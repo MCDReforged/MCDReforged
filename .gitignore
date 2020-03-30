@@ -1,0 +1,7 @@
+.idea
+release
+__pycache__
+*.log
+test.py
+*.pyc
+mcd2/

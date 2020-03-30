@@ -1,0 +1,9 @@
+# config file for MCDReforged
+
+# command to start the server
+
+start_command: cd server && java -jar server.jar
+
+# debug mode switch
+
+debug_mode: true
