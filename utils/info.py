@@ -19,6 +19,9 @@ class Info:
 		# the name of the player. if it's not sent by a player the value will be None
 		self.player = None
 
+		# very raw content
+		self.raw_content = None
+
 		# if the text is sent by a player the value will be what the player said. if not the value will be the pain text
 		self.content = None
 

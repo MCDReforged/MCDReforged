@@ -7,11 +7,12 @@ class ServerReactor(BaseReactor):
 	@staticmethod
 	def react(server, info):
 		if info.source == InfoSource.SERVER:
-			if info.content.endswith('joined the game'):
-				player = info.content.split(' ')[0]
+			player = server.parser.parse_player_joined(info)
+			if player is not None:
 				server.plugin_manager.call('on_player_joined', (server.server_interface, player))
-			if info.content.endswith('left the game'):
-				player = info.content.split(' ')[0]
+
+			player = server.parser.parse_player_left(info)
+			if player is not None:
 				server.plugin_manager.call('on_player_left', (server.server_interface, player))
 
 

@@ -35,5 +35,18 @@ class VanillaParser(base_parser.BaseParser):
 			result.content = text.replace(f'<{result.player}> ', '', 1)
 		return result
 
+	@staticmethod
+	def parse_player_joined(info):
+		if not info.is_user and info.content.endswith('joined the game'):
+			player = info.content.split(' ')[0]
+			return player
+		return None
+
+	@staticmethod
+	def parse_player_left(info):
+		if not info.is_user and info.content.endswith('left the game'):
+			player = info.content.split(' ')[0]
+			return player
+		return None
 
 parser = VanillaParser

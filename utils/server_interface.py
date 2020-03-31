@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 # An interface class for plugins to control the server
+import time
+
 from utils.server_status import ServerStatus
 
 
@@ -31,4 +33,12 @@ class ServerInterface:
 
 	# MCDR stuffs
 
+	# wait until the server is able to start
+	def wait_for_start(self):
+		while self.server.process is not None:
+			time.sleep(0.01)
 
+	def restart(self):
+		self.stop()
+		self.wait_for_start()
+		self.start()

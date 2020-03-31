@@ -25,15 +25,14 @@ def on_info(server, info):
 		if info.content == '!!stop':
 			server.stop()
 		if info.content == '!!restart':
-			server.stop()
-			server.start()
+			server.restart()
 		if info.content == '!!err':
 			x = 1 / 0
 
 
 def on_player_joined(server, player):
 	server.tell(player, 'Welcome!')
-	server.say('Bye {}'.format(player))
+	server.say('Hi {}'.format(player))
 
 
 def on_player_left(server, player):

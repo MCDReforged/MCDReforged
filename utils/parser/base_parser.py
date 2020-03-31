@@ -11,6 +11,7 @@ class BaseParser(object):
 			raise TypeError('The text to parse should be a string')
 		result = info.Info()
 		result.source = info.InfoSource.SERVER
+		result.raw_content = text
 		return result
 
 	@staticmethod
@@ -18,6 +19,7 @@ class BaseParser(object):
 		if type(text) is not str:
 			raise TypeError('The text to parse should be a string')
 		result = info.Info()
+		result.raw_content = text
 		t = time.localtime(time.time())
 		result.hour = t.tm_hour
 		result.min = t.tm_min
@@ -25,6 +27,14 @@ class BaseParser(object):
 		result.content = text
 		result.source = info.InfoSource.CONSOLE
 		return result
+
+	@staticmethod
+	def parse_player_joined(info):
+		return None
+
+	@staticmethod
+	def parse_player_left(info):
+		return None
 
 
 parser = BaseParser

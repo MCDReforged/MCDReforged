@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import logging
+import os
 import sys
 from logging.handlers import TimedRotatingFileHandler
 
@@ -30,6 +31,8 @@ class Logger:
 	def set_file(self, file_name):
 		if self.file_handler is not None:
 			self.logger.removeHandler(self.file_handler)
+		if not os.path.isfile(file_name):
+			os.makedirs(os.path.dirname(file_name))
 		self.file_handler = logging.handlers.TimedRotatingFileHandler(file_name, when='D', interval=1, backupCount=10)
 		self.file_handler.setFormatter(self.file_fmt)
 		self.logger.addHandler(self.file_handler)

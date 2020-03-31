@@ -145,15 +145,17 @@ class Server:
 			try:
 				if self.process is not None:
 					self.tick()
+				time.sleep(0.01)
+			except KeyboardInterrupt:
+				self.flag_interrupt = True
 			except:
-				if self.flag_interrupt:
-					self.logger.info(f'{constant.NAME_SHORT} has been interrupted by user')
-				else:
+				if not self.flag_interrupt:
 					self.logger.error(f'Error ticking {constant.NAME_SHORT}')
 					self.logger.error(traceback.format_exc())
 					self.stop()
 				break
-			time.sleep(0.01)
+		if self.flag_interrupt:
+			self.logger.info(f'{constant.NAME_SHORT} has been interrupted by user')
 		self.logger.info('bye')
 
 	# the thread for processing console input

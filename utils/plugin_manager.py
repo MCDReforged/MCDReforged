@@ -82,6 +82,7 @@ class PluginManager:
 		if msg == '':
 			msg = 'No plugin operation has occurred'
 		self.logger.info(msg)
+		return msg
 
 	def call(self, func, args=()):
 		for plugin in self.plugins:
