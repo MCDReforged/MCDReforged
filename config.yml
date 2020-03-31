@@ -1,9 +1,22 @@
-# config file for MCDReforged
+# Config file for MCDReforged
 
-# command to start the server
+# The working directory of the server. If you use default value server/ I will suggest you to put all the files related to the server to the server/ folder
+working_directory: server
 
-start_command: cd server && java -jar server.jar
+# The console command to start the server. Examples:
+#   java -jar server.jar --nogui
+#   ./start.sh
+#   start.bat
+start_command: java -jar minecraft_server.1.13.2_TISCarpet_b161-unofficial.jar --nogui
 
-# debug mode switch
+# The parser to parse the output of the server. Available options:
+# vanilla_parser
+#   for vanilla / carpet / fabric server
+# paper_parser
+#   for paper server
+# bungeecord_parser
+#   for bungeecord / waterfall server
+parser: vanilla_parser
 
+# Debug mode switch. Don't change unless necessary
 debug_mode: true

@@ -5,3 +5,4 @@ __pycache__
 test.py
 *.pyc
 mcd2/
+server/*

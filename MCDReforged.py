@@ -1,18 +1,13 @@
 # -*- coding: utf-8 -*-
+from utils.server import Server
+from utils import constant
 
-from .utils.server import Server
+if __name__ == '__main__':
+	print('MCDReforged starting')
+	try:
+		server = Server()
+	except:
+		print(f'Fail to initialize {constant.NAME_SHORT}')
+		raise
 
-
-def info():
-	print('MCDReforge starting')
-
-
-info()
-try:
-	server = Server()
-except:
-	print('fail to initialize the server')
-	raise
-
-server.start()
-
+	server.start()
