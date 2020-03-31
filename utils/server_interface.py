@@ -6,12 +6,15 @@ from utils.server_status import ServerStatus
 class ServerInterface:
 	def __init__(self, server):
 		self.server = server
+		self.logger = server.logger
+
+	# the same as MCD 1.0
 
 	def start(self):
-		pass
+		self.server.start_server()
 
 	def stop(self):
-		self.server.stop(force=False, new_server_status=ServerStatus.RESTARTING)
+		self.server.stop(forced=False, new_server_status=ServerStatus.STOPPING_BY_PLUGIN)
 
 	def execute(self, text):
 		self.server.send(text)
@@ -25,3 +28,7 @@ class ServerInterface:
 
 	def tell(self, player, data):
 		self.execute('tellraw ' + player + ' {"text":"' + str(data) + '"}')
+
+	# MCDR stuffs
+
+

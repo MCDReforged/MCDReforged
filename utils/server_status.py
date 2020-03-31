@@ -2,7 +2,7 @@
 
 
 class ServerStatus:
-	RUNNING = 0  # server running
-	STOPPING = 1  # server stops by itself
-	STOPPED = 2  # server and MCDR have stopped
-	RESTARTING = 3  # plugin calls a restart
+	RUNNING = 'Running'  # server running
+	STOPPING_BY_ITSELF = 'Stopping by itself'  # server stops by itself
+	STOPPING_BY_PLUGIN = 'Stopping by plugin'   # server stops by plugin
+	STOPPED = 'Stopped'  # server and MCDR have stopped

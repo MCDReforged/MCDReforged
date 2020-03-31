@@ -14,18 +14,19 @@ from utils.server_interface import ServerInterface
 class Server:
 	def __init__(self):
 		self.config = config.Config(constant.CONFIG_FILE)
-		self.parser = self.load_parser(constant.PARSER_FOLDER, self.config['parser'])
-		self.reactors = self.load_reactor(constant.REACTOR_FOLDER)
-		self.server_interface = ServerInterface(self)
-		self.console_input_thread = None
-		self.process = None
-		self.server_status = ServerStatus.STOPPED
 		self.logger = logger.Logger(constant.NAME_SHORT)
 		self.logger.set_file(constant.LOGGING_FILE)
 		if self.config['debug_mode']:
 			self.logger.set_level(logging.DEBUG)
+		self.parser = self.load_parser(constant.PARSER_FOLDER, self.config['parser'])
+		self.reactors = self.load_reactor(constant.REACTOR_FOLDER)
+		self.console_input_thread = None
+		self.process = None
+		self.set_server_status(ServerStatus.STOPPED)
+		self.server_interface = ServerInterface(self)
 		self.plugin_manager = PluginManager(self, constant.PLUGIN_FOLDER)
 		self.plugin_manager.load_plugins()
+		self.flag_interrupt = False  # ctrl-c flag
 
 	# Loaders
 
@@ -45,7 +46,15 @@ class Server:
 
 	# MCDR server
 
+	def set_server_status(self, status):
+		self.server_status = status
+		self.logger.debug('Server status has set to "{}"'.format(status))
+
 	def start_server(self):
+		if self.process is not None:
+			self.logger.warning('Server cannot start twice')
+			return
+		self.logger.info('Starting the server')
 		try:
 			self.process = Popen(self.config['start_command'], cwd=self.config['working_directory'],
 				stdin=PIPE, stdout=PIPE, shell=True)
@@ -54,8 +63,8 @@ class Server:
 			self.logger.error(traceback.format_exc())
 			return False
 		else:
-			self.server_status = ServerStatus.RUNNING
-			self.logger.info(f'Server Running at PID: {self.process.pid}')
+			self.set_server_status(ServerStatus.RUNNING)
+			self.logger.info(f'Server is running at PID {self.process.pid}')
 			return True
 
 	def start(self):
@@ -66,31 +75,45 @@ class Server:
 			self.console_input_thread.start()
 			self.run()
 
-	def stop(self, forced=False, new_server_status=ServerStatus.STOPPING):
+	def stop(self, forced=False, new_server_status=ServerStatus.STOPPING_BY_ITSELF):
+		if self.process is None:
+			self.logger.warning('Server cannot stop when terminated')
+		self.set_server_status(new_server_status)
 		if not forced:
 			try:
 				self.send(self.parser.STOP_COMMAND)
 			except:
-				self.logger.error(f'Error stopping server, forced the server to stop now')
+				self.logger.error('Error stopping server, force the server to stop now')
 				forced = True
-		self.server_status = new_server_status
 		if forced:
 			self.process.kill()
+			self.logger.info('Process killed')
 
 	def send(self, text, ending='\n'):
 		if type(text) is str:
 			text = (text + ending).encode('utf8')
-		self.process.stdin.write(text)
-		self.process.stdin.flush()
+		if self.process	is not None:
+			self.process.stdin.write(text)
+			self.process.stdin.flush()
+		else:
+			self.logger.warning('Server has been terminated, cannot send command to its stdin')
 
-	def receive(self, time_out=0.01):
+	def receive(self):
 		while True:
 			if self.process.poll() is not None:
 				return None
 			try:
 				text = next(iter(self.process.stdout))
-			except StopIteration:
-				time.sleep(time_out)
+			except StopIteration: # server process has stopped
+				for i in range(100):
+					if self.process.poll() is not None:
+						break
+					time.sleep(0.1)
+					if i % 10 == 0:
+						self.logger.info('Waiting for server process to exit')
+				if self.server_status is ServerStatus.RUNNING:
+					self.set_server_status(ServerStatus.STOPPING_BY_ITSELF)
+				return None
 			else:
 				text = text.rstrip()
 				if text != '':
@@ -99,15 +122,16 @@ class Server:
 
 	def tick(self):
 		text = self.receive()
-		if text is None:  # server process has terminated
+		if text is None:  # server process has been terminated
 			return_code = self.process.poll()
 			self.logger.info(f'Server exited with code {return_code}')
-			if self.server_status == ServerStatus.RESTARTING:
-				self.start_server()
-			else:
-				self.server_status = ServerStatus.STOPPED
+			self.process = None
+			if self.server_status == ServerStatus.STOPPING_BY_ITSELF:
+				self.logger.info('Server stopped by itself')
+				self.set_server_status(ServerStatus.STOPPED)
 			return
-		print('|>', text)
+
+		print('[Server]', text)
 		try:
 			parsed_result = self.parser.parse_server_stdout(text)
 		except:
@@ -119,12 +143,17 @@ class Server:
 	def run(self):
 		while self.server_status != ServerStatus.STOPPED:
 			try:
-				self.tick()
+				if self.process is not None:
+					self.tick()
 			except:
-				self.logger.error(f'Error ticking {constant.NAME_SHORT}')
-				self.logger.error(traceback.format_exc())
-				self.stop()
+				if self.flag_interrupt:
+					self.logger.info(f'{constant.NAME_SHORT} has been interrupted by user')
+				else:
+					self.logger.error(f'Error ticking {constant.NAME_SHORT}')
+					self.logger.error(traceback.format_exc())
+					self.stop()
 				break
+			time.sleep(0.01)
 		self.logger.info('bye')
 
 	# the thread for processing console input
@@ -132,7 +161,6 @@ class Server:
 		try:
 			while True:
 				text = input()
-				self.send(text)
 				try:
 					parsed_result = self.parser.parse_console_command(text)
 					self.react(parsed_result)
@@ -141,8 +169,9 @@ class Server:
 					self.logger.error(traceback.format_exc())
 					self.stop()
 					break
-		except (KeyboardInterrupt, SystemExit):
-			self.stop()
+		except (KeyboardInterrupt, EOFError, SystemExit, IOError):
+			self.flag_interrupt = True
+			self.stop(forced=True)
 
 	# react to a parsed info
 	def react(self, info):

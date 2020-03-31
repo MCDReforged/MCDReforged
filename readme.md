@@ -1,17 +1,11 @@
 `on_load(server, old_instance)`
 
-`on_unload(server, new_instance)`
+`on_unload(server)`
 
 `on_info(server, info)`
 
-`on_player_join(server, info)`
+`on_player_joined(server, player)`
 
-`on_player_leave(server, info)`
+`on_player_left(server, player)`
 
-`register_info_listener()`
-
-
-
-info->praser->reactor->plugins
-
-console->reactor->plugins
+stdout / console->praser->reactor->plugin_manager->plugins

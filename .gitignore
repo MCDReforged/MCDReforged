@@ -3,6 +3,6 @@ release
 __pycache__
 *.log
 test.py
-*.pyc
+a.py
 mcd2/
 server/*

@@ -14,7 +14,7 @@ class Info:
 		# time information from the parsed text
 		self.hour = None
 		self.min = None
-		self.second = None
+		self.sec = None
 
 		# the name of the player. if it's not sent by a player the value will be None
 		self.player = None
@@ -28,3 +28,8 @@ class Info:
 	@property
 	def is_user(self):
 		return self.source == InfoSource.CONSOLE or self.player is not None
+
+	# MCD 1.0 compatibility
+	@property
+	def isPlayer(self):
+		return self.player is not None

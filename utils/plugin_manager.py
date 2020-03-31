@@ -12,6 +12,7 @@ class PluginManager:
 		self.server = server
 		self.logger = server.logger
 		self.plugins = []
+		self.command_prefix_listeners = None
 
 	def load_plugin(self, file_name):
 		try:
@@ -52,6 +53,7 @@ class PluginManager:
 			return True
 
 	def load_plugins(self):
+		self.command_prefix_listeners = {}
 		name_dict = {plugin.file_name: plugin for plugin in self.plugins}
 		file_list = tool.list_py_file(constant.PLUGIN_FOLDER)
 		counter_all = counter_load = counter_unload = counter_reload = 0

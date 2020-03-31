@@ -17,7 +17,7 @@ class VanillaParser(base_parser.BaseParser):
 		elements = time_data[1:-2].split(':')
 		result.hour = int(elements[0])
 		result.min = int(elements[1])
-		result.second = int(elements[2])
+		result.sec = int(elements[2])
 
 		text = text.replace(time_data, '')
 		# [Server thread/INFO]: <Steve> Hello
