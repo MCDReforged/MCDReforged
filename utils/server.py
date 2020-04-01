@@ -169,12 +169,12 @@ class Server:
 				text = input()
 				try:
 					parsed_result = self.parser.parse_console_command(text)
-					self.react(parsed_result)
 				except:
 					self.logger.error(f'Error processing console command {text}')
 					self.logger.error(traceback.format_exc())
 					self.stop()
 					break
+				self.react(parsed_result)
 		except (KeyboardInterrupt, EOFError, SystemExit, IOError):
 			self.flag_interrupt = True
 			self.stop(forced=True)
@@ -182,4 +182,8 @@ class Server:
 	# react to a parsed info
 	def react(self, info):
 		for reactor in self.reactors:
-			reactor.react(self, info)
+			try:
+				reactor.react(self, info)
+			except:
+				self.logger.error(f'Error processing reactor {reactor.__name__}')
+				self.logger.error(traceback.format_exc())
