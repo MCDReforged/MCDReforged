@@ -43,7 +43,7 @@ MCDReforged Plugin Document
 | wait_for_start() | 等待直至服务端完全关闭，也就是可以启动 |
 | restart() | 依次执行 `stop()`、`wait_for_start()`、`start()` 来重启服务端 |
 | stop_exit() | 关闭服务端以及 MCDR，也就是退出整个程序 |
-| get_permission_level(obj) | 返回一个[整数](https://github.com/Fallen-Breath/MCDReforged#Permission)，代表 `obj` 对象拥有的最高权限等级。`obj` 对象可为一个 `Info` 实例，或者是一个表示玩家名称的字符串 |
+| get_permission_level(obj) | 返回一个[整数](https://github.com/Fallen-Breath/MCDReforged/blob/master/doc/readme_cn.md#权限)，代表 `obj` 对象拥有的最高权限等级。`obj` 对象可为一个 `Info` 实例，或者是一个表示玩家名称的字符串 |
 
 ## info
 
