@@ -76,7 +76,7 @@ MCDReforged
 
 在游戏聊天中会在控制台输入 `!!MCDR reload` 来重载插件
 
-插件用法可参考 `plugins/test_plugin.py`
+插件用法可参考 `plugins/sample_plugin.py`
 
 ## 注意事项
 

@@ -10,7 +10,7 @@ def on_load(server, old_module):
 		counter = old_module.counter + 1
 	else:
 		counter = 1
-	server.say(f'这是第{counter}次加载插件')
+	server.say(f'This is the {counter} time to load the plugin')
 
 
 def on_unload(server):

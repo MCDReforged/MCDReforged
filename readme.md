@@ -76,7 +76,7 @@ The config file is `config.yml`
 
 Input `!!MCDR reload` in game chat or in console to reload plugins
 
-Plugin usage can refer to `plugins/test_plugin.py`
+Plugin usage can refer to `plugins/sample_plugin.py`
 
 ## Notes
 

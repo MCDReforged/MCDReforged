@@ -3,9 +3,9 @@ MCDReforged Plugin Document
 
 [English](https://github.com/Fallen-Breath/MCDReforged/blob/master/doc/plugin.md)
 
-与 MCDaemon类似，一个 MCDR 的插件是一个位与 `plugins/` 文件夹下的 `.py`。MCDR 会在启动时自动加载该文件夹中的所有插件
+与 MCDaemon 类似，一个 MCDR 的插件是一个位与 `plugins/` 文件夹下的 `.py` 文件。MCDR 会在启动时自动加载该文件夹中的所有插件
 
-当服务器触发某些指定事件时，如果插件有声明下列方法的话，MCDR 会调用每个插件的对应方法。MCDR 调用每个插件时会为其新建一个独立的线程供其运行
+当服务器触发某些指定事件时，如果插件有声明下列方法的话，MCDR 会调用每个插件的对应方法。MCDR 调用每个插件的方法时会为其新建一个独立的线程供其运行
 
 | 方法 | 调用时刻 | 参考用途 |
 |---|---|---|
@@ -30,10 +30,10 @@ MCDReforged Plugin Document
 | execute(text) | 发送字符串 `text` 至服务端的标准输入流，并自动在其后方追加一个 `\n` |
 | send(text) | 发送字符串 `text` 至服务端的标准输入流 |
 | say(text) | 使用 `tellraw @a` 来在服务器中广播字符串消息 `text` |
-| tell(player, text) | 使用 `tellraw <player>` 来在对玩家 `player` 发送字符串消息 `text` |
-| wait_for_start() | 等待直至服务端可以启动 |
+| tell(player, text) | 使用 `tellraw <player>` 来在对玩家 `<player>` 发送字符串消息 `text` |
+| wait_for_start() | 等待直至服务端完全关闭，也就是可以启动 |
 | restart() | 依次执行 `stop()`、`wait_for_start()`、`start()` 来重启服务端 |
-| stop_exit() | 关闭服务端已经 MCDR。这将退出整个程序 |
+| stop_exit() | 关闭服务端以及 MCDR，也就是退出整个程序 |
 
 ## info
 
@@ -45,11 +45,11 @@ MCDReforged Plugin Document
 | min | 一个整数，代表消息发出时间的分钟数。若无则为 `None` |
 | sec | 一个整数，代表消息发出时间的秒数。若无则为 `None` |
 | raw_content | 未解析的该消息的原始字符串 |
-| content | 如果该消息是玩家的聊天信息，则其值为玩家的聊天内容。否则其值为原始信息除去时间/线程名等前缀信息后的值 |
+| content | 如果该消息是玩家的聊天信息，则其值为玩家的聊天内容。否则其值为原始信息除去时间/线程名等前缀信息后的字符串 |
 | player | 当这条消息是一条来自玩家的聊天信息时，值为代表该玩家名称的字符串，否则为 `None` |
 | source | 一个整数。若该消息是来自服务端的标准输出流，则为 `0`；若来自控制台输入，则为 `1` |
 | is_player | 等价于 `player != None` |
-| is_user | 等价于 `source == 1` 或 `is_player` |
+| is_user | 等价于 `source == 1 or is_player` |
 
 ### 例子
 
@@ -118,5 +118,4 @@ def on_load(server, old_module):
 1. 将旧插件的仅能在 python2 上运行的代码修改为可在 python3 上运行
 2. 将变量/方法名更新为 MCDR 的名称，如将 `onServerInfo` 修改为 `on_info`，将 `isPlayer` 修改为 `is_player`
 3. MCDR 在控制台输入指令时也会调用 `on_info`，注意考虑插件是否兼容这种情况
-
 
