@@ -19,5 +19,12 @@ start_command: java -jar paperclip-651.jar
 #   for bungeecord / waterfall server
 parser: paper_parser
 
+# the encoding used to encode / decode message to the server. Choose the best encoding for your os. Examples
+# utf8
+#   for general os
+# gbk
+#   for Chinese windows user
+encoding: gbk
+
 # Debug mode switch. Don't change it to true unless necessary
 debug_mode: true

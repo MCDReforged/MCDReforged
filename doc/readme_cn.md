@@ -68,6 +68,8 @@ MCDReforged
 - `paper_parser`: 适用于 Bukkit / Spiogt / Paper 服务端
 - `bungeecord_parser`: 适用于 Bungeecord / Waterfall 服务端。请在启动参数的 `-jar` 前添加 `-Djline.terminal=jline.UnsupportedTerminal` 以让其支持 MCDR 的控制，[来源](https://www.spigotmc.org/wiki/start-up-parameters/)
 
+`encoding`: 编码方式。默认情况下使用 `utf8` 即可，如果操作系统是 Windows 中文版的话可使用 `gbk` 以防止出现乱码
+
 `debug_mode`: 调试模式开关。除非有必要，否则设置为 `false` 即可
 
 ## 插件

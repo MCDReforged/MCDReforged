@@ -8,3 +8,4 @@ mcd2/
 server/*
 !plugins/sample_plugin.py
 plugins/*
+config/

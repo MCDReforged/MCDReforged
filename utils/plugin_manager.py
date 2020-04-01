@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import collections
+import os
 import traceback
 
 from utils import tool, constant
@@ -54,8 +54,10 @@ class PluginManager:
 
 	def load_plugins(self):
 		self.command_prefix_listeners = {}
-		name_dict = {plugin.file_name: plugin for plugin in self.plugins}
+		if not os.path.isdir(constant.PLUGIN_FOLDER):
+			os.makedirs(constant.PLUGIN_FOLDER)
 		file_list = tool.list_py_file(constant.PLUGIN_FOLDER)
+		name_dict = {plugin.file_name: plugin for plugin in self.plugins}
 		counter_all = counter_load = counter_unload = counter_reload = 0
 		for file_name in file_list:
 			if file_name in name_dict:

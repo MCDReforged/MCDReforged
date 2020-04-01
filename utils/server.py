@@ -91,7 +91,7 @@ class Server:
 
 	def send(self, text, ending='\r\n'):
 		if type(text) is str:
-			text = (text + ending).encode('utf8')
+			text = (text + ending).encode(self.config['encoding'])
 		if self.process	is not None:
 			self.process.stdin.write(text)
 			self.process.stdin.flush()
@@ -113,10 +113,7 @@ class Server:
 					self.set_server_status(ServerStatus.STOPPING_BY_ITSELF)
 				return None
 			else:
-				try:
-					text = text.decode('utf8')
-				except UnicodeDecodeError:
-					text = text.decode('gbk')
+				text = text.decode(self.config['encoding'])
 				return text.rstrip().lstrip()
 
 	def tick(self):

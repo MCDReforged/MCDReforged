@@ -66,7 +66,9 @@ The config file is `config.yml`
 
 - `vanilla_parser`: for Vanilla / Carpet / Fabric server
 - `paper_parser`: for Bukkit / Spiogt / Paper server
-- `bungeecord_parser`: for Bungeecord / Waterfall server. Please add `-Djline.terminal=jline.UnsupportedTerminal` before `-jar` in the start command for MCDR support. [From](https://www.spigotmc.org/wiki/start-up-parameters/)
+- `bungeecord_parser`: for Bungeecord / Waterfall server. Please add `-Djline.terminal=jline.UnsupportedTerminal` before `-jar` in the start command for MCDR support. From [here](https://www.spigotmc.org/wiki/start-up-parameters/)
+
+`encoding`: The encoding method. By default just use `utf8`. If you are Chinese Windows user or something you can try `gbk` to avoid messy words
 
 `debug_mode`: Debug mode switch. Keep it as `false` unless necessary
 
