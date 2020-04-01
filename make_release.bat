@@ -4,6 +4,7 @@ echo %name% release maker
 set /p ver=
 rd /S /Q %name%
 git clone https://github.com/Fallen-Breath/%name%.git
+
 echo =========== Finish version update ===========
 
 rd /S /Q %name%-%ver%
@@ -13,28 +14,12 @@ mv __temp__\%name% %name%-%ver%
 rd /S /Q __temp__
 cd %name%-%ver%
 rd /S /Q .git __pycache__ build
-rm -f %name%.spec .gitignore
+rm -f %name%.spec .gitignore make_release.bat
 cd ..
-rm -f %name%-%ver%-universal.zip
-zip -r %name%-%ver%-universal.zip %name%-%ver%
-echo =========== Finish universal version ===========
+rm -f %name%-%ver%.zip
+zip -r %name%-%ver%.zip %name%-%ver%
 
-cd %name%
-rm -rf dist
-rm -rf build
-rm -rf dist
-pyinstaller --noupx -F %name%.py
-cd ..
-rd /S /Q %name%-%ver%
-mv %name%\dist %name%-%ver%
-cp %name%\config.yml %name%-%ver%\
-cp %name%\readme.md %name%-%ver%\
-cp %name%\readme_cn.md %name%-%ver%\
-cp -r %name%\doc %name%-%ver%\
-rm -f %name%-%ver%-windows.zip
-zip -r %name%-%ver%-windows.zip %name%-%ver%
-rd /S /Q %name%-%ver%
-echo =========== Finish windows version ===========
+echo =========== Finish ===========
 
 rd /S /Q %name%
 pause
