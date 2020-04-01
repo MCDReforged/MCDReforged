@@ -19,7 +19,7 @@ start_command: java -jar minecraft_server.jar --nogui
 #   for bungeecord server
 # waterfall_parser
 #   for waterfall server
-parser: vanilla
+parser: vanilla_parser
 
 # the encoding / decoding format used to encode / decode message to the server. Choose the best method for your os. Examples:
 #   utf8
