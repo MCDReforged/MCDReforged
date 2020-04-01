@@ -1,5 +1,7 @@
-MCDReforged Plugin
+MCDReforged Plugin Document
 ---
+
+[English](https://github.com/Fallen-Breath/MCDReforged/blob/master/doc/plugin.md)
 
 与 MCDaemon类似，一个 MCDR 的插件是一个位与 `plugins/` 文件夹下的 `.py`。MCDR 会在启动时自动加载该文件夹中的所有插件
 
@@ -7,11 +9,11 @@ MCDReforged Plugin
 
 | 方法 | 调用时刻 | 参考用途 |
 |---|---|---|
-| `on_load(server, old_module)` | 插件被加载 | 新插件继承旧插件的信息 |
-| `on_unload(server)` | 插件被卸载 | 清理或关闭旧插件的功能 |
-| `on_info(server, info)` | 服务器的标准输出流有输出，或者控制台有输入 | 插件响应相关信息 |
-| `on_player_joined(server, player)` | 玩家加入服务器 | 插件响应相关信息 |
-| `on_player_left(server, player)` | 玩家离开服务器 | 插件响应相关信息 |
+| on_load(server, old_module) | 插件被加载 | 新插件继承旧插件的信息 |
+| on_unload(server) | 插件被卸载 | 清理或关闭旧插件的功能 |
+| on_info(server, info) | 服务器的标准输出流有输出，或者控制台有输入 | 插件响应相关信息 |
+| on_player_joined(server, player) | 玩家加入服务器 | 插件响应相关信息 |
+| on_player_left(server, player) | 玩家离开服务器 | 插件响应相关信息 |
 
 注：每个插件并不需要实现所有上述方法，按需实现即可
 
@@ -23,15 +25,15 @@ MCDReforged Plugin
 
 | 方法 | 功能 |
 |---|---|
-| `start()` | 启动服务器。仅在服务器未启动的情况下有效 |
-| `stop()` | 使用服务端对应的指令，如 `stop` 来关闭服务器。仅在服务器运行时有效 |
-| `execute(text)` | 发送字符串 `text` 至服务端的标准输入流，并自动在其后方追加一个 `\n` |
-| `send(text)` | 发送字符串 `text` 至服务端的标准输入流 |
-| `say(text)` | 使用 `tellraw @a` 来在服务器中广播字符串消息 `text` |
-| `tell(player, text)` | 使用 `tellraw <player>` 来在对玩家 `player` 发送字符串消息 `text` |
-| `wait_for_start()` | 等待直至服务端可以启动 |
-| `restart()` | 依次执行 `stop()`、`wait_for_start()`、`start()` 来重启服务端 |
-| `stop_exit()` | 关闭服务端已经 MCDR。这将退出整个程序 |
+| start() | 启动服务器。仅在服务器未启动的情况下有效 |
+| stop() | 使用服务端对应的指令，如 `stop` 来关闭服务器。仅在服务器运行时有效 |
+| execute(text) | 发送字符串 `text` 至服务端的标准输入流，并自动在其后方追加一个 `\n` |
+| send(text) | 发送字符串 `text` 至服务端的标准输入流 |
+| say(text) | 使用 `tellraw @a` 来在服务器中广播字符串消息 `text` |
+| tell(player, text) | 使用 `tellraw <player>` 来在对玩家 `player` 发送字符串消息 `text` |
+| wait_for_start() | 等待直至服务端可以启动 |
+| restart() | 依次执行 `stop()`、`wait_for_start()`、`start()` 来重启服务端 |
+| stop_exit() | 关闭服务端已经 MCDR。这将退出整个程序 |
 
 ## info
 
@@ -110,3 +112,11 @@ def on_load(server, old_module):
         counter = 1
     server.say(f'这是第{counter}次加载插件')
 ```
+
+## 将 MCDaemon 的插件移植至 MCDR
+
+1. 将旧插件的仅能在 python2 上运行的代码修改为可在 python3 上运行
+2. 将变量/方法名更新为 MCDR 的名称，如将 `onServerInfo` 修改为 `on_info`，将 `isPlayer` 修改为 `is_player`
+3. MCDR 在控制台输入指令时也会调用 `on_info`，注意考虑插件是否兼容这种情况
+
+
