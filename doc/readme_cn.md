@@ -68,7 +68,8 @@ MCDReforged/
 
 - `vanilla_parser`: 适用于原版 / 地毯 / Fabric 服务端
 - `paper_parser`: 适用于 Bukkit / Spiogt / Paper 服务端
-- `bungeecord_parser`: 适用于 Bungeecord / Waterfall 服务端。请在启动参数的 `-jar` 前添加 `-Djline.terminal=jline.UnsupportedTerminal` 以让其支持 MCDR 的控制，[来源](https://www.spigotmc.org/wiki/start-up-parameters/)
+- `bungeecord_parser`: 适用于Bungeecord 服务端。请在启动参数的 `-jar` 前添加 `-Djline.terminal=jline.UnsupportedTerminal` 以让其支持 MCDR 的控制，[来源](https://www.spigotmc.org/wiki/start-up-parameters/)
+- `waterfall_parser`: 适用于 Waterfall 服务端
 
 `encoding`: 用于编码输入文本至服务端标准输入流的编码格式。留空以让 MCDR 自动检测编码格式。默认值: ` `
 
@@ -136,5 +137,5 @@ MCDR 提供了一些控制 MCDR 的指令，它们均可在游戏中通过聊天
 
 ## 注意事项
 
-- 在使用 Bungeecord / Waterfall 服务端时请确保在启动参数的 `-jar` 前添加了 `-Djline.terminal=jline.UnsupportedTerminal`，否则在 Windows 操作系统下 MCDR 可能会无法控制服务端的标准输入流
+- 在使用 Bungeecord 服务端时请确保在启动参数的 `-jar` 前添加了 `-Djline.terminal=jline.UnsupportedTerminal`，否则在 Windows 操作系统下 MCDR 可能会无法控制服务端的标准输入流
 

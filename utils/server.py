@@ -42,6 +42,7 @@ class Server:
 		self.parser = self.load_parser(constant.PARSER_FOLDER, self.config['parser'])
 		self.encoding_method = self.config['encoding'] if self.config['encoding'] is not None else sys.getdefaultencoding()
 		self.decoding_method = self.config['decoding'] if self.config['decoding'] is not None else locale.getpreferredencoding()
+		self.logger.info(f'Encoding / Decoding method has set to {self.encoding_method} / {self.decoding_method}')
 
 	@staticmethod
 	def load_parser(path, parser_name):

@@ -16,8 +16,10 @@ start_command: java -jar minecraft_server.jar --nogui
 # paper_parser
 #   for paper server
 # bungeecord_parser
-#   for bungeecord / waterfall server
-parser: vanilla_parser
+#   for bungeecord server
+# waterfall_parser
+#   for waterfall server
+parser: vanilla
 
 # the encoding / decoding format used to encode / decode message to the server. Choose the best method for your os. Examples:
 #   utf8

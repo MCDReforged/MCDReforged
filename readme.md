@@ -68,7 +68,8 @@ The config file is `config.yml`
 
 - `vanilla_parser`: for Vanilla / Carpet / Fabric server
 - `paper_parser`: for Bukkit / Spiogt / Paper server
-- `bungeecord_parser`: for Bungeecord / Waterfall server. Please add `-Djline.terminal=jline.UnsupportedTerminal` before `-jar` in the start command for MCDR support. From [here](https://www.spigotmc.org/wiki/start-up-parameters/)
+- `bungeecord_parser`: for Bungeecord. Please add `-Djline.terminal=jline.UnsupportedTerminal` before `-jar` in the start command for MCDR support. From [here](https://www.spigotmc.org/wiki/start-up-parameters/)
+- `waterfall_parser`: for Waterfall server
 
 `encoding`: The encoding format used to encode message to the stdin of the server. Leave it blank for MCDR to auto detect the encoding. Default: ` `
 
@@ -136,5 +137,5 @@ Only player with `admin` permission level is allow to execute these command in g
 
 ## Notes
 
-- Make sure you add `-Djline.terminal=jline.UnsupportedTerminal` before `-jar` in the start command if your are running Bungeecord or Waterfall server, or MCDR might not be able to control the standard input stream of the server in Windows OS
+- Make sure you add `-Djline.terminal=jline.UnsupportedTerminal` before `-jar` in the start command if your are running a Bungeecord server, or MCDR might not be able to control the standard input stream of the server in Windows OS
 
