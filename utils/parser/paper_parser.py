@@ -9,20 +9,17 @@ class PaperParser(base_parser.BaseParser):
 
 	@staticmethod
 	def parse_server_stdout(text):
-		result = super(PaperParser, PaperParser).parse_server_stdout(text)
-
-		# [09:00:01 INFO]: <Steve> hi
-		# [09:00:03 WARN]: Alex moved too quickly!
+		raw_result = result = super(PaperParser, PaperParser).parse_server_stdout(text)
 		try:
+			# [09:00:01 INFO]: <Steve> hi
+			# [09:00:03 WARN]: Alex moved too quickly!
 			time_data = re.search(r'\[[0-9]*:[0-9]*:[0-9]* \w*\]: ', text).group()
 			elements = time_data[1:-2].split(':')
 			result.hour = int(elements[0])
 			result.min = int(elements[1])
 			result.sec = int(elements[2].split(' ')[0])
-		except:
-			result.content = text
-		else:
-			text = text.replace(time_data, '')
+
+			text = text.replace(time_data, '', 1)
 			# <Steve> hi
 			# Alex moved too quickly!
 
@@ -32,7 +29,9 @@ class PaperParser(base_parser.BaseParser):
 			else:
 				result.player = result.player.group()[1:-2]
 				result.content = text.replace(f'<{result.player}> ', '', 1)
-		return result
+			return result
+		except:
+			return raw_result
 
 	@staticmethod
 	def parse_player_joined(info):

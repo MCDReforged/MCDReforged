@@ -9,31 +9,33 @@ class VanillaParser(base_parser.BaseParser):
 
 	@staticmethod
 	def parse_server_stdout(text):
-		result = super(VanillaParser, VanillaParser).parse_server_stdout(text)
+		raw_result = result = super(VanillaParser, VanillaParser).parse_server_stdout(text)
+		try:
+			# [09:00:00] [Server thread/INFO]: <Steve> Hello
+			# [09:00:01] [Server thread/WARN]: Can't keep up!
+			time_data = re.search(r'\[[0-9]*:[0-9]*:[0-9]*\] ', text).group()
+			elements = time_data[1:-2].split(':')
+			result.hour = int(elements[0])
+			result.min = int(elements[1])
+			result.sec = int(elements[2])
 
-		# [09:00:00] [Server thread/INFO]: <Steve> Hello
-		# [09:00:01] [Server thread/WARN]: Can't keep up!
-		time_data = re.search(r'\[[0-9]*:[0-9]*:[0-9]*\] ', text).group()
-		elements = time_data[1:-2].split(':')
-		result.hour = int(elements[0])
-		result.min = int(elements[1])
-		result.sec = int(elements[2])
+			text = text.replace(time_data, '', 1)
+			# [Server thread/INFO]: <Steve> Hello
+			# [Server thread/WARN]: Can't keep up!
 
-		text = text.replace(time_data, '')
-		# [Server thread/INFO]: <Steve> Hello
-		# [Server thread/WARN]: Can't keep up!
+			text = re.split(r'\[[\w /]*\]: ', text)[1]
+			# <Steve> Hello
+			# Can't keep up!
 
-		text = re.split(r'\[[\w /]*\]: ', text)[1]
-		# <Steve> Hello
-		# Can't keep up!
-
-		result.player = re.match(r'<\w+> ', text)
-		if result.player is None:
-			result.content = text
-		else:
-			result.player = result.player.group()[1:-2]
-			result.content = text.replace(f'<{result.player}> ', '', 1)
-		return result
+			result.player = re.match(r'<\w+> ', text)
+			if result.player is None:
+				result.content = text
+			else:
+				result.player = result.player.group()[1:-2]
+				result.content = text.replace(f'<{result.player}> ', '', 1)
+			return result
+		except:
+			return raw_result
 
 	@staticmethod
 	def parse_player_joined(info):

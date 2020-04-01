@@ -3,7 +3,7 @@ import logging
 import time
 import traceback
 import threading
-from subprocess import Popen, PIPE
+from subprocess import Popen, PIPE, STDOUT
 
 from utils import config, constant, logger, tool
 from utils.plugin_manager import PluginManager
@@ -22,7 +22,7 @@ class Server:
 		self.reactors = self.load_reactor(constant.REACTOR_FOLDER)
 		self.console_input_thread = None
 		self.process = None
-		self.set_server_status(ServerStatus.STOPPED)
+		self.server_status = ServerStatus.STOPPED
 		self.server_interface = ServerInterface(self)
 		self.plugin_manager = PluginManager(self, constant.PLUGIN_FOLDER)
 		self.plugin_manager.load_plugins()
@@ -57,7 +57,7 @@ class Server:
 		self.logger.info('Starting the server')
 		try:
 			self.process = Popen(self.config['start_command'], cwd=self.config['working_directory'],
-				stdin=PIPE, stdout=PIPE, shell=True)
+				stdin=PIPE, stdout=PIPE, stderr=STDOUT, shell=True)
 		except:
 			self.logger.error('Fail to start the server')
 			self.logger.error(traceback.format_exc())
@@ -89,7 +89,7 @@ class Server:
 			self.process.kill()
 			self.logger.info('Process killed')
 
-	def send(self, text, ending='\n'):
+	def send(self, text, ending='\r\n'):
 		if type(text) is str:
 			text = (text + ending).encode('utf8')
 		if self.process	is not None:
@@ -100,8 +100,6 @@ class Server:
 
 	def receive(self):
 		while True:
-			if self.process.poll() is not None:
-				return None
 			try:
 				text = next(iter(self.process.stdout))
 			except StopIteration: # server process has stopped
@@ -115,10 +113,11 @@ class Server:
 					self.set_server_status(ServerStatus.STOPPING_BY_ITSELF)
 				return None
 			else:
-				text = text.rstrip()
-				if text != '':
-					return text.decode('utf8')
-				print('www')
+				try:
+					text = text.decode('utf8')
+				except UnicodeDecodeError:
+					text = text.decode('gbk')
+				return text.rstrip().lstrip()
 
 	def tick(self):
 		text = self.receive()
@@ -131,7 +130,12 @@ class Server:
 				self.set_server_status(ServerStatus.STOPPED)
 			return
 
-		print('[Server]', text)
+		try:
+			text = self.parser.pre_parse_server_stdout(text)
+		except:
+			self.logger.warning('Fail to pre parse text from stdout of the server, use original text')
+		print('[Server] {}'.format(text))
+
 		try:
 			parsed_result = self.parser.parse_server_stdout(text)
 		except:

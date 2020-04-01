@@ -38,7 +38,12 @@ class ServerInterface:
 		while self.server.process is not None:
 			time.sleep(0.01)
 
+	# restart the server
 	def restart(self):
 		self.stop()
 		self.wait_for_start()
 		self.start()
+
+	# stop and exit the server
+	def stop_exit(self):
+		self.server.stop(forced=False)

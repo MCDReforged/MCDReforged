@@ -11,7 +11,7 @@ class BaseParser(object):
 			raise TypeError('The text to parse should be a string')
 		result = info.Info()
 		result.source = info.InfoSource.SERVER
-		result.raw_content = text
+		result.content = result.raw_content = text
 		return result
 
 	@staticmethod
@@ -30,11 +30,15 @@ class BaseParser(object):
 
 	@staticmethod
 	def parse_player_joined(info):
-		return None
+		pass
 
 	@staticmethod
 	def parse_player_left(info):
-		return None
+		pass
+
+	@staticmethod
+	def pre_parse_server_stdout(text):
+		return text
 
 
 parser = BaseParser

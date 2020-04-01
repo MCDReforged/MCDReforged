@@ -4,10 +4,11 @@
 working_directory: server
 
 # The console command to start the server. Examples:
-#   java -jar server.jar --nogui
+#   java -jar minecraft_server.jar --nogui
+#   java -Djline.terminal=jline.UnsupportedTerminal -jar BungeeCord.jar
 #   ./start.sh
 #   start.bat
-start_command: java -jar minecraft_server.1.13.2_TISCarpet_b161-unofficial.jar --nogui
+start_command: java -jar paperclip-651.jar
 
 # The parser to parse the output of the server. Available options:
 # vanilla_parser
@@ -16,7 +17,7 @@ start_command: java -jar minecraft_server.1.13.2_TISCarpet_b161-unofficial.jar -
 #   for paper server
 # bungeecord_parser
 #   for bungeecord / waterfall server
-parser: vanilla_parser
+parser: paper_parser
 
-# Debug mode switch. Don't change unless necessary
+# Debug mode switch. Don't change it to true unless necessary
 debug_mode: true

@@ -1,15 +1,16 @@
 # -*- coding: utf-8 -*-
-import time
 
 
-loaded_time = time.time()
+counter = 0
 
 
 def on_load(server, old_module):
-	if old_module is None:
-		server.logger.info('I''m the first one!')
+	global counter
+	if old_module is not None:
+		counter = old_module.counter + 1
 	else:
-		server.logger.info('The former one has lived {}s before unload'.format(time.time() - old_module.loaded_time))
+		counter = 1
+	server.say(f'这是第{counter}次加载插件')
 
 
 def on_unload(server):
@@ -23,11 +24,11 @@ def on_info(server, info):
 		if info.content == '!!start':
 			server.start()
 		if info.content == '!!stop':
-			server.stop()
+			server.stop_exit()
 		if info.content == '!!restart':
 			server.restart()
-		if info.content == '!!err':
-			x = 1 / 0
+		if info.source == 1 and info.content.startswith('say '):
+			server.say(info.content[4:])
 
 
 def on_player_joined(server, player):

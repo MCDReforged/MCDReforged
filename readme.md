@@ -1,11 +1,35 @@
-`on_load(server, old_instance)`
+MCDReforged
+--------
 
-`on_unload(server)`
+[中文](https://github.com/Fallen-Breath/MCDReforged/blob/master/doc/readme_cn.md)
 
-`on_info(server, info)`
+> 
 
-`on_player_joined(server, player)`
 
-`on_player_left(server, player)`
+## Environment
 
-stdout / console->praser->reactor->plugin_manager->plugins
+Python version should be python3 and at least it works on Python 3.6 and Python 3.8
+
+### Python modules
+
+- PyYAML
+
+The requirements are also stored in `requirements.txt`
+
+### Minecraft server
+
+## Advantage
+
+- 
+
+## Usage
+
+1. 
+
+## Config
+
+The config file is `config.yml`
+
+## API
+
+## Notes

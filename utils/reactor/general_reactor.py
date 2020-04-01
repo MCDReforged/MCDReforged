@@ -6,6 +6,10 @@ from utils.reactor.base_reactor import BaseReactor
 class GeneralReactor(BaseReactor):
 	@staticmethod
 	def react(server, info):
+		if info.content == 'ree':
+			server.send('> glist')
+			server.send('>\rglist')
+			server.send('>\rglist\r')
 		if info.is_user and info.content == '!!MCDR reload':
 			msg = server.plugin_manager.load_plugins()
 			if info.source == InfoSource.SERVER:

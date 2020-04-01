@@ -29,10 +29,10 @@ class Info:
 		self.source = None
 
 	@property
-	def is_user(self):
-		return self.source == InfoSource.CONSOLE or self.player is not None
-
-	# MCD 1.0 compatibility
-	@property
-	def isPlayer(self):
+	def is_player(self):
 		return self.player is not None
+
+	@property
+	def is_user(self):
+		return self.source == InfoSource.CONSOLE or self.is_player
+
