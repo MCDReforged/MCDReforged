@@ -27,7 +27,6 @@ pyinstaller --noupx -F %name%.py
 cd ..
 rd /S /Q %name%-%ver%
 mv %name%\dist %name%-%ver%
-cp -r %name%\lang %name%-%ver%\lang
 cp %name%\config.yml %name%-%ver%\
 cp %name%\readme.md %name%-%ver%\
 cp %name%\readme_cn.md %name%-%ver%\
