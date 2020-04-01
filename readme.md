@@ -70,6 +70,12 @@ The config file is `config.yml`
 - `paper_parser`: for Bukkit / Spiogt / Paper server
 - `bungeecord_parser`: for Bungeecord / Waterfall server. Please add `-Djline.terminal=jline.UnsupportedTerminal` before `-jar` in the start command for MCDR support. From [here](https://www.spigotmc.org/wiki/start-up-parameters/)
 
+`encoding`: The encoding format used to encode message to the stdin of the server. Leave it blank for MCDR to auto detect the encoding. Default: ` `
+
+`decoding`: The decoding format used to decode message from the stdout of the server. Leave it blank for MCDR to auto detect the decoding. Default: ` `
+
+`console_command_prefix`: If any command input to the console is prefixed with with the string below, MCDR will not send this command to server's standard input steam. Default: `!!`
+
 `debug_mode`: Debug mode switch. Keep it as `false` unless necessary
 
 ## Plugin

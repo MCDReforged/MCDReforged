@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import locale
 import logging
+import sys
 import time
 import traceback
 import threading
@@ -17,7 +18,9 @@ class Server:
 	def __init__(self):
 		self.console_input_thread = None
 		self.process = None
-		self.parser = None  # assign in reload_config()
+		self.parser = None  # will be assigned in reload_config()
+		self.encoding_method = None  # will be assigned in reload_config()
+		self.decoding_method = None  # will be assigned in reload_config()
 		self.server_status = ServerStatus.STOPPED
 		self.flag_interrupt = False  # ctrl-c flag
 
@@ -37,6 +40,8 @@ class Server:
 		self.config.read_config()
 		self.logger.set_level(logging.DEBUG if self.config['debug_mode'] else logging.INFO)
 		self.parser = self.load_parser(constant.PARSER_FOLDER, self.config['parser'])
+		self.encoding_method = self.config['encoding'] if self.config['encoding'] is not None else sys.getdefaultencoding()
+		self.decoding_method = self.config['decoding'] if self.config['decoding'] is not None else locale.getpreferredencoding()
 
 	@staticmethod
 	def load_parser(path, parser_name):
@@ -100,9 +105,9 @@ class Server:
 			self.process.kill()
 			self.logger.info('Process killed')
 
-	def send(self, text, ending='\r\n'):
+	def send(self, text, ending='\n'):
 		if type(text) is str:
-			text = (text + ending).encode(locale.getpreferredencoding())
+			text = (text + ending).encode(self.encoding_method)
 		if self.is_running():
 			self.process.stdin.write(text)
 			self.process.stdin.flush()
@@ -127,7 +132,7 @@ class Server:
 					self.set_server_status(ServerStatus.STOPPING_BY_ITSELF)
 				return None
 			else:
-				text = text.decode(locale.getpreferredencoding())
+				text = text.decode(self.decoding_method)
 				return text.rstrip().lstrip()
 
 	def tick(self):

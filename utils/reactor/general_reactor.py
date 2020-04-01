@@ -16,8 +16,8 @@ class GeneralReactor(BaseReactor):
 			else:
 				server.server_interface.tell(info.player, '§cPermission denied§r')
 		else:
-			if info.source == InfoSource.CONSOLE:  # send input command to server's stdin
-				server.send(info.content)
+			if info.source == InfoSource.CONSOLE and not info.content.startswith(server.config['console_command_prefix']):
+				server.send(info.content)  # send input command to server's stdin
 			server.plugin_manager.call('on_info', (server.server_interface, info))
 
 

@@ -31,8 +31,8 @@ def on_info(server, info):
 				server.stop_exit()
 			if info.content == '!!restart':
 				server.restart()
-		if info.source == 1 and info.content.startswith('say '):
-			server.say(info.content[4:])
+		if info.source == 1 and info.content.startswith('!!say '):
+			server.say(info.content[6:])
 		if info.is_player:
 			if info.content == '!!permission':
 				server.tell(info.player, server.get_permission_level(info))

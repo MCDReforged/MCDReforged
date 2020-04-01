@@ -19,5 +19,18 @@ start_command: java -jar minecraft_server.jar --nogui
 #   for bungeecord / waterfall server
 parser: vanilla_parser
 
+# the encoding / decoding format used to encode / decode message to the server. Choose the best method for your os. Examples:
+#   utf8
+#   gbk
+# leave it blank for MCDR to auto detect system encoding
+encoding:
+decoding:
+
+# if any command input to the console starts with the string below, MCDR will not send this command to server's stdin
+# for example the default value is !! so these commands won't be sent to server's stdin
+#   !!test
+#   !!this is a command
+console_command_prefix: "!!"
+
 # Debug mode switch. Don't change it to true unless necessary
 debug_mode: false
