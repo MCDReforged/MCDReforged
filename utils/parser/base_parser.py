@@ -40,5 +40,9 @@ class BaseParser(object):
 	def pre_parse_server_stdout(text):
 		return text
 
+	@staticmethod
+	def is_server_startup_done(info):
+		return False
+
 
 parser = BaseParser

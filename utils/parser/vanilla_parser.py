@@ -51,4 +51,13 @@ class VanillaParser(base_parser.BaseParser):
 			return player
 		return None
 
+	@staticmethod
+	def is_server_startup_done(info):
+		# Done (3.500s)! For help, type "help"
+		if info.is_user:
+			return False
+		match = re.match(r'Done \([0-9.]*s\)! For help, type "help"', info.content)
+		return match is not None
+
+
 parser = VanillaParser

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import locale
 import logging
 import time
 import traceback
@@ -6,6 +7,7 @@ import threading
 from subprocess import Popen, PIPE, STDOUT
 
 from utils import config, constant, logger, tool
+from utils.permission_manager import PermissionManager
 from utils.plugin_manager import PluginManager
 from utils.server_status import ServerStatus
 from utils.server_interface import ServerInterface
@@ -13,22 +15,28 @@ from utils.server_interface import ServerInterface
 
 class Server:
 	def __init__(self):
+		self.console_input_thread = None
+		self.process = None
+		self.parser = None  # assign in reload_config()
+		self.server_status = ServerStatus.STOPPED
+		self.flag_interrupt = False  # ctrl-c flag
+
 		self.config = config.Config(constant.CONFIG_FILE)
 		self.logger = logger.Logger(constant.NAME_SHORT)
 		self.logger.set_file(constant.LOGGING_FILE)
-		if self.config['debug_mode']:
-			self.logger.set_level(logging.DEBUG)
-		self.parser = self.load_parser(constant.PARSER_FOLDER, self.config['parser'])
+		self.load_config()
 		self.reactors = self.load_reactor(constant.REACTOR_FOLDER)
-		self.console_input_thread = None
-		self.process = None
-		self.server_status = ServerStatus.STOPPED
 		self.server_interface = ServerInterface(self)
 		self.plugin_manager = PluginManager(self, constant.PLUGIN_FOLDER)
 		self.plugin_manager.load_plugins()
-		self.flag_interrupt = False  # ctrl-c flag
+		self.permission_manager = PermissionManager(self, constant.PERMISSION_FILE)
 
 	# Loaders
+
+	def load_config(self):
+		self.config.read_config()
+		self.logger.set_level(logging.DEBUG if self.config['debug_mode'] else logging.INFO)
+		self.parser = self.load_parser(constant.PARSER_FOLDER, self.config['parser'])
 
 	@staticmethod
 	def load_parser(path, parser_name):
@@ -46,12 +54,15 @@ class Server:
 
 	# MCDR server
 
+	def is_running(self):
+		return self.process is not None
+
 	def set_server_status(self, status):
 		self.server_status = status
 		self.logger.debug('Server status has set to "{}"'.format(status))
 
 	def start_server(self):
-		if self.process is not None:
+		if self.is_running():
 			self.logger.warning('Server cannot start twice')
 			return
 		self.logger.info('Starting the server')
@@ -76,7 +87,7 @@ class Server:
 			self.run()
 
 	def stop(self, forced=False, new_server_status=ServerStatus.STOPPING_BY_ITSELF):
-		if self.process is None:
+		if not self.is_running():
 			self.logger.warning('Server cannot stop when terminated')
 		self.set_server_status(new_server_status)
 		if not forced:
@@ -91,8 +102,8 @@ class Server:
 
 	def send(self, text, ending='\r\n'):
 		if type(text) is str:
-			text = (text + ending).encode(self.config['encoding'])
-		if self.process	is not None:
+			text = (text + ending).encode(locale.getpreferredencoding())
+		if self.is_running():
 			self.process.stdin.write(text)
 			self.process.stdin.flush()
 		else:
@@ -109,11 +120,14 @@ class Server:
 					time.sleep(0.1)
 					if i % 10 == 0:
 						self.logger.info('Waiting for server process to exit')
+				else:
+					self.process.kill()
+					time.sleep(1)
 				if self.server_status is ServerStatus.RUNNING:
 					self.set_server_status(ServerStatus.STOPPING_BY_ITSELF)
 				return None
 			else:
-				text = text.decode(self.config['encoding'])
+				text = text.decode(locale.getpreferredencoding())
 				return text.rstrip().lstrip()
 
 	def tick(self):
@@ -142,9 +156,10 @@ class Server:
 			self.react(parsed_result)
 
 	def run(self):
+		# main loop
 		while self.server_status != ServerStatus.STOPPED:
 			try:
-				if self.process is not None:
+				if self.is_running():
 					self.tick()
 				time.sleep(0.01)
 			except KeyboardInterrupt:
@@ -155,9 +170,17 @@ class Server:
 					self.logger.error(traceback.format_exc())
 					self.stop()
 				break
-		if self.flag_interrupt:
-			self.logger.info(f'{constant.NAME_SHORT} has been interrupted by user')
-		self.logger.info('bye')
+		# stop MCDR
+		try:
+			if self.flag_interrupt:
+				self.logger.info(f'{constant.NAME_SHORT} has been interrupted by user')
+			else:
+				self.logger.info('Server stopped')
+			self.plugin_manager.call('on_mcdr_stop', (self.server_interface,), new_thread=False)
+			self.logger.info('bye')
+		except:
+			self.logger.error('Error stopping MCDR')
+			self.logger.error(traceback.format_exc())
 
 	# the thread for processing console input
 	def console_input(self):

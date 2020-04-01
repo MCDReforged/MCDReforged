@@ -7,14 +7,15 @@ Like MCDaemon, a MCDR plugin is a `.py` file locating in `plugins/` folder. MCDR
 
 When the server has trigger specific event, MCDR will call relevant method of each plugin if the plugin has declared the method. MCDR will create a separated thread for the called method to run
 
-
-| Method | When to call | Reference usage |
-|---|---|---|
-| on_load(server, old_module) | A plugin gets loaded | The new plugin inherits information from the old plugin |
-| on_unload(server) | A plugin gets unloaded | Clean up or turn off functionality of the old plugin |
-| on_info(server, info) | A new line is output from the stdout of the server, or a command is input from the console  | Response to the information |
-| on_player_joined(server, player) | A player joined the server | Response to the information |
-| on_player_left(server, player) | A player left the server | Response to the information |
+| Method | When to call | Independent thread |Reference usage |
+|---|---|---|---|
+| on_load(server, old_module) | A plugin gets loaded | Yes | The new plugin inherits information from the old plugin |
+| on_unload(server) | A plugin gets unloaded | Yes | Clean up or turn off functionality of the old plugin |
+| on_info(server, info) | A new line is output from the stdout of the server, or a command is input from the console | Yes | Response to the information |
+| on_player_joined(server, player) | A player joined the server | Yes | Response to player joining |
+| on_player_left(server, player) | A player left the server | Yes | Response to player leaving |
+| on_server_startup(server) | The server has started up such as vanilla server outputs `Done (1.0s)! For help, type "help"` | Yes | Initialize something |
+| on_mcdr_stop(server) | The server has stopped and MCDR is about to exit | No | Save data and release resources
 
 Note: the plugin doesn't need to implement all methods above. Just implement what you need
 
@@ -22,7 +23,13 @@ Among them, the information of each parameter object is as follows：
 
 ## server
 
-This is a object for the plugin to interact with the server. It belongs to the ServerInterface class in `utils/server_interface.py`. It has the following methods:
+This is a object for the plugin to interact with the server. It belongs to the ServerInterface class in `utils/server_interface.py`. It has following variables:
+
+| Variable | Type | Function |
+|---|---|---|
+| logger | logging.Logger | A logger of MCDRIt is better to use `server.logger.info (message)` instead of `print (message)` to output information to the console. [docs](https://docs.python.org/3/library/logging.html#logger-objects)
+
+It also has these following methods:
 
 | Method | Function |
 |---|---|
@@ -32,14 +39,15 @@ This is a object for the plugin to interact with the server. It belongs to the S
 | send(text) | Send a string `text` to the stdin of the server |
 | say(text) | Use `tellraw @a` to broadcast message `text` in the server |
 | tell(player, text) | Use `tellraw <player>` to send message `text` to player `<player>` |
+| is_running() | If the server (more precisely, server process) is running |
 | wait_for_start() | Wait until the server is stopped, in other words, startable |
 | restart() | Execute `stop()`、`wait_for_start()`、`start()` in order to restart the server |
 | stop_exit() | Close the server and MCDR, in the other words, exit the program |
+| get_permission_level(obj) | Return a [integer](https://github.com/Fallen-Breath/MCDReforged#Permission) representing highest permission level the object `obj` has. `obj` can be a `Info` instance or a string representing a player name |
 
 ## info
 
 This is a parsed information object. It belongs to the Info class in `utils/info.py`. It has the following attributes:
-
 
 | Attribute | Content |
 |---|---|
@@ -112,11 +120,11 @@ def on_load(server, old_module):
         counter = old_module.counter + 1
     else:
         counter = 1
-    server.say(f'This is the {counter} time to load the plugin')
+    server.logger.info(f'This is the {counter} time to load the plugin')
 ```
 
 ## Porting MCDaemon's plugin to MCDR
 
-1. Modify the code of the old plugin that only works on python2 to be able to run on python3
+1. Modify the code of the old plugin that only works on python2 to be able to run on python3 and install required python modules
 2. Update the variable / method name to the name of the MCDR, such as changing `onServerInfo` to` on_info` and `isPlayer` to` is_player`
 3. MCDR also calls `on_info` when something has input from the console. Pay attention to whether the plugin is compatible with this situation

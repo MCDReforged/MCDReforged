@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
 
 import re
-from utils.parser import base_parser
+from utils.parser import vanilla_parser
 
 
-class PaperParser(base_parser.BaseParser):
-	STOP_COMMAND = 'stop'
-
+class PaperParser(vanilla_parser.VanillaParser):
 	@staticmethod
 	def parse_server_stdout(text):
 		raw_result = result = super(PaperParser, PaperParser).parse_server_stdout(text)
@@ -41,13 +39,6 @@ class PaperParser(base_parser.BaseParser):
 			if result is not None:
 				player = info.content.split('[')[0]
 				return player
-		return None
-
-	@staticmethod
-	def parse_player_left(info):
-		if not info.is_user and info.content.endswith('left the game'):
-			player = info.content.split(' ')[0]
-			return player
 		return None
 
 

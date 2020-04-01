@@ -7,13 +7,15 @@ MCDReforged Plugin Document
 
 当服务器触发某些指定事件时，如果插件有声明下列方法的话，MCDR 会调用每个插件的对应方法。MCDR 调用每个插件的方法时会为其新建一个独立的线程供其运行
 
-| 方法 | 调用时刻 | 参考用途 |
-|---|---|---|
-| on_load(server, old_module) | 插件被加载 | 新插件继承旧插件的信息 |
-| on_unload(server) | 插件被卸载 | 清理或关闭旧插件的功能 |
-| on_info(server, info) | 服务器的标准输出流有输出，或者控制台有输入 | 插件响应相关信息 |
-| on_player_joined(server, player) | 玩家加入服务器 | 插件响应相关信息 |
-| on_player_left(server, player) | 玩家离开服务器 | 插件响应相关信息 |
+| 方法 | 调用时刻 | 独立线程 | 参考用途 |
+|---|---|---|---|
+| on_load(server, old_module) | 插件被加载 | 是 | 新插件继承旧插件的信息 |
+| on_unload(server) | 插件被卸载 | 是 | 清理或关闭旧插件的功能 |
+| on_info(server, info) | 服务器的标准输出流有输出，或者控制台有输入 | 是 | 插件响应相关信息 |
+| on_player_joined(server, player) | 玩家加入服务器 | 是 | 插件响应玩家加入游戏 |
+| on_player_left(server, player) | 玩家离开服务器 | 是 | 插件响应玩家离开游戏 |
+| on_server_startup(server) | 服务端启动完成，如原版服务端输出 `Done (1.0s)! For help, type "help"` 后 | 是 | 插件相关初始化 |
+| on_mcdr_stop(server) | 服务端已经关闭，MCDR 即将退出 | 否 | 保存数据、释放资源
 
 注：每个插件并不需要实现所有上述方法，按需实现即可
 
@@ -21,7 +23,13 @@ MCDReforged Plugin Document
 
 ## server
 
-这是用于插件与服务端进行交互的对象，属于 `utils/server_interface.py` 中的 ServerInterface 类。它具有以下方法：
+这是用于插件与服务端进行交互的对象，属于 `utils/server_interface.py` 中的 ServerInterface 类。他具有以下变量：
+
+| 变量 | 类型 | 功能 |
+|---|---|---|
+| logger | logging.Logger | MCDR 的一个记录器，推荐用 `server.logger.info(message)` 替代 `print(message)` 来向控制台输出信息。[相关文档](https://docs.python.org/zh-cn/3/library/logging.html#logger-objects)
+
+它还具有以下方法：
 
 | 方法 | 功能 |
 |---|---|
@@ -31,9 +39,11 @@ MCDReforged Plugin Document
 | send(text) | 发送字符串 `text` 至服务端的标准输入流 |
 | say(text) | 使用 `tellraw @a` 来在服务器中广播字符串消息 `text` |
 | tell(player, text) | 使用 `tellraw <player>` 来在对玩家 `<player>` 发送字符串消息 `text` |
+| is_running() | 服务端（准确地说，服务端进程）是否在运行 |
 | wait_for_start() | 等待直至服务端完全关闭，也就是可以启动 |
 | restart() | 依次执行 `stop()`、`wait_for_start()`、`start()` 来重启服务端 |
 | stop_exit() | 关闭服务端以及 MCDR，也就是退出整个程序 |
+| get_permission_level(obj) | 返回一个[整数](https://github.com/Fallen-Breath/MCDReforged#Permission)，代表 `obj` 对象拥有的最高权限等级。`obj` 对象可为一个 `Info` 实例，或者是一个表示玩家名称的字符串 |
 
 ## info
 
@@ -110,12 +120,11 @@ def on_load(server, old_module):
         counter = old_module.counter + 1
     else:
         counter = 1
-    server.say(f'这是第{counter}次加载插件')
+    server.logger.info(f'这是第{counter}次加载插件')
 ```
 
 ## 将 MCDaemon 的插件移植至 MCDR
 
-1. 将旧插件的仅能在 python2 上运行的代码修改为可在 python3 上运行
+1. 将旧插件的仅能在 python2 上运行的代码修改为可在 python3 上运行，并安装插件需要的 Python 模块
 2. 将变量/方法名更新为 MCDR 的名称，如将 `onServerInfo` 修改为 `on_info`，将 `isPlayer` 修改为 `is_player`
 3. MCDR 在控制台输入指令时也会调用 `on_info`，注意考虑插件是否兼容这种情况
-

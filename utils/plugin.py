@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
+import traceback
+
 import utils.tool as tool
 
 
@@ -7,11 +9,22 @@ class Plugin:
 	def __init__(self, server, file_name):
 		self.server = server
 		self.file_name = file_name
+		self.plugin_name = os.path.basename(self.file_name).rstrip('.py')
 		self.module = None
 
-	def call(self, func, args=()):
+	def call(self, func, args=(), new_thread=True):
 		if hasattr(self.module, func):
-			tool.start_thread(self.module.__dict__[func], args, '{}@{}'.format(func, os.path.basename(self.file_name).rstrip('.py')))
+			target = self.module.__dict__[func]
+			if callable(target):
+				func_name = '{}@{}'.format(func, self.plugin_name)
+				if new_thread:
+					tool.start_thread(target, args, func_name)
+				else:
+					try:
+						target(*args)
+					except:
+						self.server.logger.warning(f'Error processing {func_name}')
+						self.server.logger.warning(traceback.format_exc())
 
 	def load(self, old_module=None):
 		self.module = tool.load_source(self.file_name)

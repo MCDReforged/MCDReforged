@@ -40,5 +40,13 @@ class BungeecordParser(base_parser.BaseParser):
 			text = text.replace(match.group(), '', 1)
 		return text
 
+	@staticmethod
+	def is_server_startup_done(info):
+		# Listening on /0.0.0.0:25577
+		if info.is_user:
+			return False
+		match = re.fullmatch(r'Listening on /[0-9.]+:[0-9]+', info.content)
+		return match is not None
+
 
 parser = BungeecordParser

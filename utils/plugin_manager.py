@@ -47,12 +47,14 @@ class PluginManager:
 		except:
 			self.logger.warning(f'Fail to reload plugin {plugin.file_name}')
 			self.logger.warning(traceback.format_exc())
+			self.plugins.remove(plugin)
 			return False
 		else:
 			self.logger.info('Plugin {} reloaded'.format(plugin.file_name))
 			return True
 
 	def load_plugins(self):
+		self.server.logger.info('Loading plugins')
 		self.command_prefix_listeners = {}
 		if not os.path.isdir(constant.PLUGIN_FOLDER):
 			os.makedirs(constant.PLUGIN_FOLDER)
@@ -86,6 +88,6 @@ class PluginManager:
 		self.logger.info(msg)
 		return msg
 
-	def call(self, func, args=()):
+	def call(self, func, args=(), new_thread=True):
 		for plugin in self.plugins:
-			plugin.call(func, args)
+			plugin.call(func, args, new_thread)

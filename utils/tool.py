@@ -32,3 +32,9 @@ def list_py_file(folder):
 		if os.path.isfile(file_path) and file_path.endswith('.py'):
 			ret.append(file_path)
 	return ret
+
+
+def unique_list(l):
+	ret = list(set(l))
+	ret.sort(key=l.index)
+	return ret

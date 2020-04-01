@@ -8,7 +8,7 @@ working_directory: server
 #   java -Djline.terminal=jline.UnsupportedTerminal -jar BungeeCord.jar
 #   ./start.sh
 #   start.bat
-start_command: java -jar minecraft_server.jar --nogui
+start_command: java -Djline.terminal=jline.UnsupportedTerminal -jar craftbukkit-1.13.2.jar
 
 # The parser to parse the output of the server. Available options:
 # vanilla_parser
@@ -17,14 +17,7 @@ start_command: java -jar minecraft_server.jar --nogui
 #   for paper server
 # bungeecord_parser
 #   for bungeecord / waterfall server
-parser: vanilla_parser
-
-# the encoding used to encode / decode message to the server. Choose the best encoding for your os. Examples
-# utf8
-#   for general os
-# gbk
-#   for Chinese windows user
-encoding: utf8
+parser: paper_parser
 
 # Debug mode switch. Don't change it to true unless necessary
 debug_mode: false
