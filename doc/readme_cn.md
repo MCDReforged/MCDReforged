@@ -69,7 +69,7 @@ MCDReforged
 
 ## 插件
 
-[插件文档](https://github.com/Fallen-Breath/MCDReforged/blob/master/readme.md)
+[插件文档](https://github.com/Fallen-Breath/MCDReforged/blob/master/doc/plugin_cn.md)
 
 在游戏聊天中会在控制台输入 `!!MCDR reload` 来重载插件
 
