@@ -10,6 +10,7 @@ from subprocess import Popen, PIPE, STDOUT
 from utils import config, constant, logger, tool
 from utils.permission_manager import PermissionManager
 from utils.plugin_manager import PluginManager
+from utils.rcon_manager import RconManager
 from utils.server_status import ServerStatus
 from utils.server_interface import ServerInterface
 
@@ -18,15 +19,19 @@ class Server:
 	def __init__(self):
 		self.console_input_thread = None
 		self.process = None
-		self.parser = None  # will be assigned in reload_config()
-		self.encoding_method = None  # will be assigned in reload_config()
-		self.decoding_method = None  # will be assigned in reload_config()
 		self.server_status = ServerStatus.STOPPED
 		self.flag_interrupt = False  # ctrl-c flag
+
+		# will be assigned in reload_config()
+		self.parser = None
+		self.encoding_method = None
+		self.decoding_method = None
+		self.rcon_manager = None
 
 		self.config = config.Config(constant.CONFIG_FILE)
 		self.logger = logger.Logger(constant.NAME_SHORT)
 		self.logger.set_file(constant.LOGGING_FILE)
+		self.rcon_manager = RconManager(self)
 		self.load_config()
 		self.reactors = self.load_reactor(constant.REACTOR_FOLDER)
 		self.server_interface = ServerInterface(self)
@@ -212,3 +217,8 @@ class Server:
 			except:
 				self.logger.error(f'Error processing reactor {reactor.__name__}')
 				self.logger.error(traceback.format_exc())
+
+	def connect_rcon(self):
+		self.rcon_manager.disconnect()
+		if self.config['enable_rcon']:
+			self.rcon_manager.connect(self.config['rcon_port'], self.config['rcon_password'])

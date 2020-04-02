@@ -11,6 +11,8 @@ def format_string(data):
 
 
 class ServerInterface:
+	MCDR = True  # Identifier for plugins
+
 	def __init__(self, server):
 		self.__server = server
 		self.logger = server.logger
@@ -67,5 +69,13 @@ class ServerInterface:
 		else:
 			return None
 
+	# if MCDR's rcon is running
+	def is_rcon_running(self):
+		return self.__server.rcon_manager.is_running()
 
+	# send command through rcon
+	# return the result server returned from rcon
+	# if rcon is not running return None
+	def rcon_query(self, command):
+		return self.__server.rcon_manager.send_command(command)
 

@@ -3,12 +3,14 @@
 # The working directory of the server. If you use default value server/ I will suggest you to put all the files related to the server to the server/ folder
 working_directory: server
 
+
 # The console command to start the server. Examples:
 #   java -jar minecraft_server.jar --nogui
 #   java -Djline.terminal=jline.UnsupportedTerminal -jar BungeeCord.jar
 #   ./start.sh
 #   start.bat
 start_command: java -jar minecraft_server.jar --nogui
+
 
 # The parser to parse the output of the server. Available options:
 # vanilla_parser
@@ -21,6 +23,7 @@ start_command: java -jar minecraft_server.jar --nogui
 #   for waterfall server
 parser: vanilla_parser
 
+
 # the encoding / decoding format used to encode / decode message to the server. Choose the best method for your os. Examples:
 #   utf8
 #   gbk
@@ -28,11 +31,21 @@ parser: vanilla_parser
 encoding:
 decoding:
 
+
 # if any command input to the console starts with the string below, MCDR will not send this command to server's stdin
 # for example the default value is !! so these commands won't be sent to server's stdin
 #   !!test
 #   !!this is a command
 console_command_prefix: "!!"
+
+
+# rcon setting
+# if enable, plugins can use rcon to query command from the server
+# MCDR will connect to 127.0.0.1 with the port and the password set below
+enable_rcon: true
+rcon_port: 25575
+rcon_password: password
+
 
 # Debug mode switch. Don't change it to true unless necessary
 debug_mode: false

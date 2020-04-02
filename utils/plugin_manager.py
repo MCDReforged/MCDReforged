@@ -74,17 +74,19 @@ class PluginManager:
 				counter_unload += self.unload_plugin(plugin)
 				counter_all += 1
 		counter_fail = counter_all - counter_load - counter_unload - counter_reload
-		msg = ''
+		msg = []
 		if counter_load > 0:
-			msg += 'Loaded: {} plugins '.format(counter_load)
+			msg.append('Loaded: {} plugins'.format(counter_load))
 		if counter_unload > 0:
-			msg += 'Unloaded: {} plugins '.format(counter_unload)
+			msg.append('Unloaded: {} plugins'.format(counter_unload))
 		if counter_reload > 0:
-			msg += 'Reloaded: {} plugins '.format(counter_reload)
+			msg.append('Reloaded: {} plugins'.format(counter_reload))
 		if counter_fail > 0:
-			msg += 'Failed: {} plugins '.format(counter_fail)
-		if msg == '':
+			msg.append('Failed: {} plugins'.format(counter_fail))
+		if len(msg) == 0:
 			msg = 'No plugin operation has occurred'
+		else:
+			msg = '; '.join(msg)
 		return msg
 
 	def call(self, func, args=(), new_thread=True):
