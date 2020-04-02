@@ -85,7 +85,6 @@ class PluginManager:
 			msg += 'Failed: {} plugins '.format(counter_fail)
 		if msg == '':
 			msg = 'No plugin operation has occurred'
-		self.logger.info(msg)
 		return msg
 
 	def call(self, func, args=(), new_thread=True):

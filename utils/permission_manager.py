@@ -11,14 +11,17 @@ class PermissionLevel:
 	HELPER = 2
 	USER = 1
 	GUEST = 0
-	LEVEL_VALUE = collections.OrderedDict([
+	DICT_VALUE = collections.OrderedDict([
 		('admin', ADMIN),
 		('helper', HELPER),
 		('user', USER),
 		('guest', GUEST)
 	])
-	LEVEL_NAME = collections.OrderedDict([(value, item) for item, value in LEVEL_VALUE.items()])
-	TOP_LEVEL = list(LEVEL_VALUE.items())[0][1]
+	DICT_NAME = collections.OrderedDict([(value, item) for item, value in DICT_VALUE.items()])
+	VALUE = list(DICT_VALUE.values())
+	NAME = list(DICT_VALUE.keys())
+	TOP_LEVEL = VALUE[0]
+	BOTTOM_LEVEL = VALUE[-1]
 
 
 class PermissionManager:
@@ -27,6 +30,8 @@ class PermissionManager:
 		self.permission_file = permission_file
 		self.data = None
 		self.load()
+
+	# File operating
 
 	def load(self):
 		try:
@@ -44,18 +49,18 @@ class PermissionManager:
 				'guest': []
 			}
 		self.unique()
+		self.save()
 
 	# deduplicate the permission data
 	def unique(self):
 		for key, value in self.data.items():
-			if key in PermissionLevel.LEVEL_VALUE.keys() and type(value) is list:
+			if key in PermissionLevel.VALUE and type(value) is list:
 				self.data[key] = tool.unique_list(self.data[key])
-		self.save()
 
 	# change empty list to None for nicer look in the .yml
 	def empty_to_none(self):
 		for key, value in self.data.items():
-			if key in PermissionLevel.LEVEL_VALUE.keys() and value is not None and len(value) == 0:
+			if key in PermissionLevel.NAME and value is not None and len(value) == 0:
 				self.data[key] = None
 
 	def save(self):
@@ -63,40 +68,79 @@ class PermissionManager:
 		with open(self.permission_file, 'w') as file:
 			yaml.round_trip_dump(self.data, file)
 
-	def get_permission_group_list(self, name):
-		if type(name) == int:
-			name = PermissionLevel.LEVEL_NAME[name]
+	# Permission processing
+
+	# convert any type of permission level into int value, examples:
+	# 'guest' -> 0; '1' -> 1; 'admin' -> 3
+	# if the argument is invalid return None
+	@staticmethod
+	def format_level_value(level):
+		if type(level) == str:
+			if level.isdigit():
+				level = int(level)
+			elif level in PermissionLevel.NAME:
+				level = PermissionLevel.DICT_VALUE[level]
+		if type(level) is int and PermissionLevel.BOTTOM_LEVEL <= level <= PermissionLevel.TOP_LEVEL:
+			return level
+		return None
+
+	# convert any type of permission level into str , examples:
+	# 0 -> 'guest'; '1' -> 'user'; 'admin' -> 'admin'
+	# if the argument is invalid return None
+	@staticmethod
+	def format_level_name(level):
+		value = PermissionManager.format_level_value(level)
+		if value is None:
+			return value
+		return PermissionLevel.DICT_NAME[value]
+
+	# return the list of the player who has permission level <level>
+	def get_permission_group_list(self, level):
+		name = self.format_level_name(level)
+		if name is None:
+			raise TypeError(f'{str(level)} is not a valid permission level')
 		if self.data[name] is None:
 			self.data[name] = []
 		return self.data[name]
 
 	# add a new player
-	def add_player(self, player):
-		level_name = self.data['default_level']
+	def add_player(self, player, level_name=None):
+		if level_name is None:
+			level_name = self.data['default_level']
 		self.get_permission_group_list(level_name).append(player)
+		self.server.logger.debug('Added player {} with permission level {}'.format(player, level_name))
 		self.save()
-		self.server.logger.info('Added player {} with permission level {}'.format(player, level_name))
-		return PermissionLevel.LEVEL_VALUE[level_name]
+		return self.format_level_value(level_name)
+
+	# add a new player
+	def remove_player(self, player):
+		while True:
+			level = self.get_player_level(player, auto_add=False)
+			if level is None:
+				break
+			self.get_permission_group_list(level).remove(player)
+		self.server.logger.debug('Removed player {}'.format(player))
+		self.save()
 
 	# set new permission level of the player
 	def set_level(self, player, new_level):
-		old_level = self.get_player_level(player)
-		old_level_name = PermissionLevel.LEVEL_NAME[old_level]
-		new_level_name = PermissionLevel.LEVEL_NAME[new_level]
-		self.get_permission_group_list(old_level_name).remove(player)
-		self.get_permission_group_list(new_level_name).append(player)
-		self.unique()  # includes self.save()
-		self.server.logger.info('The permission level of {} has changed from {} to {}'.format(player, old_level_name, new_level_name))
+		self.remove_player(player)
+		self.add_player(player, new_level)
+		self.server.logger.info('The permission level of {} has set to {}'.format(player, self.format_level_name(new_level)))
 
 	# return the permission level from a player's name
-	# if the player is not in the permission data set its level to default_level
+	# if the player is not in the permission data set its level to default_level, unless parameter auto_add is set
+	# to False, then it will return None
 	# if the player is in multiple permission level group it will return the highest one
-	def get_player_level(self, name):
-		for level_value in PermissionLevel.LEVEL_VALUE.values():
+	def get_player_level(self, name, auto_add=True):
+		for level_value in PermissionLevel.VALUE:
 			if name in self.get_permission_group_list(level_value):
 				return level_value
 		else:
-			return self.add_player(name)
+			if auto_add:
+				return self.add_player(name)
+			else:
+				return None
 
 	# add player if necessary
 	def touch_player(self, player):

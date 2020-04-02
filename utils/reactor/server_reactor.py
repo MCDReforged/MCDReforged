@@ -4,20 +4,20 @@ from utils.reactor.base_reactor import BaseReactor
 
 
 class ServerReactor(BaseReactor):
-	@staticmethod
-	def react(server, info):
+	def react(self, info):
 		if info.source == InfoSource.SERVER:
-			player = server.parser.parse_player_joined(info)
+			player = self.server.parser.parse_player_joined(info)
 			if player is not None:
-				server.permission_manager.touch_player(player)
-				server.plugin_manager.call('on_player_joined', (server.server_interface, player))
+				self.server.permission_manager.touch_player(player)
+				self.server.plugin_manager.call('on_player_joined', (self.server.server_interface, player))
 
-			player = server.parser.parse_player_left(info)
+			player = self.server.parser.parse_player_left(info)
 			if player is not None:
-				server.plugin_manager.call('on_player_left', (server.server_interface, player))
+				self.server.plugin_manager.call('on_player_left', (self.server.server_interface, player))
 
-			if server.parser.is_server_startup_done(info):
-				server.plugin_manager.call('on_server_startup', (server.server_interface, ))
+			if self.server.parser.is_server_startup_done(info):
+				self.server.plugin_manager.call('on_server_startup', (self.server.server_interface, ))
 
 
-reactor = ServerReactor
+def get_reactor(server):
+	return ServerReactor(server)

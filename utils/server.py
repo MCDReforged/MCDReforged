@@ -49,13 +49,12 @@ class Server:
 		file_name = path + parser_name + '.py'
 		return tool.load_source(file_name).parser
 
-	@staticmethod
-	def load_reactor(folder):
+	def load_reactor(self, folder):
 		reactors = []
 		for file in tool.list_py_file(folder):
 			module = tool.load_source(file)
-			if hasattr(module, 'reactor'):
-				reactors.append(module.reactor)
+			if hasattr(module, 'get_reactor'):
+				reactors.append(module.get_reactor(self))
 		return reactors
 
 	# MCDR server
@@ -209,7 +208,7 @@ class Server:
 	def react(self, info):
 		for reactor in self.reactors:
 			try:
-				reactor.react(self, info)
+				reactor.react(info)
 			except:
 				self.logger.error(f'Error processing reactor {reactor.__name__}')
 				self.logger.error(traceback.format_exc())

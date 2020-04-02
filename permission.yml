@@ -9,15 +9,8 @@
 # the default permission level a new player will get
 default_level: user
 
-# a group with the highest power to control the MCDR
 admin:
-
-# a group of admin's helper
-helper:
-
-# a group that normal player will be in
-user:
 - Fallen_Breath
-
-# a group for guest
+helper:
+user:
 guest:

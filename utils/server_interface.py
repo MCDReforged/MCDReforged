@@ -6,6 +6,10 @@ from utils.info import Info
 from utils.server_status import ServerStatus
 
 
+def format_string(data):
+	return str(data).replace('\\', '\\\\').replace('"', '\\"')
+
+
 class ServerInterface:
 	def __init__(self, server):
 		self.__server = server
@@ -27,10 +31,10 @@ class ServerInterface:
 		self.__server.send(text, ending='')
 
 	def say(self, data):
-		self.execute('tellraw @a {"text":"' + str(data) + '"}')
+		self.execute('tellraw @a {{"text":"{}"}}'.format(format_string(data)))
 
 	def tell(self, player, data):
-		self.execute('tellraw ' + player + ' {"text":"' + str(data) + '"}')
+		self.execute('tellraw {} {{"text":"{}"}}'.format(player, format_string(data)))
 
 	# MCDR stuffs
 
