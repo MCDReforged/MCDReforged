@@ -172,7 +172,7 @@ Permission file `permission.yml` is the config and storage file for the system
 - `user`: A list of names of players who has the permission level `user`
 - `guest`: A list of names of players who has the permission level `guest`
 
-Player name list of permission levels can be fill like this:
+Player name list of permission levels can be filled like this:
 
 ```
 admin:

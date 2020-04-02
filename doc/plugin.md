@@ -142,11 +142,11 @@ def on_load(server, old_module):
 
 A lazy way to do that is to add such method below at the end of the old plugin after solving python3 compatibility issues:
 
-`` `
+```
 def on_info (server, info):
-     info2 = copy.deepcopy (info)
-     info2.isPlayer = info2.is_player
-     onServerInfo (server, info2)
-`` `
+    info2 = copy.deepcopy (info)
+    info2.isPlayer = info2.is_player
+    onServerInfo (server, info2)
+```
 
 Remember to `import copy`
