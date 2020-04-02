@@ -177,7 +177,8 @@ class Server:
 			try:
 				if self.is_running():
 					self.tick()
-				time.sleep(0.01)
+				else:
+					time.sleep(0.01)
 			except KeyboardInterrupt:
 				self.flag_interrupt = True
 			except:
