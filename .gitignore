@@ -9,3 +9,4 @@ server/*
 !plugins/sample_plugin.py
 plugins/*
 config/
+qb_multi/

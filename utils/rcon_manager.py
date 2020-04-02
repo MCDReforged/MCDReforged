@@ -11,10 +11,10 @@ class RconManager:
 	def is_running(self):
 		return self.rcon is not None and self.rcon.socket is not None
 
-	def connect(self, port, password):
+	def connect(self, address, port, password):
 		if self.is_running():
 			self.disconnect()
-		self.rcon = Rcon('127.0.0.1', port, password, self.logger)
+		self.rcon = Rcon(address, port, password, self.logger)
 		try:
 			success = self.rcon.connect()
 		except Exception as e:

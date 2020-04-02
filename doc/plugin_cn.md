@@ -44,6 +44,8 @@ MCDReforged Plugin Document
 | restart() | 依次执行 `stop()`、`wait_for_start()`、`start()` 来重启服务端 |
 | stop_exit() | 关闭服务端以及 MCDR，也就是退出整个程序 |
 | get_permission_level(obj) | 返回一个[整数](https://github.com/Fallen-Breath/MCDReforged/blob/master/doc/readme_cn.md#权限)，代表 `obj` 对象拥有的最高权限等级。`obj` 对象可为一个 `Info` 实例，或者是一个表示玩家名称的字符串 |
+| is_rcon_running() | 返回一个 bool 代表 rcon 是否在运行 |
+| rcon_query(command) | 通过 rcon 向服务端发送指令 `command`，然后返回一个字符串，表示该指令执行后的返回值。如果 rcon 未在运行或者有异常发生，返回 None |
 
 ## info
 
@@ -128,3 +130,14 @@ def on_load(server, old_module):
 1. 将旧插件的仅能在 python2 上运行的代码修改为可在 python3 上运行，并安装插件需要的 Python 模块
 2. 将变量/方法名更新为 MCDR 的名称，如将 `onServerInfo` 修改为 `on_info`，将 `isPlayer` 修改为 `is_player`
 3. MCDR 在控制台输入指令时也会调用 `on_info`，注意考虑插件是否兼容这种情况
+
+一种比较偷懒的是在解决 python3 兼容问题后在旧插件末尾加入诸如以下的方法：
+
+```
+def on_info(server, info):
+    info2 = copy.deepcopy(info)
+    info2.isPlayer = info2.is_player
+    onServerInfo(server, info2)
+```
+
+记得要 `import copy`

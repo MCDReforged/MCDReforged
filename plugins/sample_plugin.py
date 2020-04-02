@@ -33,6 +33,10 @@ def on_info(server, info):
 				server.restart()
 		if info.source == 1 and info.content.startswith('!!say '):
 			server.say(info.content[6:])
+		if info.content == '!!rcon':
+			server.say('rcon is running? ' + str(server.is_rcon_running()))
+			if server.is_rcon_running():
+				server.say('"time query gametime" command result: ' + server.rcon_query('time query gametime'))
 		if info.is_player:
 			if info.content == '!!permission':
 				server.tell(info.player, server.get_permission_level(info))

@@ -60,24 +60,84 @@ MCDReforged/
 
 配置文件为 `config.yml`
 
-`working_directory`: 服务端的工作路径。默认为 `server`，即服务端将在 `server` 文件夹中执行
+### working_directory
 
-`start_command`: 启动指令，诸如 `java -jar minecraft_server.jar` 或者 `./start.sh`
+默认值: `server`
 
-`parser`: 解析器选项。对于不同种类的服务端需要使用不同种类的解析器。可用选项为：
+服务端的工作路径
+
+默认为 `server`，即服务端将在 `server` 文件夹中执行
+
+### start_command
+
+默认值: `java -Xms1G -Xmx2G -jar minecraft_server.jar --nogui`
+
+启动指令，诸如 `java -jar minecraft_server.jar` 或者 `./start.sh`
+
+### parser
+
+默认值: `vanilla_parser`
+
+解析器选项。对于不同种类的服务端需要使用不同种类的解析器。可用选项为：
 
 - `vanilla_parser`: 适用于原版 / 地毯 / Fabric 服务端
 - `paper_parser`: 适用于 Bukkit / Spiogt / Paper 服务端
 - `bungeecord_parser`: 适用于Bungeecord 服务端。请在启动参数的 `-jar` 前添加 `-Djline.terminal=jline.UnsupportedTerminal` 以让其支持 MCDR 的控制，[来源](https://www.spigotmc.org/wiki/start-up-parameters/)
 - `waterfall_parser`: 适用于 Waterfall 服务端
 
-`encoding`: 用于编码输入文本至服务端标准输入流的编码格式。留空以让 MCDR 自动检测编码格式。默认值: ` `
+### encoding
 
-`decoding`: 用于解码服务端标准输出流的文本的编码格式。留空以让 MCDR 自动检测编码格式。默认值: ` `
+默认值: ` `
 
-`console_command_prefix`: 对于任意以其为前缀的由控制台输入的命令，MCDR 将不会将此命令输入至服务端的标准输入流。默认值: `!!`
+用于编码输入文本至服务端标准输入流的编码格式
 
-`debug_mode`: 调试模式开关。除非有必要，否则设置为 `false` 即可
+留空以让 MCDR 自动检测编码格式
+
+### decoding
+
+默认值: ` `
+
+用于解码服务端标准输出流的文本的编码格式
+
+留空以让 MCDR 自动检测编码格式
+
+### console_command_prefix
+
+默认值: `!!`
+
+对于任意以其为前缀的由控制台输入的命令，MCDR 将不会将此命令输入至服务端的标准输入流
+
+### enable_rcon
+
+默认值: `false`
+
+如果值为 `true`，MCDR 会在服务端启动完成后向服务器发起 rcon 连接，这意味着插件可以通过 rcon 连接来向服务端发送命令并得到返回结果
+
+如果值为 `false`，MCDR 不会向服务端发起 rcon 连接
+
+### rcon_address
+
+用于 rcon 连接的地址。对于本地服务器来说（已经是了）使用默认值即可
+
+默认值: `127.0.0.1`
+
+### rcon_port
+
+用于 rcon 连接的端口，应当与 `server.properties` 文件中的 `rcon.port` 相同
+
+默认值: `25575`
+
+### rcon_password
+
+用于 rcon 连接的密码，应当与 `server.properties` 文件中的 `rcon.password` 相同
+
+默认值: `password`
+
+### debug_mode
+
+默认值: `false`
+
+调试模式开关。除非有必要，否则设置为 `false` 即可
 
 ## 插件
 
@@ -89,7 +149,9 @@ MCDReforged/
 
 ## 权限
 
-MCDR 配备了一个简易的权限系统给插件制作者使用。一共有 4 中不同的权限等级：
+MCDR 配备了一个简易的权限系统给插件制作者使用
+
+一共有 4 中不同的权限等级：
 
 | 名称 | 值 | 描述 |
 |---|---|---|
@@ -122,16 +184,23 @@ user:
 guest:
 ```
 
-## 指令
+## 命令
 
-MCDR 提供了一些控制 MCDR 的指令，它们均可在游戏中通过聊天或者通过控制台输入来执行。它们是：
+MCDR 提供了一些控制 MCDR 的命令，它们均可在游戏中通过聊天或者通过控制台输入来执行。它们是：
 
-| 指令 | 缩写 | 功能 |
+| 命令 | 缩写 | 功能 |
 |---|---|---|
+| !!MCDR |  | 显示帮助信息
+| !!MCDR status |  | 显示 MCDR 的状态
+| !!MCDR reload | !!MCDR r | 显示 reload 命令的帮助信息
 | !!MCDR reload plugin | !!MCDR r plg | 重新加载插件
 | !!MCDR reload config | !!MCDR r cfg | 重新加载配置文件
 | !!MCDR reload permission | !!MCDR r perm | 重新加载权限文件
 | !!MCDR reload all | !!MCDR r all | 重新加载上述所有
+| !!MCDR permission | !!MCDR perm | 显示 permission 命令的帮助信息
+| !!MCDR permission list \[\<level\>\] | !!MCDR perm list \[\<level\>\] | 列出所有玩家的权限等级。如果\[\<level\>\] 被指定则只会列出权限等级 \[\<level\>\] 的列表
+| !!MCDR permission set <player> <level> | !!MCDR perm set \<player\> \<level\> | 将玩家 \<player\> 的权限等级设置为 \<level\>
+| !!MCDR permission remove <player> | !!MCDR perm remove \<player\> | 将玩家 \<player\> 从权限等级数据库中移除
 
 只有具有 `admin` 权限等级的玩家才被允许通过游戏输入执行这些命令
 

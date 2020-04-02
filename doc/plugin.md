@@ -44,6 +44,8 @@ It also has these following methods:
 | restart() | Execute `stop()`、`wait_for_start()`、`start()` in order to restart the server |
 | stop_exit() | Close the server and MCDR, in the other words, exit the program |
 | get_permission_level(obj) | Return a [integer](https://github.com/Fallen-Breath/MCDReforged#Permission) representing highest permission level the object `obj` has. `obj` can be a `Info` instance or a string representing a player name |
+| is_rcon_running() | Return a bool representing if the rcon is running |
+| rcon_query(command) | Send the command `command` via rcon to the server. Return a response string from the server. Return None if rcon stops or exception occurred |
 
 ## info
 
@@ -128,3 +130,14 @@ def on_load(server, old_module):
 1. Modify the code of the old plugin that only works on python2 to be able to run on python3 and install required python modules
 2. Update the variable / method name to the name of the MCDR, such as changing `onServerInfo` to` on_info` and `isPlayer` to` is_player`
 3. MCDR also calls `on_info` when something has input from the console. Pay attention to whether the plugin is compatible with this situation
+
+A lazy way to do that is to add such method below at the end of the old plugin after solving python3 compatibility issues:
+
+`` `
+def on_info (server, info):
+     info2 = copy.deepcopy (info)
+     info2.isPlayer = info2.is_player
+     onServerInfo (server, info2)
+`` `
+
+Remember to `import copy`

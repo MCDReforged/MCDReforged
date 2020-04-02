@@ -60,24 +60,86 @@ MCDReforged/
 
 The config file is `config.yml`
 
-`working_directory`: The working directory of the server. Default value is `server`, which means the server will run in the `server/` folder
+### working_directory
 
-`start_command`: The start command, like `java -jar minecraft_server.jar` or `./start.sh`
+Default: `server`
 
-`parser`: The specific parser for different type of server. Available options:
+The working directory of the server
+
+Default value is `server`, which means the server will run in the `server/` folder
+
+### start_command
+
+Default: `java -Xms1G -Xmx2G -jar minecraft_server.jar --nogui`
+
+The start command, like `java -jar minecraft_server.jar` or `./start.sh`
+
+### parser
+
+Default: `vanilla_parser`
+
+The specific parser for different type of server. Available options:
 
 - `vanilla_parser`: for Vanilla / Carpet / Fabric server
 - `paper_parser`: for Bukkit / Spiogt / Paper server
 - `bungeecord_parser`: for Bungeecord. Please add `-Djline.terminal=jline.UnsupportedTerminal` before `-jar` in the start command for MCDR support. From [here](https://www.spigotmc.org/wiki/start-up-parameters/)
 - `waterfall_parser`: for Waterfall server
 
-`encoding`: The encoding format used to encode message to the stdin of the server. Leave it blank for MCDR to auto detect the encoding. Default: ` `
+### encoding
 
-`decoding`: The decoding format used to decode message from the stdout of the server. Leave it blank for MCDR to auto detect the decoding. Default: ` `
+Default: ` `
 
-`console_command_prefix`: If any command input to the console is prefixed with with the string below, MCDR will not send this command to server's standard input steam. Default: `!!`
+The encoding format used to encode message to the stdin of the server
 
-`debug_mode`: Debug mode switch. Keep it as `false` unless necessary
+Leave it blank for MCDR to auto detect the encoding. 
+
+### decoding
+
+Default: ` `
+
+The decoding format used to decode message from the stdout of the server
+
+Leave it blank for MCDR to auto detect the decoding
+
+### console_command_prefix
+
+Default: `!!`
+
+If any command input to the console is prefixed with with the string below, MCDR will not send this command to server's standard input steam
+
+### enable_rcon
+
+Default: `false`
+
+If the value is `true`, MCDR will start a rcon to the server after server startup, which means plugins can use rcon to send command and get result through rcon from the server
+
+If the value is `false`, MCDR will not start rcon connection to the server
+
+### rcon_address
+
+The address for rcon to connect. For local server (It is already) just keep default value
+
+Default: `127.0.0.1`
+
+### rcon_port
+
+The port for rcon to connect. It should be the same as `rcon.port` in `server.properties` file
+
+Default: `25575`
+
+### rcon_password
+
+The password for of rcon. It should be the same as `rcon.password` in `server.properties` file
+
+It should be the same as 
+
+Default: `password`
+
+### debug_mode
+
+Default: `false`
+
+Debug mode switch. Keep it as `false` unless necessary
 
 ## Plugin
 
@@ -128,10 +190,17 @@ There several commands to control MCDR. These command can be both input in game 
 
 | Command | Short form | Function |
 |---|---|---|
+| !!MCDR |  | Show help message 
+| !!MCDR status |  | show MCDR status
+| !!MCDR reload | !!MCDR r | Show reload command help message
 | !!MCDR reload plugin | !!MCDR r plg | Reload all plugins 
 | !!MCDR reload config | !!MCDR r cfg | Reload config file
 | !!MCDR reload permission | !!MCDR r perm | Reload permission file
 | !!MCDR reload all | !!MCDR r all | Reload everything above
+| !!MCDR permission | !!MCDR perm | Show permission command help message
+| !!MCDR permission list \[\<level\>\] | !!MCDR perm list \[\<level\>\] | List all player's permission. Only list permission level \[\<level\>\] if \[\<level\>\] has set
+| !!MCDR permission set <player> <level> | !!MCDR perm set \<player\> \<level\> | Set the permission level of \<player\> to \<level\>
+| !!MCDR permission remove <player> | !!MCDR perm remove \<player\> | Remove \<player\> from the permission database
 
 Only player with `admin` permission level is allow to execute these command in game chat
 

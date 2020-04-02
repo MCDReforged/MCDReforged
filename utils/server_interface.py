@@ -26,10 +26,12 @@ class ServerInterface:
 		self.__server.stop(forced=False, new_server_status=ServerStatus.STOPPING_BY_PLUGIN)
 
 	def execute(self, text):
+		self.logger.debug('Plugin executed "{}"'.format(text))
 		self.__server.send(text)
 
 	# without '\n' ending
 	def send(self, text):
+		self.logger.debug('Plugin sent "{}"'.format(text))
 		self.__server.send(text, ending='')
 
 	def say(self, data):

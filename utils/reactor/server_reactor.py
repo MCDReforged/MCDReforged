@@ -16,6 +16,7 @@ class ServerReactor(BaseReactor):
 				self.server.plugin_manager.call('on_player_left', (self.server.server_interface, player))
 
 			if self.server.parser.is_server_startup_done(info):
+				self.server.flag_server_startup = True
 				self.server.connect_rcon()
 				self.server.plugin_manager.call('on_server_startup', (self.server.server_interface, ))
 

@@ -18,9 +18,10 @@ from utils.server_interface import ServerInterface
 class Server:
 	def __init__(self):
 		self.console_input_thread = None
-		self.process = None
+		self.process = None  # the process for the server
 		self.server_status = ServerStatus.STOPPED
 		self.flag_interrupt = False  # ctrl-c flag
+		self.flag_server_startup = False  # set to True after server startup. used to start the rcon server
 
 		# will be assigned in reload_config()
 		self.parser = None
@@ -48,6 +49,7 @@ class Server:
 		self.encoding_method = self.config['encoding'] if self.config['encoding'] is not None else sys.getdefaultencoding()
 		self.decoding_method = self.config['decoding'] if self.config['decoding'] is not None else locale.getpreferredencoding()
 		self.logger.info(f'Encoding / Decoding method has set to {self.encoding_method} / {self.decoding_method}')
+		self.connect_rcon()
 
 	@staticmethod
 	def load_parser(path, parser_name):
@@ -140,15 +142,19 @@ class Server:
 				text = text.decode(self.decoding_method)
 				return text.rstrip().lstrip()
 
+	def on_server_stop(self):
+		return_code = self.process.poll()
+		self.logger.info(f'Server exited with code {return_code}')
+		self.process = None
+		self.flag_server_startup = False
+		if self.server_status == ServerStatus.STOPPING_BY_ITSELF:
+			self.logger.info('Server stopped by itself')
+			self.set_server_status(ServerStatus.STOPPED)
+
 	def tick(self):
 		text = self.receive()
 		if text is None:  # server process has been terminated
-			return_code = self.process.poll()
-			self.logger.info(f'Server exited with code {return_code}')
-			self.process = None
-			if self.server_status == ServerStatus.STOPPING_BY_ITSELF:
-				self.logger.info('Server stopped by itself')
-				self.set_server_status(ServerStatus.STOPPED)
+			self.on_server_stop()
 			return
 
 		try:
@@ -220,5 +226,5 @@ class Server:
 
 	def connect_rcon(self):
 		self.rcon_manager.disconnect()
-		if self.config['enable_rcon']:
-			self.rcon_manager.connect(self.config['rcon_port'], self.config['rcon_password'])
+		if self.config['enable_rcon'] and self.flag_server_startup:
+			self.rcon_manager.connect(self.config['rcon_address'], self.config['rcon_port'], self.config['rcon_password'])

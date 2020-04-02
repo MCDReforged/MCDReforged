@@ -14,10 +14,10 @@ class Validator:
 
 class MCDRCommandManager:
 	HELP_MESSAGE = '''
-!!MCDR: show this message
-!!MCDR reload: show reload command help message
-!!MCDR status: show MCDR status
-!!MCDR permission: show permission command help message
+!!MCDR: Show this message
+!!MCDR reload: Show reload command help message
+!!MCDR status: Show MCDR status
+!!MCDR permission: Show permission command help message
 '''.strip()
 
 	HELP_MESSAGE_RELOAD = '''
@@ -29,9 +29,9 @@ You can use "r" as a shortform of "reload"
 '''.strip()
 
 	HELP_MESSAGE_PERMISSION = '''
-!!MCDR permission list [<level>]: list all player's permission. only list permission level [<level>] if [<level>] has set
-!!MCDR permission set <player> <level>: set the permission level of <player> to <level>
-!!MCDR permission remove <player>: remove <player> from the permission database
+!!MCDR permission list [<level>]: List all player's permission. Only list permission level [<level>] if [<level>] has set
+!!MCDR permission set <player> <level>: Set the permission level of <player> to <level>
+!!MCDR permission remove <player>: Remove <player> from the permission database
 You can use "perm" as a shortform of "permission"
 '''.strip()
 
