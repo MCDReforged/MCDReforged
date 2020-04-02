@@ -3,7 +3,7 @@ MCDReforged
 
 [中文](https://github.com/Fallen-Breath/MCDReforged/blob/master/doc/readme_cn.md)
 
-> This is a python based Minecraft server controlling tool
+> This is a python based Minecraft server control tool
 
 MCDReforge (abbreviated as MCDR) is a tool which provides the management ability of the Minecraft server using custom plugin system. It doesn't need to modify or mod the original Minecraft server at all
 
