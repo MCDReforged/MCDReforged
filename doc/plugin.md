@@ -23,7 +23,15 @@ Among them, the information of each parameter object is as follows：
 
 ## server
 
-This is a object for the plugin to interact with the server. It belongs to the ServerInterface class in `utils/server_interface.py`. It has following variables:
+This is a object for the plugin to interact with the server. It belongs to the ServerInterface class in `utils/server_interface.py`
+
+It has following constants:
+
+| Constants | Type | Function |
+|---|---|---|
+| MCDR | bool | This constant is used to the plugin to determine whether it's running on MCDR. You can use `hasattr(server, 'MCDR')` to check
+
+It has following variables:
 
 | Variable | Type | Function |
 |---|---|---|
@@ -39,6 +47,7 @@ It also has these following methods:
 | send(text) | Send a string `text` to the stdin of the server |
 | say(text) | Use `tellraw @a` to broadcast message `text` in the server |
 | tell(player, text) | Use `tellraw <player>` to send message `text` to player `<player>` |
+| reply(info, text) | Send a string `text` to the info source: if it's from a player calls `tell(info.player, text)`; if not uses MCDR's logger to info `text` to the console
 | is_running() | If the server (more precisely, server process) is running |
 | wait_for_start() | Wait until the server is stopped, in other words, startable |
 | restart() | Execute `stop()`、`wait_for_start()`、`start()` in order to restart the server |

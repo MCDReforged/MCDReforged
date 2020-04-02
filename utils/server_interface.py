@@ -2,7 +2,7 @@
 # An interface class for plugins to control the server
 import time
 
-from utils.info import Info
+from utils.info import Info, InfoSource
 from utils.server_status import ServerStatus
 
 
@@ -81,3 +81,9 @@ class ServerInterface:
 	def rcon_query(self, command):
 		return self.__server.rcon_manager.send_command(command)
 
+	# reply to the info source, auto detects
+	def reply(self, info, msg):
+		if info.is_player:
+			self.tell(info.player, msg)
+		else:
+			self.__server.logger.info(msg)

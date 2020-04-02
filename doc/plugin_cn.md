@@ -23,13 +23,21 @@ MCDReforged Plugin Document
 
 ## server
 
-这是用于插件与服务端进行交互的对象，属于 `utils/server_interface.py` 中的 ServerInterface 类。他具有以下变量：
+这是用于插件与服务端进行交互的对象，属于 `utils/server_interface.py` 中的 ServerInterface 类
+
+它具有以下常量：
+
+| 常量 | 类型 | 功能 |
+|---|---|---|
+| MCDR | bool | 这个常量是给插件判断他是否运行在 MCDR中的。你可以使用 `hasattr(server, 'MCDR')` 来判断
+
+它具有以下变量：
 
 | 变量 | 类型 | 功能 |
 |---|---|---|
 | logger | logging.Logger | MCDR 的一个记录器，推荐用 `server.logger.info(message)` 替代 `print(message)` 来向控制台输出信息。[相关文档](https://docs.python.org/zh-cn/3/library/logging.html#logger-objects)
 
-它还具有以下方法：
+它具有以下方法：
 
 | 方法 | 功能 |
 |---|---|
@@ -39,6 +47,7 @@ MCDReforged Plugin Document
 | send(text) | 发送字符串 `text` 至服务端的标准输入流 |
 | say(text) | 使用 `tellraw @a` 来在服务器中广播字符串消息 `text` |
 | tell(player, text) | 使用 `tellraw <player>` 来在对玩家 `<player>` 发送字符串消息 `text` |
+| reply(info, text) | 向消息源发生消息字符串 `text`: 如果消息来自玩家则调用 `tell(info.player, text)`; 如果不是则调用 MCDR 的 logger 来将 `text` 告示至控制台
 | is_running() | 服务端（准确地说，服务端进程）是否在运行 |
 | wait_for_start() | 等待直至服务端完全关闭，也就是可以启动 |
 | restart() | 依次执行 `stop()`、`wait_for_start()`、`start()` 来重启服务端 |
