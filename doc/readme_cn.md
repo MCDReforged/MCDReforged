@@ -17,6 +17,10 @@ MCDReforged（以下简称 MCDR）是一个可以在完全不对 Minecraft 服�
 - 可热重载的插件系统，无需重启服务端即可更新插件
 - 多平台/服务端的兼容性，支持在 Linux / Windows 下运行vanilla、paper 已及 bungeecord
 
+## 它是如何工作的？
+
+MCDR 使用了 `Popen` 来启动服务端，以此来控制服务端的标准输入输出流。就这样
+
 ## 环境要求
 
 Python 的版本需要 Python3，至少它在 Python 3.6 与 Python 3.8 中能运行

@@ -17,6 +17,10 @@ Great thanks to chine_desu and his [MCDaemon 1.0](https://github.com/kafuuchino-
 - Hot-reloadable plugin system. You don't need to shut down the server to update the plugins
 - Multi platform / server compatibility. Supports vanilla, paper and bungeecord on Linux / Windows
 
+## How it works?
+
+MCDR uses `Popen` to start the server, so it control the standard input / out stream of the server. That's it
+
 ## Environment
 
 Python version should be python3 and at least it works on Python 3.6 and Python 3.8
