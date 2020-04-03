@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 import collections
-import copy
 import ruamel.yaml as yaml
+from ruamel.yaml.comments import CommentedSeq
+
 from utils import tool
 from utils.info import InfoSource
 
@@ -54,7 +55,7 @@ class PermissionManager:
 	# deduplicate the permission data
 	def unique(self):
 		for key, value in self.data.items():
-			if key in PermissionLevel.VALUE and type(value) is list:
+			if key in PermissionLevel.NAME and type(value) == CommentedSeq:
 				self.data[key] = tool.unique_list(self.data[key])
 
 	# change empty list to None for nicer look in the .yml

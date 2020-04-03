@@ -11,6 +11,7 @@ class PaperParser(vanilla_parser.VanillaParser):
 		try:
 			# [09:00:01 INFO]: <Steve> hi
 			# [09:00:03 WARN]: Alex moved too quickly!
+			# [09:00:04 INFO]: [world_nether]<Alex> hello
 			time_data = re.search(r'\[[0-9]*:[0-9]*:[0-9]* \w*\]: ', text).group()
 			elements = time_data[1:-2].split(':')
 			result.hour = int(elements[0])
@@ -20,6 +21,14 @@ class PaperParser(vanilla_parser.VanillaParser):
 			text = text.replace(time_data, '', 1)
 			# <Steve> hi
 			# Alex moved too quickly!
+			# [world_nether]<Alex> hello
+
+			dim = re.match(r'\[\w+\](?=<\w+> )', text)
+			if dim is not None:
+				text = text.replace(dim.group(), '', 1)
+			# <Steve> hi
+			# Alex moved too quickly!
+			# <Alex> hello
 
 			result.player = re.match(r'<\w+> ', text)
 			if result.player is None:
