@@ -203,8 +203,8 @@ There several commands to control MCDR. These command can be both input in game 
 | !!MCDR reload all | !!MCDR r all | Reload everything above
 | !!MCDR permission | !!MCDR perm | Show permission command help message
 | !!MCDR permission list \[\<level\>\] | !!MCDR perm list \[\<level\>\] | List all player's permission. Only list permission level \[\<level\>\] if \[\<level\>\] has set
-| !!MCDR permission set <player> <level> | !!MCDR perm set \<player\> \<level\> | Set the permission level of \<player\> to \<level\>
-| !!MCDR permission remove <player> | !!MCDR perm remove \<player\> | Remove \<player\> from the permission database
+| !!MCDR permission set \<player\> \<level\> | !!MCDR perm set \<player\> \<level\> | Set the permission level of \<player\> to \<level\>
+| !!MCDR permission remove \<player\> | !!MCDR perm remove \<player\> | Remove \<player\> from the permission database
 
 Only player with `admin` permission level is allow to execute these command in game chat
 

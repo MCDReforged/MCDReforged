@@ -83,7 +83,7 @@ You can use "perm" as a shortform of "permission"
 			elif len(args) == 5 and args[2] == 'set':
 				self.set_player_permission(info, args[3], args[4])
 			# !!MCDR permission remove <player>
-			elif len(args) == 4 and args[2] == 'remove':
+			elif len(args) == 4 and args[2] in ['remove', 'rm']:
 				self.remove_player_permission(info, args[3])
 			else:
 				self.send_message(info, 'Command not found, type "!!MCDR permission" to see help')
