@@ -23,7 +23,7 @@ def on_unload(server):
 def on_info(server, info):
 	if info.is_user:
 		if info.content == 'ping':
-			server.say('pong')
+			server.reply(info, 'pong')
 		if server.get_permission_level(info) == 3:
 			if info.content == '!!start':
 				server.start()
@@ -34,12 +34,11 @@ def on_info(server, info):
 		if info.source == 1 and info.content.startswith('!!say '):
 			server.say(info.content[6:])
 		if info.content == '!!rcon':
-			server.say('rcon is running? ' + str(server.is_rcon_running()))
+			server.reply(info, 'rcon is running? ' + str(server.is_rcon_running()))
 			if server.is_rcon_running():
-				server.say('"time query gametime" command result: ' + server.rcon_query('time query gametime'))
-		if info.is_player:
-			if info.content == '!!permission':
-				server.tell(info.player, server.get_permission_level(info))
+				server.reply(info, '"time query gametime" command result: ' + server.rcon_query('time query gametime'))
+		if info.content == '!!permission':
+			server.reply(info, server.get_permission_level(info))
 
 
 def on_player_joined(server, player):
