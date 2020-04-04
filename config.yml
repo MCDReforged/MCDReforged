@@ -16,7 +16,7 @@ start_command: java -Xms1G -Xmx2G -jar minecraft_server.jar --nogui
 # vanilla_parser
 #   for vanilla / carpet / fabric server
 # paper_parser
-#   for paper server
+#   for bukkit / spigot / paper server
 # bungeecord_parser
 #   for bungeecord server
 # waterfall_parser
