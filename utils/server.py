@@ -206,20 +206,24 @@ class Server:
 
 	# the thread for processing console input
 	def console_input(self):
-		try:
-			while True:
-				text = input()
-				try:
-					parsed_result = self.parser.parse_console_command(text)
-				except:
-					self.logger.error(f'Error processing console command {text}')
-					self.logger.error(traceback.format_exc())
-					self.stop()
-					break
-				self.react(parsed_result)
-		except (KeyboardInterrupt, EOFError, SystemExit, IOError):
-			self.flag_interrupt = True
-			self.stop(forced=True)
+		while True:
+			try:
+				while True:
+					text = input()
+					try:
+						parsed_result = self.parser.parse_console_command(text)
+					except:
+						self.logger.error(f'Error processing console command {text}')
+						self.logger.error(traceback.format_exc())
+						self.stop()
+						break
+					self.react(parsed_result)
+			except (KeyboardInterrupt, EOFError, SystemExit, IOError):
+				self.flag_interrupt = True
+				self.stop(forced=True)
+				break
+			except:
+				self.logger.error(traceback.format_exc())
 
 	# react to a parsed info
 	def react(self, info):
