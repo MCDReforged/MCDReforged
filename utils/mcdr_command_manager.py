@@ -2,6 +2,7 @@
 import re
 import traceback
 
+from utils import constant
 from utils.info import InfoSource
 from utils.permission_manager import PermissionLevel
 
@@ -170,6 +171,7 @@ class MCDRCommandManager:
 	def print_mcdr_status(self, info):
 		status_dict = {True: 'Online', False: 'Offline'}
 		msg = []
+		msg.append('{} version: {}'.format(constant.NAME, constant.VERSION))
 		msg.append('Server status: {}'.format(self.server.server_status))
 		msg.append('Server startup: {}'.format(self.server.flag_server_startup))
 		msg.append('Rcon: {}'.format(status_dict[self.server.server_interface.is_rcon_running(is_plugin_call=False)]))
