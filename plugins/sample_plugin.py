@@ -39,6 +39,8 @@ def on_info(server, info):
 				server.reply(info, '"time query gametime" command result: ' + server.rcon_query('time query gametime'))
 		if info.content == '!!permission':
 			server.reply(info, server.get_permission_level(info))
+		if info.content == '!!error':
+			x = 1 / 0
 
 
 def on_player_joined(server, player):

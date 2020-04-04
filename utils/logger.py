@@ -3,6 +3,8 @@
 import logging
 import os
 import sys
+import time
+import zipfile
 from logging.handlers import TimedRotatingFileHandler
 
 
@@ -31,8 +33,20 @@ class Logger:
 	def set_file(self, file_name):
 		if self.file_handler is not None:
 			self.logger.removeHandler(self.file_handler)
-		if not os.path.isfile(file_name):
+		if not os.path.isdir(os.path.dirname(file_name)):
 			os.makedirs(os.path.dirname(file_name))
-		self.file_handler = logging.handlers.TimedRotatingFileHandler(file_name, when='D', interval=1, backupCount=10)
+		if os.path.isfile(file_name):
+			modify_time = time.strftime('%Y-%m-%d', time.localtime(os.stat(file_name).st_mtime))
+			counter = 0
+			while True:
+				counter += 1
+				zip_file_name = '{}/{}-{}.zip'.format(os.path.dirname(file_name), modify_time, counter)
+				if not os.path.isfile(zip_file_name):
+					break
+			zipf = zipfile.ZipFile(zip_file_name, 'w')
+			zipf.write(file_name, arcname=os.path.basename(file_name), compress_type=zipfile.ZIP_DEFLATED)
+			zipf.close()
+			os.remove(file_name)
+		self.file_handler = logging.handlers.TimedRotatingFileHandler(file_name)
 		self.file_handler.setFormatter(self.file_fmt)
 		self.logger.addHandler(self.file_handler)

@@ -160,6 +160,7 @@ You can use "perm" as a shortform of "permission"
 		status_dict = {True: 'Online', False: 'Offline'}
 		msg = []
 		msg.append('Server status: {}'.format(self.server.server_status))
+		msg.append('Server startup: {}'.format(self.server.flag_server_startup))
 		msg.append('Rcon: {}'.format(status_dict[self.server.server_interface.is_rcon_running()]))
 		msg.append('Plugin count: {}'.format(len(self.server.plugin_manager.plugins)))
 		self.send_message(info, '\n'.join(msg))

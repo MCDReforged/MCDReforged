@@ -55,12 +55,16 @@ class PluginManager:
 
 	def load_plugins(self):
 		self.server.logger.info('Loading plugins')
+
+		# init
 		self.command_prefix_listeners = {}
 		if not os.path.isdir(constant.PLUGIN_FOLDER):
 			os.makedirs(constant.PLUGIN_FOLDER)
 		file_list = tool.list_py_file(constant.PLUGIN_FOLDER)
 		name_dict = {plugin.file_name: plugin for plugin in self.plugins}
 		counter_all = counter_load = counter_unload = counter_reload = 0
+
+		# load and reload
 		for file_name in file_list:
 			if file_name in name_dict:
 				plugin = name_dict[file_name]
@@ -69,10 +73,12 @@ class PluginManager:
 			else:
 				counter_load += self.load_plugin(file_name)
 				counter_all += 1
+		# unload
 		for plugin in self.plugins:
 			if plugin.file_name not in file_list:
 				counter_unload += self.unload_plugin(plugin)
 				counter_all += 1
+		# end
 		counter_fail = counter_all - counter_load - counter_unload - counter_reload
 		msg = []
 		if counter_load > 0:

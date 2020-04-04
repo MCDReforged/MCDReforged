@@ -1,7 +1,7 @@
 .idea
 release
 __pycache__
-*.log
+log/
 test.py
 a.py
 mcd2/
