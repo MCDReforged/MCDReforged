@@ -37,7 +37,7 @@ class Server:
 		self.reactors = self.load_reactor(constant.REACTOR_FOLDER)
 		self.server_interface = ServerInterface(self)
 		self.plugin_manager = PluginManager(self, constant.PLUGIN_FOLDER)
-		self.plugin_manager.load_plugins()
+		self.load_plugins()
 		self.permission_manager = PermissionManager(self, constant.PERMISSION_FILE)
 
 	# Loaders
@@ -50,6 +50,11 @@ class Server:
 		self.decoding_method = self.config['decoding'] if self.config['decoding'] is not None else locale.getpreferredencoding()
 		self.logger.info(f'Encoding / Decoding method has set to {self.encoding_method} / {self.decoding_method}')
 		self.connect_rcon()
+
+	def load_plugins(self):
+		msg = self.plugin_manager.load_plugins()
+		self.logger.info(msg)
+		return msg
 
 	@staticmethod
 	def load_parser(path, parser_name):
