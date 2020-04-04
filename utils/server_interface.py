@@ -24,8 +24,8 @@ class ServerInterface:
 			self.logger.debug('Plugin called start()')
 		self.__server.start_server()
 
-	def stop(self, is_is_plugin_call=True):
-		if is_is_plugin_call:
+	def stop(self, is_plugin_call=True):
+		if is_plugin_call:
 			self.logger.debug('Plugin called stop()')
 		self.__server.stop(forced=False, new_server_status=ServerStatus.STOPPING_BY_PLUGIN)
 

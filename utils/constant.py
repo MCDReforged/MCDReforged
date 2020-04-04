@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-VERSION = '0.3.3-alpha'
+VERSION = '0.3.4-alpha'
 NAME_SHORT = 'MCDR'
 NAME = 'MCDReforged'
 NAME_FULL = 'MCDaemonReforged'
