@@ -19,19 +19,19 @@ class PluginManager:
 			plugin = Plugin(self.server, file_name)
 			plugin.load()
 		except:
-			self.logger.warning(f'Fail to load plugin {file_name}')
+			self.logger.warning('Fail to load plugin {}'.format(file_name))
 			self.logger.warning(traceback.format_exc())
 			return False
 		else:
 			self.plugins.append(plugin)
-			self.logger.info('Plugin {} loaded'.format(plugin.file_name))
+			self.logger.info('Plugin {} loaded'.format(file_name))
 			return True
 
 	def unload_plugin(self, plugin):
 		try:
 			plugin.unload()
 		except:
-			self.logger.warning(f'Fail to unload plugin {plugin.file_name}')
+			self.logger.warning('Fail to unload plugin {}'.format(plugin.file_name))
 			self.logger.warning(traceback.format_exc())
 			ret = False
 		else:
@@ -45,7 +45,7 @@ class PluginManager:
 		try:
 			plugin.reload()
 		except:
-			self.logger.warning(f'Fail to reload plugin {plugin.file_name}')
+			self.logger.warning('Fail to reload plugin {}'.format(plugin.file_name))
 			self.logger.warning(traceback.format_exc())
 			self.plugins.remove(plugin)
 			return False

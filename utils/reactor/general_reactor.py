@@ -14,10 +14,10 @@ class GeneralReactor(BaseReactor):
 
 	def react(self, info):
 		if info.is_user and re.fullmatch(r'!!MCDR( .*)*', info.content) is not None:
-			if self.server.permission_manager.get_info_level(info) == PermissionLevel.ADMIN:
+			if self.server.permission_manager.get_info_permission_level(info) == PermissionLevel.ADMIN:
 				self.command_manager.process_command(info)
 			else:
-				self.server.server_interface.tell(info.player, '§cPermission denied§r')
+				self.server.server_interface.tell(info.player, '§cPermission denied§r', is_plugin_call=False)
 		else:
 			if info.source == InfoSource.CONSOLE and not info.content.startswith(self.server.config['console_command_prefix']):
 				self.server.send(info.content)  # send input command to server's stdin

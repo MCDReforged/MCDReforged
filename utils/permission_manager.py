@@ -95,6 +95,15 @@ class PermissionManager:
 			return value
 		return PermissionLevel.DICT_NAME[value]
 
+	def get_default_permission_level(self):
+		return self.data['default_level']
+
+	def set_default_permission_level(self, level):
+		level = self.format_level_name(level)
+		self.data['default_level'] = level
+		self.save()
+		self.server.logger.info('The default permission level has set to {}'.format(self.format_level_name(level)))
+
 	# return the list of the player who has permission level <level>
 	def get_permission_group_list(self, level):
 		name = self.format_level_name(level)
@@ -107,7 +116,7 @@ class PermissionManager:
 	# add a new player
 	def add_player(self, player, level_name=None):
 		if level_name is None:
-			level_name = self.data['default_level']
+			level_name = self.get_default_permission_level()
 		self.get_permission_group_list(level_name).append(player)
 		self.server.logger.debug('Added player {} with permission level {}'.format(player, level_name))
 		self.save()
@@ -116,7 +125,7 @@ class PermissionManager:
 	# add a new player
 	def remove_player(self, player):
 		while True:
-			level = self.get_player_level(player, auto_add=False)
+			level = self.get_player_permission_level(player, auto_add=False)
 			if level is None:
 				break
 			self.get_permission_group_list(level).remove(player)
@@ -124,7 +133,7 @@ class PermissionManager:
 		self.save()
 
 	# set new permission level of the player
-	def set_level(self, player, new_level):
+	def set_permission_level(self, player, new_level):
 		self.remove_player(player)
 		self.add_player(player, new_level)
 		self.server.logger.info('The permission level of {} has set to {}'.format(player, self.format_level_name(new_level)))
@@ -133,7 +142,7 @@ class PermissionManager:
 	# if the player is not in the permission data set its level to default_level, unless parameter auto_add is set
 	# to False, then it will return None
 	# if the player is in multiple permission level group it will return the highest one
-	def get_player_level(self, name, auto_add=True):
+	def get_player_permission_level(self, name, auto_add=True):
 		for level_value in PermissionLevel.VALUE:
 			if name in self.get_permission_group_list(level_value):
 				return level_value
@@ -145,15 +154,15 @@ class PermissionManager:
 
 	# add player if necessary
 	def touch_player(self, player):
-		self.get_player_level(player)
+		self.get_player_permission_level(player)
 
 	# return the permission level from a info instance
 	# console input always has the top level
 	# return None if it's the info is not from a user
-	def get_info_level(self, info):
+	def get_info_permission_level(self, info):
 		if info.source == InfoSource.CONSOLE:
 			return PermissionLevel.TOP_LEVEL
 		elif info.is_player:
-			return self.get_player_level(info.player)
+			return self.get_player_permission_level(info.player)
 		else:
 			return None

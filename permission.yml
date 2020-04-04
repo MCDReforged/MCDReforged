@@ -6,7 +6,7 @@
 # - user
 # - guest
 
-# the default permission level a new player will get
+
 default_level: user
 
 admin:

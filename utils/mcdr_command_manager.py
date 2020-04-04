@@ -25,14 +25,13 @@ class MCDRCommandManager:
 !!MCDR reload config: Reload config file
 !!MCDR reload permission: Reload permission file
 !!MCDR reload all: Reload everything above
-You can use "r" as a shortform of "reload"
 '''.strip()
 
 	HELP_MESSAGE_PERMISSION = '''
 !!MCDR permission list [<level>]: List all player's permission. Only list permission level [<level>] if [<level>] has set
 !!MCDR permission set <player> <level>: Set the permission level of <player> to <level>
 !!MCDR permission remove <player>: Remove <player> from the permission database
-You can use "perm" as a shortform of "permission"
+!!MCDR permission setdefault <level>: Set the default permission level to <level>
 '''.strip()
 
 	def __init__(self, server):
@@ -42,7 +41,7 @@ You can use "perm" as a shortform of "permission"
 	def send_message(self, info, msg):
 		for line in msg.strip().splitlines():
 			if info.source == InfoSource.SERVER:
-				self.server.server_interface.tell(info.player, line)
+				self.server.server_interface.tell(info.player, line, is_plugin_call=False)
 			else:
 				self.logger.info(line)
 
@@ -85,6 +84,8 @@ You can use "perm" as a shortform of "permission"
 			# !!MCDR permission remove <player>
 			elif len(args) == 4 and args[2] in ['remove', 'rm']:
 				self.remove_player_permission(info, args[3])
+			elif len(args) == 4 and args[2] in ['setdefault', 'setd']:
+				self.set_default_permission(info, args[3])
 			else:
 				self.send_message(info, 'Command not found, type "!!MCDR permission" to see help')
 
@@ -135,7 +136,7 @@ You can use "perm" as a shortform of "permission"
 		elif not Validator.player_name(player):
 			self.send_message(info, 'Wrong player name')
 		else:
-			self.server.permission_manager.set_level(player, level)
+			self.server.permission_manager.set_permission_level(player, level)
 			if info.is_player:
 				self.send_message(info, 'The permission level of {0} has set to {1}'.format(player, level))
 
@@ -147,12 +148,22 @@ You can use "perm" as a shortform of "permission"
 			self.send_message(info, 'Player {0} has been removed'.format(player))
 
 	def list_permission(self, info, level):
+		self.send_message(info, 'Default: {}'.format(self.server.permission_manager.get_default_permission_level()))
 		specific_name = self.server.permission_manager.format_level_name(level)
 		for name in PermissionLevel.NAME:
 			if specific_name is None or name == specific_name:
 				self.send_message(info, '[{}]'.format(name))
 				for player in self.server.permission_manager.get_permission_group_list(name):
 					self.send_message(info, '- {}'.format(player))
+
+	def set_default_permission(self, info, level):
+		level = self.server.permission_manager.format_level_name(level)
+		if level is None:
+			self.send_message(info, 'Wrong permission level')
+		else:
+			self.server.permission_manager.set_default_permission_level(level)
+			if info.is_player:
+				self.send_message(info, 'The default permission level has set to {0}'.format(level))
 
 	# Status
 
@@ -161,6 +172,6 @@ You can use "perm" as a shortform of "permission"
 		msg = []
 		msg.append('Server status: {}'.format(self.server.server_status))
 		msg.append('Server startup: {}'.format(self.server.flag_server_startup))
-		msg.append('Rcon: {}'.format(status_dict[self.server.server_interface.is_rcon_running()]))
+		msg.append('Rcon: {}'.format(status_dict[self.server.server_interface.is_rcon_running(is_plugin_call=False)]))
 		msg.append('Plugin count: {}'.format(len(self.server.plugin_manager.plugins)))
 		self.send_message(info, '\n'.join(msg))

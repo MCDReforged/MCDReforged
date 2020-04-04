@@ -205,6 +205,7 @@ MCDR 提供了一些控制 MCDR 的命令，它们均可在游戏中通过聊天
 | !!MCDR permission list \[\<level\>\] | !!MCDR perm list \[\<level\>\] | 列出所有玩家的权限等级。如果\[\<level\>\] 被指定则只会列出权限等级 \[\<level\>\] 的列表
 | !!MCDR permission set \<player\> \<level\> | !!MCDR perm set \<player\> \<level\> | 将玩家 \<player\> 的权限等级设置为 \<level\>
 | !!MCDR permission remove \<player\> | !!MCDR perm rm \<player\> | 将玩家 \<player\> 从权限等级数据库中移除
+| !!MCDR permission setdefault \<level\> | !!MCDR perm setd \<level\> | 将默认权限等级设置为 \<level\>
 
 只有具有 `admin` 权限等级的玩家才被允许通过游戏输入执行这些命令
 
