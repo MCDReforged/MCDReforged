@@ -5,7 +5,7 @@
 # Examples:
 #   en_us
 #   zh_cn
-language: zh_cn
+language: en_us
 
 
 # The working directory of the server. If you use default value server/ I will suggest you to put all the files related to the server to the server/ folder
