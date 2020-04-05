@@ -10,3 +10,4 @@ server/*
 plugins/*
 config/
 qb_multi/
+PCRC_recordings/

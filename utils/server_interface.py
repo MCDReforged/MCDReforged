@@ -7,7 +7,7 @@ from utils.server_status import ServerStatus
 
 
 def format_string(data):
-	return str(data).replace('\\', '\\\\').replace('"', '\\"')
+	return str(data).replace('\\', '\\\\').replace('"', '\\"').replace('\n', '\\n')
 
 
 class ServerInterface:
