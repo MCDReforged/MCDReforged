@@ -85,7 +85,8 @@ MCDReforged/
 解析器选项。对于不同种类的服务端需要使用不同种类的解析器。可用选项为：
 
 - `vanilla_parser`: 适用于原版 / 地毯 / Fabric 服务端
-- `paper_parser`: 适用于 Bukkit / Spiogt / Paper 服务端
+- `bukkit_parser`: 适用于 1.14 以下的 Bukkit / Spiogt 服务端，和任意版本的 Paper 服务端
+- `bukkit_parser14`: 适用于 1.14 及以上的 Bukkit / Spiogt 服务端
 - `bungeecord_parser`: 适用于Bungeecord 服务端。请在启动参数的 `-jar` 前添加 `-Djline.terminal=jline.UnsupportedTerminal` 以让其支持 MCDR 的控制，[来源](https://www.spigotmc.org/wiki/start-up-parameters/)
 - `waterfall_parser`: 适用于 Waterfall 服务端
 

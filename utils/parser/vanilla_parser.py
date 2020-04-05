@@ -5,54 +5,51 @@ from utils.parser import base_parser
 
 
 class VanillaParser(base_parser.BaseParser):
-	STOP_COMMAND = 'stop'
+	def __init__(self):
+		super().__init__()
+		self.STOP_COMMAND = 'stop'
+		self.Logger_NAME_CHAR_SET = r'\w /'
 
-	@staticmethod
-	def parse_server_stdout(text):
-		raw_result = result = super(VanillaParser, VanillaParser).parse_server_stdout(text)
-		try:
-			# [09:00:00] [Server thread/INFO]: <Steve> Hello
-			# [09:00:01] [Server thread/WARN]: Can't keep up!
-			time_data = re.search(r'\[[0-9]*:[0-9]*:[0-9]*\] ', text).group()
-			elements = time_data[1:-2].split(':')
-			result.hour = int(elements[0])
-			result.min = int(elements[1])
-			result.sec = int(elements[2])
+	def parse_server_stdout(self, text):
+		result = self.parse_server_stdout_raw(text)
 
-			text = text.replace(time_data, '', 1)
-			# [Server thread/INFO]: <Steve> Hello
-			# [Server thread/WARN]: Can't keep up!
+		# [09:00:00] [Server thread/INFO]: <Steve> Hello
+		# [09:00:01] [Server thread/WARN]: Can't keep up!
+		time_data = re.search(r'\[[0-9]*:[0-9]*:[0-9]*\] ', text).group()
+		elements = time_data[1:-2].split(':')
+		result.hour = int(elements[0])
+		result.min = int(elements[1])
+		result.sec = int(elements[2])
 
-			text = re.split(r'\[[\w /]*\]: ', text)[1]
-			# <Steve> Hello
-			# Can't keep up!
+		text = text.replace(time_data, '', 1)
+		# [Server thread/INFO]: <Steve> Hello
+		# [Server thread/WARN]: Can't keep up!
 
-			result.player = re.match(r'<\w+> ', text)
-			if result.player is None:
-				result.content = text
-			else:
-				result.player = result.player.group()[1:-2]
-				result.content = text.replace(f'<{result.player}> ', '', 1)
-			return result
-		except:
-			return raw_result
+		text = re.split(r'\[[{}]*?\]: '.format(self.Logger_NAME_CHAR_SET), text)[1]
+		# <Steve> Hello
+		# Can't keep up!
 
-	@staticmethod
-	def parse_player_joined(info):
+		result.player = re.match(r'<\w+> ', text)
+		if result.player is None:
+			result.content = text
+		else:
+			result.player = result.player.group()[1:-2]
+			result.content = text.replace(f'<{result.player}> ', '', 1)
+		return result
+
+	def parse_player_joined(self, info):
 		if not info.is_user and info.content.endswith('joined the game'):
 			player = info.content.split(' ')[0]
 			return player
 		return None
 
-	@staticmethod
-	def parse_player_left(info):
+	def parse_player_left(self, info):
 		if not info.is_user and info.content.endswith('left the game'):
 			player = info.content.split(' ')[0]
 			return player
 		return None
 
-	@staticmethod
-	def is_server_startup_done(info):
+	def is_server_startup_done(self, info):
 		# Done (3.500s)! For help, type "help"
 		if info.is_user:
 			return False
@@ -60,4 +57,4 @@ class VanillaParser(base_parser.BaseParser):
 		return match is not None
 
 
-parser = VanillaParser
+parser = VanillaParser()

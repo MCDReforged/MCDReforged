@@ -1,15 +1,11 @@
 # -*- coding: utf-8 -*-
 
-from utils.parser.bungeecord_parser import BungeecordParser
-from utils.parser.paper_parser import PaperParser
+from utils.parser import bukkit_parser, bungeecord_parser
 
 
-class WaterfallParser(PaperParser):
-	STOP_COMMAND = 'end'
-
-	@staticmethod
-	def is_server_startup_done(info):
-		return BungeecordParser.is_server_startup_done(info)
+class WaterfallParser(bungeecord_parser.BungeecordParser):
+	def parse_server_stdout(self, text):
+		return bukkit_parser.parser.parse_server_stdout(text)
 
 
-parser = WaterfallParser
+parser = WaterfallParser()

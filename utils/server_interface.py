@@ -31,23 +31,23 @@ class ServerInterface:
 
 	def execute(self, text, is_plugin_call=True):
 		if is_plugin_call:
-			self.logger.debug('Plugin called execute({})'.format(text))
+			self.logger.debug('Plugin called execute("{}")'.format(text))
 		self.__server.send(text)
 
 	# without '\n' ending
 	def send(self, text, is_plugin_call=True):
 		if is_plugin_call:
-			self.logger.debug('Plugin called send({})'.format(text))
+			self.logger.debug('Plugin called send("{}")'.format(text))
 		self.__server.send(text, ending='')
 
 	def say(self, text, is_plugin_call=True):
 		if is_plugin_call:
-			self.logger.debug('Plugin called say({})'.format(text))
+			self.logger.debug('Plugin called say("{}")'.format(text))
 		self.execute('tellraw @a {{"text":"{}"}}'.format(format_string(text)), is_plugin_call=False)
 
 	def tell(self, player, text, is_plugin_call=True):
 		if is_plugin_call:
-			self.logger.debug('Plugin called tell({}, {})'.format(player, text))
+			self.logger.debug('Plugin called tell("{}", "{}")'.format(player, text))
 		self.execute('tellraw {} {{"text":"{}"}}'.format(player, format_string(text)), is_plugin_call=False)
 
 	# MCDR stuffs
@@ -83,7 +83,7 @@ class ServerInterface:
 	# the object can be Info instance or player name
 	def get_permission_level(self, obj, is_plugin_call=True):
 		if is_plugin_call:
-			self.logger.debug('Plugin called get_permission_level({})'.format(obj))
+			self.logger.debug('Plugin called get_permission_level("{}")'.format(obj))
 		if type(obj) is Info:  # Info instance
 			return self.__server.permission_manager.get_info_permission_level(obj)
 		elif type(obj) is str:  # player name
@@ -102,13 +102,13 @@ class ServerInterface:
 	# if rcon is not running return None
 	def rcon_query(self, command, is_plugin_call=True):
 		if is_plugin_call:
-			self.logger.debug('Plugin called rcon_query({})'.format(command))
+			self.logger.debug('Plugin called rcon_query("{}")'.format(command))
 		return self.__server.rcon_manager.send_command(command)
 
 	# reply to the info source, auto detects
 	def reply(self, info, msg, is_plugin_call=True):
 		if is_plugin_call:
-			self.logger.debug('Plugin called reply({}, {})'.format(info, msg))
+			self.logger.debug('Plugin called reply("{}", "{}")'.format(info, msg))
 		if info.is_player:
 			self.tell(info.player, msg, is_plugin_call=False)
 		else:

@@ -5,8 +5,10 @@ from utils import info
 
 
 class BaseParser(object):
-	@staticmethod
-	def parse_server_stdout(text):
+	def __init__(self):
+		self.STOP_COMMAND = None
+
+	def parse_server_stdout_raw(self, text):
 		if type(text) is not str:
 			raise TypeError('The text to parse should be a string')
 		result = info.Info()
@@ -14,8 +16,10 @@ class BaseParser(object):
 		result.content = result.raw_content = text
 		return result
 
-	@staticmethod
-	def parse_console_command(text):
+	def parse_server_stdout(self, text):
+		return self.parse_server_stdout_raw(text)
+
+	def parse_console_command(self, text):
 		if type(text) is not str:
 			raise TypeError('The text to parse should be a string')
 		result = info.Info()
@@ -28,21 +32,17 @@ class BaseParser(object):
 		result.source = info.InfoSource.CONSOLE
 		return result
 
-	@staticmethod
-	def parse_player_joined(info):
+	def parse_player_joined(self, info):
 		pass
 
-	@staticmethod
-	def parse_player_left(info):
+	def parse_player_left(self, info):
 		pass
 
-	@staticmethod
-	def pre_parse_server_stdout(text):
+	def pre_parse_server_stdout(self, text):
 		return text
 
-	@staticmethod
-	def is_server_startup_done(info):
+	def is_server_startup_done(self, info):
 		return False
 
 
-parser = BaseParser
+parser = BaseParser()

@@ -44,11 +44,20 @@ class Server:
 
 	def load_config(self):
 		self.config.read_config()
+
 		self.logger.set_level(logging.DEBUG if self.config['debug_mode'] else logging.INFO)
+		if self.config['debug_mode']:
+			self.logger.info('Debug mode on')
+
 		self.parser = self.load_parser(constant.PARSER_FOLDER, self.config['parser'])
-		self.encoding_method = self.config['encoding'] if self.config['encoding'] is not None else sys.getdefaultencoding()
-		self.decoding_method = self.config['decoding'] if self.config['decoding'] is not None else locale.getpreferredencoding()
+		self.logger.info('Parser set to {}'.format(self.config['parser']))
+
+		self.encoding_method = self.config['encoding'] if self.config[
+															  'encoding'] is not None else sys.getdefaultencoding()
+		self.decoding_method = self.config['decoding'] if self.config[
+															  'decoding'] is not None else locale.getpreferredencoding()
 		self.logger.info(f'Encoding / Decoding method has set to {self.encoding_method} / {self.decoding_method}')
+
 		self.connect_rcon()
 
 	def load_plugins(self):
@@ -85,7 +94,7 @@ class Server:
 		self.logger.info('Starting the server')
 		try:
 			self.process = Popen(self.config['start_command'], cwd=self.config['working_directory'],
-				stdin=PIPE, stdout=PIPE, stderr=STDOUT, shell=True)
+								 stdin=PIPE, stdout=PIPE, stderr=STDOUT, shell=True)
 		except:
 			self.logger.error('Fail to start the server')
 			self.logger.error(traceback.format_exc())
@@ -130,7 +139,7 @@ class Server:
 		while True:
 			try:
 				text = next(iter(self.process.stdout))
-			except StopIteration: # server process has stopped
+			except StopIteration:  # server process has stopped
 				for i in range(100):
 					if self.process.poll() is not None:
 						break
@@ -144,7 +153,11 @@ class Server:
 					self.set_server_status(ServerStatus.STOPPING_BY_ITSELF)
 				return None
 			else:
-				text = text.decode(self.decoding_method)
+				try:
+					text = text.decode(self.decoding_method)
+				except:
+					self.logger.error('Fail to decode text "{}"'.format(text))
+					raise
 				return text.rstrip().lstrip()
 
 	def on_server_stop(self):
@@ -171,10 +184,10 @@ class Server:
 		try:
 			parsed_result = self.parser.parse_server_stdout(text)
 		except:
-			self.logger.warning('Fail to parse text from stdout of the server')
-			self.logger.debug(traceback.format_exc())
-		else:
-			self.react(parsed_result)
+			self.logger.debug('Fail to parse text "{}" from stdout of the server, using raw parser'.format(text))
+			# self.logger.debug(traceback.format_exc())
+			parsed_result = self.parser.parse_server_stdout_raw(text)
+		self.react(parsed_result)
 
 	def run(self):
 		# main loop
@@ -213,9 +226,8 @@ class Server:
 					try:
 						parsed_result = self.parser.parse_console_command(text)
 					except:
-						self.logger.error(f'Error processing console command {text}')
+						self.logger.error(f'Error parsing console command {text}')
 						self.logger.error(traceback.format_exc())
-						self.stop()
 						break
 					self.react(parsed_result)
 			except (KeyboardInterrupt, EOFError, SystemExit, IOError):
@@ -223,6 +235,7 @@ class Server:
 				self.stop(forced=True)
 				break
 			except:
+				self.logger.error(f'Error ticking console thread')
 				self.logger.error(traceback.format_exc())
 
 	# react to a parsed info
@@ -237,4 +250,5 @@ class Server:
 	def connect_rcon(self):
 		self.rcon_manager.disconnect()
 		if self.config['enable_rcon'] and self.flag_server_startup:
-			self.rcon_manager.connect(self.config['rcon_address'], self.config['rcon_port'], self.config['rcon_password'])
+			self.rcon_manager.connect(self.config['rcon_address'], self.config['rcon_port'],
+									  self.config['rcon_password'])
