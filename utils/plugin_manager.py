@@ -90,7 +90,7 @@ class PluginManager:
 		if counter_fail > 0:
 			msg.append(self.server.t('plugin_manager.load_plugins.info_fail', counter_fail))
 		if len(msg) == 0:
-			msg.append(self.server.t('plugin_manager.load_plugins.info_none'))
+			msg = self.server.t('plugin_manager.load_plugins.info_none')
 		else:
 			msg = '; '.join(msg)
 		return msg
