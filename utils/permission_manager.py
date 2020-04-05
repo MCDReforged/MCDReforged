@@ -36,10 +36,10 @@ class PermissionManager:
 
 	def load(self):
 		try:
-			with open(self.permission_file) as file:
+			with open(self.permission_file, encoding='utf8') as file:
 				self.data = yaml.round_trip_load(file)
 		except:
-			self.server.logger.warning(f'Fail to load {self.permission_file}, using default empty data')
+			self.server.logger.warning(self.server.t('permission_manager.load.load_fail', self.permission_file))
 			self.data = None
 		if self.data is None:
 			self.data = {
@@ -102,7 +102,7 @@ class PermissionManager:
 		level = self.format_level_name(level)
 		self.data['default_level'] = level
 		self.save()
-		self.server.logger.info('The default permission level has set to {}'.format(self.format_level_name(level)))
+		self.server.logger.info(self.server.t('permission_manager.set_default_permission_level.done', self.format_level_name(level)))
 
 	# return the list of the player who has permission level <level>
 	def get_permission_group_list(self, level):
@@ -118,7 +118,7 @@ class PermissionManager:
 		if level_name is None:
 			level_name = self.get_default_permission_level()
 		self.get_permission_group_list(level_name).append(player)
-		self.server.logger.debug('Added player {} with permission level {}'.format(player, level_name))
+		self.server.logger.debug(self.server.t('permission_manager.add_player.done', player, level_name))
 		self.save()
 		return self.format_level_value(level_name)
 
@@ -129,14 +129,14 @@ class PermissionManager:
 			if level is None:
 				break
 			self.get_permission_group_list(level).remove(player)
-		self.server.logger.debug('Removed player {}'.format(player))
+		self.server.logger.debug(self.server.t('permission_manager.remove_player.done', player))
 		self.save()
 
 	# set new permission level of the player
 	def set_permission_level(self, player, new_level):
 		self.remove_player(player)
 		self.add_player(player, new_level)
-		self.server.logger.info('The permission level of {} has set to {}'.format(player, self.format_level_name(new_level)))
+		self.server.logger.info(self.server.t('permission_manager.set_permission_level.done', player, self.format_level_name(new_level)))
 
 	# return the permission level from a player's name
 	# if the player is not in the permission data set its level to default_level, unless parameter auto_add is set

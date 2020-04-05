@@ -13,6 +13,7 @@ from utils.plugin_manager import PluginManager
 from utils.rcon_manager import RconManager
 from utils.server_status import ServerStatus
 from utils.server_interface import ServerInterface
+from utils.language_manager import LanguageManager
 
 
 class Server:
@@ -33,6 +34,7 @@ class Server:
 		self.logger = logger.Logger(constant.NAME_SHORT)
 		self.logger.set_file(constant.LOGGING_FILE)
 		self.rcon_manager = RconManager(self)
+		self.language_manager = LanguageManager(self, constant.LANGUAGE_FOLDER)
 		self.load_config()
 		self.reactors = self.load_reactor(constant.REACTOR_FOLDER)
 		self.server_interface = ServerInterface(self)
@@ -40,23 +42,33 @@ class Server:
 		self.load_plugins()
 		self.permission_manager = PermissionManager(self, constant.PERMISSION_FILE)
 
+	# Translate info strings
+
+	def translate(self, text, *args):
+		return self.language_manager.translate(text).strip().format(*args)
+
+	def t(self, text, *args):
+		return self.translate(text, *args)
+
 	# Loaders
 
 	def load_config(self):
 		self.config.read_config()
 
+		self.language_manager.load_languages()
+		self.language_manager.set_language(self.config['language'])
+		self.logger.info(self.t('server.load_config.language_set', self.config['language']))
+
 		self.logger.set_level(logging.DEBUG if self.config['debug_mode'] else logging.INFO)
 		if self.config['debug_mode']:
-			self.logger.info('Debug mode on')
+			self.logger.info(self.t('server.load_config.debug_mode_on'))
 
 		self.parser = self.load_parser(constant.PARSER_FOLDER, self.config['parser'])
-		self.logger.info('Parser set to {}'.format(self.config['parser']))
+		self.logger.info(self.t('server.load_config.parser_set', self.config['parser']))
 
-		self.encoding_method = self.config['encoding'] if self.config[
-															  'encoding'] is not None else sys.getdefaultencoding()
-		self.decoding_method = self.config['decoding'] if self.config[
-															  'decoding'] is not None else locale.getpreferredencoding()
-		self.logger.info(f'Encoding / Decoding method has set to {self.encoding_method} / {self.decoding_method}')
+		self.encoding_method = self.config['encoding'] if self.config['encoding'] is not None else sys.getdefaultencoding()
+		self.decoding_method = self.config['decoding'] if self.config['decoding'] is not None else locale.getpreferredencoding()
+		self.logger.info(self.t('server.load_config.encoding_decoding_set', self.encoding_method, self.decoding_method))
 
 		self.connect_rcon()
 
@@ -72,7 +84,7 @@ class Server:
 
 	def load_reactor(self, folder):
 		reactors = []
-		for file in tool.list_py_file(folder):
+		for file in tool.list_file(folder, '.py'):
 			module = tool.load_source(file)
 			if hasattr(module, 'get_reactor'):
 				reactors.append(module.get_reactor(self))
@@ -85,23 +97,23 @@ class Server:
 
 	def set_server_status(self, status):
 		self.server_status = status
-		self.logger.debug('Server status has set to "{}"'.format(status))
+		self.logger.debug(self.t('server.set_server_status.server_status_set', status))
 
 	def start_server(self):
 		if self.is_running():
-			self.logger.warning('Server cannot start twice')
+			self.logger.warning(self.t('server.start_server.start_twice'))
 			return
-		self.logger.info('Starting the server')
+		self.logger.info(self.t('server.start_server.starting'))
 		try:
 			self.process = Popen(self.config['start_command'], cwd=self.config['working_directory'],
 								 stdin=PIPE, stdout=PIPE, stderr=STDOUT, shell=True)
 		except:
-			self.logger.error('Fail to start the server')
+			self.logger.error(self.t('server.start_server.start_fail'))
 			self.logger.error(traceback.format_exc())
 			return False
 		else:
 			self.set_server_status(ServerStatus.RUNNING)
-			self.logger.info(f'Server is running at PID {self.process.pid}')
+			self.logger.info(self.t('server.start_server.pid_info', self.process.pid))
 			return True
 
 	def start(self):
@@ -114,17 +126,17 @@ class Server:
 
 	def stop(self, forced=False, new_server_status=ServerStatus.STOPPING_BY_ITSELF):
 		if not self.is_running():
-			self.logger.warning('Server cannot stop when terminated')
+			self.logger.warning(self.t('server.stop.stop_twice'))
 		self.set_server_status(new_server_status)
 		if not forced:
 			try:
 				self.send(self.parser.STOP_COMMAND)
 			except:
-				self.logger.error('Error stopping server, force the server to stop now')
+				self.logger.error(self.t('server.stop.stop_fail'))
 				forced = True
 		if forced:
 			self.process.kill()
-			self.logger.info('Process killed')
+			self.logger.info(self.t('server.stop.process_killed'))
 
 	def send(self, text, ending='\n'):
 		if type(text) is str:
@@ -133,7 +145,7 @@ class Server:
 			self.process.stdin.write(text)
 			self.process.stdin.flush()
 		else:
-			self.logger.warning('Server has been terminated, cannot send command to its stdin')
+			self.logger.warning(self.t('server.send.send_when_stoped'))
 
 	def receive(self):
 		while True:
@@ -145,7 +157,7 @@ class Server:
 						break
 					time.sleep(0.1)
 					if i % 10 == 0:
-						self.logger.info('Waiting for server process to exit')
+						self.logger.info(self.t('server.receive.wait_stop'))
 				else:
 					self.process.kill()
 					time.sleep(1)
@@ -156,17 +168,17 @@ class Server:
 				try:
 					text = text.decode(self.decoding_method)
 				except:
-					self.logger.error('Fail to decode text "{}"'.format(text))
+					self.logger.error(self.t('server.receive.decode_fail', text))
 					raise
 				return text.rstrip().lstrip()
 
 	def on_server_stop(self):
 		return_code = self.process.poll()
-		self.logger.info(f'Server exited with code {return_code}')
+		self.logger.info(self.t('server.on_server_stop.show_stopcode', return_code))
 		self.process = None
 		self.flag_server_startup = False
 		if self.server_status == ServerStatus.STOPPING_BY_ITSELF:
-			self.logger.info('Server stopped by itself')
+			self.logger.info(self.t('server.on_server_stop.stop_by_itself'))
 			self.set_server_status(ServerStatus.STOPPED)
 
 	def tick(self):
@@ -178,13 +190,13 @@ class Server:
 		try:
 			text = self.parser.pre_parse_server_stdout(text)
 		except:
-			self.logger.warning('Fail to pre parse text from stdout of the server, use original text')
+			self.logger.warning(self.t('server.tick.pre_parse_fail'))
 		print('[Server] {}'.format(text))
 
 		try:
 			parsed_result = self.parser.parse_server_stdout(text)
 		except:
-			self.logger.debug('Fail to parse text "{}" from stdout of the server, using raw parser'.format(text))
+			self.logger.debug(self.t('server.tick.parse_fail', text))
 			# self.logger.debug(traceback.format_exc())
 			parsed_result = self.parser.parse_server_stdout_raw(text)
 		self.react(parsed_result)
@@ -201,20 +213,20 @@ class Server:
 				self.flag_interrupt = True
 			except:
 				if not self.flag_interrupt:
-					self.logger.error(f'Error ticking {constant.NAME_SHORT}')
+					self.logger.error(self.t('server.run.error'))
 					self.logger.error(traceback.format_exc())
 					self.stop()
 				break
 		# stop MCDR
 		try:
 			if self.flag_interrupt:
-				self.logger.info(f'{constant.NAME_SHORT} has been interrupted by user')
+				self.logger.info(self.t('server.run.user_interrupted'))
 			else:
-				self.logger.info('Server stopped')
+				self.logger.info(self.t('server.run.server_stop'))
 			self.plugin_manager.call('on_mcdr_stop', (self.server_interface,), new_thread=False)
-			self.logger.info('bye')
+			self.logger.info(self.t('server.run.bye'))
 		except:
-			self.logger.error('Error stopping MCDR')
+			self.logger.error(self.t('server.run.stop_error'))
 			self.logger.error(traceback.format_exc())
 
 	# the thread for processing console input
@@ -226,7 +238,7 @@ class Server:
 					try:
 						parsed_result = self.parser.parse_console_command(text)
 					except:
-						self.logger.error(f'Error parsing console command {text}')
+						self.logger.error(self.t('server.console_input.parse_fail', text))
 						self.logger.error(traceback.format_exc())
 						break
 					self.react(parsed_result)
@@ -235,7 +247,7 @@ class Server:
 				self.stop(forced=True)
 				break
 			except:
-				self.logger.error(f'Error ticking console thread')
+				self.logger.error(self.t('server.console_input.error'))
 				self.logger.error(traceback.format_exc())
 
 	# react to a parsed info
@@ -244,11 +256,10 @@ class Server:
 			try:
 				reactor.react(info)
 			except:
-				self.logger.error(f'Error processing reactor {reactor.__name__}')
+				self.logger.error(self.t('server.react.error', reactor.__name__))
 				self.logger.error(traceback.format_exc())
 
 	def connect_rcon(self):
 		self.rcon_manager.disconnect()
 		if self.config['enable_rcon'] and self.flag_server_startup:
-			self.rcon_manager.connect(self.config['rcon_address'], self.config['rcon_port'],
-									  self.config['rcon_password'])
+			self.rcon_manager.connect(self.config['rcon_address'], self.config['rcon_port'], self.config['rcon_password'])

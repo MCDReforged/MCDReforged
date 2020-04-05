@@ -2,7 +2,7 @@
 
 
 class ServerStatus:
-	RUNNING = 'Running'  # server running
-	STOPPING_BY_ITSELF = 'Stopping by itself'  # server stops by itself
-	STOPPING_BY_PLUGIN = 'Stopping by plugin'   # server stops by plugin
-	STOPPED = 'Stopped'  # server and MCDR have stopped
+	RUNNING = 'server_status.running'
+	STOPPING_BY_ITSELF = 'server_status.stopping_by_itself'
+	STOPPING_BY_PLUGIN = 'server_status.stopping_by_plugin'
+	STOPPED = 'server_status.stopped'

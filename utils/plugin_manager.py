@@ -19,23 +19,23 @@ class PluginManager:
 			plugin = Plugin(self.server, file_name)
 			plugin.load()
 		except:
-			self.logger.warning('Fail to load plugin {}'.format(file_name))
+			self.logger.warning(self.server.t('plugin_manager.load_plugin.load_fail', file_name))
 			self.logger.warning(traceback.format_exc())
 			return False
 		else:
 			self.plugins.append(plugin)
-			self.logger.info('Plugin {} loaded'.format(file_name))
+			self.logger.info(self.server.t('plugin_manager.load_plugin.load_success', file_name))
 			return True
 
 	def unload_plugin(self, plugin):
 		try:
 			plugin.unload()
 		except:
-			self.logger.warning('Fail to unload plugin {}'.format(plugin.file_name))
+			self.logger.warning(self.server.t('plugin_manager.unload_plugin.unload_fail', plugin.plugin_name))
 			self.logger.warning(traceback.format_exc())
 			ret = False
 		else:
-			self.logger.info('Plugin {} unloaded'.format(plugin.file_name))
+			self.logger.info(self.server.t('plugin_manager.unload_plugin.unload_success', plugin.plugin_name))
 			ret = True
 		finally:
 			self.plugins.remove(plugin)
@@ -45,22 +45,22 @@ class PluginManager:
 		try:
 			plugin.reload()
 		except:
-			self.logger.warning('Fail to reload plugin {}'.format(plugin.file_name))
+			self.logger.warning(self.server.t('plugin_manager.reload_plugin.reload_fail', plugin.plugin_name))
 			self.logger.warning(traceback.format_exc())
 			self.plugins.remove(plugin)
 			return False
 		else:
-			self.logger.info('Plugin {} reloaded'.format(plugin.file_name))
+			self.logger.info(self.server.t('plugin_manager.reload_plugin.reload_success', plugin.plugin_name))
 			return True
 
 	def load_plugins(self):
-		self.server.logger.info('Loading plugins')
+		self.server.logger.info(self.server.t('plugin_manager.load_plugins.loading'))
 
 		# init
 		self.command_prefix_listeners = {}
 		if not os.path.isdir(constant.PLUGIN_FOLDER):
 			os.makedirs(constant.PLUGIN_FOLDER)
-		file_list = tool.list_py_file(constant.PLUGIN_FOLDER)
+		file_list = tool.list_file(constant.PLUGIN_FOLDER, '.py')
 		name_dict = {plugin.file_name: plugin for plugin in self.plugins}
 		counter_all = counter_load = counter_unload = counter_reload = 0
 
@@ -82,15 +82,15 @@ class PluginManager:
 		counter_fail = counter_all - counter_load - counter_unload - counter_reload
 		msg = []
 		if counter_load > 0:
-			msg.append('Loaded: {} plugins'.format(counter_load))
+			msg.append(self.server.t('plugin_manager.load_plugins.info_loaded', counter_load))
 		if counter_unload > 0:
-			msg.append('Unloaded: {} plugins'.format(counter_unload))
+			msg.append(self.server.t('plugin_manager.load_plugins.info_unloaded', counter_unload))
 		if counter_reload > 0:
-			msg.append('Reloaded: {} plugins'.format(counter_reload))
+			msg.append(self.server.t('plugin_manager.load_plugins.info_reloaded', counter_reload))
 		if counter_fail > 0:
-			msg.append('Failed: {} plugins'.format(counter_fail))
+			msg.append(self.server.t('plugin_manager.load_plugins.info_fail', counter_fail))
 		if len(msg) == 0:
-			msg = 'No plugin operation has occurred'
+			msg.append(self.server.t('plugin_manager.load_plugins.info_none'))
 		else:
 			msg = '; '.join(msg)
 		return msg

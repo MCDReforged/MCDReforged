@@ -1,0 +1,225 @@
+server.load_config.language_set: |
+  语言已设置为 {0}
+
+server.load_config.debug_mode_on: |
+  调试模式开启
+
+server.load_config.parser_set: |
+  解析器已设置为 {0}
+
+server.load_config.encoding_decoding_set: |
+  编码 / 解码方式已设置为 {0} / {1}
+
+server.set_server_status.server_status_set: |
+  服务端状态已设置为 "{0}"
+
+server.start_server.start_twice: |
+  服务端不能多次启动
+
+server.start_server.starting: |
+  正在启动服务端
+
+server.start_server.start_fail: |
+  服务端启动失败
+
+server.start_server.pid_info: |
+  服务端正在以 PID {0} 运行中
+
+server.stop.stop_twice: |
+  服务端不能在关闭时再次关闭
+
+server.stop.stop_fail: |
+  服务端关闭出错，强制关闭
+
+server.stop.process_killed: |
+  进程已终止
+
+server.send.send_when_stoped: |
+  服务端已关闭，不能向其标准输入流输入指令
+
+server.receive.wait_stop: |
+  等待服务端进程停止
+
+server.receive.decode_fail: |
+  解析文本 "{0}" 出错
+
+server.on_server_stop.show_stopcode: |
+  服务端已关闭，返回代码: {0}
+
+server.on_server_stop.stop_by_itself: |
+  服务端自行关闭
+
+server.tick.pre_parse_fail: |
+  预解析服务端标准输出流失败，使用源文本
+
+server.tick.parse_fail: |
+  Fail to parse text "{0}" from stdout of the server, using raw parser
+  解析来自服务端标准输出流的文本 "{0}" 失败，使用原始解析器
+
+server.run.error: |
+  运行 MCDR 时出错
+
+server.run.user_interrupted: |
+  MCDR 已被用户终止
+
+server.run.server_stop: |
+  服务端已关闭
+
+server.run.bye: |
+  bye
+
+server.run.stop_error: |
+  关闭 MCDR 时出错，忽略并继续退出
+
+server.console_input.parse_fail: |
+  解析控制台指令 "{0}" 出错
+
+server.console_input.error: |
+  运行控制台线程时出错
+
+server.react.error: |
+  运行反应器 {0} 时出错
+
+mcdr_command_manager.help_message: |
+  !!MCDR: 显示这条消息
+  !!MCDR reload: 显示重载相关的帮助信息
+  !!MCDR status: 显示 MCDR 状态
+  !!MCDR permission: 显示权限相关的帮助信息
+
+mcdr_command_manager.help_message_reload: |
+  !!MCDR reload plugin: 重载所有插件
+  !!MCDR reload config: 重载配置文件
+  !!MCDR reload permission: 重载权限文件
+  !!MCDR reload all: 重载上述所有
+
+mcdr_command_manager.help_message_permission: |
+  !!MCDR permission list [<level>]: 列出所有玩家的权限等级。如果 [<level>] 被指定则仅列出权限等级 [<level>]
+  !!MCDR permission set <player> <level>: 将 <player> 的权限等级设置为 <level>
+  !!MCDR permission remove <player>: 将 <player> 从权限数据库中移除
+  !!MCDR permission setdefault <level>: 将默认权限等级设置为 <level>
+
+mcdr_command_manager.command_not_found: |
+  参数错误，输入 "{0}" 以查看帮助
+
+mcdr_command_manager.reload_plugins.load_fail: |
+  插件重载失败
+
+mcdr_command_manager.reload_config.load_fail: |
+  配置文件重载失败
+
+mcdr_command_manager.reload_config.load_success: |
+  配置文件重载成功
+
+mcdr_command_manager.reload_permission.load_fail: |
+  权限文件重载失败
+
+mcdr_command_manager.reload_permission.load_success: |
+  权限文件重载成功
+
+mcdr_command_manager.invalid_permission_level: |
+  无效的权限等级
+
+mcdr_command_manager.invalid_player_name: |
+  无效的玩家名称
+
+mcdr_command_manager.remove_player_permission.player_removed: |
+  已移除玩家 {0}
+
+mcdr_command_manager.list_permission.show_default: |
+  默认值: {0}
+
+mcdr_command_manager.print_mcdr_status.online: |
+  在线
+
+mcdr_command_manager.print_mcdr_status.offline: |
+  离线
+
+mcdr_command_manager.print_mcdr_status.line1: |
+  {0} 版本: {1}
+
+mcdr_command_manager.print_mcdr_status.line2: |
+  服务端状态: {0}
+
+mcdr_command_manager.print_mcdr_status.line3: |
+  服务端已启动: {0}
+
+mcdr_command_manager.print_mcdr_status.line4: |
+  Rcon: {0}
+
+mcdr_command_manager.print_mcdr_status.line5: |
+  插件数量: {0}
+
+permission_manager.load.load_fail: |
+  加载权限文件 {0} 失败，使用默认的空数据
+
+permission_manager.set_default_permission_level.done: |
+  默认权限等级已设置为 {0}
+
+permission_manager.add_player.done: |
+  玩家 {0} 已添加，权限等级为 {1}
+
+permission_manager.remove_player.done: |
+  玩家 {0} 已移除
+
+permission_manager.set_permission_level.done: |
+  玩家 {0} 的权限等级已设置为 {1}
+
+plugin_manager.load_plugin.load_fail: |
+  插件 {0} 加载失败
+
+plugin_manager.load_plugin.load_success: |
+  插件 {0} 已加载
+
+plugin_manager.unload_plugin.unload_fail: |
+  插件 {0} 卸载失败
+
+plugin_manager.unload_plugin.unload_success: |
+  插件 {0} 已卸载
+
+plugin_manager.reload_plugin.reload_fail: |
+  插件 {0} 重载失败
+
+plugin_manager.reload_plugin.reload_success: |
+  插件 {0} 已重载
+
+plugin_manager.load_plugins.loading: |
+  加载插件中
+
+plugin_manager.load_plugins.info_loaded: |
+  已加载: {0} 个插件
+
+plugin_manager.load_plugins.info_unloaded: |
+  已卸载: {0} 个插件
+
+plugin_manager.load_plugins.info_reloaded: |
+  已重载: {0} 个插件
+
+plugin_manager.load_plugins.info_fail: |
+  失败: {0} 个插件
+
+plugin_manager.load_plugins.info_none: |
+  未找到任何插件
+
+rcon_manager.connect.connection_fail: |
+  Rcon 连接失败: {0}
+
+rcon_manager.connect.connected: |
+  Rcon 已连接
+
+rcon_manager.connect.wrong_password: |
+  Rcon 密码错误，连接失败
+
+rcon_manager.disconnect.disconnected: |
+  Rcon 已断开连接
+
+server_status.running: |
+  运行中
+
+server_status.stopping_by_itself: |
+  正在自行关闭
+
+server_status.stopping_by_plugin: |
+  正在被插件关闭
+
+server_status.stopped: |
+  已关闭

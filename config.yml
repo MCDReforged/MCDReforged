@@ -1,5 +1,13 @@
 # Config file for MCDReforged
 
+# Language of MCDR
+# Language file need to be in lang/ folder, and encoding in utf8
+# Examples:
+#   en_us
+#   zh_cn
+language: zh_cn
+
+
 # The working directory of the server. If you use default value server/ I will suggest you to put all the files related to the server to the server/ folder
 working_directory: server
 

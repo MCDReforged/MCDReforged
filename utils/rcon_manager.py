@@ -18,18 +18,18 @@ class RconManager:
 		try:
 			success = self.rcon.connect()
 		except Exception as e:
-			self.logger.info('Rcon connection failed: {}'.format(e))
+			self.logger.info(self.server.t('rcon_manager.connect.connection_fail', e))
 			self.rcon = None
 		else:
 			if success:
-				self.logger.info('Rcon connected')
+				self.logger.info(self.server.t('rcon_manager.connect.connected'))
 			else:
-				self.logger.info('Rcon password is not correct, connection failed')
+				self.logger.info(self.server.t('rcon_manager.connect.wrong_password'))
 
 	def disconnect(self):
 		if self.is_running():
 			self.rcon.disconnect()
-			self.logger.info('Rcon disconnected')
+			self.logger.info(self.server.t('rcon_manager.disconnect.disconnected'))
 		self.rcon = None
 
 	def send_command(self, command):

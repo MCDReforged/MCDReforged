@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-VERSION = '0.3.4-alpha'
+VERSION = '0.4-alpha'
 NAME_SHORT = 'MCDR'
 NAME = 'MCDReforged'
 NAME_FULL = 'MCDaemonReforged'
@@ -11,3 +11,4 @@ LOGGING_FILE = './log/{}.log'.format(NAME_SHORT)
 REACTOR_FOLDER = './utils/reactor/'
 PARSER_FOLDER = './utils/parser/'
 PLUGIN_FOLDER = './plugins/'
+LANGUAGE_FOLDER = './lang/'
