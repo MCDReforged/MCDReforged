@@ -15,8 +15,10 @@ start_command: java -Xms1G -Xmx2G -jar minecraft_server.jar --nogui
 # The parser to parse the output of the server. Available options:
 # vanilla_parser
 #   for vanilla / carpet / fabric server
+# spigot_parser
+#   for spigot 1.14.4+ server
 # paper_parser
-#   for bukkit / spigot / paper server
+#   for bukkit / spigot(<=1.13.2) / paper server
 # bungeecord_parser
 #   for bungeecord server
 # waterfall_parser
