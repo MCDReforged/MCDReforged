@@ -1,7 +1,7 @@
 # Config file for MCDReforged
 
 # Language of MCDR
-# Language file need to be in lang/ folder, and encoding in utf8
+# Language file need to be in lang/ folder, and encoded in utf8
 # Examples:
 #   en_us
 #   zh_cn
@@ -13,7 +13,7 @@ working_directory: server
 
 
 # The console command to start the server. Examples:
-#   java -Xms1G -Xmx2G -jar minecraft_server.jar --nogui
+#   java -Xms1G -Xmx2G -jar minecraft_server.jar nogui
 #   java -Djline.terminal=jline.UnsupportedTerminal -jar BungeeCord.jar
 #   ./start.sh
 #   start.bat
@@ -22,7 +22,7 @@ start_command: java -Xms1G -Xmx2G -jar minecraft_server.jar nogui
 
 # The parser to parse the output of the server. Available options:
 # vanilla_parser
-#   for Vanilla / Carpet / Fabric server
+#   for Vanilla / Carpet / Fabric / Forge server
 #
 # bukkit_parser
 #   For Bukkit / Spiogt server with Minecraft version below 1.14, and Paper server in all version

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import re
 import time
 
 from utils import info
@@ -39,6 +40,8 @@ class BaseParser(object):
 		pass
 
 	def pre_parse_server_stdout(self, text):
+		if text.startswith('\033['):
+			text = re.sub(r'\033\[.*?m', '', text)
 		return text
 
 	def is_server_startup_done(self, info):

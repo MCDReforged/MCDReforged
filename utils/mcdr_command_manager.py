@@ -2,7 +2,7 @@
 import re
 import traceback
 
-from utils import constant
+from utils import constant, tool
 from utils.info import InfoSource
 from utils.permission_manager import PermissionLevel
 
@@ -23,7 +23,7 @@ class MCDRCommandManager:
 			if info.source == InfoSource.SERVER:
 				self.server.server_interface.tell(info.player, line, is_plugin_call=False)
 			else:
-				self.logger.info(line)
+				self.logger.info(tool.clean_minecraft_color_code(line))
 
 	def process_command(self, info):
 		args = info.content.split(' ')
@@ -133,9 +133,9 @@ class MCDRCommandManager:
 		specific_name = self.server.permission_manager.format_level_name(level)
 		for name in PermissionLevel.NAME:
 			if specific_name is None or name == specific_name:
-				self.send_message(info, '[{}]'.format(name))
+				self.send_message(info, '§7[§e{}§7]§r'.format(name))
 				for player in self.server.permission_manager.get_permission_group_list(name):
-					self.send_message(info, '- {}'.format(player))
+					self.send_message(info, '§7-§r {}'.format(player))
 
 	def set_default_permission(self, info, level):
 		level = self.server.permission_manager.format_level_name(level)
@@ -160,3 +160,5 @@ class MCDRCommandManager:
 		msg.append(self.server.t('mcdr_command_manager.print_mcdr_status.line4', status_dict[self.server.server_interface.is_rcon_running(is_plugin_call=False)]))
 		msg.append(self.server.t('mcdr_command_manager.print_mcdr_status.line5', len(self.server.plugin_manager.plugins)))
 		self.send_message(info, '\n'.join(msg))
+		if info.source == InfoSource.CONSOLE and self.server.process is not None:
+			self.logger.info('PID: {}'.format(self.server.process.pid))

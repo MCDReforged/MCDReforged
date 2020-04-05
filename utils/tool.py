@@ -2,6 +2,7 @@
 import importlib.machinery
 import importlib.util
 import os
+import re
 import sys
 import threading
 
@@ -38,3 +39,7 @@ def unique_list(l):
 	ret = list(set(l))
 	ret.sort(key=l.index)
 	return ret
+
+
+def clean_minecraft_color_code(text):
+	return re.sub('§[\w0-9]', '', text)

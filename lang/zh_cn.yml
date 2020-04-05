@@ -44,7 +44,7 @@ server.receive.decode_fail: |
   解析文本 "{0}" 出错
 
 server.on_server_stop.show_stopcode: |
-  服务端已关闭，返回代码: {0}
+  服务端进程返回代码: {0}
 
 server.on_server_stop.stop_by_itself: |
   服务端自行关闭
@@ -81,76 +81,76 @@ server.react.error: |
   运行反应器 {0} 时出错
 
 mcdr_command_manager.help_message: |
-  !!MCDR: 显示这条消息
-  !!MCDR reload: 显示重载相关的帮助信息
-  !!MCDR status: 显示 MCDR 状态
-  !!MCDR permission: 显示权限相关的帮助信息
+  §7!!MCDR§r: 显示这条消息
+  §7!!MCDR reload§r: 显示重载相关的帮助信息
+  §7!!MCDR status§r: 显示 MCDR 状态
+  §7!!MCDR permission§r: 显示权限相关的帮助信息
 
 mcdr_command_manager.help_message_reload: |
-  !!MCDR reload plugin: 重载所有插件
-  !!MCDR reload config: 重载配置文件
-  !!MCDR reload permission: 重载权限文件
-  !!MCDR reload all: 重载上述所有
+  §7!!MCDR reload plugin§r: 重载所有插件
+  §7!!MCDR reload config§r: 重载配置文件
+  §7!!MCDR reload permission§r: 重载权限文件
+  §7!!MCDR reload all§r: 重载上述所有
 
 mcdr_command_manager.help_message_permission: |
-  !!MCDR permission list [<level>]: 列出所有玩家的权限等级。如果 [<level>] 被指定则仅列出权限等级 [<level>]
-  !!MCDR permission set <player> <level>: 将 <player> 的权限等级设置为 <level>
-  !!MCDR permission remove <player>: 将 <player> 从权限数据库中移除
-  !!MCDR permission setdefault <level>: 将默认权限等级设置为 <level>
+  §7!!MCDR permission list §e[<level>]§r: 列出所有玩家的权限等级。如果 §e[<level>]§r 被指定则仅列出权限等级 §e[<level>]§r
+  §7!!MCDR permission set §b<player>§r §e<level>§r: 将 §b<player>§r 的权限等级设置为 §e<level>§r
+  §7!!MCDR permission remove §b<player>§r: 将 §b<player>§r 从权限数据库中移除
+  §7!!MCDR permission setdefault §e<level>§r: 将默认权限等级设置为 §e<level>§r
 
 mcdr_command_manager.command_not_found: |
-  参数错误，输入 "{0}" 以查看帮助
+  参数错误，输入 "§7{0}§r" 以查看帮助
 
 mcdr_command_manager.reload_plugins.load_fail: |
-  插件重载失败
+  插件重载§c失败§r
 
 mcdr_command_manager.reload_config.load_fail: |
-  配置文件重载失败
+  配置文件重载§c失败§r
 
 mcdr_command_manager.reload_config.load_success: |
-  配置文件重载成功
+  配置文件重载§a成功§r
 
 mcdr_command_manager.reload_permission.load_fail: |
-  权限文件重载失败
+  权限文件重载§c失败§r
 
 mcdr_command_manager.reload_permission.load_success: |
-  权限文件重载成功
+  权限文件重载§a成功§r
 
 mcdr_command_manager.invalid_permission_level: |
-  无效的权限等级
+  §c无效的权限等级§r
 
 mcdr_command_manager.invalid_player_name: |
-  无效的玩家名称
+  §c无效的玩家名称§r
 
 mcdr_command_manager.remove_player_permission.player_removed: |
-  已移除玩家 {0}
+  已移除玩家 §b{0}§r
 
 mcdr_command_manager.list_permission.show_default: |
-  默认值: {0}
+  默认等级: §e{0}§r
 
 mcdr_command_manager.print_mcdr_status.online: |
   在线
 
 mcdr_command_manager.print_mcdr_status.offline: |
-  离线
+  §7离线§r
 
 mcdr_command_manager.print_mcdr_status.line1: |
-  {0} 版本: {1}
+  §l{0}§r 版本: §7{1}§r
 
 mcdr_command_manager.print_mcdr_status.line2: |
-  服务端状态: {0}
+  服务端状态: §7{0}§r
 
 mcdr_command_manager.print_mcdr_status.line3: |
-  服务端已启动: {0}
+  服务端已启动: §7{0}§r
 
 mcdr_command_manager.print_mcdr_status.line4: |
   Rcon: {0}
 
 mcdr_command_manager.print_mcdr_status.line5: |
-  插件数量: {0}
+  插件数量: §7{0}§r
 
 permission_manager.load.load_fail: |
-  加载权限文件 {0} 失败，使用默认的空数据
+  加载权限文件 §7{0}§r §c失败§r，使用默认的空数据
 
 permission_manager.set_default_permission_level.done: |
   默认权限等级已设置为 {0}
@@ -186,16 +186,16 @@ plugin_manager.load_plugins.loading: |
   加载插件中
 
 plugin_manager.load_plugins.info_loaded: |
-  已加载: {0} 个插件
+  已加载: §7{0}§r 个插件
 
 plugin_manager.load_plugins.info_unloaded: |
-  已卸载: {0} 个插件
+  已卸载: §7{0}§r 个插件
 
 plugin_manager.load_plugins.info_reloaded: |
-  已重载: {0} 个插件
+  已重载: §7{0}§r 个插件
 
 plugin_manager.load_plugins.info_fail: |
-  失败: {0} 个插件
+  失败: §7{0}§r 个插件
 
 plugin_manager.load_plugins.info_none: |
   未找到任何插件
@@ -223,3 +223,6 @@ server_status.stopping_by_plugin: |
 
 server_status.stopped: |
   已关闭
+
+general_reactor.permission_denied: |
+  权限不足

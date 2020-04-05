@@ -73,7 +73,7 @@ class Server:
 		self.connect_rcon()
 
 	def load_plugins(self):
-		msg = self.plugin_manager.load_plugins()
+		msg = tool.clean_minecraft_color_code(self.plugin_manager.load_plugins())
 		self.logger.info(msg)
 		return msg
 

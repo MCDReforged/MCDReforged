@@ -44,7 +44,7 @@ server.receive.decode_fail: |
   Fail to decode text "{0}"
 
 server.on_server_stop.show_stopcode: |
-  Server stopped with code {0}
+  Server process stopped with code {0}
 
 server.on_server_stop.stop_by_itself: |
   Server stopped by itself
@@ -80,73 +80,73 @@ server.react.error: |
   Error processing reactor {0}
 
 mcdr_command_manager.help_message: |
-  !!MCDR: Show this message
-  !!MCDR reload: Show reload command help message
-  !!MCDR status: Show MCDR status
-  !!MCDR permission: Show permission command help message
+  §7!!MCDR§r: Show this message
+  §7!!MCDR reload§r: Show reload command help message
+  §7!!MCDR status§r: Show MCDR status
+  §7!!MCDR permission§r: Show permission command help message
 
 mcdr_command_manager.help_message_reload: |
-  !!MCDR reload plugin: Reload all plugins
-  !!MCDR reload config: Reload config file
-  !!MCDR reload permission: Reload permission file
-  !!MCDR reload all: Reload everything above
+  §7!!MCDR reload plugin§r: Reload all plugins
+  §7!!MCDR reload config§r: Reload config file
+  §7!!MCDR reload permission§r: Reload permission file
+  §7!!MCDR reload all§r: Reload everything above
 
 mcdr_command_manager.help_message_permission: |
-  !!MCDR permission list [<level>]: List all player's permission. Only list permission level [<level>] if [<level>] has set
-  !!MCDR permission set <player> <level>: Set the permission level of <player> to <level>
-  !!MCDR permission remove <player>: Remove <player> from the permission database
-  !!MCDR permission setdefault <level>: Set the default permission level to <level>
+  §7!!MCDR permission list §e[<level>]§r: List all player's permission. Only list permission level §e[<level>]§r if §e[<level>]§r has set
+  §7!!MCDR permission set §b<player>§r §e<level>§r: Set the permission level of §b<player>§r to §e<level>§r
+  §7!!MCDR permission remove §b<player>§r: Remove §b<player>§r from the permission database
+  §7!!MCDR permission setdefault §e<level>§r: Set the default permission level to §e<level>§r
 
 mcdr_command_manager.command_not_found: |
-  Command not found, type "{0}" to see help
+  Command not found, type "§7{0}§r" to see help
 
 mcdr_command_manager.reload_plugins.load_fail: |
-  Fail to reload plugin
+  §cFail§r to reload plugin
 
 mcdr_command_manager.reload_config.load_fail: |
-  Fail to reload config file
+  §cFail§r to reload config file
 
 mcdr_command_manager.reload_config.load_success: |
-  Config file reloaded successfully
+  Config file reloaded §asuccessfully§r
 
 mcdr_command_manager.reload_permission.load_fail: |
-  Fail to reload permission file
+  §cFail§r to reload permission file
 
 mcdr_command_manager.reload_permission.load_success: |
-  Permission file reloaded successfully
+  Permission file reloaded §asuccessfully§r
 
 mcdr_command_manager.invalid_permission_level: |
-  Invalid permission level
+  §cInvalid permission level§r
 
 mcdr_command_manager.invalid_player_name: |
-  Invalid player name
+  §cInvalid player name§r
 
 mcdr_command_manager.remove_player_permission.player_removed: |
-  Player {0} has been removed
+  Player §b{0}§r has been removed
 
 mcdr_command_manager.list_permission.show_default: |
-  Default: {0}
+  Default permission level: §e{0}§r
 
 mcdr_command_manager.print_mcdr_status.online: |
   Online
 
 mcdr_command_manager.print_mcdr_status.offline: |
-  Offline
+  §7Offline§r
 
 mcdr_command_manager.print_mcdr_status.line1: |
-  {0} version: {1}
+  §l{0}§r version: §7{1}§r
 
 mcdr_command_manager.print_mcdr_status.line2: |
-  Server status: {0}
+  Server status: §7{0}§r
 
 mcdr_command_manager.print_mcdr_status.line3: |
-  Server startup: {0}
+  Server startup: §7{0}§r
 
 mcdr_command_manager.print_mcdr_status.line4: |
   Rcon: {0}
 
 mcdr_command_manager.print_mcdr_status.line5: |
-  Plugin count: {0}
+  Plugin count: §7{0}§r
 
 permission_manager.load.load_fail: |
   Fail to load permission file {0}, using default empty data
@@ -185,16 +185,16 @@ plugin_manager.load_plugins.loading: |
   Loading plugins
 
 plugin_manager.load_plugins.info_loaded: |
-  Loaded: {0} plugins
+  Loaded: §7{0}§r plugins
 
 plugin_manager.load_plugins.info_unloaded: |
-  Unloaded: {0} plugins
+  Unloaded: §7{0}§r plugins
 
 plugin_manager.load_plugins.info_reloaded: |
-  Reloaded: {0} plugins
+  Reloaded: §7{0}§r plugins
 
 plugin_manager.load_plugins.info_fail: |
-  Failed: {0} plugins
+  Failed: §7{0}§r plugins
 
 plugin_manager.load_plugins.info_none: |
   No plugin was founded
@@ -222,3 +222,6 @@ server_status.stopping_by_plugin: |
 
 server_status.stopped: |
   Stopped
+
+general_reactor.permission_denied: |
+  Permission denied
