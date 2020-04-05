@@ -197,7 +197,7 @@ plugin_manager.load_plugins.info_fail: |
   Failed: §7{0}§r plugins
 
 plugin_manager.load_plugins.info_none: |
-  No plugin was founded
+  No plugin was found
 
 rcon_manager.connect.connection_fail: |
   Rcon connection failed: {0}
