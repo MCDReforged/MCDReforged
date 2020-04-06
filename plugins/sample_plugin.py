@@ -11,7 +11,7 @@ def on_load(server, old_module):
 	else:
 		counter = 1
 	msg = f'This is the {counter} time to load the plugin'
-	if server.is_running():
+	if server.is_server_running():
 		server.say(msg)
 	server.logger.info(msg)
 

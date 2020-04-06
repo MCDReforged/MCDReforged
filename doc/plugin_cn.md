@@ -5,15 +5,15 @@ MCDReforged Plugin Document
 
 与 MCDaemon 类似，一个 MCDR 的插件是一个位与 `plugins/` 文件夹下的 `.py` 文件。MCDR 会在启动时自动加载该文件夹中的所有插件
 
-当服务器触发某些指定事件时，如果插件有声明下列方法的话，MCDR 会调用每个插件的对应方法。MCDR 调用每个插件的方法时会为其新建一个独立的线程供其运行
+当服务端触发某些指定事件时，如果插件有声明下列方法的话，MCDR 会调用每个插件的对应方法。MCDR 调用每个插件的方法时会为其新建一个独立的线程供其运行
 
 | 方法 | 调用时刻 | 独立线程 | 参考用途 |
 |---|---|---|---|
 | on_load(server, old_module) | 插件被加载 | 是 | 新插件继承旧插件的信息 |
 | on_unload(server) | 插件被卸载 | 是 | 清理或关闭旧插件的功能 |
-| on_info(server, info) | 服务器的标准输出流有输出，或者控制台有输入 | 是 | 插件响应相关信息 |
-| on_player_joined(server, player) | 玩家加入服务器 | 是 | 插件响应玩家加入游戏 |
-| on_player_left(server, player) | 玩家离开服务器 | 是 | 插件响应玩家离开游戏 |
+| on_info(server, info) | 服务端的标准输出流有输出，或者控制台有输入 | 是 | 插件响应相关信息 |
+| on_player_joined(server, player) | 玩家加入服务端 | 是 | 插件响应玩家加入游戏 |
+| on_player_left(server, player) | 玩家离开服务端 | 是 | 插件响应玩家离开游戏 |
 | on_server_startup(server) | 服务端启动完成，如原版服务端输出 `Done (1.0s)! For help, type "help"` 后 | 是 | 插件相关初始化 |
 | on_mcdr_stop(server) | 服务端已经关闭，MCDR 即将退出 | 否 | 保存数据、释放资源
 
@@ -39,22 +39,37 @@ MCDReforged Plugin Document
 
 它具有以下方法：
 
+**服务端控制**
+
 | 方法 | 功能 |
 |---|---|
-| start() | 启动服务器。仅在服务器未启动的情况下有效 |
-| stop() | 使用服务端对应的指令，如 `stop` 来关闭服务器。仅在服务器运行时有效 |
-| execute(text) | 发送字符串 `text` 至服务端的标准输入流，并自动在其后方追加一个 `\n` |
-| send(text) | 发送字符串 `text` 至服务端的标准输入流 |
-| say(text) | 使用 `tellraw @a` 来在服务器中广播字符串消息 `text` |
-| tell(player, text) | 使用 `tellraw <player>` 来在对玩家 `<player>` 发送字符串消息 `text` |
-| reply(info, text) | 向消息源发生消息字符串 `text`: 如果消息来自玩家则调用 `tell(info.player, text)`; 如果不是则调用 MCDR 的 logger 来将 `text` 告示至控制台
-| is_running() | 服务端（准确地说，服务端进程）是否在运行 |
+| start() | 启动服务端。仅在服务端未启动的情况下有效 |
+| stop() | 使用服务端对应的指令，如 `stop` 来关闭服务端。仅在服务端运行时有效 || is_running() | 服务端（准确地说，服务端进程）是否在运行 |
 | wait_for_start() | 等待直至服务端完全关闭，也就是可以启动 |
 | restart() | 依次执行 `stop()`、`wait_for_start()`、`start()` 来重启服务端 |
 | stop_exit() | 关闭服务端以及 MCDR，也就是退出整个程序 |
-| get_permission_level(obj) | 返回一个[整数](https://github.com/Fallen-Breath/MCDReforged/blob/master/doc/readme_cn.md#权限)，代表 `obj` 对象拥有的最高权限等级。`obj` 对象可为一个 `Info` 实例，或者是一个表示玩家名称的字符串 |
+| is_server_running() | 返回一个 bool 代表服务端（更准确地，服务端进程）是否在运行 |
+| is_server_startup() | 返回一个 bool 代表服务端是否已经启动完成 |
 | is_rcon_running() | 返回一个 bool 代表 rcon 是否在运行 |
+
+**文本交互**
+
+| 方法 | 功能 |
+|---|---|
+| execute(text) | 发送字符串 `text` 至服务端的标准输入流，并自动在其后方追加一个 `\n` |
+| say(text) | 使用 `tellraw @a` 来在服务端中广播字符串消息 `text` |
+| tell(player, text) | 使用 `tellraw <player>` 来在对玩家 `<player>` 发送字符串消息 `text` |
+| reply(info, text) | 向消息源发生消息字符串 `text`: 如果消息来自玩家则调用 `tell(info.player, text)`; 如果不是则调用 MCDR 的 logger 来将 `text` 告示至控制台
+
+字符串 `text` 中如果含有特殊字符 `"`、`\\`、`\n`，MCDR 会自动对齐进行转义，因此无需担心传入的字符串格式
+
+**其他**
+
+| 方法 | 功能 |
+|---|---|
+| get_permission_level(obj) | 返回一个[整数](https://github.com/Fallen-Breath/MCDReforged/blob/master/doc/readme_cn.md#权限)，代表 `obj` 对象拥有的最高权限等级。`obj` 对象可为一个 `Info` 实例，或者是一个表示玩家名称的字符串 |
 | rcon_query(command) | 通过 rcon 向服务端发送指令 `command`，然后返回一个字符串，表示该指令执行后的返回值。如果 rcon 未在运行或者有异常发生，返回 None |
+| get_plugin_instance(plugin_name) | 返回当前加载着的位于 `plugins/plugin_name.py` 的插件实例。使用此方法而非在插件中手动 import 可保证得到的目标插件实例与 MCDR 中的实例相同。若未找到该插件，返回 None |
 
 ## info
 

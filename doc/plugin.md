@@ -39,22 +39,37 @@ It has following variables:
 
 It also has these following methods:
 
+**Server Control**
+
 | Method | Function |
 |---|---|
 | start() | Start the server. Only works if the server has stopped |
 | stop() | Use the specific command like `stop` to close the server. Only works if the server is running |
-| execute(text) | Send a string `text` to the stdin of the server with a extra `\n` at the end |
-| send(text) | Send a string `text` to the stdin of the server |
-| say(text) | Use `tellraw @a` to broadcast message `text` in the server |
-| tell(player, text) | Use `tellraw <player>` to send message `text` to player `<player>` |
-| reply(info, text) | Send a string `text` to the info source: if it's from a player calls `tell(info.player, text)`; if not uses MCDR's logger to info `text` to the console
-| is_running() | If the server (more precisely, server process) is running |
 | wait_for_start() | Wait until the server is stopped, in other words, startable |
 | restart() | Execute `stop()`、`wait_for_start()`、`start()` in order to restart the server |
 | stop_exit() | Close the server and MCDR, in the other words, exit the program |
-| get_permission_level(obj) | Return a [integer](https://github.com/Fallen-Breath/MCDReforged#Permission) representing highest permission level the object `obj` has. `obj` can be a `Info` instance or a string representing a player name |
+| is_server_running() | If the server (more precisely, server process) is running |
+| is_server_startup() | If the server has started up |
 | is_rcon_running() | Return a bool representing if the rcon is running |
+
+**Text Interaction**
+
+| Method | Function |
+|---|---|
+| execute(text) | Send a string `text` to the stdin of the server with a extra `\n` at the end |
+| say(text) | Use `tellraw @a` to broadcast message `text` in the server |
+| tell(player, text) | Use `tellraw <player>` to send message `text` to player `<player>` |
+| reply(info, text) | Send a string `text` to the info source: if it's from a player calls `tell(info.player, text)`; if not uses MCDR's logger to info `text` to the console
+
+If there special characters in string `text`, including `"`, `\\` and `\n`, MCDR will automatically escape them so you don't need to worry about them 
+
+**Other**
+
+| Method | Function |
+|---|---|
+| get_permission_level(obj) | Return a [integer](https://github.com/Fallen-Breath/MCDReforged#Permission) representing highest permission level the object `obj` has. `obj` can be a `Info` instance or a string representing a player name |
 | rcon_query(command) | Send the command `command` via rcon to the server. Return a response string from the server. Return None if rcon stops or exception occurred |
+| get_plugin_instance(plugin_name) | Return an instance of the loaded plugin located in `plugins/plugin_name.py`. Using this method instead of importing the plugin by yourself allows you to get the same instance as MCDR. If plugin not found returns None |
 
 ## info
 

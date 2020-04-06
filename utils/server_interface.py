@@ -34,11 +34,12 @@ class ServerInterface:
 			self.logger.debug('Plugin called execute("{}")'.format(text))
 		self.__server.send(text)
 
-	# without '\n' ending
-	def send(self, text, is_plugin_call=True):
-		if is_plugin_call:
-			self.logger.debug('Plugin called send("{}")'.format(text))
-		self.__server.send(text, ending='')
+#	# without '\n' ending
+#	# not suggest to use
+#	def send(self, text, is_plugin_call=True):
+#		if is_plugin_call:
+#			self.logger.debug('Plugin called send("{}")'.format(text))
+#		self.__server.send(text, ending='')
 
 	def say(self, text, is_plugin_call=True):
 		if is_plugin_call:
@@ -53,16 +54,22 @@ class ServerInterface:
 	# MCDR stuffs
 
 	# if the server is running
-	def is_running(self, is_plugin_call=True):
+	def is_server_running(self, is_plugin_call=True):
+		if is_plugin_call:
+			self.logger.debug('Plugin called is_server_running()')
+		return self.__server.is_server_running()
+
+	# if the server has started up
+	def is_server_startup(self, is_plugin_call=True):
 		if is_plugin_call:
 			self.logger.debug('Plugin called is_running()')
-		return self.__server.is_running()
+		return self.__server.is_server_startup()
 
 	# wait until the server is able to start
 	def wait_for_start(self, is_plugin_call=True):
 		if is_plugin_call:
 			self.logger.debug('Plugin called wait_for_start()')
-		while self.is_running():
+		while self.is_server_running(is_plugin_call=False):
 			time.sleep(0.01)
 
 	# restart the server
@@ -95,7 +102,7 @@ class ServerInterface:
 	def is_rcon_running(self, is_plugin_call=True):
 		if is_plugin_call:
 			self.logger.debug('Plugin called is_rcon_running()')
-		return self.__server.rcon_manager.is_running()
+		return self.__server.rcon_manager.is_server_running()
 
 	# send command through rcon
 	# return the result server returned from rcon
@@ -113,3 +120,15 @@ class ServerInterface:
 			self.tell(info.player, msg, is_plugin_call=False)
 		else:
 			self.__server.logger.info(msg)
+
+	# return the current loaded plugin instance. with this your plugin can access the same plugin instance as MCDR
+	# parameter plugin_name is the name of the plugin you want
+	# the plugin need to be in plugins/plugin_name.py
+	# if plugin not found, return None
+	def get_plugin_instance(self, plugin_name, is_plugin_call=True):
+		if is_plugin_call:
+			self.logger.debug('Plugin called get_plugin_instance("{}")'.format(plugin_name))
+		plugin = self.__server.plugin_manager.get_plugin(plugin_name)
+		if plugin is not None:
+			plugin = plugin.module
+		return plugin

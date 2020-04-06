@@ -156,7 +156,7 @@ class MCDRCommandManager:
 		msg = []
 		msg.append(self.server.t('mcdr_command_manager.print_mcdr_status.line1', constant.NAME, constant.VERSION))
 		msg.append(self.server.t('mcdr_command_manager.print_mcdr_status.line2', self.server.t(self.server.server_status)))
-		msg.append(self.server.t('mcdr_command_manager.print_mcdr_status.line3', self.server.flag_server_startup))
+		msg.append(self.server.t('mcdr_command_manager.print_mcdr_status.line3', self.server.is_server_startup()))
 		msg.append(self.server.t('mcdr_command_manager.print_mcdr_status.line4', status_dict[self.server.server_interface.is_rcon_running(is_plugin_call=False)]))
 		msg.append(self.server.t('mcdr_command_manager.print_mcdr_status.line5', len(self.server.plugin_manager.plugins)))
 		self.send_message(info, '\n'.join(msg))

@@ -98,3 +98,9 @@ class PluginManager:
 	def call(self, func, args=(), new_thread=True):
 		for plugin in self.plugins:
 			plugin.call(func, args, new_thread)
+
+	def get_plugin(self, plugin_name):
+		for plugin in self.plugins:
+			if plugin.plugin_name == plugin_name:
+				return plugin
+		return None

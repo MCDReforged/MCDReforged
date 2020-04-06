@@ -92,15 +92,18 @@ class Server:
 
 	# MCDR server
 
-	def is_running(self):
+	def is_server_running(self):
 		return self.process is not None
+
+	def is_server_startup(self):
+		return self.flag_server_startup
 
 	def set_server_status(self, status):
 		self.server_status = status
 		self.logger.debug(self.t('server.set_server_status.server_status_set', status))
 
 	def start_server(self):
-		if self.is_running():
+		if self.is_server_running():
 			self.logger.warning(self.t('server.start_server.start_twice'))
 			return
 		self.logger.info(self.t('server.start_server.starting'))
@@ -125,7 +128,7 @@ class Server:
 			self.run()
 
 	def stop(self, forced=False, new_server_status=ServerStatus.STOPPING_BY_ITSELF):
-		if not self.is_running():
+		if not self.is_server_running():
 			self.logger.warning(self.t('server.stop.stop_twice'))
 		self.set_server_status(new_server_status)
 		if not forced:
@@ -141,7 +144,7 @@ class Server:
 	def send(self, text, ending='\n'):
 		if type(text) is str:
 			text = (text + ending).encode(self.encoding_method)
-		if self.is_running():
+		if self.is_server_running():
 			self.process.stdin.write(text)
 			self.process.stdin.flush()
 		else:
@@ -205,7 +208,7 @@ class Server:
 		# main loop
 		while self.server_status != ServerStatus.STOPPED:
 			try:
-				if self.is_running():
+				if self.is_server_running():
 					self.tick()
 				else:
 					time.sleep(0.01)
@@ -261,5 +264,5 @@ class Server:
 
 	def connect_rcon(self):
 		self.rcon_manager.disconnect()
-		if self.config['enable_rcon'] and self.flag_server_startup:
+		if self.config['enable_rcon'] and self.is_server_startup():
 			self.rcon_manager.connect(self.config['rcon_address'], self.config['rcon_port'], self.config['rcon_password'])
