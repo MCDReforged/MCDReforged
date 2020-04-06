@@ -96,6 +96,7 @@ class PluginManager:
 		return msg
 
 	def call(self, func, args=(), new_thread=True):
+		self.logger.debug('Calling function "{}" in plugins with {} parameters'.format(func, len(args)))
 		for plugin in self.plugins:
 			plugin.call(func, args, new_thread)
 

@@ -8,7 +8,7 @@ class VanillaParser(base_parser.BaseParser):
 	def __init__(self):
 		super().__init__()
 		self.STOP_COMMAND = 'stop'
-		self.Logger_NAME_CHAR_SET = r'\w /'
+		self.Logger_NAME_CHAR_SET = r'\w /\-'
 
 	def parse_server_stdout(self, text):
 		result = self.parse_server_stdout_raw(text)

@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
+import random
 
 counter = 0
+secret = random.random()
 
 
 def on_load(server, old_module):
@@ -38,9 +40,22 @@ def on_info(server, info):
 			if server.is_rcon_running():
 				server.reply(info, '"time query gametime" command result: ' + server.rcon_query('time query gametime'))
 		if info.content == '!!permission':
-			server.reply(info, server.get_permission_level(info))
+			server.reply(info, 'Your permission level is {}'.format(server.get_permission_level(info)))
 		if info.content == '!!error':
 			x = 1 / 0
+		if info.content == '!!status':
+			server.reply(info, '''
+is_server_running: {}
+is_server_startup: {}
+is_rcon_running: {}
+			'''.strip().format(
+				server.is_server_running(),
+				server.is_server_startup(),
+				server.is_rcon_running(),
+			))
+		if info.content == '!!secret':
+			global secret
+			server.reply(info, 'My secret number is {}\nAnd You know it too {}'.format(secret, server.get_plugin_instance('sample_plugin').secret))
 
 
 def on_player_joined(server, player):
@@ -54,6 +69,10 @@ def on_player_left(server, player):
 
 def on_server_startup(server):
 	server.logger.info('Server has started')
+
+
+def on_server_stop(server, return_code):
+	server.logger.info('Server has stopped and its return code is {}'.format(return_code))
 
 
 def on_mcdr_stop(server):

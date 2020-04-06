@@ -63,4 +63,4 @@ rcon_password: password
 
 
 # Debug mode switch. Don't change it to true unless necessary
-debug_mode: false
+debug_mode: true

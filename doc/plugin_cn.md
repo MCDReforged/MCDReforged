@@ -15,6 +15,7 @@ MCDReforged Plugin Document
 | on_player_joined(server, player) | 玩家加入服务端 | 是 | 插件响应玩家加入游戏 |
 | on_player_left(server, player) | 玩家离开服务端 | 是 | 插件响应玩家离开游戏 |
 | on_server_startup(server) | 服务端启动完成，如原版服务端输出 `Done (1.0s)! For help, type "help"` 后 | 是 | 插件相关初始化 |
+| on_server_stop(server) | 服务端已关闭，更准确地说，服务端进程已终止 | 是 | 处理相关事情 |
 | on_mcdr_stop(server) | 服务端已经关闭，MCDR 即将退出 | 否 | 保存数据、释放资源
 
 注：每个插件并不需要实现所有上述方法，按需实现即可

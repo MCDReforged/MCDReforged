@@ -102,7 +102,7 @@ class ServerInterface:
 	def is_rcon_running(self, is_plugin_call=True):
 		if is_plugin_call:
 			self.logger.debug('Plugin called is_rcon_running()')
-		return self.__server.rcon_manager.is_server_running()
+		return self.__server.rcon_manager.is_running()
 
 	# send command through rcon
 	# return the result server returned from rcon
@@ -119,7 +119,8 @@ class ServerInterface:
 		if info.is_player:
 			self.tell(info.player, msg, is_plugin_call=False)
 		else:
-			self.__server.logger.info(msg)
+			for line in msg.splitlines():
+				self.__server.logger.info(line)
 
 	# return the current loaded plugin instance. with this your plugin can access the same plugin instance as MCDR
 	# parameter plugin_name is the name of the plugin you want

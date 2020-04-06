@@ -183,6 +183,7 @@ class Server:
 		if self.server_status == ServerStatus.STOPPING_BY_ITSELF:
 			self.logger.info(self.t('server.on_server_stop.stop_by_itself'))
 			self.set_server_status(ServerStatus.STOPPED)
+		self.plugin_manager.call('on_server_stop', (self.server_interface, return_code))
 
 	def tick(self):
 		text = self.receive()

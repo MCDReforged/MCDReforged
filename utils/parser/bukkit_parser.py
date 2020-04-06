@@ -5,9 +5,6 @@ from utils.parser import vanilla_parser
 
 
 class BukkitParser(vanilla_parser.VanillaParser):
-	def __init__(self):
-		super().__init__()
-
 	def parse_server_stdout(self, text):
 		result = self.parse_server_stdout_raw(text)
 

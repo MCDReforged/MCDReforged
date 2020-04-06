@@ -7,7 +7,7 @@ Like MCDaemon, a MCDR plugin is a `.py` file locating in `plugins/` folder. MCDR
 
 When the server has trigger specific event, MCDR will call relevant method of each plugin if the plugin has declared the method. MCDR will create a separated thread for the called method to run
 
-| Method | When to call | Independent thread |Reference usage |
+| Method | When to call | Independent thread | Reference usage |
 |---|---|---|---|
 | on_load(server, old_module) | A plugin gets loaded | Yes | The new plugin inherits information from the old plugin |
 | on_unload(server) | A plugin gets unloaded | Yes | Clean up or turn off functionality of the old plugin |
@@ -15,6 +15,7 @@ When the server has trigger specific event, MCDR will call relevant method of ea
 | on_player_joined(server, player) | A player joined the server | Yes | Response to player joining |
 | on_player_left(server, player) | A player left the server | Yes | Response to player leaving |
 | on_server_startup(server) | The server has started up such as vanilla server outputs `Done (1.0s)! For help, type "help"` | Yes | Initialize something |
+| on_server_stop(server, return_code) | The server has, more precisely, server process has terminated | Yes | Process something related with the int type return_code parameter |
 | on_mcdr_stop(server) | The server has stopped and MCDR is about to exit | No | Save data and release resources
 
 Note: the plugin doesn't need to implement all methods above. Just implement what you need
