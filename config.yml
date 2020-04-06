@@ -17,7 +17,7 @@ working_directory: server
 #   java -Djline.terminal=jline.UnsupportedTerminal -jar BungeeCord.jar
 #   ./start.sh
 #   start.bat
-start_command: java -Xms1G -Xmx2G -jar minecraft_server.1.15.2.jar nogui
+start_command: java -Xms1G -Xmx2G -jar minecraft_server.jar nogui
 
 
 # The parser to parse the output of the server. Available options:
@@ -63,4 +63,4 @@ rcon_password: password
 
 
 # Debug mode switch. Don't change it to true unless necessary
-debug_mode: true
+debug_mode: false
