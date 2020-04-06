@@ -5,6 +5,8 @@ MCDReforged Plugin Document
 
 与 MCDaemon 类似，一个 MCDR 的插件是一个位与 `plugins/` 文件夹下的 `.py` 文件。MCDR 会在启动时自动加载该文件夹中的所有插件
 
+在 `plugins/` 文件夹中有一个样板插件 `sample_plugin.py`，可以参考其中的内容
+
 当服务端触发某些指定事件时，如果插件有声明下列方法的话，MCDR 会调用每个插件的对应方法。MCDR 调用每个插件的方法时会为其新建一个独立的线程供其运行
 
 | 方法 | 调用时刻 | 独立线程 | 参考用途 |

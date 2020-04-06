@@ -3,7 +3,9 @@ MCDReforged Plugin Document
 
 [中文](https://github.com/Fallen-Breath/MCDReforged/blob/master/doc/plugin_cn.md)
 
-Like MCDaemon, a MCDR plugin is a `.py` file locating in `plugins/` folder. MCDR will automatically load every plugin inside this folder
+Like MCDaemon, a MCDR plugin is a `.py` file locating in the `plugins/` folder. MCDR will automatically load every plugin inside this folder
+
+There is a sample plugin named `sample_plugin.py` in the `plugins/` folder and you can check its content for reference
 
 When the server has trigger specific event, MCDR will call relevant method of each plugin if the plugin has declared the method. MCDR will create a separated thread for the called method to run
 
