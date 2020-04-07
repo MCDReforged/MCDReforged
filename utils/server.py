@@ -248,6 +248,8 @@ class Server:
 					self.logger.error(traceback.format_exc())
 				else:
 					self.react(parsed_result)
+					if parsed_result.content == self.parser.STOP_COMMAND:
+						self.rcon_manager.disconnect()
 			except (KeyboardInterrupt, EOFError, SystemExit, IOError) as e:
 				self.logger.debug('Exception {} {} caught in console_input()'.format(type(e), e))
 				self.flag_interrupt = True
