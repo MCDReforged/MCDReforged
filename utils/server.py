@@ -23,6 +23,7 @@ class Server:
 		self.server_status = ServerStatus.STOPPED
 		self.flag_interrupt = False  # ctrl-c flag
 		self.flag_server_startup = False  # set to True after server startup. used to start the rcon server
+		self.starting_server = False  # to prevent multiple start_server() call
 
 		# will be assigned in reload_config()
 		self.parser = None
@@ -106,18 +107,24 @@ class Server:
 		if self.is_server_running():
 			self.logger.warning(self.t('server.start_server.start_twice'))
 			return False
-		self.logger.info(self.t('server.start_server.starting'))
+		if self.starting_server:
+			return
 		try:
-			self.process = Popen(self.config['start_command'], cwd=self.config['working_directory'],
-								 stdin=PIPE, stdout=PIPE, stderr=STDOUT, shell=True)
-		except:
-			self.logger.error(self.t('server.start_server.start_fail'))
-			self.logger.error(traceback.format_exc())
-			return False
-		else:
-			self.set_server_status(ServerStatus.RUNNING)
-			self.logger.info(self.t('server.start_server.pid_info', self.process.pid))
-			return True
+			self.starting_server = True
+			self.logger.info(self.t('server.start_server.starting'))
+			try:
+				self.process = Popen(self.config['start_command'], cwd=self.config['working_directory'],
+									 stdin=PIPE, stdout=PIPE, stderr=STDOUT, shell=True)
+			except:
+				self.logger.error(self.t('server.start_server.start_fail'))
+				self.logger.error(traceback.format_exc())
+				return False
+			else:
+				self.set_server_status(ServerStatus.RUNNING)
+				self.logger.info(self.t('server.start_server.pid_info', self.process.pid))
+				return True
+		finally:
+			self.starting_server = False
 
 	def start(self):
 		if self.start_server():
