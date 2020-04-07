@@ -26,7 +26,7 @@ class MCDRCommandManager:
 				self.logger.info(tool.clean_minecraft_color_code(line))
 
 	def process_command(self, info):
-		args = info.content.split(' ')
+		args = info.content.rstrip().split(' ')
 		# !!MCDR
 		if len(args) == 1:
 			self.send_message(info, self.server.t('mcdr_command_manager.help_message'))

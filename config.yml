@@ -51,7 +51,7 @@ decoding:
 # for example the default value is !! so these commands won't be sent to server's stdin
 #   !!test
 #   !!this is a command
-console_command_prefix: "!!"
+console_command_prefix: '!!'
 
 
 # rcon setting
@@ -62,5 +62,12 @@ rcon_port: 25575
 rcon_password: password
 
 
+# If set to true, MCDR will not start the console thread for handling console command input
+# Don't change it to true unless you know what you are doing
+disable_console_thread: false
+
+
 # Debug mode switch. Don't change it to true unless necessary
 debug_mode: false
+
+# Missing options down below

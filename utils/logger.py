@@ -12,7 +12,8 @@ class Logger:
 	console_fmt = logging.Formatter('[%(name)s] [%(asctime)s] [%(threadName)s/%(levelname)s]: %(message)s', datefmt='%H:%M:%S')
 	file_fmt = logging.Formatter('[%(name)s] [%(asctime)s] [%(threadName)s/%(levelname)s]: %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
 
-	def __init__(self, name=None):
+	def __init__(self, server, name=None):
+		self.server = server
 		self.logger = logging.getLogger(name)
 		self.file_handler = None
 

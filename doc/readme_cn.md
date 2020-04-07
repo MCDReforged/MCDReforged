@@ -150,11 +150,21 @@ MCDR 使用的语言
 
 默认值: `password`
 
+### disable_console_thread
+
+默认值: `false`
+
+是否禁用控制台命令输入的线程，禁用后将无法从控制台控制 MCDR
+
+除非必要，保持 `false` 即可
+
 ### debug_mode
 
 默认值: `false`
 
-调试模式开关。除非有必要，否则设置为 `false` 即可
+调试模式开关
+
+除非必要，保持 `false` 即可
 
 ## 插件
 

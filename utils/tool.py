@@ -8,10 +8,8 @@ import threading
 
 
 def start_thread(func, args, name=None):
-	thread = threading.Thread(target=func, args=args)
+	thread = threading.Thread(target=func, args=args, name=name)
 	thread.setDaemon(True)
-	if name is not None:
-		thread.setName(name)
 	thread.start()
 	return thread
 

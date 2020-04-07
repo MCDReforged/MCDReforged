@@ -148,15 +148,23 @@ Default: `25575`
 
 The password for of rcon. It should be the same as `rcon.password` in `server.properties` file
 
-It should be the same as 
-
 Default: `password`
+
+### disable_console_thread
+
+Default: `false`
+
+If set to `true`, the thread that used for console command input will be disabled and you can't control MCDR from the console
+
+Keep it as `false` unless necessary
 
 ### debug_mode
 
 Default: `false`
 
-Debug mode switch. Keep it as `false` unless necessary
+Debug mode switch
+
+Keep it as `false` unless necessary
 
 ## Plugin
 

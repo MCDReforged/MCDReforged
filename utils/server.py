@@ -30,11 +30,11 @@ class Server:
 		self.decoding_method = None
 		self.rcon_manager = None
 
-		self.config = config.Config(constant.CONFIG_FILE)
-		self.logger = logger.Logger(constant.NAME_SHORT)
+		self.logger = logger.Logger(self, constant.NAME_SHORT)
 		self.logger.set_file(constant.LOGGING_FILE)
-		self.rcon_manager = RconManager(self)
 		self.language_manager = LanguageManager(self, constant.LANGUAGE_FOLDER)
+		self.config = config.Config(self, constant.CONFIG_FILE)
+		self.rcon_manager = RconManager(self)
 		self.load_config()
 		self.reactors = self.load_reactor(constant.REACTOR_FOLDER)
 		self.server_interface = ServerInterface(self)
@@ -105,7 +105,7 @@ class Server:
 	def start_server(self):
 		if self.is_server_running():
 			self.logger.warning(self.t('server.start_server.start_twice'))
-			return
+			return False
 		self.logger.info(self.t('server.start_server.starting'))
 		try:
 			self.process = Popen(self.config['start_command'], cwd=self.config['working_directory'],
@@ -121,10 +121,12 @@ class Server:
 
 	def start(self):
 		if self.start_server():
-			self.console_input_thread = threading.Thread(target=self.console_input)
-			self.console_input_thread.setDaemon(True)
-			self.console_input_thread.setName('Console')
-			self.console_input_thread.start()
+			if not self.config['disable_console_thread']:
+				if self.console_input_thread is None or not self.console_input_thread.is_alive():
+					self.logger.info('Console thread starting')
+					self.console_input_thread = tool.start_thread(self.console_input, (), 'Console')
+			else:
+				self.logger.info('Console thread disabled')
 			self.run()
 
 	def stop(self, forced=False, new_server_status=ServerStatus.STOPPING_BY_ITSELF):
@@ -137,6 +139,7 @@ class Server:
 			except:
 				self.logger.error(self.t('server.stop.stop_fail'))
 				forced = True
+		self.rcon_manager.disconnect()
 		if forced:
 			self.process.kill()
 			self.logger.info(self.t('server.stop.process_killed'))
@@ -237,16 +240,16 @@ class Server:
 	def console_input(self):
 		while True:
 			try:
-				while True:
-					text = input()
-					try:
-						parsed_result = self.parser.parse_console_command(text)
-					except:
-						self.logger.error(self.t('server.console_input.parse_fail', text))
-						self.logger.error(traceback.format_exc())
-						break
+				text = input()
+				try:
+					parsed_result = self.parser.parse_console_command(text)
+				except:
+					self.logger.error(self.t('server.console_input.parse_fail', text))
+					self.logger.error(traceback.format_exc())
+				else:
 					self.react(parsed_result)
-			except (KeyboardInterrupt, EOFError, SystemExit, IOError):
+			except (KeyboardInterrupt, EOFError, SystemExit, IOError) as e:
+				self.logger.debug('Exception {} {} caught in console_input()'.format(type(e), e))
 				self.flag_interrupt = True
 				self.stop(forced=True)
 				break
