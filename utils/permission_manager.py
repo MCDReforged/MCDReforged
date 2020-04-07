@@ -66,7 +66,7 @@ class PermissionManager:
 
 	def save(self):
 		self.empty_to_none()
-		with open(self.permission_file, 'w') as file:
+		with open(self.permission_file, 'w', encoding='utf8') as file:
 			yaml.round_trip_dump(self.data, file)
 
 	# Permission processing

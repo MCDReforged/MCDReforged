@@ -18,7 +18,7 @@ class Config:
 		self.check_config()
 
 	def save(self):
-		with open(self.file_name, 'w') as file:
+		with open(self.file_name, 'w', encoding='utf8') as file:
 			yaml.round_trip_dump(self.data, file)
 
 	def touch(self, key, default):
