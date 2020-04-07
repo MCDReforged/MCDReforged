@@ -2,6 +2,7 @@
 # An interface class for plugins to control the server
 import time
 
+from utils import tool
 from utils.info import Info, InfoSource
 from utils.server_status import ServerStatus
 
@@ -120,7 +121,7 @@ class ServerInterface:
 			self.tell(info.player, msg, is_plugin_call=False)
 		else:
 			for line in msg.splitlines():
-				self.__server.logger.info(line)
+				self.__server.logger.info(tool.clean_minecraft_color_code(line))
 
 	# return the current loaded plugin instance. with this your plugin can access the same plugin instance as MCDR
 	# parameter plugin_name is the name of the plugin you want
