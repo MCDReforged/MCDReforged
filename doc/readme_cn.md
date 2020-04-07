@@ -23,11 +23,13 @@ MCDR 使用了 `Popen` 来启动服务端，以此来控制服务端的标准输
 
 ## 环境要求
 
-Python 的版本需要 Python3，至少它在 Python 3.6 与 Python 3.8 中能运行
+Python 的版本需要 Python3，至少它在 Python 3.6 与 Python 3.8 中能运行。已在如下环境中测试运行通过:
 
-已在 Windows10 x64 Python3.6 以及 Centos7 x64 Python3.8 下测试运行通过
+- `Windows10 x64` `Python 3.6`
+- `Centos7 x64` `Python 3.8`
+- `Ubuntu18.04.4 x64` `Python 3.6`
 
-### Python 模块
+### 依赖的 python 模块
 
 - ruamel.yaml
 

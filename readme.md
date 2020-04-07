@@ -23,11 +23,13 @@ MCDR uses `Popen` to start the server, so it control the standard input / out st
 
 ## Environment
 
-Python version should be python3 and at least it works on Python 3.6 and Python 3.8
+Python version should be python3 and at least it works on Python 3.6 and Python 3.8. Already tested in environments  below:
 
-Already tested in Windows10 x64 Python3.6 and Centos7 x64 Python 3.8
+- `Windows10 x64` `Python 3.6`
+- `Centos7 x64` `Python 3.8`
+- `Ubuntu18.04.4 x64` `Python 3.6`
 
-### Python modules
+### Required python modules
 
 - ruamel.yaml
 
