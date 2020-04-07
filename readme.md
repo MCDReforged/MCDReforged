@@ -172,6 +172,8 @@ Keep it as `false` unless necessary
 
 Plugin usage can refer to `plugins/sample_plugin.py`
 
+[Here](https://github.com/MCDReforged-Plugins/PluginCatalogue) is a MCDR plugin collection repository
+
 ## Permission
 
 There is a simple built-in permission system in MCDR for plugin maker to use
@@ -229,6 +231,8 @@ There several commands to control MCDR. These command can be both input in game 
 | !!MCDR permission setdefault \<level\> | !!MCDR perm setd \<level\> | Set the default permission level to \<level\>
 
 Only player with `admin` permission level is allow to execute these command in game chat
+
+And there is a `!!help` command to display registered help messages from plugins
 
 ## Notes
 

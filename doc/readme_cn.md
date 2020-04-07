@@ -170,9 +170,9 @@ MCDR 使用的语言
 
 [插件文档](https://github.com/Fallen-Breath/MCDReforged/blob/master/doc/plugin_cn.md)
 
-在游戏聊天中会在控制台输入 `!!MCDR reload` 来重载插件
-
 插件用法可参考 `plugins/sample_plugin.py`
+
+[这里](https://github.com/MCDReforged-Plugins/PluginCatalogue)是一个 MCDR 的插件收集仓库
 
 ## 权限
 
@@ -231,6 +231,8 @@ MCDR 提供了一些控制 MCDR 的命令，它们均可在游戏中通过聊天
 | !!MCDR permission setdefault \<level\> | !!MCDR perm setd \<level\> | 将默认权限等级设置为 \<level\>
 
 只有具有 `admin` 权限等级的玩家才被允许通过游戏输入执行这些命令
+
+除此之外还有一个 `!!help` 指令来展示所有的注册了的插件帮助信息
 
 ## 注意事项
 
