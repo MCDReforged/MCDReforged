@@ -37,8 +37,6 @@ class PluginManager:
 		else:
 			self.logger.info(self.server.t('plugin_manager.unload_plugin.unload_success', plugin.plugin_name))
 			ret = True
-		finally:
-			self.plugins.remove(plugin)
 		return ret
 
 	def reload_plugin(self, plugin):
@@ -74,10 +72,14 @@ class PluginManager:
 				counter_load += self.load_plugin(file_name)
 				counter_all += 1
 		# unload
+		unload_list = []
 		for plugin in self.plugins:
 			if plugin.file_name not in file_list:
 				counter_unload += self.unload_plugin(plugin)
 				counter_all += 1
+				unload_list.append(plugin)
+		for plugin in unload_list:
+			self.plugins.remove(plugin)
 		# end
 		counter_fail = counter_all - counter_load - counter_unload - counter_reload
 		msg = []
