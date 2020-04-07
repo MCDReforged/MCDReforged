@@ -134,3 +134,8 @@ class ServerInterface:
 		if plugin is not None:
 			plugin = plugin.module
 		return plugin
+
+	def add_help_message(self, prefix, message, is_plugin_call=True):
+		if is_plugin_call:
+			self.logger.debug('Plugin called add_help_message("{}", "{}")'.format(prefix, message))
+		self.__server.command_manager.add_help_message(prefix, message)

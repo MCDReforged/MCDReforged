@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
+import collections
 import re
 import traceback
 
-from utils import constant, tool
+from utils import constant
 from utils.info import InfoSource
 from utils.permission_manager import PermissionLevel
 
@@ -13,28 +14,30 @@ class Validator:
 		return re.fullmatch(r'\w{1,16}', player)
 
 
-class MCDRCommandManager:
+# deal with !!MCDR and !!help command
+class CommandManager:
 	def __init__(self, server):
 		self.server = server
 		self.logger = self.server.logger
+		self.help_messages = []
 
 	def send_message(self, info, msg):
-		for line in msg.strip().splitlines():
-			if info.source == InfoSource.SERVER:
-				self.server.server_interface.tell(info.player, line, is_plugin_call=False)
-			else:
-				self.logger.info(tool.clean_minecraft_color_code(line))
+		self.server.server_interface.reply(info, msg, is_plugin_call=False)
 
-	def process_command(self, info):
+	# --------------
+	# !!MCDR command
+	# --------------
+
+	def process_mcdr_command(self, info):
 		args = info.content.rstrip().split(' ')
 		# !!MCDR
 		if len(args) == 1:
-			self.send_message(info, self.server.t('mcdr_command_manager.help_message'))
+			self.send_message(info, self.server.t('command_manager.help_message'))
 
 		# !!MCDR reload
 		elif len(args) >= 2 and args[1] in ['r', 'reload']:
 			if len(args) == 2:
-				self.send_message(info, self.server.t('mcdr_command_manager.help_message_reload'))
+				self.send_message(info, self.server.t('command_manager.help_message_reload'))
 			elif len(args) == 3:
 				if args[2] in ['plugin', 'plg']:
 					self.reload_plugins(info)
@@ -45,7 +48,7 @@ class MCDRCommandManager:
 				elif args[2] == 'all':
 					self.reload_all(info)
 				else:
-					self.send_message(info, self.server.t('mcdr_command_manager.command_not_found', '!!MCDR reload'))
+					self.send_message(info, self.server.t('command_manager.command_not_found', '!!MCDR reload'))
 
 		# !!MCDR status
 		elif len(args) == 2 and args[1] in ['status']:
@@ -54,7 +57,7 @@ class MCDRCommandManager:
 		# !!MCDR permission <player> <level>
 		elif len(args) >= 2 and args[1] in ['permission', 'perm']:
 			if len(args) == 2:
-				self.send_message(info, self.server.t('mcdr_command_manager.help_message_permission'))
+				self.send_message(info, self.server.t('command_manager.help_message_permission'))
 			# !!MCDR permission list [<level>]
 			elif len(args) in [3, 4] and args[2] == 'list':
 				self.list_permission(info, args[3] if len(args) == 4 else None)
@@ -67,10 +70,10 @@ class MCDRCommandManager:
 			elif len(args) == 4 and args[2] in ['setdefault', 'setd']:
 				self.set_default_permission(info, args[3])
 			else:
-				self.send_message(info, self.server.t('mcdr_command_manager.command_not_found', '!!MCDR permission'))
+				self.send_message(info, self.server.t('command_manager.command_not_found', '!!MCDR permission'))
 
 		else:
-			self.send_message(info, self.server.t('mcdr_command_manager.command_not_found', '!!MCDR'))
+			self.send_message(info, self.server.t('command_manager.command_not_found', '!!MCDR'))
 
 	# Reload
 
@@ -78,7 +81,7 @@ class MCDRCommandManager:
 		try:
 			msg = self.server.plugin_manager.load_plugins()
 		except:
-			msg = self.server.t('mcdr_command_manager.reload_plugins.load_fail')
+			msg = self.server.t('command_manager.reload_plugins.load_fail')
 			self.server.logger.error(traceback.format_exc())
 		self.send_message(info, msg)
 
@@ -86,20 +89,20 @@ class MCDRCommandManager:
 		try:
 			self.server.load_config()
 		except:
-			msg = self.server.t('mcdr_command_manager.reload_config.load_fail')
+			msg = self.server.t('command_manager.reload_config.load_fail')
 			self.server.logger.error(traceback.format_exc())
 		else:
-			msg = self.server.t('mcdr_command_manager.reload_config.load_success')
+			msg = self.server.t('command_manager.reload_config.load_success')
 		self.send_message(info, msg)
 
 	def reload_permission(self, info):
 		try:
 			self.server.permission_manager.load()
 		except:
-			msg = self.server.t('mcdr_command_manager.reload_permission.load_fail')
+			msg = self.server.t('command_manager.reload_permission.load_fail')
 			self.server.logger.error(traceback.format_exc())
 		else:
-			msg = self.server.t('mcdr_command_manager.reload_permission.load_success')
+			msg = self.server.t('command_manager.reload_permission.load_success')
 		self.send_message(info, msg)
 
 	def reload_all(self, info):
@@ -112,9 +115,9 @@ class MCDRCommandManager:
 	def set_player_permission(self, info, player, level):
 		level = self.server.permission_manager.format_level_name(level)
 		if level is None:
-			self.send_message(info, self.server.t('mcdr_command_manager.invalid_permission_level'))
+			self.send_message(info, self.server.t('command_manager.invalid_permission_level'))
 		elif not Validator.player_name(player):
-			self.send_message(info, self.server.t('mcdr_command_manager.invalid_player_name'))
+			self.send_message(info, self.server.t('command_manager.invalid_player_name'))
 		else:
 			self.server.permission_manager.set_permission_level(player, level)
 			if info.is_player:
@@ -122,13 +125,13 @@ class MCDRCommandManager:
 
 	def remove_player_permission(self, info, player):
 		if not Validator.player_name(player):
-			self.send_message(info, self.server.t('mcdr_command_manager.invalid_player_name'))
+			self.send_message(info, self.server.t('command_manager.invalid_player_name'))
 		else:
 			self.server.permission_manager.remove_player(player)
-			self.send_message(info, self.server.t('mcdr_command_manager.remove_player_permission.player_removed', player))
+			self.send_message(info, self.server.t('command_manager.remove_player_permission.player_removed', player))
 
 	def list_permission(self, info, level):
-		self.send_message(info, self.server.t('mcdr_command_manager.list_permission.show_default',
+		self.send_message(info, self.server.t('command_manager.list_permission.show_default',
 			self.server.permission_manager.get_default_permission_level()))
 		specific_name = self.server.permission_manager.format_level_name(level)
 		for name in PermissionLevel.NAME:
@@ -140,7 +143,7 @@ class MCDRCommandManager:
 	def set_default_permission(self, info, level):
 		level = self.server.permission_manager.format_level_name(level)
 		if level is None:
-			self.send_message(info, self.server.t('mcdr_command_manager.invalid_permission_level'))
+			self.send_message(info, self.server.t('command_manager.invalid_permission_level'))
 		else:
 			self.server.permission_manager.set_default_permission_level(level)
 			if info.is_player:
@@ -150,15 +153,34 @@ class MCDRCommandManager:
 
 	def print_mcdr_status(self, info):
 		status_dict = {
-			True: self.server.t('mcdr_command_manager.print_mcdr_status.online'),
-			False: self.server.t('mcdr_command_manager.print_mcdr_status.offline')
+			True: self.server.t('command_manager.print_mcdr_status.online'),
+			False: self.server.t('command_manager.print_mcdr_status.offline')
 		}
 		msg = []
-		msg.append(self.server.t('mcdr_command_manager.print_mcdr_status.line1', constant.NAME, constant.VERSION))
-		msg.append(self.server.t('mcdr_command_manager.print_mcdr_status.line2', self.server.t(self.server.server_status)))
-		msg.append(self.server.t('mcdr_command_manager.print_mcdr_status.line3', self.server.is_server_startup()))
-		msg.append(self.server.t('mcdr_command_manager.print_mcdr_status.line4', status_dict[self.server.server_interface.is_rcon_running(is_plugin_call=False)]))
-		msg.append(self.server.t('mcdr_command_manager.print_mcdr_status.line5', len(self.server.plugin_manager.plugins)))
+		msg.append(self.server.t('command_manager.print_mcdr_status.line1', constant.NAME, constant.VERSION))
+		msg.append(self.server.t('command_manager.print_mcdr_status.line2', self.server.t(self.server.server_status)))
+		msg.append(self.server.t('command_manager.print_mcdr_status.line3', self.server.is_server_startup()))
+		msg.append(self.server.t('command_manager.print_mcdr_status.line4', status_dict[self.server.server_interface.is_rcon_running(is_plugin_call=False)]))
+		msg.append(self.server.t('command_manager.print_mcdr_status.line5', len(self.server.plugin_manager.plugins)))
 		self.send_message(info, '\n'.join(msg))
 		if info.source == InfoSource.CONSOLE and self.server.process is not None:
 			self.logger.info('PID: {}'.format(self.server.process.pid))
+
+	# --------------
+	# !!help command
+	# --------------
+
+	# overwrite if existed
+	def add_help_message(self, prefix, message):
+		self.help_messages.append(collections.namedtuple('HelpMessage', 'prefix message')(prefix, message))
+		self.server.logger.debug('Added help message "{}: {}"'.format(prefix, message))
+
+	# call before loading plugins
+	def clean_help_message(self):
+		self.help_messages = []
+		self.add_help_message('!!MCDR', self.server.t('command_manager.mcdr_help_message'))
+
+	def process_help_command(self, info):
+		sorted_list = sorted(self.help_messages, key=lambda x: x.prefix)
+		for prefix, message in sorted_list:
+			self.send_message(info, '§7{}§r: {}'.format(prefix, message))

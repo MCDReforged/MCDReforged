@@ -55,6 +55,7 @@ class PluginManager:
 		self.server.logger.info(self.server.t('plugin_manager.load_plugins.loading'))
 
 		# init
+		self.server.command_manager.clean_help_message()
 		self.command_prefix_listeners = {}
 		if not os.path.isdir(constant.PLUGIN_FOLDER):
 			os.makedirs(constant.PLUGIN_FOLDER)

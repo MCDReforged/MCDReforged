@@ -6,6 +6,17 @@ counter = 0
 secret = random.random()
 
 
+def add_help_message(server):
+	server.add_help_message('!!start', 'Start the server')
+	server.add_help_message('!!stop', 'Stop the server')
+	server.add_help_message('!!restart', 'Restart the server')
+	server.add_help_message('!!rcon', 'Rcon test')
+	server.add_help_message('!!permission', 'Get permission level')
+	server.add_help_message('!!error', 'What is 1/0?')
+	server.add_help_message('!!status', 'Get server status')
+	server.add_help_message('!!secret', 'get_plugin_instance test')
+
+
 def on_load(server, old_module):
 	global counter
 	if old_module is not None:
@@ -16,6 +27,7 @@ def on_load(server, old_module):
 	if server.is_server_running():
 		server.say(msg)
 	server.logger.info(msg)
+	add_help_message(server)
 
 
 def on_unload(server):
@@ -55,7 +67,9 @@ is_rcon_running: {}
 			))
 		if info.content == '!!secret':
 			global secret
-			server.reply(info, 'My secret number is {}\nAnd You know it too {}'.format(secret, server.get_plugin_instance('sample_plugin').secret))
+			server.reply(info, 'My secret number is {}\nAnd You know it too {}'.format(
+				secret, server.get_plugin_instance('sample_plugin').secret)
+			)
 
 
 def on_player_joined(server, player):

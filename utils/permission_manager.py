@@ -118,7 +118,7 @@ class PermissionManager:
 		if level_name is None:
 			level_name = self.get_default_permission_level()
 		self.get_permission_group_list(level_name).append(player)
-		self.server.logger.debug(self.server.t('permission_manager.add_player.done', player, level_name))
+		self.server.logger.debug('Added player {} with permission level {}'.format(player, level_name))
 		self.save()
 		return self.format_level_value(level_name)
 
@@ -129,7 +129,7 @@ class PermissionManager:
 			if level is None:
 				break
 			self.get_permission_group_list(level).remove(player)
-		self.server.logger.debug(self.server.t('permission_manager.remove_player.done', player))
+		self.server.logger.debug('Removed player {}'.format(player))
 		self.save()
 
 	# set new permission level of the player

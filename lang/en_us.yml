@@ -10,9 +10,6 @@ server.load_config.parser_set: |
 server.load_config.encoding_decoding_set: |
   Encoding / Decoding method has set to {0} / {1}
 
-server.set_server_status.server_status_set: |
-  Server status has set to "{0}"
-
 server.start_server.start_twice: |
   Server cannot start twice
 
@@ -52,9 +49,6 @@ server.on_server_stop.stop_by_itself: |
 server.tick.pre_parse_fail: |
   Fail to pre parse text from stdout of the server, use original text
 
-server.tick.parse_fail: |
-  Fail to parse text "{0}" from stdout of the server, using raw parser
-
 server.run.error: |
   Error ticking MCDR
 
@@ -79,86 +73,83 @@ server.console_input.error: |
 server.react.error: |
   Error processing reactor {0}
 
-mcdr_command_manager.help_message: |
+command_manager.help_message: |
   §7!!MCDR§r: Show this message
   §7!!MCDR reload§r: Show reload command help message
   §7!!MCDR status§r: Show MCDR status
   §7!!MCDR permission§r: Show permission command help message
 
-mcdr_command_manager.help_message_reload: |
+command_manager.help_message_reload: |
   §7!!MCDR reload plugin§r: Reload all plugins
   §7!!MCDR reload config§r: Reload config file
   §7!!MCDR reload permission§r: Reload permission file
   §7!!MCDR reload all§r: Reload everything above
 
-mcdr_command_manager.help_message_permission: |
+command_manager.help_message_permission: |
   §7!!MCDR permission list §e[<level>]§r: List all player's permission. Only list permission level §e[<level>]§r if §e[<level>]§r has set
   §7!!MCDR permission set §b<player>§r §e<level>§r: Set the permission level of §b<player>§r to §e<level>§r
   §7!!MCDR permission remove §b<player>§r: Remove §b<player>§r from the permission database
   §7!!MCDR permission setdefault §e<level>§r: Set the default permission level to §e<level>§r
 
-mcdr_command_manager.command_not_found: |
+command_manager.command_not_found: |
   Command not found, type "§7{0}§r" to see help
 
-mcdr_command_manager.reload_plugins.load_fail: |
+command_manager.reload_plugins.load_fail: |
   §cFail§r to reload plugin
 
-mcdr_command_manager.reload_config.load_fail: |
+command_manager.reload_config.load_fail: |
   §cFail§r to reload config file
 
-mcdr_command_manager.reload_config.load_success: |
+command_manager.reload_config.load_success: |
   Config file reloaded §asuccessfully§r
 
-mcdr_command_manager.reload_permission.load_fail: |
+command_manager.reload_permission.load_fail: |
   §cFail§r to reload permission file
 
-mcdr_command_manager.reload_permission.load_success: |
+command_manager.reload_permission.load_success: |
   Permission file reloaded §asuccessfully§r
 
-mcdr_command_manager.invalid_permission_level: |
+command_manager.invalid_permission_level: |
   §cInvalid permission level§r
 
-mcdr_command_manager.invalid_player_name: |
+command_manager.invalid_player_name: |
   §cInvalid player name§r
 
-mcdr_command_manager.remove_player_permission.player_removed: |
+command_manager.remove_player_permission.player_removed: |
   Player §b{0}§r has been removed
 
-mcdr_command_manager.list_permission.show_default: |
+command_manager.list_permission.show_default: |
   Default permission level: §e{0}§r
 
-mcdr_command_manager.print_mcdr_status.online: |
+command_manager.print_mcdr_status.online: |
   Online
 
-mcdr_command_manager.print_mcdr_status.offline: |
+command_manager.print_mcdr_status.offline: |
   §7Offline§r
 
-mcdr_command_manager.print_mcdr_status.line1: |
+command_manager.print_mcdr_status.line1: |
   §l{0}§r version: §7{1}§r
 
-mcdr_command_manager.print_mcdr_status.line2: |
+command_manager.print_mcdr_status.line2: |
   Server status: §7{0}§r
 
-mcdr_command_manager.print_mcdr_status.line3: |
+command_manager.print_mcdr_status.line3: |
   Server startup: §7{0}§r
 
-mcdr_command_manager.print_mcdr_status.line4: |
+command_manager.print_mcdr_status.line4: |
   Rcon: {0}
 
-mcdr_command_manager.print_mcdr_status.line5: |
+command_manager.print_mcdr_status.line5: |
   Plugin count: §7{0}§r
+
+command_manager.mcdr_help_message: |
+  MCDR control command
 
 permission_manager.load.load_fail: |
   Fail to load permission file {0}, using default empty data
 
 permission_manager.set_default_permission_level.done: |
   The default permission level has set to {0}
-
-permission_manager.add_player.done: |
-  Added player {0} with permission level {1}
-
-permission_manager.remove_player.done: |
-  Removed player {0}
 
 permission_manager.set_permission_level.done: |
   The permission level of player {0} has set to {1}

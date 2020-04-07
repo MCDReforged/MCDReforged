@@ -8,6 +8,7 @@ import threading
 from subprocess import Popen, PIPE, STDOUT
 
 from utils import config, constant, logger, tool
+from utils.command_manager import CommandManager
 from utils.permission_manager import PermissionManager
 from utils.plugin_manager import PluginManager
 from utils.rcon_manager import RconManager
@@ -39,6 +40,7 @@ class Server:
 		self.load_config()
 		self.reactors = self.load_reactor(constant.REACTOR_FOLDER)
 		self.server_interface = ServerInterface(self)
+		self.command_manager = CommandManager(self)
 		self.plugin_manager = PluginManager(self, constant.PLUGIN_FOLDER)
 		self.load_plugins()
 		self.permission_manager = PermissionManager(self, constant.PERMISSION_FILE)
@@ -46,7 +48,10 @@ class Server:
 	# Translate info strings
 
 	def translate(self, text, *args):
-		return self.language_manager.translate(text).strip().format(*args)
+		result = self.language_manager.translate(text).strip()
+		if len(args) > 0:
+			result = result.format(*args)
+		return result
 
 	def t(self, text, *args):
 		return self.translate(text, *args)
@@ -101,7 +106,7 @@ class Server:
 
 	def set_server_status(self, status):
 		self.server_status = status
-		self.logger.debug(self.t('server.set_server_status.server_status_set', status))
+		self.logger.debug('Server status has set to "{}"'.format(status))
 
 	def start_server(self):
 		if self.is_server_running():
@@ -210,7 +215,7 @@ class Server:
 		try:
 			parsed_result = self.parser.parse_server_stdout(text)
 		except:
-			self.logger.debug(self.t('server.tick.parse_fail', text))
+			self.logger.debug('Fail to parse text "{}" from stdout of the server, using raw parser'.format(text))
 			# self.logger.debug(traceback.format_exc())
 			parsed_result = self.parser.parse_server_stdout_raw(text)
 		self.react(parsed_result)
