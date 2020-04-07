@@ -153,6 +153,14 @@ def on_load(server, old_module):
     server.logger.info(f'这是第{counter}次加载插件')
 ```
 
+## 一些编写插件的提示
+
+- 默认工作路径是 MCDR 所在的文件夹。**不要**改变工作路径，这会弄乱各种东西的
+- 如果你需要导入其他插件，使用 `server.get_plugin_instance()` 而不是手动导入，这样子你可以得到跟 MCDR 所使用的相同的插件实例
+- 在 `on_load()` 时调用 `server.add_help_message()` 来添加一些必要的帮助信息，这样子玩家可以通过 `!!help` 指令来了解到你的插件
+- 保持环境整洁。将你的数据存放至 `MCDR/plugins/my_plugin/` 文件夹、将你的配置文件存放在 `MCDR/config/` 文件夹和将你的日志文件存放在 `MCDR/log/` 文件夹都是好主意
+- `on_mcdr_stop()` 给予了你充足的时间来保存数据。但是要小心，不要跑进死循环里了，MCDR 还在等着你完工的
+
 ## 将 MCDaemon 的插件移植至 MCDR
 
 1. 将旧插件的仅能在 python2 上运行的代码修改为可在 python3 上运行，并安装插件需要的 Python 模块
@@ -162,10 +170,19 @@ def on_load(server, old_module):
 一种比较偷懒的是在解决 python3 兼容问题后在旧插件末尾加入诸如以下的方法：
 
 ```
-def on_info(server, info):
-    info2 = copy.deepcopy(info)
-    info2.isPlayer = info2.is_player
-    onServerInfo(server, info2)
-```
+import copy
 
-记得要 `import copy`
+def on_load(server, old):
+	onServerStartup(server)
+
+def on_player_joined(server, player):
+	onPlayerJoin(server, player)
+
+def on_player_left(server, player):
+	onPlayerLeave(server, player)
+
+def on_info(server, info):
+	info2 = copy.deepcopy(info)
+	info2.isPlayer = info2.is_player
+	onServerInfo(server, info2)
+```

@@ -153,6 +153,14 @@ def on_load(server, old_module):
     server.logger.info(f'This is the {counter} time to load the plugin')
 ```
 
+## Some tips for writing plugin
+
+- The current working directory is the folder where MCDR is in. **DO NOT** change it since that will mess up everything
+- If you want to import other plugin use `server.get_plugin_instance()` instead so the plugin instance you get is the same as the one MCDR uses
+- Call `server.add_help_message()` in `on_load()` to add some necessary tips for your plugin so the player can use `!!help` command to know about your plugin
+- Keep the environment clean. Store your data files in a custom folder in `plugins/`, your config file in `config/` folder and your log file in `log/` folder will be a good choice
+- `on_mcdr_stop()` allows you to have as many time as you want to save your data. Be carefully, don't enter an endless loop, MCDR is waiting for you to exit
+
 ## Porting MCDaemon's plugin to MCDR
 
 1. Modify the code of the old plugin that only works on python2 to be able to run on python3 and install required python modules
@@ -162,10 +170,19 @@ def on_load(server, old_module):
 A lazy way to do that is to add such method below at the end of the old plugin after solving python3 compatibility issues:
 
 ```
-def on_info (server, info):
-    info2 = copy.deepcopy (info)
-    info2.isPlayer = info2.is_player
-    onServerInfo (server, info2)
-```
+import copy
 
-Remember to `import copy`
+def on_load(server, old):
+	onServerStartup(server)
+
+def on_player_joined(server, player):
+	onPlayerJoin(server, player)
+
+def on_player_left(server, player):
+	onPlayerLeave(server, player)
+
+def on_info(server, info):
+	info2 = copy.deepcopy(info)
+	info2.isPlayer = info2.is_player
+	onServerInfo(server, info2)
+```
