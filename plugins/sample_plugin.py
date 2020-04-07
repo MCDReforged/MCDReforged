@@ -14,7 +14,7 @@ def add_help_message(server):
 	server.add_help_message('!!permission', 'Get permission level')
 	server.add_help_message('!!error', 'What is 1/0?')
 	server.add_help_message('!!status', 'Get server status')
-	server.add_help_message('!!secret', 'get_plugin_instance test')
+	server.add_help_message('!!secret', 'get_plugin_instance() test')
 
 
 def on_load(server, old_module):
