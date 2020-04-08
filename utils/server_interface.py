@@ -3,7 +3,7 @@
 import time
 
 from utils import tool
-from utils.info import Info, InfoSource
+from utils.info import Info
 from utils.server_status import ServerStatus
 
 

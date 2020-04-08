@@ -98,7 +98,7 @@ Default: `vanilla_parser`
 
 The specific parser for different type of server. Available options:
 
-- `vanilla_parser`: For Vanilla / Carpet / Fabric / Forge server
+- `vanilla_parser`: For Vanilla / Carpet / Fabric / Forge / CatServer server
 - `bukkit_parser`: For Bukkit / Spiogt server with Minecraft version below 1.14, and Paper server in all version
 - `bukkit_parser14`: For Bukkit / Spiogt server with Minecraft version 1.14 and above
 - `bungeecord_parser`: For Bungeecord. Please add `-Djline.terminal=jline.UnsupportedTerminal` before `-jar` in the start command for MCDR support. From [here](https://www.spigotmc.org/wiki/start-up-parameters/)
