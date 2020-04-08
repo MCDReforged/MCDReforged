@@ -64,7 +64,7 @@ MCDReforged Plugin Document
 | tell(player, text) | 使用 `tellraw <player>` 来在对玩家 `<player>` 发送字符串消息 `text` |
 | reply(info, text) | 向消息源发生消息字符串 `text`: 如果消息来自玩家则调用 `tell(info.player, text)`; 如果不是则调用 MCDR 的 logger 来将 `text` 告示至控制台
 
-字符串 `text` 中如果含有特殊字符 `"`、`\\`、`\n`，MCDR 会自动对齐进行转义，因此无需担心传入的字符串格式
+字符串 `text` 中如果含有特殊字符 `"`、`\\`、`\n`，MCDR 会自动对其进行转义，因此无需担心传入的字符串格式
 
 **其他**
 
