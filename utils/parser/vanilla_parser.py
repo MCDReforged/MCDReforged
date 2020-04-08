@@ -50,10 +50,11 @@ class VanillaParser(base_parser.BaseParser):
 		return None
 
 	def is_server_startup_done(self, info):
-		# Done (3.500s)! For help, type "help"
+		# 1.13+ Done (3.500s)! For help, type "help"
+		# 1.13- Done (3.500s)! For help, type "help" or "?"
 		if info.is_user:
 			return False
-		match = re.match(r'Done \([0-9.]*s\)! For help, type "help"', info.content)
+		match = re.match(r'Done \([0-9.]*s\)! For help, type "help"( or "\?")?', info.content)
 		return match is not None
 
 

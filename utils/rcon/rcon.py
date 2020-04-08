@@ -3,7 +3,7 @@ import socket
 import struct
 import time
 
-from utils.rcon.packet import Packet, PacketType
+from .packet import Packet, PacketType
 
 
 class Rcon:
