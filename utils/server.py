@@ -242,7 +242,7 @@ class Server:
 				self.logger.info(self.t('server.run.user_interrupted'))
 			else:
 				self.logger.info(self.t('server.run.server_stop'))
-			self.plugin_manager.call('on_mcdr_stop', (self.server_interface,), new_thread=False)
+			self.plugin_manager.call('on_mcdr_stop', (self.server_interface,), wait=True)
 			self.logger.info(self.t('server.run.bye'))
 		except:
 			self.logger.error(self.t('server.run.stop_error'))

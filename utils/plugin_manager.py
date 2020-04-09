@@ -98,10 +98,16 @@ class PluginManager:
 			msg = '; '.join(msg)
 		return msg
 
-	def call(self, func, args=(), new_thread=True):
+	def call(self, func, args=(), wait=False):
 		self.logger.debug('Calling function "{}" in plugins with {} parameters'.format(func, len(args)))
+		thread_list = []
 		for plugin in self.plugins:
-			plugin.call(func, args, new_thread)
+			thread = plugin.call(func, args)
+			if thread is not None:
+				thread_list.append(thread)
+		if wait:
+			for thread in thread_list:
+				thread.join()
 
 	def get_plugin(self, plugin_name):
 		for plugin in self.plugins:

@@ -18,14 +18,8 @@ class Plugin:
 			target = self.module.__dict__[func]
 			if callable(target):
 				func_name = '{}@{}'.format(func, self.plugin_name)
-				if new_thread:
-					tool.start_thread(target, args, func_name)
-				else:
-					try:
-						target(*args)
-					except:
-						self.server.logger.warning(f'Error processing {func_name}')
-						self.server.logger.warning(traceback.format_exc())
+				return tool.start_thread(target, args, func_name)
+		return None
 
 	def load(self, old_module=None):
 		self.module = tool.load_source(self.file_name)

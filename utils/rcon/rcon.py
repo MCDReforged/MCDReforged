@@ -74,6 +74,11 @@ class Rcon:
 		except:
 			if self.logger is not None:
 				self.logger.warning('Rcon Fail to received packet')
+			try:
+				self.disconnect()
+				self.connect()
+			except:
+				pass
 			return None
 		finally:
 			self.command_lock.release()
