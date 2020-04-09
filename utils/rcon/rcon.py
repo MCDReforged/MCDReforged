@@ -2,8 +2,9 @@
 import socket
 import struct
 import time
+from threading import Lock
 
-from .packet import Packet, PacketType
+from utils.rcon.packet import Packet, PacketType
 
 
 class Rcon:
@@ -15,7 +16,7 @@ class Rcon:
 		self.port = port
 		self.password = password
 		self.socket = None
-		self.command_lock = False
+		self.command_lock = Lock()
 
 	def __del__(self):
 		self.disconnect()
@@ -58,18 +59,9 @@ class Rcon:
 		self.socket.close()
 		self.socket = None
 
-	def send_command(self, command, time_out=3):
-		time_wait = 0
-		while self.command_lock:
-			time.sleep(0.01)
-			time_wait += 0.01
-			if time_wait > time_out:
-				self.disconnect()
-				self.connect()
-				time.sleep(1)
-				break
+	def send_command(self, command):
+		self.command_lock.acquire()
 		try:
-			self.command_lock = True
 			self.send(Packet(PacketType.COMMAND_REQUEST, command))
 			self.send(Packet(PacketType.ENDING_PACKET, 'lol'))
 			result = ''
@@ -84,7 +76,7 @@ class Rcon:
 				self.logger.warning('Rcon Fail to received packet')
 			return None
 		finally:
-			self.command_lock = False
+			self.command_lock.release()
 
 
 if __name__ == '__main__':
