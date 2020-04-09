@@ -9,16 +9,16 @@ MCDReforged Plugin Document
 
 当服务端触发某些指定事件时，如果插件有声明下列方法的话，MCDR 会调用每个插件的对应方法。MCDR 调用每个插件的方法时会为其新建一个独立的线程供其运行
 
-| 方法 | 调用时刻 | 独立线程 | 参考用途 |
+| 方法 | 调用时刻 | 阻塞 | 参考用途 |
 |---|---|---|---|
-| on_load(server, old_module) | 插件被加载 | 是 | 新插件继承旧插件的信息 |
-| on_unload(server) | 插件被卸载 | 是 | 清理或关闭旧插件的功能 |
-| on_info(server, info) | 服务端的标准输出流有输出，或者控制台有输入 | 是 | 插件响应相关信息 |
-| on_player_joined(server, player) | 玩家加入服务端 | 是 | 插件响应玩家加入游戏 |
-| on_player_left(server, player) | 玩家离开服务端 | 是 | 插件响应玩家离开游戏 |
-| on_server_startup(server) | 服务端启动完成，如原版服务端输出 `Done (1.0s)! For help, type "help"` 后 | 是 | 插件相关初始化 |
-| on_server_stop(server) | 服务端已关闭，更准确地说，服务端进程已终止 | 是 | 处理相关事情 |
-| on_mcdr_stop(server) | 服务端已经关闭，MCDR 即将退出 | 否 | 保存数据、释放资源
+| on_load(server, old_module) | 插件被加载 | 否 | 新插件继承旧插件的信息 |
+| on_unload(server) | 插件被卸载 | 否 | 清理或关闭旧插件的功能 |
+| on_info(server, info) | 服务端的标准输出流有输出，或者控制台有输入 | 否 | 插件响应相关信息 |
+| on_player_joined(server, player) | 玩家加入服务端 | 否 | 插件响应玩家加入游戏 |
+| on_player_left(server, player) | 玩家离开服务端 | 否 | 插件响应玩家离开游戏 |
+| on_server_startup(server) | 服务端启动完成，如原版服务端输出 `Done (1.0s)! For help, type "help"` 后 | 否 | 插件相关初始化 |
+| on_server_stop(server) | 服务端已关闭，更准确地说，服务端进程已终止 | 否 | 处理相关事情 |
+| on_mcdr_stop(server) | 服务端已经关闭，MCDR 即将退出 | 是 | 保存数据、释放资源
 
 注：每个插件并不需要实现所有上述方法，按需实现即可
 
