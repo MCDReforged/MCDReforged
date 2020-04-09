@@ -30,6 +30,9 @@ start_command: java -Xms1G -Xmx2G -jar minecraft_server.jar nogui
 # bukkit_parser_14
 #   For Bukkit / Spiogt server with Minecraft version 1.14 and above
 #
+# cat_server_parser
+#   For CatServer server
+#
 # bungeecord_parser
 #   for Bungeecord server
 #
