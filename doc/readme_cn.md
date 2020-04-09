@@ -11,6 +11,8 @@ MCDReforged（以下简称 MCDR）是一个可以在完全不对 Minecraft 服�
 
 非常感谢 chino_desu 以及他的 [MCDaemon 1.0](https://github.com/kafuuchino-desu/MCDaemon)
 
+QQ群: [1101314858](https://jq.qq.com/?k=5gUuw9A)
+
 ## 优势
 
 - 运行于服务端之上，完全不需要修改服务端，保留原汁原味的原版特性
