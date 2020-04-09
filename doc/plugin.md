@@ -156,6 +156,7 @@ def on_load(server, old_module):
 ## Some tips for writing plugin
 
 - The current working directory is the folder where MCDR is in. **DO NOT** change it since that will mess up everything
+- For the `info` parameter in `on_info` don't modify it, just only read it
 - If you want to import other plugin use `server.get_plugin_instance()` instead so the plugin instance you get is the same as the one MCDR uses
 - Call `server.add_help_message()` in `on_load()` to add some necessary tips for your plugin so the player can use `!!help` command to know about your plugin
 - Keep the environment clean. Store your data files in a custom folder in `plugins/`, your config file in `config/` folder and your log file in `log/` folder will be a good choice
