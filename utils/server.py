@@ -15,6 +15,7 @@ from utils.rcon_manager import RconManager
 from utils.server_status import ServerStatus
 from utils.server_interface import ServerInterface
 from utils.language_manager import LanguageManager
+from utils.update_helper import UpdateHelper
 
 
 class Server:
@@ -43,6 +44,8 @@ class Server:
 		self.plugin_manager = PluginManager(self, constant.PLUGIN_FOLDER)
 		self.load_plugins()
 		self.permission_manager = PermissionManager(self, constant.PERMISSION_FILE)
+		self.update_helper = UpdateHelper(self)
+		self.update_helper.check_update()
 
 	# Translate info strings
 

@@ -219,3 +219,21 @@ general_reactor.permission_denied: |
 
 parser_manager.load_re_death_message.load_fail: |
   Fail to load death message data
+
+update_helper._check_update.check_fail: |
+  Fail to detect latest version from Github
+
+update_helper._check_update.is_already_latest: |
+  MCDR is already the latset version
+
+update_helper._check_update.new_version_detected: |
+  New version detected: {0}
+
+update_helper._check_update.new_version_url: |
+  You can update MCDR from here: {0}
+
+update_helper._check_update.download_finished: |
+  Latest MCDR downloaded finished. It's in {0}
+
+update_helper._check_update.download_fail: |
+  Latest MCDR downloaded fail

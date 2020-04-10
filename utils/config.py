@@ -44,6 +44,7 @@ class Config:
 		flag |= self.touch('rcon_port', 25575)
 		flag |= self.touch('rcon_password', 'password')
 		flag |= self.touch('disable_console_thread', False)
+		flag |= self.touch('download_update', True)
 		flag |= self.touch('debug_mode', False)
 		if flag:
 			self.server.logger.warning('Some options in the config file is missing, use default value')

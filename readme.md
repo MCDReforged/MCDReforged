@@ -11,6 +11,8 @@ From in-game calculator, player high-light, to manipulate scoreboard, manage str
 
 Great thanks to chino_desu and his [MCDaemon 1.0](https://github.com/kafuuchino-desu/MCDaemon)
 
+Contact me on discord: `Fallen_Breath#1215`
+
 ## Advantage
 
 - It's running above the server. It doesn't need to modify the server at all which keep everything vanilla
@@ -160,6 +162,12 @@ Default: `false`
 If set to `true`, the thread that used for console command input will be disabled and you can't control MCDR from the console
 
 Keep it as `false` unless necessary
+
+### download_update
+
+Default: `true`
+
+If the value is `true`, if MCDR detects a newer version it will automatically download it
 
 ### debug_mode
 

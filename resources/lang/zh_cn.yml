@@ -219,3 +219,21 @@ general_reactor.permission_denied: |
 
 parser_manager.load_re_death_message.load_fail: |
   死亡信息数据文件加载失败
+
+update_helper._check_update.check_fail: |
+  从 Github 检测最新版本失败
+
+update_helper._check_update.is_already_latest: |
+  MCDR 已为最新版
+
+update_helper._check_update.new_version_detected: |
+  已检测到新版本: {0}
+
+update_helper._check_update.new_version_url: |
+  你可以在这里更新 MCDR: {0}
+
+update_helper._check_update.download_finished: |
+  最新的 MCDR 下载完成，文件位于 {0}
+
+update_helper._check_update.download_fail: |
+  最新的 MCDR 下载失败

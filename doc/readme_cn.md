@@ -163,6 +163,12 @@ MCDR 使用的语言
 
 除非必要，保持 `false` 即可
 
+### download_update
+
+默认值: `true`
+
+如果值为 `true`，MCDR会在检测到新版本后自动将新版本下载至 `MCDR_update` 文件夹
+
 ### debug_mode
 
 默认值: `false`
