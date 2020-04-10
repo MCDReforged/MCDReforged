@@ -39,5 +39,14 @@ def unique_list(l):
 	return ret
 
 
+def get_all_base_class(cls):
+	if cls is object:
+		return []
+	ret = [cls]
+	for base in cls.__bases__:
+		ret.extend(get_all_base_class(base))
+	return unique_list(ret)
+
+
 def clean_minecraft_color_code(text):
 	return re.sub('§[\w0-9]', '', text)

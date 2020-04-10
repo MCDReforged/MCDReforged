@@ -39,3 +39,11 @@ class Info:
 	def is_user(self):
 		return self.source == InfoSource.CONSOLE or self.is_player
 
+	def __str__(self):
+		ret = [
+			'Time: {}:{}:{}'.format(self.hour, self.min, self.sec),
+			'Player: {}; Source: {}; Logging level: {}'.format(self.player, self.source, self.logging_level),
+			'Content: {}'.format(self.content),
+			'Raw content: {}'.format(self.raw_content)
+		]
+		return '\n'.join(ret)

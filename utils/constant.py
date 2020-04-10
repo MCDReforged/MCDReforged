@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+import os
+
+
 VERSION = '0.6.4-alpha'
 NAME_SHORT = 'MCDR'
 NAME = 'MCDReforged'
@@ -11,4 +14,6 @@ LOGGING_FILE = './log/{}.log'.format(NAME_SHORT)
 REACTOR_FOLDER = './utils/reactor/'
 PARSER_FOLDER = './utils/parser/'
 PLUGIN_FOLDER = './plugins/'
-LANGUAGE_FOLDER = './lang/'
+RESOURCE_FOLDER = './resources/'
+LANGUAGE_FOLDER = os.path.join(RESOURCE_FOLDER, 'lang/')
+RE_DEATH_MESSAGE_FILE = os.path.join(RESOURCE_FOLDER, 'death_message.yml')

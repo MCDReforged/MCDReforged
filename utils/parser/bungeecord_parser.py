@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
-
+import os
 import re
 from utils.parser import base_parser
 
 
 class BungeecordParser(base_parser.BaseParser):
-	def __init__(self):
-		super().__init__()
+	NAME = os.path.basename(__file__).rstrip('.py')
+
+	def __init__(self, parser_manager):
+		super().__init__(parser_manager)
 		self.STOP_COMMAND = 'end'
 
 	def parse_server_stdout(self, text):
@@ -38,7 +40,7 @@ class BungeecordParser(base_parser.BaseParser):
 			text = text.replace(match.group(), '', 1)
 		return text
 
-	def is_server_startup_done(self, info):
+	def parse_server_startup_done(self, info):
 		# Listening on /0.0.0.0:25577
 		if info.is_user:
 			return False
@@ -46,4 +48,5 @@ class BungeecordParser(base_parser.BaseParser):
 		return match is not None
 
 
-parser = BungeecordParser()
+def get_parser(parser_manager):
+	return BungeecordParser(parser_manager)

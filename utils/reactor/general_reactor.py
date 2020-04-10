@@ -6,6 +6,8 @@ from utils.permission_manager import PermissionLevel
 from utils.reactor.base_reactor import BaseReactor
 
 
+# for reacting general info
+# including on_info and !!MCDR, !!help command
 class GeneralReactor(BaseReactor):
 	def react(self, info):
 		if info.is_user and re.fullmatch(r'!!MCDR( .*)*', info.content) is not None:

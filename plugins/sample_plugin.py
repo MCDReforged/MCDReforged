@@ -81,6 +81,10 @@ def on_player_left(server, player):
 	server.say('Bye {}'.format(player))
 
 
+def on_player_death(server, player):
+	server.say('RIP {}'.format(player))
+
+
 def on_server_startup(server):
 	server.logger.info('Server has started')
 

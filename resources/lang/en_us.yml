@@ -216,3 +216,6 @@ server_status.stopped: |
 
 general_reactor.permission_denied: |
   Permission denied
+
+parser_manager.load_re_death_message.load_fail: |
+  Fail to load death message data

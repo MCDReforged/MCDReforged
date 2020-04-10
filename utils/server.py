@@ -4,11 +4,11 @@ import logging
 import sys
 import time
 import traceback
-import threading
 from subprocess import Popen, PIPE, STDOUT
 
 from utils import config, constant, logger, tool
 from utils.command_manager import CommandManager
+from utils.parser_manager import ParserManager
 from utils.permission_manager import PermissionManager
 from utils.plugin_manager import PluginManager
 from utils.rcon_manager import RconManager
@@ -27,16 +27,15 @@ class Server:
 		self.starting_server = False  # to prevent multiple start_server() call
 
 		# will be assigned in reload_config()
-		self.parser = None
 		self.encoding_method = None
 		self.decoding_method = None
-		self.rcon_manager = None
 
 		self.logger = logger.Logger(self, constant.NAME_SHORT)
 		self.logger.set_file(constant.LOGGING_FILE)
 		self.language_manager = LanguageManager(self, constant.LANGUAGE_FOLDER)
 		self.config = config.Config(self, constant.CONFIG_FILE)
 		self.rcon_manager = RconManager(self)
+		self.parser_manager = ParserManager(self)
 		self.load_config()
 		self.reactors = self.load_reactor(constant.REACTOR_FOLDER)
 		self.server_interface = ServerInterface(self)
@@ -69,7 +68,7 @@ class Server:
 		if self.config['debug_mode']:
 			self.logger.info(self.t('server.load_config.debug_mode_on'))
 
-		self.parser = self.load_parser(constant.PARSER_FOLDER, self.config['parser'])
+		self.parser_manager.load_parser(constant.PARSER_FOLDER, self.config['parser'])
 		self.logger.info(self.t('server.load_config.parser_set', self.config['parser']))
 
 		self.encoding_method = self.config['encoding'] if self.config['encoding'] is not None else sys.getdefaultencoding()
@@ -82,11 +81,6 @@ class Server:
 		msg = tool.clean_minecraft_color_code(self.plugin_manager.load_plugins())
 		self.logger.info(msg)
 		return msg
-
-	@staticmethod
-	def load_parser(path, parser_name):
-		file_name = path + parser_name + '.py'
-		return tool.load_source(file_name).parser
 
 	def load_reactor(self, folder):
 		reactors = []
@@ -147,7 +141,7 @@ class Server:
 		self.set_server_status(new_server_status)
 		if not forced:
 			try:
-				self.send(self.parser.STOP_COMMAND)
+				self.send(self.parser_manager.get_stop_command())
 			except:
 				self.logger.error(self.t('server.stop.stop_fail'))
 				forced = True
@@ -207,17 +201,21 @@ class Server:
 			return
 
 		try:
-			text = self.parser.pre_parse_server_stdout(text)
+			text = self.parser_manager.get_parser().pre_parse_server_stdout(text)
 		except:
 			self.logger.warning(self.t('server.tick.pre_parse_fail'))
 		print('[Server] {}'.format(text))
 
 		try:
-			parsed_result = self.parser.parse_server_stdout(text)
+			parsed_result = self.parser_manager.get_parser().parse_server_stdout(text)
 		except:
 			self.logger.debug('Fail to parse text "{}" from stdout of the server, using raw parser'.format(text))
 			# self.logger.debug(traceback.format_exc())
-			parsed_result = self.parser.parse_server_stdout_raw(text)
+			parsed_result = self.parser_manager.get_parser().parse_server_stdout_raw(text)
+		else:
+			self.logger.debug('Parsed text:')
+			for line in str(parsed_result).splitlines():
+				self.logger.debug('    {}'.format(line))
 		self.react(parsed_result)
 
 	def run(self):
@@ -254,13 +252,13 @@ class Server:
 			try:
 				text = input()
 				try:
-					parsed_result = self.parser.parse_console_command(text)
+					parsed_result = self.parser_manager.get_parser().parse_console_command(text)
 				except:
 					self.logger.error(self.t('server.console_input.parse_fail', text))
 					self.logger.error(traceback.format_exc())
 				else:
 					self.react(parsed_result)
-					if parsed_result.content == self.parser.STOP_COMMAND:
+					if parsed_result.content == self.parser_manager.get_stop_command():
 						self.rcon_manager.disconnect()
 			except (KeyboardInterrupt, EOFError, SystemExit, IOError) as e:
 				self.logger.debug('Exception {} {} caught in console_input()'.format(type(e), e))
@@ -277,7 +275,7 @@ class Server:
 			try:
 				reactor.react(info)
 			except:
-				self.logger.error(self.t('server.react.error', reactor.__name__))
+				self.logger.error(self.t('server.react.error', type(reactor).__name__))
 				self.logger.error(traceback.format_exc())
 
 	def connect_rcon(self):

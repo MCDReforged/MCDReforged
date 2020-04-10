@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 import copy
+import os
+
 from utils import tool
 from utils.parser.bukkit_parser import BukkitParser
 from utils.parser.vanilla_parser import VanillaParser
@@ -10,8 +12,10 @@ class CatServerParser(BukkitParser):
 	# CatServer uses vanilla logging format but spigot like player joined message
 	# And has color code around the player left message
 
-	def __init__(self):
-		VanillaParser.__init__(self)
+	NAME = os.path.basename(__file__).rstrip('.py')
+
+	def __init__(self, parser_manager):
+		super().__init__(parser_manager)
 
 	def parse_server_stdout(self, text):
 		return VanillaParser.parse_server_stdout(self, text)
@@ -23,4 +27,5 @@ class CatServerParser(BukkitParser):
 		return super().parse_player_left(processed_info)
 
 
-parser = CatServerParser()
+def get_parser(parser_manager):
+	return CatServerParser(parser_manager)
