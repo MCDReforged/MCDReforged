@@ -16,6 +16,7 @@ class BukkitParser(vanilla_parser.VanillaParser):
 		result.hour = int(elements[0])
 		result.min = int(elements[1])
 		result.sec = int(elements[2].split(' ')[0])
+		result.logging_level = re.search(r'(?<= )\w+(?=\])', elements[2]).group()
 
 		text = text.replace(time_data, '', 1)
 		# <Steve> hi

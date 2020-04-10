@@ -28,6 +28,9 @@ class Info:
 		# the value type is InfoSource
 		self.source = None
 
+		# the logging level of the server's stdout, such as "INFO" or "WARN"
+		self.logging_level = None
+
 	@property
 	def is_player(self):
 		return self.player is not None

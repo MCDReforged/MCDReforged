@@ -71,8 +71,8 @@ If there special characters in string `text`, including `"`, `\\` and `\n`, MCDR
 | Method | Function |
 |---|---|
 | get_permission_level(obj) | Return a [integer](https://github.com/Fallen-Breath/MCDReforged#Permission) representing highest permission level the object `obj` has. `obj` can be a `Info` instance or a string representing a player name |
-| rcon_query(command) | Send the command `command` via rcon to the server. Return a response string from the server. Return None if rcon stops or exception occurred |
-| get_plugin_instance(plugin_name) | Return an instance of the loaded plugin located in `plugins/plugin_name.py`. Using this method instead of importing the plugin by yourself allows you to get the same instance as MCDR. If plugin not found returns None |
+| rcon_query(command) | Send the command `command` via rcon to the server. Return a response string from the server. Return `None` if rcon stops or exception occurred |
+| get_plugin_instance(plugin_name) | Return an instance of the loaded plugin located in `plugins/plugin_name.py`. Using this method instead of importing the plugin by yourself allows you to get the same instance as MCDR. If plugin not found returns `None` |
 | add_help_message(prefix, message) | Add a help message with prefix `prefix` and message `message` to the `!!help` data of MCDR. The `!!help` data of MCDR will be reset before plugin reloading. **It is recommended to add relevant information in `on_load ()` method call** |
 
 ## info
@@ -84,10 +84,11 @@ This is a parsed information object. It belongs to the Info class in `utils/info
 | hour | A integer，representing the hour when the message was sent. If there isn't it will be `None` |
 | min | A integer，representing the minute when the message was sent. If there isn't it will be `None` |
 | sec | A integer，representing the second when the message was sent. If there isn't it will be `None` |
-| raw_content | An un-parsed raw message string |
+| raw_content | A str, an un-parsed raw message string |
 | content | If the info is player's chat message, the value is the player's chat content. Otherwise, the value is a string after omitting the prefix information such as time / thread name from the original message string |
 | player | If the info is player's chat message, the value is a string representing the player's name, otherwise `None` |
 | source | An integer. `0` if the message is from the server's standard output stream;` 1` if it is from the console input |
+| logging_level | A str, the logging level of the content like `INFO` or `WARN`. `None` if it is from console input |
 | is_player | Equivalent to `player != None` |
 | is_user | Equivalent to `source == 1 or is_player` |
 
@@ -108,6 +109,7 @@ The attributes of the info object are:
 | content | `Preparing level "world"` |
 | player | None |
 | source | 0 |
+| logging_level | `INFO` |
 | is_player | False |
 | is_user | False |
 
@@ -128,6 +130,7 @@ The attributes of the info object are:
 | content | `Hello` |
 | player | `Steve` |
 | source | 0 |
+| logging_level | `INFO` |
 | is_player | True |
 | is_user | True |
 

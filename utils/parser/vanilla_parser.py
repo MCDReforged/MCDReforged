@@ -25,7 +25,9 @@ class VanillaParser(base_parser.BaseParser):
 		# [Server thread/INFO]: <Steve> Hello
 		# [Server thread/WARN]: Can't keep up!
 
-		text = re.split(r'\[[{}]*?\]: '.format(self.Logger_NAME_CHAR_SET), text)[1]
+		logging = re.match(r'^\[[{}]*?\]: '.format(self.Logger_NAME_CHAR_SET), text).group()
+		result.logging_level = re.search(r'(?<=/)\w+(?=\]: )', logging).group()
+		text = re.sub(result.logging_level, '', text)
 		# <Steve> Hello
 		# Can't keep up!
 

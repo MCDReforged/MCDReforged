@@ -21,6 +21,7 @@ class BungeecordParser(base_parser.BaseParser):
 		result.sec = int(elements[2])
 
 		text = text.replace(time_data, '', 1)
+		result.logging_level = text.split(' ')[0][1:-1]
 		# [信息] Listening on /0.0.0.0:25565
 		# [信息] [Steve] -> UpstreamBridge has disconnected
 
