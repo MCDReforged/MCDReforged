@@ -16,13 +16,25 @@ When the server has trigger specific event, MCDR will call relevant method of ea
 | on_info(server, info) | A new line is output from the stdout of the server, or a command is input from the console | No | Response to the information |
 | on_player_joined(server, player) | A player joined the server | No | Response to player joining |
 | on_player_left(server, player) | A player left the server | No | Response to player leaving |
+| on_death_message(server, death_message) | A player died and the death message appeared | No | Response to the player's death |
+| on_player_made_advancement(server, player, advancement) | A player made an advancement | No | Response to this event |
 | on_server_startup(server) | The server has started up such as vanilla server outputs `Done (1.0s)! For help, type "help"` | No | Initialize something |
 | on_server_stop(server, return_code) | The server has, more precisely, server process has terminated | No | Process something related with the int type return_code parameter |
 | on_mcdr_stop(server) | The server has stopped and MCDR is about to exit | Yes | Save data and release resources
 
 Note: the plugin doesn't need to implement all methods above. Just implement what you need
 
-Among them, the information of each parameter object is as follows：
+Among them, the information of each parameter object is as follows:
+
+### player, death_message, advancement
+
+Both of these parameters are str, among which:
+
+`player` represents the name of the relevant player, such as `Steve`
+
+`death_message` represents the death message, such as `Steve tried to swim in lava`. Its value is the same as `info.content`
+
+`advancement` represents the advancement name, such as `Stone Age`
 
 ## server
 
@@ -133,10 +145,6 @@ The attributes of the info object are:
 | logging_level | `INFO` |
 | is_player | True |
 | is_user | True |
-
-### player
-
-This is a string representing the name of the relevant player, such as `Steve`
 
 ### old_module
 

@@ -53,12 +53,23 @@ class VanillaParser(base_parser.BaseParser):
 			return player
 		return None
 
+	def parse_player_made_advancement(self, info):
+		# Steve has made the advancement [Stone Age]
+		if info.is_user:
+			return None
+		match = re.fullmatch(r'\w{1,16} has made the advancement \[.+\]', info.content)
+		if match is not None:
+			player, rest = info.content.split(' ', 1)
+			adv = re.search(r'(?<=has made the advancement \[).+(?=\])', rest).group()
+			return player, adv
+		return None
+
 	def parse_server_startup_done(self, info):
 		# 1.13+ Done (3.500s)! For help, type "help"
 		# 1.13- Done (3.500s)! For help, type "help" or "?"
 		if info.is_user:
 			return False
-		match = re.match(r'Done \([0-9.]*s\)! For help, type "help"( or "\?")?', info.content)
+		match = re.fullmatch(r'Done \([0-9.]*s\)! For help, type "help"( or "\?")?', info.content)
 		return match is not None
 
 

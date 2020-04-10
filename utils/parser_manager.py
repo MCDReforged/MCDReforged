@@ -38,11 +38,12 @@ class ParserManager:
 	def get_death_message_list(self, cls):
 		bases = tool.get_all_base_class(cls)
 		names = [base.NAME for base in bases]
+		self.server.logger.debug('Search death message regular expressions in {}'.format(', '.join(names)))
 		result = []
 		for name in names:
 			try:
 				result.extend(self.death_message_data[name])
 			except:
 				pass
-		self.server.logger.debug('Returning a death message RE list with length {}'.format(len(result)))
+		self.server.logger.debug('Returning a death message regular expressions list with length {}'.format(len(result)))
 		return result

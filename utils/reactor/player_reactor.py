@@ -18,10 +18,15 @@ class PlayerReactor(BaseReactor):
 			if player is not None:
 				self.server.plugin_manager.call('on_player_left', (self.server.server_interface, player))
 
-			# on_player_death
-			player = self.server.parser_manager.get_parser().parse_player_death(info)
-			if player is not None:
-				self.server.plugin_manager.call('on_player_death', (self.server.server_interface, player))
+			# on_death_message
+			if self.server.parser_manager.get_parser().parse_death_message(info):
+				self.server.plugin_manager.call('on_death_message', (self.server.server_interface, info.content))
+
+			# on_player_made_advancement
+			result = self.server.parser_manager.get_parser().parse_player_made_advancement(info)
+			if result is not None:
+				player, advancement = result
+				self.server.plugin_manager.call('on_player_made_advancement', (self.server.server_interface, player, advancement))
 
 
 def get_reactor(server):

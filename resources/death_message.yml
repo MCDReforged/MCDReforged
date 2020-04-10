@@ -1,3 +1,7 @@
+# From Minecraft wiki
+# https://minecraft.gamepedia.com/Death_messages
+# 2020.4.10
+
 vanilla_parser:
 - "\\w{1,16} blew up"
 - "\\w{1,16} burned to death"

@@ -14,6 +14,7 @@ class BaseParser(object):
 		self.STOP_COMMAND = None
 		self.parser_manager = parser_manager
 
+	# base parsing, return a Info instance
 	def parse_server_stdout_raw(self, text):
 		if type(text) is not str:
 			raise TypeError('The text to parse should be a string')
@@ -25,6 +26,7 @@ class BaseParser(object):
 	def parse_server_stdout(self, text):
 		return self.parse_server_stdout_raw(text)
 
+	# base parsing, return a Info instance
 	def parse_console_command(self, text):
 		if type(text) is not str:
 			raise TypeError('The text to parse should be a string')
@@ -38,19 +40,29 @@ class BaseParser(object):
 		result.source = InfoSource.CONSOLE
 		return result
 
+	# returns 1 str: player_name
+	# if not matches return None
 	def parse_player_joined(self, info):
 		return None
 
+	# returns 1 str: player_name
+	# if not matches return None
 	def parse_player_left(self, info):
 		return None
 
-	def parse_player_death(self, info):
+	# returns 1 bool: if info.content is a death message
+	def parse_death_message(self, info):
 		if info.is_user:
-			return None
+			return False
 		re_list = self.parser_manager.get_death_message_list(type(self))
 		for re_exp in re_list:
 			if re.fullmatch(re_exp, info.content):
-				return info.content.split(' ')[0]
+				return True
+		return False
+
+	# returns 2 str: player_name, advancement_name
+	# if not matches return None
+	def parse_player_made_advancement(self, info):
 		return None
 
 	def pre_parse_server_stdout(self, text):
@@ -58,6 +70,7 @@ class BaseParser(object):
 			text = re.sub(r'\033\[.*?m', '', text)
 		return text
 
+	# returns 1 bool: if info is a server startup message
 	def parse_server_startup_done(self, info):
 		return False
 

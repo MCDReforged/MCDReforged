@@ -81,8 +81,12 @@ def on_player_left(server, player):
 	server.say('Bye {}'.format(player))
 
 
-def on_player_death(server, player):
-	server.say('RIP {}'.format(player))
+def on_death_message(server, message):
+	server.say('RIP {}'.format(message.split(' ')[0]))
+
+
+def on_player_made_advancement(server, player, advancement):
+	server.say('Good job {} u have got "{}"'.format(player, advancement))
 
 
 def on_server_startup(server):
