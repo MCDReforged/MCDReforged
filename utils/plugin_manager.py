@@ -37,8 +37,6 @@ class PluginManager:
 		else:
 			self.logger.info(self.server.t('plugin_manager.unload_plugin.unload_success', plugin.plugin_name))
 			ret = True
-		finally:
-			self.plugins.remove(plugin)
 		return ret
 
 	def reload_plugin(self, plugin):
@@ -57,6 +55,7 @@ class PluginManager:
 		self.server.logger.info(self.server.t('plugin_manager.load_plugins.loading'))
 
 		# init
+		self.server.command_manager.clean_help_message()
 		self.command_prefix_listeners = {}
 		if not os.path.isdir(constant.PLUGIN_FOLDER):
 			os.makedirs(constant.PLUGIN_FOLDER)
@@ -74,10 +73,14 @@ class PluginManager:
 				counter_load += self.load_plugin(file_name)
 				counter_all += 1
 		# unload
+		unload_list = []
 		for plugin in self.plugins:
 			if plugin.file_name not in file_list:
 				counter_unload += self.unload_plugin(plugin)
 				counter_all += 1
+				unload_list.append(plugin)
+		for plugin in unload_list:
+			self.plugins.remove(plugin)
 		# end
 		counter_fail = counter_all - counter_load - counter_unload - counter_reload
 		msg = []
@@ -95,6 +98,19 @@ class PluginManager:
 			msg = '; '.join(msg)
 		return msg
 
-	def call(self, func, args=(), new_thread=True):
+	def call(self, func, args=(), wait=False):
+		self.logger.debug('Calling function "{}" in plugins with {} parameters'.format(func, len(args)))
+		thread_list = []
 		for plugin in self.plugins:
-			plugin.call(func, args, new_thread)
+			thread = plugin.call(func, args)
+			if thread is not None:
+				thread_list.append(thread)
+		if wait:
+			for thread in thread_list:
+				thread.join()
+
+	def get_plugin(self, plugin_name):
+		for plugin in self.plugins:
+			if plugin.plugin_name == plugin_name:
+				return plugin
+		return None

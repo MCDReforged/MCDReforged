@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
+import os
 import re
 from utils.parser import vanilla_parser
 
 
 class BukkitParser(vanilla_parser.VanillaParser):
-	def __init__(self):
-		super().__init__()
+	NAME = os.path.basename(__file__).rstrip('.py')
 
 	def parse_server_stdout(self, text):
 		result = self.parse_server_stdout_raw(text)
@@ -19,6 +19,7 @@ class BukkitParser(vanilla_parser.VanillaParser):
 		result.hour = int(elements[0])
 		result.min = int(elements[1])
 		result.sec = int(elements[2].split(' ')[0])
+		result.logging_level = re.search(r'(?<= )\w+(?=\])', elements[2]).group()
 
 		text = text.replace(time_data, '', 1)
 		# <Steve> hi
@@ -50,4 +51,7 @@ class BukkitParser(vanilla_parser.VanillaParser):
 		return None
 
 
-parser = BukkitParser()
+def get_parser(parser_manager):
+	return BukkitParser(parser_manager)
+
+print(BukkitParser.NAME)

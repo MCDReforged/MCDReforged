@@ -4,16 +4,18 @@ import logging
 import sys
 import time
 import traceback
-import threading
 from subprocess import Popen, PIPE, STDOUT
 
 from utils import config, constant, logger, tool
+from utils.command_manager import CommandManager
+from utils.parser_manager import ParserManager
 from utils.permission_manager import PermissionManager
 from utils.plugin_manager import PluginManager
 from utils.rcon_manager import RconManager
 from utils.server_status import ServerStatus
 from utils.server_interface import ServerInterface
 from utils.language_manager import LanguageManager
+from utils.update_helper import UpdateHelper
 
 
 class Server:
@@ -23,29 +25,35 @@ class Server:
 		self.server_status = ServerStatus.STOPPED
 		self.flag_interrupt = False  # ctrl-c flag
 		self.flag_server_startup = False  # set to True after server startup. used to start the rcon server
+		self.starting_server = False  # to prevent multiple start_server() call
 
 		# will be assigned in reload_config()
-		self.parser = None
 		self.encoding_method = None
 		self.decoding_method = None
-		self.rcon_manager = None
 
-		self.config = config.Config(constant.CONFIG_FILE)
-		self.logger = logger.Logger(constant.NAME_SHORT)
+		self.logger = logger.Logger(self, constant.NAME_SHORT)
 		self.logger.set_file(constant.LOGGING_FILE)
-		self.rcon_manager = RconManager(self)
 		self.language_manager = LanguageManager(self, constant.LANGUAGE_FOLDER)
+		self.config = config.Config(self, constant.CONFIG_FILE)
+		self.rcon_manager = RconManager(self)
+		self.parser_manager = ParserManager(self)
 		self.load_config()
 		self.reactors = self.load_reactor(constant.REACTOR_FOLDER)
 		self.server_interface = ServerInterface(self)
+		self.command_manager = CommandManager(self)
 		self.plugin_manager = PluginManager(self, constant.PLUGIN_FOLDER)
 		self.load_plugins()
 		self.permission_manager = PermissionManager(self, constant.PERMISSION_FILE)
+		self.update_helper = UpdateHelper(self)
+		self.update_helper.check_update()
 
 	# Translate info strings
 
 	def translate(self, text, *args):
-		return self.language_manager.translate(text).strip().format(*args)
+		result = self.language_manager.translate(text).strip()
+		if len(args) > 0:
+			result = result.format(*args)
+		return result
 
 	def t(self, text, *args):
 		return self.translate(text, *args)
@@ -63,7 +71,7 @@ class Server:
 		if self.config['debug_mode']:
 			self.logger.info(self.t('server.load_config.debug_mode_on'))
 
-		self.parser = self.load_parser(constant.PARSER_FOLDER, self.config['parser'])
+		self.parser_manager.load_parser(constant.PARSER_FOLDER, self.config['parser'])
 		self.logger.info(self.t('server.load_config.parser_set', self.config['parser']))
 
 		self.encoding_method = self.config['encoding'] if self.config['encoding'] is not None else sys.getdefaultencoding()
@@ -77,11 +85,6 @@ class Server:
 		self.logger.info(msg)
 		return msg
 
-	@staticmethod
-	def load_parser(path, parser_name):
-		file_name = path + parser_name + '.py'
-		return tool.load_source(file_name).parser
-
 	def load_reactor(self, folder):
 		reactors = []
 		for file in tool.list_file(folder, '.py'):
@@ -92,48 +95,60 @@ class Server:
 
 	# MCDR server
 
-	def is_running(self):
+	def is_server_running(self):
 		return self.process is not None
+
+	def is_server_startup(self):
+		return self.flag_server_startup
 
 	def set_server_status(self, status):
 		self.server_status = status
-		self.logger.debug(self.t('server.set_server_status.server_status_set', status))
+		self.logger.debug('Server status has set to "{}"'.format(status))
 
 	def start_server(self):
-		if self.is_running():
+		if self.is_server_running():
 			self.logger.warning(self.t('server.start_server.start_twice'))
-			return
-		self.logger.info(self.t('server.start_server.starting'))
-		try:
-			self.process = Popen(self.config['start_command'], cwd=self.config['working_directory'],
-								 stdin=PIPE, stdout=PIPE, stderr=STDOUT, shell=True)
-		except:
-			self.logger.error(self.t('server.start_server.start_fail'))
-			self.logger.error(traceback.format_exc())
 			return False
-		else:
-			self.set_server_status(ServerStatus.RUNNING)
-			self.logger.info(self.t('server.start_server.pid_info', self.process.pid))
-			return True
+		if self.starting_server:
+			return
+		try:
+			self.starting_server = True
+			self.logger.info(self.t('server.start_server.starting'))
+			try:
+				self.process = Popen(self.config['start_command'], cwd=self.config['working_directory'],
+									 stdin=PIPE, stdout=PIPE, stderr=STDOUT, shell=True)
+			except:
+				self.logger.error(self.t('server.start_server.start_fail'))
+				self.logger.error(traceback.format_exc())
+				return False
+			else:
+				self.set_server_status(ServerStatus.RUNNING)
+				self.logger.info(self.t('server.start_server.pid_info', self.process.pid))
+				return True
+		finally:
+			self.starting_server = False
 
 	def start(self):
 		if self.start_server():
-			self.console_input_thread = threading.Thread(target=self.console_input)
-			self.console_input_thread.setDaemon(True)
-			self.console_input_thread.setName('Console')
-			self.console_input_thread.start()
+			if not self.config['disable_console_thread']:
+				if self.console_input_thread is None or not self.console_input_thread.is_alive():
+					self.logger.info('Console thread starting')
+					self.console_input_thread = tool.start_thread(self.console_input, (), 'Console')
+			else:
+				self.logger.info('Console thread disabled')
 			self.run()
 
 	def stop(self, forced=False, new_server_status=ServerStatus.STOPPING_BY_ITSELF):
-		if not self.is_running():
+		if not self.is_server_running():
 			self.logger.warning(self.t('server.stop.stop_twice'))
 		self.set_server_status(new_server_status)
 		if not forced:
 			try:
-				self.send(self.parser.STOP_COMMAND)
+				self.send(self.parser_manager.get_stop_command())
 			except:
 				self.logger.error(self.t('server.stop.stop_fail'))
 				forced = True
+		self.rcon_manager.disconnect()
 		if forced:
 			self.process.kill()
 			self.logger.info(self.t('server.stop.process_killed'))
@@ -141,7 +156,7 @@ class Server:
 	def send(self, text, ending='\n'):
 		if type(text) is str:
 			text = (text + ending).encode(self.encoding_method)
-		if self.is_running():
+		if self.is_server_running():
 			self.process.stdin.write(text)
 			self.process.stdin.flush()
 		else:
@@ -180,6 +195,7 @@ class Server:
 		if self.server_status == ServerStatus.STOPPING_BY_ITSELF:
 			self.logger.info(self.t('server.on_server_stop.stop_by_itself'))
 			self.set_server_status(ServerStatus.STOPPED)
+		self.plugin_manager.call('on_server_stop', (self.server_interface, return_code))
 
 	def tick(self):
 		text = self.receive()
@@ -188,24 +204,28 @@ class Server:
 			return
 
 		try:
-			text = self.parser.pre_parse_server_stdout(text)
+			text = self.parser_manager.get_parser().pre_parse_server_stdout(text)
 		except:
 			self.logger.warning(self.t('server.tick.pre_parse_fail'))
 		print('[Server] {}'.format(text))
 
 		try:
-			parsed_result = self.parser.parse_server_stdout(text)
+			parsed_result = self.parser_manager.get_parser().parse_server_stdout(text)
 		except:
-			self.logger.debug(self.t('server.tick.parse_fail', text))
+			self.logger.debug('Fail to parse text "{}" from stdout of the server, using raw parser'.format(text))
 			# self.logger.debug(traceback.format_exc())
-			parsed_result = self.parser.parse_server_stdout_raw(text)
+			parsed_result = self.parser_manager.get_parser().parse_server_stdout_raw(text)
+		else:
+			self.logger.debug('Parsed text:')
+			for line in str(parsed_result).splitlines():
+				self.logger.debug('    {}'.format(line))
 		self.react(parsed_result)
 
 	def run(self):
 		# main loop
 		while self.server_status != ServerStatus.STOPPED:
 			try:
-				if self.is_running():
+				if self.is_server_running():
 					self.tick()
 				else:
 					time.sleep(0.01)
@@ -223,7 +243,7 @@ class Server:
 				self.logger.info(self.t('server.run.user_interrupted'))
 			else:
 				self.logger.info(self.t('server.run.server_stop'))
-			self.plugin_manager.call('on_mcdr_stop', (self.server_interface,), new_thread=False)
+			self.plugin_manager.call('on_mcdr_stop', (self.server_interface,), wait=True)
 			self.logger.info(self.t('server.run.bye'))
 		except:
 			self.logger.error(self.t('server.run.stop_error'))
@@ -233,16 +253,18 @@ class Server:
 	def console_input(self):
 		while True:
 			try:
-				while True:
-					text = input()
-					try:
-						parsed_result = self.parser.parse_console_command(text)
-					except:
-						self.logger.error(self.t('server.console_input.parse_fail', text))
-						self.logger.error(traceback.format_exc())
-						break
+				text = input()
+				try:
+					parsed_result = self.parser_manager.get_parser().parse_console_command(text)
+				except:
+					self.logger.error(self.t('server.console_input.parse_fail', text))
+					self.logger.error(traceback.format_exc())
+				else:
 					self.react(parsed_result)
-			except (KeyboardInterrupt, EOFError, SystemExit, IOError):
+					if parsed_result.content == self.parser_manager.get_stop_command():
+						self.rcon_manager.disconnect()
+			except (KeyboardInterrupt, EOFError, SystemExit, IOError) as e:
+				self.logger.debug('Exception {} {} caught in console_input()'.format(type(e), e))
 				self.flag_interrupt = True
 				self.stop(forced=True)
 				break
@@ -256,10 +278,10 @@ class Server:
 			try:
 				reactor.react(info)
 			except:
-				self.logger.error(self.t('server.react.error', reactor.__name__))
+				self.logger.error(self.t('server.react.error', type(reactor).__name__))
 				self.logger.error(traceback.format_exc())
 
 	def connect_rcon(self):
 		self.rcon_manager.disconnect()
-		if self.config['enable_rcon'] and self.flag_server_startup:
+		if self.config['enable_rcon'] and self.is_server_startup():
 			self.rcon_manager.connect(self.config['rcon_address'], self.config['rcon_port'], self.config['rcon_password'])

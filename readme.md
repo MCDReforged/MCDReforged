@@ -9,7 +9,9 @@ MCDReforge (abbreviated as MCDR) is a tool which provides the management ability
 
 From in-game calculator, player high-light, to manipulate scoreboard, manage structure file and backup / load backup, you can implement these by using MCDR and related plugins
 
-Great thanks to chine_desu and his [MCDaemon 1.0](https://github.com/kafuuchino-desu/MCDaemon)
+Great thanks to chino_desu and his [MCDaemon 1.0](https://github.com/kafuuchino-desu/MCDaemon)
+
+Contact me on discord: `Fallen_Breath#1215`
 
 ## Advantage
 
@@ -23,13 +25,16 @@ MCDR uses `Popen` to start the server, so it control the standard input / out st
 
 ## Environment
 
-Python version should be python3 and at least it works on Python 3.6 and Python 3.8
+Python version should be python3 and at least it works on Python 3.6 and Python 3.8. Already tested in environments  below:
 
-Already tested in Windows10 x64 Python3.6 and Centos7 x64 Python 3.8
+- `Windows10 x64` `Python 3.6`
+- `Centos7 x64` `Python 3.8`
+- `Ubuntu18.04.4 x64` `Python 3.6`
 
-### Python modules
+### Required python modules
 
 - ruamel.yaml
+- requests
 
 The requirements are also stored in `requirements.txt`. You can execute `pip install -r requirement.txt` to install all needed modules
 
@@ -48,8 +53,8 @@ MCDReforged/
 │  ├─ my_plugin2.py
 │  └─ ...
 │
-├─ lang/
-│  ├─ en_us.yml
+├─ resources/
+│  ├─ lang/
 │  └─ ...
 │
 ├─ utils/
@@ -96,9 +101,10 @@ Default: `vanilla_parser`
 
 The specific parser for different type of server. Available options:
 
-- `vanilla_parser`: For Vanilla / Carpet / Fabric / Forge server
+- `vanilla_parser`: For Vanilla / Carpet / Fabric / Forge / CatServer server
 - `bukkit_parser`: For Bukkit / Spiogt server with Minecraft version below 1.14, and Paper server in all version
 - `bukkit_parser14`: For Bukkit / Spiogt server with Minecraft version 1.14 and above
+- `cat_server_parser`: For [CatServer](https://github.com/Luohuayu/CatServer) server
 - `bungeecord_parser`: For Bungeecord. Please add `-Djline.terminal=jline.UnsupportedTerminal` before `-jar` in the start command for MCDR support. From [here](https://www.spigotmc.org/wiki/start-up-parameters/)
 - `waterfall_parser`: For Waterfall server
 
@@ -148,21 +154,37 @@ Default: `25575`
 
 The password for of rcon. It should be the same as `rcon.password` in `server.properties` file
 
-It should be the same as 
-
 Default: `password`
+
+### disable_console_thread
+
+Default: `false`
+
+If set to `true`, the thread that used for console command input will be disabled and you can't control MCDR from the console
+
+Keep it as `false` unless necessary
+
+### download_update
+
+Default: `true`
+
+If the value is `true`, if MCDR detects a newer version it will automatically download it
 
 ### debug_mode
 
 Default: `false`
 
-Debug mode switch. Keep it as `false` unless necessary
+Debug mode switch
+
+Keep it as `false` unless necessary
 
 ## Plugin
 
 [Plugin document](https://github.com/Fallen-Breath/MCDReforged/blob/master/doc/plugin.md)
 
 Plugin usage can refer to `plugins/sample_plugin.py`
+
+[Here](https://github.com/MCDReforged-Plugins/PluginCatalogue) is a MCDR plugin collection repository
 
 ## Permission
 
@@ -221,6 +243,8 @@ There several commands to control MCDR. These command can be both input in game 
 | !!MCDR permission setdefault \<level\> | !!MCDR perm setd \<level\> | Set the default permission level to \<level\>
 
 Only player with `admin` permission level is allow to execute these command in game chat
+
+And there is a `!!help` command to display registered help messages from plugins
 
 ## Notes
 

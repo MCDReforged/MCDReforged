@@ -11,6 +11,8 @@ MCDReforged（以下简称 MCDR）是一个可以在完全不对 Minecraft 服�
 
 非常感谢 chino_desu 以及他的 [MCDaemon 1.0](https://github.com/kafuuchino-desu/MCDaemon)
 
+QQ群: [1101314858](https://jq.qq.com/?k=5gUuw9A)
+
 ## 优势
 
 - 运行于服务端之上，完全不需要修改服务端，保留原汁原味的原版特性
@@ -23,13 +25,16 @@ MCDR 使用了 `Popen` 来启动服务端，以此来控制服务端的标准输
 
 ## 环境要求
 
-Python 的版本需要 Python3，至少它在 Python 3.6 与 Python 3.8 中能运行
+Python 的版本需要 Python3，至少它在 Python 3.6 与 Python 3.8 中能运行。已在如下环境中测试运行通过:
 
-已在 Windows10 x64 Python3.6 以及 Centos7 x64 Python3.8 下测试运行通过
+- `Windows10 x64` `Python 3.6`
+- `Centos7 x64` `Python 3.8`
+- `Ubuntu18.04.4 x64` `Python 3.6`
 
-### Python 模块
+### 依赖的 python 模块
 
 - ruamel.yaml
+- requests
 
 需要的模块也储存在了 `requirement.txt` 中，可以直接执行 `pip install -r requirement.txt` 来安装所需要的模块
 
@@ -48,8 +53,8 @@ MCDReforged/
 │  ├─ my_plugin2.py
 │  └─ ...
 │
-├─ lang/
-│  ├─ en_us.yml
+├─ resources/
+│  ├─ lang/
 │  └─ ...
 │
 ├─ utils/
@@ -96,9 +101,10 @@ MCDR 使用的语言
 
 解析器选项。对于不同种类的服务端需要使用不同种类的解析器。可用选项为：
 
-- `vanilla_parser`: 适用于原版 / 地毯 / Fabric / Forge 服务端
+- `vanilla_parser`: 适用于原版 / Carpet / Fabric / Forge / CatServer 服务端
 - `bukkit_parser`: 适用于 1.14 以下的 Bukkit / Spiogt 服务端，和任意版本的 Paper 服务端
 - `bukkit_parser14`: 适用于 1.14 及以上的 Bukkit / Spiogt 服务端
+- `cat_server_parser`: 适用于 [CatServer](https://github.com/Luohuayu/CatServer) 服务端
 - `bungeecord_parser`: 适用于Bungeecord 服务端。请在启动参数的 `-jar` 前添加 `-Djline.terminal=jline.UnsupportedTerminal` 以让其支持 MCDR 的控制，[来源](https://www.spigotmc.org/wiki/start-up-parameters/)
 - `waterfall_parser`: 适用于 Waterfall 服务端
 
@@ -150,19 +156,35 @@ MCDR 使用的语言
 
 默认值: `password`
 
+### disable_console_thread
+
+默认值: `false`
+
+是否禁用控制台命令输入的线程，禁用后将无法从控制台控制 MCDR
+
+除非必要，保持 `false` 即可
+
+### download_update
+
+默认值: `true`
+
+如果值为 `true`，MCDR会在检测到新版本后自动将新版本下载至 `MCDR_update` 文件夹
+
 ### debug_mode
 
 默认值: `false`
 
-调试模式开关。除非有必要，否则设置为 `false` 即可
+调试模式开关
+
+除非必要，保持 `false` 即可
 
 ## 插件
 
 [插件文档](https://github.com/Fallen-Breath/MCDReforged/blob/master/doc/plugin_cn.md)
 
-在游戏聊天中会在控制台输入 `!!MCDR reload` 来重载插件
-
 插件用法可参考 `plugins/sample_plugin.py`
+
+[这里](https://github.com/MCDReforged-Plugins/PluginCatalogue)是一个 MCDR 的插件收集仓库
 
 ## 权限
 
@@ -221,6 +243,8 @@ MCDR 提供了一些控制 MCDR 的命令，它们均可在游戏中通过聊天
 | !!MCDR permission setdefault \<level\> | !!MCDR perm setd \<level\> | 将默认权限等级设置为 \<level\>
 
 只有具有 `admin` 权限等级的玩家才被允许通过游戏输入执行这些命令
+
+除此之外还有一个 `!!help` 指令来展示所有的注册了的插件帮助信息
 
 ## 注意事项
 

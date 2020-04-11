@@ -14,7 +14,7 @@ class RconManager:
 	def connect(self, address, port, password):
 		if self.is_running():
 			self.disconnect()
-		self.rcon = Rcon(address, port, password, self.logger)
+		self.rcon = Rcon(address, port, str(password), self.logger)
 		try:
 			success = self.rcon.connect()
 		except Exception as e:

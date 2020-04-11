@@ -1,14 +1,16 @@
 # -*- coding: utf-8 -*-
-
+import os
 import re
 from utils.parser import base_parser
 
 
 class VanillaParser(base_parser.BaseParser):
-	def __init__(self):
-		super().__init__()
+	NAME = os.path.basename(__file__).rstrip('.py')
+
+	def __init__(self, parser_manager):
+		super().__init__(parser_manager)
 		self.STOP_COMMAND = 'stop'
-		self.Logger_NAME_CHAR_SET = r'\w /'
+		self.Logger_NAME_CHAR_SET = r'\w /\#'
 
 	def parse_server_stdout(self, text):
 		result = self.parse_server_stdout_raw(text)
@@ -25,7 +27,9 @@ class VanillaParser(base_parser.BaseParser):
 		# [Server thread/INFO]: <Steve> Hello
 		# [Server thread/WARN]: Can't keep up!
 
-		text = re.split(r'\[[{}]*?\]: '.format(self.Logger_NAME_CHAR_SET), text)[1]
+		logging = re.match(r'^\[[{}]*?\]: '.format(self.Logger_NAME_CHAR_SET), text).group()
+		result.logging_level = re.search(r'(?<=/)\w+(?=\]: )', logging).group()
+		text = text.replace(logging, '', 1)
 		# <Steve> Hello
 		# Can't keep up!
 
@@ -49,12 +53,25 @@ class VanillaParser(base_parser.BaseParser):
 			return player
 		return None
 
-	def is_server_startup_done(self, info):
-		# Done (3.500s)! For help, type "help"
+	def parse_player_made_advancement(self, info):
+		# Steve has made the advancement [Stone Age]
+		if info.is_user:
+			return None
+		match = re.fullmatch(r'\w{1,16} has made the advancement \[.+\]', info.content)
+		if match is not None:
+			player, rest = info.content.split(' ', 1)
+			adv = re.search(r'(?<=has made the advancement \[).+(?=\])', rest).group()
+			return player, adv
+		return None
+
+	def parse_server_startup_done(self, info):
+		# 1.13+ Done (3.500s)! For help, type "help"
+		# 1.13- Done (3.500s)! For help, type "help" or "?"
 		if info.is_user:
 			return False
-		match = re.match(r'Done \([0-9.]*s\)! For help, type "help"', info.content)
+		match = re.fullmatch(r'Done \([0-9.]*s\)! For help, type "help"( or "\?")?', info.content)
 		return match is not None
 
 
-parser = VanillaParser()
+def get_parser(parser_manager):
+	return VanillaParser(parser_manager)

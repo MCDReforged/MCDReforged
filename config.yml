@@ -30,6 +30,9 @@ start_command: java -Xms1G -Xmx2G -jar minecraft_server.jar nogui
 # bukkit_parser_14
 #   For Bukkit / Spiogt server with Minecraft version 1.14 and above
 #
+# cat_server_parser
+#   For CatServer server
+#
 # bungeecord_parser
 #   for Bungeecord server
 #
@@ -51,7 +54,7 @@ decoding:
 # for example the default value is !! so these commands won't be sent to server's stdin
 #   !!test
 #   !!this is a command
-console_command_prefix: "!!"
+console_command_prefix: '!!'
 
 
 # rcon setting
@@ -62,5 +65,16 @@ rcon_port: 25575
 rcon_password: password
 
 
+# If set to true, MCDR will not start the console thread for handling console command input
+# Don't change it to true unless you know what you are doing
+disable_console_thread: false
+
+
+# If set to true, if MCDR detects a newer version it will automatically download it
+download_update: true
+
+
 # Debug mode switch. Don't change it to true unless necessary
 debug_mode: false
+
+# Missing options down below
