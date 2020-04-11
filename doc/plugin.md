@@ -156,7 +156,7 @@ Related examples:
 counter = 0
 
 def on_load(server, old_module):
-	global counter
+    global counter
     if old_module is not None:
         counter = old_module.counter + 1
     else:
