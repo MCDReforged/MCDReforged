@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
+import traceback
 from utils.server import Server
 from utils import constant
+
 
 if __name__ == '__main__':
 	print('{} {} starting up'.format(constant.NAME_SHORT, constant.VERSION))
@@ -9,7 +11,8 @@ if __name__ == '__main__':
 	try:
 		server = Server()
 	except:
-		print(f'Fail to initialize {constant.NAME_SHORT}')
-		raise
-
-	server.start()
+		print('Fail to initialize {}'.format(constant.NAME_SHORT))
+		print(traceback.format_exc())
+		input('Press Enter to exit')
+	else:
+		server.start()
