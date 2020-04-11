@@ -53,8 +53,8 @@ MCDReforged/
 │  ├─ my_plugin2.py
 │  └─ ...
 │
-├─ lang/
-│  ├─ en_us.yml
+├─ resources/
+│  ├─ lang/
 │  └─ ...
 │
 ├─ utils/
