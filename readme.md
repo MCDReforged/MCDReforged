@@ -25,7 +25,7 @@ MCDR uses `Popen` to start the server, so it control the standard input / out st
 
 ## Environment
 
-Python version should be python3 and at least it works on Python 3.6 and Python 3.8. Already tested in environments  below:
+Python version should be Python 3.6+. Already tested in environments  below:
 
 - `Windows10 x64` `Python 3.6`
 - `Centos7 x64` `Python 3.8`
