@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
-
 import requests
-
 from utils import tool, constant
 
 

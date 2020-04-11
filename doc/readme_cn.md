@@ -34,6 +34,7 @@ Python 的版本需要 Python3，至少它在 Python 3.6 与 Python 3.8 中能�
 ### 依赖的 python 模块
 
 - ruamel.yaml
+- requests
 
 需要的模块也储存在了 `requirement.txt` 中，可以直接执行 `pip install -r requirement.txt` 来安装所需要的模块
 

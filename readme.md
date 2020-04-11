@@ -34,6 +34,7 @@ Python version should be python3 and at least it works on Python 3.6 and Python 
 ### Required python modules
 
 - ruamel.yaml
+- requests
 
 The requirements are also stored in `requirements.txt`. You can execute `pip install -r requirement.txt` to install all needed modules
 
