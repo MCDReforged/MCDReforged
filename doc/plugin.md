@@ -82,7 +82,7 @@ If there special characters in string `text`, including `"`, `\\` and `\n`, MCDR
 
 | Method | Function |
 |---|---|
-| get_permission_level(obj) | Return a [integer](https://github.com/Fallen-Breath/MCDReforged#Permission) representing highest permission level the object `obj` has. `obj` can be a `Info` instance or a string representing a player name |
+| get_permission_level(obj) | Return a [integer](https://github.com/Fallen-Breath/MCDReforged#Permission) representing highest permission level the object `obj` has. `obj` can be a `Info` instance or a string representing a player name. If the type of `obj` is not supported or the `Info` instance is not from a user (`not info.is_user`) then it will return `None` |
 | rcon_query(command) | Send the command `command` via rcon to the server. Return a response string from the server. Return `None` if rcon stops or exception occurred |
 | get_plugin_instance(plugin_name) | Return an instance of the loaded plugin located in `plugins/plugin_name.py`. Using this method instead of importing the plugin by yourself allows you to get the same instance as MCDR. If plugin not found returns `None` |
 | add_help_message(prefix, message) | Add a help message with prefix `prefix` and message `message` to the `!!help` data of MCDR. The `!!help` data of MCDR will be reset before plugin reloading. **It is recommended to add relevant information in `on_load ()` method call** |

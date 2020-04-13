@@ -82,7 +82,7 @@ MCDReforged Plugin Document
 
 | 方法 | 功能 |
 |---|---|
-| get_permission_level(obj) | 返回一个[整数](https://github.com/Fallen-Breath/MCDReforged/blob/master/doc/readme_cn.md#权限)，代表 `obj` 对象拥有的最高权限等级。`obj` 对象可为一个 `Info` 实例，或者是一个表示玩家名称的字符串 |
+| get_permission_level(obj) | 返回一个[整数](https://github.com/Fallen-Breath/MCDReforged/blob/master/doc/readme_cn.md#权限)，代表 `obj` 对象拥有的最高权限等级。`obj` 对象可为一个 `Info` 实例，或者是一个表示玩家名称的字符串。如果 `obj` 的类型不被支持或者 `Info` 实例并不来源自用户（`not info.is_user`），则返回 `None` |
 | rcon_query(command) | 通过 rcon 向服务端发送指令 `command`，然后返回一个字符串，表示该指令执行后的返回值。如果 rcon 未在运行或者有异常发生，返回 `None` |
 | get_plugin_instance(plugin_name) | 返回当前加载着的位于 `plugins/plugin_name.py` 的插件实例。使用此方法而非在插件中手动 import 可保证得到的目标插件实例与 MCDR 中的实例相同。若未找到该插件，返回 `None` |
 | add_help_message(prefix, message) | 向 MCDR 的 `!!help` 信息库中加入一条指令前缀为 `prefix`，信息为 `message` 的帮助信息。`!!help` 信息库将在插件重载前清空。**推荐在方法 `on_load()` 中进行相关信息添加** |
