@@ -219,7 +219,7 @@ class Server:
 			# self.logger.debug(traceback.format_exc())
 			parsed_result = self.parser_manager.get_parser().parse_server_stdout_raw(text)
 		else:
-			self.logger.debug('Parsed text:')
+			self.logger.debug('Parsed text from server stdin:')
 			for line in str(parsed_result).splitlines():
 				self.logger.debug('    {}'.format(line))
 		self.react(parsed_result)
@@ -263,6 +263,9 @@ class Server:
 					self.logger.error(self.t('server.console_input.parse_fail', text))
 					self.logger.error(traceback.format_exc())
 				else:
+					self.logger.debug('Parsed text from console input:')
+					for line in str(parsed_result).splitlines():
+						self.logger.debug('    {}'.format(line))
 					self.react(parsed_result)
 					if parsed_result.content == self.parser_manager.get_stop_command():
 						self.rcon_manager.disconnect()

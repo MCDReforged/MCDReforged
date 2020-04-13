@@ -35,7 +35,7 @@ class BaseParser(object):
 		t = time.localtime(time.time())
 		result.hour = t.tm_hour
 		result.min = t.tm_min
-		result.second = t.tm_sec
+		result.sec = t.tm_sec
 		result.content = text
 		result.source = InfoSource.CONSOLE
 		return result
