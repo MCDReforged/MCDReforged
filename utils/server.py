@@ -5,6 +5,7 @@ import sys
 import time
 import traceback
 from subprocess import Popen, PIPE, STDOUT
+from threading import Lock
 
 from utils import config, constant, logger, tool
 from utils.command_manager import CommandManager
@@ -25,7 +26,7 @@ class Server:
 		self.server_status = ServerStatus.STOPPED
 		self.flag_interrupt = False  # ctrl-c flag
 		self.flag_server_startup = False  # set to True after server startup. used to start the rcon server
-		self.starting_server = False  # to prevent multiple start_server() call
+		self.starting_server_lock = Lock()  # to prevent multiple start_server() call
 
 		# will be assigned in reload_config()
 		self.encoding_method = None
@@ -105,14 +106,16 @@ class Server:
 		self.server_status = status
 		self.logger.debug('Server status has set to "{}"'.format(status))
 
-	def start_server(self):
-		if self.is_server_running():
-			self.logger.warning(self.t('server.start_server.start_twice'))
+	# return True if the server process has started successfully
+	# return False if the server is already running or start_server has been called by other
+	def start_server(self) -> bool:
+		acquired = self.starting_server_lock.acquire(blocking=False)
+		if not acquired:
 			return False
-		if self.starting_server:
-			return
 		try:
-			self.starting_server = True
+			if self.is_server_running():
+				self.logger.warning(self.t('server.start_server.start_twice'))
+				return False
 			self.logger.info(self.t('server.start_server.starting'))
 			try:
 				self.process = Popen(self.config['start_command'], cwd=self.config['working_directory'],
@@ -126,7 +129,7 @@ class Server:
 				self.logger.info(self.t('server.start_server.pid_info', self.process.pid))
 				return True
 		finally:
-			self.starting_server = False
+			self.starting_server_lock.release()
 
 	def start(self):
 		if self.start_server():
