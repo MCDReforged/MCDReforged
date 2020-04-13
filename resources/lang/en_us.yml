@@ -233,7 +233,7 @@ update_helper._check_update.new_version_url: |
   You can update MCDR from here: {0}
 
 update_helper._check_update.download_finished: |
-  Latest MCDR downloaded finished. It's in {0}
+  Latest MCDR downloaded. It's in {0}
 
 update_helper._check_update.download_fail: |
   Latest MCDR downloaded fail
