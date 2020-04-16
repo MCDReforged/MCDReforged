@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 import os
-import threading
-import traceback
 
 import utils.tool as tool
 
@@ -13,7 +11,7 @@ class Plugin:
 		self.plugin_name = os.path.basename(self.file_name).rstrip('.py')
 		self.module = None
 
-	def call(self, func, args=(), new_thread=True):
+	def call(self, func, args=()):
 		if hasattr(self.module, func):
 			target = self.module.__dict__[func]
 			if callable(target):
