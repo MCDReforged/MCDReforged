@@ -103,7 +103,7 @@ MCDR 使用的语言
 
 - `vanilla_parser`: 适用于原版 / Carpet / Fabric / Forge / CatServer 服务端
 - `bukkit_parser`: 适用于 1.14 以下的 Bukkit / Spiogt 服务端，和任意版本的 Paper 服务端
-- `bukkit_parser14`: 适用于 1.14 及以上的 Bukkit / Spiogt 服务端
+- `bukkit_parser_14`: 适用于 1.14 及以上的 Bukkit / Spiogt 服务端
 - `cat_server_parser`: 适用于 [CatServer](https://github.com/Luohuayu/CatServer) 服务端
 - `bungeecord_parser`: 适用于Bungeecord 服务端。请在启动参数的 `-jar` 前添加 `-Djline.terminal=jline.UnsupportedTerminal` 以让其支持 MCDR 的控制，[来源](https://www.spigotmc.org/wiki/start-up-parameters/)
 - `waterfall_parser`: 适用于 Waterfall 服务端
