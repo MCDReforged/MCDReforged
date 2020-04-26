@@ -101,12 +101,15 @@ Default: `vanilla_parser`
 
 The specific parser for different type of server. Available options:
 
-- `vanilla_parser`: For Vanilla / Carpet / Fabric / Forge / CatServer server
-- `bukkit_parser`: For Bukkit / Spigot server with Minecraft version below 1.14, and Paper server in all version
-- `bukkit_parser_14`: For Bukkit / Spigot server with Minecraft version 1.14 and above
-- `cat_server_parser`: For [CatServer](https://github.com/Luohuayu/CatServer) server
-- `bungeecord_parser`: For Bungeecord. Please add `-Djline.terminal=jline.UnsupportedTerminal` before `-jar` in the start command for MCDR support. From [here](https://www.spigotmc.org/wiki/start-up-parameters/)
-- `waterfall_parser`: For Waterfall server
+| Parser Name | Compatible server types |
+|---|---|
+| vanilla_parser | For Vanilla / Carpet / Fabric server |
+| bukkit_parser | For Bukkit / Spigot server with Minecraft version below 1.14, and Paper server in all version |
+| bukkit_parser_14 | For Bukkit / Spigot server with Minecraft version 1.14 and above |
+| forge_parser | For Forge server |
+| cat_server_parser | For [CatServer](https://github.com/Luohuayu/CatServer) server |
+| bungeecord_parser | For Bungeecord. Please add `-Djline.terminal=jline.UnsupportedTerminal` before `-jar` in the start command for MCDR support. From [here](https://www.spigotmc.org/wiki/start-up-parameters/) |
+| waterfall_parser | For Waterfall server |
 
 ### encoding
 

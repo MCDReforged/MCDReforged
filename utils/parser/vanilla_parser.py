@@ -72,6 +72,13 @@ class VanillaParser(base_parser.BaseParser):
 		match = re.fullmatch(r'Done \([0-9.]*s\)! For help, type "help"( or "\?")?', info.content)
 		return match is not None
 
+	def parse_rcon_started(self, info):
+		# RCON running on 0.0.0.0:25575
+		if info.is_user:
+			return False
+		match = re.fullmatch(r'RCON running on [\w.]+:\d+', info.content)
+		return match is not None
+
 
 def get_parser(parser_manager):
 	return VanillaParser(parser_manager)

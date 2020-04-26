@@ -3,8 +3,7 @@ import os
 import re
 import time
 
-import utils.info
-from utils.info import InfoSource
+from utils.info import InfoSource, Info
 
 
 class BaseParser(object):
@@ -15,22 +14,22 @@ class BaseParser(object):
 		self.parser_manager = parser_manager
 
 	# base parsing, return a Info instance
-	def parse_server_stdout_raw(self, text):
+	def parse_server_stdout_raw(self, text: str) -> Info:
 		if type(text) is not str:
 			raise TypeError('The text to parse should be a string')
-		result = utils.info.Info()
+		result = Info()
 		result.source = InfoSource.SERVER
 		result.content = result.raw_content = text
 		return result
 
-	def parse_server_stdout(self, text):
+	def parse_server_stdout(self, text: str) -> Info:
 		return self.parse_server_stdout_raw(text)
 
 	# base parsing, return a Info instance
-	def parse_console_command(self, text):
+	def parse_console_command(self, text: str) -> Info:
 		if type(text) is not str:
 			raise TypeError('The text to parse should be a string')
-		result = utils.info.Info()
+		result = Info()
 		result.raw_content = text
 		t = time.localtime(time.time())
 		result.hour = t.tm_hour
@@ -42,16 +41,16 @@ class BaseParser(object):
 
 	# returns 1 str: player_name
 	# if not matches return None
-	def parse_player_joined(self, info):
+	def parse_player_joined(self, info: Info):
 		return None
 
 	# returns 1 str: player_name
 	# if not matches return None
-	def parse_player_left(self, info):
+	def parse_player_left(self, info: Info):
 		return None
 
 	# returns 1 bool: if info.content is a death message
-	def parse_death_message(self, info):
+	def parse_death_message(self, info: Info) -> bool:
 		if info.is_user:
 			return False
 		re_list = self.parser_manager.get_death_message_list(type(self))
@@ -62,16 +61,19 @@ class BaseParser(object):
 
 	# returns 2 str: player_name, advancement_name
 	# if not matches return None
-	def parse_player_made_advancement(self, info):
+	def parse_player_made_advancement(self, info: Info):
 		return None
 
-	def pre_parse_server_stdout(self, text):
+	def pre_parse_server_stdout(self, text: str) -> str:
 		if text.startswith('\033['):
 			text = re.sub(r'\033\[.*?m', '', text)
 		return text
 
 	# returns 1 bool: if info is a server startup message
-	def parse_server_startup_done(self, info):
+	def parse_server_startup_done(self, info: Info) -> bool:
+		return False
+
+	def parse_rcon_started(self, info: Info) -> bool:
 		return False
 
 

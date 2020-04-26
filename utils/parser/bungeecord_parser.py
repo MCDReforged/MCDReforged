@@ -47,6 +47,9 @@ class BungeecordParser(base_parser.BaseParser):
 		match = re.fullmatch(r'Listening on /[0-9.]+:[0-9]+', info.content)
 		return match is not None
 
+	def parse_rcon_started(self, info):
+		return self.parse_server_startup_done(info)
+
 
 def get_parser(parser_manager):
 	return BungeecordParser(parser_manager)

@@ -25,7 +25,7 @@ class Server:
 		self.process = None  # the process for the server
 		self.server_status = ServerStatus.STOPPED
 		self.flag_interrupt = False  # ctrl-c flag
-		self.flag_server_startup = False  # set to True after server startup. used to start the rcon server
+		self.flag_rcon_startup = False  # set to True after server startup. used to start the rcon server
 		self.starting_server_lock = Lock()  # to prevent multiple start_server() call
 
 		# will be assigned in reload_config()
@@ -100,7 +100,7 @@ class Server:
 		return self.process is not None
 
 	def is_server_startup(self):
-		return self.flag_server_startup
+		return self.flag_rcon_startup
 
 	def set_server_status(self, status):
 		self.server_status = status
@@ -194,7 +194,7 @@ class Server:
 		return_code = self.process.poll()
 		self.logger.info(self.t('server.on_server_stop.show_stopcode', return_code))
 		self.process = None
-		self.flag_server_startup = False
+		self.flag_rcon_startup = False
 		if self.server_status == ServerStatus.STOPPING_BY_ITSELF:
 			self.logger.info(self.t('server.on_server_stop.stop_by_itself'))
 			self.set_server_status(ServerStatus.STOPPED)
@@ -216,7 +216,8 @@ class Server:
 			parsed_result = self.parser_manager.get_parser().parse_server_stdout(text)
 		except:
 			self.logger.debug('Fail to parse text "{}" from stdout of the server, using raw parser'.format(text))
-			# self.logger.debug(traceback.format_exc())
+			for line in traceback.format_exc().splitlines():
+				self.logger.debug('    {}'.format(line))
 			parsed_result = self.parser_manager.get_parser().parse_server_stdout_raw(text)
 		else:
 			self.logger.debug('Parsed text from server stdin:')

@@ -22,13 +22,16 @@ start_command: java -Xms1G -Xmx2G -jar minecraft_server.jar nogui
 
 # The parser to parse the output of the server. Available options:
 # vanilla_parser
-#   for Vanilla / Carpet / Fabric / Forge server
+#   for Vanilla / Carpet / Fabric server
 #
 # bukkit_parser
 #   For Bukkit / Spiogt server with Minecraft version below 1.14, and Paper server in all version
 #
 # bukkit_parser_14
 #   For Bukkit / Spiogt server with Minecraft version 1.14 and above
+#
+# forge_parser
+#   For Forge server
 #
 # cat_server_parser
 #   For CatServer server
@@ -39,7 +42,7 @@ start_command: java -Xms1G -Xmx2G -jar minecraft_server.jar nogui
 # waterfall_parser
 #   for Waterfall server
 #
-parser: vanilla_parser
+parser: forge_parser
 
 
 # the encoding / decoding format used to encode / decode message to the server. Choose the best method for your os. Examples:
@@ -75,6 +78,6 @@ download_update: true
 
 
 # Debug mode switch. Don't change it to true unless necessary
-debug_mode: false
+debug_mode: true
 
 # Missing options down below
