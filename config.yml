@@ -42,7 +42,7 @@ start_command: java -Xms1G -Xmx2G -jar minecraft_server.jar nogui
 # waterfall_parser
 #   for Waterfall server
 #
-parser: forge_parser
+parser: vanilla_parser
 
 
 # the encoding / decoding format used to encode / decode message to the server. Choose the best method for your os. Examples:
@@ -78,6 +78,6 @@ download_update: true
 
 
 # Debug mode switch. Don't change it to true unless necessary
-debug_mode: true
+debug_mode: false
 
 # Missing options down below
