@@ -82,7 +82,7 @@ If there special characters in string `text`, including `"`, `\\` and `\n`, MCDR
 
 | Method | Function |
 |---|---|
-| get_permission_level(obj) | Return a [integer](https://github.com/Fallen-Breath/MCDReforged#Permission) representing highest permission level the object `obj` has. `obj` can be a `Info` instance or a string representing a player name |
+| get_permission_level(obj) | Return a [integer](https://github.com/Fallen-Breath/MCDReforged#Permission) representing highest permission level the object `obj` has. `obj` can be a `Info` instance or a string representing a player name. If the type of `obj` is not supported or the `Info` instance is not from a user (`not info.is_user`) then it will return `None` |
 | rcon_query(command) | Send the command `command` via rcon to the server. Return a response string from the server. Return `None` if rcon stops or exception occurred |
 | get_plugin_instance(plugin_name) | Return an instance of the loaded plugin located in `plugins/plugin_name.py`. Using this method instead of importing the plugin by yourself allows you to get the same instance as MCDR. If plugin not found returns `None` |
 | add_help_message(prefix, message) | Add a help message with prefix `prefix` and message `message` to the `!!help` data of MCDR. The `!!help` data of MCDR will be reset before plugin reloading. **It is recommended to add relevant information in `on_load ()` method call** |
@@ -93,9 +93,10 @@ This is a parsed information object. It belongs to the Info class in `utils/info
 
 | Attribute | Content |
 |---|---|
-| hour | A integer，representing the hour when the message was sent. If there isn't it will be `None` |
-| min | A integer，representing the minute when the message was sent. If there isn't it will be `None` |
-| sec | A integer，representing the second when the message was sent. If there isn't it will be `None` |
+| id | Assigned by a static increasing int counter, it represents the number of created Info when it's parsed. For example the first parsed Info since MCDR has started has a id with value `1` and the second Info's id is `2`  |
+| hour | A integer, representing the hour when the message was sent. If there isn't it will be `None` |
+| min | A integer, representing the minute when the message was sent. If there isn't it will be `None` |
+| sec | A integer, representing the second when the message was sent. If there isn't it will be `None` |
 | raw_content | A str, an un-parsed raw message string |
 | content | If the info is player's chat message, the value is the player's chat content. Otherwise, the value is a string after omitting the prefix information such as time / thread name from the original message string |
 | player | If the info is player's chat message, the value is a string representing the player's name, otherwise `None` |
@@ -122,6 +123,7 @@ The attributes of the info object are:
 | player | None |
 | source | 0 |
 | logging_level | `INFO` |
+| id | 105 |
 | is_player | False |
 | is_user | False |
 
@@ -143,6 +145,7 @@ The attributes of the info object are:
 | player | `Steve` |
 | source | 0 |
 | logging_level | `INFO` |
+| id | 156 |
 | is_player | True |
 | is_user | True |
 
@@ -156,7 +159,7 @@ Related examples:
 counter = 0
 
 def on_load(server, old_module):
-	global counter
+    global counter
     if old_module is not None:
         counter = old_module.counter + 1
     else:

@@ -99,7 +99,6 @@ class PluginManager:
 		return msg
 
 	def call(self, func, args=(), wait=False):
-		self.logger.debug('Calling function "{}" in plugins with {} parameters'.format(func, len(args)))
 		thread_list = []
 		for plugin in self.plugins:
 			thread = plugin.call(func, args)

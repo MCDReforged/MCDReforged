@@ -48,6 +48,6 @@ class Logger:
 			zipf.write(file_name, arcname=os.path.basename(file_name), compress_type=zipfile.ZIP_DEFLATED)
 			zipf.close()
 			os.remove(file_name)
-		self.file_handler = logging.handlers.TimedRotatingFileHandler(file_name)
+		self.file_handler = logging.FileHandler(file_name)
 		self.file_handler.setFormatter(self.file_fmt)
 		self.logger.addHandler(self.file_handler)
