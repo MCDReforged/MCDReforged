@@ -251,5 +251,5 @@ And there is a `!!help` command to display registered help messages from plugins
 
 ## Notes
 
-- Make sure you add `-Djline.terminal=jline.UnsupportedTerminal` before `-jar` in the start command if your are running a Bungeecord server, or MCDR might not be able to control the standard input stream of the server in Windows OS
+- Make sure you add `-Djline.terminal=jline.UnsupportedTerminal` before `-jar` in the start command if your are running a Bungeecord server, or MCDR might not be able to control the standard input stream of the server
 

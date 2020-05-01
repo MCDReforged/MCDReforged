@@ -57,6 +57,12 @@ class STextBase:
 	def __str__(self):
 		return self.to_plain_text()
 
+	def __add__(self, other):
+		return STextList(self, other)
+
+	def __radd__(self, other):
+		return STextList(other, self)
+
 
 class SText(STextBase):
 	def __init__(self, text, color=SColor.white, styles=None):
@@ -91,9 +97,6 @@ class SText(STextBase):
 		}
 		return self
 
-	def __add__(self, other):
-		return STextList(self, other)
-
 	def to_plain_text(self):
 		return self.data['text']
 
@@ -115,5 +118,3 @@ class STextList(STextBase):
 	def to_plain_text(self):
 		return ''.join([obj.to_plain_text() for obj in self.data])
 
-	def __add__(self, other):
-		return STextList(self, other)

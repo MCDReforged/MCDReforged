@@ -251,5 +251,5 @@ MCDR 提供了一些控制 MCDR 的命令，它们均可在游戏中通过聊天
 
 ## 注意事项
 
-- 在使用 Bungeecord 服务端时请确保在启动参数的 `-jar` 前添加了 `-Djline.terminal=jline.UnsupportedTerminal`，否则在 Windows 操作系统下 MCDR 可能会无法控制服务端的标准输入流
+- 在使用 Bungeecord 服务端时请确保在启动参数的 `-jar` 前添加了 `-Djline.terminal=jline.UnsupportedTerminal`，否则 MCDR 可能会无法控制服务端的标准输入流
 

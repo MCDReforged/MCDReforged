@@ -27,6 +27,20 @@ class CommandManager:
 	def send_message(self, info, msg):
 		self.server.server_interface.reply(info, msg, is_plugin_call=False)
 
+	def send_command_not_found(self, info, cmd):
+		self.send_message(info, SText(self.t('command_manager.command_not_found', cmd))
+			.set_hover_event(self.t('command_manager.command_not_found_suggest', cmd))
+			.set_click_event(SAction.run_command, cmd)
+		)
+
+	def send_help_message(self, info, msg):
+		for line in msg.splitlines():
+			prefix = re.search(r'(?<=§7)!!MCDR[\w ]*(?=§)', line)
+			if prefix is not None:
+				self.send_message(info, SText(line).set_click_event(SAction.suggest_command, prefix.group()))
+			else:
+				self.send_message(info, line)
+
 	# --------------
 	# !!MCDR command
 	# --------------
@@ -35,12 +49,12 @@ class CommandManager:
 		args = info.content.rstrip().split(' ')
 		# !!MCDR
 		if len(args) == 1:
-			self.send_message(info, self.t('command_manager.help_message'))
+			self.send_help_message(info, self.t('command_manager.help_message'))
 
 		# !!MCDR reload
 		elif len(args) >= 2 and args[1] in ['r', 'reload']:
 			if len(args) == 2:
-				self.send_message(info, self.t('command_manager.help_message_reload'))
+				self.send_help_message(info, self.t('command_manager.help_message_reload'))
 			elif len(args) == 3:
 				if args[2] in ['plugin', 'plg']:
 					self.reload_changed_plugins(info)
@@ -51,7 +65,7 @@ class CommandManager:
 				elif args[2] == 'all':
 					self.reload_all(info)
 				else:
-					self.send_message(info, self.t('command_manager.command_not_found', '!!MCDR reload'))
+					self.send_command_not_found(info, '!!MCDR reload')
 
 		# !!MCDR status
 		elif len(args) == 2 and args[1] in ['status']:
@@ -60,7 +74,7 @@ class CommandManager:
 		# !!MCDR permission
 		elif len(args) >= 2 and args[1] in ['permission', 'perm']:
 			if len(args) == 2:
-				self.send_message(info, self.t('command_manager.help_message_permission'))
+				self.send_help_message(info, self.t('command_manager.help_message_permission'))
 			# !!MCDR permission list [<level>]
 			elif len(args) in [3, 4] and args[2] == 'list':
 				self.list_permission(info, args[3] if len(args) == 4 else None)
@@ -73,12 +87,12 @@ class CommandManager:
 			elif len(args) == 4 and args[2] in ['setdefault', 'setd']:
 				self.set_default_permission(info, args[3])
 			else:
-				self.send_message(info, self.t('command_manager.command_not_found', '!!MCDR permission'))
+				self.send_command_not_found(info, '!!MCDR permission')
 
 		# !!MCDR plugin
 		elif len(args) >= 2 and args[1] in ['plugin', 'plg']:
 			if len(args) == 2:
-				self.send_message(info, self.t('command_manager.help_message_plugin'))
+				self.send_help_message(info, self.t('command_manager.help_message_plugin'))
 			elif len(args) == 3 and args[2] in ['list']:
 				self.list_plugin(info)
 			elif len(args) == 4 and args[2] in ['disable']:
@@ -88,9 +102,9 @@ class CommandManager:
 			elif len(args) == 3 and args[2] in ['reloadall']:
 				self.reload_all_plugin(info)
 			else:
-				self.send_message(info, self.t('command_manager.command_not_found', '!!MCDR plugin'))
+				self.send_command_not_found(info, '!!MCDR plugin')
 		else:
-			self.send_message(info, self.t('command_manager.command_not_found', '!!MCDR'))
+			self.send_command_not_found(info, '!!MCDR')
 
 	def function_call(self, info, func, name, func_args=(), success_message=True, fail_message=True, message_args=()):
 		try:
@@ -187,11 +201,22 @@ class CommandManager:
 
 		self.send_message(info, self.t('command_manager.list_plugin.info_loaded_plugin', len(file_list_loaded)))
 		for file_name in file_list_loaded:
-			self.send_message(info, '§7-§r {}'.format(file_name))
+			self.send_message(
+				info, '§7-§r {}'.format(file_name) +
+				SText(' [×]', color=SColor.gray)
+				.set_click_event(SAction.suggest_command, '!!MCDR plugin disable {}'.format(file_name))
+				.set_hover_event(self.t('command_manager.list_plugin.suggest_disable', file_name))
+			)
 
 		self.send_message(info, self.t('command_manager.list_plugin.info_disabled_plugin', len(file_list_disabled)))
 		for file_name in file_list_disabled:
-			self.send_message(info, '§7-§r {}'.format(tool.remove_suffix(file_name, constant.DISABLED_PLUGIN_FILE_SUFFIX)))
+			file_name = tool.remove_suffix(file_name, constant.DISABLED_PLUGIN_FILE_SUFFIX)
+			self.send_message(
+				info, '§7-§r {}'.format(file_name) +
+				SText(' [√]', color=SColor.gray)
+				.set_click_event(SAction.suggest_command, '!!MCDR plugin enable {}'.format(file_name))
+				.set_hover_event(self.t('command_manager.list_plugin.suggest_enable', file_name))
+			)
 
 		self.send_message(info, self.t('command_manager.list_plugin.info_not_loaded_plugin', len(file_list_not_loaded)))
 		for file_name in file_list_not_loaded:
@@ -232,7 +257,8 @@ class CommandManager:
 		for plugin in self.server.plugin_manager.plugins:
 			help_messages.extend(plugin.help_messages)
 		for prefix, message, name in sorted(help_messages, key=lambda x: x.prefix.capitalize()):
-			self.send_message(info, SText('§7{}§r: {}'.format(prefix, message))
+			self.send_message(info, SText('§7{}§r: '.format(prefix))
 				.set_click_event(SAction.suggest_command, prefix)
 				.set_hover_event(name)
+				+ message
 			)

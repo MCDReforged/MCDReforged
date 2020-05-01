@@ -117,6 +117,7 @@ class Server:
 				return False
 			self.logger.info(self.t('server.start_server.starting'))
 			try:
+				print(self.config['start_command'])
 				self.process = Popen(self.config['start_command'], cwd=self.config['working_directory'],
 									 stdin=PIPE, stdout=PIPE, stderr=STDOUT, shell=True)
 			except:

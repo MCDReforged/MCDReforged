@@ -96,10 +96,13 @@ command_manager.help_message_plugin: |
   §7!!MCDR plugin list§r: List all plugins
   §7!!MCDR plugin enable §e<plugin>§r: Enable a plugin named §e<plugin>§r
   §7!!MCDR plugin disable §e<plugin>§r: Disable a plugin named §e<plugin>§r
-  §7!!MCDR plugin reloadall: Load/ Reload/ Unloaded every plugins
+  §7!!MCDR plugin reloadall: Load / Reload / Unloaded every plugins
 
 command_manager.command_not_found: |
   Command not found, type "§7{0}§r" to see help
+
+command_manager.command_not_found_suggest: |
+  Click to input "§7{0}§r"
 
 command_manager.reload_changed_plugins.fail: |
   §cFail§r to reload changed plugins
@@ -158,23 +161,29 @@ command_manager.list_plugin.info_disabled_plugin: |
 command_manager.list_plugin.info_not_loaded_plugin: |
   §6{0}x §eNot-loaded Plugins§r
 
+command_manager.list_plugin.suggest_disable: |
+  Click to disable plugin "§e{0}§r"
+
+command_manager.list_plugin.suggest_enable: |
+  Click to enable plugin "§e{0}§r"
+
 command_manager.invalid_plugin_name: |
-  Invalid plugin name "{0}"
+  Invalid plugin name "§e{0}§r"
 
 command_manager.disable_plugin.fail: |
-  §cFail§r to disable plugin "{0}"
+  §cFail§r to disable plugin "§e{0}§r"
 
 command_manager.disable_plugin.success: |
-  Disabled "{0}" §asuccessfully§r
+  Disabled "§e{0}§r" §asuccessfully§r
 
 command_manager.enable_plugin.fail: |
-  §cFail§r to enable plugin "{0}"
+  §cFail§r to enable plugin "§e{0}§r"
 
 command_manager.enable_plugin.load_fail: |
-  §cFail§r to load plugin "{0}"
+  §cFail§r to load plugin "§e{0}§r"
 
 command_manager.enable_plugin.success: |
-  Enabled "{0}" §asuccessfully§r
+  Enabled "§e{0}§r" §asuccessfully§r
 
 command_manager.reload_all_plugin.fail: |
   §cFail§r to reload all plugins

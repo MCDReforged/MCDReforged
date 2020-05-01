@@ -78,6 +78,7 @@ command_manager.help_message: |
   §7!!MCDR reload§r: 显示重载相关的帮助信息
   §7!!MCDR status§r: 显示 MCDR 状态
   §7!!MCDR permission§r: 显示权限相关的帮助信息
+  §7!!MCDR plugin§r: 显示插件相关的帮助信息
 
 command_manager.help_message_reload: |
   §7!!MCDR reload plugin§r: 重载所有插件
@@ -91,8 +92,17 @@ command_manager.help_message_permission: |
   §7!!MCDR permission remove §b<player>§r: 将 §b<player>§r 从权限数据库中移除
   §7!!MCDR permission setdefault §e<level>§r: 将默认权限等级设置为 §e<level>§r
 
+command_manager.help_message_plugin: |
+  §7!!MCDR plugin list§r: 列出所有的插件
+  §7!!MCDR plugin enable §e<plugin>§r: 启用名为 §e<plugin>§r 的插件
+  §7!!MCDR plugin disable §e<plugin>§r: 禁用名为 §e<plugin>§r 的插件
+  §7!!MCDR plugin reloadall§r: 加载 / 重载 / 卸载所有插件
+
 command_manager.command_not_found: |
   参数错误，输入 "§7{0}§r" 以查看帮助
+
+command_manager.command_not_found_suggest: |
+  点击以输入 "§7{0}§r"
 
 command_manager.reload_plugins.fail: |
   插件重载§c失败§r
@@ -141,6 +151,42 @@ command_manager.print_mcdr_status.line4: |
 
 command_manager.print_mcdr_status.line5: |
   插件数量: §7{0}§r
+
+command_manager.list_plugin.info_loaded_plugin: |
+  §6{0}x §e已加载插件§r
+
+command_manager.list_plugin.info_disabled_plugin: |
+  §6{0}x §e已禁用插件§r
+
+command_manager.list_plugin.info_not_loaded_plugin: |
+  §6{0}x §e未加载插件§r
+
+command_manager.list_plugin.suggest_disable: |
+  点击以禁用插件 "§e{0}§r"
+
+command_manager.list_plugin.suggest_enable: |
+  点击以启用插件 "§e{0}§r"
+
+command_manager.invalid_plugin_name: |
+  无效的插件名 "§e{0}§r"
+
+command_manager.disable_plugin.fail: |
+  插件 "§e{0}§r" 禁用§c失败§r
+
+command_manager.disable_plugin.success: |
+  插件 "§e{0}§r" 禁用§a成功§r
+
+command_manager.enable_plugin.fail: |
+  插件 "§e{0}§r" 启用§c失败§r
+
+command_manager.enable_plugin.load_fail: |
+  插件 "§e{0}§r" 加载§c失败§r
+
+command_manager.enable_plugin.success: |
+  插件 "§e{0}§r" 启用§a成功§r
+
+command_manager.reload_all_plugin.fail: |
+  重载所有插件§c失败§r
 
 command_manager.mcdr_help_message: |
   MCDR 控制指令

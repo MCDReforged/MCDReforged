@@ -16,6 +16,7 @@ def add_help_message(server):
 	server.add_help_message('!!error', 'What is 1/0?')
 	server.add_help_message('!!status', 'Get server status')
 	server.add_help_message('!!secret', 'get_plugin_instance() test')
+	server.add_help_message('!!stext', SText('stext test').set_hover_event('it', ' ', 'works', SText('?', styles=SStyle.obfuscated)))
 
 
 def on_load(server, old_module):
@@ -78,9 +79,10 @@ is_rcon_running: {}
 				STextList(
 					SText('>>>>>>> Click me <<<<<<<\n').set_click_event(SAction.suggest_command, '!!SText').set_hover_event(
 						SText('www', styles=[SStyle.obfuscated, SStyle.underlined]),
-						'<- guess what is this'
+						'<- guess what is this\n',
+						'tbh idk'
 					),
-					SText('Have you clicked that?')
+					SText('Have you clicked§f that?', styles=SStyle.bold).set_hover_event('stop lazy')
 				)
 			)
 

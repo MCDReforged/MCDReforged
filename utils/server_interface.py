@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 # An interface class for plugins to control the server
-import json
 import threading
 import time
 
