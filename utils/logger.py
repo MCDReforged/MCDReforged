@@ -29,6 +29,7 @@ class Logger:
 		self.warning = self.logger.warning
 		self.critical = self.logger.critical
 		self.error = self.logger.error
+		self.exception = self.logger.exception
 		self.set_level = self.logger.setLevel
 
 	def set_file(self, file_name):

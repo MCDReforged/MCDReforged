@@ -17,7 +17,7 @@ working_directory: server
 #   java -Djline.terminal=jline.UnsupportedTerminal -jar BungeeCord.jar
 #   ./start.sh
 #   start.bat
-start_command: java -Xms1G -Xmx2G -jar minecraft_server.jar nogui
+start_command: java -Xms1G -Xmx2G -jar paper-1.14.4.jar nogui
 
 
 # The parser to parse the output of the server. Available options:
@@ -42,14 +42,14 @@ start_command: java -Xms1G -Xmx2G -jar minecraft_server.jar nogui
 # waterfall_parser
 #   for Waterfall server
 #
-parser: vanilla_parser
+parser: bukkit_parser
 
 
 # the encoding / decoding format used to encode / decode message to the server. Choose the best method for your os. Examples:
 #   utf8
 #   gbk
 # leave it blank for MCDR to auto detect system encoding
-encoding:
+encoding: gbk
 decoding:
 
 
@@ -78,6 +78,6 @@ download_update: true
 
 
 # Debug mode switch. Don't change it to true unless necessary
-debug_mode: false
+debug_mode: true
 
 # Missing options down below

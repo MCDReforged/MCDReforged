@@ -94,19 +94,19 @@ command_manager.help_message_permission: |
 command_manager.command_not_found: |
   参数错误，输入 "§7{0}§r" 以查看帮助
 
-command_manager.reload_plugins.load_fail: |
+command_manager.reload_plugins.fail: |
   插件重载§c失败§r
 
-command_manager.reload_config.load_fail: |
+command_manager.reload_config.fail: |
   配置文件重载§c失败§r
 
-command_manager.reload_config.load_success: |
+command_manager.reload_config.success: |
   配置文件重载§a成功§r
 
-command_manager.reload_permission.load_fail: |
+command_manager.reload_permission.fail: |
   权限文件重载§c失败§r
 
-command_manager.reload_permission.load_success: |
+command_manager.reload_permission.success: |
   权限文件重载§a成功§r
 
 command_manager.invalid_permission_level: |
@@ -145,7 +145,7 @@ command_manager.print_mcdr_status.line5: |
 command_manager.mcdr_help_message: |
   MCDR 控制指令
 
-permission_manager.load.load_fail: |
+permission_manager.load.fail: |
   加载权限文件 §7{0}§r §c失败§r，使用默认的空数据
 
 permission_manager.set_default_permission_level.done: |
@@ -154,10 +154,10 @@ permission_manager.set_default_permission_level.done: |
 permission_manager.set_permission_level.done: |
   玩家 {0} 的权限等级已设置为 {1}
 
-plugin_manager.load_plugin.load_fail: |
+plugin_manager.load_plugin.fail: |
   插件 {0} 加载失败
 
-plugin_manager.load_plugin.load_success: |
+plugin_manager.load_plugin.success: |
   插件 {0} 已加载
 
 plugin_manager.unload_plugin.unload_fail: |
@@ -172,23 +172,26 @@ plugin_manager.reload_plugin.reload_fail: |
 plugin_manager.reload_plugin.reload_success: |
   插件 {0} 已重载
 
-plugin_manager.load_plugins.loading: |
+plugin_manager.refresh_all_plugins.loading: |
   加载插件中
 
-plugin_manager.load_plugins.info_loaded: |
+plugin_manager.__refresh_plugins.info_loaded: |
   已加载: §7{0}§r 个插件
 
-plugin_manager.load_plugins.info_unloaded: |
+plugin_manager.__refresh_plugins.info_unloaded: |
   已卸载: §7{0}§r 个插件
 
-plugin_manager.load_plugins.info_reloaded: |
+plugin_manager.__refresh_plugins.info_reloaded: |
   已重载: §7{0}§r 个插件
 
-plugin_manager.load_plugins.info_fail: |
+plugin_manager.__refresh_plugins.info_fail: |
   失败: §7{0}§r 个插件
 
-plugin_manager.load_plugins.info_none: |
-  未找到任何插件
+plugin_manager.__refresh_plugins.info_none: |
+  无插件变更
+
+plugin_manager.__refresh_plugins.info_plugin_amount: |
+  插件总数: §7{0}§
 
 rcon_manager.connect.connection_fail: |
   Rcon 连接失败: {0}
@@ -217,7 +220,7 @@ server_status.stopped: |
 general_reactor.permission_denied: |
   权限不足
 
-parser_manager.load_re_death_message.load_fail: |
+parser_manager.load_re_death_message.fail: |
   死亡信息数据文件加载失败
 
 update_helper._check_update.check_fail: |

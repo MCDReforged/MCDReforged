@@ -9,7 +9,7 @@ class ForgeParser(vanilla_parser.VanillaParser):
 
 	def __init__(self, parser_manager):
 		super().__init__(parser_manager)
-		self.Logger_NAME_CHAR_SET += r'.-'
+		self.Logger_NAME_CHAR_SET += r'.'
 
 	def parse_server_stdout(self, text):
 		result = self.parse_server_stdout_raw(text)

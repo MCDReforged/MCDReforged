@@ -78,9 +78,10 @@ command_manager.help_message: |
   §7!!MCDR reload§r: Show reload command help message
   §7!!MCDR status§r: Show MCDR status
   §7!!MCDR permission§r: Show permission command help message
+  §7!!MCDR plugin§r: Show plugin command help message
 
 command_manager.help_message_reload: |
-  §7!!MCDR reload plugin§r: Reload all plugins
+  §7!!MCDR reload plugin§r: Reload all changed plugins
   §7!!MCDR reload config§r: Reload config file
   §7!!MCDR reload permission§r: Reload permission file
   §7!!MCDR reload all§r: Reload everything above
@@ -91,22 +92,28 @@ command_manager.help_message_permission: |
   §7!!MCDR permission remove §b<player>§r: Remove §b<player>§r from the permission database
   §7!!MCDR permission setdefault §e<level>§r: Set the default permission level to §e<level>§r
 
+command_manager.help_message_plugin: |
+  §7!!MCDR plugin list§r: List all plugins
+  §7!!MCDR plugin enable §e<plugin>§r: Enable a plugin named §e<plugin>§r
+  §7!!MCDR plugin disable §e<plugin>§r: Disable a plugin named §e<plugin>§r
+  §7!!MCDR plugin reloadall: Load/ Reload/ Unloaded every plugins
+
 command_manager.command_not_found: |
   Command not found, type "§7{0}§r" to see help
 
-command_manager.reload_plugins.load_fail: |
-  §cFail§r to reload plugin
+command_manager.reload_changed_plugins.fail: |
+  §cFail§r to reload changed plugins
 
-command_manager.reload_config.load_fail: |
+command_manager.reload_config.fail: |
   §cFail§r to reload config file
 
-command_manager.reload_config.load_success: |
+command_manager.reload_config.success: |
   Config file reloaded §asuccessfully§r
 
-command_manager.reload_permission.load_fail: |
+command_manager.reload_permission.fail: |
   §cFail§r to reload permission file
 
-command_manager.reload_permission.load_success: |
+command_manager.reload_permission.success: |
   Permission file reloaded §asuccessfully§r
 
 command_manager.invalid_permission_level: |
@@ -142,10 +149,40 @@ command_manager.print_mcdr_status.line4: |
 command_manager.print_mcdr_status.line5: |
   Plugin count: §7{0}§r
 
+command_manager.list_plugin.info_loaded_plugin: |
+  §6{0}x §eLoaded Plugins§r
+
+command_manager.list_plugin.info_disabled_plugin: |
+  §6{0}x §eDisabled Plugins§r
+
+command_manager.list_plugin.info_not_loaded_plugin: |
+  §6{0}x §eNot-loaded Plugins§r
+
+command_manager.invalid_plugin_name: |
+  Invalid plugin name "{0}"
+
+command_manager.disable_plugin.fail: |
+  §cFail§r to disable plugin "{0}"
+
+command_manager.disable_plugin.success: |
+  Disabled "{0}" §asuccessfully§r
+
+command_manager.enable_plugin.fail: |
+  §cFail§r to enable plugin "{0}"
+
+command_manager.enable_plugin.load_fail: |
+  §cFail§r to load plugin "{0}"
+
+command_manager.enable_plugin.success: |
+  Enabled "{0}" §asuccessfully§r
+
+command_manager.reload_all_plugin.fail: |
+  §cFail§r to reload all plugins
+
 command_manager.mcdr_help_message: |
   MCDR control command
 
-permission_manager.load.load_fail: |
+permission_manager.load.fail: |
   Fail to load permission file {0}, using default empty data
 
 permission_manager.set_default_permission_level.done: |
@@ -154,10 +191,10 @@ permission_manager.set_default_permission_level.done: |
 permission_manager.set_permission_level.done: |
   The permission level of player {0} has set to {1}
 
-plugin_manager.load_plugin.load_fail: |
+plugin_manager.load_plugin.fail: |
   Fail to load plugin {0}
 
-plugin_manager.load_plugin.load_success: |
+plugin_manager.load_plugin.success: |
   Plugin {0} loaded
 
 plugin_manager.unload_plugin.unload_fail: |
@@ -172,23 +209,26 @@ plugin_manager.reload_plugin.reload_fail: |
 plugin_manager.reload_plugin.reload_success: |
   Plugin {0} reloaded
 
-plugin_manager.load_plugins.loading: |
+plugin_manager.__refresh_plugins.loading: |
   Loading plugins
 
-plugin_manager.load_plugins.info_loaded: |
+plugin_manager.__refresh_plugins.info_loaded: |
   Loaded: §7{0}§r plugins
 
-plugin_manager.load_plugins.info_unloaded: |
+plugin_manager.__refresh_plugins.info_unloaded: |
   Unloaded: §7{0}§r plugins
 
-plugin_manager.load_plugins.info_reloaded: |
+plugin_manager.__refresh_plugins.info_reloaded: |
   Reloaded: §7{0}§r plugins
 
-plugin_manager.load_plugins.info_fail: |
+plugin_manager.__refresh_plugins.info_fail: |
   Failed: §7{0}§r plugins
 
-plugin_manager.load_plugins.info_none: |
-  No plugin was found
+plugin_manager.__refresh_plugins.info_none: |
+  No plugin has changed
+
+plugin_manager.__refresh_plugins.info_plugin_amount: |
+  Plugin amount: §7{0}§r
 
 rcon_manager.connect.connection_fail: |
   Rcon connection failed: {0}
@@ -217,7 +257,7 @@ server_status.stopped: |
 general_reactor.permission_denied: |
   Permission denied
 
-parser_manager.load_re_death_message.load_fail: |
+parser_manager.load_re_death_message.fail: |
   Fail to load death message data
 
 update_helper._check_update.check_fail: |

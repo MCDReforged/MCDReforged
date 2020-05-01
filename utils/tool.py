@@ -27,7 +27,7 @@ def load_source(path, name=None):
 def list_file(folder, suffix):
 	ret = []
 	for file in os.listdir(folder):
-		file_path = folder + file
+		file_path = os.path.join(folder, file)
 		if os.path.isfile(file_path) and file_path.endswith(suffix):
 			ret.append(file_path)
 	return ret
@@ -37,6 +37,10 @@ def unique_list(l):
 	ret = list(set(l))
 	ret.sort(key=l.index)
 	return ret
+
+
+def remove_suffix(text, suffix):
+	return re.sub(r'{}$'.format(suffix), '', text)
 
 
 def get_all_base_class(cls):

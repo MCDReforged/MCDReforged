@@ -91,7 +91,7 @@ Default value is `server`, which means the server will run in the `server/` fold
 
 ### start_command
 
-Default: `java -Xms1G -Xmx2G -jar minecraft_server.jar --nogui`
+Default: `java -Xms1G -Xmx2G -jar minecraft_server.jar nogui`
 
 The start command, like `java -jar minecraft_server.jar` or `./start.sh`
 

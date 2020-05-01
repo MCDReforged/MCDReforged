@@ -91,7 +91,7 @@ MCDR 使用的语言
 
 ### start_command
 
-默认值: `java -Xms1G -Xmx2G -jar minecraft_server.jar --nogui`
+默认值: `java -Xms1G -Xmx2G -jar minecraft_server.jar nogui`
 
 启动指令，诸如 `java -jar minecraft_server.jar` 或者 `./start.sh`
 

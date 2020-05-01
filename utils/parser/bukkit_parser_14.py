@@ -13,7 +13,6 @@ class BukkitParser14(vanilla_parser.VanillaParser):
 
 	def __init__(self, parser_manager):
 		super().__init__(parser_manager)
-		self.Logger_NAME_CHAR_SET += r'\-'
 
 	def parse_player_joined(self, text):
 		return bukkit_parser.get_parser(self.parser_manager).parse_player_joined(text)

@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 # An interface class for plugins to control the server
+import threading
 import time
 
 from utils import tool
 from utils.info import Info
+from utils.plugin import PluginThread
 from utils.server_status import ServerStatus
 
 
@@ -143,4 +145,4 @@ class ServerInterface:
 	def add_help_message(self, prefix, message, is_plugin_call=True):
 		if is_plugin_call:
 			self.logger.debug('Plugin called add_help_message("{}", "{}")'.format(prefix, message))
-		self.__server.command_manager.add_help_message(prefix, message)
+		threading.current_thread().plugin.add_help_message(prefix, message)

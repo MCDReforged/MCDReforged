@@ -10,6 +10,7 @@ server/*
 plugins/*
 config/
 qb_multi/
+perma_backup/
 PCRC_recordings/
 MCDReforged.spec
 mc_task.json

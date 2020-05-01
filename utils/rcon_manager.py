@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from utils.rcon.rcon import Rcon
+from utils.rcon import Rcon
 
 
 class RconManager:

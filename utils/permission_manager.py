@@ -39,7 +39,7 @@ class PermissionManager:
 			with open(self.permission_file, encoding='utf8') as file:
 				self.data = yaml.round_trip_load(file)
 		except:
-			self.server.logger.warning(self.server.t('permission_manager.load.load_fail', self.permission_file))
+			self.server.logger.warning(self.server.t('permission_manager.load.fail', self.permission_file))
 			self.data = None
 		if self.data is None:
 			self.data = {

@@ -14,9 +14,6 @@ class CatServerParser(BukkitParser):
 
 	NAME = os.path.basename(__file__).rstrip('.py')
 
-	def __init__(self, parser_manager):
-		super().__init__(parser_manager)
-
 	def parse_server_stdout(self, text):
 		return VanillaParser.parse_server_stdout(self, text)
 

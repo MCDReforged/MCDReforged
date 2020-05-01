@@ -54,4 +54,3 @@ class BukkitParser(vanilla_parser.VanillaParser):
 def get_parser(parser_manager):
 	return BukkitParser(parser_manager)
 
-print(BukkitParser.NAME)

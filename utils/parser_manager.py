@@ -29,7 +29,7 @@ class ParserManager:
 			with open(constant.RE_DEATH_MESSAGE_FILE, 'r', encoding='utf8') as file:
 				self.death_message_data = yaml.round_trip_load(file)
 		except:
-			self.server.logger.error(self.server.t('parser_manager.load_re_death_message.load_fail'))
+			self.server.logger.error(self.server.t('parser_manager.load_re_death_message.fail'))
 			self.server.logger.error(traceback.format_exc())
 			self.death_message_data = []
 

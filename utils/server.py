@@ -13,11 +13,10 @@ from utils.parser_manager import ParserManager
 from utils.permission_manager import PermissionManager
 from utils.plugin_manager import PluginManager
 from utils.rcon_manager import RconManager
+from utils.language_manager import LanguageManager
 from utils.server_status import ServerStatus
 from utils.server_interface import ServerInterface
-from utils.language_manager import LanguageManager
 from utils.update_helper import UpdateHelper
-
 
 class Server:
 	def __init__(self):
@@ -82,7 +81,7 @@ class Server:
 		self.connect_rcon()
 
 	def load_plugins(self):
-		msg = tool.clean_minecraft_color_code(self.plugin_manager.load_plugins())
+		msg = tool.clean_minecraft_color_code(self.plugin_manager.refresh_all_plugins())
 		self.logger.info(msg)
 		return msg
 
@@ -90,7 +89,7 @@ class Server:
 		reactors = []
 		for file in tool.list_file(folder, '.py'):
 			module = tool.load_source(file)
-			if hasattr(module, 'get_reactor'):
+			if hasattr(module, 'get_reactor') and callable(module.get_reactor):
 				reactors.append(module.get_reactor(self))
 		return reactors
 
