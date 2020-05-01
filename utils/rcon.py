@@ -61,7 +61,10 @@ class Rcon:
 
 	def connect(self):
 		if self.socket is not None:
-			return False
+			try:
+				self.disconnect()
+			except:
+				pass
 		self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		self.socket.connect((self.address, self.port))
 		self.send(Packet(PacketType.LOGIN_REQUEST, self.password))
@@ -76,7 +79,7 @@ class Rcon:
 		self.socket.close()
 		self.socket = None
 
-	def send_command(self, command, depth=0):
+	def __send_command(self, command, depth, max_retry_time):
 		self.command_lock.acquire()
 		try:
 			self.send(Packet(PacketType.COMMAND_REQUEST, command))
@@ -93,13 +96,16 @@ class Rcon:
 				self.logger.warning('Rcon Fail to received packet')
 			try:
 				self.disconnect()
-				if self.connect() and depth < 5:
-					return self.send_command(command, depth=depth + 1)
+				if self.connect() and depth < max_retry_time:
+					return self.__send_command(command, depth + 1, max_retry_time)
 			except:
 				pass
 			return None
 		finally:
 			self.command_lock.release()
+
+	def send_command(self, command, max_retry_time=3):
+		return self.__send_command(command, 0, max_retry_time)
 
 
 if __name__ == '__main__':

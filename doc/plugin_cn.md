@@ -1,4 +1,4 @@
-MCDReforged Plugin Document
+MCDReforged 插件文档
 ---
 
 [English](https://github.com/Fallen-Breath/MCDReforged/blob/master/doc/plugin.md)
@@ -6,6 +6,8 @@ MCDReforged Plugin Document
 与 MCDaemon 类似，一个 MCDR 的插件是一个位与 `plugins/` 文件夹下的 `.py` 文件。MCDR 会在启动时自动加载该文件夹中的所有插件
 
 在 `plugins/` 文件夹中有一个样板插件 `sample_plugin.py`，可以参考其中的内容
+
+## 事件
 
 当服务端触发某些指定事件时，如果插件有声明下列方法的话，MCDR 会调用每个插件的对应方法。MCDR 调用每个插件的方法时会为其新建一个独立的线程供其运行
 
@@ -36,7 +38,7 @@ MCDReforged Plugin Document
 
 `advancement` 表示成就内容，如 `Stone Age`
 
-## server
+### server
 
 这是用于插件与服务端进行交互的对象，属于 `utils/server_interface.py` 中的 ServerInterface 类
 
@@ -87,7 +89,7 @@ MCDReforged Plugin Document
 | get_plugin_instance(plugin_name) | 返回当前加载着的位于 `plugins/plugin_name.py` 的插件实例。使用此方法而非在插件中手动 import 可保证得到的目标插件实例与 MCDR 中的实例相同。若未找到该插件，返回 `None` |
 | add_help_message(prefix, message) | 向 MCDR 的 `!!help` 信息库中加入一条指令前缀为 `prefix`，信息为 `message` 的帮助信息。`!!help` 信息库将在插件重载前清空。**推荐在方法 `on_load()` 中进行相关信息添加** |
 
-## info
+### info
 
 这是一个解析后的消息对象，属于 `utils/info.py` 中的 Info 类。它具有以下属性：
 
@@ -162,6 +164,17 @@ def on_load(server, old_module):
         counter = 1
     server.logger.info(f'这是第{counter}次加载插件')
 ```
+
+## 工具
+
+一些给插件开发者使用的造好的轮子
+
+目前可以使用的有：
+
+- `utils/rcon.py`: 一个 rcon 客户端
+- `utils/stext.py`: Minecraft 高级文本容器
+
+[工具文档](https://github.com/Fallen-Breath/MCDReforged/blob/master/doc/utils_cn.md)
 
 ## 一些编写插件的提示
 

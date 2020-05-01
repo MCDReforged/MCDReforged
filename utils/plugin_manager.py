@@ -47,9 +47,11 @@ class PluginManager:
 	# return the plugin instance or None
 	def load_plugin(self, file_name, call_event=True):
 		try:
-			plugin = Plugin(self.server, os.path.join(self.plugin_folder, file_name))
+			# get the existed one or create a new one
+			plugin = self.get_loaded_plugin_file_name_dict().get(file_name, Plugin(self.server, os.path.join(self.plugin_folder, file_name)))
 			plugin.load()
-			self.plugins.append(plugin)
+			if plugin not in self.plugins:
+				self.plugins.append(plugin)
 			if call_event:
 				plugin.call_on_load()
 			self.logger.info(self.server.t('plugin_manager.load_plugin.success', file_name))

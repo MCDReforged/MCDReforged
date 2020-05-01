@@ -81,7 +81,7 @@ command_manager.help_message: |
   §7!!MCDR plugin§r: 显示插件相关的帮助信息
 
 command_manager.help_message_reload: |
-  §7!!MCDR reload plugin§r: 重载所有插件
+  §7!!MCDR reload plugin§r: 加载 / 重载 / 卸载§l有修改的§r插件
   §7!!MCDR reload config§r: 重载配置文件
   §7!!MCDR reload permission§r: 重载权限文件
   §7!!MCDR reload all§r: 重载上述所有
@@ -94,9 +94,10 @@ command_manager.help_message_permission: |
 
 command_manager.help_message_plugin: |
   §7!!MCDR plugin list§r: 列出所有的插件
+  §7!!MCDR plugin load §e<plugin>§r: 加载 / 重载名为 §e<plugin>§r 的插件
   §7!!MCDR plugin enable §e<plugin>§r: 启用名为 §e<plugin>§r 的插件
   §7!!MCDR plugin disable §e<plugin>§r: 禁用名为 §e<plugin>§r 的插件
-  §7!!MCDR plugin reloadall§r: 加载 / 重载 / 卸载所有插件
+  §7!!MCDR plugin reloadall§r: 加载 / 重载 / 卸载§l所有§r插件
 
 command_manager.command_not_found: |
   参数错误，输入 "§7{0}§r" 以查看帮助
@@ -167,6 +168,12 @@ command_manager.list_plugin.suggest_disable: |
 command_manager.list_plugin.suggest_enable: |
   点击以启用插件 "§e{0}§r"
 
+command_manager.list_plugin.suggest_reload: |
+  点击以重载插件 "§e{0}§r"
+
+command_manager.list_plugin.suggest_load: |
+  点击以加载插件 "§e{0}§r"
+
 command_manager.invalid_plugin_name: |
   无效的插件名 "§e{0}§r"
 
@@ -176,8 +183,11 @@ command_manager.disable_plugin.fail: |
 command_manager.disable_plugin.success: |
   插件 "§e{0}§r" 禁用§a成功§r
 
-command_manager.enable_plugin.fail: |
+command_manager.load_plugin.fail: |
   插件 "§e{0}§r" 启用§c失败§r
+
+command_manager.load_plugin.success: |
+  插件 "§e{0}§r" 启用§a成功§r
 
 command_manager.enable_plugin.load_fail: |
   插件 "§e{0}§r" 加载§c失败§r

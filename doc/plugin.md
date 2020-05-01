@@ -7,6 +7,8 @@ Like MCDaemon, a MCDR plugin is a `.py` file locating in the `plugins/` folder. 
 
 There is a sample plugin named `sample_plugin.py` in the `plugins/` folder and you can check its content for reference
 
+## Event
+
 When the server has trigger specific event, MCDR will call relevant method of each plugin if the plugin has declared the method. MCDR will create a separated thread for the called method to run
 
 | Method | When to call | Blocking | Reference usage |
@@ -36,7 +38,7 @@ Both of these parameters are str, among which:
 
 `advancement` represents the advancement name, such as `Stone Age`
 
-## server
+### server
 
 This is a object for the plugin to interact with the server. It belongs to the ServerInterface class in `utils/server_interface.py`
 
@@ -87,7 +89,7 @@ If there special characters in string `text`, including `"`, `\\` and `\n`, MCDR
 | get_plugin_instance(plugin_name) | Return an instance of the loaded plugin located in `plugins/plugin_name.py`. Using this method instead of importing the plugin by yourself allows you to get the same instance as MCDR. If plugin not found returns `None` |
 | add_help_message(prefix, message) | Add a help message with prefix `prefix` and message `message` to the `!!help` data of MCDR. The `!!help` data of MCDR will be reset before plugin reloading. **It is recommended to add relevant information in `on_load ()` method call** |
 
-## info
+### info
 
 This is a parsed information object. It belongs to the Info class in `utils/info.py`. It has the following attributes:
 
@@ -166,6 +168,17 @@ def on_load(server, old_module):
         counter = 1
     server.logger.info(f'This is the {counter} time to load the plugin')
 ```
+
+## Utils
+
+Some invented wheels for plugin developers to use
+
+Current available: 
+
+- `utils/rcon.py`: A rcon client
+- `utils/stext.py`: Minecraft advance text component
+
+[Plugin document](https://github.com/Fallen-Breath/MCDReforged/blob/master/doc/utils.md)
 
 ## Some tips for writing plugin
 

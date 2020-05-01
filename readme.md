@@ -235,7 +235,7 @@ There several commands to control MCDR. These command can be both input in game 
 | !!MCDR |  | Show help message 
 | !!MCDR status |  | show MCDR status
 | !!MCDR reload | !!MCDR r | Show reload command help message
-| !!MCDR reload plugin | !!MCDR r plg | Reload all plugins 
+| !!MCDR reload plugin | !!MCDR r plg | Reload all **changed** plugins 
 | !!MCDR reload config | !!MCDR r cfg | Reload config file
 | !!MCDR reload permission | !!MCDR r perm | Reload permission file
 | !!MCDR reload all | !!MCDR r all | Reload everything above
@@ -244,6 +244,11 @@ There several commands to control MCDR. These command can be both input in game 
 | !!MCDR permission set \<player\> \<level\> | !!MCDR perm set \<player\> \<level\> | Set the permission level of \<player\> to \<level\>
 | !!MCDR permission remove \<player\> | !!MCDR perm remove \<player\> | Remove \<player\> from the permission database
 | !!MCDR permission setdefault \<level\> | !!MCDR perm setd \<level\> | Set the default permission level to \<level\>
+| !!MCDR plugin list | !!MCDR plg list | List all plugins
+| !!MCDR plugin load \<plugin\> | !!MCDR plg load \<plugin\> | Load / Reload a plugin named \<plugin\>
+| !!MCDR plugin enable \<plugin\> | !!MCDR plg enable \<plugin\> | Enable a plugin named \<plugin\>
+| !!MCDR plugin disable \<plugin\> | !!MCDR plg disable \<plugin\> | Disable a plugin named \<plugin\>
+| !!MCDR plugin reloadall | !!MCDR plg reloadall | Load / Reload / Unloaded every plugins
 
 Only player with `admin` permission level is allow to execute these command in game chat
 

@@ -1,4 +1,4 @@
-# Credit: Pandaria98
+# Credit: Pandaria98 https://github.com/Pandaria98
 # https://github.com/TISUnion/stext
 
 # -*- coding: utf-8 -*-
@@ -50,9 +50,6 @@ class STextBase:
 
 	def to_plain_text(self):
 		pass
-
-	def show_to_player(self, server, player):
-		server.execute('tellraw {} {}'.format(player, self.to_json_str()))
 
 	def __str__(self):
 		return self.to_plain_text()

@@ -95,6 +95,8 @@ class CommandManager:
 				self.send_help_message(info, self.t('command_manager.help_message_plugin'))
 			elif len(args) == 3 and args[2] in ['list']:
 				self.list_plugin(info)
+			elif len(args) == 4 and args[2] in ['load']:
+				self.load_plugin(info, args[3])
 			elif len(args) == 4 and args[2] in ['disable']:
 				self.disable_plugin(info, args[3])
 			elif len(args) == 4 and args[2] in ['enable']:
@@ -202,10 +204,13 @@ class CommandManager:
 		self.send_message(info, self.t('command_manager.list_plugin.info_loaded_plugin', len(file_list_loaded)))
 		for file_name in file_list_loaded:
 			self.send_message(
-				info, '§7-§r {}'.format(file_name) +
-				SText(' [×]', color=SColor.gray)
-				.set_click_event(SAction.suggest_command, '!!MCDR plugin disable {}'.format(file_name))
+				info, '§7-§r {}'.format(file_name)
+				+ SText(' [×]', color=SColor.gray)
+				.set_click_event(SAction.run_command, '!!MCDR plugin disable {}'.format(file_name))
 				.set_hover_event(self.t('command_manager.list_plugin.suggest_disable', file_name))
+				+ SText(' [▷]', color=SColor.gray)
+				.set_click_event(SAction.run_command, '!!MCDR plugin load {}'.format(file_name))
+				.set_hover_event(self.t('command_manager.list_plugin.suggest_reload', file_name))
 			)
 
 		self.send_message(info, self.t('command_manager.list_plugin.info_disabled_plugin', len(file_list_disabled)))
@@ -213,22 +218,32 @@ class CommandManager:
 			file_name = tool.remove_suffix(file_name, constant.DISABLED_PLUGIN_FILE_SUFFIX)
 			self.send_message(
 				info, '§7-§r {}'.format(file_name) +
-				SText(' [√]', color=SColor.gray)
-				.set_click_event(SAction.suggest_command, '!!MCDR plugin enable {}'.format(file_name))
+				SText(' [✔]', color=SColor.gray)
+				.set_click_event(SAction.run_command, '!!MCDR plugin enable {}'.format(file_name))
 				.set_hover_event(self.t('command_manager.list_plugin.suggest_enable', file_name))
 			)
 
 		self.send_message(info, self.t('command_manager.list_plugin.info_not_loaded_plugin', len(file_list_not_loaded)))
 		for file_name in file_list_not_loaded:
-			self.send_message(info, '§7-§r {}'.format(file_name))
+			self.send_message(info, '§7-§r {}'.format(file_name)
+				+ SText(' [✔]', color=SColor.gray)
+				.set_click_event(SAction.run_command, '!!MCDR plugin load {}'.format(file_name))
+				.set_hover_event(self.t('command_manager.list_plugin.suggest_load', file_name))
+			)
 
-	def disable_plugin(self, info, file_name):
+	def __manipulate_plugin(self, info, file_name, func, name):
 		if not file_name.endswith(constant.PLUGIN_FILE_SUFFIX):
 			file_name += constant.PLUGIN_FILE_SUFFIX
 		if not os.path.isfile(os.path.join(self.server.plugin_manager.plugin_folder, file_name)):
 			self.send_message(info, self.t('command_manager.invalid_plugin_name', file_name))
 		else:
-			self.function_call(info, self.server.plugin_manager.disable_plugin, 'disable_plugin', func_args=(file_name, ), message_args=(file_name, ))
+			self.function_call(info, func, name, func_args=(file_name, ), message_args=(file_name, ))
+
+	def disable_plugin(self, info, file_name):
+		self.__manipulate_plugin(info, file_name, self.server.plugin_manager.disable_plugin, 'disable_plugin')
+
+	def load_plugin(self, info, file_name):
+		self.__manipulate_plugin(info, file_name, self.server.plugin_manager.load_plugin, 'load_plugin')
 
 	def enable_plugin(self, info, file_name):
 		file_name = tool.remove_suffix(file_name, constant.DISABLED_PLUGIN_FILE_SUFFIX)
@@ -241,7 +256,8 @@ class CommandManager:
 				func_args=(file_name, ), message_args=(file_name, ),
 				success_message=False
 			)
-			self.send_message(info, self.t('command_manager.enable_plugin.{}'.format('success' if ret else 'load_fail'), file_name))
+			if ret is not None:  # no outside exception
+				self.send_message(info, self.t('command_manager.enable_plugin.success' if ret.return_value else 'command_manager.load_plugin.fail', file_name))
 
 	def reload_all_plugin(self, info):
 		ret = self.function_call(info, self.server.plugin_manager.refresh_all_plugins, 'reload_all_plugin', success_message=False)

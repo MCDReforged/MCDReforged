@@ -235,7 +235,7 @@ MCDR 提供了一些控制 MCDR 的命令，它们均可在游戏中通过聊天
 | !!MCDR |  | 显示帮助信息
 | !!MCDR status |  | 显示 MCDR 的状态
 | !!MCDR reload | !!MCDR r | 显示 reload 命令的帮助信息
-| !!MCDR reload plugin | !!MCDR r plg | 重新加载插件
+| !!MCDR reload plugin | !!MCDR r plg | 加载 / 重载 / 卸载**有修改的**插件
 | !!MCDR reload config | !!MCDR r cfg | 重新加载配置文件
 | !!MCDR reload permission | !!MCDR r perm | 重新加载权限文件
 | !!MCDR reload all | !!MCDR r all | 重新加载上述所有
@@ -244,7 +244,12 @@ MCDR 提供了一些控制 MCDR 的命令，它们均可在游戏中通过聊天
 | !!MCDR permission set \<player\> \<level\> | !!MCDR perm set \<player\> \<level\> | 将玩家 \<player\> 的权限等级设置为 \<level\>
 | !!MCDR permission remove \<player\> | !!MCDR perm rm \<player\> | 将玩家 \<player\> 从权限等级数据库中移除
 | !!MCDR permission setdefault \<level\> | !!MCDR perm setd \<level\> | 将默认权限等级设置为 \<level\>
-
+| !!MCDR plugin list | !!MCDR plg list | 列出所有的插件
+| !!MCDR plugin load \<plugin\> | !!MCDR plg load \<plugin\> | 加载 / 重载名为 \<plugin\> 的插件
+| !!MCDR plugin enable \<plugin\> | !!MCDR plg enable \<plugin\> | 启用名为 \<plugin\> 的插件
+| !!MCDR plugin disable \<plugin\> | !!MCDR plg disable \<plugin\> |  禁用名为 \<plugin\> 的插件
+| !!MCDR plugin reloadall | !!MCDR plg reloadall | 加载 / 重载 / 卸载**所有**插件
+  
 只有具有 `admin` 权限等级的玩家才被允许通过游戏输入执行这些命令
 
 除此之外还有一个 `!!help` 指令来展示所有的注册了的插件帮助信息
