@@ -6,6 +6,7 @@ import traceback
 
 from utils.plugin import HelpMessage
 from utils import constant, tool
+from utils.stext import *
 from utils.info import InfoSource
 from utils.permission_manager import PermissionLevel
 
@@ -227,8 +228,11 @@ class CommandManager:
 	# --------------
 
 	def process_help_command(self, info):
-		help_messages = [HelpMessage('!!MCDR', self.t('command_manager.mcdr_help_message'))]
+		help_messages = [HelpMessage('!!MCDR', self.t('command_manager.mcdr_help_message'), SText('MCDR', color=SColor.gold))]
 		for plugin in self.server.plugin_manager.plugins:
 			help_messages.extend(plugin.help_messages)
-		for prefix, message in sorted(help_messages, key=lambda x: x.prefix):
-			self.send_message(info, '§7{}§r: {}'.format(prefix, message))
+		for prefix, message, name in sorted(help_messages, key=lambda x: x.prefix.capitalize()):
+			self.send_message(info, SText('§7{}§r: {}'.format(prefix, message))
+				.set_click_event(SAction.suggest_command, prefix)
+				.set_hover_event(name)
+			)

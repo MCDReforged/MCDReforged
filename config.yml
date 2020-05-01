@@ -78,6 +78,6 @@ download_update: true
 
 
 # Debug mode switch. Don't change it to true unless necessary
-debug_mode: true
+debug_mode: false
 
 # Missing options down below

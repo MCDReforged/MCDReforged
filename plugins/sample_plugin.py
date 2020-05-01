@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import random
+from utils.stext import *
 
 counter = 0
 secret = random.random()
@@ -69,6 +70,18 @@ is_rcon_running: {}
 			global secret
 			server.reply(info, 'My secret number is {}\nAnd You know it too {}'.format(
 				secret, server.get_plugin_instance('sample_plugin').secret)
+			)
+		if info.content == '!!SText':
+			server.reply(info,
+				SText('SText Test', color=SColor.light_purple, styles=SStyle.italic).set_hover_event('QwQ') +
+				'\n===\n' +
+				STextList(
+					SText('>>>>>>> Click me <<<<<<<\n').set_click_event(SAction.suggest_command, '!!SText').set_hover_event(
+						SText('www', styles=[SStyle.obfuscated, SStyle.underlined]),
+						'<- guess what is this'
+					),
+					SText('Have you clicked that?')
+				)
 			)
 
 

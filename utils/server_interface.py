@@ -1,16 +1,13 @@
 # -*- coding: utf-8 -*-
 # An interface class for plugins to control the server
+import json
 import threading
 import time
 
 from utils import tool
 from utils.info import Info
-from utils.plugin import PluginThread
 from utils.server_status import ServerStatus
-
-
-def format_string(data):
-	return str(data).replace('\\', '\\\\').replace('"', '\\"').replace('\n', '\\n')
+from utils.stext import *
 
 
 class ServerInterface:
@@ -89,12 +86,16 @@ class ServerInterface:
 	def say(self, text, is_plugin_call=True):
 		if is_plugin_call:
 			self.logger.debug('Plugin called say("{}")'.format(text))
-		self.execute('tellraw @a {{"text":"{}"}}'.format(format_string(text)), is_plugin_call=False)
+		self.tell('@a', text, is_plugin_call=False)
 
 	def tell(self, player, text, is_plugin_call=True):
 		if is_plugin_call:
 			self.logger.debug('Plugin called tell("{}", "{}")'.format(player, text))
-		self.execute('tellraw {} {{"text":"{}"}}'.format(player, format_string(text)), is_plugin_call=False)
+		if isinstance(text, STextBase):
+			content = text.to_json_str()
+		else:
+			content = json.dumps(text)
+		self.execute('tellraw {} {}'.format(player, content), is_plugin_call=False)
 
 	# reply to the info source, auto detects
 	def reply(self, info, msg, is_plugin_call=True):
@@ -103,7 +104,7 @@ class ServerInterface:
 		if info.is_player:
 			self.tell(info.player, msg, is_plugin_call=False)
 		else:
-			for line in msg.splitlines():
+			for line in str(msg).splitlines():
 				self.__server.logger.info(tool.clean_minecraft_color_code(line))
 
 	# ------------------------

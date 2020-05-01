@@ -6,7 +6,7 @@ import hashlib
 from utils import tool
 
 
-HelpMessage = collections.namedtuple('HelpMessage', 'prefix message')
+HelpMessage = collections.namedtuple('HelpMessage', 'prefix message plugin_name')
 
 
 class Plugin:
@@ -44,7 +44,7 @@ class Plugin:
 		self.server.logger.debug('Plugin {} loaded, file sha512 {}'.format(self.file_path, self.file_hash))
 
 	def add_help_message(self, prefix, message):
-		self.help_messages.append(HelpMessage(prefix, message))
+		self.help_messages.append(HelpMessage(prefix, message, self.file_name))
 		self.server.logger.debug('Plugin Added help message "{}: {}"'.format(prefix, message))
 
 	def file_changed(self):
