@@ -40,6 +40,8 @@ Both of these parameters are str, among which:
 
 ### server
 
+**Read `utils/server_interface.py` to help you understand its functionality**
+
 This is a object for the plugin to interact with the server. It belongs to the ServerInterface class in `utils/server_interface.py`
 
 It has following constants:
@@ -76,9 +78,22 @@ It also has these following methods:
 | execute(text) | Send a string `text` to the stdin of the server with a extra `\n` at the end |
 | say(text) | Use `tellraw @a` to broadcast message `text` in the server |
 | tell(player, text) | Use `tellraw <player>` to send message `text` to player `<player>` |
-| reply(info, text) | Send a string `text` to the info source: if it's from a player calls `tell(info.player, text)`; if not uses MCDR's logger to info `text` to the console
+| reply(info, text) | Send `text` to the info source: if it's from a player calls `tell(info.player, text)`; if not uses MCDR's logger to info `text` to the console
 
-If there special characters in string `text`, including `"`, `\\` and `\n`, MCDR will automatically escape them so you don't need to worry about them 
+`text` could be a `str` or [`STextBase`](https://github.com/Fallen-Breath/MCDReforged/blob/master/doc/utils.md#stextbase) (`SText`, `STextList`)
+
+**Plugin Management**
+
+| Method | Function |
+|---|---|
+| load_plugin(plugin_name) | Load a plugin named `plugin_name`. If it's already loaded, reload it |
+| enable_plugin(plugin_name) | Enable a plugin named `plugin_name`. The plugin needs to be disbaled, that is its file name suffix is `.py.disabled` |
+| disable_plugin(plugin_name) | Disable a plugin named `plugin_name` |
+| reload_all_plugins() | Reload all plugins, load all new plugins and then unload all removed plugins |
+| reload_changed_plugins() | Reload all **changed** plugins, load all new plugins and then unload all removed plugins |
+| get_plugin_list() | Return a `str` list containing all loaded plugin name like `["pluginA.py", "pluginB.py"]` |
+
+`plugin_name` can be `"my_plugin"` or `"my_plugin.py"`
 
 **Other**
 

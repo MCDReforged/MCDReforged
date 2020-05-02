@@ -170,6 +170,70 @@ class ServerInterface:
 				self.logger.info(tool.clean_minecraft_color_code(line))
 
 	# ------------------------
+	#          Plugin
+	# ------------------------
+
+	@log_call
+	def load_plugin(self, plugin_name):
+		"""
+		Load a plugin from the given plugin name
+		If the plugin is not loaded, load the plugin. Otherwise reload the plugin
+
+		:param plugin_name: a str, The name of the plugin. it can be "my_plugin.py" or "my_plugin"
+		:return: A bool, if action succeeded
+		"""
+		return bool(self.__server.plugin_manager.load_plugin(plugin_name))
+
+	@log_call
+	@return_if_success
+	def enable_plugin(self, plugin_name):
+		"""
+		Enable the plugin. Removed the ".disabled" suffix and load it
+
+		:param plugin_name: a str, The name of the displayed plugin. it can be "my_plugin.py.disabled" or "my_plugin.py" or "my_plugin"
+		:return: A bool, if action succeeded
+		"""
+		self.__server.plugin_manager.enable_plugin(plugin_name)
+
+	@log_call
+	@return_if_success
+	def disable_plugin(self, plugin_name):
+		"""
+		Disable the plugin. Unload it and add a ".disabled" suffix to its file name
+
+		:param plugin_name: a str, The name of the plugin. it can be "my_plugin.py" or "my_plugin"
+		:return: A bool, if action succeeded
+		"""
+		self.__server.plugin_manager.disable_plugin(plugin_name)
+
+	@log_call
+	def reload_all_plugins(self):
+		"""
+		Reload all plugins, load all new plugins and then unload all removed plugins
+
+		:return: None
+		"""
+		self.__server.plugin_manager.reload_all_plugins()
+
+	@log_call
+	def reload_changed_plugins(self):
+		"""
+		Reload all changed plugins, load all new plugins and then unload all removed plugins
+
+		:return: None
+		"""
+		self.__server.plugin_manager.reload_changed_plugins()
+
+	@log_call
+	def get_plugin_list(self):
+		"""
+		Return a str list containing all loaded plugin name like ["pluginA.py", "pluginB.py"]
+
+		:return: a str list
+		"""
+		return self.__server.plugin_manager.get_plugin_file_list_all()
+
+	# ------------------------
 	#          Other
 	# ------------------------
 
@@ -227,67 +291,3 @@ class ServerInterface:
 		:return: None
 		"""
 		threading.current_thread().plugin.add_help_message(prefix, message)
-
-	# ------------------------
-	#          Plugin
-	# ------------------------
-
-	@log_call
-	def load_plugin(self, plugin_name: str) -> bool:
-		"""
-		Load a plugin from the given plugin name
-		If the plugin is not loaded, load the plugin. Otherwise reload the plugin
-
-		:param plugin_name: a str, The name of the plugin. it can be "my_plugin.py" or "my_plugin"
-		:return: A bool, if action succeeded
-		"""
-		return bool(self.__server.plugin_manager.load_plugin(plugin_name))
-
-	@log_call
-	@return_if_success
-	def enable_plugin(self, plugin_name: str):
-		"""
-		Enable the plugin. Removed the ".disabled" suffix and load it
-
-		:param plugin_name: a str, The name of the displayed plugin. it can be "my_plugin.py.disabled" or "my_plugin.py" or "my_plugin"
-		:return: A bool, if action succeeded
-		"""
-		self.__server.plugin_manager.enable_plugin(plugin_name)
-
-	@log_call
-	@return_if_success
-	def disable_plugin(self, plugin_name):
-		"""
-		Disable the plugin. Unload it and add a ".disabled" suffix to its file name
-
-		:param plugin_name: a str, The name of the plugin. it can be "my_plugin.py" or "my_plugin"
-		:return: A bool, if action succeeded
-		"""
-		self.__server.plugin_manager.disable_plugin(plugin_name)
-
-	@log_call
-	def reload_all_plugins(self):
-		"""
-		Reload all plugins, load all new plugins and then unload all removed plugins
-
-		:return: None
-		"""
-		self.__server.plugin_manager.reload_all_plugins()
-
-	@log_call
-	def reload_changed_plugins(self):
-		"""
-		Reload all changed plugins, load all new plugins and then unload all removed plugins
-
-		:return: None
-		"""
-		self.__server.plugin_manager.reload_changed_plugins()
-
-	@log_call
-	def get_plugin_list(self):
-		"""
-		Return a list containing all loaded plugin name like ["pluginA.py", "pluginB.py"]
-
-		:return: a str list
-		"""
-		return self.__server.plugin_manager.get_plugin_file_list_all()

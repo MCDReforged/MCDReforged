@@ -40,6 +40,8 @@ MCDReforged 插件文档
 
 ### server
 
+**阅读 `utils/server_interface.py` 有助于理解它的功能**
+
 这是用于插件与服务端进行交互的对象，属于 `utils/server_interface.py` 中的 ServerInterface 类
 
 它具有以下常量：
@@ -74,11 +76,24 @@ MCDReforged 插件文档
 | 方法 | 功能 |
 |---|---|
 | execute(text) | 发送字符串 `text` 至服务端的标准输入流，并自动在其后方追加一个 `\n` |
-| say(text) | 使用 `tellraw @a` 来在服务端中广播字符串消息 `text` |
-| tell(player, text) | 使用 `tellraw <player>` 来在对玩家 `<player>` 发送字符串消息 `text` |
-| reply(info, text) | 向消息源发生消息字符串 `text`: 如果消息来自玩家则调用 `tell(info.player, text)`; 如果不是则调用 MCDR 的 logger 来将 `text` 告示至控制台
+| say(text) | 使用 `tellraw @a` 来在服务端中广播消息 |
+| tell(player, text) | 使用 `tellraw <player>` 来在对玩家 `<player>` 发送消息 |
+| reply(info, text) | 向消息源发生消息: 如果消息来自玩家则调用 `tell(info.player, text)`; 如果不是则调用 MCDR 的 logger 来将 `text` 告示至控制台
 
-字符串 `text` 中如果含有特殊字符 `"`、`\\`、`\n`，MCDR 会自动对其进行转义，因此无需担心传入的字符串格式
+`text` 可为一个 `str` 或者 [`STextBase`](https://github.com/Fallen-Breath/MCDReforged/blob/master/doc/utils.md#stextbase) (`SText`, `STextList`)
+
+**插件管理**
+
+| 方法 | 功能 |
+|---|---|
+| load_plugin(plugin_name) | 加载名为 `plugin_name` 的插件。如果该插件已加载则重载它 |
+| enable_plugin(plugin_name) | 启用名为 `plugin_name` 的插件。该插件需已被禁用，即文件名后缀为 `.py.disabled` |
+| disable_plugin(plugin_name) | 禁用名为 `plugin_name` 的插件 |
+| reload_all_plugins() | 重载所有插件，加载新的插件并卸载移除的插件 |
+| reload_changed_plugins() | 重载所有**文件有变化的**插件，加载新的插件并卸载移除的插件 |
+| get_plugin_list() | 返回一个 `str` 列表代表已加载的插件的文件名，如 `["pluginA.py", "pluginB.py"]` |
+
+`plugin_name` 可为 `"my_plugin"` 或者 `"my_plugin.py"`
 
 **其他**
 
