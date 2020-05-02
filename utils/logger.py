@@ -5,12 +5,32 @@ import os
 import sys
 import time
 import zipfile
-from logging.handlers import TimedRotatingFileHandler
+from colorlog import ColoredFormatter
 
 
 class Logger:
-	console_fmt = logging.Formatter('[%(name)s] [%(asctime)s] [%(threadName)s/%(levelname)s]: %(message)s', datefmt='%H:%M:%S')
-	file_fmt = logging.Formatter('[%(name)s] [%(asctime)s] [%(threadName)s/%(levelname)s]: %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+	console_fmt = ColoredFormatter(
+		'[%(name)s] [%(asctime)s] [%(threadName)s/%(log_color)s%(levelname)s%(reset)s]: %(message_log_color)s%(message)s%(reset)s',
+		log_colors={
+			'DEBUG': 'blue',
+			'INFO': 'green',
+			'WARNING': 'yellow',
+			'ERROR': 'bold_red',
+			'CRITICAL': 'bold_red',
+		},
+		secondary_log_colors={
+			'message': {
+				'WARNING': 'yellow',
+				'ERROR': 'red',
+				'CRITICAL': 'red'
+			}
+		},
+		datefmt='%H:%M:%S'
+	)
+	file_fmt = logging.Formatter(
+		'[%(name)s] [%(asctime)s] [%(threadName)s/%(levelname)s]: %(message)s',
+		datefmt='%Y-%m-%d %H:%M:%S'
+	)
 
 	def __init__(self, server, name=None):
 		self.server = server

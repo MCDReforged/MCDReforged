@@ -2,6 +2,7 @@
 import os
 
 from utils import tool, constant
+from utils.stext import *
 from utils.plugin import Plugin
 
 
@@ -112,8 +113,8 @@ class PluginManager:
 	# Multiple plugin manipulation
 
 	def load_new_plugins(self):
-		counter_load = 0
-		counter_all = 0
+		load_list = []
+		list_fail = []
 		name_dict = self.get_loaded_plugin_file_name_dict()
 		new_plugins = []
 		for file_name in self.get_plugin_file_list_all():
@@ -121,27 +122,32 @@ class PluginManager:
 				plugin = self.load_plugin(file_name, call_event=False)
 				if plugin is not None:
 					new_plugins.append(plugin)
-				counter_load += bool(plugin)
-				counter_all += 1
+					load_list.append(plugin.file_name)
+				else:
+					list_fail.append(file_name)
 		for plugin in new_plugins:
 			plugin.call_on_load()
-		return counter_load, counter_all
+		return load_list, list_fail
 
 	# reduce repeat code
 	def __manipulate_existed_plugins(self, check, func):
-		counter_done = 0
-		counter_all = 0
+		done_list = []
+		list_fail = []
 		for plugin in self.plugins[:]:
 			if check(plugin):
-				counter_done += func(plugin)
-				counter_all += 1
-		return counter_done, counter_all
+				if func(plugin):
+					done_list.append(plugin.file_name)
+				else:
+					list_fail.append(plugin.file_name)
+		return done_list, list_fail
 
-	def reload_existed_plugins(self):
+	# reload plugins that are loaded and still existed in the plugin folder
+	def __reload_existed_plugins(self):
 		file_list = self.get_loaded_plugin_file_name_list()
 		return self.__manipulate_existed_plugins(lambda p: p.file_name in file_list, self.reload_plugin)
 
-	def reload_changed_plugins(self):
+	# reload plugins that are loaded and still existed in the plugin folder, and its file has been modified
+	def __reload_changed_plugins(self):
 		file_list = self.get_loaded_plugin_file_name_list()
 		return self.__manipulate_existed_plugins(lambda p: p.file_name in file_list and p.file_changed(), self.reload_plugin)
 
@@ -152,30 +158,34 @@ class PluginManager:
 	def __refresh_plugins(self, reload_all):
 		self.server.logger.info(self.server.t('plugin_manager.__refresh_plugins.loading'))
 
-		counter_reload, counter_all1 = self.reload_existed_plugins() if reload_all else self.reload_changed_plugins()
-		counter_load, counter_all2 = self.load_new_plugins()
-		counter_unload, counter_all3 = self.unload_removed_plugins()
+		reload_list, reload_fail_list = self.__reload_existed_plugins() if reload_all else self.__reload_changed_plugins()
+		load_list, load_fail_list = self.load_new_plugins()
+		unload_list, unload_fail_list = self.unload_removed_plugins()
+		fail_list = reload_fail_list + load_fail_list + unload_fail_list
 
-		counter_all = counter_all1 + counter_all2 + counter_all3
-		counter_fail = counter_all - counter_load - counter_unload - counter_reload
 		msg = []
-		if counter_load > 0:
-			msg.append(self.server.t('plugin_manager.__refresh_plugins.info_loaded', counter_load))
-		if counter_unload > 0:
-			msg.append(self.server.t('plugin_manager.__refresh_plugins.info_unloaded', counter_unload))
-		if counter_reload > 0:
-			msg.append(self.server.t('plugin_manager.__refresh_plugins.info_reloaded', counter_reload))
-		if counter_fail > 0:
-			msg.append(self.server.t('plugin_manager.__refresh_plugins.info_fail', counter_fail))
+		if load_list:
+			msg.extend([SText(self.server.t('plugin_manager.__refresh_plugins.info_loaded', len(load_list))).set_hover_text('\n'.join(load_list)), '; '])
+		if unload_list:
+			msg.extend([SText(self.server.t('plugin_manager.__refresh_plugins.info_unloaded', len(unload_list))).set_hover_text('\n'.join(unload_list)), '; '])
+		if reload_list:
+			msg.extend([SText(self.server.t('plugin_manager.__refresh_plugins.info_reloaded', len(reload_list))).set_hover_text('\n'.join(reload_list)), '; '])
+		if fail_list:
+			msg.extend([SText(self.server.t('plugin_manager.__refresh_plugins.info_fail', len(fail_list))).set_hover_text('\n'.join(fail_list)), '; '])
 		if len(msg) == 0:
-			msg = [self.server.t('plugin_manager.__refresh_plugins.info_none')]
-		msg.append(self.server.t('plugin_manager.__refresh_plugins.info_plugin_amount', len(self.plugins)))
-		return '; '.join(msg)
+			msg = [self.server.t('plugin_manager.__refresh_plugins.info_none'), '; ']
+		msg.append(SText(self.server.t('plugin_manager.__refresh_plugins.info_plugin_amount', len(self.plugins)))
+			.set_hover_text('\n'.join([plugin.file_name for plugin in self.plugins]))
+			.set_click_event(SAction.suggest_command, '!!MCDR plugin list')
+		)
+		return STextList(*tuple(msg))
 
-	def refresh_all_plugins(self):
+	# an interface to call, load / reload / unload all plugins
+	def reload_all_plugins(self):
 		return self.__refresh_plugins(True)
 
-	def refresh_changed_plugins(self):
+	# an interface to call, load / reload / unload all changed plugins
+	def reload_changed_plugins(self):
 		return self.__refresh_plugins(False)
 
 	def call(self, func, args=(), wait=False):

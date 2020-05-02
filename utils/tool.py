@@ -53,4 +53,4 @@ def get_all_base_class(cls):
 
 
 def clean_minecraft_color_code(text):
-	return re.sub('§[\w0-9]', '', text)
+	return re.sub('§[\w0-9]', '', str(text))

@@ -126,7 +126,7 @@ Set the click event to action `action` and value `value`
 
 Return the SText itself
 
-#### Stext.set_hover_event(*args) -> SText
+#### Stext.set_hover_text(*args) -> SText
 
 Set the hover text to `*args`
 
@@ -137,6 +137,8 @@ Return the SText itself
 ### STextList
 
 It's a list of SText
+
+When converted to json object for displaying to the game it will at a extar empty string at the front to prevent the first object's style affecting the later ones
 
 ### STextList.STextList(*args)
 

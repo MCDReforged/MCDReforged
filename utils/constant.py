@@ -7,6 +7,7 @@ VERSION = '0.8.0-alpha'
 NAME_SHORT = 'MCDR'
 NAME = 'MCDReforged'
 NAME_FULL = 'MCDaemonReforged'
+GITHUB_URL = 'https://github.com/Fallen-Breath/MCDReforged'
 
 CONFIG_FILE = 'config.yml'
 PERMISSION_FILE = 'permission.yml'

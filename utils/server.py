@@ -18,6 +18,7 @@ from utils.server_status import ServerStatus
 from utils.server_interface import ServerInterface
 from utils.update_helper import UpdateHelper
 
+
 class Server:
 	def __init__(self):
 		self.console_input_thread = None
@@ -81,9 +82,8 @@ class Server:
 		self.connect_rcon()
 
 	def load_plugins(self):
-		msg = tool.clean_minecraft_color_code(self.plugin_manager.refresh_all_plugins())
+		msg = tool.clean_minecraft_color_code(self.plugin_manager.reload_all_plugins())
 		self.logger.info(msg)
-		return msg
 
 	def load_reactor(self, folder):
 		reactors = []
@@ -221,7 +221,7 @@ class Server:
 			parsed_result = self.parser_manager.get_parser().parse_server_stdout_raw(text)
 		else:
 			self.logger.debug('Parsed text from server stdin:')
-			for line in str(parsed_result).splitlines():
+			for line in parsed_result.format_text().splitlines():
 				self.logger.debug('    {}'.format(line))
 		self.react(parsed_result)
 

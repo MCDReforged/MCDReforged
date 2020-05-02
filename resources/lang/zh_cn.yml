@@ -105,8 +105,8 @@ command_manager.command_not_found: |
 command_manager.command_not_found_suggest: |
   点击以输入 "§7{0}§r"
 
-command_manager.reload_plugins.fail: |
-  插件重载§c失败§r
+command_manager.reload_changed_plugins.fail: |
+  重载变化的插件§c失败§r
 
 command_manager.reload_config.fail: |
   配置文件重载§c失败§r
@@ -228,7 +228,7 @@ plugin_manager.reload_plugin.reload_fail: |
 plugin_manager.reload_plugin.reload_success: |
   插件 {0} 已重载
 
-plugin_manager.refresh_all_plugins.loading: |
+plugin_manager.reload_all_plugins.loading: |
   加载插件中
 
 plugin_manager.__refresh_plugins.info_loaded: |
@@ -247,7 +247,7 @@ plugin_manager.__refresh_plugins.info_none: |
   无插件变更
 
 plugin_manager.__refresh_plugins.info_plugin_amount: |
-  插件总数: §7{0}§
+  已加载插件总数: §7{0}§r
 
 rcon_manager.connect.connection_fail: |
   Rcon 连接失败: {0}

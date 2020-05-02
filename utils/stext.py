@@ -84,7 +84,7 @@ class SText(STextBase):
 		}
 		return self
 
-	def set_hover_event(self, *args):
+	def set_hover_text(self, *args):
 		self.data['hoverEvent'] = {
 			'action': 'show_text',
 			'value': {
@@ -110,7 +110,7 @@ class STextList(STextBase):
 				self.data.append(SText(str(obj)))
 
 	def to_json_object(self):
-		return [t.to_json_object() for t in self.data]
+		return [''] + [t.to_json_object() for t in self.data]  # to disable style inherit
 
 	def to_plain_text(self):
 		return ''.join([obj.to_plain_text() for obj in self.data])

@@ -126,7 +126,7 @@ MCDReforged 工具文档
 
 返回 Stext 自身
 
-#### Stext.set_hover_event(*args) -> SText
+#### Stext.set_hover_text(*args) -> SText
 
 设置悬浮文本
 
@@ -137,6 +137,8 @@ MCDReforged 工具文档
 ### STextList
 
 一个由 SText 组成的列表
+
+当转换为 json 格式用于输出至游戏中时，会在前面额外添加一个空串，从而防止第一个元素的样式影响到后方元素
 
 ### STextList.STextList(*args)
 

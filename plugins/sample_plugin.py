@@ -11,12 +11,12 @@ def add_help_message(server):
 	server.add_help_message('!!start', 'Start the server')
 	server.add_help_message('!!stop', 'Stop the server')
 	server.add_help_message('!!restart', 'Restart the server')
-	server.add_help_message('!!rcon', 'Rcon test')
+	server.add_help_message('!!rcon', 'Rcaon test')
 	server.add_help_message('!!permission', 'Get permission level')
 	server.add_help_message('!!error', 'What is 1/0?')
 	server.add_help_message('!!status', 'Get server status')
 	server.add_help_message('!!secret', 'get_plugin_instance() test')
-	server.add_help_message('!!stext', SText('stext test').set_hover_event('it', ' ', 'works', SText('?', styles=SStyle.obfuscated)))
+	server.add_help_message('!!stext', SText('stext test').set_hover_text('it', ' ', 'works', SText('?', styles=SStyle.obfuscated)))
 
 
 def on_load(server, old_module):
@@ -74,15 +74,15 @@ is_rcon_running: {}
 			)
 		if info.content == '!!SText':
 			server.reply(info,
-				SText('SText Test', color=SColor.light_purple, styles=SStyle.italic).set_hover_event('QwQ') +
+				SText('SText Test', color=SColor.light_purple, styles=SStyle.italic).set_hover_text('QwQ') +
 				'\n===\n' +
 				STextList(
-					SText('>>>>>>> Click me <<<<<<<\n').set_click_event(SAction.suggest_command, '!!SText').set_hover_event(
+					SText('>>>>>>> Click me <<<<<<<\n').set_click_event(SAction.suggest_command, '!!SText').set_hover_text(
 						SText('www', styles=[SStyle.obfuscated, SStyle.underlined]),
 						'<- guess what is this\n',
 						'tbh idk'
 					),
-					SText('Have you clicked§f that?', styles=SStyle.bold).set_hover_event('stop lazy')
+					SText('Have you clicked§f that?', styles=SStyle.bold).set_hover_text('stop lazy')
 				)
 			)
 

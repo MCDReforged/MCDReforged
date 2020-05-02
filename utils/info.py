@@ -45,15 +45,17 @@ class Info:
 	def is_user(self):
 		return self.source == InfoSource.CONSOLE or self.is_player
 
-	def __str__(self):
+	def format_text(self):
 		try:
 			time_message = '{:0>2}:{:0>2}:{:0>2}'.format(self.hour, self.min, self.sec)
 		except:
 			time_message = 'Invalid'
-		ret = [
+		return '\n'.join([
 			'Time: {}; ID: {}'.format(time_message, self.id),
 			'Player: {}; Source: {}; Logging level: {}'.format(self.player, self.source, self.logging_level),
 			'Content: {}'.format(self.content),
 			'Raw content: {}'.format(self.raw_content)
-		]
-		return '\n'.join(ret)
+		])
+
+	def __str__(self):
+		return '; '.join(self.format_text().splitlines())

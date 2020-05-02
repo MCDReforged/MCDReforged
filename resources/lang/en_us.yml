@@ -97,7 +97,7 @@ command_manager.help_message_plugin: |
   §7!!MCDR plugin load §e<plugin>§r: Load / Reload a plugin named §e<plugin>§r
   §7!!MCDR plugin enable §e<plugin>§r: Enable & Load a plugin named §e<plugin>§r
   §7!!MCDR plugin disable §e<plugin>§r: Disable a plugin named §e<plugin>§r
-  §7!!MCDR plugin reloadall: Load / Reload / Unloaded §lall§r plugins
+  §7!!MCDR plugin reloadall§r: Load / Reload / Unloaded §lall§r plugins
 
 command_manager.command_not_found: |
   Command not found, type "§7{0}§r" to see help
@@ -182,7 +182,6 @@ command_manager.disable_plugin.fail: |
 
 command_manager.disable_plugin.success: |
   Disabled "§e{0}§r" §asuccessfully§r
-  Invalid plugin name "§e{0}§r"
 
 command_manager.load_plugin.fail: |
   §cFail§r to load plugin "§e{0}§r"
@@ -248,7 +247,7 @@ plugin_manager.__refresh_plugins.info_none: |
   No plugin has changed
 
 plugin_manager.__refresh_plugins.info_plugin_amount: |
-  Plugin amount: §7{0}§r
+  Loaded plugin amount: §7{0}§r
 
 rcon_manager.connect.connection_fail: |
   Rcon connection failed: {0}

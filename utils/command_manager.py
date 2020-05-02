@@ -29,7 +29,7 @@ class CommandManager:
 
 	def send_command_not_found(self, info, cmd):
 		self.send_message(info, SText(self.t('command_manager.command_not_found', cmd))
-			.set_hover_event(self.t('command_manager.command_not_found_suggest', cmd))
+			.set_hover_text(self.t('command_manager.command_not_found_suggest', cmd))
 			.set_click_event(SAction.run_command, cmd)
 		)
 
@@ -122,7 +122,7 @@ class CommandManager:
 	# Reload
 
 	def reload_changed_plugins(self, info):
-		ret = self.function_call(info, self.server.plugin_manager.refresh_changed_plugins, 'reload_changed_plugins', success_message=False)
+		ret = self.function_call(info, self.server.plugin_manager.reload_changed_plugins, 'reload_changed_plugins', success_message=False)
 		if ret is not None:
 			self.send_message(info, ret.return_value)
 
@@ -183,13 +183,13 @@ class CommandManager:
 			True: self.t('command_manager.print_mcdr_status.online'),
 			False: self.t('command_manager.print_mcdr_status.offline')
 		}
-		msg = []
-		msg.append(self.t('command_manager.print_mcdr_status.line1', constant.NAME, constant.VERSION))
-		msg.append(self.t('command_manager.print_mcdr_status.line2', self.t(self.server.server_status)))
-		msg.append(self.t('command_manager.print_mcdr_status.line3', self.server.is_server_startup()))
-		msg.append(self.t('command_manager.print_mcdr_status.line4', status_dict[self.server.server_interface.is_rcon_running(is_plugin_call=False)]))
-		msg.append(self.t('command_manager.print_mcdr_status.line5', len(self.server.plugin_manager.plugins)))
-		self.send_message(info, '\n'.join(msg))
+		self.send_message(info, STextList(
+			SText(self.t('command_manager.print_mcdr_status.line1', constant.NAME, constant.VERSION)).set_click_event(SAction.open_url, constant.GITHUB_URL).set_hover_text(SText(constant.GITHUB_URL, styles=SStyle.underlined, color=SColor.blue)), '\n',
+			SText(self.t('command_manager.print_mcdr_status.line2', self.t(self.server.server_status))), '\n',
+			SText(self.t('command_manager.print_mcdr_status.line3', self.server.is_server_startup())), '\n',
+			SText(self.t('command_manager.print_mcdr_status.line4', status_dict[self.server.server_interface.is_rcon_running(is_plugin_call=False)])), '\n',
+			SText(self.t('command_manager.print_mcdr_status.line5', len(self.server.plugin_manager.plugins))).set_click_event(SAction.suggest_command, '!!MCDR plugin list')
+		))
 		if info.source == InfoSource.CONSOLE and self.server.process is not None:
 			self.logger.info('PID: {}'.format(self.server.process.pid))
 
@@ -207,10 +207,10 @@ class CommandManager:
 				info, '§7-§r {}'.format(file_name)
 				+ SText(' [×]', color=SColor.gray)
 				.set_click_event(SAction.run_command, '!!MCDR plugin disable {}'.format(file_name))
-				.set_hover_event(self.t('command_manager.list_plugin.suggest_disable', file_name))
+				.set_hover_text(self.t('command_manager.list_plugin.suggest_disable', file_name))
 				+ SText(' [▷]', color=SColor.gray)
 				.set_click_event(SAction.run_command, '!!MCDR plugin load {}'.format(file_name))
-				.set_hover_event(self.t('command_manager.list_plugin.suggest_reload', file_name))
+				.set_hover_text(self.t('command_manager.list_plugin.suggest_reload', file_name))
 			)
 
 		self.send_message(info, self.t('command_manager.list_plugin.info_disabled_plugin', len(file_list_disabled)))
@@ -220,7 +220,7 @@ class CommandManager:
 				info, '§7-§r {}'.format(file_name) +
 				SText(' [✔]', color=SColor.gray)
 				.set_click_event(SAction.run_command, '!!MCDR plugin enable {}'.format(file_name))
-				.set_hover_event(self.t('command_manager.list_plugin.suggest_enable', file_name))
+				.set_hover_text(self.t('command_manager.list_plugin.suggest_enable', file_name))
 			)
 
 		self.send_message(info, self.t('command_manager.list_plugin.info_not_loaded_plugin', len(file_list_not_loaded)))
@@ -228,22 +228,29 @@ class CommandManager:
 			self.send_message(info, '§7-§r {}'.format(file_name)
 				+ SText(' [✔]', color=SColor.gray)
 				.set_click_event(SAction.run_command, '!!MCDR plugin load {}'.format(file_name))
-				.set_hover_event(self.t('command_manager.list_plugin.suggest_load', file_name))
+				.set_hover_text(self.t('command_manager.list_plugin.suggest_load', file_name))
 			)
 
-	def __manipulate_plugin(self, info, file_name, func, name):
+	def disable_plugin(self, info, file_name):
 		if not file_name.endswith(constant.PLUGIN_FILE_SUFFIX):
 			file_name += constant.PLUGIN_FILE_SUFFIX
 		if not os.path.isfile(os.path.join(self.server.plugin_manager.plugin_folder, file_name)):
 			self.send_message(info, self.t('command_manager.invalid_plugin_name', file_name))
 		else:
-			self.function_call(info, func, name, func_args=(file_name, ), message_args=(file_name, ))
-
-	def disable_plugin(self, info, file_name):
-		self.__manipulate_plugin(info, file_name, self.server.plugin_manager.disable_plugin, 'disable_plugin')
+			self.function_call(info, self.server.plugin_manager.disable_plugin, 'disable_plugin', func_args=(file_name, ), message_args=(file_name, ))
 
 	def load_plugin(self, info, file_name):
-		self.__manipulate_plugin(info, file_name, self.server.plugin_manager.load_plugin, 'load_plugin')
+		if not file_name.endswith(constant.PLUGIN_FILE_SUFFIX):
+			file_name += constant.PLUGIN_FILE_SUFFIX
+		if not os.path.isfile(os.path.join(self.server.plugin_manager.plugin_folder, file_name)):
+			self.send_message(info, self.t('command_manager.invalid_plugin_name', file_name))
+		else:
+			ret = self.function_call(info, self.server.plugin_manager.load_plugin, 'load_plugin',
+				func_args=(file_name, ), message_args=(file_name, ), success_message=False
+			)
+			if ret is not None:  # no outside exception
+				self.send_message(info, self.t('command_manager.load_plugin.{}'.format('success' if ret.return_value else 'fail'), file_name))
+
 
 	def enable_plugin(self, info, file_name):
 		file_name = tool.remove_suffix(file_name, constant.DISABLED_PLUGIN_FILE_SUFFIX)
@@ -253,14 +260,17 @@ class CommandManager:
 			self.send_message(info, self.t('command_manager.invalid_plugin_name', file_name))
 		else:
 			ret = self.function_call(info, self.server.plugin_manager.enable_plugin, 'enable_plugin',
-				func_args=(file_name, ), message_args=(file_name, ),
-				success_message=False
+				func_args=(file_name, ), message_args=(file_name, ), success_message=False
 			)
 			if ret is not None:  # no outside exception
-				self.send_message(info, self.t('command_manager.enable_plugin.success' if ret.return_value else 'command_manager.load_plugin.fail', file_name))
+				if ret.return_value:
+					message = self.t('command_manager.enable_plugin.success', file_name)
+				else:
+					message = self.t('command_manager.load_plugin.fail', file_name)
+				self.send_message(info, message)
 
 	def reload_all_plugin(self, info):
-		ret = self.function_call(info, self.server.plugin_manager.refresh_all_plugins, 'reload_all_plugin', success_message=False)
+		ret = self.function_call(info, self.server.plugin_manager.reload_all_plugins, 'reload_all_plugin', success_message=False)
 		if ret is not None:
 			self.send_message(info, ret.return_value)
 
@@ -275,6 +285,6 @@ class CommandManager:
 		for prefix, message, name in sorted(help_messages, key=lambda x: x.prefix.capitalize()):
 			self.send_message(info, SText('§7{}§r: '.format(prefix))
 				.set_click_event(SAction.suggest_command, prefix)
-				.set_hover_event(name)
+				.set_hover_text(name)
 				+ message
 			)
