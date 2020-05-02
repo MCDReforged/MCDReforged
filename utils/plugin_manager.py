@@ -143,12 +143,12 @@ class PluginManager:
 
 	# reload plugins that are loaded and still existed in the plugin folder
 	def __reload_existed_plugins(self):
-		file_list = self.get_loaded_plugin_file_name_list()
+		file_list = self.get_plugin_file_list_all()
 		return self.__manipulate_existed_plugins(lambda p: p.file_name in file_list, self.reload_plugin)
 
 	# reload plugins that are loaded and still existed in the plugin folder, and its file has been modified
 	def __reload_changed_plugins(self):
-		file_list = self.get_loaded_plugin_file_name_list()
+		file_list = self.get_plugin_file_list_all()
 		return self.__manipulate_existed_plugins(lambda p: p.file_name in file_list and p.file_changed(), self.reload_plugin)
 
 	def unload_removed_plugins(self):
