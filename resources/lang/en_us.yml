@@ -105,7 +105,7 @@ command_manager.command_not_found: |
 command_manager.command_not_found_suggest: |
   Click to input "§7{0}§r"
 
-command_manager.reload_changed_plugins.fail: |
+command_manager.refresh_changed_plugins.fail: |
   §cFail§r to reload changed plugins
 
 command_manager.reload_config.fail: |

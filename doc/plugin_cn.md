@@ -89,8 +89,8 @@ MCDReforged 插件文档
 | load_plugin(plugin_name) | 加载名为 `plugin_name` 的插件。如果该插件已加载则重载它 |
 | enable_plugin(plugin_name) | 启用名为 `plugin_name` 的插件。该插件需已被禁用，即文件名后缀为 `.py.disabled` |
 | disable_plugin(plugin_name) | 禁用名为 `plugin_name` 的插件 |
-| reload_all_plugins() | 重载所有插件，加载新的插件并卸载移除的插件 |
-| reload_changed_plugins() | 重载所有**文件有变化的**插件，加载新的插件并卸载移除的插件 |
+| refresh_all_plugins() | 重载所有插件，加载新的插件并卸载移除的插件 |
+| refresh_changed_plugins() | 重载所有**文件有变化的**插件，加载新的插件并卸载移除的插件 |
 | get_plugin_list() | 返回一个 `str` 列表代表已加载的插件的文件名，如 `["pluginA.py", "pluginB.py"]` |
 
 `plugin_name` 可为 `"my_plugin"` 或者 `"my_plugin.py"`

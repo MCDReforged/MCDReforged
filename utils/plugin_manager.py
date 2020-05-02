@@ -35,18 +35,17 @@ class PluginManager:
 		if type(obj) is Plugin:
 			return obj
 		else:
-			if not obj.endswith(constant.PLUGIN_FILE_SUFFIX):
-				obj += constant.PLUGIN_FILE_SUFFIX
+			file_name = tool.format_plugin_file_name(obj)
 			for plugin in self.plugins:
-				if plugin.file_name == obj:
+				if plugin.file_name == file_name:
 					return plugin
 		return None
 
 	# load and append the plugin to the plugin list
-	# file_name is a str like my_plugin.py
 	# call_event is to decide whether to call on_load or not
 	# return the plugin instance or None
 	def load_plugin(self, file_name, call_event=True):
+		file_name = tool.format_plugin_file_name(file_name)
 		try:
 			# get the existed one or create a new one
 			plugin = self.get_loaded_plugin_file_name_dict().get(file_name, Plugin(self.server, os.path.join(self.plugin_folder, file_name)))
@@ -92,16 +91,16 @@ class PluginManager:
 			return False
 
 	# enable and load
-	# file_name is my_plugin.py.disabled
 	def enable_plugin(self, file_name) -> bool:
+		file_name = tool.format_plugin_file_name_disabled(file_name)
 		file_path = os.path.join(self.plugin_folder, file_name)
 		new_file_path = tool.remove_suffix(file_path, constant.DISABLED_PLUGIN_FILE_SUFFIX)
 		if os.path.isfile(file_path):
 			os.rename(file_path, new_file_path)
-		return bool(self.load_plugin(os.path.basename(new_file_path)))
+			return bool(self.load_plugin(os.path.basename(new_file_path)))
+		return False
 
 	# unload and disable
-	# file_name is my_plugin.py
 	def disable_plugin(self, file_name):
 		plugin = self.get_plugin(file_name)
 		if plugin is not None:
@@ -147,7 +146,7 @@ class PluginManager:
 		return self.__manipulate_existed_plugins(lambda p: p.file_name in file_list, self.reload_plugin)
 
 	# reload plugins that are loaded and still existed in the plugin folder, and its file has been modified
-	def __reload_changed_plugins(self):
+	def __refresh_changed_plugins(self):
 		file_list = self.get_plugin_file_list_all()
 		return self.__manipulate_existed_plugins(lambda p: p.file_name in file_list and p.file_changed(), self.reload_plugin)
 
@@ -158,7 +157,7 @@ class PluginManager:
 	def __refresh_plugins(self, reload_all):
 		self.server.logger.info(self.server.t('plugin_manager.__refresh_plugins.loading'))
 
-		reload_list, reload_fail_list = self.__reload_existed_plugins() if reload_all else self.__reload_changed_plugins()
+		reload_list, reload_fail_list = self.__reload_existed_plugins() if reload_all else self.__refresh_changed_plugins()
 		load_list, load_fail_list = self.load_new_plugins()
 		unload_list, unload_fail_list = self.unload_removed_plugins()
 		fail_list = reload_fail_list + load_fail_list + unload_fail_list
@@ -181,11 +180,11 @@ class PluginManager:
 		return STextList(*tuple(msg))
 
 	# an interface to call, load / reload / unload all plugins
-	def reload_all_plugins(self):
+	def refresh_all_plugins(self):
 		return self.__refresh_plugins(True)
 
 	# an interface to call, load / reload / unload all changed plugins
-	def reload_changed_plugins(self):
+	def refresh_changed_plugins(self):
 		return self.__refresh_plugins(False)
 
 	def call(self, func, args=(), wait=False):

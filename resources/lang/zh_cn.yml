@@ -105,7 +105,7 @@ command_manager.command_not_found: |
 command_manager.command_not_found_suggest: |
   点击以输入 "§7{0}§r"
 
-command_manager.reload_changed_plugins.fail: |
+command_manager.refresh_changed_plugins.fail: |
   重载变化的插件§c失败§r
 
 command_manager.reload_config.fail: |
@@ -228,7 +228,7 @@ plugin_manager.reload_plugin.reload_fail: |
 plugin_manager.reload_plugin.reload_success: |
   插件 {0} 已重载
 
-plugin_manager.reload_all_plugins.loading: |
+plugin_manager.refresh_all_plugins.loading: |
   加载插件中
 
 plugin_manager.__refresh_plugins.info_loaded: |

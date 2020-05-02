@@ -57,7 +57,7 @@ class CommandManager:
 				self.send_help_message(info, self.t('command_manager.help_message_reload'))
 			elif len(args) == 3:
 				if args[2] in ['plugin', 'plg']:
-					self.reload_changed_plugins(info)
+					self.refresh_changed_plugins(info)
 				elif args[2] in ['config', 'cfg']:
 					self.reload_config(info)
 				elif args[2] in ['permission', 'perm']:
@@ -121,8 +121,8 @@ class CommandManager:
 
 	# Reload
 
-	def reload_changed_plugins(self, info):
-		ret = self.function_call(info, self.server.plugin_manager.reload_changed_plugins, 'reload_changed_plugins', success_message=False)
+	def refresh_changed_plugins(self, info):
+		ret = self.function_call(info, self.server.plugin_manager.refresh_changed_plugins, 'refresh_changed_plugins', success_message=False)
 		if ret is not None:
 			self.send_message(info, ret.return_value)
 
@@ -133,7 +133,7 @@ class CommandManager:
 		self.function_call(info, self.server.permission_manager.load, 'reload_permission')
 
 	def reload_all(self, info):
-		self.reload_changed_plugins(info)
+		self.refresh_changed_plugins(info)
 		self.reload_config(info)
 		self.reload_permission(info)
 
@@ -232,16 +232,14 @@ class CommandManager:
 			)
 
 	def disable_plugin(self, info, file_name):
-		if not file_name.endswith(constant.PLUGIN_FILE_SUFFIX):
-			file_name += constant.PLUGIN_FILE_SUFFIX
+		file_name = tool.format_plugin_file_name(file_name)
 		if not os.path.isfile(os.path.join(self.server.plugin_manager.plugin_folder, file_name)):
 			self.send_message(info, self.t('command_manager.invalid_plugin_name', file_name))
 		else:
 			self.function_call(info, self.server.plugin_manager.disable_plugin, 'disable_plugin', func_args=(file_name, ), message_args=(file_name, ))
 
 	def load_plugin(self, info, file_name):
-		if not file_name.endswith(constant.PLUGIN_FILE_SUFFIX):
-			file_name += constant.PLUGIN_FILE_SUFFIX
+		file_name = tool.format_plugin_file_name(file_name)
 		if not os.path.isfile(os.path.join(self.server.plugin_manager.plugin_folder, file_name)):
 			self.send_message(info, self.t('command_manager.invalid_plugin_name', file_name))
 		else:
@@ -251,11 +249,8 @@ class CommandManager:
 			if ret is not None:  # no outside exception
 				self.send_message(info, self.t('command_manager.load_plugin.{}'.format('success' if ret.return_value else 'fail'), file_name))
 
-
 	def enable_plugin(self, info, file_name):
-		file_name = tool.remove_suffix(file_name, constant.DISABLED_PLUGIN_FILE_SUFFIX)
-		file_name = tool.remove_suffix(file_name, constant.PLUGIN_FILE_SUFFIX)
-		file_name += constant.PLUGIN_FILE_SUFFIX + constant.DISABLED_PLUGIN_FILE_SUFFIX
+		file_name = tool.format_plugin_file_name_disabled(file_name)
 		if not os.path.isfile(os.path.join(self.server.plugin_manager.plugin_folder, file_name)):
 			self.send_message(info, self.t('command_manager.invalid_plugin_name', file_name))
 		else:
@@ -270,7 +265,7 @@ class CommandManager:
 				self.send_message(info, message)
 
 	def reload_all_plugin(self, info):
-		ret = self.function_call(info, self.server.plugin_manager.reload_all_plugins, 'reload_all_plugin', success_message=False)
+		ret = self.function_call(info, self.server.plugin_manager.refresh_all_plugins, 'reload_all_plugin', success_message=False)
 		if ret is not None:
 			self.send_message(info, ret.return_value)
 

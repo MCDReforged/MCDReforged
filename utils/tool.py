@@ -6,6 +6,8 @@ import re
 import sys
 import threading
 
+from utils import constant
+
 
 def start_thread(func, args, name=None):
 	thread = threading.Thread(target=func, args=args, name=name)
@@ -54,3 +56,14 @@ def get_all_base_class(cls):
 
 def clean_minecraft_color_code(text):
 	return re.sub('§[\w0-9]', '', str(text))
+
+
+def format_plugin_file_name(file_name):
+	file_name = remove_suffix(file_name, constant.DISABLED_PLUGIN_FILE_SUFFIX)
+	file_name = remove_suffix(file_name, constant.PLUGIN_FILE_SUFFIX)
+	file_name += constant.PLUGIN_FILE_SUFFIX
+	return file_name
+
+
+def format_plugin_file_name_disabled(file_name):
+	return format_plugin_file_name(file_name) + constant.DISABLED_PLUGIN_FILE_SUFFIX

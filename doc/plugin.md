@@ -89,8 +89,8 @@ It also has these following methods:
 | load_plugin(plugin_name) | Load a plugin named `plugin_name`. If it's already loaded, reload it |
 | enable_plugin(plugin_name) | Enable a plugin named `plugin_name`. The plugin needs to be disbaled, that is its file name suffix is `.py.disabled` |
 | disable_plugin(plugin_name) | Disable a plugin named `plugin_name` |
-| reload_all_plugins() | Reload all plugins, load all new plugins and then unload all removed plugins |
-| reload_changed_plugins() | Reload all **changed** plugins, load all new plugins and then unload all removed plugins |
+| refresh_all_plugins() | Reload all plugins, load all new plugins and then unload all removed plugins |
+| refresh_changed_plugins() | Reload all **changed** plugins, load all new plugins and then unload all removed plugins |
 | get_plugin_list() | Return a `str` list containing all loaded plugin name like `["pluginA.py", "pluginB.py"]` |
 
 `plugin_name` can be `"my_plugin"` or `"my_plugin.py"`

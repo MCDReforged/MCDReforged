@@ -207,22 +207,22 @@ class ServerInterface:
 		self.__server.plugin_manager.disable_plugin(plugin_name)
 
 	@log_call
-	def reload_all_plugins(self):
+	def refresh_all_plugins(self):
 		"""
 		Reload all plugins, load all new plugins and then unload all removed plugins
 
 		:return: None
 		"""
-		self.__server.plugin_manager.reload_all_plugins()
+		self.__server.plugin_manager.refresh_all_plugins()
 
 	@log_call
-	def reload_changed_plugins(self):
+	def refresh_changed_plugins(self):
 		"""
 		Reload all changed plugins, load all new plugins and then unload all removed plugins
 
 		:return: None
 		"""
-		self.__server.plugin_manager.reload_changed_plugins()
+		self.__server.plugin_manager.refresh_changed_plugins()
 
 	@log_call
 	def get_plugin_list(self):

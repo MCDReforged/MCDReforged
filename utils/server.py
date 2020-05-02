@@ -82,7 +82,7 @@ class Server:
 		self.connect_rcon()
 
 	def load_plugins(self):
-		msg = tool.clean_minecraft_color_code(self.plugin_manager.reload_all_plugins())
+		msg = tool.clean_minecraft_color_code(self.plugin_manager.refresh_all_plugins())
 		self.logger.info(msg)
 
 	def load_reactor(self, folder):

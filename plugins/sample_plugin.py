@@ -8,15 +8,16 @@ secret = random.random()
 
 
 def add_help_message(server):
-	server.add_help_message('!!start', 'Start the server')
-	server.add_help_message('!!stop', 'Stop the server')
-	server.add_help_message('!!restart', 'Restart the server')
-	server.add_help_message('!!rcon', 'Rcaon test')
-	server.add_help_message('!!permission', 'Get permission level')
-	server.add_help_message('!!error', 'What is 1/0?')
-	server.add_help_message('!!status', 'Get server status')
-	server.add_help_message('!!secret', 'get_plugin_instance() test')
-	server.add_help_message('!!stext', SText('stext test').set_hover_text('it', ' ', 'works', SText('?', styles=SStyle.obfuscated)))
+	server.add_help_message('!!!start', 'Start the server')
+	server.add_help_message('!!!stop', 'Stop the server')
+	server.add_help_message('!!!restart', 'Restart the server')
+	server.add_help_message('!!!rcon', 'Rcaon test')
+	server.add_help_message('!!!permission', 'Get permission level')
+	server.add_help_message('!!!error', 'What is 1/0?')
+	server.add_help_message('!!!status', 'Get server status')
+	server.add_help_message('!!!secret', 'get_plugin_instance() test')
+	server.add_help_message('!!!stext', SText('stext test').set_hover_text('it', ' ', 'works', SText('?', styles=SStyle.obfuscated)))
+	server.add_help_message('!!!plugin', SText('stext test').set_hover_text('it', ' ', 'works', SText('?', styles=SStyle.obfuscated)))
 
 
 def on_load(server, old_module):
@@ -41,23 +42,23 @@ def on_info(server, info):
 		if info.content == 'ping':
 			server.reply(info, 'pong')
 		if server.get_permission_level(info) == 3:
-			if info.content == '!!start':
+			if info.content == '!!!start':
 				server.start()
-			if info.content == '!!stop':
+			if info.content == '!!!stop':
 				server.stop_exit()
-			if info.content == '!!restart':
+			if info.content == '!!!restart':
 				server.restart()
-		if info.source == 1 and info.content.startswith('!!say '):
+		if info.source == 1 and info.content.startswith('!!!say '):
 			server.say(info.content[6:])
-		if info.content == '!!rcon':
+		if info.content == '!!!rcon':
 			server.reply(info, 'rcon is running? ' + str(server.is_rcon_running()))
 			if server.is_rcon_running():
 				server.reply(info, '"time query gametime" command result: ' + server.rcon_query('time query gametime'))
-		if info.content == '!!permission':
+		if info.content == '!!!permission':
 			server.reply(info, 'Your permission level is {}'.format(server.get_permission_level(info)))
-		if info.content == '!!error':
+		if info.content == '!!!error':
 			x = 1 / 0
-		if info.content == '!!status':
+		if info.content == '!!!status':
 			server.reply(info, '''
 is_server_running: {}
 is_server_startup: {}
@@ -67,17 +68,17 @@ is_rcon_running: {}
 				server.is_server_startup(),
 				server.is_rcon_running(),
 			))
-		if info.content == '!!secret':
+		if info.content == '!!!secret':
 			global secret
 			server.reply(info, 'My secret number is {}\nAnd You know it too {}'.format(
 				secret, server.get_plugin_instance('sample_plugin').secret)
 			)
-		if info.content == '!!SText':
+		if info.content == '!!!SText':
 			server.reply(info,
 				SText('SText Test', color=SColor.light_purple, styles=SStyle.italic).set_hover_text('QwQ') +
 				'\n===\n' +
 				STextList(
-					SText('>>>>>>> Click me <<<<<<<\n').set_click_event(SAction.suggest_command, '!!SText').set_hover_text(
+					SText('>>>>>>> Click me <<<<<<<\n').set_click_event(SAction.suggest_command, '!!!SText').set_hover_text(
 						SText('www', styles=[SStyle.obfuscated, SStyle.underlined]),
 						'<- guess what is this\n',
 						'tbh idk'
@@ -85,6 +86,19 @@ is_rcon_running: {}
 					SText('Have you clicked§f that?', styles=SStyle.bold).set_hover_text('stop lazy')
 				)
 			)
+		if info.content == '!!!plugin':
+			name = server.get_plugin_list()[0]
+			server.reply(info, 'I found "{}"'.format(name))
+			server.disable_plugin(name)
+			server.reply(info, 'I disabled "{}"'.format(name))
+			server.enable_plugin(name)
+			server.reply(info, 'I enabled "{}"'.format(name))
+			server.load_plugin(name)
+			server.reply(info, 'I reloaded "{}"'.format(name))
+			server.refresh_changed_plugins()
+			server.reply(info, 'I refreshed all changed plugins')
+			server.refresh_all_plugins()
+			server.reply(info, 'I refreshed EVERYTHING!')
 
 
 def on_player_joined(server, player):
