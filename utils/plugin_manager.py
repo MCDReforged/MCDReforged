@@ -152,7 +152,7 @@ class PluginManager:
 		return self.__manipulate_existed_plugins(lambda p: p.file_name in file_list and p.file_changed(), self.reload_plugin)
 
 	def unload_removed_plugins(self):
-		file_list = self.get_loaded_plugin_file_name_list()
+		file_list = self.get_plugin_file_list_all()
 		return self.__manipulate_existed_plugins(lambda p: p.file_name not in file_list, self.unload_plugin)
 
 	def __refresh_plugins(self, reload_all):
