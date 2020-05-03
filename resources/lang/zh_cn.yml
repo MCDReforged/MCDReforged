@@ -228,7 +228,7 @@ plugin_manager.reload_plugin.reload_fail: |
 plugin_manager.reload_plugin.reload_success: |
   插件 {0} 已重载
 
-plugin_manager.refresh_all_plugins.loading: |
+plugin_manager.__refresh_plugins.loading: |
   加载插件中
 
 plugin_manager.__refresh_plugins.info_loaded: |
