@@ -8,6 +8,7 @@ NAME_SHORT = 'MCDR'
 NAME = 'MCDReforged'
 NAME_FULL = 'MCDaemonReforged'
 GITHUB_URL = 'https://github.com/Fallen-Breath/MCDReforged'
+GITHUB_API_LATEST = 'https://api.github.com/repos/Fallen-Breath/MCDReforged/releases/latest'
 
 CONFIG_FILE = 'config.yml'
 PERMISSION_FILE = 'permission.yml'

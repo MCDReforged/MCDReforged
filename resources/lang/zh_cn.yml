@@ -283,10 +283,13 @@ parser_manager.load_re_death_message.fail: |
   死亡信息数据文件加载失败
 
 update_helper._check_update.check_fail: |
-  从 Github 检测最新版本失败
+  从 Github 检测最新版本失败: {0}
 
 update_helper._check_update.is_already_latest: |
   MCDR 已为最新版
+
+update_helper._check_update.newer_than_latest: |
+  MCDR 比 Github 中的最新版 {0} 更新，这是一个开发版吗？
 
 update_helper._check_update.new_version_detected: |
   已检测到新版本: {0}
