@@ -73,19 +73,6 @@ is_rcon_running: {}
 			server.reply(info, 'My secret number is {}\nAnd You know it too {}'.format(
 				secret, server.get_plugin_instance('sample_plugin').secret)
 			)
-		if info.content == '!!!rtext':
-			server.reply(info,
-				RText('RText Test', color=RColor.light_purple, styles=RStyle.italic).set_hover_text('QwQ') +
-				'\n===\n' +
-				RTextList(
-					RText('>>>>>>> Click me <<<<<<<\n').set_click_event(RAction.suggest_command, '!!!RText').set_hover_text(
-						RText('www', styles=[RStyle.obfuscated, RStyle.underlined]),
-						'<- guess what is this\n',
-						'tbh idk'
-					),
-					RText('Have you clicked§f that?', styles=RStyle.bold).set_hover_text('stop lazy')
-				)
-			)
 		if info.content == '!!!plugin':
 			name = server.get_plugin_list()[0]
 			server.reply(info, 'I found "{}"'.format(name))
@@ -99,6 +86,41 @@ is_rcon_running: {}
 			server.reply(info, 'I refreshed all changed plugins')
 			server.refresh_all_plugins()
 			server.reply(info, 'I refreshed EVERYTHING!')
+		if info.content == '!!!rtext':
+			server.reply(info,
+				RText('RText Test', color=RColor.light_purple, styles=RStyle.italic).set_hover_text('QwQ') +
+				'\n===\n' +
+				RTextList(
+					RText('>>>>>>> Click me <<<<<<<\n').set_click_event(RAction.suggest_command, '!!!RText').set_hover_text(
+						RText('www', styles=[RStyle.obfuscated, RStyle.underlined]),
+						'<- guess what is this\n',
+						'tbh idk'
+					),
+					RText('Have you clicked§f that?', styles=RStyle.bold).set_hover_text('stop lazy')
+				)
+			)
+		if info.content == '!!!color':
+			text = '''
+			§0 black
+			§1 dark_blue
+			§2 dark_green
+			§3 dark_aqua
+			§4 dark_red
+			§5 dark_purple
+			§6 gold
+			§7 gray
+			§8 dark_gray
+			§9 blue
+			§a green
+			§b aqua
+			§c red
+			§d light_purple
+			§l§e yellow
+			§f white
+			§l bold
+			§k random
+			'''.strip()
+			server.reply(info, '\n'.join([line.strip() for line in text.splitlines()]))
 
 
 def on_player_joined(server, player):

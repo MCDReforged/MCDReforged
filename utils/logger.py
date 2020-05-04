@@ -7,6 +7,16 @@ import time
 import zipfile
 from colorlog import ColoredFormatter
 
+from utils import tool
+
+
+class NoColorFormatter(logging.Formatter):
+	def __init__(self, *args, **kwargs):
+		super().__init__(*args, **kwargs)
+
+	def formatMessage(self, record):
+		return tool.clean_console_color_code(super().formatMessage(record))
+
 
 class Logger:
 	console_fmt = ColoredFormatter(
@@ -27,7 +37,7 @@ class Logger:
 		},
 		datefmt='%H:%M:%S'
 	)
-	file_fmt = logging.Formatter(
+	file_fmt = NoColorFormatter(
 		'[%(name)s] [%(asctime)s] [%(threadName)s/%(levelname)s]: %(message)s',
 		datefmt='%Y-%m-%d %H:%M:%S'
 	)

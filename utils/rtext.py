@@ -4,6 +4,7 @@
 # -*- coding: utf-8 -*-
 
 import json
+from colorama import Fore, Style
 
 
 class RColor:
@@ -23,6 +24,7 @@ class RColor:
 	light_purple = "light_purple"
 	yellow = "yellow"
 	white = "white"
+	reset = 'reset'
 
 
 class RStyle:
@@ -62,7 +64,12 @@ class RTextBase:
 
 
 class RText(RTextBase):
-	def __init__(self, text, color=RColor.white, styles=None):
+	def __new__(cls, text, *args, **kwargs):
+		if type(text) == cls:
+			return text
+		return super().__new__(cls)
+
+	def __init__(self, text, color=RColor.reset, styles=None):
 		if styles is None:
 			styles = []
 		elif styles is str:
@@ -95,7 +102,52 @@ class RText(RTextBase):
 		return self
 
 	def to_plain_text(self):
-		return self.data['text']
+		rcolor_dict = {
+			RColor.black: Fore.BLACK,
+			RColor.dark_blue: Fore.BLUE,
+			RColor.dark_green: Fore.GREEN,
+			RColor.dark_aqua: Fore.CYAN,
+			RColor.dark_red: Fore.RED,
+			RColor.dark_purple: Fore.MAGENTA,
+			RColor.gold: Fore.YELLOW,
+			RColor.gray: Style.RESET_ALL,
+			RColor.dark_gray: Style.RESET_ALL,
+			RColor.blue: Fore.LIGHTBLUE_EX,
+			RColor.green: Fore.LIGHTGREEN_EX,
+			RColor.aqua: Fore.LIGHTCYAN_EX,
+			RColor.red: Fore.LIGHTRED_EX,
+			RColor.light_purple: Fore.LIGHTMAGENTA_EX,
+			RColor.yellow: Fore.LIGHTYELLOW_EX,
+			RColor.white: Style.RESET_ALL,
+			RColor.reset: Style.RESET_ALL,
+		}
+		mc_color_dict = {
+			'§0': RColor.black,
+			'§1': RColor.dark_blue,
+			'§2': RColor.dark_green,
+			'§3': RColor.dark_aqua,
+			'§4': RColor.dark_red,
+			'§5': RColor.dark_purple,
+			'§6': RColor.gold,
+			'§7': RColor.gray,
+			'§8': RColor.dark_gray,
+			'§9': RColor.blue,
+			'§a': RColor.green,
+			'§b': RColor.aqua,
+			'§c': RColor.red,
+			'§d': RColor.light_purple,
+			'§e': RColor.yellow,
+			'§f': RColor.white,
+			'§r': RColor.reset,
+		}
+		color = rcolor_dict[self.data['color']]
+		if self.data['bold']:
+			color += Style.BRIGHT
+		text = self.data['text']
+		for key, value in mc_color_dict.items():
+			text = text.replace(key, rcolor_dict[value])
+		text = text.replace('§l', Style.BRIGHT)  # bold
+		return color + text + Style.RESET_ALL
 
 
 class RTextList(RTextBase):

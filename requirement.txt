@@ -1,3 +1,4 @@
 ruamel.yaml
 requests
 colorlog
+colorama

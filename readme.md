@@ -36,6 +36,7 @@ Python version should be Python 3.6+. Already tested in environments  below:
 - ruamel.yaml
 - requests
 - colorlog
+- colorama
 
 The requirements are also stored in `requirements.txt`. You can execute `pip install -r requirement.txt` to install all needed modules
 
