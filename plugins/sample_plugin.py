@@ -73,7 +73,7 @@ is_rcon_running: {}
 			server.reply(info, 'My secret number is {}\nAnd You know it too {}'.format(
 				secret, server.get_plugin_instance('sample_plugin').secret)
 			)
-		if info.content == '!!!RText':
+		if info.content == '!!!rtext':
 			server.reply(info,
 				RText('RText Test', color=RColor.light_purple, styles=RStyle.italic).set_hover_text('QwQ') +
 				'\n===\n' +
