@@ -80,7 +80,7 @@ MCDReforged 插件文档
 | tell(player, text) | 使用 `tellraw <player>` 来在对玩家 `<player>` 发送消息 |
 | reply(info, text) | 向消息源发生消息: 如果消息来自玩家则调用 `tell(info.player, text)`; 如果不是则调用 MCDR 的 logger 来将 `text` 告示至控制台
 
-`text` 可为一个 `str` 或者 [`STextBase`](https://github.com/Fallen-Breath/MCDReforged/blob/master/doc/utils.md#stextbase) (`SText`, `STextList`)
+`text` 可为一个 `str` 或者 [`RTextBase`](https://github.com/Fallen-Breath/MCDReforged/blob/master/doc/utils.md#rtextbase) (`RText`, `RTextList`)
 
 **插件管理**
 
@@ -187,7 +187,7 @@ def on_load(server, old_module):
 目前可以使用的有：
 
 - `utils/rcon.py`: 一个 rcon 客户端
-- `utils/stext.py`: Minecraft 高级文本容器
+- `utils/rtext.py`: Minecraft 高级文本容器
 
 [工具文档](https://github.com/Fallen-Breath/MCDReforged/blob/master/doc/utils_cn.md)
 

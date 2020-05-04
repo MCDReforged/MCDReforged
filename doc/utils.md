@@ -35,122 +35,122 @@ Return a `str`, the command execution result form the server
 
 `max_retry_time` is the maximum retry time of the operation. This method will return `None` if it's exceeded  
 
-## stext.py
+## rtext.py
 
-`from utils.stext import *`
+`from utils.rtext import *`
 
 Recommand to read the page [Raw JSON text format](https://minecraft.gamepedia.com/Raw_JSON_text_format) in Minecraft Wiki first
 
 This is an advance text component library for Minecraft
 
-Inspired by the [MCD stext API](https://github.com/TISUnion/stext) made by [Pandaria98](https://github.com/Pandaria98)
+Inspired by the [MCD rtext API](https://github.com/TISUnion/rtext) made by [Pandaria98](https://github.com/Pandaria98)
 
-### SColor
+### RColor
 
-`SColor` stores all Minecraft color codes
+`RColor` stores all Minecraft color codes
 
-- `SColor.black`
-- `SColor.dark_blue`
-- `SColor.dark_green`
-- `SColor.dark_aqua`
-- `SColor.dark_red`
-- `SColor.dark_purple`
-- `SColor.gold`
-- `SColor.gray`
-- `SColor.dark_gray`
-- `SColor.blue`
-- `SColor.green`
-- `SColor.aqua`
-- `SColor.red`
-- `SColor.light_purple`
-- `SColor.yellow`
-- `SColor.white`
+- `RColor.black`
+- `RColor.dark_blue`
+- `RColor.dark_green`
+- `RColor.dark_aqua`
+- `RColor.dark_red`
+- `RColor.dark_purple`
+- `RColor.gold`
+- `RColor.gray`
+- `RColor.dark_gray`
+- `RColor.blue`
+- `RColor.green`
+- `RColor.aqua`
+- `RColor.red`
+- `RColor.light_purple`
+- `RColor.yellow`
+- `RColor.white`
 
-### SStyle
+### RStyle
 
-`SStyle` stores all Minecraft text styles
+`RStyle` stores all Minecraft text styles
 
-- `SStyle.bold`
-- `SStyle.italic`
-- `SStyle.underlined`
-- `SStyle.strike_through`
-- `SStyle.obfuscated`
+- `RStyle.bold`
+- `RStyle.italic`
+- `RStyle.underlined`
+- `RStyle.strike_through`
+- `RStyle.obfuscated`
 
-### SAction
+### RAction
 
-`SAction` stores all click event actions
+`RAction` stores all click event actions
 
-- `SAction.suggest_command`
-- `SAction.run_command`
-- `SAction.open_url`
-- `SAction.open_file`
-- `SAction.copy_to_clipboard`
+- `RAction.suggest_command`
+- `RAction.run_command`
+- `RAction.open_url`
+- `RAction.open_file`
+- `RAction.copy_to_clipboard`
 
-### STextBase
+### RTextBase
 
-The base class of `SText` and `STextList`
+The base class of `RText` and `RTextList`
 
-#### STextBase.to_json_object()
+#### RTextBase.to_json_object()
 
 Return a `dict` representing it's data
 
-#### STextBase.to_json_str()
+#### RTextBase.to_json_str()
 
 Return a json formatted `str` representing it's data. It can be used as the second parameter in command `/tellraw <target> <message>` and more
 
-#### STextBase.to_plain_text()
+#### RTextBase.to_plain_text()
 
 Return a plain text for console display. Click event and hover event will be ignored
 
-#### STextBase.__str__()
+#### RTextBase.__str__()
 
-Return `STextBase.to_plain_text()`
+Return `RTextBase.to_plain_text()`
 
-#### STextBase.__add__, STextBase.__radd__
+#### RTextBase.__add__, RTextBase.__radd__
 
-Return a `STextList` created by merging two operand
+Return a `RTextList` created by merging two operand
 
-### SText
+### RText
 
 The text component class
 
-#### SText.SText(text, color=SColor.white, styles=None)
+#### RText.RText(text, color=RColor.white, styles=None)
 
-Create a SText object with specific text and color. `styles` can be a `SStyle` or a `list` of `SStyle`
+Create a RText object with specific text and color. `styles` can be a `RStyle` or a `list` of `RStyle`
 
-#### Stext.set_click_event(action, value) -> SText
+#### Stext.set_click_event(action, value) -> RText
 
 Set the click event to action `action` and value `value`
 
 `action` and `value` are both `str`
 
-Return the SText itself
+Return the RText itself
 
-#### Stext.set_hover_text(*args) -> SText
+#### Stext.set_hover_text(*args) -> RText
 
 Set the hover text to `*args`
 
-Parameter `*args` will be used to create a `STextList` instance. For the restrictions check the constructor of `STextList` below
+Parameter `*args` will be used to create a `RTextList` instance. For the restrictions check the constructor of `RTextList` below
 
-Return the SText itself
+Return the RText itself
 
-### STextList
+### RTextList
 
-It's a list of SText
+It's a list of RText
 
 When converted to json object for displaying to the game it will at a extar empty string at the front to prevent the first object's style affecting the later ones
 
-### STextList.STextList(*args)
+### RTextList.RTextList(*args)
 
-Objects in `*args` can be a `str`, a `SText`, a `STextList` or any classes implemented `__str__` method. All of them will be convert to `SText`
+Objects in `*args` can be a `str`, a `RText`, a `RTextList` or any classes implemented `__str__` method. All of them will be convert to `RText`
 
 ---------
 
-`STextBase` objects can be used as the message parameter in plugin APIs as below:
+`RTextBase` objects can be used as the message parameter in plugin APIs as below:
 
 - `server.tell`
 - `server.say`
 - `server.reply`
 - `add_help_message`
 
-Special judge for console output is unnecessary since `server.reply` etc. will convert `STextBase` objects into plain text
+Special judge for console output is unnecessary since `server.reply` etc. will convert `RTextBase` objects into plain text

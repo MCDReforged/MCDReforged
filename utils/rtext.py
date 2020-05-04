@@ -6,7 +6,7 @@
 import json
 
 
-class SColor:
+class RColor:
 	black = "black"
 	dark_blue = "dark_blue"
 	dark_green = "dark_green"
@@ -25,7 +25,7 @@ class SColor:
 	white = "white"
 
 
-class SStyle:
+class RStyle:
 	bold = "bold"
 	italic = "italic"
 	underlined = "underlined"
@@ -33,7 +33,7 @@ class SStyle:
 	obfuscated = "obfuscated"
 
 
-class SAction:
+class RAction:
 	suggest_command = "suggest_command"
 	run_command = "run_command"
 	open_url = "open_url"
@@ -41,7 +41,7 @@ class SAction:
 	copy_to_clipboard = "copy_to_clipboard"
 
 
-class STextBase:
+class RTextBase:
 	def to_json_object(self):
 		pass
 
@@ -55,14 +55,14 @@ class STextBase:
 		return self.to_plain_text()
 
 	def __add__(self, other):
-		return STextList(self, other)
+		return RTextList(self, other)
 
 	def __radd__(self, other):
-		return STextList(other, self)
+		return RTextList(other, self)
 
 
-class SText(STextBase):
-	def __init__(self, text, color=SColor.white, styles=None):
+class RText(RTextBase):
+	def __init__(self, text, color=RColor.white, styles=None):
 		if styles is None:
 			styles = []
 		elif styles is str:
@@ -71,7 +71,7 @@ class SText(STextBase):
 			'text': str(text),
 			'color': color
 		}  # type: dict
-		for style in [SStyle.bold, SStyle.italic, SStyle.underlined, SStyle.strike_through, SStyle.obfuscated]:
+		for style in [RStyle.bold, RStyle.italic, RStyle.underlined, RStyle.strike_through, RStyle.obfuscated]:
 			self.data[style] = style in styles
 
 	def to_json_object(self):
@@ -89,7 +89,7 @@ class SText(STextBase):
 			'action': 'show_text',
 			'value': {
 				'text': '',
-				'extra': STextList(*args).to_json_object(),
+				'extra': RTextList(*args).to_json_object(),
 			}
 		}
 		return self
@@ -98,16 +98,16 @@ class SText(STextBase):
 		return self.data['text']
 
 
-class STextList(STextBase):
+class RTextList(RTextBase):
 	def __init__(self, *args):
 		self.data = []
 		for obj in args:
-			if type(obj) is STextList:
+			if type(obj) is RTextList:
 				self.data.extend(obj.data)
-			elif type(obj) is SText:
+			elif type(obj) is RText:
 				self.data.append(obj)
 			else:
-				self.data.append(SText(str(obj)))
+				self.data.append(RText(str(obj)))
 
 	def to_json_object(self):
 		return [''] + [t.to_json_object() for t in self.data]  # to disable style inherit

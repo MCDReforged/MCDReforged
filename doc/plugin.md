@@ -80,7 +80,7 @@ It also has these following methods:
 | tell(player, text) | Use `tellraw <player>` to send message `text` to player `<player>` |
 | reply(info, text) | Send `text` to the info source: if it's from a player calls `tell(info.player, text)`; if not uses MCDR's logger to info `text` to the console
 
-`text` could be a `str` or [`STextBase`](https://github.com/Fallen-Breath/MCDReforged/blob/master/doc/utils.md#stextbase) (`SText`, `STextList`)
+`text` could be a `str` or [`RTextBase`](https://github.com/Fallen-Breath/MCDReforged/blob/master/doc/utils.md#rtextbase) (`RText`, `RTextList`)
 
 **Plugin Management**
 
@@ -191,7 +191,7 @@ Some invented wheels for plugin developers to use
 Current available: 
 
 - `utils/rcon.py`: A rcon client
-- `utils/stext.py`: Minecraft advance text component
+- `utils/rtext.py`: Minecraft advance text component
 
 [Plugin document](https://github.com/Fallen-Breath/MCDReforged/blob/master/doc/utils.md)
 

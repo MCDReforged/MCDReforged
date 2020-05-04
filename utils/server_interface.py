@@ -8,7 +8,7 @@ import time
 from utils import tool
 from utils.info import Info
 from utils.server_status import ServerStatus
-from utils.stext import *
+from utils.rtext import *
 
 
 def log_call(func):
@@ -131,10 +131,10 @@ class ServerInterface:
 		"""
 		Use /tellraw <target> to send the message to the specific player
 
-		:param text: a str or a STextBase, the message you want to send
+		:param text: a str or a RTextBase, the message you want to send
 		:return: None
 		"""
-		if isinstance(text, STextBase):
+		if isinstance(text, RTextBase):
 			content = text.to_json_str()
 		else:
 			content = json.dumps(text)
@@ -145,7 +145,7 @@ class ServerInterface:
 		"""
 		Use /tellraw @a to broadcast the message in game
 
-		:param text: a str or a STextBase, the message you want to send
+		:param text: a str or a RTextBase, the message you want to send
 		:return: None
 		"""
 		self.tell('@a', text, is_plugin_call=False)
@@ -159,7 +159,7 @@ class ServerInterface:
 		Otherwise use logger.info to output to the console
 
 		:param info: the Info you want to reply to
-		:param text: a str or a STextBase, the message you want to send
+		:param text: a str or a RTextBase, the message you want to send
 		:param kwargs:
 		:return: None
 		"""
@@ -287,7 +287,7 @@ class ServerInterface:
 
 		:param prefix: A str, the help command of your plugin.
 		When player click on the displayed message it will suggest this prefix parameter to the player
-		:param message: A str or a STextBase, a neat command description
+		:param message: A str or a RTextBase, a neat command description
 		:return: None
 		"""
 		threading.current_thread().plugin.add_help_message(prefix, message)

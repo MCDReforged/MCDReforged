@@ -35,122 +35,122 @@ MCDReforged 工具文档
 
 `max_retry_time` 是最大失败尝试次数，如果超出了次数限制，这个方法会返回 `None`
 
-## stext.py
+## rtext.py
 
-`from utils.stext import *`
+`from utils.rtext import *`
 
 推荐阅读 Minecraft Wiki 中关于 [原始JSON文本格式](https://minecraft-zh.gamepedia.com/%E5%8E%9F%E5%A7%8BJSON%E6%96%87%E6%9C%AC%E6%A0%BC%E5%BC%8F) 的页面
 
 这是一个 Minecraft 高级文本容器库
 
-受 [Pandaria98](https://github.com/Pandaria98) 制作的 [MCD stext API](https://github.com/TISUnion/stext) 启发
+受 [Pandaria98](https://github.com/Pandaria98) 制作的 [MCD rtext API](https://github.com/TISUnion/rtext) 启发
 
-### SColor
+### RColor
 
-`SColor` 储存着 Minecraft 的所有颜色代码
+`RColor` 储存着 Minecraft 的所有颜色代码
 
-- `SColor.black`
-- `SColor.dark_blue`
-- `SColor.dark_green`
-- `SColor.dark_aqua`
-- `SColor.dark_red`
-- `SColor.dark_purple`
-- `SColor.gold`
-- `SColor.gray`
-- `SColor.dark_gray`
-- `SColor.blue`
-- `SColor.green`
-- `SColor.aqua`
-- `SColor.red`
-- `SColor.light_purple`
-- `SColor.yellow`
-- `SColor.white`
+- `RColor.black`
+- `RColor.dark_blue`
+- `RColor.dark_green`
+- `RColor.dark_aqua`
+- `RColor.dark_red`
+- `RColor.dark_purple`
+- `RColor.gold`
+- `RColor.gray`
+- `RColor.dark_gray`
+- `RColor.blue`
+- `RColor.green`
+- `RColor.aqua`
+- `RColor.red`
+- `RColor.light_purple`
+- `RColor.yellow`
+- `RColor.white`
 
-### SStyle
+### RStyle
 
-`SStyle` 储存着 Minecraft 所有的样式代码
+`RStyle` 储存着 Minecraft 所有的样式代码
 
-- `SStyle.bold`
-- `SStyle.italic`
-- `SStyle.underlined`
-- `SStyle.strike_through`
-- `SStyle.obfuscated`
+- `RStyle.bold`
+- `RStyle.italic`
+- `RStyle.underlined`
+- `RStyle.strike_through`
+- `RStyle.obfuscated`
 
-### SAction
+### RAction
 
-`SAction` 储存着所有点击事件的行为
+`RAction` 储存着所有点击事件的行为
 
-- `SAction.suggest_command`
-- `SAction.run_command`
-- `SAction.open_url`
-- `SAction.open_file`
-- `SAction.copy_to_clipboard`
+- `RAction.suggest_command`
+- `RAction.run_command`
+- `RAction.open_url`
+- `RAction.open_file`
+- `RAction.copy_to_clipboard`
 
-### STextBase
+### RTextBase
 
-`SText` 以及 `STextList` 的基类
+`RText` 以及 `RTextList` 的基类
 
-#### STextBase.to_json_object()
+#### RTextBase.to_json_object()
 
 返回一个代表其数据的 `dict`
 
-#### STextBase.to_json_str()
+#### RTextBase.to_json_str()
 
 返回一个代表其数据的 json 格式的 `str`。这可用做例如 `/tellraw <target> <message>` 的第二个参数
 
-#### STextBase.to_plain_text()
+#### RTextBase.to_plain_text()
 
 返回一个用于控制台显示的朴素字符串。点击事件以及悬浮时间将会被忽略s
 
-#### STextBase.__str__()
+#### RTextBase.__str__()
 
-返回 `STextBase.to_plain_text()`
+返回 `RTextBase.to_plain_text()`
 
-#### STextBase.__add__, STextBase.__radd__
+#### RTextBase.__add__, RTextBase.__radd__
 
-返回一个由合并两个运算符得来的 `STextList` 
+返回一个由合并两个运算符得来的 `RTextList` 
 
-### SText
+### RText
 
 文本容器类
 
-#### SText.SText(text, color=SColor.white, styles=None)
+#### RText.RText(text, color=RColor.white, styles=None)
 
-创建一个由指定文本以及颜色构成的 `SText`。`styles` 可以是一个 `SStyle` 或者是一个 `SStyle` 的 `list`
+创建一个由指定文本以及颜色构成的 `RText`。`styles` 可以是一个 `RStyle` 或者是一个 `RStyle` 的 `list`
 
-#### Stext.set_click_event(action, value) -> SText
+#### RText.set_click_event(action, value) -> RText
 
 设置点击事件，动作为 `action`，值为 `value`
 
 `action` 以及 `value` 均为 `str`
 
-返回 Stext 自身
+返回 RText 自身
 
-#### Stext.set_hover_text(*args) -> SText
+#### RText.set_hover_text(*args) -> RText
 
 设置悬浮文本
 
-参数 `*args` 将会用于创建一个 `STextList` 实例。对于参数的约束条件请参考下文的 `STextList` 构造函数
+参数 `*args` 将会用于创建一个 `RTextList` 实例。对于参数的约束条件请参考下文的 `RTextList` 构造函数
 
-返回 Stext 自身
+返回 RText 自身
 
-### STextList
+### RTextList
 
-一个由 SText 组成的列表
+一个由 RText 组成的列表
 
 当转换为 json 格式用于输出至游戏中时，会在前面额外添加一个空串，从而防止第一个元素的样式影响到后方元素
 
-### STextList.STextList(*args)
+### RTextList.RTextList(*args)
 
-`*args` 中的对象可以为一个 `str`, 一个 `SText`, 一个 `STextList` 或者任何实现了 `__str__` 方法的类。它们都会被转化为 `SText`
+`*args` 中的对象可以为一个 `str`, 一个 `RText`, 一个 `RTextList` 或者任何实现了 `__str__` 方法的类。它们都会被转化为 `RText`
 
 ---------
 
-`STextBase` 可以被当做 `message` 参数在以下的插件 API 中使用:
+`RTextBase` 可以被当做 `message` 参数在以下的插件 API 中使用:
 
 - `server.tell`
 - `server.say`
 - `server.reply`
 - `add_help_message`
 
-对于控制台的特判是不必要的，因为 `server.reply` 等方法会自动将 `STextBase` 对象转换为朴素文本
+对于控制台的特判是不必要的，因为 `server.reply` 等方法会自动将 `RTextBase` 对象转换为朴素文本
