@@ -118,7 +118,7 @@ is_rcon_running: {}
 			§l§e yellow
 			§f white
 			§l bold
-			§k random
+			§k random (won't work)
 			'''.strip()
 			server.reply(info, '\n'.join([line.strip() for line in text.splitlines()]))
 
