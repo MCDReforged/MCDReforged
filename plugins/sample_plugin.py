@@ -101,26 +101,28 @@ is_rcon_running: {}
 			)
 		if info.content == '!!!color':
 			text = '''
-			§0 black
-			§1 dark_blue
-			§2 dark_green
-			§3 dark_aqua
-			§4 dark_red
-			§5 dark_purple
-			§6 gold
-			§7 gray
-			§8 dark_gray
-			§9 blue
-			§a green
-			§b aqua
-			§c red
-			§d light_purple
-			§l§e yellow
-			§f white
-			§l bold
-			§k random (won't work)
+			§0black
+			§1dark_blue
+			§2dark_green
+			§3dark_aqua
+			§4dark_red
+			§5dark_purple
+			§6gold
+			§7gray
+			§8dark_gray
+			§9blue
+			§agreen
+			§baqua
+			§cred
+			§dlight_purple
+			§eyellow
+			§fwhite
+			§lbold
+			§r§krandom (won't work)
 			'''.strip()
-			server.reply(info, '\n'.join([line.strip() for line in text.splitlines()]))
+			text = '\n'.join([line.strip() for line in text.splitlines()])
+			server.reply(info, text)
+			server.logger.warning(text)
 
 
 def on_player_joined(server, player):

@@ -26,6 +26,55 @@ class RColor:
 	white = "white"
 	reset = 'reset'
 
+	@classmethod
+	def to_console_code(cls, color):
+		color_dict = {
+			RColor.black: Fore.BLACK,
+			RColor.dark_blue: Fore.BLUE,
+			RColor.dark_green: Fore.GREEN,
+			RColor.dark_aqua: Fore.CYAN,
+			RColor.dark_red: Fore.RED,
+			RColor.dark_purple: Fore.MAGENTA,
+			RColor.gold: Fore.YELLOW,
+			RColor.gray: Style.RESET_ALL,
+			RColor.dark_gray: Style.RESET_ALL,
+			RColor.blue: Fore.LIGHTBLUE_EX,
+			RColor.green: Fore.LIGHTGREEN_EX,
+			RColor.aqua: Fore.LIGHTCYAN_EX,
+			RColor.red: Fore.LIGHTRED_EX,
+			RColor.light_purple: Fore.LIGHTMAGENTA_EX,
+			RColor.yellow: Fore.LIGHTYELLOW_EX,
+			RColor.white: Style.RESET_ALL,
+			RColor.reset: Style.RESET_ALL,
+		}
+		return color_dict[color]
+
+	@classmethod
+	def convert_minecraft_color_code(cls, text):
+		mc_color_dict = {
+			'§0': RColor.black,
+			'§1': RColor.dark_blue,
+			'§2': RColor.dark_green,
+			'§3': RColor.dark_aqua,
+			'§4': RColor.dark_red,
+			'§5': RColor.dark_purple,
+			'§6': RColor.gold,
+			'§7': RColor.gray,
+			'§8': RColor.dark_gray,
+			'§9': RColor.blue,
+			'§a': RColor.green,
+			'§b': RColor.aqua,
+			'§c': RColor.red,
+			'§d': RColor.light_purple,
+			'§e': RColor.yellow,
+			'§f': RColor.white,
+			'§r': RColor.reset,
+		}
+		for key, value in mc_color_dict.items():
+			text = text.replace(key, cls.to_console_code(value))
+		text = text.replace('§l', Style.BRIGHT)  # bold
+		return text
+
 
 class RStyle:
 	bold = "bold"
@@ -102,51 +151,10 @@ class RText(RTextBase):
 		return self
 
 	def to_plain_text(self):
-		rcolor_dict = {
-			RColor.black: Fore.BLACK,
-			RColor.dark_blue: Fore.BLUE,
-			RColor.dark_green: Fore.GREEN,
-			RColor.dark_aqua: Fore.CYAN,
-			RColor.dark_red: Fore.RED,
-			RColor.dark_purple: Fore.MAGENTA,
-			RColor.gold: Fore.YELLOW,
-			RColor.gray: Style.RESET_ALL,
-			RColor.dark_gray: Style.RESET_ALL,
-			RColor.blue: Fore.LIGHTBLUE_EX,
-			RColor.green: Fore.LIGHTGREEN_EX,
-			RColor.aqua: Fore.LIGHTCYAN_EX,
-			RColor.red: Fore.LIGHTRED_EX,
-			RColor.light_purple: Fore.LIGHTMAGENTA_EX,
-			RColor.yellow: Fore.LIGHTYELLOW_EX,
-			RColor.white: Style.RESET_ALL,
-			RColor.reset: Style.RESET_ALL,
-		}
-		mc_color_dict = {
-			'§0': RColor.black,
-			'§1': RColor.dark_blue,
-			'§2': RColor.dark_green,
-			'§3': RColor.dark_aqua,
-			'§4': RColor.dark_red,
-			'§5': RColor.dark_purple,
-			'§6': RColor.gold,
-			'§7': RColor.gray,
-			'§8': RColor.dark_gray,
-			'§9': RColor.blue,
-			'§a': RColor.green,
-			'§b': RColor.aqua,
-			'§c': RColor.red,
-			'§d': RColor.light_purple,
-			'§e': RColor.yellow,
-			'§f': RColor.white,
-			'§r': RColor.reset,
-		}
-		color = rcolor_dict[self.data['color']]
+		color = RColor.to_console_code(self.data['color'])
 		if self.data['bold']:
 			color += Style.BRIGHT
 		text = self.data['text']
-		for key, value in mc_color_dict.items():
-			text = text.replace(key, rcolor_dict[value])
-		text = text.replace('§l', Style.BRIGHT)  # bold
 		return color + text + Style.RESET_ALL
 
 

@@ -5,7 +5,6 @@
 import threading
 import time
 
-from utils import tool
 from utils.info import Info
 from utils.server_status import ServerStatus
 from utils.rtext import *
@@ -167,7 +166,7 @@ class ServerInterface:
 			self.tell(info.player, text, is_plugin_call=False)
 		else:
 			for line in RTextList(text).to_plain_text().splitlines():
-				self.logger.info(tool.clean_minecraft_color_code(line))
+				self.logger.info(line)
 
 	# ------------------------
 	#          Plugin

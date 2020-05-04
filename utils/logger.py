@@ -8,18 +8,24 @@ import zipfile
 from colorlog import ColoredFormatter
 
 from utils import tool
+from utils.rtext import *
+
+
+class MCColoredFormatter(ColoredFormatter):
+	def formatMessage(self, record):
+		text = super().formatMessage(record)
+		text = RColor.convert_minecraft_color_code(text)  # minecraft code -> console code
+		text = tool.clean_minecraft_color_code(text)  # clean the rest of minecraft codes
+		return text
 
 
 class NoColorFormatter(logging.Formatter):
-	def __init__(self, *args, **kwargs):
-		super().__init__(*args, **kwargs)
-
 	def formatMessage(self, record):
 		return tool.clean_console_color_code(super().formatMessage(record))
 
 
 class Logger:
-	console_fmt = ColoredFormatter(
+	console_fmt = MCColoredFormatter(
 		'[%(name)s] [%(asctime)s] [%(threadName)s/%(log_color)s%(levelname)s%(reset)s]: %(message_log_color)s%(message)s%(reset)s',
 		log_colors={
 			'DEBUG': 'blue',
