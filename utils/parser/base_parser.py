@@ -76,6 +76,9 @@ class BaseParser(object):
 	def parse_rcon_started(self, info: Info) -> bool:
 		return False
 
+	def parse_server_stopping(self, info: Info) -> bool:
+		return False
+
 
 def get_parser(parser_manager):
 	return BaseParser(parser_manager)

@@ -14,7 +14,7 @@ server.start_server.start_twice: |
   Server cannot start twice
 
 server.start_server.starting: |
-  Starting the server
+  Starting the server with command "{0}"
 
 server.start_server.start_fail: |
   Fail to start the server
@@ -260,6 +260,9 @@ rcon_manager.connect.wrong_password: |
 
 rcon_manager.disconnect.disconnected: |
   Rcon disconnected
+
+rcon_manager.disconnect.disconnect_fail: |
+  Fail to disconnect rcon
 
 server_status.running: |
   Running

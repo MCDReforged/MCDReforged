@@ -14,7 +14,7 @@ server.start_server.start_twice: |
   服务端不能多次启动
 
 server.start_server.starting: |
-  正在启动服务端
+  正在启动服务端，启动参数为 "{0}"
 
 server.start_server.start_fail: |
   服务端启动失败
@@ -148,7 +148,7 @@ command_manager.print_mcdr_status.line3: |
   服务端已启动: §7{0}§r
 
 command_manager.print_mcdr_status.line4: |
-  Rcon: {0}
+  rcon: {0}
 
 command_manager.print_mcdr_status.line5: |
   插件数量: §7{0}§r
@@ -250,16 +250,19 @@ plugin_manager.__refresh_plugins.info_plugin_amount: |
   已加载插件总数: §7{0}§r
 
 rcon_manager.connect.connection_fail: |
-  Rcon 连接失败: {0}
+  rcon 连接失败: {0}
 
 rcon_manager.connect.connected: |
-  Rcon 已连接
+  rcon 已连接
 
 rcon_manager.connect.wrong_password: |
-  Rcon 密码错误，连接失败
+  rcon 密码错误，连接失败
 
 rcon_manager.disconnect.disconnected: |
-  Rcon 已断开连接
+  rcon 已断开连接
+
+rcon_manager.disconnect.disconnect_fail: |
+  rcon 断开连接失败
 
 server_status.running: |
   运行中

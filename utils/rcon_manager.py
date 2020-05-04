@@ -2,6 +2,7 @@
 from utils.rcon import Rcon
 
 
+# pack everything up and make sure no exception can escape
 class RconManager:
 	def __init__(self, server):
 		self.server = server
@@ -28,8 +29,11 @@ class RconManager:
 
 	def disconnect(self):
 		if self.is_running():
-			self.rcon.disconnect()
-			self.logger.info(self.server.t('rcon_manager.disconnect.disconnected'))
+			try:
+				self.rcon.disconnect()
+				self.logger.info(self.server.t('rcon_manager.disconnect.disconnected'))
+			except:
+				self.server.logger.error(self.server.t('rcon_manager.disconnect.disconnect_fail'))
 		self.rcon = None
 
 	def send_command(self, command):

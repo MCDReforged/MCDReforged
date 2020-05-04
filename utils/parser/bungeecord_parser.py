@@ -42,13 +42,14 @@ class BungeecordParser(base_parser.BaseParser):
 
 	def parse_server_startup_done(self, info):
 		# Listening on /0.0.0.0:25577
-		if info.is_user:
-			return False
-		match = re.fullmatch(r'Listening on /[0-9.]+:[0-9]+', info.content)
-		return match is not None
+		return not info.is_user and re.fullmatch(r'Listening on /[0-9.]+:[0-9]+', info.content) is not None
 
 	def parse_rcon_started(self, info):
 		return self.parse_server_startup_done(info)
+
+	def parse_server_stopping(self, info) -> bool:
+		# Closing listener [id: 0x3acae0b0, L:/0:0:0:0:0:0:0:0:25565]
+		return not info.is_user and re.fullmatch(r'Closing listener \[id: .+, L:[\d:/]+\]', info.content) is not None
 
 
 def get_parser(parser_manager):

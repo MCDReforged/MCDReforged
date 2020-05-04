@@ -79,6 +79,12 @@ class VanillaParser(base_parser.BaseParser):
 		match = re.fullmatch(r'RCON running on [\w.]+:\d+', info.content)
 		return match is not None
 
+	def parse_server_stopping(self, info):
+		# Stopping server
+		if info.is_user:
+			return False
+		return info.content == 'Stopping server'
+
 
 def get_parser(parser_manager):
 	return VanillaParser(parser_manager)

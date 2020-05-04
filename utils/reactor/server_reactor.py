@@ -18,6 +18,10 @@ class ServerReactor(BaseReactor):
 				self.server.flag_rcon_startup = True
 				self.server.connect_rcon()
 
+			if parser.parse_server_stopping(info):
+				self.server.logger.debug('Server stopping detected')
+				self.server.rcon_manager.disconnect()
+
 
 def get_reactor(server):
 	return ServerReactor(server)

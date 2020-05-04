@@ -105,9 +105,14 @@ class Server:
 		self.server_status = status
 		self.logger.debug('Server status has set to "{}"'.format(status))
 
-	# return True if the server process has started successfully
-	# return False if the server is already running or start_server has been called by other
 	def start_server(self) -> bool:
+		"""
+		try to start the server process
+		return True if the server process has started successfully
+		return False if the server is already running or start_server has been called by other
+
+		:return: a bool as above
+		"""
 		acquired = self.starting_server_lock.acquire(blocking=False)
 		if not acquired:
 			return False
@@ -115,11 +120,10 @@ class Server:
 			if self.is_server_running():
 				self.logger.warning(self.t('server.start_server.start_twice'))
 				return False
-			self.logger.info(self.t('server.start_server.starting'))
 			try:
-				print(self.config['start_command'])
-				self.process = Popen(self.config['start_command'], cwd=self.config['working_directory'],
-									 stdin=PIPE, stdout=PIPE, stderr=STDOUT, shell=True)
+				start_command = self.config['start_command']
+				self.logger.info(self.t('server.start_server.starting', start_command))
+				self.process = Popen(start_command, cwd=self.config['working_directory'], stdin=PIPE, stdout=PIPE, stderr=STDOUT, shell=True)
 			except:
 				self.logger.error(self.t('server.start_server.start_fail'))
 				self.logger.error(traceback.format_exc())
@@ -132,16 +136,33 @@ class Server:
 			self.starting_server_lock.release()
 
 	def start(self):
-		if self.start_server():
-			if not self.config['disable_console_thread']:
-				if self.console_input_thread is None or not self.console_input_thread.is_alive():
-					self.logger.info('Console thread starting')
-					self.console_input_thread = tool.start_thread(self.console_input, (), 'Console')
-			else:
-				self.logger.info('Console thread disabled')
-			self.run()
+		"""
+		try to start the server. if succeeded the console thread will start and MCDR will start ticking
+
+		:return: a bool, if the server start up try succeeds
+		"""
+		if not self.start_server():
+			return False
+		if not self.config['disable_console_thread']:
+			if self.console_input_thread is None or not self.console_input_thread.is_alive():
+				self.logger.info('Console thread starting')
+				self.console_input_thread = tool.start_thread(self.console_input, (), 'Console')
+		else:
+			self.logger.info('Console thread disabled')
+		self.run()
+		return True
 
 	def stop(self, forced=False, new_server_status=ServerStatus.STOPPING_BY_ITSELF):
+		"""
+		stop the server
+
+		:param forced: an optional bool. If it's False (default) MCDR will stop the server by sending the STOP_COMMAND from the
+		current parser. If it's True MCDR will just kill the server process
+		:param new_server_status: an optional ServerStatus object, the new server status MCDR will be set to
+		default is STOPPING_BY_ITSELF, which will cause MCDR to exit after server has stopped
+		set it to STOPPING_BY_PLUGIN to prevent MCDR exiting
+		:return:
+		"""
 		if not self.is_server_running():
 			self.logger.warning(self.t('server.stop.stop_twice'))
 		self.set_server_status(new_server_status)
@@ -151,12 +172,18 @@ class Server:
 			except:
 				self.logger.error(self.t('server.stop.stop_fail'))
 				forced = True
-		self.rcon_manager.disconnect()
 		if forced:
 			self.process.kill()
 			self.logger.info(self.t('server.stop.process_killed'))
 
 	def send(self, text, ending='\n'):
+		"""
+		send a text to server's stdin if the server is running
+		:param text: a str or a bytes you want to send. if text is a str then it will attach the ending parameter to its
+		back
+		:param ending: the suffix of a command with a default value \n
+		:return: None
+		"""
 		if type(text) is str:
 			text = (text + ending).encode(self.encoding_method)
 		if self.is_server_running():
@@ -166,6 +193,13 @@ class Server:
 			self.logger.warning(self.t('server.send.send_when_stoped'))
 
 	def receive(self):
+		"""
+		try to receive a str from server's stdout. This will block the thread
+		if server has stopped it will wait up to 10s for the server process to exit and then set the server status
+		to STOPPING_BY_ITSELF if the old server status is RUNNING
+
+		:return: the received str, or None
+		"""
 		while True:
 			try:
 				text = next(iter(self.process.stdout))
@@ -201,6 +235,11 @@ class Server:
 		self.plugin_manager.call('on_server_stop', (self.server_interface, return_code))
 
 	def tick(self):
+		"""
+		ticking MCDR: try to receive a new line from server's stdout and parse / display / process the text
+
+		:return: None
+		"""
 		text = self.receive()
 		if text is None:  # server process has been terminated
 			self.on_server_stop()
@@ -226,7 +265,10 @@ class Server:
 		self.react(parsed_result)
 
 	def run(self):
-		# main loop
+		"""
+		the main loop of MCDR
+		:return: None
+		"""
 		while self.server_status != ServerStatus.STOPPED:
 			try:
 				if self.is_server_running():
@@ -253,8 +295,11 @@ class Server:
 			self.logger.error(self.t('server.run.stop_error'))
 			self.logger.error(traceback.format_exc())
 
-	# the thread for processing console input
 	def console_input(self):
+		"""
+		the thread for processing console input
+		:return: None
+		"""
 		while True:
 			try:
 				text = input()
@@ -268,8 +313,6 @@ class Server:
 					for line in str(parsed_result).splitlines():
 						self.logger.debug('    {}'.format(line))
 					self.react(parsed_result)
-					if parsed_result.content == self.parser_manager.get_stop_command():
-						self.rcon_manager.disconnect()
 			except (KeyboardInterrupt, EOFError, SystemExit, IOError) as e:
 				self.logger.debug('Exception {} {} caught in console_input()'.format(type(e), e))
 				self.flag_interrupt = True
@@ -279,8 +322,12 @@ class Server:
 				self.logger.error(self.t('server.console_input.error'))
 				self.logger.error(traceback.format_exc())
 
-	# react to a parsed info
 	def react(self, info):
+		"""
+		react to a parsed info
+		:param info: the info instance you want to react to
+		:return: None
+		"""
 		for reactor in self.reactors:
 			try:
 				reactor.react(info)
