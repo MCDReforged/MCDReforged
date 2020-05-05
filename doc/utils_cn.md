@@ -43,7 +43,7 @@ MCDReforged 工具文档
 
 这是一个 Minecraft 高级文本容器库
 
-受 [Pandaria98](https://github.com/Pandaria98) 制作的 [MCD rtext API](https://github.com/TISUnion/rtext) 启发
+受 [Pandaria98](https://github.com/Pandaria98) 制作的 [MCD stext API](https://github.com/TISUnion/rtext) 启发
 
 ### RColor
 
@@ -124,7 +124,11 @@ MCDReforged 工具文档
 
 `action` 以及 `value` 均为 `str`
 
-返回 RText 自身
+返回应用点击事件后的 RText 自身
+
+#### RText.c(action, value) -> RText
+
+同 `RText.set_click_event`
 
 #### RText.set_hover_text(*args) -> RText
 
@@ -132,7 +136,11 @@ MCDReforged 工具文档
 
 参数 `*args` 将会用于创建一个 `RTextList` 实例。对于参数的约束条件请参考下文的 `RTextList` 构造函数
 
-返回 RText 自身
+返回应用悬浮文本后的 RText 自身
+
+#### RText.h(*args) -> RText
+
+同 `RText.set_hover_text`
 
 ### RTextList
 

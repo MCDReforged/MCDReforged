@@ -43,7 +43,7 @@ Recommand to read the page [Raw JSON text format](https://minecraft.gamepedia.co
 
 This is an advance text component library for Minecraft
 
-Inspired by the [MCD rtext API](https://github.com/TISUnion/rtext) made by [Pandaria98](https://github.com/Pandaria98)
+Inspired by the [MCD stext API](https://github.com/TISUnion/rtext) made by [Pandaria98](https://github.com/Pandaria98)
 
 ### RColor
 
@@ -124,7 +124,11 @@ Set the click event to action `action` and value `value`
 
 `action` and `value` are both `str`
 
-Return the RText itself
+Return the RText itself after applied the click event
+
+#### RText.c(*args) -> RText
+
+The same as `RText.set_click_event`
 
 #### Stext.set_hover_text(*args) -> RText
 
@@ -132,7 +136,11 @@ Set the hover text to `*args`
 
 Parameter `*args` will be used to create a `RTextList` instance. For the restrictions check the constructor of `RTextList` below
 
-Return the RText itself
+Return the RText itself after applied the hover text
+
+#### RText.h(*args) -> RText
+
+The same as `RText.set_hover_text`
 
 ### RTextList
 

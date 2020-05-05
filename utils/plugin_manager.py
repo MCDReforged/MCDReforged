@@ -164,18 +164,18 @@ class PluginManager:
 
 		msg = []
 		if load_list:
-			msg.extend([RText(self.server.t('plugin_manager.__refresh_plugins.info_loaded', len(load_list))).set_hover_text('\n'.join(load_list)), '; '])
+			msg.extend([RText(self.server.t('plugin_manager.__refresh_plugins.info_loaded', len(load_list))).h('\n'.join(load_list)), '; '])
 		if unload_list:
-			msg.extend([RText(self.server.t('plugin_manager.__refresh_plugins.info_unloaded', len(unload_list))).set_hover_text('\n'.join(unload_list)), '; '])
+			msg.extend([RText(self.server.t('plugin_manager.__refresh_plugins.info_unloaded', len(unload_list))).h('\n'.join(unload_list)), '; '])
 		if reload_list:
-			msg.extend([RText(self.server.t('plugin_manager.__refresh_plugins.info_reloaded', len(reload_list))).set_hover_text('\n'.join(reload_list)), '; '])
+			msg.extend([RText(self.server.t('plugin_manager.__refresh_plugins.info_reloaded', len(reload_list))).h('\n'.join(reload_list)), '; '])
 		if fail_list:
-			msg.extend([RText(self.server.t('plugin_manager.__refresh_plugins.info_fail', len(fail_list))).set_hover_text('\n'.join(fail_list)), '; '])
+			msg.extend([RText(self.server.t('plugin_manager.__refresh_plugins.info_fail', len(fail_list))).h('\n'.join(fail_list)), '; '])
 		if len(msg) == 0:
 			msg = [self.server.t('plugin_manager.__refresh_plugins.info_none'), '; ']
 		msg.append(RText(self.server.t('plugin_manager.__refresh_plugins.info_plugin_amount', len(self.plugins)))
-			.set_hover_text('\n'.join([plugin.file_name for plugin in self.plugins]))
-			.set_click_event(RAction.suggest_command, '!!MCDR plugin list')
+			.h('\n'.join([plugin.file_name for plugin in self.plugins]))
+			.c(RAction.suggest_command, '!!MCDR plugin list')
 		)
 		return RTextList(*tuple(msg))
 

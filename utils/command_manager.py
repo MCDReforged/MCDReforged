@@ -29,15 +29,15 @@ class CommandManager:
 
 	def send_command_not_found(self, info, cmd):
 		self.send_message(info, RText(self.t('command_manager.command_not_found', cmd))
-			.set_hover_text(self.t('command_manager.command_not_found_suggest', cmd))
-			.set_click_event(RAction.run_command, cmd)
+			.h(self.t('command_manager.command_not_found_suggest', cmd))
+			.c(RAction.run_command, cmd)
 		)
 
 	def send_help_message(self, info, msg):
 		for line in msg.splitlines():
 			prefix = re.search(r'(?<=§7)!!MCDR[\w ]*(?=§)', line)
 			if prefix is not None:
-				self.send_message(info, RText(line).set_click_event(RAction.suggest_command, prefix.group()))
+				self.send_message(info, RText(line).c(RAction.suggest_command, prefix.group()))
 			else:
 				self.send_message(info, line)
 
@@ -184,11 +184,11 @@ class CommandManager:
 			False: self.t('command_manager.print_mcdr_status.offline')
 		}
 		self.send_message(info, RTextList(
-			RText(self.t('command_manager.print_mcdr_status.line1', constant.NAME, constant.VERSION)).set_click_event(RAction.open_url, constant.GITHUB_URL).set_hover_text(RText(constant.GITHUB_URL, styles=RStyle.underlined, color=RColor.blue)), '\n',
+			RText(self.t('command_manager.print_mcdr_status.line1', constant.NAME, constant.VERSION)).c(RAction.open_url, constant.GITHUB_URL).h(RText(constant.GITHUB_URL, styles=RStyle.underlined, color=RColor.blue)), '\n',
 			RText(self.t('command_manager.print_mcdr_status.line2', self.t(self.server.server_status))), '\n',
 			RText(self.t('command_manager.print_mcdr_status.line3', self.server.is_server_startup())), '\n',
 			RText(self.t('command_manager.print_mcdr_status.line4', status_dict[self.server.server_interface.is_rcon_running(is_plugin_call=False)])), '\n',
-			RText(self.t('command_manager.print_mcdr_status.line5', len(self.server.plugin_manager.plugins))).set_click_event(RAction.suggest_command, '!!MCDR plugin list')
+			RText(self.t('command_manager.print_mcdr_status.line5', len(self.server.plugin_manager.plugins))).c(RAction.suggest_command, '!!MCDR plugin list')
 		))
 		if info.source == InfoSource.CONSOLE and self.server.process is not None:
 			self.logger.info('PID: {}'.format(self.server.process.pid))
@@ -206,11 +206,11 @@ class CommandManager:
 			self.send_message(
 				info, '§7-§r {}'.format(file_name)
 				+ RText(' [×]', color=RColor.gray)
-				.set_click_event(RAction.run_command, '!!MCDR plugin disable {}'.format(file_name))
-				.set_hover_text(self.t('command_manager.list_plugin.suggest_disable', file_name))
+				.c(RAction.run_command, '!!MCDR plugin disable {}'.format(file_name))
+				.h(self.t('command_manager.list_plugin.suggest_disable', file_name))
 				+ RText(' [▷]', color=RColor.gray)
-				.set_click_event(RAction.run_command, '!!MCDR plugin load {}'.format(file_name))
-				.set_hover_text(self.t('command_manager.list_plugin.suggest_reload', file_name))
+				.c(RAction.run_command, '!!MCDR plugin load {}'.format(file_name))
+				.h(self.t('command_manager.list_plugin.suggest_reload', file_name))
 			)
 
 		self.send_message(info, self.t('command_manager.list_plugin.info_disabled_plugin', len(file_list_disabled)))
@@ -219,16 +219,16 @@ class CommandManager:
 			self.send_message(
 				info, '§7-§r {}'.format(file_name) +
 				RText(' [✔]', color=RColor.gray)
-				.set_click_event(RAction.run_command, '!!MCDR plugin enable {}'.format(file_name))
-				.set_hover_text(self.t('command_manager.list_plugin.suggest_enable', file_name))
+				.c(RAction.run_command, '!!MCDR plugin enable {}'.format(file_name))
+				.h(self.t('command_manager.list_plugin.suggest_enable', file_name))
 			)
 
 		self.send_message(info, self.t('command_manager.list_plugin.info_not_loaded_plugin', len(file_list_not_loaded)))
 		for file_name in file_list_not_loaded:
 			self.send_message(info, '§7-§r {}'.format(file_name)
 				+ RText(' [✔]', color=RColor.gray)
-				.set_click_event(RAction.run_command, '!!MCDR plugin load {}'.format(file_name))
-				.set_hover_text(self.t('command_manager.list_plugin.suggest_load', file_name))
+				.c(RAction.run_command, '!!MCDR plugin load {}'.format(file_name))
+				.h(self.t('command_manager.list_plugin.suggest_load', file_name))
 			)
 
 	def disable_plugin(self, info, file_name):
@@ -278,8 +278,4 @@ class CommandManager:
 		for plugin in self.server.plugin_manager.plugins:
 			help_messages.extend(plugin.help_messages)
 		for prefix, message, name in sorted(help_messages, key=lambda x: x.prefix.capitalize()):
-			self.send_message(info, RText('§7{}§r: '.format(prefix))
-				.set_click_event(RAction.suggest_command, prefix)
-				.set_hover_text(name)
-				+ message
-			)
+			self.send_message(info, RText('§7{}§r: '.format(prefix)).c(RAction.suggest_command, prefix).h(name) + message)
