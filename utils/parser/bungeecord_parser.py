@@ -35,6 +35,7 @@ class BungeecordParser(base_parser.BaseParser):
 		return result
 
 	def pre_parse_server_stdout(self, text):
+		text = super().pre_parse_server_stdout(text)
 		match = re.match(r'>*\r', text)
 		if match is not None:
 			text = text.replace(match.group(), '', 1)

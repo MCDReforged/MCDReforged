@@ -88,3 +88,16 @@ class Logger:
 		self.file_handler = logging.FileHandler(file_name, encoding='utf8')
 		self.file_handler.setFormatter(self.file_fmt)
 		self.logger.addHandler(self.file_handler)
+
+
+class ServerLogger(logging.Logger):
+	server_fmt = logging.Formatter('[%(name)s] %(message)s')
+
+	def __init__(self, name):
+		super().__init__(name)
+
+		console_handler = logging.StreamHandler(sys.stdout)
+		console_handler.setFormatter(self.server_fmt)
+
+		self.addHandler(console_handler)
+		self.setLevel(logging.DEBUG)

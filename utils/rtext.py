@@ -26,6 +26,7 @@ class RColor:
 	white = "white"
 	reset = 'reset'
 
+	# RColor -> console color
 	@classmethod
 	def to_console_code(cls, color):
 		color_dict = {
@@ -49,6 +50,7 @@ class RColor:
 		}
 		return color_dict[color]
 
+	# minecraft code -> console code
 	@classmethod
 	def convert_minecraft_color_code(cls, text):
 		mc_color_dict = {
@@ -102,6 +104,9 @@ class RTextBase:
 	def to_plain_text(self):
 		pass
 
+	def to_colored_text(self):
+		pass
+
 	def __str__(self):
 		return self.to_plain_text()
 
@@ -151,11 +156,13 @@ class RText(RTextBase):
 		return self
 
 	def to_plain_text(self):
+		return self.data['text']
+
+	def to_colored_text(self):
 		color = RColor.to_console_code(self.data['color'])
 		if self.data['bold']:
 			color += Style.BRIGHT
-		text = self.data['text']
-		return color + text + Style.RESET_ALL
+		return color + self.to_plain_text() + Style.RESET_ALL
 
 
 class RTextList(RTextBase):
@@ -174,4 +181,7 @@ class RTextList(RTextBase):
 
 	def to_plain_text(self):
 		return ''.join([obj.to_plain_text() for obj in self.data])
+
+	def to_colored_text(self):
+		return ''.join([obj.to_colored_text() for obj in self.data])
 

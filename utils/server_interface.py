@@ -165,7 +165,7 @@ class ServerInterface:
 		if info.is_player:
 			self.tell(info.player, text, is_plugin_call=False)
 		else:
-			for line in RTextList(text).to_plain_text().splitlines():
+			for line in RTextList(text).to_colored_text().splitlines():
 				self.logger.info(line)
 
 	# ------------------------

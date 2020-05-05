@@ -11,10 +11,10 @@ class UpdateHelper:
 		self.server = server
 		self.check_update_thread = None
 
-	def check_update(self):
-		self.check_update_thread = tool.start_thread(self._check_update, (), type(self).__name__)
+	def check_update_start(self):
+		self.check_update_thread = tool.start_thread(self.check_update_loop, (), type(self).__name__)
 
-	def _check_update(self):
+	def check_update_loop(self):
 		while True:
 			try:
 				response = requests.get(constant.GITHUB_API_LATEST).json()

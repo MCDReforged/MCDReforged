@@ -18,11 +18,12 @@ class GeneralReactor(BaseReactor):
 		else:
 			if info.source == InfoSource.CONSOLE and not info.content.startswith(self.server.config['console_command_prefix']):
 				self.server.send(info.content)  # send input command to server's stdin
+
 			if info.is_user and info.content == '!!help':
 				self.server.command_manager.process_help_command(info)
+
 			self.server.plugin_manager.call('on_info', (self.server.server_interface, info))
 
 
 def get_reactor(server):
 	return GeneralReactor(server)
-

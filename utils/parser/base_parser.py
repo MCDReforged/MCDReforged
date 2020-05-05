@@ -3,6 +3,7 @@ import os
 import re
 import time
 
+from utils import tool
 from utils.info import InfoSource, Info
 
 
@@ -65,9 +66,7 @@ class BaseParser(object):
 		return None
 
 	def pre_parse_server_stdout(self, text: str) -> str:
-		if text.startswith('\033['):
-			text = re.sub(r'\033\[.*?m', '', text)
-		return text
+		return tool.clean_console_color_code(text)
 
 	# returns 1 bool: if info is a server startup message
 	def parse_server_startup_done(self, info: Info) -> bool:

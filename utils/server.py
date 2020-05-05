@@ -34,6 +34,7 @@ class Server:
 
 		self.logger = logger.Logger(self, constant.NAME_SHORT)
 		self.logger.set_file(constant.LOGGING_FILE)
+		self.server_logger = logger.ServerLogger('Server')
 		self.language_manager = LanguageManager(self, constant.LANGUAGE_FOLDER)
 		self.config = config.Config(self, constant.CONFIG_FILE)
 		self.rcon_manager = RconManager(self)
@@ -46,7 +47,7 @@ class Server:
 		self.load_plugins()
 		self.permission_manager = PermissionManager(self, constant.PERMISSION_FILE)
 		self.update_helper = UpdateHelper(self)
-		self.update_helper.check_update()
+		self.update_helper.check_update_start()
 
 	# Translate info strings
 
@@ -249,7 +250,7 @@ class Server:
 			text = self.parser_manager.get_parser().pre_parse_server_stdout(text)
 		except:
 			self.logger.warning(self.t('server.tick.pre_parse_fail'))
-		print('[Server] {}'.format(text))
+		self.server_logger.info(text)
 
 		try:
 			parsed_result = self.parser_manager.get_parser().parse_server_stdout(text)
