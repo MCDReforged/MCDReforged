@@ -302,3 +302,4 @@ update_helper._check_update.download_finished: |
 
 update_helper._check_update.download_fail: |
   最新的MCDR下載失敗
+  
