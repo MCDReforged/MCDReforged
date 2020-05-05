@@ -2,7 +2,7 @@
 # https://github.com/TISUnion/stext
 
 # -*- coding: utf-8 -*-
-
+import copy
 import json
 from colorama import Fore, Style
 
@@ -118,22 +118,20 @@ class RTextBase:
 
 
 class RText(RTextBase):
-	def __new__(cls, text, *args, **kwargs):
-		if type(text) == cls:
-			return text
-		return super().__new__(cls)
-
 	def __init__(self, text, color=RColor.reset, styles=None):
 		if styles is None:
 			styles = []
 		elif styles is str:
 			styles = [styles]
-		self.data = {
-			'text': str(text),
-			'color': color
-		}  # type: dict
-		for style in [RStyle.bold, RStyle.italic, RStyle.underlined, RStyle.strike_through, RStyle.obfuscated]:
-			self.data[style] = style in styles
+		if type(text) == type(self):
+			self.data = text.data.copy()
+		else:
+			self.data = {
+				'text': str(text),
+				'color': color
+			}  # type: dict
+			for style in [RStyle.bold, RStyle.italic, RStyle.underlined, RStyle.strike_through, RStyle.obfuscated]:
+				self.data[style] = style in styles
 
 	def to_json_object(self):
 		return self.data
@@ -154,6 +152,12 @@ class RText(RTextBase):
 			}
 		}
 		return self
+
+	def c(self, action, value):
+		return self.set_click_event(action, value)
+
+	def h(self, *args):
+		return self.set_hover_text(*args)
 
 	def to_plain_text(self):
 		return self.data['text']
