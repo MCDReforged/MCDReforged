@@ -163,18 +163,19 @@ class Server:
 		set it to STOPPING_BY_PLUGIN to prevent MCDR exiting
 		:return:
 		"""
+		self.set_server_status(new_server_status)
 		if not self.is_server_running():
 			self.logger.warning(self.t('server.stop.stop_twice'))
-		self.set_server_status(new_server_status)
-		if not forced:
-			try:
-				self.send(self.parser_manager.get_stop_command())
-			except:
-				self.logger.error(self.t('server.stop.stop_fail'))
-				forced = True
-		if forced:
-			self.process.kill()
-			self.logger.info(self.t('server.stop.process_killed'))
+		else:
+			if not forced:
+				try:
+					self.send(self.parser_manager.get_stop_command())
+				except:
+					self.logger.error(self.t('server.stop.stop_fail'))
+					forced = True
+			if forced:
+				self.process.kill()
+				self.logger.info(self.t('server.stop.process_killed'))
 
 	def send(self, text, ending='\n'):
 		"""
@@ -315,9 +316,8 @@ class Server:
 					self.react(parsed_result)
 			except (KeyboardInterrupt, EOFError, SystemExit, IOError) as e:
 				self.logger.debug('Exception {} {} caught in console_input()'.format(type(e), e))
+				self.stop(forced=self.flag_interrupt)
 				self.flag_interrupt = True
-				self.stop(forced=True)
-				break
 			except:
 				self.logger.error(self.t('server.console_input.error'))
 				self.logger.error(traceback.format_exc())
@@ -331,9 +331,11 @@ class Server:
 		for reactor in self.reactors:
 			try:
 				reactor.react(info)
-			except:
+			except Exception as e:
 				self.logger.error(self.t('server.react.error', type(reactor).__name__))
 				self.logger.error(traceback.format_exc())
+				if e is KeyboardInterrupt:
+					raise
 
 	def connect_rcon(self):
 		self.rcon_manager.disconnect()

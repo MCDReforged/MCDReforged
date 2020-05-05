@@ -67,6 +67,7 @@ It also has these following methods:
 | wait_for_start() | Wait until the server is stopped, in other words, startable |
 | restart() | Execute `stop()`、`wait_for_start()`、`start()` in order to restart the server |
 | stop_exit() | Close the server and MCDR, in the other words, exit the program |
+| exit() | Stop MCDR. Only works when the server is not running |
 | is_server_running() | If the server (more precisely, server process) is running |
 | is_server_startup() | If the server has started up |
 | is_rcon_running() | Return a bool representing if the rcon is running |

@@ -67,6 +67,7 @@ MCDReforged 插件文档
 | wait_for_start() | 等待直至服务端完全关闭，也就是可以启动 |
 | restart() | 依次执行 `stop()`、`wait_for_start()`、`start()` 来重启服务端 |
 | stop_exit() | 关闭服务端以及 MCDR，也就是退出整个程序 |
+| exit() | 关闭 MCDR。仅在服务端已关闭时有效 |
 | is_server_running() | 返回一个 bool 代表服务端（更准确地，服务端进程）是否在运行 |
 | is_server_startup() | 返回一个 bool 代表服务端是否已经启动完成 |
 | is_rcon_running() | 返回一个 bool 代表 rcon 是否在运行 |

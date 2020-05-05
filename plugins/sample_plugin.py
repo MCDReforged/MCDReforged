@@ -10,14 +10,16 @@ secret = random.random()
 def add_help_message(server):
 	server.add_help_message('!!!start', 'Start the server')
 	server.add_help_message('!!!stop', 'Stop the server')
+	server.add_help_message('!!!stop_exit', 'Stop the server and exit')
 	server.add_help_message('!!!restart', 'Restart the server')
+	server.add_help_message('!!!exit', 'Exit MCDR when server stopped')
 	server.add_help_message('!!!rcon', 'Rcaon test')
 	server.add_help_message('!!!permission', 'Get permission level')
 	server.add_help_message('!!!error', 'What is 1/0?')
 	server.add_help_message('!!!status', 'Get server status')
 	server.add_help_message('!!!secret', 'get_plugin_instance() test')
 	server.add_help_message('!!!rtext', RText('rtext test').set_hover_text('it', ' ', 'works', RText('?', styles=RStyle.obfuscated)))
-	server.add_help_message('!!!plugin', RText('rtext test').set_hover_text('it', ' ', 'works', RText('?', styles=RStyle.obfuscated)))
+	server.add_help_message('!!!plugin', 'plugin test')
 
 
 def on_load(server, old_module):
@@ -45,9 +47,13 @@ def on_info(server, info):
 			if info.content == '!!!start':
 				server.start()
 			if info.content == '!!!stop':
+				server.stop()
+			if info.content == '!!!stop_exit':
 				server.stop_exit()
 			if info.content == '!!!restart':
 				server.restart()
+			if info.content == '!!!exit':
+				server.reply(info, 'success: {}'.format(server.exit()))
 		if info.source == 1 and info.content.startswith('!!!say '):
 			server.say(info.content[6:])
 		if info.content == '!!!rcon':

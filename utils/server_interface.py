@@ -91,6 +91,19 @@ class ServerInterface:
 		self.__server.stop(forced=False)
 
 	@log_call
+	def exit(self):
+		"""
+		exit MCDR when the server is stopped
+		if the server is running return False otherwise return True
+
+		:return: a bool described as above
+		"""
+		if self.__server.is_server_running():
+			return False
+		self.__server.set_server_status(ServerStatus.STOPPED)
+		return True
+
+	@log_call
 	def is_server_running(self):
 		"""
 		:return: a bool, if the server is running
