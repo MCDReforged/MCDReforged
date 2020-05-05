@@ -1,0 +1,305 @@
+server.load_config.language_set: |
+  語言已設置為{0}
+
+server.load_config.debug_mode_on: |
+  調試模式開啟
+
+server.load_config.parser_set: |
+  解析器已設置為{0}
+
+server.load_config.encoding_decoding_set: |
+  編碼/解碼方式已設置為{0} / {1}
+
+server.start_server.start_twice: |
+  服務端不能多次啟動
+
+server.start_server.starting: |
+  正在啟動服務端，啟動參數為“ {0}”
+
+server.start_server.start_fail: |
+  服務端啟動失敗
+
+server.start_server.pid_info: |
+  服務端正在以PID {0}運行中
+
+server.stop.stop_twice: |
+  服務端不能在關閉時再次關閉
+
+server.stop.stop_fail: |
+  服務端關閉出錯，強制關閉
+
+server.stop.process_killed: |
+  進度已終止
+
+server.send.send_when_stoped: |
+  服務端已關閉，不能向其標準輸入流輸入指令
+
+server.receive.wait_stop: |
+  等待服務端進展停止
+
+server.receive.decode_fail: |
+  解析文本“ {0}”錯誤
+
+server.on_server_stop.show_stopcode: |
+  服務端進程返回代碼: {0}
+
+server.on_server_stop.stop_by_itself: |
+  服務端自行關閉
+
+server.tick.pre_parse_fail: |
+  預解析服務端標準輸出流失敗，使用源文本
+
+server.run.error: |
+  運行MCDR時出錯
+
+server.run.user_interrupted: |
+  MCDR已被用戶終止
+
+server.run.server_stop: |
+  服務端已關閉
+
+server.run.bye: |
+  再見
+
+server.run.stop_error: |
+  關閉MCDR時出錯，忽略並繼續退出
+
+server.console_input.parse_fail: |
+  解析控制台指令“ {0}”錯誤
+
+server.console_input.error: |
+  運行控制台線程時出錯
+
+server.react.error: |
+  運行反應器{0}時出錯
+
+command_manager.help_message: |
+  §7!!MCDR§r: 顯示這條消息
+  §7!! MCDR重新加載§r: 顯示重載相關的幫助信息
+  §7!! MCDR狀態§r: 顯示MCDR狀態
+  §7!! MCDR權限§r: 顯示權限相關的幫助信息
+  §7!! MCDR插件§r: 顯示插件相關的幫助信息
+
+command_manager.help_message_reload: |
+  §7!! MCDR重新加載插件§r: 加載/重載/卸載§l有修改的§r插件
+  §7!! MCDR重載配置§r: 重載配置文件
+  §7!! MCDR重新加載權限§r: 重載權限文件
+  §7!! MCDR重新加載所有§r: 重載上述所有
+
+command_manager.help_message_permission: |
+  §7!! MCDR權限列表§e[<level>]§r: 列出所有玩家的權限等級。如果§e[<level>]§r被指定則僅列出權限等級§e[<level>] §r
+  §7!! MCDR權限集§b<player>§r§e<level>§r: 將§b<player>§r的權限等級設置為§e<level>§r
+  §7!! MCDR權限刪除§b<player>§r: 將§b<player>§r從權限數據庫中移除
+  §7!! MCDR權限設置為默認值§e<level>§r: 將默認權限等級設置為§e<level>§r
+
+command_manager.help_message_plugin: |
+  §7!! MCDR插件列表§r: 列出所有的插件
+  §7!! MCDR插件加載§e<plugin>§r: 加載/重載調用§e<plugin>§r的插件
+  §7!! MCDR插件啟用§e<plugin>§r: 啟用稱為§e<plugin>§r的插件
+  §7!! MCDR插件禁用§e<plugin>§r: 放置稱為§e<plugin>§r的插件
+  §7!! MCDR插件reloadall§r: 加載/重載/卸載§l所有§r插件
+
+command_manager.command_not_found: |
+  參數錯誤，輸入“§7{0}§r”以查看幫助
+
+command_manager.command_not_found_suggest: |
+  單擊以輸入“§7{0}§r”
+
+command_manager.refresh_changed_plugins.fail: |
+  重載變化的插件§c失敗§r
+
+command_manager.reload_config.fail: |
+  配置文件重載§c失敗§r
+
+command_manager.reload_config.success: |
+  配置文件重載§a成功§r
+
+command_manager.reload_permission.fail: |
+  權限文件重載§c失敗§r
+
+command_manager.reload_permission.success: |
+  權限文件重載§a成功§r
+
+command_manager.invalid_permission_level: |
+  §c無效的權限等級§r
+
+command_manager.invalid_player_name: |
+  §c無效的玩家名稱§r
+
+command_manager.remove_player_permission.player_removed: |
+  已移除玩家§b{0}§r
+
+command_manager.list_permission.show_default: |
+  默認等級: §e{0}§r
+
+command_manager.print_mcdr_status.online: |
+  在線
+
+command_manager.print_mcdr_status.offline: |
+  §7離線§r
+
+command_manager.print_mcdr_status.line1: |
+  §l{0}§r版本: §7{1}§r
+
+command_manager.print_mcdr_status.line2: |
+  服務端狀態: §7{0}§r
+
+command_manager.print_mcdr_status.line3: |
+  服務端已啟動: §7{0}§r
+
+command_manager.print_mcdr_status.line4: |
+  rcon: {0}
+
+command_manager.print_mcdr_status.line5: |
+  插件數量: §7{0}§r
+
+command_manager.list_plugin.info_loaded_plugin: |
+  §6{0} x§e已加載插件§r
+
+command_manager.list_plugin.info_disabled_plugin: |
+  §6{0} x§e已添加插件§r
+
+command_manager.list_plugin.info_not_loaded_plugin: |
+  §6{0} x§e未加載插件§r
+
+command_manager.list_plugin.suggest_disable: |
+  點擊以當地插件“§e{0}§r”
+
+command_manager.list_plugin.suggest_enable: |
+  點擊以啟用插件“§e{0}§r”
+
+command_manager.list_plugin.suggest_reload: |
+  點擊以重載插件“§e{0}§r”
+
+command_manager.list_plugin.suggest_load: |
+  點擊以加載插件“§e{0}§r”
+
+command_manager.invalid_plugin_name: |
+  無效的插件名“§e{0}§r”
+
+command_manager.disable_plugin.fail: |
+  插件“§e{0}§r”替換§c失敗§r
+
+command_manager.disable_plugin.success: |
+  插件“§e{0}§r”擴展§a成功§r
+
+command_manager.load_plugin.fail: |
+  插件“§e{0}§r”啟用§c失敗§r
+
+command_manager.load_plugin.success: |
+  插件“§e{0}§r”啟用§a成功§r
+
+command_manager.enable_plugin.load_fail: |
+  插件“§e{0}§r”加載§c失敗§r
+
+command_manager.enable_plugin.success: |
+  插件“§e{0}§r”啟用§a成功§r
+
+command_manager.reload_all_plugin.fail: |
+  重載所有插件§c失敗§r
+
+command_manager.mcdr_help_message: |
+  MCDR控制指令
+
+Permission_manager.load.fail: |
+  §7{0}§r§c失敗§r，使用替換的空數據
+
+Permission_manager.set_default_permission_level.done: |
+  默認權限等級已設置為{0}
+
+Permission_manager.set_permission_level.done: |
+  玩家{0}的權限等級已設置為{1}
+
+plugin_manager.load_plugin.fail: |
+  插件{0}加載失敗
+
+plugin_manager.load_plugin.success: |
+  插件{0}已加載
+
+plugin_manager.unload_plugin.unload_fail: |
+  插件{0}卸載失敗
+
+plugin_manager.unload_plugin.unload_success: |
+  插件{0}已卸載
+
+plugin_manager.reload_plugin.reload_fail: |
+  插件{0}重載失敗
+
+plugin_manager.reload_plugin.reload_success: |
+  插件{0}已重載
+
+plugin_manager .__ refresh_plugins.loading: |
+  加載插件中
+
+plugin_manager .__ refresh_plugins.info_loaded: |
+  已加載: §7{0}§r個插件
+
+plugin_manager .__ refresh_plugins.info_unloaded: |
+  已卸載: §7{0}§r個插件
+
+plugin_manager .__ refresh_plugins.info_reloaded: |
+  已重載: §7{0}§r個插件
+
+plugin_manager .__ refresh_plugins.info_fail: |
+  失敗: §7{0}§r個插件
+
+plugin_manager .__ refresh_plugins.info_none: |
+  無插件變更
+
+plugin_manager .__ refresh_plugins.info_plugin_amount: |
+  已加載插件總數: §7{0}§r
+
+rcon_manager.connect.connection_fail: |
+  rcon連接失敗: {0}
+
+rcon_manager.connect.connected: |
+  rcon已連接
+
+rcon_manager.connect.wrong_password: |
+  rcon密碼錯誤，連接失敗
+
+rcon_manager.disconnect.disconnected: |
+  rcon已斷開連接
+
+rcon_manager.disconnect.disconnect_fail: |
+  rcon插入連接失敗
+
+server_status.running: |
+  運行中
+
+server_status.stopping_by_itself: |
+  正在自行關閉
+
+server_status.stopping_by_plugin: |
+  正在被插件關閉
+
+server_status.stopped: |
+  已關閉
+
+general_reactor.permission_denied: |
+  權限不足
+
+parser_manager.load_re_death_message.fail: |
+  死亡信息數據文件加載失敗
+
+update_helper._check_update.check_fail: |
+  從Github檢測最新版本失敗: {0}
+
+update_helper._check_update.is_already_latest: |
+  MCDR已為最新版
+
+update_helper._check_update.newer_than_latest: |
+  MCDR比Github中的最新版{0}更新，這是一個開發版嗎？
+
+檢測到update_helper._check_update.new_version_: |
+  已檢測到新版本: {0}
+
+update_helper._check_update.new_version_url: |
+  你可以在這裡更新MCDR: {0}
+
+update_helper._check_update.download_finished: |
+  最新的MCDR下載完成，文件位於{0}
+
+update_helper._check_update.download_fail: |
+  最新的MCDR下載失敗
+  
