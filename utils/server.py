@@ -145,7 +145,7 @@ class Server:
 			return False
 		if not self.config['disable_console_thread']:
 			if self.console_input_thread is None or not self.console_input_thread.is_alive():
-				self.logger.info('Console thread starting')
+				self.logger.debug('Console thread starting')
 				self.console_input_thread = tool.start_thread(self.console_input, (), 'Console')
 		else:
 			self.logger.info('Console thread disabled')
