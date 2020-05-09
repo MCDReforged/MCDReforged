@@ -101,10 +101,17 @@ class CommandManager:
 				self.disable_plugin(info, args[3])
 			elif len(args) == 4 and args[2] in ['enable']:
 				self.enable_plugin(info, args[3])
-			elif len(args) == 3 and args[2] in ['reloadall']:
+			elif len(args) == 3 and args[2] in ['reloadall', 'ra']:
 				self.reload_all_plugin(info)
 			else:
 				self.send_command_not_found(info, '!!MCDR plugin')
+
+		# !!MCDR checkupdate
+		elif len(args) == 2 and args[1] in ['cu', 'checkupdate']:
+			def reply(msg):
+				self.send_message(info, msg)
+			self.server.update_helper.check_update(reply_func=reply)
+
 		else:
 			self.send_command_not_found(info, '!!MCDR')
 

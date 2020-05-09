@@ -250,7 +250,8 @@ There several commands to control MCDR. These command can be both input in game 
 | !!MCDR plugin load \<plugin\> | !!MCDR plg load \<plugin\> | Load / Reload a plugin named \<plugin\>
 | !!MCDR plugin enable \<plugin\> | !!MCDR plg enable \<plugin\> | Enable a plugin named \<plugin\>
 | !!MCDR plugin disable \<plugin\> | !!MCDR plg disable \<plugin\> | Disable a plugin named \<plugin\>
-| !!MCDR plugin reloadall | !!MCDR plg reloadall | Load / Reload / Unloaded every plugins
+| !!MCDR plugin reloadall | !!MCDR plg ra | Load / Reload / Unloaded every plugins
+| !!MCDR plugin checkupdate | !!MCDR plg cu | Check update from Github
 
 Only player with `admin` permission level is allow to execute these command in game chat
 

@@ -79,6 +79,7 @@ command_manager.help_message: |
   §7!!MCDR status§r: Show MCDR status
   §7!!MCDR permission§r: Show permission command help message
   §7!!MCDR plugin§r: Show plugin command help message
+  §7!!MCDR checkupdate§r: Check update from Github
 
 command_manager.help_message_reload: |
   §7!!MCDR reload plugin§r: Load / Reload / Unloaded §lchanged§r plugins
@@ -292,22 +293,22 @@ parser_manager.load_re_death_message.fail: |
   Fail to load death message data
 
 update_helper._check_update.check_fail: |
-  Fail to detect latest version from Github: {0}
+  §cFail to detect latest version from Github: {0}§r
 
 update_helper._check_update.is_already_latest: |
   MCDR is already the latset version
 
 update_helper._check_update.newer_than_latest: |
-  MCDR is newer than the latest version {0} in github, is it a developing version?
+  Current version §7{0}§r is newer than the latest version §7{1}§r in github, is it a developing version?
 
 update_helper._check_update.new_version_detected: |
-  New version detected: {0}
+  New version detected: §7{0}§r
 
 update_helper._check_update.new_version_url: |
-  You can update MCDR from here: {0}
+  You can update MCDR from here: §9{0}§r
 
 update_helper._check_update.download_finished: |
-  Latest MCDR downloaded. It's in {0}
+  Latest MCDR downloaded. It's in §7{0}§r
 
 update_helper._check_update.download_fail: |
-  Latest MCDR downloaded fail
+  §cLatest MCDR downloaded fail§r

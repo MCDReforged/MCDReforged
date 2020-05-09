@@ -250,7 +250,8 @@ MCDR 提供了一些控制 MCDR 的命令，它们均可在游戏中通过聊天
 | !!MCDR plugin load \<plugin\> | !!MCDR plg load \<plugin\> | 加载 / 重载名为 \<plugin\> 的插件
 | !!MCDR plugin enable \<plugin\> | !!MCDR plg enable \<plugin\> | 启用名为 \<plugin\> 的插件
 | !!MCDR plugin disable \<plugin\> | !!MCDR plg disable \<plugin\> |  禁用名为 \<plugin\> 的插件
-| !!MCDR plugin reloadall | !!MCDR plg reloadall | 加载 / 重载 / 卸载**所有**插件
+| !!MCDR plugin reloadall | !!MCDR plg ra | 加载 / 重载 / 卸载**所有**插件
+| !!MCDR checkupdate | !!MCDR cu | 从 Github 检测更新
   
 只有具有 `admin` 权限等级的玩家才被允许通过游戏输入执行这些命令
 

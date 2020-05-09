@@ -79,6 +79,7 @@ command_manager.help_message: |
   §7!!MCDR status§r: 显示 MCDR 状态
   §7!!MCDR permission§r: 显示权限相关的帮助信息
   §7!!MCDR plugin§r: 显示插件相关的帮助信息
+  §7!!MCDR checkupdate§r: 从 Github 检测更新
 
 command_manager.help_message_reload: |
   §7!!MCDR reload plugin§r: 加载 / 重载 / 卸载§l有修改的§r插件
@@ -292,22 +293,22 @@ parser_manager.load_re_death_message.fail: |
   死亡信息数据文件加载失败
 
 update_helper._check_update.check_fail: |
-  从 Github 检测最新版本失败: {0}
+  §c从 Github 检测最新版本失败: {0}§r
 
 update_helper._check_update.is_already_latest: |
   MCDR 已为最新版
 
 update_helper._check_update.newer_than_latest: |
-  MCDR 比 Github 中的最新版 {0} 更新，这是一个开发版吗？
+  目前版本 §7{0}§r 比 Github 中的最新版 §7{1}§r 更新，这是一个开发版吗？
 
 update_helper._check_update.new_version_detected: |
-  已检测到新版本: {0}
+  已检测到新版本: §7{0}§r
 
 update_helper._check_update.new_version_url: |
-  你可以在这里更新 MCDR: {0}
+  你可以在这里更新 MCDR: §9{0}§r
 
 update_helper._check_update.download_finished: |
-  最新的 MCDR 下载完成，文件位于 {0}
+  最新的 MCDR 下载完成，文件位于 §7{0}§r
 
 update_helper._check_update.download_fail: |
-  最新的 MCDR 下载失败
+  §c最新的 MCDR 下载失§r

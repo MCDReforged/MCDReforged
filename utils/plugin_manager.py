@@ -111,13 +111,15 @@ class PluginManager:
 
 	# Multiple plugin manipulation
 
-	def load_new_plugins(self):
+	def load_new_plugins(self, except_list=None):
+		if except_list is None:
+			except_list = []
 		load_list = []
 		list_fail = []
 		name_dict = self.get_loaded_plugin_file_name_dict()
 		new_plugins = []
 		for file_name in self.get_plugin_file_list_all():
-			if file_name not in name_dict:
+			if file_name not in name_dict and file_name not in except_list:
 				plugin = self.load_plugin(file_name, call_event=False)
 				if plugin is not None:
 					new_plugins.append(plugin)
@@ -157,9 +159,9 @@ class PluginManager:
 	def __refresh_plugins(self, reload_all):
 		self.server.logger.info(self.server.t('plugin_manager.__refresh_plugins.loading'))
 
-		load_list, load_fail_list = self.load_new_plugins()
-		unload_list, unload_fail_list = self.unload_removed_plugins()
 		reload_list, reload_fail_list = self.__reload_existed_plugins() if reload_all else self.__refresh_changed_plugins()
+		load_list, load_fail_list = self.load_new_plugins(except_list=reload_fail_list)
+		unload_list, unload_fail_list = self.unload_removed_plugins()
 		fail_list = \
 			['[§6{}§r]'.format(self.server.t('plugin_manager.load'))] + load_fail_list + \
 			['[§6{}§r]'.format(self.server.t('plugin_manager.unload'))] + unload_fail_list + \
