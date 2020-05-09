@@ -160,7 +160,10 @@ class PluginManager:
 		load_list, load_fail_list = self.load_new_plugins()
 		unload_list, unload_fail_list = self.unload_removed_plugins()
 		reload_list, reload_fail_list = self.__reload_existed_plugins() if reload_all else self.__refresh_changed_plugins()
-		fail_list = reload_fail_list + load_fail_list + unload_fail_list
+		fail_list = \
+			[self.server.t('plugin_manager.load')] + load_fail_list + \
+			[self.server.t('plugin_manager.unload')] + unload_fail_list + \
+			[self.server.t('plugin_manager.reload')] + reload_fail_list
 
 		msg = []
 		if load_list:
@@ -169,8 +172,8 @@ class PluginManager:
 			msg.extend([RText(self.server.t('plugin_manager.__refresh_plugins.info_unloaded', len(unload_list))).h('\n'.join(unload_list)), '; '])
 		if reload_list:
 			msg.extend([RText(self.server.t('plugin_manager.__refresh_plugins.info_reloaded', len(reload_list))).h('\n'.join(reload_list)), '; '])
-		if fail_list:
-			msg.extend([RText(self.server.t('plugin_manager.__refresh_plugins.info_fail', len(fail_list))).h('\n'.join(fail_list)), '; '])
+		if load_fail_list or unload_fail_list or reload_fail_list:
+			msg.extend([RText(self.server.t('plugin_manager.__refresh_plugins.info_fail', len(fail_list) - 3)).h('\n'.join(fail_list)), '; '])
 		if len(msg) == 0:
 			msg = [self.server.t('plugin_manager.__refresh_plugins.info_none'), '; ']
 		msg.append(RText(self.server.t('plugin_manager.__refresh_plugins.info_plugin_amount', len(self.plugins)))

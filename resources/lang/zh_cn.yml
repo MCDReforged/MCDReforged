@@ -210,6 +210,15 @@ permission_manager.set_default_permission_level.done: |
 permission_manager.set_permission_level.done: |
   玩家 {0} 的权限等级已设置为 {1}
 
+plugin_manager.load: |
+  加载
+
+plugin_manager.unload: |
+  卸载
+
+plugin_manager.reload: |
+  重载
+
 plugin_manager.load_plugin.fail: |
   插件 {0} 加载失败
 

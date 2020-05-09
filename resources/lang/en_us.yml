@@ -210,6 +210,15 @@ permission_manager.set_default_permission_level.done: |
 permission_manager.set_permission_level.done: |
   The permission level of player {0} has set to {1}
 
+plugin_manager.load: |
+  load
+
+plugin_manager.unload: |
+  unload
+
+plugin_manager.reload: |
+  reload
+
 plugin_manager.load_plugin.fail: |
   Fail to load plugin {0}
 
