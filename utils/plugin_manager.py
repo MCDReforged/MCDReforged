@@ -161,9 +161,9 @@ class PluginManager:
 		unload_list, unload_fail_list = self.unload_removed_plugins()
 		reload_list, reload_fail_list = self.__reload_existed_plugins() if reload_all else self.__refresh_changed_plugins()
 		fail_list = \
-			[self.server.t('plugin_manager.load')] + load_fail_list + \
-			[self.server.t('plugin_manager.unload')] + unload_fail_list + \
-			[self.server.t('plugin_manager.reload')] + reload_fail_list
+			['[§6{}§r]'.format(self.server.t('plugin_manager.load'))] + load_fail_list + \
+			['[§6{}§r]'.format(self.server.t('plugin_manager.unload'))] + unload_fail_list + \
+			['[§6{}§r]'.format(self.server.t('plugin_manager.reload'))] + reload_fail_list
 
 		msg = []
 		if load_list:
