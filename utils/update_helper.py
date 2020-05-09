@@ -32,7 +32,7 @@ class UpdateHelper:
 		else:
 			cmp_result = tool.version_compare(constant.VERSION, latest_version)
 			if cmp_result == 0:
-				(self.server.t('update_helper._check_update.is_already_latest'))
+				reply_func(self.server.t('update_helper._check_update.is_already_latest'))
 			elif cmp_result == 1:
 				reply_func(self.server.t('update_helper._check_update.newer_than_latest', constant.VERSION, latest_version))
 			else:
