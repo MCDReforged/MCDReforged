@@ -157,9 +157,9 @@ class PluginManager:
 	def __refresh_plugins(self, reload_all):
 		self.server.logger.info(self.server.t('plugin_manager.__refresh_plugins.loading'))
 
-		reload_list, reload_fail_list = self.__reload_existed_plugins() if reload_all else self.__refresh_changed_plugins()
 		load_list, load_fail_list = self.load_new_plugins()
 		unload_list, unload_fail_list = self.unload_removed_plugins()
+		reload_list, reload_fail_list = self.__reload_existed_plugins() if reload_all else self.__refresh_changed_plugins()
 		fail_list = reload_fail_list + load_fail_list + unload_fail_list
 
 		msg = []
