@@ -66,7 +66,8 @@ def clean_console_color_code(text):
 		Style.BRIGHT, Style.DIM, Style.NORMAL, Style.RESET_ALL,
 		Back.BLACK, Back.RED, Back.GREEN, Back.YELLOW, Back.BLUE, Back.MAGENTA, Back.CYAN, Back.WHITE, Back.RESET,
 		Back.LIGHTBLACK_EX, Back.LIGHTRED_EX, Back.LIGHTGREEN_EX, Back.LIGHTYELLOW_EX, Back.LIGHTBLUE_EX,
-		Back.LIGHTMAGENTA_EX, Back.LIGHTCYAN_EX, Back.LIGHTWHITE_EX
+		Back.LIGHTMAGENTA_EX, Back.LIGHTCYAN_EX, Back.LIGHTWHITE_EX,
+		'\033[m'
 	]:
 		text = text.replace(c, '')
 	return text
