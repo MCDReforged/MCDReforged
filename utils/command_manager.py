@@ -215,7 +215,7 @@ class CommandManager:
 				+ RText(' [×]', color=RColor.gray)
 				.c(RAction.run_command, '!!MCDR plugin disable {}'.format(file_name))
 				.h(self.t('command_manager.list_plugin.suggest_disable', file_name))
-				+ RText(' [▷]', color=RColor.gray)
+				+ RText(' [↻]', color=RColor.gray)
 				.c(RAction.run_command, '!!MCDR plugin load {}'.format(file_name))
 				.h(self.t('command_manager.list_plugin.suggest_reload', file_name))
 			)
