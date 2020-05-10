@@ -293,7 +293,7 @@ parser_manager.load_re_death_message.fail: |
   Fail to load death message data
 
 update_helper._check_update.check_fail: |
-  §cFail to detect latest version from Github: {0}§r
+  Fail to detect latest version from Github: {0}
 
 update_helper._check_update.is_already_latest: |
   MCDR is already the latset version
@@ -311,4 +311,4 @@ update_helper._check_update.download_finished: |
   Latest MCDR downloaded. It's in §7{0}§r
 
 update_helper._check_update.download_fail: |
-  §cLatest MCDR downloaded fail§r
+  Latest MCDR §cdownloaded fail§r
