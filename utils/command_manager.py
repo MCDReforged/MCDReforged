@@ -2,6 +2,7 @@
 import collections
 import os
 import re
+import threading
 import traceback
 
 from utils.plugin import HelpMessage
@@ -197,8 +198,11 @@ class CommandManager:
 			RText(self.t('command_manager.print_mcdr_status.line4', status_dict[self.server.server_interface.is_rcon_running(is_plugin_call=False)])), '\n',
 			RText(self.t('command_manager.print_mcdr_status.line5', len(self.server.plugin_manager.plugins))).c(RAction.suggest_command, '!!MCDR plugin list')
 		))
-		if info.source == InfoSource.CONSOLE and self.server.process is not None:
-			self.logger.info('PID: {}'.format(self.server.process.pid))
+		if info.source == InfoSource.CONSOLE:
+			self.logger.info('PID: {}'.format(self.server.process.pid if self.server.process is not None else 'N/A'))
+			self.logger.info('Thread count: {}'.format(threading.active_count()))
+			for thread in threading.enumerate():
+				self.logger.info('  - {}'.format(thread.getName()))
 
 	# Plugin
 
