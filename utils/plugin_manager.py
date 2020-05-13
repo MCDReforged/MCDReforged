@@ -44,10 +44,14 @@ class PluginManager:
 					return plugin
 		return None
 
+	# --------------------------
+	# Single plugin manipulation
+	# --------------------------
+
 	# load and append the plugin to the plugin list
 	# call_event is to decide whether to call on_load or not
 	# return the plugin instance or None
-	def load_plugin(self, file_name, call_event=True):
+	def load_plugin(self, file_name, call_on_load=True):
 		file_name = tool.format_plugin_file_name(file_name)
 		try:
 			# get the existed one or create a new one
@@ -55,7 +59,7 @@ class PluginManager:
 			plugin.load()
 			if plugin not in self.plugins:
 				self.plugins.append(plugin)
-			if call_event:
+			if call_on_load:
 				plugin.call_on_load()
 			self.logger.info(self.server.t('plugin_manager.load_plugin.success', file_name))
 			return plugin
@@ -65,13 +69,11 @@ class PluginManager:
 
 	# reload the plugin
 	# if loading fail remove the plugin from the plugin list
-	def reload_plugin(self, plugin, call_event=True):
+	def reload_plugin(self, plugin, call_on_load=True):
 		try:
 			plugin.unload()
-			if call_event:
-				plugin.call_on_unload()
 			plugin.load()
-			if call_event:
+			if call_on_load:
 				plugin.call_on_load()
 			self.logger.info(self.server.t('plugin_manager.load_plugin.success', plugin.file_name))
 			return True
@@ -82,12 +84,10 @@ class PluginManager:
 
 	# remove the plugin from the plugin list
 	# obj can be Plugin instance of a str like my_plugin or my_plugin.py
-	def unload_plugin(self, obj, call_event=True):
+	def unload_plugin(self, obj):
 		plugin = self.get_plugin(obj)
 		try:
 			plugin.unload()
-			if call_event:
-				plugin.call_on_unload()
 			self.plugins.remove(plugin)
 			self.logger.info(self.server.t('plugin_manager.unload_plugin.unload_success', plugin.file_name))
 			return True
@@ -114,34 +114,32 @@ class PluginManager:
 		if os.path.isfile(file_path):
 			os.rename(file_path, file_path + constant.DISABLED_PLUGIN_FILE_SUFFIX)
 
+	# ----------------------------
 	# Multiple plugin manipulation
+	# ----------------------------
 
-	def load_new_plugins(self, except_list=None):
+	def __load_new_plugins(self, except_list=None):
 		if except_list is None:
 			except_list = []
 		load_list = []
 		list_fail = []
 		name_dict = self.get_loaded_plugin_file_name_dict()
-		new_plugins = []
 		for file_name in self.get_plugin_file_list_all():
 			if file_name not in name_dict and file_name not in except_list:
-				plugin = self.load_plugin(file_name, call_event=False)
+				plugin = self.load_plugin(file_name, call_on_load=False)
 				if plugin is not None:
-					new_plugins.append(plugin)
 					load_list.append(plugin.file_name)
 				else:
 					list_fail.append(file_name)
-		for plugin in new_plugins:
-			plugin.call_on_load()
 		return load_list, list_fail
 
 	# reduce repeat code
-	def __manipulate_existed_plugins(self, check, func):
+	def __manipulate_existed_plugins(self, check, func, **kwargs):
 		done_list = []
 		list_fail = []
 		for plugin in self.plugins[:]:
 			if check(plugin):
-				if func(plugin):
+				if func(plugin, **kwargs):
 					done_list.append(plugin.file_name)
 				else:
 					list_fail.append(plugin.file_name)
@@ -150,23 +148,34 @@ class PluginManager:
 	# reload plugins that are loaded and still existed in the plugin folder
 	def __reload_existed_plugins(self):
 		file_list = self.get_plugin_file_list_all()
-		return self.__manipulate_existed_plugins(lambda p: p.file_name in file_list, self.reload_plugin)
+		return self.__manipulate_existed_plugins(lambda p: p.file_name in file_list, self.reload_plugin, call_on_load=False)
 
 	# reload plugins that are loaded and still existed in the plugin folder, and its file has been modified
 	def __refresh_changed_plugins(self):
 		file_list = self.get_plugin_file_list_all()
-		return self.__manipulate_existed_plugins(lambda p: p.file_name in file_list and p.file_changed(), self.reload_plugin)
+		return self.__manipulate_existed_plugins(lambda p: p.file_name in file_list and p.file_changed(), self.reload_plugin, call_on_load=False)
 
-	def unload_removed_plugins(self):
+	def __unload_removed_plugins(self):
 		file_list = self.get_plugin_file_list_all()
 		return self.__manipulate_existed_plugins(lambda p: p.file_name not in file_list, self.unload_plugin)
 
 	def __refresh_plugins(self, reload_all):
 		self.server.logger.info(self.server.t('plugin_manager.__refresh_plugins.loading'))
 
+		# 1. reload existed (and changed) plugins. if reload fail unload it
 		reload_list, reload_fail_list = self.__reload_existed_plugins() if reload_all else self.__refresh_changed_plugins()
-		load_list, load_fail_list = self.load_new_plugins(except_list=reload_fail_list)
-		unload_list, unload_fail_list = self.unload_removed_plugins()
+
+		# 2. load new plugins, and ignore those plugins which just got unloaded because reloading failed
+		load_list, load_fail_list = self.__load_new_plugins(except_list=reload_fail_list)
+
+		# 3. unload removed plugins
+		unload_list, unload_fail_list = self.__unload_removed_plugins()
+
+		# 4. call on_load for new loaded plugins
+		for name in reload_list + load_list:
+			self.get_plugin(name).call_on_load()
+
+		# result information prepare
 		fail_list = \
 			['[§6{}§r]'.format(self.server.t('plugin_manager.load'))] + load_fail_list + \
 			['[§6{}§r]'.format(self.server.t('plugin_manager.unload'))] + unload_fail_list + \
@@ -196,6 +205,10 @@ class PluginManager:
 	# an interface to call, load / reload / unload all changed plugins
 	def refresh_changed_plugins(self):
 		return self.__refresh_plugins(False)
+
+	# -----------------
+	# Plugin event call
+	# -----------------
 
 	def call(self, func, args=(), wait=False):
 		thread_list = []
