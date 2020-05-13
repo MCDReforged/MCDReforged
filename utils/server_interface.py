@@ -5,6 +5,7 @@
 import threading
 import time
 
+from utils.plugin import Plugin
 from utils.info import Info
 from utils.server_status import ServerStatus
 from utils.rtext import *
@@ -292,14 +293,19 @@ class ServerInterface:
 		return plugin
 
 	@log_call
-	def add_help_message(self, prefix, message, is_plugin_call=True):
+	def add_help_message(self, prefix, message):
 		"""
-		Add help message for you plugin
-		It's used in !!help command
+		Add help message for you plugin, which is used in !!help command
+		It needs to be called in a MCDR provided thread such as on_info or on_player_left called
 
 		:param prefix: A str, the help command of your plugin.
 		When player click on the displayed message it will suggest this prefix parameter to the player
 		:param message: A str or a RTextBase, a neat command description
-		:return: None
+		:return: a bool, if it's called in a MCDR provided thread and the execution succeeded
 		"""
-		threading.current_thread().plugin.add_help_message(prefix, message)
+		thread = threading.current_thread()
+		if hasattr(thread, 'plugin') and type(thread.plugin) is Plugin:
+			plugin = thread.plugin  # type: Plugin
+			plugin.add_help_message(prefix, message)
+			return True
+		return False

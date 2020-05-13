@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import collections
 import os
-import threading
 import hashlib
+
 from utils import tool
 
 
@@ -19,14 +19,14 @@ class Plugin:
 		self.old_module = None
 		self.help_messages = []
 		self.file_hash = None
+		self.flag_unload = False
+		self.thread_pool = self.server.plugin_manager.thread_pool
 
 	def call(self, func_name, args=()):
 		if hasattr(self.module, func_name):
-			target = self.module.__dict__[func_name]
-			if callable(target):
-				thread = PluginThread(target, args, self, func_name)
-				thread.start()
-				return thread
+			func = self.module.__dict__[func_name]
+			if callable(func):
+				return self.thread_pool.add_task(func, args, func_name, self)
 		return None
 
 	def call_on_load(self):
@@ -43,6 +43,9 @@ class Plugin:
 			self.file_hash = hashlib.sha256(file.read()).hexdigest()
 		self.server.logger.debug('Plugin {} loaded, file sha256 = {}'.format(self.file_path, self.file_hash))
 
+	def unload(self):
+		self.flag_unload = True
+
 	def add_help_message(self, prefix, message):
 		self.help_messages.append(HelpMessage(prefix, message, self.file_name))
 		self.server.logger.debug('Plugin Added help message "{}: {}"'.format(prefix, message))
@@ -55,16 +58,3 @@ class Plugin:
 			file_hash = None
 		return file_hash != self.file_hash
 
-
-class PluginThread(threading.Thread):
-	def __init__(self, target, args, plugin, func_name):
-		super().__init__(target=target, args=args, name='{}@{}'.format(func_name, plugin.plugin_name))
-		self.daemon = True
-		self.plugin = plugin
-		self.func_name = func_name
-
-	def run(self):
-		try:
-			super().run()
-		except:
-			self.plugin.server.logger.exception('Error calling {} in plugin {}'.format(self.func_name, self.plugin.plugin_name))

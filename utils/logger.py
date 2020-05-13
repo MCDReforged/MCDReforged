@@ -71,8 +71,7 @@ class Logger:
 	def set_file(self, file_name):
 		if self.file_handler is not None:
 			self.logger.removeHandler(self.file_handler)
-		if not os.path.isdir(os.path.dirname(file_name)):
-			os.makedirs(os.path.dirname(file_name))
+		tool.touch_folder(os.path.dirname(file_name))
 		if os.path.isfile(file_name):
 			modify_time = time.strftime('%Y-%m-%d', time.localtime(os.stat(file_name).st_mtime))
 			counter = 0

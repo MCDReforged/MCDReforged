@@ -42,15 +42,15 @@ class VanillaParser(base_parser.BaseParser):
 		return result
 
 	def parse_player_joined(self, info):
-		if not info.is_user and info.content.endswith('joined the game'):
-			player = info.content.split(' ')[0]
-			return player
+		# Steve joined the game
+		if not info.is_user and re.fullmatch(r'\w{1,16} joined the game', info.content):
+			return info.content.split(' ')[0]
 		return None
 
 	def parse_player_left(self, info):
-		if not info.is_user and info.content.endswith('left the game'):
-			player = info.content.split(' ')[0]
-			return player
+		# Steve left the game
+		if not info.is_user and re.fullmatch(r'\w{1,16} left the game', info.content):
+			return info.content.split(' ')[0]
 		return None
 
 	def parse_player_made_advancement(self, info):

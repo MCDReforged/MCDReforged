@@ -35,6 +35,11 @@ def list_file(folder, suffix):
 	return ret
 
 
+def touch_folder(folder):
+	if not os.path.isdir(folder):
+		os.makedirs(folder)
+
+
 def unique_list(l):
 	ret = list(set(l))
 	ret.sort(key=l.index)

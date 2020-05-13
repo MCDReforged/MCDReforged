@@ -3,7 +3,7 @@
 import os
 
 
-VERSION = '0.8.5-alpha'
+VERSION = '0.8.6-alpha'
 NAME_SHORT = 'MCDR'
 NAME = 'MCDReforged'
 NAME_FULL = 'MCDaemonReforged'
@@ -16,6 +16,7 @@ LOGGING_FILE = os.path.join('log', '{}.log'.format(NAME_SHORT))
 REACTOR_FOLDER = os.path.join('utils', 'reactor')
 PARSER_FOLDER = os.path.join('utils', 'parser')
 PLUGIN_FOLDER = 'plugins'
+PLUGIN_CONFIG_FOLDER = 'config'
 RESOURCE_FOLDER = 'resources'
 LANGUAGE_FOLDER = os.path.join(RESOURCE_FOLDER, 'lang')
 RE_DEATH_MESSAGE_FILE = os.path.join(RESOURCE_FOLDER, 'death_message.yml')

@@ -17,7 +17,11 @@ class ParserManager:
 
 	def load_parser(self, path, parser_name):
 		file_name = os.path.join(path, parser_name + '.py')
-		self.parser = tool.load_source(file_name).get_parser(self)
+		try:
+			self.parser = tool.load_source(file_name).get_parser(self)
+		except FileNotFoundError:
+			self.server.logger.exception(self.server.t('parser_manager.load_parser.file_not_found', parser_name))
+			raise
 		self.death_message_list.clear()
 		self.update_death_message_list(type(self.parser))
 

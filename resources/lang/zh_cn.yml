@@ -289,6 +289,9 @@ server_status.stopped: |
 general_reactor.permission_denied: |
   权限不足
 
+parser_manager.load_parser.file_not_found: |
+  解析器 "{0}" 未找到! 请确保你在配置文件中填写的解析器是正确的
+
 parser_manager.load_re_death_message.fail: |
   死亡信息数据文件加载失败
 

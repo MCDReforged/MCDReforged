@@ -289,6 +289,9 @@ server_status.stopped: |
 general_reactor.permission_denied: |
   Permission denied
 
+parser_manager.load_parser.file_not_found: |
+  Parser "{0}" not found! Make sure you have given a correct parser name in the config
+
 parser_manager.load_re_death_message.fail: |
   Fail to load death message data
 

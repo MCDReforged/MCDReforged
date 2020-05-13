@@ -41,8 +41,7 @@ class UpdateHelper:
 				if self.server.config['download_update']:
 					try:
 						file_name = os.path.join(constant.UPDATE_DOWNLOAD_FOLDER, os.path.basename(download_url))
-						if not os.path.isdir(constant.UPDATE_DOWNLOAD_FOLDER):
-							os.makedirs(constant.UPDATE_DOWNLOAD_FOLDER)
+						tool.touch_folder(constant.UPDATE_DOWNLOAD_FOLDER)
 						if not os.path.isfile(file_name):
 							file_data = requests.get(download_url)
 							with open(file_name, 'wb') as file:

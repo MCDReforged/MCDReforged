@@ -27,7 +27,7 @@ class BungeecordParser(base_parser.BaseParser):
 		# [信息] Listening on /0.0.0.0:25565
 		# [信息] [Steve] -> UpstreamBridge has disconnected
 
-		text = text.replace(re.match(r'\[.*\] ', text).group(), '', 1)
+		text = text.replace(re.match(r'\[\w+?\] ', text).group(), '', 1)
 		# Listening on /0.0.0.0:25565
 		# [Steve] -> UpstreamBridge has disconnected
 
@@ -40,6 +40,18 @@ class BungeecordParser(base_parser.BaseParser):
 		if match is not None:
 			text = text.replace(match.group(), '', 1)
 		return text
+
+	def parse_player_joined(self, info):
+		# [Steve,/127.0.0.1:3631] <-> InitialHandler has connected
+		if not info.is_user and re.fullmatch(r'\[\w{1,16},/[0-9.]+:[0-9]+\] <-> InitialHandler has connected', info.content):
+			return info.content[1:].split(',/')[0]
+		return None
+
+	def parse_player_left(self, info):
+		# [Steve] -> UpstreamBridge has disconnected
+		if not info.is_user and re.fullmatch(r'\[\w{1,16}\] -> UpstreamBridge has disconnected', info.content):
+			return info.content[1:].split('] -> ')[0]
+		return None
 
 	def parse_server_startup_done(self, info):
 		# Listening on /0.0.0.0:25577

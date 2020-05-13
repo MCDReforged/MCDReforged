@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 import os
+import threading
 
 from utils import tool, constant
+from utils.plugin_thread import PluginThreadPool
 from utils.rtext import *
 from utils.plugin import Plugin
 
@@ -12,10 +14,11 @@ class PluginManager:
 		self.server = server
 		self.logger = server.logger
 		self.plugins = []
+		self.thread_pool = PluginThreadPool(self.server)
+		tool.touch_folder(self.plugin_folder)
+		tool.touch_folder(constant.PLUGIN_CONFIG_FOLDER)
 
 	def __get_file_list(self, suffix):
-		if not os.path.isdir(self.plugin_folder):
-			os.makedirs(self.plugin_folder)
 		full_path_list = tool.list_file(self.plugin_folder, suffix)
 		return [path.replace(self.plugin_folder + os.path.sep, '', 1) for path in full_path_list]
 
@@ -64,6 +67,7 @@ class PluginManager:
 	# if loading fail remove the plugin from the plugin list
 	def reload_plugin(self, plugin, call_event=True):
 		try:
+			plugin.unload()
 			if call_event:
 				plugin.call_on_unload()
 			plugin.load()
@@ -81,6 +85,7 @@ class PluginManager:
 	def unload_plugin(self, obj, call_event=True):
 		plugin = self.get_plugin(obj)
 		try:
+			plugin.unload()
 			if call_event:
 				plugin.call_on_unload()
 			self.plugins.remove(plugin)
@@ -196,8 +201,7 @@ class PluginManager:
 		thread_list = []
 		for plugin in self.plugins:
 			thread = plugin.call(func, args)
-			if thread is not None:
+			if isinstance(thread, threading.Thread):
 				thread_list.append(thread)
 		if wait:
-			for thread in thread_list:
-				thread.join()
+			self.thread_pool.join()

@@ -17,6 +17,7 @@ cd %name%-%ver%
 rd /S /Q .git __pycache__ build
 rm -f %name%.spec .gitignore make_release.bat
 mkdir server
+mkdir config
 cp doc\readme_cn.md .
 rm -f plugins\*
 rd /S /Q doc

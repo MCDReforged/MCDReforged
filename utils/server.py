@@ -278,12 +278,12 @@ class Server:
 					time.sleep(0.01)
 			except KeyboardInterrupt:
 				self.flag_interrupt = True
-			except:
-				if not self.flag_interrupt:
-					self.logger.error(self.t('server.run.error'))
-					self.logger.error(traceback.format_exc())
-					self.stop()
 				break
+			except:
+				if self.flag_interrupt:
+					break
+				else:
+					self.logger.exception(self.t('server.run.error'))
 		# stop MCDR
 		try:
 			if self.flag_interrupt:
