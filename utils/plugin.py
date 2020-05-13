@@ -32,8 +32,7 @@ class Plugin:
 		self.old_module = self.module
 		self.module = tool.load_source(self.file_path)
 		self.help_messages = []
-		with open(self.file_path, 'rb') as file:
-			self.file_hash = hashlib.sha256(file.read()).hexdigest()
+		self.file_hash = self.get_file_hash()
 		self.server.logger.debug('Plugin {} loaded, file sha256 = {}'.format(self.file_path, self.file_hash))
 
 	# on_load event sometimes cannot be called right after plugin gets loaded, so here's its separated method for the call
@@ -47,11 +46,13 @@ class Plugin:
 		self.help_messages.append(HelpMessage(prefix, message, self.file_name))
 		self.server.logger.debug('Plugin Added help message "{}: {}"'.format(prefix, message))
 
-	def file_changed(self):
+	def get_file_hash(self):
 		if os.path.isfile(self.file_path):
 			with open(self.file_path, 'rb') as file:
-				file_hash = hashlib.sha256(file.read()).hexdigest()
+				return hashlib.sha256(file.read()).hexdigest()
 		else:
-			file_hash = None
-		return file_hash != self.file_hash
+			return None
+
+	def file_changed(self):
+		return self.get_file_hash() != self.file_hash
 
