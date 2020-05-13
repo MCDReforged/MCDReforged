@@ -40,7 +40,8 @@ def on_unload(server):
 
 
 def on_user_info(server, info):
-	server.reply(info, 'Ah this is an info from a user')
+	if info.content == 'ping':
+		server.reply(info, 'pong from on_user_info')
 
 
 def on_info(server, info):

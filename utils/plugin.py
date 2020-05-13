@@ -32,9 +32,6 @@ class Plugin:
 	def call_on_load(self):
 		self.call('on_load', (self.server.server_interface, self.old_module))
 
-	def call_on_unload(self):
-		self.call('on_unload', (self.server.server_interface, ))
-
 	def load(self):
 		self.old_module = self.module
 		self.module = tool.load_source(self.file_path)
@@ -45,6 +42,7 @@ class Plugin:
 
 	def unload(self):
 		self.flag_unload = True
+		self.call('on_unload', (self.server.server_interface, ))
 
 	def add_help_message(self, prefix, message):
 		self.help_messages.append(HelpMessage(prefix, message, self.file_name))

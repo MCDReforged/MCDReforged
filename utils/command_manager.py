@@ -126,6 +126,7 @@ class CommandManager:
 			if fail_message:
 				self.send_message(info, self.t('command_manager.{}.fail'.format(name), *message_args))
 			self.server.logger.error(traceback.format_exc())
+			return None
 
 	# Reload
 

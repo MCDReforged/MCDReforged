@@ -23,7 +23,7 @@ from utils.update_helper import UpdateHelper
 class Server:
 	def __init__(self):
 		self.console_input_thread = None
-		self.info_processor_thread = None
+		self.info_reactor_thread = None
 		self.info_queue = queue.Queue(maxsize=constant.MAX_INFO_QUEUE_SIZE)
 		self.process = None  # the process for the server
 		self.server_status = ServerStatus.STOPPED
@@ -154,7 +154,7 @@ class Server:
 			self.console_input_thread = start_thread(self.console_input, (), 'Console')
 		else:
 			self.logger.info('Console thread disabled')
-		self.info_processor_thread = start_thread(self.info_react, (), 'InfoProcessor')
+		self.info_reactor_thread = start_thread(self.info_react, (), 'InfoReactor')
 		self.run()
 		return True
 

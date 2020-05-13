@@ -37,50 +37,40 @@ class PluginManager:
 	def get_plugin(self, obj):
 		if type(obj) is Plugin:
 			return obj
-		else:
+		elif type(obj) is str:
 			file_name = tool.format_plugin_file_name(obj)
-			for plugin in self.plugins:
-				if plugin.file_name == file_name:
-					return plugin
-		return None
+			return self.get_loaded_plugin_file_name_dict().get(file_name)
+		else:
+			raise TypeError('The object to load needs to be a Plugin or a str')
 
 	# --------------------------
 	# Single plugin manipulation
 	# --------------------------
 
 	# load and append the plugin to the plugin list
+	# reload if it's already loaded
 	# call_event is to decide whether to call on_load or not
 	# return the plugin instance or None
-	def load_plugin(self, file_name, call_on_load=True):
-		file_name = tool.format_plugin_file_name(file_name)
+	def load_plugin(self, obj, call_on_load=True):
+		plugin = self.get_plugin(obj)
 		try:
 			# get the existed one or create a new one
-			plugin = self.get_loaded_plugin_file_name_dict().get(file_name, Plugin(self.server, os.path.join(self.plugin_folder, file_name)))
+			if type(plugin) is Plugin:
+				plugin.unload()
+			else:
+				plugin = Plugin(self.server, os.path.join(self.plugin_folder, obj))
 			plugin.load()
 			if plugin not in self.plugins:
 				self.plugins.append(plugin)
 			if call_on_load:
 				plugin.call_on_load()
-			self.logger.info(self.server.t('plugin_manager.load_plugin.success', file_name))
+			self.logger.info(self.server.t('plugin_manager.load_plugin.success', plugin.file_name))
 			return plugin
 		except:
-			self.logger.exception(self.server.t('plugin_manager.load_plugin.fail', file_name))
-			return None
-
-	# reload the plugin
-	# if loading fail remove the plugin from the plugin list
-	def reload_plugin(self, plugin, call_on_load=True):
-		try:
-			plugin.unload()
-			plugin.load()
-			if call_on_load:
-				plugin.call_on_load()
-			self.logger.info(self.server.t('plugin_manager.load_plugin.success', plugin.file_name))
-			return True
-		except:
 			self.logger.exception(self.server.t('plugin_manager.load_plugin.fail', plugin.file_name))
-			self.plugins.remove(plugin)
-			return False
+			if plugin in self.plugins:
+				self.plugins.remove(plugin)
+			return None
 
 	# remove the plugin from the plugin list
 	# obj can be Plugin instance of a str like my_plugin or my_plugin.py
@@ -148,12 +138,12 @@ class PluginManager:
 	# reload plugins that are loaded and still existed in the plugin folder
 	def __reload_existed_plugins(self):
 		file_list = self.get_plugin_file_list_all()
-		return self.__manipulate_existed_plugins(lambda p: p.file_name in file_list, self.reload_plugin, call_on_load=False)
+		return self.__manipulate_existed_plugins(lambda p: p.file_name in file_list, self.load_plugin, call_on_load=False)
 
 	# reload plugins that are loaded and still existed in the plugin folder, and its file has been modified
 	def __refresh_changed_plugins(self):
 		file_list = self.get_plugin_file_list_all()
-		return self.__manipulate_existed_plugins(lambda p: p.file_name in file_list and p.file_changed(), self.reload_plugin, call_on_load=False)
+		return self.__manipulate_existed_plugins(lambda p: p.file_name in file_list and p.file_changed(), self.load_plugin, call_on_load=False)
 
 	def __unload_removed_plugins(self):
 		file_list = self.get_plugin_file_list_all()
