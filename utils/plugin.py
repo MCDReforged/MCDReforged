@@ -19,7 +19,6 @@ class Plugin:
 		self.old_module = None
 		self.help_messages = []
 		self.file_hash = None
-		self.flag_unload = False
 		self.thread_pool = self.server.plugin_manager.thread_pool
 
 	def call(self, func_name, args=()):
@@ -29,9 +28,6 @@ class Plugin:
 				return self.thread_pool.add_task(func, args, func_name, self)
 		return None
 
-	def call_on_load(self):
-		self.call('on_load', (self.server.server_interface, self.old_module))
-
 	def load(self):
 		self.old_module = self.module
 		self.module = tool.load_source(self.file_path)
@@ -40,8 +36,11 @@ class Plugin:
 			self.file_hash = hashlib.sha256(file.read()).hexdigest()
 		self.server.logger.debug('Plugin {} loaded, file sha256 = {}'.format(self.file_path, self.file_hash))
 
+	# on_load event sometimes cannot be called right after plugin gets loaded, so here's its separated method for the call
+	def call_on_load(self):
+		self.call('on_load', (self.server.server_interface, self.old_module))
+
 	def unload(self):
-		self.flag_unload = True
 		self.call('on_unload', (self.server.server_interface, ))
 
 	def add_help_message(self, prefix, message):
