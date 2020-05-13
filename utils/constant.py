@@ -3,7 +3,7 @@
 import os
 
 
-VERSION = '0.8.6-alpha'
+VERSION = '0.9.0-alpha'
 NAME_SHORT = 'MCDR'
 NAME = 'MCDReforged'
 NAME_FULL = 'MCDaemonReforged'
@@ -20,7 +20,7 @@ PLUGIN_CONFIG_FOLDER = 'config'
 RESOURCE_FOLDER = 'resources'
 LANGUAGE_FOLDER = os.path.join(RESOURCE_FOLDER, 'lang')
 RE_DEATH_MESSAGE_FILE = os.path.join(RESOURCE_FOLDER, 'death_message.yml')
-UPDATE_DOWNLOAD_FOLDER = 'MCDR_update/'
+UPDATE_DOWNLOAD_FOLDER = 'MCDR_update'
 
 PLUGIN_FILE_SUFFIX = '.py'
 DISABLED_PLUGIN_FILE_SUFFIX = '.disabled'

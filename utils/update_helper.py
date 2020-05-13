@@ -40,8 +40,8 @@ class UpdateHelper:
 				reply_func(self.server.t('update_helper._check_update.new_version_url', url))
 				if self.server.config['download_update']:
 					try:
-						file_name = os.path.join(constant.UPDATE_DOWNLOAD_FOLDER, os.path.basename(download_url))
 						tool.touch_folder(constant.UPDATE_DOWNLOAD_FOLDER)
+						file_name = os.path.join(constant.UPDATE_DOWNLOAD_FOLDER, os.path.basename(download_url))
 						if not os.path.isfile(file_name):
 							file_data = requests.get(download_url)
 							with open(file_name, 'wb') as file:
