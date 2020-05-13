@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import locale
 import logging
+import queue
 import sys
 import time
 import traceback
@@ -22,6 +23,8 @@ from utils.update_helper import UpdateHelper
 class Server:
 	def __init__(self):
 		self.console_input_thread = None
+		self.info_processor_thread = None
+		self.info_queue = queue.Queue(maxsize=constant.MAX_INFO_QUEUE_SIZE)
 		self.process = None  # the process for the server
 		self.server_status = ServerStatus.STOPPED
 		self.flag_interrupt = False  # ctrl-c flag
@@ -125,8 +128,7 @@ class Server:
 				self.logger.info(self.t('server.start_server.starting', start_command))
 				self.process = Popen(start_command, cwd=self.config['working_directory'], stdin=PIPE, stdout=PIPE, stderr=STDOUT, shell=True)
 			except:
-				self.logger.error(self.t('server.start_server.start_fail'))
-				self.logger.error(traceback.format_exc())
+				self.logger.exception(self.t('server.start_server.start_fail'))
 				return False
 			else:
 				self.set_server_status(ServerStatus.RUNNING)
@@ -141,14 +143,18 @@ class Server:
 
 		:return: a bool, if the server start up try succeeds
 		"""
+		def start_thread(target, args, name):
+			self.logger.debug('{} thread starting'.format(name))
+			thread = tool.start_thread(target, args, name)
+			return thread
+
 		if not self.start_server():
 			return False
 		if not self.config['disable_console_thread']:
-			if self.console_input_thread is None or not self.console_input_thread.is_alive():
-				self.logger.debug('Console thread starting')
-				self.console_input_thread = tool.start_thread(self.console_input, (), 'Console')
+			self.console_input_thread = start_thread(self.console_input, (), 'Console')
 		else:
 			self.logger.info('Console thread disabled')
+		self.info_processor_thread = start_thread(self.info_react, (), 'InfoProcessor')
 		self.run()
 		return True
 
@@ -245,7 +251,6 @@ class Server:
 		if text is None:  # server process has been terminated
 			self.on_server_stop()
 			return
-
 		try:
 			text = self.parser_manager.get_parser().pre_parse_server_stdout(text)
 		except:
@@ -263,14 +268,25 @@ class Server:
 			self.logger.debug('Parsed text from server stdin:')
 			for line in parsed_result.format_text().splitlines():
 				self.logger.debug('    {}'.format(line))
-		self.react(parsed_result)
+		self.put_info(parsed_result)
+
+	def on_mcdr_stop(self):
+		try:
+			if self.flag_interrupt:
+				self.logger.info(self.t('server.on_mcdr_stop.user_interrupted'))
+			else:
+				self.logger.info(self.t('server.on_mcdr_stop.server_stop'))
+			self.plugin_manager.call('on_mcdr_stop', (self.server_interface,), wait=True)
+			self.logger.info(self.t('server.on_mcdr_stop.bye'))
+		except:
+			self.logger.exception(self.t('server.on_mcdr_stop.stop_error'))
 
 	def run(self):
 		"""
 		the main loop of MCDR
 		:return: None
 		"""
-		while self.server_status != ServerStatus.STOPPED:
+		while self.server_status not in [ServerStatus.STOPPED]:
 			try:
 				if self.is_server_running():
 					self.tick()
@@ -284,17 +300,7 @@ class Server:
 					break
 				else:
 					self.logger.exception(self.t('server.run.error'))
-		# stop MCDR
-		try:
-			if self.flag_interrupt:
-				self.logger.info(self.t('server.run.user_interrupted'))
-			else:
-				self.logger.info(self.t('server.run.server_stop'))
-			self.plugin_manager.call('on_mcdr_stop', (self.server_interface,), wait=True)
-			self.logger.info(self.t('server.run.bye'))
-		except:
-			self.logger.error(self.t('server.run.stop_error'))
-			self.logger.error(traceback.format_exc())
+		self.on_mcdr_stop()
 
 	def console_input(self):
 		"""
@@ -307,35 +313,45 @@ class Server:
 				try:
 					parsed_result = self.parser_manager.get_parser().parse_console_command(text)
 				except:
-					self.logger.error(self.t('server.console_input.parse_fail', text))
-					self.logger.error(traceback.format_exc())
+					self.logger.exception(self.t('server.console_input.parse_fail', text))
 				else:
 					self.logger.debug('Parsed text from console input:')
 					for line in str(parsed_result).splitlines():
 						self.logger.debug('    {}'.format(line))
-					self.react(parsed_result)
+					self.put_info(parsed_result)
 			except (KeyboardInterrupt, EOFError, SystemExit, IOError) as e:
 				self.logger.debug('Exception {} {} caught in console_input()'.format(type(e), e))
 				self.stop(forced=self.flag_interrupt)
 				self.flag_interrupt = True
 			except:
-				self.logger.error(self.t('server.console_input.error'))
-				self.logger.error(traceback.format_exc())
+				self.logger.exception(self.t('server.console_input.error'))
 
-	def react(self, info):
+	def put_info(self, info):
+		try:
+			self.info_queue.put_nowait(info)
+		except queue.Full:
+			self.logger.critical(self.t('server.info_queue.full'))
+
+	def info_react(self):
 		"""
-		react to a parsed info
-		:param info: the info instance you want to react to
+		the thread for looping to react to parsed info
+
 		:return: None
 		"""
-		for reactor in self.reactors:
+		while not self.flag_interrupt:
 			try:
-				reactor.react(info)
-			except Exception as e:
-				self.logger.error(self.t('server.react.error', type(reactor).__name__))
-				self.logger.error(traceback.format_exc())
-				if e is KeyboardInterrupt:
-					raise
+				info = self.info_queue.get(timeout=0.1)
+			except queue.Empty:
+				pass
+			else:
+				for reactor in self.reactors:
+					try:
+						reactor.react(info)
+					except Exception as e:
+						self.logger.exception(self.t('server.react.error', type(reactor).__name__))
+						if e is KeyboardInterrupt:
+							self.flag_interrupt = True
+							break
 
 	def connect_rcon(self):
 		self.rcon_manager.disconnect()

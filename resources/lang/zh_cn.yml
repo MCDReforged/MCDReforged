@@ -52,16 +52,16 @@ server.tick.pre_parse_fail: |
 server.run.error: |
   运行 MCDR 时出错
 
-server.run.user_interrupted: |
+server.on_mcdr_stop.user_interrupted: |
   MCDR 已被用户终止
 
-server.run.server_stop: |
+server.on_mcdr_stop.server_stop: |
   服务端已关闭
 
-server.run.bye: |
+server.on_mcdr_stop.bye: |
   bye
 
-server.run.stop_error: |
+server.on_mcdr_stop.stop_error: |
   关闭 MCDR 时出错，忽略并继续退出
 
 server.console_input.parse_fail: |
@@ -72,6 +72,9 @@ server.console_input.error: |
 
 server.react.error: |
   运行反应器 {0} 时出错
+
+server.info_queue.full: |
+  消息队列已满, 服务端是否在刷屏? 忽略新到来消息
 
 command_manager.help_message: |
   §7!!MCDR§r: 显示这条消息

@@ -52,16 +52,16 @@ server.tick.pre_parse_fail: |
 server.run.error: |
   Error ticking MCDR
 
-server.run.user_interrupted: |
+server.on_mcdr_stop.user_interrupted: |
   MCDR has been interrupted by user
 
-server.run.server_stop: |
+server.on_mcdr_stop.server_stop: |
   Server stopped
 
-server.run.bye: |
+server.on_mcdr_stop.bye: |
   bye
 
-server.run.stop_error: |
+server.on_mcdr_stop.stop_error: |
   Error stopping MCDR, ignored that and exiting
 
 server.console_input.parse_fail: |
@@ -72,6 +72,9 @@ server.console_input.error: |
 
 server.react.error: |
   Error processing reactor {0}
+
+server.info_queue.full: |
+  Info queue has been full, is the server spamming? Ignore incoming info!
 
 command_manager.help_message: |
   §7!!MCDR§r: Show this message

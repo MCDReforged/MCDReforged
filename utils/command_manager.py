@@ -200,6 +200,7 @@ class CommandManager:
 		))
 		if info.source == InfoSource.CONSOLE:
 			self.logger.info('PID: {}'.format(self.server.process.pid if self.server.process is not None else 'N/A'))
+			self.logger.info('Info queue size: {}'.format(self.server.info_queue.qsize()))
 			self.logger.info('Thread count: {}'.format(threading.active_count()))
 			for thread in threading.enumerate():
 				self.logger.info('  - {}'.format(thread.getName()))

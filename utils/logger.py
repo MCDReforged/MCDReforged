@@ -68,6 +68,10 @@ class Logger:
 		self.exception = self.logger.exception
 		self.set_level = self.logger.setLevel
 
+	@property
+	def level(self):
+		return self.logger.level
+
 	def set_file(self, file_name):
 		if self.file_handler is not None:
 			self.logger.removeHandler(self.file_handler)
