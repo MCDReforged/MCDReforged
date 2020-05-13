@@ -1,5 +1,6 @@
 MCDReforged
 --------
+![MCDR-banner](https://raw.githubusercontent.com/Fallen-Breath/MCDReforged/master/logo_long.png)
 
 [中文](https://github.com/Fallen-Breath/MCDReforged/blob/master/doc/readme_cn.md)
 
