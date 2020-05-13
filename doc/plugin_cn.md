@@ -16,6 +16,7 @@ MCDReforged 插件文档
 | on_load(server, old_module) | 插件被加载 | 否 | 新插件继承旧插件的信息 |
 | on_unload(server) | 插件被卸载 | 否 | 清理或关闭旧插件的功能 |
 | on_info(server, info) | 服务端的标准输出流有输出，或者控制台有输入 | 否 | 插件响应相关信息 |
+| on_user_info(server, info) | 跟 `on_info` 相同但仅在 `info.is_user` 为 `True` 时。如果你的插件仅对用户命令感兴趣，使用它而非 `on_info` 来减小性能开销 | 否 | 响应潜在的来自用户的指令 |
 | on_player_joined(server, player) | 玩家加入服务端 | 否 | 插件响应玩家加入游戏 |
 | on_player_left(server, player) | 玩家离开服务端 | 否 | 插件响应玩家离开游戏 |
 | on_death_message(server, death_message) | 玩家死亡显示死亡信息 | 否 | 插件响应玩家死亡 |

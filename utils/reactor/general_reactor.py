@@ -24,6 +24,9 @@ class GeneralReactor(BaseReactor):
 
 			self.server.plugin_manager.call('on_info', (self.server.server_interface, info))
 
+			if info.is_user:
+				self.server.plugin_manager.call('on_user_info', (self.server.server_interface, info))
+
 
 def get_reactor(server):
 	return GeneralReactor(server)

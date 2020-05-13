@@ -39,6 +39,10 @@ def on_unload(server):
 	server.logger.info('bye')
 
 
+def on_user_info(server, info):
+	server.reply(info, 'Ah this is an info from a user')
+
+
 def on_info(server, info):
 	if info.is_user:
 
