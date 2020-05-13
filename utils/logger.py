@@ -31,7 +31,7 @@ class Logger:
 			'DEBUG': 'blue',
 			'INFO': 'green',
 			'WARNING': 'yellow',
-			'ERROR': 'bold_red',
+			'ERROR': 'red',
 			'CRITICAL': 'bold_red',
 		},
 		secondary_log_colors={

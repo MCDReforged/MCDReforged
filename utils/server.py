@@ -299,7 +299,7 @@ class Server:
 				if self.flag_interrupt:
 					break
 				else:
-					self.logger.exception(self.t('server.run.error'))
+					self.logger.critical(self.t('server.run.error'), exc_info=True)
 		self.on_mcdr_stop()
 
 	def console_input(self):
@@ -330,7 +330,7 @@ class Server:
 		try:
 			self.info_queue.put_nowait(info)
 		except queue.Full:
-			self.logger.critical(self.t('server.info_queue.full'))
+			self.logger.warning(self.t('server.info_queue.full'))
 
 	def info_react(self):
 		"""
