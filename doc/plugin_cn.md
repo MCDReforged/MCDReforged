@@ -197,6 +197,7 @@ def on_load(server, old_module):
 
 - 默认工作路径是 MCDR 所在的文件夹。**不要**改变工作路径，这会弄乱各种东西的
 - 对于 `on_info` 中的 info 参数请不要对其进行修改，只读就好
+- 如果你不关系来源非用户的玩家信息，使用 `on_user_info` 而非 `on_info`，这样子可以提升 MCDR 在服务端后台刷屏且内容非来自于用户时（如 Litematica 粘贴原理图时）的性能表现
 - 如果你需要导入其他插件，使用 `server.get_plugin_instance()` 而不是手动导入，这样子你可以得到跟 MCDR 所使用的相同的插件实例
 - 在 `on_load()` 时调用 `server.add_help_message()` 来添加一些必要的帮助信息，这样子玩家可以通过 `!!help` 指令来了解到你的插件
 - 保持环境整洁。将你的数据存放至 `MCDR/plugins/my_plugin/` 文件夹、将你的配置文件存放在 `MCDR/config/` 文件夹和将你的日志文件存放在 `MCDR/log/` 文件夹都是好主意
