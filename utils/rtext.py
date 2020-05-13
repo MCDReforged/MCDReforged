@@ -2,7 +2,6 @@
 # https://github.com/TISUnion/stext
 
 # -*- coding: utf-8 -*-
-import copy
 import json
 from colorama import Fore, Style
 
