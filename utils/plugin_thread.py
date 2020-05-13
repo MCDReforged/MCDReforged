@@ -67,7 +67,7 @@ class PluginThreadPool:
 
 	def set_max_thread(self, max_thread):
 		self.max_thread = max_thread
-		for i, thread in enumerate(self.threads[:]):
+		for i, thread in enumerate(self.threads.copy()):
 			if i >= self.max_thread:
 				thread.flag_interrupt = True
 
@@ -81,5 +81,5 @@ class PluginThreadPool:
 			thread.start()
 
 	def join(self, timeout=None):
-		for thread in self.threads[:]:
+		for thread in self.threads.copy():
 			thread.join(timeout)
