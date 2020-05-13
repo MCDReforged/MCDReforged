@@ -53,7 +53,7 @@ class PluginThread(threading.Thread):
 
 
 class PluginThreadPool:
-	def __init__(self, server, max_thread=4):
+	def __init__(self, server, max_thread):
 		self.server = server
 		self.threads = []
 		self.threads_write_lock = threading.Lock()

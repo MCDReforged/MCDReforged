@@ -14,7 +14,7 @@ class PluginManager:
 		self.server = server
 		self.logger = server.logger
 		self.plugins = []
-		self.thread_pool = PluginThreadPool(self.server)
+		self.thread_pool = PluginThreadPool(self.server, max_thread=constant.PLUGIN_THREAD_POOL_SIZE)
 		tool.touch_folder(self.plugin_folder)
 		tool.touch_folder(constant.PLUGIN_CONFIG_FOLDER)
 
