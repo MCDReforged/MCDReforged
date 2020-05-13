@@ -141,6 +141,8 @@ info 对象的属性分别为：
 | content | `Preparing level "world"` |
 | player | None |
 | source | 0 |
+| logging_level | `INFO` |
+| id | 105 |
 | is_player | False |
 | is_user | False |
 
@@ -161,6 +163,8 @@ info 对象的属性分别为：
 | content | `Hello` |
 | player | `Steve` |
 | source | 0 |
+| logging_level | `INFO` |
+| id | 156 |
 | is_player | True |
 | is_user | True |
 
