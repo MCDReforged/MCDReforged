@@ -298,23 +298,26 @@ parser_manager.load_parser.file_not_found: |
 parser_manager.load_re_death_message.fail: |
   Fail to load death message data
 
-update_helper._check_update.check_fail: |
+update_helper.check_update.already_checking: |
+  MCDR has already started checking update
+
+update_helper.check_update.check_fail: |
   Fail to detect latest version from Github: {0}
 
-update_helper._check_update.is_already_latest: |
+update_helper.check_update.is_already_latest: |
   MCDR is already the latset version
 
-update_helper._check_update.newer_than_latest: |
+update_helper.check_update.newer_than_latest: |
   Current version §7{0}§r is newer than the latest version §7{1}§r in github, is it a developing version?
 
-update_helper._check_update.new_version_detected: |
-  New version detected: §7{0}§r
+update_helper.check_update.new_version_detected: |
+  New version detected: §7{0}§r. What's new in §7{0}§r:
 
-update_helper._check_update.new_version_url: |
+update_helper.check_update.new_version_url: |
   You can update MCDR from here: §9{0}§r
 
-update_helper._check_update.download_finished: |
+update_helper.check_update.download_finished: |
   Latest MCDR downloaded. It's in §7{0}§r
 
-update_helper._check_update.download_fail: |
+update_helper.check_update.download_fail: |
   Latest MCDR §cdownloaded fail§r
