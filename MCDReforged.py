@@ -11,7 +11,7 @@ def main():
 	print('{} is still in development, it may not work well'.format(constant.NAME))
 	try:
 		server = Server()
-	except Exception as e:
+	except:
 		print('Fail to initialize {}'.format(constant.NAME_SHORT))
 		raise
 	else:
@@ -19,14 +19,15 @@ def main():
 
 
 try:
-	if sys.version_info.major + sys.version_info.minor * 0.1 < 3.6:
+	python_version = sys.version_info.major + sys.version_info.minor * 0.1
+	if python_version < 3.6:
 		print('Python 3.6+ is needed')
-		raise Exception('Python is too old')
+		raise Exception('Python version {} is too old'.format(python_version))
 
 	if not os.path.isdir('utils'):
 		print('Cannot found necessary folder "utils", seems that you have launched it in a wrong directory')
 		print('Current working directory: {}'.format(os.getcwd()))
-		raise Exception('Path not right')
+		raise Exception('Wrong working directory')
 
 	try:
 		from utils import constant
