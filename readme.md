@@ -196,22 +196,24 @@ Plugin usage can refer to `plugins/sample_plugin.py`
 
 There is a simple built-in permission system in MCDR for plugin maker to use
 
-There are 4 different level of permission:
+There are 5 different level of permission:
 
 | Name | Value | Description |
 |---|---|---|
-| admin | 3 | A group with the highest power to control the MCDR
+| owner | 4 | Highest level for those who have the ability to access the physical server
+| admin | 3 | People with power to control the MCDR and the server
 | helper | 2 | A group of admin's helper
 | user | 1 | A group that normal player will be in
-| guest | 0 | A group for guest
+| guest | 0 | The lowest level for guest or trollers
 
-The permission level of console input is always the highest level `admin`
+The permission level of console input is always the highest level `owner`
 
 ### Permission File
 
 Permission file `permission.yml` is the config and storage file for the system
 
 - `default_level`: The default permission level a new player will get. Default: `user`
+- `owner`: A list of names of players who has the permission level `owner`
 - `admin`: A list of names of players who has the permission level `admin`
 - `helper`: A list of names of players who has the permission level `helper`
 - `user`: A list of names of players who has the permission level `user`
@@ -220,8 +222,10 @@ Permission file `permission.yml` is the config and storage file for the system
 Player name list of permission levels can be filled like this:
 
 ```
-admin:
+owner:
 - Notch
+admin:
+- Dinnerbone
 helper:
 - Steve
 - Alex
@@ -254,9 +258,9 @@ There several commands to control MCDR. These command can be both input in game 
 | !!MCDR plugin reloadall | !!MCDR plg ra | Load / Reload / Unloaded every plugins
 | !!MCDR plugin checkupdate | !!MCDR plg cu | Check update from Github
 
-Only player with `admin` permission level is allow to execute these command in game chat
+Only player with `admin` permission level or higher is allow to execute these command in game chat
 
-And there is a `!!help` command to display registered help messages from plugins
+And there is a `!!help` command to display registered help messages from plugins. Anyone can use that
 
 ## Notes
 

@@ -11,7 +11,7 @@ from utils.reactor.base_reactor import BaseReactor
 class GeneralReactor(BaseReactor):
 	def react(self, info):
 		if info.is_user and re.fullmatch(r'!!MCDR( .*)*', info.content) is not None:
-			if self.server.permission_manager.get_info_permission_level(info) == PermissionLevel.ADMIN:
+			if self.server.permission_manager.get_info_permission_level(info) >= PermissionLevel.ADMIN:
 				self.server.command_manager.process_mcdr_command(info)
 			else:
 				self.server.server_interface.tell(info.player, '§c{}§r'.format(self.server.t('general_reactor.permission_denied')), is_plugin_call=False)

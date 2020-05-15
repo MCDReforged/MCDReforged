@@ -118,6 +118,9 @@ command_manager.reload_config.fail: |
 command_manager.reload_config.success: |
   配置文件重载§a成功§r
 
+command_manager.permission_not_enough: |
+  §c权限等级不足§r
+
 command_manager.reload_permission.fail: |
   权限文件重载§c失败§r
 
@@ -135,6 +138,18 @@ command_manager.remove_player_permission.player_removed: |
 
 command_manager.list_permission.show_default: |
   默认等级: §e{0}§r
+
+command_manager.list_permission.suggest_setdefault: |
+  点击以设置默认权限等级
+
+command_manager.list_permission.suggest_list: |
+  点击以查看权限等级 §e{0}§r 的玩家列表
+
+command_manager.list_permission.suggest_set: |
+  点击以设置玩家 §b{0}§r 的权限等级
+
+command_manager.list_permission.suggest_disable: |
+  点击以将玩家 §b{0}§r 从权限数据库中移除
 
 command_manager.print_mcdr_status.online: |
   在线
@@ -156,6 +171,15 @@ command_manager.print_mcdr_status.line4: |
 
 command_manager.print_mcdr_status.line5: |
   插件数量: §7{0}§r
+
+command_manager.print_mcdr_status.extra_line1: |
+  PID: §7{0}§r
+
+command_manager.print_mcdr_status.extra_line2: |
+  消息队列大小: §7{0}§r
+
+command_manager.print_mcdr_status.extra_line3: |
+  线程数: §7{0}§r
 
 command_manager.list_plugin.info_loaded_plugin: |
   §6{0}x §e已加载插件§r
@@ -209,10 +233,10 @@ permission_manager.load.fail: |
   加载权限文件 §7{0}§r §c失败§r，使用默认的空数据
 
 permission_manager.set_default_permission_level.done: |
-  默认权限等级已设置为 {0}
+  默认权限等级已设置为 §e{0}§r
 
 permission_manager.set_permission_level.done: |
-  玩家 {0} 的权限等级已设置为 {1}
+  玩家 §b{0}§r 的权限等级已设置为 §e{1}§r
 
 plugin_manager.load: |
   加载

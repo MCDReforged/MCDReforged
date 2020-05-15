@@ -121,6 +121,9 @@ command_manager.reload_config.success: |
 command_manager.reload_permission.fail: |
   §cFail§r to reload permission file
 
+command_manager.permission_not_enough: |
+  §cPermission not enough§r
+
 command_manager.reload_permission.success: |
   Permission file reloaded §asuccessfully§r
 
@@ -135,6 +138,18 @@ command_manager.remove_player_permission.player_removed: |
 
 command_manager.list_permission.show_default: |
   Default permission level: §e{0}§r
+
+command_manager.list_permission.suggest_setdefault: |
+  Click to set default permission level
+
+command_manager.list_permission.suggest_list: |
+  Click to list permission level §e{0}§r
+
+command_manager.list_permission.suggest_set: |
+  Click to set the permission level of player §b{0}§r
+
+command_manager.list_permission.suggest_disable: |
+  Click to remove player §b{0}§r from the permission database
 
 command_manager.print_mcdr_status.online: |
   Online
@@ -156,6 +171,15 @@ command_manager.print_mcdr_status.line4: |
 
 command_manager.print_mcdr_status.line5: |
   Plugin count: §7{0}§r
+
+command_manager.print_mcdr_status.extra_line1: |
+  PID: §7{0}§r
+
+command_manager.print_mcdr_status.extra_line2: |
+  Info queue size: §7{0}§r
+
+command_manager.print_mcdr_status.extra_line3: |
+  Thread count: §7{0}§r
 
 command_manager.list_plugin.info_loaded_plugin: |
   §6{0}x §eLoaded Plugins§r
@@ -209,10 +233,10 @@ permission_manager.load.fail: |
   Fail to load permission file {0}, using default empty data
 
 permission_manager.set_default_permission_level.done: |
-  The default permission level has set to {0}
+  The default permission level has set to §e{0}§r
 
 permission_manager.set_permission_level.done: |
-  The permission level of player {0} has set to {1}
+  The permission level of player §b{0}§r has set to §e{1}§r
 
 plugin_manager.load: |
   load

@@ -128,7 +128,9 @@ class CommandManager:
 			self.server.logger.error(traceback.format_exc())
 			return None
 
+	# ------
 	# Reload
+	# ------
 
 	def refresh_changed_plugins(self, info):
 		ret = self.function_call(info, self.server.plugin_manager.refresh_changed_plugins, 'refresh_changed_plugins', success_message=False)
@@ -146,7 +148,9 @@ class CommandManager:
 		self.reload_config(info)
 		self.reload_permission(info)
 
+	# ----------
 	# Permission
+	# ----------
 
 	def set_player_permission(self, info, player, level):
 		level = self.server.permission_manager.format_level_name(level)
@@ -155,37 +159,69 @@ class CommandManager:
 		elif not Validator.player_name(player):
 			self.send_message(info, self.t('command_manager.invalid_player_name'))
 		else:
-			self.server.permission_manager.set_permission_level(player, level)
-			if info.is_player:
-				self.send_message(info, self.t('permission_manager.set_permission_level.done', player, level))
+			executor_level = self.server.permission_manager.get_info_permission_level(info)
+			if max(self.server.permission_manager.format_level_value(level), self.server.permission_manager.get_player_permission_level(player)) > executor_level:
+				self.send_message(info, self.t('command_manager.permission_not_enough'))
+			else:
+				self.server.permission_manager.set_permission_level(player, level)
+				if info.is_player:
+					self.send_message(info, self.t('permission_manager.set_permission_level.done', player, level))
 
 	def remove_player_permission(self, info, player):
 		if not Validator.player_name(player):
 			self.send_message(info, self.t('command_manager.invalid_player_name'))
 		else:
-			self.server.permission_manager.remove_player(player)
-			self.send_message(info, self.t('command_manager.remove_player_permission.player_removed', player))
+			if self.server.permission_manager.get_player_permission_level(player) > self.server.permission_manager.get_info_permission_level(info):
+				self.send_message(info, self.t('command_manager.permission_not_enough'))
+			else:
+				self.server.permission_manager.remove_player(player)
+				self.send_message(info, self.t('command_manager.remove_player_permission.player_removed', player))
 
 	def list_permission(self, info, level):
-		self.send_message(info, self.t('command_manager.list_permission.show_default',
-			self.server.permission_manager.get_default_permission_level()))
 		specific_name = self.server.permission_manager.format_level_name(level)
+		if specific_name is None:
+			self.send_message(
+				info, RText(self.t(
+					'command_manager.list_permission.show_default',
+					self.server.permission_manager.get_default_permission_level()
+				))
+				.c(RAction.suggest_command, '!!MCDR permission setdefault ')
+				.h(self.t('command_manager.list_permission.suggest_setdefault'))
+			)
 		for name in PermissionLevel.NAME:
 			if specific_name is None or name == specific_name:
-				self.send_message(info, '§7[§e{}§7]§r'.format(name))
+				self.send_message(
+					info, RText('§7[§e{}§7]§r'.format(name))
+					.c(RAction.run_command, '!!MCDR permission list {}'.format(name))
+					.h(self.t('command_manager.list_permission.suggest_list', name))
+				)
 				for player in self.server.permission_manager.get_permission_group_list(name):
-					self.send_message(info, '§7-§r {}'.format(player))
+					self.send_message(
+						info, RTextList(
+							'§7-§r {}'.format(player),
+							RText(' [✎]', color=RColor.gray)
+							.c(RAction.suggest_command, '!!MCDR permission set {} '.format(player))
+							.h(self.t('command_manager.list_permission.suggest_set', player)),
+							RText(' [×]', color=RColor.gray)
+							.c(RAction.suggest_command, '!!MCDR permission remove {}'.format(player))
+							.h(self.t('command_manager.list_permission.suggest_disable', player)),
+						)
+					)
 
 	def set_default_permission(self, info, level):
 		level = self.server.permission_manager.format_level_name(level)
 		if level is None:
 			self.send_message(info, self.t('command_manager.invalid_permission_level'))
+		elif self.server.permission_manager.format_level_value(level) > self.server.permission_manager.get_info_permission_level(info):
+			self.send_message(info, self.t('command_manager.permission_not_enough'))
 		else:
 			self.server.permission_manager.set_default_permission_level(level)
 			if info.is_player:
 				self.send_message(info, self.t('permission_manager.set_default_permission_level.done', level))
 
+	# ------
 	# Status
+	# ------
 
 	def print_mcdr_status(self, info):
 		status_dict = {
@@ -199,14 +235,18 @@ class CommandManager:
 			RText(self.t('command_manager.print_mcdr_status.line4', status_dict[self.server.server_interface.is_rcon_running(is_plugin_call=False)])), '\n',
 			RText(self.t('command_manager.print_mcdr_status.line5', len(self.server.plugin_manager.plugins))).c(RAction.suggest_command, '!!MCDR plugin list')
 		))
-		if info.source == InfoSource.CONSOLE:
-			self.logger.info('PID: {}'.format(self.server.process.pid if self.server.process is not None else 'N/A'))
-			self.logger.info('Info queue size: {}'.format(self.server.info_queue.qsize()))
-			self.logger.info('Thread count: {}'.format(threading.active_count()))
+		if self.server.permission_manager.get_info_permission_level(info) >= PermissionLevel.OWNER:
+			self.send_message(info, RTextList(
+				self.t('command_manager.print_mcdr_status.extra_line1', self.server.process.pid if self.server.process is not None else '§rN/A§r'),
+				self.t('command_manager.print_mcdr_status.extra_line2', self.server.info_queue.qsize()),
+				self.t('command_manager.print_mcdr_status.extra_line3', threading.active_count())
+			))
 			for thread in threading.enumerate():
-				self.logger.info('  - {}'.format(thread.getName()))
+				self.send_message(info, '  - {}'.format(thread.getName()))
 
+	# ------
 	# Plugin
+	# ------
 
 	def list_plugin(self, info):
 		file_list_all = self.server.plugin_manager.get_plugin_file_list_all()
@@ -217,31 +257,38 @@ class CommandManager:
 		self.send_message(info, self.t('command_manager.list_plugin.info_loaded_plugin', len(file_list_loaded)))
 		for file_name in file_list_loaded:
 			self.send_message(
-				info, '§7-§r {}'.format(file_name)
-				+ RText(' [×]', color=RColor.gray)
-				.c(RAction.run_command, '!!MCDR plugin disable {}'.format(file_name))
-				.h(self.t('command_manager.list_plugin.suggest_disable', file_name))
-				+ RText(' [↻]', color=RColor.gray)
-				.c(RAction.run_command, '!!MCDR plugin load {}'.format(file_name))
-				.h(self.t('command_manager.list_plugin.suggest_reload', file_name))
+				info, RTextList(
+					'§7-§r {}'.format(file_name),
+					RText(' [×]', color=RColor.gray)
+					.c(RAction.run_command, '!!MCDR plugin disable {}'.format(file_name))
+					.h(self.t('command_manager.list_plugin.suggest_disable', file_name)),
+					RText(' [↻]', color=RColor.gray)
+					.c(RAction.run_command, '!!MCDR plugin load {}'.format(file_name))
+					.h(self.t('command_manager.list_plugin.suggest_reload', file_name))
+				)
 			)
 
 		self.send_message(info, self.t('command_manager.list_plugin.info_disabled_plugin', len(file_list_disabled)))
 		for file_name in file_list_disabled:
 			file_name = tool.remove_suffix(file_name, constant.DISABLED_PLUGIN_FILE_SUFFIX)
 			self.send_message(
-				info, '§7-§r {}'.format(file_name) +
-				RText(' [✔]', color=RColor.gray)
-				.c(RAction.run_command, '!!MCDR plugin enable {}'.format(file_name))
-				.h(self.t('command_manager.list_plugin.suggest_enable', file_name))
+				info, RTextList(
+					'§7-§r {}'.format(file_name),
+					RText(' [✔]', color=RColor.gray)
+					.c(RAction.run_command, '!!MCDR plugin enable {}'.format(file_name))
+					.h(self.t('command_manager.list_plugin.suggest_enable', file_name))
+				)
 			)
 
 		self.send_message(info, self.t('command_manager.list_plugin.info_not_loaded_plugin', len(file_list_not_loaded)))
 		for file_name in file_list_not_loaded:
-			self.send_message(info, '§7-§r {}'.format(file_name)
-				+ RText(' [✔]', color=RColor.gray)
-				.c(RAction.run_command, '!!MCDR plugin load {}'.format(file_name))
-				.h(self.t('command_manager.list_plugin.suggest_load', file_name))
+			self.send_message(
+				info, RTextList(
+					'§7-§r {}'.format(file_name),
+					RText(' [✔]', color=RColor.gray)
+					.c(RAction.run_command, '!!MCDR plugin load {}'.format(file_name))
+					.h(self.t('command_manager.list_plugin.suggest_load', file_name))
+				)
 			)
 
 	def disable_plugin(self, info, file_name):

@@ -12,6 +12,9 @@ from utils.rtext import *
 
 
 def log_call(func):
+	"""
+	Log plugin call
+	"""
 	def wrap(self, *args, **kwargs):
 		if kwargs.get('is_plugin_call', True):
 			self.logger.debug('Plugin called {}(), args amount: {}'.format(func.__name__, len(args)))
@@ -22,6 +25,10 @@ def log_call(func):
 
 
 def return_if_success(func):
+	"""
+	Catch all exception from the func execution
+	Return a bool, if no exception occurred
+	"""
 	def wrap(self, *args, **kwargs):
 		try:
 			func(self, *args, **kwargs)
@@ -47,7 +54,8 @@ class ServerInterface:
 	def start(self):
 		"""
 		Start the server
-		:return: a bool, if the action succeed it's True. If the server is running or being starting by other plugin return False
+		:return: If the action succeed it's True. If the server is running or being starting by other plugin return False
+		:rtype: bool
 		"""
 		return self.__server.start_server()
 
@@ -56,7 +64,7 @@ class ServerInterface:
 		"""
 		Soft shutting down the server by sending the correct stop command to the server
 
-		:return: None
+		:rtype: None
 		"""
 		self.__server.stop(forced=False, new_server_status=ServerStatus.STOPPING_BY_PLUGIN)
 
@@ -65,7 +73,7 @@ class ServerInterface:
 		"""
 		Wait until the server is stopped, or is able to start
 
-		:return: None
+		:rtype: None
 		"""
 		while self.is_server_running(is_plugin_call=False):
 			time.sleep(0.01)
@@ -76,7 +84,7 @@ class ServerInterface:
 		Restart the server
 		It will first soft stop the server and then wait until the server is stopped, then start the server up
 
-		:return: None
+		:rtype: None
 		"""
 		self.stop(is_plugin_call=False)
 		self.wait_for_start(is_plugin_call=False)
@@ -87,17 +95,17 @@ class ServerInterface:
 		"""
 		Soft stop the server and exit MCDR
 
-		:return: None
+		:rtype: None
 		"""
 		self.__server.stop(forced=False)
 
 	@log_call
 	def exit(self):
 		"""
-		exit MCDR when the server is stopped
-		if the server is running return False otherwise return True
+		Exit MCDR when the server is stopped
+		If the server is running return False otherwise return True
 
-		:return: a bool described as above
+		:rtype: bool
 		"""
 		if self.__server.is_server_running():
 			return False
@@ -107,21 +115,27 @@ class ServerInterface:
 	@log_call
 	def is_server_running(self):
 		"""
-		:return: a bool, if the server is running
+		Return if the server is running
+
+		:rtype: bool
 		"""
 		return self.__server.is_server_running()
 
 	@log_call
 	def is_server_startup(self):
 		"""
-		:return: a bool, if the server has started up
+		Return if the server has started up
+
+		:rtype: bool
 		"""
 		return self.__server.is_server_startup()
 
 	@log_call
 	def is_rcon_running(self):
 		"""
-		:return: a bool, if MCDR's rcon is running
+		Return if MCDR's rcon is running
+
+		:rtype: bool
 		"""
 		return self.__server.rcon_manager.is_running()
 
@@ -134,8 +148,8 @@ class ServerInterface:
 		"""
 		Execute a command by sending the command content to server's standard input stream
 
-		:param text: a str, The content of the command you want to send
-		:return: None
+		:param str text: The content of the command you want to send
+		:rtype: None
 		"""
 		self.__server.send(text)
 
@@ -144,8 +158,9 @@ class ServerInterface:
 		"""
 		Use /tellraw <target> to send the message to the specific player
 
-		:param text: a str or a RTextBase, the message you want to send
-		:return: None
+		:param text: the message you want to send
+		:type text: str or RTextBase
+		:rtype: None
 		"""
 		if isinstance(text, RTextBase):
 			content = text.to_json_str()
@@ -158,8 +173,9 @@ class ServerInterface:
 		"""
 		Use /tellraw @a to broadcast the message in game
 
-		:param text: a str or a RTextBase, the message you want to send
-		:return: None
+		:param text: the message you want to send
+		:type text: str or RTextBase
+		:rtype: None
 		"""
 		self.tell('@a', text, is_plugin_call=False)
 
@@ -171,10 +187,10 @@ class ServerInterface:
 		If the Info is from a player then use tell to reply the player
 		Otherwise use logger.info to output to the console
 
-		:param info: the Info you want to reply to
-		:param text: a str or a RTextBase, the message you want to send
-		:param kwargs:
-		:return: None
+		:param Info info: the Info you want to reply to
+		:param text: the message you want to send
+		:type text: str or RTextBase
+		:rtype: None
 		"""
 		if info.is_player:
 			self.tell(info.player, text, is_plugin_call=False)
@@ -193,7 +209,8 @@ class ServerInterface:
 		If the plugin is not loaded, load the plugin. Otherwise reload the plugin
 
 		:param plugin_name: a str, The name of the plugin. it can be "my_plugin.py" or "my_plugin"
-		:return: A bool, if action succeeded
+		:return: If action succeeded without exception, return True. Otherwise False
+		:rtype: bool
 		"""
 		return bool(self.__server.plugin_manager.load_plugin(plugin_name))
 
@@ -203,8 +220,10 @@ class ServerInterface:
 		"""
 		Enable the plugin. Removed the ".disabled" suffix and load it
 
-		:param plugin_name: a str, The name of the displayed plugin. it can be "my_plugin.py.disabled" or "my_plugin.py" or "my_plugin"
-		:return: A bool, if action succeeded
+		:param str plugin_name: The name of the displayed plugin
+		It can be "my_plugin.py.disabled" or "my_plugin.py" or "my_plugin"
+		:return: If action succeeded without exception, return True. Otherwise False
+		:rtype: bool
 		"""
 		self.__server.plugin_manager.enable_plugin(plugin_name)
 
@@ -214,8 +233,9 @@ class ServerInterface:
 		"""
 		Disable the plugin. Unload it and add a ".disabled" suffix to its file name
 
-		:param plugin_name: a str, The name of the plugin. it can be "my_plugin.py" or "my_plugin"
-		:return: A bool, if action succeeded
+		:param str plugin_name: The name of the plugin. It can be "my_plugin.py" or "my_plugin"
+		:return: If action succeeded without exception, return True. Otherwise False
+		:rtype: bool
 		"""
 		self.__server.plugin_manager.disable_plugin(plugin_name)
 
@@ -224,7 +244,7 @@ class ServerInterface:
 		"""
 		Reload all plugins, load all new plugins and then unload all removed plugins
 
-		:return: None
+		:rtype: None
 		"""
 		self.__server.plugin_manager.refresh_all_plugins()
 
@@ -233,7 +253,7 @@ class ServerInterface:
 		"""
 		Reload all changed plugins, load all new plugins and then unload all removed plugins
 
-		:return: None
+		:rtype: None
 		"""
 		self.__server.plugin_manager.refresh_changed_plugins()
 
@@ -242,7 +262,7 @@ class ServerInterface:
 		"""
 		Return a str list containing all loaded plugin name like ["pluginA.py", "pluginB.py"]
 
-		:return: a str list
+		:rtype: list[str]
 		"""
 		return self.__server.plugin_manager.get_plugin_file_list_all()
 
@@ -253,11 +273,13 @@ class ServerInterface:
 	@log_call
 	def get_permission_level(self, obj):
 		"""
-		return the permission level number the parameter object has
-		The object can be Info instance or a str, a player name
+		Return the permission level number the parameter object has
+		The object can be Info instance or a str, the name of a player
 
 		:param obj: The object your are querying
-		:return: An int, representing the permission level
+		:type obj: Info or str
+		:return: The permission level you are querying
+		:rtype: int or None
 		"""
 		if type(obj) is Info:  # Info instance
 			return self.__server.permission_manager.get_info_permission_level(obj)
@@ -271,8 +293,9 @@ class ServerInterface:
 		"""
 		Send command to the server through rcon
 
-		:param command: The command you want to send to the rcon server
-		:return: The result server returned from rcon. Return None if rcon is not running or rcon query fail
+		:param str command: The command you want to send to the rcon server
+		:return: The result server returned from rcon. Return None if rcon is not running or rcon query failed
+		:rtype: str or None
 		"""
 		return self.__server.rcon_manager.send_command(command)
 
@@ -284,7 +307,7 @@ class ServerInterface:
 		react to events of MCDR
 		The plugin need to be in plugins/plugin_name.py
 
-		:param plugin_name: The name of the plugin you want. It can be "my_plugin" or "my_plugin.py"
+		:param str plugin_name: The name of the plugin you want. It can be "my_plugin" or "my_plugin.py"
 		:return: A current loaded plugin instance. Return None if plugin not found
 		"""
 		plugin = self.__server.plugin_manager.get_plugin(plugin_name)
@@ -298,10 +321,12 @@ class ServerInterface:
 		Add help message for you plugin, which is used in !!help command
 		It needs to be called in a MCDR provided thread such as on_info or on_player_left called
 
-		:param prefix: A str, the help command of your plugin.
+		:param str prefix: The help command of your plugin
 		When player click on the displayed message it will suggest this prefix parameter to the player
-		:param message: A str or a RTextBase, a neat command description
-		:return: a bool, if it's called in a MCDR provided thread and the execution succeeded
+		:param message: A neat command description
+		:type message: str or RTextBase
+		:return: If it's called in a MCDR provided thread and the execution succeeded
+		:rtype: bool
 		"""
 		thread = threading.current_thread()
 		if hasattr(thread, 'plugin') and type(thread.plugin) is Plugin:
