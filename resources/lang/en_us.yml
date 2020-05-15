@@ -152,16 +152,16 @@ command_manager.list_permission.suggest_disable: |
   Click to remove player §b{0}§r from the permission database
 
 command_manager.print_mcdr_status.online: |
-  Online
+  §aOnline§r
 
 command_manager.print_mcdr_status.offline: |
   §7Offline§r
 
 command_manager.print_mcdr_status.line1: |
-  §l{0}§r version: §7{1}§r
+  §l{0}§r version: §e{1}§r
 
 command_manager.print_mcdr_status.line2: |
-  Server status: §7{0}§r
+  Server status: {0}
 
 command_manager.print_mcdr_status.line3: |
   Server startup: §7{0}§r
@@ -170,16 +170,16 @@ command_manager.print_mcdr_status.line4: |
   Rcon: {0}
 
 command_manager.print_mcdr_status.line5: |
-  Plugin count: §7{0}§r
+  Plugin count: §6{0}§r
 
 command_manager.print_mcdr_status.extra_line1: |
-  PID: §7{0}§r
+  Server PID: {0}
 
 command_manager.print_mcdr_status.extra_line2: |
-  Info queue size: §7{0}§r
+  Info queue size: §6{0}§r/§6{1}§r
 
 command_manager.print_mcdr_status.extra_line3: |
-  Thread count: §7{0}§r
+  Thread count: §6{0}§r
 
 command_manager.list_plugin.info_loaded_plugin: |
   §6{0}x §eLoaded Plugins§r
@@ -302,16 +302,16 @@ rcon_manager.disconnect.disconnect_fail: |
   Fail to disconnect rcon
 
 server_status.running: |
-  Running
+  §aRunning§r
 
 server_status.stopping_by_itself: |
-  Stopping by itself
+  §cStopping by itself§r
 
 server_status.stopping_by_plugin: |
-  Stopping by plugin
+  §cStopping by plugin§r
 
 server_status.stopped: |
-  Stopped
+  §4Stopped§r
 
 general_reactor.permission_denied: |
   Permission denied

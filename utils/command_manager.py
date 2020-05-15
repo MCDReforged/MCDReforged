@@ -231,18 +231,18 @@ class CommandManager:
 		self.send_message(info, RTextList(
 			RText(self.t('command_manager.print_mcdr_status.line1', constant.NAME, constant.VERSION)).c(RAction.open_url, constant.GITHUB_URL).h(RText(constant.GITHUB_URL, styles=RStyle.underlined, color=RColor.blue)), '\n',
 			RText(self.t('command_manager.print_mcdr_status.line2', self.t(self.server.server_status))), '\n',
-			RText(self.t('command_manager.print_mcdr_status.line3', self.server.is_server_startup())), '\n',
+			RText(self.t('command_manager.print_mcdr_status.line3', '{}{}§r'.format('§a' if self.server.is_server_startup() else '§7', self.server.is_server_startup()))), '\n',
 			RText(self.t('command_manager.print_mcdr_status.line4', status_dict[self.server.server_interface.is_rcon_running(is_plugin_call=False)])), '\n',
 			RText(self.t('command_manager.print_mcdr_status.line5', len(self.server.plugin_manager.plugins))).c(RAction.suggest_command, '!!MCDR plugin list')
 		))
 		if self.server.permission_manager.get_info_permission_level(info) >= PermissionLevel.OWNER:
 			self.send_message(info, RTextList(
-				self.t('command_manager.print_mcdr_status.extra_line1', self.server.process.pid if self.server.process is not None else '§rN/A§r'),
-				self.t('command_manager.print_mcdr_status.extra_line2', self.server.info_queue.qsize()),
+				self.t('command_manager.print_mcdr_status.extra_line1', self.server.process.pid if self.server.process is not None else '§rN/A§r'), '\n',
+				self.t('command_manager.print_mcdr_status.extra_line2', self.server.info_queue.qsize(), constant.MAX_INFO_QUEUE_SIZE), '\n',
 				self.t('command_manager.print_mcdr_status.extra_line3', threading.active_count())
 			))
 			for thread in threading.enumerate():
-				self.send_message(info, '  - {}'.format(thread.getName()))
+				self.send_message(info, '  §r-§r {}'.format(thread.getName()))
 
 	# ------
 	# Plugin

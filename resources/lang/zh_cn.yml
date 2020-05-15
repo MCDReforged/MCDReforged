@@ -152,16 +152,16 @@ command_manager.list_permission.suggest_disable: |
   点击以将玩家 §b{0}§r 从权限数据库中移除
 
 command_manager.print_mcdr_status.online: |
-  在线
+  §a在线§r
 
 command_manager.print_mcdr_status.offline: |
   §7离线§r
 
 command_manager.print_mcdr_status.line1: |
-  §l{0}§r 版本: §7{1}§r
+  §l{0}§r 版本: §e{1}§r
 
 command_manager.print_mcdr_status.line2: |
-  服务端状态: §7{0}§r
+  服务端状态: {0}
 
 command_manager.print_mcdr_status.line3: |
   服务端已启动: §7{0}§r
@@ -170,16 +170,16 @@ command_manager.print_mcdr_status.line4: |
   rcon: {0}
 
 command_manager.print_mcdr_status.line5: |
-  插件数量: §7{0}§r
+  插件数量: §6{0}§r
 
 command_manager.print_mcdr_status.extra_line1: |
-  PID: §7{0}§r
+  服务端 PID: {0}
 
 command_manager.print_mcdr_status.extra_line2: |
-  消息队列大小: §7{0}§r
+  消息队列大小: §6{0}§r/§6{1}§r
 
 command_manager.print_mcdr_status.extra_line3: |
-  线程数: §7{0}§r
+  线程数: §6{0}§r
 
 command_manager.list_plugin.info_loaded_plugin: |
   §6{0}x §e已加载插件§r
@@ -302,16 +302,16 @@ rcon_manager.disconnect.disconnect_fail: |
   rcon 断开连接失败
 
 server_status.running: |
-  运行中
+  §a运行中§r
 
 server_status.stopping_by_itself: |
-  正在自行关闭
+  §c正在自行关闭§r
 
 server_status.stopping_by_plugin: |
-  正在被插件关闭
+  §c正在被插件关闭§r
 
 server_status.stopped: |
-  已关闭
+  §4已关闭§r
 
 general_reactor.permission_denied: |
   权限不足
