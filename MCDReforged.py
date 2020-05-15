@@ -1,7 +1,21 @@
 # -*- coding: utf-8 -*-
+
 import traceback
 import sys
 import os
+
+
+def main():
+	print('{} {} is starting up'.format(constant.NAME, constant.VERSION))
+	print('{} is open source, u can find it here: {}'.format(constant.NAME, constant.GITHUB_URL))
+	print('{} is still in development, it may not work well'.format(constant.NAME))
+	try:
+		server = Server()
+	except Exception as e:
+		print('Fail to initialize {}'.format(constant.NAME_SHORT))
+		raise
+	else:
+		server.start()
 
 
 try:
@@ -22,17 +36,10 @@ try:
 		raise
 
 	if __name__ == '__main__':
-		print('{} {} is starting up'.format(constant.NAME, constant.VERSION))
-		print('{} is open source, u can find it here: {}'.format(constant.NAME, constant.GITHUB_URL))
-		print('{} is still in development, it may not work well'.format(constant.NAME))
-		try:
-			server = Server()
-		except Exception as e:
-			print('Fail to initialize {}'.format(constant.NAME_SHORT))
-			raise
-		else:
-			server.start()
-
+		main()
 except:
-	traceback.print_exc()
-	input('Exception occurred, press Enter to exit')
+	if __name__ == '__main__':
+		traceback.print_exc()
+		input('Exception occurred, press Enter to exit')
+	else:
+		raise
