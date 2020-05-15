@@ -24,8 +24,8 @@ try:
 		print('Python 3.6+ is needed')
 		raise Exception('Python version {} is too old'.format(python_version))
 
-	if not os.path.isdir('utils'):
-		print('Cannot found necessary folder "utils", seems that you have launched it in a wrong directory')
+	if not os.path.isfile(os.path.join('utils', '__init__.py')):
+		print('Cannot found necessary module folder "utils", seems that you have launched it in a wrong directory')
 		print('Current working directory: {}'.format(os.getcwd()))
 		raise Exception('Wrong working directory')
 
