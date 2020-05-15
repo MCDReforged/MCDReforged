@@ -5,6 +5,7 @@ from threading import Lock
 
 import requests
 from utils import tool, constant
+from utils.rtext import *
 
 
 class UpdateHelper:
@@ -22,6 +23,9 @@ class UpdateHelper:
 			time.sleep(24 * 60 * 60)
 
 	def check_update(self, reply_func=None):
+		tool.start_thread(self.__check_update, (reply_func, ), 'CheckUpdate')
+
+	def __check_update(self, reply_func):
 		acquired = self.update_lock.acquire(blocking=False)
 		if not acquired:
 			reply_func(self.server.t('update_helper.check_update.already_checking'))
@@ -29,13 +33,23 @@ class UpdateHelper:
 		try:
 			if reply_func is None:
 				reply_func = self.server.logger.info
+			response = None
 			try:
 				response = requests.get(constant.GITHUB_API_LATEST, timeout=5).json()
 				latest_version = response['tag_name']
 				url = response['html_url']
 				download_url = response['assets'][0]['browser_download_url']
+				update_log = response['body']
 			except Exception as e:
 				reply_func(self.server.t('update_helper.check_update.check_fail', repr(e)))
+				if isinstance(e, KeyError) and type(response) is dict and 'message' in response:
+					reply_func(response['message'])
+					if 'documentation_url' in response:
+						reply_func(
+							RText(response['documentation_url'], color=RColor.blue, styles=RStyle.underlined)
+							.h(response['documentation_url'])
+							.c(RAction.open_url, response['documentation_url'])
+						)
 			else:
 				cmp_result = tool.version_compare(constant.VERSION, latest_version)
 				if cmp_result == 0:
@@ -44,7 +58,7 @@ class UpdateHelper:
 					reply_func(self.server.t('update_helper.check_update.newer_than_latest', constant.VERSION, latest_version))
 				else:
 					reply_func(self.server.t('update_helper.check_update.new_version_detected', latest_version))
-					for line in response['body'].splitlines():
+					for line in update_log.splitlines():
 						reply_func('    {}'.format(line))
 					reply_func(self.server.t('update_helper.check_update.new_version_url', url))
 					if self.server.config['download_update']:
