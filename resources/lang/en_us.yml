@@ -31,7 +31,7 @@ server.stop.stop_fail: |
 server.stop.process_killed: |
   Process killed
 
-server.send.send_when_stoped: |
+server.send.send_when_stopped: |
   Server has been terminated, cannot send command to its stdin
 
 server.receive.wait_stop: |

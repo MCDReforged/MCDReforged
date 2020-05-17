@@ -101,9 +101,9 @@ MCDReforged 插件文档
 
 | 方法 | 功能 |
 |---|---|
-| get_permission_level(obj) | 返回一个[整数](https://github.com/Fallen-Breath/MCDReforged/blob/master/doc/readme_cn.md#权限)，代表 `obj` 对象拥有的最高权限等级。`obj` 对象可为一个 `Info` 实例，或者是一个表示玩家名称的字符串。如果 `obj` 的类型不被支持或者 `Info` 实例并不来源自用户（`not info.is_user`），则返回 `None` |
-| rcon_query(command) | 通过 rcon 向服务端发送指令 `command`，然后返回一个字符串，表示该指令执行后的返回值。如果 rcon 未在运行或者有异常发生，返回 `None` |
-| get_plugin_instance(plugin_name) | 返回当前加载着的位于 `plugins/plugin_name.py` 的插件实例。使用此方法而非在插件中手动 import 可保证得到的目标插件实例与 MCDR 中的实例相同。若未找到该插件，返回 `None` |
+| get_permission_level(obj) | 返回一个[整数](https://github.com/Fallen-Breath/MCDReforged/blob/master/doc/readme_cn.md#权限)，代表 `obj` 对象拥有的最高权限等级。`obj` 对象可为一个 `Info` 实例，或者是一个表示玩家名称的字符串。如果 `obj` 的类型不被支持或者 `Info` 实例并不来源自用户（`not info.is_user`），则返回 None |
+| rcon_query(command) | 通过 rcon 向服务端发送指令 `command`，然后返回一个字符串，表示该指令执行后的返回值。如果 rcon 未在运行或者有异常发生，返回 None |
+| get_plugin_instance(plugin_name) | 返回当前加载着的位于 `plugins/plugin_name.py` 的插件实例。使用此方法而非在插件中手动 import 可保证得到的目标插件实例与 MCDR 中的实例相同。若未找到该插件，返回 None |
 | add_help_message(prefix, message) | 向 MCDR 的 `!!help` 信息库中加入一条指令前缀为 `prefix`，信息为 `message` 的帮助信息。`!!help` 信息库将在插件重载前清空。**推荐在方法 `on_load()` 中进行相关信息添加** |
 
 ### info
@@ -113,14 +113,14 @@ MCDReforged 插件文档
 | 属性 | 内容 |
 |---|---|
 | id | 由一个静态的累加计数器赋值。id 代表着这个 Info 是第几个被创建的信息类。比如 MCDR 启动时第一条被解析的 Info 的 id 是 `1`，第二条的 id 是 `2`  |
-| hour | 一个整数，代表消息发出时间的小时数。若无则为 `None` |
-| min | 一个整数，代表消息发出时间的分钟数。若无则为 `None` |
-| sec | 一个整数，代表消息发出时间的秒数。若无则为 `None` |
+| hour | 一个整数，代表消息发出时间的小时数。若无则为 None |
+| min | 一个整数，代表消息发出时间的分钟数。若无则为 None |
+| sec | 一个整数，代表消息发出时间的秒数。若无则为 None |
 | raw_content | 一个字符串，未解析的该消息的原始字符串 |
 | content | 如果该消息是玩家的聊天信息，则其值为玩家的聊天内容。否则其值为原始信息除去时间/线程名等前缀信息后的字符串 |
-| player | 当这条消息是一条来自玩家的聊天信息时，值为代表该玩家名称的字符串，否则为 `None` |
+| player | 当这条消息是一条来自玩家的聊天信息时，值为代表该玩家名称的字符串，否则为 None |
 | source | 一个整数。若该消息是来自服务端的标准输出流，则为 `0`；若来自控制台输入，则为 `1` |
-| logging_level | 一个字符串，代表该信息的 logging 级别，例如 `INFO` 或者 `WARN`。如果该消息来自控制台输入，则为 `None` |
+| logging_level | 一个字符串，代表该信息的 logging 级别，例如 `INFO` 或者 `WARN`。如果该消息来自控制台输入，则为 None |
 | is_player | 等价于 `player != None` |
 | is_user | 等价于 `source == 1 or is_player` |
 
@@ -170,7 +170,7 @@ info 对象的属性分别为：
 
 ### old_module
 
-这是一个模块的实例，用于在插件重载后新的插件继承旧插件的一些必要信息用。如果其值为 `None` 则代表这是 MCDR 刚开始运行时首次在加载插件
+这是一个模块的实例，用于在插件重载后新的插件继承旧插件的一些必要信息用。如果其值为 None 则代表这是 MCDR 刚开始运行时首次在加载插件
 
 相关应用例子：
 

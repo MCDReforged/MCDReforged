@@ -33,7 +33,7 @@ Send a `str` command `command` to the rcon server
 
 Return a `str`, the command execution result form the server
 
-`max_retry_time` is the maximum retry time of the operation. This method will return `None` if it's exceeded  
+`max_retry_time` is the maximum retry time of the operation. This method will return None if it's exceeded  
 
 ## rtext.py
 

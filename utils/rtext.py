@@ -2,6 +2,7 @@
 # https://github.com/TISUnion/stext
 
 # -*- coding: utf-8 -*-
+import copy
 import json
 from colorama import Fore, Style
 
@@ -106,6 +107,9 @@ class RTextBase:
 	def to_colored_text(self):
 		pass
 
+	def copy(self):
+		return copy.deepcopy(self)
+
 	def __str__(self):
 		return self.to_plain_text()
 
@@ -187,4 +191,3 @@ class RTextList(RTextBase):
 
 	def to_colored_text(self):
 		return ''.join([obj.to_colored_text() for obj in self.data])
-

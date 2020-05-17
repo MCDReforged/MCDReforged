@@ -31,7 +31,7 @@ server.stop.stop_fail: |
 server.stop.process_killed: |
   进程已终止
 
-server.send.send_when_stoped: |
+server.send.send_when_stopped: |
   服务端已关闭，不能向其标准输入流输入指令
 
 server.receive.wait_stop: |

@@ -197,7 +197,7 @@ class Server:
 			self.process.stdin.write(text)
 			self.process.stdin.flush()
 		else:
-			self.logger.warning(self.t('server.send.send_when_stoped'))
+			self.logger.warning(self.t('server.send.send_when_stopped'))
 
 	def receive(self):
 		"""

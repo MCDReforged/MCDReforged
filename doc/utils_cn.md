@@ -33,7 +33,7 @@ MCDReforged 工具文档
 
 返回一个代表着命令执行结果的 `str`
 
-`max_retry_time` 是最大失败尝试次数，如果超出了次数限制，这个方法会返回 `None`
+`max_retry_time` 是最大失败尝试次数，如果超出了次数限制，这个方法会返回 None
 
 ## rtext.py
 
