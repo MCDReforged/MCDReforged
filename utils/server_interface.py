@@ -8,7 +8,6 @@ import time
 from utils.exception import *
 from utils.plugin import Plugin
 from utils.info import Info
-from utils.server import Server
 from utils.server_status import ServerStatus
 from utils.rtext import *
 
@@ -49,6 +48,7 @@ class ServerInterface:
 	MCDR = True  # Identifier for plugins
 
 	def __init__(self, server):
+		from utils.server import Server
 		self.__server = server  # type: Server
 		self.logger = server.logger
 
