@@ -2,6 +2,7 @@
 import collections
 import os
 import hashlib
+import sys
 
 from utils import tool
 
@@ -19,7 +20,9 @@ class Plugin:
 		self.old_module = None
 		self.help_messages = []
 		self.file_hash = None
+		self.loaded_modules = []
 		self.thread_pool = self.server.plugin_manager.thread_pool
+		self.load_lock = self.server.plugin_manager.plugin_load_lock
 
 	def call(self, func_name, args=()):
 		if hasattr(self.module, func_name):
@@ -29,11 +32,14 @@ class Plugin:
 		return None
 
 	def load(self):
-		self.old_module = self.module
-		self.module = tool.load_source(self.file_path)
-		self.help_messages = []
-		self.file_hash = self.get_file_hash()
-		self.server.logger.debug('Plugin {} loaded, file sha256 = {}'.format(self.file_path, self.file_hash))
+		with self.load_lock:
+			self.old_module = self.module
+			previous_modules = sys.modules.copy()
+			self.module = tool.load_source(self.file_path)
+			self.loaded_modules = [module for module in sys.modules.copy() if module not in previous_modules]
+			self.help_messages = []
+			self.file_hash = self.get_file_hash()
+			self.server.logger.debug('Plugin {} loaded, file sha256 = {}'.format(self.file_path, self.file_hash))
 
 	# on_load event sometimes cannot be called right after plugin gets loaded, so here's its separated method for the call
 	def call_on_load(self):
@@ -41,6 +47,18 @@ class Plugin:
 
 	def unload(self):
 		self.call('on_unload', (self.server.server_interface, ))
+		self.unload_modules()
+
+	def unload_modules(self):
+		with self.load_lock:
+			for module in self.loaded_modules:
+				try:
+					del sys.modules[module]
+				except KeyError:
+					self.server.logger.critical('Module {} not found when unloading plugin {}'.format(module, self.plugin_name))
+				else:
+					self.server.logger.debug('Removed module {} when unloading plugin {}'.format(module, self.plugin_name))
+			self.loaded_modules = []
 
 	def add_help_message(self, prefix, message):
 		self.help_messages.append(HelpMessage(prefix, message, self.file_name))

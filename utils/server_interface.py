@@ -5,8 +5,10 @@
 import threading
 import time
 
+from utils.exception import *
 from utils.plugin import Plugin
 from utils.info import Info
+from utils.server import Server
 from utils.server_status import ServerStatus
 from utils.rtext import *
 
@@ -14,13 +16,18 @@ from utils.rtext import *
 def log_call(func):
 	"""
 	Log plugin call
+
+	Use kwarg is_plugin_call to determined if do log
 	"""
 	def wrap(self, *args, **kwargs):
-		if kwargs.get('is_plugin_call', True):
+		is_plugin_call = 'is_plugin_call'
+		if kwargs.get(is_plugin_call, True):
 			self.logger.debug('Plugin called {}(), args amount: {}'.format(func.__name__, len(args)))
 			for arg in args:
 				self.logger.debug('  - type: {}, content: {}'.format(type(arg).__name__, arg))
-		return func(self, *args)
+		if is_plugin_call in kwargs:
+			kwargs.pop(is_plugin_call)
+		return func(self, *args, **kwargs)
 	return wrap
 
 
@@ -43,7 +50,7 @@ class ServerInterface:
 	MCDR = True  # Identifier for plugins
 
 	def __init__(self, server):
-		self.__server = server
+		self.__server = server  # type: Server
 		self.logger = server.logger
 
 	# ------------------------
@@ -54,6 +61,7 @@ class ServerInterface:
 	def start(self):
 		"""
 		Start the server
+
 		:return: If the action succeed it's True. If the server is running or being starting by other plugin return False
 		:rtype: bool
 		"""
@@ -105,12 +113,11 @@ class ServerInterface:
 		Exit MCDR when the server is stopped
 		If the server is running return False otherwise return True
 
-		:rtype: bool
+		:raise: IllegalCall, if the server is not stopped
 		"""
 		if self.__server.is_server_running():
-			return False
+			raise IllegalCall('Cannot exit MCDR when the server is running')
 		self.__server.set_server_status(ServerStatus.STOPPED)
-		return True
 
 	@log_call
 	def is_server_running(self):
@@ -144,44 +151,47 @@ class ServerInterface:
 	# ------------------------
 
 	@log_call
-	def execute(self, text):
+	def execute(self, text, encoding=None):
 		"""
 		Execute a command by sending the command content to server's standard input stream
 
 		:param str text: The content of the command you want to send
+		:param str encoding: The encoding method for the text
 		:rtype: None
 		"""
-		self.__server.send(text)
+		self.__server.send(text, encoding=encoding)
 
 	@log_call
-	def tell(self, player, text):
+	def tell(self, player, text, encoding=None):
 		"""
 		Use /tellraw <target> to send the message to the specific player
 
+		:param str player: The name of the player you want to tell
 		:param text: the message you want to send
-		:type text: str or RTextBase
+		:param str encoding: The encoding method for the text
+		:type text: str or dict or list or RTextBase
 		:rtype: None
 		"""
 		if isinstance(text, RTextBase):
 			content = text.to_json_str()
 		else:
 			content = json.dumps(text)
-		self.execute('tellraw {} {}'.format(player, content), is_plugin_call=False)
+		self.execute('tellraw {} {}'.format(player, content), encoding=encoding, is_plugin_call=False)
 
 	@log_call
-	def say(self, text):
+	def say(self, text, encoding=None):
 		"""
 		Use /tellraw @a to broadcast the message in game
 
 		:param text: the message you want to send
-		:type text: str or RTextBase
+		:param str encoding: The encoding method for the text
+		:type text: str or dict or list or RTextBase
 		:rtype: None
 		"""
-		self.tell('@a', text, is_plugin_call=False)
+		self.tell('@a', text, encoding=encoding, is_plugin_call=False)
 
-	# reply to the info source, auto detects
 	@log_call
-	def reply(self, info, text):
+	def reply(self, info, text, encoding=None):
 		"""
 		Reply to the source of the Info
 		If the Info is from a player then use tell to reply the player
@@ -189,11 +199,12 @@ class ServerInterface:
 
 		:param Info info: the Info you want to reply to
 		:param text: the message you want to send
-		:type text: str or RTextBase
+		:param str encoding: The encoding method for the text
+		:type text: str or dict or list or RTextBase
 		:rtype: None
 		"""
 		if info.is_player:
-			self.tell(info.player, text, is_plugin_call=False)
+			self.tell(info.player, text, encoding=encoding, is_plugin_call=False)
 		else:
 			for line in RTextList(text).to_colored_text().splitlines():
 				self.logger.info(line)
@@ -215,27 +226,21 @@ class ServerInterface:
 		return bool(self.__server.plugin_manager.load_plugin(plugin_name))
 
 	@log_call
-	@return_if_success
 	def enable_plugin(self, plugin_name):
 		"""
 		Enable the plugin. Removed the ".disabled" suffix and load it
 
 		:param str plugin_name: The name of the displayed plugin
 		It can be "my_plugin.py.disabled" or "my_plugin.py" or "my_plugin"
-		:return: If action succeeded without exception, return True. Otherwise False
-		:rtype: bool
 		"""
 		self.__server.plugin_manager.enable_plugin(plugin_name)
 
 	@log_call
-	@return_if_success
 	def disable_plugin(self, plugin_name):
 		"""
 		Disable the plugin. Unload it and add a ".disabled" suffix to its file name
 
 		:param str plugin_name: The name of the plugin. It can be "my_plugin.py" or "my_plugin"
-		:return: If action succeeded without exception, return True. Otherwise False
-		:rtype: bool
 		"""
 		self.__server.plugin_manager.disable_plugin(plugin_name)
 
@@ -275,18 +280,37 @@ class ServerInterface:
 		"""
 		Return the permission level number the parameter object has
 		The object can be Info instance or a str, the name of a player
+		Raise TypeError if the type of obj is object supported
 
 		:param obj: The object your are querying
 		:type obj: Info or str
 		:return: The permission level you are querying
-		:rtype: int or None
+		:rtype: int
+		:raise: TypeError
 		"""
-		if type(obj) is Info:  # Info instance
+		t = type(obj)
+		if t is Info:  # Info instance
 			return self.__server.permission_manager.get_info_permission_level(obj)
-		elif type(obj) is str:  # player name
+		elif t is str:  # player name
 			return self.__server.permission_manager.get_player_permission_level(obj)
 		else:
-			return None
+			raise TypeError('Except Info or str for permission level querying but {} found'.format(getattr(t, '__name__', t)))
+
+	@log_call
+	def set_permission_level(self, player, level):
+		"""
+		Set the permission level of a player
+
+		:param str player: The name of the player that you want to set his/her permission level
+		:param level: The target permission level you want to set the player to. It can be an int or a str as long as
+		it's related to the permission level. Available examples: 1, '1', 'user'
+		:type level: int or str
+		:raise: TypeError if param player is illegal
+		"""
+		level_name = self.__server.permission_manager.format_level_name(level)
+		if level_name is None:
+			raise TypeError('Parameter level needs to be a permission related value')
+		self.__server.permission_manager.set_permission_level(player, level_name)
 
 	@log_call
 	def rcon_query(self, command):
@@ -319,18 +343,18 @@ class ServerInterface:
 	def add_help_message(self, prefix, message):
 		"""
 		Add help message for you plugin, which is used in !!help command
-		It needs to be called in a MCDR provided thread such as on_info or on_player_left called
+		It needs to be called in a MCDR provided thread such as on_info or on_player_left called or an IllegalCall will
+		be raised
 
 		:param str prefix: The help command of your plugin
 		When player click on the displayed message it will suggest this prefix parameter to the player
 		:param message: A neat command description
 		:type message: str or RTextBase
-		:return: If it's called in a MCDR provided thread and the execution succeeded
-		:rtype: bool
+		:raise: IllegalCall
 		"""
 		thread = threading.current_thread()
 		if hasattr(thread, 'plugin') and type(thread.plugin) is Plugin:
 			plugin = thread.plugin  # type: Plugin
 			plugin.add_help_message(prefix, message)
-			return True
-		return False
+		else:
+			raise IllegalCall('Method add_help_message needs to be called in a MCDR provided thread')

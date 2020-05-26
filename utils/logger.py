@@ -94,7 +94,7 @@ class Logger:
 
 
 class ServerLogger(logging.Logger):
-	server_fmt = logging.Formatter('[%(name)s] %(message)s')
+	server_fmt = MCColoredFormatter('[%(name)s] %(message)s')
 
 	def __init__(self, name):
 		super().__init__(name)

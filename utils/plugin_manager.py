@@ -15,6 +15,7 @@ class PluginManager:
 		self.logger = server.logger
 		self.plugins = []
 		self.thread_pool = PluginThreadPool(self.server, max_thread=constant.PLUGIN_THREAD_POOL_SIZE)
+		self.plugin_load_lock = threading.Lock()
 		tool.touch_folder(self.plugin_folder)
 		tool.touch_folder(constant.PLUGIN_CONFIG_FOLDER)
 
@@ -34,7 +35,7 @@ class PluginManager:
 	def get_loaded_plugin_file_name_list(self):
 		return self.get_loaded_plugin_file_name_dict().keys()
 
-	def get_plugin(self, obj):
+	def get_plugin(self, obj) -> Plugin:
 		if type(obj) is Plugin:
 			return obj
 		elif type(obj) is str:

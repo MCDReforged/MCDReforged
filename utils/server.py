@@ -9,6 +9,7 @@ from subprocess import Popen, PIPE, STDOUT
 from threading import Lock
 
 from utils import config, constant, logger, tool
+from utils.exception import *
 from utils.command_manager import CommandManager
 from utils.parser_manager import ParserManager
 from utils.permission_manager import PermissionManager
@@ -21,14 +22,15 @@ from utils.update_helper import UpdateHelper
 
 
 class Server:
-	def __init__(self):
+	def __init__(self, old_process=None):
 		self.console_input_thread = None
 		self.info_reactor_thread = None
 		self.info_queue = queue.Queue(maxsize=constant.MAX_INFO_QUEUE_SIZE)
-		self.process = None  # the process for the server
+		self.process = old_process  # the process for the server
 		self.server_status = ServerStatus.STOPPED
 		self.flag_interrupt = False  # ctrl-c flag
 		self.flag_rcon_startup = False  # set to True after server startup. used to start the rcon server
+		self.flag_exit = False  # MCDR exit flag
 		self.starting_server_lock = Lock()  # to prevent multiple start_server() call
 
 		# will be assigned in reload_config()
@@ -92,7 +94,7 @@ class Server:
 		reactors = []
 		for file in tool.list_file(folder, '.py'):
 			module = tool.load_source(file)
-			if hasattr(module, 'get_reactor') and callable(module.get_reactor):
+			if callable(getattr(module, 'get_reactor', None)):
 				reactors.append(module.get_reactor(self))
 		return reactors
 
@@ -139,9 +141,9 @@ class Server:
 
 	def start(self):
 		"""
-		try to start the server. if succeeded the console thread will start and MCDR will start ticking
+		Yry to start the server. if succeeded the console thread will start and MCDR will start ticking
 
-		:return: a bool, if the server start up try succeeds
+		:raise: Raise ServerStartError if the server is already running or start_server has been called by other
 		"""
 		def start_thread(target, args, name):
 			self.logger.debug('{} thread starting'.format(name))
@@ -149,14 +151,14 @@ class Server:
 			return thread
 
 		if not self.start_server():
-			return False
+			raise ServerStartError()
 		if not self.config['disable_console_thread']:
 			self.console_input_thread = start_thread(self.console_input, (), 'Console')
 		else:
 			self.logger.info('Console thread disabled')
 		self.info_reactor_thread = start_thread(self.info_react, (), 'InfoReactor')
 		self.run()
-		return True
+		return self.process
 
 	def stop(self, forced=False, new_server_status=ServerStatus.STOPPING_BY_ITSELF):
 		"""
@@ -167,7 +169,6 @@ class Server:
 		:param new_server_status: an optional ServerStatus object, the new server status MCDR will be set to
 		default is STOPPING_BY_ITSELF, which will cause MCDR to exit after server has stopped
 		set it to STOPPING_BY_PLUGIN to prevent MCDR exiting
-		:return:
 		"""
 		self.set_server_status(new_server_status)
 		if not self.is_server_running():
@@ -183,16 +184,19 @@ class Server:
 				self.process.kill()
 				self.logger.info(self.t('server.stop.process_killed'))
 
-	def send(self, text, ending='\n'):
+	def send(self, text, ending='\n', encoding=None):
 		"""
-		send a text to server's stdin if the server is running
-		:param text: a str or a bytes you want to send. if text is a str then it will attach the ending parameter to its
+		Send a text to server's stdin if the server is running
+
+		:param text: A str or a bytes you want to send. if text is a str then it will attach the ending parameter to its
 		back
-		:param ending: the suffix of a command with a default value \n
-		:return: None
+		:param str ending: The suffix of a command with a default value \n
+		:param str encoding: The encoding method for the text. If it's not given used the method in config
 		"""
+		if encoding is None:
+			encoding = self.encoding_method
 		if type(text) is str:
-			text = (text + ending).encode(self.encoding_method)
+			text = (text + ending).encode(encoding)
 		if self.is_server_running():
 			self.process.stdin.write(text)
 			self.process.stdin.flush()
@@ -205,7 +209,7 @@ class Server:
 		if server has stopped it will wait up to 10s for the server process to exit and then set the server status
 		to STOPPING_BY_ITSELF if the old server status is RUNNING
 
-		:return: the received str, or None
+		:rtype: str or None
 		"""
 		while True:
 			try:
@@ -243,9 +247,8 @@ class Server:
 
 	def tick(self):
 		"""
-		ticking MCDR: try to receive a new line from server's stdout and parse / display / process the text
-
-		:return: None
+		ticking MCDR:
+		try to receive a new line from server's stdout and parse / display / process the text
 		"""
 		text = self.receive()
 		if text is None:  # server process has been terminated
@@ -277,6 +280,7 @@ class Server:
 			else:
 				self.logger.info(self.t('server.on_mcdr_stop.server_stop'))
 			self.plugin_manager.call('on_mcdr_stop', (self.server_interface,), wait=True)
+			self.flag_exit = True
 			self.logger.info(self.t('server.on_mcdr_stop.bye'))
 		except:
 			self.logger.exception(self.t('server.on_mcdr_stop.stop_error'))
@@ -338,9 +342,9 @@ class Server:
 
 		:return: None
 		"""
-		while not self.flag_interrupt:
+		while not self.flag_interrupt and not self.flag_exit:
 			try:
-				info = self.info_queue.get(timeout=0.1)
+				info = self.info_queue.get(timeout=0.01)
 			except queue.Empty:
 				pass
 			else:
