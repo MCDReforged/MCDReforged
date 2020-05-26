@@ -64,7 +64,7 @@ MCDReforged 插件文档
 | 方法 | 功能 |
 |---|---|
 | start() | 启动服务端。仅在服务端未启动的情况下有效 |
-| stop() | 使用服务端对应的指令，如 `stop` 来关闭服务端。仅在服务端运行时有效 || is_running() | 服务端（准确地说，服务端进程）是否在运行 |
+| stop() | 使用服务端对应的指令，如 `stop` 来关闭服务端。仅在服务端运行时有效 |
 | wait_for_start() | 等待直至服务端完全关闭，也就是可以启动 |
 | restart() | 依次执行 `stop()`、`wait_for_start()`、`start()` 来重启服务端 |
 | stop_exit() | 关闭服务端以及 MCDR，也就是退出整个程序 |
@@ -77,12 +77,14 @@ MCDReforged 插件文档
 
 | 方法 | 功能 |
 |---|---|
-| execute(text) | 发送字符串 `text` 至服务端的标准输入流，并自动在其后方追加一个 `\n` |
-| say(text) | 使用 `tellraw @a` 来在服务端中广播消息 |
-| tell(player, text) | 使用 `tellraw <player>` 来在对玩家 `<player>` 发送消息 |
-| reply(info, text) | 向消息源发生消息: 如果消息来自玩家则调用 `tell(info.player, text)`; 如果不是则调用 MCDR 的 logger 来将 `text` 告示至控制台
+| execute(text, encoding=None) | 发送字符串 `text` 至服务端的标准输入流，并自动在其后方追加一个 `\n` |
+| say(text, encoding=None) | 使用 `tellraw @a` 来在服务端中广播消息 |
+| tell(player, text, encoding=None) | 使用 `tellraw <player>` 来在对玩家 `<player>` 发送消息 |
+| reply(info, text, encoding=None) | 向消息源发生消息: 如果消息来自玩家则调用 `tell(info.player, text)`; 如果不是则调用 MCDR 的 logger 来将 `text` 告示至控制台
 
 `text` 可为一个 `str` 或者 [`RTextBase`](https://github.com/Fallen-Breath/MCDReforged/blob/master/doc/utils.md#rtextbase) (`RText`, `RTextList`)
+
+`encoding` 为可选的指定的编码方式，使用默认值 None 则为使用 MCDR 配置文件的编码方式。MCDR 将用此编码方式将输入的字符串进行编码并发送至服务端的标准输入流
 
 **插件管理**
 
@@ -102,9 +104,12 @@ MCDReforged 插件文档
 | 方法 | 功能 |
 |---|---|
 | get_permission_level(obj) | 返回一个[整数](https://github.com/Fallen-Breath/MCDReforged/blob/master/doc/readme_cn.md#权限)，代表 `obj` 对象拥有的最高权限等级。`obj` 对象可为一个 `Info` 实例，或者是一个表示玩家名称的字符串。如果 `obj` 的类型不被支持或者 `Info` 实例并不来源自用户（`not info.is_user`），则返回 None |
-| rcon_query(command) | 通过 rcon 向服务端发送指令 `command`，然后返回一个字符串，表示该指令执行后的返回值。如果 rcon 未在运行或者有异常发生，返回 None |
+| set_permission_level(player, level) | 设置指定玩家的权限等级
+| rcon_query(command) | 通过 rcon 向服务端发送字符串指令 `command`，然后返回一个字符串，表示该指令执行后的返回值。如果 rcon 未在运行或者有异常发生，返回 None |
 | get_plugin_instance(plugin_name) | 返回当前加载着的位于 `plugins/plugin_name.py` 的插件实例。使用此方法而非在插件中手动 import 可保证得到的目标插件实例与 MCDR 中的实例相同。若未找到该插件，返回 None |
 | add_help_message(prefix, message) | 向 MCDR 的 `!!help` 信息库中加入一条指令前缀为 `prefix`，信息为 `message` 的帮助信息。`!!help` 信息库将在插件重载前清空。**推荐在方法 `on_load()` 中进行相关信息添加** |
+
+`plugin_name` 可为 `"my_plugin"` 或者 `"my_plugin.py"`
 
 ### info
 

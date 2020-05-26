@@ -77,12 +77,14 @@ It also has these following methods:
 
 | Method | Function |
 |---|---|
-| execute(text) | Send a string `text` to the stdin of the server with a extra `\n` at the end |
-| say(text) | Use `tellraw @a` to broadcast message `text` in the server |
-| tell(player, text) | Use `tellraw <player>` to send message `text` to player `<player>` |
-| reply(info, text) | Send `text` to the info source: if it's from a player calls `tell(info.player, text)`; if not uses MCDR's logger to info `text` to the console
+| execute(text, encoding=None) | Send a string `text` to the stdin of the server with a extra `\n` at the end |
+| say(text, encoding=None) | Use `tellraw @a` to broadcast message `text` in the server |
+| tell(player, text, encoding=None) | Use `tellraw <player>` to send message `text` to player `<player>` |
+| reply(info, text, encoding=None) | Send `text` to the info source: if it's from a player calls `tell(info.player, text)`; if not uses MCDR's logger to info `text` to the console
 
 `text` could be a `str` or [`RTextBase`](https://github.com/Fallen-Breath/MCDReforged/blob/master/doc/utils.md#rtextbase) (`RText`, `RTextList`)
+
+`encoding` is an optional encoding method. Use default value None to use the encoding method from MCDR config. MCDR will encode the text string using the encoding method and then send it to the standard input stream of the server
 
 **Plugin Management**
 
@@ -102,9 +104,12 @@ It also has these following methods:
 | Method | Function |
 |---|---|
 | get_permission_level(obj) | Return a [integer](https://github.com/Fallen-Breath/MCDReforged#Permission) representing highest permission level the object `obj` has. `obj` can be a `Info` instance or a string representing a player name. If the type of `obj` is not supported or the `Info` instance is not from a user (`not info.is_user`) then it will return None |
-| rcon_query(command) | Send the command `command` via rcon to the server. Return a response string from the server. Return None if rcon stops or exception occurred |
+| set_permission_level(player, level) | Set the permission level of a player
+| rcon_query(command) | Send a str command `command` via rcon to the server. Return a response string from the server. Return None if rcon stops or exception occurred |
 | get_plugin_instance(plugin_name) | Return an instance of the loaded plugin located in `plugins/plugin_name.py`. Using this method instead of importing the plugin by yourself allows you to get the same instance as MCDR. If plugin not found returns None |
 | add_help_message(prefix, message) | Add a help message with prefix `prefix` and message `message` to the `!!help` data of MCDR. The `!!help` data of MCDR will be reset before plugin reloading. **It is recommended to add relevant information in `on_load ()` method call** |
+
+`plugin_name` can be `"my_plugin"` or `"my_plugin.py"`
 
 ### info
 

@@ -16,7 +16,6 @@ from utils.rtext import *
 def log_call(func):
 	"""
 	Log plugin call
-
 	Use kwarg is_plugin_call to determined if do log
 	"""
 	def wrap(self, *args, **kwargs):
