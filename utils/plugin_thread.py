@@ -19,7 +19,7 @@ class PluginThread(threading.Thread):
 		self.task = task
 		self.id = PluginThread.counter
 		PluginThread.counter += 1
-		self.original_name = '{}-{}'.format(type(self).__name__, self.id)
+		self.original_name = 'PT{}-idling'.format(self.id)
 		self.setName(self.original_name)
 
 	def run(self):
