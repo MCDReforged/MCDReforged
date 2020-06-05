@@ -204,8 +204,9 @@ class PluginManager:
 	def call(self, func, args=(), wait=False):
 		thread_list = []
 		for plugin in self.plugins:
-			thread = plugin.call(func, args)
+			thread = plugin.call(func, args, forced_new_thread=wait)
 			if isinstance(thread, threading.Thread):
 				thread_list.append(thread)
 		if wait:
-			self.thread_pool.join()
+			for thread in thread_list:
+				thread.join()

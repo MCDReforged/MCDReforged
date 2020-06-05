@@ -10,12 +10,13 @@ TaskData = collections.namedtuple('TaskData', 'func args func_name plugin')
 class PluginThread(threading.Thread):
 	counter = 0
 
-	def __init__(self, thread_pool, temporary=False):
+	def __init__(self, thread_pool, temporary=False, task=None):
 		super().__init__()
 		self.daemon = True
 		self.thread_pool = thread_pool
 		self.flag_interrupt = temporary
 		self.plugin = None
+		self.task = task
 		self.id = PluginThread.counter
 		PluginThread.counter += 1
 		self.original_name = '{}-{}'.format(type(self).__name__, self.id)
@@ -25,7 +26,11 @@ class PluginThread(threading.Thread):
 		try:
 			while True:
 				try:
-					task_data = self.thread_pool.task_queue.get(timeout=0.01)
+					if self.task is not None:
+						task_data = self.task
+						self.task = None
+					else:
+						task_data = self.thread_pool.task_queue.get(timeout=0.01)
 				except queue.Empty:
 					pass
 				else:
@@ -71,14 +76,26 @@ class PluginThreadPool:
 			if i >= self.max_thread:
 				thread.flag_interrupt = True
 
-	def add_task(self, func, args, func_name, plugin):
-		task_data = TaskData(func, args, func_name, plugin)
-		self.task_queue.put(task_data)
-		if self.working_count >= self.max_thread:
-			thread = PluginThread(self, temporary=True)
+	def add_task(self, task_data, forced_new_thread):
+		"""
+		Added a task to the dynamic thread pool and execute it
+		If the thread pool is not enough a new temporary thread will start to process the task
+		If forced_new_thread is set to true, the task will must be executed in a new temporary thread and will return
+		the thread instance
+
+		:type task_data: TaskData
+		:param forced_new_thread: if set to true, it will force start a new thread for processing the task
+		:return: None if forced_new_thread is False; The thread instance that is executing the task otherwise
+		:rtype: PluginThread or None
+		"""
+		if forced_new_thread or self.working_count >= self.max_thread:
+			thread = PluginThread(self, temporary=True, task=task_data)
 			with self.threads_write_lock:
 				self.threads.append(thread)
 			thread.start()
+			return thread if forced_new_thread else None
+		else:
+			self.task_queue.put(task_data)
 
 	def join(self, timeout=None):
 		for thread in self.threads.copy():

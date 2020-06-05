@@ -5,7 +5,7 @@ import hashlib
 import sys
 
 from utils import tool
-
+from utils.plugin_thread import TaskData
 
 HelpMessage = collections.namedtuple('HelpMessage', 'prefix message plugin_name')
 
@@ -24,12 +24,11 @@ class Plugin:
 		self.thread_pool = self.server.plugin_manager.thread_pool
 		self.load_lock = self.server.plugin_manager.plugin_load_lock
 
-	def call(self, func_name, args=()):
+	def call(self, func_name, args, forced_new_thread=False):
 		if hasattr(self.module, func_name):
 			func = self.module.__dict__[func_name]
 			if callable(func):
-				return self.thread_pool.add_task(func, args, func_name, self)
-		return None
+				return self.thread_pool.add_task(TaskData(func, args, func_name, self), forced_new_thread=forced_new_thread)
 
 	def load(self):
 		with self.load_lock:
