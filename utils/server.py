@@ -141,7 +141,7 @@ class Server:
 
 	def start(self):
 		"""
-		Yry to start the server. if succeeded the console thread will start and MCDR will start ticking
+		Try to start the server. if succeeded the console thread will start and MCDR will start ticking
 
 		:raise: Raise ServerStartError if the server is already running or start_server has been called by other
 		"""
