@@ -29,7 +29,7 @@ MCDReforged 工具文档
 
 ### Rcon.send_command(command, max_retry_time=3) -> str
 
-像服务器发送一个 `str` 类型的命令 `command`
+向服务器发送一个 `str` 类型的命令 `command`
 
 返回一个代表着命令执行结果的 `str`
 
@@ -100,7 +100,7 @@ MCDReforged 工具文档
 
 #### RTextBase.to_plain_text()
 
-返回一个用于控制台显示的朴素字符串。点击事件以及悬浮时间将会被忽略s
+返回一个用于控制台显示的朴素字符串。忽略其中的点击、悬浮事件
 
 #### RTextBase.__str__()
 
@@ -120,7 +120,7 @@ MCDReforged 工具文档
 
 #### RText.set_click_event(action, value) -> RText
 
-设置点击事件，动作为 `action`，值为 `value`
+设置一个动作为 `action`，值为 `value`的点击事件
 
 `action` 以及 `value` 均为 `str`
 
@@ -161,4 +161,4 @@ MCDReforged 工具文档
 - `server.reply`
 - `add_help_message`
 
-对于控制台的特判是不必要的，因为 `server.reply` 等方法会自动将 `RTextBase` 对象转换为朴素文本
+因 `server.reply` 等方法会自动将 `RTextBase` 对象转换为朴素文本，所以没有必要判断控制台这个特例。
