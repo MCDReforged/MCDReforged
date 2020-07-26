@@ -10,7 +10,6 @@ from utils import constant, tool
 from utils.rtext import *
 from utils.info import InfoSource
 from utils.permission_manager import PermissionLevel
-from utils.server_status import ExitType
 
 
 class Validator:
@@ -113,11 +112,6 @@ class CommandManager:
 			def reply(msg):
 				self.send_message(info, msg)
 			self.server.update_helper.check_update(reply_func=reply)
-
-		# !!MCDR restart
-		elif len(args) == 2 and args[1] in ['restart']:
-			self.send_message(info, 'BANG')
-			self.server.set_exit_type(ExitType.RESTART)
 
 		else:
 			self.send_command_not_found(info, '!!MCDR')

@@ -11,25 +11,23 @@ from threading import Lock
 from utils import config, constant, logger, tool
 from utils.exception import *
 from utils.command_manager import CommandManager
-from utils.info import Info
 from utils.parser_manager import ParserManager
 from utils.permission_manager import PermissionManager
 from utils.plugin_manager import PluginManager
 from utils.rcon_manager import RconManager
 from utils.language_manager import LanguageManager
-from utils.server_status import *
+from utils.server_status import ServerStatus
 from utils.server_interface import ServerInterface
 from utils.update_helper import UpdateHelper
 
 
 class Server:
-	def __init__(self):
+	def __init__(self, old_process=None):
 		self.console_input_thread = None
 		self.info_reactor_thread = None
 		self.info_queue = queue.Queue(maxsize=constant.MAX_INFO_QUEUE_SIZE)
-		self.process = None  # the process for the server
+		self.process = old_process  # the process for the server
 		self.server_status = ServerStatus.STOPPED
-		self.exit_type = ExitType.EXIT
 		self.flag_interrupt = False  # ctrl-c flag
 		self.flag_rcon_startup = False  # set to True after server startup. used to start the rcon server
 		self.flag_exit = False  # MCDR exit flag
@@ -112,10 +110,6 @@ class Server:
 		self.server_status = status
 		self.logger.debug('Server status has set to "{}"'.format(status))
 
-	def set_exit_type(self, exit_type):
-		self.exit_type = exit_type
-		self.logger.debug('MCDR exit type has set to "{}"'.format(exit_type))
-
 	def start_server(self) -> bool:
 		"""
 		try to start the server process
@@ -139,39 +133,32 @@ class Server:
 				self.logger.exception(self.t('server.start_server.start_fail'))
 				return False
 			else:
+				self.set_server_status(ServerStatus.RUNNING)
 				self.logger.info(self.t('server.start_server.pid_info', self.process.pid))
 				return True
 		finally:
 			self.starting_server_lock.release()
 
-	def start(self, process=None):
+	def start(self):
 		"""
 		Try to start the server. if succeeded the console thread will start and MCDR will start ticking
 
-		:param Popen process: The server process object from the previous MCDR instance
-		:raises: Raise ServerStartError if the server is already running or start_server has been called by other. Raise
-		TypeError if the type of the parameter process is invalid
+		:raise: Raise ServerStartError if the server is already running or start_server has been called by other
 		"""
 		def start_thread(target, args, name):
 			self.logger.debug('{} thread starting'.format(name))
 			thread = tool.start_thread(target, args, name)
 			return thread
 
-		if process is not None:
-			if type(process) is Popen:
-				self.process = process
-			else:
-				raise TypeError('The type of process parameter needs to be Popen, but {} found'.format(type(process).__name__))
-		else:
-			if not self.start_server():
-				raise ServerStartError()
-		self.set_server_status(ServerStatus.RUNNING)
+		if not self.start_server():
+			raise ServerStartError()
 		if not self.config['disable_console_thread']:
 			self.console_input_thread = start_thread(self.console_input, (), 'Console')
 		else:
 			self.logger.info('Console thread disabled')
 		self.info_reactor_thread = start_thread(self.info_react, (), 'InfoReactor')
 		self.run()
+		return self.process
 
 	def stop(self, forced=False, new_server_status=ServerStatus.STOPPING_BY_ITSELF):
 		"""
@@ -287,25 +274,23 @@ class Server:
 		self.put_info(parsed_result)
 
 	def on_mcdr_stop(self):
-		if self.exit_type in [ExitType.EXIT]:
+		try:
 			if self.flag_interrupt:
 				self.logger.info(self.t('server.on_mcdr_stop.user_interrupted'))
 			else:
 				self.logger.info(self.t('server.on_mcdr_stop.server_stop'))
-		try:
 			self.plugin_manager.call('on_mcdr_stop', (self.server_interface,), wait=True)
-		except:
-			self.logger.exception(self.t('server.on_mcdr_stop.stop_error'))
-		finally:
 			self.flag_exit = True
 			self.logger.info(self.t('server.on_mcdr_stop.bye'))
+		except:
+			self.logger.exception(self.t('server.on_mcdr_stop.stop_error'))
 
 	def run(self):
 		"""
 		the main loop of MCDR
 		:return: None
 		"""
-		while self.server_status not in [ServerStatus.STOPPED] and self.exit_type not in [ExitType.RESTART]:
+		while self.server_status not in [ServerStatus.STOPPED]:
 			try:
 				if self.is_server_running():
 					self.tick()
@@ -346,11 +331,6 @@ class Server:
 				self.logger.exception(self.t('server.console_input.error'))
 
 	def put_info(self, info):
-		"""
-		Put an Info into info_queue for future processing
-
-		:type info: Info
-		"""
 		try:
 			self.info_queue.put_nowait(info)
 		except queue.Full:
