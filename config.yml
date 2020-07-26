@@ -25,10 +25,10 @@ start_command: java -Xms1G -Xmx2G -jar minecraft_server.jar nogui
 #   for Vanilla / Carpet / Fabric server
 #
 # bukkit_parser
-#   For Bukkit / Spiogt server with Minecraft version below 1.14, and Paper server in all version
+#   For Bukkit / Spigot server with Minecraft version below 1.14, and Paper server in all version
 #
 # bukkit_parser_14
-#   For Bukkit / Spiogt server with Minecraft version 1.14 and above
+#   For Bukkit / Spigot server with Minecraft version 1.14 and above
 #
 # forge_parser
 #   For Forge server
