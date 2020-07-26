@@ -12,7 +12,7 @@ class CatServerParser(BukkitParser):
 	# CatServer uses vanilla logging format but spigot like player joined message
 	# And has color code around the player left message
 
-	NAME = os.path.basename(__file__).rstrip('.py')
+	NAME = tool.remove_suffix(os.path.basename(__file__), '.py')
 
 	def parse_server_stdout(self, text):
 		return VanillaParser.parse_server_stdout(self, text)

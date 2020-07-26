@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 import os
 import re
+
+from utils import tool
 from utils.parser import base_parser
 
 
 class VanillaParser(base_parser.BaseParser):
-	NAME = os.path.basename(__file__).rstrip('.py')
+	NAME = tool.remove_suffix(os.path.basename(__file__), '.py')
 	PLAYER_JOINED_PATTERN = re.compile(r'\w{1,16}\[/[\d.:]+\] logged in with entity id \d+ at \([\d., ]+\)')
 	STOP_COMMAND = 'stop'
 	LOGGER_NAME_CHAR_SET = r'\w /\#\-'

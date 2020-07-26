@@ -8,7 +8,7 @@ from utils.info import InfoSource, Info
 
 
 class BaseParser(object):
-	NAME = os.path.basename(__file__).rstrip('.py')
+	NAME = tool.remove_suffix(os.path.basename(__file__), '.py')
 	STOP_COMMAND = ''
 
 	def __init__(self, parser_manager):

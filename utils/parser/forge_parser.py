@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 import os
 import re
+
+from utils import tool
 from utils.parser import vanilla_parser
 
 
 class ForgeParser(vanilla_parser.VanillaParser):
-	NAME = os.path.basename(__file__).rstrip('.py')
+	NAME = tool.remove_suffix(os.path.basename(__file__), '.py')
 	LOGGER_NAME_CHAR_SET = super().LOGGER_NAME_CHAR_SET + r'.'
 
 	def __init__(self, parser_manager):

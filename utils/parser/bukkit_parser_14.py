@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 
+from utils import tool
 from utils.parser import vanilla_parser, bukkit_parser
 
 
@@ -9,7 +10,7 @@ class BukkitParser14(vanilla_parser.VanillaParser):
 	# idk why they did this
 	# paper is not included
 
-	NAME = os.path.basename(__file__).rstrip('.py')
+	NAME = tool.remove_suffix(os.path.basename(__file__), '.py')
 
 	def __init__(self, parser_manager):
 		super().__init__(parser_manager)

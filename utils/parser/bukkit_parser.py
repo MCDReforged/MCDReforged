@@ -2,11 +2,13 @@
 
 import os
 import re
+
+from utils import tool
 from utils.parser import vanilla_parser
 
 
 class BukkitParser(vanilla_parser.VanillaParser):
-	NAME = os.path.basename(__file__).rstrip('.py')
+	NAME = tool.remove_suffix(os.path.basename(__file__), '.py')
 
 	# Fallen_Breath[/127.0.0.1:50099] logged in with entity id 11 at ([lobby]0.7133817548136454, 4.0, 5.481879061970788)
 	PLAYER_JOINED_PATTERN = re.compile(r'\w{1,16}\[/[\d.:]+\] logged in with entity id \d+ at \((\[\w+\])?[\d., ]+\)')
