@@ -2,10 +2,11 @@
 import os
 
 from utils import tool
-from utils.parser import bukkit_parser, bungeecord_parser
+from utils.parser import bukkit_parser
+from utils.parser.bungeecord_parser import BungeecordParser
 
 
-class WaterfallParser(bungeecord_parser.BungeecordParser):
+class WaterfallParser(BungeecordParser):
 	# The logging format of waterfall server is spigot like
 
 	NAME = tool.remove_suffix(os.path.basename(__file__), '.py')

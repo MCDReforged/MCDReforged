@@ -4,14 +4,14 @@ import os
 import re
 
 from utils import tool
-from utils.parser import vanilla_parser
+from utils.parser.vanilla_parser import VanillaParser
 
 
-class BukkitParser(vanilla_parser.VanillaParser):
+class BukkitParser(VanillaParser):
 	NAME = tool.remove_suffix(os.path.basename(__file__), '.py')
 
 	# Fallen_Breath[/127.0.0.1:50099] logged in with entity id 11 at ([lobby]0.7133817548136454, 4.0, 5.481879061970788)
-	PLAYER_JOINED_PATTERN = re.compile(r'\w{1,16}\[/[\d.:]+\] logged in with entity id \d+ at \((\[\w+\])?[\d., ]+\)')
+	PLAYER_JOINED_PATTERN = re.compile(r'\w{1,16}\[/[\d.:]+\] logged in with entity id \d+ at \((\[\w+\])?[\dE\-., ]+\)')
 
 	def parse_server_stdout(self, text):
 		result = self.parse_server_stdout_raw(text)

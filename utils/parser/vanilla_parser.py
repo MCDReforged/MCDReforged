@@ -3,12 +3,12 @@ import os
 import re
 
 from utils import tool
-from utils.parser import base_parser
+from utils.parser.base_parser import BaseParser
 
 
-class VanillaParser(base_parser.BaseParser):
+class VanillaParser(BaseParser):
 	NAME = tool.remove_suffix(os.path.basename(__file__), '.py')
-	PLAYER_JOINED_PATTERN = re.compile(r'\w{1,16}\[/[\d.:]+\] logged in with entity id \d+ at \([\d., ]+\)')
+	PLAYER_JOINED_PATTERN = re.compile(r'\w{1,16}\[/[\d.:]+\] logged in with entity id \d+ at \([\dE\-., ]+\)')
 	STOP_COMMAND = 'stop'
 	LOGGER_NAME_CHAR_SET = r'\w /\#\-'
 

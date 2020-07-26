@@ -4,9 +4,10 @@ import re
 
 from utils import tool
 from utils.parser import base_parser
+from utils.parser.base_parser import BaseParser
 
 
-class BungeecordParser(base_parser.BaseParser):
+class BungeecordParser(BaseParser):
 	NAME = tool.remove_suffix(os.path.basename(__file__), '.py')
 
 	def __init__(self, parser_manager):
