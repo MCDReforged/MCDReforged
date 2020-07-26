@@ -16,7 +16,6 @@ class ServerReactor(BaseReactor):
 
 			if parser.parse_rcon_started(info):
 				self.server.logger.debug('Server rcon started detected')
-				self.server.flag_rcon_startup = True
 				self.server.connect_rcon()
 
 			if parser.parse_server_stopping(info):
