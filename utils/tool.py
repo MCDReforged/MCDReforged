@@ -47,7 +47,8 @@ def unique_list(l):
 
 
 def remove_suffix(text: str, suffix: str):
-	return text[:text.rfind(suffix)]
+	pos = text.rfind(suffix)
+	return text[:pos] if pos >= 0 else text
 
 
 def get_all_base_class(cls):
