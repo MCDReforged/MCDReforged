@@ -46,8 +46,8 @@ def unique_list(l):
 	return ret
 
 
-def remove_suffix(text, suffix):
-	return re.sub(r'{}$'.format(suffix), '', text)
+def remove_suffix(text: str, suffix: str):
+	return text[:text.rfind(suffix)]
 
 
 def get_all_base_class(cls):
