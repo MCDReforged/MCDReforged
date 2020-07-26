@@ -26,7 +26,6 @@ class VanillaParser(base_parser.BaseParser):
 		text = text.replace(time_data, '', 1)
 		# [Server thread/INFO]: <Steve> Hello
 		# [Server thread/WARN]: Can't keep up!
-
 		logging = re.match(r'^\[[{}]*?\]: '.format(self.LOGGER_NAME_CHAR_SET), text).group()
 		result.logging_level = re.search(r'(?<=/)\w+(?=\]: )', logging).group()
 		text = text.replace(logging, '', 1)
@@ -55,13 +54,16 @@ class VanillaParser(base_parser.BaseParser):
 
 	def parse_player_made_advancement(self, info):
 		# Steve has made the advancement [Stone Age]
+		# Steve has completed the challenge [Uneasy Alliance]
+		# Steve has reached the goal [Sky's the Limit]
 		if info.is_user:
 			return None
-		match = re.fullmatch(r'\w{1,16} has made the advancement \[.+\]', info.content)
-		if match is not None:
-			player, rest = info.content.split(' ', 1)
-			adv = re.search(r'(?<=has made the advancement \[).+(?=\])', rest).group()
-			return player, adv
+		for action in ['made the advancement', 'completed the challenge', 'reached the goal']:
+			match = re.fullmatch(r'\w{1,16} has %s \[.+\]' % action, info.content)
+			if match is not None:
+				player, rest = info.content.split(' ', 1)
+				adv = re.search(r'(?<=%s \[).+(?=\])' % action, rest).group()
+				return player, adv
 		return None
 
 	def parse_server_startup_done(self, info):
