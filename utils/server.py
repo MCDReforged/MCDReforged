@@ -181,8 +181,8 @@ class Server:
 					self.logger.error(self.t('server.stop.stop_fail'))
 					forced = True
 			if forced:
+				self.logger.info(self.t('server.stop.process_killed', self.process.pid))
 				self.process.kill()
-				self.logger.info(self.t('server.stop.process_killed'))
 
 	def send(self, text, ending='\n', encoding=None):
 		"""

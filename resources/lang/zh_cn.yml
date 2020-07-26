@@ -29,7 +29,7 @@ server.stop.stop_fail: |
   服务端关闭出错，强制关闭
 
 server.stop.process_killed: |
-  进程已终止
+  进程 {0} 已终止
 
 server.send.send_when_stopped: |
   服务端已关闭，不能向其标准输入流输入指令

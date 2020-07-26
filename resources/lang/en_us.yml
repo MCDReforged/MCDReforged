@@ -29,7 +29,7 @@ server.stop.stop_fail: |
   Error stopping server, force the server to stop now
 
 server.stop.process_killed: |
-  Process killed
+  Process {0} killed
 
 server.send.send_when_stopped: |
   Server has been terminated, cannot send command to its stdin
