@@ -29,7 +29,8 @@ class Server:
 		self.process = old_process  # the process for the server
 		self.server_status = ServerStatus.STOPPED
 		self.flag_interrupt = False  # ctrl-c flag
-		self.flag_server_startup = False  # set to True after server startup. used to start the rcon server
+		self.flag_server_startup = False  # set to True after server startup
+		self.flag_server_rcon_ready = False  # set to True after server started its rcon. used to start the rcon server
 		self.flag_exit = False  # MCDR exit flag
 		self.starting_server_lock = Lock()  # to prevent multiple start_server() call
 
@@ -105,6 +106,9 @@ class Server:
 
 	def is_server_startup(self):
 		return self.flag_server_startup
+
+	def is_server_rcon_ready(self):
+		return self.flag_server_rcon_ready
 
 	def set_server_status(self, status):
 		self.server_status = status
@@ -240,6 +244,7 @@ class Server:
 		self.logger.info(self.t('server.on_server_stop.show_stopcode', return_code))
 		self.process = None
 		self.flag_server_startup = False
+		self.flag_server_rcon_ready = False
 		if self.server_status == ServerStatus.STOPPING_BY_ITSELF:
 			self.logger.info(self.t('server.on_server_stop.stop_by_itself'))
 			self.set_server_status(ServerStatus.STOPPED)
@@ -359,5 +364,5 @@ class Server:
 
 	def connect_rcon(self):
 		self.rcon_manager.disconnect()
-		if self.config['enable_rcon'] and self.is_server_startup():
+		if self.config['enable_rcon'] and self.is_server_rcon_ready():
 			self.rcon_manager.connect(self.config['rcon_address'], self.config['rcon_port'], self.config['rcon_password'])
