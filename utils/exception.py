@@ -1,9 +1,13 @@
 # -*- coding: utf-8 -*-
 
 
-class ServerStartError(Exception):
+class ServerStartError(RuntimeError):
 	pass
 
 
-class IllegalCall(Exception):
+class IllegalCall(RuntimeError):
+	pass
+
+
+class ArgumentFormatError(TypeError):
 	pass

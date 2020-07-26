@@ -238,6 +238,9 @@ permission_manager.set_default_permission_level.done: |
 permission_manager.set_permission_level.done: |
   玩家 §b{0}§r 的权限等级已设置为 §e{1}§r
 
+plugin.call.args_not_matched: |
+  错误的参数数量！插件 {1} 的方法 {0} 需要 {2} 个参数，而期望需要 {3} 个参数
+
 plugin_manager.load: |
   加载
 

@@ -9,9 +9,9 @@ from utils.info import InfoSource, Info
 
 class BaseParser(object):
 	NAME = os.path.basename(__file__).rstrip('.py')
+	STOP_COMMAND = ''
 
 	def __init__(self, parser_manager):
-		self.STOP_COMMAND = None
 		self.parser_manager = parser_manager
 
 	# base parsing, return a Info instance
@@ -40,7 +40,7 @@ class BaseParser(object):
 		result.source = InfoSource.CONSOLE
 		return result
 
-	# returns 1 str: player_name
+	# returns a str indicating the name of the player
 	# if not matches return None
 	def parse_player_joined(self, info: Info):
 		return None

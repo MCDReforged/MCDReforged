@@ -18,6 +18,7 @@ MCDReforged 插件文档
 | on_info(server, info) | 服务端的标准输出流有输出，或者控制台有输入 | 否 | 插件响应相关信息 |
 | on_user_info(server, info) | 跟 `on_info` 相同但仅在 `info.is_user` 为 `True` 时。如果你的插件仅对用户命令感兴趣，使用它而非 `on_info` 来减小性能开销 | 否 | 响应潜在的来自用户的指令 |
 | on_player_joined(server, player) | 玩家加入服务端 | 否 | 插件响应玩家加入游戏 |
+| on_player_joined(server, player, info) | 玩家加入服务端 | 否 | 插件使用 info 对象来响应玩家加入游戏 |
 | on_player_left(server, player) | 玩家离开服务端 | 否 | 插件响应玩家离开游戏 |
 | on_death_message(server, death_message) | 玩家死亡显示死亡信息 | 否 | 插件响应玩家死亡 |
 | on_player_made_advancement(server, player, advancement) | 玩家获得了一个进度 | 否 | 插件响应相关信息 |

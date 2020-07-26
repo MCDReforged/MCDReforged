@@ -238,6 +238,9 @@ permission_manager.set_default_permission_level.done: |
 permission_manager.set_permission_level.done: |
   The permission level of player §b{0}§r has set to §e{1}§r
 
+plugin.call.args_not_matched: |
+  Wrong amount of arguments! Method {0} in plugin {1} requires {2} arguments, but is excepted to have {3} arguments
+
 plugin_manager.load: |
   load
 

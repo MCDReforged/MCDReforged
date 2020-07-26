@@ -320,7 +320,7 @@ class Server:
 					self.logger.exception(self.t('server.console_input.parse_fail', text))
 				else:
 					self.logger.debug('Parsed text from console input:')
-					for line in str(parsed_result).splitlines():
+					for line in parsed_result.format_text().splitlines():
 						self.logger.debug('    {}'.format(line))
 					self.put_info(parsed_result)
 			except (KeyboardInterrupt, EOFError, SystemExit, IOError) as e:

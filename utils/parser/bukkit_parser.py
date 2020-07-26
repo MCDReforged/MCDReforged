@@ -8,6 +8,9 @@ from utils.parser import vanilla_parser
 class BukkitParser(vanilla_parser.VanillaParser):
 	NAME = os.path.basename(__file__).rstrip('.py')
 
+	# Fallen_Breath[/127.0.0.1:50099] logged in with entity id 11 at ([lobby]0.7133817548136454, 4.0, 5.481879061970788)
+	PLAYER_JOINED_PATTERN = re.compile(r'\w{1,16}\[/[\d.:]+\] logged in with entity id \d+ at \((\[\w+\])?[\d., ]+\)')
+
 	def parse_server_stdout(self, text):
 		result = self.parse_server_stdout_raw(text)
 
@@ -40,15 +43,6 @@ class BukkitParser(vanilla_parser.VanillaParser):
 			result.player = result.player.group()[1:-2]
 			result.content = text.replace(f'<{result.player}> ', '', 1)
 		return result
-
-	def parse_player_joined(self, info):
-		# Fallen_Breath[/127.0.0.1:50099] logged in with entity id 11 at ([lobby]0.7133817548136454, 4.0, 5.481879061970788)
-		if not info.is_user:
-			result = re.fullmatch(f'\w+\[.*\] logged in with entity id .*', info.content)
-			if result is not None:
-				player = info.content.split('[')[0]
-				return player
-		return None
 
 
 def get_parser(parser_manager):

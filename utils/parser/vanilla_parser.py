@@ -6,11 +6,9 @@ from utils.parser import base_parser
 
 class VanillaParser(base_parser.BaseParser):
 	NAME = os.path.basename(__file__).rstrip('.py')
-
-	def __init__(self, parser_manager):
-		super().__init__(parser_manager)
-		self.STOP_COMMAND = 'stop'
-		self.Logger_NAME_CHAR_SET = r'\w /\#\-'
+	PLAYER_JOINED_PATTERN = re.compile(r'\w{1,16}\[/[\d.:]+\] logged in with entity id \d+ at \([\d., ]+\)')
+	STOP_COMMAND = 'stop'
+	LOGGER_NAME_CHAR_SET = r'\w /\#\-'
 
 	def parse_server_stdout(self, text):
 		result = self.parse_server_stdout_raw(text)
@@ -27,7 +25,7 @@ class VanillaParser(base_parser.BaseParser):
 		# [Server thread/INFO]: <Steve> Hello
 		# [Server thread/WARN]: Can't keep up!
 
-		logging = re.match(r'^\[[{}]*?\]: '.format(self.Logger_NAME_CHAR_SET), text).group()
+		logging = re.match(r'^\[[{}]*?\]: '.format(self.LOGGER_NAME_CHAR_SET), text).group()
 		result.logging_level = re.search(r'(?<=/)\w+(?=\]: )', logging).group()
 		text = text.replace(logging, '', 1)
 		# <Steve> Hello
@@ -42,9 +40,9 @@ class VanillaParser(base_parser.BaseParser):
 		return result
 
 	def parse_player_joined(self, info):
-		# Steve joined the game
-		if not info.is_user and re.fullmatch(r'\w{1,16} joined the game', info.content):
-			return info.content.split(' ')[0]
+		# Steve[/127.0.0.1:9864] logged in with entity id 131 at (187.2703, 146.79014, 404.84718)
+		if not info.is_user and self.PLAYER_JOINED_PATTERN.fullmatch(info.content):
+			return info.content.split('[', 1)[0]
 		return None
 
 	def parse_player_left(self, info):

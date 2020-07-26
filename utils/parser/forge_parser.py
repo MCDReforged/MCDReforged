@@ -6,10 +6,10 @@ from utils.parser import vanilla_parser
 
 class ForgeParser(vanilla_parser.VanillaParser):
 	NAME = os.path.basename(__file__).rstrip('.py')
+	LOGGER_NAME_CHAR_SET = super().LOGGER_NAME_CHAR_SET + r'.'
 
 	def __init__(self, parser_manager):
 		super().__init__(parser_manager)
-		self.Logger_NAME_CHAR_SET += r'.'
 
 	def parse_server_stdout(self, text):
 		result = self.parse_server_stdout_raw(text)
@@ -28,14 +28,14 @@ class ForgeParser(vanilla_parser.VanillaParser):
 		# [Server thread/INFO] [minecraft/DedicatedServer]: Done (9.855s)! For help, type "help" or "?"
 		# [Server thread/INFO] [minecraft/DedicatedServer]: <Steve> test
 
-		logging = re.match(r'^\[[{}]*?\] '.format(self.Logger_NAME_CHAR_SET), text).group()
+		logging = re.match(r'^\[[{}]*?\] '.format(self.LOGGER_NAME_CHAR_SET), text).group()
 		result.logging_level = re.search(r'(?<=/)\w+(?=\] )', logging).group()
 		text = text.replace(logging, '', 1)
 		# [FML]: Unloading dimension 1
 		# [minecraft/DedicatedServer]: Done (9.855s)! For help, type "help" or "?"
 		# [minecraft/DedicatedServer]: <Steve> test
 
-		matched = re.match(r'^\[[{}]*\]: '.format(self.Logger_NAME_CHAR_SET), text).group()
+		matched = re.match(r'^\[[{}]*\]: '.format(self.LOGGER_NAME_CHAR_SET), text).group()
 		text = text.replace(matched, '', 1)
 		# Unloading dimension 1
 		# Done (9.855s)! For help, type "help" or "?"

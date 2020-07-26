@@ -18,6 +18,7 @@ When the server has trigger specific event, MCDR will call relevant method of ea
 | on_info(server, info) | A new line is output from the stdout of the server, or a command is input from the console | No | Response to the information |
 | on_user_info(server, info) | The same as `on_info` but only when `info.is_user` is `True`. If your plugin is only interested in user command, use this instead of `on_info` to reduce performance consumption | No | Response to the potential command from the user |
 | on_player_joined(server, player) | A player joined the server | No | Response to player joining |
+| on_player_joined(server, player, info) | A player joined the server | No | Response to player joining with the given info instance |
 | on_player_left(server, player) | A player left the server | No | Response to player leaving |
 | on_death_message(server, death_message) | A player died and the death message appeared | No | Response to the player's death |
 | on_player_made_advancement(server, player, advancement) | A player made an advancement | No | Response to this event |
