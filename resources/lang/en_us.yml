@@ -76,6 +76,10 @@ server.react.error: |
 server.info_queue.full: |
   Info queue has been full, is the server spamming? Ignore incoming info!
 
+config.missing_config: |
+  Some options in the config file is missing, use default value
+  Remember to check and update the config file as soon as possible
+
 command_manager.help_message: |
   §7!!MCDR§r: Show this message
   §7!!MCDR reload§r: Show reload command help message

@@ -76,6 +76,10 @@ server.react.error: |
 server.info_queue.full: |
   消息队列已满, 服务端是否在刷屏? 忽略新到来消息
 
+config.missing_config: |
+  配置文件缺失部分选项，使用默认值
+  请尽快去检测并更新配置文件
+
 command_manager.help_message: |
   §7!!MCDR§r: 显示这条消息
   §7!!MCDR reload§r: 显示重载相关的帮助信息
