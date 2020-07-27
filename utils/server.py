@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 import locale
 import logging
+import os
 import queue
+import signal
 import sys
 import time
 import traceback
@@ -26,7 +28,7 @@ class Server:
 		self.console_input_thread = None
 		self.info_reactor_thread = None
 		self.info_queue = queue.Queue(maxsize=constant.MAX_INFO_QUEUE_SIZE)
-		self.process = old_process  # the process for the server
+		self.process = old_process # type: Popen # the process for the server
 		self.server_status = ServerStatus.STOPPED
 		self.flag_interrupt = False  # ctrl-c flag
 		self.flag_server_startup = False  # set to True after server startup
@@ -54,6 +56,13 @@ class Server:
 		self.permission_manager = PermissionManager(self, constant.PERMISSION_FILE)
 		self.update_helper = UpdateHelper(self)
 		self.update_helper.check_update_start()
+
+	def __del__(self):
+		try:
+			if self.process and self.process.poll() is None:
+				self.kill_server()
+		except:
+			pass
 
 	# Translate info strings
 
@@ -164,12 +173,38 @@ class Server:
 		self.run()
 		return self.process
 
+	def kill_server(self):
+		"""
+		Kill the server process group
+		"""
+		if self.process and self.process.poll() is None:
+			pid = self.process.pid
+			self.process.kill()
+			if hasattr(signal, 'CTRL_C_EVENT'):  # windows
+				os.kill(os.getpid(), signal.CTRL_C_EVENT)
+			else:  # unix
+				os.killpg(os.getpgid(pid), signal.SIGTERM)
+		else:
+			raise IllegalCall("Server process has already been terminated")
+
+	def interrupt(self):
+		"""
+		Interrupt MCDR
+		The first call will softly stop the server and the later calls will kill the server
+		Return if it's the first try
+		:rtype: bool
+		"""
+		self.stop(forced=self.flag_interrupt)
+		ret = self.flag_interrupt
+		self.flag_interrupt = True
+		return ret
+
 	def stop(self, forced=False, new_server_status=ServerStatus.STOPPING_BY_ITSELF):
 		"""
 		stop the server
 
 		:param forced: an optional bool. If it's False (default) MCDR will stop the server by sending the STOP_COMMAND from the
-		current parser. If it's True MCDR will just kill the server process
+		current parser. If it's True MCDR will just kill the server process group
 		:param new_server_status: an optional ServerStatus object, the new server status MCDR will be set to
 		default is STOPPING_BY_ITSELF, which will cause MCDR to exit after server has stopped
 		set it to STOPPING_BY_PLUGIN to prevent MCDR exiting
@@ -185,8 +220,10 @@ class Server:
 					self.logger.error(self.t('server.stop.stop_fail'))
 					forced = True
 			if forced:
-				self.logger.info(self.t('server.stop.process_killed', self.process.pid))
-				self.process.kill()
+				try:
+					self.kill_server()
+				except IllegalCall:
+					pass
 
 	def send(self, text, ending='\n', encoding=None):
 		"""
@@ -219,15 +256,12 @@ class Server:
 			try:
 				text = next(iter(self.process.stdout))
 			except StopIteration:  # server process has stopped
-				for i in range(100):
+				for i in range(constant.WAIT_TIME_AFTER_SERVER_STDOUT_END_SEC * 10):
 					if self.process.poll() is not None:
 						break
 					time.sleep(0.1)
 					if i % 10 == 0:
 						self.logger.info(self.t('server.receive.wait_stop'))
-				else:
-					self.process.kill()
-					time.sleep(1)
 				if self.server_status is ServerStatus.RUNNING:
 					self.set_server_status(ServerStatus.STOPPING_BY_ITSELF)
 				return None
@@ -287,6 +321,8 @@ class Server:
 			self.plugin_manager.call('on_mcdr_stop', (self.server_interface,), wait=True)
 			self.flag_exit = True
 			self.logger.info(self.t('server.on_mcdr_stop.bye'))
+		except KeyboardInterrupt:  # I don't know why there sometimes will be a KeyboardInterrupt if MCDR is stopped by ctrl-c
+			pass
 		except:
 			self.logger.exception(self.t('server.on_mcdr_stop.stop_error'))
 
@@ -302,8 +338,7 @@ class Server:
 				else:
 					time.sleep(0.01)
 			except KeyboardInterrupt:
-				self.flag_interrupt = True
-				break
+				self.interrupt()
 			except:
 				if self.flag_interrupt:
 					break
@@ -330,8 +365,7 @@ class Server:
 					self.put_info(parsed_result)
 			except (KeyboardInterrupt, EOFError, SystemExit, IOError) as e:
 				self.logger.debug('Exception {} {} caught in console_input()'.format(type(e), e))
-				self.stop(forced=self.flag_interrupt)
-				self.flag_interrupt = True
+				self.interrupt()
 			except:
 				self.logger.exception(self.t('server.console_input.error'))
 
@@ -356,11 +390,8 @@ class Server:
 				for reactor in self.reactors:
 					try:
 						reactor.react(info)
-					except Exception as e:
+					except:
 						self.logger.exception(self.t('server.react.error', type(reactor).__name__))
-						if e is KeyboardInterrupt:
-							self.flag_interrupt = True
-							break
 
 	def connect_rcon(self):
 		self.rcon_manager.disconnect()
