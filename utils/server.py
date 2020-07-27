@@ -2,7 +2,6 @@
 import locale
 import logging
 import os
-import queue
 import signal
 import sys
 import time
@@ -18,6 +17,7 @@ from utils.permission_manager import PermissionManager
 from utils.plugin_manager import PluginManager
 from utils.rcon_manager import RconManager
 from utils.language_manager import LanguageManager
+from utils.reactor_manager import ReactorManager
 from utils.server_status import ServerStatus
 from utils.server_interface import ServerInterface
 from utils.update_helper import UpdateHelper
@@ -27,13 +27,12 @@ class Server:
 	def __init__(self, old_process=None):
 		self.console_input_thread = None
 		self.info_reactor_thread = None
-		self.info_queue = queue.Queue(maxsize=constant.MAX_INFO_QUEUE_SIZE)
-		self.process = old_process # type: Popen # the process for the server
+		self.process = old_process  # type: Popen # the process for the server
 		self.server_status = ServerStatus.STOPPED
 		self.flag_interrupt = False  # ctrl-c flag
 		self.flag_server_startup = False  # set to True after server startup
 		self.flag_server_rcon_ready = False  # set to True after server started its rcon. used to start the rcon server
-		self.flag_exit = False  # MCDR exit flag
+		self.flag_mcdr_exit = False  # MCDR exit flag
 		self.starting_server_lock = Lock()  # to prevent multiple start_server() call
 
 		# will be assigned in reload_config()
@@ -47,8 +46,9 @@ class Server:
 		self.config = config.Config(self, constant.CONFIG_FILE)
 		self.rcon_manager = RconManager(self)
 		self.parser_manager = ParserManager(self)
-		self.load_config()
-		self.reactors = self.load_reactor(constant.REACTOR_FOLDER)
+		self.load_config()  # loads config, language, parsers
+
+		self.reactor_manager = ReactorManager(self)
 		self.server_interface = ServerInterface(self)
 		self.command_manager = CommandManager(self)
 		self.plugin_manager = PluginManager(self, constant.PLUGIN_FOLDER)
@@ -100,15 +100,7 @@ class Server:
 	def load_plugins(self):
 		self.logger.info(self.plugin_manager.refresh_all_plugins())
 
-	def load_reactor(self, folder):
-		reactors = []
-		for file in tool.list_file(folder, '.py'):
-			module = tool.load_source(file)
-			if callable(getattr(module, 'get_reactor', None)):
-				reactors.append(module.get_reactor(self))
-		return reactors
-
-	# MCDR server
+	# MCDR status
 
 	def is_server_running(self):
 		return self.process is not None
@@ -119,9 +111,17 @@ class Server:
 	def is_server_rcon_ready(self):
 		return self.flag_server_rcon_ready
 
+	def is_interrupt(self):
+		return self.flag_interrupt
+
+	def is_mcdr_exit(self):
+		return self.flag_mcdr_exit
+
 	def set_server_status(self, status):
 		self.server_status = status
 		self.logger.debug('Server status has set to "{}"'.format(status))
+
+	# MCDR server
 
 	def start_server(self) -> bool:
 		"""
@@ -169,7 +169,7 @@ class Server:
 			self.console_input_thread = start_thread(self.console_input, (), 'Console')
 		else:
 			self.logger.info('Console thread disabled')
-		self.info_reactor_thread = start_thread(self.info_react, (), 'InfoReactor')
+		self.info_reactor_thread = start_thread(self.reactor_manager.run, (), 'InfoReactor')
 		self.run()
 		return self.process
 
@@ -194,8 +194,8 @@ class Server:
 		Return if it's the first try
 		:rtype: bool
 		"""
-		self.stop(forced=self.flag_interrupt)
-		ret = self.flag_interrupt
+		self.stop(forced=self.is_interrupt())
+		ret = self.is_interrupt()
 		self.flag_interrupt = True
 		return ret
 
@@ -310,21 +310,22 @@ class Server:
 			self.logger.debug('Parsed text from server stdin:')
 			for line in parsed_result.format_text().splitlines():
 				self.logger.debug('    {}'.format(line))
-		self.put_info(parsed_result)
+		self.reactor_manager.put_info(parsed_result)
 
 	def on_mcdr_stop(self):
 		try:
-			if self.flag_interrupt:
+			if self.is_interrupt():
 				self.logger.info(self.t('server.on_mcdr_stop.user_interrupted'))
 			else:
 				self.logger.info(self.t('server.on_mcdr_stop.server_stop'))
 			self.plugin_manager.call('on_mcdr_stop', (self.server_interface,), wait=True)
-			self.flag_exit = True
 			self.logger.info(self.t('server.on_mcdr_stop.bye'))
 		except KeyboardInterrupt:  # I don't know why there sometimes will be a KeyboardInterrupt if MCDR is stopped by ctrl-c
 			pass
 		except:
 			self.logger.exception(self.t('server.on_mcdr_stop.stop_error'))
+		finally:
+			self.flag_mcdr_exit = True
 
 	def run(self):
 		"""
@@ -340,7 +341,7 @@ class Server:
 			except KeyboardInterrupt:
 				self.interrupt()
 			except:
-				if self.flag_interrupt:
+				if self.is_interrupt():
 					break
 				else:
 					self.logger.critical(self.t('server.run.error'), exc_info=True)
@@ -362,36 +363,12 @@ class Server:
 					self.logger.debug('Parsed text from console input:')
 					for line in parsed_result.format_text().splitlines():
 						self.logger.debug('    {}'.format(line))
-					self.put_info(parsed_result)
+					self.reactor_manager.put_info(parsed_result)
 			except (KeyboardInterrupt, EOFError, SystemExit, IOError) as e:
 				self.logger.debug('Exception {} {} caught in console_input()'.format(type(e), e))
 				self.interrupt()
 			except:
 				self.logger.exception(self.t('server.console_input.error'))
-
-	def put_info(self, info):
-		try:
-			self.info_queue.put_nowait(info)
-		except queue.Full:
-			self.logger.warning(self.t('server.info_queue.full'))
-
-	def info_react(self):
-		"""
-		the thread for looping to react to parsed info
-
-		:return: None
-		"""
-		while not self.flag_interrupt and not self.flag_exit:
-			try:
-				info = self.info_queue.get(timeout=0.01)
-			except queue.Empty:
-				pass
-			else:
-				for reactor in self.reactors:
-					try:
-						reactor.react(info)
-					except:
-						self.logger.exception(self.t('server.react.error', type(reactor).__name__))
 
 	def connect_rcon(self):
 		self.rcon_manager.disconnect()

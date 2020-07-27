@@ -241,7 +241,7 @@ class CommandManager:
 		if self.server.permission_manager.get_info_permission_level(info) >= PermissionLevel.OWNER:
 			self.send_message(info, RTextList(
 				self.t('command_manager.print_mcdr_status.extra_line1', self.server.process.pid if self.server.process is not None else '§rN/A§r'), '\n',
-				self.t('command_manager.print_mcdr_status.extra_line2', self.server.info_queue.qsize(), constant.MAX_INFO_QUEUE_SIZE), '\n',
+				self.t('command_manager.print_mcdr_status.extra_line2', self.server.reactor_manager.info_queue.qsize(), constant.MAX_INFO_QUEUE_SIZE), '\n',
 				self.t('command_manager.print_mcdr_status.extra_line3', threading.active_count())
 			))
 			for thread in threading.enumerate():

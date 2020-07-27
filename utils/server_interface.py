@@ -352,7 +352,7 @@ class ServerInterface:
 		:raise: IllegalCall
 		"""
 		thread = threading.current_thread()
-		if hasattr(thread, 'plugin') and type(thread.plugin) is Plugin:
+		if type(getattr(thread, 'plugin', None)) is Plugin:
 			plugin = thread.plugin  # type: Plugin
 			plugin.add_help_message(prefix, message)
 		else:
