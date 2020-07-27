@@ -21,7 +21,9 @@ RESOURCE_FOLDER = 'resources'
 LANGUAGE_FOLDER = os.path.join(RESOURCE_FOLDER, 'lang')
 RE_DEATH_MESSAGE_FILE = os.path.join(RESOURCE_FOLDER, 'death_message.yml')
 UPDATE_DOWNLOAD_FOLDER = 'MCDR_update'
+BASIC_PARSER_NAME = 'basic_parser'
 
+PARSER_FILE_SUFFIX = '.py'
 REACTOR_FILE_SUFFIX = '.py'
 PLUGIN_FILE_SUFFIX = '.py'
 DISABLED_PLUGIN_FILE_SUFFIX = '.disabled'

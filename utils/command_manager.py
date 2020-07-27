@@ -10,6 +10,7 @@ from utils import constant, tool
 from utils.rtext import *
 from utils.info import InfoSource
 from utils.permission_manager import PermissionLevel
+from utils.server_status import ServerStatus
 
 
 class Validator:
@@ -233,7 +234,7 @@ class CommandManager:
 		}
 		self.send_message(info, RTextList(
 			RText(self.t('command_manager.print_mcdr_status.line1', constant.NAME, constant.VERSION)).c(RAction.open_url, constant.GITHUB_URL).h(RText(constant.GITHUB_URL, styles=RStyle.underlined, color=RColor.blue)), '\n',
-			RText(self.t('command_manager.print_mcdr_status.line2', self.t(self.server.server_status))), '\n',
+			RText(self.t('command_manager.print_mcdr_status.line2', self.t(ServerStatus.translate_key(self.server.server_status)))), '\n',
 			RText(self.t('command_manager.print_mcdr_status.line3', '{}{}§r'.format('§a' if self.server.is_server_startup() else '§7', self.server.is_server_startup()))), '\n',
 			RText(self.t('command_manager.print_mcdr_status.line4', status_dict[self.server.server_interface.is_rcon_running(is_plugin_call=False)])), '\n',
 			RText(self.t('command_manager.print_mcdr_status.line5', len(self.server.plugin_manager.plugins))).c(RAction.suggest_command, '!!MCDR plugin list')

@@ -5,25 +5,36 @@ import traceback
 from ruamel import yaml
 
 from utils import tool, constant
+from utils.parser.abstract_parser import AbstractParser
 
 
 class ParserManager:
-	def __init__(self, server):
+	def __init__(self, server, parser_folder):
 		self.server = server
-		self.parser = None
+		self.parser_folder = parser_folder
+		self.parser = AbstractParser(self)
 		self.death_message_data = None
-		self.death_message_list = {}
+		self.death_message_dict = {}
 		self.load_death_message_data()
+		self.basic_parser = self.load_parser(constant.BASIC_PARSER_NAME)
 
-	def load_parser(self, path, parser_name):
-		file_name = os.path.join(path, parser_name + '.py')
+	def load_parser(self, parser_name):
+		"""
+		Load a parser from the parser folder
+
+		:param parser_name: the name of the parser you want to load
+		:return: A parser instance inherited from AbstractParser
+		:rtype: AbstractParser
+		"""
+		file_name = os.path.join(self.parser_folder, parser_name + constant.PARSER_FILE_SUFFIX)
 		try:
-			self.parser = tool.load_source(file_name).get_parser(self)
+			return tool.load_source(file_name).get_parser(self)
 		except FileNotFoundError:
 			self.server.logger.exception(self.server.t('parser_manager.load_parser.file_not_found', parser_name))
 			raise
-		self.death_message_list.clear()
-		self.update_death_message_list(type(self.parser))
+
+	def install_parser(self, parser_name):
+		self.parser = self.load_parser(parser_name)
 
 	def update_death_message_list(self, cls):
 		bases = tool.get_all_base_class(cls)
@@ -35,13 +46,16 @@ class ParserManager:
 			except:
 				pass
 		self.server.logger.debug('Search death message regular expressions for {} in {}, returned a list with length {}'.format(cls.NAME, ', '.join(names), len(result)))
-		self.death_message_list[cls] = result
+		self.death_message_dict[cls] = result
 
 	def get_stop_command(self):
 		return self.parser.STOP_COMMAND
 
 	def get_parser(self):
 		return self.parser
+
+	def get_basic_parser(self):
+		return self.basic_parser
 
 	def load_death_message_data(self):
 		try:
@@ -54,6 +68,6 @@ class ParserManager:
 	# return a list of regular expression for death message matching
 	# parameter cls is a parser class
 	def get_death_message_list(self, cls):
-		if cls not in self.death_message_list:
+		if cls not in self.death_message_dict:
 			self.update_death_message_list(cls)
-		return self.death_message_list[cls]
+		return self.death_message_dict[cls]
