@@ -42,6 +42,9 @@ class CommandManager:
 			else:
 				self.send_message(info, line)
 
+	def display_buttons(self, info):
+		return info.source in [InfoSource.SERVER]
+
 	# --------------
 	# !!MCDR command
 	# --------------
@@ -196,9 +199,9 @@ class CommandManager:
 					.h(self.t('command_manager.list_permission.suggest_list', name))
 				)
 				for player in self.server.permission_manager.get_permission_group_list(name):
-					self.send_message(
-						info, RTextList(
-							'§7-§r {}'.format(player),
+					texts = RText('§7-§r {}'.format(player))
+					if self.display_buttons(info):
+						texts += RTextList(
 							RText(' [✎]', color=RColor.gray)
 							.c(RAction.suggest_command, '!!MCDR permission set {} '.format(player))
 							.h(self.t('command_manager.list_permission.suggest_set', player)),
@@ -206,7 +209,7 @@ class CommandManager:
 							.c(RAction.suggest_command, '!!MCDR permission remove {}'.format(player))
 							.h(self.t('command_manager.list_permission.suggest_disable', player)),
 						)
-					)
+					self.send_message(info, texts)
 
 	def set_default_permission(self, info, level):
 		level = self.server.permission_manager.format_level_name(level)
@@ -256,9 +259,9 @@ class CommandManager:
 
 		self.send_message(info, self.t('command_manager.list_plugin.info_loaded_plugin', len(file_list_loaded)))
 		for file_name in file_list_loaded:
-			self.send_message(
-				info, RTextList(
-					'§7-§r {}'.format(file_name),
+			texts = RText('§7-§r {}'.format(file_name))
+			if self.display_buttons(info):
+				texts += RTextList(
 					RText(' [×]', color=RColor.gray)
 					.c(RAction.run_command, '!!MCDR plugin disable {}'.format(file_name))
 					.h(self.t('command_manager.list_plugin.suggest_disable', file_name)),
@@ -266,30 +269,30 @@ class CommandManager:
 					.c(RAction.run_command, '!!MCDR plugin load {}'.format(file_name))
 					.h(self.t('command_manager.list_plugin.suggest_reload', file_name))
 				)
-			)
+			self.send_message(info, texts)
 
 		self.send_message(info, self.t('command_manager.list_plugin.info_disabled_plugin', len(file_list_disabled)))
 		for file_name in file_list_disabled:
 			file_name = tool.remove_suffix(file_name, constant.DISABLED_PLUGIN_FILE_SUFFIX)
-			self.send_message(
-				info, RTextList(
-					'§7-§r {}'.format(file_name),
+			texts = RText('§7-§r {}'.format(file_name))
+			if self.display_buttons(info):
+				texts += (
 					RText(' [✔]', color=RColor.gray)
 					.c(RAction.run_command, '!!MCDR plugin enable {}'.format(file_name))
 					.h(self.t('command_manager.list_plugin.suggest_enable', file_name))
 				)
-			)
+			self.send_message(info, texts)
 
 		self.send_message(info, self.t('command_manager.list_plugin.info_not_loaded_plugin', len(file_list_not_loaded)))
 		for file_name in file_list_not_loaded:
-			self.send_message(
-				info, RTextList(
-					'§7-§r {}'.format(file_name),
+			texts = RText('§7-§r {}'.format(file_name))
+			if self.display_buttons(info):
+				texts += (
 					RText(' [✔]', color=RColor.gray)
 					.c(RAction.run_command, '!!MCDR plugin load {}'.format(file_name))
 					.h(self.t('command_manager.list_plugin.suggest_load', file_name))
 				)
-			)
+			self.send_message(info, texts)
 
 	def disable_plugin(self, info, file_name):
 		file_name = tool.format_plugin_file_name(file_name)
