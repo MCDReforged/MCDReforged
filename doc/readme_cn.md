@@ -3,6 +3,8 @@ MCDReforged
 
 [English](https://github.com/Fallen-Breath/MCDReforged/blob/master/readme.md)
 
+[非官方网站](http://mcdr.cc/)
+
 > 这是一个基于 Python 的 Minecraft 服务端控制工具
 
 MCDReforged（以下简称 MCDR）是一个可以在完全不对 Minecraft 服务端进行修改的情况下，通过可自定义的插件系统，提供对服务端的管理能力的工具
