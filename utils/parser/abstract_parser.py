@@ -14,9 +14,8 @@ AbstractParser
  │   │   └─ CatServerParser
  │   ├─ BukkitParser14
  │   └─ ForgeParser
- ├─ BungeecordParser
- │   └─ WaterfallParser
- └─ BedrockBDSParser
+ └─ BungeecordParser
+     └─ WaterfallParser
 '''
 
 
