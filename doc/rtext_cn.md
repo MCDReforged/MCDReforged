@@ -59,7 +59,7 @@
 | 执行命令 | run_command | RAction.run_command |
 | 打开链接 | open_url | RAction.open_url |
 | 打开文件 | open_file | RAction.open_file |
-| 辅助到剪贴板 | copy_to_clipboard | RAction.copy_to_clipboard |
+| 复制到剪贴板 | copy_to_clipboard | RAction.copy_to_clipboard |
 
 ---------
 
