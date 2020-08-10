@@ -3,17 +3,17 @@ import os
 import re
 
 from utils import tool
-from utils.parser.base_parser import BaseParser
+from utils.parser.abstract_parser import AbstractParser
 
 
-class VanillaParser(BaseParser):
+class VanillaParser(AbstractParser):
 	NAME = tool.remove_suffix(os.path.basename(__file__), '.py')
 	PLAYER_JOINED_PATTERN = re.compile(r'\w{1,16}\[(?:/[\d.:]+|local)\] logged in with entity id \d+ at \([\dE\-., ]+\)')
 	STOP_COMMAND = 'stop'
 	LOGGER_NAME_CHAR_SET = r'\w /\#\-'
 
 	def parse_server_stdout(self, text):
-		result = self.parse_server_stdout_raw(text)
+		result = self.__parse_server_stdout_raw(text)
 
 		# [09:00:00] [Server thread/INFO]: <Steve> Hello
 		# [09:00:01] [Server thread/WARN]: Can't keep up!
