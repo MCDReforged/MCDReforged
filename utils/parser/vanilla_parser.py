@@ -8,7 +8,7 @@ from utils.parser.base_parser import BaseParser
 
 class VanillaParser(BaseParser):
 	NAME = tool.remove_suffix(os.path.basename(__file__), '.py')
-	PLAYER_JOINED_PATTERN = re.compile(r'\w{1,16}\[/[\d.:]+\] logged in with entity id \d+ at \([\dE\-., ]+\)')
+	PLAYER_JOINED_PATTERN = re.compile(r'\w{1,16}\[(?:/[\d.:]+|local)\] logged in with entity id \d+ at \((\[\w+\])?[\dE\-., ]+\)')
 	STOP_COMMAND = 'stop'
 	LOGGER_NAME_CHAR_SET = r'\w /\#\-'
 
