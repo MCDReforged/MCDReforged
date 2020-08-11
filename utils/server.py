@@ -45,7 +45,7 @@ class Server:
 		self.language_manager = LanguageManager(self, constant.LANGUAGE_FOLDER)
 		self.config = config.Config(self, constant.CONFIG_FILE)
 		self.rcon_manager = RconManager(self)
-		self.parser_manager = ParserManager(self)
+		self.parser_manager = ParserManager(self, constant.PARSER_FOLDER)
 		self.load_config()  # loads config, language, parsers
 
 		self.reactor_manager = ReactorManager(self)
@@ -88,7 +88,7 @@ class Server:
 		if self.config['debug_mode']:
 			self.logger.info(self.t('server.load_config.debug_mode_on'))
 
-		self.parser_manager.load_parser(constant.PARSER_FOLDER, self.config['parser'])
+		self.parser_manager.install_parser(self.config['parser'])
 		self.logger.info(self.t('server.load_config.parser_set', self.config['parser']))
 
 		self.encoding_method = self.config['encoding'] if self.config['encoding'] is not None else sys.getdefaultencoding()
@@ -119,17 +119,18 @@ class Server:
 
 	def set_server_status(self, status):
 		self.server_status = status
-		self.logger.debug('Server status has set to "{}"'.format(status))
+		self.logger.debug('Server status has set to "{}"'.format(ServerStatus.translate_key(status)))
 
 	# MCDR server
 
-	def start_server(self) -> bool:
+	def start_server(self):
 		"""
 		try to start the server process
 		return True if the server process has started successfully
 		return False if the server is already running or start_server has been called by other
 
 		:return: a bool as above
+		:rtype: bool
 		"""
 		acquired = self.starting_server_lock.acquire(blocking=False)
 		if not acquired:
@@ -282,7 +283,7 @@ class Server:
 		if self.server_status == ServerStatus.STOPPING_BY_ITSELF:
 			self.logger.info(self.t('server.on_server_stop.stop_by_itself'))
 			self.set_server_status(ServerStatus.STOPPED)
-		self.plugin_manager.call('on_server_stop', (self.server_interface, return_code))
+		self.plugin_manager.call('on_server_stop', (self.server_interface, return_code), wait=True)
 
 	def tick(self):
 		"""
@@ -305,7 +306,7 @@ class Server:
 			self.logger.debug('Fail to parse text "{}" from stdout of the server, using raw parser'.format(text))
 			for line in traceback.format_exc().splitlines():
 				self.logger.debug('    {}'.format(line))
-			parsed_result = self.parser_manager.get_parser().parse_server_stdout_raw(text)
+			parsed_result = self.parser_manager.get_basic_parser().parse_server_stdout(text)
 		else:
 			self.logger.debug('Parsed text from server stdin:')
 			for line in parsed_result.format_text().splitlines():
