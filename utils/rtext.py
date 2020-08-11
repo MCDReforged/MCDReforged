@@ -77,6 +77,33 @@ class RColor:
 		text = text.replace('§l', Style.BRIGHT)  # bold
 		return text
 
+	# minecraft code -> RColor
+	@classmethod
+	def convert_minecraft_color_code_2_rcolor(cls, code):
+		mc_color_dict = {
+			'0': RColor.black,
+			'1': RColor.dark_blue,
+			'2': RColor.dark_green,
+			'3': RColor.dark_aqua,
+			'4': RColor.dark_red,
+			'5': RColor.dark_purple,
+			'6': RColor.gold,
+			'7': RColor.gray,
+			'8': RColor.dark_gray,
+			'9': RColor.blue,
+			'a': RColor.green,
+			'b': RColor.aqua,
+			'c': RColor.red,
+			'd': RColor.light_purple,
+			'e': RColor.yellow,
+			'f': RColor.white,
+			'r': RColor.reset,
+		}
+		try:
+			return mc_color_dict[code]
+		except KeyError:
+			return None
+
 
 class RStyle:
 	bold = "bold"
@@ -84,6 +111,21 @@ class RStyle:
 	underlined = "underlined"
 	strike_through = "strikethrough"
 	obfuscated = "obfuscated"
+
+	# minecraft code -> RStyle
+	@classmethod
+	def convert_minecraft_style_code_2_rstyle(self, code):
+		mc_style_dict = {
+			'k': RStyle.obfuscated,
+			'l': RStyle.bold,
+			'm': RStyle.strike_through,
+			'n': RStyle.underlined,
+			'o': RStyle.italic
+		}
+		try:
+			return mc_style_dict[code]
+		except KeyError:
+			return None
 
 
 class RAction:
@@ -173,15 +215,48 @@ class RText(RTextBase):
 
 
 class RTextList(RTextBase):
-	def __init__(self, *args):
+	def __init__(self, *args, force_format=False):
 		self.data = []
-		for obj in args:
-			if type(obj) is RTextList:
-				self.data.extend(obj.data)
-			elif type(obj) is RText:
-				self.data.append(obj)
-			else:
-				self.data.append(RText(str(obj)))
+		if not force_format:
+			for obj in args:
+				if type(obj) is RTextList:
+					self.data.extend(obj.data)
+				elif type(obj) is RText:
+					self.data.append(obj)
+				else:
+					self.data.append(RText(str(obj)))
+		else:
+			for obj in args:
+				if type(obj) is str:
+					pervious_color = RColor.reset
+					pervious_format = None
+					need_parse = False
+					x = obj.split("\u00A7")
+					if x[0] == "":
+						x = x[1:len(x)]
+						need_parse = True
+					for s in x:
+						if s == "":
+							need_parse = False if need_parse else True
+						else:
+							if need_parse:
+								if RColor.convert_minecraft_color_code_2_rcolor(s[0:1]) is not None:
+									pervious_color = RColor.convert_minecraft_color_code_2_rcolor(s[0:1])
+									pervious_format = None
+								if RStyle.convert_minecraft_style_code_2_rstyle(s[0:1]) is not None:
+									pervious_format = RStyle.convert_minecraft_style_code_2_rstyle(s[0:1])
+								if len(s) > 1:
+									self.data.append(RText(s[1:len(s)], pervious_color, pervious_format))
+							else:
+								if len(s) > 0:
+									self.data.append(RText(s, pervious_color, pervious_format))
+									need_parse = True
+				elif type(obj) is RText:
+					self.data.append(obj)
+				elif type(obj) is RTextList:
+					self.data.extend(obj.data)
+				else:
+					raise TypeError("args argument must be str, RText or RTextList, not '" + str(type(obj)) + "'")
 
 	def to_json_object(self):
 		return [''] + [t.to_json_object() for t in self.data]  # to disable style inherit
