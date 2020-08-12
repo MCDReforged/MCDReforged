@@ -136,8 +136,9 @@ class RText(RTextBase):
 			for style in [RStyle.bold, RStyle.italic, RStyle.underlined, RStyle.strike_through, RStyle.obfuscated]:
 				self.data[style] = style in styles
 
-	def to_json_object(self):
-		return self.data
+	def set_insertion(self, text):
+		self.data['insertion'] = text
+		return self
 
 	def set_click_event(self, action, value):
 		self.data['clickEvent'] = {
@@ -156,11 +157,22 @@ class RText(RTextBase):
 		}
 		return self
 
+	def set_hover_item(self, data):
+		data = data.replace('minecraft:', '')
+		self.data['hoverEvent'] = {
+			'action': 'show_item',
+			'value': data
+		}
+		return self
+
 	def c(self, action, value):
 		return self.set_click_event(action, value)
 
 	def h(self, *args):
 		return self.set_hover_text(*args)
+
+	def to_json_object(self):
+		return self.data
 
 	def to_plain_text(self):
 		return self.data['text']

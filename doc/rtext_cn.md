@@ -91,6 +91,23 @@ RText('这是例子', color=RColor.blue, styles=None)
 
 该类拥有以下方法:
 
+### set_insertion(text)
+
+设置 shift + 鼠标点击时添加到聊天框的内容
+
+`text` 为一个字符串
+
+例子：
+
+```python
+RText('点我查看密码').set_insertion('2468')
+```
+
+效果：
+
+- 消息为 `点我查看密码`
+- shift + 点击后在聊天栏追加文本 `2468`
+
 ### set_click_event(action, value)
 
 设置一个动作为 `action`，值为 `value`的点击事件
@@ -118,7 +135,7 @@ RText('点我去主城').set_click_event(RAction.run_command, '/server lobby')
 
 不知道 `*args` 看 <https://www.jianshu.com/p/be92113116c8>
 
-`*args` 将会用于创建一个 [RTextList](#rtl) 实例
+`*args` 将会用于创建一个 [RTextList](#RTextList类) 实例
 
 例子：
 
@@ -134,7 +151,24 @@ RText('§a欢迎新玩家加入服务器，点击欢迎').set_hover_text(r.RText
 
 注：使用 `h(*args)` 完全相同
 
-<span id="rtl"></span>
+### set_hover_item(data)
+
+用于设置鼠标指向时，显示的悬浮物品
+
+`data` 为一个 [物品通用标签](https://minecraft-zh.gamepedia.com/Player.dat%E6%A0%BC%E5%BC%8F#.E7.89.A9.E5.93.81.E7.BB.93.E6.9E.84)
+
+例子：
+
+```python
+RText('展示物品').set_hover_item('{id:"minecraft:wooden_axe",Count:1b,tag:{Damage:1}}')
+```
+
+效果：
+
+- 消息为白色的 `展示物品`
+- 鼠标指向时显示 `木斧`, 耐久缺少1
+
+注：不可使用 `h(*args)`
 
 ## RTextList类
 
@@ -180,7 +214,7 @@ except Exception as e:
 
 这里通过RText设置悬浮文本让玩家可以在游戏内查看错误详细信息
 
-### [BotInit](https://github.com/MCDReforged-Plugins/BotInit/blob/master/BotInit.py)
+### [BotInit](https://github.com/MCDReforged-Plugins/BotInit)
 
 ```python
 from utils import rtext as r
