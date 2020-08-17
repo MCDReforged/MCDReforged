@@ -51,7 +51,7 @@ class CommandManager:
 	# --------------
 
 	def process_mcdr_command(self, info):
-		args = info.content.rstrip().split(' ')
+		args = info.content.split(' ')
 		# !!MCDR
 		if len(args) == 1:
 			self.send_help_message(info, self.t('command_manager.help_message'))
