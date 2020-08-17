@@ -3,7 +3,7 @@
 import os
 
 
-VERSION = '0.9.4-alpha'
+VERSION = '0.9.5'
 NAME_SHORT = 'MCDR'
 NAME = 'MCDReforged'
 NAME_FULL = 'MCDaemonReforged'
