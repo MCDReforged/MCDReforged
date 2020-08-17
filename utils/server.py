@@ -130,6 +130,15 @@ class Server:
 		self.server_status = status
 		self.logger.debug('Server status has set to "{}"'.format(ServerStatus.translate_key(status)))
 
+	def should_keep_looping(self):
+		"""
+		A criterion for sub threads to determine if it should keep looping
+		:rtype: bool
+		"""
+		if self.server_status in [ServerStatus.STOPPED]:
+			return not self.is_interrupt() and not self.flag_exit_naturally
+		return not self.is_mcdr_exit()
+
 	# MCDR server
 
 	def start_server(self):
@@ -340,11 +349,6 @@ class Server:
 			self.logger.exception(self.t('server.on_mcdr_stop.stop_error'))
 		finally:
 			self.flag_mcdr_exit = True
-
-	def should_keep_looping(self):
-		if self.server_status in [ServerStatus.STOPPED]:
-			return not self.is_interrupt() and not self.flag_exit_naturally
-		return True
 
 	def run(self):
 		"""

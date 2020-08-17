@@ -34,7 +34,7 @@ class ReactorManager:
 		"""
 		the thread for looping to react to parsed info
 		"""
-		while not self.server.is_interrupt() and not self.server.is_mcdr_exit():
+		while self.server.should_keep_looping():
 			try:
 				info = self.info_queue.get(timeout=0.01)
 			except queue.Empty:
