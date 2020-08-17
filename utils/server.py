@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 import locale
 import logging
-import os
-import signal
 import sys
 import time
 import traceback
@@ -37,6 +35,7 @@ class Server:
 		self.flag_mcdr_exit = False  # MCDR exit flag
 		self.flag_exit_naturally = True  # if MCDR exit after server stop. can be modified by plugins
 		self.starting_server_lock = Lock()  # to prevent multiple start_server() call
+		self.stop_lock = Lock()  # to prevent multiple stop() call
 
 		# will be assigned in reload_config()
 		self.encoding_method = None
@@ -210,6 +209,7 @@ class Server:
 		Return if it's the first try
 		:rtype: bool
 		"""
+		self.logger.debug('Interrupting, first strike = {}'.format(not self.is_interrupt()))
 		self.stop(forced=self.is_interrupt())
 		ret = self.is_interrupt()
 		self.flag_interrupt = True
@@ -222,21 +222,22 @@ class Server:
 		:param forced: an optional bool. If it's False (default) MCDR will stop the server by sending the STOP_COMMAND from the
 		current parser. If it's True MCDR will just kill the server process group
 		"""
-		if not self.is_server_running():
-			self.logger.warning(self.t('server.stop.stop_when_stopped'))
-			return
-		self.set_server_status(ServerStatus.STOPPING)
-		if not forced:
-			try:
-				self.send(self.parser_manager.get_stop_command())
-			except:
-				self.logger.error(self.t('server.stop.stop_fail'))
-				forced = True
-		if forced:
-			try:
-				self.kill_server()
-			except IllegalCall:
-				pass
+		with self.stop_lock:
+			if not self.is_server_running():
+				self.logger.warning(self.t('server.stop.stop_when_stopped'))
+				return
+			self.set_server_status(ServerStatus.STOPPING)
+			if not forced:
+				try:
+					self.send(self.parser_manager.get_stop_command())
+				except:
+					self.logger.error(self.t('server.stop.stop_fail'))
+					forced = True
+			if forced:
+				try:
+					self.kill_server()
+				except IllegalCall:
+					pass
 
 	def send(self, text, ending='\n', encoding=None):
 		"""
