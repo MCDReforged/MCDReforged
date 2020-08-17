@@ -168,12 +168,15 @@ command_manager.print_mcdr_status.line2: |
   服务端状态: {0}
 
 command_manager.print_mcdr_status.line3: |
-  服务端已启动: §7{0}§r
+  服务端已启动: {0}
 
 command_manager.print_mcdr_status.line4: |
-  rcon: {0}
+  自然退出: {0}
 
 command_manager.print_mcdr_status.line5: |
+  rcon: {0}
+
+command_manager.print_mcdr_status.line6: |
   插件数量: §6{0}§r
 
 command_manager.print_mcdr_status.extra_line1: |

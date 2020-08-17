@@ -168,12 +168,15 @@ command_manager.print_mcdr_status.line2: |
   Server status: {0}
 
 command_manager.print_mcdr_status.line3: |
-  Server startup: §7{0}§r
+  Server startup: {0}
 
 command_manager.print_mcdr_status.line4: |
-  Rcon: {0}
+  Exit naturally: {0}
 
 command_manager.print_mcdr_status.line5: |
+  Rcon: {0}
+
+command_manager.print_mcdr_status.line6: |
   Plugin count: §6{0}§r
 
 command_manager.print_mcdr_status.extra_line1: |

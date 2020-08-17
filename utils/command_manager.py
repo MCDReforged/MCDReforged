@@ -228,16 +228,20 @@ class CommandManager:
 	# ------
 
 	def print_mcdr_status(self, info):
+		def bool_formatter(bl):
+			return '{}{}§r'.format('§a' if bl else '§7', bl)
 		status_dict = {
 			True: self.t('command_manager.print_mcdr_status.online'),
 			False: self.t('command_manager.print_mcdr_status.offline')
 		}
+
 		self.send_message(info, RTextList(
 			RText(self.t('command_manager.print_mcdr_status.line1', constant.NAME, constant.VERSION)).c(RAction.open_url, constant.GITHUB_URL).h(RText(constant.GITHUB_URL, styles=RStyle.underlined, color=RColor.blue)), '\n',
 			RText(self.t('command_manager.print_mcdr_status.line2', self.t(ServerStatus.translate_key(self.server.server_status)))), '\n',
-			RText(self.t('command_manager.print_mcdr_status.line3', '{}{}§r'.format('§a' if self.server.is_server_startup() else '§7', self.server.is_server_startup()))), '\n',
-			RText(self.t('command_manager.print_mcdr_status.line4', status_dict[self.server.server_interface.is_rcon_running(is_plugin_call=False)])), '\n',
-			RText(self.t('command_manager.print_mcdr_status.line5', len(self.server.plugin_manager.plugins))).c(RAction.suggest_command, '!!MCDR plugin list')
+			RText(self.t('command_manager.print_mcdr_status.line3', bool_formatter(self.server.is_server_startup()))), '\n',
+			RText(self.t('command_manager.print_mcdr_status.line4', bool_formatter(self.server.is_exit_naturally()))), '\n',
+			RText(self.t('command_manager.print_mcdr_status.line5', status_dict[self.server.server_interface.is_rcon_running(is_plugin_call=False)])), '\n',
+			RText(self.t('command_manager.print_mcdr_status.line6', len(self.server.plugin_manager.plugins))).c(RAction.suggest_command, '!!MCDR plugin list')
 		))
 		if self.server.permission_manager.get_info_permission_level(info) >= PermissionLevel.OWNER:
 			self.send_message(info, RTextList(
