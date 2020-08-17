@@ -311,11 +311,8 @@ rcon_manager.disconnect.disconnect_fail: |
 server_status.running: |
   §a运行中§r
 
-server_status.stopping_by_itself: |
-  §c正在自行关闭§r
-
-server_status.stopping_by_plugin: |
-  §c正在被插件关闭§r
+server_status.stopping: |
+  §c正在关闭§r
 
 server_status.stopped: |
   §4已关闭§r
