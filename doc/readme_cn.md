@@ -37,6 +37,7 @@ Python 的版本需要 Python 3.6+。已在如下环境中测试运行通过:
 - requests
 - colorlog
 - colorama
+- psutil
 
 需要的模块也储存在了 `requirement.txt` 中，可以直接执行 `pip install -r requirement.txt` 来安装所需要的模块
 
