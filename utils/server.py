@@ -123,6 +123,7 @@ class Server:
 
 	def set_exit_naturally(self, flag):
 		self.flag_exit_naturally = flag
+		self.logger.debug('flag_exit_naturally has set to "{}"'.format(self.flag_exit_naturally))
 
 	def set_server_status(self, status):
 		self.server_status = status
@@ -155,6 +156,7 @@ class Server:
 				return False
 			else:
 				self.set_server_status(ServerStatus.RUNNING)
+				self.set_exit_naturally(True)
 				self.logger.info(self.t('server.start_server.pid_info', self.process.pid))
 				return True
 		finally:
@@ -162,6 +164,7 @@ class Server:
 
 	def start(self):
 		"""
+		The entry method to start MCDR
 		Try to start the server. if succeeded the console thread will start and MCDR will start ticking
 
 		:raise: Raise ServerStartError if the server is already running or start_server has been called by other

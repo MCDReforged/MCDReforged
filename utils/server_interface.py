@@ -73,7 +73,8 @@ class ServerInterface:
 
 		:rtype: None
 		"""
-		self.__server.stop(forced=False, new_server_status=ServerStatus.STOPPING_BY_PLUGIN)
+		self.__server.set_exit_naturally(False)
+		self.__server.stop(forced=False)
 
 	@log_call
 	def wait_for_start(self):
