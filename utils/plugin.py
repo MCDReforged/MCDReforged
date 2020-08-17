@@ -6,7 +6,6 @@ import sys
 from inspect import getfullargspec
 
 from utils import tool
-from utils.exception import ArgumentFormatError
 from utils.plugin_thread import TaskData
 
 HelpMessage = collections.namedtuple('HelpMessage', 'prefix message plugin_name')

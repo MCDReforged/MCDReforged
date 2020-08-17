@@ -22,7 +22,7 @@ server.start_server.start_fail: |
 server.start_server.pid_info: |
   Server is running at PID {0}
 
-server.stop.stop_twice: |
+server.stop.stop_when_stopped: |
   Server cannot stop when terminated
 
 server.stop.stop_fail: |

@@ -22,7 +22,7 @@ server.start_server.start_fail: |
 server.start_server.pid_info: |
   服务端正在以 PID {0} 运行中
 
-server.stop.stop_twice: |
+server.stop.stop_when_stopped: |
   服务端不能在关闭时再次关闭
 
 server.stop.stop_fail: |

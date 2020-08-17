@@ -33,6 +33,7 @@ class Server:
 		self.flag_server_startup = False  # set to True after server startup
 		self.flag_server_rcon_ready = False  # set to True after server started its rcon. used to start the rcon server
 		self.flag_mcdr_exit = False  # MCDR exit flag
+		self.flag_exit_naturally = True  # if MCDR exit after server stop. can be modified by plugins
 		self.starting_server_lock = Lock()  # to prevent multiple start_server() call
 
 		# will be assigned in reload_config()
@@ -117,6 +118,12 @@ class Server:
 	def is_mcdr_exit(self):
 		return self.flag_mcdr_exit
 
+	def is_exit_naturally(self):
+		return self.flag_exit_naturally
+
+	def set_exit_naturally(self, flag):
+		self.flag_exit_naturally = flag
+
 	def set_server_status(self, status):
 		self.server_status = status
 		self.logger.debug('Server status has set to "{}"'.format(ServerStatus.translate_key(status)))
@@ -200,31 +207,28 @@ class Server:
 		self.flag_interrupt = True
 		return ret
 
-	def stop(self, forced=False, new_server_status=ServerStatus.STOPPING_BY_ITSELF):
+	def stop(self, forced=False):
 		"""
 		stop the server
 
 		:param forced: an optional bool. If it's False (default) MCDR will stop the server by sending the STOP_COMMAND from the
 		current parser. If it's True MCDR will just kill the server process group
-		:param new_server_status: an optional ServerStatus object, the new server status MCDR will be set to
-		default is STOPPING_BY_ITSELF, which will cause MCDR to exit after server has stopped
-		set it to STOPPING_BY_PLUGIN to prevent MCDR exiting
 		"""
-		self.set_server_status(new_server_status)
 		if not self.is_server_running():
-			self.logger.warning(self.t('server.stop.stop_twice'))
-		else:
-			if not forced:
-				try:
-					self.send(self.parser_manager.get_stop_command())
-				except:
-					self.logger.error(self.t('server.stop.stop_fail'))
-					forced = True
-			if forced:
-				try:
-					self.kill_server()
-				except IllegalCall:
-					pass
+			self.logger.warning(self.t('server.stop.stop_when_stopped'))
+			return
+		self.set_server_status(ServerStatus.STOPPING)
+		if not forced:
+			try:
+				self.send(self.parser_manager.get_stop_command())
+			except:
+				self.logger.error(self.t('server.stop.stop_fail'))
+				forced = True
+		if forced:
+			try:
+				self.kill_server()
+			except IllegalCall:
+				pass
 
 	def send(self, text, ending='\n', encoding=None):
 		"""
@@ -247,11 +251,11 @@ class Server:
 
 	def receive(self):
 		"""
-		try to receive a str from server's stdout. This will block the thread
-		if server has stopped it will wait up to 10s for the server process to exit and then set the server status
-		to STOPPING_BY_ITSELF if the old server status is RUNNING
+		Try to receive a str from server's stdout. This will block the current thread
+		If server has stopped it will wait up to 10s for the server process to exit, then raise a ServerStopped exception
 
-		:rtype: str or None
+		:rtype: str
+		:raise: ServerStopped
 		"""
 		while True:
 			try:
@@ -263,9 +267,7 @@ class Server:
 					time.sleep(0.1)
 					if i % 10 == 0:
 						self.logger.info(self.t('server.receive.wait_stop'))
-				if self.server_status is ServerStatus.RUNNING:
-					self.set_server_status(ServerStatus.STOPPING_BY_ITSELF)
-				return None
+				raise ServerStopped()
 			else:
 				try:
 					text = text.decode(self.decoding_method)
@@ -280,9 +282,8 @@ class Server:
 		self.process = None
 		self.flag_server_startup = False
 		self.flag_server_rcon_ready = False
-		if self.server_status == ServerStatus.STOPPING_BY_ITSELF:
-			self.logger.info(self.t('server.on_server_stop.stop_by_itself'))
-			self.set_server_status(ServerStatus.STOPPED)
+		self.logger.info(self.t('server.on_server_stop.stop_by_itself'))
+		self.set_server_status(ServerStatus.STOPPED)
 		self.plugin_manager.call('on_server_stop', (self.server_interface, return_code), wait=True)
 
 	def tick(self):
@@ -290,8 +291,9 @@ class Server:
 		ticking MCDR:
 		try to receive a new line from server's stdout and parse / display / process the text
 		"""
-		text = self.receive()
-		if text is None:  # server process has been terminated
+		try:
+			text = self.receive()
+		except ServerStopped:
 			self.on_server_stop()
 			return
 		try:
@@ -328,12 +330,15 @@ class Server:
 		finally:
 			self.flag_mcdr_exit = True
 
+	def should_keep_running(self):
+		return self.server_status not in [ServerStatus.STOPPED] or not self.flag_exit_naturally
+
 	def run(self):
 		"""
 		the main loop of MCDR
 		:return: None
 		"""
-		while self.server_status not in [ServerStatus.STOPPED]:
+		while self.should_keep_running():
 			try:
 				if self.is_server_running():
 					self.tick()
