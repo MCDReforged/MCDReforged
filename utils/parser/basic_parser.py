@@ -16,7 +16,7 @@ class BasicParser(AbstractParser):
 	NAME = tool.remove_suffix(os.path.basename(__file__), '.py')
 
 	def parse_server_stdout(self, text):
-		return self.__parse_server_stdout_raw(text)
+		return self._parse_server_stdout_raw(text)
 
 	def parse_player_joined(self, info):
 		return None
@@ -38,4 +38,4 @@ class BasicParser(AbstractParser):
 
 
 def get_parser(parser_manager):
-	return BaseParser(parser_manager)
+	return BasicParser(parser_manager)

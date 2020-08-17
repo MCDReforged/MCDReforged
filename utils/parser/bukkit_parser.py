@@ -15,7 +15,7 @@ class BukkitParser(VanillaParser):
 	PLAYER_JOINED_PATTERN = re.compile(r'\w{1,16}\[(?:/[\d.:]+|local)\] logged in with entity id \d+ at \((\[\w+\])?[\dE\-., ]+\)')
 
 	def parse_server_stdout(self, text):
-		result = self.__parse_server_stdout_raw(text)
+		result = self._parse_server_stdout_raw(text)
 
 		# [09:00:01 INFO]: <Steve> hi
 		# [09:00:03 WARN]: Alex moved too quickly!

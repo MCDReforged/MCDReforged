@@ -15,7 +15,7 @@ class BungeecordParser(AbstractParser):
 		super().__init__(parser_manager)
 
 	def parse_server_stdout(self, text):
-		result = self.__parse_server_stdout_raw(text)
+		result = self._parse_server_stdout_raw(text)
 
 		# 09:00:02 [信息] Listening on /0.0.0.0:25565
 		# 09:00:01 [信息] [Steve] -> UpstreamBridge has disconnected

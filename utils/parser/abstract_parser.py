@@ -27,7 +27,7 @@ class AbstractParser:
 		self.parser_manager = parser_manager
 
 	@staticmethod
-	def __parse_server_stdout_raw(text: str):
+	def _parse_server_stdout_raw(text: str):
 		"""
 		Base raw parsing, returns an almost un-parsed Info instance
 		Use as the first step of the parsing process, or as the return value if you give up parsing this text

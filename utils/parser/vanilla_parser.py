@@ -13,7 +13,7 @@ class VanillaParser(AbstractParser):
 	LOGGER_NAME_CHAR_SET = r'\w /\#\-'
 
 	def parse_server_stdout(self, text):
-		result = self.__parse_server_stdout_raw(text)
+		result = self._parse_server_stdout_raw(text)
 
 		# [09:00:00] [Server thread/INFO]: <Steve> Hello
 		# [09:00:01] [Server thread/WARN]: Can't keep up!
