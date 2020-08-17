@@ -28,7 +28,7 @@ server.stop.stop_when_stopped: |
 server.stop.stop_fail: |
   Error stopping server, force the server to stop now
 
-server.stop.process_killed: |
+server.kill_server.process_killed: |
   Process {0} killed
 
 server.send.send_when_stopped: |

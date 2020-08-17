@@ -28,7 +28,7 @@ server.stop.stop_when_stopped: |
 server.stop.stop_fail: |
   服务端关闭出错，强制关闭
 
-server.stop.process_killed: |
+server.kill_server.process_killed: |
   进程 {0} 已终止
 
 server.send.send_when_stopped: |

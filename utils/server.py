@@ -9,6 +9,8 @@ import traceback
 from subprocess import Popen, PIPE, STDOUT
 from threading import Lock
 
+import psutil as psutil
+
 from utils import config, constant, logger, tool
 from utils.exception import *
 from utils.command_manager import CommandManager
@@ -189,12 +191,11 @@ class Server:
 		Kill the server process group
 		"""
 		if self.process and self.process.poll() is None:
-			pid = self.process.pid
+			for child in psutil.Process(self.process.pid).children(recursive=True):
+				child.kill()
+				self.logger.info(self.t('server.kill_server.process_killed', child.pid))
 			self.process.kill()
-			if hasattr(signal, 'CTRL_C_EVENT'):  # windows
-				os.kill(os.getpid(), signal.CTRL_C_EVENT)
-			else:  # unix
-				os.killpg(os.getpgid(pid), signal.SIGTERM)
+			self.logger.info(self.t('server.kill_server.process_killed', self.process.pid))
 		else:
 			raise IllegalCall("Server process has already been terminated")
 
