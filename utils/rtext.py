@@ -175,6 +175,9 @@ class RText(RTextBase):
 class RTextList(RTextBase):
 	def __init__(self, *args):
 		self.data = []
+		self.append(*args)
+
+	def append(self, *args):
 		for obj in args:
 			if type(obj) is RTextList:
 				self.data.extend(obj.data)
