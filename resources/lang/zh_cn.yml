@@ -10,6 +10,9 @@ server.load_config.parser_set: |
 server.load_config.encoding_decoding_set: |
   编码 / 解码方式已设置为 {0} / {1}
 
+server.start_server.already_interrupted: |
+  MCDR 已被中止
+
 server.start_server.start_twice: |
   服务端不能多次启动
 

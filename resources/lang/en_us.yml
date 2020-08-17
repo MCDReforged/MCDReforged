@@ -10,6 +10,9 @@ server.load_config.parser_set: |
 server.load_config.encoding_decoding_set: |
   Encoding / Decoding method has set to {0} / {1}
 
+server.start_server.already_interrupted: |
+  MCDR has already been interrupted
+
 server.start_server.start_twice: |
   Server cannot start twice
 

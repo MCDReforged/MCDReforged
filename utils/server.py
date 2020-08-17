@@ -145,6 +145,9 @@ class Server:
 		if not acquired:
 			return False
 		try:
+			if self.is_interrupt():
+				self.logger.warning(self.t('server.start_server.already_interrupted'))
+				return False
 			if self.is_server_running():
 				self.logger.warning(self.t('server.start_server.start_twice'))
 				return False
@@ -158,7 +161,6 @@ class Server:
 			else:
 				self.set_server_status(ServerStatus.RUNNING)
 				self.set_exit_naturally(True)
-				self.flag_interrupt = False
 				self.logger.info(self.t('server.start_server.pid_info', self.process.pid))
 				return True
 		finally:
@@ -340,6 +342,8 @@ class Server:
 			self.flag_mcdr_exit = True
 
 	def should_keep_running(self):
+		if self.is_interrupt():
+			return False
 		return self.server_status not in [ServerStatus.STOPPED] or not self.flag_exit_naturally
 
 	def run(self):
