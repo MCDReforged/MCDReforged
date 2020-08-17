@@ -38,6 +38,7 @@ Python version needs to be Python 3.6+. Already tested in environments  below:
 - requests
 - colorlog
 - colorama
+- psutil
 
 The requirements are also stored in `requirements.txt`. You can execute `pip install -r requirement.txt` to install all needed modules
 
@@ -71,6 +72,8 @@ MCDReforged/
 │
 └─ MCDReforged.py
 ```
+
+When you enter `ctrl-c` or `ctrl-z` to the console, MCDR will be interrupted. For first time MCDR will send the stop command to the server and for the other times MCDR will just kill the server process 
 
 ## Config
 

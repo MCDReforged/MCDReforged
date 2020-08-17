@@ -6,7 +6,6 @@ import sys
 from inspect import getfullargspec
 
 from utils import tool
-from utils.exception import ArgumentFormatError
 from utils.plugin_thread import TaskData
 
 HelpMessage = collections.namedtuple('HelpMessage', 'prefix message plugin_name')
@@ -75,8 +74,6 @@ class Plugin:
 					self.server.logger.error(self.server.t('plugin.call.args_not_matched', func_name, self.plugin_name, required_args_msg, excepted_args))
 				else:
 					return self.thread_pool.add_task(TaskData(func, correct_args, func_name, self), forced_new_thread=forced_new_thread)
-
-
 
 	def load(self):
 		with self.load_lock:

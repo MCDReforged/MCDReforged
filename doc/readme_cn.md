@@ -37,6 +37,7 @@ Python 的版本需要 Python 3.6+。已在如下环境中测试运行通过:
 - requests
 - colorlog
 - colorama
+- psutil
 
 需要的模块也储存在了 `requirement.txt` 中，可以直接执行 `pip install -r requirement.txt` 来安装所需要的模块
 
@@ -70,6 +71,8 @@ MCDReforged/
 │
 └─ MCDReforged.py
 ```
+
+当你在控制台键入 `ctrl-c` 或者 `ctrl-z` 时，MCDR 将被终止。第一次终止时 MCDR 将会向服务端发送对应的关闭指令，之后的终止操作均会让 MCDR 直接杀死服务端进程
 
 ## 配置文件
 
@@ -106,8 +109,8 @@ MCDR 使用的语言
 | 解析器名称 | 兼容的服务器类型 |
 |---|---|
 | vanilla_parser | 适用于原版 / Carpet / Fabric 服务端 |
-| bukkit_parser | 适用于 1.14 以下的 Bukkit / Spiogt 服务端，和任意版本的 Paper 服务端 |
-| bukkit_parser_14 | 适用于 1.14 及以上的 Bukkit / Spiogt 服务端 |
+| bukkit_parser | 适用于 1.14 以下的 Bukkit / Spigot 服务端，和任意版本的 Paper 服务端 |
+| bukkit_parser_14 | 适用于 1.14 及以上的 Bukkit / Spigot 服务端 |
 | forge_parser | 适用于 Forge 服务端 |
 | cat_server_parser | 适用于 [CatServer](https://github.com/Luohuayu/CatServer) 服务端 |
 | bungeecord_parser | 适用于Bungeecord 服务端。请在启动参数的 `-jar` 前添加 `-Djline.terminal=jline.UnsupportedTerminal` 以让其支持 MCDR 的控制，[来源](https://www.spigotmc.org/wiki/start-up-parameters/) |

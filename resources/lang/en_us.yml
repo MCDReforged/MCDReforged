@@ -10,6 +10,9 @@ server.load_config.parser_set: |
 server.load_config.encoding_decoding_set: |
   Encoding / Decoding method has set to {0} / {1}
 
+server.start_server.already_interrupted: |
+  MCDR has already been interrupted
+
 server.start_server.start_twice: |
   Server cannot start twice
 
@@ -22,13 +25,16 @@ server.start_server.start_fail: |
 server.start_server.pid_info: |
   Server is running at PID {0}
 
-server.stop.stop_twice: |
+server.stop.stop_when_stopped: |
   Server cannot stop when terminated
 
 server.stop.stop_fail: |
   Error stopping server, force the server to stop now
 
-server.stop.process_killed: |
+server.kill_server.killing: |
+  Killing server process group
+
+server.kill_server.process_killed: |
   Process {0} killed
 
 server.send.send_when_stopped: |
@@ -42,9 +48,6 @@ server.receive.decode_fail: |
 
 server.on_server_stop.show_stopcode: |
   Server process stopped with code {0}
-
-server.on_server_stop.stop_by_itself: |
-  Server stopped by itself
 
 server.tick.pre_parse_fail: |
   Fail to pre parse text from stdout of the server, use original text
@@ -75,6 +78,10 @@ server.react.error: |
 
 server.info_queue.full: |
   Info queue has been full, is the server spamming? Ignore incoming info!
+
+config.missing_config: |
+  Some options in the config file is missing, use default value
+  Remember to check and update the config file as soon as possible
 
 command_manager.help_message: |
   §7!!MCDR§r: Show this message
@@ -164,12 +171,15 @@ command_manager.print_mcdr_status.line2: |
   Server status: {0}
 
 command_manager.print_mcdr_status.line3: |
-  Server startup: §7{0}§r
+  Server startup: {0}
 
 command_manager.print_mcdr_status.line4: |
-  Rcon: {0}
+  Exit naturally: {0}
 
 command_manager.print_mcdr_status.line5: |
+  Rcon: {0}
+
+command_manager.print_mcdr_status.line6: |
   Plugin count: §6{0}§r
 
 command_manager.print_mcdr_status.extra_line1: |
@@ -307,11 +317,8 @@ rcon_manager.disconnect.disconnect_fail: |
 server_status.running: |
   §aRunning§r
 
-server_status.stopping_by_itself: |
-  §cStopping by itself§r
-
-server_status.stopping_by_plugin: |
-  §cStopping by plugin§r
+server_status.stopping: |
+  §cStopping§r
 
 server_status.stopped: |
   §4Stopped§r

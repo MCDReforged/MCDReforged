@@ -148,7 +148,7 @@ It's a list of RText
 
 When converted to json object for displaying to the game it will at a extar empty string at the front to prevent the first object's style affecting the later ones
 
-### RTextList.RTextList(*args)
+#### RTextList.RTextList(*args)
 
 Objects in `*args` can be a `str`, a `RText`, a `RTextList` or any classes implemented `__str__` method. All of them will be convert to `RText`
 
@@ -162,3 +162,9 @@ Objects in `*args` can be a `str`, a `RText`, a `RTextList` or any classes imple
 - `add_help_message`
 
 Special judge for console output is unnecessary since `server.reply` etc. will convert `RTextBase` objects into plain text
+
+#### RTextList.append(*args)
+
+Add several elements to the end of the current `RTextList`
+
+Objects in `*args` can be a `str`, a `RText`, a `RTextList` or any classes implemented `__str__` method. All of them will be convert to `RText`
