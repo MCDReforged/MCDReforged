@@ -28,6 +28,9 @@ server.stop.stop_when_stopped: |
 server.stop.stop_fail: |
   服务端关闭出错，强制关闭
 
+server.kill_server.killing: |
+  正在终止服务端进程组
+
 server.kill_server.process_killed: |
   进程 {0} 已终止
 
@@ -42,9 +45,6 @@ server.receive.decode_fail: |
 
 server.on_server_stop.show_stopcode: |
   服务端进程返回代码: {0}
-
-server.on_server_stop.stop_by_itself: |
-  服务端自行关闭
 
 server.tick.pre_parse_fail: |
   预解析服务端标准输出流失败，使用源文本

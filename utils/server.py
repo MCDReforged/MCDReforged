@@ -191,9 +191,13 @@ class Server:
 		Kill the server process group
 		"""
 		if self.process and self.process.poll() is None:
-			for child in psutil.Process(self.process.pid).children(recursive=True):
-				child.kill()
-				self.logger.info(self.t('server.kill_server.process_killed', child.pid))
+			self.logger.info(self.t('server.kill_server.killing'))
+			try:
+				for child in psutil.Process(self.process.pid).children(recursive=True):
+					child.kill()
+					self.logger.info(self.t('server.kill_server.process_killed', child.pid))
+			except psutil.NoSuchProcess:
+				pass
 			self.process.kill()
 			self.logger.info(self.t('server.kill_server.process_killed', self.process.pid))
 		else:
@@ -286,7 +290,6 @@ class Server:
 		self.process = None
 		self.flag_server_startup = False
 		self.flag_server_rcon_ready = False
-		self.logger.info(self.t('server.on_server_stop.stop_by_itself'))
 		self.set_server_status(ServerStatus.STOPPED)
 		self.plugin_manager.call('on_server_stop', (self.server_interface, return_code), wait=True)
 

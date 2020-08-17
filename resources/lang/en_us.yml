@@ -28,6 +28,9 @@ server.stop.stop_when_stopped: |
 server.stop.stop_fail: |
   Error stopping server, force the server to stop now
 
+server.kill_server.killing: |
+  Killing server process group
+
 server.kill_server.process_killed: |
   Process {0} killed
 
@@ -42,9 +45,6 @@ server.receive.decode_fail: |
 
 server.on_server_stop.show_stopcode: |
   Server process stopped with code {0}
-
-server.on_server_stop.stop_by_itself: |
-  Server stopped by itself
 
 server.tick.pre_parse_fail: |
   Fail to pre parse text from stdout of the server, use original text
