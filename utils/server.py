@@ -341,17 +341,17 @@ class Server:
 		finally:
 			self.flag_mcdr_exit = True
 
-	def should_keep_running(self):
-		if self.is_interrupt():
-			return False
-		return self.server_status not in [ServerStatus.STOPPED] or not self.flag_exit_naturally
+	def should_keep_looping(self):
+		if self.server_status in [ServerStatus.STOPPED]:
+			return not self.is_interrupt() and not self.flag_exit_naturally
+		return True
 
 	def run(self):
 		"""
 		the main loop of MCDR
 		:return: None
 		"""
-		while self.should_keep_running():
+		while self.should_keep_looping():
 			try:
 				if self.is_server_running():
 					self.tick()
