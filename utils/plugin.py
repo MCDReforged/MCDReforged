@@ -75,8 +75,6 @@ class Plugin:
 				else:
 					return self.thread_pool.add_task(TaskData(func, correct_args, func_name, self), forced_new_thread=forced_new_thread)
 
-
-
 	def load(self):
 		with self.load_lock:
 			self.old_module = self.module
