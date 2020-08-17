@@ -19,18 +19,18 @@ class CatServerParser(BukkitParser):
 
 	def parse_player_left(self, info):
 		# §eSteve left the game§r
-		return super().parse_player_left(cleaned_minecraft_color_code(info))
+		return super().parse_player_left(cleaned_info(info))
 
 	def parse_player_made_advancement(self, info):
 		# § before advancement name
-		return super().parse_player_made_advancement(cleaned_minecraft_color_code(info))
+		return super().parse_player_made_advancement(cleaned_info(info))
 
 
 def get_parser(parser_manager):
 	return CatServerParser(parser_manager)
 
 
-def cleaned_minecraft_color_code(info):
+def cleaned_info(info):
 	processed_info = copy.deepcopy(info)
 	processed_info.content = tool.clean_minecraft_color_code(processed_info.content)
 	return processed_info

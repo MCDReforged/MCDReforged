@@ -22,13 +22,16 @@ server.start_server.start_fail: |
 server.start_server.pid_info: |
   服务端正在以 PID {0} 运行中
 
-server.stop.stop_twice: |
+server.stop.stop_when_stopped: |
   服务端不能在关闭时再次关闭
 
 server.stop.stop_fail: |
   服务端关闭出错，强制关闭
 
-server.stop.process_killed: |
+server.kill_server.killing: |
+  正在终止服务端进程组
+
+server.kill_server.process_killed: |
   进程 {0} 已终止
 
 server.send.send_when_stopped: |
@@ -42,9 +45,6 @@ server.receive.decode_fail: |
 
 server.on_server_stop.show_stopcode: |
   服务端进程返回代码: {0}
-
-server.on_server_stop.stop_by_itself: |
-  服务端自行关闭
 
 server.tick.pre_parse_fail: |
   预解析服务端标准输出流失败，使用源文本
@@ -75,6 +75,10 @@ server.react.error: |
 
 server.info_queue.full: |
   消息队列已满, 服务端是否在刷屏? 忽略新到来消息
+
+config.missing_config: |
+  配置文件缺失部分选项，使用默认值
+  请尽快去检测并更新配置文件
 
 command_manager.help_message: |
   §7!!MCDR§r: 显示这条消息
@@ -164,12 +168,15 @@ command_manager.print_mcdr_status.line2: |
   服务端状态: {0}
 
 command_manager.print_mcdr_status.line3: |
-  服务端已启动: §7{0}§r
+  服务端已启动: {0}
 
 command_manager.print_mcdr_status.line4: |
-  rcon: {0}
+  自然退出: {0}
 
 command_manager.print_mcdr_status.line5: |
+  rcon: {0}
+
+command_manager.print_mcdr_status.line6: |
   插件数量: §6{0}§r
 
 command_manager.print_mcdr_status.extra_line1: |
@@ -307,11 +314,8 @@ rcon_manager.disconnect.disconnect_fail: |
 server_status.running: |
   §a运行中§r
 
-server_status.stopping_by_itself: |
-  §c正在自行关闭§r
-
-server_status.stopping_by_plugin: |
-  §c正在被插件关闭§r
+server_status.stopping: |
+  §c正在关闭§r
 
 server_status.stopped: |
   §4已关闭§r

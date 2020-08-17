@@ -73,7 +73,8 @@ class ServerInterface:
 
 		:rtype: None
 		"""
-		self.__server.stop(forced=False, new_server_status=ServerStatus.STOPPING_BY_PLUGIN)
+		self.__server.set_exit_naturally(False)
+		self.__server.stop(forced=False)
 
 	@log_call
 	def wait_for_start(self):
@@ -352,7 +353,7 @@ class ServerInterface:
 		:raise: IllegalCall
 		"""
 		thread = threading.current_thread()
-		if hasattr(thread, 'plugin') and type(thread.plugin) is Plugin:
+		if type(getattr(thread, 'plugin', None)) is Plugin:
 			plugin = thread.plugin  # type: Plugin
 			plugin.add_help_message(prefix, message)
 		else:

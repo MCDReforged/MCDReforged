@@ -14,7 +14,7 @@ class ForgeParser(VanillaParser):
 		super().__init__(parser_manager)
 
 	def parse_server_stdout(self, text):
-		result = self.parse_server_stdout_raw(text)
+		result = self._parse_server_stdout_raw(text)
 
 		# [18:26:03] [Server thread/INFO] [FML]: Unloading dimension 1
 		# [18:26:03] [Server thread/INFO] [minecraft/DedicatedServer]: Done (9.855s)! For help, type "help" or "?"
