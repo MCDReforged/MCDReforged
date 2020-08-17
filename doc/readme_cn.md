@@ -72,6 +72,8 @@ MCDReforged/
 └─ MCDReforged.py
 ```
 
+当你在控制台键入 `ctrl-c` 或者 `ctrl-z` 时，MCDR 将被终止。第一次终止时 MCDR 将会向服务端发送对应的关闭指令，之后的终止操作均会让 MCDR 直接杀死服务端进程
+
 ## 配置文件
 
 配置文件为 `config.yml`

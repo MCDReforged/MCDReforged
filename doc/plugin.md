@@ -64,7 +64,7 @@ It also has these following methods:
 
 | Method | Function |
 |---|---|
-| start() | Start the server. Only works if the server has stopped |
+| start() | Start the server. Only works if the server has stopped and MCDR is not interrupted |
 | stop() | Use the specific command like `stop` to close the server. Only works if the server is running |
 | wait_for_start() | Wait until the server is stopped, in other words, startable |
 | restart() | Execute `stop()`、`wait_for_start()`、`start()` in order to restart the server |
