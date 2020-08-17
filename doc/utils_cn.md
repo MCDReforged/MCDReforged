@@ -148,7 +148,7 @@ MCDReforged 工具文档
 
 当转换为 json 格式用于输出至游戏中时，会在前面额外添加一个空串，从而防止第一个元素的样式影响到后方元素
 
-### RTextList.RTextList(*args)
+#### RTextList.RTextList(*args)
 
 `*args` 中的对象可以为一个 `str`, 一个 `RText`, 一个 `RTextList` 或者任何实现了 `__str__` 方法的类。它们都会被转化为 `RText`
 
@@ -162,3 +162,9 @@ MCDReforged 工具文档
 - `add_help_message`
 
 因 `server.reply` 等方法会自动将 `RTextBase` 对象转换为朴素文本，所以没有必要判断控制台这个特例。
+
+#### RTextList.append(*args)
+
+将若干个元素添加至当前 `RTextList` 的末尾
+
+`*args` 中的对象可以为一个 `str`, 一个 `RText`, 一个 `RTextList` 或者任何实现了 `__str__` 方法的类。它们都会被转化为 `RText`
