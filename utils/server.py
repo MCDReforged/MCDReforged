@@ -158,6 +158,7 @@ class Server:
 			else:
 				self.set_server_status(ServerStatus.RUNNING)
 				self.set_exit_naturally(True)
+				self.flag_interrupt = False
 				self.logger.info(self.t('server.start_server.pid_info', self.process.pid))
 				return True
 		finally:
