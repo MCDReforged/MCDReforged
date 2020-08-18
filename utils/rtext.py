@@ -158,7 +158,7 @@ class RText(RTextBase):
 		return self
 
 	def set_hover_item(self, data):
-		data = data.replace('minecraft:', '')
+		data = data.replace('minecraft:', '') # 防止冒号被转义
 		self.data['hoverEvent'] = {
 			'action': 'show_item',
 			'value': data
