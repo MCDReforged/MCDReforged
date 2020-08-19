@@ -186,11 +186,17 @@ class RTextList(RTextBase):
 			else:
 				self.data.append(RText(str(obj)))
 
+	def empty(self):
+		return len(self.data) == 0
+
+	def __get_item_list(self, func=lambda x: x):
+		return [func(obj) for obj in self.data]
+
 	def to_json_object(self):
-		return [''] + [t.to_json_object() for t in self.data]  # to disable style inherit
+		return [''].extend(self.__get_item_list(lambda obj: obj.to_json_object()))
 
 	def to_plain_text(self):
-		return ''.join([obj.to_plain_text() for obj in self.data])
+		return ''.join(self.__get_item_list(lambda obj: obj.to_plain_text()))
 
 	def to_colored_text(self):
-		return ''.join([obj.to_colored_text() for obj in self.data])
+		return ''.join(self.__get_item_list(lambda obj: obj.to_colored_text()))

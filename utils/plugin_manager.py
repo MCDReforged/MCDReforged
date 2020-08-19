@@ -172,22 +172,23 @@ class PluginManager:
 			['[§6{}§r]'.format(self.server.t('plugin_manager.unload'))] + unload_fail_list + \
 			['[§6{}§r]'.format(self.server.t('plugin_manager.reload'))] + reload_fail_list
 
-		msg = []
+		msg = RTextList()
 		if load_list:
-			msg.extend([RText(self.server.t('plugin_manager.__refresh_plugins.info_loaded', len(load_list))).h('\n'.join(load_list)), '; '])
+			msg.append(RText(self.server.t('plugin_manager.__refresh_plugins.info_loaded', len(load_list))).h('\n'.join(load_list)), '; ')
 		if unload_list:
-			msg.extend([RText(self.server.t('plugin_manager.__refresh_plugins.info_unloaded', len(unload_list))).h('\n'.join(unload_list)), '; '])
+			msg.append(RText(self.server.t('plugin_manager.__refresh_plugins.info_unloaded', len(unload_list))).h('\n'.join(unload_list)), '; ')
 		if reload_list:
-			msg.extend([RText(self.server.t('plugin_manager.__refresh_plugins.info_reloaded', len(reload_list))).h('\n'.join(reload_list)), '; '])
+			msg.append(RText(self.server.t('plugin_manager.__refresh_plugins.info_reloaded', len(reload_list))).h('\n'.join(reload_list)), '; ')
 		if load_fail_list or unload_fail_list or reload_fail_list:
-			msg.extend([RText(self.server.t('plugin_manager.__refresh_plugins.info_fail', len(fail_list) - 3)).h('\n'.join(fail_list)), '; '])
-		if len(msg) == 0:
+			msg.append(RText(self.server.t('plugin_manager.__refresh_plugins.info_fail', len(fail_list) - 3)).h('\n'.join(fail_list)), '; ')
+		if msg.empty():
 			msg = [self.server.t('plugin_manager.__refresh_plugins.info_none'), '; ']
-		msg.append(RText(self.server.t('plugin_manager.__refresh_plugins.info_plugin_amount', len(self.plugins)))
+		msg.append(
+			RText(self.server.t('plugin_manager.__refresh_plugins.info_plugin_amount', len(self.plugins)))
 			.h('\n'.join([plugin.file_name for plugin in self.plugins]))
 			.c(RAction.suggest_command, '!!MCDR plugin list')
 		)
-		return RTextList(*tuple(msg))
+		return msg
 
 	# an interface to call, load / reload / unload all plugins
 	def refresh_all_plugins(self):

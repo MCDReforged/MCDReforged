@@ -264,9 +264,9 @@ class CommandManager:
 
 		self.send_message(info, self.t('command_manager.list_plugin.info_loaded_plugin', len(file_list_loaded)))
 		for file_name in file_list_loaded:
-			texts = RText('§7-§r {}'.format(file_name))
+			texts = RTextList('§7-§r {}'.format(file_name))
 			if self.display_buttons(info):
-				texts += RTextList(
+				texts.append(
 					RText(' [×]', color=RColor.gray)
 					.c(RAction.run_command, '!!MCDR plugin disable {}'.format(file_name))
 					.h(self.t('command_manager.list_plugin.suggest_disable', file_name)),
@@ -279,9 +279,9 @@ class CommandManager:
 		self.send_message(info, self.t('command_manager.list_plugin.info_disabled_plugin', len(file_list_disabled)))
 		for file_name in file_list_disabled:
 			file_name = tool.remove_suffix(file_name, constant.DISABLED_PLUGIN_FILE_SUFFIX)
-			texts = RText('§7-§r {}'.format(file_name))
+			texts = RTextList('§7-§r {}'.format(file_name))
 			if self.display_buttons(info):
-				texts += (
+				texts.append(
 					RText(' [✔]', color=RColor.gray)
 					.c(RAction.run_command, '!!MCDR plugin enable {}'.format(file_name))
 					.h(self.t('command_manager.list_plugin.suggest_enable', file_name))
@@ -290,9 +290,9 @@ class CommandManager:
 
 		self.send_message(info, self.t('command_manager.list_plugin.info_not_loaded_plugin', len(file_list_not_loaded)))
 		for file_name in file_list_not_loaded:
-			texts = RText('§7-§r {}'.format(file_name))
+			texts = RTextList('§7-§r {}'.format(file_name))
 			if self.display_buttons(info):
-				texts += (
+				texts.append(
 					RText(' [✔]', color=RColor.gray)
 					.c(RAction.run_command, '!!MCDR plugin load {}'.format(file_name))
 					.h(self.t('command_manager.list_plugin.suggest_load', file_name))
@@ -345,5 +345,5 @@ class CommandManager:
 		help_messages = [HelpMessage('!!MCDR', self.t('command_manager.mcdr_help_message'), RText('MCDR', color=RColor.gold))]
 		for plugin in self.server.plugin_manager.plugins:
 			help_messages.extend(plugin.help_messages)
-		for prefix, message, name in sorted(help_messages, key=lambda x: x.prefix.capitalize()):
+		for prefix, message, name in sorted(help_messages, key=lambda x: x.prefix.upper()):
 			self.send_message(info, RText('§7{}§r: '.format(prefix)).c(RAction.suggest_command, prefix).h(name) + message)
