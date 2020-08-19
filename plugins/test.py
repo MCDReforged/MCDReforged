@@ -1,3 +1,6 @@
+from utils.rtext import *
+
+
 def on_load(server, old):
 	add_help_message(server)
 
