@@ -27,6 +27,7 @@ def on_load(server, old_module):
 	Do some clean up when your plugin is being loaded
 	Like migrating data, reading config file or adding help messages
 
+	:param old_module: Previous plugin instance. If the plugin is freshly loaded it will be None
 	:param server: A ServerInterface instance
 	"""
 	global counter
@@ -85,7 +86,7 @@ def on_player_joined(server, player, info):
 
 	:param server: A ServerInterface instance
 	:param str player: The name of the player
-	:param info: a Info instance
+	:param info: a Info instance, go parse it if you want more information
 	"""
 	server.tell(player, 'Welcome!')
 	server.say('Hi {}'.format(player))
