@@ -4,7 +4,6 @@ import time
 from threading import Lock
 
 import requests
-
 from utils import tool, constant
 from utils.rtext import *
 
@@ -24,7 +23,7 @@ class UpdateHelper:
 			time.sleep(24 * 60 * 60)
 
 	def check_update(self, reply_func=None):
-		tool.start_thread(self.__check_update, (reply_func, ), 'CheckingUpdate')
+		tool.start_thread(self.__check_update, (reply_func, ), 'CheckUpdate')
 
 	def __check_update(self, reply_func):
 		acquired = self.update_lock.acquire(blocking=False)
