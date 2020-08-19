@@ -5,7 +5,7 @@ import os
 import re
 import sys
 import threading
-from colorama import Fore, Back, Style
+
 from utils import constant
 
 
@@ -61,7 +61,7 @@ def get_all_base_class(cls):
 
 
 def clean_minecraft_color_code(text):
-	return re.sub('§[\w0-9]', '', str(text))
+	return re.sub('§[a-z0-9]', '', str(text))
 
 
 def clean_console_color_code(text):
