@@ -4,10 +4,9 @@ __pycache__
 log/
 test.py
 a.py
-mcd2/
 server/*
-!plugins/sample_plugin.py
 plugins/*
+!plugins/SamplePlugin.py
 config/
 qb_multi/
 perma_backup/
