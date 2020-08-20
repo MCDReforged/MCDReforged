@@ -1,13 +1,15 @@
+"""
+For reacting general info
+Including on_info and !!MCDR, !!help command
+"""
 import re
 
 from utils.info import InfoSource
 from utils.permission_manager import PermissionLevel
-from utils.reactor.base_reactor import BaseReactor
+from utils.reactor.abstract_reactor import AbstractReactor
 
 
-# for reacting general info
-# including on_info and !!MCDR, !!help command
-class GeneralReactor(BaseReactor):
+class GeneralReactor(AbstractReactor):
 	def react(self, info):
 		if info.is_user and re.fullmatch(r'!!MCDR( .*)*', info.content) is not None:
 			if self.server.permission_manager.get_info_permission_level(info) >= PermissionLevel.ADMIN:

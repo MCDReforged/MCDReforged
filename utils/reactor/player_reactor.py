@@ -1,9 +1,11 @@
+"""
+Analyzing and reacting events related to player
+"""
 from utils.info import InfoSource
-from utils.reactor.base_reactor import BaseReactor
+from utils.reactor.abstract_reactor import AbstractReactor
 
 
-# analyzing and reacting events related to player
-class PlayerReactor(BaseReactor):
+class PlayerReactor(AbstractReactor):
 	def react(self, info):
 		if info.source == InfoSource.SERVER:
 			parser = self.server.parser_manager.get_parser()
