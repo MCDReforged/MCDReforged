@@ -5,13 +5,13 @@ The basic plain parser
 
 import os
 
-from utils import tool
+from utils import tool, constant
 from utils.info import Info
 from utils.parser.abstract_parser import AbstractParser
 
 
 class BasicParser(AbstractParser):
-	NAME = tool.remove_suffix(os.path.basename(__file__), '.py')
+	NAME = tool.remove_suffix(os.path.basename(__file__), constant.PARSER_FILE_SUFFIX)
 
 	def parse_server_stdout(self, text):
 		return self._parse_server_stdout_raw(text)

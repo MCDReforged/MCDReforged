@@ -7,7 +7,7 @@ import os
 import sys
 from inspect import getfullargspec
 
-from utils import tool
+from utils import tool, constant
 from utils.plugin.plugin_thread import TaskData
 
 HelpMessage = collections.namedtuple('HelpMessage', 'prefix message plugin_name')
@@ -18,7 +18,7 @@ class Plugin:
 		self.server = server
 		self.file_path = file_path
 		self.file_name = os.path.basename(file_path)
-		self.plugin_name = tool.remove_suffix(self.file_name, '.py')
+		self.plugin_name = tool.remove_suffix(self.file_name, constant.PLUGIN_FILE_SUFFIX)
 		self.module = None
 		self.old_module = None
 		self.help_messages = []

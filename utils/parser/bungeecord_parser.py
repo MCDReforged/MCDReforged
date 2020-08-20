@@ -1,13 +1,13 @@
 import os
 import re
 
-from utils import tool
+from utils import tool, constant
 from utils.info import Info
 from utils.parser.abstract_parser import AbstractParser
 
 
 class BungeecordParser(AbstractParser):
-	NAME = tool.remove_suffix(os.path.basename(__file__), '.py')
+	NAME = tool.remove_suffix(os.path.basename(__file__), constant.PARSER_FILE_SUFFIX)
 	STOP_COMMAND = 'end'
 
 	def __init__(self, parser_manager):

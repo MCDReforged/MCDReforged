@@ -1,12 +1,12 @@
 import os
 import re
 
-from utils import tool
+from utils import tool, constant
 from utils.parser.vanilla_parser import VanillaParser
 
 
 class ForgeParser(VanillaParser):
-	NAME = tool.remove_suffix(os.path.basename(__file__), '.py')
+	NAME = tool.remove_suffix(os.path.basename(__file__), constant.PARSER_FILE_SUFFIX)
 	LOGGER_NAME_CHAR_SET = VanillaParser.LOGGER_NAME_CHAR_SET + r'.'
 
 	def __init__(self, parser_manager):

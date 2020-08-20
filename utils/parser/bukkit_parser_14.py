@@ -1,6 +1,6 @@
 import os
 
-from utils import tool
+from utils import tool, constant
 from utils.parser import bukkit_parser
 from utils.parser.vanilla_parser import VanillaParser
 
@@ -10,7 +10,7 @@ class BukkitParser14(VanillaParser):
 	# idk why they did this
 	# paper is not included
 
-	NAME = tool.remove_suffix(os.path.basename(__file__), '.py')
+	NAME = tool.remove_suffix(os.path.basename(__file__), constant.PARSER_FILE_SUFFIX)
 
 	def __init__(self, parser_manager):
 		super().__init__(parser_manager)

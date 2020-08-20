@@ -1,7 +1,7 @@
 import copy
 import os
 
-from utils import tool
+from utils import tool, constant
 from utils.parser.bukkit_parser import BukkitParser
 from utils.parser.vanilla_parser import VanillaParser
 
@@ -11,7 +11,7 @@ class CatServerParser(BukkitParser):
 	# CatServer uses vanilla logging format but spigot like player joined message
 	# And has color code around the player left message
 
-	NAME = tool.remove_suffix(os.path.basename(__file__), '.py')
+	NAME = tool.remove_suffix(os.path.basename(__file__), constant.PARSER_FILE_SUFFIX)
 
 	def parse_server_stdout(self, text):
 		return VanillaParser.parse_server_stdout(self, text)

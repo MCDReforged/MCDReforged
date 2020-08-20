@@ -2,7 +2,7 @@ import os
 import re
 import time
 
-from utils import tool
+from utils import tool, constant
 from utils.info import InfoSource, Info
 
 '''
@@ -19,7 +19,7 @@ AbstractParser
 
 
 class AbstractParser:
-	NAME = tool.remove_suffix(os.path.basename(__file__), '.py')
+	NAME = tool.remove_suffix(os.path.basename(__file__), constant.PARSER_FILE_SUFFIX)
 	STOP_COMMAND = ''
 
 	def __init__(self, parser_manager):
