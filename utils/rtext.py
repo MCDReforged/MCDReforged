@@ -1,9 +1,11 @@
-# Credit: Pandaria98 https://github.com/Pandaria98
-# https://github.com/TISUnion/stext
+"""
+Advanced text container for Minecraft
+Credit: Pandaria98 https://github.com/Pandaria98 https://github.com/TISUnion/stext
+"""
 
-# -*- coding: utf-8 -*-
 import copy
 import json
+
 from colorama import Fore, Style
 
 

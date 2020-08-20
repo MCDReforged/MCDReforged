@@ -1,10 +1,13 @@
-# -*- coding: utf-8 -*-
+"""
+Custom logger for MCDR
+"""
 
 import logging
 import os
 import sys
 import time
 import zipfile
+
 from colorlog import ColoredFormatter
 
 from utils import tool

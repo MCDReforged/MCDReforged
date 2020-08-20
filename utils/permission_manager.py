@@ -1,5 +1,9 @@
-# -*- coding: utf-8 -*-
+"""
+Permission control things
+"""
+
 import collections
+
 import ruamel.yaml as yaml
 from ruamel.yaml.comments import CommentedSeq
 

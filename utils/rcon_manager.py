@@ -1,4 +1,6 @@
-# -*- coding: utf-8 -*-
+"""
+A more flexible interface for rcon support
+"""
 from utils.rcon import Rcon
 
 

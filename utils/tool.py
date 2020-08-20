@@ -1,4 +1,6 @@
-# -*- coding: utf-8 -*-
+"""
+Misc tool collection
+"""
 import importlib.machinery
 import importlib.util
 import os

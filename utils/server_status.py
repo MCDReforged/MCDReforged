@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-
-
 class ServerStatus:
 	RUNNING = 0
 	STOPPED = 1

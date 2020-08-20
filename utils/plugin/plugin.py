@@ -1,4 +1,6 @@
-# -*- coding: utf-8 -*-
+"""
+Single plugin class
+"""
 import collections
 import hashlib
 import os

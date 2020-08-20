@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from utils.info import InfoSource
 from utils.reactor.base_reactor import BaseReactor
 

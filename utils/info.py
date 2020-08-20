@@ -1,4 +1,6 @@
-# -*- coding: utf-8 -*-
+"""
+Info and InfoSource
+"""
 
 
 class InfoSource:

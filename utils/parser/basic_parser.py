@@ -3,8 +3,6 @@ The basic plain parser
 """
 
 
-# -*- coding: utf-8 -*-
-
 import os
 
 from utils import tool

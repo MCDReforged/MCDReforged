@@ -1,7 +1,11 @@
-# -*- coding: utf-8 -*-
+"""
+Translation support
+"""
+
+import os
 
 import ruamel.yaml as yaml
-import os
+
 from utils import tool, constant
 
 

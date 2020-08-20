@@ -1,6 +1,9 @@
-# -*- coding: utf-8 -*-
+"""
+MCDR config file stuffs
+"""
 
 import os
+
 import ruamel.yaml as yaml
 
 

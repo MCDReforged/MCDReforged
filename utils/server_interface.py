@@ -1,6 +1,7 @@
-# An interface class for plugins to control the server
+"""
+An interface class for plugins to control the server
+"""
 
-# -*- coding: utf-8 -*-
 
 import threading
 import time

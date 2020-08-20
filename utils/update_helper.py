@@ -1,9 +1,12 @@
-# -*- coding: utf-8 -*-
+"""
+MCDR update things
+"""
 import os
 import time
 from threading import Lock
 
 import requests
+
 from utils import tool, constant
 from utils.rtext import *
 

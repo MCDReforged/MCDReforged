@@ -1,4 +1,6 @@
-# -*- coding: utf-8 -*-
+"""
+Plugin management
+"""
 import os
 import threading
 

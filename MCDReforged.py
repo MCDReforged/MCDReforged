@@ -1,8 +1,10 @@
-# -*- coding: utf-8 -*-
+"""
+Entry for MCDR
+"""
 
-import traceback
-import sys
 import os
+import sys
+import traceback
 
 
 def main():

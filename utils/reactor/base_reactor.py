@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-
-
 class BaseReactor:
 	def __init__(self, server):
 		self.server = server

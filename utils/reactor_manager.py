@@ -1,3 +1,6 @@
+"""
+The place to reacting information from the server
+"""
 import queue
 import time
 

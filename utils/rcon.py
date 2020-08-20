@@ -1,4 +1,6 @@
-# -*- coding: utf-8 -*-
+"""
+Simple rcon client implement
+"""
 import socket
 import struct
 import time

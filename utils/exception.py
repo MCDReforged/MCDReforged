@@ -1,4 +1,6 @@
-# -*- coding: utf-8 -*-
+"""
+Some custom exceptions
+"""
 
 
 # Fail to start the server

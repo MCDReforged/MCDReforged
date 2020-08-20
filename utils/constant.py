@@ -1,4 +1,6 @@
-# -*- coding: utf-8 -*-
+"""
+Constants for MCDR
+"""
 
 import os
 

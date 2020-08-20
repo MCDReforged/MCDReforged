@@ -1,4 +1,6 @@
-# -*- coding: utf-8 -*-
+"""
+Thread for plugin call
+"""
 import collections
 import queue
 import threading
