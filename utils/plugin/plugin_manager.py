@@ -3,9 +3,9 @@ import os
 import threading
 
 from utils import tool, constant
-from utils.plugin_thread import PluginThreadPool
+from utils.plugin.plugin import Plugin
+from utils.plugin.plugin_thread import PluginThreadPool
 from utils.rtext import *
-from utils.plugin import Plugin
 
 
 class PluginManager:

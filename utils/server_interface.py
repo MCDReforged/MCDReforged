@@ -6,10 +6,10 @@ import threading
 import time
 
 from utils.exception import *
-from utils.plugin import Plugin
 from utils.info import Info
-from utils.server_status import ServerStatus
+from utils.plugin.plugin import Plugin
 from utils.rtext import *
+from utils.server_status import ServerStatus
 
 
 def log_call(func):

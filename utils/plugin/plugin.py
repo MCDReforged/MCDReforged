@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 import collections
-import os
 import hashlib
+import os
 import sys
 from inspect import getfullargspec
 
 from utils import tool
-from utils.plugin_thread import TaskData
+from utils.plugin.plugin_thread import TaskData
 
 HelpMessage = collections.namedtuple('HelpMessage', 'prefix message plugin_name')
 

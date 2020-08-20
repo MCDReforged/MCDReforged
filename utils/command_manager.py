@@ -5,11 +5,11 @@ import re
 import threading
 import traceback
 
-from utils.plugin import HelpMessage
 from utils import constant, tool
-from utils.rtext import *
 from utils.info import InfoSource
 from utils.permission_manager import PermissionLevel
+from utils.plugin.plugin import HelpMessage
+from utils.rtext import *
 from utils.server_status import ServerStatus
 
 

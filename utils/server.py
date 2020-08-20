@@ -10,16 +10,16 @@ from threading import Lock
 import psutil as psutil
 
 from utils import config, constant, logger, tool
-from utils.exception import *
 from utils.command_manager import CommandManager
+from utils.exception import *
+from utils.language_manager import LanguageManager
 from utils.parser_manager import ParserManager
 from utils.permission_manager import PermissionManager
-from utils.plugin_manager import PluginManager
+from utils.plugin.plugin_manager import PluginManager
 from utils.rcon_manager import RconManager
-from utils.language_manager import LanguageManager
 from utils.reactor_manager import ReactorManager
-from utils.server_status import ServerStatus
 from utils.server_interface import ServerInterface
+from utils.server_status import ServerStatus
 from utils.update_helper import UpdateHelper
 
 
