@@ -195,7 +195,9 @@ class RTextList(RTextBase):
 		return [func(obj) for obj in self.data]
 
 	def to_json_object(self):
-		return [''].extend(self.__get_item_list(lambda obj: obj.to_json_object()))
+		ret = ['']
+		ret.extend(self.__get_item_list(lambda obj: obj.to_json_object()))
+		return ret
 
 	def to_plain_text(self):
 		return ''.join(self.__get_item_list(lambda obj: obj.to_plain_text()))
