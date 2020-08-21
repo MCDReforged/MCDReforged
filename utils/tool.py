@@ -9,6 +9,7 @@ import sys
 import threading
 
 from utils import constant
+from utils.plugin.version import Version
 
 
 def start_thread(func, args, name=None):
@@ -86,24 +87,9 @@ def version_compare(v1, v2):
 	Compare which version number is newer
 	suffixes begin with "-" like "-alpha", "-beta" will be ignored
 
-	:param v1: a version number like "0.4.5-alpha" or "1.2.0.10086"
-	:param v2: the same as v1
+	:param str v1: a version number like "0.4.5-alpha" or "1.2.0.10086"
+	:param str v2: the same as v1
 	:return: a int. 1: v1 is newer; 0: they are the same; -1: v2 is newer
+	:rtype: int
 	"""
-	def split_version(v):
-		return tuple([int(x) for x in v.split('-')[0].split('.')])
-
-	def cmp(a, b):
-		if a < b:
-			return -1
-		elif a > b:
-			return 1
-		else:
-			return 0
-	v1 = split_version(v1)
-	v2 = split_version(v2)
-	for i in range(min(len(v1), len(v2))):
-		if v1[i] != v2[i]:
-			return cmp(v1[i], v2[i])
-	else:
-		return cmp(len(v1), len(v2))
+	return Version(v1).compare_to(Version(v2))
