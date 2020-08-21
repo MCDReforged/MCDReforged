@@ -20,7 +20,7 @@ mkdir server
 mkdir config
 cp doc\readme_cn.md .
 rm -f plugins\*
-rd /S /Q doc
+rd /S /Q doc test
 cd ..
 rm -f %name%-%ver%.zip
 zip -r %name%-%ver%.zip %name%-%ver%
