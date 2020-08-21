@@ -5,7 +5,7 @@ Constants for MCDR
 import os
 
 
-VERSION = '0.9.5'
+VERSION = '0.10.0-dev'
 NAME_SHORT = 'MCDR'
 NAME = 'MCDReforged'
 NAME_FULL = 'MCDaemonReforged'
