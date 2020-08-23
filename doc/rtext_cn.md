@@ -4,7 +4,7 @@
 
 导入: `from utils.rtext import *`
 
-下文所有使用RText的地方不再使用前缀，自己使用时可根据需要 import
+下文不使用前缀，自己使用时可根据需要 import
 
 推荐阅读 Minecraft Wiki 中关于 [原始JSON文本格式](https://minecraft-zh.gamepedia.com/%E5%8E%9F%E5%A7%8BJSON%E6%96%87%E6%9C%AC%E6%A0%BC%E5%BC%8F) 的页面
 
@@ -14,7 +14,7 @@
 
 ---------
 
-以下三个类需要作为参数在`RText`中使用
+以下三个类的属性可以作为参数在 `RText` 中使用
 
 ## RColor
 
@@ -84,7 +84,7 @@ RText(text, color=RColor.reset, styles=None)
 例子：
 
 ```python
-RText('这是例子', color=RColor.blue, styles=None)
+RText('这是例子', color=RColor.blue, styles=RStyle.underlined)
 ```
 
 效果：

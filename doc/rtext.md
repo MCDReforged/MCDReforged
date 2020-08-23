@@ -4,7 +4,9 @@
 
 import: `from utils.rtext import *`
 
-Read the page about [Raw JSON text format](https://minecraft.gamepedia.com/Raw_JSON_text_format)  on Minecraft Wiki is recommanded before you doing this.
+The following does not use prefix, you can import as required when you use
+
+Read the page about [Raw JSON text format](https://minecraft.gamepedia.com/Raw_JSON_text_format) on Minecraft Wiki is recommanded before you doing this.
 
 rtext is an advanced Minecraft text container
 
@@ -12,11 +14,11 @@ Inspired by [MCD stext API](https://github.com/TISUnion/rtext) by [Pandaria98](h
 
 ---
 
-The following classes need to be used in `RText` as parameters
+The following 3 classes' property could to be used in `RText` as parameters
 
 ## Rcolor
 
-`Rcolor` class contains all Minecraft color code in it.
+`Rcolor` class contains all Minecraft color code in it
 
 | Code | Official Name | Rcolor Code |
 | - | - | - |
@@ -39,7 +41,7 @@ The following classes need to be used in `RText` as parameters
 
 ## RStyle
 
-`RStyle` class contains all Minecraft text style code in it.
+`RStyle` class contains all Minecraft text style code in it
 
 | Code | Official Name | Rstyle Code |
 | - | - | - |
@@ -51,7 +53,7 @@ The following classes need to be used in `RText` as parameters
 
 ## RAction
 
-`RAction` class contains all Minecraft click event in it.
+`RAction` class contains all Minecraft click event in it
 
 | Event | Official Name | RAction Code |
 | - | - | - |
@@ -63,7 +65,7 @@ The following classes need to be used in `RText` as parameters
 
 ---
 
-Here are the classes you really need to write your plugin
+Here are the classes you really need to write in your plugin
 
 ## Rtext
 
@@ -73,14 +75,16 @@ Initialize Rtext:
 RText(text, color=RColor.reset, styles=None)
 ```
 
-`text` is an object can be use `str()` function or a Rtext object
+`text` accept an object can be use `str()` method or a Rtext object
 
-`styles` is a `RStyle` object or a `list` contains objects.
+`color` accept a str, could use the property of [RColor](#RColor)
+
+`styles` accept a str or str list, could use the property of [RStyle](#RStyle)
 
 For example:
 
 ```python
-RText('This is an example', color=RColor.blue, styles=None)
+RText('This is an example', color=RColor.blue, styles=RStyle.underlined)
 ```
 
 Result:
@@ -95,7 +99,7 @@ This class has the following methods:
 
 Set the content which will be added to chat box when `shift + mouse right` clicked
 
-`text` is a str type parameter
+`text` accept a str
 
 For example:
 
@@ -112,9 +116,9 @@ Result:
 
 set the click event to `action`, value to `value`
 
-`action` is an action name in type str. Also a [RAction](#RAction) property can be used here
+`action` accept action name in type str. Also a [RAction](#RAction) property can be used here
 
-`value` is the action parameter in type `str`
+`value` accept the action parameter in type str
 
 For example:
 
@@ -127,9 +131,9 @@ Result:
 - Message is `Lobby`
 - When you click it, it'll execute `/server lobby`
 
-Tips: You can use `c(action, value)` instead of `set_click_event(action, value)`, they have the same effect
+Tip: The method `c(action, value)` in this class is same as `set_click_event(action, value)`, they have the same effect
 
-### set_hover_text(\*args)
+### set_hover_text(*args)
 
 The floating text display when your mouse floating at the text
 
@@ -138,7 +142,7 @@ The floating text display when your mouse floating at the text
 For example:
 
 ```python
-RText('§aWelcome new player! Click to welcome!').set_hover_text(r.RText('§7Click me to welcome')).c(r.RAction.run_command, 'Welcome new friend!')`
+RText('§aWelcome new player! Click to welcome!').set_hover_text(RText('§7Click me to welcome')).c(RAction.run_command, 'Welcome new friend!')
 ```
 
 Result:
@@ -147,13 +151,13 @@ Result:
 - Display `Click me to welcome` in gray when your mouse floating at the message
 - Send `Welcome new friend!` when you click it
 
-Tip: You can use `h(*args)` instead of `set_hover_text(*args)`, they have the same effect.
+Tip: The method `h(*args)` in this class is same as `set_hover_text(*args)`, they have the same effect
 
 ### set_hover_item(data)
 
 The floating item display when your mouse floating at the text
 
-`data` is a [general tag](https://minecraft.gamepedia.com/Player.dat_format#General_Tags)
+`data` accept a [Tags common](https://minecraft.gamepedia.com/Player.dat_format#Item_structure)
 
 For example:
 
@@ -164,7 +168,7 @@ RText('Display item').set_hover_item('{id:"minecraft:wooden_axe",Count:1b,tag:{D
 Result:
 
 - Display `Display item` in color white
-- Display a floating item wooden axe with the durability minus 1
+- Display a floating item wooden axe with the durability minus 1 when your mouse floating at the message
 
 Tips: You cannot use `h(*args)` here
 
@@ -176,7 +180,7 @@ Initialize RTextList:
 RTextList(*args)
 ```
 
-`*args` can be all the object can use `str()` or a RText object or a RtextList object
+`*args` accept an object can be use `str()` method or a RText object or a RtextList object
 
 ---
 
@@ -186,11 +190,14 @@ this class has the following method:
 
 Add text to an initialized RtextList object
 
-`*args` can be all the object can use `str()` or a RText object or a RtextList object
+`*args` accept an object can be use `str()` method or a RText object or a RtextList object
 
-### Tips:
+---
+
+## Tips
 
 - `RText` and `RTextList` objects can be used as `message` in the following methods: `server.tell`, `server.say`, `server.reply`, `add_help_message`
+
 - Don't worry about the output goes into console or in-game
 
 ---
@@ -210,14 +217,12 @@ Use the function when floating text and click event are needed at the same time
 
 ```python
 except Exception as e:
-	print_message(server, info, RText('§Delete fail§r, check console for more detail').set_hover_text(e), tell=False)
+    print_message(server, info, RText('§Delete fail§r, check console for more detail').set_hover_text(e), tell=False)
 ```
 
 Here place a floating text to make players can see the error message in game through Rtext
 
-### [BotInit](https://github.com/MCDReforged-Plugins/BotInit/blob/master/BotInit.py)
-
-Due to this plugin doesn't have the English version, the messages inside have been translated to English by [GamerNoTitle](https://github.com/GamerNoTitle)
+### [BotInit](https://github.com/MCDReforged-Plugins/BotInit/blob/master/BotInit.py) {Due to this plugin doesn't have the English version, the messages inside have been translated to English by [GamerNoTitle](https://github.com/GamerNoTitle)}
 
 ```python
 server.add_help_message('!!bot', r.RText('Display the bot list').c(RAction.run_command, '!!bot').h('Click to display bot list'))
@@ -228,7 +233,6 @@ Use Rtext to be the message part of add_help_message
 `.h` display `Click to display bot list` when player's mouse pointing at this help message
 
 `.c` make player say `!!bot` when clicking at the message
-
 
 ```python
 help_msg = {
@@ -253,28 +257,23 @@ When player's mouse point at the line, every line will have its own help message
 ```python
 c = ['']
 for a, b in bot_list.items():
-    bot_info = r.RTextList(
+    bot_info = RTextList(
         '\n'
         f'§7----------- §6{a}§7 -----------\n',
         f'§7Dimension:§6 {b["dim"]}\n',
-        r.RText(
-            f'§7Position:§6 {b["pos"]}\n', ).c(
-            r.RAction.run_command,
-            '[x:{}, y:{}, z:{}, name:{}, dim{}]'.format(
-                *[int(i) for i in b['pos']], a, b['dim'])).h(
-            'Click to display waypoint'),
+        RText(f'§7Position:§6 {b["pos"]}\n', ).c(RAction.run_command, '[x:{}, y:{}, z:{}, name:{}, dim{}]'.format(*[int(i) for i in b['pos']], a, b['dim'])).h('Click to display waypoint'),
         f'§7Facing:§6 {b["facing"]}\n',
-        r.RText('§dClick to spawn\n').c(r.RAction.run_command, f'!!bot spawn {a}').h(f'放置§6{a}'),
-        r.RText('§dClick to kill\n').c(r.RAction.run_command, f'!!bot kill {a}').h(f'移除§6{a}')
+        RText('§dClick to spawn\n').c(RAction.run_command, f'!!bot spawn {a}').h(f'Place§6{a}'),
+        RText('§dClick to kill\n').c(RAction.run_command, f'!!bot kill {a}').h(f'Remove§6{a}')
     )
     c.append(bot_info)
 server.reply(info, r.RTextList(*c))
 ```
 
-Actually, the code here send a `RTextList` with `RTextList` in it
+Here send to the player a `RTextList` with str, RText and RTextList in it
 
-First create a `list` with information of all bots, use wrap to prevent the timestamp of tweakeroo's interference
+First create a `list` with information of all bots, use a space line to prevent the timestamp of tweakeroo's interference
 
-Then start a traverse of bots' information, a is the name of the bot, b is the information, every bot's information in **RTextList** will be added to a list
+Then start a traverse of bots' information, `a` is the name of the bot, `b` is the information, every bot's information in **RTextList** will be added to a list
 
 After finishing the traverse, use `server.reply(info, r.RTextList(*c))` to send the result to player, `*c` will be used to devide the `list` into lots of parameters
