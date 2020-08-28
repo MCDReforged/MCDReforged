@@ -147,6 +147,20 @@ class ServerInterface:
 		"""
 		return self.__server.rcon_manager.is_running()
 
+	@log_call
+	def get_server_pid(self):
+		"""
+		Return the pid of the server process
+		Notes the process with this pid is a bash process, which is the parent process of real server process
+		you might be interested in
+
+		:return: The pid of the server. None if the server is stopped
+		:rtype: int or None
+		"""
+		if self.__server.process is not None:
+			return self.__server.process.pid
+		return None
+
 	# ------------------------
 	#     Text Interaction
 	# ------------------------

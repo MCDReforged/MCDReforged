@@ -320,6 +320,9 @@ server_status.running: |
 server_status.stopping: |
   §c正在关闭§r
 
+server_status.pre_stopped: |
+  §4即将关闭§r
+
 server_status.stopped: |
   §4已关闭§r
 

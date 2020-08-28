@@ -59,10 +59,12 @@ def on_user_info(server, info):
 is_server_running: {}
 is_server_startup: {}
 is_rcon_running: {}
+pid: {}
 		'''.strip().format(
 			server.is_server_running(),
 			server.is_server_startup(),
 			server.is_rcon_running(),
+			server.get_server_pid(),
 		))
 
 	if info.content == '!!!secret':

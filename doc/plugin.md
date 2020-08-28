@@ -73,6 +73,7 @@ It also has these following methods:
 | is_server_running() | If the server (more precisely, server process) is running |
 | is_server_startup() | If the server has started up |
 | is_rcon_running() | Return a bool representing if the rcon is running |
+| get_server_pid() | Return the pid of the server process. Notes the process with this pid is a bash process, which is the parent process of real server process you might be interested in |
 
 **Text Interaction**
 
