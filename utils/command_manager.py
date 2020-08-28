@@ -32,7 +32,8 @@ class CommandManager:
 		self.server.server_interface.reply(info, msg, is_plugin_call=False)
 
 	def send_command_not_found(self, info, cmd):
-		self.send_message(info, RText(self.t('command_manager.command_not_found', cmd))
+		self.send_message(
+			info, RText(self.t('command_manager.command_not_found', cmd))
 			.h(self.t('command_manager.command_not_found_suggest', cmd))
 			.c(RAction.run_command, cmd)
 		)
@@ -313,7 +314,8 @@ class CommandManager:
 		if not os.path.isfile(os.path.join(self.server.plugin_manager.plugin_folder, file_name)):
 			self.send_message(info, self.t('command_manager.invalid_plugin_name', file_name))
 		else:
-			ret = self.function_call(info, self.server.plugin_manager.load_plugin, 'load_plugin',
+			ret = self.function_call(
+				info, self.server.plugin_manager.load_plugin, 'load_plugin',
 				func_args=(file_name, ), message_args=(file_name, ), success_message=False
 			)
 			if ret is not None:  # no outside exception
@@ -324,7 +326,8 @@ class CommandManager:
 		if not os.path.isfile(os.path.join(self.server.plugin_manager.plugin_folder, file_name)):
 			self.send_message(info, self.t('command_manager.invalid_plugin_name', file_name))
 		else:
-			ret = self.function_call(info, self.server.plugin_manager.enable_plugin, 'enable_plugin',
+			ret = self.function_call(
+				info, self.server.plugin_manager.enable_plugin, 'enable_plugin',
 				func_args=(file_name, ), message_args=(file_name, ), success_message=False
 			)
 			if ret is not None:  # no outside exception
