@@ -10,16 +10,16 @@ from threading import Lock
 import psutil as psutil
 
 from utils import config, constant, logger, tool
-from utils.exception import *
 from utils.command_manager import CommandManager
+from utils.exception import *
+from utils.language_manager import LanguageManager
 from utils.parser_manager import ParserManager
 from utils.permission_manager import PermissionManager
 from utils.plugin_manager import PluginManager
 from utils.rcon_manager import RconManager
-from utils.language_manager import LanguageManager
 from utils.reactor_manager import ReactorManager
-from utils.server_status import ServerStatus
 from utils.server_interface import ServerInterface
+from utils.server_status import ServerStatus
 from utils.update_helper import UpdateHelper
 
 
@@ -136,7 +136,9 @@ class Server:
 		:rtype: bool
 		"""
 		if self.server_status in [ServerStatus.STOPPED]:
-			return not self.is_interrupt() and not self.flag_exit_naturally
+			if self.is_interrupt():  # if interrupted and stopped
+				return False
+			return not self.flag_exit_naturally  # if the sever exited naturally, exit MCDR
 		return not self.is_mcdr_exit()
 
 	# MCDR server
@@ -303,8 +305,10 @@ class Server:
 		self.process = None
 		self.flag_server_startup = False
 		self.flag_server_rcon_ready = False
-		self.set_server_status(ServerStatus.STOPPED)
+		self.set_server_status(ServerStatus.PRE_STOPPED)
 		self.plugin_manager.call('on_server_stop', (self.server_interface, return_code), wait=True)
+		if self.server_status == ServerStatus.PRE_STOPPED:
+			self.set_server_status(ServerStatus.STOPPED)
 
 	def tick(self):
 		"""

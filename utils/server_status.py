@@ -4,10 +4,12 @@
 class ServerStatus:
 	RUNNING = 0
 	STOPPED = 1
-	STOPPING = 2
+	PRE_STOPPED = 2
+	STOPPING = 3
 	__TRANSLATION_MAP = {
 		RUNNING: 'server_status.running',
 		STOPPING: 'server_status.stopping',
+		PRE_STOPPED: 'server_status.pre_stopped',
 		STOPPED: 'server_status.stopped'
 	}
 

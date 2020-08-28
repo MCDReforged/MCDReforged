@@ -320,6 +320,9 @@ server_status.running: |
 server_status.stopping: |
   §cStopping§r
 
+server_status.pre_stopped: |
+  §4Pre-stopped§r
+
 server_status.stopped: |
   §4Stopped§r
 
