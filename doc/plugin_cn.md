@@ -73,6 +73,7 @@ MCDReforged 插件文档
 | is_server_running() | 返回一个 bool 代表服务端（更准确地，服务端进程）是否在运行 |
 | is_server_startup() | 返回一个 bool 代表服务端是否已经启动完成 |
 | is_rcon_running() | 返回一个 bool 代表 rcon 是否在运行 |
+| get_server_pid() | 返回服务端进程的 pid。注意这个这个 pid 对于的进程是一个 bash 进程，很可能是你想要的真实服务端进程的父进程 |
 
 **文本交互**
 
