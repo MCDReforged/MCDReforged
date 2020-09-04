@@ -181,7 +181,7 @@ info 对象的属性分别为：
 
 相关应用例子：
 
-```
+```Python
 counter = 0
 
 def on_load(server, old_module):
@@ -222,7 +222,7 @@ def on_load(server, old_module):
 
 一种比较偷懒的是在解决 python3 兼容问题后在旧插件末尾加入诸如以下的方法：
 
-```
+```Python
 import copy
 
 def on_load(server, old):
