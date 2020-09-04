@@ -181,7 +181,7 @@ This is an instance of a module, which is used by the new plugin to inherit some
 
 Related examples:
 
-```
+```Python
 counter = 0
 
 def on_load(server, old_module):
@@ -222,7 +222,7 @@ Current available:
 
 A lazy way to do that is to add such method below at the end of the old plugin after solving python3 compatibility issues:
 
-```
+```Python
 import copy
 
 def on_load(server, old):
