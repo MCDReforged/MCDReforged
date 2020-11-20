@@ -2,10 +2,7 @@
 
 import ruamel.yaml as yaml
 import os
-from utils import tool
-
-
-LANGUAGE_FILE_SUFFIX = '.yml'
+from utils import tool, constant
 
 
 class LanguageManager:
@@ -17,15 +14,11 @@ class LanguageManager:
 
 	def load_languages(self):
 		self.translations = {}
-		if os.path.isdir(self.language_folder):
-			for file in tool.list_file(self.language_folder, LANGUAGE_FILE_SUFFIX):
-				language = os.path.basename(file).rstrip(LANGUAGE_FILE_SUFFIX)
-				with open(file, encoding='utf8') as f:
-					self.translations[language] = yaml.round_trip_load(f)
-			return True
-		else:
-			os.makedirs(self.language_folder)
-			return False
+		tool.touch_folder(self.language_folder)
+		for file in tool.list_file(self.language_folder, constant.LANGUAGE_FILE_SUFFIX):
+			language = tool.remove_suffix(os.path.basename(file), constant.LANGUAGE_FILE_SUFFIX)
+			with open(file, encoding='utf8') as f:
+				self.translations[language] = yaml.round_trip_load(f)
 
 	@property
 	def languages(self):
@@ -34,7 +27,7 @@ class LanguageManager:
 	def contain_language(self, language):
 		return language in self.languages
 
-	def translate(self, text, language=None):
+	def translate(self, text, language=None) -> str:
 		if language is None:
 			language = self.language
 		try:

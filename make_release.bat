@@ -15,9 +15,10 @@ mv __temp__\%name% %name%-%ver%
 rd /S /Q __temp__
 cd %name%-%ver%
 rd /S /Q .git __pycache__ build
-rm -f %name%.spec .gitignore make_release.bat
+rm -f %name%.spec .gitignore make_release.bat logo_long.png
 mkdir server
-cp doc\* .
+mkdir config
+cp doc\readme_cn.md .
 rm -f plugins\*
 rd /S /Q doc
 cd ..

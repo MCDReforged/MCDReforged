@@ -12,20 +12,25 @@ class CatServerParser(BukkitParser):
 	# CatServer uses vanilla logging format but spigot like player joined message
 	# And has color code around the player left message
 
-	NAME = os.path.basename(__file__).rstrip('.py')
-
-	def __init__(self, parser_manager):
-		super().__init__(parser_manager)
+	NAME = tool.remove_suffix(os.path.basename(__file__), '.py')
 
 	def parse_server_stdout(self, text):
 		return VanillaParser.parse_server_stdout(self, text)
 
 	def parse_player_left(self, info):
 		# §eSteve left the game§r
-		processed_info = copy.deepcopy(info)
-		processed_info.content = tool.clean_minecraft_color_code(processed_info.content)
-		return super().parse_player_left(processed_info)
+		return super().parse_player_left(cleaned_info(info))
+
+	def parse_player_made_advancement(self, info):
+		# § before advancement name
+		return super().parse_player_made_advancement(cleaned_info(info))
 
 
 def get_parser(parser_manager):
 	return CatServerParser(parser_manager)
+
+
+def cleaned_info(info):
+	processed_info = copy.deepcopy(info)
+	processed_info.content = tool.clean_minecraft_color_code(processed_info.content)
+	return processed_info
