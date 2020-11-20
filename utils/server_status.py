@@ -2,7 +2,17 @@
 
 
 class ServerStatus:
-	RUNNING = 'server_status.running'
-	STOPPING_BY_ITSELF = 'server_status.stopping_by_itself'
-	STOPPING_BY_PLUGIN = 'server_status.stopping_by_plugin'
-	STOPPED = 'server_status.stopped'
+	RUNNING = 0
+	STOPPED = 1
+	PRE_STOPPED = 2
+	STOPPING = 3
+	__TRANSLATION_MAP = {
+		RUNNING: 'server_status.running',
+		STOPPING: 'server_status.stopping',
+		PRE_STOPPED: 'server_status.pre_stopped',
+		STOPPED: 'server_status.stopped'
+	}
+
+	@classmethod
+	def translate_key(cls, status):
+		return cls.__TRANSLATION_MAP[status]

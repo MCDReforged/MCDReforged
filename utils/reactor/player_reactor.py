@@ -14,7 +14,7 @@ class PlayerReactor(BaseReactor):
 			if player is not None:
 				self.server.logger.debug('Player joined detected')
 				self.server.permission_manager.touch_player(player)
-				self.server.plugin_manager.call('on_player_joined', (self.server.server_interface, player))
+				self.server.plugin_manager.call('on_player_joined', [(self.server.server_interface, player), (self.server.server_interface, player, info)])
 
 			# on_player_left
 			player = parser.parse_player_left(info)

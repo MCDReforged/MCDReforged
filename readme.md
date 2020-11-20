@@ -1,11 +1,12 @@
 MCDReforged
 --------
+![MCDR-banner](https://raw.githubusercontent.com/Fallen-Breath/MCDReforged/master/logo_long.png)
 
 [中文](https://github.com/Fallen-Breath/MCDReforged/blob/master/doc/readme_cn.md)
 
 > This is a python based Minecraft server control tool
 
-MCDReforge (abbreviated as MCDR) is a tool which provides the management ability of the Minecraft server using custom plugin system. It doesn't need to modify or mod the original Minecraft server at all
+MCDReforged (abbreviated as MCDR) is a tool which provides the management ability of the Minecraft server using custom plugin system. It doesn't need to modify or mod the original Minecraft server at all
 
 From in-game calculator, player high-light, to manipulate scoreboard, manage structure file and backup / load backup, you can implement these by using MCDR and related plugins
 
@@ -25,7 +26,7 @@ MCDR uses `Popen` to start the server, so it control the standard input / out st
 
 ## Environment
 
-Python version should be Python 3.6+. Already tested in environments  below:
+Python version needs to be Python 3.6+. Already tested in environments  below:
 
 - `Windows10 x64` `Python 3.6`
 - `Centos7 x64` `Python 3.8`
@@ -35,6 +36,9 @@ Python version should be Python 3.6+. Already tested in environments  below:
 
 - ruamel.yaml
 - requests
+- colorlog
+- colorama
+- psutil
 
 The requirements are also stored in `requirements.txt`. You can execute `pip install -r requirement.txt` to install all needed modules
 
@@ -69,6 +73,8 @@ MCDReforged/
 └─ MCDReforged.py
 ```
 
+When you enter `ctrl-c` or `ctrl-z` to the console, MCDR will be interrupted. For first time MCDR will send the stop command to the server and for the other times MCDR will just kill the server process 
+
 ## Config
 
 The config file is `config.yml`
@@ -91,7 +97,7 @@ Default value is `server`, which means the server will run in the `server/` fold
 
 ### start_command
 
-Default: `java -Xms1G -Xmx2G -jar minecraft_server.jar --nogui`
+Default: `java -Xms1G -Xmx2G -jar minecraft_server.jar nogui`
 
 The start command, like `java -jar minecraft_server.jar` or `./start.sh`
 
@@ -193,22 +199,24 @@ Plugin usage can refer to `plugins/sample_plugin.py`
 
 There is a simple built-in permission system in MCDR for plugin maker to use
 
-There are 4 different level of permission:
+There are 5 different level of permission:
 
 | Name | Value | Description |
 |---|---|---|
-| admin | 3 | A group with the highest power to control the MCDR
+| owner | 4 | Highest level for those who have the ability to access the physical server
+| admin | 3 | People with power to control the MCDR and the server
 | helper | 2 | A group of admin's helper
 | user | 1 | A group that normal player will be in
-| guest | 0 | A group for guest
+| guest | 0 | The lowest level for guest or trollers
 
-The permission level of console input is always the highest level `admin`
+The permission level of console input is always the highest level `owner`
 
 ### Permission File
 
 Permission file `permission.yml` is the config and storage file for the system
 
 - `default_level`: The default permission level a new player will get. Default: `user`
+- `owner`: A list of names of players who has the permission level `owner`
 - `admin`: A list of names of players who has the permission level `admin`
 - `helper`: A list of names of players who has the permission level `helper`
 - `user`: A list of names of players who has the permission level `user`
@@ -216,9 +224,11 @@ Permission file `permission.yml` is the config and storage file for the system
 
 Player name list of permission levels can be filled like this:
 
-```
-admin:
+```YAML
+owner:
 - Notch
+admin:
+- Dinnerbone
 helper:
 - Steve
 - Alex
@@ -235,7 +245,7 @@ There several commands to control MCDR. These command can be both input in game 
 | !!MCDR |  | Show help message 
 | !!MCDR status |  | show MCDR status
 | !!MCDR reload | !!MCDR r | Show reload command help message
-| !!MCDR reload plugin | !!MCDR r plg | Reload all plugins 
+| !!MCDR reload plugin | !!MCDR r plg | Reload all **changed** plugins 
 | !!MCDR reload config | !!MCDR r cfg | Reload config file
 | !!MCDR reload permission | !!MCDR r perm | Reload permission file
 | !!MCDR reload all | !!MCDR r all | Reload everything above
@@ -244,12 +254,18 @@ There several commands to control MCDR. These command can be both input in game 
 | !!MCDR permission set \<player\> \<level\> | !!MCDR perm set \<player\> \<level\> | Set the permission level of \<player\> to \<level\>
 | !!MCDR permission remove \<player\> | !!MCDR perm remove \<player\> | Remove \<player\> from the permission database
 | !!MCDR permission setdefault \<level\> | !!MCDR perm setd \<level\> | Set the default permission level to \<level\>
+| !!MCDR plugin list | !!MCDR plg list | List all plugins
+| !!MCDR plugin load \<plugin\> | !!MCDR plg load \<plugin\> | Load / Reload a plugin named \<plugin\>
+| !!MCDR plugin enable \<plugin\> | !!MCDR plg enable \<plugin\> | Enable a plugin named \<plugin\>
+| !!MCDR plugin disable \<plugin\> | !!MCDR plg disable \<plugin\> | Disable a plugin named \<plugin\>
+| !!MCDR plugin reloadall | !!MCDR plg ra | Load / Reload / Unloaded every plugins
+| !!MCDR plugin checkupdate | !!MCDR plg cu | Check update from Github
 
-Only player with `admin` permission level is allow to execute these command in game chat
+Only player with `admin` permission level or higher is allow to execute these command in game chat
 
-And there is a `!!help` command to display registered help messages from plugins
+And there is a `!!help` command to display registered help messages from plugins. Anyone can use that
 
 ## Notes
 
-- Make sure you add `-Djline.terminal=jline.UnsupportedTerminal` before `-jar` in the start command if your are running a Bungeecord server, or MCDR might not be able to control the standard input stream of the server in Windows OS
+- Make sure you add `-Djline.terminal=jline.UnsupportedTerminal` before `-jar` in the start command if your are running a Bungeecord server, or MCDR might not be able to control the standard input stream of the server
 

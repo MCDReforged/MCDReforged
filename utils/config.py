@@ -47,8 +47,8 @@ class Config:
 		flag |= self.touch('download_update', True)
 		flag |= self.touch('debug_mode', False)
 		if flag:
-			self.server.logger.warning('Some options in the config file is missing, use default value')
-			self.server.logger.warning('Remember to update the config file as soon as possible')
+			for line in self.server.t('config.missing_config').splitlines():
+				self.server.logger.warning(line)
 			self.save()
 
 	def __getitem__(self, item):

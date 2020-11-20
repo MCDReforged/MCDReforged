@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
 import os
 
-from utils.parser import bukkit_parser, bungeecord_parser
+from utils import tool
+from utils.parser import bukkit_parser
+from utils.parser.bungeecord_parser import BungeecordParser
 
 
-class WaterfallParser(bungeecord_parser.BungeecordParser):
+class WaterfallParser(BungeecordParser):
 	# The logging format of waterfall server is spigot like
 
-	NAME = os.path.basename(__file__).rstrip('.py')
+	NAME = tool.remove_suffix(os.path.basename(__file__), '.py')
 
 	def parse_server_stdout(self, text):
 		return bukkit_parser.get_parser(self.parser_manager).parse_server_stdout(text)
