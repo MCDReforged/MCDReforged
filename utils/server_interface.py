@@ -5,11 +5,12 @@
 import threading
 import time
 
+from utils import tool
 from utils.exception import *
-from utils.plugin import Plugin
 from utils.info import Info
-from utils.server_status import ServerStatus
+from utils.plugin import Plugin
 from utils.rtext import *
+from utils.server_status import ServerStatus
 
 
 def log_call(func):
@@ -186,11 +187,17 @@ class ServerInterface:
 		:type text: str or dict or list or RTextBase
 		:rtype: None
 		"""
+		# if isinstance(text, RTextBase):
+		# 	content = text.to_json_str()
+		# else:
+		# 	content = json.dumps(text)
+		# self.execute('tellraw {} {}'.format(player, content), encoding=encoding, is_plugin_call=False)
 		if isinstance(text, RTextBase):
-			content = text.to_json_str()
+			content = text.to_plain_text()
 		else:
-			content = json.dumps(text)
-		self.execute('tellraw {} {}'.format(player, content), encoding=encoding, is_plugin_call=False)
+			content = str(text)
+		content = tool.clean_minecraft_color_code(content)
+		self.execute('tell {} {}'.format(player, content), encoding=encoding, is_plugin_call=False)
 
 	@log_call
 	def say(self, text, encoding=None):
@@ -202,7 +209,13 @@ class ServerInterface:
 		:type text: str or dict or list or RTextBase
 		:rtype: None
 		"""
-		self.tell('@a', text, encoding=encoding, is_plugin_call=False)
+		# self.tell('@a', text, encoding=encoding, is_plugin_call=False)
+		if isinstance(text, RTextBase):
+			content = text.to_plain_text()
+		else:
+			content = str(text)
+		content = tool.clean_minecraft_color_code(content)
+		self.execute('say {}'.format(content), encoding=encoding, is_plugin_call=False)
 
 	@log_call
 	def reply(self, info, text, encoding=None):

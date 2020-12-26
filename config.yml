@@ -42,7 +42,11 @@ start_command: java -Xms1G -Xmx2G -jar minecraft_server.jar nogui
 # waterfall_parser
 #   for Waterfall server
 #
-parser: vanilla_parser
+# beta1.8_parser
+#   for Vanilla Minecraft beta 1.8 server
+#   Maybe it works for other beta version but idk
+#
+parser: beta1.8_parser
 
 
 # the encoding / decoding format used to encode / decode message to the server. Choose the best method for your os. Examples:
