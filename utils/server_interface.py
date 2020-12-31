@@ -6,10 +6,10 @@ import threading
 import time
 
 from utils.exception import *
-from utils.plugin import Plugin
 from utils.info import Info
-from utils.server_status import ServerStatus
+from utils.plugin import Plugin
 from utils.rtext import *
+from utils.server_status import ServerStatus
 
 
 def log_call(func):
@@ -189,7 +189,7 @@ class ServerInterface:
 		if isinstance(text, RTextBase):
 			content = text.to_json_str()
 		else:
-			content = json.dumps(text)
+			content = json.dumps(str(text))
 		self.execute('tellraw {} {}'.format(player, content), encoding=encoding, is_plugin_call=False)
 
 	@log_call

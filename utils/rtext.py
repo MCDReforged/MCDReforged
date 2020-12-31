@@ -4,6 +4,7 @@
 # -*- coding: utf-8 -*-
 import copy
 import json
+
 from colorama import Fore, Style
 
 
@@ -96,16 +97,16 @@ class RAction:
 
 class RTextBase:
 	def to_json_object(self):
-		pass
+		raise NotImplementedError()
 
 	def to_json_str(self):
 		return json.dumps(self.to_json_object())
 
 	def to_plain_text(self):
-		pass
+		raise NotImplementedError()
 
 	def to_colored_text(self):
-		pass
+		raise NotImplementedError()
 
 	def copy(self):
 		return copy.deepcopy(self)
@@ -172,6 +173,16 @@ class RText(RTextBase):
 		return color + self.to_plain_text() + Style.RESET_ALL
 
 
+class RTextTranslation(RText):
+	def __init__(self, translation_key, color=RColor.reset, styles=None):
+		super().__init__(translation_key, color, styles)
+		self.data.pop('text')
+		self.data['translate'] = translation_key
+
+	def to_plain_text(self):
+		return self.data['translate']
+
+
 class RTextList(RTextBase):
 	def __init__(self, *args):
 		self.data = []
@@ -181,7 +192,7 @@ class RTextList(RTextBase):
 		for obj in args:
 			if type(obj) is RTextList:
 				self.data.extend(obj.data)
-			elif type(obj) is RText:
+			elif isinstance(obj, RText):
 				self.data.append(obj)
 			else:
 				self.data.append(RText(str(obj)))
