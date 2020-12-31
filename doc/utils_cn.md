@@ -114,7 +114,7 @@ MCDReforged 工具文档
 
 文本容器类
 
-#### RText.RText(text, color=RColor.white, styles=None)
+#### RText.RText(text, color=RColor.reset, styles=None)
 
 创建一个由指定文本以及颜色构成的 `RText`。`styles` 可以是一个 `RStyle` 或者是一个 `RStyle` 的 `list`
 
@@ -141,6 +141,18 @@ MCDReforged 工具文档
 #### RText.h(*args) -> RText
 
 同 `RText.set_hover_text`
+
+
+### RTextTranslation
+
+可翻译的文本容器类
+
+例子：`RTextTranslation('advancements.nether.root.title', color=RColor.red)`
+
+#### RTextTranslation.RTextTranslation(text, color=RColor.reset, styles=None)
+
+创建一个由指定翻译键字的 `RTextTranslation`。其余参数同 `RText`
+
 
 ### RTextList
 

@@ -224,7 +224,7 @@ Permission file `permission.yml` is the config and storage file for the system
 
 Player name list of permission levels can be filled like this:
 
-```
+```YAML
 owner:
 - Notch
 admin:

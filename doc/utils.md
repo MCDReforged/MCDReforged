@@ -114,7 +114,7 @@ Return a `RTextList` created by merging two operand
 
 The text component class
 
-#### RText.RText(text, color=RColor.white, styles=None)
+#### RText.RText(text, color=RColor.reset, styles=None)
 
 Create a RText object with specific text and color. `styles` can be a `RStyle` or a `list` of `RStyle`
 
@@ -130,7 +130,7 @@ Return the RText itself after applied the click event
 
 The same as `RText.set_click_event`
 
-#### Stext.set_hover_text(*args) -> RText
+#### RText.set_hover_text(*args) -> RText
 
 Set the hover text to `*args`
 
@@ -142,11 +142,23 @@ Return the RText itself after applied the hover text
 
 The same as `RText.set_hover_text`
 
+
+### RTextTranslation
+
+The translation text component class. It's almost the same as `RText` and it has all `RText`'s methods
+
+Example: `RTextTranslation('advancements.nether.root.title', color=RColor.red)`
+
+#### RTextTranslation.RTextTranslation(translation_key, color=RColor.reset, styles=None)
+
+Create a RTextTranslation object with specific translation_key. The rest of the parameters are the same as `RText`
+
+
 ### RTextList
 
 It's a list of RText
 
-When converted to json object for displaying to the game it will at a extar empty string at the front to prevent the first object's style affecting the later ones
+When converted to json object for displaying to the game it will at an extra empty string at the front to prevent the first object's style affecting the later ones
 
 #### RTextList.RTextList(*args)
 

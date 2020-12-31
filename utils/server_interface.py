@@ -190,7 +190,7 @@ class ServerInterface:
 		if isinstance(text, RTextBase):
 			content = text.to_json_str()
 		else:
-			content = json.dumps(text)
+			content = json.dumps(str(text))
 		self.execute('tellraw {} {}'.format(player, content), encoding=encoding, is_plugin_call=False)
 
 	@log_call
