@@ -7,13 +7,15 @@ import re
 
 class Version:
 	EXTRA_ID_PATTERN = re.compile(r'|[-0-9A-Za-z]+(\.[-0-9A-Za-z]+)*')
-	WILDCARDS = ['x', 'X', '*']
+	WILDCARDS = {'x', 'X', '*'}
 	WILDCARD = -1
 
 	def __init__(self, version_str, allow_wildcard=True):
 		"""
 		:param str version_str: the version str like '1.2.3-pre4+build.5'
 		"""
+		if not isinstance(version_str, str):
+			raise VersionParsingError('Invalid input version string')
 
 		def separate_extra(text, char):
 			if text.find(char) >= 0:
@@ -108,29 +110,30 @@ class VersionRequirement:
 
 	def __init__(self, requirements):
 		if not isinstance(requirements, str):
-			raise TypeError('Requirements should be a str, not {}'.format(type(requirements).__name__))
-		self.__judges = []
+			raise VersionParsingError('Requirements should be a str, not {}'.format(type(requirements).__name__))
+		self.__criterions = []
 		for requirement in requirements.split(' '):
-			for prefix, func in self.PREFIXES.items():
-				if requirement.startswith(prefix):
-					judge = func
-					base_version = requirement[len(prefix):]
-					break
-			else:
-				judge = self.PREFIXES['=']
-				base_version = requirement
-			self.__judges.append(judge(Version(base_version)))
+			if len(requirement) > 0:
+				for prefix, func in self.PREFIXES.items():
+					if requirement.startswith(prefix):
+						criterion = func
+						base_version = requirement[len(prefix):]
+						break
+				else:
+					criterion = self.PREFIXES['=']
+					base_version = requirement
+				self.__criterions.append(criterion(Version(base_version)))
 
 	def accept(self, version):
 		if isinstance(version, str):
 			version = Version(version)
-		for judge in self.__judges:
+		for judge in self.__criterions:
 			if not judge(version):
 				return False
 		return True
 
 
-class VersionParsingError(TypeError):
+class VersionParsingError(ValueError):
 	pass
 
 

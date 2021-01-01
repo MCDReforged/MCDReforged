@@ -5,12 +5,23 @@ import collections
 import hashlib
 import os
 import sys
-from inspect import getfullargspec
+from threading import RLock
+from typing import Dict, Callable, List
 
-from utils import tool, constant
-from utils.plugin.plugin_thread import TaskData
+from utils import tool
+from utils.exception import IllegalCall, IllegalStateError
+from utils.plugin.metadata import MetaData
+from utils.plugin.plugin_event import Event
 
 HelpMessage = collections.namedtuple('HelpMessage', 'prefix message plugin_name')
+GLOBAL_LOAD_LOCK = RLock()
+
+
+class PluginState:
+	UNINITIALIZED = 0  # just created the instance
+	LOADED = 1         # loaded the .py file
+	READY = 2          # called on_load event
+	UNLOADED = 3       # unloaded
 
 
 class Plugin:
@@ -18,105 +29,102 @@ class Plugin:
 		self.server = server
 		self.file_path = file_path
 		self.file_name = os.path.basename(file_path)
-		self.plugin_name = tool.remove_suffix(self.file_name, constant.PLUGIN_FILE_SUFFIX)
-		self.module = None
-		self.old_module = None
-		self.help_messages = []
 		self.file_hash = None
-		self.loaded_modules = []
-		self.thread_pool = self.server.plugin_manager.thread_pool
-		self.load_lock = self.server.plugin_manager.plugin_load_lock
+		self.instance = None
+		self.old_instance = None
+		self.newly_loaded_module = []
+		# noinspection PyTypeChecker
+		self.meta_data = None  # type: MetaData
+		self.state = PluginState.UNINITIALIZED
+		self.event_listeners = {}  # type: Dict[Event, List[Callable]]
 
-	def call(self, func_name, args, forced_new_thread=False):
-		"""
-		Try to call a function named func_name in this plugin
-		If this plugin has not implement a callable object named func_name nothing will happen
-		If the argument count of the function is not matched an error message will be logged
-		Otherwise a function call task will be created in the thread pool of MCDR
+	def set_state(self, state):
+		self.state = state
 
-		:param str func_name: The name of the function to call
-		:param args: A tuple of args using during calling the function. It can also be a list of potential args and in
-		that case it will try to find an args in the list which has the same length of the accepted argument length of
-		the function the plugin implements
-		:type args: tuple or list[tuple]
-		:param forced_new_thread: If set to True, create a independent thread for the call
-		:return: A threading.Thread instance if forced_new_thread is True else None
-		:rtype: threading.Thread or None
-		"""
+	def assert_state(self, states, extra_message=None):
+		if self.state not in states:
+			msg = '{} state assertion failed, excepts {} but founded {}.'.format(repr(self), self.state, states)
+			if extra_message is not None:
+				msg += ' ' + extra_message
+			raise IllegalStateError(msg)
 
-		def argument_match(argument):
-			return required_args_length_min <= len(argument) and (len(argument) <= required_args_length_max or spec.varargs)
+	def get_meta_data(self) -> MetaData:
+		if self.meta_data is None:
+			raise IllegalCall('Meta data of plugin {} is not loaded. Plugin state = {}'.format(repr(self), self.state))
+		return self.meta_data
 
-		if hasattr(self.module, func_name):
-			func = self.module.__dict__[func_name]
-			if callable(func):
-				spec = getfullargspec(func)
-				required_args_length_max = len(spec.args)
-				required_args_length_min = required_args_length_max - len(spec.defaults) if spec.defaults else required_args_length_max
-				required_args_msg = (
-					'>={}'.format(required_args_length_min) if spec.varargs
-					else str(required_args_length_max) if required_args_length_max == required_args_length_min
-					else '{}-{}'.format(required_args_length_min, required_args_length_max)
-				)
-				correct_args = None
-				if type(args) is tuple:
-					excepted_args = str(len(args))
-					if argument_match(args):
-						correct_args = args
-				elif type(args) is list:
-					excepted_args = '[{}]'.format(', '.join([str(len(x)) for x in args]))
-					for args_candidate in args:
-						if argument_match(args_candidate):
-							correct_args = args_candidate
-							break
-				else:
-					raise TypeError('args should be a tuple or a list')
+	# -----------------
+	#   Load / Unload
+	# -----------------
 
-				if correct_args is None:
-					self.server.logger.error(self.server.t('plugin.call.args_not_matched', func_name, self.plugin_name, required_args_msg, excepted_args))
-				else:
-					return self.thread_pool.add_task(TaskData(func, correct_args, func_name, self), forced_new_thread=forced_new_thread)
+	def __load(self):
+		self.file_hash = self.get_file_hash()
+		with GLOBAL_LOAD_LOCK:
+			previous_modules = sys.modules.copy()
+			self.old_instance = self.instance
+			try:
+				self.instance = tool.load_source(self.file_path)
+			finally:
+				self.newly_loaded_module = [module for module in sys.modules if module not in previous_modules]
+		self.meta_data = MetaData(self, self.instance.__dict__.get('PLUGIN_METADATA'))
 
 	def load(self):
-		with self.load_lock:
-			self.old_module = self.module
-			previous_modules = sys.modules.copy()
-			self.module = tool.load_source(self.file_path)
-			self.loaded_modules = [module for module in sys.modules.copy() if module not in previous_modules]
-			self.help_messages = []
-			self.file_hash = self.get_file_hash()
-			self.server.logger.debug('Plugin {} loaded, file sha256 = {}'.format(self.file_path, self.file_hash))
+		self.assert_state({PluginState.UNINITIALIZED})
+		self.__load()
+		self.server.logger.debug('Plugin {} loaded from {}, file sha256 = {}'.format(self, self.file_path, self.file_hash))
+		self.set_state(PluginState.LOADED)
 
-	# on_load event sometimes cannot be called right after plugin gets loaded, so here's its separated method for the call
-	def call_on_load(self):
-		self.call('on_load', (self.server.server_interface, self.old_module))
+	def reload(self):
+		self.assert_state({PluginState.LOADED, PluginState.READY})
+		self.__load()
+		self.server.logger.debug('Plugin {} reloaded, file sha256 = {}'.format(self, self.file_hash))
 
 	def unload(self):
-		self.call('on_unload', (self.server.server_interface, ))
-		self.unload_modules()
-
-	def unload_modules(self):
-		with self.load_lock:
-			for module in self.loaded_modules:
+		self.assert_state({PluginState.UNINITIALIZED, PluginState.LOADED, PluginState.READY})
+		with GLOBAL_LOAD_LOCK:
+			for module in self.newly_loaded_module:
 				try:
-					del sys.modules[module]
+					sys.modules.pop(module)
 				except KeyError:
-					self.server.logger.critical('Module {} not found when unloading plugin {}'.format(module, self.plugin_name))
+					self.server.logger.critical('Module {} not found when unloading plugin {}'.format(module, repr(self)))
 				else:
-					self.server.logger.debug('Removed module {} when unloading plugin {}'.format(module, self.plugin_name))
-			self.loaded_modules = []
+					self.server.logger.debug('Removed module {} when unloading plugin {}'.format(module, repr(self)))
+			self.newly_loaded_module.clear()
+		self.set_state(PluginState.UNLOADED)
 
-	def add_help_message(self, prefix, message):
-		self.help_messages.append(HelpMessage(prefix, message, self.file_name))
-		self.server.logger.debug('Plugin Added help message "{}: {}"'.format(prefix, message))
+	# ---------------
+	#   Plugin File
+	# ---------------
+
+	def file_exists(self):
+		return os.path.isfile(self.file_path)
+
+	def file_changed(self):
+		return self.get_file_hash() != self.file_hash
 
 	def get_file_hash(self):
-		if os.path.isfile(self.file_path):
+		if self.file_exists():
 			with open(self.file_path, 'rb') as file:
 				return hashlib.sha256(file.read()).hexdigest()
 		else:
 			return None
 
-	def file_changed(self):
-		return self.get_file_hash() != self.file_hash
+	# -----------------
+	#   Magic Methods
+	# -----------------
 
+	def __str__(self):
+		meta_data = self.get_meta_data()
+		return '{}@{}'.format(meta_data.id, meta_data.id)
+
+	def __repr__(self):
+		return 'Plugin[{},path={},state={}]'.format(self.file_name, self.file_path, self.state)
+
+	# ----------------
+	#   Plugin Event
+	# ----------------
+
+	def receive_event(self, event: Event):
+		self.assert_state({PluginState.READY}, 'Only plugin in ready state is allowed to receive events')
+		for listener in self.event_listeners.get(event, ()):
+			listener()  # TODO

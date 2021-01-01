@@ -75,8 +75,8 @@ class CommandManager:
 				else:
 					self.send_command_not_found(info, '!!MCDR reload')
 
-		# !!MCDR status
-		elif len(args) == 2 and args[1] in ['status']:
+		# !!MCDR state
+		elif len(args) == 2 and args[1] in ['state']:
 			self.print_mcdr_status(info)
 
 		# !!MCDR permission

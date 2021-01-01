@@ -5,8 +5,8 @@ import re
 import time
 
 
-PLUGIN_INFO = {
-	'id': 'sample-plugin',  # if missing it will be the file name without .py suffix
+PLUGIN_METADATA = {
+	'id': 'sample-plugin',
 	'version': '1.0.0',
 	'name': 'Sample Plugin',
 	'description': 'Sample plugin for MCDR',

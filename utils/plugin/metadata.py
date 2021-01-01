@@ -1,35 +1,74 @@
 """
 Information of a plugin
 """
+from typing import List, Dict
+
 from utils import tool, constant
-from utils.plugin.version import Version
+from utils.plugin.version import Version, VersionParsingError, VersionRequirement
 
 
-class Metadata:
-	def __init__(self, file_name, data):
+class MetaData:
+	id: str
+	version: Version
+	name: str
+	description: str
+	author: str or List[str]
+	link: str
+	dependencies: Dict[str, VersionRequirement]
+
+	FALLBACK_VERSION = '0.0.0'
+
+	def __init__(self, plugin, data):
 		"""
-		:param str file_name: file name of the plugin
-		:param dict data: a dict with information of the plugin
+		:param Plugin plugin: the plugin which this metadata is belong to
+		:param dict or None data: a dict with information of the plugin
 		"""
-		self.__data = data
-		self.id = data.get('id', tool.remove_suffix(file_name, constant.PLUGIN_FILE_SUFFIX))
-		self.version = Version(data.get('version', '0'), allow_wildcard=False)
+		if not isinstance(data, dict):
+			data = {}
+		fallback_id = tool.remove_suffix(plugin.file_name, constant.PLUGIN_FILE_SUFFIX)
+		logger = plugin.server.logger
+
+		self.id = data.get('id', fallback_id)
 		self.name = data.get('name', self.id)
 		self.description = data.get('description', None)
 		self.author = data.get('author', None)
 		self.link = data.get('link', None)
-		self.depends = data.get('dependencies', {})
+
+		version_str = data.get('version')
+		if version_str:
+			try:
+				self.version = Version(version_str, allow_wildcard=False)
+			except VersionParsingError as e:
+				logger.warning('Version "{}" of {} is invalid ({}), ignore and use fallback version instead {}'.format(
+					version_str, repr(plugin), e, self.FALLBACK_VERSION
+				))
+				version_str = None
+		else:
+			logger.warning('{} doesn\'t specific a version, use fallback version {}'.format(repr(plugin), self.FALLBACK_VERSION))
+		if version_str is None:
+			self.version = Version(self.FALLBACK_VERSION)
+
+		self.dependencies = {}
+		for plugin_id, requirement in data.get('dependencies', {}).items():
+			try:
+				self.dependencies[plugin_id] = VersionRequirement(requirement)
+			except VersionParsingError as e:
+				plugin.server.logger.warning('Dependency "{}: {}" of {} is invalid ({}), ignore'.format(
+					plugin_id, requirement, repr(plugin), e
+				))
 
 
 __SAMPLE_METADATA = {
 	'id': 'example-plugin',  # If missing it will be the file name without .py suffix
-	'version': '1.0.0',  # If missing it will be '0'
+	'version': '1.0.0',  # If missing it will be '0.0.0'
 	'name': 'Sample Plugin',  # RText is allowed
 	'description': 'Sample plugin for MCDR',  # RText is allowed
-	'author': 'Fallen_Breath',
+	'author': [
+		'Fallen_Breath'
+	],
 	'link': 'https://github.com/Fallen-Breath/MCDReforged',
 	'dependencies': {
-		'MCDReforged': '>=0.10.0',
+		'MCDReforged': '>=1.0.0',
 		'PlayerInfoAPI': '*'
 	}
 }

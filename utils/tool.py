@@ -9,7 +9,6 @@ import sys
 import threading
 
 from utils import constant
-from utils.plugin.version import Version
 
 
 def start_thread(func, args, name=None):
@@ -71,25 +70,12 @@ def clean_console_color_code(text):
 	return re.sub(r'\033\[(\d+(;\d+)?)?m', '', text)
 
 
-def format_plugin_file_name(file_name):
-	file_name = remove_suffix(file_name, constant.DISABLED_PLUGIN_FILE_SUFFIX)
-	file_name = remove_suffix(file_name, constant.PLUGIN_FILE_SUFFIX)
-	file_name += constant.PLUGIN_FILE_SUFFIX
-	return file_name
+def format_plugin_file_path(file_path):
+	file_path = remove_suffix(file_path, constant.DISABLED_PLUGIN_FILE_SUFFIX)
+	file_path = remove_suffix(file_path, constant.PLUGIN_FILE_SUFFIX)
+	file_path += constant.PLUGIN_FILE_SUFFIX
+	return file_path
 
 
-def format_plugin_file_name_disabled(file_name):
-	return format_plugin_file_name(file_name) + constant.DISABLED_PLUGIN_FILE_SUFFIX
-
-
-def version_compare(v1, v2):
-	"""
-	Compare which version number is newer
-	suffixes begin with "-" like "-alpha", "-beta" will be ignored
-
-	:param str v1: a version number like "0.4.5-alpha" or "1.2.0.10086"
-	:param str v2: the same as v1
-	:return: a int. 1: v1 is newer; 0: they are the same; -1: v2 is newer
-	:rtype: int
-	"""
-	return Version(v1).compare_to(Version(v2))
+def format_plugin_file_path_disabled(file_path):
+	return format_plugin_file_path(file_path) + constant.DISABLED_PLUGIN_FILE_SUFFIX

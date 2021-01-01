@@ -55,7 +55,7 @@ decoding:
 
 # if any command input to the console starts with the string below, MCDR will not send this command to server's stdin
 # for example the default value is !! so these commands won't be sent to server's stdin
-#   !!test
+#   !!tests
 #   !!this is a command
 console_command_prefix: '!!'
 
@@ -75,6 +75,10 @@ disable_console_thread: false
 
 # If set to true, if MCDR detects a newer version it will automatically download it
 download_update: true
+
+
+plugin_folders:
+  - ./plugins
 
 
 # Debug mode switch. Don't change it to true unless necessary

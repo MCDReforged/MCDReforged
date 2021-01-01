@@ -17,7 +17,7 @@ class ForgeParser(VanillaParser):
 
 		# [18:26:03] [Server thread/INFO] [FML]: Unloading dimension 1
 		# [18:26:03] [Server thread/INFO] [minecraft/DedicatedServer]: Done (9.855s)! For help, type "help" or "?"
-		# [18:29:30] [Server thread/INFO] [minecraft/DedicatedServer]: <Steve> test
+		# [18:29:30] [Server thread/INFO] [minecraft/DedicatedServer]: <Steve> tests
 		time_data = re.search(r'\[[0-9]*:[0-9]*:[0-9.]*\] ', text).group()
 		elements = time_data[1:-2].split(':')
 		result.hour = int(elements[0])
@@ -27,20 +27,20 @@ class ForgeParser(VanillaParser):
 		text = text.replace(time_data, '', 1)
 		# [Server thread/INFO] [FML]: Unloading dimension 1
 		# [Server thread/INFO] [minecraft/DedicatedServer]: Done (9.855s)! For help, type "help" or "?"
-		# [Server thread/INFO] [minecraft/DedicatedServer]: <Steve> test
+		# [Server thread/INFO] [minecraft/DedicatedServer]: <Steve> tests
 
 		logging = re.match(r'^\[[{}]*?\] '.format(self.LOGGER_NAME_CHAR_SET), text).group()
 		result.logging_level = re.search(r'(?<=/)\w+(?=\] )', logging).group()
 		text = text.replace(logging, '', 1)
 		# [FML]: Unloading dimension 1
 		# [minecraft/DedicatedServer]: Done (9.855s)! For help, type "help" or "?"
-		# [minecraft/DedicatedServer]: <Steve> test
+		# [minecraft/DedicatedServer]: <Steve> tests
 
 		matched = re.match(r'^\[[{}]*\]: '.format(self.LOGGER_NAME_CHAR_SET), text).group()
 		text = text.replace(matched, '', 1)
 		# Unloading dimension 1
 		# Done (9.855s)! For help, type "help" or "?"
-		# <Steve> test
+		# <Steve> tests
 
 		result.player = re.match(r'<\w+> ', text)
 		if result.player is None:

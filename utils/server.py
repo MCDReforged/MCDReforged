@@ -9,7 +9,7 @@ from threading import Lock
 import psutil as psutil
 
 from utils import config, constant, logger, tool
-from utils.command_manager import CommandManager
+from utils.command.command_manager import CommandManager
 from utils.exception import *
 from utils.language_manager import LanguageManager
 from utils.parser_manager import ParserManager
@@ -101,7 +101,7 @@ class Server:
 	def load_plugins(self):
 		self.logger.info(self.plugin_manager.refresh_all_plugins())
 
-	# MCDR status
+	# MCDR state
 
 	def is_server_running(self):
 		return self.process is not None
@@ -127,7 +127,7 @@ class Server:
 
 	def set_server_status(self, status):
 		self.server_status = status
-		self.logger.debug('Server status has set to "{}"'.format(ServerStatus.translate_key(status)))
+		self.logger.debug('Server state has set to "{}"'.format(ServerStatus.translate_key(status)))
 
 	def should_keep_looping(self):
 		"""

@@ -13,6 +13,10 @@ class IllegalCall(RuntimeError):
 	pass
 
 
+class IllegalStateError(RuntimeError):
+	pass
+
+
 # The server has stopped, operation is illegal
 class ServerStopped(IllegalCall):
 	pass
