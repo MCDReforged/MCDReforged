@@ -1,6 +1,6 @@
 import unittest
 
-from utils.plugin.version import *
+from mcdr.plugin.version import *
 
 
 class VersionTest(unittest.TestCase):
