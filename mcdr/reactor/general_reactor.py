@@ -17,7 +17,8 @@ class GeneralReactor(AbstractReactor):
 			if self.server.permission_manager.get_info_permission_level(info) >= PermissionLevel.ADMIN:
 				self.server.command_manager.process_mcdr_command(info)
 			else:
-				self.server.server_interface.tell(info.player, RText(self.server.t('general_reactor.permission_denied'), color=RColor.red), is_plugin_call=False)
+				self.server.server_interface.tell(info.player, RText(
+					self.server.tr('general_reactor.permission_denied'), color=RColor.red), is_plugin_call=False)
 		else:
 			if info.source == InfoSource.CONSOLE and not info.content.startswith(self.server.config['console_command_prefix']):
 				self.server.send(info.content)  # send input command to server's stdin

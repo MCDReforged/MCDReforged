@@ -26,7 +26,7 @@ class CommandManager:
 	def __init__(self, server):
 		self.server = server
 		self.logger = self.server.logger
-		self.t = self.server.t
+		self.t = self.server.tr
 
 	def send_message(self, info, msg):
 		self.server.server_interface.reply(info, msg, is_plugin_call=False)
@@ -148,7 +148,7 @@ class CommandManager:
 		self.function_call(info, self.server.load_config, 'reload_config')
 
 	def reload_permission(self, info):
-		self.function_call(info, self.server.permission_manager.load, 'reload_permission')
+		self.function_call(info, self.server.permission_manager.load_permission_file, 'reload_permission')
 
 	def reload_all(self, info):
 		self.refresh_changed_plugins(info)

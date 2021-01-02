@@ -1,7 +1,6 @@
 """
 MCDR config file stuffs
 """
-
 import os
 
 import ruamel.yaml as yaml
@@ -14,14 +13,12 @@ class Config:
 		self.server = server
 		self.data = None
 		self.file_name = file_name
-		self.read_config()
 
 	def read_config(self):
 		if os.path.isfile(self.file_name):
 			with open(self.file_name, encoding='utf8') as file:
 				self.data = yaml.round_trip_load(file)
 		self.check_config()
-		self.server.logger.set_debug_options(self.data['debug'])
 
 	def save(self):
 		with open(self.file_name, 'w', encoding='utf8') as file:
@@ -36,16 +33,11 @@ class Config:
 			return True
 		return False
 
-	def is_debug_on(self):
-		for value in self.data['debug']:
-			if value is True:
-				return True
-		return False
-
 	def check_config(self):
 		flag = False
 		flag |= self.touch('language', 'en_us')
 		flag |= self.touch('working_directory', 'server')
+		flag |= self.touch('plugin_folders', ['./plugins'])
 		flag |= self.touch('start_command', '')
 		flag |= self.touch('parser', 'vanilla_parser')
 		flag |= self.touch('encoding', None)
@@ -63,9 +55,19 @@ class Config:
 			DebugOption.PLUGIN: False,
 		})
 		if flag:
-			for line in self.server.t('config.missing_config').splitlines():
+			for line in self.server.tr('config.missing_config').splitlines():
 				self.server.logger.warning(line)
 			self.save()
 
 	def __getitem__(self, item):
 		return self.data[item]
+
+	# -------------------------
+	#   Actual data analyzers
+	# -------------------------
+
+	def is_debug_on(self):
+		for value in self.data['debug']:
+			if value is True:
+				return True
+		return False

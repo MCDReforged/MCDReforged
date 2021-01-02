@@ -1,6 +1,6 @@
 import unittest
 
-from command_builder import *
+from mcdr.command.command_builder import *
 
 
 class MyTestCase(unittest.TestCase):

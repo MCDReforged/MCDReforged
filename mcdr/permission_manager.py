@@ -36,13 +36,12 @@ class PermissionManager:
 		self.server = server
 		self.permission_file = permission_file
 		self.data = None
-		self.load()
 
 	# --------------
 	# File Operating
 	# --------------
 
-	def load(self):
+	def load_permission_file(self):
 		"""
 		Load the permission file from disk
 		"""
@@ -50,7 +49,7 @@ class PermissionManager:
 			with open(self.permission_file, encoding='utf8') as file:
 				self.data = yaml.round_trip_load(file)
 		except:
-			self.server.logger.warning(self.server.t('permission_manager.load.fail', self.permission_file))
+			self.server.logger.warning(self.server.tr('permission_manager.load.fail', self.permission_file))
 			self.data = {
 				'default_level': 'user',
 				'owner': None,
@@ -153,7 +152,8 @@ class PermissionManager:
 		level = self.format_level_name(level)
 		self.data['default_level'] = level
 		self.save()
-		self.server.logger.info(self.server.t('permission_manager.set_default_permission_level.done', self.format_level_name(level)))
+		self.server.logger.info(
+			self.server.tr('permission_manager.set_default_permission_level.done', self.format_level_name(level)))
 
 	def get_permission_group_list(self, level):
 		"""
@@ -216,7 +216,8 @@ class PermissionManager:
 		"""
 		self.remove_player(player)
 		self.add_player(player, new_level)
-		self.server.logger.info(self.server.t('permission_manager.set_permission_level.done', player, self.format_level_name(new_level)))
+		self.server.logger.info(
+			self.server.tr('permission_manager.set_permission_level.done', player, self.format_level_name(new_level)))
 
 	def touch_player(self, player):
 		"""

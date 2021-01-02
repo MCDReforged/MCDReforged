@@ -17,7 +17,6 @@ class PluginThread(threading.Thread):
 		self.daemon = True
 		self.thread_pool = thread_pool
 		self.flag_interrupt = temporary
-		self.plugin = None
 		self.task = task
 		self.id = PluginThread.counter
 		PluginThread.counter += 1
@@ -36,16 +35,17 @@ class PluginThread(threading.Thread):
 				except queue.Empty:
 					pass
 				else:
-					self.plugin = task_data.plugin
-					self.setName('PT{}@{}'.format(self.id, self.plugin.get_meta_data().id))
+					plugin = task_data.plugin
+					plugin.plugin_manager.set_current_plugin(plugin)
+					self.setName('PT{}@{}'.format(self.id, plugin.get_meta_data().id))
 					self.thread_pool.working_count += 1
 					try:
 						task_data.callback()
 					except:
-						self.thread_pool.server.logger.exception('Error invoking listener in plugin {}'.format(self.plugin))
+						self.thread_pool.server.logger.exception('Error invoking listener in plugin {}'.format(plugin))
 					finally:
 						self.thread_pool.working_count -= 1
-						self.plugin = None
+						plugin.plugin_manager.set_current_plugin(None)
 						self.setName(self.original_name)
 				finally:
 					if self.flag_interrupt:

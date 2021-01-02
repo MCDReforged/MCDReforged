@@ -3,8 +3,10 @@ The place to reacting information from the server
 """
 import queue
 import time
+from typing import List
 
 from mcdr import constant
+from mcdr.reactor.abstract_reactor import AbstractReactor
 from mcdr.utils import misc_util, file_util
 
 
@@ -12,16 +14,14 @@ class ReactorManager:
 	def __init__(self, server):
 		self.server = server
 		self.info_queue = queue.Queue(maxsize=constant.MAX_INFO_QUEUE_SIZE)
-		self.reactors = self.load_reactor(constant.REACTOR_FOLDER)
 		self.last_queue_full_warn_time = None
+		self.reactors = []  # type: List[AbstractReactor]
 
-	def load_reactor(self, folder):
-		reactors = []
+	def load_reactors(self, folder):
 		for file in file_util.list_file(folder, constant.REACTOR_FILE_SUFFIX):
 			module = misc_util.load_source(file)
 			if callable(getattr(module, 'get_reactor', None)):
-				reactors.append(module.get_reactor(self.server))
-		return reactors
+				self.reactors.append(module.get_reactor(self.server))
 
 	def put_info(self, info):
 		try:
@@ -32,7 +32,7 @@ class ReactorManager:
 			if self.last_queue_full_warn_time is None or current_time - self.last_queue_full_warn_time >= constant.REACTOR_QUEUE_FULL_WARN_INTERVAL_SEC:
 				logging_method = self.server.logger.warning
 				self.last_queue_full_warn_time = current_time
-			logging_method(self.server.t('server.info_queue.full'))
+			logging_method(self.server.tr('server.info_queue.full'))
 
 	def run(self):
 		"""
@@ -48,4 +48,4 @@ class ReactorManager:
 					try:
 						reactor.react(info)
 					except:
-						self.server.logger.exception(self.server.t('server.react.error', type(reactor).__name__))
+						self.server.logger.exception(self.server.tr('server.react.error', type(reactor).__name__))

@@ -58,7 +58,7 @@ class VersionTest(unittest.TestCase):
 		self.assertIsInstance(VersionRequirement('1 2 3 4'), VersionRequirement)
 		self.assertIsInstance(VersionRequirement('~1.2.3-pre.4+build.5.6'), VersionRequirement)
 		self.assertIsInstance(VersionRequirement('<=2 >1 ~0'), VersionRequirement)
-		self.assertRaises(TypeError, VersionRequirement, 1234)
+		self.assertRaises(VersionParsingError, VersionRequirement, 1234)
 		self.assertRaises(VersionParsingError, VersionRequirement, '>')
 		self.assertRaises(VersionParsingError, VersionRequirement, '<>1')
 		self.assertRaises(VersionParsingError, VersionRequirement, '<=2 >1 ~0 ^')

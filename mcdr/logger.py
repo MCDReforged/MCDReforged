@@ -66,7 +66,7 @@ class Logger:
 		console_handler.setFormatter(self.console_fmt)
 
 		self.logger.addHandler(console_handler)
-		self.logger.setLevel(logging.INFO)
+		self.logger.setLevel(logging.DEBUG)
 
 		self.log = self.logger.log
 		self.info = self.logger.info
@@ -74,7 +74,6 @@ class Logger:
 		self.critical = self.logger.critical
 		self.error = self.logger.error
 		self.exception = self.logger.exception
-		self.set_level = self.logger.setLevel
 
 		self.debug_options = {}
 
@@ -88,7 +87,7 @@ class Logger:
 		if option is not None:
 			do_log |= self.debug_options.get(option, False)
 		if do_log:
-			self.logger.debug(args)
+			self.logger.debug(*args)
 
 	@property
 	def level(self):

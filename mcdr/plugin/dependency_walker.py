@@ -1,6 +1,10 @@
 import collections
 from typing import Dict, List
 
+from mcdr import constant
+from mcdr.logger import DebugOption
+from mcdr.plugin.metadata import MetaData
+from mcdr.plugin.plugin import Plugin
 from mcdr.plugin.version import VersionRequirement
 
 
@@ -24,12 +28,25 @@ class DependencyLoop(DependencyError):
 	pass
 
 
-class VisitingStatus:
+class VisitingState:
 	UNVISITED = 0
 	PASS = 1
 	FAIL = 2
 
 
+class FakePlugin:
+	def __init__(self):
+		self.file_name = constant.NAME + constant.PLUGIN_FILE_SUFFIX
+		self.meta_data = MetaData(self, {
+			'id': constant.NAME,
+			'version': constant.VERSION
+		})
+
+	def get_meta_data(self) -> MetaData:
+		return self.meta_data
+
+
+mcdr_fake_plugin = FakePlugin()
 WalkResult = collections.namedtuple('WalkResult', 'plugin_id success reason')
 
 
@@ -37,56 +54,60 @@ class DependencyWalker:
 	def __init__(self, plugin_manager):
 		from mcdr.plugin.plugin_manager import PluginManager
 		self.plugin_manager = plugin_manager  # type: PluginManager
-		self.visiting_status = {}  # type: Dict[str, int]
+		self.visiting_state = {}  # type: Dict[str, int]
 		self.visiting_plugins = set()
 		self.topo_order = []
 
 	def get_visiting_status(self, plugin_id):
-		value = self.visiting_status.get(plugin_id)
+		value = self.visiting_state.get(plugin_id)
 		if value is None:
-			value = VisitingStatus.UNVISITED
-			self.visiting_status[plugin_id] = value
+			value = VisitingState.UNVISITED
+			self.visiting_state[plugin_id] = value
 		return value
 
-	def ensure_loaded(self, plugin_id: str, requirement: VersionRequirement):
+	def ensure_loaded(self, plugin_id: str, requirement: VersionRequirement or None):
 		visiting_status = self.get_visiting_status(plugin_id)
-		if visiting_status == VisitingStatus.PASS:
+		if visiting_status == VisitingState.PASS:
 			return
-		if visiting_status == VisitingStatus.FAIL:
-			raise DependencyParentFail()
+		if visiting_status == VisitingState.FAIL:
+			raise DependencyParentFail('Parent dependency {} failed to check dependency'.format(plugin_id))
 
 		if plugin_id in self.visiting_plugins:
-			raise DependencyLoop()
+			raise DependencyLoop('Dependency loop at {}'.format(plugin_id))
 
 		self.visiting_plugins.add(plugin_id)
 		try:
-			plugin = self.plugin_manager.plugins.get(plugin_id)
+			plugin = self.get_plugin_from_id(plugin_id)
 			if plugin is None:
-				raise DependencyNotFound()
+				raise DependencyNotFound('Dependency {} not found'.format(plugin_id))
 			if requirement is not None and not requirement.accept(plugin.get_meta_data().version):
-				raise DependencyNotMet()
+				raise DependencyNotMet('Dependency {} does not meet version requirement {}'.format(plugin, requirement))
 
-			for dep_id, requirement in plugin.get_meta_data().dependencies.items():
-				try:
-					self.ensure_loaded(dep_id, requirement)
-				except DependencyError:
-					self.visiting_status[plugin_id] = VisitingStatus.FAIL
-					raise
-
-			self.visiting_status[plugin_id] = VisitingStatus.PASS
-			self.topo_order.append(plugin_id)
+			if not isinstance(plugin, FakePlugin):
+				for dep_id, req in plugin.get_meta_data().dependencies.items():
+					try:
+						self.ensure_loaded(dep_id, req)
+					except DependencyError as e:
+						self.visiting_state[plugin_id] = VisitingState.FAIL
+						self.plugin_manager.logger.debug('Set visiting state of {} to FAIL due to "{}"'.format(plugin_id, e), option=DebugOption.PLUGIN)
+						raise
+				self.topo_order.append(plugin_id)
+			self.visiting_state[plugin_id] = VisitingState.PASS
 		finally:
 			self.visiting_plugins.remove(plugin_id)
 
 	def walk(self) -> List[WalkResult]:
-		self.visiting_status.clear()
+		self.visiting_state.clear()
 		self.visiting_plugins.clear()
 		self.topo_order.clear()
 		fail_list = []
 		for plugin in self.plugin_manager.plugins.values():
 			try:
-				for dep_id, restriction in plugin.get_meta_data().dependencies.items():
-					self.ensure_loaded(dep_id, restriction)
+				plugin_id = plugin.get_meta_data().id
+				if self.get_visiting_status(plugin_id) is not VisitingState.FAIL:
+					self.ensure_loaded(plugin_id, None)
+				else:
+					raise DependencyError('Visiting state of plugin {} is already FAIL'.format(plugin))
 			except DependencyError as e:
 				fail_list.append((plugin.get_meta_data().id, e))
 		result = []
@@ -95,3 +116,8 @@ class DependencyWalker:
 		for plugin_id in self.topo_order:
 			result.append(WalkResult(plugin_id, True, None))
 		return result
+
+	def get_plugin_from_id(self, plugin_id: str) -> Plugin or FakePlugin:
+		if plugin_id == constant.NAME:
+			return mcdr_fake_plugin
+		return self.plugin_manager.plugins.get(plugin_id)

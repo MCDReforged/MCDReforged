@@ -2,8 +2,6 @@
 An interface class for plugins to control the server
 """
 
-
-import threading
 import time
 
 from mcdr.exception import *
@@ -367,9 +365,8 @@ class ServerInterface:
 		:type message: str or RTextBase
 		:raise: IllegalCall
 		"""
-		thread = threading.current_thread()
-		if type(getattr(thread, 'plugin', None)) is Plugin:
-			plugin = thread.plugin  # type: Plugin
+		plugin = self.__server.plugin_manager.get_current_plugin()
+		if isinstance(plugin, Plugin):
 			plugin.add_help_message(prefix, message)
 		else:
 			raise IllegalCall('Method add_help_message needs to be called in a MCDR provided thread')

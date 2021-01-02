@@ -9,6 +9,7 @@ from threading import RLock
 from typing import Dict, Callable, Set, Tuple, Any
 
 from mcdr.exception import IllegalCall, IllegalStateError
+from mcdr.logger import DebugOption
 from mcdr.plugin.metadata import MetaData
 from mcdr.plugin.plugin_event import PluginEvent, PluginEvents, LegacyPluginEvent
 from mcdr.plugin.plugin_thread import PluginThreadPool, TaskData
@@ -21,8 +22,9 @@ GLOBAL_LOAD_LOCK = RLock()
 class PluginState:
 	UNINITIALIZED = 0  # just created the instance
 	LOADED = 1         # loaded the .py file
-	READY = 2          # called on_load event
-	UNLOADED = 3       # unloaded
+	READY = 2          # called "on load" event, ready to do anything
+	UNLOADING = 3      # just removed from the plugin list, ready to call "on unload" event
+	UNLOADED = 4       # unloaded, should never access it
 
 
 class Plugin:
@@ -40,6 +42,7 @@ class Plugin:
 		self.meta_data = None  # type: MetaData
 		self.state = PluginState.UNINITIALIZED
 		self.event_listeners = {}  # type: Dict[PluginEvent, Set[Callable]]
+		self.help_messages = []
 
 	def get_meta_data(self) -> MetaData:
 		if self.meta_data is None:
@@ -64,7 +67,7 @@ class Plugin:
 
 	def assert_state(self, states, extra_message=None):
 		if not self.in_states(states):
-			msg = '{} state assertion failed, excepts {} but founded {}.'.format(repr(self), self.state, states)
+			msg = '{} state assertion failed, excepts {} but founded {}.'.format(repr(self), states, self.state)
 			if extra_message is not None:
 				msg += ' ' + extra_message
 			raise IllegalStateError(msg)
@@ -84,13 +87,18 @@ class Plugin:
 				self.newly_loaded_module = [module for module in sys.modules if module not in previous_modules]
 		self.meta_data = MetaData(self, self.instance.__dict__.get('PLUGIN_METADATA'))
 		self.event_listeners.clear()
+		self.help_messages = []
 
 	def load(self):
 		self.assert_state({PluginState.UNINITIALIZED})
 		self.__load_instance()
 		self.server.logger.debug('Plugin {} loaded from {}, file sha256 = {}'.format(self, self.file_path, self.file_hash))
 		self.set_state(PluginState.LOADED)
+
+	def ready(self):
+		self.assert_state({PluginState.LOADED})
 		self.register_legacy_listeners()
+		self.set_state(PluginState.READY)
 
 	def reload(self):
 		self.assert_state({PluginState.LOADED, PluginState.READY})
@@ -108,6 +116,10 @@ class Plugin:
 				else:
 					self.server.logger.debug('Removed module {} when unloading plugin {}'.format(module, repr(self)))
 			self.newly_loaded_module.clear()
+		self.set_state(PluginState.UNLOADING)
+
+	def remove(self):
+		self.assert_state({PluginState.UNLOADING})
 		self.set_state(PluginState.UNLOADED)
 
 	# ---------------
@@ -136,15 +148,15 @@ class Plugin:
 		return '{}@{}'.format(meta_data.id, meta_data.version)
 
 	def __repr__(self):
-		return 'Plugin[{},path={},state={}]'.format(self.file_name, self.file_path, self.state)
+		return 'Plugin[file={},path={},state={}]'.format(self.file_name, self.file_path, self.state)
 
 	# ----------------
 	#   Plugin Event
 	# ----------------
 
 	def register_listeners(self, event, callback):
-		self.assert_state([PluginState.LOADED, PluginState.READY], 'Only plugin in loaded or ready state is allowed to receive events')
-		self.server.logger.debug('{} registered event listener {} for event {}'.format(self, callback, event))
+		self.assert_state([PluginState.LOADED, PluginState.READY], 'Only plugin in loaded or ready state is allowed to register listeners')
+		self.server.logger.debug('{} registered event listener {} for event {}'.format(self, callback, event), option=DebugOption.PLUGIN)
 		listeners = self.event_listeners.get(event, set())
 		listeners.add(callback)
 		self.event_listeners[event] = listeners
@@ -157,6 +169,11 @@ class Plugin:
 					self.register_listeners(event, func)
 
 	def receive_event(self, event: PluginEvent, args: Tuple[Any, ...]):
-		self.assert_state({PluginState.READY}, 'Only plugin in ready state is allowed to receive events')
+		self.assert_state({PluginState.READY, PluginState.UNLOADING}, 'Only plugin in READY or UNLOADING state is allowed to receive events')
 		for listener in self.event_listeners.get(event, []):
 			self.thread_pool.add_task(TaskData(callback=lambda: listener(*args), plugin=self), False)
+
+	# let it be here
+	def add_help_message(self, prefix, message):
+		self.help_messages.append(HelpMessage(prefix, message, self.file_name))
+		self.server.logger.debug('Plugin Added help message "{}: {}"'.format(prefix, message))

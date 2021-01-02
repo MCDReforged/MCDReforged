@@ -12,7 +12,7 @@ PLUGIN_METADATA = {
 	'description': 'Sample plugin for MCDR',
 	'author': 'Fallen_Breath',
 	'link': 'https://github.com/Fallen-Breath/MCDReforged',
-	'depends': {
+	'dependencies': {
 		'MCDReforged': '>=0.10.0',
 	}
 }

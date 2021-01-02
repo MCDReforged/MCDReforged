@@ -1,8 +1,8 @@
 """
 Plugin Version
 """
-import collections
 import re
+from typing import List, Callable
 
 
 class Version:
@@ -52,7 +52,7 @@ class Version:
 			raise VersionParsingError('Empty version string')
 
 	def __str__(self):
-		version_str = '.'.format(self.component)
+		version_str = '.'.join(map(str, self.component))
 		if self.pre is not None:
 			version_str += '-' + self.pre
 		if self.build is not None:
@@ -97,38 +97,48 @@ class Version:
 			return 0
 
 
+class Criterion:
+	def __init__(self, opt: str, base_version: Version, criterion: Callable[[Version, Version], bool]):
+		self.opt = opt
+		self.base_version = base_version
+		self.criterion = criterion
+
+	def test(self, target: str or Version):
+		return self.criterion(self.base_version, target)
+
+
 class VersionRequirement:
-	PREFIXES = collections.OrderedDict([
-		('<=', lambda base: lambda ver: ver <= base),
-		('>=', lambda base: lambda ver: ver >= base),
-		('<', lambda base: lambda ver: ver < base),
-		('>', lambda base: lambda ver: ver > base),
-		('=', lambda base: lambda ver: ver == base),
-		('^', lambda base: lambda ver: ver >= base and ver[0] == base[0]),
-		('~', lambda base: lambda ver: ver >= base and ver[0] == base[0] and ver[1] == base[1]),
-	])
+	CRITERIONS = {
+		'<=': lambda base, ver: ver <= base,
+		'>=': lambda base, ver: ver >= base,
+		'<': lambda base, ver: ver < base,
+		'>': lambda base, ver: ver > base,
+		'=': lambda base, ver: ver == base,
+		'^': lambda base, ver: ver >= base and ver[0] == base[0],
+		'~': lambda base, ver: ver >= base and ver[0] == base[0] and ver[1] == base[1],
+	}
 
 	def __init__(self, requirements):
 		if not isinstance(requirements, str):
 			raise VersionParsingError('Requirements should be a str, not {}'.format(type(requirements).__name__))
-		self.__criterions = []
+		self.criterions = []  # type: List[Criterion]
 		for requirement in requirements.split(' '):
 			if len(requirement) > 0:
-				for prefix, func in self.PREFIXES.items():
+				for prefix, func in self.CRITERIONS.items():
 					if requirement.startswith(prefix):
-						criterion = func
+						opt = prefix
 						base_version = requirement[len(prefix):]
 						break
 				else:
-					criterion = self.PREFIXES['=']
+					opt = '='
 					base_version = requirement
-				self.__criterions.append(criterion(Version(base_version)))
+				self.criterions.append(Criterion(opt, Version(base_version), self.CRITERIONS[opt]))
 
 	def accept(self, version):
 		if isinstance(version, str):
 			version = Version(version)
-		for judge in self.__criterions:
-			if not judge(version):
+		for criterion in self.criterions:
+			if not criterion.test(version):
 				return False
 		return True
 

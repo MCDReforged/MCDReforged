@@ -77,10 +77,6 @@ disable_console_thread: false
 download_update: true
 
 
-plugin_folders:
-  - ./plugins
-
-
 # Debug mode switches. Don't change it to true unless necessary
 debug:
   all: false
@@ -88,3 +84,5 @@ debug:
   plugin: true
 
 # Missing options down below
+plugin_folders:
+- ./plugins_test

@@ -5,6 +5,7 @@ import importlib.machinery
 import importlib.util
 import sys
 import threading
+from typing import List, Any
 
 from mcdr.plugin.version import Version
 
@@ -16,7 +17,7 @@ def start_thread(func, args, name=None):
 	return thread
 
 
-def load_source(path, name=None):
+def load_source(path: str, name=None):
 	if name is None:
 		name = path.replace('/', '_').replace('\\', '_').replace('.', '_')
 	spec = importlib.util.spec_from_file_location(name, path)
@@ -26,9 +27,9 @@ def load_source(path, name=None):
 	return module
 
 
-def unique_list(l):
-	ret = list(set(l))
-	ret.sort(key=l.index)
+def unique_list(lst: List[Any]) -> List[Any]:
+	ret = list(set(lst))
+	ret.sort(key=lst.index)
 	return ret
 
 
