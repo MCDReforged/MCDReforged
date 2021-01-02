@@ -1,4 +1,4 @@
-from utils.rtext import *
+from mcdr.rtext import *
 
 
 def on_load(server, old):

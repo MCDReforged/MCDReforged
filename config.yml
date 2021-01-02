@@ -81,7 +81,10 @@ plugin_folders:
   - ./plugins
 
 
-# Debug mode switch. Don't change it to true unless necessary
-debug_mode: false
+# Debug mode switches. Don't change it to true unless necessary
+debug:
+  all: false
+  parser: false
+  plugin: true
 
 # Missing options down below

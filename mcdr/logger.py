@@ -10,21 +10,27 @@ import zipfile
 
 from colorlog import ColoredFormatter
 
-from mcdr import tool
 from mcdr.rtext import *
+from mcdr.utils import string_util, file_util
+
+
+class DebugOption:
+	ALL = 'all'
+	PARSER = 'parser'
+	PLUGIN = 'plugin'
 
 
 class MCColoredFormatter(ColoredFormatter):
 	def formatMessage(self, record):
 		text = super().formatMessage(record)
 		text = RColor.convert_minecraft_color_code(text)  # minecraft code -> console code
-		text = tool.clean_minecraft_color_code(text)  # clean the rest of minecraft codes
+		text = string_util.clean_minecraft_color_code(text)  # clean the rest of minecraft codes
 		return text
 
 
 class NoColorFormatter(logging.Formatter):
 	def formatMessage(self, record):
-		return tool.clean_console_color_code(super().formatMessage(record))
+		return string_util.clean_console_color_code(super().formatMessage(record))
 
 
 class Logger:
@@ -63,13 +69,26 @@ class Logger:
 		self.logger.setLevel(logging.INFO)
 
 		self.log = self.logger.log
-		self.debug = self.logger.debug
 		self.info = self.logger.info
 		self.warning = self.logger.warning
 		self.critical = self.logger.critical
 		self.error = self.logger.error
 		self.exception = self.logger.exception
 		self.set_level = self.logger.setLevel
+
+		self.debug_options = {}
+
+	def set_debug_options(self, debug_options: dict):
+		self.debug_options = debug_options
+		for key, value in debug_options.items():
+			self.logger.debug('Debug option {} is set to {}'.format(key, value))
+
+	def debug(self, *args, option=None):
+		do_log = self.debug_options.get(DebugOption.ALL, False)
+		if option is not None:
+			do_log |= self.debug_options.get(option, False)
+		if do_log:
+			self.logger.debug(args)
 
 	@property
 	def level(self):
@@ -78,7 +97,7 @@ class Logger:
 	def set_file(self, file_name):
 		if self.file_handler is not None:
 			self.logger.removeHandler(self.file_handler)
-		tool.touch_folder(os.path.dirname(file_name))
+		file_util.touch_folder(os.path.dirname(file_name))
 		if os.path.isfile(file_name):
 			modify_time = time.strftime('%Y-%m-%d', time.localtime(os.stat(file_name).st_mtime))
 			counter = 0

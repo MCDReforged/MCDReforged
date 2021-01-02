@@ -4,7 +4,8 @@ The place to reacting information from the server
 import queue
 import time
 
-from mcdr import constant, tool
+from mcdr import constant
+from mcdr.utils import misc_util, file_util
 
 
 class ReactorManager:
@@ -16,8 +17,8 @@ class ReactorManager:
 
 	def load_reactor(self, folder):
 		reactors = []
-		for file in tool.list_file(folder, constant.REACTOR_FILE_SUFFIX):
-			module = tool.load_source(file)
+		for file in file_util.list_file(folder, constant.REACTOR_FILE_SUFFIX):
+			module = misc_util.load_source(file)
 			if callable(getattr(module, 'get_reactor', None)):
 				reactors.append(module.get_reactor(self.server))
 		return reactors

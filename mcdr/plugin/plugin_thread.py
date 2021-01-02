@@ -6,7 +6,7 @@ import queue
 import threading
 
 
-TaskData = collections.namedtuple('TaskData', 'func args func_name plugin')
+TaskData = collections.namedtuple('TaskData', 'callback plugin')
 
 
 class PluginThread(threading.Thread):
@@ -32,17 +32,17 @@ class PluginThread(threading.Thread):
 						task_data = self.task
 						self.task = None
 					else:
-						task_data = self.thread_pool.task_queue.get(timeout=0.01)
+						task_data = self.thread_pool.task_queue.get(timeout=0.01)  # type: TaskData
 				except queue.Empty:
 					pass
 				else:
 					self.plugin = task_data.plugin
-					self.setName('PT{}-{}@{}'.format(self.id, task_data.func_name, self.plugin.plugin_name))
+					self.setName('PT{}@{}'.format(self.id, self.plugin.get_meta_data().id))
 					self.thread_pool.working_count += 1
 					try:
-						task_data.func(*task_data.args)
+						task_data.callback()
 					except:
-						self.thread_pool.server.logger.exception('Error calling {} in plugin {}'.format(task_data.func_name, self.plugin.plugin_name))
+						self.thread_pool.server.logger.exception('Error invoking listener in plugin {}'.format(self.plugin))
 					finally:
 						self.thread_pool.working_count -= 1
 						self.plugin = None
@@ -86,7 +86,7 @@ class PluginThreadPool:
 		the thread instance
 
 		:type task_data: TaskData
-		:param forced_new_thread: if set to true, it will force start a new thread for processing the task
+		:param bool forced_new_thread: if set to true, it will force start a new thread for processing the task
 		:return: None if forced_new_thread is False; The thread instance that is executing the task otherwise
 		:rtype: PluginThread or None
 		"""

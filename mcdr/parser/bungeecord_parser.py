@@ -1,13 +1,14 @@
 import os
 import re
 
-from mcdr import tool, constant
+from mcdr import constant
 from mcdr.info import Info
 from mcdr.parser.abstract_parser import AbstractParser
+from mcdr.utils import string_util
 
 
 class BungeecordParser(AbstractParser):
-	NAME = tool.remove_suffix(os.path.basename(__file__), constant.PARSER_FILE_SUFFIX)
+	NAME = string_util.remove_suffix(os.path.basename(__file__), constant.PARSER_FILE_SUFFIX)
 	STOP_COMMAND = 'end'
 
 	def __init__(self, parser_manager):

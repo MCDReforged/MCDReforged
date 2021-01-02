@@ -1,13 +1,13 @@
 MCDReforged Utils Document
 ---
 
-## rcon.py
+## rcon_connection.py
 
-`from utils.rcon import Rcon`
+`from utils.rcon import RconConnection`
 
 This is a simply rcon client
 
-### Rcon.Rcon(address, port, password, logger=None)
+### RconConnection.RconConnection(address, port, password, logger=None)
 
 Create a rcon client instance
 
@@ -19,15 +19,15 @@ Create a rcon client instance
 
 (Optional) `logger` is an instance of `logging.Logger`. It's used to output some warning information
 
-### Rcon.connect() -> bool
+### RconConnection.connect() -> bool
 
 Start a connection to the rcon server and tries to login. If login success it will return `True`, otherwise `False`
 
-### Rcon.disconnect()
+### RconConnection.disconnect()
 
 Disconnect from the server
 
-### Rcon.send_command(command, max_retry_time=3) -> str
+### RconConnection.send_command(command, max_retry_time=3) -> str
 
 Send a `str` command `command` to the rcon server
 

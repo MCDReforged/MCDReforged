@@ -1,8 +1,9 @@
 import os
 
-from mcdr import tool, constant
+from mcdr import constant
 from mcdr.parser import bukkit_parser
 from mcdr.parser.vanilla_parser import VanillaParser
+from mcdr.utils import string_util
 
 
 class BukkitParser14(VanillaParser):
@@ -10,7 +11,7 @@ class BukkitParser14(VanillaParser):
 	# idk why they did this
 	# paper is not included
 
-	NAME = tool.remove_suffix(os.path.basename(__file__), constant.PARSER_FILE_SUFFIX)
+	NAME = string_util.remove_suffix(os.path.basename(__file__), constant.PARSER_FILE_SUFFIX)
 
 	def __init__(self, parser_manager):
 		super().__init__(parser_manager)

@@ -26,7 +26,7 @@ class Packet:
 		return struct.pack('<i', len(data)) + data
 
 
-class Rcon:
+class RconConnection:
 	BUFFER_SIZE = 2**10
 
 	def __init__(self, address, port, password, logger=None):
@@ -111,7 +111,7 @@ class Rcon:
 
 
 if __name__ == '__main__':
-	rcon = Rcon('localhost', 25575, 'password')
+	rcon = RconConnection('localhost', 25575, 'password')
 	print('Login success? ', rcon.connect())
 	while True:
 		print('->', rcon.send_command(input('<- ')))

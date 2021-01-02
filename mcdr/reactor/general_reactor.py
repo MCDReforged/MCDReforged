@@ -6,6 +6,7 @@ import re
 
 from mcdr.info import InfoSource
 from mcdr.permission_manager import PermissionLevel
+from mcdr.plugin.plugin_event import PluginEvents
 from mcdr.reactor.abstract_reactor import AbstractReactor
 from mcdr.rtext import *
 
@@ -24,10 +25,10 @@ class GeneralReactor(AbstractReactor):
 			if info.is_user and info.content == '!!help':
 				self.server.command_manager.process_help_command(info)
 
-			self.server.plugin_manager.call('on_info', (self.server.server_interface, info))
+			self.server.plugin_manager.dispatch_event(PluginEvents.GENERAL_INFO, (self.server.server_interface, info))
 
 			if info.is_user:
-				self.server.plugin_manager.call('on_user_info', (self.server.server_interface, info))
+				self.server.plugin_manager.dispatch_event(PluginEvents.USER_INFO, (self.server.server_interface, info))
 
 
 def get_reactor(server):

@@ -8,18 +8,20 @@ from threading import Lock
 
 import psutil as psutil
 
-from mcdr import config, constant, logger, tool
+from mcdr import config, constant, logger
 from mcdr.command.command_manager import CommandManager
 from mcdr.exception import *
 from mcdr.language_manager import LanguageManager
 from mcdr.parser_manager import ParserManager
 from mcdr.permission_manager import PermissionManager
+from mcdr.plugin.plugin_event import PluginEvents
 from mcdr.plugin.plugin_manager import PluginManager
-from mcdr.rcon_manager import RconManager
+from mcdr.rcon.rcon_manager import RconManager
 from mcdr.reactor_manager import ReactorManager
 from mcdr.server_interface import ServerInterface
 from mcdr.server_status import ServerStatus
 from mcdr.update_helper import UpdateHelper
+from mcdr.utils import misc_util
 
 
 class Server:
@@ -53,7 +55,7 @@ class Server:
 		self.server_interface = ServerInterface(self)
 		self.command_manager = CommandManager(self)
 		self.plugin_manager = PluginManager(self, constant.PLUGIN_FOLDER)
-		self.load_plugins()
+		self.load_plugins()  # TODO: move this to the main loop
 		self.permission_manager = PermissionManager(self, constant.PERMISSION_FILE)
 		self.update_helper = UpdateHelper(self)
 		self.update_helper.check_update_start()
@@ -85,8 +87,8 @@ class Server:
 		self.language_manager.set_language(self.config['language'])
 		self.logger.info(self.t('server.load_config.language_set', self.config['language']))
 
-		self.logger.set_level(logging.DEBUG if self.config['debug_mode'] else logging.INFO)
-		if self.config['debug_mode']:
+		self.logger.set_level(logging.DEBUG if self.config.is_debug_on() else logging.INFO)
+		if self.config.is_debug_on():
 			self.logger.info(self.t('server.load_config.debug_mode_on'))
 
 		self.parser_manager.install_parser(self.config['parser'])
@@ -99,7 +101,8 @@ class Server:
 		self.connect_rcon()
 
 	def load_plugins(self):
-		self.logger.info(self.plugin_manager.refresh_all_plugins())
+		self.plugin_manager.refresh_all_plugins()
+		self.logger.info(self.plugin_manager.last_operation_result.to_rtext())
 
 	# MCDR state
 
@@ -185,7 +188,7 @@ class Server:
 		"""
 		def start_thread(target, args, name):
 			self.logger.debug('{} thread starting'.format(name))
-			thread = tool.start_thread(target, args, name)
+			thread = misc_util.start_thread(target, args, name)
 			return thread
 
 		if not self.start_server():
@@ -305,7 +308,7 @@ class Server:
 		self.flag_server_startup = False
 		self.flag_server_rcon_ready = False
 		self.set_server_status(ServerStatus.PRE_STOPPED)
-		self.plugin_manager.call('on_server_stop', (self.server_interface, return_code), wait=True)
+		self.plugin_manager.dispatch_event(PluginEvents.SERVER_STOP, (self.server_interface, return_code), wait=True)
 		if self.server_status == ServerStatus.PRE_STOPPED:
 			self.set_server_status(ServerStatus.STOPPED)
 
@@ -344,7 +347,7 @@ class Server:
 				self.logger.info(self.t('server.on_mcdr_stop.user_interrupted'))
 			else:
 				self.logger.info(self.t('server.on_mcdr_stop.server_stop'))
-			self.plugin_manager.call('on_mcdr_stop', (self.server_interface,), wait=True)
+			self.plugin_manager.dispatch_event(PluginEvents.MCDR_STOP, (self.server_interface,), wait=True)
 			self.logger.info(self.t('server.on_mcdr_stop.bye'))
 		except KeyboardInterrupt:  # I don't know why there sometimes will be a KeyboardInterrupt if MCDR is stopped by ctrl-c
 			pass

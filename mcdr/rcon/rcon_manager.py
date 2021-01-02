@@ -1,7 +1,7 @@
 """
 A more flexible interface for rcon support
 """
-from mcdr.rcon import Rcon
+from mcdr.rcon.rcon_connection import RconConnection
 
 
 # pack everything up and make sure no exception can escape
@@ -17,7 +17,7 @@ class RconManager:
 	def connect(self, address, port, password):
 		if self.is_running():
 			self.disconnect()
-		self.rcon = Rcon(address, port, str(password), self.logger)
+		self.rcon = RconConnection(address, port, str(password), self.logger)
 		try:
 			success = self.rcon.connect()
 		except Exception as e:

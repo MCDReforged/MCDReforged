@@ -199,7 +199,7 @@ Some invented wheels for plugin developers to use
 
 Current available: 
 
-- `utils/rcon.py`: A rcon client
+- `utils/rcon_connection.py`: A rcon client
 - `utils/rtext.py`: Minecraft advance text component
 
 [Plugin document](https://github.com/Fallen-Breath/MCDReforged/blob/master/doc/utils.md)

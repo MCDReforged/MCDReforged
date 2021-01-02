@@ -7,8 +7,9 @@ from threading import Lock
 
 import requests
 
-from mcdr import tool, constant
+from mcdr import constant
 from mcdr.rtext import *
+from mcdr.utils import misc_util, file_util
 
 
 class UpdateHelper:
@@ -18,7 +19,7 @@ class UpdateHelper:
 		self.update_lock = Lock()
 
 	def check_update_start(self):
-		self.check_update_thread = tool.start_thread(self.check_update_loop, (), type(self).__name__)
+		self.check_update_thread = misc_util.start_thread(self.check_update_loop, (), type(self).__name__)
 
 	def check_update_loop(self):
 		while True:
@@ -26,7 +27,7 @@ class UpdateHelper:
 			time.sleep(24 * 60 * 60)
 
 	def check_update(self, reply_func=None):
-		tool.start_thread(self.__check_update, (reply_func, ), 'CheckUpdate')
+		misc_util.start_thread(self.__check_update, (reply_func,), 'CheckUpdate')
 
 	def __check_update(self, reply_func):
 		acquired = self.update_lock.acquire(blocking=False)
@@ -54,7 +55,11 @@ class UpdateHelper:
 							.c(RAction.open_url, response['documentation_url'])
 						)
 			else:
-				cmp_result = tool.version_compare(constant.VERSION, latest_version)
+				try:
+					cmp_result = misc_util.version_compare(constant.VERSION, latest_version)
+				except:
+					self.server.logger.exception('Fail to compare between versions "{}" and "{}"'.format(constant.VERSION, latest_version))
+					return False
 				if cmp_result == 0:
 					reply_func(self.server.t('update_helper.check_update.is_already_latest'))
 				elif cmp_result == 1:
@@ -66,7 +71,7 @@ class UpdateHelper:
 					reply_func(self.server.t('update_helper.check_update.new_version_url', url))
 					if self.server.config['download_update']:
 						try:
-							tool.touch_folder(constant.UPDATE_DOWNLOAD_FOLDER)
+							file_util.touch_folder(constant.UPDATE_DOWNLOAD_FOLDER)
 							file_name = os.path.join(constant.UPDATE_DOWNLOAD_FOLDER, os.path.basename(download_url))
 							if not os.path.isfile(file_name):
 								file_data = requests.get(download_url, timeout=5)

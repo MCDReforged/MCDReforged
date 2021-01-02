@@ -7,8 +7,8 @@ import collections
 import ruamel.yaml as yaml
 from ruamel.yaml.comments import CommentedSeq
 
-from mcdr import tool
 from mcdr.info import *
+from mcdr.utils import misc_util
 
 
 class PermissionLevel:
@@ -70,7 +70,7 @@ class PermissionManager:
 		"""
 		for key, value in self.data.items():
 			if key in PermissionLevel.NAME and type(value) in [list, CommentedSeq]:
-				self.data[key] = tool.unique_list(self.data[key])
+				self.data[key] = misc_util.unique_list(self.data[key])
 
 	def empty_to_none(self):
 		"""

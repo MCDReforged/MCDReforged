@@ -3,8 +3,9 @@ Information of a plugin
 """
 from typing import List, Dict
 
-from mcdr import tool, constant
+from mcdr import constant
 from mcdr.plugin.version import Version, VersionParsingError, VersionRequirement
+from mcdr.utils import string_util
 
 
 class MetaData:
@@ -25,7 +26,7 @@ class MetaData:
 		"""
 		if not isinstance(data, dict):
 			data = {}
-		fallback_id = tool.remove_suffix(plugin.file_name, constant.PLUGIN_FILE_SUFFIX)
+		fallback_id = string_util.remove_suffix(plugin.file_name, constant.PLUGIN_FILE_SUFFIX)
 		logger = plugin.server.logger
 
 		self.id = data.get('id', fallback_id)
@@ -40,11 +41,11 @@ class MetaData:
 				self.version = Version(version_str, allow_wildcard=False)
 			except VersionParsingError as e:
 				logger.warning('Version "{}" of {} is invalid ({}), ignore and use fallback version instead {}'.format(
-					version_str, repr(plugin), e, self.FALLBACK_VERSION
+					version_str, plugin.get_name(), e, self.FALLBACK_VERSION
 				))
 				version_str = None
 		else:
-			logger.warning('{} doesn\'t specific a version, use fallback version {}'.format(repr(plugin), self.FALLBACK_VERSION))
+			logger.warning('{} doesn\'t specific a version, use fallback version {}'.format(plugin.get_name(), self.FALLBACK_VERSION))
 		if version_str is None:
 			self.version = Version(self.FALLBACK_VERSION)
 
@@ -54,7 +55,7 @@ class MetaData:
 				self.dependencies[plugin_id] = VersionRequirement(requirement)
 			except VersionParsingError as e:
 				plugin.server.logger.warning('Dependency "{}: {}" of {} is invalid ({}), ignore'.format(
-					plugin_id, requirement, repr(plugin), e
+					plugin_id, requirement, plugin.get_name(), e
 				))
 
 

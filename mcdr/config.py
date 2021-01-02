@@ -6,6 +6,8 @@ import os
 
 import ruamel.yaml as yaml
 
+from mcdr.logger import DebugOption
+
 
 class Config:
 	def __init__(self, server, file_name):
@@ -19,6 +21,7 @@ class Config:
 			with open(self.file_name, encoding='utf8') as file:
 				self.data = yaml.round_trip_load(file)
 		self.check_config()
+		self.server.logger.set_debug_options(self.data['debug'])
 
 	def save(self):
 		with open(self.file_name, 'w', encoding='utf8') as file:
@@ -31,6 +34,12 @@ class Config:
 			self.data[key] = default
 			self.server.logger.warning('Option "{}" missing, use default value "{}"'.format(key, default))
 			return True
+		return False
+
+	def is_debug_on(self):
+		for value in self.data['debug']:
+			if value is True:
+				return True
 		return False
 
 	def check_config(self):
@@ -48,7 +57,11 @@ class Config:
 		flag |= self.touch('rcon_password', 'password')
 		flag |= self.touch('disable_console_thread', False)
 		flag |= self.touch('download_update', True)
-		flag |= self.touch('debug_mode', False)
+		flag |= self.touch('debug', {
+			DebugOption.ALL: False,
+			DebugOption.PARSER: False,
+			DebugOption.PLUGIN: False,
+		})
 		if flag:
 			for line in self.server.t('config.missing_config').splitlines():
 				self.server.logger.warning(line)

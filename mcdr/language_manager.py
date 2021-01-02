@@ -6,7 +6,8 @@ import os
 
 import ruamel.yaml as yaml
 
-from mcdr import tool, constant
+from mcdr import constant
+from mcdr.utils import file_util, string_util
 
 
 class LanguageManager:
@@ -18,9 +19,9 @@ class LanguageManager:
 
 	def load_languages(self):
 		self.translations = {}
-		tool.touch_folder(self.language_folder)
-		for file in tool.list_file(self.language_folder, constant.LANGUAGE_FILE_SUFFIX):
-			language = tool.remove_suffix(os.path.basename(file), constant.LANGUAGE_FILE_SUFFIX)
+		file_util.touch_folder(self.language_folder)
+		for file in file_util.list_file(self.language_folder, constant.LANGUAGE_FILE_SUFFIX):
+			language = string_util.remove_suffix(os.path.basename(file), constant.LANGUAGE_FILE_SUFFIX)
 			with open(file, encoding='utf8') as f:
 				self.translations[language] = yaml.round_trip_load(f)
 

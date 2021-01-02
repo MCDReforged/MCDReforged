@@ -7,7 +7,7 @@ import re
 import threading
 import traceback
 
-from mcdr import constant, tool
+from mcdr import constant
 from mcdr.info import InfoSource
 from mcdr.permission_manager import PermissionLevel
 from mcdr.plugin.plugin import HelpMessage
@@ -281,7 +281,7 @@ class CommandManager:
 
 		self.send_message(info, self.t('command_manager.list_plugin.info_disabled_plugin', len(file_list_disabled)))
 		for file_name in file_list_disabled:
-			file_name = tool.remove_suffix(file_name, constant.DISABLED_PLUGIN_FILE_SUFFIX)
+			file_name = string_util.remove_suffix(file_name, constant.DISABLED_PLUGIN_FILE_SUFFIX)
 			texts = RTextList('§7-§r {}'.format(file_name))
 			if self.display_buttons(info):
 				texts.append(
@@ -303,14 +303,14 @@ class CommandManager:
 			self.send_message(info, texts)
 
 	def disable_plugin(self, info, file_name):
-		file_name = tool.format_plugin_file_name(file_name)
+		file_name = string_util.format_plugin_file_name(file_name)
 		if not os.path.isfile(os.path.join(self.server.plugin_manager.plugin_folder, file_name)):
 			self.send_message(info, self.t('command_manager.invalid_plugin_name', file_name))
 		else:
 			self.function_call(info, self.server.plugin_manager.disable_plugin, 'disable_plugin', func_args=(file_name, ), message_args=(file_name, ))
 
 	def load_plugin(self, info, file_name):
-		file_name = tool.format_plugin_file_name(file_name)
+		file_name = string_util.format_plugin_file_name(file_name)
 		if not os.path.isfile(os.path.join(self.server.plugin_manager.plugin_folder, file_name)):
 			self.send_message(info, self.t('command_manager.invalid_plugin_name', file_name))
 		else:
@@ -322,7 +322,7 @@ class CommandManager:
 				self.send_message(info, self.t('command_manager.load_plugin.{}'.format('success' if ret.return_value else 'fail'), file_name))
 
 	def enable_plugin(self, info, file_name):
-		file_name = tool.format_plugin_file_name_disabled(file_name)
+		file_name = string_util.format_plugin_file_name_disabled(file_name)
 		if not os.path.isfile(os.path.join(self.server.plugin_manager.plugin_folder, file_name)):
 			self.send_message(info, self.t('command_manager.invalid_plugin_name', file_name))
 		else:

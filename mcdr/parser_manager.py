@@ -2,8 +2,9 @@ import os
 
 from ruamel import yaml
 
-from mcdr import tool, constant
+from mcdr import constant
 from mcdr.parser.abstract_parser import AbstractParser
+from mcdr.utils import misc_util
 
 
 class ParserManager:
@@ -26,7 +27,7 @@ class ParserManager:
 		"""
 		file_name = os.path.join(self.parser_folder, parser_name + constant.PARSER_FILE_SUFFIX)
 		try:
-			return tool.load_source(file_name).get_parser(self)
+			return misc_util.load_source(file_name).get_parser(self)
 		except FileNotFoundError:
 			self.server.logger.exception(self.server.t('parser_manager.load_parser.file_not_found', parser_name))
 			raise
@@ -35,7 +36,7 @@ class ParserManager:
 		self.parser = self.load_parser(parser_name)
 
 	def update_death_message_list(self, cls):
-		bases = tool.get_all_base_class(cls)
+		bases = misc_util.get_all_base_class(cls)
 		names = [base.NAME for base in bases]
 		result = []
 		for name in names:

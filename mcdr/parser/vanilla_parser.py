@@ -1,12 +1,13 @@
 import os
 import re
 
-from mcdr import tool, constant
+from mcdr import constant
 from mcdr.parser.abstract_parser import AbstractParser
+from mcdr.utils import string_util
 
 
 class VanillaParser(AbstractParser):
-	NAME = tool.remove_suffix(os.path.basename(__file__), constant.PARSER_FILE_SUFFIX)
+	NAME = string_util.remove_suffix(os.path.basename(__file__), constant.PARSER_FILE_SUFFIX)
 	PLAYER_JOINED_PATTERN = re.compile(r'\w{1,16}\[(?:/[\d.:]+|local)\] logged in with entity id \d+ at \([\dE\-., ]+\)')
 	STOP_COMMAND = 'stop'
 	LOGGER_NAME_CHAR_SET = r'\w /\#\-'

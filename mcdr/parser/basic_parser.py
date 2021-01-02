@@ -5,13 +5,14 @@ The basic plain parser
 
 import os
 
-from mcdr import tool, constant
+from mcdr import constant
 from mcdr.info import Info
 from mcdr.parser.abstract_parser import AbstractParser
+from mcdr.utils import string_util
 
 
 class BasicParser(AbstractParser):
-	NAME = tool.remove_suffix(os.path.basename(__file__), constant.PARSER_FILE_SUFFIX)
+	NAME = string_util.remove_suffix(os.path.basename(__file__), constant.PARSER_FILE_SUFFIX)
 
 	def parse_server_stdout(self, text):
 		return self._parse_server_stdout_raw(text)

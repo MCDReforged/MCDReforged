@@ -1,7 +1,6 @@
 import collections
 from typing import Dict, List
 
-from mcdr.plugin.plugin_manager import PluginManager
 from mcdr.plugin.version import VersionRequirement
 
 
@@ -36,6 +35,7 @@ WalkResult = collections.namedtuple('WalkResult', 'plugin_id success reason')
 
 class DependencyWalker:
 	def __init__(self, plugin_manager):
+		from mcdr.plugin.plugin_manager import PluginManager
 		self.plugin_manager = plugin_manager  # type: PluginManager
 		self.visiting_status = {}  # type: Dict[str, int]
 		self.visiting_plugins = set()

@@ -199,7 +199,7 @@ def on_load(server, old_module):
 
 目前可以使用的有：
 
-- `utils/rcon.py`: 一个 rcon 客户端
+- `utils/rcon_connection.py`: 一个 rcon 客户端
 - `utils/rtext.py`: Minecraft 高级文本容器
 
 [工具文档](https://github.com/Fallen-Breath/MCDReforged/blob/master/doc/utils_cn.md)

@@ -1,12 +1,13 @@
 import os
 import re
 
-from mcdr import tool, constant
+from mcdr import constant
 from mcdr.parser.vanilla_parser import VanillaParser
+from mcdr.utils import string_util
 
 
 class BukkitParser(VanillaParser):
-	NAME = tool.remove_suffix(os.path.basename(__file__), constant.PARSER_FILE_SUFFIX)
+	NAME = string_util.remove_suffix(os.path.basename(__file__), constant.PARSER_FILE_SUFFIX)
 
 	# Fallen_Breath[/127.0.0.1:50099] logged in with entity id 11 at ([lobby]0.7133817548136454, 4.0, 5.481879061970788)
 	# Fake_player[local] logged in with entity id 11 at ([lobby]100.19, 22.33, 404.0)

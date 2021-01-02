@@ -2,16 +2,17 @@
 Plugin management
 """
 import os
-from typing import Callable, Dict, List, Optional
+from typing import Callable, Dict, List, Optional, Any, Tuple
 
-from mcdr import tool, constant
+from mcdr import constant
 from mcdr.exception import IllegalCall
 from mcdr.logger import Logger
 from mcdr.plugin.dependency_walker import DependencyWalker
 from mcdr.plugin.plugin import Plugin, PluginState
-from mcdr.plugin.plugin_event import PluginEvent
+from mcdr.plugin.plugin_event import PluginEvents, PluginEvent
 from mcdr.plugin.plugin_thread import PluginThreadPool
 from mcdr.rtext import RTextList, RText, RAction, RTextBase
+from mcdr.utils import file_util, string_util
 
 
 class SingleOperationResult:
@@ -63,17 +64,17 @@ class PluginOperationResult:
 				add_element(msg, RText(self.server.t(key, len(lst))).h('\n'.join(map(str, lst))))
 
 		message = RTextList()
-		add_if_not_empty(message, self.load_result.success_list, 'plugin_manager.__refresh_plugins.info_loaded_succeeded')
-		add_if_not_empty(message, self.unload_result.success_list, 'plugin_manager.__refresh_plugins.info_unloaded_succeeded')
-		add_if_not_empty(message, self.reload_result.success_list, 'plugin_manager.__refresh_plugins.info_reloaded_succeeded')
-		add_if_not_empty(message, self.load_result.failed_list, 'plugin_manager.__refresh_plugins.info_loaded_failed')
-		add_if_not_empty(message, self.unload_result.failed_list, 'plugin_manager.__refresh_plugins.info_unloaded_failed')
-		add_if_not_empty(message, self.reload_result.failed_list, 'plugin_manager.__refresh_plugins.info_reloaded_failed')
-		add_if_not_empty(message, self.dependency_check_result.failed_list, 'plugin_manager.__refresh_plugins.info_dependency_check_failed')
+		add_if_not_empty(message, self.load_result.success_list, 'plugin_operation_result.info_loaded_succeeded')
+		add_if_not_empty(message, self.unload_result.success_list, 'plugin_operation_result.info_unloaded_succeeded')
+		add_if_not_empty(message, self.reload_result.success_list, 'plugin_operation_result.info_reloaded_succeeded')
+		add_if_not_empty(message, self.load_result.failed_list, 'plugin_operation_result.info_loaded_failed')
+		add_if_not_empty(message, self.unload_result.failed_list, 'plugin_operation_result.info_unloaded_failed')
+		add_if_not_empty(message, self.reload_result.failed_list, 'plugin_operation_result.info_reloaded_failed')
+		add_if_not_empty(message, self.dependency_check_result.failed_list, 'plugin_operation_result.info_dependency_check_failed')
 		if message.empty():
-			add_element(message, self.server.t('plugin_manager.__refresh_plugins.info_none'))
+			add_element(message, self.server.t('plugin_operation_result.info_none'))
 		message.append(
-			RText(self.server.t('plugin_manager.__refresh_plugins.info_plugin_amount', len(self.plugin_manager.plugins))).
+			RText(self.server.t('plugin_operation_result.info_plugin_amount', len(self.plugin_manager.plugins))).
 				h('\n'.join(map(str, self.plugin_manager.plugins.values()))).
 				c(RAction.suggest_command, '!!MCDR plugin list')
 		)
@@ -95,8 +96,8 @@ class PluginManager:
 
 		self.thread_pool = PluginThreadPool(self.server, max_thread=constant.PLUGIN_THREAD_POOL_SIZE)
 
-		tool.touch_folder(self.plugin_folder)
-		tool.touch_folder(constant.PLUGIN_CONFIG_FOLDER)
+		file_util.touch_folder(self.plugin_folder)
+		file_util.touch_folder(constant.PLUGIN_CONFIG_FOLDER)
 
 	def contains_plugin_file(self, file_path):
 		return file_path in self.plugin_file_path
@@ -109,8 +110,9 @@ class PluginManager:
 	# ------------------------------------------------
 
 	def __add_plugin(self, plugin: Plugin):
-		self.plugins.pop(plugin.get_meta_data().id)
-		self.plugin_file_path.pop(plugin.file_path)
+		plugin_id = plugin.get_meta_data().id
+		self.plugins[plugin_id] = plugin
+		self.plugin_file_path[plugin.file_path] = plugin_id
 
 	def __remove_plugin(self, plugin: Plugin):
 		self.plugins.pop(plugin.get_meta_data().id)
@@ -132,9 +134,9 @@ class PluginManager:
 		plugin = Plugin(self, file_path)
 		try:
 			plugin.load()
-			self.logger.info(self.server.t('plugin_manager.load_plugin.success', repr(plugin)))
+			self.logger.info(self.server.t('plugin_manager.load_plugin.success', plugin.get_name()))
 		except:
-			self.logger.exception(self.server.t('plugin_manager.load_plugin.fail', repr(plugin)))
+			self.logger.exception(self.server.t('plugin_manager.load_plugin.fail', plugin.get_name()))
 			return None
 		else:
 			self.__add_plugin(plugin)
@@ -151,10 +153,10 @@ class PluginManager:
 		try:
 			plugin.unload()
 		except:
-			self.logger.exception(self.server.t('plugin_manager.unload_plugin.unload_fail', repr(plugin)))
+			self.logger.exception(self.server.t('plugin_manager.unload_plugin.unload_fail', plugin.get_name()))
 			ret = False
 		else:
-			self.logger.info(self.server.t('plugin_manager.unload_plugin.unload_success', repr(plugin)))
+			self.logger.info(self.server.t('plugin_manager.unload_plugin.unload_success', plugin.get_name()))
 			ret = True
 		finally:
 			self.__remove_plugin(plugin)
@@ -172,11 +174,11 @@ class PluginManager:
 		try:
 			plugin.reload()
 		except:
-			self.logger.exception(self.server.t('plugin_manager.reload_plugin.fail', repr(plugin)))
+			self.logger.exception(self.server.t('plugin_manager.reload_plugin.fail', plugin.get_name()))
 			self.__unload_plugin(plugin)
 			return False
 		else:
-			self.logger.info(self.server.t('plugin_manager.reload_plugin.success', repr(plugin)))
+			self.logger.info(self.server.t('plugin_manager.reload_plugin.success', plugin.get_name()))
 			return True
 
 	# -------------------------------
@@ -185,7 +187,7 @@ class PluginManager:
 
 	def collect_and_process_new_plugins(self, filter: Callable[[str], bool], specific: Optional[str] = None) -> SingleOperationResult:
 		result = SingleOperationResult()
-		file_list = tool.list_file(self.plugin_folder, constant.PLUGIN_FILE_SUFFIX) if specific is None else [specific]
+		file_list = file_util.list_file(self.plugin_folder, constant.PLUGIN_FILE_SUFFIX) if specific is None else [specific]
 		for file_path in file_list:
 			if not self.contains_plugin_file(file_path) and filter(file_path):
 				plugin = self.__load_plugin(file_path)
@@ -207,7 +209,7 @@ class PluginManager:
 		result = SingleOperationResult()
 		plugin_list = self.plugins.values() if specific is None else [specific]
 		for plugin in plugin_list:
-			if filter(plugin):
+			if plugin.in_states({PluginState.READY}) and filter(plugin):
 				result.record(plugin, self.__reload_plugin(plugin))
 				self.__reload_plugin(plugin)
 		return result
@@ -267,10 +269,10 @@ class PluginManager:
 		newly_loaded_plugins = {*load_result.success_list, *reload_result.success_list}
 		for plugin in dependency_check_result.success_list:
 			if plugin in newly_loaded_plugins:
-				plugin.receive_event(PluginEvent.ON_PLUGIN_LOAD)
+				plugin.receive_event(PluginEvents.PLUGIN_LOAD, (self.server.server_interface, plugin.old_instance))
 
 		for plugin in unload_result.success_list + unload_result.failed_list + reload_result.failed_list + dependency_check_result.failed_list:
-			plugin.receive_event(PluginEvent.ON_PLUGIN_UNLOAD)
+			plugin.receive_event(PluginEvents.PLUGIN_UNLOAD, (self.server.server_interface,))
 
 	def __refresh_plugins(self, reload_filter: Callable[[Plugin], bool]):
 		load_result = self.collect_and_process_new_plugins(lambda fp: True)
@@ -295,7 +297,7 @@ class PluginManager:
 		self.__post_plugin_process(reload_result=reload_result)
 
 	def enable_plugin(self, file_path):
-		new_file_path = tool.remove_suffix(file_path, constant.DISABLED_PLUGIN_FILE_SUFFIX)
+		new_file_path = string_util.remove_suffix(file_path, constant.DISABLED_PLUGIN_FILE_SUFFIX)
 		if os.path.isfile(file_path):
 			os.rename(file_path, new_file_path)
 			self.load_plugin(new_file_path)
@@ -312,3 +314,12 @@ class PluginManager:
 
 	def refresh_changed_plugins(self):
 		return self.__refresh_plugins(lambda plg: plg.file_changed())
+
+	# ----------------
+	#   Plugin Event
+	# ----------------
+
+	def dispatch_event(self, event: PluginEvent, args: Tuple[Any, ...], wait: bool = True):
+		# TODO: handle wait param
+		for plugin in self.plugins.values():
+			plugin.receive_event(event, args)

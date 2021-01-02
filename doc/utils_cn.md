@@ -1,13 +1,13 @@
 MCDReforged 工具文档
 ---
 
-## rcon.py
+## rcon_connection.py
 
-`from utils.rcon import Rcon`
+`from utils.rcon import RconConnection`
 
 这是一个简易的 rcon 客户端
 
-### Rcon.Rcon(address, port, password, logger=None)
+### RconConnection.RconConnection(address, port, password, logger=None)
 
 创建一个 rcon 客户端实例
 
@@ -19,15 +19,15 @@ MCDReforged 工具文档
 
 (可选) `logger` 是一个 `logging.Logger` 的实例。这是用于输出一些警告信息所用
 
-### Rcon.connect() -> bool
+### RconConnection.connect() -> bool
 
 开始连接至 rcon 服务器并尝试进行登录。如果登录成功，返回 `True`；否则返回 `False`
 
-### Rcon.disconnect()
+### RconConnection.disconnect()
 
 从 rcon 服务器端口
 
-### Rcon.send_command(command, max_retry_time=3) -> str
+### RconConnection.send_command(command, max_retry_time=3) -> str
 
 向服务器发送一个 `str` 类型的命令 `command`
 

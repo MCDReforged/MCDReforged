@@ -2,8 +2,9 @@ import os
 import re
 import time
 
-from mcdr import tool, constant
+from mcdr import constant
 from mcdr.info import InfoSource, Info
+from mcdr.utils import string_util
 
 '''
 AbstractParser
@@ -19,7 +20,7 @@ AbstractParser
 
 
 class AbstractParser:
-	NAME = tool.remove_suffix(os.path.basename(__file__), constant.PARSER_FILE_SUFFIX)
+	NAME = string_util.remove_suffix(os.path.basename(__file__), constant.PARSER_FILE_SUFFIX)
 	STOP_COMMAND = ''
 
 	def __init__(self, parser_manager):
@@ -50,7 +51,7 @@ class AbstractParser:
 		:return: Trimmed line
 		:rtype: str
 		"""
-		return tool.clean_console_color_code(text)
+		return string_util.clean_console_color_code(text)
 
 	@staticmethod
 	def parse_console_command(text):
