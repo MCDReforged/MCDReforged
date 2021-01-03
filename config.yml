@@ -85,4 +85,4 @@ debug:
 
 # Missing options down below
 plugin_folders:
-- ./plugins_test
+- plugins_test

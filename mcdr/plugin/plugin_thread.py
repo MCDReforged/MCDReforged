@@ -42,7 +42,7 @@ class PluginThread(threading.Thread):
 					try:
 						task_data.callback()
 					except:
-						self.thread_pool.server.logger.exception('Error invoking listener in plugin {}'.format(plugin))
+						self.thread_pool.mcdr_server.logger.exception('Error invoking listener in plugin {}'.format(plugin))
 					finally:
 						self.thread_pool.working_count -= 1
 						plugin.plugin_manager.set_current_plugin(None)
@@ -60,8 +60,8 @@ class PluginThread(threading.Thread):
 
 
 class PluginThreadPool:
-	def __init__(self, server, max_thread):
-		self.server = server
+	def __init__(self, mcdr_server, max_thread):
+		self.mcdr_server = mcdr_server
 		self.threads = []
 		self.threads_write_lock = threading.Lock()
 		self.task_queue = queue.Queue()

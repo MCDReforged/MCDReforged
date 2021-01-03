@@ -134,7 +134,7 @@ class VersionRequirement:
 					base_version = requirement
 				self.criterions.append(Criterion(opt, Version(base_version), self.CRITERIONS[opt]))
 
-	def accept(self, version):
+	def accept(self, version: Version or str):
 		if isinstance(version, str):
 			version = Version(version)
 		for criterion in self.criterions:

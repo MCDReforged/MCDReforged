@@ -1,34 +1,34 @@
-server.on_config_changed.language_set          : Language has set to {0}
-server.on_config_changed.debug_mode_on         : Debug mode on
-server.on_config_changed.parser_set            : Parser has set to {0}
-server.on_config_changed.encoding_decoding_set : Encoding / Decoding method has set to {0} / {1}
-server.start_server.already_interrupted  : MCDR has already been interrupted
-server.start_server.start_twice          : Server cannot start twice
-server.start_server.starting             : Starting the server with command "{0}"
-server.start_server.start_fail           : Fail to start the server
-server.start_server.pid_info             : Server is running at PID {0}
-server.stop.stop_when_stopped            : Server cannot stop when terminated
-server.stop.stop_fail                    : Error stopping server, force the server to stop now
-server.kill_server.killing               : Killing server process group
-server.kill_server.process_killed        : Process {0} killed
-server.send.send_when_stopped            : Server has been terminated, cannot send command to its stdin
-server.receive.wait_stop                 : Waiting for server process to stop
-server.receive.decode_fail               : Fail to decode text "{0}"
-server.on_server_stop.show_stopcode      : Server process stopped with code {0}
-server.tick.pre_parse_fail               : Fail to pre parse text from stdout of the server, use original text
-server.run.error                         : Error ticking MCDR
-server.on_mcdr_stop.user_interrupted     : MCDR has been interrupted by user
-server.on_mcdr_stop.server_stop          : Server stopped
-server.on_mcdr_stop.bye                  : bye
-server.on_mcdr_stop.stop_error           : Error stopping MCDR, ignored that and exiting
-server.console_input.parse_fail          : Error parsing console command "{0}"
-server.console_input.error               : Error ticking console thread
-server.react.error                       : Error processing reactor {0}
-server.info_queue.full                   : Info queue has been full, is the server spamming? Ignore incoming info!
+mcdr_server.on_config_changed.language_set          : Language has set to {0}
+mcdr_server.on_config_changed.debug_mode_on         : Debug mode on
+mcdr_server.on_config_changed.parser_set            : Parser has set to {0}
+mcdr_server.on_config_changed.encoding_decoding_set : Encoding / Decoding method has set to {0} / {1}
+mcdr_server.start_server.already_interrupted        : MCDR has already been interrupted
+mcdr_server.start_server.start_twice                : Server cannot start twice
+mcdr_server.start_server.starting                   : Starting the server with command "{0}"
+mcdr_server.start_server.start_fail                 : Fail to start the server
+mcdr_server.start_server.pid_info                   : Server is running at PID {0}
+mcdr_server.stop.stop_when_stopped                  : Server cannot stop when terminated
+mcdr_server.stop.stop_fail                          : Error stopping server, force the server to stop now
+mcdr_server.kill_server.killing                     : Killing server process group
+mcdr_server.kill_server.process_killed              : Process {0} killed
+mcdr_server.send.send_when_stopped                  : Server has been terminated, cannot send command to its stdin
+mcdr_server.receive.wait_stop                       : Waiting for server process to stop
+mcdr_server.receive.decode_fail                     : Fail to decode text "{0}"
+mcdr_server.on_server_stop.show_stopcode            : Server process stopped with code {0}
+mcdr_server.tick.pre_parse_fail                     : Fail to pre parse text from stdout of the server, use original text
+mcdr_server.run.error                               : Error ticking MCDR
+mcdr_server.on_mcdr_stop.user_interrupted           : MCDR has been interrupted by user
+mcdr_server.on_mcdr_stop.server_stop                : Server stopped
+mcdr_server.on_mcdr_stop.bye                        : bye
+mcdr_server.on_mcdr_stop.stop_error                 : Error stopping MCDR, ignored that and exiting
+mcdr_server.console_input.parse_fail                : Error parsing console command "{0}"
+mcdr_server.console_input.error                     : Error ticking console thread
+mcdr_server.react.error                             : Error processing reactor {0}
+mcdr_server.info_queue.full                         : Info queue has been full, is the server spamming? Ignore incoming info!
 config.missing_config: |
   Some options in the config file is missing, use default value
   Remember to check and update the config file as soon as possible
-command_manager.help_message:
+command_manager.help_message: |
   §7!!MCDR§r: Show this message
   §7!!MCDR reload§r: Show reload command help message
   §7!!MCDR status§r: Show MCDR status

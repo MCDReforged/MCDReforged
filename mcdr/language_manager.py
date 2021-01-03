@@ -11,8 +11,8 @@ from mcdr.utils import file_util, string_util
 
 
 class LanguageManager:
-	def __init__(self, server, language_folder):
-		self.server = server
+	def __init__(self, mcdr_server, language_folder):
+		self.mcdr_server = mcdr_server
 		self.language_folder = language_folder
 		self.language = None
 		self.translations = {}
@@ -38,7 +38,7 @@ class LanguageManager:
 		try:
 			return self.translations[language][text]
 		except:
-			self.server.logger.error('Error translate text "{}" to language {}'.format(text, language))
+			self.mcdr_server.logger.error('Error translate text "{}" to language {}'.format(text, language))
 			return text
 
 	def set_language(self, language):

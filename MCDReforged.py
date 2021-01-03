@@ -12,7 +12,7 @@ def main():
 	print('{} is open source, u can find it here: {}'.format(constant.NAME, constant.GITHUB_URL))
 	print('{} is still in development, it may not work well'.format(constant.NAME))
 	try:
-		server = Server()
+		server = MCDReforgedServer()
 	except:
 		print('Fail to initialize {}'.format(constant.NAME_SHORT))
 		raise
@@ -33,7 +33,7 @@ try:
 
 	try:
 		from mcdr import constant
-		from mcdr.server import Server
+		from mcdr.mcdr_server import MCDReforgedServer
 	except ModuleNotFoundError:
 		print('It seems that you have not installed all require modules')
 		raise

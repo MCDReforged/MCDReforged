@@ -11,8 +11,8 @@ from mcdr.utils import misc_util, file_util
 
 
 class ReactorManager:
-	def __init__(self, server):
-		self.server = server
+	def __init__(self, mcdr_server):
+		self.mcdr_server = mcdr_server
 		self.info_queue = queue.Queue(maxsize=constant.MAX_INFO_QUEUE_SIZE)
 		self.last_queue_full_warn_time = None
 		self.reactors = []  # type: List[AbstractReactor]
@@ -21,24 +21,24 @@ class ReactorManager:
 		for file in file_util.list_file(folder, constant.REACTOR_FILE_SUFFIX):
 			module = misc_util.load_source(file)
 			if callable(getattr(module, 'get_reactor', None)):
-				self.reactors.append(module.get_reactor(self.server))
+				self.reactors.append(module.get_reactor(self.mcdr_server))
 
 	def put_info(self, info):
 		try:
 			self.info_queue.put_nowait(info)
 		except queue.Full:
 			current_time = time.time()
-			logging_method = self.server.logger.debug
+			logging_method = self.mcdr_server.logger.debug
 			if self.last_queue_full_warn_time is None or current_time - self.last_queue_full_warn_time >= constant.REACTOR_QUEUE_FULL_WARN_INTERVAL_SEC:
-				logging_method = self.server.logger.warning
+				logging_method = self.mcdr_server.logger.warning
 				self.last_queue_full_warn_time = current_time
-			logging_method(self.server.tr('server.info_queue.full'))
+			logging_method(self.mcdr_server.tr('mcdr_server.info_queue.full'))
 
 	def run(self):
 		"""
 		the thread for looping to react to parsed info
 		"""
-		while self.server.should_keep_looping():
+		while self.mcdr_server.should_keep_looping():
 			try:
 				info = self.info_queue.get(timeout=0.01)
 			except queue.Empty:
@@ -48,4 +48,4 @@ class ReactorManager:
 					try:
 						reactor.react(info)
 					except:
-						self.server.logger.exception(self.server.tr('server.react.error', type(reactor).__name__))
+						self.mcdr_server.logger.exception(self.mcdr_server.tr('mcdr_server.react.error', type(reactor).__name__))

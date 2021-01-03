@@ -8,8 +8,8 @@ from mcdr.utils import misc_util
 
 
 class ParserManager:
-	def __init__(self, server, parser_folder):
-		self.server = server
+	def __init__(self, mcdr_server, parser_folder):
+		self.mcdr_server = mcdr_server
 		self.parser_folder = parser_folder
 		self.parser = AbstractParser(self)
 		self.death_message_data = None
@@ -32,7 +32,7 @@ class ParserManager:
 		try:
 			return misc_util.load_source(file_name).get_parser(self)
 		except FileNotFoundError:
-			self.server.logger.exception(self.server.tr('parser_manager.load_parser.file_not_found', parser_name))
+			self.mcdr_server.logger.exception(self.mcdr_server.tr('parser_manager.load_parser.file_not_found', parser_name))
 			raise
 
 	def install_parser(self, parser_name):
@@ -47,7 +47,7 @@ class ParserManager:
 				result.extend(self.death_message_data[name])
 			except:
 				pass
-		self.server.logger.debug('Search death message regular expressions for {} in {}, returned a list with length {}'.format(cls.NAME, ', '.join(names), len(result)))
+		self.mcdr_server.logger.debug('Search death message regular expressions for {} in {}, returned a list with length {}'.format(cls.NAME, ', '.join(names), len(result)))
 		self.death_message_dict[cls] = result
 
 	def get_stop_command(self):
@@ -64,7 +64,7 @@ class ParserManager:
 			with open(constant.RE_DEATH_MESSAGE_FILE, 'r', encoding='utf8') as file:
 				self.death_message_data = yaml.round_trip_load(file)
 		except:
-			self.server.logger.exception(self.server.tr('parser_manager.load_re_death_message.fail'))
+			self.mcdr_server.logger.exception(self.mcdr_server.tr('parser_manager.load_re_death_message.fail'))
 			self.death_message_data = []
 
 	# return a list of regular expression for death message matching

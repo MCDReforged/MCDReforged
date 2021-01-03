@@ -32,8 +32,8 @@ class PermissionLevel:
 
 
 class PermissionManager:
-	def __init__(self, server, permission_file):
-		self.server = server
+	def __init__(self, mcdr_server, permission_file):
+		self.mcdr_server = mcdr_server
 		self.permission_file = permission_file
 		self.data = None
 
@@ -49,7 +49,7 @@ class PermissionManager:
 			with open(self.permission_file, encoding='utf8') as file:
 				self.data = yaml.round_trip_load(file)
 		except:
-			self.server.logger.warning(self.server.tr('permission_manager.load.fail', self.permission_file))
+			self.mcdr_server.logger.warning(self.mcdr_server.tr('permission_manager.load.fail', self.permission_file))
 			self.data = {
 				'default_level': 'user',
 				'owner': None,
@@ -152,8 +152,8 @@ class PermissionManager:
 		level = self.format_level_name(level)
 		self.data['default_level'] = level
 		self.save()
-		self.server.logger.info(
-			self.server.tr('permission_manager.set_default_permission_level.done', self.format_level_name(level)))
+		self.mcdr_server.logger.info(
+			self.mcdr_server.tr('permission_manager.set_default_permission_level.done', self.format_level_name(level)))
 
 	def get_permission_group_list(self, level):
 		"""
@@ -185,7 +185,7 @@ class PermissionManager:
 		if level_name is None:
 			level_name = self.get_default_permission_level()
 		self.get_permission_group_list(level_name).append(player)
-		self.server.logger.debug('Added player {} with permission level {}'.format(player, level_name))
+		self.mcdr_server.logger.debug('Added player {} with permission level {}'.format(player, level_name))
 		self.save()
 		return self.format_level_value(level_name)
 
@@ -202,7 +202,7 @@ class PermissionManager:
 			if level is None:
 				break
 			self.get_permission_group_list(level).remove(player)
-		self.server.logger.debug('Removed player {}'.format(player))
+		self.mcdr_server.logger.debug('Removed player {}'.format(player))
 		self.save()
 
 	def set_permission_level(self, player, new_level):
@@ -216,8 +216,8 @@ class PermissionManager:
 		"""
 		self.remove_player(player)
 		self.add_player(player, new_level)
-		self.server.logger.info(
-			self.server.tr('permission_manager.set_permission_level.done', player, self.format_level_name(new_level)))
+		self.mcdr_server.logger.info(
+			self.mcdr_server.tr('permission_manager.set_permission_level.done', player, self.format_level_name(new_level)))
 
 	def touch_player(self, player):
 		"""

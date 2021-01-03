@@ -27,6 +27,7 @@ class MetaData:
 		if not isinstance(data, dict):
 			data = {}
 		fallback_id = string_util.remove_suffix(plugin.file_name, constant.PLUGIN_FILE_SUFFIX)
+		logger = plugin.mcdr_server.logger
 
 		self.id = data.get('id', fallback_id)
 		self.name = data.get('name', self.id)
@@ -39,12 +40,12 @@ class MetaData:
 			try:
 				self.version = Version(version_str, allow_wildcard=False)
 			except VersionParsingError as e:
-				plugin.server.logger.warning('Version "{}" of {} is invalid ({}), ignore and use fallback version instead {}'.format(
+				logger.warning('Version "{}" of {} is invalid ({}), ignore and use fallback version instead {}'.format(
 					version_str, plugin.get_name(), e, self.FALLBACK_VERSION
 				))
 				version_str = None
 		else:
-			plugin.server.logger.warning('{} doesn\'t specific a version, use fallback version {}'.format(plugin.get_name(), self.FALLBACK_VERSION))
+			logger.warning('{} doesn\'t specific a version, use fallback version {}'.format(plugin.get_name(), self.FALLBACK_VERSION))
 		if version_str is None:
 			self.version = Version(self.FALLBACK_VERSION)
 
@@ -53,7 +54,7 @@ class MetaData:
 			try:
 				self.dependencies[plugin_id] = VersionRequirement(requirement)
 			except VersionParsingError as e:
-				plugin.server.logger.warning('Dependency "{}: {}" of {} is invalid ({}), ignore'.format(
+				logger.warning('Dependency "{}: {}" of {} is invalid ({}), ignore'.format(
 					plugin_id, requirement, plugin.get_name(), e
 				))
 

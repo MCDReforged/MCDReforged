@@ -30,7 +30,7 @@ class PluginState:
 class Plugin:
 	def __init__(self, plugin_manager, file_path):
 		self.plugin_manager = plugin_manager
-		self.server = plugin_manager.server
+		self.mcdr_server = plugin_manager.mcdr_server
 		self.file_path = file_path
 		self.file_name = os.path.basename(file_path)
 		self.file_hash = None
@@ -90,7 +90,7 @@ class Plugin:
 	def load(self):
 		self.assert_state({PluginState.UNINITIALIZED})
 		self.__load_instance()
-		self.server.logger.debug('Plugin {} loaded from {}, file sha256 = {}'.format(self, self.file_path, self.file_hash))
+		self.mcdr_server.logger.debug('Plugin {} loaded from {}, file sha256 = {}'.format(self, self.file_path, self.file_hash))
 		self.set_state(PluginState.LOADED)
 
 	def ready(self):
@@ -101,7 +101,7 @@ class Plugin:
 	def reload(self):
 		self.assert_state({PluginState.LOADED, PluginState.READY})
 		self.__load_instance()
-		self.server.logger.debug('Plugin {} reloaded, file sha256 = {}'.format(self, self.file_hash))
+		self.mcdr_server.logger.debug('Plugin {} reloaded, file sha256 = {}'.format(self, self.file_hash))
 
 	def unload(self):
 		self.assert_state({PluginState.UNINITIALIZED, PluginState.LOADED, PluginState.READY})
@@ -110,9 +110,9 @@ class Plugin:
 				try:
 					sys.modules.pop(module)
 				except KeyError:
-					self.server.logger.critical('Module {} not found when unloading plugin {}'.format(module, repr(self)))
+					self.mcdr_server.logger.critical('Module {} not found when unloading plugin {}'.format(module, repr(self)))
 				else:
-					self.server.logger.debug('Removed module {} when unloading plugin {}'.format(module, repr(self)))
+					self.mcdr_server.logger.debug('Removed module {} when unloading plugin {}'.format(module, repr(self)))
 			self.newly_loaded_module.clear()
 		self.set_state(PluginState.UNLOADING)
 
@@ -162,13 +162,13 @@ class Plugin:
 	def add_listener(self, event: PluginEvent or str, callback):
 		self.assert_state([PluginState.LOADED, PluginState.READY], 'Only plugin in loaded or ready state is allowed to register listeners')
 		self.registry.register_listener(event, callback)
-		self.server.logger.debug('{} registered event listener {} for event {}'.format(self, callback, event), option=DebugOption.PLUGIN)
+		self.mcdr_server.logger.debug('{} registered event listener {} for event {}'.format(self, callback, event), option=DebugOption.PLUGIN)
 
 	def add_help_message(self, prefix: str, help_message: str or RTextBase):
 		self.registry.register_help_message(prefix, help_message)
 		if isinstance(help_message, str):
 			help_message = RText(help_message)
-		self.server.logger.debug('Plugin Added help message "{}: {}"'.format(prefix, help_message), option=DebugOption.PLUGIN)
+		self.mcdr_server.logger.debug('Plugin Added help message "{}: {}"'.format(prefix, help_message), option=DebugOption.PLUGIN)
 
 	def receive_event(self, event: PluginEvent, args: Tuple[Any, ...]):
 		self.assert_state({PluginState.READY, PluginState.UNLOADING}, 'Only plugin in READY or UNLOADING state is allowed to receive events')

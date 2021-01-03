@@ -57,8 +57,8 @@ class Logger:
 		datefmt='%Y-%m-%d %H:%M:%S'
 	)
 
-	def __init__(self, server, name=None):
-		self.server = server
+	def __init__(self, mcdr_server, name=None):
+		self.mcdr_server = mcdr_server
 		self.logger = logging.getLogger(name)
 		self.file_handler = None
 

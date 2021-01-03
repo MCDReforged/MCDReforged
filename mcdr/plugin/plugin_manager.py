@@ -17,10 +17,10 @@ from mcdr.utils import file_util, string_util, misc_util
 
 
 class PluginManager:
-	def __init__(self, server):
+	def __init__(self, mcdr_server):
 		self.plugin_folders = []  # type: List[str]
-		self.server = server
-		self.logger = server.logger  # type: Logger
+		self.mcdr_server = mcdr_server
+		self.logger = mcdr_server.logger  # type: Logger
 
 		# id -> Plugin plugin storage
 		self.plugins = {}   # type: Dict[str, Plugin]
@@ -29,7 +29,7 @@ class PluginManager:
 
 		self.last_operation_result = PluginOperationResult(self)
 
-		self.thread_pool = PluginThreadPool(self.server, max_thread=constant.PLUGIN_THREAD_POOL_SIZE)
+		self.thread_pool = PluginThreadPool(self.mcdr_server, max_thread=constant.PLUGIN_THREAD_POOL_SIZE)
 		self.tls = threading.local()
 		self.set_current_plugin(None)
 
@@ -94,21 +94,21 @@ class PluginManager:
 		try:
 			plugin.load()
 		except:
-			self.logger.exception(self.server.tr('plugin_manager.load_plugin.fail', plugin.get_name()))
+			self.logger.exception(self.mcdr_server.tr('plugin_manager.load_plugin.fail', plugin.get_name()))
 			return None
 		else:
 			existed_plugin = self.plugins.get(plugin.get_meta_data().id)
 			if existed_plugin is None:
-				self.logger.info(self.server.tr('plugin_manager.load_plugin.success', plugin.get_name()))
+				self.logger.info(self.mcdr_server.tr('plugin_manager.load_plugin.success', plugin.get_name()))
 				self.__add_plugin(plugin)
 				return plugin
 			else:
-				self.logger.error(self.server.tr('plugin_manager.load_plugin.duplicate', plugin.get_name(), plugin.file_path, existed_plugin.get_name(), existed_plugin.file_path))
+				self.logger.error(self.mcdr_server.tr('plugin_manager.load_plugin.duplicate', plugin.get_name(), plugin.file_path, existed_plugin.get_name(), existed_plugin.file_path))
 				try:
 					plugin.unload()
 				except:
 					# should never come here
-					self.logger.exception(self.server.tr('plugin_manager.load_plugin.unload_duplication_fail', plugin.get_name(), plugin.file_path))
+					self.logger.exception(self.mcdr_server.tr('plugin_manager.load_plugin.unload_duplication_fail', plugin.get_name(), plugin.file_path))
 				plugin.remove()  # quickly remove this plugin
 				return None
 
@@ -125,10 +125,10 @@ class PluginManager:
 		except:
 			# should never come here
 			plugin.set_state(PluginState.UNLOADING)
-			self.logger.exception(self.server.tr('plugin_manager.unload_plugin.unload_fail', plugin.get_name()))
+			self.logger.exception(self.mcdr_server.tr('plugin_manager.unload_plugin.unload_fail', plugin.get_name()))
 			ret = False
 		else:
-			self.logger.info(self.server.tr('plugin_manager.unload_plugin.unload_success', plugin.get_name()))
+			self.logger.info(self.mcdr_server.tr('plugin_manager.unload_plugin.unload_success', plugin.get_name()))
 			ret = True
 		finally:
 			self.__remove_plugin(plugin)
@@ -146,11 +146,11 @@ class PluginManager:
 		try:
 			plugin.reload()
 		except:
-			self.logger.exception(self.server.tr('plugin_manager.reload_plugin.fail', plugin.get_name()))
+			self.logger.exception(self.mcdr_server.tr('plugin_manager.reload_plugin.fail', plugin.get_name()))
 			self.__unload_plugin(plugin)
 			return False
 		else:
-			self.logger.info(self.server.tr('plugin_manager.reload_plugin.success', plugin.get_name()))
+			self.logger.info(self.mcdr_server.tr('plugin_manager.reload_plugin.success', plugin.get_name()))
 			return True
 
 	# -------------------------------
@@ -245,12 +245,12 @@ class PluginManager:
 		newly_loaded_plugins = {*load_result.success_list, *reload_result.success_list}
 		for plugin in dependency_check_result.success_list:
 			if plugin in newly_loaded_plugins:
-				plugin.receive_event(PluginEvents.PLUGIN_LOAD, (self.server.server_interface, plugin.old_instance))
+				plugin.receive_event(PluginEvents.PLUGIN_LOAD, (self.mcdr_server.server_interface, plugin.old_instance))
 
 		for plugin in unload_result.success_list + unload_result.failed_list + reload_result.failed_list + dependency_check_result.failed_list:
 			# plugins might just be loaded but failed on dependency check, dont dispatch event to them
 			if plugin.in_states({PluginState.READY}):
-				plugin.receive_event(PluginEvents.PLUGIN_UNLOAD, (self.server.server_interface,))
+				plugin.receive_event(PluginEvents.PLUGIN_UNLOAD, (self.mcdr_server.server_interface,))
 			plugin.remove()
 
 	def __refresh_plugins(self, reload_filter: Callable[[Plugin], bool]):

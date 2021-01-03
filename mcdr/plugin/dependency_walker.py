@@ -3,8 +3,6 @@ from typing import Dict, List
 
 from mcdr import constant
 from mcdr.logger import DebugOption
-from mcdr.plugin.metadata import MetaData
-from mcdr.plugin.plugin import Plugin
 from mcdr.plugin.version import VersionRequirement
 
 
@@ -34,19 +32,6 @@ class VisitingState:
 	FAIL = 2
 
 
-class FakePlugin:
-	def __init__(self):
-		self.file_name = constant.NAME + constant.PLUGIN_FILE_SUFFIX
-		self.meta_data = MetaData(self, {
-			'id': constant.NAME,
-			'version': constant.VERSION
-		})
-
-	def get_meta_data(self) -> MetaData:
-		return self.meta_data
-
-
-mcdr_fake_plugin = FakePlugin()
 WalkResult = collections.namedtuple('WalkResult', 'plugin_id success reason')
 
 
@@ -77,21 +62,28 @@ class DependencyWalker:
 
 		self.visiting_plugins.add(plugin_id)
 		try:
-			plugin = self.get_plugin_from_id(plugin_id)
-			if plugin is None:
-				raise DependencyNotFound('Dependency {} not found'.format(plugin_id))
-			if requirement is not None and not requirement.accept(plugin.get_meta_data().version):
-				raise DependencyNotMet('Dependency {} does not meet version requirement {}'.format(plugin, requirement))
+			if plugin_id == constant.NAME:  # MCDReforged
+				plugin_name_display = plugin_id
+				plugin_version = constant.VERSION
+				plugin_dependencies = {}
+			else:
+				plugin = self.plugin_manager.plugins.get(plugin_id)
+				if plugin is None:
+					raise DependencyNotFound('Dependency {} not found'.format(plugin_id))
+				plugin_name_display = plugin.get_name()
+				plugin_version = plugin.get_meta_data().version
+				plugin_dependencies = plugin.get_meta_data().dependencies
 
-			if not isinstance(plugin, FakePlugin):
-				for dep_id, req in plugin.get_meta_data().dependencies.items():
-					try:
-						self.ensure_loaded(dep_id, req)
-					except DependencyError as e:
-						self.visiting_state[plugin_id] = VisitingState.FAIL
-						self.plugin_manager.logger.debug('Set visiting state of {} to FAIL due to "{}"'.format(plugin_id, e), option=DebugOption.PLUGIN)
-						raise
-				self.topo_order.append(plugin_id)
+			if requirement is not None and isinstance(requirement, VersionRequirement) and not requirement.accept(plugin_version):
+				raise DependencyNotMet('Dependency {} does not meet version requirement {}'.format(plugin_name_display, requirement))
+			for dep_id, req in plugin_dependencies.items():
+				try:
+					self.ensure_loaded(dep_id, req)
+				except DependencyError as e:
+					self.visiting_state[plugin_id] = VisitingState.FAIL
+					self.plugin_manager.logger.debug('Set visiting state of {} to FAIL due to "{}"'.format(plugin_id, e), option=DebugOption.PLUGIN)
+					raise
+			self.topo_order.append(plugin_id)
 			self.visiting_state[plugin_id] = VisitingState.PASS
 		finally:
 			self.visiting_plugins.remove(plugin_id)
@@ -116,8 +108,3 @@ class DependencyWalker:
 		for plugin_id in self.topo_order:
 			result.append(WalkResult(plugin_id, True, None))
 		return result
-
-	def get_plugin_from_id(self, plugin_id: str) -> Plugin or FakePlugin:
-		if plugin_id == constant.NAME:
-			return mcdr_fake_plugin
-		return self.plugin_manager.plugins.get(plugin_id)

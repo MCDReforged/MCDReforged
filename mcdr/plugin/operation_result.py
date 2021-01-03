@@ -31,7 +31,7 @@ class PluginOperationResult:
 
 	def __init__(self, plugin_manager):
 		self.plugin_manager = plugin_manager
-		self.server = plugin_manager.server
+		self.mcdr_server = plugin_manager.mcdr_server
 		self.has_record = False
 
 	def record(self, load_result, unload_result, reload_result, dependencies_resolve_result):
@@ -51,7 +51,7 @@ class PluginOperationResult:
 
 		def add_if_not_empty(msg: RTextList, lst: List[Plugin or str], key: str):
 			if len(lst) > 0:
-				add_element(msg, RText(self.server.tr(key, len(lst))).h('\n'.join(map(str, lst))))
+				add_element(msg, RText(self.mcdr_server.tr(key, len(lst))).h('\n'.join(map(str, lst))))
 
 		message = RTextList()
 		add_if_not_empty(message, self.load_result.success_list, 'plugin_operation_result.info_loaded_succeeded')
@@ -62,9 +62,9 @@ class PluginOperationResult:
 		add_if_not_empty(message, self.reload_result.failed_list, 'plugin_operation_result.info_reloaded_failed')
 		add_if_not_empty(message, self.dependency_check_result.failed_list, 'plugin_operation_result.info_dependency_check_failed')
 		if message.empty():
-			add_element(message, self.server.tr('plugin_operation_result.info_none'))
+			add_element(message, self.mcdr_server.tr('plugin_operation_result.info_none'))
 		message.append(
-			RText(self.server.tr('plugin_operation_result.info_plugin_amount', len(self.plugin_manager.plugins))).
+			RText(self.mcdr_server.tr('plugin_operation_result.info_plugin_amount', len(self.plugin_manager.plugins))).
 				h('\n'.join(map(str, self.plugin_manager.plugins.values()))).
 				c(RAction.suggest_command, '!!MCDR plugin list')
 		)

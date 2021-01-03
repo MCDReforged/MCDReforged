@@ -9,8 +9,8 @@ from mcdr.logger import DebugOption
 
 
 class Config:
-	def __init__(self, server, file_name):
-		self.server = server
+	def __init__(self, mcdr_server, file_name):
+		self.mcdr_server = mcdr_server
 		self.data = None
 		self.file_name = file_name
 
@@ -29,7 +29,7 @@ class Config:
 			self.data = {}
 		if key not in self.data:
 			self.data[key] = default
-			self.server.logger.warning('Option "{}" missing, use default value "{}"'.format(key, default))
+			self.mcdr_server.logger.warning('Option "{}" missing, use default value "{}"'.format(key, default))
 			return True
 		return False
 
@@ -55,8 +55,8 @@ class Config:
 			DebugOption.PLUGIN: False,
 		})
 		if flag:
-			for line in self.server.tr('config.missing_config').splitlines():
-				self.server.logger.warning(line)
+			for line in self.mcdr_server.tr('config.missing_config').splitlines():
+				self.mcdr_server.logger.warning(line)
 			self.save()
 
 	def __getitem__(self, item):

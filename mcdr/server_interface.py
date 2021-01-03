@@ -43,24 +43,13 @@ def return_if_success(func):
 	return wrap
 
 
-def require_on_mcdr_thread(func):
-	def wrap(self, *args, **kwargs):
-		plugin = self.__server.plugin_manager.get_current_plugin()
-		if isinstance(plugin, Plugin):
-			kwargs['plugin'] = plugin
-			func(self, *args, **kwargs)
-		else:
-			raise IllegalCall('MCDR provided thead is required')
-	return wrap
-
-
 class ServerInterface:
 	MCDR = True  # Identifier for plugins
 
-	def __init__(self, server):
-		from mcdr.server import Server
-		self.__server = server  # type: Server
-		self.logger = server.logger
+	def __init__(self, mcdr_server):
+		from mcdr.mcdr_server import MCDReforgedServer
+		self.__mcdr_server = mcdr_server  # type: MCDReforgedServer
+		self.logger = mcdr_server.logger
 
 	# ------------------------
 	#      Server Control
@@ -74,7 +63,7 @@ class ServerInterface:
 		:return: If the action succeed it's True. If the server is running or being starting by other plugin return False
 		:rtype: bool
 		"""
-		return self.__server.start_server()
+		return self.__mcdr_server.start_server()
 
 	@log_call
 	def stop(self):
@@ -83,8 +72,8 @@ class ServerInterface:
 
 		:rtype: None
 		"""
-		self.__server.set_exit_naturally(False)
-		self.__server.stop(forced=False)
+		self.__mcdr_server.set_exit_naturally(False)
+		self.__mcdr_server.stop(forced=False)
 
 	@log_call
 	def wait_for_start(self):
@@ -115,7 +104,7 @@ class ServerInterface:
 
 		:rtype: None
 		"""
-		self.__server.stop(forced=False)
+		self.__mcdr_server.stop(forced=False)
 
 	@log_call
 	def exit(self):
@@ -125,9 +114,9 @@ class ServerInterface:
 
 		:raise: IllegalCall, if the server is not stopped
 		"""
-		if self.__server.is_server_running():
+		if self.__mcdr_server.is_server_running():
 			raise IllegalCall('Cannot exit MCDR when the server is running')
-		self.__server.set_server_status(ServerStatus.STOPPED)
+		self.__mcdr_server.set_server_status(ServerStatus.STOPPED)
 
 	@log_call
 	def is_server_running(self):
@@ -136,7 +125,7 @@ class ServerInterface:
 
 		:rtype: bool
 		"""
-		return self.__server.is_server_running()
+		return self.__mcdr_server.is_server_running()
 
 	@log_call
 	def is_server_startup(self):
@@ -145,7 +134,7 @@ class ServerInterface:
 
 		:rtype: bool
 		"""
-		return self.__server.is_server_startup()
+		return self.__mcdr_server.is_server_startup()
 
 	@log_call
 	def is_rcon_running(self):
@@ -154,7 +143,7 @@ class ServerInterface:
 
 		:rtype: bool
 		"""
-		return self.__server.rcon_manager.is_running()
+		return self.__mcdr_server.rcon_manager.is_running()
 
 	@log_call
 	def get_server_pid(self):
@@ -166,8 +155,8 @@ class ServerInterface:
 		:return: The pid of the server. None if the server is stopped
 		:rtype: int or None
 		"""
-		if self.__server.process is not None:
-			return self.__server.process.pid
+		if self.__mcdr_server.process is not None:
+			return self.__mcdr_server.process.pid
 		return None
 
 	# ------------------------
@@ -183,7 +172,7 @@ class ServerInterface:
 		:param str encoding: The encoding method for the text
 		:rtype: None
 		"""
-		self.__server.send(text, encoding=encoding)
+		self.__mcdr_server.send(text, encoding=encoding)
 
 	@log_call
 	def tell(self, player, text, encoding=None):
@@ -247,7 +236,7 @@ class ServerInterface:
 		:return: If action succeeded without exception, return True. Otherwise False
 		:rtype: bool
 		"""
-		return bool(self.__server.plugin_manager.load_plugin(plugin_name))
+		return bool(self.__mcdr_server.plugin_manager.load_plugin(plugin_name))
 
 	@log_call
 	def enable_plugin(self, plugin_name):
@@ -257,7 +246,7 @@ class ServerInterface:
 		:param str plugin_name: The name of the displayed plugin
 		It can be "my_plugin.py.disabled" or "my_plugin.py" or "my_plugin"
 		"""
-		self.__server.plugin_manager.enable_plugin(plugin_name)
+		self.__mcdr_server.plugin_manager.enable_plugin(plugin_name)
 
 	@log_call
 	def disable_plugin(self, plugin_name):
@@ -266,7 +255,7 @@ class ServerInterface:
 
 		:param str plugin_name: The name of the plugin. It can be "my_plugin.py" or "my_plugin"
 		"""
-		self.__server.plugin_manager.disable_plugin(plugin_name)
+		self.__mcdr_server.plugin_manager.disable_plugin(plugin_name)
 
 	@log_call
 	def refresh_all_plugins(self):
@@ -275,7 +264,7 @@ class ServerInterface:
 
 		:rtype: None
 		"""
-		self.__server.plugin_manager.refresh_all_plugins()
+		self.__mcdr_server.plugin_manager.refresh_all_plugins()
 
 	@log_call
 	def refresh_changed_plugins(self):
@@ -284,7 +273,7 @@ class ServerInterface:
 
 		:rtype: None
 		"""
-		self.__server.plugin_manager.refresh_changed_plugins()
+		self.__mcdr_server.plugin_manager.refresh_changed_plugins()
 
 	@log_call
 	def get_plugin_list(self):
@@ -293,27 +282,33 @@ class ServerInterface:
 
 		:rtype: list[str]
 		"""
-		return self.__server.plugin_manager.get_plugin_file_list_all()
+		return self.__mcdr_server.plugin_manager.get_plugin_file_list_all()
 
 	# ------------------------
 	#     Plugin Registry
 	# ------------------------
 
+	def __get_current_plugin(self):
+		plugin = self.__mcdr_server.plugin_manager.get_current_plugin()
+		if isinstance(plugin, Plugin):
+			return plugin
+		else:
+			raise IllegalCall('MCDR provided thead is required')
+
 	@log_call
-	@require_on_mcdr_thread
-	def add_help_message(self, prefix, message, plugin=None):
+	def add_help_message(self, prefix, message):
 		"""
 		Add help message for you plugin, which is used in !!help command
 		It needs to be called in a MCDR provided thread such as on_info or on_player_left called or an IllegalCall will
 		be raised
 
-		:param Plugin plugin: Current plugin instance. No need to specify
 		:param str prefix: The help command of your plugin
 		When player click on the displayed message it will suggest this prefix parameter to the player
 		:param message: A neat command description
 		:type message: str or RTextBase
 		:raise: IllegalCall
 		"""
+		plugin = self.__get_current_plugin()
 		plugin.add_help_message(prefix, message)
 
 	# ------------------------
@@ -335,9 +330,9 @@ class ServerInterface:
 		"""
 		t = type(obj)
 		if t is Info:  # Info instance
-			return self.__server.permission_manager.get_info_permission_level(obj)
+			return self.__mcdr_server.permission_manager.get_info_permission_level(obj)
 		elif t is str:  # player name
-			return self.__server.permission_manager.get_player_permission_level(obj)
+			return self.__mcdr_server.permission_manager.get_player_permission_level(obj)
 		else:
 			raise TypeError('Except Info or str for permission level querying but {} found'.format(getattr(t, '__name__', t)))
 
@@ -352,10 +347,10 @@ class ServerInterface:
 		:type level: int or str
 		:raise: TypeError if param player is illegal
 		"""
-		level_name = self.__server.permission_manager.format_level_name(level)
+		level_name = self.__mcdr_server.permission_manager.format_level_name(level)
 		if level_name is None:
 			raise TypeError('Parameter level needs to be a permission related value')
-		self.__server.permission_manager.set_permission_level(player, level_name)
+		self.__mcdr_server.permission_manager.set_permission_level(player, level_name)
 
 	@log_call
 	def rcon_query(self, command):
@@ -366,7 +361,7 @@ class ServerInterface:
 		:return: The result server returned from rcon. Return None if rcon is not running or rcon query failed
 		:rtype: str or None
 		"""
-		return self.__server.rcon_manager.send_command(command)
+		return self.__mcdr_server.rcon_manager.send_command(command)
 
 	@log_call
 	def get_plugin_instance(self, plugin_name):
@@ -379,7 +374,7 @@ class ServerInterface:
 		:param str plugin_name: The name of the plugin you want. It can be "my_plugin" or "my_plugin.py"
 		:return: A current loaded plugin instance. Return None if plugin not found
 		"""
-		plugin = self.__server.plugin_manager.get_plugin(plugin_name)
+		plugin = self.__mcdr_server.plugin_manager.get_plugin(plugin_name)
 		if plugin is not None:
 			plugin = plugin.module
 		return plugin

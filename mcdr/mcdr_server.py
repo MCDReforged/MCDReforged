@@ -24,12 +24,12 @@ from mcdr.update_helper import UpdateHelper
 from mcdr.utils import misc_util
 
 
-class Server:
+class MCDReforgedServer:
 	def __init__(self, old_process=None):
 		self.console_input_thread = None
 		self.info_reactor_thread = None
 		self.process = old_process  # type: Popen # the process for the server
-		self.server_status = ServerStatus.STOPPED
+		self.mcdr_server_status = ServerStatus.STOPPED
 		self.flag_interrupt = False  # ctrl-c flag
 		self.flag_server_startup = False  # set to True after server startup
 		self.flag_server_rcon_ready = False  # set to True after server started its rcon. used to start the rcon server
@@ -83,7 +83,9 @@ class Server:
 			result = result.format(*args)
 		return result
 
-	# Loaders
+	# --------------------------
+	#          Loaders
+	# --------------------------
 
 	def load_config(self):
 		self.config.read_config()
@@ -92,18 +94,18 @@ class Server:
 	def on_config_changed(self):
 		self.logger.set_debug_options(self.config['debug'])
 		if self.config.is_debug_on():
-			self.logger.info(self.tr('server.on_config_changed.debug_mode_on'))
+			self.logger.info(self.tr('mcdr_server.on_config_changed.debug_mode_on'))
 
 		self.language_manager.load_languages()
 		self.language_manager.set_language(self.config['language'])
-		self.logger.info(self.tr('server.on_config_changed.language_set', self.config['language']))
+		self.logger.info(self.tr('mcdr_server.on_config_changed.language_set', self.config['language']))
 
 		self.parser_manager.install_parser(self.config['parser'])
-		self.logger.info(self.tr('server.on_config_changed.parser_set', self.config['parser']))
+		self.logger.info(self.tr('mcdr_server.on_config_changed.parser_set', self.config['parser']))
 
 		self.encoding_method = self.config['encoding'] if self.config['encoding'] is not None else sys.getdefaultencoding()
 		self.decoding_method = self.config['decoding'] if self.config['decoding'] is not None else locale.getpreferredencoding()
-		self.logger.info(self.tr('server.on_config_changed.encoding_decoding_set', self.encoding_method, self.decoding_method))
+		self.logger.info(self.tr('mcdr_server.on_config_changed.encoding_decoding_set', self.encoding_method, self.decoding_method))
 
 		self.plugin_manager.set_plugin_folders(self.config['plugin_folders'])
 
@@ -113,7 +115,9 @@ class Server:
 		self.plugin_manager.refresh_all_plugins()
 		self.logger.info(self.plugin_manager.last_operation_result.to_rtext())
 
-	# MCDR state
+	# ---------------------------
+	#   State Getters / Setters
+	# ---------------------------
 
 	def is_server_running(self):
 		return self.process is not None
@@ -137,22 +141,27 @@ class Server:
 		self.flag_exit_naturally = flag
 		self.logger.debug('flag_exit_naturally has set to "{}"'.format(self.flag_exit_naturally))
 
+	def in_status(self, status: set):
+		return self.mcdr_server_status in status
+
 	def set_server_status(self, status):
-		self.server_status = status
-		self.logger.debug('Server state has set to "{}"'.format(ServerStatus.translate_key(status)))
+		self.mcdr_server_status = status
+		self.logger.debug('MCDR Server state has set to "{}"'.format(ServerStatus.get_translate_key(status)))
 
 	def should_keep_looping(self):
 		"""
 		A criterion for sub threads to determine if it should keep looping
 		:rtype: bool
 		"""
-		if self.server_status in [ServerStatus.STOPPED]:
+		if self.in_status({ServerStatus.STOPPED}):
 			if self.is_interrupt():  # if interrupted and stopped
 				return False
 			return not self.flag_exit_naturally  # if the sever exited naturally, exit MCDR
 		return not self.is_mcdr_exit()
 
-	# MCDR server
+	# --------------------------
+	#      Server Controls
+	# --------------------------
 
 	def start_server(self):
 		"""
@@ -168,62 +177,40 @@ class Server:
 			return False
 		try:
 			if self.is_interrupt():
-				self.logger.warning(self.tr('server.start_server.already_interrupted'))
+				self.logger.warning(self.tr('mcdr_server.start_server.already_interrupted'))
 				return False
 			if self.is_server_running():
-				self.logger.warning(self.tr('server.start_server.start_twice'))
+				self.logger.warning(self.tr('mcdr_server.start_server.start_twice'))
 				return False
 			try:
 				start_command = self.config['start_command']
-				self.logger.info(self.tr('server.start_server.starting', start_command))
+				self.logger.info(self.tr('mcdr_server.start_server.starting', start_command))
 				self.process = Popen(start_command, cwd=self.config['working_directory'], stdin=PIPE, stdout=PIPE, stderr=STDOUT, shell=True)
 			except:
-				self.logger.exception(self.tr('server.start_server.start_fail'))
+				self.logger.exception(self.tr('mcdr_server.start_server.start_fail'))
 				return False
 			else:
 				self.set_server_status(ServerStatus.RUNNING)
 				self.set_exit_naturally(True)
-				self.logger.info(self.tr('server.start_server.pid_info', self.process.pid))
+				self.logger.info(self.tr('mcdr_server.start_server.pid_info', self.process.pid))
 				return True
 		finally:
 			self.starting_server_lock.release()
-
-	def start(self):
-		"""
-		The entry method to start MCDR
-		Try to start the server. if succeeded the console thread will start and MCDR will start ticking
-
-		:raise: Raise ServerStartError if the server is already running or start_server has been called by other
-		"""
-		def start_thread(target, args, name):
-			self.logger.debug('{} thread starting'.format(name))
-			thread = misc_util.start_thread(target, args, name)
-			return thread
-
-		if not self.start_server():
-			raise ServerStartError()
-		if not self.config['disable_console_thread']:
-			self.console_input_thread = start_thread(self.console_input, (), 'Console')
-		else:
-			self.logger.info('Console thread disabled')
-		self.info_reactor_thread = start_thread(self.reactor_manager.run, (), 'InfoReactor')
-		self.main_loop()
-		return self.process
 
 	def kill_server(self):
 		"""
 		Kill the server process group
 		"""
 		if self.process and self.process.poll() is None:
-			self.logger.info(self.tr('server.kill_server.killing'))
+			self.logger.info(self.tr('mcdr_server.kill_server.killing'))
 			try:
 				for child in psutil.Process(self.process.pid).children(recursive=True):
 					child.kill()
-					self.logger.info(self.tr('server.kill_server.process_killed', child.pid))
+					self.logger.info(self.tr('mcdr_server.kill_server.process_killed', child.pid))
 			except psutil.NoSuchProcess:
 				pass
 			self.process.kill()
-			self.logger.info(self.tr('server.kill_server.process_killed', self.process.pid))
+			self.logger.info(self.tr('mcdr_server.kill_server.process_killed', self.process.pid))
 		else:
 			raise IllegalCall("Server process has already been terminated")
 
@@ -249,20 +236,24 @@ class Server:
 		"""
 		with self.stop_lock:
 			if not self.is_server_running():
-				self.logger.warning(self.tr('server.stop.stop_when_stopped'))
+				self.logger.warning(self.tr('mcdr_server.stop.stop_when_stopped'))
 				return
 			self.set_server_status(ServerStatus.STOPPING)
 			if not forced:
 				try:
 					self.send(self.parser_manager.get_stop_command())
 				except:
-					self.logger.error(self.tr('server.stop.stop_fail'))
+					self.logger.error(self.tr('mcdr_server.stop.stop_fail'))
 					forced = True
 			if forced:
 				try:
 					self.kill_server()
 				except IllegalCall:
 					pass
+
+	# --------------------------
+	#      Server Logics
+	# --------------------------
 
 	def send(self, text, ending='\n', encoding=None):
 		"""
@@ -281,7 +272,7 @@ class Server:
 			self.process.stdin.write(text)
 			self.process.stdin.flush()
 		else:
-			self.logger.warning(self.tr('server.send.send_when_stopped'))
+			self.logger.warning(self.tr('mcdr_server.send.send_when_stopped'))
 
 	def receive(self):
 		"""
@@ -300,25 +291,25 @@ class Server:
 						break
 					time.sleep(0.1)
 					if i % 10 == 0:
-						self.logger.info(self.tr('server.receive.wait_stop'))
+						self.logger.info(self.tr('mcdr_server.receive.wait_stop'))
 				raise ServerStopped()
 			else:
 				try:
 					text = text.decode(self.decoding_method)
 				except:
-					self.logger.error(self.tr('server.receive.decode_fail', text))
+					self.logger.error(self.tr('mcdr_server.receive.decode_fail', text))
 					raise
 				return text.rstrip().lstrip()
 
 	def on_server_stop(self):
 		return_code = self.process.poll()
-		self.logger.info(self.tr('server.on_server_stop.show_stopcode', return_code))
+		self.logger.info(self.tr('mcdr_server.on_server_stop.show_stopcode', return_code))
 		self.process = None
 		self.flag_server_startup = False
 		self.flag_server_rcon_ready = False
 		self.set_server_status(ServerStatus.PRE_STOPPED)
 		self.plugin_manager.dispatch_event(PluginEvents.SERVER_STOP, (self.server_interface, return_code), wait=True)
-		if self.server_status == ServerStatus.PRE_STOPPED:
+		if self.in_status({ServerStatus.PRE_STOPPED}):
 			self.set_server_status(ServerStatus.STOPPED)
 
 	def tick(self):
@@ -334,7 +325,7 @@ class Server:
 		try:
 			text = self.parser_manager.get_parser().pre_parse_server_stdout(text)
 		except:
-			self.logger.warning(self.tr('server.tick.pre_parse_fail'))
+			self.logger.warning(self.tr('mcdr_server.tick.pre_parse_fail'))
 		self.server_logger.info(text)
 
 		try:
@@ -353,17 +344,39 @@ class Server:
 	def on_mcdr_stop(self):
 		try:
 			if self.is_interrupt():
-				self.logger.info(self.tr('server.on_mcdr_stop.user_interrupted'))
+				self.logger.info(self.tr('mcdr_server.on_mcdr_stop.user_interrupted'))
 			else:
-				self.logger.info(self.tr('server.on_mcdr_stop.server_stop'))
+				self.logger.info(self.tr('mcdr_server.on_mcdr_stop.server_stop'))
 			self.plugin_manager.dispatch_event(PluginEvents.MCDR_STOP, (self.server_interface,), wait=True)
-			self.logger.info(self.tr('server.on_mcdr_stop.bye'))
+			self.logger.info(self.tr('mcdr_server.on_mcdr_stop.bye'))
 		except KeyboardInterrupt:  # I don't know why there sometimes will be a KeyboardInterrupt if MCDR is stopped by ctrl-c
 			pass
 		except:
-			self.logger.exception(self.tr('server.on_mcdr_stop.stop_error'))
+			self.logger.exception(self.tr('mcdr_server.on_mcdr_stop.stop_error'))
 		finally:
 			self.flag_mcdr_exit = True
+
+	def start(self):
+		"""
+		The entry method to start MCDR
+		Try to start the server. if succeeded the console thread will start and MCDR will start ticking
+
+		:raise: Raise ServerStartError if the server is already running or start_server has been called by other
+		"""
+		def start_thread(target, args, name):
+			self.logger.debug('{} thread starting'.format(name))
+			thread = misc_util.start_thread(target, args, name)
+			return thread
+
+		if not self.start_server():
+			raise ServerStartError()
+		if not self.config['disable_console_thread']:
+			self.console_input_thread = start_thread(self.console_input, (), 'Console')
+		else:
+			self.logger.info('Console thread disabled')
+		self.info_reactor_thread = start_thread(self.reactor_manager.run, (), 'InfoReactor')
+		self.main_loop()
+		return self.process
 
 	def main_loop(self):
 		"""
@@ -381,7 +394,7 @@ class Server:
 				if self.is_interrupt():
 					break
 				else:
-					self.logger.critical(self.tr('server.run.error'), exc_info=True)
+					self.logger.critical(self.tr('mcdr_server.run.error'), exc_info=True)
 		self.on_mcdr_stop()
 
 	def console_input(self):
@@ -395,7 +408,7 @@ class Server:
 				try:
 					parsed_result = self.parser_manager.get_parser().parse_console_command(text)
 				except:
-					self.logger.exception(self.tr('server.console_input.parse_fail', text))
+					self.logger.exception(self.tr('mcdr_server.console_input.parse_fail', text))
 				else:
 					self.logger.debug('Parsed text from console input:')
 					for line in parsed_result.format_text().splitlines():
@@ -405,7 +418,7 @@ class Server:
 				self.logger.debug('Exception {} {} caught in console_input()'.format(type(e), e))
 				self.interrupt()
 			except:
-				self.logger.exception(self.tr('server.console_input.error'))
+				self.logger.exception(self.tr('mcdr_server.console_input.error'))
 
 	def connect_rcon(self):
 		self.rcon_manager.disconnect()

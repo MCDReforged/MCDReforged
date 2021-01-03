@@ -13,8 +13,8 @@ from mcdr.utils import misc_util, file_util
 
 
 class UpdateHelper:
-	def __init__(self, server):
-		self.server = server
+	def __init__(self, mcdr_server):
+		self.mcdr_server = mcdr_server
 		self.check_update_thread = None
 		self.update_lock = Lock()
 
@@ -32,11 +32,11 @@ class UpdateHelper:
 	def __check_update(self, reply_func):
 		acquired = self.update_lock.acquire(blocking=False)
 		if not acquired:
-			reply_func(self.server.tr('update_helper.check_update.already_checking'))
+			reply_func(self.mcdr_server.tr('update_helper.check_update.already_checking'))
 			return False
 		try:
 			if reply_func is None:
-				reply_func = self.server.logger.info
+				reply_func = self.mcdr_server.logger.info
 			response = None
 			try:
 				response = requests.get(constant.GITHUB_API_LATEST, timeout=5).json()
@@ -45,7 +45,7 @@ class UpdateHelper:
 				download_url = response['assets'][0]['browser_download_url']
 				update_log = response['body']
 			except Exception as e:
-				reply_func(self.server.tr('update_helper.check_update.check_fail', repr(e)))
+				reply_func(self.mcdr_server.tr('update_helper.check_update.check_fail', repr(e)))
 				if isinstance(e, KeyError) and type(response) is dict and 'message' in response:
 					reply_func(response['message'])
 					if 'documentation_url' in response:
@@ -58,19 +58,19 @@ class UpdateHelper:
 				try:
 					cmp_result = misc_util.version_compare(constant.VERSION, latest_version)
 				except:
-					self.server.logger.exception('Fail to compare between versions "{}" and "{}"'.format(constant.VERSION, latest_version))
+					self.mcdr_server.logger.exception('Fail to compare between versions "{}" and "{}"'.format(constant.VERSION, latest_version))
 					return False
 				if cmp_result == 0:
-					reply_func(self.server.tr('update_helper.check_update.is_already_latest'))
+					reply_func(self.mcdr_server.tr('update_helper.check_update.is_already_latest'))
 				elif cmp_result == 1:
-					reply_func(self.server.tr('update_helper.check_update.newer_than_latest', constant.VERSION,
+					reply_func(self.mcdr_server.tr('update_helper.check_update.newer_than_latest', constant.VERSION,
 											  latest_version))
 				else:
-					reply_func(self.server.tr('update_helper.check_update.new_version_detected', latest_version))
+					reply_func(self.mcdr_server.tr('update_helper.check_update.new_version_detected', latest_version))
 					for line in update_log.splitlines():
 						reply_func('    {}'.format(line))
-					reply_func(self.server.tr('update_helper.check_update.new_version_url', url))
-					if self.server.config['download_update']:
+					reply_func(self.mcdr_server.tr('update_helper.check_update.new_version_url', url))
+					if self.mcdr_server.config['download_update']:
 						try:
 							file_util.touch_folder(constant.UPDATE_DOWNLOAD_FOLDER)
 							file_name = os.path.join(constant.UPDATE_DOWNLOAD_FOLDER, os.path.basename(download_url))
@@ -78,9 +78,9 @@ class UpdateHelper:
 								file_data = requests.get(download_url, timeout=5)
 								with open(file_name, 'wb') as file:
 									file.write(file_data.content)
-							reply_func(self.server.tr('update_helper.check_update.download_finished', file_name))
+							reply_func(self.mcdr_server.tr('update_helper.check_update.download_finished', file_name))
 						except:
-							reply_func(self.server.tr('update_helper.check_update.download_fail'))
+							reply_func(self.mcdr_server.tr('update_helper.check_update.download_fail'))
 						else:
 							return True
 			return False
