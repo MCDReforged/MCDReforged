@@ -7,7 +7,6 @@ import collections
 import ruamel.yaml as yaml
 from ruamel.yaml.comments import CommentedSeq
 
-from mcdr.command.command_source import CommandSource
 from mcdr.info import *
 from mcdr.utils import misc_util
 
@@ -265,10 +264,10 @@ class PermissionManager:
 		else:
 			return None
 
-	def has_permission(self, source: CommandSource, level: int):
-		if source.source == InfoSource.CONSOLE:
+	def get_permission(self, source: CommandSource):
+		if isinstance(source, ConsoleCommandSource):
 			return PermissionLevel.TOP_LEVEL
-		elif info.is_player:
-			return self.get_player_permission_level(info.player)
+		elif isinstance(source, PlayerCommandSource):
+			return self.get_player_permission_level(source.player)
 		else:
-			return None
+			raise TypeError('Unknown type {} in get_permission'.format(type(source)))

@@ -1,6 +1,6 @@
 import unittest
 
-from mcdr.command.command_builder import *
+from mcdr.command.builder.command_node import *
 
 
 class MyTestCase(unittest.TestCase):
@@ -8,10 +8,10 @@ class MyTestCase(unittest.TestCase):
 	#   callbacks
 	# -------------
 
-	def hit(self, ctx):
+	def callback_hit(self, source, ctx):
 		self.has_hit = True
 
-	def dummy(self, ctx):
+	def callback_dummy(self, source, ctx):
 		pass
 
 	def set_result_from_ctx(self, ctx, key):
@@ -24,12 +24,13 @@ class MyTestCase(unittest.TestCase):
 	#   utils
 	# ---------
 
-	def run_command(self, executor, command):
+	def run_command(self, executor: ExecutableNode, command):
 		self.has_hit = False
 		self.result = None
-		executor.execute(command)
+		# noinspection PyTypeChecker
+		executor.execute(None, command)
 
-	def check_hit(self, value):
+	def check_hit(self, value: bool):
 		self.assertEqual(self.has_hit, value)
 
 	def check_result(self, result):
@@ -40,7 +41,7 @@ class MyTestCase(unittest.TestCase):
 		self.run_command(executor, command)
 		self.check_result(result)
 
-	def run_command_and_check_hit(self, executor, command, value):
+	def run_command_and_check_hit(self, executor, command, value: bool):
 		self.run_command(executor, command)
 		self.check_hit(value)
 
@@ -49,17 +50,18 @@ class MyTestCase(unittest.TestCase):
 	# ---------
 
 	def test_1_root_node(self):
-		self.assertRaises(RuntimeError, self.run_command, Number('num').run(self.hit), '123')
-		self.assertRaises(RuntimeError, self.run_command, Text('t').run(self.hit), 'awa')
+		pass
+		# self.assertRaises(RuntimeError, self.run_command, Number('num').run(self.callback_hit), '123')
+		# self.assertRaises(RuntimeError, self.run_command, Text('t').run(self.callback_hit), 'awa')
 
 	def test_2_literal(self):
-		executor = Literal('test').run(self.hit)
+		executor = Literal('test').runs(self.callback_hit)
 		self.assertRaises(UnknownArgument, self.run_command, executor, 'awa')
 		self.check_hit(False)
 		self.run_command_and_check_hit(executor, 'test', True)
 		self.assertRaises(UnknownArgument, self.run_command, executor, 'another')
 
-		executor = Literal('test').then(Literal('ping').run(self.dummy)).then(Literal('pong').run(self.hit))
+		executor = Literal('test').then(Literal('ping').runs(self.callback_dummy)).then(Literal('pong').runs(self.callback_hit))
 		self.run_command_and_check_hit(executor, 'test ping', False)
 		self.run_command_and_check_hit(executor, 'test pong', True)
 		self.run_command_and_check_hit(executor, 'test    pong', True)
@@ -68,10 +70,16 @@ class MyTestCase(unittest.TestCase):
 		self.assertRaises(UnknownArgument, self.run_command, executor, 'test pingpong')
 		self.assertRaises(UnknownArgument, self.run_command, executor, 'test ping extra')
 
+		executor = Literal('test').then(Literal(['ping1', 'ping2']).runs(self.callback_hit))
+		self.run_command_and_check_hit(executor, 'test ping1', True)
+		self.run_command_and_check_hit(executor, 'test ping2', True)
+
 		self.assertRaises(TypeError, Literal, 'ab cd')
+		self.assertRaises(TypeError, Literal, 123)
+		self.assertRaises(TypeError, Literal, ['ab', 'c '])
 
 	def test_3_int(self):
-		executor = Literal('int').then(Integer('i').run(lambda ctx: self.set_result_from_ctx(ctx, 'i')))
+		executor = Literal('int').then(Integer('i').runs(lambda s, ctx: self.set_result_from_ctx(ctx, 'i')))
 		self.run_command_and_check_result(executor, 'int 10', 10)
 		self.run_command_and_check_result(executor, 'int -121', -121)
 		self.assertRaises(IllegalArgument, self.run_command, executor, 'int 1.0')
@@ -79,14 +87,14 @@ class MyTestCase(unittest.TestCase):
 		self.assertRaises(IllegalArgument, self.run_command, executor, 'int 123abc')
 
 	def test_4_int_range(self):
-		executor = Literal('int2').then(Integer('i').in_range(10, 20).run(lambda ctx: self.set_result_from_ctx(ctx, 'i')))
+		executor = Literal('int2').then(Integer('i').in_range(10, 20).runs(lambda s, ctx: self.set_result_from_ctx(ctx, 'i')))
 		self.run_command_and_check_result(executor, 'int2 10', 10)
 		self.run_command_and_check_result(executor, 'int2 20', 20)
 		self.assertRaises(NumberOutOfRange, self.run_command, executor, 'int2 9')
 		self.assertRaises(NumberOutOfRange, self.run_command, executor, 'int2 21')
 
 	def test_5_float(self):
-		executor = Literal('float').then(Float('f').in_range(-10, 20).run(lambda ctx: self.set_result_from_ctx(ctx, 'f')))
+		executor = Literal('float').then(Float('f').in_range(-10, 20).runs(lambda s, ctx: self.set_result_from_ctx(ctx, 'f')))
 		self.run_command_and_check_result(executor, 'float 12.34', 12.34)
 		self.run_command_and_check_result(executor, 'float -10.0', -10.0)
 		self.run_command_and_check_result(executor, 'float 1e1', 1e1)
@@ -96,7 +104,7 @@ class MyTestCase(unittest.TestCase):
 		self.assertRaises(IllegalArgument, self.run_command, executor, 'float 1.2.3')
 
 	def test_6_number(self):
-		executor = Literal('number').then(Number('n').in_range(-10, 20).run(lambda ctx: self.set_result_from_ctx(ctx, 'n')))
+		executor = Literal('number').then(Number('n').in_range(-10, 20).runs(lambda s, ctx: self.set_result_from_ctx(ctx, 'n')))
 		self.run_command_and_check_result(executor, 'number 8', 8)
 		self.run_command_and_check_result(executor, 'number 8.0', 8.0)
 		self.run_command_and_check_result(executor, 'number -1.56e-9', -1.56e-9)
@@ -104,7 +112,7 @@ class MyTestCase(unittest.TestCase):
 		self.assertRaises(IllegalArgument, self.run_command, executor, 'number xxx')
 
 	def test_7_text(self):
-		executor = Literal('text').then(Text('t').run(lambda ctx: self.set_result_from_ctx(ctx, 't')))
+		executor = Literal('text').then(Text('t').runs(lambda s, ctx: self.set_result_from_ctx(ctx, 't')))
 		self.run_command_and_check_result(executor, 'text awa', 'awa')
 		self.run_command_and_check_result(executor, 'text 123123', '123123')
 		self.run_command_and_check_result(executor, 'text "quote"', '"quote"')
@@ -113,7 +121,7 @@ class MyTestCase(unittest.TestCase):
 		self.assertRaises(UnknownArgument, self.run_command, executor, 'text "try to quote"')
 
 	def test_8_quote_text(self):
-		executor = Literal('text').then(QuotableText('t').run(lambda ctx: self.set_result_from_ctx(ctx, 't')))
+		executor = Literal('text').then(QuotableText('t').runs(lambda s, ctx: self.set_result_from_ctx(ctx, 't')))
 		self.run_command_and_check_result(executor, 'text awa', 'awa')
 		self.run_command_and_check_result(executor, 'text 123123', '123123')
 		self.run_command_and_check_result(executor, 'text "quote"', 'quote')
@@ -125,12 +133,12 @@ class MyTestCase(unittest.TestCase):
 		self.assertRaises(UnknownArgument, self.run_command, executor, 'text awa awa')
 		self.assertRaises(UnknownArgument, self.run_command, executor, 'text "a b c" awa')
 
-		executor2 = Literal('text').then(QuotableText('t').allow_empty().run(lambda ctx: self.set_result_from_ctx(ctx, 't')))
+		executor2 = Literal('text').then(QuotableText('t').allow_empty().runs(lambda s, ctx: self.set_result_from_ctx(ctx, 't')))
 		self.assertRaises(EmptyText, self.run_command, executor, 'text ""')
 		self.run_command_and_check_result(executor2, 'text ""', '')
 
 	def test_9_greedy_text(self):
-		executor = Literal('text').then(GreedyText('t').run(lambda ctx: self.set_result_from_ctx(ctx, 't')))
+		executor = Literal('text').then(GreedyText('t').runs(lambda s, ctx: self.set_result_from_ctx(ctx, 't')))
 		self.run_command_and_check_result(executor, 'text awa', 'awa')
 		self.run_command_and_check_result(executor, 'text 123123', '123123')
 		self.run_command_and_check_result(executor, 'text abc de f', 'abc de f')
@@ -138,21 +146,21 @@ class MyTestCase(unittest.TestCase):
 		self.run_command_and_check_result(executor, r'text d(&sg^\bnSA', r'd(&sg^\bnSA')
 
 	def test_10_arg_multi(self):
-		executor = Literal('test'). \
-			then(Integer('a').
-				then(Float('b').in_range(10, 20).
-					then(Text('t').
-						run(lambda ctx: self.set_result((ctx['a'], ctx['b'], ctx['t'])))
-					)
+		executor = Literal('test').then(
+			Integer('a').then(
+				Float('b').in_range(10, 20).then(
+					Text('t').
+					runs(lambda s, ctx: self.set_result((ctx['a'], ctx['b'], ctx['t'])))
 				)
-			). \
-			then(Literal('literal').
-				then(Number('n').
-					run(lambda ctx: self.set_result_from_ctx(ctx, 'n'))
-				).
-				run(self.hit).
-				then(Literal('dead'))
 			)
+		).then(
+			Literal('literal').then(
+				Number('n').
+				runs(lambda s, ctx: self.set_result_from_ctx(ctx, 'n'))
+			).
+			runs(self.callback_hit).
+			then(Literal('dead'))
+		)
 		self.run_command_and_check_result(executor, 'test 9 12.3 awa', (9, 12.3, 'awa'))
 		self.assertRaises(NumberOutOfRange, self.run_command, executor, 'test 9 58 awa')
 		self.assertRaises(NumberOutOfRange, self.run_command, executor, 'test 81 -.01 awa')
@@ -167,6 +175,35 @@ class MyTestCase(unittest.TestCase):
 		self.assertRaises(UnknownArgument, self.run_command, executor, 'test literal 100 x')
 
 		self.assertRaises(UnknownCommand, self.run_command, executor, 'test literal dead')
+
+	def test_11_permission(self):
+		executor = Literal('permission').then(
+			Literal('cannot').requires(lambda s: False).runs(self.callback_hit)
+		).then(
+			Literal('pass').requires(lambda s: True).runs(self.callback_hit).then(
+				Literal('fail').requires(lambda s: False)
+			)
+		).then(
+			Literal('fail').requires(lambda s: False).runs(self.callback_hit)
+		)
+		self.run_command_and_check_hit(executor, 'permission pass', True)
+		self.assertRaises(PermissionDenied, self.run_command, executor, 'permission cannot')
+		self.assertRaises(PermissionDenied, self.run_command, executor, 'permission fail')
+		self.assertRaises(PermissionDenied, self.run_command, executor, 'permission pass fail')
+
+	def test_12_redirect(self):
+		executor1 = Literal('tp').then(
+			Literal('here').then(
+				Literal('there').runs(self.callback_hit)
+			)
+		)
+		let_it_pass = True
+		executor2 = Literal('teleport').requires(lambda s: let_it_pass).redirects(executor1)
+		self.run_command_and_check_hit(executor1, 'tp here there', True)
+		self.run_command_and_check_hit(executor2, 'teleport here there', True)
+		self.assertRaises(UnknownCommand, self.run_command, executor2, 'teleport here')
+		let_it_pass = False
+		self.assertRaises(PermissionDenied, self.run_command, executor2, 'teleport here there')
 
 
 if __name__ == '__main__':

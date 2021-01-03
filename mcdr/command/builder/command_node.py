@@ -1,142 +1,13 @@
 import collections
 from abc import ABC
-from typing import List, Callable
+from typing import List, Callable, Iterable, Set
 
-__all__ = [
-	# utils
-	'get_element', 'get_int', 'get_float',
-
-	# errors
-	'CommandError', 'UnknownCommand', 'UnknownArgument', 'UnknownRootArgument',  # command structure errors
-	'IllegalArgument', 'NumberOutOfRange', 'EmptyText',  # built-in command syntax errors
-
-	# for custom argument type
-	'CommandSyntaxError', 'ArgumentNode', 'ParseResult',
-
-	# nodes
-	'Literal',
-	'Number', 'Integer', 'Float',
-	'Text', 'QuotableText', 'GreedyText'
-]
-
+from mcdr.command.builder import utils
+from mcdr.command.builder.exception import IllegalLiteralArgument, NumberOutOfRange, IllegalArgument, EmptyText, \
+	UnknownCommand, UnknownArgument, CommandSyntaxError, UnknownRootArgument, PermissionDenied, IllegalNodeOperation
+from mcdr.command.command_source import CommandSource
 
 ParseResult = collections.namedtuple('ParseResult', 'value char_read')
-DIVIDER = ' '
-
-
-class CommandError(Exception):
-	def __init__(self, message, fail_position_hint):
-		self.message = message
-		self.fail_position_hint = fail_position_hint
-
-	def __str__(self):
-		return '{}: {}'.format(self.message, self.fail_position_hint)
-
-
-class UnknownCommand(CommandError):
-	"""
-	When the command finishes parsing, but current node doesn't have a callback function
-	"""
-	def __init__(self, fail_position):
-		super().__init__('Unknown Command', fail_position)
-
-
-class UnknownArgument(CommandError):
-	"""
-	When there's remaining command string, but there's no matched Literal nodes and no general argument nodes
-	"""
-	def __init__(self, fail_position):
-		super().__init__('Unknown Argument', fail_position)
-
-
-class UnknownRootArgument(UnknownArgument):
-	"""
-	The same as UnknownArgument, but it fails to match at root node
-	"""
-	pass
-
-
-class CommandSyntaxError(CommandError):
-	"""
-	General illegal argument error
-	Used in integer parsing failure etc.
-	"""
-	def __init__(self, message, char_read):
-		super().__init__(message, 'unknown')
-		self.message = message
-		self.char_read = char_read
-
-	def set_fail_position_hint(self, fail_position_hint):
-		self.fail_position_hint = fail_position_hint
-
-
-class IllegalArgument(CommandSyntaxError):
-	"""
-	General illegal argument error
-	Used in integer parsing failure etc.
-	"""
-	pass
-
-
-class IllegalLiteralArgument(CommandSyntaxError):
-	"""
-	Used by Literal node parsing failure for fail-soft
-	"""
-	pass
-
-
-class NumberOutOfRange(CommandSyntaxError):
-	"""
-	The parsed number value is out of the restriction range
-	"""
-	pass
-
-
-class EmptyText(CommandSyntaxError):
-	"""
-	The text is empty, and it's not allowed to be
-	"""
-	pass
-
-
-def remove_divider_prefix(text):
-	return text.lstrip(DIVIDER)
-
-
-def get_element(text):
-	"""
-	"my test command" -> "my"
-	:type text: str
-	:rtype: str
-	"""
-	pos = text.find(DIVIDER)
-	if pos == -1:
-		return text
-	else:
-		return text[:pos]
-
-
-def __get_var(text, func):
-	"""
-	Return value, char_read
-	value will be None if ValueError occurs
-	"""
-	origin_text = text
-	text = remove_divider_prefix(text)
-	arg = get_element(text)
-	try:
-		value = func(arg)
-	except ValueError:
-		value = None
-	return value, len(origin_text) - len(text) + len(arg)
-
-
-def get_int(text):
-	return __get_var(text, int)
-
-
-def get_float(text):
-	return __get_var(text, float)
 
 
 class ArgumentNode:
@@ -145,6 +16,8 @@ class ArgumentNode:
 		self.children_literal = []  # type: List[Literal]
 		self.children = []  # type: List[ArgumentNode]
 		self.callback = None
+		self.requirement = lambda source: True
+		self.redirect_node = None
 
 	# --------------
 	#   Interfaces
@@ -152,52 +25,54 @@ class ArgumentNode:
 
 	def then(self, node):
 		"""
+		Add a child node to this node
 		:param ArgumentNode node: a child node for new level command
 		:rtype: ArgumentNode
 		"""
+		if self.redirect_node is not None:
+			raise IllegalNodeOperation('Redirected node is not allowed to add child nodes')
 		if isinstance(node, Literal):
 			self.children_literal.append(node)
 		else:
 			self.children.append(node)
 		return self
 
-	def run(self, func: Callable[[dict], None]):
+	def runs(self, func: Callable[[CommandSource, dict], None]):
 		"""
+		Executes the given function if the command string ends here
 		:param func: a function to execute at this node
 		:rtype: ArgumentNode
 		"""
 		self.callback = func
 		return self
 
-	def execute(self, command):
+	def requires(self, requirement: Callable[[CommandSource], bool]):
 		"""
-		Parse and execute this command
-		Raise variable CommandError if parsing fails
-		A RuntimeError will be raised if this method is not invoked from a Literal node
-		:param str command: the command string to execute
-		:rtype: None
+		Set the requirement for the command source to enter this node
+		:param requirement: A callable function which accepts 1 parameter (the command source) and return a bool
+		indicating whether the source is allowed to executes this command or not
+		:rtype: ArgumentNode
 		"""
-		if isinstance(self, Literal):
-			try:
-				self._execute(command, command, {})
-			except IllegalLiteralArgument as e:
-				# the root literal node fails to parse the first element
-				raise UnknownRootArgument(e.fail_position_hint)
-		else:
-			raise RuntimeError('Only Literal node is allowed to execute a command')
+		self.requirement = requirement
+		return self
+
+	def redirects(self, redirect_node):
+		"""
+		Redirect the child branches of this node to the child branches of the given node
+		:type redirect_node: ArgumentNode
+		:rtype: ArgumentNode
+		"""
+		if self.has_children():
+			raise IllegalNodeOperation('Node with children nodes is not allowed to be redirected')
+		self.redirect_node = redirect_node
+		return self
 
 	# -------------------
 	#   Interfaces ends
 	# -------------------
 
-	def __does_store_thing(self):
-		"""
-		If this argument stores something into the context after parsing the given command string
-		For example it might need to store an int after parsing an integer
-		In general situation, only Literal Argument doesn't store anything
-		:return: bool
-		"""
-		return self.name is not None
+	def has_children(self):
+		return len(self.children) + len(self.children_literal) > 0
 
 	def parse(self, text):
 		"""
@@ -210,7 +85,16 @@ class ArgumentNode:
 		"""
 		raise NotImplementedError()
 
-	def _execute(self, command, remaining, context):
+	def __does_store_thing(self):
+		"""
+		If this argument stores something into the context after parsing the given command string
+		For example it might need to store an int after parsing an integer
+		In general situation, only Literal Argument doesn't store anything
+		:return: bool
+		"""
+		return self.name is not None
+
+	def _execute(self, source, command, remaining, context):
 		def error_pos(ending_pos):
 			return '{}<--'.format(command[:ending_pos])
 
@@ -220,60 +104,93 @@ class ArgumentNode:
 			e.set_fail_position_hint(error_pos(len(command) - len(remaining) + e.char_read))
 			raise e
 
+		total_read = len(command) - len(remaining) + result.char_read
+		trimmed_remaining = utils.remove_divider_prefix(remaining[result.char_read:])
+
+		if self.requirement is not None and not self.requirement(source):
+			raise PermissionDenied(error_pos(total_read))
+
 		if self.__does_store_thing():
 			context[self.name] = result.value
 
-		total_read = len(command) - len(remaining) + result.char_read
-		trimmed_remaining = remove_divider_prefix(remaining[result.char_read:])
 		# Parsing finished
 		if len(trimmed_remaining) == 0:
 			if self.callback is not None:
-				self.callback(context)
+				self.callback(source, context)
 			else:
 				raise UnknownCommand(error_pos(total_read))
 		# Un-parsed command string remains
 		else:
+			# Redirecting
+			node = self if self.redirect_node is None else self.redirect_node
+
 			# No child at all
-			if len(self.children) + len(self.children_literal) == 0:
+			if not node.has_children():
 				raise UnknownArgument(error_pos(len(command)))
 
-			for child_literal in self.children_literal:
+			# Check literal children first
+			for child_literal in node.children_literal:
 				try:
-					child_literal._execute(command, trimmed_remaining, context)
+					child_literal._execute(source, command, trimmed_remaining, context)
 					break
 				except IllegalLiteralArgument:
 					# it's ok for a direct literal node to fail
 					pass
-			else:
+			else:  # All literal children fails
 				# No argument child
-				if len(self.children) == 0:
+				if len(node.children) == 0:
 					raise UnknownArgument(error_pos(len(command)))
-				for child in self.children:
+				for child in node.children:
 					try:
-						child._execute(command, trimmed_remaining, context)
+						child._execute(source, command, trimmed_remaining, context)
 						break
 					except IllegalArgument:
 						raise
+
+
+class ExecutableNode(ArgumentNode, ABC):
+	def execute(self, source, command):
+		"""
+		Parse and execute this command
+		Raise variable CommandError if parsing fails
+		:param CommandSource source: the source that executes this command
+		:param str command: the command string to execute
+		:rtype: None
+		"""
+		try:
+			self._execute(source, command, command, {})
+		except IllegalLiteralArgument as e:
+			# the root literal node fails to parse the first element
+			raise UnknownRootArgument(e.fail_position_hint)
 
 # ---------------------------------
 #   Argument Node implementations
 # ---------------------------------
 
 
-class Literal(ArgumentNode):
+class Literal(ExecutableNode):
 	"""
 	A literal argument, doesn't store any value, only for extending and readability of the command
 	The only argument type that is allowed to use the execute method
 	"""
-	def __init__(self, literal):
+	def __init__(self, literal: str or Iterable[str]):
 		super().__init__(None)
-		if ' ' in literal:
-			raise TypeError('Space character cannot be inside a literal')
-		self.literal = literal
+		if isinstance(literal, str):
+			literals = {literal}
+		elif isinstance(literal, Iterable):
+			literals = set(literal)
+		else:
+			raise TypeError('Only str or Iterable[str] is accepted')
+		for literal in literals:
+			if not isinstance(literal, str):
+				raise TypeError('Literal node only accepts str but {} found'.format(type(literal)))
+			if ' ' in literal:
+				raise TypeError('Space character cannot be inside a literal')
+		self.literals = literals  # type: Set[str]
 
 	def parse(self, text):
-		arg = get_element(text)
-		if arg == self.literal:
+		arg = utils.get_element(text)
+		if arg in self.literals:
 			return ParseResult(None, len(arg))
 		else:
 			raise IllegalLiteralArgument('Invalid Argument', len(arg))
@@ -304,9 +221,9 @@ class Number(NumberNode):
 	An Integer, or a float
 	"""
 	def parse(self, text):
-		value, read = get_int(text)
+		value, read = utils.get_int(text)
 		if value is None:
-			value, read = get_float(text)
+			value, read = utils.get_float(text)
 		if value is not None:
 			self._check_in_range(value, read)
 			return ParseResult(value, read)
@@ -319,7 +236,7 @@ class Integer(NumberNode):
 	An Integer
 	"""
 	def parse(self, text):
-		value, read = get_int(text)
+		value, read = utils.get_int(text)
 		if value is not None:
 			self._check_in_range(value, read)
 			return ParseResult(value, read)
@@ -329,7 +246,7 @@ class Integer(NumberNode):
 
 class Float(NumberNode):
 	def parse(self, text):
-		value, read = get_float(text)
+		value, read = utils.get_float(text)
 		if value is not None:
 			self._check_in_range(value, read)
 			return ParseResult(value, read)
@@ -351,7 +268,7 @@ class Text(TextNode):
 	Just like a single word
 	"""
 	def parse(self, text):
-		arg = get_element(text)
+		arg = utils.get_element(text)
 		return ParseResult(arg, len(arg))
 
 

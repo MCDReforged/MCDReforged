@@ -8,6 +8,7 @@ import threading
 from typing import List, Any
 
 from mcdr.plugin.version import Version
+from mcdr.rtext import RTextList
 
 
 def start_thread(func, args, name=None):
@@ -46,3 +47,8 @@ def version_compare(v1: str, v2: str) -> int:
 	version1 = Version(v1, allow_wildcard=False)
 	version2 = Version(v2, allow_wildcard=False)
 	return version1.compare_to(version2)
+
+
+def print_text_to_console(logger, text):
+	for line in RTextList(text).to_colored_text().splitlines():
+		logger.info(line)

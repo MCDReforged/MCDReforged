@@ -1,6 +1,7 @@
 """
 Info and InfoSource
 """
+from mcdr.command.command_source import CommandSource, ConsoleCommandSource, PlayerCommandSource
 
 
 class InfoSource:
@@ -61,3 +62,17 @@ class Info:
 
 	def __str__(self):
 		return '; '.join(self.format_text().splitlines())
+
+
+class ServerInfo(Info):
+	def __init__(self, mcdr_server):
+		super().__init__()
+		self.__mcdr_server = mcdr_server
+
+	def to_command_source(self) -> CommandSource or None:
+		if self.source == InfoSource.CONSOLE:
+			return ConsoleCommandSource(self.__mcdr_server)
+		elif self.is_player:
+			return PlayerCommandSource(self.__mcdr_server, self.player)
+		else:
+			return None

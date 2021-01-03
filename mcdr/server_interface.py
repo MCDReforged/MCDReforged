@@ -13,6 +13,7 @@ from mcdr.plugin.plugin_event import MCDREvent, EventListener, LiteralEvent
 from mcdr.plugin.plugin_registry import DEFAULT_LISTENER_PRIORITY, HelpMessage
 from mcdr.rtext import *
 from mcdr.server_status import ServerStatus
+from mcdr.utils import misc_util
 
 
 def log_call(func):
@@ -223,8 +224,7 @@ class ServerInterface:
 		if info.is_player:
 			self.tell(info.player, text, encoding=encoding, is_plugin_call=False)
 		else:
-			for line in RTextList(text).to_colored_text().splitlines():
-				self.logger.info(line)
+			misc_util.print_text_to_console(self.logger, text)
 
 	# ------------------------
 	#          Plugin

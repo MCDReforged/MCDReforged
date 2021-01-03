@@ -8,7 +8,9 @@ import threading
 import traceback
 
 from mcdr import constant
-from mcdr.info import InfoSource
+from mcdr.command.builder.command_executor import CommandExecutor
+from mcdr.command.command_source import CommandSource
+from mcdr.logger import Logger
 from mcdr.permission_manager import PermissionLevel
 from mcdr.plugin.plugin_registry import HelpMessage
 from mcdr.rtext import *
@@ -26,29 +28,36 @@ class Validator:
 class CommandManager:
 	def __init__(self, mcdr_server):
 		self.mcdr_server = mcdr_server
-		self.logger = self.mcdr_server.logger
+		self.logger = self.mcdr_server.logger  # type: Logger
 		self.tr = self.mcdr_server.tr
+		self.command_executor = CommandExecutor()
 
-	def send_message(self, info, msg):
-		self.mcdr_server.server_interface.reply(info, )
+	# -------------
+	#   Interface
+	# -------------
 
-	def send_command_not_found(self, info, cmd):
-		self.send_message(
-			info, RText(self.tr('command_manager.command_not_found', cmd))
-			.h(self.tr('command_manager.command_not_found_suggest', cmd))
-			.c(RAction.run_command, cmd)
-		)
+	def reset_command(self):
+		self.command_executor.clear()
+		self.register_mcdr_command()
 
-	def send_help_message(self, info, msg):
-		for line in msg.splitlines():
-			prefix = re.search(r'(?<=§7)!!MCDR[\w ]*(?=§)', line)
-			if prefix is not None:
-				self.send_message(info, RText(line).c(RAction.suggest_command, prefix.group()))
-			else:
-				self.send_message(info, line)
+	def register_command(self, root_node):
+		self.command_executor.add_root_node(root_node)
 
-	def display_buttons(self, info):
-		return info.source in [InfoSource.SERVER]
+	def execute_command(self, source: CommandSource, command: str):
+		try:
+			command_errors = self.command_executor.execute(source, command)
+		except:
+			self.logger.exception('Error when executing command "{}" with command source "{}"'.format(command, source))
+		else:
+			for error in command_errors:
+				source.reply(str(error))
+
+	# ------------------
+	#   Interface ends
+	# ------------------
+
+	def register_mcdr_command(self):
+		pass
 
 	# --------------
 	# !!MCDR command
