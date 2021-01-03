@@ -1,5 +1,6 @@
 from typing import Dict, List
 
+from mcdr.command.builder import utils
 from mcdr.command.builder.command_node import Literal
 from mcdr.command.builder.exception import CommandError
 from mcdr.command.command_source import CommandSource
@@ -21,7 +22,7 @@ class CommandExecutor:
 		self.root_nodes.clear()
 
 	def execute(self, source: CommandSource, command: str) -> List[CommandError]:
-		first_literal_element = command.split(' ', 1)[0]
+		first_literal_element = utils.get_element(command)
 		errors = []
 		for node in self.root_nodes.get(first_literal_element, []):
 			try:

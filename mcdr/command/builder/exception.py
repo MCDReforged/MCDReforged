@@ -3,28 +3,38 @@ class IllegalNodeOperation(Exception):
 
 
 class CommandError(Exception):
-	def __init__(self, message, fail_position_hint):
-		self.message = message
-		self.fail_position_hint = fail_position_hint
+	def __init__(self, message, parsed_command, failed_command):
+		self.__message = message
+		self._parsed_command = parsed_command
+		self._failed_command = failed_command
 
 	def __str__(self):
-		return '{}: {}'.format(self.message, self.fail_position_hint)
+		return '{}: {}<--'.format(self.__message, self._failed_command)
+
+	def to_mc_color_text(self):
+		return '§c{}§r: {}§c{}§4<--'.format(self.__message, self._parsed_command, self._failed_command[:len(self._parsed_command)])
+
+	def get_parsed_command(self):
+		return self._parsed_command
+
+	def get_failed_command(self):
+		return self._failed_command
 
 
 class UnknownCommand(CommandError):
 	"""
 	When the command finishes parsing, but current node doesn't have a callback function
 	"""
-	def __init__(self, fail_position):
-		super().__init__('Unknown Command', fail_position)
+	def __init__(self, parsed_command, failed_command):
+		super().__init__('Unknown Command', parsed_command, failed_command)
 
 
 class UnknownArgument(CommandError):
 	"""
 	When there's remaining command string, but there's no matched Literal nodes and no general argument nodes
 	"""
-	def __init__(self, fail_position):
-		super().__init__('Unknown Argument', fail_position)
+	def __init__(self, parsed_command, failed_command):
+		super().__init__('Unknown Argument', parsed_command, failed_command)
 
 
 class UnknownRootArgument(UnknownArgument):
@@ -38,8 +48,8 @@ class PermissionDenied(CommandError):
 	"""
 	The command source is not allowed to executes inside this command tree
 	"""
-	def __init__(self, fail_position):
-		super().__init__('Permission denied', fail_position)
+	def __init__(self, parsed_command, failed_command):
+		super().__init__('Permission denied', parsed_command, failed_command)
 
 
 class CommandSyntaxError(CommandError):
@@ -48,12 +58,15 @@ class CommandSyntaxError(CommandError):
 	Used in integer parsing failure etc.
 	"""
 	def __init__(self, message, char_read):
-		super().__init__(message, 'unknown')
+		super().__init__(message, '?', '?')
 		self.message = message
 		self.char_read = char_read
 
-	def set_fail_position_hint(self, fail_position_hint):
-		self.fail_position_hint = fail_position_hint
+	def set_parsed_command(self, parsed_command):
+		self._parsed_command = parsed_command
+
+	def set_failed_command(self, failed_command):
+		self._failed_command = failed_command
 
 
 class IllegalArgument(CommandSyntaxError):

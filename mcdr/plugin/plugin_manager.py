@@ -256,13 +256,14 @@ class PluginManager:
 				plugin.receive_event(PluginEvents.PLUGIN_UNLOAD, (self.mcdr_server.server_interface,))
 			plugin.remove()
 
-		self.__generate_registry()
+		self.__update_registry()
 
-	def __generate_registry(self):
+	def __update_registry(self):
 		self.registry_storage.clear()
 		for plugin in self.get_plugins():
 			self.registry_storage.collect(plugin.plugin_registry)
 		self.registry_storage.arrange()
+		self.mcdr_server.on_plugin_changed()
 
 	def __refresh_plugins(self, reload_filter: Callable[[Plugin], bool]):
 		load_result = self.collect_and_process_new_plugins(lambda fp: True)

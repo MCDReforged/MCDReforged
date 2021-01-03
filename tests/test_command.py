@@ -45,6 +45,10 @@ class MyTestCase(unittest.TestCase):
 		self.run_command(executor, command)
 		self.check_hit(value)
 
+	def assert_raises_and_check_hit(self, value: bool, error, func, *args, **kwargs):
+		self.assertRaises(error, func, *args, **kwargs)
+		self.check_hit(value)
+
 	# ---------
 	#   Tests
 	# ---------
@@ -204,6 +208,20 @@ class MyTestCase(unittest.TestCase):
 		self.assertRaises(UnknownCommand, self.run_command, executor2, 'teleport here')
 		let_it_pass = False
 		self.assertRaises(PermissionDenied, self.run_command, executor2, 'teleport here there')
+
+	def test_13_error_listener(self):
+		executor = Literal('error').then(
+			Literal('ping').
+			on_error(UnknownCommand, lambda s, e: self.assertIsInstance(e, UnknownCommand)).
+			on_error(UnknownArgument, lambda s, e: self.assertIsInstance(e, UnknownArgument))
+		).then(
+			Integer('w').on_error(IllegalArgument, lambda s, e: self.callback_hit(s, {}))
+		).on_error(UnknownCommand, lambda s, e: self.callback_hit(s, {}))
+		self.assertRaises(UnknownCommand, self.run_command, executor, 'error ping')
+		self.assertRaises(UnknownArgument, self.run_command, executor, 'error ping awa')
+		self.assert_raises_and_check_hit(True, UnknownCommand, self.run_command, executor, 'error')
+		self.assert_raises_and_check_hit(True, UnknownCommand, self.run_command, executor, 'error')
+		self.assert_raises_and_check_hit(True, IllegalArgument, self.run_command, executor, 'error 10x')
 
 
 if __name__ == '__main__':

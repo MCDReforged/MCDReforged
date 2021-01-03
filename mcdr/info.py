@@ -69,6 +69,17 @@ class ServerInfo(Info):
 		super().__init__()
 		self.__mcdr_server = mcdr_server
 
+	@classmethod
+	def from_info(cls, mcdr_server, info: Info):
+		ret = ServerInfo(mcdr_server)
+		ret.hour, ret.min, ret.sec = info.hour, info.min, info.sec
+		ret.raw_content = info.raw_content
+		ret.content = info.content
+		ret.player = info.player
+		ret.source = info.source
+		ret.logging_level = info.logging_level
+		return ret
+
 	def to_command_source(self) -> CommandSource or None:
 		if self.source == InfoSource.CONSOLE:
 			return ConsoleCommandSource(self.__mcdr_server)

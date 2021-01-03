@@ -11,6 +11,7 @@ from mcdr import constant, logger
 from mcdr.command.command_manager import CommandManager
 from mcdr.config import Config
 from mcdr.exception import *
+from mcdr.info import ServerInfo
 from mcdr.language_manager import LanguageManager
 from mcdr.parser_manager import ParserManager
 from mcdr.permission_manager import PermissionManager
@@ -114,6 +115,10 @@ class MCDReforgedServer:
 	def load_plugins(self):
 		self.plugin_manager.refresh_all_plugins()
 		self.logger.info(self.plugin_manager.last_operation_result.to_rtext())
+
+	def on_plugin_changed(self):
+		self.command_manager.reset_command()
+		self.plugin_manager.registry_storage.export_commands(self.command_manager.register_command)
 
 	# ---------------------------
 	#   State Getters / Setters
@@ -339,7 +344,7 @@ class MCDReforgedServer:
 			self.logger.debug('Parsed text from server stdin:')
 			for line in parsed_result.format_text().splitlines():
 				self.logger.debug('    {}'.format(line))
-		self.reactor_manager.put_info(parsed_result)
+		self.reactor_manager.put_info(ServerInfo.from_info(self, parsed_result))
 
 	def on_mcdr_stop(self):
 		try:
@@ -413,7 +418,7 @@ class MCDReforgedServer:
 					self.logger.debug('Parsed text from console input:')
 					for line in parsed_result.format_text().splitlines():
 						self.logger.debug('    {}'.format(line))
-					self.reactor_manager.put_info(parsed_result)
+					self.reactor_manager.put_info(ServerInfo.from_info(self, parsed_result))
 			except (KeyboardInterrupt, EOFError, SystemExit, IOError) as e:
 				self.logger.debug('Exception {} {} caught in console_input()'.format(type(e), e))
 				self.interrupt()

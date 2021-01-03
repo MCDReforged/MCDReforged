@@ -1,10 +1,11 @@
 import collections
 from abc import ABC
-from typing import List, Callable, Iterable, Set
+from typing import List, Callable, Iterable, Set, Dict, Type, Any
 
 from mcdr.command.builder import utils
 from mcdr.command.builder.exception import IllegalLiteralArgument, NumberOutOfRange, IllegalArgument, EmptyText, \
-	UnknownCommand, UnknownArgument, CommandSyntaxError, UnknownRootArgument, PermissionDenied, IllegalNodeOperation
+	UnknownCommand, UnknownArgument, CommandSyntaxError, UnknownRootArgument, PermissionDenied, IllegalNodeOperation, \
+	CommandError
 from mcdr.command.command_source import CommandSource
 
 ParseResult = collections.namedtuple('ParseResult', 'value char_read')
@@ -13,9 +14,10 @@ ParseResult = collections.namedtuple('ParseResult', 'value char_read')
 class ArgumentNode:
 	def __init__(self, name):
 		self.name = name
-		self.children_literal = []  # type: List[Literal]
+		self.children_literal = {}  # type: Dict[str, List[Literal]]
 		self.children = []  # type: List[ArgumentNode]
 		self.callback = None
+		self.error_listeners = {}  # type: Dict[Type[CommandError], Callable[[CommandSource, CommandError], Any]]
 		self.requirement = lambda source: True
 		self.redirect_node = None
 
@@ -32,12 +34,15 @@ class ArgumentNode:
 		if self.redirect_node is not None:
 			raise IllegalNodeOperation('Redirected node is not allowed to add child nodes')
 		if isinstance(node, Literal):
-			self.children_literal.append(node)
+			for literal in node.literals:
+				nodes = self.children_literal.get(literal, [])
+				nodes.append(node)
+				self.children_literal[literal] = nodes
 		else:
 			self.children.append(node)
 		return self
 
-	def runs(self, func: Callable[[CommandSource, dict], None]):
+	def runs(self, func: Callable[[CommandSource, dict], Any]):
 		"""
 		Executes the given function if the command string ends here
 		:param func: a function to execute at this node
@@ -67,6 +72,10 @@ class ArgumentNode:
 		self.redirect_node = redirect_node
 		return self
 
+	def on_error(self, error_type: Type[CommandError], listener: Callable[[CommandSource, CommandError], Any]):
+		self.error_listeners[error_type] = listener
+		return self
+
 	# -------------------
 	#   Interfaces ends
 	# -------------------
@@ -94,58 +103,61 @@ class ArgumentNode:
 		"""
 		return self.name is not None
 
-	def _execute(self, source, command, remaining, context):
-		def error_pos(ending_pos):
-			return '{}<--'.format(command[:ending_pos])
+	def __raise_error(self, source, error: CommandError):
+		listener = self.error_listeners.get(type(error))
+		if listener is not None:
+			listener(source, error)
+		raise error
 
+	def _execute(self, source, command: str, remaining: str, context: dict):
+		success_read = len(command) - len(remaining)
 		try:
 			result = self.parse(remaining)
-		except CommandSyntaxError as e:
-			e.set_fail_position_hint(error_pos(len(command) - len(remaining) + e.char_read))
-			raise e
-
-		total_read = len(command) - len(remaining) + result.char_read
-		trimmed_remaining = utils.remove_divider_prefix(remaining[result.char_read:])
-
-		if self.requirement is not None and not self.requirement(source):
-			raise PermissionDenied(error_pos(total_read))
-
-		if self.__does_store_thing():
-			context[self.name] = result.value
-
-		# Parsing finished
-		if len(trimmed_remaining) == 0:
-			if self.callback is not None:
-				self.callback(source, context)
-			else:
-				raise UnknownCommand(error_pos(total_read))
-		# Un-parsed command string remains
+		except CommandSyntaxError as error:
+			error.set_parsed_command(command[:success_read])
+			error.set_failed_command(command[:success_read + error.char_read])
+			self.__raise_error(source, error)
 		else:
-			# Redirecting
-			node = self if self.redirect_node is None else self.redirect_node
+			success_read += result.char_read
+			trimmed_remaining = utils.remove_divider_prefix(remaining[result.char_read:])
 
-			# No child at all
-			if not node.has_children():
-				raise UnknownArgument(error_pos(len(command)))
+			if self.requirement is not None and not self.requirement(source):
+				self.__raise_error(source, PermissionDenied(command[:success_read], command[:success_read]))
 
-			# Check literal children first
-			for child_literal in node.children_literal:
-				try:
-					child_literal._execute(source, command, trimmed_remaining, context)
-					break
-				except IllegalLiteralArgument:
-					# it's ok for a direct literal node to fail
-					pass
-			else:  # All literal children fails
-				# No argument child
-				if len(node.children) == 0:
-					raise UnknownArgument(error_pos(len(command)))
-				for child in node.children:
+			if self.__does_store_thing():
+				context[self.name] = result.value
+
+			# Parsing finished
+			if len(trimmed_remaining) == 0:
+				if self.callback is not None:
+					self.callback(source, context)
+				else:
+					self.__raise_error(source, UnknownCommand(command[:success_read], command[:success_read]))
+			# Un-parsed command string remains
+			else:
+				# Redirecting
+				node = self if self.redirect_node is None else self.redirect_node
+
+				# No child at all
+				if not node.has_children():
+					self.__raise_error(source, UnknownArgument(command[:success_read], command))
+
+				# Check literal children first
+				next_literal = utils.get_element(trimmed_remaining)
+				for child_literal in node.children_literal.get(next_literal, []):
 					try:
+						child_literal._execute(source, command, trimmed_remaining, context)
+						break
+					except IllegalLiteralArgument:
+						# it's ok for a direct literal node to fail
+						pass
+				else:  # All literal children fails
+					# No argument child
+					if len(node.children) == 0:
+						self.__raise_error(source, UnknownArgument(command[:success_read], command))
+					for child in node.children:
 						child._execute(source, command, trimmed_remaining, context)
 						break
-					except IllegalArgument:
-						raise
 
 
 class ExecutableNode(ArgumentNode, ABC):
@@ -159,9 +171,9 @@ class ExecutableNode(ArgumentNode, ABC):
 		"""
 		try:
 			self._execute(source, command, command, {})
-		except IllegalLiteralArgument as e:
+		except IllegalLiteralArgument as error:
 			# the root literal node fails to parse the first element
-			raise UnknownRootArgument(e.fail_position_hint)
+			raise UnknownRootArgument(error.get_parsed_command(), error.get_failed_command())
 
 # ---------------------------------
 #   Argument Node implementations
@@ -184,8 +196,8 @@ class Literal(ExecutableNode):
 		for literal in literals:
 			if not isinstance(literal, str):
 				raise TypeError('Literal node only accepts str but {} found'.format(type(literal)))
-			if ' ' in literal:
-				raise TypeError('Space character cannot be inside a literal')
+			if utils.DIVIDER in literal:
+				raise TypeError('DIVIDER character "{}" cannot be inside a literal'.format(utils.DIVIDER))
 		self.literals = literals  # type: Set[str]
 
 	def parse(self, text):

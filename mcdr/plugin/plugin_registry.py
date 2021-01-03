@@ -1,5 +1,6 @@
-from typing import Dict, List
+from typing import Dict, List, Callable, Any
 
+from mcdr.command.builder.command_node import Literal
 from mcdr.permission_manager import PermissionLevel
 from mcdr.plugin.plugin_event import EventListener
 from mcdr.rtext import RTextBase
@@ -28,6 +29,7 @@ class PluginRegistry:
 		self.plugin = plugin
 		self.event_listeners = {}  # type: Dict[str, List[EventListener]]
 		self.help_messages = []
+		self.command_roots = []  # type: List[Literal]
 
 	def register_help_message(self, help_message: HelpMessage):
 		self.help_messages.append(help_message)
@@ -37,12 +39,13 @@ class PluginRegistry:
 		listeners.append(listener)
 		self.event_listeners[event_id] = listeners
 
-	def register_command(self):
-		pass  # TODO
+	def register_command(self, node: Literal):
+		self.command_roots.append(node)
 
 	def clear(self):
 		self.event_listeners.clear()
 		self.help_messages.clear()
+		self.command_roots.clear()
 
 
 class PluginManagerRegistry:
@@ -50,10 +53,12 @@ class PluginManagerRegistry:
 		self.plugin_manager = plugin_manager
 		self.event_listeners = {}  # type: Dict[str, List[EventListener]]
 		self.help_messages = []  # type: List[HelpMessage]
+		self.command_roots = []  # type: List[Literal]
 
 	def clear(self):
 		self.event_listeners.clear()
 		self.help_messages.clear()
+		self.command_roots.clear()
 
 	def collect(self, registry: PluginRegistry):
 		for event_id, plg_listeners in registry.event_listeners.items():
@@ -61,6 +66,7 @@ class PluginManagerRegistry:
 			listeners.extend(plg_listeners)
 			self.event_listeners[event_id] = listeners
 		self.help_messages.extend(registry.help_messages)
+		self.command_roots.extend(registry.command_roots)
 
 	def arrange(self):
 		self.help_messages.append(HelpMessage(
@@ -72,3 +78,7 @@ class PluginManagerRegistry:
 		self.help_messages.sort()
 		for listeners in self.event_listeners.values():
 			listeners.sort()
+
+	def export_commands(self, exporter: Callable[[Literal], Any]):
+		for node in self.command_roots:
+			exporter(node)

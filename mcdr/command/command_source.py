@@ -23,6 +23,9 @@ class CommandSource:
 	def has_permission(self, level: int) -> bool:
 		return self.get_permission_level() >= level
 
+	def has_permission_higher_than(self, level: int) -> bool:
+		return self.get_permission_level() > level
+
 	def reply(self, message, **kwargs):
 		"""
 		Reply to the command source
@@ -62,7 +65,7 @@ class ConsoleCommandSource(CommandSource):
 		return False
 
 	def reply(self, message, **kwargs):
-		misc_util.print_text_to_console(self._mcdr_server, message)
+		misc_util.print_text_to_console(self._mcdr_server.logger, message)
 
 	def __str__(self):
 		return 'Console'
