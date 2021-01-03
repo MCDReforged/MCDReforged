@@ -38,8 +38,19 @@ def return_if_success(func):
 			func(self, *args, **kwargs)
 			return True
 		except:
-			self.logger.debug('Exception occurred when calling {}: ', exc_info=True)
+			self.logger.debug('Exception occurred when calling {}: '.format(func), exc_info=True)
 			return False
+	return wrap
+
+
+def require_on_mcdr_thread(func):
+	def wrap(self, *args, **kwargs):
+		plugin = self.__server.plugin_manager.get_current_plugin()
+		if isinstance(plugin, Plugin):
+			kwargs['plugin'] = plugin
+			func(self, *args, **kwargs)
+		else:
+			raise IllegalCall('MCDR provided thead is required')
 	return wrap
 
 
@@ -285,6 +296,27 @@ class ServerInterface:
 		return self.__server.plugin_manager.get_plugin_file_list_all()
 
 	# ------------------------
+	#     Plugin Registry
+	# ------------------------
+
+	@log_call
+	@require_on_mcdr_thread
+	def add_help_message(self, prefix, message, plugin=None):
+		"""
+		Add help message for you plugin, which is used in !!help command
+		It needs to be called in a MCDR provided thread such as on_info or on_player_left called or an IllegalCall will
+		be raised
+
+		:param Plugin plugin: Current plugin instance. No need to specify
+		:param str prefix: The help command of your plugin
+		When player click on the displayed message it will suggest this prefix parameter to the player
+		:param message: A neat command description
+		:type message: str or RTextBase
+		:raise: IllegalCall
+		"""
+		plugin.add_help_message(prefix, message)
+
+	# ------------------------
 	#          Other
 	# ------------------------
 
@@ -351,22 +383,3 @@ class ServerInterface:
 		if plugin is not None:
 			plugin = plugin.module
 		return plugin
-
-	@log_call
-	def add_help_message(self, prefix, message):
-		"""
-		Add help message for you plugin, which is used in !!help command
-		It needs to be called in a MCDR provided thread such as on_info or on_player_left called or an IllegalCall will
-		be raised
-
-		:param str prefix: The help command of your plugin
-		When player click on the displayed message it will suggest this prefix parameter to the player
-		:param message: A neat command description
-		:type message: str or RTextBase
-		:raise: IllegalCall
-		"""
-		plugin = self.__server.plugin_manager.get_current_plugin()
-		if isinstance(plugin, Plugin):
-			plugin.add_help_message(prefix, message)
-		else:
-			raise IllegalCall('Method add_help_message needs to be called in a MCDR provided thread')

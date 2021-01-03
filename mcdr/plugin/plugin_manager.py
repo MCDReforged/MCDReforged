@@ -4,7 +4,7 @@ Plugin management
 import os
 import sys
 import threading
-from typing import Callable, Dict, Optional, Any, Tuple, List
+from typing import Callable, Dict, Optional, Any, Tuple, List, Iterable
 
 from mcdr import constant
 from mcdr.logger import Logger, DebugOption
@@ -40,6 +40,9 @@ class PluginManager:
 		Get current executing plugin in this thread
 		"""
 		return self.tls.current_plugin
+
+	def get_plugins(self) -> Iterable[Plugin]:
+		return self.plugins.values()
 
 	def set_current_plugin(self, plugin):
 		self.tls.current_plugin = plugin
@@ -104,6 +107,7 @@ class PluginManager:
 				try:
 					plugin.unload()
 				except:
+					# should never come here
 					self.logger.exception(self.server.tr('plugin_manager.load_plugin.unload_duplication_fail', plugin.get_name(), plugin.file_path))
 				plugin.remove()  # quickly remove this plugin
 				return None
@@ -119,6 +123,8 @@ class PluginManager:
 		try:
 			plugin.unload()
 		except:
+			# should never come here
+			plugin.set_state(PluginState.UNLOADING)
 			self.logger.exception(self.server.tr('plugin_manager.unload_plugin.unload_fail', plugin.get_name()))
 			ret = False
 		else:
@@ -188,7 +194,7 @@ class PluginManager:
 			plugin = self.plugins.get(item.plugin_id)  # should be not None
 			result.record(plugin, item.success)
 			if not item.success:
-				self.logger.warning('Unloading plugin {} due to {}'.format(plugin, item.reason))
+				self.logger.error('Unloading plugin {} due to {}'.format(plugin, item.reason))
 				self.__unload_plugin(plugin)
 		self.logger.debug('Plugin dependency topology order:', option=DebugOption.PLUGIN)
 		for plugin in result.success_list:

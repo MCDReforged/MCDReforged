@@ -1,21 +1,21 @@
 """
 Single plugin class
 """
-import collections
 import hashlib
 import os
 import sys
 from threading import RLock
-from typing import Dict, Callable, Set, Tuple, Any
+from typing import Tuple, Any
 
 from mcdr.exception import IllegalCall, IllegalStateError
 from mcdr.logger import DebugOption
 from mcdr.plugin.metadata import MetaData
-from mcdr.plugin.plugin_event import PluginEvent, PluginEvents, LegacyPluginEvent
+from mcdr.plugin.plugin_event import PluginEvent, PluginEvents
+from mcdr.plugin.plugin_registry import PluginRegistry
 from mcdr.plugin.plugin_thread import PluginThreadPool, TaskData
+from mcdr.rtext import RText, RTextBase
 from mcdr.utils import misc_util
 
-HelpMessage = collections.namedtuple('HelpMessage', 'prefix message plugin_name')
 GLOBAL_LOAD_LOCK = RLock()
 
 
@@ -41,8 +41,7 @@ class Plugin:
 		# noinspection PyTypeChecker
 		self.meta_data = None  # type: MetaData
 		self.state = PluginState.UNINITIALIZED
-		self.event_listeners = {}  # type: Dict[PluginEvent, Set[Callable]]
-		self.help_messages = []
+		self.registry = PluginRegistry(self)
 
 	def get_meta_data(self) -> MetaData:
 		if self.meta_data is None:
@@ -86,8 +85,7 @@ class Plugin:
 			finally:
 				self.newly_loaded_module = [module for module in sys.modules if module not in previous_modules]
 		self.meta_data = MetaData(self, self.instance.__dict__.get('PLUGIN_METADATA'))
-		self.event_listeners.clear()
-		self.help_messages = []
+		self.registry.clear()
 
 	def load(self):
 		self.assert_state({PluginState.UNINITIALIZED})
@@ -97,7 +95,7 @@ class Plugin:
 
 	def ready(self):
 		self.assert_state({PluginState.LOADED})
-		self.register_legacy_listeners()
+		self.__register_default_listeners()
 		self.set_state(PluginState.READY)
 
 	def reload(self):
@@ -154,26 +152,25 @@ class Plugin:
 	#   Plugin Event
 	# ----------------
 
-	def register_listeners(self, event, callback):
-		self.assert_state([PluginState.LOADED, PluginState.READY], 'Only plugin in loaded or ready state is allowed to register listeners')
-		self.server.logger.debug('{} registered event listener {} for event {}'.format(self, callback, event), option=DebugOption.PLUGIN)
-		listeners = self.event_listeners.get(event, set())
-		listeners.add(callback)
-		self.event_listeners[event] = listeners
-
-	def register_legacy_listeners(self):
+	def __register_default_listeners(self):
 		for event in PluginEvents.get_event_list():
-			if isinstance(event, LegacyPluginEvent):
-				func = self.instance.__dict__.get(event.legacy_method_name)
+			if isinstance(event.default_method_name, str):
+				func = self.instance.__dict__.get(event.default_method_name)
 				if callable(func):
-					self.register_listeners(event, func)
+					self.add_listener(event, func)
+
+	def add_listener(self, event: PluginEvent or str, callback):
+		self.assert_state([PluginState.LOADED, PluginState.READY], 'Only plugin in loaded or ready state is allowed to register listeners')
+		self.registry.register_listener(event, callback)
+		self.server.logger.debug('{} registered event listener {} for event {}'.format(self, callback, event), option=DebugOption.PLUGIN)
+
+	def add_help_message(self, prefix: str, help_message: str or RTextBase):
+		self.registry.register_help_message(prefix, help_message)
+		if isinstance(help_message, str):
+			help_message = RText(help_message)
+		self.server.logger.debug('Plugin Added help message "{}: {}"'.format(prefix, help_message), option=DebugOption.PLUGIN)
 
 	def receive_event(self, event: PluginEvent, args: Tuple[Any, ...]):
 		self.assert_state({PluginState.READY, PluginState.UNLOADING}, 'Only plugin in READY or UNLOADING state is allowed to receive events')
-		for listener in self.event_listeners.get(event, []):
+		for listener in self.registry.event_listeners.get(event, []):
 			self.thread_pool.add_task(TaskData(callback=lambda: listener(*args), plugin=self), False)
-
-	# let it be here
-	def add_help_message(self, prefix, message):
-		self.help_messages.append(HelpMessage(prefix, message, self.file_name))
-		self.server.logger.debug('Plugin Added help message "{}: {}"'.format(prefix, message))

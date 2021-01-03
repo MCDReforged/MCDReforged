@@ -142,6 +142,9 @@ class VersionRequirement:
 				return False
 		return True
 
+	def __str__(self):
+		return ' '.join(['{}{}'.format(c.opt, c.base_version) for c in self.criterions])
+
 
 class VersionParsingError(ValueError):
 	pass
