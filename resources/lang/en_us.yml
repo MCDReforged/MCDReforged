@@ -93,7 +93,6 @@ command_manager.load_plugin.success                     : Loaded "§e{0}§r" §a
 command_manager.enable_plugin.fail                      : §cFail§r to enable plugin "§e{0}§r"
 command_manager.enable_plugin.success                   : Enabled "§e{0}§r" §asuccessfully§r
 command_manager.reload_all_plugin.fail                  : §cFail§r to reload all plugins
-command_manager.mcdr_help_message                       : MCDR control command
 permission_manager.load.fail                            : Fail to load permission file {0}, using default empty data
 permission_manager.set_default_permission_level.done    : The default permission level has set to §e{0}§r
 permission_manager.set_permission_level.done            : The permission level of player §b{0}§r has set to §e{1}§r
@@ -106,7 +105,7 @@ plugin_operation_result.info_unloaded_failed            : "Unload failed: §7{0}
 plugin_operation_result.info_reloaded_failed            : "Reload failed: §7{0}§r plugins"
 plugin_operation_result.info_dependency_check_failed    : "Dependency check failed: §7{0}§r plugins"
 plugin_operation_result.info_none                       : "No plugin has changed"
-plugin_operation_result.info_plugin_amount              : "Loaded plugin amount: §7{0}§r"
+plugin_operation_result.info_plugin_amount              : "Active plugin amount: §7{0}§r"
 plugin_manager.load                                     : load
 plugin_manager.unload                                   : unload
 plugin_manager.reload                                   : reload
@@ -118,6 +117,7 @@ plugin_manager.unload_plugin.unload_fail                : Fail to unload plugin 
 plugin_manager.unload_plugin.unload_success             : Plugin {0} unloaded
 plugin_manager.reload_plugin.reload_fail                : Fail to reload plugin {0}
 plugin_manager.reload_plugin.reload_success             : Plugin {0} reloaded
+plugin_registry.mcdr_help_message                       : MCDR control command
 rcon_manager.connect.connection_fail                    : "Rcon connection failed: {0}"
 rcon_manager.connect.connected                          : Rcon connected
 rcon_manager.connect.wrong_password                     : Rcon password is not correct, connection failed

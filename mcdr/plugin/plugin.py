@@ -10,10 +10,10 @@ from typing import Tuple, Any
 from mcdr.exception import IllegalCall, IllegalStateError
 from mcdr.logger import DebugOption
 from mcdr.plugin.metadata import MetaData
-from mcdr.plugin.plugin_event import PluginEvent, PluginEvents
-from mcdr.plugin.plugin_registry import PluginRegistry
+from mcdr.plugin.plugin_event import MCDREvent, PluginEvents, EventListener, PluginEvent
+from mcdr.plugin.plugin_registry import PluginRegistry, DEFAULT_LISTENER_PRIORITY, HelpMessage
 from mcdr.plugin.plugin_thread import PluginThreadPool, TaskData
-from mcdr.rtext import RText, RTextBase
+from mcdr.rtext import RText
 from mcdr.utils import misc_util
 
 GLOBAL_LOAD_LOCK = RLock()
@@ -41,7 +41,7 @@ class Plugin:
 		# noinspection PyTypeChecker
 		self.meta_data = None  # type: MetaData
 		self.state = PluginState.UNINITIALIZED
-		self.registry = PluginRegistry(self)
+		self.plugin_registry = PluginRegistry(self)
 
 	def get_meta_data(self) -> MetaData:
 		if self.meta_data is None:
@@ -85,7 +85,7 @@ class Plugin:
 			finally:
 				self.newly_loaded_module = [module for module in sys.modules if module not in previous_modules]
 		self.meta_data = MetaData(self, self.instance.__dict__.get('PLUGIN_METADATA'))
-		self.registry.clear()
+		self.plugin_registry.clear()
 
 	def load(self):
 		self.assert_state({PluginState.UNINITIALIZED})
@@ -157,20 +157,20 @@ class Plugin:
 			if isinstance(event.default_method_name, str):
 				func = self.instance.__dict__.get(event.default_method_name)
 				if callable(func):
-					self.add_listener(event, func)
+					self.add_event_listener(event, EventListener(self, func, DEFAULT_LISTENER_PRIORITY))
 
-	def add_listener(self, event: PluginEvent or str, callback):
+	def add_event_listener(self, event: PluginEvent, listener: EventListener):
 		self.assert_state([PluginState.LOADED, PluginState.READY], 'Only plugin in loaded or ready state is allowed to register listeners')
-		self.registry.register_listener(event, callback)
-		self.mcdr_server.logger.debug('{} registered event listener {} for event {}'.format(self, callback, event), option=DebugOption.PLUGIN)
+		self.plugin_registry.register_listener(event.id, listener)
+		self.mcdr_server.logger.debug('{} is registered for {}'.format(listener, event), option=DebugOption.PLUGIN)
 
-	def add_help_message(self, prefix: str, help_message: str or RTextBase):
-		self.registry.register_help_message(prefix, help_message)
+	def add_help_message(self, help_message: HelpMessage):
+		self.plugin_registry.register_help_message(help_message)
 		if isinstance(help_message, str):
 			help_message = RText(help_message)
-		self.mcdr_server.logger.debug('Plugin Added help message "{}: {}"'.format(prefix, help_message), option=DebugOption.PLUGIN)
+		self.mcdr_server.logger.debug('Plugin Added help message "{}"'.format(help_message), option=DebugOption.PLUGIN)
 
-	def receive_event(self, event: PluginEvent, args: Tuple[Any, ...]):
+	def receive_event(self, event: MCDREvent, args: Tuple[Any, ...]):
 		self.assert_state({PluginState.READY, PluginState.UNLOADING}, 'Only plugin in READY or UNLOADING state is allowed to receive events')
-		for listener in self.registry.event_listeners.get(event, []):
+		for listener in self.plugin_registry.event_listeners.get(event, []):
 			self.thread_pool.add_task(TaskData(callback=lambda: listener(*args), plugin=self), False)

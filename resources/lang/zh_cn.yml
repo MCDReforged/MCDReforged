@@ -93,7 +93,6 @@ command_manager.load_plugin.success                     : 插件 "§e{0}§r" 启
 command_manager.enable_plugin.load_fail                 : 插件 "§e{0}§r" 加载§c失败§r
 command_manager.enable_plugin.success                   : 插件 "§e{0}§r" 启用§a成功§r
 command_manager.reload_all_plugin.fail                  : 重载所有插件§c失败§r
-command_manager.mcdr_help_message                       : MCDR 控制指令
 permission_manager.load.fail                            : 加载权限文件 §7{0}§r §c失败§r，使用默认的空数据
 permission_manager.set_default_permission_level.done    : 默认权限等级已设置为 §e{0}§r
 permission_manager.set_permission_level.done            : 玩家 §b{0}§r 的权限等级已设置为 §e{1}§r
@@ -114,6 +113,7 @@ plugin_manager.__refresh_plugins.info_reloaded          : "已重载: §7{0}§r 
 plugin_manager.__refresh_plugins.info_fail              : "失败: §7{0}§r 个插件"
 plugin_manager.__refresh_plugins.info_none              : "无插件变更"
 plugin_manager.__refresh_plugins.info_plugin_amount     : "已加载插件总数: §7{0}§r"
+plugin_registry.mcdr_help_message                       : MCDR 控制指令
 rcon_manager.connect.connection_fail                    : "rcon 连接失败: {0}"
 rcon_manager.connect.connected                          : rcon 已连接
 rcon_manager.connect.wrong_password                     : rcon 密码错误，连接失败

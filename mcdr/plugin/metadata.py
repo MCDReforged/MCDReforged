@@ -5,16 +5,17 @@ from typing import List, Dict
 
 from mcdr import constant
 from mcdr.plugin.version import Version, VersionParsingError, VersionRequirement
+from mcdr.rtext import RTextBase
 from mcdr.utils import string_util
 
 
 class MetaData:
 	id: str
 	version: Version
-	name: str
-	description: str
-	author: str or List[str]
-	link: str
+	name: str or RTextBase
+	description: str or RTextBase or None
+	author: str or List[str] or None
+	link: str or None
 	dependencies: Dict[str, VersionRequirement]
 
 	FALLBACK_VERSION = '0.0.0'

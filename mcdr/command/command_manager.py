@@ -349,8 +349,6 @@ class CommandManager:
 	# --------------
 
 	def process_help_command(self, info):
-		help_messages = [HelpMessage('!!MCDR', self.tr('command_manager.mcdr_help_message'), RText('MCDR', color=RColor.gold))]
-		for plugin in self.mcdr_server.plugin_manager.get_plugins():
-			help_messages.extend(plugin.registry.help_messages)
-		for prefix, message, name in sorted(help_messages, key=lambda x: x.prefix.upper()):
-			self.send_message(info, RText('§7{}§r: '.format(prefix)).c(RAction.suggest_command, prefix).h(name) + message)
+		for msg in self.mcdr_server.plugin_manager.registry_storage.help_messages:  # type: HelpMessage
+			# TODO: permission check
+			self.send_message(info, RText('§7{}§r: '.format(msg.prefix)).c(RAction.suggest_command, msg.prefix) + msg.message)

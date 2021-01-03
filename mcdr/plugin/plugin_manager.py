@@ -11,7 +11,8 @@ from mcdr.logger import Logger, DebugOption
 from mcdr.plugin.dependency_walker import DependencyWalker
 from mcdr.plugin.operation_result import PluginOperationResult, SingleOperationResult
 from mcdr.plugin.plugin import Plugin, PluginState
-from mcdr.plugin.plugin_event import PluginEvents, PluginEvent
+from mcdr.plugin.plugin_event import PluginEvents, MCDREvent
+from mcdr.plugin.plugin_registry import PluginManagerRegistry
 from mcdr.plugin.plugin_thread import PluginThreadPool
 from mcdr.utils import file_util, string_util, misc_util
 
@@ -26,6 +27,8 @@ class PluginManager:
 		self.plugins = {}   # type: Dict[str, Plugin]
 		# file_path -> id mapping
 		self.plugin_file_path = {}  # type: Dict[str, str]
+		# storage for event listeners, help messages and commands
+		self.registry_storage = PluginManagerRegistry(self)
 
 		self.last_operation_result = PluginOperationResult(self)
 
@@ -172,7 +175,7 @@ class PluginManager:
 
 	def collect_and_remove_plugins(self, filter: Callable[[Plugin], bool], specific: Optional[Plugin] = None) -> SingleOperationResult:
 		result = SingleOperationResult()
-		plugin_list = self.plugins.values() if specific is None else [specific]
+		plugin_list = self.get_plugins() if specific is None else [specific]
 		for plugin in plugin_list:
 			if filter(plugin):
 				result.record(plugin, self.__unload_plugin(plugin))
@@ -180,7 +183,7 @@ class PluginManager:
 
 	def reload_ready_plugins(self, filter: Callable[[Plugin], bool], specific: Optional[Plugin] = None) -> SingleOperationResult:
 		result = SingleOperationResult()
-		plugin_list = self.plugins.values() if specific is None else [specific]
+		plugin_list = self.get_plugins() if specific is None else [specific]
 		for plugin in plugin_list:
 			if plugin.in_states({PluginState.READY}) and filter(plugin):
 				result.record(plugin, self.__reload_plugin(plugin))
@@ -253,6 +256,14 @@ class PluginManager:
 				plugin.receive_event(PluginEvents.PLUGIN_UNLOAD, (self.mcdr_server.server_interface,))
 			plugin.remove()
 
+		self.__generate_registry()
+
+	def __generate_registry(self):
+		self.registry_storage.clear()
+		for plugin in self.get_plugins():
+			self.registry_storage.collect(plugin.plugin_registry)
+		self.registry_storage.arrange()
+
 	def __refresh_plugins(self, reload_filter: Callable[[Plugin], bool]):
 		load_result = self.collect_and_process_new_plugins(lambda fp: True)
 		unload_result = self.collect_and_remove_plugins(lambda plugin: not plugin.file_exists())
@@ -298,7 +309,7 @@ class PluginManager:
 	#   Plugin Event
 	# ----------------
 
-	def dispatch_event(self, event: PluginEvent, args: Tuple[Any, ...], wait: bool = True):
+	def dispatch_event(self, event: MCDREvent, args: Tuple[Any, ...], wait: bool = True):
 		# TODO: handle wait param
-		for plugin in self.plugins.values():
+		for plugin in self.get_plugins():
 			plugin.receive_event(event, args)

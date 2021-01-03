@@ -7,6 +7,7 @@ import collections
 import ruamel.yaml as yaml
 from ruamel.yaml.comments import CommentedSeq
 
+from mcdr.command.command_source import CommandSource
 from mcdr.info import *
 from mcdr.utils import misc_util
 
@@ -27,8 +28,10 @@ class PermissionLevel:
 	DICT_NAME = collections.OrderedDict([(value, item) for item, value in DICT_VALUE.items()])
 	VALUE = list(DICT_VALUE.values())
 	NAME = list(DICT_VALUE.keys())
+
 	TOP_LEVEL = VALUE[0]
 	BOTTOM_LEVEL = VALUE[-1]
+	MCDR_CONTROL_LEVEL = ADMIN
 
 
 class PermissionManager:
@@ -256,6 +259,14 @@ class PermissionManager:
 		:rtype: int or None
 		"""
 		if info.source == InfoSource.CONSOLE:
+			return PermissionLevel.TOP_LEVEL
+		elif info.is_player:
+			return self.get_player_permission_level(info.player)
+		else:
+			return None
+
+	def has_permission(self, source: CommandSource, level: int):
+		if source.source == InfoSource.CONSOLE:
 			return PermissionLevel.TOP_LEVEL
 		elif info.is_player:
 			return self.get_player_permission_level(info.player)

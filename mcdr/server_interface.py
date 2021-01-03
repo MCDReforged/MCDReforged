@@ -3,10 +3,14 @@ An interface class for plugins to control the server
 """
 
 import time
+from typing import Callable
 
 from mcdr.exception import *
 from mcdr.info import Info
+from mcdr.permission_manager import PermissionLevel
 from mcdr.plugin.plugin import Plugin
+from mcdr.plugin.plugin_event import MCDREvent, EventListener, LiteralEvent
+from mcdr.plugin.plugin_registry import DEFAULT_LISTENER_PRIORITY, HelpMessage
 from mcdr.rtext import *
 from mcdr.server_status import ServerStatus
 
@@ -296,20 +300,37 @@ class ServerInterface:
 			raise IllegalCall('MCDR provided thead is required')
 
 	@log_call
-	def add_help_message(self, prefix, message):
+	def add_help_message(self, prefix, message, permission=PermissionLevel.BOTTOM_LEVEL):
 		"""
-		Add help message for you plugin, which is used in !!help command
-		It needs to be called in a MCDR provided thread such as on_info or on_player_left called or an IllegalCall will
-		be raised
+		Add a help message for the current plugin, which is used in !!help command
 
 		:param str prefix: The help command of your plugin
 		When player click on the displayed message it will suggest this prefix parameter to the player
-		:param message: A neat command description
-		:type message: str or RTextBase
-		:raise: IllegalCall
+		:param str or RTextBase message: A neat command description
+		:param int permission: The minimum permission level for the user to see this help message. With default, anyone
+		can see this message
+		:raise: IllegalCall if it's not called in a MCDR provided thread
 		"""
 		plugin = self.__get_current_plugin()
-		plugin.add_help_message(prefix, message)
+		if isinstance(message, str):
+			message = RText(message)
+		plugin.add_help_message(HelpMessage(plugin, prefix, message, permission))
+
+	@log_call
+	def add_event_listener(self, event: str or MCDREvent, callback: Callable, priority: int = DEFAULT_LISTENER_PRIORITY):
+		"""
+		Add an event listener for the current plugin
+
+		:param event: The id of the event to listen, or the PluginEvent instance if it's a built-in
+		MCDR event
+		:param callback: The callback listener method for the event
+		:param priority: The priority of the listener
+		:raise: IllegalCall if it's not called in a MCDR provided thread
+		"""
+		plugin = self.__get_current_plugin()
+		if isinstance(event, str):
+			event = LiteralEvent(event_id=event)
+		plugin.add_event_listener(event, EventListener(plugin, callback, priority))
 
 	# ------------------------
 	#          Other

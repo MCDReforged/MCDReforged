@@ -62,17 +62,18 @@ class DependencyWalker:
 
 		self.visiting_plugins.add(plugin_id)
 		try:
-			if plugin_id == constant.NAME:  # MCDReforged
-				plugin_name_display = plugin_id
-				plugin_version = constant.VERSION
-				plugin_dependencies = {}
-			else:
+			is_plugin = plugin_id != constant.NAME
+			if is_plugin:
 				plugin = self.plugin_manager.plugins.get(plugin_id)
 				if plugin is None:
 					raise DependencyNotFound('Dependency {} not found'.format(plugin_id))
 				plugin_name_display = plugin.get_name()
 				plugin_version = plugin.get_meta_data().version
 				plugin_dependencies = plugin.get_meta_data().dependencies
+			else:  # MCDReforged
+				plugin_name_display = plugin_id
+				plugin_version = constant.VERSION
+				plugin_dependencies = {}
 
 			if requirement is not None and isinstance(requirement, VersionRequirement) and not requirement.accept(plugin_version):
 				raise DependencyNotMet('Dependency {} does not meet version requirement {}'.format(plugin_name_display, requirement))
@@ -83,8 +84,9 @@ class DependencyWalker:
 					self.visiting_state[plugin_id] = VisitingState.FAIL
 					self.plugin_manager.logger.debug('Set visiting state of {} to FAIL due to "{}"'.format(plugin_id, e), option=DebugOption.PLUGIN)
 					raise
-			self.topo_order.append(plugin_id)
-			self.visiting_state[plugin_id] = VisitingState.PASS
+			if is_plugin:
+				self.topo_order.append(plugin_id)
+				self.visiting_state[plugin_id] = VisitingState.PASS
 		finally:
 			self.visiting_plugins.remove(plugin_id)
 
