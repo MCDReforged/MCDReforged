@@ -18,6 +18,7 @@ class DebugOption:
 	ALL = 'all'
 	PARSER = 'parser'
 	PLUGIN = 'plugin'
+	PERMISSION = 'permission'
 
 
 class MCColoredFormatter(ColoredFormatter):

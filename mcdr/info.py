@@ -87,3 +87,6 @@ class ServerInfo(Info):
 			return PlayerCommandSource(self.__mcdr_server, self.player)
 		else:
 			return None
+
+	def cancel_echo(self):
+		pass

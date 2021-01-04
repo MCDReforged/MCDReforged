@@ -14,50 +14,62 @@ class Config:
 		self.data = None
 		self.file_name = file_name
 
-	def read_config(self):
+	def read_config(self) -> bool:
+		"""
+		:return: if there are any missing config entries
+		"""
 		if os.path.isfile(self.file_name):
 			with open(self.file_name, encoding='utf8') as file:
 				self.data = yaml.round_trip_load(file)
-		self.check_config()
+		return self.check_config()
 
 	def save(self):
 		with open(self.file_name, 'w', encoding='utf8') as file:
 			yaml.round_trip_dump(self.data, file)
 
-	def touch(self, key, default):
+	def touch(self, data, key, default, key_path=''):
+		if key not in data:
+			data[key] = default
+			self.mcdr_server.logger.warning('Option "{}{}" missing, use default value "{}"'.format(key_path, key, default))
+			return True
+		ret = False
+		if isinstance(default, dict):
+			divider = ' -> ' if len(key_path) > 0 else ''
+			for k, v in default.items():
+				ret |= self.touch(data[key], k, v, key_path + divider + key)
+		return ret
+
+	def check_config(self) -> bool:
+		"""
+		:return: if there are any missing config entries
+		"""
+		flag = False
 		if self.data is None:
 			self.data = {}
-		if key not in self.data:
-			self.data[key] = default
-			self.mcdr_server.logger.warning('Option "{}" missing, use default value "{}"'.format(key, default))
-			return True
-		return False
-
-	def check_config(self):
-		flag = False
-		flag |= self.touch('language', 'en_us')
-		flag |= self.touch('working_directory', 'server')
-		flag |= self.touch('plugin_folders', ['./plugins'])
-		flag |= self.touch('start_command', '')
-		flag |= self.touch('parser', 'vanilla_parser')
-		flag |= self.touch('encoding', None)
-		flag |= self.touch('decoding', None)
-		flag |= self.touch('console_command_prefix', '!!')
-		flag |= self.touch('enable_rcon', False)
-		flag |= self.touch('rcon_address', '127.0.0.1')
-		flag |= self.touch('rcon_port', 25575)
-		flag |= self.touch('rcon_password', 'password')
-		flag |= self.touch('disable_console_thread', False)
-		flag |= self.touch('download_update', True)
-		flag |= self.touch('debug', {
+			flag = True
+		flag |= self.touch(self.data, 'language', 'en_us')
+		flag |= self.touch(self.data, 'working_directory', 'server')
+		flag |= self.touch(self.data, 'plugin_folders', ['./plugins'])
+		flag |= self.touch(self.data, 'start_command', '')
+		flag |= self.touch(self.data, 'parser', 'vanilla_parser')
+		flag |= self.touch(self.data, 'encoding', None)
+		flag |= self.touch(self.data, 'decoding', None)
+		flag |= self.touch(self.data, 'console_command_prefix', '!!')
+		flag |= self.touch(self.data, 'enable_rcon', False)
+		flag |= self.touch(self.data, 'rcon_address', '127.0.0.1')
+		flag |= self.touch(self.data, 'rcon_port', 25575)
+		flag |= self.touch(self.data, 'rcon_password', 'password')
+		flag |= self.touch(self.data, 'disable_console_thread', False)
+		flag |= self.touch(self.data, 'download_update', True)
+		flag |= self.touch(self.data, 'debug', {
 			DebugOption.ALL: False,
 			DebugOption.PARSER: False,
 			DebugOption.PLUGIN: False,
+			DebugOption.PERMISSION: False,
 		})
 		if flag:
-			for line in self.mcdr_server.tr('config.missing_config').splitlines():
-				self.mcdr_server.logger.warning(line)
 			self.save()
+		return flag
 
 	def __getitem__(self, item):
 		return self.data[item]

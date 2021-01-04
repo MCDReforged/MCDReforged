@@ -3,8 +3,9 @@ An interface class for plugins to control the server
 """
 
 import time
-from typing import Callable
+from typing import Callable, Union
 
+from mcdr.command.command_source import CommandSource
 from mcdr.exception import *
 from mcdr.info import Info
 from mcdr.permission_manager import PermissionLevel
@@ -12,7 +13,7 @@ from mcdr.plugin.plugin import Plugin
 from mcdr.plugin.plugin_event import MCDREvent, EventListener, LiteralEvent
 from mcdr.plugin.plugin_registry import DEFAULT_LISTENER_PRIORITY, HelpMessage
 from mcdr.rtext import *
-from mcdr.server_status import ServerStatus
+from mcdr.server_status import MCDRServerStatus
 from mcdr.utils import misc_util
 
 
@@ -121,7 +122,7 @@ class ServerInterface:
 		"""
 		if self.__mcdr_server.is_server_running():
 			raise IllegalCall('Cannot exit MCDR when the server is running')
-		self.__mcdr_server.set_server_status(ServerStatus.STOPPED)
+		self.__mcdr_server.set_server_status(MCDRServerStatus.STOPPED)
 
 	@log_call
 	def is_server_running(self):
@@ -300,7 +301,7 @@ class ServerInterface:
 			raise IllegalCall('MCDR provided thead is required')
 
 	@log_call
-	def add_help_message(self, prefix, message, permission=PermissionLevel.BOTTOM_LEVEL):
+	def add_help_message(self, prefix, message, permission=PermissionLevel.MINIMUM_LEVEL):
 		"""
 		Add a help message for the current plugin, which is used in !!help command
 
@@ -344,18 +345,19 @@ class ServerInterface:
 		Raise TypeError if the type of obj is object supported
 
 		:param obj: The object your are querying
-		:type obj: Info or str
+		:type obj: Union[Info, str, CommandSource]
 		:return: The permission level you are querying
 		:rtype: int
 		:raise: TypeError
 		"""
-		t = type(obj)
-		if t is Info:  # Info instance
+		if isinstance(obj, Info):  # Info instance
 			return self.__mcdr_server.permission_manager.get_info_permission_level(obj)
-		elif t is str:  # player name
+		elif isinstance(obj, CommandSource):  # Command Source
+			return obj.get_permission_level()
+		elif isinstance(obj, str):  # Player name
 			return self.__mcdr_server.permission_manager.get_player_permission_level(obj)
 		else:
-			raise TypeError('Except Info or str for permission level querying but {} found'.format(getattr(t, '__name__', t)))
+			raise TypeError('Unsupported permission level querying for type {}'.format(type(obj)))
 
 	@log_call
 	def set_permission_level(self, player, level):

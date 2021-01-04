@@ -23,6 +23,9 @@ class HelpMessage:
 			return False
 		return self.__get_compare_key() < other.__get_compare_key()
 
+	def __repr__(self):
+		return 'HelpMessage[prefix={},message={},permission={}]'.format(self.prefix, self.message.to_plain_text(), self.permission)
+
 
 class PluginRegistry:
 	def __init__(self, plugin):

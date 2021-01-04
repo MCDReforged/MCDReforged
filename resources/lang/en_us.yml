@@ -85,9 +85,12 @@ command_manager.list_plugin.suggest_disable             : Click to disable plugi
 command_manager.list_plugin.suggest_enable              : Click to enable plugin "§e{0}§r"
 command_manager.list_plugin.suggest_reload              : Click to reload plugin "§e{0}§r"
 command_manager.list_plugin.suggest_load                : Click to load plugin "§e{0}§r"
-command_manager.invalid_plugin_name                     : Invalid plugin name "§e{0}§r"
+command_manager.invalid_plugin_id                       : Invalid plugin id "§e{0}§r"
+command_manager.invalid_plugin_file_name                : Invalid plugin file name "§e{0}§r"
 command_manager.disable_plugin.fail                     : §cFail§r to disable plugin "§e{0}§r"
-command_manager.disable_plugin.success                  : Disabled "§e{0}§r" §asuccessfully§r
+command_manager.disable_plugin.success                  : Disable "§e{0}§r" §asuccessfully§r
+command_manager.reload_plugin.fail                      : §cFail§r to reload plugin "§e{0}§r"
+command_manager.reload_plugin.success                   : Reload "§e{0}§r" §asuccessfully§r
 command_manager.load_plugin.fail                        : §cFail§r to load plugin "§e{0}§r"
 command_manager.load_plugin.success                     : Loaded "§e{0}§r" §asuccessfully§r
 command_manager.enable_plugin.fail                      : §cFail§r to enable plugin "§e{0}§r"
@@ -123,10 +126,10 @@ rcon_manager.connect.connected                          : Rcon connected
 rcon_manager.connect.wrong_password                     : Rcon password is not correct, connection failed
 rcon_manager.disconnect.disconnected                    : Rcon disconnected
 rcon_manager.disconnect.disconnect_fail                 : Fail to disconnect rcon
-server_status.running                                   : §aRunning§r
-server_status.stopping                                  : §cStopping§r
-server_status.pre_stopped                               : §4Pre-stopped§r
-server_status.stopped                                   : §4Stopped§r
+mcdr_server_status.running                                   : §aRunning§r
+mcdr_server_status.stopping                                  : §cStopping§r
+mcdr_server_status.pre_stopped                               : §4Pre-stopped§r
+mcdr_server_status.stopped                                   : §4Stopped§r
 general_reactor.permission_denied                       : Permission denied
 parser_manager.load_parser.file_not_found               : Parser "{0}" not found! Make sure you have given a correct parser name in the config
 parser_manager.load_re_death_message.fail               : Fail to load death message data

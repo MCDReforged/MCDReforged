@@ -52,6 +52,9 @@ parser: vanilla_parser
 encoding:
 decoding:
 
+# A list of folder path where MCDR will search for plugin to load
+plugin_folders:
+- plugins_test
 
 # if any command input to the console starts with the string below, MCDR will not send this command to server's stdin
 # for example the default value is !! so these commands won't be sent to server's stdin
@@ -82,7 +85,6 @@ debug:
   all: false
   parser: false
   plugin: true
+  permission: false
 
 # Missing options down below
-plugin_folders:
-- plugins_test

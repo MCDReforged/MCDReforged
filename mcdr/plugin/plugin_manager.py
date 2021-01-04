@@ -4,7 +4,7 @@ Plugin management
 import os
 import sys
 import threading
-from typing import Callable, Dict, Optional, Any, Tuple, List, Iterable
+from typing import Callable, Dict, Optional, Any, Tuple, List
 
 from mcdr import constant
 from mcdr.logger import Logger, DebugOption
@@ -44,8 +44,11 @@ class PluginManager:
 		"""
 		return self.tls.current_plugin
 
-	def get_plugins(self) -> Iterable[Plugin]:
-		return self.plugins.values()
+	def get_plugins(self) -> List[Plugin]:
+		return list(self.plugins.values())
+
+	def get_plugin_from_id(self, plugin_id: str) -> Optional[Plugin]:
+		return self.plugins.get(plugin_id)
 
 	def set_current_plugin(self, plugin):
 		self.tls.current_plugin = plugin
@@ -87,7 +90,7 @@ class PluginManager:
 	def __load_plugin(self, file_path):
 		"""
 		Try to load a plugin from the given file
-		If succeeds, add the plugin to the plugin list
+		If succeeds, add the plugin to the plugin list, the plugin state will be set to LOADED
 		If fails, nothing will happen
 		:param str file_path: The path to the plugin file, a *.py
 		:return: the new plugin instance if succeeds, otherwise None
@@ -119,6 +122,7 @@ class PluginManager:
 		"""
 		Try to load a plugin from the given file
 		Whether it succeeds or not, the plugin instance will be removed from the plugin list
+		The plugin state will be set to UNLOADING
 		:param Plugin plugin: The plugin instance to be unloaded
 		:return: If there's an exception during plugin unloading
 		:rtype: bool
@@ -139,9 +143,8 @@ class PluginManager:
 
 	def __reload_plugin(self, plugin):
 		"""
-		Try to load a plugin from the given file
-		If succeeds, add the plugin to the plugin list
-		If fails, nothing will happen
+		Try to reload an existed plugin
+		If fails, unload the plugin and then the plugin state will be set to UNLOADED
 		:param Plugin plugin: The plugin instance to be reloaded
 		:return: If the plugin reloads successfully without error
 		:rtype: bool
@@ -163,7 +166,7 @@ class PluginManager:
 	def collect_and_process_new_plugins(self, filter: Callable[[str], bool], specific: Optional[str] = None) -> SingleOperationResult:
 		result = SingleOperationResult()
 		for plugin_folder in self.plugin_folders:
-			file_list = file_util.list_file(plugin_folder, constant.PLUGIN_FILE_SUFFIX) if specific is None else [specific]
+			file_list = file_util.list_file_with_suffix(plugin_folder, constant.PLUGIN_FILE_SUFFIX) if specific is None else [specific]
 			for file_path in file_list:
 				if not self.contains_plugin_file(file_path) and filter(file_path):
 					plugin = self.__load_plugin(file_path)
@@ -187,7 +190,6 @@ class PluginManager:
 		for plugin in plugin_list:
 			if plugin.in_states({PluginState.READY}) and filter(plugin):
 				result.record(plugin, self.__reload_plugin(plugin))
-				self.__reload_plugin(plugin)
 		return result
 
 	def check_plugin_dependencies(self) -> SingleOperationResult:
@@ -241,6 +243,13 @@ class PluginManager:
 		dependency_check_result = self.check_plugin_dependencies()
 		self.last_operation_result.record(load_result, unload_result, reload_result, dependency_check_result)
 
+		# Expected plugin states:
+		# 					success_list		fail_list
+		# load_result		LOADED				N/A
+		# unload_result		UNLOADING			UNLOADING
+		# reload_result		READY				UNLOADING
+		# dep_chk_result	LOADED / READY		UNLOADING
+
 		for plugin in load_result.success_list:
 			if plugin in dependency_check_result.success_list:
 				plugin.ready()
@@ -251,12 +260,23 @@ class PluginManager:
 				plugin.receive_event(PluginEvents.PLUGIN_LOAD, (self.mcdr_server.server_interface, plugin.old_instance))
 
 		for plugin in unload_result.success_list + unload_result.failed_list + reload_result.failed_list + dependency_check_result.failed_list:
-			# plugins might just be loaded but failed on dependency check, dont dispatch event to them
-			if plugin.in_states({PluginState.READY}):
+			plugin.assert_state({PluginState.UNLOADING})
+			# plugins might just be newly loaded but failed on dependency check, dont dispatch event to them
+			if plugin not in load_result.success_list:
 				plugin.receive_event(PluginEvents.PLUGIN_UNLOAD, (self.mcdr_server.server_interface,))
 			plugin.remove()
 
+		# they should be
+		for plugin in self.get_plugins():
+			plugin.assert_state({PluginState.READY})
+
 		self.__update_registry()
+
+	def __refresh_plugins(self, reload_filter: Callable[[Plugin], bool]):
+		load_result = self.collect_and_process_new_plugins(lambda fp: True)
+		unload_result = self.collect_and_remove_plugins(lambda plugin: not plugin.file_exists())
+		reload_result = self.reload_ready_plugins(reload_filter)
+		self.__post_plugin_process(load_result, unload_result, reload_result)
 
 	def __update_registry(self):
 		self.registry_storage.clear()
@@ -264,12 +284,6 @@ class PluginManager:
 			self.registry_storage.collect(plugin.plugin_registry)
 		self.registry_storage.arrange()
 		self.mcdr_server.on_plugin_changed()
-
-	def __refresh_plugins(self, reload_filter: Callable[[Plugin], bool]):
-		load_result = self.collect_and_process_new_plugins(lambda fp: True)
-		unload_result = self.collect_and_remove_plugins(lambda plugin: not plugin.file_exists())
-		reload_result = self.reload_ready_plugins(reload_filter)
-		self.__post_plugin_process(load_result, unload_result, reload_result)
 
 	# --------------
 	#   Interfaces
@@ -293,12 +307,10 @@ class PluginManager:
 			os.rename(file_path, new_file_path)
 			self.load_plugin(new_file_path)
 
-	def disable_plugin(self, file_path):
-		plugin_id = self.plugin_file_path.get(file_path)
-		if plugin_id is not None:
-			self.unload_plugin(self.plugins.get(plugin_id))
-		if os.path.isfile(file_path):
-			os.rename(file_path, file_path + constant.DISABLED_PLUGIN_FILE_SUFFIX)
+	def disable_plugin(self, plugin: Plugin):
+		self.unload_plugin(plugin)
+		if os.path.isfile(plugin.file_path):
+			os.rename(plugin.file_path, plugin.file_path + constant.DISABLED_PLUGIN_FILE_SUFFIX)
 
 	def refresh_all_plugins(self):
 		return self.__refresh_plugins(lambda plg: True)
@@ -312,5 +324,6 @@ class PluginManager:
 
 	def dispatch_event(self, event: MCDREvent, args: Tuple[Any, ...], wait: bool = True):
 		# TODO: handle wait param
-		for plugin in self.get_plugins():
-			plugin.receive_event(event, args)
+		self.mcdr_server.logger.debug('Dispatching {}'.format(event), option=DebugOption.PLUGIN)
+		for listener in self.registry_storage.event_listeners.get(event.id, []):
+			self.thread_pool.add_listener_execution_task(listener, args, False)

@@ -12,7 +12,7 @@ class CommandError(Exception):
 		return '{}: {}<--'.format(self.__message, self._failed_command)
 
 	def to_mc_color_text(self):
-		return '§c{}§r: {}§c{}§4<--'.format(self.__message, self._parsed_command, self._failed_command[:len(self._parsed_command)])
+		return '§c{}: §r{}§c{}§4<--'.format(self.__message, self._parsed_command, self._failed_command[len(self._parsed_command):])
 
 	def get_parsed_command(self):
 		return self._parsed_command

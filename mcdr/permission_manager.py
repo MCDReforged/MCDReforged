@@ -3,41 +3,112 @@ Permission control things
 """
 
 import collections
+from typing import List, Dict, Optional, Any
 
 import ruamel.yaml as yaml
 from ruamel.yaml.comments import CommentedSeq
 
 from mcdr.info import *
+from mcdr.logger import DebugOption
 from mcdr.utils import misc_util
 
 
-class PermissionLevel:
-	OWNER = 4
-	ADMIN = 3
-	HELPER = 2
-	USER = 1
-	GUEST = 0
-	DICT_VALUE = collections.OrderedDict([
-		('owner', OWNER),
-		('admin', ADMIN),
-		('helper', HELPER),
-		('user', USER),
-		('guest', GUEST)
-	])
-	DICT_NAME = collections.OrderedDict([(value, item) for item, value in DICT_VALUE.items()])
-	VALUE = list(DICT_VALUE.values())
-	NAME = list(DICT_VALUE.keys())
+class PermissionLevelItem:
+	def __init__(self, name: str, level: int):
+		self.name = name
+		self.level = level
 
-	TOP_LEVEL = VALUE[0]
-	BOTTOM_LEVEL = VALUE[-1]
+	def __str__(self):
+		return 'Permission[name={},level={}]'.format(self.name, self.level)
+
+	def __lt__(self, other):
+		if not isinstance(other, type(self)):
+			return False
+		return self.level < other.level
+
+
+class _PermissionLevelStorage:
+	STORAGE = []  # type: List[PermissionLevelItem]
+
+	@classmethod
+	def register(cls, item: PermissionLevelItem):
+		cls.STORAGE.append(item)
+		cls.STORAGE.sort()
+		return item.level
+
+	@classmethod
+	def get_value_dict(cls):
+		return collections.OrderedDict([(item.name, item.level) for item in cls.STORAGE])
+
+
+class PermissionLevel:
+	GUEST	= _PermissionLevelStorage.register(PermissionLevelItem('guest', 0))
+	USER	= _PermissionLevelStorage.register(PermissionLevelItem('user', 1))
+	HELPER	= _PermissionLevelStorage.register(PermissionLevelItem('helper', 2))
+	ADMIN	= _PermissionLevelStorage.register(PermissionLevelItem('admin', 3))
+	OWNER	= _PermissionLevelStorage.register(PermissionLevelItem('owner', 4))
+	__NAME_DICT = collections.OrderedDict([(item.name, item) for item in _PermissionLevelStorage.STORAGE])  # type: Dict[str, PermissionLevelItem]
+	__LEVEL_DICT = collections.OrderedDict([(item.level, item) for item in _PermissionLevelStorage.STORAGE])  # type: Dict[int, PermissionLevelItem]
+	LEVELS = [item.level for item in _PermissionLevelStorage.STORAGE]
+	NAMES = [item.name for item in _PermissionLevelStorage.STORAGE]
+	INSTANCES = _PermissionLevelStorage.STORAGE.copy()
+
+	MAXIMUM_LEVEL = LEVELS[-1]
+	MINIMUM_LEVEL = LEVELS[0]
 	MCDR_CONTROL_LEVEL = ADMIN
+	PHYSICAL_SERVER_CONTROL_LEVEL = OWNER
+	CONSOLE_LEVEL = MAXIMUM_LEVEL
+
+	@classmethod
+	def __check_range(cls, level: int):
+		if cls.MINIMUM_LEVEL <= level <= cls.MAXIMUM_LEVEL:
+			pass
+		else:
+			raise ValueError('Value {} out of range [{}, {}]'.format(level, cls.MINIMUM_LEVEL, cls.MAXIMUM_LEVEL))
+
+	@classmethod
+	def from_value(cls, value):
+		"""
+		Convert any type of permission level into int value. Examples:
+			'guest'	-> 0
+			'admin'	-> 3
+			'1'		-> 1
+			2		-> 2
+		If the argument is invalid return None
+
+		:param value: a permission related object
+		:type value: str or int
+		:rtype: PermissionLevelItem
+		"""
+		level = None
+		if isinstance(value, str):
+			if value.isdigit():
+				value = int(value)
+			elif value in cls.NAMES:
+				level = cls.__NAME_DICT[value]
+		if isinstance(value, int):
+			cls.__check_range(value)
+			level = cls.__LEVEL_DICT[value]
+		if level is None:
+			raise TypeError('Unsupported value for {}: {}'.format(cls.__name__, value))
+		return level
+
+	@classmethod
+	def get_level(cls, value) -> Optional[PermissionLevelItem]:
+		"""
+		Fail-proof version of from_value
+		"""
+		try:
+			return cls.from_value(value)
+		except (TypeError, ValueError):
+			return None
 
 
 class PermissionManager:
 	def __init__(self, mcdr_server, permission_file):
 		self.mcdr_server = mcdr_server
 		self.permission_file = permission_file
-		self.data = None
+		self.data = {}  # type: Dict[str, Any]
 
 	# --------------
 	# File Operating
@@ -60,7 +131,7 @@ class PermissionManager:
 				'user': None,
 				'guest': None
 			}
-		for name in PermissionLevel.NAME:
+		for name in PermissionLevel.NAMES:
 			if name not in self.data:
 				self.data[name] = None
 		self.save()
@@ -70,7 +141,7 @@ class PermissionManager:
 		Deduplicate the permission data=
 		"""
 		for key, value in self.data.items():
-			if key in PermissionLevel.NAME and type(value) in [list, CommentedSeq]:
+			if key in PermissionLevel.NAMES and type(value) in [list, CommentedSeq]:
 				self.data[key] = misc_util.unique_list(self.data[key])
 
 	def empty_to_none(self):
@@ -78,7 +149,7 @@ class PermissionManager:
 		Change empty list to None for nicer look in the .yml file
 		"""
 		for key, value in self.data.items():
-			if key in PermissionLevel.NAME and value is not None and len(value) == 0:
+			if key in PermissionLevel.NAMES and value is not None and len(value) == 0:
 				self.data[key] = None
 
 	def save(self):
@@ -94,84 +165,34 @@ class PermissionManager:
 	# Permission processing
 	# ---------------------
 
-	@staticmethod
-	def format_level_value(level):
-		"""
-		Convert any type of permission level into int value. Examples:
-			'guest'	-> 0
-			'admin'	-> 3
-			'1'		-> 1
-			2		-> 2
-		If the argument is invalid return None
-
-		:param level: a permission related object
-		:type level: str or int
-		:rtype: int or None
-		"""
-		if type(level) == str:
-			if level.isdigit():
-				level = int(level)
-			elif level in PermissionLevel.NAME:
-				level = PermissionLevel.DICT_VALUE[level]
-		if type(level) is int and PermissionLevel.BOTTOM_LEVEL <= level <= PermissionLevel.TOP_LEVEL:
-			return level
-		return None
-
-	@staticmethod
-	def format_level_name(level):
-		"""
-		Convert any type of permission level into str. Examples:
-			0		-> 'guest'
-			'1'		-> 'user'
-			'admin'	-> 'admin'
-		If the argument is invalid return None
-
-		:param level: a permission related object
-		:type level: str or int
-		:rtype: str or None
-		"""
-		value = PermissionManager.format_level_value(level)
-		if value is None:
-			return value
-		return PermissionLevel.DICT_NAME[value]
-
 	def get_default_permission_level(self):
 		"""
 		Return the default permission level
-
 		:rtype: str
 		"""
 		return self.data['default_level']
 
-	def set_default_permission_level(self, level):
+	def set_default_permission_level(self, level: PermissionLevelItem):
 		"""
 		Set default permission level
 		A message will be informed using server logger
-
-		:param level: a permission related object
-		:type level: str or int
 		"""
-		level = self.format_level_name(level)
-		self.data['default_level'] = level
+		self.data['default_level'] = level.name
 		self.save()
-		self.mcdr_server.logger.info(
-			self.mcdr_server.tr('permission_manager.set_default_permission_level.done', self.format_level_name(level)))
+		self.mcdr_server.logger.info(self.mcdr_server.tr('permission_manager.set_default_permission_level.done', level.name))
 
-	def get_permission_group_list(self, level):
+	def get_permission_group_list(self, value):
 		"""
 		Return the list of the player who has permission level <level>
 		Example return value: ['Steve', 'Alex']
 
-		:param level: a permission related object
-		:type level: str or int
+		:param str or int value: a permission related object
 		:rtype: list[str]
 		"""
-		name = self.format_level_name(level)
-		if name is None:
-			raise TypeError('{} is not a valid permission level'.format(level))
-		if self.data[name] is None:
-			self.data[name] = []
-		return self.data[name]
+		level_name = PermissionLevel.from_value(value).name
+		if self.data[level_name] is None:
+			self.data[level_name] = []
+		return self.data[level_name]
 
 	def add_player(self, player, level_name=None):
 		"""
@@ -186,10 +207,11 @@ class PermissionManager:
 		"""
 		if level_name is None:
 			level_name = self.get_default_permission_level()
+		PermissionLevel.from_value(level_name)  # validity check
 		self.get_permission_group_list(level_name).append(player)
-		self.mcdr_server.logger.debug('Added player {} with permission level {}'.format(player, level_name))
+		self.mcdr_server.logger.debug('Added player {} with permission level {}'.format(player, level_name), option=DebugOption.PERMISSION)
 		self.save()
-		return self.format_level_value(level_name)
+		return PermissionLevel.from_value(level_name).level
 
 	def remove_player(self, player):
 		"""
@@ -204,7 +226,7 @@ class PermissionManager:
 			if level is None:
 				break
 			self.get_permission_group_list(level).remove(player)
-		self.mcdr_server.logger.debug('Removed player {}'.format(player))
+		self.mcdr_server.logger.debug('Removed player {}'.format(player), option=DebugOption.PERMISSION)
 		self.save()
 
 	def set_permission_level(self, player, new_level):
@@ -214,12 +236,11 @@ class PermissionManager:
 		Then save the permission data to file
 
 		:param str player: the name of the player
-		:param str new_level: the permission level name
+		:param PermissionLevelItem new_level: the permission level name
 		"""
 		self.remove_player(player)
-		self.add_player(player, new_level)
-		self.mcdr_server.logger.info(
-			self.mcdr_server.tr('permission_manager.set_permission_level.done', player, self.format_level_name(new_level)))
+		self.add_player(player, new_level.name)
+		self.mcdr_server.logger.info(self.mcdr_server.tr('permission_manager.set_permission_level.done', player, new_level.name))
 
 	def touch_player(self, player):
 		"""
@@ -240,7 +261,7 @@ class PermissionManager:
 		:return the permission level from a player's name. If auto_add is False and player invalid return None
 		:rtype: int or None
 		"""
-		for level_value in PermissionLevel.VALUE:
+		for level_value in PermissionLevel.LEVELS:
 			if player in self.get_permission_group_list(level_value):
 				return level_value
 		else:
@@ -258,7 +279,7 @@ class PermissionManager:
 		:rtype: int or None
 		"""
 		if info.source == InfoSource.CONSOLE:
-			return PermissionLevel.TOP_LEVEL
+			return PermissionLevel.MAXIMUM_LEVEL
 		elif info.is_player:
 			return self.get_player_permission_level(info.player)
 		else:
@@ -266,7 +287,7 @@ class PermissionManager:
 
 	def get_permission(self, source: CommandSource):
 		if isinstance(source, ConsoleCommandSource):
-			return PermissionLevel.TOP_LEVEL
+			return PermissionLevel.CONSOLE_LEVEL
 		elif isinstance(source, PlayerCommandSource):
 			return self.get_player_permission_level(source.player)
 		else:

@@ -68,5 +68,8 @@ class EventListener:
 			return False
 		return self.priority < other.priority
 
+	def execute(self, *args, **kwargs):
+		return self.callback(*args, **kwargs)
+
 	def __repr__(self):
 		return 'EventListener[plugin={},priority={},callback={}]'.format(self.plugin.get_name(), self.priority, self.callback)

@@ -18,7 +18,7 @@ class ReactorManager:
 		self.reactors = []  # type: List[AbstractReactor]
 
 	def load_reactors(self, folder):
-		for file in file_util.list_file(folder, constant.REACTOR_FILE_SUFFIX):
+		for file in file_util.list_file_with_suffix(folder, constant.REACTOR_FILE_SUFFIX):
 			module = misc_util.load_source(file)
 			if callable(getattr(module, 'get_reactor', None)):
 				self.reactors.append(module.get_reactor(self.mcdr_server))

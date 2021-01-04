@@ -1,4 +1,4 @@
-class ServerStatus:
+class MCDRServerStatus:
 	RUNNING = 0
 	STOPPED = 1
 	PRE_STOPPED = 2

@@ -20,7 +20,7 @@ from mcdr.plugin.plugin_manager import PluginManager
 from mcdr.rcon.rcon_manager import RconManager
 from mcdr.reactor_manager import ReactorManager
 from mcdr.server_interface import ServerInterface
-from mcdr.server_status import ServerStatus
+from mcdr.server_status import MCDRServerStatus
 from mcdr.update_helper import UpdateHelper
 from mcdr.utils import misc_util
 
@@ -30,7 +30,7 @@ class MCDReforgedServer:
 		self.console_input_thread = None
 		self.info_reactor_thread = None
 		self.process = old_process  # type: Popen # the process for the server
-		self.mcdr_server_status = ServerStatus.STOPPED
+		self.mcdr_server_status = MCDRServerStatus.STOPPED
 		self.flag_interrupt = False  # ctrl-c flag
 		self.flag_server_startup = False  # set to True after server startup
 		self.flag_server_rcon_ready = False  # set to True after server started its rcon. used to start the rcon server
@@ -89,8 +89,11 @@ class MCDReforgedServer:
 	# --------------------------
 
 	def load_config(self):
-		self.config.read_config()
+		has_missing = self.config.read_config()
 		self.on_config_changed()
+		if has_missing:
+			for line in self.tr('config.missing_config').splitlines():
+				self.logger.warning(line)
 
 	def on_config_changed(self):
 		self.logger.set_debug_options(self.config['debug'])
@@ -151,14 +154,14 @@ class MCDReforgedServer:
 
 	def set_server_status(self, status):
 		self.mcdr_server_status = status
-		self.logger.debug('MCDR Server state has set to "{}"'.format(ServerStatus.get_translate_key(status)))
+		self.logger.debug('MCDR Server state has set to "{}"'.format(MCDRServerStatus.get_translate_key(status)))
 
 	def should_keep_looping(self):
 		"""
 		A criterion for sub threads to determine if it should keep looping
 		:rtype: bool
 		"""
-		if self.in_status({ServerStatus.STOPPED}):
+		if self.in_status({MCDRServerStatus.STOPPED}):
 			if self.is_interrupt():  # if interrupted and stopped
 				return False
 			return not self.flag_exit_naturally  # if the sever exited naturally, exit MCDR
@@ -195,7 +198,7 @@ class MCDReforgedServer:
 				self.logger.exception(self.tr('mcdr_server.start_server.start_fail'))
 				return False
 			else:
-				self.set_server_status(ServerStatus.RUNNING)
+				self.set_server_status(MCDRServerStatus.RUNNING)
 				self.set_exit_naturally(True)
 				self.logger.info(self.tr('mcdr_server.start_server.pid_info', self.process.pid))
 				return True
@@ -243,7 +246,7 @@ class MCDReforgedServer:
 			if not self.is_server_running():
 				self.logger.warning(self.tr('mcdr_server.stop.stop_when_stopped'))
 				return
-			self.set_server_status(ServerStatus.STOPPING)
+			self.set_server_status(MCDRServerStatus.STOPPING)
 			if not forced:
 				try:
 					self.send(self.parser_manager.get_stop_command())
@@ -312,10 +315,10 @@ class MCDReforgedServer:
 		self.process = None
 		self.flag_server_startup = False
 		self.flag_server_rcon_ready = False
-		self.set_server_status(ServerStatus.PRE_STOPPED)
+		self.set_server_status(MCDRServerStatus.PRE_STOPPED)
 		self.plugin_manager.dispatch_event(PluginEvents.SERVER_STOP, (self.server_interface, return_code), wait=True)
-		if self.in_status({ServerStatus.PRE_STOPPED}):
-			self.set_server_status(ServerStatus.STOPPED)
+		if self.in_status({MCDRServerStatus.PRE_STOPPED}):
+			self.set_server_status(MCDRServerStatus.STOPPED)
 
 	def tick(self):
 		"""

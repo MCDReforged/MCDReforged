@@ -12,8 +12,8 @@ from mcdr.utils import string_util
 class MetaData:
 	id: str
 	version: Version
-	name: str or RTextBase
-	description: str or RTextBase or None
+	name: RTextBase
+	description: RTextBase or None
 	author: str or List[str] or None
 	link: str or None
 	dependencies: Dict[str, VersionRequirement]
@@ -31,8 +31,10 @@ class MetaData:
 		logger = plugin.mcdr_server.logger
 
 		self.id = data.get('id', fallback_id)
-		self.name = data.get('name', self.id)
+		self.name = RTextBase.from_any(data.get('name', self.id))
 		self.description = data.get('description', None)
+		if self.description is not None:
+			self.description = RTextBase.from_any(self.description)
 		self.author = data.get('author', None)
 		self.link = data.get('link', None)
 

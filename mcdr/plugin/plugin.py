@@ -12,7 +12,7 @@ from mcdr.logger import DebugOption
 from mcdr.plugin.metadata import MetaData
 from mcdr.plugin.plugin_event import MCDREvent, PluginEvents, EventListener, PluginEvent
 from mcdr.plugin.plugin_registry import PluginRegistry, DEFAULT_LISTENER_PRIORITY, HelpMessage
-from mcdr.plugin.plugin_thread import PluginThreadPool, TaskData
+from mcdr.plugin.plugin_thread import PluginThreadPool
 from mcdr.rtext import RText
 from mcdr.utils import misc_util
 
@@ -48,9 +48,13 @@ class Plugin:
 			raise IllegalCall('Meta data of plugin {} is not loaded. Plugin state = {}'.format(repr(self), self.state))
 		return self.meta_data
 
+	def get_identifier(self) -> str:
+		meta_data = self.get_meta_data()
+		return '{}@{}'.format(meta_data.id, meta_data.version)
+
 	def get_name(self) -> str:
 		try:
-			return str(self)
+			return self.get_identifier()
 		except IllegalCall:
 			return repr(self)
 
@@ -84,7 +88,7 @@ class Plugin:
 				self.instance = misc_util.load_source(self.file_path)
 			finally:
 				self.newly_loaded_module = [module for module in sys.modules if module not in previous_modules]
-		self.meta_data = MetaData(self, self.instance.__dict__.get('PLUGIN_METADATA'))
+		self.meta_data = MetaData(self, getattr(self.instance, 'PLUGIN_METADATA', None))
 		self.plugin_registry.clear()
 
 	def load(self):
@@ -142,8 +146,7 @@ class Plugin:
 	# -----------------
 
 	def __str__(self):
-		meta_data = self.get_meta_data()
-		return '{}@{}'.format(meta_data.id, meta_data.version)
+		return self.get_name()
 
 	def __repr__(self):
 		return 'Plugin[file={},path={},state={}]'.format(self.file_name, self.file_path, self.state)
@@ -155,7 +158,7 @@ class Plugin:
 	def __register_default_listeners(self):
 		for event in PluginEvents.get_event_list():
 			if isinstance(event.default_method_name, str):
-				func = self.instance.__dict__.get(event.default_method_name)
+				func = getattr(self.instance, event.default_method_name, None)
 				if callable(func):
 					self.add_event_listener(event, EventListener(self, func, DEFAULT_LISTENER_PRIORITY))
 
@@ -171,6 +174,11 @@ class Plugin:
 		self.mcdr_server.logger.debug('Plugin Added help message "{}"'.format(help_message), option=DebugOption.PLUGIN)
 
 	def receive_event(self, event: MCDREvent, args: Tuple[Any, ...]):
+		"""
+		Directly dispatch an event towards this plugin
+		Not suggested to use in general case since it doesn't have priority control
+		"""
 		self.assert_state({PluginState.READY, PluginState.UNLOADING}, 'Only plugin in READY or UNLOADING state is allowed to receive events')
-		for listener in self.plugin_registry.event_listeners.get(event, []):
-			self.thread_pool.add_task(TaskData(callback=lambda: listener(*args), plugin=self), False)
+		self.mcdr_server.logger.debug('{} directly received {}'.format(self, event), option=DebugOption.PLUGIN)
+		for listener in self.plugin_registry.event_listeners.get(event.id, []):
+			self.thread_pool.add_listener_execution_task(listener, args, False)
