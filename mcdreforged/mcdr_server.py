@@ -10,8 +10,11 @@ import psutil as psutil
 from mcdreforged import constant
 from mcdreforged.command.command_manager import CommandManager
 from mcdreforged.config import Config
-from mcdreforged.exception import *
+from mcdreforged.exception import IllegalCall, ServerStopped, ServerStartError
+from mcdreforged.executor.console_handler import ConsoleHandler
+from mcdreforged.executor.task_executor import TaskExecutor
 from mcdreforged.info import Info
+from mcdreforged.info_reactor_manager import InfoReactorManager
 from mcdreforged.language_manager import LanguageManager
 from mcdreforged.logger import DebugOption, Logger, ServerLogger
 from mcdreforged.parser_manager import ParserManager
@@ -19,17 +22,13 @@ from mcdreforged.permission_manager import PermissionManager
 from mcdreforged.plugin.plugin_event import PluginEvents
 from mcdreforged.plugin.plugin_manager import PluginManager
 from mcdreforged.rcon.rcon_manager import RconManager
-from mcdreforged.reactor_manager import ReactorManager
 from mcdreforged.server_interface import ServerInterface
 from mcdreforged.server_status import MCDRServerStatus
 from mcdreforged.update_helper import UpdateHelper
-from mcdreforged.utils import misc_util
 
 
 class MCDReforgedServer:
 	def __init__(self, old_process=None):
-		self.console_input_thread = None
-		self.info_reactor_thread = None
 		self.process = old_process  # type: Popen # the process for the server
 		self.mcdr_server_status = MCDRServerStatus.STOPPED
 		self.flag_interrupt = False  # ctrl-c flag
@@ -49,11 +48,13 @@ class MCDReforgedServer:
 		self.logger.set_file(constant.LOGGING_FILE)
 		self.server_logger = ServerLogger('Server')
 		self.server_interface = ServerInterface(self)
+		self.task_executor = TaskExecutor(self)
+		self.console_handler = ConsoleHandler(self)
 		self.language_manager = LanguageManager(self, constant.LANGUAGE_FOLDER)
 		self.config = Config(self, constant.CONFIG_FILE)  # TODO: config query lock
 		self.rcon_manager = RconManager(self)
 		self.parser_manager = ParserManager(self, constant.PARSER_FOLDER)
-		self.reactor_manager = ReactorManager(self)
+		self.reactor_manager = InfoReactorManager(self)
 		self.command_manager = CommandManager(self)
 		self.plugin_manager = PluginManager(self)
 		self.permission_manager = PermissionManager(self, constant.PERMISSION_FILE)
@@ -375,18 +376,13 @@ class MCDReforgedServer:
 
 		:raise: Raise ServerStartError if the server is already running or start_server has been called by other
 		"""
-		def start_thread(target, args, name):
-			self.logger.debug('{} thread starting'.format(name))
-			thread = misc_util.start_thread(target, args, name)
-			return thread
-
 		if not self.start_server():
 			raise ServerStartError()
 		if not self.config['disable_console_thread']:
-			self.console_input_thread = start_thread(self.console_input, (), 'Console')
+			self.console_handler.start()
 		else:
 			self.logger.info('Console thread disabled')
-		self.info_reactor_thread = start_thread(self.reactor_manager.run, (), 'InfoReactor')
+		self.task_executor.start()
 		self.main_loop()
 		return self.process
 
@@ -408,31 +404,6 @@ class MCDReforgedServer:
 				else:
 					self.logger.critical(self.tr('mcdr_server.run.error'), exc_info=True)
 		self.on_mcdr_stop()
-
-	def console_input(self):
-		"""
-		the thread for processing console input
-		:return: None
-		"""
-		while True:
-			try:
-				text = input()
-				parsed_result: Info
-				try:
-					parsed_result = self.parser_manager.get_parser().parse_console_command(text)
-				except:
-					self.logger.exception(self.tr('mcdr_server.console_input.parse_fail', text))
-				else:
-					self.logger.debug('Parsed text from console input:')
-					for line in parsed_result.format_text().splitlines():
-						self.logger.debug('    {}'.format(line))
-					parsed_result.attach_mcdr_server(self)
-					self.reactor_manager.put_info(parsed_result)
-			except (KeyboardInterrupt, EOFError, SystemExit, IOError) as e:
-				self.logger.debug('Exception {} {} caught in console_input()'.format(type(e), e))
-				self.interrupt()
-			except:
-				self.logger.exception(self.tr('mcdr_server.console_input.error'))
 
 	def connect_rcon(self):
 		self.rcon_manager.disconnect()

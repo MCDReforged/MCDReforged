@@ -1,4 +1,5 @@
 import functools
+import inspect
 import threading
 import time
 from typing import Optional, Callable
@@ -17,6 +18,10 @@ def new_thread(thread_name: Optional[str or Callable] = None):
 			thread.setDaemon(True)
 			thread.start()
 			return thread
+		# bring the signature of the func to the wrap function
+		# so inspect.getfullargspec(func) works correctly
+		# https://stackoverflow.com/questions/39926567/python-create-decorator-preserving-function-arguments
+		wrap.__signature__ = inspect.signature(func)
 		return wrap
 	# Directly use @on_new_thread without ending brackets case
 	if isinstance(thread_name, Callable):
@@ -43,9 +48,9 @@ def test():
 		time.sleep(0.5)
 		print(threading.current_thread().getName() + ' ' + str(value))
 
-	print(bla1, bla1('1'))
-	print(bla2, bla2('2'))
-	print(bla3, bla3('3'))
+	print(bla1, bla1('1'), inspect.getfullargspec(bla1))
+	print(bla2, bla2('2'), inspect.getfullargspec(bla2))
+	print(bla3, bla3('3'), inspect.getfullargspec(bla3))
 	time.sleep(1)
 
 

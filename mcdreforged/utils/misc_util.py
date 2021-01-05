@@ -5,13 +5,13 @@ import importlib.machinery
 import importlib.util
 import sys
 import threading
-from typing import List, Any
+from typing import List, Any, Callable, Tuple
 
 from mcdreforged.plugin.version import Version
 from mcdreforged.rtext import RTextBase
 
 
-def start_thread(func, args, name=None):
+def start_thread(func: Callable, args: Tuple, name: str or None = None):
 	thread = threading.Thread(target=func, args=args, name=name)
 	thread.setDaemon(True)
 	thread.start()

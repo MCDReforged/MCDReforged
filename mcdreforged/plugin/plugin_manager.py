@@ -41,7 +41,7 @@ class PluginManager:
 
 		file_util.touch_folder(constant.PLUGIN_CONFIG_FOLDER)
 
-	def get_current_plugin(self) -> Plugin:
+	def get_current_running_plugin(self) -> Plugin:
 		"""
 		Get current executing plugin in this thread
 		"""
@@ -326,13 +326,12 @@ class PluginManager:
 	# ----------------
 
 	def dispatch_event(self, event: MCDREvent, args: Tuple[Any, ...]):
-		# TODO: handle wait param
 		self.logger.debug('Dispatching {}'.format(event), option=DebugOption.PLUGIN)
 		for listener in self.registry_storage.event_listeners.get(event.id, []):
 			self.trigger_listener(listener, args)
 
 	def trigger_listener(self, listener: EventListener, args: Tuple[Any, ...]):
-		# self.thread_pool.add_listener_execution_task(listener, args, False)
+		# self.thread_pool.add_task(lambda: listener.execute(*args), listener.plugin)
 		self.set_current_plugin(listener.plugin)
 		try:
 			listener.execute(*args)

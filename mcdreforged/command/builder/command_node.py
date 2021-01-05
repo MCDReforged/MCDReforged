@@ -1,9 +1,9 @@
 import collections
 import inspect
 from abc import ABC
-from typing import List, Callable, Iterable, Set, Dict, Type, Any
+from typing import List, Callable, Iterable, Set, Dict, Type, Any, Union
 
-from mcdreforged.command.builder import utils
+from mcdreforged.command.builder import command_builder_util as utils
 from mcdreforged.command.builder.exception import LiteralNotMatch, NumberOutOfRange, IllegalArgument, EmptyText, \
 	UnknownCommand, UnknownArgument, CommandSyntaxError, UnknownRootArgument, RequirementNotMet, IllegalNodeOperation, \
 	CommandError
@@ -43,7 +43,7 @@ class ArgumentNode:
 			self.children.append(node)
 		return self
 
-	def runs(self, func: Callable[[], Any] or Callable[[CommandSource], Any] or Callable[[CommandSource, dict], Any]):
+	def runs(self, func: Union[Callable[[], Any], Callable[[CommandSource], Any], Callable[[CommandSource, dict], Any]]):
 		"""
 		Executes the given function if the command string ends here
 		:param func: A function to execute at this node, with 0 to 2 args
@@ -52,7 +52,7 @@ class ArgumentNode:
 		self.callback = func
 		return self
 
-	def requires(self, requirement: Callable[[CommandSource], bool]):
+	def requires(self, requirement: Union[Callable[[], bool], Callable[[CommandSource], bool]]):
 		"""
 		Set the requirement for the command source to enter this node
 		:param requirement: A callable function which accepts 1 parameter (the command source) and return a bool
@@ -73,7 +73,7 @@ class ArgumentNode:
 		self.redirect_node = redirect_node
 		return self
 
-	def on_error(self, error_type: Type[CommandError], listener: Callable[[], Any] or Callable[[CommandSource], Any] or Callable[[CommandSource, CommandError], Any] or Callable[[CommandSource, CommandError, dict], Any]):
+	def on_error(self, error_type: Type[CommandError], listener: Union[Callable[[], Any], Callable[[CommandSource], Any], Callable[[CommandSource, CommandError], Any], Callable[[CommandSource, CommandError, dict], Any]]):
 		"""
 		When a command error occurs, invoke the listener
 		:param error_type: A class of CommandError or inherited from CommandError
@@ -111,15 +111,26 @@ class ArgumentNode:
 		return self.name is not None
 
 	@staticmethod
-	def smart_callback(callback: Callable, *args):
-		spec = inspect.getfullargspec(callback)
-		arg_len = min(len(spec.args), len(args))
-		return callback(*args[:arg_len])
+	def __smart_callback(callback: Callable, *args):
+		def run(sal: int):
+			arg_len = min(sal, len(args))
+			return callback(*args[:arg_len])
+
+		spec_args = inspect.getfullargspec(callback).args
+		spec_args_len = len(spec_args)
+		try:
+			return run(spec_args_len)
+		except TypeError as e:
+			error = e
+		if len(spec_args) > 0 and spec_args[0] == 'self':  # hacky fix for class method
+			return run(spec_args_len - 1)
+		else:
+			raise error
 
 	def __raise_error(self, source, error: CommandError, context: dict):
 		listener = self.error_listeners.get(type(error))
 		if listener is not None:
-			self.smart_callback(listener, source, error, context)
+			self.__smart_callback(listener, source, error, context)
 		raise error
 
 	def _execute(self, source, command: str, remaining: str, context: dict):
@@ -134,8 +145,9 @@ class ArgumentNode:
 			success_read += result.char_read
 			trimmed_remaining = utils.remove_divider_prefix(remaining[result.char_read:])
 
-			if self.requirement is not None and not self.requirement(source):
-				self.__raise_error(source, RequirementNotMet(command[:success_read], command[:success_read]), context)
+			if self.requirement is not None:
+				if not self.__smart_callback(self.requirement, source):
+					self.__raise_error(source, RequirementNotMet(command[:success_read], command[:success_read]), context)
 
 			if self.__does_store_thing():
 				context[self.name] = result.value
@@ -143,7 +155,7 @@ class ArgumentNode:
 			# Parsing finished
 			if len(trimmed_remaining) == 0:
 				if self.callback is not None:
-					self.smart_callback(self.callback, source, context)
+					self.__smart_callback(self.callback, source, context)
 				else:
 					self.__raise_error(source, UnknownCommand(command[:success_read], command[:success_read]), context)
 			# Un-parsed command string remains
@@ -234,9 +246,26 @@ class NumberNode(ArgumentNode, ABC):
 		self.min_value = None
 		self.max_value = None
 
-	def in_range(self, min_value, max_value):
+	def at_min(self, min_value):
+		"""
+		Static range check
+		"""
 		self.min_value = min_value
+		return self
+
+	def at_max(self, max_value):
+		"""
+		Static range check
+		"""
 		self.max_value = max_value
+		return self
+
+	def in_range(self, min_value, max_value):
+		"""
+		Static range check
+		"""
+		self.at_min(min_value)
+		self.at_max(max_value)
 		return self
 
 	def _check_in_range(self, value, char_read):

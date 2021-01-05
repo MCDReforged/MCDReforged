@@ -6,6 +6,7 @@ import time
 from typing import List, TYPE_CHECKING
 
 from mcdreforged import constant
+from mcdreforged.info import Info
 from mcdreforged.reactor.abstract_reactor import AbstractReactor
 from mcdreforged.utils import misc_util, file_util
 
@@ -13,10 +14,9 @@ if TYPE_CHECKING:
 	from mcdreforged import MCDReforgedServer
 
 
-class ReactorManager:
+class InfoReactorManager:
 	def __init__(self, mcdr_server: 'MCDReforgedServer'):
 		self.mcdr_server = mcdr_server
-		self.info_queue = queue.Queue(maxsize=constant.MAX_INFO_QUEUE_SIZE)
 		self.last_queue_full_warn_time = None
 		self.reactors = []  # type: List[AbstractReactor]
 
@@ -26,9 +26,16 @@ class ReactorManager:
 			if callable(getattr(module, 'get_reactor', None)):
 				self.reactors.append(module.get_reactor(self.mcdr_server))
 
+	def process_info(self, info: Info):
+		for reactor in self.reactors:
+			try:
+				reactor.react(info)
+			except:
+				self.mcdr_server.logger.exception(self.mcdr_server.tr('mcdr_server.react.error', type(reactor).__name__))  # TODO: fix translation
+
 	def put_info(self, info):
 		try:
-			self.info_queue.put_nowait(info)
+			self.mcdr_server.task_executor.add_info_task(lambda: self.process_info(info))
 		except queue.Full:
 			current_time = time.time()
 			logging_method = self.mcdr_server.logger.debug
@@ -36,19 +43,3 @@ class ReactorManager:
 				logging_method = self.mcdr_server.logger.warning
 				self.last_queue_full_warn_time = current_time
 			logging_method(self.mcdr_server.tr('mcdr_server.info_queue.full'))
-
-	def run(self):
-		"""
-		the thread for looping to react to parsed info
-		"""
-		while self.mcdr_server.should_keep_looping():
-			try:
-				info = self.info_queue.get(timeout=0.01)
-			except queue.Empty:
-				pass
-			else:
-				for reactor in self.reactors:
-					try:
-						reactor.react(info)
-					except:
-						self.mcdr_server.logger.exception(self.mcdr_server.tr('mcdr_server.react.error', type(reactor).__name__))

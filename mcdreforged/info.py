@@ -1,8 +1,13 @@
 """
 Info and InfoSource
 """
+from typing import TYPE_CHECKING
+
 from mcdreforged.command.command_source import CommandSource, ConsoleCommandSource, PlayerCommandSource
 from mcdreforged.exception import IllegalStateError
+
+if TYPE_CHECKING:
+	from mcdreforged.server_interface import ServerInterface
 
 
 class InfoSource:
@@ -14,13 +19,20 @@ class InfoSource:
 
 
 class Info:
-	id_counter = 0
+	__id_counter = 0
 
 	def __init__(self):
 		# a increasing id number for distinguishing info instance
-		Info.id_counter += 1
-		self.id = Info.id_counter
-		self.__mcdr_server = None
+		self.id = Info.__id_counter
+		Info.__id_counter += 1
+		# noinspection PyTypeChecker
+		self.__mcdr_server = None  # type: 'MCDReforgedServer'
+		self.__echo = True
+		self.__send_to_server = True
+
+		# -----------------
+		#   Public fields
+		# -----------------
 
 		# time information from the parsed text
 		self.hour = None
@@ -50,6 +62,45 @@ class Info:
 	def is_user(self):
 		return self.source == InfoSource.CONSOLE or self.is_player
 
+	# --------------
+	#      API
+	# --------------
+
+	def __assert_attached(self):
+		if self.__mcdr_server is None:
+			raise IllegalStateError('MCDR server is not attached to this Info instance yet')
+
+	def attach_mcdr_server(self, mcdr_server):
+		self.__mcdr_server = mcdr_server
+
+	def get_server(self) -> 'ServerInterface':
+		return self.__mcdr_server.server_interface
+
+	def to_command_source(self) -> CommandSource or None:
+		self.__assert_attached()
+		if self.source == InfoSource.CONSOLE:
+			return ConsoleCommandSource(self.__mcdr_server, self)
+		elif self.is_player:
+			return PlayerCommandSource(self.__mcdr_server, self, self.player)
+		else:
+			return None
+
+	def will_echo(self) -> bool:
+		return self.__echo
+
+	def will_send_to_server(self) -> bool:
+		return self.__send_to_server
+
+	def cancel_echo(self):
+		self.__echo = False
+
+	def cancel_send_to_server(self):
+		self.__send_to_server = False
+
+	# --------------------------------
+	#   Formatting and Magic methods
+	# --------------------------------
+
 	def format_text(self):
 		try:
 			time_message = '{:0>2}:{:0>2}:{:0>2}'.format(self.hour, self.min, self.sec)
@@ -64,23 +115,6 @@ class Info:
 
 	def __str__(self):
 		return '; '.join(self.format_text().splitlines())
-
-	def attach_mcdr_server(self, mcdr_server):
-		self.__mcdr_server = mcdr_server
-
-	def to_command_source(self) -> CommandSource or None:
-		if self.__mcdr_server is None:
-			raise IllegalStateError('MCDR server is not attached to this Info instance yet')
-		if self.source == InfoSource.CONSOLE:
-			return ConsoleCommandSource(self.__mcdr_server, self)
-		elif self.is_player:
-			return PlayerCommandSource(self.__mcdr_server, self, self.player)
-		else:
-			return None
-
-	def cancel_echo(self):
-		pass
-		# TODO
 
 	def __deepcopy__(self, memo):
 		"""

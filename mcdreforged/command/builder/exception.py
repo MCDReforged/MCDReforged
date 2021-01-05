@@ -17,6 +17,7 @@ class CommandError(CommandErrorBase):
 		self.__message = message
 		self._parsed_command = parsed_command
 		self._failed_command = failed_command
+		self.__handled = False
 
 	def __str__(self):
 		return '{}: {}<--'.format(self.__message, self._failed_command)
@@ -29,6 +30,16 @@ class CommandError(CommandErrorBase):
 
 	def get_failed_command(self):
 		return self._failed_command
+
+	def set_handled(self, value=True):
+		"""
+		It won't make any difference to the command node tree execution
+		But it might be useful for outer error handlers
+		"""
+		self.__handled = value
+
+	def is_handled(self):
+		return self.__handled
 
 
 class UnknownCommand(CommandError):

@@ -52,15 +52,12 @@ class CommandManager:
 		self.command_executor.add_root_node(root_node)
 
 	def execute_command(self, source: CommandSource, command: str):
-		try:
-			command_errors = self.command_executor.execute(source, command)
-		except:
-			self.logger.exception('Error when executing command "{}" with command source "{}"'.format(command, source))
-		else:
-			if not self.__preserve_command_error_display_flag:
-				for error in command_errors:
-					source.reply(error.to_mc_color_text())
-			self.__preserve_command_error_display_flag = False
+		command_errors, general_exc_info = self.command_executor.execute(source, command)
+		for exc_info in general_exc_info:
+			self.logger.error('Error when executing command "{}" with command source "{}"'.format(command, source), exc_info=exc_info)
+		for error in command_errors:
+			if not error.is_handled():
+				source.reply(error.to_mc_color_text())
 
 	# ------------------
 	#   Interface ends
@@ -87,7 +84,7 @@ class CommandManager:
 			h(self.tr('command_manager.command_not_found_suggest', command)).
 			c(RAction.run_command, command)
 		)
-		self.__preserve_command_error_display_flag = True
+		error.set_handled()
 
 	def register_mcdr_command(self):
 		self.register_command(
@@ -269,7 +266,7 @@ class CommandManager:
 		if source.has_permission(PermissionLevel.PHYSICAL_SERVER_CONTROL_LEVEL):
 			source.reply(RTextList(
 				self.tr('command_manager.print_mcdr_status.extra_line1', self.mcdr_server.process.pid if self.mcdr_server.process is not None else '§rN/A§r'), '\n',
-				self.tr('command_manager.print_mcdr_status.extra_line2', self.mcdr_server.reactor_manager.info_queue.qsize(), constant.MAX_INFO_QUEUE_SIZE), '\n',
+				self.tr('command_manager.print_mcdr_status.extra_line2', self.mcdr_server.reactor_manager.info_queue.qsize(), constant.MAX_TASK_QUEUE_SIZE), '\n',
 				self.tr('command_manager.print_mcdr_status.extra_line3', threading.active_count())
 			))
 			for thread in threading.enumerate():

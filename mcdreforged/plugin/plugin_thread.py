@@ -4,9 +4,12 @@ Thread for plugin call
 import collections
 import queue
 import threading
-from typing import Tuple, Any
+from typing import TYPE_CHECKING, Callable
 
-from mcdreforged.plugin.plugin_event import EventListener
+if TYPE_CHECKING:
+	from mcdreforged import MCDReforgedServer
+	from mcdreforged.plugin.plugin import Plugin
+
 
 TaskData = collections.namedtuple('TaskData', 'callback plugin')
 
@@ -22,7 +25,7 @@ class PluginThread(threading.Thread):
 		self.task = task
 		self.id = PluginThread.counter
 		PluginThread.counter += 1
-		self.original_name = 'PT{}-idle'.format(self.id)
+		self.original_name = '{}-idle'.format(self)
 		self.setName(self.original_name)
 
 	def run(self):
@@ -39,16 +42,16 @@ class PluginThread(threading.Thread):
 				else:
 					plugin = task_data.plugin
 					plugin.plugin_manager.set_current_plugin(plugin)
-					self.setName('PT{}@{}'.format(self.id, plugin.get_meta_data().id))
+					self.setName('{}@{}'.format(self, plugin.get_meta_data().id))
 					self.thread_pool.working_count += 1
 					try:
 						task_data.callback()
 					except:
-						self.thread_pool.mcdr_server.logger.exception('Error invoking listener in plugin {}'.format(plugin))
+						self.thread_pool.mcdr_server.logger.exception('Exception in thread created by {}'.format(plugin))
 					finally:
 						self.thread_pool.working_count -= 1
-						plugin.plugin_manager.set_current_plugin(None)
 						self.setName(self.original_name)
+						plugin.plugin_manager.set_current_plugin(None)
 				finally:
 					if self.flag_interrupt:
 						break
@@ -56,13 +59,19 @@ class PluginThread(threading.Thread):
 			with self.thread_pool.threads_write_lock:
 				self.thread_pool.threads.remove(self)
 
-	def join(self, timeout=None):
+	def set_interrupt(self):
 		self.flag_interrupt = True
+
+	def join(self, timeout=None):
+		self.set_interrupt()
 		super().join(timeout)
+
+	def __repr__(self):
+		return '{}{}'.format(self.__class__.__name__, self.id)
 
 
 class PluginThreadPool:
-	def __init__(self, mcdr_server, max_thread):
+	def __init__(self, mcdr_server: 'MCDReforgedServer', max_thread):
 		self.mcdr_server = mcdr_server
 		self.threads = []
 		self.threads_write_lock = threading.Lock()
@@ -78,28 +87,20 @@ class PluginThreadPool:
 		self.max_thread = max_thread
 		for i, thread in enumerate(self.threads.copy()):
 			if i >= self.max_thread:
-				thread.flag_interrupt = True
+				thread.set_interrupt()
 
-	def add_listener_execution_task(self, listener: EventListener, args: Tuple[Any, ...], forced_new_thread):
+	def add_task(self, func: Callable, plugin: 'Plugin'):
 		"""
 		Added a task to executing the callback of a listener to the dynamic thread pool and execute it
 		If the thread pool is not enough a new temporary thread will start to process the task
-		If forced_new_thread is set to true, the task will must be executed in a new temporary thread and will return
-		the thread instance
-
-		:param listener: The event listener to execute it's callback
-		:param args: The arguments for the callback
-		:param bool forced_new_thread: if set to true, it will force start a new thread for processing the task
-		:return: None if forced_new_thread is False; The thread instance that is executing the task otherwise
-		:rtype: PluginThread or None
 		"""
-		task_data = TaskData(callback=lambda: listener.execute(*args), plugin=listener.plugin)
-		if forced_new_thread or self.working_count >= self.max_thread:
+		task_data = TaskData(callback=func, plugin=plugin)
+		if self.working_count >= self.max_thread:
 			thread = PluginThread(self, temporary=True, task=task_data)
 			with self.threads_write_lock:
 				self.threads.append(thread)
 			thread.start()
-			return thread if forced_new_thread else None
+			return thread
 		else:
 			self.task_queue.put(task_data)
 

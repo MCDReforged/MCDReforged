@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from mcdreforged.utils import misc_util
 
@@ -40,7 +40,7 @@ class CommandSource:
 	def has_permission_higher_than(self, level: int) -> bool:
 		return self.get_permission_level() > level
 
-	def reply(self, message, **kwargs):
+	def reply(self, message: Any, **kwargs):
 		"""
 		Reply to the command source
 		:param message: The message you want to send. It will be mapped with str() unless it's a RTextBase
@@ -60,7 +60,7 @@ class PlayerCommandSource(CommandSource):
 	def is_player(self):
 		return True
 
-	def reply(self, message, **kwargs):
+	def reply(self, message: Any, **kwargs):
 		"""
 		Specify key word argument encoding
 		"""
@@ -78,7 +78,7 @@ class ConsoleCommandSource(CommandSource):
 	def is_player(self):
 		return False
 
-	def reply(self, message, **kwargs):
+	def reply(self, message: Any, **kwargs):
 		misc_util.print_text_to_console(self._mcdr_server.logger, message)
 
 	def __str__(self):
