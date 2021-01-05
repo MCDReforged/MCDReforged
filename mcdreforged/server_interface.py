@@ -10,7 +10,6 @@ from mcdreforged.command.command_source import CommandSource
 from mcdreforged.exception import IllegalCall
 from mcdreforged.info import Info
 from mcdreforged.permission_manager import PermissionLevel
-from mcdreforged.plugin.operation_result import PluginOperationResult
 from mcdreforged.plugin.plugin import RegularPlugin
 from mcdreforged.plugin.plugin_event import MCDREvent, EventListener, LiteralEvent, PluginEvent
 from mcdreforged.plugin.plugin_registry import DEFAULT_LISTENER_PRIORITY, HelpMessage
@@ -235,10 +234,6 @@ class ServerInterface:
 	#     Plugin Operations
 	# ------------------------
 
-	def __assert_info_reactor_thread(self):
-		if not self.__mcdr_server.is_on_info_reactor_thread():
-			raise RuntimeError('Should be executed directly on info reactor\'s thread')
-
 	# Notes: All plugin manipulation will trigger a dependency check, which might cause unwanted plugin operations
 
 	@log_call
@@ -248,12 +243,11 @@ class ServerInterface:
 		Example: "plugins/my_plugin.py"
 
 		:param str plugin_file_path: a str, The name of the plugin to load
-		:return: The result of the operation. The result might be empty if plugin not found
-		:rtype: PluginOperationResult
+		:return: If the plugin gets loaded successfully
+		:rtype: bool
 		"""
-		self.__assert_info_reactor_thread()
 		self.__mcdr_server.plugin_manager.load_plugin(plugin_file_path)
-		return self.__mcdr_server.plugin_manager.last_operation_result
+		return self.__mcdr_server.plugin_manager.last_operation_result.load_result.has_success()
 
 	@log_call
 	def enable_plugin(self, plugin_file_path):
@@ -262,12 +256,11 @@ class ServerInterface:
 		Example: "plugins/my_plugin.py.disabled"
 
 		:param str plugin_file_path: The file path of the plugin to enable
-		:return: The result of the operation. The result might be empty if plugin not found
-		:rtype: PluginOperationResult
+		:return: If the plugin gets enabled successfully
+		:rtype: bool
 		"""
-		self.__assert_info_reactor_thread()
 		self.__mcdr_server.plugin_manager.enable_plugin(plugin_file_path)
-		return self.__mcdr_server.plugin_manager.last_operation_result
+		return self.__mcdr_server.plugin_manager.last_operation_result.load_result.has_success()
 
 	@log_call
 	def reload_plugin(self, plugin_id):
@@ -276,14 +269,13 @@ class ServerInterface:
 		Example: "my-plugin"
 
 		:param str plugin_id: a str, the id of the plugin to reload
-		:return: The result of the operation. None if plugin not found
-		:rtype: PluginOperationResult or None
+		:return: A bool indicating if the plugin gets reloaded successfully. None if plugin not found
+		:rtype: bool or None
 		"""
-		self.__assert_info_reactor_thread()
 		plugin = self.__mcdr_server.plugin_manager.get_plugin_from_id(plugin_id)
 		if plugin is not None:
 			self.__mcdr_server.plugin_manager.reload_plugin(plugin)
-			return self.__mcdr_server.plugin_manager.last_operation_result
+			return self.__mcdr_server.plugin_manager.last_operation_result.reload_result.has_success()
 		return None
 
 	@log_call
@@ -293,14 +285,13 @@ class ServerInterface:
 		Example: "my-plugin"
 
 		:param str plugin_id: The file path of the plugin to disable
-		:return: The result of the operation. None if plugin not found
-		:rtype: PluginOperationResult or None
+		:return: A bool indicating if the plugin gets disabled successfully. None if plugin not found
+		:rtype: bool or None
 		"""
-		self.__assert_info_reactor_thread()
 		plugin = self.__mcdr_server.plugin_manager.get_plugin_from_id(plugin_id)
 		if plugin is not None:
 			self.__mcdr_server.plugin_manager.disable_plugin(plugin)
-			return self.__mcdr_server.plugin_manager.last_operation_result
+			return self.__mcdr_server.plugin_manager.last_operation_result.unload_result.has_success()
 		else:
 			return None
 
@@ -308,25 +299,15 @@ class ServerInterface:
 	def refresh_all_plugins(self):
 		"""
 		Reload all plugins, load all new plugins and then unload all removed plugins
-
-		:return: The result of the operation
-		:rtype: PluginOperationResult
 		"""
-		self.__assert_info_reactor_thread()
 		self.__mcdr_server.plugin_manager.refresh_all_plugins()
-		return self.__mcdr_server.plugin_manager.last_operation_result
 
 	@log_call
 	def refresh_changed_plugins(self):
 		"""
 		Reload all changed plugins, load all new plugins and then unload all removed plugins
-
-		:return: The result of the operation
-		:rtype: PluginOperationResult
 		"""
-		self.__assert_info_reactor_thread()
 		self.__mcdr_server.plugin_manager.refresh_changed_plugins()
-		return self.__mcdr_server.plugin_manager.last_operation_result
 
 	@log_call
 	def get_plugin_list(self):

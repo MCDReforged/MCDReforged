@@ -63,7 +63,6 @@ class MCDReforgedServer:
 		self.parser_manager.init()
 		self.permission_manager.load_permission_file()
 		self.plugin_manager.register_permanent_plugins()
-		self.load_plugins()
 
 		self.update_helper = UpdateHelper(self)
 		self.update_helper.check_update_start()
@@ -352,6 +351,17 @@ class MCDReforgedServer:
 		parsed_result.attach_mcdr_server(self)
 		self.reactor_manager.put_info(parsed_result)
 
+	def on_mcdr_start(self):
+		self.task_executor.start()
+		self.task_executor.add_task(self.load_plugins)
+		self.task_executor.wait_till_finish_all_task()
+		if not self.config['disable_console_thread']:
+			self.console_handler.start()
+		else:
+			self.logger.info('Console thread disabled')
+		if not self.start_server():
+			raise ServerStartError()
+
 	def on_mcdr_stop(self):
 		try:
 			if self.is_interrupt():
@@ -375,13 +385,6 @@ class MCDReforgedServer:
 
 		:raise: Raise ServerStartError if the server is already running or start_server has been called by other
 		"""
-		if not self.start_server():
-			raise ServerStartError()
-		if not self.config['disable_console_thread']:
-			self.console_handler.start()
-		else:
-			self.logger.info('Console thread disabled')
-		self.task_executor.start()
 		self.main_loop()
 		return self.process
 
@@ -389,6 +392,7 @@ class MCDReforgedServer:
 		"""
 		the main loop of MCDR
 		"""
+		self.on_mcdr_start()
 		while self.should_keep_looping():
 			try:
 				if self.is_server_running():

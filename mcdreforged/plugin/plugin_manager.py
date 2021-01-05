@@ -260,6 +260,10 @@ class PluginManager:
 	#     2. Call on_load for new / reloaded plugins by topo order
 	#     3. Call on_unload for unloaded plugins
 
+	def __check_thread(self):
+		if not self.mcdr_server.task_executor.is_on_thread():
+			raise RuntimeError('Plugin operations should be executed directly on task executor\'s thread, but thread {} founded'.format(threading.current_thread().getName()))
+
 	def __post_plugin_process(self, load_result=None, unload_result=None, reload_result=None):
 		if load_result is None:
 			load_result = SingleOperationResult()
@@ -302,6 +306,7 @@ class PluginManager:
 		self.__update_registry()
 
 	def __refresh_plugins(self, reload_filter: Callable[[RegularPlugin], bool]):
+		self.__check_thread()
 		load_result = self.collect_and_process_new_plugins(lambda fp: True)
 		unload_result = self.collect_and_remove_plugins(lambda plugin: not plugin.file_exists())
 		reload_result = self.reload_ready_plugins(reload_filter)
@@ -319,14 +324,17 @@ class PluginManager:
 	# --------------
 
 	def load_plugin(self, file_path: str):
+		self.__check_thread()
 		load_result = self.collect_and_process_new_plugins(lambda fp: True, specific=file_path)
 		self.__post_plugin_process(load_result=load_result)
 
 	def unload_plugin(self, plugin: RegularPlugin):
+		self.__check_thread()
 		unload_result = self.collect_and_remove_plugins(lambda plg: True, specific=plugin)
 		self.__post_plugin_process(unload_result=unload_result)
 
 	def reload_plugin(self, plugin: RegularPlugin):
+		self.__check_thread()
 		reload_result = self.reload_ready_plugins(lambda plg: True, specific=plugin)
 		self.__post_plugin_process(reload_result=reload_result)
 

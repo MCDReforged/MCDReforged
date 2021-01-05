@@ -58,3 +58,10 @@ class TaskExecutor(ThreadExecutor):
 			task.func()
 		except:
 			self.mcdr_server.logger.exception('Error executing task')  # TODO: translation
+		finally:
+			self.task_queue.task_done()
+
+	def wait_till_finish_all_task(self):
+		if self.is_on_thread():
+			raise RuntimeError('Cannot wait in self\'s thread')
+		self.task_queue.join()
