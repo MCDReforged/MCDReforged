@@ -11,7 +11,7 @@ from mcdr.logger import Logger, DebugOption
 from mcdr.plugin.dependency_walker import DependencyWalker
 from mcdr.plugin.operation_result import PluginOperationResult, SingleOperationResult
 from mcdr.plugin.plugin import Plugin, PluginState
-from mcdr.plugin.plugin_event import PluginEvents, MCDREvent
+from mcdr.plugin.plugin_event import PluginEvents, MCDREvent, EventListener
 from mcdr.plugin.plugin_registry import PluginManagerRegistry
 from mcdr.plugin.plugin_thread import PluginThreadPool
 from mcdr.utils import file_util, string_util, misc_util
@@ -250,7 +250,7 @@ class PluginManager:
 		# reload_result		READY				UNLOADING
 		# dep_chk_result	LOADED / READY		UNLOADING
 
-		for plugin in load_result.success_list:
+		for plugin in load_result.success_list + reload_result.success_list:
 			if plugin in dependency_check_result.success_list:
 				plugin.ready()
 
@@ -322,8 +322,18 @@ class PluginManager:
 	#   Plugin Event
 	# ----------------
 
-	def dispatch_event(self, event: MCDREvent, args: Tuple[Any, ...], wait: bool = True):
+	def dispatch_event(self, event: MCDREvent, args: Tuple[Any, ...]):
 		# TODO: handle wait param
-		self.mcdr_server.logger.debug('Dispatching {}'.format(event), option=DebugOption.PLUGIN)
+		self.logger.debug('Dispatching {}'.format(event), option=DebugOption.PLUGIN)
 		for listener in self.registry_storage.event_listeners.get(event.id, []):
-			self.thread_pool.add_listener_execution_task(listener, args, False)
+			self.trigger_listener(listener, args)
+
+	def trigger_listener(self, listener: EventListener, args: Tuple[Any, ...]):
+		# self.thread_pool.add_listener_execution_task(listener, args, False)
+		self.set_current_plugin(listener.plugin)
+		try:
+			listener.execute(*args)
+		except:
+			self.logger.exception('Error invoking listener {}'.format(listener))
+		finally:
+			self.set_current_plugin(None)

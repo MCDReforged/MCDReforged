@@ -1,5 +1,8 @@
 # Link to mcdr.rcon.rcon_connection
 # A rcon client implementation
 
-# noinspection PyUnresolvedReferences
+__all__ = [
+	'RconConnection'
+]
+
 from mcdr.rcon.rcon_connection import *

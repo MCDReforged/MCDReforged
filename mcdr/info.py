@@ -2,6 +2,7 @@
 Info and InfoSource
 """
 from mcdr.command.command_source import CommandSource, ConsoleCommandSource, PlayerCommandSource
+from mcdr.exception import IllegalStateError
 
 
 class InfoSource:
@@ -19,6 +20,7 @@ class Info:
 		# a increasing id number for distinguishing info instance
 		Info.id_counter += 1
 		self.id = Info.id_counter
+		self.__mcdr_server = None
 
 		# time information from the parsed text
 		self.hour = None
@@ -63,24 +65,12 @@ class Info:
 	def __str__(self):
 		return '; '.join(self.format_text().splitlines())
 
-
-class ServerInfo(Info):
-	def __init__(self, mcdr_server):
-		super().__init__()
+	def attach_mcdr_server(self, mcdr_server):
 		self.__mcdr_server = mcdr_server
 
-	@classmethod
-	def from_info(cls, mcdr_server, info: Info):
-		ret = ServerInfo(mcdr_server)
-		ret.hour, ret.min, ret.sec = info.hour, info.min, info.sec
-		ret.raw_content = info.raw_content
-		ret.content = info.content
-		ret.player = info.player
-		ret.source = info.source
-		ret.logging_level = info.logging_level
-		return ret
-
 	def to_command_source(self) -> CommandSource or None:
+		if self.__mcdr_server is None:
+			raise IllegalStateError('MCDR server is not attached to this Info instance yet')
 		if self.source == InfoSource.CONSOLE:
 			return ConsoleCommandSource(self.__mcdr_server)
 		elif self.is_player:
@@ -90,3 +80,20 @@ class ServerInfo(Info):
 
 	def cancel_echo(self):
 		pass
+		# TODO
+
+	def __deepcopy__(self, memo):
+		"""
+		Just dont copy the mcdr_server instance
+		"""
+		existed = memo.get(self)
+		if existed is not None:
+			return existed
+		memo[self] = dupe = Info()
+		dupe.hour, dupe.min, dupe.sec = self.hour, self.min, self.sec
+		dupe.raw_content = self.raw_content
+		dupe.content = self.content
+		dupe.player = self.player
+		dupe.source = self.source
+		dupe.logging_level = self.logging_level
+		return dupe

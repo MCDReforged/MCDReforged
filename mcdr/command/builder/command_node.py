@@ -207,6 +207,9 @@ class Literal(ExecutableNode):
 		else:
 			raise IllegalLiteralArgument('Invalid Argument', len(arg))
 
+	def __repr__(self):
+		return 'Literal[literals={}]'.format(self.literals)
+
 # --------------------
 #   Number Arguments
 # --------------------

@@ -106,6 +106,9 @@ class Criterion:
 	def test(self, target: str or Version):
 		return self.criterion(self.base_version, target)
 
+	def __str__(self):
+		return '{}{}'.format(self.opt, self.base_version)
+
 
 class VersionRequirement:
 	CRITERIONS = {
@@ -143,7 +146,7 @@ class VersionRequirement:
 		return True
 
 	def __str__(self):
-		return ' '.join(['{}{}'.format(c.opt, c.base_version) for c in self.criterions])
+		return ' '.join(map(str, self.criterions))
 
 
 class VersionParsingError(ValueError):

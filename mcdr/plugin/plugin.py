@@ -7,6 +7,7 @@ import sys
 from threading import RLock
 from typing import Tuple, Any
 
+from mcdr.command.builder.command_node import Literal
 from mcdr.exception import IllegalCall, IllegalStateError
 from mcdr.logger import DebugOption
 from mcdr.plugin.metadata import MetaData
@@ -98,7 +99,10 @@ class Plugin:
 		self.set_state(PluginState.LOADED)
 
 	def ready(self):
-		self.assert_state({PluginState.LOADED})
+		"""
+		Get ready, and register default things (listeners etc.)
+		"""
+		self.assert_state({PluginState.LOADED, PluginState.READY})
 		self.__register_default_listeners()
 		self.set_state(PluginState.READY)
 
@@ -162,12 +166,21 @@ class Plugin:
 				if callable(func):
 					self.add_event_listener(event, EventListener(self, func, DEFAULT_LISTENER_PRIORITY))
 
+	def __assert_allow_to_register(self, target):
+		self.assert_state([PluginState.LOADED, PluginState.READY], 'Only plugin in loaded or ready state is allowed to register {}'.format(target))
+
 	def add_event_listener(self, event: PluginEvent, listener: EventListener):
-		self.assert_state([PluginState.LOADED, PluginState.READY], 'Only plugin in loaded or ready state is allowed to register listeners')
+		self.__assert_allow_to_register('listener')
 		self.plugin_registry.register_listener(event.id, listener)
 		self.mcdr_server.logger.debug('{} is registered for {}'.format(listener, event), option=DebugOption.PLUGIN)
 
+	def add_command(self, node: Literal):
+		self.__assert_allow_to_register('command')
+		self.plugin_registry.register_command(node)
+		self.mcdr_server.logger.debug('{} registered command with root node {}'.format(self, node), option=DebugOption.PLUGIN)
+
 	def add_help_message(self, help_message: HelpMessage):
+		self.__assert_allow_to_register('help message')
 		self.plugin_registry.register_help_message(help_message)
 		if isinstance(help_message, str):
 			help_message = RText(help_message)
@@ -176,9 +189,9 @@ class Plugin:
 	def receive_event(self, event: MCDREvent, args: Tuple[Any, ...]):
 		"""
 		Directly dispatch an event towards this plugin
-		Not suggested to use in general case since it doesn't have priority control
+		Not suggested to invoke directly in general case since it doesn't have priority control
 		"""
 		self.assert_state({PluginState.READY, PluginState.UNLOADING}, 'Only plugin in READY or UNLOADING state is allowed to receive events')
 		self.mcdr_server.logger.debug('{} directly received {}'.format(self, event), option=DebugOption.PLUGIN)
 		for listener in self.plugin_registry.event_listeners.get(event.id, []):
-			self.thread_pool.add_listener_execution_task(listener, args, False)
+			self.plugin_manager.trigger_listener(listener, args)

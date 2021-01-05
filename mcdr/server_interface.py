@@ -5,6 +5,7 @@ An interface class for plugins to control the server
 import time
 from typing import Callable, Union
 
+from mcdr.command.builder.command_node import Literal
 from mcdr.command.command_source import CommandSource
 from mcdr.exception import *
 from mcdr.info import Info
@@ -333,6 +334,17 @@ class ServerInterface:
 			event = LiteralEvent(event_id=event)
 		plugin.add_event_listener(event, EventListener(plugin, callback, priority))
 
+	@log_call
+	def add_command(self, root_node: Literal):
+		"""
+		Add an event listener for the current plugin
+
+		:param root_node: the root node of your command tree
+		:raise: IllegalCall if it's not called in a MCDR provided thread
+		"""
+		plugin = self.__get_current_plugin()
+		plugin.add_command(root_node)
+
 	# ------------------------
 	#          Other
 	# ------------------------
@@ -351,8 +363,10 @@ class ServerInterface:
 		:raise: TypeError
 		"""
 		if isinstance(obj, Info):  # Info instance
-			return self.__mcdr_server.permission_manager.get_info_permission_level(obj)
-		elif isinstance(obj, CommandSource):  # Command Source
+			obj = obj.to_command_source()
+			if obj is None:
+				raise TypeError('The Info instance is not from a user')
+		if isinstance(obj, CommandSource):  # Command Source
 			return obj.get_permission_level()
 		elif isinstance(obj, str):  # Player name
 			return self.__mcdr_server.permission_manager.get_player_permission_level(obj)
@@ -360,20 +374,20 @@ class ServerInterface:
 			raise TypeError('Unsupported permission level querying for type {}'.format(type(obj)))
 
 	@log_call
-	def set_permission_level(self, player, level):
+	def set_permission_level(self, player, value):
 		"""
 		Set the permission level of a player
 
 		:param str player: The name of the player that you want to set his/her permission level
-		:param level: The target permission level you want to set the player to. It can be an int or a str as long as
+		:param value: The target permission level you want to set the player to. It can be an int or a str as long as
 		it's related to the permission level. Available examples: 1, '1', 'user'
-		:type level: int or str
-		:raise: TypeError if param player is illegal
+		:type value: int or str
+		:raise: TypeError if param value is illegal
 		"""
-		level_name = self.__mcdr_server.permission_manager.format_level_name(level)
-		if level_name is None:
+		level = PermissionLevel.get_level(value)
+		if level is None:
 			raise TypeError('Parameter level needs to be a permission related value')
-		self.__mcdr_server.permission_manager.set_permission_level(player, level_name)
+		self.__mcdr_server.permission_manager.set_permission_level(player, value)
 
 	@log_call
 	def rcon_query(self, command):

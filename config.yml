@@ -77,6 +77,9 @@ disable_console_thread: false
 
 
 # If set to true, if MCDR detects a newer version it will automatically download it
+check_update: false
+
+# If set to true, if MCDR detects a newer version it will automatically download it
 download_update: true
 
 

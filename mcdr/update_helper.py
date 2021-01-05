@@ -30,6 +30,8 @@ class UpdateHelper:
 		misc_util.start_thread(self.__check_update, (reply_func,), 'CheckUpdate')
 
 	def __check_update(self, reply_func):
+		if not self.mcdr_server.config['check_update']:
+			return
 		acquired = self.update_lock.acquire(blocking=False)
 		if not acquired:
 			reply_func(self.mcdr_server.tr('update_helper.check_update.already_checking'))

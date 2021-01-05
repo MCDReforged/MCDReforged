@@ -11,8 +11,9 @@ from mcdr import constant, logger
 from mcdr.command.command_manager import CommandManager
 from mcdr.config import Config
 from mcdr.exception import *
-from mcdr.info import ServerInfo
+from mcdr.info import Info
 from mcdr.language_manager import LanguageManager
+from mcdr.logger import DebugOption
 from mcdr.parser_manager import ParserManager
 from mcdr.permission_manager import PermissionManager
 from mcdr.plugin.plugin_event import PluginEvents
@@ -49,7 +50,7 @@ class MCDReforgedServer:
 		self.server_logger = logger.ServerLogger('Server')
 		self.server_interface = ServerInterface(self)
 		self.language_manager = LanguageManager(self, constant.LANGUAGE_FOLDER)
-		self.config = Config(self, constant.CONFIG_FILE)
+		self.config = Config(self, constant.CONFIG_FILE)  # TODO: config query lock
 		self.rcon_manager = RconManager(self)
 		self.parser_manager = ParserManager(self, constant.PARSER_FOLDER)
 		self.reactor_manager = ReactorManager(self)
@@ -316,7 +317,7 @@ class MCDReforgedServer:
 		self.flag_server_startup = False
 		self.flag_server_rcon_ready = False
 		self.set_server_status(MCDRServerStatus.PRE_STOPPED)
-		self.plugin_manager.dispatch_event(PluginEvents.SERVER_STOP, (self.server_interface, return_code), wait=True)
+		self.plugin_manager.dispatch_event(PluginEvents.SERVER_STOP, (self.server_interface, return_code))
 		if self.in_status({MCDRServerStatus.PRE_STOPPED}):
 			self.set_server_status(MCDRServerStatus.STOPPED)
 
@@ -336,18 +337,21 @@ class MCDReforgedServer:
 			self.logger.warning(self.tr('mcdr_server.tick.pre_parse_fail'))
 		self.server_logger.info(text)
 
+		parsed_result: Info
 		try:
 			parsed_result = self.parser_manager.get_parser().parse_server_stdout(text)
 		except:
-			self.logger.debug('Fail to parse text "{}" from stdout of the server, using raw parser'.format(text))
-			for line in traceback.format_exc().splitlines():
-				self.logger.debug('    {}'.format(line))
+			if self.logger.should_log_debug(option=DebugOption.PARSER):  # traceback.format_exc() is costly
+				self.logger.debug('Fail to parse text "{}" from stdout of the server, using raw parser'.format(text))
+				for line in traceback.format_exc().splitlines():
+					self.logger.debug('    {}'.format(line))
 			parsed_result = self.parser_manager.get_basic_parser().parse_server_stdout(text)
 		else:
 			self.logger.debug('Parsed text from server stdin:')
 			for line in parsed_result.format_text().splitlines():
 				self.logger.debug('    {}'.format(line))
-		self.reactor_manager.put_info(ServerInfo.from_info(self, parsed_result))
+		parsed_result.attach_mcdr_server(self)
+		self.reactor_manager.put_info(parsed_result)
 
 	def on_mcdr_stop(self):
 		try:
@@ -355,7 +359,7 @@ class MCDReforgedServer:
 				self.logger.info(self.tr('mcdr_server.on_mcdr_stop.user_interrupted'))
 			else:
 				self.logger.info(self.tr('mcdr_server.on_mcdr_stop.server_stop'))
-			self.plugin_manager.dispatch_event(PluginEvents.MCDR_STOP, (self.server_interface,), wait=True)
+			# self.plugin_manager.dispatch_event(PluginEvents.MCDR_STOP, (self.server_interface,))
 			self.logger.info(self.tr('mcdr_server.on_mcdr_stop.bye'))
 		except KeyboardInterrupt:  # I don't know why there sometimes will be a KeyboardInterrupt if MCDR is stopped by ctrl-c
 			pass
@@ -413,6 +417,7 @@ class MCDReforgedServer:
 		while True:
 			try:
 				text = input()
+				parsed_result: Info
 				try:
 					parsed_result = self.parser_manager.get_parser().parse_console_command(text)
 				except:
@@ -421,7 +426,8 @@ class MCDReforgedServer:
 					self.logger.debug('Parsed text from console input:')
 					for line in parsed_result.format_text().splitlines():
 						self.logger.debug('    {}'.format(line))
-					self.reactor_manager.put_info(ServerInfo.from_info(self, parsed_result))
+					parsed_result.attach_mcdr_server(self)
+					self.reactor_manager.put_info(parsed_result)
 			except (KeyboardInterrupt, EOFError, SystemExit, IOError) as e:
 				self.logger.debug('Exception {} {} caught in console_input()'.format(type(e), e))
 				self.interrupt()

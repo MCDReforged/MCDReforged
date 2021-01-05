@@ -24,7 +24,7 @@ class DebugOption:
 class MCColoredFormatter(ColoredFormatter):
 	def formatMessage(self, record):
 		text = super().formatMessage(record)
-		text = RColor.convert_minecraft_color_code(text)  # minecraft code -> console code
+		text = RColorConvertor.convert_minecraft_color_code(text)  # minecraft code -> console code
 		text = string_util.clean_minecraft_color_code(text)  # clean the rest of minecraft codes
 		return text
 
@@ -83,11 +83,14 @@ class Logger:
 		for key, value in debug_options.items():
 			self.logger.debug('Debug option {} is set to {}'.format(key, value))
 
-	def debug(self, *args, option=None):
+	def should_log_debug(self, option=None):
 		do_log = self.debug_options.get(DebugOption.ALL, False)
 		if option is not None:
 			do_log |= self.debug_options.get(option, False)
-		if do_log:
+		return do_log
+
+	def debug(self, *args, option=None):
+		if self.should_log_debug(option):
 			self.logger.debug(*args)
 
 	@property

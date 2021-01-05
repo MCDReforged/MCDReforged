@@ -270,22 +270,10 @@ class PermissionManager:
 			else:
 				return None
 
-	def get_info_permission_level(self, info):
+	def get_permission(self, source: CommandSource) -> int:
 		"""
-		Return the permission level from a info instance, return None if it's the info is not from a user
-		Console input always has the top level
-
-		:type info: Info or str
-		:rtype: int or None
+		Gets called in CommandSource implementation
 		"""
-		if info.source == InfoSource.CONSOLE:
-			return PermissionLevel.MAXIMUM_LEVEL
-		elif info.is_player:
-			return self.get_player_permission_level(info.player)
-		else:
-			return None
-
-	def get_permission(self, source: CommandSource):
 		if isinstance(source, ConsoleCommandSource):
 			return PermissionLevel.CONSOLE_LEVEL
 		elif isinstance(source, PlayerCommandSource):
