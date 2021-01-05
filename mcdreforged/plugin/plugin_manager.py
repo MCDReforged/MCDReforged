@@ -4,10 +4,10 @@ Plugin management
 import os
 import sys
 import threading
-from typing import Callable, Dict, Optional, Any, Tuple, List
+from typing import Callable, Dict, Optional, Any, Tuple, List, TYPE_CHECKING
 
 from mcdreforged import constant
-from mcdreforged.logger import Logger, DebugOption
+from mcdreforged.logger import DebugOption
 from mcdreforged.plugin.dependency_walker import DependencyWalker
 from mcdreforged.plugin.operation_result import PluginOperationResult, SingleOperationResult
 from mcdreforged.plugin.plugin import Plugin, PluginState
@@ -16,12 +16,15 @@ from mcdreforged.plugin.plugin_registry import PluginManagerRegistry
 from mcdreforged.plugin.plugin_thread import PluginThreadPool
 from mcdreforged.utils import file_util, string_util, misc_util
 
+if TYPE_CHECKING:
+	from mcdreforged import MCDReforgedServer
+
 
 class PluginManager:
-	def __init__(self, mcdr_server):
+	def __init__(self, mcdr_server: 'MCDReforgedServer'):
 		self.plugin_folders = []  # type: List[str]
 		self.mcdr_server = mcdr_server
-		self.logger = mcdr_server.logger  # type: Logger
+		self.logger = mcdr_server.logger
 
 		# id -> Plugin plugin storage
 		self.plugins = {}   # type: Dict[str, Plugin]

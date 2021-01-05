@@ -1,9 +1,12 @@
 import collections
-from typing import Dict, List
+from typing import Dict, List, TYPE_CHECKING
 
 from mcdreforged import constant
 from mcdreforged.logger import DebugOption
 from mcdreforged.plugin.version import VersionRequirement
+
+if TYPE_CHECKING:
+	from mcdreforged.plugin.plugin_manager import PluginManager
 
 
 class DependencyError(Exception):
@@ -36,9 +39,8 @@ WalkResult = collections.namedtuple('WalkResult', 'plugin_id success reason')
 
 
 class DependencyWalker:
-	def __init__(self, plugin_manager):
-		from mcdreforged.plugin.plugin_manager import PluginManager
-		self.plugin_manager = plugin_manager  # type: PluginManager
+	def __init__(self, plugin_manager: 'PluginManager'):
+		self.plugin_manager = plugin_manager
 		self.visiting_state = {}  # type: Dict[str, int]
 		self.visiting_plugins = set()
 		self.topo_order = []

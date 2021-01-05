@@ -5,7 +5,7 @@ import hashlib
 import os
 import sys
 from threading import RLock
-from typing import Tuple, Any
+from typing import Tuple, Any, TYPE_CHECKING
 
 from mcdreforged.command.builder.command_node import Literal
 from mcdreforged.exception import IllegalCall, IllegalStateError
@@ -16,6 +16,9 @@ from mcdreforged.plugin.plugin_registry import PluginRegistry, DEFAULT_LISTENER_
 from mcdreforged.plugin.plugin_thread import PluginThreadPool
 from mcdreforged.rtext import RText
 from mcdreforged.utils import misc_util
+
+if TYPE_CHECKING:
+	from mcdreforged.plugin.plugin_manager import PluginManager
 
 GLOBAL_LOAD_LOCK = RLock()
 
@@ -29,7 +32,7 @@ class PluginState:
 
 
 class Plugin:
-	def __init__(self, plugin_manager, file_path):
+	def __init__(self, plugin_manager: 'PluginManager', file_path: str):
 		self.plugin_manager = plugin_manager
 		self.mcdr_server = plugin_manager.mcdr_server
 		self.file_path = file_path

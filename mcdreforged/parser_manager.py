@@ -1,4 +1,5 @@
 import os
+from typing import TYPE_CHECKING
 
 from ruamel import yaml
 
@@ -6,9 +7,12 @@ from mcdreforged import constant
 from mcdreforged.parser.abstract_parser import AbstractParser
 from mcdreforged.utils import misc_util
 
+if TYPE_CHECKING:
+	from mcdreforged import MCDReforgedServer
+
 
 class ParserManager:
-	def __init__(self, mcdr_server, parser_folder):
+	def __init__(self, mcdr_server: 'MCDReforgedServer', parser_folder: str):
 		self.mcdr_server = mcdr_server
 		self.parser_folder = parser_folder
 		self.parser = AbstractParser(self)

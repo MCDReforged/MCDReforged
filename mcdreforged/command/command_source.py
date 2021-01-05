@@ -1,4 +1,11 @@
+from typing import TYPE_CHECKING
+
 from mcdreforged.utils import misc_util
+
+if TYPE_CHECKING:
+	from mcdreforged import MCDReforgedServer
+	from mcdreforged.info import Info
+	from mcdreforged.server_interface import ServerInterface
 
 
 class CommandSourceType:
@@ -9,13 +16,20 @@ class CommandSourceType:
 class CommandSource:
 	source_type: int
 
-	def __init__(self, mcdr_server, source_type):
+	def __init__(self, mcdr_server: 'MCDReforgedServer', info: 'Info', source_type: int):
 		self._mcdr_server = mcdr_server
+		self._info = info
 		self.source_type = source_type
 
 	@property
 	def is_player(self) -> bool:
 		raise NotImplementedError()
+
+	def get_server(self) -> 'ServerInterface':
+		return self._mcdr_server.server_interface
+
+	def get_info(self) -> 'Info':
+		return self._info
 
 	def get_permission_level(self) -> int:
 		return self._mcdr_server.permission_manager.get_permission(self)
@@ -38,8 +52,8 @@ class CommandSource:
 
 
 class PlayerCommandSource(CommandSource):
-	def __init__(self, mcdr_server, player: str):
-		super().__init__(mcdr_server, CommandSourceType.PLAYER)
+	def __init__(self, mcdr_server, info, player: str):
+		super().__init__(mcdr_server, info, CommandSourceType.PLAYER)
 		self.player = player
 
 	@property
@@ -57,8 +71,8 @@ class PlayerCommandSource(CommandSource):
 
 
 class ConsoleCommandSource(CommandSource):
-	def __init__(self, mcdr_server):
-		super().__init__(mcdr_server, CommandSourceType.CONSOLE)
+	def __init__(self, mcdr_server, info):
+		super().__init__(mcdr_server, info, CommandSourceType.CONSOLE)
 
 	@property
 	def is_player(self):

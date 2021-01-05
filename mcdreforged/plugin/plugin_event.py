@@ -1,5 +1,8 @@
 import abc
-from typing import Dict, List
+from typing import Dict, List, Callable, TYPE_CHECKING
+
+if TYPE_CHECKING:
+	from mcdreforged.plugin.plugin import Plugin
 
 
 class PluginEvent(abc.ABC):
@@ -58,7 +61,7 @@ class PluginEvents:
 
 
 class EventListener:
-	def __init__(self, plugin, callback, priority):
+	def __init__(self, plugin: 'Plugin', callback: Callable, priority: int):
 		self.plugin = plugin
 		self.callback = callback
 		self.priority = priority

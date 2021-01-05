@@ -7,13 +7,13 @@ from threading import Lock
 
 import psutil as psutil
 
-from mcdreforged import constant, logger
+from mcdreforged import constant
 from mcdreforged.command.command_manager import CommandManager
 from mcdreforged.config import Config
 from mcdreforged.exception import *
 from mcdreforged.info import Info
 from mcdreforged.language_manager import LanguageManager
-from mcdreforged.logger import DebugOption
+from mcdreforged.logger import DebugOption, Logger, ServerLogger
 from mcdreforged.parser_manager import ParserManager
 from mcdreforged.permission_manager import PermissionManager
 from mcdreforged.plugin.plugin_event import PluginEvents
@@ -45,9 +45,9 @@ class MCDReforgedServer:
 		self.decoding_method = None
 
 		# Constructing fields
-		self.logger = logger.Logger(self, constant.NAME_SHORT)
+		self.logger = Logger(self, constant.NAME_SHORT)
 		self.logger.set_file(constant.LOGGING_FILE)
-		self.server_logger = logger.ServerLogger('Server')
+		self.server_logger = ServerLogger('Server')
 		self.server_interface = ServerInterface(self)
 		self.language_manager = LanguageManager(self, constant.LANGUAGE_FOLDER)
 		self.config = Config(self, constant.CONFIG_FILE)  # TODO: config query lock

@@ -1,12 +1,15 @@
 """
 Information of a plugin
 """
-from typing import List, Dict
+from typing import List, Dict, TYPE_CHECKING
 
 from mcdreforged import constant
 from mcdreforged.plugin.version import Version, VersionParsingError, VersionRequirement
 from mcdreforged.rtext import RTextBase
 from mcdreforged.utils import string_util
+
+if TYPE_CHECKING:
+	from mcdreforged.plugin.plugin import Plugin
 
 
 class MetaData:
@@ -20,7 +23,7 @@ class MetaData:
 
 	FALLBACK_VERSION = '0.0.0'
 
-	def __init__(self, plugin, data):
+	def __init__(self, plugin: 'Plugin', data: dict):
 		"""
 		:param Plugin plugin: the plugin which this metadata is belong to
 		:param dict or None data: a dict with information of the plugin

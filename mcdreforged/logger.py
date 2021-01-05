@@ -10,7 +10,7 @@ import zipfile
 
 from colorlog import ColoredFormatter
 
-from mcdreforged.rtext import *
+from mcdreforged.rtext import RColorConvertor
 from mcdreforged.utils import string_util, file_util
 
 

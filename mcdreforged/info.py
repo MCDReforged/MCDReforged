@@ -72,9 +72,9 @@ class Info:
 		if self.__mcdr_server is None:
 			raise IllegalStateError('MCDR server is not attached to this Info instance yet')
 		if self.source == InfoSource.CONSOLE:
-			return ConsoleCommandSource(self.__mcdr_server)
+			return ConsoleCommandSource(self.__mcdr_server, self)
 		elif self.is_player:
-			return PlayerCommandSource(self.__mcdr_server, self.player)
+			return PlayerCommandSource(self.__mcdr_server, self, self.player)
 		else:
 			return None
 

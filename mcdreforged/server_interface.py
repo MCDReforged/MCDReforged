@@ -1,21 +1,24 @@
 """
 An interface class for plugins to control the server
 """
-
+import json
 import time
-from typing import Callable, Union
+from typing import Callable, Union, TYPE_CHECKING
 
 from mcdreforged.command.builder.command_node import Literal
 from mcdreforged.command.command_source import CommandSource
-from mcdreforged.exception import *
+from mcdreforged.exception import IllegalCall
 from mcdreforged.info import Info
 from mcdreforged.permission_manager import PermissionLevel
 from mcdreforged.plugin.plugin import Plugin
 from mcdreforged.plugin.plugin_event import MCDREvent, EventListener, LiteralEvent
 from mcdreforged.plugin.plugin_registry import DEFAULT_LISTENER_PRIORITY, HelpMessage
-from mcdreforged.rtext import *
+from mcdreforged.rtext import RTextBase, RText
 from mcdreforged.server_status import MCDRServerStatus
 from mcdreforged.utils import misc_util
+
+if TYPE_CHECKING:
+	from mcdreforged import MCDReforgedServer
 
 
 def log_call(func):
@@ -53,9 +56,8 @@ def return_if_success(func):
 class ServerInterface:
 	MCDR = True  # Identifier for plugins
 
-	def __init__(self, mcdr_server):
-		from mcdreforged.mcdr_server import MCDReforgedServer
-		self.__mcdr_server = mcdr_server  # type: MCDReforgedServer
+	def __init__(self, mcdr_server: 'MCDReforgedServer'):
+		self.__mcdr_server = mcdr_server
 		self.logger = mcdr_server.logger
 
 	# ------------------------

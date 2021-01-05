@@ -4,16 +4,20 @@ MCDR update things
 import os
 import time
 from threading import Lock
+from typing import TYPE_CHECKING
 
 import requests
 
 from mcdreforged import constant
-from mcdreforged.rtext import *
+from mcdreforged.rtext import RText, RAction, RColor, RStyle
 from mcdreforged.utils import misc_util, file_util
+
+if TYPE_CHECKING:
+	from mcdreforged import MCDReforgedServer
 
 
 class UpdateHelper:
-	def __init__(self, mcdr_server):
+	def __init__(self, mcdr_server: 'MCDReforgedServer'):
 		self.mcdr_server = mcdr_server
 		self.check_update_thread = None
 		self.update_lock = Lock()

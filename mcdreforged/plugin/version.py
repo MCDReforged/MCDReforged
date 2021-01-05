@@ -10,7 +10,7 @@ class Version:
 	WILDCARDS = {'x', 'X', '*'}
 	WILDCARD = -1
 
-	def __init__(self, version_str, allow_wildcard=True):
+	def __init__(self, version_str: str, allow_wildcard=True):
 		"""
 		:param str version_str: the version str like '1.2.3-pre4+build.5'
 		"""
@@ -121,7 +121,7 @@ class VersionRequirement:
 		'~': lambda base, ver: ver >= base and ver[0] == base[0] and ver[1] == base[1],
 	}
 
-	def __init__(self, requirements):
+	def __init__(self, requirements: str):
 		if not isinstance(requirements, str):
 			raise VersionParsingError('Requirements should be a str, not {}'.format(type(requirements).__name__))
 		self.criterions = []  # type: List[Criterion]

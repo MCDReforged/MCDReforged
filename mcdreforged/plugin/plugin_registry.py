@@ -1,15 +1,19 @@
-from typing import Dict, List, Callable, Any
+from typing import Dict, List, Callable, Any, TYPE_CHECKING
 
 from mcdreforged.command.builder.command_node import Literal
 from mcdreforged.permission_manager import PermissionLevel
 from mcdreforged.plugin.plugin_event import EventListener
 from mcdreforged.rtext import RTextBase
 
+if TYPE_CHECKING:
+	from mcdreforged.plugin.plugin import Plugin
+	from mcdreforged.plugin.plugin_manager import PluginManager
+
 DEFAULT_LISTENER_PRIORITY = 1000
 
 
 class HelpMessage:
-	def __init__(self, plugin, prefix: str, message: RTextBase, permission: int):
+	def __init__(self, plugin: 'Plugin', prefix: str, message: RTextBase, permission: int):
 		self.plugin = plugin
 		self.prefix = prefix
 		self.message = message
@@ -28,7 +32,7 @@ class HelpMessage:
 
 
 class PluginRegistry:
-	def __init__(self, plugin):
+	def __init__(self, plugin: 'Plugin'):
 		self.plugin = plugin
 		self.event_listeners = {}  # type: Dict[str, List[EventListener]]
 		self.help_messages = []
@@ -52,7 +56,7 @@ class PluginRegistry:
 
 
 class PluginManagerRegistry:
-	def __init__(self, plugin_manager):
+	def __init__(self, plugin_manager: 'PluginManager'):
 		self.plugin_manager = plugin_manager
 		self.event_listeners = {}  # type: Dict[str, List[EventListener]]
 		self.help_messages = []  # type: List[HelpMessage]

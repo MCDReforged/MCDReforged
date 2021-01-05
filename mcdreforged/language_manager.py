@@ -3,19 +3,23 @@ Translation support
 """
 
 import os
+from typing import TYPE_CHECKING, Dict
 
 import ruamel.yaml as yaml
 
 from mcdreforged import constant
 from mcdreforged.utils import file_util, string_util
 
+if TYPE_CHECKING:
+	from mcdreforged import MCDReforgedServer
+
 
 class LanguageManager:
-	def __init__(self, mcdr_server, language_folder):
+	def __init__(self, mcdr_server: 'MCDReforgedServer', language_folder: str):
 		self.mcdr_server = mcdr_server
 		self.language_folder = language_folder
 		self.language = None
-		self.translations = {}
+		self.translations = {}  # type: Dict[str, Dict]
 
 	def load_languages(self):
 		self.translations = {}

@@ -3,15 +3,18 @@ The place to reacting information from the server
 """
 import queue
 import time
-from typing import List
+from typing import List, TYPE_CHECKING
 
 from mcdreforged import constant
 from mcdreforged.reactor.abstract_reactor import AbstractReactor
 from mcdreforged.utils import misc_util, file_util
 
+if TYPE_CHECKING:
+	from mcdreforged import MCDReforgedServer
+
 
 class ReactorManager:
-	def __init__(self, mcdr_server):
+	def __init__(self, mcdr_server: 'MCDReforgedServer'):
 		self.mcdr_server = mcdr_server
 		self.info_queue = queue.Queue(maxsize=constant.MAX_INFO_QUEUE_SIZE)
 		self.last_queue_full_warn_time = None

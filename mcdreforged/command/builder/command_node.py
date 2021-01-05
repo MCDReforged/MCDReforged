@@ -1,4 +1,5 @@
 import collections
+import inspect
 from abc import ABC
 from typing import List, Callable, Iterable, Set, Dict, Type, Any
 
@@ -42,10 +43,10 @@ class ArgumentNode:
 			self.children.append(node)
 		return self
 
-	def runs(self, func: Callable[[CommandSource, dict], Any]):
+	def runs(self, func: Callable[[], Any] or Callable[[CommandSource], Any] or Callable[[CommandSource, dict], Any]):
 		"""
 		Executes the given function if the command string ends here
-		:param func: a function to execute at this node
+		:param func: A function to execute at this node, with 0 to 2 args
 		:rtype: ArgumentNode
 		"""
 		self.callback = func
@@ -72,7 +73,13 @@ class ArgumentNode:
 		self.redirect_node = redirect_node
 		return self
 
-	def on_error(self, error_type: Type[CommandError], listener: Callable[[CommandSource, CommandError], Any]):
+	def on_error(self, error_type: Type[CommandError], listener: Callable[[], Any] or Callable[[CommandSource], Any] or Callable[[CommandSource, CommandError], Any] or Callable[[CommandSource, CommandError, dict], Any]):
+		"""
+		When a command error occurs, invoke the listener
+		:param error_type: A class of CommandError or inherited from CommandError
+		:param listener: A callback function, with 0 to 3 args
+		:return:
+		"""
 		self.error_listeners[error_type] = listener
 		return self
 
@@ -103,10 +110,16 @@ class ArgumentNode:
 		"""
 		return self.name is not None
 
-	def __raise_error(self, source, error: CommandError):
+	@staticmethod
+	def smart_callback(callback: Callable, *args):
+		spec = inspect.getfullargspec(callback)
+		arg_len = min(len(spec.args), len(args))
+		return callback(*args[:arg_len])
+
+	def __raise_error(self, source, error: CommandError, context: dict):
 		listener = self.error_listeners.get(type(error))
 		if listener is not None:
-			listener(source, error)
+			self.smart_callback(listener, source, error, context)
 		raise error
 
 	def _execute(self, source, command: str, remaining: str, context: dict):
@@ -116,13 +129,13 @@ class ArgumentNode:
 		except CommandSyntaxError as error:
 			error.set_parsed_command(command[:success_read])
 			error.set_failed_command(command[:success_read + error.char_read])
-			self.__raise_error(source, error)
+			self.__raise_error(source, error, context)
 		else:
 			success_read += result.char_read
 			trimmed_remaining = utils.remove_divider_prefix(remaining[result.char_read:])
 
 			if self.requirement is not None and not self.requirement(source):
-				self.__raise_error(source, RequirementNotMet(command[:success_read], command[:success_read]))
+				self.__raise_error(source, RequirementNotMet(command[:success_read], command[:success_read]), context)
 
 			if self.__does_store_thing():
 				context[self.name] = result.value
@@ -130,9 +143,9 @@ class ArgumentNode:
 			# Parsing finished
 			if len(trimmed_remaining) == 0:
 				if self.callback is not None:
-					self.callback(source, context)
+					self.smart_callback(self.callback, source, context)
 				else:
-					self.__raise_error(source, UnknownCommand(command[:success_read], command[:success_read]))
+					self.__raise_error(source, UnknownCommand(command[:success_read], command[:success_read]), context)
 			# Un-parsed command string remains
 			else:
 				# Redirecting
@@ -140,7 +153,7 @@ class ArgumentNode:
 
 				# No child at all
 				if not node.has_children():
-					self.__raise_error(source, UnknownArgument(command[:success_read], command))
+					self.__raise_error(source, UnknownArgument(command[:success_read], command), context)
 
 				# Check literal children first
 				next_literal = utils.get_element(trimmed_remaining)
@@ -154,7 +167,7 @@ class ArgumentNode:
 				else:  # All literal children fails
 					# No argument child
 					if len(node.children) == 0:
-						self.__raise_error(source, UnknownArgument(command[:success_read], command))
+						self.__raise_error(source, UnknownArgument(command[:success_read], command), context)
 					for child in node.children:
 						child._execute(source, command, trimmed_remaining, context)
 						break

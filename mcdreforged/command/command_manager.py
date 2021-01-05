@@ -6,20 +6,22 @@ import os
 import re
 import threading
 import traceback
-from typing import Callable, Any, List, Tuple
+from typing import Callable, Any, List, Tuple, TYPE_CHECKING
 
 from mcdreforged import constant
 from mcdreforged.command.builder.command_executor import CommandExecutor
 from mcdreforged.command.builder.command_node import Literal, Text, QuotableText
 from mcdreforged.command.builder.exception import CommandError, UnknownArgument, RequirementNotMet
 from mcdreforged.command.command_source import CommandSource
-from mcdreforged.logger import Logger
 from mcdreforged.permission_manager import PermissionLevel
 from mcdreforged.plugin.plugin import Plugin
 from mcdreforged.plugin.plugin_registry import HelpMessage
 from mcdreforged.rtext import *
 from mcdreforged.server_status import MCDRServerStatus
 from mcdreforged.utils import file_util
+
+if TYPE_CHECKING:
+	from mcdreforged import MCDReforgedServer
 
 
 class Validator:
@@ -30,9 +32,9 @@ class Validator:
 
 # deal with !!MCDR and !!help command
 class CommandManager:
-	def __init__(self, mcdr_server):
+	def __init__(self, mcdr_server: 'MCDReforgedServer'):
 		self.mcdr_server = mcdr_server
-		self.logger = self.mcdr_server.logger  # type: Logger
+		self.logger = self.mcdr_server.logger
 		self.tr = self.mcdr_server.tr
 		self.command_executor = CommandExecutor()
 
@@ -92,50 +94,50 @@ class CommandManager:
 			Literal('!!MCDR').
 			requires(lambda src: src.has_permission(PermissionLevel.MCDR_CONTROL_LEVEL)).
 			runs(
-				lambda src, ctx: src.reply(self.get_help_message('command_manager.help_message'))
+				lambda src: src.reply(self.get_help_message('command_manager.help_message'))
 			).
+			on_error(RequirementNotMet, lambda src: src.reply(RText(self.mcdr_server.tr('general_reactor.permission_denied'), color=RColor.red))).
+			on_error(UnknownArgument, self.on_mcdr_command_unknown_argument).
 			then(
 				Literal({'r', 'reload'}).
-				runs(lambda src, ctx: src.reply(self.get_help_message('command_manager.help_message_reload'))).
-				then(Literal({'plugin', 'plg'}).runs(lambda src, ctx: self.refresh_changed_plugins(src))).
-				then(Literal({'config', 'cfg'}).runs(lambda src, ctx: self.reload_config(src))).
-				then(Literal({'permission', 'perm'}).runs(lambda src, ctx: self.reload_permission(src))).
-				then(Literal('all').runs(lambda src, ctx: self.reload_all(src))).
-				on_error(UnknownArgument, self.on_mcdr_command_unknown_argument)
+				runs(lambda src: src.reply(self.get_help_message('command_manager.help_message_reload'))).
+				on_error(UnknownArgument, self.on_mcdr_command_unknown_argument).
+				then(Literal({'plugin', 'plg'}).runs(self.refresh_changed_plugins)).
+				then(Literal({'config', 'cfg'}).runs(self.reload_config)).
+				then(Literal({'permission', 'perm'}).runs(self.reload_permission)).
+				then(Literal('all').runs(self.reload_all))
 			).
 			then(
-				Literal('status').runs(lambda src, ctx: self.print_mcdr_status(src))
+				Literal('status').runs(self.print_mcdr_status)
 			).
 			then(
 				Literal({'permission', 'perm'}).
-				runs(lambda src, ctx: src.reply(self.get_help_message('command_manager.help_message_permission'))).
+				runs(lambda src: src.reply(self.get_help_message('command_manager.help_message_permission'))).
+				on_error(UnknownArgument, self.on_mcdr_command_unknown_argument).
 				then(
-					Literal('list').runs(lambda src, ctx: self.list_permission(src, None)).
+					Literal('list').runs(lambda src: self.list_permission(src, None)).
 					then(Text('level').runs(lambda src, ctx: self.list_permission(src, ctx['level'])))
 				).
 				then(Literal('set').then(Text('player').then(Text('level').runs(lambda src, ctx: self.set_player_permission(src, ctx['player'], ctx['level']))))).
 				then(Literal({'remove', 'rm'}).then(Text('player').runs(lambda src, ctx: self.remove_player_permission(src, ctx['player'])))).
-				then(Literal({'setdefault', 'setd'}).then(Text('level').runs(lambda src, ctx: self.remove_player_permission(src, ctx['level'])))).
-				on_error(UnknownArgument, self.on_mcdr_command_unknown_argument)
+				then(Literal({'setdefault', 'setd'}).then(Text('level').runs(lambda src, ctx: self.remove_player_permission(src, ctx['level']))))
 			).
 			then(
 				Literal({'plugin', 'plg'}).
-				runs(lambda src, ctx: src.reply(self.get_help_message('command_manager.help_message_plugin'))).
-				then(Literal('list').runs(lambda src, ctx: self.list_plugin(src))).
+				runs(lambda src: src.reply(self.get_help_message('command_manager.help_message_plugin'))).
+				on_error(UnknownArgument, self.on_mcdr_command_unknown_argument).
+				then(Literal('list').runs(self.list_plugin)).
 				then(Literal('load').then(QuotableText('plugin_file').runs(lambda src, ctx: self.load_plugin(src, ctx['plugin_file'])))).
 				then(Literal('enable').then(QuotableText('plugin_file').runs(lambda src, ctx: self.enable_plugin(src, ctx['plugin_file'])))).
 				then(Literal('reload').then(QuotableText('plugin_id').runs(lambda src, ctx: self.reload_plugin(src, ctx['plugin_id'])))).
 				then(Literal('disable').then(QuotableText('plugin_id').runs(lambda src, ctx: self.disable_plugin(src, ctx['plugin_id'])))).
-				then(Literal({'reloadall', 'ra'}).runs(lambda src, ctx: self.reload_all_plugin(src))).
-				on_error(UnknownArgument, self.on_mcdr_command_unknown_argument)
+				then(Literal({'reloadall', 'ra'}).runs(self.reload_all_plugin))
 			).
 			then(
-				Literal({'checkupdate', 'cu'}).runs(lambda src, ctx: self.mcdr_server.update_helper.check_update(reply_func=src.reply))
-			).
-			on_error(RequirementNotMet, lambda src, ctx: src.reply(RText(self.mcdr_server.tr('general_reactor.permission_denied'), color=RColor.red))).
-			on_error(UnknownArgument, self.on_mcdr_command_unknown_argument)
+				Literal({'checkupdate', 'cu'}).runs(lambda src: self.mcdr_server.update_helper.check_update(reply_func=src.reply))
+			)
 		)
-		self.register_command(Literal('!!help').runs(lambda src, ctx: self.process_help_command(src)))
+		self.register_command(Literal('!!help').runs(self.process_help_command))
 
 	FunctionCallResult = collections.namedtuple('FunctionCallResult', 'return_value no_error')
 
