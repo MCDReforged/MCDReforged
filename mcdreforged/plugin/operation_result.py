@@ -4,22 +4,22 @@ from mcdreforged.exception import IllegalCall
 from mcdreforged.rtext import RTextList, RText, RAction, RTextBase
 
 if TYPE_CHECKING:
-	from mcdreforged.plugin.plugin import Plugin
+	from mcdreforged.plugin.plugin import AbstractPlugin
 	from mcdreforged.plugin.plugin_manager import PluginManager
 
 
 class SingleOperationResult:
 	def __init__(self):
-		self.success_list = []  # type: List['Plugin']
-		self.failed_list = []  # type: List['Plugin' or str]
+		self.success_list = []  # type: List['AbstractPlugin']
+		self.failed_list = []  # type: List['AbstractPlugin' or str]
 
-	def succeed(self, plugin: 'Plugin'):
+	def succeed(self, plugin: 'AbstractPlugin'):
 		self.success_list.append(plugin)
 
-	def fail(self, plugin: 'Plugin' or str):
+	def fail(self, plugin: 'AbstractPlugin' or str):
 		self.failed_list.append(plugin)
 
-	def record(self, plugin: 'Plugin' or str, result: bool):
+	def record(self, plugin: 'AbstractPlugin' or str, result: bool):
 		if result:
 			self.succeed(plugin)
 		else:
@@ -52,7 +52,7 @@ class PluginOperationResult:
 			msg.append(element)
 			msg.append('; ')
 
-		def add_if_not_empty(msg: RTextList, lst: List['Plugin' or str], key: str):
+		def add_if_not_empty(msg: RTextList, lst: List['AbstractPlugin' or str], key: str):
 			if len(lst) > 0:
 				add_element(msg, RText(self.__mcdr_server.tr(key, len(lst))).h('\n'.join(map(str, lst))))
 

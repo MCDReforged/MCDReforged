@@ -3,13 +3,11 @@ Information of a plugin
 """
 from typing import List, Dict, TYPE_CHECKING
 
-from mcdreforged import constant
 from mcdreforged.plugin.version import Version, VersionParsingError, VersionRequirement
 from mcdreforged.rtext import RTextBase
-from mcdreforged.utils import string_util
 
 if TYPE_CHECKING:
-	from mcdreforged.plugin.plugin import Plugin
+	from mcdreforged.plugin.plugin import AbstractPlugin
 
 
 class MetaData:
@@ -17,29 +15,41 @@ class MetaData:
 	version: Version
 	name: RTextBase
 	description: RTextBase or None
-	author: str or List[str] or None
+	author: List[str] or None
 	link: str or None
 	dependencies: Dict[str, VersionRequirement]
 
 	FALLBACK_VERSION = '0.0.0'
 
-	def __init__(self, plugin: 'Plugin', data: dict):
+	def __init__(self, plugin: 'AbstractPlugin', data: dict):
 		"""
-		:param Plugin plugin: the plugin which this metadata is belong to
+		:param AbstractPlugin plugin: the plugin which this metadata is belong to
 		:param dict or None data: a dict with information of the plugin
 		"""
 		if not isinstance(data, dict):
 			data = {}
-		fallback_id = string_util.remove_suffix(plugin.file_name, constant.PLUGIN_FILE_SUFFIX)
 		logger = plugin.mcdr_server.logger
 
-		self.id = data.get('id', fallback_id)
+		self.id = data.get('id', plugin.get_fallback_metadata_id())
+
 		self.name = RTextBase.from_any(data.get('name', self.id))
+
 		self.description = data.get('description', None)
 		if self.description is not None:
 			self.description = RTextBase.from_any(self.description)
+
 		self.author = data.get('author', None)
+		if isinstance(self.author, str):
+			self.author = [self.author]
+		if isinstance(self.author, list):
+			for i in range(len(self.author)):
+				self.author[i] = str(self.author[i])
+			if len(self.author) == 0:
+				self.author = None
+
 		self.link = data.get('link', None)
+		if not isinstance(self.link, str):
+			self.link = None
 
 		version_str = data.get('version')
 		if version_str:
@@ -63,19 +73,3 @@ class MetaData:
 				logger.warning('Dependency "{}: {}" of {} is invalid ({}), ignore'.format(
 					plugin_id, requirement, plugin.get_name(), e
 				))
-
-
-__SAMPLE_METADATA = {
-	'id': 'example-plugin',  # If missing it will be the file name without .py suffix
-	'version': '1.0.0',  # If missing it will be '0.0.0'
-	'name': 'Sample Plugin',  # RText is allowed
-	'description': 'Sample plugin for MCDR',  # RText is allowed
-	'author': [
-		'Fallen_Breath'
-	],
-	'link': 'https://github.com/Fallen-Breath/MCDReforged',
-	'dependencies': {
-		'MCDReforged': '>=1.0.0',
-		'PlayerInfoAPI': '*'
-	}
-}

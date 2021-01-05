@@ -36,11 +36,11 @@ class InfoReactorManager:
 		self.__post_process_info(info)
 
 	def __post_process_info(self, info: Info):
-		if info.should_echo():
+		if info.source == InfoSource.SERVER and info.should_echo():
 			self.server_logger.info(info.raw_content)
 
-		if info.source == InfoSource.CONSOLE:
-			if info.should_send_to_server() and not info.content.startswith(self.mcdr_server.config['console_command_prefix']):
+		if info.source == InfoSource.CONSOLE and info.should_send_to_server():
+			if not info.content.startswith(self.mcdr_server.config['console_command_prefix']):
 				self.mcdr_server.send(info.content)  # send input command to server's stdin
 
 	def put_info(self, info):

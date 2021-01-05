@@ -11,7 +11,7 @@ from mcdreforged.exception import IllegalCall
 from mcdreforged.info import Info
 from mcdreforged.permission_manager import PermissionLevel
 from mcdreforged.plugin.operation_result import PluginOperationResult
-from mcdreforged.plugin.plugin import Plugin
+from mcdreforged.plugin.plugin import RegularPlugin
 from mcdreforged.plugin.plugin_event import MCDREvent, EventListener, LiteralEvent, PluginEvent
 from mcdreforged.plugin.plugin_registry import DEFAULT_LISTENER_PRIORITY, HelpMessage
 from mcdreforged.rtext import RTextBase, RText
@@ -331,11 +331,11 @@ class ServerInterface:
 	@log_call
 	def get_plugin_list(self):
 		"""
-		Return a str list containing all loaded plugin name like ["pluginA.py", "pluginB.py"]
+		Return a str list containing all loaded plugin id like ["my-plugin", "another-plugin"]
 
 		:rtype: list[str]
 		"""
-		return self.__mcdr_server.plugin_manager.get_plugins()
+		return [plugin.get_metadata().id for plugin in self.__mcdr_server.plugin_manager.get_regular_plugins()]
 
 	@log_call
 	def get_plugin_instance(self, plugin_name):
@@ -359,7 +359,7 @@ class ServerInterface:
 
 	def __get_current_plugin(self):
 		plugin = self.__mcdr_server.plugin_manager.get_current_running_plugin()
-		if isinstance(plugin, Plugin):
+		if isinstance(plugin, RegularPlugin):
 			return plugin
 		else:
 			raise IllegalCall('MCDR provided thead is required')

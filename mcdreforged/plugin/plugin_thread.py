@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING, Callable
 
 if TYPE_CHECKING:
 	from mcdreforged import MCDReforgedServer
-	from mcdreforged.plugin.plugin import Plugin
+	from mcdreforged.plugin.plugin import RegularPlugin
 
 
 TaskData = collections.namedtuple('TaskData', 'callback plugin')
@@ -42,7 +42,7 @@ class PluginThread(threading.Thread):
 				else:
 					plugin = task_data.plugin
 					plugin.plugin_manager.set_current_plugin(plugin)
-					self.setName('{}@{}'.format(self, plugin.get_meta_data().id))
+					self.setName('{}@{}'.format(self, plugin.get_metadata().id))
 					self.thread_pool.working_count += 1
 					try:
 						task_data.callback()
@@ -89,7 +89,7 @@ class PluginThreadPool:
 			if i >= self.max_thread:
 				thread.set_interrupt()
 
-	def add_task(self, func: Callable, plugin: 'Plugin'):
+	def add_task(self, func: Callable, plugin: 'RegularPlugin'):
 		"""
 		Added a task to executing the callback of a listener to the dynamic thread pool and execute it
 		If the thread pool is not enough a new temporary thread will start to process the task

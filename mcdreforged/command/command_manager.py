@@ -6,7 +6,7 @@ import os
 import re
 import threading
 import traceback
-from typing import Callable, Any, List, Tuple, TYPE_CHECKING
+from typing import Callable, Any, Tuple, TYPE_CHECKING
 
 from mcdreforged import constant
 from mcdreforged.command.builder.command_executor import CommandExecutor
@@ -14,7 +14,7 @@ from mcdreforged.command.builder.command_node import Literal, Text, QuotableText
 from mcdreforged.command.builder.exception import CommandError, UnknownArgument, RequirementNotMet
 from mcdreforged.command.command_source import CommandSource
 from mcdreforged.permission_manager import PermissionLevel
-from mcdreforged.plugin.plugin import Plugin
+from mcdreforged.plugin.plugin import RegularPlugin, AbstractPlugin
 from mcdreforged.plugin.plugin_registry import HelpMessage
 from mcdreforged.rtext import *
 from mcdreforged.server_status import MCDRServerStatus
@@ -124,6 +124,7 @@ class CommandManager:
 				runs(lambda src: src.reply(self.get_help_message('command_manager.help_message_plugin'))).
 				on_error(UnknownArgument, self.on_mcdr_command_unknown_argument).
 				then(Literal('list').runs(self.list_plugin)).
+				then(Literal('info').then(QuotableText('plugin_id').runs(lambda src, ctx: self.show_plugin_info(src, ctx['plugin_id'])))).
 				then(Literal('load').then(QuotableText('plugin_file').runs(lambda src, ctx: self.load_plugin(src, ctx['plugin_file'])))).
 				then(Literal('enable').then(QuotableText('plugin_file').runs(lambda src, ctx: self.enable_plugin(src, ctx['plugin_file'])))).
 				then(Literal('reload').then(QuotableText('plugin_id').runs(lambda src, ctx: self.reload_plugin(src, ctx['plugin_id'])))).
@@ -285,12 +286,12 @@ class CommandManager:
 	def list_plugin(self, source: CommandSource):
 		not_loaded_plugin_list = self.get_files_in_plugin_folders(lambda fp: fp.endswith(constant.PLUGIN_FILE_SUFFIX) and not self.mcdr_server.plugin_manager.contains_plugin_file(fp))  # type: List[str]
 		disabled_plugin_list = self.get_files_in_plugin_folders(lambda fp: fp.endswith(constant.DISABLED_PLUGIN_FILE_SUFFIX))  # type: List[str]
-		current_plugins = list(self.mcdr_server.plugin_manager.get_plugins())  # type: List[Plugin]
+		current_plugins = list(self.mcdr_server.plugin_manager.get_all_plugins())  # type: List[AbstractPlugin]
 
 		source.reply(self.tr('command_manager.list_plugin.info_loaded_plugin', len(current_plugins)))
 		for plugin in current_plugins:
-			meta = plugin.get_meta_data()
-			texts = RTextList('§7-§r ', meta.name.h(str(plugin)))
+			meta = plugin.get_metadata()
+			texts = RTextList('§7-§r ', meta.name.h(plugin).c(RAction.run_command, '!!MCDR plugin info {}'.format(meta.id)))
 			if self.should_display_buttons(source):
 				texts.append(
 					RText(' [×]', color=RColor.gray)
@@ -333,18 +334,32 @@ class CommandManager:
 				)
 			source.reply(texts)
 
-	def __existed_plugin_manipulate(self, source: CommandSource, plugin_id: str, operation_name: str, func: Callable[[Plugin], Any]):
+	def __existed_regular_plugin_manipulate(self, source: CommandSource, plugin_id: str, operation_name: str, func: Callable[[RegularPlugin], Any]):
 		plugin = self.mcdr_server.plugin_manager.get_plugin_from_id(plugin_id)
-		if plugin is None:
+		if plugin is None or not isinstance(plugin, RegularPlugin):
 			source.reply(self.tr('command_manager.invalid_plugin_id', plugin_id))
 		else:
 			self.function_call(source, lambda: func(plugin), operation_name, msg_args=(plugin.get_name(),))
 
+	def show_plugin_info(self, source: CommandSource, plugin_id: str):
+		plugin = self.mcdr_server.plugin_manager.get_plugin_from_id(plugin_id)
+		if plugin is None:
+			source.reply(self.tr('command_manager.invalid_plugin_id', plugin_id))
+		else:
+			meta = plugin.get_metadata()
+			source.reply(RTextList(RText(meta.name, styles=RStyle.bold).h(plugin), ' ', RText('v{}'.format(meta.version), color=RColor.gray)))
+			if meta.author is not None:
+				source.reply(RText('Authors: {}'.format(', '.join(meta.author))))
+			if meta.link is not None:
+				source.reply(RTextList('Link: ', RText(meta.link, color=RColor.blue, styles=RStyle.underlined)))
+			if meta.description is not None:
+				source.reply(meta.description)
+
 	def disable_plugin(self, source: CommandSource, plugin_id: str):
-		self.__existed_plugin_manipulate(source, plugin_id, 'disable_plugin', self.mcdr_server.plugin_manager.disable_plugin)
+		self.__existed_regular_plugin_manipulate(source, plugin_id, 'disable_plugin', self.mcdr_server.plugin_manager.disable_plugin)
 
 	def reload_plugin(self, source: CommandSource, plugin_id: str):
-		self.__existed_plugin_manipulate(source, plugin_id, 'reload_plugin', self.mcdr_server.plugin_manager.reload_plugin)
+		self.__existed_regular_plugin_manipulate(source, plugin_id, 'reload_plugin', self.mcdr_server.plugin_manager.reload_plugin)
 
 	def __not_loaded_plugin_file_manipulate(self, source: CommandSource, file_name: str, operation_name: str, func: Callable[[str], Any]):
 		plugin_paths = self.get_files_in_plugin_folders(lambda fp: os.path.basename(fp) == file_name)

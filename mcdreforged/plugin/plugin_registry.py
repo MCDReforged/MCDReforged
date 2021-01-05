@@ -6,14 +6,14 @@ from mcdreforged.plugin.plugin_event import EventListener
 from mcdreforged.rtext import RTextBase
 
 if TYPE_CHECKING:
-	from mcdreforged.plugin.plugin import Plugin
+	from mcdreforged.plugin.plugin import AbstractPlugin
 	from mcdreforged.plugin.plugin_manager import PluginManager
 
 DEFAULT_LISTENER_PRIORITY = 1000
 
 
 class HelpMessage:
-	def __init__(self, plugin: 'Plugin', prefix: str, message: RTextBase, permission: int):
+	def __init__(self, plugin: 'AbstractPlugin', prefix: str, message: RTextBase, permission: int):
 		self.plugin = plugin
 		self.prefix = prefix
 		self.message = message
@@ -32,7 +32,7 @@ class HelpMessage:
 
 
 class PluginRegistry:
-	def __init__(self, plugin: 'Plugin'):
+	def __init__(self, plugin: 'AbstractPlugin'):
 		self.plugin = plugin
 		self.event_listeners = {}  # type: Dict[str, List[EventListener]]
 		self.help_messages = []

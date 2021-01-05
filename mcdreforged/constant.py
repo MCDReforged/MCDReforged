@@ -8,7 +8,6 @@ import os
 VERSION = '1.0.0-alpha.1'
 NAME_SHORT = 'MCDR'
 NAME = 'MCDReforged'
-NAME_FULL = 'MCDaemonReforged'
 GITHUB_URL = 'https://github.com/Fallen-Breath/MCDReforged'
 GITHUB_API_LATEST = 'https://api.github.com/repos/Fallen-Breath/MCDReforged/releases/latest'
 

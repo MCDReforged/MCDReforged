@@ -5,7 +5,7 @@ Credit: Pandaria98 https://github.com/Pandaria98 https://github.com/TISUnion/ste
 
 import copy
 import json
-from typing import Iterable
+from typing import Iterable, List
 
 from colorama import Fore, Style
 
@@ -173,7 +173,7 @@ class RText(RTextBase):
 			styles = set(styles)
 		else:
 			raise TypeError('Unsupported style type {}'.format(type(styles)))
-		if type(text) == type(self):
+		if isinstance(text, type(self)):
 			self.data = text.data.copy()
 		else:
 			self.data = {
@@ -228,7 +228,7 @@ class RTextList(RTextBase):
 	def __init__(self, *args):
 		self.header = RText('')
 		self.header_empty = True
-		self.children = []
+		self.children = []  # type: List[RTextBase or str]
 		self.append(*args)
 
 	def set_click_event(self, action, value):
@@ -243,12 +243,12 @@ class RTextList(RTextBase):
 
 	def append(self, *args):
 		for obj in args:
-			if type(obj) is RTextList:
+			if isinstance(obj, RTextList):
 				self.children.extend(obj.children)
-			elif isinstance(obj, RText):
+			elif isinstance(obj, RTextBase):
 				self.children.append(obj)
 			else:
-				self.children.append(RText(str(obj)))
+				self.children.append(RText(obj))
 
 	def empty(self):
 		return len(self.children) == 0

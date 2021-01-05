@@ -62,6 +62,7 @@ class MCDReforgedServer:
 		self.load_config()  # loads config, language, parsers
 		self.parser_manager.init()
 		self.permission_manager.load_permission_file()
+		self.plugin_manager.register_permanent_plugins()
 		self.load_plugins()
 
 		self.update_helper = UpdateHelper(self)
