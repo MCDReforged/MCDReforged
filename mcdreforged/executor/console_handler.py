@@ -19,7 +19,7 @@ class ConsoleHandler(ThreadExecutor):
 				self.mcdr_server.logger.debug('Parsed text from console input:')
 				for line in parsed_result.format_text().splitlines():
 					self.mcdr_server.logger.debug('    {}'.format(line))
-				parsed_result.attach_mcdr_server(self)
+				parsed_result.attach_mcdr_server(self.mcdr_server)
 				self.mcdr_server.reactor_manager.put_info(parsed_result)
 		except (KeyboardInterrupt, EOFError, SystemExit, IOError) as e:
 			self.mcdr_server.logger.debug('Exception {} {} caught in console_input()'.format(type(e), e))

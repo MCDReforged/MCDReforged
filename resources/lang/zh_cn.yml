@@ -122,10 +122,10 @@ rcon_manager.connect.connected                          : rcon 已连接
 rcon_manager.connect.wrong_password                     : rcon 密码错误，连接失败
 rcon_manager.disconnect.disconnected                    : rcon 已断开连接
 rcon_manager.disconnect.disconnect_fail                 : rcon 断开连接失败
-mcdr_server_status.running                                   : §a运行中§r
-mcdr_server_status.stopping                                  : §c正在关闭§r
-mcdr_server_status.pre_stopped                               : §4即将关闭§r
-mcdr_server_status.stopped                                   : §4已关闭§r
+server_status.running                                   : §a运行中§r
+server_status.stopping                                  : §c正在关闭§r
+server_status.pre_stopped                               : §4即将关闭§r
+server_status.stopped                                   : §4已关闭§r
 general_reactor.permission_denied                       : 权限不足
 parser_manager.load_parser.file_not_found               : 解析器 "{0}" 未找到! 请确保你在配置文件中填写的解析器是正确的
 parser_manager.load_re_death_message.fail               : 死亡信息数据文件加载失败

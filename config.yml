@@ -87,7 +87,7 @@ download_update: true
 debug:
   all: false
   parser: false
-  plugin: true
+  plugin: false
   permission: false
 
 # Missing options down below

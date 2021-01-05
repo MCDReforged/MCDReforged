@@ -326,7 +326,7 @@ class PluginManager:
 	# ----------------
 
 	def dispatch_event(self, event: MCDREvent, args: Tuple[Any, ...]):
-		self.logger.debug('Dispatching {}'.format(event), option=DebugOption.PLUGIN)
+		self.logger.debug('Dispatching {} with args ({})'.format(event, ', '.join([type(arg).__name__ for arg in args])), option=DebugOption.PLUGIN)
 		for listener in self.registry_storage.event_listeners.get(event.id, []):
 			self.trigger_listener(listener, args)
 

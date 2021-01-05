@@ -3,12 +3,14 @@ The place to reacting information from the server
 """
 import queue
 import time
-from typing import List, TYPE_CHECKING
+from typing import TYPE_CHECKING
 
 from mcdreforged import constant
-from mcdreforged.info import Info
-from mcdreforged.reactor.abstract_reactor import AbstractReactor
-from mcdreforged.utils import misc_util, file_util
+from mcdreforged.info import Info, InfoSource
+from mcdreforged.logger import ServerLogger
+from mcdreforged.reactor.general_reactor import GeneralReactor
+from mcdreforged.reactor.player_reactor import PlayerReactor
+from mcdreforged.reactor.server_reactor import ServerReactor
 
 if TYPE_CHECKING:
 	from mcdreforged import MCDReforgedServer
@@ -18,13 +20,12 @@ class InfoReactorManager:
 	def __init__(self, mcdr_server: 'MCDReforgedServer'):
 		self.mcdr_server = mcdr_server
 		self.last_queue_full_warn_time = None
-		self.reactors = []  # type: List[AbstractReactor]
-
-	def load_reactors(self, folder):
-		for file in file_util.list_file_with_suffix(folder, constant.REACTOR_FILE_SUFFIX):
-			module = misc_util.load_source(file)
-			if callable(getattr(module, 'get_reactor', None)):
-				self.reactors.append(module.get_reactor(self.mcdr_server))
+		self.server_logger = ServerLogger('Server')
+		self.reactors = [
+			GeneralReactor(self.mcdr_server),
+			PlayerReactor(self.mcdr_server),
+			ServerReactor(self.mcdr_server),
+		]
 
 	def process_info(self, info: Info):
 		for reactor in self.reactors:
@@ -32,10 +33,19 @@ class InfoReactorManager:
 				reactor.react(info)
 			except:
 				self.mcdr_server.logger.exception(self.mcdr_server.tr('mcdr_server.react.error', type(reactor).__name__))  # TODO: fix translation
+		self.__post_process_info(info)
+
+	def __post_process_info(self, info: Info):
+		if info.should_echo():
+			self.server_logger.info(info.raw_content)
+
+		if info.source == InfoSource.CONSOLE:
+			if info.should_send_to_server() and not info.content.startswith(self.mcdr_server.config['console_command_prefix']):
+				self.mcdr_server.send(info.content)  # send input command to server's stdin
 
 	def put_info(self, info):
 		try:
-			self.mcdr_server.task_executor.add_info_task(lambda: self.process_info(info))
+			self.mcdr_server.task_executor.add_info_task(lambda: self.process_info(info), info.is_user)
 		except queue.Full:
 			current_time = time.time()
 			logging_method = self.mcdr_server.logger.debug

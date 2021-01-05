@@ -4,10 +4,10 @@ Analyzing and reacting events related to server
 
 from mcdreforged.info import InfoSource
 from mcdreforged.plugin.plugin_event import PluginEvents
-from mcdreforged.reactor.abstract_reactor import AbstractReactor
+from mcdreforged.reactor.abstract_inf_reactor import AbstractInfoReactor
 
 
-class ServerReactor(AbstractReactor):
+class ServerReactor(AbstractInfoReactor):
 	def react(self, info):
 		if info.source == InfoSource.SERVER:
 			parser = self.mcdr_server.parser_manager.get_parser()
@@ -25,7 +25,3 @@ class ServerReactor(AbstractReactor):
 			if parser.parse_server_stopping(info):
 				self.mcdr_server.logger.debug('Server stopping detected')
 				self.mcdr_server.rcon_manager.disconnect()
-
-
-def get_reactor(server):
-	return ServerReactor(server)

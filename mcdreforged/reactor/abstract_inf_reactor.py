@@ -4,7 +4,7 @@ if TYPE_CHECKING:
 	from mcdreforged import MCDReforgedServer
 
 
-class AbstractReactor:
+class AbstractInfoReactor:
 	def __init__(self, mcdr_server: 'MCDReforgedServer'):
 		self.mcdr_server = mcdr_server
 

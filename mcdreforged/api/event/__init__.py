@@ -1,5 +1,5 @@
-from mcdreforged.plugin.plugin_event import PluginEvent, LiteralEvent
+from mcdreforged.plugin.plugin_event import LiteralEvent
 
 __all__ = [
-	'PluginEvent', 'LiteralEvent'
+	'LiteralEvent'
 ]

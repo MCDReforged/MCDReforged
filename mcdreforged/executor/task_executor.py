@@ -6,8 +6,10 @@ from mcdreforged.executor.thread_executor import ThreadExecutor
 
 
 class Priority:
+	# High priority
 	REGULAR = 0
-	INFO = 1
+	INFO = 20
+	# Low priority
 
 
 class TaskData:
@@ -31,11 +33,15 @@ class TaskExecutor(ThreadExecutor):
 	def should_keep_looping(self):
 		return not self.mcdr_server.is_mcdr_exit()
 
-	def add_info_task(self, func: Callable[[], Any]):
-		self.task_queue.put_nowait(TaskData(func, Priority.REGULAR))
+	def add_info_task(self, func: Callable[[], Any], is_user: bool):
+		data = TaskData(func, Priority.INFO)
+		if is_user:
+			self.task_queue.put(data)
+		else:
+			self.task_queue.put_nowait(data)
 
 	def add_task(self, func: Callable[[], Any]):
-		self.task_queue.put(TaskData(func, Priority.INFO))
+		self.task_queue.put(TaskData(func, Priority.REGULAR))
 
 	def execute_or_enqueue(self, func: Callable[[], Any]):
 		if self.is_on_thread():

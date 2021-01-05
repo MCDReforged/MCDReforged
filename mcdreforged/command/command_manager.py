@@ -257,7 +257,7 @@ class CommandManager:
 		source.reply(RTextList(
 			RText(self.tr('command_manager.print_mcdr_status.line1', constant.NAME, constant.VERSION)).c(RAction.open_url, constant.GITHUB_URL).h(RText(constant.GITHUB_URL, styles=RStyle.underlined, color=RColor.blue)), '\n',
 			RText(self.tr('command_manager.print_mcdr_status.line2', self.tr(
-				MCDRServerStatus.get_translate_key(self.mcdr_server.mcdr_server_status)))), '\n',
+				MCDRServerStatus.get_translate_key(self.mcdr_server.server_status)))), '\n',
 			RText(self.tr('command_manager.print_mcdr_status.line3', bool_formatter(self.mcdr_server.is_server_startup()))), '\n',
 			RText(self.tr('command_manager.print_mcdr_status.line4', bool_formatter(self.mcdr_server.is_exit_naturally()))), '\n',
 			RText(self.tr('command_manager.print_mcdr_status.line5', status_dict[self.mcdr_server.server_interface.is_rcon_running(is_plugin_call=False)])), '\n',
@@ -266,7 +266,7 @@ class CommandManager:
 		if source.has_permission(PermissionLevel.PHYSICAL_SERVER_CONTROL_LEVEL):
 			source.reply(RTextList(
 				self.tr('command_manager.print_mcdr_status.extra_line1', self.mcdr_server.process.pid if self.mcdr_server.process is not None else '§rN/A§r'), '\n',
-				self.tr('command_manager.print_mcdr_status.extra_line2', self.mcdr_server.reactor_manager.info_queue.qsize(), constant.MAX_TASK_QUEUE_SIZE), '\n',
+				self.tr('command_manager.print_mcdr_status.extra_line2', self.mcdr_server.task_executor.task_queue.qsize(), constant.MAX_TASK_QUEUE_SIZE), '\n',
 				self.tr('command_manager.print_mcdr_status.extra_line3', threading.active_count())
 			))
 			for thread in threading.enumerate():

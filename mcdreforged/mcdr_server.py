@@ -16,7 +16,7 @@ from mcdreforged.executor.task_executor import TaskExecutor
 from mcdreforged.info import Info
 from mcdreforged.info_reactor_manager import InfoReactorManager
 from mcdreforged.language_manager import LanguageManager
-from mcdreforged.logger import DebugOption, Logger, ServerLogger
+from mcdreforged.logger import DebugOption, Logger
 from mcdreforged.parser_manager import ParserManager
 from mcdreforged.permission_manager import PermissionManager
 from mcdreforged.plugin.plugin_event import PluginEvents
@@ -30,7 +30,7 @@ from mcdreforged.update_helper import UpdateHelper
 class MCDReforgedServer:
 	def __init__(self, old_process=None):
 		self.process = old_process  # type: Popen # the process for the server
-		self.mcdr_server_status = MCDRServerStatus.STOPPED
+		self.server_status = MCDRServerStatus.STOPPED
 		self.flag_interrupt = False  # ctrl-c flag
 		self.flag_server_startup = False  # set to True after server startup
 		self.flag_server_rcon_ready = False  # set to True after server started its rcon. used to start the rcon server
@@ -46,7 +46,6 @@ class MCDReforgedServer:
 		# Constructing fields
 		self.logger = Logger(self, constant.NAME_SHORT)
 		self.logger.set_file(constant.LOGGING_FILE)
-		self.server_logger = ServerLogger('Server')
 		self.server_interface = ServerInterface(self)
 		self.task_executor = TaskExecutor(self)
 		self.console_handler = ConsoleHandler(self)
@@ -62,7 +61,6 @@ class MCDReforgedServer:
 		# Initialize fields instance
 		self.load_config()  # loads config, language, parsers
 		self.parser_manager.init()
-		self.reactor_manager.load_reactors(constant.REACTOR_FOLDER)
 		self.permission_manager.load_permission_file()
 		self.load_plugins()
 
@@ -152,11 +150,11 @@ class MCDReforgedServer:
 		self.logger.debug('flag_exit_naturally has set to "{}"'.format(self.flag_exit_naturally))
 
 	def in_status(self, status: set):
-		return self.mcdr_server_status in status
+		return self.server_status in status
 
 	def set_server_status(self, status):
-		self.mcdr_server_status = status
-		self.logger.debug('MCDR Server state has set to "{}"'.format(MCDRServerStatus.get_translate_key(status)))
+		self.server_status = status
+		self.logger.debug('Server state has set to "{}"'.format(MCDRServerStatus.get_translate_key(status)))
 
 	def should_keep_looping(self):
 		"""
@@ -336,7 +334,6 @@ class MCDReforgedServer:
 			text = self.parser_manager.get_parser().pre_parse_server_stdout(text)
 		except:
 			self.logger.warning(self.tr('mcdr_server.tick.pre_parse_fail'))
-		self.server_logger.info(text)
 
 		parsed_result: Info
 		try:
@@ -360,7 +357,8 @@ class MCDReforgedServer:
 				self.logger.info(self.tr('mcdr_server.on_mcdr_stop.user_interrupted'))
 			else:
 				self.logger.info(self.tr('mcdr_server.on_mcdr_stop.server_stop'))
-			# self.plugin_manager.dispatch_event(PluginEvents.MCDR_STOP, (self.server_interface,))
+			self.plugin_manager.dispatch_event(PluginEvents.MCDR_STOP, (self.server_interface,))
+			self.task_executor.join()
 			self.logger.info(self.tr('mcdr_server.on_mcdr_stop.bye'))
 		except KeyboardInterrupt:  # I don't know why there sometimes will be a KeyboardInterrupt if MCDR is stopped by ctrl-c
 			pass

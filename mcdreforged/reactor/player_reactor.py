@@ -3,10 +3,10 @@ Analyzing and reacting events related to player
 """
 from mcdreforged.info import InfoSource
 from mcdreforged.plugin.plugin_event import PluginEvents
-from mcdreforged.reactor.abstract_reactor import AbstractReactor
+from mcdreforged.reactor.abstract_inf_reactor import AbstractInfoReactor
 
 
-class PlayerReactor(AbstractReactor):
+class PlayerReactor(AbstractInfoReactor):
 	def react(self, info):
 		if info.source == InfoSource.SERVER:
 			parser = self.mcdr_server.parser_manager.get_parser()
@@ -35,7 +35,3 @@ class PlayerReactor(AbstractReactor):
 			# 	self.mcdr_server.logger.debug('Player made advancement detected')
 			# 	player, advancement = result
 			# 	self.mcdr_server.plugin_manager.call('on_player_made_advancement', (self.mcdr_server.server_interface, player, advancement))
-
-
-def get_reactor(server):
-	return PlayerReactor(server)

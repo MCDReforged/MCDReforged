@@ -39,7 +39,7 @@ class Info:
 		self.min = None
 		self.sec = None
 
-		# very raw content
+		# very raw content, it's also the content to be echoed to the stdout
 		self.raw_content = None
 
 		# if the text is sent by a player the value will be what the player said. if not the value will be the pain text
@@ -85,10 +85,10 @@ class Info:
 		else:
 			return None
 
-	def will_echo(self) -> bool:
+	def should_echo(self) -> bool:
 		return self.__echo
 
-	def will_send_to_server(self) -> bool:
+	def should_send_to_server(self) -> bool:
 		return self.__send_to_server
 
 	def cancel_echo(self):
