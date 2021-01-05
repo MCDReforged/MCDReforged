@@ -1,0 +1,18 @@
+# This is the permission config and storage file of MCDReforged
+# It is used to storage permission level stuffs of MCDR
+# Available levels (top to down):
+# - owner
+# - admin
+# - helper
+# - user
+# - guest
+
+
+default_level: user
+
+owner:
+- Fallen_Breath
+admin:
+helper:
+user:
+guest:

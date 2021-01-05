@@ -26,14 +26,13 @@ try:
 		print('Python 3.6+ is needed')
 		raise Exception('Python version {} is too old'.format(python_version))
 
-	if not os.path.isfile(os.path.join('mcdr', '__init__.py')):
-		print('Cannot found necessary module folder "mcdr", seems that you have launched it in a wrong directory')
+	if not os.path.isfile(os.path.join('mcdreforged', '__init__.py')):
+		print('Cannot found necessary module folder "mcdreforged", seems that you have launched it in a wrong directory')
 		print('Current working directory: {}'.format(os.getcwd()))
 		raise Exception('Wrong working directory')
 
 	try:
-		from mcdr import constant
-		from mcdr.mcdr_server import MCDReforgedServer
+		from mcdreforged import constant, MCDReforgedServer
 	except ModuleNotFoundError:
 		print('It seems that you have not installed all require modules')
 		raise

@@ -1,6 +1,6 @@
 import unittest
 
-from mcdr.command.builder.command_node import *
+from mcdreforged.command.builder.command_node import *
 
 
 class MyTestCase(unittest.TestCase):
@@ -191,9 +191,9 @@ class MyTestCase(unittest.TestCase):
 			Literal('fail').requires(lambda s: False).runs(self.callback_hit)
 		)
 		self.run_command_and_check_hit(executor, 'permission pass', True)
-		self.assertRaises(PermissionDenied, self.run_command, executor, 'permission cannot')
-		self.assertRaises(PermissionDenied, self.run_command, executor, 'permission fail')
-		self.assertRaises(PermissionDenied, self.run_command, executor, 'permission pass fail')
+		self.assertRaises(RequirementNotMet, self.run_command, executor, 'permission cannot')
+		self.assertRaises(RequirementNotMet, self.run_command, executor, 'permission fail')
+		self.assertRaises(RequirementNotMet, self.run_command, executor, 'permission pass fail')
 
 	def test_12_redirect(self):
 		executor1 = Literal('tp').then(
@@ -207,7 +207,7 @@ class MyTestCase(unittest.TestCase):
 		self.run_command_and_check_hit(executor2, 'teleport here there', True)
 		self.assertRaises(UnknownCommand, self.run_command, executor2, 'teleport here')
 		let_it_pass = False
-		self.assertRaises(PermissionDenied, self.run_command, executor2, 'teleport here there')
+		self.assertRaises(RequirementNotMet, self.run_command, executor2, 'teleport here there')
 
 	def test_13_error_listener(self):
 		executor = Literal('error').then(
