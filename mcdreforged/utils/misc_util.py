@@ -3,6 +3,7 @@ Misc tool collection
 """
 import importlib.machinery
 import importlib.util
+import os
 import sys
 import threading
 from typing import List, Any, Callable, Tuple
@@ -18,10 +19,12 @@ def start_thread(func: Callable, args: Tuple, name: str or None = None):
 	return thread
 
 
-def load_source(path: str, name=None):
+def load_source(source_path: str, name=None):
+	if not os.path.isfile(source_path):
+		raise TypeError('Source path {} is not a file'.format(source_path))
 	if name is None:
-		name = path.replace('/', '_').replace('\\', '_').replace('.', '_')
-	spec = importlib.util.spec_from_file_location(name, path)
+		name = source_path.replace('/', '_').replace('\\', '_').replace('.', '_')
+	spec = importlib.util.spec_from_file_location(name, source_path)
 	module = importlib.util.module_from_spec(spec)
 	sys.modules[name] = module
 	spec.loader.exec_module(module)

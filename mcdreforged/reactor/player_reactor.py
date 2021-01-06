@@ -16,13 +16,13 @@ class PlayerReactor(AbstractInfoReactor):
 			if player is not None:
 				self.mcdr_server.logger.debug('Player joined detected')
 				self.mcdr_server.permission_manager.touch_player(player)
-				self.mcdr_server.plugin_manager.dispatch_event(PluginEvents.PLAYER_JOIN, (self.mcdr_server.server_interface, player, info))
+				self.mcdr_server.plugin_manager.dispatch_event(PluginEvents.PLAYER_JOIN, (player, info))
 
 			# on_player_left
 			player = parser.parse_player_left(info)
 			if player is not None:
 				self.mcdr_server.logger.debug('Player left detected')
-				self.mcdr_server.plugin_manager.dispatch_event(PluginEvents.PLAYER_LEFT, (self.mcdr_server.server_interface, player))
+				self.mcdr_server.plugin_manager.dispatch_event(PluginEvents.PLAYER_LEFT, (player, ))
 
 			# # on_death_message
 			# if parser.parse_death_message(info):

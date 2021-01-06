@@ -17,7 +17,7 @@ Create a rcon client instance
 
 `password` is a `str`, the password of the rcon connection
 
-(Optional) `logger` is an instance of `logging.Logger`. It's used to output some warning information
+(Optional) `logger` is an instance of `logging.MCDReforgedLogger`. It's used to output some warning information
 
 ### RconConnection.connect() -> bool
 

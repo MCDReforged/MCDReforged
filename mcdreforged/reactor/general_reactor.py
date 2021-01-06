@@ -13,7 +13,7 @@ class GeneralReactor(AbstractInfoReactor):
 		if command_source is not None:
 			self.mcdr_server.command_manager.execute_command(command_source, info.content)
 
-		self.mcdr_server.plugin_manager.dispatch_event(PluginEvents.GENERAL_INFO, (self.mcdr_server.server_interface, info))
+		self.mcdr_server.plugin_manager.dispatch_event(PluginEvents.GENERAL_INFO, (info, ))
 
 		if info.is_user:
-			self.mcdr_server.plugin_manager.dispatch_event(PluginEvents.USER_INFO, (self.mcdr_server.server_interface, info))
+			self.mcdr_server.plugin_manager.dispatch_event(PluginEvents.USER_INFO, (info, ))

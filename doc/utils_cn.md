@@ -17,7 +17,7 @@ MCDReforged 工具文档
 
 `password` 是一个 `str`, 代表 rcon 的密码
 
-(可选) `logger` 是一个 `logging.Logger` 的实例。这是用于输出一些警告信息所用
+(可选) `logger` 是一个 `logging.MCDReforgedLogger` 的实例。这是用于输出一些警告信息所用
 
 ### RconConnection.connect() -> bool
 

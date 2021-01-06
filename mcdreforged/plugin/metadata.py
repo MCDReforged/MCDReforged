@@ -1,6 +1,7 @@
 """
 Information of a plugin
 """
+import re
 from typing import List, Dict, TYPE_CHECKING
 
 from mcdreforged.plugin.version import Version, VersionParsingError, VersionRequirement
@@ -30,7 +31,15 @@ class MetaData:
 			data = {}
 		logger = plugin.mcdr_server.logger
 
-		self.id = data.get('id', plugin.get_fallback_metadata_id())
+		use_fallback_id_reason = None
+		self.id = data.get('id')
+		if self.id is None:
+			use_fallback_id_reason = 'Plugin ID of {} not found'.format(plugin)
+		elif not isinstance(self.id, str) or re.fullmatch(r'[a-zA-Z0-9-_]{1,64}', self.id) is None:
+			use_fallback_id_reason = 'Plugin ID "{}" of {} is invalid'.format(self.id, plugin)
+		if use_fallback_id_reason is not None:
+			self.id = plugin.get_fallback_metadata_id()
+			logger.warning('{}, use fallback id {} instead'.format(use_fallback_id_reason, self.id))
 
 		self.name = RTextBase.from_any(data.get('name', self.id))
 
@@ -56,12 +65,10 @@ class MetaData:
 			try:
 				self.version = Version(version_str, allow_wildcard=False)
 			except VersionParsingError as e:
-				logger.warning('Version "{}" of {} is invalid ({}), ignore and use fallback version instead {}'.format(
-					version_str, plugin.get_name(), e, self.FALLBACK_VERSION
-				))
+				logger.warning('Version "{}" of {} is invalid ({}), ignore and use fallback version instead {}'.format(version_str, plugin, e, self.FALLBACK_VERSION))
 				version_str = None
 		else:
-			logger.warning('{} doesn\'t specific a version, use fallback version {}'.format(plugin.get_name(), self.FALLBACK_VERSION))
+			logger.warning('{} doesn\'t specific a version, use fallback version {}'.format(plugin, self.FALLBACK_VERSION))
 		if version_str is None:
 			self.version = Version(self.FALLBACK_VERSION)
 
@@ -73,3 +80,9 @@ class MetaData:
 				logger.warning('Dependency "{}: {}" of {} is invalid ({}), ignore'.format(
 					plugin_id, requirement, plugin.get_name(), e
 				))
+
+	def __repr__(self):
+		return '{}[id={},version={},name={},description={},author={},link={},dependencies={}]'.format(
+			self.__class__.__name__,
+			self.id, self.version, self.name, self.description, self.author, self.link, self.dependencies
+		)

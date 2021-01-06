@@ -11,10 +11,11 @@ from mcdreforged.logger import DebugOption
 from mcdreforged.plugin.dependency_walker import DependencyWalker
 from mcdreforged.plugin.mcdreforged_plugin import MCDReforgedPlugin
 from mcdreforged.plugin.operation_result import PluginOperationResult, SingleOperationResult
-from mcdreforged.plugin.plugin import RegularPlugin, PluginState, AbstractPlugin
+from mcdreforged.plugin.plugin import PluginState, AbstractPlugin
 from mcdreforged.plugin.plugin_event import PluginEvents, MCDREvent, EventListener
 from mcdreforged.plugin.plugin_registry import PluginManagerRegistry
 from mcdreforged.plugin.plugin_thread import PluginThreadPool
+from mcdreforged.plugin.regular_plugin import RegularPlugin
 from mcdreforged.utils import file_util, string_util, misc_util
 
 if TYPE_CHECKING:
@@ -61,13 +62,13 @@ class PluginManager:
 	def get_plugin_from_id(self, plugin_id: str) -> Optional[AbstractPlugin]:
 		return self.plugins.get(plugin_id)
 
-	def get_regular_plugin_from_id(self, plugin_id: str) -> Optional[RegularPlugin]:
+	def get_regular_plugin_from_id(self, plugin_id: str) -> Optional[AbstractPlugin]:
 		plugin = self.get_plugin_from_id(plugin_id)
 		if not isinstance(plugin, RegularPlugin):
 			plugin = None
 		return plugin
 
-	def set_current_plugin(self, plugin: Optional[RegularPlugin]):
+	def set_current_plugin(self, plugin: Optional[AbstractPlugin]):
 		self.tls.current_plugin = plugin
 
 	def set_plugin_folders(self, plugin_folders: List[str]):
@@ -194,14 +195,14 @@ class PluginManager:
 			self.logger.info(self.mcdr_server.tr('plugin_manager.reload_plugin.success', plugin.get_name()))
 			return True
 
-	# -------------------------------
-	#   Plugin Collector & Handlers
-	# -------------------------------
+	# ---------------------------------------
+	#   Regular Plugin Collector & Handlers
+	# ---------------------------------------
 
-	def collect_and_process_new_plugins(self, filter: Callable[[str], bool], specific: Optional[str] = None) -> SingleOperationResult:
+	def collect_and_process_new_plugins(self, filter: Callable[[str], bool]) -> SingleOperationResult:
 		result = SingleOperationResult()
 		for plugin_folder in self.plugin_folders:
-			file_list = file_util.list_file_with_suffix(plugin_folder, constant.PLUGIN_FILE_SUFFIX) if specific is None else [specific]
+			file_list = file_util.list_file_with_suffix(plugin_folder, constant.PLUGIN_FILE_SUFFIX)
 			for file_path in file_list:
 				if not self.contains_plugin_file(file_path) and filter(file_path):
 					plugin = self.__load_plugin(file_path)
@@ -297,13 +298,13 @@ class PluginManager:
 		for plugin in dependency_check_result.success_list:
 			if plugin in newly_loaded_plugins:
 				if isinstance(plugin, RegularPlugin):
-					plugin.receive_event(PluginEvents.PLUGIN_LOAD, (self.mcdr_server.server_interface, plugin.old_instance))
+					plugin.receive_event(PluginEvents.PLUGIN_LOAD, (plugin.old_instance, ))
 
 		for plugin in unload_result.success_list + unload_result.failed_list + reload_result.failed_list + dependency_check_result.failed_list:
 			plugin.assert_state({PluginState.UNLOADING})
 			# plugins might just be newly loaded but failed on dependency check, dont dispatch event to them
 			if plugin not in load_result.success_list:
-				plugin.receive_event(PluginEvents.PLUGIN_UNLOAD, (self.mcdr_server.server_interface,))
+				plugin.receive_event(PluginEvents.PLUGIN_UNLOAD, ())
 			plugin.remove()
 
 		# they should be
@@ -332,34 +333,41 @@ class PluginManager:
 
 	def load_plugin(self, file_path: str):
 		self.__check_thread()
-		load_result = self.collect_and_process_new_plugins(lambda fp: True, specific=file_path)
+		self.logger.info('Loading plugin from {}'.format(file_path))
+		load_result = self.collect_and_process_new_plugins(lambda fp: fp == file_path)
 		self.__post_plugin_process(load_result=load_result)
 
 	def unload_plugin(self, plugin: RegularPlugin):
 		self.__check_thread()
+		self.logger.info('Unloading plugin {}'.format(plugin))
 		unload_result = self.collect_and_remove_plugins(lambda plg: True, specific=plugin)
 		self.__post_plugin_process(unload_result=unload_result)
 
 	def reload_plugin(self, plugin: RegularPlugin):
 		self.__check_thread()
+		self.logger.info('Reloading plugin {}'.format(plugin))
 		reload_result = self.reload_ready_plugins(lambda plg: True, specific=plugin)
 		self.__post_plugin_process(reload_result=reload_result)
 
 	def enable_plugin(self, file_path):
+		self.logger.info('Enabling plugin from {}'.format(file_path))
 		new_file_path = string_util.remove_suffix(file_path, constant.DISABLED_PLUGIN_FILE_SUFFIX)
 		if os.path.isfile(file_path):
 			os.rename(file_path, new_file_path)
 			self.load_plugin(new_file_path)
 
 	def disable_plugin(self, plugin: RegularPlugin):
+		self.logger.info('Disabling plugin {}'.format(plugin))
 		self.unload_plugin(plugin)
 		if os.path.isfile(plugin.file_path):
 			os.rename(plugin.file_path, plugin.file_path + constant.DISABLED_PLUGIN_FILE_SUFFIX)
 
 	def refresh_all_plugins(self):
+		self.logger.info('Refreshing all plugins')
 		return self.__refresh_plugins(lambda plg: True)
 
 	def refresh_changed_plugins(self):
+		self.logger.info('Refreshing all changed plugins')
 		return self.__refresh_plugins(lambda plg: plg.file_changed())
 
 	# ----------------
@@ -372,10 +380,14 @@ class PluginManager:
 			self.trigger_listener(listener, args)
 
 	def trigger_listener(self, listener: EventListener, args: Tuple[Any, ...]):
+		"""
+		The terminated entry for triggering a listener
+		The server_interface parameter will be automatically added as the 1st parameter
+		"""
 		# self.thread_pool.add_task(lambda: listener.execute(*args), listener.plugin)
 		self.set_current_plugin(listener.plugin)
 		try:
-			listener.execute(*args)
+			listener.execute(self.mcdr_server.server_interface, *args)
 		except:
 			self.logger.exception('Error invoking listener {}'.format(listener))
 		finally:

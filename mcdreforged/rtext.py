@@ -182,7 +182,7 @@ class RText(RTextBase):
 			}  # type: dict
 			for style in [RStyle.bold, RStyle.italic, RStyle.underlined, RStyle.strike_through, RStyle.obfuscated]:
 				if style in styles:
-					self.data[style] = style in styles
+					self.data[style] = True
 
 	def to_json_object(self):
 		return self.data

@@ -56,7 +56,7 @@ MCDReforged 插件文档
 
 | 变量 | 类型 | 功能 |
 |---|---|---|
-| logger | logging.Logger | MCDR 的一个记录器，推荐用 `server.logger.info(message)` 替代 `print(message)` 来向控制台输出信息。[相关文档](https://docs.python.org/zh-cn/3/library/logging.html#logger-objects)
+| logger | logging.MCDReforgedLogger | MCDR 的一个记录器，推荐用 `server.logger.info(message)` 替代 `print(message)` 来向控制台输出信息。[相关文档](https://docs.python.org/zh-cn/3/library/logging.html#logger-objects)
 
 它具有以下方法：
 

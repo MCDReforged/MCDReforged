@@ -3,15 +3,16 @@ An interface class for plugins to control the server
 """
 import json
 import time
-from typing import Callable, TYPE_CHECKING, Tuple, Any
+from typing import Callable, TYPE_CHECKING, Tuple, Any, Union
 
 from mcdreforged.command.builder.command_node import Literal
 from mcdreforged.command.command_source import CommandSource
 from mcdreforged.exception import IllegalCallError
 from mcdreforged.info import Info
+from mcdreforged.logger import MCDReforgedLogger
 from mcdreforged.permission_manager import PermissionLevel
-from mcdreforged.plugin.plugin import RegularPlugin
-from mcdreforged.plugin.plugin_event import MCDREvent, EventListener, LiteralEvent, PluginEvent
+from mcdreforged.plugin.operation_result import SingleOperationResult, PluginOperationResult
+from mcdreforged.plugin.plugin_event import EventListener, LiteralEvent, PluginEvent
 from mcdreforged.plugin.plugin_registry import DEFAULT_LISTENER_PRIORITY, HelpMessage
 from mcdreforged.rtext import RTextBase, RText
 from mcdreforged.server_status import ServerStatus
@@ -19,6 +20,8 @@ from mcdreforged.utils import misc_util
 
 if TYPE_CHECKING:
 	from mcdreforged import MCDReforgedServer
+	from mcdreforged.plugin.plugin_manager import PluginManager
+	from mcdreforged.plugin.plugin import RegularPlugin
 
 
 def log_call(func):
@@ -236,6 +239,44 @@ class ServerInterface:
 
 	# Notes: All plugin manipulation will trigger a dependency check, which might cause unwanted plugin operations
 
+	def __check_if_success(self, operation_result: SingleOperationResult) -> bool:
+		"""
+		Check if there's any plugin inside the given operation result (load result / reload result etc.)
+		Then check if the plugin passed the dependency check
+		"""
+		success = operation_result.has_success()
+		if success:
+			plugin = operation_result.success_list[0]
+			success = plugin in self.__mcdr_server.plugin_manager.last_operation_result.dependency_check_result.success_list
+		return success
+
+	def __not_loaded_regular_plugin_manipulate(self, plugin_file_path: str, handler: Callable[['PluginManager'], Callable[[str], Any]]) -> bool:
+		"""
+		Manipulate a not loaded regular plugin from a given file path
+		:param plugin_file_path: The path to the not loaded new plugin
+		:param handler: What you want to do with Plugin Manager to the given file path
+		:return: If success
+		"""
+		handler(self.__mcdr_server.plugin_manager)(plugin_file_path)
+		return self.__check_if_success(self.__mcdr_server.plugin_manager.last_operation_result.load_result)
+
+	def __existed_regular_plugin_manipulate(self, plugin_id: str, handler: Callable[['PluginManager'], Callable[['RegularPlugin'], Any]], result_getter: Callable[[PluginOperationResult], SingleOperationResult]) -> bool or None:
+		"""
+		Manipulate a loaded regular plugin from a given plugin id
+		:param plugin_id: The plugin id of the plugin you want to manipulate
+		:param handler: What callable you want to use with Plugin Manager to the plugin id,
+		the returned callable accepts the plugin instance
+		:param result_getter: How to get the single operation result from the plugin operation result.
+		It's used to determine if the operation succeeded
+		:return: If success, None if plugin not found
+		"""
+		plugin = self.__mcdr_server.plugin_manager.get_regular_plugin_from_id(plugin_id)
+		if plugin is not None:
+			handler(self.__mcdr_server.plugin_manager)(plugin)
+			opt_result = result_getter(self.__mcdr_server.plugin_manager.last_operation_result)
+			return self.__check_if_success(opt_result)
+		return None
+
 	@log_call
 	def load_plugin(self, plugin_file_path):
 		"""
@@ -246,8 +287,7 @@ class ServerInterface:
 		:return: If the plugin gets loaded successfully
 		:rtype: bool
 		"""
-		self.__mcdr_server.plugin_manager.load_plugin(plugin_file_path)
-		return self.__mcdr_server.plugin_manager.last_operation_result.load_result.has_success()
+		return self.__not_loaded_regular_plugin_manipulate(plugin_file_path, lambda mgr: mgr.load_plugin)
 
 	@log_call
 	def enable_plugin(self, plugin_file_path):
@@ -259,8 +299,7 @@ class ServerInterface:
 		:return: If the plugin gets enabled successfully
 		:rtype: bool
 		"""
-		self.__mcdr_server.plugin_manager.enable_plugin(plugin_file_path)
-		return self.__mcdr_server.plugin_manager.last_operation_result.load_result.has_success()
+		return self.__not_loaded_regular_plugin_manipulate(plugin_file_path, lambda mgr: mgr.enable_plugin)
 
 	@log_call
 	def reload_plugin(self, plugin_id):
@@ -272,11 +311,19 @@ class ServerInterface:
 		:return: A bool indicating if the plugin gets reloaded successfully. None if plugin not found
 		:rtype: bool or None
 		"""
-		plugin = self.__mcdr_server.plugin_manager.get_regular_plugin_from_id(plugin_id)
-		if plugin is not None:
-			self.__mcdr_server.plugin_manager.reload_plugin(plugin)
-			return self.__mcdr_server.plugin_manager.last_operation_result.reload_result.has_success()
-		return None
+		return self.__existed_regular_plugin_manipulate(plugin_id, lambda mgr: mgr.reload_plugin, lambda lor: lor.reload_result)
+
+	@log_call
+	def unload_plugin(self, plugin_id):
+		"""
+		Unload a plugin specified by plugin id
+		Example: "my-plugin"
+
+		:param str plugin_id: a str, the id of the plugin to reload
+		:return: A bool indicating if the plugin gets unloaded successfully. None if plugin not found
+		:rtype: bool or None
+		"""
+		return self.__existed_regular_plugin_manipulate(plugin_id, lambda mgr: mgr.unload_plugin, lambda lor: lor.unload_result)
 
 	@log_call
 	def disable_plugin(self, plugin_id):
@@ -288,12 +335,7 @@ class ServerInterface:
 		:return: A bool indicating if the plugin gets disabled successfully. None if plugin not found
 		:rtype: bool or None
 		"""
-		plugin = self.__mcdr_server.plugin_manager.get_regular_plugin_from_id(plugin_id)
-		if plugin is not None:
-			self.__mcdr_server.plugin_manager.disable_plugin(plugin)
-			return self.__mcdr_server.plugin_manager.last_operation_result.unload_result.has_success()
-		else:
-			return None
+		return self.__existed_regular_plugin_manipulate(plugin_id, lambda mgr: mgr.disable_plugin, lambda lor: lor.unload_result)
 
 	@log_call
 	def refresh_all_plugins(self):
@@ -318,6 +360,20 @@ class ServerInterface:
 		"""
 		return [plugin.get_metadata().id for plugin in self.__mcdr_server.plugin_manager.get_regular_plugins()]
 
+	def __existed_regular_plugin_info_getter(self, plugin_id: str, handler: Callable[['RegularPlugin'], Any]):
+		plugin = self.__mcdr_server.plugin_manager.get_regular_plugin_from_id(plugin_id)
+		if plugin is not None:
+			return handler(plugin)
+		return None
+
+	@log_call
+	def get_plugin_metadata(self, plugin_id: str):
+		return self.__existed_regular_plugin_info_getter(plugin_id, lambda plugin: plugin.get_metadata())
+
+	@log_call
+	def get_plugin_file_path(self, plugin_id: str):
+		return self.__existed_regular_plugin_info_getter(plugin_id, lambda plugin: plugin.file_path)
+
 	@log_call
 	def get_plugin_instance(self, plugin_name):
 		"""
@@ -340,7 +396,7 @@ class ServerInterface:
 
 	def __get_current_plugin(self):
 		plugin = self.__mcdr_server.plugin_manager.get_current_running_plugin()
-		if isinstance(plugin, RegularPlugin):
+		if plugin.is_regular():
 			return plugin
 		else:
 			raise IllegalCallError('MCDR provided thead is required')
@@ -363,7 +419,7 @@ class ServerInterface:
 		plugin.add_help_message(HelpMessage(plugin, prefix, message, permission))
 
 	@log_call
-	def add_event_listener(self, event: str or MCDREvent, callback: Callable, priority: int = DEFAULT_LISTENER_PRIORITY):
+	def add_event_listener(self, event: Union[PluginEvent, str], callback: Callable, priority: int = DEFAULT_LISTENER_PRIORITY):
 		"""
 		Add an event listener for the current plugin
 
@@ -395,12 +451,13 @@ class ServerInterface:
 		Dispatch an event to all loaded plugins
 
 		:param event: The event to dispatch
-		:param args: The argument that will be used to invoke the event listeners
+		:param args: The argument that will be used to invoke the event listeners. An server interface instance will be
+		automatically added to the beginning of the paramenter list
 		"""
 		self.__mcdr_server.task_executor.execute_or_enqueue(lambda: self.__mcdr_server.plugin_manager.dispatch_event(event, args))
 
 	# ------------------------
-	#          Other
+	#           Misc
 	# ------------------------
 
 	@log_call
@@ -453,3 +510,8 @@ class ServerInterface:
 		:rtype: str or None
 		"""
 		return self.__mcdr_server.rcon_manager.send_command(command)
+
+	@log_call
+	def get_unique_logger(self) -> MCDReforgedLogger:
+		plugin = self.__get_current_plugin()
+		return MCDReforgedLogger(self.__mcdr_server, plugin.get_metadata().name)

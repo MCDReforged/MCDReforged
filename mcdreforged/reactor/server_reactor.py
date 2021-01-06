@@ -15,7 +15,7 @@ class ServerReactor(AbstractInfoReactor):
 			if parser.parse_server_startup_done(info):
 				self.mcdr_server.logger.debug('Server startup detected')
 				self.mcdr_server.flag_server_startup = True
-				self.mcdr_server.plugin_manager.dispatch_event(PluginEvents.SERVER_STARTUP, (self.mcdr_server.server_interface,))
+				self.mcdr_server.plugin_manager.dispatch_event(PluginEvents.SERVER_STARTUP, ())
 
 			if parser.parse_rcon_started(info):
 				self.mcdr_server.logger.debug('Server rcon started detected')

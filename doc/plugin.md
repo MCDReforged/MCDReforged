@@ -56,7 +56,7 @@ It has following variables:
 
 | Variable | Type | Function |
 |---|---|---|
-| logger | logging.Logger | A logger of MCDRIt is better to use `server.logger.info (message)` instead of `print (message)` to output information to the console. [docs](https://docs.python.org/3/library/logging.html#logger-objects)
+| logger | logging.MCDReforgedLogger | A logger of MCDRIt is better to use `server.logger.info (message)` instead of `print (message)` to output information to the console. [docs](https://docs.python.org/3/library/logging.html#logger-objects)
 
 It also has these following methods:
 
