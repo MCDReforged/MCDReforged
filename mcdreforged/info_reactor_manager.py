@@ -40,8 +40,7 @@ class InfoReactorManager:
 			self.server_logger.info(info.raw_content)
 
 		if info.source == InfoSource.CONSOLE and info.should_send_to_server():
-			if not info.content.startswith(self.mcdr_server.config['console_command_prefix']):
-				self.mcdr_server.send(info.content)  # send input command to server's stdin
+			self.mcdr_server.send(info.content)  # send input command to server's stdin
 
 	def put_info(self, info):
 		try:

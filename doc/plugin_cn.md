@@ -69,7 +69,7 @@ MCDReforged 插件文档
 | wait_for_start() | 等待直至服务端完全关闭，也就是可以启动 |
 | restart() | 依次执行 `stop()`、`wait_for_start()`、`start()` 来重启服务端 |
 | stop_exit() | 关闭服务端以及 MCDR，也就是退出整个程序 |
-| exit() | 关闭 MCDR。仅在服务端已关闭时有效，否则会抛出 IllegalCall 异常 |
+| exit() | 关闭 MCDR。仅在服务端已关闭时有效，否则会抛出 IllegalCallError 异常 |
 | is_server_running() | 返回一个 bool 代表服务端（更准确地，服务端进程）是否在运行 |
 | is_server_startup() | 返回一个 bool 代表服务端是否已经启动完成 |
 | is_rcon_running() | 返回一个 bool 代表 rcon 是否在运行 |
@@ -109,7 +109,7 @@ MCDReforged 插件文档
 | set_permission_level(player, level) | 设置指定玩家的权限等级。参数 `level` 可为与权限等级相关的一个 int 或 str，如 `1`, `'1'`, `'user'`。若权限等级不合法则抛出 TypeError 异常
 | rcon_query(command) | 通过 rcon 向服务端发送字符串指令 `command`，然后返回一个字符串，表示该指令执行后的返回值。如果 rcon 未在运行或者有异常发生，返回 None |
 | get_plugin_instance(plugin_name) | 返回当前加载着的位于 `plugins/plugin_name.py` 的插件实例。使用此方法而非在插件中手动 import 可保证得到的目标插件实例与 MCDR 中的实例相同。若未找到该插件，返回 None |
-| add_help_message(prefix, message) | 向 MCDR 的 `!!help` 信息库中加入一条指令前缀为 `prefix`，信息为 `message` 的帮助信息。`!!help` 信息库将在插件重载前清空。**推荐在方法 `on_load()` 中进行相关信息添加。**需要在 MCDR提供的线程中调用，如 `on_load`、`on_info`，否则一个 IllegalCall 异常将被抛出 |
+| add_help_message(prefix, message) | 向 MCDR 的 `!!help` 信息库中加入一条指令前缀为 `prefix`，信息为 `message` 的帮助信息。`!!help` 信息库将在插件重载前清空。**推荐在方法 `on_load()` 中进行相关信息添加。**需要在 MCDR提供的线程中调用，如 `on_load`、`on_info`，否则一个 IllegalCallError 异常将被抛出 |
 
 `plugin_name` 可为 `my_plugin` 或者 `my_plugin.py`
 

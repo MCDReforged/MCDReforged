@@ -63,7 +63,7 @@ class DependencyWalker:
 
 		self.visiting_plugins.add(plugin_id)
 		try:
-			plugin = self.plugin_manager.plugins.get(plugin_id)
+			plugin = self.plugin_manager.get_plugin_from_id(plugin_id)
 			if plugin is None:
 				raise DependencyNotFound('Dependency {} not found'.format(plugin_id))
 			plugin_name_display = plugin.get_name()
@@ -90,7 +90,7 @@ class DependencyWalker:
 		self.visiting_plugins.clear()
 		self.topo_order.clear()
 		fail_list = []
-		for plugin in self.plugin_manager.plugins.values():  # directly querying plugins field to access inner permanent plugins
+		for plugin in self.plugin_manager.get_regular_plugins():
 			try:
 				plugin_id = plugin.get_metadata().id
 				if self.get_visiting_status(plugin_id) is not VisitingState.FAIL:

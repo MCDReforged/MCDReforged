@@ -69,7 +69,7 @@ It also has these following methods:
 | wait_for_start() | Wait until the server is stopped, in other words, startable |
 | restart() | Execute `stop()`、`wait_for_start()`、`start()` in order to restart the server |
 | stop_exit() | Close the server and MCDR, in the other words, exit the program |
-| exit() | Stop MCDR. Only works when the server is not running, or an IllegalCall exception will be raised |
+| exit() | Stop MCDR. Only works when the server is not running, or an IllegalCallError exception will be raised |
 | is_server_running() | If the server (more precisely, server process) is running |
 | is_server_startup() | If the server has started up |
 | is_rcon_running() | Return a bool representing if the rcon is running |
@@ -109,7 +109,7 @@ It also has these following methods:
 | set_permission_level(player, level) | Set the permission level of a player. The value of level can be an int or a str as long as it's related to the permission level e.g.: `1`, `'1'`, `'user'`. If the value is invalid a TypeError exception will be raised
 | rcon_query(command) | Send a str command `command` via rcon to the server. Return a response string from the server. Return None if rcon stops or exception occurred |
 | get_plugin_instance(plugin_name) | Return an instance of the loaded plugin located in `plugins/plugin_name.py`. Using this method instead of importing the plugin by yourself allows you to get the same instance as MCDR. If plugin not found returns None |
-| add_help_message(prefix, message) | Add a help message with prefix `prefix` and message `message` to the `!!help` data of MCDR. The `!!help` data of MCDR will be reset before plugin reloading. **It is recommended to add relevant information in `on_load ()` method call.** It needs to be called in a MCDR provided thread such as `on_load` or `on_info` called or an IllegalCall will be raised |
+| add_help_message(prefix, message) | Add a help message with prefix `prefix` and message `message` to the `!!help` data of MCDR. The `!!help` data of MCDR will be reset before plugin reloading. **It is recommended to add relevant information in `on_load ()` method call.** It needs to be called in a MCDR provided thread such as `on_load` or `on_info` called or an IllegalCallError will be raised |
 
 `plugin_name` can be `my_plugin` or `my_plugin.py`
 

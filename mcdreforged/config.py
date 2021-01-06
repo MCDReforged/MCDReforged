@@ -54,7 +54,6 @@ class Config:
 		flag |= self.touch(self.data, 'parser', 'vanilla_parser')
 		flag |= self.touch(self.data, 'encoding', None)
 		flag |= self.touch(self.data, 'decoding', None)
-		flag |= self.touch(self.data, 'console_command_prefix', '!!')
 		flag |= self.touch(self.data, 'enable_rcon', False)
 		flag |= self.touch(self.data, 'rcon_address', '127.0.0.1')
 		flag |= self.touch(self.data, 'rcon_port', 25575)

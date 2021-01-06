@@ -3,7 +3,7 @@ Analyzing and reacting events related to player
 """
 from mcdreforged.info import InfoSource
 from mcdreforged.plugin.plugin_event import PluginEvents
-from mcdreforged.reactor.abstract_inf_reactor import AbstractInfoReactor
+from mcdreforged.reactor.abstract_info_reactor import AbstractInfoReactor
 
 
 class PlayerReactor(AbstractInfoReactor):

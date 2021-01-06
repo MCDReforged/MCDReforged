@@ -7,14 +7,14 @@ from typing import Callable, TYPE_CHECKING, Tuple, Any
 
 from mcdreforged.command.builder.command_node import Literal
 from mcdreforged.command.command_source import CommandSource
-from mcdreforged.exception import IllegalCall
+from mcdreforged.exception import IllegalCallError
 from mcdreforged.info import Info
 from mcdreforged.permission_manager import PermissionLevel
 from mcdreforged.plugin.plugin import RegularPlugin
 from mcdreforged.plugin.plugin_event import MCDREvent, EventListener, LiteralEvent, PluginEvent
 from mcdreforged.plugin.plugin_registry import DEFAULT_LISTENER_PRIORITY, HelpMessage
 from mcdreforged.rtext import RTextBase, RText
-from mcdreforged.server_status import MCDRServerStatus
+from mcdreforged.server_status import ServerStatus
 from mcdreforged.utils import misc_util
 
 if TYPE_CHECKING:
@@ -121,11 +121,11 @@ class ServerInterface:
 		Exit MCDR when the server is stopped
 		If the server is running return False otherwise return True
 
-		:raise: IllegalCall, if the server is not stopped
+		:raise: IllegalCallError, if the server is not stopped
 		"""
 		if self.__mcdr_server.is_server_running():
-			raise IllegalCall('Cannot exit MCDR when the server is running')
-		self.__mcdr_server.set_server_status(MCDRServerStatus.STOPPED)
+			raise IllegalCallError('Cannot exit MCDR when the server is running')
+		self.__mcdr_server.set_server_status(ServerStatus.STOPPED)
 
 	@log_call
 	def is_server_running(self):
@@ -272,7 +272,7 @@ class ServerInterface:
 		:return: A bool indicating if the plugin gets reloaded successfully. None if plugin not found
 		:rtype: bool or None
 		"""
-		plugin = self.__mcdr_server.plugin_manager.get_plugin_from_id(plugin_id)
+		plugin = self.__mcdr_server.plugin_manager.get_regular_plugin_from_id(plugin_id)
 		if plugin is not None:
 			self.__mcdr_server.plugin_manager.reload_plugin(plugin)
 			return self.__mcdr_server.plugin_manager.last_operation_result.reload_result.has_success()
@@ -288,7 +288,7 @@ class ServerInterface:
 		:return: A bool indicating if the plugin gets disabled successfully. None if plugin not found
 		:rtype: bool or None
 		"""
-		plugin = self.__mcdr_server.plugin_manager.get_plugin_from_id(plugin_id)
+		plugin = self.__mcdr_server.plugin_manager.get_regular_plugin_from_id(plugin_id)
 		if plugin is not None:
 			self.__mcdr_server.plugin_manager.disable_plugin(plugin)
 			return self.__mcdr_server.plugin_manager.last_operation_result.unload_result.has_success()
@@ -343,7 +343,7 @@ class ServerInterface:
 		if isinstance(plugin, RegularPlugin):
 			return plugin
 		else:
-			raise IllegalCall('MCDR provided thead is required')
+			raise IllegalCallError('MCDR provided thead is required')
 
 	@log_call
 	def add_help_message(self, prefix, message, permission=PermissionLevel.MINIMUM_LEVEL):
@@ -355,7 +355,7 @@ class ServerInterface:
 		:param str or RTextBase message: A neat command description
 		:param int permission: The minimum permission level for the user to see this help message. With default, anyone
 		can see this message
-		:raise: IllegalCall if it's not called in a MCDR provided thread
+		:raise: IllegalCallError if it's not called in a MCDR provided thread
 		"""
 		plugin = self.__get_current_plugin()
 		if isinstance(message, str):
@@ -371,7 +371,7 @@ class ServerInterface:
 		MCDR event
 		:param callback: The callback listener method for the event
 		:param priority: The priority of the listener
-		:raise: IllegalCall if it's not called in a MCDR provided thread
+		:raise: IllegalCallError if it's not called in a MCDR provided thread
 		"""
 		plugin = self.__get_current_plugin()
 		if isinstance(event, str):
@@ -384,7 +384,7 @@ class ServerInterface:
 		Add an event listener for the current plugin
 
 		:param root_node: the root node of your command tree
-		:raise: IllegalCall if it's not called in a MCDR provided thread
+		:raise: IllegalCallError if it's not called in a MCDR provided thread
 		"""
 		plugin = self.__get_current_plugin()
 		plugin.add_command(root_node)
@@ -417,7 +417,7 @@ class ServerInterface:
 		:raise: TypeError
 		"""
 		if isinstance(obj, Info):  # Info instance
-			obj = obj.to_command_source()
+			obj = obj.get_command_source()
 			if obj is None:
 				raise TypeError('The Info instance is not from a user')
 		if isinstance(obj, CommandSource):  # Command Source

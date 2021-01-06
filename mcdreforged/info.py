@@ -4,7 +4,7 @@ Info and InfoSource
 from typing import TYPE_CHECKING
 
 from mcdreforged.command.command_source import CommandSource, ConsoleCommandSource, PlayerCommandSource
-from mcdreforged.exception import IllegalStateError
+from mcdreforged.exception import IllegalStateError, IllegalCallError
 
 if TYPE_CHECKING:
 	from mcdreforged.server_interface import ServerInterface
@@ -29,6 +29,7 @@ class Info:
 		self.__mcdr_server = None  # type: 'MCDReforgedServer'
 		self.__echo = True
 		self.__send_to_server = True
+		self.__command_source = None
 
 		# -----------------
 		#   Public fields
@@ -55,12 +56,20 @@ class Info:
 		self.logging_level = None
 
 	@property
+	def is_from_console(self):
+		return self.source == InfoSource.CONSOLE
+
+	@property
+	def is_from_server(self):
+		return self.source == InfoSource.SERVER
+
+	@property
 	def is_player(self):
-		return self.player is not None
+		return self.is_from_server and self.player is not None
 
 	@property
 	def is_user(self):
-		return self.source == InfoSource.CONSOLE or self.is_player
+		return self.is_from_console or self.is_player
 
 	# --------------
 	#      API
@@ -76,14 +85,20 @@ class Info:
 	def get_server(self) -> 'ServerInterface':
 		return self.__mcdr_server.server_interface
 
-	def to_command_source(self) -> CommandSource or None:
+	def get_command_source(self) -> CommandSource or None:
 		self.__assert_attached()
-		if self.source == InfoSource.CONSOLE:
-			return ConsoleCommandSource(self.__mcdr_server, self)
-		elif self.is_player:
-			return PlayerCommandSource(self.__mcdr_server, self, self.player)
-		else:
-			return None
+		if self.__command_source is None:
+			if self.source == InfoSource.CONSOLE:
+				self.__command_source = ConsoleCommandSource(self.__mcdr_server, self)
+			elif self.is_player:
+				self.__command_source = PlayerCommandSource(self.__mcdr_server, self, self.player)
+		return self.__command_source
+
+	def to_command_source(self) -> CommandSource:
+		source = self.get_command_source()
+		if source is None:
+			raise IllegalCallError()
+		return source
 
 	def should_echo(self) -> bool:
 		return self.__echo

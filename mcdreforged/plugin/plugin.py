@@ -10,12 +10,11 @@ from typing import Tuple, Any, TYPE_CHECKING
 
 from mcdreforged import constant
 from mcdreforged.command.builder.command_node import Literal
-from mcdreforged.exception import IllegalCall, IllegalStateError
+from mcdreforged.exception import IllegalCallError, IllegalStateError
 from mcdreforged.logger import DebugOption
 from mcdreforged.plugin.metadata import MetaData
 from mcdreforged.plugin.plugin_event import MCDREvent, PluginEvents, EventListener, PluginEvent
 from mcdreforged.plugin.plugin_registry import PluginRegistry, DEFAULT_LISTENER_PRIORITY, HelpMessage
-from mcdreforged.rtext import RText
 from mcdreforged.utils import misc_util, string_util
 
 if TYPE_CHECKING:
@@ -52,7 +51,7 @@ class AbstractPlugin:
 	def get_name(self) -> str:
 		try:
 			return self.get_identifier()
-		except IllegalCall:
+		except IllegalCallError:
 			return repr(self)
 
 	def get_identifier(self) -> str:
@@ -118,8 +117,6 @@ class AbstractPlugin:
 	def add_help_message(self, help_message: HelpMessage):
 		self.__assert_allow_to_register('help message')
 		self.plugin_registry.register_help_message(help_message)
-		if isinstance(help_message, str):
-			help_message = RText(help_message)
 		self.mcdr_server.logger.debug('Plugin Added help message "{}"'.format(help_message), option=DebugOption.PLUGIN)
 
 	def receive_event(self, event: MCDREvent, args: Tuple[Any, ...]):
@@ -133,7 +130,7 @@ class AbstractPlugin:
 			self.plugin_manager.trigger_listener(listener, args)
 
 
-class BuiltinPlugin(AbstractPlugin, ABC):
+class PermanentPlugin(AbstractPlugin, ABC):
 	def __init__(self, plugin_manager: 'PluginManager'):
 		super().__init__(plugin_manager, '**builtin**')
 
@@ -154,7 +151,7 @@ class RegularPlugin(AbstractPlugin):
 
 	def get_metadata(self) -> MetaData:
 		if self.metadata is None:
-			raise IllegalCall('Meta data of plugin {} is not loaded. Plugin state = {}'.format(repr(self), self.state))
+			raise IllegalCallError('Meta data of plugin {} is not loaded. Plugin state = {}'.format(repr(self), self.state))
 		return self.metadata
 
 	def get_fallback_metadata_id(self) -> str:

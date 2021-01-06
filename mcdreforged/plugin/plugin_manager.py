@@ -61,6 +61,12 @@ class PluginManager:
 	def get_plugin_from_id(self, plugin_id: str) -> Optional[AbstractPlugin]:
 		return self.plugins.get(plugin_id)
 
+	def get_regular_plugin_from_id(self, plugin_id: str) -> Optional[RegularPlugin]:
+		plugin = self.get_plugin_from_id(plugin_id)
+		if not isinstance(plugin, RegularPlugin):
+			plugin = None
+		return plugin
+
 	def set_current_plugin(self, plugin: Optional[RegularPlugin]):
 		self.tls.current_plugin = plugin
 
@@ -93,7 +99,8 @@ class PluginManager:
 		plugin.load()
 
 	def register_permanent_plugins(self):
-		self.__add_plugin(MCDReforgedPlugin(self))
+		self.__add_permanent_plugin(MCDReforgedPlugin(self))
+		self.__update_registry()  # not really necessary, but in case
 
 	# ------------------------------------------------
 	#   Actual operations that add / remove a plugin
@@ -314,7 +321,7 @@ class PluginManager:
 
 	def __update_registry(self):
 		self.registry_storage.clear()
-		for plugin in self.get_regular_plugins():
+		for plugin in self.get_all_plugins():
 			self.registry_storage.collect(plugin.plugin_registry)
 		self.registry_storage.arrange()
 		self.mcdr_server.on_plugin_changed()

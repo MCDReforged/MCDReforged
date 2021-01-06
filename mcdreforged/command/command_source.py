@@ -53,6 +53,8 @@ class CommandSource:
 
 class PlayerCommandSource(CommandSource):
 	def __init__(self, mcdr_server, info, player: str):
+		if not info.is_from_server:
+			raise TypeError('{} should be built from server info'.format(self.__class__.__name__))
 		super().__init__(mcdr_server, info, CommandSourceType.PLAYER)
 		self.player = player
 
@@ -72,6 +74,8 @@ class PlayerCommandSource(CommandSource):
 
 class ConsoleCommandSource(CommandSource):
 	def __init__(self, mcdr_server, info):
+		if not info.is_from_console:
+			raise TypeError('{} should be built from console info'.format(self.__class__.__name__))
 		super().__init__(mcdr_server, info, CommandSourceType.CONSOLE)
 
 	@property

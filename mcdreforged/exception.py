@@ -9,7 +9,7 @@ class ServerStartError(RuntimeError):
 
 
 # The function call is illegal due to some reasons
-class IllegalCall(RuntimeError):
+class IllegalCallError(RuntimeError):
 	pass
 
 
@@ -17,6 +17,5 @@ class IllegalStateError(RuntimeError):
 	pass
 
 
-# The server has stopped, operation is illegal
-class ServerStopped(IllegalCall):
+class ServerStopped(RuntimeError):
 	pass

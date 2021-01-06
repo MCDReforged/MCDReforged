@@ -1,7 +1,6 @@
 from typing import Dict, List, Callable, Any, TYPE_CHECKING
 
 from mcdreforged.command.builder.command_node import Literal
-from mcdreforged.permission_manager import PermissionLevel
 from mcdreforged.plugin.plugin_event import EventListener
 from mcdreforged.rtext import RTextBase
 
@@ -13,10 +12,10 @@ DEFAULT_LISTENER_PRIORITY = 1000
 
 
 class HelpMessage:
-	def __init__(self, plugin: 'AbstractPlugin', prefix: str, message: RTextBase, permission: int):
+	def __init__(self, plugin: 'AbstractPlugin', prefix: str, message: str or RTextBase, permission: int):
 		self.plugin = plugin
 		self.prefix = prefix
-		self.message = message
+		self.message = RTextBase.from_any(message)
 		self.permission = permission
 
 	def __get_compare_key(self):
@@ -28,7 +27,7 @@ class HelpMessage:
 		return self.__get_compare_key() < other.__get_compare_key()
 
 	def __repr__(self):
-		return 'HelpMessage[prefix={},message={},permission={}]'.format(self.prefix, self.message.to_plain_text(), self.permission)
+		return 'HelpMessage[prefix={},message={},permission={}]'.format(self.prefix, self.message, self.permission)
 
 
 class PluginRegistry:
@@ -50,6 +49,10 @@ class PluginRegistry:
 		self.command_roots.append(node)
 
 	def clear(self):
+		"""
+		Invoke this when a plugin gets loaded / reloaded
+		:return:
+		"""
 		self.event_listeners.clear()
 		self.help_messages.clear()
 		self.command_roots.clear()
@@ -76,12 +79,6 @@ class PluginManagerRegistry:
 		self.command_roots.extend(registry.command_roots)
 
 	def arrange(self):
-		self.help_messages.append(HelpMessage(
-			None,
-			'!!MCDR',
-			self.plugin_manager.mcdr_server.tr('plugin_registry.mcdr_help_message'),
-			PermissionLevel.MCDR_CONTROL_LEVEL
-		))
 		self.help_messages.sort()
 		for listeners in self.event_listeners.values():
 			listeners.sort()

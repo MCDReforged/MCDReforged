@@ -1,6 +1,6 @@
 from typing import List, TYPE_CHECKING
 
-from mcdreforged.exception import IllegalCall
+from mcdreforged.exception import IllegalCallError
 from mcdreforged.rtext import RTextList, RText, RAction, RTextBase
 
 if TYPE_CHECKING:
@@ -52,7 +52,7 @@ class PluginOperationResult:
 
 	def to_rtext(self) -> RTextBase:
 		if not self.__has_record:
-			raise IllegalCall('No record yet')
+			raise IllegalCallError('No record yet')
 
 		def add_element(msg: RTextList, element):
 			msg.append(element)
