@@ -12,7 +12,7 @@ from mcdreforged.plugin.dependency_walker import DependencyWalker
 from mcdreforged.plugin.mcdreforged_plugin import MCDReforgedPlugin
 from mcdreforged.plugin.operation_result import PluginOperationResult, SingleOperationResult
 from mcdreforged.plugin.plugin import PluginState, AbstractPlugin
-from mcdreforged.plugin.plugin_event import PluginEvents, MCDREvent, EventListener
+from mcdreforged.plugin.plugin_event import MCDRPluginEvents, MCDREvent, EventListener
 from mcdreforged.plugin.plugin_registry import PluginManagerRegistry
 from mcdreforged.plugin.plugin_thread import PluginThreadPool
 from mcdreforged.plugin.regular_plugin import RegularPlugin
@@ -62,7 +62,7 @@ class PluginManager:
 	def get_plugin_from_id(self, plugin_id: str) -> Optional[AbstractPlugin]:
 		return self.plugins.get(plugin_id)
 
-	def get_regular_plugin_from_id(self, plugin_id: str) -> Optional[AbstractPlugin]:
+	def get_regular_plugin_from_id(self, plugin_id: str) -> Optional[RegularPlugin]:
 		plugin = self.get_plugin_from_id(plugin_id)
 		if not isinstance(plugin, RegularPlugin):
 			plugin = None
@@ -298,13 +298,13 @@ class PluginManager:
 		for plugin in dependency_check_result.success_list:
 			if plugin in newly_loaded_plugins:
 				if isinstance(plugin, RegularPlugin):
-					plugin.receive_event(PluginEvents.PLUGIN_LOAD, (plugin.old_instance, ))
+					plugin.receive_event(MCDRPluginEvents.PLUGIN_LOAD, (plugin.old_module_instance,))
 
 		for plugin in unload_result.success_list + unload_result.failed_list + reload_result.failed_list + dependency_check_result.failed_list:
 			plugin.assert_state({PluginState.UNLOADING})
 			# plugins might just be newly loaded but failed on dependency check, dont dispatch event to them
 			if plugin not in load_result.success_list:
-				plugin.receive_event(PluginEvents.PLUGIN_UNLOAD, ())
+				plugin.receive_event(MCDRPluginEvents.PLUGIN_UNLOAD, ())
 			plugin.remove()
 
 		# they should be

@@ -19,7 +19,7 @@ from mcdreforged.language_manager import LanguageManager
 from mcdreforged.logger import DebugOption, MCDReforgedLogger
 from mcdreforged.parser_manager import ParserManager
 from mcdreforged.permission_manager import PermissionManager
-from mcdreforged.plugin.plugin_event import PluginEvents
+from mcdreforged.plugin.plugin_event import MCDRPluginEvents
 from mcdreforged.plugin.plugin_manager import PluginManager
 from mcdreforged.rcon.rcon_manager import RconManager
 from mcdreforged.server_interface import ServerInterface
@@ -307,7 +307,7 @@ class MCDReforgedServer:
 				except:
 					self.logger.error(self.tr('mcdr_server.receive.decode_fail', text))
 					raise
-				return text.rstrip().lstrip()
+				return text.rstrip('\n\r').lstrip('\n\r')
 
 	def on_server_stop(self):
 		return_code = self.process.poll()
@@ -316,7 +316,7 @@ class MCDReforgedServer:
 		self.flag_server_startup = False
 		self.flag_server_rcon_ready = False
 		self.set_server_status(ServerStatus.PRE_STOPPED)
-		self.plugin_manager.dispatch_event(PluginEvents.SERVER_STOP, (return_code, ))
+		self.plugin_manager.dispatch_event(MCDRPluginEvents.SERVER_STOP, (return_code,))
 		if self.in_status({ServerStatus.PRE_STOPPED}):
 			self.set_server_status(ServerStatus.STOPPED)
 
@@ -368,7 +368,7 @@ class MCDReforgedServer:
 				self.logger.info(self.tr('mcdr_server.on_mcdr_stop.user_interrupted'))
 			else:
 				self.logger.info(self.tr('mcdr_server.on_mcdr_stop.server_stop'))
-			self.plugin_manager.dispatch_event(PluginEvents.MCDR_STOP, ())
+			self.plugin_manager.dispatch_event(MCDRPluginEvents.MCDR_STOP, ())
 			self.task_executor.join()
 			self.logger.info(self.tr('mcdr_server.on_mcdr_stop.bye'))
 		except KeyboardInterrupt:  # I don't know why there sometimes will be a KeyboardInterrupt if MCDR is stopped by ctrl-c

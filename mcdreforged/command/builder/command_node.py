@@ -116,12 +116,15 @@ class ArgumentNode:
 			arg_len = min(sal, len(args))
 			return callback(*args[:arg_len])
 
+		sig = inspect.signature(callback)
 		spec_args = inspect.getfullargspec(callback).args
 		spec_args_len = len(spec_args)
 		try:
-			return run(spec_args_len)
+			sig.bind()
 		except TypeError as e:
 			error = e
+		else:
+			return run(spec_args_len)
 		if len(spec_args) > 0 and spec_args[0] == 'self':  # hacky fix for class method
 			return run(spec_args_len - 1)
 		else:
@@ -198,7 +201,7 @@ class ExecutableNode(ArgumentNode, ABC):
 			self._execute(source, command, command, {})
 		except LiteralNotMatch as error:
 			# the root literal node fails to parse the first element
-			raise UnknownRootArgument(error.get_parsed_command(), error.get_failed_command())
+			raise UnknownRootArgument(error.get_parsed_command(), error.get_failed_command()) from error
 
 # ---------------------------------
 #   Argument Node implementations

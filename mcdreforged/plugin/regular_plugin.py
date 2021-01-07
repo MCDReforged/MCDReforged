@@ -9,7 +9,7 @@ from mcdreforged import constant
 from mcdreforged.exception import IllegalCallError
 from mcdreforged.plugin.metadata import MetaData
 from mcdreforged.plugin.plugin import AbstractPlugin, PluginState
-from mcdreforged.plugin.plugin_event import PluginEvents, EventListener
+from mcdreforged.plugin.plugin_event import MCDRPluginEvents, EventListener
 from mcdreforged.plugin.plugin_registry import DEFAULT_LISTENER_PRIORITY
 from mcdreforged.utils import misc_util, string_util
 
@@ -24,8 +24,8 @@ class RegularPlugin(AbstractPlugin):
 		super().__init__(plugin_manager, file_path)
 		self.file_name = os.path.basename(file_path)
 		self.file_hash = None
-		self.instance = None
-		self.old_instance = None
+		self.module_instance = None
+		self.old_module_instance = None
 		self.newly_loaded_module = []
 		# noinspection PyTypeChecker
 		self.__metadata = None  # type: MetaData
@@ -45,9 +45,9 @@ class RegularPlugin(AbstractPlugin):
 		return 'RegularPlugin[file={},path={},state={}]'.format(self.file_name, self.file_path, self.state)
 
 	def __register_default_listeners(self):
-		for event in PluginEvents.get_event_list():
+		for event in MCDRPluginEvents.get_event_list():
 			if isinstance(event.default_method_name, str):
-				func = getattr(self.instance, event.default_method_name, None)
+				func = getattr(self.module_instance, event.default_method_name, None)
 				if callable(func):
 					self.add_event_listener(event, EventListener(self, func, DEFAULT_LISTENER_PRIORITY))
 
@@ -59,12 +59,12 @@ class RegularPlugin(AbstractPlugin):
 		self.file_hash = self.get_file_hash()
 		with GLOBAL_LOAD_LOCK:
 			previous_modules = sys.modules.copy()
-			self.old_instance = self.instance
+			self.old_module_instance = self.module_instance
 			try:
-				self.instance = misc_util.load_source(self.file_path)
+				self.module_instance = misc_util.load_source(self.file_path)
 			finally:
 				self.newly_loaded_module = [module for module in sys.modules if module not in previous_modules]
-		self.__metadata = MetaData(self, getattr(self.instance, 'PLUGIN_METADATA', None))
+		self.__metadata = MetaData(self, getattr(self.module_instance, 'PLUGIN_METADATA', None))
 		self.plugin_registry.clear()
 
 	def load(self):

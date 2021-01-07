@@ -12,7 +12,7 @@ from mcdreforged.command.command_source import CommandSource
 from mcdreforged.permission_manager import PermissionLevel
 from mcdreforged.plugin.metadata import MetaData
 from mcdreforged.plugin.plugin import PermanentPlugin, AbstractPlugin, PluginState
-from mcdreforged.plugin.plugin_event import PluginEvents, EventListener
+from mcdreforged.plugin.plugin_event import MCDRPluginEvents, EventListener
 from mcdreforged.plugin.plugin_registry import HelpMessage
 from mcdreforged.plugin.regular_plugin import RegularPlugin
 from mcdreforged.rtext import RText, RAction, RTextList, RStyle, RColor
@@ -70,14 +70,14 @@ class MCDReforgedPlugin(PermanentPlugin):
 		pass
 
 	def __register_event_listeners(self):
-		self.add_event_listener(PluginEvents.GENERAL_INFO, EventListener(self, self.on_info, 0))
+		self.add_event_listener(MCDRPluginEvents.GENERAL_INFO, EventListener(self, self.on_info, 0))
 
 	def on_info(self, server_interface, info):
 		pass
 
 	def __register_commands(self):
 		self.add_command(
-			Literal('!!MCDR').
+			Literal('!!' + constant.NAME_SHORT).
 			requires(lambda src: src.has_permission(PermissionLevel.MCDR_CONTROL_LEVEL)).
 			runs(
 				lambda src: src.reply(self.get_help_message('command_manager.help_message'))

@@ -41,7 +41,7 @@ class _PluginEventStorage:
 		return list(cls.EVENT_DICT.values())
 
 
-class PluginEvents:
+class MCDRPluginEvents:
 	# legacy events
 	GENERAL_INFO 	= _PluginEventStorage.register(MCDREvent('mcdr.general_info', 'General info', 'on_info'))
 	USER_INFO 		= _PluginEventStorage.register(MCDREvent('mcdr.user_info', 'User info', 'on_user_info'))
@@ -58,6 +58,10 @@ class PluginEvents:
 	@classmethod
 	def get_event_list(cls):
 		return _PluginEventStorage.get_event_list()
+
+	@classmethod
+	def contains_id(cls, event_id: str):
+		return event_id in _PluginEventStorage.EVENT_DICT
 
 
 class EventListener:

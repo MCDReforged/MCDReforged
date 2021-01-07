@@ -18,7 +18,7 @@ class Version:
 			raise VersionParsingError('Invalid input version string')
 
 		def separate_extra(text, char):
-			if text.find(char) >= 0:
+			if char in text:
 				text, extra = text.split(char, 1)
 				if not self.EXTRA_ID_PATTERN.fullmatch(extra):
 					raise VersionParsingError('Invalid build string: ' + extra)

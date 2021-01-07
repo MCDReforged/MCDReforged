@@ -12,7 +12,7 @@ from mcdreforged.info import Info
 from mcdreforged.logger import MCDReforgedLogger
 from mcdreforged.permission_manager import PermissionLevel
 from mcdreforged.plugin.operation_result import SingleOperationResult, PluginOperationResult
-from mcdreforged.plugin.plugin_event import EventListener, LiteralEvent, PluginEvent
+from mcdreforged.plugin.plugin_event import EventListener, LiteralEvent, PluginEvent, MCDRPluginEvents
 from mcdreforged.plugin.plugin_registry import DEFAULT_LISTENER_PRIORITY, HelpMessage
 from mcdreforged.rtext import RTextBase, RText
 from mcdreforged.server_status import ServerStatus
@@ -375,19 +375,18 @@ class ServerInterface:
 		return self.__existed_regular_plugin_info_getter(plugin_id, lambda plugin: plugin.file_path)
 
 	@log_call
-	def get_plugin_instance(self, plugin_name):
+	def get_plugin_instance(self, plugin_id):
 		"""
 		Return the current loaded plugin instance. with this your plugin can access the same plugin instance as MCDR
 		It's quite important to use this instead of manually import the plugin you want if the target plugin needs to
 		react to events of MCDR
-		The plugin need to be in plugins/plugin_name.py
 
-		:param str plugin_name: The name of the plugin you want. It can be "my_plugin" or "my_plugin.py"
+		:param str plugin_id: The plugin id of the plugin you want
 		:return: A current loaded plugin instance. Return None if plugin not found
 		"""
-		plugin = self.__mcdr_server.plugin_manager.get_plugin(plugin_name)
+		plugin = self.__mcdr_server.plugin_manager.get_regular_plugin_from_id(plugin_id)
 		if plugin is not None:
-			plugin = plugin.module
+			plugin = plugin.module_instance
 		return plugin
 
 	# ------------------------
@@ -454,6 +453,10 @@ class ServerInterface:
 		:param args: The argument that will be used to invoke the event listeners. An server interface instance will be
 		automatically added to the beginning of the paramenter list
 		"""
+		if not isinstance(event, PluginEvent):
+			raise TypeError('Excepted {} but {} found'.format(PluginEvent, type(event)))
+		if MCDRPluginEvents.contains_id(event.id):
+			raise ValueError('Cannot dispatch event with already exists event id {}'.format(event.id))
 		self.__mcdr_server.task_executor.execute_or_enqueue(lambda: self.__mcdr_server.plugin_manager.dispatch_event(event, args))
 
 	# ------------------------

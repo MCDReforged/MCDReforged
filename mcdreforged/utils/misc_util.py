@@ -4,9 +4,8 @@ Misc tool collection
 import importlib.machinery
 import importlib.util
 import os
-import sys
 import threading
-from typing import List, Any, Callable, Tuple
+from typing import List, Callable, Tuple, TypeVar
 
 from mcdreforged.plugin.version import Version
 from mcdreforged.rtext import RTextBase
@@ -19,19 +18,27 @@ def start_thread(func: Callable, args: Tuple, name: str or None = None):
 	return thread
 
 
-def load_source(source_path: str, name=None):
+def load_source(source_path: str, module_name=None):
 	if not os.path.isfile(source_path):
 		raise TypeError('Source path {} is not a file'.format(source_path))
-	if name is None:
-		name = source_path.replace('/', '_').replace('\\', '_').replace('.', '_')
-	spec = importlib.util.spec_from_file_location(name, source_path)
+	if module_name is None:
+		module_name = source_path.replace('/', '_').replace('\\', '_').replace('.', '_')
+
+	# https://docs.python.org/3/library/importlib.html#importing-a-source-file-directly
+	# https://docs.python.org/zh-cn/3.6/library/importlib.html#importing-a-source-file-directly
+	spec = importlib.util.spec_from_file_location(module_name, source_path)
 	module = importlib.util.module_from_spec(spec)
-	sys.modules[name] = module
 	spec.loader.exec_module(module)
+	# Optional; only necessary if you want to be able to import the module
+	# by name later.
+	# sys.modules[module_name] = module
 	return module
 
 
-def unique_list(lst: List[Any]) -> List[Any]:
+T = TypeVar('T')
+
+
+def unique_list(lst: List[T]) -> List[T]:
 	ret = list(set(lst))
 	ret.sort(key=lst.index)
 	return ret
