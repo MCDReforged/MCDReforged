@@ -14,25 +14,25 @@ from mcdreforged.config import Config
 from mcdreforged.executor.console_handler import ConsoleHandler
 from mcdreforged.executor.task_executor import TaskExecutor
 from mcdreforged.info import Info
-from mcdreforged.info_reactor_manager import InfoReactorManager
 from mcdreforged.language_manager import LanguageManager
 from mcdreforged.mcdr_state import ServerState, MCDReforgedState, MCDReforgedFlags
-from mcdreforged.parser_manager import ParserManager
-from mcdreforged.permission_manager import PermissionManager
+from mcdreforged.minecraft.rcon.rcon_manager import RconManager
+from mcdreforged.parser.server_handler_manager import ServerHandlerManager
+from mcdreforged.permission.permission_manager import PermissionManager
 from mcdreforged.plugin.plugin_event import MCDRPluginEvents
 from mcdreforged.plugin.plugin_manager import PluginManager
-from mcdreforged.rcon.rcon_manager import RconManager
-from mcdreforged.server_interface import ServerInterface
-from mcdreforged.update_helper import UpdateHelper
+from mcdreforged.plugin.server_interface import ServerInterface
+from mcdreforged.reactor.info_reactor_manager import InfoReactorManager
 from mcdreforged.utils.exception import IllegalCallError, ServerStopped, ServerStartError, IllegalStateError
 from mcdreforged.utils.logger import DebugOption, MCDReforgedLogger
+from mcdreforged.utils.update_helper import UpdateHelper
 
 
 class MCDReforgedServer:
 	process: Optional[Popen]
 
 	def __init__(self, old_process=None):
-		# TODO args
+		# TODO console args
 		self.mcdr_state = MCDReforgedState.INITIALIZING
 		self.server_state = ServerState.STOPPED
 		self.process = old_process  # the process for the server
@@ -44,7 +44,7 @@ class MCDReforgedServer:
 		self.encoding_method = None
 		self.decoding_method = None
 
-		# Constructing fields
+		# --- Constructing fields ---
 		self.logger = MCDReforgedLogger(self)
 		self.logger.set_file(constant.LOGGING_FILE)
 		self.server_interface = ServerInterface(self)
@@ -53,16 +53,18 @@ class MCDReforgedServer:
 		self.language_manager = LanguageManager(self.logger)
 		self.config = Config(self.logger)  # TODO: config query lock
 		self.rcon_manager = RconManager(self)
-		self.parser_manager = ParserManager(self, constant.PARSER_FOLDER)
+		self.server_handler_manager = ServerHandlerManager(self.logger)
 		self.reactor_manager = InfoReactorManager(self)
 		self.command_manager = CommandManager(self)
 		self.plugin_manager = PluginManager(self)
 		self.permission_manager = PermissionManager(self)
 
-		# Initialize fields instance
+		# --- Initialize fields instance ---
+		# register handlers first, so when the config is loaded the parser is ready to be set
+		self.server_handler_manager.register_handlers()
 		file_missing = False
 		try:
-			self.load_config(allowed_missing_file=False)  # loads config, language, parsers
+			self.load_config(allowed_missing_file=False)  # loads config, language, handlers
 		except FileNotFoundError:
 			self.logger.info('Config is missing, default config generated')
 			self.config.save_default()
@@ -76,8 +78,6 @@ class MCDReforgedServer:
 		if file_missing:
 			self.logger.info('Some of the files are missing, check them and launch MCDR again')
 			return
-
-		self.parser_manager.init()
 		self.plugin_manager.register_permanent_plugins()
 
 		self.update_helper = UpdateHelper(self)
@@ -108,7 +108,8 @@ class MCDReforgedServer:
 
 	def load_config(self, *, allowed_missing_file=True):
 		has_missing = self.config.read_config(allowed_missing_file)
-		self.on_config_changed()  # load the language first to make sure tr() is available
+		# load the language first to make sure tr() is available
+		self.on_config_changed()
 		if has_missing:
 			for line in self.tr('config.missing_config').splitlines():
 				self.logger.warning(line)
@@ -121,7 +122,7 @@ class MCDReforgedServer:
 		self.language_manager.set_language(self.config['language'])
 		self.logger.info(self.tr('mcdr_server.on_config_changed.language_set', self.config['language']))
 
-		self.parser_manager.install_parser(self.config['parser'])
+		self.server_handler_manager.set_handler(self.config['parser'])
 		self.logger.info(self.tr('mcdr_server.on_config_changed.parser_set', self.config['parser']))
 
 		self.encoding_method = self.config['encoding'] if self.config['encoding'] is not None else sys.getdefaultencoding()
@@ -281,7 +282,7 @@ class MCDReforgedServer:
 			self.set_server_state(ServerState.STOPPING)
 			if not forced:
 				try:
-					self.send(self.parser_manager.get_stop_command())
+					self.send(self.server_handler_manager.get_stop_command())
 				except:
 					self.logger.error(self.tr('mcdr_server.stop.stop_fail'))
 					forced = True
@@ -367,19 +368,19 @@ class MCDReforgedServer:
 			self.on_server_stop()
 			return
 		try:
-			text = self.parser_manager.get_parser().pre_parse_server_stdout(text)
+			text = self.server_handler_manager.get_current_handler().pre_parse_server_stdout(text)
 		except:
 			self.logger.warning(self.tr('mcdr_server.tick.pre_parse_fail'))
 
 		parsed_result: Info
 		try:
-			parsed_result = self.parser_manager.get_parser().parse_server_stdout(text)
+			parsed_result = self.server_handler_manager.get_current_handler().parse_server_stdout(text)
 		except:
 			if self.logger.should_log_debug(option=DebugOption.PARSER):  # traceback.format_exc() is costly
 				self.logger.debug('Fail to parse text "{}" from stdout of the server, using raw parser'.format(text))
 				for line in traceback.format_exc().splitlines():
 					self.logger.debug('    {}'.format(line))
-			parsed_result = self.parser_manager.get_basic_parser().parse_server_stdout(text)
+			parsed_result = self.server_handler_manager.get_basic_handler().parse_server_stdout(text)
 		else:
 			if self.logger.should_log_debug(option=DebugOption.PARSER):
 				self.logger.debug('Parsed text from server stdin:')

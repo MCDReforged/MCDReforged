@@ -1,6 +1,6 @@
 from typing import List, TYPE_CHECKING
 
-from mcdreforged.rtext import RTextList, RText, RAction, RTextBase
+from mcdreforged.minecraft.rtext import RTextList, RText, RAction, RTextBase
 from mcdreforged.utils.exception import IllegalCallError
 
 if TYPE_CHECKING:

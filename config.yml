@@ -17,32 +17,36 @@ working_directory: server
 #   java -Djline.terminal=jline.UnsupportedTerminal -jar BungeeCord.jar
 #   ./start.sh
 #   start.bat
-start_command: java -Xms1G -Xmx2G -jar minecraft_server.jar nogui
+start_command: java -Djline.terminal=jline.UnsupportedTerminal -Xms1G -Xmx2G -jar
+  Waterfall-323.jar nogui
 
 
-# The parser to parse the output of the server. Available options:
-# vanilla_parser
+# The handler to determine the specific way to control the server and parse the output of the server. Available options:
+# vanilla_handler
 #   for Vanilla / Carpet / Fabric server
 #
-# bukkit_parser
+# beta18_handler
+#   for Vanilla server in beta1.8 versions
+#
+# bukkit_handler
 #   For Bukkit / Spigot server with Minecraft version below 1.14, and Paper server in all version
 #
-# bukkit_parser_14
+# bukkit14_handler
 #   For Bukkit / Spigot server with Minecraft version 1.14 and above
 #
-# forge_parser
+# forge_handler
 #   For Forge server
 #
-# cat_server_parser
+# cat_server_handler
 #   For CatServer server
 #
-# bungeecord_parser
+# bungeecord_handler
 #   for Bungeecord server
 #
-# waterfall_parser
+# waterfall_handler
 #   for Waterfall server
 #
-parser: vanilla_parser
+parser: waterfall_handler
 
 
 # the encoding / decoding format used to encode / decode message to the server. Choose the best method for your os. Examples:

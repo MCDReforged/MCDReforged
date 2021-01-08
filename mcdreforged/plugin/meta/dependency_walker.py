@@ -1,7 +1,7 @@
 import collections
 from typing import Dict, List, TYPE_CHECKING
 
-from mcdreforged.plugin.version import VersionRequirement
+from mcdreforged.plugin.meta.version import VersionRequirement
 from mcdreforged.utils.logger import DebugOption
 
 if TYPE_CHECKING:

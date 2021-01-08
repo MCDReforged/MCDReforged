@@ -12,12 +12,8 @@ GITHUB_URL = 'https://github.com/Fallen-Breath/MCDReforged'
 GITHUB_API_LATEST = 'https://api.github.com/repos/Fallen-Breath/MCDReforged/releases/latest'
 
 LOGGING_FILE = os.path.join('log', '{}.log'.format(NAME_SHORT))
-REACTOR_FOLDER = os.path.join('mcdreforged', 'reactor')
 PARSER_FOLDER = os.path.join('mcdreforged', 'parser')
-PLUGIN_FOLDER = 'plugins'
-PLUGIN_CONFIG_FOLDER = 'config'
 RESOURCE_FOLDER = 'resources'
-LANGUAGE_FOLDER = os.path.join(RESOURCE_FOLDER, 'lang')
 RE_DEATH_MESSAGE_FILE = os.path.join(RESOURCE_FOLDER, 'death_message.yml')
 UPDATE_DOWNLOAD_FOLDER = 'MCDR_update'
 BASIC_PARSER_NAME = 'basic_parser'

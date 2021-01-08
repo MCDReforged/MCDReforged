@@ -7,8 +7,8 @@ import threading
 from typing import Callable, Dict, Optional, Any, Tuple, List, TYPE_CHECKING
 
 from mcdreforged import constant
-from mcdreforged.plugin.dependency_walker import DependencyWalker
 from mcdreforged.plugin.mcdreforged_plugin import MCDReforgedPlugin
+from mcdreforged.plugin.meta.dependency_walker import DependencyWalker
 from mcdreforged.plugin.operation_result import PluginOperationResult, SingleOperationResult
 from mcdreforged.plugin.plugin import PluginState, AbstractPlugin
 from mcdreforged.plugin.plugin_event import MCDRPluginEvents, MCDREvent, EventListener
@@ -20,6 +20,8 @@ from mcdreforged.utils.logger import DebugOption
 
 if TYPE_CHECKING:
 	from mcdreforged import MCDReforgedServer
+
+PLUGIN_CONFIG_FOLDER = 'config'
 
 
 class PluginManager:
@@ -41,7 +43,7 @@ class PluginManager:
 		self.tls = threading.local()
 		self.set_current_plugin(None)
 
-		file_util.touch_folder(constant.PLUGIN_CONFIG_FOLDER)
+		file_util.touch_folder(PLUGIN_CONFIG_FOLDER)
 
 	# --------------------------
 	#   Getters / Setters etc.
@@ -293,7 +295,7 @@ class PluginManager:
 		for plugin in load_result.success_list + reload_result.success_list:
 			if plugin in dependency_check_result.success_list:
 				plugin.ready()
-
+		# TODO: Fix no unload event on reload plugins
 		newly_loaded_plugins = {*load_result.success_list, *reload_result.success_list}
 		for plugin in dependency_check_result.success_list:
 			if plugin in newly_loaded_plugins:

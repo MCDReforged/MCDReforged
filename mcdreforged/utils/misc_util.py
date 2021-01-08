@@ -7,8 +7,8 @@ import os
 import threading
 from typing import List, Callable, Tuple, TypeVar
 
-from mcdreforged.plugin.version import Version
-from mcdreforged.rtext import RTextBase
+from mcdreforged.minecraft.rtext import RTextBase
+from mcdreforged.plugin.meta.version import Version
 
 
 def start_thread(func: Callable, args: Tuple, name: str or None = None):

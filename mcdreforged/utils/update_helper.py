@@ -9,7 +9,7 @@ from typing import TYPE_CHECKING
 import requests
 
 from mcdreforged import constant
-from mcdreforged.rtext import RText, RAction, RColor, RStyle
+from mcdreforged.minecraft.rtext import RText, RAction, RColor, RStyle
 from mcdreforged.utils import misc_util, file_util
 
 if TYPE_CHECKING:

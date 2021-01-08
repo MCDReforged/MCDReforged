@@ -5,7 +5,7 @@ from mcdreforged.utils import misc_util
 if TYPE_CHECKING:
 	from mcdreforged import MCDReforgedServer
 	from mcdreforged.info import Info
-	from mcdreforged.server_interface import ServerInterface
+	from mcdreforged.plugin.server_interface import ServerInterface
 
 
 class CommandSourceType:

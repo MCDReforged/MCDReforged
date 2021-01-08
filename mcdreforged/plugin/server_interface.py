@@ -1,7 +1,6 @@
 """
 An interface class for plugins to control the server
 """
-import json
 import time
 from typing import Callable, TYPE_CHECKING, Tuple, Any, Union
 
@@ -9,11 +8,11 @@ from mcdreforged.command.builder.command_node import Literal
 from mcdreforged.command.command_source import CommandSource
 from mcdreforged.info import Info
 from mcdreforged.mcdr_state import ServerState
-from mcdreforged.permission_manager import PermissionLevel
+from mcdreforged.minecraft.rtext import RTextBase, RText
+from mcdreforged.permission.permission_level import PermissionLevel
 from mcdreforged.plugin.operation_result import SingleOperationResult, PluginOperationResult
 from mcdreforged.plugin.plugin_event import EventListener, LiteralEvent, PluginEvent, MCDRPluginEvents
 from mcdreforged.plugin.plugin_registry import DEFAULT_LISTENER_PRIORITY, HelpMessage
-from mcdreforged.rtext import RTextBase, RText
 from mcdreforged.utils import misc_util
 from mcdreforged.utils.exception import IllegalCallError
 from mcdreforged.utils.logger import MCDReforgedLogger
@@ -197,11 +196,9 @@ class ServerInterface:
 		:type text: str or dict or list or RTextBase
 		:rtype: None
 		"""
-		if isinstance(text, RTextBase):
-			content = text.to_json_str()
-		else:
-			content = json.dumps(str(text))
-		self.execute('tellraw {} {}'.format(player, content), encoding=encoding, is_plugin_call=False)
+		command = self.__mcdr_server.server_handler_manager.get_current_handler().get_send_message_command(player, text)
+		if command is not None:
+			self.execute(command, encoding=encoding, is_plugin_call=False)
 
 	@log_call
 	def say(self, text, encoding=None):
@@ -213,7 +210,9 @@ class ServerInterface:
 		:type text: str or dict or list or RTextBase
 		:rtype: None
 		"""
-		self.tell('@a', text, encoding=encoding, is_plugin_call=False)
+		command = self.__mcdr_server.server_handler_manager.get_current_handler().get_broadcast_message_command(text)
+		if command is not None:
+			self.execute(command, encoding=encoding, is_plugin_call=False)
 
 	@log_call
 	def reply(self, info, text, encoding=None):

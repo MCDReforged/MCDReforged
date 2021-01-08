@@ -5,7 +5,7 @@ from abc import ABC
 from typing import Tuple, Any, TYPE_CHECKING
 
 from mcdreforged.command.builder.command_node import Literal
-from mcdreforged.plugin.metadata import MetaData
+from mcdreforged.plugin.meta.metadata import MetaData
 from mcdreforged.plugin.plugin_event import MCDREvent, EventListener, PluginEvent
 from mcdreforged.plugin.plugin_registry import PluginRegistry, HelpMessage
 from mcdreforged.utils.exception import IllegalCallError, IllegalStateError

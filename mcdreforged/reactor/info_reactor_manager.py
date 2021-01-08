@@ -7,9 +7,9 @@ from typing import TYPE_CHECKING
 
 from mcdreforged import constant
 from mcdreforged.info import Info, InfoSource
-from mcdreforged.reactor.general_reactor import GeneralReactor
-from mcdreforged.reactor.player_reactor import PlayerReactor
-from mcdreforged.reactor.server_reactor import ServerReactor
+from mcdreforged.reactor.impl.general_reactor import GeneralReactor
+from mcdreforged.reactor.impl.player_reactor import PlayerReactor
+from mcdreforged.reactor.impl.server_reactor import ServerReactor
 from mcdreforged.utils.logger import ServerLogger
 
 if TYPE_CHECKING:

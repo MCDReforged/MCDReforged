@@ -11,7 +11,7 @@ import zipfile
 from colorlog import ColoredFormatter
 
 from mcdreforged import constant
-from mcdreforged.rtext import RColorConvertor
+from mcdreforged.minecraft.rtext import RColorConvertor
 from mcdreforged.utils import string_util, file_util
 
 

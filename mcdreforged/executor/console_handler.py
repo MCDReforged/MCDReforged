@@ -12,7 +12,7 @@ class ConsoleHandler(ThreadExecutor):
 			text = input()
 			parsed_result: Info
 			try:
-				parsed_result = self.mcdr_server.parser_manager.get_parser().parse_console_command(text)
+				parsed_result = self.mcdr_server.server_handler_manager.get_current_handler().parse_console_command(text)
 			except:
 				self.mcdr_server.logger.exception(self.mcdr_server.tr('mcdr_server.console_input.parse_fail', text))
 			else:

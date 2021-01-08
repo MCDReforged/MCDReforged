@@ -7,7 +7,7 @@ from mcdreforged.command.command_source import CommandSource, ConsoleCommandSour
 from mcdreforged.utils.exception import IllegalStateError, IllegalCallError
 
 if TYPE_CHECKING:
-	from mcdreforged.server_interface import ServerInterface
+	from mcdreforged.plugin.server_interface import ServerInterface
 
 
 class InfoSource:

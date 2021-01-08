@@ -1,6 +1,6 @@
 import unittest
 
-from mcdreforged.plugin.version import *
+from mcdreforged.plugin.meta.version import *
 
 
 class VersionTest(unittest.TestCase):

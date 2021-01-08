@@ -1,10 +1,10 @@
 """
 A more flexible interface for rcon support
+It also wrap everything to make sure no exception can escape
 """
-from mcdreforged.rcon.rcon_connection import RconConnection
+from mcdreforged.minecraft.rcon.rcon_connection import RconConnection
 
 
-# pack everything up and make sure no exception can escape
 class RconManager:
 	def __init__(self, mcdr_server):
 		self.mcdr_server = mcdr_server

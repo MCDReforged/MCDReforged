@@ -4,8 +4,8 @@ Information of a plugin
 import re
 from typing import List, Dict, TYPE_CHECKING
 
-from mcdreforged.plugin.version import Version, VersionParsingError, VersionRequirement
-from mcdreforged.rtext import RTextBase
+from mcdreforged.minecraft.rtext import RTextBase
+from mcdreforged.plugin.meta.version import Version, VersionParsingError, VersionRequirement
 
 if TYPE_CHECKING:
 	from mcdreforged.plugin.plugin import AbstractPlugin

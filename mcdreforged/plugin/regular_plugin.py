@@ -6,7 +6,7 @@ from threading import RLock
 from typing import TYPE_CHECKING
 
 from mcdreforged import constant
-from mcdreforged.plugin.metadata import MetaData
+from mcdreforged.plugin.meta.metadata import MetaData
 from mcdreforged.plugin.plugin import AbstractPlugin, PluginState
 from mcdreforged.plugin.plugin_event import MCDRPluginEvents, EventListener
 from mcdreforged.plugin.plugin_registry import DEFAULT_LISTENER_PRIORITY

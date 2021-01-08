@@ -9,13 +9,13 @@ from mcdreforged import constant
 from mcdreforged.command.builder.command_node import Literal, QuotableText, Text
 from mcdreforged.command.builder.exception import UnknownArgument, RequirementNotMet, CommandError
 from mcdreforged.command.command_source import CommandSource
-from mcdreforged.permission_manager import PermissionLevel
-from mcdreforged.plugin.metadata import MetaData
+from mcdreforged.minecraft.rtext import RText, RAction, RTextList, RStyle, RColor
+from mcdreforged.permission.permission_level import PermissionLevel
+from mcdreforged.plugin.meta.metadata import MetaData
 from mcdreforged.plugin.plugin import PermanentPlugin, AbstractPlugin, PluginState
 from mcdreforged.plugin.plugin_event import MCDRPluginEvents, EventListener
 from mcdreforged.plugin.plugin_registry import HelpMessage
 from mcdreforged.plugin.regular_plugin import RegularPlugin
-from mcdreforged.rtext import RText, RAction, RTextList, RStyle, RColor
 from mcdreforged.utils import file_util
 
 METADATA = {

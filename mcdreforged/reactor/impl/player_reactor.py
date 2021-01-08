@@ -9,7 +9,7 @@ from mcdreforged.reactor.abstract_info_reactor import AbstractInfoReactor
 class PlayerReactor(AbstractInfoReactor):
 	def react(self, info):
 		if info.source == InfoSource.SERVER:
-			parser = self.mcdr_server.parser_manager.get_parser()
+			parser = self.mcdr_server.server_handler_manager.get_current_handler()
 
 			# on_player_joined
 			player = parser.parse_player_joined(info)
