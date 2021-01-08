@@ -40,6 +40,7 @@ jobs:
 
   assemble:
     runs-on: ubuntu-latest
+    name: Assemble a dev build compressed file
 
     steps:
     - uses: actions/checkout@v2

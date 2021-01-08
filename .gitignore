@@ -11,8 +11,6 @@ config/
 server/*
 release/
 plugins/*
-plugins_test/*
-plugins0.x/*
 !plugins/ExamplePlugin.py
 !plugins/test.py
 
@@ -28,6 +26,8 @@ back-up/
 
 # random files
 test.py
+plugins_test/*
+plugins0.x/*
 
 # user config files
 # these will be automatically generated at the first run
