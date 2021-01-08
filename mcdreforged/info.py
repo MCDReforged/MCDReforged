@@ -4,7 +4,7 @@ Info and InfoSource
 from typing import TYPE_CHECKING
 
 from mcdreforged.command.command_source import CommandSource, ConsoleCommandSource, PlayerCommandSource
-from mcdreforged.exception import IllegalStateError, IllegalCallError
+from mcdreforged.utils.exception import IllegalStateError, IllegalCallError
 
 if TYPE_CHECKING:
 	from mcdreforged.server_interface import ServerInterface

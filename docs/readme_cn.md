@@ -188,7 +188,7 @@ MCDR 使用的语言
 
 ## 插件
 
-[插件文档](https://github.com/Fallen-Breath/MCDReforged/blob/master/doc/plugin_cn.md)
+[插件文档](https://github.com/Fallen-Breath/MCDReforged/blob/master/docs/plugin_cn.md)
 
 插件用法可参考 `plugins/sample_plugin.py`
 

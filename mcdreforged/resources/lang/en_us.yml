@@ -126,10 +126,10 @@ rcon_manager.connect.connected                          : Rcon connected
 rcon_manager.connect.wrong_password                     : Rcon password is not correct, connection failed
 rcon_manager.disconnect.disconnected                    : Rcon disconnected
 rcon_manager.disconnect.disconnect_fail                 : Fail to disconnect rcon
-server_status.running                                   : §aRunning§r
-server_status.stopping                                  : §cStopping§r
-server_status.pre_stopped                               : §4Pre-stopped§r
-server_status.stopped                                   : §4Stopped§r
+server_state.running                                   : §aRunning§r
+server_state.stopping                                  : §cStopping§r
+server_state.pre_stopped                               : §4Pre-stopped§r
+server_state.stopped                                   : §4Stopped§r
 general_reactor.permission_denied                       : Permission denied
 parser_manager.load_parser.file_not_found               : Parser "{0}" not found! Make sure you have given a correct parser name in the config
 parser_manager.load_re_death_message.fail               : Fail to load death message data

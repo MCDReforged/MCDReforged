@@ -5,12 +5,10 @@ Permission control things
 import collections
 from typing import List, Dict, Optional, Any
 
-import ruamel.yaml as yaml
-from ruamel.yaml.comments import CommentedSeq
-
+from mcdreforged.config import YamlDataStorage
 from mcdreforged.info import *
-from mcdreforged.logger import DebugOption
 from mcdreforged.utils import misc_util
+from mcdreforged.utils.logger import DebugOption
 
 
 class PermissionLevelItem:
@@ -104,62 +102,35 @@ class PermissionLevel:
 			return None
 
 
-class PermissionManager:
-	def __init__(self, mcdr_server, permission_file):
+PERMISSION_FILE = 'permission.yml'
+DEFAULT_PERMISSION_RESOURCE_PATH = 'resources/default_permission.yml'
+
+
+class PermissionManager(YamlDataStorage):
+	def __init__(self, mcdr_server):
+		super().__init__(mcdr_server.logger, PERMISSION_FILE, DEFAULT_PERMISSION_RESOURCE_PATH)
 		self.mcdr_server = mcdr_server
-		self.permission_file = permission_file
 		self.data = {}  # type: Dict[str, Any]
 
 	# --------------
 	# File Operating
 	# --------------
 
-	def load_permission_file(self):
+	def load_permission_file(self, *, allowed_missing_file=True):
 		"""
 		Load the permission file from disk
 		"""
-		try:
-			with open(self.permission_file, encoding='utf8') as file:
-				self.data = yaml.round_trip_load(file)
-		except:
-			self.mcdr_server.logger.warning(self.mcdr_server.tr('permission_manager.load.fail', self.permission_file))
-			self.data = {
-				'default_level': 'user',
-				'owner': None,
-				'admin': None,
-				'helper': None,
-				'user': None,
-				'guest': None
-			}
-		for name in PermissionLevel.NAMES:
-			if name not in self.data:
-				self.data[name] = None
-		self.save()
+		self._load_data(allowed_missing_file)
 
-	def deduplicate_data(self):
-		"""
-		Deduplicate the permission data=
-		"""
+	def _pre_save(self, data):
+		# Deduplicate the permission data=
 		for key, value in self.data.items():
-			if key in PermissionLevel.NAMES and type(value) in [list, CommentedSeq]:
+			if key in PermissionLevel.NAMES and isinstance(value, list):
 				self.data[key] = misc_util.unique_list(self.data[key])
-
-	def empty_to_none(self):
-		"""
-		Change empty list to None for nicer look in the .yml file
-		"""
+		# Change empty list to None for nicer look in the .yml file
 		for key, value in self.data.items():
 			if key in PermissionLevel.NAMES and value is not None and len(value) == 0:
 				self.data[key] = None
-
-	def save(self):
-		"""
-		Save data to file
-		"""
-		self.deduplicate_data()
-		self.empty_to_none()
-		with open(self.permission_file, 'w', encoding='utf8') as file:
-			yaml.round_trip_dump(self.data, file)
 
 	# ---------------------
 	# Permission processing

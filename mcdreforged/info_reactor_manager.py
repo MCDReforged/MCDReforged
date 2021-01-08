@@ -7,10 +7,10 @@ from typing import TYPE_CHECKING
 
 from mcdreforged import constant
 from mcdreforged.info import Info, InfoSource
-from mcdreforged.logger import ServerLogger
 from mcdreforged.reactor.general_reactor import GeneralReactor
 from mcdreforged.reactor.player_reactor import PlayerReactor
 from mcdreforged.reactor.server_reactor import ServerReactor
+from mcdreforged.utils.logger import ServerLogger
 
 if TYPE_CHECKING:
 	from mcdreforged import MCDReforgedServer
@@ -43,6 +43,7 @@ class InfoReactorManager:
 			self.mcdr_server.send(info.content)  # send input command to server's stdin
 
 	def put_info(self, info):
+		info.attach_mcdr_server(self.mcdr_server)
 		try:
 			self.mcdr_server.task_executor.add_info_task(lambda: self.process_info(info), info.is_user)
 		except queue.Full:

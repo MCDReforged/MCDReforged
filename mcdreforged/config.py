@@ -2,73 +2,79 @@
 MCDR config file stuffs
 """
 import os
+from logging import Logger
 
 import ruamel.yaml as yaml
+from ruamel.yaml.comments import CommentedMap
 
-from mcdreforged.logger import DebugOption
+from mcdreforged.utils import resources_util
+from mcdreforged.utils.lazy_item import LazyItem
 
 
-class Config:
-	def __init__(self, mcdr_server, file_name):
-		self.mcdr_server = mcdr_server
-		self.data = None
-		self.file_name = file_name
+class YamlDataStorage:
+	def __init__(self, logger: Logger, file_path: str, default_file_path: str):
+		self.logger = logger
+		self.file_path = file_path
+		self.default_file_path = default_file_path
+		self.data = CommentedMap()
+		self.default_data = LazyItem(lambda: resources_util.get_yaml(self.default_file_path))
+		self.__has_changes = False
 
-	def read_config(self) -> bool:
+	def _load_data(self, allowed_missing_file) -> bool:
 		"""
-		:return: if there are any missing config entries
+		:param bool allowed_missing_file: If set to True, missing data file will result in a FileNotFoundError(),
+		otherwise it will treat it as an empty config gile
+		:return: if there is any missing data entry
+		:raise: FileNotFoundError
 		"""
-		if os.path.isfile(self.file_name):
-			with open(self.file_name, encoding='utf8') as file:
-				self.data = yaml.round_trip_load(file)
-		return self.check_config()
+		if os.path.isfile(self.file_path):
+			with open(self.file_path, encoding='utf8') as file:
+				users_data = yaml.round_trip_load(file)
+		else:
+			if not allowed_missing_file:
+				raise FileNotFoundError()
+			users_data = {}
+		self.__has_changes = False
+		self.data = self.__fix(self.default_data.get(), users_data)
+		self.save()
+		return self.__has_changes
+
+	def __fix(self, current_data: CommentedMap, users_data: CommentedMap, key_path='') -> CommentedMap:
+		if not isinstance(users_data, dict):
+			self.__has_changes = True
+			return current_data
+		else:
+			current_data = current_data.copy()
+			divider = ' -> ' if len(key_path) > 0 else ''
+			for key in current_data.keys():
+				current_key_path = key_path + divider + key
+				if key in users_data:
+					# if key presents in user's data
+					if isinstance(current_data[key], dict):
+						# dive deeper
+						current_data[key] = self.__fix(current_data[key], users_data[key], current_key_path)
+					else:
+						# use the value in user's data
+						current_data[key] = users_data[key]
+				else:
+					# missing config key
+					self.__has_changes = True
+					self.logger.warning('Option "{}" missing, use default value "{}"'.format(current_key_path, current_data[key]))
+			return current_data
+
+	def _pre_save(self, data: CommentedMap):
+		pass
+
+	def __save(self, data: CommentedMap):
+		self._pre_save(data)
+		with open(self.file_path, 'w', encoding='utf8') as file:
+			yaml.round_trip_dump(data, file)
 
 	def save(self):
-		with open(self.file_name, 'w', encoding='utf8') as file:
-			yaml.round_trip_dump(self.data, file)
+		self.__save(self.data)
 
-	def touch(self, data, key, default, key_path=''):
-		if key not in data:
-			data[key] = default
-			self.mcdr_server.logger.warning('Option "{}{}" missing, use default value "{}"'.format(key_path, key, default))
-			return True
-		ret = False
-		if isinstance(default, dict):
-			divider = ' -> ' if len(key_path) > 0 else ''
-			for k, v in default.items():
-				ret |= self.touch(data[key], k, v, key_path + divider + key)
-		return ret
-
-	def check_config(self) -> bool:
-		"""
-		:return: if there are any missing config entries
-		"""
-		flag = False
-		if self.data is None:
-			self.data = {}
-			flag = True
-		flag |= self.touch(self.data, 'language', 'en_us')
-		flag |= self.touch(self.data, 'working_directory', 'server')
-		flag |= self.touch(self.data, 'plugin_folders', ['./plugins'])
-		flag |= self.touch(self.data, 'start_command', '')
-		flag |= self.touch(self.data, 'parser', 'vanilla_parser')
-		flag |= self.touch(self.data, 'encoding', None)
-		flag |= self.touch(self.data, 'decoding', None)
-		flag |= self.touch(self.data, 'enable_rcon', False)
-		flag |= self.touch(self.data, 'rcon_address', '127.0.0.1')
-		flag |= self.touch(self.data, 'rcon_port', 25575)
-		flag |= self.touch(self.data, 'rcon_password', 'password')
-		flag |= self.touch(self.data, 'disable_console_thread', False)
-		flag |= self.touch(self.data, 'download_update', True)
-		flag |= self.touch(self.data, 'debug', {
-			DebugOption.ALL: False,
-			DebugOption.PARSER: False,
-			DebugOption.PLUGIN: False,
-			DebugOption.PERMISSION: False,
-		})
-		if flag:
-			self.save()
-		return flag
+	def save_default(self):
+		self.__save(self.default_data.get())
 
 	def __getitem__(self, item):
 		return self.data[item]
@@ -82,3 +88,16 @@ class Config:
 			if value is True:
 				return True
 		return False
+
+
+CONFIG_FILE = 'config.yml'
+DEFAULT_CONFIG_RESOURCE_PATH = 'resources/default_config.yml'
+
+
+class Config(YamlDataStorage):
+	def __init__(self, logger: Logger):
+		super().__init__(logger, CONFIG_FILE, DEFAULT_CONFIG_RESOURCE_PATH)
+		self.storage = ()
+
+	def read_config(self, allowed_missing_file):
+		return self._load_data(allowed_missing_file)

@@ -1,7 +1,7 @@
 from typing import List, TYPE_CHECKING
 
-from mcdreforged.exception import IllegalCallError
 from mcdreforged.rtext import RTextList, RText, RAction, RTextBase
+from mcdreforged.utils.exception import IllegalCallError
 
 if TYPE_CHECKING:
 	from mcdreforged.plugin.plugin import AbstractPlugin

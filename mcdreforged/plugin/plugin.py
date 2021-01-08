@@ -5,11 +5,11 @@ from abc import ABC
 from typing import Tuple, Any, TYPE_CHECKING
 
 from mcdreforged.command.builder.command_node import Literal
-from mcdreforged.exception import IllegalCallError, IllegalStateError
-from mcdreforged.logger import DebugOption
 from mcdreforged.plugin.metadata import MetaData
 from mcdreforged.plugin.plugin_event import MCDREvent, EventListener, PluginEvent
 from mcdreforged.plugin.plugin_registry import PluginRegistry, HelpMessage
+from mcdreforged.utils.exception import IllegalCallError, IllegalStateError
+from mcdreforged.utils.logger import DebugOption
 
 if TYPE_CHECKING:
 	from mcdreforged.plugin.plugin_manager import PluginManager

@@ -1,49 +1,35 @@
 """
 Translation support
 """
-
-import os
-from typing import TYPE_CHECKING, Dict
-
-import ruamel.yaml as yaml
+from logging import Logger
+from typing import Dict
 
 from mcdreforged import constant
-from mcdreforged.utils import file_util, string_util
+from mcdreforged.utils import resources_util
 
-if TYPE_CHECKING:
-	from mcdreforged import MCDReforgedServer
+DEFAULT_LANGUAGE_RESOURCE_FOLDER_PATH = 'resources/lang/'
 
 
 class LanguageManager:
-	def __init__(self, mcdr_server: 'MCDReforgedServer', language_folder: str):
-		self.mcdr_server = mcdr_server
-		self.language_folder = language_folder
+	def __init__(self, logger: Logger):
+		self.logger = logger
 		self.language = None
-		self.translations = {}  # type: Dict[str, Dict]
-
-	def load_languages(self):
-		self.translations = {}
-		file_util.touch_folder(self.language_folder)
-		for file in file_util.list_file_with_suffix(self.language_folder, constant.LANGUAGE_FILE_SUFFIX):
-			language = string_util.remove_suffix(os.path.basename(file), constant.LANGUAGE_FILE_SUFFIX)
-			with open(file, encoding='utf8') as f:
-				self.translations[language] = yaml.round_trip_load(f)
-
-	@property
-	def languages(self):
-		return self.translations.keys()
-
-	def contain_language(self, language):
-		return language in self.languages
-
-	def translate(self, text, language=None) -> str:
-		if language is None:
-			language = self.language
-		try:
-			return self.translations[language][text]
-		except:
-			self.mcdr_server.logger.error('Error translate text "{}" to language {}'.format(text, language))
-			return text
+		self.translations = {}  # type: Dict[str, str]
 
 	def set_language(self, language):
 		self.language = language
+		self.translations.clear()
+		language_file_path = DEFAULT_LANGUAGE_RESOURCE_FOLDER_PATH + language + constant.LANGUAGE_FILE_SUFFIX
+		try:
+			self.translations = resources_util.get_yaml(language_file_path)
+			if self.translations is None:
+				raise FileNotFoundError('Language file not found')
+		except:
+			self.logger.exception('Failed to load language {} from "{}"'.format(language, language_file_path))
+
+	def translate(self, text) -> str:
+		try:
+			return self.translations[text]
+		except:
+			self.logger.error('Error translate text "{}" to current language {}'.format(text, self.language))
+			return text

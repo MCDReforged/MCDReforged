@@ -6,12 +6,12 @@ from threading import RLock
 from typing import TYPE_CHECKING
 
 from mcdreforged import constant
-from mcdreforged.exception import IllegalCallError
 from mcdreforged.plugin.metadata import MetaData
 from mcdreforged.plugin.plugin import AbstractPlugin, PluginState
 from mcdreforged.plugin.plugin_event import MCDRPluginEvents, EventListener
 from mcdreforged.plugin.plugin_registry import DEFAULT_LISTENER_PRIORITY
 from mcdreforged.utils import misc_util, string_util
+from mcdreforged.utils.exception import IllegalCallError
 
 if TYPE_CHECKING:
 	from mcdreforged.plugin.plugin_manager import PluginManager

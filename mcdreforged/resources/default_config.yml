@@ -59,13 +59,6 @@ plugin_folders:
 # - path/to/my/plugin/folder
 
 
-# if any command input to the console starts with the string below, MCDR will not send this command to server's stdin
-# for example the default value is !! so these commands won't be sent to server's stdin
-#   !!tests
-#   !!this is a command
-console_command_prefix: '!!'
-
-
 # rcon setting
 # if enable, plugins can use rcon to query command from the server
 enable_rcon: false
@@ -91,7 +84,5 @@ download_update: true
 debug:
   all: false
   parser: false
-  plugin: true
+  plugin: false
   permission: false
-
-# Missing options down below

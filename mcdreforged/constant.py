@@ -11,8 +11,6 @@ NAME = 'MCDReforged'
 GITHUB_URL = 'https://github.com/Fallen-Breath/MCDReforged'
 GITHUB_API_LATEST = 'https://api.github.com/repos/Fallen-Breath/MCDReforged/releases/latest'
 
-CONFIG_FILE = 'config.yml'
-PERMISSION_FILE = 'permission.yml'
 LOGGING_FILE = os.path.join('log', '{}.log'.format(NAME_SHORT))
 REACTOR_FOLDER = os.path.join('mcdreforged', 'reactor')
 PARSER_FOLDER = os.path.join('mcdreforged', 'parser')

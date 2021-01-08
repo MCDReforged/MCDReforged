@@ -3,6 +3,7 @@ from typing import Callable, Any
 
 from mcdreforged import constant
 from mcdreforged.executor.thread_executor import ThreadExecutor
+from mcdreforged.mcdr_state import MCDReforgedState
 
 
 class Priority:
@@ -31,7 +32,7 @@ class TaskExecutor(ThreadExecutor):
 		self.task_queue = PriorityQueue(maxsize=constant.MAX_TASK_QUEUE_SIZE)
 
 	def should_keep_looping(self):
-		return not self.mcdr_server.is_mcdr_exit()
+		return not self.mcdr_server.is_mcdr_exit() and not self.mcdr_server.mcdr_in_state(MCDReforgedState.PRE_STOPPED)
 
 	def add_info_task(self, func: Callable[[], Any], is_user: bool):
 		data = TaskData(func, Priority.INFO)

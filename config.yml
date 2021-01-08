@@ -52,9 +52,11 @@ parser: vanilla_parser
 encoding:
 decoding:
 
+
 # A list of folder path where MCDR will search for plugin to load
 plugin_folders:
 - plugins_test
+# - path/to/my/plugin/folder
 
 
 # rcon setting
@@ -73,6 +75,7 @@ disable_console_thread: false
 # If set to true, if MCDR detects a newer version it will automatically download it
 check_update: false
 
+
 # If set to true, if MCDR detects a newer version it will automatically download it
 download_update: true
 
@@ -83,5 +86,3 @@ debug:
   parser: false
   plugin: false
   permission: false
-
-# Missing options down below

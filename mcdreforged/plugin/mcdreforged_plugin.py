@@ -16,7 +16,6 @@ from mcdreforged.plugin.plugin_event import MCDRPluginEvents, EventListener
 from mcdreforged.plugin.plugin_registry import HelpMessage
 from mcdreforged.plugin.regular_plugin import RegularPlugin
 from mcdreforged.rtext import RText, RAction, RTextList, RStyle, RColor
-from mcdreforged.server_status import ServerStatus
 from mcdreforged.utils import file_util
 
 METADATA = {
@@ -179,15 +178,14 @@ class MCDReforgedPlugin(PermanentPlugin):
 
 	def reload_config(self, source: CommandSource):
 		self.function_call(source, self.mcdr_server.load_config, 'reload_config')
-		self.function_call(source, self.mcdr_server.load_config, 'reload_config')
 
 	def reload_permission(self, source: CommandSource):
 		self.function_call(source, self.mcdr_server.permission_manager.load_permission_file, 'reload_permission')
 
 	def reload_all(self, source: CommandSource):
-		self.refresh_changed_plugins(source)
 		self.reload_config(source)
 		self.reload_permission(source)
+		self.refresh_changed_plugins(source)
 
 	# ----------
 	# Permission
@@ -275,8 +273,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 
 		source.reply(RTextList(
 			RText(self.tr('command_manager.print_mcdr_status.line1', constant.NAME, constant.VERSION)).c(RAction.open_url, constant.GITHUB_URL).h(RText(constant.GITHUB_URL, styles=RStyle.underlined, color=RColor.blue)), '\n',
-			RText(self.tr('command_manager.print_mcdr_status.line2', self.tr(
-				ServerStatus.get_translate_key(self.mcdr_server.server_status)))), '\n',
+			RText(self.tr('command_manager.print_mcdr_status.line2', self.tr(self.mcdr_server.server_state.value))), '\n',
 			RText(self.tr('command_manager.print_mcdr_status.line3', bool_formatter(self.mcdr_server.is_server_startup()))), '\n',
 			RText(self.tr('command_manager.print_mcdr_status.line4', bool_formatter(self.mcdr_server.is_exit_naturally()))), '\n',
 			RText(self.tr('command_manager.print_mcdr_status.line5', status_dict[self.mcdr_server.server_interface.is_rcon_running(is_plugin_call=False)])), '\n',

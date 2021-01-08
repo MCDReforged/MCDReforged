@@ -7,16 +7,16 @@ from typing import Callable, TYPE_CHECKING, Tuple, Any, Union
 
 from mcdreforged.command.builder.command_node import Literal
 from mcdreforged.command.command_source import CommandSource
-from mcdreforged.exception import IllegalCallError
 from mcdreforged.info import Info
-from mcdreforged.logger import MCDReforgedLogger
+from mcdreforged.mcdr_state import ServerState
 from mcdreforged.permission_manager import PermissionLevel
 from mcdreforged.plugin.operation_result import SingleOperationResult, PluginOperationResult
 from mcdreforged.plugin.plugin_event import EventListener, LiteralEvent, PluginEvent, MCDRPluginEvents
 from mcdreforged.plugin.plugin_registry import DEFAULT_LISTENER_PRIORITY, HelpMessage
 from mcdreforged.rtext import RTextBase, RText
-from mcdreforged.server_status import ServerStatus
 from mcdreforged.utils import misc_util
+from mcdreforged.utils.exception import IllegalCallError
+from mcdreforged.utils.logger import MCDReforgedLogger
 
 if TYPE_CHECKING:
 	from mcdreforged import MCDReforgedServer
@@ -128,7 +128,7 @@ class ServerInterface:
 		"""
 		if self.__mcdr_server.is_server_running():
 			raise IllegalCallError('Cannot exit MCDR when the server is running')
-		self.__mcdr_server.set_server_status(ServerStatus.STOPPED)
+		self.__mcdr_server.set_server_state(ServerState.STOPPED)
 
 	@log_call
 	def is_server_running(self):

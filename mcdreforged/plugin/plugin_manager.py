@@ -7,7 +7,6 @@ import threading
 from typing import Callable, Dict, Optional, Any, Tuple, List, TYPE_CHECKING
 
 from mcdreforged import constant
-from mcdreforged.logger import DebugOption
 from mcdreforged.plugin.dependency_walker import DependencyWalker
 from mcdreforged.plugin.mcdreforged_plugin import MCDReforgedPlugin
 from mcdreforged.plugin.operation_result import PluginOperationResult, SingleOperationResult
@@ -17,6 +16,7 @@ from mcdreforged.plugin.plugin_registry import PluginManagerRegistry
 from mcdreforged.plugin.plugin_thread import PluginThreadPool
 from mcdreforged.plugin.regular_plugin import RegularPlugin
 from mcdreforged.utils import file_util, string_util, misc_util
+from mcdreforged.utils.logger import DebugOption
 
 if TYPE_CHECKING:
 	from mcdreforged import MCDReforgedServer

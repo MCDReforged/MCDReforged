@@ -2,7 +2,7 @@ MCDReforged
 --------
 ![MCDR-banner](https://raw.githubusercontent.com/Fallen-Breath/MCDReforged/master/logo_long.png)
 
-[中文](https://github.com/Fallen-Breath/MCDReforged/blob/master/doc/readme_cn.md)
+[中文](https://github.com/Fallen-Breath/MCDReforged/blob/master/docs/readme_cn.md)
 
 > This is a python based Minecraft server control tool
 
@@ -189,7 +189,7 @@ Keep it as `false` unless necessary
 
 ## Plugin
 
-[Plugin document](https://github.com/Fallen-Breath/MCDReforged/blob/master/doc/plugin.md)
+[Plugin document](https://github.com/Fallen-Breath/MCDReforged/blob/master/docs/plugin.md)
 
 Plugin usage can refer to `plugins/sample_plugin.py`
 

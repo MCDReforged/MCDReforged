@@ -4,38 +4,39 @@ import time
 import traceback
 from subprocess import Popen, PIPE, STDOUT
 from threading import Lock
+from typing import Optional
 
-import psutil as psutil
+import psutil
 
 from mcdreforged import constant
 from mcdreforged.command.command_manager import CommandManager
 from mcdreforged.config import Config
-from mcdreforged.exception import IllegalCallError, ServerStopped, ServerStartError
 from mcdreforged.executor.console_handler import ConsoleHandler
 from mcdreforged.executor.task_executor import TaskExecutor
 from mcdreforged.info import Info
 from mcdreforged.info_reactor_manager import InfoReactorManager
 from mcdreforged.language_manager import LanguageManager
-from mcdreforged.logger import DebugOption, MCDReforgedLogger
+from mcdreforged.mcdr_state import ServerState, MCDReforgedState, MCDReforgedFlags
 from mcdreforged.parser_manager import ParserManager
 from mcdreforged.permission_manager import PermissionManager
 from mcdreforged.plugin.plugin_event import MCDRPluginEvents
 from mcdreforged.plugin.plugin_manager import PluginManager
 from mcdreforged.rcon.rcon_manager import RconManager
 from mcdreforged.server_interface import ServerInterface
-from mcdreforged.server_status import ServerStatus
 from mcdreforged.update_helper import UpdateHelper
+from mcdreforged.utils.exception import IllegalCallError, ServerStopped, ServerStartError, IllegalStateError
+from mcdreforged.utils.logger import DebugOption, MCDReforgedLogger
 
 
 class MCDReforgedServer:
+	process: Optional[Popen]
+
 	def __init__(self, old_process=None):
-		self.process = old_process  # type: Popen # the process for the server
-		self.server_status = ServerStatus.STOPPED
-		self.flag_interrupt = False  # ctrl-c flag
-		self.flag_server_startup = False  # set to True after server startup
-		self.flag_server_rcon_ready = False  # set to True after server started its rcon. used to start the rcon server
-		self.flag_mcdr_exit = False  # MCDR exit flag
-		self.flag_exit_naturally = True  # if MCDR exit after server stop. can be modified by plugins
+		# TODO args
+		self.mcdr_state = MCDReforgedState.INITIALIZING
+		self.server_state = ServerState.STOPPED
+		self.process = old_process  # the process for the server
+		self.flags = MCDReforgedFlags.NONE
 		self.starting_server_lock = Lock()  # to prevent multiple start_server() call
 		self.stop_lock = Lock()  # to prevent multiple stop() call
 
@@ -49,23 +50,40 @@ class MCDReforgedServer:
 		self.server_interface = ServerInterface(self)
 		self.task_executor = TaskExecutor(self)
 		self.console_handler = ConsoleHandler(self)
-		self.language_manager = LanguageManager(self, constant.LANGUAGE_FOLDER)
-		self.config = Config(self, constant.CONFIG_FILE)  # TODO: config query lock
+		self.language_manager = LanguageManager(self.logger)
+		self.config = Config(self.logger)  # TODO: config query lock
 		self.rcon_manager = RconManager(self)
 		self.parser_manager = ParserManager(self, constant.PARSER_FOLDER)
 		self.reactor_manager = InfoReactorManager(self)
 		self.command_manager = CommandManager(self)
 		self.plugin_manager = PluginManager(self)
-		self.permission_manager = PermissionManager(self, constant.PERMISSION_FILE)
+		self.permission_manager = PermissionManager(self)
 
 		# Initialize fields instance
-		self.load_config()  # loads config, language, parsers
+		file_missing = False
+		try:
+			self.load_config(allowed_missing_file=False)  # loads config, language, parsers
+		except FileNotFoundError:
+			self.logger.info('Config is missing, default config generated')
+			self.config.save_default()
+			file_missing = True
+		try:
+			self.permission_manager.load_permission_file(allowed_missing_file=False)
+		except FileNotFoundError:
+			self.logger.info('Permission file is missing, default permission file generated')
+			self.permission_manager.save_default()
+			file_missing = True
+		if file_missing:
+			self.logger.info('Some of the files are missing, check them and launch MCDR again')
+			return
+
 		self.parser_manager.init()
-		self.permission_manager.load_permission_file()
 		self.plugin_manager.register_permanent_plugins()
 
 		self.update_helper = UpdateHelper(self)
 		self.update_helper.check_update_start()
+
+		self.set_mcdr_state(MCDReforgedState.INITIALIZED)
 
 	def __del__(self):
 		try:
@@ -88,9 +106,9 @@ class MCDReforgedServer:
 	#          Loaders
 	# --------------------------
 
-	def load_config(self):
-		has_missing = self.config.read_config()
-		self.on_config_changed()
+	def load_config(self, *, allowed_missing_file=True):
+		has_missing = self.config.read_config(allowed_missing_file)
+		self.on_config_changed()  # load the language first to make sure tr() is available
 		if has_missing:
 			for line in self.tr('config.missing_config').splitlines():
 				self.logger.warning(line)
@@ -100,7 +118,6 @@ class MCDReforgedServer:
 		if self.config.is_debug_on():
 			self.logger.info(self.tr('mcdr_server.on_config_changed.debug_mode_on'))
 
-		self.language_manager.load_languages()
 		self.language_manager.set_language(self.config['language'])
 		self.logger.info(self.tr('mcdr_server.on_config_changed.language_set', self.config['language']))
 
@@ -130,41 +147,58 @@ class MCDReforgedServer:
 	def is_server_running(self):
 		return self.process is not None
 
+	# Flags
+
 	def is_server_startup(self):
-		return self.flag_server_startup
+		return MCDReforgedFlags.SERVER_STARTUP in self.flags
 
 	def is_server_rcon_ready(self):
-		return self.flag_server_rcon_ready
+		return MCDReforgedFlags.SERVER_RCON_READY in self.flags
 
 	def is_interrupt(self):
-		return self.flag_interrupt
+		return MCDReforgedFlags.INTERRUPT in self.flags
 
 	def is_mcdr_exit(self):
-		return self.flag_mcdr_exit
+		return self.mcdr_in_state(MCDReforgedState.STOPPED)
 
 	def is_exit_naturally(self):
-		return self.flag_exit_naturally
+		return MCDReforgedFlags.EXIT_NATURALLY in self.flags
 
 	def set_exit_naturally(self, flag):
-		self.flag_exit_naturally = flag
-		self.logger.debug('flag_exit_naturally has set to "{}"'.format(self.flag_exit_naturally))
+		if flag:
+			self.flags |= MCDReforgedFlags.EXIT_NATURALLY
+		else:
+			self.flags &= ~MCDReforgedFlags.EXIT_NATURALLY
+		self.logger.debug('flag_exit_naturally has set to "{}"'.format(flag))
 
-	def in_status(self, status: set):
-		return self.server_status in status
+	# State
 
-	def set_server_status(self, status):
-		self.server_status = status
-		self.logger.debug('Server state has set to "{}"'.format(ServerStatus.get_translate_key(status)))
+	def server_in_state(self, states):
+		return self.server_state.in_state(states)
+
+	def mcdr_in_state(self, states):
+		return self.mcdr_state.in_state(states)
+
+	def is_initialized(self):
+		return self.mcdr_in_state(MCDReforgedState.INITIALIZED)
+
+	def set_server_state(self, state):
+		self.server_state = state
+		self.logger.debug('Server state has set to "{}"'.format(state))
+
+	def set_mcdr_state(self, state):
+		self.mcdr_state = state
+		self.logger.debug('MCDR state has set to "{}"'.format(state))
 
 	def should_keep_looping(self):
 		"""
 		A criterion for sub threads to determine if it should keep looping
 		:rtype: bool
 		"""
-		if self.in_status({ServerStatus.STOPPED}):
+		if self.server_in_state(ServerState.STOPPED):
 			if self.is_interrupt():  # if interrupted and stopped
 				return False
-			return not self.flag_exit_naturally  # if the sever exited naturally, exit MCDR
+			return not self.is_exit_naturally()  # if the sever exited naturally, exit MCDR
 		return not self.is_mcdr_exit()
 
 	# --------------------------
@@ -198,9 +232,7 @@ class MCDReforgedServer:
 				self.logger.exception(self.tr('mcdr_server.start_server.start_fail'))
 				return False
 			else:
-				self.set_server_status(ServerStatus.RUNNING)
-				self.set_exit_naturally(True)
-				self.logger.info(self.tr('mcdr_server.start_server.pid_info', self.process.pid))
+				self.on_server_start()
 				return True
 		finally:
 			self.starting_server_lock.release()
@@ -232,12 +264,12 @@ class MCDReforgedServer:
 		self.logger.debug('Interrupting, first strike = {}'.format(not self.is_interrupt()))
 		self.stop(forced=self.is_interrupt())
 		ret = self.is_interrupt()
-		self.flag_interrupt = True
+		self.flags |= MCDReforgedFlags.INTERRUPT
 		return ret
 
 	def stop(self, forced=False):
 		"""
-		stop the server
+		Stop the server
 
 		:param forced: an optional bool. If it's False (default) MCDR will stop the server by sending the STOP_COMMAND from the
 		current parser. If it's True MCDR will just kill the server process group
@@ -246,7 +278,7 @@ class MCDReforgedServer:
 			if not self.is_server_running():
 				self.logger.warning(self.tr('mcdr_server.stop.stop_when_stopped'))
 				return
-			self.set_server_status(ServerStatus.STOPPING)
+			self.set_server_state(ServerState.STOPPING)
 			if not forced:
 				try:
 					self.send(self.parser_manager.get_stop_command())
@@ -262,6 +294,21 @@ class MCDReforgedServer:
 	# --------------------------
 	#      Server Logics
 	# --------------------------
+
+	def on_server_start(self):
+		self.set_exit_naturally(True)
+		self.logger.info(self.tr('mcdr_server.start_server.pid_info', self.process.pid))
+		self.set_server_state(ServerState.RUNNING)
+
+	def on_server_stop(self):
+		return_code = self.process.poll()
+		self.logger.info(self.tr('mcdr_server.on_server_stop.show_stopcode', return_code))
+		self.process.stdin.close()
+		self.process.stdout.close()
+		self.process = None
+		self.flags &= ~(MCDReforgedFlags.SERVER_STARTUP | MCDReforgedFlags.SERVER_RCON_READY)  # removes this two
+		self.plugin_manager.dispatch_event(MCDRPluginEvents.SERVER_STOP, (return_code,))
+		self.set_server_state(ServerState.STOPPED)
 
 	def send(self, text, ending='\n', encoding=None):
 		"""
@@ -309,17 +356,6 @@ class MCDReforgedServer:
 					raise
 				return text.rstrip('\n\r').lstrip('\n\r')
 
-	def on_server_stop(self):
-		return_code = self.process.poll()
-		self.logger.info(self.tr('mcdr_server.on_server_stop.show_stopcode', return_code))
-		self.process = None
-		self.flag_server_startup = False
-		self.flag_server_rcon_ready = False
-		self.set_server_status(ServerStatus.PRE_STOPPED)
-		self.plugin_manager.dispatch_event(MCDRPluginEvents.SERVER_STOP, (return_code,))
-		if self.in_status({ServerStatus.PRE_STOPPED}):
-			self.set_server_status(ServerStatus.STOPPED)
-
 	def tick(self):
 		"""
 		ticking MCDR:
@@ -345,10 +381,10 @@ class MCDReforgedServer:
 					self.logger.debug('    {}'.format(line))
 			parsed_result = self.parser_manager.get_basic_parser().parse_server_stdout(text)
 		else:
-			self.logger.debug('Parsed text from server stdin:')
-			for line in parsed_result.format_text().splitlines():
-				self.logger.debug('    {}'.format(line))
-		parsed_result.attach_mcdr_server(self)
+			if self.logger.should_log_debug(option=DebugOption.PARSER):
+				self.logger.debug('Parsed text from server stdin:')
+				for line in parsed_result.format_text().splitlines():
+					self.logger.debug('    {}'.format(line))
 		self.reactor_manager.put_info(parsed_result)
 
 	def on_mcdr_start(self):
@@ -361,6 +397,7 @@ class MCDReforgedServer:
 			self.logger.info('Console thread disabled')
 		if not self.start_server():
 			raise ServerStartError()
+		self.set_mcdr_state(MCDReforgedState.RUNNING)
 
 	def on_mcdr_stop(self):
 		try:
@@ -369,22 +406,31 @@ class MCDReforgedServer:
 			else:
 				self.logger.info(self.tr('mcdr_server.on_mcdr_stop.server_stop'))
 			self.plugin_manager.dispatch_event(MCDRPluginEvents.MCDR_STOP, ())
+
+			self.set_mcdr_state(MCDReforgedState.PRE_STOPPED)
 			self.task_executor.join()
+
 			self.logger.info(self.tr('mcdr_server.on_mcdr_stop.bye'))
 		except KeyboardInterrupt:  # I don't know why there sometimes will be a KeyboardInterrupt if MCDR is stopped by ctrl-c
 			pass
 		except:
 			self.logger.exception(self.tr('mcdr_server.on_mcdr_stop.stop_error'))
 		finally:
-			self.flag_mcdr_exit = True
+			self.set_mcdr_state(MCDReforgedState.STOPPED)
 
 	def start(self):
 		"""
 		The entry method to start MCDR
 		Try to start the server. if succeeded the console thread will start and MCDR will start ticking
 
-		:raise: Raise ServerStartError if the server is already running or start_server has been called by other
+		:raise: IllegalStateError if MCDR is in wrong state
+		:raise: ServerStartError if the server is already running or start_server has been called by other
 		"""
+		if not self.mcdr_in_state(MCDReforgedState.INITIALIZED):
+			if self.mcdr_in_state(MCDReforgedState.INITIALIZING):
+				raise IllegalStateError('This instance is not fully initialized')
+			else:
+				raise IllegalStateError('MCDR can only start once')
 		self.main_loop()
 		return self.process
 
