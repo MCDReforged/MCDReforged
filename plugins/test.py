@@ -1,4 +1,8 @@
-from mcdr.rtext import *
+from random import random
+
+from mcdreforged.api.all import *
+
+secret = random()
 
 
 def on_load(server, old):
@@ -18,9 +22,11 @@ def add_help_message(server):
 	server.add_help_message('!!!secret', 'get_plugin_instance() test')
 	server.add_help_message('!!!rtext', RText('rtext test').h('it', ' ', 'works', RText('?', styles=RStyle.obfuscated)))
 	server.add_help_message('!!!plugin', 'plugin test')
+	server.add_help_message('!!!color', 'color test')
+	server.add_help_message('!!!logger', 'unique logger test')
 
 
-def on_user_info(server, info):
+def on_user_info(server: ServerInterface, info):
 	if info.content == 'ping':
 		server.reply(info, 'pong')
 
@@ -71,22 +77,28 @@ pid: {}
 		global secret
 		server.reply(
 			info, 'My secret number is {}\nAnd You know it too {}'.format(
-			secret, server.get_plugin_instance('sample_plugin').secret)
+				secret, server.get_plugin_instance('test').secret
+			)
 		)
 
 	if info.content == '!!!plugin':
-		name = server.get_plugin_list()[0]
-		server.reply(info, 'I found "{}"'.format(name))
-		server.disable_plugin(name)
-		server.reply(info, 'I disabled "{}"'.format(name))
-		server.enable_plugin(name)
-		server.reply(info, 'I enabled "{}"'.format(name))
-		server.load_plugin(name)
-		server.reply(info, 'I reloaded "{}"'.format(name))
-		server.refresh_changed_plugins()
-		server.reply(info, 'I refreshed all changed plugins')
-		server.refresh_all_plugins()
-		server.reply(info, 'I refreshed EVERYTHING!')
+		# getters
+		plugin_id = server.get_plugin_list()[0]
+		server.reply(info, 'I found "{}"'.format(plugin_id))
+		meta = server.get_plugin_metadata(plugin_id)
+		server.reply(info, 'I got the metadata of "{}": {}'.format(plugin_id, meta))
+		plugin_file_path = server.get_plugin_file_path(plugin_id)
+		plugin_file_path_disabled = plugin_file_path + '.disabled'
+		server.reply(info, 'I got the file path of "{}": {}'.format(plugin_id, plugin_file_path))
+
+		# manipulations
+		server.disable_plugin(plugin_id),					server.reply(info, 'I disabled "{}"'.format(plugin_id))
+		server.enable_plugin(plugin_file_path_disabled),	server.reply(info, 'I enabled "{}"'.format(plugin_file_path_disabled))
+		server.unload_plugin(plugin_id),					server.reply(info, 'I unloaded "{}"'.format(plugin_id))
+		server.load_plugin(plugin_file_path),				server.reply(info, 'I loaded "{}"'.format(plugin_file_path))
+		server.reload_plugin(plugin_id),					server.reply(info, 'I reloaded "{}"'.format(plugin_id))
+		server.refresh_changed_plugins(),					server.reply(info, 'I refreshed all changed plugins')
+		server.refresh_all_plugins(),						server.reply(info, 'I refreshed EVERYTHING!')
 
 	if info.content == '!!!rtext':
 		server.reply(info, RText('RText!!', color=RColor.gold))
@@ -133,3 +145,7 @@ pid: {}
 		text = '\n'.join([line.strip() for line in text.splitlines()])
 		server.reply(info, text)
 		server.logger.warning(text)
+
+	if info.content == '!!!logger':
+		logger = server.get_unique_logger()
+		logger.info('awa')

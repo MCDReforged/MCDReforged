@@ -55,7 +55,7 @@ decoding:
 
 # A list of folder path where MCDR will search for plugin to load
 plugin_folders:
-- plugins_test
+- plugins
 # - path/to/my/plugin/folder
 
 

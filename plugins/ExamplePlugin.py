@@ -13,7 +13,7 @@ PLUGIN_METADATA = {
 	'author': 'Fallen_Breath',
 	'link': 'https://github.com/Fallen-Breath/MCDReforged',
 	'dependencies': {
-		'MCDReforged': '>=0.10.0',
+		'mcdreforged': '>=0.10.0',
 	}
 }
 
@@ -58,7 +58,10 @@ def on_info(server, info):
 	:param info: a Info instance
 	"""
 	if not info.is_user and re.fullmatch(r'Starting Minecraft server on \S*', info.content):
-		server.reply(info, 'The server bound port {}'.format(info.content.split(':')[-1]))
+		server.logger.info('Minecraft starting')
+
+	if info.content.startswith('[Fallen_Breath: Changed the block at '):
+		info.cancel_echo()
 
 
 def on_user_info(server, info):
@@ -69,15 +72,7 @@ def on_user_info(server, info):
 	:param info: a Info instance
 	"""
 	if info.content == '!!example':
-		server.reply(info, 'Hello world!')
-
-
-'''
-# It works too but not it's not recommend to use
-def on_player_joined(server, player):
-	server.tell(player, 'Welcome!')
-	server.say('Hi {}'.format(player))
-'''
+		server.reply(info, 'example!!')
 
 
 def on_player_joined(server, player, info):

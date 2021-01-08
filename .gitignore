@@ -9,6 +9,7 @@ plugins/*
 !plugins/ExamplePlugin.py
 !plugins/test.py
 plugins_test/*
+plugins0.x/*
 config/
 qb_multi/
 perma_backup/
