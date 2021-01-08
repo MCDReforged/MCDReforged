@@ -52,7 +52,7 @@ class MyTestCase(unittest.TestCase):
 			self.assertIn(info.logging_level, {'INFO', 'WARN', 'ERROR'})
 
 
-TEXT = '''
+TEXT = r'''
 [00:38:41] [Server thread/INFO]: Starting minecraft server version 1.14.4
 [00:38:41] [Server thread/INFO]: Loading properties
 [00:38:41] [Server thread/INFO]: This server is running CraftBukkit version git-Spigot-9de398a-9c887d4 (MC: 1.14.4) (Implementing API version 1.14.4-R0.1-SNAPSHOT)

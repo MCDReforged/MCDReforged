@@ -56,7 +56,7 @@ class MyTestCase(unittest.TestCase):
 			self.assertIn(info.logging_level, {'INFO', 'WARN'})
 
 
-TEXT = '''
+TEXT = r'''
 [00:11:21 INFO]: Loaded 0 recipes
 [00:11:21 INFO]: Starting minecraft server version 1.13.2
 [00:11:21 INFO]: Loading properties

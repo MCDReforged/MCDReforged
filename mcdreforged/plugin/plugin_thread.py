@@ -42,7 +42,7 @@ class PluginThread(threading.Thread):
 				else:
 					plugin = task_data.plugin
 					plugin.plugin_manager.set_current_plugin(plugin)
-					self.setName('{}@{}'.format(self, plugin.get_metadata().id))
+					self.setName('{}@{}'.format(self, plugin.get_id()))
 					self.thread_pool.working_count += 1
 					try:
 						task_data.callback()

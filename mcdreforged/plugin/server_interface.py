@@ -238,13 +238,13 @@ class ServerInterface:
 
 	# Notes: All plugin manipulation will trigger a dependency check, which might cause unwanted plugin operations
 
-	def __check_if_success(self, operation_result: SingleOperationResult) -> bool:
+	def __check_if_success(self, operation_result: SingleOperationResult, check_loaded: bool) -> bool:
 		"""
 		Check if there's any plugin inside the given operation result (load result / reload result etc.)
-		Then check if the plugin passed the dependency check
+		Then check if the plugin passed the dependency check if param check_loaded is True
 		"""
 		success = operation_result.has_success()
-		if success:
+		if success and check_loaded:
 			plugin = operation_result.success_list[0]
 			success = plugin in self.__mcdr_server.plugin_manager.last_operation_result.dependency_check_result.success_list
 		return success
@@ -257,9 +257,9 @@ class ServerInterface:
 		:return: If success
 		"""
 		handler(self.__mcdr_server.plugin_manager)(plugin_file_path)
-		return self.__check_if_success(self.__mcdr_server.plugin_manager.last_operation_result.load_result)
+		return self.__check_if_success(self.__mcdr_server.plugin_manager.last_operation_result.load_result, check_loaded=True)  # the operations is always loading a plugin
 
-	def __existed_regular_plugin_manipulate(self, plugin_id: str, handler: Callable[['PluginManager'], Callable[['RegularPlugin'], Any]], result_getter: Callable[[PluginOperationResult], SingleOperationResult]) -> bool or None:
+	def __existed_regular_plugin_manipulate(self, plugin_id: str, handler: Callable[['PluginManager'], Callable[['RegularPlugin'], Any]], result_getter: Callable[[PluginOperationResult], SingleOperationResult], check_loaded: bool) -> bool or None:
 		"""
 		Manipulate a loaded regular plugin from a given plugin id
 		:param plugin_id: The plugin id of the plugin you want to manipulate
@@ -273,7 +273,7 @@ class ServerInterface:
 		if plugin is not None:
 			handler(self.__mcdr_server.plugin_manager)(plugin)
 			opt_result = result_getter(self.__mcdr_server.plugin_manager.last_operation_result)
-			return self.__check_if_success(opt_result)
+			return self.__check_if_success(opt_result, check_loaded)
 		return None
 
 	@log_call
@@ -310,7 +310,7 @@ class ServerInterface:
 		:return: A bool indicating if the plugin gets reloaded successfully. None if plugin not found
 		:rtype: bool or None
 		"""
-		return self.__existed_regular_plugin_manipulate(plugin_id, lambda mgr: mgr.reload_plugin, lambda lor: lor.reload_result)
+		return self.__existed_regular_plugin_manipulate(plugin_id, lambda mgr: mgr.reload_plugin, lambda lor: lor.reload_result, check_loaded=True)
 
 	@log_call
 	def unload_plugin(self, plugin_id):
@@ -322,7 +322,7 @@ class ServerInterface:
 		:return: A bool indicating if the plugin gets unloaded successfully. None if plugin not found
 		:rtype: bool or None
 		"""
-		return self.__existed_regular_plugin_manipulate(plugin_id, lambda mgr: mgr.unload_plugin, lambda lor: lor.unload_result)
+		return self.__existed_regular_plugin_manipulate(plugin_id, lambda mgr: mgr.unload_plugin, lambda lor: lor.unload_result, check_loaded=False)
 
 	@log_call
 	def disable_plugin(self, plugin_id):
@@ -334,7 +334,7 @@ class ServerInterface:
 		:return: A bool indicating if the plugin gets disabled successfully. None if plugin not found
 		:rtype: bool or None
 		"""
-		return self.__existed_regular_plugin_manipulate(plugin_id, lambda mgr: mgr.disable_plugin, lambda lor: lor.unload_result)
+		return self.__existed_regular_plugin_manipulate(plugin_id, lambda mgr: mgr.disable_plugin, lambda lor: lor.unload_result, check_loaded=False)
 
 	@log_call
 	def refresh_all_plugins(self):
@@ -357,7 +357,7 @@ class ServerInterface:
 
 		:rtype: list[str]
 		"""
-		return [plugin.get_metadata().id for plugin in self.__mcdr_server.plugin_manager.get_regular_plugins()]
+		return [plugin.get_id() for plugin in self.__mcdr_server.plugin_manager.get_regular_plugins()]
 
 	def __existed_regular_plugin_info_getter(self, plugin_id: str, handler: Callable[['RegularPlugin'], Any]):
 		plugin = self.__mcdr_server.plugin_manager.get_regular_plugin_from_id(plugin_id)

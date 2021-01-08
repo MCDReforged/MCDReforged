@@ -14,7 +14,8 @@ AbstractServerHandler
  │   ├─ BukkitHandler
  │   │   ├─ Bukkit14Handler
  │   │   └─ CatServerHandler
- │   └─ ForgeHandler
+ │   ├─ ForgeHandler
+ │   └─ Beta18Handler
  └─ BungeecordHandler
      └─ WaterfallParser
 '''

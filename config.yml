@@ -17,8 +17,7 @@ working_directory: server
 #   java -Djline.terminal=jline.UnsupportedTerminal -jar BungeeCord.jar
 #   ./start.sh
 #   start.bat
-start_command: java -Djline.terminal=jline.UnsupportedTerminal -Xms1G -Xmx2G -jar
-  Waterfall-323.jar nogui
+start_command: java -Xms1G -Xmx2G -jar minecraft_server.jar nogui
 
 
 # The handler to determine the specific way to control the server and parse the output of the server. Available options:
@@ -46,7 +45,7 @@ start_command: java -Djline.terminal=jline.UnsupportedTerminal -Xms1G -Xmx2G -ja
 # waterfall_handler
 #   for Waterfall server
 #
-parser: waterfall_handler
+parser: vanilla_handler
 
 
 # the encoding / decoding format used to encode / decode message to the server. Choose the best method for your os. Examples:

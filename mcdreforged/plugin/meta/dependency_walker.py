@@ -92,13 +92,13 @@ class DependencyWalker:
 		fail_list = []
 		for plugin in self.plugin_manager.get_regular_plugins():
 			try:
-				plugin_id = plugin.get_metadata().id
+				plugin_id = plugin.get_id()
 				if self.get_visiting_status(plugin_id) is not VisitingState.FAIL:
 					self.ensure_loaded(plugin_id, None)
 				else:
 					raise DependencyError('Visiting state of plugin {} is already FAIL'.format(plugin))
 			except DependencyError as e:
-				fail_list.append((plugin.get_metadata().id, e))
+				fail_list.append((plugin.get_id(), e))
 		result = []
 		for plugin_id, error in fail_list:
 			result.append(WalkResult(plugin_id, False, error))

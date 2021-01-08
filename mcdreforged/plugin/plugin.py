@@ -40,6 +40,9 @@ class AbstractPlugin:
 	def get_metadata(self) -> MetaData:
 		raise NotImplementedError()
 
+	def get_id(self) -> id:
+		return self.get_metadata().id
+
 	def get_fallback_metadata_id(self) -> str:
 		raise NotImplementedError()
 

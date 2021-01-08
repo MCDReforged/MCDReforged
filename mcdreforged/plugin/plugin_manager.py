@@ -110,14 +110,14 @@ class PluginManager:
 	# ------------------------------------------------
 
 	def __add_plugin(self, plugin: AbstractPlugin):
-		plugin_id = plugin.get_metadata().id
+		plugin_id = plugin.get_id()
 		self.plugins[plugin_id] = plugin
 		if isinstance(plugin, RegularPlugin):
 			self.plugin_file_path[plugin.file_path] = plugin_id
 
 	def __remove_plugin(self, plugin: AbstractPlugin):
 		if not plugin.is_permanent():
-			self.plugins.pop(plugin.get_metadata().id)
+			self.plugins.pop(plugin.get_id())
 			if isinstance(plugin, RegularPlugin):
 				self.plugin_file_path.pop(plugin.file_path)
 
@@ -141,7 +141,7 @@ class PluginManager:
 			self.logger.exception(self.mcdr_server.tr('plugin_manager.load_plugin.fail', plugin.get_name()))
 			return None
 		else:
-			existed_plugin = self.plugins.get(plugin.get_metadata().id)
+			existed_plugin = self.plugins.get(plugin.get_id())
 			if existed_plugin is None:
 				self.logger.info(self.mcdr_server.tr('plugin_manager.load_plugin.success', plugin.get_name()))
 				self.__add_plugin(plugin)
@@ -188,6 +188,7 @@ class PluginManager:
 		:rtype: bool
 		"""
 		try:
+			plugin.receive_event(MCDRPluginEvents.PLUGIN_UNLOAD, ())
 			plugin.reload()
 		except:
 			self.logger.exception(self.mcdr_server.tr('plugin_manager.reload_plugin.fail', plugin.get_name()))
@@ -295,7 +296,7 @@ class PluginManager:
 		for plugin in load_result.success_list + reload_result.success_list:
 			if plugin in dependency_check_result.success_list:
 				plugin.ready()
-		# TODO: Fix no unload event on reload plugins
+
 		newly_loaded_plugins = {*load_result.success_list, *reload_result.success_list}
 		for plugin in dependency_check_result.success_list:
 			if plugin in newly_loaded_plugins:

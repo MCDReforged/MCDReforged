@@ -2,15 +2,7 @@ from logging import Logger
 from typing import Dict, Optional
 
 from mcdreforged.parser.abstract_server_handler import AbstractServerHandler
-from mcdreforged.parser.impl.basic_handler import BasicHandler
-from mcdreforged.parser.impl.beta18_handler import Beta18Handler
-from mcdreforged.parser.impl.bukkit14_handler import Bukkit14Handler
-from mcdreforged.parser.impl.bukkit_handler import BukkitHandler
-from mcdreforged.parser.impl.bungeecord_handler import BungeecordHandler
-from mcdreforged.parser.impl.cat_server_handler import CatServerHandler
-from mcdreforged.parser.impl.forge_handler import ForgeHandler
-from mcdreforged.parser.impl.vanilla_handler import VanillaHandler
-from mcdreforged.parser.impl.waterfall_handler import WaterfallHandler
+from mcdreforged.parser.impl import *
 
 
 class ServerHandlerManager:
@@ -18,7 +10,7 @@ class ServerHandlerManager:
 		self.logger = logger
 		self.handlers = {}  # type: Dict[str, AbstractServerHandler]
 		self.__current_handler = None  # type: Optional[AbstractServerHandler]
-		self.basic_parser = None  # TODO
+		self.basic_parser = None
 
 	def register_handlers(self):
 		self.basic_parser = BasicHandler()
@@ -40,7 +32,8 @@ class ServerHandlerManager:
 			self.__current_handler = self.handlers[parser_name]
 		except KeyError:
 			self.logger.error('Fail to load parser with name "{}"'.format(parser_name))
-			raise
+			self.logger.error('Fallback basic parser is used, MCDR might not works correctly'.format(parser_name))
+			self.__current_handler = self.basic_parser
 
 	def get_current_handler(self) -> AbstractServerHandler:
 		return self.__current_handler

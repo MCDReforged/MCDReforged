@@ -65,7 +65,7 @@ class YamlDataStorage:
 	def __save(self, data: CommentedMap):
 		self._pre_save(data)
 		with open(self.file_path, 'w', encoding='utf8') as file:
-			yaml.round_trip_dump(data, file)
+			yaml.round_trip_dump(data, file, width=4096)  # specifying width=4096 to prevent yaml breaks long string into multiple lines
 
 	def save(self):
 		self.__save(self.data)
