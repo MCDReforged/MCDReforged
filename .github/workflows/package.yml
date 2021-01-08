@@ -49,12 +49,12 @@ jobs:
         mv * MCDReforged-dev || true
         cd MCDReforged-dev
         rm -rf .git
-        rm -f %name%.spec .gitignore make_release.bat logo_long.png
+        rm -f .gitignore logo_long.png
         mkdir server
         mkdir config
-        cp doc/readme_cn.md .
+        cp docs/readme_cn.md .
         rm -f plugins/*
-        rm -rf doc
+        rm -rf docs
         cd ..
         zip -r MCDReforged-dev.zip ./MCDReforged-dev
 
