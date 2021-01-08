@@ -112,23 +112,17 @@ class ArgumentNode:
 
 	@staticmethod
 	def __smart_callback(callback: Callable, *args):
-		def run(sal: int):
-			arg_len = min(sal, len(args))
-			return callback(*args[:arg_len])
-
 		sig = inspect.signature(callback)
 		spec_args = inspect.getfullargspec(callback).args
 		spec_args_len = len(spec_args)
 		try:
-			sig.bind()
-		except TypeError as e:
-			error = e
-		else:
-			return run(spec_args_len)
-		if len(spec_args) > 0 and spec_args[0] == 'self':  # hacky fix for class method
-			return run(spec_args_len - 1)
-		else:
-			raise error
+			sig.bind(*args[:spec_args_len])  # test if using full arg length is ok
+		except TypeError:
+			if len(spec_args) > 0 and spec_args[0] == 'self':  # hacky fix for class method
+				spec_args_len -= 1
+			else:
+				raise
+		return callback(*args[:spec_args_len])
 
 	def __raise_error(self, source, error: CommandError, context: dict):
 		listener = self.error_listeners.get(type(error))
