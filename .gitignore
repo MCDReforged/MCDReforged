@@ -1,22 +1,35 @@
+# IDE
 .idea
-release
-__pycache__
+
+# python things
+*/__pycache__
+.pytest_cache
+
+# file structure
 log/
-test.py
-a.py
+config/
 server/*
+release/
 plugins/*
-!plugins/ExamplePlugin.py
-!plugins/test.py
 plugins_test/*
 plugins0.x/*
-config/
+!plugins/ExamplePlugin.py
+!plugins/test.py
+
+# plugin things
 qb_multi/
 perma_backup/
 PCRC_recordings/
-MCDReforged.spec
 mc_task.json
 seen.json
 PCRC.log
 MCDR_update/
 back-up/
+
+# random files
+test.py
+
+# user config files
+# these will be automatically generated at the first run
+config.yml
+permission.yml
