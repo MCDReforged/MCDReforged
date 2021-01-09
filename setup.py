@@ -5,7 +5,7 @@ from setuptools import find_packages, setup
 
 from mcdreforged import constant
 
-NAME = 'mcdreforged-Fallen_Breath'
+NAME = 'mcdreforged'
 DESCRIPTION = 'A rewritten version of MCDaemon, a python script to control your Minecraft server'
 URL = 'https://github.com/Fallen-Breath/MCDReforged'
 AUTHOR = 'Fallen_Breath'
@@ -47,7 +47,7 @@ setup(
 	author=AUTHOR,
 	python_requires=REQUIRES_PYTHON,
 	url=URL,
-	packages=find_packages(),
+	packages=find_packages(exclude=['tests', '*.tests', '*.tests.*', 'tests.*']),
 	install_requires=REQUIRED,
 	include_package_data=True,
 	license='GPL-3.0',
