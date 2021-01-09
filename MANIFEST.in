@@ -1,0 +1,3 @@
+recursive-include mcdreforged/resources/*
+
+recursive-exclude tests *

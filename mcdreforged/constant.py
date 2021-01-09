@@ -5,7 +5,8 @@ Constants for MCDR
 import os
 
 
-VERSION = '1.0.0-alpha.2'
+VERSION = '1.0.0-alpha.3'
+VERSION_PYPI = '1.0.0a3'
 NAME_SHORT = 'MCDR'
 NAME = 'MCDReforged'
 GITHUB_URL = 'https://github.com/Fallen-Breath/MCDReforged'

@@ -3,7 +3,13 @@
 
 # python things
 */__pycache__
+venv/
 .pytest_cache
+
+# pypi
+build/
+dist/
+*.egg-info/
 
 # file structure
 log/
