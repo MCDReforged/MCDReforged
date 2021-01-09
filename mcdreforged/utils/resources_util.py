@@ -7,7 +7,7 @@ from typing import Optional
 
 __all__ = [
 	'ROOT_PACKAGE',
-	'get_data'
+	'get_data', 'get_yaml'
 ]
 
 from ruamel import yaml

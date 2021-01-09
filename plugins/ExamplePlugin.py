@@ -28,7 +28,7 @@ def on_load(server, old_module):
 	Like migrating data, reading config file or adding help messages
 
 	:param old_module: Previous plugin instance. If the plugin is freshly loaded it will be None
-	:param server: A ServerInterface instance
+	:param ServerInterface server: A ServerInterface instance
 	"""
 	global counter
 	if old_module is not None:
@@ -97,27 +97,6 @@ def on_player_left(server, player):
 	server.say('Bye {}'.format(player))
 
 
-def on_death_message(server, message):
-	"""
-	RIP someone
-
-	:param server: A ServerInterface instance
-	:param str message: The death message
-	"""
-	server.say('RIP {}'.format(message.split(' ')[0]))
-
-
-def on_player_made_advancement(server, player, advancement):
-	"""
-	Someone just made an advancement, congratulations!
-
-	:param server: A ServerInterface instance
-	:param str player: The name of the player
-	:param str advancement: The name of the advancement / challenge / goal
-	"""
-	server.say('Good job {} u have got "{}"'.format(player, advancement))
-
-
 def on_server_startup(server):
 	"""
 	When the server is fully startup
@@ -147,6 +126,6 @@ def on_mcdr_stop(server):
 
 	:param server: A ServerInterface instance
 	"""
-	server.logger.info('Give me 3 second to prepare exiting')
-	time.sleep(3)
+	server.logger.info('Give me 1 second to prepare exiting')
+	time.sleep(1)
 	server.logger.info('See you next time~')

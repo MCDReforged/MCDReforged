@@ -53,8 +53,6 @@ class MCDRPluginEvents:
 	PLUGIN_LOAD 	= _PluginEventStorage.register(MCDREvent('mcdr.plugin_load', 'Plugin loaded', 'on_load'))
 	PLUGIN_UNLOAD 	= _PluginEventStorage.register(MCDREvent('mcdr.plugin_unload', 'Plugin unloaded', 'on_unload'))
 
-	USER_COMMAND	= _PluginEventStorage.register(MCDREvent('mcdr.on', 'User enter command', 'on_command'))
-
 	@classmethod
 	def get_event_list(cls):
 		return _PluginEventStorage.get_event_list()

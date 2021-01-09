@@ -462,6 +462,14 @@ class ServerInterface:
 	#           Misc
 	# ------------------------
 
+	def is_on_executor_thread(self):
+		"""
+		Return if the current thread is the task executor thread
+		Task executor thread is the main thread to parse messages and trigger listeners
+		:rtype: bool
+		"""
+		return self.__mcdr_server.task_executor.is_on_thread()
+
 	@log_call
 	def get_permission_level(self, obj):
 		"""

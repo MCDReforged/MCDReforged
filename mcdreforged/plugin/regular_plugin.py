@@ -12,6 +12,7 @@ from mcdreforged.plugin.plugin_event import MCDRPluginEvents, EventListener
 from mcdreforged.plugin.plugin_registry import DEFAULT_LISTENER_PRIORITY
 from mcdreforged.utils import misc_util, string_util
 from mcdreforged.utils.exception import IllegalCallError
+from mcdreforged.utils.logger import DebugOption
 
 if TYPE_CHECKING:
 	from mcdreforged.plugin.plugin_manager import PluginManager
@@ -64,13 +65,25 @@ class RegularPlugin(AbstractPlugin):
 				self.module_instance = misc_util.load_source(self.file_path)
 			finally:
 				self.newly_loaded_module = [module for module in sys.modules if module not in previous_modules]
+				self.mcdr_server.logger.debug('Newly loaded modules of {}: {}'.format(self, self.newly_loaded_module), option=DebugOption.PLUGIN)
 		self.__metadata = MetaData(self, getattr(self.module_instance, 'PLUGIN_METADATA', None))
 		self.plugin_registry.clear()
+
+	def __unload_instance(self):
+		with GLOBAL_LOAD_LOCK:
+			for module in self.newly_loaded_module:
+				try:
+					sys.modules.pop(module)
+				except KeyError:
+					self.mcdr_server.logger.critical('Module {} not found when unloading plugin {}'.format(module, repr(self)))
+				else:
+					self.mcdr_server.logger.debug('Removed module {} when unloading plugin {}'.format(module, repr(self)))
+			self.newly_loaded_module.clear()
 
 	def load(self):
 		self.assert_state({PluginState.UNINITIALIZED})
 		self.__load_instance()
-		self.mcdr_server.logger.debug('Plugin {} loaded from {}, file sha256 = {}'.format(self, self.file_path, self.file_hash))
+		self.mcdr_server.logger.debug('Plugin {} loaded from {}, file sha256 = {}'.format(self, self.file_path, self.file_hash), option=DebugOption.PLUGIN)
 		self.set_state(PluginState.LOADED)
 
 	def ready(self):
@@ -83,20 +96,13 @@ class RegularPlugin(AbstractPlugin):
 
 	def reload(self):
 		self.assert_state({PluginState.LOADED, PluginState.READY})
+		self.__unload_instance()
 		self.__load_instance()
 		self.mcdr_server.logger.debug('RegularPlugin {} reloaded, file sha256 = {}'.format(self, self.file_hash))
 
 	def unload(self):
 		self.assert_state({PluginState.UNINITIALIZED, PluginState.LOADED, PluginState.READY})
-		with GLOBAL_LOAD_LOCK:
-			for module in self.newly_loaded_module:
-				try:
-					sys.modules.pop(module)
-				except KeyError:
-					self.mcdr_server.logger.critical('Module {} not found when unloading plugin {}'.format(module, repr(self)))
-				else:
-					self.mcdr_server.logger.debug('Removed module {} when unloading plugin {}'.format(module, repr(self)))
-			self.newly_loaded_module.clear()
+		self.__unload_instance()
 		self.set_state(PluginState.UNLOADING)
 
 	def remove(self):
