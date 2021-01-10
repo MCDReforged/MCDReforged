@@ -5,6 +5,11 @@ from setuptools import find_packages, setup
 
 from mcdreforged import constant
 
+# python setup.py sdist bdist_wheel
+# python -m twine upload --repository testpypi dist/*
+# python -m twine upload dist/*
+
+
 NAME = constant.PACKAGE_NAME
 VERSION = constant.VERSION_PYPI
 DESCRIPTION = 'A rewritten version of MCDaemon, a python script to control your Minecraft server'
