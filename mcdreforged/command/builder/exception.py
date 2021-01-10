@@ -1,5 +1,5 @@
 from abc import ABC
-from typing import Optional
+from typing import Optional, Callable
 
 
 class CommandErrorBase(Exception, ABC):
@@ -32,11 +32,8 @@ class CommandError(CommandErrorBase, ABC):
 	def get_translation_args(self) -> tuple:
 		return ()
 
-	def get_message(self) -> str:
-		return self.__message
-
-	def set_message(self, message: str):
-		self.__message = message
+	def set_translated_message(self, key: str, translator: Callable[[str, tuple], str]):
+		self.__message = translator(key, self.get_translation_args())
 
 	def get_parsed_command(self):
 		return self._parsed_command

@@ -19,12 +19,14 @@ from mcdreforged.utils import string_util, file_util
 
 @unique
 class DebugOption(Enum):
+	# remember to sync with the debug field in the default config file
 	ALL = auto()
 	MCDR = auto()
 	PARSER = auto()
 	REACTOR = auto()
 	PLUGIN = auto()
 	PERMISSION = auto()
+	COMMAND = auto()
 
 
 class MCColoredFormatter(ColoredFormatter):
