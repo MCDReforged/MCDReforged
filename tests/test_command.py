@@ -86,9 +86,9 @@ class MyTestCase(unittest.TestCase):
 		executor = Literal('int').then(Integer('i').runs(lambda s, ctx: self.set_result_from_ctx(ctx, 'i')))
 		self.run_command_and_check_result(executor, 'int 10', 10)
 		self.run_command_and_check_result(executor, 'int -121', -121)
-		self.assertRaises(IllegalArgument, self.run_command, executor, 'int 1.0')
-		self.assertRaises(IllegalArgument, self.run_command, executor, 'int xxx')
-		self.assertRaises(IllegalArgument, self.run_command, executor, 'int 123abc')
+		self.assertRaises(InvalidInteger, self.run_command, executor, 'int 1.0')
+		self.assertRaises(InvalidInteger, self.run_command, executor, 'int xxx')
+		self.assertRaises(InvalidInteger, self.run_command, executor, 'int 123abc')
 
 	def test_4_int_range(self):
 		executor = Literal('int2').then(Integer('i').in_range(10, 20).runs(lambda s, ctx: self.set_result_from_ctx(ctx, 'i')))
@@ -105,7 +105,7 @@ class MyTestCase(unittest.TestCase):
 		self.run_command_and_check_result(executor, 'float -1.56e-9', -1.56e-9)
 		self.run_command_and_check_result(executor, 'float .8', .8)
 		self.assertRaises(NumberOutOfRange, self.run_command, executor, 'float 1.2e9')
-		self.assertRaises(IllegalArgument, self.run_command, executor, 'float 1.2.3')
+		self.assertRaises(InvalidFloat, self.run_command, executor, 'float 1.2.3')
 
 	def test_6_number(self):
 		executor = Literal('number').then(Number('n').in_range(-10, 20).runs(lambda s, ctx: self.set_result_from_ctx(ctx, 'n')))
@@ -113,7 +113,7 @@ class MyTestCase(unittest.TestCase):
 		self.run_command_and_check_result(executor, 'number 8.0', 8.0)
 		self.run_command_and_check_result(executor, 'number -1.56e-9', -1.56e-9)
 		self.assertRaises(NumberOutOfRange, self.run_command, executor, 'number 48595')
-		self.assertRaises(IllegalArgument, self.run_command, executor, 'number xxx')
+		self.assertRaises(InvalidNumber, self.run_command, executor, 'number xxx')
 
 	def test_7_text(self):
 		executor = Literal('text').then(Text('t').runs(lambda s, ctx: self.set_result_from_ctx(ctx, 't')))
@@ -132,8 +132,8 @@ class MyTestCase(unittest.TestCase):
 		self.run_command_and_check_result(executor, 'text "try to quote"', 'try to quote')
 		self.run_command_and_check_result(executor, r'text "aa\"bb\\cc"', r'aa"bb\cc')
 		self.run_command_and_check_result(executor, r'text "\\\\\"ww"', r'\\"ww')
-		self.assertRaises(IllegalArgument, self.run_command, executor, 'text "un quote')
-		self.assertRaises(IllegalArgument, self.run_command, executor, r'text "random escaping \w"')
+		self.assertRaises(UnclosedQuotedString, self.run_command, executor, 'text "un quote')
+		self.assertRaises(IllegalEscapesUsage, self.run_command, executor, r'text "random escaping \w"')
 		self.assertRaises(UnknownArgument, self.run_command, executor, 'text awa awa')
 		self.assertRaises(UnknownArgument, self.run_command, executor, 'text "a b c" awa')
 
@@ -168,14 +168,14 @@ class MyTestCase(unittest.TestCase):
 		self.run_command_and_check_result(executor, 'test 9 12.3 awa', (9, 12.3, 'awa'))
 		self.assertRaises(NumberOutOfRange, self.run_command, executor, 'test 9 58 awa')
 		self.assertRaises(NumberOutOfRange, self.run_command, executor, 'test 81 -.01 awa')
-		self.assertRaises(IllegalArgument, self.run_command, executor, 'test 81 --.01 awa')
-		self.assertRaises(IllegalArgument, self.run_command, executor, 'test -5 xxx awa')
+		self.assertRaises(InvalidFloat, self.run_command, executor, 'test 81 --.01 awa')
+		self.assertRaises(InvalidFloat, self.run_command, executor, 'test -5 xxx awa')
 		self.assertRaises(UnknownArgument, self.run_command, executor, 'test -5 20 xxx yyy')
-		self.assertRaises(IllegalArgument, self.run_command, executor, 'test not_literal')
+		self.assertRaises(InvalidInteger, self.run_command, executor, 'test not_literal')  # literal node all fails, try integer node
 
 		self.run_command_and_check_hit(executor, 'test literal', True)
 		self.run_command_and_check_result(executor, 'test literal 100', 100)
-		self.assertRaises(IllegalArgument, self.run_command, executor, 'test literal 100x')
+		self.assertRaises(InvalidNumber, self.run_command, executor, 'test literal 100x')
 		self.assertRaises(UnknownArgument, self.run_command, executor, 'test literal 100 x')
 
 		self.assertRaises(UnknownCommand, self.run_command, executor, 'test literal dead')
@@ -188,12 +188,16 @@ class MyTestCase(unittest.TestCase):
 				Literal('fail').requires(lambda s: False)
 			)
 		).then(
-			Literal('fail').requires(lambda s: False).runs(self.callback_hit)
+			Literal('fail').requires(lambda s: False, lambda: 'FAIL MESSAGE').runs(self.callback_hit)
 		)
 		self.run_command_and_check_hit(executor, 'permission pass', True)
 		self.assertRaises(RequirementNotMet, self.run_command, executor, 'permission cannot')
 		self.assertRaises(RequirementNotMet, self.run_command, executor, 'permission fail')
 		self.assertRaises(RequirementNotMet, self.run_command, executor, 'permission pass fail')
+		try:
+			self.run_command(executor, 'permission fail')
+		except RequirementNotMet as e:
+			self.assertEqual(('FAIL MESSAGE',), e.get_translation_args())
 
 	def test_12_redirect(self):
 		executor1 = Literal('tp').then(

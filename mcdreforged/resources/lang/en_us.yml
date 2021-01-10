@@ -36,6 +36,7 @@ info_reactor_manager.info_queue.full                : Info queue has been full, 
 config.missing_config: |
   Some options in the config file is missing, use default value
   Remember to check and update the config file as soon as possible
+mcdr_command.permission_denied                      : §cPermission denied§r
 mcdr_command.help_message: |
   §7!!MCDR§r: Show this message
   §7!!MCDR reload§r: Show reload command help message
@@ -160,7 +161,6 @@ server_state.running                                  : §aRunning§r
 server_state.stopping                                 : §cStopping§r
 server_state.pre_stopped                              : §4Pre-stopped§r
 server_state.stopped                                  : §4Stopped§r
-general_reactor.permission_denied                     : Permission denied
 parser_manager.load_parser.file_not_found             : Parser "{0}" not found! Make sure you have given a correct parser name in the config
 parser_manager.load_re_death_message.fail             : Fail to load death message data
 update_helper.check_update.already_checking           : MCDR has already started checking update
@@ -174,7 +174,7 @@ update_helper.check_update.download_fail              : Latest MCDR §cdownloade
 command_exception.unknown_command                     : Unknown command
 command_exception.unknown_argument                    : Unknown argument
 command_exception.unknown_root_argument               : Unknown root argument
-command_exception.requirement_not_met                 : "{0}"
+command_exception.requirement_not_met                 : "{0}"  # keep it as it is
 command_exception.literal_not_match                   : Literal is not match
 command_exception.number_out_of_range                 : Number {0} out of range [{1}, {2}]
 command_exception.invalid_number                      : Invalid number

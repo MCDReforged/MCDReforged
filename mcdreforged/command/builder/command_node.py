@@ -11,6 +11,10 @@ from mcdreforged.command.builder.exception import LiteralNotMatch, NumberOutOfRa
 from mcdreforged.command.command_source import CommandSource
 
 ParseResult = collections.namedtuple('ParseResult', 'value char_read')
+SOURCE_CONTEXT_CALLBACK = Union[Callable[[], Any], Callable[[CommandSource], Any], Callable[[CommandSource, dict], Any]]
+SOURCE_CONTEXT_CALLBACK_BOOL = Union[Callable[[], bool], Callable[[CommandSource], bool], Callable[[CommandSource, dict], bool]]
+SOURCE_CONTEXT_CALLBACK_STR = Union[Callable[[], str], Callable[[CommandSource], str], Callable[[CommandSource, dict], str]]
+SOURCE_ERROR_CONTEXT_CALLBACK = Union[Callable[[], Any], Callable[[CommandSource], Any], Callable[[CommandSource, CommandError], Any], Callable[[CommandSource, CommandError, dict], Any]]
 
 
 class ArgumentNode:
@@ -21,7 +25,7 @@ class ArgumentNode:
 		self.callback = None
 		self.error_listeners = {}  # type: Dict[Type[CommandError], Callable[[CommandSource, CommandError], Any]]
 		self.requirement = lambda source: True
-		self.requirement_reason = None
+		self.requirement_failure_message_getter = None
 		self.redirect_node = None
 
 	# --------------
@@ -44,7 +48,7 @@ class ArgumentNode:
 			self.children.append(node)
 		return self
 
-	def runs(self, func: Union[Callable[[], Any], Callable[[CommandSource], Any], Callable[[CommandSource, dict], Any]]):
+	def runs(self, func: SOURCE_CONTEXT_CALLBACK):
 		"""
 		Executes the given function if the command string ends here
 		:param func: A function to execute at this node which accepts maximum 2 parameters (command source and context)
@@ -53,16 +57,18 @@ class ArgumentNode:
 		self.callback = func
 		return self
 
-	def requires(self, requirement: Union[Callable[[], bool], Callable[[CommandSource], bool], Callable[[CommandSource, dict], bool]], reason: Optional[str] = None):
+	def requires(self, requirement: SOURCE_CONTEXT_CALLBACK_BOOL, failure_message_getter: Optional[SOURCE_CONTEXT_CALLBACK_STR] = None):
 		"""
 		Set the requirement for the command source to enter this node
 		:param requirement: A callable function which accepts maximum 2 parameters (command source and context)
 		and return a bool indicating whether the source is allowed to executes this command or not
-		:param str reason: The reason to show in the exception when the requirement is not met
+		:param failure_message_getter: The reason to show in the exception when the requirement is not met.
+		It's a callable function which accepts maximum 2 parameters (command source and context). If it's not specified,
+		a default message will be used
 		:rtype: ArgumentNode
 		"""
 		self.requirement = requirement
-		self.requirement_reason = reason
+		self.requirement_failure_message_getter = failure_message_getter
 		return self
 
 	def redirects(self, redirect_node: 'ArgumentNode'):
@@ -76,7 +82,7 @@ class ArgumentNode:
 		self.redirect_node = redirect_node
 		return self
 
-	def on_error(self, error_type: Type[CommandError], listener: Union[Callable[[], Any], Callable[[CommandSource], Any], Callable[[CommandSource, CommandError], Any], Callable[[CommandSource, CommandError, dict], Any]]):
+	def on_error(self, error_type: Type[CommandError], listener: SOURCE_ERROR_CONTEXT_CALLBACK):
 		"""
 		When a command error occurs, invoke the listener
 		:param error_type: A class of CommandError or inherited from CommandError
@@ -150,7 +156,9 @@ class ArgumentNode:
 
 			if self.requirement is not None:
 				if not self.__smart_callback(self.requirement, source, context):
-					self.__raise_error(source, RequirementNotMet(command[:success_read], command[:success_read], self.requirement_reason), context)
+					getter = self.requirement_failure_message_getter if self.requirement_failure_message_getter is not None else lambda: None
+					failure_message = self.__smart_callback(getter, source, context)
+					self.__raise_error(source, RequirementNotMet(command[:success_read], command[:success_read], failure_message), context)
 
 			# Parsing finished
 			if len(trimmed_remaining) == 0:

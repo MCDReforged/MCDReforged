@@ -68,7 +68,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 			Literal('!!' + constant.NAME_SHORT).
 			requires(lambda src: src.has_permission(PermissionLevel.MCDR_CONTROL_LEVEL)).
 			runs(lambda src: src.reply(self.get_help_message('mcdr_command.help_message'))).
-			on_error(RequirementNotMet, lambda src: src.reply(RText(self.mcdr_server.tr('general_reactor.permission_denied'), color=RColor.red))).
+			on_error(RequirementNotMet, lambda src: src.reply(RText(self.mcdr_server.tr('mcdr_command.permission_denied'), color=RColor.red))).
 			on_error(UnknownArgument, self.on_mcdr_command_unknown_argument).
 			then(
 				Literal({'r', 'reload'}).

@@ -36,6 +36,7 @@ info_reactor_manager.info_queue.full                : 消息队列已满, 服务
 config.missing_config: |
   配置文件缺失部分选项，使用默认值
   请尽快去检测并更新配置文件
+mcdr_command.permission_denied                      : §c权限不足§r
 mcdr_command.help_message: |
   §7!!MCDR§r: 显示这条消息
   §7!!MCDR reload§r: 显示重载相关的帮助信息
@@ -160,7 +161,6 @@ server_state.running                                  : §a运行中§r
 server_state.stopping                                 : §c正在关闭§r
 server_state.pre_stopped                              : §4即将关闭§r
 server_state.stopped                                  : §4已关闭§r
-general_reactor.permission_denied                     : 权限不足
 parser_manager.load_parser.file_not_found             : 解析器 "{0}" 未找到! 请确保你在配置文件中填写的解析器是正确的
 parser_manager.load_re_death_message.fail             : 死亡信息数据文件加载失败
 update_helper.check_update.already_checking           : MCDR 已在检查更新中
@@ -174,7 +174,7 @@ update_helper.check_update.download_fail              : 最新的 MCDR §c下载
 command_exception.unknown_command                     : 未知指令
 command_exception.unknown_argument                    : 未知参数
 command_exception.unknown_root_argument               : 未知根节点参数
-command_exception.requirement_not_met                 : "{0}"
+command_exception.requirement_not_met                 : "{0}"  # 保持原状
 command_exception.literal_not_match                   : 字面不匹配
 command_exception.number_out_of_range                 : 数字 {0} 超出范围 [{1}, {2}]
 command_exception.invalid_number                      : 无效的数字
