@@ -1,7 +1,6 @@
 """
 Single plugin class
 """
-from abc import ABC
 from typing import Tuple, Any, TYPE_CHECKING
 
 from mcdreforged.command.builder.command_node import Literal
@@ -126,11 +125,3 @@ class AbstractPlugin:
 		self.mcdr_server.logger.debug('{} directly received {}'.format(self, event), option=DebugOption.PLUGIN)
 		for listener in self.plugin_registry.event_listeners.get(event.id, []):
 			self.plugin_manager.trigger_listener(listener, args)
-
-
-class PermanentPlugin(AbstractPlugin, ABC):
-	def __init__(self, plugin_manager: 'PluginManager'):
-		super().__init__(plugin_manager, '**builtin**')
-
-	def is_permanent(self) -> bool:
-		return True

@@ -8,6 +8,7 @@ import mcdreforged.command.builder.command_builder_util as utils
 from mcdreforged.command.builder.command_node import Literal
 from mcdreforged.command.builder.exception import CommandError
 from mcdreforged.command.command_source import CommandSource, CommandSourceType
+from mcdreforged.utils import string_util
 
 if TYPE_CHECKING:
 	from mcdreforged import MCDReforgedServer
@@ -54,4 +55,11 @@ class CommandManager:
 			self.logger.error('Error when executing command "{}" with command source "{}"'.format(command, source), exc_info=exc_info)
 		for error in command_errors:
 			if not error.is_handled():
+				translation_key = 'command_exception.{}'.format(string_util.hump_to_underline(type(error).__name__))
+				try:
+					translated_message = self.mcdr_server.tr(translation_key, *error.get_translation_args(), allow_failure=False)
+				except KeyError:
+					pass
+				else:
+					error.set_message(translated_message)
 				source.reply(error.to_mc_color_text())

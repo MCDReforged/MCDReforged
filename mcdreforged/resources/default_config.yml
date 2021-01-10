@@ -86,6 +86,8 @@ download_update: true
 # Debug mode switches. Don't change it to true unless necessary
 debug:
   all: false
+  mcdr: false
   parser: false
+  reactor: false
   plugin: false
   permission: false

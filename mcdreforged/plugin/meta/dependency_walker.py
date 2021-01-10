@@ -1,4 +1,5 @@
 import collections
+from enum import unique, Enum, auto
 from typing import Dict, List, TYPE_CHECKING
 
 from mcdreforged.plugin.meta.version import VersionRequirement
@@ -28,10 +29,11 @@ class DependencyLoop(DependencyError):
 	pass
 
 
-class VisitingState:
-	UNVISITED = 0
-	PASS = 1
-	FAIL = 2
+@unique
+class VisitingState(Enum):
+	UNVISITED = auto()
+	PASS = auto()
+	FAIL = auto()
 
 
 WalkResult = collections.namedtuple('WalkResult', 'plugin_id success reason')
@@ -40,7 +42,8 @@ WalkResult = collections.namedtuple('WalkResult', 'plugin_id success reason')
 class DependencyWalker:
 	def __init__(self, plugin_manager: 'PluginManager'):
 		self.plugin_manager = plugin_manager
-		self.visiting_state = {}  # type: Dict[str, int]
+		self.tr = plugin_manager.mcdr_server.tr
+		self.visiting_state = {}  # type: Dict[str, VisitingState]
 		self.visiting_plugins = set()
 		self.topo_order = []
 
@@ -56,22 +59,22 @@ class DependencyWalker:
 		if visiting_status == VisitingState.PASS:
 			return
 		if visiting_status == VisitingState.FAIL:
-			raise DependencyParentFail('Parent dependency {} failed to check dependency'.format(plugin_id))
+			raise DependencyParentFail(self.tr('dependency_walker.dependency_parent_failed', plugin_id))
 
 		if plugin_id in self.visiting_plugins:
-			raise DependencyLoop('Dependency loop at {}'.format(plugin_id))
+			raise DependencyLoop(self.tr('dependency_walker.dependency_loop', plugin_id))
 
 		self.visiting_plugins.add(plugin_id)
 		try:
 			plugin = self.plugin_manager.get_plugin_from_id(plugin_id)
 			if plugin is None:
-				raise DependencyNotFound('Dependency {} not found'.format(plugin_id))
+				raise DependencyNotFound(self.tr('dependency_walker.dependency_not_found', plugin_id))
 			plugin_name_display = plugin.get_name()
 			plugin_version = plugin.get_metadata().version
 			plugin_dependencies = plugin.get_metadata().dependencies
 
 			if requirement is not None and isinstance(requirement, VersionRequirement) and not requirement.accept(plugin_version):
-				raise DependencyNotMet('Dependency {} does not meet version requirement {}'.format(plugin_name_display, requirement))
+				raise DependencyNotMet(self.tr('dependency_walker.dependency_not_met', plugin_name_display, requirement))
 			for dep_id, req in plugin_dependencies.items():
 				try:
 					self.ensure_loaded(dep_id, req)
@@ -93,10 +96,11 @@ class DependencyWalker:
 		for plugin in self.plugin_manager.get_regular_plugins():
 			try:
 				plugin_id = plugin.get_id()
-				if self.get_visiting_status(plugin_id) is not VisitingState.FAIL:
+				visiting_state = self.get_visiting_status(plugin_id)
+				if visiting_state is not VisitingState.FAIL:
 					self.ensure_loaded(plugin_id, None)
 				else:
-					raise DependencyError('Visiting state of plugin {} is already FAIL'.format(plugin))
+					raise DependencyError(self.tr('dependency_walker.dependency_already_failed', plugin, visiting_state))
 			except DependencyError as e:
 				fail_list.append((plugin.get_id(), e))
 		result = []

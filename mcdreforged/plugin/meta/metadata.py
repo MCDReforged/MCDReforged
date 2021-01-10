@@ -35,7 +35,7 @@ class MetaData:
 		self.id = data.get('id')
 		if self.id is None:
 			use_fallback_id_reason = 'Plugin ID of {} not found'.format(plugin)
-		elif not isinstance(self.id, str) or re.fullmatch(r'[a-zA-Z0-9-_]{1,64}', self.id) is None:
+		elif not isinstance(self.id, str) or re.fullmatch(r'[a-z0-9_]{1,64}', self.id) is None:
 			use_fallback_id_reason = 'Plugin ID "{}" of {} is invalid'.format(self.id, plugin)
 		if use_fallback_id_reason is not None:
 			self.id = plugin.get_fallback_metadata_id()

@@ -10,7 +10,7 @@ from mcdreforged.info import Info, InfoSource
 from mcdreforged.reactor.impl.general_reactor import GeneralReactor
 from mcdreforged.reactor.impl.player_reactor import PlayerReactor
 from mcdreforged.reactor.impl.server_reactor import ServerReactor
-from mcdreforged.utils.logger import ServerLogger
+from mcdreforged.utils.logger import ServerLogger, DebugOption
 
 if TYPE_CHECKING:
 	from mcdreforged import MCDReforgedServer
@@ -21,18 +21,23 @@ class InfoReactorManager:
 		self.mcdr_server = mcdr_server
 		self.last_queue_full_warn_time = None
 		self.server_logger = ServerLogger('Server')
-		self.reactors = [
+		self.reactors = []
+
+	def load_reactors(self):
+		self.reactors.clear()
+		self.reactors.extend([
 			GeneralReactor(self.mcdr_server),
 			PlayerReactor(self.mcdr_server),
 			ServerReactor(self.mcdr_server),
-		]
+		])
+		# TODO custom reactors
 
 	def process_info(self, info: Info):
 		for reactor in self.reactors:
 			try:
 				reactor.react(info)
 			except:
-				self.mcdr_server.logger.exception(self.mcdr_server.tr('mcdr_server.react.error', type(reactor).__name__))  # TODO: fix translation
+				self.mcdr_server.logger.exception(self.mcdr_server.tr('info_reactor_manager.react.error', type(reactor).__name__))  # TODO: fix translation
 		self.__post_process_info(info)
 
 	def __post_process_info(self, info: Info):
@@ -49,7 +54,9 @@ class InfoReactorManager:
 		except queue.Full:
 			current_time = time.time()
 			logging_method = self.mcdr_server.logger.debug
+			kwargs = {'option': DebugOption.REACTOR}
 			if self.last_queue_full_warn_time is None or current_time - self.last_queue_full_warn_time >= constant.REACTOR_QUEUE_FULL_WARN_INTERVAL_SEC:
 				logging_method = self.mcdr_server.logger.warning
+				kwargs = {}
 				self.last_queue_full_warn_time = current_time
-			logging_method(self.mcdr_server.tr('mcdr_server.info_queue.full'))
+			logging_method(self.mcdr_server.tr('info_reactor_manager.info_queue.full'), **kwargs)

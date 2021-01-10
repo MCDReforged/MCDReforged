@@ -58,7 +58,7 @@ class TaskExecutor(ThreadExecutor):
 		try:
 			task.func()
 		except:
-			self.mcdr_server.logger.exception('Error executing task')  # TODO: translation
+			self.mcdr_server.logger.exception(self.mcdr_server.tr('task_executor.error'))
 		finally:
 			self.task_queue.task_done()
 

@@ -7,9 +7,9 @@ import threading
 from typing import Callable, Dict, Optional, Any, Tuple, List, TYPE_CHECKING
 
 from mcdreforged import constant
-from mcdreforged.plugin.mcdreforged_plugin import MCDReforgedPlugin
 from mcdreforged.plugin.meta.dependency_walker import DependencyWalker
 from mcdreforged.plugin.operation_result import PluginOperationResult, SingleOperationResult
+from mcdreforged.plugin.permanent.mcdreforged_plugin import MCDReforgedPlugin
 from mcdreforged.plugin.plugin import PluginState, AbstractPlugin
 from mcdreforged.plugin.plugin_event import MCDRPluginEvents, MCDREvent, EventListener
 from mcdreforged.plugin.plugin_registry import PluginManagerRegistry
@@ -170,10 +170,10 @@ class PluginManager:
 		except:
 			# should never come here
 			plugin.set_state(PluginState.UNLOADING)
-			self.logger.exception(self.mcdr_server.tr('plugin_manager.unload_plugin.unload_fail', plugin.get_name()))
+			self.logger.exception(self.mcdr_server.tr('plugin_manager.unload_plugin.fail', plugin.get_name()))
 			ret = False
 		else:
-			self.logger.info(self.mcdr_server.tr('plugin_manager.unload_plugin.unload_success', plugin.get_name()))
+			self.logger.info(self.mcdr_server.tr('plugin_manager.unload_plugin.success', plugin.get_name()))
 			ret = True
 		finally:
 			self.__remove_plugin(plugin)
@@ -238,9 +238,9 @@ class PluginManager:
 			plugin = self.plugins.get(item.plugin_id)  # should be not None
 			result.record(plugin, item.success)
 			if not item.success:
-				self.logger.error('Unloading plugin {} due to {}'.format(plugin, item.reason))
+				self.logger.error(self.mcdr_server.tr('plugin_manager.check_plugin_dependencies.item_failed', plugin, item.reason))
 				self.__unload_plugin(plugin)
-		self.logger.debug('Plugin dependency topology order:', option=DebugOption.PLUGIN)
+		self.logger.debug(self.mcdr_server.tr('plugin_manager.check_plugin_dependencies.topo_order'), option=DebugOption.PLUGIN)
 		for plugin in result.success_list:
 			self.logger.debug('- {}'.format(plugin), option=DebugOption.PLUGIN)
 		# the success list order matches the dependency topo order
@@ -336,41 +336,41 @@ class PluginManager:
 
 	def load_plugin(self, file_path: str):
 		self.__check_thread()
-		self.logger.info('Loading plugin from {}'.format(file_path))
+		self.logger.info(self.mcdr_server.tr('plugin_manager.load_plugin.entered', file_path))
 		load_result = self.collect_and_process_new_plugins(lambda fp: fp == file_path)
 		self.__post_plugin_process(load_result=load_result)
 
 	def unload_plugin(self, plugin: RegularPlugin):
 		self.__check_thread()
-		self.logger.info('Unloading plugin {}'.format(plugin))
+		self.logger.info(self.mcdr_server.tr('plugin_manager.unload_plugin.entered', plugin))
 		unload_result = self.collect_and_remove_plugins(lambda plg: True, specific=plugin)
 		self.__post_plugin_process(unload_result=unload_result)
 
 	def reload_plugin(self, plugin: RegularPlugin):
 		self.__check_thread()
-		self.logger.info('Reloading plugin {}'.format(plugin))
+		self.logger.info(self.mcdr_server.tr('plugin_manager.reload_plugin.entered', plugin))
 		reload_result = self.reload_ready_plugins(lambda plg: True, specific=plugin)
 		self.__post_plugin_process(reload_result=reload_result)
 
-	def enable_plugin(self, file_path):
-		self.logger.info('Enabling plugin from {}'.format(file_path))
+	def enable_plugin(self, file_path: str):
+		self.logger.info(self.mcdr_server.tr('plugin_manager.enable_plugin.entered', file_path))
 		new_file_path = string_util.remove_suffix(file_path, constant.DISABLED_PLUGIN_FILE_SUFFIX)
 		if os.path.isfile(file_path):
 			os.rename(file_path, new_file_path)
 			self.load_plugin(new_file_path)
 
 	def disable_plugin(self, plugin: RegularPlugin):
-		self.logger.info('Disabling plugin {}'.format(plugin))
+		self.logger.info(self.mcdr_server.tr('plugin_manager.disable_plugin.entered', plugin))
 		self.unload_plugin(plugin)
 		if os.path.isfile(plugin.file_path):
 			os.rename(plugin.file_path, plugin.file_path + constant.DISABLED_PLUGIN_FILE_SUFFIX)
 
 	def refresh_all_plugins(self):
-		self.logger.info('Refreshing all plugins')
+		self.logger.info('plugin_manager.refresh_all_plugins.entered')
 		return self.__refresh_plugins(lambda plg: True)
 
 	def refresh_changed_plugins(self):
-		self.logger.info('Refreshing all changed plugins')
+		self.logger.info('plugin_manager.refresh_changed_plugins.entered')
 		return self.__refresh_plugins(lambda plg: plg.file_changed())
 
 	# ----------------

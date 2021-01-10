@@ -22,11 +22,11 @@ class EnumStateBase(Enum):
 
 @unique
 class MCDReforgedState(EnumStateBase):
-	INITIALIZING	= 'mcdr_status.initializing' 	# Just entered construction method
-	INITIALIZED		= 'mcdr_status.initialized'		# Construction finished
-	RUNNING			= 'mcdr_status.running'			# MCDR started and is running
-	PRE_STOPPED		= 'mcdr_status.pre_stopped'		# MCDR is stopping and making some cleaning things
-	STOPPED			= 'mcdr_status.stopped'			# MCDR is stopped
+	INITIALIZING	= 'mcdr_state.initializing' 	# Just entered construction method
+	INITIALIZED		= 'mcdr_state.initialized'		# Construction finished
+	RUNNING			= 'mcdr_state.running'			# MCDR started and is running
+	PRE_STOPPED		= 'mcdr_state.pre_stopped'		# MCDR is stopping and making some cleaning things
+	STOPPED			= 'mcdr_state.stopped'			# MCDR is stopped
 
 
 @unique

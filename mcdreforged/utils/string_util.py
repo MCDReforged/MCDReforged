@@ -25,3 +25,7 @@ def format_plugin_file_path(file_path):
 
 def format_plugin_file_path_disabled(file_path):
 	return format_plugin_file_path(file_path) + constant.DISABLED_PLUGIN_FILE_SUFFIX
+
+
+def hump_to_underline(name: str) -> str:
+	return re.sub(r'([a-z]|\d)([A-Z])', r'\1_\2', name).lower()

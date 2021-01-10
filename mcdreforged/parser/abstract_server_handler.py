@@ -1,4 +1,3 @@
-import re
 import time
 from typing import Optional, Any
 
@@ -27,8 +26,7 @@ class AbstractServerHandler:
 	# ---------------------
 
 	def get_name(self) -> str:
-		class_name = type(self).__name__
-		return re.sub(r'([a-z]|\d)([A-Z])', r'\1_\2', class_name).lower()
+		return string_util.hump_to_underline(type(self).__name__)
 
 	# ------------------
 	#   Server control

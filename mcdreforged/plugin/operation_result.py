@@ -63,7 +63,7 @@ class PluginOperationResult:
 				add_element(msg, RText(self.__mcdr_server.tr(key, len(lst))).h('\n'.join(map(str, lst))))
 
 		message = RTextList()
-		add_if_not_empty(message, self.load_result.success_list, 'plugin_operation_result.info_loaded_succeeded')
+		add_if_not_empty(message, list(filter(lambda plg: plg in self.dependency_check_result.success_list, self.load_result.success_list)), 'plugin_operation_result.info_loaded_succeeded')
 		add_if_not_empty(message, self.unload_result.success_list, 'plugin_operation_result.info_unloaded_succeeded')
 		add_if_not_empty(message, self.reload_result.success_list, 'plugin_operation_result.info_reloaded_succeeded')
 		add_if_not_empty(message, self.load_result.failed_list, 'plugin_operation_result.info_loaded_failed')

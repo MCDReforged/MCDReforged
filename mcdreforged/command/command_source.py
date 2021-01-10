@@ -71,6 +71,9 @@ class PlayerCommandSource(CommandSource):
 	def __str__(self):
 		return 'Player {}'.format(self.player)
 
+	def __repr__(self):
+		return '{}[player={}]'.format(type(self).__name__, self.player)
+
 
 class ConsoleCommandSource(CommandSource):
 	def __init__(self, mcdr_server, info):
@@ -87,3 +90,6 @@ class ConsoleCommandSource(CommandSource):
 
 	def __str__(self):
 		return 'Console'
+
+	def __repr__(self):
+		return type(self).__name__

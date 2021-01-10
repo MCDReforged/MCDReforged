@@ -77,7 +77,7 @@ class RegularPlugin(AbstractPlugin):
 				except KeyError:
 					self.mcdr_server.logger.critical('Module {} not found when unloading plugin {}'.format(module, repr(self)))
 				else:
-					self.mcdr_server.logger.debug('Removed module {} when unloading plugin {}'.format(module, repr(self)))
+					self.mcdr_server.logger.debug('Removed module {} when unloading plugin {}'.format(module, repr(self)), option=DebugOption.PLUGIN)
 			self.newly_loaded_module.clear()
 
 	def load(self):

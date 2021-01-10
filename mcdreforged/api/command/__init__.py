@@ -3,7 +3,7 @@ from mcdreforged.command.builder.command_node import ArgumentNode, Literal, Numb
 	GreedyText
 from mcdreforged.command.builder.exception import LiteralNotMatch, NumberOutOfRange, IllegalArgument, EmptyText, \
 	UnknownCommand, UnknownArgument, CommandSyntaxError, UnknownRootArgument, RequirementNotMet, IllegalNodeOperation, \
-	CommandError
+	CommandError, InvalidNumber, InvalidInteger, InvalidFloat, UnclosedQuotedString, IllegalEscapesUsage
 
 __all__ = [
 	# ------------------
@@ -25,7 +25,9 @@ __all__ = [
 	'UnknownCommand', 'UnknownArgument', 'UnknownRootArgument', 'RequirementNotMet',
 
 	'CommandSyntaxError',
-	'IllegalArgument', 'LiteralNotMatch', 'NumberOutOfRange', 'EmptyText',
+	'IllegalArgument', 'LiteralNotMatch',
+	'NumberOutOfRange', 'InvalidNumber', 'InvalidInteger', 'InvalidFloat',
+	'IllegalEscapesUsage', 'UnclosedQuotedString', 'EmptyText',
 
 	# ------------------
 	#       Utils

@@ -5,12 +5,12 @@ from setuptools import find_packages, setup
 
 from mcdreforged import constant
 
-NAME = 'mcdreforged'
+NAME = constant.PACKAGE_NAME
+VERSION = constant.VERSION_PYPI
 DESCRIPTION = 'A rewritten version of MCDaemon, a python script to control your Minecraft server'
 URL = 'https://github.com/Fallen-Breath/MCDReforged'
 AUTHOR = 'Fallen_Breath'
 REQUIRES_PYTHON = '>=3.6.0'
-VERSION = constant.VERSION_PYPI
 
 CLASSIFIERS = [
 	# https://pypi.org/classifiers/

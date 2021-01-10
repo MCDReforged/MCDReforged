@@ -4,12 +4,12 @@ MCDR update things
 import os
 import time
 from threading import Lock
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Callable, Any, Union
 
 import requests
 
 from mcdreforged import constant
-from mcdreforged.minecraft.rtext import RText, RAction, RColor, RStyle
+from mcdreforged.minecraft.rtext import RText, RAction, RColor, RStyle, RTextBase
 from mcdreforged.utils import misc_util, file_util
 
 if TYPE_CHECKING:
@@ -27,22 +27,20 @@ class UpdateHelper:
 
 	def check_update_loop(self):
 		while True:
-			self.check_update()
+			self.check_update(lambda: self.mcdr_server.config['check_update'] is True, self.mcdr_server.logger.info)
 			time.sleep(24 * 60 * 60)
 
-	def check_update(self, reply_func=None):
-		misc_util.start_thread(self.__check_update, (reply_func,), 'CheckUpdate')
+	def check_update(self, condition_check: Callable[[], bool], reply_func: Callable[[Union[str or RTextBase]], Any]):
+		misc_util.start_thread(self.__check_update, (condition_check, reply_func), 'CheckUpdate')
 
-	def __check_update(self, reply_func):
-		if not self.mcdr_server.config['check_update']:
+	def __check_update(self, condition_check: Callable[[], bool], reply_func: Callable[[Union[str or RTextBase]], Any]):
+		if not condition_check():
 			return
 		acquired = self.update_lock.acquire(blocking=False)
 		if not acquired:
 			reply_func(self.mcdr_server.tr('update_helper.check_update.already_checking'))
 			return False
 		try:
-			if reply_func is None:
-				reply_func = self.mcdr_server.logger.info
 			response = None
 			try:
 				response = requests.get(constant.GITHUB_API_LATEST, timeout=5).json()
@@ -69,8 +67,7 @@ class UpdateHelper:
 				if cmp_result == 0:
 					reply_func(self.mcdr_server.tr('update_helper.check_update.is_already_latest'))
 				elif cmp_result == 1:
-					reply_func(self.mcdr_server.tr('update_helper.check_update.newer_than_latest', constant.VERSION,
-											  latest_version))
+					reply_func(self.mcdr_server.tr('update_helper.check_update.newer_than_latest', constant.VERSION, latest_version))
 				else:
 					reply_func(self.mcdr_server.tr('update_helper.check_update.new_version_detected', latest_version))
 					for line in update_log.splitlines():

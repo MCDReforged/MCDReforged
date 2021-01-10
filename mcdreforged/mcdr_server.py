@@ -1,4 +1,5 @@
 import locale
+import os
 import sys
 import time
 import traceback
@@ -66,17 +67,17 @@ class MCDReforgedServer:
 		try:
 			self.load_config(allowed_missing_file=False)  # loads config, language, handlers
 		except FileNotFoundError:
-			self.logger.info('Config is missing, default config generated')
+			self.logger.info(self.tr('mcdr_server.init.config_file_missing'))
 			self.config.save_default()
 			file_missing = True
 		try:
 			self.permission_manager.load_permission_file(allowed_missing_file=False)
 		except FileNotFoundError:
-			self.logger.info('Permission file is missing, default permission file generated')
+			self.logger.info(self.tr('mcdr_server.init.permission_file_missing'))
 			self.permission_manager.save_default()
 			file_missing = True
 		if file_missing:
-			self.logger.info('Some of the files are missing, check them and launch MCDR again')
+			self.logger.info(self.tr('mcdr_server.init.file_missing'))
 			return
 		self.plugin_manager.register_permanent_plugins()
 
@@ -96,8 +97,8 @@ class MCDReforgedServer:
 	#   Translate info strings
 	# --------------------------
 
-	def tr(self, text, *args):
-		result = self.language_manager.translate(text).strip()
+	def tr(self, text, *args, allow_failure=True):
+		result = self.language_manager.translate(text, allow_failure)
 		if len(args) > 0:
 			result = result.format(*args)
 		return result
@@ -130,6 +131,11 @@ class MCDReforgedServer:
 		self.logger.info(self.tr('mcdr_server.on_config_changed.encoding_decoding_set', self.encoding_method, self.decoding_method))
 
 		self.plugin_manager.set_plugin_folders(self.config['plugin_folders'])
+		self.logger.info(self.tr('mcdr_server.on_config_changed.plugin_folders_set', self.encoding_method, self.decoding_method))
+		for folder in self.plugin_manager.plugin_folders:
+			self.logger.info('- {}'.format(folder))
+
+		self.reactor_manager.load_reactors()
 
 		self.connect_rcon()
 
@@ -170,7 +176,7 @@ class MCDReforgedServer:
 			self.flags |= MCDReforgedFlags.EXIT_NATURALLY
 		else:
 			self.flags &= ~MCDReforgedFlags.EXIT_NATURALLY
-		self.logger.debug('flag_exit_naturally has set to "{}"'.format(flag))
+		self.logger.debug('flag_exit_naturally has set to "{}"'.format(flag), option=DebugOption.MCDR)
 
 	# State
 
@@ -185,11 +191,11 @@ class MCDReforgedServer:
 
 	def set_server_state(self, state):
 		self.server_state = state
-		self.logger.debug('Server state has set to "{}"'.format(state))
+		self.logger.debug('Server state has set to "{}"'.format(state), option=DebugOption.MCDR)
 
 	def set_mcdr_state(self, state):
 		self.mcdr_state = state
-		self.logger.debug('MCDR state has set to "{}"'.format(state))
+		self.logger.debug('MCDR state has set to "{}"'.format(state), option=DebugOption.MCDR)
 
 	def should_keep_looping(self):
 		"""
@@ -224,6 +230,10 @@ class MCDReforgedServer:
 				return False
 			if self.is_server_running():
 				self.logger.warning(self.tr('mcdr_server.start_server.start_twice'))
+				return False
+			cwd = self.config['working_directory']
+			if not os.path.isdir(cwd):
+				self.logger.error(self.tr('mcdr_server.start_server.cwd_not_existed', cwd))
 				return False
 			try:
 				start_command = self.config['start_command']
@@ -262,7 +272,7 @@ class MCDReforgedServer:
 		Return if it's the first try
 		:rtype: bool
 		"""
-		self.logger.debug('Interrupting, first strike = {}'.format(not self.is_interrupt()))
+		self.logger.info('Interrupting, first strike = {}'.format(not self.is_interrupt()))
 		self.stop(forced=self.is_interrupt())
 		ret = self.is_interrupt()
 		self.flags |= MCDReforgedFlags.INTERRUPT
@@ -282,7 +292,7 @@ class MCDReforgedServer:
 			self.set_server_state(ServerState.STOPPING)
 			if not forced:
 				try:
-					self.send(self.server_handler_manager.get_stop_command())
+					self.send(self.server_handler_manager.get_current_handler().get_stop_command())
 				except:
 					self.logger.error(self.tr('mcdr_server.stop.stop_fail'))
 					forced = True
@@ -395,7 +405,7 @@ class MCDReforgedServer:
 		if not self.config['disable_console_thread']:
 			self.console_handler.start()
 		else:
-			self.logger.info('Console thread disabled')
+			self.logger.info(self.tr('mcdr_server.on_mcdr_start.console_disabled'))
 		if not self.start_server():
 			raise ServerStartError()
 		self.set_mcdr_state(MCDReforgedState.RUNNING)
@@ -437,7 +447,7 @@ class MCDReforgedServer:
 
 	def main_loop(self):
 		"""
-		the main loop of MCDR
+		The main loop of MCDR
 		"""
 		self.on_mcdr_start()
 		while self.should_keep_looping():

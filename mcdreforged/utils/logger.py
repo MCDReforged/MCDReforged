@@ -7,6 +7,8 @@ import os
 import sys
 import time
 import zipfile
+from enum import Enum, unique, auto
+from typing import Dict, Optional
 
 from colorlog import ColoredFormatter
 
@@ -15,11 +17,14 @@ from mcdreforged.minecraft.rtext import RColorConvertor
 from mcdreforged.utils import string_util, file_util
 
 
-class DebugOption:
-	ALL = 'all'
-	PARSER = 'parser'
-	PLUGIN = 'plugin'
-	PERMISSION = 'permission'
+@unique
+class DebugOption(Enum):
+	ALL = auto()
+	MCDR = auto()
+	PARSER = auto()
+	REACTOR = auto()
+	PLUGIN = auto()
+	PERMISSION = auto()
 
 
 class MCColoredFormatter(ColoredFormatter):
@@ -79,12 +84,14 @@ class MCDReforgedLogger(logging.Logger):
 
 		self.debug_options = {}
 
-	def set_debug_options(self, debug_options: dict):
-		self.debug_options = debug_options
+	def set_debug_options(self, debug_options: Dict[str, bool]):
 		for key, value in debug_options.items():
-			self.debug('Debug option {} is set to {}'.format(key, value))
+			option = DebugOption[key.upper()]
+			self.debug_options[option] = value
+		for option, value in self.debug_options.items():
+			self.debug('Debug option {} is set to {}'.format(option, value), option=option)
 
-	def should_log_debug(self, option=None):
+	def should_log_debug(self, option: Optional[DebugOption] = None):
 		do_log = self.debug_options.get(DebugOption.ALL, False)
 		if option is not None:
 			do_log |= self.debug_options.get(option, False)

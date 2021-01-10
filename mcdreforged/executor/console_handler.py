@@ -7,21 +7,20 @@ class ConsoleHandler(ThreadExecutor):
 		return True
 
 	def tick(self):
-		# TODO: fix translation
 		try:
 			text = input()
 			parsed_result: Info
 			try:
 				parsed_result = self.mcdr_server.server_handler_manager.get_current_handler().parse_console_command(text)
 			except:
-				self.mcdr_server.logger.exception(self.mcdr_server.tr('mcdr_server.console_input.parse_fail', text))
+				self.mcdr_server.logger.exception(self.mcdr_server.tr('console_handler.parse_fail', text))
 			else:
-				self.mcdr_server.logger.debug('Parsed text from console input:')
+				self.mcdr_server.logger.debug('Parsed text from {}:'.format(type(self).__name__))
 				for line in parsed_result.format_text().splitlines():
 					self.mcdr_server.logger.debug('    {}'.format(line))
 				self.mcdr_server.reactor_manager.put_info(parsed_result)
 		except (KeyboardInterrupt, EOFError, SystemExit, IOError) as e:
-			self.mcdr_server.logger.debug('Exception {} {} caught in console_input()'.format(type(e), e))
+			self.mcdr_server.logger.critical('Critical exception caught in {}: {} {}'.format(type(self).__name__, type(e).__name__, e))
 			self.mcdr_server.interrupt()
 		except:
-			self.mcdr_server.logger.exception(self.mcdr_server.tr('mcdr_server.console_input.error'))
+			self.mcdr_server.logger.exception(self.mcdr_server.tr('console_handler.error'))

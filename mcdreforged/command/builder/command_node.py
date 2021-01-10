@@ -1,36 +1,37 @@
 import collections
 import inspect
 from abc import ABC
-from typing import List, Callable, Iterable, Set, Dict, Type, Any, Union
+from typing import List, Callable, Iterable, Set, Dict, Type, Any, Union, Optional
 
 from mcdreforged.command.builder import command_builder_util as utils
-from mcdreforged.command.builder.exception import LiteralNotMatch, NumberOutOfRange, IllegalArgument, EmptyText, \
+from mcdreforged.command.builder.exception import LiteralNotMatch, NumberOutOfRange, EmptyText, \
 	UnknownCommand, UnknownArgument, CommandSyntaxError, UnknownRootArgument, RequirementNotMet, IllegalNodeOperation, \
-	CommandError
+	CommandError, InvalidNumber, InvalidInteger, InvalidFloat, UnclosedQuotedString, IllegalEscapesUsage, \
+	TextLengthOutOfRange
 from mcdreforged.command.command_source import CommandSource
 
 ParseResult = collections.namedtuple('ParseResult', 'value char_read')
 
 
 class ArgumentNode:
-	def __init__(self, name):
+	def __init__(self, name: Optional[str]):
 		self.name = name
 		self.children_literal = {}  # type: Dict[str, List[Literal]]
 		self.children = []  # type: List[ArgumentNode]
 		self.callback = None
 		self.error_listeners = {}  # type: Dict[Type[CommandError], Callable[[CommandSource, CommandError], Any]]
 		self.requirement = lambda source: True
+		self.requirement_reason = None
 		self.redirect_node = None
 
 	# --------------
 	#   Interfaces
 	# --------------
 
-	def then(self, node):
+	def then(self, node: 'ArgumentNode') -> 'ArgumentNode':
 		"""
 		Add a child node to this node
-		:param ArgumentNode node: a child node for new level command
-		:rtype: ArgumentNode
+		:param node: a child node for new level command
 		"""
 		if self.redirect_node is not None:
 			raise IllegalNodeOperation('Redirected node is not allowed to add child nodes')
@@ -46,23 +47,25 @@ class ArgumentNode:
 	def runs(self, func: Union[Callable[[], Any], Callable[[CommandSource], Any], Callable[[CommandSource, dict], Any]]):
 		"""
 		Executes the given function if the command string ends here
-		:param func: A function to execute at this node, with 0 to 2 args
+		:param func: A function to execute at this node which accepts maximum 2 parameters (command source and context)
 		:rtype: ArgumentNode
 		"""
 		self.callback = func
 		return self
 
-	def requires(self, requirement: Union[Callable[[], bool], Callable[[CommandSource], bool]]):
+	def requires(self, requirement: Union[Callable[[], bool], Callable[[CommandSource], bool], Callable[[CommandSource, dict], bool]], reason: Optional[str] = None):
 		"""
 		Set the requirement for the command source to enter this node
-		:param requirement: A callable function which accepts 1 parameter (the command source) and return a bool
-		indicating whether the source is allowed to executes this command or not
+		:param requirement: A callable function which accepts maximum 2 parameters (command source and context)
+		and return a bool indicating whether the source is allowed to executes this command or not
+		:param str reason: The reason to show in the exception when the requirement is not met
 		:rtype: ArgumentNode
 		"""
 		self.requirement = requirement
+		self.requirement_reason = reason
 		return self
 
-	def redirects(self, redirect_node):
+	def redirects(self, redirect_node: 'ArgumentNode'):
 		"""
 		Redirect the child branches of this node to the child branches of the given node
 		:type redirect_node: ArgumentNode
@@ -77,7 +80,7 @@ class ArgumentNode:
 		"""
 		When a command error occurs, invoke the listener
 		:param error_type: A class of CommandError or inherited from CommandError
-		:param listener: A callback function, with 0 to 3 args
+		:param listener: A callback function which accepts maximum 3 parameters (command source, error and context)
 		:return:
 		"""
 		self.error_listeners[error_type] = listener
@@ -90,7 +93,7 @@ class ArgumentNode:
 	def has_children(self):
 		return len(self.children) + len(self.children_literal) > 0
 
-	def parse(self, text):
+	def parse(self, text: str):
 		"""
 		Try to parse the text and get a argument. Return a ParseResult instance indicating the parsing result
 		ParseResult.success: If the parsing is success
@@ -142,12 +145,12 @@ class ArgumentNode:
 			success_read += result.char_read
 			trimmed_remaining = utils.remove_divider_prefix(remaining[result.char_read:])
 
-			if self.requirement is not None:
-				if not self.__smart_callback(self.requirement, source):
-					self.__raise_error(source, RequirementNotMet(command[:success_read], command[:success_read]), context)
-
 			if self.__does_store_thing():
 				context[self.name] = result.value
+
+			if self.requirement is not None:
+				if not self.__smart_callback(self.requirement, source, context):
+					self.__raise_error(source, RequirementNotMet(command[:success_read], command[:success_read], self.requirement_reason), context)
 
 			# Parsing finished
 			if len(trimmed_remaining) == 0:
@@ -240,34 +243,26 @@ class Literal(ExecutableNode):
 class NumberNode(ArgumentNode, ABC):
 	def __init__(self, name):
 		super().__init__(name)
-		self.min_value = None
-		self.max_value = None
+		self.__min_value = None
+		self.__max_value = None
 
 	def at_min(self, min_value):
-		"""
-		Static range check
-		"""
-		self.min_value = min_value
+		self.__min_value = min_value
 		return self
 
 	def at_max(self, max_value):
-		"""
-		Static range check
-		"""
-		self.max_value = max_value
+		self.__max_value = max_value
 		return self
 
 	def in_range(self, min_value, max_value):
-		"""
-		Static range check
-		"""
 		self.at_min(min_value)
 		self.at_max(max_value)
 		return self
 
-	def _check_in_range(self, value, char_read):
-		if (self.min_value is not None and value < self.min_value) or (self.max_value is not None and value > self.max_value):
-			raise NumberOutOfRange('Value out of range [{}, {}]'.format(self.min_value, self.max_value), char_read)
+	def _check_in_range_and_return(self, value, char_read):
+		if (self.__min_value is not None and value < self.__min_value) or (self.__max_value is not None and value > self.__max_value):
+			raise NumberOutOfRange(char_read, value, self.__min_value, self.__max_value)
+		return ParseResult(value, char_read)
 
 
 class Number(NumberNode):
@@ -279,10 +274,9 @@ class Number(NumberNode):
 		if value is None:
 			value, read = utils.get_float(text)
 		if value is not None:
-			self._check_in_range(value, read)
-			return ParseResult(value, read)
+			return self._check_in_range_and_return(value, read)
 		else:
-			raise IllegalArgument('Invalid number', read)
+			raise InvalidNumber(read)
 
 
 class Integer(NumberNode):
@@ -292,20 +286,18 @@ class Integer(NumberNode):
 	def parse(self, text):
 		value, read = utils.get_int(text)
 		if value is not None:
-			self._check_in_range(value, read)
-			return ParseResult(value, read)
+			return self._check_in_range_and_return(value, read)
 		else:
-			raise IllegalArgument('Invalid integer', read)
+			raise InvalidInteger(read)
 
 
 class Float(NumberNode):
 	def parse(self, text):
 		value, read = utils.get_float(text)
 		if value is not None:
-			self._check_in_range(value, read)
-			return ParseResult(value, read)
+			return self._check_in_range_and_return(value, read)
 		else:
-			raise IllegalArgument('Invalid float', read)
+			raise InvalidFloat(read)
 
 # ------------------
 #   Text Arguments
@@ -313,7 +305,29 @@ class Float(NumberNode):
 
 
 class TextNode(ArgumentNode, ABC):
-	pass
+	def __init__(self, name):
+		super().__init__(name)
+		self.__min_length = None
+		self.__max_length = None
+
+	def at_min_length(self, min_length):
+		self.__min_length = min_length
+		return self
+
+	def at_max_length(self, max_length):
+		self.__max_length = max_length
+		return self
+
+	def in_length_range(self, min_length, max_length):
+		self.__min_length = min_length
+		self.__max_length = max_length
+		return self
+
+	def _check_length_in_range_and_return(self, text, char_read):
+		length = len(text)
+		if (self.__min_length is not None and length < self.__min_length) or (self.__max_length is not None and length > self.__max_length):
+			raise TextLengthOutOfRange(char_read, length, self.__min_length, self.__max_length)
+		return ParseResult(text, char_read)
 
 
 class Text(TextNode):
@@ -323,7 +337,7 @@ class Text(TextNode):
 	"""
 	def parse(self, text):
 		arg = utils.get_element(text)
-		return ParseResult(arg, len(arg))
+		return self._check_length_in_range_and_return(arg, len(arg))
 
 
 class QuotableText(Text):
@@ -351,18 +365,18 @@ class QuotableText(Text):
 					collected.append(ch)
 					escaped = False
 				else:
-					raise IllegalArgument("Illegal usage of escapes", i + 1)
+					raise IllegalEscapesUsage(i + 1)
 			elif ch == self.ESCAPE_CHAR:
 				escaped = True
 			elif ch == self.QUOTE_CHAR:
 				result = ''.join(collected)
 				if not self.empty_allowed and len(result) == 0:
-					raise EmptyText('Empty text is not allowed', i + 1)
-				return ParseResult(result, i + 1)
+					raise EmptyText(i + 1)
+				return self._check_length_in_range_and_return(result, i + 1)
 			else:
 				collected.append(ch)
 			i += 1
-		raise IllegalArgument("Unclosed quoted string", len(text))
+		raise UnclosedQuotedString(len(text))
 
 
 class GreedyText(TextNode):
@@ -370,4 +384,4 @@ class GreedyText(TextNode):
 	A greedy text argument, which will consume all remaining input
 	"""
 	def parse(self, text):
-		return ParseResult(text, len(text))
+		return self._check_length_in_range_and_return(text, len(text))
