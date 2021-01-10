@@ -175,7 +175,7 @@ class ServerInterface:
 	# ------------------------
 
 	@log_call
-	def execute(self, text, encoding=None):
+	def execute(self, text, *, encoding=None):
 		"""
 		Execute a command by sending the command content to server's standard input stream
 
@@ -186,7 +186,7 @@ class ServerInterface:
 		self.__mcdr_server.send(text, encoding=encoding)
 
 	@log_call
-	def tell(self, player, text, encoding=None):
+	def tell(self, player, text, *, encoding=None):
 		"""
 		Use /tellraw <target> to send the message to the specific player
 
@@ -201,7 +201,7 @@ class ServerInterface:
 			self.execute(command, encoding=encoding, is_plugin_call=False)
 
 	@log_call
-	def say(self, text, encoding=None):
+	def say(self, text, *, encoding=None):
 		"""
 		Use /tellraw @a to broadcast the message in game
 
@@ -215,7 +215,7 @@ class ServerInterface:
 			self.execute(command, encoding=encoding, is_plugin_call=False)
 
 	@log_call
-	def reply(self, info, text, encoding=None):
+	def reply(self, info, text, *, encoding=None):
 		"""
 		Reply to the source of the Info
 		If the Info is from a player then use tell to reply the player
@@ -231,6 +231,19 @@ class ServerInterface:
 			self.tell(info.player, text, encoding=encoding, is_plugin_call=False)
 		else:
 			misc_util.print_text_to_console(self.logger, text)
+
+	@log_call
+	def broadcast(self, text, *, encoding=None):
+		"""
+		Broadcast the message in game and  console
+
+		:param text: the message you want to send
+		:param str encoding: The encoding method for the text
+		:type text: str or dict or list or RTextBase
+		:rtype: None
+		"""
+		self.say(text, encoding=encoding, is_plugin_call=False)
+		misc_util.print_text_to_console(self.logger, text)
 
 	# ------------------------
 	#     Plugin Operations
