@@ -1,7 +1,7 @@
 MCDReforged
 --------
 
-[English](https://github.com/Fallen-Breath/MCDReforged/blob/master/readme.md)
+[English](https://github.com/Fallen-Breath/MCDReforged/blob/master/README.md)
 
 > 这是一个基于 Python 的 Minecraft 服务端控制工具
 

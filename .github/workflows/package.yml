@@ -54,7 +54,7 @@ jobs:
         rm -f .gitignore logo_long.png
         mkdir server
         mkdir config
-        cp docs/readme_cn.md .
+        cp docs/README_cn.md .
         rm -f plugins/*
         rm -rf docs
         cd ..

@@ -2,7 +2,7 @@ MCDReforged
 --------
 ![MCDR-banner](https://raw.githubusercontent.com/Fallen-Breath/MCDReforged/master/logo_long.png)
 
-[中文](https://github.com/Fallen-Breath/MCDReforged/blob/master/docs/readme_cn.md)
+[中文](https://github.com/Fallen-Breath/MCDReforged/blob/master/docs/README_cn.md)
 
 > This is a python based Minecraft server control tool
 
