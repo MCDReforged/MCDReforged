@@ -3,7 +3,7 @@ mcdr_server.init.permission_file_missing            : 权限文件缺失，默�
 mcdr_server.init.file_missing                       : 存在缺失的用户文件，请在再次启动 MCDR 前查阅它们
 mcdr_server.on_config_changed.language_set          : 语言已设置为 {0}
 mcdr_server.on_config_changed.debug_mode_on         : 调试模式开启
-mcdr_server.on_config_changed.parser_set            : 解析器已设置为 {0}
+mcdr_server.on_config_changed.handler_set           : 解析处理器已设置为 {0}
 mcdr_server.on_config_changed.encoding_decoding_set : 编码 / 解码方式已设置为 {0} / {1}
 mcdr_server.on_config_changed.plugin_folders_set    : "插件文件夹列表:"
 mcdr_server.start_server.already_interrupted        : MCDR 已被终止
@@ -113,9 +113,9 @@ mcdr_command.help_message_mcdr                        : MCDR 控制指令
 permission_manager.load.fail                          : 加载权限文件 §7{0}§r §c失败§r，使用默认的空数据
 permission_manager.set_default_permission_level.done  : 默认权限等级已设置为 §e{0}§r
 permission_manager.set_permission_level.done          : 玩家 §b{0}§r 的权限等级已设置为 §e{1}§r
-plugin_operation_result.info_loaded_succeeded         : "已加载: §7{0}§r 个插件"
-plugin_operation_result.info_unloaded_succeeded       : "已卸载: §7{0}§r 个插件"
-plugin_operation_result.info_reloaded_succeeded       : "已重载: §7{0}§r 个插件"
+plugin_operation_result.info_loaded_succeeded         : "共加载: §7{0}§r 个插件"
+plugin_operation_result.info_unloaded_succeeded       : "共卸载: §7{0}§r 个插件"
+plugin_operation_result.info_reloaded_succeeded       : "共重载: §7{0}§r 个插件"
 plugin_operation_result.info_loaded_failed            : "加载失败: §7{0}§r 个插件"
 plugin_operation_result.info_unloaded_failed          : "卸载失败: §7{0}§r 个插件"
 plugin_operation_result.info_reloaded_failed          : "重载失败: §7{0}§r 个插件"
@@ -128,7 +128,7 @@ plugin_manager.reload                                 : 重载
 plugin_manager.load_plugin.entered                    : 正在从 {0} 加载插件
 plugin_manager.load_plugin.fail                       : 插件 {0} 加载失败
 plugin_manager.load_plugin.success                    : 插件 {0} 已加载
-plugin_manager.load_plugin.duplicate                  : 插件 {0} ({1}) 拥有与已存在插件 {2} ({3}) 相同的 uuid，已移除
+plugin_manager.load_plugin.duplicate                  : 插件 {0} ({1}) 拥有与已存在插件 {2} ({3}) 相同的 id，已移除
 plugin_manager.load_plugin.unload_duplication_fail    : 重复插件 {0} ({1}) 卸载失败
 plugin_manager.unload_plugin.entered                  : 正在卸载插件 {0}
 plugin_manager.unload_plugin.fail                     : 插件 {0} 卸载失败
@@ -143,7 +143,7 @@ plugin_manager.refresh_changed_plugins.entered        : 刷新所有变更的插
 plugin_manager.check_plugin_dependencies.item_failed  : "卸载插件 {0}，原因: {1}"
 plugin_manager.check_plugin_dependencies.topo_order   : "插件依赖拓扑顺序:"
 dependency_walker.dependency_parent_failed            : 父依赖项 {0} 依赖检查失败
-dependency_walker.dependency_loop                     : 于 {0} 检查到循环依赖
+dependency_walker.dependency_loop                     : "于 {0} 检查到循环依赖: {1}"
 dependency_walker.dependency_not_found                : 未找到依赖项 {0}
 dependency_walker.dependency_not_met                  : 依赖项 {0} 不满足版本约束 {1}
 dependency_walker.dependency_already_failed           : 插件 {0} 的访问状态已为 {1}
@@ -161,8 +161,8 @@ server_state.running                                  : §a运行中§r
 server_state.stopping                                 : §c正在关闭§r
 server_state.pre_stopped                              : §4即将关闭§r
 server_state.stopped                                  : §4已关闭§r
-parser_manager.load_parser.file_not_found             : 解析器 "{0}" 未找到! 请确保你在配置文件中填写的解析器是正确的
-parser_manager.load_re_death_message.fail             : 死亡信息数据文件加载失败
+handler_manager.load_handler.file_not_found             : 解析器 "{0}" 未找到! 请确保你在配置文件中填写的解析器是正确的
+handler_manager.load_re_death_message.fail             : 死亡信息数据文件加载失败
 update_helper.check_update.already_checking           : MCDR 已在检查更新中
 update_helper.check_update.check_fail                 : "从 Github 检测最新版本失败: {0}"
 update_helper.check_update.is_already_latest          : MCDR 已为最新版

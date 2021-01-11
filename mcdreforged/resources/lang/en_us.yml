@@ -3,7 +3,7 @@ mcdr_server.init.permission_file_missing            : Permission file is missing
 mcdr_server.init.file_missing                       : Some of the user files are missing, check them before launch MCDR again
 mcdr_server.on_config_changed.language_set          : Language has set to {0}
 mcdr_server.on_config_changed.debug_mode_on         : Debug mode on
-mcdr_server.on_config_changed.parser_set            : Parser has set to {0}
+mcdr_server.on_config_changed.handler_set           : Handler has set to {0}
 mcdr_server.on_config_changed.encoding_decoding_set : Encoding / Decoding method has set to {0} / {1}
 mcdr_server.on_config_changed.plugin_folders_set    : "Plugin folder list:"
 mcdr_server.start_server.already_interrupted        : MCDR has already been interrupted
@@ -143,7 +143,7 @@ plugin_manager.refresh_changed_plugins.entered        : Refreshing all changed p
 plugin_manager.check_plugin_dependencies.item_failed  : Unloading plugin {0} due to "{1}"
 plugin_manager.check_plugin_dependencies.topo_order   : "Plugin dependency topology order:"
 dependency_walker.dependency_parent_failed            : Parent dependency {0} failed to check dependency
-dependency_walker.dependency_loop                     : Dependency loop at {0}
+dependency_walker.dependency_loop                     : "Dependency loop found at {0}: {1}"
 dependency_walker.dependency_not_found                : Dependency {0} not found
 dependency_walker.dependency_not_met                  : Dependency {0} does not meet version requirement {1}
 dependency_walker.dependency_already_failed           : Visiting state of plugin {0} is already {1}
@@ -161,8 +161,8 @@ server_state.running                                  : §aRunning§r
 server_state.stopping                                 : §cStopping§r
 server_state.pre_stopped                              : §4Pre-stopped§r
 server_state.stopped                                  : §4Stopped§r
-parser_manager.load_parser.file_not_found             : Parser "{0}" not found! Make sure you have given a correct parser name in the config
-parser_manager.load_re_death_message.fail             : Fail to load death message data
+handler_manager.load_handler.file_not_found             : Handler "{0}" not found! Make sure you have given a correct handler name in the config
+handler_manager.load_re_death_message.fail             : Fail to load death message data
 update_helper.check_update.already_checking           : MCDR has already started checking update
 update_helper.check_update.check_fail                 : "Fail to detect latest version from Github: {0}"
 update_helper.check_update.is_already_latest          : MCDR is already the latset version

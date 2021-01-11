@@ -1,6 +1,6 @@
 import unittest
 
-from mcdreforged.parser.impl.beta18_handler import Beta18Handler
+from mcdreforged.handler.impl.beta18_handler import Beta18Handler
 
 
 class MyTestCase(unittest.TestCase):

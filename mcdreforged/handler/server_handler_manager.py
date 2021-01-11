@@ -1,8 +1,8 @@
 from logging import Logger
 from typing import Dict, Optional
 
-from mcdreforged.parser.abstract_server_handler import AbstractServerHandler
-from mcdreforged.parser.impl import *
+from mcdreforged.handler.abstract_server_handler import AbstractServerHandler
+from mcdreforged.handler.impl import *
 
 
 class ServerHandlerManager:
@@ -10,11 +10,11 @@ class ServerHandlerManager:
 		self.logger = logger
 		self.handlers = {}  # type: Dict[str, AbstractServerHandler]
 		self.__current_handler = None  # type: Optional[AbstractServerHandler]
-		self.basic_parser = None
+		self.basic_handler = None
 
 	def register_handlers(self):
-		self.basic_parser = BasicHandler()
-		self.add_handler(self.basic_parser)
+		self.basic_handler = BasicHandler()
+		self.add_handler(self.basic_handler)
 		self.add_handler(VanillaHandler())
 		self.add_handler(BukkitHandler())
 		self.add_handler(Bukkit14Handler())
@@ -24,19 +24,19 @@ class ServerHandlerManager:
 		self.add_handler(BungeecordHandler())
 		self.add_handler(WaterfallHandler())
 
-	def add_handler(self, parser: AbstractServerHandler):
-		self.handlers[parser.get_name()] = parser
+	def add_handler(self, handler: AbstractServerHandler):
+		self.handlers[handler.get_name()] = handler
 
-	def set_handler(self, parser_name: str):
+	def set_handler(self, handler_name: str):
 		try:
-			self.__current_handler = self.handlers[parser_name]
+			self.__current_handler = self.handlers[handler_name]
 		except KeyError:
-			self.logger.error('Fail to load parser with name "{}"'.format(parser_name))
-			self.logger.error('Fallback basic parser is used, MCDR might not works correctly'.format(parser_name))
-			self.__current_handler = self.basic_parser
+			self.logger.error('Fail to load handler with name "{}"'.format(handler_name))
+			self.logger.error('Fallback basic handler is used, MCDR might not works correctly'.format(handler_name))
+			self.__current_handler = self.basic_handler
 
 	def get_current_handler(self) -> AbstractServerHandler:
 		return self.__current_handler
 
 	def get_basic_handler(self) -> AbstractServerHandler:
-		return self.basic_parser
+		return self.basic_handler

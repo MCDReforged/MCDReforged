@@ -3,9 +3,9 @@ from typing import Optional, Any
 
 from parse import parse
 
+from mcdreforged.handler.impl.vanilla_handler import VanillaHandler
 from mcdreforged.info import Info
 from mcdreforged.minecraft.rtext import RTextBase
-from mcdreforged.parser.impl.vanilla_handler import VanillaHandler
 from mcdreforged.utils import string_util
 
 

@@ -1,11 +1,11 @@
 import unittest
 
-from mcdreforged.parser.impl.basic_handler import BasicHandler
+from mcdreforged.handler.impl.basic_handler import BasicHandler
 
 TEXT = '''
 A quick example text
-Another line for basic parser testing
-Basic parser should work like a simple wrapper, 
+Another line for basic handler testing
+Basic handler should work like a simple wrapper, 
 that only adds time stamp and source information of the given text
 '''.strip()
 

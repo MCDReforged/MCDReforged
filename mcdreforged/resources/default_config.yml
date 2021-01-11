@@ -45,7 +45,7 @@ start_command: java -Xms1G -Xmx2G -jar minecraft_server.jar nogui
 # waterfall_handler
 #   for Waterfall server
 #
-parser: vanilla_handler
+handler: vanilla_handler
 
 
 # the encoding / decoding format used to encode / decode message to the server. Choose the best method for your os. Examples:
@@ -75,6 +75,11 @@ rcon_password: password
 disable_console_thread: false
 
 
+# If set to true, MCDR will removed all console font formatter codes in before any message gets printed onto the console
+disable_console_color: false
+
+
+
 # If set to true, if MCDR detects a newer version it will automatically download it
 check_update: false
 
@@ -98,7 +103,7 @@ info_reactors:
 debug:
   all: false
   mcdr: false
-  parser: false
+  handler: false
   reactor: false
   plugin: false
   permission: false

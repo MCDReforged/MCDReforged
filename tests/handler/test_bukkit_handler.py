@@ -1,6 +1,6 @@
 import unittest
 
-from mcdreforged.parser.impl.bukkit_handler import BukkitHandler
+from mcdreforged.handler.impl.bukkit_handler import BukkitHandler
 
 
 class MyTestCase(unittest.TestCase):

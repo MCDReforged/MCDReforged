@@ -1,6 +1,6 @@
 import unittest
 
-from mcdreforged.parser.impl.forge_handler import ForgeHandler
+from mcdreforged.handler.impl.forge_handler import ForgeHandler
 
 
 class MyTestCase(unittest.TestCase):

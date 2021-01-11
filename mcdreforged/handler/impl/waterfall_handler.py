@@ -2,9 +2,9 @@ from typing import Optional
 
 from parse import parse
 
+from mcdreforged.handler.impl.bukkit_handler import BukkitHandler
+from mcdreforged.handler.impl.bungeecord_handler import BungeecordHandler
 from mcdreforged.info import Info
-from mcdreforged.parser.impl.bukkit_handler import BukkitHandler
-from mcdreforged.parser.impl.bungeecord_handler import BungeecordHandler
 
 
 class WaterfallHandler(BungeecordHandler):

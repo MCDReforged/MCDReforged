@@ -45,6 +45,7 @@ class DependencyWalker:
 		self.tr = plugin_manager.mcdr_server.tr
 		self.visiting_state = {}  # type: Dict[str, VisitingState]
 		self.visiting_plugins = set()
+		self.visiting_plugin_stack = []
 		self.topo_order = []
 
 	def get_visiting_status(self, plugin_id):
@@ -62,9 +63,18 @@ class DependencyWalker:
 			raise DependencyParentFail(self.tr('dependency_walker.dependency_parent_failed', plugin_id))
 
 		if plugin_id in self.visiting_plugins:
-			raise DependencyLoop(self.tr('dependency_walker.dependency_loop', plugin_id))
+			start = 0
+			for i, pid in enumerate(self.visiting_plugin_stack):
+				if pid == plugin_id:
+					start = i
+					break
+			loop_list = self.visiting_plugin_stack[start:]
+			loop_list.append(plugin_id)
+			loop_message = ' -> '.join(loop_list)
+			raise DependencyLoop(self.tr('dependency_walker.dependency_loop', plugin_id, loop_message))
 
 		self.visiting_plugins.add(plugin_id)
+		self.visiting_plugin_stack.append(plugin_id)
 		try:
 			plugin = self.plugin_manager.get_plugin_from_id(plugin_id)
 			if plugin is None:
@@ -87,6 +97,7 @@ class DependencyWalker:
 				self.visiting_state[plugin_id] = VisitingState.PASS
 		finally:
 			self.visiting_plugins.remove(plugin_id)
+			self.visiting_plugin_stack.pop(len(self.visiting_plugin_stack) - 1)
 
 	def walk(self) -> List[WalkResult]:
 		self.visiting_state.clear()

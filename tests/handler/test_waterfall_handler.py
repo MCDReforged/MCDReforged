@@ -1,6 +1,6 @@
 import unittest
 
-from mcdreforged.parser.impl.waterfall_handler import WaterfallHandler
+from mcdreforged.handler.impl.waterfall_handler import WaterfallHandler
 
 
 class MyTestCase(unittest.TestCase):

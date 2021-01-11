@@ -1,5 +1,5 @@
-from mcdreforged.parser.impl.bukkit_handler import BukkitHandler
-from mcdreforged.parser.impl.vanilla_handler import VanillaHandler
+from mcdreforged.handler.impl.bukkit_handler import BukkitHandler
+from mcdreforged.handler.impl.vanilla_handler import VanillaHandler
 
 
 class Bukkit14Handler(BukkitHandler):

@@ -1,6 +1,6 @@
 import unittest
 
-from mcdreforged.parser.impl.bungeecord_handler import BungeecordHandler
+from mcdreforged.handler.impl.bungeecord_handler import BungeecordHandler
 
 
 class MyTestCase(unittest.TestCase):

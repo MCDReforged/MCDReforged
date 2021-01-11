@@ -16,7 +16,7 @@ AbstractServerHandler
  │   ├─ ForgeHandler
  │   └─ Beta18Handler
  └─ BungeecordHandler
-     └─ WaterfallParser
+     └─ WaterfallHandler
 '''
 
 
@@ -56,13 +56,12 @@ class AbstractServerHandler:
 
 	def pre_parse_server_stdout(self, text: str) -> str:
 		"""
-		Remove useless things like console color code in the text before parse
+		Remove useless / annoying things like control characters in the text before parse
 
 		:param str text: A line of the server stdout to be parsed
-		:return: Trimmed line
 		:rtype: str
 		"""
-		return string_util.clean_console_color_code(text)
+		return text
 
 	@classmethod
 	def parse_console_command(cls, text: str) -> Info:
@@ -96,7 +95,8 @@ class AbstractServerHandler:
 			raise TypeError('The text to parse should be a string')
 		result = Info()
 		result.source = InfoSource.SERVER
-		result.content = result.raw_content = text
+		result.raw_content = text
+		result.content = string_util.clean_console_color_code(text)
 		return result
 
 	@classmethod

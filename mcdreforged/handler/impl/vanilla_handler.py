@@ -4,9 +4,9 @@ from typing import Optional, Any
 
 from parse import parse
 
+from mcdreforged.handler.abstract_server_handler import AbstractServerHandler
 from mcdreforged.info import Info
 from mcdreforged.minecraft.rtext import RTextBase
-from mcdreforged.parser.abstract_server_handler import AbstractServerHandler
 
 
 class VanillaHandler(AbstractServerHandler):

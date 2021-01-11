@@ -1,6 +1,6 @@
 import unittest
 
-from mcdreforged.parser.impl.vanilla_handler import VanillaHandler
+from mcdreforged.handler.impl.vanilla_handler import VanillaHandler
 
 
 class MyTestCase(unittest.TestCase):

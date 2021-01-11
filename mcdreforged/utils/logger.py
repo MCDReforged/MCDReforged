@@ -22,11 +22,15 @@ class DebugOption(Enum):
 	# remember to sync with the debug field in the default config file
 	ALL = auto()
 	MCDR = auto()
-	PARSER = auto()
+	HANDLER = auto()
 	REACTOR = auto()
 	PLUGIN = auto()
 	PERMISSION = auto()
 	COMMAND = auto()
+
+
+# global flag
+console_color_disabled = False
 
 
 class MCColoredFormatter(ColoredFormatter):
@@ -34,6 +38,8 @@ class MCColoredFormatter(ColoredFormatter):
 		text = super().formatMessage(record)
 		text = RColorConvertor.convert_minecraft_color_code(text)  # minecraft code -> console code
 		text = string_util.clean_minecraft_color_code(text)  # clean the rest of minecraft codes
+		if console_color_disabled:
+			text = string_util.clean_console_color_code(text)
 		return text
 
 

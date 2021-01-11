@@ -1,6 +1,6 @@
 from parse import parse
 
-from mcdreforged.parser.impl.vanilla_handler import VanillaHandler
+from mcdreforged.handler.impl.vanilla_handler import VanillaHandler
 
 
 class BukkitHandler(VanillaHandler):

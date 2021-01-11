@@ -45,14 +45,14 @@ class PermissionManager(YamlDataStorage):
 		Return the default permission level
 		:rtype: str
 		"""
-		return self.data['default_level']
+		return self._data['default_level']
 
 	def set_default_permission_level(self, level: PermissionLevelItem):
 		"""
 		Set default permission level
 		A message will be informed using server logger
 		"""
-		self.data['default_level'] = level.name
+		self._data['default_level'] = level.name
 		self.save()
 		self.mcdr_server.logger.info(self.mcdr_server.tr('permission_manager.set_default_permission_level.done', level.name))
 
@@ -65,9 +65,9 @@ class PermissionManager(YamlDataStorage):
 		:rtype: list[str]
 		"""
 		level_name = PermissionLevel.from_value(value).name
-		if self.data[level_name] is None:
-			self.data[level_name] = []
-		return self.data[level_name]
+		if self._data[level_name] is None:
+			self._data[level_name] = []
+		return self._data[level_name]
 
 	def add_player(self, player, level_name=None):
 		"""

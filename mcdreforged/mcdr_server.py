@@ -14,16 +14,17 @@ from mcdreforged.command.command_manager import CommandManager
 from mcdreforged.config import Config
 from mcdreforged.executor.console_handler import ConsoleHandler
 from mcdreforged.executor.task_executor import TaskExecutor
+from mcdreforged.handler.server_handler_manager import ServerHandlerManager
 from mcdreforged.info import Info
 from mcdreforged.info_reactor.info_reactor_manager import InfoReactorManager
 from mcdreforged.language_manager import LanguageManager
 from mcdreforged.mcdr_state import ServerState, MCDReforgedState, MCDReforgedFlags
 from mcdreforged.minecraft.rcon.rcon_manager import RconManager
-from mcdreforged.parser.server_handler_manager import ServerHandlerManager
 from mcdreforged.permission.permission_manager import PermissionManager
 from mcdreforged.plugin.plugin_event import MCDRPluginEvents
 from mcdreforged.plugin.plugin_manager import PluginManager
 from mcdreforged.plugin.server_interface import ServerInterface
+from mcdreforged.utils import logger
 from mcdreforged.utils.exception import IllegalCallError, ServerStopped, ServerStartError, IllegalStateError
 from mcdreforged.utils.logger import DebugOption, MCDReforgedLogger
 from mcdreforged.utils.update_helper import UpdateHelper
@@ -52,7 +53,7 @@ class MCDReforgedServer:
 		self.task_executor = TaskExecutor(self)
 		self.console_handler = ConsoleHandler(self)
 		self.language_manager = LanguageManager(self.logger)
-		self.config = Config(self.logger)  # TODO: config query lock
+		self.config = Config(self.logger)
 		self.rcon_manager = RconManager(self)
 		self.server_handler_manager = ServerHandlerManager(self.logger)
 		self.reactor_manager = InfoReactorManager(self)
@@ -61,7 +62,7 @@ class MCDReforgedServer:
 		self.permission_manager = PermissionManager(self)
 
 		# --- Initialize fields instance ---
-		# register handlers first, so when the config is loaded the parser is ready to be set
+		# register handlers first, so when the config is loaded the handler is ready to be set
 		self.server_handler_manager.register_handlers()
 		file_missing = False
 		try:
@@ -116,6 +117,7 @@ class MCDReforgedServer:
 				self.logger.warning(line)
 
 	def on_config_changed(self):
+		logger.console_color_disabled = self.config['disable_console_color']
 		self.logger.set_debug_options(self.config['debug'])
 		if self.config.is_debug_on():
 			self.logger.info(self.tr('mcdr_server.on_config_changed.debug_mode_on'))
@@ -123,8 +125,8 @@ class MCDReforgedServer:
 		self.language_manager.set_language(self.config['language'])
 		self.logger.info(self.tr('mcdr_server.on_config_changed.language_set', self.config['language']))
 
-		self.server_handler_manager.set_handler(self.config['parser'])
-		self.logger.info(self.tr('mcdr_server.on_config_changed.parser_set', self.config['parser']))
+		self.server_handler_manager.set_handler(self.config['handler'])
+		self.logger.info(self.tr('mcdr_server.on_config_changed.handler_set', self.config['handler']))
 
 		self.encoding_method = self.config['encoding'] if self.config['encoding'] is not None else sys.getdefaultencoding()
 		self.decoding_method = self.config['decoding'] if self.config['decoding'] is not None else locale.getpreferredencoding()
@@ -283,7 +285,7 @@ class MCDReforgedServer:
 		Stop the server
 
 		:param forced: an optional bool. If it's False (default) MCDR will stop the server by sending the STOP_COMMAND from the
-		current parser. If it's True MCDR will just kill the server process group
+		current handler. If it's True MCDR will just kill the server process group
 		"""
 		with self.stop_lock:
 			if not self.is_server_running():
@@ -386,13 +388,13 @@ class MCDReforgedServer:
 		try:
 			parsed_result = self.server_handler_manager.get_current_handler().parse_server_stdout(text)
 		except:
-			if self.logger.should_log_debug(option=DebugOption.PARSER):  # traceback.format_exc() is costly
-				self.logger.debug('Fail to parse text "{}" from stdout of the server, using raw parser'.format(text))
+			if self.logger.should_log_debug(option=DebugOption.HANDLER):  # traceback.format_exc() is costly
+				self.logger.debug('Fail to parse text "{}" from stdout of the server, using raw handler'.format(text))
 				for line in traceback.format_exc().splitlines():
 					self.logger.debug('    {}'.format(line))
 			parsed_result = self.server_handler_manager.get_basic_handler().parse_server_stdout(text)
 		else:
-			if self.logger.should_log_debug(option=DebugOption.PARSER):
+			if self.logger.should_log_debug(option=DebugOption.HANDLER):
 				self.logger.debug('Parsed text from server stdin:')
 				for line in parsed_result.format_text().splitlines():
 					self.logger.debug('    {}'.format(line))

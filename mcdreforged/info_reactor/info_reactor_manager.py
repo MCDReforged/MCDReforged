@@ -42,7 +42,7 @@ class InfoReactorManager:
 			try:
 				reactor.react(info)
 			except:
-				self.mcdr_server.logger.exception(self.mcdr_server.tr('info_reactor_manager.react.error', type(reactor).__name__))  # TODO: fix translation
+				self.mcdr_server.logger.exception(self.mcdr_server.tr('info_reactor_manager.react.error', type(reactor).__name__))
 		self.__post_process_info(info)
 
 	def __post_process_info(self, info: Info):

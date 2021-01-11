@@ -1,5 +1,6 @@
 import os
 from logging import Logger
+from threading import RLock
 
 from ruamel import yaml
 from ruamel.yaml.comments import CommentedMap
@@ -11,11 +12,12 @@ from mcdreforged.utils.lazy_item import LazyItem
 class YamlDataStorage:
 	def __init__(self, logger: Logger, file_path: str, default_file_path: str):
 		self.logger = logger
-		self.file_path = file_path
-		self.default_file_path = default_file_path
-		self.data = CommentedMap()
-		self.default_data = LazyItem(lambda: resources_util.get_yaml(self.default_file_path))
+		self.__file_path = file_path
+		self.__default_file_path = default_file_path
+		self._data = CommentedMap()
+		self.__default_data = LazyItem(lambda: resources_util.get_yaml(self.__default_file_path))
 		self.__has_changes = False
+		self._data_operation_lock = RLock()
 
 	def _load_data(self, allowed_missing_file) -> bool:
 		"""
@@ -24,15 +26,17 @@ class YamlDataStorage:
 		:return: if there is any missing data entry
 		:raise: FileNotFoundError
 		"""
-		if os.path.isfile(self.file_path):
-			with open(self.file_path, encoding='utf8') as file:
+		if os.path.isfile(self.__file_path):
+			with open(self.__file_path, encoding='utf8') as file:
 				users_data = yaml.round_trip_load(file)
 		else:
 			if not allowed_missing_file:
 				raise FileNotFoundError()
 			users_data = {}
 		self.__has_changes = False
-		self.data = self.__fix(self.default_data.get(), users_data)
+		fixed_result = self.__fix(self.__default_data.get(), users_data)
+		with self._data_operation_lock:
+			self._data = fixed_result
 		self.save()
 		return self.__has_changes
 
@@ -63,12 +67,13 @@ class YamlDataStorage:
 		pass
 
 	def __save(self, data: CommentedMap):
-		self._pre_save(data)
-		with open(self.file_path, 'w', encoding='utf8') as file:
-			yaml.round_trip_dump(data, file, width=4096)  # specifying width=4096 to prevent yaml breaks long string into multiple lines
+		with self._data_operation_lock:
+			self._pre_save(data)
+			with open(self.__file_path, 'w', encoding='utf8') as file:
+				yaml.round_trip_dump(data, file, width=4096)  # specifying width=4096 to prevent yaml breaks long string into multiple lines
 
 	def save(self):
-		self.__save(self.data)
+		self.__save(self._data)
 
 	def save_default(self):
-		self.__save(self.default_data.get())
+		self.__save(self.__default_data.get())

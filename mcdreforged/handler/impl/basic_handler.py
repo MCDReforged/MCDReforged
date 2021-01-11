@@ -1,14 +1,21 @@
 """
-The basic plain parser
+The basic plain handler
 """
+from typing import Any, Optional
 
+from mcdreforged.handler.abstract_server_handler import AbstractServerHandler
 from mcdreforged.info import Info
-from mcdreforged.parser.abstract_server_handler import AbstractServerHandler
 
 
 class BasicHandler(AbstractServerHandler):
 	def get_stop_command(self) -> str:
 		return ''
+
+	def get_send_message_command(self, target: str, message: Any) -> Optional[str]:
+		return None
+
+	def get_broadcast_message_command(self, message: Any) -> Optional[str]:
+		return None
 
 	def parse_server_stdout(self, text: str) -> Info:
 		return self._get_server_stdout_raw_result(text)

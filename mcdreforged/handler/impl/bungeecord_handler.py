@@ -3,9 +3,9 @@ from typing import Any, Optional
 
 from parse import parse
 
+from mcdreforged.handler.abstract_server_handler import AbstractServerHandler
+from mcdreforged.handler.impl.beta18_handler import Beta18Handler
 from mcdreforged.info import Info
-from mcdreforged.parser.abstract_server_handler import AbstractServerHandler
-from mcdreforged.parser.impl.beta18_handler import Beta18Handler
 
 
 class BungeecordHandler(AbstractServerHandler):

@@ -1,6 +1,6 @@
 import unittest
 
-from mcdreforged.parser.impl.cat_server_handler import CatServerHandler
+from mcdreforged.handler.impl.cat_server_handler import CatServerHandler
 
 
 class MyTestCase(unittest.TestCase):
