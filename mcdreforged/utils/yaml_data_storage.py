@@ -76,5 +76,8 @@ class YamlDataStorage:
 	def save(self):
 		self.__save(self._data)
 
+	def get_default(self):
+		return self.__default_data.get()
+
 	def save_default(self):
-		self.__save(self.__default_data.get())
+		self.__save(self.get_default())

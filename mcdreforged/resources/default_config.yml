@@ -99,6 +99,8 @@ download_update: true
 #
 # custom_info_reactors:
 # - my.custom.reactor.MyInfoReactor
+#
+# All custom info reactors will be registered to the reactor list to process information from the server
 custom_info_reactors:
 
 
@@ -108,6 +110,9 @@ custom_info_reactors:
 #
 # custom_handlers:
 # - my.custom.handler.MyHandler
+#
+# Then you can use the name of your handler in the "handler" option above to use your handler
+# The name of a handler is defined in the get_name method
 custom_handlers:
 
 

@@ -24,7 +24,7 @@ from mcdreforged.permission.permission_manager import PermissionManager
 from mcdreforged.plugin.plugin_event import MCDRPluginEvents
 from mcdreforged.plugin.plugin_manager import PluginManager
 from mcdreforged.plugin.server_interface import ServerInterface
-from mcdreforged.utils import logger
+from mcdreforged.utils import logger, file_util
 from mcdreforged.utils.exception import IllegalCallError, ServerStopped, ServerStartError, IllegalStateError
 from mcdreforged.utils.logger import DebugOption, MCDReforgedLogger
 from mcdreforged.utils.update_helper import UpdateHelper
@@ -77,7 +77,7 @@ class MCDReforgedServer:
 			self.permission_manager.save_default()
 			file_missing = True
 		if file_missing:
-			self.logger.error('Some of the user files are missing, check them before launch MCDR again')
+			self.on_first_start()
 			return
 		self.plugin_manager.register_permanent_plugins()
 
@@ -92,6 +92,12 @@ class MCDReforgedServer:
 				self.kill_server()
 		except:
 			pass
+
+	def on_first_start(self):
+		self.logger.error('Some of the user files are missing, check them before launch MCDR again')
+		default_config = self.config.get_default()
+		file_util.touch_folder(default_config['working_directory'])
+		self.plugin_manager.set_plugin_folders(default_config['plugin_folders'])  # to touch the directory
 
 	# --------------------------
 	#   Translate info strings
