@@ -99,7 +99,7 @@ class MCDReforgedServer:
 	# --------------------------
 
 	def tr(self, text, *args, allow_failure=True):
-		result = self.language_manager.translate(text, allow_failure)
+		result = self.language_manager.translate(text, allow_failure).strip('\r\n')
 		if len(args) > 0:
 			result = result.format(*args)
 		return result
