@@ -30,6 +30,11 @@ CLASSIFIERS = [
 	'Operating System :: OS Independent'
 ]
 
+if os.getenv('CI', None) is not None:
+	build_num = os.getenv('GITHUB_RUN_NUMBER', None)
+	if build_num is not None and os.getenv('GITHUB_REF', None) == 'refs/heads/dev':
+		VERSION += '.dev{}'.format(build_num)
+
 # ----------------------------------------------------------------
 
 here = os.path.abspath(os.path.dirname(__file__))

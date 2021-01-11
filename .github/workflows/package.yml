@@ -41,6 +41,7 @@ jobs:
   assemble:
     runs-on: ubuntu-latest
     name: Assemble a dev build compressed file
+    needs: test
 
     steps:
     - uses: actions/checkout@v2
@@ -63,3 +64,39 @@ jobs:
       with:
         name: MCDReforged dev build for ${{ github.sha }}
         path: MCDReforged-dev.zip
+
+  pypi-dev:
+    runs-on: ubuntu-latest
+    name: Upload a dev version to test pypi
+    needs: test
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup python
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - uses: actions/cache@v2
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install setuptools wheel
+
+    - name: Create distribution
+      run: |
+        python setup.py sdist bdist_wheel
+
+    - name: Publish a Python distribution to PyPI
+      if: github.ref == 'refs/heads/dev'
+      uses: pypa/gh-action-pypi-publish@master
+      with:
+        user: __token__
+        password: ${{ secrets.TEST_PYPI_API_TOKEN }}
+        repository_url: https://test.pypi.org/legacy/
