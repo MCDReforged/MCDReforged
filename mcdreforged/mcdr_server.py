@@ -94,7 +94,7 @@ class MCDReforgedServer:
 			pass
 
 	def on_first_start(self):
-		self.logger.error('Some of the user files are missing, check them before launch MCDR again')
+		self.logger.info('Some of the user files are missing, check them before launch MCDR again')
 		default_config = self.config.get_default()
 		file_util.touch_folder(default_config['working_directory'])
 		self.plugin_manager.set_plugin_folders(default_config['plugin_folders'])  # to touch the directory

@@ -13,7 +13,7 @@ VERSION_PYPI = '1.0.0a5'
 GITHUB_URL = 'https://github.com/Fallen-Breath/MCDReforged'
 GITHUB_API_LATEST = 'https://api.github.com/repos/Fallen-Breath/MCDReforged/releases/latest'
 
-LOGGING_FILE = os.path.join('log', '{}.log'.format(NAME_SHORT))
+LOGGING_FILE = os.path.join('logs', '{}.log'.format(NAME_SHORT))
 UPDATE_DOWNLOAD_FOLDER = 'MCDR_update'
 
 PLUGIN_FILE_SUFFIX = '.py'

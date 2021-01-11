@@ -37,7 +37,8 @@ class YamlDataStorage:
 		fixed_result = self.__fix(self.__default_data.get(), users_data)
 		with self._data_operation_lock:
 			self._data = fixed_result
-		self.save()
+		if self.__has_changes:
+			self.save()
 		return self.__has_changes
 
 	def __fix(self, current_data: CommentedMap, users_data: CommentedMap, key_path='') -> CommentedMap:

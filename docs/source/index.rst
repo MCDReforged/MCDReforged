@@ -11,6 +11,9 @@ Welcome to MCDReforged's documentation!
    :caption: Home:
 
    Quick-Start<quick_start.md>
+   Config<config.md>
+   Permission<permission.md>
+   Migrate from MCDR 0.x<migrate_from_0.x.md>
 
 Indices and tables
 ==================

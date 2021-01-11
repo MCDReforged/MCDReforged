@@ -21,11 +21,54 @@ cd my_mcdr_server
 python -m mcdreforged
 ```
 
-At the first run, MCDR will generated the default config and permission files, as well as some default folders.
+At the first run, MCDR will generated the default config and permission files, as well as some default folders. The file structure will be like this
 
+```
+my_mcdr_server/
+ ├─ config/
+ ├─ logs/
+ │   └─ MCDR.log
+ ├─ plugins/
+ ├─ server/
+ ├─ config.yml
+ └─ permission.yml
+```
+
+Now put your server files into the server folder (`server` by default), then modify the configuration file `config.yml` and permission file `permission.yml` correctly. After you can start MCDR again and it correctly handle the server.
+
+```bash
+python -m mcdreforged
+``` 
+
+
+## Upgrade
+
+With the help of pypi, MCDR can be easily upgraded via a single command
+
+```
+pip install mcdreforged --upgrade
+```
+
+That's it! 
 
 ## Start from source
 
-Alternatively, you can download MCDR in the [github release page](https://github.com/Fallen-Breath/MCDReforged/releases), and decompress the file to your server
+Instead of installing MCDR from pypi, you can execute the source file of MCDR directly. 
 
+Download the source files of MCDR in the [github release page](https://github.com/Fallen-Breath/MCDReforged/releases), and decompress the file to your server folder.
 
+```
+my_mcdr_server/
+ ├─ mcdreforged/
+ │   └─ ...
+ ├─ MCDReforged.py
+ └─ ...
+```
+
+Then you can start MCDR with the same command as above.
+
+```bash
+python -m mcdreforged
+``` 
+
+For windows users, if you have bound a correct python interpreter to `*.py` files you can also double click the `MCDReforged.py` to start MCDR.
