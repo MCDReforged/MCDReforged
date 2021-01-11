@@ -3,8 +3,8 @@ For reacting general info
 Including on_info and !!MCDR, !!help command
 """
 
+from mcdreforged.info_reactor.abstract_info_reactor import AbstractInfoReactor
 from mcdreforged.plugin.plugin_event import MCDRPluginEvents
-from mcdreforged.reactor.abstract_info_reactor import AbstractInfoReactor
 
 
 class GeneralReactor(AbstractInfoReactor):

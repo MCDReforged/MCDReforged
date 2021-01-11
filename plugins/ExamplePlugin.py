@@ -6,7 +6,7 @@ import time
 
 
 PLUGIN_METADATA = {
-	'id': 'sample-plugin',
+	'id': 'example_plugin',
 	'version': '1.0.0',
 	'name': 'Sample Plugin',
 	'description': 'Sample plugin for MCDR',

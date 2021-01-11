@@ -6,7 +6,7 @@ from threading import RLock
 from typing import TYPE_CHECKING
 
 from mcdreforged import constant
-from mcdreforged.plugin.meta.metadata import MetaData
+from mcdreforged.plugin.meta.metadata import Metadata
 from mcdreforged.plugin.plugin import AbstractPlugin, PluginState
 from mcdreforged.plugin.plugin_event import MCDRPluginEvents, EventListener
 from mcdreforged.plugin.plugin_registry import DEFAULT_LISTENER_PRIORITY
@@ -29,12 +29,12 @@ class RegularPlugin(AbstractPlugin):
 		self.old_module_instance = None
 		self.newly_loaded_module = []
 		# noinspection PyTypeChecker
-		self.__metadata = None  # type: MetaData
+		self.__metadata = None  # type: Metadata
 
 	def is_regular(self) -> bool:
 		return True
 
-	def get_metadata(self) -> MetaData:
+	def get_metadata(self) -> Metadata:
 		if self.__metadata is None:
 			raise IllegalCallError('Meta data of plugin {} is not loaded. Plugin state = {}'.format(repr(self), self.state))
 		return self.__metadata
@@ -66,7 +66,7 @@ class RegularPlugin(AbstractPlugin):
 			finally:
 				self.newly_loaded_module = [module for module in sys.modules if module not in previous_modules]
 				self.mcdr_server.logger.debug('Newly loaded modules of {}: {}'.format(self, self.newly_loaded_module), option=DebugOption.PLUGIN)
-		self.__metadata = MetaData(self, getattr(self.module_instance, 'PLUGIN_METADATA', None))
+		self.__metadata = Metadata(self, getattr(self.module_instance, 'PLUGIN_METADATA', None))
 		self.plugin_registry.clear()
 
 	def __unload_instance(self):

@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 	from mcdreforged.plugin.plugin import AbstractPlugin
 
 
-class MetaData:
+class Metadata:
 	id: str
 	version: Version
 	name: RTextBase
@@ -43,11 +43,11 @@ class MetaData:
 
 		self.name = RTextBase.from_any(data.get('name', self.id))
 
-		self.description = data.get('description', None)
+		self.description = data.get('description')
 		if self.description is not None:
 			self.description = RTextBase.from_any(self.description)
 
-		self.author = data.get('author', None)
+		self.author = data.get('author')
 		if isinstance(self.author, str):
 			self.author = [self.author]
 		if isinstance(self.author, list):
@@ -56,7 +56,7 @@ class MetaData:
 			if len(self.author) == 0:
 				self.author = None
 
-		self.link = data.get('link', None)
+		self.link = data.get('link')
 		if not isinstance(self.link, str):
 			self.link = None
 
@@ -86,3 +86,19 @@ class MetaData:
 			self.__class__.__name__,
 			self.id, self.version, self.name, self.description, self.author, self.link, self.dependencies
 		)
+
+
+__SAMPLE_METADATA = {
+	'id': 'example_plugin',  # If missing it will be the file name without .py suffix
+	'version': '1.0.0',  # If missing it will be '0.0.0'
+	'name': 'Sample Plugin',  # RText is allowed
+	'description': 'Sample plugin for MCDR',  # RText is allowed
+	'author': [
+		'Fallen_Breath'
+	],
+	'link': 'https://github.com/Fallen-Breath/MCDReforged',
+	'dependencies': {
+		'MCDReforged': '>=1.0.0',
+		'PlayerInfoAPI': '*'
+	},
+}

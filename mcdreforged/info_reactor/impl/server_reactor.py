@@ -3,8 +3,8 @@ Analyzing and reacting events related to server
 """
 
 from mcdreforged.info import InfoSource
+from mcdreforged.info_reactor.abstract_info_reactor import AbstractInfoReactor
 from mcdreforged.plugin.plugin_event import MCDRPluginEvents
-from mcdreforged.reactor.abstract_info_reactor import AbstractInfoReactor
 from mcdreforged.utils.logger import DebugOption
 
 

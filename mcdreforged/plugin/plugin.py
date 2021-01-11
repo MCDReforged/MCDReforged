@@ -4,7 +4,7 @@ Single plugin class
 from typing import Tuple, Any, TYPE_CHECKING
 
 from mcdreforged.command.builder.command_node import Literal
-from mcdreforged.plugin.meta.metadata import MetaData
+from mcdreforged.plugin.meta.metadata import Metadata
 from mcdreforged.plugin.plugin_event import MCDREvent, EventListener, PluginEvent
 from mcdreforged.plugin.plugin_registry import PluginRegistry, HelpMessage
 from mcdreforged.utils.exception import IllegalCallError, IllegalStateError
@@ -36,7 +36,7 @@ class AbstractPlugin:
 	def is_regular(self) -> bool:
 		return False
 
-	def get_metadata(self) -> MetaData:
+	def get_metadata(self) -> Metadata:
 		raise NotImplementedError()
 
 	def get_id(self) -> id:

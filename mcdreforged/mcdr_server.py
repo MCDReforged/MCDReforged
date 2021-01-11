@@ -15,6 +15,7 @@ from mcdreforged.config import Config
 from mcdreforged.executor.console_handler import ConsoleHandler
 from mcdreforged.executor.task_executor import TaskExecutor
 from mcdreforged.info import Info
+from mcdreforged.info_reactor.info_reactor_manager import InfoReactorManager
 from mcdreforged.language_manager import LanguageManager
 from mcdreforged.mcdr_state import ServerState, MCDReforgedState, MCDReforgedFlags
 from mcdreforged.minecraft.rcon.rcon_manager import RconManager
@@ -23,7 +24,6 @@ from mcdreforged.permission.permission_manager import PermissionManager
 from mcdreforged.plugin.plugin_event import MCDRPluginEvents
 from mcdreforged.plugin.plugin_manager import PluginManager
 from mcdreforged.plugin.server_interface import ServerInterface
-from mcdreforged.reactor.info_reactor_manager import InfoReactorManager
 from mcdreforged.utils.exception import IllegalCallError, ServerStopped, ServerStartError, IllegalStateError
 from mcdreforged.utils.logger import DebugOption, MCDReforgedLogger
 from mcdreforged.utils.update_helper import UpdateHelper
@@ -135,7 +135,7 @@ class MCDReforgedServer:
 		for folder in self.plugin_manager.plugin_folders:
 			self.logger.info('- {}'.format(folder))
 
-		self.reactor_manager.load_reactors()
+		self.reactor_manager.load_reactors(self.config['info_reactors'])
 
 		self.connect_rcon()
 

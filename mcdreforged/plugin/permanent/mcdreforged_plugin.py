@@ -11,7 +11,7 @@ from mcdreforged.command.builder.exception import UnknownArgument, RequirementNo
 from mcdreforged.command.command_source import CommandSource
 from mcdreforged.minecraft.rtext import RText, RAction, RTextList, RStyle, RColor
 from mcdreforged.permission.permission_level import PermissionLevel
-from mcdreforged.plugin.meta.metadata import MetaData
+from mcdreforged.plugin.meta.metadata import Metadata
 from mcdreforged.plugin.permanent.permanent_plugin import PermanentPlugin
 from mcdreforged.plugin.plugin import AbstractPlugin, PluginState
 from mcdreforged.plugin.plugin_event import MCDRPluginEvents, EventListener
@@ -40,10 +40,10 @@ class Validator:
 class MCDReforgedPlugin(PermanentPlugin):
 	def __init__(self, plugin_manager):
 		super().__init__(plugin_manager)
-		self.metadata = MetaData(self, METADATA)
+		self.metadata = Metadata(self, METADATA)
 		self.tr = plugin_manager.mcdr_server.tr
 
-	def get_metadata(self) -> MetaData:
+	def get_metadata(self) -> Metadata:
 		return self.metadata
 
 	def get_fallback_metadata_id(self) -> str:

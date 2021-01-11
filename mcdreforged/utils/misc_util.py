@@ -35,6 +35,22 @@ def load_source(source_path: str, module_name=None):
 	return module
 
 
+def load_class(path: str):
+	"""
+	:param path: the path to the class, e.g. mcdreforged.info.Info
+	:return: The class
+	"""
+	try:
+		module_path, class_name = path.rsplit('.', 1)
+	except ValueError:
+		raise ImportError('Wrong path to a class: {}'.format(path)) from None
+	module = importlib.import_module(module_path)
+	try:
+		return getattr(module, class_name)
+	except AttributeError:
+		raise ImportError('Class {} not found in package {}'.format(class_name, module_path)) from None
+
+
 T = TypeVar('T')
 
 

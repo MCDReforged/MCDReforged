@@ -83,6 +83,17 @@ check_update: false
 download_update: true
 
 
+# =========================================
+# |             Advance Config            |
+# =========================================
+
+# The info reactor classes to handle the info instance
+info_reactors:
+- mcdreforged.info_reactor.impl.GeneralReactor
+- mcdreforged.info_reactor.impl.PlayerReactor
+- mcdreforged.info_reactor.impl.ServerReactor
+
+
 # Debug mode switches. Don't change it to true unless necessary
 debug:
   all: false
