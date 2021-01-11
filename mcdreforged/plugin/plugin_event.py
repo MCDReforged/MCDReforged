@@ -48,7 +48,7 @@ class MCDRPluginEvents:
 	SERVER_STARTUP 	= _PluginEventStorage.register(MCDREvent('mcdr.server_startup', 'Server startup', 'on_server_startup'))
 	SERVER_STOP 	= _PluginEventStorage.register(MCDREvent('mcdr.server_stop', 'Server startup', 'on_server_stop'))
 	MCDR_STOP 		= _PluginEventStorage.register(MCDREvent('mcdr.mcdr_stop', 'MCDR stop', 'on_mcdr_stop'))
-	PLAYER_JOIN 	= _PluginEventStorage.register(MCDREvent('mcdr.player_join', 'Player joined', 'on_player_joined'))
+	PLAYER_JOINED 	= _PluginEventStorage.register(MCDREvent('mcdr.player_join', 'Player joined', 'on_player_joined'))
 	PLAYER_LEFT 	= _PluginEventStorage.register(MCDREvent('mcdr.player_left', 'Player left', 'on_player_left'))
 	PLUGIN_LOAD 	= _PluginEventStorage.register(MCDREvent('mcdr.plugin_load', 'Plugin loaded', 'on_load'))
 	PLUGIN_UNLOAD 	= _PluginEventStorage.register(MCDREvent('mcdr.plugin_unload', 'Plugin unloaded', 'on_unload'))

@@ -17,7 +17,7 @@ class PlayerReactor(AbstractInfoReactor):
 			if player is not None:
 				self.mcdr_server.logger.debug('Player joined detected', option=DebugOption.REACTOR)
 				self.mcdr_server.permission_manager.touch_player(player)
-				self.mcdr_server.plugin_manager.dispatch_event(MCDRPluginEvents.PLAYER_JOIN, (player, info))
+				self.mcdr_server.plugin_manager.dispatch_event(MCDRPluginEvents.PLAYER_JOINED, (player, info))
 
 			# on_player_left
 			player = handler.parse_player_left(info)

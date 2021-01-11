@@ -15,7 +15,7 @@ from mcdreforged.utils import misc_util, file_util
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
 
-
+# TODO make it work properly with pypi
 class UpdateHelper:
 	def __init__(self, mcdr_server: 'MCDReforgedServer'):
 		self.mcdr_server = mcdr_server
