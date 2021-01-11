@@ -161,8 +161,9 @@ server_state.running                                  : §aRunning§r
 server_state.stopping                                 : §cStopping§r
 server_state.pre_stopped                              : §4Pre-stopped§r
 server_state.stopped                                  : §4Stopped§r
-handler_manager.load_handler.file_not_found             : Handler "{0}" not found! Make sure you have given a correct handler name in the config
-handler_manager.load_re_death_message.fail             : Fail to load death message data
+server_handler_manager.handler_detection.result1      : Looks like you are not using the correct handler for the server
+server_handler_manager.handler_detection.result2      : "Currently using handler: {0}, success rate {1}% ({2}/{3})"
+server_handler_manager.handler_detection.result3      : "Most likely capable handler: {0}, success rate {1}% ({2}/{3})"
 update_helper.check_update.already_checking           : MCDR has already started checking update
 update_helper.check_update.check_fail                 : "Fail to detect latest version from Github: {0}"
 update_helper.check_update.is_already_latest          : MCDR is already the latset version

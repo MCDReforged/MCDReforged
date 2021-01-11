@@ -55,7 +55,7 @@ class MCDReforgedServer:
 		self.language_manager = LanguageManager(self.logger)
 		self.config = Config(self.logger)
 		self.rcon_manager = RconManager(self)
-		self.server_handler_manager = ServerHandlerManager(self.logger)
+		self.server_handler_manager = ServerHandlerManager(self)
 		self.reactor_manager = InfoReactorManager(self)
 		self.command_manager = CommandManager(self)
 		self.plugin_manager = PluginManager(self)
@@ -398,6 +398,7 @@ class MCDReforgedServer:
 				self.logger.debug('Parsed text from server stdin:')
 				for line in parsed_result.format_text().splitlines():
 					self.logger.debug('    {}'.format(line))
+		self.server_handler_manager.detect_text(text)
 		self.reactor_manager.put_info(parsed_result)
 
 	def on_mcdr_start(self):
@@ -410,6 +411,7 @@ class MCDReforgedServer:
 			self.logger.info(self.tr('mcdr_server.on_mcdr_start.console_disabled'))
 		if not self.start_server():
 			raise ServerStartError()
+		self.server_handler_manager.start_handler_detection()
 		self.set_mcdr_state(MCDReforgedState.RUNNING)
 
 	def on_mcdr_stop(self):

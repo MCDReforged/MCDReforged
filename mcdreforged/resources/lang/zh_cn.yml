@@ -161,8 +161,9 @@ server_state.running                                  : §a运行中§r
 server_state.stopping                                 : §c正在关闭§r
 server_state.pre_stopped                              : §4即将关闭§r
 server_state.stopped                                  : §4已关闭§r
-handler_manager.load_handler.file_not_found             : 解析器 "{0}" 未找到! 请确保你在配置文件中填写的解析器是正确的
-handler_manager.load_re_death_message.fail             : 死亡信息数据文件加载失败
+server_handler_manager.handler_detection.result1      : 似乎你并没有使用正确的服务端解析处理器
+server_handler_manager.handler_detection.result2      : "目前正在使用的解析处理器: {0}, 成功率 {1}% ({2}/{3})"
+server_handler_manager.handler_detection.result3      : "可能更为准确的解析处理器: {0}, 成功率 {1}% ({2}/{3})"
 update_helper.check_update.already_checking           : MCDR 已在检查更新中
 update_helper.check_update.check_fail                 : "从 Github 检测最新版本失败: {0}"
 update_helper.check_update.is_already_latest          : MCDR 已为最新版
