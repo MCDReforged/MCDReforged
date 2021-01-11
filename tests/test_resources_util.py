@@ -9,7 +9,6 @@ class MyTestCase(unittest.TestCase):
 		self.assertIsNotNone(resources_util.get_data(DEFAULT_CONFIG_RESOURCE_PATH))
 		data = resources_util.get_data('/' + DEFAULT_CONFIG_RESOURCE_PATH)
 		self.assertIsNotNone(data)
-		print(data[:20])
 
 
 if __name__ == '__main__':

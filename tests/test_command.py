@@ -124,6 +124,12 @@ class MyTestCase(unittest.TestCase):
 		self.assertRaises(UnknownArgument, self.run_command, executor, 'text awa awa')
 		self.assertRaises(UnknownArgument, self.run_command, executor, 'text "try to quote"')
 
+		executor = Literal('text').then(Text('t').in_length_range(5, 10).runs(lambda s, ctx: self.set_result_from_ctx(ctx, 't')))
+		self.run_command_and_check_result(executor, 'text 12345', '12345')
+		self.run_command_and_check_result(executor, 'text 1234567890', '1234567890')
+		self.assertRaises(TextLengthOutOfRange, self.run_command, executor, 'text 1234')
+		self.assertRaises(TextLengthOutOfRange, self.run_command, executor, 'text 12345678901')
+
 	def test_8_quote_text(self):
 		executor = Literal('text').then(QuotableText('t').runs(lambda s, ctx: self.set_result_from_ctx(ctx, 't')))
 		self.run_command_and_check_result(executor, 'text awa', 'awa')
@@ -140,6 +146,11 @@ class MyTestCase(unittest.TestCase):
 		executor2 = Literal('text').then(QuotableText('t').allow_empty().runs(lambda s, ctx: self.set_result_from_ctx(ctx, 't')))
 		self.assertRaises(EmptyText, self.run_command, executor, 'text ""')
 		self.run_command_and_check_result(executor2, 'text ""', '')
+
+		executor = Literal('text').then(QuotableText('t').in_length_range(5, 10).runs(lambda s, ctx: self.set_result_from_ctx(ctx, 't')))
+		self.run_command_and_check_result(executor, 'text "1234567890"', '1234567890')
+		self.assertRaises(TextLengthOutOfRange, self.run_command, executor, 'text 12345678901')
+		self.assertRaises(TextLengthOutOfRange, self.run_command, executor, 'text "12345678901"')
 
 	def test_9_greedy_text(self):
 		executor = Literal('text').then(GreedyText('t').runs(lambda s, ctx: self.set_result_from_ctx(ctx, 't')))
