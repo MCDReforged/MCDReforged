@@ -17,6 +17,10 @@ class BasicHandler(AbstractServerHandler):
 	def get_broadcast_message_command(self, message: Any) -> Optional[str]:
 		return None
 
+	@classmethod
+	def get_content_parsing_formatter(cls):
+		raise RuntimeError()
+
 	def parse_server_stdout(self, text: str) -> Info:
 		return self._get_server_stdout_raw_result(text)
 

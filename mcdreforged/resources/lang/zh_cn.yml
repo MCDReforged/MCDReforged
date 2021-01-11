@@ -1,6 +1,3 @@
-mcdr_server.init.config_file_missing                : 配置文件缺失，默认配置文件已生成
-mcdr_server.init.permission_file_missing            : 权限文件缺失，默认权限文件已生成
-mcdr_server.init.file_missing                       : 存在缺失的用户文件，请在再次启动 MCDR 前查阅它们
 mcdr_server.on_config_changed.language_set          : 语言已设置为 {0}
 mcdr_server.on_config_changed.debug_mode_on         : 调试模式开启
 mcdr_server.on_config_changed.handler_set           : 解析处理器已设置为 {0}

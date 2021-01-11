@@ -4,6 +4,7 @@ from typing import Dict, Optional, Tuple, List, TYPE_CHECKING
 from mcdreforged.handler.abstract_server_handler import AbstractServerHandler
 from mcdreforged.handler.impl import *
 from mcdreforged.utils import misc_util
+from mcdreforged.utils.logger import DebugOption
 
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
@@ -26,7 +27,8 @@ class ServerHandlerManager:
 		self.__detection_text_count = 0
 		self.__detection_success_count = {}
 
-	def register_handlers(self):
+	def register_handlers(self, custom_handler_class_paths: Optional[List[str]]):
+		self.handlers.clear()
 		self.basic_handler = BasicHandler()
 		self.add_handler(self.basic_handler)
 		self.add_handler(VanillaHandler())
@@ -37,6 +39,22 @@ class ServerHandlerManager:
 		self.add_handler(Beta18Handler())
 		self.add_handler(BungeecordHandler())
 		self.add_handler(WaterfallHandler())
+		if custom_handler_class_paths is not None:
+			for class_path in custom_handler_class_paths:
+				try:
+					handler_class = misc_util.load_class(class_path)
+				except:
+					self.mcdr_server.logger.exception('Fail to load info handler from "{}"'.format(class_path))
+				else:
+					if issubclass(handler_class, AbstractServerHandler):
+						handler = handler_class()
+						if handler.get_name() not in self.handlers:
+							self.add_handler(handler)
+							self.mcdr_server.logger.debug('Loaded info handler {} from {}'.format(handler_class.__name__, class_path), option=DebugOption.HANDLER)
+						else:
+							self.mcdr_server.logger.error('Handler with name {} from path {} is already registered, ignored'.format(handler.get_name(), class_path))
+					else:
+						self.mcdr_server.logger.exception('Wrong handler class "{}", expected {} but found {}'.format(class_path, AbstractServerHandler, handler_class))
 
 	def add_handler(self, handler: AbstractServerHandler):
 		self.handlers[handler.get_name()] = handler

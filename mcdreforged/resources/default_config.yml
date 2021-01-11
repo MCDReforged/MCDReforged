@@ -92,11 +92,23 @@ download_update: true
 # |             Advance Config            |
 # =========================================
 
-# The info reactor classes to handle the info instance
-info_reactors:
-- mcdreforged.info_reactor.impl.GeneralReactor
-- mcdreforged.info_reactor.impl.PlayerReactor
-- mcdreforged.info_reactor.impl.ServerReactor
+
+# A list of custom info reactor classes to handle the info instance. The classed need to be subclasses of AbstractInfoReactor
+# For example, if your custom reactor class is my.custom.reactor and the class is MyInfoReactor, use my.custom.reactor.MyInfoReactor
+# Then the following field could be:
+#
+# custom_info_reactors:
+# - my.custom.reactor.MyInfoReactor
+custom_info_reactors:
+
+
+# A list of custom info reactor classes to handle the info instance. The classed need to be subclasses of AbstractServerHandler
+# for example, if your custom reactor class is my.custom.handler and the class is MyHandler, use my.custom.handler.MyHandler
+# Then the following field could be:
+#
+# custom_handlers:
+# - my.custom.handler.MyHandler
+custom_handlers:
 
 
 # Debug mode switches. Don't change it to true unless necessary
@@ -108,3 +120,6 @@ debug:
   plugin: false
   permission: false
   command: false
+
+
+# Missing configs downs below

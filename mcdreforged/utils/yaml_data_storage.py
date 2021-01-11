@@ -45,7 +45,7 @@ class YamlDataStorage:
 			self.__has_changes = True
 			return current_data
 		else:
-			current_data = current_data.copy()
+			result = users_data.copy()
 			divider = ' -> ' if len(key_path) > 0 else ''
 			for key in current_data.keys():
 				current_key_path = key_path + divider + key
@@ -53,15 +53,16 @@ class YamlDataStorage:
 					# if key presents in user's data
 					if isinstance(current_data[key], dict):
 						# dive deeper
-						current_data[key] = self.__fix(current_data[key], users_data[key], current_key_path)
+						result[key] = self.__fix(current_data[key], users_data[key], current_key_path)
 					else:
 						# use the value in user's data
-						current_data[key] = users_data[key]
+						result[key] = users_data[key]
 				else:
 					# missing config key
+					result[key] = current_data[key]
 					self.__has_changes = True
 					self.logger.warning('Option "{}" missing, use default value "{}"'.format(current_key_path, current_data[key]))
-			return current_data
+			return result
 
 	def _pre_save(self, data: CommentedMap):
 		pass

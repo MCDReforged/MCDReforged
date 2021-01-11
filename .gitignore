@@ -41,4 +41,4 @@ config.yml
 permission.yml
 
 # sphinx documentation
-docs/_build/
+docs/build/

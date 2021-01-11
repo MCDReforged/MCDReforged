@@ -63,22 +63,21 @@ class MCDReforgedServer:
 
 		# --- Initialize fields instance ---
 		# register handlers first, so when the config is loaded the handler is ready to be set
-		self.server_handler_manager.register_handlers()
 		file_missing = False
 		try:
 			self.load_config(allowed_missing_file=False)  # loads config, language, handlers
 		except FileNotFoundError:
-			self.logger.info(self.tr('mcdr_server.init.config_file_missing'))
+			self.logger.error('Config is missing, default config generated')
 			self.config.save_default()
 			file_missing = True
 		try:
 			self.permission_manager.load_permission_file(allowed_missing_file=False)
 		except FileNotFoundError:
-			self.logger.info(self.tr('mcdr_server.init.permission_file_missing'))
+			self.logger.error('Permission file is missing, default permission file generated')
 			self.permission_manager.save_default()
 			file_missing = True
 		if file_missing:
-			self.logger.info(self.tr('mcdr_server.init.file_missing'))
+			self.logger.error('Some of the user files are missing, check them before launch MCDR again')
 			return
 		self.plugin_manager.register_permanent_plugins()
 
@@ -125,9 +124,6 @@ class MCDReforgedServer:
 		self.language_manager.set_language(self.config['language'])
 		self.logger.info(self.tr('mcdr_server.on_config_changed.language_set', self.config['language']))
 
-		self.server_handler_manager.set_handler(self.config['handler'])
-		self.logger.info(self.tr('mcdr_server.on_config_changed.handler_set', self.config['handler']))
-
 		self.encoding_method = self.config['encoding'] if self.config['encoding'] is not None else sys.getdefaultencoding()
 		self.decoding_method = self.config['decoding'] if self.config['decoding'] is not None else locale.getpreferredencoding()
 		self.logger.info(self.tr('mcdr_server.on_config_changed.encoding_decoding_set', self.encoding_method, self.decoding_method))
@@ -137,7 +133,11 @@ class MCDReforgedServer:
 		for folder in self.plugin_manager.plugin_folders:
 			self.logger.info('- {}'.format(folder))
 
-		self.reactor_manager.load_reactors(self.config['info_reactors'])
+		self.reactor_manager.register_reactors(self.config['custom_info_reactors'])
+
+		self.server_handler_manager.register_handlers(self.config['custom_handlers'])
+		self.server_handler_manager.set_handler(self.config['handler'])
+		self.logger.info(self.tr('mcdr_server.on_config_changed.handler_set', self.config['handler']))
 
 		self.connect_rcon()
 

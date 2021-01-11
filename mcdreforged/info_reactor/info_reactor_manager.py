@@ -3,11 +3,12 @@ The place to reacting information from the server
 """
 import queue
 import time
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING, List, Optional
 
 from mcdreforged import constant
 from mcdreforged.info import Info, InfoSource
 from mcdreforged.info_reactor.abstract_info_reactor import AbstractInfoReactor
+from mcdreforged.info_reactor.impl import PlayerReactor, ServerReactor, GeneralReactor
 from mcdreforged.utils import misc_util
 from mcdreforged.utils.logger import ServerLogger, DebugOption
 
@@ -22,20 +23,25 @@ class InfoReactorManager:
 		self.server_logger = ServerLogger('Server')
 		self.reactors = []  # type: List[AbstractInfoReactor]
 
-	def load_reactors(self, reactor_class_paths: List[str]):
+	def register_reactors(self, custom_reactor_class_paths: Optional[List[str]]):
 		self.reactors.clear()
-		for class_path in reactor_class_paths:
-			try:
-				reactor_class = misc_util.load_class(class_path)
-			except:
-				self.mcdr_server.logger.exception('Fail to load info reactor from "{}"'.format(class_path))
-			else:
-				if issubclass(reactor_class, AbstractInfoReactor):
-					reactor = reactor_class(self.mcdr_server)
-					self.reactors.append(reactor)
-					self.mcdr_server.logger.debug('Loaded info reactor {} from {}'.format(reactor_class.__name__, class_path), option=DebugOption.REACTOR)
+		self.reactors.extend([
+			GeneralReactor(self.mcdr_server),
+			ServerReactor(self.mcdr_server),
+			PlayerReactor(self.mcdr_server)
+		])
+		if custom_reactor_class_paths is not None:
+			for class_path in custom_reactor_class_paths:
+				try:
+					reactor_class = misc_util.load_class(class_path)
+				except:
+					self.mcdr_server.logger.exception('Fail to load info reactor from "{}"'.format(class_path))
 				else:
-					self.mcdr_server.logger.exception('Wrong reactor class "{}", expected {} but found {}'.format(class_path, AbstractInfoReactor, reactor_class))
+					if issubclass(reactor_class, AbstractInfoReactor):
+						self.reactors.append(reactor_class(self.mcdr_server))
+						self.mcdr_server.logger.debug('Loaded info reactor {} from {}'.format(reactor_class.__name__, class_path), option=DebugOption.REACTOR)
+					else:
+						self.mcdr_server.logger.exception('Wrong reactor class "{}", expected {} but found {}'.format(class_path, AbstractInfoReactor, reactor_class))
 
 	def process_info(self, info: Info):
 		for reactor in self.reactors:

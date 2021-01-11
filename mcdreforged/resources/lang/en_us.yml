@@ -1,6 +1,3 @@
-mcdr_server.init.config_file_missing                : Config is missing, default config generated
-mcdr_server.init.permission_file_missing            : Permission file is missing, default permission file generated
-mcdr_server.init.file_missing                       : Some of the user files are missing, check them before launch MCDR again
 mcdr_server.on_config_changed.language_set          : Language has set to {0}
 mcdr_server.on_config_changed.debug_mode_on         : Debug mode on
 mcdr_server.on_config_changed.handler_set           : Handler has set to {0}
