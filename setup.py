@@ -32,7 +32,7 @@ CLASSIFIERS = [
 
 if os.getenv('CI', None) is not None:
 	build_num = os.getenv('GITHUB_RUN_NUMBER', None)
-	if build_num is not None and os.getenv('GITHUB_REF', None) == 'refs/heads/dev':
+	if build_num is not None and not os.getenv('GITHUB_REF', '').startswith('refs/tags'):
 		VERSION += '.dev{}'.format(build_num)
 
 # ----------------------------------------------------------------
