@@ -12,7 +12,7 @@ from mcdreforged.utils import misc_util
 from mcdreforged.utils.logger import ServerLogger, DebugOption
 
 if TYPE_CHECKING:
-	from mcdreforged import MCDReforgedServer
+	from mcdreforged.mcdr_server import MCDReforgedServer
 
 
 class InfoReactorManager:

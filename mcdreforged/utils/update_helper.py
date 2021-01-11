@@ -13,7 +13,7 @@ from mcdreforged.minecraft.rtext import RText, RAction, RColor, RStyle, RTextBas
 from mcdreforged.utils import misc_util, file_util
 
 if TYPE_CHECKING:
-	from mcdreforged import MCDReforgedServer
+	from mcdreforged.mcdr_server import MCDReforgedServer
 
 
 class UpdateHelper:

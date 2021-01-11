@@ -11,7 +11,8 @@ def main():
 		raise Exception('Python version {} is too old'.format(python_version))
 
 	try:
-		from mcdreforged import constant, MCDReforgedServer
+		from mcdreforged import constant
+		from mcdreforged.mcdr_server import MCDReforgedServer
 	except ModuleNotFoundError:
 		print('It seems that you have not installed all require modules')
 		raise

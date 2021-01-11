@@ -12,7 +12,7 @@ from mcdreforged.utils import string_util
 from mcdreforged.utils.logger import DebugOption
 
 if TYPE_CHECKING:
-	from mcdreforged import MCDReforgedServer
+	from mcdreforged.mcdr_server import MCDReforgedServer
 
 
 # deal with !!MCDR and !!help command

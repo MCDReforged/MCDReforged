@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-	from mcdreforged import MCDReforgedServer
+	from mcdreforged.mcdr_server import MCDReforgedServer
 
 
 class AbstractInfoReactor:

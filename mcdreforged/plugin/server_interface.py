@@ -18,7 +18,7 @@ from mcdreforged.utils.exception import IllegalCallError
 from mcdreforged.utils.logger import MCDReforgedLogger
 
 if TYPE_CHECKING:
-	from mcdreforged import MCDReforgedServer
+	from mcdreforged.mcdr_server import MCDReforgedServer
 	from mcdreforged.plugin.plugin_manager import PluginManager
 	from mcdreforged.plugin.plugin import RegularPlugin
 

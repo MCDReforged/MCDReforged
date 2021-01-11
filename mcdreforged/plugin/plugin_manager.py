@@ -19,7 +19,7 @@ from mcdreforged.utils import file_util, string_util, misc_util
 from mcdreforged.utils.logger import DebugOption
 
 if TYPE_CHECKING:
-	from mcdreforged import MCDReforgedServer
+	from mcdreforged.mcdr_server import MCDReforgedServer
 
 PLUGIN_CONFIG_FOLDER = 'config'
 

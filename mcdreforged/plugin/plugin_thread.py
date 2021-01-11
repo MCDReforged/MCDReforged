@@ -7,7 +7,7 @@ import threading
 from typing import TYPE_CHECKING, Callable
 
 if TYPE_CHECKING:
-	from mcdreforged import MCDReforgedServer
+	from mcdreforged.mcdr_server import MCDReforgedServer
 	from mcdreforged.plugin.plugin import RegularPlugin
 
 
