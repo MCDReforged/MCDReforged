@@ -1,4 +1,5 @@
 from queue import Empty, PriorityQueue
+from threading import Lock
 from typing import Callable, Any
 
 from mcdreforged import constant
@@ -14,16 +15,25 @@ class Priority:
 
 
 class TaskData:
+	ID_COUNTER = 0
+	ID_COUNTER_LOCK = Lock()
+
 	def __init__(self, func: Callable, priority: int):
 		if not isinstance(func, Callable):
 			raise TypeError('func should be a callable object')
 		self.func = func
 		self.priority = priority
+		with TaskData.ID_COUNTER_LOCK:
+			self.id = TaskData.ID_COUNTER
+			TaskData.ID_COUNTER += 1
 
 	def __lt__(self, other):
 		if not isinstance(other, type(self)):
 			return False
-		return self.priority < other.priority
+		if self.priority != other.priority:
+			return self.priority < other.priority
+		else:
+			return self.id < other.id
 
 
 class TaskExecutor(ThreadExecutor):
