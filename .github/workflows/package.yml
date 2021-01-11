@@ -1,9 +1,15 @@
 # This workflow will build a Java project with Gradle
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
 
-name: Dev build
+name: Dev CI
 
-on: [push]
+on:
+  push:
+    paths:
+      - ".github/**"
+      - "mcdreforged/**"
+      - "tests/**"
+      - "*.py"
 
 jobs:
   test:
@@ -93,7 +99,7 @@ jobs:
       run: |
         python setup.py sdist bdist_wheel
 
-    - name: Publish a Python distribution to PyPI
+    - name: Publish distribution to Test PyPI
       if: github.ref == 'refs/heads/dev'
       uses: pypa/gh-action-pypi-publish@master
       with:

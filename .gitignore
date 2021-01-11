@@ -39,3 +39,6 @@ plugins0.x/*
 # these will be automatically generated at the first run
 config.yml
 permission.yml
+
+# sphinx documentation
+docs/_build/
