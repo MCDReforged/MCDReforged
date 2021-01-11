@@ -91,7 +91,6 @@ TEXT = r'''
 [02:21:39 INFO]: Disabling plugins
 [02:21:39 INFO]: Closing IO threads
 [02:21:41 INFO]: Thank you and goodbye
-
 '''.strip()
 
 

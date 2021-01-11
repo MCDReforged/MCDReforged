@@ -39,7 +39,10 @@ class PluginManager:
 
 		self.last_operation_result = PluginOperationResult(self)
 
+		# not used currently
 		self.thread_pool = PluginThreadPool(self.mcdr_server, max_thread=constant.PLUGIN_THREAD_POOL_SIZE)
+
+		# thread local storage, to store current plugin
 		self.tls = threading.local()
 		self.set_current_plugin(None)
 

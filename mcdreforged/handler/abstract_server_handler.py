@@ -1,3 +1,4 @@
+import re
 import time
 from typing import Optional, Any
 
@@ -101,15 +102,18 @@ class AbstractServerHandler:
 
 	@classmethod
 	def get_content_parsing_formatter(cls):
-		return '[{hour:d}:{min:d}:{sec:d}] [{thread}/{logging}]: {content}'
+		raise NotImplementedError()
 
 	@classmethod
-	def _content_parse(cls, info: Info):
-		parsed = parse(cls.get_content_parsing_formatter(), info.content)
+	def _content_parse(cls, info: Info, *, formatter=None):
+		if formatter is None:
+			formatter = cls.get_content_parsing_formatter()
+		parsed = parse(formatter, info.content)
 		info.hour = parsed['hour']
 		info.min = parsed['min']
 		info.sec = parsed['sec']
 		info.logging_level = parsed['logging']
+		assert re.fullmatch(r'\w+', info.logging_level) is not None  # logging level should be text only, just in case
 		info.content = parsed['content']
 
 	def parse_server_stdout(self, text: str) -> Info:

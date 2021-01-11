@@ -24,6 +24,8 @@ class MyTestCase(unittest.TestCase):
 		self.assertEqual('INFO', info.logging_level)
 		self.assertEqual('---- Migration of old nether folder complete ----', info.content)
 
+		self.assertRaises(Exception, self.handler.parse_server_stdout, '[16:56:48] [main/INFO]: Loaded 0 advancements')  # vanilla thing
+
 	def test_1_player(self):
 		info = self.handler.parse_server_stdout('[00:12:10 INFO]: <Fallen_Breath> test')
 		self.assertEqual('Fallen_Breath', info.player)

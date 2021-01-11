@@ -78,6 +78,8 @@ class PluginThreadPool:
 		self.task_queue = queue.Queue()
 		self.working_count = 0
 		self.max_thread = max_thread
+
+	def start(self):
 		for i in range(self.max_thread):
 			thread = PluginThread(self)
 			thread.start()

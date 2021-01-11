@@ -23,6 +23,10 @@ class VanillaHandler(AbstractServerHandler):
 	def get_broadcast_message_command(self, message: Any) -> Optional[str]:
 		return self.get_send_message_command('@a', message)
 
+	@classmethod
+	def get_content_parsing_formatter(cls):
+		return '[{hour:d}:{min:d}:{sec:d}] [{thread}/{logging}]: {content}'
+
 	def parse_server_stdout(self, text: str):
 		result = self._get_server_stdout_raw_result(text)
 		self._content_parse(result)

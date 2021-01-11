@@ -24,6 +24,8 @@ class MyTestCase(unittest.TestCase):
 		self.assertEqual('INFO', info.logging_level)
 		self.assertEqual('Loaded 0 recipes', info.content)
 
+		self.assertRaises(Exception, self.handler.parse_server_stdout, '[00:11:34 INFO]: Preparing level "world"')  # bukkit thing
+
 	def test_1_player(self):
 		info = self.handler.parse_server_stdout('[09:00:00] [Server thread/INFO]: <Steve> Hello')
 		self.assertEqual('Steve', info.player)
