@@ -22,7 +22,7 @@ Default value: `en_us`
 
 Available options: `en_us`, `zh_cn`
 
-#### working directory
+#### working_directory
 
 The working directory of the server. You should probably put all the files related to the server int this directory
 
@@ -184,12 +184,12 @@ custom_info_reactors:
 
 Example:
 
-In this example the custom reactor class is `my.custom.reactor` and the class is `MyInfoReactor`
-
 ```yaml
 custom_info_reactors:
 - my.custom.reactor.MyInfoReactor
 ```
+
+In this example the custom reactor package path is `my.custom.reactor` and the class name is `MyInfoReactor`
 
 #### custom_handlers
 
@@ -209,12 +209,12 @@ custom_handlers:
 
 Example:
 
-In this example the custom handler class is `my.custom.handler` and the class is `MyHandler`
-
 ```yaml
 custom_handlers:
 - my.custom.handler.MyHandler
 ```
+
+In this example the custom handler package path is `my.custom.handler` and the class is name `MyHandler`
 
 #### debug
 
