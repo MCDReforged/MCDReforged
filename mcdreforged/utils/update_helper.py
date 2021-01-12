@@ -1,7 +1,6 @@
 """
 MCDR update things
 """
-import os
 import time
 from threading import Lock
 from typing import TYPE_CHECKING, Callable, Any, Union
@@ -10,10 +9,11 @@ import requests
 
 from mcdreforged import constant
 from mcdreforged.minecraft.rtext import RText, RAction, RColor, RStyle, RTextBase
-from mcdreforged.utils import misc_util, file_util
+from mcdreforged.utils import misc_util
 
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
+
 
 # TODO make it work properly with pypi
 class UpdateHelper:
@@ -39,14 +39,12 @@ class UpdateHelper:
 		acquired = self.update_lock.acquire(blocking=False)
 		if not acquired:
 			reply_func(self.mcdr_server.tr('update_helper.check_update.already_checking'))
-			return False
+			return
 		try:
 			response = None
 			try:
 				response = requests.get(constant.GITHUB_API_LATEST, timeout=5).json()
 				latest_version = response['tag_name']
-				url = response['html_url']
-				download_url = response['assets'][0]['browser_download_url']
 				update_log = response['body']
 			except Exception as e:
 				reply_func(self.mcdr_server.tr('update_helper.check_update.check_fail', repr(e)))
@@ -63,7 +61,7 @@ class UpdateHelper:
 					cmp_result = misc_util.version_compare(constant.VERSION, latest_version)
 				except:
 					self.mcdr_server.logger.exception('Fail to compare between versions "{}" and "{}"'.format(constant.VERSION, latest_version))
-					return False
+					return
 				if cmp_result == 0:
 					reply_func(self.mcdr_server.tr('update_helper.check_update.is_already_latest'))
 				elif cmp_result == 1:
@@ -72,20 +70,5 @@ class UpdateHelper:
 					reply_func(self.mcdr_server.tr('update_helper.check_update.new_version_detected', latest_version))
 					for line in update_log.splitlines():
 						reply_func('    {}'.format(line))
-					reply_func(self.mcdr_server.tr('update_helper.check_update.new_version_url', url))
-					if self.mcdr_server.config['download_update']:
-						try:
-							file_util.touch_directory(constant.UPDATE_DOWNLOAD_DIRECTORY)
-							file_name = os.path.join(constant.UPDATE_DOWNLOAD_DIRECTORY, os.path.basename(download_url))
-							if not os.path.isfile(file_name):
-								file_data = requests.get(download_url, timeout=5)
-								with open(file_name, 'wb') as file:
-									file.write(file_data.content)
-							reply_func(self.mcdr_server.tr('update_helper.check_update.download_finished', file_name))
-						except:
-							reply_func(self.mcdr_server.tr('update_helper.check_update.download_fail'))
-						else:
-							return True
-			return False
 		finally:
 			self.update_lock.release()

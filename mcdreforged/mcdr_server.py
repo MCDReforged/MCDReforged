@@ -477,5 +477,5 @@ class MCDReforgedServer:
 
 	def connect_rcon(self):
 		self.rcon_manager.disconnect()
-		if self.config['enable_rcon'] and self.is_server_rcon_ready():
-			self.rcon_manager.connect(self.config['rcon_address'], self.config['rcon_port'], self.config['rcon_password'])
+		if self.config['rcon']['enable'] and self.is_server_rcon_ready():
+			self.rcon_manager.connect(self.config['rcon']['address'], self.config['rcon']['port'], self.config['rcon']['password'])

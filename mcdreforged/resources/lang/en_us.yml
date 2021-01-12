@@ -166,9 +166,6 @@ update_helper.check_update.check_fail                 : "Fail to detect latest v
 update_helper.check_update.is_already_latest          : MCDR is already the latset version
 update_helper.check_update.newer_than_latest          : Current version §7{0}§r is newer than the latest version §7{1}§r in github, is it a developing version?
 update_helper.check_update.new_version_detected       : "New version detected: §7{0}§r. What's new in §7{0}§r:"
-update_helper.check_update.new_version_url            : "You can update MCDR from here: §9{0}§r"
-update_helper.check_update.download_finished          : Latest MCDR downloaded. It's in §7{0}§r
-update_helper.check_update.download_fail              : Latest MCDR §cdownloaded fail§r
 command_exception.unknown_command                     : Unknown command
 command_exception.unknown_argument                    : Unknown argument
 command_exception.unknown_root_argument               : Unknown root argument

@@ -166,9 +166,6 @@ update_helper.check_update.check_fail                 : "从 Github 检测最新
 update_helper.check_update.is_already_latest          : MCDR 已为最新版
 update_helper.check_update.newer_than_latest          : 目前版本 §7{0}§r 比 Github 中的最新版 §7{1}§r 更新，这是一个开发版吗？
 update_helper.check_update.new_version_detected       : "已检测到新版本: §7{0}§r。§7{0}§r 的新内容:"
-update_helper.check_update.new_version_url            : "你可以在这里更新 MCDR: §9{0}§r"
-update_helper.check_update.download_finished          : 最新的 MCDR 下载完成，文件位于 §7{0}§r
-update_helper.check_update.download_fail              : 最新的 MCDR §c下载失败§r
 command_exception.unknown_command                     : 未知指令
 command_exception.unknown_argument                    : 未知参数
 command_exception.unknown_root_argument               : 未知根节点参数

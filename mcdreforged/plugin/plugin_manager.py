@@ -76,7 +76,9 @@ class PluginManager:
 	def set_current_plugin(self, plugin: Optional[AbstractPlugin]):
 		self.tls.current_plugin = plugin
 
-	def set_plugin_directories(self, plugin_directories: List[str]):
+	def set_plugin_directories(self, plugin_directories: Optional[List[str]]):
+		if plugin_directories is None:
+			plugin_directories = []
 		for plugin_directory in self.plugin_directories:
 			try:
 				sys.path.remove(plugin_directory)
