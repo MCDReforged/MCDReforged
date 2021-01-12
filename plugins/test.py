@@ -24,6 +24,7 @@ def add_help_message(server):
 	server.add_help_message('!!!plugin', 'plugin test')
 	server.add_help_message('!!!color', 'color test')
 	server.add_help_message('!!!logger', 'unique logger test')
+	server.add_help_message('!!!console', 'special command to console')
 
 
 def on_user_info(server: ServerInterface, info):
@@ -147,5 +148,7 @@ pid: {}
 		server.logger.warning(text)
 
 	if info.content == '!!!logger':
-		logger = server.get_unique_logger()
-		logger.info('awa')
+		server.logger.info('awa')
+
+	if info.content == '!!!console':
+		server.reply(info, 'This is the reply to player', console_text='This is the reply to console')

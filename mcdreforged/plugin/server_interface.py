@@ -230,7 +230,7 @@ class ServerInterface:
 			self.execute(command, encoding=encoding, is_plugin_call=False)
 
 	@log_call
-	def reply(self, info, text, *, encoding=None):
+	def reply(self, info, text, *, encoding=None, console_text=None):
 		"""
 		Reply to the source of the Info
 		If the Info is from a player then use tell to reply the player
@@ -238,6 +238,7 @@ class ServerInterface:
 
 		:param Info info: the Info you want to reply to
 		:param text: the message you want to send
+		:param console_text: If it's specified, console_text will be used instead of text when replying to console
 		:param str encoding: The encoding method for the text
 		:type text: str or dict or list or RTextBase
 		:rtype: None
@@ -245,6 +246,8 @@ class ServerInterface:
 		if info.is_player:
 			self.tell(info.player, text, encoding=encoding, is_plugin_call=False)
 		else:
+			if console_text is not None:
+				text = console_text
 			misc_util.print_text_to_console(self.logger, text)
 
 	@log_call
