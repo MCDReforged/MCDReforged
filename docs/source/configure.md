@@ -75,7 +75,7 @@ Leave it blank for MCDR to auto detect the encoding. If it doesn't work (e.g. ra
 
 Option type: string or null
 
-Default value: ``
+Default value: ` `
 
 Examples: `utf8`, `gbk`
 
