@@ -67,8 +67,12 @@ gettext_compact = False  # optional
 
 
 # -- save the table width ----------------------------------------------------
+# https://rackerlabs.github.io/docs-rackspace/tools/rtd-tables.html
+
 html_static_path = ['static']
 
-
-def setup(app):
-	app.add_stylesheet('css/custom.css')
+html_context = {
+	'css_files': [
+		'static/css/theme_overrides.css',  # override wide tables in RTD theme
+	]
+}
