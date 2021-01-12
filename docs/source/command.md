@@ -53,15 +53,15 @@ Here's a table of the commands
 | Command | Short form | Function |
 |---|---|---|
 | !!MCDR permission | !!MCDR perm | Show permission command help message |
-| !!MCDR permission list \[\<level\>\] | !!MCDR perm list \[\<level\>\] | List all player's permission. Only list permission level \[\<level\>\] if \[\<level\>\] has set |
-| !!MCDR permission set \<player\> \<level\> | !!MCDR perm set \<player\> \<level\> | Set the permission level of \<player\> to \<level\> |
-| !!MCDR permission query \<player\> | !!MCDR perm q \[\<player\>\] | Query the permission level of \<player\>. If \<player\> is not set, query the permission level of the command sender |
-| !!MCDR permission remove \<player\> | !!MCDR perm remove \<player\> | Remove \<player\> from the permission database |
-| !!MCDR permission setdefault \<level\> | !!MCDR perm setd \<level\> | Set the default permission level to \<level\> |
+| !!MCDR permission list \[<level\>\] | !!MCDR perm list \[<level\>\] | List all player's permission. Only list permission level \[<level\>\] if \[<level\>\] has set |
+| !!MCDR permission set <player\> <level\> | !!MCDR perm set <player\> <level\> | Set the permission level of <player\> to <level\> |
+| !!MCDR permission query <player\> | !!MCDR perm q \[<player\>\] | Query the permission level of <player\>. If <player\> is not set, query the permission level of the command sender |
+| !!MCDR permission remove <player\> | !!MCDR perm remove <player\> | Remove <player\> from the permission database |
+| !!MCDR permission setdefault <level\> | !!MCDR perm setd <level\> | Set the default permission level to <level\> |
 
-The \<player\> argument should be a string indicating the name of the player
+The <player\> argument should be a string indicating the name of the player
 
-The \<level\> argument should be a string or a integer indicating a permission level. It can be a string, the name of the permission, or a integer, the level of the permission
+The <level\> argument should be a string or a integer indicating a permission level. It can be a string, the name of the permission, or a integer, the level of the permission
 
 Examples:
 
@@ -69,7 +69,7 @@ Examples:
 - `!!MCDR permission set Steve admin`: Set the permission level of player Steve to 3 (admin)
 - `!!MCDR permission q Steve`: Query the permission level of player Steve. The value should be 3 (admin)
 
-Check the page [Permission](/permission.html) for more information about MCDR permission system
+Check the page [Permission](permission.md) for more information about MCDR permission system
 
 ### Plugin management
 
@@ -80,17 +80,17 @@ Here's a table of the commands
 | Command | Short form | Function |
 |---|---|---|
 | !!MCDR plugin list | !!MCDR plg list | List all plugins |
-| !!MCDR plugin info \<plugin_id\> | !!MCDR plg info \<plugin_id\> | Display the information of the plugin with id \<plugin_id\> |
-| !!MCDR plugin load \<file_path\> | !!MCDR plg load \<file_path\> | Load a plugin with file path \<file_path\> |
-| !!MCDR plugin enable \<file_path\> | !!MCDR plg enable \<file_path\> | Enable a plugin with file path \<file_path\> |
-| !!MCDR plugin reload \<plugin_id\> | !!MCDR plg reload \<plugin_id\> | Reload a plugin with id \<plugin_id\> |
-| !!MCDR plugin unload \<plugin_id\> | !!MCDR plg unload \<plugin_id\> | Unload a plugin with id \<plugin_id\> |
-| !!MCDR plugin disable \<plugin_id\> | !!MCDR plg disable \<plugin_id\> | Disable a plugin with id \<plugin_id\> |
+| !!MCDR plugin info <plugin_id\> | !!MCDR plg info <plugin_id\> | Display the information of the plugin with id <plugin_id\> |
+| !!MCDR plugin load <file_path\> | !!MCDR plg load <file_path\> | Load a plugin with file path <file_path\> |
+| !!MCDR plugin enable <file_path\> | !!MCDR plg enable <file_path\> | Enable a plugin with file path <file_path\> |
+| !!MCDR plugin reload <plugin_id\> | !!MCDR plg reload <plugin_id\> | Reload a plugin with id <plugin_id\> |
+| !!MCDR plugin unload <plugin_id\> | !!MCDR plg unload <plugin_id\> | Unload a plugin with id <plugin_id\> |
+| !!MCDR plugin disable <plugin_id\> | !!MCDR plg disable <plugin_id\> | Disable a plugin with id <plugin_id\> |
 | !!MCDR plugin reloadall | !!MCDR plg ra | Load / Reload / Unloaded **all** not disabled plugins |
 
-The \<plugin_id\> argument is a string of the unique plugin id of the plugin you want to manipulate
+The <plugin_id\> argument is a string of the unique plugin id of the plugin you want to manipulate
 
-The \<file_path\> argument is a string of the path to the plugin file you want to load or enable
+The <file_path\> argument is a string of the path to the plugin file you want to load or enable
 
 Example:
 
