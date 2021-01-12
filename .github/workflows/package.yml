@@ -10,6 +10,7 @@ on:
       - "mcdreforged/**"
       - "tests/**"
       - "*.py"
+  pull_request:
 
 jobs:
   test:
@@ -75,6 +76,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Upload a dev version to test pypi
     needs: test
+    if: github.event_name == 'push'
 
     steps:
     - uses: actions/checkout@v2
