@@ -64,4 +64,3 @@ html_theme = 'sphinx_rtd_theme'
 # path is example but recommended.
 locale_dirs = ['locale/']
 gettext_compact = False  # optional
-

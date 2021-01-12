@@ -105,7 +105,7 @@ plugin_directories:
 
 The setting for [rcon](https://wiki.vg/RCON). If rcon is enabled, MCDR will start a rcon client to connect to the server after server rcon has started up. Then plugins can use rcon to query command from the server
 
-##### enable
+##### rcon.enable
 
 The switch of rcon
 
@@ -113,7 +113,7 @@ Option type: boolean
 
 Default value: `false`
 
-##### address
+##### rcon.address
 
 The address of the rcon server
 
@@ -121,7 +121,7 @@ Option type: string
 
 Default value: `127.0.0.1`
 
-##### port
+##### rcon.port
 
 The port of the rcon server
 
@@ -129,7 +129,7 @@ Option type: integer
 
 Default value: `25575`
 
-##### password
+##### rcon.password
 
 The password to connect to the rcon server
 
