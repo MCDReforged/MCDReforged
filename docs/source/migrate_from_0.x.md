@@ -10,6 +10,7 @@ Since MCDR now is installed as a python package, unless you run MCDR with source
 - LICENSE
 - readme.md
 - readme_cn.md
+- MCDReforged.py (If you still want to use it you can grab it from github release, it's just an entry script)
 
 The logging folder is renamed from `log/` to `logs/`
 
@@ -62,12 +63,14 @@ If your plugin relies on these 2 events, there is an alternative for it: [coming
 
 #### Listener arguments
 
-In MCDR 0.x the player joined event listener accepts 2 or 3 arguments. The 2 definitions below work
+In MCDR 0.x the player joined event listener accepts 2 or 3 arguments. Both of these 2 definitions below work.
 
 ```python
 def on_player_joined(server: ServerInterface, player: str):
     pass
+```
 
+```python
 def on_player_joined(server: ServerInterface, player: str, info: Info):
     pass
 ```
@@ -110,8 +113,8 @@ If your plugin imports some of the mcdr utils, like `RText` or `Rcon`, you need 
 
 Current MCDR collects all useful classes / functions in the `mcdreforged.api` package. It's recommended to import the package you want in this `api` package.
 
-Use `from mcdreforged.api.rtext import *` if you want to use all rtext classes
+Use `from mcdreforged.api.rtext import *` if you want to use all rtext classes.
 
-Use `from mcdreforged.api.rcon import *` if you want to use all rcon classes. Class `Rcon` is renamed to `RconConnection` by the way
+Use `from mcdreforged.api.rcon import *` if you want to use all rcon classes. Class `Rcon` is renamed to `RconConnection` by the way.
 
-For lazy man, you can safely use `from mcdreforged.api.all import *` to import all useful things to the plugin
+For lazy man, you can safely use `from mcdreforged.api.all import *` to import all useful things to the plugin.

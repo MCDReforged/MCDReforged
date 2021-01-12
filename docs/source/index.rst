@@ -8,11 +8,13 @@ Welcome to MCDReforged's documentation!
 
 .. toctree::
    :maxdepth: 2
-   :caption: Home:
+   :caption: Home
 
    Quick-Start<quick_start.md>
-   Config<config.md>
+   Configure<configure.md>
    Permission<permission.md>
+   Plugin Development<plugin_dev.md>
+   Server Handler<handler.md>
    Migrate from MCDR 0.x<migrate_from_0.x.md>
 
 Indices and tables

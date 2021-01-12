@@ -45,7 +45,7 @@ python -m mcdreforged
 
 With the help of pypi, MCDR can be easily upgraded via a single command
 
-```
+```bash
 pip install mcdreforged --upgrade
 ```
 
@@ -70,5 +70,11 @@ Then you can start MCDR with the same command as above.
 ```bash
 python -m mcdreforged
 ``` 
+
+Alternatively you can launch `MCDReforged.py` to start MCDR
+
+```bash
+python MCDReforged.py
+```
 
 For windows users, if you have bound a correct python interpreter to `*.py` files you can also double click the `MCDReforged.py` to start MCDR.
