@@ -106,8 +106,9 @@ mcdr_command.load_plugin.success                      : Loaded "§e{0}§r" §asu
 mcdr_command.enable_plugin.fail                       : §cFail§r to enable plugin "§e{0}§r"
 mcdr_command.enable_plugin.success                    : Enabled "§e{0}§r" §asuccessfully§r
 mcdr_command.reload_all_plugin.fail                   : §cFail§r to reload all plugins
+mcdr_command.help_message.title                       : MCDR command help message list
 mcdr_command.help_message.mcdr_command                : MCDR control command
-mcdr_command.help_message.help_command                : MCDR command help messages
+mcdr_command.help_message.help_command                : Display command help messages
 permission_manager.load.fail                          : Fail to load permission file {0}, using default empty data
 permission_manager.set_default_permission_level.done  : The default permission level has set to §e{0}§r
 permission_manager.set_permission_level.done          : The permission level of player §b{0}§r has set to §e{1}§r

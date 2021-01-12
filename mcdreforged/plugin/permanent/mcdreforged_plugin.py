@@ -421,6 +421,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 
 	def process_help_command(self, source: CommandSource):
 		# TODO help list paging
+		source.reply(self.tr('mcdr_command.help_message.title'))
 		for msg in self.mcdr_server.plugin_manager.registry_storage.help_messages:  # type: HelpMessage
 			if source.has_permission(msg.permission):
 				source.reply(RText('§7{}§r: '.format(msg.prefix)).c(RAction.suggest_command, msg.prefix) + msg.message)
