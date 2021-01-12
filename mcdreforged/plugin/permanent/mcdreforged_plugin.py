@@ -63,9 +63,17 @@ class MCDReforgedPlugin(PermanentPlugin):
 		# maybe maybe
 		pass
 
+	@classmethod
+	def get_control_command_prefix(cls):
+		return '!!MCDR'
+
+	@classmethod
+	def get_help_command_prefix(cls):
+		return '!!help'
+
 	def __register_commands(self):
 		self.add_command(
-			Literal('!!' + constant.NAME_SHORT).
+			Literal(self.get_control_command_prefix()).
 			requires(lambda src: src.has_permission(PermissionLevel.MCDR_CONTROL_LEVEL)).
 			runs(lambda src: src.reply(self.get_help_message('mcdr_command.help_message'))).
 			on_error(RequirementNotMet, lambda src: src.reply(RText(self.mcdr_server.tr('mcdr_command.permission_denied'), color=RColor.red))).
@@ -111,7 +119,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 				Literal({'checkupdate', 'cu'}).runs(lambda src: self.mcdr_server.update_helper.check_update(condition_check=lambda: True, reply_func=src.reply))
 			)
 		)
-		self.add_command(Literal('!!help').runs(self.process_help_command))
+		self.add_command(Literal(self.get_help_command_prefix()).runs(self.process_help_command))
 
 	# ==============================
 	#     Command Implementation
@@ -400,12 +408,19 @@ class MCDReforgedPlugin(PermanentPlugin):
 	def __register_help_messages(self):
 		self.add_help_message(HelpMessage(
 			self,
-			'!!MCDR',
-			self.plugin_manager.mcdr_server.tr('mcdr_command.help_message_mcdr'),
+			self.get_control_command_prefix(),
+			self.plugin_manager.mcdr_server.tr('mcdr_command.help_message.mcdr_command'),
 			PermissionLevel.MCDR_CONTROL_LEVEL
+		))
+		self.add_help_message(HelpMessage(
+			self,
+			self.get_help_command_prefix(),
+			self.plugin_manager.mcdr_server.tr('mcdr_command.help_message.help_command'),
+			PermissionLevel.MINIMUM_LEVEL
 		))
 
 	def process_help_command(self, source: CommandSource):
+		# TODO help list paging
 		for msg in self.mcdr_server.plugin_manager.registry_storage.help_messages:  # type: HelpMessage
 			if source.has_permission(msg.permission):
 				source.reply(RText('§7{}§r: '.format(msg.prefix)).c(RAction.suggest_command, msg.prefix) + msg.message)

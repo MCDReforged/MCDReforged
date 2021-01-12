@@ -86,7 +86,7 @@ mcdr_command.print_mcdr_status.line5                  : "自然退出: {0}"
 mcdr_command.print_mcdr_status.line6                  : "rcon: {0}"
 mcdr_command.print_mcdr_status.line7                  : "插件数量: §6{0}§r"
 mcdr_command.print_mcdr_status.extra_line1            : "服务端 PID: {0}"
-mcdr_command.print_mcdr_status.extra_line2            : "消息队列大小: §6{0}§r/§6{1}§r"
+mcdr_command.print_mcdr_status.extra_line2            : "消息队列负载: §6{0}§r/§6{1}§r"
 mcdr_command.print_mcdr_status.extra_line3            : "线程数: §6{0}§r"
 mcdr_command.list_plugin.info_loaded_plugin           : §6{0}x §e已加载插件§r
 mcdr_command.list_plugin.info_disabled_plugin         : §6{0}x §e已禁用插件§r
@@ -106,7 +106,8 @@ mcdr_command.load_plugin.success                      : 插件 "§e{0}§r" 启�
 mcdr_command.enable_plugin.fail                       : 插件 "§e{0}§r" 加载§c失败§r
 mcdr_command.enable_plugin.success                    : 插件 "§e{0}§r" 启用§a成功§r
 mcdr_command.reload_all_plugin.fail                   : 重载所有插件§c失败§r
-mcdr_command.help_message_mcdr                        : MCDR 控制指令
+mcdr_command.help_message.mcdr_command                : MCDR 控制指令
+mcdr_command.help_message.help_command                : MCDR 指令帮助信息
 permission_manager.load.fail                          : 加载权限文件 §7{0}§r §c失败§r，使用默认的空数据
 permission_manager.set_default_permission_level.done  : 默认权限等级已设置为 §e{0}§r
 permission_manager.set_permission_level.done          : 玩家 §b{0}§r 的权限等级已设置为 §e{1}§r

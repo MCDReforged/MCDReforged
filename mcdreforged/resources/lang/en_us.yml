@@ -79,14 +79,14 @@ mcdr_command.list_permission.suggest_disable          : Click to remove player �
 mcdr_command.print_mcdr_status.online                 : §aOnline§r
 mcdr_command.print_mcdr_status.offline                : §7Offline§r
 mcdr_command.print_mcdr_status.line1                  : "§l{0}§r version: §e{1}§r"
-mcdr_command.print_mcdr_status.line2                  : "MCDR status: {0}"
-mcdr_command.print_mcdr_status.line3                  : "Server status: {0}"
+mcdr_command.print_mcdr_status.line2                  : "MCDR state: {0}"
+mcdr_command.print_mcdr_status.line3                  : "Server state: {0}"
 mcdr_command.print_mcdr_status.line4                  : "Server startup: {0}"
 mcdr_command.print_mcdr_status.line5                  : "Exit naturally: {0}"
 mcdr_command.print_mcdr_status.line6                  : "Rcon: {0}"
 mcdr_command.print_mcdr_status.line7                  : "Plugin count: §6{0}§r"
 mcdr_command.print_mcdr_status.extra_line1            : "Server PID: {0}"
-mcdr_command.print_mcdr_status.extra_line2            : "Info queue size: §6{0}§r/§6{1}§r"
+mcdr_command.print_mcdr_status.extra_line2            : "Info queue load: §6{0}§r/§6{1}§r"
 mcdr_command.print_mcdr_status.extra_line3            : "Thread count: §6{0}§r"
 mcdr_command.list_plugin.info_loaded_plugin           : §6{0}x §eLoaded Plugins§r
 mcdr_command.list_plugin.info_disabled_plugin         : §6{0}x §eDisabled Plugins§r
@@ -106,7 +106,8 @@ mcdr_command.load_plugin.success                      : Loaded "§e{0}§r" §asu
 mcdr_command.enable_plugin.fail                       : §cFail§r to enable plugin "§e{0}§r"
 mcdr_command.enable_plugin.success                    : Enabled "§e{0}§r" §asuccessfully§r
 mcdr_command.reload_all_plugin.fail                   : §cFail§r to reload all plugins
-mcdr_command.help_message_mcdr                        : MCDR control command
+mcdr_command.help_message.mcdr_command                : MCDR control command
+mcdr_command.help_message.help_command                : MCDR command help messages
 permission_manager.load.fail                          : Fail to load permission file {0}, using default empty data
 permission_manager.set_default_permission_level.done  : The default permission level has set to §e{0}§r
 permission_manager.set_permission_level.done          : The permission level of player §b{0}§r has set to §e{1}§r
