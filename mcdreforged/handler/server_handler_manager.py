@@ -54,7 +54,7 @@ class ServerHandlerManager:
 						else:
 							self.mcdr_server.logger.error('Handler with name {} from path {} is already registered, ignored'.format(handler.get_name(), class_path))
 					else:
-						self.mcdr_server.logger.exception('Wrong handler class "{}", expected {} but found {}'.format(class_path, AbstractServerHandler, handler_class))
+						self.mcdr_server.logger.error('Wrong handler class "{}", expected {} but found {}'.format(class_path, AbstractServerHandler, handler_class))
 
 	def add_handler(self, handler: AbstractServerHandler):
 		self.handlers[handler.get_name()] = handler
