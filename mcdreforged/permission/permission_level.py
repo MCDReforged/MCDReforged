@@ -8,6 +8,9 @@ class PermissionLevelItem:
 		self.level = level
 
 	def __str__(self):
+		return '{} ({})'.format(self.level, self.name)
+
+	def __repr__(self):
 		return 'Permission[name={},level={}]'.format(self.name, self.level)
 
 	def __lt__(self, other):
@@ -38,9 +41,9 @@ class PermissionLevel:
 	OWNER	= _PermissionLevelStorage.register(PermissionLevelItem('owner', 4))
 	__NAME_DICT = collections.OrderedDict([(item.name, item) for item in _PermissionLevelStorage.STORAGE])  # type: Dict[str, PermissionLevelItem]
 	__LEVEL_DICT = collections.OrderedDict([(item.level, item) for item in _PermissionLevelStorage.STORAGE])  # type: Dict[int, PermissionLevelItem]
-	LEVELS = [item.level for item in _PermissionLevelStorage.STORAGE]
-	NAMES = [item.name for item in _PermissionLevelStorage.STORAGE]
-	INSTANCES = _PermissionLevelStorage.STORAGE.copy()
+	LEVELS = [item.level for item in _PermissionLevelStorage.STORAGE]  # type: List[int]
+	NAMES = [item.name for item in _PermissionLevelStorage.STORAGE]  # type: List[str]
+	INSTANCES = _PermissionLevelStorage.STORAGE.copy()  # type: List[PermissionLevelItem]
 
 	MAXIMUM_LEVEL = LEVELS[-1]
 	MINIMUM_LEVEL = LEVELS[0]

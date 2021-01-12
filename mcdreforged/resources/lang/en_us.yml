@@ -49,6 +49,7 @@ mcdr_command.help_message_reload: |
 mcdr_command.help_message_permission: |
   §7!!MCDR permission list §e[<level>]§r: List all player's permission. Only list permission level §e[<level>]§r if §e[<level>]§r has set
   §7!!MCDR permission set §b<player>§r §e<level>§r: Set the permission level of §b<player>§r to §e<level>§r
+  §7!!MCDR permission query §b[<player>]§r: Query the permission level of §b<player>§r. If §b<player>§r is not set, query the permission level of the command sender
   §7!!MCDR permission remove §b<player>§r: Remove §b<player>§r from the permission database
   §7!!MCDR permission setdefault §e<level>§r: Set the default permission level to §e<level>§r
 mcdr_command.help_message_plugin: |
@@ -70,6 +71,9 @@ mcdr_command.reload_permission.success                : Permission file reloaded
 mcdr_command.permission_not_enough                    : §cPermission not enough§r
 mcdr_command.invalid_permission_level                 : §cInvalid permission level§r
 mcdr_command.invalid_player_name                      : §cInvalid player name§r
+mcdr_command.query_player_permission.self             : Your permission level is §e{0}§r
+mcdr_command.query_player_permission.player           : The permission level of player §b{0}§r is §e{1}§r
+mcdr_command.query_player_permission.player_unknown   : The permission level of player §b{0}§r is unknown
 mcdr_command.remove_player_permission.player_removed  : Player §b{0}§r has been removed
 mcdr_command.list_permission.show_default             : "Default permission level: §e{0}§r"
 mcdr_command.list_permission.suggest_setdefault       : Click to set default permission level

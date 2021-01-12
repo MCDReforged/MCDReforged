@@ -1,6 +1,7 @@
 
 import hashlib
 import os
+import re
 import sys
 from threading import RLock
 from typing import TYPE_CHECKING
@@ -40,7 +41,8 @@ class RegularPlugin(AbstractPlugin):
 		return self.__metadata
 
 	def get_fallback_metadata_id(self) -> str:
-		return string_util.remove_suffix(self.file_name, constant.PLUGIN_FILE_SUFFIX)
+		file_name = string_util.remove_suffix(self.file_name, constant.PLUGIN_FILE_SUFFIX)
+		return re.sub(r'[^a-z0-9]', '_', file_name.lower())
 
 	def __repr__(self):
 		return 'RegularPlugin[file={},path={},state={}]'.format(self.file_name, self.file_path, self.state)

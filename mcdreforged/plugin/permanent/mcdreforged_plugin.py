@@ -3,10 +3,10 @@ import os
 import re
 import threading
 import traceback
-from typing import Callable, Any, Tuple, List
+from typing import Callable, Any, Tuple, List, Optional
 
 from mcdreforged import constant
-from mcdreforged.command.builder.command_node import Literal, QuotableText, Text
+from mcdreforged.command.builder.command_node import Literal, QuotableText, Text, GreedyText
 from mcdreforged.command.builder.exception import UnknownArgument, RequirementNotMet, CommandError
 from mcdreforged.command.command_source import CommandSource
 from mcdreforged.minecraft.rtext import RText, RAction, RTextList, RStyle, RColor
@@ -17,7 +17,7 @@ from mcdreforged.plugin.plugin import AbstractPlugin, PluginState
 from mcdreforged.plugin.plugin_event import MCDRPluginEvents, EventListener
 from mcdreforged.plugin.plugin_registry import HelpMessage
 from mcdreforged.plugin.regular_plugin import RegularPlugin
-from mcdreforged.utils import file_util
+from mcdreforged.utils import file_util, string_util
 
 METADATA = {
 	'id': constant.NAME.lower(),
@@ -47,7 +47,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 		return self.metadata
 
 	def get_fallback_metadata_id(self) -> str:
-		return METADATA['id']
+		raise RuntimeError()
 
 	def load(self):
 		self.plugin_registry.clear()
@@ -98,21 +98,25 @@ class MCDReforgedPlugin(PermanentPlugin):
 					Literal('list').runs(lambda src: self.list_permission(src, None)).
 					then(Text('level').runs(lambda src, ctx: self.list_permission(src, ctx['level'])))
 				).
-				then(Literal('set').then(Text('player').then(Text('level').runs(lambda src, ctx: self.set_player_permission(src, ctx['player'], ctx['level']))))).
-				then(Literal({'remove', 'rm'}).then(Text('player').runs(lambda src, ctx: self.remove_player_permission(src, ctx['player'])))).
-				then(Literal({'setdefault', 'setd'}).then(Text('level').runs(lambda src, ctx: self.remove_player_permission(src, ctx['level']))))
+				then(Literal('set').then(QuotableText('player').then(Text('level').runs(lambda src, ctx: self.set_player_permission(src, ctx['player'], ctx['level']))))).
+				then(
+					Literal({'query', 'q'}).runs(lambda src: self.query_player_permission(src, None)).
+					then(QuotableText('player').runs(lambda src, ctx: self.query_player_permission(src, ctx['player'])))
+				).
+				then(Literal({'remove', 'rm'}).then(QuotableText('player').runs(lambda src, ctx: self.remove_player_permission(src, ctx['player'])))).
+				then(Literal({'setdefault', 'setd'}).then(Text('level').runs(lambda src, ctx: self.set_default_permission(src, ctx['level']))))
 			).
 			then(
 				Literal({'plugin', 'plg'}).
 				runs(lambda src: src.reply(self.get_help_message('mcdr_command.help_message_plugin'))).
 				on_error(UnknownArgument, self.on_mcdr_command_unknown_argument).
 				then(Literal('list').runs(self.list_plugin)).
-				then(Literal('info').then(QuotableText('plugin_id').runs(lambda src, ctx: self.show_plugin_info(src, ctx['plugin_id'])))).
-				then(Literal('load').then(QuotableText('file_path').runs(lambda src, ctx: self.load_plugin(src, ctx['file_path'])))).
-				then(Literal('enable').then(QuotableText('file_path').runs(lambda src, ctx: self.enable_plugin(src, ctx['file_path'])))).
-				then(Literal('reload').then(QuotableText('plugin_id').runs(lambda src, ctx: self.reload_plugin(src, ctx['plugin_id'])))).
-				then(Literal('unload').then(QuotableText('plugin_id').runs(lambda src, ctx: self.unload_plugin(src, ctx['plugin_id'])))).
-				then(Literal('disable').then(QuotableText('plugin_id').runs(lambda src, ctx: self.disable_plugin(src, ctx['plugin_id'])))).
+				then(Literal('info').then(GreedyText('plugin_id').runs(lambda src, ctx: self.show_plugin_info(src, ctx['plugin_id'])))).
+				then(Literal('load').then(GreedyText('file_path').runs(lambda src, ctx: self.load_plugin(src, ctx['file_path'])))).
+				then(Literal('enable').then(GreedyText('file_path').runs(lambda src, ctx: self.enable_plugin(src, ctx['file_path'])))).
+				then(Literal('reload').then(GreedyText('plugin_id').runs(lambda src, ctx: self.reload_plugin(src, ctx['plugin_id'])))).
+				then(Literal('unload').then(GreedyText('plugin_id').runs(lambda src, ctx: self.unload_plugin(src, ctx['plugin_id'])))).
+				then(Literal('disable').then(GreedyText('plugin_id').runs(lambda src, ctx: self.disable_plugin(src, ctx['plugin_id'])))).
 				then(Literal({'reloadall', 'ra'}).runs(self.reload_all_plugin))
 			).
 			then(
@@ -186,7 +190,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 	# Permission
 	# ----------
 
-	def set_player_permission(self, source: CommandSource, player, value):
+	def set_player_permission(self, source: CommandSource, player: str, value: str):
 		permission_level = PermissionLevel.get_level(value)
 		if permission_level is None:
 			source.reply(self.tr('mcdr_command.invalid_permission_level'))
@@ -201,7 +205,22 @@ class MCDReforgedPlugin(PermanentPlugin):
 				if source.is_player:
 					source.reply(self.tr('permission_manager.set_permission_level.done', player, permission_level.name))
 
-	def remove_player_permission(self, source: CommandSource, player):
+	def query_player_permission(self, source: CommandSource, player: Optional[str]):
+		if player is None:
+			level = source.get_permission_level()
+			source.reply(self.tr('mcdr_command.query_player_permission.self', PermissionLevel.from_value(level)))
+		else:
+			if not Validator.player_name(player):
+				source.reply(self.tr('mcdr_command.invalid_player_name'))
+				return
+			else:
+				level = self.mcdr_server.permission_manager.get_player_permission_level(player, auto_add=False)
+				if level is not None:
+					source.reply(self.tr('mcdr_command.query_player_permission.player', player, PermissionLevel.from_value(level)))
+				else:
+					source.reply(self.tr('mcdr_command.query_player_permission.player_unknown', player))
+
+	def remove_player_permission(self, source: CommandSource, player: str):
 		if not Validator.player_name(player):
 			source.reply(self.tr('mcdr_command.invalid_player_name'))
 		else:
@@ -211,7 +230,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 				self.mcdr_server.permission_manager.remove_player(player)
 				source.reply(self.tr('mcdr_command.remove_player_permission.player_removed', player))
 
-	def list_permission(self, source: CommandSource, target_value):
+	def list_permission(self, source: CommandSource, target_value: Optional[str]):
 		specified_level = PermissionLevel.get_level(target_value)
 		if specified_level is None:
 			# show default level information if target permission not specified
@@ -235,15 +254,15 @@ class MCDReforgedPlugin(PermanentPlugin):
 					if self.should_display_buttons(source):
 						texts += RTextList(
 							RText(' [✎]', color=RColor.gray)
-							.c(RAction.suggest_command, '!!MCDR permission set {} '.format(player))
+							.c(RAction.suggest_command, '!!MCDR permission set {} '.format(string_util.auto_quotes(player)))
 							.h(self.tr('mcdr_command.list_permission.suggest_set', player)),
 							RText(' [×]', color=RColor.gray)
-							.c(RAction.suggest_command, '!!MCDR permission remove {}'.format(player))
+							.c(RAction.suggest_command, '!!MCDR permission remove {}'.format(string_util.auto_quotes(player)))
 							.h(self.tr('mcdr_command.list_permission.suggest_disable', player)),
 						)
 					source.reply(texts)
 
-	def set_default_permission(self, source: CommandSource, value):
+	def set_default_permission(self, source: CommandSource, value: str):
 		permission_level = PermissionLevel.get_level(value)
 		if permission_level is None:
 			source.reply(self.tr('mcdr_command.invalid_permission_level'))

@@ -31,9 +31,7 @@ The following status can only be seen by users with permission 4 (owner)
 
 ### Hot reloads
 
-`!!MCDR reload` commands are the places to hot-reload things. Its short form is `!!MCDR r`.
- 
-Directly enter command `!!MCDR reload` will show the help message of the hot reload commands
+`!!MCDR reload` commands are the places to hot-reload things. Its short form is `!!MCDR r`. Directly enter command `!!MCDR reload` will show the help message of the hot reload commands
 
 Here's a table of the commands
 
@@ -48,9 +46,7 @@ Here's a table of the commands
 
 ### Permission management
 
-`!!MCDR permission` commands are used to manipulate player's permission. Its short form is `!!MCDR perm`.
- 
-Directly enter command `!!MCDR perm` will show the help message of the permission manipulation commands
+`!!MCDR permission` commands are used to manipulate player's permission. Its short form is `!!MCDR perm`. Directly enter command `!!MCDR perm` will show the help message of the permission manipulation commands
 
 Here's a table of the commands
 
@@ -59,6 +55,7 @@ Here's a table of the commands
 | !!MCDR permission | !!MCDR perm | Show permission command help message |
 | !!MCDR permission list \[\<level\>\] | !!MCDR perm list \[\<level\>\] | List all player's permission. Only list permission level \[\<level\>\] if \[\<level\>\] has set |
 | !!MCDR permission set \<player\> \<level\> | !!MCDR perm set \<player\> \<level\> | Set the permission level of \<player\> to \<level\> |
+| !!MCDR permission query \<player\> | !!MCDR perm q \[\<player\>\] | Query the permission level of \<player\>. If \<player\> is not set, query the permission level of the command sender |
 | !!MCDR permission remove \<player\> | !!MCDR perm remove \<player\> | Remove \<player\> from the permission database |
 | !!MCDR permission setdefault \<level\> | !!MCDR perm setd \<level\> | Set the default permission level to \<level\> |
 
@@ -69,25 +66,52 @@ The \<level\> argument should be a string or a integer indicating a permission l
 Examples:
 
 - `!!MCDR perm list 4`: List all players with permission level 4 (owner)
-- `!!MCDR set Steve admin`: Set the permission level of player Steve to 3 (admin)
+- `!!MCDR permission set Steve admin`: Set the permission level of player Steve to 3 (admin)
+- `!!MCDR permission q Steve`: Query the permission level of player Steve. The value should be 3 (admin)
 
 Check the page [Permission](/permission.html) for more information about MCDR permission system
 
 ### Plugin management
 
+`!!MCDR plugin` is the place for user to manipulate plugins. Its short form is `!!MCDR plg`. Directly enter command `!!MCDR plg` will show the help message of the commands
+
+Here's a table of the commands
+
 | Command | Short form | Function |
 |---|---|---|
-| !!MCDR permission | !!MCDR perm | Show permission command help message |
-| !!MCDR permission list \[\<level\>\] | !!MCDR perm list \[\<level\>\] | List all player's permission. Only list permission level \[\<level\>\] if \[\<level\>\] has set |
-| !!MCDR permission set \<player\> \<level\> | !!MCDR perm set \<player\> \<level\> | Set the permission level of \<player\> to \<level\> |
-| !!MCDR permission remove \<player\> | !!MCDR perm remove \<player\> | Remove \<player\> from the permission database |
-| !!MCDR permission setdefault \<level\> | !!MCDR perm setd \<level\> | Set the default permission level to \<level\> |
 | !!MCDR plugin list | !!MCDR plg list | List all plugins |
-| !!MCDR plugin load \<plugin\> | !!MCDR plg load \<plugin\> | Load / Reload a plugin named \<plugin\> |
-| !!MCDR plugin enable \<plugin\> | !!MCDR plg enable \<plugin\> | Enable a plugin named \<plugin\> |
-| !!MCDR plugin disable \<plugin\> | !!MCDR plg disable \<plugin\> | Disable a plugin named \<plugin\> |
-| !!MCDR plugin reloadall | !!MCDR plg ra | Load / Reload / Unloaded every plugins |
-| !!MCDR plugin checkupdate | !!MCDR plg cu | Check update from Github |
+| !!MCDR plugin info \<plugin_id\> | !!MCDR plg info \<plugin_id\> | Display the information of the plugin with id \<plugin_id\> |
+| !!MCDR plugin load \<file_path\> | !!MCDR plg load \<file_path\> | Load a plugin with file path \<file_path\> |
+| !!MCDR plugin enable \<file_path\> | !!MCDR plg enable \<file_path\> | Enable a plugin with file path \<file_path\> |
+| !!MCDR plugin reload \<plugin_id\> | !!MCDR plg reload \<plugin_id\> | Reload a plugin with id \<plugin_id\> |
+| !!MCDR plugin unload \<plugin_id\> | !!MCDR plg unload \<plugin_id\> | Unload a plugin with id \<plugin_id\> |
+| !!MCDR plugin disable \<plugin_id\> | !!MCDR plg disable \<plugin_id\> | Disable a plugin with id \<plugin_id\> |
+| !!MCDR plugin reloadall | !!MCDR plg ra | Load / Reload / Unloaded **all** not disabled plugins |
+
+The \<plugin_id\> argument is a string of the unique plugin id of the plugin you want to manipulate
+
+The \<file_path\> argument is a string of the path to the plugin file you want to load or enable
+
+Example:
+
+Let's say there's is a loaded plugin with id `my_plugin` and a disabled plugin in path `plugins/another_plugin.py.disabled` with id `another_plugin`
+
+Then you can do the following commands
+
+```
+!!MCDR plugin reload my_plugin
+!!MCDR plugin enable plugins/another_plugin.py.disabled
+!!MCDR plugin unload another_plugin
+!!MCDR plugin load plugins/another_plugin.py
+```
+
+Theses commands firstly reload the loaded plugin `my_plugin`, and then enable the plugin
+
+### Update checker
+
+`!!MCDR checkupdate`, or `!!MCDR cu`. Use it to manually check update from github
+
+It will try to get the latest release version in github, and check if it's newer than the current version. If it is, it will show the update logs from the github release
 
 ## !!help command
 

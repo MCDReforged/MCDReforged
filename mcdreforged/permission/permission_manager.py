@@ -1,6 +1,7 @@
 """
 Permission control things
 """
+
 from mcdreforged.info import *
 from mcdreforged.permission.permission_level import PermissionLevel, PermissionLevelItem
 from mcdreforged.utils import misc_util
@@ -125,7 +126,7 @@ class PermissionManager(YamlDataStorage):
 		"""
 		self.get_player_permission_level(player)
 
-	def get_player_permission_level(self, player, auto_add=True):
+	def get_player_permission_level(self, player, *, auto_add=True):
 		"""
 		If the player is not in the permission data set its level to default_level,
 		unless parameter auto_add is set to False, then it will return None
