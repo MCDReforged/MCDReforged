@@ -1,6 +1,7 @@
 """
 An interface class for plugins to control the server
 """
+import functools
 import time
 from typing import Callable, TYPE_CHECKING, Tuple, Any, Union
 
@@ -15,7 +16,7 @@ from mcdreforged.plugin.plugin_event import EventListener, LiteralEvent, PluginE
 from mcdreforged.plugin.plugin_registry import DEFAULT_LISTENER_PRIORITY, HelpMessage
 from mcdreforged.utils import misc_util
 from mcdreforged.utils.exception import IllegalCallError
-from mcdreforged.utils.logger import MCDReforgedLogger
+from mcdreforged.utils.logger import MCDReforgedLogger, DebugOption
 
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
@@ -30,7 +31,7 @@ def log_call(func):
 	"""
 	def wrap(self, *args, **kwargs):
 		is_plugin_call = 'is_plugin_call'
-		if kwargs.get(is_plugin_call, True):
+		if kwargs.get(is_plugin_call, True) and MCDReforgedLogger.should_log_debug(option=DebugOption.PLUGIN):
 			self.logger.debug('Plugin called {}(), args amount: {}'.format(func.__name__, len(args)))
 			for arg in args:
 				self.logger.debug('  - type: {}, content: {}'.format(type(arg).__name__, arg))
@@ -60,7 +61,21 @@ class ServerInterface:
 
 	def __init__(self, mcdr_server: 'MCDReforgedServer'):
 		self.__mcdr_server = mcdr_server
-		self.logger = mcdr_server.logger
+		self.__logger = mcdr_server.logger
+
+	@functools.lru_cache(maxsize=512, typed=True)
+	def __get_logger(self, plugin_name: str):
+		return MCDReforgedLogger(self.__mcdr_server, plugin_name)
+
+	@property
+	def logger(self) -> MCDReforgedLogger:
+		try:
+			plugin = self.__get_current_plugin()
+			plugin_name = plugin.get_metadata().name
+		except IllegalCallError:
+			return self.__logger
+		else:
+			return self.__get_logger(plugin_name)
 
 	# ------------------------
 	#      Server Control
@@ -533,8 +548,3 @@ class ServerInterface:
 		:rtype: str or None
 		"""
 		return self.__mcdr_server.rcon_manager.send_command(command)
-
-	@log_call
-	def get_unique_logger(self) -> MCDReforgedLogger:
-		plugin = self.__get_current_plugin()
-		return MCDReforgedLogger(self.__mcdr_server, plugin.get_metadata().name)

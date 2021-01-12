@@ -71,13 +71,15 @@ class MCDReforgedLogger(logging.Logger):
 
 	@classmethod
 	def get_console_formatter(cls, plugin_name=None):
-		extra = '' if plugin_name is None else '/{}'.format(plugin_name)
+		extra = '' if plugin_name is None else ' [{}]'.format(plugin_name)
 		return MCColoredFormatter(
-			f'[%(name)s] [%(asctime)s] [%(threadName)s{extra}/%(log_color)s%(levelname)s%(reset)s]: %(message_log_color)s%(message)s%(reset)s',
+			f'[%(name)s] [%(asctime)s] [%(threadName)s/%(log_color)s%(levelname)s%(reset)s]{extra}: %(message_log_color)s%(message)s%(reset)s',
 			log_colors=cls.LOG_COLORS,
 			secondary_log_colors=cls.SECONDARY_LOG_COLORS,
 			datefmt='%H:%M:%S'
 		)
+
+	debug_options = {}  # type: Dict[DebugOption, bool]
 
 	def __init__(self, mcdr_server, plugin_name=None):
 		super().__init__(self.DEFAULT_NAME)
@@ -90,19 +92,18 @@ class MCDReforgedLogger(logging.Logger):
 		self.addHandler(self.console_handler)
 		self.setLevel(logging.DEBUG)
 
-		self.debug_options = {}
-
 	def set_debug_options(self, debug_options: Dict[str, bool]):
 		for key, value in debug_options.items():
 			option = DebugOption[key.upper()]
-			self.debug_options[option] = value
-		for option, value in self.debug_options.items():
+			MCDReforgedLogger.debug_options[option] = value
+		for option, value in MCDReforgedLogger.debug_options.items():
 			self.debug('Debug option {} is set to {}'.format(option, value), option=option)
 
-	def should_log_debug(self, option: Optional[DebugOption] = None):
-		do_log = self.debug_options.get(DebugOption.ALL, False)
+	@classmethod
+	def should_log_debug(cls, option: Optional[DebugOption] = None):
+		do_log = cls.debug_options.get(DebugOption.ALL, False)
 		if option is not None:
-			do_log |= self.debug_options.get(option, False)
+			do_log |= cls.debug_options.get(option, False)
 		return do_log
 
 	def debug(self, *args, option=None):
