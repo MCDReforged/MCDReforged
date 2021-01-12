@@ -34,14 +34,14 @@ class YamlDataStorage:
 				raise FileNotFoundError()
 			users_data = {}
 		self.__has_changes = False
-		fixed_result = self.__fix(self.__default_data.get(), users_data)
+		fixed_result = self.__fix(dict(self.__default_data.get()), users_data)
 		with self._data_operation_lock:
 			self._data = fixed_result
 		if self.__has_changes:
 			self.save()
 		return self.__has_changes
 
-	def __fix(self, current_data: CommentedMap, users_data: CommentedMap, key_path='') -> CommentedMap:
+	def __fix(self, current_data: dict, users_data: CommentedMap, key_path='') -> dict:
 		if not isinstance(users_data, dict):
 			self.__has_changes = True
 			return current_data
