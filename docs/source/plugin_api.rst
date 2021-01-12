@@ -5,4 +5,4 @@ Plugin API
    :maxdepth: 2
 
    Command<plugin_api/command.md>
-   plugin_api/decorator.md
+   Decorator<plugin_api/decorator.md>

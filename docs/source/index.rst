@@ -10,7 +10,7 @@ Welcome to MCDReforged's documentation!
    :maxdepth: 2
    :caption: Home
 
-   Quick-Start<quick_start.md>
+   Quick Start<quick_start.md>
    Configure<configure.md>
    Permission<permission.md>
    Command<command.md>

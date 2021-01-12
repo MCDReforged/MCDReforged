@@ -34,7 +34,7 @@ Metadata is a global field inside the plugin file. It's used to store basic info
 
 A legacy plugin is still able to be loaded if it doesn't have the metadata field, but a warning will be shown in the console
 
-Check [here]() for more information about plugin metadata
+Check [here](#TODO) for more information about plugin metadata
 
 ### Listener
 
@@ -59,7 +59,7 @@ These 2 events are removed from MCDR
 - on_death_message
 - on_player_made_advancement
 
-If your plugin relies on these 2 events, there is an alternative for it: [coming-soon]()
+If your plugin relies on these 2 events, there is an alternative for it: [coming-soon](#TODO)
 
 #### Listener arguments
 

@@ -32,10 +32,14 @@ release = '1.0.0'
 # ones.
 extensions = [
 	'recommonmark',
+	'sphinx_markdown_tables',
 	'sphinx.ext.autodoc',
 	'sphinx.ext.napoleon',
 	'sphinx.ext.viewcode'
 ]
+
+# markdown yes
+source_suffix = ['.rst', '.md']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['templates']
@@ -54,4 +58,10 @@ exclude_patterns = ['build', 'Thumbs.db', '.DS_Store']
 html_theme = 'sphinx_rtd_theme'
 
 
-source_suffix = ['.rst', '.md']
+# -- Options for sphinx-intl -------------------------------------------------
+
+# po files will be created in this directory
+# path is example but recommended.
+locale_dirs = ['locale/']
+gettext_compact = False  # optional
+
