@@ -96,8 +96,8 @@ class MCDReforgedServer:
 	def on_first_start(self):
 		self.logger.info('Some of the user files are missing, check them before launch MCDR again')
 		default_config = self.config.get_default()
-		file_util.touch_folder(default_config['working_directory'])
-		self.plugin_manager.set_plugin_folders(default_config['plugin_folders'])  # to touch the directory
+		file_util.touch_directory(default_config['working_directory'])
+		self.plugin_manager.set_plugin_directories(default_config['plugin_directories'])  # to touch the directory
 
 	# --------------------------
 	#   Translate info strings
@@ -134,10 +134,10 @@ class MCDReforgedServer:
 		self.decoding_method = self.config['decoding'] if self.config['decoding'] is not None else locale.getpreferredencoding()
 		self.logger.info(self.tr('mcdr_server.on_config_changed.encoding_decoding_set', self.encoding_method, self.decoding_method))
 
-		self.plugin_manager.set_plugin_folders(self.config['plugin_folders'])
-		self.logger.info(self.tr('mcdr_server.on_config_changed.plugin_folders_set', self.encoding_method, self.decoding_method))
-		for folder in self.plugin_manager.plugin_folders:
-			self.logger.info('- {}'.format(folder))
+		self.plugin_manager.set_plugin_directories(self.config['plugin_directories'])
+		self.logger.info(self.tr('mcdr_server.on_config_changed.plugin_directories_set', self.encoding_method, self.decoding_method))
+		for directory in self.plugin_manager.plugin_directories:
+			self.logger.info('- {}'.format(directory))
 
 		self.reactor_manager.register_reactors(self.config['custom_info_reactors'])
 

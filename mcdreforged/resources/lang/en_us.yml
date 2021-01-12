@@ -2,7 +2,7 @@ mcdr_server.on_config_changed.language_set          : Language has set to {0}
 mcdr_server.on_config_changed.debug_mode_on         : Debug mode on
 mcdr_server.on_config_changed.handler_set           : Handler has set to {0}
 mcdr_server.on_config_changed.encoding_decoding_set : Encoding / Decoding method has set to {0} / {1}
-mcdr_server.on_config_changed.plugin_folders_set    : "Plugin folder list:"
+mcdr_server.on_config_changed.plugin_directories_set    : "Plugin directory list:"
 mcdr_server.start_server.already_interrupted        : MCDR has already been interrupted
 mcdr_server.start_server.start_twice                : Server cannot start twice
 mcdr_server.start_server.cwd_not_existed            : Server working directory {0} does not exist

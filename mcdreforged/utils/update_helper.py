@@ -75,8 +75,8 @@ class UpdateHelper:
 					reply_func(self.mcdr_server.tr('update_helper.check_update.new_version_url', url))
 					if self.mcdr_server.config['download_update']:
 						try:
-							file_util.touch_folder(constant.UPDATE_DOWNLOAD_FOLDER)
-							file_name = os.path.join(constant.UPDATE_DOWNLOAD_FOLDER, os.path.basename(download_url))
+							file_util.touch_directory(constant.UPDATE_DOWNLOAD_DIRECTORY)
+							file_name = os.path.join(constant.UPDATE_DOWNLOAD_DIRECTORY, os.path.basename(download_url))
 							if not os.path.isfile(file_name):
 								file_data = requests.get(download_url, timeout=5)
 								with open(file_name, 'wb') as file:

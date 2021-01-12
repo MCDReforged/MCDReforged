@@ -13,8 +13,11 @@ Welcome to MCDReforged's documentation!
    Quick-Start<quick_start.md>
    Configure<configure.md>
    Permission<permission.md>
+   Command<command.md>
    Plugin Development<plugin_dev.md>
+   Plugin API<plugin_api.rst>
    Server Handler<handler.md>
+   Info Reactor<reactor.md>
    Migrate from MCDR 0.x<migrate_from_0.x.md>
 
 Indices and tables

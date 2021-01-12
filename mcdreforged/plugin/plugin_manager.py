@@ -21,12 +21,12 @@ from mcdreforged.utils.logger import DebugOption
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
 
-PLUGIN_CONFIG_FOLDER = 'config'
+PLUGIN_CONFIG_DIRECTORY = 'config'
 
 
 class PluginManager:
 	def __init__(self, mcdr_server: 'MCDReforgedServer'):
-		self.plugin_folders = []  # type: List[str]
+		self.plugin_directories = []  # type: List[str]
 		self.mcdr_server = mcdr_server
 		self.logger = mcdr_server.logger
 
@@ -46,7 +46,7 @@ class PluginManager:
 		self.tls = threading.local()
 		self.set_current_plugin(None)
 
-		file_util.touch_folder(PLUGIN_CONFIG_FOLDER)
+		file_util.touch_directory(PLUGIN_CONFIG_DIRECTORY)
 
 	# --------------------------
 	#   Getters / Setters etc.
@@ -76,16 +76,16 @@ class PluginManager:
 	def set_current_plugin(self, plugin: Optional[AbstractPlugin]):
 		self.tls.current_plugin = plugin
 
-	def set_plugin_folders(self, plugin_folders: List[str]):
-		for plugin_folder in self.plugin_folders:
+	def set_plugin_directories(self, plugin_directories: List[str]):
+		for plugin_directory in self.plugin_directories:
 			try:
-				sys.path.remove(plugin_folder)
+				sys.path.remove(plugin_directory)
 			except ValueError:
-				self.logger.exception('Fail to remove old plugin folder "{}" in sys.path'.format(plugin_folder))
-		self.plugin_folders = misc_util.unique_list(plugin_folders)
-		for plugin_folder in self.plugin_folders:
-			file_util.touch_folder(plugin_folder)
-			sys.path.append(plugin_folder)
+				self.logger.exception('Fail to remove old plugin directory "{}" in sys.path'.format(plugin_directory))
+		self.plugin_directories = misc_util.unique_list(plugin_directories)
+		for plugin_directory in self.plugin_directories:
+			file_util.touch_directory(plugin_directory)
+			sys.path.append(plugin_directory)
 
 	def contains_plugin_file(self, file_path: str) -> bool:
 		return file_path in self.plugin_file_path
@@ -207,8 +207,8 @@ class PluginManager:
 
 	def collect_and_process_new_plugins(self, filter: Callable[[str], bool]) -> SingleOperationResult:
 		result = SingleOperationResult()
-		for plugin_folder in self.plugin_folders:
-			file_list = file_util.list_file_with_suffix(plugin_folder, constant.PLUGIN_FILE_SUFFIX)
+		for plugin_directory in self.plugin_directories:
+			file_list = file_util.list_file_with_suffix(plugin_directory, constant.PLUGIN_FILE_SUFFIX)
 			for file_path in file_list:
 				if not self.contains_plugin_file(file_path) and filter(file_path):
 					plugin = self.__load_plugin(file_path)

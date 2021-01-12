@@ -280,15 +280,15 @@ class MCDReforgedPlugin(PermanentPlugin):
 	# Plugin
 	# ------
 
-	def get_files_in_plugin_folders(self, filter: Callable[[str], bool]) -> List[str]:
+	def get_files_in_plugin_directories(self, filter: Callable[[str], bool]) -> List[str]:
 		result = []
-		for plugin_folder in self.mcdr_server.plugin_manager.plugin_folders:
-			result.extend(file_util.list_file(plugin_folder, filter))
+		for plugin_directory in self.mcdr_server.plugin_manager.plugin_directories:
+			result.extend(file_util.list_file(plugin_directory, filter))
 		return result
 
 	def list_plugin(self, source: CommandSource):
-		not_loaded_plugin_list = self.get_files_in_plugin_folders(lambda fp: fp.endswith(constant.PLUGIN_FILE_SUFFIX) and not self.mcdr_server.plugin_manager.contains_plugin_file(fp))  # type: List[str]
-		disabled_plugin_list = self.get_files_in_plugin_folders(lambda fp: fp.endswith(constant.DISABLED_PLUGIN_FILE_SUFFIX))  # type: List[str]
+		not_loaded_plugin_list = self.get_files_in_plugin_directories(lambda fp: fp.endswith(constant.PLUGIN_FILE_SUFFIX) and not self.mcdr_server.plugin_manager.contains_plugin_file(fp))  # type: List[str]
+		disabled_plugin_list = self.get_files_in_plugin_directories(lambda fp: fp.endswith(constant.DISABLED_PLUGIN_FILE_SUFFIX))  # type: List[str]
 		current_plugins = list(self.mcdr_server.plugin_manager.get_all_plugins())  # type: List[AbstractPlugin]
 
 		source.reply(self.tr('mcdr_command.list_plugin.info_loaded_plugin', len(current_plugins)))
@@ -352,7 +352,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 				source.reply(meta.description)
 
 	def __not_loaded_plugin_file_manipulate(self, source: CommandSource, file_name: str, operation_name: str, func: Callable[[str], Any]):
-		plugin_paths = self.get_files_in_plugin_folders(lambda fp: os.path.basename(fp) == file_name)
+		plugin_paths = self.get_files_in_plugin_directories(lambda fp: os.path.basename(fp) == file_name)
 		if len(plugin_paths) == 0:
 			source.reply(self.tr('mcdr_command.invalid_plugin_file_name', file_name))
 		else:

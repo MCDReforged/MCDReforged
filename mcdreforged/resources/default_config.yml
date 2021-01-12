@@ -1,65 +1,42 @@
-# Config file for MCDReforged
+# Configure file for MCDReforged
+# Check https://mcdreforged.readthedocs.io/en/latest/configure.html for detail
 
-# Language of MCDR
-# Language file need to be in lang/ folder, and encoded in utf8
-# Examples:
-#   en_us
-#   zh_cn
+# The language that MCDR will use to display information
+# Examples: "en_us", "zh_cn"
 language: en_us
 
 
-# The working directory of the server. If you use default value server/ I will suggest you to put all the files related to the server to the server/ folder
+# The working directory of the server. If you use default value server/ I will suggest you to put all the files related to the server to the server/ directory
 working_directory: server
 
 
 # The console command to start the server. Examples:
-#   java -Xms1G -Xmx2G -jar minecraft_server.jar nogui
-#   java -Djline.terminal=jline.UnsupportedTerminal -jar BungeeCord.jar
-#   ./start.sh
-#   start.bat
 start_command: java -Xms1G -Xmx2G -jar minecraft_server.jar nogui
 
 
-# The handler to determine the specific way to control the server and parse the output of the server. Available options:
-# vanilla_handler
-#   for Vanilla / Carpet / Fabric server
-#
-# beta18_handler
-#   for Vanilla server in beta1.8 versions
-#
-# bukkit_handler
-#   For Bukkit / Spigot server with Minecraft version below 1.14, and Paper server in all version
-#
-# bukkit14_handler
-#   For Bukkit / Spigot server with Minecraft version 1.14 and above
-#
-# forge_handler
-#   For Forge server
-#
-# cat_server_handler
-#   For CatServer server
-#
-# bungeecord_handler
-#   for Bungeecord server
-#
-# waterfall_handler
-#   for Waterfall server
-#
+# The handler to the specific way to parse the standard output text of the server and the correct command for server control
+# vanilla_handler, for Vanilla / Carpet / Fabric server
+# beta18_handler, for Vanilla server in beta1.8 versions
+# bukkit_handler, For Bukkit / Spigot server with Minecraft version below 1.14, and Paper server in all version
+# bukkit14_handler, For Bukkit / Spigot server with Minecraft version 1.14 and above
+# forge_handler, For Forge server
+# cat_server_handler, For CatServer server
+# bungeecord_handler, for Bungeecord server
+# waterfall_handler,  for Waterfall server
 handler: vanilla_handler
 
 
-# the encoding / decoding format used to encode / decode message to the server. Choose the best method for your os. Examples:
-#   utf8
-#   gbk
-# leave it blank for MCDR to auto detect system encoding
+# The encoding / decoding format used to encode / decode message to the server.
+# Examples: "utf8", "gbk"
+# Leave it blank for MCDR to auto detect system encoding
 encoding:
 decoding:
 
 
-# A list of folder path where MCDR will search for plugin to load
-plugin_folders:
+# A list of directory path where MCDR will search for plugin to load
+# Example: "path/to/my/plugin/directory"
+plugin_directories:
 - plugins
-# - path/to/my/plugin/folder
 
 
 # rcon setting

@@ -2,7 +2,7 @@ mcdr_server.on_config_changed.language_set          : 语言已设置为 {0}
 mcdr_server.on_config_changed.debug_mode_on         : 调试模式开启
 mcdr_server.on_config_changed.handler_set           : 解析处理器已设置为 {0}
 mcdr_server.on_config_changed.encoding_decoding_set : 编码 / 解码方式已设置为 {0} / {1}
-mcdr_server.on_config_changed.plugin_folders_set    : "插件文件夹列表:"
+mcdr_server.on_config_changed.plugin_directories_set    : "插件文件夹列表:"
 mcdr_server.start_server.already_interrupted        : MCDR 已被终止
 mcdr_server.start_server.start_twice                : 服务端不能多次启动
 mcdr_server.start_server.cwd_not_existed            : 服务端工作路径 {0} 不存在

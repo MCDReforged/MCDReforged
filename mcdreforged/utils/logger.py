@@ -113,7 +113,7 @@ class MCDReforgedLogger(logging.Logger):
 	def set_file(self, file_name):
 		if self.file_handler is not None:
 			self.removeHandler(self.file_handler)
-		file_util.touch_folder(os.path.dirname(file_name))
+		file_util.touch_directory(os.path.dirname(file_name))
 		if os.path.isfile(file_name):
 			modify_time = time.strftime('%Y-%m-%d', time.localtime(os.stat(file_name).st_mtime))
 			counter = 0
