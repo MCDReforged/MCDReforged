@@ -55,8 +55,8 @@ mcdr_command.help_message_permission: |
 mcdr_command.help_message_plugin: |
   §7!!MCDR plugin list§r: List all plugins
   §7!!MCDR plugin info §6<plugin_id>§r: Display the information of the plugin with id §6<plugin_id>§r
-  §7!!MCDR plugin load §e<file_path>§r: Load a plugin with file path §e<file_path>§r
-  §7!!MCDR plugin enable §e<file_path>§r: Enable a plugin with file path §e<file_path>§r
+  §7!!MCDR plugin load §e<file_name>§r: Load a plugin with file name §e<file_name>§r
+  §7!!MCDR plugin enable §e<file_name>§r: Enable a plugin with file name §e<file_name>§r
   §7!!MCDR plugin reload §6<plugin_id>§r: Reload a plugin with id §6<plugin_id>§r
   §7!!MCDR plugin unload §6<plugin_id>§r: Unload a plugin with id §6<plugin_id>§r
   §7!!MCDR plugin disable §6<plugin_id>§r: Disable a plugin with id §6<plugin_id>§r

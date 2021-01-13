@@ -5,7 +5,7 @@ Credit: Pandaria98 https://github.com/Pandaria98 https://github.com/TISUnion/ste
 
 import json
 from enum import Enum, auto
-from typing import Iterable, List, Union, Optional
+from typing import Iterable, List, Union, Optional, Callable, Any
 
 from colorama import Fore, Style
 
@@ -55,10 +55,10 @@ class RColorConvertor:
 
 class RStyle(Enum):
 	bold = RItem('§l', Style.BRIGHT)
-	italic = RItem('§o', Style.RESET_ALL)
-	underlined = RItem('§n', Style.RESET_ALL)
-	strikethrough = RItem('§m', Style.RESET_ALL)
-	obfuscated = RItem('§k', Style.RESET_ALL)
+	italic = RItem('§o', '')
+	underlined = RItem('§n', '')
+	strikethrough = RItem('§m', '')
+	obfuscated = RItem('§k', '')
 
 
 class RAction(Enum):
@@ -73,40 +73,28 @@ class RTextBase:
 	def to_json_object(self):
 		raise NotImplementedError()
 
-	def to_json_str(self):
+	def to_json_str(self) -> str:
 		return json.dumps(self.to_json_object())
 
-	def to_plain_text(self):
+	def to_plain_text(self) -> str:
 		raise NotImplementedError()
 
-	def to_colored_text(self):
+	def to_colored_text(self) -> str:
 		raise NotImplementedError()
 
 	def copy(self) -> 'RTextBase':
 		raise NotImplementedError()
 
-	def set_click_event(self, action, value):
-		"""
-		:rtype: RTextBase
-		"""
+	def set_click_event(self, action: RAction, value: str) -> 'RTextBase':
 		raise NotImplementedError()
 
-	def set_hover_text(self, *args):
-		"""
-		:rtype: RTextBase
-		"""
+	def set_hover_text(self, *args) -> 'RTextBase':
 		raise NotImplementedError()
 
-	def c(self, action, value):
-		"""
-		:rtype: RTextBase
-		"""
+	def c(self, action: RAction, value: str) -> 'RTextBase':
 		return self.set_click_event(action, value)
 
-	def h(self, *args):
-		"""
-		:rtype: RTextBase
-		"""
+	def h(self, *args) -> 'RTextBase':
 		return self.set_hover_text(*args)
 
 	def __str__(self):
@@ -130,27 +118,38 @@ class RTextBase:
 
 
 class RText(RTextBase):
-	def __init__(self, text, color: RColor = RColor.reset, styles: Optional[Union[RStyle, Iterable[RStyle]]] = None):
-		if styles is None:
-			styles = {}
-		elif isinstance(styles, RStyle):
+	def __init__(self, text, color: Optional[RColor] = None, styles: Optional[Union[RStyle, Iterable[RStyle]]] = None):
+		if isinstance(text, type(self)):
+			self._copy_from(text)
+		else:
+			self.data = {'text': str(text)}  # type: dict
+			if color is not None:
+				self.set_color(color)
+			if styles is not None:
+				self.set_styles(styles)
+
+	def _copy_from(self, text: 'RText'):
+		self.data = text.data.copy()
+
+	def set_color(self, color: RColor):
+		self.data['color'] = color.name
+		return self
+
+	def set_styles(self, styles: Union[RStyle, Iterable[RStyle]]):
+		if isinstance(styles, RStyle):
 			styles = {styles}
 		elif isinstance(styles, Iterable):
 			styles = set(styles)
 		else:
 			raise TypeError('Unsupported style type {}'.format(type(styles)))
-		if isinstance(text, type(self)):
-			self.data = text.data.copy()
-		else:
-			self.data = {
-				'text': str(text),
-				'color': color.name
-			}  # type: dict
-			for style in RStyle:
-				if style in styles:
-					self.data[style.name] = True
+		for style in RStyle:
+			if style in styles:
+				self.data[style.name] = True
+			elif style.name in self.data:
+				self.data.pop(style.name)
+		return self
 
-	def set_click_event(self, action: RAction, value):
+	def set_click_event(self, action: RAction, value: str):
 		self.data['clickEvent'] = {
 			'action': action.name,
 			'value': value
@@ -170,18 +169,19 @@ class RText(RTextBase):
 	def to_json_object(self):
 		return self.data
 
-	def to_plain_text(self):
+	def to_plain_text(self) -> str:
 		return self.data['text']
 
-	def to_colored_text(self):
-		color = RColorConvertor.RCOLOR_NAME_TO_CONSOLE[self.data['color']]
-		if self.data.get(RStyle.bold, False):
-			color += RColor.bold.value.console_color
+	def to_colored_text(self) -> str:
+		color = RColorConvertor.RCOLOR_NAME_TO_CONSOLE[self.data['color']] if 'color' in self.data else ''
+		for style in RStyle:
+			if self.data.get(style.name, False):
+				color += style.value.console_color
 		return color + self.to_plain_text() + Style.RESET_ALL
 
-	def copy(self):
+	def copy(self) -> 'RText':
 		copied = RText('')
-		copied.data = self.data.copy()
+		copied._copy_from(self)
 		return copied
 
 
@@ -191,8 +191,13 @@ class RTextTranslation(RText):
 		self.data.pop('text')
 		self.data['translate'] = translation_key
 
-	def to_plain_text(self):
+	def to_plain_text(self) -> str:
 		return self.data['translate']
+
+	def copy(self) -> 'RTextTranslation':
+		copied = RTextTranslation('')
+		copied._copy_from(self)
+		return copied
 
 
 class RTextList(RTextBase):
@@ -221,24 +226,24 @@ class RTextList(RTextBase):
 			else:
 				self.children.append(RText(obj))
 
-	def empty(self):
+	def empty(self) -> bool:
 		return len(self.children) == 0
 
-	def __get_item_list(self, func=lambda x: x):
+	def __get_item_list(self, func: Callable[[RTextBase], Any]):
 		return [func(obj) for obj in self.children]
 
-	def to_json_object(self):
+	def to_json_object(self) -> list:
 		ret = ['' if self.header_empty else self.header.to_json_object()]
 		ret.extend(self.__get_item_list(lambda obj: obj.to_json_object()))
 		return ret
 
-	def to_plain_text(self):
+	def to_plain_text(self) -> str:
 		return ''.join(self.__get_item_list(lambda obj: obj.to_plain_text()))
 
-	def to_colored_text(self):
+	def to_colored_text(self) -> str:
 		return ''.join(self.__get_item_list(lambda obj: obj.to_colored_text()))
 
-	def copy(self):
+	def copy(self) -> 'RTextList':
 		copied = RTextList()
 		copied.header = self.header.copy()
 		copied.header_empty = self.header_empty

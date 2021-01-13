@@ -81,8 +81,8 @@ Here's a table of the commands
 |---|---|---|
 | !!MCDR plugin list | !!MCDR plg list | List all plugins |
 | !!MCDR plugin info <plugin_id\> | !!MCDR plg info <plugin_id\> | Display the information of the plugin with id <plugin_id\> |
-| !!MCDR plugin load <file_path\> | !!MCDR plg load <file_path\> | Load a plugin with file path <file_path\> |
-| !!MCDR plugin enable <file_path\> | !!MCDR plg enable <file_path\> | Enable a plugin with file path <file_path\> |
+| !!MCDR plugin load <file_name\> | !!MCDR plg load <file_name\> | Load a plugin with file path <file_name\> |
+| !!MCDR plugin enable <file_name\> | !!MCDR plg enable <file_name\> | Enable a plugin with file path <file_name\> |
 | !!MCDR plugin reload <plugin_id\> | !!MCDR plg reload <plugin_id\> | Reload a plugin with id <plugin_id\> |
 | !!MCDR plugin unload <plugin_id\> | !!MCDR plg unload <plugin_id\> | Unload a plugin with id <plugin_id\> |
 | !!MCDR plugin disable <plugin_id\> | !!MCDR plg disable <plugin_id\> | Disable a plugin with id <plugin_id\> |
@@ -99,13 +99,20 @@ Let's say there's is a loaded plugin with id `my_plugin` and a disabled plugin i
 Then you can do the following commands
 
 ```
+!!MCDR plg info mcdreforged
 !!MCDR plugin reload my_plugin
 !!MCDR plugin enable another_plugin.py.disabled
 !!MCDR plugin unload another_plugin
 !!MCDR plugin load another_plugin.py
 ```
 
-Theses commands firstly reload the loaded plugin `my_plugin`, and then enable the plugin
+These commands do the following things:
+
+1. Query the information about a built-in permanent plugin `mcdreforged`
+2. Reload the plugin with id `my_plugin`
+3. Enable and load the disabled plugin with file name `another_plugin.py.disabled`. It has plugin id `another_plugin`
+4. Unload the plugin with id `another_plugin`
+5. Reload the plugin with file name `another_plugin.py`. Note that since this plugin is not loaded, you can only use file name to specify it
 
 ### Update checker
 

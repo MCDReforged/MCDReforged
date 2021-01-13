@@ -115,8 +115,8 @@ class MCDReforgedPlugin(PermanentPlugin):
 				on_error(UnknownArgument, self.on_mcdr_command_unknown_argument).
 				then(Literal('list').runs(self.list_plugin)).
 				then(Literal('info').then(GreedyText('plugin_id').runs(lambda src, ctx: self.show_plugin_info(src, ctx['plugin_id'])))).
-				then(Literal('load').then(GreedyText('file_path').runs(lambda src, ctx: self.load_plugin(src, ctx['file_path'])))).
-				then(Literal('enable').then(GreedyText('file_path').runs(lambda src, ctx: self.enable_plugin(src, ctx['file_path'])))).
+				then(Literal('load').then(GreedyText('file_name').runs(lambda src, ctx: self.load_plugin(src, ctx['file_name'])))).
+				then(Literal('enable').then(GreedyText('file_name').runs(lambda src, ctx: self.enable_plugin(src, ctx['file_name'])))).
 				then(Literal('reload').then(GreedyText('plugin_id').runs(lambda src, ctx: self.reload_plugin(src, ctx['plugin_id'])))).
 				then(Literal('unload').then(GreedyText('plugin_id').runs(lambda src, ctx: self.unload_plugin(src, ctx['plugin_id'])))).
 				then(Literal('disable').then(GreedyText('plugin_id').runs(lambda src, ctx: self.disable_plugin(src, ctx['plugin_id'])))).
@@ -373,11 +373,11 @@ class MCDReforgedPlugin(PermanentPlugin):
 			source.reply(self.tr('mcdr_command.invalid_plugin_id', plugin_id))
 		else:
 			meta = plugin.get_metadata()
-			source.reply(RTextList(RText(meta.name, styles=RStyle.bold).h(plugin), ' ', RText('v{}'.format(meta.version), color=RColor.gray)))
+			source.reply(RTextList(meta.name.copy().set_styles(RStyle.bold).h(plugin), ' ', RText('v{}'.format(meta.version), color=RColor.gray)))
 			if meta.author is not None:
 				source.reply(RText('Authors: {}'.format(', '.join(meta.author))))
 			if meta.link is not None:
-				source.reply(RTextList('Link: ', RText(meta.link, color=RColor.blue, styles=RStyle.underlined)))
+				source.reply(RTextList('Link: ', RText(meta.link, color=RColor.blue, styles=RStyle.underlined).c(RAction.open_url, meta.link)))
 			if meta.description is not None:
 				source.reply(meta.description)
 
@@ -412,10 +412,10 @@ class MCDReforgedPlugin(PermanentPlugin):
 	def unload_plugin(self, source: CommandSource, plugin_id: str):
 		self.__existed_regular_plugin_manipulate(source, plugin_id, 'unload_plugin', lambda plg: self.mcdr_server.server_interface.unload_plugin(plg.get_id(), is_plugin_call=False))
 
-	def load_plugin(self, source: CommandSource, file_name):
+	def load_plugin(self, source: CommandSource, file_name: str):
 		self.__not_loaded_plugin_file_manipulate(source, file_name, 'load_plugin', lambda pth: self.mcdr_server.server_interface.load_plugin(pth, is_plugin_call=False))
 
-	def enable_plugin(self, source: CommandSource, file_name):
+	def enable_plugin(self, source: CommandSource, file_name: str):
 		self.__not_loaded_plugin_file_manipulate(source, file_name, 'enable_plugin', lambda pth: self.mcdr_server.server_interface.enable_plugin(pth, is_plugin_call=False))
 
 	def reload_all_plugin(self, source: CommandSource):
