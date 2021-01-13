@@ -63,6 +63,9 @@ class MCDReforgedPlugin(PermanentPlugin):
 		# maybe maybe
 		pass
 
+	def __repr__(self):
+		return 'MCDReforgedPlugin[version={}]'.format(self.get_metadata().version)
+
 	@classmethod
 	def get_control_command_prefix(cls):
 		return '!!MCDR'
@@ -321,7 +324,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 		source.reply(self.tr('mcdr_command.list_plugin.info_loaded_plugin', len(current_plugins)))
 		for plugin in current_plugins:
 			meta = plugin.get_metadata()
-			texts = RTextList('§7-§r ', meta.name.h(plugin).c(RAction.run_command, '!!MCDR plugin info {}'.format(meta.id)))
+			texts = RTextList('§7-§r ', meta.name.copy().h(plugin).c(RAction.run_command, '!!MCDR plugin info {}'.format(meta.id)))
 			if self.should_display_buttons(source) and not plugin.is_permanent():
 				texts.append(
 					RText(' [×]', color=RColor.gray)

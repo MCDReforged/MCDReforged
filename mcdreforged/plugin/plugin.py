@@ -58,6 +58,9 @@ class AbstractPlugin:
 	def __str__(self):
 		return self.get_name()
 
+	def __repr__(self):
+		raise NotImplementedError()
+
 	# ----------------
 	#   Plugin State
 	# ----------------

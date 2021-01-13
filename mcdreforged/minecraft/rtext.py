@@ -3,7 +3,6 @@ Advanced text container for Minecraft
 Credit: Pandaria98 https://github.com/Pandaria98 https://github.com/TISUnion/stext
 """
 
-import copy
 import json
 from typing import Iterable, List
 
@@ -116,8 +115,8 @@ class RTextBase:
 	def to_colored_text(self):
 		raise NotImplementedError()
 
-	def copy(self):
-		return copy.deepcopy(self)
+	def copy(self) -> 'RTextBase':
+		raise NotImplementedError()
 
 	def set_click_event(self, action, value):
 		"""
@@ -184,9 +183,6 @@ class RText(RTextBase):
 				if style in styles:
 					self.data[style] = True
 
-	def to_json_object(self):
-		return self.data
-
 	def set_click_event(self, action, value):
 		self.data['clickEvent'] = {
 			'action': action,
@@ -204,6 +200,9 @@ class RText(RTextBase):
 		}
 		return self
 
+	def to_json_object(self):
+		return self.data
+
 	def to_plain_text(self):
 		return self.data['text']
 
@@ -212,6 +211,11 @@ class RText(RTextBase):
 		if self.data.get(RStyle.bold, False):
 			color += Style.BRIGHT
 		return color + self.to_plain_text() + Style.RESET_ALL
+
+	def copy(self):
+		copied = RText('')
+		copied.data = self.data.copy()
+		return copied
 
 
 class RTextTranslation(RText):
@@ -228,7 +232,7 @@ class RTextList(RTextBase):
 	def __init__(self, *args):
 		self.header = RText('')
 		self.header_empty = True
-		self.children = []  # type: List[RTextBase or str]
+		self.children = []  # type: List[RTextBase]
 		self.append(*args)
 
 	def set_click_event(self, action, value):
@@ -266,3 +270,10 @@ class RTextList(RTextBase):
 
 	def to_colored_text(self):
 		return ''.join(self.__get_item_list(lambda obj: obj.to_colored_text()))
+
+	def copy(self):
+		copied = RTextList()
+		copied.header = self.header.copy()
+		copied.header_empty = self.header_empty
+		copied.children = [child.copy() for child in self.children]
+		return copied
