@@ -57,8 +57,6 @@ class DependencyWalker:
 
 	def ensure_loaded(self, plugin_id: str, requirement: VersionRequirement or None):
 		visiting_status = self.get_visiting_status(plugin_id)
-		if visiting_status == VisitingState.PASS:
-			return
 		if visiting_status == VisitingState.FAIL:
 			raise DependencyParentFail(self.tr('dependency_walker.dependency_parent_failed', plugin_id))
 
@@ -85,6 +83,10 @@ class DependencyWalker:
 
 			if requirement is not None and isinstance(requirement, VersionRequirement) and not requirement.accept(plugin_version):
 				raise DependencyNotMet(self.tr('dependency_walker.dependency_not_met', plugin_name_display, requirement))
+
+			if visiting_status == VisitingState.PASS:  # no need to do further dependencies check, already done
+				return
+
 			for dep_id, req in plugin_dependencies.items():
 				try:
 					self.ensure_loaded(dep_id, req)
@@ -94,7 +96,7 @@ class DependencyWalker:
 					raise
 			if not plugin.is_permanent():
 				self.topo_order.append(plugin_id)
-				self.visiting_state[plugin_id] = VisitingState.PASS
+			self.visiting_state[plugin_id] = VisitingState.PASS
 		finally:
 			self.visiting_plugins.remove(plugin_id)
 			self.visiting_plugin_stack.pop(len(self.visiting_plugin_stack) - 1)

@@ -324,7 +324,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 		source.reply(self.tr('mcdr_command.list_plugin.info_loaded_plugin', len(current_plugins)))
 		for plugin in current_plugins:
 			meta = plugin.get_metadata()
-			texts = RTextList('§7-§r ', RTextList(meta.name.copy(), ' ({})'.format(plugin)).c(RAction.run_command, '!!MCDR plugin info {}'.format(meta.id)))
+			texts = RTextList('§7-§r ', meta.name.copy().c(RAction.run_command, '!!MCDR plugin info {}'.format(meta.id)))
 			if self.can_see_rtext(source) and not plugin.is_permanent():
 				texts.append(
 					RText(' [×]', color=RColor.gray)

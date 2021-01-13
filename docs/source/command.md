@@ -100,9 +100,9 @@ Then you can do the following commands
 
 ```
 !!MCDR plugin reload my_plugin
-!!MCDR plugin enable plugins/another_plugin.py.disabled
+!!MCDR plugin enable another_plugin.py.disabled
 !!MCDR plugin unload another_plugin
-!!MCDR plugin load plugins/another_plugin.py
+!!MCDR plugin load another_plugin.py
 ```
 
 Theses commands firstly reload the loaded plugin `my_plugin`, and then enable the plugin

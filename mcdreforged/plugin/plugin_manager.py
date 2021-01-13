@@ -239,7 +239,8 @@ class PluginManager:
 	def check_plugin_dependencies(self) -> SingleOperationResult:
 		result = SingleOperationResult()
 		walker = DependencyWalker(self)
-		for item in walker.walk():
+		walk_result = walker.walk()
+		for item in walk_result:
 			plugin = self.plugins.get(item.plugin_id)  # should be not None
 			result.record(plugin, item.success)
 			if not item.success:
