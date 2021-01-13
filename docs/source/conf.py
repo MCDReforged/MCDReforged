@@ -58,6 +58,13 @@ exclude_patterns = ['build', 'Thumbs.db', '.DS_Store']
 html_theme = 'sphinx_rtd_theme'
 
 
+# Show a deeper toctree in the sidebar
+# https://stackoverflow.com/questions/27669376/show-entire-toctree-in-read-the-docs-sidebar
+html_theme_options = {
+	'navigation_depth': 6,
+}
+
+
 # -- Options for sphinx-intl -------------------------------------------------
 
 # po files will be created in this directory

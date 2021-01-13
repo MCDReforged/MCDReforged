@@ -16,7 +16,9 @@ Type: MCDReforgedLogger, which is inherited from `logging.Logger`
 
 Methods in the SererInterface object are also the API interface for plugins to control the server and the MCDR
 
-### start
+### Server Control
+
+#### start
 
 ```python
 def start(self) -> bool
@@ -26,7 +28,7 @@ Start the server. Return if the action succeed.
 
 If the server is running or being starting by other plugin it will return `False`
 
-### stop
+#### stop
 
 ```python
 def stop(self) -> None
@@ -36,7 +38,7 @@ Soft shutting down the server by sending the correct stop command to the server
 
 This option will not stop MCDR
 
-### wait_for_start
+#### wait_for_start
 
 ```python
 def wait_for_start(self) -> None
@@ -44,7 +46,7 @@ def wait_for_start(self) -> None
 
 Wait until the server is able to start. In other words, wait until the server is stopped
 
-### restart
+#### restart
 
 ```python
 def restart(self) -> None
@@ -54,7 +56,7 @@ Restart the server
 
 It will first soft stop the server and then wait until the server is stopped, then start the server up
 
-### stop_exit
+#### stop_exit
 
 ```python
 def stop_exit(self) -> None
@@ -62,7 +64,7 @@ def stop_exit(self) -> None
 
 Soft stop the server and exit MCDR
 
-### exit
+#### exit
 
 ```python
 def exit(self) -> None
@@ -72,7 +74,7 @@ Exit MCDR when the server is stopped
 
 If the server is running return False otherwise return True
 
-### is_server_running
+#### is_server_running
 
 ```python
 def is_server_running(self) -> bool
@@ -80,7 +82,7 @@ def is_server_running(self) -> bool
 
 Return if the server is running
 
-### is_server_startup
+#### is_server_startup
 
 ```python
 def is_server_startup(self) -> bool
@@ -88,7 +90,7 @@ def is_server_startup(self) -> bool
 
 Return if the server has started up
 
-### is_rcon_running
+#### is_rcon_running
 
 ```python
 def is_rcon_running(self) -> bool
@@ -96,7 +98,7 @@ def is_rcon_running(self) -> bool
 
 Return if MCDR's rcon is running
 
-### get_server_pid
+#### get_server_pid
 
 ```python
 def get_server_pid(self) -> Optional[int]
@@ -106,9 +108,9 @@ Return the pid of the server process, None if the server is stopped
 
 Notes the process with this pid is a bash process, which is the parent process of real server process you might be interested in
 
-## Text Interaction
+### Text Interaction
 
-### execute
+#### execute
 
 ```python
 def execute(self, text: str, *, encoding: Optional[str] = None) -> None
@@ -120,7 +122,7 @@ Parameter *text*: The content of the command you want to send
 
 Parameter *encoding*: The encoding method for the text. Leave it empty to use the encoding method from the configure of MCDR
 
-### tell
+#### tell
 
 ```python
 def tell(self, player: str, text: Union[str, RTextBase], *, encoding: Optional[str] = None) -> None
@@ -134,7 +136,7 @@ Parameter *text*: the message you want to send to the player
 
 Parameter *encoding*: The encoding method for the text. Leave it empty to use the encoding method from the configure of MCDR
 
-### say
+#### say
 
 ```python
 def say(self, text: Union[str, RTextBase], *, encoding: Optional[str] = None) -> None
@@ -146,7 +148,7 @@ Parameter *text*: the message you want to send
 
 Parameter *encoding*: The encoding method for the text. Leave it empty to use the encoding method from the configure of MCDR
 
-### broadcast
+#### broadcast
 
 ```python
 def broadcast(self, text: Union[str, RTextBase], *, encoding: Optional[str] = None) -> None
@@ -158,7 +160,7 @@ Parameter *text*: the message you want to send
 
 Parameter *encoding*: The encoding method for the text. Leave it empty to use the encoding method from the configure of MCDR
 
-### reply
+#### reply
 
 ```python
 def reply(self, info: Info, text: Union[str, RTextBase], *, encoding: Optional[str] = None, console_text: Optional[Union[str, RTextBase]] = None)
@@ -176,11 +178,11 @@ Parameter *console_text*: If it's specified, console_text will be used instead o
 
 Parameter *encoding*: The encoding method for the text
 
-## Plugin Operations
+### Plugin Operations
 
 **Notes**: All plugin manipulation will trigger a dependency check, which might cause unwanted plugin operations
 
-### load_plugin
+#### load_plugin
 
 ```python
 def load_plugin(self, plugin_file_path: str) -> bool
@@ -190,7 +192,7 @@ Load a plugin from the given file path. Return if the plugin gets loaded success
 
 Parameter *plugin_file_path*: The file path of the plugin to load. Example: `plugins/my_plugin.py`
 
-### load_plugin
+#### load_plugin
 
 ```python
 def enable_plugin(self, plugin_file_path: str) -> bool
@@ -200,7 +202,7 @@ Enable an unloaded plugin from the given path. Return if the plugin gets enabled
 
 Parameter *plugin_file_path*: The file path of the plugin to enable. Example: "plugins/my_plugin.py.disabled"
 
-### reload_plugin
+#### reload_plugin
 
 ```python
 def reload_plugin(self, plugin_id: str) -> Optional[bool]
@@ -210,7 +212,7 @@ Reload a plugin specified by plugin id. Return a bool indicating if the plugin g
 
 Parameter *plugin_id*: The id of the plugin to reload. Example: "my_plugin"
 
-### unload_plugin
+#### unload_plugin
 
 ```python
 def unload_plugin(self, plugin_id: str) -> Optional[bool]
@@ -220,7 +222,7 @@ Unload a plugin specified by plugin id. Return a bool indicating if the plugin g
 
 Parameter *plugin_id*: The id of the plugin to unload. Example: "my_plugin"
 
-### disable_plugin
+#### disable_plugin
 
 ```python
 def disable_plugin(self, plugin_id: str) -> Optional[bool]
@@ -230,7 +232,7 @@ Disable a plugin specified by plugin id. Return a bool indicating if the plugin 
 
 Parameter *plugin_id*: The id of the plugin to disable. Example: "my_plugin"
 
-### refresh_all_plugins
+#### refresh_all_plugins
 
 ```python
 def refresh_all_plugins(self) -> None
@@ -238,7 +240,7 @@ def refresh_all_plugins(self) -> None
 
 Reload all plugins, load all new plugins and then unload all removed plugins
 
-### refresh_changed_plugins
+#### refresh_changed_plugins
 
 ```python
 def refresh_all_plugins(self) -> None
@@ -246,7 +248,7 @@ def refresh_all_plugins(self) -> None
 
 Reload all changed plugins, load all new plugins and then unload all removed plugins
 
-### get_plugin_list
+#### get_plugin_list
 
 ```python
 def get_plugin_list(self) -> List[str]
@@ -254,7 +256,7 @@ def get_plugin_list(self) -> List[str]
 
 Return a list containing all loaded plugin id like ["my_plugin", "another_plugin"]
 
-### get_plugin_metadata
+#### get_plugin_metadata
 
 ```python
 def get_plugin_list(self) -> Optional[Metadata]
@@ -264,7 +266,7 @@ Return the metadata of the specified plugin, or None if the plugin doesn't exist
 
 Parameter *plugin_id*: The plugin id of the plugin to query metadata
 
-### get_plugin_file_path
+#### get_plugin_file_path
 
 ```python
 def get_plugin_list(self) -> Optional[str]
@@ -274,7 +276,7 @@ Return the file path of the specified plugin, or None if the plugin doesn't exis
 
 Parameter *plugin_id*: The plugin id of the plugin to query file path
 
-### get_plugin_instance
+#### get_plugin_instance
 
 ```python
 def get_plugin_instance(self) -> Optional[Any]
@@ -299,9 +301,9 @@ def info_query_api(item):
 server.get_plugin_instance('my_api').info_query_api(an_item)
 ```
 
-## Plugin Registry
+### Plugin Registry
 
-### register_event_listener
+#### register_event_listener
 
 ```python
 def register_event_listener(self, event: Union[PluginEvent, str], callback: Callable, priority: int = 1000) -> None
@@ -317,7 +319,7 @@ Parameter *callback*: The callback listener method for the event
 
 Parameter *priority*: The priority of the listener. It will be set to the default value 1000 if it's not specified
 
-### register_command
+#### register_command
 
 ```python
 def register_command(self, root_node: Literal) -> None
@@ -329,7 +331,7 @@ Raise an `IllegalCallError` if it's not invoked in the task executor thread
 
 Parameter *root_node*: The root node of your command tree. It should be a `Literal` node
 
-### register_help_message
+#### register_help_message
 
 ```python
 def register_help_message(self, prefix: str, message: Union[str, RTextBase], permission: int = PermissionLevel.MINIMUM_LEVEL) -> None
@@ -344,7 +346,7 @@ Parameter *message*: A neat command description
 
 Parameter *permission*: The minimum permission level for the user to see this help message. With default, anyone can see this message
 
-### dispatch_event
+#### dispatch_event
 
 ```python
 def dispatch_event(self, event: PluginEvent, args: Tuple[Any, ...]) -> None
@@ -358,9 +360,9 @@ Parameter *event*: The event to dispatch. It need to be a `PluginEvent` instance
 
 Parameter *args*: The argument that will be used to invoke the event listeners. An ServerInterface instance will be automatically added to the beginning of the argument list
 
-## Permission
+### Permission
 
-### get_permission_level
+#### get_permission_level
 
 ```python
 def get_permission_level(self, obj: Union[str, Info, CommandSource]) -> int
@@ -374,7 +376,7 @@ Parameter *obj*: The object your are querying
 
 It raises `TypeError` if the type of the given object is not supported for permission querying
 
-### set_permission_level
+#### set_permission_level
 
 ```python
 def set_permission_level(self, player: str, value: Union[int, str]) -> None
@@ -386,9 +388,9 @@ Parameter *player*: The name of the player that you want to set his/her permissi
 
 Parameter *value*: The target permission level you want to set the player to. It can be an int or a str as long as it's related to the permission level. Available examples: 1, '1', 'user'
 
-## Misc
+### Misc
 
-### is_on_executor_thread
+#### is_on_executor_thread
 
 ```python
 def is_on_executor_thread(self) -> bool
@@ -398,7 +400,7 @@ Return if the current thread is the task executor thread
 
 Task executor thread is the main thread to parse messages and trigger listeners where some ServerInterface APIs  are required to be invoked on
 
-### rcon_query
+#### rcon_query
 
 ```python
 def rcon_query(self, command: str) -> Optional[str]
