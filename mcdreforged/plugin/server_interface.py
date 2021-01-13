@@ -3,7 +3,7 @@ An interface class for plugins to control the server
 """
 import functools
 import time
-from typing import Callable, TYPE_CHECKING, Tuple, Any, Union
+from typing import Callable, TYPE_CHECKING, Tuple, Any, Union, Optional, List
 
 from mcdreforged.command.builder.command_node import Literal
 from mcdreforged.command.command_source import CommandSource
@@ -11,6 +11,7 @@ from mcdreforged.info import Info
 from mcdreforged.mcdr_state import ServerState
 from mcdreforged.minecraft.rtext import RTextBase, RText
 from mcdreforged.permission.permission_level import PermissionLevel
+from mcdreforged.plugin.meta.metadata import Metadata
 from mcdreforged.plugin.operation_result import SingleOperationResult, PluginOperationResult
 from mcdreforged.plugin.plugin_event import EventListener, LiteralEvent, PluginEvent, MCDRPluginEvents
 from mcdreforged.plugin.plugin_registry import DEFAULT_LISTENER_PRIORITY, HelpMessage
@@ -77,67 +78,62 @@ class ServerInterface:
 		else:
 			return self.__get_logger(plugin_name)
 
+	def __get_current_plugin(self):
+		plugin = self.__mcdr_server.plugin_manager.get_current_running_plugin()
+		if plugin.is_regular():
+			return plugin
+		else:
+			raise IllegalCallError('MCDR provided thead is required')
+
 	# ------------------------
 	#      Server Control
 	# ------------------------
 
 	@log_call
-	def start(self):
+	def start(self) -> bool:
 		"""
 		Start the server
-
 		:return: If the action succeed it's True. If the server is running or being starting by other plugin return False
-		:rtype: bool
 		"""
 		return self.__mcdr_server.start_server()
 
 	@log_call
-	def stop(self):
+	def stop(self) -> None:
 		"""
 		Soft shutting down the server by sending the correct stop command to the server
-
-		:rtype: None
 		"""
 		self.__mcdr_server.set_exit_naturally(False)
 		self.__mcdr_server.stop(forced=False)
 
 	@log_call
-	def wait_for_start(self):
+	def wait_for_start(self) -> None:
 		"""
-		Wait until the server is stopped, or is able to start
-
-		:rtype: None
+		Wait until the server is able to start. In other words, wait until the server is stopped
 		"""
 		while self.is_server_running(is_plugin_call=False):
 			time.sleep(0.01)
 
 	@log_call
-	def restart(self):
+	def restart(self) -> None:
 		"""
 		Restart the server
 		It will first soft stop the server and then wait until the server is stopped, then start the server up
-
-		:rtype: None
 		"""
 		self.stop(is_plugin_call=False)
 		self.wait_for_start(is_plugin_call=False)
 		self.start(is_plugin_call=False)
 
 	@log_call
-	def stop_exit(self):
+	def stop_exit(self) -> None:
 		"""
 		Soft stop the server and exit MCDR
-
-		:rtype: None
 		"""
 		self.__mcdr_server.stop(forced=False)
 
 	@log_call
-	def exit(self):
+	def exit(self) -> None:
 		"""
 		Exit MCDR when the server is stopped
-		If the server is running return False otherwise return True
-
 		:raise: IllegalCallError, if the server is not stopped
 		"""
 		if self.__mcdr_server.is_server_running():
@@ -145,41 +141,33 @@ class ServerInterface:
 		self.__mcdr_server.set_server_state(ServerState.STOPPED)
 
 	@log_call
-	def is_server_running(self):
+	def is_server_running(self) -> bool:
 		"""
 		Return if the server is running
-
-		:rtype: bool
 		"""
 		return self.__mcdr_server.is_server_running()
 
 	@log_call
-	def is_server_startup(self):
+	def is_server_startup(self) -> bool:
 		"""
 		Return if the server has started up
-
-		:rtype: bool
 		"""
 		return self.__mcdr_server.is_server_startup()
 
 	@log_call
-	def is_rcon_running(self):
+	def is_rcon_running(self) -> bool:
 		"""
 		Return if MCDR's rcon is running
-
-		:rtype: bool
 		"""
 		return self.__mcdr_server.rcon_manager.is_running()
 
 	@log_call
-	def get_server_pid(self):
+	def get_server_pid(self) -> Optional[int]:
 		"""
 		Return the pid of the server process
 		Notes the process with this pid is a bash process, which is the parent process of real server process
 		you might be interested in
-
 		:return: The pid of the server. None if the server is stopped
-		:rtype: int or None
 		"""
 		if self.__mcdr_server.process is not None:
 			return self.__mcdr_server.process.pid
@@ -190,78 +178,66 @@ class ServerInterface:
 	# ------------------------
 
 	@log_call
-	def execute(self, text, *, encoding=None):
+	def execute(self, text: str, *, encoding: Optional[str] = None) -> None:
 		"""
 		Execute a command by sending the command content to server's standard input stream
-
 		:param str text: The content of the command you want to send
 		:param str encoding: The encoding method for the text
-		:rtype: None
 		"""
 		self.__mcdr_server.send(text, encoding=encoding)
 
 	@log_call
-	def tell(self, player, text, *, encoding=None):
+	def tell(self, player: str, text: Union[str, RTextBase], *, encoding: Optional[str] = None) -> None:
 		"""
-		Use /tellraw <target> to send the message to the specific player
-
-		:param str player: The name of the player you want to tell
-		:param text: the message you want to send
-		:param str encoding: The encoding method for the text
-		:type text: str or dict or list or RTextBase
-		:rtype: None
+		Use command like /tellraw to send the message to the specific player
+		:param player: The name of the player you want to tell
+		:param text: the message you want to send to the player
+		:param encoding: The encoding method for the text
 		"""
 		command = self.__mcdr_server.server_handler_manager.get_current_handler().get_send_message_command(player, text)
 		if command is not None:
 			self.execute(command, encoding=encoding, is_plugin_call=False)
 
 	@log_call
-	def say(self, text, *, encoding=None):
+	def say(self, text: Union[str, RTextBase], *, encoding: Optional[str] = None) -> None:
 		"""
-		Use /tellraw @a to broadcast the message in game
-
+		Use command like /tellraw @a to broadcast the message in game
 		:param text: the message you want to send
-		:param str encoding: The encoding method for the text
-		:type text: str or dict or list or RTextBase
-		:rtype: None
+		:param encoding: The encoding method for the text
 		"""
 		command = self.__mcdr_server.server_handler_manager.get_current_handler().get_broadcast_message_command(text)
 		if command is not None:
 			self.execute(command, encoding=encoding, is_plugin_call=False)
 
 	@log_call
-	def reply(self, info, text, *, encoding=None, console_text=None):
+	def broadcast(self, text: Union[str, RTextBase], *, encoding: Optional[str] = None) -> None:
 		"""
-		Reply to the source of the Info
-		If the Info is from a player then use tell to reply the player
-		Otherwise use logger.info to output to the console
-
-		:param Info info: the Info you want to reply to
+		Broadcast the message in game and to the console
 		:param text: the message you want to send
-		:param console_text: If it's specified, console_text will be used instead of text when replying to console
-		:param str encoding: The encoding method for the text
-		:type text: str or dict or list or RTextBase
-		:rtype: None
-		"""
-		if info.is_player:
-			self.tell(info.player, text, encoding=encoding, is_plugin_call=False)
-		else:
-			if console_text is not None:
-				text = console_text
-			misc_util.print_text_to_console(self.logger, text)
-
-	@log_call
-	def broadcast(self, text, *, encoding=None):
-		"""
-		Broadcast the message in game and  console
-
-		:param text: the message you want to send
-		:param str encoding: The encoding method for the text
-		:type text: str or dict or list or RTextBase
-		:rtype: None
+		:param encoding: The encoding method for the text
 		"""
 		self.say(text, encoding=encoding, is_plugin_call=False)
 		misc_util.print_text_to_console(self.logger, text)
+
+	@log_call
+	def reply(self, info: Info, text: Union[str, RTextBase], *, encoding: Optional[str] = None, console_text: Optional[Union[str, RTextBase]] = None):
+		"""
+		Reply to the source of the Info
+		If the Info is from a player then use tell to reply the player
+		Otherwise if the Info is from the console use logger.info to output to the console
+		In the rest of the situations, the Info is not from a user, a IllegalCallError is raised
+		:param info: the Info you want to reply to
+		:param text: the message you want to send
+		:param console_text: If it's specified, console_text will be used instead of text when replying to console
+		:param encoding: The encoding method for the text
+		"""
+		source = info.get_command_source()
+		if source is None:
+			raise IllegalCallError('Cannot reply to the given info instance')
+		if not source.is_console:
+			if console_text is not None:
+				text = console_text
+		source.reply(text, encoding=encoding)
 
 	# ------------------------
 	#     Plugin Operations
@@ -308,85 +284,68 @@ class ServerInterface:
 		return None
 
 	@log_call
-	def load_plugin(self, plugin_file_path):
+	def load_plugin(self, plugin_file_path: str) -> bool:
 		"""
-		Load a plugin from the given path
-		Example: "plugins/my_plugin.py"
-
-		:param str plugin_file_path: a str, The name of the plugin to load
+		Load a plugin from the given file path
+		:param plugin_file_path: The file path of the plugin to load. Example: "plugins/my_plugin.py"
 		:return: If the plugin gets loaded successfully
-		:rtype: bool
 		"""
 		return self.__not_loaded_regular_plugin_manipulate(plugin_file_path, lambda mgr: mgr.load_plugin)
 
 	@log_call
-	def enable_plugin(self, plugin_file_path):
+	def enable_plugin(self, plugin_file_path: str) -> bool:
 		"""
 		Enable an unloaded plugin from the given path
-		Example: "plugins/my_plugin.py.disabled"
-
-		:param str plugin_file_path: The file path of the plugin to enable
+		:param plugin_file_path: The file path of the plugin to enable. Example: "plugins/my_plugin.py.disabled"
 		:return: If the plugin gets enabled successfully
-		:rtype: bool
 		"""
 		return self.__not_loaded_regular_plugin_manipulate(plugin_file_path, lambda mgr: mgr.enable_plugin)
 
 	@log_call
-	def reload_plugin(self, plugin_id):
+	def reload_plugin(self, plugin_id: str) -> Optional[bool]:
 		"""
 		Reload a plugin specified by plugin id
-		Example: "my-plugin"
-
-		:param str plugin_id: a str, the id of the plugin to reload
-		:return: A bool indicating if the plugin gets reloaded successfully. None if plugin not found
-		:rtype: bool or None
+		:param plugin_id: The id of the plugin to reload. Example: "my_plugin"
+		:return: A bool indicating if the plugin gets reloaded successfully, or None if plugin not found
 		"""
 		return self.__existed_regular_plugin_manipulate(plugin_id, lambda mgr: mgr.reload_plugin, lambda lor: lor.reload_result, check_loaded=True)
 
 	@log_call
-	def unload_plugin(self, plugin_id):
+	def unload_plugin(self, plugin_id: str) -> Optional[bool]:
 		"""
 		Unload a plugin specified by plugin id
-		Example: "my-plugin"
-
-		:param str plugin_id: a str, the id of the plugin to reload
-		:return: A bool indicating if the plugin gets unloaded successfully. None if plugin not found
-		:rtype: bool or None
+		:param plugin_id: The id of the plugin to unload. Example: "my_plugin"
+		:return: A bool indicating if the plugin gets unloaded successfully, or None if plugin not found
 		"""
 		return self.__existed_regular_plugin_manipulate(plugin_id, lambda mgr: mgr.unload_plugin, lambda lor: lor.unload_result, check_loaded=False)
 
 	@log_call
-	def disable_plugin(self, plugin_id):
+	def disable_plugin(self, plugin_id: str) -> Optional[bool]:
 		"""
 		Disable an unloaded plugin from the given path
-		Example: "my-plugin"
-
-		:param str plugin_id: The file path of the plugin to disable
-		:return: A bool indicating if the plugin gets disabled successfully. None if plugin not found
-		:rtype: bool or None
+		:param plugin_id: The id of the plugin to disable. Example: "my_plugin"
+		:return: A bool indicating if the plugin gets disabled successfully, or None if plugin not found
 		"""
 		return self.__existed_regular_plugin_manipulate(plugin_id, lambda mgr: mgr.disable_plugin, lambda lor: lor.unload_result, check_loaded=False)
 
 	@log_call
-	def refresh_all_plugins(self):
+	def refresh_all_plugins(self) -> None:
 		"""
 		Reload all plugins, load all new plugins and then unload all removed plugins
 		"""
 		self.__mcdr_server.plugin_manager.refresh_all_plugins()
 
 	@log_call
-	def refresh_changed_plugins(self):
+	def refresh_changed_plugins(self) -> None:
 		"""
 		Reload all changed plugins, load all new plugins and then unload all removed plugins
 		"""
 		self.__mcdr_server.plugin_manager.refresh_changed_plugins()
 
 	@log_call
-	def get_plugin_list(self):
+	def get_plugin_list(self) -> List[str]:
 		"""
-		Return a str list containing all loaded plugin id like ["my-plugin", "another-plugin"]
-
-		:rtype: list[str]
+		Return a list containing all loaded plugin id like ["my_plugin", "another_plugin"]
 		"""
 		return [plugin.get_id() for plugin in self.__mcdr_server.plugin_manager.get_regular_plugins()]
 
@@ -397,22 +356,29 @@ class ServerInterface:
 		return None
 
 	@log_call
-	def get_plugin_metadata(self, plugin_id: str):
+	def get_plugin_metadata(self, plugin_id: str) -> Optional[Metadata]:
+		"""
+		Return the metadata of the specified plugin, or None if the plugin doesn't exist
+		:param plugin_id: The plugin id of the plugin to query metadata
+		"""
 		return self.__existed_regular_plugin_info_getter(plugin_id, lambda plugin: plugin.get_metadata())
 
 	@log_call
-	def get_plugin_file_path(self, plugin_id: str):
+	def get_plugin_file_path(self, plugin_id: str) -> Optional[str]:
+		"""
+		Return the file path of the specified plugin, or None if the plugin doesn't exist
+		:param plugin_id: The plugin id of the plugin to query file path
+		"""
 		return self.__existed_regular_plugin_info_getter(plugin_id, lambda plugin: plugin.file_path)
 
 	@log_call
-	def get_plugin_instance(self, plugin_id):
+	def get_plugin_instance(self, plugin_id: str) -> Optional[Any]:
 		"""
-		Return the current loaded plugin instance. with this your plugin can access the same plugin instance as MCDR
+		Return the current loaded plugin instance. With this api your plugin can access the same plugin instance to MCDR
 		It's quite important to use this instead of manually import the plugin you want if the target plugin needs to
-		react to events of MCDR
-
-		:param str plugin_id: The plugin id of the plugin you want
-		:return: A current loaded plugin instance. Return None if plugin not found
+		react to events from MCDR
+		:param plugin_id: The plugin id of the plugin you want
+		:return: A current loaded plugin instance, or None if the plugin doesn't exist
 		"""
 		plugin = self.__mcdr_server.plugin_manager.get_regular_plugin_from_id(plugin_id)
 		if plugin is not None:
@@ -423,40 +389,14 @@ class ServerInterface:
 	#     Plugin Registry
 	# ------------------------
 
-	def __get_current_plugin(self):
-		plugin = self.__mcdr_server.plugin_manager.get_current_running_plugin()
-		if plugin.is_regular():
-			return plugin
-		else:
-			raise IllegalCallError('MCDR provided thead is required')
-
 	@log_call
-	def register_help_message(self, prefix, message, permission=PermissionLevel.MINIMUM_LEVEL):
+	def register_event_listener(self, event: Union[PluginEvent, str], callback: Callable, priority: int = DEFAULT_LISTENER_PRIORITY) -> None:
 		"""
-		Add a help message for the current plugin, which is used in !!help command
-
-		:param str prefix: The help command of your plugin
-		When player click on the displayed message it will suggest this prefix parameter to the player
-		:param str or RTextBase message: A neat command description
-		:param int permission: The minimum permission level for the user to see this help message. With default, anyone
-		can see this message
-		:raise: IllegalCallError if it's not called in a MCDR provided thread
-		"""
-		plugin = self.__get_current_plugin()
-		if isinstance(message, str):
-			message = RText(message)
-		plugin.register_help_message(HelpMessage(plugin, prefix, message, permission))
-
-	@log_call
-	def register_event_listener(self, event: Union[PluginEvent, str], callback: Callable, priority: int = DEFAULT_LISTENER_PRIORITY):
-		"""
-		Add an event listener for the current plugin
-
-		:param event: The id of the event to listen, or the PluginEvent instance if it's a built-in
-		MCDR event
+		Register an event listener for the current plugin
+		:param event: The id of the event to listen, or the PluginEvent instance
 		:param callback: The callback listener method for the event
-		:param priority: The priority of the listener
-		:raise: IllegalCallError if it's not called in a MCDR provided thread
+		:param priority: The priority of the listener. It will be set to the default value 1000 if it's not specified
+		:raise: IllegalCallError if it's not invoked in the task executor thread
 		"""
 		plugin = self.__get_current_plugin()
 		if isinstance(event, str):
@@ -464,24 +404,40 @@ class ServerInterface:
 		plugin.register_event_listener(event, EventListener(plugin, callback, priority))
 
 	@log_call
-	def register_command(self, root_node: Literal):
+	def register_command(self, root_node: Literal) -> None:
 		"""
-		Add an event listener for the current plugin
-
-		:param root_node: the root node of your command tree
-		:raise: IllegalCallError if it's not called in a MCDR provided thread
+		Register an event listener for the current plugin
+		:param root_node: the root node of your command tree. It should be a Literal node
+		:raise: IllegalCallError if it's not invoked in the task executor thread
 		"""
 		plugin = self.__get_current_plugin()
 		plugin.register_command(root_node)
 
 	@log_call
-	def dispatch_event(self, event: PluginEvent, args: Tuple[Any, ...]):
+	def register_help_message(self, prefix: str, message: Union[str, RTextBase], permission: int = PermissionLevel.MINIMUM_LEVEL) -> None:
+		"""
+		Register a help message for the current plugin, which is used in !!help command
+		:param prefix: The help command of your plugin. When player click on the displayed message it will suggest this
+		prefix parameter to the player. It's recommend to set it to the entry command of your plugin
+		:param message: A neat command description
+		:param permission: The minimum permission level for the user to see this help message. With default, anyone
+		can see this message
+		:raise: IllegalCallError if it's not invoked in the task executor thread
+		"""
+		plugin = self.__get_current_plugin()
+		if isinstance(message, str):
+			message = RText(message)
+		plugin.register_help_message(HelpMessage(plugin, prefix, message, permission))
+
+	@log_call
+	def dispatch_event(self, event: PluginEvent, args: Tuple[Any, ...]) -> None:
 		"""
 		Dispatch an event to all loaded plugins
-
-		:param event: The event to dispatch
-		:param args: The argument that will be used to invoke the event listeners. An server interface instance will be
-		automatically added to the beginning of the paramenter list
+		The event will be immediately dispatch if it's on the task executor thread, or gets enqueued if it's on other thread
+		:param event: The event to dispatch. It need to be a PluginEvent instance. For simple usage, you can create a
+		LiteralEvent instance for this argument
+		:param args: The argument that will be used to invoke the event listeners. An ServerInterface instance will be
+		automatically added to the beginning of the argument list
 		"""
 		if not isinstance(event, PluginEvent):
 			raise TypeError('Excepted {} but {} found'.format(PluginEvent, type(event)))
@@ -490,29 +446,16 @@ class ServerInterface:
 		self.__mcdr_server.task_executor.execute_or_enqueue(lambda: self.__mcdr_server.plugin_manager.dispatch_event(event, args))
 
 	# ------------------------
-	#           Misc
+	#        Permission
 	# ------------------------
 
-	def is_on_executor_thread(self):
-		"""
-		Return if the current thread is the task executor thread
-		Task executor thread is the main thread to parse messages and trigger listeners
-		:rtype: bool
-		"""
-		return self.__mcdr_server.task_executor.is_on_thread()
-
 	@log_call
-	def get_permission_level(self, obj):
+	def get_permission_level(self, obj: Union[str, Info, CommandSource]) -> int:
 		"""
-		Return the permission level number the parameter object has
-		The object can be Info instance or a str, the name of a player
-		Raise TypeError if the type of obj is object supported
-
+		Return an int indicating permission level number the given object has
+		The object could be a str indicating the name of a player, an Info instance or a command source
 		:param obj: The object your are querying
-		:type obj: Info or str or CommandSource
-		:return: The permission level you are querying
-		:rtype: int
-		:raise: TypeError
+		:raise: TypeError, if the type of the given object is not supported for permission querying
 		"""
 		if isinstance(obj, Info):  # Info instance
 			obj = obj.get_command_source()
@@ -526,28 +469,36 @@ class ServerInterface:
 			raise TypeError('Unsupported permission level querying for type {}'.format(type(obj)))
 
 	@log_call
-	def set_permission_level(self, player, value):
+	def set_permission_level(self, player: str, value: Union[int, str]) -> None:
 		"""
-		Set the permission level of a player
-
-		:param str player: The name of the player that you want to set his/her permission level
+		Set the permission level of the given player
+		:param player: The name of the player that you want to set his/her permission level
 		:param value: The target permission level you want to set the player to. It can be an int or a str as long as
 		it's related to the permission level. Available examples: 1, '1', 'user'
-		:type value: int or str
-		:raise: TypeError if param value is illegal
+		:raise: TypeError if the value parameter doesn't proper represent a permission level
 		"""
 		level = PermissionLevel.get_level(value)
 		if level is None:
 			raise TypeError('Parameter level needs to be a permission related value')
 		self.__mcdr_server.permission_manager.set_permission_level(player, value)
 
-	@log_call
-	def rcon_query(self, command):
-		"""
-		Send command to the server through rcon
+	# ------------------------
+	#           Misc
+	# ------------------------
 
+	def is_on_executor_thread(self) -> bool:
+		"""
+		Return if the current thread is the task executor thread
+		Task executor thread is the main thread to parse messages and trigger listeners where some ServerInterface APIs
+		are required to be invoked on
+		"""
+		return self.__mcdr_server.task_executor.is_on_thread()
+
+	@log_call
+	def rcon_query(self, command: str) -> Optional[str]:
+		"""
+		Send command to the server through rcon connection
 		:param str command: The command you want to send to the rcon server
-		:return: The result server returned from rcon. Return None if rcon is not running or rcon query failed
-		:rtype: str or None
+		:return: The result that server returned from rcon. Return None if rcon is not running or rcon query failed
 		"""
 		return self.__mcdr_server.rcon_manager.send_command(command)

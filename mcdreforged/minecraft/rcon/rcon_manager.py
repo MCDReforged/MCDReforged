@@ -11,7 +11,7 @@ class RconManager:
 		self.logger = mcdr_server.logger
 		self.rcon = None
 
-	def is_running(self):
+	def is_running(self) -> bool:
 		return self.rcon is not None and self.rcon.socket is not None
 
 	def connect(self, address, port, password):

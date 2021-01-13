@@ -14,8 +14,8 @@ Welcome to MCDReforged's documentation!
    Configure<configure.md>
    Permission<permission.md>
    Command<command.md>
-   Plugin Development<plugin.rst>
-   Customize<customize.rst>
+   Plugin Development<plugin_dev/plugin_dev.rst>
+   Customize<customize/customize.rst>
    Migrate from MCDR 0.x<migrate_from_0.x.md>
 
 Indices and tables

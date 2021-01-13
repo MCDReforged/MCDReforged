@@ -373,11 +373,11 @@ class PluginManager:
 			os.rename(plugin.file_path, plugin.file_path + constant.DISABLED_PLUGIN_FILE_SUFFIX)
 
 	def refresh_all_plugins(self):
-		self.logger.info('plugin_manager.refresh_all_plugins.entered')
+		self.logger.info(self.mcdr_server.tr('plugin_manager.refresh_all_plugins.entered'))
 		return self.__refresh_plugins(lambda plg: True)
 
 	def refresh_changed_plugins(self):
-		self.logger.info('plugin_manager.refresh_changed_plugins.entered')
+		self.logger.info(self.mcdr_server.tr('plugin_manager.refresh_changed_plugins.entered'))
 		return self.__refresh_plugins(lambda plg: plg.file_changed())
 
 	# ----------------

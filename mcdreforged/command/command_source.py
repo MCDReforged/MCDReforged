@@ -25,6 +25,10 @@ class CommandSource:
 	def is_player(self) -> bool:
 		raise NotImplementedError()
 
+	@property
+	def is_console(self) -> bool:
+		raise NotImplementedError()
+
 	def get_server(self) -> 'ServerInterface':
 		return self._mcdr_server.server_interface
 
@@ -59,8 +63,12 @@ class PlayerCommandSource(CommandSource):
 		self.player = player
 
 	@property
-	def is_player(self):
+	def is_player(self) -> bool:
 		return True
+
+	@property
+	def is_console(self) -> bool:
+		return False
 
 	def reply(self, message: Any, **kwargs):
 		"""
@@ -82,8 +90,12 @@ class ConsoleCommandSource(CommandSource):
 		super().__init__(mcdr_server, info, CommandSourceType.CONSOLE)
 
 	@property
-	def is_player(self):
+	def is_player(self) -> bool:
 		return False
+
+	@property
+	def is_console(self) -> bool:
+		return True
 
 	def reply(self, message: Any, **kwargs):
 		misc_util.print_text_to_console(self._mcdr_server.logger, message)

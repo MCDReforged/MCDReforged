@@ -118,3 +118,7 @@ Use `from mcdreforged.api.rtext import *` if you want to use all rtext classes
 Use `from mcdreforged.api.rcon import *` if you want to use all rcon classes. Class `Rcon` is renamed to `RconConnection` by the way
 
 For lazy man, you can safely use `from mcdreforged.api.all import *` to import all useful things to the plugin
+
+### Server Instance API
+
+Method `reply` now raises a `TypeError` if the given *info* parameter is not from a user

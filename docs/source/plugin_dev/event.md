@@ -169,7 +169,7 @@ Example:
 
 ```python
 def on_player_joined(server: ServerInterface, player: str, info: Info):
-	server.say('Welcome {}'.format(player))
+    server.say('Welcome {}'.format(player))
 ```
 
 - Event id: mcdr.player_joined
@@ -184,6 +184,8 @@ A player just left the game. Plugin can do cleanups for player related objects
 - Callback arguments: ServerInterface, player_name
 - Default function name: 
 
-### Custom Event
+## Custom Event
 
 Besides MCDR itself, plugins can also dispatch its own event. All you need to do is invoking `server.dispatch_event` api with the event and some arguments. Check [here]() for more details of the api
+
+Customizing event is a good way to broadcast a message between plugins. It's also a good indirectly way for your plugin to react to requests from other plugins 
