@@ -1,10 +1,11 @@
-Plugin API
-==========
+Plugin Development
+==================
 
 .. toctree::
    :maxdepth: 2
 
    Basic<plugin/basic.md>
-   Event<plugin/event.md>
+   Classes<plugin/classes.md>
+   Plugin Event<plugin/event.md>
    Command<plugin/command.md>
    API<plugin/api.md>
