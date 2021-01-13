@@ -8,12 +8,12 @@ import sys
 import time
 import zipfile
 from enum import Enum, unique, auto
-from typing import Dict, Optional
+from typing import Dict, Optional, List
 
 from colorlog import ColoredFormatter
 
 from mcdreforged import constant
-from mcdreforged.minecraft.rtext import RColorConvertor
+from mcdreforged.minecraft.rtext import RColor, RStyle, RItem, RTextBase
 from mcdreforged.utils import string_util, file_util
 
 
@@ -34,10 +34,16 @@ console_color_disabled = False
 
 
 class MCColoredFormatter(ColoredFormatter):
+	MC_CODE_ITEMS = list(map(lambda item: item.value, list(RColor) + list(RStyle)))  # type: List[RItem]
+
 	def formatMessage(self, record):
 		text = super().formatMessage(record)
-		text = RColorConvertor.convert_minecraft_color_code(text)  # minecraft code -> console code
-		text = string_util.clean_minecraft_color_code(text)  # clean the rest of minecraft codes
+		# minecraft code -> console code
+		for item in self.MC_CODE_ITEMS:
+			if item.mc_code in text:
+				text = text.replace(item.mc_code, item.console_code)
+		# clean the rest of minecraft codes
+		text = string_util.clean_minecraft_color_code(text)
 		if console_color_disabled:
 			text = string_util.clean_console_color_code(text)
 		return text
@@ -71,7 +77,9 @@ class MCDReforgedLogger(logging.Logger):
 
 	@classmethod
 	def get_console_formatter(cls, plugin_name=None):
-		extra = '' if plugin_name is None else ' [{}]'.format(plugin_name)
+		if isinstance(plugin_name, RTextBase):
+			plugin_name = plugin_name.to_plain_text()
+		extra = '' if plugin_name is None else ' [{}]'.format(string_util.clean_minecraft_color_code(plugin_name))
 		return MCColoredFormatter(
 			f'[%(name)s] [%(asctime)s] [%(threadName)s/%(log_color)s%(levelname)s%(reset)s]{extra}: %(message_log_color)s%(message)s%(reset)s',
 			log_colors=cls.LOG_COLORS,

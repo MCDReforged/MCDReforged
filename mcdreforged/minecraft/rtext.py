@@ -11,9 +11,9 @@ from colorama import Fore, Style
 
 
 class RItem:
-	def __init__(self, mc_color: str, console_color: str):
-		self.mc_color = mc_color
-		self.console_color = console_color
+	def __init__(self, mc_code: str, console_code: str):
+		self.mc_code = mc_code
+		self.console_code = console_code
 
 
 class RColor(Enum):
@@ -38,19 +38,10 @@ class RColor(Enum):
 
 
 class RColorConvertor:
-	__MC_COLOR_TO_CONSOLE_LIST = [(rcolor.value.mc_color, rcolor.value.console_color) for rcolor in RColor]
-	MC_COLOR_TO_CONSOLE = dict(__MC_COLOR_TO_CONSOLE_LIST)
-	MC_COLOR_TO_RCOLOR = dict([(rcolor.value.mc_color, rcolor) for rcolor in RColor])
-	RCOLOR_TO_CONSOLE = dict([(rcolor, rcolor.value.console_color) for rcolor in RColor])
-	RCOLOR_NAME_TO_CONSOLE = dict([(rcolor.name, rcolor.value.console_color) for rcolor in RColor])
-
-	# minecraft code -> console code
-	@classmethod
-	def convert_minecraft_color_code(cls, text):
-		for key, value in cls.__MC_COLOR_TO_CONSOLE_LIST:
-			if key in text:
-				text = text.replace(key, value)
-		return text
+	MC_COLOR_TO_CONSOLE = dict([(rcolor.value.mc_code, rcolor.value.console_code) for rcolor in RColor])
+	MC_COLOR_TO_RCOLOR = dict([(rcolor.value.mc_code, rcolor) for rcolor in RColor])
+	RCOLOR_TO_CONSOLE = dict([(rcolor, rcolor.value.console_code) for rcolor in RColor])
+	RCOLOR_NAME_TO_CONSOLE = dict([(rcolor.name, rcolor.value.console_code) for rcolor in RColor])
 
 
 class RStyle(Enum):
@@ -182,7 +173,7 @@ class RText(RTextBase):
 		color = RColorConvertor.RCOLOR_NAME_TO_CONSOLE[self.data['color']] if 'color' in self.data else ''
 		for style in RStyle:
 			if self.data.get(style.name, False):
-				color += style.value.console_color
+				color += style.value.console_code
 		return color + self.to_plain_text() + Style.RESET_ALL
 
 	def copy(self) -> 'RText':
