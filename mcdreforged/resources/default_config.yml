@@ -72,11 +72,11 @@ disable_console_thread: false
 disable_console_color: false
 
 
-# A list of custom info reactor classes to handle the info instance. The classed need to be subclasses of AbstractInfoReactor
+# A list of customize info reactor classes to handle the info instance. The classed need to be subclasses of AbstractInfoReactor
 custom_info_reactors:
 
 
-# A list of custom info reactor classes to handle the info instance. The classed need to be subclasses of AbstractServerHandler
+# A list of customize info reactor classes to handle the info instance. The classed need to be subclasses of AbstractServerHandler
 custom_handlers:
 
 

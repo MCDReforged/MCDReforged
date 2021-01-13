@@ -1,5 +1,5 @@
 """
-Some custom exceptions
+Some customize exceptions
 """
 
 

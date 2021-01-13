@@ -170,7 +170,7 @@ custom_info_reactors:
 
 ```yaml
 custom_info_reactors:
-- my.custom.reactor.MyInfoReactor
+- my.customize.reactor.MyInfoReactor
 ```
 
 In this example the custom reactor package path is `my.custom.reactor` and the class name is `MyInfoReactor`
@@ -194,7 +194,7 @@ custom_handlers:
 
 ```yaml
 custom_handlers:
-- my.custom.handler.MyHandler
+- my.customize.handler.MyHandler
 ```
 
 In this example the custom handler package path is `my.custom.handler` and the class is name `MyHandler`
