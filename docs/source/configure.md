@@ -69,7 +69,7 @@ The encoding format used to encode message to the stdin of the server.
 Leave it blank for MCDR to auto detect the encoding. If it doesn't work (e.g. random characters in game) you needs to manually specify it depends on your os and language
 
 - Option type: string or null
-- Default value: ``
+- Default value: ` `
 - Examples: `utf8`, `gbk`
 
 #### plugin_directories

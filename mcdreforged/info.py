@@ -1,7 +1,7 @@
 """
 Info and InfoSource
 """
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 from mcdreforged.command.command_source import CommandSource, ConsoleCommandSource, PlayerCommandSource
 from mcdreforged.utils.exception import IllegalStateError, IllegalCallError
@@ -80,15 +80,17 @@ class Info:
 			raise IllegalStateError('MCDR server is not attached to this Info instance yet')
 
 	def attach_mcdr_server(self, mcdr_server):
+		if self.__mcdr_server is not None:
+			raise IllegalStateError('An Info instance can only attach the MCDR server once')
 		self.__mcdr_server = mcdr_server
 
 	def get_server(self) -> 'ServerInterface':
 		return self.__mcdr_server.server_interface
 
-	def get_command_source(self) -> CommandSource or None:
+	def get_command_source(self) -> Optional[CommandSource]:
 		self.__assert_attached()
 		if self.__command_source is None:
-			if self.source == InfoSource.CONSOLE:
+			if self.is_from_console:
 				self.__command_source = ConsoleCommandSource(self.__mcdr_server, self)
 			elif self.is_player:
 				self.__command_source = PlayerCommandSource(self.__mcdr_server, self, self.player)
@@ -106,10 +108,10 @@ class Info:
 	def should_send_to_server(self) -> bool:
 		return self.__send_to_server
 
-	def cancel_echo(self):
+	def cancel_echo(self) -> None:
 		self.__echo = False
 
-	def cancel_send_to_server(self):
+	def cancel_send_to_server(self) -> None:
 		self.__send_to_server = False
 
 	# --------------------------------

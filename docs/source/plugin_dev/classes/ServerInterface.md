@@ -8,11 +8,13 @@ You can check the code to see the implementation for deeper understanding
 
 ### logger
 
-Type: `MCDReforgedLogger`, which is inherited from `logging.Logger`
+A logger for logging message to the console
 
-Use it to log message to the console
+Type: MCDReforgedLogger, which is inherited from `logging.Logger`
 
-## Server Control API
+## Method
+
+Methods in the SererInterface object are also the API interface for plugins to control the server and the MCDR
 
 ### start
 
