@@ -44,7 +44,7 @@ class CommandSource:
 	def has_permission_higher_than(self, level: int) -> bool:
 		return self.get_permission_level() > level
 
-	def reply(self, message: Any, **kwargs):
+	def reply(self, message: Any, **kwargs) -> None:
 		"""
 		Reply to the command source
 		:param message: The message you want to send. It will be mapped with str() unless it's a RTextBase
