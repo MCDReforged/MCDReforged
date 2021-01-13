@@ -6,25 +6,25 @@ secret = random()
 
 
 def on_load(server, old):
-	add_help_message(server)
+	register_help_message(server)
 
 
-def add_help_message(server):
-	server.add_help_message('!!!start', 'Start the server')
-	server.add_help_message('!!!stop', 'Stop the server')
-	server.add_help_message('!!!stop_exit', 'Stop the server and exit')
-	server.add_help_message('!!!restart', 'Restart the server')
-	server.add_help_message('!!!exit', 'Exit MCDR when server stopped')
-	server.add_help_message('!!!rcon', 'Rcon test')
-	server.add_help_message('!!!permission', 'Get permission level')
-	server.add_help_message('!!!error', 'What is 1/0?')
-	server.add_help_message('!!!status', 'Get server status')
-	server.add_help_message('!!!secret', 'get_plugin_instance() test')
-	server.add_help_message('!!!rtext', RText('rtext test').h('it', ' ', 'works', RText('?', styles=RStyle.obfuscated)))
-	server.add_help_message('!!!plugin', 'plugin test')
-	server.add_help_message('!!!color', 'color test')
-	server.add_help_message('!!!logger', 'unique logger test')
-	server.add_help_message('!!!console', 'special command to console')
+def register_help_message(server):
+	server.register_help_message('!!!start', 'Start the server')
+	server.register_help_message('!!!stop', 'Stop the server')
+	server.register_help_message('!!!stop_exit', 'Stop the server and exit')
+	server.register_help_message('!!!restart', 'Restart the server')
+	server.register_help_message('!!!exit', 'Exit MCDR when server stopped')
+	server.register_help_message('!!!rcon', 'Rcon test')
+	server.register_help_message('!!!permission', 'Get permission level')
+	server.register_help_message('!!!error', 'What is 1/0?')
+	server.register_help_message('!!!status', 'Get server status')
+	server.register_help_message('!!!secret', 'get_plugin_instance() test')
+	server.register_help_message('!!!rtext', RText('rtext test').h('it', ' ', 'works', RText('?', styles=RStyle.obfuscated)))
+	server.register_help_message('!!!plugin', 'plugin test')
+	server.register_help_message('!!!color', 'color test')
+	server.register_help_message('!!!logger', 'unique logger test')
+	server.register_help_message('!!!console', 'special command to console')
 
 
 def on_user_info(server: ServerInterface, info):

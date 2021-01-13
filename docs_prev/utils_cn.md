@@ -171,7 +171,7 @@ MCDReforged 工具文档
 - `server.tell`
 - `server.say`
 - `server.reply`
-- `add_help_message`
+- `register_help_message`
 
 因 `server.reply` 等方法会自动将 `RTextBase` 对象转换为朴素文本，所以没有必要判断控制台这个特例。
 

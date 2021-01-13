@@ -32,9 +32,9 @@ def on_load(server: ServerInterface, old_module):
 		counter = 1
 	msg = f'This is the {counter} time to load the plugin'
 	server.logger.info(msg)
-	server.add_command(Literal('!!cexample').runs(lambda src: src.reply('Hello world from sample command')))
-	server.add_help_message('!!example', 'Hello world')
-	server.add_help_message('!!cexample', 'Hello world from command')
+	server.register_command(Literal('!!cexample').runs(lambda src: src.reply('Hello world from sample command')))
+	server.register_help_message('!!example', 'Hello world')
+	server.register_help_message('!!cexample', 'Hello world from command')
 
 
 def on_unload(server: ServerInterface):
@@ -44,7 +44,7 @@ def on_unload(server: ServerInterface):
 	server.logger.info('Bye')
 
 
-def on_removed(server: ServerInterface):
+def on_remove(server: ServerInterface):
 	"""
 	Do some clean up when your plugin is being removed from MCDR
 	"""
@@ -57,7 +57,7 @@ def on_info(server: ServerInterface, info: Info):
 	Recommend to use on_user_info instead if you only care about info created by users
 	"""
 	if not info.is_user and re.fullmatch(r'Starting Minecraft server on \S*', info.content):
-		server.logger.info('Minecraft is starting')
+		server.logger.info('Minecraft is starting at address {}'.format(info.content.rsplit(' ', 1)[1]))
 
 
 def on_user_info(server: ServerInterface, info: Info):
@@ -72,8 +72,8 @@ def on_player_joined(server: ServerInterface, player: str, info: Info):
 	"""
 	A new player joined game, welcome!
 	"""
-	server.tell(player, 'Welcome!')
-	server.say('Hi {}'.format(player))
+	server.tell(player, 'Hi!')
+	server.say('Welcome {}'.format(player))
 
 
 def on_player_left(server: ServerInterface, player: str):

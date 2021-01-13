@@ -431,7 +431,7 @@ class ServerInterface:
 			raise IllegalCallError('MCDR provided thead is required')
 
 	@log_call
-	def add_help_message(self, prefix, message, permission=PermissionLevel.MINIMUM_LEVEL):
+	def register_help_message(self, prefix, message, permission=PermissionLevel.MINIMUM_LEVEL):
 		"""
 		Add a help message for the current plugin, which is used in !!help command
 
@@ -445,10 +445,10 @@ class ServerInterface:
 		plugin = self.__get_current_plugin()
 		if isinstance(message, str):
 			message = RText(message)
-		plugin.add_help_message(HelpMessage(plugin, prefix, message, permission))
+		plugin.register_help_message(HelpMessage(plugin, prefix, message, permission))
 
 	@log_call
-	def add_event_listener(self, event: Union[PluginEvent, str], callback: Callable, priority: int = DEFAULT_LISTENER_PRIORITY):
+	def register_event_listener(self, event: Union[PluginEvent, str], callback: Callable, priority: int = DEFAULT_LISTENER_PRIORITY):
 		"""
 		Add an event listener for the current plugin
 
@@ -461,10 +461,10 @@ class ServerInterface:
 		plugin = self.__get_current_plugin()
 		if isinstance(event, str):
 			event = LiteralEvent(event_id=event)
-		plugin.add_event_listener(event, EventListener(plugin, callback, priority))
+		plugin.register_event_listener(event, EventListener(plugin, callback, priority))
 
 	@log_call
-	def add_command(self, root_node: Literal):
+	def register_command(self, root_node: Literal):
 		"""
 		Add an event listener for the current plugin
 
@@ -472,7 +472,7 @@ class ServerInterface:
 		:raise: IllegalCallError if it's not called in a MCDR provided thread
 		"""
 		plugin = self.__get_current_plugin()
-		plugin.add_command(root_node)
+		plugin.register_command(root_node)
 
 	@log_call
 	def dispatch_event(self, event: PluginEvent, args: Tuple[Any, ...]):

@@ -171,7 +171,7 @@ Objects in `*args` can be a `str`, a `RText`, a `RTextList` or any classes imple
 - `server.tell`
 - `server.say`
 - `server.reply`
-- `add_help_message`
+- `register_help_message`
 
 Special judge for console output is unnecessary since `server.reply` etc. will convert `RTextBase` objects into plain text
 

@@ -109,7 +109,7 @@ It also has these following methods:
 | set_permission_level(player, level) | Set the permission level of a player. The value of level can be an int or a str as long as it's related to the permission level e.g.: `1`, `'1'`, `'user'`. If the value is invalid a TypeError exception will be raised
 | rcon_query(command) | Send a str command `command` via rcon to the server. Return a response string from the server. Return None if rcon stops or exception occurred |
 | get_plugin_instance(plugin_name) | Return an instance of the loaded plugin located in `plugins/plugin_name.py`. Using this method instead of importing the plugin by yourself allows you to get the same instance as MCDR. If plugin not found returns None |
-| add_help_message(prefix, message) | Add a help message with prefix `prefix` and message `message` to the `!!help` data of MCDR. The `!!help` data of MCDR will be reset before plugin reloading. **It is recommended to add relevant information in `on_load ()` method call.** It needs to be called in a MCDR provided thread such as `on_load` or `on_info` called or an IllegalCallError will be raised |
+| register_help_message(prefix, message) | Add a help message with prefix `prefix` and message `message` to the `!!help` data of MCDR. The `!!help` data of MCDR will be reset before plugin reloading. **It is recommended to add relevant information in `on_load ()` method call.** It needs to be called in a MCDR provided thread such as `on_load` or `on_info` called or an IllegalCallError will be raised |
 
 `plugin_name` can be `my_plugin` or `my_plugin.py`
 
@@ -210,7 +210,7 @@ Current available:
 - For the `info` parameter in `on_info` don't modify it, just only read it
 - If you don't care about info from non-user source use `on_user_info` instead of `on_info`, which can improve MCDR's performance when the server is spamming with non-user info (e.g. Pasting schematic with Litematica mod) in the console
 - If you want to import other plugin use `server.get_plugin_instance()` instead so the plugin instance you get is the same as the one MCDR uses
-- Call `server.add_help_message()` in `on_load()` to add some necessary tips for your plugin so the player can use `!!help` command to know about your plugin
+- Call `server.register_help_message()` in `on_load()` to add some necessary tips for your plugin so the player can use `!!help` command to know about your plugin
 - Keep the environment clean. Store your data files in a custom folder in `plugins/`, your config file in `config/` folder and your log file in `log/` folder will be a good choice
 - `on_mcdr_stop()` allows you to have as many time as you want to save your data. Be carefully, don't enter an endless loop, MCDR is waiting for you to exit
 

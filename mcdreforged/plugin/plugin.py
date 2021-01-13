@@ -104,17 +104,17 @@ class AbstractPlugin:
 	def __assert_allow_to_register(self, target):
 		self.assert_state([PluginState.LOADED, PluginState.READY], 'Only plugin in loaded or ready state is allowed to register {}'.format(target))
 
-	def add_event_listener(self, event: PluginEvent, listener: EventListener):
+	def register_event_listener(self, event: PluginEvent, listener: EventListener):
 		self.__assert_allow_to_register('listener')
-		self.plugin_registry.register_listener(event.id, listener)
+		self.plugin_registry.register_event_listener(event.id, listener)
 		self.mcdr_server.logger.debug('{} is registered for {}'.format(listener, event), option=DebugOption.PLUGIN)
 
-	def add_command(self, node: Literal):
+	def register_command(self, node: Literal):
 		self.__assert_allow_to_register('command')
 		self.plugin_registry.register_command(node)
 		self.mcdr_server.logger.debug('{} registered command with root node {}'.format(self, node), option=DebugOption.PLUGIN)
 
-	def add_help_message(self, help_message: HelpMessage):
+	def register_help_message(self, help_message: HelpMessage):
 		self.__assert_allow_to_register('help message')
 		self.plugin_registry.register_help_message(help_message)
 		self.mcdr_server.logger.debug('Plugin Added help message "{}"'.format(help_message), option=DebugOption.PLUGIN)

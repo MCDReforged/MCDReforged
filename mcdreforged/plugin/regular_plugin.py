@@ -52,7 +52,7 @@ class RegularPlugin(AbstractPlugin):
 			if isinstance(event.default_method_name, str):
 				func = getattr(self.module_instance, event.default_method_name, None)
 				if callable(func):
-					self.add_event_listener(event, EventListener(self, func, DEFAULT_LISTENER_PRIORITY))
+					self.register_event_listener(event, EventListener(self, func, DEFAULT_LISTENER_PRIORITY))
 
 	# --------------
 	#   Life Cycle

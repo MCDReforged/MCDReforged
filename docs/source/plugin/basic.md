@@ -69,15 +69,15 @@ Id, or plugin id, is the identity string of your plugin. It should consist of lo
 
 Here's some available plugin ids:
 
-- my_plugin
-- anotherhelper123
-- \_\_a_cool_plugin__
+- `my_plugin`
+- `anotherhelper123`
+- `__a_cool_plugin__`
 
 But the following ids are not allowed:
 
-- MyPlugin
-- another-helper-123
-- a cool plugin
+- `MyPlugin`
+- `another-helper-123`
+- `a cool plugin`
 
 MCDR uses plugin id to distinguish between different plugins and check the dependencies. All loaded plugin in MCDR contain different plugin ids. If a newly loaded plugin has a plugin id exactly the same with an existed plugin, the new plugin will fail to load
 
@@ -93,11 +93,11 @@ The version value indicates the version of your value. It's mostly in [semver](h
 
 Here's some available version:
 
-- 1.0.0
-- 2.0
-- 1.2.3-pre4
-- 1.8.9-rc.8
-- 1.14.1-beta.4+build.54
+- `1.0.0`
+- `2.0`
+- `1.2.3-pre4`
+- `1.8.9-rc.8`
+- `1.14.1-beta.4+build.54`
 
 Following [semver](https://semver.org/) format for you version string is a good idea. It's easier to maintain and for people to understand
 
@@ -192,13 +192,17 @@ This field is optional, you can just ignore it if your plugin doesn't have any d
 
 ## Plugin Registry
 
+Plugin registry is a collection of things that plugin registered for. It will get clean up every time before the plugin gets loaded, so you'd better register them in [Plugin Load](event.html#plugin-load) event
+
 ### Event listeners
 
-There are several ways to register an event listener for you plugin. You can either 
+Check [here](event.html#register-a-event-listener) for more detail about event listener registering
 
 ### Command
 
 Rather than manually parsing `info.content` inside user info event callback like `on_user_info`, MCDR provides a command system for plugins to register their commands
+
+Check []() for more detail
 
 ### Help message
 

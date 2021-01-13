@@ -40,7 +40,7 @@ class PluginRegistry:
 	def register_help_message(self, help_message: HelpMessage):
 		self.help_messages.append(help_message)
 
-	def register_listener(self, event_id: str, listener: EventListener):
+	def register_event_listener(self, event_id: str, listener: EventListener):
 		listeners = self.event_listeners.get(event_id, [])
 		listeners.append(listener)
 		self.event_listeners[event_id] = listeners

@@ -57,7 +57,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 		self.__register_commands()
 
 	def __register_event_listeners(self):
-		self.add_event_listener(MCDRPluginEvents.GENERAL_INFO, EventListener(self, self.on_info, 10))
+		self.register_event_listener(MCDRPluginEvents.GENERAL_INFO, EventListener(self, self.on_info, 10))
 
 	def on_info(self, server_interface, info):
 		# maybe maybe
@@ -75,7 +75,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 		return '!!help'
 
 	def __register_commands(self):
-		self.add_command(
+		self.register_command(
 			Literal(self.get_control_command_prefix()).
 			requires(lambda src: src.has_permission(PermissionLevel.MCDR_CONTROL_LEVEL)).
 			runs(lambda src: src.reply(self.get_help_message('mcdr_command.help_message'))).
@@ -126,7 +126,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 				Literal({'checkupdate', 'cu'}).runs(lambda src: self.mcdr_server.update_helper.check_update(condition_check=lambda: True, reply_func=src.reply))
 			)
 		)
-		self.add_command(Literal(self.get_help_command_prefix()).runs(self.process_help_command))
+		self.register_command(Literal(self.get_help_command_prefix()).runs(self.process_help_command))
 
 	# ==============================
 	#     Command Implementation
@@ -443,13 +443,13 @@ class MCDReforgedPlugin(PermanentPlugin):
 	# =======================
 
 	def __register_help_messages(self):
-		self.add_help_message(HelpMessage(
+		self.register_help_message(HelpMessage(
 			self,
 			self.get_control_command_prefix(),
 			self.plugin_manager.mcdr_server.tr('mcdr_command.help_message.mcdr_command'),
 			PermissionLevel.MCDR_CONTROL_LEVEL
 		))
-		self.add_help_message(HelpMessage(
+		self.register_help_message(HelpMessage(
 			self,
 			self.get_help_command_prefix(),
 			self.plugin_manager.mcdr_server.tr('mcdr_command.help_message.help_command'),

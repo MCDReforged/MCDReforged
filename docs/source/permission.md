@@ -42,4 +42,4 @@ guest:
 - Noob
 ```
 
-Permission file supports hot-reload. You can use `!!MCDR reload permission` to reload the permission file in-game. Check the related [command section](command.html#Hot-reloads) for more detail
+Permission file supports hot-reload. You can use `!!MCDR reload permission` to reload the permission file in-game. Check the related [command section](command.html#hot-reloads) for more detail

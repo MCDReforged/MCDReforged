@@ -109,7 +109,7 @@ MCDReforged 插件文档
 | set_permission_level(player, level) | 设置指定玩家的权限等级。参数 `level` 可为与权限等级相关的一个 int 或 str，如 `1`, `'1'`, `'user'`。若权限等级不合法则抛出 TypeError 异常
 | rcon_query(command) | 通过 rcon 向服务端发送字符串指令 `command`，然后返回一个字符串，表示该指令执行后的返回值。如果 rcon 未在运行或者有异常发生，返回 None |
 | get_plugin_instance(plugin_name) | 返回当前加载着的位于 `plugins/plugin_name.py` 的插件实例。使用此方法而非在插件中手动 import 可保证得到的目标插件实例与 MCDR 中的实例相同。若未找到该插件，返回 None |
-| add_help_message(prefix, message) | 向 MCDR 的 `!!help` 信息库中加入一条指令前缀为 `prefix`，信息为 `message` 的帮助信息。`!!help` 信息库将在插件重载前清空。**推荐在方法 `on_load()` 中进行相关信息添加。**需要在 MCDR提供的线程中调用，如 `on_load`、`on_info`，否则一个 IllegalCallError 异常将被抛出 |
+| register_help_message(prefix, message) | 向 MCDR 的 `!!help` 信息库中加入一条指令前缀为 `prefix`，信息为 `message` 的帮助信息。`!!help` 信息库将在插件重载前清空。**推荐在方法 `on_load()` 中进行相关信息添加。**需要在 MCDR提供的线程中调用，如 `on_load`、`on_info`，否则一个 IllegalCallError 异常将被抛出 |
 
 `plugin_name` 可为 `my_plugin` 或者 `my_plugin.py`
 
@@ -210,7 +210,7 @@ def on_load(server, old_module):
 - 对于 `on_info` 中的 info 参数请不要对其进行修改，只读就好
 - 如果你不关心来源非用户的玩家信息，使用 `on_user_info` 而非 `on_info`，这样子可以提升 MCDR 在服务端后台刷屏且内容非来自于用户时（如 Litematica 粘贴原理图时）的性能表现
 - 如果你需要导入其他插件，使用 `server.get_plugin_instance()` 而不是手动导入，这样子你可以得到跟 MCDR 所使用的相同的插件实例
-- 在 `on_load()` 时调用 `server.add_help_message()` 来添加一些必要的帮助信息，这样子玩家可以通过 `!!help` 指令来了解到你的插件
+- 在 `on_load()` 时调用 `server.register_help_message()` 来添加一些必要的帮助信息，这样子玩家可以通过 `!!help` 指令来了解到你的插件
 - 保持环境整洁。将你的数据存放至 `MCDR/plugins/my_plugin/` 文件夹、将你的配置文件存放在 `MCDR/config/` 文件夹和将你的日志文件存放在 `MCDR/log/` 文件夹都是好主意
 - `on_mcdr_stop()` 给予了你充足的时间来保存数据。但是要小心，不要跑进死循环里了，MCDR 还在等着你完工的
 
