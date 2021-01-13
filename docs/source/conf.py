@@ -69,7 +69,7 @@ gettext_compact = False  # optional
 # -- save the table width ----------------------------------------------------
 # https://rackerlabs.github.io/docs-rackspace/tools/rtd-tables.html
 
-html_static_path = ['static']
+html_static_path = ['../static']
 
 html_context = {
 	'css_files': [
