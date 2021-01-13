@@ -18,7 +18,7 @@ SOURCE_ERROR_CONTEXT_CALLBACK = Union[Callable[[], Any], Callable[[CommandSource
 
 
 class ArgumentNode:
-	class ErrorListener:
+	class ErrorHandler:
 		def __init__(self, callback: SOURCE_ERROR_CONTEXT_CALLBACK, handled: bool):
 			self.callback = callback
 			self.handled = handled
@@ -28,7 +28,7 @@ class ArgumentNode:
 		self.children_literal = {}  # type: Dict[str, List[Literal]]
 		self.children = []  # type: List[ArgumentNode]
 		self.callback = None
-		self.error_listeners = {}  # type: Dict[Type[CommandError], ArgumentNode.ErrorListener]
+		self.error_handlers = {}  # type: Dict[Type[CommandError], ArgumentNode.ErrorHandler]
 		self.requirement = lambda source: True
 		self.requirement_failure_message_getter = None
 		self.redirect_node = None
@@ -53,7 +53,7 @@ class ArgumentNode:
 			self.children.append(node)
 		return self
 
-	def runs(self, func: SOURCE_CONTEXT_CALLBACK):
+	def runs(self, func: SOURCE_CONTEXT_CALLBACK) -> 'ArgumentNode':
 		"""
 		Executes the given function if the command string ends here
 		:param func: A function to execute at this node which accepts maximum 2 parameters (command source and context)
@@ -62,7 +62,7 @@ class ArgumentNode:
 		self.callback = func
 		return self
 
-	def requires(self, requirement: SOURCE_CONTEXT_CALLBACK_BOOL, failure_message_getter: Optional[SOURCE_CONTEXT_CALLBACK_STR] = None):
+	def requires(self, requirement: SOURCE_CONTEXT_CALLBACK_BOOL, failure_message_getter: Optional[SOURCE_CONTEXT_CALLBACK_STR] = None) -> 'ArgumentNode':
 		"""
 		Set the requirement for the command source to enter this node
 		:param requirement: A callable function which accepts maximum 2 parameters (command source and context)
@@ -76,7 +76,7 @@ class ArgumentNode:
 		self.requirement_failure_message_getter = failure_message_getter
 		return self
 
-	def redirects(self, redirect_node: 'ArgumentNode'):
+	def redirects(self, redirect_node: 'ArgumentNode') -> 'ArgumentNode':
 		"""
 		Redirect the child branches of this node to the child branches of the given node
 		:type redirect_node: ArgumentNode
@@ -87,14 +87,14 @@ class ArgumentNode:
 		self.redirect_node = redirect_node
 		return self
 
-	def on_error(self, error_type: Type[CommandError], listener: SOURCE_ERROR_CONTEXT_CALLBACK, *, handled: bool = False):
+	def on_error(self, error_type: Type[CommandError], handler: SOURCE_ERROR_CONTEXT_CALLBACK, *, handled: bool = False) -> 'ArgumentNode':
 		"""
-		When a command error occurs, invoke the listener
-		:param error_type: A class of CommandError or inherited from CommandError
-		:param listener: A callback function which accepts maximum 3 parameters (command source, error and context)
-		:param handled: If handled is set to True, error.set_handled() is called automatically after invoking the listener callback
+		When a command error occurs, invoke the handler
+		:param error_type: A class that is subclass of CommandError
+		:param handler: A callback function which accepts maximum 3 parameters (command source, error and context)
+		:param handled: If handled is set to True, error.set_handled() is called automatically when invoking the handler callback
 		"""
-		self.error_listeners[error_type] = self.ErrorListener(listener, handled)
+		self.error_handlers[error_type] = self.ErrorHandler(handler, handled)
 		return self
 
 	# -------------------
@@ -139,11 +139,11 @@ class ArgumentNode:
 		return callback(*args[:spec_args_len])
 
 	def __raise_error(self, source, error: CommandError, context: dict):
-		listener = self.error_listeners.get(type(error))
-		if listener is not None:
-			if listener.handled:
+		handler = self.error_handlers.get(type(error))
+		if handler is not None:
+			if handler.handled:
 				error.set_handled()
-			self.__smart_callback(listener.callback, source, error, context)
+			self.__smart_callback(handler.callback, source, error, context)
 		raise error
 
 	def _execute(self, source, command: str, remaining: str, context: dict):
@@ -261,15 +261,15 @@ class NumberNode(ArgumentNode, ABC):
 		self.__min_value = None
 		self.__max_value = None
 
-	def at_min(self, min_value):
+	def at_min(self, min_value) -> 'NumberNode':
 		self.__min_value = min_value
 		return self
 
-	def at_max(self, max_value):
+	def at_max(self, max_value) -> 'NumberNode':
 		self.__max_value = max_value
 		return self
 
-	def in_range(self, min_value, max_value):
+	def in_range(self, min_value, max_value) -> 'NumberNode':
 		self.at_min(min_value)
 		self.at_max(max_value)
 		return self
@@ -325,15 +325,15 @@ class TextNode(ArgumentNode, ABC):
 		self.__min_length = None
 		self.__max_length = None
 
-	def at_min_length(self, min_length):
+	def at_min_length(self, min_length) -> 'TextNode':
 		self.__min_length = min_length
 		return self
 
-	def at_max_length(self, max_length):
+	def at_max_length(self, max_length) -> 'TextNode':
 		self.__max_length = max_length
 		return self
 
-	def in_length_range(self, min_length, max_length):
+	def in_length_range(self, min_length, max_length) -> 'TextNode':
 		self.__min_length = min_length
 		self.__max_length = max_length
 		return self

@@ -83,3 +83,5 @@ def reply(self, message: Any, **kwargs) -> None
 Send a message to the command source. The message can be anything including RTexts
 
 The message will be converted to str using `str()` function unless it's a RTextBase object
+
+Keyword Parameter *encoding*: The encoding method for the text. It's only used in PlayerCommandSource to optionally specify the encoding method. Check [here](ServerInterface.html#execute) for more details

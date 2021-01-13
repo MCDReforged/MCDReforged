@@ -120,7 +120,7 @@ Execute a command by sending the command content to server's standard input stre
 
 Parameter *text*: The content of the command you want to send
 
-Parameter *encoding*: The encoding method for the text. Leave it empty to use the encoding method from the configure of MCDR
+Keyword Parameter *encoding*: The encoding method for the text. Leave it empty to use the encoding method from the configure of MCDR
 
 #### tell
 
@@ -134,7 +134,7 @@ Parameter *player*: The name of the player you want to tell
 
 Parameter *text*: the message you want to send to the player
 
-Parameter *encoding*: The encoding method for the text. Leave it empty to use the encoding method from the configure of MCDR
+Keyword Parameter *encoding*: The encoding method for the text. Leave it empty to use the encoding method from the configure of MCDR
 
 #### say
 
@@ -146,7 +146,7 @@ Use command like `/tellraw @a` to send the message to broadcast the message in g
 
 Parameter *text*: the message you want to send
 
-Parameter *encoding*: The encoding method for the text. Leave it empty to use the encoding method from the configure of MCDR
+Keyword Parameter *encoding*: The encoding method for the text. Leave it empty to use the encoding method from the configure of MCDR
 
 #### broadcast
 
@@ -158,7 +158,7 @@ Broadcast the message in game and to the console
 
 Parameter *text*: the message you want to send
 
-Parameter *encoding*: The encoding method for the text. Leave it empty to use the encoding method from the configure of MCDR
+Keyword Parameter *encoding*: The encoding method for the text. Leave it empty to use the encoding method from the configure of MCDR
 
 #### reply
 
@@ -174,9 +174,9 @@ Parameter *info*: the Info you want to reply to
 
 Parameter *text*: the message you want to send
 
-Parameter *console_text*: If it's specified, console_text will be used instead of text when replying to console
+Keyword Parameter *console_text*: If it's specified, console_text will be used instead of text when replying to console
 
-Parameter *encoding*: The encoding method for the text
+Keyword Parameter *encoding*: The encoding method for the text
 
 ### Plugin Operations
 

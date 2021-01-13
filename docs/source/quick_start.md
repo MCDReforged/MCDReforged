@@ -51,6 +51,8 @@ pip install mcdreforged --upgrade
 
 That's it! 
 
+Development builds are avaiable in [Test PyPi](https://test.pypi.org/project/mcdreforged/#history), you can install them if you have special needs
+
 ## Start from source
 
 Instead of installing MCDR from pypi, you can execute the source file of MCDR directly. 
