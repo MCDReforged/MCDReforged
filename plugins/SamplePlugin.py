@@ -1,11 +1,7 @@
-# -*- coding: utf-8 -*-
-
-import random
 import re
-import time
 
 from mcdreforged.api.command import *
-from mcdreforged.api.types import ServerInterface
+from mcdreforged.api.types import *
 
 PLUGIN_METADATA = {
 	'id': 'sample_plugin',    # contains letter in lowercase, number and underscore
@@ -21,16 +17,13 @@ PLUGIN_METADATA = {
 
 # variant for functionality demo
 counter = 0
-secret = random.random()
 
 
 def on_load(server: ServerInterface, old_module):
 	"""
 	Do some clean up when your plugin is being loaded
 	Like migrating data, reading config file or adding help messages
-
-	:param old_module: Previous plugin instance. If the plugin is freshly loaded it will be None
-	:param ServerInterface server: A ServerInterface instance
+	old_module is the previous plugin instance. If the plugin is freshly loaded it will be None
 	"""
 	global counter
 	if old_module is not None:
@@ -44,89 +37,86 @@ def on_load(server: ServerInterface, old_module):
 	server.add_help_message('!!cexample', 'Hello world from command')
 
 
-def on_unload(server):
+def on_unload(server: ServerInterface):
 	"""
-	Do some clean up when your plugin is being unloaded
-
-	:param server: A ServerInterface instance
+	Do some clean up when your plugin is being unloaded. Note that it might be a reload
 	"""
-	server.logger.info('bye')
+	server.logger.info('Bye')
 
 
-def on_info(server, info):
+def on_removed(server: ServerInterface):
+	"""
+	Do some clean up when your plugin is being removed from MCDR
+	"""
+	server.logger.info('Man i got removed')
+
+
+def on_info(server: ServerInterface, info: Info):
 	"""
 	Handler for general server output event
 	Recommend to use on_user_info instead if you only care about info created by users
-
-	:param server: A ServerInterface instance
-	:param info: a Info instance
 	"""
 	if not info.is_user and re.fullmatch(r'Starting Minecraft server on \S*', info.content):
-		server.logger.info('Minecraft starting')
+		server.logger.info('Minecraft is starting')
 
 
-def on_user_info(server, info):
+def on_user_info(server: ServerInterface, info: Info):
 	"""
 	Reacting to user input
-
-	:param server: A ServerInterface instance
-	:param info: a Info instance
 	"""
 	if info.content == '!!example':
 		server.reply(info, 'example!!')
 
 
-def on_player_joined(server, player, info):
+def on_player_joined(server: ServerInterface, player: str, info: Info):
 	"""
 	A new player joined game, welcome!
-
-	:param server: A ServerInterface instance
-	:param str player: The name of the player
-	:param info: a Info instance, go parse it if you want more information
 	"""
 	server.tell(player, 'Welcome!')
 	server.say('Hi {}'.format(player))
 
 
-def on_player_left(server, player):
+def on_player_left(server: ServerInterface, player: str):
 	"""
 	A player left the game, do some cleanup!
-
-	:param server: A ServerInterface instance
-	:param str player: The name of the player
 	"""
 	server.say('Bye {}'.format(player))
 
 
-def on_server_startup(server):
+def on_server_start(server: ServerInterface):
+	"""
+	When the server begins to start
+	"""
+	server.logger.info('Server is starting')
+
+
+def on_server_startup(server: ServerInterface):
 	"""
 	When the server is fully startup
-
-	:param server: A ServerInterface instance
 	"""
 	server.logger.info('Server has started')
 
 
-def on_server_stop(server, return_code):
+def on_server_stop(server: ServerInterface, return_code: int):
 	"""
 	When the server process is stopped, go do some clean up
 	If the server is not stopped by a plugin, this is the only chance for plugins to restart the server, otherwise MCDR
 	will exit too
-	MCDR will wait until all on_server_stop event call are finished before exiting
-
-	:param int return_code: The return code of the process
-	:param server: A ServerInterface instance
 	"""
 	server.logger.info('Server has stopped and its return code is {}'.format(return_code))
 
 
-def on_mcdr_stop(server):
+def on_mcdr_start(server: ServerInterface):
 	"""
 	When MCDR is about to stop, go do some clean up
 	MCDR will wait until all on_mcdr_stop event call are finished before exiting
-
-	:param server: A ServerInterface instance
 	"""
-	server.logger.info('Give me 1 second to prepare exiting')
-	time.sleep(1)
+	server.logger.info('Another new launch for MCDR')
+
+
+def on_mcdr_stop(server: ServerInterface):
+	"""
+	When MCDR is about to stop, go do some clean up
+	MCDR will wait until all on_mcdr_stop event call are finished before exiting
+	"""
 	server.logger.info('See you next time~')

@@ -209,6 +209,12 @@ When the server has trigger a specific event, it will list out all event listene
 - Callback arguments: ServerInterface, Info
 - Default function name: on_user_info
 
+#### Server Start
+
+- Event id: mcdr.server_start
+- Callback arguments: ServerInterface
+- Default function name: on_server_start
+
 #### Server Startup
 
 - Event id: mcdr.server_startup

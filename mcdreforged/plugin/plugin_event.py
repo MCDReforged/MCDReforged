@@ -44,6 +44,7 @@ class _PluginEventStorage:
 class MCDRPluginEvents:
 	GENERAL_INFO 	= _PluginEventStorage.register(MCDREvent('mcdr.general_info', 'General info', 'on_info'))
 	USER_INFO 		= _PluginEventStorage.register(MCDREvent('mcdr.user_info', 'User info', 'on_user_info'))
+	SERVER_START 	= _PluginEventStorage.register(MCDREvent('mcdr.server_start', 'Server start', 'on_server_start'))
 	SERVER_STARTUP 	= _PluginEventStorage.register(MCDREvent('mcdr.server_startup', 'Server startup', 'on_server_startup'))
 	SERVER_STOP 	= _PluginEventStorage.register(MCDREvent('mcdr.server_stop', 'Server startup', 'on_server_stop'))
 	MCDR_START 		= _PluginEventStorage.register(MCDREvent('mcdr.mcdr_start', 'MCDR start', 'on_mcdr_start'))

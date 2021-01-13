@@ -317,6 +317,7 @@ class MCDReforgedServer:
 	def on_server_start(self):
 		self.set_exit_naturally(True)
 		self.logger.info(self.tr('mcdr_server.start_server.pid_info', self.process.pid))
+		self.plugin_manager.dispatch_event(MCDRPluginEvents.SERVER_START, ())
 		self.set_server_state(ServerState.RUNNING)
 
 	def on_server_stop(self):
@@ -411,6 +412,7 @@ class MCDReforgedServer:
 		self.task_executor.start()
 		self.task_executor.add_task(self.load_plugins)
 		self.task_executor.wait_till_finish_all_task()
+		self.plugin_manager.dispatch_event(MCDRPluginEvents.MCDR_START, ())
 		if not self.config['disable_console_thread']:
 			self.console_handler.start()
 		else:
@@ -419,7 +421,6 @@ class MCDReforgedServer:
 			raise ServerStartError()
 		self.server_handler_manager.start_handler_detection()
 		self.set_mcdr_state(MCDReforgedState.RUNNING)
-		self.plugin_manager.dispatch_event(MCDRPluginEvents.MCDR_START, ())
 
 	def on_mcdr_stop(self):
 		try:
