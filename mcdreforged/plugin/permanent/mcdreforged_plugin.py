@@ -133,7 +133,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 	# ==============================
 
 	@staticmethod
-	def should_display_buttons(source: CommandSource):
+	def can_see_rtext(source: CommandSource):
 		return source.is_player
 
 	def get_help_message(self, translation_key):
@@ -189,9 +189,9 @@ class MCDReforgedPlugin(PermanentPlugin):
 		self.reload_permission(source)
 		self.refresh_changed_plugins(source)
 
-	# ----------
-	# Permission
-	# ----------
+	# --------------
+	#   Permission
+	# --------------
 
 	def set_player_permission(self, source: CommandSource, player: str, value: str):
 		permission_level = PermissionLevel.get_level(value)
@@ -254,7 +254,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 				)
 				for player in self.mcdr_server.permission_manager.get_permission_group_list(permission_level.name):
 					texts = RText('§7-§r {}'.format(player))
-					if self.should_display_buttons(source):
+					if self.can_see_rtext(source):
 						texts += RTextList(
 							RText(' [✎]', color=RColor.gray)
 							.c(RAction.suggest_command, '!!MCDR permission set {} '.format(string_util.auto_quotes(player)))
@@ -276,9 +276,9 @@ class MCDReforgedPlugin(PermanentPlugin):
 			if source.is_player:
 				source.reply(self.tr('permission_manager.set_default_permission_level.done', permission_level.name))
 
-	# ------
-	# Status
-	# ------
+	# ----------
+	#   Status
+	# ----------
 
 	def print_mcdr_status(self, source: CommandSource):
 		def bool_formatter(bl):
@@ -306,9 +306,9 @@ class MCDReforgedPlugin(PermanentPlugin):
 			for thread in threading.enumerate():
 				source.reply('  §r-§r {}'.format(thread.getName()))
 
-	# ------
-	# Plugin
-	# ------
+	# ----------
+	#   Plugin
+	# ----------
 
 	def get_files_in_plugin_directories(self, filter: Callable[[str], bool]) -> List[str]:
 		result = []
@@ -324,8 +324,8 @@ class MCDReforgedPlugin(PermanentPlugin):
 		source.reply(self.tr('mcdr_command.list_plugin.info_loaded_plugin', len(current_plugins)))
 		for plugin in current_plugins:
 			meta = plugin.get_metadata()
-			texts = RTextList('§7-§r ', meta.name.copy().h(plugin).c(RAction.run_command, '!!MCDR plugin info {}'.format(meta.id)))
-			if self.should_display_buttons(source) and not plugin.is_permanent():
+			texts = RTextList('§7-§r ', RTextList(meta.name.copy(), ' ({})'.format(plugin)).c(RAction.run_command, '!!MCDR plugin info {}'.format(meta.id)))
+			if self.can_see_rtext(source) and not plugin.is_permanent():
 				texts.append(
 					RText(' [×]', color=RColor.gray)
 					.c(RAction.run_command, '!!MCDR plugin disable {}'.format(meta.id))
@@ -347,7 +347,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 		for file_path in disabled_plugin_list:
 			file_name, file_name_text = get_file_name(file_path)
 			texts = RTextList(RText('- ', color=RColor.gray), file_name_text)
-			if self.should_display_buttons(source):
+			if self.can_see_rtext(source):
 				texts.append(
 					RText(' [✔]', color=RColor.gray)
 					.c(RAction.run_command, '!!MCDR plugin enable {}'.format(file_name))
@@ -359,7 +359,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 		for file_path in not_loaded_plugin_list:
 			file_name, file_name_text = get_file_name(file_path)
 			texts = RTextList(RText('- ', color=RColor.gray), file_name_text)
-			if self.should_display_buttons(source):
+			if self.can_see_rtext(source):
 				texts.append(
 					RText(' [✔]', color=RColor.gray)
 					.c(RAction.run_command, '!!MCDR plugin load {}'.format(file_name))

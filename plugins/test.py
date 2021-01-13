@@ -113,7 +113,7 @@ pid: {}
 			RText('More Test', color=RColor.light_purple, styles=[RStyle.italic, RStyle.underlined]).h('QwQ') +
 			'\nMinecraft §aC§bo§cl§do§er §r§lCode\n' +
 			RTextList(
-				RText('>>>>>>> Click me <<<<<<<\n').c(RAction.suggest_command, '!!!RText').h(
+				RText('>>>>>>> Click me <<<<<<<\n').c(RAction.suggest_command, '!!!rtext').h(
 					RText('www', styles=[RStyle.obfuscated, RStyle.underlined]),
 					'<- guess what is this\n',
 					'tbh idk'
@@ -123,27 +123,32 @@ pid: {}
 		)
 
 	if info.content == '!!!color':
-		text = '''
-		§0black
-		§1dark_blue
-		§2dark_green
-		§3dark_aqua
-		§4dark_red
-		§5dark_purple
-		§6gold
-		§7gray
-		§8dark_gray
-		§9blue
-		§agreen
-		§baqua
-		§cred
-		§dlight_purple
-		§eyellow
-		§fwhite
-		§lbold
-		§r§krandom (won't work)
-		'''.strip()
-		text = '\n'.join([line.strip() for line in text.splitlines()])
+		if info.is_player:
+			text = RTextList()
+			text.append(*[RText(color.name + '\n', color=color) for color in RColor])
+			text.append(*[RText(style.name + '\n', styles=style) for style in RStyle])
+		else:
+			text = '''
+			§0black
+			§1dark_blue
+			§2dark_green
+			§3dark_aqua
+			§4dark_red
+			§5dark_purple
+			§6gold
+			§7gray
+			§8dark_gray
+			§9blue
+			§agreen
+			§baqua
+			§cred
+			§dlight_purple
+			§eyellow
+			§fwhite
+			§lbold
+			§r§krandom (won't work)
+			'''.strip()
+			text = '\n'.join([line.strip() for line in text.splitlines()])
 		server.reply(info, text)
 		server.logger.warning(text)
 

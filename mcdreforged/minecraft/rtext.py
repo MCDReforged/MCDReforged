@@ -4,78 +4,45 @@ Credit: Pandaria98 https://github.com/Pandaria98 https://github.com/TISUnion/ste
 """
 
 import json
-from typing import Iterable, List
+from enum import Enum, auto
+from typing import Iterable, List, Union, Optional
 
 from colorama import Fore, Style
 
 
-class RColor:
-	black = "black"
-	dark_blue = "dark_blue"
-	dark_green = "dark_green"
-	dark_aqua = "dark_aqua"
-	dark_red = "dark_red"
-	dark_purple = "dark_purple"
-	gold = "gold"
-	gray = "gray"
-	dark_gray = "dark_gray"
-	blue = "blue"
-	green = "green"
-	aqua = "aqua"
-	red = "red"
-	light_purple = "light_purple"
-	yellow = "yellow"
-	white = "white"
-	reset = 'reset'
+class RItem:
+	def __init__(self, mc_color: str, console_color: str):
+		self.mc_color = mc_color
+		self.console_color = console_color
 
 
-_RCOLOR_TO_CONSOLE = {
-	RColor.black: Fore.BLACK,
-	RColor.dark_blue: Fore.BLUE,
-	RColor.dark_green: Fore.GREEN,
-	RColor.dark_aqua: Fore.CYAN,
-	RColor.dark_red: Fore.RED,
-	RColor.dark_purple: Fore.MAGENTA,
-	RColor.gold: Fore.YELLOW,
-	RColor.gray: Style.RESET_ALL,
-	RColor.dark_gray: Style.RESET_ALL,
-	RColor.blue: Fore.LIGHTBLUE_EX,
-	RColor.green: Fore.LIGHTGREEN_EX,
-	RColor.aqua: Fore.LIGHTCYAN_EX,
-	RColor.red: Fore.LIGHTRED_EX,
-	RColor.light_purple: Fore.LIGHTMAGENTA_EX,
-	RColor.yellow: Fore.LIGHTYELLOW_EX,
-	RColor.white: Style.RESET_ALL,
-	RColor.reset: Style.RESET_ALL,
-}
+class RColor(Enum):
+	black = RItem('§0', Fore.BLACK)
+	dark_blue = RItem('§1', Fore.BLUE)
+	dark_green = RItem('§2', Fore.GREEN)
+	dark_aqua = RItem('§3', Fore.CYAN)
+	dark_red = RItem('§4', Fore.RED)
+	dark_purple = RItem('§5', Fore.MAGENTA)
+	gold = RItem('§6', Fore.YELLOW)
+	gray = RItem('§7', Style.RESET_ALL)
+	dark_gray = RItem('§8', Style.RESET_ALL)
+	blue = RItem('§9', Fore.LIGHTBLUE_EX)
+	green = RItem('§a', Fore.LIGHTGREEN_EX)
+	aqua = RItem('§b', Fore.LIGHTCYAN_EX)
+	red = RItem('§c', Fore.LIGHTRED_EX)
+	light_purple = RItem('§d', Fore.LIGHTMAGENTA_EX)
+	yellow = RItem('§e', Fore.LIGHTYELLOW_EX)
+	white = RItem('§f', Style.RESET_ALL)
 
-_MC_COLOR_TO_RCOLOR = {
-	'§0': RColor.black,
-	'§1': RColor.dark_blue,
-	'§2': RColor.dark_green,
-	'§3': RColor.dark_aqua,
-	'§4': RColor.dark_red,
-	'§5': RColor.dark_purple,
-	'§6': RColor.gold,
-	'§7': RColor.gray,
-	'§8': RColor.dark_gray,
-	'§9': RColor.blue,
-	'§a': RColor.green,
-	'§b': RColor.aqua,
-	'§c': RColor.red,
-	'§d': RColor.light_purple,
-	'§e': RColor.yellow,
-	'§f': RColor.white,
-	'§r': RColor.reset,
-}
+	reset = RItem('§r', Style.RESET_ALL)
 
 
 class RColorConvertor:
-	__MC_COLOR_TO_CONSOLE_LIST = [(mc_color, _RCOLOR_TO_CONSOLE[rcolor]) for mc_color, rcolor in _MC_COLOR_TO_RCOLOR.items()]
-	__MC_COLOR_TO_CONSOLE_LIST.append(('§l', Style.BRIGHT))  # bold
-	MC_COLOR_TO_RCOLOR = _MC_COLOR_TO_RCOLOR
-	RCOLOR_TO_CONSOLE = _RCOLOR_TO_CONSOLE
+	__MC_COLOR_TO_CONSOLE_LIST = [(rcolor.value.mc_color, rcolor.value.console_color) for rcolor in RColor]
 	MC_COLOR_TO_CONSOLE = dict(__MC_COLOR_TO_CONSOLE_LIST)
+	MC_COLOR_TO_RCOLOR = dict([(rcolor.value.mc_color, rcolor) for rcolor in RColor])
+	RCOLOR_TO_CONSOLE = dict([(rcolor, rcolor.value.console_color) for rcolor in RColor])
+	RCOLOR_NAME_TO_CONSOLE = dict([(rcolor.name, rcolor.value.console_color) for rcolor in RColor])
 
 	# minecraft code -> console code
 	@classmethod
@@ -86,20 +53,20 @@ class RColorConvertor:
 		return text
 
 
-class RStyle:
-	bold = "bold"
-	italic = "italic"
-	underlined = "underlined"
-	strike_through = "strikethrough"
-	obfuscated = "obfuscated"
+class RStyle(Enum):
+	bold = RItem('§l', Style.BRIGHT)
+	italic = RItem('§o', Style.RESET_ALL)
+	underlined = RItem('§n', Style.RESET_ALL)
+	strikethrough = RItem('§m', Style.RESET_ALL)
+	obfuscated = RItem('§k', Style.RESET_ALL)
 
 
-class RAction:
-	suggest_command = "suggest_command"
-	run_command = "run_command"
-	open_url = "open_url"
-	open_file = "open_file"
-	copy_to_clipboard = "copy_to_clipboard"
+class RAction(Enum):
+	suggest_command = auto()
+	run_command = auto()
+	open_url = auto()
+	open_file = auto()
+	copy_to_clipboard = auto()
 
 
 class RTextBase:
@@ -163,10 +130,10 @@ class RTextBase:
 
 
 class RText(RTextBase):
-	def __init__(self, text, color=RColor.reset, styles=None):
+	def __init__(self, text, color: RColor = RColor.reset, styles: Optional[Union[RStyle, Iterable[RStyle]]] = None):
 		if styles is None:
 			styles = {}
-		elif isinstance(styles, str):
+		elif isinstance(styles, RStyle):
 			styles = {styles}
 		elif isinstance(styles, Iterable):
 			styles = set(styles)
@@ -177,15 +144,15 @@ class RText(RTextBase):
 		else:
 			self.data = {
 				'text': str(text),
-				'color': color
+				'color': color.name
 			}  # type: dict
-			for style in [RStyle.bold, RStyle.italic, RStyle.underlined, RStyle.strike_through, RStyle.obfuscated]:
+			for style in RStyle:
 				if style in styles:
-					self.data[style] = True
+					self.data[style.name] = True
 
-	def set_click_event(self, action, value):
+	def set_click_event(self, action: RAction, value):
 		self.data['clickEvent'] = {
-			'action': action,
+			'action': action.name,
 			'value': value
 		}
 		return self
@@ -207,9 +174,9 @@ class RText(RTextBase):
 		return self.data['text']
 
 	def to_colored_text(self):
-		color = RColorConvertor.RCOLOR_TO_CONSOLE[self.data['color']]
+		color = RColorConvertor.RCOLOR_NAME_TO_CONSOLE[self.data['color']]
 		if self.data.get(RStyle.bold, False):
-			color += Style.BRIGHT
+			color += RColor.bold.value.console_color
 		return color + self.to_plain_text() + Style.RESET_ALL
 
 	def copy(self):
@@ -219,7 +186,7 @@ class RText(RTextBase):
 
 
 class RTextTranslation(RText):
-	def __init__(self, translation_key, color=RColor.reset, styles=None):
+	def __init__(self, translation_key, color: RColor = RColor.reset, styles: Optional[Union[RStyle, Iterable[RStyle]]] = None):
 		super().__init__(translation_key, color, styles)
 		self.data.pop('text')
 		self.data['translate'] = translation_key
@@ -235,7 +202,7 @@ class RTextList(RTextBase):
 		self.children = []  # type: List[RTextBase]
 		self.append(*args)
 
-	def set_click_event(self, action, value):
+	def set_click_event(self, action: RAction, value):
 		self.header.set_click_event(action, value)
 		self.header_empty = False
 		return self
