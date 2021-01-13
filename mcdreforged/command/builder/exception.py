@@ -35,20 +35,20 @@ class CommandError(CommandErrorBase, ABC):
 	def set_translated_message(self, key: str, translator: Callable[[str, tuple], str]):
 		self.__message = translator(key, self.get_translation_args())
 
-	def get_parsed_command(self):
+	def get_parsed_command(self) -> str:
 		return self._parsed_command
 
-	def get_failed_command(self):
+	def get_failed_command(self) -> str:
 		return self._failed_command
 
-	def set_handled(self, value=True):
+	def set_handled(self) -> None:
 		"""
 		It won't make any difference to the command node tree execution
 		But it might be useful for outer error handlers
 		"""
-		self.__handled = value
+		self.__handled = True
 
-	def is_handled(self):
+	def is_handled(self) -> bool:
 		return self.__handled
 
 
