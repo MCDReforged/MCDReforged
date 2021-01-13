@@ -79,8 +79,8 @@ class MCDReforgedPlugin(PermanentPlugin):
 			Literal(self.get_control_command_prefix()).
 			requires(lambda src: src.has_permission(PermissionLevel.MCDR_CONTROL_LEVEL)).
 			runs(lambda src: src.reply(self.get_help_message('mcdr_command.help_message'))).
-			on_error(RequirementNotMet, lambda src: src.reply(RText(self.mcdr_server.tr('mcdr_command.permission_denied'), color=RColor.red))).
-			on_error(UnknownArgument, self.on_mcdr_command_unknown_argument).
+			on_error(RequirementNotMet, self.on_mcdr_command_permission_denied, handled=True).
+			on_error(UnknownArgument, self.on_mcdr_command_unknown_argument, handled=True).
 			then(
 				Literal({'r', 'reload'}).
 				runs(lambda src: src.reply(self.get_help_message('mcdr_command.help_message_reload'))).
@@ -146,6 +146,9 @@ class MCDReforgedPlugin(PermanentPlugin):
 				lst.append(line)
 		return lst
 
+	def on_mcdr_command_permission_denied(self, source: CommandSource, error: CommandError):
+		source.reply(RText(self.mcdr_server.tr('mcdr_command.permission_denied'), color=RColor.red))
+
 	def on_mcdr_command_unknown_argument(self, source: CommandSource, error: CommandError):
 		command = error.get_parsed_command()
 		source.reply(
@@ -153,7 +156,6 @@ class MCDReforgedPlugin(PermanentPlugin):
 			h(self.tr('mcdr_command.command_not_found_suggest', command)).
 			c(RAction.run_command, command)
 		)
-		error.set_handled()
 
 	FunctionCallResult = collections.namedtuple('FunctionCallResult', 'return_value no_error')
 
@@ -324,13 +326,20 @@ class MCDReforgedPlugin(PermanentPlugin):
 		source.reply(self.tr('mcdr_command.list_plugin.info_loaded_plugin', len(current_plugins)))
 		for plugin in current_plugins:
 			meta = plugin.get_metadata()
-			texts = RTextList('§7-§r ', meta.name.copy().c(RAction.run_command, '!!MCDR plugin info {}'.format(meta.id)))
+			texts = RTextList(
+				'§7-§r ',
+				meta.name.copy().
+				c(RAction.run_command, '!!MCDR plugin info {}'.format(meta.id)).
+				h(self.tr('mcdr_command.list_plugin.suggest_info', meta.id))
+			)
 			if self.can_see_rtext(source) and not plugin.is_permanent():
 				texts.append(
-					RText(' [×]', color=RColor.gray)
+					' ',
+					RText('[×]', color=RColor.gray)
 					.c(RAction.run_command, '!!MCDR plugin disable {}'.format(meta.id))
 					.h(self.tr('mcdr_command.list_plugin.suggest_disable', meta.id)),
-					RText(' [↻]', color=RColor.gray)
+					' ',
+					RText('[↻]', color=RColor.gray)
 					.c(RAction.run_command, '!!MCDR plugin reload {}'.format(meta.id))
 					.h(self.tr('mcdr_command.list_plugin.suggest_reload', meta.id))
 				)
@@ -349,7 +358,8 @@ class MCDReforgedPlugin(PermanentPlugin):
 			texts = RTextList(RText('- ', color=RColor.gray), file_name_text)
 			if self.can_see_rtext(source):
 				texts.append(
-					RText(' [✔]', color=RColor.gray)
+					' ',
+					RText('[✔]', color=RColor.gray)
 					.c(RAction.run_command, '!!MCDR plugin enable {}'.format(file_name))
 					.h(self.tr('mcdr_command.list_plugin.suggest_enable', file_name))
 				)
@@ -361,7 +371,8 @@ class MCDReforgedPlugin(PermanentPlugin):
 			texts = RTextList(RText('- ', color=RColor.gray), file_name_text)
 			if self.can_see_rtext(source):
 				texts.append(
-					RText(' [✔]', color=RColor.gray)
+					' ',
+					RText('[✔]', color=RColor.gray)
 					.c(RAction.run_command, '!!MCDR plugin load {}'.format(file_name))
 					.h(self.tr('mcdr_command.list_plugin.suggest_load', file_name))
 				)
@@ -373,7 +384,11 @@ class MCDReforgedPlugin(PermanentPlugin):
 			source.reply(self.tr('mcdr_command.invalid_plugin_id', plugin_id))
 		else:
 			meta = plugin.get_metadata()
-			source.reply(RTextList(meta.name.copy().set_styles(RStyle.bold).h(plugin), ' ', RText('v{}'.format(meta.version), color=RColor.gray)))
+			source.reply(RTextList(
+				meta.name.copy().set_color(RColor.yellow).set_styles(RStyle.bold).h(plugin),
+				' ',
+				RText('v{}'.format(meta.version), color=RColor.gray)
+			))
 			if meta.author is not None:
 				source.reply(RText('Authors: {}'.format(', '.join(meta.author))))
 			if meta.link is not None:

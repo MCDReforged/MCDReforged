@@ -85,6 +85,12 @@ class RTextBase:
 	def copy(self) -> 'RTextBase':
 		raise NotImplementedError()
 
+	def set_color(self, color: RColor):
+		raise NotImplementedError()
+
+	def set_styles(self, styles: Union[RStyle, Iterable[RStyle]]):
+		raise NotImplementedError()
+
 	def set_click_event(self, action: RAction, value: str) -> 'RTextBase':
 		raise NotImplementedError()
 
@@ -206,6 +212,16 @@ class RTextList(RTextBase):
 		self.header_empty = True
 		self.children = []  # type: List[RTextBase]
 		self.append(*args)
+
+	def set_color(self, color: RColor):
+		self.header.set_color(color)
+		self.header_empty = False
+		return self
+
+	def set_styles(self, styles: Union[RStyle, Iterable[RStyle]]):
+		self.header.set_styles(styles)
+		self.header_empty = False
+		return self
 
 	def set_click_event(self, action: RAction, value):
 		self.header.set_click_event(action, value)

@@ -18,12 +18,17 @@ SOURCE_ERROR_CONTEXT_CALLBACK = Union[Callable[[], Any], Callable[[CommandSource
 
 
 class ArgumentNode:
+	class ErrorListener:
+		def __init__(self, callback: SOURCE_ERROR_CONTEXT_CALLBACK, handled: bool):
+			self.callback = callback
+			self.handled = handled
+
 	def __init__(self, name: Optional[str]):
 		self.name = name
 		self.children_literal = {}  # type: Dict[str, List[Literal]]
 		self.children = []  # type: List[ArgumentNode]
 		self.callback = None
-		self.error_listeners = {}  # type: Dict[Type[CommandError], Callable[[CommandSource, CommandError], Any]]
+		self.error_listeners = {}  # type: Dict[Type[CommandError], ArgumentNode.ErrorListener]
 		self.requirement = lambda source: True
 		self.requirement_failure_message_getter = None
 		self.redirect_node = None
@@ -82,14 +87,14 @@ class ArgumentNode:
 		self.redirect_node = redirect_node
 		return self
 
-	def on_error(self, error_type: Type[CommandError], listener: SOURCE_ERROR_CONTEXT_CALLBACK):
+	def on_error(self, error_type: Type[CommandError], listener: SOURCE_ERROR_CONTEXT_CALLBACK, *, handled: bool = False):
 		"""
 		When a command error occurs, invoke the listener
 		:param error_type: A class of CommandError or inherited from CommandError
 		:param listener: A callback function which accepts maximum 3 parameters (command source, error and context)
-		:return:
+		:param handled: If handled is set to True, error.set_handled() is called automatically after invoking the listener callback
 		"""
-		self.error_listeners[error_type] = listener
+		self.error_listeners[error_type] = self.ErrorListener(listener, handled)
 		return self
 
 	# -------------------
@@ -136,7 +141,9 @@ class ArgumentNode:
 	def __raise_error(self, source, error: CommandError, context: dict):
 		listener = self.error_listeners.get(type(error))
 		if listener is not None:
-			self.__smart_callback(listener, source, error, context)
+			if listener.handled:
+				error.set_handled()
+			self.__smart_callback(listener.callback, source, error, context)
 		raise error
 
 	def _execute(self, source, command: str, remaining: str, context: dict):

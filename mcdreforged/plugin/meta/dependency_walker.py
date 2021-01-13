@@ -1,6 +1,6 @@
 import collections
 from enum import unique, Enum, auto
-from typing import Dict, List, TYPE_CHECKING
+from typing import Dict, List, TYPE_CHECKING, Tuple
 
 from mcdreforged.plugin.meta.version import VersionRequirement
 from mcdreforged.utils.logger import DebugOption
@@ -104,8 +104,9 @@ class DependencyWalker:
 	def walk(self) -> List[WalkResult]:
 		self.visiting_state.clear()
 		self.visiting_plugins.clear()
+		self.visiting_plugin_stack.clear()
 		self.topo_order.clear()
-		fail_list = []
+		fail_list = []  # type: List[Tuple[str, DependencyError]]
 		for plugin in self.plugin_manager.get_regular_plugins():
 			try:
 				plugin_id = plugin.get_id()

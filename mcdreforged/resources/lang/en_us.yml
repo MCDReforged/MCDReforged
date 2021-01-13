@@ -95,6 +95,7 @@ mcdr_command.print_mcdr_status.extra_line3            : "Thread count: §6{0}§r
 mcdr_command.list_plugin.info_loaded_plugin           : §6{0}x §eLoaded Plugins§r
 mcdr_command.list_plugin.info_disabled_plugin         : §6{0}x §eDisabled Plugins§r
 mcdr_command.list_plugin.info_not_loaded_plugin       : §6{0}x §eNot-loaded Plugins§r
+mcdr_command.list_plugin.suggest_info                 : Click to display the information of plugin "§e{0}§r"
 mcdr_command.list_plugin.suggest_disable              : Click to disable plugin "§e{0}§r"
 mcdr_command.list_plugin.suggest_enable               : Click to enable plugin "§e{0}§r"
 mcdr_command.list_plugin.suggest_reload               : Click to reload plugin "§e{0}§r"

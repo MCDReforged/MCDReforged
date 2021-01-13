@@ -95,6 +95,7 @@ mcdr_command.print_mcdr_status.extra_line3            : "线程数: §6{0}§r"
 mcdr_command.list_plugin.info_loaded_plugin           : §6{0}x §e已加载插件§r
 mcdr_command.list_plugin.info_disabled_plugin         : §6{0}x §e已禁用插件§r
 mcdr_command.list_plugin.info_not_loaded_plugin       : §6{0}x §e未加载插件§r
+mcdr_command.list_plugin.suggest_info                 : 点击以显示插件 "§e{0}§r" 的信息
 mcdr_command.list_plugin.suggest_disable              : 点击以禁用插件 "§e{0}§r"
 mcdr_command.list_plugin.suggest_enable               : 点击以启用插件 "§e{0}§r"
 mcdr_command.list_plugin.suggest_reload               : 点击以重载插件 "§e{0}§r"
