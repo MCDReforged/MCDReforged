@@ -6,6 +6,7 @@ from mcdreforged.plugin.meta.version import *
 class VersionTest(unittest.TestCase):
 	def test_version_parsing(self):
 		self.assertIsInstance(Version('1.0.0'), Version)
+		self.assertIsInstance(Version('1.0.0-pre4'), Version)
 		self.assertIsInstance(Version('1.0.0-pre.4'), Version)
 		self.assertIsInstance(Version('1.998.0-'), Version)
 		self.assertIsInstance(Version('1.998.0-alpha.100'), Version)

@@ -89,8 +89,8 @@ class Metadata:
 
 
 __SAMPLE_METADATA = {
-	'id': 'example_plugin',  # If missing it will be the file name without .py suffix
-	'version': '1.0.0',  # If missing it will be '0.0.0'
+	'id': 'example_plugin',   # If missing it will be the file name without .py suffix
+	'version': '1.0.0',       # If missing it will be '0.0.0'
 	'name': 'Sample Plugin',  # RText is allowed
 	'description': 'Sample plugin for MCDR',  # RText is allowed
 	'author': [
@@ -98,7 +98,6 @@ __SAMPLE_METADATA = {
 	],
 	'link': 'https://github.com/Fallen-Breath/MCDReforged',
 	'dependencies': {
-		'MCDReforged': '>=1.0.0',
-		'PlayerInfoAPI': '*'
+		'mcdreforged': '>=1.0.0'
 	},
 }

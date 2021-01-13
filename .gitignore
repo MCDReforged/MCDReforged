@@ -18,7 +18,7 @@ config/
 server/*
 release/
 plugins/*
-!plugins/ExamplePlugin.py
+!SamplePlugin.py
 !plugins/test.py
 
 # plugin things

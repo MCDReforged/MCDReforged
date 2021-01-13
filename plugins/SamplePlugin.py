@@ -4,14 +4,16 @@ import random
 import re
 import time
 
+from mcdreforged.api.command import *
+from mcdreforged.api.types import ServerInterface
 
 PLUGIN_METADATA = {
-	'id': 'example_plugin',
-	'version': '1.0.0',
-	'name': 'Sample Plugin',
-	'description': 'Sample plugin for MCDR',
-	'author': 'Fallen_Breath',
-	'link': 'https://github.com/Fallen-Breath/MCDReforged',
+	'id': 'sample_plugin',    # contains letter in lowercase, number and underscore
+	'version': '1.0.0',       # recommend to follow semver
+	'name': 'Sample Plugin',  # RText is allowed
+	'description': 'Sample plugin for MCDR',  # RText is allowed
+	'author': 'Fallen_Breath',  # A str, or a list of str
+	'link': 'https://github.com/Fallen-Breath/MCDReforged',  # A str to your plugin home page
 	'dependencies': {
 		'mcdreforged': '>=0.10.0',
 	}
@@ -22,7 +24,7 @@ counter = 0
 secret = random.random()
 
 
-def on_load(server, old_module):
+def on_load(server: ServerInterface, old_module):
 	"""
 	Do some clean up when your plugin is being loaded
 	Like migrating data, reading config file or adding help messages
@@ -37,7 +39,9 @@ def on_load(server, old_module):
 		counter = 1
 	msg = f'This is the {counter} time to load the plugin'
 	server.logger.info(msg)
+	server.add_command(Literal('!!cexample').runs(lambda src: src.reply('Hello world from sample command')))
 	server.add_help_message('!!example', 'Hello world')
+	server.add_help_message('!!cexample', 'Hello world from command')
 
 
 def on_unload(server):
@@ -59,9 +63,6 @@ def on_info(server, info):
 	"""
 	if not info.is_user and re.fullmatch(r'Starting Minecraft server on \S*', info.content):
 		server.logger.info('Minecraft starting')
-
-	if info.content.startswith('[Fallen_Breath: Changed the block at '):
-		info.cancel_echo()
 
 
 def on_user_info(server, info):

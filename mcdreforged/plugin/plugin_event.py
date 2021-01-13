@@ -42,16 +42,17 @@ class _PluginEventStorage:
 
 
 class MCDRPluginEvents:
-	# legacy events
 	GENERAL_INFO 	= _PluginEventStorage.register(MCDREvent('mcdr.general_info', 'General info', 'on_info'))
 	USER_INFO 		= _PluginEventStorage.register(MCDREvent('mcdr.user_info', 'User info', 'on_user_info'))
 	SERVER_STARTUP 	= _PluginEventStorage.register(MCDREvent('mcdr.server_startup', 'Server startup', 'on_server_startup'))
 	SERVER_STOP 	= _PluginEventStorage.register(MCDREvent('mcdr.server_stop', 'Server startup', 'on_server_stop'))
+	MCDR_START 		= _PluginEventStorage.register(MCDREvent('mcdr.mcdr_start', 'MCDR start', 'on_mcdr_start'))
 	MCDR_STOP 		= _PluginEventStorage.register(MCDREvent('mcdr.mcdr_stop', 'MCDR stop', 'on_mcdr_stop'))
-	PLAYER_JOINED 	= _PluginEventStorage.register(MCDREvent('mcdr.player_join', 'Player joined', 'on_player_joined'))
+	PLAYER_JOINED 	= _PluginEventStorage.register(MCDREvent('mcdr.player_joined', 'Player joined', 'on_player_joined'))
 	PLAYER_LEFT 	= _PluginEventStorage.register(MCDREvent('mcdr.player_left', 'Player left', 'on_player_left'))
-	PLUGIN_LOAD 	= _PluginEventStorage.register(MCDREvent('mcdr.plugin_load', 'Plugin loaded', 'on_load'))
-	PLUGIN_UNLOAD 	= _PluginEventStorage.register(MCDREvent('mcdr.plugin_unload', 'Plugin unloaded', 'on_unload'))
+	PLUGIN_LOADED 	= _PluginEventStorage.register(MCDREvent('mcdr.plugin_loaded', 'Plugin loaded', 'on_load'))
+	PLUGIN_UNLOADED = _PluginEventStorage.register(MCDREvent('mcdr.plugin_unloaded', 'Plugin unloaded', 'on_unload'))
+	PLUGIN_REMOVED 	= _PluginEventStorage.register(MCDREvent('mcdr.plugin_removed', 'Plugin removed', 'on_removed'))
 
 	@classmethod
 	def get_event_list(cls):

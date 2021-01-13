@@ -193,7 +193,7 @@ class PluginManager:
 		:rtype: bool
 		"""
 		try:
-			plugin.receive_event(MCDRPluginEvents.PLUGIN_UNLOAD, ())
+			plugin.receive_event(MCDRPluginEvents.PLUGIN_UNLOADED, ())
 			plugin.reload()
 		except:
 			self.logger.exception(self.mcdr_server.tr('plugin_manager.reload_plugin.fail', plugin.get_name()))
@@ -307,13 +307,14 @@ class PluginManager:
 		for plugin in dependency_check_result.success_list:
 			if plugin in newly_loaded_plugins:
 				if isinstance(plugin, RegularPlugin):
-					plugin.receive_event(MCDRPluginEvents.PLUGIN_LOAD, (plugin.old_module_instance,))
+					plugin.receive_event(MCDRPluginEvents.PLUGIN_LOADED, (plugin.old_module_instance,))
 
 		for plugin in unload_result.success_list + unload_result.failed_list + reload_result.failed_list + dependency_check_result.failed_list:
 			plugin.assert_state({PluginState.UNLOADING})
 			# plugins might just be newly loaded but failed on dependency check, dont dispatch event to them
 			if plugin not in load_result.success_list:
-				plugin.receive_event(MCDRPluginEvents.PLUGIN_UNLOAD, ())
+				plugin.receive_event(MCDRPluginEvents.PLUGIN_UNLOADED, ())
+			plugin.receive_event(MCDRPluginEvents.PLUGIN_REMOVED, ())
 			plugin.remove()
 
 		# they should be

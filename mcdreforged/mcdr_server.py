@@ -419,6 +419,7 @@ class MCDReforgedServer:
 			raise ServerStartError()
 		self.server_handler_manager.start_handler_detection()
 		self.set_mcdr_state(MCDReforgedState.RUNNING)
+		self.plugin_manager.dispatch_event(MCDRPluginEvents.MCDR_START, ())
 
 	def on_mcdr_stop(self):
 		try:
