@@ -76,6 +76,8 @@ Leave it blank for MCDR to auto detect the encoding. If it doesn't work (e.g. ra
 
 The list of directory path where MCDR will search for plugin to load
 
+MCDR also **adds these directories into `sys.path`** so plugins can import packages inside plugin folders directly
+
 - Option type: a list of string
 - Default value: 
 
