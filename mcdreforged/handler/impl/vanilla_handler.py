@@ -27,11 +27,15 @@ class VanillaHandler(AbstractServerHandler):
 	def get_content_parsing_formatter(cls):
 		return '[{hour:d}:{min:d}:{sec:d}] [{thread}/{logging}]: {content}'
 
+	@classmethod
+	def _verify_player_name(cls, name: str):
+		return re.fullmatch(r'\w+', name) is not None
+
 	def parse_server_stdout(self, text: str):
 		result = self._get_server_stdout_raw_result(text)
 		self._content_parse(result)
 		parsed = parse('<{name}> {message}', result.content)
-		if parsed is not None:
+		if parsed is not None and self._verify_player_name(parsed['name']):
 			result.player, result.content = parsed['name'], parsed['message']
 		return result
 
@@ -39,7 +43,7 @@ class VanillaHandler(AbstractServerHandler):
 		# Steve[/127.0.0.1:9864] logged in with entity id 131 at (187.2703, 146.79014, 404.84718)
 		if not info.is_user:
 			parsed = parse('{name}[{}] logged in with entity id {} at ({})', info.content)
-			if parsed is not None:
+			if parsed is not None and self._verify_player_name(parsed['name']):
 				return parsed['name']
 		return None
 

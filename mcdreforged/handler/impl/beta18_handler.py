@@ -35,7 +35,7 @@ class Beta18Handler(VanillaHandler):
 		if not info.is_user:
 			# there's an extra space character after {name}
 			parsed = parse('{name} [{}] logged in with entity id {} at ({})', info.content)
-			if parsed is not None:
+			if parsed is not None and self._verify_player_name(parsed['name']):
 				return parsed['name']
 		return None
 

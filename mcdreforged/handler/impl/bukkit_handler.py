@@ -14,7 +14,7 @@ class BukkitHandler(VanillaHandler):
 		parsed = parse('<{name}> {message}', result.content)
 		if parsed is None:
 			parsed = parse('[{dim_name}]<{name}> {message}', result.content)
-		if parsed is not None:
+		if parsed is not None and self._verify_player_name(parsed['name']):
 			result.player, result.content = parsed['name'], parsed['message']
 		return result
 

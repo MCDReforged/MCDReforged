@@ -37,6 +37,9 @@ class MyTestCase(unittest.TestCase):
 		self.assertEqual('Steve', info.player)
 		self.assertEqual('<Alex> !!ping', info.content)
 
+		self.assertEqual(None, self.handler.parse_server_stdout('[09:00:00] [Server thread/INFO]: <Prefix Steve> Hello').player)
+		self.assertEqual(None, self.handler.parse_server_stdout('[09:00:00] [Server thread/INFO]: <[Prefix]Steve> Hello').player)
+
 	def test_2_player_events(self):
 		info = self.handler.parse_server_stdout('[00:04:13] [Server thread/INFO]: Fallen_Breath[/127.0.0.1:10545] logged in with entity id 573 at (124.37274191311167, 279.4052172954894, 141.89424426399407)')
 		self.assertEqual('Fallen_Breath', self.handler.parse_player_joined(info))

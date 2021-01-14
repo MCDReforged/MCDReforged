@@ -48,7 +48,7 @@ def load_class(path: str):
 	try:
 		return getattr(module, class_name)
 	except AttributeError:
-		raise ImportError('Class {} not found in package {}'.format(class_name, module_path)) from None
+		raise ImportError('Class "{}" not found in package "{}"'.format(class_name, module_path)) from None
 
 
 T = TypeVar('T')
