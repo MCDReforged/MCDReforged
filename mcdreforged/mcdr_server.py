@@ -18,7 +18,7 @@ from mcdreforged.handler.server_handler_manager import ServerHandlerManager
 from mcdreforged.info import Info
 from mcdreforged.info_reactor.info_reactor_manager import InfoReactorManager
 from mcdreforged.language_manager import LanguageManager
-from mcdreforged.mcdr_state import ServerState, MCDReforgedState, MCDReforgedFlags
+from mcdreforged.mcdr_state import ServerState, MCDReforgedState, MCDReforgedFlag
 from mcdreforged.minecraft.rcon.rcon_manager import RconManager
 from mcdreforged.permission.permission_manager import PermissionManager
 from mcdreforged.plugin.plugin_event import MCDRPluginEvents
@@ -38,7 +38,7 @@ class MCDReforgedServer:
 		self.mcdr_state = MCDReforgedState.INITIALIZING
 		self.server_state = ServerState.STOPPED
 		self.process = old_process  # the process for the server
-		self.flags = MCDReforgedFlags.NONE
+		self.flags = MCDReforgedFlag.NONE
 		self.starting_server_lock = Lock()  # to prevent multiple start_server() call
 		self.stop_lock = Lock()  # to prevent multiple stop() call
 
@@ -165,25 +165,31 @@ class MCDReforgedServer:
 	# Flags
 
 	def is_server_startup(self):
-		return MCDReforgedFlags.SERVER_STARTUP in self.flags
+		return MCDReforgedFlag.SERVER_STARTUP in self.flags
 
 	def is_server_rcon_ready(self):
-		return MCDReforgedFlags.SERVER_RCON_READY in self.flags
+		return MCDReforgedFlag.SERVER_RCON_READY in self.flags
 
 	def is_interrupt(self):
-		return MCDReforgedFlags.INTERRUPT in self.flags
+		return MCDReforgedFlag.INTERRUPT in self.flags
 
 	def is_mcdr_exit(self):
 		return self.mcdr_in_state(MCDReforgedState.STOPPED)
 
 	def is_exit_naturally(self):
-		return MCDReforgedFlags.EXIT_NATURALLY in self.flags
+		return MCDReforgedFlag.EXIT_NATURALLY in self.flags
+
+	def with_flag(self, flag: MCDReforgedFlag):
+		self.flags |= flag
+
+	def remove_flag(self, flag: MCDReforgedFlag):
+		self.flags &= ~flag
 
 	def set_exit_naturally(self, flag):
 		if flag:
-			self.flags |= MCDReforgedFlags.EXIT_NATURALLY
+			self.with_flag(MCDReforgedFlag.EXIT_NATURALLY)
 		else:
-			self.flags &= ~MCDReforgedFlags.EXIT_NATURALLY
+			self.remove_flag(MCDReforgedFlag.EXIT_NATURALLY)
 		self.logger.debug('flag_exit_naturally has set to "{}"'.format(flag), option=DebugOption.MCDR)
 
 	# State
@@ -283,7 +289,7 @@ class MCDReforgedServer:
 		self.logger.info('Interrupting, first strike = {}'.format(not self.is_interrupt()))
 		self.stop(forced=self.is_interrupt())
 		ret = self.is_interrupt()
-		self.flags |= MCDReforgedFlags.INTERRUPT
+		self.with_flag(MCDReforgedFlag.INTERRUPT)
 		return ret
 
 	def stop(self, forced=False):
@@ -326,7 +332,7 @@ class MCDReforgedServer:
 		self.process.stdin.close()
 		self.process.stdout.close()
 		self.process = None
-		self.flags &= ~(MCDReforgedFlags.SERVER_STARTUP | MCDReforgedFlags.SERVER_RCON_READY)  # removes this two
+		self.remove_flag(MCDReforgedFlag.SERVER_STARTUP | MCDReforgedFlag.SERVER_RCON_READY)  # removes this two
 		self.plugin_manager.dispatch_event(MCDRPluginEvents.SERVER_STOP, (return_code,))
 		self.set_server_state(ServerState.STOPPED)
 

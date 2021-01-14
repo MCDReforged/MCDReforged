@@ -70,7 +70,7 @@ class PluginOperationResult:
 		add_if_not_empty(message, self.unload_result.failed_list, 'plugin_operation_result.info_unloaded_failed')
 		add_if_not_empty(message, self.reload_result.failed_list, 'plugin_operation_result.info_reloaded_failed')
 		add_if_not_empty(message, self.dependency_check_result.failed_list, 'plugin_operation_result.info_dependency_check_failed')
-		if message.empty():
+		if message.is_empty():
 			add_element(message, self.__mcdr_server.tr('plugin_operation_result.info_none'))
 		message.append(
 			RText(self.__mcdr_server.tr('plugin_operation_result.info_plugin_amount', len(self.__plugin_manager.plugins))).

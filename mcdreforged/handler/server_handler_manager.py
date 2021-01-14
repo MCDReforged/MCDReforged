@@ -81,12 +81,14 @@ class ServerHandlerManager:
 			self.__detection_text_count = 0
 			self.__detection_success_count.clear()
 			self.__detection_start_time = time.time()
-			for handler in self.handlers.values():
-				self.__detection_success_count[handler] = 0
 			misc_util.start_thread(self.__detection_thread, (), 'HandlerDetector')
 
 	def is_detection_running(self) -> bool:
 		return self.__detection_running
+
+	def __touch_detection_success_count(self, handler):
+		if handler not in self.__detection_success_count:
+			self.__detection_success_count[handler] = 0
 
 	def __detection_thread(self):
 		time.sleep(self.HANDLER_DETECTION_MINIMUM_SAMPLING_TIME)
@@ -99,7 +101,9 @@ class ServerHandlerManager:
 		while end < len(lst) and lst[end][1] == best_count:
 			end += 1
 		best_handlers = set(map(lambda item: item[0], lst[:end]))
-		current_handler, current_count = self.get_current_handler(), self.__detection_success_count[self.get_current_handler()]
+		current_handler = self.get_current_handler()
+		self.__touch_detection_success_count(current_handler)
+		current_count = self.__detection_success_count[self.get_current_handler()]
 		if current_handler not in best_handlers:
 			self.mcdr_server.logger.warning(self.mcdr_server.tr('server_handler_manager.handler_detection.result1'))
 			self.mcdr_server.logger.warning(self.mcdr_server.tr('server_handler_manager.handler_detection.result2', current_handler.get_name(), round(100.0 * current_count / total, 2), current_count, total))
@@ -116,11 +120,13 @@ class ServerHandlerManager:
 					except:
 						pass
 					else:
+						self.__touch_detection_success_count(handler)
 						self.__detection_success_count[handler] += 1
 
 	def finalize_detection_result(self):
 		self.__detection_running = False
-		lst = list(self.__detection_success_count.items())  # type: List[Tuple[AbstractServerHandler, int]]
+		current_handler_set = set(self.handlers)
+		lst = list(filter(lambda hdr: hdr in current_handler_set, self.__detection_success_count.items()))  # type: List[Tuple[AbstractServerHandler, int]]
 		lst.sort(key=lambda item: item[1])
 		lst.reverse()
 		return lst

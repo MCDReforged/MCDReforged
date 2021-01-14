@@ -76,10 +76,10 @@ class RTextBase:
 	def copy(self) -> 'RTextBase':
 		raise NotImplementedError()
 
-	def set_color(self, color: RColor):
+	def set_color(self, color: RColor) -> 'RTextBase':
 		raise NotImplementedError()
 
-	def set_styles(self, styles: Union[RStyle, Iterable[RStyle]]):
+	def set_styles(self, styles: Union[RStyle, Iterable[RStyle]]) -> 'RTextBase':
 		raise NotImplementedError()
 
 	def set_click_event(self, action: RAction, value: str) -> 'RTextBase':
@@ -224,7 +224,7 @@ class RTextList(RTextBase):
 		self.header_empty = False
 		return self
 
-	def append(self, *args):
+	def append(self, *args) -> 'RTextList':
 		for obj in args:
 			if isinstance(obj, RTextList):
 				self.children.extend(obj.children)
@@ -232,8 +232,9 @@ class RTextList(RTextBase):
 				self.children.append(obj)
 			else:
 				self.children.append(RText(obj))
+		return self
 
-	def empty(self) -> bool:
+	def is_empty(self) -> bool:
 		return len(self.children) == 0
 
 	def __get_item_list(self, func: Callable[[RTextBase], Any]):

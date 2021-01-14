@@ -360,6 +360,8 @@ Parameter *event*: The event to dispatch. It need to be a `PluginEvent` instance
 
 Parameter *args*: The argument that will be used to invoke the event listeners. An ServerInterface instance will be automatically added to the beginning of the argument list
 
+**Note**: You cannot dispatch an event with the same event id to any MCDR built-in event
+
 ### Permission
 
 #### get_permission_level

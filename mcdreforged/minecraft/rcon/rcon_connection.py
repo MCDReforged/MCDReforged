@@ -4,7 +4,9 @@ Simple rcon client implement
 import socket
 import struct
 import time
+from logging import Logger
 from threading import RLock
+from typing import Optional
 
 
 class PacketType:
@@ -29,7 +31,7 @@ class Packet:
 class RconConnection:
 	BUFFER_SIZE = 2**10
 
-	def __init__(self, address, port, password, logger=None):
+	def __init__(self, address: str, port: int, password: str, *, logger: Optional[Logger] = None):
 		self.logger = logger
 		self.address = address
 		self.port = port
@@ -40,28 +42,28 @@ class RconConnection:
 	def __del__(self):
 		self.disconnect()
 
-	def send(self, data):
+	def __send(self, data):
 		if type(data) is Packet:
 			data = data.flush()
 		self.socket.send(data)
 		time.sleep(0.03)  # MC-72390
 
-	def receive(self, length):
+	def __receive(self, length):
 		data = bytes()
 		while len(data) < length:
 			data += self.socket.recv(min(self.BUFFER_SIZE, length - len(data)))
 		return data
 
-	def receive_packet(self):
-		length = struct.unpack('<i', self.receive(4))[0]
-		data = self.receive(length)
+	def __receive_packet(self):
+		length = struct.unpack('<i', self.__receive(4))[0]
+		data = self.__receive(length)
 		packet = Packet()
 		packet.packet_id = struct.unpack('<i', data[0:4])[0]
 		packet.packet_type = struct.unpack('<i', data[4:8])[0]
 		packet.payload = data[8:-2].decode('utf8')
 		return packet
 
-	def connect(self):
+	def connect(self) -> bool:
 		if self.socket is not None:
 			try:
 				self.disconnect()
@@ -69,8 +71,8 @@ class RconConnection:
 				pass
 		self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		self.socket.connect((self.address, self.port))
-		self.send(Packet(PacketType.LOGIN_REQUEST, self.password))
-		success = self.receive_packet().packet_id != PacketType.LOGIN_FAIL
+		self.__send(Packet(PacketType.LOGIN_REQUEST, self.password))
+		success = self.__receive_packet().packet_id != PacketType.LOGIN_FAIL
 		if not success:
 			self.disconnect()
 		return success
@@ -81,37 +83,34 @@ class RconConnection:
 		self.socket.close()
 		self.socket = None
 
-	def __send_command(self, command, depth, max_retry_time):
-		self.command_lock.acquire()
-		try:
-			self.send(Packet(PacketType.COMMAND_REQUEST, command))
-			self.send(Packet(PacketType.ENDING_PACKET, 'lol'))
-			result = ''
-			while True:
-				packet = self.receive_packet()
-				if packet.payload == 'Unknown request {}'.format(hex(PacketType.ENDING_PACKET)[2:]):
+	def send_command(self, command: str, max_retry_time: int = 3) -> Optional[str]:
+		with self.command_lock:
+			for i in range(max_retry_time):
+				try:
+					self.__send(Packet(PacketType.COMMAND_REQUEST, command))
+					self.__send(Packet(PacketType.ENDING_PACKET, 'lol'))
+					result = ''
+					while True:
+						packet = self.__receive_packet()
+						if packet.payload == 'Unknown request {}'.format(hex(PacketType.ENDING_PACKET)[2:]):
+							break
+						result += packet.payload
+					return result
+				except:
+					if self.logger is not None:
+						self.logger.warning('Rcon Fail to received packet')
+					try:
+						self.disconnect()
+						if self.connect():  # next try
+							continue
+					except:
+						pass
 					break
-				result += packet.payload
-			return result
-		except:
-			if self.logger is not None:
-				self.logger.warning('Rcon Fail to received packet')
-			try:
-				self.disconnect()
-				if self.connect() and depth < max_retry_time:
-					return self.__send_command(command, depth + 1, max_retry_time)
-			except:
-				pass
-			return None
-		finally:
-			self.command_lock.release()
-
-	def send_command(self, command, max_retry_time=3):
-		return self.__send_command(command, 0, max_retry_time)
+		return None
 
 
 if __name__ == '__main__':
 	rcon = RconConnection('localhost', 25575, 'password')
 	print('Login success? ', rcon.connect())
 	while True:
-		print('->', rcon.send_command(input('<- ')))
+		print('Server ->', rcon.send_command(input('Server <- ')))

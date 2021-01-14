@@ -3,7 +3,7 @@ from typing import Iterable
 
 
 @unique
-class MCDReforgedFlags(Flag):
+class MCDReforgedFlag(Flag):
 	NONE = auto()
 	INTERRUPT = auto()			# ctrl-c flag
 	SERVER_STARTUP = auto()		# set to True after server startup

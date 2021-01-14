@@ -105,7 +105,7 @@ def my_slow_method3():
     time.sleep(10)
 ```
 
-With the `@new_thread` decorator, everytime when you invoke `my_slow_method2`, a new daemon thread will be started to executed it. The `new_thread` decorator only changed the return value to the created thread instance of the function. Beside the return value, it reserved all signature of the decorated function, so you can safely use the decorated function as if there's no decorating at all
+With the `@new_thread` decorator, everytime when you invoke `my_slow_method2`, a new daemon thread will be started to executed it. For more details about the `@new_thread` decorator, check [here](plugin_dev/api.html#new-thread)
 
 ### Package location
 
