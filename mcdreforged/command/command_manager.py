@@ -1,7 +1,6 @@
 """
 Handling MCDR commands
 """
-import sys
 from typing import TYPE_CHECKING, Dict, List
 
 import mcdreforged.command.builder.command_builder_util as utils
@@ -42,17 +41,16 @@ class CommandManager:
 			source.get_info().cancel_send_to_server()
 
 		command_errors = []
-		general_exc_info = []
 		for plugin_root_node in plugin_root_nodes:
-			with self.mcdr_server.plugin_manager.with_plugin_context(plugin_root_node.plugin):
+			plugin = plugin_root_node.plugin
+			node = plugin_root_node.node
+			with self.mcdr_server.plugin_manager.with_plugin_context(plugin):
 				try:
-					plugin_root_node.node.execute(source, command)
+					node.execute(source, command)
 				except CommandError as e:
 					command_errors.append(e)
 				except:
-					general_exc_info.append(sys.exc_info())
-		for exc_info in general_exc_info:
-			self.logger.error('Error when executing command "{}" with command source "{}"'.format(command, source), exc_info=exc_info)
+					self.logger.exception('Error when executing command "{}" with command source "{}" on {} registered by {}'.format(command, source, node, plugin))
 		for error in command_errors:
 			if not error.is_handled():
 				translation_key = 'command_exception.{}'.format(string_util.hump_to_underline(type(error).__name__))
