@@ -5,8 +5,9 @@ from mcdreforged.api.all import *
 secret = random()
 
 
-def on_load(server, old):
+def on_load(server: ServerInterface, prev):
 	register_help_message(server)
+	server.register_command(Literal('!!mypoint').then(PointArgument('pt').runs(lambda src, ctx: src.reply('You have input a point ({}, {}, {})'.format(*ctx['pt'])))))
 
 
 def register_help_message(server):
@@ -157,3 +158,28 @@ pid: {}
 
 	if info.content == '!!!console':
 		server.reply(info, 'This is the reply to player', console_text='This is the reply to console')
+
+
+class IllegalPoint(CommandSyntaxError):
+	def __init__(self, char_read: int):
+		super().__init__('Invalid Point', char_read)
+
+
+class IncompletePoint(CommandSyntaxError):
+	def __init__(self, char_read: int):
+		super().__init__('Incomplete Point', char_read)
+
+
+class PointArgument(ArgumentNode):
+	def parse(self, text: str) -> ParseResult:
+		total_read = 0
+		coords = []
+		for i in range(3):
+			value, read = command_builder_util.get_float(text[total_read:])
+			if read == 0:
+				raise IncompletePoint(total_read)
+			total_read += read
+			if value is None:
+				raise IllegalPoint(total_read)
+			coords.append(value)
+		return ParseResult(coords, total_read)

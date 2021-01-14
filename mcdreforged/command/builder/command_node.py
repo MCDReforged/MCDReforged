@@ -1,4 +1,3 @@
-import collections
 import inspect
 from abc import ABC
 from typing import List, Callable, Iterable, Set, Dict, Type, Any, Union, Optional
@@ -10,11 +9,16 @@ from mcdreforged.command.builder.exception import LiteralNotMatch, NumberOutOfRa
 	TextLengthOutOfRange
 from mcdreforged.command.command_source import CommandSource
 
-ParseResult = collections.namedtuple('ParseResult', 'value char_read')
 SOURCE_CONTEXT_CALLBACK = Union[Callable[[], Any], Callable[[CommandSource], Any], Callable[[CommandSource, dict], Any]]
 SOURCE_CONTEXT_CALLBACK_BOOL = Union[Callable[[], bool], Callable[[CommandSource], bool], Callable[[CommandSource, dict], bool]]
 SOURCE_CONTEXT_CALLBACK_STR = Union[Callable[[], str], Callable[[CommandSource], str], Callable[[CommandSource, dict], str]]
 SOURCE_ERROR_CONTEXT_CALLBACK = Union[Callable[[], Any], Callable[[CommandSource], Any], Callable[[CommandSource, CommandError], Any], Callable[[CommandSource, CommandError, dict], Any]]
+
+
+class ParseResult:
+	def __init__(self, value: Optional[Any], char_read: int):
+		self.value = value
+		self.char_read = char_read
 
 
 class ArgumentNode:
@@ -104,7 +108,7 @@ class ArgumentNode:
 	def has_children(self):
 		return len(self.children) + len(self.children_literal) > 0
 
-	def parse(self, text: str):
+	def parse(self, text: str) -> ParseResult:
 		"""
 		Try to parse the text and get a argument. Return a ParseResult instance indicating the parsing result
 		ParseResult.success: If the parsing is success

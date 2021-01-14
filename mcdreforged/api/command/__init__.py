@@ -1,6 +1,6 @@
 from mcdreforged.command.builder import command_builder_util
 from mcdreforged.command.builder.command_node import ArgumentNode, Literal, Number, Integer, Float, Text, QuotableText, \
-	GreedyText
+	GreedyText, ParseResult
 from mcdreforged.command.builder.exception import LiteralNotMatch, NumberOutOfRange, IllegalArgument, EmptyText, \
 	UnknownCommand, UnknownArgument, CommandSyntaxError, UnknownRootArgument, RequirementNotMet, IllegalNodeOperation, \
 	CommandError, InvalidNumber, InvalidInteger, InvalidFloat, UnclosedQuotedString, IllegalEscapesUsage
@@ -33,5 +33,6 @@ __all__ = [
 	#       Utils
 	# ------------------
 
-	'command_builder_util'
+	'command_builder_util',
+	'ParseResult'
 ]

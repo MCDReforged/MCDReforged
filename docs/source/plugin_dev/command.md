@@ -14,7 +14,7 @@ Let's peek into the actual operation of a command tree. As an example, let's say
 
 To implement these commands, we can build a command tree with MCDR like this:
 
-```python
+```
 Literal('!!email')
  ├─ Literal('list')
  ├─ Literal('remove')
@@ -44,7 +44,7 @@ When MCDR executes the command `!!email remove 21`, the following things will ha
 
 This is a quick overview of the implantation logic part of command building system. It's mainly for help you build a perceptual understanding of the command tree based command building system
 
-Following the literal nodes, parsing the remaining command, storing the parsed value inside the context dict, this is how the command system works
+Matching the literal nodes, parsing the remaining command, storing the parsed value inside the context dict, this is how the command system works
 
 Rather than reading this document, anther good way to learn to use the MCDR command building system is to refer and imitate existing codes. You can find the command building code of `!!MCDR` command in the `__register_commands` method of class `mcdreforged.plugin.permanent.mcdreforged_plugin.MCDReforgedPlugin`
 
@@ -334,6 +334,55 @@ It's not a smart decision to append any child nodes to a `GreedyText`, since the
 
 ## Customize
 
-### Custom argument
+MCDR also supports customize an argument node. It might save you same repeated work on building your command
 
-### Custom exception
+To create a custom a argument node, you need to declare a class inherited from `ArgumentNode`, and then implement the `parse` method logic. That's it, the custom node class is ready to be used
+
+Custom exception provides a precise way to handle your exception with `on_error` method. If you want to raise a custom exception when your argument node fails to parsing the text, you need to have the custom exception inherited from `CommandSyntaxError`
+
+Here's a quick example of a custom Argument node, `PointArgument`. It accepts continuous 3 float input as a coordinate and batch them in to a list as a point. It raises `IllegalPoint` if it gets a non-float input, or `IncompletePoint` if the command ends before it finishes reading 3 floats
+
+```python
+class IllegalPoint(CommandSyntaxError):
+	def __init__(self, char_read: int):
+		super().__init__('Invalid Point', char_read)
+
+
+class IncompletePoint(CommandSyntaxError):
+	def __init__(self, char_read: int):
+		super().__init__('Incomplete Point', char_read)
+
+
+class PointArgument(ArgumentNode):
+	def parse(self, text: str) -> ParseResult:
+		total_read = 0
+		coords = []
+		for i in range(3):
+			value, read = command_builder_util.get_float(text[total_read:])
+			if read == 0:
+				raise IncompletePoint(total_read)
+			total_read += read
+			if value is None:
+				raise IllegalPoint(total_read)
+			coords.append(value)
+		return ParseResult(coords, total_read)
+```
+
+For its usage, here's a simple example as well as an input/output table:
+
+```python
+def on_load(server, prev):
+    server.register_command(
+        Literal('!!mypoint').then(
+            PointArgument('pt').
+            runs(lambda src, ctx: src.reply('You have input a point ({}, {}, {})'.format(*ctx['pt'])))
+        )
+    )
+```
+
+| Input | Output |
+| --- | --- |
+| !!mypoint 1 2 3 | You have input a point (1.0, 2.0, 3.0) |
+| !!mypoint 1 2 | Incomplete Point: !!mypoint 1 2<-- |
+| !!mypoint xxx | Invalid Point: !!mypoint xxx<-- |
+| !!mypoint 1 2 x | Invalid Point: !!mypoint 1 2 x<-- |
