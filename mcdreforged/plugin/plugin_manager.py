@@ -201,14 +201,16 @@ class PluginManager:
 		:return: If the plugin reloads successfully without error
 		:rtype: bool
 		"""
+		plugin.receive_event(MCDRPluginEvents.PLUGIN_UNLOADED, ())
+		self.__remove_plugin(plugin)
 		try:
-			plugin.receive_event(MCDRPluginEvents.PLUGIN_UNLOADED, ())
 			plugin.reload()
 		except:
 			self.logger.exception(self.mcdr_server.tr('plugin_manager.reload_plugin.fail', plugin.get_name()))
 			self.__unload_plugin(plugin)
 			return False
 		else:
+			self.__add_plugin(plugin)
 			self.logger.info(self.mcdr_server.tr('plugin_manager.reload_plugin.success', plugin.get_name()))
 			return True
 
