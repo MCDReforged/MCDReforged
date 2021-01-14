@@ -1,7 +1,4 @@
-# This workflow will build a Java project with Gradle
-# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
-
-name: Dev CI
+name: CI for MCDR
 
 on:
   push:
@@ -47,7 +44,7 @@ jobs:
 
   assemble:
     runs-on: ubuntu-latest
-    name: Assemble a dev build compressed file
+    name: Assemble a dev source compressed file
     needs: test
 
     steps:
@@ -58,7 +55,7 @@ jobs:
         mv * MCDReforged || true
         cd MCDReforged
         rm -rf .git tests
-        rm -f .gitignore logo_long.png setup.py MANIFEST.in *.md LICENSE
+        rm -f .gitignore logo_long.png setup.py MANIFEST.in *.md
         mkdir server
         mkdir config
         rm -f plugins/*
@@ -68,7 +65,7 @@ jobs:
 
     - uses: actions/upload-artifact@v2
       with:
-        name: MCDReforged dev build for ${{ github.sha }}
+        name: MCDReforged dev source for ${{ github.sha }}
         path: MCDReforged-dev.zip
 
   pypi-upload:
