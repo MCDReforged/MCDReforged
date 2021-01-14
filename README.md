@@ -18,7 +18,7 @@ Contact me on discord: `Fallen_Breath#1215`
 
 - It's running above the server. It doesn't need to modify the server at all which keep everything vanilla
 - Hot-reloadable plugin system. You don't need to shut down the server to update the plugins
-- Multi platform / server compatibility. Supports vanilla, paper and bungeecord on Linux / Windows
+- Multi platform / server compatibility. Supports vanilla, paper, bungeecord etc. on Linux / Windows
 
 ## How it works?
 
@@ -30,4 +30,4 @@ MCDR uses `Popen` to start the server, so it control the standard input / out st
 
 ## Document
 
-Check https://mcdreforged.readthedocs.io/ for more details for MCDR
+Check https://mcdreforged.readthedocs.io/ for more details of MCDR
