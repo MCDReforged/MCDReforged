@@ -42,7 +42,7 @@ Great, you have successfully created your first plugin
 
 ## Metadata
 
-The meta data field provides the basic information of the plugin. As you can see in the [Quick Start](#Quick-Start) section above, meta data is declared in the global scope. It's a dict contains several key-value with the name `PLUGIN_METADATA`
+The meta data field provides the basic information of the plugin. As you can see in the [Quick Start](#quick-start) section above, meta data is declared in the global scope. It's a dict contains several key-value with the name `PLUGIN_METADATA`
 
 Here's a metadata field with all possible key-values
 

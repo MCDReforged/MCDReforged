@@ -72,7 +72,7 @@ def has_permission_higher_than(self, level: int) -> bool:
     return self.get_permission_level() > level
 ```
 
-Just like the [has_permission](#has_permission), but this time it is a greater than judgment
+Just like the [has_permission](#has-permission), but this time it is a greater than judgment
 
 ### reply
 

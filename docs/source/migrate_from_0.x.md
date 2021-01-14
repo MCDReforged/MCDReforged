@@ -34,7 +34,7 @@ Metadata is a global field inside the plugin file. It's used to store basic info
 
 A legacy plugin is still able to be loaded if it doesn't have the metadata field, but a warning will be shown in the console
 
-Check [here](#TODO) for more information about plugin metadata
+Check [here](plugin_dev/basic.html#metadata) for more information about plugin metadata
 
 ### Listener
 

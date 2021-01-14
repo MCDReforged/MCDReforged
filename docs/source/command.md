@@ -2,7 +2,7 @@
 
 Command is the most common way for users to interact with MCDR. MCDR consider all console input and player chat messages from the server as user inputs. For them, MCDR will try to parse the input as a command
 
-Commands can be registered by MCDR itself and by plugins. This page only introduces about commands from MCDR. For plugin registered command, check [todo](#todo)
+Commands can be registered by MCDR itself and by plugins. This page only introduces about commands from MCDR. For plugin registered command, check [here](plugin_dev/command)
 
 ## !!MCDR command
 

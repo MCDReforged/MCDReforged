@@ -8,7 +8,7 @@ Event Listeners have a priority value. The default priority is `1000`. Plugins c
 
 ## Register a event listener
 
-See [Event listeners](basic.html#event-listeners)
+See the [Event listeners](basic.html#event-listeners) section in Plugin Registry in the document of [MCDR Plugin](basic)
 
 ## MCDR Event
 
