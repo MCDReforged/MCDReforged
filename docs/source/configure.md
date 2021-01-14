@@ -153,28 +153,6 @@ When set to true, MCDR will removed all console font formatter codes in before a
 - Option type: boolean
 - Default value: `false`
 
-#### custom_info_reactors
-
-A list of custom info reactor classes to handle the info instance. The classed need to be subclasses of `AbstractInfoReactor`
-
-All custom info reactors will be registered to the reactor list to process information from the server
-
-- Option type: a list of string, or null
-- Default value: 
-
-```yaml
-custom_info_reactors:
-```
-
-- Example:
-
-```yaml
-custom_info_reactors:
-- my.customize.reactor.MyInfoReactor
-```
-
-In this example the custom reactor package path is `my.custom.reactor` and the class name is `MyInfoReactor`
-
 #### custom_handlers
 
 A list of custom info reactor classes to handle the info instance. The classed need to be subclasses of `AbstractServerHandler`
@@ -198,6 +176,28 @@ custom_handlers:
 ```
 
 In this example the custom handler package path is `my.custom.handler` and the class is name `MyHandler`
+
+#### custom_info_reactors
+
+A list of custom info reactor classes to handle the info instance. The classed need to be subclasses of `AbstractInfoReactor`
+
+All custom info reactors will be registered to the reactor list to process information from the server
+
+- Option type: a list of string, or null
+- Default value: 
+
+```yaml
+custom_info_reactors:
+```
+
+- Example:
+
+```yaml
+custom_info_reactors:
+- my.customize.reactor.MyInfoReactor
+```
+
+In this example the custom reactor package path is `my.custom.reactor` and the class name is `MyInfoReactor`
 
 #### debug
 

@@ -43,7 +43,7 @@ class MyHandler(VanillaHandler):
 And then you are able to use this handler to handle the server. You need to do the following things in the configure file
 
 1. Set the `handler` option in the configure file to `the_handler_for_my_server`
-2. Added the path to the custom handler in the `custom_handlers` option, e.g:
+2. Added the path to the custom handler in the [custom_handlers](../configure.html#custom-handlers) option, e.g:
 
 ```
 custom_handlers:

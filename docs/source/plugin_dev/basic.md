@@ -231,7 +231,7 @@ There are 2 methods to register an event listener for you plugin
 
 Rather than manually parsing `info.content` inside user info event callback like `on_user_info`, MCDR provides a command system for plugins to register their commands
 
-Check the [command](command.html) document for more detail about building a command tree
+Check the [command](command) document for more detail about building a command tree
 
 Assuming that you have already built a command tree with root literal node *root*, then you can use the following command to register your command tree in MCDR
 

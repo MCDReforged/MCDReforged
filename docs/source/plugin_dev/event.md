@@ -76,7 +76,7 @@ def on_remove(server: ServerInterface, info: Info):
 
 #### General Info
 
-A new line of text is output from the stdout of the server, or a text is input from the console. MCDR has already parsed the text into an [Info](classes/Info.html) object. In this event plugin can response to the info
+A new line of text is output from the stdout of the server, or a text is input from the console. MCDR has already parsed the text into an [Info](classes/Info) object. In this event plugin can response to the info
 
 Here's an example
 

@@ -84,7 +84,7 @@ It also has these following methods:
 | tell(player, text, encoding=None) | Use `tellraw <player>` to send message `text` to player `<player>` |
 | reply(info, text, encoding=None) | Send `text` to the info source: if it's from a player calls `tell(info.player, text)`; if not uses MCDR's logger to info `text` to the console
 
-`text` could be a `str` or [`RTextBase`](https://github.com/Fallen-Breath/MCDReforged/blob/master/docs/utils.md#rtextbase) (`RText`, `RTextList`)
+`text` could be a `str` or [RTextBase](https://github.com/Fallen-Breath/MCDReforged/blob/master/docs/utils.md#rtextbase) (`RText`, `RTextList`)
 
 `encoding` is an optional encoding method. Use default value None to use the encoding method from MCDR config. MCDR will encode the text string using the encoding method and then send it to the standard input stream of the server
 
