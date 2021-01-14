@@ -44,7 +44,7 @@ class UpdateHelper:
 			response = None
 			try:
 				response = requests.get(constant.GITHUB_API_LATEST, timeout=5).json()
-				latest_version = response['tag_name']
+				latest_version = response['tag_name']  # type: str
 				update_log = response['body']
 			except Exception as e:
 				reply_func(self.mcdr_server.tr('update_helper.check_update.check_fail', repr(e)))
@@ -58,7 +58,7 @@ class UpdateHelper:
 						)
 			else:
 				try:
-					cmp_result = misc_util.version_compare(constant.VERSION, latest_version)
+					cmp_result = misc_util.version_compare(constant.VERSION, latest_version.lstrip('v'))
 				except:
 					self.mcdr_server.logger.exception('Fail to compare between versions "{}" and "{}"'.format(constant.VERSION, latest_version))
 					return
