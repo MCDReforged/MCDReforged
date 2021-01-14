@@ -24,6 +24,10 @@ Contact me on discord: `Fallen_Breath#1215`
 
 MCDR uses `Popen` to start the server, so it control the standard input / out stream of the server. That's it
 
+## Plugin
+
+[Here](https://github.com/MCDReforged/PluginCatalogue) is a MCDR plugin collection repository
+
 ## Document
 
 Check https://mcdreforged.readthedocs.io/ for more details for MCDR

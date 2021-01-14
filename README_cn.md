@@ -23,6 +23,10 @@ QQ群: [1101314858](https://jq.qq.com/?k=5gUuw9A)
 
 MCDR 使用了 `Popen` 来启动服务端，以此来控制服务端的标准输入输出流。就这样
 
+## 插件
+
+[这里](https://github.com/MCDReforged/PluginCatalogue) 是一个 MCDR 的插件收集仓库
+
 ## 文档
 
-想要了解更多关于 MCDR 的详情？去看文档吧 https://mcdreforged.readthedocs.io/ （中文版即将到来）
+想要了解更多关于 MCDR 的详情？去看文档吧 https://mcdreforged.readthedocs.io/ （中文在做了在咕了）
