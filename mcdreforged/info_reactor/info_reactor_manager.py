@@ -6,7 +6,7 @@ import time
 from typing import TYPE_CHECKING, List, Optional
 
 from mcdreforged import constant
-from mcdreforged.info import Info, InfoSource
+from mcdreforged.info import Info
 from mcdreforged.info_reactor.abstract_info_reactor import AbstractInfoReactor
 from mcdreforged.info_reactor.impl import PlayerReactor, ServerReactor, GeneralReactor
 from mcdreforged.utils import misc_util
@@ -44,19 +44,19 @@ class InfoReactorManager:
 						self.mcdr_server.logger.error('Wrong reactor class "{}", expected {} but found {}'.format(class_path, AbstractInfoReactor, reactor_class))
 
 	def process_info(self, info: Info):
+		# echo info from the server to the console
+		if info.is_from_server:
+			self.server_logger.info(info.raw_content)
+
 		for reactor in self.reactors:
 			try:
 				reactor.react(info)
 			except:
 				self.mcdr_server.logger.exception(self.mcdr_server.tr('info_reactor_manager.react.error', type(reactor).__name__))
-		self.__post_process_info(info)
 
-	def __post_process_info(self, info: Info):
-		if info.source == InfoSource.SERVER and info.should_echo():
-			self.server_logger.info(info.raw_content)
-
-		if info.source == InfoSource.CONSOLE and info.should_send_to_server():
-			self.mcdr_server.send(info.content)  # send input command to server's stdin
+		# send command input from the console to the server's stdin
+		if info.is_from_console and info.should_send_to_server():
+			self.mcdr_server.send(info.content)
 
 	def put_info(self, info):
 		info.attach_mcdr_server(self.mcdr_server)

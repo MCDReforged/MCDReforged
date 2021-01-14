@@ -102,14 +102,8 @@ class Info:
 			raise IllegalCallError()
 		return source
 
-	def should_echo(self) -> bool:
-		return self.__echo
-
 	def should_send_to_server(self) -> bool:
 		return self.__send_to_server
-
-	def cancel_echo(self) -> None:
-		self.__echo = False
 
 	def cancel_send_to_server(self) -> None:
 		self.__send_to_server = False

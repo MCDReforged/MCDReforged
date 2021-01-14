@@ -112,29 +112,13 @@ def to_command_source(self) -> CommandSource
 
 The same to method `get_command_source`, but it raises a `IllegalCallError` if it can't extract a command source
 
-### should_echo
-
-```
-def should_echo(self) -> bool
-```
-
-Representing if MCDR should echo the content to the console if this info is parsed from the server
-
 ### should_send_to_server
 
 ```
-def should_echo(self) -> bool
+def should_send_to_server(self) -> bool
 ```
 
 Representing if MCDR should send the content to the standard input stream of the server if this info is input from the console
-
-### cancel_echo
-
-```
-def cancel_echo(self) -> None
-```
-
-Prevent this info from being echoed to the console
 
 ### cancel_send_to_server
 
