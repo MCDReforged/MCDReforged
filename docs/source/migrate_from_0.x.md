@@ -124,3 +124,13 @@ For lazy man, you can safely use `from mcdreforged.api.all import *` to import a
 Method `reply` now raises a `TypeError` if the given *info* parameter is not from a user
 
 Method `add_help_message` is renamed to `register_help_message`
+
+### Others
+
+#### console_command_prefix
+
+The option `console_command_prefix` is removed, which was used to prevent input starts with `!!` to be sent to the standard input stream of the server by default
+
+In current version, MCDR will not prevent that kind of console input to be sent to the server unless it matches an registered command tree root node. See how the current command system works [here](plugin_dev/command.html#workflow)
+
+As a result, if you plugin use manually parsing method to parse command to parse a user command in `on_user_info` etc., you need to invoke `info.cancel_send_to_server()` in your command processing, otherwise if the command you enter on console might be sent to the server standard input stream
