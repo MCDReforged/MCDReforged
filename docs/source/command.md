@@ -122,7 +122,7 @@ It will try to get the latest release version in github, and check if it's newer
 
 ## !!help command
 
-`!!help` command is place to display the help messages of all command. It works as an index of all commands
+`!!help` command is place to display the help messages of all commands. It works as an index of all commands
 
 The content of this command can be registered by plugins, so a new user can easily browse all available commands that it can access
 

@@ -1,5 +1,7 @@
 # Quick Start
 
+This is a quick start tutorial of MCDReforged (abbreviated as MCDR, omitted below)
+
 ## Requirements
 
 MCDR requires python3 runtime. The python version need to be at least 3.6

@@ -5,7 +5,7 @@ Credit: Pandaria98 https://github.com/Pandaria98 https://github.com/TISUnion/ste
 
 import json
 from enum import Enum, auto
-from typing import Iterable, List, Union, Optional, Callable, Any
+from typing import Iterable, List, Union, Optional
 
 from colorama import Fore, Style
 
@@ -237,19 +237,16 @@ class RTextList(RTextBase):
 	def is_empty(self) -> bool:
 		return len(self.children) == 0
 
-	def __get_item_list(self, func: Callable[[RTextBase], Any]):
-		return [func(obj) for obj in self.children]
-
 	def to_json_object(self) -> list:
 		ret = ['' if self.header_empty else self.header.to_json_object()]
-		ret.extend(self.__get_item_list(lambda obj: obj.to_json_object()))
+		ret.extend(map(lambda rtext: rtext.to_json_object(), self.children))
 		return ret
 
 	def to_plain_text(self) -> str:
-		return ''.join(self.__get_item_list(lambda obj: obj.to_plain_text()))
+		return ''.join(map(lambda rtext: rtext.to_plain_text(), self.children))
 
 	def to_colored_text(self) -> str:
-		return ''.join(self.__get_item_list(lambda obj: obj.to_colored_text()))
+		return ''.join(map(lambda rtext: rtext.to_colored_text(), self.children))
 
 	def copy(self) -> 'RTextList':
 		copied = RTextList()

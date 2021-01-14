@@ -95,6 +95,8 @@ class ServerHandlerManager:
 		while self.__detection_text_count < self.HANDLER_DETECTION_MINIMUM_SAMPLE_COUNT:
 			time.sleep(1)
 		lst = self.finalize_detection_result()  # type: List[Tuple[AbstractServerHandler, int]]
+		if len(lst) == 0:
+			return
 		total = self.__detection_text_count
 		best_count = lst[0][1]
 		end = 1

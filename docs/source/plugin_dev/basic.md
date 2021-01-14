@@ -192,22 +192,57 @@ This field is optional, you can just ignore it if your plugin doesn't have any d
 
 ## Plugin Registry
 
-Plugin registry is a collection of things that plugin registered for. It will get clean up every time before the plugin gets loaded, so you'd better register them in [Plugin Load](event.html#plugin-load) event
+Plugin registry is a collection of things that plugin registered for. It will get cleaned up every time before the plugin gets loaded, so you'd better register them in [Plugin Load](event.html#plugin-load) event
 
 ### Event listeners
 
-Check [here](event.html#register-a-event-listener) for more detail about event listener registering
+There are 2 methods to register an event listener for you plugin
+
+1. Declare a function inside the global slope with the specific name. It's the legacy registering method to register a listener and it only works with events provided by MCDR. Check [here](event.html#default-event-listener) for more detail
+
+    For example, the widely-used function below is a default [Plugin Loaded](event.html#plugin-loaded) event listener
+    
+    ```python
+    def on_load(server, prev):
+        do_something()
+    ```
+
+2. Manually invoke `server.register_event_listener` method to register an event listener. You can specify the callable object and the priority for the event listener
+
+    Check [here](event.html#register-a-event-listener) for more detail about event listener registering 
+    
+    Here some examples about manually register event listeners
+    
+    ```python
+    def my_on_mcdr_general_info(server, info):
+        pass
+    
+    def on_my_task_done(server, my_task_info, my_task_data):  # the 2nd and 3rd parameter is determined by the plugin that emits this event
+        pass
+    
+    def on_load(server, prev):
+        server.register_event_listener('mcdr.general_info', my_on_mcdr_general_info, priority=500)  # TODO: use better event identifier
+        server.register_event_listener('myplugin.task_done', on_my_task_done)  # TODO: use better event identifier
+    ```
+    
+    Take a look at the reference of `register_event_listener` method in [ServerInterface](classes/ServerInterface.html#register-event-listener) document for more detail
 
 ### Command
 
 Rather than manually parsing `info.content` inside user info event callback like `on_user_info`, MCDR provides a command system for plugins to register their commands
 
-Check []() for more detail
+Check the [command](command.html) document for more detail about building a command tree
+
+Assuming that you have already built a command tree with root literal node *root*, then you can use the following command to register your command tree in MCDR
+
+```python
+server.register_command(root)
+```
+
+Take a look at the reference of `register_command` method in [ServerInterface](classes/ServerInterface.html#register-command) document for more details of its usage
 
 ### Help message
 
+Plugin can register its help message with `server.register_help_message` to MCDR, so that users can use [`!!help` command](../command.html#help-command) to view the help messages of all commands
 
-## Plugin Life Cycle
-
-Knowing the whole lifecycle of the plugin can help you understand more about MCDR plugins
-
+Take a look at the reference of `register_help_message` method in [ServerInterface](classes/ServerInterface.html#register-help-message) document for more details of its usage

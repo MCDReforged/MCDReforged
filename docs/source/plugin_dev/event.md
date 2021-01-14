@@ -8,10 +8,7 @@ Event Listeners have a priority value. The default priority is `1000`. Plugins c
 
 ## Register a event listener
 
-There are 2 methods to register an event listener for you plugin
-
-- Declare a function inside the global slope with the specific name. It's the legacy registering method to register a listener and it only works with events provided by MCDR. Check [the section below](#default-event-listener) for more detail
-- Manually invoke `server.register_event_listener` method to register an event listener. You can specify the callable object and the priority for the event listener. Check [here]() for more detail
+See [Event listeners](basic.html#event-listeners)
 
 ## MCDR Event
 
@@ -79,7 +76,7 @@ def on_remove(server: ServerInterface, info: Info):
 
 #### General Info
 
-A new line of text is output from the stdout of the server, or a text is input from the console. MCDR has already parsed the text into an [Info]() object. In this event plugin can response to the info
+A new line of text is output from the stdout of the server, or a text is input from the console. MCDR has already parsed the text into an [Info](classes/Info.html) object. In this event plugin can response to the info
 
 Here's an example
 
@@ -107,7 +104,7 @@ def on_info(server: ServerInterface, info: Info):
         server.reply(info, 'You are {}.'.format(info.player))
 ```
 
-If you want to have a not-simple command system, rather than parsing them manually in User Info event, I will suggest you to register a command tree for you plugin. See []()
+If you want to have a not-simple command system, rather than parsing them manually in User Info event, I will suggest you to register a command tree for you plugin. See the [command registering](basic.html#command) doc
 
 - Event id: mcdr.user_info
 - Callback arguments: ServerInterface, Info
@@ -186,6 +183,6 @@ A player just left the game. Plugin can do cleanups for player related objects
 
 ## Custom Event
 
-Besides MCDR itself, plugins can also dispatch its own event. All you need to do is invoking `server.dispatch_event` api with the event and some arguments. Check [here]() for more details of the api
+Besides MCDR itself, plugins can also dispatch its own event. All you need to do is invoking `server.dispatch_event` api with the event and some arguments. Check [here](classes/ServerInterface.html#dispatch-event) for more details of the api
 
 Customizing event is a good way to broadcast a message between plugins. It's also a good indirectly way for your plugin to react to requests from other plugins 

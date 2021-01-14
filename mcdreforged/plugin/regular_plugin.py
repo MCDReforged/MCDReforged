@@ -97,13 +97,13 @@ class RegularPlugin(AbstractPlugin):
 		self.set_state(PluginState.READY)
 
 	def reload(self):
-		self.assert_state({PluginState.LOADED, PluginState.READY})
+		self.assert_state({PluginState.READY})
 		self.__unload_instance()
 		self.__load_instance()
 		self.mcdr_server.logger.debug('RegularPlugin {} reloaded, file sha256 = {}'.format(self, self.file_hash))
 
 	def unload(self):
-		self.assert_state({PluginState.UNINITIALIZED, PluginState.LOADED, PluginState.READY})
+		self.assert_state({PluginState.LOADED, PluginState.READY})
 		self.__unload_instance()
 		self.set_state(PluginState.UNLOADING)
 

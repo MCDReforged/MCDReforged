@@ -393,7 +393,7 @@ class ServerInterface:
 	def register_event_listener(self, event: Union[PluginEvent, str], callback: Callable, priority: int = DEFAULT_LISTENER_PRIORITY) -> None:
 		"""
 		Register an event listener for the current plugin
-		:param event: The id of the event to listen, or the PluginEvent instance
+		:param event: The id of the event, or a PluginEvent instance. It indicates the target event for the plugin to listen
 		:param callback: The callback listener method for the event
 		:param priority: The priority of the listener. It will be set to the default value 1000 if it's not specified
 		:raise: IllegalCallError if it's not invoked in the task executor thread

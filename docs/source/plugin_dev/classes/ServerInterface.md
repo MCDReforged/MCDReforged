@@ -192,7 +192,7 @@ Load a plugin from the given file path. Return if the plugin gets loaded success
 
 Parameter *plugin_file_path*: The file path of the plugin to load. Example: `plugins/my_plugin.py`
 
-#### load_plugin
+#### enable_plugin
 
 ```python
 def enable_plugin(self, plugin_file_path: str) -> bool
@@ -313,7 +313,7 @@ Register an event listener for the current plugin
 
 Raise an `IllegalCallError` if it's not invoked in the task executor thread
 
-Parameter *event*: The id of the event to listen, or the PluginEvent instance
+Parameter *event*: The id of the event, or a PluginEvent instance. It indicates the target event for the plugin to listen
 
 Parameter *callback*: The callback listener method for the event
 

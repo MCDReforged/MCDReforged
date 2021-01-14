@@ -61,7 +61,6 @@ jobs:
         rm -f .gitignore logo_long.png
         mkdir server
         mkdir config
-        cp docs_prev/README_cn.md .
         rm -f plugins/*
         rm -rf docs docs_prev
         cd ..

@@ -174,7 +174,7 @@ class PluginManager:
 			plugin.unload()
 		except:
 			# should never come here
-			plugin.set_state(PluginState.UNLOADING)
+			plugin.set_state(PluginState.UNLOADING)  # a fallback set state
 			self.logger.exception(self.mcdr_server.tr('plugin_manager.unload_plugin.fail', plugin.get_name()))
 			ret = False
 		else:
