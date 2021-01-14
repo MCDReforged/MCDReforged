@@ -122,3 +122,5 @@ For lazy man, you can safely use `from mcdreforged.api.all import *` to import a
 ### Server Instance API
 
 Method `reply` now raises a `TypeError` if the given *info* parameter is not from a user
+
+Method `add_help_message` is renamed to `register_help_message`
