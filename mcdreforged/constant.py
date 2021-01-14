@@ -8,13 +8,12 @@ import os
 NAME_SHORT = 'MCDR'
 NAME = 'MCDReforged'
 PACKAGE_NAME = 'mcdreforged'
-VERSION = '1.0.0-alpha.7'
-VERSION_PYPI = '1.0.0a7'
+VERSION = '1.0.0-alpha.8'
+VERSION_PYPI = '1.0.0a8'
 GITHUB_URL = 'https://github.com/Fallen-Breath/MCDReforged'
 GITHUB_API_LATEST = 'https://api.github.com/repos/Fallen-Breath/MCDReforged/releases/latest'
 
 LOGGING_FILE = os.path.join('logs', '{}.log'.format(NAME_SHORT))
-UPDATE_DOWNLOAD_DIRECTORY = 'MCDR_update'
 
 PLUGIN_FILE_SUFFIX = '.py'
 DISABLED_PLUGIN_FILE_SUFFIX = '.disabled'

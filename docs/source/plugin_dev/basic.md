@@ -4,7 +4,7 @@
 
 An MCDR plugin is a python source file with `.py` file extension located in plugin directories. The list of the plugin directory can is defined inside the [configure file](configure.html#plugin_directories)
 
-At start up, MCDR will automatically load every plugin inside this folder
+At start up, MCDR will automatically load every plugin inside the plugin directories. Additionally, MCDR will append all the plugin directories into `sys.path`, so plugins can import modules placed inside the plugin folders directly
 
 There is a sample plugin named `SamplePlugin.py` in the `plugins/` folder in source and you can check its content for reference
 
@@ -50,8 +50,8 @@ Here's a metadata field with all possible key-values
 PLUGIN_METADATA = {
 	'id': 'my_plugin_id',
 	'version': '1.0.0',
-	'name': 'My Plugin',  # RText is allowed
-	'description': 'A plugin to do something cool',  # RText is allowed
+	'name': 'My Plugin',  # RText component is allowed
+	'description': 'A plugin to do something cool',  # RText component is allowed
 	'author': 'myself',
 	'link': 'https://github.com',
 	'dependencies': {

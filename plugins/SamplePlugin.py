@@ -6,12 +6,12 @@ from mcdreforged.api.types import *
 PLUGIN_METADATA = {
 	'id': 'sample_plugin',    # contains letter in lowercase, number and underscore
 	'version': '1.0.0',       # recommend to follow semver
-	'name': 'Sample Plugin',  # RText is allowed
-	'description': 'Sample plugin for MCDR',  # RText is allowed
+	'name': 'Sample Plugin',  # RText component is allowed
+	'description': 'Sample plugin for MCDR',  # RText component is allowed
 	'author': 'Fallen_Breath',  # A str, or a list of str
 	'link': 'https://github.com/Fallen-Breath/MCDReforged',  # A str to your plugin home page
 	'dependencies': {
-		'mcdreforged': '>=0.10.0',
+		'mcdreforged': '>=1.0.0',
 	}
 }
 
