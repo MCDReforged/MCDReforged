@@ -1,6 +1,11 @@
 MCDReforged
 --------
 
+[![Python Versions](https://img.shields.io/pypi/pyversions/mcdreforged.svg)](https://pypi.org/project/mcdreforged)
+[![PyPI Version](https://img.shields.io/pypi/v/mcdreforged.svg)](https://pypi.org/project/mcdreforged)
+[![License](https://img.shields.io/github/license/Fallen-Breath/MCDReforged.svg)](https://github.com/Fallen-Breath/MCDReforged/blob/master/LICENSE)
+[![Documentation Status](https://readthedocs.org/projects/mcdreforged/badge/)](https://mcdreforged.readthedocs.io/)
+
 [English](https://github.com/Fallen-Breath/MCDReforged/blob/master/README.md)
 
 > 这是一个基于 Python 的 Minecraft 服务端控制工具
