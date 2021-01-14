@@ -108,8 +108,7 @@ def on_server_stop(server: ServerInterface, return_code: int):
 
 def on_mcdr_start(server: ServerInterface):
 	"""
-	When MCDR is about to stop, go do some clean up
-	MCDR will wait until all on_mcdr_stop event call are finished before exiting
+	When MCDR just launched
 	"""
 	server.logger.info('Another new launch for MCDR')
 
