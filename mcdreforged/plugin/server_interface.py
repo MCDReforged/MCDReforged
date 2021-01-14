@@ -78,9 +78,9 @@ class ServerInterface:
 		else:
 			return self.__get_logger(plugin_id)
 
-	def __get_current_plugin(self):
+	def __get_current_plugin(self) -> 'RegularPlugin':
 		plugin = self.__mcdr_server.plugin_manager.get_current_running_plugin()
-		if plugin.is_regular():
+		if plugin is not None and plugin.is_regular():
 			return plugin
 		else:
 			raise IllegalCallError('MCDR provided thead is required')

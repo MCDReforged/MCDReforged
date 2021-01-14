@@ -30,12 +30,21 @@ class HelpMessage:
 		return 'HelpMessage[prefix={},message={},permission={}]'.format(self.prefix, self.message, self.permission)
 
 
+class PluginCommandNode:
+	"""
+	A Tuple like data class for tracking the plugin of the node
+	"""
+	def __init__(self, plugin: 'AbstractPlugin', node: Literal):
+		self.plugin = plugin
+		self.node = node
+
+
 class PluginRegistry:
 	def __init__(self, plugin: 'AbstractPlugin'):
 		self.plugin = plugin
 		self.event_listeners = {}  # type: Dict[str, List[EventListener]]
 		self.help_messages = []
-		self.command_roots = []  # type: List[Literal]
+		self.command_roots = []  # type: List[PluginCommandNode]
 
 	def register_help_message(self, help_message: HelpMessage):
 		self.help_messages.append(help_message)
@@ -46,7 +55,9 @@ class PluginRegistry:
 		self.event_listeners[event_id] = listeners
 
 	def register_command(self, node: Literal):
-		self.command_roots.append(node)
+		if not isinstance(node, Literal):
+			raise TypeError('Only Literal node is accepted to be a root node')
+		self.command_roots.append(PluginCommandNode(self.plugin, node))
 
 	def clear(self):
 		"""
@@ -63,7 +74,7 @@ class PluginManagerRegistry:
 		self.plugin_manager = plugin_manager
 		self.event_listeners = {}  # type: Dict[str, List[EventListener]]
 		self.help_messages = []  # type: List[HelpMessage]
-		self.command_roots = []  # type: List[Literal]
+		self.command_roots = []  # type: List[PluginCommandNode]
 
 	def clear(self):
 		self.event_listeners.clear()
@@ -83,6 +94,6 @@ class PluginManagerRegistry:
 		for listeners in self.event_listeners.values():
 			listeners.sort()
 
-	def export_commands(self, exporter: Callable[[Literal], Any]):
+	def export_commands(self, exporter: Callable[[PluginCommandNode], Any]):
 		for node in self.command_roots:
 			exporter(node)
