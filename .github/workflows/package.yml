@@ -54,17 +54,17 @@ jobs:
     - uses: actions/checkout@v2
     - name: Create Dev Build
       run: |
-        mkdir MCDReforged-dev
-        mv * MCDReforged-dev || true
-        cd MCDReforged-dev
+        mkdir MCDReforged
+        mv * MCDReforged || true
+        cd MCDReforged
         rm -rf .git tests
-        rm -f .gitignore logo_long.png
+        rm -f .gitignore logo_long.png setup.py MANIFEST.in *.md LICENSE
         mkdir server
         mkdir config
         rm -f plugins/*
         rm -rf docs docs_prev
         cd ..
-        zip -r MCDReforged-dev.zip ./MCDReforged-dev
+        zip -r MCDReforged-dev.zip ./MCDReforged
 
     - uses: actions/upload-artifact@v2
       with:
