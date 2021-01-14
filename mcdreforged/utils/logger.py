@@ -13,7 +13,7 @@ from typing import Dict, Optional, List
 from colorlog import ColoredFormatter
 
 from mcdreforged import constant
-from mcdreforged.minecraft.rtext import RColor, RStyle, RItem, RTextBase
+from mcdreforged.minecraft.rtext import RColor, RStyle, RItem
 from mcdreforged.utils import string_util, file_util
 
 
@@ -76,10 +76,8 @@ class MCDReforgedLogger(logging.Logger):
 	)
 
 	@classmethod
-	def get_console_formatter(cls, plugin_name=None):
-		if isinstance(plugin_name, RTextBase):
-			plugin_name = plugin_name.to_plain_text()
-		extra = '' if plugin_name is None else ' [{}]'.format(string_util.clean_minecraft_color_code(plugin_name))
+	def get_console_formatter(cls, plugin_id=None):
+		extra = '' if plugin_id is None else ' [{}]'.format(plugin_id)
 		return MCColoredFormatter(
 			f'[%(name)s] [%(asctime)s] [%(threadName)s/%(log_color)s%(levelname)s%(reset)s]{extra}: %(message_log_color)s%(message)s%(reset)s',
 			log_colors=cls.LOG_COLORS,
@@ -89,13 +87,13 @@ class MCDReforgedLogger(logging.Logger):
 
 	debug_options = {}  # type: Dict[DebugOption, bool]
 
-	def __init__(self, mcdr_server, plugin_name=None):
+	def __init__(self, mcdr_server, plugin_id=None):
 		super().__init__(self.DEFAULT_NAME)
 		self.mcdr_server = mcdr_server
 		self.file_handler = None
 
 		self.console_handler = logging.StreamHandler(sys.stdout)
-		self.console_handler.setFormatter(self.get_console_formatter(plugin_name))
+		self.console_handler.setFormatter(self.get_console_formatter(plugin_id))
 
 		self.addHandler(self.console_handler)
 		self.setLevel(logging.DEBUG)
