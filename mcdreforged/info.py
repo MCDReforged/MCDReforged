@@ -27,7 +27,6 @@ class Info:
 		Info.__id_counter += 1
 		# noinspection PyTypeChecker
 		self.__mcdr_server = None  # type: 'MCDReforgedServer'
-		self.__echo = True
 		self.__send_to_server = True
 		self.__command_source = None
 

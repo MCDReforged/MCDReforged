@@ -9,7 +9,7 @@ MCDReforged（以下简称 MCDR）是一个可以在完全不对 Minecraft 服�
 
 小至计算器、高亮玩家、b 站弹幕姬，大至操控计分板、管理结构文件、自助备份回档，都可以通过 MCDR 及相配套的插件实现
 
-非常感谢 chino_desu 以及他的 [MCDaemon 1.0](https://github.com/kafuuchino-desu/MCDaemon)
+非常感谢 chino_desu 以及他的 [MCDaemon 1.0](https://github.com/kafuuchino-desu/MCDaemon) 提出了这样一个超棒的 Minecraft 服务端控制工具的点子
 
 QQ 群: [1101314858](https://jq.qq.com/?k=5gUuw9A)
 
