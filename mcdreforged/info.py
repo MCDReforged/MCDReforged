@@ -35,24 +35,24 @@ class Info:
 		# -----------------
 
 		# time information from the parsed text
-		self.hour = None
-		self.min = None
-		self.sec = None
+		self.hour = None  # type: Optional[int]
+		self.min = None  # type: Optional[int]
+		self.sec = None  # type: Optional[int]
 
 		# very raw content, it's also the content to be echoed to the stdout
-		self.raw_content = None
+		self.raw_content = None  # type: Optional[str]
 
 		# if the text is sent by a player the value will be what the player said. if not the value will be the pain text
-		self.content = None
+		self.content = None  # type: Optional[str]
 
 		# the name of the player. if it's not sent by a player the value will be None
-		self.player = None
+		self.player = None  # type: Optional[str]
 
 		# the value type is InfoSource
-		self.source = None
+		self.source = None  # type: Optional[int]
 
 		# the logging level of the server's stdout, such as "INFO" or "WARN"
-		self.logging_level = None
+		self.logging_level = None  # type: Optional[str]
 
 	@property
 	def is_from_console(self):

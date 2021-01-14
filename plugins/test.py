@@ -28,7 +28,7 @@ def register_help_message(server):
 	server.register_help_message('!!!console', 'special command to console')
 
 
-def on_user_info(server: ServerInterface, info):
+def on_user_info(server: ServerInterface, info: Info):
 	if info.content == 'ping':
 		server.reply(info, 'pong')
 
