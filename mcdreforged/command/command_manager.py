@@ -44,15 +44,13 @@ class CommandManager:
 		command_errors = []
 		general_exc_info = []
 		for plugin_root_node in plugin_root_nodes:
-			self.mcdr_server.plugin_manager.set_current_plugin(plugin_root_node.plugin)
-			try:
-				plugin_root_node.node.execute(source, command)
-			except CommandError as e:
-				command_errors.append(e)
-			except:
-				general_exc_info.append(sys.exc_info())
-			finally:
-				self.mcdr_server.plugin_manager.set_current_plugin(None)
+			with self.mcdr_server.plugin_manager.with_plugin_context(plugin_root_node.plugin):
+				try:
+					plugin_root_node.node.execute(source, command)
+				except CommandError as e:
+					command_errors.append(e)
+				except:
+					general_exc_info.append(sys.exc_info())
 		for exc_info in general_exc_info:
 			self.logger.error('Error when executing command "{}" with command source "{}"'.format(command, source), exc_info=exc_info)
 		for error in command_errors:
