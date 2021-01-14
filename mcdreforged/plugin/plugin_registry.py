@@ -17,14 +17,14 @@ class HelpMessage:
 		self.prefix = prefix
 		self.message = RTextBase.from_any(message)
 		self.permission = permission
-
-	def __get_compare_key(self):
-		return self.prefix[:1].upper() + self.prefix[1:]
+		self.__prefix_lower = self.prefix.lower()
 
 	def __lt__(self, other):
 		if not isinstance(other, type(self)):
 			return False
-		return self.__get_compare_key() < other.__get_compare_key()
+		if self.__prefix_lower != other.__prefix_lower:
+			return self.__prefix_lower < other.__prefix_lower
+		return self.prefix < other.prefix
 
 	def __repr__(self):
 		return 'HelpMessage[prefix={},message={},permission={}]'.format(self.prefix, self.message, self.permission)
