@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING, Callable
 
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
-	from mcdreforged.plugin.plugin import RegularPlugin
+	from mcdreforged.plugin.plugin import AbstractPlugin
 
 
 TaskData = collections.namedtuple('TaskData', 'callback plugin')
@@ -40,18 +40,17 @@ class PluginThread(threading.Thread):
 				except queue.Empty:
 					pass
 				else:
-					plugin = task_data.plugin
-					plugin.plugin_manager.set_current_plugin(plugin)
-					self.setName('{}@{}'.format(self, plugin.get_id()))
-					self.thread_pool.working_count += 1
-					try:
-						task_data.callback()
-					except:
-						self.thread_pool.mcdr_server.logger.exception('Exception in thread created by {}'.format(plugin))
-					finally:
-						self.thread_pool.working_count -= 1
-						self.setName(self.original_name)
-						plugin.plugin_manager.set_current_plugin(None)
+					plugin = task_data.plugin  # type: AbstractPlugin
+					with plugin.plugin_manager.with_plugin_context(plugin):
+						self.setName('{}@{}'.format(self, plugin.get_id()))
+						self.thread_pool.working_count += 1
+						try:
+							task_data.callback()
+						except:
+							self.thread_pool.mcdr_server.logger.exception('Exception in thread created by {}'.format(plugin))
+						finally:
+							self.thread_pool.working_count -= 1
+							self.setName(self.original_name)
 				finally:
 					if self.flag_interrupt:
 						break
@@ -91,7 +90,7 @@ class PluginThreadPool:
 			if i >= self.max_thread:
 				thread.set_interrupt()
 
-	def add_task(self, func: Callable, plugin: 'RegularPlugin'):
+	def add_task(self, func: Callable, plugin: 'AbstractPlugin'):
 		"""
 		Added a task to executing the callback of a listener to the dynamic thread pool and execute it
 		If the thread pool is not enough a new temporary thread will start to process the task

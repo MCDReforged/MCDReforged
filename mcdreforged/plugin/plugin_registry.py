@@ -17,17 +17,26 @@ class HelpMessage:
 		self.prefix = prefix
 		self.message = RTextBase.from_any(message)
 		self.permission = permission
-
-	def __get_compare_key(self):
-		return self.prefix[:1].upper() + self.prefix[1:]
+		self.__prefix_lower = self.prefix.lower()
 
 	def __lt__(self, other):
 		if not isinstance(other, type(self)):
 			return False
-		return self.__get_compare_key() < other.__get_compare_key()
+		if self.__prefix_lower != other.__prefix_lower:
+			return self.__prefix_lower < other.__prefix_lower
+		return self.prefix < other.prefix
 
 	def __repr__(self):
 		return 'HelpMessage[prefix={},message={},permission={}]'.format(self.prefix, self.message, self.permission)
+
+
+class PluginCommandNode:
+	"""
+	A Tuple like data class for tracking the plugin of the node
+	"""
+	def __init__(self, plugin: 'AbstractPlugin', node: Literal):
+		self.plugin = plugin
+		self.node = node
 
 
 class PluginRegistry:
@@ -35,7 +44,7 @@ class PluginRegistry:
 		self.plugin = plugin
 		self.event_listeners = {}  # type: Dict[str, List[EventListener]]
 		self.help_messages = []
-		self.command_roots = []  # type: List[Literal]
+		self.command_roots = []  # type: List[PluginCommandNode]
 
 	def register_help_message(self, help_message: HelpMessage):
 		self.help_messages.append(help_message)
@@ -46,7 +55,9 @@ class PluginRegistry:
 		self.event_listeners[event_id] = listeners
 
 	def register_command(self, node: Literal):
-		self.command_roots.append(node)
+		if not isinstance(node, Literal):
+			raise TypeError('Only Literal node is accepted to be a root node')
+		self.command_roots.append(PluginCommandNode(self.plugin, node))
 
 	def clear(self):
 		"""
@@ -63,7 +74,7 @@ class PluginManagerRegistry:
 		self.plugin_manager = plugin_manager
 		self.event_listeners = {}  # type: Dict[str, List[EventListener]]
 		self.help_messages = []  # type: List[HelpMessage]
-		self.command_roots = []  # type: List[Literal]
+		self.command_roots = []  # type: List[PluginCommandNode]
 
 	def clear(self):
 		self.event_listeners.clear()
@@ -83,6 +94,6 @@ class PluginManagerRegistry:
 		for listeners in self.event_listeners.values():
 			listeners.sort()
 
-	def export_commands(self, exporter: Callable[[Literal], Any]):
+	def export_commands(self, exporter: Callable[[PluginCommandNode], Any]):
 		for node in self.command_roots:
 			exporter(node)

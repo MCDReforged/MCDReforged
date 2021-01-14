@@ -65,22 +65,22 @@ class ServerInterface:
 		self.__logger = mcdr_server.logger
 
 	@functools.lru_cache(maxsize=512, typed=True)
-	def __get_logger(self, plugin_name: str):
-		return MCDReforgedLogger(self.__mcdr_server, plugin_name)
+	def __get_logger(self, plugin_id: str):
+		return MCDReforgedLogger(self.__mcdr_server, plugin_id)
 
 	@property
 	def logger(self) -> MCDReforgedLogger:
 		try:
 			plugin = self.__get_current_plugin()
-			plugin_name = plugin.get_metadata().name
+			plugin_id = plugin.get_metadata().id
 		except IllegalCallError:
 			return self.__logger
 		else:
-			return self.__get_logger(plugin_name)
+			return self.__get_logger(plugin_id)
 
-	def __get_current_plugin(self):
+	def __get_current_plugin(self) -> 'RegularPlugin':
 		plugin = self.__mcdr_server.plugin_manager.get_current_running_plugin()
-		if plugin.is_regular():
+		if plugin is not None and plugin.is_regular():
 			return plugin
 		else:
 			raise IllegalCallError('MCDR provided thead is required')

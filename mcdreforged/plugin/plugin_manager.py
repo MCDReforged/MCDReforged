@@ -4,6 +4,7 @@ Plugin management
 import os
 import sys
 import threading
+from contextlib import contextmanager
 from typing import Callable, Dict, Optional, Any, Tuple, List, TYPE_CHECKING
 
 from mcdreforged import constant
@@ -88,6 +89,14 @@ class PluginManager:
 		for plugin_directory in self.plugin_directories:
 			file_util.touch_directory(plugin_directory)
 			sys.path.append(plugin_directory)
+
+	@contextmanager
+	def with_plugin_context(self, plugin: AbstractPlugin):
+		self.set_current_plugin(plugin)
+		try:
+			yield
+		finally:
+			self.set_current_plugin(None)
 
 	def contains_plugin_file(self, file_path: str) -> bool:
 		return file_path in self.plugin_file_path
@@ -192,14 +201,16 @@ class PluginManager:
 		:return: If the plugin reloads successfully without error
 		:rtype: bool
 		"""
+		plugin.receive_event(MCDRPluginEvents.PLUGIN_UNLOADED, ())
+		self.__remove_plugin(plugin)
 		try:
-			plugin.receive_event(MCDRPluginEvents.PLUGIN_UNLOADED, ())
 			plugin.reload()
 		except:
 			self.logger.exception(self.mcdr_server.tr('plugin_manager.reload_plugin.fail', plugin.get_name()))
 			self.__unload_plugin(plugin)
 			return False
 		else:
+			self.__add_plugin(plugin)
 			self.logger.info(self.mcdr_server.tr('plugin_manager.reload_plugin.success', plugin.get_name()))
 			return True
 
@@ -395,10 +406,8 @@ class PluginManager:
 		The server_interface parameter will be automatically added as the 1st parameter
 		"""
 		# self.thread_pool.add_task(lambda: listener.execute(*args), listener.plugin)
-		self.set_current_plugin(listener.plugin)
-		try:
-			listener.execute(self.mcdr_server.server_interface, *args)
-		except:
-			self.logger.exception('Error invoking listener {}'.format(listener))
-		finally:
-			self.set_current_plugin(None)
+		with self.with_plugin_context(listener.plugin):
+			try:
+				listener.execute(self.mcdr_server.server_interface, *args)
+			except:
+				self.logger.exception('Error invoking listener {}'.format(listener))

@@ -64,7 +64,8 @@ class MCDReforgedPlugin(PermanentPlugin):
 		pass
 
 	def __repr__(self):
-		return 'MCDReforgedPlugin[version={}]'.format(self.get_metadata().version)
+		# avoid using self.metadata here since it might not be initialized
+		return 'MCDReforgedPlugin[version={}]'.format(METADATA['version'])
 
 	@classmethod
 	def get_control_command_prefix(cls):
