@@ -73,7 +73,7 @@ jobs:
 
   pypi-upload:
     runs-on: ubuntu-latest
-    name: Upload a dev version to test pypi
+    name: Make and upload a package to (test) pypi
     needs: test
     if: github.event_name == 'push'
 
