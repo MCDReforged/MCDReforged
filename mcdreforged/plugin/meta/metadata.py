@@ -32,11 +32,12 @@ class Metadata:
 		logger = plugin.mcdr_server.logger
 
 		use_fallback_id_reason = None
+		plugin_name_text = repr(plugin)
 		self.id = data.get('id')
 		if self.id is None:
-			use_fallback_id_reason = 'Plugin ID of {} not found'.format(plugin)
+			use_fallback_id_reason = 'Plugin ID of {} not found'.format(plugin_name_text)
 		elif not isinstance(self.id, str) or re.fullmatch(r'[a-z0-9_]{1,64}', self.id) is None:
-			use_fallback_id_reason = 'Plugin ID "{}" of {} is invalid'.format(self.id, plugin)
+			use_fallback_id_reason = 'Plugin ID "{}" of {} is invalid'.format(self.id, plugin_name_text)
 		if use_fallback_id_reason is not None:
 			self.id = plugin.get_fallback_metadata_id()
 			logger.warning('{}, use fallback id {} instead'.format(use_fallback_id_reason, self.id))
@@ -65,10 +66,10 @@ class Metadata:
 			try:
 				self.version = Version(version_str, allow_wildcard=False)
 			except VersionParsingError as e:
-				logger.warning('Version "{}" of {} is invalid ({}), ignore and use fallback version instead {}'.format(version_str, plugin, e, self.FALLBACK_VERSION))
+				logger.warning('Version "{}" of {} is invalid ({}), ignore and use fallback version instead {}'.format(version_str, plugin_name_text, e, self.FALLBACK_VERSION))
 				version_str = None
 		else:
-			logger.warning('{} doesn\'t specific a version, use fallback version {}'.format(plugin, self.FALLBACK_VERSION))
+			logger.warning('{} doesn\'t specific a version, use fallback version {}'.format(plugin_name_text, self.FALLBACK_VERSION))
 		if version_str is None:
 			self.version = Version(self.FALLBACK_VERSION)
 
@@ -78,7 +79,7 @@ class Metadata:
 				self.dependencies[plugin_id] = VersionRequirement(requirement)
 			except VersionParsingError as e:
 				logger.warning('Dependency "{}: {}" of {} is invalid ({}), ignore'.format(
-					plugin_id, requirement, plugin.get_name(), e
+					plugin_id, requirement, plugin_name_text, e
 				))
 
 	def __repr__(self):
