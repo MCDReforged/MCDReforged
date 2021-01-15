@@ -5,7 +5,7 @@ from mcdreforged.executor.thread_executor import ThreadExecutor
 
 
 class WatchDog(ThreadExecutor):
-	TASK_EXECUTOR_NO_RESPOND_THRESHOLD = 60  # 60 seconds
+	TASK_EXECUTOR_NO_RESPOND_THRESHOLD = 10  # seconds
 
 	def check_task_executor_state(self):
 		task_executor = self.mcdr_server.task_executor
@@ -18,9 +18,9 @@ class WatchDog(ThreadExecutor):
 			task_executor.soft_stop()  # Soft-stop it, in case it turns alive somehow
 			task_executor.set_name(task_executor.get_name() + ' (no response)')
 
-			task_executor = TaskExecutor(self.mcdr_server)
-			task_executor.start()
-			self.mcdr_server.task_executor = task_executor
+			new_executor = TaskExecutor(self.mcdr_server, previous_executor=task_executor)
+			self.mcdr_server.task_executor = new_executor
+			new_executor.start()
 
 	def tick(self):
 		try:

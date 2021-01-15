@@ -44,10 +44,6 @@ class InfoReactorManager:
 						self.mcdr_server.logger.error('Wrong reactor class "{}", expected {} but found {}'.format(class_path, AbstractInfoReactor, reactor_class))
 
 	def process_info(self, info: Info):
-		# echo info from the server to the console
-		if info.is_from_server:
-			self.server_logger.info(info.raw_content)
-
 		for reactor in self.reactors:
 			try:
 				reactor.react(info)
@@ -60,6 +56,9 @@ class InfoReactorManager:
 
 	def put_info(self, info):
 		info.attach_mcdr_server(self.mcdr_server)
+		# echo info from the server to the console
+		if info.is_from_server:
+			self.server_logger.info(info.raw_content)
 		try:
 			self.mcdr_server.task_executor.add_info_task(lambda: self.process_info(info), info.is_user)
 		except queue.Full:

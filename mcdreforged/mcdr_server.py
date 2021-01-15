@@ -14,6 +14,7 @@ from mcdreforged.command.command_manager import CommandManager
 from mcdreforged.config import Config
 from mcdreforged.executor.console_handler import ConsoleHandler
 from mcdreforged.executor.task_executor import TaskExecutor
+from mcdreforged.executor.update_helper import UpdateHelper
 from mcdreforged.executor.watchdog import WatchDog
 from mcdreforged.handler.server_handler_manager import ServerHandlerManager
 from mcdreforged.info import Info
@@ -28,24 +29,23 @@ from mcdreforged.plugin.server_interface import ServerInterface
 from mcdreforged.utils import logger, file_util
 from mcdreforged.utils.exception import IllegalCallError, ServerStopped, ServerStartError, IllegalStateError
 from mcdreforged.utils.logger import DebugOption, MCDReforgedLogger
-from mcdreforged.utils.update_helper import UpdateHelper
 
 
 class MCDReforgedServer:
 	process: Optional[Popen]
 
-	def __init__(self, old_process=None):
+	def __init__(self):
 		# TODO console args
 		self.mcdr_state = MCDReforgedState.INITIALIZING
 		self.server_state = ServerState.STOPPED
-		self.process = old_process  # the process for the server
+		self.process = None  # type: Optional[PIPE]
 		self.flags = MCDReforgedFlag.NONE
 		self.starting_server_lock = Lock()  # to prevent multiple start_server() call
 		self.stop_lock = Lock()  # to prevent multiple stop() call
 
-		# will be assigned in reload_config()
-		self.encoding_method = None
-		self.decoding_method = None
+		# will be assigned in on_config_changed()
+		self.encoding_method = None  # type: Optional[str]
+		self.decoding_method = None  # type: Optional[str]
 
 		# --- Constructing fields ---
 		self.logger = MCDReforgedLogger(self)
@@ -54,6 +54,7 @@ class MCDReforgedServer:
 		self.task_executor = TaskExecutor(self)
 		self.console_handler = ConsoleHandler(self)
 		self.watch_dog = WatchDog(self)
+		self.update_helper = UpdateHelper(self)
 		self.language_manager = LanguageManager(self.logger)
 		self.config = Config(self.logger)
 		self.rcon_manager = RconManager(self)
@@ -64,7 +65,6 @@ class MCDReforgedServer:
 		self.permission_manager = PermissionManager(self)
 
 		# --- Initialize fields instance ---
-		# register handlers first, so when the config is loaded the handler is ready to be set
 		file_missing = False
 		try:
 			self.load_config(allowed_missing_file=False)  # loads config, language, handlers
@@ -82,9 +82,6 @@ class MCDReforgedServer:
 			self.on_first_start()
 			return
 		self.plugin_manager.register_permanent_plugins()
-
-		self.update_helper = UpdateHelper(self)
-		self.update_helper.check_update_start()
 
 		self.set_mcdr_state(MCDReforgedState.INITIALIZED)
 
@@ -162,7 +159,7 @@ class MCDReforgedServer:
 	# ---------------------------
 
 	def is_server_running(self):
-		return self.process is not None
+		return self.server_state.in_state({ServerState.RUNNING, ServerState.STOPPING})
 
 	# Flags
 
@@ -232,15 +229,12 @@ class MCDReforgedServer:
 		"""
 		try to start the server process
 		return True if the server process has started successfully
-		return False if the server is already running or start_server has been called by other
+		return False if the server is not able to start
 
 		:return: a bool as above
 		:rtype: bool
 		"""
-		acquired = self.starting_server_lock.acquire(blocking=False)
-		if not acquired:
-			return False
-		try:
+		with self.starting_server_lock:
 			if self.is_interrupt():
 				self.logger.warning(self.tr('mcdr_server.start_server.already_interrupted'))
 				return False
@@ -261,8 +255,6 @@ class MCDReforgedServer:
 			else:
 				self.on_server_start()
 				return True
-		finally:
-			self.starting_server_lock.release()
 
 	def kill_server(self):
 		"""
@@ -427,20 +419,23 @@ class MCDReforgedServer:
 			self.logger.info(self.tr('mcdr_server.on_mcdr_start.console_disabled'))
 		if not self.start_server():
 			raise ServerStartError()
+		self.update_helper.start()
 		self.watch_dog.start()
 		self.server_handler_manager.start_handler_detection()
 		self.set_mcdr_state(MCDReforgedState.RUNNING)
 
 	def on_mcdr_stop(self):
 		try:
+			self.set_mcdr_state(MCDReforgedState.PRE_STOPPED)
 			if self.is_interrupt():
 				self.logger.info(self.tr('mcdr_server.on_mcdr_stop.user_interrupted'))
 			else:
 				self.logger.info(self.tr('mcdr_server.on_mcdr_stop.server_stop'))
-			self.plugin_manager.dispatch_event(MCDRPluginEvents.MCDR_STOP, ())
 
-			self.set_mcdr_state(MCDReforgedState.PRE_STOPPED)
-			# self.task_executor.join()
+			self.watch_dog.stop()  # it's ok for plugins to take some time
+			self.watch_dog.join()
+			self.plugin_manager.dispatch_event(MCDRPluginEvents.MCDR_STOP, ())
+			self.task_executor.wait_till_finish_all_task()
 
 			self.logger.info(self.tr('mcdr_server.on_mcdr_stop.bye'))
 		except KeyboardInterrupt:  # I don't know why there sometimes will be a KeyboardInterrupt if MCDR is stopped by ctrl-c

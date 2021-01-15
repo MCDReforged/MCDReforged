@@ -1,7 +1,7 @@
 import time
 from queue import Empty, PriorityQueue
 from threading import Lock
-from typing import Callable, Any
+from typing import Callable, Any, Optional
 
 from mcdreforged import constant
 from mcdreforged.executor.thread_executor import ThreadExecutor
@@ -38,11 +38,23 @@ class TaskData:
 
 
 class TaskExecutor(ThreadExecutor):
-	def __init__(self, mcdr_server):
+	def __init__(self, mcdr_server, *, previous_executor: 'Optional[TaskExecutor]' = None):
 		super().__init__(mcdr_server)
 		self.task_queue = PriorityQueue(maxsize=constant.MAX_TASK_QUEUE_SIZE)
 		self.__last_tick_time = None
 		self.__stopped = False
+		if previous_executor is not None:
+			self.extract_tasks(previous_executor)
+
+	def extract_tasks(self, other: 'TaskExecutor'):
+		while True:
+			try:
+				task = other.task_queue.get(block=False)
+			except Empty:
+				break
+			else:
+				other.task_queue.task_done()  # marked the extract task as done
+				self.task_queue.put(task)
 
 	def should_keep_looping(self):
 		return super().should_keep_looping() and not self.mcdr_server.is_mcdr_exit() and not self.mcdr_server.mcdr_in_state(MCDReforgedState.PRE_STOPPED)

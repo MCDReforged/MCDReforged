@@ -3,34 +3,29 @@ MCDR update things
 """
 import time
 from threading import Lock
-from typing import TYPE_CHECKING, Callable, Any, Union
+from typing import Callable, Any, Union
 
 import requests
 
 from mcdreforged import constant
+from mcdreforged.executor.thread_executor import ThreadExecutor
 from mcdreforged.minecraft.rtext import RText, RAction, RColor, RStyle, RTextBase
 from mcdreforged.utils import misc_util
 
-if TYPE_CHECKING:
-	from mcdreforged.mcdr_server import MCDReforgedServer
 
-
-# TODO make it work properly with pypi
-class UpdateHelper:
-	def __init__(self, mcdr_server: 'MCDReforgedServer'):
-		self.mcdr_server = mcdr_server
-		self.check_update_thread = None
+class UpdateHelper(ThreadExecutor):
+	def __init__(self, mcdr_server):
+		super().__init__(mcdr_server)
 		self.update_lock = Lock()
+		self.__last_query_time = 0
 
-	def check_update_start(self):
-		self.check_update_thread = misc_util.start_thread(self.check_update_loop, (), type(self).__name__)
-
-	def check_update_loop(self):
-		while True:
+	def tick(self):
+		if time.time() - self.__last_query_time >= 60 * 60 * 24:
 			self.check_update(lambda: self.mcdr_server.config['check_update'] is True, self.mcdr_server.logger.info)
-			time.sleep(24 * 60 * 60)
+		time.sleep(1)
 
 	def check_update(self, condition_check: Callable[[], bool], reply_func: Callable[[Union[str or RTextBase]], Any]):
+		self.__last_query_time = time.time()
 		misc_util.start_thread(self.__check_update, (condition_check, reply_func), 'CheckUpdate')
 
 	def __check_update(self, condition_check: Callable[[], bool], reply_func: Callable[[Union[str or RTextBase]], Any]):

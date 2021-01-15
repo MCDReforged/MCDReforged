@@ -80,9 +80,6 @@ class PluginManager:
 			plugin = None
 		return plugin
 
-	def set_current_plugin(self, plugin: Optional[AbstractPlugin]):
-		self.tls.put('current_plugin', plugin)
-
 	def set_plugin_directories(self, plugin_directories: Optional[List[str]]):
 		if plugin_directories is None:
 			plugin_directories = []
@@ -98,11 +95,11 @@ class PluginManager:
 
 	@contextmanager
 	def with_plugin_context(self, plugin: AbstractPlugin):
-		self.set_current_plugin(plugin)
+		self.tls.put(self.TLS_PLUGIN_KEY, plugin)
 		try:
 			yield
 		finally:
-			self.set_current_plugin(None)
+			self.tls.pop(self.TLS_PLUGIN_KEY)
 
 	def contains_plugin_file(self, file_path: str) -> bool:
 		return file_path in self.plugin_file_path
@@ -400,10 +397,13 @@ class PluginManager:
 	#   Plugin Event
 	# ----------------
 
-	def dispatch_event(self, event: MCDREvent, args: Tuple[Any, ...]):
+	def __dispatch_event(self, event: MCDREvent, args: Tuple[Any, ...]):
 		self.logger.debug('Dispatching {} with args ({})'.format(event, ', '.join([type(arg).__name__ for arg in args])), option=DebugOption.PLUGIN)
 		for listener in self.registry_storage.event_listeners.get(event.id, []):
 			self.trigger_listener(listener, args)
+
+	def dispatch_event(self, event: MCDREvent, args: Tuple[Any, ...]):
+		self.mcdr_server.task_executor.execute_or_enqueue(lambda: self.__dispatch_event(event, args))
 
 	def trigger_listener(self, listener: EventListener, args: Tuple[Any, ...]):
 		"""
