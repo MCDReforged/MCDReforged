@@ -1,3 +1,4 @@
+import time
 from queue import Empty, PriorityQueue
 from threading import Lock
 from typing import Callable, Any
@@ -40,9 +41,18 @@ class TaskExecutor(ThreadExecutor):
 	def __init__(self, mcdr_server):
 		super().__init__(mcdr_server)
 		self.task_queue = PriorityQueue(maxsize=constant.MAX_TASK_QUEUE_SIZE)
+		self.__last_tick_time = None
+		self.__stopped = False
 
 	def should_keep_looping(self):
-		return not self.mcdr_server.is_mcdr_exit() and not self.mcdr_server.mcdr_in_state(MCDReforgedState.PRE_STOPPED)
+		return super().should_keep_looping() and not self.mcdr_server.is_mcdr_exit() and not self.mcdr_server.mcdr_in_state(MCDReforgedState.PRE_STOPPED)
+
+	def soft_stop(self):
+		"""
+		Soft stop
+		:return:
+		"""
+		self.__stopped = True
 
 	def add_info_task(self, func: Callable[[], Any], is_user: bool):
 		data = TaskData(func, Priority.INFO)
@@ -60,10 +70,22 @@ class TaskExecutor(ThreadExecutor):
 		else:
 			self.add_task(func)
 
+	def get_this_tick_time(self) -> float:
+		"""
+		Return the duration of this tick
+		If it's too long, something might go wrong
+		"""
+		if self.__last_tick_time is None:  # not started yet
+			return 0
+		return time.time() - self.__last_tick_time
+
 	def tick(self):
+		self.__last_tick_time = time.time()
 		try:
 			task = self.task_queue.get(timeout=0.01)
 		except Empty:
+			if self.__stopped:
+				self.stop()
 			return
 		try:
 			task.func()

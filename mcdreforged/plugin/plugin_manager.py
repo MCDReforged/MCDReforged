@@ -18,6 +18,7 @@ from mcdreforged.plugin.plugin_thread import PluginThreadPool
 from mcdreforged.plugin.regular_plugin import RegularPlugin
 from mcdreforged.utils import file_util, string_util, misc_util
 from mcdreforged.utils.logger import DebugOption
+from mcdreforged.utils.thread_local_storage import ThreadLocalStorage
 
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
@@ -26,6 +27,8 @@ PLUGIN_CONFIG_DIRECTORY = 'config'
 
 
 class PluginManager:
+	TLS_PLUGIN_KEY = 'current_plugin'
+
 	def __init__(self, mcdr_server: 'MCDReforgedServer'):
 		self.plugin_directories = []  # type: List[str]
 		self.mcdr_server = mcdr_server
@@ -44,7 +47,7 @@ class PluginManager:
 		self.thread_pool = PluginThreadPool(self.mcdr_server, max_thread=constant.PLUGIN_THREAD_POOL_SIZE)
 
 		# thread local storage, to store current plugin
-		self.tls = threading.local()
+		self.tls = ThreadLocalStorage()
 
 		file_util.touch_directory(PLUGIN_CONFIG_DIRECTORY)
 
@@ -52,15 +55,12 @@ class PluginManager:
 	#   Getters / Setters etc.
 	# --------------------------
 
-	def get_current_running_plugin(self) -> Optional[RegularPlugin]:
+	def get_current_running_plugin(self, *, thread=None) -> Optional[RegularPlugin]:
 		"""
 		Get current executing plugin in this thread
+		:param thread: If specified, it should be a Thread instance. Then it will return the executing plugin in the given thread
 		"""
-		try:
-			return self.tls.current_plugin
-		except AttributeError:
-			self.set_current_plugin(None)
-			return None
+		return self.tls.get(self.TLS_PLUGIN_KEY, None, thread=thread)
 
 	def get_all_plugins(self) -> List[AbstractPlugin]:
 		return list(self.plugins.values())
@@ -78,7 +78,7 @@ class PluginManager:
 		return plugin
 
 	def set_current_plugin(self, plugin: Optional[AbstractPlugin]):
-		self.tls.current_plugin = plugin
+		self.tls.put('current_plugin', plugin)
 
 	def set_plugin_directories(self, plugin_directories: Optional[List[str]]):
 		if plugin_directories is None:

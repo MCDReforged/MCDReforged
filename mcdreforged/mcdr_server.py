@@ -14,6 +14,7 @@ from mcdreforged.command.command_manager import CommandManager
 from mcdreforged.config import Config
 from mcdreforged.executor.console_handler import ConsoleHandler
 from mcdreforged.executor.task_executor import TaskExecutor
+from mcdreforged.executor.watchdog import WatchDog
 from mcdreforged.handler.server_handler_manager import ServerHandlerManager
 from mcdreforged.info import Info
 from mcdreforged.info_reactor.info_reactor_manager import InfoReactorManager
@@ -52,6 +53,7 @@ class MCDReforgedServer:
 		self.server_interface = ServerInterface(self)
 		self.task_executor = TaskExecutor(self)
 		self.console_handler = ConsoleHandler(self)
+		self.watch_dog = WatchDog(self)
 		self.language_manager = LanguageManager(self.logger)
 		self.config = Config(self.logger)
 		self.rcon_manager = RconManager(self)
@@ -425,6 +427,7 @@ class MCDReforgedServer:
 			self.logger.info(self.tr('mcdr_server.on_mcdr_start.console_disabled'))
 		if not self.start_server():
 			raise ServerStartError()
+		self.watch_dog.start()
 		self.server_handler_manager.start_handler_detection()
 		self.set_mcdr_state(MCDReforgedState.RUNNING)
 
@@ -437,7 +440,7 @@ class MCDReforgedServer:
 			self.plugin_manager.dispatch_event(MCDRPluginEvents.MCDR_STOP, ())
 
 			self.set_mcdr_state(MCDReforgedState.PRE_STOPPED)
-			self.task_executor.join()
+			# self.task_executor.join()
 
 			self.logger.info(self.tr('mcdr_server.on_mcdr_stop.bye'))
 		except KeyboardInterrupt:  # I don't know why there sometimes will be a KeyboardInterrupt if MCDR is stopped by ctrl-c
