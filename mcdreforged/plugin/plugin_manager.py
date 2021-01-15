@@ -49,6 +49,9 @@ class PluginManager:
 		# thread local storage, to store current plugin
 		self.tls = ThreadLocalStorage()
 
+		# plugin manipulation lock
+		self.mani_lock = threading.RLock()
+
 		file_util.touch_directory(PLUGIN_CONFIG_DIRECTORY)
 
 	# --------------------------
@@ -221,7 +224,7 @@ class PluginManager:
 	#   Regular Plugin Collector & Handlers
 	# ---------------------------------------
 
-	def collect_and_process_new_plugins(self, filter: Callable[[str], bool]) -> SingleOperationResult:
+	def __collect_and_process_new_plugins(self, filter: Callable[[str], bool]) -> SingleOperationResult:
 		result = SingleOperationResult()
 		for plugin_directory in self.plugin_directories:
 			file_list = file_util.list_file_with_suffix(plugin_directory, constant.PLUGIN_FILE_SUFFIX)
@@ -234,7 +237,7 @@ class PluginManager:
 						result.succeed(plugin)
 		return result
 
-	def collect_and_remove_plugins(self, filter: Callable[[RegularPlugin], bool], specific: Optional[RegularPlugin] = None) -> SingleOperationResult:
+	def __collect_and_remove_plugins(self, filter: Callable[[RegularPlugin], bool], specific: Optional[RegularPlugin] = None) -> SingleOperationResult:
 		result = SingleOperationResult()
 		plugin_list = self.get_regular_plugins() if specific is None else [specific]
 		for plugin in plugin_list:
@@ -242,7 +245,7 @@ class PluginManager:
 				result.record(plugin, self.__unload_plugin(plugin))
 		return result
 
-	def reload_ready_plugins(self, filter: Callable[[RegularPlugin], bool], specific: Optional[RegularPlugin] = None) -> SingleOperationResult:
+	def __reload_ready_plugins(self, filter: Callable[[RegularPlugin], bool], specific: Optional[RegularPlugin] = None) -> SingleOperationResult:
 		result = SingleOperationResult()
 		plugin_list = self.get_regular_plugins() if specific is None else [specific]
 		for plugin in plugin_list:
@@ -250,7 +253,7 @@ class PluginManager:
 				result.record(plugin, self.__reload_plugin(plugin))
 		return result
 
-	def check_plugin_dependencies(self) -> SingleOperationResult:
+	def __check_plugin_dependencies(self) -> SingleOperationResult:
 		result = SingleOperationResult()
 		walker = DependencyWalker(self)
 		walk_result = walker.walk()
@@ -291,10 +294,6 @@ class PluginManager:
 	#     2. Call on_load for new / reloaded plugins by topo order
 	#     3. Call on_unload for unloaded plugins
 
-	def __check_thread(self):
-		if not self.mcdr_server.task_executor.is_on_thread():
-			raise RuntimeError('Plugin operations should be executed directly on task executor\'s thread, but thread {} founded'.format(threading.current_thread().getName()))
-
 	def __post_plugin_process(self, load_result=None, unload_result=None, reload_result=None):
 		if load_result is None:
 			load_result = SingleOperationResult()
@@ -303,7 +302,7 @@ class PluginManager:
 		if reload_result is None:
 			reload_result = SingleOperationResult()
 
-		dependency_check_result = self.check_plugin_dependencies()
+		dependency_check_result = self.__check_plugin_dependencies()
 		self.last_operation_result.record(load_result, unload_result, reload_result, dependency_check_result)
 
 		# Expected plugin states:
@@ -337,13 +336,6 @@ class PluginManager:
 
 		self.__update_registry()
 
-	def __refresh_plugins(self, reload_filter: Callable[[RegularPlugin], bool]):
-		self.__check_thread()
-		load_result = self.collect_and_process_new_plugins(lambda fp: True)
-		unload_result = self.collect_and_remove_plugins(lambda plugin: not plugin.file_exists())
-		reload_result = self.reload_ready_plugins(reload_filter)
-		self.__post_plugin_process(load_result, unload_result, reload_result)
-
 	def __update_registry(self):
 		self.registry_storage.clear()
 		for plugin in self.get_all_plugins():
@@ -351,48 +343,58 @@ class PluginManager:
 		self.registry_storage.arrange()
 		self.mcdr_server.on_plugin_changed()
 
+	def __refresh_plugins(self, reload_filter: Callable[[RegularPlugin], bool]):
+		load_result = self.__collect_and_process_new_plugins(lambda fp: True)
+		unload_result = self.__collect_and_remove_plugins(lambda plugin: not plugin.file_exists())
+		reload_result = self.__reload_ready_plugins(reload_filter)
+		self.__post_plugin_process(load_result, unload_result, reload_result)
+
 	# --------------
 	#   Interfaces
 	# --------------
 
 	def load_plugin(self, file_path: str):
-		self.__check_thread()
-		self.logger.info(self.mcdr_server.tr('plugin_manager.load_plugin.entered', file_path))
-		load_result = self.collect_and_process_new_plugins(lambda fp: fp == file_path)
-		self.__post_plugin_process(load_result=load_result)
+		with self.mani_lock:
+			self.logger.info(self.mcdr_server.tr('plugin_manager.load_plugin.entered', file_path))
+			load_result = self.__collect_and_process_new_plugins(lambda fp: fp == file_path)
+			self.__post_plugin_process(load_result=load_result)
 
 	def unload_plugin(self, plugin: RegularPlugin):
-		self.__check_thread()
-		self.logger.info(self.mcdr_server.tr('plugin_manager.unload_plugin.entered', plugin))
-		unload_result = self.collect_and_remove_plugins(lambda plg: True, specific=plugin)
-		self.__post_plugin_process(unload_result=unload_result)
+		with self.mani_lock:
+			self.logger.info(self.mcdr_server.tr('plugin_manager.unload_plugin.entered', plugin))
+			unload_result = self.__collect_and_remove_plugins(lambda plg: True, specific=plugin)
+			self.__post_plugin_process(unload_result=unload_result)
 
 	def reload_plugin(self, plugin: RegularPlugin):
-		self.__check_thread()
-		self.logger.info(self.mcdr_server.tr('plugin_manager.reload_plugin.entered', plugin))
-		reload_result = self.reload_ready_plugins(lambda plg: True, specific=plugin)
-		self.__post_plugin_process(reload_result=reload_result)
+		with self.mani_lock:
+			self.logger.info(self.mcdr_server.tr('plugin_manager.reload_plugin.entered', plugin))
+			reload_result = self.__reload_ready_plugins(lambda plg: True, specific=plugin)
+			self.__post_plugin_process(reload_result=reload_result)
 
 	def enable_plugin(self, file_path: str):
-		self.logger.info(self.mcdr_server.tr('plugin_manager.enable_plugin.entered', file_path))
-		new_file_path = string_util.remove_suffix(file_path, constant.DISABLED_PLUGIN_FILE_SUFFIX)
-		if os.path.isfile(file_path):
-			os.rename(file_path, new_file_path)
-			self.load_plugin(new_file_path)
+		with self.mani_lock:
+			self.logger.info(self.mcdr_server.tr('plugin_manager.enable_plugin.entered', file_path))
+			new_file_path = string_util.remove_suffix(file_path, constant.DISABLED_PLUGIN_FILE_SUFFIX)
+			if os.path.isfile(file_path):
+				os.rename(file_path, new_file_path)
+				self.load_plugin(new_file_path)
 
 	def disable_plugin(self, plugin: RegularPlugin):
-		self.logger.info(self.mcdr_server.tr('plugin_manager.disable_plugin.entered', plugin))
-		self.unload_plugin(plugin)
-		if os.path.isfile(plugin.file_path):
-			os.rename(plugin.file_path, plugin.file_path + constant.DISABLED_PLUGIN_FILE_SUFFIX)
+		with self.mani_lock:
+			self.logger.info(self.mcdr_server.tr('plugin_manager.disable_plugin.entered', plugin))
+			self.unload_plugin(plugin)
+			if os.path.isfile(plugin.file_path):
+				os.rename(plugin.file_path, plugin.file_path + constant.DISABLED_PLUGIN_FILE_SUFFIX)
 
 	def refresh_all_plugins(self):
-		self.logger.info(self.mcdr_server.tr('plugin_manager.refresh_all_plugins.entered'))
-		return self.__refresh_plugins(lambda plg: True)
+		with self.mani_lock:
+			self.logger.info(self.mcdr_server.tr('plugin_manager.refresh_all_plugins.entered'))
+			return self.__refresh_plugins(lambda plg: True)
 
 	def refresh_changed_plugins(self):
-		self.logger.info(self.mcdr_server.tr('plugin_manager.refresh_changed_plugins.entered'))
-		return self.__refresh_plugins(lambda plg: plg.file_changed())
+		with self.mani_lock:
+			self.logger.info(self.mcdr_server.tr('plugin_manager.refresh_changed_plugins.entered'))
+			return self.__refresh_plugins(lambda plg: plg.file_changed())
 
 	# ----------------
 	#   Plugin Event

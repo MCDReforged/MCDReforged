@@ -486,6 +486,7 @@ class ServerInterface:
 	#           Misc
 	# ------------------------
 
+	@log_call
 	def is_on_executor_thread(self) -> bool:
 		"""
 		Return if the current thread is the task executor thread
