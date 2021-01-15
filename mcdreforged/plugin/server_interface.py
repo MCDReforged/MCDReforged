@@ -119,9 +119,10 @@ class ServerInterface:
 		Restart the server
 		It will first soft stop the server and then wait until the server is stopped, then start the server up
 		"""
-		self.stop(is_plugin_call=False)
-		self.wait_for_start(is_plugin_call=False)
-		self.start(is_plugin_call=False)
+		if self.is_server_running():
+			self.stop(is_plugin_call=False)
+			self.wait_for_start(is_plugin_call=False)
+			self.start(is_plugin_call=False)
 
 	@log_call
 	def stop_exit(self) -> None:
