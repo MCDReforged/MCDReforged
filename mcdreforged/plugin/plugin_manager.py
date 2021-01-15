@@ -45,7 +45,6 @@ class PluginManager:
 
 		# thread local storage, to store current plugin
 		self.tls = threading.local()
-		self.set_current_plugin(None)
 
 		file_util.touch_directory(PLUGIN_CONFIG_DIRECTORY)
 
@@ -57,7 +56,11 @@ class PluginManager:
 		"""
 		Get current executing plugin in this thread
 		"""
-		return self.tls.current_plugin
+		try:
+			return self.tls.current_plugin
+		except AttributeError:
+			self.set_current_plugin(None)
+			return None
 
 	def get_all_plugins(self) -> List[AbstractPlugin]:
 		return list(self.plugins.values())
