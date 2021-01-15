@@ -28,6 +28,9 @@ mcdr_server.on_mcdr_stop.stop_error                 : 关闭 MCDR 时出错，�
 console_handler.parse_fail                          : 解析控制台指令 "{0}" 出错
 console_handler.error                               : 运行 ConsoleHandler 时出错
 task_executor.error                                 : 运行 TaskExecutor 时出错
+watchdog.task_executor_no_response.line1            : TaskExecutor 线程已经 {0} 秒没有响应了，可能出了些问题
+watchdog.task_executor_no_response.line2            : "正在于 TaskExecutor 线程中运行的插件 (如果存在的话): {0}"
+watchdog.task_executor_no_response.line3            : 重建 TaskExecutor 中
 info_reactor_manager.react.error                    : 运行响应器 {0} 时出错
 info_reactor_manager.info_queue.full                : 消息队列已满, 服务端是否在刷屏? 忽略新到来消息
 config.missing_config: |

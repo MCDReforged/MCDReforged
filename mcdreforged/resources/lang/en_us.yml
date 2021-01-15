@@ -28,6 +28,9 @@ mcdr_server.on_mcdr_stop.stop_error                 : Error stopping MCDR, ignor
 console_handler.parse_fail                          : Error parsing console command "{0}"
 console_handler.error                               : Error ticking ConsoleHandler
 task_executor.error                                 : Error ticking TaskExecutor
+watchdog.task_executor_no_response.line1            : Task executor thread has no respond for {0} seconds, something might go wrong
+watchdog.task_executor_no_response.line2            : "Current running plugin in task executor thread (if there's any): {0}"
+watchdog.task_executor_no_response.line3            : Recreating the task executor
 info_reactor_manager.react.error                    : Error processing reactor {0}
 info_reactor_manager.info_queue.full                : Info queue has been full, is the server spamming? Ignore incoming info!
 config.missing_config: |
