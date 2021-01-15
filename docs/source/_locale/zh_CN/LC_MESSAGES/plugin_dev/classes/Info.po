@@ -1,0 +1,223 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Fallen_Breath
+# This file is distributed under the same license as the MCDReforged
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2021.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: MCDReforged \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-01-15 15:18+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.0\n"
+
+#: ../plugin_dev/classes/Info.md:1
+msgid "Info"
+msgstr ""
+
+#: ../plugin_dev/classes/Info.md:3
+msgid ""
+"An Info instance contains the parsed result from the server or from the "
+"console."
+msgstr ""
+
+#: ../plugin_dev/classes/Info.md:5
+msgid "Property"
+msgstr ""
+
+#: ../plugin_dev/classes/Info.md:7
+msgid "Property might be None if MCDR didn't parse out the related property"
+msgstr ""
+
+#: ../plugin_dev/classes/Info.md:9
+msgid "id"
+msgstr ""
+
+#: ../plugin_dev/classes/Info.md:11
+msgid ""
+"A increasing id number for distinguishing info instance. The id is "
+"monotonously rising by time"
+msgstr ""
+
+#: ../plugin_dev/classes/Info.md:13 ../plugin_dev/classes/Info.md:19
+#: ../plugin_dev/classes/Info.md:47
+msgid "Type: int"
+msgstr ""
+
+#: ../plugin_dev/classes/Info.md:15
+msgid "hour, min, sec"
+msgstr ""
+
+#: ../plugin_dev/classes/Info.md:17
+msgid "Time information from the parsed text"
+msgstr ""
+
+#: ../plugin_dev/classes/Info.md:21
+msgid "raw_content"
+msgstr ""
+
+#: ../plugin_dev/classes/Info.md:23
+msgid ""
+"Very raw unparsed content from the server stdout. It's also the content "
+"to be echoed to the stdout"
+msgstr ""
+
+#: ../plugin_dev/classes/Info.md:25 ../plugin_dev/classes/Info.md:31
+#: ../plugin_dev/classes/Info.md:37 ../plugin_dev/classes/Info.md:53
+msgid "Type: str"
+msgstr ""
+
+#: ../plugin_dev/classes/Info.md:27
+msgid "content"
+msgstr ""
+
+#: ../plugin_dev/classes/Info.md:29
+msgid ""
+"The parsed message text. If the text is sent by a player it will be what "
+"the player said"
+msgstr ""
+
+#: ../plugin_dev/classes/Info.md:33
+msgid "player"
+msgstr ""
+
+#: ../plugin_dev/classes/Info.md:35
+msgid ""
+"The name of the player. If it's not sent by a player the value will be "
+"None"
+msgstr ""
+
+#: ../plugin_dev/classes/Info.md:39
+msgid "source"
+msgstr ""
+
+#: ../plugin_dev/classes/Info.md:41
+msgid "A int representing the the type of the info"
+msgstr ""
+
+#: ../plugin_dev/classes/Info.md:43
+msgid "For info from the server, its value is 0"
+msgstr ""
+
+#: ../plugin_dev/classes/Info.md:45
+msgid "For info from the console, its value is 1"
+msgstr ""
+
+#: ../plugin_dev/classes/Info.md:49
+msgid "logging_level"
+msgstr ""
+
+#: ../plugin_dev/classes/Info.md:51
+msgid "The logging level of the server's stdout, such as INFO or WARN"
+msgstr ""
+
+#: ../plugin_dev/classes/Info.md:55
+msgid "is_from_console"
+msgstr ""
+
+#: ../plugin_dev/classes/Info.md:57 ../plugin_dev/classes/Info.md:65
+#: ../plugin_dev/classes/Info.md:73 ../plugin_dev/classes/Info.md:81
+msgid "An @property decorated method"
+msgstr ""
+
+#: ../plugin_dev/classes/Info.md:59
+msgid "If the source of the info is 1, aka from the console"
+msgstr ""
+
+#: ../plugin_dev/classes/Info.md:61 ../plugin_dev/classes/Info.md:69
+#: ../plugin_dev/classes/Info.md:77 ../plugin_dev/classes/Info.md:85
+msgid "Type: bool"
+msgstr ""
+
+#: ../plugin_dev/classes/Info.md:63
+msgid "is_from_server"
+msgstr ""
+
+#: ../plugin_dev/classes/Info.md:67
+msgid "If the source of the info is 0, aka from the server"
+msgstr ""
+
+#: ../plugin_dev/classes/Info.md:71
+msgid "is_player"
+msgstr ""
+
+#: ../plugin_dev/classes/Info.md:75
+msgid "If the source is from a player in the server"
+msgstr ""
+
+#: ../plugin_dev/classes/Info.md:79
+msgid "is_user"
+msgstr ""
+
+#: ../plugin_dev/classes/Info.md:83
+msgid ""
+"If the source is from a user, in other words, if the source is from the "
+"console or from a player in the server"
+msgstr ""
+
+#: ../plugin_dev/classes/Info.md:87
+msgid "Method"
+msgstr ""
+
+#: ../plugin_dev/classes/Info.md:89
+msgid "get_server"
+msgstr ""
+
+#: ../plugin_dev/classes/Info.md:95
+msgid "Return the server interface instance"
+msgstr ""
+
+#: ../plugin_dev/classes/Info.md:97
+msgid "get_command_source"
+msgstr ""
+
+#: ../plugin_dev/classes/Info.md:103
+msgid ""
+"Extract an command source object from this info instance. "
+"ConsoleCommandSource if this info is from console, or PlayerCommandSource"
+" if this info is from a player in game"
+msgstr ""
+
+#: ../plugin_dev/classes/Info.md:105
+msgid ""
+"Return the command source instance, or None if it can't extract a command"
+" source"
+msgstr ""
+
+#: ../plugin_dev/classes/Info.md:107
+msgid "to_command_source"
+msgstr ""
+
+#: ../plugin_dev/classes/Info.md:113
+msgid ""
+"The same to method get_command_source, but it raises a IllegalCallError "
+"if it can't extract a command source"
+msgstr ""
+
+#: ../plugin_dev/classes/Info.md:115
+msgid "should_send_to_server"
+msgstr ""
+
+#: ../plugin_dev/classes/Info.md:121
+msgid ""
+"Representing if MCDR should send the content to the standard input stream"
+" of the server if this info is input from the console"
+msgstr ""
+
+#: ../plugin_dev/classes/Info.md:123
+msgid "cancel_send_to_server"
+msgstr ""
+
+#: ../plugin_dev/classes/Info.md:129
+msgid ""
+"Prevent this info from being sent to the standard input stream of the "
+"server"
+msgstr ""
+

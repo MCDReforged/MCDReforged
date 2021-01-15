@@ -16,6 +16,7 @@
 
 
 # -- Project information -----------------------------------------------------
+import os
 
 project = 'MCDReforged'
 copyright = '2021, Fallen_Breath'
@@ -67,9 +68,12 @@ html_theme_options = {
 
 # -- Options for sphinx-intl -------------------------------------------------
 
+# https://docs.readthedocs.io/en/stable/builds.html#build-environment
+language = os.environ.get('READTHEDOCS_LANGUAGE', 'en')
+
 # po files will be created in this directory
 # path is example but recommended.
-locale_dirs = ['locale/']
+locale_dirs = ['_locale']
 gettext_compact = False  # optional
 
 

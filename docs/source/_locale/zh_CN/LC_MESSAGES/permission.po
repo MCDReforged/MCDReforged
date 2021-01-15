@@ -1,0 +1,89 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Fallen_Breath
+# This file is distributed under the same license as the MCDReforged
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2021.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: MCDReforged \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-01-15 15:18+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.0\n"
+
+#: ../permission.md:1
+msgid "Permission"
+msgstr ""
+
+#: ../permission.md:3
+msgid "Overview"
+msgstr ""
+
+#: ../permission.md:5
+msgid ""
+"There is a simple built-in permission system in MCDR. It can be used by "
+"MCDR commands and plugins"
+msgstr ""
+
+#: ../permission.md:7
+msgid "There are 5 different levels of permission in total:"
+msgstr ""
+
+#: ../permission.md:46
+msgid "The permission level of console input is always the highest level owner"
+msgstr ""
+
+#: ../permission.md:48
+msgid "Permission File"
+msgstr ""
+
+#: ../permission.md:50
+msgid ""
+"Permission file permission.yml is the config and storage file for the "
+"system"
+msgstr ""
+
+#: ../permission.md:52
+msgid ""
+"default_level: The default permission level a new player will get. "
+"Default: user"
+msgstr ""
+
+#: ../permission.md:53
+msgid "owner: Names of players with permission owner"
+msgstr ""
+
+#: ../permission.md:54
+msgid "admin: Names of players with permission admin"
+msgstr ""
+
+#: ../permission.md:55
+msgid "helper: Names of players with permission helper"
+msgstr ""
+
+#: ../permission.md:56
+msgid "user: Names of players with permission user"
+msgstr ""
+
+#: ../permission.md:57
+msgid "guest: Names of players with permission guest"
+msgstr ""
+
+#: ../permission.md:59
+msgid "Player name list of permission levels can be filled like this:"
+msgstr ""
+
+#: ../permission.md:74
+msgid ""
+"Permission file supports hot-reload. You can use !!MCDR reload permission"
+" to reload the permission file in-game. Check the related command section"
+" for more detail"
+msgstr ""
+

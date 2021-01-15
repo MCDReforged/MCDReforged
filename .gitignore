@@ -43,4 +43,6 @@ permission.yml
 
 # sphinx documentation
 docs/build/
-docs/source/locale/
+**/.doctrees/
+**/*.mo
+**/*.pot
