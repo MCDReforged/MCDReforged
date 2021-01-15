@@ -67,6 +67,8 @@ html_theme_options = {
 
 # -- Options for sphinx-intl -------------------------------------------------
 
+language = 'en'
+
 # po files will be created in this directory
 # path is example but recommended.
 locale_dirs = ['locale/']
