@@ -118,8 +118,8 @@ mcdr_command.help_message.title                       : MCDR 指令帮助信息�
 mcdr_command.help_message.mcdr_command                : MCDR 控制指令
 mcdr_command.help_message.help_command                : 显示指令帮助信息
 mcdr_command.help_message.page_number                 : 第 §6{0}§r 页
-mcdr_command.help_message.previous_page_hover         : 点击显示下一页
-mcdr_command.help_message.next_page_hover             : 点击显示上一页
+mcdr_command.help_message.previous_page_hover         : 点击显示上一页
+mcdr_command.help_message.next_page_hover             : 点击显示下一页
 permission_manager.load.fail                          : 加载权限文件 §7{0}§r §c失败§r，使用默认的空数据
 permission_manager.set_default_permission_level.done  : 默认权限等级已设置为 §e{0}§r
 permission_manager.set_permission_level.done          : 玩家 §b{0}§r 的权限等级已设置为 §e{1}§r
