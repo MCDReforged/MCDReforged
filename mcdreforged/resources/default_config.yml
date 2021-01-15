@@ -89,6 +89,7 @@ debug:
   plugin: false
   permission: false
   command: false
+  task_executor: false
 
 
 # =========================================

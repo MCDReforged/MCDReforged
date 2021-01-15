@@ -60,7 +60,7 @@ class InfoReactorManager:
 		if info.is_from_server:
 			self.server_logger.info(info.raw_content)
 		try:
-			self.mcdr_server.task_executor.add_info_task(lambda: self.process_info(info), info.is_user)
+			self.mcdr_server.task_executor.enqueue_info_task(lambda: self.process_info(info), info.is_user)
 		except queue.Full:
 			current_time = time.time()
 			logging_method = self.mcdr_server.logger.debug

@@ -27,6 +27,7 @@ class DebugOption(Enum):
 	PLUGIN = auto()
 	PERMISSION = auto()
 	COMMAND = auto()
+	TASK_EXECUTOR = auto()
 
 
 # global flag

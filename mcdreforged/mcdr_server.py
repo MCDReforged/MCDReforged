@@ -410,7 +410,7 @@ class MCDReforgedServer:
 
 	def on_mcdr_start(self):
 		self.task_executor.start()
-		self.task_executor.add_task(self.load_plugins)
+		self.task_executor.enqueue_regular_task(self.load_plugins)
 		self.task_executor.wait_till_finish_all_task()
 		self.plugin_manager.dispatch_event(MCDRPluginEvents.MCDR_START, ())
 		if not self.config['disable_console_thread']:
