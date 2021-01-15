@@ -117,6 +117,9 @@ mcdr_command.reload_all_plugin.fail                   : §cFail§r to reload all
 mcdr_command.help_message.title                       : MCDR command help message list
 mcdr_command.help_message.mcdr_command                : MCDR control command
 mcdr_command.help_message.help_command                : Display command help messages
+mcdr_command.help_message.page_number                 : Page §6{0}§r
+mcdr_command.help_message.previous_page_hover         : Click to display the previous page
+mcdr_command.help_message.next_page_hover             : Click to display the next page
 permission_manager.load.fail                          : Fail to load permission file {0}, using default empty data
 permission_manager.set_default_permission_level.done  : The default permission level has set to §e{0}§r
 permission_manager.set_permission_level.done          : The permission level of player §b{0}§r has set to §e{1}§r

@@ -6,7 +6,7 @@ import traceback
 from typing import Callable, Any, Tuple, List, Optional
 
 from mcdreforged import constant
-from mcdreforged.command.builder.command_node import Literal, QuotableText, Text, GreedyText
+from mcdreforged.command.builder.command_node import Literal, QuotableText, Text, GreedyText, Integer
 from mcdreforged.command.builder.exception import UnknownArgument, RequirementNotMet, CommandError
 from mcdreforged.command.command_source import CommandSource
 from mcdreforged.minecraft.rtext import RText, RAction, RTextList, RStyle, RColor
@@ -29,6 +29,7 @@ METADATA = {
 	],
 	'link': 'https://github.com/Fallen-Breath/MCDReforged'
 }
+HELP_MESSAGE_PER_PAGE = 10
 
 
 class Validator:
@@ -127,7 +128,14 @@ class MCDReforgedPlugin(PermanentPlugin):
 				Literal({'checkupdate', 'cu'}).runs(lambda src: self.mcdr_server.update_helper.check_update(condition_check=lambda: True, reply_func=src.reply))
 			)
 		)
-		self.register_command(Literal(self.get_help_command_prefix()).runs(self.process_help_command))
+		self.register_command(
+			Literal(self.get_help_command_prefix()).
+			runs(self.process_help_command).
+			then(
+				Integer('page').at_min(1).
+				runs(self.process_help_command)
+			)
+		)
 
 	# ==============================
 	#     Command Implementation
@@ -457,9 +465,41 @@ class MCDReforgedPlugin(PermanentPlugin):
 			PermissionLevel.MINIMUM_LEVEL
 		))
 
-	def process_help_command(self, source: CommandSource):
-		# TODO help list paging
+	def process_help_command(self, source: CommandSource, context: dict):
+		page = context.get('page')
 		source.reply(self.tr('mcdr_command.help_message.title'))
+		matched = []  # type: List[HelpMessage]
 		for msg in self.mcdr_server.plugin_manager.registry_storage.help_messages:  # type: HelpMessage
 			if source.has_permission(msg.permission):
-				source.reply(RText('§7{}§r: '.format(msg.prefix)).c(RAction.suggest_command, msg.prefix) + msg.message)
+				matched.append(msg)
+		matched_count = len(matched)
+
+		if page is not None:
+			left, right = (page - 1) * HELP_MESSAGE_PER_PAGE, page * HELP_MESSAGE_PER_PAGE
+		else:
+			left, right = 0, matched_count
+		for i in range(left, right):
+			if 0 <= i < matched_count:
+				msg = matched[i]
+				source.reply(RTextList(
+					RText(msg.prefix, color=RColor.gray).c(RAction.suggest_command, msg.prefix),
+					': ',
+					msg.message
+				))
+
+		if page is not None:
+			has_prev = 0 < left < matched_count
+			has_next = 0 < right < matched_count
+			color = {False: RColor.dark_gray, True: RColor.gray}
+			prev_page = RText('<-', color=color[has_prev])
+			if has_prev:
+				prev_page.c(RAction.run_command, '!!help {}'.format(page - 1)).h(self.tr('mcdr_command.help_message.previous_page_hover'))
+			next_page = RText('->', color=color[has_next])
+			if has_next:
+				next_page.c(RAction.run_command, '!!help {}'.format(page + 1)).h(self.tr('mcdr_command.help_message.next_page_hover'))
+
+			source.reply(RTextList(
+				prev_page,
+				' {} '.format(self.tr('mcdr_command.help_message.page_number', page)),
+				next_page
+			))
