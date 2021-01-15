@@ -67,11 +67,11 @@ html_theme_options = {
 
 # -- Options for sphinx-intl -------------------------------------------------
 
-language = 'en'
+language = 'zh_CN'
 
 # po files will be created in this directory
 # path is example but recommended.
-locale_dirs = ['_locale ']
+locale_dirs = ['_locale']
 gettext_compact = False  # optional
 
 
