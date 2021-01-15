@@ -20,33 +20,33 @@ msgstr ""
 
 #: ../quick_start.md:1
 msgid "Quick Start"
-msgstr ""
+msgstr "快速开始"
 
 #: ../quick_start.md:3
 msgid ""
 "This is a quick start tutorial of MCDReforged (abbreviated as MCDR, "
 "omitted below)"
-msgstr ""
+msgstr "这是一个 MCDReforged（简称为 MCDR，以下省略）的快速上手教程"
 
 #: ../quick_start.md:5
 msgid "Requirements"
-msgstr ""
+msgstr "依赖"
 
 #: ../quick_start.md:7
 msgid "MCDR requires python3 runtime. The python version need to be at least 3.6"
-msgstr ""
+msgstr "MCDR 依赖 python3 运行环境。python 的具体版本需要至少是 3.6"
 
 #: ../quick_start.md:9
 msgid "Install"
-msgstr ""
+msgstr "安装"
 
 #: ../quick_start.md:11
 msgid "MCDR is available in pypi. It can be installed via pip command"
-msgstr ""
+msgstr "MCDR 在 [pypi](https://pypi.org/project/mcdreforged) 中可用，因此可用使用 `pip` 指令来安装"
 
 #: ../quick_start.md:17
 msgid "Start up"
-msgstr ""
+msgstr "启动"
 
 #: ../quick_start.md:19
 msgid ""
