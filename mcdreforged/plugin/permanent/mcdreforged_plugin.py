@@ -187,7 +187,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 	def refresh_changed_plugins(self, source: CommandSource):
 		ret = self.function_call(source, self.mcdr_server.plugin_manager.refresh_changed_plugins, 'refresh_changed_plugins', log_success=False)
 		if ret.no_error:
-			source.reply(self.mcdr_server.plugin_manager.last_operation_result.to_rtext())
+			source.reply(self.mcdr_server.plugin_manager.last_operation_result.to_rtext(show_path=source.has_permission(PermissionLevel.PHYSICAL_SERVER_CONTROL_LEVEL)))
 
 	def reload_config(self, source: CommandSource):
 		self.function_call(source, self.mcdr_server.load_config, 'reload_config')
@@ -445,7 +445,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 	def reload_all_plugin(self, source: CommandSource):
 		ret = self.function_call(source, self.mcdr_server.plugin_manager.refresh_all_plugins, 'reload_all_plugin', log_success=False)
 		if ret.no_error:
-			source.reply(self.mcdr_server.plugin_manager.last_operation_result.to_rtext())
+			source.reply(self.mcdr_server.plugin_manager.last_operation_result.to_rtext(show_path=source.has_permission(PermissionLevel.PHYSICAL_SERVER_CONTROL_LEVEL)))
 
 	# =======================
 	#   Help Message things

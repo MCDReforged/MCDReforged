@@ -1,3 +1,4 @@
+import os
 from typing import List, TYPE_CHECKING
 
 from mcdreforged.minecraft.rtext import RTextList, RText, RAction, RTextBase
@@ -50,7 +51,7 @@ class PluginOperationResult:
 		self.reload_result = reload_result
 		self.dependency_check_result = dependencies_resolve_result
 
-	def to_rtext(self) -> RTextBase:
+	def to_rtext(self, *, show_path: bool) -> RTextBase:
 		if not self.__has_record:
 			raise IllegalCallError('No record yet')
 
@@ -60,7 +61,13 @@ class PluginOperationResult:
 
 		def add_if_not_empty(msg: RTextList, lst: List['AbstractPlugin' or str], key: str):
 			if len(lst) > 0:
-				add_element(msg, RText(self.__mcdr_server.tr(key, len(lst))).h('\n'.join(map(str, lst))))
+				text_list = []
+				for ele in lst:
+					if isinstance(ele, str):
+						text_list.append(ele if show_path else os.path.basename(ele))
+					else:
+						text_list.append(str(ele))
+				add_element(msg, RText(self.__mcdr_server.tr(key, len(lst))).h('\n'.join(text_list)))
 
 		message = RTextList()
 		add_if_not_empty(message, list(filter(lambda plg: plg in self.dependency_check_result.success_list, self.load_result.success_list)), 'plugin_operation_result.info_loaded_succeeded')
