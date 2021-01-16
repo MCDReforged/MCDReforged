@@ -1,0 +1,194 @@
+mcdr_server.on_config_changed.language_set          : 语言已设置为 {0}
+mcdr_server.on_config_changed.debug_mode_on         : 调试模式开启
+mcdr_server.on_config_changed.handler_set           : 解析处理器已设置为 {0}
+mcdr_server.on_config_changed.encoding_decoding_set : 编码 / 解码方式已设置为 {0} / {1}
+mcdr_server.on_config_changed.plugin_directories_set: "插件文件夹列表:"
+mcdr_server.start_server.already_interrupted        : MCDR 已被终止
+mcdr_server.start_server.start_twice                : 服务端不能多次启动
+mcdr_server.start_server.cwd_not_existed            : 服务端工作路径 {0} 不存在
+mcdr_server.start_server.starting                   : 正在启动服务端，启动参数为 "{0}"
+mcdr_server.start_server.start_fail                 : 服务端启动失败
+mcdr_server.start_server.pid_info                   : 服务端正在以 PID {0} 运行中
+mcdr_server.stop.stop_when_stopped                  : 服务端不能在关闭时再次关闭
+mcdr_server.stop.stop_fail                          : 服务端关闭出错，强制关闭
+mcdr_server.kill_server.killing                     : 正在终止服务端进程组
+mcdr_server.kill_server.process_killed              : 进程 {0} 已终止
+mcdr_server.interrupt.hint                          : 中断 MCDR 中，首次操作 = {0}
+mcdr_server.send.send_when_stopped                  : 服务端已关闭，不能向其标准输入流输入指令
+mcdr_server.receive.wait_stop                       : 等待服务端进程停止
+mcdr_server.receive.decode_fail                     : 解析文本 "{0}" 出错
+mcdr_server.on_mcdr_start.console_disabled          : 控制台线程已禁用
+mcdr_server.on_server_stop.show_stopcode            : "服务端进程返回代码: {0}"
+mcdr_server.tick.pre_parse_fail                     : 预解析服务端标准输出流失败，使用源文本
+mcdr_server.run.error                               : 运行 MCDR 时出错
+mcdr_server.on_mcdr_stop.user_interrupted           : MCDR 已被用户终止
+mcdr_server.on_mcdr_stop.server_stop                : 服务端已关闭
+mcdr_server.on_mcdr_stop.bye                        : bye
+mcdr_server.on_mcdr_stop.stop_error                 : 关闭 MCDR 时出错，忽略并继续退出
+console_handler.parse_fail                          : 解析控制台指令 "{0}" 出错
+console_handler.error                               : 运行 ConsoleHandler 时出错
+task_executor.error                                 : 运行 TaskExecutor 时出错
+watchdog.task_executor_no_response.line1            : TaskExecutor 线程已经 {0} 秒没有响应了，可能出了些问题
+watchdog.task_executor_no_response.line2            : "正在于 TaskExecutor 线程中运行的插件 (如果存在的话): {0}"
+watchdog.task_executor_no_response.line3            : 重建 TaskExecutor 中
+info_reactor_manager.react.error                    : 运行响应器 {0} 时出错
+info_reactor_manager.info_queue.full                : 消息队列已满, 服务端是否在刷屏? 忽略新到来消息
+config.missing_config: |
+  配置文件缺失部分选项，使用默认值
+  请尽快去检测并更新配置文件
+mcdr_command.permission_denied                      : §c权限不足§r
+mcdr_command.help_message: |
+  §7!!MCDR§r: 显示这条消息
+  §7!!MCDR reload§r: 显示重载相关的帮助信息
+  §7!!MCDR status§r: 显示 MCDR 状态
+  §7!!MCDR permission§r: 显示权限相关的帮助信息
+  §7!!MCDR plugin§r: 显示插件相关的帮助信息
+  §7!!MCDR checkupdate§r: 从 Github 检测更新
+mcdr_command.help_message_reload: |
+  §7!!MCDR reload plugin§r: 加载 / 重载 / 卸载§l有修改的§r插件
+  §7!!MCDR reload config§r: 重载配置文件
+  §7!!MCDR reload permission§r: 重载权限文件
+  §7!!MCDR reload all§r: 重载上述所有
+mcdr_command.help_message_permission: |
+  §7!!MCDR permission list §e[<level>]§r: 列出所有玩家的权限等级。如果 §e[<level>]§r 被指定则仅列出权限等级 §e[<level>]§r
+  §7!!MCDR permission set §b<player>§r §e<level>§r: 将 §b<player>§r 的权限等级设置为 §e<level>§r
+  §7!!MCDR permission query §b[<player>]§r: 查询 §b<player>§r 的权限等级。当 §b<player>§r 参数被省略时，查询指令发送者的权限等级
+  §7!!MCDR permission remove §b<player>§r: 将 §b<player>§r 从权限数据库中移除
+  §7!!MCDR permission setdefault §e<level>§r: 将默认权限等级设置为 §e<level>§r
+mcdr_command.help_message_plugin: |
+  §7!!MCDR plugin list§r: 列出所有的插件
+  §7!!MCDR plugin info §6<plugin_id>§r: 显示 id 为 §6<plugin_id>§r 插件的信息
+  §7!!MCDR plugin load §e<file_name>§r: 加载文件名为 §e<file_name>§r 的插件
+  §7!!MCDR plugin enable §e<file_name>§r: 启用文件名为 §e<file_name>§r 的插件
+  §7!!MCDR plugin reload §6<plugin_id>§r: 重载 id 为 §6<plugin_id>§r 的插件
+  §7!!MCDR plugin unload §6<plugin_id>§r: 卸载 id 为 §6<plugin_id>§r 的插件
+  §7!!MCDR plugin disable §6<plugin_id>§r: 禁用 id 为 §6<plugin_id>§r 的插件
+  §7!!MCDR plugin reloadall§r: 加载 / 重载 / 卸载§l所有§r插件
+mcdr_command.command_not_found                        : 参数错误，输入 "§7{0}§r" 以查看帮助
+mcdr_command.command_not_found_suggest                : 点击以输入 "§7{0}§r"
+mcdr_command.refresh_changed_plugins.fail             : 重载变化的插件§c失败§r
+mcdr_command.reload_config.fail                       : 配置文件重载§c失败§r
+mcdr_command.reload_config.success                    : 配置文件重载§a成功§r
+mcdr_command.reload_permission.fail                   : 权限文件重载§c失败§r
+mcdr_command.reload_permission.success                : 权限文件重载§a成功§r
+mcdr_command.permission_not_enough                    : §c权限等级不足§r
+mcdr_command.invalid_permission_level                 : §c无效的权限等级§r
+mcdr_command.invalid_player_name                      : §c无效的玩家名称§r
+mcdr_command.query_player_permission.self             : 你的权限等级为 §e{0}§r
+mcdr_command.query_player_permission.player           : 玩家 §b{0}§r 的权限等级为 §e{1}§r
+mcdr_command.query_player_permission.player_unknown   : 玩家 §b{0}§r 的权限等级未知
+mcdr_command.remove_player_permission.player_removed  : 已移除玩家 §b{0}§r
+mcdr_command.list_permission.show_default             : "默认等级: §e{0}§r"
+mcdr_command.list_permission.suggest_setdefault       : 点击以设置默认权限等级
+mcdr_command.list_permission.suggest_list             : 点击以查看权限等级 §e{0}§r 的玩家列表
+mcdr_command.list_permission.suggest_set              : 点击以设置玩家 §b{0}§r 的权限等级
+mcdr_command.list_permission.suggest_disable          : 点击以将玩家 §b{0}§r 从权限数据库中移除
+mcdr_command.print_mcdr_status.online                 : §a在线§r
+mcdr_command.print_mcdr_status.offline                : §7离线§r
+mcdr_command.print_mcdr_status.line1                  : "§l{0}§r 版本: §e{1}§r"
+mcdr_command.print_mcdr_status.line2                  : "MCDR 状态: {0}"
+mcdr_command.print_mcdr_status.line3                  : "服务端状态: {0}"
+mcdr_command.print_mcdr_status.line4                  : "服务端已启动: {0}"
+mcdr_command.print_mcdr_status.line5                  : "自然退出: {0}"
+mcdr_command.print_mcdr_status.line6                  : "rcon: {0}"
+mcdr_command.print_mcdr_status.line7                  : "插件数量: §6{0}§r"
+mcdr_command.print_mcdr_status.extra_line1            : "服务端 PID: {0}"
+mcdr_command.print_mcdr_status.extra_line2            : "消息队列负载: §6{0}§r/§6{1}§r"
+mcdr_command.print_mcdr_status.extra_line3            : "线程数: §6{0}§r"
+mcdr_command.list_plugin.info_loaded_plugin           : §6{0}x §e已加载插件§r
+mcdr_command.list_plugin.info_disabled_plugin         : §6{0}x §e已禁用插件§r
+mcdr_command.list_plugin.info_not_loaded_plugin       : §6{0}x §e未加载插件§r
+mcdr_command.list_plugin.suggest_info                 : 点击以显示插件 "§e{0}§r" 的信息
+mcdr_command.list_plugin.suggest_disable              : 点击以禁用插件 "§e{0}§r"
+mcdr_command.list_plugin.suggest_enable               : 点击以启用插件 "§e{0}§r"
+mcdr_command.list_plugin.suggest_reload               : 点击以重载插件 "§e{0}§r"
+mcdr_command.list_plugin.suggest_load                 : 点击以加载插件 "§e{0}§r"
+mcdr_command.invalid_plugin_id                        : 无效的插件id "§e{0}§r"
+mcdr_command.invalid_plugin_file_name                 : 无效的插件文件名 "§e{0}§r"
+mcdr_command.disable_plugin.fail                      : 插件 "§e{0}§r" 禁用§c失败§r
+mcdr_command.disable_plugin.success                   : 插件 "§e{0}§r" 禁用§a成功§r
+mcdr_command.reload_plugin.fail                       : 插件 "§e{0}§r" 重载§c失败§r
+mcdr_command.reload_plugin.success                    : 插件 "§e{0}§r" 重载§a成功§r
+mcdr_command.load_plugin.fail                         : 插件 "§e{0}§r" 启用§c失败§r
+mcdr_command.load_plugin.success                      : 插件 "§e{0}§r" 启用§a成功§r
+mcdr_command.enable_plugin.fail                       : 插件 "§e{0}§r" 加载§c失败§r
+mcdr_command.enable_plugin.success                    : 插件 "§e{0}§r" 启用§a成功§r
+mcdr_command.reload_all_plugin.fail                   : 重载所有插件§c失败§r
+mcdr_command.help_message.title                       : MCDR 指令帮助信息列表
+mcdr_command.help_message.mcdr_command                : MCDR 控制指令
+mcdr_command.help_message.help_command                : 显示指令帮助信息
+mcdr_command.help_message.page_number                 : 第 §6{0}§r 页
+mcdr_command.help_message.previous_page_hover         : 点击显示上一页
+mcdr_command.help_message.next_page_hover             : 点击显示下一页
+permission_manager.load.fail                          : 加载权限文件 §7{0}§r §c失败§r，使用默认的空数据
+permission_manager.set_default_permission_level.done  : 默认权限等级已设置为 §e{0}§r
+permission_manager.set_permission_level.done          : 玩家 §b{0}§r 的权限等级已设置为 §e{1}§r
+plugin_operation_result.info_loaded_succeeded         : "共加载: §7{0}§r 个插件"
+plugin_operation_result.info_unloaded_succeeded       : "共卸载: §7{0}§r 个插件"
+plugin_operation_result.info_reloaded_succeeded       : "共重载: §7{0}§r 个插件"
+plugin_operation_result.info_loaded_failed            : "加载失败: §7{0}§r 个插件"
+plugin_operation_result.info_unloaded_failed          : "卸载失败: §7{0}§r 个插件"
+plugin_operation_result.info_reloaded_failed          : "重载失败: §7{0}§r 个插件"
+plugin_operation_result.info_dependency_check_failed  : "依赖检查失败: §7{0}§r 个插件"
+plugin_operation_result.info_none                     : "没有插件变更"
+plugin_operation_result.info_plugin_amount            : "已加载插件数: §7{0}§r"
+plugin_manager.load                                   : 加载
+plugin_manager.unload                                 : 卸载
+plugin_manager.reload                                 : 重载
+plugin_manager.load_plugin.entered                    : 正在从 {0} 加载插件
+plugin_manager.load_plugin.fail                       : 插件 {0} 加载失败
+plugin_manager.load_plugin.success                    : 插件 {0} 已加载
+plugin_manager.load_plugin.duplicate                  : 插件 {0} ({1}) 拥有与已存在插件 {2} ({3}) 相同的 id，已移除
+plugin_manager.load_plugin.unload_duplication_fail    : 重复插件 {0} ({1}) 卸载失败
+plugin_manager.unload_plugin.entered                  : 正在卸载插件 {0}
+plugin_manager.unload_plugin.fail                     : 插件 {0} 卸载失败
+plugin_manager.unload_plugin.success                  : 插件 {0} 已卸载
+plugin_manager.reload_plugin.entered                  : 正在重载插件 {0}
+plugin_manager.reload_plugin.fail                     : 插件 {0} 重载失败
+plugin_manager.reload_plugin.success                  : 插件 {0} 已重载
+plugin_manager.enable_plugin.entered                  : 正在从 {0} 启用插件
+plugin_manager.disable_plugin.entered                 : 正在禁用插件 {0}
+plugin_manager.refresh_all_plugins.entered            : 刷新所有插件中
+plugin_manager.refresh_changed_plugins.entered        : 刷新所有变更的插件中
+plugin_manager.check_plugin_dependencies.item_failed  : "卸载插件 {0}，原因: {1}"
+plugin_manager.check_plugin_dependencies.topo_order   : "插件依赖拓扑顺序:"
+dependency_walker.dependency_parent_failed            : 父依赖项 {0} 依赖检查失败
+dependency_walker.dependency_loop                     : "于 {0} 检查到循环依赖: {1}"
+dependency_walker.dependency_not_found                : 未找到依赖项 {0}
+dependency_walker.dependency_not_met                  : 依赖项 {0} 不满足版本约束 {1}
+dependency_walker.dependency_already_failed           : 插件 {0} 的访问状态已为 {1}
+rcon_manager.connect.connection_fail                  : "rcon 连接失败: {0}"
+rcon_manager.connect.connected                        : rcon 已连接
+rcon_manager.connect.wrong_password                   : rcon 密码错误，连接失败
+rcon_manager.disconnect.disconnected                  : rcon 已断开连接
+rcon_manager.disconnect.disconnect_fail               : rcon 断开连接失败
+mcdr_state.initializing                               : §8初始化中§r
+mcdr_state.initialized                                : §7已初始化§r
+mcdr_state.running                                    : §a运行中§r
+mcdr_state.pre_stopped                                : §4正在关闭§r
+mcdr_state.stopped                                    : §4已关闭§r
+server_state.running                                  : §a运行中§r
+server_state.stopping                                 : §c正在关闭§r
+server_state.pre_stopped                              : §4即将关闭§r
+server_state.stopped                                  : §4已关闭§r
+server_handler_manager.handler_detection.result1      : 似乎你并没有使用正确的服务端解析处理器
+server_handler_manager.handler_detection.result2      : "目前正在使用的解析处理器: {0}, 成功率 {1}% ({2}/{3})"
+server_handler_manager.handler_detection.result3      : "可能更为准确的解析处理器: {0}, 成功率 {1}% ({2}/{3})"
+update_helper.check_update.already_checking           : MCDR 已在检查更新中
+update_helper.check_update.check_fail                 : "从 Github 检测最新版本失败: {0}"
+update_helper.check_update.is_already_latest          : MCDR 已为最新版
+update_helper.check_update.newer_than_latest          : 目前版本 §7{0}§r 比 Github 中的最新版 §7{1}§r 更新，这是一个开发版吗？
+update_helper.check_update.new_version_detected       : "已检测到新版本: §7{0}§r。§7{0}§r 的新内容:"
+command_exception.unknown_command                     : 未知指令
+command_exception.unknown_argument                    : 未知参数
+command_exception.unknown_root_argument               : 未知根节点参数
+command_exception.requirement_not_met                 : "{0}"  # 保持原状
+command_exception.literal_not_match                   : 字面不匹配
+command_exception.number_out_of_range                 : 数字 {0} 超出范围 [{1}, {2}]
+command_exception.invalid_number                      : 无效的数字
+command_exception.invalid_integer                     : 无效的整数
+command_exception.invalid_float                       : 无效的浮点数
+command_exception.text_length_out_of_range            : 文本长度 {0} 超出范围 [{1}, {2}]
+command_exception.illegal_escapes_usage               : 转义符的非法使用
+command_exception.unclosed_quoted_string              : 未封闭的引号
+command_exception.empty_text                          : 空文本
