@@ -20,43 +20,39 @@ msgstr ""
 
 #: ../index.rst:9
 msgid "Quick Start"
-msgstr ""
+msgstr "快速开始"
 
 #: ../index.rst:9
 msgid "Configure"
-msgstr ""
+msgstr "配置"
 
 #: ../index.rst:9
 msgid "Permission"
-msgstr ""
+msgstr "权限"
 
 #: ../index.rst:9
 msgid "Command"
-msgstr ""
+msgstr "指令"
 
 #: ../index.rst:9
 msgid "Plugin Development"
-msgstr ""
+msgstr "插件开发"
 
 #: ../index.rst:9
 msgid "Customize"
-msgstr ""
+msgstr "自定义"
 
 #: ../index.rst:9
 msgid "Migrate from MCDR 0.x"
-msgstr ""
+msgstr "迁移自 MCDR 0.x"
 
 #: ../index.rst:9
 msgid "Home"
-msgstr ""
+msgstr "首页"
 
 #: ../index.rst:7
 msgid "Welcome to MCDReforged's documentation!"
-msgstr ""
-
-#: ../index.rst:22
-msgid "Indices and tables"
-msgstr ""
+msgstr "欢迎来到 MCDReforged 的文档"
 
 #: ../index.rst:24
 msgid ":ref:`genindex`"
