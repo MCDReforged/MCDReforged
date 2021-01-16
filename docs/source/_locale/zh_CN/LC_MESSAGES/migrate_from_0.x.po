@@ -1,0 +1,344 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Fallen_Breath
+# This file is distributed under the same license as the MCDReforged
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2021.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: MCDReforged \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-01-15 15:18+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.0\n"
+
+#: ../migrate_from_0.x.md:1
+msgid "Migrate from MCDR 0.x"
+msgstr ""
+
+#: ../migrate_from_0.x.md:3
+msgid "File structure"
+msgstr ""
+
+#: ../migrate_from_0.x.md:5
+msgid ""
+"Since MCDR now is installed as a python package, unless you run MCDR with"
+" source, file / folders below can be removed"
+msgstr ""
+
+#: ../migrate_from_0.x.md:7
+msgid "utils/"
+msgstr ""
+
+#: ../migrate_from_0.x.md:8
+msgid "resources/"
+msgstr ""
+
+#: ../migrate_from_0.x.md:9
+msgid "requirements.txt"
+msgstr ""
+
+#: ../migrate_from_0.x.md:10
+msgid "LICENSE"
+msgstr ""
+
+#: ../migrate_from_0.x.md:11
+msgid "readme.md"
+msgstr ""
+
+#: ../migrate_from_0.x.md:12
+msgid "readme_cn.md"
+msgstr ""
+
+#: ../migrate_from_0.x.md:13
+msgid ""
+"MCDReforged.py (If you still want to use it you can grab it from github "
+"release, it's just an entry script)"
+msgstr ""
+
+#: ../migrate_from_0.x.md:15
+msgid "The logging folder is renamed from log/ to logs/"
+msgstr ""
+
+#: ../migrate_from_0.x.md:17
+msgid "Config"
+msgstr ""
+
+#: ../migrate_from_0.x.md:19
+msgid ""
+"There come quite a lot of changes to the config file. Although MCDR will "
+"still work if you keep the old config file, it's highly recommend to make"
+" a new default configure file, and fill your old configures into the new "
+"configure file"
+msgstr ""
+
+#: ../migrate_from_0.x.md:21
+msgid ""
+"You can rename the old config.yml to a temporary name like "
+"old_config.yml, then start MCDR. MCDR will generate a new default "
+"configure file and exit. Then open these 2 configure file and migrate"
+msgstr ""
+
+#: ../migrate_from_0.x.md:23
+msgid "Permission"
+msgstr ""
+
+#: ../migrate_from_0.x.md:25
+msgid ""
+"There's no change to the permission system and the permission file, so "
+"you can just use the old permission file"
+msgstr ""
+
+#: ../migrate_from_0.x.md:27
+msgid "Plugins"
+msgstr ""
+
+#: ../migrate_from_0.x.md:29
+msgid ""
+"Most of the MCDR 0.x plugins only need to have some small changes to be "
+"adjusted to current MCDR. Some of them can even directly work with "
+"current MCDR without any change"
+msgstr ""
+
+#: ../migrate_from_0.x.md:31
+msgid "Metadata"
+msgstr ""
+
+#: ../migrate_from_0.x.md:33
+msgid ""
+"Metadata is a global field inside the plugin file. It's used to store "
+"basic information and dependencies of a plugin. It's necessary for a "
+"plugin to declare it so MCDR can handle all the plugins correctly"
+msgstr ""
+
+#: ../migrate_from_0.x.md:35
+msgid ""
+"A legacy plugin is still able to be loaded if it doesn't have the "
+"metadata field, but a warning will be shown in the console"
+msgstr ""
+
+#: ../migrate_from_0.x.md:37
+msgid "Check here for more information about plugin metadata"
+msgstr ""
+
+#: ../migrate_from_0.x.md:39
+msgid "Listener"
+msgstr ""
+
+#: ../migrate_from_0.x.md:41
+msgid "Compatibility"
+msgstr ""
+
+#: ../migrate_from_0.x.md:43
+msgid ""
+"Current MCDR implements a better event & listener system, plugin can "
+"register any callback as event listener to any event."
+msgstr ""
+
+#: ../migrate_from_0.x.md:45
+msgid ""
+"Most of the MCDR 0.x style event listeners are reserved and now work as "
+"an automatically registered default listener for the related event"
+msgstr ""
+
+#: ../migrate_from_0.x.md:47
+msgid "on_info"
+msgstr ""
+
+#: ../migrate_from_0.x.md:48
+msgid "on_user_info"
+msgstr ""
+
+#: ../migrate_from_0.x.md:49
+msgid "on_server_startup"
+msgstr ""
+
+#: ../migrate_from_0.x.md:50
+msgid "on_server_stop"
+msgstr ""
+
+#: ../migrate_from_0.x.md:51
+msgid "on_mcdr_stop"
+msgstr ""
+
+#: ../migrate_from_0.x.md:52
+msgid "on_player_joined"
+msgstr ""
+
+#: ../migrate_from_0.x.md:53
+msgid "on_player_left"
+msgstr ""
+
+#: ../migrate_from_0.x.md:55
+msgid ""
+"If you declare a function with name above, MCDR will automatically detect"
+" it and register it as an event listener when your plugin gets loaded. "
+"The listener priority is the default value 1000"
+msgstr ""
+
+#: ../migrate_from_0.x.md:57
+msgid "These 2 events are removed from MCDR"
+msgstr ""
+
+#: ../migrate_from_0.x.md:59
+msgid "on_death_message"
+msgstr ""
+
+#: ../migrate_from_0.x.md:60
+msgid "on_player_made_advancement"
+msgstr ""
+
+#: ../migrate_from_0.x.md:62
+msgid ""
+"If your plugin relies on these 2 events, there is an alternative for it: "
+"coming-soon"
+msgstr ""
+
+#: ../migrate_from_0.x.md:64
+msgid "Listener arguments"
+msgstr ""
+
+#: ../migrate_from_0.x.md:66
+msgid ""
+"In MCDR 0.x the player joined event listener accepts 2 or 3 arguments. "
+"Both of these 2 definitions below work"
+msgstr ""
+
+#: ../migrate_from_0.x.md:78
+msgid ""
+"However, the former usage is removed in current MCDR version, only the "
+"latter one with 3 arguments is accepted"
+msgstr ""
+
+#: ../migrate_from_0.x.md:80
+msgid ""
+"Beside the player joined event listener, other event listener callbacks "
+"have their argument list unchanged"
+msgstr ""
+
+#: ../migrate_from_0.x.md:82
+msgid "Multi-threading"
+msgstr ""
+
+#: ../migrate_from_0.x.md:84
+msgid ""
+"MCDR 0.x allocates separate threads for plugins to execute their event "
+"listener callbacks. This lazyness brings unpredictable plugin execution "
+"order and affects overall performance by a lot. Multithreading also make "
+"it hard to do something after all plugins have finished their callbacks"
+msgstr ""
+
+#: ../migrate_from_0.x.md:86
+msgid ""
+"In current MCDR, all event listeners callbacks are invoked in a single "
+"thread named TaskExecutor to solve the issues above"
+msgstr ""
+
+#: ../migrate_from_0.x.md:88
+msgid ""
+"If your plugin depends on multithreading from MCDR to do some parallel "
+"operations, or your plugin need to do some I/O or network operations "
+"which might take some times, you'd better create a new thread to execute "
+"them manually, so MCDR won't be blocked by these"
+msgstr ""
+
+#: ../migrate_from_0.x.md:90
+msgid ""
+"MCDR also provides a simple function decorator new_thread for lazy man, "
+"to make a function multi threaded when being invoked. Here's an quick "
+"example:"
+msgstr ""
+
+#: ../migrate_from_0.x.md:108
+msgid ""
+"With the @new_thread decorator, everytime when you invoke "
+"my_slow_method2, a new daemon thread will be started to executed it. For "
+"more details about the @new_thread decorator, check here"
+msgstr ""
+
+#: ../migrate_from_0.x.md:110
+msgid "Package location"
+msgstr ""
+
+#: ../migrate_from_0.x.md:112
+msgid ""
+"If your plugin imports some of the mcdr utils, like RText or Rcon, you "
+"need to take a look at the package location"
+msgstr ""
+
+#: ../migrate_from_0.x.md:114
+msgid ""
+"Current MCDR collects all useful classes / functions in the "
+"mcdreforged.api package. It's recommended to import the package you want "
+"in this api package"
+msgstr ""
+
+#: ../migrate_from_0.x.md:116
+msgid ""
+"Use from mcdreforged.api.rtext import * if you want to use all rtext "
+"classes"
+msgstr ""
+
+#: ../migrate_from_0.x.md:118
+msgid ""
+"Use from mcdreforged.api.rcon import * if you want to use all rcon "
+"classes. Class Rcon is renamed to RconConnection by the way"
+msgstr ""
+
+#: ../migrate_from_0.x.md:120
+msgid ""
+"For lazy man, you can safely use from mcdreforged.api.all import * to "
+"import all useful things to the plugin"
+msgstr ""
+
+#: ../migrate_from_0.x.md:122
+msgid "Server Instance API"
+msgstr ""
+
+#: ../migrate_from_0.x.md:124
+msgid ""
+"Method reply now raises a TypeError if the given info parameter is not "
+"from a user"
+msgstr ""
+
+#: ../migrate_from_0.x.md:126
+msgid "Method add_help_message is renamed to register_help_message"
+msgstr ""
+
+#: ../migrate_from_0.x.md:128
+msgid "Others"
+msgstr ""
+
+#: ../migrate_from_0.x.md:130
+msgid "console_command_prefix"
+msgstr ""
+
+#: ../migrate_from_0.x.md:132
+msgid ""
+"The option console_command_prefix is removed, which was used to prevent "
+"input starts with !! to be sent to the standard input stream of the "
+"server by default"
+msgstr ""
+
+#: ../migrate_from_0.x.md:134
+msgid ""
+"In current version, MCDR will not prevent that kind of console input to "
+"be sent to the server unless it matches an registered command tree root "
+"node. See how the current command system works here"
+msgstr ""
+
+#: ../migrate_from_0.x.md:136
+msgid ""
+"As a result, if you plugin use manually parsing method to parse command "
+"to parse a user command in on_user_info etc., you need to invoke "
+"info.cancel_send_to_server() in your command processing, otherwise if the"
+" command you enter on console might be sent to the server standard input "
+"stream"
+msgstr ""
+

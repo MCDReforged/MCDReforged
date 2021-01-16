@@ -1,0 +1,100 @@
+# Configure file for MCDReforged
+# Check https://mcdreforged.readthedocs.io/en/latest/configure.html for detail
+
+
+# =========================================
+# |            Basic Configure            |
+# =========================================
+
+
+# The language that MCDR will use to display information
+# Examples: "en_us", "zh_cn"
+language: en_us
+
+
+# The working directory of the server. If you use default value server/ I will suggest you to put all the files related to the server to the server/ directory
+working_directory: server
+
+
+# The console command to start the server. Examples:
+start_command: java -Xms1G -Xmx2G -jar minecraft_server.jar nogui
+
+
+# The handler to the specific way to parse the standard output text of the server and the correct command for server control
+# vanilla_handler, for Vanilla / Carpet / Fabric server
+# beta18_handler, for Vanilla server in beta1.8 versions
+# bukkit_handler, For Bukkit / Spigot server with Minecraft version below 1.14, and Paper server in all version
+# bukkit14_handler, For Bukkit / Spigot server with Minecraft version 1.14 and above
+# forge_handler, For Forge server
+# cat_server_handler, For CatServer server
+# bungeecord_handler, for Bungeecord server
+# waterfall_handler,  for Waterfall server
+handler: vanilla_handler
+
+
+# The encoding / decoding format used to encode / decode message to the server.
+# Examples: "utf8", "gbk"
+# Leave it blank for MCDR to auto detect system encoding
+encoding:
+decoding:
+
+
+# The list of directory path where MCDR will search for plugin to load
+# Example: "path/to/my/plugin/directory"
+plugin_directories:
+- plugins
+
+
+# rcon setting
+# if enable, plugins can use rcon to query command from the server
+rcon:
+  enable: false
+  address: 127.0.0.1
+  port: 25575
+  password: password
+
+
+# If set to true, MCDR will detect if there's a new version every 24h
+check_update: true
+
+
+# =========================================
+# |           Advance Configure           |
+# =========================================
+
+
+# When set to true, MCDR will not start the console thread for handling console command input
+# Don't change it to true unless you know what you are doing
+disable_console_thread: false
+
+
+# When set to true, MCDR will removed all console font formatter codes in before any message gets printed onto the console
+disable_console_color: false
+
+
+# A list of customize info reactor classes to handle the info instance. The classed need to be subclasses of AbstractServerHandler
+custom_handlers:
+
+
+# A list of customize info reactor classes to handle the info instance. The classed need to be subclasses of AbstractInfoReactor
+custom_info_reactors:
+
+
+# Debug mode switches
+debug:
+  all: false
+  mcdr: false
+  handler: false
+  reactor: false
+  plugin: false
+  permission: false
+  command: false
+  task_executor: false
+
+
+# =========================================
+# |           Missing Configure           |
+# =========================================
+
+# Options below were missing and set by MCDR with default value
+# Remember to check and update the them as soon as possible
