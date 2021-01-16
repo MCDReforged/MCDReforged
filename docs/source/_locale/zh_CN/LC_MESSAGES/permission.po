@@ -2,7 +2,7 @@
 # Copyright (C) 2021, Fallen_Breath
 # This file is distributed under the same license as the MCDReforged
 # package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2021.
+# FIRST AUTHOR Alex3236, 2021.
 #
 msgid ""
 msgstr ""
@@ -32,7 +32,7 @@ msgstr "概览"
 msgid ""
 "There is a simple built-in permission system in MCDR. It can be used by MCDR "
 "commands and plugins"
-msgstr "MCDR中内置了一个简单(简陋)的权限系统，可以为MCDR指令和插件所用。"
+msgstr "MCDR中内置了一个简易的权限系统，可以为MCDR指令和插件所用。"
 
 #: ../permission.md:7
 msgid "There are 5 different levels of permission in total:"
@@ -49,33 +49,33 @@ msgstr "权限文件"
 #: ../permission.md:50
 msgid ""
 "Permission file permission.yml is the config and storage file for the system"
-msgstr "权限文件 permission.yml 用于存储和配置权限系统。"
+msgstr "权限文件 `permission.yml` 用于存储和配置权限系统。"
 
 #: ../permission.md:52
 msgid ""
 "default_level: The default permission level a new player will get. Default: "
 "user"
-msgstr "默认等级: 新玩家的默认权限等级。默认值: user"
+msgstr "`default_level`: 新玩家默认权限等级。默认值: `user`"
 
 #: ../permission.md:53
 msgid "owner: Names of players with permission owner"
-msgstr "owner: 拥有 owner 权限的玩家名"
+msgstr "`owner`: 拥有 `owner` 权限的玩家名"
 
 #: ../permission.md:54
 msgid "admin: Names of players with permission admin"
-msgstr "admin: 拥有 admin 权限的玩家名"
+msgstr "`admin`: 拥有 `admin` 权限的玩家名"
 
 #: ../permission.md:55
 msgid "helper: Names of players with permission helper"
-msgstr "helper: 拥有 helper 权限的玩家名"
+msgstr "`helper`: 拥有 `helper` 权限的玩家名"
 
 #: ../permission.md:56
 msgid "user: Names of players with permission user"
-msgstr "user: 拥有 user 权限的玩家名"
+msgstr "`user`: 拥有 `user` 权限的玩家名"
 
 #: ../permission.md:57
 msgid "guest: Names of players with permission guest"
-msgstr "guest: 拥有 guest 权限的玩家名"
+msgstr "`guest`: 拥有 `guest` 权限的玩家名"
 
 #: ../permission.md:59
 msgid "Player name list of permission levels can be filled like this:"
@@ -87,5 +87,5 @@ msgid ""
 "reload the permission file in-game. Check the related command section for "
 "more detail"
 msgstr ""
-"权限文件支持热重载。你可以使用 !!MCDR reload permission 指令重载权限文件。更"
-"多信息请阅读此文档指令部分的相关内容。"
+"权限文件支持热重载。你可以使用 `!!MCDR reload permission` 指令重载权限文件。更"
+"多信息请阅读此文档[指令部分](command.html#hot-reloads)的相关内容。"
