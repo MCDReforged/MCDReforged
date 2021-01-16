@@ -55,7 +55,7 @@ msgstr "权限文件 permission.yml 用于存储和配置权限系统。"
 msgid ""
 "default_level: The default permission level a new player will get. Default: "
 "user"
-msgstr "默认等级: 新玩家默认权限等级。默认值: user"
+msgstr "默认等级: 新玩家的默认权限等级。默认值: user"
 
 #: ../permission.md:53
 msgid "owner: Names of players with permission owner"
