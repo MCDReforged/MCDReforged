@@ -42,7 +42,7 @@ msgstr "安装"
 
 #: ../quick_start.md:11
 msgid "MCDR is available in pypi. It can be installed via pip command"
-msgstr "MCDR 在 [pypi](https://pypi.org/project/mcdreforged) 中可用，因此可用使用 `pip` 指令来安装"
+msgstr "MCDR 在 [pypi](https://pypi.org/project/mcdreforged) 中可用，因此可以使用 `pip` 指令来安装"
 
 #: ../quick_start.md:17
 msgid ""
@@ -64,7 +64,6 @@ msgid ""
 msgstr "比方说你准备打算在一个叫 `my_mcdr_server` 的文件夹里启动 MCDR，那么你可以运行以下的指令"
 
 #: ../quick_start.md:32
-#, fuzzy
 msgid ""
 "At the first run, MCDR will generated the default configure and "
 "permission files, as well as some default folders. The file structure "
@@ -72,7 +71,6 @@ msgid ""
 msgstr "在首次启动时，MCDR 会生成默认的配置文件以和权限文件，以及一些默认的文件夹。这个时候的文件路径将会如下所示"
 
 #: ../quick_start.md:45
-#, fuzzy
 msgid ""
 "Now put your server files into the server folder (server by default), "
 "then modify the configuration file config.yml and permission file "

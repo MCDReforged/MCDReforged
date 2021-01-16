@@ -20,13 +20,13 @@ msgstr ""
 
 #: ../configure.md:1
 msgid "Configure"
-msgstr ""
+msgstr "配置"
 
 #: ../configure.md:3
 msgid ""
 "The configure file of MCDR is config.yml. It's located and should be "
 "located in the working directory of MCDR"
-msgstr ""
+msgstr "MCDR 的配置文件是 `config.yml`。它位于也应当位于 MCDR 的工作路径下"
 
 #: ../configure.md:5
 msgid ""
@@ -35,7 +35,9 @@ msgid ""
 "Otherwise, MCDR will load the config file and compare its content with "
 "the default configure file. If your configure file has any missing "
 "options, MCDR will add default values to the end of your configure file"
-msgstr ""
+msgstr "在启动时，MCDR 会尝试加载配置文件。如果配置文件不存在，MCDR 会生成一个默认配置文件并退出；"
+"否则，MCDR 会载入配置文件并将其内容与默认配置文件对比。如果你的配置文件存在任何缺失的选项，MCDR 会"
+"将它们的默认值添加至你的配置文件的末尾处"
 
 #: ../configure.md:7
 msgid "The configure file use YAML format"
