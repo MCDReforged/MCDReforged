@@ -9,3 +9,4 @@ Plugin Development
    Command<command.md>
    API<api.md>
    Class References<classes/classes.rst>
+   Some tips<dev_tips.md>
