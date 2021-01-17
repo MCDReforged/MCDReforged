@@ -1,0 +1,623 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Command &mdash; MCDReforged 1.0.0 文档</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme_overrides.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/translations.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜索" href="../search.html" />
+    <link rel="next" title="API Packages for Plugins" href="api.html" />
+    <link rel="prev" title="Plugin Event" href="event.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> MCDReforged
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Home</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../quick_start.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configure.html">Configure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../permission.html">Permission</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../command.html">Command</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="plugin_dev.html">Plugin Development</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="basic.html">Basic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="event.html">Plugin Event</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Command</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#workflow">Workflow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#a-quick-peek">A Quick Peek</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#argument-nodes">Argument Nodes</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#argumentnode">ArgumentNode</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#then">then</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#runs">runs</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#requires">requires</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#redirects">redirects</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#on-error">on_error</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#literal">Literal</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#numbernode">NumberNode</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#at-min">at_min</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#at-max">at_max</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#in-range">in_range</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#number">Number</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#integer">Integer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#float">Float</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#textnode">TextNode</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#at-min-length">at_min_length</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#at-max-length">at_max_length</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#in-length-range">in_length_range</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#text">Text</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#quotabletext">QuotableText</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#greedytext">GreedyText</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#customize">Customize</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api.html">API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classes/classes.html">Class References</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev_tips.html">Some tips</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../customize/customize.html">Customize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../migrate_from_0.x.html">Migrate from MCDR 0.x</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">MCDReforged</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="plugin_dev.html">Plugin Development</a> &raquo;</li>
+        
+      <li>Command</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/plugin_dev/command.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="command">
+<h1>Command<a class="headerlink" href="#command" title="永久链接至标题">¶</a></h1>
+<p>Tired of manually splitting argument and parsing commands? Being annoyed by the complicated argument conditions? Go try the MCDR command building system!</p>
+<p>MCDR contains a command tree building system for plugins to build their commands. It behaves like a lite version of mojang’s <a class="reference external" href="https://github.com/Mojang/brigadier">brigadier</a></p>
+<div class="section" id="workflow">
+<h2>Workflow<a class="headerlink" href="#workflow" title="永久链接至标题">¶</a></h2>
+<p>MCDR maintains a dict to store registered commands. Any value in the storage dict is a list of literal node as a root node of a command tree, and the related key is the literal value of the root literal node. With it, MCDR can quickly find the possible command tree that might accept the incoming command</p>
+<p>Every time when a user info is being processed, MCDR will try to parse the user input as a command. It will takes the first segment of the user input as a key to query the command tree storage dict. <strong>If it gets any, it will prevent the info to be sent to the standard input stream of the server</strong> by invoking <code class="docutils literal notranslate"><span class="pre">info.cancel_send_to_server()</span></code>, then it will let the found command trees to handle the command.</p>
+<p>If an command error occurs and the error has not been set to handled, MCDR will sent the default translated command error message to the command source</p>
+</div>
+<div class="section" id="a-quick-peek">
+<h2>A Quick Peek<a class="headerlink" href="#a-quick-peek" title="永久链接至标题">¶</a></h2>
+<p>Let’s peek into the actual operation of a command tree. As an example, let’s say that there are 3 kinds of commands:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">!!email</span> <span class="pre">list</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">!!email</span> <span class="pre">remove</span> <span class="pre">&lt;email_id></span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">!!email</span> <span class="pre">send</span> <span class="pre">&lt;player></span> <span class="pre">&lt;message></span></code></p></li>
+</ul>
+<p>To implement these commands, we can build a command tree with MCDR like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Literal(&#39;!!email&#39;)
+ ├─ Literal(&#39;list&#39;)
+ ├─ Literal(&#39;remove&#39;)
+ │   └─ Integer(&#39;email_id&#39;)
+ └─ Literal(&#39;send&#39;)
+     └─ Text(&#39;player&#39;)
+         └─ GreedyText(&#39;message&#39;)
+</pre></div>
+</div>
+<p>When MCDR executes the command <code class="docutils literal notranslate"><span class="pre">!!email</span> <span class="pre">remove</span> <span class="pre">21</span></code>, the following things will happen</p>
+<ol class="simple">
+<li><p>Parsing at node <code class="docutils literal notranslate"><span class="pre">Literal('!!email')</span></code> with command <code class="docutils literal notranslate"><span class="pre">!!email</span> <span class="pre">remove</span> <span class="pre">21</span></code></p>
+<ol class="simple">
+<li><p>Literal Node <code class="docutils literal notranslate"><span class="pre">Literal('!!email')</span></code> gets the first element of <code class="docutils literal notranslate"><span class="pre">!!email</span> <span class="pre">remove</span> <span class="pre">21</span></code>, it’s <code class="docutils literal notranslate"><span class="pre">!!email</span></code> and it matches the literal node</p></li>
+<li><p>Now the remaining command is <code class="docutils literal notranslate"><span class="pre">remove</span> <span class="pre">21</span></code></p></li>
+<li><p>And then, it searches through its literal children, found the child node <code class="docutils literal notranslate"><span class="pre">Literal('remove')</span></code> matches the next literal element <code class="docutils literal notranslate"><span class="pre">remove</span></code></p></li>
+<li><p>Then it let that child node to handle the rest of the command</p></li>
+</ol>
+</li>
+<li><p>Parsing at node <code class="docutils literal notranslate"><span class="pre">Literal('remove')</span></code> with command <code class="docutils literal notranslate"><span class="pre">remove</span> <span class="pre">21</span></code></p>
+<ol class="simple">
+<li><p>Literal Node <code class="docutils literal notranslate"><span class="pre">Literal('remove')</span></code> gets the first element of <code class="docutils literal notranslate"><span class="pre">remove</span> <span class="pre">21</span></code>, it’s <code class="docutils literal notranslate"><span class="pre">remove</span></code> and it matches the literal node</p></li>
+<li><p>Now the remaining command is <code class="docutils literal notranslate"><span class="pre">21</span></code></p></li>
+<li><p>And then it searches through its literal children, but doesn’t found any literal child matches the next element <code class="docutils literal notranslate"><span class="pre">21</span></code></p></li>
+<li><p>So it let its non-literal child <code class="docutils literal notranslate"><span class="pre">Integer('email_id')</span></code> to handle the rest of the command</p></li>
+</ol>
+</li>
+<li><p>Parsing at node <code class="docutils literal notranslate"><span class="pre">Integer('email_id')</span></code> with command <code class="docutils literal notranslate"><span class="pre">21</span></code></p>
+<ol class="simple">
+<li><p>Integer Node <code class="docutils literal notranslate"><span class="pre">Integer('email_id')</span></code> gets the first element of <code class="docutils literal notranslate"><span class="pre">21</span></code>, it’s a legal integer</p></li>
+<li><p>It store the value <code class="docutils literal notranslate"><span class="pre">21</span></code> to the context dict with key <code class="docutils literal notranslate"><span class="pre">email_id</span></code></p></li>
+<li><p>And then it finds that the command parsing is already finished so it invokes the callback function with the command source and the context dict as the argument.</p></li>
+<li><p>The command parsing finishes</p></li>
+</ol>
+</li>
+</ol>
+<p>This is a quick overview of the implantation logic part of command building system. It’s mainly for help you build a perceptual understanding of the command tree based command building system</p>
+<p>Matching the literal nodes, parsing the remaining command, storing the parsed value inside the context dict, this is how the command system works</p>
+<p>Rather than reading this document, anther good way to learn to use the MCDR command building system is to refer and imitate existing codes. You can find the command building code of <code class="docutils literal notranslate"><span class="pre">!!MCDR</span></code> command in the <code class="docutils literal notranslate"><span class="pre">__register_commands</span></code> method of class <code class="docutils literal notranslate"><span class="pre">mcdreforged.plugin.permanent.mcdreforged_plugin.MCDReforgedPlugin</span></code></p>
+</div>
+<div class="section" id="argument-nodes">
+<h2>Argument Nodes<a class="headerlink" href="#argument-nodes" title="永久链接至标题">¶</a></h2>
+<p>A list of MCDR built-in argument nodes and their usage</p>
+<div class="section" id="argumentnode">
+<h3>ArgumentNode<a class="headerlink" href="#argumentnode" title="永久链接至标题">¶</a></h3>
+<p>Argument Node is base node of all argument nodes. It’s also a abstract class. It provides several methods for building up the command tree</p>
+<div class="section" id="then">
+<h4>then<a class="headerlink" href="#then" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">then</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="s1">&#39;ArgumentNode&#39;</span><span class="p">)</span> <span class="o">-></span> <span class="n">ArgumentNode</span>
+</pre></div>
+</div>
+<p>Attach a child node to its children list, and then return itself</p>
+<p>It’s used for building the command tree structure</p>
+<p>Parameter <em>node</em>: A node instance to be added to current node’s children list</p>
+<p>The command tree in the <a class="reference external" href="#a-quick-peek">Quick Peek</a> section can be built with the following codes</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Literal</span><span class="p">(</span><span class="s1">&#39;!!email&#39;</span><span class="p">)</span><span class="o">.</span> \
+<span class="n">then</span><span class="p">(</span>
+    <span class="n">Literal</span><span class="p">(</span><span class="s1">&#39;list&#39;</span><span class="p">)</span>
+<span class="p">)</span><span class="o">.</span> \
+<span class="n">then</span><span class="p">(</span>
+    <span class="n">Literal</span><span class="p">(</span><span class="s1">&#39;remove&#39;</span><span class="p">)</span><span class="o">.</span>
+    <span class="n">then</span><span class="p">(</span>
+        <span class="n">Integer</span><span class="p">(</span><span class="s1">&#39;email_id&#39;</span><span class="p">)</span>
+    <span class="p">)</span>
+<span class="p">)</span><span class="o">.</span> \
+<span class="n">then</span><span class="p">(</span>
+    <span class="n">Literal</span><span class="p">(</span><span class="s1">&#39;send&#39;</span><span class="p">)</span><span class="o">.</span>
+    <span class="n">then</span><span class="p">(</span>
+        <span class="n">Text</span><span class="p">(</span><span class="s1">&#39;player&#39;</span><span class="p">)</span><span class="o">.</span>
+        <span class="n">then</span><span class="p">(</span>
+            <span class="n">GreedyText</span><span class="p">(</span><span class="s1">&#39;message&#39;</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="runs">
+<h4>runs<a class="headerlink" href="#runs" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">runs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[],</span> <span class="n">Any</span><span class="p">],</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">CommandSource</span><span class="p">],</span> <span class="n">Any</span><span class="p">],</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">CommandSource</span><span class="p">,</span> <span class="nb">dict</span><span class="p">],</span> <span class="n">Any</span><span class="p">]])</span> <span class="o">-></span> <span class="n">ArgumentNode</span>
+</pre></div>
+</div>
+<p>Set the callback function of this node. When the command parsing finished at this node, the callback function will be executed</p>
+<p>Parameter <em>func</em>: A callable that accepts up to 2 arguments. Argument list: <code class="docutils literal notranslate"><span class="pre">CommandSource</span></code>, <code class="docutils literal notranslate"><span class="pre">dict</span></code> (context)</p>
+<p>The callback function is allowed to accepted 0 to 2 arguments (a <code class="docutils literal notranslate"><span class="pre">CommandSource</span></code> as command source and a <code class="docutils literal notranslate"><span class="pre">dict</span></code> as context). For example, the following 4 functions are available callbacks</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">callback1</span><span class="p">():</span>
+    <span class="k">pass</span>
+
+<span class="k">def</span> <span class="nf">callback2</span><span class="p">(</span><span class="n">source</span><span class="p">:</span> <span class="n">CommandSource</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<span class="k">def</span> <span class="nf">callback3</span><span class="p">(</span><span class="n">source</span><span class="p">:</span> <span class="n">CommandSource</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<span class="n">callback4</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">src</span><span class="p">:</span> <span class="n">src</span><span class="o">.</span><span class="n">reply</span><span class="p">(</span><span class="s1">&#39;pong&#39;</span><span class="p">)</span>
+<span class="n">node1</span><span class="o">.</span><span class="n">runs</span><span class="p">(</span><span class="n">callback1</span><span class="p">)</span>
+<span class="n">node2</span><span class="o">.</span><span class="n">runs</span><span class="p">(</span><span class="n">callback2</span><span class="p">)</span>
+<span class="n">node3</span><span class="o">.</span><span class="n">runs</span><span class="p">(</span><span class="n">callback3</span><span class="p">)</span>
+<span class="n">node4</span><span class="o">.</span><span class="n">runs</span><span class="p">(</span><span class="n">callback4</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Both of them can be used as the argument of the <code class="docutils literal notranslate"><span class="pre">runs</span></code> method</p>
+<p>This dynamic callback argument adaptation is used in all callback invoking of the command nodes</p>
+</div>
+<div class="section" id="requires">
+<h4>requires<a class="headerlink" href="#requires" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">requires</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">requirement</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[],</span> <span class="nb">bool</span><span class="p">],</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">CommandSource</span><span class="p">],</span> <span class="nb">bool</span><span class="p">],</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">CommandSource</span><span class="p">,</span> <span class="nb">dict</span><span class="p">],</span> <span class="nb">bool</span><span class="p">]],</span> <span class="n">failure_message_getter</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[],</span> <span class="nb">str</span><span class="p">],</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">CommandSource</span><span class="p">],</span> <span class="nb">str</span><span class="p">],</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">CommandSource</span><span class="p">,</span> <span class="nb">dict</span><span class="p">],</span> <span class="nb">str</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-></span> <span class="n">ArgumentNode</span>
+</pre></div>
+</div>
+<p>Set the requirement tester callback of the node. When entering this node, MCDR will invoke the requirement tester to see if the current command source and context match your specific condition.</p>
+<p>If the tester callback return True, nothing will happen, MCDR will continue parsing the rest of the command</p>
+<p>If the tester callback return False, a <code class="docutils literal notranslate"><span class="pre">RequirementNotMet</span></code> exception will be risen. At this time if the <em>failure_message_getter</em> parameter is available, MCDR will invoke <em>failure_message_getter</em> to get the message string as the <code class="docutils literal notranslate"><span class="pre">RequirementNotMet</span></code> exception, otherwise a default message will be used</p>
+<p>Parameter <em>requirement</em>: A callable that accepts up to 2 arguments and returns a bool. Argument list: <code class="docutils literal notranslate"><span class="pre">CommandSource</span></code>, <code class="docutils literal notranslate"><span class="pre">dict</span></code> (context)</p>
+<p>Parameter <em>failure_message_getter</em>: An optional callable that accepts up to 2 arguments and returns a str. Argument list: <code class="docutils literal notranslate"><span class="pre">CommandSource</span></code>, <code class="docutils literal notranslate"><span class="pre">dict</span></code> (context)</p>
+<p>Some Example usages:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">node</span><span class="o">.</span><span class="n">requires</span><span class="p">(</span><span class="k">lambda</span> <span class="n">src</span><span class="p">:</span> <span class="n">src</span><span class="o">.</span><span class="n">has_permission_level</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>  <span class="c1"># Permission check</span>
+<span class="n">node</span><span class="o">.</span><span class="n">requires</span><span class="p">(</span><span class="k">lambda</span> <span class="n">src</span><span class="p">,</span> <span class="n">ctx</span><span class="p">:</span> <span class="n">ctx</span><span class="p">[</span><span class="s1">&#39;page_count&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">get_max_page</span><span class="p">())</span>  <span class="c1"># Dynamic range check</span>
+<span class="n">node</span><span class="o">.</span><span class="n">requires</span><span class="p">(</span><span class="k">lambda</span> <span class="n">src</span><span class="p">,</span> <span class="n">ctx</span><span class="p">:</span> <span class="n">is_legal</span><span class="p">(</span><span class="n">ctx</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]),</span> <span class="k">lambda</span> <span class="n">src</span><span class="p">,</span> <span class="n">ctx</span><span class="p">:</span> <span class="s1">&#39;target </span><span class="si">{}</span><span class="s1"> is illegal&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ctx</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]))</span>  <span class="c1"># Customized failure message</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="redirects">
+<h4>redirects<a class="headerlink" href="#redirects" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">redirects</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">redirect_node</span><span class="p">:</span> <span class="n">ArgumentNode</span><span class="p">)</span> <span class="o">-></span> <span class="n">ArgumentNode</span>
+</pre></div>
+</div>
+<p>Redirect all further child nodes command parsing to another given node. When you want a short command and and full-path command that will all execute the same commands, <code class="docutils literal notranslate"><span class="pre">redirects</span></code> will make it simpler</p>
+<p>Parameter <em>redirect_node</em>: A node instance which current node is redirecting to</p>
+<p>Examples:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">command_node</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">(</span><span class="s1">&#39;command&#39;</span><span class="p">)</span><span class="o">.</span> \
+    <span class="n">then</span><span class="p">(</span><span class="n">Literal</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">runs</span><span class="p">(</span><span class="n">do_something1</span><span class="p">))</span><span class="o">.</span> \
+    <span class="n">then</span><span class="p">(</span><span class="n">Literal</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">runs</span><span class="p">(</span><span class="n">do_something2</span><span class="p">))</span><span class="o">.</span> \
+    <span class="n">then</span><span class="p">(</span><span class="n">Literal</span><span class="p">(</span><span class="s1">&#39;z&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">runs</span><span class="p">(</span><span class="n">do_something3</span><span class="p">))</span>
+
+<span class="n">long_node</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">then</span><span class="p">(</span><span class="n">Literal</span><span class="p">(</span><span class="s1">&#39;long&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">then</span><span class="p">(</span><span class="n">Literal</span><span class="p">(</span><span class="s1">&#39;way&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">then</span><span class="p">(</span><span class="n">Literal</span><span class="p">(</span><span class="s1">&#39;to&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">then</span><span class="p">(</span><span class="n">Literal</span><span class="p">(</span><span class="s1">&#39;the&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">then</span><span class="p">(</span><span class="n">command_node</span><span class="p">)))))</span>
+<span class="n">short_node</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">(</span><span class="s1">&#39;quick&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">redirects</span><span class="p">(</span><span class="n">command_node</span><span class="p">)</span>
+
+<span class="n">root_executor</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">then</span><span class="p">(</span><span class="n">long_node</span><span class="p">)</span><span class="o">.</span><span class="n">then</span><span class="p">(</span><span class="n">short_node</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Command starts at <em>root_executor</em></p>
+<p>These commands:</p>
+<ul class="simple">
+<li><p>“foo a long way to the command x”</p></li>
+<li><p>“foo a long way to the command y”</p></li>
+<li><p>“foo a long way to the command z”</p></li>
+</ul>
+<p>are the same to</p>
+<ul class="simple">
+<li><p>“foo quick x”</p></li>
+<li><p>“foo quick y”</p></li>
+<li><p>“foo quick z”</p></li>
+</ul>
+<p>Pay attention to the difference between <code class="docutils literal notranslate"><span class="pre">redirects</span></code> and <code class="docutils literal notranslate"><span class="pre">then</span></code>. <code class="docutils literal notranslate"><span class="pre">redirects</span></code> is to redirect the child nodes, and <code class="docutils literal notranslate"><span class="pre">then</span></code> is to add a child node. If you do something like this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">short_node2</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">(</span><span class="s1">&#39;fast&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">then</span><span class="p">(</span><span class="n">command_node</span><span class="p">)</span>
+<span class="n">root_executor</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">then</span><span class="p">(</span><span class="n">long_node</span><span class="p">)</span><span class="o">.</span><span class="n">then</span><span class="p">(</span><span class="n">short_node</span><span class="p">)</span><span class="o">.</span><span class="n">then</span><span class="p">(</span><span class="n">short_node2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Then all commands which eventually executes <code class="docutils literal notranslate"><span class="pre">do_something1</span></code> will be:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">foo</span> <span class="pre">a</span> <span class="pre">long</span> <span class="pre">way</span> <span class="pre">to</span> <span class="pre">the</span> <span class="pre">command</span> <span class="pre">x</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">foo</span> <span class="pre">quick</span> <span class="pre">x</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">foo</span> <span class="pre">fast</span> <span class="pre">command</span> <span class="pre">x</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="on-error">
+<h4>on_error<a class="headerlink" href="#on-error" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">on_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">error_type</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">CommandError</span><span class="p">],</span> <span class="n">handler</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[],</span> <span class="n">Any</span><span class="p">],</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">CommandSource</span><span class="p">],</span> <span class="n">Any</span><span class="p">],</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">CommandSource</span><span class="p">,</span> <span class="n">CommandError</span><span class="p">],</span> <span class="n">Any</span><span class="p">],</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">CommandSource</span><span class="p">,</span> <span class="n">CommandError</span><span class="p">,</span> <span class="nb">dict</span><span class="p">],</span> <span class="n">Any</span><span class="p">]],</span> <span class="o">*</span><span class="p">,</span> <span class="n">handled</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-></span> <span class="n">ArgumentNode</span>
+</pre></div>
+</div>
+<p>When a command error occurs, the given will invoke the given handler to handle with the error</p>
+<p>Parameter <em>error_type</em>: A class that is subclass of CommandError</p>
+<p>Parameter <em>handler</em>: A callable that accepts up to 3 arguments. Argument list: <code class="docutils literal notranslate"><span class="pre">CommandSource</span></code>, <code class="docutils literal notranslate"><span class="pre">CommandError</span></code>, <code class="docutils literal notranslate"><span class="pre">dict</span></code> (context)</p>
+<p>Keyword Parameter <em>handled</em>: If handled is set to True, <code class="docutils literal notranslate"><span class="pre">error.set_handled()</span></code> is called automatically when invoking the handler callback</p>
+<p>For uses about <code class="docutils literal notranslate"><span class="pre">error.set_handled()</span></code>, check the <a class="reference external" href="classes/CommandError.html#set-handled">CommandError</a> class reference</p>
+</div>
+</div>
+<div class="section" id="literal">
+<h3>Literal<a class="headerlink" href="#literal" title="永久链接至标题">¶</a></h3>
+<p>Literal node is a special node. It doesn’t output any value. It’s more like a command branch carrier</p>
+<p>Literal node can accept a str as its literal in its constructor. A literal node accepts the parsing command only when the next element of the parsing command exactly matches the literal of the node</p>
+<p>Literal node is the only node that can start a command execution</p>
+<p>Examples:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Literal</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">runs</span><span class="p">(</span><span class="k">lambda</span> <span class="n">src</span><span class="p">:</span> <span class="n">src</span><span class="o">.</span><span class="n">reply</span><span class="p">(</span><span class="s1">&#39;Foo!&#39;</span><span class="p">))</span>  <span class="c1"># input &quot;foo&quot;, get reply &quot;Foo!&quot;</span>
+<span class="n">Literal</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">then</span><span class="p">(</span>
+    <span class="n">Literal</span><span class="p">(</span><span class="s1">&#39;bar&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">runs</span><span class="p">(</span><span class="k">lambda</span> <span class="n">src</span><span class="p">:</span> <span class="n">src</span><span class="o">.</span><span class="n">reply</span><span class="p">(</span><span class="s1">&#39;Foo Bar&#39;</span><span class="p">))</span>
+<span class="p">)</span>  <span class="c1"># input &quot;foo bar&quot;, get reply &quot;Foo Bar&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="numbernode">
+<h3>NumberNode<a class="headerlink" href="#numbernode" title="永久链接至标题">¶</a></h3>
+<p>It’s an abstract class. It’s inherited by <code class="docutils literal notranslate"><span class="pre">Number</span></code>, <code class="docutils literal notranslate"><span class="pre">Integer</span></code> and <code class="docutils literal notranslate"><span class="pre">Float</span></code>. It represents a type of number based node</p>
+<p>For a <code class="docutils literal notranslate"><span class="pre">NumberNode</span></code> instance, you can restrict the range of the number argument. If the parsed number is out of range, a <code class="docutils literal notranslate"><span class="pre">NumberOutOfRange</span></code> exception will be risen</p>
+<p>By default there’s no range restriction</p>
+<div class="section" id="at-min">
+<h4>at_min<a class="headerlink" href="#at-min" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">at_min</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">min_value</span><span class="p">)</span> <span class="o">-></span> <span class="n">NumberNode</span>
+</pre></div>
+</div>
+<p>Set the lower boundary of the range restriction to <em>min_value</em></p>
+</div>
+<div class="section" id="at-max">
+<h4>at_max<a class="headerlink" href="#at-max" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">at_max</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_value</span><span class="p">)</span> <span class="o">-></span> <span class="n">NumberNode</span>
+</pre></div>
+</div>
+<p>Set the higher boundary of the range restriction to <em>max_value</em></p>
+</div>
+<div class="section" id="in-range">
+<h4>in_range<a class="headerlink" href="#in-range" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">in_range</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">min_value</span><span class="p">,</span> <span class="n">max_value</span><span class="p">)</span> <span class="o">-></span> <span class="n">NumberNode</span>
+</pre></div>
+</div>
+<p>Set the lower and the higher boundary of the range restriction at the same time</p>
+</div>
+</div>
+<div class="section" id="number">
+<h3>Number<a class="headerlink" href="#number" title="永久链接至标题">¶</a></h3>
+<p>A <code class="docutils literal notranslate"><span class="pre">Number</span></code> node accepts a number argument. It can be an integer or an float. If the next element is not a number, a <code class="docutils literal notranslate"><span class="pre">InvalidNumber</span></code> exception will be risen</p>
+</div>
+<div class="section" id="integer">
+<h3>Integer<a class="headerlink" href="#integer" title="永久链接至标题">¶</a></h3>
+<p>An <code class="docutils literal notranslate"><span class="pre">Integer</span></code> node accepts a int argument. It can only be an integer. If the next element is not an integer, a <code class="docutils literal notranslate"><span class="pre">InvalidInteger</span></code> exception will be risen</p>
+</div>
+<div class="section" id="float">
+<h3>Float<a class="headerlink" href="#float" title="永久链接至标题">¶</a></h3>
+<p>A <code class="docutils literal notranslate"><span class="pre">Float</span></code> node accepts a float argument. It can only be a float. If the next element is not a float, a <code class="docutils literal notranslate"><span class="pre">InvalidFloat</span></code> exception will be risen</p>
+</div>
+<div class="section" id="textnode">
+<h3>TextNode<a class="headerlink" href="#textnode" title="永久链接至标题">¶</a></h3>
+<p>It’s an abstract class. It’s inherited by <code class="docutils literal notranslate"><span class="pre">Text</span></code>, <code class="docutils literal notranslate"><span class="pre">QuotableText</span></code> and <code class="docutils literal notranslate"><span class="pre">GreedyText</span></code>. It represents a type of text based node</p>
+<p>For a <code class="docutils literal notranslate"><span class="pre">TextNode</span></code> instance, you can restrict the length range of the str text argument. If the length of the parsed text is out of range, a <code class="docutils literal notranslate"><span class="pre">TextLengthOutOfRange</span></code> exception will be risen</p>
+<p>By default there’s no length range restriction</p>
+<div class="section" id="at-min-length">
+<h4>at_min_length<a class="headerlink" href="#at-min-length" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">at_min_length</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">min_length</span><span class="p">)</span> <span class="o">-></span> <span class="n">TextNode</span>
+</pre></div>
+</div>
+<p>Set the lower boundary of the length range restriction to <em>min_length</em></p>
+</div>
+<div class="section" id="at-max-length">
+<h4>at_max_length<a class="headerlink" href="#at-max-length" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">at_max_length</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_length</span><span class="p">)</span> <span class="o">-></span> <span class="n">TextNode</span>
+</pre></div>
+</div>
+<p>Set the higher boundary of the length range restriction to <em>max_length</em></p>
+</div>
+<div class="section" id="in-length-range">
+<h4>in_length_range<a class="headerlink" href="#in-length-range" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">in_length_range</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">min_length</span><span class="p">,</span> <span class="n">max_length</span><span class="p">)</span> <span class="o">-></span> <span class="n">TextNode</span>
+</pre></div>
+</div>
+<p>Set the lower and the higher boundary of the length range restriction at the same time</p>
+</div>
+</div>
+<div class="section" id="text">
+<h3>Text<a class="headerlink" href="#text" title="永久链接至标题">¶</a></h3>
+<p>A <code class="docutils literal notranslate"><span class="pre">Text</span></code> node accepts a single string element. Since space character is the divider character of MCDR command parsing. <code class="docutils literal notranslate"><span class="pre">Text</span></code> nodes will keep taking the continuous string segment until they meet a space character</p>
+</div>
+<div class="section" id="quotabletext">
+<h3>QuotableText<a class="headerlink" href="#quotabletext" title="永久链接至标题">¶</a></h3>
+<p>A <code class="docutils literal notranslate"><span class="pre">QuotableText</span></code> works just like a <code class="docutils literal notranslate"><span class="pre">Text</span></code> argument node, but it gives user a way to input text with space character: Use two double quotes to enclose the text content</p>
+<p>If you use two double quotes to enclose the text content, You can use escape character <code class="docutils literal notranslate"><span class="pre">\</span></code> to escape double quotes <code class="docutils literal notranslate"><span class="pre">&quot;</span></code> and escape character <code class="docutils literal notranslate"><span class="pre">\</span></code> itself</p>
+<p>For example, here are some texts that accepted by <code class="docutils literal notranslate"><span class="pre">QuotableText</span></code>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Something</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;Someting</span> <span class="pre">with</span> <span class="pre">space</span> <span class="pre">characters&quot;</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;or</span> <span class="pre">escapes</span> <span class="pre">\\</span> <span class="pre">like</span> <span class="pre">\&quot;</span> <span class="pre">this&quot;</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="greedytext">
+<h3>GreedyText<a class="headerlink" href="#greedytext" title="永久链接至标题">¶</a></h3>
+<p>The principle of <code class="docutils literal notranslate"><span class="pre">GreedyText</span></code> is quite simple: It greedily take out all remaining texts in the commands</p>
+<p>It’s not a smart decision to append any child nodes to a <code class="docutils literal notranslate"><span class="pre">GreedyText</span></code>, since the child nodes can never get any remaining command</p>
+</div>
+</div>
+<div class="section" id="customize">
+<h2>Customize<a class="headerlink" href="#customize" title="永久链接至标题">¶</a></h2>
+<p>MCDR also supports customize an argument node. It might save you same repeated work on building your command</p>
+<p>To create a custom a argument node, you need to declare a class inherited from <code class="docutils literal notranslate"><span class="pre">ArgumentNode</span></code>, and then implement the <code class="docutils literal notranslate"><span class="pre">parse</span></code> method logic. That’s it, the custom node class is ready to be used</p>
+<p>Custom exception provides a precise way to handle your exception with <code class="docutils literal notranslate"><span class="pre">on_error</span></code> method. If you want to raise a custom exception when your argument node fails to parsing the text, you need to have the custom exception inherited from <code class="docutils literal notranslate"><span class="pre">CommandSyntaxError</span></code></p>
+<p>Here’s a quick example of a custom Argument node, <code class="docutils literal notranslate"><span class="pre">PointArgument</span></code>. It accepts continuous 3 float input as a coordinate and batch them in to a list as a point. It raises <code class="docutils literal notranslate"><span class="pre">IllegalPoint</span></code> if it gets a non-float input, or <code class="docutils literal notranslate"><span class="pre">IncompletePoint</span></code> if the command ends before it finishes reading 3 floats</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">IllegalPoint</span><span class="p">(</span><span class="n">CommandSyntaxError</span><span class="p">):</span>
+	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">char_read</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+		<span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s1">&#39;Invalid Point&#39;</span><span class="p">,</span> <span class="n">char_read</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">IncompletePoint</span><span class="p">(</span><span class="n">CommandSyntaxError</span><span class="p">):</span>
+	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">char_read</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+		<span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s1">&#39;Incomplete Point&#39;</span><span class="p">,</span> <span class="n">char_read</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">PointArgument</span><span class="p">(</span><span class="n">ArgumentNode</span><span class="p">):</span>
+	<span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-></span> <span class="n">ParseResult</span><span class="p">:</span>
+		<span class="n">total_read</span> <span class="o">=</span> <span class="mi">0</span>
+		<span class="n">coords</span> <span class="o">=</span> <span class="p">[]</span>
+		<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+			<span class="n">value</span><span class="p">,</span> <span class="n">read</span> <span class="o">=</span> <span class="n">command_builder_util</span><span class="o">.</span><span class="n">get_float</span><span class="p">(</span><span class="n">text</span><span class="p">[</span><span class="n">total_read</span><span class="p">:])</span>
+			<span class="k">if</span> <span class="n">read</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+				<span class="k">raise</span> <span class="n">IncompletePoint</span><span class="p">(</span><span class="n">total_read</span><span class="p">)</span>
+			<span class="n">total_read</span> <span class="o">+=</span> <span class="n">read</span>
+			<span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+				<span class="k">raise</span> <span class="n">IllegalPoint</span><span class="p">(</span><span class="n">total_read</span><span class="p">)</span>
+			<span class="n">coords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+		<span class="k">return</span> <span class="n">ParseResult</span><span class="p">(</span><span class="n">coords</span><span class="p">,</span> <span class="n">total_read</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For its usage, here’s a simple example as well as an input/output table:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">on_load</span><span class="p">(</span><span class="n">server</span><span class="p">,</span> <span class="n">prev</span><span class="p">):</span>
+    <span class="n">server</span><span class="o">.</span><span class="n">register_command</span><span class="p">(</span>
+        <span class="n">Literal</span><span class="p">(</span><span class="s1">&#39;!!mypoint&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">then</span><span class="p">(</span>
+            <span class="n">PointArgument</span><span class="p">(</span><span class="s1">&#39;pt&#39;</span><span class="p">)</span><span class="o">.</span>
+            <span class="n">runs</span><span class="p">(</span><span class="k">lambda</span> <span class="n">src</span><span class="p">,</span> <span class="n">ctx</span><span class="p">:</span> <span class="n">src</span><span class="o">.</span><span class="n">reply</span><span class="p">(</span><span class="s1">&#39;You have input a point (</span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">*</span><span class="n">ctx</span><span class="p">[</span><span class="s1">&#39;pt&#39;</span><span class="p">])))</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>Input</th>
+<th>Output</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>!!mypoint 1 2 3</td>
+<td>You have input a point (1.0, 2.0, 3.0)</td>
+</tr>
+<tr>
+<td>!!mypoint 1 2</td>
+<td>Incomplete Point: !!mypoint 1 2&lt;--</td>
+</tr>
+<tr>
+<td>!!mypoint xxx</td>
+<td>Invalid Point: !!mypoint xxx&lt;--</td>
+</tr>
+<tr>
+<td>!!mypoint 1 2 x</td>
+<td>Invalid Point: !!mypoint 1 2 x&lt;--</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="api.html" class="btn btn-neutral float-right" title="API Packages for Plugins" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="event.html" class="btn btn-neutral float-left" title="Plugin Event" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; 版权所有 2021, Fallen_Breath.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

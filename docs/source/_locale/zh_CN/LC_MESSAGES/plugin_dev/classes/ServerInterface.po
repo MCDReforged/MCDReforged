@@ -1,0 +1,845 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Fallen_Breath
+# This file is distributed under the same license as the MCDReforged
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2021.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: MCDReforged \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-01-17 13:08+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.0\n"
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:3
+msgid "ServerInterface"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:5
+msgid ""
+"ServerInterface is the interface for plugins to interact with the server."
+" The first argument in all plugin events is always the ServerInterface. "
+"It's recommend to use ``server`` as the parameter name of the "
+"ServerInterface argument which is widely used in this document"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:7
+msgid "You can check the code to see the implementation for deeper understanding"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:10
+msgid "Property"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:13
+msgid "logger"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:15
+msgid "A logger for logging message to the console"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:17
+msgid "Type: MCDReforgedLogger, which is inherited from ``logging.Logger``"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:20
+msgid "Method"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:22
+msgid ""
+"Methods in the SererInterface object are also the API interface for "
+"plugins to control the server and the MCDR"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:25
+msgid "Server Control"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:28
+msgid "start"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:34
+msgid "Start the server. Return if the action succeed."
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:36
+msgid ""
+"If the server is running or being starting by other plugin it will return"
+" ``False``"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:39
+msgid "stop"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:45
+msgid ""
+"Soft shutting down the server by sending the correct stop command to the "
+"server"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:47
+msgid "This option will not stop MCDR"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:50
+msgid "wait_for_start"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:56
+msgid ""
+"Wait until the server is able to start. In other words, wait until the "
+"server is stopped"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:59
+msgid "restart"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:65
+msgid "Restart the server"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:67
+msgid ""
+"It will first soft stop the server and then wait until the server is "
+"stopped, then start the server up"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:70
+msgid "stop_exit"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:76
+msgid "Soft stop the server and exit MCDR"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:79
+msgid "exit"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:85
+msgid "Exit MCDR when the server is stopped"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:87
+msgid "If the server is running return False otherwise return True"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:90
+msgid "is_server_running"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:96
+msgid "Return if the server is running"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:99
+msgid "is_server_startup"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:105
+msgid "Return if the server has started up"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:108
+msgid "is_rcon_running"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:114
+msgid "Return if MCDR's rcon is running"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:117
+msgid "get_server_pid"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:123
+msgid "Return the pid of the server process, None if the server is stopped"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:125
+msgid ""
+"Notes the process with this pid is a bash process, which is the parent "
+"process of real server process you might be interested in"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:128
+msgid "Text Interaction"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:131
+msgid "execute"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:137
+msgid ""
+"Execute a command by sending the command content to server's standard "
+"input stream"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:139
+msgid "Parameter *text*\\ : The content of the command you want to send"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:141
+#: ../../source/plugin_dev/classes/ServerInterface.rst:156
+#: ../../source/plugin_dev/classes/ServerInterface.rst:169
+#: ../../source/plugin_dev/classes/ServerInterface.rst:182
+msgid ""
+"Keyword Parameter *encoding*\\ : The encoding method for the text. Leave "
+"it empty to use the encoding method from the configure of MCDR"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:144
+msgid "tell"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:150
+msgid "Use command like ``/tellraw`` to send the message to the specific player"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:152
+msgid "Parameter *player*\\ : The name of the player you want to tell"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:154
+msgid "Parameter *text*\\ : the message you want to send to the player"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:159
+msgid "say"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:165
+msgid ""
+"Use command like ``/tellraw @a`` to send the message to broadcast the "
+"message in game"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:167
+#: ../../source/plugin_dev/classes/ServerInterface.rst:180
+#: ../../source/plugin_dev/classes/ServerInterface.rst:197
+msgid "Parameter *text*\\ : the message you want to send"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:172
+msgid "broadcast"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:178
+msgid "Broadcast the message in game and to the console"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:185
+msgid "reply"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:191
+msgid "Reply to the source of the Info"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:193
+msgid ""
+"If the Info is from a player then use tell to reply the player, otherwise"
+" if the Info is from the console use logger.info to output to the "
+"console. In the rest of the situations, the Info is not from a user, a "
+"IllegalCallError is raised"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:195
+msgid "Parameter *info*\\ : the Info you want to reply to"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:199
+msgid ""
+"Keyword Parameter *console_text*\\ : If it's specified, console_text will"
+" be used instead of text when replying to console"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:201
+msgid "Keyword Parameter *encoding*\\ : The encoding method for the text"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:204
+msgid "Plugin Operations"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:206
+msgid ""
+"**Notes**\\ : All plugin manipulation will trigger a dependency check, "
+"which might cause unwanted plugin operations"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:209
+msgid "load_plugin"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:215
+msgid ""
+"Load a plugin from the given file path. Return if the plugin gets loaded "
+"successfully"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:217
+msgid ""
+"Parameter *plugin_file_path*\\ : The file path of the plugin to load. "
+"Example: ``plugins/my_plugin.py``"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:220
+msgid "enable_plugin"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:226
+msgid ""
+"Enable an unloaded plugin from the given path. Return if the plugin gets "
+"enabled successfully"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:228
+msgid ""
+"Parameter *plugin_file_path*\\ : The file path of the plugin to enable. "
+"Example: \"plugins/my_plugin.py.disabled\""
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:231
+msgid "reload_plugin"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:237
+msgid ""
+"Reload a plugin specified by plugin id. Return a bool indicating if the "
+"plugin gets reloaded successfully, or None if plugin not found"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:239
+msgid ""
+"Parameter *plugin_id*\\ : The id of the plugin to reload. Example: "
+"\"my_plugin\""
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:242
+msgid "unload_plugin"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:248
+msgid ""
+"Unload a plugin specified by plugin id. Return a bool indicating if the "
+"plugin gets unloaded successfully, or None if plugin not found"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:250
+msgid ""
+"Parameter *plugin_id*\\ : The id of the plugin to unload. Example: "
+"\"my_plugin\""
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:253
+msgid "disable_plugin"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:259
+msgid ""
+"Disable a plugin specified by plugin id. Return a bool indicating if the "
+"plugin gets disabled successfully, or None if plugin not found"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:261
+msgid ""
+"Parameter *plugin_id*\\ : The id of the plugin to disable. Example: "
+"\"my_plugin\""
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:264
+msgid "refresh_all_plugins"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:270
+msgid ""
+"Reload all plugins, load all new plugins and then unload all removed "
+"plugins"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:273
+msgid "refresh_changed_plugins"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:279
+msgid ""
+"Reload all changed plugins, load all new plugins and then unload all "
+"removed plugins"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:282
+msgid "get_plugin_list"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:288
+msgid ""
+"Return a list containing all loaded plugin id like [\"my_plugin\", "
+"\"another_plugin\"]"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:291
+msgid "get_plugin_metadata"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:297
+msgid ""
+"Return the metadata of the specified plugin, or None if the plugin "
+"doesn't exist"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:299
+msgid "Parameter *plugin_id*\\ : The plugin id of the plugin to query metadata"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:302
+msgid "get_plugin_file_path"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:308
+msgid ""
+"Return the file path of the specified plugin, or None if the plugin "
+"doesn't exist"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:310
+msgid "Parameter *plugin_id*\\ : The plugin id of the plugin to query file path"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:313
+msgid "get_plugin_instance"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:319
+msgid ""
+"Return the current loaded plugin instance, or None if the plugin doesn't "
+"exist. With this api your plugin can access the same plugin instance to "
+"MCDR"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:321
+msgid ""
+"It's quite important to use this instead of manually import the plugin "
+"you want if the target plugin needs to react to events from MCDR"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:323
+msgid "Parameter *plugin_id*\\ : The plugin id of the plugin you want"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:325
+msgid "Example:"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:339
+msgid "Plugin Registry"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:342
+msgid "register_event_listener"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:348
+#: ../../source/plugin_dev/classes/ServerInterface.rst:365
+msgid "Register an event listener for the current plugin"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:350
+#: ../../source/plugin_dev/classes/ServerInterface.rst:367
+#: ../../source/plugin_dev/classes/ServerInterface.rst:380
+msgid ""
+"Raise an ``IllegalCallError`` if it's not invoked in the task executor "
+"thread"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:352
+msgid ""
+"Parameter *event*\\ : The id of the event, or a PluginEvent instance. It "
+"indicates the target event for the plugin to listen"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:354
+msgid "Parameter *callback*\\ : The callback listener method for the event"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:356
+msgid ""
+"Parameter *priority*\\ : The priority of the listener. It will be set to "
+"the default value 1000 if it's not specified"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:359
+msgid "register_command"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:369
+msgid ""
+"Parameter *root_node*\\ : The root node of your command tree. It should "
+"be a ``Literal`` node"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:372
+msgid "register_help_message"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:378
+msgid ""
+"Register a help message for the current plugin, which is used in !!help "
+"command"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:382
+msgid ""
+"Parameter *prefix*\\ : The help command of your plugin. When player click"
+" on the displayed message it will suggest this prefix parameter to the "
+"player. It's recommend to set it to the entry command of your plugin"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:384
+msgid "Parameter *message*\\ : A neat command description"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:386
+msgid ""
+"Parameter *permission*\\ : The minimum permission level for the user to "
+"see this help message. With default, anyone can see this message"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:389
+msgid "dispatch_event"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:395
+msgid "Dispatch an event to all loaded plugins"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:397
+msgid ""
+"The event will be immediately dispatch if it's on the task executor "
+"thread, or gets enqueued if it's on other thread"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:399
+msgid ""
+"Parameter *event*\\ : The event to dispatch. It need to be a "
+"``PluginEvent`` instance. For simple usage, you can create a "
+"``LiteralEvent`` instance for this argument"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:401
+msgid ""
+"Parameter *args*\\ : The argument that will be used to invoke the event "
+"listeners. An ServerInterface instance will be automatically added to the"
+" beginning of the argument list"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:403
+msgid ""
+"**Note**\\ : You cannot dispatch an event with the same event id to any "
+"MCDR built-in event"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:406
+msgid "Permission"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:409
+msgid "get_permission_level"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:415
+msgid "Return an int indicating permission level number the given object has"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:417
+msgid ""
+"The object could be a str indicating the name of a player, an Info "
+"instance or a command source"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:419
+msgid "Parameter *obj*\\ : The object your are querying"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:421
+msgid ""
+"It raises ``TypeError`` if the type of the given object is not supported "
+"for permission querying"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:424
+msgid "set_permission_level"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:430
+msgid ""
+"Set the permission level of the given player. It raises ``TypeError`` if "
+"the value parameter doesn't proper represent a permission level"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:432
+msgid ""
+"Parameter *player*\\ : The name of the player that you want to set "
+"his/her permission level"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:434
+msgid ""
+"Parameter *value*\\ : The target permission level you want to set the "
+"player to. It can be an int or a str as long as it's related to the "
+"permission level. Available examples: 1, '1', 'user'"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:437
+msgid "Misc"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:440
+msgid "is_on_executor_thread"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:446
+msgid "Return if the current thread is the task executor thread"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:448
+msgid ""
+"Task executor thread is the main thread to parse messages and trigger "
+"listeners where some ServerInterface APIs  are required to be invoked on"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:451
+msgid "rcon_query"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:457
+msgid ""
+"Send command to the server through rcon connection. Return the result "
+"that server returned from rcon. Return None if rcon is not running or "
+"rcon query failed"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:459
+msgid "Parameter *command*\\ : The command you want to send to the rcon server"
+msgstr ""
+
+#~ msgid ""
+#~ "ServerInterface is the interface for "
+#~ "plugins to interact with the server. "
+#~ "The first argument in all plugin "
+#~ "events is always the ServerInterface. "
+#~ "It's recommend to use server as "
+#~ "the parameter name of the "
+#~ "ServerInterface argument which is widely "
+#~ "used in this document"
+#~ msgstr ""
+
+#~ msgid "Type: MCDReforgedLogger, which is inherited from logging.Logger"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "If the server is running or being"
+#~ " starting by other plugin it will "
+#~ "return False"
+#~ msgstr ""
+
+#~ msgid "Parameter text: The content of the command you want to send"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Keyword Parameter encoding: The encoding "
+#~ "method for the text. Leave it "
+#~ "empty to use the encoding method "
+#~ "from the configure of MCDR"
+#~ msgstr ""
+
+#~ msgid "Use command like /tellraw to send the message to the specific player"
+#~ msgstr ""
+
+#~ msgid "Parameter player: The name of the player you want to tell"
+#~ msgstr ""
+
+#~ msgid "Parameter text: the message you want to send to the player"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Use command like /tellraw @a to "
+#~ "send the message to broadcast the "
+#~ "message in game"
+#~ msgstr ""
+
+#~ msgid "Parameter text: the message you want to send"
+#~ msgstr ""
+
+#~ msgid "Parameter info: the Info you want to reply to"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Keyword Parameter console_text: If it's "
+#~ "specified, console_text will be used "
+#~ "instead of text when replying to "
+#~ "console"
+#~ msgstr ""
+
+#~ msgid "Keyword Parameter encoding: The encoding method for the text"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Notes: All plugin manipulation will "
+#~ "trigger a dependency check, which might"
+#~ " cause unwanted plugin operations"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Parameter plugin_file_path: The file path "
+#~ "of the plugin to load. Example: "
+#~ "plugins/my_plugin.py"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Parameter plugin_file_path: The file path "
+#~ "of the plugin to enable. Example: "
+#~ "\"plugins/my_plugin.py.disabled\""
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Parameter plugin_id: The id of the "
+#~ "plugin to reload. Example: \"my_plugin\""
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Parameter plugin_id: The id of the "
+#~ "plugin to unload. Example: \"my_plugin\""
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Parameter plugin_id: The id of the "
+#~ "plugin to disable. Example: \"my_plugin\""
+#~ msgstr ""
+
+#~ msgid "Parameter plugin_id: The plugin id of the plugin to query metadata"
+#~ msgstr ""
+
+#~ msgid "Parameter plugin_id: The plugin id of the plugin to query file path"
+#~ msgstr ""
+
+#~ msgid "Parameter plugin_id: The plugin id of the plugin you want"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Raise an IllegalCallError if it's not"
+#~ " invoked in the task executor thread"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Parameter event: The id of the "
+#~ "event, or a PluginEvent instance. It "
+#~ "indicates the target event for the "
+#~ "plugin to listen"
+#~ msgstr ""
+
+#~ msgid "Parameter callback: The callback listener method for the event"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Parameter priority: The priority of the"
+#~ " listener. It will be set to "
+#~ "the default value 1000 if it's not"
+#~ " specified"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Parameter root_node: The root node of"
+#~ " your command tree. It should be "
+#~ "a Literal node"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Parameter prefix: The help command of"
+#~ " your plugin. When player click on"
+#~ " the displayed message it will "
+#~ "suggest this prefix parameter to the "
+#~ "player. It's recommend to set it "
+#~ "to the entry command of your "
+#~ "plugin"
+#~ msgstr ""
+
+#~ msgid "Parameter message: A neat command description"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Parameter permission: The minimum permission"
+#~ " level for the user to see this"
+#~ " help message. With default, anyone "
+#~ "can see this message"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Parameter event: The event to dispatch."
+#~ " It need to be a PluginEvent "
+#~ "instance. For simple usage, you can "
+#~ "create a LiteralEvent instance for this"
+#~ " argument"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Parameter args: The argument that will"
+#~ " be used to invoke the event "
+#~ "listeners. An ServerInterface instance will"
+#~ " be automatically added to the "
+#~ "beginning of the argument list"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Note: You cannot dispatch an event "
+#~ "with the same event id to any "
+#~ "MCDR built-in event"
+#~ msgstr ""
+
+#~ msgid "Parameter obj: The object your are querying"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "It raises TypeError if the type of"
+#~ " the given object is not supported"
+#~ " for permission querying"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Set the permission level of the "
+#~ "given player. It raises TypeError if "
+#~ "the value parameter doesn't proper "
+#~ "represent a permission level"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Parameter player: The name of the "
+#~ "player that you want to set "
+#~ "his/her permission level"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Parameter value: The target permission "
+#~ "level you want to set the player"
+#~ " to. It can be an int or "
+#~ "a str as long as it's related "
+#~ "to the permission level. Available "
+#~ "examples: 1, '1', 'user'"
+#~ msgstr ""
+
+#~ msgid "Parameter command: The command you want to send to the rcon server"
+#~ msgstr ""
+

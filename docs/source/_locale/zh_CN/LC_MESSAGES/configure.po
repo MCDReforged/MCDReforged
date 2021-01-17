@@ -1,0 +1,587 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Fallen_Breath
+# This file is distributed under the same license as the MCDReforged
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2021.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: MCDReforged \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-01-17 13:10+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.0\n"
+
+#: ../../source/configure.rst:3
+msgid "Configure"
+msgstr ""
+
+#: ../../source/configure.rst:5
+msgid ""
+"The configure file of MCDR is ``config.yml``. It's located and should be "
+"located in the working directory of MCDR"
+msgstr ""
+
+#: ../../source/configure.rst:7
+msgid ""
+"At startup, MCDR will try to load the configure file. If the configure "
+"file is not present, MCDR will generate a default config file and exit. "
+"Otherwise, MCDR will load the config file and compare its content with "
+"the default configure file. If your configure file has any missing "
+"options, MCDR will add default values to the end of your configure file"
+msgstr ""
+
+#: ../../source/configure.rst:9
+msgid ""
+"The configure file use `YAML <https://en.wikipedia.org/wiki/YAML>`__ "
+"format"
+msgstr ""
+
+#: ../../source/configure.rst:11
+msgid ""
+"You can use command ``!!MCDR reload config`` or its short form ``!!MCDR r"
+" cfg`` to reload the config file when MCDR is running"
+msgstr ""
+
+#: ../../source/configure.rst:14
+msgid "List of options"
+msgstr ""
+
+#: ../../source/configure.rst:17
+msgid "Basic"
+msgstr ""
+
+#: ../../source/configure.rst:20
+msgid "language"
+msgstr ""
+
+#: ../../source/configure.rst:22
+msgid "The language that MCDR will use to display information"
+msgstr ""
+
+#: ../../source/configure.rst:25 ../../source/configure.rst:35
+#: ../../source/configure.rst:51 ../../source/configure.rst:90
+#: ../../source/configure.rst:151 ../../source/configure.rst:169
+msgid "Option type: string"
+msgstr ""
+
+#: ../../source/configure.rst:26
+msgid "Default value: ``en_us``"
+msgstr ""
+
+#: ../../source/configure.rst:27
+msgid "Available options: ``en_us``\\ , ``zh_cn``"
+msgstr ""
+
+#: ../../source/configure.rst:30
+msgid "working_directory"
+msgstr ""
+
+#: ../../source/configure.rst:32
+msgid ""
+"The working directory of the server. You should probably put all the "
+"files related to the server int this directory"
+msgstr ""
+
+#: ../../source/configure.rst:36
+msgid "Default value: ``server``"
+msgstr ""
+
+#: ../../source/configure.rst:39
+msgid "start_command"
+msgstr ""
+
+#: ../../source/configure.rst:41
+msgid "The console command to launch the server"
+msgstr ""
+
+#: ../../source/configure.rst:43
+msgid "Some examples:"
+msgstr ""
+
+#: ../../source/configure.rst:46
+msgid ""
+"``java -Xms1G -Xmx2G -jar minecraft_server.jar nogui``\\ , if you want to"
+" launch a Minecraft server"
+msgstr ""
+
+#: ../../source/configure.rst:48
+msgid ""
+"``./start.sh``\\ , if you have already written a startup script in the "
+"working directory"
+msgstr ""
+
+#: ../../source/configure.rst:53
+msgid "Default value: ``java -Xms1G -Xmx2G -jar minecraft_server.jar nogui``"
+msgstr ""
+
+#: ../../source/configure.rst:56
+msgid "handler"
+msgstr ""
+
+#: ../../source/configure.rst:58
+msgid ""
+"Different Minecraft server has different kind of output, and event "
+"different kind of command. Server handlers are the modules to handle "
+"between all kind of servers and the interface for MCDR to control the "
+"server"
+msgstr ""
+
+#: ../../source/configure.rst:60
+msgid ""
+"Handler determines the specific way to parse the standard output text of "
+"the server, and uses the correct command for server control"
+msgstr ""
+
+#: ../../source/configure.rst:62
+msgid ""
+"Here is a table of current built-in handlers and their suitable server "
+"types"
+msgstr ""
+
+#: ../../source/configure.rst:67
+msgid "Handler"
+msgstr ""
+
+#: ../../source/configure.rst:68
+msgid "Compatible server types"
+msgstr ""
+
+#: ../../source/configure.rst:69
+msgid "vanilla_handler"
+msgstr ""
+
+#: ../../source/configure.rst:70
+msgid "For Vanilla / Carpet / Fabric server"
+msgstr ""
+
+#: ../../source/configure.rst:71
+msgid "beta18_handler"
+msgstr ""
+
+#: ../../source/configure.rst:72
+msgid ""
+"For vanilla server in beta 1.8 version. Maybe it works for other beta "
+"versions but it's only tested in beta 1.8.1."
+msgstr ""
+
+#: ../../source/configure.rst:73
+msgid "bukkit_handler"
+msgstr ""
+
+#: ../../source/configure.rst:74
+msgid ""
+"For Bukkit / Spigot server with Minecraft version below 1.14, and Paper "
+"server in all version."
+msgstr ""
+
+#: ../../source/configure.rst:75
+msgid "bukkit_handler_14"
+msgstr ""
+
+#: ../../source/configure.rst:76
+msgid "For Bukkit / Spigot server with Minecraft version 1.14 and above"
+msgstr ""
+
+#: ../../source/configure.rst:77
+msgid "forge_handler"
+msgstr ""
+
+#: ../../source/configure.rst:78
+msgid "For Forge server"
+msgstr ""
+
+#: ../../source/configure.rst:79
+msgid "cat_server_handler"
+msgstr ""
+
+#: ../../source/configure.rst:80
+msgid "For `CatServer <https://github.com/Luohuayu/CatServer>`__ server"
+msgstr ""
+
+#: ../../source/configure.rst:81
+msgid "bungeecord_handler"
+msgstr ""
+
+#: ../../source/configure.rst:82
+msgid ""
+"For Bungeecord. Please add ``-Djline.terminal=jline.UnsupportedTerminal``"
+" before ``-jar`` in the start command for MCDR support. From `here "
+"<https://www.spigotmc.org/wiki/start-up-parameters/>`__"
+msgstr ""
+
+#: ../../source/configure.rst:83
+msgid "waterfall_handler"
+msgstr ""
+
+#: ../../source/configure.rst:84
+msgid "For Waterfall server"
+msgstr ""
+
+#: ../../source/configure.rst:85
+msgid "basic_handler"
+msgstr ""
+
+#: ../../source/configure.rst:86
+msgid ""
+"The handler that parse nothing and return the raw text from the server. "
+"Don't use this unless you want to use MCDR to lanuch non Minecraft "
+"related servers."
+msgstr ""
+
+#: ../../source/configure.rst:91
+msgid "Default value: ``vanilla_handler``"
+msgstr ""
+
+#: ../../source/configure.rst:94
+msgid "encoding / decoding"
+msgstr ""
+
+#: ../../source/configure.rst:96
+msgid "The encoding format used to encode message to the stdin of the server."
+msgstr ""
+
+#: ../../source/configure.rst:98
+msgid ""
+"Leave it blank for MCDR to auto detect the encoding. If it doesn't work "
+"(e.g. random characters in game) you needs to manually specify it depends"
+" on your os and language"
+msgstr ""
+
+#: ../../source/configure.rst:101
+msgid "Option type: string or null"
+msgstr ""
+
+#: ../../source/configure.rst:102
+msgid "Default value: `` ``"
+msgstr ""
+
+#: ../../source/configure.rst:103
+msgid "Examples: ``utf8``\\ , ``gbk``"
+msgstr ""
+
+#: ../../source/configure.rst:106
+msgid "plugin_directories"
+msgstr ""
+
+#: ../../source/configure.rst:108
+msgid "The list of directory path where MCDR will search for plugin to load"
+msgstr ""
+
+#: ../../source/configure.rst:110
+msgid ""
+"MCDR also **adds these directories into ``sys.path`` ** so plugins can "
+"import packages inside plugin folders directly"
+msgstr ""
+
+#: ../../source/configure.rst:113
+msgid "Option type: a list of string"
+msgstr ""
+
+#: ../../source/configure.rst:114 ../../source/configure.rst:217
+#: ../../source/configure.rst:242 ../../source/configure.rst:264
+msgid "Default value:"
+msgstr ""
+
+#: ../../source/configure.rst:122 ../../source/configure.rst:224
+#: ../../source/configure.rst:249
+msgid "Example:"
+msgstr ""
+
+#: ../../source/configure.rst:132
+msgid "rcon"
+msgstr ""
+
+#: ../../source/configure.rst:134
+msgid ""
+"The setting for `rcon <https://wiki.vg/RCON>`__. If rcon is enabled, MCDR"
+" will start a rcon client to connect to the server after server rcon has "
+"started up. Then plugins can use rcon to query command from the server"
+msgstr ""
+
+#: ../../source/configure.rst:137
+msgid "rcon.enable"
+msgstr ""
+
+#: ../../source/configure.rst:139
+msgid "The switch of rcon"
+msgstr ""
+
+#: ../../source/configure.rst:142 ../../source/configure.rst:178
+#: ../../source/configure.rst:194 ../../source/configure.rst:203
+msgid "Option type: boolean"
+msgstr ""
+
+#: ../../source/configure.rst:143 ../../source/configure.rst:195
+#: ../../source/configure.rst:204
+msgid "Default value: ``false``"
+msgstr ""
+
+#: ../../source/configure.rst:146
+msgid "rcon.address"
+msgstr ""
+
+#: ../../source/configure.rst:148
+msgid "The address of the rcon server"
+msgstr ""
+
+#: ../../source/configure.rst:152
+msgid "Default value: ``127.0.0.1``"
+msgstr ""
+
+#: ../../source/configure.rst:155
+msgid "rcon.port"
+msgstr ""
+
+#: ../../source/configure.rst:157
+msgid "The port of the rcon server"
+msgstr ""
+
+#: ../../source/configure.rst:160
+msgid "Option type: integer"
+msgstr ""
+
+#: ../../source/configure.rst:161
+msgid "Default value: ``25575``"
+msgstr ""
+
+#: ../../source/configure.rst:164
+msgid "rcon.password"
+msgstr ""
+
+#: ../../source/configure.rst:166
+msgid "The password to connect to the rcon server"
+msgstr ""
+
+#: ../../source/configure.rst:170
+msgid "Default value: ``password``"
+msgstr ""
+
+#: ../../source/configure.rst:173
+msgid "check_update"
+msgstr ""
+
+#: ../../source/configure.rst:175
+msgid "If set to true, MCDR will detect if there's a new version every 24h"
+msgstr ""
+
+#: ../../source/configure.rst:179
+msgid "Default value: ``true``"
+msgstr ""
+
+#: ../../source/configure.rst:182
+msgid "Advance"
+msgstr ""
+
+#: ../../source/configure.rst:184
+msgid "Configure options for advance users"
+msgstr ""
+
+#: ../../source/configure.rst:187
+msgid "disable_console_thread"
+msgstr ""
+
+#: ../../source/configure.rst:189
+msgid ""
+"When set to true, MCDR will not start the console thread for handling "
+"console command input"
+msgstr ""
+
+#: ../../source/configure.rst:191
+msgid "Don't change it to true unless you know what you are doing"
+msgstr ""
+
+#: ../../source/configure.rst:198
+msgid "disable_console_color"
+msgstr ""
+
+#: ../../source/configure.rst:200
+msgid ""
+"When set to true, MCDR will removed all console font formatter codes in "
+"before any message gets printed onto the console"
+msgstr ""
+
+#: ../../source/configure.rst:207
+msgid "custom_handlers"
+msgstr ""
+
+#: ../../source/configure.rst:209
+msgid ""
+"A list of custom info reactor classes to handle the info instance. The "
+"classed need to be subclasses of ``AbstractServerHandler``"
+msgstr ""
+
+#: ../../source/configure.rst:211
+msgid ""
+"Then you can use the name of your handler in the `handler <#handler>`__ "
+"option above to use your handler"
+msgstr ""
+
+#: ../../source/configure.rst:213
+msgid "The name of a handler is defined in the get_name method"
+msgstr ""
+
+#: ../../source/configure.rst:216 ../../source/configure.rst:241
+msgid "Option type: a list of string, or null"
+msgstr ""
+
+#: ../../source/configure.rst:231
+msgid ""
+"In this example the custom handler package path is ``my.custom.handler`` "
+"and the class is name ``MyHandler``"
+msgstr ""
+
+#: ../../source/configure.rst:234
+msgid "custom_info_reactors"
+msgstr ""
+
+#: ../../source/configure.rst:236
+msgid ""
+"A list of custom info reactor classes to handle the info instance. The "
+"classed need to be subclasses of ``AbstractInfoReactor``"
+msgstr ""
+
+#: ../../source/configure.rst:238
+msgid ""
+"All custom info reactors will be registered to the reactor list to "
+"process information from the server"
+msgstr ""
+
+#: ../../source/configure.rst:256
+msgid ""
+"In this example the custom reactor package path is ``my.custom.reactor`` "
+"and the class name is ``MyInfoReactor``"
+msgstr ""
+
+#: ../../source/configure.rst:259
+msgid "debug"
+msgstr ""
+
+#: ../../source/configure.rst:261
+msgid ""
+"Debug logging switches. Set ``all`` to true to enable all debug logging, "
+"or set the specific option to enable specific debug logging"
+msgstr ""
+
+#~ msgid ""
+#~ "The configure file of MCDR is "
+#~ "config.yml. It's located and should be"
+#~ " located in the working directory of"
+#~ " MCDR"
+#~ msgstr ""
+
+#~ msgid "The configure file use YAML format"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "You can use command !!MCDR reload "
+#~ "config or its short form !!MCDR r"
+#~ " cfg to reload the config file "
+#~ "when MCDR is running"
+#~ msgstr ""
+
+#~ msgid "Default value: en_us"
+#~ msgstr ""
+
+#~ msgid "Available options: en_us, zh_cn"
+#~ msgstr ""
+
+#~ msgid "Default value: server"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "java -Xms1G -Xmx2G -jar minecraft_server.jar"
+#~ " nogui, if you want to launch a"
+#~ " Minecraft server"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "./start.sh, if you have already written"
+#~ " a startup script in the working "
+#~ "directory"
+#~ msgstr ""
+
+#~ msgid "Default value: java -Xms1G -Xmx2G -jar minecraft_server.jar nogui"
+#~ msgstr ""
+
+#~ msgid "Default value: vanilla_handler"
+#~ msgstr ""
+
+#~ msgid "Examples: utf8, gbk"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "MCDR also adds these directories into"
+#~ " sys.path so plugins can import "
+#~ "packages inside plugin folders directly"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "The setting for rcon. If rcon is"
+#~ " enabled, MCDR will start a rcon "
+#~ "client to connect to the server "
+#~ "after server rcon has started up. "
+#~ "Then plugins can use rcon to query"
+#~ " command from the server"
+#~ msgstr ""
+
+#~ msgid "Default value: false"
+#~ msgstr ""
+
+#~ msgid "Default value: 127.0.0.1"
+#~ msgstr ""
+
+#~ msgid "Default value: 25575"
+#~ msgstr ""
+
+#~ msgid "Default value: password"
+#~ msgstr ""
+
+#~ msgid "Default value: true"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "A list of custom info reactor "
+#~ "classes to handle the info instance. "
+#~ "The classed need to be subclasses "
+#~ "of AbstractServerHandler"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Then you can use the name of "
+#~ "your handler in the handler option "
+#~ "above to use your handler"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "In this example the custom handler "
+#~ "package path is my.custom.handler and "
+#~ "the class is name MyHandler"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "A list of custom info reactor "
+#~ "classes to handle the info instance. "
+#~ "The classed need to be subclasses "
+#~ "of AbstractInfoReactor"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "In this example the custom reactor "
+#~ "package path is my.custom.reactor and "
+#~ "the class name is MyInfoReactor"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Debug logging switches. Set all to "
+#~ "true to enable all debug logging, "
+#~ "or set the specific option to "
+#~ "enable specific debug logging"
+#~ msgstr ""
+

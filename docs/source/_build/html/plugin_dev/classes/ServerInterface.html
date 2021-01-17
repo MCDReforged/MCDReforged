@@ -1,0 +1,626 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>ServerInterface &mdash; MCDReforged 1.0.0 文档</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme_overrides.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/translations.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="Info" href="Info.html" />
+    <link rel="prev" title="Class References" href="classes.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> MCDReforged
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Home</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../quick_start.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../configure.html">Configure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../permission.html">Permission</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../command.html">Command</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../plugin_dev.html">Plugin Development</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../basic.html">Basic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../event.html">Plugin Event</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../command.html">Command</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html">API</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="classes.html">Class References</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">ServerInterface</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#property">Property</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#logger">logger</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#method">Method</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#server-control">Server Control</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#start">start</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#stop">stop</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#wait-for-start">wait_for_start</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#restart">restart</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#stop-exit">stop_exit</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#exit">exit</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#is-server-running">is_server_running</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#is-server-startup">is_server_startup</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#is-rcon-running">is_rcon_running</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#get-server-pid">get_server_pid</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="#text-interaction">Text Interaction</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#execute">execute</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#tell">tell</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#say">say</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#broadcast">broadcast</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#reply">reply</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="#plugin-operations">Plugin Operations</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#load-plugin">load_plugin</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#enable-plugin">enable_plugin</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#reload-plugin">reload_plugin</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#unload-plugin">unload_plugin</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#disable-plugin">disable_plugin</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#refresh-all-plugins">refresh_all_plugins</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#refresh-changed-plugins">refresh_changed_plugins</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#get-plugin-list">get_plugin_list</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#get-plugin-metadata">get_plugin_metadata</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#get-plugin-file-path">get_plugin_file_path</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#get-plugin-instance">get_plugin_instance</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="#plugin-registry">Plugin Registry</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#register-event-listener">register_event_listener</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#register-command">register_command</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#register-help-message">register_help_message</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#dispatch-event">dispatch_event</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="#permission">Permission</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#get-permission-level">get_permission_level</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#set-permission-level">set_permission_level</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="#misc">Misc</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#is-on-executor-thread">is_on_executor_thread</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#rcon-query">rcon_query</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Info.html">Info</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CommandSource.html">CommandSource</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CommandError.html">CommandError</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../dev_tips.html">Some tips</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../customize/customize.html">Customize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../migrate_from_0.x.html">Migrate from MCDR 0.x</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MCDReforged</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../plugin_dev.html">Plugin Development</a> &raquo;</li>
+        
+          <li><a href="classes.html">Class References</a> &raquo;</li>
+        
+      <li>ServerInterface</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../../_sources/plugin_dev/classes/ServerInterface.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="serverinterface">
+<h1>ServerInterface<a class="headerlink" href="#serverinterface" title="永久链接至标题">¶</a></h1>
+<p>ServerInterface is the interface for plugins to interact with the server. The first argument in all plugin events is always the ServerInterface. It’s recommend to use <code class="docutils literal notranslate"><span class="pre">server</span></code> as the parameter name of the ServerInterface argument which is widely used in this document</p>
+<p>You can check the code to see the implementation for deeper understanding</p>
+<div class="section" id="property">
+<h2>Property<a class="headerlink" href="#property" title="永久链接至标题">¶</a></h2>
+<div class="section" id="logger">
+<h3>logger<a class="headerlink" href="#logger" title="永久链接至标题">¶</a></h3>
+<p>A logger for logging message to the console</p>
+<p>Type: MCDReforgedLogger, which is inherited from <code class="docutils literal notranslate"><span class="pre">logging.Logger</span></code></p>
+</div>
+</div>
+<div class="section" id="method">
+<h2>Method<a class="headerlink" href="#method" title="永久链接至标题">¶</a></h2>
+<p>Methods in the SererInterface object are also the API interface for plugins to control the server and the MCDR</p>
+<div class="section" id="server-control">
+<h3>Server Control<a class="headerlink" href="#server-control" title="永久链接至标题">¶</a></h3>
+<div class="section" id="start">
+<h4>start<a class="headerlink" href="#start" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-></span> <span class="nb">bool</span>
+</pre></div>
+</div>
+<p>Start the server. Return if the action succeed.</p>
+<p>If the server is running or being starting by other plugin it will return <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
+</div>
+<div class="section" id="stop">
+<h4>stop<a class="headerlink" href="#stop" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-></span> <span class="kc">None</span>
+</pre></div>
+</div>
+<p>Soft shutting down the server by sending the correct stop command to the server</p>
+<p>This option will not stop MCDR</p>
+</div>
+<div class="section" id="wait-for-start">
+<h4>wait_for_start<a class="headerlink" href="#wait-for-start" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">wait_for_start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-></span> <span class="kc">None</span>
+</pre></div>
+</div>
+<p>Wait until the server is able to start. In other words, wait until the server is stopped</p>
+</div>
+<div class="section" id="restart">
+<h4>restart<a class="headerlink" href="#restart" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">restart</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-></span> <span class="kc">None</span>
+</pre></div>
+</div>
+<p>Restart the server</p>
+<p>It will first soft stop the server and then wait until the server is stopped, then start the server up</p>
+</div>
+<div class="section" id="stop-exit">
+<h4>stop_exit<a class="headerlink" href="#stop-exit" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">stop_exit</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-></span> <span class="kc">None</span>
+</pre></div>
+</div>
+<p>Soft stop the server and exit MCDR</p>
+</div>
+<div class="section" id="exit">
+<h4>exit<a class="headerlink" href="#exit" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">exit</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-></span> <span class="kc">None</span>
+</pre></div>
+</div>
+<p>Exit MCDR when the server is stopped</p>
+<p>If the server is running return False otherwise return True</p>
+</div>
+<div class="section" id="is-server-running">
+<h4>is_server_running<a class="headerlink" href="#is-server-running" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">is_server_running</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-></span> <span class="nb">bool</span>
+</pre></div>
+</div>
+<p>Return if the server is running</p>
+</div>
+<div class="section" id="is-server-startup">
+<h4>is_server_startup<a class="headerlink" href="#is-server-startup" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">is_server_startup</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-></span> <span class="nb">bool</span>
+</pre></div>
+</div>
+<p>Return if the server has started up</p>
+</div>
+<div class="section" id="is-rcon-running">
+<h4>is_rcon_running<a class="headerlink" href="#is-rcon-running" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">is_rcon_running</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-></span> <span class="nb">bool</span>
+</pre></div>
+</div>
+<p>Return if MCDR’s rcon is running</p>
+</div>
+<div class="section" id="get-server-pid">
+<h4>get_server_pid<a class="headerlink" href="#get-server-pid" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_server_pid</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-></span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Return the pid of the server process, None if the server is stopped</p>
+<p>Notes the process with this pid is a bash process, which is the parent process of real server process you might be interested in</p>
+</div>
+</div>
+<div class="section" id="text-interaction">
+<h3>Text Interaction<a class="headerlink" href="#text-interaction" title="永久链接至标题">¶</a></h3>
+<div class="section" id="execute">
+<h4>execute<a class="headerlink" href="#execute" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">encoding</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-></span> <span class="kc">None</span>
+</pre></div>
+</div>
+<p>Execute a command by sending the command content to server’s standard input stream</p>
+<p>Parameter <em>text</em>: The content of the command you want to send</p>
+<p>Keyword Parameter <em>encoding</em>: The encoding method for the text. Leave it empty to use the encoding method from the configure of MCDR</p>
+</div>
+<div class="section" id="tell">
+<h4>tell<a class="headerlink" href="#tell" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">tell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">RTextBase</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">encoding</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-></span> <span class="kc">None</span>
+</pre></div>
+</div>
+<p>Use command like <code class="docutils literal notranslate"><span class="pre">/tellraw</span></code> to send the message to the specific player</p>
+<p>Parameter <em>player</em>: The name of the player you want to tell</p>
+<p>Parameter <em>text</em>: the message you want to send to the player</p>
+<p>Keyword Parameter <em>encoding</em>: The encoding method for the text. Leave it empty to use the encoding method from the configure of MCDR</p>
+</div>
+<div class="section" id="say">
+<h4>say<a class="headerlink" href="#say" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">say</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">RTextBase</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">encoding</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-></span> <span class="kc">None</span>
+</pre></div>
+</div>
+<p>Use command like <code class="docutils literal notranslate"><span class="pre">/tellraw</span> <span class="pre">&#64;a</span></code> to send the message to broadcast the message in game</p>
+<p>Parameter <em>text</em>: the message you want to send</p>
+<p>Keyword Parameter <em>encoding</em>: The encoding method for the text. Leave it empty to use the encoding method from the configure of MCDR</p>
+</div>
+<div class="section" id="broadcast">
+<h4>broadcast<a class="headerlink" href="#broadcast" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">broadcast</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">RTextBase</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">encoding</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-></span> <span class="kc">None</span>
+</pre></div>
+</div>
+<p>Broadcast the message in game and to the console</p>
+<p>Parameter <em>text</em>: the message you want to send</p>
+<p>Keyword Parameter <em>encoding</em>: The encoding method for the text. Leave it empty to use the encoding method from the configure of MCDR</p>
+</div>
+<div class="section" id="reply">
+<h4>reply<a class="headerlink" href="#reply" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">reply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info</span><span class="p">:</span> <span class="n">Info</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">RTextBase</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">encoding</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">console_text</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">RTextBase</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Reply to the source of the Info</p>
+<p>If the Info is from a player then use tell to reply the player, otherwise if the Info is from the console use logger.info to output to the console. In the rest of the situations, the Info is not from a user, a IllegalCallError is raised</p>
+<p>Parameter <em>info</em>: the Info you want to reply to</p>
+<p>Parameter <em>text</em>: the message you want to send</p>
+<p>Keyword Parameter <em>console_text</em>: If it’s specified, console_text will be used instead of text when replying to console</p>
+<p>Keyword Parameter <em>encoding</em>: The encoding method for the text</p>
+</div>
+</div>
+<div class="section" id="plugin-operations">
+<h3>Plugin Operations<a class="headerlink" href="#plugin-operations" title="永久链接至标题">¶</a></h3>
+<p><strong>Notes</strong>: All plugin manipulation will trigger a dependency check, which might cause unwanted plugin operations</p>
+<div class="section" id="load-plugin">
+<h4>load_plugin<a class="headerlink" href="#load-plugin" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">load_plugin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">plugin_file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-></span> <span class="nb">bool</span>
+</pre></div>
+</div>
+<p>Load a plugin from the given file path. Return if the plugin gets loaded successfully</p>
+<p>Parameter <em>plugin_file_path</em>: The file path of the plugin to load. Example: <code class="docutils literal notranslate"><span class="pre">plugins/my_plugin.py</span></code></p>
+</div>
+<div class="section" id="enable-plugin">
+<h4>enable_plugin<a class="headerlink" href="#enable-plugin" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">enable_plugin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">plugin_file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-></span> <span class="nb">bool</span>
+</pre></div>
+</div>
+<p>Enable an unloaded plugin from the given path. Return if the plugin gets enabled successfully</p>
+<p>Parameter <em>plugin_file_path</em>: The file path of the plugin to enable. Example: “plugins/my_plugin.py.disabled”</p>
+</div>
+<div class="section" id="reload-plugin">
+<h4>reload_plugin<a class="headerlink" href="#reload-plugin" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">reload_plugin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">plugin_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-></span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Reload a plugin specified by plugin id. Return a bool indicating if the plugin gets reloaded successfully, or None if plugin not found</p>
+<p>Parameter <em>plugin_id</em>: The id of the plugin to reload. Example: “my_plugin”</p>
+</div>
+<div class="section" id="unload-plugin">
+<h4>unload_plugin<a class="headerlink" href="#unload-plugin" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">unload_plugin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">plugin_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-></span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Unload a plugin specified by plugin id. Return a bool indicating if the plugin gets unloaded successfully, or None if plugin not found</p>
+<p>Parameter <em>plugin_id</em>: The id of the plugin to unload. Example: “my_plugin”</p>
+</div>
+<div class="section" id="disable-plugin">
+<h4>disable_plugin<a class="headerlink" href="#disable-plugin" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">disable_plugin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">plugin_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-></span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Disable a plugin specified by plugin id. Return a bool indicating if the plugin gets disabled successfully, or None if plugin not found</p>
+<p>Parameter <em>plugin_id</em>: The id of the plugin to disable. Example: “my_plugin”</p>
+</div>
+<div class="section" id="refresh-all-plugins">
+<h4>refresh_all_plugins<a class="headerlink" href="#refresh-all-plugins" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">refresh_all_plugins</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-></span> <span class="kc">None</span>
+</pre></div>
+</div>
+<p>Reload all plugins, load all new plugins and then unload all removed plugins</p>
+</div>
+<div class="section" id="refresh-changed-plugins">
+<h4>refresh_changed_plugins<a class="headerlink" href="#refresh-changed-plugins" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">refresh_all_plugins</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-></span> <span class="kc">None</span>
+</pre></div>
+</div>
+<p>Reload all changed plugins, load all new plugins and then unload all removed plugins</p>
+</div>
+<div class="section" id="get-plugin-list">
+<h4>get_plugin_list<a class="headerlink" href="#get-plugin-list" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_plugin_list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-></span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Return a list containing all loaded plugin id like [“my_plugin”, “another_plugin”]</p>
+</div>
+<div class="section" id="get-plugin-metadata">
+<h4>get_plugin_metadata<a class="headerlink" href="#get-plugin-metadata" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_plugin_list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-></span> <span class="n">Optional</span><span class="p">[</span><span class="n">Metadata</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Return the metadata of the specified plugin, or None if the plugin doesn’t exist</p>
+<p>Parameter <em>plugin_id</em>: The plugin id of the plugin to query metadata</p>
+</div>
+<div class="section" id="get-plugin-file-path">
+<h4>get_plugin_file_path<a class="headerlink" href="#get-plugin-file-path" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_plugin_list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-></span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Return the file path of the specified plugin, or None if the plugin doesn’t exist</p>
+<p>Parameter <em>plugin_id</em>: The plugin id of the plugin to query file path</p>
+</div>
+<div class="section" id="get-plugin-instance">
+<h4>get_plugin_instance<a class="headerlink" href="#get-plugin-instance" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_plugin_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-></span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Return the current loaded plugin instance, or None if the plugin doesn’t exist. With this api your plugin can access the same plugin instance to MCDR</p>
+<p>It’s quite important to use this instead of manually import the plugin you want if the target plugin needs to react to events from MCDR</p>
+<p>Parameter <em>plugin_id</em>: The plugin id of the plugin you want</p>
+<p>Example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># My API plugin with id my_api</span>
+<span class="k">def</span> <span class="nf">info_query_api</span><span class="p">(</span><span class="n">item</span><span class="p">):</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Another plugin that needs My API</span>
+<span class="n">server</span><span class="o">.</span><span class="n">get_plugin_instance</span><span class="p">(</span><span class="s1">&#39;my_api&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">info_query_api</span><span class="p">(</span><span class="n">an_item</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="plugin-registry">
+<h3>Plugin Registry<a class="headerlink" href="#plugin-registry" title="永久链接至标题">¶</a></h3>
+<div class="section" id="register-event-listener">
+<h4>register_event_listener<a class="headerlink" href="#register-event-listener" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">register_event_listener</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">PluginEvent</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">priority</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">)</span> <span class="o">-></span> <span class="kc">None</span>
+</pre></div>
+</div>
+<p>Register an event listener for the current plugin</p>
+<p>Raise an <code class="docutils literal notranslate"><span class="pre">IllegalCallError</span></code> if it’s not invoked in the task executor thread</p>
+<p>Parameter <em>event</em>: The id of the event, or a PluginEvent instance. It indicates the target event for the plugin to listen</p>
+<p>Parameter <em>callback</em>: The callback listener method for the event</p>
+<p>Parameter <em>priority</em>: The priority of the listener. It will be set to the default value 1000 if it’s not specified</p>
+</div>
+<div class="section" id="register-command">
+<h4>register_command<a class="headerlink" href="#register-command" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">register_command</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root_node</span><span class="p">:</span> <span class="n">Literal</span><span class="p">)</span> <span class="o">-></span> <span class="kc">None</span>
+</pre></div>
+</div>
+<p>Register an event listener for the current plugin</p>
+<p>Raise an <code class="docutils literal notranslate"><span class="pre">IllegalCallError</span></code> if it’s not invoked in the task executor thread</p>
+<p>Parameter <em>root_node</em>: The root node of your command tree. It should be a <code class="docutils literal notranslate"><span class="pre">Literal</span></code> node</p>
+</div>
+<div class="section" id="register-help-message">
+<h4>register_help_message<a class="headerlink" href="#register-help-message" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">register_help_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">RTextBase</span><span class="p">],</span> <span class="n">permission</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">PermissionLevel</span><span class="o">.</span><span class="n">MINIMUM_LEVEL</span><span class="p">)</span> <span class="o">-></span> <span class="kc">None</span>
+</pre></div>
+</div>
+<p>Register a help message for the current plugin, which is used in !!help command</p>
+<p>Raise an <code class="docutils literal notranslate"><span class="pre">IllegalCallError</span></code> if it’s not invoked in the task executor thread</p>
+<p>Parameter <em>prefix</em>: The help command of your plugin. When player click on the displayed message it will suggest this prefix parameter to the player. It’s recommend to set it to the entry command of your plugin</p>
+<p>Parameter <em>message</em>: A neat command description</p>
+<p>Parameter <em>permission</em>: The minimum permission level for the user to see this help message. With default, anyone can see this message</p>
+</div>
+<div class="section" id="dispatch-event">
+<h4>dispatch_event<a class="headerlink" href="#dispatch-event" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">dispatch_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">PluginEvent</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="o">...</span><span class="p">])</span> <span class="o">-></span> <span class="kc">None</span>
+</pre></div>
+</div>
+<p>Dispatch an event to all loaded plugins</p>
+<p>The event will be immediately dispatch if it’s on the task executor thread, or gets enqueued if it’s on other thread</p>
+<p>Parameter <em>event</em>: The event to dispatch. It need to be a <code class="docutils literal notranslate"><span class="pre">PluginEvent</span></code> instance. For simple usage, you can create a <code class="docutils literal notranslate"><span class="pre">LiteralEvent</span></code> instance for this argument</p>
+<p>Parameter <em>args</em>: The argument that will be used to invoke the event listeners. An ServerInterface instance will be automatically added to the beginning of the argument list</p>
+<p><strong>Note</strong>: You cannot dispatch an event with the same event id to any MCDR built-in event</p>
+</div>
+</div>
+<div class="section" id="permission">
+<h3>Permission<a class="headerlink" href="#permission" title="永久链接至标题">¶</a></h3>
+<div class="section" id="get-permission-level">
+<h4>get_permission_level<a class="headerlink" href="#get-permission-level" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_permission_level</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Info</span><span class="p">,</span> <span class="n">CommandSource</span><span class="p">])</span> <span class="o">-></span> <span class="nb">int</span>
+</pre></div>
+</div>
+<p>Return an int indicating permission level number the given object has</p>
+<p>The object could be a str indicating the name of a player, an Info instance or a command source</p>
+<p>Parameter <em>obj</em>: The object your are querying</p>
+<p>It raises <code class="docutils literal notranslate"><span class="pre">TypeError</span></code> if the type of the given object is not supported for permission querying</p>
+</div>
+<div class="section" id="set-permission-level">
+<h4>set_permission_level<a class="headerlink" href="#set-permission-level" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">set_permission_level</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-></span> <span class="kc">None</span>
+</pre></div>
+</div>
+<p>Set the permission level of the given player. It raises <code class="docutils literal notranslate"><span class="pre">TypeError</span></code> if the value parameter doesn’t proper represent a permission level</p>
+<p>Parameter <em>player</em>: The name of the player that you want to set his/her permission level</p>
+<p>Parameter <em>value</em>: The target permission level you want to set the player to. It can be an int or a str as long as it’s related to the permission level. Available examples: 1, ‘1’, ‘user’</p>
+</div>
+</div>
+<div class="section" id="misc">
+<h3>Misc<a class="headerlink" href="#misc" title="永久链接至标题">¶</a></h3>
+<div class="section" id="is-on-executor-thread">
+<h4>is_on_executor_thread<a class="headerlink" href="#is-on-executor-thread" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">is_on_executor_thread</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-></span> <span class="nb">bool</span>
+</pre></div>
+</div>
+<p>Return if the current thread is the task executor thread</p>
+<p>Task executor thread is the main thread to parse messages and trigger listeners where some ServerInterface APIs  are required to be invoked on</p>
+</div>
+<div class="section" id="rcon-query">
+<h4>rcon_query<a class="headerlink" href="#rcon-query" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">rcon_query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-></span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Send command to the server through rcon connection. Return the result that server returned from rcon. Return None if rcon is not running or rcon query failed</p>
+<p>Parameter <em>command</em>: The command you want to send to the rcon server</p>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="Info.html" class="btn btn-neutral float-right" title="Info" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="classes.html" class="btn btn-neutral float-left" title="Class References" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; 版权所有 2021, Fallen_Breath.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,429 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Plugin Event &mdash; MCDReforged 1.0.0 文档</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme_overrides.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/translations.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜索" href="../search.html" />
+    <link rel="next" title="Command" href="command.html" />
+    <link rel="prev" title="MCDR Plugin" href="basic.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> MCDReforged
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Home</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../quick_start.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configure.html">Configure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../permission.html">Permission</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../command.html">Command</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="plugin_dev.html">Plugin Development</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="basic.html">Basic</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Plugin Event</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#register-a-event-listener">Register a event listener</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mcdr-event">MCDR Event</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#default-event-listener">Default Event Listener</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mcdr-event-list">MCDR Event List</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#plugin-loaded">Plugin Loaded</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#plugin-unloaded">Plugin Unloaded</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#plugin-removed">Plugin Removed</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#general-info">General Info</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#user-info">User Info</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#server-start">Server Start</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#server-startup">Server Startup</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#server-stop">Server Stop</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#mcdr-start">MCDR Start</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#mcdr-stop">MCDR Stop</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#player-joined">Player Joined</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#player-left">Player Left</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#custom-event">Custom Event</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="command.html">Command</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html">API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classes/classes.html">Class References</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev_tips.html">Some tips</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../customize/customize.html">Customize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../migrate_from_0.x.html">Migrate from MCDR 0.x</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">MCDReforged</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="plugin_dev.html">Plugin Development</a> &raquo;</li>
+        
+      <li>Plugin Event</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/plugin_dev/event.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="plugin-event">
+<h1>Plugin Event<a class="headerlink" href="#plugin-event" title="永久链接至标题">¶</a></h1>
+<p>Plugin events are the most important way for plugins to interact with the server and the console</p>
+<p>When the server has trigger a specific event, it will list out all event listeners that have registered to this event, then MCDR will invoke the callback function of the listener with the given arguments</p>
+<p>Event Listeners have a priority value. The default priority is <code class="docutils literal notranslate"><span class="pre">1000</span></code>. Plugins can specify the priority when they register an event listener manually. MCDR will execute event listeners in ascending order according to the priority</p>
+<div class="section" id="register-a-event-listener">
+<h2>Register a event listener<a class="headerlink" href="#register-a-event-listener" title="永久链接至标题">¶</a></h2>
+<p>See the <a class="reference external" href="basic.html#event-listeners">Event listeners</a> section in Plugin Registry in the document of <a class="reference internal" href="basic.html"><span class="doc">MCDR Plugin</span></a></p>
+</div>
+<div class="section" id="mcdr-event">
+<h2>MCDR Event<a class="headerlink" href="#mcdr-event" title="永久链接至标题">¶</a></h2>
+<div class="section" id="default-event-listener">
+<h3>Default Event Listener<a class="headerlink" href="#default-event-listener" title="永久链接至标题">¶</a></h3>
+<p>All of the MCDR events have an attribute called “Default function name”. If your plugin declare a function in the global slope of the plugin file, with the same name to the “Default function name”, the function will be automatically registered as a listener to the specific event.</p>
+<p>The priority of these event listeners are always the default priority (<code class="docutils literal notranslate"><span class="pre">1000</span></code>)</p>
+</div>
+<div class="section" id="mcdr-event-list">
+<h3>MCDR Event List<a class="headerlink" href="#mcdr-event-list" title="永久链接至标题">¶</a></h3>
+<div class="section" id="plugin-loaded">
+<h4>Plugin Loaded<a class="headerlink" href="#plugin-loaded" title="永久链接至标题">¶</a></h4>
+<p>Plugin load event is triggered once when a plugin is loaded. Plugins are supposed to register some event listeners, commands and help messages as well as initialize their fields here</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">on_load</span><span class="p">(</span><span class="n">server</span><span class="p">:</span> <span class="n">ServerInterface</span><span class="p">,</span> <span class="n">prev_module</span><span class="p">):</span>
+    <span class="n">server</span><span class="o">.</span><span class="n">register_command</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+    <span class="n">server</span><span class="o">.</span><span class="n">register_event_listener</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+    <span class="n">server</span><span class="o">.</span><span class="n">register_help_message</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If it’s a plugin reload, <code class="docutils literal notranslate"><span class="pre">prev_module</span></code> argument indicates the previous plugin instance module, otherwise if it’s the first time to load the plugin, prev_module is None. With this parameter plugin can easily inherit information from the previous plugin instance. Here’s an example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">on_load</span><span class="p">(</span><span class="n">server</span><span class="p">:</span> <span class="n">ServerInterface</span><span class="p">,</span> <span class="n">prev_module</span><span class="p">):</span>
+    <span class="k">global</span> <span class="n">reload_counter</span>
+    <span class="k">if</span> <span class="n">prev_module</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">reload_counter</span> <span class="o">=</span> <span class="n">prev_module</span><span class="o">.</span><span class="n">reload_counter</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">reload_counter</span> <span class="o">=</span> <span class="mi">0</span>
+</pre></div>
+</div>
+<p>Note: Since it’s the first event in the lifecycle of a plugin, this event can only be registered with default event listener, so the <code class="docutils literal notranslate"><span class="pre">on_load</span></code> function is the entry spot of your plugin</p>
+<ul class="simple">
+<li><p>Event id: mcdr.plugin_loaded</p></li>
+<li><p>Callback arguments: ServerInterface, prev_plugin_module</p></li>
+<li><p>Default function name: on_load</p></li>
+</ul>
+</div>
+<div class="section" id="plugin-unloaded">
+<h4>Plugin Unloaded<a class="headerlink" href="#plugin-unloaded" title="永久链接至标题">¶</a></h4>
+<p>This even is trigger when MCDR unload the plugin instance. It can be caused by a plugin reload or a plugin unload</p>
+<ul class="simple">
+<li><p>Event id: mcdr.plugin_unloaded</p></li>
+<li><p>Callback arguments: ServerInterface</p></li>
+<li><p>Default function name: on_unload</p></li>
+</ul>
+</div>
+<div class="section" id="plugin-removed">
+<h4>Plugin Removed<a class="headerlink" href="#plugin-removed" title="永久链接至标题">¶</a></h4>
+<p>This even is trigger when MCDR remove the plugin. It can only be caused by a plugin unload. It’s time to do some clean up for your plugin</p>
+<p>Another event for plugin to do some cleanup is <a class="reference external" href="#mcdr-stop">MCDR Stop</a> event</p>
+<p>Here is an example usage</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">on_remove</span><span class="p">(</span><span class="n">server</span><span class="p">:</span> <span class="n">ServerInterface</span><span class="p">,</span> <span class="n">info</span><span class="p">:</span> <span class="n">Info</span><span class="p">):</span>
+    <span class="n">my_network_connection</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
+    <span class="n">stop_my_new_thread</span><span class="p">()</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Event id: mcdr.plugin_removed</p></li>
+<li><p>Callback arguments: ServerInterface</p></li>
+<li><p>Default function name: on_remove</p></li>
+</ul>
+</div>
+<div class="section" id="general-info">
+<h4>General Info<a class="headerlink" href="#general-info" title="永久链接至标题">¶</a></h4>
+<p>A new line of text is output from the stdout of the server, or a text is input from the console. MCDR has already parsed the text into an <a class="reference internal" href="classes/Info.html"><span class="doc">Info</span></a> object. In this event plugin can response to the info</p>
+<p>Here’s an example</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">on_info</span><span class="p">(</span><span class="n">server</span><span class="p">:</span> <span class="n">ServerInterface</span><span class="p">,</span> <span class="n">info</span><span class="p">:</span> <span class="n">Info</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">info</span><span class="o">.</span><span class="n">is_user</span> <span class="ow">and</span> <span class="n">re</span><span class="o">.</span><span class="n">fullmatch</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Starting Minecraft server on \S*&#39;</span><span class="p">,</span> <span class="n">info</span><span class="o">.</span><span class="n">content</span><span class="p">):</span>
+        <span class="n">server</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Minecraft is starting at address </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">info</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]))</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Event id: mcdr.general_info</p></li>
+<li><p>Callback arguments: ServerInterface, Info</p></li>
+<li><p>Default function name: on_info</p></li>
+</ul>
+</div>
+<div class="section" id="user-info">
+<h4>User Info<a class="headerlink" href="#user-info" title="永久链接至标题">¶</a></h4>
+<p>User Info event is very similar to General Info event, but it only gets triggered when the info is sent by a user, more precisely, <code class="docutils literal notranslate"><span class="pre">info.is_user</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code></p>
+<p>If you want a simple way to handle user input, you can use this event</p>
+<p>Here’s an example</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">on_info</span><span class="p">(</span><span class="n">server</span><span class="p">:</span> <span class="n">ServerInterface</span><span class="p">,</span> <span class="n">info</span><span class="p">:</span> <span class="n">Info</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">info</span><span class="o">.</span><span class="n">content</span> <span class="o">==</span> <span class="s1">&#39;Who am I?&#39;</span><span class="p">:</span>
+        <span class="n">server</span><span class="o">.</span><span class="n">reply</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="s1">&#39;You are </span><span class="si">{}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">info</span><span class="o">.</span><span class="n">player</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>If you want to have a not-simple command system, rather than parsing them manually in User Info event, I will suggest you to register a command tree for you plugin. See the <a class="reference external" href="basic.html#command">command registering</a> doc</p>
+<ul class="simple">
+<li><p>Event id: mcdr.user_info</p></li>
+<li><p>Callback arguments: ServerInterface, Info</p></li>
+<li><p>Default function name: on_user_info</p></li>
+</ul>
+</div>
+<div class="section" id="server-start">
+<h4>Server Start<a class="headerlink" href="#server-start" title="永久链接至标题">¶</a></h4>
+<p>The server process is just started by MCDR</p>
+<ul class="simple">
+<li><p>Event id: mcdr.server_start</p></li>
+<li><p>Callback arguments: ServerInterface</p></li>
+<li><p>Default function name: on_server_start</p></li>
+</ul>
+</div>
+<div class="section" id="server-startup">
+<h4>Server Startup<a class="headerlink" href="#server-startup" title="永久链接至标题">¶</a></h4>
+<p>The server has fully started up. For example, a vanilla Minecraft server outputs <code class="docutils literal notranslate"><span class="pre">Done</span> <span class="pre">(1.0s)!</span> <span class="pre">For</span> <span class="pre">help,</span> <span class="pre">type</span> <span class="pre">&quot;help&quot;</span></code></p>
+<ul class="simple">
+<li><p>Event id: mcdr.server_startup</p></li>
+<li><p>Callback arguments: ServerInterface</p></li>
+<li><p>Default function name: on_server_startup</p></li>
+</ul>
+</div>
+<div class="section" id="server-stop">
+<h4>Server Stop<a class="headerlink" href="#server-stop" title="永久链接至标题">¶</a></h4>
+<p>The server process stops. You can do something depends on the process return code</p>
+<p>Example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">on_server_stop</span><span class="p">(</span><span class="n">server</span><span class="p">:</span> <span class="n">ServerInterface</span><span class="p">,</span> <span class="n">server_return_code</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">server_return_code</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">server</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Is it a server crash?&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Event id: mcdr.server_stop</p></li>
+<li><p>Callback arguments: ServerInterface, server_return_code</p></li>
+<li><p>Default function name: on_server_stop</p></li>
+</ul>
+</div>
+<div class="section" id="mcdr-start">
+<h4>MCDR Start<a class="headerlink" href="#mcdr-start" title="永久链接至标题">¶</a></h4>
+<p>The MCDR is starting. Only plugins which is loaded with MCDR is able to receive this event</p>
+<ul class="simple">
+<li><p>Event id: mcdr.mcdr_start</p></li>
+<li><p>Callback arguments: ServerInterface</p></li>
+<li><p>Default function name: on_mcdr_start</p></li>
+</ul>
+</div>
+<div class="section" id="mcdr-stop">
+<h4>MCDR Stop<a class="headerlink" href="#mcdr-stop" title="永久链接至标题">¶</a></h4>
+<p>The MCDR is stopping. Time to do some clean up like <a class="reference external" href="#plugin-removed">Plugin Removed</a> event</p>
+<ul class="simple">
+<li><p>Event id: mcdr.mcdr_stop</p></li>
+<li><p>Callback arguments: ServerInterface</p></li>
+<li><p>Default function name: on_mcdr_stop</p></li>
+</ul>
+</div>
+<div class="section" id="player-joined">
+<h4>Player Joined<a class="headerlink" href="#player-joined" title="永久链接至标题">¶</a></h4>
+<p>A player just joined the game. MCDR only parses the name of the player to a string, plugin can use the info instance for more custom information parsing</p>
+<p>Example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">on_player_joined</span><span class="p">(</span><span class="n">server</span><span class="p">:</span> <span class="n">ServerInterface</span><span class="p">,</span> <span class="n">player</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">info</span><span class="p">:</span> <span class="n">Info</span><span class="p">):</span>
+    <span class="n">server</span><span class="o">.</span><span class="n">say</span><span class="p">(</span><span class="s1">&#39;Welcome </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">player</span><span class="p">))</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Event id: mcdr.player_joined</p></li>
+<li><p>Callback arguments: ServerInterface, player_name, Info</p></li>
+<li><p>Default function name:</p></li>
+</ul>
+</div>
+<div class="section" id="player-left">
+<h4>Player Left<a class="headerlink" href="#player-left" title="永久链接至标题">¶</a></h4>
+<p>A player just left the game. Plugin can do cleanups for player related objects</p>
+<ul class="simple">
+<li><p>Event id: mcdr.player_left</p></li>
+<li><p>Callback arguments: ServerInterface, player_name</p></li>
+<li><p>Default function name:</p></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="custom-event">
+<h2>Custom Event<a class="headerlink" href="#custom-event" title="永久链接至标题">¶</a></h2>
+<p>Besides MCDR itself, plugins can also dispatch its own event. All you need to do is invoking <code class="docutils literal notranslate"><span class="pre">server.dispatch_event</span></code> api with the event and some arguments. Check <a class="reference external" href="classes/ServerInterface.html#dispatch-event">here</a> for more details of the api</p>
+<p>Customizing event is a good way to broadcast a message between plugins. It’s also a good indirectly way for your plugin to react to requests from other plugins</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="command.html" class="btn btn-neutral float-right" title="Command" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="basic.html" class="btn btn-neutral float-left" title="MCDR Plugin" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; 版权所有 2021, Fallen_Breath.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

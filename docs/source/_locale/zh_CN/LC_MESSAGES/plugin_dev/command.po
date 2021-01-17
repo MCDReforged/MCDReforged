@@ -1,0 +1,1087 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Fallen_Breath
+# This file is distributed under the same license as the MCDReforged
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2021.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: MCDReforged \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-01-17 13:15+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.0\n"
+
+#: ../../source/plugin_dev/command.rst:3
+msgid "Command"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:5
+msgid ""
+"Tired of manually splitting argument and parsing commands? Being annoyed "
+"by the complicated argument conditions? Go try the MCDR command building "
+"system!"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:7
+msgid ""
+"MCDR contains a command tree building system for plugins to build their "
+"commands. It behaves like a lite version of mojang's `brigadier "
+"<https://github.com/Mojang/brigadier>`__"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:10
+msgid "Workflow"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:12
+msgid ""
+"MCDR maintains a dict to store registered commands. Any value in the "
+"storage dict is a list of literal node as a root node of a command tree, "
+"and the related key is the literal value of the root literal node. With "
+"it, MCDR can quickly find the possible command tree that might accept the"
+" incoming command"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:14
+msgid ""
+"Every time when a user info is being processed, MCDR will try to parse "
+"the user input as a command. It will takes the first segment of the user "
+"input as a key to query the command tree storage dict. **If it gets any, "
+"it will prevent the info to be sent to the standard input stream of the "
+"server** by invoking ``info.cancel_send_to_server()``\\ , then it will "
+"let the found command trees to handle the command."
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:16
+msgid ""
+"If an command error occurs and the error has not been set to handled, "
+"MCDR will sent the default translated command error message to the "
+"command source"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:19
+msgid "A Quick Peek"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:21
+msgid ""
+"Let's peek into the actual operation of a command tree. As an example, "
+"let's say that there are 3 kinds of commands:"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:24
+msgid "``!!email list``"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:25
+msgid "``!!email remove <email_id>``"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:26
+msgid "``!!email send <player> <message>``"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:28
+msgid ""
+"To implement these commands, we can build a command tree with MCDR like "
+"this:"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:40
+msgid ""
+"When MCDR executes the command ``!!email remove 21``\\ , the following "
+"things will happen"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:43
+msgid "Parsing at node ``Literal('!!email')`` with command ``!!email remove 21``"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:45
+msgid ""
+"Literal Node ``Literal('!!email')`` gets the first element of ``!!email "
+"remove 21``\\ , it's ``!!email`` and it matches the literal node"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:46
+msgid "Now the remaining command is ``remove 21``"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:47
+msgid ""
+"And then, it searches through its literal children, found the child node "
+"``Literal('remove')`` matches the next literal element ``remove``"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:48
+msgid "Then it let that child node to handle the rest of the command"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:50
+msgid "Parsing at node ``Literal('remove')`` with command ``remove 21``"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:52
+msgid ""
+"Literal Node ``Literal('remove')`` gets the first element of ``remove "
+"21``\\ , it's ``remove`` and it matches the literal node"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:53
+msgid "Now the remaining command is ``21``"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:54
+msgid ""
+"And then it searches through its literal children, but doesn't found any "
+"literal child matches the next element ``21``"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:55
+msgid ""
+"So it let its non-literal child ``Integer('email_id')`` to handle the "
+"rest of the command"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:57
+msgid "Parsing at node ``Integer('email_id')`` with command ``21``"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:59
+msgid ""
+"Integer Node ``Integer('email_id')`` gets the first element of ``21``\\ ,"
+" it's a legal integer"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:60
+msgid "It store the value ``21`` to the context dict with key ``email_id``"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:61
+msgid ""
+"And then it finds that the command parsing is already finished so it "
+"invokes the callback function with the command source and the context "
+"dict as the argument."
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:62
+msgid "The command parsing finishes"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:64
+msgid ""
+"This is a quick overview of the implantation logic part of command "
+"building system. It's mainly for help you build a perceptual "
+"understanding of the command tree based command building system"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:66
+msgid ""
+"Matching the literal nodes, parsing the remaining command, storing the "
+"parsed value inside the context dict, this is how the command system "
+"works"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:68
+msgid ""
+"Rather than reading this document, anther good way to learn to use the "
+"MCDR command building system is to refer and imitate existing codes. You "
+"can find the command building code of ``!!MCDR`` command in the "
+"``__register_commands`` method of class "
+"``mcdreforged.plugin.permanent.mcdreforged_plugin.MCDReforgedPlugin``"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:71
+msgid "Argument Nodes"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:73
+msgid "A list of MCDR built-in argument nodes and their usage"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:76
+msgid "ArgumentNode"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:78
+msgid ""
+"Argument Node is base node of all argument nodes. It's also a abstract "
+"class. It provides several methods for building up the command tree"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:81
+msgid "then"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:87
+msgid "Attach a child node to its children list, and then return itself"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:89
+msgid "It's used for building the command tree structure"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:91
+msgid ""
+"Parameter *node*\\ : A node instance to be added to current node's "
+"children list"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:93
+msgid ""
+"The command tree in the `Quick Peek <#a-quick-peek>`__ section can be "
+"built with the following codes"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:118
+msgid "runs"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:124
+msgid ""
+"Set the callback function of this node. When the command parsing finished"
+" at this node, the callback function will be executed"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:126
+msgid ""
+"Parameter *func*\\ : A callable that accepts up to 2 arguments. Argument "
+"list: ``CommandSource``\\ , ``dict`` (context)"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:128
+msgid ""
+"The callback function is allowed to accepted 0 to 2 arguments (a "
+"``CommandSource`` as command source and a ``dict`` as context). For "
+"example, the following 4 functions are available callbacks"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:147
+msgid "Both of them can be used as the argument of the ``runs`` method"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:149
+msgid ""
+"This dynamic callback argument adaptation is used in all callback "
+"invoking of the command nodes"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:152
+msgid "requires"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:158
+msgid ""
+"Set the requirement tester callback of the node. When entering this node,"
+" MCDR will invoke the requirement tester to see if the current command "
+"source and context match your specific condition."
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:160
+msgid ""
+"If the tester callback return True, nothing will happen, MCDR will "
+"continue parsing the rest of the command"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:162
+msgid ""
+"If the tester callback return False, a ``RequirementNotMet`` exception "
+"will be risen. At this time if the *failure_message_getter* parameter is "
+"available, MCDR will invoke *failure_message_getter* to get the message "
+"string as the ``RequirementNotMet`` exception, otherwise a default "
+"message will be used"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:164
+msgid ""
+"Parameter *requirement*\\ : A callable that accepts up to 2 arguments and"
+" returns a bool. Argument list: ``CommandSource``\\ , ``dict`` (context)"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:166
+msgid ""
+"Parameter *failure_message_getter*\\ : An optional callable that accepts "
+"up to 2 arguments and returns a str. Argument list: ``CommandSource``\\ ,"
+" ``dict`` (context)"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:168
+msgid "Some Example usages:"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:177
+msgid "redirects"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:183
+msgid ""
+"Redirect all further child nodes command parsing to another given node. "
+"When you want a short command and and full-path command that will all "
+"execute the same commands, ``redirects`` will make it simpler"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:185
+msgid ""
+"Parameter *redirect_node*\\ : A node instance which current node is "
+"redirecting to"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:187
+#: ../../source/plugin_dev/command.rst:257
+msgid "Examples:"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:201
+msgid "Command starts at *root_executor*"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:203
+msgid "These commands:"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:206
+msgid "\"foo a long way to the command x\""
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:207
+msgid "\"foo a long way to the command y\""
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:208
+msgid "\"foo a long way to the command z\""
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:210
+msgid "are the same to"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:213
+msgid "\"foo quick x\""
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:214
+msgid "\"foo quick y\""
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:215
+msgid "\"foo quick z\""
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:217
+msgid ""
+"Pay attention to the difference between ``redirects`` and ``then``. "
+"``redirects`` is to redirect the child nodes, and ``then`` is to add a "
+"child node. If you do something like this:"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:224
+msgid "Then all commands which eventually executes ``do_something1`` will be:"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:227
+msgid "``foo a long way to the command x``"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:228
+msgid "``foo quick x``"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:229
+msgid "``foo fast command x``"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:232
+msgid "on_error"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:238
+msgid ""
+"When a command error occurs, the given will invoke the given handler to "
+"handle with the error"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:240
+msgid "Parameter *error_type*\\ : A class that is subclass of CommandError"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:242
+msgid ""
+"Parameter *handler*\\ : A callable that accepts up to 3 arguments. "
+"Argument list: ``CommandSource``\\ , ``CommandError``\\ , ``dict`` "
+"(context)"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:244
+msgid ""
+"Keyword Parameter *handled*\\ : If handled is set to True, "
+"``error.set_handled()`` is called automatically when invoking the handler"
+" callback"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:246
+msgid ""
+"For uses about ``error.set_handled()``\\ , check the `CommandError "
+"<classes/CommandError.html#set-handled>`__ class reference"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:249
+msgid "Literal"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:251
+msgid ""
+"Literal node is a special node. It doesn't output any value. It's more "
+"like a command branch carrier"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:253
+msgid ""
+"Literal node can accept a str as its literal in its constructor. A "
+"literal node accepts the parsing command only when the next element of "
+"the parsing command exactly matches the literal of the node"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:255
+msgid "Literal node is the only node that can start a command execution"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:267
+msgid "NumberNode"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:269
+msgid ""
+"It's an abstract class. It's inherited by ``Number``\\ , ``Integer`` and "
+"``Float``. It represents a type of number based node"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:271
+msgid ""
+"For a ``NumberNode`` instance, you can restrict the range of the number "
+"argument. If the parsed number is out of range, a ``NumberOutOfRange`` "
+"exception will be risen"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:273
+msgid "By default there's no range restriction"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:276
+msgid "at_min"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:282
+msgid "Set the lower boundary of the range restriction to *min_value*"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:285
+msgid "at_max"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:291
+msgid "Set the higher boundary of the range restriction to *max_value*"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:294
+msgid "in_range"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:300
+msgid ""
+"Set the lower and the higher boundary of the range restriction at the "
+"same time"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:303
+msgid "Number"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:305
+msgid ""
+"A ``Number`` node accepts a number argument. It can be an integer or an "
+"float. If the next element is not a number, a ``InvalidNumber`` exception"
+" will be risen"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:308
+msgid "Integer"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:310
+msgid ""
+"An ``Integer`` node accepts a int argument. It can only be an integer. If"
+" the next element is not an integer, a ``InvalidInteger`` exception will "
+"be risen"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:313
+msgid "Float"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:315
+msgid ""
+"A ``Float`` node accepts a float argument. It can only be a float. If the"
+" next element is not a float, a ``InvalidFloat`` exception will be risen"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:318
+msgid "TextNode"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:320
+msgid ""
+"It's an abstract class. It's inherited by ``Text``\\ , ``QuotableText`` "
+"and ``GreedyText``. It represents a type of text based node"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:322
+msgid ""
+"For a ``TextNode`` instance, you can restrict the length range of the str"
+" text argument. If the length of the parsed text is out of range, a "
+"``TextLengthOutOfRange`` exception will be risen"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:324
+msgid "By default there's no length range restriction"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:327
+msgid "at_min_length"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:333
+msgid "Set the lower boundary of the length range restriction to *min_length*"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:336
+msgid "at_max_length"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:342
+msgid "Set the higher boundary of the length range restriction to *max_length*"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:345
+msgid "in_length_range"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:351
+msgid ""
+"Set the lower and the higher boundary of the length range restriction at "
+"the same time"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:354
+msgid "Text"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:356
+msgid ""
+"A ``Text`` node accepts a single string element. Since space character is"
+" the divider character of MCDR command parsing. ``Text`` nodes will keep "
+"taking the continuous string segment until they meet a space character"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:359
+msgid "QuotableText"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:361
+msgid ""
+"A ``QuotableText`` works just like a ``Text`` argument node, but it gives"
+" user a way to input text with space character: Use two double quotes to "
+"enclose the text content"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:363
+msgid ""
+"If you use two double quotes to enclose the text content, You can use "
+"escape character ``\\`` to escape double quotes ``\"`` and escape "
+"character ``\\`` itself"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:365
+msgid "For example, here are some texts that accepted by ``QuotableText``\\ :"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:368
+msgid "``Something``"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:369
+msgid "``\"Someting with space characters\"``"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:370
+msgid "``\"or escapes \\\\ like \\\" this\"``"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:373
+msgid "GreedyText"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:375
+msgid ""
+"The principle of ``GreedyText`` is quite simple: It greedily take out all"
+" remaining texts in the commands"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:377
+msgid ""
+"It's not a smart decision to append any child nodes to a ``GreedyText``\\"
+" , since the child nodes can never get any remaining command"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:380
+msgid "Customize"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:382
+msgid ""
+"MCDR also supports customize an argument node. It might save you same "
+"repeated work on building your command"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:384
+msgid ""
+"To create a custom a argument node, you need to declare a class inherited"
+" from ``ArgumentNode``\\ , and then implement the ``parse`` method logic."
+" That's it, the custom node class is ready to be used"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:386
+msgid ""
+"Custom exception provides a precise way to handle your exception with "
+"``on_error`` method. If you want to raise a custom exception when your "
+"argument node fails to parsing the text, you need to have the custom "
+"exception inherited from ``CommandSyntaxError``"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:388
+msgid ""
+"Here's a quick example of a custom Argument node, ``PointArgument``. It "
+"accepts continuous 3 float input as a coordinate and batch them in to a "
+"list as a point. It raises ``IllegalPoint`` if it gets a non-float input,"
+" or ``IncompletePoint`` if the command ends before it finishes reading 3 "
+"floats"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:416
+msgid "For its usage, here's a simple example as well as an input/output table:"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:431
+msgid "Input"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:432
+msgid "Output"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:433
+msgid "!!mypoint 1 2 3"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:434
+msgid "You have input a point (1.0, 2.0, 3.0)"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:435
+msgid "!!mypoint 1 2"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:436
+msgid "Incomplete Point: !!mypoint 1 2<--"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:437
+msgid "!!mypoint xxx"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:438
+msgid "Invalid Point: !!mypoint xxx<--"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:439
+msgid "!!mypoint 1 2 x"
+msgstr ""
+
+#: ../../source/plugin_dev/command.rst:440
+msgid "Invalid Point: !!mypoint 1 2 x<--"
+msgstr ""
+
+#~ msgid ""
+#~ "MCDR contains a command tree building"
+#~ " system for plugins to build their"
+#~ " commands. It behaves like a lite "
+#~ "version of mojang's brigadier"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Every time when a user info is "
+#~ "being processed, MCDR will try to "
+#~ "parse the user input as a command."
+#~ " It will takes the first segment "
+#~ "of the user input as a key "
+#~ "to query the command tree storage "
+#~ "dict. If it gets any, it will "
+#~ "prevent the info to be sent to "
+#~ "the standard input stream of the "
+#~ "server by invoking info.cancel_send_to_server(), "
+#~ "then it will let the found command"
+#~ " trees to handle the command."
+#~ msgstr ""
+
+#~ msgid "!!email list"
+#~ msgstr ""
+
+#~ msgid "!!email remove <email_id>"
+#~ msgstr ""
+
+#~ msgid "!!email send <player> <message>"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "When MCDR executes the command !!email"
+#~ " remove 21, the following things will"
+#~ " happen"
+#~ msgstr ""
+
+#~ msgid "Parsing at node Literal('!!email') with command !!email remove 21"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Literal Node Literal('!!email') gets the "
+#~ "first element of !!email remove 21, "
+#~ "it's !!email and it matches the "
+#~ "literal node"
+#~ msgstr ""
+
+#~ msgid "Now the remaining command is remove 21"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "And then, it searches through its "
+#~ "literal children, found the child node"
+#~ " Literal('remove') matches the next literal"
+#~ " element remove"
+#~ msgstr ""
+
+#~ msgid "Parsing at node Literal('remove') with command remove 21"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Literal Node Literal('remove') gets the "
+#~ "first element of remove 21, it's "
+#~ "remove and it matches the literal "
+#~ "node"
+#~ msgstr ""
+
+#~ msgid "Now the remaining command is 21"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "And then it searches through its "
+#~ "literal children, but doesn't found any"
+#~ " literal child matches the next "
+#~ "element 21"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "So it let its non-literal child"
+#~ " Integer('email_id') to handle the rest "
+#~ "of the command"
+#~ msgstr ""
+
+#~ msgid "Parsing at node Integer('email_id') with command 21"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Integer Node Integer('email_id') gets the "
+#~ "first element of 21, it's a legal"
+#~ " integer"
+#~ msgstr ""
+
+#~ msgid "It store the value 21 to the context dict with key email_id"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Rather than reading this document, "
+#~ "anther good way to learn to use"
+#~ " the MCDR command building system is"
+#~ " to refer and imitate existing codes."
+#~ " You can find the command building"
+#~ " code of !!MCDR command in the "
+#~ "__register_commands method of class "
+#~ "mcdreforged.plugin.permanent.mcdreforged_plugin.MCDReforgedPlugin"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Parameter node: A node instance to "
+#~ "be added to current node's children "
+#~ "list"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "The command tree in the Quick Peek"
+#~ " section can be built with the "
+#~ "following codes"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Parameter func: A callable that accepts"
+#~ " up to 2 arguments. Argument list:"
+#~ " CommandSource, dict (context)"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "The callback function is allowed to "
+#~ "accepted 0 to 2 arguments (a "
+#~ "CommandSource as command source and a"
+#~ " dict as context). For example, the"
+#~ " following 4 functions are available "
+#~ "callbacks"
+#~ msgstr ""
+
+#~ msgid "Both of them can be used as the argument of the runs method"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "If the tester callback return False, "
+#~ "a RequirementNotMet exception will be "
+#~ "risen. At this time if the "
+#~ "failure_message_getter parameter is available, "
+#~ "MCDR will invoke failure_message_getter to "
+#~ "get the message string as the "
+#~ "RequirementNotMet exception, otherwise a "
+#~ "default message will be used"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Parameter requirement: A callable that "
+#~ "accepts up to 2 arguments and "
+#~ "returns a bool. Argument list: "
+#~ "CommandSource, dict (context)"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Parameter failure_message_getter: An optional "
+#~ "callable that accepts up to 2 "
+#~ "arguments and returns a str. Argument"
+#~ " list: CommandSource, dict (context)"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Redirect all further child nodes command"
+#~ " parsing to another given node. When"
+#~ " you want a short command and "
+#~ "and full-path command that will "
+#~ "all execute the same commands, redirects"
+#~ " will make it simpler"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Parameter redirect_node: A node instance "
+#~ "which current node is redirecting to"
+#~ msgstr ""
+
+#~ msgid "Command starts at root_executor"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Pay attention to the difference between"
+#~ " redirects and then. redirects is to"
+#~ " redirect the child nodes, and then"
+#~ " is to add a child node. If "
+#~ "you do something like this:"
+#~ msgstr ""
+
+#~ msgid "Then all commands which eventually executes do_something1 will be:"
+#~ msgstr ""
+
+#~ msgid "foo a long way to the command x"
+#~ msgstr ""
+
+#~ msgid "foo quick x"
+#~ msgstr ""
+
+#~ msgid "foo fast command x"
+#~ msgstr ""
+
+#~ msgid "Parameter error_type: A class that is subclass of CommandError"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Parameter handler: A callable that "
+#~ "accepts up to 3 arguments. Argument "
+#~ "list: CommandSource, CommandError, dict "
+#~ "(context)"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Keyword Parameter handled: If handled is"
+#~ " set to True, error.set_handled() is "
+#~ "called automatically when invoking the "
+#~ "handler callback"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "For uses about error.set_handled(), check "
+#~ "the CommandError class reference"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "It's an abstract class. It's inherited"
+#~ " by Number, Integer and Float. It "
+#~ "represents a type of number based "
+#~ "node"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "For a NumberNode instance, you can "
+#~ "restrict the range of the number "
+#~ "argument. If the parsed number is "
+#~ "out of range, a NumberOutOfRange "
+#~ "exception will be risen"
+#~ msgstr ""
+
+#~ msgid "Set the lower boundary of the range restriction to min_value"
+#~ msgstr ""
+
+#~ msgid "Set the higher boundary of the range restriction to max_value"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "A Number node accepts a number "
+#~ "argument. It can be an integer or"
+#~ " an float. If the next element "
+#~ "is not a number, a InvalidNumber "
+#~ "exception will be risen"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "An Integer node accepts a int "
+#~ "argument. It can only be an "
+#~ "integer. If the next element is "
+#~ "not an integer, a InvalidInteger "
+#~ "exception will be risen"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "A Float node accepts a float "
+#~ "argument. It can only be a float."
+#~ " If the next element is not a"
+#~ " float, a InvalidFloat exception will "
+#~ "be risen"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "It's an abstract class. It's inherited"
+#~ " by Text, QuotableText and GreedyText. "
+#~ "It represents a type of text based"
+#~ " node"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "For a TextNode instance, you can "
+#~ "restrict the length range of the "
+#~ "str text argument. If the length "
+#~ "of the parsed text is out of "
+#~ "range, a TextLengthOutOfRange exception will"
+#~ " be risen"
+#~ msgstr ""
+
+#~ msgid "Set the lower boundary of the length range restriction to min_length"
+#~ msgstr ""
+
+#~ msgid "Set the higher boundary of the length range restriction to max_length"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "A Text node accepts a single "
+#~ "string element. Since space character is"
+#~ " the divider character of MCDR "
+#~ "command parsing. Text nodes will keep"
+#~ " taking the continuous string segment "
+#~ "until they meet a space character"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "A QuotableText works just like a "
+#~ "Text argument node, but it gives "
+#~ "user a way to input text with "
+#~ "space character: Use two double quotes"
+#~ " to enclose the text content"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "If you use two double quotes to"
+#~ " enclose the text content, You can"
+#~ " use escape character \\ to escape"
+#~ " double quotes \" and escape "
+#~ "character \\ itself"
+#~ msgstr ""
+
+#~ msgid "For example, here are some texts that accepted by QuotableText:"
+#~ msgstr ""
+
+#~ msgid "Something"
+#~ msgstr ""
+
+#~ msgid "\"Someting with space characters\""
+#~ msgstr ""
+
+#~ msgid "\"or escapes \\\\ like \\\" this\""
+#~ msgstr ""
+
+#~ msgid ""
+#~ "The principle of GreedyText is quite "
+#~ "simple: It greedily take out all "
+#~ "remaining texts in the commands"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "It's not a smart decision to "
+#~ "append any child nodes to a "
+#~ "GreedyText, since the child nodes can"
+#~ " never get any remaining command"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "To create a custom a argument "
+#~ "node, you need to declare a class"
+#~ " inherited from ArgumentNode, and then "
+#~ "implement the parse method logic. That's"
+#~ " it, the custom node class is "
+#~ "ready to be used"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Custom exception provides a precise way"
+#~ " to handle your exception with "
+#~ "on_error method. If you want to "
+#~ "raise a custom exception when your "
+#~ "argument node fails to parsing the "
+#~ "text, you need to have the custom"
+#~ " exception inherited from CommandSyntaxError"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Here's a quick example of a custom"
+#~ " Argument node, PointArgument. It accepts"
+#~ " continuous 3 float input as a "
+#~ "coordinate and batch them in to a"
+#~ " list as a point. It raises "
+#~ "IllegalPoint if it gets a non-"
+#~ "float input, or IncompletePoint if the"
+#~ " command ends before it finishes "
+#~ "reading 3 floats"
+#~ msgstr ""
+

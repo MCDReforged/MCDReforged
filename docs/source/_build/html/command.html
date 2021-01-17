@@ -1,0 +1,474 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Command &mdash; MCDReforged 1.0.0 文档</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme_overrides.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/translations.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="搜索" href="search.html" />
+    <link rel="next" title="Plugin Development" href="plugin_dev/plugin_dev.html" />
+    <link rel="prev" title="Permission" href="permission.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> MCDReforged
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Home</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configure.html">Configure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="permission.html">Permission</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Command</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#mcdr-command">!!MCDR command</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#status-display">Status display</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hot-reloads">Hot reloads</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#permission-management">Permission management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plugin-management">Plugin management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#update-checker">Update checker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#help-command">!!help command</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="plugin_dev/plugin_dev.html">Plugin Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="customize/customize.html">Customize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="migrate_from_0.x.html">Migrate from MCDR 0.x</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">MCDReforged</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Command</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/command.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="command">
+<h1>Command<a class="headerlink" href="#command" title="永久链接至标题">¶</a></h1>
+<p>命令是用户与 MCDR 交互的最常见方式。 MCDR 将来自服务器的所有控制台输入和玩家聊天信息视为用户输入。 对于这些输入，MCDR 将尝试解析为命令。</p>
+<p>Commands can be registered by MCDR itself and by plugins. This page only
+introduces about commands from MCDR. For plugin registered command,
+check <a class="reference external" href="plugin_dev/command">here</a></p>
+<div class="section" id="mcdr-command">
+<h2>!!MCDR command<a class="headerlink" href="#mcdr-command" title="永久链接至标题">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">!!MCDR</span></code> commands is the way for users to control MCDR on console, or
+in game. All of these command requires permission level 3 (admin) to be
+executed.</p>
+<p>Assuming you already have the permission to control MCDR, then you can
+enter <code class="docutils literal notranslate"><span class="pre">!!MCDR</span></code> to the console or in game chat and you will see the
+help message of MCDR</p>
+<div class="section" id="status-display">
+<h3>Status display<a class="headerlink" href="#status-display" title="永久链接至标题">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">!!MCDR</span> <span class="pre">status</span></code> displayer the status of MCDR. It will display the
+following contents:</p>
+<ul class="simple">
+<li><p>The version of MCDR</p></li>
+<li><p>The state of MCDR</p></li>
+<li><p>The state of the server</p></li>
+<li><p>The flag that displays if the server has started up</p></li>
+<li><p>If the server exists naturally by itself, or the server is stopped /
+killed by MCDR</p></li>
+<li><p>The state of rcon connection</p></li>
+<li><p>The amount of loaded plugin</p></li>
+</ul>
+<p>The following status can only be seen by users with permission 4 (owner)</p>
+<ul class="simple">
+<li><p>The PID of the server. Notices that this PID is the pid of the bash
+program that the server is running in</p></li>
+<li><p>Info Queue load. If the server is spamming text the queue might be
+filled</p></li>
+<li><p>The current thread list</p></li>
+</ul>
+</div>
+<div class="section" id="hot-reloads">
+<h3>Hot reloads<a class="headerlink" href="#hot-reloads" title="永久链接至标题">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">!!MCDR</span> <span class="pre">reload</span></code> commands are the places to hot-reload things. Its
+short form is <code class="docutils literal notranslate"><span class="pre">!!MCDR</span> <span class="pre">r</span></code>. Directly enter command <code class="docutils literal notranslate"><span class="pre">!!MCDR</span> <span class="pre">reload</span></code>
+will show the help message of the hot reload commands</p>
+<p>Here’s a table of the commands</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 35%" />
+<col style="width: 21%" />
+<col style="width: 44%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Command</p></th>
+<th class="head"><p>Short form</p></th>
+<th class="head"><p>Function</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>!!MCDR reload</p></td>
+<td><p>!!MCDR r</p></td>
+<td><p>Show reload command help message</p></td>
+</tr>
+<tr class="row-odd"><td><p>!!MCDR reload plugin</p></td>
+<td><p>!!MCDR r plg</p></td>
+<td><p>Reload all <strong>changed</strong> plugins</p></td>
+</tr>
+<tr class="row-even"><td><p>!!MCDR reload config</p></td>
+<td><p>!!MCDR r cfg</p></td>
+<td><p>Reload config file</p></td>
+</tr>
+<tr class="row-odd"><td><p>!!MCDR reload permission</p></td>
+<td><p>!!MCDR r perm</p></td>
+<td><p>Reload permission file</p></td>
+</tr>
+<tr class="row-even"><td><p>!!MCDR reload all</p></td>
+<td><p>!!MCDR r all</p></td>
+<td><p>Reload everything above</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="permission-management">
+<h3>Permission management<a class="headerlink" href="#permission-management" title="永久链接至标题">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">!!MCDR</span> <span class="pre">permission</span></code> commands are used to manipulate player’s
+permission. Its short form is <code class="docutils literal notranslate"><span class="pre">!!MCDR</span> <span class="pre">perm</span></code>. Directly enter command
+<code class="docutils literal notranslate"><span class="pre">!!MCDR</span> <span class="pre">perm</span></code> will show the help message of the permission
+manipulation commands</p>
+<p>Here’s a table of the commands</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 21%" />
+<col style="width: 15%" />
+<col style="width: 64%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Command</p></th>
+<th class="head"><p>Short form</p></th>
+<th class="head"><p>Function</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>!!MCDR permission</p></td>
+<td><p>!!MCDR perm</p></td>
+<td><p>Show permission command help message</p></td>
+</tr>
+<tr class="row-odd"><td><p>!!MCDR permission list []</p></td>
+<td><p>!!MCDR perm list []</p></td>
+<td><p>List all player’s permission. Only list permission level [] if [] has set</p></td>
+</tr>
+<tr class="row-even"><td><p>!!MCDR permission set</p></td>
+<td><p>!!MCDR perm set</p></td>
+<td><p>Set the permission level of to</p></td>
+</tr>
+<tr class="row-odd"><td><p>!!MCDR permission query</p></td>
+<td><p>!!MCDR perm q []</p></td>
+<td><p>Query the permission level of . If is not set, query the permission level of the command sender</p></td>
+</tr>
+<tr class="row-even"><td><p>!!MCDR permission remove</p></td>
+<td><p>!!MCDR perm remove</p></td>
+<td><p>Remove from the permission database</p></td>
+</tr>
+<tr class="row-odd"><td><p>!!MCDR permission setdefault</p></td>
+<td><p>!!MCDR perm setd</p></td>
+<td><p>Set the default permission level to</p></td>
+</tr>
+</tbody>
+</table>
+<p>The argument should be a string indicating the name of the player</p>
+<p>The argument should be a string or a integer indicating a permission
+level. It can be a string, the name of the permission, or a integer, the
+level of the permission</p>
+<p>Examples:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">!!MCDR</span> <span class="pre">perm</span> <span class="pre">list</span> <span class="pre">4</span></code>: List all players with permission level 4
+(owner)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">!!MCDR</span> <span class="pre">permission</span> <span class="pre">set</span> <span class="pre">Steve</span> <span class="pre">admin</span></code>: Set the permission level of
+player Steve to 3 (admin)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">!!MCDR</span> <span class="pre">permission</span> <span class="pre">q</span> <span class="pre">Steve</span></code>: Query the permission level of player
+Steve. The value should be 3 (admin)</p></li>
+</ul>
+<p>Check the page <a class="reference external" href="permission.md">Permission</a> for more information about
+MCDR permission system</p>
+</div>
+<div class="section" id="plugin-management">
+<h3>Plugin management<a class="headerlink" href="#plugin-management" title="永久链接至标题">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">!!MCDR</span> <span class="pre">plugin</span></code> is the place for user to manipulate plugins. Its short
+form is <code class="docutils literal notranslate"><span class="pre">!!MCDR</span> <span class="pre">plg</span></code>. Directly enter command <code class="docutils literal notranslate"><span class="pre">!!MCDR</span> <span class="pre">plg</span></code> will show
+the help message of the commands</p>
+<p>Here’s a table of the commands</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 21%" />
+<col style="width: 53%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Command</p></th>
+<th class="head"><p>Short form</p></th>
+<th class="head"><p>Function</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>!!MCDR plugin list</p></td>
+<td><p>!!MCDR plg list</p></td>
+<td><p>List all plugins</p></td>
+</tr>
+<tr class="row-odd"><td><p>!!MCDR plugin info</p></td>
+<td><p>!!MCDR plg info</p></td>
+<td><p>Display the information of the plugin with id</p></td>
+</tr>
+<tr class="row-even"><td><p>!!MCDR plugin load</p></td>
+<td><p>!!MCDR plg load</p></td>
+<td><p>Load a plugin with file path</p></td>
+</tr>
+<tr class="row-odd"><td><p>!!MCDR plugin enable</p></td>
+<td><p>!!MCDR plg enable</p></td>
+<td><p>Enable a plugin with file path</p></td>
+</tr>
+<tr class="row-even"><td><p>!!MCDR plugin reload</p></td>
+<td><p>!!MCDR plg reload</p></td>
+<td><p>Reload a plugin with id</p></td>
+</tr>
+<tr class="row-odd"><td><p>!!MCDR plugin unload</p></td>
+<td><p>!!MCDR plg unload</p></td>
+<td><p>Unload a plugin with id</p></td>
+</tr>
+<tr class="row-even"><td><p>!!MCDR plugin disable</p></td>
+<td><p>!!MCDR plg disable</p></td>
+<td><p>Disable a plugin with id</p></td>
+</tr>
+<tr class="row-odd"><td><p>!!MCDR plugin reloadall</p></td>
+<td><p>!!MCDR plg ra</p></td>
+<td><p>Load / Reload / Unloaded <strong>all</strong> not disabled plugins</p></td>
+</tr>
+</tbody>
+</table>
+<p>The argument is a string of the unique plugin id of the plugin you want
+to manipulate</p>
+<p>The argument is a string of the path to the plugin file you want to load
+or enable</p>
+<p>Example:</p>
+<p>Let’s say there’s is a loaded plugin with id <code class="docutils literal notranslate"><span class="pre">my_plugin</span></code> and a
+disabled plugin in path <code class="docutils literal notranslate"><span class="pre">plugins/another_plugin.py.disabled</span></code> with id
+<code class="docutils literal notranslate"><span class="pre">another_plugin</span></code></p>
+<p>Then you can do the following commands</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>!!MCDR plg info mcdreforged
+!!MCDR plugin reload my_plugin
+!!MCDR plugin enable another_plugin.py.disabled
+!!MCDR plugin unload another_plugin
+!!MCDR plugin load another_plugin.py
+</pre></div>
+</div>
+<p>These commands do the following things:</p>
+<ol class="arabic simple">
+<li><p>Query the information about a built-in permanent plugin
+<code class="docutils literal notranslate"><span class="pre">mcdreforged</span></code></p></li>
+<li><p>Reload the plugin with id <code class="docutils literal notranslate"><span class="pre">my_plugin</span></code></p></li>
+<li><p>Enable and load the disabled plugin with file name
+<code class="docutils literal notranslate"><span class="pre">another_plugin.py.disabled</span></code>. It has plugin id <code class="docutils literal notranslate"><span class="pre">another_plugin</span></code></p></li>
+<li><p>Unload the plugin with id <code class="docutils literal notranslate"><span class="pre">another_plugin</span></code></p></li>
+<li><p>Reload the plugin with file name <code class="docutils literal notranslate"><span class="pre">another_plugin.py</span></code>. Note that
+since this plugin is not loaded, you can only use file name to
+specify it</p></li>
+</ol>
+</div>
+<div class="section" id="update-checker">
+<h3>Update checker<a class="headerlink" href="#update-checker" title="永久链接至标题">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">!!MCDR</span> <span class="pre">checkupdate</span></code>, or <code class="docutils literal notranslate"><span class="pre">!!MCDR</span> <span class="pre">cu</span></code>. Use it to manually check
+update from github</p>
+<p>It will try to get the latest release version in github, and check if
+it’s newer than the current version. If it is, it will show the update
+logs from the github release</p>
+</div>
+</div>
+<div class="section" id="help-command">
+<h2>!!help command<a class="headerlink" href="#help-command" title="永久链接至标题">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">!!help</span></code> command is place to display the help messages of all
+commands. It works as an index of all commands</p>
+<p>The content of this command can be registered by plugins, so a new user
+can easily browse all available commands that it can access</p>
+<p>Any user is allowed to use this command, and MCDR will list all command
+help messages that the user has enough permission level to see</p>
+<p>Without any plugin, you may see the result below after you entered the
+<code class="docutils literal notranslate"><span class="pre">!!help</span></code> command</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>MCDR command help message list
+!!MCDR: MCDR control command
+!!help: MCDR command help messages
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="plugin_dev/plugin_dev.html" class="btn btn-neutral float-right" title="Plugin Development" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="permission.html" class="btn btn-neutral float-left" title="Permission" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; 版权所有 2021, Fallen_Breath.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

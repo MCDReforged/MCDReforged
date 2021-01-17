@@ -1,0 +1,495 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Configure &mdash; MCDReforged 1.0.0 文档</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme_overrides.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/translations.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="搜索" href="search.html" />
+    <link rel="next" title="Permission" href="permission.html" />
+    <link rel="prev" title="Quick Start" href="quick_start.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> MCDReforged
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Home</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick Start</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Configure</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#list-of-options">List of options</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#basic">Basic</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#language">language</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#working-directory">working_directory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#start-command">start_command</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#handler">handler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#encoding-decoding">encoding / decoding</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#plugin-directories">plugin_directories</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rcon">rcon</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#rcon-enable">rcon.enable</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#rcon-address">rcon.address</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#rcon-port">rcon.port</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#rcon-password">rcon.password</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#check-update">check_update</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#advance">Advance</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#disable-console-thread">disable_console_thread</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#disable-console-color">disable_console_color</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#custom-handlers">custom_handlers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#custom-info-reactors">custom_info_reactors</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#debug">debug</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="permission.html">Permission</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command.html">Command</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plugin_dev/plugin_dev.html">Plugin Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="customize/customize.html">Customize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="migrate_from_0.x.html">Migrate from MCDR 0.x</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">MCDReforged</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Configure</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/configure.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="configure">
+<h1>Configure<a class="headerlink" href="#configure" title="永久链接至标题">¶</a></h1>
+<p>The configure file of MCDR is <code class="docutils literal notranslate"><span class="pre">config.yml</span></code>. It’s located and should be located in the working directory of MCDR</p>
+<p>At startup, MCDR will try to load the configure file. If the configure file is not present, MCDR will generate a default config file and exit. Otherwise, MCDR will load the config file and compare its content with the default configure file. If your configure file has any missing options, MCDR will add default values to the end of your configure file</p>
+<p>The configure file use <a class="reference external" href="https://en.wikipedia.org/wiki/YAML">YAML</a> format</p>
+<p>You can use command <code class="docutils literal notranslate"><span class="pre">!!MCDR</span> <span class="pre">reload</span> <span class="pre">config</span></code> or its short form <code class="docutils literal notranslate"><span class="pre">!!MCDR</span> <span class="pre">r</span> <span class="pre">cfg</span></code> to reload the config file when MCDR is running</p>
+<div class="section" id="list-of-options">
+<h2>List of options<a class="headerlink" href="#list-of-options" title="永久链接至标题">¶</a></h2>
+<div class="section" id="basic">
+<h3>Basic<a class="headerlink" href="#basic" title="永久链接至标题">¶</a></h3>
+<div class="section" id="language">
+<h4>language<a class="headerlink" href="#language" title="永久链接至标题">¶</a></h4>
+<p>The language that MCDR will use to display information</p>
+<ul class="simple">
+<li><p>Option type: string</p></li>
+<li><p>Default value: <code class="docutils literal notranslate"><span class="pre">en_us</span></code></p></li>
+<li><p>Available options: <code class="docutils literal notranslate"><span class="pre">en_us</span></code>, <code class="docutils literal notranslate"><span class="pre">zh_cn</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="working-directory">
+<h4>working_directory<a class="headerlink" href="#working-directory" title="永久链接至标题">¶</a></h4>
+<p>The working directory of the server. You should probably put all the files related to the server int this directory</p>
+<ul class="simple">
+<li><p>Option type: string</p></li>
+<li><p>Default value: <code class="docutils literal notranslate"><span class="pre">server</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="start-command">
+<h4>start_command<a class="headerlink" href="#start-command" title="永久链接至标题">¶</a></h4>
+<p>The console command to launch the server</p>
+<p>Some examples:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">java</span> <span class="pre">-Xms1G</span> <span class="pre">-Xmx2G</span> <span class="pre">-jar</span> <span class="pre">minecraft_server.jar</span> <span class="pre">nogui</span></code>, if you want to launch a Minecraft server</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">./start.sh</span></code>, if you have already written a startup script in the working directory</p></li>
+<li><p>Option type: string</p></li>
+<li><p>Default value: <code class="docutils literal notranslate"><span class="pre">java</span> <span class="pre">-Xms1G</span> <span class="pre">-Xmx2G</span> <span class="pre">-jar</span> <span class="pre">minecraft_server.jar</span> <span class="pre">nogui</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="handler">
+<h4>handler<a class="headerlink" href="#handler" title="永久链接至标题">¶</a></h4>
+<p>Different Minecraft server has different kind of output, and event different kind of command. Server handlers are the modules to handle between all kind of servers and the interface for MCDR to control the server</p>
+<p>Handler determines the specific way to parse the standard output text of the server, and uses the correct command for server control</p>
+<p>Here is a table of current built-in handlers and their suitable server types</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>Handler</th>
+<th>Compatible server types</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>vanilla_handler</td>
+<td>For Vanilla / Carpet / Fabric server</td>
+</tr>
+<tr>
+<td>beta18_handler</td>
+<td>For vanilla server in beta 1.8 version. Maybe it works for other beta versions but it's only tested in beta 1.8.1.</td>
+</tr>
+<tr>
+<td>bukkit_handler</td>
+<td>For Bukkit / Spigot server with Minecraft version below 1.14, and Paper server in all version.</td>
+</tr>
+<tr>
+<td>bukkit_handler_14</td>
+<td>For Bukkit / Spigot server with Minecraft version 1.14 and above</td>
+</tr>
+<tr>
+<td>forge_handler</td>
+<td>For Forge server</td>
+</tr>
+<tr>
+<td>cat_server_handler</td>
+<td>For <a href="https://github.com/Luohuayu/CatServer">CatServer</a> server</td>
+</tr>
+<tr>
+<td>bungeecord_handler</td>
+<td>For Bungeecord. Please add <code>-Djline.terminal=jline.UnsupportedTerminal</code> before <code>-jar</code> in the start command for MCDR support. From <a href="https://www.spigotmc.org/wiki/start-up-parameters/">here</a></td>
+</tr>
+<tr>
+<td>waterfall_handler</td>
+<td>For Waterfall server</td>
+</tr>
+<tr>
+<td>basic_handler</td>
+<td>The handler that parse nothing and return the raw text from the server. Don't use this unless you want to use MCDR to lanuch non Minecraft related servers.</td>
+</tr>
+</tbody>
+</table><ul class="simple">
+<li><p>Option type: string</p></li>
+<li><p>Default value: <code class="docutils literal notranslate"><span class="pre">vanilla_handler</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="encoding-decoding">
+<h4>encoding / decoding<a class="headerlink" href="#encoding-decoding" title="永久链接至标题">¶</a></h4>
+<p>The encoding format used to encode message to the stdin of the server.</p>
+<p>Leave it blank for MCDR to auto detect the encoding. If it doesn’t work (e.g. random characters in game) you needs to manually specify it depends on your os and language</p>
+<ul class="simple">
+<li><p>Option type: string or null</p></li>
+<li><p>Default value: <code class="docutils literal notranslate"> </code></p></li>
+<li><p>Examples: <code class="docutils literal notranslate"><span class="pre">utf8</span></code>, <code class="docutils literal notranslate"><span class="pre">gbk</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="plugin-directories">
+<h4>plugin_directories<a class="headerlink" href="#plugin-directories" title="永久链接至标题">¶</a></h4>
+<p>The list of directory path where MCDR will search for plugin to load</p>
+<p>MCDR also <strong>adds these directories into <code class="docutils literal notranslate"><span class="pre">sys.path</span></code></strong> so plugins can import packages inside plugin folders directly</p>
+<ul class="simple">
+<li><p>Option type: a list of string</p></li>
+<li><p>Default value:</p></li>
+</ul>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">plugin_directories</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">plugins</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Example:</p></li>
+</ul>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">plugin_directories</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">plugins</span>
+<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">path/to/my/plugin/directory</span>
+<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">another/plugin/directory</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="rcon">
+<h4>rcon<a class="headerlink" href="#rcon" title="永久链接至标题">¶</a></h4>
+<p>The setting for <a class="reference external" href="https://wiki.vg/RCON">rcon</a>. If rcon is enabled, MCDR will start a rcon client to connect to the server after server rcon has started up. Then plugins can use rcon to query command from the server</p>
+<div class="section" id="rcon-enable">
+<h5>rcon.enable<a class="headerlink" href="#rcon-enable" title="永久链接至标题">¶</a></h5>
+<p>The switch of rcon</p>
+<ul class="simple">
+<li><p>Option type: boolean</p></li>
+<li><p>Default value: <code class="docutils literal notranslate"><span class="pre">false</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="rcon-address">
+<h5>rcon.address<a class="headerlink" href="#rcon-address" title="永久链接至标题">¶</a></h5>
+<p>The address of the rcon server</p>
+<ul class="simple">
+<li><p>Option type: string</p></li>
+<li><p>Default value: <code class="docutils literal notranslate"><span class="pre">127.0.0.1</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="rcon-port">
+<h5>rcon.port<a class="headerlink" href="#rcon-port" title="永久链接至标题">¶</a></h5>
+<p>The port of the rcon server</p>
+<ul class="simple">
+<li><p>Option type: integer</p></li>
+<li><p>Default value: <code class="docutils literal notranslate"><span class="pre">25575</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="rcon-password">
+<h5>rcon.password<a class="headerlink" href="#rcon-password" title="永久链接至标题">¶</a></h5>
+<p>The password to connect to the rcon server</p>
+<ul class="simple">
+<li><p>Option type: string</p></li>
+<li><p>Default value: <code class="docutils literal notranslate"><span class="pre">password</span></code></p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="check-update">
+<h4>check_update<a class="headerlink" href="#check-update" title="永久链接至标题">¶</a></h4>
+<p>If set to true, MCDR will detect if there’s a new version every 24h</p>
+<ul class="simple">
+<li><p>Option type: boolean</p></li>
+<li><p>Default value: <code class="docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="advance">
+<h3>Advance<a class="headerlink" href="#advance" title="永久链接至标题">¶</a></h3>
+<p>Configure options for advance users</p>
+<div class="section" id="disable-console-thread">
+<h4>disable_console_thread<a class="headerlink" href="#disable-console-thread" title="永久链接至标题">¶</a></h4>
+<p>When set to true, MCDR will not start the console thread for handling console command input</p>
+<p>Don’t change it to true unless you know what you are doing</p>
+<ul class="simple">
+<li><p>Option type: boolean</p></li>
+<li><p>Default value: <code class="docutils literal notranslate"><span class="pre">false</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="disable-console-color">
+<h4>disable_console_color<a class="headerlink" href="#disable-console-color" title="永久链接至标题">¶</a></h4>
+<p>When set to true, MCDR will removed all console font formatter codes in before any message gets printed onto the console</p>
+<ul class="simple">
+<li><p>Option type: boolean</p></li>
+<li><p>Default value: <code class="docutils literal notranslate"><span class="pre">false</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="custom-handlers">
+<h4>custom_handlers<a class="headerlink" href="#custom-handlers" title="永久链接至标题">¶</a></h4>
+<p>A list of custom info reactor classes to handle the info instance. The classed need to be subclasses of <code class="docutils literal notranslate"><span class="pre">AbstractServerHandler</span></code></p>
+<p>Then you can use the name of your handler in the <a class="reference external" href="#handler">handler</a> option above to use your handler</p>
+<p>The name of a handler is defined in the get_name method</p>
+<ul class="simple">
+<li><p>Option type: a list of string, or null</p></li>
+<li><p>Default value:</p></li>
+</ul>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">custom_handlers</span><span class="p">:</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Example:</p></li>
+</ul>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">custom_handlers</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">my.customize.handler.MyHandler</span>
+</pre></div>
+</div>
+<p>In this example the custom handler package path is <code class="docutils literal notranslate"><span class="pre">my.custom.handler</span></code> and the class is name <code class="docutils literal notranslate"><span class="pre">MyHandler</span></code></p>
+</div>
+<div class="section" id="custom-info-reactors">
+<h4>custom_info_reactors<a class="headerlink" href="#custom-info-reactors" title="永久链接至标题">¶</a></h4>
+<p>A list of custom info reactor classes to handle the info instance. The classed need to be subclasses of <code class="docutils literal notranslate"><span class="pre">AbstractInfoReactor</span></code></p>
+<p>All custom info reactors will be registered to the reactor list to process information from the server</p>
+<ul class="simple">
+<li><p>Option type: a list of string, or null</p></li>
+<li><p>Default value:</p></li>
+</ul>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">custom_info_reactors</span><span class="p">:</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Example:</p></li>
+</ul>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">custom_info_reactors</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">my.customize.reactor.MyInfoReactor</span>
+</pre></div>
+</div>
+<p>In this example the custom reactor package path is <code class="docutils literal notranslate"><span class="pre">my.custom.reactor</span></code> and the class name is <code class="docutils literal notranslate"><span class="pre">MyInfoReactor</span></code></p>
+</div>
+<div class="section" id="debug">
+<h4>debug<a class="headerlink" href="#debug" title="永久链接至标题">¶</a></h4>
+<p>Debug logging switches. Set <code class="docutils literal notranslate"><span class="pre">all</span></code> to true to enable all debug logging, or set the specific option to enable specific debug logging</p>
+<ul class="simple">
+<li><p>Default value:</p></li>
+</ul>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">debug</span><span class="p">:</span>
+  <span class="nt">all</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+  <span class="nt">mcdr</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+  <span class="nt">handler</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+  <span class="nt">reactor</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+  <span class="nt">plugin</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+  <span class="nt">permission</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+  <span class="nt">command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="permission.html" class="btn btn-neutral float-right" title="Permission" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="quick_start.html" class="btn btn-neutral float-left" title="Quick Start" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; 版权所有 2021, Fallen_Breath.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

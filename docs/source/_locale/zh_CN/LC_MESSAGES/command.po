@@ -1,0 +1,688 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Fallen_Breath
+# This file is distributed under the same license as the MCDReforged
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2021.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: MCDReforged \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-01-17 13:10+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.0\n"
+
+#: ../../source/command.rst:3 ../../source/command.rst:47
+#: ../../source/command.rst:77 ../../source/command.rst:123
+msgid "Command"
+msgstr ""
+
+#: ../../source/command.rst:5
+msgid ""
+"Command is the most common way for users to interact with MCDR. MCDR "
+"consider all console input and player chat messages from the server as "
+"user inputs. For them, MCDR will try to parse the input as a command"
+msgstr ""
+"命令是用户与 MCDR 交互的最常见方式。 MCDR 将来自服务器的所有控制台输入和玩家聊天信息视为用户输入。 对于这些输入，MCDR "
+"将尝试解析为命令。"
+
+#: ../../source/command.rst:7
+msgid ""
+"Commands can be registered by MCDR itself and by plugins. This page only "
+"introduces about commands from MCDR. For plugin registered command, check"
+" `here <plugin_dev/command>`__"
+msgstr ""
+
+#: ../../source/command.rst:10
+msgid "!!MCDR command"
+msgstr ""
+
+#: ../../source/command.rst:12
+msgid ""
+"``!!MCDR`` commands is the way for users to control MCDR on console, or "
+"in game. All of these command requires permission level 3 (admin) to be "
+"executed."
+msgstr ""
+
+#: ../../source/command.rst:14
+msgid ""
+"Assuming you already have the permission to control MCDR, then you can "
+"enter ``!!MCDR`` to the console or in game chat and you will see the help"
+" message of MCDR"
+msgstr ""
+
+#: ../../source/command.rst:17
+msgid "Status display"
+msgstr ""
+
+#: ../../source/command.rst:19
+msgid ""
+"``!!MCDR status`` displayer the status of MCDR. It will display the "
+"following contents:"
+msgstr ""
+
+#: ../../source/command.rst:22
+msgid "The version of MCDR"
+msgstr ""
+
+#: ../../source/command.rst:23
+msgid "The state of MCDR"
+msgstr ""
+
+#: ../../source/command.rst:24
+msgid "The state of the server"
+msgstr ""
+
+#: ../../source/command.rst:25
+msgid "The flag that displays if the server has started up"
+msgstr ""
+
+#: ../../source/command.rst:26
+msgid ""
+"If the server exists naturally by itself, or the server is stopped / "
+"killed by MCDR"
+msgstr ""
+
+#: ../../source/command.rst:27
+msgid "The state of rcon connection"
+msgstr ""
+
+#: ../../source/command.rst:28
+msgid "The amount of loaded plugin"
+msgstr ""
+
+#: ../../source/command.rst:30
+msgid "The following status can only be seen by users with permission 4 (owner)"
+msgstr ""
+
+#: ../../source/command.rst:33
+msgid ""
+"The PID of the server. Notices that this PID is the pid of the bash "
+"program that the server is running in"
+msgstr ""
+
+#: ../../source/command.rst:34
+msgid "Info Queue load. If the server is spamming text the queue might be filled"
+msgstr ""
+
+#: ../../source/command.rst:35
+msgid "The current thread list"
+msgstr ""
+
+#: ../../source/command.rst:38
+msgid "Hot reloads"
+msgstr ""
+
+#: ../../source/command.rst:40
+msgid ""
+"``!!MCDR reload`` commands are the places to hot-reload things. Its short"
+" form is ``!!MCDR r``. Directly enter command ``!!MCDR reload`` will show"
+" the help message of the hot reload commands"
+msgstr ""
+
+#: ../../source/command.rst:42 ../../source/command.rst:72
+#: ../../source/command.rst:118
+msgid "Here's a table of the commands"
+msgstr ""
+
+#: ../../source/command.rst:48 ../../source/command.rst:78
+#: ../../source/command.rst:124
+msgid "Short form"
+msgstr ""
+
+#: ../../source/command.rst:49 ../../source/command.rst:79
+#: ../../source/command.rst:125
+msgid "Function"
+msgstr ""
+
+#: ../../source/command.rst:50
+msgid "!!MCDR reload"
+msgstr ""
+
+#: ../../source/command.rst:51
+msgid "!!MCDR r"
+msgstr ""
+
+#: ../../source/command.rst:52
+msgid "Show reload command help message"
+msgstr ""
+
+#: ../../source/command.rst:53
+msgid "!!MCDR reload plugin"
+msgstr ""
+
+#: ../../source/command.rst:54
+msgid "!!MCDR r plg"
+msgstr ""
+
+#: ../../source/command.rst:55
+msgid "Reload all **changed** plugins"
+msgstr ""
+
+#: ../../source/command.rst:56
+msgid "!!MCDR reload config"
+msgstr ""
+
+#: ../../source/command.rst:57
+msgid "!!MCDR r cfg"
+msgstr ""
+
+#: ../../source/command.rst:58
+msgid "Reload config file"
+msgstr ""
+
+#: ../../source/command.rst:59
+msgid "!!MCDR reload permission"
+msgstr ""
+
+#: ../../source/command.rst:60
+msgid "!!MCDR r perm"
+msgstr ""
+
+#: ../../source/command.rst:61
+msgid "Reload permission file"
+msgstr ""
+
+#: ../../source/command.rst:62
+msgid "!!MCDR reload all"
+msgstr ""
+
+#: ../../source/command.rst:63
+msgid "!!MCDR r all"
+msgstr ""
+
+#: ../../source/command.rst:64
+msgid "Reload everything above"
+msgstr ""
+
+#: ../../source/command.rst:68
+msgid "Permission management"
+msgstr ""
+
+#: ../../source/command.rst:70
+msgid ""
+"``!!MCDR permission`` commands are used to manipulate player's "
+"permission. Its short form is ``!!MCDR perm``. Directly enter command "
+"``!!MCDR perm`` will show the help message of the permission manipulation"
+" commands"
+msgstr ""
+
+#: ../../source/command.rst:80
+msgid "!!MCDR permission"
+msgstr ""
+
+#: ../../source/command.rst:81
+msgid "!!MCDR perm"
+msgstr ""
+
+#: ../../source/command.rst:82
+msgid "Show permission command help message"
+msgstr ""
+
+#: ../../source/command.rst:83
+msgid "!!MCDR permission list [<level>]"
+msgstr ""
+
+#: ../../source/command.rst:84
+msgid "!!MCDR perm list [<level>]"
+msgstr ""
+
+#: ../../source/command.rst:85
+msgid ""
+"List all player's permission. Only list permission level [<level>] if "
+"[<level>] has set"
+msgstr ""
+
+#: ../../source/command.rst:86
+msgid "!!MCDR permission set <player> <level>"
+msgstr ""
+
+#: ../../source/command.rst:87
+msgid "!!MCDR perm set <player> <level>"
+msgstr ""
+
+#: ../../source/command.rst:88
+msgid "Set the permission level of <player> to <level>"
+msgstr ""
+
+#: ../../source/command.rst:89
+msgid "!!MCDR permission query <player>"
+msgstr ""
+
+#: ../../source/command.rst:90
+msgid "!!MCDR perm q [<player>]"
+msgstr ""
+
+#: ../../source/command.rst:91
+msgid ""
+"Query the permission level of <player>. If <player> is not set, query the"
+" permission level of the command sender"
+msgstr ""
+
+#: ../../source/command.rst:92
+msgid "!!MCDR permission remove <player>"
+msgstr ""
+
+#: ../../source/command.rst:93
+msgid "!!MCDR perm remove <player>"
+msgstr ""
+
+#: ../../source/command.rst:94
+msgid "Remove <player> from the permission database"
+msgstr ""
+
+#: ../../source/command.rst:95
+msgid "!!MCDR permission setdefault <level>"
+msgstr ""
+
+#: ../../source/command.rst:96
+msgid "!!MCDR perm setd <level>"
+msgstr ""
+
+#: ../../source/command.rst:97
+msgid "Set the default permission level to <level>"
+msgstr ""
+
+#: ../../source/command.rst:100
+msgid "The <player> argument should be a string indicating the name of the player"
+msgstr ""
+
+#: ../../source/command.rst:102
+msgid ""
+"The <level> argument should be a string or a integer indicating a "
+"permission level. It can be a string, the name of the permission, or a "
+"integer, the level of the permission"
+msgstr ""
+
+#: ../../source/command.rst:104
+msgid "Examples:"
+msgstr ""
+
+#: ../../source/command.rst:107
+msgid ""
+"``!!MCDR perm list 4``\\ : List all players with permission level 4 "
+"(owner)"
+msgstr ""
+
+#: ../../source/command.rst:108
+msgid ""
+"``!!MCDR permission set Steve admin``\\ : Set the permission level of "
+"player Steve to 3 (admin)"
+msgstr ""
+
+#: ../../source/command.rst:109
+msgid ""
+"``!!MCDR permission q Steve``\\ : Query the permission level of player "
+"Steve. The value should be 3 (admin)"
+msgstr ""
+
+#: ../../source/command.rst:111
+msgid ""
+"Check the page `Permission <permission.md>`__ for more information about "
+"MCDR permission system"
+msgstr ""
+
+#: ../../source/command.rst:114
+msgid "Plugin management"
+msgstr ""
+
+#: ../../source/command.rst:116
+msgid ""
+"``!!MCDR plugin`` is the place for user to manipulate plugins. Its short "
+"form is ``!!MCDR plg``. Directly enter command ``!!MCDR plg`` will show "
+"the help message of the commands"
+msgstr ""
+
+#: ../../source/command.rst:126
+msgid "!!MCDR plugin list"
+msgstr ""
+
+#: ../../source/command.rst:127
+msgid "!!MCDR plg list"
+msgstr ""
+
+#: ../../source/command.rst:128
+msgid "List all plugins"
+msgstr ""
+
+#: ../../source/command.rst:129
+msgid "!!MCDR plugin info <plugin_id>"
+msgstr ""
+
+#: ../../source/command.rst:130
+msgid "!!MCDR plg info <plugin_id>"
+msgstr ""
+
+#: ../../source/command.rst:131
+msgid "Display the information of the plugin with id <plugin_id>"
+msgstr ""
+
+#: ../../source/command.rst:132
+msgid "!!MCDR plugin load <file_name>"
+msgstr ""
+
+#: ../../source/command.rst:133
+msgid "!!MCDR plg load <file_name>"
+msgstr ""
+
+#: ../../source/command.rst:134
+msgid "Load a plugin with file path <file_name>"
+msgstr ""
+
+#: ../../source/command.rst:135
+msgid "!!MCDR plugin enable <file_name>"
+msgstr ""
+
+#: ../../source/command.rst:136
+msgid "!!MCDR plg enable <file_name>"
+msgstr ""
+
+#: ../../source/command.rst:137
+msgid "Enable a plugin with file path <file_name>"
+msgstr ""
+
+#: ../../source/command.rst:138
+msgid "!!MCDR plugin reload <plugin_id>"
+msgstr ""
+
+#: ../../source/command.rst:139
+msgid "!!MCDR plg reload <plugin_id>"
+msgstr ""
+
+#: ../../source/command.rst:140
+msgid "Reload a plugin with id <plugin_id>"
+msgstr ""
+
+#: ../../source/command.rst:141
+msgid "!!MCDR plugin unload <plugin_id>"
+msgstr ""
+
+#: ../../source/command.rst:142
+msgid "!!MCDR plg unload <plugin_id>"
+msgstr ""
+
+#: ../../source/command.rst:143
+msgid "Unload a plugin with id <plugin_id>"
+msgstr ""
+
+#: ../../source/command.rst:144
+msgid "!!MCDR plugin disable <plugin_id>"
+msgstr ""
+
+#: ../../source/command.rst:145
+msgid "!!MCDR plg disable <plugin_id>"
+msgstr ""
+
+#: ../../source/command.rst:146
+msgid "Disable a plugin with id <plugin_id>"
+msgstr ""
+
+#: ../../source/command.rst:147
+msgid "!!MCDR plugin reloadall"
+msgstr ""
+
+#: ../../source/command.rst:148
+msgid "!!MCDR plg ra"
+msgstr ""
+
+#: ../../source/command.rst:149
+msgid "Load / Reload / Unloaded **all** not disabled plugins"
+msgstr ""
+
+#: ../../source/command.rst:152
+msgid ""
+"The <plugin_id> argument is a string of the unique plugin id of the "
+"plugin you want to manipulate"
+msgstr ""
+
+#: ../../source/command.rst:154
+msgid ""
+"The <file_path> argument is a string of the path to the plugin file you "
+"want to load or enable"
+msgstr ""
+
+#: ../../source/command.rst:156
+msgid "Example:"
+msgstr ""
+
+#: ../../source/command.rst:158
+msgid ""
+"Let's say there's is a loaded plugin with id ``my_plugin`` and a disabled"
+" plugin in path ``plugins/another_plugin.py.disabled`` with id "
+"``another_plugin``"
+msgstr ""
+
+#: ../../source/command.rst:160
+msgid "Then you can do the following commands"
+msgstr ""
+
+#: ../../source/command.rst:170
+msgid "These commands do the following things:"
+msgstr ""
+
+#: ../../source/command.rst:173
+msgid "Query the information about a built-in permanent plugin ``mcdreforged``"
+msgstr ""
+
+#: ../../source/command.rst:174
+msgid "Reload the plugin with id ``my_plugin``"
+msgstr ""
+
+#: ../../source/command.rst:175
+msgid ""
+"Enable and load the disabled plugin with file name "
+"``another_plugin.py.disabled``. It has plugin id ``another_plugin``"
+msgstr ""
+
+#: ../../source/command.rst:176
+msgid "Unload the plugin with id ``another_plugin``"
+msgstr ""
+
+#: ../../source/command.rst:177
+msgid ""
+"Reload the plugin with file name ``another_plugin.py``. Note that since "
+"this plugin is not loaded, you can only use file name to specify it"
+msgstr ""
+
+#: ../../source/command.rst:180
+msgid "Update checker"
+msgstr ""
+
+#: ../../source/command.rst:182
+msgid ""
+"``!!MCDR checkupdate``\\ , or ``!!MCDR cu``. Use it to manually check "
+"update from github"
+msgstr ""
+
+#: ../../source/command.rst:184
+msgid ""
+"It will try to get the latest release version in github, and check if "
+"it's newer than the current version. If it is, it will show the update "
+"logs from the github release"
+msgstr ""
+
+#: ../../source/command.rst:187
+msgid "!!help command"
+msgstr ""
+
+#: ../../source/command.rst:189
+msgid ""
+"``!!help`` command is place to display the help messages of all commands."
+" It works as an index of all commands"
+msgstr ""
+
+#: ../../source/command.rst:191
+msgid ""
+"The content of this command can be registered by plugins, so a new user "
+"can easily browse all available commands that it can access"
+msgstr ""
+
+#: ../../source/command.rst:193
+msgid ""
+"Any user is allowed to use this command, and MCDR will list all command "
+"help messages that the user has enough permission level to see"
+msgstr ""
+
+#: ../../source/command.rst:195
+msgid ""
+"Without any plugin, you may see the result below after you entered the "
+"``!!help`` command"
+msgstr ""
+
+#~ msgid "!!MCDR permission list []"
+#~ msgstr ""
+
+#~ msgid "!!MCDR perm list []"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "List all player's permission. Only list"
+#~ " permission level [] if [] has "
+#~ "set"
+#~ msgstr ""
+
+#~ msgid "!!MCDR permission set"
+#~ msgstr ""
+
+#~ msgid "!!MCDR perm set"
+#~ msgstr ""
+
+#~ msgid "Set the permission level of to"
+#~ msgstr ""
+
+#~ msgid "!!MCDR permission query"
+#~ msgstr ""
+
+#~ msgid "!!MCDR perm q []"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Query the permission level of . If"
+#~ " is not set, query the permission "
+#~ "level of the command sender"
+#~ msgstr ""
+
+#~ msgid "!!MCDR permission remove"
+#~ msgstr ""
+
+#~ msgid "!!MCDR perm remove"
+#~ msgstr ""
+
+#~ msgid "Remove from the permission database"
+#~ msgstr ""
+
+#~ msgid "!!MCDR permission setdefault"
+#~ msgstr ""
+
+#~ msgid "!!MCDR perm setd"
+#~ msgstr ""
+
+#~ msgid "Set the default permission level to"
+#~ msgstr ""
+
+#~ msgid "The argument should be a string indicating the name of the player"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "The argument should be a string or"
+#~ " a integer indicating a permission "
+#~ "level. It can be a string, the "
+#~ "name of the permission, or a "
+#~ "integer, the level of the permission"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "``!!MCDR perm list 4``: List all "
+#~ "players with permission level 4 (owner)"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "``!!MCDR permission set Steve admin``: "
+#~ "Set the permission level of player "
+#~ "Steve to 3 (admin)"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "``!!MCDR permission q Steve``: Query the"
+#~ " permission level of player Steve. "
+#~ "The value should be 3 (admin)"
+#~ msgstr ""
+
+#~ msgid "!!MCDR plugin info"
+#~ msgstr ""
+
+#~ msgid "!!MCDR plg info"
+#~ msgstr ""
+
+#~ msgid "Display the information of the plugin with id"
+#~ msgstr ""
+
+#~ msgid "!!MCDR plugin load"
+#~ msgstr ""
+
+#~ msgid "!!MCDR plg load"
+#~ msgstr ""
+
+#~ msgid "Load a plugin with file path"
+#~ msgstr ""
+
+#~ msgid "!!MCDR plugin enable"
+#~ msgstr ""
+
+#~ msgid "!!MCDR plg enable"
+#~ msgstr ""
+
+#~ msgid "Enable a plugin with file path"
+#~ msgstr ""
+
+#~ msgid "!!MCDR plugin reload"
+#~ msgstr ""
+
+#~ msgid "!!MCDR plg reload"
+#~ msgstr ""
+
+#~ msgid "Reload a plugin with id"
+#~ msgstr ""
+
+#~ msgid "!!MCDR plugin unload"
+#~ msgstr ""
+
+#~ msgid "!!MCDR plg unload"
+#~ msgstr ""
+
+#~ msgid "Unload a plugin with id"
+#~ msgstr ""
+
+#~ msgid "!!MCDR plugin disable"
+#~ msgstr ""
+
+#~ msgid "!!MCDR plg disable"
+#~ msgstr ""
+
+#~ msgid "Disable a plugin with id"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "The argument is a string of the"
+#~ " unique plugin id of the plugin "
+#~ "you want to manipulate"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "The argument is a string of the"
+#~ " path to the plugin file you "
+#~ "want to load or enable"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "``!!MCDR checkupdate``, or ``!!MCDR cu``. "
+#~ "Use it to manually check update "
+#~ "from github"
+#~ msgstr ""
+

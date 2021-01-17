@@ -1,0 +1,571 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>API Packages for Plugins &mdash; MCDReforged 1.0.0 文档</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme_overrides.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/translations.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜索" href="../search.html" />
+    <link rel="next" title="Class References" href="classes/classes.html" />
+    <link rel="prev" title="Command" href="command.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> MCDReforged
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Home</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../quick_start.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configure.html">Configure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../permission.html">Permission</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../command.html">Command</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="plugin_dev.html">Plugin Development</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="basic.html">Basic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="event.html">Plugin Event</a></li>
+<li class="toctree-l2"><a class="reference internal" href="command.html">Command</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#all">all</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#command">command</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#decorator">decorator</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#new-thread">new_thread</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#event">event</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rcon">rcon</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#rconconnection">RconConnection</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id1">RconConnection</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#connect">connect</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#disconnect">disconnect</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#send-command">send_command</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#rtext">rtext</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#rcolor">RColor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rstyle">RStyle</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#raction">RAction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rtextbase">RTextBase</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#to-json-object">to_json_object</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#to-json-str">to_json_str</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#to-plain-text">to_plain_text</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#copy">copy</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#set-color">set_color</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#set-styles">set_styles</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#set-click-event">set_click_event</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#set-hover-text">set_hover_text</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#id2">RText</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id3">RText</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#rtexttranslation">RTextTranslation</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id4">RTextTranslation</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#rtextlist">RTextList</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id5">RTextList</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#append">append</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#is-empty">is_empty</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#types">types</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="classes/classes.html">Class References</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev_tips.html">Some tips</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../customize/customize.html">Customize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../migrate_from_0.x.html">Migrate from MCDR 0.x</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">MCDReforged</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="plugin_dev.html">Plugin Development</a> &raquo;</li>
+        
+      <li>API Packages for Plugins</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/plugin_dev/api.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="api-packages-for-plugins">
+<h1>API Packages for Plugins<a class="headerlink" href="#api-packages-for-plugins" title="永久链接至标题">¶</a></h1>
+<p>When your plugin needs to import something from MCDR, rather than directly import the package you want, you can import the packages in <code class="docutils literal notranslate"><span class="pre">mcdreforged.api</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">mcdreforged.api</span></code> is the package for plugin developers to import. By only importing from the api package, the import of the target class in the plugin can be decoupled from the actual location of the target class. If MCDR refactors the target class and moves its location in the future, only importing from the api package can keep your plugin unaffected</p>
+<div class="section" id="all">
+<h2>all<a class="headerlink" href="#all" title="永久链接至标题">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mcdreforged.api.all</span> <span class="kn">import</span> <span class="o">*</span>
+</pre></div>
+</div>
+<p>This is the simplest way to import everything you want for plugin development. It’s a life saver for lazy man</p>
+<p>Continue reading to see what it will actually import</p>
+</div>
+<div class="section" id="command">
+<h2>command<a class="headerlink" href="#command" title="永久链接至标题">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">command</span></code> package contains the necessities for building a command tree or create your own command, including command tree node classes, command exceptions and some command utils</p>
+<p>For example, if you want the class <code class="docutils literal notranslate"><span class="pre">Literal</span></code> and <code class="docutils literal notranslate"><span class="pre">IllegalArgument</span></code> for building your command tree <code class="docutils literal notranslate"><span class="pre">on_error</span></code> exception handling, you can do it like this</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mcdreforged.api.command</span> <span class="kn">import</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">IllegalArgument</span>
+</pre></div>
+</div>
+<p>Of course if you are lazy enough you can just</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mcdreforged.api.command</span> <span class="kn">import</span> <span class="o">*</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="decorator">
+<h2>decorator<a class="headerlink" href="#decorator" title="永久链接至标题">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">decorator</span></code> package contains some useful function decorators for plugin development</p>
+<div class="section" id="new-thread">
+<h3>new_thread<a class="headerlink" href="#new-thread" title="永久链接至标题">¶</a></h3>
+<p>This is a one line solution to make your function executes asynchronously. When decorated with this decorator, functions will be executed in a new daemon thread</p>
+<p>This decorator only changes the return value of the function to the created <code class="docutils literal notranslate"><span class="pre">Thread</span></code> instance. Beside the return value, it reserves all signatures of the decorated function, so you can safely use the decorated function as if there’s no decorating at all</p>
+<p>It’s also a simple compatible upgrade method for old MCDR 0.x plugins</p>
+<p>Example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mcdreforged.api.decorator</span> <span class="kn">import</span> <span class="n">new_thread</span>
+
+<span class="k">def</span> <span class="nf">do_something1</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">text</span>
+
+<span class="nd">@new_thread</span>
+<span class="k">def</span> <span class="nf">do_something2</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">text</span>
+
+<span class="k">def</span> <span class="nf">on_info</span><span class="p">(</span><span class="n">server</span><span class="p">,</span> <span class="n">info</span><span class="p">):</span>
+    <span class="c1"># do_something1(&#39;hello&#39;)</span>
+    <span class="n">do_something2</span><span class="p">(</span><span class="s1">&#39;there&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The only difference between <code class="docutils literal notranslate"><span class="pre">do_something1</span></code> and <code class="docutils literal notranslate"><span class="pre">do_something2</span></code> is that <code class="docutils literal notranslate"><span class="pre">do_something2</span></code> is decorated by <code class="docutils literal notranslate"><span class="pre">&#64;new_thread</span></code>. So when executing <code class="docutils literal notranslate"><span class="pre">do_something2</span></code>, it won’t lag the following execution of MCDR like <code class="docutils literal notranslate"><span class="pre">do_something1</span></code> since <code class="docutils literal notranslate"><span class="pre">do_something2</span></code> will execute on another thread</p>
+<p>If you want to wait for the decorated function to complete, you can simple use the <code class="docutils literal notranslate"><span class="pre">join</span></code> method from class <code class="docutils literal notranslate"><span class="pre">threading.Thread</span></code>. Remember the return value of the decorated function has already been changed in to the <code class="docutils literal notranslate"><span class="pre">Thread</span></code> instance</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">do_something2</span><span class="p">(</span><span class="s1">&#39;task&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>In addition to simply and directly use a raw <code class="docutils literal notranslate"><span class="pre">&#64;new_thread</span></code>, it’s recommend to add a thread name argument for the decorator</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@new_thread</span><span class="p">(</span><span class="s1">&#39;My Plugin Thread&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">do_something3</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">threading</span><span class="o">.</span><span class="n">current_thread</span><span class="p">()</span><span class="o">.</span><span class="n">getName</span><span class="p">())</span>  <span class="c1"># will be &quot;My Plugin Thread&quot;</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>So when you logs something by <code class="docutils literal notranslate"><span class="pre">server.logger</span></code>, a meaningful thread name will be displayed instead of a plain and meaningless <code class="docutils literal notranslate"><span class="pre">Thread-3</span></code></p>
+<p><strong>Notes</strong>: Some api methods in <code class="docutils literal notranslate"><span class="pre">ServerInterface</span></code> class are required to be invoked in the MCDR task executor thread. Invoking them in another thread might result in an exception</p>
+</div>
+</div>
+<div class="section" id="event">
+<h2>event<a class="headerlink" href="#event" title="永久链接至标题">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">event</span></code> package contains the classes for creating custom events, and classes of MCDR built-in events</p>
+<p>You might already read the <a class="reference external" href="classes/ServerInterface.html#dispatch-event">dispatch_event</a> method in <code class="docutils literal notranslate"><span class="pre">ServerInterface</span></code> class. It only accepts a <code class="docutils literal notranslate"><span class="pre">PluginEvent</span></code> instance as its first parameter. So if you want to dispatch your custom event, create a <code class="docutils literal notranslate"><span class="pre">LiteralEvent</span></code> for simpleness or a custom event class inherited from <code class="docutils literal notranslate"><span class="pre">PluginEvent</span></code></p>
+</div>
+<div class="section" id="rcon">
+<h2>rcon<a class="headerlink" href="#rcon" title="永久链接至标题">¶</a></h2>
+<p>Package <code class="docutils literal notranslate"><span class="pre">rcon</span></code> contains a single class <code class="docutils literal notranslate"><span class="pre">RconConnection</span></code>. It’s is a simply rcon client for connect to any Minecraft servers that supports rcon protocol</p>
+<div class="section" id="rconconnection">
+<h3>RconConnection<a class="headerlink" href="#rconconnection" title="永久链接至标题">¶</a></h3>
+<div class="section" id="id1">
+<h4>RconConnection<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">address</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">port</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">password</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">logger</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Logger</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Create a rcon client instance</p>
+<p>Parameter <em>address</em>: The address of the rcon server</p>
+<p>Parameter <em>port</em>: The port if the rcon server</p>
+<p>Parameter <em>password</em>: The password of the rcon connection</p>
+<p>Keyword Parameter <em>logger</em>: An instance of <code class="docutils literal notranslate"><span class="pre">logging.Logger</span></code>. It’s used to output some warning information like failing to receive a packet</p>
+</div>
+<div class="section" id="connect">
+<h4>connect<a class="headerlink" href="#connect" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-></span> <span class="nb">bool</span>
+</pre></div>
+</div>
+<p>Start a connection to the rcon server and tries to login. If login success it will return <code class="docutils literal notranslate"><span class="pre">True</span></code>, otherwise <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
+</div>
+<div class="section" id="disconnect">
+<h4>disconnect<a class="headerlink" href="#disconnect" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Disconnect from the server</p>
+</div>
+<div class="section" id="send-command">
+<h4>send_command<a class="headerlink" href="#send-command" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">send_command</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">max_retry_time</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">)</span> <span class="o">-></span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Send  command to the rcon server, and return the command execution result form the server</p>
+<p>Parameter <em>command</em>: The command you want to send to the server</p>
+<p>Parameter <em>max_retry_time</em>: The maximum retry time of the operation. This method will return None if <em>max_retry_time</em> retries exceeded</p>
+</div>
+</div>
+</div>
+<div class="section" id="rtext">
+<h2>rtext<a class="headerlink" href="#rtext" title="永久链接至标题">¶</a></h2>
+<p>Recommend to read the page <a class="reference external" href="https://minecraft.gamepedia.com/Raw_JSON_text_format">Raw JSON text format</a> in Minecraft Wiki first</p>
+<p>This is an advance text component library for Minecraft</p>
+<p>Inspired by the <a class="reference external" href="https://github.com/TISUnion/rtext">MCD stext API</a> made by <a class="reference external" href="https://github.com/Pandaria98">Pandaria98</a></p>
+<div class="section" id="rcolor">
+<h3>RColor<a class="headerlink" href="#rcolor" title="永久链接至标题">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">RColor</span></code> is an enum class storing all Minecraft color codes</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">RColor.black</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RColor.dark_blue</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RColor.dark_green</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RColor.dark_aqua</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RColor.dark_red</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RColor.dark_purple</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RColor.gold</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RColor.gray</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RColor.dark_gray</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RColor.blue</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RColor.green</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RColor.aqua</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RColor.red</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RColor.light_purple</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RColor.yellow</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RColor.white</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RColor.reset</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="rstyle">
+<h3>RStyle<a class="headerlink" href="#rstyle" title="永久链接至标题">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">RStyle</span></code> is an enum class storing all Minecraft text styles</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">RStyle.bold</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RStyle.italic</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RStyle.underlined</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RStyle.strike_through</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RStyle.obfuscated</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="raction">
+<h3>RAction<a class="headerlink" href="#raction" title="永久链接至标题">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">RAction</span></code> is a enum class storing all click event actions</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">RAction.suggest_command</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RAction.run_command</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RAction.open_url</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RAction.open_file</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RAction.copy_to_clipboard</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="rtextbase">
+<h3>RTextBase<a class="headerlink" href="#rtextbase" title="永久链接至标题">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">RTextBase</span></code> is an abstract class of text component. It’s the base class of <code class="docutils literal notranslate"><span class="pre">RText</span></code> and <code class="docutils literal notranslate"><span class="pre">RTextList</span></code></p>
+<div class="section" id="to-json-object">
+<h4>to_json_object<a class="headerlink" href="#to-json-object" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">to_json_object</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Abstract method</p>
+<p>Return an object representing it’s data that can be serialized into json string</p>
+</div>
+<div class="section" id="to-json-str">
+<h4>to_json_str<a class="headerlink" href="#to-json-str" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">to_json_str</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-></span> <span class="nb">str</span>
+</pre></div>
+</div>
+<p>Return a json formatted str representing it’s data. It can be used as the second parameter in command <code class="docutils literal notranslate"><span class="pre">/tellraw</span> <span class="pre">&lt;target></span> <span class="pre">&lt;message></span></code> and more</p>
+</div>
+<div class="section" id="to-plain-text">
+<h4>to_plain_text<a class="headerlink" href="#to-plain-text" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">to_plain_text</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-></span> <span class="nb">str</span>
+</pre></div>
+</div>
+<p>Abstract method</p>
+<p>Return a plain text for console display. Click event and hover event will be ignored</p>
+</div>
+<div class="section" id="copy">
+<h4>copy<a class="headerlink" href="#copy" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-></span> <span class="n">RTextBase</span>
+</pre></div>
+</div>
+<p>Abstract method</p>
+<p>Return a copy version of itself</p>
+</div>
+<div class="section" id="set-color">
+<h4>set_color<a class="headerlink" href="#set-color" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">set_color</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">color</span><span class="p">:</span> <span class="n">RColor</span><span class="p">)</span> <span class="o">-></span> <span class="n">RTextBase</span>
+</pre></div>
+</div>
+<p>Abstract method</p>
+<p>Set the color of the text and return the text component itself</p>
+</div>
+<div class="section" id="set-styles">
+<h4>set_styles<a class="headerlink" href="#set-styles" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">set_styles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">styles</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">RStyle</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">RStyle</span><span class="p">]])</span> <span class="o">-></span> <span class="n">RTextBase</span>
+</pre></div>
+</div>
+<p>Abstract method</p>
+<p>Set the styles of the text and return the text component itself</p>
+</div>
+<div class="section" id="set-click-event">
+<h4>set_click_event<a class="headerlink" href="#set-click-event" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">set_click_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">:</span> <span class="n">RAction</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-></span> <span class="n">RTextBase</span>
+</pre></div>
+</div>
+<p>Set the click event with given <em>action</em> and <em>value</em> and return the text component itself</p>
+<p>Parameter <em>action</em>: The type of the action</p>
+<p>Parameter <em>value</em>: The string value of the action</p>
+<p>Method <code class="docutils literal notranslate"><span class="pre">c</span></code> is the short form of method <code class="docutils literal notranslate"><span class="pre">set_click_event</span></code></p>
+</div>
+<div class="section" id="set-hover-text">
+<h4>set_hover_text<a class="headerlink" href="#set-hover-text" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">set_hover_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span> <span class="o">-></span> <span class="n">RTextBase</span>
+</pre></div>
+</div>
+<p>Set the hover text with given <em>*args</em> and return the text component itself</p>
+<p>Parameter <em>action</em>: The elements be used to create a <code class="docutils literal notranslate"><span class="pre">RTextList</span></code> instance. The <code class="docutils literal notranslate"><span class="pre">RTextList</span></code> instance is used as the actual hover text</p>
+<p>Method <code class="docutils literal notranslate"><span class="pre">h</span></code> is the short form of method <code class="docutils literal notranslate"><span class="pre">set_hover_text</span></code></p>
+</div>
+</div>
+<div class="section" id="id2">
+<h3>RText<a class="headerlink" href="#id2" title="永久链接至标题">¶</a></h3>
+<p>The regular text component class</p>
+<div class="section" id="id3">
+<h4>RText<a class="headerlink" href="#id3" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">color</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">RColor</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">styles</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">RStyle</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">RStyle</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Create an <code class="docutils literal notranslate"><span class="pre">RText</span></code> object with specific text, color and style. <code class="docutils literal notranslate"><span class="pre">styles</span></code> can be a <code class="docutils literal notranslate"><span class="pre">RStyle</span></code> or a collection of <code class="docutils literal notranslate"><span class="pre">RStyle</span></code></p>
+</div>
+</div>
+<div class="section" id="rtexttranslation">
+<h3>RTextTranslation<a class="headerlink" href="#rtexttranslation" title="永久链接至标题">¶</a></h3>
+<p>The translation text component class. It’s almost the same as <code class="docutils literal notranslate"><span class="pre">RText</span></code></p>
+<div class="section" id="id4">
+<h4>RTextTranslation<a class="headerlink" href="#id4" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">translation_key</span><span class="p">,</span> <span class="n">color</span><span class="p">:</span> <span class="n">RColor</span> <span class="o">=</span> <span class="n">RColor</span><span class="o">.</span><span class="n">reset</span><span class="p">,</span> <span class="n">styles</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">RStyle</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">RStyle</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Create a RTextTranslation object with specific translation_key. The rest of the parameters are the same to <code class="docutils literal notranslate"><span class="pre">RText</span></code></p>
+<p>Example: <code class="docutils literal notranslate"><span class="pre">RTextTranslation('advancements.nether.root.title',</span> <span class="pre">color=RColor.red)</span></code></p>
+</div>
+</div>
+<div class="section" id="rtextlist">
+<h3>RTextList<a class="headerlink" href="#rtextlist" title="永久链接至标题">¶</a></h3>
+<p>A list of RTextBase objects</p>
+<div class="section" id="id5">
+<h4>RTextList<a class="headerlink" href="#id5" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Use the given <em>*args</em> to create a <code class="docutils literal notranslate"><span class="pre">RTextList</span></code></p>
+<p>Objects in <code class="docutils literal notranslate"><span class="pre">*args</span></code> can be a <code class="docutils literal notranslate"><span class="pre">str</span></code>, a <code class="docutils literal notranslate"><span class="pre">RTextBase</span></code> or any classes implemented <code class="docutils literal notranslate"><span class="pre">__str__</span></code> method. All of them will be convert to <code class="docutils literal notranslate"><span class="pre">RText</span></code></p>
+</div>
+<div class="section" id="append">
+<h4>append<a class="headerlink" href="#append" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span> <span class="o">-></span> <span class="n">RTextList</span>
+</pre></div>
+</div>
+<p>Add several elements to the end of the current <code class="docutils literal notranslate"><span class="pre">RTextList</span></code>, then return the <code class="docutils literal notranslate"><span class="pre">RTextList</span></code> component itself</p>
+<p>Objects in <code class="docutils literal notranslate"><span class="pre">*args</span></code> can be a <code class="docutils literal notranslate"><span class="pre">str</span></code>, a <code class="docutils literal notranslate"><span class="pre">RTextBase</span></code> or any classes implemented <code class="docutils literal notranslate"><span class="pre">__str__</span></code> method. All of them will be convert to <code class="docutils literal notranslate"><span class="pre">RText</span></code></p>
+</div>
+<div class="section" id="is-empty">
+<h4>is_empty<a class="headerlink" href="#is-empty" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">is_empty</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-></span> <span class="nb">bool</span>
+</pre></div>
+</div>
+<p>Return a bool indicating if the <code class="docutils literal notranslate"><span class="pre">RTextList</span></code> is empty. In other words, has no child element</p>
+</div>
+</div>
+</div>
+<div class="section" id="types">
+<h2>types<a class="headerlink" href="#types" title="永久链接至标题">¶</a></h2>
+<p>Who doesn’t want a complete type checking to help you reduce silly mistakes etc. when coding your plugin? If you want to add type hints to the server interface or command source parameter, here’s the package for you to import those Usually-used classes</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mcdreforged.api.types</span> <span class="kn">import</span> <span class="n">ServerInterface</span><span class="p">,</span> <span class="n">Info</span>
+
+<span class="k">def</span> <span class="nf">on_info</span><span class="p">(</span><span class="n">server</span><span class="p">:</span> <span class="n">ServerInterface</span><span class="p">,</span> <span class="n">info</span><span class="p">:</span> <span class="n">Info</span><span class="p">):</span>
+    <span class="c1"># Now auto completion for server and info parameters should be available for IDE</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="classes/classes.html" class="btn btn-neutral float-right" title="Class References" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="command.html" class="btn btn-neutral float-left" title="Command" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; 版权所有 2021, Fallen_Breath.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
