@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-15 15:18+0800\n"
+"POT-Creation-Date: 2021-01-17 13:10+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,36 +18,73 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.0\n"
 
-#: ../customize/reactor.md:1
+#: ../../source/customize/reactor.rst:3
 msgid "Info Reactor"
 msgstr ""
 
-#: ../customize/reactor.md:3
+#: ../../source/customize/reactor.rst:5
 msgid ""
-"Info reactors are the components to react to a parsed Info instance. MCDR"
-" uses reactors to trigger command parsing or dispatch plugin events"
+"Info reactors are the components to react to a parsed ``Info`` instance. "
+"MCDR uses reactors to trigger command parsing or dispatch plugin events"
 msgstr ""
 
-#: ../customize/reactor.md:5
+#: ../../source/customize/reactor.rst:7
 msgid ""
 "If you want to add more behaviors to MCDR, like dispatching new events "
 "and so on, rather than use a plugin, you can design you own info reactor."
-" Since info reactors can access to the inner MCDReforgedServer instance "
-"which is the core object of MCDR, so it may have much more possible "
-"usages. But yes, as always, use with cautions"
+" Since info reactors can access to the inner ``MCDReforgedServer`` "
+"instance which is the core object of MCDR, so it may have much more "
+"possible usages. But yes, as always, use with cautions"
 msgstr ""
 
-#: ../customize/reactor.md:7
+#: ../../source/customize/reactor.rst:9
 msgid ""
-"Similar to custom server handler, you info reactor class needs to inherit"
-" from the class AbstractInfoReactor. Then you need to implement the react"
-" method to give it some functionalities"
+"Similar to `custom server handler <handler>`__\\ , you info reactor class"
+" needs to inherit from the class ``AbstractInfoReactor``. Then you need "
+"to implement the ``react`` method to give it some functionalities"
 msgstr ""
 
-#: ../customize/reactor.md:9
+#: ../../source/customize/reactor.rst:11
 msgid ""
 "After you finish coding your reactor, you need to add you reactor class "
-"path to the custom_info_reactors option of the configure file, then your "
-"reactor will start working"
+"path to the `custom_info_reactors <../configure.html#custom-info-"
+"reactors>`__ option of the configure file, then your reactor will start "
+"working"
 msgstr ""
+
+#~ msgid ""
+#~ "Info reactors are the components to "
+#~ "react to a parsed Info instance. "
+#~ "MCDR uses reactors to trigger command"
+#~ " parsing or dispatch plugin events"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "If you want to add more behaviors"
+#~ " to MCDR, like dispatching new events"
+#~ " and so on, rather than use a"
+#~ " plugin, you can design you own "
+#~ "info reactor. Since info reactors can"
+#~ " access to the inner MCDReforgedServer "
+#~ "instance which is the core object "
+#~ "of MCDR, so it may have much "
+#~ "more possible usages. But yes, as "
+#~ "always, use with cautions"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Similar to custom server handler, you"
+#~ " info reactor class needs to inherit"
+#~ " from the class AbstractInfoReactor. Then"
+#~ " you need to implement the react "
+#~ "method to give it some functionalities"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "After you finish coding your reactor,"
+#~ " you need to add you reactor "
+#~ "class path to the custom_info_reactors "
+#~ "option of the configure file, then "
+#~ "your reactor will start working"
+#~ msgstr ""
 

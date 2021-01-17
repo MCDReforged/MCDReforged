@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-15 15:18+0800\n"
+"POT-Creation-Date: 2021-01-17 09:55+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,15 +18,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.0\n"
 
-#: ../customize/customize.rst:4
+#: ../../source/customize/customize.rst:4
 msgid "Server Handler"
 msgstr ""
 
-#: ../customize/customize.rst:4
+#: ../../source/customize/customize.rst:4
 msgid "Info Reactor"
 msgstr ""
 
-#: ../customize/customize.rst:2
+#: ../../source/customize/customize.rst:2
 msgid "Customize"
 msgstr ""
 
