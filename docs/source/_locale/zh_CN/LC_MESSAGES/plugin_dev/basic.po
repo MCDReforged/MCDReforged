@@ -1,22 +1,22 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2021, Fallen_Breath
-# This file is distributed under the same license as the MCDReforged
-# package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2021.
-#
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: MCDReforged \n"
+"Project-Id-Version: mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-17 13:15+0800\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2021-01-17 07:19\n"
+"Last-Translator: \n"
+"Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.0\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Crowdin-Project: mcdreforged\n"
+"X-Crowdin-Project-ID: 437248\n"
+"X-Crowdin-Language: zh-CN\n"
+"X-Crowdin-File: /plugin_dev/basic.po\n"
+"X-Crowdin-File-ID: 88\n"
+"Language: zh_CN\n"
 
 #: ../../source/plugin_dev/basic.rst:3
 msgid "MCDR Plugin"
@@ -27,34 +27,23 @@ msgid "What is a MCDR plugin"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:8
-msgid ""
-"An MCDR plugin is a python source file with ``.py`` file extension "
-"located in plugin directories. The list of the plugin directory can is "
-"defined inside the `configure file <configure.html#plugin_directories>`__"
+msgid "An MCDR plugin is a python source file with ``.py`` file extension located in plugin directories. The list of the plugin directory can is defined inside the `configure file <configure.html#plugin_directories>`__"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:10
-msgid ""
-"At start up, MCDR will automatically load every plugin inside the plugin "
-"directories. Additionally, MCDR will append all the plugin directories "
-"into ``sys.path``\\ , so plugins can import modules placed inside the "
-"plugin folders directly"
+msgid "At start up, MCDR will automatically load every plugin inside the plugin directories. Additionally, MCDR will append all the plugin directories into ``sys.path``\\ , so plugins can import modules placed inside the plugin folders directly"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:12
-msgid ""
-"There is a sample plugin named ``SamplePlugin.py`` in the ``plugins/`` "
-"folder in source and you can check its content for reference"
+msgid "There is a sample plugin named ``SamplePlugin.py`` in the ``plugins/`` folder in source and you can check its content for reference"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:15
 msgid "Quick Start"
-msgstr ""
+msgstr "快速开始"
 
 #: ../../source/plugin_dev/basic.rst:17
-msgid ""
-"Open one of the plugin directories of MCDR, create a file named "
-"``HelloWorld.py``"
+msgid "Open one of the plugin directories of MCDR, create a file named ``HelloWorld.py``"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:24
@@ -62,9 +51,7 @@ msgid "open it and enter these code"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:38
-msgid ""
-"Return to MCDR console, enter ``!!MCDR reload plugin``\\ , and you should"
-" see the hello world message from your plugin"
+msgid "Return to MCDR console, enter ``!!MCDR reload plugin``\\ , and you should see the hello world message from your plugin"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:44
@@ -73,14 +60,10 @@ msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:47
 msgid "Metadata"
-msgstr ""
+msgstr "元数据"
 
 #: ../../source/plugin_dev/basic.rst:49
-msgid ""
-"The meta data field provides the basic information of the plugin. As you "
-"can see in the `Quick Start <#quick-start>`__ section above, meta data is"
-" declared in the global scope. It's a dict contains several key-value "
-"with the name ``PLUGIN_METADATA``"
+msgid "The meta data field provides the basic information of the plugin. As you can see in the `Quick Start <#quick-start>`__ section above, meta data is declared in the global scope. It's a dict contains several key-value with the name ``PLUGIN_METADATA``"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:51
@@ -88,9 +71,7 @@ msgid "Here's a metadata field with all possible key-values"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:68
-msgid ""
-"If a plugin doesn't not declare the meta data field, a warning will arise"
-" in the console and the fallback values will be used"
+msgid "If a plugin doesn't not declare the meta data field, a warning will arise in the console and the fallback values will be used"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:71
@@ -98,10 +79,7 @@ msgid "id"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:73
-msgid ""
-"Id, or plugin id, is the identity string of your plugin. It should "
-"consist of lowercase letters, numbers and underscores with a length of 1 "
-"to 64"
+msgid "Id, or plugin id, is the identity string of your plugin. It should consist of lowercase letters, numbers and underscores with a length of 1 to 64"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:75
@@ -137,17 +115,11 @@ msgid "``a cool plugin``"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:89
-msgid ""
-"MCDR uses plugin id to distinguish between different plugins and check "
-"the dependencies. All loaded plugin in MCDR contain different plugin ids."
-" If a newly loaded plugin has a plugin id exactly the same with an "
-"existed plugin, the new plugin will fail to load"
+msgid "MCDR uses plugin id to distinguish between different plugins and check the dependencies. All loaded plugin in MCDR contain different plugin ids. If a newly loaded plugin has a plugin id exactly the same with an existed plugin, the new plugin will fail to load"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:91
-msgid ""
-"Choose your plugin id wisely. It's highly suggested to keep your plugin "
-"id not changed after release your plugin"
+msgid "Choose your plugin id wisely. It's highly suggested to keep your plugin id not changed after release your plugin"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:94
@@ -168,10 +140,7 @@ msgid "version"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:101
-msgid ""
-"The version value indicates the version of your value. It's mostly in "
-"`semver <https://semver.org/>`__ format but it has less restriction such "
-"as you can have the core version with any length"
+msgid "The version value indicates the version of your value. It's mostly in `semver <https://semver.org/>`__ format but it has less restriction such as you can have the core version with any length"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:103
@@ -199,9 +168,7 @@ msgid "``1.14.1-beta.4+build.54``"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:112
-msgid ""
-"Following `semver <https://semver.org/>`__ format for you version string "
-"is a good idea. It's easier to maintain and for people to understand"
+msgid "Following `semver <https://semver.org/>`__ format for you version string is a good idea. It's easier to maintain and for people to understand"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:115
@@ -217,15 +184,11 @@ msgid "name"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:122
-msgid ""
-"The name of your plugin. Give your plugin with a nice name with any kinds"
-" of characters. RText is allowed here"
+msgid "The name of your plugin. Give your plugin with a nice name with any kinds of characters. RText is allowed here"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:124
-msgid ""
-"Try not to make the name too long. For more details of your plugin, you "
-"can put them into the ``description``"
+msgid "Try not to make the name too long. For more details of your plugin, you can put them into the ``description``"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:127
@@ -245,9 +208,7 @@ msgid "description"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:134
-msgid ""
-"The description of you plugin. Put the details of your plugin here. Rtext"
-" is allowed too"
+msgid "The description of you plugin. Put the details of your plugin here. Rtext is allowed too"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:136 ../../source/plugin_dev/basic.rst:148
@@ -269,9 +230,7 @@ msgid "author"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:146
-msgid ""
-"The authors of the plugins. If there's only a single author, you can also"
-" use a string instead of a list of string"
+msgid "The authors of the plugins. If there's only a single author, you can also use a string instead of a list of string"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:151
@@ -287,9 +246,7 @@ msgid "link"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:158
-msgid ""
-"The link of your project. You can put a link to the github repository of "
-"your plugin here. It should be an available url"
+msgid "The link of your project. You can put a link to the github repository of your plugin here. It should be an available url"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:163
@@ -301,25 +258,15 @@ msgid "dependencies"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:170
-msgid ""
-"A dict of dependencies you plugin relies on. It's a dict contains several"
-" key-value pairs. The key is the id of the plugin that your plugin is "
-"relies on, and the value is the version requirement of the plugin that "
-"your plugin is relies on"
+msgid "A dict of dependencies you plugin relies on. It's a dict contains several key-value pairs. The key is the id of the plugin that your plugin is relies on, and the value is the version requirement of the plugin that your plugin is relies on"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:172
-msgid ""
-"If your plugin has requirement to the version of MCDR, use "
-"``mcdreforged`` as the plugin id"
+msgid "If your plugin has requirement to the version of MCDR, use ``mcdreforged`` as the plugin id"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:174
-msgid ""
-"A version requirement is a string than contains several criterions of the"
-" version. Criterions are divided by space character, each criterion is "
-"made up of an operator and a base version string. Wildcard is allowed "
-"when describing the base version"
+msgid "A version requirement is a string than contains several criterions of the version. Criterions are divided by space character, each criterion is made up of an operator and a base version string. Wildcard is allowed when describing the base version"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:176
@@ -448,9 +395,7 @@ msgid "1.2, 1.2.4"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:213
-msgid ""
-"If the operator is not specified, ``=`` is used as default. In this case "
-"the target version should equal to 1.2.3"
+msgid "If the operator is not specified, ``=`` is used as default. In this case the target version should equal to 1.2.3"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:216
@@ -462,9 +407,7 @@ msgid "^1.2.3"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:218
-msgid ""
-"The target version should be equal to or newer than 1.2.3, and the first "
-"version segment of the target version should be equal to the base version"
+msgid "The target version should be equal to or newer than 1.2.3, and the first version segment of the target version should be equal to the base version"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:219
@@ -484,10 +427,7 @@ msgid "~1.2.3"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:223
-msgid ""
-"The target version should be equal to or newer than 1.2.3, and the first "
-"and the second version segment of the target version should be equal to "
-"the base version"
+msgid "The target version should be equal to or newer than 1.2.3, and the first and the second version segment of the target version should be equal to the base version"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:224
@@ -499,15 +439,11 @@ msgid "1.0.0, 1.4.4, 2.0.0"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:228
-msgid ""
-"Check `here <https://docs.npmjs.com/about-semantic-versioning>`__ for "
-"more detail to the version requirement"
+msgid "Check `here <https://docs.npmjs.com/about-semantic-versioning>`__ for more detail to the version requirement"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:230
-msgid ""
-"If there are multiple declared criterions, the target version is accepted"
-" only when it's accepted by all criterions"
+msgid "If there are multiple declared criterions, the target version is accepted only when it's accepted by all criterions"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:232
@@ -515,17 +451,11 @@ msgid "Here a dependencies example:"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:243
-msgid ""
-"MCDR will make sure only when all dependency requirements are satisfied "
-"your plugin will get loaded successfully. Missing dependency, dependency "
-"version not match or dependency loop will result in a dependency check "
-"failure"
+msgid "MCDR will make sure only when all dependency requirements are satisfied your plugin will get loaded successfully. Missing dependency, dependency version not match or dependency loop will result in a dependency check failure"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:245
-msgid ""
-"This field is optional, you can just ignore it if your plugin doesn't "
-"have any dependency"
+msgid "This field is optional, you can just ignore it if your plugin doesn't have any dependency"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:248
@@ -541,10 +471,7 @@ msgid "Plugin Registry"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:255
-msgid ""
-"Plugin registry is a collection of things that plugin registered for. It "
-"will get cleaned up every time before the plugin gets loaded, so you'd "
-"better register them in `Plugin Load <event.html#plugin-load>`__ event"
+msgid "Plugin registry is a collection of things that plugin registered for. It will get cleaned up every time before the plugin gets loaded, so you'd better register them in `Plugin Load <event.html#plugin-load>`__ event"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:258
@@ -556,30 +483,19 @@ msgid "There are 2 methods to register an event listener for you plugin"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:264
-msgid ""
-"Declare a function inside the global slope with the specific name. It's "
-"the legacy registering method to register a listener and it only works "
-"with events provided by MCDR. Check `here <event.html#default-event-"
-"listener>`__ for more detail"
+msgid "Declare a function inside the global slope with the specific name. It's the legacy registering method to register a listener and it only works with events provided by MCDR. Check `here <event.html#default-event-listener>`__ for more detail"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:266
-msgid ""
-"For example, the widely-used function below is a default `Plugin Loaded "
-"<event.html#plugin-loaded>`__ event listener"
+msgid "For example, the widely-used function below is a default `Plugin Loaded <event.html#plugin-loaded>`__ event listener"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:274
-msgid ""
-"Manually invoke ``server.register_event_listener`` method to register an "
-"event listener. You can specify the callable object and the priority for "
-"the event listener"
+msgid "Manually invoke ``server.register_event_listener`` method to register an event listener. You can specify the callable object and the priority for the event listener"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:276
-msgid ""
-"Check `here <event.html#register-a-event-listener>`__ for more detail "
-"about event listener registering"
+msgid "Check `here <event.html#register-a-event-listener>`__ for more detail about event listener registering"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:278
@@ -587,41 +503,27 @@ msgid "Here some examples about manually register event listeners"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:292
-msgid ""
-"Take a look at the reference of ``register_event_listener`` method in "
-"`ServerInterface <classes/ServerInterface.html#register-event-"
-"listener>`__ document for more detail"
+msgid "Take a look at the reference of ``register_event_listener`` method in `ServerInterface <classes/ServerInterface.html#register-event-listener>`__ document for more detail"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:295
 msgid "Command"
-msgstr ""
+msgstr "指令"
 
 #: ../../source/plugin_dev/basic.rst:297
-msgid ""
-"Rather than manually parsing ``info.content`` inside user info event "
-"callback like ``on_user_info``\\ , MCDR provides a command system for "
-"plugins to register their commands"
+msgid "Rather than manually parsing ``info.content`` inside user info event callback like ``on_user_info``\\ , MCDR provides a command system for plugins to register their commands"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:299
-msgid ""
-"Check the `command <command>`__ document for more detail about building a"
-" command tree"
+msgid "Check the `command <command>`__ document for more detail about building a command tree"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:301
-msgid ""
-"Assuming that you have already built a command tree with root literal "
-"node *root*\\ , then you can use the following command to register your "
-"command tree in MCDR"
+msgid "Assuming that you have already built a command tree with root literal node *root*\\ , then you can use the following command to register your command tree in MCDR"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:307
-msgid ""
-"Take a look at the reference of ``register_command`` method in "
-"`ServerInterface <classes/ServerInterface.html#register-command>`__ "
-"document for more details of its usage"
+msgid "Take a look at the reference of ``register_command`` method in `ServerInterface <classes/ServerInterface.html#register-command>`__ document for more details of its usage"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:310
@@ -629,18 +531,11 @@ msgid "Help message"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:312
-msgid ""
-"Plugin can register its help message with "
-"``server.register_help_message`` to MCDR, so that users can use `\\ "
-"``!!help`` command <../command.html#help-command>`__ to view the help "
-"messages of all commands"
+msgid "Plugin can register its help message with ``server.register_help_message`` to MCDR, so that users can use `\\ ``!!help`` command <../command.html#help-command>`__ to view the help messages of all commands"
 msgstr ""
 
 #: ../../source/plugin_dev/basic.rst:314
-msgid ""
-"Take a look at the reference of ``register_help_message`` method in "
-"`ServerInterface <classes/ServerInterface.html#register-help-message>`__ "
-"document for more details of its usage"
+msgid "Take a look at the reference of ``register_help_message`` method in `ServerInterface <classes/ServerInterface.html#register-help-message>`__ document for more details of its usage"
 msgstr ""
 
 #~ msgid ""

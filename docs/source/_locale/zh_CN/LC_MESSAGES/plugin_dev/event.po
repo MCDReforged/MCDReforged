@@ -1,109 +1,81 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2021, Fallen_Breath
-# This file is distributed under the same license as the MCDReforged
-# package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2021.
-#
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: MCDReforged \n"
+"Project-Id-Version: mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-17 13:10+0800\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2021-01-17 07:19\n"
+"Last-Translator: \n"
+"Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.0\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Crowdin-Project: mcdreforged\n"
+"X-Crowdin-Project-ID: 437248\n"
+"X-Crowdin-Language: zh-CN\n"
+"X-Crowdin-File: /plugin_dev/event.po\n"
+"X-Crowdin-File-ID: 94\n"
+"Language: zh_CN\n"
 
 #: ../../source/plugin_dev/event.rst:3
 msgid "Plugin Event"
-msgstr ""
+msgstr "插件事件"
 
 #: ../../source/plugin_dev/event.rst:5
-msgid ""
-"Plugin events are the most important way for plugins to interact with the"
-" server and the console"
-msgstr ""
+msgid "Plugin events are the most important way for plugins to interact with the server and the console"
+msgstr "插件事件是插件与 控制台和服务器 交互的重要方式"
 
 #: ../../source/plugin_dev/event.rst:7
-msgid ""
-"When the server has trigger a specific event, it will list out all event "
-"listeners that have registered to this event, then MCDR will invoke the "
-"callback function of the listener with the given arguments"
-msgstr ""
+msgid "When the server has trigger a specific event, it will list out all event listeners that have registered to this event, then MCDR will invoke the callback function of the listener with the given arguments"
+msgstr "当服务器触发某一事件时，MCDR 会以触发的参数传递至注册该事件的事件监听器，然后调用该监听器的回调函数"
 
 #: ../../source/plugin_dev/event.rst:9
-msgid ""
-"Event Listeners have a priority value. The default priority is ``1000``. "
-"Plugins can specify the priority when they register an event listener "
-"manually. MCDR will execute event listeners in ascending order according "
-"to the priority"
-msgstr ""
+msgid "Event Listeners have a priority value. The default priority is ``1000``. Plugins can specify the priority when they register an event listener manually. MCDR will execute event listeners in ascending order according to the priority"
+msgstr "事件监听器是具有优先级的，默认优先级为 ``1000``，插件可以在手动注册事件监听器时设置优先级，MCDR会根据优先级按升序来执行事件监听器"
 
 #: ../../source/plugin_dev/event.rst:12
 msgid "Register a event listener"
-msgstr ""
+msgstr "注册事件监听器"
 
 #: ../../source/plugin_dev/event.rst:14
-msgid ""
-"See the `Event listeners <basic.html#event-listeners>`__ section in "
-"Plugin Registry in the document of `MCDR Plugin <basic>`__"
+msgid "See the `Event listeners <basic.html#event-listeners>`__ section in Plugin Registry in the document of `MCDR Plugin <basic>`__"
 msgstr ""
 
 #: ../../source/plugin_dev/event.rst:17
 msgid "MCDR Event"
-msgstr ""
+msgstr "MCDR 事件"
 
 #: ../../source/plugin_dev/event.rst:20
 msgid "Default Event Listener"
-msgstr ""
+msgstr "默认的事件监听器"
 
 #: ../../source/plugin_dev/event.rst:22
-msgid ""
-"All of the MCDR events have an attribute called \"Default function "
-"name\". If your plugin declare a function in the global slope of the "
-"plugin file, with the same name to the \"Default function name\", the "
-"function will be automatically registered as a listener to the specific "
-"event."
-msgstr ""
+msgid "All of the MCDR events have an attribute called \"Default function name\". If your plugin declare a function in the global slope of the plugin file, with the same name to the \"Default function name\", the function will be automatically registered as a listener to the specific event."
+msgstr "所有的 MCDR 事件监听器都有一个 “默认函数名称”。当你在插件文件内创建一个函数名称与“默认函数名称”相同的函数时，该函数会自动注册为相应的事件监听器"
 
 #: ../../source/plugin_dev/event.rst:24
-msgid ""
-"The priority of these event listeners are always the default priority (\\"
-" ``1000``\\ )"
-msgstr ""
+msgid "The priority of these event listeners are always the default priority (\\ ``1000``\\ )"
+msgstr "这些事件监听器的优先级始终是默认的优先级(\\ ``1000`` )"
 
 #: ../../source/plugin_dev/event.rst:27
 msgid "MCDR Event List"
-msgstr ""
+msgstr "MCDR 事件列表"
 
 #: ../../source/plugin_dev/event.rst:30
 msgid "Plugin Loaded"
-msgstr ""
+msgstr "插件加载"
 
 #: ../../source/plugin_dev/event.rst:32
-msgid ""
-"Plugin load event is triggered once when a plugin is loaded. Plugins are "
-"supposed to register some event listeners, commands and help messages as "
-"well as initialize their fields here"
-msgstr ""
+msgid "Plugin load event is triggered once when a plugin is loaded. Plugins are supposed to register some event listeners, commands and help messages as well as initialize their fields here"
+msgstr "插件加载事件 位于插件加载后 触发一次，若你需要注册一些 事件监听器/命令/帮助消息，以及初始化参数，那么你应该置于这个函数里"
 
 #: ../../source/plugin_dev/event.rst:41
-msgid ""
-"If it's a plugin reload, ``prev_module`` argument indicates the previous "
-"plugin instance module, otherwise if it's the first time to load the "
-"plugin, prev_module is None. With this parameter plugin can easily "
-"inherit information from the previous plugin instance. Here's an example:"
-msgstr ""
+msgid "If it's a plugin reload, ``prev_module`` argument indicates the previous plugin instance module, otherwise if it's the first time to load the plugin, prev_module is None. With this parameter plugin can easily inherit information from the previous plugin instance. Here's an example:"
+msgstr "插件重新加载时，``prev_module`` 参数会代表之前的插件实例。若第一次加载插件 ``prev_module`` 为 None。你使用该参数时，可让插件继承以前的插件实例中的内容，下面为一个栗子："
 
 #: ../../source/plugin_dev/event.rst:52
-msgid ""
-"Note: Since it's the first event in the lifecycle of a plugin, this event"
-" can only be registered with default event listener, so the ``on_load`` "
-"function is the entry spot of your plugin"
+msgid "Note: Since it's the first event in the lifecycle of a plugin, this event can only be registered with default event listener, so the ``on_load`` function is the entry spot of your plugin"
 msgstr ""
 
 #: ../../source/plugin_dev/event.rst:55
@@ -123,9 +95,7 @@ msgid "Plugin Unloaded"
 msgstr ""
 
 #: ../../source/plugin_dev/event.rst:62
-msgid ""
-"This even is trigger when MCDR unload the plugin instance. It can be "
-"caused by a plugin reload or a plugin unload"
+msgid "This even is trigger when MCDR unload the plugin instance. It can be caused by a plugin reload or a plugin unload"
 msgstr ""
 
 #: ../../source/plugin_dev/event.rst:65
@@ -147,15 +117,11 @@ msgid "Plugin Removed"
 msgstr ""
 
 #: ../../source/plugin_dev/event.rst:72
-msgid ""
-"This even is trigger when MCDR remove the plugin. It can only be caused "
-"by a plugin unload. It's time to do some clean up for your plugin"
+msgid "This even is trigger when MCDR remove the plugin. It can only be caused by a plugin unload. It's time to do some clean up for your plugin"
 msgstr ""
 
 #: ../../source/plugin_dev/event.rst:74
-msgid ""
-"Another event for plugin to do some cleanup is `MCDR Stop <#mcdr-stop>`__"
-" event"
+msgid "Another event for plugin to do some cleanup is `MCDR Stop <#mcdr-stop>`__ event"
 msgstr ""
 
 #: ../../source/plugin_dev/event.rst:76
@@ -175,10 +141,7 @@ msgid "General Info"
 msgstr ""
 
 #: ../../source/plugin_dev/event.rst:92
-msgid ""
-"A new line of text is output from the stdout of the server, or a text is "
-"input from the console. MCDR has already parsed the text into an `Info "
-"<classes/Info>`__ object. In this event plugin can response to the info"
+msgid "A new line of text is output from the stdout of the server, or a text is input from the console. MCDR has already parsed the text into an `Info <classes/Info>`__ object. In this event plugin can response to the info"
 msgstr ""
 
 #: ../../source/plugin_dev/event.rst:94 ../../source/plugin_dev/event.rst:114
@@ -202,10 +165,7 @@ msgid "User Info"
 msgstr ""
 
 #: ../../source/plugin_dev/event.rst:110
-msgid ""
-"User Info event is very similar to General Info event, but it only gets "
-"triggered when the info is sent by a user, more precisely, "
-"``info.is_user`` is ``True``"
+msgid "User Info event is very similar to General Info event, but it only gets triggered when the info is sent by a user, more precisely, ``info.is_user`` is ``True``"
 msgstr ""
 
 #: ../../source/plugin_dev/event.rst:112
@@ -213,11 +173,7 @@ msgid "If you want a simple way to handle user input, you can use this event"
 msgstr ""
 
 #: ../../source/plugin_dev/event.rst:122
-msgid ""
-"If you want to have a not-simple command system, rather than parsing them"
-" manually in User Info event, I will suggest you to register a command "
-"tree for you plugin. See the `command registering <basic.html#command>`__"
-" doc"
+msgid "If you want to have a not-simple command system, rather than parsing them manually in User Info event, I will suggest you to register a command tree for you plugin. See the `command registering <basic.html#command>`__ doc"
 msgstr ""
 
 #: ../../source/plugin_dev/event.rst:125
@@ -249,9 +205,7 @@ msgid "Server Startup"
 msgstr ""
 
 #: ../../source/plugin_dev/event.rst:142
-msgid ""
-"The server has fully started up. For example, a vanilla Minecraft server "
-"outputs ``Done (1.0s)! For help, type \"help\"``"
+msgid "The server has fully started up. For example, a vanilla Minecraft server outputs ``Done (1.0s)! For help, type \"help\"``"
 msgstr ""
 
 #: ../../source/plugin_dev/event.rst:145
@@ -267,14 +221,12 @@ msgid "Server Stop"
 msgstr ""
 
 #: ../../source/plugin_dev/event.rst:152
-msgid ""
-"The server process stops. You can do something depends on the process "
-"return code"
+msgid "The server process stops. You can do something depends on the process return code"
 msgstr ""
 
 #: ../../source/plugin_dev/event.rst:154 ../../source/plugin_dev/event.rst:192
 msgid "Example:"
-msgstr ""
+msgstr "例如："
 
 #: ../../source/plugin_dev/event.rst:163
 msgid "Event id: mcdr.server_stop"
@@ -293,9 +245,7 @@ msgid "MCDR Start"
 msgstr ""
 
 #: ../../source/plugin_dev/event.rst:170
-msgid ""
-"The MCDR is starting. Only plugins which is loaded with MCDR is able to "
-"receive this event"
+msgid "The MCDR is starting. Only plugins which is loaded with MCDR is able to receive this event"
 msgstr ""
 
 #: ../../source/plugin_dev/event.rst:173
@@ -311,9 +261,7 @@ msgid "MCDR Stop"
 msgstr ""
 
 #: ../../source/plugin_dev/event.rst:180
-msgid ""
-"The MCDR is stopping. Time to do some clean up like `Plugin Removed "
-"<#plugin-removed>`__ event"
+msgid "The MCDR is stopping. Time to do some clean up like `Plugin Removed <#plugin-removed>`__ event"
 msgstr ""
 
 #: ../../source/plugin_dev/event.rst:183
@@ -329,10 +277,7 @@ msgid "Player Joined"
 msgstr ""
 
 #: ../../source/plugin_dev/event.rst:190
-msgid ""
-"A player just joined the game. MCDR only parses the name of the player to"
-" a string, plugin can use the info instance for more custom information "
-"parsing"
+msgid "A player just joined the game. MCDR only parses the name of the player to a string, plugin can use the info instance for more custom information parsing"
 msgstr ""
 
 #: ../../source/plugin_dev/event.rst:200
@@ -352,9 +297,7 @@ msgid "Player Left"
 msgstr ""
 
 #: ../../source/plugin_dev/event.rst:207
-msgid ""
-"A player just left the game. Plugin can do cleanups for player related "
-"objects"
+msgid "A player just left the game. Plugin can do cleanups for player related objects"
 msgstr ""
 
 #: ../../source/plugin_dev/event.rst:210
@@ -370,18 +313,11 @@ msgid "Custom Event"
 msgstr ""
 
 #: ../../source/plugin_dev/event.rst:217
-msgid ""
-"Besides MCDR itself, plugins can also dispatch its own event. All you "
-"need to do is invoking ``server.dispatch_event`` api with the event and "
-"some arguments. Check `here <classes/ServerInterface.html#dispatch-"
-"event>`__ for more details of the api"
+msgid "Besides MCDR itself, plugins can also dispatch its own event. All you need to do is invoking ``server.dispatch_event`` api with the event and some arguments. Check `here <classes/ServerInterface.html#dispatch-event>`__ for more details of the api"
 msgstr ""
 
 #: ../../source/plugin_dev/event.rst:219
-msgid ""
-"Customizing event is a good way to broadcast a message between plugins. "
-"It's also a good indirectly way for your plugin to react to requests from"
-" other plugins"
+msgid "Customizing event is a good way to broadcast a message between plugins. It's also a good indirectly way for your plugin to react to requests from other plugins"
 msgstr ""
 
 #~ msgid ""
