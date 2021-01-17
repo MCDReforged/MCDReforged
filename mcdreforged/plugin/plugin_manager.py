@@ -352,7 +352,11 @@ class PluginManager:
 		for plugin in self.get_regular_plugins():
 			plugin.assert_state({PluginState.READY})
 
+		self.__sort_plugins_by_id()
 		self.__update_registry()
+
+	def __sort_plugins_by_id(self):
+		self.plugins = dict(sorted(self.plugins.items(), key=lambda item: item[0]))
 
 	def __update_registry(self):
 		self.registry_storage.clear()
