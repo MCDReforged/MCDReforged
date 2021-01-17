@@ -63,7 +63,8 @@ class PluginManager:
 		Get current executing plugin in this thread
 		:param thread: If specified, it should be a Thread instance. Then it will return the executing plugin in the given thread
 		"""
-		return self.tls.get(self.TLS_PLUGIN_KEY, None, thread=thread)
+		stack = self.tls.get(self.TLS_PLUGIN_KEY, None, thread=thread)
+		return stack[len(stack) - 1] if stack is not None else None
 
 	def get_all_plugins(self) -> List[AbstractPlugin]:
 		return list(self.plugins.values())
@@ -95,11 +96,15 @@ class PluginManager:
 
 	@contextmanager
 	def with_plugin_context(self, plugin: AbstractPlugin):
-		self.tls.put(self.TLS_PLUGIN_KEY, plugin)
+		stack = self.tls.get(self.TLS_PLUGIN_KEY, default=[])  # type: List[AbstractPlugin]
+		stack.append(plugin)
+		self.tls.put(self.TLS_PLUGIN_KEY, stack)
 		try:
 			yield
 		finally:
-			self.tls.pop(self.TLS_PLUGIN_KEY)
+			stack.pop(len(stack) - 1)
+			if len(stack) == 0:
+				self.tls.pop(self.TLS_PLUGIN_KEY)
 
 	def contains_plugin_file(self, file_path: str) -> bool:
 		return file_path in self.plugin_file_path
@@ -418,8 +423,11 @@ class PluginManager:
 		for listener in self.registry_storage.event_listeners.get(event.id, []):
 			self.trigger_listener(listener, args)
 
-	def dispatch_event(self, event: MCDREvent, args: Tuple[Any, ...]):
-		self.mcdr_server.task_executor.execute_or_enqueue(lambda: self.__dispatch_event(event, args))
+	def dispatch_event(self, event: MCDREvent, args: Tuple[Any, ...], *, on_executor_thread=True):
+		if on_executor_thread:
+			self.mcdr_server.task_executor.execute_or_enqueue(lambda: self.__dispatch_event(event, args))
+		else:
+			self.__dispatch_event(event, args)
 
 	def trigger_listener(self, listener: EventListener, args: Tuple[Any, ...]):
 		"""

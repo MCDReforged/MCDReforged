@@ -431,7 +431,7 @@ class ServerInterface:
 		plugin.register_help_message(HelpMessage(plugin, prefix, message, permission))
 
 	@log_call
-	def dispatch_event(self, event: PluginEvent, args: Tuple[Any, ...]) -> None:
+	def dispatch_event(self, event: PluginEvent, args: Tuple[Any, ...], *, on_executor_thread: bool = True) -> None:
 		"""
 		Dispatch an event to all loaded plugins
 		The event will be immediately dispatch if it's on the task executor thread, or gets enqueued if it's on other thread
@@ -439,12 +439,14 @@ class ServerInterface:
 		LiteralEvent instance for this argument
 		:param args: The argument that will be used to invoke the event listeners. An ServerInterface instance will be
 		automatically added to the beginning of the argument list
+		:param on_executor_thread: If it's set to false. The event will be dispatched immediately no matter what the
+		current thread is
 		"""
 		if not isinstance(event, PluginEvent):
 			raise TypeError('Excepted {} but {} found'.format(PluginEvent, type(event)))
 		if MCDRPluginEvents.contains_id(event.id):
 			raise ValueError('Cannot dispatch event with already exists event id {}'.format(event.id))
-		self.__mcdr_server.task_executor.execute_or_enqueue(lambda: self.__mcdr_server.plugin_manager.dispatch_event(event, args))
+		self.__mcdr_server.plugin_manager.dispatch_event(event, args, on_executor_thread=on_executor_thread)
 
 	# ------------------------
 	#        Permission

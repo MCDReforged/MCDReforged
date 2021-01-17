@@ -48,6 +48,8 @@ def get_info(self) -> Info
 
 Return the Info instance that this command source is created from
 
+It's only available in command source originated from an info created by MCDR
+
 ### get_permission_level
 
 ```python
