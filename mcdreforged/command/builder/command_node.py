@@ -1,3 +1,4 @@
+import collections
 import inspect
 from abc import ABC
 from typing import List, Callable, Iterable, Set, Dict, Type, Any, Union, Optional
@@ -29,7 +30,7 @@ class ArgumentNode:
 
 	def __init__(self, name: Optional[str]):
 		self.name = name
-		self.children_literal = {}  # type: Dict[str, List[Literal]]
+		self.children_literal = collections.defaultdict(list)  # type: Dict[str, List[Literal]]
 		self.children = []  # type: List[ArgumentNode]
 		self.callback = None
 		self.error_handlers = {}  # type: Dict[Type[CommandError], ArgumentNode.ErrorHandler]
@@ -50,9 +51,7 @@ class ArgumentNode:
 			raise IllegalNodeOperation('Redirected node is not allowed to add child nodes')
 		if isinstance(node, Literal):
 			for literal in node.literals:
-				nodes = self.children_literal.get(literal, [])
-				nodes.append(node)
-				self.children_literal[literal] = nodes
+				self.children_literal[literal].append(node)
 		else:
 			self.children.append(node)
 		return self

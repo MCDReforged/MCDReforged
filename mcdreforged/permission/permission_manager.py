@@ -1,7 +1,7 @@
 """
 Permission control things
 """
-
+from mcdreforged.command.command_source import CommandSource
 from mcdreforged.info import *
 from mcdreforged.permission.permission_level import PermissionLevel, PermissionLevelItem
 from mcdreforged.utils import misc_util

@@ -1,3 +1,4 @@
+import collections
 from typing import Dict, List, Callable, Any, TYPE_CHECKING
 
 from mcdreforged.command.builder.command_node import Literal
@@ -42,7 +43,7 @@ class PluginCommandNode:
 class PluginRegistry:
 	def __init__(self, plugin: 'AbstractPlugin'):
 		self.plugin = plugin
-		self.event_listeners = {}  # type: Dict[str, List[EventListener]]
+		self.event_listeners = collections.defaultdict(list)  # type: Dict[str, List[EventListener]]
 		self.help_messages = []
 		self.command_roots = []  # type: List[PluginCommandNode]
 
@@ -50,9 +51,7 @@ class PluginRegistry:
 		self.help_messages.append(help_message)
 
 	def register_event_listener(self, event_id: str, listener: EventListener):
-		listeners = self.event_listeners.get(event_id, [])
-		listeners.append(listener)
-		self.event_listeners[event_id] = listeners
+		self.event_listeners[event_id].append(listener)
 
 	def register_command(self, node: Literal):
 		if not isinstance(node, Literal):
@@ -72,7 +71,7 @@ class PluginRegistry:
 class PluginManagerRegistry:
 	def __init__(self, plugin_manager: 'PluginManager'):
 		self.plugin_manager = plugin_manager
-		self.event_listeners = {}  # type: Dict[str, List[EventListener]]
+		self.event_listeners = collections.defaultdict(list)  # type: Dict[str, List[EventListener]]
 		self.help_messages = []  # type: List[HelpMessage]
 		self.command_roots = []  # type: List[PluginCommandNode]
 
@@ -83,9 +82,7 @@ class PluginManagerRegistry:
 
 	def collect(self, registry: PluginRegistry):
 		for event_id, plg_listeners in registry.event_listeners.items():
-			listeners = self.event_listeners.get(event_id, [])
-			listeners.extend(plg_listeners)
-			self.event_listeners[event_id] = listeners
+			self.event_listeners[event_id].extend(plg_listeners)
 		self.help_messages.extend(registry.help_messages)
 		self.command_roots.extend(registry.command_roots)
 
