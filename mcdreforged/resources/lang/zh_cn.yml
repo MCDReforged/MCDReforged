@@ -102,6 +102,7 @@ mcdr_command.list_plugin.suggest_info                 : 点击以显示插件 "�
 mcdr_command.list_plugin.suggest_disable              : 点击以禁用插件 "§e{0}§r"
 mcdr_command.list_plugin.suggest_enable               : 点击以启用插件 "§e{0}§r"
 mcdr_command.list_plugin.suggest_reload               : 点击以重载插件 "§e{0}§r"
+mcdr_command.list_plugin.suggest_unload               : 点击以卸载插件 "§e{0}§r"
 mcdr_command.list_plugin.suggest_load                 : 点击以加载插件 "§e{0}§r"
 mcdr_command.invalid_plugin_id                        : 无效的插件id "§e{0}§r"
 mcdr_command.invalid_plugin_file_name                 : 无效的插件文件名 "§e{0}§r"
@@ -109,9 +110,11 @@ mcdr_command.disable_plugin.fail                      : 插件 "§e{0}§r" 禁�
 mcdr_command.disable_plugin.success                   : 插件 "§e{0}§r" 禁用§a成功§r
 mcdr_command.reload_plugin.fail                       : 插件 "§e{0}§r" 重载§c失败§r
 mcdr_command.reload_plugin.success                    : 插件 "§e{0}§r" 重载§a成功§r
-mcdr_command.load_plugin.fail                         : 插件 "§e{0}§r" 启用§c失败§r
-mcdr_command.load_plugin.success                      : 插件 "§e{0}§r" 启用§a成功§r
-mcdr_command.enable_plugin.fail                       : 插件 "§e{0}§r" 加载§c失败§r
+mcdr_command.unload_plugin.fail                       : 插件 "§e{0}§r" 卸载§c失败§r
+mcdr_command.unload_plugin.success                    : 插件 "§e{0}§r" 卸载§a成功§r
+mcdr_command.load_plugin.fail                         : 插件 "§e{0}§r" 加载§c失败§r
+mcdr_command.load_plugin.success                      : 插件 "§e{0}§r" 加载§a成功§r
+mcdr_command.enable_plugin.fail                       : 插件 "§e{0}§r" 启用§c失败§r
 mcdr_command.enable_plugin.success                    : 插件 "§e{0}§r" 启用§a成功§r
 mcdr_command.reload_all_plugin.fail                   : 重载所有插件§c失败§r
 mcdr_command.help_message.title                       : MCDR 指令帮助信息列表

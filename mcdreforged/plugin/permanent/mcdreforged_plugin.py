@@ -344,13 +344,17 @@ class MCDReforgedPlugin(PermanentPlugin):
 			if self.can_see_rtext(source) and not plugin.is_permanent():
 				texts.append(
 					' ',
-					RText('[×]', color=RColor.gray)
-					.c(RAction.run_command, '!!MCDR plugin disable {}'.format(meta.id))
-					.h(self.tr('mcdr_command.list_plugin.suggest_disable', meta.id)),
-					' ',
 					RText('[↻]', color=RColor.gray)
 					.c(RAction.run_command, '!!MCDR plugin reload {}'.format(meta.id))
-					.h(self.tr('mcdr_command.list_plugin.suggest_reload', meta.id))
+					.h(self.tr('mcdr_command.list_plugin.suggest_reload', meta.id)),
+					' ',
+					RText('[↓]', color=RColor.gray)
+					.c(RAction.run_command, '!!MCDR plugin unload {}'.format(meta.id))
+					.h(self.tr('mcdr_command.list_plugin.suggest_unload', meta.id)),
+					' ',
+					RText('[×]', color=RColor.gray)
+					.c(RAction.run_command, '!!MCDR plugin disable {}'.format(meta.id))
+					.h(self.tr('mcdr_command.list_plugin.suggest_disable', meta.id))
 				)
 			source.reply(texts)
 
@@ -381,7 +385,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 			if self.can_see_rtext(source):
 				texts.append(
 					' ',
-					RText('[✔]', color=RColor.gray)
+					RText('[↑]', color=RColor.gray)
 					.c(RAction.run_command, '!!MCDR plugin load {}'.format(file_name))
 					.h(self.tr('mcdr_command.list_plugin.suggest_load', file_name))
 				)
