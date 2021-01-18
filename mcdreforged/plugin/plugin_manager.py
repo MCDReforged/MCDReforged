@@ -1,11 +1,12 @@
 """
 Plugin management
 """
+import collections
 import os
 import sys
 import threading
 from contextlib import contextmanager
-from typing import Callable, Dict, Optional, Any, Tuple, List, TYPE_CHECKING
+from typing import Callable, Dict, Optional, Any, Tuple, List, TYPE_CHECKING, Deque
 
 from mcdreforged import constant
 from mcdreforged.plugin.meta.dependency_walker import DependencyWalker
@@ -58,13 +59,13 @@ class PluginManager:
 	#   Getters / Setters etc.
 	# --------------------------
 
-	def get_current_running_plugin(self, *, thread=None) -> Optional[RegularPlugin]:
+	def get_current_running_plugin(self, *, thread=None) -> Optional[AbstractPlugin]:
 		"""
 		Get current executing plugin in this thread
 		:param thread: If specified, it should be a Thread instance. Then it will return the executing plugin in the given thread
 		"""
-		stack = self.tls.get(self.TLS_PLUGIN_KEY, None, thread=thread)
-		return stack[len(stack) - 1] if stack is not None else None
+		stack = self.tls.get(self.TLS_PLUGIN_KEY, None, thread=thread)  # type: Deque[AbstractPlugin]
+		return stack[-1] if stack is not None else None
 
 	def get_all_plugins(self) -> List[AbstractPlugin]:
 		return list(self.plugins.values())
@@ -96,13 +97,13 @@ class PluginManager:
 
 	@contextmanager
 	def with_plugin_context(self, plugin: AbstractPlugin):
-		stack = self.tls.get(self.TLS_PLUGIN_KEY, default=[])  # type: List[AbstractPlugin]
+		stack = self.tls.get(self.TLS_PLUGIN_KEY, default=collections.deque())  # type: Deque[AbstractPlugin]
 		stack.append(plugin)
 		self.tls.put(self.TLS_PLUGIN_KEY, stack)
 		try:
 			yield
 		finally:
-			stack.pop(len(stack) - 1)
+			stack.pop()
 			if len(stack) == 0:
 				self.tls.pop(self.TLS_PLUGIN_KEY)
 
