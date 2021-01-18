@@ -399,8 +399,26 @@ The event will be immediately dispatch if it's on the task executor thread, or g
 Parameter *event*\ : The event to dispatch. It need to be a ``PluginEvent`` instance. For simple usage, you can create a ``LiteralEvent`` instance for this argument
 
 Parameter *args*\ : The argument that will be used to invoke the event listeners. An ServerInterface instance will be automatically added to the beginning of the argument list
+Parameter *on_executor_thread*\ : If it's set to false. The event will be dispatched immediately no matter what the current thread is
 
 **Note**\ : You cannot dispatch an event with the same event id to any MCDR built-in event
+
+Example:
+
+For the event dispatcher plugin
+
+.. code-block:: python
+
+    server.dispatch_event(LiteralEvent('my_plugin.my_event'), (1, 'a'))
+
+In the event listener plugin
+
+.. code-block:: python
+
+    def do_something(server: ServerInterface, int_data: int, str_data: str):
+        pass
+
+    server.register_event_listener('my_plugin.my_event', do_something)
 
 Permission
 ^^^^^^^^^^
