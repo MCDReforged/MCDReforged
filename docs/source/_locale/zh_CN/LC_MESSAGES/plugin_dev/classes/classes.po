@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-17 09:55+0800\n"
-"PO-Revision-Date: 2021-01-17 07:19\n"
+"PO-Revision-Date: 2021-01-18 05:32\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -20,21 +20,21 @@ msgstr ""
 
 #: ../../source/plugin_dev/classes/classes.rst:4
 msgid "ServerInterface"
-msgstr ""
+msgstr "ServerInterface"
 
 #: ../../source/plugin_dev/classes/classes.rst:4
 msgid "Info"
-msgstr ""
+msgstr "Info"
 
 #: ../../source/plugin_dev/classes/classes.rst:4
 msgid "CommandSource"
-msgstr ""
+msgstr "CommandSource"
 
 #: ../../source/plugin_dev/classes/classes.rst:4
 msgid "CommandError"
-msgstr ""
+msgstr "CommandError"
 
 #: ../../source/plugin_dev/classes/classes.rst:2
 msgid "Class References"
-msgstr ""
+msgstr "Class References"
 

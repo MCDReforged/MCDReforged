@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-17 13:10+0800\n"
-"PO-Revision-Date: 2021-01-17 07:19\n"
+"PO-Revision-Date: 2021-01-18 05:32\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -111,7 +111,7 @@ msgstr "以下为命令列表："
 #: ../../source/command.rst:48 ../../source/command.rst:78
 #: ../../source/command.rst:124
 msgid "Short form"
-msgstr ""
+msgstr "缩写"
 
 #: ../../source/command.rst:49 ../../source/command.rst:79
 #: ../../source/command.rst:125
@@ -120,11 +120,11 @@ msgstr "功能"
 
 #: ../../source/command.rst:50
 msgid "!!MCDR reload"
-msgstr ""
+msgstr "!!MCDR reload"
 
 #: ../../source/command.rst:51
 msgid "!!MCDR r"
-msgstr ""
+msgstr "!!MCDR r"
 
 #: ../../source/command.rst:52
 msgid "Show reload command help message"
@@ -132,11 +132,11 @@ msgstr "显示重载命令帮助信息"
 
 #: ../../source/command.rst:53
 msgid "!!MCDR reload plugin"
-msgstr ""
+msgstr "!!MCDR reload plugin"
 
 #: ../../source/command.rst:54
 msgid "!!MCDR r plg"
-msgstr ""
+msgstr "!!MCDR r plg"
 
 #: ../../source/command.rst:55
 msgid "Reload all **changed** plugins"
@@ -144,11 +144,11 @@ msgstr "重载所有 **已更改** 插件"
 
 #: ../../source/command.rst:56
 msgid "!!MCDR reload config"
-msgstr ""
+msgstr "!!MCDR reload config"
 
 #: ../../source/command.rst:57
 msgid "!!MCDR r cfg"
-msgstr ""
+msgstr "!!MCDR r cfg"
 
 #: ../../source/command.rst:58
 msgid "Reload config file"
@@ -156,11 +156,11 @@ msgstr "重新载入配置文件"
 
 #: ../../source/command.rst:59
 msgid "!!MCDR reload permission"
-msgstr ""
+msgstr "!!MCDR reload permission"
 
 #: ../../source/command.rst:60
 msgid "!!MCDR r perm"
-msgstr ""
+msgstr "!!MCDR r perm"
 
 #: ../../source/command.rst:61
 msgid "Reload permission file"
@@ -168,11 +168,11 @@ msgstr "重新载入权限文件"
 
 #: ../../source/command.rst:62
 msgid "!!MCDR reload all"
-msgstr ""
+msgstr "!!MCDR reload all"
 
 #: ../../source/command.rst:63
 msgid "!!MCDR r all"
-msgstr ""
+msgstr "!!MCDR r all"
 
 #: ../../source/command.rst:64
 msgid "Reload everything above"
@@ -188,11 +188,11 @@ msgstr "``!!MCDR permission`` 命令用于操作玩家权限。它的缩写是 `
 
 #: ../../source/command.rst:80
 msgid "!!MCDR permission"
-msgstr ""
+msgstr "!!MCDR permission"
 
 #: ../../source/command.rst:81
 msgid "!!MCDR perm"
-msgstr ""
+msgstr "!!MCDR perm"
 
 #: ../../source/command.rst:82
 msgid "Show permission command help message"
@@ -200,63 +200,63 @@ msgstr "显示权限命令帮助信息"
 
 #: ../../source/command.rst:83
 msgid "!!MCDR permission list [<level>]"
-msgstr ""
+msgstr "!!MCDR permission list [<level>]"
 
 #: ../../source/command.rst:84
 msgid "!!MCDR perm list [<level>]"
-msgstr ""
+msgstr "!!MCDR perm list [<level>]"
 
 #: ../../source/command.rst:85
 msgid "List all player's permission. Only list permission level [<level>] if [<level>] has set"
-msgstr ""
+msgstr "列出所有玩家的权限。在设置了 [<level>] 时，仅列出拥有 [<level>] 权限的玩家"
 
 #: ../../source/command.rst:86
 msgid "!!MCDR permission set <player> <level>"
-msgstr ""
+msgstr "!!MCDR permission set <player> <level>"
 
 #: ../../source/command.rst:87
 msgid "!!MCDR perm set <player> <level>"
-msgstr ""
+msgstr "!!MCDR perm set <player> <level>"
 
 #: ../../source/command.rst:88
 msgid "Set the permission level of <player> to <level>"
-msgstr ""
+msgstr "设置 <player> 的权限级别为 <level>"
 
 #: ../../source/command.rst:89
 msgid "!!MCDR permission query <player>"
-msgstr ""
+msgstr "!!MCDR permission query <player>"
 
 #: ../../source/command.rst:90
 msgid "!!MCDR perm q [<player>]"
-msgstr ""
+msgstr "!!MCDR perm q [<player>]"
 
 #: ../../source/command.rst:91
 msgid "Query the permission level of <player>. If <player> is not set, query the permission level of the command sender"
-msgstr ""
+msgstr "查询 <player>的权限级别。如果没有设置 <player> ，查询命令发送者的权限级别"
 
 #: ../../source/command.rst:92
 msgid "!!MCDR permission remove <player>"
-msgstr ""
+msgstr "!!MCDR permission remove <player>"
 
 #: ../../source/command.rst:93
 msgid "!!MCDR perm remove <player>"
-msgstr ""
+msgstr "!!MCDR perm remove <player>"
 
 #: ../../source/command.rst:94
 msgid "Remove <player> from the permission database"
-msgstr ""
+msgstr "从权限数据库中删除 <player>"
 
 #: ../../source/command.rst:95
 msgid "!!MCDR permission setdefault <level>"
-msgstr ""
+msgstr "!!MCDR permission setdefault <level>"
 
 #: ../../source/command.rst:96
 msgid "!!MCDR perm setd <level>"
-msgstr ""
+msgstr "!!MCDR perm setd <level>"
 
 #: ../../source/command.rst:97
 msgid "Set the default permission level to <level>"
-msgstr ""
+msgstr "设置默认权限级别为 <level>"
 
 #: ../../source/command.rst:100
 msgid "The <player> argument should be a string indicating the name of the player"
@@ -272,19 +272,19 @@ msgstr "例如："
 
 #: ../../source/command.rst:107
 msgid "``!!MCDR perm list 4``\\ : List all players with permission level 4 (owner)"
-msgstr ""
+msgstr "``!!MCDR perm list 4``\\：列出所有权限级别为 4 (owner) 的玩家"
 
 #: ../../source/command.rst:108
 msgid "``!!MCDR permission set Steve admin``\\ : Set the permission level of player Steve to 3 (admin)"
-msgstr ""
+msgstr "``!!MCDR permission set Steve admin``\\：将玩家 Steve 的权限级别设置为 3 (admin)"
 
 #: ../../source/command.rst:109
 msgid "``!!MCDR permission q Steve``\\ : Query the permission level of player Steve. The value should be 3 (admin)"
-msgstr ""
+msgstr "``!!MCDR permission q Steve``：查询玩家 Steve 的权限级别。其值应为上一条示例设置的 3 (admin) "
 
 #: ../../source/command.rst:111
 msgid "Check the page `Permission <permission.md>`__ for more information about MCDR permission system"
-msgstr ""
+msgstr "查看 `权限 <permission.md>`__ 页面以获取更多关于 MCDR 权限系统的信息"
 
 #: ../../source/command.rst:114
 msgid "Plugin management"
@@ -292,103 +292,103 @@ msgstr "插件管理"
 
 #: ../../source/command.rst:116
 msgid "``!!MCDR plugin`` is the place for user to manipulate plugins. Its short form is ``!!MCDR plg``. Directly enter command ``!!MCDR plg`` will show the help message of the commands"
-msgstr ""
+msgstr "``!!MCDR plugin`` 是插件操作指令。它的缩写是 ``!!MCDR plg``。 执行命令 ``!!MCDR plg`` 将显示该命令的帮助信息"
 
 #: ../../source/command.rst:126
 msgid "!!MCDR plugin list"
-msgstr ""
+msgstr "!!MCDR plugin list"
 
 #: ../../source/command.rst:127
 msgid "!!MCDR plg list"
-msgstr ""
+msgstr "!!MCDR plg list"
 
 #: ../../source/command.rst:128
 msgid "List all plugins"
-msgstr ""
+msgstr "列出所有插件"
 
 #: ../../source/command.rst:129
 msgid "!!MCDR plugin info <plugin_id>"
-msgstr ""
+msgstr "!!MCDR plugin info <plugin_id>"
 
 #: ../../source/command.rst:130
 msgid "!!MCDR plg info <plugin_id>"
-msgstr ""
+msgstr "!!MCDR plg info <plugin_id>"
 
 #: ../../source/command.rst:131
 msgid "Display the information of the plugin with id <plugin_id>"
-msgstr ""
+msgstr "显示ID为 <plugin_id> 的插件信息"
 
 #: ../../source/command.rst:132
 msgid "!!MCDR plugin load <file_name>"
-msgstr ""
+msgstr "!!MCDR plugin load <file_name>"
 
 #: ../../source/command.rst:133
 msgid "!!MCDR plg load <file_name>"
-msgstr ""
+msgstr "!!MCDR plg load <file_name>"
 
 #: ../../source/command.rst:134
 msgid "Load a plugin with file path <file_name>"
-msgstr ""
+msgstr "加载文件名为 <file_name> 的插件"
 
 #: ../../source/command.rst:135
 msgid "!!MCDR plugin enable <file_name>"
-msgstr ""
+msgstr "!!MCDR plugin enable <file_name>"
 
 #: ../../source/command.rst:136
 msgid "!!MCDR plg enable <file_name>"
-msgstr ""
+msgstr "!!MCDR plg enable <file_name>"
 
 #: ../../source/command.rst:137
 msgid "Enable a plugin with file path <file_name>"
-msgstr ""
+msgstr "启用文件名为 <file_name> 的插件"
 
 #: ../../source/command.rst:138
 msgid "!!MCDR plugin reload <plugin_id>"
-msgstr ""
+msgstr "!!MCDR plugin reload <plugin_id>"
 
 #: ../../source/command.rst:139
 msgid "!!MCDR plg reload <plugin_id>"
-msgstr ""
+msgstr "!!MCDR plg reload <plugin_id>"
 
 #: ../../source/command.rst:140
 msgid "Reload a plugin with id <plugin_id>"
-msgstr ""
+msgstr "重载 ID 为 <plugin_id> 的插件"
 
 #: ../../source/command.rst:141
 msgid "!!MCDR plugin unload <plugin_id>"
-msgstr ""
+msgstr "!!MCDR plugin unload <plugin_id>"
 
 #: ../../source/command.rst:142
 msgid "!!MCDR plg unload <plugin_id>"
-msgstr ""
+msgstr "!!MCDR plg unload <plugin_id>"
 
 #: ../../source/command.rst:143
 msgid "Unload a plugin with id <plugin_id>"
-msgstr ""
+msgstr "卸载 ID 为 <plugin_id> 的插件"
 
 #: ../../source/command.rst:144
 msgid "!!MCDR plugin disable <plugin_id>"
-msgstr ""
+msgstr "!!MCDR plugin disable <plugin_id>"
 
 #: ../../source/command.rst:145
 msgid "!!MCDR plg disable <plugin_id>"
-msgstr ""
+msgstr "!!MCDR plg disable <plugin_id>"
 
 #: ../../source/command.rst:146
 msgid "Disable a plugin with id <plugin_id>"
-msgstr ""
+msgstr "禁用 ID 为 <plugin_id> 的插件"
 
 #: ../../source/command.rst:147
 msgid "!!MCDR plugin reloadall"
-msgstr ""
+msgstr "!!MCDR plugin reloadall"
 
 #: ../../source/command.rst:148
 msgid "!!MCDR plg ra"
-msgstr ""
+msgstr "!!MCDR plg ra"
 
 #: ../../source/command.rst:149
 msgid "Load / Reload / Unloaded **all** not disabled plugins"
-msgstr ""
+msgstr "加载 / 重载 / 卸载 **all** 未禁用插件"
 
 #: ../../source/command.rst:152
 msgid "The <plugin_id> argument is a string of the unique plugin id of the plugin you want to manipulate"
@@ -404,7 +404,7 @@ msgstr "例如："
 
 #: ../../source/command.rst:158
 msgid "Let's say there's is a loaded plugin with id ``my_plugin`` and a disabled plugin in path ``plugins/another_plugin.py.disabled`` with id ``another_plugin``"
-msgstr ""
+msgstr "假设现在有一个 Id 为 ``my_plugin`` 的插件被加载，一个路径为 ``plugins/another_plugin.py.disabled`` 的插件被 Id 为 ``another_plugin`` 的插件禁用"
 
 #: ../../source/command.rst:160
 msgid "Then you can do the following commands"
@@ -416,23 +416,23 @@ msgstr "这些命令将执行以下操作："
 
 #: ../../source/command.rst:173
 msgid "Query the information about a built-in permanent plugin ``mcdreforged``"
-msgstr ""
+msgstr "查询内置插件 ``mcdreforged`` 的信息"
 
 #: ../../source/command.rst:174
 msgid "Reload the plugin with id ``my_plugin``"
-msgstr ""
+msgstr "重载 ID 为 ``my_plugin`` 的插件"
 
 #: ../../source/command.rst:175
 msgid "Enable and load the disabled plugin with file name ``another_plugin.py.disabled``. It has plugin id ``another_plugin``"
-msgstr ""
+msgstr "启用并加载文件名为 ``another_plugin.py.disable`` 的插件。它的 ID 为 ``another_plugin``"
 
 #: ../../source/command.rst:176
 msgid "Unload the plugin with id ``another_plugin``"
-msgstr ""
+msgstr "卸载 ID 为 ``another_plugin`` 的插件"
 
 #: ../../source/command.rst:177
 msgid "Reload the plugin with file name ``another_plugin.py``. Note that since this plugin is not loaded, you can only use file name to specify it"
-msgstr ""
+msgstr "加载文件名为 `another_plugin.py` 的插件。注意，由于此插件未加载，故您只能使用文件名来指定它。"
 
 #: ../../source/command.rst:180
 msgid "Update checker"
@@ -440,7 +440,7 @@ msgstr "更新检查器"
 
 #: ../../source/command.rst:182
 msgid "``!!MCDR checkupdate``\\ , or ``!!MCDR cu``. Use it to manually check update from github"
-msgstr ""
+msgstr "使用 ``!!MCDR checkupdate``\\ 或 ``!!MCDR cu`` 可手动检查来自 GitHub 的更新。"
 
 #: ../../source/command.rst:184
 msgid "It will try to get the latest release version in github, and check if it's newer than the current version. If it is, it will show the update logs from the github release"
@@ -452,7 +452,7 @@ msgstr "!!help 命令"
 
 #: ../../source/command.rst:189
 msgid "``!!help`` command is place to display the help messages of all commands. It works as an index of all commands"
-msgstr ""
+msgstr "``!!help`` 命令将显示所有命令的帮助消息。它是所有命令的索引。"
 
 #: ../../source/command.rst:191
 msgid "The content of this command can be registered by plugins, so a new user can easily browse all available commands that it can access"
@@ -464,7 +464,7 @@ msgstr "任何用户都可以使用此命令，MCDR 将列出该用户有权查�
 
 #: ../../source/command.rst:195
 msgid "Without any plugin, you may see the result below after you entered the ``!!help`` command"
-msgstr ""
+msgstr "在无任何插件的情况下，输入 ``!!help`` 命令后将返回如下结果："
 
 #~ msgid "!!MCDR permission list []"
 #~ msgstr ""

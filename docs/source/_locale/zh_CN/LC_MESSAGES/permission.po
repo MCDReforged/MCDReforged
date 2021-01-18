@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-17 13:10+0800\n"
-"PO-Revision-Date: 2021-01-17 07:19\n"
+"PO-Revision-Date: 2021-01-18 05:32\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -108,7 +108,7 @@ msgstr "最低的权限，如访客"
 
 #: ../../source/permission.rst:35
 msgid "The permission level of console input is always the highest level ``owner``"
-msgstr "控制台输出所属的权限等级总是最高的 `owner` 级"
+msgstr "控制台输出所属的权限等级总是最高的 ``owner`` 级"
 
 #: ../../source/permission.rst:38
 msgid "Permission File"
@@ -148,7 +148,7 @@ msgstr "玩家列表可以参照如下方式填写："
 
 #: ../../source/permission.rst:65
 msgid "Permission file supports hot-reload. You can use ``!!MCDR reload permission`` to reload the permission file in-game. Check the related `command section <command.html#hot-reloads>`__ for more detail"
-msgstr "权限文件支持热重载。你可以使用 ``!!MCDR reload permission`` 指令来重载权限文件。详细内容请阅读 `相关指令 <command.html#hot-reloads>`__ 部分。"
+msgstr "权限文件支持热重载。你可以使用 ``!!MCDR reload permission`` 指令来重载权限文件。详细内容请阅读 `相关指令 <command.html#hot-reloads>`"
 
 #~ msgid "The permission level of console input is always the highest level owner"
 #~ msgstr ""

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-17 09:55+0800\n"
-"PO-Revision-Date: 2021-01-17 07:19\n"
+"PO-Revision-Date: 2021-01-18 05:32\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -20,11 +20,11 @@ msgstr ""
 
 #: ../../source/plugin_dev/plugin_dev.rst:4
 msgid "Basic"
-msgstr ""
+msgstr "基本"
 
 #: ../../source/plugin_dev/plugin_dev.rst:4
 msgid "Plugin Event"
-msgstr ""
+msgstr "插件事件"
 
 #: ../../source/plugin_dev/plugin_dev.rst:4
 msgid "Command"
@@ -32,15 +32,15 @@ msgstr "指令"
 
 #: ../../source/plugin_dev/plugin_dev.rst:4
 msgid "API"
-msgstr ""
+msgstr "API"
 
 #: ../../source/plugin_dev/plugin_dev.rst:4
 msgid "Class References"
-msgstr ""
+msgstr "类引用"
 
 #: ../../source/plugin_dev/plugin_dev.rst:4
 msgid "Some tips"
-msgstr ""
+msgstr "一些提示"
 
 #: ../../source/plugin_dev/plugin_dev.rst:2
 msgid "Plugin Development"

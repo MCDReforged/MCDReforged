@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-17 13:15+0800\n"
-"PO-Revision-Date: 2021-01-17 07:19\n"
+"PO-Revision-Date: 2021-01-18 05:32\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -264,7 +264,7 @@ msgstr "在当前版本中，MCDR 不会阻止将此类控制台输入发送到�
 
 #: ../../source/migrate_from_0.x.rst:154
 msgid "As a result, if you plugin use manually parsing method to parse command to parse a user command in ``on_user_info`` etc., you need to invoke ``info.cancel_send_to_server()`` in your command processing, otherwise if the command you enter on console might be sent to the server standard input stream"
-msgstr ""
+msgstr "因此，如果插件使用手动解析方法解析 ``on_user_info`` 等里面的用户指令，则需要在命令处理中调用 ``info.cancel_send_to_server()`` 方法，否则在控制台中输入的指令可能会被发送到服务器标准输入流中。"
 
 #~ msgid "The logging folder is renamed from log/ to logs/"
 #~ msgstr ""
