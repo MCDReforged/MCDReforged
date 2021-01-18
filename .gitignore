@@ -46,3 +46,4 @@ docs/build/
 **/.doctrees/
 **/*.mo
 **/*.pot
+docs/source/.vscode/settings.json
