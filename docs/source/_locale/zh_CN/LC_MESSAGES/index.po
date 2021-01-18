@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-15 15:18+0800\n"
+"POT-Creation-Date: 2021-01-17 09:55+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,55 +18,55 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.0\n"
 
-#: ../index.rst:9
+#: ../../source/index.rst:9
 msgid "Quick Start"
 msgstr ""
 
-#: ../index.rst:9
+#: ../../source/index.rst:9
 msgid "Configure"
 msgstr ""
 
-#: ../index.rst:9
+#: ../../source/index.rst:9
 msgid "Permission"
 msgstr ""
 
-#: ../index.rst:9
+#: ../../source/index.rst:9
 msgid "Command"
 msgstr ""
 
-#: ../index.rst:9
+#: ../../source/index.rst:9
 msgid "Plugin Development"
 msgstr ""
 
-#: ../index.rst:9
+#: ../../source/index.rst:9
 msgid "Customize"
 msgstr ""
 
-#: ../index.rst:9
+#: ../../source/index.rst:9
 msgid "Migrate from MCDR 0.x"
 msgstr ""
 
-#: ../index.rst:9
+#: ../../source/index.rst:9
 msgid "Home"
 msgstr ""
 
-#: ../index.rst:7
+#: ../../source/index.rst:7
 msgid "Welcome to MCDReforged's documentation!"
 msgstr ""
 
-#: ../index.rst:22
+#: ../../source/index.rst:22
 msgid "Indices and tables"
 msgstr ""
 
-#: ../index.rst:24
+#: ../../source/index.rst:24
 msgid ":ref:`genindex`"
 msgstr ""
 
-#: ../index.rst:25
+#: ../../source/index.rst:25
 msgid ":ref:`modindex`"
 msgstr ""
 
-#: ../index.rst:26
+#: ../../source/index.rst:26
 msgid ":ref:`search`"
 msgstr ""
 

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-15 15:18+0800\n"
+"POT-Creation-Date: 2021-01-17 13:10+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,72 +18,184 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.0\n"
 
-#: ../permission.md:1
+#: ../../source/permission.rst:3
 msgid "Permission"
 msgstr ""
 
-#: ../permission.md:3
+#: ../../source/permission.rst:6
 msgid "Overview"
 msgstr ""
 
-#: ../permission.md:5
+#: ../../source/permission.rst:8
 msgid ""
 "There is a simple built-in permission system in MCDR. It can be used by "
 "MCDR commands and plugins"
 msgstr ""
 
-#: ../permission.md:7
+#: ../../source/permission.rst:10
 msgid "There are 5 different levels of permission in total:"
 msgstr ""
 
-#: ../permission.md:46
-msgid "The permission level of console input is always the highest level owner"
+#: ../../source/permission.rst:15
+msgid "Name"
 msgstr ""
 
-#: ../permission.md:48
+#: ../../source/permission.rst:16
+msgid "Value"
+msgstr ""
+
+#: ../../source/permission.rst:17
+msgid "Description"
+msgstr ""
+
+#: ../../source/permission.rst:18
+msgid "owner"
+msgstr ""
+
+#: ../../source/permission.rst:19
+msgid "4"
+msgstr ""
+
+#: ../../source/permission.rst:20
+msgid "Highest level for those who have the ability to access the physical server"
+msgstr ""
+
+#: ../../source/permission.rst:21
+msgid "admin"
+msgstr ""
+
+#: ../../source/permission.rst:22
+msgid "3"
+msgstr ""
+
+#: ../../source/permission.rst:23
+msgid "People with power to control the MCDR and the server"
+msgstr ""
+
+#: ../../source/permission.rst:24
+msgid "helper"
+msgstr ""
+
+#: ../../source/permission.rst:25
+msgid "2"
+msgstr ""
+
+#: ../../source/permission.rst:26
+msgid "A group of helper of admin"
+msgstr ""
+
+#: ../../source/permission.rst:27
+msgid "user"
+msgstr ""
+
+#: ../../source/permission.rst:28
+msgid "1"
+msgstr ""
+
+#: ../../source/permission.rst:29
+msgid "A group that normal player will be in"
+msgstr ""
+
+#: ../../source/permission.rst:30
+msgid "guest"
+msgstr ""
+
+#: ../../source/permission.rst:31
+msgid "0"
+msgstr ""
+
+#: ../../source/permission.rst:32
+msgid "The lowest level for guest or trollers"
+msgstr ""
+
+#: ../../source/permission.rst:35
+msgid ""
+"The permission level of console input is always the highest level "
+"``owner``"
+msgstr ""
+
+#: ../../source/permission.rst:38
 msgid "Permission File"
 msgstr ""
 
-#: ../permission.md:50
+#: ../../source/permission.rst:40
 msgid ""
-"Permission file permission.yml is the config and storage file for the "
-"system"
+"Permission file ``permission.yml`` is the config and storage file for the"
+" system"
 msgstr ""
 
-#: ../permission.md:52
+#: ../../source/permission.rst:43
 msgid ""
-"default_level: The default permission level a new player will get. "
-"Default: user"
+"`default_level`: The default permission level a new player will get. "
+"Default: ``user``"
 msgstr ""
 
-#: ../permission.md:53
-msgid "owner: Names of players with permission owner"
+#: ../../source/permission.rst:44
+msgid "``owner``\\ : Names of players with permission ``owner``"
 msgstr ""
 
-#: ../permission.md:54
-msgid "admin: Names of players with permission admin"
+#: ../../source/permission.rst:45
+msgid "``admin``\\ : Names of players with permission ``admin``"
 msgstr ""
 
-#: ../permission.md:55
-msgid "helper: Names of players with permission helper"
+#: ../../source/permission.rst:46
+msgid "``helper``\\ : Names of players with permission ``helper``"
 msgstr ""
 
-#: ../permission.md:56
-msgid "user: Names of players with permission user"
+#: ../../source/permission.rst:47
+msgid "``user``\\ : Names of players with permission ``user``"
 msgstr ""
 
-#: ../permission.md:57
-msgid "guest: Names of players with permission guest"
+#: ../../source/permission.rst:48
+msgid "``guest``\\ : Names of players with permission ``guest``"
 msgstr ""
 
-#: ../permission.md:59
+#: ../../source/permission.rst:50
 msgid "Player name list of permission levels can be filled like this:"
 msgstr ""
 
-#: ../permission.md:74
+#: ../../source/permission.rst:65
 msgid ""
-"Permission file supports hot-reload. You can use !!MCDR reload permission"
-" to reload the permission file in-game. Check the related command section"
-" for more detail"
+"Permission file supports hot-reload. You can use ``!!MCDR reload "
+"permission`` to reload the permission file in-game. Check the related "
+"`command section <command.html#hot-reloads>`__ for more detail"
 msgstr ""
+
+#~ msgid "The permission level of console input is always the highest level owner"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Permission file permission.yml is the "
+#~ "config and storage file for the "
+#~ "system"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "default_level: The default permission level"
+#~ " a new player will get. Default: "
+#~ "user"
+#~ msgstr ""
+
+#~ msgid "owner: Names of players with permission owner"
+#~ msgstr ""
+
+#~ msgid "admin: Names of players with permission admin"
+#~ msgstr ""
+
+#~ msgid "helper: Names of players with permission helper"
+#~ msgstr ""
+
+#~ msgid "user: Names of players with permission user"
+#~ msgstr ""
+
+#~ msgid "guest: Names of players with permission guest"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Permission file supports hot-reload. You"
+#~ " can use !!MCDR reload permission to"
+#~ " reload the permission file in-game."
+#~ " Check the related command section "
+#~ "for more detail"
+#~ msgstr ""
 
