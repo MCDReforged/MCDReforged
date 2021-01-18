@@ -40,12 +40,22 @@ class PluginCommandNode:
 		self.node = node
 
 
-class PluginRegistry:
-	def __init__(self, plugin: 'AbstractPlugin'):
-		self.plugin = plugin
+class AbstractPluginRegistry:
+	def __init__(self):
 		self.event_listeners = collections.defaultdict(list)  # type: Dict[str, List[EventListener]]
 		self.help_messages = []
 		self.command_roots = []  # type: List[PluginCommandNode]
+
+	def clear(self):
+		self.event_listeners.clear()
+		self.help_messages.clear()
+		self.command_roots.clear()
+
+
+class PluginRegistry(AbstractPluginRegistry):
+	def __init__(self, plugin: 'AbstractPlugin'):
+		super().__init__()
+		self.plugin = plugin
 
 	def register_help_message(self, help_message: HelpMessage):
 		self.help_messages.append(help_message)
@@ -58,27 +68,11 @@ class PluginRegistry:
 			raise TypeError('Only Literal node is accepted to be a root node')
 		self.command_roots.append(PluginCommandNode(self.plugin, node))
 
-	def clear(self):
-		"""
-		Invoke this when a plugin gets loaded / reloaded
-		:return:
-		"""
-		self.event_listeners.clear()
-		self.help_messages.clear()
-		self.command_roots.clear()
 
-
-class PluginManagerRegistry:
+class PluginRegistryStorage(AbstractPluginRegistry):
 	def __init__(self, plugin_manager: 'PluginManager'):
+		super().__init__()
 		self.plugin_manager = plugin_manager
-		self.event_listeners = collections.defaultdict(list)  # type: Dict[str, List[EventListener]]
-		self.help_messages = []  # type: List[HelpMessage]
-		self.command_roots = []  # type: List[PluginCommandNode]
-
-	def clear(self):
-		self.event_listeners.clear()
-		self.help_messages.clear()
-		self.command_roots.clear()
 
 	def collect(self, registry: PluginRegistry):
 		for event_id, plg_listeners in registry.event_listeners.items():

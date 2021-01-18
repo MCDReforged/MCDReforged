@@ -14,7 +14,7 @@ from mcdreforged.plugin.operation_result import PluginOperationResult, SingleOpe
 from mcdreforged.plugin.permanent.mcdreforged_plugin import MCDReforgedPlugin
 from mcdreforged.plugin.plugin import PluginState, AbstractPlugin
 from mcdreforged.plugin.plugin_event import MCDRPluginEvents, MCDREvent, EventListener
-from mcdreforged.plugin.plugin_registry import PluginManagerRegistry
+from mcdreforged.plugin.plugin_registry import PluginRegistryStorage
 from mcdreforged.plugin.plugin_thread import PluginThreadPool
 from mcdreforged.plugin.regular_plugin import RegularPlugin
 from mcdreforged.utils import file_util, string_util, misc_util
@@ -40,7 +40,7 @@ class PluginManager:
 		# file_path -> id mapping
 		self.plugin_file_path = {}  # type: Dict[str, str]
 		# storage for event listeners, help messages and commands
-		self.registry_storage = PluginManagerRegistry(self)
+		self.registry_storage = PluginRegistryStorage(self)
 
 		self.last_operation_result = PluginOperationResult(self)
 
@@ -330,6 +330,8 @@ class PluginManager:
 		# unload_result		UNLOADING			UNLOADING
 		# reload_result		READY				UNLOADING
 		# dep_chk_result	LOADED / READY		UNLOADING
+
+		self.registry_storage.clear()  # in case plugin invokes dispatch_event during on_load. dont let them trigger listeners
 
 		for plugin in load_result.success_list + reload_result.success_list:
 			if plugin in dependency_check_result.success_list:

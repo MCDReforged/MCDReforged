@@ -49,8 +49,9 @@ If it's a plugin reload, ``prev_module`` argument indicates the previous plugin 
        else:
            reload_counter = 0
 
-Note: Since it's the first event in the lifecycle of a plugin, this event can only be registered with default event listener, so the ``on_load`` function is the entry spot of your plugin
+Since it's the first event in the lifecycle of a plugin, this event can only be registered with default event listener, so the ``on_load`` function is the entry spot of your plugin
 
+Note: You should not dispatch custom events in the ``on_load`` function or it will do nothing. The event listener storage of MCDR has not been initialized yet
 
 * Event id: mcdr.plugin_loaded
 * Callback arguments: ServerInterface, prev_plugin_module
