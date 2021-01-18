@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-15 15:18+0800\n"
+"POT-Creation-Date: 2021-01-17 13:08+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,206 +18,237 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.0\n"
 
-#: ../plugin_dev/classes/Info.md:1
+#: ../../source/plugin_dev/classes/Info.rst:3
 msgid "Info"
 msgstr ""
 
-#: ../plugin_dev/classes/Info.md:3
+#: ../../source/plugin_dev/classes/Info.rst:5
 msgid ""
 "An Info instance contains the parsed result from the server or from the "
 "console."
 msgstr ""
 
-#: ../plugin_dev/classes/Info.md:5
+#: ../../source/plugin_dev/classes/Info.rst:8
 msgid "Property"
 msgstr ""
 
-#: ../plugin_dev/classes/Info.md:7
+#: ../../source/plugin_dev/classes/Info.rst:10
 msgid "Property might be None if MCDR didn't parse out the related property"
 msgstr ""
 
-#: ../plugin_dev/classes/Info.md:9
+#: ../../source/plugin_dev/classes/Info.rst:13
 msgid "id"
 msgstr ""
 
-#: ../plugin_dev/classes/Info.md:11
+#: ../../source/plugin_dev/classes/Info.rst:15
 msgid ""
 "A increasing id number for distinguishing info instance. The id is "
 "monotonously rising by time"
 msgstr ""
 
-#: ../plugin_dev/classes/Info.md:13 ../plugin_dev/classes/Info.md:19
-#: ../plugin_dev/classes/Info.md:47
+#: ../../source/plugin_dev/classes/Info.rst:17
+#: ../../source/plugin_dev/classes/Info.rst:24
+#: ../../source/plugin_dev/classes/Info.rst:56
 msgid "Type: int"
 msgstr ""
 
-#: ../plugin_dev/classes/Info.md:15
+#: ../../source/plugin_dev/classes/Info.rst:20
 msgid "hour, min, sec"
 msgstr ""
 
-#: ../plugin_dev/classes/Info.md:17
+#: ../../source/plugin_dev/classes/Info.rst:22
 msgid "Time information from the parsed text"
 msgstr ""
 
-#: ../plugin_dev/classes/Info.md:21
+#: ../../source/plugin_dev/classes/Info.rst:27
 msgid "raw_content"
 msgstr ""
 
-#: ../plugin_dev/classes/Info.md:23
+#: ../../source/plugin_dev/classes/Info.rst:29
 msgid ""
 "Very raw unparsed content from the server stdout. It's also the content "
 "to be echoed to the stdout"
 msgstr ""
 
-#: ../plugin_dev/classes/Info.md:25 ../plugin_dev/classes/Info.md:31
-#: ../plugin_dev/classes/Info.md:37 ../plugin_dev/classes/Info.md:53
+#: ../../source/plugin_dev/classes/Info.rst:31
+#: ../../source/plugin_dev/classes/Info.rst:38
+#: ../../source/plugin_dev/classes/Info.rst:45
+#: ../../source/plugin_dev/classes/Info.rst:63
 msgid "Type: str"
 msgstr ""
 
-#: ../plugin_dev/classes/Info.md:27
+#: ../../source/plugin_dev/classes/Info.rst:34
 msgid "content"
 msgstr ""
 
-#: ../plugin_dev/classes/Info.md:29
+#: ../../source/plugin_dev/classes/Info.rst:36
 msgid ""
 "The parsed message text. If the text is sent by a player it will be what "
 "the player said"
 msgstr ""
 
-#: ../plugin_dev/classes/Info.md:33
+#: ../../source/plugin_dev/classes/Info.rst:41
 msgid "player"
 msgstr ""
 
-#: ../plugin_dev/classes/Info.md:35
+#: ../../source/plugin_dev/classes/Info.rst:43
 msgid ""
 "The name of the player. If it's not sent by a player the value will be "
 "None"
 msgstr ""
 
-#: ../plugin_dev/classes/Info.md:39
+#: ../../source/plugin_dev/classes/Info.rst:48
 msgid "source"
 msgstr ""
 
-#: ../plugin_dev/classes/Info.md:41
+#: ../../source/plugin_dev/classes/Info.rst:50
 msgid "A int representing the the type of the info"
 msgstr ""
 
-#: ../plugin_dev/classes/Info.md:43
-msgid "For info from the server, its value is 0"
+#: ../../source/plugin_dev/classes/Info.rst:52
+msgid "For info from the server, its value is ``0``"
 msgstr ""
 
-#: ../plugin_dev/classes/Info.md:45
-msgid "For info from the console, its value is 1"
+#: ../../source/plugin_dev/classes/Info.rst:54
+msgid "For info from the console, its value is ``1``"
 msgstr ""
 
-#: ../plugin_dev/classes/Info.md:49
+#: ../../source/plugin_dev/classes/Info.rst:59
 msgid "logging_level"
 msgstr ""
 
-#: ../plugin_dev/classes/Info.md:51
-msgid "The logging level of the server's stdout, such as INFO or WARN"
+#: ../../source/plugin_dev/classes/Info.rst:61
+msgid "The logging level of the server's stdout, such as ``INFO`` or ``WARN``"
 msgstr ""
 
-#: ../plugin_dev/classes/Info.md:55
+#: ../../source/plugin_dev/classes/Info.rst:66
 msgid "is_from_console"
 msgstr ""
 
-#: ../plugin_dev/classes/Info.md:57 ../plugin_dev/classes/Info.md:65
-#: ../plugin_dev/classes/Info.md:73 ../plugin_dev/classes/Info.md:81
-msgid "An @property decorated method"
+#: ../../source/plugin_dev/classes/Info.rst:68
+#: ../../source/plugin_dev/classes/Info.rst:77
+#: ../../source/plugin_dev/classes/Info.rst:86
+#: ../../source/plugin_dev/classes/Info.rst:95
+msgid "An ``@property`` decorated method"
 msgstr ""
 
-#: ../plugin_dev/classes/Info.md:59
-msgid "If the source of the info is 1, aka from the console"
+#: ../../source/plugin_dev/classes/Info.rst:70
+msgid "If the source of the info is ``1``\\ , aka from the console"
 msgstr ""
 
-#: ../plugin_dev/classes/Info.md:61 ../plugin_dev/classes/Info.md:69
-#: ../plugin_dev/classes/Info.md:77 ../plugin_dev/classes/Info.md:85
+#: ../../source/plugin_dev/classes/Info.rst:72
+#: ../../source/plugin_dev/classes/Info.rst:81
+#: ../../source/plugin_dev/classes/Info.rst:90
+#: ../../source/plugin_dev/classes/Info.rst:99
 msgid "Type: bool"
 msgstr ""
 
-#: ../plugin_dev/classes/Info.md:63
+#: ../../source/plugin_dev/classes/Info.rst:75
 msgid "is_from_server"
 msgstr ""
 
-#: ../plugin_dev/classes/Info.md:67
-msgid "If the source of the info is 0, aka from the server"
+#: ../../source/plugin_dev/classes/Info.rst:79
+msgid "If the source of the info is ``0``\\ , aka from the server"
 msgstr ""
 
-#: ../plugin_dev/classes/Info.md:71
+#: ../../source/plugin_dev/classes/Info.rst:84
 msgid "is_player"
 msgstr ""
 
-#: ../plugin_dev/classes/Info.md:75
+#: ../../source/plugin_dev/classes/Info.rst:88
 msgid "If the source is from a player in the server"
 msgstr ""
 
-#: ../plugin_dev/classes/Info.md:79
+#: ../../source/plugin_dev/classes/Info.rst:93
 msgid "is_user"
 msgstr ""
 
-#: ../plugin_dev/classes/Info.md:83
+#: ../../source/plugin_dev/classes/Info.rst:97
 msgid ""
 "If the source is from a user, in other words, if the source is from the "
 "console or from a player in the server"
 msgstr ""
 
-#: ../plugin_dev/classes/Info.md:87
+#: ../../source/plugin_dev/classes/Info.rst:102
 msgid "Method"
 msgstr ""
 
-#: ../plugin_dev/classes/Info.md:89
+#: ../../source/plugin_dev/classes/Info.rst:105
 msgid "get_server"
 msgstr ""
 
-#: ../plugin_dev/classes/Info.md:95
+#: ../../source/plugin_dev/classes/Info.rst:111
 msgid "Return the server interface instance"
 msgstr ""
 
-#: ../plugin_dev/classes/Info.md:97
+#: ../../source/plugin_dev/classes/Info.rst:114
 msgid "get_command_source"
 msgstr ""
 
-#: ../plugin_dev/classes/Info.md:103
+#: ../../source/plugin_dev/classes/Info.rst:120
 msgid ""
 "Extract an command source object from this info instance. "
 "ConsoleCommandSource if this info is from console, or PlayerCommandSource"
 " if this info is from a player in game"
 msgstr ""
 
-#: ../plugin_dev/classes/Info.md:105
+#: ../../source/plugin_dev/classes/Info.rst:122
 msgid ""
 "Return the command source instance, or None if it can't extract a command"
 " source"
 msgstr ""
 
-#: ../plugin_dev/classes/Info.md:107
+#: ../../source/plugin_dev/classes/Info.rst:125
 msgid "to_command_source"
 msgstr ""
 
-#: ../plugin_dev/classes/Info.md:113
+#: ../../source/plugin_dev/classes/Info.rst:131
 msgid ""
-"The same to method get_command_source, but it raises a IllegalCallError "
-"if it can't extract a command source"
+"The same to method ``get_command_source``\\ , but it raises a "
+"``IllegalCallError`` if it can't extract a command source"
 msgstr ""
 
-#: ../plugin_dev/classes/Info.md:115
+#: ../../source/plugin_dev/classes/Info.rst:134
 msgid "should_send_to_server"
 msgstr ""
 
-#: ../plugin_dev/classes/Info.md:121
+#: ../../source/plugin_dev/classes/Info.rst:140
 msgid ""
 "Representing if MCDR should send the content to the standard input stream"
 " of the server if this info is input from the console"
 msgstr ""
 
-#: ../plugin_dev/classes/Info.md:123
+#: ../../source/plugin_dev/classes/Info.rst:143
 msgid "cancel_send_to_server"
 msgstr ""
 
-#: ../plugin_dev/classes/Info.md:129
+#: ../../source/plugin_dev/classes/Info.rst:149
 msgid ""
 "Prevent this info from being sent to the standard input stream of the "
 "server"
 msgstr ""
+
+#~ msgid "For info from the server, its value is 0"
+#~ msgstr ""
+
+#~ msgid "For info from the console, its value is 1"
+#~ msgstr ""
+
+#~ msgid "The logging level of the server's stdout, such as INFO or WARN"
+#~ msgstr ""
+
+#~ msgid "An @property decorated method"
+#~ msgstr ""
+
+#~ msgid "If the source of the info is 1, aka from the console"
+#~ msgstr ""
+
+#~ msgid "If the source of the info is 0, aka from the server"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "The same to method get_command_source, "
+#~ "but it raises a IllegalCallError if "
+#~ "it can't extract a command source"
+#~ msgstr ""
 

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-16 14:29+0800\n"
+"POT-Creation-Date: 2021-01-17 13:10+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,61 +18,65 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.0\n"
 
-#: ../plugin_dev/dev_tips.md:1
+#: ../../source/plugin_dev/dev_tips.rst:3
 msgid "Some tips to plugin development"
 msgstr ""
 
-#: ../plugin_dev/dev_tips.md:3
+#: ../../source/plugin_dev/dev_tips.rst:5
 msgid "The following tips are useful to"
 msgstr ""
 
-#: ../plugin_dev/dev_tips.md:5
+#: ../../source/plugin_dev/dev_tips.rst:8
 msgid "Help message"
 msgstr ""
 
-#: ../plugin_dev/dev_tips.md:7
+#: ../../source/plugin_dev/dev_tips.rst:10
 msgid ""
-"Use server.register_help_message() to add some necessary tips for your "
-"plugin, so the player can use !!help command to know about your plugin"
+"Use ``server.register_help_message()`` to add some necessary tips for "
+"your plugin, so the player can use ``!!help`` command to know about your "
+"plugin"
 msgstr ""
 
-#: ../plugin_dev/dev_tips.md:9
+#: ../../source/plugin_dev/dev_tips.rst:12
 msgid ""
 "Of course if your plugin is supposed to only be used by player with "
-"enough permission level, specify the permission argument when registering"
+"enough permission level, specify the *permission* argument when "
+"registering"
 msgstr ""
 
-#: ../plugin_dev/dev_tips.md:11
+#: ../../source/plugin_dev/dev_tips.rst:15
 msgid "Event listening"
 msgstr ""
 
-#: ../plugin_dev/dev_tips.md:13
+#: ../../source/plugin_dev/dev_tips.rst:17
 msgid ""
-"If you don't care about info from non-user source, listen to User Info "
-"event instead of General Info event, which can improve MCDR's performance"
-" when the server is spamming with non-user info (e.g. Pasting schematic "
+"If you don't care about info from non-user source, listen to `User Info "
+"event <event.html#user-info>`__ instead of `General Info event "
+"<event.html#general-info>`__\\ , which can improve MCDR's performance "
+"when the server is spamming with non-user info (e.g. Pasting schematic "
 "with Litematica mod) in the console"
 msgstr ""
 
-#: ../plugin_dev/dev_tips.md:15
+#: ../../source/plugin_dev/dev_tips.rst:19
 msgid ""
-"If you only care about commands from users, instead of listening to User "
-"Info event, you can register a command tree to MCDR. It's much more "
-"efficient than handling yourself inside User Info event"
+"If you only care about commands from users, instead of listening to `User"
+" Info event <event.html#user-info>`__\\ , you can `register a command "
+"tree <command.md>`__ to MCDR. It's much more efficient than handling "
+"yourself inside `User Info event <event.html#user-info>`__"
 msgstr ""
 
-#: ../plugin_dev/dev_tips.md:17
+#: ../../source/plugin_dev/dev_tips.rst:21
 msgid ""
-"MCDR Stop event allows you to have as many time as you want to save your "
-"data. Be carefully, don't enter an endless loop, MCDR is waiting for you "
-"to exit"
+"`MCDR Stop event <event.html#mcdr-stop>`__ allows you to have as many "
+"time as you want to save your data. Be carefully, don't enter an endless "
+"loop, MCDR is waiting for you to exit"
 msgstr ""
 
-#: ../plugin_dev/dev_tips.md:19
+#: ../../source/plugin_dev/dev_tips.rst:24
 msgid "Multi-threading"
 msgstr ""
 
-#: ../plugin_dev/dev_tips.md:21
+#: ../../source/plugin_dev/dev_tips.rst:26
 msgid ""
 "If you want to do some tasks in your plugin that might take some time to "
 "finished, such as network querying or massive file operation, it's "
@@ -81,91 +85,227 @@ msgid ""
 "might block the pending task execution"
 msgstr ""
 
-#: ../plugin_dev/dev_tips.md:23
+#: ../../source/plugin_dev/dev_tips.rst:28
 msgid ""
-"For easier use there's a decorator named new_thread to help you make your"
-" function run in another thread asynchronously"
+"For easier use there's a decorator named `new_thread "
+"<api.html#new_thread>`__ to help you make your function run in another "
+"thread asynchronously"
 msgstr ""
 
-#: ../plugin_dev/dev_tips.md:25
+#: ../../source/plugin_dev/dev_tips.rst:31
 msgid "User config, data and log files"
 msgstr ""
 
-#: ../plugin_dev/dev_tips.md:27
+#: ../../source/plugin_dev/dev_tips.rst:33
 msgid ""
 "If you want to store some user configure or user data file, it's "
-"recommend to store them inside the config folder rather than store them "
-"inside the plugin folder"
+"recommend to store them inside the ``config`` folder rather than store "
+"them inside the plugin folder"
 msgstr ""
 
-#: ../plugin_dev/dev_tips.md:29
+#: ../../source/plugin_dev/dev_tips.rst:35
 msgid ""
 "The reason is that user might have their plugins be placed in another "
 "directory or even have multiple MCDR instances to load a same plugin "
-"collection directory, by a configure option named plugin_directories"
+"collection directory, by a configure option named `plugin_directories "
+"<../configure.html#plugin-directories>`__"
 msgstr ""
 
-#: ../plugin_dev/dev_tips.md:31
+#: ../../source/plugin_dev/dev_tips.rst:37
 msgid ""
 "If you store your configure or data inside the plugin folder, you can't "
 "distinguish which MCDR instance the configuration file belongs to. You "
-"can either store them inside the config folder directly or a inner folder"
-" inside the config folder like config/my_plugin/, so the user data can be"
-" dedicated for the MCDR instance that loads your plugin"
+"can either store them inside the ``config`` folder directly or a inner "
+"folder inside the ``config`` folder like ``config/my_plugin/``\\ , so the"
+" user data can be dedicated for the MCDR instance that loads your plugin"
 msgstr ""
 
-#: ../plugin_dev/dev_tips.md:33
-msgid "For logging files, store them inside logs/ folder is a good idea"
+#: ../../source/plugin_dev/dev_tips.rst:39
+msgid "For logging files, store them inside ``logs/`` folder is a good idea"
 msgstr ""
 
-#: ../plugin_dev/dev_tips.md:35
+#: ../../source/plugin_dev/dev_tips.rst:42
 msgid "External packages"
 msgstr ""
 
-#: ../plugin_dev/dev_tips.md:37
+#: ../../source/plugin_dev/dev_tips.rst:44
 msgid ""
 "Some times you plugin needs some external resource files or requires some"
-" other .py codes as libraries. For these, you can place them inside a "
-"custom package in the plugin folder"
+" other ``.py`` codes as libraries. For these, you can place them inside a"
+" custom package in the plugin folder"
 msgstr ""
 
-#: ../plugin_dev/dev_tips.md:39
+#: ../../source/plugin_dev/dev_tips.rst:46
 msgid ""
-"For example, if the plugin folder is plugins/, then you can have the "
-"following file structure:"
+"For example, if the plugin folder is ``plugins/``\\ , then you can have "
+"the following file structure:"
 msgstr ""
 
-#: ../plugin_dev/dev_tips.md:52
+#: ../../source/plugin_dev/dev_tips.rst:59
 msgid ""
-"Then your plugin MyPlugin.py can directly import your library or resource"
-" files by from my_plugin import a_useful_library"
+"Then your plugin ``MyPlugin.py`` can directly import your library or "
+"resource files by ``from my_plugin import a_useful_library``"
 msgstr ""
 
-#: ../plugin_dev/dev_tips.md:54
+#: ../../source/plugin_dev/dev_tips.rst:61
 msgid ""
-"Don't worry, MCDR has already appended all plugin directories into the "
-"sys.path so import your package inside the plugin folder directly"
+"Don't worry, MCDR has already `appended all plugin directories into the "
+"``sys.path`` <../configure.html#plugin-directories>`__ so import your "
+"package inside the plugin folder directly"
 msgstr ""
 
-#: ../plugin_dev/dev_tips.md:56
+#: ../../source/plugin_dev/dev_tips.rst:64
 msgid "Misc"
 msgstr ""
 
-#: ../plugin_dev/dev_tips.md:58
+#: ../../source/plugin_dev/dev_tips.rst:67
 msgid ""
-"The current working directory is the folder where MCDR is in. DO NOT "
+"The current working directory is the folder where MCDR is in. **DO NOT** "
 "change it since that will mess up everything"
 msgstr ""
 
-#: ../plugin_dev/dev_tips.md:59
+#: ../../source/plugin_dev/dev_tips.rst:68
 msgid ""
-"For the Info parameter in General Info event etc., don't modify it, just "
-"use its public methods and read its properties"
+"For the ``Info`` parameter in `General Info event <event.html#general-"
+"info>`__ etc., don't modify it, just use its public methods and read its "
+"properties"
 msgstr ""
 
-#: ../plugin_dev/dev_tips.md:60
+#: ../../source/plugin_dev/dev_tips.rst:69
 msgid ""
-"If you want to import other plugin use server.get_plugin_instance() "
+"If you want to import other plugin use ``server.get_plugin_instance()`` "
 "instead so the plugin instance you get is the same as the one MCDR uses"
 msgstr ""
+
+#~ msgid ""
+#~ "Use server.register_help_message() to add some"
+#~ " necessary tips for your plugin, so"
+#~ " the player can use !!help command"
+#~ " to know about your plugin"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Of course if your plugin is "
+#~ "supposed to only be used by player"
+#~ " with enough permission level, specify "
+#~ "the permission argument when registering"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "If you don't care about info from"
+#~ " non-user source, listen to User "
+#~ "Info event instead of General Info "
+#~ "event, which can improve MCDR's "
+#~ "performance when the server is spamming"
+#~ " with non-user info (e.g. Pasting "
+#~ "schematic with Litematica mod) in the"
+#~ " console"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "If you only care about commands "
+#~ "from users, instead of listening to "
+#~ "User Info event, you can register "
+#~ "a command tree to MCDR. It's much"
+#~ " more efficient than handling yourself "
+#~ "inside User Info event"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "MCDR Stop event allows you to have"
+#~ " as many time as you want to"
+#~ " save your data. Be carefully, don't"
+#~ " enter an endless loop, MCDR is "
+#~ "waiting for you to exit"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "For easier use there's a decorator "
+#~ "named new_thread to help you make "
+#~ "your function run in another thread "
+#~ "asynchronously"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "If you want to store some user "
+#~ "configure or user data file, it's "
+#~ "recommend to store them inside the "
+#~ "config folder rather than store them "
+#~ "inside the plugin folder"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "The reason is that user might have"
+#~ " their plugins be placed in another"
+#~ " directory or even have multiple MCDR"
+#~ " instances to load a same plugin "
+#~ "collection directory, by a configure "
+#~ "option named plugin_directories"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "If you store your configure or "
+#~ "data inside the plugin folder, you "
+#~ "can't distinguish which MCDR instance "
+#~ "the configuration file belongs to. You"
+#~ " can either store them inside the "
+#~ "config folder directly or a inner "
+#~ "folder inside the config folder like "
+#~ "config/my_plugin/, so the user data can"
+#~ " be dedicated for the MCDR instance"
+#~ " that loads your plugin"
+#~ msgstr ""
+
+#~ msgid "For logging files, store them inside logs/ folder is a good idea"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Some times you plugin needs some "
+#~ "external resource files or requires some"
+#~ " other .py codes as libraries. For"
+#~ " these, you can place them inside "
+#~ "a custom package in the plugin "
+#~ "folder"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "For example, if the plugin folder "
+#~ "is plugins/, then you can have the"
+#~ " following file structure:"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Then your plugin MyPlugin.py can "
+#~ "directly import your library or resource"
+#~ " files by from my_plugin import "
+#~ "a_useful_library"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Don't worry, MCDR has already appended"
+#~ " all plugin directories into the "
+#~ "sys.path so import your package inside"
+#~ " the plugin folder directly"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "The current working directory is the "
+#~ "folder where MCDR is in. DO NOT"
+#~ " change it since that will mess "
+#~ "up everything"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "For the Info parameter in General "
+#~ "Info event etc., don't modify it, "
+#~ "just use its public methods and "
+#~ "read its properties"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "If you want to import other plugin"
+#~ " use server.get_plugin_instance() instead so "
+#~ "the plugin instance you get is the"
+#~ " same as the one MCDR uses"
+#~ msgstr ""
 

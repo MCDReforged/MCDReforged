@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-16 17:37+0800\n"
+"POT-Creation-Date: 2021-01-17 13:10+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,131 +18,193 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.0\n"
 
-#: ../quick_start.md:1
+#: ../../source/quick_start.rst:3
 msgid "Quick Start"
-msgstr "快速开始"
+msgstr ""
 
-#: ../quick_start.md:3
+#: ../../source/quick_start.rst:5
 msgid ""
 "This is a quick start tutorial of MCDReforged (abbreviated as MCDR, "
 "omitted below)"
-msgstr "这是一个 MCDReforged（简称为 MCDR，以下省略）的快速上手教程"
+msgstr ""
 
-#: ../quick_start.md:5
+#: ../../source/quick_start.rst:8
 msgid "Requirements"
-msgstr "依赖"
+msgstr ""
 
-#: ../quick_start.md:7
+#: ../../source/quick_start.rst:10
 msgid "MCDR requires python3 runtime. The python version need to be at least 3.6"
-msgstr "MCDR 依赖 python3 运行环境。python 的具体版本需要至少是 3.6"
+msgstr ""
 
-#: ../quick_start.md:9
+#: ../../source/quick_start.rst:13
 msgid "Install"
-msgstr "安装"
+msgstr ""
 
-#: ../quick_start.md:11
-msgid "MCDR is available in pypi. It can be installed via pip command"
-msgstr "MCDR 在 [pypi](https://pypi.org/project/mcdreforged) 中可用，因此可以使用 `pip` 指令来安装"
-
-#: ../quick_start.md:17
+#: ../../source/quick_start.rst:15
 msgid ""
-"For Chinese users, you can added a -i "
-"https://pypi.tuna.tsinghua.edu.cn/simple prefix to the command to use "
+"MCDR is available in `pypi <https://pypi.org/project/mcdreforged>`__. It "
+"can be installed via ``pip`` command"
+msgstr ""
+
+#: ../../source/quick_start.rst:21
+msgid ""
+"For Chinese users, you can added a ``-i "
+"https://pypi.tuna.tsinghua.edu.cn/simple`` prefix to the command to use "
 "Tsinghua tuna mirror website to speed up the installation"
 msgstr ""
-"如果你是国内用户，你可以在指令后方添加一个 `-i https://pypi.tuna.tsinghua.edu.cn/simple` "
-"后缀来使用清华 pypi 镜像来加速 MCDR 的下载安装"
 
-#: ../quick_start.md:23
+#: ../../source/quick_start.rst:28
 msgid "Start up"
-msgstr "启动"
+msgstr ""
 
-#: ../quick_start.md:25
+#: ../../source/quick_start.rst:30
 msgid ""
-"Let's say your are going to start MCDR in a folder named my_mcdr_server. "
-"Then you can run the following commands:"
-msgstr "比方说你准备打算在一个叫 `my_mcdr_server` 的文件夹里启动 MCDR，那么你可以运行以下的指令"
+"Let's say your are going to start MCDR in a folder named "
+"``my_mcdr_server``. Then you can run the following commands:"
+msgstr ""
 
-#: ../quick_start.md:32
+#: ../../source/quick_start.rst:37
 msgid ""
 "At the first run, MCDR will generated the default configure and "
 "permission files, as well as some default folders. The file structure "
 "will be like this"
-msgstr "在首次启动时，MCDR 会生成默认的配置文件以和权限文件，以及一些默认的文件夹。这个时候的文件路径将会如下所示"
-
-#: ../quick_start.md:45
-msgid ""
-"Now put your server files into the server folder (server by default), "
-"then modify the configuration file config.yml and permission file "
-"permission.yml correctly. After you can start MCDR again and it correctly"
-" launch and handle the server"
 msgstr ""
-"现在，把你的服务端文件都放进服务端文件夹里（默认为 `server` 文件夹），然后修改配置文件 `config.yml` 以及权限文件 "
-"`permission.yml` 以满足你的需求配置完成后，你可以再次启动 MCDR，这次它将正确地启动并操控服务器运行了"
 
-#: ../quick_start.md:51
+#: ../../source/quick_start.rst:50
+msgid ""
+"Now put your server files into the server folder (\\ ``server`` by "
+"default), then modify the configuration file ``config.yml`` and "
+"permission file ``permission.yml`` correctly. After you can start MCDR "
+"again and it correctly launch and handle the server"
+msgstr ""
+
+#: ../../source/quick_start.rst:57
 msgid "Upgrade"
-msgstr "更新"
-
-#: ../quick_start.md:53
-msgid "With the help of pypi, MCDR can be easily upgraded via a single command"
-msgstr "在 [pypi](https://pypi.org/project/mcdreforged/) 的帮助下，你可以轻易的通过指令来升级 MCDR"
-
-#: ../quick_start.md:59
-msgid "That's it!"
-msgstr "这就行了"
-
-#: ../quick_start.md:61
-msgid "For Chinese users, you can use tuna mirror to speed up the upgrading too"
-msgstr "如果你是国内用户，你同样可以借助清华 pypi 镜像来加速 MCDR 的升级"
-
-#: ../quick_start.md:67
-msgid ""
-"Development builds are available in Test PyPi, you can install them if "
-"you have special needs"
 msgstr ""
-"开发版本的构建在 [Test PyPi](https://test.pypi.org/project/mcdreforged/#history) "
-"可以获得，如果你有特殊需要的话可以前往安装"
 
-#: ../quick_start.md:69
+#: ../../source/quick_start.rst:59
+msgid ""
+"With the help of `pypi <https://pypi.org/project/mcdreforged/>`__\\ , "
+"MCDR can be easily upgraded via a single command"
+msgstr ""
+
+#: ../../source/quick_start.rst:65
+msgid "That's it!"
+msgstr ""
+
+#: ../../source/quick_start.rst:67
+msgid "For Chinese users, you can use tuna mirror to speed up the upgrading too"
+msgstr ""
+
+#: ../../source/quick_start.rst:73
+msgid ""
+"Development builds are available in `Test PyPi "
+"<https://test.pypi.org/project/mcdreforged/#history>`__\\ , you can "
+"install them if you have special needs"
+msgstr ""
+
+#: ../../source/quick_start.rst:76
 msgid "Start from source"
-msgstr "从源码启动"
+msgstr ""
 
-#: ../quick_start.md:71
+#: ../../source/quick_start.rst:78
 msgid ""
 "Instead of installing MCDR from pypi, you can execute the source file of "
 "MCDR directly."
-msgstr "除了直接借助 pypi 安装 MCDR，你还可以直接从源代码执行 MCDR"
+msgstr ""
 
-#: ../quick_start.md:73
+#: ../../source/quick_start.rst:80
 msgid ""
-"Download the source files of MCDR in the github release page, and "
+"Download the source files of MCDR in the `github release page "
+"<https://github.com/Fallen-Breath/MCDReforged/releases>`__\\ , and "
 "decompress the file to your server folder"
 msgstr ""
-"在 [github release 页面](https://github.com/Fallen-"
-"Breath/MCDReforged/releases) 中下载 MCDR 源代码，随后将压缩包解压至你的服务器文件夹"
 
-#: ../quick_start.md:83
+#: ../../source/quick_start.rst:90
 msgid "Then you can start MCDR with the same command as above"
-msgstr "然后你就可以使用同上所述的指令启动 MCDR"
+msgstr ""
 
-#: ../quick_start.md:89
-msgid "Alternatively you can execute MCDReforged.py with python to start MCDR"
-msgstr "除此之外你也可以通过使用 python 运行 `MCDReforged.py` 来启动 MCDR"
+#: ../../source/quick_start.rst:96
+msgid "Alternatively you can execute ``MCDReforged.py`` with python to start MCDR"
+msgstr ""
 
-#: ../quick_start.md:95
+#: ../../source/quick_start.rst:102
 msgid ""
-"MCDReforged.py is just a simple wrapper for launching MCDR with the "
+"``MCDReforged.py`` is just a simple wrapper for launching MCDR with the "
 "following codes"
-msgstr "`MCDReforged.py` 只是一个简单的启动 MCDR 的包装，它的代码如下所示"
+msgstr ""
 
-#: ../quick_start.md:106
-msgid "MCDReforged.py also works for MCDR installed by pip command"
-msgstr "`MCDReforged.py` 同样适用于使用 pip 命令安装的 MCDR"
+#: ../../source/quick_start.rst:113
+msgid "``MCDReforged.py`` also works for MCDR installed by ``pip`` command"
+msgstr ""
 
-#: ../quick_start.md:108
+#: ../../source/quick_start.rst:115
 msgid ""
-"For windows users, if you have bound a correct python interpreter to *.py"
-" files you can also double click the MCDReforged.py to start MCDR"
-msgstr "对于 windows 的用户而言，如果你已将 `*.py` 的打开方式绑定到了一个正确的 python 解释器，"
-"你还可以通过双击运行 `MCDReforged.py` 来启动 MCDR"
+"For windows users, if you have bound a correct python interpreter to "
+"``*.py`` files you can also double click the ``MCDReforged.py`` to start "
+"MCDR"
+msgstr ""
+
+#~ msgid "MCDR is available in pypi. It can be installed via pip command"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "For Chinese users, you can added a"
+#~ " -i https://pypi.tuna.tsinghua.edu.cn/simple prefix "
+#~ "to the command to use Tsinghua "
+#~ "tuna mirror website to speed up "
+#~ "the installation"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Let's say your are going to start"
+#~ " MCDR in a folder named "
+#~ "my_mcdr_server. Then you can run the "
+#~ "following commands:"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Now put your server files into the"
+#~ " server folder (server by default), "
+#~ "then modify the configuration file "
+#~ "config.yml and permission file permission.yml"
+#~ " correctly. After you can start MCDR"
+#~ " again and it correctly launch and"
+#~ " handle the server"
+#~ msgstr ""
+
+#~ msgid "With the help of pypi, MCDR can be easily upgraded via a single command"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Development builds are available in Test"
+#~ " PyPi, you can install them if "
+#~ "you have special needs"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Download the source files of MCDR "
+#~ "in the github release page, and "
+#~ "decompress the file to your server "
+#~ "folder"
+#~ msgstr ""
+
+#~ msgid "Alternatively you can execute MCDReforged.py with python to start MCDR"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "MCDReforged.py is just a simple wrapper"
+#~ " for launching MCDR with the "
+#~ "following codes"
+#~ msgstr ""
+
+#~ msgid "MCDReforged.py also works for MCDR installed by pip command"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "For windows users, if you have "
+#~ "bound a correct python interpreter to"
+#~ " *.py files you can also double "
+#~ "click the MCDReforged.py to start MCDR"
+#~ msgstr ""
+
