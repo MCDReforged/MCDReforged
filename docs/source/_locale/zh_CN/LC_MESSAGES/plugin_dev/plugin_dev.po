@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-16 14:29+0800\n"
+"POT-Creation-Date: 2021-01-17 09:55+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,31 +18,31 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.0\n"
 
-#: ../plugin_dev/plugin_dev.rst:4
+#: ../../source/plugin_dev/plugin_dev.rst:4
 msgid "Basic"
 msgstr ""
 
-#: ../plugin_dev/plugin_dev.rst:4
+#: ../../source/plugin_dev/plugin_dev.rst:4
 msgid "Plugin Event"
 msgstr ""
 
-#: ../plugin_dev/plugin_dev.rst:4
+#: ../../source/plugin_dev/plugin_dev.rst:4
 msgid "Command"
 msgstr ""
 
-#: ../plugin_dev/plugin_dev.rst:4
+#: ../../source/plugin_dev/plugin_dev.rst:4
 msgid "API"
 msgstr ""
 
-#: ../plugin_dev/plugin_dev.rst:4
+#: ../../source/plugin_dev/plugin_dev.rst:4
 msgid "Class References"
 msgstr ""
 
-#: ../plugin_dev/plugin_dev.rst:4
+#: ../../source/plugin_dev/plugin_dev.rst:4
 msgid "Some tips"
 msgstr ""
 
-#: ../plugin_dev/plugin_dev.rst:2
+#: ../../source/plugin_dev/plugin_dev.rst:2
 msgid "Plugin Development"
 msgstr ""
 

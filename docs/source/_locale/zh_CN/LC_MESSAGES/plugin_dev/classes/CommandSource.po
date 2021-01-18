@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-15 15:18+0800\n"
+"POT-Creation-Date: 2021-01-17 13:10+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,137 +18,168 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.0\n"
 
-#: ../plugin_dev/classes/CommandSource.md:1
+#: ../../source/plugin_dev/classes/CommandSource.rst:3
 msgid "CommandSource"
 msgstr ""
 
-#: ../plugin_dev/classes/CommandSource.md:3
+#: ../../source/plugin_dev/classes/CommandSource.rst:5
 msgid ""
 "CommandSource is command executor model abstracted from a user-type Info "
 "instance. It provides several methods for command execution"
 msgstr ""
 
-#: ../plugin_dev/classes/CommandSource.md:5
+#: ../../source/plugin_dev/classes/CommandSource.rst:7
 msgid ""
 "Inherited from the class CommandSource, there are 2 subclasses, "
 "PlayerCommandSource and ConsoleCommandSource, which are used to implement"
 " methods dedicatedly"
 msgstr ""
 
-#: ../plugin_dev/classes/CommandSource.md:7
+#: ../../source/plugin_dev/classes/CommandSource.rst:10
 msgid "Property"
 msgstr ""
 
-#: ../plugin_dev/classes/CommandSource.md:9
+#: ../../source/plugin_dev/classes/CommandSource.rst:13
 msgid "source_type"
 msgstr ""
 
-#: ../plugin_dev/classes/CommandSource.md:11
-msgid "If the source is a player command source, its value is 0"
+#: ../../source/plugin_dev/classes/CommandSource.rst:15
+msgid "If the source is a player command source, its value is ``0``"
 msgstr ""
 
-#: ../plugin_dev/classes/CommandSource.md:13
-msgid "If the source is a console command source, its value is 1"
+#: ../../source/plugin_dev/classes/CommandSource.rst:17
+msgid "If the source is a console command source, its value is ``1``"
 msgstr ""
 
-#: ../plugin_dev/classes/CommandSource.md:15
+#: ../../source/plugin_dev/classes/CommandSource.rst:19
 msgid "Type: int"
 msgstr ""
 
-#: ../plugin_dev/classes/CommandSource.md:17
+#: ../../source/plugin_dev/classes/CommandSource.rst:22
 msgid "is_player"
 msgstr ""
 
-#: ../plugin_dev/classes/CommandSource.md:19
-#: ../plugin_dev/classes/CommandSource.md:27
-msgid "An @property decorated method"
+#: ../../source/plugin_dev/classes/CommandSource.rst:24
+#: ../../source/plugin_dev/classes/CommandSource.rst:33
+msgid "An ``@property`` decorated method"
 msgstr ""
 
-#: ../plugin_dev/classes/CommandSource.md:21
+#: ../../source/plugin_dev/classes/CommandSource.rst:26
 msgid "If the command source is a player command source"
 msgstr ""
 
-#: ../plugin_dev/classes/CommandSource.md:23
-#: ../plugin_dev/classes/CommandSource.md:31
+#: ../../source/plugin_dev/classes/CommandSource.rst:28
+#: ../../source/plugin_dev/classes/CommandSource.rst:37
 msgid "Type: bool"
 msgstr ""
 
-#: ../plugin_dev/classes/CommandSource.md:25
+#: ../../source/plugin_dev/classes/CommandSource.rst:31
 msgid "is_console"
 msgstr ""
 
-#: ../plugin_dev/classes/CommandSource.md:29
+#: ../../source/plugin_dev/classes/CommandSource.rst:35
 msgid "If the command source is a console command source"
 msgstr ""
 
-#: ../plugin_dev/classes/CommandSource.md:33
+#: ../../source/plugin_dev/classes/CommandSource.rst:40
 msgid "Method"
 msgstr ""
 
-#: ../plugin_dev/classes/CommandSource.md:35
+#: ../../source/plugin_dev/classes/CommandSource.rst:43
 msgid "get_server"
 msgstr ""
 
-#: ../plugin_dev/classes/CommandSource.md:41
+#: ../../source/plugin_dev/classes/CommandSource.rst:49
 msgid "Return the server interface instance"
 msgstr ""
 
-#: ../plugin_dev/classes/CommandSource.md:43
+#: ../../source/plugin_dev/classes/CommandSource.rst:52
 msgid "get_info"
 msgstr ""
 
-#: ../plugin_dev/classes/CommandSource.md:49
+#: ../../source/plugin_dev/classes/CommandSource.rst:58
 msgid "Return the Info instance that this command source is created from"
 msgstr ""
 
-#: ../plugin_dev/classes/CommandSource.md:51
+#: ../../source/plugin_dev/classes/CommandSource.rst:61
 msgid "get_permission_level"
 msgstr ""
 
-#: ../plugin_dev/classes/CommandSource.md:57
+#: ../../source/plugin_dev/classes/CommandSource.rst:67
 msgid ""
 "Return the permission level representing by an int that the command "
 "source has"
 msgstr ""
 
-#: ../plugin_dev/classes/CommandSource.md:59
+#: ../../source/plugin_dev/classes/CommandSource.rst:70
 msgid "has_permission"
 msgstr ""
 
-#: ../plugin_dev/classes/CommandSource.md:66
+#: ../../source/plugin_dev/classes/CommandSource.rst:77
 msgid ""
 "Return if the command source has not less level than the given permission"
 " level"
 msgstr ""
 
-#: ../plugin_dev/classes/CommandSource.md:68
+#: ../../source/plugin_dev/classes/CommandSource.rst:80
 msgid "has_permission_higher_than"
 msgstr ""
 
-#: ../plugin_dev/classes/CommandSource.md:75
-msgid "Just like the has_permission, but this time it is a greater than judgment"
+#: ../../source/plugin_dev/classes/CommandSource.rst:87
+msgid ""
+"Just like the `has_permission <#has-permission>`__\\ , but this time it "
+"is a greater than judgment"
 msgstr ""
 
-#: ../plugin_dev/classes/CommandSource.md:77
+#: ../../source/plugin_dev/classes/CommandSource.rst:90
 msgid "reply"
 msgstr ""
 
-#: ../plugin_dev/classes/CommandSource.md:83
+#: ../../source/plugin_dev/classes/CommandSource.rst:96
 msgid ""
 "Send a message to the command source. The message can be anything "
 "including RTexts"
 msgstr ""
 
-#: ../plugin_dev/classes/CommandSource.md:85
+#: ../../source/plugin_dev/classes/CommandSource.rst:98
 msgid ""
-"The message will be converted to str using str() function unless it's a "
-"RTextBase object"
+"The message will be converted to str using ``str()`` function unless it's"
+" a RTextBase object"
 msgstr ""
 
-#: ../plugin_dev/classes/CommandSource.md:87
+#: ../../source/plugin_dev/classes/CommandSource.rst:100
 msgid ""
-"Keyword Parameter encoding: The encoding method for the text. It's only "
-"used in PlayerCommandSource to optionally specify the encoding method. "
-"Check here for more details"
+"Keyword Parameter *encoding*\\ : The encoding method for the text. It's "
+"only used in PlayerCommandSource to optionally specify the encoding "
+"method. Check `here <ServerInterface.html#execute>`__ for more details"
 msgstr ""
+
+#~ msgid "If the source is a player command source, its value is 0"
+#~ msgstr ""
+
+#~ msgid "If the source is a console command source, its value is 1"
+#~ msgstr ""
+
+#~ msgid "An @property decorated method"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Just like the has_permission, but this"
+#~ " time it is a greater than "
+#~ "judgment"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "The message will be converted to "
+#~ "str using str() function unless it's "
+#~ "a RTextBase object"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Keyword Parameter encoding: The encoding "
+#~ "method for the text. It's only "
+#~ "used in PlayerCommandSource to optionally "
+#~ "specify the encoding method. Check here"
+#~ " for more details"
+#~ msgstr ""
 
