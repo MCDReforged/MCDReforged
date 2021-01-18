@@ -4,6 +4,7 @@ Single plugin class
 from typing import Tuple, Any, TYPE_CHECKING
 
 from mcdreforged.command.builder.command_node import Literal
+from mcdreforged.minecraft.rtext import RTextBase
 from mcdreforged.plugin.meta.metadata import Metadata
 from mcdreforged.plugin.plugin_event import MCDREvent, EventListener, PluginEvent
 from mcdreforged.plugin.plugin_registry import PluginRegistry, HelpMessage
@@ -39,8 +40,11 @@ class AbstractPlugin:
 	def get_metadata(self) -> Metadata:
 		raise NotImplementedError()
 
-	def get_id(self) -> id:
+	def get_id(self) -> str:
 		return self.get_metadata().id
+
+	def get_meta_name(self) -> RTextBase:
+		return self.get_metadata().name
 
 	def get_fallback_metadata_id(self) -> str:
 		raise NotImplementedError()
