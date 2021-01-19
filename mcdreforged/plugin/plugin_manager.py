@@ -301,8 +301,8 @@ class PluginManager:
 	# Current behavior for plugin operations
 	# 1. Actual plugin operations
 	#   For plugin refresh
-	#     1. Load new plugins
-	#     2. Unload plugins whose file is removed
+	#     1. Unload plugins whose file is removed
+	#     2. Load new plugins
 	#     3. Reload existed (and matches filter) plugins whose state is ready. if reload fail unload it
 	#
 	#   For single plugin operation
@@ -369,8 +369,8 @@ class PluginManager:
 		self.mcdr_server.on_plugin_changed()
 
 	def __refresh_plugins(self, reload_filter: Callable[[RegularPlugin], bool]):
-		load_result = self.__collect_and_process_new_plugins(lambda fp: True)
 		unload_result = self.__collect_and_remove_plugins(lambda plugin: not plugin.file_exists())
+		load_result = self.__collect_and_process_new_plugins(lambda fp: True)
 		reload_result = self.__reload_ready_plugins(reload_filter)
 		self.__post_plugin_process(load_result, unload_result, reload_result)
 
