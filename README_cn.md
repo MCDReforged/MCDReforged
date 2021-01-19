@@ -22,7 +22,7 @@ QQ 群: [1101314858](https://jq.qq.com/?k=5gUuw9A)
 
 - 运行于服务端之上，完全不需要修改服务端，保留原汁原味的原版特性
 - 可热重载的插件系统，无需重启服务端即可更新插件
-- 多平台/服务端的兼容性，支持在 Linux / Windows 下运行 vanilla、paper 以及 bungeecord 等服务端
+- 多平台/服务端的兼容性，只要这个系统有办法支持Java和Python，就可以在这上面下运行（前提是内存够用） vanilla、paper 以及 bungeecord 等服务端
 
 ## 它是如何工作的？
 
