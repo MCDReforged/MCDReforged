@@ -1,41 +1,33 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2021, Fallen_Breath
-# This file is distributed under the same license as the MCDReforged
-# package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2021.
-#
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: MCDReforged \n"
+"Project-Id-Version: mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-17 13:19+0800\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2021-01-19 05:12\n"
+"Last-Translator: \n"
+"Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.0\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Crowdin-Project: mcdreforged\n"
+"X-Crowdin-Project-ID: 437248\n"
+"X-Crowdin-Language: zh-CN\n"
+"X-Crowdin-File: /plugin_dev/api.po\n"
+"X-Crowdin-File-ID: 86\n"
+"Language: zh_CN\n"
 
 #: ../../source/plugin_dev/api.rst:3
 msgid "API Packages for Plugins"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:5
-msgid ""
-"When your plugin needs to import something from MCDR, rather than "
-"directly import the package you want, you can import the packages in "
-"``mcdreforged.api``"
+msgid "When your plugin needs to import something from MCDR, rather than directly import the package you want, you can import the packages in ``mcdreforged.api``"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:7
-msgid ""
-"``mcdreforged.api`` is the package for plugin developers to import. By "
-"only importing from the api package, the import of the target class in "
-"the plugin can be decoupled from the actual location of the target class."
-" If MCDR refactors the target class and moves its location in the future,"
-" only importing from the api package can keep your plugin unaffected"
+msgid "``mcdreforged.api`` is the package for plugin developers to import. By only importing from the api package, the import of the target class in the plugin can be decoupled from the actual location of the target class. If MCDR refactors the target class and moves its location in the future, only importing from the api package can keep your plugin unaffected"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:10
@@ -43,9 +35,7 @@ msgid "all"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:16
-msgid ""
-"This is the simplest way to import everything you want for plugin "
-"development. It's a life saver for lazy man"
+msgid "This is the simplest way to import everything you want for plugin development. It's a life saver for lazy man"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:18
@@ -54,20 +44,14 @@ msgstr ""
 
 #: ../../source/plugin_dev/api.rst:21
 msgid "command"
-msgstr ""
+msgstr "指令"
 
 #: ../../source/plugin_dev/api.rst:23
-msgid ""
-"``command`` package contains the necessities for building a command tree "
-"or create your own command, including command tree node classes, command "
-"exceptions and some command utils"
+msgid "``command`` package contains the necessities for building a command tree or create your own command, including command tree node classes, command exceptions and some command utils"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:25
-msgid ""
-"For example, if you want the class ``Literal`` and ``IllegalArgument`` "
-"for building your command tree ``on_error`` exception handling, you can "
-"do it like this"
+msgid "For example, if you want the class ``Literal`` and ``IllegalArgument`` for building your command tree ``on_error`` exception handling, you can do it like this"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:31
@@ -79,9 +63,7 @@ msgid "decorator"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:40
-msgid ""
-"``decorator`` package contains some useful function decorators for plugin"
-" development"
+msgid "``decorator`` package contains some useful function decorators for plugin development"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:43
@@ -89,18 +71,11 @@ msgid "new_thread"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:45
-msgid ""
-"This is a one line solution to make your function executes "
-"asynchronously. When decorated with this decorator, functions will be "
-"executed in a new daemon thread"
+msgid "This is a one line solution to make your function executes asynchronously. When decorated with this decorator, functions will be executed in a new daemon thread"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:47
-msgid ""
-"This decorator only changes the return value of the function to the "
-"created ``Thread`` instance. Beside the return value, it reserves all "
-"signatures of the decorated function, so you can safely use the decorated"
-" function as if there's no decorating at all"
+msgid "This decorator only changes the return value of the function to the created ``Thread`` instance. Beside the return value, it reserves all signatures of the decorated function, so you can safely use the decorated function as if there's no decorating at all"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:49
@@ -109,41 +84,26 @@ msgstr ""
 
 #: ../../source/plugin_dev/api.rst:51
 msgid "Example:"
-msgstr ""
+msgstr "例如："
 
 #: ../../source/plugin_dev/api.rst:72
-msgid ""
-"The only difference between ``do_something1`` and ``do_something2`` is "
-"that ``do_something2`` is decorated by ``@new_thread``. So when executing"
-" ``do_something2``\\ , it won't lag the following execution of MCDR like "
-"``do_something1`` since ``do_something2`` will execute on another thread"
+msgid "The only difference between ``do_something1`` and ``do_something2`` is that ``do_something2`` is decorated by ``@new_thread``. So when executing ``do_something2``\\ , it won't lag the following execution of MCDR like ``do_something1`` since ``do_something2`` will execute on another thread"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:74
-msgid ""
-"If you want to wait for the decorated function to complete, you can "
-"simple use the ``join`` method from class ``threading.Thread``. Remember "
-"the return value of the decorated function has already been changed in to"
-" the ``Thread`` instance"
+msgid "If you want to wait for the decorated function to complete, you can simple use the ``join`` method from class ``threading.Thread``. Remember the return value of the decorated function has already been changed in to the ``Thread`` instance"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:80
-msgid ""
-"In addition to simply and directly use a raw ``@new_thread``\\ , it's "
-"recommend to add a thread name argument for the decorator"
+msgid "In addition to simply and directly use a raw ``@new_thread``\\ , it's recommend to add a thread name argument for the decorator"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:89
-msgid ""
-"So when you logs something by ``server.logger``\\ , a meaningful thread "
-"name will be displayed instead of a plain and meaningless ``Thread-3``"
+msgid "So when you logs something by ``server.logger``\\ , a meaningful thread name will be displayed instead of a plain and meaningless ``Thread-3``"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:91
-msgid ""
-"**Notes**\\ : Some api methods in ``ServerInterface`` class are required "
-"to be invoked in the MCDR task executor thread. Invoking them in another "
-"thread might result in an exception"
+msgid "**Notes**\\ : Some api methods in ``ServerInterface`` class are required to be invoked in the MCDR task executor thread. Invoking them in another thread might result in an exception"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:94
@@ -151,18 +111,11 @@ msgid "event"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:96
-msgid ""
-"``event`` package contains the classes for creating custom events, and "
-"classes of MCDR built-in events"
+msgid "``event`` package contains the classes for creating custom events, and classes of MCDR built-in events"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:98
-msgid ""
-"You might already read the `dispatch_event <classes/ServerInterface.html"
-"#dispatch-event>`__ method in ``ServerInterface`` class. It only accepts "
-"a ``PluginEvent`` instance as its first parameter. So if you want to "
-"dispatch your custom event, create a ``LiteralEvent`` for simpleness or a"
-" custom event class inherited from ``PluginEvent``"
+msgid "You might already read the `dispatch_event <classes/ServerInterface.html#dispatch-event>`__ method in ``ServerInterface`` class. It only accepts a ``PluginEvent`` instance as its first parameter. So if you want to dispatch your custom event, create a ``LiteralEvent`` for simpleness or a custom event class inherited from ``PluginEvent``"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:101
@@ -170,10 +123,7 @@ msgid "rcon"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:103
-msgid ""
-"Package ``rcon`` contains a single class ``RconConnection``. It's is a "
-"simply rcon client for connect to any Minecraft servers that supports "
-"rcon protocol"
+msgid "Package ``rcon`` contains a single class ``RconConnection``. It's is a simply rcon client for connect to any Minecraft servers that supports rcon protocol"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:107
@@ -197,9 +147,7 @@ msgid "Parameter *password*\\ : The password of the rcon connection"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:121
-msgid ""
-"Keyword Parameter *logger*\\ : An instance of ``logging.Logger``. It's "
-"used to output some warning information like failing to receive a packet"
+msgid "Keyword Parameter *logger*\\ : An instance of ``logging.Logger``. It's used to output some warning information like failing to receive a packet"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:124
@@ -207,9 +155,7 @@ msgid "connect"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:130
-msgid ""
-"Start a connection to the rcon server and tries to login. If login "
-"success it will return ``True``\\ , otherwise ``False``"
+msgid "Start a connection to the rcon server and tries to login. If login success it will return ``True``\\ , otherwise ``False``"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:133
@@ -225,9 +171,7 @@ msgid "send_command"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:148
-msgid ""
-"Send  command to the rcon server, and return the command execution result"
-" form the server"
+msgid "Send  command to the rcon server, and return the command execution result form the server"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:150
@@ -235,9 +179,7 @@ msgid "Parameter *command*\\ : The command you want to send to the server"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:152
-msgid ""
-"Parameter *max_retry_time*\\ : The maximum retry time of the operation. "
-"This method will return None if *max_retry_time* retries exceeded"
+msgid "Parameter *max_retry_time*\\ : The maximum retry time of the operation. This method will return None if *max_retry_time* retries exceeded"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:155
@@ -245,10 +187,7 @@ msgid "rtext"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:157
-msgid ""
-"Recommend to read the page `Raw JSON text format "
-"<https://minecraft.gamepedia.com/Raw_JSON_text_format>`__ in Minecraft "
-"Wiki first"
+msgid "Recommend to read the page `Raw JSON text format <https://minecraft.gamepedia.com/Raw_JSON_text_format>`__ in Minecraft Wiki first"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:159
@@ -256,9 +195,7 @@ msgid "This is an advance text component library for Minecraft"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:161
-msgid ""
-"Inspired by the `MCD stext API <https://github.com/TISUnion/rtext>`__ "
-"made by `Pandaria98 <https://github.com/Pandaria98>`__"
+msgid "Inspired by the `MCD stext API <https://github.com/TISUnion/rtext>`__ made by `Pandaria98 <https://github.com/Pandaria98>`__"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:164
@@ -398,9 +335,7 @@ msgid "RTextBase"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:214
-msgid ""
-"``RTextBase`` is an abstract class of text component. It's the base class"
-" of ``RText`` and ``RTextList``"
+msgid "``RTextBase`` is an abstract class of text component. It's the base class of ``RText`` and ``RTextList``"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:217
@@ -414,9 +349,7 @@ msgid "Abstract method"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:225
-msgid ""
-"Return an object representing it's data that can be serialized into json "
-"string"
+msgid "Return an object representing it's data that can be serialized into json string"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:228
@@ -424,9 +357,7 @@ msgid "to_json_str"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:234
-msgid ""
-"Return a json formatted str representing it's data. It can be used as the"
-" second parameter in command ``/tellraw <target> <message>`` and more"
+msgid "Return a json formatted str representing it's data. It can be used as the second parameter in command ``/tellraw <target> <message>`` and more"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:237
@@ -434,9 +365,7 @@ msgid "to_plain_text"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:245
-msgid ""
-"Return a plain text for console display. Click event and hover event will"
-" be ignored"
+msgid "Return a plain text for console display. Click event and hover event will be ignored"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:248
@@ -468,9 +397,7 @@ msgid "set_click_event"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:287
-msgid ""
-"Set the click event with given *action* and *value* and return the text "
-"component itself"
+msgid "Set the click event with given *action* and *value* and return the text component itself"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:289
@@ -490,15 +417,11 @@ msgid "set_hover_text"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:302
-msgid ""
-"Set the hover text with given *\\*\\ args* and return the text component "
-"itself"
+msgid "Set the hover text with given *\\*\\ args* and return the text component itself"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:304
-msgid ""
-"Parameter *action*\\ : The elements be used to create a ``RTextList`` "
-"instance. The ``RTextList`` instance is used as the actual hover text"
+msgid "Parameter *action*\\ : The elements be used to create a ``RTextList`` instance. The ``RTextList`` instance is used as the actual hover text"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:306
@@ -514,9 +437,7 @@ msgid "The regular text component class"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:317
-msgid ""
-"Create an ``RText`` object with specific text, color and style. "
-"``styles`` can be a ``RStyle`` or a collection of ``RStyle``"
+msgid "Create an ``RText`` object with specific text, color and style. ``styles`` can be a ``RStyle`` or a collection of ``RStyle``"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:320 ../../source/plugin_dev/api.rst:325
@@ -528,15 +449,11 @@ msgid "The translation text component class. It's almost the same as ``RText``"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:331
-msgid ""
-"Create a RTextTranslation object with specific translation_key. The rest "
-"of the parameters are the same to ``RText``"
+msgid "Create a RTextTranslation object with specific translation_key. The rest of the parameters are the same to ``RText``"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:333
-msgid ""
-"Example: ``RTextTranslation('advancements.nether.root.title', "
-"color=RColor.red)``"
+msgid "Example: ``RTextTranslation('advancements.nether.root.title', color=RColor.red)``"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:336 ../../source/plugin_dev/api.rst:341
@@ -552,9 +469,7 @@ msgid "Use the given *\\*\\ args* to create a ``RTextList``"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:349 ../../source/plugin_dev/api.rst:360
-msgid ""
-"Objects in ``*args`` can be a ``str``\\ , a ``RTextBase`` or any classes "
-"implemented ``__str__`` method. All of them will be convert to ``RText``"
+msgid "Objects in ``*args`` can be a ``str``\\ , a ``RTextBase`` or any classes implemented ``__str__`` method. All of them will be convert to ``RText``"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:352
@@ -562,9 +477,7 @@ msgid "append"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:358
-msgid ""
-"Add several elements to the end of the current ``RTextList``\\ , then "
-"return the ``RTextList`` component itself"
+msgid "Add several elements to the end of the current ``RTextList``\\ , then return the ``RTextList`` component itself"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:363
@@ -572,9 +485,7 @@ msgid "is_empty"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:369
-msgid ""
-"Return a bool indicating if the ``RTextList`` is empty. In other words, "
-"has no child element"
+msgid "Return a bool indicating if the ``RTextList`` is empty. In other words, has no child element"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:372
@@ -582,11 +493,7 @@ msgid "types"
 msgstr ""
 
 #: ../../source/plugin_dev/api.rst:374
-msgid ""
-"Who doesn't want a complete type checking to help you reduce silly "
-"mistakes etc. when coding your plugin? If you want to add type hints to "
-"the server interface or command source parameter, here's the package for "
-"you to import those Usually-used classes"
+msgid "Who doesn't want a complete type checking to help you reduce silly mistakes etc. when coding your plugin? If you want to add type hints to the server interface or command source parameter, here's the package for you to import those Usually-used classes"
 msgstr ""
 
 #~ msgid ""

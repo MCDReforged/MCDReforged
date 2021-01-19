@@ -1,350 +1,270 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2021, Fallen_Breath
-# This file is distributed under the same license as the MCDReforged
-# package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2021.
-#
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: MCDReforged \n"
+"Project-Id-Version: mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-17 13:15+0800\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2021-01-19 05:20\n"
+"Last-Translator: \n"
+"Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.0\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Crowdin-Project: mcdreforged\n"
+"X-Crowdin-Project-ID: 437248\n"
+"X-Crowdin-Language: zh-CN\n"
+"X-Crowdin-File: migrate_from_0.x.po\n"
+"X-Crowdin-File-ID: 70\n"
+"Language: zh_CN\n"
 
 #: ../../source/migrate_from_0.x.rst:3
 msgid "Migrate from MCDR 0.x"
-msgstr ""
+msgstr "迁移自 MCDR 0.x"
 
 #: ../../source/migrate_from_0.x.rst:6
 msgid "File structure"
-msgstr ""
+msgstr "文件结构"
 
 #: ../../source/migrate_from_0.x.rst:8
-msgid ""
-"Since MCDR now is installed as a python package, unless you run MCDR with"
-" source, file / folders below can be removed"
-msgstr ""
+msgid "Since MCDR now is installed as a python package, unless you run MCDR with source, file / folders below can be removed"
+msgstr "由于 MCDR 现在作为 Python 包安装，除非您使用源码运行MCDR，否则下面的文件/文件夹可直接删除："
 
 #: ../../source/migrate_from_0.x.rst:11
 msgid "utils/"
-msgstr ""
+msgstr "utils/"
 
 #: ../../source/migrate_from_0.x.rst:12
 msgid "resources/"
-msgstr ""
+msgstr "resources/"
 
 #: ../../source/migrate_from_0.x.rst:13
 msgid "requirements.txt"
-msgstr ""
+msgstr "requirements.txt"
 
 #: ../../source/migrate_from_0.x.rst:14
 msgid "LICENSE"
-msgstr ""
+msgstr "LICENSE"
 
 #: ../../source/migrate_from_0.x.rst:15
 msgid "readme.md"
-msgstr ""
+msgstr "readme.md"
 
 #: ../../source/migrate_from_0.x.rst:16
 msgid "readme_cn.md"
-msgstr ""
+msgstr "readme_cn.md"
 
 #: ../../source/migrate_from_0.x.rst:17
-msgid ""
-"MCDReforged.py (If you still want to use it you can grab it from github "
-"release, it's just an entry script)"
-msgstr ""
+msgid "MCDReforged.py (If you still want to use it you can grab it from github release, it's just an entry script)"
+msgstr "MCDReforged.py (如果你仍要使用它可以从 GitHub release 获取——现在它只作为 MCDR 的启动脚本。)"
 
 #: ../../source/migrate_from_0.x.rst:19
 msgid "The logging folder is renamed from ``log/`` to ``logs/``"
-msgstr ""
+msgstr "日志文件夹已从 ``log/`` 重命名为 ``logs/``"
 
 #: ../../source/migrate_from_0.x.rst:22
 msgid "Config"
-msgstr ""
+msgstr "配置文件"
 
 #: ../../source/migrate_from_0.x.rst:24
-msgid ""
-"There come quite a lot of changes to the config file. Although MCDR will "
-"still work if you keep the old config file, it's highly recommend to make"
-" a new default configure file, and fill your old configures into the new "
-"configure file"
-msgstr ""
+msgid "There come quite a lot of changes to the config file. Although MCDR will still work if you keep the old config file, it's highly recommend to make a new default configure file, and fill your old configures into the new configure file"
+msgstr "配置文件进行了大量更改。如果你仍然使用旧版的配置文件，MCDR 仍然可以工作，但我们强烈建议您生成新的默认配置文件，并将旧配置填充到新的配置文件中。"
 
 #: ../../source/migrate_from_0.x.rst:26
-msgid ""
-"You can rename the old ``config.yml`` to a temporary name like "
-"``old_config.yml``\\ , then start MCDR. MCDR will generate a new default "
-"configure file and exit. Then open these 2 configure file and migrate"
-msgstr ""
+msgid "You can rename the old ``config.yml`` to a temporary name like ``old_config.yml``\\ , then start MCDR. MCDR will generate a new default configure file and exit. Then open these 2 configure file and migrate"
+msgstr "你可以将旧的 ``config.yml`` 重命名为 ``old_config.yml`` 并启动 MCDR。 MCDR 将重新生成一份配置文件并自动退出。在这之后，你可以打开这两个配置文件并迁移配置。"
 
 #: ../../source/migrate_from_0.x.rst:29
 msgid "Permission"
-msgstr ""
+msgstr "权限文件"
 
 #: ../../source/migrate_from_0.x.rst:31
-msgid ""
-"There's no change to the permission system and the permission file, so "
-"you can just use the old permission file"
-msgstr ""
+msgid "There's no change to the permission system and the permission file, so you can just use the old permission file"
+msgstr "权限系统没有任何改变，所以你仍然可以使用旧的权限文件"
 
 #: ../../source/migrate_from_0.x.rst:34
 msgid "Plugins"
-msgstr ""
+msgstr "插件"
 
 #: ../../source/migrate_from_0.x.rst:36
-msgid ""
-"Most of the MCDR 0.x plugins only need to have some small changes to be "
-"adjusted to current MCDR. Some of them can even directly work with "
-"current MCDR without any change"
-msgstr ""
+msgid "Most of the MCDR 0.x plugins only need to have some small changes to be adjusted to current MCDR. Some of them can even directly work with current MCDR without any change"
+msgstr "大部分旧的 MCDR 插件只需做出一些小改动以适配新的 MCDR。相当一部分旧插件可以毫无更改的运行在新的 MCDR 中。"
 
 #: ../../source/migrate_from_0.x.rst:39
 msgid "Metadata"
-msgstr ""
+msgstr "元数据"
 
 #: ../../source/migrate_from_0.x.rst:41
-msgid ""
-"Metadata is a global field inside the plugin file. It's used to store "
-"basic information and dependencies of a plugin. It's necessary for a "
-"plugin to declare it so MCDR can handle all the plugins correctly"
-msgstr ""
+msgid "Metadata is a global field inside the plugin file. It's used to store basic information and dependencies of a plugin. It's necessary for a plugin to declare it so MCDR can handle all the plugins correctly"
+msgstr "元数据插件内部的一个全局变量。它用来存储插件的基本信息和依赖关系。一个插件必须声明元数据，这样才能使 MCDR 正确的处理所有插件。"
 
 #: ../../source/migrate_from_0.x.rst:43
-msgid ""
-"A legacy plugin is still able to be loaded if it doesn't have the "
-"metadata field, but a warning will be shown in the console"
-msgstr ""
+msgid "A legacy plugin is still able to be loaded if it doesn't have the metadata field, but a warning will be shown in the console"
+msgstr "如果插件没有元数据，它仍然可以被加载，但在控制台中会显示一个警告"
 
 #: ../../source/migrate_from_0.x.rst:45
-msgid ""
-"Check `here <plugin_dev/basic.html#metadata\\>`__ for more information "
-"about plugin metadata"
-msgstr ""
+msgid "Check `here <plugin_dev/basic.html#metadata\\>`__ for more information about plugin metadata"
+msgstr "点击 `这里 <plugin_dev/basic.html#metadata\\>`__ 以查看更多关于元数据的信息"
 
 #: ../../source/migrate_from_0.x.rst:48
 msgid "Listener"
-msgstr ""
+msgstr "监听器"
 
 #: ../../source/migrate_from_0.x.rst:51
 msgid "Compatibility"
-msgstr ""
+msgstr "兼容性"
 
 #: ../../source/migrate_from_0.x.rst:53
-msgid ""
-"Current MCDR implements a better event & listener system, plugin can "
-"register any callback as event listener to any event."
-msgstr ""
+msgid "Current MCDR implements a better event & listener system, plugin can register any callback as event listener to any event."
+msgstr "新版的 MCDR 实现了更好的事件和监听器系统，插件可以将任意函数注册为事件监听器。"
 
 #: ../../source/migrate_from_0.x.rst:55
-msgid ""
-"Most of the MCDR 0.x style event listeners are reserved and now work as "
-"an automatically registered default listener for the related event"
-msgstr ""
+msgid "Most of the MCDR 0.x style event listeners are reserved and now work as an automatically registered default listener for the related event"
+msgstr "大多数 MCDR 0.x 风格的事件监听器都保留了下来，现在作为相关事件的自动注册的默认监听器工作"
 
 #: ../../source/migrate_from_0.x.rst:58
 msgid "on_info"
-msgstr ""
+msgstr "on_info"
 
 #: ../../source/migrate_from_0.x.rst:59
 msgid "on_user_info"
-msgstr ""
+msgstr "on_user_info"
 
 #: ../../source/migrate_from_0.x.rst:60
 msgid "on_server_startup"
-msgstr ""
+msgstr "on_server_startup"
 
 #: ../../source/migrate_from_0.x.rst:61
 msgid "on_server_stop"
-msgstr ""
+msgstr "on_server_stop"
 
 #: ../../source/migrate_from_0.x.rst:62
 msgid "on_mcdr_stop"
-msgstr ""
+msgstr "on_mcdr_stop"
 
 #: ../../source/migrate_from_0.x.rst:63
 msgid "on_player_joined"
-msgstr ""
+msgstr "on_player_joined"
 
 #: ../../source/migrate_from_0.x.rst:64
 msgid "on_player_left"
-msgstr ""
+msgstr "on_player_left"
 
 #: ../../source/migrate_from_0.x.rst:66
-msgid ""
-"If you declare a function with name above, MCDR will automatically detect"
-" it and register it as an event listener when your plugin gets loaded. "
-"The listener priority is the default value ``1000``"
-msgstr ""
+msgid "If you declare a function with name above, MCDR will automatically detect it and register it as an event listener when your plugin gets loaded. The listener priority is the default value ``1000``"
+msgstr "如果你定义了一个在以上列表中的函数，那么 MCDR 会在插件加被加载时自动把它们注册为一个事件监听器。这个监听器的默认优先级是 ``1000``"
 
 #: ../../source/migrate_from_0.x.rst:68
 msgid "These 2 events are removed from MCDR"
-msgstr ""
+msgstr "以下两个事件已从 MCDR 中移除："
 
 #: ../../source/migrate_from_0.x.rst:71
 msgid "on_death_message"
-msgstr ""
+msgstr "on_death_message"
 
 #: ../../source/migrate_from_0.x.rst:72
 msgid "on_player_made_advancement"
-msgstr ""
+msgstr "on_player_made_advancement"
 
 #: ../../source/migrate_from_0.x.rst:74
-msgid ""
-"If your plugin relies on these 2 events, there is an alternative for it: "
-"`coming-soon <#TODO>`__"
-msgstr ""
+msgid "If your plugin relies on these 2 events, there is an alternative for it: `coming-soon <#TODO>`__"
+msgstr "如果你的插件依赖于这两个事件， 有一个替代方案：`即将到来 <#TODO>`__"
 
 #: ../../source/migrate_from_0.x.rst:77
 msgid "Listener arguments"
-msgstr ""
+msgstr "监听器参数"
 
 #: ../../source/migrate_from_0.x.rst:79
-msgid ""
-"In MCDR 0.x the player joined event listener accepts 2 or 3 arguments. "
-"Both of these 2 definitions below work"
-msgstr ""
+msgid "In MCDR 0.x the player joined event listener accepts 2 or 3 arguments. Both of these 2 definitions below work"
+msgstr "在 MCDR 0.x 中，玩家加入的事件监听器接受 2 或 3 个参数。以下的两个定义方式都有效："
 
 #: ../../source/migrate_from_0.x.rst:91
-msgid ""
-"However, the former usage is removed in current MCDR version, only the "
-"latter one with 3 arguments is accepted"
-msgstr ""
+msgid "However, the former usage is removed in current MCDR version, only the latter one with 3 arguments is accepted"
+msgstr "然而，在当前版本的 MCDR 中，前者将不被接受，只有定义 3 个参数的后者被接受"
 
 #: ../../source/migrate_from_0.x.rst:93
-msgid ""
-"Beside the player joined event listener, other event listener callbacks "
-"have their argument list unchanged"
-msgstr ""
+msgid "Beside the player joined event listener, other event listener callbacks have their argument list unchanged"
+msgstr "除了玩家加入的事件监听器外，其他事件监听器的回调参数保持不变"
 
 #: ../../source/migrate_from_0.x.rst:96
 msgid "Multi-threading"
-msgstr ""
+msgstr "多线程"
 
 #: ../../source/migrate_from_0.x.rst:98
-msgid ""
-"MCDR 0.x allocates separate threads for plugins to execute their event "
-"listener callbacks. This lazyness brings unpredictable plugin execution "
-"order and affects overall performance by a lot. Multithreading also make "
-"it hard to do something after all plugins have finished their callbacks"
-msgstr ""
+msgid "MCDR 0.x allocates separate threads for plugins to execute their event listener callbacks. This lazyness brings unpredictable plugin execution order and affects overall performance by a lot. Multithreading also make it hard to do something after all plugins have finished their callbacks"
+msgstr "MCDR 0.x 为每个插件分配单独的线程以执行其事件监听器回调。这种做法带来了不可预知的插件执行顺序，并极大影响了整体性能。这样的多线程也使得在所有插件完成回调后很难执行任何工作"
 
 #: ../../source/migrate_from_0.x.rst:100
-msgid ""
-"In current MCDR, all event listeners callbacks are invoked in a single "
-"thread named ``TaskExecutor`` to solve the issues above"
-msgstr ""
+msgid "In current MCDR, all event listeners callbacks are invoked in a single thread named ``TaskExecutor`` to solve the issues above"
+msgstr "在新版 MCDR 中，所有事件监听器回调在名为 ``TaskExcutor`` 的单线程中调用，以解决上述的问题"
 
 #: ../../source/migrate_from_0.x.rst:102
-msgid ""
-"If your plugin depends on multithreading from MCDR to do some parallel "
-"operations, or your plugin need to do some I/O or network operations "
-"which might take some times, you'd better create a new thread to execute "
-"them manually, so MCDR won't be blocked by these"
-msgstr ""
+msgid "If your plugin depends on multithreading from MCDR to do some parallel operations, or your plugin need to do some I/O or network operations which might take some times, you'd better create a new thread to execute them manually, so MCDR won't be blocked by these"
+msgstr "如果您的插件依赖于来自 MCDR 的多线程以执行一些并行操作，或您的插件需要执行一些 I/O 或网络操作，并需要耗费一些时间，那最好创建一个新线程来手动执行它们，以保证 MCDR 不会被这些操作阻塞"
 
 #: ../../source/migrate_from_0.x.rst:104
-msgid ""
-"MCDR also provides a simple function decorator ``new_thread`` for lazy "
-"man, to make a function multi threaded when being invoked. Here's an "
-"quick example:"
-msgstr ""
+msgid "MCDR also provides a simple function decorator ``new_thread`` for lazy man, to make a function multi threaded when being invoked. Here's an quick example:"
+msgstr "MCDR 还提供了一个简单的函数装饰器 ``new_thread`` ，用于在调用函数时使函数为多线程。下面是一个示例："
 
 #: ../../source/migrate_from_0.x.rst:122
-msgid ""
-"With the ``@new_thread`` decorator, everytime when you invoke "
-"``my_slow_method2``\\ , a new daemon thread will be started to executed "
-"it. For more details about the ``@new_thread`` decorator, check `here "
-"<plugin_dev/api.html#new-thread>`__"
-msgstr ""
+msgid "With the ``@new_thread`` decorator, everytime when you invoke ``my_slow_method2``\\ , a new daemon thread will be started to executed it. For more details about the ``@new_thread`` decorator, check `here <plugin_dev/api.html#new-thread>`__"
+msgstr "使用 ``@new_thread`` 修饰器，则每次调用 ``my_slow_method2``\\ 时，都会创建一个新的守护线程来执行它。关于 ``@new_thread`` 的详细信息，请查看 `这里 <plugin_dev/api.html#new-thread>`__"
 
 #: ../../source/migrate_from_0.x.rst:125
 msgid "Package location"
-msgstr ""
+msgstr "模块位置"
 
 #: ../../source/migrate_from_0.x.rst:127
-msgid ""
-"If your plugin imports some of the mcdr utils, like ``RText`` or "
-"``Rcon``\\ , you need to take a look at the package location"
-msgstr ""
+msgid "If your plugin imports some of the mcdr utils, like ``RText`` or ``Rcon``\\ , you need to take a look at the package location"
+msgstr "如果您的插件需要导入一些 MCDR 内置模块，如 RText 或 Rcon，请查看模块的位置。"
 
 #: ../../source/migrate_from_0.x.rst:129
-msgid ""
-"Current MCDR collects all useful classes / functions in the "
-"``mcdreforged.api`` package. It's recommended to import the package you "
-"want in this ``api`` package"
-msgstr ""
+msgid "Current MCDR collects all useful classes / functions in the ``mcdreforged.api`` package. It's recommended to import the package you want in this ``api`` package"
+msgstr "MCDR 集合了所有有用的类/函数至 ``mcdreforged.api`` 包中。建议从 ``api`` 包中导入所需的模块"
 
 #: ../../source/migrate_from_0.x.rst:131
-msgid ""
-"Use ``from mcdreforged.api.rtext import *`` if you want to use all rtext "
-"classes"
-msgstr ""
+msgid "Use ``from mcdreforged.api.rtext import *`` if you want to use all rtext classes"
+msgstr "如需导入所有 RText 类，可使用 ``from mcdreforged.api.rtext import *``"
 
 #: ../../source/migrate_from_0.x.rst:133
-msgid ""
-"Use ``from mcdreforged.api.rcon import *`` if you want to use all rcon "
-"classes. Class ``Rcon`` is renamed to ``RconConnection`` by the way"
-msgstr ""
+msgid "Use ``from mcdreforged.api.rcon import *`` if you want to use all rcon classes. Class ``Rcon`` is renamed to ``RconConnection`` by the way"
+msgstr "如需导入所有 Rcon 类，可使用 ``from mcdreforged.api.rcon import *`` 。注意，``Rcon`` 类已被重命名为 ``RconConnection`` 。"
 
 #: ../../source/migrate_from_0.x.rst:135
-msgid ""
-"For lazy man, you can safely use ``from mcdreforged.api.all import *`` to"
-" import all useful things to the plugin"
-msgstr ""
+msgid "For lazy man, you can safely use ``from mcdreforged.api.all import *`` to import all useful things to the plugin"
+msgstr "对于懒人，你可以使用 ``from mcdreforged.api.all import *`` 来向插件中导入所有内置模块。"
 
 #: ../../source/migrate_from_0.x.rst:138
 msgid "Server Instance API"
-msgstr ""
+msgstr "服务器实例 API"
 
 #: ../../source/migrate_from_0.x.rst:140
-msgid ""
-"Method ``reply`` now raises a ``TypeError`` if the given *info* parameter"
-" is not from a user"
-msgstr ""
+msgid "Method ``reply`` now raises a ``TypeError`` if the given *info* parameter is not from a user"
+msgstr "如果给定的 *info* 参数不是来自用户，则 ``reply`` 方法将产生一个 ``TypeError`` "
 
 #: ../../source/migrate_from_0.x.rst:142
 msgid "Method ``add_help_message`` is renamed to ``register_help_message``"
-msgstr ""
+msgstr "``add_help_message`` 方法已重命名为 ``register_help_message``"
 
 #: ../../source/migrate_from_0.x.rst:145
 msgid "Others"
-msgstr ""
+msgstr "其它"
 
 #: ../../source/migrate_from_0.x.rst:148
 msgid "console_command_prefix"
-msgstr ""
+msgstr "console_command_prefix"
 
 #: ../../source/migrate_from_0.x.rst:150
-msgid ""
-"The option ``console_command_prefix`` is removed, which was used to "
-"prevent input starts with ``!!`` to be sent to the standard input stream "
-"of the server by default"
-msgstr ""
+msgid "The option ``console_command_prefix`` is removed, which was used to prevent input starts with ``!!`` to be sent to the standard input stream of the server by default"
+msgstr "``console_command_prefix`` 已被移除——它曾用于防止将 ``!!`` 开头的控制台输入被发送至服务器标准输入流。"
 
 #: ../../source/migrate_from_0.x.rst:152
-msgid ""
-"In current version, MCDR will not prevent that kind of console input to "
-"be sent to the server unless it matches an registered command tree root "
-"node. See how the current command system works `here "
-"<plugin_dev/command.html#workflow>`__"
-msgstr ""
+msgid "In current version, MCDR will not prevent that kind of console input to be sent to the server unless it matches an registered command tree root node. See how the current command system works `here <plugin_dev/command.html#workflow>`__"
+msgstr "在当前版本中，MCDR 不会阻止将此类控制台输入发送到服务器，除非它与已注册命令树的根节点匹配。点击 `这里<plugin_dev/command.html#workflow>`__ 以了解该命令系统如何工作。"
 
 #: ../../source/migrate_from_0.x.rst:154
-msgid ""
-"As a result, if you plugin use manually parsing method to parse command "
-"to parse a user command in ``on_user_info`` etc., you need to invoke "
-"``info.cancel_send_to_server()`` in your command processing, otherwise if"
-" the command you enter on console might be sent to the server standard "
-"input stream"
-msgstr ""
+msgid "As a result, if you plugin use manually parsing method to parse command to parse a user command in ``on_user_info`` etc., you need to invoke ``info.cancel_send_to_server()`` in your command processing, otherwise if the command you enter on console might be sent to the server standard input stream"
+msgstr "因此，如果插件使用手动解析方法解析 ``on_user_info`` 等里面的用户指令，则需要在命令处理中调用 ``info.cancel_send_to_server()`` 方法，否则在控制台中输入的指令可能会被发送到服务器标准输入流中。"
 
 #~ msgid "The logging folder is renamed from log/ to logs/"
 #~ msgstr ""

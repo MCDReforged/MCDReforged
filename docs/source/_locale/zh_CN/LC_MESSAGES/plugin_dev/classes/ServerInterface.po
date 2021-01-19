@@ -1,18 +1,14 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2021, Fallen_Breath
-# This file is distributed under the same license as the MCDReforged
-# package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2021.
-#
-#, fuzzy
+
 msgid ""
 msgstr ""
-"Project-Id-Version: MCDReforged \n"
+"Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-17 13:08+0800\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"POT-Creation-Date: 2021-01-19 13:23+0800\n"
+"PO-Revision-Date: 2021-01-19 05:12+0000\n"
+"Last-Translator: \n"
+"Language: zh_CN\n"
+"Language-Team: Chinese Simplified\n"
+"Plural-Forms: nplurals=1; plural=0\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -20,7 +16,7 @@ msgstr ""
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:3
 msgid "ServerInterface"
-msgstr ""
+msgstr "ServerInterface"
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:5
 msgid ""
@@ -32,27 +28,27 @@ msgstr ""
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:7
 msgid "You can check the code to see the implementation for deeper understanding"
-msgstr ""
+msgstr "阅读代码有助于理解它的功能"
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:10
 msgid "Property"
-msgstr ""
+msgstr "属性"
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:13
 msgid "logger"
-msgstr ""
+msgstr "logger"
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:15
 msgid "A logger for logging message to the console"
-msgstr ""
+msgstr "一个用于记录控制台消息的 Logger"
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:17
 msgid "Type: MCDReforgedLogger, which is inherited from ``logging.Logger``"
-msgstr ""
+msgstr "类型： MCDReforgedLogger，继承自 ``logging.Logger``"
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:20
 msgid "Method"
-msgstr ""
+msgstr "方法"
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:22
 msgid ""
@@ -62,11 +58,11 @@ msgstr ""
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:25
 msgid "Server Control"
-msgstr ""
+msgstr "服务端控制"
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:28
 msgid "start"
-msgstr ""
+msgstr "start"
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:34
 msgid "Start the server. Return if the action succeed."
@@ -80,7 +76,7 @@ msgstr ""
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:39
 msgid "stop"
-msgstr ""
+msgstr "stop"
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:45
 msgid ""
@@ -94,7 +90,7 @@ msgstr ""
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:50
 msgid "wait_for_start"
-msgstr ""
+msgstr "wait_for_start"
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:56
 msgid ""
@@ -104,11 +100,11 @@ msgstr ""
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:59
 msgid "restart"
-msgstr ""
+msgstr "restart"
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:65
 msgid "Restart the server"
-msgstr ""
+msgstr "重启服务端"
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:67
 msgid ""
@@ -118,7 +114,7 @@ msgstr ""
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:70
 msgid "stop_exit"
-msgstr ""
+msgstr "stop_exit"
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:76
 msgid "Soft stop the server and exit MCDR"
@@ -126,7 +122,7 @@ msgstr ""
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:79
 msgid "exit"
-msgstr ""
+msgstr "exit"
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:85
 msgid "Exit MCDR when the server is stopped"
@@ -138,7 +134,7 @@ msgstr ""
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:90
 msgid "is_server_running"
-msgstr ""
+msgstr "is_server_running"
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:96
 msgid "Return if the server is running"
@@ -146,7 +142,7 @@ msgstr ""
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:99
 msgid "is_server_startup"
-msgstr ""
+msgstr "is_server_startup"
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:105
 msgid "Return if the server has started up"
@@ -154,7 +150,7 @@ msgstr ""
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:108
 msgid "is_rcon_running"
-msgstr ""
+msgstr "is_rcon_running"
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:114
 msgid "Return if MCDR's rcon is running"
@@ -162,7 +158,7 @@ msgstr ""
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:117
 msgid "get_server_pid"
-msgstr ""
+msgstr "get_server_pid"
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:123
 msgid "Return the pid of the server process, None if the server is stopped"
@@ -176,11 +172,11 @@ msgstr ""
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:128
 msgid "Text Interaction"
-msgstr ""
+msgstr "文本交互"
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:131
 msgid "execute"
-msgstr ""
+msgstr "execute"
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:137
 msgid ""
@@ -203,7 +199,7 @@ msgstr ""
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:144
 msgid "tell"
-msgstr ""
+msgstr "tell"
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:150
 msgid "Use command like ``/tellraw`` to send the message to the specific player"
@@ -219,7 +215,7 @@ msgstr ""
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:159
 msgid "say"
-msgstr ""
+msgstr "say"
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:165
 msgid ""
@@ -235,7 +231,7 @@ msgstr ""
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:172
 msgid "broadcast"
-msgstr ""
+msgstr "broadcast"
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:178
 msgid "Broadcast the message in game and to the console"
@@ -243,7 +239,7 @@ msgstr ""
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:185
 msgid "reply"
-msgstr ""
+msgstr "reply"
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:191
 msgid "Reply to the source of the Info"
@@ -383,7 +379,7 @@ msgstr ""
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:282
 msgid "get_plugin_list"
-msgstr ""
+msgstr "get_plugin_list"
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:288
 msgid ""
@@ -393,7 +389,7 @@ msgstr ""
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:291
 msgid "get_plugin_metadata"
-msgstr ""
+msgstr "get_plugin_metadata"
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:297
 msgid ""
@@ -407,7 +403,7 @@ msgstr ""
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:302
 msgid "get_plugin_file_path"
-msgstr ""
+msgstr "get_plugin_file_path"
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:308
 msgid ""
@@ -421,7 +417,7 @@ msgstr ""
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:313
 msgid "get_plugin_instance"
-msgstr ""
+msgstr "get_plugin_instance"
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:319
 msgid ""
@@ -441,8 +437,9 @@ msgid "Parameter *plugin_id*\\ : The plugin id of the plugin you want"
 msgstr ""
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:325
+#: ../../source/plugin_dev/classes/ServerInterface.rst:406
 msgid "Example:"
-msgstr ""
+msgstr "例如："
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:339
 msgid "Plugin Registry"
@@ -450,7 +447,7 @@ msgstr ""
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:342
 msgid "register_event_listener"
-msgstr ""
+msgstr "register_event_listener"
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:348
 #: ../../source/plugin_dev/classes/ServerInterface.rst:365
@@ -483,7 +480,7 @@ msgstr ""
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:359
 msgid "register_command"
-msgstr ""
+msgstr "register_command"
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:369
 msgid ""
@@ -493,7 +490,7 @@ msgstr ""
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:372
 msgid "register_help_message"
-msgstr ""
+msgstr "register_help_message"
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:378
 msgid ""
@@ -520,7 +517,7 @@ msgstr ""
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:389
 msgid "dispatch_event"
-msgstr ""
+msgstr "dispatch_event"
 
 #: ../../source/plugin_dev/classes/ServerInterface.rst:395
 msgid "Dispatch an event to all loaded plugins"
@@ -543,96 +540,106 @@ msgstr ""
 msgid ""
 "Parameter *args*\\ : The argument that will be used to invoke the event "
 "listeners. An ServerInterface instance will be automatically added to the"
-" beginning of the argument list"
+" beginning of the argument list Parameter *on_executor_thread*\\ : If "
+"it's set to false. The event will be dispatched immediately no matter "
+"what the current thread is"
 msgstr ""
 
-#: ../../source/plugin_dev/classes/ServerInterface.rst:403
+#: ../../source/plugin_dev/classes/ServerInterface.rst:404
 msgid ""
 "**Note**\\ : You cannot dispatch an event with the same event id to any "
 "MCDR built-in event"
 msgstr ""
 
-#: ../../source/plugin_dev/classes/ServerInterface.rst:406
+#: ../../source/plugin_dev/classes/ServerInterface.rst:408
+msgid "For the event dispatcher plugin"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:414
+msgid "In the event listener plugin"
+msgstr ""
+
+#: ../../source/plugin_dev/classes/ServerInterface.rst:424
 msgid "Permission"
-msgstr ""
+msgstr "权限"
 
-#: ../../source/plugin_dev/classes/ServerInterface.rst:409
+#: ../../source/plugin_dev/classes/ServerInterface.rst:427
 msgid "get_permission_level"
-msgstr ""
+msgstr "get_permission_level"
 
-#: ../../source/plugin_dev/classes/ServerInterface.rst:415
+#: ../../source/plugin_dev/classes/ServerInterface.rst:433
 msgid "Return an int indicating permission level number the given object has"
 msgstr ""
 
-#: ../../source/plugin_dev/classes/ServerInterface.rst:417
+#: ../../source/plugin_dev/classes/ServerInterface.rst:435
 msgid ""
 "The object could be a str indicating the name of a player, an Info "
 "instance or a command source"
 msgstr ""
 
-#: ../../source/plugin_dev/classes/ServerInterface.rst:419
+#: ../../source/plugin_dev/classes/ServerInterface.rst:437
 msgid "Parameter *obj*\\ : The object your are querying"
 msgstr ""
 
-#: ../../source/plugin_dev/classes/ServerInterface.rst:421
+#: ../../source/plugin_dev/classes/ServerInterface.rst:439
 msgid ""
 "It raises ``TypeError`` if the type of the given object is not supported "
 "for permission querying"
 msgstr ""
 
-#: ../../source/plugin_dev/classes/ServerInterface.rst:424
+#: ../../source/plugin_dev/classes/ServerInterface.rst:442
 msgid "set_permission_level"
-msgstr ""
+msgstr "set_permission_level"
 
-#: ../../source/plugin_dev/classes/ServerInterface.rst:430
+#: ../../source/plugin_dev/classes/ServerInterface.rst:448
 msgid ""
 "Set the permission level of the given player. It raises ``TypeError`` if "
 "the value parameter doesn't proper represent a permission level"
 msgstr ""
 
-#: ../../source/plugin_dev/classes/ServerInterface.rst:432
+#: ../../source/plugin_dev/classes/ServerInterface.rst:450
 msgid ""
 "Parameter *player*\\ : The name of the player that you want to set "
 "his/her permission level"
 msgstr ""
 
-#: ../../source/plugin_dev/classes/ServerInterface.rst:434
+#: ../../source/plugin_dev/classes/ServerInterface.rst:452
 msgid ""
 "Parameter *value*\\ : The target permission level you want to set the "
 "player to. It can be an int or a str as long as it's related to the "
 "permission level. Available examples: 1, '1', 'user'"
 msgstr ""
 
-#: ../../source/plugin_dev/classes/ServerInterface.rst:437
+#: ../../source/plugin_dev/classes/ServerInterface.rst:455
 msgid "Misc"
 msgstr ""
 
-#: ../../source/plugin_dev/classes/ServerInterface.rst:440
+#: ../../source/plugin_dev/classes/ServerInterface.rst:458
 msgid "is_on_executor_thread"
-msgstr ""
+msgstr "is_on_executor_thread"
 
-#: ../../source/plugin_dev/classes/ServerInterface.rst:446
+#: ../../source/plugin_dev/classes/ServerInterface.rst:464
 msgid "Return if the current thread is the task executor thread"
 msgstr ""
 
-#: ../../source/plugin_dev/classes/ServerInterface.rst:448
+#: ../../source/plugin_dev/classes/ServerInterface.rst:466
 msgid ""
 "Task executor thread is the main thread to parse messages and trigger "
 "listeners where some ServerInterface APIs  are required to be invoked on"
 msgstr ""
 
-#: ../../source/plugin_dev/classes/ServerInterface.rst:451
+#: ../../source/plugin_dev/classes/ServerInterface.rst:469
 msgid "rcon_query"
 msgstr ""
 
-#: ../../source/plugin_dev/classes/ServerInterface.rst:457
+#: ../../source/plugin_dev/classes/ServerInterface.rst:475
 msgid ""
 "Send command to the server through rcon connection. Return the result "
 "that server returned from rcon. Return None if rcon is not running or "
 "rcon query failed"
 msgstr ""
 
-#: ../../source/plugin_dev/classes/ServerInterface.rst:459
+#: ../../source/plugin_dev/classes/ServerInterface.rst:477
 msgid "Parameter *command*\\ : The command you want to send to the rcon server"
 msgstr ""
 
@@ -841,5 +848,13 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Parameter command: The command you want to send to the rcon server"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Parameter *args*\\ : The argument that"
+#~ " will be used to invoke the "
+#~ "event listeners. An ServerInterface instance"
+#~ " will be automatically added to the"
+#~ " beginning of the argument list"
 #~ msgstr ""
 
