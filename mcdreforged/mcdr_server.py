@@ -315,10 +315,10 @@ class MCDReforgedServer:
 	# --------------------------
 
 	def on_server_start(self):
-		self.logger.info(self.tr('mcdr_server.start_server.pid_info', self.process.pid))
-		self.plugin_manager.dispatch_event(MCDRPluginEvents.SERVER_START, ())
 		self.set_server_state(ServerState.RUNNING)
 		self.set_exit_naturally(True)  # Set after server state is set to RUNNING, or MCDR might have a chance to exit if the server is started by other thread
+		self.logger.info(self.tr('mcdr_server.start_server.pid_info', self.process.pid))
+		self.plugin_manager.dispatch_event(MCDRPluginEvents.SERVER_START, ())
 
 	def on_server_stop(self):
 		return_code = self.process.poll()
