@@ -29,7 +29,7 @@ MCDR Event List
 Plugin Loaded
 ~~~~~~~~~~~~~
 
-Plugin load event is triggered once when a plugin is loaded. Plugins are supposed to register some event listeners, commands and help messages as well as initialize their fields here
+Plugin load event gets triggered once when a plugin is loaded. Plugins are supposed to register some event listeners, commands and help messages as well as initialize their fields here
 
 .. code-block:: python
 
@@ -54,13 +54,13 @@ Since it's the first event in the lifecycle of a plugin, this event can only be 
 Note: You should not dispatch custom events in the ``on_load`` function or it will do nothing. The event listener storage of MCDR has not been initialized yet
 
 * Event id: mcdr.plugin_loaded
-* Callback arguments: ServerInterface, prev_plugin_module
+* Callback arguments: ServerInterface, prev_module
 * Default function name: on_load
 
 Plugin Unloaded
 ~~~~~~~~~~~~~~~
 
-This even is trigger when MCDR unload the plugin instance. It can be caused by a plugin reload or a plugin unload
+This event gets triggered when MCDR unload the plugin instance. It can be caused by a plugin reload or a plugin unload
 
 
 * Event id: mcdr.plugin_unloaded
@@ -70,7 +70,7 @@ This even is trigger when MCDR unload the plugin instance. It can be caused by a
 Plugin Removed
 ~~~~~~~~~~~~~~
 
-This even is trigger when MCDR remove the plugin. It can only be caused by a plugin unload. It's time to do some clean up for your plugin
+This even gets triggered when MCDR remove the plugin. It can only be caused by a plugin unload. It's time to do some clean up for your plugin
 
 Another event for plugin to do some cleanup is `MCDR Stop <#mcdr-stop>`__ event 
 
@@ -116,9 +116,10 @@ Here's an example
 
 .. code-block:: python
 
-   def on_info(server: ServerInterface, info: Info):
-       if info.content == 'Who am I?':
-           server.reply(info, 'You are {}.'.format(info.player))
+   def on_user_info(server: ServerInterface, info: Info):
+       if info.content == 'Restart the server!':
+           server.reply(info, 'Roger that. Server restarting...')
+           server.restart()
 
 If you want to have a not-simple command system, rather than parsing them manually in User Info event, I will suggest you to register a command tree for you plugin. See the `command registering <basic.html#command>`__ doc
 

@@ -430,10 +430,10 @@ class PluginManager:
 		for listener in self.registry_storage.event_listeners.get(event.id, []):
 			self.trigger_listener(listener, args)
 
-	def dispatch_event(self, event: MCDREvent, args: Tuple[Any, ...], *, on_executor_thread=True):
+	def dispatch_event(self, event: MCDREvent, args: Tuple[Any, ...], *, on_executor_thread=True, wait=False):
 		if on_executor_thread:
-			self.mcdr_server.task_executor.execute_or_enqueue(lambda: self.__dispatch_event(event, args))
-		else:
+			self.mcdr_server.task_executor.execute_or_enqueue(lambda: self.__dispatch_event(event, args), wait=wait)
+		else:  # on thread
 			self.__dispatch_event(event, args)
 
 	def trigger_listener(self, listener: EventListener, args: Tuple[Any, ...]):
