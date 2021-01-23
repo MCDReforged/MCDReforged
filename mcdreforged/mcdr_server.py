@@ -175,6 +175,9 @@ class MCDReforgedServer:
 	def is_mcdr_exit(self):
 		return self.mcdr_in_state(MCDReforgedState.STOPPED)
 
+	def is_mcdr_about_to_exit(self):
+		return self.mcdr_in_state({MCDReforgedState.PRE_STOPPED, MCDReforgedState.STOPPED})
+
 	def is_exit_naturally(self):
 		return MCDReforgedFlag.EXIT_NATURALLY in self.flags
 
@@ -240,6 +243,9 @@ class MCDReforgedServer:
 				return False
 			if self.is_server_running():
 				self.logger.warning(self.tr('mcdr_server.start_server.start_twice'))
+				return False
+			if self.is_mcdr_about_to_exit():
+				self.logger.warning(self.tr('mcdr_server.start_server.about_to_exit'))
 				return False
 			cwd = self.config['working_directory']
 			if not os.path.isdir(cwd):
@@ -326,9 +332,9 @@ class MCDReforgedServer:
 		self.process.stdin.close()
 		self.process.stdout.close()
 		self.process = None
-		self.remove_flag(MCDReforgedFlag.SERVER_STARTUP | MCDReforgedFlag.SERVER_RCON_READY)  # removes this two
-		self.plugin_manager.dispatch_event(MCDRPluginEvents.SERVER_STOP, (return_code,))
 		self.set_server_state(ServerState.STOPPED)
+		self.remove_flag(MCDReforgedFlag.SERVER_STARTUP | MCDReforgedFlag.SERVER_RCON_READY)  # removes this two
+		self.plugin_manager.dispatch_event(MCDRPluginEvents.SERVER_STOP, (return_code,), wait=True)
 
 	def send(self, text, ending='\n', encoding=None):
 		"""
@@ -434,8 +440,7 @@ class MCDReforgedServer:
 
 			self.watch_dog.stop()  # it's ok for plugins to take some time
 			self.watch_dog.join()
-			self.plugin_manager.dispatch_event(MCDRPluginEvents.MCDR_STOP, ())
-			self.task_executor.wait_till_finish_all_task()
+			self.plugin_manager.dispatch_event(MCDRPluginEvents.MCDR_STOP, (), wait=True)
 
 			self.logger.info(self.tr('mcdr_server.on_mcdr_stop.bye'))
 		except KeyboardInterrupt:  # I don't know why there sometimes will be a KeyboardInterrupt if MCDR is stopped by ctrl-c

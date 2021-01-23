@@ -5,6 +5,7 @@ mcdr_server.on_config_changed.encoding_decoding_set : 编码 / 解码方式已�
 mcdr_server.on_config_changed.plugin_directories_set: "插件文件夹列表:"
 mcdr_server.start_server.already_interrupted        : MCDR 已被终止
 mcdr_server.start_server.start_twice                : 服务端不能多次启动
+mcdr_server.start_server.about_to_exit                 : MCDR 即将退出
 mcdr_server.start_server.cwd_not_existed            : 服务端工作路径 {0} 不存在
 mcdr_server.start_server.starting                   : 正在启动服务端，启动参数为 "{0}"
 mcdr_server.start_server.start_fail                 : 服务端启动失败

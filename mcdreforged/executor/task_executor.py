@@ -75,11 +75,13 @@ class TaskExecutor(ThreadExecutor):
 	def enqueue_regular_task(self, func: Callable[[], Any]):
 		self.task_queue.put(TaskData(func, Priority.REGULAR))
 
-	def execute_or_enqueue(self, func: Callable[[], Any]):
+	def execute_or_enqueue(self, func: Callable[[], Any], *, wait=False):
 		if self.is_on_thread():
 			func()
 		else:
 			self.enqueue_regular_task(func)
+			if wait:
+				self.wait_till_finish_all_task()
 
 	def get_this_tick_time(self) -> float:
 		"""

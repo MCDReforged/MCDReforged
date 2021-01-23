@@ -5,6 +5,7 @@ mcdr_server.on_config_changed.encoding_decoding_set : Encoding / Decoding method
 mcdr_server.on_config_changed.plugin_directories_set: "Plugin directory list:"
 mcdr_server.start_server.already_interrupted        : MCDR has already been interrupted
 mcdr_server.start_server.start_twice                : Server cannot start twice
+mcdr_server.start_server.about_to_exit                 : MCDR is about to exit
 mcdr_server.start_server.cwd_not_existed            : Server working directory {0} does not exist
 mcdr_server.start_server.starting                   : Starting the server with command "{0}"
 mcdr_server.start_server.start_fail                 : Fail to start the server
