@@ -1,926 +1,377 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2021, Fallen_Breath
-# This file is distributed under the same license as the MCDReforged
-# package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2021.
-#
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: MCDReforged \n"
+"Project-Id-Version: mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-17 13:19+0800\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2021-01-24 09:02+0800\n"
+"Last-Translator: Alex3236 <alex3236@qq.com>\n"
+"Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.0\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Crowdin-Project: mcdreforged\n"
+"X-Crowdin-Project-ID: 437248\n"
+"X-Crowdin-Language: zh-CN\n"
+"X-Crowdin-File: /plugin_dev/api.po\n"
+"X-Crowdin-File-ID: 86\n"
+"Language: zh_CN\n"
+"X-Generator: Poedit 2.4.2\n"
 
-#: ../../source/plugin_dev/api.rst:3
 msgid "API Packages for Plugins"
-msgstr ""
+msgstr "插件的 API 包"
 
-#: ../../source/plugin_dev/api.rst:5
-msgid ""
-"When your plugin needs to import something from MCDR, rather than "
-"directly import the package you want, you can import the packages in "
-"``mcdreforged.api``"
-msgstr ""
+msgid "When your plugin needs to import something from MCDR, rather than directly import the package you want, you can import the packages in ``mcdreforged.api``"
+msgstr "当您的插件需要从 MCDR 导入，而不是直接导入所需的包时，您可以在 ``mcdreforged.api`` 中导入这些包。"
 
-#: ../../source/plugin_dev/api.rst:7
-msgid ""
-"``mcdreforged.api`` is the package for plugin developers to import. By "
-"only importing from the api package, the import of the target class in "
-"the plugin can be decoupled from the actual location of the target class."
-" If MCDR refactors the target class and moves its location in the future,"
-" only importing from the api package can keep your plugin unaffected"
-msgstr ""
+msgid "``mcdreforged.api`` is the package for plugin developers to import. By only importing from the api package, the import of the target class in the plugin can be decoupled from the actual location of the target class. If MCDR refactors the target class and moves its location in the future, only importing from the api package can keep your plugin unaffected"
+msgstr "``mcdreforged.api`` 是供插件开发者导入的包。通过仅从 API 包导入，插件中目标类的导入可以与目标类的实际位置脱钩。若以后MCDR重构了目标类，移动了目标类的位置，只从 API 包导入可以保证你的插件不受影响。"
 
-#: ../../source/plugin_dev/api.rst:10
 msgid "all"
-msgstr ""
+msgstr "all"
 
-#: ../../source/plugin_dev/api.rst:16
-msgid ""
-"This is the simplest way to import everything you want for plugin "
-"development. It's a life saver for lazy man"
-msgstr ""
+msgid "This is the simplest way to import everything you want for plugin development. It's a life saver for lazy man"
+msgstr "这是导入插件开发所需的所有内容的最简单方法，是懒人的救命稻草。"
 
-#: ../../source/plugin_dev/api.rst:18
 msgid "Continue reading to see what it will actually import"
-msgstr ""
+msgstr "继续阅读以了解实际导入的内容。"
 
-#: ../../source/plugin_dev/api.rst:21
 msgid "command"
-msgstr ""
+msgstr "command"
 
-#: ../../source/plugin_dev/api.rst:23
-msgid ""
-"``command`` package contains the necessities for building a command tree "
-"or create your own command, including command tree node classes, command "
-"exceptions and some command utils"
-msgstr ""
+msgid "``command`` package contains the necessities for building a command tree or create your own command, including command tree node classes, command exceptions and some command utils"
+msgstr "``command`` 包包含了建立命令树或创建自己的命令的必要条件，包括命令树节点类、命令异常和一些命令实用工具。"
 
-#: ../../source/plugin_dev/api.rst:25
-msgid ""
-"For example, if you want the class ``Literal`` and ``IllegalArgument`` "
-"for building your command tree ``on_error`` exception handling, you can "
-"do it like this"
-msgstr ""
+msgid "For example, if you want the class ``Literal`` and ``IllegalArgument`` for building your command tree ``on_error`` exception handling, you can do it like this"
+msgstr "例如，若您希望使用 ``Literal`` 和 ``IllegalArgument`` 来构建您命令树并处理 ``on_error`` 异常，则可以这样做："
 
-#: ../../source/plugin_dev/api.rst:31
 msgid "Of course if you are lazy enough you can just"
-msgstr ""
+msgstr "当然，如果你嫌麻烦，那么也可以："
 
-#: ../../source/plugin_dev/api.rst:38
 msgid "decorator"
-msgstr ""
+msgstr "decorator"
 
-#: ../../source/plugin_dev/api.rst:40
-msgid ""
-"``decorator`` package contains some useful function decorators for plugin"
-" development"
-msgstr ""
+msgid "``decorator`` package contains some useful function decorators for plugin development"
+msgstr "``decorator`` 包包含了一些对插件开发有用的函数装饰器。"
 
-#: ../../source/plugin_dev/api.rst:43
 msgid "new_thread"
-msgstr ""
+msgstr "new_thread"
 
-#: ../../source/plugin_dev/api.rst:45
-msgid ""
-"This is a one line solution to make your function executes "
-"asynchronously. When decorated with this decorator, functions will be "
-"executed in a new daemon thread"
-msgstr ""
+msgid "This is a one line solution to make your function executes asynchronously. When decorated with this decorator, functions will be executed in a new daemon thread"
+msgstr "这是一个让你的函数异步执行的单行解决方案。当使用这个装饰器时，函数将在一个新的守护线程中执行。"
 
-#: ../../source/plugin_dev/api.rst:47
-msgid ""
-"This decorator only changes the return value of the function to the "
-"created ``Thread`` instance. Beside the return value, it reserves all "
-"signatures of the decorated function, so you can safely use the decorated"
-" function as if there's no decorating at all"
-msgstr ""
+msgid "This decorator only changes the return value of the function to the created ``Thread`` instance. Beside the return value, it reserves all signatures of the decorated function, so you can safely use the decorated function as if there's no decorating at all"
+msgstr "这个装饰器只将函数的返回值改为创建的 ``Thread`` 实例。除了返回值，它还保留了被装饰的函数的所有签名，所以你可以安全地使用被装饰的函数，就像它们没有被装饰一样。"
 
-#: ../../source/plugin_dev/api.rst:49
 msgid "It's also a simple compatible upgrade method for old MCDR 0.x plugins"
-msgstr ""
+msgstr "这也是老的 MCDR 0.x 插件的简单的兼容升级方法。"
 
-#: ../../source/plugin_dev/api.rst:51
 msgid "Example:"
-msgstr ""
+msgstr "例如："
 
-#: ../../source/plugin_dev/api.rst:72
-msgid ""
-"The only difference between ``do_something1`` and ``do_something2`` is "
-"that ``do_something2`` is decorated by ``@new_thread``. So when executing"
-" ``do_something2``\\ , it won't lag the following execution of MCDR like "
-"``do_something1`` since ``do_something2`` will execute on another thread"
-msgstr ""
+msgid "The only difference between ``do_something1`` and ``do_something2`` is that ``do_something2`` is decorated by ``@new_thread``. So when executing ``do_something2``\\ , it won't lag the following execution of MCDR like ``do_something1`` since ``do_something2`` will execute on another thread"
+msgstr "``do_something1`` 和 ``do_something2`` 的唯一区别是 ``do_something2`` 由 ``@new_thread`` 装饰。所以当执行 ``do_something2`` 时，它不会像 ``do_something1`` 那样阻塞 MCDR 之后的操作，因为 ``do_something2`` 会在另一个线程上执行。"
 
-#: ../../source/plugin_dev/api.rst:74
-msgid ""
-"If you want to wait for the decorated function to complete, you can "
-"simple use the ``join`` method from class ``threading.Thread``. Remember "
-"the return value of the decorated function has already been changed in to"
-" the ``Thread`` instance"
-msgstr ""
+msgid "If you want to wait for the decorated function to complete, you can simple use the ``join`` method from class ``threading.Thread``. Remember the return value of the decorated function has already been changed in to the ``Thread`` instance"
+msgstr "如果你想等待被装饰的函数完成，你可以简单地使用类 ``threading.Thread`` 中的 ``join`` 方法。记住被装饰函数的返回值已经被修改为 ``Thread`` 实例。"
 
-#: ../../source/plugin_dev/api.rst:80
-msgid ""
-"In addition to simply and directly use a raw ``@new_thread``\\ , it's "
-"recommend to add a thread name argument for the decorator"
-msgstr ""
+msgid "In addition to simply and directly use a raw ``@new_thread``\\ , it's recommend to add a thread name argument for the decorator"
+msgstr "除了简单直接使用原始的 ``@new_thread`` 之外，建议为装饰器添加一个线程名参数。"
 
-#: ../../source/plugin_dev/api.rst:89
-msgid ""
-"So when you logs something by ``server.logger``\\ , a meaningful thread "
-"name will be displayed instead of a plain and meaningless ``Thread-3``"
-msgstr ""
+msgid "So when you logs something by ``server.logger``\\ , a meaningful thread name will be displayed instead of a plain and meaningless ``Thread-3``"
+msgstr "这样，当您通过 ``server.logger`` 输出某些内容时，将显示一个有意义的线程名称，而不是简单无意义的 ``Thread-3``。"
 
-#: ../../source/plugin_dev/api.rst:91
-msgid ""
-"**Notes**\\ : Some api methods in ``ServerInterface`` class are required "
-"to be invoked in the MCDR task executor thread. Invoking them in another "
-"thread might result in an exception"
-msgstr ""
+msgid "**Notes**\\ : Some api methods in ``ServerInterface`` class are required to be invoked in the MCDR task executor thread. Invoking them in another thread might result in an exception"
+msgstr "**注意**：``ServerInterface`` 类中的某些 api 方法必须在 MCDR 任务执行者线程（TaskExecutor）中调用——在另一线程中调用它们可能会导致异常。"
 
-#: ../../source/plugin_dev/api.rst:94
 msgid "event"
-msgstr ""
+msgstr "event"
 
-#: ../../source/plugin_dev/api.rst:96
-msgid ""
-"``event`` package contains the classes for creating custom events, and "
-"classes of MCDR built-in events"
-msgstr ""
+msgid "``event`` package contains the classes for creating custom events, and classes of MCDR built-in events"
+msgstr "``event`` 包包含用于创建自定义事件的类和 MCDR 内置事件的类。"
 
-#: ../../source/plugin_dev/api.rst:98
-msgid ""
-"You might already read the `dispatch_event <classes/ServerInterface.html"
-"#dispatch-event>`__ method in ``ServerInterface`` class. It only accepts "
-"a ``PluginEvent`` instance as its first parameter. So if you want to "
-"dispatch your custom event, create a ``LiteralEvent`` for simpleness or a"
-" custom event class inherited from ``PluginEvent``"
-msgstr ""
+msgid "You might already read the `dispatch_event <classes/ServerInterface.html#dispatch-event>`__ method in ``ServerInterface`` class. It only accepts a ``PluginEvent`` instance as its first parameter. So if you want to dispatch your custom event, create a ``LiteralEvent`` for simpleness or a custom event class inherited from ``PluginEvent``"
+msgstr "你可能已经读过 ``ServerInterface`` 类中的 ``dispatch_event <classes/ServerInterface.html#dispatch-event>`__ 方法。它只接受一个 ``PluginEvent`` 实例作为第一个参数。所以，如果你想调度你的自定义事件，为了简单起见，请创建一个 ``LiteralEvent`` 或一个继承自 ``PluginEvent`` 的自定义事件类。"
 
-#: ../../source/plugin_dev/api.rst:101
 msgid "rcon"
-msgstr ""
+msgstr "rcon"
 
-#: ../../source/plugin_dev/api.rst:103
-msgid ""
-"Package ``rcon`` contains a single class ``RconConnection``. It's is a "
-"simply rcon client for connect to any Minecraft servers that supports "
-"rcon protocol"
-msgstr ""
+msgid "Package ``rcon`` contains a single class ``RconConnection``. It's is a simply rcon client for connect to any Minecraft servers that supports rcon protocol"
+msgstr "``rcon`` 包仅包含一个类—— ``RconConnection``。这是一个简单的 rcon 客户端，用于连接到任何支持 rcon 协议的 Minecraft 服务端。"
 
-#: ../../source/plugin_dev/api.rst:107
 msgid "RconConnection"
-msgstr ""
+msgstr "RconConnection"
 
-#: ../../source/plugin_dev/api.rst:113
 msgid "Create a rcon client instance"
-msgstr ""
+msgstr "创建一个 rcon 客户端实例。"
 
-#: ../../source/plugin_dev/api.rst:115
 msgid "Parameter *address*\\ : The address of the rcon server"
-msgstr ""
+msgstr "参数 *address*：rcon 服务器的地址"
 
-#: ../../source/plugin_dev/api.rst:117
 msgid "Parameter *port*\\ : The port if the rcon server"
-msgstr ""
+msgstr "参数 *port*：rcon服务器的端口"
 
-#: ../../source/plugin_dev/api.rst:119
 msgid "Parameter *password*\\ : The password of the rcon connection"
-msgstr ""
+msgstr "参数 *password*：rcon服务器的密码"
 
-#: ../../source/plugin_dev/api.rst:121
-msgid ""
-"Keyword Parameter *logger*\\ : An instance of ``logging.Logger``. It's "
-"used to output some warning information like failing to receive a packet"
-msgstr ""
+msgid "Keyword Parameter *logger*\\ : An instance of ``logging.Logger``. It's used to output some warning information like failing to receive a packet"
+msgstr "关键字参数 *logger*：``logging.Logger`` 实例。它用于输出一些警告信息，例如未收到数据包。"
 
-#: ../../source/plugin_dev/api.rst:124
 msgid "connect"
-msgstr ""
+msgstr "connect"
 
-#: ../../source/plugin_dev/api.rst:130
-msgid ""
-"Start a connection to the rcon server and tries to login. If login "
-"success it will return ``True``\\ , otherwise ``False``"
-msgstr ""
+msgid "Start a connection to the rcon server and tries to login. If login success it will return ``True``\\ , otherwise ``False``"
+msgstr "启动与 rcon 服务器的连接并尝试登录。如果登录成功，它将返回 ``True``，否则返回 ``False``。"
 
-#: ../../source/plugin_dev/api.rst:133
 msgid "disconnect"
-msgstr ""
+msgstr "disconnect"
 
-#: ../../source/plugin_dev/api.rst:139
 msgid "Disconnect from the server"
-msgstr ""
+msgstr "断开与服务器的连接。"
 
-#: ../../source/plugin_dev/api.rst:142
 msgid "send_command"
-msgstr ""
+msgstr "send_command"
 
-#: ../../source/plugin_dev/api.rst:148
-msgid ""
-"Send  command to the rcon server, and return the command execution result"
-" form the server"
-msgstr ""
+msgid "Send  command to the rcon server, and return the command execution result form the server"
+msgstr "将命令发送到 rcon 服务器，并从返回命令执行结果。"
 
-#: ../../source/plugin_dev/api.rst:150
 msgid "Parameter *command*\\ : The command you want to send to the server"
-msgstr ""
+msgstr "参数 *command*：要发送到服务器的命令。"
 
-#: ../../source/plugin_dev/api.rst:152
-msgid ""
-"Parameter *max_retry_time*\\ : The maximum retry time of the operation. "
-"This method will return None if *max_retry_time* retries exceeded"
-msgstr ""
+msgid "Parameter *max_retry_time*\\ : The maximum retry time of the operation. This method will return None if *max_retry_time* retries exceeded"
+msgstr "参数 *max_retry_time*：操作的最大重试次数。如果重试次数超过 *max_retry_time*，则将返回 None。"
 
-#: ../../source/plugin_dev/api.rst:155
 msgid "rtext"
-msgstr ""
+msgstr "rtext"
 
-#: ../../source/plugin_dev/api.rst:157
-msgid ""
-"Recommend to read the page `Raw JSON text format "
-"<https://minecraft.gamepedia.com/Raw_JSON_text_format>`__ in Minecraft "
-"Wiki first"
-msgstr ""
+msgid "Recommend to read the page `Raw JSON text format <https://minecraft.gamepedia.com/Raw_JSON_text_format>`__ in Minecraft Wiki first"
+msgstr "建议先阅读 Minecraft Wiki 中的 `原始JSON文本格式 <https://wiki.biligame.com/mc/%E5%8E%9F%E5%A7%8BJSON%E6%96%87%E6%9C%AC%E6%A0%BC%E5%BC%8F>`__ 页面。"
 
-#: ../../source/plugin_dev/api.rst:159
 msgid "This is an advance text component library for Minecraft"
-msgstr ""
+msgstr "这是一个用于Minecraft的高级文本组件库。"
 
-#: ../../source/plugin_dev/api.rst:161
-msgid ""
-"Inspired by the `MCD stext API <https://github.com/TISUnion/rtext>`__ "
-"made by `Pandaria98 <https://github.com/Pandaria98>`__"
-msgstr ""
+msgid "Inspired by the `MCD stext API <https://github.com/TISUnion/rtext>`__ made by `Pandaria98 <https://github.com/Pandaria98>`__"
+msgstr "这部分受 `Pandaria98 <https://github.com/Pandaria98>`__ 制作的 `MCD stext API <https://github.com/TISUnion/rtext>`__ 的启发，在此表达感谢。"
 
-#: ../../source/plugin_dev/api.rst:164
 msgid "RColor"
-msgstr ""
+msgstr "RColor"
 
-#: ../../source/plugin_dev/api.rst:166
 msgid "``RColor`` is an enum class storing all Minecraft color codes"
-msgstr ""
+msgstr "``RColor`` is an enum class storing all Minecraft color codes"
 
-#: ../../source/plugin_dev/api.rst:169
 msgid "``RColor.black``"
-msgstr ""
+msgstr "``RColor.black``"
 
-#: ../../source/plugin_dev/api.rst:170
 msgid "``RColor.dark_blue``"
-msgstr ""
+msgstr "``RColor.dark_blue``"
 
-#: ../../source/plugin_dev/api.rst:171
 msgid "``RColor.dark_green``"
-msgstr ""
+msgstr "``RColor.dark_green``"
 
-#: ../../source/plugin_dev/api.rst:172
 msgid "``RColor.dark_aqua``"
-msgstr ""
+msgstr "``RColor.dark_aqua``"
 
-#: ../../source/plugin_dev/api.rst:173
 msgid "``RColor.dark_red``"
-msgstr ""
+msgstr "``RColor.dark_red``"
 
-#: ../../source/plugin_dev/api.rst:174
 msgid "``RColor.dark_purple``"
-msgstr ""
+msgstr "``RColor.dark_purple``"
 
-#: ../../source/plugin_dev/api.rst:175
 msgid "``RColor.gold``"
-msgstr ""
+msgstr "``RColor.gold``"
 
-#: ../../source/plugin_dev/api.rst:176
 msgid "``RColor.gray``"
-msgstr ""
+msgstr "``RColor.gray``"
 
-#: ../../source/plugin_dev/api.rst:177
 msgid "``RColor.dark_gray``"
-msgstr ""
+msgstr "``RColor.dark_gray``"
 
-#: ../../source/plugin_dev/api.rst:178
 msgid "``RColor.blue``"
-msgstr ""
+msgstr "``RColor.blue``"
 
-#: ../../source/plugin_dev/api.rst:179
 msgid "``RColor.green``"
-msgstr ""
+msgstr "``RColor.green``"
 
-#: ../../source/plugin_dev/api.rst:180
 msgid "``RColor.aqua``"
-msgstr ""
+msgstr "``RColor.aqua``"
 
-#: ../../source/plugin_dev/api.rst:181
 msgid "``RColor.red``"
-msgstr ""
+msgstr "``RColor.red``"
 
-#: ../../source/plugin_dev/api.rst:182
 msgid "``RColor.light_purple``"
-msgstr ""
+msgstr "``RColor.light_purple``"
 
-#: ../../source/plugin_dev/api.rst:183
 msgid "``RColor.yellow``"
-msgstr ""
+msgstr "``RColor.yellow``"
 
-#: ../../source/plugin_dev/api.rst:184
 msgid "``RColor.white``"
-msgstr ""
+msgstr "``RColor.white``"
 
-#: ../../source/plugin_dev/api.rst:185
 msgid "``RColor.reset``"
-msgstr ""
+msgstr "``RColor.reset``"
 
-#: ../../source/plugin_dev/api.rst:188
 msgid "RStyle"
-msgstr ""
+msgstr "RStyle"
 
-#: ../../source/plugin_dev/api.rst:190
 msgid "``RStyle`` is an enum class storing all Minecraft text styles"
-msgstr ""
+msgstr "``RStyle`` 是一个存储所有 Minecraft 文本样式的枚举类。"
 
-#: ../../source/plugin_dev/api.rst:193
 msgid "``RStyle.bold``"
-msgstr ""
+msgstr "``RStyle.bold``"
 
-#: ../../source/plugin_dev/api.rst:194
 msgid "``RStyle.italic``"
-msgstr ""
+msgstr "``RStyle.italic``"
 
-#: ../../source/plugin_dev/api.rst:195
 msgid "``RStyle.underlined``"
-msgstr ""
+msgstr "``RStyle.underlined``"
 
-#: ../../source/plugin_dev/api.rst:196
 msgid "``RStyle.strike_through``"
-msgstr ""
+msgstr "``RStyle.strike_through``"
 
-#: ../../source/plugin_dev/api.rst:197
 msgid "``RStyle.obfuscated``"
-msgstr ""
+msgstr "``RStyle.obfuscated``"
 
-#: ../../source/plugin_dev/api.rst:200
 msgid "RAction"
-msgstr ""
+msgstr "RAction"
 
-#: ../../source/plugin_dev/api.rst:202
 msgid "``RAction`` is a enum class storing all click event actions"
-msgstr ""
+msgstr "``RAction`` 是一个存储所有点击事件动作的枚举类。"
 
-#: ../../source/plugin_dev/api.rst:205
 msgid "``RAction.suggest_command``"
-msgstr ""
+msgstr "``RAction.suggest_command``"
 
-#: ../../source/plugin_dev/api.rst:206
 msgid "``RAction.run_command``"
-msgstr ""
+msgstr "``RAction.run_command``"
 
-#: ../../source/plugin_dev/api.rst:207
 msgid "``RAction.open_url``"
-msgstr ""
+msgstr "``RAction.open_url``"
 
-#: ../../source/plugin_dev/api.rst:208
 msgid "``RAction.open_file``"
-msgstr ""
+msgstr "``RAction.open_file``"
 
-#: ../../source/plugin_dev/api.rst:209
 msgid "``RAction.copy_to_clipboard``"
-msgstr ""
+msgstr "``RAction.copy_to_clipboard``"
 
-#: ../../source/plugin_dev/api.rst:212
 msgid "RTextBase"
-msgstr ""
+msgstr "RTextBase"
 
-#: ../../source/plugin_dev/api.rst:214
-msgid ""
-"``RTextBase`` is an abstract class of text component. It's the base class"
-" of ``RText`` and ``RTextList``"
-msgstr ""
+msgid "``RTextBase`` is an abstract class of text component. It's the base class of ``RText`` and ``RTextList``"
+msgstr "``RTextBase`` 是文本组件的一个抽象类，是 ``RText`` 和 ``RTextList`` 的基类。"
 
-#: ../../source/plugin_dev/api.rst:217
 msgid "to_json_object"
-msgstr ""
+msgstr "to_json_object"
 
-#: ../../source/plugin_dev/api.rst:223 ../../source/plugin_dev/api.rst:243
-#: ../../source/plugin_dev/api.rst:254 ../../source/plugin_dev/api.rst:265
-#: ../../source/plugin_dev/api.rst:276
 msgid "Abstract method"
-msgstr ""
+msgstr "抽象方法"
 
-#: ../../source/plugin_dev/api.rst:225
-msgid ""
-"Return an object representing it's data that can be serialized into json "
-"string"
-msgstr ""
+msgid "Return an object representing it's data that can be serialized into json string"
+msgstr "返回一个代表其数据的对象，该对象可以被序列化为 json 字符串。"
 
-#: ../../source/plugin_dev/api.rst:228
 msgid "to_json_str"
-msgstr ""
+msgstr "to_json_str"
 
-#: ../../source/plugin_dev/api.rst:234
-msgid ""
-"Return a json formatted str representing it's data. It can be used as the"
-" second parameter in command ``/tellraw <target> <message>`` and more"
-msgstr ""
+msgid "Return a json formatted str representing it's data. It can be used as the second parameter in command ``/tellraw <target> <message>`` and more"
+msgstr "返回一个表示其数据的 json 格式字符串。它可以作为命令 ``/tellraw <target> <message>`` 中的第二个参数，以及更多的参数。"
 
-#: ../../source/plugin_dev/api.rst:237
 msgid "to_plain_text"
-msgstr ""
+msgstr "to_plain_text"
 
-#: ../../source/plugin_dev/api.rst:245
-msgid ""
-"Return a plain text for console display. Click event and hover event will"
-" be ignored"
-msgstr ""
+msgid "Return a plain text for console display. Click event and hover event will be ignored"
+msgstr "返回纯文本以供控制台显示。Click事件和悬停事件将被忽略。"
 
-#: ../../source/plugin_dev/api.rst:248
 msgid "copy"
-msgstr ""
+msgstr "copy"
 
-#: ../../source/plugin_dev/api.rst:256
 msgid "Return a copy version of itself"
-msgstr ""
+msgstr "返回其自身。"
 
-#: ../../source/plugin_dev/api.rst:259
 msgid "set_color"
-msgstr ""
+msgstr "set_color"
 
-#: ../../source/plugin_dev/api.rst:267
 msgid "Set the color of the text and return the text component itself"
-msgstr ""
+msgstr "设置文本的颜色并返回文本组件本身。"
 
-#: ../../source/plugin_dev/api.rst:270
 msgid "set_styles"
-msgstr ""
+msgstr "set_styles"
 
-#: ../../source/plugin_dev/api.rst:278
 msgid "Set the styles of the text and return the text component itself"
-msgstr ""
+msgstr "设置文本的样式并返回文本组件本身。"
 
-#: ../../source/plugin_dev/api.rst:281
 msgid "set_click_event"
-msgstr ""
+msgstr "set_click_event"
 
-#: ../../source/plugin_dev/api.rst:287
-msgid ""
-"Set the click event with given *action* and *value* and return the text "
-"component itself"
-msgstr ""
+msgid "Set the click event with given *action* and *value* and return the text component itself"
+msgstr "用给定的 *action* 和 *value* 设置点击事件，并返回文本组件本身。"
 
-#: ../../source/plugin_dev/api.rst:289
 msgid "Parameter *action*\\ : The type of the action"
-msgstr ""
+msgstr "参数*action*：动作的类型"
 
-#: ../../source/plugin_dev/api.rst:291
 msgid "Parameter *value*\\ : The string value of the action"
-msgstr ""
+msgstr "参数*value*：操作的字符串值"
 
-#: ../../source/plugin_dev/api.rst:293
 msgid "Method ``c`` is the short form of method ``set_click_event``"
-msgstr ""
+msgstr "方法 ``c`` 是方法` `set_click_event`` 的简写。"
 
-#: ../../source/plugin_dev/api.rst:296
 msgid "set_hover_text"
-msgstr ""
+msgstr "set_hover_text"
 
-#: ../../source/plugin_dev/api.rst:302
-msgid ""
-"Set the hover text with given *\\*\\ args* and return the text component "
-"itself"
-msgstr ""
+msgid "Set the hover text with given *\\*\\ args* and return the text component itself"
+msgstr "使用给定的 *args* 设置悬停文本并返回文本组件本身。"
 
-#: ../../source/plugin_dev/api.rst:304
-msgid ""
-"Parameter *action*\\ : The elements be used to create a ``RTextList`` "
-"instance. The ``RTextList`` instance is used as the actual hover text"
-msgstr ""
+msgid "Parameter *action*\\ : The elements be used to create a ``RTextList`` instance. The ``RTextList`` instance is used as the actual hover text"
+msgstr "参数 *action*：用于创建 ``RTextList`` 实例的元素。``RTextList`` 实例作为实际的悬停文本使用。"
 
-#: ../../source/plugin_dev/api.rst:306
 msgid "Method ``h`` is the short form of method ``set_hover_text``"
-msgstr ""
+msgstr "方法 ``h`` 是方法 ``set_hover_text'' 的简写。"
 
-#: ../../source/plugin_dev/api.rst:309
 msgid "RText"
-msgstr ""
+msgstr "RText"
 
-#: ../../source/plugin_dev/api.rst:311
 msgid "The regular text component class"
-msgstr ""
+msgstr "常规文本组件类"
 
-#: ../../source/plugin_dev/api.rst:317
-msgid ""
-"Create an ``RText`` object with specific text, color and style. "
-"``styles`` can be a ``RStyle`` or a collection of ``RStyle``"
-msgstr ""
+msgid "Create an ``RText`` object with specific text, color and style. ``styles`` can be a ``RStyle`` or a collection of ``RStyle``"
+msgstr "用特定的文本，颜色和样式创建一个 ``RText`` 对象，其中样式可以是 ``RStyle`` 或 ``RStyle`` 的集合。"
 
-#: ../../source/plugin_dev/api.rst:320 ../../source/plugin_dev/api.rst:325
 msgid "RTextTranslation"
-msgstr ""
+msgstr "RTextTranslation"
 
-#: ../../source/plugin_dev/api.rst:322
 msgid "The translation text component class. It's almost the same as ``RText``"
-msgstr ""
+msgstr "翻译文本组件类。几乎和 ``RText`` 相同。"
 
-#: ../../source/plugin_dev/api.rst:331
-msgid ""
-"Create a RTextTranslation object with specific translation_key. The rest "
-"of the parameters are the same to ``RText``"
-msgstr ""
+msgid "Create a RTextTranslation object with specific translation_key. The rest of the parameters are the same to ``RText``"
+msgstr "使用特定的 ``translation_key`` 创建一个 ``RTextTranslation`` 对象。其余参数与 ``RText`` 相同。"
 
-#: ../../source/plugin_dev/api.rst:333
-msgid ""
-"Example: ``RTextTranslation('advancements.nether.root.title', "
-"color=RColor.red)``"
-msgstr ""
+msgid "Example: ``RTextTranslation('advancements.nether.root.title', color=RColor.red)``"
+msgstr "例如：``RTextTranslation('advancements.nether.root.title', color=RColor.red)``"
 
-#: ../../source/plugin_dev/api.rst:336 ../../source/plugin_dev/api.rst:341
 msgid "RTextList"
-msgstr ""
+msgstr "RTextList"
 
-#: ../../source/plugin_dev/api.rst:338
 msgid "A list of RTextBase objects"
-msgstr ""
+msgstr "由 RTextBase 对象组成的列表。"
 
-#: ../../source/plugin_dev/api.rst:347
 msgid "Use the given *\\*\\ args* to create a ``RTextList``"
-msgstr ""
+msgstr "使用给定的 *args* 创建 ``RTextList`` 。"
 
-#: ../../source/plugin_dev/api.rst:349 ../../source/plugin_dev/api.rst:360
-msgid ""
-"Objects in ``*args`` can be a ``str``\\ , a ``RTextBase`` or any classes "
-"implemented ``__str__`` method. All of them will be convert to ``RText``"
-msgstr ""
+msgid "Objects in ``*args`` can be a ``str``\\ , a ``RTextBase`` or any classes implemented ``__str__`` method. All of them will be convert to ``RText``"
+msgstr "``*args`` 中的对象可以是 ``str``，`RTextBase`` 或任何实现 __str__ 方法的类。所有的这些对象都将被转换为 ``RText``。"
 
-#: ../../source/plugin_dev/api.rst:352
 msgid "append"
-msgstr ""
+msgstr "append"
 
-#: ../../source/plugin_dev/api.rst:358
-msgid ""
-"Add several elements to the end of the current ``RTextList``\\ , then "
-"return the ``RTextList`` component itself"
-msgstr ""
+msgid "Add several elements to the end of the current ``RTextList``\\ , then return the ``RTextList`` component itself"
+msgstr "在当前 ``RTextList`` 的末尾添加几个元素，然后返回 ``RTextList`` 组件本身。"
 
-#: ../../source/plugin_dev/api.rst:363
 msgid "is_empty"
-msgstr ""
+msgstr "is_empty"
 
-#: ../../source/plugin_dev/api.rst:369
-msgid ""
-"Return a bool indicating if the ``RTextList`` is empty. In other words, "
-"has no child element"
-msgstr ""
+msgid "Return a bool indicating if the ``RTextList`` is empty. In other words, has no child element"
+msgstr "返回一个布尔值，指示 ``RTextList`` 是否为空——换句话说——有没有子元素。"
 
-#: ../../source/plugin_dev/api.rst:372
 msgid "types"
-msgstr ""
+msgstr "types"
 
-#: ../../source/plugin_dev/api.rst:374
-msgid ""
-"Who doesn't want a complete type checking to help you reduce silly "
-"mistakes etc. when coding your plugin? If you want to add type hints to "
-"the server interface or command source parameter, here's the package for "
-"you to import those Usually-used classes"
-msgstr ""
-
-#~ msgid ""
-#~ "When your plugin needs to import "
-#~ "something from MCDR, rather than "
-#~ "directly import the package you want,"
-#~ " you can import the packages in "
-#~ "mcdreforged.api"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "mcdreforged.api is the package for "
-#~ "plugin developers to import. By only "
-#~ "importing from the api package, the "
-#~ "import of the target class in the"
-#~ " plugin can be decoupled from the "
-#~ "actual location of the target class. "
-#~ "If MCDR refactors the target class "
-#~ "and moves its location in the "
-#~ "future, only importing from the api "
-#~ "package can keep your plugin unaffected"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "command package contains the necessities "
-#~ "for building a command tree or "
-#~ "create your own command, including "
-#~ "command tree node classes, command "
-#~ "exceptions and some command utils"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "For example, if you want the class"
-#~ " Literal and IllegalArgument for building"
-#~ " your command tree on_error exception "
-#~ "handling, you can do it like this"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "decorator package contains some useful "
-#~ "function decorators for plugin development"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "This decorator only changes the return"
-#~ " value of the function to the "
-#~ "created Thread instance. Beside the "
-#~ "return value, it reserves all signatures"
-#~ " of the decorated function, so you"
-#~ " can safely use the decorated "
-#~ "function as if there's no decorating "
-#~ "at all"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "The only difference between do_something1 "
-#~ "and do_something2 is that do_something2 "
-#~ "is decorated by @new_thread. So when "
-#~ "executing do_something2, it won't lag "
-#~ "the following execution of MCDR like "
-#~ "do_something1 since do_something2 will execute"
-#~ " on another thread"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "If you want to wait for the "
-#~ "decorated function to complete, you can"
-#~ " simple use the join method from "
-#~ "class threading.Thread. Remember the return"
-#~ " value of the decorated function has"
-#~ " already been changed in to the "
-#~ "Thread instance"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "In addition to simply and directly "
-#~ "use a raw @new_thread, it's recommend"
-#~ " to add a thread name argument "
-#~ "for the decorator"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "So when you logs something by "
-#~ "server.logger, a meaningful thread name "
-#~ "will be displayed instead of a "
-#~ "plain and meaningless Thread-3"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Notes: Some api methods in "
-#~ "ServerInterface class are required to be"
-#~ " invoked in the MCDR task executor"
-#~ " thread. Invoking them in another "
-#~ "thread might result in an exception"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "event package contains the classes for"
-#~ " creating custom events, and classes "
-#~ "of MCDR built-in events"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "You might already read the "
-#~ "dispatch_event method in ServerInterface "
-#~ "class. It only accepts a PluginEvent "
-#~ "instance as its first parameter. So "
-#~ "if you want to dispatch your "
-#~ "custom event, create a LiteralEvent for"
-#~ " simpleness or a custom event class"
-#~ " inherited from PluginEvent"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Package rcon contains a single class "
-#~ "RconConnection. It's is a simply rcon"
-#~ " client for connect to any Minecraft"
-#~ " servers that supports rcon protocol"
-#~ msgstr ""
-
-#~ msgid "Parameter address: The address of the rcon server"
-#~ msgstr ""
-
-#~ msgid "Parameter port: The port if the rcon server"
-#~ msgstr ""
-
-#~ msgid "Parameter password: The password of the rcon connection"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Keyword Parameter logger: An instance of"
-#~ " logging.Logger. It's used to output "
-#~ "some warning information like failing to"
-#~ " receive a packet"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Start a connection to the rcon "
-#~ "server and tries to login. If "
-#~ "login success it will return True, "
-#~ "otherwise False"
-#~ msgstr ""
-
-#~ msgid "Parameter command: The command you want to send to the server"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Parameter max_retry_time: The maximum retry"
-#~ " time of the operation. This method"
-#~ " will return None if max_retry_time "
-#~ "retries exceeded"
-#~ msgstr ""
-
-#~ msgid "Recommend to read the page Raw JSON text format in Minecraft Wiki first"
-#~ msgstr ""
-
-#~ msgid "Inspired by the MCD stext API made by Pandaria98"
-#~ msgstr ""
-
-#~ msgid "RColor is an enum class storing all Minecraft color codes"
-#~ msgstr ""
-
-#~ msgid "RColor.black"
-#~ msgstr ""
-
-#~ msgid "RColor.dark_blue"
-#~ msgstr ""
-
-#~ msgid "RColor.dark_green"
-#~ msgstr ""
-
-#~ msgid "RColor.dark_aqua"
-#~ msgstr ""
-
-#~ msgid "RColor.dark_red"
-#~ msgstr ""
-
-#~ msgid "RColor.dark_purple"
-#~ msgstr ""
-
-#~ msgid "RColor.gold"
-#~ msgstr ""
-
-#~ msgid "RColor.gray"
-#~ msgstr ""
-
-#~ msgid "RColor.dark_gray"
-#~ msgstr ""
-
-#~ msgid "RColor.blue"
-#~ msgstr ""
-
-#~ msgid "RColor.green"
-#~ msgstr ""
-
-#~ msgid "RColor.aqua"
-#~ msgstr ""
-
-#~ msgid "RColor.red"
-#~ msgstr ""
-
-#~ msgid "RColor.light_purple"
-#~ msgstr ""
-
-#~ msgid "RColor.yellow"
-#~ msgstr ""
-
-#~ msgid "RColor.white"
-#~ msgstr ""
-
-#~ msgid "RColor.reset"
-#~ msgstr ""
-
-#~ msgid "RStyle is an enum class storing all Minecraft text styles"
-#~ msgstr ""
-
-#~ msgid "RStyle.bold"
-#~ msgstr ""
-
-#~ msgid "RStyle.italic"
-#~ msgstr ""
-
-#~ msgid "RStyle.underlined"
-#~ msgstr ""
-
-#~ msgid "RStyle.strike_through"
-#~ msgstr ""
-
-#~ msgid "RStyle.obfuscated"
-#~ msgstr ""
-
-#~ msgid "RAction is a enum class storing all click event actions"
-#~ msgstr ""
-
-#~ msgid "RAction.suggest_command"
-#~ msgstr ""
-
-#~ msgid "RAction.run_command"
-#~ msgstr ""
-
-#~ msgid "RAction.open_url"
-#~ msgstr ""
-
-#~ msgid "RAction.open_file"
-#~ msgstr ""
-
-#~ msgid "RAction.copy_to_clipboard"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "RTextBase is an abstract class of "
-#~ "text component. It's the base class "
-#~ "of RText and RTextList"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Return a json formatted str representing"
-#~ " it's data. It can be used as"
-#~ " the second parameter in command "
-#~ "/tellraw <target> <message> and more"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Set the click event with given "
-#~ "action and value and return the "
-#~ "text component itself"
-#~ msgstr ""
-
-#~ msgid "Parameter action: The type of the action"
-#~ msgstr ""
-
-#~ msgid "Parameter value: The string value of the action"
-#~ msgstr ""
-
-#~ msgid "Method c is the short form of method set_click_event"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Set the hover text with given "
-#~ "*args and return the text component "
-#~ "itself"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Parameter action: The elements be used"
-#~ " to create a RTextList instance. The"
-#~ " RTextList instance is used as the"
-#~ " actual hover text"
-#~ msgstr ""
-
-#~ msgid "Method h is the short form of method set_hover_text"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Create an RText object with specific "
-#~ "text, color and style. styles can "
-#~ "be a RStyle or a collection of "
-#~ "RStyle"
-#~ msgstr ""
-
-#~ msgid "The translation text component class. It's almost the same as RText"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Create a RTextTranslation object with "
-#~ "specific translation_key. The rest of "
-#~ "the parameters are the same to "
-#~ "RText"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Example: RTextTranslation('advancements.nether.root.title', "
-#~ "color=RColor.red)"
-#~ msgstr ""
-
-#~ msgid "Use the given *args to create a RTextList"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Objects in *args can be a str, "
-#~ "a RTextBase or any classes implemented"
-#~ " __str__ method. All of them will "
-#~ "be convert to RText"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Add several elements to the end of"
-#~ " the current RTextList, then return "
-#~ "the RTextList component itself"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Return a bool indicating if the "
-#~ "RTextList is empty. In other words, "
-#~ "has no child element"
-#~ msgstr ""
-
+msgid "Who doesn't want a complete type checking to help you reduce silly mistakes etc. when coding your plugin? If you want to add type hints to the server interface or command source parameter, here's the package for you to import those Usually-used classes"
+msgstr "谁不希望在编写插件时，有一个检查器来帮助你减少愚蠢的错误呢？如果你想指定类型以让 IDE 知道你在写什么，这里有一个包可以让你导入一些常用的类。"
