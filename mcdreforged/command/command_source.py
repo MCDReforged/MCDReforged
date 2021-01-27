@@ -41,6 +41,7 @@ class CommandSource:
 class InfoCommandSource(CommandSource, ABC):
 	"""
 	Command source generated from info
+	TODO: DOC
 	"""
 	def __init__(self, mcdr_server: 'MCDReforgedServer', info: 'Info'):
 		self._mcdr_server = mcdr_server
