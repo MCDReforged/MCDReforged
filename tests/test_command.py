@@ -208,7 +208,7 @@ class MyTestCase(unittest.TestCase):
 		try:
 			self.run_command(executor, 'permission fail')
 		except RequirementNotMet as e:
-			self.assertEqual(('FAIL MESSAGE',), e.get_translation_args())
+			self.assertEqual(('FAIL MESSAGE',), e.get_error_data())
 
 	def test_12_redirect(self):
 		executor1 = Literal('tp').then(

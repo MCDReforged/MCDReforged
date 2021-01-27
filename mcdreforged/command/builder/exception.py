@@ -29,11 +29,11 @@ class CommandError(CommandErrorBase, ABC):
 	def to_mc_color_text(self):
 		return '§c{}: §r{}§c{}§4<--'.format(self.__message, self._parsed_command, self._failed_command[len(self._parsed_command):])
 
-	def get_translation_args(self) -> tuple:
+	def get_error_data(self) -> tuple:
 		return ()
 
 	def set_translated_message(self, key: str, translator: Callable[[str, tuple], str]):
-		self.__message = translator(key, self.get_translation_args())
+		self.__message = translator(key, self.get_error_data())
 
 	def get_parsed_command(self) -> str:
 		return self._parsed_command
@@ -83,7 +83,7 @@ class RequirementNotMet(CommandError):
 		self.__reason = reason if reason is not None else 'Requirement is not met'
 		super().__init__(self.__reason, parsed_command, failed_command)
 
-	def get_translation_args(self) -> tuple:
+	def get_error_data(self) -> tuple:
 		return (self.__reason,)
 
 # -----------------
@@ -139,7 +139,7 @@ class AbstractOutOfRange(IllegalArgument, ABC):
 	def _get_boundary_text(cls, value) -> str:
 		return str(value) if value is not None else '/'
 
-	def get_translation_args(self) -> tuple:
+	def get_error_data(self) -> tuple:
 		return self.__value, self._get_boundary_text(self.__range_l), self._get_boundary_text(self.__range_r)
 
 
