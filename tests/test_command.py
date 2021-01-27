@@ -230,13 +230,30 @@ class MyTestCase(unittest.TestCase):
 			on_error(UnknownCommand, lambda s, e: self.assertIsInstance(e, UnknownCommand)).
 			on_error(UnknownArgument, lambda s, e: self.assertIsInstance(e, UnknownArgument))
 		).then(
+			Literal('text').
+			then(
+				QuotableText('t').in_length_range(5, 10)
+			).on_child_error(
+				IllegalEscapesUsage, lambda s, e: self.callback_hit(s, {})
+			)
+		).then(
 			Integer('w').on_error(InvalidInteger, lambda s, e: self.callback_hit(s, {}))
-		).on_error(UnknownCommand, lambda s, e: self.callback_hit(s, {}))
+		).on_error(
+			UnknownCommand, lambda s, e: self.callback_hit(s, {})
+		).on_child_error(
+			TextLengthOutOfRange, lambda s, e: self.callback_hit(s, {})
+		)
 		self.assertRaises(UnknownCommand, self.run_command, executor, 'error ping')
 		self.assertRaises(UnknownArgument, self.run_command, executor, 'error ping awa')
 		self.assert_raises_and_check_hit(True, UnknownCommand, self.run_command, executor, 'error')
 		self.assert_raises_and_check_hit(True, UnknownCommand, self.run_command, executor, 'error')
 		self.assert_raises_and_check_hit(True, InvalidInteger, self.run_command, executor, 'error 10x')
+		self.assert_raises_and_check_hit(True, CommandError, self.run_command, executor, 'error 10x')  # using parent error class
+
+		self.assert_raises_and_check_hit(False, UnknownCommand, self.run_command, executor, 'error text')
+		self.assert_raises_and_check_hit(True, TextLengthOutOfRange, self.run_command, executor, 'error text abc')
+		self.assert_raises_and_check_hit(True, IllegalEscapesUsage, self.run_command, executor, r'error text "ab\c"')
+		self.assert_raises_and_check_hit(False, UnclosedQuotedString, self.run_command, executor, 'error text "abc')
 
 
 if __name__ == '__main__':
