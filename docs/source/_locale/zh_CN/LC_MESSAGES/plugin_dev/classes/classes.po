@@ -36,5 +36,5 @@ msgstr "CommandError"
 
 #: ../../source/plugin_dev/classes/classes.rst:2
 msgid "Class References"
-msgstr "Class References"
+msgstr "类参考"
 

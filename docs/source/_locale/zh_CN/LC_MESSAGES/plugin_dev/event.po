@@ -1,420 +1,406 @@
+
 msgid ""
 msgstr ""
-"Project-Id-Version: mcdreforged\n"
+"Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-19 13:23+0800\n"
+"POT-Creation-Date: 2021-01-30 14:06+0800\n"
 "PO-Revision-Date: 2021-01-23 12:20+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
 "Language-Team: Chinese Simplified\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Plural-Forms: nplurals=1; plural=0\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.0\n"
-"X-Generator: Poedit 2.4.2\n"
 
-#: ../../source/plugin_dev/event.rst:3
+#: ../plugin_dev/event.rst:3
 msgid "Plugin Event"
 msgstr "插件事件"
 
-#: ../../source/plugin_dev/event.rst:5
+#: ../plugin_dev/event.rst:5
 msgid ""
-"Plugin events are the most important way for plugins to interact with the "
-"server and the console"
+"Plugin events are the most important way for plugins to interact with the"
+" server and the console"
 msgstr "插件事件是插件与控制台和服务器交互的重要方式。"
 
-#: ../../source/plugin_dev/event.rst:7
+#: ../plugin_dev/event.rst:7
 msgid ""
 "When the server has trigger a specific event, it will list out all event "
 "listeners that have registered to this event, then MCDR will invoke the "
 "callback function of the listener with the given arguments"
-msgstr ""
-"当服务器触发某一事件时，MCDR 会以触发的参数传递至注册该事件的事件监听器，然后"
-"调用该监听器的回调函数"
+msgstr "当服务器触发某一事件时，MCDR 会以触发的参数传递至注册该事件的事件监听器，然后调用该监听器的回调函数"
 
-#: ../../source/plugin_dev/event.rst:9
+#: ../plugin_dev/event.rst:9
 msgid ""
 "Event Listeners have a priority value. The default priority is ``1000``. "
 "Plugins can specify the priority when they register an event listener "
-"manually. MCDR will execute event listeners in ascending order according to "
-"the priority"
-msgstr ""
-"事件监听器是具有优先级的，默认优先级为 ``1000``，插件可以在手动注册事件监听器"
-"时设置优先级，MCDR会根据优先级按升序来执行事件监听器"
+"manually. MCDR will execute event listeners in ascending order according "
+"to the priority"
+msgstr "事件监听器是具有优先级的，默认优先级为 ``1000``，插件可以在手动注册事件监听器时设置优先级，MCDR会根据优先级按升序来执行事件监听器"
 
-#: ../../source/plugin_dev/event.rst:12
+#: ../plugin_dev/event.rst:12
 msgid "Register a event listener"
 msgstr "注册事件监听器"
 
-#: ../../source/plugin_dev/event.rst:14
+#: ../plugin_dev/event.rst:14
 msgid ""
-"See the `Event listeners <basic.html#event-listeners>`__ section in Plugin "
-"Registry in the document of `MCDR Plugin <basic>`__"
+"See the `Event listeners <basic.html#event-listeners>`__ section in "
+"Plugin Registry in the document of `MCDR Plugin <basic.html>`__"
 msgstr ""
-"请参阅 *MCDR插件* 文档中的插件注册表中的 `事件监听器 <basic.html#event-"
+"请参阅 `MCDR 插件 <basic.html>`__ 文档中的插件注册表中的 `事件监听器 <basic.html#event-"
 "listeners>`__ 部分。"
 
-#: ../../source/plugin_dev/event.rst:17
+#: ../plugin_dev/event.rst:17
 msgid "MCDR Event"
 msgstr "MCDR 事件"
 
-#: ../../source/plugin_dev/event.rst:20
+#: ../plugin_dev/event.rst:20
 msgid "Default Event Listener"
 msgstr "默认的事件监听器"
 
-#: ../../source/plugin_dev/event.rst:22
+#: ../plugin_dev/event.rst:22
 msgid ""
-"All of the MCDR events have an attribute called \"Default function name\". If "
-"your plugin declare a function in the global slope of the plugin file, with "
-"the same name to the \"Default function name\", the function will be "
-"automatically registered as a listener to the specific event."
+"All of the MCDR events have an attribute called \"Default function "
+"name\". If your plugin declare a function in the global slope of the "
+"plugin file, with the same name to the \"Default function name\", the "
+"function will be automatically registered as a listener to the specific "
+"event."
 msgstr ""
-"所有的 MCDR 事件监听器都有一个 “默认函数名称”。当你在插件文件内创建一个函数名"
-"称与“默认函数名称”相同的函数时，该函数会自动注册为相应的事件监听器。"
+"所有的 MCDR 事件监听器都有一个 "
+"“默认函数名称”。当你在插件文件内创建一个函数名称与“默认函数名称”相同的函数时，该函数会自动注册为相应的事件监听器。"
 
-#: ../../source/plugin_dev/event.rst:24
+#: ../plugin_dev/event.rst:24
 msgid ""
-"The priority of these event listeners are always the default priority (\\ "
-"``1000``\\ )"
-msgstr "这些事件监听器的优先级始终是默认的优先级(\\ ``1000`` )"
+"The priority of these event listeners are always the default priority "
+"(``1000``)"
+msgstr "这些事件监听器的优先级始终是默认的优先级（``1000``）"
 
-#: ../../source/plugin_dev/event.rst:27
+#: ../plugin_dev/event.rst:27
 msgid "MCDR Event List"
 msgstr "MCDR 事件列表"
 
-#: ../../source/plugin_dev/event.rst:30
+#: ../plugin_dev/event.rst:30
 msgid "Plugin Loaded"
 msgstr "插件被加载"
 
-#: ../../source/plugin_dev/event.rst:32
+#: ../plugin_dev/event.rst:32
 msgid ""
-"Plugin load event is triggered once when a plugin is loaded. Plugins are "
-"supposed to register some event listeners, commands and help messages as well "
-"as initialize their fields here"
-msgstr ""
-"插件被加载事件将在插件加载后被触发一次，若你需要注册一些事件监听器/命令/帮助消"
-"息，以及初始化参数，那么你应该将它们置于这个函数里。"
+"Plugin load event gets triggered once when a plugin is loaded. Plugins "
+"are supposed to register some event listeners, commands and help messages"
+" as well as initialize their fields here"
+msgstr "插件被加载事件将在插件加载后被触发一次，若你需要注册一些事件监听器/命令/帮助消息，以及初始化参数，那么你应该将它们置于这个函数里。"
 
-#: ../../source/plugin_dev/event.rst:41
+#: ../plugin_dev/event.rst:41
 msgid ""
 "If it's a plugin reload, ``prev_module`` argument indicates the previous "
-"plugin instance module, otherwise if it's the first time to load the plugin, "
-"prev_module is None. With this parameter plugin can easily inherit "
-"information from the previous plugin instance. Here's an example:"
+"plugin instance module, otherwise if it's the first time to load the "
+"plugin, prev_module is None. With this parameter plugin can easily "
+"inherit information from the previous plugin instance. Here's an example:"
 msgstr ""
-"插件重载时，``prev_module`` 参数会代表之前的插件实例。若第一次加载插件，则 "
-"``prev_module`` 为 None。你使用该参数时，可让插件继承以前的插件实例中的内容，"
-"例如："
+"插件重载时，``prev_module`` 参数会代表之前的插件实例。若第一次加载插件，则 ``prev_module`` 为 "
+"None。你使用该参数时，可让插件继承以前的插件实例中的内容，例如："
 
-#: ../../source/plugin_dev/event.rst:52
+#: ../plugin_dev/event.rst:52
 msgid ""
-"Since it's the first event in the lifecycle of a plugin, this event can only "
-"be registered with default event listener, so the ``on_load`` function is the "
-"entry spot of your plugin"
-msgstr ""
-"由于它是插件生命周期中的第一个事件，因此只能使用默认事件侦听器注册该事件，因"
-"此 ``on_load`` 函数是插件的入口点。"
+"Since it's the first event in the lifecycle of a plugin, this event can "
+"only be registered with default event listener, so the ``on_load`` "
+"function is the entry spot of your plugin"
+msgstr "由于它是插件生命周期中的第一个事件，因此只能使用默认事件侦听器注册该事件，因此 ``on_load`` 函数是插件的入口点。"
 
-#: ../../source/plugin_dev/event.rst:54
+#: ../plugin_dev/event.rst:54
 msgid ""
-"Note: You should not dispatch custom events in the ``on_load`` function or it "
-"will do nothing. The event listener storage of MCDR has not been initialized "
-"yet"
-msgstr ""
-"注意：您不应该在 ``on_load`` 函数中调度自定义事件，否则它将无效。 MCDR的事件侦"
-"听器存储此时尚未初始化。"
+"Note: You should not dispatch custom events in the ``on_load`` function "
+"or it will do nothing. The event listener storage of MCDR has not been "
+"initialized yet"
+msgstr "注意：你不应该在 ``on_load`` 函数中分发自定义事件，否则它将无效。 MCDR的事件侦听器存储此时尚未初始化。"
 
-#: ../../source/plugin_dev/event.rst:56
+#: ../plugin_dev/event.rst:56
 msgid "Event id: mcdr.plugin_loaded"
-msgstr "事件 ID：mcdr.plugin_loased"
+msgstr "事件 ID：mcdr.plugin_loaded"
 
-#: ../../source/plugin_dev/event.rst:57
-msgid "Callback arguments: ServerInterface, prev_plugin_module"
+#: ../plugin_dev/event.rst:57
+msgid "Callback arguments: ServerInterface, prev_module"
 msgstr "回调参数：ServerInterface，prev_plugin_module"
 
-#: ../../source/plugin_dev/event.rst:58
+#: ../plugin_dev/event.rst:58
 msgid "Default function name: on_load"
 msgstr "默认函数名称：on_load"
 
-#: ../../source/plugin_dev/event.rst:61
+#: ../plugin_dev/event.rst:61
 msgid "Plugin Unloaded"
 msgstr "插件被卸载"
 
-#: ../../source/plugin_dev/event.rst:63
+#: ../plugin_dev/event.rst:63
 msgid ""
-"This even is trigger when MCDR unload the plugin instance. It can be caused "
-"by a plugin reload or a plugin unload"
+"This event gets triggered when MCDR unload the plugin instance. It can be"
+" caused by a plugin reload or a plugin unload"
 msgstr "当 MCDR 卸载插件实例时，将触发该事件。这可能是由插件重载或卸载引起的。"
 
-#: ../../source/plugin_dev/event.rst:66
+#: ../plugin_dev/event.rst:66
 msgid "Event id: mcdr.plugin_unloaded"
 msgstr "事件 ID：mcdr.plugin_unloaded"
 
-#: ../../source/plugin_dev/event.rst:67 ../../source/plugin_dev/event.rst:87
-#: ../../source/plugin_dev/event.rst:137 ../../source/plugin_dev/event.rst:147
-#: ../../source/plugin_dev/event.rst:175 ../../source/plugin_dev/event.rst:185
+#: ../plugin_dev/event.rst:67 ../plugin_dev/event.rst:87
+#: ../plugin_dev/event.rst:138 ../plugin_dev/event.rst:148
+#: ../plugin_dev/event.rst:176 ../plugin_dev/event.rst:186
 msgid "Callback arguments: ServerInterface"
 msgstr "回调参数：ServerInterface"
 
-#: ../../source/plugin_dev/event.rst:68
+#: ../plugin_dev/event.rst:68
 msgid "Default function name: on_unload"
 msgstr "默认函数名称：on_unload"
 
-#: ../../source/plugin_dev/event.rst:71
+#: ../plugin_dev/event.rst:71
 msgid "Plugin Removed"
 msgstr "插件被“删除”"
 
-#: ../../source/plugin_dev/event.rst:73
+#: ../plugin_dev/event.rst:73
 msgid ""
-"This even is trigger when MCDR remove the plugin. It can only be caused by a "
-"plugin unload. It's time to do some clean up for your plugin"
-msgstr ""
-"当 MCDR “删除”插件时，将触发该事件。它只能由插件卸载引起——是时候为您的插件做一"
-"些临死前清理了。"
+"This even gets triggered when MCDR remove the plugin. It can only be "
+"caused by a plugin unload. It's time to do some clean up for your plugin"
+msgstr "当 MCDR “删除”插件时，将触发该事件。它只能由插件卸载引起——是时候为你的插件做一些临死前清理了。"
 
-#: ../../source/plugin_dev/event.rst:75
+#: ../plugin_dev/event.rst:75
 msgid ""
-"Another event for plugin to do some cleanup is `MCDR Stop <#mcdr-stop>`__ "
-"event"
+"Another event for plugin to do some cleanup is `MCDR Stop <#mcdr-stop>`__"
+" event"
 msgstr "插件应进行临死清理的另一个事件是 `MCDR 停止 <#mcdr-stop>`__ 事件。"
 
-#: ../../source/plugin_dev/event.rst:77
+#: ../plugin_dev/event.rst:77
 msgid "Here is an example usage"
 msgstr "以下是一个示例用法："
 
-#: ../../source/plugin_dev/event.rst:86
+#: ../plugin_dev/event.rst:86
 msgid "Event id: mcdr.plugin_removed"
 msgstr "事件 ID：mcdr.plugin_removed"
 
-#: ../../source/plugin_dev/event.rst:88
+#: ../plugin_dev/event.rst:88
 msgid "Default function name: on_remove"
 msgstr "默认函数名称：on_remove"
 
-#: ../../source/plugin_dev/event.rst:91
+#: ../plugin_dev/event.rst:91
 msgid "General Info"
 msgstr "标准信息"
 
-#: ../../source/plugin_dev/event.rst:93
+#: ../plugin_dev/event.rst:93
 msgid ""
 "A new line of text is output from the stdout of the server, or a text is "
 "input from the console. MCDR has already parsed the text into an `Info "
 "<classes/Info>`__ object. In this event plugin can response to the info"
 msgstr ""
-"服务器输出新一行文本，或者从控制台中输入文本时，触发此事件。 MCDR 将把文本解析"
-"为 `Info <classes/Info>`__ 对象。在这种情况下，插件可以响应信息。"
+"服务器输出新一行文本，或者从控制台中输入文本时，触发此事件。 MCDR 将把文本解析为 `Info <classes/Info>`__ "
+"对象。在这种情况下，插件可以响应信息。"
 
-#: ../../source/plugin_dev/event.rst:95 ../../source/plugin_dev/event.rst:115
+#: ../plugin_dev/event.rst:95 ../plugin_dev/event.rst:115
 msgid "Here's an example"
 msgstr "以下是一个示例用法："
 
-#: ../../source/plugin_dev/event.rst:104
+#: ../plugin_dev/event.rst:104
 msgid "Event id: mcdr.general_info"
 msgstr "事件 ID：mcdr.general_info"
 
-#: ../../source/plugin_dev/event.rst:105 ../../source/plugin_dev/event.rst:127
+#: ../plugin_dev/event.rst:105 ../plugin_dev/event.rst:128
 msgid "Callback arguments: ServerInterface, Info"
 msgstr "回调参数：ServerInterface，Info"
 
-#: ../../source/plugin_dev/event.rst:106
+#: ../plugin_dev/event.rst:106
 msgid "Default function name: on_info"
 msgstr "默认函数名称：on_info"
 
-#: ../../source/plugin_dev/event.rst:109
+#: ../plugin_dev/event.rst:109
 msgid "User Info"
 msgstr "用户信息"
 
-#: ../../source/plugin_dev/event.rst:111
+#: ../plugin_dev/event.rst:111
 msgid ""
 "User Info event is very similar to General Info event, but it only gets "
-"triggered when the info is sent by a user, more precisely, ``info.is_user`` "
-"is ``True``"
+"triggered when the info is sent by a user, more precisely, "
+"``info.is_user`` is ``True``"
 msgstr ""
-"*用户信息* 事​​件与 *标准信息* 事​​件非常相似，但仅在用户发送信息时——更准确地说，"
-"``info.is_user`` 为 ``True`` 时——才会触发。"
+"*用户信息* 事件与 *标准信息* 事件非常相似，但仅在用户发送信息时——更准确地说，``info.is_user`` 为 "
+"``True`` 时——才会触发。"
 
-#: ../../source/plugin_dev/event.rst:113
+#: ../plugin_dev/event.rst:113
 msgid "If you want a simple way to handle user input, you can use this event"
-msgstr "如果您需要一种简单的方式来处理用户输入，则可以使用此事件。"
+msgstr "如果你需要一种简单的方式来处理用户输入，则可以使用此事件。"
 
-#: ../../source/plugin_dev/event.rst:123
+#: ../plugin_dev/event.rst:124
 msgid ""
-"If you want to have a not-simple command system, rather than parsing them "
-"manually in User Info event, I will suggest you to register a command tree "
-"for you plugin. See the `command registering <basic.html#command>`__ doc"
+"If you want to have a not-simple command system, rather than parsing them"
+" manually in User Info event, I will suggest you to register a command "
+"tree for you plugin. See the `command registering <basic.html#command>`__"
+" doc"
 msgstr ""
-"如果您想要更复杂的命令系统，而不是在用户信息事​​件中手动解析它们，则建议您为插件"
-"注册一个命令树。参见 `指令注册 <basic.html#command>`__ 。"
+"如果你想要更复杂的命令系统，而不是在用户信息事件中手动解析它们，则建议你为插件注册一个命令树。参见 `指令注册 "
+"<basic.html#command>`__ 。"
 
-#: ../../source/plugin_dev/event.rst:126
+#: ../plugin_dev/event.rst:127
 msgid "Event id: mcdr.user_info"
 msgstr "事件 ID：mcdr.user_info"
 
-#: ../../source/plugin_dev/event.rst:128
+#: ../plugin_dev/event.rst:129
 msgid "Default function name: on_user_info"
 msgstr "默认函数名称：user_info"
 
-#: ../../source/plugin_dev/event.rst:131
+#: ../plugin_dev/event.rst:132
 msgid "Server Start"
 msgstr "服务端启动"
 
-#: ../../source/plugin_dev/event.rst:133
+#: ../plugin_dev/event.rst:134
 msgid "The server process is just started by MCDR"
 msgstr "服务端进程刚被 MCDR 启动时触发。"
 
-#: ../../source/plugin_dev/event.rst:136
+#: ../plugin_dev/event.rst:137
 msgid "Event id: mcdr.server_start"
 msgstr "事件 ID：mcdr.server_start"
 
-#: ../../source/plugin_dev/event.rst:138
+#: ../plugin_dev/event.rst:139
 msgid "Default function name: on_server_start"
 msgstr "默认函数名称：on_server_start"
 
-#: ../../source/plugin_dev/event.rst:141
+#: ../plugin_dev/event.rst:142
 msgid "Server Startup"
 msgstr "服务端启动完成"
 
-#: ../../source/plugin_dev/event.rst:143
+#: ../plugin_dev/event.rst:144
 msgid ""
 "The server has fully started up. For example, a vanilla Minecraft server "
 "outputs ``Done (1.0s)! For help, type \"help\"``"
 msgstr ""
-"服务器已完全启动时——例如，原版Minecraft服务器输出 ``Done (1.0s)! For help, "
-"type \"help\"`` 时——被触发。"
+"服务器已完全启动时——例如，原版 Minecraft 服务器输出 ``Done (1.0s)! For help, type \"help\"`` "
+"时——被触发。"
 
-#: ../../source/plugin_dev/event.rst:146
+#: ../plugin_dev/event.rst:147
 msgid "Event id: mcdr.server_startup"
 msgstr "事件 ID：mcdr.server_startup"
 
-#: ../../source/plugin_dev/event.rst:148
+#: ../plugin_dev/event.rst:149
 msgid "Default function name: on_server_startup"
 msgstr "默认函数名称：on_server_startup"
 
-#: ../../source/plugin_dev/event.rst:151
+#: ../plugin_dev/event.rst:152
 msgid "Server Stop"
 msgstr "服务端终止"
 
-#: ../../source/plugin_dev/event.rst:153
+#: ../plugin_dev/event.rst:154
 msgid ""
-"The server process stops. You can do something depends on the process return "
-"code"
-msgstr "服务端进程终止。您可以通过判断进程的返回码执行不同操作。"
+"The server process stops. You can do something depends on the process "
+"return code"
+msgstr "服务端进程终止。你可以通过判断进程的返回码执行不同操作。"
 
-#: ../../source/plugin_dev/event.rst:155 ../../source/plugin_dev/event.rst:193
+#: ../plugin_dev/event.rst:156 ../plugin_dev/event.rst:194
 msgid "Example:"
 msgstr "例如："
 
-#: ../../source/plugin_dev/event.rst:164
+#: ../plugin_dev/event.rst:165
 msgid "Event id: mcdr.server_stop"
 msgstr "事件 ID：mcdr.server_stop"
 
-#: ../../source/plugin_dev/event.rst:165
+#: ../plugin_dev/event.rst:166
 msgid "Callback arguments: ServerInterface, server_return_code"
 msgstr "回调参数：ServerInterface，server_return_code"
 
-#: ../../source/plugin_dev/event.rst:166
+#: ../plugin_dev/event.rst:167
 msgid "Default function name: on_server_stop"
 msgstr "默认函数名称：on_server_stop"
 
-#: ../../source/plugin_dev/event.rst:169
+#: ../plugin_dev/event.rst:170
 msgid "MCDR Start"
 msgstr "MCDR 启动"
 
-#: ../../source/plugin_dev/event.rst:171
+#: ../plugin_dev/event.rst:172
 msgid ""
 "The MCDR is starting. Only plugins which is loaded with MCDR is able to "
 "receive this event"
-msgstr "MCDR正在启动。只有成功加载的插件才能接收此事件。"
+msgstr "MCDR 正在启动。只有成功加载的插件才能接收此事件。"
 
-#: ../../source/plugin_dev/event.rst:174
+#: ../plugin_dev/event.rst:175
 msgid "Event id: mcdr.mcdr_start"
 msgstr "事件 ID：mcdr.mcdr_start"
 
-#: ../../source/plugin_dev/event.rst:176
+#: ../plugin_dev/event.rst:177
 msgid "Default function name: on_mcdr_start"
 msgstr "默认函数名称：on_mcdr_start"
 
-#: ../../source/plugin_dev/event.rst:179
+#: ../plugin_dev/event.rst:180
 msgid "MCDR Stop"
 msgstr "MCDR 终止"
 
-#: ../../source/plugin_dev/event.rst:181
+#: ../plugin_dev/event.rst:182
 msgid ""
-"The MCDR is stopping. Time to do some clean up like `Plugin Removed <#plugin-"
-"removed>`__ event"
-msgstr ""
-"MCDR正在停止。是时候进行一些临死清理了——就像 `插件被“删除” <＃plugin-"
-"removed>`__ 事件时的那样。"
+"The MCDR is stopping. Time to do some clean up like `Plugin Removed "
+"<#plugin-removed>`__ event"
+msgstr "MCDR 正在停止。是时候进行一些移除前的清理了——就像 `插件被“删除” <#plugin-removed>`__ 事件时的那样。"
 
-#: ../../source/plugin_dev/event.rst:184
+#: ../plugin_dev/event.rst:185
 msgid "Event id: mcdr.mcdr_stop"
 msgstr "事件 ID：mcdr.mcdr_stop"
 
-#: ../../source/plugin_dev/event.rst:186
+#: ../plugin_dev/event.rst:187
 msgid "Default function name: on_mcdr_stop"
 msgstr "默认函数名称：on_mcdr_stop"
 
-#: ../../source/plugin_dev/event.rst:189
+#: ../plugin_dev/event.rst:190
 msgid "Player Joined"
 msgstr "玩家加入"
 
-#: ../../source/plugin_dev/event.rst:191
+#: ../plugin_dev/event.rst:192
 msgid ""
-"A player just joined the game. MCDR only parses the name of the player to a "
-"string, plugin can use the info instance for more custom information parsing"
-msgstr ""
-"一名玩家加入了游戏。 MCDR仅将玩家的名称解析为字符串，插件可以使用返回的 "
-"``Info`` 实例进行更多自定义信息解析。"
+"A player just joined the game. MCDR only parses the name of the player to"
+" a string, plugin can use the info instance for more custom information "
+"parsing"
+msgstr "一名玩家加入了游戏。 MCDR 仅将玩家的名称解析为字符串，插件可以使用返回的 ``Info`` 实例进行更多自定义信息解析。"
 
-#: ../../source/plugin_dev/event.rst:201
+#: ../plugin_dev/event.rst:202
 msgid "Event id: mcdr.player_joined"
 msgstr "事件 ID：mcdr.plugin_joined"
 
-#: ../../source/plugin_dev/event.rst:202
+#: ../plugin_dev/event.rst:203
 msgid "Callback arguments: ServerInterface, player_name, Info"
 msgstr "回调参数：ServerInterface，player_name，Info"
 
-#: ../../source/plugin_dev/event.rst:203 ../../source/plugin_dev/event.rst:213
+#: ../plugin_dev/event.rst:204 ../plugin_dev/event.rst:214
 msgid "Default function name:"
 msgstr "默认函数名称：on_player_joined"
 
-#: ../../source/plugin_dev/event.rst:206
+#: ../plugin_dev/event.rst:207
 msgid "Player Left"
 msgstr "玩家离开"
 
-#: ../../source/plugin_dev/event.rst:208
+#: ../plugin_dev/event.rst:209
 msgid ""
-"A player just left the game. Plugin can do cleanups for player related objects"
+"A player just left the game. Plugin can do cleanups for player related "
+"objects"
 msgstr "一名玩家离开了游戏。插件可以清理与玩家相关的对象。"
 
-#: ../../source/plugin_dev/event.rst:211
+#: ../plugin_dev/event.rst:212
 msgid "Event id: mcdr.player_left"
 msgstr "事件 ID：mcdr.plugin_left"
 
-#: ../../source/plugin_dev/event.rst:212
+#: ../plugin_dev/event.rst:213
 msgid "Callback arguments: ServerInterface, player_name"
 msgstr "回调参数：ServerInterface，player_name"
 
-#: ../../source/plugin_dev/event.rst:216
+#: ../plugin_dev/event.rst:217
 msgid "Custom Event"
 msgstr "自定义事件"
 
-#: ../../source/plugin_dev/event.rst:218
+#: ../plugin_dev/event.rst:219
 msgid ""
-"Besides MCDR itself, plugins can also dispatch its own event. All you need to "
-"do is invoking ``server.dispatch_event`` api with the event and some "
-"arguments. Check `here <classes/ServerInterface.html#dispatch-event>`__ for "
-"more details of the api"
+"Besides MCDR itself, plugins can also dispatch its own event. All you "
+"need to do is invoking ``server.dispatch_event`` api with the event and "
+"some arguments. Check `here <classes/ServerInterface.html#dispatch-"
+"event>`__ for more details of the api"
 msgstr ""
-"除了MCDR本身，插件还可以调度自己的事件。您需要做的就是调用带有事件和一些参数"
-"的 ``server.dispatch_event`` API。查看 `此处 <classes/ServerInterface."
-"html#dispatch-event>`__ 以获取有关 API 的详细信息。"
+"除了 MCDR 本身，插件还可以分发自己的事件。你需要做的就是调用带有事件和一些参数的 ``server.dispatch_event`` "
+"API。查看 `此处 <classes/ServerInterface.html#dispatch-event>`__ 以获取有关 API "
+"的详细信息。"
 
-#: ../../source/plugin_dev/event.rst:220
+#: ../plugin_dev/event.rst:221
 msgid ""
-"Customizing event is a good way to broadcast a message between plugins. It's "
-"also a good indirectly way for your plugin to react to requests from other "
-"plugins"
-msgstr ""
-"自定义事件是在插件之间传递消息的好办法。这也是一种不错的间接让插件响应其他插件"
-"请求的方式。"
+"Customizing event is a good way to broadcast a message between plugins. "
+"It's also a good indirectly way for your plugin to react to requests from"
+" other plugins"
+msgstr "自定义事件是在插件之间传递消息的好办法。这也是一种不错的间接让插件响应其他插件请求的方式。"
+

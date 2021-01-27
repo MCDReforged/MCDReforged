@@ -5,7 +5,7 @@ Migrate from MCDR 0.x
 File structure
 --------------
 
-Since MCDR now is installed as a python package, unless you run MCDR with source, file / folders below can be removed
+MCDR has refactored its file structure for being suitable to be installed as a python package, so some of the files / folder that MCDR 0.x used can be removed:
 
 
 * utils/
@@ -14,7 +14,7 @@ Since MCDR now is installed as a python package, unless you run MCDR with source
 * LICENSE
 * readme.md
 * readme_cn.md
-* MCDReforged.py (If you still want to use it you can grab it from github release, it's just an entry script)
+* MCDReforged.py (If you still want to use it you can grab it from github, it's just an entry script)
 
 The logging folder is renamed from ``log/`` to ``logs/``
 
@@ -23,7 +23,7 @@ Config
 
 There come quite a lot of changes to the config file. Although MCDR will still work if you keep the old config file, it's highly recommend to make a new default configure file, and fill your old configures into the new configure file
 
-You can rename the old ``config.yml`` to a temporary name like ``old_config.yml``\ , then start MCDR. MCDR will generate a new default configure file and exit. Then open these 2 configure file and migrate
+You can rename the old ``config.yml`` to a temporary name like ``old_config.yml``, then start MCDR. MCDR will generate a new default configure file and exit. Then open these 2 configure file and migrate
 
 Permission
 ----------
@@ -42,7 +42,7 @@ Metadata is a global field inside the plugin file. It's used to store basic info
 
 A legacy plugin is still able to be loaded if it doesn't have the metadata field, but a warning will be shown in the console
 
-Check `here <plugin_dev/basic.html#metadata\>`__ for more information about plugin metadata
+Check `here <plugin_dev/basic.html#metadata>`__ for more information about plugin metadata
 
 Listener
 ^^^^^^^^

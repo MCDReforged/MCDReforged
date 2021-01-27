@@ -69,7 +69,7 @@ Example:
        # do_something1('hello')
        do_something2('there')
 
-The only difference between ``do_something1`` and ``do_something2`` is that ``do_something2`` is decorated by ``@new_thread``. So when executing ``do_something2``\ , it won't lag the following execution of MCDR like ``do_something1`` since ``do_something2`` will execute on another thread
+The only difference between ``do_something1`` and ``do_something2`` is that ``do_something2`` is decorated by ``@new_thread``. So when executing ``do_something2``, it won't lag the following execution of MCDR like ``do_something1`` since ``do_something2`` will execute on another thread
 
 If you want to wait for the decorated function to complete, you can simple use the ``join`` method from class ``threading.Thread``. Remember the return value of the decorated function has already been changed in to the ``Thread`` instance
 
@@ -77,7 +77,7 @@ If you want to wait for the decorated function to complete, you can simple use t
 
    do_something2('task').join()
 
-In addition to simply and directly use a raw ``@new_thread``\ , it's recommend to add a thread name argument for the decorator
+In addition to simply and directly use a raw ``@new_thread``, it's recommend to add a thread name argument for the decorator
 
 .. code-block:: python
 
@@ -86,9 +86,9 @@ In addition to simply and directly use a raw ``@new_thread``\ , it's recommend t
        print(threading.current_thread().getName())  # will be "My Plugin Thread"
        time.sleep(10)
 
-So when you logs something by ``server.logger``\ , a meaningful thread name will be displayed instead of a plain and meaningless ``Thread-3``
+So when you logs something by ``server.logger``, a meaningful thread name will be displayed instead of a plain and meaningless ``Thread-3``
 
-**Notes**\ : Some api methods in ``ServerInterface`` class are required to be invoked in the MCDR task executor thread. Invoking them in another thread might result in an exception
+**Notes**: Some api methods in ``ServerInterface`` class are required to be invoked in the MCDR task executor thread. Invoking them in another thread might result in an exception
 
 event
 -----
@@ -112,13 +112,13 @@ RconConnection
 
 Create a rcon client instance
 
-Parameter *address*\ : The address of the rcon server
+Parameter *address*: The address of the rcon server
 
-Parameter *port*\ : The port if the rcon server
+Parameter *port*: The port if the rcon server
 
-Parameter *password*\ : The password of the rcon connection
+Parameter *password*: The password of the rcon connection
 
-Keyword Parameter *logger*\ : An instance of ``logging.Logger``. It's used to output some warning information like failing to receive a packet
+Keyword Parameter *logger*: An instance of ``logging.Logger``. It's used to output some warning information like failing to receive a packet
 
 connect
 ~~~~~~~
@@ -127,7 +127,7 @@ connect
 
    def connect(self) -> bool
 
-Start a connection to the rcon server and tries to login. If login success it will return ``True``\ , otherwise ``False``
+Start a connection to the rcon server and tries to login. If login success it will return ``True``, otherwise ``False``
 
 disconnect
 ~~~~~~~~~~
@@ -147,9 +147,9 @@ send_command
 
 Send  command to the rcon server, and return the command execution result form the server
 
-Parameter *command*\ : The command you want to send to the server
+Parameter *command*: The command you want to send to the server
 
-Parameter *max_retry_time*\ : The maximum retry time of the operation. This method will return None if *max_retry_time* retries exceeded  
+Parameter *max_retry_time*: The maximum retry time of the operation. This method will return None if *max_retry_time* retries exceeded  
 
 rtext
 -----
@@ -286,9 +286,9 @@ set_click_event
 
 Set the click event with given *action* and *value* and return the text component itself
 
-Parameter *action*\ : The type of the action
+Parameter *action*: The type of the action
 
-Parameter *value*\ : The string value of the action
+Parameter *value*: The string value of the action
 
 Method ``c`` is the short form of method ``set_click_event``
 
@@ -299,9 +299,9 @@ set_hover_text
 
    def set_hover_text(self, *args) -> RTextBase
 
-Set the hover text with given *\*\ args* and return the text component itself
+Set the hover text with given *\*args* and return the text component itself
 
-Parameter *action*\ : The elements be used to create a ``RTextList`` instance. The ``RTextList`` instance is used as the actual hover text
+Parameter *action*: The elements be used to create a ``RTextList`` instance. The ``RTextList`` instance is used as the actual hover text
 
 Method ``h`` is the short form of method ``set_hover_text``
 
@@ -344,9 +344,9 @@ RTextList
 
    def __init__(self, *args)
 
-Use the given *\*\ args* to create a ``RTextList``
+Use the given *\*args* to create a ``RTextList``
 
-Objects in ``*args`` can be a ``str``\ , a ``RTextBase`` or any classes implemented ``__str__`` method. All of them will be convert to ``RText``
+Objects in ``*args`` can be a ``str``, a ``RTextBase`` or any classes implemented ``__str__`` method. All of them will be convert to ``RText``
 
 append
 ~~~~~~
@@ -355,9 +355,9 @@ append
 
    def append(self, *args) -> RTextList
 
-Add several elements to the end of the current ``RTextList``\ , then return the ``RTextList`` component itself
+Add several elements to the end of the current ``RTextList``, then return the ``RTextList`` component itself
 
-Objects in ``*args`` can be a ``str``\ , a ``RTextBase`` or any classes implemented ``__str__`` method. All of them will be convert to ``RText``
+Objects in ``*args`` can be a ``str``, a ``RTextBase`` or any classes implemented ``__str__`` method. All of them will be convert to ``RText``
 
 is_empty
 ~~~~~~~~

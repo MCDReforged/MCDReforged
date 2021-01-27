@@ -8,4 +8,4 @@ If you want to add more behaviors to MCDR, like dispatching new events and so on
 
 Similar to `custom server handler <handler>`__\ , you info reactor class needs to inherit from the class ``AbstractInfoReactor``. Then you need to implement the ``react`` method to give it some functionalities
 
-After you finish coding your reactor, you need to add you reactor class path to the `custom_info_reactors <../configure.html#custom-info-reactors>`__ option of the configure file, then your reactor will start working
+After you finish coding your reactor, you need to add you reactor class path to the `custom_info_reactors <../configure.html#custom-info-reactors>`__ option of the configure file, then your reactor will start working automatically

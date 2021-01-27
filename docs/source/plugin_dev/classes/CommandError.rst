@@ -2,7 +2,7 @@
 CommandError
 ============
 
-Sometimes when executing a command, the MCDR command parsing system fail to parse the command for some reason. At that time if you have registered a error listener in the command tree node you will receive a CommandError instance. There are a few useful method of the CommandError instance for plugin developers
+Sometimes when executing a command, the MCDR command parsing system might fail to parse the command for some reason. At that time if you have registered a error listener in the command tree node you will receive a CommandError instance. There are a few useful method of the CommandError instance for plugin developers
 
 Method
 ------
@@ -16,7 +16,7 @@ get_parsed_command
 
 Return a prefix of the input command that has been successfully parsed
 
-get_parsed_command
+get_failed_command
 ^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python

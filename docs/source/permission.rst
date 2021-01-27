@@ -41,11 +41,11 @@ Permission file ``permission.yml`` is the config and storage file for the system
 
 
 * `default_level`: The default permission level a new player will get. Default: ``user``
-* ``owner``\ : Names of players with permission ``owner``
-* ``admin``\ : Names of players with permission ``admin``
-* ``helper``\ : Names of players with permission ``helper``
-* ``user``\ : Names of players with permission ``user``
-* ``guest``\ : Names of players with permission ``guest``
+* ``owner``: Names of players with permission ``owner``
+* ``admin``: Names of players with permission ``admin``
+* ``helper``: Names of players with permission ``helper``
+* ``user``: Names of players with permission ``user``
+* ``guest``: Names of players with permission ``guest``
 
 Player name list of permission levels can be filled like this:
 
@@ -62,4 +62,4 @@ Player name list of permission levels can be filled like this:
    guest:
    - Noob
 
-Permission file supports hot-reload. You can use ``!!MCDR reload permission`` to reload the permission file in-game. Check the related `command section <command.html#hot-reloads>`__ for more detail
+Permission file supports hot-reload. You can use ``!!MCDR reload permission`` to reload the permission file in-game. Check the `here <command.html#hot-reloads>`__ for more detail about hot reloads

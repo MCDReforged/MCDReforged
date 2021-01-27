@@ -104,9 +104,9 @@ The <level> argument should be a string or a integer indicating a permission lev
 Examples:
 
 
-* ``!!MCDR perm list 4``\ : List all players with permission level 4 (owner)
-* ``!!MCDR permission set Steve admin``\ : Set the permission level of player Steve to 3 (admin)
-* ``!!MCDR permission q Steve``\ : Query the permission level of player Steve. The value should be 3 (admin)
+* ``!!MCDR perm list 4``: List all players with permission level 4 (owner)
+* ``!!MCDR permission set Steve admin``: Set the permission level of player Steve to 3 (admin)
+* ``!!MCDR permission q Steve``: Query the permission level of player Steve. The value should be 3 (admin)
 
 Check the page `Permission <permission.md>`__ for more information about MCDR permission system
 
@@ -151,7 +151,7 @@ Here's a table of the commands
 
 The <plugin_id> argument is a string of the unique plugin id of the plugin you want to manipulate
 
-The <file_path> argument is a string of the path to the plugin file you want to load or enable
+The <file_name> argument is a string of the file name of the plugin file you want to load or enable
 
 Example:
 
@@ -161,7 +161,7 @@ Then you can do the following commands
 
 .. code-block::
 
-   !!MCDR plg info mcdreforged
+   !!MCDR plg info my_plugin
    !!MCDR plugin reload my_plugin
    !!MCDR plugin enable another_plugin.py.disabled
    !!MCDR plugin unload another_plugin
@@ -170,16 +170,16 @@ Then you can do the following commands
 These commands do the following things:
 
 
-#. Query the information about a built-in permanent plugin ``mcdreforged``
+#. Query the information about the plugin with id ``my_plugin``
 #. Reload the plugin with id ``my_plugin``
 #. Enable and load the disabled plugin with file name ``another_plugin.py.disabled``. It has plugin id ``another_plugin``
 #. Unload the plugin with id ``another_plugin``
 #. Reload the plugin with file name ``another_plugin.py``. Note that since this plugin is not loaded, you can only use file name to specify it
 
-Update checker
-^^^^^^^^^^^^^^
+Update checking
+^^^^^^^^^^^^^^^
 
-``!!MCDR checkupdate``\ , or ``!!MCDR cu``. Use it to manually check update from github
+``!!MCDR checkupdate``, or ``!!MCDR cu``. Use it to manually check update from github
 
 It will try to get the latest release version in github, and check if it's newer than the current version. If it is, it will show the update logs from the github release
 

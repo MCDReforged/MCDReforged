@@ -20,9 +20,9 @@ In this example, we have a vanilla server, but some of the players have a prefix
    <[Builder]Steve> Hello
    <[Builder]Steve> !!MCDR status
 
-For the default vanilla handler, ``[Builder]Steve`` is not a illegal player name. Luckily all possible prefixes of the players in the server follows the same format ``[Prefix] PlayerName``. So it's possible to make a dedicated handler for the server
+For the default vanilla handler, ``[Builder]Steve`` is an illegal player name. Luckily all possible prefixes of the players in the server follows the same format ``[Prefix] PlayerName``. So it's possible to make a dedicated handler for the server
 
-For example, the following codes above creates a handler than is able to handle username in this server
+For example, the following codes above creates a handler than is able to handle player names in this server
 
 .. code-block:: python
 

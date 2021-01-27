@@ -5,11 +5,11 @@ MCDR Plugin
 What is a MCDR plugin
 ---------------------
 
-An MCDR plugin is a python source file with ``.py`` file extension located in plugin directories. The list of the plugin directory can is defined inside the `configure file <configure.html#plugin_directories>`__
+An MCDR plugin is a python source file with ``.py`` file extension located in plugin directories. The list of the plugin directory can be defined inside the `configure file <../configure.html#plugin_directories>`__
 
-At start up, MCDR will automatically load every plugin inside the plugin directories. Additionally, MCDR will append all the plugin directories into ``sys.path``\ , so plugins can import modules placed inside the plugin folders directly
+At start up, MCDR will automatically load every plugin inside the plugin directories. Additionally, MCDR will append all the plugin directories into ``sys.path``, so plugins can import modules placed inside the plugin folders directly
 
-There is a sample plugin named ``SamplePlugin.py`` in the ``plugins/`` folder in source and you can check its content for reference
+There is a sample plugin named ``SamplePlugin.py`` in the ``plugins/`` folder in github source and you can check its content for reference
 
 Quick Start
 -----------
@@ -35,11 +35,11 @@ open it and enter these code
    def on_load(server, old):
        server.logger.info('Hello world!')
 
-Return to MCDR console, enter ``!!MCDR reload plugin``\ , and you should see the hello world message from your plugin
+Return to MCDR console, enter ``!!MCDR reload plugin``, and you should see the hello world message from your plugin
 
 .. code-block::
 
-   [TaskExecutor/INFO] [My Hello World Plugin]: Hello world!
+   [TaskExecutor/INFO] [hello_world]: Hello world!
 
 Great, you have successfully created your first plugin
 
@@ -119,7 +119,7 @@ Following `semver <https://semver.org/>`__ format for you version string is a go
 name
 ^^^^
 
-The name of your plugin. Give your plugin with a nice name with any kinds of characters. RText is allowed here
+The name of your plugin. Give your plugin with a nice name with any kinds of characters. `RText <api.html#rtext>`__ is allowed here
 
 Try not to make the name too long. For more details of your plugin, you can put them into the ``description``
 
@@ -131,7 +131,7 @@ Try not to make the name too long. For more details of your plugin, you can put 
 description
 ^^^^^^^^^^^
 
-The description of you plugin. Put the details of your plugin here. Rtext is allowed too
+The description of you plugin. Put the details of your plugin here. `RText <api.html#rtext>`__ is allowed too
 
 This field is optional, you can just ignore it if you are lazy
 
@@ -155,7 +155,7 @@ This field is optional, you can just ignore it if you are lazy
 link
 ^^^^
 
-The link of your project. You can put a link to the github repository of your plugin here. It should be an available url
+The url to your plugin. You can put a link to the github repository of your plugin here. It should be an available url
 
 This field is optional, you can just ignore it if you are lazy
 
@@ -237,7 +237,8 @@ Here a dependencies example:
        'mcdreforged': '>=1.0.0 <2.0',
        'my_library': '>=1.0.0',
        'an_important_api': '*',
-       'another_api': '1.0.*'
+       'another_api_1': '1.0.*',
+       'another_api_2': '2.7.x',
    }
 
 MCDR will make sure only when all dependency requirements are satisfied your plugin will get loaded successfully. Missing dependency, dependency version not match or dependency loop will result in a dependency check failure
@@ -252,7 +253,7 @@ This field is optional, you can just ignore it if your plugin doesn't have any d
 Plugin Registry
 ---------------
 
-Plugin registry is a collection of things that plugin registered for. It will get cleaned up every time before the plugin gets loaded, so you'd better register them in `Plugin Load <event.html#plugin-load>`__ event
+Plugin registry is a collection of things that plugin registered for. It will get cleaned up every time before the plugin gets loaded, so you'd better register them in `Plugin_Load <event.html#plugin-load>`__ event
 
 Event listeners
 ^^^^^^^^^^^^^^^
@@ -263,7 +264,7 @@ There are 2 methods to register an event listener for you plugin
 #. 
    Declare a function inside the global slope with the specific name. It's the legacy registering method to register a listener and it only works with events provided by MCDR. Check `here <event.html#default-event-listener>`__ for more detail
 
-    For example, the widely-used function below is a default `Plugin Loaded <event.html#plugin-loaded>`__ event listener
+   For example, the widely-used function below is a default `Plugin Loaded <event.html#plugin-loaded>`__ event listener
 
    .. code-block:: python
 
@@ -273,9 +274,9 @@ There are 2 methods to register an event listener for you plugin
 #. 
    Manually invoke ``server.register_event_listener`` method to register an event listener. You can specify the callable object and the priority for the event listener
 
-    Check `here <event.html#register-a-event-listener>`__ for more detail about event listener registering 
+   Check `here <event.html#register-a-event-listener>`__ for more detail about event listener registering
 
-    Here some examples about manually register event listeners
+   Here some examples about manually register event listeners
 
    .. code-block:: python
 
@@ -289,16 +290,16 @@ There are 2 methods to register an event listener for you plugin
            server.register_event_listener('mcdr.general_info', my_on_mcdr_general_info, priority=500)  # TODO: use better event identifier
            server.register_event_listener('myplugin.task_done', on_my_task_done)  # TODO: use better event identifier
 
-  Take a look at the reference of ``register_event_listener`` method in `ServerInterface <classes/ServerInterface.html#register-event-listener>`__ document for more detail
+Take a look at the reference of ``register_event_listener`` method in `ServerInterface <classes/ServerInterface.html#register-event-listener>`__ document for more detail
 
 Command
 ^^^^^^^
 
-Rather than manually parsing ``info.content`` inside user info event callback like ``on_user_info``\ , MCDR provides a command system for plugins to register their commands
+Rather than manually parsing ``info.content`` inside user info event callback like ``on_user_info``, MCDR provides a command system for plugins to register their commands
 
 Check the `command <command>`__ document for more detail about building a command tree
 
-Assuming that you have already built a command tree with root literal node *root*\ , then you can use the following command to register your command tree in MCDR
+Assuming that you have already built a command tree with root literal node *root*, then you can use the following code to register your command tree in MCDR
 
 .. code-block:: python
 
@@ -309,6 +310,6 @@ Take a look at the reference of ``register_command`` method in `ServerInterface 
 Help message
 ^^^^^^^^^^^^
 
-Plugin can register its help message with ``server.register_help_message`` to MCDR, so that users can use `\ ``!!help`` command <../command.html#help-command>`__ to view the help messages of all commands
+Plugin can register its help message with ``server.register_help_message`` to MCDR, so that users can use `!!help command <../command.html#help-command>`__ to view the help messages of all commands
 
 Take a look at the reference of ``register_help_message`` method in `ServerInterface <classes/ServerInterface.html#register-help-message>`__ document for more details of its usage

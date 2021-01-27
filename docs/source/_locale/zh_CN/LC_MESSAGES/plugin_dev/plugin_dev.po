@@ -20,7 +20,7 @@ msgstr ""
 
 #: ../../source/plugin_dev/plugin_dev.rst:4
 msgid "Basic"
-msgstr "基本"
+msgstr "基础"
 
 #: ../../source/plugin_dev/plugin_dev.rst:4
 msgid "Plugin Event"
@@ -36,7 +36,7 @@ msgstr "API"
 
 #: ../../source/plugin_dev/plugin_dev.rst:4
 msgid "Class References"
-msgstr "类引用"
+msgstr "类参考"
 
 #: ../../source/plugin_dev/plugin_dev.rst:4
 msgid "Some tips"
