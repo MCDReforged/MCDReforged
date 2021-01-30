@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Poedit 2.4.2\n"
 
 msgid "This is the official documentation for `MCDReforged <https://github.com/Fallen-Breath/MCDReforged>`__."
-msgstr "这是 `MCDReforged <https://github.com/Fallen-Breath/MCDReforged>`__ 的中文文档，由 `Alex3236 <https://github.com/eagle3236>`__ 维护。同时，感谢 Huaji_MUR233 等 Crowdin 用户对此文档的贡献 (约 13.3%)。"
+msgstr "这是 `MCDReforged <https://github.com/Fallen-Breath/MCDReforged>`__ 的中文文档。感谢 `Alex3236 <https://github.com/eagle3236>`__ 等对此文档的贡献。"
 
 msgid "Quick Start"
 msgstr "快速上手"
