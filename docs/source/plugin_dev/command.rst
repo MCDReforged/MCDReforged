@@ -169,7 +169,7 @@ Some Example usages:
 
 .. code-block:: python
 
-   node.requires(lambda src: src.has_permission_level(3))  # Permission check
+   node.requires(lambda src: src.has_permission(3))  # Permission check
    node.requires(lambda src, ctx: ctx['page_count'] <= get_max_page())  # Dynamic range check
    node.requires(lambda src, ctx: is_legal(ctx['target']), lambda src, ctx: 'target {} is illegal'.format(ctx['target']))  # Customized failure message
 
