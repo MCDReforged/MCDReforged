@@ -408,7 +408,7 @@ class MCDReforgedServer:
 			parsed_result = self.server_handler_manager.get_basic_handler().parse_server_stdout(text)
 		else:
 			if self.logger.should_log_debug(option=DebugOption.HANDLER):
-				self.logger.debug('Parsed text from server stdin:')
+				self.logger.debug('Parsed text from server stdout:')
 				for line in parsed_result.format_text().splitlines():
 					self.logger.debug('    {}'.format(line))
 		self.server_handler_manager.detect_text(text)
