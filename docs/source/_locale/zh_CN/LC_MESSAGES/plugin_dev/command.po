@@ -248,7 +248,7 @@ msgstr "参数 *node*：要添加到当前节点的子级列表中的节点实�
 msgid ""
 "The command tree in the `Quick Peek <#a-quick-peek>`__ section can be "
 "built with the following codes"
-msgstr "可以使用以下代码构建 `“先瞅一眼...” <＃a-quick-peek>`__ 部分中的指令树："
+msgstr "可以使用以下代码构建 `“先瞅一眼...” <#a-quick-peek>`__ 部分中的指令树："
 
 #: ../plugin_dev/command.rst:118
 msgid "runs"
