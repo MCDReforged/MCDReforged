@@ -8,7 +8,7 @@ At startup, MCDR will try to load the configure file. If the configure file is n
 
 The configure file use `YAML <https://en.wikipedia.org/wiki/YAML>`__ format
 
-You can use command ``!!MCDR reload config`` or its short form ``!!MCDR r cfg`` to reload the config file when MCDR is running
+You can use command ``!!MCDR reload config`` or its short form ``!!MCDR r cfg`` to reload the config file when MCDR is running. Check the `here <command.html#hot-reloads>`__ for more detail about hot reloads
 
 List of options
 ---------------
@@ -107,7 +107,7 @@ plugin_directories
 
 The list of directory path where MCDR will search for plugin to load
 
-MCDR also **adds these directories into ``sys.path`` ** so plugins can import packages inside plugin folders directly
+MCDR also **adds these directories into ``sys.path``** so plugins can import packages inside plugin folders directly
 
 
 * Option type: a list of string
@@ -206,7 +206,7 @@ When set to true, MCDR will removed all console font formatter codes in before a
 custom_handlers
 ~~~~~~~~~~~~~~~
 
-A list of custom info reactor classes to handle the info instance. The classed need to be subclasses of ``AbstractServerHandler``
+A list of custom `server handler <customize/handler.html>`__ classes. The classed need to be subclasses of ``AbstractServerHandler``
 
 Then you can use the name of your handler in the `handler <#handler>`__ option above to use your handler
 
@@ -233,7 +233,7 @@ In this example the custom handler package path is ``my.custom.handler`` and the
 custom_info_reactors
 ~~~~~~~~~~~~~~~~~~~~
 
-A list of custom info reactor classes to handle the info instance. The classed need to be subclasses of ``AbstractInfoReactor``
+A list of custom `info reactor <customize/reactor.html>`__ classes to handle the info instance. The classed need to be subclasses of ``AbstractInfoReactor``
 
 All custom info reactors will be registered to the reactor list to process information from the server
 

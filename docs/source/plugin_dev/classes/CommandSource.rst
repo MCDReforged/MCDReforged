@@ -2,9 +2,18 @@
 CommandSource
 =============
 
-CommandSource is command executor model abstracted from a user-type Info instance. It provides several methods for command execution
+CommandSource is an abstracted command executor model. It provides several methods for command execution
 
-Inherited from the class CommandSource, there are 2 subclasses, PlayerCommandSource and ConsoleCommandSource, which are used to implement methods dedicatedly
+Class inheriting tree:
+
+.. code-block::
+
+   CommandSource
+    └─ InfoCommandSource
+        ├─ PlayerCommandSource
+        └─ ConsoleCommandSource
+
+Plugins can declare a class inherited from ``CommandSource`` to create their own command source
 
 Property
 --------
@@ -36,6 +45,15 @@ If the command source is a console command source
 
 Type: bool
 
+player
+^^^^^^
+
+**Only in PlayerCommandSource**
+
+The name of the player
+
+Type: str
+
 Method
 ------
 
@@ -54,6 +72,8 @@ get_info
 .. code-block:: python
 
    def get_info(self) -> Info
+
+**Only in InfoCommandSource**
 
 Return the Info instance that this command source is created from
 
@@ -86,7 +106,7 @@ has_permission_higher_than
    def has_permission_higher_than(self, level: int) -> bool:
        return self.get_permission_level() > level
 
-Just like the `has_permission <#has-permission>`__\ , but this time it is a greater than judgment
+Just like the `has_permission <#has-permission>`__, but this time it is a greater than judgment
 
 reply
 ^^^^^
@@ -99,4 +119,4 @@ Send a message to the command source. The message can be anything including RTex
 
 The message will be converted to str using ``str()`` function unless it's a RTextBase object
 
-Keyword Parameter *encoding*\ : The encoding method for the text. It's only used in PlayerCommandSource to optionally specify the encoding method. Check `here <ServerInterface.html#execute>`__ for more details
+Keyword Parameter *encoding*: The encoding method for the text. It's only used in PlayerCommandSource to optionally specify the encoding method. Check `here <ServerInterface.html#execute>`__ for more details

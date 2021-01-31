@@ -1,201 +1,161 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2021, Fallen_Breath
-# This file is distributed under the same license as the MCDReforged
-# package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2021.
-#
-#, fuzzy
+
 msgid ""
 msgstr ""
-"Project-Id-Version: MCDReforged \n"
+"Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-17 13:10+0800\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"POT-Creation-Date: 2021-01-26 12:18+0800\n"
+"PO-Revision-Date: 2021-01-23 08:51+0800\n"
+"Last-Translator: Alex3236 <alex3236@qq.com>\n"
+"Language: zh_CN\n"
+"Language-Team: Chinese Simplified\n"
+"Plural-Forms: nplurals=1; plural=0\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.0\n"
 
-#: ../../source/permission.rst:3
+#: ../permission.rst:3
 msgid "Permission"
-msgstr ""
+msgstr "权限"
 
-#: ../../source/permission.rst:6
+#: ../permission.rst:6
 msgid "Overview"
-msgstr ""
+msgstr "概览"
 
-#: ../../source/permission.rst:8
+#: ../permission.rst:8
 msgid ""
 "There is a simple built-in permission system in MCDR. It can be used by "
 "MCDR commands and plugins"
-msgstr ""
+msgstr "MCDR 配备了一个简易的权限系统以供 MCDR 及插件使用。"
 
-#: ../../source/permission.rst:10
+#: ../permission.rst:10
 msgid "There are 5 different levels of permission in total:"
-msgstr ""
+msgstr "MCDR 中一共有 5 种不同的权限等级："
 
-#: ../../source/permission.rst:15
+#: ../permission.rst:15
 msgid "Name"
-msgstr ""
+msgstr "名称"
 
-#: ../../source/permission.rst:16
+#: ../permission.rst:16
 msgid "Value"
-msgstr ""
+msgstr "整数值"
 
-#: ../../source/permission.rst:17
+#: ../permission.rst:17
 msgid "Description"
-msgstr ""
+msgstr "描述"
 
-#: ../../source/permission.rst:18
+#: ../permission.rst:18
 msgid "owner"
-msgstr ""
+msgstr "owner"
 
-#: ../../source/permission.rst:19
+#: ../permission.rst:19
 msgid "4"
-msgstr ""
+msgstr "4"
 
-#: ../../source/permission.rst:20
+#: ../permission.rst:20
 msgid "Highest level for those who have the ability to access the physical server"
-msgstr ""
+msgstr "最高权限，所有者，具有控制物理服务器的能力"
 
-#: ../../source/permission.rst:21
+#: ../permission.rst:21
 msgid "admin"
-msgstr ""
+msgstr "admin"
 
-#: ../../source/permission.rst:22
+#: ../permission.rst:22
 msgid "3"
-msgstr ""
+msgstr "3"
 
-#: ../../source/permission.rst:23
+#: ../permission.rst:23
 msgid "People with power to control the MCDR and the server"
-msgstr ""
+msgstr "管理员，拥有控制 MCDR 与服务器的能力"
 
-#: ../../source/permission.rst:24
+#: ../permission.rst:24
 msgid "helper"
-msgstr ""
+msgstr "helper"
 
-#: ../../source/permission.rst:25
+#: ../permission.rst:25
 msgid "2"
-msgstr ""
+msgstr "2"
 
-#: ../../source/permission.rst:26
+#: ../permission.rst:26
 msgid "A group of helper of admin"
-msgstr ""
+msgstr "助手，可以协助管理员进行服务器管理"
 
-#: ../../source/permission.rst:27
+#: ../permission.rst:27
 msgid "user"
-msgstr ""
+msgstr "user"
 
-#: ../../source/permission.rst:28
+#: ../permission.rst:28
 msgid "1"
-msgstr ""
+msgstr "1"
 
-#: ../../source/permission.rst:29
+#: ../permission.rst:29
 msgid "A group that normal player will be in"
-msgstr ""
+msgstr "普通玩家"
 
-#: ../../source/permission.rst:30
+#: ../permission.rst:30
 msgid "guest"
-msgstr ""
+msgstr "guest"
 
-#: ../../source/permission.rst:31
+#: ../permission.rst:31
 msgid "0"
-msgstr ""
+msgstr "0"
 
-#: ../../source/permission.rst:32
+#: ../permission.rst:32
 msgid "The lowest level for guest or trollers"
-msgstr ""
+msgstr "最低权限，如访客"
 
-#: ../../source/permission.rst:35
+#: ../permission.rst:35
 msgid ""
 "The permission level of console input is always the highest level "
 "``owner``"
-msgstr ""
+msgstr "控制台输入的指令将被视为最高权限等级 ``owner`` 。"
 
-#: ../../source/permission.rst:38
+#: ../permission.rst:38
 msgid "Permission File"
-msgstr ""
+msgstr "权限文件"
 
-#: ../../source/permission.rst:40
+#: ../permission.rst:40
 msgid ""
 "Permission file ``permission.yml`` is the config and storage file for the"
 " system"
-msgstr ""
+msgstr "权限文件 ``permission.yml`` 用以储存权限系统的相关信息。"
 
-#: ../../source/permission.rst:43
+#: ../permission.rst:43
 msgid ""
 "`default_level`: The default permission level a new player will get. "
 "Default: ``user``"
-msgstr ""
+msgstr "``default_level``：新玩家默认的权限等级。默认值：``user``"
 
-#: ../../source/permission.rst:44
-msgid "``owner``\\ : Names of players with permission ``owner``"
-msgstr ""
+#: ../permission.rst:44
+msgid "``owner``: Names of players with permission ``owner``"
+msgstr "``owner``：拥有权限等级 ``owner`` 的玩家列表"
 
-#: ../../source/permission.rst:45
-msgid "``admin``\\ : Names of players with permission ``admin``"
-msgstr ""
+#: ../permission.rst:45
+msgid "``admin``: Names of players with permission ``admin``"
+msgstr "``admin``：拥有权限等级 ``admin`` 的玩家列表"
 
-#: ../../source/permission.rst:46
-msgid "``helper``\\ : Names of players with permission ``helper``"
-msgstr ""
+#: ../permission.rst:46
+msgid "``helper``: Names of players with permission ``helper``"
+msgstr "``helper``：拥有权限等级 ``helper`` 的玩家列表"
 
-#: ../../source/permission.rst:47
-msgid "``user``\\ : Names of players with permission ``user``"
-msgstr ""
+#: ../permission.rst:47
+msgid "``user``: Names of players with permission ``user``"
+msgstr "``user``：拥有权限等级 ``user`` 的玩家列表"
 
-#: ../../source/permission.rst:48
-msgid "``guest``\\ : Names of players with permission ``guest``"
-msgstr ""
+#: ../permission.rst:48
+msgid "``guest``: Names of players with permission ``guest``"
+msgstr "``guest``：拥有权限等级 ``guest`` 的玩家列表"
 
-#: ../../source/permission.rst:50
+#: ../permission.rst:50
 msgid "Player name list of permission levels can be filled like this:"
-msgstr ""
+msgstr "玩家名列表可以参照如下方式填写："
 
-#: ../../source/permission.rst:65
+#: ../permission.rst:65
 msgid ""
 "Permission file supports hot-reload. You can use ``!!MCDR reload "
-"permission`` to reload the permission file in-game. Check the related "
-"`command section <command.html#hot-reloads>`__ for more detail"
+"permission`` to reload the permission file in-game. Check the `here "
+"<command.html#hot-reloads>`__ for more detail about hot reloads"
 msgstr ""
-
-#~ msgid "The permission level of console input is always the highest level owner"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Permission file permission.yml is the "
-#~ "config and storage file for the "
-#~ "system"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "default_level: The default permission level"
-#~ " a new player will get. Default: "
-#~ "user"
-#~ msgstr ""
-
-#~ msgid "owner: Names of players with permission owner"
-#~ msgstr ""
-
-#~ msgid "admin: Names of players with permission admin"
-#~ msgstr ""
-
-#~ msgid "helper: Names of players with permission helper"
-#~ msgstr ""
-
-#~ msgid "user: Names of players with permission user"
-#~ msgstr ""
-
-#~ msgid "guest: Names of players with permission guest"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Permission file supports hot-reload. You"
-#~ " can use !!MCDR reload permission to"
-#~ " reload the permission file in-game."
-#~ " Check the related command section "
-#~ "for more detail"
-#~ msgstr ""
+"权限文件支持热重载。你可以使用 ``!!MCDR reload permission`` 指令来重载权限文件。更多与热重载相关的指令见 `此处 "
+"<command.html#hot-reloads>`__。"
 

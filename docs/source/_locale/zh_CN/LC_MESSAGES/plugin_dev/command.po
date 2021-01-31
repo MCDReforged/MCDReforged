@@ -1,46 +1,44 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2021, Fallen_Breath
-# This file is distributed under the same license as the MCDReforged
-# package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2021.
-#
-#, fuzzy
+
 msgid ""
 msgstr ""
-"Project-Id-Version: MCDReforged \n"
+"Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-17 13:15+0800\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"POT-Creation-Date: 2021-01-30 13:54+0800\n"
+"PO-Revision-Date: 2021-01-23 17:24+0800\n"
+"Last-Translator: Alex3236 <alex3236@qq.com>\n"
+"Language: zh_CN\n"
+"Language-Team: Chinese Simplified\n"
+"Plural-Forms: nplurals=1; plural=0\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.0\n"
 
-#: ../../source/plugin_dev/command.rst:3
+#: ../plugin_dev/command.rst:3
 msgid "Command"
-msgstr ""
+msgstr "指令"
 
-#: ../../source/plugin_dev/command.rst:5
+#: ../plugin_dev/command.rst:5
 msgid ""
 "Tired of manually splitting argument and parsing commands? Being annoyed "
 "by the complicated argument conditions? Go try the MCDR command building "
 "system!"
-msgstr ""
+msgstr "厌倦了手动拆分参数、解析指令？厌烦了复杂的判断条件？快来尝试 MCDR 的指令构建系统吧！"
 
-#: ../../source/plugin_dev/command.rst:7
+#: ../plugin_dev/command.rst:7
 msgid ""
 "MCDR contains a command tree building system for plugins to build their "
-"commands. It behaves like a lite version of mojang's `brigadier "
+"commands. It behaves like a lite version of Mojang's `brigadier "
 "<https://github.com/Mojang/brigadier>`__"
 msgstr ""
+"MCDR 内置了一个指令树构建系统，供插件构建其指令。它如同一个 Mojang 的 `brigadier "
+"<https://github.com/Mojang/brigadier>`__ 的精简版。"
 
-#: ../../source/plugin_dev/command.rst:10
+#: ../plugin_dev/command.rst:10
 msgid "Workflow"
-msgstr ""
+msgstr "工作流程"
 
-#: ../../source/plugin_dev/command.rst:12
+#: ../plugin_dev/command.rst:12
 msgid ""
 "MCDR maintains a dict to store registered commands. Any value in the "
 "storage dict is a list of literal node as a root node of a command tree, "
@@ -48,148 +46,157 @@ msgid ""
 "it, MCDR can quickly find the possible command tree that might accept the"
 " incoming command"
 msgstr ""
+"MCDR维护了一个 dict 用于储存注册的指令。该 dict 的值均为指令树根节点列表，而值对应的键则是根节点的字面值。有了它，MCDR "
+"可以快速地找到可能可以接收到来指令的指令树。"
 
-#: ../../source/plugin_dev/command.rst:14
+#: ../plugin_dev/command.rst:14
 msgid ""
 "Every time when a user info is being processed, MCDR will try to parse "
 "the user input as a command. It will takes the first segment of the user "
 "input as a key to query the command tree storage dict. **If it gets any, "
 "it will prevent the info to be sent to the standard input stream of the "
-"server** by invoking ``info.cancel_send_to_server()``\\ , then it will "
-"let the found command trees to handle the command."
+"server** by invoking ``info.cancel_send_to_server()``, then it will let "
+"the found command trees to handle the command."
 msgstr ""
+"每次处理用户信息时，MCDR都会尝试将用户输入解析为指令。它将用户输入的第一个分段作为键来查询指令树存储字典。**如果指令存在，则调用** "
+"``info.cancel_send_to_server()`` **来阻止将信息发送到服务器的标准输入流** "
+"，然后使用对应的指令树来处理该指令。"
 
-#: ../../source/plugin_dev/command.rst:16
+#: ../plugin_dev/command.rst:16
 msgid ""
 "If an command error occurs and the error has not been set to handled, "
 "MCDR will sent the default translated command error message to the "
 "command source"
-msgstr ""
+msgstr "如果解析指令时发生错误，且插件未将错误设置为已处理，则 MCDR 会将翻译后的指令错误消息发送到指令源。"
 
-#: ../../source/plugin_dev/command.rst:19
+#: ../plugin_dev/command.rst:19
 msgid "A Quick Peek"
-msgstr ""
+msgstr "先瞅一眼..."
 
-#: ../../source/plugin_dev/command.rst:21
+#: ../plugin_dev/command.rst:21
 msgid ""
 "Let's peek into the actual operation of a command tree. As an example, "
 "let's say that there are 3 kinds of commands:"
-msgstr ""
+msgstr "让我们来看看指令树的实际含义。例如，假设某插件包含3种指令："
 
-#: ../../source/plugin_dev/command.rst:24
+#: ../plugin_dev/command.rst:24
 msgid "``!!email list``"
-msgstr ""
+msgstr "``!!email list``"
 
-#: ../../source/plugin_dev/command.rst:25
+#: ../plugin_dev/command.rst:25
 msgid "``!!email remove <email_id>``"
-msgstr ""
+msgstr "``!!email remove <email_id>``"
 
-#: ../../source/plugin_dev/command.rst:26
+#: ../plugin_dev/command.rst:26
 msgid "``!!email send <player> <message>``"
-msgstr ""
+msgstr "``!!email send <player> <message>``"
 
-#: ../../source/plugin_dev/command.rst:28
+#: ../plugin_dev/command.rst:28
 msgid ""
 "To implement these commands, we can build a command tree with MCDR like "
 "this:"
-msgstr ""
+msgstr "要实现这些指令，我们可以构建如下所示的指令树："
 
-#: ../../source/plugin_dev/command.rst:40
+#: ../plugin_dev/command.rst:40
 msgid ""
-"When MCDR executes the command ``!!email remove 21``\\ , the following "
+"When MCDR executes the command ``!!email remove 21``, the following "
 "things will happen"
-msgstr ""
+msgstr "当执行 ``!!email remove 21`` 指令时，以下过程将会发生："
 
-#: ../../source/plugin_dev/command.rst:43
+#: ../plugin_dev/command.rst:43
 msgid "Parsing at node ``Literal('!!email')`` with command ``!!email remove 21``"
-msgstr ""
+msgstr "于节点 ``Literal('!!email')`` 解析指令 ``!!email remove 21`` 。"
 
-#: ../../source/plugin_dev/command.rst:45
+#: ../plugin_dev/command.rst:45
 msgid ""
 "Literal Node ``Literal('!!email')`` gets the first element of ``!!email "
-"remove 21``\\ , it's ``!!email`` and it matches the literal node"
+"remove 21``, it's ``!!email`` and it matches the literal node"
 msgstr ""
+"字面量节点 ``Literal('!!email')`` 获取了 ``!!email remove 21`` 的第一个元素，它是 "
+"``!!email`` ——与字面量节点匹配。"
 
-#: ../../source/plugin_dev/command.rst:46
+#: ../plugin_dev/command.rst:46
 msgid "Now the remaining command is ``remove 21``"
-msgstr ""
+msgstr "现在余下的指令是 ``remove 21``。"
 
-#: ../../source/plugin_dev/command.rst:47
+#: ../plugin_dev/command.rst:47
 msgid ""
 "And then, it searches through its literal children, found the child node "
 "``Literal('remove')`` matches the next literal element ``remove``"
-msgstr ""
+msgstr "于是，它搜索其字面量子节点，找到与下一个指令元素 ``remove`` 匹配的子节点 ``Literal('remove')`` 。"
 
-#: ../../source/plugin_dev/command.rst:48
+#: ../plugin_dev/command.rst:48
 msgid "Then it let that child node to handle the rest of the command"
-msgstr ""
+msgstr "这样，它让该子节点处理其余指令。"
 
-#: ../../source/plugin_dev/command.rst:50
+#: ../plugin_dev/command.rst:50
 msgid "Parsing at node ``Literal('remove')`` with command ``remove 21``"
-msgstr ""
+msgstr "于节点 ``Literal('remove')`` 解析指令 ``remove 21`` 。"
 
-#: ../../source/plugin_dev/command.rst:52
+#: ../plugin_dev/command.rst:52
 msgid ""
 "Literal Node ``Literal('remove')`` gets the first element of ``remove "
-"21``\\ , it's ``remove`` and it matches the literal node"
+"21``, it's ``remove`` and it matches the literal node"
 msgstr ""
+"字面量节点 ``Literal('remove')`` 获取了 ``remove 21`` 的第一个元素，它是 ``remove`` "
+"——与字面量节点匹配。"
 
-#: ../../source/plugin_dev/command.rst:53
+#: ../plugin_dev/command.rst:53
 msgid "Now the remaining command is ``21``"
-msgstr ""
+msgstr "现在余下的指令是 ``21`` 。"
 
-#: ../../source/plugin_dev/command.rst:54
+#: ../plugin_dev/command.rst:54
 msgid ""
 "And then it searches through its literal children, but doesn't found any "
 "literal child matches the next element ``21``"
-msgstr ""
+msgstr "然后它搜索其字面量子节点，但未找到与下一个指令元素 ``21`` 匹配的任何字面量子节点。"
 
-#: ../../source/plugin_dev/command.rst:55
+#: ../plugin_dev/command.rst:55
 msgid ""
 "So it let its non-literal child ``Integer('email_id')`` to handle the "
 "rest of the command"
-msgstr ""
+msgstr "因此，它让它的非字面量子节点 ``Integer('email_id')`` 处理剩余指令。"
 
-#: ../../source/plugin_dev/command.rst:57
+#: ../plugin_dev/command.rst:57
 msgid "Parsing at node ``Integer('email_id')`` with command ``21``"
-msgstr ""
+msgstr "于节点 ``Integer('email_id')`` 解析指令 ``21`` 。"
 
-#: ../../source/plugin_dev/command.rst:59
+#: ../plugin_dev/command.rst:59
 msgid ""
-"Integer Node ``Integer('email_id')`` gets the first element of ``21``\\ ,"
-" it's a legal integer"
-msgstr ""
+"Integer Node ``Integer('email_id')`` gets the first element of ``21``, "
+"it's a legal integer"
+msgstr "整数节点 ``Integer('email_id')`` 获得了 ``21`` 的第一个元素，这是一个合法的整数。"
 
-#: ../../source/plugin_dev/command.rst:60
+#: ../plugin_dev/command.rst:60
 msgid "It store the value ``21`` to the context dict with key ``email_id``"
-msgstr ""
+msgstr "它使用键 `` email_id`` 将值 ``21`` 存储到上下文 dict 中。"
 
-#: ../../source/plugin_dev/command.rst:61
+#: ../plugin_dev/command.rst:61
 msgid ""
 "And then it finds that the command parsing is already finished so it "
 "invokes the callback function with the command source and the context "
 "dict as the argument."
-msgstr ""
+msgstr "然后，它发现指令解析已经完成，因此它以指令源和上下文 dict 作为参数来调用回调函数。"
 
-#: ../../source/plugin_dev/command.rst:62
+#: ../plugin_dev/command.rst:62
 msgid "The command parsing finishes"
-msgstr ""
+msgstr "至此，指令解析完成。"
 
-#: ../../source/plugin_dev/command.rst:64
+#: ../plugin_dev/command.rst:64
 msgid ""
 "This is a quick overview of the implantation logic part of command "
 "building system. It's mainly for help you build a perceptual "
 "understanding of the command tree based command building system"
-msgstr ""
+msgstr "以上是指令构建系统逻辑部分的快速概述，主要是为了帮助你建立对指令树和指令构建系统的感性理解。"
 
-#: ../../source/plugin_dev/command.rst:66
+#: ../plugin_dev/command.rst:66
 msgid ""
 "Matching the literal nodes, parsing the remaining command, storing the "
 "parsed value inside the context dict, this is how the command system "
 "works"
-msgstr ""
+msgstr "匹配文字节点，解析剩余指令，将解析后的值存储在上下文字典中，这就是指令系统的工作方式。"
 
-#: ../../source/plugin_dev/command.rst:68
+#: ../plugin_dev/command.rst:68
 msgid ""
 "Rather than reading this document, anther good way to learn to use the "
 "MCDR command building system is to refer and imitate existing codes. You "
@@ -197,100 +204,105 @@ msgid ""
 "``__register_commands`` method of class "
 "``mcdreforged.plugin.permanent.mcdreforged_plugin.MCDReforgedPlugin``"
 msgstr ""
+"除了阅读本文档外，学习使用 MCDR 指令构建系统的另一种好办法是引用和模仿现有代码。你可以在 "
+"``mcdreforged.plugin.permanent.mcdreforged_plugin.MCDReforgedPlugin`` 类的 "
+"``__register_commands`` 方法下找到 ``!!MCDR`` 指令的构建代码。"
 
-#: ../../source/plugin_dev/command.rst:71
+#: ../plugin_dev/command.rst:71
 msgid "Argument Nodes"
-msgstr ""
+msgstr "参数节点"
 
-#: ../../source/plugin_dev/command.rst:73
+#: ../plugin_dev/command.rst:73
 msgid "A list of MCDR built-in argument nodes and their usage"
-msgstr ""
+msgstr "MCDR 内置参数节点列表及其用法。"
 
-#: ../../source/plugin_dev/command.rst:76
+#: ../plugin_dev/command.rst:76
 msgid "ArgumentNode"
-msgstr ""
+msgstr "ArgumentNode"
 
-#: ../../source/plugin_dev/command.rst:78
+#: ../plugin_dev/command.rst:78
 msgid ""
 "Argument Node is base node of all argument nodes. It's also a abstract "
 "class. It provides several methods for building up the command tree"
-msgstr ""
+msgstr "ArgumentNode 是所有参数节点的基础节点，也是一个类。它提供了几种构建指令树的方法。"
 
-#: ../../source/plugin_dev/command.rst:81
+#: ../plugin_dev/command.rst:81
 msgid "then"
-msgstr ""
+msgstr "then"
 
-#: ../../source/plugin_dev/command.rst:87
+#: ../plugin_dev/command.rst:87
 msgid "Attach a child node to its children list, and then return itself"
-msgstr ""
+msgstr "将子节点附加到其子列表中，然后返回自身。"
 
-#: ../../source/plugin_dev/command.rst:89
+#: ../plugin_dev/command.rst:89
 msgid "It's used for building the command tree structure"
-msgstr ""
+msgstr "用于构建指令树结构。"
 
-#: ../../source/plugin_dev/command.rst:91
+#: ../plugin_dev/command.rst:91
 msgid ""
-"Parameter *node*\\ : A node instance to be added to current node's "
-"children list"
-msgstr ""
+"Parameter *node*: A node instance to be added to current node's children "
+"list"
+msgstr "参数 *node*：要添加到当前节点的子级列表中的节点实例。"
 
-#: ../../source/plugin_dev/command.rst:93
+#: ../plugin_dev/command.rst:93
 msgid ""
 "The command tree in the `Quick Peek <#a-quick-peek>`__ section can be "
 "built with the following codes"
-msgstr ""
+msgstr "可以使用以下代码构建 `“先瞅一眼...” <#a-quick-peek>`__ 部分中的指令树："
 
-#: ../../source/plugin_dev/command.rst:118
+#: ../plugin_dev/command.rst:118
 msgid "runs"
-msgstr ""
+msgstr "runs"
 
-#: ../../source/plugin_dev/command.rst:124
+#: ../plugin_dev/command.rst:124
 msgid ""
 "Set the callback function of this node. When the command parsing finished"
 " at this node, the callback function will be executed"
-msgstr ""
+msgstr "设置节点的回调函数。在该节点上的指令解析完成后，将执行指定的回调函数。"
 
-#: ../../source/plugin_dev/command.rst:126
+#: ../plugin_dev/command.rst:126
 msgid ""
-"Parameter *func*\\ : A callable that accepts up to 2 arguments. Argument "
-"list: ``CommandSource``\\ , ``dict`` (context)"
-msgstr ""
+"Parameter *func*: A callable that accepts up to 2 arguments. Argument "
+"list: ``CommandSource``, ``dict`` (context)"
+msgstr "参数 *func*：一个最多可接收 2 个参数的可调用对象。参数列表：``CommandSource``，``dict`` （上下文）"
 
-#: ../../source/plugin_dev/command.rst:128
+#: ../plugin_dev/command.rst:128
 msgid ""
 "The callback function is allowed to accepted 0 to 2 arguments (a "
 "``CommandSource`` as command source and a ``dict`` as context). For "
 "example, the following 4 functions are available callbacks"
 msgstr ""
+"回调函数允许接受 0 到 2 个参数（ ``CommandSource`` 作为指令源，而 ``dict`` "
+"作为上下文）。例如，是可用的四个回调函数："
 
-#: ../../source/plugin_dev/command.rst:147
+#: ../plugin_dev/command.rst:147
 msgid "Both of them can be used as the argument of the ``runs`` method"
-msgstr ""
+msgstr "它们都可以用作 ``runs`` 方法的参数"
 
-#: ../../source/plugin_dev/command.rst:149
+#: ../plugin_dev/command.rst:149
 msgid ""
 "This dynamic callback argument adaptation is used in all callback "
 "invoking of the command nodes"
-msgstr ""
+msgstr "这种动态回调参数适配在所有指令节点的回调调用中使用。"
 
-#: ../../source/plugin_dev/command.rst:152
+#: ../plugin_dev/command.rst:152
 msgid "requires"
-msgstr ""
+msgstr "requires"
 
-#: ../../source/plugin_dev/command.rst:158
+#: ../plugin_dev/command.rst:158
 msgid ""
 "Set the requirement tester callback of the node. When entering this node,"
 " MCDR will invoke the requirement tester to see if the current command "
 "source and context match your specific condition."
-msgstr ""
+msgstr "设置节点的需要的测试器回调。进入此节点时，MCDR将调用需求测试器以查看当前指令源和上下文是否符合你设定的条件。"
 
-#: ../../source/plugin_dev/command.rst:160
+#: ../plugin_dev/command.rst:160
 msgid ""
 "If the tester callback return True, nothing will happen, MCDR will "
 "continue parsing the rest of the command"
-msgstr ""
+msgstr "如果测试器返回 True，则MCDR将继续解析指令的其余部分。"
 
-#: ../../source/plugin_dev/command.rst:162
+#: ../plugin_dev/command.rst:162
 msgid ""
 "If the tester callback return False, a ``RequirementNotMet`` exception "
 "will be risen. At this time if the *failure_message_getter* parameter is "
@@ -298,373 +310,392 @@ msgid ""
 "string as the ``RequirementNotMet`` exception, otherwise a default "
 "message will be used"
 msgstr ""
+"如果测试器返回False，则会引发 ``RequirementNotMet`` 异常。此时，如果 *failure_message_getter*"
+" 参数可用，则MCDR将调用 *failure_message_getter* 以获取消息字符串作为 RequirementNotMet "
+"的异常消息，否则将使用默认消息。"
 
-#: ../../source/plugin_dev/command.rst:164
+#: ../plugin_dev/command.rst:164
 msgid ""
-"Parameter *requirement*\\ : A callable that accepts up to 2 arguments and"
-" returns a bool. Argument list: ``CommandSource``\\ , ``dict`` (context)"
+"Parameter *requirement*: A callable that accepts up to 2 arguments and "
+"returns a bool. Argument list: ``CommandSource``, ``dict`` (context)"
 msgstr ""
+"参数 *requirement*: 一个最多接受 2 个参数并返回一个 bool 的可调用对象。参数列表：``CommandSource`` ,"
+" ``dict`` （上下文）"
 
-#: ../../source/plugin_dev/command.rst:166
+#: ../plugin_dev/command.rst:166
 msgid ""
-"Parameter *failure_message_getter*\\ : An optional callable that accepts "
-"up to 2 arguments and returns a str. Argument list: ``CommandSource``\\ ,"
-" ``dict`` (context)"
+"Parameter *failure_message_getter*: An optional callable that accepts up "
+"to 2 arguments and returns a str. Argument list: ``CommandSource``, "
+"``dict`` (context)"
 msgstr ""
+"参数 *failure_message_getter*：一个可选的可调用对象，最多接受 2 "
+"个参数并返回一个str。参数列表：``CommandSource``，``dict`` （上下文）"
 
-#: ../../source/plugin_dev/command.rst:168
+#: ../plugin_dev/command.rst:168
 msgid "Some Example usages:"
-msgstr ""
+msgstr "一些示例用法："
 
-#: ../../source/plugin_dev/command.rst:177
+#: ../plugin_dev/command.rst:177
 msgid "redirects"
-msgstr ""
+msgstr "redirects"
 
-#: ../../source/plugin_dev/command.rst:183
+#: ../plugin_dev/command.rst:183
 msgid ""
 "Redirect all further child nodes command parsing to another given node. "
 "When you want a short command and and full-path command that will all "
 "execute the same commands, ``redirects`` will make it simpler"
-msgstr ""
+msgstr "将所有其他子节点指令解析重定向到另一个给定节点。当你需要一个简短的指令和一个全路径指令来执行相同的指令时，``redirect`` 将使其更简单。"
 
-#: ../../source/plugin_dev/command.rst:185
+#: ../plugin_dev/command.rst:185
 msgid ""
-"Parameter *redirect_node*\\ : A node instance which current node is "
+"Parameter *redirect_node*: A node instance which current node is "
 "redirecting to"
-msgstr ""
+msgstr "参数 *redirect_node*：当前节点的重定向目标"
 
-#: ../../source/plugin_dev/command.rst:187
-#: ../../source/plugin_dev/command.rst:257
+#: ../plugin_dev/command.rst:187 ../plugin_dev/command.rst:257
 msgid "Examples:"
-msgstr ""
+msgstr "例如："
 
-#: ../../source/plugin_dev/command.rst:201
+#: ../plugin_dev/command.rst:201
 msgid "Command starts at *root_executor*"
-msgstr ""
+msgstr "以上示例中，指令从 ``root_executor`` 这个节点开始解析。"
 
-#: ../../source/plugin_dev/command.rst:203
+#: ../plugin_dev/command.rst:203
 msgid "These commands:"
-msgstr ""
+msgstr "以下指令："
 
-#: ../../source/plugin_dev/command.rst:206
+#: ../plugin_dev/command.rst:206
 msgid "\"foo a long way to the command x\""
-msgstr ""
+msgstr "\"foo a long way to the command x\""
 
-#: ../../source/plugin_dev/command.rst:207
+#: ../plugin_dev/command.rst:207
 msgid "\"foo a long way to the command y\""
-msgstr ""
+msgstr "\"foo a long way to the command y\""
 
-#: ../../source/plugin_dev/command.rst:208
+#: ../plugin_dev/command.rst:208
 msgid "\"foo a long way to the command z\""
-msgstr ""
+msgstr "\"foo a long way to the command z\""
 
-#: ../../source/plugin_dev/command.rst:210
+#: ../plugin_dev/command.rst:210
 msgid "are the same to"
-msgstr ""
+msgstr "与以下指令相同："
 
-#: ../../source/plugin_dev/command.rst:213
+#: ../plugin_dev/command.rst:213
 msgid "\"foo quick x\""
-msgstr ""
+msgstr "\"foo quick x\""
 
-#: ../../source/plugin_dev/command.rst:214
+#: ../plugin_dev/command.rst:214
 msgid "\"foo quick y\""
-msgstr ""
+msgstr "\"foo quick y\""
 
-#: ../../source/plugin_dev/command.rst:215
+#: ../plugin_dev/command.rst:215
 msgid "\"foo quick z\""
-msgstr ""
+msgstr "\"foo quick z\""
 
-#: ../../source/plugin_dev/command.rst:217
+#: ../plugin_dev/command.rst:217
 msgid ""
 "Pay attention to the difference between ``redirects`` and ``then``. "
 "``redirects`` is to redirect the child nodes, and ``then`` is to add a "
 "child node. If you do something like this:"
 msgstr ""
+"注意 ``redirects`` 和 ``then`` 之间的区别。``redirects`` 是重定向子节点，而 ``then`` "
+"是添加子节点。如果你执行以下操作："
 
-#: ../../source/plugin_dev/command.rst:224
+#: ../plugin_dev/command.rst:224
 msgid "Then all commands which eventually executes ``do_something1`` will be:"
-msgstr ""
+msgstr "在以上示例中，所有最终执行 ``do_something1`` 的指令将是："
 
-#: ../../source/plugin_dev/command.rst:227
+#: ../plugin_dev/command.rst:227
 msgid "``foo a long way to the command x``"
-msgstr ""
+msgstr "``foo a long way to the command x``"
 
-#: ../../source/plugin_dev/command.rst:228
+#: ../plugin_dev/command.rst:228
 msgid "``foo quick x``"
-msgstr ""
+msgstr "``foo quick x``"
 
-#: ../../source/plugin_dev/command.rst:229
+#: ../plugin_dev/command.rst:229
 msgid "``foo fast command x``"
-msgstr ""
+msgstr "``foo fast command x``"
 
-#: ../../source/plugin_dev/command.rst:232
+#: ../plugin_dev/command.rst:232
 msgid "on_error"
-msgstr ""
+msgstr "on_error"
 
-#: ../../source/plugin_dev/command.rst:238
+#: ../plugin_dev/command.rst:238
 msgid ""
 "When a command error occurs, the given will invoke the given handler to "
 "handle with the error"
-msgstr ""
+msgstr "当发生指令错误时，给定的将调用给定的处理程序以处理错误。"
 
-#: ../../source/plugin_dev/command.rst:240
-msgid "Parameter *error_type*\\ : A class that is subclass of CommandError"
-msgstr ""
+#: ../plugin_dev/command.rst:240
+msgid "Parameter *error_type*: A class that is subclass of CommandError"
+msgstr "参数 *error_type*：CommandError 的子类"
 
-#: ../../source/plugin_dev/command.rst:242
+#: ../plugin_dev/command.rst:242
 msgid ""
-"Parameter *handler*\\ : A callable that accepts up to 3 arguments. "
-"Argument list: ``CommandSource``\\ , ``CommandError``\\ , ``dict`` "
-"(context)"
+"Parameter *handler*: A callable that accepts up to 3 arguments. Argument "
+"list: ``CommandSource``, ``CommandError``, ``dict`` (context)"
 msgstr ""
+"参数 *handler*：一个最多可以接受 3 "
+"个参数的可调用对象。参数列表：``CommandSource``，``CommandError``，``dict`` （上下文）"
 
-#: ../../source/plugin_dev/command.rst:244
+#: ../plugin_dev/command.rst:244
 msgid ""
-"Keyword Parameter *handled*\\ : If handled is set to True, "
+"Keyword Parameter *handled*: If handled is set to True, "
 "``error.set_handled()`` is called automatically when invoking the handler"
 " callback"
 msgstr ""
+"关键字参数 *handled*：如果将 handled 设置为True，则在调用处理程序回调时会自动调用 "
+"``error.set_handled()``。"
 
-#: ../../source/plugin_dev/command.rst:246
+#: ../plugin_dev/command.rst:246
 msgid ""
-"For uses about ``error.set_handled()``\\ , check the `CommandError "
+"For uses about ``error.set_handled()``, check the `CommandError "
 "<classes/CommandError.html#set-handled>`__ class reference"
 msgstr ""
+"对于 ``error.set_handled()`` 的用法，请查看 `CommandError "
+"<classes/CommandError.html#set-handled>`__ 类的相关说明。"
 
-#: ../../source/plugin_dev/command.rst:249
+#: ../plugin_dev/command.rst:249
 msgid "Literal"
-msgstr ""
+msgstr "Literal"
 
-#: ../../source/plugin_dev/command.rst:251
+#: ../plugin_dev/command.rst:251
 msgid ""
 "Literal node is a special node. It doesn't output any value. It's more "
 "like a command branch carrier"
-msgstr ""
+msgstr "字面值（Literal）节点是一个特殊的节点。它不输出任何值，更像是一个指令分支的载体。"
 
-#: ../../source/plugin_dev/command.rst:253
+#: ../plugin_dev/command.rst:253
 msgid ""
 "Literal node can accept a str as its literal in its constructor. A "
 "literal node accepts the parsing command only when the next element of "
 "the parsing command exactly matches the literal of the node"
-msgstr ""
+msgstr "字面值节点可以在其构造的函数中接受 str 作为其字面值。当解析指令的下一个元素与节点的字面值完全匹配时，字面值节点才接受并解析指令。"
 
-#: ../../source/plugin_dev/command.rst:255
+#: ../plugin_dev/command.rst:255
 msgid "Literal node is the only node that can start a command execution"
-msgstr ""
+msgstr "字面值节点是唯一可以发起指令执行的节点。"
 
-#: ../../source/plugin_dev/command.rst:267
+#: ../plugin_dev/command.rst:267
 msgid "NumberNode"
-msgstr ""
+msgstr "NumberNode"
 
-#: ../../source/plugin_dev/command.rst:269
+#: ../plugin_dev/command.rst:269
 msgid ""
-"It's an abstract class. It's inherited by ``Number``\\ , ``Integer`` and "
+"It's an abstract class. It's inherited by ``Number``, ``Integer`` and "
 "``Float``. It represents a type of number based node"
-msgstr ""
+msgstr "这是一个抽象类。它被 ``Number``，``Integer`` 和 ``Float`` 继承。它代表一种基于数字的节点。"
 
-#: ../../source/plugin_dev/command.rst:271
+#: ../plugin_dev/command.rst:271
 msgid ""
 "For a ``NumberNode`` instance, you can restrict the range of the number "
 "argument. If the parsed number is out of range, a ``NumberOutOfRange`` "
 "exception will be risen"
-msgstr ""
+msgstr "对于 NumberNode 实例，你可以限制数字参数的范围。如果解析的数字超出范围，则会抛出 ``NumberOutOfRange`` 异常。"
 
-#: ../../source/plugin_dev/command.rst:273
+#: ../plugin_dev/command.rst:273
 msgid "By default there's no range restriction"
-msgstr ""
+msgstr "默认情况下，没有范围限制。"
 
-#: ../../source/plugin_dev/command.rst:276
+#: ../plugin_dev/command.rst:276
 msgid "at_min"
-msgstr ""
+msgstr "at_min"
 
-#: ../../source/plugin_dev/command.rst:282
+#: ../plugin_dev/command.rst:282
 msgid "Set the lower boundary of the range restriction to *min_value*"
-msgstr ""
+msgstr "将数字范围的下限设置为 *min_value* 。"
 
-#: ../../source/plugin_dev/command.rst:285
+#: ../plugin_dev/command.rst:285
 msgid "at_max"
-msgstr ""
+msgstr "at_max"
 
-#: ../../source/plugin_dev/command.rst:291
+#: ../plugin_dev/command.rst:291
 msgid "Set the higher boundary of the range restriction to *max_value*"
-msgstr ""
+msgstr "将数字范围的上限设置为 *max_value* 。"
 
-#: ../../source/plugin_dev/command.rst:294
+#: ../plugin_dev/command.rst:294
 msgid "in_range"
-msgstr ""
+msgstr "in_range"
 
-#: ../../source/plugin_dev/command.rst:300
+#: ../plugin_dev/command.rst:300
 msgid ""
 "Set the lower and the higher boundary of the range restriction at the "
 "same time"
-msgstr ""
+msgstr "同时设置数字范围的上、下限。"
 
-#: ../../source/plugin_dev/command.rst:303
+#: ../plugin_dev/command.rst:303
 msgid "Number"
-msgstr ""
+msgstr "Number"
 
-#: ../../source/plugin_dev/command.rst:305
+#: ../plugin_dev/command.rst:305
 msgid ""
 "A ``Number`` node accepts a number argument. It can be an integer or an "
 "float. If the next element is not a number, a ``InvalidNumber`` exception"
 " will be risen"
-msgstr ""
+msgstr "``Number`` 节点接受数字参数——整数或浮点数。如果下一个元素不是数字，则将抛出 ``InvalidNumber`` 异常。"
 
-#: ../../source/plugin_dev/command.rst:308
+#: ../plugin_dev/command.rst:308
 msgid "Integer"
-msgstr ""
+msgstr "Integer"
 
-#: ../../source/plugin_dev/command.rst:310
+#: ../plugin_dev/command.rst:310
 msgid ""
 "An ``Integer`` node accepts a int argument. It can only be an integer. If"
 " the next element is not an integer, a ``InvalidInteger`` exception will "
 "be risen"
-msgstr ""
+msgstr "``Integer`` 节点只接受 int 类型的参数，即整数。如果下一个元素不是整数，则将抛出 ``InvalidInteger`` 异常。"
 
-#: ../../source/plugin_dev/command.rst:313
+#: ../plugin_dev/command.rst:313
 msgid "Float"
-msgstr ""
+msgstr "Float"
 
-#: ../../source/plugin_dev/command.rst:315
+#: ../plugin_dev/command.rst:315
 msgid ""
 "A ``Float`` node accepts a float argument. It can only be a float. If the"
 " next element is not a float, a ``InvalidFloat`` exception will be risen"
-msgstr ""
+msgstr "``Float`` 节点只接受 float 类型的参数，即浮点数。如果下一个元素不是浮点数，则将抛出 ``InvalidFloat`` 异常。"
 
-#: ../../source/plugin_dev/command.rst:318
+#: ../plugin_dev/command.rst:318
 msgid "TextNode"
-msgstr ""
+msgstr "TextNode"
 
-#: ../../source/plugin_dev/command.rst:320
+#: ../plugin_dev/command.rst:320
 msgid ""
-"It's an abstract class. It's inherited by ``Text``\\ , ``QuotableText`` "
-"and ``GreedyText``. It represents a type of text based node"
-msgstr ""
+"It's an abstract class. It's inherited by ``Text``, ``QuotableText`` and "
+"``GreedyText``. It represents a type of text based node"
+msgstr "这是一个抽象类。它被 ``Text``，``QuotableText`` 和 ``GreedyText`` 继承。它代表一种基于文本的节点。"
 
-#: ../../source/plugin_dev/command.rst:322
+#: ../plugin_dev/command.rst:322
 msgid ""
 "For a ``TextNode`` instance, you can restrict the length range of the str"
 " text argument. If the length of the parsed text is out of range, a "
 "``TextLengthOutOfRange`` exception will be risen"
 msgstr ""
+"对于 ``TextNode`` 实例，你可以限制文本参数的长度范围。如果解析的文本长度超出范围，则将抛出 "
+"``TextLengthOutOfRange`` 异常。"
 
-#: ../../source/plugin_dev/command.rst:324
+#: ../plugin_dev/command.rst:324
 msgid "By default there's no length range restriction"
-msgstr ""
+msgstr "默认情况下，没有长度范围限制。"
 
-#: ../../source/plugin_dev/command.rst:327
+#: ../plugin_dev/command.rst:327
 msgid "at_min_length"
-msgstr ""
+msgstr "at_min_length"
 
-#: ../../source/plugin_dev/command.rst:333
+#: ../plugin_dev/command.rst:333
 msgid "Set the lower boundary of the length range restriction to *min_length*"
-msgstr ""
+msgstr "将长度范围的下限设置为 *min_length* 。"
 
-#: ../../source/plugin_dev/command.rst:336
+#: ../plugin_dev/command.rst:336
 msgid "at_max_length"
-msgstr ""
+msgstr "at_max_length"
 
-#: ../../source/plugin_dev/command.rst:342
+#: ../plugin_dev/command.rst:342
 msgid "Set the higher boundary of the length range restriction to *max_length*"
-msgstr ""
+msgstr "将长度范围的上限设置为 *max_length* 。"
 
-#: ../../source/plugin_dev/command.rst:345
+#: ../plugin_dev/command.rst:345
 msgid "in_length_range"
-msgstr ""
+msgstr "in_length_range"
 
-#: ../../source/plugin_dev/command.rst:351
+#: ../plugin_dev/command.rst:351
 msgid ""
 "Set the lower and the higher boundary of the length range restriction at "
 "the same time"
-msgstr ""
+msgstr "同时设置文本长度的上、下限。"
 
-#: ../../source/plugin_dev/command.rst:354
+#: ../plugin_dev/command.rst:354
 msgid "Text"
-msgstr ""
+msgstr "Text"
 
-#: ../../source/plugin_dev/command.rst:356
+#: ../plugin_dev/command.rst:356
 msgid ""
 "A ``Text`` node accepts a single string element. Since space character is"
 " the divider character of MCDR command parsing. ``Text`` nodes will keep "
 "taking the continuous string segment until they meet a space character"
-msgstr ""
+msgstr "``Text`` 节点接受一个字符串元素。空格字符是MCDR指令解析的分隔符，所以 ``Text`` 节点将获取第一个空格之前的字符。"
 
-#: ../../source/plugin_dev/command.rst:359
+#: ../plugin_dev/command.rst:359
 msgid "QuotableText"
-msgstr ""
+msgstr "QuotableText"
 
-#: ../../source/plugin_dev/command.rst:361
+#: ../plugin_dev/command.rst:361
 msgid ""
 "A ``QuotableText`` works just like a ``Text`` argument node, but it gives"
 " user a way to input text with space character: Use two double quotes to "
 "enclose the text content"
 msgstr ""
+"``QuotableText`` 的工作方式与 ``Text`` "
+"节点一样，但是它提供了一种输入带有空格的文本的方法：使用两个双引号将文本内容括起来。"
 
-#: ../../source/plugin_dev/command.rst:363
+#: ../plugin_dev/command.rst:363
 msgid ""
 "If you use two double quotes to enclose the text content, You can use "
 "escape character ``\\`` to escape double quotes ``\"`` and escape "
 "character ``\\`` itself"
-msgstr ""
+msgstr "使用双引号括住文本内容后，你可以使用转义字符 ``\\`` 来转义 ``\"`` 或 ``\\`` 本身。"
 
-#: ../../source/plugin_dev/command.rst:365
-msgid "For example, here are some texts that accepted by ``QuotableText``\\ :"
-msgstr ""
+#: ../plugin_dev/command.rst:365
+msgid "For example, here are some texts that accepted by ``QuotableText``:"
+msgstr "例如，以下是可被 ``QuotableText`` 接受的一些文本："
 
-#: ../../source/plugin_dev/command.rst:368
+#: ../plugin_dev/command.rst:368
 msgid "``Something``"
-msgstr ""
+msgstr "``我是一段文字`` -> ``我是一段文字``"
 
-#: ../../source/plugin_dev/command.rst:369
+#: ../plugin_dev/command.rst:369
 msgid "``\"Someting with space characters\"``"
-msgstr ""
+msgstr "``\"这段 文本 包括 空格 ！\"`` -> ``这段 文本 包含 空格 ！``"
 
-#: ../../source/plugin_dev/command.rst:370
+#: ../plugin_dev/command.rst:370
 msgid "``\"or escapes \\\\ like \\\" this\"``"
-msgstr ""
+msgstr "``\"也可以像这样包含 \\\\ 或者 \\\" ！\"`` -> ``也可以像这样包含 \\ 或者 \" ！``"
 
-#: ../../source/plugin_dev/command.rst:373
+#: ../plugin_dev/command.rst:373
 msgid "GreedyText"
-msgstr ""
+msgstr "GreedyText"
 
-#: ../../source/plugin_dev/command.rst:375
+#: ../plugin_dev/command.rst:375
 msgid ""
 "The principle of ``GreedyText`` is quite simple: It greedily take out all"
 " remaining texts in the commands"
-msgstr ""
+msgstr "``GreedyText`` 的原理很简单：它贪婪地取出指令中所有剩余的文本。"
 
-#: ../../source/plugin_dev/command.rst:377
+#: ../plugin_dev/command.rst:377
 msgid ""
-"It's not a smart decision to append any child nodes to a ``GreedyText``\\"
-" , since the child nodes can never get any remaining command"
-msgstr ""
+"It's not a smart decision to append any child nodes to a ``GreedyText``, "
+"since the child nodes can never get any remaining command"
+msgstr "将任何子节点附加到 ``GreedyText`` 上不是明智的决定，因为这样子节点永远无法获得任何剩余指令。"
 
-#: ../../source/plugin_dev/command.rst:380
+#: ../plugin_dev/command.rst:380
 msgid "Customize"
-msgstr ""
+msgstr "自定义"
 
-#: ../../source/plugin_dev/command.rst:382
+#: ../plugin_dev/command.rst:382
 msgid ""
 "MCDR also supports customize an argument node. It might save you same "
 "repeated work on building your command"
-msgstr ""
+msgstr "MCDR 支持自定义参数节点。它也许能节省一些你为构建指令而重复工作的时间。"
 
-#: ../../source/plugin_dev/command.rst:384
+#: ../plugin_dev/command.rst:384
 msgid ""
 "To create a custom a argument node, you need to declare a class inherited"
-" from ``ArgumentNode``\\ , and then implement the ``parse`` method logic."
-" That's it, the custom node class is ready to be used"
-msgstr ""
+" from ``ArgumentNode``, and then implement the ``parse`` method logic. "
+"That's it, the custom node class is ready to be used"
+msgstr "要创建自定义参数节点，你需要声明一个继承自 ``ArgumentNode`` 的类，然后实现 ``parse`` 的方法逻辑。"
 
-#: ../../source/plugin_dev/command.rst:386
+#: ../plugin_dev/command.rst:386
 msgid ""
 "Custom exception provides a precise way to handle your exception with "
 "``on_error`` method. If you want to raise a custom exception when your "
 "argument node fails to parsing the text, you need to have the custom "
 "exception inherited from ``CommandSyntaxError``"
 msgstr ""
+"自定义异常提供了一种使用 ``on_error`` "
+"方法处理异常的精确方法。如果你想在参数节点无法解析文本时引发自定义异常，则需要使自定义异常继承自 ``CommandSyntaxError``。"
 
-#: ../../source/plugin_dev/command.rst:388
+#: ../plugin_dev/command.rst:388
 msgid ""
 "Here's a quick example of a custom Argument node, ``PointArgument``. It "
 "accepts continuous 3 float input as a coordinate and batch them in to a "
@@ -672,416 +703,51 @@ msgid ""
 " or ``IncompletePoint`` if the command ends before it finishes reading 3 "
 "floats"
 msgstr ""
+"这是一个自定义参数节点 ``PointArgument`` 的简单示例。它接受连续 3 个 float "
+"类型的参数输入作为坐标，并将它们作为点储存到列表中。如果它获得非浮点输入，则抛出 ``IllegalPoint`` "
+"异常。如果指令在读取完三个浮点数之前结束，则抛出 ``IncompletePoint`` 异常。"
 
-#: ../../source/plugin_dev/command.rst:416
+#: ../plugin_dev/command.rst:416
 msgid "For its usage, here's a simple example as well as an input/output table:"
-msgstr ""
+msgstr "对于它的用法，这是一个简单的示例，以及一个对应的输入/输出表："
 
-#: ../../source/plugin_dev/command.rst:431
+#: ../plugin_dev/command.rst:431
 msgid "Input"
-msgstr ""
+msgstr "输入值"
 
-#: ../../source/plugin_dev/command.rst:432
+#: ../plugin_dev/command.rst:432
 msgid "Output"
-msgstr ""
+msgstr "输出值"
 
-#: ../../source/plugin_dev/command.rst:433
+#: ../plugin_dev/command.rst:433
 msgid "!!mypoint 1 2 3"
-msgstr ""
+msgstr "!!mypoint 1 2 3"
 
-#: ../../source/plugin_dev/command.rst:434
+#: ../plugin_dev/command.rst:434
 msgid "You have input a point (1.0, 2.0, 3.0)"
-msgstr ""
+msgstr "You have input a point (1.0, 2.0, 3.0)"
 
-#: ../../source/plugin_dev/command.rst:435
+#: ../plugin_dev/command.rst:435
 msgid "!!mypoint 1 2"
-msgstr ""
+msgstr "!!mypoint 1 2"
 
-#: ../../source/plugin_dev/command.rst:436
+#: ../plugin_dev/command.rst:436
 msgid "Incomplete Point: !!mypoint 1 2<--"
-msgstr ""
+msgstr "Incomplete Point: !!mypoint 1 2<--"
 
-#: ../../source/plugin_dev/command.rst:437
+#: ../plugin_dev/command.rst:437
 msgid "!!mypoint xxx"
-msgstr ""
+msgstr "!!mypoint xxx"
 
-#: ../../source/plugin_dev/command.rst:438
+#: ../plugin_dev/command.rst:438
 msgid "Invalid Point: !!mypoint xxx<--"
-msgstr ""
+msgstr "Invalid Point: !!mypoint xxx<--"
 
-#: ../../source/plugin_dev/command.rst:439
+#: ../plugin_dev/command.rst:439
 msgid "!!mypoint 1 2 x"
-msgstr ""
+msgstr "!!mypoint 1 2 x"
 
-#: ../../source/plugin_dev/command.rst:440
+#: ../plugin_dev/command.rst:440
 msgid "Invalid Point: !!mypoint 1 2 x<--"
-msgstr ""
-
-#~ msgid ""
-#~ "MCDR contains a command tree building"
-#~ " system for plugins to build their"
-#~ " commands. It behaves like a lite "
-#~ "version of mojang's brigadier"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Every time when a user info is "
-#~ "being processed, MCDR will try to "
-#~ "parse the user input as a command."
-#~ " It will takes the first segment "
-#~ "of the user input as a key "
-#~ "to query the command tree storage "
-#~ "dict. If it gets any, it will "
-#~ "prevent the info to be sent to "
-#~ "the standard input stream of the "
-#~ "server by invoking info.cancel_send_to_server(), "
-#~ "then it will let the found command"
-#~ " trees to handle the command."
-#~ msgstr ""
-
-#~ msgid "!!email list"
-#~ msgstr ""
-
-#~ msgid "!!email remove <email_id>"
-#~ msgstr ""
-
-#~ msgid "!!email send <player> <message>"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "When MCDR executes the command !!email"
-#~ " remove 21, the following things will"
-#~ " happen"
-#~ msgstr ""
-
-#~ msgid "Parsing at node Literal('!!email') with command !!email remove 21"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Literal Node Literal('!!email') gets the "
-#~ "first element of !!email remove 21, "
-#~ "it's !!email and it matches the "
-#~ "literal node"
-#~ msgstr ""
-
-#~ msgid "Now the remaining command is remove 21"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "And then, it searches through its "
-#~ "literal children, found the child node"
-#~ " Literal('remove') matches the next literal"
-#~ " element remove"
-#~ msgstr ""
-
-#~ msgid "Parsing at node Literal('remove') with command remove 21"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Literal Node Literal('remove') gets the "
-#~ "first element of remove 21, it's "
-#~ "remove and it matches the literal "
-#~ "node"
-#~ msgstr ""
-
-#~ msgid "Now the remaining command is 21"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "And then it searches through its "
-#~ "literal children, but doesn't found any"
-#~ " literal child matches the next "
-#~ "element 21"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "So it let its non-literal child"
-#~ " Integer('email_id') to handle the rest "
-#~ "of the command"
-#~ msgstr ""
-
-#~ msgid "Parsing at node Integer('email_id') with command 21"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Integer Node Integer('email_id') gets the "
-#~ "first element of 21, it's a legal"
-#~ " integer"
-#~ msgstr ""
-
-#~ msgid "It store the value 21 to the context dict with key email_id"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Rather than reading this document, "
-#~ "anther good way to learn to use"
-#~ " the MCDR command building system is"
-#~ " to refer and imitate existing codes."
-#~ " You can find the command building"
-#~ " code of !!MCDR command in the "
-#~ "__register_commands method of class "
-#~ "mcdreforged.plugin.permanent.mcdreforged_plugin.MCDReforgedPlugin"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Parameter node: A node instance to "
-#~ "be added to current node's children "
-#~ "list"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "The command tree in the Quick Peek"
-#~ " section can be built with the "
-#~ "following codes"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Parameter func: A callable that accepts"
-#~ " up to 2 arguments. Argument list:"
-#~ " CommandSource, dict (context)"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "The callback function is allowed to "
-#~ "accepted 0 to 2 arguments (a "
-#~ "CommandSource as command source and a"
-#~ " dict as context). For example, the"
-#~ " following 4 functions are available "
-#~ "callbacks"
-#~ msgstr ""
-
-#~ msgid "Both of them can be used as the argument of the runs method"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "If the tester callback return False, "
-#~ "a RequirementNotMet exception will be "
-#~ "risen. At this time if the "
-#~ "failure_message_getter parameter is available, "
-#~ "MCDR will invoke failure_message_getter to "
-#~ "get the message string as the "
-#~ "RequirementNotMet exception, otherwise a "
-#~ "default message will be used"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Parameter requirement: A callable that "
-#~ "accepts up to 2 arguments and "
-#~ "returns a bool. Argument list: "
-#~ "CommandSource, dict (context)"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Parameter failure_message_getter: An optional "
-#~ "callable that accepts up to 2 "
-#~ "arguments and returns a str. Argument"
-#~ " list: CommandSource, dict (context)"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Redirect all further child nodes command"
-#~ " parsing to another given node. When"
-#~ " you want a short command and "
-#~ "and full-path command that will "
-#~ "all execute the same commands, redirects"
-#~ " will make it simpler"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Parameter redirect_node: A node instance "
-#~ "which current node is redirecting to"
-#~ msgstr ""
-
-#~ msgid "Command starts at root_executor"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Pay attention to the difference between"
-#~ " redirects and then. redirects is to"
-#~ " redirect the child nodes, and then"
-#~ " is to add a child node. If "
-#~ "you do something like this:"
-#~ msgstr ""
-
-#~ msgid "Then all commands which eventually executes do_something1 will be:"
-#~ msgstr ""
-
-#~ msgid "foo a long way to the command x"
-#~ msgstr ""
-
-#~ msgid "foo quick x"
-#~ msgstr ""
-
-#~ msgid "foo fast command x"
-#~ msgstr ""
-
-#~ msgid "Parameter error_type: A class that is subclass of CommandError"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Parameter handler: A callable that "
-#~ "accepts up to 3 arguments. Argument "
-#~ "list: CommandSource, CommandError, dict "
-#~ "(context)"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Keyword Parameter handled: If handled is"
-#~ " set to True, error.set_handled() is "
-#~ "called automatically when invoking the "
-#~ "handler callback"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "For uses about error.set_handled(), check "
-#~ "the CommandError class reference"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "It's an abstract class. It's inherited"
-#~ " by Number, Integer and Float. It "
-#~ "represents a type of number based "
-#~ "node"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "For a NumberNode instance, you can "
-#~ "restrict the range of the number "
-#~ "argument. If the parsed number is "
-#~ "out of range, a NumberOutOfRange "
-#~ "exception will be risen"
-#~ msgstr ""
-
-#~ msgid "Set the lower boundary of the range restriction to min_value"
-#~ msgstr ""
-
-#~ msgid "Set the higher boundary of the range restriction to max_value"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "A Number node accepts a number "
-#~ "argument. It can be an integer or"
-#~ " an float. If the next element "
-#~ "is not a number, a InvalidNumber "
-#~ "exception will be risen"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "An Integer node accepts a int "
-#~ "argument. It can only be an "
-#~ "integer. If the next element is "
-#~ "not an integer, a InvalidInteger "
-#~ "exception will be risen"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "A Float node accepts a float "
-#~ "argument. It can only be a float."
-#~ " If the next element is not a"
-#~ " float, a InvalidFloat exception will "
-#~ "be risen"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "It's an abstract class. It's inherited"
-#~ " by Text, QuotableText and GreedyText. "
-#~ "It represents a type of text based"
-#~ " node"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "For a TextNode instance, you can "
-#~ "restrict the length range of the "
-#~ "str text argument. If the length "
-#~ "of the parsed text is out of "
-#~ "range, a TextLengthOutOfRange exception will"
-#~ " be risen"
-#~ msgstr ""
-
-#~ msgid "Set the lower boundary of the length range restriction to min_length"
-#~ msgstr ""
-
-#~ msgid "Set the higher boundary of the length range restriction to max_length"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "A Text node accepts a single "
-#~ "string element. Since space character is"
-#~ " the divider character of MCDR "
-#~ "command parsing. Text nodes will keep"
-#~ " taking the continuous string segment "
-#~ "until they meet a space character"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "A QuotableText works just like a "
-#~ "Text argument node, but it gives "
-#~ "user a way to input text with "
-#~ "space character: Use two double quotes"
-#~ " to enclose the text content"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "If you use two double quotes to"
-#~ " enclose the text content, You can"
-#~ " use escape character \\ to escape"
-#~ " double quotes \" and escape "
-#~ "character \\ itself"
-#~ msgstr ""
-
-#~ msgid "For example, here are some texts that accepted by QuotableText:"
-#~ msgstr ""
-
-#~ msgid "Something"
-#~ msgstr ""
-
-#~ msgid "\"Someting with space characters\""
-#~ msgstr ""
-
-#~ msgid "\"or escapes \\\\ like \\\" this\""
-#~ msgstr ""
-
-#~ msgid ""
-#~ "The principle of GreedyText is quite "
-#~ "simple: It greedily take out all "
-#~ "remaining texts in the commands"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "It's not a smart decision to "
-#~ "append any child nodes to a "
-#~ "GreedyText, since the child nodes can"
-#~ " never get any remaining command"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "To create a custom a argument "
-#~ "node, you need to declare a class"
-#~ " inherited from ArgumentNode, and then "
-#~ "implement the parse method logic. That's"
-#~ " it, the custom node class is "
-#~ "ready to be used"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Custom exception provides a precise way"
-#~ " to handle your exception with "
-#~ "on_error method. If you want to "
-#~ "raise a custom exception when your "
-#~ "argument node fails to parsing the "
-#~ "text, you need to have the custom"
-#~ " exception inherited from CommandSyntaxError"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Here's a quick example of a custom"
-#~ " Argument node, PointArgument. It accepts"
-#~ " continuous 3 float input as a "
-#~ "coordinate and batch them in to a"
-#~ " list as a point. It raises "
-#~ "IllegalPoint if it gets a non-"
-#~ "float input, or IncompletePoint if the"
-#~ " command ends before it finishes "
-#~ "reading 3 floats"
-#~ msgstr ""
+msgstr "Invalid Point: !!mypoint 1 2 x<--"
 

@@ -2,7 +2,7 @@
 Quick Start
 ===========
 
-This is a quick start tutorial of MCDReforged (abbreviated as MCDR, omitted below)
+This is a quick start tutorial of `MCDReforged <https://github.com/Fallen-Breath/MCDReforged>`__ (abbreviated as MCDR, omitted below)
 
 Requirements
 ------------
@@ -18,7 +18,7 @@ MCDR is available in `pypi <https://pypi.org/project/mcdreforged>`__. It can be 
 
    pip install mcdreforged
 
-For Chinese users, you can added a ``-i https://pypi.tuna.tsinghua.edu.cn/simple`` prefix to the command to use Tsinghua tuna mirror website to speed up the installation
+For Chinese users, you can added a ``-i https://pypi.tuna.tsinghua.edu.cn/simple`` prefix to the command to use `Tsinghua tuna mirror <https://mirrors.tuna.tsinghua.edu.cn/help/pypi/>`__ to speed up the installation
 
 .. code-block:: bash
 
@@ -47,7 +47,7 @@ At the first run, MCDR will generated the default configure and permission files
     ├─ config.yml
     └─ permission.yml
 
-Now put your server files into the server folder (\ ``server`` by default), then modify the configuration file ``config.yml`` and permission file ``permission.yml`` correctly. After you can start MCDR again and it correctly launch and handle the server
+Now put your server files into the server folder (``server`` by default), then modify the configuration file ``config.yml`` and permission file ``permission.yml`` correctly. After you can start MCDR again and it correctly launch and handle the server
 
 .. code-block:: bash
 
@@ -56,7 +56,7 @@ Now put your server files into the server folder (\ ``server`` by default), then
 Upgrade
 -------
 
-With the help of `pypi <https://pypi.org/project/mcdreforged/>`__\ , MCDR can be easily upgraded via a single command
+With the help of `pypi <https://pypi.org/project/mcdreforged/>`__, MCDR can be easily upgraded via a single command
 
 .. code-block:: bash
 
@@ -70,14 +70,14 @@ For Chinese users, you can use tuna mirror to speed up the upgrading too
 
    pip install mcdreforged --upgrade -i https://pypi.tuna.tsinghua.edu.cn/simple
 
-Development builds are available in `Test PyPi <https://test.pypi.org/project/mcdreforged/#history>`__\ , you can install them if you have special needs
+Development builds are available in `Test PyPi <https://test.pypi.org/project/mcdreforged/#history>`__, you can install them if you have special needs
 
-Start from source
------------------
+Launch from source
+------------------
 
 Instead of installing MCDR from pypi, you can execute the source file of MCDR directly. 
 
-Download the source files of MCDR in the `github release page <https://github.com/Fallen-Breath/MCDReforged/releases>`__\ , and decompress the file to your server folder
+Download the source files of MCDR in the `github release page <https://github.com/Fallen-Breath/MCDReforged/releases>`__, and decompress the file to your server folder
 
 .. code-block::
 

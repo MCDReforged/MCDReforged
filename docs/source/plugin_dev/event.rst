@@ -11,7 +11,7 @@ Event Listeners have a priority value. The default priority is ``1000``. Plugins
 Register a event listener
 -------------------------
 
-See the `Event listeners <basic.html#event-listeners>`__ section in Plugin Registry in the document of `MCDR Plugin <basic>`__
+See the `Event listeners <basic.html#event-listeners>`__ section in Plugin Registry in the document of `MCDR Plugin <basic.html>`__
 
 MCDR Event
 ----------
@@ -21,7 +21,7 @@ Default Event Listener
 
 All of the MCDR events have an attribute called "Default function name". If your plugin declare a function in the global slope of the plugin file, with the same name to the "Default function name", the function will be automatically registered as a listener to the specific event.
 
-The priority of these event listeners are always the default priority (\ ``1000``\ )
+The priority of these event listeners are always the default priority (``1000``)
 
 MCDR Event List
 ^^^^^^^^^^^^^^^

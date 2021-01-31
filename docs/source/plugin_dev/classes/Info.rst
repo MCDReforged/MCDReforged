@@ -2,7 +2,7 @@
 Info
 ====
 
-An Info instance contains the parsed result from the server or from the console. 
+An Info instance contains the parsed result from the server or from the console
 
 Property
 --------
