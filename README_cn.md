@@ -6,7 +6,9 @@ MCDReforged
 [![License](https://img.shields.io/github/license/Fallen-Breath/MCDReforged.svg)](https://github.com/Fallen-Breath/MCDReforged/blob/master/LICENSE)
 [![Documentation Status](https://readthedocs.org/projects/mcdreforged/badge/)](https://mcdreforged.readthedocs.io/)
 
-[English](https://github.com/Fallen-Breath/MCDReforged/blob/master/README.md)
+![MCDR-banner](logo_long.png)
+
+[English](README.md) | **中文**
 
 > 这是一个基于 Python 的 Minecraft 服务端控制工具
 
