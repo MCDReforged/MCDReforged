@@ -72,7 +72,7 @@ Here is a table of current built-in handlers and their suitable server types
      - For vanilla server in beta 1.8 version. Maybe it works for other beta versions but it's only tested in beta 1.8.1.
    * - bukkit_handler
      - For Bukkit / Spigot server with Minecraft version below 1.14, and Paper server in all version.
-   * - bukkit_handler_14
+   * - bukkit14_handler
      - For Bukkit / Spigot server with Minecraft version 1.14 and above
    * - forge_handler
      - For Forge server

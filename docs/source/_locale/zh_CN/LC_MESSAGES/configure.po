@@ -178,8 +178,8 @@ msgid ""
 msgstr "用于 1.14 版本以下的 Bukkit / Spigot 服务器"
 
 #: ../configure.rst:75
-msgid "bukkit_handler_14"
-msgstr "bukkit_handler_14"
+msgid "bukkit14_handler"
+msgstr "bukkit14_handler"
 
 #: ../configure.rst:76
 msgid "For Bukkit / Spigot server with Minecraft version 1.14 and above"
