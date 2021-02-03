@@ -292,7 +292,7 @@ get_plugin_metadata
 
 .. code-block:: python
 
-   def get_plugin_list(self) -> Optional[Metadata]
+   def get_plugin_metadata(self, plugin_id: str) -> Optional[Metadata]
 
 Return the metadata of the specified plugin, or None if the plugin doesn't exist
 
@@ -303,7 +303,7 @@ get_plugin_file_path
 
 .. code-block:: python
 
-   def get_plugin_list(self) -> Optional[str]
+   def get_plugin_file_path(self, plugin_id: str) -> Optional[str]
 
 Return the file path of the specified plugin, or None if the plugin doesn't exist
 
@@ -314,7 +314,7 @@ get_plugin_instance
 
 .. code-block:: python
 
-   def get_plugin_instance(self) -> Optional[Any]
+   def get_plugin_instance(self, plugin_id: str) -> Optional[Any]
 
 Return the current loaded plugin instance, or None if the plugin doesn't exist. With this api your plugin can access the same plugin instance to MCDR
 
