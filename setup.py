@@ -46,7 +46,8 @@ with open(os.path.join(here, 'requirements.txt')) as f:
 print('REQUIRED = {}'.format(REQUIRED))
 
 with open(os.path.join(here, 'README.md'), encoding='utf8') as f:
-	LONG_DESCRIPTION = f.read()
+	LONG_DESCRIPTION = f.read().replace('\n**English** | [中文](README_cn.md)\n', '')\
+		.replace('![MCDR-banner](logo_long.png)', f'![MCDR-banner]({URL}/blob/master/logo_long.png)')
 
 
 setup(
