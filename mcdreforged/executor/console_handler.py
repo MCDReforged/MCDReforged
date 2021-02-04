@@ -14,9 +14,9 @@ class ConsoleHandler(ThreadExecutor):
 				self.mcdr_server.logger.exception(self.mcdr_server.tr('console_handler.parse_fail', text))
 			else:
 				if self.mcdr_server.logger.should_log_debug(DebugOption.HANDLER):
-					self.mcdr_server.logger.debug('Parsed text from {}:'.format(type(self).__name__))
+					self.mcdr_server.logger.debug('Parsed text from {}:'.format(type(self).__name__), no_check=True)
 					for line in parsed_result.format_text().splitlines():
-						self.mcdr_server.logger.debug('    {}'.format(line))
+						self.mcdr_server.logger.debug('    {}'.format(line), no_check=True)
 				self.mcdr_server.reactor_manager.put_info(parsed_result)
 		except (KeyboardInterrupt, EOFError, SystemExit, IOError) as e:
 			self.mcdr_server.logger.critical('Critical exception caught in {}: {} {}'.format(type(self).__name__, type(e).__name__, e))

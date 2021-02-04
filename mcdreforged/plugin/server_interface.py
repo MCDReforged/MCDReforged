@@ -30,27 +30,12 @@ def log_call(func):
 	Log plugin call
 	Use kwarg is_plugin_call to determined if do log
 	"""
-	def wrap(self, *args, is_plugin_call=True, **kwargs):
+	def wrap(self: 'ServerInterface', *args, is_plugin_call=True, **kwargs):
 		if is_plugin_call and MCDReforgedLogger.should_log_debug(option=DebugOption.PLUGIN):
-			self.logger.debug('Plugin called {}(), args amount: {}'.format(func.__name__, len(args)))
+			self.logger.debug('Plugin called {}(), args amount: {}'.format(func.__name__, len(args)), no_check=True)
 			for arg in args:
-				self.logger.debug('  - type: {}, content: {}'.format(type(arg).__name__, arg))
+				self.logger.debug('  - type: {}, content: {}'.format(type(arg).__name__, arg), no_check=True)
 		return func(self, *args, **kwargs)
-	return wrap
-
-
-def return_if_success(func):
-	"""
-	Catch all exception from the func execution
-	Return a bool, if no exception occurred
-	"""
-	def wrap(self, *args, **kwargs):
-		try:
-			func(self, *args, **kwargs)
-			return True
-		except:
-			self.logger.debug('Exception occurred when calling {}: '.format(func), exc_info=True)
-			return False
 	return wrap
 
 

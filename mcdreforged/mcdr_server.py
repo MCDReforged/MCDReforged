@@ -402,15 +402,15 @@ class MCDReforgedServer:
 			parsed_result = self.server_handler_manager.get_current_handler().parse_server_stdout(text)
 		except:
 			if self.logger.should_log_debug(option=DebugOption.HANDLER):  # traceback.format_exc() is costly
-				self.logger.debug('Fail to parse text "{}" from stdout of the server, using raw handler'.format(text))
+				self.logger.debug('Fail to parse text "{}" from stdout of the server, using raw handler'.format(text), no_check=True)
 				for line in traceback.format_exc().splitlines():
-					self.logger.debug('    {}'.format(line))
+					self.logger.debug('    {}'.format(line), no_check=True)
 			parsed_result = self.server_handler_manager.get_basic_handler().parse_server_stdout(text)
 		else:
 			if self.logger.should_log_debug(option=DebugOption.HANDLER):
-				self.logger.debug('Parsed text from server stdout:')
+				self.logger.debug('Parsed text from server stdout:', no_check=True)
 				for line in parsed_result.format_text().splitlines():
-					self.logger.debug('    {}'.format(line))
+					self.logger.debug('    {}'.format(line), no_check=True)
 		self.server_handler_manager.detect_text(text)
 		self.reactor_manager.put_info(parsed_result)
 
