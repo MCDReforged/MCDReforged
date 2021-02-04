@@ -1,5 +1,5 @@
 from abc import ABC
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Optional
 
 from mcdreforged.utils import misc_util
 
@@ -41,6 +41,7 @@ class CommandSource:
 class InfoCommandSource(CommandSource, ABC):
 	"""
 	Command source generated from info
+	TODO: DOC
 	"""
 	def __init__(self, mcdr_server: 'MCDReforgedServer', info: 'Info'):
 		self._mcdr_server = mcdr_server
@@ -71,11 +72,11 @@ class PlayerCommandSource(InfoCommandSource):
 	def is_console(self) -> bool:
 		return False
 
-	def reply(self, message: Any, **kwargs):
+	def reply(self, message: Any, *, encoding: Optional[str] = None, **kwargs):
 		"""
-		Specify key word argument encoding
+		:keyword encoding: encoding method for server_interface.tell
 		"""
-		self._mcdr_server.server_interface.tell(self.player, message, encoding=kwargs.get('encoding'), is_plugin_call=False)
+		self._mcdr_server.server_interface.tell(self.player, message, encoding=encoding, is_plugin_call=False)
 
 	def __str__(self):
 		return 'Player {}'.format(self.player)
@@ -98,7 +99,12 @@ class ConsoleCommandSource(InfoCommandSource):
 	def is_console(self) -> bool:
 		return True
 
-	def reply(self, message: Any, **kwargs):
+	def reply(self, message: Any, *, console_text: Optional[Any] = None, **kwargs):
+		"""
+		:keyword console_text: If it's specified, use it instead of param message
+		"""
+		if console_text is not None:
+			message = console_text
 		misc_util.print_text_to_console(self._mcdr_server.logger, message)
 
 	def __str__(self):

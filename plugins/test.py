@@ -8,6 +8,8 @@ secret = random()
 def on_load(server: ServerInterface, prev):
 	register_help_message(server)
 	server.register_command(Literal('!!mypoint').then(PointArgument('pt').runs(lambda src, ctx: src.reply('You have input a point ({}, {}, {})'.format(*ctx['pt'])))))
+	server.register_command(Literal('req1').requires(lambda: False))
+	server.register_command(Literal('req2').requires(lambda: False, failure_message_getter=lambda: "as"))
 
 
 def register_help_message(server):

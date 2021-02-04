@@ -1,7 +1,8 @@
 """
 Type hints are always nice to have
 """
-from mcdreforged.command.command_source import CommandSource, ConsoleCommandSource, PlayerCommandSource
+from mcdreforged.command.command_source import CommandSource, ConsoleCommandSource, PlayerCommandSource, \
+	InfoCommandSource
 from mcdreforged.info import Info
 from mcdreforged.permission.permission_level import PermissionLevel
 from mcdreforged.plugin.meta.metadata import Metadata
@@ -12,7 +13,7 @@ __all__ = [
 	'ServerInterface', 'Info',
 
 	# Command sources
-	'CommandSource', 'PlayerCommandSource', 'ConsoleCommandSource',
+	'CommandSource', 'InfoCommandSource', 'PlayerCommandSource', 'ConsoleCommandSource',
 
 	# Plugin things
 	'Metadata',

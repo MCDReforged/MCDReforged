@@ -28,12 +28,15 @@ class ArgumentNode:
 			self.callback = callback
 			self.handled = handled
 
+	_ERROR_HANDLER_TYPE = Dict[Type[CommandError], ErrorHandler]
+
 	def __init__(self, name: Optional[str]):
 		self.name = name
 		self.children_literal = collections.defaultdict(list)  # type: Dict[str, List[Literal]]
 		self.children = []  # type: List[ArgumentNode]
 		self.callback = None
-		self.error_handlers = {}  # type: Dict[Type[CommandError], ArgumentNode.ErrorHandler]
+		self.error_handlers = {}  # type: ArgumentNode._ERROR_HANDLER_TYPE
+		self.child_error_handlers = {}  # type: ArgumentNode._ERROR_HANDLER_TYPE
 		self.requirement = lambda source: True
 		self.requirement_failure_message_getter = None
 		self.redirect_node = None
@@ -97,7 +100,22 @@ class ArgumentNode:
 		:param handler: A callback function which accepts maximum 3 parameters (command source, error and context)
 		:param handled: If handled is set to True, error.set_handled() is called automatically when invoking the handler callback
 		"""
+		if not issubclass(error_type, CommandError):
+			raise TypeError('error_type parameter should be a class inherited from CommandError, but class {} found'.format(error_type))
 		self.error_handlers[error_type] = self.ErrorHandler(handler, handled)
+		return self
+
+	def on_child_error(self, error_type: Type[CommandError], handler: SOURCE_ERROR_CONTEXT_CALLBACK, *, handled: bool = False) -> 'ArgumentNode':
+		"""
+		TODO: update doc
+		When receives a command error from one of the node's child, invoke the handler
+		:param error_type: A class that is subclass of CommandError
+		:param handler: A callback function which accepts maximum 3 parameters (command source, error and context)
+		:param handled: If handled is set to True, error.set_handled() is called automatically when invoking the handler callback
+		"""
+		if not issubclass(error_type, CommandError):
+			raise TypeError('error_type parameter should be a class inherited from CommandError, but class {} found'.format(error_type))
+		self.child_error_handlers[error_type] = self.ErrorHandler(handler, handled)
 		return self
 
 	# -------------------
@@ -141,12 +159,15 @@ class ArgumentNode:
 				raise
 		return callback(*args[:spec_args_len])
 
+	def __handle_error(self, source, error: CommandError, context: dict, error_handlers: _ERROR_HANDLER_TYPE):
+		for error_type, handler in error_handlers.items():
+			if isinstance(error, error_type):
+				if handler.handled:
+					error.set_handled()
+				self.__smart_callback(handler.callback, source, error, context)
+
 	def __raise_error(self, source, error: CommandError, context: dict):
-		handler = self.error_handlers.get(type(error))
-		if handler is not None:
-			if handler.handled:
-				error.set_handled()
-			self.__smart_callback(handler.callback, source, error, context)
+		self.__handle_error(source, error, context, self.error_handlers)
 		raise error
 
 	def _execute(self, source, command: str, remaining: str, context: dict):
@@ -185,22 +206,27 @@ class ArgumentNode:
 				if not node.has_children():
 					self.__raise_error(source, UnknownArgument(command[:success_read], command), context)
 
-				# Check literal children first
-				next_literal = utils.get_element(trimmed_remaining)
-				for child_literal in node.children_literal.get(next_literal, []):
-					try:
-						child_literal._execute(source, command, trimmed_remaining, context)
-						break
-					except LiteralNotMatch:
-						# it's ok for a direct literal node to fail
-						pass
-				else:  # All literal children fails
-					# No argument child
-					if len(node.children) == 0:
-						self.__raise_error(source, UnknownArgument(command[:success_read], command), context)
-					for child in node.children:
-						child._execute(source, command, trimmed_remaining, context)
-						break
+				# Pass the remaining command string to the children
+				try:
+					# Check literal children first
+					next_literal = utils.get_element(trimmed_remaining)
+					for child_literal in node.children_literal.get(next_literal, []):
+						try:
+							child_literal._execute(source, command, trimmed_remaining, context)
+							break
+						except LiteralNotMatch:
+							# it's ok for a direct literal node to fail
+							pass
+					else:  # All literal children fails
+						# No argument child
+						if len(node.children) == 0:
+							self.__raise_error(source, UnknownArgument(command[:success_read], command), context)
+						for child in node.children:
+							child._execute(source, command, trimmed_remaining, context)
+							break
+				except CommandError as error:
+					self.__handle_error(source, error, context, self.child_error_handlers)
+					raise error from None
 
 
 class ExecutableNode(ArgumentNode, ABC):

@@ -184,10 +184,13 @@ class MCDReforgedPlugin(PermanentPlugin):
 	#   Reload
 	# ----------
 
-	def refresh_changed_plugins(self, source: CommandSource):
-		ret = self.function_call(source, self.mcdr_server.plugin_manager.refresh_changed_plugins, 'refresh_changed_plugins', log_success=False)
+	def __print_plugin_operation_result_if_no_error(self, source: CommandSource, ret: FunctionCallResult):
 		if ret.no_error:
 			source.reply(self.mcdr_server.plugin_manager.last_operation_result.to_rtext(show_path=source.has_permission(PermissionLevel.PHYSICAL_SERVER_CONTROL_LEVEL)))
+
+	def refresh_changed_plugins(self, source: CommandSource):
+		ret = self.function_call(source, self.mcdr_server.plugin_manager.refresh_changed_plugins, 'refresh_changed_plugins', log_success=False)
+		self.__print_plugin_operation_result_if_no_error(source, ret)
 
 	def reload_config(self, source: CommandSource):
 		self.function_call(source, self.mcdr_server.load_config, 'reload_config')
@@ -423,6 +426,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 				source.reply(self.tr('mcdr_command.{}.success'.format(operation_name), file_name))
 			else:
 				source.reply(self.tr('mcdr_command.{}.fail'.format(operation_name), file_name))
+			self.__print_plugin_operation_result_if_no_error(source, result)
 
 	def __existed_regular_plugin_manipulate(self, source: CommandSource, plugin_id: str, operation_name: str, func: Callable[[RegularPlugin], Any]):
 		plugin = self.mcdr_server.plugin_manager.get_regular_plugin_from_id(plugin_id)
@@ -434,6 +438,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 				source.reply(self.tr('mcdr_command.{}.success'.format(operation_name), plugin.get_name()))
 			else:
 				source.reply(self.tr('mcdr_command.{}.fail'.format(operation_name), plugin.get_name()))
+			self.__print_plugin_operation_result_if_no_error(source, result)
 
 	def disable_plugin(self, source: CommandSource, plugin_id: str):
 		self.__existed_regular_plugin_manipulate(source, plugin_id, 'disable_plugin', lambda plg: self.mcdr_server.server_interface.disable_plugin(plg.get_id(), is_plugin_call=False))
@@ -452,8 +457,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 
 	def reload_all_plugin(self, source: CommandSource):
 		ret = self.function_call(source, self.mcdr_server.plugin_manager.refresh_all_plugins, 'reload_all_plugin', log_success=False)
-		if ret.no_error:
-			source.reply(self.mcdr_server.plugin_manager.last_operation_result.to_rtext(show_path=source.has_permission(PermissionLevel.PHYSICAL_SERVER_CONTROL_LEVEL)))
+		self.__print_plugin_operation_result_if_no_error(source, ret)
 
 	# =======================
 	#   Help Message things

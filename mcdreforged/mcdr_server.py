@@ -321,10 +321,10 @@ class MCDReforgedServer:
 	# --------------------------
 
 	def on_server_start(self):
-		self.logger.info(self.tr('mcdr_server.start_server.pid_info', self.process.pid))
-		self.plugin_manager.dispatch_event(MCDRPluginEvents.SERVER_START, ())
 		self.set_server_state(ServerState.RUNNING)
 		self.set_exit_naturally(True)  # Set after server state is set to RUNNING, or MCDR might have a chance to exit if the server is started by other thread
+		self.logger.info(self.tr('mcdr_server.start_server.pid_info', self.process.pid))
+		self.plugin_manager.dispatch_event(MCDRPluginEvents.SERVER_START, ())
 
 	def on_server_stop(self):
 		return_code = self.process.poll()
@@ -402,15 +402,15 @@ class MCDReforgedServer:
 			parsed_result = self.server_handler_manager.get_current_handler().parse_server_stdout(text)
 		except:
 			if self.logger.should_log_debug(option=DebugOption.HANDLER):  # traceback.format_exc() is costly
-				self.logger.debug('Fail to parse text "{}" from stdout of the server, using raw handler'.format(text))
+				self.logger.debug('Fail to parse text "{}" from stdout of the server, using raw handler'.format(text), no_check=True)
 				for line in traceback.format_exc().splitlines():
-					self.logger.debug('    {}'.format(line))
+					self.logger.debug('    {}'.format(line), no_check=True)
 			parsed_result = self.server_handler_manager.get_basic_handler().parse_server_stdout(text)
 		else:
 			if self.logger.should_log_debug(option=DebugOption.HANDLER):
-				self.logger.debug('Parsed text from server stdin:')
+				self.logger.debug('Parsed text from server stdout:', no_check=True)
 				for line in parsed_result.format_text().splitlines():
-					self.logger.debug('    {}'.format(line))
+					self.logger.debug('    {}'.format(line), no_check=True)
 		self.server_handler_manager.detect_text(text)
 		self.reactor_manager.put_info(parsed_result)
 
