@@ -3,7 +3,8 @@ Info and InfoSource
 """
 from typing import TYPE_CHECKING, Optional
 
-from mcdreforged.command.command_source import CommandSource, ConsoleCommandSource, PlayerCommandSource
+from mcdreforged.command.command_source import ConsoleCommandSource, PlayerCommandSource, \
+	InfoCommandSource
 from mcdreforged.utils.exception import IllegalStateError, IllegalCallError
 
 if TYPE_CHECKING:
@@ -86,7 +87,7 @@ class Info:
 	def get_server(self) -> 'ServerInterface':
 		return self.__mcdr_server.server_interface
 
-	def get_command_source(self) -> Optional[CommandSource]:
+	def get_command_source(self) -> Optional[InfoCommandSource]:
 		self.__assert_attached()
 		if self.__command_source is None:
 			if self.is_from_console:
@@ -95,7 +96,7 @@ class Info:
 				self.__command_source = PlayerCommandSource(self.__mcdr_server, self, self.player)
 		return self.__command_source
 
-	def to_command_source(self) -> CommandSource:
+	def to_command_source(self) -> InfoCommandSource:
 		source = self.get_command_source()
 		if source is None:
 			raise IllegalCallError()

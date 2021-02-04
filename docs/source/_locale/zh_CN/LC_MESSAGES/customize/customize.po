@@ -1,32 +1,32 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2021, Fallen_Breath
-# This file is distributed under the same license as the MCDReforged
-# package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2021.
-#
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: MCDReforged \n"
+"Project-Id-Version: mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-15 15:18+0800\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"POT-Creation-Date: 2021-01-17 09:55+0800\n"
+"PO-Revision-Date: 2021-01-23 17:32+0800\n"
+"Last-Translator: Alex3236 <alex3236@qq.com>\n"
+"Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.0\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Crowdin-Project: mcdreforged\n"
+"X-Crowdin-Project-ID: 437248\n"
+"X-Crowdin-Language: zh-CN\n"
+"X-Crowdin-File: /customize/customize.po\n"
+"X-Crowdin-File-ID: 98\n"
+"Language: zh_CN\n"
+"X-Generator: Poedit 2.4.2\n"
 
-#: ../customize/customize.rst:4
+#: ../../source/customize/customize.rst:4
 msgid "Server Handler"
-msgstr ""
+msgstr "服务端处理器"
 
-#: ../customize/customize.rst:4
+#: ../../source/customize/customize.rst:4
 msgid "Info Reactor"
-msgstr ""
+msgstr "Info 响应器"
 
-#: ../customize/customize.rst:2
+#: ../../source/customize/customize.rst:2
 msgid "Customize"
-msgstr ""
-
+msgstr "自定义"

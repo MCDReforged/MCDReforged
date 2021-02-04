@@ -335,22 +335,29 @@ class MCDReforgedPlugin(PermanentPlugin):
 		source.reply(self.tr('mcdr_command.list_plugin.info_loaded_plugin', len(current_plugins)))
 		for plugin in current_plugins:
 			meta = plugin.get_metadata()
+			displayed_name = meta.name.copy()
+			if not self.can_see_rtext(source):
+				displayed_name += RText(' ({})'.format(plugin.get_identifier()), color=RColor.gray)
 			texts = RTextList(
 				'§7-§r ',
-				meta.name.copy().
+				displayed_name.
 				c(RAction.run_command, '!!MCDR plugin info {}'.format(meta.id)).
 				h(self.tr('mcdr_command.list_plugin.suggest_info', meta.id))
 			)
 			if self.can_see_rtext(source) and not plugin.is_permanent():
 				texts.append(
 					' ',
-					RText('[×]', color=RColor.gray)
-					.c(RAction.run_command, '!!MCDR plugin disable {}'.format(meta.id))
-					.h(self.tr('mcdr_command.list_plugin.suggest_disable', meta.id)),
-					' ',
 					RText('[↻]', color=RColor.gray)
 					.c(RAction.run_command, '!!MCDR plugin reload {}'.format(meta.id))
-					.h(self.tr('mcdr_command.list_plugin.suggest_reload', meta.id))
+					.h(self.tr('mcdr_command.list_plugin.suggest_reload', meta.id)),
+					' ',
+					RText('[↓]', color=RColor.gray)
+					.c(RAction.run_command, '!!MCDR plugin unload {}'.format(meta.id))
+					.h(self.tr('mcdr_command.list_plugin.suggest_unload', meta.id)),
+					' ',
+					RText('[×]', color=RColor.gray)
+					.c(RAction.run_command, '!!MCDR plugin disable {}'.format(meta.id))
+					.h(self.tr('mcdr_command.list_plugin.suggest_disable', meta.id))
 				)
 			source.reply(texts)
 
@@ -381,7 +388,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 			if self.can_see_rtext(source):
 				texts.append(
 					' ',
-					RText('[✔]', color=RColor.gray)
+					RText('[↑]', color=RColor.gray)
 					.c(RAction.run_command, '!!MCDR plugin load {}'.format(file_name))
 					.h(self.tr('mcdr_command.list_plugin.suggest_load', file_name))
 				)
@@ -398,8 +405,9 @@ class MCDReforgedPlugin(PermanentPlugin):
 				' ',
 				RText('v{}'.format(meta.version), color=RColor.gray)
 			))
+			source.reply('ID: {}'.format(meta.id))
 			if meta.author is not None:
-				source.reply(RText('Authors: {}'.format(', '.join(meta.author))))
+				source.reply('Authors: {}'.format(', '.join(meta.author)))
 			if meta.link is not None:
 				source.reply(RTextList('Link: ', RText(meta.link, color=RColor.blue, styles=RStyle.underlined).c(RAction.open_url, meta.link)))
 			if meta.description is not None:
