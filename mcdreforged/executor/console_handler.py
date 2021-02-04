@@ -18,8 +18,9 @@ class ConsoleHandler(ThreadExecutor):
 					for line in parsed_result.format_text().splitlines():
 						self.mcdr_server.logger.debug('    {}'.format(line), no_check=True)
 				self.mcdr_server.reactor_manager.put_info(parsed_result)
-		except (KeyboardInterrupt, EOFError, SystemExit, IOError) as e:
-			self.mcdr_server.logger.critical('Critical exception caught in {}: {} {}'.format(type(self).__name__, type(e).__name__, e))
-			self.mcdr_server.interrupt()
+		except (KeyboardInterrupt, EOFError, SystemExit, IOError) as error:
+			if self.mcdr_server.is_server_running():
+				self.mcdr_server.logger.critical('Critical exception caught in {}: {} {}'.format(type(self).__name__, type(error).__name__, error))
+				self.mcdr_server.interrupt()
 		except:
 			self.mcdr_server.logger.exception(self.mcdr_server.tr('console_handler.error'))
