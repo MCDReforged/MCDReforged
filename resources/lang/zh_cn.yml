@@ -353,6 +353,9 @@ update_helper.check_update.new_version_detected: |
 update_helper.check_update.new_version_url: |
   你可以在这里更新 MCDR: §9{0}§r
 
+update_helper.check_update.mcdr1.0_hint: |
+  MCDR 0.x 至 MCDR 1.0 并不是一个简单的更新。在升级你的 MCDR 前请仔细于 MCDR 文档网站中阅读章节《迁移自 MCDR 0.x》
+
 update_helper.check_update.download_finished: |
   最新的 MCDR 下载完成，文件位于 §7{0}§r
 

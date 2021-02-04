@@ -353,6 +353,9 @@ update_helper.check_update.new_version_detected: |
 update_helper.check_update.new_version_url: |
   You can update MCDR from here: §9{0}§r
 
+update_helper.check_update.mcdr1.0_hint: |
+  It's not a simple small update from MCDR 0.x to MCDR 1.0. Read the page Migrate from MCDR 0.x in the document website of MCDR carefully before update your MCDR
+
 update_helper.check_update.download_finished: |
   Latest MCDR downloaded. It's in §7{0}§r
 
