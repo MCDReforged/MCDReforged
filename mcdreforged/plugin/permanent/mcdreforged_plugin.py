@@ -105,7 +105,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 				).
 				then(Literal('set').then(QuotableText('player').then(Text('level').runs(lambda src, ctx: self.set_player_permission(src, ctx['player'], ctx['level']))))).
 				then(
-					Literal({'query', 'q'}).runs(lambda src: self.query_player_permission(src, None)).
+					Literal({'query', 'q'}).runs(lambda src: self.query_self_permission(src)).
 					then(QuotableText('player').runs(lambda src, ctx: self.query_player_permission(src, ctx['player'])))
 				).
 				then(Literal({'remove', 'rm'}).then(QuotableText('player').runs(lambda src, ctx: self.remove_player_permission(src, ctx['player'])))).
@@ -222,26 +222,25 @@ class MCDReforgedPlugin(PermanentPlugin):
 				if source.is_player:
 					source.reply(self.tr('permission_manager.set_permission_level.done', player, permission_level.name))
 
-	def query_player_permission(self, source: CommandSource, player: Optional[str]):
-		if player is None:
-			level = source.get_permission_level()
-			source.reply(self.tr('mcdr_command.query_player_permission.self', PermissionLevel.from_value(level)))
+	def query_self_permission(self, source: CommandSource):
+		source.reply(self.tr('mcdr_command.query_player_permission.self', PermissionLevel.from_value(source.get_permission_level())))
+
+	def query_player_permission(self, source: CommandSource, player: str):
+		if not Validator.player_name(player):
+			source.reply(self.tr('mcdr_command.invalid_player_name'))
+			return
 		else:
-			if not Validator.player_name(player):
-				source.reply(self.tr('mcdr_command.invalid_player_name'))
-				return
+			level = self.mcdr_server.permission_manager.get_player_permission_level(player, auto_add=False)
+			if level is not None:
+				source.reply(self.tr('mcdr_command.query_player_permission.player', player, PermissionLevel.from_value(level)))
 			else:
-				level = self.mcdr_server.permission_manager.get_player_permission_level(player, auto_add=False)
-				if level is not None:
-					source.reply(self.tr('mcdr_command.query_player_permission.player', player, PermissionLevel.from_value(level)))
-				else:
-					source.reply(self.tr('mcdr_command.query_player_permission.player_unknown', player))
+				source.reply(self.tr('mcdr_command.query_player_permission.player_unknown', player))
 
 	def remove_player_permission(self, source: CommandSource, player: str):
 		if not Validator.player_name(player):
 			source.reply(self.tr('mcdr_command.invalid_player_name'))
 		else:
-			if not source.has_permission_higher_than(self.mcdr_server.permission_manager.get_player_permission_level(player)):
+			if not source.has_permission(self.mcdr_server.permission_manager.get_player_permission_level(player)):
 				source.reply(self.tr('mcdr_command.permission_not_enough'))
 			else:
 				self.mcdr_server.permission_manager.remove_player(player)
