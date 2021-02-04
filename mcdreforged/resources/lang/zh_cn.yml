@@ -186,7 +186,7 @@ update_helper.check_update.new_version_detected       : "已检测到新版本: 
 command_exception.unknown_command                     : 未知指令
 command_exception.unknown_argument                    : 未知参数
 command_exception.unknown_root_argument               : 未知根节点参数
-command_exception.requirement_not_met                 : "{0}"  # 保持原状
+command_exception.requirement_not_met                 : 约束未满足
 command_exception.literal_not_match                   : 字面不匹配
 command_exception.number_out_of_range                 : 数字 {0} 超出范围 [{1}, {2}]
 command_exception.invalid_number                      : 无效的数字

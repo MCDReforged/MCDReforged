@@ -44,7 +44,8 @@ msgid ""
 "You can use command ``!!MCDR reload config`` or its short form ``!!MCDR r"
 " cfg`` to reload the config file when MCDR is running. Check the `here "
 "<command.html#hot-reloads>`__ for more detail about hot reloads"
-msgstr ""
+msgstr "当 MCDR 运行时，你可以使用 ``!!MCDR reload "
+"config`` 命令（或其缩写 ``!!MCDR r cfg``）来重载配置文件。查阅 `此处 <command.html#hot-reloads>`__ 以了解更多热重载的信息"
 
 #: ../configure.rst:14
 msgid "List of options"
@@ -178,8 +179,8 @@ msgid ""
 msgstr "用于 1.14 版本以下的 Bukkit / Spigot 服务器"
 
 #: ../configure.rst:75
-msgid "bukkit_handler_14"
-msgstr "bukkit_handler_14"
+msgid "bukkit14_handler"
+msgstr "bukkit14_handler"
 
 #: ../configure.rst:76
 msgid "For Bukkit / Spigot server with Minecraft version 1.14 and above"
@@ -473,23 +474,4 @@ msgid ""
 "or set the specific option to enable specific debug logging"
 msgstr "调试日志模式开关。将 ``all`` 设置为 ``true`` 以启用所有的调试输出。也可以打开部分选项，以启用某些调试输出。"
 
-#~ msgid ""
-#~ "You can use command ``!!MCDR reload "
-#~ "config`` or its short form ``!!MCDR "
-#~ "r cfg`` to reload the config file"
-#~ " when MCDR is running"
-#~ msgstr ""
-#~ "当 MCDR 运行时，你可以使用 ``!!MCDR reload "
-#~ "config`` 命令（或其缩写 ``!!MCDR r cfg`` "
-#~ "）来重载配置文件。"
-
-#~ msgid ""
-#~ "You can use command ``!!MCDR reload "
-#~ "config`` or its short form ``!!MCDR "
-#~ "r cfg`` to reload the config file"
-#~ " when MCDR is running. Check the "
-#~ "related `command section <command.html#hot-"
-#~ "reloads>`__ for more detail about hot"
-#~ " reloads"
-#~ msgstr ""
 

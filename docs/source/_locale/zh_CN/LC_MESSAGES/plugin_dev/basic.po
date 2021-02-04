@@ -66,7 +66,7 @@ msgstr "打开它并输入如下代码："
 msgid ""
 "Return to MCDR console, enter ``!!MCDR reload plugin``, and you should "
 "see the hello world message from your plugin"
-msgstr "返回MCDR控制台，输入 ``!! MCDR reload plugin`` 。你应该会看到插件发送了一条 hello world。"
+msgstr "返回MCDR控制台，输入 ``!!MCDR reload plugin`` 。你应该会看到插件发送了一条 hello world。"
 
 #: ../plugin_dev/basic.rst:44
 msgid "Great, you have successfully created your first plugin"

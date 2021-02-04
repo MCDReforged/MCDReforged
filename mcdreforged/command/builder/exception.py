@@ -1,5 +1,5 @@
 from abc import ABC
-from typing import Optional, Callable
+from typing import Optional
 
 
 class CommandErrorBase(Exception, ABC):
@@ -29,11 +29,11 @@ class CommandError(CommandErrorBase, ABC):
 	def to_mc_color_text(self):
 		return '§c{}: §r{}§c{}§4<--'.format(self.__message, self._parsed_command, self._failed_command[len(self._parsed_command):])
 
-	def get_translation_args(self) -> tuple:
+	def get_error_data(self) -> tuple:
 		return ()
 
-	def set_translated_message(self, key: str, translator: Callable[[str, tuple], str]):
-		self.__message = translator(key, self.get_translation_args())
+	def set_message(self, message: str):
+		self.__message = message
 
 	def get_parsed_command(self) -> str:
 		return self._parsed_command
@@ -79,12 +79,17 @@ class RequirementNotMet(CommandError):
 	"""
 	The specified requirement for the command source to enter this node is not met
 	"""
+	DEFAULT_REASON = object()
+
 	def __init__(self, parsed_command: str, failed_command: str, reason: Optional[str]):
-		self.__reason = reason if reason is not None else 'Requirement is not met'
+		self.__reason = reason if reason is not None else self.DEFAULT_REASON
 		super().__init__(self.__reason, parsed_command, failed_command)
 
-	def get_translation_args(self) -> tuple:
-		return (self.__reason,)
+	def get_reason(self) -> Optional[str]:
+		return self.__reason
+
+	def get_error_data(self) -> tuple:
+		return (self.get_reason(),)
 
 # -----------------
 #   Syntax things
@@ -139,7 +144,7 @@ class AbstractOutOfRange(IllegalArgument, ABC):
 	def _get_boundary_text(cls, value) -> str:
 		return str(value) if value is not None else '/'
 
-	def get_translation_args(self) -> tuple:
+	def get_error_data(self) -> tuple:
 		return self.__value, self._get_boundary_text(self.__range_l), self._get_boundary_text(self.__range_r)
 
 

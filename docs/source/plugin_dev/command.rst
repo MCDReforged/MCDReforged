@@ -245,6 +245,15 @@ Keyword Parameter *handled*: If handled is set to True, ``error.set_handled()`` 
 
 For uses about ``error.set_handled()``, check the `CommandError <classes/CommandError.html#set-handled>`__ class reference
 
+on_child_error
+~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   def on_child_error(self, error_type: Type[CommandError], handler: Union[Callable[[], Any], Callable[[CommandSource], Any], Callable[[CommandSource, CommandError], Any], Callable[[CommandSource, CommandError, dict], Any]], *, handled: bool = False) -> ArgumentNode
+
+Similar to `on_error <#on_error>`__, but it gets triggered only when the node receives a command error from one of the node's direct or indirect child
+
 Literal
 ^^^^^^^
 

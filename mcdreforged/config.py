@@ -1,6 +1,5 @@
 """
 MCDR config file stuffs
-TODO console color code switch
 """
 from logging import Logger
 
