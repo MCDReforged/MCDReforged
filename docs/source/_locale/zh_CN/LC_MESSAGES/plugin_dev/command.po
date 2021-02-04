@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-30 13:54+0800\n"
+"POT-Creation-Date: 2021-02-04 12:37+0800\n"
 "PO-Revision-Date: 2021-01-23 17:24+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -319,8 +319,8 @@ msgid ""
 "Parameter *requirement*: A callable that accepts up to 2 arguments and "
 "returns a bool. Argument list: ``CommandSource``, ``dict`` (context)"
 msgstr ""
-"参数 *requirement*: 一个最多接受 2 个参数并返回一个 bool 的可调用对象。参数列表：``CommandSource`` ,"
-" ``dict`` （上下文）"
+"参数 *requirement*: 一个最多接受 2 个参数并返回一个 bool 的可调用对象。参数列表：``CommandSource`` , "
+"``dict`` （上下文）"
 
 #: ../plugin_dev/command.rst:166
 msgid ""
@@ -352,7 +352,7 @@ msgid ""
 "redirecting to"
 msgstr "参数 *redirect_node*：当前节点的重定向目标"
 
-#: ../plugin_dev/command.rst:187 ../plugin_dev/command.rst:257
+#: ../plugin_dev/command.rst:187 ../plugin_dev/command.rst:266
 msgid "Examples:"
 msgstr "例如："
 
@@ -445,7 +445,7 @@ msgid ""
 "``error.set_handled()`` is called automatically when invoking the handler"
 " callback"
 msgstr ""
-"关键字参数 *handled*：如果将 handled 设置为True，则在调用处理程序回调时会自动调用 "
+"关键字参数 *handled*：如果将 handled 设置为 True，则在调用处理程序回调时会自动调用 "
 "``error.set_handled()``。"
 
 #: ../plugin_dev/command.rst:246
@@ -457,116 +457,127 @@ msgstr ""
 "<classes/CommandError.html#set-handled>`__ 类的相关说明。"
 
 #: ../plugin_dev/command.rst:249
+msgid "on_child_error"
+msgstr "on_child_error"
+
+#: ../plugin_dev/command.rst:255
+msgid ""
+"Similar to `on_error <#on_error>`__, but it gets triggered only when the "
+"node receives a command error from one of the node's direct or indirect "
+"child"
+msgstr "与 `on_error <#on_error>`__ 类似，不过它仅在该节点收到了一个来自其子孙节点的指令错误时触发"
+
+#: ../plugin_dev/command.rst:258
 msgid "Literal"
 msgstr "Literal"
 
-#: ../plugin_dev/command.rst:251
+#: ../plugin_dev/command.rst:260
 msgid ""
 "Literal node is a special node. It doesn't output any value. It's more "
 "like a command branch carrier"
 msgstr "字面值（Literal）节点是一个特殊的节点。它不输出任何值，更像是一个指令分支的载体。"
 
-#: ../plugin_dev/command.rst:253
+#: ../plugin_dev/command.rst:262
 msgid ""
 "Literal node can accept a str as its literal in its constructor. A "
 "literal node accepts the parsing command only when the next element of "
 "the parsing command exactly matches the literal of the node"
 msgstr "字面值节点可以在其构造的函数中接受 str 作为其字面值。当解析指令的下一个元素与节点的字面值完全匹配时，字面值节点才接受并解析指令。"
 
-#: ../plugin_dev/command.rst:255
+#: ../plugin_dev/command.rst:264
 msgid "Literal node is the only node that can start a command execution"
 msgstr "字面值节点是唯一可以发起指令执行的节点。"
 
-#: ../plugin_dev/command.rst:267
+#: ../plugin_dev/command.rst:276
 msgid "NumberNode"
 msgstr "NumberNode"
 
-#: ../plugin_dev/command.rst:269
+#: ../plugin_dev/command.rst:278
 msgid ""
 "It's an abstract class. It's inherited by ``Number``, ``Integer`` and "
 "``Float``. It represents a type of number based node"
 msgstr "这是一个抽象类。它被 ``Number``，``Integer`` 和 ``Float`` 继承。它代表一种基于数字的节点。"
 
-#: ../plugin_dev/command.rst:271
+#: ../plugin_dev/command.rst:280
 msgid ""
 "For a ``NumberNode`` instance, you can restrict the range of the number "
 "argument. If the parsed number is out of range, a ``NumberOutOfRange`` "
 "exception will be risen"
 msgstr "对于 NumberNode 实例，你可以限制数字参数的范围。如果解析的数字超出范围，则会抛出 ``NumberOutOfRange`` 异常。"
 
-#: ../plugin_dev/command.rst:273
+#: ../plugin_dev/command.rst:282
 msgid "By default there's no range restriction"
 msgstr "默认情况下，没有范围限制。"
 
-#: ../plugin_dev/command.rst:276
+#: ../plugin_dev/command.rst:285
 msgid "at_min"
 msgstr "at_min"
 
-#: ../plugin_dev/command.rst:282
+#: ../plugin_dev/command.rst:291
 msgid "Set the lower boundary of the range restriction to *min_value*"
 msgstr "将数字范围的下限设置为 *min_value* 。"
 
-#: ../plugin_dev/command.rst:285
+#: ../plugin_dev/command.rst:294
 msgid "at_max"
 msgstr "at_max"
 
-#: ../plugin_dev/command.rst:291
+#: ../plugin_dev/command.rst:300
 msgid "Set the higher boundary of the range restriction to *max_value*"
 msgstr "将数字范围的上限设置为 *max_value* 。"
 
-#: ../plugin_dev/command.rst:294
+#: ../plugin_dev/command.rst:303
 msgid "in_range"
 msgstr "in_range"
 
-#: ../plugin_dev/command.rst:300
+#: ../plugin_dev/command.rst:309
 msgid ""
 "Set the lower and the higher boundary of the range restriction at the "
 "same time"
 msgstr "同时设置数字范围的上、下限。"
 
-#: ../plugin_dev/command.rst:303
+#: ../plugin_dev/command.rst:312
 msgid "Number"
 msgstr "Number"
 
-#: ../plugin_dev/command.rst:305
+#: ../plugin_dev/command.rst:314
 msgid ""
 "A ``Number`` node accepts a number argument. It can be an integer or an "
 "float. If the next element is not a number, a ``InvalidNumber`` exception"
 " will be risen"
 msgstr "``Number`` 节点接受数字参数——整数或浮点数。如果下一个元素不是数字，则将抛出 ``InvalidNumber`` 异常。"
 
-#: ../plugin_dev/command.rst:308
+#: ../plugin_dev/command.rst:317
 msgid "Integer"
 msgstr "Integer"
 
-#: ../plugin_dev/command.rst:310
+#: ../plugin_dev/command.rst:319
 msgid ""
 "An ``Integer`` node accepts a int argument. It can only be an integer. If"
 " the next element is not an integer, a ``InvalidInteger`` exception will "
 "be risen"
 msgstr "``Integer`` 节点只接受 int 类型的参数，即整数。如果下一个元素不是整数，则将抛出 ``InvalidInteger`` 异常。"
 
-#: ../plugin_dev/command.rst:313
+#: ../plugin_dev/command.rst:322
 msgid "Float"
 msgstr "Float"
 
-#: ../plugin_dev/command.rst:315
+#: ../plugin_dev/command.rst:324
 msgid ""
 "A ``Float`` node accepts a float argument. It can only be a float. If the"
 " next element is not a float, a ``InvalidFloat`` exception will be risen"
 msgstr "``Float`` 节点只接受 float 类型的参数，即浮点数。如果下一个元素不是浮点数，则将抛出 ``InvalidFloat`` 异常。"
 
-#: ../plugin_dev/command.rst:318
+#: ../plugin_dev/command.rst:327
 msgid "TextNode"
 msgstr "TextNode"
 
-#: ../plugin_dev/command.rst:320
+#: ../plugin_dev/command.rst:329
 msgid ""
 "It's an abstract class. It's inherited by ``Text``, ``QuotableText`` and "
 "``GreedyText``. It represents a type of text based node"
 msgstr "这是一个抽象类。它被 ``Text``，``QuotableText`` 和 ``GreedyText`` 继承。它代表一种基于文本的节点。"
 
-#: ../plugin_dev/command.rst:322
+#: ../plugin_dev/command.rst:331
 msgid ""
 "For a ``TextNode`` instance, you can restrict the length range of the str"
 " text argument. If the length of the parsed text is out of range, a "
@@ -575,52 +586,52 @@ msgstr ""
 "对于 ``TextNode`` 实例，你可以限制文本参数的长度范围。如果解析的文本长度超出范围，则将抛出 "
 "``TextLengthOutOfRange`` 异常。"
 
-#: ../plugin_dev/command.rst:324
+#: ../plugin_dev/command.rst:333
 msgid "By default there's no length range restriction"
 msgstr "默认情况下，没有长度范围限制。"
 
-#: ../plugin_dev/command.rst:327
+#: ../plugin_dev/command.rst:336
 msgid "at_min_length"
 msgstr "at_min_length"
 
-#: ../plugin_dev/command.rst:333
+#: ../plugin_dev/command.rst:342
 msgid "Set the lower boundary of the length range restriction to *min_length*"
 msgstr "将长度范围的下限设置为 *min_length* 。"
 
-#: ../plugin_dev/command.rst:336
+#: ../plugin_dev/command.rst:345
 msgid "at_max_length"
 msgstr "at_max_length"
 
-#: ../plugin_dev/command.rst:342
+#: ../plugin_dev/command.rst:351
 msgid "Set the higher boundary of the length range restriction to *max_length*"
 msgstr "将长度范围的上限设置为 *max_length* 。"
 
-#: ../plugin_dev/command.rst:345
+#: ../plugin_dev/command.rst:354
 msgid "in_length_range"
 msgstr "in_length_range"
 
-#: ../plugin_dev/command.rst:351
+#: ../plugin_dev/command.rst:360
 msgid ""
 "Set the lower and the higher boundary of the length range restriction at "
 "the same time"
 msgstr "同时设置文本长度的上、下限。"
 
-#: ../plugin_dev/command.rst:354
+#: ../plugin_dev/command.rst:363
 msgid "Text"
 msgstr "Text"
 
-#: ../plugin_dev/command.rst:356
+#: ../plugin_dev/command.rst:365
 msgid ""
 "A ``Text`` node accepts a single string element. Since space character is"
 " the divider character of MCDR command parsing. ``Text`` nodes will keep "
 "taking the continuous string segment until they meet a space character"
 msgstr "``Text`` 节点接受一个字符串元素。空格字符是MCDR指令解析的分隔符，所以 ``Text`` 节点将获取第一个空格之前的字符。"
 
-#: ../plugin_dev/command.rst:359
+#: ../plugin_dev/command.rst:368
 msgid "QuotableText"
 msgstr "QuotableText"
 
-#: ../plugin_dev/command.rst:361
+#: ../plugin_dev/command.rst:370
 msgid ""
 "A ``QuotableText`` works just like a ``Text`` argument node, but it gives"
 " user a way to input text with space character: Use two double quotes to "
@@ -629,63 +640,63 @@ msgstr ""
 "``QuotableText`` 的工作方式与 ``Text`` "
 "节点一样，但是它提供了一种输入带有空格的文本的方法：使用两个双引号将文本内容括起来。"
 
-#: ../plugin_dev/command.rst:363
+#: ../plugin_dev/command.rst:372
 msgid ""
 "If you use two double quotes to enclose the text content, You can use "
 "escape character ``\\`` to escape double quotes ``\"`` and escape "
 "character ``\\`` itself"
 msgstr "使用双引号括住文本内容后，你可以使用转义字符 ``\\`` 来转义 ``\"`` 或 ``\\`` 本身。"
 
-#: ../plugin_dev/command.rst:365
+#: ../plugin_dev/command.rst:374
 msgid "For example, here are some texts that accepted by ``QuotableText``:"
 msgstr "例如，以下是可被 ``QuotableText`` 接受的一些文本："
 
-#: ../plugin_dev/command.rst:368
+#: ../plugin_dev/command.rst:377
 msgid "``Something``"
 msgstr "``我是一段文字`` -> ``我是一段文字``"
 
-#: ../plugin_dev/command.rst:369
+#: ../plugin_dev/command.rst:378
 msgid "``\"Someting with space characters\"``"
 msgstr "``\"这段 文本 包括 空格 ！\"`` -> ``这段 文本 包含 空格 ！``"
 
-#: ../plugin_dev/command.rst:370
+#: ../plugin_dev/command.rst:379
 msgid "``\"or escapes \\\\ like \\\" this\"``"
 msgstr "``\"也可以像这样包含 \\\\ 或者 \\\" ！\"`` -> ``也可以像这样包含 \\ 或者 \" ！``"
 
-#: ../plugin_dev/command.rst:373
+#: ../plugin_dev/command.rst:382
 msgid "GreedyText"
 msgstr "GreedyText"
 
-#: ../plugin_dev/command.rst:375
+#: ../plugin_dev/command.rst:384
 msgid ""
 "The principle of ``GreedyText`` is quite simple: It greedily take out all"
 " remaining texts in the commands"
 msgstr "``GreedyText`` 的原理很简单：它贪婪地取出指令中所有剩余的文本。"
 
-#: ../plugin_dev/command.rst:377
+#: ../plugin_dev/command.rst:386
 msgid ""
 "It's not a smart decision to append any child nodes to a ``GreedyText``, "
 "since the child nodes can never get any remaining command"
 msgstr "将任何子节点附加到 ``GreedyText`` 上不是明智的决定，因为这样子节点永远无法获得任何剩余指令。"
 
-#: ../plugin_dev/command.rst:380
+#: ../plugin_dev/command.rst:389
 msgid "Customize"
 msgstr "自定义"
 
-#: ../plugin_dev/command.rst:382
+#: ../plugin_dev/command.rst:391
 msgid ""
 "MCDR also supports customize an argument node. It might save you same "
 "repeated work on building your command"
 msgstr "MCDR 支持自定义参数节点。它也许能节省一些你为构建指令而重复工作的时间。"
 
-#: ../plugin_dev/command.rst:384
+#: ../plugin_dev/command.rst:393
 msgid ""
 "To create a custom a argument node, you need to declare a class inherited"
 " from ``ArgumentNode``, and then implement the ``parse`` method logic. "
 "That's it, the custom node class is ready to be used"
 msgstr "要创建自定义参数节点，你需要声明一个继承自 ``ArgumentNode`` 的类，然后实现 ``parse`` 的方法逻辑。"
 
-#: ../plugin_dev/command.rst:386
+#: ../plugin_dev/command.rst:395
 msgid ""
 "Custom exception provides a precise way to handle your exception with "
 "``on_error`` method. If you want to raise a custom exception when your "
@@ -695,7 +706,7 @@ msgstr ""
 "自定义异常提供了一种使用 ``on_error`` "
 "方法处理异常的精确方法。如果你想在参数节点无法解析文本时引发自定义异常，则需要使自定义异常继承自 ``CommandSyntaxError``。"
 
-#: ../plugin_dev/command.rst:388
+#: ../plugin_dev/command.rst:397
 msgid ""
 "Here's a quick example of a custom Argument node, ``PointArgument``. It "
 "accepts continuous 3 float input as a coordinate and batch them in to a "
@@ -707,47 +718,47 @@ msgstr ""
 "类型的参数输入作为坐标，并将它们作为点储存到列表中。如果它获得非浮点输入，则抛出 ``IllegalPoint`` "
 "异常。如果指令在读取完三个浮点数之前结束，则抛出 ``IncompletePoint`` 异常。"
 
-#: ../plugin_dev/command.rst:416
+#: ../plugin_dev/command.rst:425
 msgid "For its usage, here's a simple example as well as an input/output table:"
 msgstr "对于它的用法，这是一个简单的示例，以及一个对应的输入/输出表："
 
-#: ../plugin_dev/command.rst:431
+#: ../plugin_dev/command.rst:440
 msgid "Input"
 msgstr "输入值"
 
-#: ../plugin_dev/command.rst:432
+#: ../plugin_dev/command.rst:441
 msgid "Output"
 msgstr "输出值"
 
-#: ../plugin_dev/command.rst:433
+#: ../plugin_dev/command.rst:442
 msgid "!!mypoint 1 2 3"
 msgstr "!!mypoint 1 2 3"
 
-#: ../plugin_dev/command.rst:434
+#: ../plugin_dev/command.rst:443
 msgid "You have input a point (1.0, 2.0, 3.0)"
 msgstr "You have input a point (1.0, 2.0, 3.0)"
 
-#: ../plugin_dev/command.rst:435
+#: ../plugin_dev/command.rst:444
 msgid "!!mypoint 1 2"
 msgstr "!!mypoint 1 2"
 
-#: ../plugin_dev/command.rst:436
+#: ../plugin_dev/command.rst:445
 msgid "Incomplete Point: !!mypoint 1 2<--"
 msgstr "Incomplete Point: !!mypoint 1 2<--"
 
-#: ../plugin_dev/command.rst:437
+#: ../plugin_dev/command.rst:446
 msgid "!!mypoint xxx"
 msgstr "!!mypoint xxx"
 
-#: ../plugin_dev/command.rst:438
+#: ../plugin_dev/command.rst:447
 msgid "Invalid Point: !!mypoint xxx<--"
 msgstr "Invalid Point: !!mypoint xxx<--"
 
-#: ../plugin_dev/command.rst:439
+#: ../plugin_dev/command.rst:448
 msgid "!!mypoint 1 2 x"
 msgstr "!!mypoint 1 2 x"
 
-#: ../plugin_dev/command.rst:440
+#: ../plugin_dev/command.rst:449
 msgid "Invalid Point: !!mypoint 1 2 x<--"
 msgstr "Invalid Point: !!mypoint 1 2 x<--"
 

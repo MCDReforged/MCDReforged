@@ -107,7 +107,6 @@ class ArgumentNode:
 
 	def on_child_error(self, error_type: Type[CommandError], handler: SOURCE_ERROR_CONTEXT_CALLBACK, *, handled: bool = False) -> 'ArgumentNode':
 		"""
-		TODO: update doc
 		When receives a command error from one of the node's child, invoke the handler
 		:param error_type: A class that is subclass of CommandError
 		:param handler: A callback function which accepts maximum 3 parameters (command source, error and context)
