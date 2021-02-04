@@ -36,7 +36,7 @@ msgid "Customize"
 msgstr "自定义"
 
 msgid "Migrate from MCDR 0.x"
-msgstr "从 MCDR 0.x 迁移"
+msgstr "迁移自 MCDR 0.x"
 
 msgid "Home"
 msgstr "首页"
