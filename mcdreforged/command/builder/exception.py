@@ -1,5 +1,5 @@
 from abc import ABC
-from typing import Optional, Callable
+from typing import Optional
 
 
 class CommandErrorBase(Exception, ABC):
@@ -32,8 +32,8 @@ class CommandError(CommandErrorBase, ABC):
 	def get_error_data(self) -> tuple:
 		return ()
 
-	def set_translated_message(self, key: str, translator: Callable[[str, tuple], str]):
-		self.__message = translator(key, self.get_error_data())
+	def set_message(self, message: str):
+		self.__message = message
 
 	def get_parsed_command(self) -> str:
 		return self._parsed_command
@@ -79,12 +79,17 @@ class RequirementNotMet(CommandError):
 	"""
 	The specified requirement for the command source to enter this node is not met
 	"""
+	DEFAULT_REASON = object()
+
 	def __init__(self, parsed_command: str, failed_command: str, reason: Optional[str]):
-		self.__reason = reason if reason is not None else 'Requirement is not met'
+		self.__reason = reason if reason is not None else self.DEFAULT_REASON
 		super().__init__(self.__reason, parsed_command, failed_command)
 
+	def get_reason(self) -> Optional[str]:
+		return self.__reason
+
 	def get_error_data(self) -> tuple:
-		return (self.__reason,)
+		return (self.get_reason(),)
 
 # -----------------
 #   Syntax things

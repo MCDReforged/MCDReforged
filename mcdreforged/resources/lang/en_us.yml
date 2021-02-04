@@ -186,7 +186,7 @@ update_helper.check_update.new_version_detected       : "New version detected: Â
 command_exception.unknown_command                     : Unknown command
 command_exception.unknown_argument                    : Unknown argument
 command_exception.unknown_root_argument               : Unknown root argument
-command_exception.requirement_not_met                 : "{0}"  # keep it as it is
+command_exception.requirement_not_met                 : Requirement not met
 command_exception.literal_not_match                   : Literal is not match
 command_exception.number_out_of_range                 : Number {0} out of range [{1}, {2}]
 command_exception.invalid_number                      : Invalid number
