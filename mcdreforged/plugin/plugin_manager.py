@@ -1,11 +1,12 @@
 """
 Plugin management
 """
+import collections
 import os
 import sys
 import threading
 from contextlib import contextmanager
-from typing import Callable, Dict, Optional, Any, Tuple, List, TYPE_CHECKING
+from typing import Callable, Dict, Optional, Any, Tuple, List, TYPE_CHECKING, Deque
 
 from mcdreforged import constant
 from mcdreforged.plugin.meta.dependency_walker import DependencyWalker
@@ -13,7 +14,7 @@ from mcdreforged.plugin.operation_result import PluginOperationResult, SingleOpe
 from mcdreforged.plugin.permanent.mcdreforged_plugin import MCDReforgedPlugin
 from mcdreforged.plugin.plugin import PluginState, AbstractPlugin
 from mcdreforged.plugin.plugin_event import MCDRPluginEvents, MCDREvent, EventListener
-from mcdreforged.plugin.plugin_registry import PluginManagerRegistry
+from mcdreforged.plugin.plugin_registry import PluginRegistryStorage
 from mcdreforged.plugin.plugin_thread import PluginThreadPool
 from mcdreforged.plugin.regular_plugin import RegularPlugin
 from mcdreforged.utils import file_util, string_util, misc_util
@@ -39,7 +40,7 @@ class PluginManager:
 		# file_path -> id mapping
 		self.plugin_file_path = {}  # type: Dict[str, str]
 		# storage for event listeners, help messages and commands
-		self.registry_storage = PluginManagerRegistry(self)
+		self.registry_storage = PluginRegistryStorage(self)
 
 		self.last_operation_result = PluginOperationResult(self)
 
@@ -58,12 +59,13 @@ class PluginManager:
 	#   Getters / Setters etc.
 	# --------------------------
 
-	def get_current_running_plugin(self, *, thread=None) -> Optional[RegularPlugin]:
+	def get_current_running_plugin(self, *, thread=None) -> Optional[AbstractPlugin]:
 		"""
 		Get current executing plugin in this thread
 		:param thread: If specified, it should be a Thread instance. Then it will return the executing plugin in the given thread
 		"""
-		return self.tls.get(self.TLS_PLUGIN_KEY, None, thread=thread)
+		stack = self.tls.get(self.TLS_PLUGIN_KEY, None, thread=thread)  # type: Deque[AbstractPlugin]
+		return stack[-1] if stack is not None else None
 
 	def get_all_plugins(self) -> List[AbstractPlugin]:
 		return list(self.plugins.values())
@@ -95,11 +97,15 @@ class PluginManager:
 
 	@contextmanager
 	def with_plugin_context(self, plugin: AbstractPlugin):
-		self.tls.put(self.TLS_PLUGIN_KEY, plugin)
+		stack = self.tls.get(self.TLS_PLUGIN_KEY, default=collections.deque())  # type: Deque[AbstractPlugin]
+		stack.append(plugin)
+		self.tls.put(self.TLS_PLUGIN_KEY, stack)
 		try:
 			yield
 		finally:
-			self.tls.pop(self.TLS_PLUGIN_KEY)
+			stack.pop()
+			if len(stack) == 0:
+				self.tls.pop(self.TLS_PLUGIN_KEY)
 
 	def contains_plugin_file(self, file_path: str) -> bool:
 		return file_path in self.plugin_file_path
@@ -295,8 +301,8 @@ class PluginManager:
 	# Current behavior for plugin operations
 	# 1. Actual plugin operations
 	#   For plugin refresh
-	#     1. Load new plugins
-	#     2. Unload plugins whose file is removed
+	#     1. Unload plugins whose file is removed
+	#     2. Load new plugins
 	#     3. Reload existed (and matches filter) plugins whose state is ready. if reload fail unload it
 	#
 	#   For single plugin operation
@@ -325,6 +331,8 @@ class PluginManager:
 		# reload_result		READY				UNLOADING
 		# dep_chk_result	LOADED / READY		UNLOADING
 
+		self.registry_storage.clear()  # in case plugin invokes dispatch_event during on_load. dont let them trigger listeners
+
 		for plugin in load_result.success_list + reload_result.success_list:
 			if plugin in dependency_check_result.success_list:
 				plugin.ready()
@@ -347,7 +355,11 @@ class PluginManager:
 		for plugin in self.get_regular_plugins():
 			plugin.assert_state({PluginState.READY})
 
+		self.__sort_plugins_by_id()
 		self.__update_registry()
+
+	def __sort_plugins_by_id(self):
+		self.plugins = dict(sorted(self.plugins.items(), key=lambda item: item[0]))
 
 	def __update_registry(self):
 		self.registry_storage.clear()
@@ -357,8 +369,8 @@ class PluginManager:
 		self.mcdr_server.on_plugin_changed()
 
 	def __refresh_plugins(self, reload_filter: Callable[[RegularPlugin], bool]):
-		load_result = self.__collect_and_process_new_plugins(lambda fp: True)
 		unload_result = self.__collect_and_remove_plugins(lambda plugin: not plugin.file_exists())
+		load_result = self.__collect_and_process_new_plugins(lambda fp: True)
 		reload_result = self.__reload_ready_plugins(reload_filter)
 		self.__post_plugin_process(load_result, unload_result, reload_result)
 
@@ -418,8 +430,11 @@ class PluginManager:
 		for listener in self.registry_storage.event_listeners.get(event.id, []):
 			self.trigger_listener(listener, args)
 
-	def dispatch_event(self, event: MCDREvent, args: Tuple[Any, ...]):
-		self.mcdr_server.task_executor.execute_or_enqueue(lambda: self.__dispatch_event(event, args))
+	def dispatch_event(self, event: MCDREvent, args: Tuple[Any, ...], *, on_executor_thread=True, wait=False):
+		if on_executor_thread:
+			self.mcdr_server.task_executor.execute_or_enqueue(lambda: self.__dispatch_event(event, args), wait=wait)
+		else:  # on thread
+			self.__dispatch_event(event, args)
 
 	def trigger_listener(self, listener: EventListener, args: Tuple[Any, ...]):
 		"""

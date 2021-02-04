@@ -23,7 +23,7 @@ copyright = '2021, Fallen_Breath'
 author = 'Fallen_Breath'
 
 # The full version, including alpha/beta/rc tags
-release = '1.0.0'
+release = '1.2'
 
 
 # -- General configuration ---------------------------------------------------
@@ -70,6 +70,10 @@ html_theme_options = {
 
 # https://docs.readthedocs.io/en/stable/builds.html#build-environment
 language = os.environ.get('READTHEDOCS_LANGUAGE', 'en')
+
+# To update locale files, execute these in docs/source:
+# sphinx-build -b gettext . _locale           # Generate file structures
+# sphinx-intl update -p _locale -l zh_CN      # Update translation files
 
 # po files will be created in this directory
 # path is example but recommended.

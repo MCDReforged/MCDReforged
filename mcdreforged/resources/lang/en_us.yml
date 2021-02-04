@@ -5,6 +5,7 @@ mcdr_server.on_config_changed.encoding_decoding_set : Encoding / Decoding method
 mcdr_server.on_config_changed.plugin_directories_set: "Plugin directory list:"
 mcdr_server.start_server.already_interrupted        : MCDR has already been interrupted
 mcdr_server.start_server.start_twice                : Server cannot start twice
+mcdr_server.start_server.about_to_exit                 : MCDR is about to exit
 mcdr_server.start_server.cwd_not_existed            : Server working directory {0} does not exist
 mcdr_server.start_server.starting                   : Starting the server with command "{0}"
 mcdr_server.start_server.start_fail                 : Fail to start the server
@@ -102,6 +103,7 @@ mcdr_command.list_plugin.suggest_info                 : Click to display the inf
 mcdr_command.list_plugin.suggest_disable              : Click to disable plugin "§e{0}§r"
 mcdr_command.list_plugin.suggest_enable               : Click to enable plugin "§e{0}§r"
 mcdr_command.list_plugin.suggest_reload               : Click to reload plugin "§e{0}§r"
+mcdr_command.list_plugin.suggest_unload               : Click to unload plugin "§e{0}§r"
 mcdr_command.list_plugin.suggest_load                 : Click to load plugin "§e{0}§r"
 mcdr_command.invalid_plugin_id                        : Invalid plugin id "§e{0}§r"
 mcdr_command.invalid_plugin_file_name                 : Invalid plugin file name "§e{0}§r"
@@ -109,6 +111,8 @@ mcdr_command.disable_plugin.fail                      : §cFail§r to disable pl
 mcdr_command.disable_plugin.success                   : Disable "§e{0}§r" §asuccessfully§r
 mcdr_command.reload_plugin.fail                       : §cFail§r to reload plugin "§e{0}§r"
 mcdr_command.reload_plugin.success                    : Reload "§e{0}§r" §asuccessfully§r
+mcdr_command.unload_plugin.fail                       : §cFail§r to unload plugin "§e{0}§r"
+mcdr_command.unload_plugin.success                    : Unload "§e{0}§r" §asuccessfully§r
 mcdr_command.load_plugin.fail                         : §cFail§r to load plugin "§e{0}§r"
 mcdr_command.load_plugin.success                      : Loaded "§e{0}§r" §asuccessfully§r
 mcdr_command.enable_plugin.fail                       : §cFail§r to enable plugin "§e{0}§r"
@@ -182,7 +186,7 @@ update_helper.check_update.new_version_detected       : "New version detected: �
 command_exception.unknown_command                     : Unknown command
 command_exception.unknown_argument                    : Unknown argument
 command_exception.unknown_root_argument               : Unknown root argument
-command_exception.requirement_not_met                 : "{0}"  # keep it as it is
+command_exception.requirement_not_met                 : Requirement not met
 command_exception.literal_not_match                   : Literal is not match
 command_exception.number_out_of_range                 : Number {0} out of range [{1}, {2}]
 command_exception.invalid_number                      : Invalid number

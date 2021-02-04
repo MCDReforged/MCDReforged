@@ -1,462 +1,670 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2021, Fallen_Breath
-# This file is distributed under the same license as the MCDReforged
-# package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2021.
-#
-#, fuzzy
+
 msgid ""
 msgstr ""
-"Project-Id-Version: MCDReforged \n"
+"Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-15 15:18+0800\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"POT-Creation-Date: 2021-01-28 19:22+0800\n"
+"PO-Revision-Date: 2021-01-23 10:38+0800\n"
+"Last-Translator: Alex3236 <alex3236@qq.com>\n"
+"Language: zh_CN\n"
+"Language-Team: Chinese Simplified\n"
+"Plural-Forms: nplurals=1; plural=0\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.0\n"
 
-#: ../plugin_dev/basic.md:1
+#: ../plugin_dev/basic.rst:3
 msgid "MCDR Plugin"
-msgstr ""
+msgstr "MCDR 插件"
 
-#: ../plugin_dev/basic.md:3
+#: ../plugin_dev/basic.rst:6
 msgid "What is a MCDR plugin"
-msgstr ""
+msgstr "什么是 MCDR 插件？"
 
-#: ../plugin_dev/basic.md:5
+#: ../plugin_dev/basic.rst:8
 msgid ""
-"An MCDR plugin is a python source file with .py file extension located in"
-" plugin directories. The list of the plugin directory can is defined "
-"inside the configure file"
+"An MCDR plugin is a python source file with ``.py`` file extension "
+"located in plugin directories. The list of the plugin directory can be "
+"defined inside the `configure file "
+"<../configure.html#plugin_directories>`__"
 msgstr ""
+"MCDR 插件是位于插件目录中的一个以 ``.py`` 为后缀的 python 源文件。插件目录的列表可以在 `配置文件 "
+"<../configure.html#plugin_directories>`__ 中定义。"
 
-#: ../plugin_dev/basic.md:7
+#: ../plugin_dev/basic.rst:10
 msgid ""
 "At start up, MCDR will automatically load every plugin inside the plugin "
 "directories. Additionally, MCDR will append all the plugin directories "
-"into sys.path, so plugins can import modules placed inside the plugin "
-"folders directly"
+"into ``sys.path``, so plugins can import modules placed inside the plugin"
+" folders directly"
 msgstr ""
+"启动时，MCDR 会自动加载插件目录内的每个插件。此外，MCDR 会将所有插件目录加入到 ``sys.path`` "
+"中，以使插件可以直接导入插件文件夹中的模块。"
 
-#: ../plugin_dev/basic.md:9
+#: ../plugin_dev/basic.rst:12
 msgid ""
-"There is a sample plugin named SamplePlugin.py in the plugins/ folder in "
-"source and you can check its content for reference"
-msgstr ""
+"There is a sample plugin named ``SamplePlugin.py`` in the ``plugins/`` "
+"folder in github source and you can check its content for reference"
+msgstr "在源代码的 ``plugins/`` 文件夹中有一个名为 ``SamplePlugin.py`` 的示例插件，你可以查看其内容以供参考。"
 
-#: ../plugin_dev/basic.md:11
+#: ../plugin_dev/basic.rst:15
 msgid "Quick Start"
-msgstr ""
+msgstr "快速开始"
 
-#: ../plugin_dev/basic.md:13
+#: ../plugin_dev/basic.rst:17
 msgid ""
 "Open one of the plugin directories of MCDR, create a file named "
-"HelloWorld.py"
-msgstr ""
+"``HelloWorld.py``"
+msgstr "打开你设置的 MCDR 的插件目录之一，创建一个名为 ``HelloWorld.py`` 的文件。"
 
-#: ../plugin_dev/basic.md:20
+#: ../plugin_dev/basic.rst:24
 msgid "open it and enter these code"
-msgstr ""
+msgstr "打开它并输入如下代码："
 
-#: ../plugin_dev/basic.md:35
+#: ../plugin_dev/basic.rst:38
 msgid ""
-"Return to MCDR console, enter !!MCDR reload plugin, and you should see "
-"the hello world message from your plugin"
-msgstr ""
+"Return to MCDR console, enter ``!!MCDR reload plugin``, and you should "
+"see the hello world message from your plugin"
+msgstr "返回MCDR控制台，输入 ``!! MCDR reload plugin`` 。你应该会看到插件发送了一条 hello world。"
 
-#: ../plugin_dev/basic.md:41
+#: ../plugin_dev/basic.rst:44
 msgid "Great, you have successfully created your first plugin"
-msgstr ""
+msgstr "好耶，你成功写出了你的第一个插件！"
 
-#: ../plugin_dev/basic.md:43
+#: ../plugin_dev/basic.rst:47
 msgid "Metadata"
-msgstr ""
+msgstr "元数据"
 
-#: ../plugin_dev/basic.md:45
+#: ../plugin_dev/basic.rst:49
 msgid ""
 "The meta data field provides the basic information of the plugin. As you "
-"can see in the Quick Start section above, meta data is declared in the "
-"global scope. It's a dict contains several key-value with the name "
-"PLUGIN_METADATA"
+"can see in the `Quick Start <#quick-start>`__ section above, meta data is"
+" declared in the global scope. It's a dict contains several key-value "
+"with the name ``PLUGIN_METADATA``"
 msgstr ""
+"元数据字段提供了插件的基本信息。如你在 `快速上手 <#quick-start>`__ 部分中所见，元数据声明于插件的全局作用域中，是一个名为 "
+"``PLUGIN_METADATA`` 的包含着若干个键值对的 ``dict``。"
 
-#: ../plugin_dev/basic.md:47
+#: ../plugin_dev/basic.rst:51
 msgid "Here's a metadata field with all possible key-values"
-msgstr ""
+msgstr "以下是一个元数据字段，其中包含所有可能的键值。"
 
-#: ../plugin_dev/basic.md:64
+#: ../plugin_dev/basic.rst:68
 msgid ""
 "If a plugin doesn't not declare the meta data field, a warning will arise"
 " in the console and the fallback values will be used"
-msgstr ""
+msgstr "如果插件未声明元数据字段，则控制台中将出现警告，并使用备用值。"
 
-#: ../plugin_dev/basic.md:66
+#: ../plugin_dev/basic.rst:71
 msgid "id"
-msgstr ""
+msgstr "id"
 
-#: ../plugin_dev/basic.md:68
+#: ../plugin_dev/basic.rst:73
 msgid ""
 "Id, or plugin id, is the identity string of your plugin. It should "
 "consist of lowercase letters, numbers and underscores with a length of 1 "
 "to 64"
-msgstr ""
+msgstr "ID（即插件 ID）是你插件的“身份证号”。它应由小写字母，数字和下划线组成，长度为 1 到 64。"
 
-#: ../plugin_dev/basic.md:70
+#: ../plugin_dev/basic.rst:75
 msgid "Here's some available plugin ids:"
-msgstr ""
+msgstr "以下是一些可用的插件 ID："
 
-#: ../plugin_dev/basic.md:72
-msgid "my_plugin"
-msgstr ""
+#: ../plugin_dev/basic.rst:78
+msgid "``my_plugin``"
+msgstr "``my_plugin``"
 
-#: ../plugin_dev/basic.md:73
-msgid "anotherhelper123"
-msgstr ""
+#: ../plugin_dev/basic.rst:79
+msgid "``anotherhelper123``"
+msgstr "``anotherhelper123``"
 
-#: ../plugin_dev/basic.md:74
-msgid "__a_cool_plugin__"
-msgstr ""
+#: ../plugin_dev/basic.rst:80
+msgid "``__a_cool_plugin__``"
+msgstr "``__a_cool_plugin__``"
 
-#: ../plugin_dev/basic.md:76
+#: ../plugin_dev/basic.rst:82
 msgid "But the following ids are not allowed:"
-msgstr ""
+msgstr "但不允许使用以下ID："
 
-#: ../plugin_dev/basic.md:78
-msgid "MyPlugin"
-msgstr ""
+#: ../plugin_dev/basic.rst:85
+msgid "``MyPlugin``"
+msgstr "``MyPlugin``"
 
-#: ../plugin_dev/basic.md:79
-msgid "another-helper-123"
-msgstr ""
+#: ../plugin_dev/basic.rst:86
+msgid "``another-helper-123``"
+msgstr "``another-helper-123``"
 
-#: ../plugin_dev/basic.md:80
-msgid "a cool plugin"
-msgstr ""
+#: ../plugin_dev/basic.rst:87
+msgid "``a cool plugin``"
+msgstr "``a cool plugin``"
 
-#: ../plugin_dev/basic.md:82
+#: ../plugin_dev/basic.rst:89
 msgid ""
 "MCDR uses plugin id to distinguish between different plugins and check "
 "the dependencies. All loaded plugin in MCDR contain different plugin ids."
 " If a newly loaded plugin has a plugin id exactly the same with an "
 "existed plugin, the new plugin will fail to load"
 msgstr ""
+"MCDR 使用插件 ID 来区分不同的插件并检查插件间的依赖。 MCDR 中加载的所有插件都应使用不同的插件 "
+"ID。如果新加载的插件具有与现有插件完全相同的插件 ID，则新插件将无法加载。"
 
-#: ../plugin_dev/basic.md:84
+#: ../plugin_dev/basic.rst:91
 msgid ""
 "Choose your plugin id wisely. It's highly suggested to keep your plugin "
 "id not changed after release your plugin"
-msgstr ""
+msgstr "请明智地选择你的插件 ID。强烈建议你在发布插件后不要再更改插件 ID。"
 
-#: ../plugin_dev/basic.md:86
-msgid "Field key: id"
-msgstr ""
+#: ../plugin_dev/basic.rst:94
+msgid "Field key: ``id``"
+msgstr "字段键名：``id``"
 
-#: ../plugin_dev/basic.md:87 ../plugin_dev/basic.md:105
-#: ../plugin_dev/basic.md:145
+#: ../plugin_dev/basic.rst:95 ../plugin_dev/basic.rst:116
+#: ../plugin_dev/basic.rst:164
 msgid "Value type: str"
-msgstr ""
+msgstr "字段类型：str"
 
-#: ../plugin_dev/basic.md:88
-msgid "Fallback value: the file name without the .py extension"
-msgstr ""
+#: ../plugin_dev/basic.rst:96
+msgid "Fallback value: the file name without the ``.py`` extension"
+msgstr "备用值：不含 ``.py`` 后缀的插件文件名"
 
-#: ../plugin_dev/basic.md:90
+#: ../plugin_dev/basic.rst:99
 msgid "version"
-msgstr ""
+msgstr "version"
 
-#: ../plugin_dev/basic.md:92
+#: ../plugin_dev/basic.rst:101
 msgid ""
 "The version value indicates the version of your value. It's mostly in "
-"semver format but it has less restriction such as you can have the core "
-"version with any length"
+"`semver <https://semver.org/>`__ format but it has less restriction such "
+"as you can have the core version with any length"
 msgstr ""
+"version 字段代表你的插件版本。它基本上采用了 `语义化版本 <https://semver.org/lang/zh-CN/>`__ "
+"的格式，不过限制较少，如你可以定义任意长度的版本号。"
 
-#: ../plugin_dev/basic.md:94
+#: ../plugin_dev/basic.rst:103
 msgid "Here's some available version:"
-msgstr ""
+msgstr "以下一些可用的版本："
 
-#: ../plugin_dev/basic.md:96
-msgid "1.0.0"
-msgstr ""
+#: ../plugin_dev/basic.rst:106
+msgid "``1.0.0``"
+msgstr "``1.0.0``"
 
-#: ../plugin_dev/basic.md:97
-msgid "2.0"
-msgstr ""
+#: ../plugin_dev/basic.rst:107
+msgid "``2.0``"
+msgstr "``2.0``"
 
-#: ../plugin_dev/basic.md:98
-msgid "1.2.3-pre4"
-msgstr ""
+#: ../plugin_dev/basic.rst:108
+msgid "``1.2.3-pre4``"
+msgstr "``1.2.3-pre4``"
 
-#: ../plugin_dev/basic.md:99
-msgid "1.8.9-rc.8"
-msgstr ""
+#: ../plugin_dev/basic.rst:109
+msgid "``1.8.9-rc.8``"
+msgstr "``1.8.9-rc.8``"
 
-#: ../plugin_dev/basic.md:100
-msgid "1.14.1-beta.4+build.54"
-msgstr ""
+#: ../plugin_dev/basic.rst:110
+msgid "``1.14.1-beta.4+build.54``"
+msgstr "``1.14.1-beta.4+build.54``"
 
-#: ../plugin_dev/basic.md:102
+#: ../plugin_dev/basic.rst:112
 msgid ""
-"Following semver format for you version string is a good idea. It's "
-"easier to maintain and for people to understand"
+"Following `semver <https://semver.org/>`__ format for you version string "
+"is a good idea. It's easier to maintain and for people to understand"
 msgstr ""
+"遵循 `语义化版本 <https://semver.org/lang/zh-CN/>`__ "
+"格式为你的插件定义版本字符串是一个好主意——易于维护、易于理解。"
 
-#: ../plugin_dev/basic.md:104
-msgid "Field key: version"
-msgstr ""
+#: ../plugin_dev/basic.rst:115
+msgid "Field key: ``version``"
+msgstr "字段键名：``version``"
 
-#: ../plugin_dev/basic.md:106
-msgid "Fallback value: 0.0.0"
-msgstr ""
+#: ../plugin_dev/basic.rst:117
+msgid "Fallback value: ``0.0.0``"
+msgstr "备用值：``0.0.0``"
 
-#: ../plugin_dev/basic.md:108
+#: ../plugin_dev/basic.rst:120
 msgid "name"
-msgstr ""
+msgstr "name"
 
-#: ../plugin_dev/basic.md:110
+#: ../plugin_dev/basic.rst:122
 msgid ""
 "The name of your plugin. Give your plugin with a nice name with any kinds"
-" of characters. RText is allowed here"
-msgstr ""
+" of characters. `RText <api.html#rtext>`__ is allowed here"
+msgstr "你的插件名称——给你的插件起一个好听的名字吧。你可以使用的任何字符，也可以用 `RText <api.html#rtext>`__。"
 
-#: ../plugin_dev/basic.md:112
+#: ../plugin_dev/basic.rst:124
 msgid ""
 "Try not to make the name too long. For more details of your plugin, you "
-"can put them into the description"
-msgstr ""
+"can put them into the ``description``"
+msgstr "尽量不要使插件名称太长。你可以把插件的详细信息放在 ``description`` 之中。"
 
-#: ../plugin_dev/basic.md:114
-msgid "Field key: name"
-msgstr ""
+#: ../plugin_dev/basic.rst:127
+msgid "Field key: ``name``"
+msgstr "字段键名：``name``"
 
-#: ../plugin_dev/basic.md:115 ../plugin_dev/basic.md:125
+#: ../plugin_dev/basic.rst:128 ../plugin_dev/basic.rst:140
 msgid "Value type: str or RTextBase"
-msgstr ""
+msgstr "字段类型：str 或 RTextBase"
 
-#: ../plugin_dev/basic.md:116
+#: ../plugin_dev/basic.rst:129
 msgid "Fallback value: The plugin id"
-msgstr ""
+msgstr "备用值：插件 ID"
 
-#: ../plugin_dev/basic.md:118
+#: ../plugin_dev/basic.rst:132
 msgid "description"
-msgstr ""
+msgstr "description"
 
-#: ../plugin_dev/basic.md:120
+#: ../plugin_dev/basic.rst:134
 msgid ""
-"The description of you plugin. Put the details of your plugin here. Rtext"
-" is allowed too"
-msgstr ""
+"The description of you plugin. Put the details of your plugin here. "
+"`RText <api.html#rtext>`__ is allowed too"
+msgstr "你的插件详细。把插件的详细信息放在这里吧。同样的，这里也可以使用 `RText <api.html#rtext>`__"
 
-#: ../plugin_dev/basic.md:122 ../plugin_dev/basic.md:132
-#: ../plugin_dev/basic.md:142
+#: ../plugin_dev/basic.rst:136 ../plugin_dev/basic.rst:148
+#: ../plugin_dev/basic.rst:160
 msgid "This field is optional, you can just ignore it if you are lazy"
-msgstr ""
+msgstr "此字段是可选的。如果你想偷懒的话可以不填写。"
 
-#: ../plugin_dev/basic.md:124
-msgid "Field key: description"
-msgstr ""
+#: ../plugin_dev/basic.rst:139
+msgid "Field key: ``description``"
+msgstr "字段键名：``description``"
 
-#: ../plugin_dev/basic.md:126 ../plugin_dev/basic.md:136
-#: ../plugin_dev/basic.md:146 ../plugin_dev/basic.md:249
+#: ../plugin_dev/basic.rst:141 ../plugin_dev/basic.rst:153
+#: ../plugin_dev/basic.rst:165 ../plugin_dev/basic.rst:251
 msgid "Fallback value: None"
-msgstr ""
+msgstr "备用值：None"
 
-#: ../plugin_dev/basic.md:128
+#: ../plugin_dev/basic.rst:144
 msgid "author"
-msgstr ""
+msgstr "author"
 
-#: ../plugin_dev/basic.md:130
+#: ../plugin_dev/basic.rst:146
 msgid ""
 "The authors of the plugins. If there's only a single author, you can also"
 " use a string instead of a list of string"
-msgstr ""
+msgstr "插件作者。如果只有一个作者，可使用 string 而非 list。"
 
-#: ../plugin_dev/basic.md:134
-msgid "Field key: author"
-msgstr ""
+#: ../plugin_dev/basic.rst:151
+msgid "Field key: ``author``"
+msgstr "字段键名：``author``"
 
-#: ../plugin_dev/basic.md:135
+#: ../plugin_dev/basic.rst:152
 msgid "Value type: str or List[str]"
-msgstr ""
+msgstr "字段类型：str 或 list[str]"
 
-#: ../plugin_dev/basic.md:138
+#: ../plugin_dev/basic.rst:156
 msgid "link"
 msgstr ""
 
-#: ../plugin_dev/basic.md:140
+#: ../plugin_dev/basic.rst:158
 msgid ""
-"The link of your project. You can put a link to the github repository of "
+"The url to your plugin. You can put a link to the github repository of "
 "your plugin here. It should be an available url"
-msgstr ""
+msgstr "你的插件的网址。你可以将其指向插件的 github 链接。它的值应为一个可访问的网址。"
 
-#: ../plugin_dev/basic.md:144
-msgid "Field key: link"
-msgstr ""
+#: ../plugin_dev/basic.rst:163
+msgid "Field key: ``link``"
+msgstr "字段键名：``link``"
 
-#: ../plugin_dev/basic.md:148
+#: ../plugin_dev/basic.rst:168
 msgid "dependencies"
-msgstr ""
+msgstr "dependencies"
 
-#: ../plugin_dev/basic.md:150
+#: ../plugin_dev/basic.rst:170
 msgid ""
 "A dict of dependencies you plugin relies on. It's a dict contains several"
 " key-value pairs. The key is the id of the plugin that your plugin is "
 "relies on, and the value is the version requirement of the plugin that "
 "your plugin is relies on"
-msgstr ""
+msgstr "插件的依赖关系。应为一个字典，其中包含多个键值对。键为插件所依赖的插件 ID，值是插件所依赖插件的版本要求。"
 
-#: ../plugin_dev/basic.md:152
+#: ../plugin_dev/basic.rst:172
 msgid ""
-"If your plugin has requirement to the version of MCDR, use mcdreforged as"
-" the plugin id"
-msgstr ""
+"If your plugin has requirement to the version of MCDR, use "
+"``mcdreforged`` as the plugin id"
+msgstr "如果你的插件对 MCDR 版本有需求，请使用 mcdreforged 作为插件 ID。"
 
-#: ../plugin_dev/basic.md:154
+#: ../plugin_dev/basic.rst:174
 msgid ""
 "A version requirement is a string than contains several criterions of the"
 " version. Criterions are divided by space character, each criterion is "
 "made up of an operator and a base version string. Wildcard is allowed "
 "when describing the base version"
-msgstr ""
+msgstr "版本要求是一个包含若干个版本约束的字符串。约束按空格划分，每个每个由一个运算符和一个基础版本字符串组成。描述基版本时允许使用通配符。"
 
-#: ../plugin_dev/basic.md:156
+#: ../plugin_dev/basic.rst:176
 msgid "List of the operators:"
-msgstr ""
+msgstr "运算符列表："
 
-#: ../plugin_dev/basic.md:228
-msgid "Check here for more detail to the version requirement"
-msgstr ""
+#: ../plugin_dev/basic.rst:181
+msgid "Operator"
+msgstr "运算符"
 
-#: ../plugin_dev/basic.md:230
+#: ../plugin_dev/basic.rst:182
+msgid "Example"
+msgstr "示例说明"
+
+#: ../plugin_dev/basic.rst:183
+msgid "Explanation for the example"
+msgstr "示例说明"
+
+#: ../plugin_dev/basic.rst:184
+msgid "Accepted"
+msgstr "允许的值"
+
+#: ../plugin_dev/basic.rst:185
+msgid "Unaccepted"
+msgstr "不允许的值"
+
+#: ../plugin_dev/basic.rst:186
+msgid ">="
+msgstr ">="
+
+#: ../plugin_dev/basic.rst:187
+msgid ">=1.2.3"
+msgstr ">=1.2.3"
+
+#: ../plugin_dev/basic.rst:188
+msgid "The target version should be equal to or newer than 1.2.3"
+msgstr "目标版本应大于等于 1.2.3"
+
+#: ../plugin_dev/basic.rst:189
+msgid "1.2.3, 1.3.0"
+msgstr "1.2.3，1.3.0"
+
+#: ../plugin_dev/basic.rst:190
+msgid "1.2.0"
+msgstr "1.2.0"
+
+#: ../plugin_dev/basic.rst:191
+msgid ">"
+msgstr ">"
+
+#: ../plugin_dev/basic.rst:192
+msgid ">1.2.3"
+msgstr ">1.2.3"
+
+#: ../plugin_dev/basic.rst:193
+msgid "The target version should be newer than 1.2.3"
+msgstr "目标版本应大于 1.2.3"
+
+#: ../plugin_dev/basic.rst:194
+msgid "1.2.4, 1.3.0"
+msgstr "1.2.4，1.3.0"
+
+#: ../plugin_dev/basic.rst:195
+msgid "1.2.0, 1.2.3"
+msgstr "1.2.0，1.2.3"
+
+#: ../plugin_dev/basic.rst:196
+msgid "<="
+msgstr "<="
+
+#: ../plugin_dev/basic.rst:197
+msgid "<=1.2.3"
+msgstr "<=1.2.3"
+
+#: ../plugin_dev/basic.rst:198
+msgid "The target version should be equal to or older than 1.2.3"
+msgstr "目标版本应小于等于 1.2.3"
+
+#: ../plugin_dev/basic.rst:199
+msgid "1.2.3, 1.1.0"
+msgstr "1.2.3，1.1.0"
+
+#: ../plugin_dev/basic.rst:200
+msgid "1.2.4, 2.0.0"
+msgstr "1.2.4，2.0.0"
+
+#: ../plugin_dev/basic.rst:201
+msgid "<"
+msgstr "<"
+
+#: ../plugin_dev/basic.rst:202
+msgid "<1.2.3"
+msgstr "<1.2.3"
+
+#: ../plugin_dev/basic.rst:203
+msgid "The target version should be older than 1.2.3"
+msgstr "目标版本应小于 1.2.3"
+
+#: ../plugin_dev/basic.rst:204
+msgid "1.1.0"
+msgstr "1.1.0"
+
+#: ../plugin_dev/basic.rst:205
+msgid "1.2.3, 1.5"
+msgstr "1.2.3，1.5"
+
+#: ../plugin_dev/basic.rst:206
+msgid "="
+msgstr "="
+
+#: ../plugin_dev/basic.rst:207
+msgid "=1.2.3"
+msgstr "=1.2.3"
+
+#: ../plugin_dev/basic.rst:208
+msgid "The target version should equal to 1.2.3"
+msgstr "目标版本应等于 1.2.3"
+
+#: ../plugin_dev/basic.rst:209 ../plugin_dev/basic.rst:212
+#: ../plugin_dev/basic.rst:214
+msgid "1.2.3"
+msgstr "1.2.3"
+
+#: ../plugin_dev/basic.rst:210 ../plugin_dev/basic.rst:215
+msgid "1.2, 1.2.4"
+msgstr "1.2，1.2.4"
+
+#: ../plugin_dev/basic.rst:213
+msgid ""
+"If the operator is not specified, ``=`` is used as default. In this case "
+"the target version should equal to 1.2.3"
+msgstr "如果未指定运算符，则默认使用 ``=`` 。在这种情况下，目标版本应等于1.2.3"
+
+#: ../plugin_dev/basic.rst:216
+msgid "^"
+msgstr "^"
+
+#: ../plugin_dev/basic.rst:217
+msgid "^1.2.3"
+msgstr "^1.2.3"
+
+#: ../plugin_dev/basic.rst:218
+msgid ""
+"The target version should be equal to or newer than 1.2.3, and the first "
+"version segment of the target version should be equal to the base version"
+msgstr "目标版本应大于等于 1.2.3，且目标版本的第一个版本分段应等于基版本"
+
+#: ../plugin_dev/basic.rst:219
+msgid "1.2.3, 1.2.4, 1.4.4"
+msgstr "1.2.3，1.2.4，1.4.4"
+
+#: ../plugin_dev/basic.rst:220
+msgid "1.0.0, 2.0.0"
+msgstr "1.0.0，2.0.0"
+
+#: ../plugin_dev/basic.rst:221
+msgid "~"
+msgstr "~"
+
+#: ../plugin_dev/basic.rst:222
+msgid "~1.2.3"
+msgstr "~1.2.3"
+
+#: ../plugin_dev/basic.rst:223
+msgid ""
+"The target version should be equal to or newer than 1.2.3, and the first "
+"and the second version segment of the target version should be equal to "
+"the base version"
+msgstr "目标版本应大于等于 1.2.3，并且目标版本的第一和第二版本分段应等于基版本"
+
+#: ../plugin_dev/basic.rst:224
+msgid "1.2.3, 1.2.4"
+msgstr "1.2.3，1.2.4"
+
+#: ../plugin_dev/basic.rst:225
+msgid "1.0.0, 1.4.4, 2.0.0"
+msgstr "1.0.0，1.4.4，2.0.0"
+
+#: ../plugin_dev/basic.rst:228
+msgid ""
+"Check `here <https://docs.npmjs.com/about-semantic-versioning>`__ for "
+"more detail to the version requirement"
+msgstr ""
+"查看 `此处(EN) <https://docs.npmjs.com/about-semantic-versioning>`__ 或 "
+"`此处(中文) <https://www.kancloud.cn/shellway/npm-doc/199995>`__ "
+"以获取版本要求的更多详细信息。"
+
+#: ../plugin_dev/basic.rst:230
 msgid ""
 "If there are multiple declared criterions, the target version is accepted"
 " only when it's accepted by all criterions"
-msgstr ""
+msgstr "如果存在多个声明的条件，则仅当所有条件都接受目标版本时，才接受目标版本。"
 
-#: ../plugin_dev/basic.md:232
+#: ../plugin_dev/basic.rst:232
 msgid "Here a dependencies example:"
-msgstr ""
+msgstr "这里是一个依赖关系示例："
 
-#: ../plugin_dev/basic.md:243
+#: ../plugin_dev/basic.rst:244
 msgid ""
 "MCDR will make sure only when all dependency requirements are satisfied "
 "your plugin will get loaded successfully. Missing dependency, dependency "
 "version not match or dependency loop will result in a dependency check "
 "failure"
-msgstr ""
+msgstr "MCDR 将确保仅在满足所有依赖项要求时，你的插件才能成功加载。依赖项缺失，依赖项版本不匹配或出现依赖环路，都会导致依赖关系检查失败。"
 
-#: ../plugin_dev/basic.md:245
+#: ../plugin_dev/basic.rst:246
 msgid ""
 "This field is optional, you can just ignore it if your plugin doesn't "
 "have any dependency"
-msgstr ""
+msgstr "该字段是可选的，如果你的插件没有任何依赖关系，则可以忽略它。"
 
-#: ../plugin_dev/basic.md:247
-msgid "Field key: dependencies"
-msgstr ""
+#: ../plugin_dev/basic.rst:249
+msgid "Field key: ``dependencies``"
+msgstr "字段键名：``dependencies``"
 
-#: ../plugin_dev/basic.md:248
+#: ../plugin_dev/basic.rst:250
 msgid "Value type: Dict[str, str]"
-msgstr ""
+msgstr "字段类型：Dict[str]"
 
-#: ../plugin_dev/basic.md:252
+#: ../plugin_dev/basic.rst:254
 msgid "Plugin Registry"
-msgstr ""
+msgstr "插件注册表"
 
-#: ../plugin_dev/basic.md:254
+#: ../plugin_dev/basic.rst:256
 msgid ""
 "Plugin registry is a collection of things that plugin registered for. It "
 "will get cleaned up every time before the plugin gets loaded, so you'd "
-"better register them in Plugin Load event"
+"better register them in `Plugin_Load <event.html#plugin-load>`__ event"
 msgstr ""
+"插件注册表是一个插件注册的东西的集合。在每次加载插件之前，它都会被清空，因此你最好在 `插件被加载 <event.html#plugin-loaded>`__ 事件中注册它们。"
 
-#: ../plugin_dev/basic.md:256
+#: ../plugin_dev/basic.rst:259
 msgid "Event listeners"
-msgstr ""
+msgstr "事件监听器"
 
-#: ../plugin_dev/basic.md:258
+#: ../plugin_dev/basic.rst:261
 msgid "There are 2 methods to register an event listener for you plugin"
-msgstr ""
+msgstr "有两种方法可以注册事件侦听器的插件。"
 
-#: ../plugin_dev/basic.md:260
+#: ../plugin_dev/basic.rst:265
 msgid ""
 "Declare a function inside the global slope with the specific name. It's "
 "the legacy registering method to register a listener and it only works "
-"with events provided by MCDR. Check here for more detail"
+"with events provided by MCDR. Check `here <event.html#default-event-"
+"listener>`__ for more detail"
 msgstr ""
+"使用特定名称在全局范围内声明一个函数。它是注册监听器的老办法，仅适用于 MCDR 提供的事件。有关详细信息，请查看 `此处 <event.html"
+"#default-event-listener>`__ 。"
 
-#: ../plugin_dev/basic.md:262
+#: ../plugin_dev/basic.rst:267
 msgid ""
-"For example, the widely-used function below is a default Plugin Loaded "
-"event listener"
-msgstr ""
+"For example, the widely-used function below is a default `Plugin Loaded "
+"<event.html#plugin-loaded>`__ event listener"
+msgstr "例如，下面广泛使用的函数是默认的 `插件被加载 <event.html#plugin-loaded>`__ 事件监听器。"
 
-#: ../plugin_dev/basic.md:269
+#: ../plugin_dev/basic.rst:275
 msgid ""
-"Manually invoke server.register_event_listener method to register an "
+"Manually invoke ``server.register_event_listener`` method to register an "
 "event listener. You can specify the callable object and the priority for "
 "the event listener"
-msgstr ""
+msgstr "手动调用 ``server.register_event_listener`` 方法来注册事件监听器。你可以为事件监听器指定可调用对象和优先级。"
 
-#: ../plugin_dev/basic.md:271
-msgid "Check here for more detail about event listener registering"
-msgstr ""
+#: ../plugin_dev/basic.rst:277
+msgid ""
+"Check `here <event.html#register-a-event-listener>`__ for more detail "
+"about event listener registering"
+msgstr "查看 `此处 <event.html#register-a-event-listener>`__ 以获取有关事件监听器注册的更多详细信息。"
 
-#: ../plugin_dev/basic.md:273
+#: ../plugin_dev/basic.rst:279
 msgid "Here some examples about manually register event listeners"
-msgstr ""
+msgstr "以下是一些关于手动注册事件监听器的例子："
 
-#: ../plugin_dev/basic.md:287
+#: ../plugin_dev/basic.rst:293
 msgid ""
-"Take a look at the reference of register_event_listener method in "
-"ServerInterface document for more detail"
+"Take a look at the reference of ``register_event_listener`` method in "
+"`ServerInterface <classes/ServerInterface.html#register-event-"
+"listener>`__ document for more detail"
 msgstr ""
+"请参阅 `ServerInterface <classes/ServerInterface.html#register-event-"
+"listener>`__ 文档中有关 ``register_event_listener`` 方法的说明，以了解更多详细信息。"
 
-#: ../plugin_dev/basic.md:289
+#: ../plugin_dev/basic.rst:296
 msgid "Command"
-msgstr ""
+msgstr "指令"
 
-#: ../plugin_dev/basic.md:291
+#: ../plugin_dev/basic.rst:298
 msgid ""
-"Rather than manually parsing info.content inside user info event callback"
-" like on_user_info, MCDR provides a command system for plugins to "
-"register their commands"
+"Rather than manually parsing ``info.content`` inside user info event "
+"callback like ``on_user_info``, MCDR provides a command system for "
+"plugins to register their commands"
 msgstr ""
+"除了在如 ``on_user_info`` 的用户信息事件回调中手动解析用户输入 ``info.content``，MCDR "
+"还为插件提供了一个指令构建系统来帮助插件注册它们的指令。"
 
-#: ../plugin_dev/basic.md:293
-msgid "Check the command document for more detail about building a command tree"
-msgstr ""
+#: ../plugin_dev/basic.rst:300
+msgid ""
+"Check the `command <command>`__ document for more detail about building a"
+" command tree"
+msgstr "查看 `指令 <command>`__ 文档以获取有关构建指令树的更多详细信息。"
 
-#: ../plugin_dev/basic.md:295
+#: ../plugin_dev/basic.rst:302
 msgid ""
 "Assuming that you have already built a command tree with root literal "
-"node root, then you can use the following command to register your "
-"command tree in MCDR"
-msgstr ""
+"node *root*, then you can use the following code to register your command"
+" tree in MCDR"
+msgstr "假设你已经使用根文字节点 *root* 构建了指令树，则你可以使用以下代码在 MCDR 中注册这一棵指令树："
 
-#: ../plugin_dev/basic.md:301
+#: ../plugin_dev/basic.rst:308
 msgid ""
-"Take a look at the reference of register_command method in "
-"ServerInterface document for more details of its usage"
+"Take a look at the reference of ``register_command`` method in "
+"`ServerInterface <classes/ServerInterface.html#register-command>`__ "
+"document for more details of its usage"
 msgstr ""
+"查看 `ServerInterface <classes/ServerInterface.html#register-command>`__ "
+"文档中有关 ``register_command`` 方法的参考，以获取其用法的更多详细信息。"
 
-#: ../plugin_dev/basic.md:303
+#: ../plugin_dev/basic.rst:311
 msgid "Help message"
-msgstr ""
+msgstr "帮助信息"
 
-#: ../plugin_dev/basic.md:305
+#: ../plugin_dev/basic.rst:313
 msgid ""
-"Plugin can register its help message with server.register_help_message to"
-" MCDR, so that users can use !!help command to view the help messages of "
+"Plugin can register its help message with "
+"``server.register_help_message`` to MCDR, so that users can use `!!help "
+"command <../command.html#help-command>`__ to view the help messages of "
 "all commands"
 msgstr ""
+"插件可以使用 ``server.register_help_message`` 将其帮助消息注册到MCDR，以便用户使用 `!!help 指令 "
+"<../command.html#help-command>`__ 来查看所有插件的帮助消息。"
 
-#: ../plugin_dev/basic.md:307
+#: ../plugin_dev/basic.rst:315
 msgid ""
-"Take a look at the reference of register_help_message method in "
-"ServerInterface document for more details of its usage"
+"Take a look at the reference of ``register_help_message`` method in "
+"`ServerInterface <classes/ServerInterface.html#register-help-message>`__ "
+"document for more details of its usage"
 msgstr ""
+"查看 `ServerInterface <classes/ServerInterface.html#register-help-"
+"message>`__ 文档中有关 ``register_help_message`` 方法的参考，以了解其用法的更多详细信息。"
 

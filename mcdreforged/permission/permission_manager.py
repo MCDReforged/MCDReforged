@@ -1,7 +1,7 @@
 """
 Permission control things
 """
-
+from mcdreforged.command.command_source import CommandSource
 from mcdreforged.info import *
 from mcdreforged.permission.permission_level import PermissionLevel, PermissionLevelItem
 from mcdreforged.utils import misc_util
@@ -137,7 +137,7 @@ class PermissionManager(YamlDataStorage):
 		:return the permission level from a player's name. If auto_add is False and player invalid return None
 		:rtype: int or None
 		"""
-		for level_value in PermissionLevel.LEVELS:
+		for level_value in PermissionLevel.LEVELS[::-1]:  # high -> low
 			if player in self.get_permission_group_list(level_value):
 				return level_value
 		else:

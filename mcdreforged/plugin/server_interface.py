@@ -30,30 +30,12 @@ def log_call(func):
 	Log plugin call
 	Use kwarg is_plugin_call to determined if do log
 	"""
-	def wrap(self, *args, **kwargs):
-		is_plugin_call = 'is_plugin_call'
-		if kwargs.get(is_plugin_call, True) and MCDReforgedLogger.should_log_debug(option=DebugOption.PLUGIN):
-			self.logger.debug('Plugin called {}(), args amount: {}'.format(func.__name__, len(args)))
+	def wrap(self: 'ServerInterface', *args, is_plugin_call=True, **kwargs):
+		if is_plugin_call and MCDReforgedLogger.should_log_debug(option=DebugOption.PLUGIN):
+			self.logger.debug('Plugin called {}(), args amount: {}'.format(func.__name__, len(args)), no_check=True)
 			for arg in args:
-				self.logger.debug('  - type: {}, content: {}'.format(type(arg).__name__, arg))
-		if is_plugin_call in kwargs:
-			kwargs.pop(is_plugin_call)
+				self.logger.debug('  - type: {}, content: {}'.format(type(arg).__name__, arg), no_check=True)
 		return func(self, *args, **kwargs)
-	return wrap
-
-
-def return_if_success(func):
-	"""
-	Catch all exception from the func execution
-	Return a bool, if no exception occurred
-	"""
-	def wrap(self, *args, **kwargs):
-		try:
-			func(self, *args, **kwargs)
-			return True
-		except:
-			self.logger.debug('Exception occurred when calling {}: '.format(func), exc_info=True)
-			return False
 	return wrap
 
 
@@ -431,7 +413,7 @@ class ServerInterface:
 		plugin.register_help_message(HelpMessage(plugin, prefix, message, permission))
 
 	@log_call
-	def dispatch_event(self, event: PluginEvent, args: Tuple[Any, ...]) -> None:
+	def dispatch_event(self, event: PluginEvent, args: Tuple[Any, ...], *, on_executor_thread: bool = True) -> None:
 		"""
 		Dispatch an event to all loaded plugins
 		The event will be immediately dispatch if it's on the task executor thread, or gets enqueued if it's on other thread
@@ -439,12 +421,14 @@ class ServerInterface:
 		LiteralEvent instance for this argument
 		:param args: The argument that will be used to invoke the event listeners. An ServerInterface instance will be
 		automatically added to the beginning of the argument list
+		:param on_executor_thread: If it's set to false. The event will be dispatched immediately no matter what the
+		current thread is
 		"""
 		if not isinstance(event, PluginEvent):
 			raise TypeError('Excepted {} but {} found'.format(PluginEvent, type(event)))
 		if MCDRPluginEvents.contains_id(event.id):
 			raise ValueError('Cannot dispatch event with already exists event id {}'.format(event.id))
-		self.__mcdr_server.task_executor.execute_or_enqueue(lambda: self.__mcdr_server.plugin_manager.dispatch_event(event, args))
+		self.__mcdr_server.plugin_manager.dispatch_event(event, args, on_executor_thread=on_executor_thread)
 
 	# ------------------------
 	#        Permission

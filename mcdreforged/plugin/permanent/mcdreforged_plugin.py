@@ -105,7 +105,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 				).
 				then(Literal('set').then(QuotableText('player').then(Text('level').runs(lambda src, ctx: self.set_player_permission(src, ctx['player'], ctx['level']))))).
 				then(
-					Literal({'query', 'q'}).runs(lambda src: self.query_player_permission(src, None)).
+					Literal({'query', 'q'}).runs(lambda src: self.query_self_permission(src)).
 					then(QuotableText('player').runs(lambda src, ctx: self.query_player_permission(src, ctx['player'])))
 				).
 				then(Literal({'remove', 'rm'}).then(QuotableText('player').runs(lambda src, ctx: self.remove_player_permission(src, ctx['player'])))).
@@ -184,10 +184,13 @@ class MCDReforgedPlugin(PermanentPlugin):
 	#   Reload
 	# ----------
 
-	def refresh_changed_plugins(self, source: CommandSource):
-		ret = self.function_call(source, self.mcdr_server.plugin_manager.refresh_changed_plugins, 'refresh_changed_plugins', log_success=False)
+	def __print_plugin_operation_result_if_no_error(self, source: CommandSource, ret: FunctionCallResult):
 		if ret.no_error:
 			source.reply(self.mcdr_server.plugin_manager.last_operation_result.to_rtext(show_path=source.has_permission(PermissionLevel.PHYSICAL_SERVER_CONTROL_LEVEL)))
+
+	def refresh_changed_plugins(self, source: CommandSource):
+		ret = self.function_call(source, self.mcdr_server.plugin_manager.refresh_changed_plugins, 'refresh_changed_plugins', log_success=False)
+		self.__print_plugin_operation_result_if_no_error(source, ret)
 
 	def reload_config(self, source: CommandSource):
 		self.function_call(source, self.mcdr_server.load_config, 'reload_config')
@@ -219,26 +222,25 @@ class MCDReforgedPlugin(PermanentPlugin):
 				if source.is_player:
 					source.reply(self.tr('permission_manager.set_permission_level.done', player, permission_level.name))
 
-	def query_player_permission(self, source: CommandSource, player: Optional[str]):
-		if player is None:
-			level = source.get_permission_level()
-			source.reply(self.tr('mcdr_command.query_player_permission.self', PermissionLevel.from_value(level)))
+	def query_self_permission(self, source: CommandSource):
+		source.reply(self.tr('mcdr_command.query_player_permission.self', PermissionLevel.from_value(source.get_permission_level())))
+
+	def query_player_permission(self, source: CommandSource, player: str):
+		if not Validator.player_name(player):
+			source.reply(self.tr('mcdr_command.invalid_player_name'))
+			return
 		else:
-			if not Validator.player_name(player):
-				source.reply(self.tr('mcdr_command.invalid_player_name'))
-				return
+			level = self.mcdr_server.permission_manager.get_player_permission_level(player, auto_add=False)
+			if level is not None:
+				source.reply(self.tr('mcdr_command.query_player_permission.player', player, PermissionLevel.from_value(level)))
 			else:
-				level = self.mcdr_server.permission_manager.get_player_permission_level(player, auto_add=False)
-				if level is not None:
-					source.reply(self.tr('mcdr_command.query_player_permission.player', player, PermissionLevel.from_value(level)))
-				else:
-					source.reply(self.tr('mcdr_command.query_player_permission.player_unknown', player))
+				source.reply(self.tr('mcdr_command.query_player_permission.player_unknown', player))
 
 	def remove_player_permission(self, source: CommandSource, player: str):
 		if not Validator.player_name(player):
 			source.reply(self.tr('mcdr_command.invalid_player_name'))
 		else:
-			if not source.has_permission_higher_than(self.mcdr_server.permission_manager.get_player_permission_level(player)):
+			if not source.has_permission(self.mcdr_server.permission_manager.get_player_permission_level(player)):
 				source.reply(self.tr('mcdr_command.permission_not_enough'))
 			else:
 				self.mcdr_server.permission_manager.remove_player(player)
@@ -335,22 +337,29 @@ class MCDReforgedPlugin(PermanentPlugin):
 		source.reply(self.tr('mcdr_command.list_plugin.info_loaded_plugin', len(current_plugins)))
 		for plugin in current_plugins:
 			meta = plugin.get_metadata()
+			displayed_name = meta.name.copy()
+			if not self.can_see_rtext(source):
+				displayed_name += RText(' ({})'.format(plugin.get_identifier()), color=RColor.gray)
 			texts = RTextList(
 				'§7-§r ',
-				meta.name.copy().
+				displayed_name.
 				c(RAction.run_command, '!!MCDR plugin info {}'.format(meta.id)).
 				h(self.tr('mcdr_command.list_plugin.suggest_info', meta.id))
 			)
 			if self.can_see_rtext(source) and not plugin.is_permanent():
 				texts.append(
 					' ',
-					RText('[×]', color=RColor.gray)
-					.c(RAction.run_command, '!!MCDR plugin disable {}'.format(meta.id))
-					.h(self.tr('mcdr_command.list_plugin.suggest_disable', meta.id)),
-					' ',
 					RText('[↻]', color=RColor.gray)
 					.c(RAction.run_command, '!!MCDR plugin reload {}'.format(meta.id))
-					.h(self.tr('mcdr_command.list_plugin.suggest_reload', meta.id))
+					.h(self.tr('mcdr_command.list_plugin.suggest_reload', meta.id)),
+					' ',
+					RText('[↓]', color=RColor.gray)
+					.c(RAction.run_command, '!!MCDR plugin unload {}'.format(meta.id))
+					.h(self.tr('mcdr_command.list_plugin.suggest_unload', meta.id)),
+					' ',
+					RText('[×]', color=RColor.gray)
+					.c(RAction.run_command, '!!MCDR plugin disable {}'.format(meta.id))
+					.h(self.tr('mcdr_command.list_plugin.suggest_disable', meta.id))
 				)
 			source.reply(texts)
 
@@ -381,7 +390,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 			if self.can_see_rtext(source):
 				texts.append(
 					' ',
-					RText('[✔]', color=RColor.gray)
+					RText('[↑]', color=RColor.gray)
 					.c(RAction.run_command, '!!MCDR plugin load {}'.format(file_name))
 					.h(self.tr('mcdr_command.list_plugin.suggest_load', file_name))
 				)
@@ -398,8 +407,9 @@ class MCDReforgedPlugin(PermanentPlugin):
 				' ',
 				RText('v{}'.format(meta.version), color=RColor.gray)
 			))
+			source.reply('ID: {}'.format(meta.id))
 			if meta.author is not None:
-				source.reply(RText('Authors: {}'.format(', '.join(meta.author))))
+				source.reply('Authors: {}'.format(', '.join(meta.author)))
 			if meta.link is not None:
 				source.reply(RTextList('Link: ', RText(meta.link, color=RColor.blue, styles=RStyle.underlined).c(RAction.open_url, meta.link)))
 			if meta.description is not None:
@@ -415,6 +425,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 				source.reply(self.tr('mcdr_command.{}.success'.format(operation_name), file_name))
 			else:
 				source.reply(self.tr('mcdr_command.{}.fail'.format(operation_name), file_name))
+			self.__print_plugin_operation_result_if_no_error(source, result)
 
 	def __existed_regular_plugin_manipulate(self, source: CommandSource, plugin_id: str, operation_name: str, func: Callable[[RegularPlugin], Any]):
 		plugin = self.mcdr_server.plugin_manager.get_regular_plugin_from_id(plugin_id)
@@ -426,6 +437,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 				source.reply(self.tr('mcdr_command.{}.success'.format(operation_name), plugin.get_name()))
 			else:
 				source.reply(self.tr('mcdr_command.{}.fail'.format(operation_name), plugin.get_name()))
+			self.__print_plugin_operation_result_if_no_error(source, result)
 
 	def disable_plugin(self, source: CommandSource, plugin_id: str):
 		self.__existed_regular_plugin_manipulate(source, plugin_id, 'disable_plugin', lambda plg: self.mcdr_server.server_interface.disable_plugin(plg.get_id(), is_plugin_call=False))
@@ -444,8 +456,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 
 	def reload_all_plugin(self, source: CommandSource):
 		ret = self.function_call(source, self.mcdr_server.plugin_manager.refresh_all_plugins, 'reload_all_plugin', log_success=False)
-		if ret.no_error:
-			source.reply(self.mcdr_server.plugin_manager.last_operation_result.to_rtext(show_path=source.has_permission(PermissionLevel.PHYSICAL_SERVER_CONTROL_LEVEL)))
+		self.__print_plugin_operation_result_if_no_error(source, ret)
 
 	# =======================
 	#   Help Message things

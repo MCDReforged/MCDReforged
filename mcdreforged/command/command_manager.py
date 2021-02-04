@@ -1,11 +1,12 @@
 """
 Handling MCDR commands
 """
+import collections
 from typing import TYPE_CHECKING, Dict, List
 
 import mcdreforged.command.builder.command_builder_util as utils
-from mcdreforged.command.builder.exception import CommandError
-from mcdreforged.command.command_source import CommandSource
+from mcdreforged.command.builder.exception import CommandError, RequirementNotMet
+from mcdreforged.command.command_source import InfoCommandSource
 from mcdreforged.plugin.plugin_registry import PluginCommandNode
 from mcdreforged.utils import string_util
 from mcdreforged.utils.logger import DebugOption
@@ -20,7 +21,7 @@ class CommandManager:
 		self.mcdr_server = mcdr_server
 		self.logger = self.mcdr_server.logger
 		self.tr = self.mcdr_server.tr
-		self.root_nodes = {}  # type: Dict[str, List[PluginCommandNode]]
+		self.root_nodes = collections.defaultdict(list)  # type: Dict[str, List[PluginCommandNode]]
 
 		self.__preserve_command_error_display_flag = False
 
@@ -29,11 +30,18 @@ class CommandManager:
 
 	def register_command(self, plugin_node: PluginCommandNode):
 		for literal in plugin_node.node.literals:
-			nodes = self.root_nodes.get(literal, [])
-			nodes.append(plugin_node)
-			self.root_nodes[literal] = nodes
+			self.root_nodes[literal].append(plugin_node)
 
-	def execute_command(self, source: CommandSource, command: str):
+	def __translate_command_error_header(self, translation_key: str, error: CommandError):
+		if isinstance(error, RequirementNotMet):
+			if error.get_reason() is not RequirementNotMet.DEFAULT_REASON:
+				return error.get_reason()
+			args = ()
+		else:
+			args = error.get_error_data()
+		return self.mcdr_server.tr(translation_key, *args, allow_failure=False)
+
+	def execute_command(self, source: InfoCommandSource, command: str):
 		first_literal_element = utils.get_element(command)
 		plugin_root_nodes = self.root_nodes.get(first_literal_element, [])
 		if len(plugin_root_nodes) > 0 and source.is_console:
@@ -55,7 +63,7 @@ class CommandManager:
 			if not error.is_handled():
 				translation_key = 'command_exception.{}'.format(string_util.hump_to_underline(type(error).__name__))
 				try:
-					error.set_translated_message(translation_key, lambda key, args: self.mcdr_server.tr(key, *args, allow_failure=False))
+					error.set_message(self.__translate_command_error_header(translation_key, error))
 				except KeyError:
 					self.logger.debug('Fail to translated command error with key {}'.format(translation_key), option=DebugOption.COMMAND)
 				source.reply(error.to_mc_color_text())

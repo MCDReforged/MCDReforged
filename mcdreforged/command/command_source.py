@@ -1,4 +1,5 @@
-from typing import TYPE_CHECKING, Any
+from abc import ABC
+from typing import TYPE_CHECKING, Any, Optional
 
 from mcdreforged.utils import misc_util
 
@@ -8,19 +9,7 @@ if TYPE_CHECKING:
 	from mcdreforged.plugin.server_interface import ServerInterface
 
 
-class CommandSourceType:
-	PLAYER = 0
-	CONSOLE = 1
-
-
 class CommandSource:
-	source_type: int
-
-	def __init__(self, mcdr_server: 'MCDReforgedServer', info: 'Info', source_type: int):
-		self._mcdr_server = mcdr_server
-		self._info = info
-		self.source_type = source_type
-
 	@property
 	def is_player(self) -> bool:
 		raise NotImplementedError()
@@ -30,13 +19,10 @@ class CommandSource:
 		raise NotImplementedError()
 
 	def get_server(self) -> 'ServerInterface':
-		return self._mcdr_server.server_interface
-
-	def get_info(self) -> 'Info':
-		return self._info
+		raise NotImplementedError()
 
 	def get_permission_level(self) -> int:
-		return self._mcdr_server.permission_manager.get_permission(self)
+		raise NotImplementedError()
 
 	def has_permission(self, level: int) -> bool:
 		return self.get_permission_level() >= level
@@ -51,15 +37,31 @@ class CommandSource:
 		"""
 		raise NotImplementedError()
 
-	def __str__(self):
-		raise NotImplementedError()
+
+class InfoCommandSource(CommandSource, ABC):
+	"""
+	Command source generated from info
+	TODO: DOC
+	"""
+	def __init__(self, mcdr_server: 'MCDReforgedServer', info: 'Info'):
+		self._mcdr_server = mcdr_server
+		self._info = info
+
+	def get_info(self) -> 'Info':
+		return self._info
+
+	def get_server(self) -> 'ServerInterface':
+		return self._mcdr_server.server_interface
+
+	def get_permission_level(self) -> int:
+		return self._mcdr_server.permission_manager.get_permission(self)
 
 
-class PlayerCommandSource(CommandSource):
+class PlayerCommandSource(InfoCommandSource):
 	def __init__(self, mcdr_server, info, player: str):
 		if not info.is_from_server:
 			raise TypeError('{} should be built from server info'.format(self.__class__.__name__))
-		super().__init__(mcdr_server, info, CommandSourceType.PLAYER)
+		super().__init__(mcdr_server, info)
 		self.player = player
 
 	@property
@@ -70,11 +72,11 @@ class PlayerCommandSource(CommandSource):
 	def is_console(self) -> bool:
 		return False
 
-	def reply(self, message: Any, **kwargs):
+	def reply(self, message: Any, *, encoding: Optional[str] = None, **kwargs):
 		"""
-		Specify key word argument encoding
+		:keyword encoding: encoding method for server_interface.tell
 		"""
-		self._mcdr_server.server_interface.tell(self.player, message, encoding=kwargs.get('encoding'), is_plugin_call=False)
+		self._mcdr_server.server_interface.tell(self.player, message, encoding=encoding, is_plugin_call=False)
 
 	def __str__(self):
 		return 'Player {}'.format(self.player)
@@ -83,11 +85,11 @@ class PlayerCommandSource(CommandSource):
 		return '{}[player={}]'.format(type(self).__name__, self.player)
 
 
-class ConsoleCommandSource(CommandSource):
+class ConsoleCommandSource(InfoCommandSource):
 	def __init__(self, mcdr_server, info):
 		if not info.is_from_console:
 			raise TypeError('{} should be built from console info'.format(self.__class__.__name__))
-		super().__init__(mcdr_server, info, CommandSourceType.CONSOLE)
+		super().__init__(mcdr_server, info)
 
 	@property
 	def is_player(self) -> bool:
@@ -97,7 +99,12 @@ class ConsoleCommandSource(CommandSource):
 	def is_console(self) -> bool:
 		return True
 
-	def reply(self, message: Any, **kwargs):
+	def reply(self, message: Any, *, console_text: Optional[Any] = None, **kwargs):
+		"""
+		:keyword console_text: If it's specified, use it instead of param message
+		"""
+		if console_text is not None:
+			message = console_text
 		misc_util.print_text_to_console(self._mcdr_server.logger, message)
 
 	def __str__(self):

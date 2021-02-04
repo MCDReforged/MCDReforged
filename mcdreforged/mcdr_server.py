@@ -175,6 +175,9 @@ class MCDReforgedServer:
 	def is_mcdr_exit(self):
 		return self.mcdr_in_state(MCDReforgedState.STOPPED)
 
+	def is_mcdr_about_to_exit(self):
+		return self.mcdr_in_state({MCDReforgedState.PRE_STOPPED, MCDReforgedState.STOPPED})
+
 	def is_exit_naturally(self):
 		return MCDReforgedFlag.EXIT_NATURALLY in self.flags
 
@@ -240,6 +243,9 @@ class MCDReforgedServer:
 				return False
 			if self.is_server_running():
 				self.logger.warning(self.tr('mcdr_server.start_server.start_twice'))
+				return False
+			if self.is_mcdr_about_to_exit():
+				self.logger.warning(self.tr('mcdr_server.start_server.about_to_exit'))
 				return False
 			cwd = self.config['working_directory']
 			if not os.path.isdir(cwd):
@@ -315,10 +321,10 @@ class MCDReforgedServer:
 	# --------------------------
 
 	def on_server_start(self):
-		self.set_exit_naturally(True)
+		self.set_server_state(ServerState.RUNNING)
+		self.set_exit_naturally(True)  # Set after server state is set to RUNNING, or MCDR might have a chance to exit if the server is started by other thread
 		self.logger.info(self.tr('mcdr_server.start_server.pid_info', self.process.pid))
 		self.plugin_manager.dispatch_event(MCDRPluginEvents.SERVER_START, ())
-		self.set_server_state(ServerState.RUNNING)
 
 	def on_server_stop(self):
 		return_code = self.process.poll()
@@ -326,9 +332,9 @@ class MCDReforgedServer:
 		self.process.stdin.close()
 		self.process.stdout.close()
 		self.process = None
-		self.remove_flag(MCDReforgedFlag.SERVER_STARTUP | MCDReforgedFlag.SERVER_RCON_READY)  # removes this two
-		self.plugin_manager.dispatch_event(MCDRPluginEvents.SERVER_STOP, (return_code,))
 		self.set_server_state(ServerState.STOPPED)
+		self.remove_flag(MCDReforgedFlag.SERVER_STARTUP | MCDReforgedFlag.SERVER_RCON_READY)  # removes this two
+		self.plugin_manager.dispatch_event(MCDRPluginEvents.SERVER_STOP, (return_code,), wait=True)
 
 	def send(self, text, ending='\n', encoding=None):
 		"""
@@ -396,15 +402,15 @@ class MCDReforgedServer:
 			parsed_result = self.server_handler_manager.get_current_handler().parse_server_stdout(text)
 		except:
 			if self.logger.should_log_debug(option=DebugOption.HANDLER):  # traceback.format_exc() is costly
-				self.logger.debug('Fail to parse text "{}" from stdout of the server, using raw handler'.format(text))
+				self.logger.debug('Fail to parse text "{}" from stdout of the server, using raw handler'.format(text), no_check=True)
 				for line in traceback.format_exc().splitlines():
-					self.logger.debug('    {}'.format(line))
+					self.logger.debug('    {}'.format(line), no_check=True)
 			parsed_result = self.server_handler_manager.get_basic_handler().parse_server_stdout(text)
 		else:
 			if self.logger.should_log_debug(option=DebugOption.HANDLER):
-				self.logger.debug('Parsed text from server stdin:')
+				self.logger.debug('Parsed text from server stdout:', no_check=True)
 				for line in parsed_result.format_text().splitlines():
-					self.logger.debug('    {}'.format(line))
+					self.logger.debug('    {}'.format(line), no_check=True)
 		self.server_handler_manager.detect_text(text)
 		self.reactor_manager.put_info(parsed_result)
 
@@ -434,8 +440,7 @@ class MCDReforgedServer:
 
 			self.watch_dog.stop()  # it's ok for plugins to take some time
 			self.watch_dog.join()
-			self.plugin_manager.dispatch_event(MCDRPluginEvents.MCDR_STOP, ())
-			self.task_executor.wait_till_finish_all_task()
+			self.plugin_manager.dispatch_event(MCDRPluginEvents.MCDR_STOP, (), wait=True)
 
 			self.logger.info(self.tr('mcdr_server.on_mcdr_stop.bye'))
 		except KeyboardInterrupt:  # I don't know why there sometimes will be a KeyboardInterrupt if MCDR is stopped by ctrl-c

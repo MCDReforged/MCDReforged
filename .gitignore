@@ -35,6 +35,7 @@ back-up/
 test.py
 plugins_test/*
 plugins0.x/*
+plugins_dev/*
 
 # user config files
 # these will be automatically generated at the first run
