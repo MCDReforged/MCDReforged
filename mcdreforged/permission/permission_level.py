@@ -1,4 +1,5 @@
 import collections
+from enum import Enum
 from typing import Optional, Dict, List
 
 
@@ -19,31 +20,25 @@ class PermissionLevelItem:
 		return self.level < other.level
 
 
-class _PermissionLevelStorage:
-	STORAGE = []  # type: List[PermissionLevelItem]
-
-	@classmethod
-	def register(cls, item: PermissionLevelItem):
-		cls.STORAGE.append(item)
-		cls.STORAGE.sort()
-		return item.level
-
-	@classmethod
-	def get_value_dict(cls):
-		return collections.OrderedDict([(item.name, item.level) for item in cls.STORAGE])
-
-
 class PermissionLevel:
-	GUEST	= _PermissionLevelStorage.register(PermissionLevelItem('guest', 0))
-	USER	= _PermissionLevelStorage.register(PermissionLevelItem('user', 1))
-	HELPER	= _PermissionLevelStorage.register(PermissionLevelItem('helper', 2))
-	ADMIN	= _PermissionLevelStorage.register(PermissionLevelItem('admin', 3))
-	OWNER	= _PermissionLevelStorage.register(PermissionLevelItem('owner', 4))
-	__NAME_DICT = collections.OrderedDict([(item.name, item) for item in _PermissionLevelStorage.STORAGE])  # type: Dict[str, PermissionLevelItem]
-	__LEVEL_DICT = collections.OrderedDict([(item.level, item) for item in _PermissionLevelStorage.STORAGE])  # type: Dict[int, PermissionLevelItem]
-	LEVELS = [item.level for item in _PermissionLevelStorage.STORAGE]  # type: List[int]
-	NAMES = [item.name for item in _PermissionLevelStorage.STORAGE]  # type: List[str]
-	INSTANCES = _PermissionLevelStorage.STORAGE.copy()  # type: List[PermissionLevelItem]
+	class __Storage(Enum):
+		GUEST	= PermissionLevelItem('guest', 0)
+		USER	= PermissionLevelItem('user', 1)
+		HELPER	= PermissionLevelItem('helper', 2)
+		ADMIN	= PermissionLevelItem('admin', 3)
+		OWNER	= PermissionLevelItem('owner', 4)
+
+	GUEST = __Storage.GUEST.value.level
+	USER = __Storage.USER.value.level
+	HELPER = __Storage.HELPER.value.level
+	ADMIN = __Storage.ADMIN.value.level
+	OWNER = __Storage.OWNER.value.level
+
+	INSTANCES = [item.value for item in __Storage]  # type: List[PermissionLevelItem]
+	LEVELS = [inst.level for inst in INSTANCES]  # type: List[int]
+	NAMES = [inst.name for inst in INSTANCES]  # type: List[str]
+	__NAME_DICT = collections.OrderedDict(zip(NAMES, INSTANCES))  # type: Dict[str, PermissionLevelItem]
+	__LEVEL_DICT = collections.OrderedDict(zip(LEVELS, INSTANCES))  # type: Dict[int, PermissionLevelItem]
 
 	MAXIMUM_LEVEL = LEVELS[-1]
 	MINIMUM_LEVEL = LEVELS[0]
