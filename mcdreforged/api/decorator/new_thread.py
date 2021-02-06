@@ -30,29 +30,3 @@ def new_thread(thread_name: Optional[str or Callable] = None):
 		return wrapper(this_is_a_function)
 	# Use @on_new_thread with ending brackets case
 	return wrapper
-
-
-def test():
-	@new_thread()
-	def bla1(value):
-		time.sleep(0.5)
-		print(threading.current_thread().getName() + ' ' + str(value))
-
-	@new_thread
-	def bla2(value):
-		time.sleep(0.5)
-		print(threading.current_thread().getName() + ' ' + str(value))
-
-	@new_thread('awa')
-	def bla3(value):
-		time.sleep(0.5)
-		print(threading.current_thread().getName() + ' ' + str(value))
-
-	print(bla1, bla1('1'), inspect.getfullargspec(bla1))
-	print(bla2, bla2('2'), inspect.getfullargspec(bla2))
-	print(bla3, bla3('3'), inspect.getfullargspec(bla3))
-	time.sleep(1)
-
-
-if __name__ == '__main__':
-	test()
