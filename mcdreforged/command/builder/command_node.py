@@ -4,11 +4,12 @@ from abc import ABC
 from typing import List, Callable, Iterable, Set, Dict, Type, Any, Union, Optional
 
 from mcdreforged.command.builder import command_builder_util as utils
-from mcdreforged.command.builder.exception import LiteralNotMatch, NumberOutOfRange, EmptyText, \
-	UnknownCommand, UnknownArgument, CommandSyntaxError, UnknownRootArgument, RequirementNotMet, IllegalNodeOperation, \
-	CommandError, InvalidNumber, InvalidInteger, InvalidFloat, UnclosedQuotedString, IllegalEscapesUsage, \
+from mcdreforged.command.builder.exception import LiteralNotMatch, NumberOutOfRange, EmptyText,\
+	UnknownCommand, UnknownArgument, CommandSyntaxError, UnknownRootArgument, RequirementNotMet, IllegalNodeOperation,\
+	CommandError, InvalidNumber, InvalidInteger, InvalidFloat, UnclosedQuotedString, IllegalEscapesUsage,\
 	TextLengthOutOfRange
 from mcdreforged.command.command_source import CommandSource
+from mcdreforged.minecraft.rtext import *
 
 SOURCE_CONTEXT_CALLBACK = Union[Callable[[], Any], Callable[[CommandSource], Any], Callable[[CommandSource, dict], Any]]
 SOURCE_CONTEXT_CALLBACK_BOOL = Union[Callable[[], bool], Callable[[CommandSource], bool], Callable[[CommandSource, dict], bool]]
@@ -32,8 +33,9 @@ class ArgumentNode:
 
 	def __init__(self, name: Optional[str]):
 		self.name = name
-		self.children_literal = collections.defaultdict(list)  # type: Dict[str, List[Literal]]
+		self.children_literal = collections.defaultdict(list)  # type: Dict[tuple[str], List[Literal]]
 		self.children = []  # type: List[ArgumentNode]
+		self.help_messages = []  # type: List[Union[str, RTextBase]]
 		self.callback = None
 		self.error_handlers = {}  # type: ArgumentNode._ERROR_HANDLER_TYPE
 		self.child_error_handlers = {}  # type: ArgumentNode._ERROR_HANDLER_TYPE
@@ -53,8 +55,7 @@ class ArgumentNode:
 		if self.redirect_node is not None:
 			raise IllegalNodeOperation('Redirected node is not allowed to add child nodes')
 		if isinstance(node, Literal):
-			for literal in node.literals:
-				self.children_literal[literal].append(node)
+			self.children_literal[tuple(node.literals)].append(node)
 		else:
 			self.children.append(node)
 		return self
@@ -91,6 +92,10 @@ class ArgumentNode:
 		if self.has_children():
 			raise IllegalNodeOperation('Node with children nodes is not allowed to be redirected')
 		self.redirect_node = redirect_node
+		return self
+
+	def add_help_message(self, message: Union[str, RTextBase]):
+		self.help_messages.append(message)
 		return self
 
 	def on_error(self, error_type: Type[CommandError], handler: SOURCE_ERROR_CONTEXT_CALLBACK, *, handled: bool = False) -> 'ArgumentNode':
@@ -169,6 +174,23 @@ class ArgumentNode:
 		self.__handle_error(source, error, context, self.error_handlers)
 		raise error
 
+	@staticmethod
+	def _gen_help_msg(command: str, message: Union[str, RTextBase]):
+		return RTextList(RText(command, RColor.gray).c(RAction.suggest_command, command), ' ', message).h('')
+
+	def gen_help_msg(self, command: str):
+		output = []
+		if self.has_children():
+			output.append(self._gen_help_msg(command, 'Show this message'))
+			for key_names, val_lits in self.children_literal.items():
+				for lit in val_lits:
+					for msg in lit.help_messages:
+						output.append(self._gen_help_msg('{} {}'.format(command, key_names[0]), msg))
+			for child in self.children:
+				for msg in child.help_messages:
+					output.append(self._gen_help_msg(command, msg))
+		return output
+
 	def _execute(self, source, command: str, remaining: str, context: dict):
 		success_read = len(command) - len(remaining)
 		try:
@@ -192,9 +214,12 @@ class ArgumentNode:
 
 			# Parsing finished
 			if len(trimmed_remaining) == 0:
+				output = self.gen_help_msg(command)
+				for line in output:
+					source.reply(line)
 				if self.callback is not None:
 					self.__smart_callback(self.callback, source, context)
-				else:
+				elif not bool(output):
 					self.__raise_error(source, UnknownCommand(command[:success_read], command[:success_read]), context)
 			# Un-parsed command string remains
 			else:
@@ -209,13 +234,16 @@ class ArgumentNode:
 				try:
 					# Check literal children first
 					next_literal = utils.get_element(trimmed_remaining)
-					for child_literal in node.children_literal.get(next_literal, []):
-						try:
-							child_literal._execute(source, command, trimmed_remaining, context)
+					for lit_names, child_lits in node.children_literal.items():
+						if next_literal in lit_names:
+							for child_literal in child_lits:
+								try:
+									child_literal._execute(source, command, trimmed_remaining, context)
+									break
+								except LiteralNotMatch:
+									# it's ok for a direct literal node to fail
+									pass
 							break
-						except LiteralNotMatch:
-							# it's ok for a direct literal node to fail
-							pass
 					else:  # All literal children fails
 						# No argument child
 						if len(node.children) == 0:
@@ -253,20 +281,17 @@ class Literal(ExecutableNode):
 	A literal argument, doesn't store any value, only for extending and readability of the command
 	The only argument type that is allowed to use the execute method
 	"""
-	def __init__(self, literal: str or Iterable[str]):
+	def __init__(self, *literals: str):
 		super().__init__(None)
-		if isinstance(literal, str):
-			literals = {literal}
-		elif isinstance(literal, Iterable):
-			literals = set(literal)
-		else:
-			raise TypeError('Only str or Iterable[str] is accepted')
+		literal_list = []
 		for literal in literals:
 			if not isinstance(literal, str):
 				raise TypeError('Literal node only accepts str but {} found'.format(type(literal)))
-			if utils.DIVIDER in literal:
+			elif utils.DIVIDER in literal:
 				raise TypeError('DIVIDER character "{}" cannot be inside a literal'.format(utils.DIVIDER))
-		self.literals = literals  # type: Set[str]
+			else:
+				literal_list.append(literal)
+		self.literals = literal_list  # type: List[str]
 
 	def parse(self, text):
 		arg = utils.get_element(text)

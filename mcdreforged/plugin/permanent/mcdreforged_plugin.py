@@ -84,19 +84,19 @@ class MCDReforgedPlugin(PermanentPlugin):
 			on_error(RequirementNotMet, self.on_mcdr_command_permission_denied, handled=True).
 			on_error(UnknownArgument, self.on_mcdr_command_unknown_argument, handled=True).
 			then(
-				Literal({'r', 'reload'}).
+				Literal('reload', 'r').
 				runs(lambda src: src.reply(self.get_help_message('mcdr_command.help_message_reload'))).
 				on_error(UnknownArgument, self.on_mcdr_command_unknown_argument).
-				then(Literal({'plugin', 'plg'}).runs(self.refresh_changed_plugins)).
-				then(Literal({'config', 'cfg'}).runs(self.reload_config)).
-				then(Literal({'permission', 'perm'}).runs(self.reload_permission)).
+				then(Literal('plugin', 'plg').runs(self.refresh_changed_plugins)).
+				then(Literal('config', 'cfg').runs(self.reload_config)).
+				then(Literal('permission', 'perm').runs(self.reload_permission)).
 				then(Literal('all').runs(self.reload_all))
 			).
 			then(
 				Literal('status').runs(self.print_mcdr_status)
 			).
 			then(
-				Literal({'permission', 'perm'}).
+				Literal('permission', 'perm').
 				runs(lambda src: src.reply(self.get_help_message('mcdr_command.help_message_permission'))).
 				on_error(UnknownArgument, self.on_mcdr_command_unknown_argument).
 				then(
@@ -105,14 +105,14 @@ class MCDReforgedPlugin(PermanentPlugin):
 				).
 				then(Literal('set').then(QuotableText('player').then(Text('level').runs(lambda src, ctx: self.set_player_permission(src, ctx['player'], ctx['level']))))).
 				then(
-					Literal({'query', 'q'}).runs(lambda src: self.query_self_permission(src)).
+					Literal('query', 'q').runs(lambda src: self.query_self_permission(src)).
 					then(QuotableText('player').runs(lambda src, ctx: self.query_player_permission(src, ctx['player'])))
 				).
-				then(Literal({'remove', 'rm'}).then(QuotableText('player').runs(lambda src, ctx: self.remove_player_permission(src, ctx['player'])))).
-				then(Literal({'setdefault', 'setd'}).then(Text('level').runs(lambda src, ctx: self.set_default_permission(src, ctx['level']))))
+				then(Literal('remove', 'rm').then(QuotableText('player').runs(lambda src, ctx: self.remove_player_permission(src, ctx['player'])))).
+				then(Literal('setdefault', 'setd').then(Text('level').runs(lambda src, ctx: self.set_default_permission(src, ctx['level']))))
 			).
 			then(
-				Literal({'plugin', 'plg'}).
+				Literal('plugin', 'plg').
 				runs(lambda src: src.reply(self.get_help_message('mcdr_command.help_message_plugin'))).
 				on_error(UnknownArgument, self.on_mcdr_command_unknown_argument).
 				then(Literal('list').runs(self.list_plugin)).
@@ -122,10 +122,10 @@ class MCDReforgedPlugin(PermanentPlugin):
 				then(Literal('reload').then(GreedyText('plugin_id').runs(lambda src, ctx: self.reload_plugin(src, ctx['plugin_id'])))).
 				then(Literal('unload').then(GreedyText('plugin_id').runs(lambda src, ctx: self.unload_plugin(src, ctx['plugin_id'])))).
 				then(Literal('disable').then(GreedyText('plugin_id').runs(lambda src, ctx: self.disable_plugin(src, ctx['plugin_id'])))).
-				then(Literal({'reloadall', 'ra'}).runs(self.reload_all_plugin))
+				then(Literal('reloadall', 'ra').runs(self.reload_all_plugin))
 			).
 			then(
-				Literal({'checkupdate', 'cu'}).runs(lambda src: self.mcdr_server.update_helper.check_update(condition_check=lambda: True, reply_func=src.reply))
+				Literal('checkupdate', 'cu').runs(lambda src: self.mcdr_server.update_helper.check_update(condition_check=lambda: True, reply_func=src.reply))
 			)
 		)
 		self.register_command(
@@ -494,7 +494,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 				msg = matched[i]
 				source.reply(RTextList(
 					RText(msg.prefix, color=RColor.gray).c(RAction.suggest_command, msg.prefix),
-					': ',
+					' ',
 					msg.message
 				))
 

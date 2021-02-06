@@ -74,7 +74,7 @@ class MyTestCase(unittest.TestCase):
 		self.assertRaises(UnknownArgument, self.run_command, executor, 'test pingpong')
 		self.assertRaises(UnknownArgument, self.run_command, executor, 'test ping extra')
 
-		executor = Literal('test').then(Literal(['ping1', 'ping2']).runs(self.callback_hit))
+		executor = Literal('test').then(Literal('ping1', 'ping2').runs(self.callback_hit))
 		self.run_command_and_check_hit(executor, 'test ping1', True)
 		self.run_command_and_check_hit(executor, 'test ping2', True)
 
