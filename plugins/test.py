@@ -1,4 +1,4 @@
-from random import random
+from random import random, shuffle
 
 from mcdreforged.api.all import *
 
@@ -10,6 +10,61 @@ def on_load(server: ServerInterface, prev):
 	server.register_command(Literal('!!mypoint').then(PointArgument('pt').runs(lambda src, ctx: src.reply('You have input a point ({}, {}, {})'.format(*ctx['pt'])))))
 	server.register_command(Literal('req1').requires(lambda: False))
 	server.register_command(Literal('req2').requires(lambda: False, failure_message_getter=lambda: "as"))
+	server.register_command(
+		Literal('!!!root')
+		.add_help_message('I am invisible for now')
+		.then(
+			Text('string')
+			.add_help_message('§6<string>§3 <mode>§r Print string formatted by mode')
+			.then(
+				Literal('raw', 'r')
+				.add_help_message('Print raw string')
+				.runs(lambda src, ctx: src.reply(ctx['string']))
+			).then(
+				Literal('reverse', 'rev')
+				.add_help_message('Print reversed string')
+				.runs(lambda src, ctx: src.reply(ctx['string'][::-1]))
+			).then(
+				Literal('random', 'ran')
+				.add_help_message('Print random ordered string')
+				.runs(lambda src, ctx: src.reply(ranstr(ctx['string'])))
+			)
+		).then(
+			Literal('node1', 'n1')
+			.add_help_message(RText('Here is node 1').h('!!!root §ln1§r'))
+			.then(
+				Literal('node11', 'n11')
+				.add_help_message(RText('Here is node 11').h('!!!root §ln1 n11§r'))
+				.runs(lambda src: src.reply('You have reached an end node: n11'))
+			).then(
+				Literal('node12', 'n12')
+				.add_help_message(RText('Here is node 12').h('!!!root §ln1 n12§r'))
+				.runs(lambda src: src.reply('You have reached an end node: n12'))
+			)
+		).then(
+			Literal('node2', 'n2')
+			.add_help_message(RText('Here is node 2').h('!!!root §ln2§r'))
+			.add_help_message(
+				RText('Here is also node 2')
+				.h('You discovered me, click me to run')
+				.c(RAction.run_command, '!!!root n2')
+			).then(
+				Literal('node21', 'n21')
+				.add_help_message(RText('Here is node 21').h('!!!root §ln2 n21§r'))
+				.then(
+					Literal('node211', 'n211')
+					.add_help_message(RText('Here is node 211').h('!!!root §ln2 n21 n211§r'))
+					.runs(lambda src: src.reply('You have reached another end node: n211'))
+				)
+			)
+		)
+	)
+
+
+def ranstr(string: str):
+	str_list = list(string)
+	shuffle(str_list)
+	return ''.join(str_list)
 
 
 def register_help_message(server):
