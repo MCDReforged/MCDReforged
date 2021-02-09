@@ -175,20 +175,20 @@ class ArgumentNode:
 		raise error
 
 	@staticmethod
-	def _gen_help_msg(command: str, message: Union[str, RTextBase]):
+	def __rtext_help_msg(command: str, message: Union[str, RTextBase]):
 		return RTextList(RText(command, RColor.gray).c(RAction.suggest_command, command), ' ', message).h('')
 
-	def gen_help_msg(self, command: str):
+	def __gen_help_msg(self, command: str):
 		output = []
 		if self.has_children():
-			output.append(self._gen_help_msg(command, 'Show this message'))
+			output.append(self.__rtext_help_msg(command, 'Show this message'))
 			for key_names, val_lits in self.children_literal.items():
 				for lit in val_lits:
 					for msg in lit.help_messages:
-						output.append(self._gen_help_msg('{} {}'.format(command, key_names[0]), msg))
+						output.append(self.__rtext_help_msg('{} {}'.format(command, key_names[0]), msg))
 			for child in self.children:
 				for msg in child.help_messages:
-					output.append(self._gen_help_msg(command, msg))
+					output.append(self.__rtext_help_msg(command, msg))
 		return output
 
 	def _execute(self, source, command: str, remaining: str, context: dict):
@@ -214,7 +214,7 @@ class ArgumentNode:
 
 			# Parsing finished
 			if len(trimmed_remaining) == 0:
-				output = self.gen_help_msg(command)
+				output = self.__gen_help_msg(command)
 				for line in output:
 					source.reply(line)
 				if self.callback is not None:

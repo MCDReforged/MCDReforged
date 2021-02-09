@@ -3,6 +3,7 @@ from typing import Dict, List, Callable, Any, TYPE_CHECKING
 
 from mcdreforged.command.builder.command_node import Literal
 from mcdreforged.minecraft.rtext import RTextBase
+from mcdreforged.permission.permission_level import PermissionLevel
 from mcdreforged.plugin.plugin_event import EventListener
 
 if TYPE_CHECKING:
@@ -67,6 +68,8 @@ class PluginRegistry(AbstractPluginRegistry):
 		if not isinstance(node, Literal):
 			raise TypeError('Only Literal node is accepted to be a root node')
 		self.command_roots.append(PluginCommandNode(self.plugin, node))
+		for msg in node.help_messages:  # type: str or RTextBase
+			self.help_messages.append(HelpMessage(self.plugin, node.literals[0], msg, PermissionLevel.MINIMUM_LEVEL))
 
 
 class PluginRegistryStorage(AbstractPluginRegistry):
