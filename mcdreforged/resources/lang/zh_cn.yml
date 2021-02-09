@@ -38,33 +38,61 @@ config.missing_config: |
   配置文件缺失部分选项，使用默认值
   请尽快去检测并更新配置文件
 mcdr_command.permission_denied                      : §c权限不足§r
-mcdr_command.help_message: |
-  §7!!MCDR§r: 显示这条消息
-  §7!!MCDR reload§r: 显示重载相关的帮助信息
-  §7!!MCDR status§r: 显示 MCDR 状态
-  §7!!MCDR permission§r: 显示权限相关的帮助信息
-  §7!!MCDR plugin§r: 显示插件相关的帮助信息
-  §7!!MCDR checkupdate§r: 从 Github 检测更新
-mcdr_command.help_message_reload: |
-  §7!!MCDR reload plugin§r: 加载 / 重载 / 卸载§l有修改的§r插件
-  §7!!MCDR reload config§r: 重载配置文件
-  §7!!MCDR reload permission§r: 重载权限文件
-  §7!!MCDR reload all§r: 重载上述所有
-mcdr_command.help_message_permission: |
-  §7!!MCDR permission list §e[<level>]§r: 列出所有玩家的权限等级。如果 §e[<level>]§r 被指定则仅列出权限等级 §e[<level>]§r
-  §7!!MCDR permission set §b<player>§r §e<level>§r: 将 §b<player>§r 的权限等级设置为 §e<level>§r
-  §7!!MCDR permission query §b[<player>]§r: 查询 §b<player>§r 的权限等级。当 §b<player>§r 参数被省略时，查询指令发送者的权限等级
-  §7!!MCDR permission remove §b<player>§r: 将 §b<player>§r 从权限数据库中移除
-  §7!!MCDR permission setdefault §e<level>§r: 将默认权限等级设置为 §e<level>§r
-mcdr_command.help_message_plugin: |
-  §7!!MCDR plugin list§r: 列出所有的插件
-  §7!!MCDR plugin info §6<plugin_id>§r: 显示 id 为 §6<plugin_id>§r 插件的信息
-  §7!!MCDR plugin load §e<file_name>§r: 加载文件名为 §e<file_name>§r 的插件
-  §7!!MCDR plugin enable §e<file_name>§r: 启用文件名为 §e<file_name>§r 的插件
-  §7!!MCDR plugin reload §6<plugin_id>§r: 重载 id 为 §6<plugin_id>§r 的插件
-  §7!!MCDR plugin unload §6<plugin_id>§r: 卸载 id 为 §6<plugin_id>§r 的插件
-  §7!!MCDR plugin disable §6<plugin_id>§r: 禁用 id 为 §6<plugin_id>§r 的插件
-  §7!!MCDR plugin reloadall§r: 加载 / 重载 / 卸载§l所有§r插件
+
+#mcdr_command.help_message: |
+#  §7!!MCDR§r: 显示这条消息
+#  §7!!MCDR reload§r: 显示重载相关的帮助信息
+#  §7!!MCDR status§r: 显示 MCDR 状态
+#  §7!!MCDR permission§r: 显示权限相关的帮助信息
+#  §7!!MCDR plugin§r: 显示插件相关的帮助信息
+#  §7!!MCDR checkupdate§r: 从 Github 检测更新
+mcdr_command.help_message: 显示这条消息
+mcdr_command.help_message_reload: 显示重载相关的帮助信息
+mcdr_command.help_message_status: 显示 MCDR 状态
+mcdr_command.help_message_permission: 显示权限相关的帮助信息
+mcdr_command.help_message_plugin: 显示插件相关的帮助信息
+mcdr_command.checkupdate: 从 Github 检测更新
+
+#mcdr_command.help_message_reload: |
+#  §7!!MCDR reload plugin§r: 加载 / 重载 / 卸载§l有修改的§r插件
+#  §7!!MCDR reload config§r: 重载配置文件
+#  §7!!MCDR reload permission§r: 重载权限文件
+#  §7!!MCDR reload all§r: 重载上述所有
+mcdr_command.help_message_reload.plugin: 加载 / 重载 / 卸载§l有修改的§r插件
+mcdr_command.help_message_reload.config: 重载配置文件
+mcdr_command.help_message_reload.permission: 重载权限文件
+mcdr_command.help_message_reload.all: 重载上述所有
+
+#mcdr_command.help_message_permission: |
+#  §7!!MCDR permission list §e[<level>]§r: 列出所有玩家的权限等级。如果 §e[<level>]§r 被指定则仅列出权限等级 §e[<level>]§r
+#  §7!!MCDR permission set §b<player>§r §e<level>§r: 将 §b<player>§r 的权限等级设置为 §e<level>§r
+#  §7!!MCDR permission query §b[<player>]§r: 查询 §b<player>§r 的权限等级。当 §b<player>§r 参数被省略时，查询指令发送者的权限等级
+#  §7!!MCDR permission remove §b<player>§r: 将 §b<player>§r 从权限数据库中移除
+#  §7!!MCDR permission setdefault §e<level>§r: 将默认权限等级设置为 §e<level>§r
+mcdr_command.help_message_permission.list: §e[<level>]§r 列出所有玩家的权限等级。如果 §e[<level>]§r 被指定则仅列出权限等级 §e[<level>]§r
+mcdr_command.help_message_permission.set: §b<player>§r §e<level>§r 将 §b<player>§r 的权限等级设置为 §e<level>§r
+mcdr_command.help_message_permission.query: §b[<player>]§r 查询 §b<player>§r 的权限等级。当 §b<player>§r 参数被省略时，查询指令发送者的权限等级
+mcdr_command.help_message_permission.remove: §b<player>§r 将 §b<player>§r 从权限数据库中移除
+mcdr_command.help_message_permission.setdefault: §e<level>§r 将默认权限等级设置为 §e<level>§r
+
+#mcdr_command.help_message_plugin: |
+#  §7!!MCDR plugin list§r: 列出所有的插件
+#  §7!!MCDR plugin info §6<plugin_id>§r: 显示 id 为 §6<plugin_id>§r 插件的信息
+#  §7!!MCDR plugin load §e<file_name>§r: 加载文件名为 §e<file_name>§r 的插件
+#  §7!!MCDR plugin enable §e<file_name>§r: 启用文件名为 §e<file_name>§r 的插件
+#  §7!!MCDR plugin reload §6<plugin_id>§r: 重载 id 为 §6<plugin_id>§r 的插件
+#  §7!!MCDR plugin unload §6<plugin_id>§r: 卸载 id 为 §6<plugin_id>§r 的插件
+#  §7!!MCDR plugin disable §6<plugin_id>§r: 禁用 id 为 §6<plugin_id>§r 的插件
+#  §7!!MCDR plugin reloadall§r: 加载 / 重载 / 卸载§l所有§r插件
+mcdr_command.help_message_plugin.list: 列出所有的插件
+mcdr_command.help_message_plugin.info: §6<plugin_id>§r 显示 id 为 §6<plugin_id>§r 插件的信息
+mcdr_command.help_message_plugin.load: §e<file_name>§r 加载文件名为 §e<file_name>§r 的插件
+mcdr_command.help_message_plugin.enable: §e<file_name>§r 启用文件名为 §e<file_name>§r 的插件
+mcdr_command.help_message_plugin.reload: §6<plugin_id>§r 重载 id 为 §6<plugin_id>§r 的插件
+mcdr_command.help_message_plugin.unload: §6<plugin_id>§r 卸载 id 为 §6<plugin_id>§r 的插件
+mcdr_command.help_message_plugin.disable: §6<plugin_id>§r 禁用 id 为 §6<plugin_id>§r 的插件
+mcdr_command.help_message_plugin.reloadall: 加载 / 重载 / 卸载§l所有§r插件
+
 mcdr_command.command_not_found                        : 参数错误，输入 "§7{0}§r" 以查看帮助
 mcdr_command.command_not_found_suggest                : 点击以输入 "§7{0}§r"
 mcdr_command.refresh_changed_plugins.fail             : 重载变化的插件§c失败§r
