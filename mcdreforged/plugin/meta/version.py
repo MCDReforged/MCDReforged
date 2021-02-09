@@ -151,5 +151,3 @@ class VersionRequirement:
 
 class VersionParsingError(ValueError):
 	pass
-
-
