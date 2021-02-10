@@ -79,7 +79,6 @@ class MCDReforgedPlugin(PermanentPlugin):
 	def __register_commands(self):
 		self.register_command(
 			Literal(self.get_control_command_prefix()).
-			add_help_message(self.tr('mcdr_command.help_message')).
 			requires(lambda src: src.has_permission(PermissionLevel.MCDR_CONTROL_LEVEL)).
 			# runs(lambda src: src.reply(self.get_help_message('mcdr_command.help_message'))).
 			on_error(RequirementNotMet, self.on_mcdr_command_permission_denied, handled=True).

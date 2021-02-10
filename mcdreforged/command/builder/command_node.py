@@ -1,7 +1,7 @@
 import collections
 import inspect
 from abc import ABC
-from typing import List, Callable, Iterable, Set, Dict, Type, Any, Union, Optional
+from typing import List, Callable, Iterable, Set, Dict, Type, Any, Union, Optional, Tuple
 
 from mcdreforged.command.builder import command_builder_util as utils
 from mcdreforged.command.builder.exception import LiteralNotMatch, NumberOutOfRange, EmptyText,\
@@ -9,7 +9,8 @@ from mcdreforged.command.builder.exception import LiteralNotMatch, NumberOutOfRa
 	CommandError, InvalidNumber, InvalidInteger, InvalidFloat, UnclosedQuotedString, IllegalEscapesUsage,\
 	TextLengthOutOfRange
 from mcdreforged.command.command_source import CommandSource
-from mcdreforged.minecraft.rtext import *
+from mcdreforged.minecraft.rtext import RTextBase, RText, RTextList, RColor, RAction
+from mcdreforged.permission.permission_level import PermissionLevel
 
 SOURCE_CONTEXT_CALLBACK = Union[Callable[[], Any], Callable[[CommandSource], Any], Callable[[CommandSource, dict], Any]]
 SOURCE_CONTEXT_CALLBACK_BOOL = Union[Callable[[], bool], Callable[[CommandSource], bool], Callable[[CommandSource, dict], bool]]
@@ -35,7 +36,7 @@ class ArgumentNode:
 		self.name = name
 		self.children_literal = collections.defaultdict(list)  # type: Dict[tuple[str], List[Literal]]
 		self.children = []  # type: List[ArgumentNode]
-		self.help_messages = []  # type: List[Union[str, RTextBase]]
+		self.help_messages = []  # type: List[Tuple[Union[str, RTextBase], int]]
 		self.callback = None
 		self.error_handlers = {}  # type: ArgumentNode._ERROR_HANDLER_TYPE
 		self.child_error_handlers = {}  # type: ArgumentNode._ERROR_HANDLER_TYPE
@@ -94,8 +95,8 @@ class ArgumentNode:
 		self.redirect_node = redirect_node
 		return self
 
-	def add_help_message(self, message: Union[str, RTextBase]):
-		self.help_messages.append(message)
+	def add_help_message(self, message: Union[str, RTextBase], permission: int = PermissionLevel.MINIMUM_LEVEL) -> 'ArgumentNode':
+		self.help_messages.append((message, permission))
 		return self
 
 	def on_error(self, error_type: Type[CommandError], handler: SOURCE_ERROR_CONTEXT_CALLBACK, *, handled: bool = False) -> 'ArgumentNode':
@@ -178,17 +179,19 @@ class ArgumentNode:
 	def __rtext_help_msg(command: str, message: Union[str, RTextBase]):
 		return RTextList(RText(command, RColor.gray).c(RAction.suggest_command, command), ' ', message).h('')
 
-	def __gen_help_msg(self, command: str):
+	def __gen_help_msg(self, command: str, source):
 		output = []
 		if self.has_children():
 			output.append(self.__rtext_help_msg(command, 'Show this message'))
 			for key_names, val_lits in self.children_literal.items():
 				for lit in val_lits:
 					for msg in lit.help_messages:
-						output.append(self.__rtext_help_msg('{} {}'.format(command, key_names[0]), msg))
+						if source.has_permission(msg[1]):
+							output.append(self.__rtext_help_msg('{} {}'.format(command, key_names[0]), msg[0]))
 			for child in self.children:
 				for msg in child.help_messages:
-					output.append(self.__rtext_help_msg(command, msg))
+					if source.has_permission(msg[1]):
+						output.append(self.__rtext_help_msg(command, msg[0]))
 		return output
 
 	def _execute(self, source, command: str, remaining: str, context: dict):
@@ -214,7 +217,7 @@ class ArgumentNode:
 
 			# Parsing finished
 			if len(trimmed_remaining) == 0:
-				output = self.__gen_help_msg(command)
+				output = self.__gen_help_msg(command, source)
 				for line in output:
 					source.reply(line)
 				if self.callback is not None:

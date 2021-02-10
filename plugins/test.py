@@ -12,7 +12,8 @@ def on_load(server: ServerInterface, prev):
 	server.register_command(Literal('req2').requires(lambda: False, failure_message_getter=lambda: "as"))
 	server.register_command(
 		Literal('!!!root')
-		.add_help_message('I am invisible for now')
+		.requires(lambda src: src.has_permission(2))
+		.add_help_message('Command help message test', 2)
 		.then(
 			Text('string')
 			.add_help_message('§6<string>§3 <mode>§r Print string formatted by mode')
@@ -22,11 +23,13 @@ def on_load(server: ServerInterface, prev):
 				.runs(lambda src, ctx: src.reply(ctx['string']))
 			).then(
 				Literal('reverse', 'rev')
-				.add_help_message('Print reversed string')
+				.requires(lambda src: src.has_permission(3))
+				.add_help_message('Print reversed string', 3)
 				.runs(lambda src, ctx: src.reply(ctx['string'][::-1]))
 			).then(
 				Literal('random', 'ran')
-				.add_help_message('Print random ordered string')
+				.requires(lambda src: src.has_permission(4))
+				.add_help_message('Print random ordered string', 4)
 				.runs(lambda src, ctx: src.reply(ranstr(ctx['string'])))
 			)
 		).then(
@@ -43,11 +46,12 @@ def on_load(server: ServerInterface, prev):
 			)
 		).then(
 			Literal('node2', 'n2')
-			.add_help_message(RText('Here is node 2').h('!!!root §ln2§r'))
+			.requires(lambda src: src.has_permission(3))
+			.add_help_message(RText('Here is node 2').h('!!!root §ln2§r'), 3)
 			.add_help_message(
 				RText('Here is also node 2')
 				.h('You discovered me, click me to run')
-				.c(RAction.run_command, '!!!root n2')
+				.c(RAction.run_command, '!!!root n2'), 3
 			).then(
 				Literal('node21', 'n21')
 				.add_help_message(RText('Here is node 21').h('!!!root §ln2 n21§r'))
