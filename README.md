@@ -6,7 +6,7 @@ MCDReforged
 [![License](https://img.shields.io/github/license/Fallen-Breath/MCDReforged.svg)](https://github.com/Fallen-Breath/MCDReforged/blob/master/LICENSE)
 [![Documentation Status](https://readthedocs.org/projects/mcdreforged/badge/)](https://mcdreforged.readthedocs.io/)
 
-![MCDR-banner](https://github.com/Fallen-Breath/MCDReforged/blob/master/logo_long.png)
+![MCDR-banner](https://raw.githubusercontent.com/Fallen-Breath/MCDReforged/master/logo_long.png)
 
 **English** | [中文](https://github.com/Fallen-Breath/MCDReforged/blob/master/README_cn.md)
 
