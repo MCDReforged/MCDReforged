@@ -93,7 +93,7 @@ def on_user_info(server: ServerInterface, info: Info):
 	if info.content == 'ping':
 		server.reply(info, 'pong')
 
-	if server.get_permission_level(info) == 3:
+	if server.get_permission_level(info) >= 3:
 		if info.content == '!!!start':
 			server.start()
 

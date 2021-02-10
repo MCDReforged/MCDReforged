@@ -1,7 +1,7 @@
 import collections
 import inspect
 from abc import ABC
-from typing import List, Callable, Iterable, Set, Dict, Type, Any, Union, Optional, Tuple
+from typing import List, Callable, Dict, Type, Any, Union, Optional
 
 from mcdreforged.command.builder import command_builder_util as utils
 from mcdreforged.command.builder.exception import LiteralNotMatch, NumberOutOfRange, EmptyText,\
@@ -9,7 +9,7 @@ from mcdreforged.command.builder.exception import LiteralNotMatch, NumberOutOfRa
 	CommandError, InvalidNumber, InvalidInteger, InvalidFloat, UnclosedQuotedString, IllegalEscapesUsage,\
 	TextLengthOutOfRange
 from mcdreforged.command.command_source import CommandSource
-from mcdreforged.minecraft.rtext import RTextBase, RText, RTextList, RColor, RAction
+from mcdreforged.minecraft.rtext import RTextBase
 from mcdreforged.permission.permission_level import PermissionLevel
 
 SOURCE_CONTEXT_CALLBACK = Union[Callable[[], Any], Callable[[CommandSource], Any], Callable[[CommandSource, dict], Any]]
@@ -36,7 +36,7 @@ class ArgumentNode:
 		self.name = name
 		self.children_literal = collections.defaultdict(list)  # type: Dict[tuple[str], List[Literal]]
 		self.children = []  # type: List[ArgumentNode]
-		self.help_messages = []  # type: List[Tuple[Union[str, RTextBase], int]]
+		self.help_messages = []  # type: List[tuple[Union[str, RTextBase], int]]
 		self.callback = None
 		self.error_handlers = {}  # type: ArgumentNode._ERROR_HANDLER_TYPE
 		self.child_error_handlers = {}  # type: ArgumentNode._ERROR_HANDLER_TYPE
@@ -175,26 +175,19 @@ class ArgumentNode:
 		self.__handle_error(source, error, context, self.error_handlers)
 		raise error
 
-	@staticmethod
-	def __rtext_help_msg(command: str, message: Union[str, RTextBase]):
-		return RTextList(RText(command, RColor.gray).c(RAction.suggest_command, command), ' ', message).h('')
-
-	def __gen_help_msg(self, command: str, source):
+	def __gen_help_msg(self, plugin, command: str):
+		from mcdreforged.plugin.plugin_registry import HelpMessage
 		output = []
-		if self.has_children():
-			output.append(self.__rtext_help_msg(command, 'Show this message'))
-			for key_names, val_lits in self.children_literal.items():
-				for lit in val_lits:
-					for msg in lit.help_messages:
-						if source.has_permission(msg[1]):
-							output.append(self.__rtext_help_msg('{} {}'.format(command, key_names[0]), msg[0]))
-			for child in self.children:
-				for msg in child.help_messages:
-					if source.has_permission(msg[1]):
-						output.append(self.__rtext_help_msg(command, msg[0]))
+		for key_names, val_lits in self.children_literal.items():
+			for lit in val_lits:
+				for msg in lit.help_messages:
+					output.append(HelpMessage(plugin, f'{command} {key_names[0]}', *msg))
+		for child in self.children:
+			for msg in child.help_messages:
+				output.append(HelpMessage(plugin, command, *msg))
 		return output
 
-	def _execute(self, source, command: str, remaining: str, context: dict):
+	def _execute(self, plugin, source, command: str, remaining: str, context: dict):
 		success_read = len(command) - len(remaining)
 		try:
 			result = self.parse(remaining)
@@ -217,9 +210,10 @@ class ArgumentNode:
 
 			# Parsing finished
 			if len(trimmed_remaining) == 0:
-				output = self.__gen_help_msg(command, source)
-				for line in output:
-					source.reply(line)
+				output = self.__gen_help_msg(plugin, command)
+				for msg in output:
+					if source.has_permission(msg.permission):
+						source.reply(msg.to_rtext())
 				if self.callback is not None:
 					self.__smart_callback(self.callback, source, context)
 				elif not bool(output):
@@ -241,7 +235,7 @@ class ArgumentNode:
 						if next_literal in lit_names:
 							for child_literal in child_lits:
 								try:
-									child_literal._execute(source, command, trimmed_remaining, context)
+									child_literal._execute(plugin, source, command, trimmed_remaining, context)
 									break
 								except LiteralNotMatch:
 									# it's ok for a direct literal node to fail
@@ -252,7 +246,7 @@ class ArgumentNode:
 						if len(node.children) == 0:
 							self.__raise_error(source, UnknownArgument(command[:success_read], command), context)
 						for child in node.children:
-							child._execute(source, command, trimmed_remaining, context)
+							child._execute(plugin, source, command, trimmed_remaining, context)
 							break
 				except CommandError as error:
 					self.__handle_error(source, error, context, self.child_error_handlers)
@@ -260,16 +254,17 @@ class ArgumentNode:
 
 
 class ExecutableNode(ArgumentNode, ABC):
-	def execute(self, source, command):
+	def execute(self, plugin, source, command):
 		"""
 		Parse and execute this command
 		Raise variable CommandError if parsing fails
+		:param AbstractPlugin plugin: the plugin where this command from
 		:param CommandSource source: the source that executes this command
 		:param str command: the command string to execute
 		:rtype: None
 		"""
 		try:
-			self._execute(source, command, command, {})
+			self._execute(plugin, source, command, command, {})
 		except LiteralNotMatch as error:
 			# the root literal node fails to parse the first element
 			raise UnknownRootArgument(error.get_parsed_command(), error.get_failed_command()) from error

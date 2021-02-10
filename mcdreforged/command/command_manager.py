@@ -54,7 +54,7 @@ class CommandManager:
 			node = plugin_root_node.node
 			with self.mcdr_server.plugin_manager.with_plugin_context(plugin):
 				try:
-					node.execute(source, command)
+					node.execute(plugin, source, command)
 				except CommandError as e:
 					command_errors.append(e)
 				except:

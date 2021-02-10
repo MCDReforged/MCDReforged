@@ -2,7 +2,7 @@ import collections
 from typing import Dict, List, Callable, Any, TYPE_CHECKING
 
 from mcdreforged.command.builder.command_node import Literal
-from mcdreforged.minecraft.rtext import RTextBase
+from mcdreforged.minecraft.rtext import RTextBase, RText, RTextList, RAction
 from mcdreforged.plugin.plugin_event import EventListener
 
 if TYPE_CHECKING:
@@ -29,6 +29,14 @@ class HelpMessage:
 
 	def __repr__(self):
 		return 'HelpMessage[prefix={},message={},permission={}]'.format(self.prefix, self.message, self.permission)
+
+	def to_rtext(self) -> RTextBase:
+		return RTextList(
+			RText(f'§7{self.prefix}§r')
+			.c(RAction.suggest_command, self.prefix)
+			.h(f'§7{self.prefix}§r: {self.plugin.get_name()}'),
+			' ', self.message
+		)
 
 
 class PluginCommandNode:
