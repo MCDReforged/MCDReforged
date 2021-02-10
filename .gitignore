@@ -2,10 +2,9 @@
 .idea
 
 # python things
-*/__pycache__
+__pycache__
 venv/
 .pytest_cache
-*.pyc
 
 # pypi
 build/
