@@ -96,6 +96,13 @@ class ArgumentNode:
 		return self
 
 	def add_help_message(self, message: Union[str, RTextBase], permission: int = PermissionLevel.MINIMUM_LEVEL) -> 'ArgumentNode':
+		"""
+		Add a help message to the current node, which used in command of parent node
+
+		:param message: The help message what you want to add, support RText
+		:param permission: The minimum permission level for the user to see this help message. With default, anyone can see this message
+		:rtype: ArgumentNode
+		"""
 		self.help_messages.append((message, permission))
 		return self
 
