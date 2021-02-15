@@ -82,10 +82,16 @@ class RTextBase:
 	def set_styles(self, styles: Union[RStyle, Iterable[RStyle]]) -> 'RTextBase':
 		raise NotImplementedError()
 
+	def set_insertion(self, text: str) -> 'RTextBase':
+		raise NotImplementedError()
+
 	def set_click_event(self, action: RAction, value: str) -> 'RTextBase':
 		raise NotImplementedError()
 
 	def set_hover_text(self, *args) -> 'RTextBase':
+		raise NotImplementedError()
+
+	def set_hover_item(self, data: dict) -> 'RTextBase':
 		raise NotImplementedError()
 
 	def c(self, action: RAction, value: str) -> 'RTextBase':
@@ -146,6 +152,10 @@ class RText(RTextBase):
 				self.data.pop(style.name)
 		return self
 
+	def set_insertion(self, text: str):
+		self.data['insertion'] = text
+		return self
+
 	def set_click_event(self, action: RAction, value: str):
 		self.data['clickEvent'] = {
 			'action': action.name,
@@ -160,6 +170,14 @@ class RText(RTextBase):
 				'text': '',
 				'extra': RTextList(*args).to_json_object(),
 			}
+		}
+		return self
+
+	def set_hover_item(self, data: dict):
+		data = json.dumps(data).replace('minecraft:', '')
+		self.data['hoverEvent'] = {
+			'action': 'show_item',
+			'value': data
 		}
 		return self
 
@@ -214,6 +232,11 @@ class RTextList(RTextBase):
 		self.header_empty = False
 		return self
 
+	def set_insertion(self, text: str):
+		self.header.set_insertion(text)
+		self.header_empty = False
+		return self
+
 	def set_click_event(self, action: RAction, value):
 		self.header.set_click_event(action, value)
 		self.header_empty = False
@@ -221,6 +244,11 @@ class RTextList(RTextBase):
 
 	def set_hover_text(self, *args):
 		self.header.set_hover_text(*args)
+		self.header_empty = False
+		return self
+
+	def set_hover_item(self, data: dict):
+		self.header.set_hover_item(data)
 		self.header_empty = False
 		return self
 
