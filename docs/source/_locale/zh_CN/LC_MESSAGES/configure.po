@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-26 12:18+0800\n"
+"POT-Creation-Date: 2021-02-22 10:20+0800\n"
 "PO-Revision-Date: 2021-01-23 13:20+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -44,8 +44,9 @@ msgid ""
 "You can use command ``!!MCDR reload config`` or its short form ``!!MCDR r"
 " cfg`` to reload the config file when MCDR is running. Check the `here "
 "<command.html#hot-reloads>`__ for more detail about hot reloads"
-msgstr "当 MCDR 运行时，你可以使用 ``!!MCDR reload "
-"config`` 命令（或其缩写 ``!!MCDR r cfg``）来重载配置文件。查阅 `此处 <command.html#hot-reloads>`__ 以了解更多热重载的信息"
+msgstr ""
+"当 MCDR 运行时，你可以使用 ``!!MCDR reload config`` 命令（或其缩写 ``!!MCDR r "
+"cfg``）来重载配置文件。查阅 `此处 <command.html#hot-reloads>`__ 以了解更多热重载的信息"
 
 #: ../configure.rst:14
 msgid "List of options"
@@ -276,9 +277,9 @@ msgstr "MCDR 搜索将要加载插件的目录列表。"
 
 #: ../configure.rst:110
 msgid ""
-"MCDR also **adds these directories into ``sys.path``** so plugins can "
+"MCDR also **adds these directories into** ``sys.path`` so plugins can "
 "import packages inside plugin folders directly"
-msgstr "MCDR 会将这些目录添加到 ``sys.path``，以让插件可以直接导入插件文件夹中的包。"
+msgstr "MCDR 会 **将这些目录添加到** ``sys.path``，以让插件可以直接导入插件文件夹中的包。"
 
 #: ../configure.rst:113
 msgid "Option type: a list of string"
@@ -473,5 +474,4 @@ msgid ""
 "Debug logging switches. Set ``all`` to true to enable all debug logging, "
 "or set the specific option to enable specific debug logging"
 msgstr "调试日志模式开关。将 ``all`` 设置为 ``true`` 以启用所有的调试输出。也可以打开部分选项，以启用某些调试输出。"
-
 
