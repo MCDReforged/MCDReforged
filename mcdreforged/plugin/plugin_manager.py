@@ -246,14 +246,17 @@ class PluginManager:
 	def __collect_and_process_new_plugins(self, filter: Callable[[str], bool]) -> SingleOperationResult:
 		result = SingleOperationResult()
 		for plugin_directory in self.plugin_directories:
-			file_list = file_util.list_file_with_suffix(plugin_directory, constant.PLUGIN_FILE_SUFFIX)
-			for file_path in file_list:
-				if not self.contains_plugin_file(file_path) and filter(file_path):
-					plugin = self.__load_plugin(file_path)
-					if plugin is None:
-						result.fail(file_path)
-					else:
-						result.succeed(plugin)
+			if os.path.isdir(plugin_directory):
+				file_list = file_util.list_file_with_suffix(plugin_directory, constant.PLUGIN_FILE_SUFFIX)
+				for file_path in file_list:
+					if not self.contains_plugin_file(file_path) and filter(file_path):
+						plugin = self.__load_plugin(file_path)
+						if plugin is None:
+							result.fail(file_path)
+						else:
+							result.succeed(plugin)
+			else:
+				self.logger.warning('Plugin directory "{}" not found'.format(plugin_directory))
 		return result
 
 	def __collect_and_remove_plugins(self, filter: Callable[[RegularPlugin], bool], specific: Optional[RegularPlugin] = None) -> SingleOperationResult:
