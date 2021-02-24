@@ -22,7 +22,7 @@ from mcdreforged.utils.logger import MCDReforgedLogger, DebugOption
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
 	from mcdreforged.plugin.plugin_manager import PluginManager
-	from mcdreforged.plugin.plugin import RegularPlugin
+	from mcdreforged.plugin.regular_plugin import RegularPlugin
 
 
 def log_call(func):
