@@ -1,7 +1,7 @@
 MCDReforged 插件文档
 ---
 
-[English](https://github.com/Fallen-Breath/MCDReforged/blob/master/doc/plugin.md)
+[English](https://github.com/Fallen-Breath/MCDReforged/blob/0.x/doc/plugin.md)
 
 与 MCDaemon 类似，一个 MCDR 的插件是一个位与 `plugins/` 文件夹下的 `.py` 文件。MCDR 会在启动时自动加载该文件夹中的所有插件
 
@@ -84,7 +84,7 @@ MCDReforged 插件文档
 | tell(player, text, encoding=None) | 使用 `tellraw <player>` 来在对玩家 `<player>` 发送消息 |
 | reply(info, text, encoding=None) | 向消息源发生消息: 如果消息来自玩家则调用 `tell(info.player, text)`; 如果不是则调用 MCDR 的 logger 来将 `text` 告示至控制台
 
-`text` 可为一个 `str` 或者 [`RTextBase`](https://github.com/Fallen-Breath/MCDReforged/blob/master/doc/utils.md#rtextbase) (`RText`, `RTextList`)
+`text` 可为一个 `str` 或者 [`RTextBase`](https://github.com/Fallen-Breath/MCDReforged/blob/0.x/doc/utils.md#rtextbase) (`RText`, `RTextList`)
 
 `encoding` 为可选的指定的编码方式，使用默认值 None 则为使用 MCDR 配置文件的编码方式。MCDR 将用此编码方式将输入的字符串进行编码并发送至服务端的标准输入流
 
@@ -105,7 +105,7 @@ MCDReforged 插件文档
 
 | 方法 | 功能 |
 |---|---|
-| get_permission_level(obj) | 返回一个[整数](https://github.com/Fallen-Breath/MCDReforged/blob/master/doc/readme_cn.md#权限)，代表 `obj` 对象拥有的最高权限等级。`obj` 对象可为一个 Info 实例，或者是一个表示玩家名称的字符串。如果 `obj` 的类型不被支持或者 Info 实例并不来源自用户（`not info.is_user`），则抛出 TypeError 异常 |
+| get_permission_level(obj) | 返回一个[整数](https://github.com/Fallen-Breath/MCDReforged/blob/0.x/doc/readme_cn.md#权限)，代表 `obj` 对象拥有的最高权限等级。`obj` 对象可为一个 Info 实例，或者是一个表示玩家名称的字符串。如果 `obj` 的类型不被支持或者 Info 实例并不来源自用户（`not info.is_user`），则抛出 TypeError 异常 |
 | set_permission_level(player, level) | 设置指定玩家的权限等级。参数 `level` 可为与权限等级相关的一个 int 或 str，如 `1`, `'1'`, `'user'`。若权限等级不合法则抛出 TypeError 异常
 | rcon_query(command) | 通过 rcon 向服务端发送字符串指令 `command`，然后返回一个字符串，表示该指令执行后的返回值。如果 rcon 未在运行或者有异常发生，返回 None |
 | get_plugin_instance(plugin_name) | 返回当前加载着的位于 `plugins/plugin_name.py` 的插件实例。使用此方法而非在插件中手动 import 可保证得到的目标插件实例与 MCDR 中的实例相同。若未找到该插件，返回 None |
@@ -202,7 +202,7 @@ def on_load(server, old_module):
 - `utils/rcon.py`: 一个 rcon 客户端
 - `utils/rtext.py`: Minecraft 高级文本容器
 
-[工具文档](https://github.com/Fallen-Breath/MCDReforged/blob/master/doc/utils_cn.md)
+[工具文档](https://github.com/Fallen-Breath/MCDReforged/blob/0.x/doc/utils_cn.md)
 
 ## 一些编写插件的提示
 

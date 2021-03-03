@@ -1,7 +1,7 @@
 MCDReforged Plugin Document
 ---
 
-[中文](https://github.com/Fallen-Breath/MCDReforged/blob/master/doc/plugin_cn.md)
+[中文](https://github.com/Fallen-Breath/MCDReforged/blob/0.x/doc/plugin_cn.md)
 
 Like MCDaemon, a MCDR plugin is a `.py` file locating in the `plugins/` folder. MCDR will automatically load every plugin inside this folder
 
@@ -84,7 +84,7 @@ It also has these following methods:
 | tell(player, text, encoding=None) | Use `tellraw <player>` to send message `text` to player `<player>` |
 | reply(info, text, encoding=None) | Send `text` to the info source: if it's from a player calls `tell(info.player, text)`; if not uses MCDR's logger to info `text` to the console
 
-`text` could be a `str` or [`RTextBase`](https://github.com/Fallen-Breath/MCDReforged/blob/master/doc/utils.md#rtextbase) (`RText`, `RTextList`)
+`text` could be a `str` or [`RTextBase`](https://github.com/Fallen-Breath/MCDReforged/blob/0.x/doc/utils.md#rtextbase) (`RText`, `RTextList`)
 
 `encoding` is an optional encoding method. Use default value None to use the encoding method from MCDR config. MCDR will encode the text string using the encoding method and then send it to the standard input stream of the server
 
@@ -202,7 +202,7 @@ Current available:
 - `utils/rcon.py`: A rcon client
 - `utils/rtext.py`: Minecraft advance text component
 
-[Plugin document](https://github.com/Fallen-Breath/MCDReforged/blob/master/doc/utils.md)
+[Plugin document](https://github.com/Fallen-Breath/MCDReforged/blob/0.x/doc/utils.md)
 
 ## Some tips for writing plugin
 

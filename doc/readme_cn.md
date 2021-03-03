@@ -1,7 +1,7 @@
 MCDReforged
 --------
 
-[English](https://github.com/Fallen-Breath/MCDReforged/blob/master/readme.md)
+[English](https://github.com/Fallen-Breath/MCDReforged/blob/0.x/readme.md)
 
 > 这是一个基于 Python 的 Minecraft 服务端控制工具
 
@@ -188,7 +188,7 @@ MCDR 使用的语言
 
 ## 插件
 
-[插件文档](https://github.com/Fallen-Breath/MCDReforged/blob/master/doc/plugin_cn.md)
+[插件文档](https://github.com/Fallen-Breath/MCDReforged/blob/0.x/doc/plugin_cn.md)
 
 插件用法可参考 `plugins/sample_plugin.py`
 
