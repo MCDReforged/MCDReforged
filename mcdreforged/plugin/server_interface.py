@@ -6,7 +6,7 @@ import time
 from typing import Callable, TYPE_CHECKING, Tuple, Any, Union, Optional, List
 
 from mcdreforged.command.builder.command_node import Literal
-from mcdreforged.command.command_source import CommandSource
+from mcdreforged.command.command_source import CommandSource, PluginCommandSource
 from mcdreforged.info import Info
 from mcdreforged.mcdr_state import ServerState
 from mcdreforged.minecraft.rtext import RTextBase, RText
@@ -424,8 +424,7 @@ class ServerInterface:
 		:param on_executor_thread: If it's set to false. The event will be dispatched immediately no matter what the
 		current thread is
 		"""
-		if not isinstance(event, PluginEvent):
-			raise TypeError('Excepted {} but {} found'.format(PluginEvent, type(event)))
+		misc_util.check_type(event, PluginEvent)
 		if MCDRPluginEvents.contains_id(event.id):
 			raise ValueError('Cannot dispatch event with already exists event id {}'.format(event.id))
 		self.__mcdr_server.plugin_manager.dispatch_event(event, args, on_executor_thread=on_executor_thread)
@@ -466,6 +465,22 @@ class ServerInterface:
 		if level is None:
 			raise TypeError('Parameter level needs to be a permission related value')
 		self.__mcdr_server.permission_manager.set_permission_level(player, value)
+
+	# ------------------------
+	#         Command
+	# ------------------------
+
+	@log_call
+	def get_command_source(self) -> PluginCommandSource:
+		return PluginCommandSource(self)
+
+	@log_call
+	def execute_command(self, command: str, source: CommandSource = None):
+		if source is None:
+			source = self.get_command_source(is_plugin_call=False)
+		misc_util.check_type(command, str)
+		misc_util.check_type(source, CommandSource)
+		self.__mcdr_server.command_manager.execute_command(command, source)
 
 	# ------------------------
 	#           Misc

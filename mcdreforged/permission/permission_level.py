@@ -40,11 +40,12 @@ class PermissionLevel:
 	__NAME_DICT = collections.OrderedDict(zip(NAMES, INSTANCES))  # type: Dict[str, PermissionLevelItem]
 	__LEVEL_DICT = collections.OrderedDict(zip(LEVELS, INSTANCES))  # type: Dict[int, PermissionLevelItem]
 
-	MAXIMUM_LEVEL = LEVELS[-1]
-	MINIMUM_LEVEL = LEVELS[0]
-	MCDR_CONTROL_LEVEL = ADMIN
-	PHYSICAL_SERVER_CONTROL_LEVEL = OWNER
-	CONSOLE_LEVEL = MAXIMUM_LEVEL
+	MAXIMUM_LEVEL = LEVELS[-1]  # type: int
+	MINIMUM_LEVEL = LEVELS[0]  # type: int
+	MCDR_CONTROL_LEVEL = ADMIN  # type: int
+	PHYSICAL_SERVER_CONTROL_LEVEL = OWNER  # type: int
+	CONSOLE_LEVEL = MAXIMUM_LEVEL  # type: int
+	PLUGIN_LEVEL = MAXIMUM_LEVEL  # type: int
 
 	@classmethod
 	def __check_range(cls, level: int):

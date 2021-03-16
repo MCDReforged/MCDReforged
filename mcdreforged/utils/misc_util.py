@@ -5,7 +5,7 @@ import importlib.machinery
 import importlib.util
 import os
 import threading
-from typing import List, Callable, Tuple, TypeVar
+from typing import List, Callable, Tuple, TypeVar, Any, Type
 
 from mcdreforged.minecraft.rtext import RTextBase
 from mcdreforged.plugin.meta.version import Version
@@ -78,3 +78,10 @@ def version_compare(v1: str, v2: str) -> int:
 def print_text_to_console(logger, text):
 	for line in RTextBase.from_any(text).to_colored_text().splitlines():
 		logger.info(line)
+
+
+def check_type(value: Any, type_: Type, error_message: str = None):
+	if not isinstance(value, type_):
+		if error_message is None:
+			error_message = 'Except type {} but found type {}'.format(type_, type(value))
+		raise TypeError(error_message)
