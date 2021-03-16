@@ -471,13 +471,23 @@ class ServerInterface:
 	# ------------------------
 
 	@log_call
-	def get_command_source(self) -> PluginCommandSource:
+	def get_plugin_command_source(self) -> PluginCommandSource:
+		"""
+		Return a simple plugin command source for e.g. command execution
+		It's not player or console, it has maximum permission level, it use ServerInterface.logger for replying
+		"""
 		return PluginCommandSource(self)
 
 	@log_call
 	def execute_command(self, command: str, source: CommandSource = None):
+		"""
+		Execute a single command using the command system of MCDR
+		:param str command: The command you want to execute
+		:param CommandSource source: The command source that is used to execute the command. If it's not specified MCDR
+		will use ServerInterface.get_plugin_command_source as fallback command source
+		"""
 		if source is None:
-			source = self.get_command_source(is_plugin_call=False)
+			source = self.get_plugin_command_source(is_plugin_call=False)
 		misc_util.check_type(command, str)
 		misc_util.check_type(source, CommandSource)
 		self.__mcdr_server.command_manager.execute_command(command, source)
