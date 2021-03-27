@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-30 16:59+0800\n"
+"POT-Creation-Date: 2021-03-27 12:26+0800\n"
 "PO-Revision-Date: 2021-01-24 09:17+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -134,120 +134,124 @@ msgstr "当服务端停止时，退出 MCDR。"
 msgid "If the server is running return False otherwise return True"
 msgstr "如果服务端正在运行，返回 False，否则将执行操作并返回 True。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:90
+#: ../plugin_dev/classes/ServerInterface.rst:89
+msgid "Example usage:"
+msgstr "示例用法："
+
+#: ../plugin_dev/classes/ServerInterface.rst:100
 msgid "is_server_running"
 msgstr "is_server_running"
 
-#: ../plugin_dev/classes/ServerInterface.rst:96
+#: ../plugin_dev/classes/ServerInterface.rst:106
 msgid "Return if the server is running"
 msgstr "服务端是否正在运行。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:99
+#: ../plugin_dev/classes/ServerInterface.rst:109
 msgid "is_server_startup"
 msgstr "is_server_startup"
 
-#: ../plugin_dev/classes/ServerInterface.rst:105
+#: ../plugin_dev/classes/ServerInterface.rst:115
 msgid "Return if the server has started up"
 msgstr "服务端是否已经启动。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:108
+#: ../plugin_dev/classes/ServerInterface.rst:118
 msgid "is_rcon_running"
 msgstr "is_rcon_running"
 
-#: ../plugin_dev/classes/ServerInterface.rst:114
+#: ../plugin_dev/classes/ServerInterface.rst:124
 msgid "Return if MCDR's rcon is running"
 msgstr "MCDR 的 RCON 服务是否正在运行。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:117
+#: ../plugin_dev/classes/ServerInterface.rst:127
 msgid "get_server_pid"
 msgstr "get_server_pid"
 
-#: ../plugin_dev/classes/ServerInterface.rst:123
+#: ../plugin_dev/classes/ServerInterface.rst:133
 msgid "Return the pid of the server process, None if the server is stopped"
 msgstr "返回服务端进程的 pid，如果服务端已经停止，则返回 None。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:125
+#: ../plugin_dev/classes/ServerInterface.rst:135
 msgid ""
 "Notes the process with this pid is a bash process, which is the parent "
 "process of real server process you might be interested in"
 msgstr "注意，这个 pid 对应的是一个 bash 进程，它是真实服务端进程的父进程。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:128
+#: ../plugin_dev/classes/ServerInterface.rst:138
 msgid "Text Interaction"
 msgstr "文字交互"
 
-#: ../plugin_dev/classes/ServerInterface.rst:131
+#: ../plugin_dev/classes/ServerInterface.rst:141
 msgid "execute"
 msgstr "execute"
 
-#: ../plugin_dev/classes/ServerInterface.rst:137
+#: ../plugin_dev/classes/ServerInterface.rst:147
 msgid ""
 "Execute a command by sending the command content to server's standard "
 "input stream"
 msgstr "通过将指令内容发送到服务端的标准输入流来执行指令。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:139
+#: ../plugin_dev/classes/ServerInterface.rst:149
 msgid "Parameter *text*: The content of the command you want to send"
 msgstr "参数 *text*：你要发送的指令内容。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:141
-#: ../plugin_dev/classes/ServerInterface.rst:156
-#: ../plugin_dev/classes/ServerInterface.rst:169
-#: ../plugin_dev/classes/ServerInterface.rst:182
+#: ../plugin_dev/classes/ServerInterface.rst:151
+#: ../plugin_dev/classes/ServerInterface.rst:166
+#: ../plugin_dev/classes/ServerInterface.rst:179
+#: ../plugin_dev/classes/ServerInterface.rst:192
 msgid ""
 "Keyword Parameter *encoding*: The encoding method for the text. Leave it "
 "empty to use the encoding method from the configure of MCDR"
 msgstr "关键字参数 *encoding*：文本的编码方法。留空以使用 MCDR 配置文件中的编码方法。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:144
+#: ../plugin_dev/classes/ServerInterface.rst:154
 msgid "tell"
 msgstr "tell"
 
-#: ../plugin_dev/classes/ServerInterface.rst:150
+#: ../plugin_dev/classes/ServerInterface.rst:160
 msgid "Use command like ``/tellraw`` to send the message to the specific player"
 msgstr "使用 ``/tellraw`` 等指令向特定玩家发送消息。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:152
+#: ../plugin_dev/classes/ServerInterface.rst:162
 msgid "Parameter *player*: The name of the player you want to tell"
 msgstr "参数 *player*：目标玩家的名字。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:154
+#: ../plugin_dev/classes/ServerInterface.rst:164
 msgid "Parameter *text*: the message you want to send to the player"
 msgstr "参数 *text*：你想发送的信息。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:159
+#: ../plugin_dev/classes/ServerInterface.rst:169
 msgid "say"
 msgstr "say"
 
-#: ../plugin_dev/classes/ServerInterface.rst:165
+#: ../plugin_dev/classes/ServerInterface.rst:175
 msgid ""
 "Use command like ``/tellraw @a`` to send the message to broadcast the "
 "message in game"
 msgstr "使用 ``/tellraw @a`` 等指令在游戏中广播消息。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:167
-#: ../plugin_dev/classes/ServerInterface.rst:180
-#: ../plugin_dev/classes/ServerInterface.rst:197
+#: ../plugin_dev/classes/ServerInterface.rst:177
+#: ../plugin_dev/classes/ServerInterface.rst:190
+#: ../plugin_dev/classes/ServerInterface.rst:207
 msgid "Parameter *text*: the message you want to send"
 msgstr "参数 *text*：你要发送的消息。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:172
+#: ../plugin_dev/classes/ServerInterface.rst:182
 msgid "broadcast"
 msgstr "broadcast"
 
-#: ../plugin_dev/classes/ServerInterface.rst:178
+#: ../plugin_dev/classes/ServerInterface.rst:188
 msgid "Broadcast the message in game and to the console"
 msgstr "在游戏和控制台中广播消息。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:185
+#: ../plugin_dev/classes/ServerInterface.rst:195
 msgid "reply"
 msgstr "reply"
 
-#: ../plugin_dev/classes/ServerInterface.rst:191
+#: ../plugin_dev/classes/ServerInterface.rst:201
 msgid "Reply to the source of the Info"
 msgstr "对信息源的答复。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:193
+#: ../plugin_dev/classes/ServerInterface.rst:203
 msgid ""
 "If the Info is from a player then use tell to reply the player, otherwise"
 " if the Info is from the console use logger.info to output to the "
@@ -257,283 +261,283 @@ msgstr ""
 "如果 Info 来自玩家，那么使用 ``tell`` 方法来回复玩家，否则如果 Info 来自控制台，则使用 ``logger.info`` "
 "来输出到控制台。 在其他情况下，如果 Info 不是来自用户，则会抛出 ``IllegalCallError``。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:195
+#: ../plugin_dev/classes/ServerInterface.rst:205
 msgid "Parameter *info*: the Info you want to reply to"
 msgstr "参数 *info*：你要回复的目标。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:199
+#: ../plugin_dev/classes/ServerInterface.rst:209
 msgid ""
 "Keyword Parameter *console_text*: If it's specified, console_text will be"
 " used instead of text when replying to console"
 msgstr "关键字参数 *console_text*：如果指定了该参数，那么在回复控制台时，将使用 console_text 来代替 。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:201
+#: ../plugin_dev/classes/ServerInterface.rst:211
 msgid "Keyword Parameter *encoding*: The encoding method for the text"
 msgstr "关键字参数 *encoding*：文本的编码方法。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:204
+#: ../plugin_dev/classes/ServerInterface.rst:214
 msgid "Plugin Operations"
 msgstr "插件操作"
 
-#: ../plugin_dev/classes/ServerInterface.rst:206
+#: ../plugin_dev/classes/ServerInterface.rst:216
 msgid ""
 "**Notes**: All plugin manipulation will trigger a dependency check, which"
 " might cause unwanted plugin operations"
 msgstr "**注**：所有的插件操作都会触发依赖性检查——这可能会导致不必要的插件操作。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:209
+#: ../plugin_dev/classes/ServerInterface.rst:219
 msgid "load_plugin"
 msgstr "load_plugin"
 
-#: ../plugin_dev/classes/ServerInterface.rst:215
+#: ../plugin_dev/classes/ServerInterface.rst:225
 msgid ""
 "Load a plugin from the given file path. Return if the plugin gets loaded "
 "successfully"
 msgstr "从给定的文件路径加载一个插件，并返回插件加载是否成功。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:217
+#: ../plugin_dev/classes/ServerInterface.rst:227
 msgid ""
 "Parameter *plugin_file_path*: The file path of the plugin to load. "
 "Example: ``plugins/my_plugin.py``"
 msgstr "参数 *plugin_file_path*：要加载插件的文件路径。 例如：``plugins/my_plugin.py``。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:220
+#: ../plugin_dev/classes/ServerInterface.rst:230
 msgid "enable_plugin"
 msgstr "enable_plugin"
 
-#: ../plugin_dev/classes/ServerInterface.rst:226
+#: ../plugin_dev/classes/ServerInterface.rst:236
 msgid ""
 "Enable an unloaded plugin from the given path. Return if the plugin gets "
 "enabled successfully"
 msgstr "从给定的文件路径启用一个被禁用的插件，并返回插件是否被成功启用。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:228
+#: ../plugin_dev/classes/ServerInterface.rst:238
 msgid ""
 "Parameter *plugin_file_path*: The file path of the plugin to enable. "
 "Example: \"plugins/my_plugin.py.disabled\""
 msgstr "参数 *plugin_file_path*：要启用插件的文件路径。例如：``plugin/my_plugin.py.disabled``。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:231
+#: ../plugin_dev/classes/ServerInterface.rst:241
 msgid "reload_plugin"
 msgstr "reload_plugin"
 
-#: ../plugin_dev/classes/ServerInterface.rst:237
+#: ../plugin_dev/classes/ServerInterface.rst:247
 msgid ""
 "Reload a plugin specified by plugin id. Return a bool indicating if the "
 "plugin gets reloaded successfully, or None if plugin not found"
 msgstr "重载一个由插件 ID 给定的插件，并返回一个 bool 表示插件是否被成功重载，若插件不存在则返回 None。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:239
+#: ../plugin_dev/classes/ServerInterface.rst:249
 msgid ""
 "Parameter *plugin_id*: The id of the plugin to reload. Example: "
 "\"my_plugin\""
 msgstr "参数 *plugin_id*：要重新加载的插件的 ID。例如：``my_plugin_id``。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:242
+#: ../plugin_dev/classes/ServerInterface.rst:252
 msgid "unload_plugin"
 msgstr "unload_plugin"
 
-#: ../plugin_dev/classes/ServerInterface.rst:248
+#: ../plugin_dev/classes/ServerInterface.rst:258
 msgid ""
 "Unload a plugin specified by plugin id. Return a bool indicating if the "
 "plugin gets unloaded successfully, or None if plugin not found"
 msgstr "卸载一个由插件 ID 给定的插件，并返回一个 bool 表示插件是否被成功卸载，若插件不存在则返回 None。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:250
+#: ../plugin_dev/classes/ServerInterface.rst:260
 msgid ""
 "Parameter *plugin_id*: The id of the plugin to unload. Example: "
 "\"my_plugin\""
 msgstr "参数 *plugin_id* : 要卸载的插件的 ID。例如：``my_plugin_id``。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:253
+#: ../plugin_dev/classes/ServerInterface.rst:263
 msgid "disable_plugin"
 msgstr "disable_plugin"
 
-#: ../plugin_dev/classes/ServerInterface.rst:259
+#: ../plugin_dev/classes/ServerInterface.rst:269
 msgid ""
 "Disable a plugin specified by plugin id. Return a bool indicating if the "
 "plugin gets disabled successfully, or None if plugin not found"
 msgstr "禁用一个由插件 ID 给定的插件，并返回一个 bool 表示插件是否被成功禁用，若插件不存在则返回 None。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:261
+#: ../plugin_dev/classes/ServerInterface.rst:271
 msgid ""
 "Parameter *plugin_id*: The id of the plugin to disable. Example: "
 "\"my_plugin\""
 msgstr "参数 *plugin_id* : 要禁用的插件的 ID。例如：``my_plugin_id``。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:264
+#: ../plugin_dev/classes/ServerInterface.rst:274
 msgid "refresh_all_plugins"
 msgstr "refresh_all_plugins"
 
-#: ../plugin_dev/classes/ServerInterface.rst:270
+#: ../plugin_dev/classes/ServerInterface.rst:280
 msgid ""
 "Reload all plugins, load all new plugins and then unload all removed "
 "plugins"
 msgstr "重新加载所有插件，加载所有新插件，并卸载所有被删除的插件。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:273
+#: ../plugin_dev/classes/ServerInterface.rst:283
 msgid "refresh_changed_plugins"
 msgstr "refresh_changed_plugins"
 
-#: ../plugin_dev/classes/ServerInterface.rst:279
+#: ../plugin_dev/classes/ServerInterface.rst:289
 msgid ""
 "Reload all changed plugins, load all new plugins and then unload all "
 "removed plugins"
 msgstr "重新加载所有 **更改过** 的插件，加载所有新插件，并卸载所有删除的插件。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:282
+#: ../plugin_dev/classes/ServerInterface.rst:292
 msgid "get_plugin_list"
 msgstr "get_plugin_list"
 
-#: ../plugin_dev/classes/ServerInterface.rst:288
+#: ../plugin_dev/classes/ServerInterface.rst:298
 msgid ""
 "Return a list containing all loaded plugin id like [\"my_plugin\", "
 "\"another_plugin\"]"
 msgstr "返回一个包含所有已加载插件的 ID 列表，例如：``['my_plugin_id', 'another_plugin_id']``。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:291
+#: ../plugin_dev/classes/ServerInterface.rst:301
 msgid "get_plugin_metadata"
 msgstr "get_plugin_metadata"
 
-#: ../plugin_dev/classes/ServerInterface.rst:297
+#: ../plugin_dev/classes/ServerInterface.rst:307
 msgid ""
 "Return the metadata of the specified plugin, or None if the plugin "
 "doesn't exist"
 msgstr "返回指定插件的元数据。若插件不存在，则返回 None。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:299
+#: ../plugin_dev/classes/ServerInterface.rst:309
 msgid "Parameter *plugin_id*: The plugin id of the plugin to query metadata"
 msgstr "参数 *plugin_id*：要查询元数据的插件 ID。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:302
+#: ../plugin_dev/classes/ServerInterface.rst:312
 msgid "get_plugin_file_path"
 msgstr "get_plugin_file_path"
 
-#: ../plugin_dev/classes/ServerInterface.rst:308
+#: ../plugin_dev/classes/ServerInterface.rst:318
 msgid ""
 "Return the file path of the specified plugin, or None if the plugin "
 "doesn't exist"
 msgstr "返回指定插件的文件路径。若插件不存在，则返回 None。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:310
+#: ../plugin_dev/classes/ServerInterface.rst:320
 msgid "Parameter *plugin_id*: The plugin id of the plugin to query file path"
 msgstr "参数 *plugin_id*：要查询文件路径的插件的 ID。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:313
+#: ../plugin_dev/classes/ServerInterface.rst:323
 msgid "get_plugin_instance"
 msgstr "get_plugin_instance"
 
-#: ../plugin_dev/classes/ServerInterface.rst:319
+#: ../plugin_dev/classes/ServerInterface.rst:329
 msgid ""
 "Return the current loaded plugin instance, or None if the plugin doesn't "
 "exist. With this api your plugin can access the same plugin instance to "
 "MCDR"
 msgstr "返回当前加载的插件实例。若插件不存在，则返回 None。通过这个 API，你的插件获得与 MCDR 所使用的相同的插件实例。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:321
+#: ../plugin_dev/classes/ServerInterface.rst:331
 msgid ""
 "It's quite important to use this instead of manually import the plugin "
 "you want if the target plugin needs to react to events from MCDR"
 msgstr "如果目标插件需要对 MCDR 的事件做出反应，那么请使用这个功能而不是手动导入你想要的插件。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:323
+#: ../plugin_dev/classes/ServerInterface.rst:333
 msgid "Parameter *plugin_id*: The plugin id of the plugin you want"
 msgstr "参数 *plugin_id*：你想要的插件的 ID。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:325
-#: ../plugin_dev/classes/ServerInterface.rst:407
+#: ../plugin_dev/classes/ServerInterface.rst:335
+#: ../plugin_dev/classes/ServerInterface.rst:417
 msgid "Example:"
 msgstr "例如："
 
-#: ../plugin_dev/classes/ServerInterface.rst:339
+#: ../plugin_dev/classes/ServerInterface.rst:349
 msgid "Plugin Registry"
 msgstr "插件注册"
 
-#: ../plugin_dev/classes/ServerInterface.rst:342
+#: ../plugin_dev/classes/ServerInterface.rst:352
 msgid "register_event_listener"
 msgstr "register_event_listener"
 
-#: ../plugin_dev/classes/ServerInterface.rst:348
-#: ../plugin_dev/classes/ServerInterface.rst:365
+#: ../plugin_dev/classes/ServerInterface.rst:358
+#: ../plugin_dev/classes/ServerInterface.rst:375
 msgid "Register an event listener for the current plugin"
 msgstr "为当前插件注册一个事件监听器。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:350
-#: ../plugin_dev/classes/ServerInterface.rst:367
-#: ../plugin_dev/classes/ServerInterface.rst:380
+#: ../plugin_dev/classes/ServerInterface.rst:360
+#: ../plugin_dev/classes/ServerInterface.rst:377
+#: ../plugin_dev/classes/ServerInterface.rst:390
 msgid ""
 "Raise an ``IllegalCallError`` if it's not invoked in the task executor "
 "thread"
 msgstr "若没有在任务执行线程中被调用，则抛出 ``IllegalCallError``。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:352
+#: ../plugin_dev/classes/ServerInterface.rst:362
 msgid ""
 "Parameter *event*: The id of the event, or a PluginEvent instance. It "
 "indicates the target event for the plugin to listen"
 msgstr "参数 *event*：事件的 ID，或 ``PluginEvent`` 实例。它表示插件要监听的目标事件。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:354
+#: ../plugin_dev/classes/ServerInterface.rst:364
 msgid "Parameter *callback*: The callback listener method for the event"
 msgstr "参数 *callback*：事件的回调的监听器方法。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:356
+#: ../plugin_dev/classes/ServerInterface.rst:366
 msgid ""
 "Parameter *priority*: The priority of the listener. It will be set to the"
 " default value 1000 if it's not specified"
 msgstr "参数 *priority*：监听器的优先级。如果没有指定，将被设置为默认值 ``1000``。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:359
+#: ../plugin_dev/classes/ServerInterface.rst:369
 msgid "register_command"
 msgstr "register_command"
 
-#: ../plugin_dev/classes/ServerInterface.rst:369
+#: ../plugin_dev/classes/ServerInterface.rst:379
 msgid ""
 "Parameter *root_node*: The root node of your command tree. It should be a"
 " ``Literal`` node"
 msgstr "参数 *root_node*：指令树的根节点。 它应为一个 ``Literal`` 节点。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:372
+#: ../plugin_dev/classes/ServerInterface.rst:382
 msgid "register_help_message"
 msgstr "register_help_message"
 
-#: ../plugin_dev/classes/ServerInterface.rst:378
+#: ../plugin_dev/classes/ServerInterface.rst:388
 msgid ""
 "Register a help message for the current plugin, which is used in !!help "
 "command"
 msgstr "为当前插件注册一个帮助信息，以在 !!help 指令中显示。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:382
+#: ../plugin_dev/classes/ServerInterface.rst:392
 msgid ""
 "Parameter *prefix*: The help command of your plugin. When player click on"
 " the displayed message it will suggest this prefix parameter to the "
 "player. It's recommend to set it to the entry command of your plugin"
 msgstr "参数 *prefix*：你的插件的帮助指令。 当玩家点击显示的信息时，会向玩家提示这个前缀参数。 建议将其设置为你的插件的入口指令。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:384
+#: ../plugin_dev/classes/ServerInterface.rst:394
 msgid "Parameter *message*: A neat command description"
 msgstr "参数 *message*：一个整洁的指令描述。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:386
+#: ../plugin_dev/classes/ServerInterface.rst:396
 msgid ""
 "Parameter *permission*: The minimum permission level for the user to see "
 "this help message. With default, anyone can see this message"
 msgstr "参数 *permission*：用户看到此帮助信息的最低权限。默认情况下，任何人都可以看到此信息。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:389
+#: ../plugin_dev/classes/ServerInterface.rst:399
 msgid "dispatch_event"
 msgstr "dispatch_event"
 
-#: ../plugin_dev/classes/ServerInterface.rst:395
+#: ../plugin_dev/classes/ServerInterface.rst:405
 msgid "Dispatch an event to all loaded plugins"
 msgstr "向所有加载的插件分发事件。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:397
+#: ../plugin_dev/classes/ServerInterface.rst:407
 msgid ""
 "The event will be immediately dispatch if it's on the task executor "
 "thread, or gets enqueued if it's on other thread"
 msgstr "如果该事件在任务执行者线程上，则会被立即触发。如果在其他线程上，则会被 入队等候 (enqueued)。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:399
+#: ../plugin_dev/classes/ServerInterface.rst:409
 msgid ""
 "Parameter *event*: The event to dispatch. It need to be a ``PluginEvent``"
 " instance. For simple usage, you can create a ``LiteralEvent`` instance "
@@ -542,78 +546,78 @@ msgstr ""
 "参数 *event*：要发送的事件。它必须是一个 ``PluginEvent`` 实例。为了更简单地使用，你可以为这个参数创建一个 "
 "``LiteralEvent`` 实例。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:401
+#: ../plugin_dev/classes/ServerInterface.rst:411
 msgid ""
 "Parameter *args*: The argument that will be used to invoke the event "
 "listeners. An ServerInterface instance will be automatically added to the"
 " beginning of the argument list"
 msgstr "参数 *args*：用于调用事件监听器的参数。 一个 ``ServerInterface`` 实例将被自动添加到参数列表的开头。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:403
+#: ../plugin_dev/classes/ServerInterface.rst:413
 msgid ""
 "Parameter *on_executor_thread*: If it's set to false. The event will be "
 "dispatched immediately no matter what the current thread is"
 msgstr "参数 *on_executor_thread*：如果它被设置为 False，则无论当前线程是什么，事件都会被立即触发。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:405
+#: ../plugin_dev/classes/ServerInterface.rst:415
 msgid ""
 "**Note**: You cannot dispatch an event with the same event id to any MCDR"
 " built-in event"
 msgstr "**注意**：你不能发送 与任何一个 MCDR 内置事件拥有相同事件 ID 的事件。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:409
+#: ../plugin_dev/classes/ServerInterface.rst:419
 msgid "For the event dispatcher plugin"
 msgstr "对于分发事件的插件："
 
-#: ../plugin_dev/classes/ServerInterface.rst:415
+#: ../plugin_dev/classes/ServerInterface.rst:425
 msgid "In the event listener plugin"
 msgstr "对于监听事件的插件："
 
-#: ../plugin_dev/classes/ServerInterface.rst:425
+#: ../plugin_dev/classes/ServerInterface.rst:435
 msgid "Permission"
 msgstr "权限"
 
-#: ../plugin_dev/classes/ServerInterface.rst:428
+#: ../plugin_dev/classes/ServerInterface.rst:438
 msgid "get_permission_level"
 msgstr "get_permission_level"
 
-#: ../plugin_dev/classes/ServerInterface.rst:434
+#: ../plugin_dev/classes/ServerInterface.rst:444
 msgid "Return an int indicating permission level number the given object has"
 msgstr "返回一个 int，表示给定对象拥有的权限级别。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:436
+#: ../plugin_dev/classes/ServerInterface.rst:446
 msgid ""
 "The object could be a str indicating the name of a player, an Info "
 "instance or a command source"
 msgstr "``obj`` 对象可以是一个表示玩家名的 str，一个 Info 实例或者一个指令源"
 
-#: ../plugin_dev/classes/ServerInterface.rst:438
+#: ../plugin_dev/classes/ServerInterface.rst:448
 msgid "Parameter *obj*: The object your are querying"
 msgstr "参数 *obj* : 你要查询的对象。这个对象可以是 str (玩家名字)，Info实例或一个指令源。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:440
+#: ../plugin_dev/classes/ServerInterface.rst:450
 msgid ""
 "It raises ``TypeError`` if the type of the given object is not supported "
 "for permission querying"
 msgstr "如果给定对象的类型不支持权限查询，则抛出 ``TypeError``。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:443
+#: ../plugin_dev/classes/ServerInterface.rst:453
 msgid "set_permission_level"
 msgstr "set_permission_level"
 
-#: ../plugin_dev/classes/ServerInterface.rst:449
+#: ../plugin_dev/classes/ServerInterface.rst:459
 msgid ""
 "Set the permission level of the given player. It raises ``TypeError`` if "
 "the value parameter doesn't proper represent a permission level"
 msgstr "设置给定玩家的权限级别。如果数值参数不是一个正确的权限级别，则抛出 ``TypeError``。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:451
+#: ../plugin_dev/classes/ServerInterface.rst:461
 msgid ""
 "Parameter *player*: The name of the player that you want to set his/her "
 "permission level"
 msgstr "参数 *player*：你想设置权限级别的玩家名字。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:453
+#: ../plugin_dev/classes/ServerInterface.rst:463
 msgid ""
 "Parameter *value*: The target permission level you want to set the player"
 " to. It can be an int or a str as long as it's related to the permission "
@@ -622,36 +626,36 @@ msgstr ""
 "参数 *value*：你想将玩家设置为的目标权限级别，它可以是一个代表权限级别的 int 或 str。例如：``1``， ``'1'``，或  "
 "``'user'``"
 
-#: ../plugin_dev/classes/ServerInterface.rst:456
+#: ../plugin_dev/classes/ServerInterface.rst:466
 msgid "Misc"
 msgstr "其他"
 
-#: ../plugin_dev/classes/ServerInterface.rst:459
+#: ../plugin_dev/classes/ServerInterface.rst:469
 msgid "is_on_executor_thread"
 msgstr "is_on_executor_thread"
 
-#: ../plugin_dev/classes/ServerInterface.rst:465
+#: ../plugin_dev/classes/ServerInterface.rst:475
 msgid "Return if the current thread is the task executor thread"
 msgstr "当前线程是否为 任务执行者 (task executor) 线程。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:467
+#: ../plugin_dev/classes/ServerInterface.rst:477
 msgid ""
 "Task executor thread is the main thread to parse messages and trigger "
 "listeners where some ServerInterface APIs  are required to be invoked on"
 msgstr "任务执行者线程 是解析消息和触发监听器的主线程，需要调用一些 ServerInterface API。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:470
+#: ../plugin_dev/classes/ServerInterface.rst:480
 msgid "rcon_query"
 msgstr "rcon_query"
 
-#: ../plugin_dev/classes/ServerInterface.rst:476
+#: ../plugin_dev/classes/ServerInterface.rst:486
 msgid ""
 "Send command to the server through rcon connection. Return the result "
 "that server returned from rcon. Return None if rcon is not running or "
 "rcon query failed"
 msgstr "通过 rcon 连接向服务端发送指令，并返回指令执行结果。 如果 rcon 没有运行或 rcon 执行失败，则返回 None。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:478
+#: ../plugin_dev/classes/ServerInterface.rst:488
 msgid "Parameter *command*: The command you want to send to the rcon server"
 msgstr "参数 *command*：你要发送给 rcon 服务端的指令。"
 

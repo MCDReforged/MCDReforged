@@ -86,6 +86,16 @@ Exit MCDR when the server is stopped
 
 If the server is running return False otherwise return True
 
+Example usage:
+
+.. code-block:: python
+
+    server.stop()  # Stop the server
+    # do something A
+    server.wait_for_start()  # Make sure the server is fully stopped. It's necessary to run it in your custom thread
+    # do something B
+    server.exit()  # Exit MCDR
+
 is_server_running
 ~~~~~~~~~~~~~~~~~
 
