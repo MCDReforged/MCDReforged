@@ -356,7 +356,7 @@ class MCDReforgedServer:
 			encoding = self.encoding_method
 		if isinstance(text, str):
 			encoded_text = (text + ending).encode(encoding)
-		elif isinstance(text, bytes):  # TODO: yeet it
+		elif isinstance(text, bytes):
 			encoded_text = text
 		else:
 			raise TypeError()

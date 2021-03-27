@@ -97,6 +97,11 @@ event
 
 You might already read the `dispatch_event <classes/ServerInterface.html#dispatch-event>`__ method in ``ServerInterface`` class. It only accepts a ``PluginEvent`` instance as its first parameter. So if you want to dispatch your custom event, create a ``LiteralEvent`` for simpleness or a custom event class inherited from ``PluginEvent``
 
+exception
+---------
+
+There some custom exceptions that is used in MCDR runtime e.g. `ServerInterface <classes/ServerInterface.html>`__ methods. Here comes the way to import them
+
 rcon
 ----
 
