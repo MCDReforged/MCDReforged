@@ -8,8 +8,12 @@ import os
 NAME_SHORT = 'MCDR'
 NAME = 'MCDReforged'
 PACKAGE_NAME = 'mcdreforged'
-VERSION = '1.3.1-alpha1'       # semver
-VERSION_PYPI = '1.3.1a1'  # pythonic ver
+
+# MCDR Version Storage
+# Related: docs/source/conf.py
+VERSION = '1.3.1'       # semver
+VERSION_PYPI = '1.3.1'  # pythonic ver
+
 GITHUB_URL = 'https://github.com/Fallen-Breath/MCDReforged'
 GITHUB_API_LATEST = 'https://api.github.com/repos/Fallen-Breath/MCDReforged/releases/latest'
 
