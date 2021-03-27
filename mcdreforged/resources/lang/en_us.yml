@@ -16,6 +16,7 @@ mcdr_server.kill_server.killing                     : Killing server process gro
 mcdr_server.kill_server.process_killed              : Process {0} killed
 mcdr_server.interrupt.hint                          : Interrupting, first strike = {0}
 mcdr_server.send.send_when_stopped                  : Server has been terminated, cannot send command to its stdin
+mcdr_server.send.send_when_stopped.text             : "Command being sent: {0}"
 mcdr_server.receive.wait_stop                       : Waiting for server process to stop
 mcdr_server.receive.decode_fail                     : Fail to decode text "{0}"
 mcdr_server.on_mcdr_start.console_disabled          : Console thread disabled

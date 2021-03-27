@@ -354,13 +354,18 @@ class MCDReforgedServer:
 		"""
 		if encoding is None:
 			encoding = self.encoding_method
-		if type(text) is str:
-			text = (text + ending).encode(encoding)
+		if isinstance(text, str):
+			encoded_text = (text + ending).encode(encoding)
+		elif isinstance(text, bytes):  # TODO: yeet it
+			encoded_text = text
+		else:
+			raise TypeError()
 		if self.is_server_running():
-			self.process.stdin.write(text)
+			self.process.stdin.write(encoded_text)
 			self.process.stdin.flush()
 		else:
 			self.logger.warning(self.tr('mcdr_server.send.send_when_stopped'))
+			self.logger.warning(self.tr('mcdr_server.send.send_when_stopped.text', text if len(text) <= 32 else text[:32] + '...'))
 
 	def receive(self):
 		"""

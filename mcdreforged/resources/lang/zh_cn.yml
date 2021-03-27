@@ -16,6 +16,7 @@ mcdr_server.kill_server.killing                     : 正在终止服务端进�
 mcdr_server.kill_server.process_killed              : 进程 {0} 已终止
 mcdr_server.interrupt.hint                          : 中断 MCDR 中，首次操作 = {0}
 mcdr_server.send.send_when_stopped                  : 服务端已关闭，不能向其标准输入流输入指令
+mcdr_server.send.send_when_stopped.text             : "被输入的指令: {0}"
 mcdr_server.receive.wait_stop                       : 等待服务端进程停止
 mcdr_server.receive.decode_fail                     : 解析文本 "{0}" 出错
 mcdr_server.on_mcdr_start.console_disabled          : 控制台线程已禁用
