@@ -22,8 +22,9 @@ mcdr_server.on_mcdr_start.console_disabled          : 控制台线程已禁用
 mcdr_server.on_server_stop.show_stopcode            : "服务端进程返回代码: {0}"
 mcdr_server.tick.pre_parse_fail                     : 预解析服务端标准输出流失败，使用源文本
 mcdr_server.run.error                               : 运行 MCDR 时出错
-mcdr_server.on_mcdr_stop.user_interrupted           : MCDR 已被用户终止
-mcdr_server.on_mcdr_stop.server_stop                : 服务端已关闭
+mcdr_server.on_server_stop.user_interrupted         : 服务端已被用户终止
+mcdr_server.on_server_stop.server_stop              : 服务端已关闭
+mcdr_server.on_mcdr_stop.info                       : 正在关闭 MCDR
 mcdr_server.on_mcdr_stop.bye                        : bye
 mcdr_server.on_mcdr_stop.stop_error                 : 关闭 MCDR 时出错，忽略并继续退出
 console_handler.parse_fail                          : 解析控制台指令 "{0}" 出错

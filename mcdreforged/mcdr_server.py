@@ -338,6 +338,11 @@ class MCDReforgedServer:
 		self.remove_flag(MCDReforgedFlag.SERVER_STARTUP | MCDReforgedFlag.SERVER_RCON_READY)  # removes this two
 		self.plugin_manager.dispatch_event(MCDRPluginEvents.SERVER_STOP, (return_code,), wait=True)
 
+		if self.is_interrupt():
+			self.logger.info(self.tr('mcdr_server.on_server_stop.user_interrupted'))
+		else:
+			self.logger.info(self.tr('mcdr_server.on_server_stop.server_stop'))
+
 	def send(self, text, ending='\n', encoding=None):
 		"""
 		Send a text to server's stdin if the server is running
@@ -435,10 +440,8 @@ class MCDReforgedServer:
 	def on_mcdr_stop(self):
 		try:
 			self.set_mcdr_state(MCDReforgedState.PRE_STOPPED)
-			if self.is_interrupt():
-				self.logger.info(self.tr('mcdr_server.on_mcdr_stop.user_interrupted'))
-			else:
-				self.logger.info(self.tr('mcdr_server.on_mcdr_stop.server_stop'))
+
+			self.logger.info(self.tr('mcdr_server.on_mcdr_stop.info'))
 
 			self.watch_dog.stop()  # it's ok for plugins to take some time
 			self.watch_dog.join()
