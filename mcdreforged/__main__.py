@@ -19,7 +19,6 @@ def main():
 
 	print('{} {} is starting up'.format(constant.NAME, constant.VERSION))
 	print('{} is open source, u can find it here: {}'.format(constant.NAME, constant.GITHUB_URL))
-	print('{} is still in development, it may not work well'.format(constant.NAME))
 	try:
 		mcdreforged_server = MCDReforgedServer()
 	except:
