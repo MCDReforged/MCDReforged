@@ -377,7 +377,7 @@ class MCDReforgedServer:
 		"""
 		while True:
 			try:
-				text = next(iter(self.process.stdout))
+				text = next(iter(self.process.stdout))  # type: bytes
 			except StopIteration:  # server process has stopped
 				for i in range(constant.WAIT_TIME_AFTER_SERVER_STDOUT_END_SEC * 10):
 					if self.process.poll() is not None:
@@ -388,11 +388,11 @@ class MCDReforgedServer:
 				raise ServerStopped()
 			else:
 				try:
-					text = text.decode(self.decoding_method)
+					decoded_text = text.decode(self.decoding_method)  # type: str
 				except:
 					self.logger.error(self.tr('mcdr_server.receive.decode_fail', text))
 					raise
-				return text.rstrip('\n\r').lstrip('\n\r')
+				return decoded_text.rstrip('\n\r').lstrip('\n\r')
 
 	def tick(self):
 		"""

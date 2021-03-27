@@ -11,7 +11,7 @@ class GeneralReactor(AbstractInfoReactor):
 	def react(self, info):
 		command_source = info.get_command_source()
 		if command_source is not None:
-			self.mcdr_server.command_manager.execute_command(command_source, info.content)
+			self.mcdr_server.command_manager.execute_command(info.content, command_source)
 
 		self.mcdr_server.plugin_manager.dispatch_event(MCDRPluginEvents.GENERAL_INFO, (info,))
 

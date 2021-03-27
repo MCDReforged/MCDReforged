@@ -6,7 +6,7 @@ import time
 from typing import Callable, TYPE_CHECKING, Tuple, Any, Union, Optional, List
 
 from mcdreforged.command.builder.command_node import Literal
-from mcdreforged.command.command_source import CommandSource
+from mcdreforged.command.command_source import CommandSource, PluginCommandSource
 from mcdreforged.info import Info
 from mcdreforged.minecraft.rtext import RTextBase, RText
 from mcdreforged.permission.permission_level import PermissionLevel
@@ -21,7 +21,7 @@ from mcdreforged.utils.logger import MCDReforgedLogger, DebugOption
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
 	from mcdreforged.plugin.plugin_manager import PluginManager
-	from mcdreforged.plugin.plugin import RegularPlugin
+	from mcdreforged.plugin.regular_plugin import RegularPlugin
 
 
 def log_call(func):
@@ -423,8 +423,7 @@ class ServerInterface:
 		:param on_executor_thread: If it's set to false. The event will be dispatched immediately no matter what the
 		current thread is
 		"""
-		if not isinstance(event, PluginEvent):
-			raise TypeError('Excepted {} but {} found'.format(PluginEvent, type(event)))
+		misc_util.check_type(event, PluginEvent)
 		if MCDRPluginEvents.contains_id(event.id):
 			raise ValueError('Cannot dispatch event with already exists event id {}'.format(event.id))
 		self.__mcdr_server.plugin_manager.dispatch_event(event, args, on_executor_thread=on_executor_thread)
@@ -465,6 +464,32 @@ class ServerInterface:
 		if level is None:
 			raise TypeError('Parameter level needs to be a permission related value')
 		self.__mcdr_server.permission_manager.set_permission_level(player, value)
+
+	# ------------------------
+	#         Command
+	# ------------------------
+
+	@log_call
+	def get_plugin_command_source(self) -> PluginCommandSource:
+		"""
+		Return a simple plugin command source for e.g. command execution
+		It's not player or console, it has maximum permission level, it use ServerInterface.logger for replying
+		"""
+		return PluginCommandSource(self)
+
+	@log_call
+	def execute_command(self, command: str, source: CommandSource = None):
+		"""
+		Execute a single command using the command system of MCDR
+		:param str command: The command you want to execute
+		:param CommandSource source: The command source that is used to execute the command. If it's not specified MCDR
+		will use ServerInterface.get_plugin_command_source as fallback command source
+		"""
+		if source is None:
+			source = self.get_plugin_command_source(is_plugin_call=False)
+		misc_util.check_type(command, str)
+		misc_util.check_type(source, CommandSource)
+		self.__mcdr_server.command_manager.execute_command(command, source)
 
 	# ------------------------
 	#           Misc

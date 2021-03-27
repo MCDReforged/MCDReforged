@@ -1,6 +1,7 @@
 from abc import ABC
 from typing import TYPE_CHECKING, Any, Optional
 
+from mcdreforged.permission.permission_level import PermissionLevel
 from mcdreforged.utils import misc_util
 
 if TYPE_CHECKING:
@@ -111,3 +112,26 @@ class ConsoleCommandSource(InfoCommandSource):
 
 	def __repr__(self):
 		return type(self).__name__
+
+
+class PluginCommandSource(CommandSource):
+	def __init__(self, server: 'ServerInterface'):
+		self.__server = server
+		self.__logger = self.__server.logger
+
+	@property
+	def is_player(self) -> bool:
+		return False
+
+	@property
+	def is_console(self) -> bool:
+		return False
+
+	def get_server(self) -> 'ServerInterface':
+		return self.__server
+
+	def get_permission_level(self) -> int:
+		return PermissionLevel.PLUGIN_LEVEL
+
+	def reply(self, message: Any, **kwargs) -> None:
+		misc_util.print_text_to_console(self.__logger, message)
