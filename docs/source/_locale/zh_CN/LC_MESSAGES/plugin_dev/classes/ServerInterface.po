@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-27 12:26+0800\n"
+"POT-Creation-Date: 2021-03-27 13:20+0800\n"
 "PO-Revision-Date: 2021-01-24 09:17+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -627,35 +627,74 @@ msgstr ""
 "``'user'``"
 
 #: ../plugin_dev/classes/ServerInterface.rst:466
+msgid "Command"
+msgstr "Command"
+
+#: ../plugin_dev/classes/ServerInterface.rst:469
+msgid "get_plugin_command_source"
+msgstr "get_plugin_command_source"
+
+#: ../plugin_dev/classes/ServerInterface.rst:475
+msgid "Return a simple plugin command source for e.g. command execution"
+msgstr "返回一个简单的插件指令源，用于例如执行指令时使用。"
+
+#: ../plugin_dev/classes/ServerInterface.rst:477
+msgid ""
+"It's not player or console, it has maximum permission level, it use "
+"`logger <#logger>`__ for replying"
+msgstr "该指令源不是玩家或控制台，它拥有最高的权限等级，它使用 `logger <#logger>`__ 来处理回复"
+
+#: ../plugin_dev/classes/ServerInterface.rst:480
+msgid "execute_command"
+msgstr "execute_command"
+
+#: ../plugin_dev/classes/ServerInterface.rst:486
+msgid "Execute a single command using the command system of MCDR"
+msgstr "使用 MCDR 的指令系统来执行一条指令"
+
+#: ../plugin_dev/classes/ServerInterface.rst:488
+msgid "Parameter *command*: The command you want to execute"
+msgstr "参数 *command*：你想要执行的指令"
+
+#: ../plugin_dev/classes/ServerInterface.rst:490
+msgid ""
+"Parameter *source*: The command source that is used to execute the "
+"command. If it's not specified MCDR will use `get_plugin_command_source "
+"<#get-plugin-command-source>`__ as fallback command source"
+msgstr ""
+"参数 *source*：用于执行该条指令的指令源。如果它未被指定，MCDR 将会使用 <#get-plugin-command-"
+"source>`__ 来获得默认的指令源"
+
+#: ../plugin_dev/classes/ServerInterface.rst:493
 msgid "Misc"
 msgstr "其他"
 
-#: ../plugin_dev/classes/ServerInterface.rst:469
+#: ../plugin_dev/classes/ServerInterface.rst:496
 msgid "is_on_executor_thread"
 msgstr "is_on_executor_thread"
 
-#: ../plugin_dev/classes/ServerInterface.rst:475
+#: ../plugin_dev/classes/ServerInterface.rst:502
 msgid "Return if the current thread is the task executor thread"
 msgstr "当前线程是否为 任务执行者 (task executor) 线程。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:477
+#: ../plugin_dev/classes/ServerInterface.rst:504
 msgid ""
 "Task executor thread is the main thread to parse messages and trigger "
 "listeners where some ServerInterface APIs  are required to be invoked on"
 msgstr "任务执行者线程 是解析消息和触发监听器的主线程，需要调用一些 ServerInterface API。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:480
+#: ../plugin_dev/classes/ServerInterface.rst:507
 msgid "rcon_query"
 msgstr "rcon_query"
 
-#: ../plugin_dev/classes/ServerInterface.rst:486
+#: ../plugin_dev/classes/ServerInterface.rst:513
 msgid ""
 "Send command to the server through rcon connection. Return the result "
 "that server returned from rcon. Return None if rcon is not running or "
 "rcon query failed"
 msgstr "通过 rcon 连接向服务端发送指令，并返回指令执行结果。 如果 rcon 没有运行或 rcon 执行失败，则返回 None。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:488
+#: ../plugin_dev/classes/ServerInterface.rst:515
 msgid "Parameter *command*: The command you want to send to the rcon server"
 msgstr "参数 *command*：你要发送给 rcon 服务端的指令。"
 

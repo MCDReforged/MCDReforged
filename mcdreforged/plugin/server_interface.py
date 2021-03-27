@@ -478,7 +478,7 @@ class ServerInterface:
 		return PluginCommandSource(self)
 
 	@log_call
-	def execute_command(self, command: str, source: CommandSource = None):
+	def execute_command(self, command: str, source: CommandSource = None) -> None:
 		"""
 		Execute a single command using the command system of MCDR
 		:param str command: The command you want to execute

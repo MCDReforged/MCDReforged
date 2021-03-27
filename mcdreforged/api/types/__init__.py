@@ -2,7 +2,7 @@
 Type hints are always nice to have
 """
 from mcdreforged.command.command_source import CommandSource, ConsoleCommandSource, PlayerCommandSource, \
-	InfoCommandSource
+	InfoCommandSource, PluginCommandSource
 from mcdreforged.info import Info
 from mcdreforged.permission.permission_level import PermissionLevel
 from mcdreforged.plugin.meta.metadata import Metadata
@@ -13,7 +13,7 @@ __all__ = [
 	'ServerInterface', 'Info',
 
 	# Command sources
-	'CommandSource', 'InfoCommandSource', 'PlayerCommandSource', 'ConsoleCommandSource',
+	'CommandSource', 'InfoCommandSource', 'PlayerCommandSource', 'ConsoleCommandSource', 'PluginCommandSource',
 
 	# Plugin things
 	'Metadata',
