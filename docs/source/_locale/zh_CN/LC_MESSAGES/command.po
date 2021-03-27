@@ -82,9 +82,9 @@ msgstr "如果服务器已启动则显示的标志"
 
 #: ../command.rst:26
 msgid ""
-"If the server exists naturally by itself, or the server is stopped / "
+"If MCDR will exit after the server stop, aka if the server exists naturally by itself, or the server is stopped / "
 "killed by MCDR"
-msgstr "服务器在正常运行，或已停止/被 MCDR 杀死"
+msgstr "MCDR 是否会在服务端停止后关闭，也即服务器是自然关闭的还是被 MCDR 停止/杀死"
 
 #: ../command.rst:27
 msgid "The state of rcon connection"

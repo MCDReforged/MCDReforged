@@ -90,7 +90,7 @@ mcdr_command.print_mcdr_status.line1                  : "§l{0}§r version: §e{
 mcdr_command.print_mcdr_status.line2                  : "MCDR state: {0}"
 mcdr_command.print_mcdr_status.line3                  : "Server state: {0}"
 mcdr_command.print_mcdr_status.line4                  : "Server startup: {0}"
-mcdr_command.print_mcdr_status.line5                  : "Exit naturally: {0}"
+mcdr_command.print_mcdr_status.line5                  : "Exit after server stops: {0}"
 mcdr_command.print_mcdr_status.line6                  : "Rcon: {0}"
 mcdr_command.print_mcdr_status.line7                  : "Plugin count: §6{0}§r"
 mcdr_command.print_mcdr_status.extra_line1            : "Server PID: {0}"

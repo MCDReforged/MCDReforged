@@ -8,7 +8,7 @@ class MCDReforgedFlag(Flag):
 	INTERRUPT = auto()			# ctrl-c flag
 	SERVER_STARTUP = auto()		# set to True after server startup
 	SERVER_RCON_READY = auto() 	# set to True after server started its rcon. used to start the rcon server
-	EXIT_NATURALLY = auto()		# if MCDR exit after server stop. can be modified by plugins
+	EXIT_AFTER_STOP = auto()	# if MCDR exit after server stop. can be modified by plugins
 
 
 class EnumStateBase(Enum):

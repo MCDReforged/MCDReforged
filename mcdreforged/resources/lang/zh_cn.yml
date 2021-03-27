@@ -90,7 +90,7 @@ mcdr_command.print_mcdr_status.line1                  : "§l{0}§r 版本: §e{1
 mcdr_command.print_mcdr_status.line2                  : "MCDR 状态: {0}"
 mcdr_command.print_mcdr_status.line3                  : "服务端状态: {0}"
 mcdr_command.print_mcdr_status.line4                  : "服务端已启动: {0}"
-mcdr_command.print_mcdr_status.line5                  : "自然退出: {0}"
+mcdr_command.print_mcdr_status.line5                  : "将于服务端关闭后退出: {0}"
 mcdr_command.print_mcdr_status.line6                  : "rcon: {0}"
 mcdr_command.print_mcdr_status.line7                  : "插件数量: §6{0}§r"
 mcdr_command.print_mcdr_status.extra_line1            : "服务端 PID: {0}"

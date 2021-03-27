@@ -23,7 +23,7 @@ Status display
 * The state of MCDR
 * The state of the server
 * The flag that displays if the server has started up
-* If the server exists naturally by itself, or the server is stopped / killed by MCDR
+* If MCDR will exit after the server stop, aka if the server exists naturally by itself, or the server is stopped / killed by MCDR
 * The state of rcon connection
 * The amount of loaded plugin
 
