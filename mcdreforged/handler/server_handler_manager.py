@@ -1,5 +1,6 @@
+import collections
 import time
-from typing import Dict, Optional, Tuple, List, TYPE_CHECKING
+from typing import Dict, Optional, Tuple, List, TYPE_CHECKING, Set
 
 from mcdreforged.handler.abstract_server_handler import AbstractServerHandler
 from mcdreforged.handler.impl import *
@@ -19,26 +20,30 @@ class ServerHandlerManager:
 		self.logger = mcdr_server.logger
 		self.handlers = {}  # type: Dict[str, AbstractServerHandler]
 		self.__current_handler = None  # type: Optional[AbstractServerHandler]
-		self.basic_handler = None
+		# the handler that should always work
+		self.basic_handler = None  # type: Optional[AbstractServerHandler]
 
 		# Automation for lazy
 		self.__detection_running = False
 		self.__detection_start_time = None
 		self.__detection_text_count = 0
-		self.__detection_success_count = {}
+		self.__detection_success_count = collections.defaultdict(lambda: 0)
 
 	def register_handlers(self, custom_handler_class_paths: Optional[List[str]]):
+		def add_handler(hdr: AbstractServerHandler):
+			self.handlers[hdr.get_name()] = hdr
+
 		self.handlers.clear()
 		self.basic_handler = BasicHandler()
-		self.add_handler(self.basic_handler)
-		self.add_handler(VanillaHandler())
-		self.add_handler(BukkitHandler())
-		self.add_handler(Bukkit14Handler())
-		self.add_handler(ForgeHandler())
-		self.add_handler(CatServerHandler())
-		self.add_handler(Beta18Handler())
-		self.add_handler(BungeecordHandler())
-		self.add_handler(WaterfallHandler())
+		add_handler(self.basic_handler)
+		add_handler(VanillaHandler())
+		add_handler(BukkitHandler())
+		add_handler(Bukkit14Handler())
+		add_handler(ForgeHandler())
+		add_handler(CatServerHandler())
+		add_handler(Beta18Handler())
+		add_handler(BungeecordHandler())
+		add_handler(WaterfallHandler())
 		if custom_handler_class_paths is not None:
 			for class_path in custom_handler_class_paths:
 				try:
@@ -49,15 +54,12 @@ class ServerHandlerManager:
 					if issubclass(handler_class, AbstractServerHandler):
 						handler = handler_class()
 						if handler.get_name() not in self.handlers:
-							self.add_handler(handler)
+							add_handler(handler)
 							self.mcdr_server.logger.debug('Loaded info handler {} from {}'.format(handler_class.__name__, class_path), option=DebugOption.HANDLER)
 						else:
 							self.mcdr_server.logger.error('Handler with name {} from path {} is already registered, ignored'.format(handler.get_name(), class_path))
 					else:
 						self.mcdr_server.logger.error('Wrong handler class "{}", expected {} but found {}'.format(class_path, AbstractServerHandler, handler_class))
-
-	def add_handler(self, handler: AbstractServerHandler):
-		self.handlers[handler.get_name()] = handler
 
 	def set_handler(self, handler_name: str):
 		try:
@@ -86,10 +88,6 @@ class ServerHandlerManager:
 	def is_detection_running(self) -> bool:
 		return self.__detection_running
 
-	def __touch_detection_success_count(self, handler):
-		if handler not in self.__detection_success_count:
-			self.__detection_success_count[handler] = 0
-
 	def __detection_thread(self):
 		time.sleep(self.HANDLER_DETECTION_MINIMUM_SAMPLING_TIME)
 		while self.__detection_text_count < self.HANDLER_DETECTION_MINIMUM_SAMPLE_COUNT:
@@ -104,7 +102,6 @@ class ServerHandlerManager:
 			end += 1
 		best_handlers = set(map(lambda item: item[0], lst[:end]))
 		current_handler = self.get_current_handler()
-		self.__touch_detection_success_count(current_handler)
 		current_count = self.__detection_success_count[self.get_current_handler()]
 		if current_handler not in best_handlers:
 			self.mcdr_server.logger.warning(self.mcdr_server.tr('server_handler_manager.handler_detection.result1'))
@@ -122,13 +119,11 @@ class ServerHandlerManager:
 					except:
 						pass
 					else:
-						self.__touch_detection_success_count(handler)
 						self.__detection_success_count[handler] += 1
 
 	def finalize_detection_result(self):
 		self.__detection_running = False
-		current_handler_set = set(self.handlers)
-		lst = list(filter(lambda hdr: hdr in current_handler_set, self.__detection_success_count.items()))  # type: List[Tuple[AbstractServerHandler, int]]
-		lst.sort(key=lambda item: item[1])
-		lst.reverse()
+		current_handler_set = set(self.handlers.values())  # type: Set[AbstractServerHandler]
+		lst = list(filter(lambda item: item[0] in current_handler_set, self.__detection_success_count.items()))  # type: List[Tuple[AbstractServerHandler, int]]
+		lst.sort(key=lambda item: item[1], reverse=True)
 		return lst
