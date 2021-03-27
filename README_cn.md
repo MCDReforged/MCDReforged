@@ -36,4 +36,4 @@ MCDR 使用了 `Popen` 来启动服务端，以此来控制服务端的标准输
 
 ## 文档
 
-想要了解更多关于 MCDR 的详情？去看文档吧 https://mcdreforged.readthedocs.io/ （中文在做了在咕了）
+想要了解更多关于 MCDR 的详情？去看文档吧 https://mcdreforged.readthedocs.io/zh_CN/latest/
