@@ -24,11 +24,6 @@ class BungeecordHandler(AbstractServerHandler):
 		# 09:00:01 [信息] [Steve] -> UpstreamBridge has disconnected
 		return '{hour:d}:{min:d}:{sec:d} [{logging}] {content}'
 
-	def parse_server_stdout(self, text):
-		result = self._get_server_stdout_raw_result(text)
-		self._content_parse(result)
-		return result
-
 	def pre_parse_server_stdout(self, text):
 		text = super().pre_parse_server_stdout(text)
 		match = re.match(r'>*\r', text)

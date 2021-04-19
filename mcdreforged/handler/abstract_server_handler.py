@@ -150,7 +150,9 @@ class AbstractServerHandler:
 		:return: An Info instance
 		:rtype: Info
 		"""
-		raise NotImplementedError()
+		result = self._get_server_stdout_raw_result(text)
+		self._content_parse(result)
+		return result
 
 	def parse_player_joined(self, info: Info) -> Optional[str]:
 		"""
