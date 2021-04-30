@@ -23,7 +23,7 @@ copyright = '2021, Fallen_Breath'
 author = 'Fallen_Breath'
 
 # The full version, including alpha/beta/rc tags
-release = '1.4'
+release = '1.5'
 
 
 # -- General configuration ---------------------------------------------------
