@@ -331,8 +331,14 @@ class MCDReforgedServer:
 	def on_server_stop(self):
 		return_code = self.process.poll()
 		self.logger.info(self.tr('mcdr_server.on_server_stop.show_stopcode', return_code))
-		self.process.stdin.close()
-		self.process.stdout.close()
+		try:
+			self.process.stdin.close()
+		except Exception as e:
+			self.logger.warning('Error when closing stdin: {}'.format(e))
+		try:
+			self.process.stdout.close()
+		except Exception as e:
+			self.logger.warning('Error when closing stdout: {}'.format(e))
 		self.process = None
 		self.set_server_state(ServerState.STOPPED)
 		self.remove_flag(MCDReforgedFlag.SERVER_STARTUP | MCDReforgedFlag.SERVER_RCON_READY)  # removes this two
