@@ -9,6 +9,7 @@ from typing import Callable, TYPE_CHECKING, Tuple, Any, Union, Optional, List
 from mcdreforged.command.builder.command_node import Literal
 from mcdreforged.command.command_source import CommandSource, PluginCommandSource
 from mcdreforged.info import Info
+from mcdreforged.mcdr_state import MCDReforgedFlag
 from mcdreforged.minecraft.rtext import RTextBase, RText
 from mcdreforged.permission.permission_level import PermissionLevel
 from mcdreforged.plugin.meta.metadata import Metadata
@@ -84,7 +85,7 @@ class ServerInterface:
 		"""
 		Soft shutting down the server by sending the correct stop command to the server
 		"""
-		self.__mcdr_server.set_exit_after_stop_flag(False)
+		self.__mcdr_server.remove_flag(MCDReforgedFlag.EXIT_AFTER_STOP)
 		self.__mcdr_server.stop(forced=False)
 
 	@log_call
@@ -121,7 +122,7 @@ class ServerInterface:
 		"""
 		if self.__mcdr_server.is_server_running():
 			raise IllegalCallError('Cannot exit MCDR when the server is running')
-		self.__mcdr_server.set_exit_after_stop_flag(True)
+		self.__mcdr_server.with_flag(MCDReforgedFlag.EXIT_AFTER_STOP)
 
 	@log_call
 	def is_server_running(self) -> bool:

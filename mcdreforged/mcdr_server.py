@@ -183,16 +183,11 @@ class MCDReforgedServer:
 
 	def with_flag(self, flag: MCDReforgedFlag):
 		self.flags |= flag
+		self.logger.debug('Added MCDReforgedFlag {}'.format(flag), option=DebugOption.MCDR)
 
 	def remove_flag(self, flag: MCDReforgedFlag):
 		self.flags &= ~flag
-
-	def set_exit_after_stop_flag(self, flag):
-		if flag:
-			self.with_flag(MCDReforgedFlag.EXIT_AFTER_STOP)
-		else:
-			self.remove_flag(MCDReforgedFlag.EXIT_AFTER_STOP)
-		self.logger.debug('flag EXIT_AFTER_STOP has set to "{}"'.format(flag), option=DebugOption.MCDR)
+		self.logger.debug('Removed MCDReforgedFlag {}'.format(flag), option=DebugOption.MCDR)
 
 	# State
 
@@ -324,7 +319,7 @@ class MCDReforgedServer:
 
 	def on_server_start(self):
 		self.set_server_state(ServerState.RUNNING)
-		self.set_exit_after_stop_flag(True)  # Set after server state is set to RUNNING, or MCDR might have a chance to exit if the server is started by other thread
+		self.with_flag(MCDReforgedFlag.EXIT_AFTER_STOP)  # Set after server state is set to RUNNING, or MCDR might have a chance to exit if the server is started by other thread
 		self.logger.info(self.tr('mcdr_server.start_server.pid_info', self.process.pid))
 		self.plugin_manager.dispatch_event(MCDRPluginEvents.SERVER_START, ())
 
