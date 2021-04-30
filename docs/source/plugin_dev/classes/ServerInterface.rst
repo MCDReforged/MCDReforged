@@ -431,6 +431,24 @@ In the event listener plugin
 
     server.register_event_listener('my_plugin.my_event', do_something)
 
+Plugin Utils
+^^^^^^^^^^^^
+
+get_data_folder
+~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+    def get_data_folder(self) -> str
+
+Return a unified data directory path for the current plugin
+
+The path of the directory will be ``config/plugin_id`` where ``plugin_id`` is the id of the current plugin
+
+If the directory does not exist, create it
+
+Raise an ``IllegalCallError`` if it's not invoked in the task executor thread
+
 Permission
 ^^^^^^^^^^
 
