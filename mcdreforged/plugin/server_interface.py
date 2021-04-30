@@ -2,6 +2,7 @@
 An interface class for plugins to control the server
 """
 import functools
+import os
 import time
 from typing import Callable, TYPE_CHECKING, Tuple, Any, Union, Optional, List
 
@@ -427,6 +428,26 @@ class ServerInterface:
 		if MCDRPluginEvents.contains_id(event.id):
 			raise ValueError('Cannot dispatch event with already exists event id {}'.format(event.id))
 		self.__mcdr_server.plugin_manager.dispatch_event(event, args, on_executor_thread=on_executor_thread)
+
+	# ------------------------
+	#      Plugin Utils
+	# ------------------------
+
+	@log_call
+	def get_data_folder(self) -> str:
+		"""
+		Return a unified data directory path for the current plugin
+		The path of the directory will be "config/plugin_id" where "plugin_id" is the id of the current plugin
+		If the directory does not exist, create it
+		:return: The path of the directory
+		:raise: IllegalCallError if it's not invoked in the task executor thread
+		"""
+		plugin = self.__get_current_plugin()
+		from mcdreforged.plugin.plugin_manager import PLUGIN_CONFIG_DIRECTORY
+		plugin_data_folder = os.path.join(PLUGIN_CONFIG_DIRECTORY, plugin.get_id())
+		if not os.path.isdir(plugin_data_folder):
+			os.makedirs(plugin_data_folder)
+		return plugin_data_folder
 
 	# ------------------------
 	#        Permission

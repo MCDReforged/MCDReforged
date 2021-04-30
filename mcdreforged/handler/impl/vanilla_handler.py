@@ -32,8 +32,7 @@ class VanillaHandler(AbstractServerHandler):
 		return re.fullmatch(r'\w+', name) is not None
 
 	def parse_server_stdout(self, text: str):
-		result = self._get_server_stdout_raw_result(text)
-		self._content_parse(result)
+		result = super().parse_server_stdout(text)
 		parsed = parse('<{name}> {message}', result.content)
 		if parsed is not None and self._verify_player_name(parsed['name']):
 			result.player, result.content = parsed['name'], parsed['message']

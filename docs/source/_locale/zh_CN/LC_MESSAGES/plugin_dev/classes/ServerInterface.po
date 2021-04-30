@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-27 13:20+0800\n"
+"POT-Creation-Date: 2021-04-30 11:43+0800\n"
 "PO-Revision-Date: 2021-01-24 09:17+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -465,6 +465,7 @@ msgstr "为当前插件注册一个事件监听器。"
 #: ../plugin_dev/classes/ServerInterface.rst:360
 #: ../plugin_dev/classes/ServerInterface.rst:377
 #: ../plugin_dev/classes/ServerInterface.rst:390
+#: ../plugin_dev/classes/ServerInterface.rst:450
 msgid ""
 "Raise an ``IllegalCallError`` if it's not invoked in the task executor "
 "thread"
@@ -574,50 +575,72 @@ msgid "In the event listener plugin"
 msgstr "对于监听事件的插件："
 
 #: ../plugin_dev/classes/ServerInterface.rst:435
+msgid "Plugin Utils"
+msgstr "插件工具"
+
+#: ../plugin_dev/classes/ServerInterface.rst:438
+msgid "get_data_folder"
+msgstr "get_data_folder"
+
+#: ../plugin_dev/classes/ServerInterface.rst:444
+msgid "Return a unified data directory path for the current plugin"
+msgstr "为当前插件返回一个统一的数据文件夹。"
+
+#: ../plugin_dev/classes/ServerInterface.rst:446
+msgid ""
+"The path of the directory will be ``config/plugin_id`` where "
+"``plugin_id`` is the id of the current plugin"
+msgstr "文件夹的路径将会为 ``config/plugin_id``，其中 ``plugin_id`` 是当前插件的 id"
+
+#: ../plugin_dev/classes/ServerInterface.rst:448
+msgid "If the directory does not exist, create it"
+msgstr "如果该文件夹不存在，该文件夹会被自动创建"
+
+#: ../plugin_dev/classes/ServerInterface.rst:453
 msgid "Permission"
 msgstr "权限"
 
-#: ../plugin_dev/classes/ServerInterface.rst:438
+#: ../plugin_dev/classes/ServerInterface.rst:456
 msgid "get_permission_level"
 msgstr "get_permission_level"
 
-#: ../plugin_dev/classes/ServerInterface.rst:444
+#: ../plugin_dev/classes/ServerInterface.rst:462
 msgid "Return an int indicating permission level number the given object has"
 msgstr "返回一个 int，表示给定对象拥有的权限级别。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:446
+#: ../plugin_dev/classes/ServerInterface.rst:464
 msgid ""
 "The object could be a str indicating the name of a player, an Info "
 "instance or a command source"
 msgstr "``obj`` 对象可以是一个表示玩家名的 str，一个 Info 实例或者一个指令源"
 
-#: ../plugin_dev/classes/ServerInterface.rst:448
+#: ../plugin_dev/classes/ServerInterface.rst:466
 msgid "Parameter *obj*: The object your are querying"
 msgstr "参数 *obj* : 你要查询的对象。这个对象可以是 str (玩家名字)，Info实例或一个指令源。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:450
+#: ../plugin_dev/classes/ServerInterface.rst:468
 msgid ""
 "It raises ``TypeError`` if the type of the given object is not supported "
 "for permission querying"
 msgstr "如果给定对象的类型不支持权限查询，则抛出 ``TypeError``。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:453
+#: ../plugin_dev/classes/ServerInterface.rst:471
 msgid "set_permission_level"
 msgstr "set_permission_level"
 
-#: ../plugin_dev/classes/ServerInterface.rst:459
+#: ../plugin_dev/classes/ServerInterface.rst:477
 msgid ""
 "Set the permission level of the given player. It raises ``TypeError`` if "
 "the value parameter doesn't proper represent a permission level"
 msgstr "设置给定玩家的权限级别。如果数值参数不是一个正确的权限级别，则抛出 ``TypeError``。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:461
+#: ../plugin_dev/classes/ServerInterface.rst:479
 msgid ""
 "Parameter *player*: The name of the player that you want to set his/her "
 "permission level"
 msgstr "参数 *player*：你想设置权限级别的玩家名字。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:463
+#: ../plugin_dev/classes/ServerInterface.rst:481
 msgid ""
 "Parameter *value*: The target permission level you want to set the player"
 " to. It can be an int or a str as long as it's related to the permission "
@@ -626,37 +649,37 @@ msgstr ""
 "参数 *value*：你想将玩家设置为的目标权限级别，它可以是一个代表权限级别的 int 或 str。例如：``1``， ``'1'``，或  "
 "``'user'``"
 
-#: ../plugin_dev/classes/ServerInterface.rst:466
+#: ../plugin_dev/classes/ServerInterface.rst:484
 msgid "Command"
 msgstr "Command"
 
-#: ../plugin_dev/classes/ServerInterface.rst:469
+#: ../plugin_dev/classes/ServerInterface.rst:487
 msgid "get_plugin_command_source"
 msgstr "get_plugin_command_source"
 
-#: ../plugin_dev/classes/ServerInterface.rst:475
+#: ../plugin_dev/classes/ServerInterface.rst:493
 msgid "Return a simple plugin command source for e.g. command execution"
 msgstr "返回一个简单的插件指令源，用于例如执行指令时使用。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:477
+#: ../plugin_dev/classes/ServerInterface.rst:495
 msgid ""
 "It's not player or console, it has maximum permission level, it use "
 "`logger <#logger>`__ for replying"
 msgstr "该指令源不是玩家或控制台，它拥有最高的权限等级，它使用 `logger <#logger>`__ 来处理回复"
 
-#: ../plugin_dev/classes/ServerInterface.rst:480
+#: ../plugin_dev/classes/ServerInterface.rst:498
 msgid "execute_command"
 msgstr "execute_command"
 
-#: ../plugin_dev/classes/ServerInterface.rst:486
+#: ../plugin_dev/classes/ServerInterface.rst:504
 msgid "Execute a single command using the command system of MCDR"
 msgstr "使用 MCDR 的指令系统来执行一条指令"
 
-#: ../plugin_dev/classes/ServerInterface.rst:488
+#: ../plugin_dev/classes/ServerInterface.rst:506
 msgid "Parameter *command*: The command you want to execute"
 msgstr "参数 *command*：你想要执行的指令"
 
-#: ../plugin_dev/classes/ServerInterface.rst:490
+#: ../plugin_dev/classes/ServerInterface.rst:508
 msgid ""
 "Parameter *source*: The command source that is used to execute the "
 "command. If it's not specified MCDR will use `get_plugin_command_source "
@@ -665,36 +688,42 @@ msgstr ""
 "参数 *source*：用于执行该条指令的指令源。如果它未被指定，MCDR 将会使用 <#get-plugin-command-"
 "source>`__ 来获得默认的指令源"
 
-#: ../plugin_dev/classes/ServerInterface.rst:493
+#: ../plugin_dev/classes/ServerInterface.rst:511
 msgid "Misc"
 msgstr "其他"
 
-#: ../plugin_dev/classes/ServerInterface.rst:496
+#: ../plugin_dev/classes/ServerInterface.rst:514
 msgid "is_on_executor_thread"
 msgstr "is_on_executor_thread"
 
-#: ../plugin_dev/classes/ServerInterface.rst:502
+#: ../plugin_dev/classes/ServerInterface.rst:520
 msgid "Return if the current thread is the task executor thread"
 msgstr "当前线程是否为 任务执行者 (task executor) 线程。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:504
+#: ../plugin_dev/classes/ServerInterface.rst:522
 msgid ""
 "Task executor thread is the main thread to parse messages and trigger "
 "listeners where some ServerInterface APIs  are required to be invoked on"
 msgstr "任务执行者线程 是解析消息和触发监听器的主线程，需要调用一些 ServerInterface API。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:507
+#: ../plugin_dev/classes/ServerInterface.rst:525
 msgid "rcon_query"
 msgstr "rcon_query"
 
-#: ../plugin_dev/classes/ServerInterface.rst:513
+#: ../plugin_dev/classes/ServerInterface.rst:531
 msgid ""
 "Send command to the server through rcon connection. Return the result "
 "that server returned from rcon. Return None if rcon is not running or "
 "rcon query failed"
 msgstr "通过 rcon 连接向服务端发送指令，并返回指令执行结果。 如果 rcon 没有运行或 rcon 执行失败，则返回 None。"
 
-#: ../plugin_dev/classes/ServerInterface.rst:515
+#: ../plugin_dev/classes/ServerInterface.rst:533
 msgid "Parameter *command*: The command you want to send to the rcon server"
 msgstr "参数 *command*：你要发送给 rcon 服务端的指令。"
+
+#~ msgid ""
+#~ "The path of the directory will be"
+#~ " `config/plugin_id` where `plugin_id` is "
+#~ "the id of the current plugin"
+#~ msgstr ""
 

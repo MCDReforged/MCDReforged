@@ -1,6 +1,6 @@
 import re
 import time
-from typing import Optional, Any
+from typing import Optional, Any, Union, Iterable
 
 from parse import parse
 
@@ -101,19 +101,42 @@ class AbstractServerHandler:
 		return result
 
 	@classmethod
-	def get_content_parsing_formatter(cls):
+	def get_content_parsing_formatter(cls) -> Union[str, Iterable[str]]:
+		"""
+		Return a str or a str collection that is used in method _content_parse for parsing
+		"""
 		raise NotImplementedError()
 
 	@classmethod
-	def _content_parse(cls, info: Info, *, formatter=None):
-		if formatter is None:
-			formatter = cls.get_content_parsing_formatter()
-		parsed = parse(formatter, info.content)
+	def _content_parse(cls, info: Info):
+		"""
+		A common method to parse several elements from an un-parsed Info instance
+		Elements expected to be parsed includes:
+		- info.hour
+		- info.min
+		- info.sec
+		- info.logging
+		- info.content
+		:param info: The incoming Info instance
+		"""
+		formatters = cls.get_content_parsing_formatter()
+		if isinstance(formatters, str):
+			formatters = (formatters,)
+		for formatter in formatters:
+			parsed = parse(formatter, info.content)
+			if parsed is not None:
+				logging_level = parsed['logging']
+				if re.fullmatch(r'\w+', logging_level) is None:
+					# logging level should be text only, just in case
+					# might happens in e.g. WaterfallHandler parsing "[01:23:45 INFO] [Test]: ping"
+					continue
+				break
+		else:
+			raise ValueError('Unrecognized input: ' + info.content)
 		info.hour = parsed['hour']
 		info.min = parsed['min']
 		info.sec = parsed['sec']
 		info.logging_level = parsed['logging']
-		assert re.fullmatch(r'\w+', info.logging_level) is not None  # logging level should be text only, just in case
 		info.content = parsed['content']
 
 	def parse_server_stdout(self, text: str) -> Info:
@@ -127,7 +150,9 @@ class AbstractServerHandler:
 		:return: An Info instance
 		:rtype: Info
 		"""
-		raise NotImplementedError()
+		result = self._get_server_stdout_raw_result(text)
+		self._content_parse(result)
+		return result
 
 	def parse_player_joined(self, info: Info) -> Optional[str]:
 		"""

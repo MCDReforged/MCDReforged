@@ -25,6 +25,11 @@ class MyTestCase(unittest.TestCase):
 		self.assertEqual('Fallen_Breath', info.player)
 		self.assertEqual('hi forge', info.content)
 
+		# vanilla format compatibility
+		info = self.handler.parse_server_stdout('[09:00:00] [Server thread/INFO]: <Steve> Hello')
+		self.assertEqual('Steve', info.player)
+		self.assertEqual('Hello', info.content)
+
 	def test_2_player_events(self):
 		info = self.handler.parse_server_stdout('[00:55:26] [Server thread/INFO] [minecraft/PlayerList]: _awa_[/127.0.0.1:2115] logged in with entity id 314 at (154.2220250783568, 279.4052172954894, 134.95837063704676)')
 		self.assertEqual('_awa_', self.handler.parse_player_joined(info))

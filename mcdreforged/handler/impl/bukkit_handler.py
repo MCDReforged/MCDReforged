@@ -9,8 +9,7 @@ class BukkitHandler(VanillaHandler):
 		return '[{hour:d}:{min:d}:{sec:d} {logging}]: {content}'
 
 	def parse_server_stdout(self, text):
-		result = self._get_server_stdout_raw_result(text)
-		self._content_parse(result)
+		result = super().parse_server_stdout(text)
 		parsed = parse('<{name}> {message}', result.content)
 		if parsed is None:
 			parsed = parse('[{dim_name}]<{name}> {message}', result.content)
