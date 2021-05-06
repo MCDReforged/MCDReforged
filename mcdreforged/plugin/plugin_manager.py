@@ -48,10 +48,10 @@ class PluginManager:
 		self.thread_pool = PluginThreadPool(self.mcdr_server, max_thread=constant.PLUGIN_THREAD_POOL_SIZE)
 
 		# thread local storage, to store current plugin
-		self.tls = ThreadLocalStorage()
+		self.__tls = ThreadLocalStorage()
 
 		# plugin manipulation lock
-		self.mani_lock = threading.RLock()
+		self.__mani_lock = threading.RLock()
 
 		file_util.touch_directory(PLUGIN_CONFIG_DIRECTORY)
 
@@ -64,8 +64,11 @@ class PluginManager:
 		Get current executing plugin in this thread
 		:param thread: If specified, it should be a Thread instance. Then it will return the executing plugin in the given thread
 		"""
-		stack = self.tls.get(self.TLS_PLUGIN_KEY, None, thread=thread)  # type: Deque[AbstractPlugin]
+		stack = self.__tls.get(self.TLS_PLUGIN_KEY, None, thread=thread)  # type: Deque[AbstractPlugin]
 		return stack[-1] if stack is not None else None
+
+	def get_plugin_amount(self) -> int:
+		return len(self.plugins)
 
 	def get_all_plugins(self) -> List[AbstractPlugin]:
 		return list(self.plugins.values())
@@ -97,15 +100,15 @@ class PluginManager:
 
 	@contextmanager
 	def with_plugin_context(self, plugin: AbstractPlugin):
-		stack = self.tls.get(self.TLS_PLUGIN_KEY, default=collections.deque())  # type: Deque[AbstractPlugin]
+		stack = self.__tls.get(self.TLS_PLUGIN_KEY, default=collections.deque())  # type: Deque[AbstractPlugin]
 		stack.append(plugin)
-		self.tls.put(self.TLS_PLUGIN_KEY, stack)
+		self.__tls.put(self.TLS_PLUGIN_KEY, stack)
 		try:
 			yield
 		finally:
 			stack.pop()
 			if len(stack) == 0:
-				self.tls.pop(self.TLS_PLUGIN_KEY)
+				self.__tls.pop(self.TLS_PLUGIN_KEY)
 
 	def contains_plugin_file(self, file_path: str) -> bool:
 		return file_path in self.plugin_file_path
@@ -382,25 +385,25 @@ class PluginManager:
 	# --------------
 
 	def load_plugin(self, file_path: str):
-		with self.mani_lock:
+		with self.__mani_lock:
 			self.logger.info(self.mcdr_server.tr('plugin_manager.load_plugin.entered', file_path))
 			load_result = self.__collect_and_process_new_plugins(lambda fp: fp == file_path)
 			self.__post_plugin_process(load_result=load_result)
 
 	def unload_plugin(self, plugin: RegularPlugin):
-		with self.mani_lock:
+		with self.__mani_lock:
 			self.logger.info(self.mcdr_server.tr('plugin_manager.unload_plugin.entered', plugin))
 			unload_result = self.__collect_and_remove_plugins(lambda plg: True, specific=plugin)
 			self.__post_plugin_process(unload_result=unload_result)
 
 	def reload_plugin(self, plugin: RegularPlugin):
-		with self.mani_lock:
+		with self.__mani_lock:
 			self.logger.info(self.mcdr_server.tr('plugin_manager.reload_plugin.entered', plugin))
 			reload_result = self.__reload_ready_plugins(lambda plg: True, specific=plugin)
 			self.__post_plugin_process(reload_result=reload_result)
 
 	def enable_plugin(self, file_path: str):
-		with self.mani_lock:
+		with self.__mani_lock:
 			self.logger.info(self.mcdr_server.tr('plugin_manager.enable_plugin.entered', file_path))
 			new_file_path = string_util.remove_suffix(file_path, constant.DISABLED_PLUGIN_FILE_SUFFIX)
 			if os.path.isfile(file_path):
@@ -408,19 +411,19 @@ class PluginManager:
 				self.load_plugin(new_file_path)
 
 	def disable_plugin(self, plugin: RegularPlugin):
-		with self.mani_lock:
+		with self.__mani_lock:
 			self.logger.info(self.mcdr_server.tr('plugin_manager.disable_plugin.entered', plugin))
 			self.unload_plugin(plugin)
 			if os.path.isfile(plugin.file_path):
 				os.rename(plugin.file_path, plugin.file_path + constant.DISABLED_PLUGIN_FILE_SUFFIX)
 
 	def refresh_all_plugins(self):
-		with self.mani_lock:
+		with self.__mani_lock:
 			self.logger.info(self.mcdr_server.tr('plugin_manager.refresh_all_plugins.entered'))
 			return self.__refresh_plugins(lambda plg: True)
 
 	def refresh_changed_plugins(self):
-		with self.mani_lock:
+		with self.__mani_lock:
 			self.logger.info(self.mcdr_server.tr('plugin_manager.refresh_changed_plugins.entered'))
 			return self.__refresh_plugins(lambda plg: plg.file_changed())
 

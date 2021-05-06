@@ -80,8 +80,8 @@ class PluginOperationResult:
 		if message.is_empty():
 			add_element(message, self.__mcdr_server.tr('plugin_operation_result.info_none'))
 		message.append(
-			RText(self.__mcdr_server.tr('plugin_operation_result.info_plugin_amount', len(self.__plugin_manager.plugins))).
-				h('\n'.join(map(str, self.__plugin_manager.plugins.values()))).
+			RText(self.__mcdr_server.tr('plugin_operation_result.info_plugin_amount', self.__plugin_manager.get_plugin_amount())).
+				h('\n'.join(map(str, self.__plugin_manager.get_all_plugins()))).
 				c(RAction.suggest_command, '!!MCDR plugin list')
 		)
 		return message
