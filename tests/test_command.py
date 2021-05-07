@@ -224,7 +224,7 @@ class MyTestCase(unittest.TestCase):
 		let_it_pass = False
 		self.assertRaises(RequirementNotMet, self.run_command, executor2, 'teleport here there')
 
-	def test_13_error_listener(self):
+	def test_13_error_listener1(self):
 		executor = Literal('error').then(
 			Literal('ping').
 			on_error(UnknownCommand, lambda s, e: self.assertIsInstance(e, UnknownCommand)).
@@ -254,6 +254,22 @@ class MyTestCase(unittest.TestCase):
 		self.assert_raises_and_check_hit(True, TextLengthOutOfRange, self.run_command, executor, 'error text abc')
 		self.assert_raises_and_check_hit(True, IllegalEscapesUsage, self.run_command, executor, r'error text "ab\c"')
 		self.assert_raises_and_check_hit(False, UnclosedQuotedString, self.run_command, executor, 'error text "abc')
+
+	def test_14_error_listener_only_1_catch(self):
+		# https://github.com/Fallen-Breath/MCDReforged/issues/109
+		counter = []
+		executor = Literal('test'). \
+			runs(lambda: None). \
+			on_error(UnknownArgument, lambda: counter.append(1)). \
+			on_child_error(UnknownArgument, lambda: counter.append(1))
+
+		self.assertRaises(UnknownArgument, self.run_command, executor, 'test bang')
+		self.assertEqual(1, len(counter))
+
+		executor.then(Literal('next').runs(lambda: None))
+		counter.clear()
+		self.assertRaises(UnknownArgument, self.run_command, executor, 'test bang')
+		self.assertEqual(1, len(counter))
 
 
 if __name__ == '__main__':

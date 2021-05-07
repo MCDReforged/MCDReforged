@@ -201,31 +201,34 @@ class ArgumentNode:
 				# Redirecting
 				node = self if self.redirect_node is None else self.redirect_node
 
+				argument_unknown = False
 				# No child at all
 				if not node.has_children():
-					self.__raise_error(source, UnknownArgument(command[:success_read], command), context)
+					argument_unknown = True
+				else:
+					# Pass the remaining command string to the children
+					try:
+						# Check literal children first
+						next_literal = utils.get_element(trimmed_remaining)
+						for child_literal in node.children_literal.get(next_literal, []):
+							try:
+								child_literal._execute(source, command, trimmed_remaining, context)
+								break
+							except LiteralNotMatch:
+								# it's ok for a direct literal node to fail
+								pass
+						else:  # All literal children fails
+							for child in node.children:
+								child._execute(source, command, trimmed_remaining, context)
+								break
+							else:  # No argument child
+								argument_unknown = True
+					except CommandError as error:
+						self.__handle_error(source, error, context, self.child_error_handlers)
+						raise error from None
 
-				# Pass the remaining command string to the children
-				try:
-					# Check literal children first
-					next_literal = utils.get_element(trimmed_remaining)
-					for child_literal in node.children_literal.get(next_literal, []):
-						try:
-							child_literal._execute(source, command, trimmed_remaining, context)
-							break
-						except LiteralNotMatch:
-							# it's ok for a direct literal node to fail
-							pass
-					else:  # All literal children fails
-						# No argument child
-						if len(node.children) == 0:
-							self.__raise_error(source, UnknownArgument(command[:success_read], command), context)
-						for child in node.children:
-							child._execute(source, command, trimmed_remaining, context)
-							break
-				except CommandError as error:
-					self.__handle_error(source, error, context, self.child_error_handlers)
-					raise error from None
+				if argument_unknown:
+					self.__raise_error(source, UnknownArgument(command[:success_read], command), context)
 
 
 class ExecutableNode(ArgumentNode, ABC):
