@@ -29,6 +29,9 @@ def format_plugin_file_path_disabled(file_path):
 
 
 def hump_to_underline(name: str) -> str:
+	"""
+	ThisIsAnHumpName -> this_is_an_hump_name
+	"""
 	return re.sub(r'([a-z]|\d)([A-Z])', r'\1_\2', name).lower()
 
 
