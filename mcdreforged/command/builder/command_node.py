@@ -1,6 +1,7 @@
 import collections
 import inspect
 from abc import ABC
+from types import MethodType
 from typing import List, Callable, Iterable, Set, Dict, Type, Any, Union, Optional
 
 from mcdreforged.command.builder import command_builder_util as utils
@@ -149,13 +150,12 @@ class ArgumentNode:
 		sig = inspect.signature(callback)
 		spec_args = inspect.getfullargspec(callback).args
 		spec_args_len = len(spec_args)
+		if isinstance(callback, MethodType):  # class method, remove the 1st param
+			spec_args_len -= 1
 		try:
 			sig.bind(*args[:spec_args_len])  # test if using full arg length is ok
 		except TypeError:
-			if len(spec_args) > 0 and spec_args[0] == 'self':  # hacky fix for class method
-				spec_args_len -= 1
-			else:
-				raise
+			raise
 		return callback(*args[:spec_args_len])
 
 	def __handle_error(self, source, error: CommandError, context: dict, error_handlers: _ERROR_HANDLER_TYPE):

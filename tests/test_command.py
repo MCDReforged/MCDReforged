@@ -34,7 +34,7 @@ class MyTestCase(unittest.TestCase):
 		self.assertEqual(self.has_hit, value)
 
 	def check_result(self, result):
-		self.assertEqual(type(result), type(result))
+		self.assertEqual(type(self.result), type(result))
 		self.assertEqual(self.result, result)
 
 	def run_command_and_check_result(self, executor, command, result):
@@ -224,7 +224,7 @@ class MyTestCase(unittest.TestCase):
 		let_it_pass = False
 		self.assertRaises(RequirementNotMet, self.run_command, executor2, 'teleport here there')
 
-	def test_13_error_listener1(self):
+	def test_13_error_listener(self):
 		executor = Literal('error').then(
 			Literal('ping').
 			on_error(UnknownCommand, lambda s, e: self.assertIsInstance(e, UnknownCommand)).
@@ -270,6 +270,29 @@ class MyTestCase(unittest.TestCase):
 		counter.clear()
 		self.assertRaises(UnknownArgument, self.run_command, executor, 'test bang')
 		self.assertEqual(1, len(counter))
+
+	def test_15_callback(self):
+		def func1():
+			self.has_hit = True
+
+		def func2(p1):
+			func1()
+
+		def func3(p1, p2):
+			func1()
+
+		def func4(p1, p2, p3):
+			func1()
+
+		class _C:
+			# noinspection PyMethodMayBeStatic
+			def method(self, p1, p2):
+				func1()
+		self.run_command_and_check_hit(Literal('test').runs(func1), 'test', True)
+		self.run_command_and_check_hit(Literal('test').runs(func2), 'test', True)
+		self.run_command_and_check_hit(Literal('test').runs(func3), 'test', True)
+		self.run_command_and_check_hit(Literal('test').runs(_C().method), 'test', True)
+		self.assert_raises_and_check_hit(False, TypeError, self.run_command, Literal('test').runs(func4), 'test')
 
 
 if __name__ == '__main__':
