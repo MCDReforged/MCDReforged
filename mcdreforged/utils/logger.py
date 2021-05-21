@@ -1,13 +1,14 @@
 """
 Custom logger for MCDR
 """
-
+import collections
 import logging
 import os
 import sys
 import time
 import zipfile
 from enum import Enum, unique, auto
+from threading import RLock
 from typing import Dict, Optional, List
 
 from colorlog import ColoredFormatter
@@ -32,6 +33,22 @@ class DebugOption(Enum):
 
 # global flag
 console_color_disabled = False
+
+
+class SyncStreamHandler(logging.StreamHandler):
+	__lock_map = collections.defaultdict(RLock)
+
+	def __init__(self, stream=None):
+		super().__init__(stream)
+		self.__lock = self.__lock_map[self.stream]
+
+	def emit(self, record) -> None:
+		with self.__lock:
+			super().emit(record)
+
+	def flush(self) -> None:
+		with self.__lock:
+			super().flush()
 
 
 class MCColoredFormatter(ColoredFormatter):
@@ -93,7 +110,7 @@ class MCDReforgedLogger(logging.Logger):
 		self.mcdr_server = mcdr_server
 		self.file_handler = None
 
-		self.console_handler = logging.StreamHandler(sys.stdout)
+		self.console_handler = SyncStreamHandler(sys.stdout)
 		self.console_handler.setFormatter(self.get_console_formatter(plugin_id))
 
 		self.addHandler(self.console_handler)
@@ -144,7 +161,7 @@ class ServerLogger(logging.Logger):
 	def __init__(self, name):
 		super().__init__(name)
 
-		console_handler = logging.StreamHandler(sys.stdout)
+		console_handler = SyncStreamHandler(sys.stdout)
 		console_handler.setFormatter(self.server_fmt)
 
 		self.addHandler(console_handler)
