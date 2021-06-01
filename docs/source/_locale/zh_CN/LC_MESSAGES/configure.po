@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-22 10:20+0800\n"
+"POT-Creation-Date: 2021-06-01 20:43+0800\n"
 "PO-Revision-Date: 2021-01-23 13:20+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -175,9 +175,9 @@ msgstr "bukkit_handler"
 
 #: ../configure.rst:74
 msgid ""
-"For Bukkit / Spigot server with Minecraft version below 1.14, and Paper "
-"server in all version."
-msgstr "用于 1.14 版本以下的 Bukkit / Spigot 服务器"
+"For Bukkit / Spigot server with Minecraft version below 1.14, and Paper /"
+" `Mohistmc <https://mohistmc.com>`__ server in all version."
+msgstr "用于 1.14 版本以下的 Bukkit / Spigot 服务器，以及所有版本的 Paper / `Mohistmc <https://mohistmc.com>`__ 服务器"
 
 #: ../configure.rst:75
 msgid "bukkit14_handler"
