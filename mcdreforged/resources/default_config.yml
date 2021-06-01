@@ -23,7 +23,7 @@ start_command: java -Xms1G -Xmx2G -jar minecraft_server.jar nogui
 # The handler to the specific way to parse the standard output text of the server and the correct command for server control
 # vanilla_handler, for Vanilla / Carpet / Fabric server
 # beta18_handler, for Vanilla server in beta1.8 versions
-# bukkit_handler, For Bukkit / Spigot server with Minecraft version below 1.14, and Paper server in all version
+# bukkit_handler, For Bukkit / Spigot server with Minecraft version below 1.14, and Paper / Mohist server in all version
 # bukkit14_handler, For Bukkit / Spigot server with Minecraft version 1.14 and above
 # forge_handler, For Forge server
 # cat_server_handler, For CatServer server
