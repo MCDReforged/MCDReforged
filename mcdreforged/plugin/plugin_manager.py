@@ -3,7 +3,6 @@ Plugin management
 """
 import collections
 import os
-import sys
 import threading
 from contextlib import contextmanager
 from typing import Callable, Dict, Optional, Any, Tuple, List, TYPE_CHECKING, Deque
@@ -89,15 +88,9 @@ class PluginManager:
 	def set_plugin_directories(self, plugin_directories: Optional[List[str]]):
 		if plugin_directories is None:
 			plugin_directories = []
-		for plugin_directory in self.plugin_directories:
-			try:
-				sys.path.remove(plugin_directory)
-			except ValueError:
-				self.logger.exception('Fail to remove old plugin directory "{}" in sys.path'.format(plugin_directory))
 		self.plugin_directories = misc_util.unique_list(plugin_directories)
 		for plugin_directory in self.plugin_directories:
 			file_util.touch_directory(plugin_directory)
-			sys.path.append(plugin_directory)
 
 	@contextmanager
 	def with_plugin_context(self, plugin: AbstractPlugin):

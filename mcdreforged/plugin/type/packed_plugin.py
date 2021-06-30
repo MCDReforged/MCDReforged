@@ -26,7 +26,10 @@ class PackedPlugin(RegularPlugin):
 
 	def _on_unload(self):
 		self._unload_instance()
-		sys.path.remove(self.file_path)
+		try:
+			sys.path.remove(self.file_path)
+		except ValueError:
+			self.mcdr_server.logger.exception('Fail to remove path "{}" in sys.path for {}'.format(self.file_path, self))
 
 	def _on_ready(self):
 		sys.path.append(self.file_path)
