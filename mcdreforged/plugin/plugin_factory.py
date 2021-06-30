@@ -1,7 +1,7 @@
 import os
 from typing import Optional, TYPE_CHECKING
 
-from mcdreforged import constant
+from mcdreforged.constants import plugin_constant
 from mcdreforged.plugin.type.directory_plugin import DirectoryPlugin
 from mcdreforged.plugin.type.packed_plugin import PackedPlugin
 from mcdreforged.plugin.type.regular_plugin import RegularPlugin
@@ -21,12 +21,12 @@ def __get_suffix(file_path: str):
 def __get_plugin_class_from_path(file_path: str) -> Optional[type]:
 	if os.path.isfile(file_path):
 		suffix = __get_suffix(file_path)
-		if suffix == constant.SOLO_PLUGIN_FILE_SUFFIX:
+		if suffix == plugin_constant.SOLO_PLUGIN_FILE_SUFFIX:
 			return SoloPlugin
-		if suffix == constant.PACKED_PLUGIN_FILE_SUFFIX:
+		if suffix == plugin_constant.PACKED_PLUGIN_FILE_SUFFIX:
 			return PackedPlugin
 	elif os.path.isdir(file_path):
-		if os.path.isfile(os.path.join(file_path, constant.PLUGIN_META_FILE)):
+		if os.path.isfile(os.path.join(file_path, plugin_constant.PLUGIN_META_FILE)):
 			return DirectoryPlugin
 
 

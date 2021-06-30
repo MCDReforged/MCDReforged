@@ -8,7 +8,7 @@ import threading
 from contextlib import contextmanager
 from typing import Callable, Dict, Optional, Any, Tuple, List, TYPE_CHECKING, Deque
 
-from mcdreforged import constant
+from mcdreforged.constants import core_constant
 from mcdreforged.plugin import plugin_factory
 from mcdreforged.plugin.builtin.mcdreforged_plugin import MCDReforgedPlugin
 from mcdreforged.plugin.meta.dependency_walker import DependencyWalker
@@ -46,7 +46,7 @@ class PluginManager:
 		self.last_operation_result = PluginOperationResult(self)
 
 		# not used currently
-		self.thread_pool = PluginThreadPool(self.mcdr_server, max_thread=constant.PLUGIN_THREAD_POOL_SIZE)
+		self.thread_pool = PluginThreadPool(self.mcdr_server, max_thread=core_constant.PLUGIN_THREAD_POOL_SIZE)
 
 		# thread local storage, to store current plugin
 		self.__tls = ThreadLocalStorage()
@@ -407,7 +407,7 @@ class PluginManager:
 	def enable_plugin(self, file_path: str):
 		with self.__mani_lock:
 			self.logger.info(self.mcdr_server.tr('plugin_manager.enable_plugin.entered', file_path))
-			new_file_path = string_util.remove_suffix(file_path, constant.DISABLED_PLUGIN_FILE_SUFFIX)
+			new_file_path = string_util.remove_suffix(file_path, core_constant.DISABLED_PLUGIN_FILE_SUFFIX)
 			if os.path.isfile(file_path):
 				os.rename(file_path, new_file_path)
 				self.load_plugin(new_file_path)
@@ -417,7 +417,7 @@ class PluginManager:
 			self.logger.info(self.mcdr_server.tr('plugin_manager.disable_plugin.entered', plugin))
 			self.unload_plugin(plugin)
 			if os.path.isfile(plugin.file_path):
-				os.rename(plugin.file_path, plugin.file_path + constant.DISABLED_PLUGIN_FILE_SUFFIX)
+				os.rename(plugin.file_path, plugin.file_path + core_constant.DISABLED_PLUGIN_FILE_SUFFIX)
 
 	def refresh_all_plugins(self):
 		with self.__mani_lock:

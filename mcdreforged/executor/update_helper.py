@@ -7,7 +7,7 @@ from typing import Callable, Any, Union
 
 import requests
 
-from mcdreforged import constant
+from mcdreforged.constants import core_constant
 from mcdreforged.executor.thread_executor import ThreadExecutor
 from mcdreforged.minecraft.rtext import RText, RAction, RColor, RStyle, RTextBase
 from mcdreforged.utils import misc_util
@@ -38,7 +38,7 @@ class UpdateHelper(ThreadExecutor):
 		try:
 			response = None
 			try:
-				response = requests.get(constant.GITHUB_API_LATEST, timeout=5).json()
+				response = requests.get(core_constant.GITHUB_API_LATEST, timeout=5).json()
 				latest_version = response['tag_name']  # type: str
 				update_log = response['body']
 			except Exception as e:
@@ -53,14 +53,14 @@ class UpdateHelper(ThreadExecutor):
 						)
 			else:
 				try:
-					cmp_result = misc_util.version_compare(constant.VERSION, latest_version.lstrip('v'))
+					cmp_result = misc_util.version_compare(core_constant.VERSION, latest_version.lstrip('v'))
 				except:
-					self.mcdr_server.logger.exception('Fail to compare between versions "{}" and "{}"'.format(constant.VERSION, latest_version))
+					self.mcdr_server.logger.exception('Fail to compare between versions "{}" and "{}"'.format(core_constant.VERSION, latest_version))
 					return
 				if cmp_result == 0:
 					reply_func(self.mcdr_server.tr('update_helper.check_update.is_already_latest'))
 				elif cmp_result == 1:
-					reply_func(self.mcdr_server.tr('update_helper.check_update.newer_than_latest', constant.VERSION, latest_version))
+					reply_func(self.mcdr_server.tr('update_helper.check_update.newer_than_latest', core_constant.VERSION, latest_version))
 				else:
 					reply_func(self.mcdr_server.tr('update_helper.check_update.new_version_detected', latest_version))
 					for line in update_log.splitlines():

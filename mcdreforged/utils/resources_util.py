@@ -13,9 +13,9 @@ __all__ = [
 from ruamel import yaml
 from ruamel.yaml.comments import CommentedMap
 
-from mcdreforged.constant import PACKAGE_NAME
+from mcdreforged.constants import core_constant
 
-ROOT_PACKAGE = PACKAGE_NAME
+ROOT_PACKAGE = core_constant.PACKAGE_NAME
 
 
 def __get_path(path: str) -> str:

@@ -1,3 +1,3 @@
-from mcdreforged import constant
+from mcdreforged.constants import core_constant
 
-__version__ = constant.VERSION_PYPI
+__version__ = core_constant.VERSION_PYPI

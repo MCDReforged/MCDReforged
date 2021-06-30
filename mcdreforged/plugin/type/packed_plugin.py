@@ -4,7 +4,7 @@ import sys
 from typing import IO
 from zipfile import ZipFile
 
-from mcdreforged import constant
+from mcdreforged.constants import plugin_constant
 from mcdreforged.plugin.meta.metadata import Metadata
 from mcdreforged.plugin.type.regular_plugin import RegularPlugin
 from mcdreforged.utils.exception import BrokenMetadata
@@ -12,7 +12,7 @@ from mcdreforged.utils.exception import BrokenMetadata
 
 class PackedPlugin(RegularPlugin):
 	def get_fallback_metadata_id(self) -> str:
-		raise BrokenMetadata('Missing plugin id in {}'.format(constant.PLUGIN_META_FILE))
+		raise BrokenMetadata('Missing plugin id in {}'.format(plugin_constant.PLUGIN_META_FILE))
 
 	def get_file(self, file_name: str) -> IO[bytes]:
 		return ZipFile(self.file_path).open(file_name, 'r')
@@ -22,7 +22,7 @@ class PackedPlugin(RegularPlugin):
 
 	def _on_load(self):
 		self._reset()
-		self._set_metadata(Metadata(self, json.load(self.get_file(constant.PLUGIN_META_FILE))))
+		self._set_metadata(Metadata(self, json.load(self.get_file(plugin_constant.PLUGIN_META_FILE))))
 
 	def _on_unload(self):
 		self._unload_instance()

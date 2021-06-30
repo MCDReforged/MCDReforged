@@ -13,7 +13,7 @@ from typing import Dict, Optional, List
 
 from colorlog import ColoredFormatter
 
-from mcdreforged import constant
+from mcdreforged.constants import core_constant
 from mcdreforged.minecraft.rtext import RColor, RStyle, RItem
 from mcdreforged.utils import string_util, file_util
 
@@ -73,7 +73,7 @@ class NoColorFormatter(logging.Formatter):
 
 
 class MCDReforgedLogger(logging.Logger):
-	DEFAULT_NAME = constant.NAME_SHORT
+	DEFAULT_NAME = core_constant.NAME_SHORT
 	LOG_COLORS = {
 		'DEBUG': 'blue',
 		'INFO': 'green',

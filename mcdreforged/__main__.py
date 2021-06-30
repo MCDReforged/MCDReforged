@@ -11,18 +11,18 @@ def main():
 		raise Exception('Python version {} is too old'.format(python_version))
 
 	try:
-		from mcdreforged import constant
+		from mcdreforged.constants import core_constant
 		from mcdreforged.mcdr_server import MCDReforgedServer
 	except ModuleNotFoundError:
 		print('It seems that you have not installed all require modules')
 		raise
 
-	print('{} {} is starting up'.format(constant.NAME, constant.VERSION))
-	print('{} is open source, u can find it here: {}'.format(constant.NAME, constant.GITHUB_URL))
+	print('{} {} is starting up'.format(core_constant.NAME, core_constant.VERSION))
+	print('{} is open source, u can find it here: {}'.format(core_constant.NAME, core_constant.GITHUB_URL))
 	try:
 		mcdreforged_server = MCDReforgedServer()
 	except:
-		print('Fail to initialize {}'.format(constant.NAME_SHORT))
+		print('Fail to initialize {}'.format(core_constant.NAME_SHORT))
 		raise
 	else:
 		if mcdreforged_server.is_initialized():

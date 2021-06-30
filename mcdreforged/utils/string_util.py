@@ -1,7 +1,7 @@
 import json
 import re
 
-from mcdreforged import constant
+from mcdreforged.constants import core_constant
 
 
 def remove_suffix(text: str, suffix: str):
@@ -22,13 +22,13 @@ def format_plugin_file_path(file_path: str):
 	:param file_path: "a.py", "a.mcdr", "a.py.disabled", "a.mcdr.disabled"
 	:return "a.py", "a.mcdr"
 	"""
-	if file_path.endswith(constant.SOLO_PLUGIN_FILE_SUFFIX) or file_path.endswith(constant.PACKED_PLUGIN_FILE_SUFFIX):
+	if file_path.endswith(core_constant.SOLO_PLUGIN_FILE_SUFFIX) or file_path.endswith(core_constant.PACKED_PLUGIN_FILE_SUFFIX):
 		return file_path
-	return remove_suffix(file_path, constant.DISABLED_PLUGIN_FILE_SUFFIX)
+	return remove_suffix(file_path, core_constant.DISABLED_PLUGIN_FILE_SUFFIX)
 
 
 def format_plugin_file_path_disabled(file_path):
-	return format_plugin_file_path(file_path) + constant.DISABLED_PLUGIN_FILE_SUFFIX
+	return format_plugin_file_path(file_path) + core_constant.DISABLED_PLUGIN_FILE_SUFFIX
 
 
 def hump_to_underline(name: str) -> str:

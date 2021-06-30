@@ -5,7 +5,7 @@ import queue
 import time
 from typing import TYPE_CHECKING, List, Optional
 
-from mcdreforged import constant
+from mcdreforged.constants import core_constant
 from mcdreforged.info import Info
 from mcdreforged.info_reactor.abstract_info_reactor import AbstractInfoReactor
 from mcdreforged.info_reactor.impl import PlayerReactor, ServerReactor, GeneralReactor
@@ -65,7 +65,7 @@ class InfoReactorManager:
 			current_time = time.time()
 			logging_method = self.mcdr_server.logger.debug
 			kwargs = {'option': DebugOption.REACTOR}
-			if self.last_queue_full_warn_time is None or current_time - self.last_queue_full_warn_time >= constant.REACTOR_QUEUE_FULL_WARN_INTERVAL_SEC:
+			if self.last_queue_full_warn_time is None or current_time - self.last_queue_full_warn_time >= core_constant.REACTOR_QUEUE_FULL_WARN_INTERVAL_SEC:
 				logging_method = self.mcdr_server.logger.warning
 				kwargs = {}
 				self.last_queue_full_warn_time = current_time

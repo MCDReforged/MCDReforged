@@ -6,7 +6,7 @@ from abc import ABC
 from threading import RLock
 from typing import TYPE_CHECKING, Optional
 
-from mcdreforged import constant
+from mcdreforged.constants import core_constant
 from mcdreforged.plugin.meta.metadata import Metadata
 from mcdreforged.plugin.plugin_event import MCDRPluginEvents, EventListener
 from mcdreforged.plugin.plugin_registry import DEFAULT_LISTENER_PRIORITY
@@ -73,7 +73,7 @@ class RegularPlugin(AbstractPlugin, ABC):
 			try:
 				self.module_instance = self._get_module_instance()
 			finally:
-				self.newly_loaded_module = [module for module in sys.modules if module not in previous_modules and not module.startswith(constant.PACKAGE_NAME)]
+				self.newly_loaded_module = [module for module in sys.modules if module not in previous_modules and not module.startswith(core_constant.PACKAGE_NAME)]
 				self.mcdr_server.logger.debug('Newly loaded modules of {}: {}'.format(self, self.newly_loaded_module), option=DebugOption.PLUGIN)
 
 	def _unload_instance(self):

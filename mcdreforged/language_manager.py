@@ -4,7 +4,7 @@ Translation support
 from logging import Logger
 from typing import Dict
 
-from mcdreforged import constant
+from mcdreforged.constants import core_constant
 from mcdreforged.utils import resources_util
 
 DEFAULT_LANGUAGE_RESOURCE_DIRECTORY = 'resources/lang/'
@@ -19,7 +19,7 @@ class LanguageManager:
 	def set_language(self, language):
 		self.language = language
 		self.translations.clear()
-		language_file_path = DEFAULT_LANGUAGE_RESOURCE_DIRECTORY + language + constant.LANGUAGE_FILE_SUFFIX
+		language_file_path = DEFAULT_LANGUAGE_RESOURCE_DIRECTORY + language + core_constant.LANGUAGE_FILE_SUFFIX
 		try:
 			self.translations = resources_util.get_yaml(language_file_path)
 			if self.translations is None:

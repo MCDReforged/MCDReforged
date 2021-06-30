@@ -5,10 +5,10 @@ import threading
 import traceback
 from typing import Callable, Any, Tuple, List, Optional
 
-from mcdreforged import constant
 from mcdreforged.command.builder.command_node import Literal, QuotableText, Text, GreedyText, Integer
 from mcdreforged.command.builder.exception import UnknownArgument, RequirementNotMet, CommandError
 from mcdreforged.command.command_source import CommandSource
+from mcdreforged.constants import core_constant
 from mcdreforged.minecraft.rtext import RText, RAction, RTextList, RStyle, RColor
 from mcdreforged.permission.permission_level import PermissionLevel
 from mcdreforged.plugin.meta.metadata import Metadata
@@ -20,10 +20,10 @@ from mcdreforged.plugin.type.regular_plugin import RegularPlugin
 from mcdreforged.utils import file_util, string_util
 
 METADATA = {
-	'id': constant.NAME.lower(),
-	'version': constant.VERSION,
-	'name': constant.NAME,
-	'description': 'The core of {}'.format(constant.NAME),
+	'id': core_constant.NAME.lower(),
+	'version': core_constant.VERSION,
+	'name': core_constant.NAME,
+	'description': 'The core of {}'.format(core_constant.NAME),
 	'author': [
 		'Fallen_Breath'
 	],
@@ -302,7 +302,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 		}
 
 		source.reply(RTextList(
-			RText(self.tr('mcdr_command.print_mcdr_status.line1', constant.NAME, constant.VERSION)).c(RAction.open_url, constant.GITHUB_URL).h(RText(constant.GITHUB_URL, styles=RStyle.underlined, color=RColor.blue)), '\n',
+			RText(self.tr('mcdr_command.print_mcdr_status.line1', core_constant.NAME, core_constant.VERSION)).c(RAction.open_url, core_constant.GITHUB_URL).h(RText(core_constant.GITHUB_URL, styles=RStyle.underlined, color=RColor.blue)), '\n',
 			RText(self.tr('mcdr_command.print_mcdr_status.line2', self.tr(self.mcdr_server.mcdr_state.value))), '\n',
 			RText(self.tr('mcdr_command.print_mcdr_status.line3', self.tr(self.mcdr_server.server_state.value))), '\n',
 			RText(self.tr('mcdr_command.print_mcdr_status.line4', bool_formatter(self.mcdr_server.is_server_startup()))), '\n',
@@ -313,7 +313,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 		if source.has_permission(PermissionLevel.PHYSICAL_SERVER_CONTROL_LEVEL):
 			source.reply(RTextList(
 				self.tr('mcdr_command.print_mcdr_status.extra_line1', self.mcdr_server.process.pid if self.mcdr_server.process is not None else '§rN/A§r'), '\n',
-				self.tr('mcdr_command.print_mcdr_status.extra_line2', self.mcdr_server.task_executor.task_queue.qsize(), constant.MAX_TASK_QUEUE_SIZE), '\n',
+				self.tr('mcdr_command.print_mcdr_status.extra_line2', self.mcdr_server.task_executor.task_queue.qsize(), core_constant.MAX_TASK_QUEUE_SIZE), '\n',
 				self.tr('mcdr_command.print_mcdr_status.extra_line3', threading.active_count())
 			))
 			for thread in threading.enumerate():
@@ -330,8 +330,8 @@ class MCDReforgedPlugin(PermanentPlugin):
 		return result
 
 	def list_plugin(self, source: CommandSource):
-		not_loaded_plugin_list = self.get_files_in_plugin_directories(lambda fp: fp.endswith(constant.SOLO_PLUGIN_FILE_SUFFIX) and not self.mcdr_server.plugin_manager.contains_plugin_file(fp))  # type: List[str]
-		disabled_plugin_list = self.get_files_in_plugin_directories(lambda fp: fp.endswith(constant.DISABLED_PLUGIN_FILE_SUFFIX))  # type: List[str]
+		not_loaded_plugin_list = self.get_files_in_plugin_directories(lambda fp: fp.endswith(core_constant.SOLO_PLUGIN_FILE_SUFFIX) and not self.mcdr_server.plugin_manager.contains_plugin_file(fp))  # type: List[str]
+		disabled_plugin_list = self.get_files_in_plugin_directories(lambda fp: fp.endswith(core_constant.DISABLED_PLUGIN_FILE_SUFFIX))  # type: List[str]
 		current_plugins = list(self.mcdr_server.plugin_manager.get_all_plugins())  # type: List[AbstractPlugin]
 
 		source.reply(self.tr('mcdr_command.list_plugin.info_loaded_plugin', len(current_plugins)))

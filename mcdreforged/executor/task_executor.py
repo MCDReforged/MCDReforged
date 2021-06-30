@@ -3,7 +3,7 @@ from queue import Empty, PriorityQueue
 from threading import Lock
 from typing import Callable, Any, Optional
 
-from mcdreforged import constant
+from mcdreforged.constants import core_constant
 from mcdreforged.executor.thread_executor import ThreadExecutor
 from mcdreforged.utils.logger import DebugOption
 
@@ -40,7 +40,7 @@ class TaskData:
 class TaskExecutor(ThreadExecutor):
 	def __init__(self, mcdr_server, *, previous_executor: 'Optional[TaskExecutor]' = None):
 		super().__init__(mcdr_server)
-		self.task_queue = PriorityQueue(maxsize=constant.MAX_TASK_QUEUE_SIZE)
+		self.task_queue = PriorityQueue(maxsize=core_constant.MAX_TASK_QUEUE_SIZE)
 		self.__last_tick_time = None
 		self.__soft_stopped = False
 		if previous_executor is not None:

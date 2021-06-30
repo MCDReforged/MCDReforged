@@ -9,9 +9,9 @@ from typing import Optional
 
 import psutil
 
-from mcdreforged import constant
 from mcdreforged.command.command_manager import CommandManager
 from mcdreforged.config import Config
+from mcdreforged.constants import core_constant
 from mcdreforged.executor.console_handler import ConsoleHandler
 from mcdreforged.executor.task_executor import TaskExecutor
 from mcdreforged.executor.update_helper import UpdateHelper
@@ -49,7 +49,7 @@ class MCDReforgedServer:
 
 		# --- Constructing fields ---
 		self.logger = MCDReforgedLogger(self)
-		self.logger.set_file(constant.LOGGING_FILE)
+		self.logger.set_file(core_constant.LOGGING_FILE)
 		self.server_interface = ServerInterface(self)
 		self.task_executor = TaskExecutor(self)
 		self.console_handler = ConsoleHandler(self)
@@ -380,7 +380,7 @@ class MCDReforgedServer:
 			try:
 				text = next(iter(self.process.stdout))  # type: bytes
 			except StopIteration:  # server process has stopped
-				for i in range(constant.WAIT_TIME_AFTER_SERVER_STDOUT_END_SEC * 10):
+				for i in range(core_constant.WAIT_TIME_AFTER_SERVER_STDOUT_END_SEC * 10):
 					if self.process.poll() is not None:
 						break
 					time.sleep(0.1)
