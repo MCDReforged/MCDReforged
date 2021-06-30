@@ -18,6 +18,7 @@ from mcdreforged.plugin.operation_result import SingleOperationResult, PluginOpe
 from mcdreforged.plugin.plugin_event import EventListener, LiteralEvent, PluginEvent, MCDRPluginEvents
 from mcdreforged.plugin.plugin_registry import DEFAULT_LISTENER_PRIORITY, HelpMessage
 from mcdreforged.plugin.type.packed_plugin import PackedPlugin
+from mcdreforged.plugin.type.plugin import AbstractPlugin
 from mcdreforged.utils import misc_util
 from mcdreforged.utils.exception import IllegalCallError
 from mcdreforged.utils.logger import MCDReforgedLogger
@@ -32,29 +33,32 @@ class ServerInterface:
 	MCDR = True  # Identifier for plugins
 
 	def __init__(self, mcdr_server: 'MCDReforgedServer'):
-		self.__mcdr_server = mcdr_server
+		self._mcdr_server = mcdr_server
 		self.__logger = mcdr_server.logger
+
+	def __get_current_plugin(self) -> 'AbstractPlugin':
+		plugin = self._mcdr_server.plugin_manager.get_current_running_plugin()
+		if plugin is not None and plugin.is_regular():
+			return plugin
+		else:
+			raise IllegalCallError('MCDR provided thead is required')
 
 	@functools.lru_cache(maxsize=512, typed=True)
 	def __get_logger(self, plugin_id: str):
-		return MCDReforgedLogger(self.__mcdr_server, plugin_id)
+		return MCDReforgedLogger(self._mcdr_server, plugin_id)
+
+	def as_basic_server_interface(self) -> 'ServerInterface':
+		return self._mcdr_server.basic_server_interface
 
 	@property
 	def logger(self) -> MCDReforgedLogger:
 		try:
 			plugin = self.__get_current_plugin()
-			plugin_id = plugin.get_metadata().id
+			plugin_id = plugin.get_id()
 		except IllegalCallError:
 			return self.__logger
 		else:
 			return self.__get_logger(plugin_id)
-
-	def __get_current_plugin(self) -> 'RegularPlugin':
-		plugin = self.__mcdr_server.plugin_manager.get_current_running_plugin()
-		if plugin is not None and plugin.is_regular():
-			return plugin
-		else:
-			raise IllegalCallError('MCDR provided thead is required')
 
 	# ------------------------
 	#      Server Control
@@ -65,14 +69,14 @@ class ServerInterface:
 		Start the server
 		:return: If the action succeed it's True. If the server is running or being starting by other plugin return False
 		"""
-		return self.__mcdr_server.start_server()
+		return self._mcdr_server.start_server()
 
 	def stop(self) -> None:
 		"""
 		Soft shutting down the server by sending the correct stop command to the server
 		"""
-		self.__mcdr_server.remove_flag(MCDReforgedFlag.EXIT_AFTER_STOP)
-		self.__mcdr_server.stop(forced=False)
+		self._mcdr_server.remove_flag(MCDReforgedFlag.EXIT_AFTER_STOP)
+		self._mcdr_server.stop(forced=False)
 
 	def wait_for_start(self) -> None:
 		"""
@@ -95,34 +99,34 @@ class ServerInterface:
 		"""
 		Soft stop the server and exit MCDR
 		"""
-		self.__mcdr_server.stop(forced=False)
+		self._mcdr_server.stop(forced=False)
 
 	def exit(self) -> None:
 		"""
 		Exit MCDR when the server is stopped
 		:raise: IllegalCallError, if the server is not stopped
 		"""
-		if self.__mcdr_server.is_server_running():
+		if self._mcdr_server.is_server_running():
 			raise IllegalCallError('Cannot exit MCDR when the server is running')
-		self.__mcdr_server.with_flag(MCDReforgedFlag.EXIT_AFTER_STOP)
+		self._mcdr_server.with_flag(MCDReforgedFlag.EXIT_AFTER_STOP)
 
 	def is_server_running(self, **kwargs) -> bool:
 		"""
 		Return if the server is running
 		"""
-		return self.__mcdr_server.is_server_running()
+		return self._mcdr_server.is_server_running()
 
 	def is_server_startup(self) -> bool:
 		"""
 		Return if the server has started up
 		"""
-		return self.__mcdr_server.is_server_startup()
+		return self._mcdr_server.is_server_startup()
 
 	def is_rcon_running(self) -> bool:
 		"""
 		Return if MCDR's rcon is running
 		"""
-		return self.__mcdr_server.rcon_manager.is_running()
+		return self._mcdr_server.rcon_manager.is_running()
 
 	def get_server_pid(self) -> Optional[int]:
 		"""
@@ -131,8 +135,8 @@ class ServerInterface:
 		you might be interested in
 		:return: The pid of the server. None if the server is stopped
 		"""
-		if self.__mcdr_server.process is not None:
-			return self.__mcdr_server.process.pid
+		if self._mcdr_server.process is not None:
+			return self._mcdr_server.process.pid
 		return None
 
 	# ------------------------
@@ -145,7 +149,7 @@ class ServerInterface:
 		:param str text: The content of the command you want to send
 		:param str encoding: The encoding method for the text
 		"""
-		self.__mcdr_server.send(text, encoding=encoding)
+		self._mcdr_server.send(text, encoding=encoding)
 
 	def tell(self, player: str, text: Union[str, RTextBase], *, encoding: Optional[str] = None) -> None:
 		"""
@@ -154,7 +158,7 @@ class ServerInterface:
 		:param text: the message you want to send to the player
 		:param encoding: The encoding method for the text
 		"""
-		command = self.__mcdr_server.server_handler_manager.get_current_handler().get_send_message_command(player, text)
+		command = self._mcdr_server.server_handler_manager.get_current_handler().get_send_message_command(player, text)
 		if command is not None:
 			self.execute(command, encoding=encoding)
 
@@ -164,7 +168,7 @@ class ServerInterface:
 		:param text: the message you want to send
 		:param encoding: The encoding method for the text
 		"""
-		command = self.__mcdr_server.server_handler_manager.get_current_handler().get_broadcast_message_command(text)
+		command = self._mcdr_server.server_handler_manager.get_current_handler().get_broadcast_message_command(text)
 		if command is not None:
 			self.execute(command, encoding=encoding)
 
@@ -210,7 +214,7 @@ class ServerInterface:
 		success = operation_result.has_success()
 		if success and check_loaded:
 			plugin = operation_result.success_list[0]
-			success = plugin in self.__mcdr_server.plugin_manager.last_operation_result.dependency_check_result.success_list
+			success = plugin in self._mcdr_server.plugin_manager.last_operation_result.dependency_check_result.success_list
 		return success
 
 	def __not_loaded_regular_plugin_manipulate(self, plugin_file_path: str, handler: Callable[['PluginManager'], Callable[[str], Any]]) -> bool:
@@ -220,8 +224,8 @@ class ServerInterface:
 		:param handler: What you want to do with Plugin Manager to the given file path
 		:return: If success
 		"""
-		handler(self.__mcdr_server.plugin_manager)(plugin_file_path)
-		return self.__check_if_success(self.__mcdr_server.plugin_manager.last_operation_result.load_result, check_loaded=True)  # the operations is always loading a plugin
+		handler(self._mcdr_server.plugin_manager)(plugin_file_path)
+		return self.__check_if_success(self._mcdr_server.plugin_manager.last_operation_result.load_result, check_loaded=True)  # the operations is always loading a plugin
 
 	def __existed_regular_plugin_manipulate(self, plugin_id: str, handler: Callable[['PluginManager'], Callable[['RegularPlugin'], Any]], result_getter: Callable[[PluginOperationResult], SingleOperationResult], check_loaded: bool) -> bool or None:
 		"""
@@ -233,10 +237,10 @@ class ServerInterface:
 		It's used to determine if the operation succeeded
 		:return: If success, None if plugin not found
 		"""
-		plugin = self.__mcdr_server.plugin_manager.get_regular_plugin_from_id(plugin_id)
+		plugin = self._mcdr_server.plugin_manager.get_regular_plugin_from_id(plugin_id)
 		if plugin is not None:
-			handler(self.__mcdr_server.plugin_manager)(plugin)
-			opt_result = result_getter(self.__mcdr_server.plugin_manager.last_operation_result)
+			handler(self._mcdr_server.plugin_manager)(plugin)
+			opt_result = result_getter(self._mcdr_server.plugin_manager.last_operation_result)
 			return self.__check_if_success(opt_result, check_loaded)
 		return None
 
@@ -284,22 +288,22 @@ class ServerInterface:
 		"""
 		Reload all plugins, load all new plugins and then unload all removed plugins
 		"""
-		self.__mcdr_server.plugin_manager.refresh_all_plugins()
+		self._mcdr_server.plugin_manager.refresh_all_plugins()
 
 	def refresh_changed_plugins(self) -> None:
 		"""
 		Reload all changed plugins, load all new plugins and then unload all removed plugins
 		"""
-		self.__mcdr_server.plugin_manager.refresh_changed_plugins()
+		self._mcdr_server.plugin_manager.refresh_changed_plugins()
 
 	def get_plugin_list(self) -> List[str]:
 		"""
 		Return a list containing all loaded plugin id like ["my_plugin", "another_plugin"]
 		"""
-		return [plugin.get_id() for plugin in self.__mcdr_server.plugin_manager.get_regular_plugins()]
+		return [plugin.get_id() for plugin in self._mcdr_server.plugin_manager.get_regular_plugins()]
 
 	def __existed_regular_plugin_info_getter(self, plugin_id: str, handler: Callable[['RegularPlugin'], Any]):
-		plugin = self.__mcdr_server.plugin_manager.get_regular_plugin_from_id(plugin_id)
+		plugin = self._mcdr_server.plugin_manager.get_regular_plugin_from_id(plugin_id)
 		if plugin is not None:
 			return handler(plugin)
 		return None
@@ -326,98 +330,10 @@ class ServerInterface:
 		:param plugin_id: The plugin id of the plugin you want
 		:return: A current loaded plugin instance, or None if the plugin doesn't exist
 		"""
-		plugin = self.__mcdr_server.plugin_manager.get_regular_plugin_from_id(plugin_id)
+		plugin = self._mcdr_server.plugin_manager.get_regular_plugin_from_id(plugin_id)
 		if plugin is not None:
 			plugin = plugin.module_instance
 		return plugin
-
-	# ------------------------
-	#     Plugin Registry
-	# ------------------------
-
-	def register_event_listener(self, event: Union[PluginEvent, str], callback: Callable, priority: int = DEFAULT_LISTENER_PRIORITY) -> None:
-		"""
-		Register an event listener for the current plugin
-		:param event: The id of the event, or a PluginEvent instance. It indicates the target event for the plugin to listen
-		:param callback: The callback listener method for the event
-		:param priority: The priority of the listener. It will be set to the default value 1000 if it's not specified
-		:raise: IllegalCallError if it's not invoked in the task executor thread
-		"""
-		plugin = self.__get_current_plugin()
-		if isinstance(event, str):
-			event = LiteralEvent(event_id=event)
-		plugin.register_event_listener(event, EventListener(plugin, callback, priority))
-
-	def register_command(self, root_node: Literal) -> None:
-		"""
-		Register an event listener for the current plugin
-		:param root_node: the root node of your command tree. It should be a Literal node
-		:raise: IllegalCallError if it's not invoked in the task executor thread
-		"""
-		plugin = self.__get_current_plugin()
-		plugin.register_command(root_node)
-
-	def register_help_message(self, prefix: str, message: Union[str, RTextBase], permission: int = PermissionLevel.MINIMUM_LEVEL) -> None:
-		"""
-		Register a help message for the current plugin, which is used in !!help command
-		:param prefix: The help command of your plugin. When player click on the displayed message it will suggest this
-		prefix parameter to the player. It's recommend to set it to the entry command of your plugin
-		:param message: A neat command description
-		:param permission: The minimum permission level for the user to see this help message. With default, anyone
-		can see this message
-		:raise: IllegalCallError if it's not invoked in the task executor thread
-		"""
-		plugin = self.__get_current_plugin()
-		if isinstance(message, str):
-			message = RText(message)
-		plugin.register_help_message(HelpMessage(plugin, prefix, message, permission))
-
-	def dispatch_event(self, event: PluginEvent, args: Tuple[Any, ...], *, on_executor_thread: bool = True) -> None:
-		"""
-		Dispatch an event to all loaded plugins
-		The event will be immediately dispatch if it's on the task executor thread, or gets enqueued if it's on other thread
-		:param event: The event to dispatch. It need to be a PluginEvent instance. For simple usage, you can create a
-		LiteralEvent instance for this argument
-		:param args: The argument that will be used to invoke the event listeners. An ServerInterface instance will be
-		automatically added to the beginning of the argument list
-		:param on_executor_thread: If it's set to false. The event will be dispatched immediately no matter what the
-		current thread is
-		"""
-		misc_util.check_type(event, PluginEvent)
-		if MCDRPluginEvents.contains_id(event.id):
-			raise ValueError('Cannot dispatch event with already exists event id {}'.format(event.id))
-		self.__mcdr_server.plugin_manager.dispatch_event(event, args, on_executor_thread=on_executor_thread)
-
-	# ------------------------
-	#      Plugin Utils
-	# ------------------------
-
-	def get_data_folder(self) -> str:
-		"""
-		Return a unified data directory path for the current plugin
-		The path of the directory will be "config/plugin_id" where "plugin_id" is the id of the current plugin
-		If the directory does not exist, create it
-		:return: The path of the directory
-		:raise: IllegalCallError if it's not invoked in the task executor thread
-		"""
-		plugin = self.__get_current_plugin()
-		plugin_data_folder = os.path.join(plugin_constant.PLUGIN_CONFIG_DIRECTORY, plugin.get_id())
-		if not os.path.isdir(plugin_data_folder):
-			os.makedirs(plugin_data_folder)
-		return plugin_data_folder
-
-	def open_file_in_plugin(self, related_file_path: str) -> IO[bytes]:
-		"""
-		Open a file inside the plugin with binary mode
-		:return: A file-like object
-		:raise:
-		IllegalCallError if it's not invoked in the task executor thread
-		FileNotFoundError if the plugin is not a packed plugin (that is, a solo plugin)
-		"""
-		plugin = self.__get_current_plugin()
-		if not isinstance(plugin, PackedPlugin):
-			raise FileNotFoundError('Only packed plugin supported this api')
-		return plugin.get_file(related_file_path)
 
 	# ------------------------
 	#        Permission
@@ -437,7 +353,7 @@ class ServerInterface:
 		if isinstance(obj, CommandSource):  # Command Source
 			return obj.get_permission_level()
 		elif isinstance(obj, str):  # Player name
-			return self.__mcdr_server.permission_manager.get_player_permission_level(obj)
+			return self._mcdr_server.permission_manager.get_player_permission_level(obj)
 		else:
 			raise TypeError('Unsupported permission level querying for type {}'.format(type(obj)))
 
@@ -452,7 +368,7 @@ class ServerInterface:
 		level = PermissionLevel.get_level(value)
 		if level is None:
 			raise TypeError('Parameter level needs to be a permission related value')
-		self.__mcdr_server.permission_manager.set_permission_level(player, value)
+		self._mcdr_server.permission_manager.set_permission_level(player, value)
 
 	# ------------------------
 	#         Command
@@ -476,7 +392,7 @@ class ServerInterface:
 			source = self.get_plugin_command_source()
 		misc_util.check_type(command, str)
 		misc_util.check_type(source, CommandSource)
-		self.__mcdr_server.command_manager.execute_command(command, source)
+		self._mcdr_server.command_manager.execute_command(command, source)
 
 	# ------------------------
 	#           Misc
@@ -488,7 +404,7 @@ class ServerInterface:
 		Task executor thread is the main thread to parse messages and trigger listeners where some ServerInterface APIs
 		are required to be invoked on
 		"""
-		return self.__mcdr_server.task_executor.is_on_thread()
+		return self._mcdr_server.task_executor.is_on_thread()
 
 	def rcon_query(self, command: str) -> Optional[str]:
 		"""
@@ -496,4 +412,98 @@ class ServerInterface:
 		:param str command: The command you want to send to the rcon server
 		:return: The result that server returned from rcon. Return None if rcon is not running or rcon query failed
 		"""
-		return self.__mcdr_server.rcon_manager.send_command(command)
+		return self._mcdr_server.rcon_manager.send_command(command)
+
+
+class PluginServerInterface(ServerInterface):
+	def __init__(self, mcdr_server: 'MCDReforgedServer', plugin: AbstractPlugin):
+		super().__init__(mcdr_server)
+		self.__plugin = plugin
+		self.__logger_for_plugin = None  # type: Optional[MCDReforgedLogger]
+
+	@property
+	def logger(self) -> MCDReforgedLogger:
+		if self.__logger_for_plugin is None:
+			try:
+				self.__logger_for_plugin = MCDReforgedLogger(self._mcdr_server, self.__plugin.get_id())
+			except:
+				return super().logger
+		return self.__logger_for_plugin
+
+	# ------------------------
+	#     Plugin Registry
+	# ------------------------
+
+	def register_event_listener(self, event: Union[PluginEvent, str], callback: Callable, priority: int = DEFAULT_LISTENER_PRIORITY) -> None:
+		"""
+		Register an event listener for the current plugin
+		:param event: The id of the event, or a PluginEvent instance. It indicates the target event for the plugin to listen
+		:param callback: The callback listener method for the event
+		:param priority: The priority of the listener. It will be set to the default value 1000 if it's not specified
+		"""
+		if isinstance(event, str):
+			event = LiteralEvent(event_id=event)
+		self.__plugin.register_event_listener(event, EventListener(self.__plugin, callback, priority))
+
+	def register_command(self, root_node: Literal) -> None:
+		"""
+		Register an event listener for the current plugin
+		:param root_node: the root node of your command tree. It should be a Literal node
+		"""
+		self.__plugin.register_command(root_node)
+
+	def register_help_message(self, prefix: str, message: Union[str, RTextBase], permission: int = PermissionLevel.MINIMUM_LEVEL) -> None:
+		"""
+		Register a help message for the current plugin, which is used in !!help command
+		:param prefix: The help command of your plugin. When player click on the displayed message it will suggest this
+		prefix parameter to the player. It's recommend to set it to the entry command of your plugin
+		:param message: A neat command description
+		:param permission: The minimum permission level for the user to see this help message. With default, anyone
+		can see this message
+		"""
+		if isinstance(message, str):
+			message = RText(message)
+		self.__plugin.register_help_message(HelpMessage(self.__plugin, prefix, message, permission))
+
+	def dispatch_event(self, event: PluginEvent, args: Tuple[Any, ...], *, on_executor_thread: bool = True) -> None:
+		"""
+		Dispatch an event to all loaded plugins
+		The event will be immediately dispatch if it's on the task executor thread, or gets enqueued if it's on other thread
+		:param event: The event to dispatch. It need to be a PluginEvent instance. For simple usage, you can create a
+		LiteralEvent instance for this argument
+		:param args: The argument that will be used to invoke the event listeners. An ServerInterface instance will be
+		automatically added to the beginning of the argument list
+		:param on_executor_thread: If it's set to false. The event will be dispatched immediately no matter what the
+		current thread is
+		"""
+		misc_util.check_type(event, PluginEvent)
+		if MCDRPluginEvents.contains_id(event.id):
+			raise ValueError('Cannot dispatch event with already exists event id {}'.format(event.id))
+		self._mcdr_server.plugin_manager.dispatch_event(event, args, on_executor_thread=on_executor_thread)
+
+	# ------------------------
+	#      Plugin Utils
+	# ------------------------
+
+	def get_data_folder(self) -> str:
+		"""
+		Return a unified data directory path for the current plugin
+		The path of the directory will be "config/plugin_id" where "plugin_id" is the id of the current plugin
+		If the directory does not exist, create it
+		:return: The path of the directory
+		"""
+		plugin_data_folder = os.path.join(plugin_constant.PLUGIN_CONFIG_DIRECTORY, self.__plugin.get_id())
+		if not os.path.isdir(plugin_data_folder):
+			os.makedirs(plugin_data_folder)
+		return plugin_data_folder
+
+	def open_file_in_plugin(self, related_file_path: str) -> IO[bytes]:
+		"""
+		Open a file inside the plugin with binary mode
+		:return: A file-like object
+		:raise:
+		FileNotFoundError if the plugin is not a packed plugin (that is, a solo plugin)
+		"""
+		if not isinstance(self.__plugin, PackedPlugin):
+			raise FileNotFoundError('Only packed plugin supported this api')
+		return self.__plugin.get_file(related_file_path)

@@ -31,6 +31,9 @@ class AbstractPlugin:
 		self.state = PluginState.UNINITIALIZED
 		self.plugin_registry = PluginRegistry(self)
 
+		from mcdreforged.plugin.server_interface import PluginServerInterface
+		self.server_interface = PluginServerInterface(self.mcdr_server, self)
+
 	def is_permanent(self) -> bool:
 		return False
 

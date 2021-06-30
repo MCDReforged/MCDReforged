@@ -51,7 +51,7 @@ class InfoCommandSource(CommandSource, ABC):
 		return self._info
 
 	def get_server(self) -> 'ServerInterface':
-		return self._mcdr_server.server_interface
+		return self._mcdr_server.basic_server_interface
 
 	def get_permission_level(self) -> int:
 		return self._mcdr_server.permission_manager.get_permission(self)
@@ -76,7 +76,7 @@ class PlayerCommandSource(InfoCommandSource):
 		"""
 		:keyword encoding: encoding method for server_interface.tell
 		"""
-		self._mcdr_server.server_interface.tell(self.player, message, encoding=encoding)
+		self._mcdr_server.basic_server_interface.tell(self.player, message, encoding=encoding)
 
 	def __str__(self):
 		return 'Player {}'.format(self.player)
@@ -116,7 +116,7 @@ class ConsoleCommandSource(InfoCommandSource):
 
 class PluginCommandSource(CommandSource):
 	def __init__(self, server: 'ServerInterface'):
-		self.__server = server
+		self.__server = server.as_basic_server_interface()
 		self.__logger = self.__server.logger
 
 	@property

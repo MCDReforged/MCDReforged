@@ -50,7 +50,7 @@ class MCDReforgedServer:
 		# --- Constructing fields ---
 		self.logger = MCDReforgedLogger(self)
 		self.logger.set_file(core_constant.LOGGING_FILE)
-		self.server_interface = ServerInterface(self)
+		self.basic_server_interface = ServerInterface(self)
 		self.task_executor = TaskExecutor(self)
 		self.console_handler = ConsoleHandler(self)
 		self.watch_dog = WatchDog(self)

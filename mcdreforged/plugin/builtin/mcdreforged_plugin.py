@@ -8,7 +8,7 @@ from typing import Callable, Any, Tuple, List, Optional
 from mcdreforged.command.builder.command_node import Literal, QuotableText, Text, GreedyText, Integer
 from mcdreforged.command.builder.exception import UnknownArgument, RequirementNotMet, CommandError
 from mcdreforged.command.command_source import CommandSource
-from mcdreforged.constants import core_constant
+from mcdreforged.constants import core_constant, plugin_constant
 from mcdreforged.minecraft.rtext import RText, RAction, RTextList, RStyle, RColor
 from mcdreforged.permission.permission_level import PermissionLevel
 from mcdreforged.plugin.meta.metadata import Metadata
@@ -307,7 +307,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 			RText(self.tr('mcdr_command.print_mcdr_status.line3', self.tr(self.mcdr_server.server_state.value))), '\n',
 			RText(self.tr('mcdr_command.print_mcdr_status.line4', bool_formatter(self.mcdr_server.is_server_startup()))), '\n',
 			RText(self.tr('mcdr_command.print_mcdr_status.line5', bool_formatter(self.mcdr_server.should_exit_after_stop()))), '\n',
-			RText(self.tr('mcdr_command.print_mcdr_status.line6', rcon_status_dict[self.mcdr_server.server_interface.is_rcon_running()])), '\n',
+			RText(self.tr('mcdr_command.print_mcdr_status.line6', rcon_status_dict[self.server_interface.is_rcon_running()])), '\n',
 			RText(self.tr('mcdr_command.print_mcdr_status.line7', self.mcdr_server.plugin_manager.get_plugin_amount())).c(RAction.suggest_command, '!!MCDR plugin list')
 		))
 		if source.has_permission(PermissionLevel.PHYSICAL_SERVER_CONTROL_LEVEL):
@@ -330,8 +330,8 @@ class MCDReforgedPlugin(PermanentPlugin):
 		return result
 
 	def list_plugin(self, source: CommandSource):
-		not_loaded_plugin_list = self.get_files_in_plugin_directories(lambda fp: fp.endswith(core_constant.SOLO_PLUGIN_FILE_SUFFIX) and not self.mcdr_server.plugin_manager.contains_plugin_file(fp))  # type: List[str]
-		disabled_plugin_list = self.get_files_in_plugin_directories(lambda fp: fp.endswith(core_constant.DISABLED_PLUGIN_FILE_SUFFIX))  # type: List[str]
+		not_loaded_plugin_list = self.get_files_in_plugin_directories(lambda fp: fp.endswith(plugin_constant.SOLO_PLUGIN_FILE_SUFFIX) and not self.mcdr_server.plugin_manager.contains_plugin_file(fp))  # type: List[str]
+		disabled_plugin_list = self.get_files_in_plugin_directories(lambda fp: fp.endswith(plugin_constant.DISABLED_PLUGIN_FILE_SUFFIX))  # type: List[str]
 		current_plugins = list(self.mcdr_server.plugin_manager.get_all_plugins())  # type: List[AbstractPlugin]
 
 		source.reply(self.tr('mcdr_command.list_plugin.info_loaded_plugin', len(current_plugins)))
@@ -440,19 +440,19 @@ class MCDReforgedPlugin(PermanentPlugin):
 			self.__print_plugin_operation_result_if_no_error(source, result)
 
 	def disable_plugin(self, source: CommandSource, plugin_id: str):
-		self.__existed_regular_plugin_manipulate(source, plugin_id, 'disable_plugin', lambda plg: self.mcdr_server.server_interface.disable_plugin(plg.get_id()))
+		self.__existed_regular_plugin_manipulate(source, plugin_id, 'disable_plugin', lambda plg: self.server_interface.disable_plugin(plg.get_id()))
 
 	def reload_plugin(self, source: CommandSource, plugin_id: str):
-		self.__existed_regular_plugin_manipulate(source, plugin_id, 'reload_plugin', lambda plg: self.mcdr_server.server_interface.reload_plugin(plg.get_id()))
+		self.__existed_regular_plugin_manipulate(source, plugin_id, 'reload_plugin', lambda plg: self.server_interface.reload_plugin(plg.get_id()))
 
 	def unload_plugin(self, source: CommandSource, plugin_id: str):
-		self.__existed_regular_plugin_manipulate(source, plugin_id, 'unload_plugin', lambda plg: self.mcdr_server.server_interface.unload_plugin(plg.get_id()))
+		self.__existed_regular_plugin_manipulate(source, plugin_id, 'unload_plugin', lambda plg: self.server_interface.unload_plugin(plg.get_id()))
 
 	def load_plugin(self, source: CommandSource, file_name: str):
-		self.__not_loaded_plugin_file_manipulate(source, file_name, 'load_plugin', lambda pth: self.mcdr_server.server_interface.load_plugin(pth))
+		self.__not_loaded_plugin_file_manipulate(source, file_name, 'load_plugin', lambda pth: self.server_interface.load_plugin(pth))
 
 	def enable_plugin(self, source: CommandSource, file_name: str):
-		self.__not_loaded_plugin_file_manipulate(source, file_name, 'enable_plugin', lambda pth: self.mcdr_server.server_interface.enable_plugin(pth))
+		self.__not_loaded_plugin_file_manipulate(source, file_name, 'enable_plugin', lambda pth: self.server_interface.enable_plugin(pth))
 
 	def reload_all_plugin(self, source: CommandSource):
 		ret = self.function_call(source, self.mcdr_server.plugin_manager.refresh_all_plugins, 'reload_all_plugin', log_success=False)
