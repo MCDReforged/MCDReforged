@@ -1,50 +1,50 @@
 # IDE
-.idea
+.idea/
 
 # python things
 */__pycache__
 *.pyc
-venv/
-.pytest_cache
+/venv/
+/.pytest_cache
 
 # pypi
-build/
-dist/
+/build/
+/dist/
 *.egg-info/
 
 # file structure
-log/
-logs/
-config/
-server/*
-release/
-plugins/*
-!SamplePlugin.py
-!plugins/test.py
+/log/
+/logs/
+/config/
+/server/*
+/release/
+/plugins/*
+!/plugins/SamplePlugin.py
+!/plugins/test.py
 
 # plugin things
-qb_multi/
-perma_backup/
-PCRC_recordings/
-mc_task.json
-seen.json
-PCRC.log
-MCDR_update/
-back-up/
+/qb_multi/
+/perma_backup/
+/PCRC_recordings/
+/mc_task.json
+/seen.json
+/PCRC.log
+/MCDR_update/
+/back-up/
 
 # random files
-test.py
-plugins_test/*
-plugins0.x/*
-plugins_dev/*
+/test.py
+/plugins_test/*
+/plugins0.x/*
+/plugins_dev/*
 
 # user config files
 # these will be automatically generated at the first run
-config.yml
-permission.yml
+/config.yml
+/permission.yml
 
 # sphinx documentation
-docs/build/
+/docs/build/
 **/.doctrees/
 **/*.mo
 **/*.pot
