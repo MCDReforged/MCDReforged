@@ -324,7 +324,7 @@ class ServerInterface:
 		"""
 		plugin = self._mcdr_server.plugin_manager.get_regular_plugin_from_id(plugin_id)
 		if plugin is not None:
-			plugin = plugin.module_instance
+			plugin = plugin.entry_module_instance
 		return plugin
 
 	# ------------------------

@@ -26,8 +26,8 @@ class RegularPlugin(AbstractPlugin, ABC):
 		self.file_name = os.path.basename(file_path)
 		self.file_hash = None
 		self.__metadata = None  # type: Optional[Metadata]
-		self.module_instance = None
-		self.old_module_instance = None
+		self.entry_module_instance = None
+		self.old_entry_module_instance = None
 		self.newly_loaded_module = []
 
 	def _reset(self):
@@ -62,30 +62,19 @@ class RegularPlugin(AbstractPlugin, ABC):
 	def _register_default_listeners(self):
 		for event in MCDRPluginEvents.get_event_list():
 			if isinstance(event.default_method_name, str):
-				func = getattr(self.module_instance, event.default_method_name, None)
+				func = getattr(self.entry_module_instance, event.default_method_name, None)
 				if callable(func):
 					self.register_event_listener(event, EventListener(self, func, DEFAULT_LISTENER_PRIORITY))
 
-	def _load_instance(self):
+	def _load_entry_instance(self):
 		with GLOBAL_LOAD_LOCK:
 			previous_modules = sys.modules.copy()
-			self.old_module_instance = self.module_instance
+			self.old_entry_module_instance = self.entry_module_instance
 			try:
-				self.module_instance = self._get_module_instance()
+				self.entry_module_instance = self._get_module_instance()
 			finally:
 				self.newly_loaded_module = [module for module in sys.modules if module not in previous_modules and not module.startswith(core_constant.PACKAGE_NAME)]
 				self.mcdr_server.logger.debug('Newly loaded modules of {}: {}'.format(self, self.newly_loaded_module), option=DebugOption.PLUGIN)
-
-	def _unload_instance(self):
-		with GLOBAL_LOAD_LOCK:
-			for module in self.newly_loaded_module:
-				try:
-					sys.modules.pop(module)
-				except KeyError:
-					self.mcdr_server.logger.critical('Module {} not found when unloading plugin {}'.format(module, repr(self)))
-				else:
-					self.mcdr_server.logger.debug('Removed module {} when unloading plugin {}'.format(module, repr(self)), option=DebugOption.PLUGIN)
-			self.newly_loaded_module.clear()
 
 	# ---------------------
 	#   To be Implemented
@@ -95,13 +84,21 @@ class RegularPlugin(AbstractPlugin, ABC):
 		raise NotImplementedError()
 
 	def _on_ready(self):
-		raise NotImplementedError()
+		self._register_default_listeners()
 
 	def _on_load(self):
-		raise NotImplementedError()
+		self._reset()
 
 	def _on_unload(self):
-		raise NotImplementedError()
+		with GLOBAL_LOAD_LOCK:
+			for module in self.newly_loaded_module:
+				try:
+					sys.modules.pop(module)
+				except KeyError:
+					self.mcdr_server.logger.critical('Module {} not found when unloading plugin {}'.format(module, repr(self)))
+				else:
+					self.mcdr_server.logger.debug('Removed module {} when unloading plugin {}'.format(module, repr(self)), option=DebugOption.PLUGIN)
+			self.newly_loaded_module.clear()
 
 	# --------------
 	#   Life Cycle

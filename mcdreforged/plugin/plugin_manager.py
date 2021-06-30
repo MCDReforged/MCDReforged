@@ -340,7 +340,7 @@ class PluginManager:
 		for plugin in dependency_check_result.success_list:
 			if plugin in newly_loaded_plugins:
 				if isinstance(plugin, RegularPlugin):
-					plugin.receive_event(MCDRPluginEvents.PLUGIN_LOADED, (plugin.old_module_instance,))
+					plugin.receive_event(MCDRPluginEvents.PLUGIN_LOADED, (plugin.old_entry_module_instance,))
 
 		for plugin in unload_result.success_list + unload_result.failed_list + reload_result.failed_list + dependency_check_result.failed_list:
 			plugin.assert_state({PluginState.UNLOADING})

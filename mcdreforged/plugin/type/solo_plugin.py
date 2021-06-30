@@ -1,6 +1,7 @@
 import re
 
 from mcdreforged.constants import plugin_constant
+from mcdreforged.plugin.meta.metadata import Metadata
 from mcdreforged.plugin.type.regular_plugin import RegularPlugin
 from mcdreforged.utils import misc_util, string_util
 
@@ -11,14 +12,9 @@ class SoloPlugin(RegularPlugin):
 		return re.sub(r'[^a-z0-9]', '_', file_name.lower())
 
 	def _get_module_instance(self):
-		return misc_util.load_source(self.file_path)
+		return misc_util.load_source_from_file_path(self.file_path)
 
 	def _on_load(self):
-		self._reset()
-		self._load_instance()
-
-	def _on_unload(self):
-		self._unload_instance()
-
-	def _on_ready(self):
-		self._register_default_listeners()
+		super()._on_load()
+		self._load_entry_instance()
+		self._set_metadata(Metadata(self, getattr(self.entry_module_instance, 'PLUGIN_METADATA', None)))
