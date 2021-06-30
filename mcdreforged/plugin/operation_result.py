@@ -5,7 +5,7 @@ from mcdreforged.minecraft.rtext import RTextList, RText, RAction, RTextBase
 from mcdreforged.utils.exception import IllegalCallError
 
 if TYPE_CHECKING:
-	from mcdreforged.plugin.plugin import AbstractPlugin
+	from mcdreforged.plugin.type.plugin import AbstractPlugin
 	from mcdreforged.plugin.plugin_manager import PluginManager
 
 

@@ -6,7 +6,7 @@ from mcdreforged.minecraft.rtext import RTextBase
 from mcdreforged.plugin.plugin_event import EventListener
 
 if TYPE_CHECKING:
-	from mcdreforged.plugin.plugin import AbstractPlugin
+	from mcdreforged.plugin.type.plugin import AbstractPlugin
 	from mcdreforged.plugin.plugin_manager import PluginManager
 
 DEFAULT_LISTENER_PRIORITY = 1000

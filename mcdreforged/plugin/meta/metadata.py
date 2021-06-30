@@ -8,7 +8,7 @@ from mcdreforged.minecraft.rtext import RTextBase
 from mcdreforged.plugin.meta.version import Version, VersionParsingError, VersionRequirement
 
 if TYPE_CHECKING:
-	from mcdreforged.plugin.plugin import AbstractPlugin
+	from mcdreforged.plugin.type.plugin import AbstractPlugin
 
 
 class Metadata:

@@ -1,6 +1,3 @@
-"""
-An interface class for plugins to control the server
-"""
 import functools
 import os
 import time
@@ -30,35 +27,30 @@ if TYPE_CHECKING:
 
 
 class ServerInterface:
+	"""
+	An interface class for plugins to control the server
+	"""
+
 	MCDR = True  # Identifier for plugins
 
 	def __init__(self, mcdr_server: 'MCDReforgedServer'):
 		self._mcdr_server = mcdr_server
-		self.__logger = mcdr_server.logger
-
-	def __get_current_plugin(self) -> 'AbstractPlugin':
-		plugin = self._mcdr_server.plugin_manager.get_current_running_plugin()
-		if plugin is not None and plugin.is_regular():
-			return plugin
-		else:
-			raise IllegalCallError('MCDR provided thead is required')
 
 	@functools.lru_cache(maxsize=512, typed=True)
 	def __get_logger(self, plugin_id: str):
 		return MCDReforgedLogger(self._mcdr_server, plugin_id)
 
-	def as_basic_server_interface(self) -> 'ServerInterface':
-		return self._mcdr_server.basic_server_interface
-
 	@property
 	def logger(self) -> MCDReforgedLogger:
 		try:
-			plugin = self.__get_current_plugin()
-			plugin_id = plugin.get_id()
+			plugin = self._mcdr_server.plugin_manager.get_current_running_plugin()
+			if plugin is not None:
+				return self.__get_logger(plugin.get_id())
 		except IllegalCallError:
-			return self.__logger
-		else:
-			return self.__get_logger(plugin_id)
+			return self._mcdr_server.logger
+
+	def as_basic_server_interface(self) -> 'ServerInterface':
+		return self._mcdr_server.basic_server_interface
 
 	# ------------------------
 	#      Server Control
@@ -110,7 +102,7 @@ class ServerInterface:
 			raise IllegalCallError('Cannot exit MCDR when the server is running')
 		self._mcdr_server.with_flag(MCDReforgedFlag.EXIT_AFTER_STOP)
 
-	def is_server_running(self, **kwargs) -> bool:
+	def is_server_running(self) -> bool:
 		"""
 		Return if the server is running
 		"""
@@ -379,7 +371,7 @@ class ServerInterface:
 		Return a simple plugin command source for e.g. command execution
 		It's not player or console, it has maximum permission level, it use ServerInterface.logger for replying
 		"""
-		return PluginCommandSource(self)
+		return PluginCommandSource(self, None)
 
 	def execute_command(self, command: str, source: CommandSource = None) -> None:
 		"""
@@ -416,6 +408,10 @@ class ServerInterface:
 
 
 class PluginServerInterface(ServerInterface):
+	"""
+	An interface class for plugins to control the server and the plugin
+	"""
+
 	def __init__(self, mcdr_server: 'MCDReforgedServer', plugin: AbstractPlugin):
 		super().__init__(mcdr_server)
 		self.__plugin = plugin
@@ -429,6 +425,13 @@ class PluginServerInterface(ServerInterface):
 			except:
 				return super().logger
 		return self.__logger_for_plugin
+
+	# -----------------------
+	#   Overwritten methods
+	# -----------------------
+
+	def get_plugin_command_source(self) -> PluginCommandSource:
+		return PluginCommandSource(self, self.__plugin)
 
 	# ------------------------
 	#     Plugin Registry

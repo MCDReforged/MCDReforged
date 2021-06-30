@@ -2,7 +2,7 @@ import abc
 from typing import Dict, List, Callable, TYPE_CHECKING
 
 if TYPE_CHECKING:
-	from mcdreforged.plugin.plugin import AbstractPlugin
+	from mcdreforged.plugin.type.plugin import AbstractPlugin
 
 
 class PluginEvent(abc.ABC):

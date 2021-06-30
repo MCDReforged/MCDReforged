@@ -1,13 +1,13 @@
 import re
 
-from mcdreforged.constants import core_constant
+from mcdreforged.constants import plugin_constant
 from mcdreforged.plugin.type.regular_plugin import RegularPlugin
 from mcdreforged.utils import misc_util, string_util
 
 
 class SoloPlugin(RegularPlugin):
 	def get_fallback_metadata_id(self) -> str:
-		file_name = string_util.remove_suffix(self.file_name, core_constant.SOLO_PLUGIN_FILE_SUFFIX)
+		file_name = string_util.remove_suffix(self.file_name, plugin_constant.SOLO_PLUGIN_FILE_SUFFIX)
 		return re.sub(r'[^a-z0-9]', '_', file_name.lower())
 
 	def _get_module_instance(self):

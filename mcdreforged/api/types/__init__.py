@@ -6,11 +6,11 @@ from mcdreforged.command.command_source import CommandSource, ConsoleCommandSour
 from mcdreforged.info import Info
 from mcdreforged.permission.permission_level import PermissionLevel
 from mcdreforged.plugin.meta.metadata import Metadata
-from mcdreforged.plugin.server_interface import ServerInterface
+from mcdreforged.plugin.server_interface import ServerInterface, PluginServerInterface
 
 __all__ = [
 	# Usually-used ones
-	'ServerInterface', 'Info',
+	'ServerInterface', 'PluginServerInterface', 'Info',
 
 	# Command sources
 	'CommandSource', 'InfoCommandSource', 'PlayerCommandSource', 'ConsoleCommandSource', 'PluginCommandSource',

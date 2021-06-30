@@ -8,6 +8,7 @@ if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
 	from mcdreforged.info import Info
 	from mcdreforged.plugin.server_interface import ServerInterface
+	from mcdreforged.plugin.type.plugin import AbstractPlugin
 
 
 class CommandSource:
@@ -45,16 +46,22 @@ class InfoCommandSource(CommandSource, ABC):
 	"""
 	def __init__(self, mcdr_server: 'MCDReforgedServer', info: 'Info'):
 		self._mcdr_server = mcdr_server
-		self._info = info
+		self.__info = info
 
 	def get_info(self) -> 'Info':
-		return self._info
+		return self.__info
 
 	def get_server(self) -> 'ServerInterface':
 		return self._mcdr_server.basic_server_interface
 
 	def get_permission_level(self) -> int:
 		return self._mcdr_server.permission_manager.get_permission(self)
+
+	def __str__(self):
+		raise NotImplementedError()
+
+	def __repr__(self):
+		raise NotImplementedError()
 
 
 class PlayerCommandSource(InfoCommandSource):
@@ -82,7 +89,7 @@ class PlayerCommandSource(InfoCommandSource):
 		return 'Player {}'.format(self.player)
 
 	def __repr__(self):
-		return '{}[player={}]'.format(type(self).__name__, self.player)
+		return '{}[player={},info_id={}]'.format(type(self).__name__, self.player, self.get_info().id)
 
 
 class ConsoleCommandSource(InfoCommandSource):
@@ -111,13 +118,14 @@ class ConsoleCommandSource(InfoCommandSource):
 		return 'Console'
 
 	def __repr__(self):
-		return type(self).__name__
+		return '{}[info_id={}]'.format(type(self).__name__, self.get_info().id)
 
 
 class PluginCommandSource(CommandSource):
-	def __init__(self, server: 'ServerInterface'):
+	def __init__(self, server: 'ServerInterface', plugin: Optional['AbstractPlugin'] = None):
 		self.__server = server.as_basic_server_interface()
 		self.__logger = self.__server.logger
+		self.__plugin = plugin
 
 	@property
 	def is_player(self) -> bool:
@@ -135,3 +143,9 @@ class PluginCommandSource(CommandSource):
 
 	def reply(self, message: Any, **kwargs) -> None:
 		misc_util.print_text_to_console(self.__logger, message)
+
+	def __str__(self):
+		return 'Plugin' if self.__plugin is None else 'Plugin {}'.format(self.__plugin)
+
+	def __repr__(self):
+		return '{}[plugin={}]'.format(type(self).__name__, self.__plugin)

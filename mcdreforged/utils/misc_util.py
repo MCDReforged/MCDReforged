@@ -28,6 +28,7 @@ def load_source(source_path: str, module_name=None):
 	# https://docs.python.org/zh-cn/3.6/library/importlib.html#importing-a-source-file-directly
 	spec = importlib.util.spec_from_file_location(module_name, source_path)
 	module = importlib.util.module_from_spec(spec)
+	# noinspection PyUnresolvedReferences
 	spec.loader.exec_module(module)
 	# Optional; only necessary if you want to be able to import the module
 	# by name later.

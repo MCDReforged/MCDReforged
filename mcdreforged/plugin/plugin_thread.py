@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING, Callable
 
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
-	from mcdreforged.plugin.plugin import AbstractPlugin
+	from mcdreforged.plugin.type.plugin import AbstractPlugin
 
 
 TaskData = collections.namedtuple('TaskData', 'callback plugin')
