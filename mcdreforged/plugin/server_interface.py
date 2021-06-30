@@ -4,10 +4,11 @@ An interface class for plugins to control the server
 import functools
 import os
 import time
-from typing import Callable, TYPE_CHECKING, Tuple, Any, Union, Optional, List
+from typing import Callable, TYPE_CHECKING, Tuple, Any, Union, Optional, List, IO
 
 from mcdreforged.command.builder.command_node import Literal
 from mcdreforged.command.command_source import CommandSource, PluginCommandSource
+from mcdreforged.constants import plugin_constant
 from mcdreforged.info import Info
 from mcdreforged.mcdr_state import MCDReforgedFlag
 from mcdreforged.minecraft.rtext import RTextBase, RText
@@ -16,6 +17,7 @@ from mcdreforged.plugin.meta.metadata import Metadata
 from mcdreforged.plugin.operation_result import SingleOperationResult, PluginOperationResult
 from mcdreforged.plugin.plugin_event import EventListener, LiteralEvent, PluginEvent, MCDRPluginEvents
 from mcdreforged.plugin.plugin_registry import DEFAULT_LISTENER_PRIORITY, HelpMessage
+from mcdreforged.plugin.type.packed_plugin import PackedPlugin
 from mcdreforged.utils import misc_util
 from mcdreforged.utils.exception import IllegalCallError
 from mcdreforged.utils.logger import MCDReforgedLogger
@@ -23,7 +25,7 @@ from mcdreforged.utils.logger import MCDReforgedLogger
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
 	from mcdreforged.plugin.plugin_manager import PluginManager
-	from mcdreforged.plugin.regular_plugin import RegularPlugin
+	from mcdreforged.plugin.type.regular_plugin import RegularPlugin
 
 
 class ServerInterface:
@@ -399,11 +401,23 @@ class ServerInterface:
 		:raise: IllegalCallError if it's not invoked in the task executor thread
 		"""
 		plugin = self.__get_current_plugin()
-		from mcdreforged.plugin.plugin_manager import PLUGIN_CONFIG_DIRECTORY
-		plugin_data_folder = os.path.join(PLUGIN_CONFIG_DIRECTORY, plugin.get_id())
+		plugin_data_folder = os.path.join(plugin_constant.PLUGIN_CONFIG_DIRECTORY, plugin.get_id())
 		if not os.path.isdir(plugin_data_folder):
 			os.makedirs(plugin_data_folder)
 		return plugin_data_folder
+
+	def open_file_in_plugin(self, related_file_path: str) -> IO[bytes]:
+		"""
+		Open a file inside the plugin with binary mode
+		:return: A file-like object
+		:raise:
+		IllegalCallError if it's not invoked in the task executor thread
+		FileNotFoundError if the plugin is not a packed plugin (that is, a solo plugin)
+		"""
+		plugin = self.__get_current_plugin()
+		if not isinstance(plugin, PackedPlugin):
+			raise FileNotFoundError('Only packed plugin supported this api')
+		return plugin.get_file(related_file_path)
 
 	# ------------------------
 	#        Permission

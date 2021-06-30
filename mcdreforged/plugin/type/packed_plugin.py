@@ -29,7 +29,7 @@ class PackedPlugin(RegularPlugin):
 		try:
 			sys.path.remove(self.file_path)
 		except ValueError:
-			self.mcdr_server.logger.exception('Fail to remove path "{}" in sys.path for {}'.format(self.file_path, self))
+			self.mcdr_server.logger.debug('Fail to remove path "{}" in sys.path for {}'.format(self.file_path, self))
 
 	def _on_ready(self):
 		sys.path.append(self.file_path)

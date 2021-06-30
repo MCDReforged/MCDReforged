@@ -2,7 +2,17 @@
 Constants related to plugin for MCDR
 """
 
+# the directory inside MCDR working directory that stores plugins' configure files
+PLUGIN_CONFIG_DIRECTORY = 'config'
+
+# The file prefix for a solo plugin (a single .py file)
 SOLO_PLUGIN_FILE_SUFFIX = '.py'
+
+# The file prefix for a packed plugin (a zipped file)
 PACKED_PLUGIN_FILE_SUFFIX = '.mcdr'
+
+# The name of the meta file inside a packed plugin
 PLUGIN_META_FILE = 'mcdreforged.plugin.json'
+
+# Disabled plugin file name suffix
 DISABLED_PLUGIN_FILE_SUFFIX = '.disabled'

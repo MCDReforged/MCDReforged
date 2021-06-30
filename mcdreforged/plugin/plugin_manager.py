@@ -7,7 +7,7 @@ import threading
 from contextlib import contextmanager
 from typing import Callable, Dict, Optional, Any, Tuple, List, TYPE_CHECKING, Deque
 
-from mcdreforged.constants import core_constant
+from mcdreforged.constants import core_constant, plugin_constant
 from mcdreforged.plugin import plugin_factory
 from mcdreforged.plugin.builtin.mcdreforged_plugin import MCDReforgedPlugin
 from mcdreforged.plugin.meta.dependency_walker import DependencyWalker
@@ -23,8 +23,6 @@ from mcdreforged.utils.thread_local_storage import ThreadLocalStorage
 
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
-
-PLUGIN_CONFIG_DIRECTORY = 'config'
 
 
 class PluginManager:
@@ -53,7 +51,7 @@ class PluginManager:
 		# plugin manipulation lock
 		self.__mani_lock = threading.RLock()
 
-		file_util.touch_directory(PLUGIN_CONFIG_DIRECTORY)
+		file_util.touch_directory(plugin_constant.PLUGIN_CONFIG_DIRECTORY)
 
 	# --------------------------
 	#   Getters / Setters etc.
@@ -400,7 +398,7 @@ class PluginManager:
 	def enable_plugin(self, file_path: str):
 		with self.__mani_lock:
 			self.logger.info(self.mcdr_server.tr('plugin_manager.enable_plugin.entered', file_path))
-			new_file_path = string_util.remove_suffix(file_path, core_constant.DISABLED_PLUGIN_FILE_SUFFIX)
+			new_file_path = string_util.remove_suffix(file_path, plugin_constant.DISABLED_PLUGIN_FILE_SUFFIX)
 			if os.path.isfile(file_path):
 				os.rename(file_path, new_file_path)
 				self.load_plugin(new_file_path)
@@ -410,7 +408,7 @@ class PluginManager:
 			self.logger.info(self.mcdr_server.tr('plugin_manager.disable_plugin.entered', plugin))
 			self.unload_plugin(plugin)
 			if os.path.isfile(plugin.file_path):
-				os.rename(plugin.file_path, plugin.file_path + core_constant.DISABLED_PLUGIN_FILE_SUFFIX)
+				os.rename(plugin.file_path, plugin.file_path + plugin_constant.DISABLED_PLUGIN_FILE_SUFFIX)
 
 	def refresh_all_plugins(self):
 		with self.__mani_lock:

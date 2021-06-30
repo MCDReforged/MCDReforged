@@ -25,7 +25,7 @@ def __get_plugin_class_from_path(file_path: str) -> Optional[type]:
 			return SoloPlugin
 		if suffix == plugin_constant.PACKED_PLUGIN_FILE_SUFFIX:
 			return PackedPlugin
-	elif os.path.isdir(file_path):
+	elif os.path.isdir(file_path) and not file_path.endswith(plugin_constant.DISABLED_PLUGIN_FILE_SUFFIX):
 		if os.path.isfile(os.path.join(file_path, plugin_constant.PLUGIN_META_FILE)):
 			return DirectoryPlugin
 

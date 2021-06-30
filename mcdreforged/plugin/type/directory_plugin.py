@@ -6,7 +6,7 @@ from mcdreforged.plugin.type.packed_plugin import PackedPlugin
 
 class DirectoryPlugin(PackedPlugin):
 	def get_file(self, file_name: str) -> IO[bytes]:
-		return open(os.path.join(self.file_path, file_name))
+		return open(os.path.join(self.file_path, file_name), 'rb')
 
 	def file_exists(self):
 		return os.path.isdir(self.file_path)
