@@ -18,26 +18,12 @@ from mcdreforged.plugin.plugin_event import EventListener, LiteralEvent, PluginE
 from mcdreforged.plugin.plugin_registry import DEFAULT_LISTENER_PRIORITY, HelpMessage
 from mcdreforged.utils import misc_util
 from mcdreforged.utils.exception import IllegalCallError
-from mcdreforged.utils.logger import MCDReforgedLogger, DebugOption
+from mcdreforged.utils.logger import MCDReforgedLogger
 
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
 	from mcdreforged.plugin.plugin_manager import PluginManager
 	from mcdreforged.plugin.regular_plugin import RegularPlugin
-
-
-def log_call(func):
-	"""
-	Log plugin call
-	Use kwarg is_plugin_call to determined if do log
-	"""
-	def wrap(self: 'ServerInterface', *args, is_plugin_call=True, **kwargs):
-		if is_plugin_call and MCDReforgedLogger.should_log_debug(option=DebugOption.PLUGIN):
-			self.logger.debug('Plugin called {}(), args amount: {}'.format(func.__name__, len(args)), no_check=True)
-			for arg in args:
-				self.logger.debug('  - type: {}, content: {}'.format(type(arg).__name__, arg), no_check=True)
-		return func(self, *args, **kwargs)
-	return wrap
 
 
 class ServerInterface:
@@ -72,7 +58,6 @@ class ServerInterface:
 	#      Server Control
 	# ------------------------
 
-	@log_call
 	def start(self) -> bool:
 		"""
 		Start the server
@@ -80,7 +65,6 @@ class ServerInterface:
 		"""
 		return self.__mcdr_server.start_server()
 
-	@log_call
 	def stop(self) -> None:
 		"""
 		Soft shutting down the server by sending the correct stop command to the server
@@ -88,33 +72,29 @@ class ServerInterface:
 		self.__mcdr_server.remove_flag(MCDReforgedFlag.EXIT_AFTER_STOP)
 		self.__mcdr_server.stop(forced=False)
 
-	@log_call
 	def wait_for_start(self) -> None:
 		"""
 		Wait until the server is able to start. In other words, wait until the server is stopped
 		"""
-		while self.is_server_running(is_plugin_call=False):
+		while self.is_server_running():
 			time.sleep(0.01)
 
-	@log_call
 	def restart(self) -> None:
 		"""
 		Restart the server
 		It will first soft stop the server and then wait until the server is stopped, then start the server up
 		"""
 		if self.is_server_running():
-			self.stop(is_plugin_call=False)
-			self.wait_for_start(is_plugin_call=False)
-			self.start(is_plugin_call=False)
+			self.stop()
+			self.wait_for_start()
+			self.start()
 
-	@log_call
 	def stop_exit(self) -> None:
 		"""
 		Soft stop the server and exit MCDR
 		"""
 		self.__mcdr_server.stop(forced=False)
 
-	@log_call
 	def exit(self) -> None:
 		"""
 		Exit MCDR when the server is stopped
@@ -124,28 +104,24 @@ class ServerInterface:
 			raise IllegalCallError('Cannot exit MCDR when the server is running')
 		self.__mcdr_server.with_flag(MCDReforgedFlag.EXIT_AFTER_STOP)
 
-	@log_call
-	def is_server_running(self) -> bool:
+	def is_server_running(self, **kwargs) -> bool:
 		"""
 		Return if the server is running
 		"""
 		return self.__mcdr_server.is_server_running()
 
-	@log_call
 	def is_server_startup(self) -> bool:
 		"""
 		Return if the server has started up
 		"""
 		return self.__mcdr_server.is_server_startup()
 
-	@log_call
 	def is_rcon_running(self) -> bool:
 		"""
 		Return if MCDR's rcon is running
 		"""
 		return self.__mcdr_server.rcon_manager.is_running()
 
-	@log_call
 	def get_server_pid(self) -> Optional[int]:
 		"""
 		Return the pid of the server process
@@ -161,7 +137,6 @@ class ServerInterface:
 	#     Text Interaction
 	# ------------------------
 
-	@log_call
 	def execute(self, text: str, *, encoding: Optional[str] = None) -> None:
 		"""
 		Execute a command by sending the command content to server's standard input stream
@@ -170,7 +145,6 @@ class ServerInterface:
 		"""
 		self.__mcdr_server.send(text, encoding=encoding)
 
-	@log_call
 	def tell(self, player: str, text: Union[str, RTextBase], *, encoding: Optional[str] = None) -> None:
 		"""
 		Use command like /tellraw to send the message to the specific player
@@ -180,9 +154,8 @@ class ServerInterface:
 		"""
 		command = self.__mcdr_server.server_handler_manager.get_current_handler().get_send_message_command(player, text)
 		if command is not None:
-			self.execute(command, encoding=encoding, is_plugin_call=False)
+			self.execute(command, encoding=encoding)
 
-	@log_call
 	def say(self, text: Union[str, RTextBase], *, encoding: Optional[str] = None) -> None:
 		"""
 		Use command like /tellraw @a to broadcast the message in game
@@ -191,19 +164,17 @@ class ServerInterface:
 		"""
 		command = self.__mcdr_server.server_handler_manager.get_current_handler().get_broadcast_message_command(text)
 		if command is not None:
-			self.execute(command, encoding=encoding, is_plugin_call=False)
+			self.execute(command, encoding=encoding)
 
-	@log_call
 	def broadcast(self, text: Union[str, RTextBase], *, encoding: Optional[str] = None) -> None:
 		"""
 		Broadcast the message in game and to the console
 		:param text: the message you want to send
 		:param encoding: The encoding method for the text
 		"""
-		self.say(text, encoding=encoding, is_plugin_call=False)
+		self.say(text, encoding=encoding)
 		misc_util.print_text_to_console(self.logger, text)
 
-	@log_call
 	def reply(self, info: Info, text: Union[str, RTextBase], *, encoding: Optional[str] = None, console_text: Optional[Union[str, RTextBase]] = None):
 		"""
 		Reply to the source of the Info
@@ -267,7 +238,6 @@ class ServerInterface:
 			return self.__check_if_success(opt_result, check_loaded)
 		return None
 
-	@log_call
 	def load_plugin(self, plugin_file_path: str) -> bool:
 		"""
 		Load a plugin from the given file path
@@ -276,7 +246,6 @@ class ServerInterface:
 		"""
 		return self.__not_loaded_regular_plugin_manipulate(plugin_file_path, lambda mgr: mgr.load_plugin)
 
-	@log_call
 	def enable_plugin(self, plugin_file_path: str) -> bool:
 		"""
 		Enable an unloaded plugin from the given path
@@ -285,7 +254,6 @@ class ServerInterface:
 		"""
 		return self.__not_loaded_regular_plugin_manipulate(plugin_file_path, lambda mgr: mgr.enable_plugin)
 
-	@log_call
 	def reload_plugin(self, plugin_id: str) -> Optional[bool]:
 		"""
 		Reload a plugin specified by plugin id
@@ -294,7 +262,6 @@ class ServerInterface:
 		"""
 		return self.__existed_regular_plugin_manipulate(plugin_id, lambda mgr: mgr.reload_plugin, lambda lor: lor.reload_result, check_loaded=True)
 
-	@log_call
 	def unload_plugin(self, plugin_id: str) -> Optional[bool]:
 		"""
 		Unload a plugin specified by plugin id
@@ -303,7 +270,6 @@ class ServerInterface:
 		"""
 		return self.__existed_regular_plugin_manipulate(plugin_id, lambda mgr: mgr.unload_plugin, lambda lor: lor.unload_result, check_loaded=False)
 
-	@log_call
 	def disable_plugin(self, plugin_id: str) -> Optional[bool]:
 		"""
 		Disable an unloaded plugin from the given path
@@ -312,21 +278,18 @@ class ServerInterface:
 		"""
 		return self.__existed_regular_plugin_manipulate(plugin_id, lambda mgr: mgr.disable_plugin, lambda lor: lor.unload_result, check_loaded=False)
 
-	@log_call
 	def refresh_all_plugins(self) -> None:
 		"""
 		Reload all plugins, load all new plugins and then unload all removed plugins
 		"""
 		self.__mcdr_server.plugin_manager.refresh_all_plugins()
 
-	@log_call
 	def refresh_changed_plugins(self) -> None:
 		"""
 		Reload all changed plugins, load all new plugins and then unload all removed plugins
 		"""
 		self.__mcdr_server.plugin_manager.refresh_changed_plugins()
 
-	@log_call
 	def get_plugin_list(self) -> List[str]:
 		"""
 		Return a list containing all loaded plugin id like ["my_plugin", "another_plugin"]
@@ -339,7 +302,6 @@ class ServerInterface:
 			return handler(plugin)
 		return None
 
-	@log_call
 	def get_plugin_metadata(self, plugin_id: str) -> Optional[Metadata]:
 		"""
 		Return the metadata of the specified plugin, or None if the plugin doesn't exist
@@ -347,7 +309,6 @@ class ServerInterface:
 		"""
 		return self.__existed_regular_plugin_info_getter(plugin_id, lambda plugin: plugin.get_metadata())
 
-	@log_call
 	def get_plugin_file_path(self, plugin_id: str) -> Optional[str]:
 		"""
 		Return the file path of the specified plugin, or None if the plugin doesn't exist
@@ -355,7 +316,6 @@ class ServerInterface:
 		"""
 		return self.__existed_regular_plugin_info_getter(plugin_id, lambda plugin: plugin.file_path)
 
-	@log_call
 	def get_plugin_instance(self, plugin_id: str) -> Optional[Any]:
 		"""
 		Return the current loaded plugin instance. With this api your plugin can access the same plugin instance to MCDR
@@ -373,7 +333,6 @@ class ServerInterface:
 	#     Plugin Registry
 	# ------------------------
 
-	@log_call
 	def register_event_listener(self, event: Union[PluginEvent, str], callback: Callable, priority: int = DEFAULT_LISTENER_PRIORITY) -> None:
 		"""
 		Register an event listener for the current plugin
@@ -387,7 +346,6 @@ class ServerInterface:
 			event = LiteralEvent(event_id=event)
 		plugin.register_event_listener(event, EventListener(plugin, callback, priority))
 
-	@log_call
 	def register_command(self, root_node: Literal) -> None:
 		"""
 		Register an event listener for the current plugin
@@ -397,7 +355,6 @@ class ServerInterface:
 		plugin = self.__get_current_plugin()
 		plugin.register_command(root_node)
 
-	@log_call
 	def register_help_message(self, prefix: str, message: Union[str, RTextBase], permission: int = PermissionLevel.MINIMUM_LEVEL) -> None:
 		"""
 		Register a help message for the current plugin, which is used in !!help command
@@ -413,7 +370,6 @@ class ServerInterface:
 			message = RText(message)
 		plugin.register_help_message(HelpMessage(plugin, prefix, message, permission))
 
-	@log_call
 	def dispatch_event(self, event: PluginEvent, args: Tuple[Any, ...], *, on_executor_thread: bool = True) -> None:
 		"""
 		Dispatch an event to all loaded plugins
@@ -434,7 +390,6 @@ class ServerInterface:
 	#      Plugin Utils
 	# ------------------------
 
-	@log_call
 	def get_data_folder(self) -> str:
 		"""
 		Return a unified data directory path for the current plugin
@@ -454,7 +409,6 @@ class ServerInterface:
 	#        Permission
 	# ------------------------
 
-	@log_call
 	def get_permission_level(self, obj: Union[str, Info, CommandSource]) -> int:
 		"""
 		Return an int indicating permission level number the given object has
@@ -473,7 +427,6 @@ class ServerInterface:
 		else:
 			raise TypeError('Unsupported permission level querying for type {}'.format(type(obj)))
 
-	@log_call
 	def set_permission_level(self, player: str, value: Union[int, str]) -> None:
 		"""
 		Set the permission level of the given player
@@ -491,7 +444,6 @@ class ServerInterface:
 	#         Command
 	# ------------------------
 
-	@log_call
 	def get_plugin_command_source(self) -> PluginCommandSource:
 		"""
 		Return a simple plugin command source for e.g. command execution
@@ -499,7 +451,6 @@ class ServerInterface:
 		"""
 		return PluginCommandSource(self)
 
-	@log_call
 	def execute_command(self, command: str, source: CommandSource = None) -> None:
 		"""
 		Execute a single command using the command system of MCDR
@@ -508,7 +459,7 @@ class ServerInterface:
 		will use ServerInterface.get_plugin_command_source as fallback command source
 		"""
 		if source is None:
-			source = self.get_plugin_command_source(is_plugin_call=False)
+			source = self.get_plugin_command_source()
 		misc_util.check_type(command, str)
 		misc_util.check_type(source, CommandSource)
 		self.__mcdr_server.command_manager.execute_command(command, source)
@@ -517,7 +468,6 @@ class ServerInterface:
 	#           Misc
 	# ------------------------
 
-	@log_call
 	def is_on_executor_thread(self) -> bool:
 		"""
 		Return if the current thread is the task executor thread
@@ -526,7 +476,6 @@ class ServerInterface:
 		"""
 		return self.__mcdr_server.task_executor.is_on_thread()
 
-	@log_call
 	def rcon_query(self, command: str) -> Optional[str]:
 		"""
 		Send command to the server through rcon connection

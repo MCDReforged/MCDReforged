@@ -76,7 +76,7 @@ class PlayerCommandSource(InfoCommandSource):
 		"""
 		:keyword encoding: encoding method for server_interface.tell
 		"""
-		self._mcdr_server.server_interface.tell(self.player, message, encoding=encoding, is_plugin_call=False)
+		self._mcdr_server.server_interface.tell(self.player, message, encoding=encoding)
 
 	def __str__(self):
 		return 'Player {}'.format(self.player)
