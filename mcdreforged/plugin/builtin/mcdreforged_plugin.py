@@ -12,11 +12,11 @@ from mcdreforged.command.command_source import CommandSource
 from mcdreforged.minecraft.rtext import RText, RAction, RTextList, RStyle, RColor
 from mcdreforged.permission.permission_level import PermissionLevel
 from mcdreforged.plugin.meta.metadata import Metadata
-from mcdreforged.plugin.permanent.permanent_plugin import PermanentPlugin
-from mcdreforged.plugin.plugin import AbstractPlugin, PluginState
 from mcdreforged.plugin.plugin_event import MCDRPluginEvents, EventListener
 from mcdreforged.plugin.plugin_registry import HelpMessage
-from mcdreforged.plugin.regular_plugin import RegularPlugin
+from mcdreforged.plugin.type.permanent_plugin import PermanentPlugin
+from mcdreforged.plugin.type.plugin import AbstractPlugin, PluginState
+from mcdreforged.plugin.type.regular_plugin import RegularPlugin
 from mcdreforged.utils import file_util, string_util
 
 METADATA = {
@@ -330,7 +330,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 		return result
 
 	def list_plugin(self, source: CommandSource):
-		not_loaded_plugin_list = self.get_files_in_plugin_directories(lambda fp: fp.endswith(constant.PLUGIN_FILE_SUFFIX) and not self.mcdr_server.plugin_manager.contains_plugin_file(fp))  # type: List[str]
+		not_loaded_plugin_list = self.get_files_in_plugin_directories(lambda fp: fp.endswith(constant.SOLO_PLUGIN_FILE_SUFFIX) and not self.mcdr_server.plugin_manager.contains_plugin_file(fp))  # type: List[str]
 		disabled_plugin_list = self.get_files_in_plugin_directories(lambda fp: fp.endswith(constant.DISABLED_PLUGIN_FILE_SUFFIX))  # type: List[str]
 		current_plugins = list(self.mcdr_server.plugin_manager.get_all_plugins())  # type: List[AbstractPlugin]
 

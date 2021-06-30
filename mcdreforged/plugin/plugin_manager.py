@@ -9,14 +9,15 @@ from contextlib import contextmanager
 from typing import Callable, Dict, Optional, Any, Tuple, List, TYPE_CHECKING, Deque
 
 from mcdreforged import constant
+from mcdreforged.plugin import plugin_factory
+from mcdreforged.plugin.builtin.mcdreforged_plugin import MCDReforgedPlugin
 from mcdreforged.plugin.meta.dependency_walker import DependencyWalker
 from mcdreforged.plugin.operation_result import PluginOperationResult, SingleOperationResult
-from mcdreforged.plugin.permanent.mcdreforged_plugin import MCDReforgedPlugin
-from mcdreforged.plugin.plugin import PluginState, AbstractPlugin
 from mcdreforged.plugin.plugin_event import MCDRPluginEvents, MCDREvent, EventListener
 from mcdreforged.plugin.plugin_registry import PluginRegistryStorage
 from mcdreforged.plugin.plugin_thread import PluginThreadPool
-from mcdreforged.plugin.regular_plugin import RegularPlugin
+from mcdreforged.plugin.type.plugin import AbstractPlugin, PluginState
+from mcdreforged.plugin.type.regular_plugin import RegularPlugin
 from mcdreforged.utils import file_util, string_util, misc_util
 from mcdreforged.utils.logger import DebugOption
 from mcdreforged.utils.thread_local_storage import ThreadLocalStorage
@@ -165,7 +166,7 @@ class PluginManager:
 		:return: the new plugin instance if succeeds, otherwise None
 		:rtype: RegularPlugin or None
 		"""
-		plugin = RegularPlugin(self, file_path)
+		plugin = plugin_factory.create_regular_plugin(self, file_path)
 		try:
 			plugin.load()
 		except:
@@ -250,14 +251,15 @@ class PluginManager:
 		result = SingleOperationResult()
 		for plugin_directory in self.plugin_directories:
 			if os.path.isdir(plugin_directory):
-				file_list = file_util.list_file_with_suffix(plugin_directory, constant.PLUGIN_FILE_SUFFIX)
-				for file_path in file_list:
-					if not self.contains_plugin_file(file_path) and filter(file_path):
-						plugin = self.__load_plugin(file_path)
-						if plugin is None:
-							result.fail(file_path)
-						else:
-							result.succeed(plugin)
+				for file in os.listdir(plugin_directory):
+					file_path = os.path.join(plugin_directory, file)
+					if plugin_factory.maybe_plugin(file_path):
+						if not self.contains_plugin_file(file_path) and filter(file_path):
+							plugin = self.__load_plugin(file_path)
+							if plugin is None:
+								result.fail(file_path)
+							else:
+								result.succeed(plugin)
 			else:
 				self.logger.warning('Plugin directory "{}" not found'.format(plugin_directory))
 		return result
@@ -339,11 +341,11 @@ class PluginManager:
 
 		self.registry_storage.clear()  # in case plugin invokes dispatch_event during on_load. dont let them trigger listeners
 
-		for plugin in load_result.success_list + reload_result.success_list:
-			if plugin in dependency_check_result.success_list:
+		newly_loaded_plugins = {*load_result.success_list, *reload_result.success_list}
+		for plugin in dependency_check_result.success_list:
+			if plugin in newly_loaded_plugins:
 				plugin.ready()
 
-		newly_loaded_plugins = {*load_result.success_list, *reload_result.success_list}
 		for plugin in dependency_check_result.success_list:
 			if plugin in newly_loaded_plugins:
 				if isinstance(plugin, RegularPlugin):

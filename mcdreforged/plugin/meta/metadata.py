@@ -100,5 +100,5 @@ __SAMPLE_METADATA = {
 	'link': 'https://github.com/Fallen-Breath/MCDReforged',
 	'dependencies': {
 		'mcdreforged': '>=1.0.0'
-	},
+	}
 }

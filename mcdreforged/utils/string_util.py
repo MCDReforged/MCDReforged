@@ -17,11 +17,14 @@ def clean_console_color_code(text):
 	return re.sub(r'\033\[(\d+(;\d+)?)?m', '', text)
 
 
-def format_plugin_file_path(file_path):
-	file_path = remove_suffix(file_path, constant.DISABLED_PLUGIN_FILE_SUFFIX)
-	file_path = remove_suffix(file_path, constant.PLUGIN_FILE_SUFFIX)
-	file_path += constant.PLUGIN_FILE_SUFFIX
-	return file_path
+def format_plugin_file_path(file_path: str):
+	"""
+	:param file_path: "a.py", "a.mcdr", "a.py.disabled", "a.mcdr.disabled"
+	:return "a.py", "a.mcdr"
+	"""
+	if file_path.endswith(constant.SOLO_PLUGIN_FILE_SUFFIX) or file_path.endswith(constant.PACKED_PLUGIN_FILE_SUFFIX):
+		return file_path
+	return remove_suffix(file_path, constant.DISABLED_PLUGIN_FILE_SUFFIX)
 
 
 def format_plugin_file_path_disabled(file_path):

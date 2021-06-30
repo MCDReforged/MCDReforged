@@ -19,7 +19,9 @@ GITHUB_API_LATEST = 'https://api.github.com/repos/Fallen-Breath/MCDReforged/rele
 
 LOGGING_FILE = os.path.join('logs', '{}.log'.format(NAME_SHORT))
 
-PLUGIN_FILE_SUFFIX = '.py'
+SOLO_PLUGIN_FILE_SUFFIX = '.py'
+PACKED_PLUGIN_FILE_SUFFIX = '.mcdr'
+PLUGIN_META_FILE = 'mcdreforged.plugin.json'
 DISABLED_PLUGIN_FILE_SUFFIX = '.disabled'
 LANGUAGE_FILE_SUFFIX = '.yml'
 

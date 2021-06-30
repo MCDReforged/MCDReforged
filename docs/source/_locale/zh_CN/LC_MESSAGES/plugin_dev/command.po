@@ -202,10 +202,10 @@ msgid ""
 "MCDR command building system is to refer and imitate existing codes. You "
 "can find the command building code of ``!!MCDR`` command in the "
 "``__register_commands`` method of class "
-"``mcdreforged.plugin.permanent.mcdreforged_plugin.MCDReforgedPlugin``"
+"``mcdreforged.plugin.builtin.mcdreforged_plugin.MCDReforgedPlugin``"
 msgstr ""
 "除了阅读本文档外，学习使用 MCDR 指令构建系统的另一种好办法是引用和模仿现有代码。你可以在 "
-"``mcdreforged.plugin.permanent.mcdreforged_plugin.MCDReforgedPlugin`` 类的 "
+"``mcdreforged.plugin.builtin.mcdreforged_plugin.MCDReforgedPlugin`` 类的 "
 "``__register_commands`` 方法下找到 ``!!MCDR`` 指令的构建代码。"
 
 #: ../plugin_dev/command.rst:71

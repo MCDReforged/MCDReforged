@@ -17,5 +17,10 @@ class IllegalStateError(RuntimeError):
 	pass
 
 
+# When the metadata of a plugin is invalid
+class BrokenMetadata(RuntimeError):
+	pass
+
+
 class ServerStopped(RuntimeError):
 	pass
