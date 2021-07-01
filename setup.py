@@ -3,15 +3,14 @@ import re
 
 from setuptools import find_packages, setup
 
-from mcdreforged import constant
+from mcdreforged.constants import core_constant
 
 # python setup.py sdist bdist_wheel
 # python -m twine upload --repository testpypi dist/*
 # python -m twine upload dist/*
 
-
-NAME = constant.PACKAGE_NAME
-VERSION = constant.VERSION_PYPI
+NAME = core_constant.PACKAGE_NAME
+VERSION = core_constant.VERSION_PYPI
 DESCRIPTION = 'A rewritten version of MCDaemon, a python script to control your Minecraft server'
 URL = 'https://github.com/Fallen-Breath/MCDReforged'
 AUTHOR = 'Fallen_Breath'
