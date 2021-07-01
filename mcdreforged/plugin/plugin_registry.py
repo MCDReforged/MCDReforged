@@ -45,6 +45,7 @@ class AbstractPluginRegistry:
 		self.event_listeners = collections.defaultdict(list)  # type: Dict[str, List[EventListener]]
 		self.help_messages = []
 		self.command_roots = []  # type: List[PluginCommandNode]
+		self.translations = {}  # type: Dict[str, Dict[str, str]]
 
 	def clear(self):
 		self.event_listeners.clear()
@@ -68,17 +69,21 @@ class PluginRegistry(AbstractPluginRegistry):
 			raise TypeError('Only Literal node is accepted to be a root node')
 		self.command_roots.append(PluginCommandNode(self.plugin, node))
 
+	def register_translation(self, language: str, mapping: Dict[str, str]):
+		self.translations[language] = mapping
+
 
 class PluginRegistryStorage(AbstractPluginRegistry):
 	def __init__(self, plugin_manager: 'PluginManager'):
 		super().__init__()
 		self.plugin_manager = plugin_manager
 
-	def collect(self, registry: PluginRegistry):
+	def collect(self, registry: AbstractPluginRegistry):
 		for event_id, plg_listeners in registry.event_listeners.items():
 			self.event_listeners[event_id].extend(plg_listeners)
 		self.help_messages.extend(registry.help_messages)
 		self.command_roots.extend(registry.command_roots)
+		self.translations.update(registry.translations)
 
 	def arrange(self):
 		self.help_messages.sort()

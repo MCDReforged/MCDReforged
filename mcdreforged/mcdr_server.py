@@ -102,8 +102,9 @@ class MCDReforgedServer:
 	#   Translate info strings
 	# --------------------------
 
-	def tr(self, text, *args, allow_failure=True):
-		result = self.language_manager.translate(text, allow_failure).strip('\r\n')
+	def tr(self, translation_key: str, *args, allow_failure=True):
+		plugin_translations = self.plugin_manager.registry_storage.translations.get(self.language_manager.language)
+		result = self.language_manager.translate(translation_key, allow_failure, fallback_translations=plugin_translations).strip('\r\n')
 		if len(args) > 0:
 			result = result.format(*args)
 		return result

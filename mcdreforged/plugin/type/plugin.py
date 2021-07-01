@@ -1,7 +1,7 @@
 """
 Single plugin class
 """
-from typing import Tuple, Any, TYPE_CHECKING
+from typing import Tuple, Any, TYPE_CHECKING, Dict
 
 from mcdreforged.command.builder.command_node import Literal
 from mcdreforged.minecraft.rtext import RTextBase
@@ -135,3 +135,8 @@ class AbstractPlugin:
 		self.mcdr_server.logger.debug('{} directly received {}'.format(self, event), option=DebugOption.PLUGIN)
 		for listener in self.plugin_registry.event_listeners.get(event.id, []):
 			self.plugin_manager.trigger_listener(listener, args)
+
+	def register_translation(self, language: str, mapping: Dict[str, str]):
+		self.__assert_allow_to_register('translation')
+		self.mcdr_server.logger.debug('{} is registering translation for {} with {} entries'.format(self, language, len(mapping)), option=DebugOption.PLUGIN)
+		self.plugin_registry.register_translation(language, mapping)

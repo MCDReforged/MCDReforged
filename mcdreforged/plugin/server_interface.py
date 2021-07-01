@@ -1,7 +1,7 @@
 import functools
 import os
 import time
-from typing import Callable, TYPE_CHECKING, Tuple, Any, Union, Optional, List, IO
+from typing import Callable, TYPE_CHECKING, Tuple, Any, Union, Optional, List, IO, Dict
 
 from mcdreforged.command.builder.command_node import Literal
 from mcdreforged.command.command_source import CommandSource, PluginCommandSource
@@ -42,6 +42,9 @@ class ServerInterface:
 
 	@property
 	def logger(self) -> MCDReforgedLogger:
+		"""
+		Yes, a nice logger for you to use
+		"""
 		try:
 			plugin = self._mcdr_server.plugin_manager.get_current_running_plugin()
 			if plugin is not None:
@@ -49,7 +52,19 @@ class ServerInterface:
 		except IllegalCallError:
 			return self._mcdr_server.logger
 
+	def tr(self, translation_key: str, *args) -> str:
+		"""
+		Return a translated text from given translation key and args
+		:param translation_key: The identity key for the translation. It's recommend to be started with "plugin_id."
+		:param args: The arguments for formatting the translation result
+		"""
+		return self._mcdr_server.tr(translation_key, *args)
+
 	def as_basic_server_interface(self) -> 'ServerInterface':
+		"""
+		Return a ServerInterface instance. The type of the return value is exactly the ServerInterface
+		It's used for removing the plugin information inside PluginServerInterface when you need to send a ServerInterface
+		"""
 		return self._mcdr_server.basic_server_interface
 
 	# ------------------------
@@ -193,6 +208,58 @@ class ServerInterface:
 		source.reply(text, encoding=encoding)
 
 	# ------------------------
+	#      Plugin Queries
+	# ------------------------
+
+	def __existed_plugin_info_getter(self, plugin_id: str, handler: Callable[['AbstractPlugin'], Any], *, regular: bool):
+		if regular:
+			plugin = self._mcdr_server.plugin_manager.get_regular_plugin_from_id(plugin_id)
+		else:
+			plugin = self._mcdr_server.plugin_manager.get_plugin_from_id(plugin_id)
+		if plugin is not None:
+			return handler(plugin)
+		return None
+
+	def get_plugin_metadata(self, plugin_id: str) -> Optional[Metadata]:
+		"""
+		Return the metadata of the specified plugin, or None if the plugin doesn't exist
+		:param plugin_id: The plugin id of the plugin to query metadata
+		"""
+		return self.__existed_plugin_info_getter(plugin_id, lambda plugin: plugin.get_metadata(), regular=False)
+
+	def get_plugin_file_path(self, plugin_id: str) -> Optional[str]:
+		"""
+		Return the file path of the specified plugin, or None if the plugin doesn't exist
+		:param plugin_id: The plugin id of the plugin to query file path
+		"""
+		return self.__existed_plugin_info_getter(plugin_id, lambda plugin: plugin.file_path, regular=False)
+
+	def get_plugin_instance(self, plugin_id: str) -> Optional[Any]:
+		"""
+		Return the current loaded plugin instance. With this api your plugin can access the same plugin instance to MCDR
+		It's quite important to use this instead of manually import the plugin you want if the target plugin needs to
+		react to events from MCDR
+		:param plugin_id: The plugin id of the plugin you want
+		:return: A current loaded plugin instance, or None if the plugin doesn't exist
+		"""
+		return self.__existed_plugin_info_getter(plugin_id, lambda plugin: plugin.entry_module_instance, regular=True)
+
+	def get_loaded_plugin_list(self) -> List[str]:
+		"""
+		Return a list containing all loaded plugin id like ["my_plugin", "another_plugin"]
+		"""
+		return [plugin.get_id() for plugin in self._mcdr_server.plugin_manager.get_regular_plugins()]
+
+	def get_metadata_of_all(self) -> Dict[str, Metadata]:
+		"""
+		Return a dict containing metadatas of all loaded plugin with (plugin_id, metadata) as key-value pair
+		"""
+		result = {}
+		for plugin in self._mcdr_server.plugin_manager.get_all_plugins():
+			result[plugin.get_id()] = plugin.get_metadata()
+		return result
+
+	# ------------------------
 	#     Plugin Operations
 	# ------------------------
 
@@ -288,45 +355,6 @@ class ServerInterface:
 		"""
 		self._mcdr_server.plugin_manager.refresh_changed_plugins()
 
-	def get_plugin_list(self) -> List[str]:
-		"""
-		Return a list containing all loaded plugin id like ["my_plugin", "another_plugin"]
-		"""
-		return [plugin.get_id() for plugin in self._mcdr_server.plugin_manager.get_regular_plugins()]
-
-	def __existed_regular_plugin_info_getter(self, plugin_id: str, handler: Callable[['RegularPlugin'], Any]):
-		plugin = self._mcdr_server.plugin_manager.get_regular_plugin_from_id(plugin_id)
-		if plugin is not None:
-			return handler(plugin)
-		return None
-
-	def get_plugin_metadata(self, plugin_id: str) -> Optional[Metadata]:
-		"""
-		Return the metadata of the specified plugin, or None if the plugin doesn't exist
-		:param plugin_id: The plugin id of the plugin to query metadata
-		"""
-		return self.__existed_regular_plugin_info_getter(plugin_id, lambda plugin: plugin.get_metadata())
-
-	def get_plugin_file_path(self, plugin_id: str) -> Optional[str]:
-		"""
-		Return the file path of the specified plugin, or None if the plugin doesn't exist
-		:param plugin_id: The plugin id of the plugin to query file path
-		"""
-		return self.__existed_regular_plugin_info_getter(plugin_id, lambda plugin: plugin.file_path)
-
-	def get_plugin_instance(self, plugin_id: str) -> Optional[Any]:
-		"""
-		Return the current loaded plugin instance. With this api your plugin can access the same plugin instance to MCDR
-		It's quite important to use this instead of manually import the plugin you want if the target plugin needs to
-		react to events from MCDR
-		:param plugin_id: The plugin id of the plugin you want
-		:return: A current loaded plugin instance, or None if the plugin doesn't exist
-		"""
-		plugin = self._mcdr_server.plugin_manager.get_regular_plugin_from_id(plugin_id)
-		if plugin is not None:
-			plugin = plugin.entry_module_instance
-		return plugin
-
 	# ------------------------
 	#        Permission
 	# ------------------------
@@ -409,7 +437,7 @@ class ServerInterface:
 
 class PluginServerInterface(ServerInterface):
 	"""
-	An interface class for plugins to control the server and the plugin
+	An extended ServerInterface class that adds the ability for plugins to control the plugin itself
 	"""
 
 	def __init__(self, mcdr_server: 'MCDReforgedServer', plugin: AbstractPlugin):
@@ -468,6 +496,12 @@ class PluginServerInterface(ServerInterface):
 			message = RText(message)
 		self.__plugin.register_help_message(HelpMessage(self.__plugin, prefix, message, permission))
 
+	def register_translation(self, language: str, mapping: Dict[str, str]) -> None:
+		"""
+		Register translation mapping for a specific language for the current plugin
+		"""
+		self.__plugin.register_translation(language, mapping)
+
 	def dispatch_event(self, event: PluginEvent, args: Tuple[Any, ...], *, on_executor_thread: bool = True) -> None:
 		"""
 		Dispatch an event to all loaded plugins
@@ -504,8 +538,7 @@ class PluginServerInterface(ServerInterface):
 		"""
 		Open a file inside the plugin with binary mode
 		:return: A file-like object
-		:raise:
-		FileNotFoundError if the plugin is not a packed plugin (that is, a solo plugin)
+		:raise: FileNotFoundError if the plugin is not a packed plugin (that is, a solo plugin)
 		"""
 		if not isinstance(self.__plugin, PackedPlugin):
 			raise FileNotFoundError('Only packed plugin supported this api')

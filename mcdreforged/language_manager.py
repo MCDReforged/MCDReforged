@@ -2,7 +2,7 @@
 Translation support
 """
 from logging import Logger
-from typing import Dict
+from typing import Dict, Optional
 
 from mcdreforged.constants import core_constant
 from mcdreforged.utils import resources_util
@@ -31,10 +31,15 @@ class LanguageManager:
 			if not isinstance(key, str) or not isinstance(value, str):
 				self.logger.error('Translation dict has illegal key-value, founded: {} ({}) - {} ({})'.format(key, type(key).__name__, value, type(value).__name__))
 
-	def translate(self, key: str, allow_failure: bool) -> str:
-		text = self.translations.get(key)
-		if text is not None:
-			return text
+	def translate(self, key: str, allow_failure: bool, *, fallback_translations: Optional[Dict[str, str]] = None) -> str:
+		# Translating
+		translated_text = self.translations.get(key)
+		if translated_text is None and fallback_translations is not None:
+			translated_text = fallback_translations.get(key)
+
+		# Processing
+		if translated_text is not None:
+			return translated_text
 		else:
 			if not allow_failure:
 				raise KeyError('Translation key "{}" not found'.format(key))
