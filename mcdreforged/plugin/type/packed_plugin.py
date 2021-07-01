@@ -43,4 +43,8 @@ class PackedPlugin(RegularPlugin, ABC):
 			super()._on_ready()
 
 	def _check_subdir_legality(self):
+		"""
+		Make sure the only python submodule inside the plugin is named with the plugin id
+		:raise IllegalPluginStructure if check failed
+		"""
 		raise NotImplementedError()

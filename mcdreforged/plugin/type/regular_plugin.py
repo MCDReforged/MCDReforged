@@ -137,14 +137,14 @@ class RegularPlugin(AbstractPlugin, ABC):
 	#   Plugin File
 	# ---------------
 
-	def file_exists(self):
+	def plugin_exists(self):
 		return os.path.isfile(self.file_path)
 
 	def file_changed(self):
 		return self.get_file_hash() != self.file_hash
 
 	def get_file_hash(self):
-		if self.file_exists():
+		if self.plugin_exists():
 			with open(self.file_path, 'rb') as file:
 				return hashlib.sha256(file.read()).hexdigest()
 		else:

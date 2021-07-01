@@ -5,6 +5,7 @@ from typing import IO
 from zipfile import ZipFile
 
 from mcdreforged.plugin.type.packed_plugin import PackedPlugin
+from mcdreforged.utils.exception import IllegalPluginStructure
 
 
 class ZippedPlugin(PackedPlugin):
@@ -23,7 +24,7 @@ class ZippedPlugin(PackedPlugin):
 				else:
 					is_module = not init_info.is_dir()
 				if is_module and package_name != self.get_id():
-					raise Exception('Packed plugin cannot contain other package: found package {}'.format(package_name))
+					raise IllegalPluginStructure('Packed plugin cannot contain other package: found package {}'.format(package_name))
 
 	def _on_unload(self):
 		super()._on_unload()
@@ -34,4 +35,4 @@ class ZippedPlugin(PackedPlugin):
 			# noinspection PyProtectedMember,PyUnresolvedReferences
 			zipimport._zip_directory_cache.pop(self.file_path)
 		except KeyError:
-			self.mcdr_server.logger.warning('qwq')
+			self.mcdr_server.logger.exception('Fail to clean zip import cache for {}'.format(self))

@@ -368,7 +368,7 @@ class PluginManager:
 		self.mcdr_server.on_plugin_changed()
 
 	def __refresh_plugins(self, reload_filter: Callable[[RegularPlugin], bool]):
-		unload_result = self.__collect_and_remove_plugins(lambda plugin: not plugin.file_exists())
+		unload_result = self.__collect_and_remove_plugins(lambda plugin: not plugin.plugin_exists())
 		load_result = self.__collect_and_process_new_plugins(lambda fp: True)
 		reload_result = self.__reload_ready_plugins(reload_filter)
 		self.__post_plugin_process(load_result, unload_result, reload_result)
