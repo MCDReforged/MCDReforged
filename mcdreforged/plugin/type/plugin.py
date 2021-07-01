@@ -27,7 +27,7 @@ class AbstractPlugin:
 	def __init__(self, plugin_manager: 'PluginManager', file_path: str):
 		self.plugin_manager = plugin_manager
 		self.mcdr_server = plugin_manager.mcdr_server
-		self.file_path = file_path
+		self.plugin_path = file_path
 		self.state = PluginState.UNINITIALIZED
 		self.plugin_registry = PluginRegistry(self)
 

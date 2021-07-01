@@ -12,7 +12,7 @@ class SoloPlugin(RegularPlugin):
 		return re.sub(r'[^a-z0-9]', '_', file_name.lower())
 
 	def _get_module_instance(self):
-		return misc_util.load_source_from_file_path(self.file_path)
+		return misc_util.load_source_from_file_path(self.plugin_path)
 
 	def _on_load(self):
 		super()._on_load()

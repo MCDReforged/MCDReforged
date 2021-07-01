@@ -1,4 +1,5 @@
 import functools
+import json
 import os
 import time
 from typing import Callable, TYPE_CHECKING, Tuple, Any, Union, Optional, List, IO, Dict
@@ -16,7 +17,7 @@ from mcdreforged.plugin.plugin_event import EventListener, LiteralEvent, PluginE
 from mcdreforged.plugin.plugin_registry import DEFAULT_LISTENER_PRIORITY, HelpMessage
 from mcdreforged.plugin.type.packed_plugin import PackedPlugin
 from mcdreforged.plugin.type.plugin import AbstractPlugin
-from mcdreforged.utils import misc_util
+from mcdreforged.utils import misc_util, serializer
 from mcdreforged.utils.exception import IllegalCallError
 from mcdreforged.utils.logger import MCDReforgedLogger
 
@@ -232,7 +233,7 @@ class ServerInterface:
 		Return the file path of the specified plugin, or None if the plugin doesn't exist
 		:param plugin_id: The plugin id of the plugin to query file path
 		"""
-		return self.__existed_plugin_info_getter(plugin_id, lambda plugin: plugin.file_path, regular=False)
+		return self.__existed_plugin_info_getter(plugin_id, lambda plugin: plugin.plugin_path, regular=False)
 
 	def get_plugin_instance(self, plugin_id: str) -> Optional[Any]:
 		"""
@@ -354,6 +355,22 @@ class ServerInterface:
 		Reload all changed plugins, load all new plugins and then unload all removed plugins
 		"""
 		self._mcdr_server.plugin_manager.refresh_changed_plugins()
+
+	def dispatch_event(self, event: PluginEvent, args: Tuple[Any, ...], *, on_executor_thread: bool = True) -> None:
+		"""
+		Dispatch an event to all loaded plugins
+		The event will be immediately dispatch if it's on the task executor thread, or gets enqueued if it's on other thread
+		:param event: The event to dispatch. It need to be a PluginEvent instance. For simple usage, you can create a
+		LiteralEvent instance for this argument
+		:param args: The argument that will be used to invoke the event listeners. An ServerInterface instance will be
+		automatically added to the beginning of the argument list
+		:param on_executor_thread: If it's set to false. The event will be dispatched immediately no matter what the
+		current thread is
+		"""
+		misc_util.check_type(event, PluginEvent)
+		if MCDRPluginEvents.contains_id(event.id):
+			raise ValueError('Cannot dispatch event with already exists event id {}'.format(event.id))
+		self._mcdr_server.plugin_manager.dispatch_event(event, args, on_executor_thread=on_executor_thread)
 
 	# ------------------------
 	#        Permission
@@ -502,25 +519,15 @@ class PluginServerInterface(ServerInterface):
 		"""
 		self.__plugin.register_translation(language, mapping)
 
-	def dispatch_event(self, event: PluginEvent, args: Tuple[Any, ...], *, on_executor_thread: bool = True) -> None:
-		"""
-		Dispatch an event to all loaded plugins
-		The event will be immediately dispatch if it's on the task executor thread, or gets enqueued if it's on other thread
-		:param event: The event to dispatch. It need to be a PluginEvent instance. For simple usage, you can create a
-		LiteralEvent instance for this argument
-		:param args: The argument that will be used to invoke the event listeners. An ServerInterface instance will be
-		automatically added to the beginning of the argument list
-		:param on_executor_thread: If it's set to false. The event will be dispatched immediately no matter what the
-		current thread is
-		"""
-		misc_util.check_type(event, PluginEvent)
-		if MCDRPluginEvents.contains_id(event.id):
-			raise ValueError('Cannot dispatch event with already exists event id {}'.format(event.id))
-		self._mcdr_server.plugin_manager.dispatch_event(event, args, on_executor_thread=on_executor_thread)
-
 	# ------------------------
 	#      Plugin Utils
 	# ------------------------
+
+	def get_self_metadata(self) -> Metadata:
+		"""
+		Return the metadata of the plugin itself
+		"""
+		return self.__plugin.get_metadata()
 
 	def get_data_folder(self) -> str:
 		"""
@@ -542,4 +549,76 @@ class PluginServerInterface(ServerInterface):
 		"""
 		if not isinstance(self.__plugin, PackedPlugin):
 			raise FileNotFoundError('Only packed plugin supported this api')
-		return self.__plugin.get_file(related_file_path)
+		return self.__plugin.open_file(related_file_path)
+
+	def load_config_simple(
+			self, file_name: str = 'config.json', default_config: dict = None, *,
+			in_data_folder: bool = True, echo_in_console: bool = True, source_to_reply: Optional[CommandSource] = None
+		) -> dict:
+		"""
+		A simple method to load a dict type config from a json file
+		Default config is supported. Missing key-values in the loaded config object will be filled using the default config
+		:param file_name: The name of the config file
+		:param default_config: A dict contains the default config. It's required when the config file is missing
+		:param in_data_folder: If true, the parent directory of file operating is the data folder of the plugin
+		:param echo_in_console: If logging messages in console about config loading
+		:param source_to_reply: The command source for replying logging messages
+		:return: A dict contains the loaded and processed config
+		"""
+		def log(msg):
+			if source_to_reply is not None:
+				source_to_reply.reply(msg)
+			if echo_in_console:
+				self.logger.info(msg)
+
+		config_file_path = os.path.join(self.get_data_folder(), file_name) if in_data_folder else file_name
+		needs_save = False
+		try:
+			with open(config_file_path) as file_handler:
+				read_data = json.load(file_handler)
+		except Exception as e:
+			if default_config is not None:  # use default config
+				result_config = default_config.copy()
+			else:  # no default config and cannot read config file, raise the error
+				raise
+			needs_save = True
+			log('Fail to read config file, using default config ({})'.format(e))
+		else:
+			if default_config is not None:
+				# constructing the result config based on the given default config
+				result_config = {}
+				for key, value in default_config.items():
+					if key in read_data:
+						result_config[key] = read_data[key]
+					else:
+						result_config[key] = value
+						log('Found missing config key "{}", using default value "{}"'.format(key, value))
+						needs_save = True
+			else:
+				result_config = read_data
+			log('Config file loaded')
+		if needs_save:
+			with open(config_file_path, 'w') as file:
+				json.dump(result_config, file, indent=4)
+		return result_config
+
+	def deserialize_data(self, file_path: str, object_type: type) -> Any:
+		"""
+		:param file_path: The json file that is used to load the object from
+		:param object_type: A well typehint decorated class type
+		:return: A object deserialize from the file
+		"""
+		with open(file_path, 'r') as handler:
+			data = json.load(handler)
+		obj = serializer.deserialize(data, object_type)
+		self.serialize_data(file_path, obj)
+		return obj
+
+	def serialize_data(self, file_path: str, config_object: Any) -> None:
+		"""
+		:param file_path: The json file that is to used to save the object to
+		:param config_object: The object to be serialized
+		"""
+		data = serializer.serialize(config_object)
+		with open(file_path, 'w') as handler:
+			json.dump(data, handler, indent=4, ensure_ascii=False)

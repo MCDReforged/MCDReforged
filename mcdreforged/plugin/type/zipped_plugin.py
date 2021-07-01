@@ -1,24 +1,63 @@
 import os
 import sys
 import zipimport
-from typing import IO
+from io import BytesIO
+from typing import IO, Collection, TYPE_CHECKING, Optional
 from zipfile import ZipFile
 
 from mcdreforged.plugin.type.packed_plugin import PackedPlugin
 from mcdreforged.utils.exception import IllegalPluginStructure
 
+if TYPE_CHECKING:
+	from mcdreforged.plugin.plugin_manager import PluginManager
+
 
 class ZippedPlugin(PackedPlugin):
-	def get_file(self, file_name: str) -> IO[bytes]:
-		return ZipFile(self.file_path).open(file_name, 'r')
+	def __init__(self, plugin_manager: 'PluginManager', file_path: str):
+		super().__init__(plugin_manager, file_path)
+		self.__zip_file_cache = None  # type: Optional[ZipFile]
+
+	@property
+	def __zip_file(self) -> ZipFile:
+		if self.__zip_file_cache is None:
+			with open(self.plugin_path, 'rb') as file_handler:
+				content = BytesIO()
+				content.write(file_handler.read())
+			self.__zip_file_cache = ZipFile(content)
+		return self.__zip_file_cache
+
+	@classmethod
+	def __format_path(cls, path: str):
+		return path.replace('\\', '/')
+
+	def _reset(self):
+		super()._reset()
+		if self.__zip_file_cache is not None:
+			self.__zip_file_cache.close()
+		self.__zip_file_cache = None
+
+	def open_file(self, file_path: str) -> IO[bytes]:
+		return self.__zip_file.open(self.__format_path(file_path), 'r')
+
+	def list_directory(self, directory_name: str) -> Collection[str]:
+		result = []
+		directory_name = self.__format_path(directory_name).rstrip('/\\') + '/'
+		for file_info in self.__zip_file_cache.infolist():
+			# is inside the dir and is directly inside
+			if file_info.filename.startswith(directory_name):
+				file_name = file_info.filename.replace(directory_name, '', 1)
+				if len(file_name) > 0 and '/' not in file_name.rstrip('/'):
+					result.append(file_name)
+		return result
 
 	def _check_subdir_legality(self):
-		zip_file = ZipFile(self.file_path)
-		for file_info in zip_file.infolist():
+		for file_info in self.__zip_file_cache.infolist():
 			if file_info.is_dir():
-				package_name = file_info.filename[:-1]  # removing the ending '/'
+				package_name: str = file_info.filename[:-1]  # removing the ending '/'
+				if '/' in package_name:  # not at root
+					continue
 				try:
-					init_info = zip_file.getinfo(os.path.join(package_name, '__init__.py'))
+					init_info = self.__zip_file_cache.getinfo(os.path.join(package_name, '__init__.py'))
 				except KeyError:
 					is_module = False
 				else:
@@ -30,9 +69,9 @@ class ZippedPlugin(PackedPlugin):
 		super()._on_unload()
 		try:
 			for path in list(sys.path_importer_cache.keys()):
-				if path.startswith(self.file_path):
+				if path.startswith(self.plugin_path):
 					sys.path_importer_cache.pop(path)
 			# noinspection PyProtectedMember,PyUnresolvedReferences
-			zipimport._zip_directory_cache.pop(self.file_path)
+			zipimport._zip_directory_cache.pop(self.plugin_path)
 		except KeyError:
 			self.mcdr_server.logger.exception('Fail to clean zip import cache for {}'.format(self))

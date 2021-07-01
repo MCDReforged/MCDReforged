@@ -16,3 +16,5 @@ from mcdreforged.api.rcon import *
 from mcdreforged.api.rtext import *
 # noinspection PyUnresolvedReferences
 from mcdreforged.api.types import *
+# noinspection PyUnresolvedReferences
+from mcdreforged.api.utils import *

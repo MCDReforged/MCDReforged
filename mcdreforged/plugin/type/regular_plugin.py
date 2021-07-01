@@ -53,7 +53,7 @@ class RegularPlugin(AbstractPlugin, ABC):
 		return self.__class__.__name__
 
 	def __repr__(self):
-		return '{}[file={},path={},state={}]'.format(self.__class_name, self.file_name, self.file_path, self.state)
+		return '{}[file={},path={},state={}]'.format(self.__class_name, self.file_name, self.plugin_path, self.state)
 
 	# ----------------------
 	#   Instance Operation
@@ -107,7 +107,7 @@ class RegularPlugin(AbstractPlugin, ABC):
 	def load(self):
 		self.assert_state({PluginState.UNINITIALIZED})
 		self._on_load()
-		self.mcdr_server.logger.debug('{} {} loaded from {}, file sha256 = {}'.format(self.__class_name, self, self.file_path, self.file_hash), option=DebugOption.PLUGIN)
+		self.mcdr_server.logger.debug('{} {} loaded from {}, file sha256 = {}'.format(self.__class_name, self, self.plugin_path, self.file_hash), option=DebugOption.PLUGIN)
 		self.set_state(PluginState.LOADED)
 
 	def ready(self):
@@ -138,14 +138,14 @@ class RegularPlugin(AbstractPlugin, ABC):
 	# ---------------
 
 	def plugin_exists(self):
-		return os.path.isfile(self.file_path)
+		return os.path.isfile(self.plugin_path)
 
 	def file_changed(self):
 		return self.get_file_hash() != self.file_hash
 
 	def get_file_hash(self):
 		if self.plugin_exists():
-			with open(self.file_path, 'rb') as file:
+			with open(self.plugin_path, 'rb') as file:
 				return hashlib.sha256(file.read()).hexdigest()
 		else:
 			return None

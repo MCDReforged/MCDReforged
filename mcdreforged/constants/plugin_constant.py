@@ -15,7 +15,7 @@ PACKED_PLUGIN_FILE_SUFFIX = '.mcdr'
 PLUGIN_META_FILE = 'mcdreforged.plugin.json'
 
 # the path to the directory inside a packed plugin as the default directory to store the language files of the plugin
-PLUGIN_LANGUAGE_FILES_PATH = 'lang'
+PLUGIN_TRANSLATION_FILES_PATH = 'lang'
 
 # Disabled plugin file name suffix
 DISABLED_PLUGIN_FILE_SUFFIX = '.disabled'

@@ -133,7 +133,7 @@ class PluginManager:
 			self.logger.critical('Something is not correct, a plugin with existed plugin id "{}" is added'.format(plugin_id))
 		self.plugins[plugin_id] = plugin
 		if isinstance(plugin, RegularPlugin):
-			self.plugin_file_path[plugin.file_path] = plugin_id
+			self.plugin_file_path[plugin.plugin_path] = plugin_id
 
 	def __remove_plugin(self, plugin: AbstractPlugin):
 		if not plugin.is_permanent():
@@ -141,8 +141,8 @@ class PluginManager:
 			if plugin_id in self.plugins:
 				self.plugins.pop(plugin_id)
 			if isinstance(plugin, RegularPlugin):
-				if plugin.file_path in self.plugin_file_path:
-					self.plugin_file_path.pop(plugin.file_path)
+				if plugin.plugin_path in self.plugin_file_path:
+					self.plugin_file_path.pop(plugin.plugin_path)
 
 	# ----------------------------
 	#   Single Plugin Operations
@@ -170,12 +170,12 @@ class PluginManager:
 				self.logger.info(self.mcdr_server.tr('plugin_manager.load_plugin.success', plugin.get_name()))
 				return plugin
 			else:
-				self.logger.error(self.mcdr_server.tr('plugin_manager.load_plugin.duplicate', plugin.get_name(), plugin.file_path, existed_plugin.get_name(), existed_plugin.file_path))
+				self.logger.error(self.mcdr_server.tr('plugin_manager.load_plugin.duplicate', plugin.get_name(), plugin.plugin_path, existed_plugin.get_name(), existed_plugin.plugin_path))
 				try:
 					plugin.unload()
 				except:
 					# should never come here
-					self.logger.exception(self.mcdr_server.tr('plugin_manager.load_plugin.unload_duplication_fail', plugin.get_name(), plugin.file_path))
+					self.logger.exception(self.mcdr_server.tr('plugin_manager.load_plugin.unload_duplication_fail', plugin.get_name(), plugin.plugin_path))
 				plugin.remove()  # quickly remove this plugin
 				return None
 
@@ -226,12 +226,12 @@ class PluginManager:
 				self.logger.info(self.mcdr_server.tr('plugin_manager.reload_plugin.success', plugin.get_name()))
 				return True
 			else:
-				self.logger.error(self.mcdr_server.tr('plugin_manager.load_plugin.duplicate', plugin.get_name(), plugin.file_path, existed_plugin.get_name(), existed_plugin.file_path))
+				self.logger.error(self.mcdr_server.tr('plugin_manager.load_plugin.duplicate', plugin.get_name(), plugin.plugin_path, existed_plugin.get_name(), existed_plugin.plugin_path))
 				try:
 					plugin.unload()
 				except:
 					# should never come here
-					self.logger.exception(self.mcdr_server.tr('plugin_manager.load_plugin.unload_duplication_fail', plugin.get_name(), plugin.file_path))
+					self.logger.exception(self.mcdr_server.tr('plugin_manager.load_plugin.unload_duplication_fail', plugin.get_name(), plugin.plugin_path))
 				return False
 
 	# ---------------------------------------
@@ -407,8 +407,8 @@ class PluginManager:
 		with self.__mani_lock:
 			self.logger.info(self.mcdr_server.tr('plugin_manager.disable_plugin.entered', plugin))
 			self.unload_plugin(plugin)
-			if os.path.isfile(plugin.file_path):
-				os.rename(plugin.file_path, plugin.file_path + plugin_constant.DISABLED_PLUGIN_FILE_SUFFIX)
+			if os.path.isfile(plugin.plugin_path):
+				os.rename(plugin.plugin_path, plugin.plugin_path + plugin_constant.DISABLED_PLUGIN_FILE_SUFFIX)
 
 	def refresh_all_plugins(self):
 		with self.__mani_lock:

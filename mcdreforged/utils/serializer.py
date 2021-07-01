@@ -20,14 +20,12 @@ def serialize(obj) -> Union[None, int, float, str, list, dict]:
 
 
 def deserialize(data, cls: T, *, error_at_missing=False, error_at_redundancy=False) -> T:
-	# Element
-	if data is None or cls is int or cls is float or cls is str:
-		if type(data) is cls:
-			return data
-		elif cls is float and isinstance(data, int):
-			return float(data)
-		else:
-			raise TypeError('Unmatched input type: expected {} but found ({})'.format(cls, type(data)))
+	# Element (None, int, float, str, list, dict)
+	if type(data) is cls:
+		return data
+	# float thing
+	elif cls is float and isinstance(data, int):
+		return float(data)
 	# List
 	elif isinstance(data, list) and issubclass(cls, List):
 		element_type = getattr(cls, '__args__')[0]
@@ -57,7 +55,7 @@ def deserialize(data, cls: T, *, error_at_missing=False, error_at_redundancy=Fal
 			raise ValueError('Redundancy attributes {} for class {} in input object {}'.format(input_key_set, cls, data))
 		return result
 	else:
-		raise TypeError('Unsupported input type {}'.format(type(data)))
+		raise TypeError('Unsupported input type: expected {} but found ({})'.format(cls, type(data)))
 
 
 class Serializable(ABC):
