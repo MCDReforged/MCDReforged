@@ -27,11 +27,11 @@ def deserialize(data, cls: T, *, error_at_missing=False, error_at_redundancy=Fal
 	elif cls is float and isinstance(data, int):
 		return float(data)
 	# List
-	elif isinstance(data, list) and issubclass(cls, List):
+	elif isinstance(data, list) and getattr(cls, '__origin__', None) == List[int].__origin__:
 		element_type = getattr(cls, '__args__')[0]
 		return list(map(lambda e: deserialize(e, element_type), data))
 	# Dict
-	elif isinstance(data, dict) and issubclass(cls, Dict):
+	elif isinstance(data, dict) and getattr(cls, '__origin__', None) == Dict[int, int].__origin__:
 		key_type = getattr(cls, '__args__')[0]
 		val_type = getattr(cls, '__args__')[1]
 		instance = {}
@@ -55,7 +55,7 @@ def deserialize(data, cls: T, *, error_at_missing=False, error_at_redundancy=Fal
 			raise ValueError('Redundancy attributes {} for class {} in input object {}'.format(input_key_set, cls, data))
 		return result
 	else:
-		raise TypeError('Unsupported input type: expected {} but found ({})'.format(cls, type(data)))
+		raise TypeError('Unsupported input type: expected class {} but found data {}'.format(cls, type(data)))
 
 
 class Serializable(ABC):
