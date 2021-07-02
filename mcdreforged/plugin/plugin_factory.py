@@ -18,24 +18,25 @@ def __get_suffix(file_path: str):
 	return file_path[index:]
 
 
-def __get_plugin_class_from_path(file_path: str) -> Optional[type]:
+def __get_plugin_class_from_path(file_path: str, allow_disabled: bool) -> Optional[type]:
 	if os.path.isfile(file_path):
 		suffix = __get_suffix(file_path)
-		if suffix == plugin_constant.SOLO_PLUGIN_FILE_SUFFIX:
+		if suffix == plugin_constant.SOLO_PLUGIN_FILE_SUFFIX:  # .py
 			return SoloPlugin
-		if suffix == plugin_constant.PACKED_PLUGIN_FILE_SUFFIX:
+		if suffix == plugin_constant.PACKED_PLUGIN_FILE_SUFFIX:  # .mcdr
 			return ZippedPlugin
-	elif os.path.isdir(file_path) and not file_path.endswith(plugin_constant.DISABLED_PLUGIN_FILE_SUFFIX):
+	elif os.path.isdir(file_path) and (allow_disabled or not file_path.endswith(plugin_constant.DISABLED_PLUGIN_FILE_SUFFIX)):
 		if os.path.isfile(os.path.join(file_path, plugin_constant.PLUGIN_META_FILE)) and not os.path.isfile(os.path.join(file_path, '__init__.py')):
 			return DirectoryPlugin
+	return None
 
 
-def maybe_plugin(file_path: str) -> bool:
-	return __get_plugin_class_from_path(file_path) is not None
+def maybe_plugin(file_path: str, *, allow_disabled: bool = False) -> bool:
+	return __get_plugin_class_from_path(file_path, allow_disabled) is not None
 
 
-def create_regular_plugin(plugin_manager: 'PluginManager', file_path: str) -> Optional[RegularPlugin]:
-	cls = __get_plugin_class_from_path(file_path)
+def create_regular_plugin(plugin_manager: 'PluginManager', file_path: str) -> RegularPlugin:
+	cls = __get_plugin_class_from_path(file_path, False)
 	if cls is None:
-		return None
+		raise TypeError('Trying to create a regular plugin with invalid path {}'.format(file_path))
 	return cls(plugin_manager, file_path)

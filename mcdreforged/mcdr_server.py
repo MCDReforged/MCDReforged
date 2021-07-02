@@ -5,7 +5,7 @@ import time
 import traceback
 from subprocess import Popen, PIPE, STDOUT
 from threading import Lock
-from typing import Optional
+from typing import Optional, Union
 
 import psutil
 
@@ -19,13 +19,14 @@ from mcdreforged.executor.watchdog import WatchDog
 from mcdreforged.handler.server_handler_manager import ServerHandlerManager
 from mcdreforged.info import Info
 from mcdreforged.info_reactor.info_reactor_manager import InfoReactorManager
-from mcdreforged.language_manager import LanguageManager
 from mcdreforged.mcdr_state import ServerState, MCDReforgedState, MCDReforgedFlag
 from mcdreforged.minecraft.rcon.rcon_manager import RconManager
+from mcdreforged.minecraft.rtext import RTextBase
 from mcdreforged.permission.permission_manager import PermissionManager
 from mcdreforged.plugin.plugin_event import MCDRPluginEvents
 from mcdreforged.plugin.plugin_manager import PluginManager
 from mcdreforged.plugin.server_interface import ServerInterface
+from mcdreforged.translation_manager import TranslationManager
 from mcdreforged.utils import logger, file_util
 from mcdreforged.utils.exception import IllegalCallError, ServerStopped, ServerStartError, IllegalStateError
 from mcdreforged.utils.logger import DebugOption, MCDReforgedLogger
@@ -55,7 +56,7 @@ class MCDReforgedServer:
 		self.console_handler = ConsoleHandler(self)
 		self.watch_dog = WatchDog(self)
 		self.update_helper = UpdateHelper(self)
-		self.language_manager = LanguageManager(self.logger)
+		self.translation_manager = TranslationManager(self.logger)
 		self.config = Config(self.logger)
 		self.rcon_manager = RconManager(self)
 		self.server_handler_manager = ServerHandlerManager(self)
@@ -99,15 +100,20 @@ class MCDReforgedServer:
 		self.plugin_manager.set_plugin_directories(default_config['plugin_directories'])  # to touch the directory
 
 	# --------------------------
-	#   Translate info strings
+	#         Translate
 	# --------------------------
 
-	def tr(self, translation_key: str, *args, allow_failure=True):
-		plugin_translations = self.plugin_manager.registry_storage.translations.get(self.language_manager.language)
-		result = self.language_manager.translate(translation_key, allow_failure, fallback_translations=plugin_translations).strip('\r\n')
-		if len(args) > 0:
-			result = result.format(*args)
-		return result
+	def tr(self, translation_key: str, *args, allow_failure=True) -> Union[str, RTextBase]:
+		"""
+		Return a translated text corresponded to the translation key and format the text with given args
+		If args contains RText element, then the result will be a RText, otherwise the result will be a regular str
+		If the translation key is not recognized, the input translation key will be returned
+		:param translation_key: The key of the translation
+		:param args: The args to be formatted
+		:param allow_failure: If set to false, a KeyError will be risen if the translation key is not recognized
+		"""
+		plugin_translations = self.plugin_manager.registry_storage.translations.get(self.translation_manager.language)
+		return self.translation_manager.translate(translation_key, args, allow_failure=allow_failure, fallback_translations=plugin_translations)
 
 	# --------------------------
 	#          Loaders
@@ -127,7 +133,7 @@ class MCDReforgedServer:
 		if self.config.is_debug_on():
 			self.logger.info(self.tr('mcdr_server.on_config_changed.debug_mode_on'))
 
-		self.language_manager.set_language(self.config['language'])
+		self.translation_manager.set_language(self.config['language'])
 		self.logger.info(self.tr('mcdr_server.on_config_changed.language_set', self.config['language']))
 
 		self.encoding_method = self.config['encoding'] if self.config['encoding'] is not None else sys.getdefaultencoding()
@@ -450,8 +456,7 @@ class MCDReforgedServer:
 
 			self.logger.info(self.tr('mcdr_server.on_mcdr_stop.info'))
 
-			self.watch_dog.stop()  # it's ok for plugins to take some time
-			self.watch_dog.join()
+			self.watch_dog.pause()  # it's ok for plugins to take some time
 			self.plugin_manager.dispatch_event(MCDRPluginEvents.MCDR_STOP, (), wait=True)
 
 			self.logger.info(self.tr('mcdr_server.on_mcdr_stop.bye'))

@@ -345,9 +345,9 @@ class PluginManager:
 		for plugin in unload_result.success_list + unload_result.failed_list + reload_result.failed_list + dependency_check_result.failed_list:
 			plugin.assert_state({PluginState.UNLOADING})
 			# plugins might just be newly loaded but failed on dependency check, dont dispatch event to them
-			if plugin not in load_result.success_list:
+			if plugin not in newly_loaded_plugins:
 				plugin.receive_event(MCDRPluginEvents.PLUGIN_UNLOADED, ())
-			plugin.receive_event(MCDRPluginEvents.PLUGIN_REMOVED, ())
+			# plugin.receive_event(MCDRPluginEvents.PLUGIN_REMOVED, ())
 			plugin.remove()
 
 		# they should be
@@ -399,7 +399,7 @@ class PluginManager:
 		with self.__mani_lock:
 			self.logger.info(self.mcdr_server.tr('plugin_manager.enable_plugin.entered', file_path))
 			new_file_path = string_util.remove_suffix(file_path, plugin_constant.DISABLED_PLUGIN_FILE_SUFFIX)
-			if os.path.isfile(file_path):
+			if plugin_factory.maybe_plugin(file_path, allow_disabled=True):
 				os.rename(file_path, new_file_path)
 				self.load_plugin(new_file_path)
 
@@ -407,7 +407,7 @@ class PluginManager:
 		with self.__mani_lock:
 			self.logger.info(self.mcdr_server.tr('plugin_manager.disable_plugin.entered', plugin))
 			self.unload_plugin(plugin)
-			if os.path.isfile(plugin.plugin_path):
+			if plugin.plugin_exists():
 				os.rename(plugin.plugin_path, plugin.plugin_path + plugin_constant.DISABLED_PLUGIN_FILE_SUFFIX)
 
 	def refresh_all_plugins(self):

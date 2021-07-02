@@ -17,7 +17,7 @@ from mcdreforged.plugin.plugin_event import EventListener, LiteralEvent, PluginE
 from mcdreforged.plugin.plugin_registry import DEFAULT_LISTENER_PRIORITY, HelpMessage
 from mcdreforged.plugin.type.packed_plugin import PackedPlugin
 from mcdreforged.plugin.type.plugin import AbstractPlugin
-from mcdreforged.utils import misc_util, serializer
+from mcdreforged.utils import misc_util
 from mcdreforged.utils.exception import IllegalCallError
 from mcdreforged.utils.logger import MCDReforgedLogger
 
@@ -33,9 +33,22 @@ class ServerInterface:
 	"""
 
 	MCDR = True  # Identifier for plugins
+	__global_instance: Optional['ServerInterface'] = None  # For singleton instance storage
+
+	@classmethod
+	def get_instance(cls) -> Optional['ServerInterface']:
+		"""
+		A class method, for plugins to get a ServerInterface instance anywhere as long as MCDR is running
+		"""
+		return cls.__global_instance
 
 	def __init__(self, mcdr_server: 'MCDReforgedServer'):
 		self._mcdr_server = mcdr_server
+		if type(self) is ServerInterface:
+			# singleton, should only occurs during MCDReforgedServer construction
+			if ServerInterface.__global_instance is not None:
+				self._mcdr_server.logger.warning('Double assigning the singleton instance in {}'.format(self.__class__.__name__), stack_info=True)
+			ServerInterface.__global_instance = self
 
 	@functools.lru_cache(maxsize=512, typed=True)
 	def __get_logger(self, plugin_id: str):
@@ -53,7 +66,7 @@ class ServerInterface:
 		except IllegalCallError:
 			return self._mcdr_server.logger
 
-	def tr(self, translation_key: str, *args) -> str:
+	def tr(self, translation_key: str, *args) -> Union[str, RTextBase]:
 		"""
 		Return a translated text from given translation key and args
 		:param translation_key: The identity key for the translation. It's recommend to be started with "plugin_id."
@@ -82,9 +95,18 @@ class ServerInterface:
 	def stop(self) -> None:
 		"""
 		Soft shutting down the server by sending the correct stop command to the server
+		MCDR will keep running unless exit() is invoked
 		"""
 		self._mcdr_server.remove_flag(MCDReforgedFlag.EXIT_AFTER_STOP)
 		self._mcdr_server.stop(forced=False)
+
+	def kill(self) -> None:
+		"""
+		Kill the server process group
+		MCDR will keep running unless exit() is invoked
+		"""
+		self._mcdr_server.remove_flag(MCDReforgedFlag.EXIT_AFTER_STOP)
+		self._mcdr_server.stop(forced=True)
 
 	def wait_for_start(self) -> None:
 		"""
@@ -284,6 +306,7 @@ class ServerInterface:
 		:param handler: What you want to do with Plugin Manager to the given file path
 		:return: If success
 		"""
+		self._mcdr_server.plugin_manager.last_operation_result.clear()
 		handler(self._mcdr_server.plugin_manager)(plugin_file_path)
 		return self.__check_if_success(self._mcdr_server.plugin_manager.last_operation_result.load_result, check_loaded=True)  # the operations is always loading a plugin
 
@@ -299,6 +322,7 @@ class ServerInterface:
 		"""
 		plugin = self._mcdr_server.plugin_manager.get_regular_plugin_from_id(plugin_id)
 		if plugin is not None:
+			self._mcdr_server.plugin_manager.last_operation_result.clear()
 			handler(self._mcdr_server.plugin_manager)(plugin)
 			opt_result = result_getter(self._mcdr_server.plugin_manager.last_operation_result)
 			return self.__check_if_success(opt_result, check_loaded)
@@ -566,7 +590,7 @@ class PluginServerInterface(ServerInterface):
 		:return: A dict contains the loaded and processed config
 		"""
 		def log(msg):
-			if source_to_reply is not None:
+			if isinstance(source_to_reply, CommandSource):
 				source_to_reply.reply(msg)
 			if echo_in_console:
 				self.logger.info(msg)
@@ -601,24 +625,3 @@ class PluginServerInterface(ServerInterface):
 			with open(config_file_path, 'w') as file:
 				json.dump(result_config, file, indent=4)
 		return result_config
-
-	def deserialize_data(self, file_path: str, object_type: type) -> Any:
-		"""
-		:param file_path: The json file that is used to load the object from
-		:param object_type: A well typehint decorated class type
-		:return: A object deserialize from the file
-		"""
-		with open(file_path, 'r') as handler:
-			data = json.load(handler)
-		obj = serializer.deserialize(data, object_type)
-		self.serialize_data(file_path, obj)
-		return obj
-
-	def serialize_data(self, file_path: str, config_object: Any) -> None:
-		"""
-		:param file_path: The json file that is to used to save the object to
-		:param config_object: The object to be serialized
-		"""
-		data = serializer.serialize(config_object)
-		with open(file_path, 'w') as handler:
-			json.dump(data, handler, indent=4, ensure_ascii=False)

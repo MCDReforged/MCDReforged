@@ -1,13 +1,13 @@
 import logging
 import unittest
 
-from mcdreforged.language_manager import LanguageManager
+from mcdreforged.translation_manager import TranslationManager
 
 
 class MyTestCase(unittest.TestCase):
 	def __init__(self, *args):
 		super().__init__(*args)
-		self.language_manager = LanguageManager(logging.getLogger())
+		self.language_manager = TranslationManager(logging.getLogger())
 
 	def test_0_same_key_order(self):
 		language_list = ['en_us', 'zh_cn']

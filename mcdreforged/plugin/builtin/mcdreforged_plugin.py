@@ -326,7 +326,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 	def get_files_in_plugin_directories(self, filter: Callable[[str], bool]) -> List[str]:
 		result = []
 		for plugin_directory in self.mcdr_server.plugin_manager.plugin_directories:
-			result.extend(file_util.list_file(plugin_directory, filter))
+			result.extend(file_util.list_all(plugin_directory, filter))
 		return result
 
 	def list_plugin(self, source: CommandSource):

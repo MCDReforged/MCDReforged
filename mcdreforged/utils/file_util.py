@@ -2,13 +2,17 @@ import os
 from typing import Callable
 
 
-def list_file(directory: str, filter: Callable[[str], bool] = lambda file_path: True):
+def list_all(directory: str, filter: Callable[[str], bool] = lambda file_path: True):
 	ret = []
 	for file in os.listdir(directory):
 		file_path = os.path.join(directory, file)
-		if os.path.isfile(file_path) and filter(file_path):
+		if filter(file_path):
 			ret.append(file_path)
 	return ret
+
+
+def list_file(directory: str, filter: Callable[[str], bool] = lambda file_path: True):
+	return list_all(directory, lambda file_path: os.path.isfile(file_path) and filter(file_path))
 
 
 def list_file_with_suffix(directory: str, suffix: str):

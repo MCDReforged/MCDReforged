@@ -53,7 +53,7 @@ class MCDRPluginEvents:
 	PLAYER_LEFT 	= _PluginEventStorage.register(MCDREvent('mcdr.player_left', 'Player left', 'on_player_left'))
 	PLUGIN_LOADED 	= _PluginEventStorage.register(MCDREvent('mcdr.plugin_loaded', 'Plugin loaded', 'on_load'))
 	PLUGIN_UNLOADED = _PluginEventStorage.register(MCDREvent('mcdr.plugin_unloaded', 'Plugin unloaded', 'on_unload'))
-	PLUGIN_REMOVED 	= _PluginEventStorage.register(MCDREvent('mcdr.plugin_removed', 'Plugin removed', 'on_remove'))
+	# PLUGIN_REMOVED 	= _PluginEventStorage.register(MCDREvent('mcdr.plugin_removed', 'Plugin removed', 'on_remove'))
 
 	@classmethod
 	def get_event_list(cls):

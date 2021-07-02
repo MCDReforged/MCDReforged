@@ -2,7 +2,6 @@ import os
 from typing import List, TYPE_CHECKING
 
 from mcdreforged.minecraft.rtext import RTextList, RText, RAction, RTextBase
-from mcdreforged.utils.exception import IllegalCallError
 
 if TYPE_CHECKING:
 	from mcdreforged.plugin.type.plugin import AbstractPlugin
@@ -26,6 +25,10 @@ class SingleOperationResult:
 		else:
 			self.fail(plugin)
 
+	def clear(self):
+		self.success_list.clear()
+		self.failed_list.clear()
+
 	def has_success(self):
 		return len(self.success_list) > 0
 
@@ -34,27 +37,27 @@ class SingleOperationResult:
 
 
 class PluginOperationResult:
-	load_result: SingleOperationResult
-	unload_result: SingleOperationResult
-	reload_result: SingleOperationResult
-	dependency_check_result: SingleOperationResult
-
 	def __init__(self, plugin_manager: 'PluginManager'):
 		self.__plugin_manager = plugin_manager
 		self.__mcdr_server = plugin_manager.mcdr_server
-		self.__has_record = False
+		self.load_result = SingleOperationResult()
+		self.unload_result = SingleOperationResult()
+		self.reload_result = SingleOperationResult()
+		self.dependency_check_result = SingleOperationResult()
 
 	def record(self, load_result, unload_result, reload_result, dependencies_resolve_result):
-		self.__has_record = True
 		self.load_result = load_result
 		self.unload_result = unload_result
 		self.reload_result = reload_result
 		self.dependency_check_result = dependencies_resolve_result
 
-	def to_rtext(self, *, show_path: bool) -> RTextBase:
-		if not self.__has_record:
-			raise IllegalCallError('No record yet')
+	def clear(self):
+		self.load_result.clear()
+		self.unload_result.clear()
+		self.reload_result.clear()
+		self.dependency_check_result.clear()
 
+	def to_rtext(self, *, show_path: bool) -> RTextBase:
 		def add_element(msg: RTextList, element):
 			msg.append(element)
 			msg.append('; ')
