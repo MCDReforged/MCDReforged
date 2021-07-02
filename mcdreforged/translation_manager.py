@@ -40,11 +40,14 @@ class TranslationManager:
 		if len(self.translations[language]) == 0:
 			self.logger.warning('Setting language to {} with 0 available translation'.format(language))
 
-	def translate(self, key: str, args: tuple, *, allow_failure: bool, fallback_translations: Optional[Dict[str, Dict[str, str]]] = None) -> Union[str, RTextBase]:
+	def translate(self, key: str, args: tuple, *, allow_failure: bool, language: Optional[str], fallback_translations: Optional[Dict[str, Dict[str, str]]] = None) -> Union[str, RTextBase]:
+		if language is None:
+			language = self.language
+
 		# Translating
-		translated_text = self.translations[self.language].get(key)
+		translated_text = self.translations[language].get(key)
 		if translated_text is None and fallback_translations is not None:
-			translated_text = fallback_translations.get(self.language, {}).get(key)
+			translated_text = fallback_translations.get(language, {}).get(key)
 
 		# Check if there's any rtext inside args
 		use_rtext = False
@@ -63,7 +66,7 @@ class TranslationManager:
 		else:
 			if not allow_failure:
 				raise KeyError('Translation key "{}" not found'.format(key))
-			self.logger.error('Error translate text "{}" to current language {}'.format(key, self.language))
+			self.logger.error('Error translate text "{}" to language {}'.format(key, language))
 			return key if not use_rtext else RTextBase.from_any(key)
 
 	@classmethod
