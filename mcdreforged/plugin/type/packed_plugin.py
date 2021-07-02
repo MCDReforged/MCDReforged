@@ -59,18 +59,19 @@ class PackedPlugin(RegularPlugin, ABC):
 		except FileNotFoundError:
 			return
 		for file_name in file_list:
+			file_path = os.path.join(plugin_constant.PLUGIN_TRANSLATION_FILES_PATH, file_name)
 			try:
 				language, file_extension = file_name.rsplit('.', 1)
-				file_handler = self.open_file(os.path.join(plugin_constant.PLUGIN_TRANSLATION_FILES_PATH, file_name))
+				file_handler = self.open_file(file_path)
 				if file_extension == 'json':
 					translations = json.load(file_handler)
 				elif file_extension == 'yml':
-					translations = dict(yaml.round_trip_load(file_handler))
+					translations = dict(yaml.load(file_handler, Loader=yaml.Loader))
 				else:
 					continue
 				self.register_translation(language, translations)
 			except:
-				self.mcdr_server.logger.exception('Fail to load default translation from file {}'.format(file_name))
+				self.mcdr_server.logger.exception('Fail to load default translation from file {} in {}'.format(file_path, repr(self)))
 
 	def _check_subdir_legality(self):
 		"""

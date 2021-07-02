@@ -29,7 +29,7 @@ class AbstractPlugin:
 		self.mcdr_server = plugin_manager.mcdr_server
 		self.plugin_path = file_path
 		self.state = PluginState.UNINITIALIZED
-		self.plugin_registry = PluginRegistry(self)
+		self.plugin_registry = PluginRegistry(self, plugin_manager.registry_storage)
 
 		from mcdreforged.plugin.server_interface import PluginServerInterface
 		self.server_interface = PluginServerInterface(self.mcdr_server, self)

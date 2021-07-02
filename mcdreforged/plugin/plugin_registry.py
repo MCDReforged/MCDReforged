@@ -45,7 +45,7 @@ class AbstractPluginRegistry:
 		self.event_listeners = collections.defaultdict(list)  # type: Dict[str, List[EventListener]]
 		self.help_messages = []
 		self.command_roots = []  # type: List[PluginCommandNode]
-		self.translations = {}  # type: Dict[str, Dict[str, str]]
+		self.translations = collections.defaultdict(dict)  # type: Dict[str, Dict[str, str]]
 
 	def clear(self):
 		self.event_listeners.clear()
@@ -54,9 +54,10 @@ class AbstractPluginRegistry:
 
 
 class PluginRegistry(AbstractPluginRegistry):
-	def __init__(self, plugin: 'AbstractPlugin'):
+	def __init__(self, plugin: 'AbstractPlugin', target_storage: 'PluginRegistryStorage'):
 		super().__init__()
 		self.plugin = plugin
+		self.target_storage = target_storage
 
 	def register_help_message(self, help_message: HelpMessage):
 		self.help_messages.append(help_message)
@@ -70,7 +71,11 @@ class PluginRegistry(AbstractPluginRegistry):
 		self.command_roots.append(PluginCommandNode(self.plugin, node))
 
 	def register_translation(self, language: str, mapping: Dict[str, str]):
+		"""
+		Translation should be updated immediately
+		"""
 		self.translations[language] = mapping
+		self.target_storage.translations[language].update(mapping)
 
 
 class PluginRegistryStorage(AbstractPluginRegistry):
@@ -83,7 +88,6 @@ class PluginRegistryStorage(AbstractPluginRegistry):
 			self.event_listeners[event_id].extend(plg_listeners)
 		self.help_messages.extend(registry.help_messages)
 		self.command_roots.extend(registry.command_roots)
-		self.translations.update(registry.translations)
 
 	def arrange(self):
 		self.help_messages.sort()
