@@ -65,13 +65,14 @@ class ZippedPlugin(PackedPlugin):
 				if is_module and package_name != self.get_id():
 					raise IllegalPluginStructure('Packed plugin cannot contain other package: found package {}'.format(package_name))
 
+	# noinspection PyProtectedMember,PyUnresolvedReferences
 	def _on_unload(self):
 		super()._on_unload()
 		try:
 			for path in list(sys.path_importer_cache.keys()):
 				if path.startswith(self.plugin_path):
 					sys.path_importer_cache.pop(path)
-			# noinspection PyProtectedMember,PyUnresolvedReferences
-			zipimport._zip_directory_cache.pop(self.plugin_path)
+			if self.plugin_path in zipimport._zip_directory_cache:
+				zipimport._zip_directory_cache.pop(self.plugin_path)
 		except KeyError:
 			self.mcdr_server.logger.exception('Fail to clean zip import cache for {}'.format(self))
