@@ -62,7 +62,7 @@ class TranslationManager:
 			if isinstance(arg, RTextBase):
 				identifiers.append('@@MCDR#Translation#Placeholder#{}@@'.format(i))
 			else:
-				identifiers.append(args)
+				identifiers.append(arg)
 		texts = [translated_text.format(*identifiers)]
 		for i, arg in enumerate(args):
 			if isinstance(arg, RTextBase):

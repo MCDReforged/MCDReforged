@@ -198,3 +198,4 @@ command_exception.text_length_out_of_range            : Text length {0} out of r
 command_exception.illegal_escapes_usage               : Illegal escapes usage
 command_exception.unclosed_quoted_string              : Unclosed quoted string
 command_exception.empty_text                          : Empty text
+python_plugin.info                                    : "{0} is running on {1} environment"

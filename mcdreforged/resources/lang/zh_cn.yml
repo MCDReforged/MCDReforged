@@ -198,3 +198,4 @@ command_exception.text_length_out_of_range            : 文本长度 {0} 超出�
 command_exception.illegal_escapes_usage               : 转义符的非法使用
 command_exception.unclosed_quoted_string              : 未封闭的引号
 command_exception.empty_text                          : 空文本
+python_plugin.info                                    : "{0}正于{1}环境中运行"

@@ -10,11 +10,13 @@ from typing import Callable, Dict, Optional, Any, Tuple, List, TYPE_CHECKING, De
 from mcdreforged.constants import core_constant, plugin_constant
 from mcdreforged.plugin import plugin_factory
 from mcdreforged.plugin.builtin.mcdreforged_plugin import MCDReforgedPlugin
+from mcdreforged.plugin.builtin.python_plugin import PythonPlugin
 from mcdreforged.plugin.meta.dependency_walker import DependencyWalker
 from mcdreforged.plugin.operation_result import PluginOperationResult, SingleOperationResult
 from mcdreforged.plugin.plugin_event import MCDRPluginEvents, MCDREvent, EventListener
 from mcdreforged.plugin.plugin_registry import PluginRegistryStorage
 from mcdreforged.plugin.plugin_thread import PluginThreadPool
+from mcdreforged.plugin.type.permanent_plugin import PermanentPlugin
 from mcdreforged.plugin.type.plugin import AbstractPlugin, PluginState
 from mcdreforged.plugin.type.regular_plugin import RegularPlugin
 from mcdreforged.utils import file_util, string_util, misc_util
@@ -115,12 +117,14 @@ class PluginManager:
 	#   Permanent build-in plugin operation
 	# ---------------------------------------
 
-	def __add_permanent_plugin(self, plugin: AbstractPlugin):
+	def __add_permanent_plugin(self, plugin: PermanentPlugin):
 		self.__add_plugin(plugin)
 		plugin.load()
+		plugin.set_state(PluginState.READY)
 
 	def register_permanent_plugins(self):
 		self.__add_permanent_plugin(MCDReforgedPlugin(self))
+		self.__add_permanent_plugin(PythonPlugin(self))
 		self.__update_registry()  # not really necessary, but in case
 
 	# ------------------------------------------------
