@@ -66,6 +66,7 @@ class MCDReforgedServer:
 		self.permission_manager = PermissionManager(self)
 
 		# --- Initialize fields instance ---
+		self.translation_manager.load_translations()
 		file_missing = False
 		try:
 			self.load_config(allowed_missing_file=False)  # loads config, language, handlers
@@ -112,7 +113,7 @@ class MCDReforgedServer:
 		:param args: The args to be formatted
 		:param allow_failure: If set to false, a KeyError will be risen if the translation key is not recognized
 		"""
-		plugin_translations = self.plugin_manager.registry_storage.translations.get(self.translation_manager.language)
+		plugin_translations = self.plugin_manager.registry_storage.translations
 		return self.translation_manager.translate(translation_key, args, allow_failure=allow_failure, fallback_translations=plugin_translations)
 
 	# --------------------------
