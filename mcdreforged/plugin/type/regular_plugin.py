@@ -1,5 +1,3 @@
-
-import hashlib
 import os
 import sys
 from abc import ABC
@@ -24,14 +22,14 @@ class RegularPlugin(AbstractPlugin, ABC):
 	def __init__(self, plugin_manager: 'PluginManager', file_path: str):
 		super().__init__(plugin_manager, file_path)
 		self.file_name = os.path.basename(file_path)
-		self.file_hash = None
+		self.file_modify_time = None
 		self.__metadata = None  # type: Optional[Metadata]
 		self.entry_module_instance = None
 		self.old_entry_module_instance = None
 		self.newly_loaded_module = []
 
 	def _reset(self):
-		self.file_hash = self.get_file_hash()
+		self.file_modify_time = self.calculate_file_modify_time()
 		self.plugin_registry.clear()
 
 	def is_regular(self) -> bool:
@@ -107,7 +105,7 @@ class RegularPlugin(AbstractPlugin, ABC):
 	def load(self):
 		self.assert_state({PluginState.UNINITIALIZED})
 		self._on_load()
-		self.mcdr_server.logger.debug('{} {} loaded from {}, file sha256 = {}'.format(self.__class_name, self, self.plugin_path, self.file_hash), option=DebugOption.PLUGIN)
+		self.mcdr_server.logger.debug('{} {} loaded from {}, file sha256 = {}'.format(self.__class_name, self, self.plugin_path, self.file_modify_time), option=DebugOption.PLUGIN)
 		self.set_state(PluginState.LOADED)
 
 	def ready(self):
@@ -122,7 +120,7 @@ class RegularPlugin(AbstractPlugin, ABC):
 		self.assert_state({PluginState.READY})
 		self._on_unload()
 		self._on_load()
-		self.mcdr_server.logger.debug('{} {} reloaded, file sha256 = {}'.format(self.__class_name, self, self.file_hash))
+		self.mcdr_server.logger.debug('{} {} reloaded, file sha256 = {}'.format(self.__class_name, self, self.file_modify_time))
 
 	def unload(self):
 		self.assert_state({PluginState.LOADED, PluginState.READY})
@@ -141,11 +139,12 @@ class RegularPlugin(AbstractPlugin, ABC):
 		return os.path.isfile(self.plugin_path)
 
 	def file_changed(self):
-		return self.get_file_hash() != self.file_hash
+		return self.calculate_file_modify_time() != self.file_modify_time
 
-	def get_file_hash(self):
+	def calculate_file_modify_time(self):
 		if self.plugin_exists():
-			with open(self.plugin_path, 'rb') as file:
-				return hashlib.sha256(file.read()).hexdigest()
-		else:
-			return None
+			try:
+				return os.stat(self.plugin_path).st_mtime_ns
+			except:
+				pass
+		return None

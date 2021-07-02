@@ -25,5 +25,5 @@ class DirectoryPlugin(PackedPlugin):
 		# So just consider Directory Plugin to be always changed
 		return True
 
-	def get_file_hash(self):
+	def calculate_file_modify_time(self):
 		return None
