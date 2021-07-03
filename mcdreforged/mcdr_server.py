@@ -1,5 +1,6 @@
 import locale
 import os
+import shlex
 import sys
 import time
 import traceback
@@ -265,7 +266,7 @@ class MCDReforgedServer:
 			try:
 				start_command = self.config['start_command']
 				self.logger.info(self.tr('mcdr_server.start_server.starting', start_command))
-				self.process = Popen(start_command, cwd=self.config['working_directory'], stdin=PIPE, stdout=PIPE, stderr=STDOUT, shell=True)
+				self.process = Popen(shlex.split(start_command), cwd=self.config['working_directory'], stdin=PIPE, stdout=PIPE, stderr=STDOUT)
 			except:
 				self.logger.exception(self.tr('mcdr_server.start_server.start_fail'))
 				return False
