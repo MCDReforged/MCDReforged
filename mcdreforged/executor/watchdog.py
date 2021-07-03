@@ -1,4 +1,5 @@
 import time
+from contextlib import contextmanager
 from typing import TYPE_CHECKING
 
 from mcdreforged.executor.task_executor import TaskExecutor
@@ -23,6 +24,14 @@ class WatchDog(ThreadExecutor):
 
 	def resume(self):
 		self.__monitoring = True
+
+	@contextmanager
+	def pausing(self):
+		self.pause()
+		try:
+			yield
+		finally:
+			self.resume()
 
 	def check_task_executor_state(self):
 		task_executor = self.mcdr_server.task_executor

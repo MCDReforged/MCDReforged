@@ -66,13 +66,12 @@ class ServerInterface:
 		except IllegalCallError:
 			return self._mcdr_server.logger
 
-	def tr(self, translation_key: str, *args) -> Union[str, RTextBase]:
+	def tr(self, translation_key: str, *args, language: Optional[str] = None) -> Union[str, RTextBase]:
 		"""
 		Return a translated text from given translation key and args
-		:param translation_key: The identity key for the translation. It's recommend to be started with "plugin_id."
-		:param args: The arguments for formatting the translation result
+		Check mcdreforged.mcdr_server.MCDReforgedServer.tr for detail doc
 		"""
-		return self._mcdr_server.tr(translation_key, *args)
+		return self._mcdr_server.tr(translation_key, *args, language=language)
 
 	def as_basic_server_interface(self) -> 'ServerInterface':
 		"""
@@ -105,7 +104,6 @@ class ServerInterface:
 		Kill the server process group
 		MCDR will keep running unless exit() is invoked
 		"""
-		self._mcdr_server.remove_flag(MCDReforgedFlag.EXIT_AFTER_STOP)
 		self._mcdr_server.stop(forced=True)
 
 	def wait_for_start(self) -> None:
@@ -134,11 +132,23 @@ class ServerInterface:
 	def exit(self) -> None:
 		"""
 		Exit MCDR when the server is stopped
+		Basically it's the same to invoking set_exit_after_stop_flag(True), but with an extra server not running check
 		:raise: IllegalCallError, if the server is not stopped
 		"""
 		if self._mcdr_server.is_server_running():
 			raise IllegalCallError('Cannot exit MCDR when the server is running')
 		self._mcdr_server.with_flag(MCDReforgedFlag.EXIT_AFTER_STOP)
+
+	def set_exit_after_stop_flag(self, flag_value: bool) -> None:
+		"""
+		Set the flag that indicating if MCDR should exit when the server has stopped
+		If set to true, after the server stops MCDR will exit,
+		otherwise MCDR will just keep running
+		"""
+		if flag_value:
+			self._mcdr_server.with_flag(MCDReforgedFlag.EXIT_AFTER_STOP)
+		else:
+			self._mcdr_server.remove_flag(MCDReforgedFlag.EXIT_AFTER_STOP)
 
 	def is_server_running(self) -> bool:
 		"""
