@@ -14,6 +14,9 @@ PACKED_PLUGIN_FILE_SUFFIX = '.mcdr'
 # The name of the meta file inside a packed plugin
 PLUGIN_META_FILE = 'mcdreforged.plugin.json'
 
+# The name of the python package requirement file
+PLUGIN_REQUIREMENTS_FILE = 'requirements.txt'
+
 # the path to the directory inside a packed plugin as the default directory to store the language files of the plugin
 PLUGIN_TRANSLATION_FILES_PATH = 'lang'
 

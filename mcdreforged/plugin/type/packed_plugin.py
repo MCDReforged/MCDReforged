@@ -5,6 +5,7 @@ import sys
 from abc import ABC
 from typing import IO, Collection
 
+import pkg_resources
 from ruamel import yaml
 
 from mcdreforged.constants import plugin_constant
@@ -30,9 +31,11 @@ class PackedPlugin(RegularPlugin, ABC):
 		super()._on_load()
 		try:
 			meta_file = self.open_file(plugin_constant.PLUGIN_META_FILE)
-		except KeyError:
+		except:
 			raise IllegalPluginStructure('Metadata file {} not found'.format(plugin_constant.PLUGIN_META_FILE)) from None
-		self._set_metadata(Metadata(self, json.load(meta_file)))
+		with meta_file:
+			self._set_metadata(Metadata(self, json.load(meta_file)))
+		self.__check_requirements()
 		self._check_subdir_legality()
 
 	def _on_unload(self):
@@ -79,3 +82,14 @@ class PackedPlugin(RegularPlugin, ABC):
 		:raise IllegalPluginStructure if check failed
 		"""
 		raise NotImplementedError()
+
+	def __check_requirements(self):
+		try:
+			req_file = self.open_file(plugin_constant.PLUGIN_REQUIREMENTS_FILE)
+		except:
+			return
+		with req_file:
+			requirements = []
+			for line in req_file.readlines():
+				requirements.append(line.decode('utf8').strip('\r\n'))
+		pkg_resources.require(requirements)

@@ -53,6 +53,8 @@ class PluginManager:
 		# plugin manipulation lock
 		self.__mani_lock = threading.RLock()
 
+	@classmethod
+	def touch_directory(cls):
 		file_util.touch_directory(plugin_constant.PLUGIN_CONFIG_DIRECTORY)
 
 	# --------------------------

@@ -36,8 +36,10 @@ from mcdreforged.utils.logger import DebugOption, MCDReforgedLogger
 class MCDReforgedServer:
 	process: Optional[Popen]
 
-	def __init__(self):
-		# TODO console args
+	def __init__(self, *, generate_default_only: bool = False):
+		"""
+		:param generate_default_only: If set to true, MCDR will only generate the default configure and permission files
+		"""
 		self.mcdr_state = MCDReforgedState.INITIALIZING
 		self.server_state = ServerState.STOPPED
 		self.process = None  # type: Optional[PIPE]
@@ -49,25 +51,32 @@ class MCDReforgedServer:
 		self.encoding_method = None  # type: Optional[str]
 		self.decoding_method = None  # type: Optional[str]
 
-		# --- Constructing fields ---
+		# --- Constructing fields --- #
 		self.logger = MCDReforgedLogger(self)
-		self.logger.set_file(core_constant.LOGGING_FILE)
+		self.config = Config(self.logger)
+		self.permission_manager = PermissionManager(self)
 		self.basic_server_interface = ServerInterface(self)
 		self.task_executor = TaskExecutor(self)
 		self.console_handler = ConsoleHandler(self)
 		self.watch_dog = WatchDog(self)
 		self.update_helper = UpdateHelper(self)
 		self.translation_manager = TranslationManager(self.logger)
-		self.config = Config(self.logger)
 		self.rcon_manager = RconManager(self)
 		self.server_handler_manager = ServerHandlerManager(self)
 		self.reactor_manager = InfoReactorManager(self)
 		self.command_manager = CommandManager(self)
 		self.plugin_manager = PluginManager(self)
-		self.permission_manager = PermissionManager(self)
 
-		# --- Initialize fields instance ---
+		# --- Input arguments processing --- #
+		if generate_default_only:
+			self.config.save_default()
+			self.permission_manager.save_default()
+			return
+
+		# --- Initialize fields instance --- #
+		self.logger.set_file(core_constant.LOGGING_FILE)  # will create logs/ folder
 		self.translation_manager.load_translations()
+		self.plugin_manager.touch_directory()  # will create plugins/ folder
 		file_missing = False
 		try:
 			self.load_config(allowed_missing_file=False)  # loads config, language, handlers
@@ -86,6 +95,7 @@ class MCDReforgedServer:
 			return
 		self.plugin_manager.register_permanent_plugins()
 
+		# --- Done --- #
 		self.set_mcdr_state(MCDReforgedState.INITIALIZED)
 
 	def __del__(self):
@@ -266,7 +276,9 @@ class MCDReforgedServer:
 			try:
 				start_command = self.config['start_command']
 				self.logger.info(self.tr('mcdr_server.start_server.starting', start_command))
-				self.process = Popen(shlex.split(start_command), cwd=self.config['working_directory'], stdin=PIPE, stdout=PIPE, stderr=STDOUT)
+				split_command = shlex.split(start_command)
+				self.logger.debug('Start command argument list: {}'.format(split_command), option=DebugOption.MCDR)
+				self.process = Popen(split_command, cwd=self.config['working_directory'], stdin=PIPE, stdout=PIPE, stderr=STDOUT)
 			except:
 				self.logger.exception(self.tr('mcdr_server.start_server.start_fail'))
 				return False
