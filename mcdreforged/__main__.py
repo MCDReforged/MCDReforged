@@ -3,11 +3,11 @@ Entry for MCDR
 """
 import sys
 
-from mcdreforged.cli import cli_handler
+from mcdreforged.cli import cli_entry
 
 
 def main():
-	return cli_handler.entry_point()
+	return cli_entry.entry_point()
 
 
 if __name__ == '__main__':
