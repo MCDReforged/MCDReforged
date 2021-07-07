@@ -73,8 +73,7 @@ def make_packed_plugin(input_dir: str, output_dir: str, file_name: Optional[str]
 		print('Invalid input directory {}'.format(input_dir))
 		return
 	if not os.path.isdir(output_dir):
-		print('Invalid output directory {}'.format(output_dir))
-		return
+		os.makedirs(output_dir)
 
 	meta_file_path = os.path.join(input_dir, plugin_constant.PLUGIN_META_FILE)
 	req_file_path = os.path.join(input_dir, plugin_constant.PLUGIN_REQUIREMENTS_FILE)
@@ -117,8 +116,6 @@ def make_packed_plugin(input_dir: str, output_dir: str, file_name: Optional[str]
 					print('Writing: {} -> {}'.format(full_path, arc_name))
 
 	print('Packing plugin "{}" into "{}" ...'.format(plugin_id, file_name))
-	if not os.path.isdir(output_dir):
-		os.makedirs(output_dir)
 	with ZipFile(os.path.join(output_dir, file_name), 'w') as zip_file:
 		zip_file.write(meta_file_path, os.path.basename(meta_file_path))
 		if os.path.isfile(req_file_path):
