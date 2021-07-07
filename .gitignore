@@ -23,6 +23,7 @@
 !/plugins/test.py
 
 # plugin things
+*.mcdr
 /qb_multi/
 /perma_backup/
 /PCRC_recordings/

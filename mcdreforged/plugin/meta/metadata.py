@@ -2,7 +2,7 @@
 Information of a plugin
 """
 import re
-from typing import List, Dict, TYPE_CHECKING
+from typing import List, Dict, TYPE_CHECKING, Optional
 
 from mcdreforged.minecraft.rtext import RTextBase
 from mcdreforged.plugin.meta.version import Version, VersionParsingError, VersionRequirement
@@ -15,10 +15,11 @@ class Metadata:
 	id: str
 	version: Version
 	name: RTextBase
-	description: RTextBase or None
-	author: List[str] or None
-	link: str or None
+	description: Optional[RTextBase]
+	author: Optional[List[str]]
+	link: Optional[str]
 	dependencies: Dict[str, VersionRequirement]
+	entry: Optional[str]
 
 	FALLBACK_VERSION = '0.0.0'
 
@@ -82,6 +83,8 @@ class Metadata:
 					plugin_id, requirement, plugin_name_text, e
 				))
 
+		self.entry = data.get('entrypoint', self.id)
+
 	def __repr__(self):
 		return '{}[id={},version={},name={},description={},author={},link={},dependencies={}]'.format(
 			self.__class__.__name__,
@@ -100,5 +103,13 @@ __SAMPLE_METADATA = {
 	'link': 'https://github.com/Fallen-Breath/MCDReforged',
 	'dependencies': {
 		'mcdreforged': '>=1.0.0'
-	}
+	},
+
+	# Fields for packed plugins
+	'entrypoint': 'example_plugin.entry',
+	'archive_name': 'MyExamplePlugin-v{version}',
+	'resources': [
+		'my_resource_folder',
+		'another_resource_file',
+	]
 }

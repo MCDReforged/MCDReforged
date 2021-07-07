@@ -4,7 +4,6 @@ Misc tool collection
 import importlib.machinery
 import importlib.util
 import os
-import sys
 import threading
 from typing import List, Callable, Tuple, TypeVar, Any, Type
 
@@ -34,16 +33,6 @@ def load_source_from_file_path(source_path: str, module_name=None):
 	# Optional; only necessary if you want to be able to import the module
 	# by name later.
 	# sys.modules[module_name] = module
-	return module
-
-
-def load_source_from_package(module_name: str):
-	spec = importlib.util.find_spec(module_name)
-	module = importlib.util.module_from_spec(spec)
-	print(spec.loader)
-	# noinspection PyUnresolvedReferences
-	spec.loader.exec_module(module)
-	sys.modules[module_name] = module
 	return module
 
 

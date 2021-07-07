@@ -35,9 +35,9 @@ def entry_point():
 		subparsers.add_parser('gendefault', help='Generate default configure and permission files here')
 
 		parser_pack = subparsers.add_parser('pack', help='Pack plugin files into a {} plugin'.format(plugin_constant.PACKED_PLUGIN_FILE_SUFFIX))
-		parser_pack.add_argument('-i', '--input', help='The input directory which the plugin is in', default='.')
-		parser_pack.add_argument('-o', '--output', help='The output directory to store the packed plugin', default='.')
-		parser_pack.add_argument('-n', '--name', help='A specific name to the output packed plugin file. If not given a default one will be used', default=None)
+		parser_pack.add_argument('-i', '--input', help='The input directory which the plugin is in, default: current directory', default='.')
+		parser_pack.add_argument('-o', '--output', help='The output directory to store the packed plugin, default: current directory', default='.')
+		parser_pack.add_argument('-n', '--name', help='A specific name to the output packed plugin file. If not given the metadata specific name or a default one will be used', default=None)
 		parser_pack.add_argument('--keep-pycache', help='Keep __pycache__ folder if appended', action='store_true')
 
 		result = parser.parse_args()
@@ -94,7 +94,11 @@ def make_packed_plugin(input_dir: str, output_dir: str, file_name: Optional[str]
 		return
 	plugin_version = meta.get('version', '?')
 	if file_name is None:
-		file_name = '{} v{}'.format(meta.get('name') or plugin_id, plugin_version) + plugin_constant.PACKED_PLUGIN_FILE_SUFFIX
+		file_name = meta.get('archive_name')
+	if file_name is None:
+		file_name = '{}-v{}'.format(meta.get('name').replace(' ', '') or plugin_id, plugin_version)
+	file_name: str
+	file_name = file_name.format(id=plugin_id, version=plugin_version) + plugin_constant.PACKED_PLUGIN_FILE_SUFFIX
 
 	def write_directory(directory: str):
 		if os.path.isdir(directory):
@@ -113,6 +117,8 @@ def make_packed_plugin(input_dir: str, output_dir: str, file_name: Optional[str]
 					print('Writing: {} -> {}'.format(full_path, arc_name))
 
 	print('Packing plugin "{}" into "{}" ...'.format(plugin_id, file_name))
+	if not os.path.isdir(output_dir):
+		os.makedirs(output_dir)
 	with ZipFile(os.path.join(output_dir, file_name), 'w') as zip_file:
 		zip_file.write(meta_file_path, os.path.basename(meta_file_path))
 		if os.path.isfile(req_file_path):
