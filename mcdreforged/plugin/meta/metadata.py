@@ -14,12 +14,12 @@ if TYPE_CHECKING:
 class Metadata:
 	id: str
 	version: Version
-	name: RTextBase
-	description: Optional[RTextBase]
+	name: str
+	description: str
 	author: Optional[List[str]]
 	link: Optional[str]
 	dependencies: Dict[str, VersionRequirement]
-	entry: Optional[str]
+	entrypoint: Optional[str]
 
 	FALLBACK_VERSION = '0.0.0'
 
@@ -43,11 +43,13 @@ class Metadata:
 			self.id = plugin.get_fallback_metadata_id()
 			logger.warning('{}, use fallback id {} instead'.format(use_fallback_id_reason, self.id))
 
-		self.name = RTextBase.from_any(data.get('name', self.id))
+		self.name = data.get('name', self.id)
+		if isinstance(self.name, RTextBase):
+			self.name = self.name.to_plain_text()
 
 		self.description = data.get('description')
-		if self.description is not None:
-			self.description = RTextBase.from_any(self.description)
+		if isinstance(self.description, RTextBase):
+			self.description = self.description.to_plain_text()
 
 		self.author = data.get('author')
 		if isinstance(self.author, str):
@@ -83,7 +85,7 @@ class Metadata:
 					plugin_id, requirement, plugin_name_text, e
 				))
 
-		self.entry = data.get('entrypoint', self.id)
+		self.entrypoint = data.get('entrypoint', self.id)
 
 	def __repr__(self):
 		return '{}[id={},version={},name={},description={},author={},link={},dependencies={}]'.format(

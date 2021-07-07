@@ -25,7 +25,7 @@ class PackedPlugin(RegularPlugin, ABC):
 		return os.listdir(os.path.join(self.plugin_path, directory_name))
 
 	def _get_module_instance(self):
-		return importlib.import_module(self.get_metadata().entry)
+		return importlib.import_module(self.get_metadata().entrypoint)
 
 	def _on_load(self):
 		super()._on_load()

@@ -331,14 +331,14 @@ class MCDReforgedPlugin(PermanentPlugin):
 		source.reply(self.tr('mcdr_command.list_plugin.info_loaded_plugin', len(current_plugins)))
 		for plugin in current_plugins:
 			meta = plugin.get_metadata()
-			displayed_name = meta.name.copy()
+			displayed_name = RText(meta.name)
 			if not self.can_see_rtext(source):
 				displayed_name += RText(' ({})'.format(plugin.get_identifier()), color=RColor.gray)
 			texts = RTextList(
 				'§7-§r ',
 				displayed_name.
 				c(RAction.run_command, '!!MCDR plugin info {}'.format(meta.id)).
-				h(self.tr('mcdr_command.list_plugin.suggest_info', meta.id))
+				h(self.tr('mcdr_command.list_plugin.suggest_info', plugin.get_identifier()))
 			)
 			if self.can_see_rtext(source) and not plugin.is_permanent():
 				texts.append(
@@ -397,7 +397,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 		else:
 			meta = plugin.get_metadata()
 			source.reply(RTextList(
-				meta.name.copy().set_color(RColor.yellow).set_styles(RStyle.bold).h(plugin),
+				RText(meta.name).set_color(RColor.yellow).set_styles(RStyle.bold).h(plugin),
 				' ',
 				RText('v{}'.format(meta.version), color=RColor.gray)
 			))
