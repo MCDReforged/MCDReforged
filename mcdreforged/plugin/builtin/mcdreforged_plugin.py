@@ -41,7 +41,7 @@ class Validator:
 class MCDReforgedPlugin(PermanentPlugin):
 	def __init__(self, plugin_manager):
 		super().__init__(plugin_manager)
-		self._set_metadata(Metadata(self, METADATA))
+		self._set_metadata(Metadata(METADATA, plugin=self))
 		self.tr = plugin_manager.mcdr_server.tr
 
 	def load(self):

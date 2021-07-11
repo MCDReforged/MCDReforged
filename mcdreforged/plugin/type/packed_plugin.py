@@ -34,7 +34,7 @@ class PackedPlugin(RegularPlugin, ABC):
 		except:
 			raise IllegalPluginStructure('Metadata file {} not found'.format(plugin_constant.PLUGIN_META_FILE)) from None
 		with meta_file:
-			self._set_metadata(Metadata(self, json.load(meta_file)))
+			self._set_metadata(Metadata(json.load(meta_file), plugin=self))
 		self.__check_requirements()
 		self._check_subdir_legality()
 

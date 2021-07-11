@@ -5,6 +5,8 @@ from argparse import ArgumentParser
 from typing import Optional
 from zipfile import ZipFile
 
+from mcdreforged.plugin.meta.metadata import Metadata
+
 try:
 	from mcdreforged.constants import core_constant, plugin_constant
 	from mcdreforged.mcdr_server import MCDReforgedServer
@@ -82,22 +84,19 @@ def make_packed_plugin(input_dir: str, output_dir: str, file_name: Optional[str]
 		return
 	try:
 		with open(meta_file_path, encoding='utf8') as meta_file:
-			meta = json.load(meta_file)  # type: dict
-		assert isinstance(meta, dict)
+			meta_dict = json.load(meta_file)  # type: dict
+		assert isinstance(meta_dict, dict)
+		meta = Metadata(meta_dict)
 	except Exception as e:
 		print('Fail to load plugin metadata from {}: {}'.format(meta_file_path, e))
 		return
-	plugin_id = meta.get('id')
-	if not plugin_id:
-		print('Plugin id not found in metadata')
-		return
-	plugin_version = meta.get('version', '?')
+	print('Plugin ID: {}'.format(meta.id))
+	print('Plugin version: {}'.format(meta.version))
 	if file_name is None:
-		file_name = meta.get('archive_name')
+		file_name = meta.archive_name
 	if file_name is None:
-		file_name = '{}-v{}'.format(meta.get('name').replace(' ', '') or plugin_id, plugin_version)
-	file_name: str
-	file_name = file_name.format(id=plugin_id, version=plugin_version) + plugin_constant.PACKED_PLUGIN_FILE_SUFFIX
+		file_name = '{}-v{}'.format(meta.name.replace(' ', '') or meta.id, meta.version)
+	file_name = file_name.format(id=meta.id, version=meta.version) + plugin_constant.PACKED_PLUGIN_FILE_SUFFIX
 
 	def write_directory(directory: str):
 		if os.path.isdir(directory):
@@ -115,13 +114,13 @@ def make_packed_plugin(input_dir: str, output_dir: str, file_name: Optional[str]
 					zip_file.write(full_path, arcname=arc_name)
 					print('Writing: {} -> {}'.format(full_path, arc_name))
 
-	print('Packing plugin "{}" into "{}" ...'.format(plugin_id, file_name))
+	print('Packing plugin "{}" into "{}" ...'.format(meta.id, file_name))
 	with ZipFile(os.path.join(output_dir, file_name), 'w') as zip_file:
 		zip_file.write(meta_file_path, os.path.basename(meta_file_path))
 		if os.path.isfile(req_file_path):
 			zip_file.write(req_file_path, os.path.basename(req_file_path))
-		write_directory(os.path.join(input_dir, plugin_id))
-		for resource_path in meta.get('resources', []):
+		write_directory(os.path.join(input_dir, meta.id))
+		for resource_path in meta.resources:
 			write_directory(os.path.join(input_dir, resource_path))
 
 	print('Done')

@@ -19,29 +19,39 @@ class Metadata:
 	author: Optional[List[str]]
 	link: Optional[str]
 	dependencies: Dict[str, VersionRequirement]
-	entrypoint: Optional[str]
+
+	entrypoint: str
+	archive_name: Optional[str]
+	resources: Optional[List[str]]
 
 	FALLBACK_VERSION = '0.0.0'
 
-	def __init__(self, plugin: 'AbstractPlugin', data: dict):
+	def __init__(self, data: Optional[dict], *, plugin: Optional['AbstractPlugin'] = None):
 		"""
 		:param AbstractPlugin plugin: the plugin which this metadata is belong to
 		:param dict or None data: a dict with information of the plugin
 		"""
 		if not isinstance(data, dict):
 			data = {}
-		logger = plugin.mcdr_server.logger
+
+		def warn(*args, **kwargs):
+			if plugin is not None:
+				plugin.mcdr_server.logger.warning(*args, **kwargs)
+
+		plugin_name_text = repr(plugin)
 
 		use_fallback_id_reason = None
-		plugin_name_text = repr(plugin)
 		self.id = data.get('id')
 		if self.id is None:
 			use_fallback_id_reason = 'Plugin ID of {} not found'.format(plugin_name_text)
 		elif not isinstance(self.id, str) or re.fullmatch(r'[a-z0-9_]{1,64}', self.id) is None:
 			use_fallback_id_reason = 'Plugin ID "{}" of {} is invalid'.format(self.id, plugin_name_text)
 		if use_fallback_id_reason is not None:
-			self.id = plugin.get_fallback_metadata_id()
-			logger.warning('{}, use fallback id {} instead'.format(use_fallback_id_reason, self.id))
+			if plugin is not None:
+				self.id = plugin.get_fallback_metadata_id()
+				warn('{}, use fallback id {} instead'.format(use_fallback_id_reason, self.id))
+			else:
+				raise ValueError('Plugin id not found in metadata')
 
 		self.name = data.get('name', self.id)
 		if isinstance(self.name, RTextBase):
@@ -69,10 +79,10 @@ class Metadata:
 			try:
 				self.version = Version(version_str, allow_wildcard=False)
 			except VersionParsingError as e:
-				logger.warning('Version "{}" of {} is invalid ({}), ignore and use fallback version instead {}'.format(version_str, plugin_name_text, e, self.FALLBACK_VERSION))
+				warn('Version "{}" of {} is invalid ({}), ignore and use fallback version instead {}'.format(version_str, plugin_name_text, e, self.FALLBACK_VERSION))
 				version_str = None
 		else:
-			logger.warning('{} doesn\'t specific a version, use fallback version {}'.format(plugin_name_text, self.FALLBACK_VERSION))
+			warn('{} doesn\'t specific a version, use fallback version {}'.format(plugin_name_text, self.FALLBACK_VERSION))
 		if version_str is None:
 			self.version = Version(self.FALLBACK_VERSION)
 
@@ -81,16 +91,19 @@ class Metadata:
 			try:
 				self.dependencies[plugin_id] = VersionRequirement(requirement)
 			except VersionParsingError as e:
-				logger.warning('Dependency "{}: {}" of {} is invalid ({}), ignore'.format(
+				warn('Dependency "{}: {}" of {} is invalid ({}), ignore'.format(
 					plugin_id, requirement, plugin_name_text, e
 				))
 
 		self.entrypoint = data.get('entrypoint', self.id)
+		self.archive_name = data.get('archive_name')
+		self.resources = data.get('resources', [])
 
 	def __repr__(self):
-		return '{}[id={},version={},name={},description={},author={},link={},dependencies={}]'.format(
+		return '{}[id={},version={},name={},description={},author={},link={},dependencies={},entrypoint={},archive_name={},resources={}]'.format(
 			self.__class__.__name__,
-			self.id, self.version, self.name, self.description, self.author, self.link, self.dependencies
+			self.id, self.version, self.name, self.description, self.author, self.link, self.dependencies,
+			self.entrypoint, self.archive_name, self.resources
 		)
 
 

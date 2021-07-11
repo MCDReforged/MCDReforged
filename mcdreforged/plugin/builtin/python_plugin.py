@@ -25,10 +25,10 @@ METADATA = {
 class PythonPlugin(PermanentPlugin):
 	def __init__(self, plugin_manager):
 		super().__init__(plugin_manager)
-		self._set_metadata(Metadata(self, METADATA))
+		self._set_metadata(Metadata(METADATA, plugin=self))
 
 	def load(self):
-		self.mcdr_server.logger.info(self.mcdr_server.tr('python_plugin.info', core_constant.NAME, self.get_metadata().name))
+		self.mcdr_server.logger.info(self.mcdr_server.tr('python_plugin.info', core_constant.NAME, self.get_meta_name()))
 
 	def __repr__(self):
 		return 'PythonPlugin[version={}]'.format(METADATA['version'])
