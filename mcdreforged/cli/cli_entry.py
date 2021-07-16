@@ -98,29 +98,33 @@ def make_packed_plugin(input_dir: str, output_dir: str, file_name: Optional[str]
 		file_name = '{}-v{}'.format(meta.name.replace(' ', '') or meta.id, meta.version)
 	file_name = file_name.format(id=meta.id, version=meta.version) + plugin_constant.PACKED_PLUGIN_FILE_SUFFIX
 
-	def write_directory(directory: str):
-		if os.path.isdir(directory):
-			dir_arc = os.path.basename(directory)
-			zip_file.write(directory, arcname=dir_arc)
-			print('Creating directory: {} -> {}'.format(directory, dir_arc))
-			for dir_path, dir_names, file_names in os.walk(directory):
+	def write(base_path: str, *, directory_only=True):
+		if os.path.isdir(base_path):
+			dir_arc = os.path.basename(base_path)
+			zip_file.write(base_path, arcname=dir_arc)
+			print('Creating directory: {} -> {}'.format(base_path, dir_arc))
+			for dir_path, dir_names, file_names in os.walk(base_path):
 				if not keep_pycache and os.path.basename(dir_path) == '__pycache__':
 					continue
 				for file_name_ in file_names + dir_names:
 					full_path = os.path.join(dir_path, file_name_)
 					if not keep_pycache and os.path.isdir(full_path) and os.path.basename(full_path) == '__pycache__':
 						continue
-					arc_name = os.path.join(os.path.basename(directory), full_path.replace(directory, '', 1).lstrip(os.sep))
+					arc_name = os.path.join(os.path.basename(base_path), full_path.replace(base_path, '', 1).lstrip(os.sep))
 					zip_file.write(full_path, arcname=arc_name)
 					print('Writing: {} -> {}'.format(full_path, arc_name))
+		elif os.path.isfile(base_path) and not directory_only:
+			arc_name = os.path.basename(base_path)
+			zip_file.write(base_path, arcname=arc_name)
+			print('Writing single file: {} -> {}'.format(base_path, arc_name))
 
 	print('Packing plugin "{}" into "{}" ...'.format(meta.id, file_name))
 	with ZipFile(os.path.join(output_dir, file_name), 'w') as zip_file:
 		zip_file.write(meta_file_path, os.path.basename(meta_file_path))
 		if os.path.isfile(req_file_path):
 			zip_file.write(req_file_path, os.path.basename(req_file_path))
-		write_directory(os.path.join(input_dir, meta.id))
+		write(os.path.join(input_dir, meta.id))
 		for resource_path in meta.resources:
-			write_directory(os.path.join(input_dir, resource_path))
+			write(os.path.join(input_dir, resource_path), directory_only=False)
 
 	print('Done')
