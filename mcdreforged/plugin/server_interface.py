@@ -575,7 +575,7 @@ class PluginServerInterface(ServerInterface):
 			os.makedirs(plugin_data_folder)
 		return plugin_data_folder
 
-	def open_file_in_plugin(self, related_file_path: str) -> IO[bytes]:
+	def open_bundled_file(self, related_file_path: str) -> IO[bytes]:
 		"""
 		Open a file inside the plugin with binary mode
 		:return: A un-decoded file-like object
