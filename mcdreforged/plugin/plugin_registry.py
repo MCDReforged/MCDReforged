@@ -71,9 +71,7 @@ class PluginRegistry(AbstractPluginRegistry):
 		self.command_roots.append(PluginCommandNode(self.plugin, node))
 
 	def register_translation(self, language: str, mapping: Dict[str, str]):
-		"""
-		Translation should be updated immediately
-		"""
+		# Translation should be updated immediately
 		self.translations[language] = mapping
 		self.target_storage.translations[language].update(mapping)
 

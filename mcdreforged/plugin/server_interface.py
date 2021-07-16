@@ -578,7 +578,7 @@ class PluginServerInterface(ServerInterface):
 	def open_file_in_plugin(self, related_file_path: str) -> IO[bytes]:
 		"""
 		Open a file inside the plugin with binary mode
-		:return: A file-like object
+		:return: A un-decoded file-like object
 		:raise: FileNotFoundError if the plugin is not a packed plugin (that is, a solo plugin)
 		"""
 		if not isinstance(self.__plugin, PackedPlugin):

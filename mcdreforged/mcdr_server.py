@@ -119,18 +119,17 @@ class MCDReforgedServer:
 		"""
 		Return a translated text corresponded to the translation key and format the text with given args
 		If args contains RText element, then the result will be a RText, otherwise the result will be a regular str
-		If the translation key is not recognized, the input translation key will be returned
+		If the translation key is not recognized, the return value will be the input translation key
 		:param translation_key: The key of the translation
 		:param args: The args to be formatted
 		:param language: Specific language to be used in this translation
 		:param allow_failure: If set to false, a KeyError will be risen if the translation key is not recognized
 		"""
-		plugin_translations = self.plugin_manager.registry_storage.translations
 		return self.translation_manager.translate(
 			translation_key, args,
 			allow_failure=allow_failure,
 			language=language,
-			fallback_translations=plugin_translations
+			fallback_translations=self.plugin_manager.registry_storage.translations
 		)
 
 	# --------------------------
@@ -403,24 +402,23 @@ class MCDReforgedServer:
 		:rtype: str
 		:raise: ServerStopped
 		"""
-		while True:
+		try:
+			text = next(iter(self.process.stdout))  # type: bytes
+		except StopIteration:  # server process has stopped
+			for i in range(core_constant.WAIT_TIME_AFTER_SERVER_STDOUT_END_SEC * 10):
+				if self.process.poll() is not None:
+					break
+				time.sleep(0.1)
+				if i % 10 == 0:
+					self.logger.info(self.tr('mcdr_server.receive.wait_stop'))
+			raise ServerStopped()
+		else:
 			try:
-				text = next(iter(self.process.stdout))  # type: bytes
-			except StopIteration:  # server process has stopped
-				for i in range(core_constant.WAIT_TIME_AFTER_SERVER_STDOUT_END_SEC * 10):
-					if self.process.poll() is not None:
-						break
-					time.sleep(0.1)
-					if i % 10 == 0:
-						self.logger.info(self.tr('mcdr_server.receive.wait_stop'))
-				raise ServerStopped()
-			else:
-				try:
-					decoded_text = text.decode(self.decoding_method)  # type: str
-				except:
-					self.logger.error(self.tr('mcdr_server.receive.decode_fail', text))
-					raise
-				return decoded_text.rstrip('\n\r').lstrip('\n\r')
+				decoded_text = text.decode(self.decoding_method)  # type: str
+			except:
+				self.logger.error(self.tr('mcdr_server.receive.decode_fail', text))
+				raise
+			return decoded_text.rstrip('\n\r').lstrip('\n\r')
 
 	def __tick(self):
 		"""
