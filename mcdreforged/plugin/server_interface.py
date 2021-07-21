@@ -59,11 +59,10 @@ class ServerInterface:
 		"""
 		Yes, a nice logger for you to use
 		"""
-		try:
-			plugin = self._mcdr_server.plugin_manager.get_current_running_plugin()
-			if plugin is not None:
-				return self.__get_logger(plugin.get_id())
-		except IllegalCallError:
+		plugin = self._mcdr_server.plugin_manager.get_current_running_plugin()
+		if plugin is not None:
+			return self.__get_logger(plugin.get_id())
+		else:
 			return self._mcdr_server.logger
 
 	def tr(self, translation_key: str, *args, language: Optional[str] = None) -> Union[str, RTextBase]:
