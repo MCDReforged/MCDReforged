@@ -276,13 +276,13 @@ class ServerInterface:
 		"""
 		return self.__existed_plugin_info_getter(plugin_id, lambda plugin: plugin.entry_module_instance, regular=True)
 
-	def get_loaded_plugin_list(self) -> List[str]:
+	def get_plugin_list(self) -> List[str]:
 		"""
 		Return a list containing all loaded plugin id like ["my_plugin", "another_plugin"]
 		"""
 		return [plugin.get_id() for plugin in self._mcdr_server.plugin_manager.get_regular_plugins()]
 
-	def get_metadata_of_all(self) -> Dict[str, Metadata]:
+	def get_all_metadata(self) -> Dict[str, Metadata]:
 		"""
 		Return a dict containing metadatas of all loaded plugin with (plugin_id, metadata) as key-value pair
 		"""
