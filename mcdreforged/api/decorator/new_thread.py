@@ -5,8 +5,31 @@ import time
 from typing import Optional, Callable
 
 __all__ = [
-	'new_thread'
+	'new_thread',
+	'FunctionThread'
 ]
+
+
+class FunctionThread(threading.Thread):
+	__NONE = object()
+
+	def __init__(self, target, name, args, kwargs):
+		super().__init__(target=target, args=args, kwargs=kwargs, name=name, daemon=True)
+		self.__return_value = self.__NONE
+
+		def wrapped_target(*args_, **kwargs_):
+			self.__return_value = target(*args_, **kwargs_)
+
+		self._target = wrapped_target
+
+	def get_return_value(self, block: bool = False, timeout: Optional[float] = None):
+		if block:
+			self.join(timeout)
+		if self.__return_value is self.__NONE:
+			if self.is_alive():
+				raise RuntimeError('The thread is still running')
+			raise RuntimeError('An exception has been thrown in thread')
+		return self.__return_value
 
 
 def new_thread(thread_name: Optional[str or Callable] = None):
@@ -18,7 +41,7 @@ def new_thread(thread_name: Optional[str or Callable] = None):
 	def wrapper(func):
 		@functools.wraps(func)  # to preserve the origin function information
 		def wrap(*args, **kwargs):
-			thread = threading.Thread(target=func, args=args, kwargs=kwargs, name=thread_name)
+			thread = FunctionThread(target=func, args=args, kwargs=kwargs, name=thread_name)
 			thread.setDaemon(True)
 			thread.start()
 			return thread
@@ -26,6 +49,7 @@ def new_thread(thread_name: Optional[str or Callable] = None):
 		# so inspect.getfullargspec(func) works correctly
 		# https://stackoverflow.com/questions/39926567find/python-create-decorator-preserving-function-arguments
 		wrap.__signature__ = inspect.signature(func)
+		wrap.original = func  # access this field to get the original function
 		return wrap
 	# Directly use @on_new_thread without ending brackets case
 	if isinstance(thread_name, Callable):
