@@ -77,7 +77,17 @@ class ServerInterface:
 		Return a ServerInterface instance. The type of the return value is exactly the ServerInterface
 		It's used for removing the plugin information inside PluginServerInterface when you need to send a ServerInterface
 		"""
-		return self._mcdr_server.basic_server_interface
+		return self.get_instance()
+
+	def as_plugin_server_interface(self) -> Optional['PluginServerInterface']:
+		"""
+		Return a PluginServerInterface instance. If current thread is not a MCDR provided thread and the object is not
+		a PluginServerInterface instance, it will return None
+		"""
+		plugin = self._mcdr_server.plugin_manager.get_current_running_plugin()
+		if plugin is not None:
+			return plugin.server_interface
+		return None
 
 	# ------------------------
 	#      Server Control
@@ -504,6 +514,9 @@ class PluginServerInterface(ServerInterface):
 				return super().logger
 		return self.__logger_for_plugin
 
+	def as_plugin_server_interface(self) -> Optional['PluginServerInterface']:
+		return self
+
 	# -----------------------
 	#   Overwritten methods
 	# -----------------------
@@ -515,13 +528,15 @@ class PluginServerInterface(ServerInterface):
 	#     Plugin Registry
 	# ------------------------
 
-	def register_event_listener(self, event: Union[PluginEvent, str], callback: Callable, priority: int = DEFAULT_LISTENER_PRIORITY) -> None:
+	def register_event_listener(self, event: Union[PluginEvent, str], callback: Callable, priority: Optional[int] = None) -> None:
 		"""
 		Register an event listener for the current plugin
 		:param event: The id of the event, or a PluginEvent instance. It indicates the target event for the plugin to listen
 		:param callback: The callback listener method for the event
 		:param priority: The priority of the listener. It will be set to the default value 1000 if it's not specified
 		"""
+		if priority is None:
+			priority = DEFAULT_LISTENER_PRIORITY
 		if isinstance(event, str):
 			event = LiteralEvent(event_id=event)
 		self.__plugin.register_event_listener(event, EventListener(self.__plugin, callback, priority))

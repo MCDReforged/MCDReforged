@@ -1,6 +1,7 @@
 """
 Single plugin class
 """
+from enum import Enum, auto
 from typing import Tuple, Any, TYPE_CHECKING, Dict
 
 from mcdreforged.command.builder.command_node import Literal
@@ -14,12 +15,13 @@ if TYPE_CHECKING:
 	from mcdreforged.plugin.plugin_manager import PluginManager
 
 
-class PluginState:
-	UNINITIALIZED = 0  # just created the instance
-	LOADED = 1         # loaded the .py file
-	READY = 2          # called "on load" event, ready to do anything
-	UNLOADING = 3      # just removed from the plugin list, ready to call "on unload" event
-	UNLOADED = 4       # unloaded, should never access it
+class PluginState(Enum):
+	UNINITIALIZED = auto()  # just created the instance
+	LOADING = auto()        # loading the .py entrance file
+	LOADED = auto()         # loaded the .py entrance file
+	READY = auto()          # called "on load" event, ready to do anything
+	UNLOADING = auto()      # just removed from the plugin list, ready to call "on unload" event
+	UNLOADED = auto()       # unloaded, should never access it
 
 
 class AbstractPlugin:
@@ -103,9 +105,9 @@ class AbstractPlugin:
 	def remove(self):
 		raise NotImplementedError()
 
-	# ----------------
-	#   Plugin Event
-	# ----------------
+	# -------------------
+	#   Plugin Registry
+	# -------------------
 
 	def __assert_allow_to_register(self, target):
 		self.assert_state([PluginState.LOADED, PluginState.READY], 'Only plugin in loaded or ready state is allowed to register {}'.format(target))

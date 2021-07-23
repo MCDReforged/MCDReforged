@@ -121,6 +121,7 @@ class PluginManager:
 
 	def __add_permanent_plugin(self, plugin: PermanentPlugin):
 		self.__add_plugin(plugin)
+		plugin.set_state(PluginState.LOADED)
 		plugin.load()
 		plugin.set_state(PluginState.READY)
 

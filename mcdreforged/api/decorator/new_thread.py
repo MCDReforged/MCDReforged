@@ -4,6 +4,10 @@ import threading
 import time
 from typing import Optional, Callable
 
+__all__ = [
+	'new_thread'
+]
+
 
 def new_thread(thread_name: Optional[str or Callable] = None):
 	"""

@@ -15,7 +15,7 @@ from mcdreforged.plugin.meta.metadata import Metadata
 from mcdreforged.plugin.plugin_event import MCDRPluginEvents, EventListener
 from mcdreforged.plugin.plugin_registry import HelpMessage
 from mcdreforged.plugin.type.permanent_plugin import PermanentPlugin
-from mcdreforged.plugin.type.plugin import AbstractPlugin, PluginState
+from mcdreforged.plugin.type.plugin import AbstractPlugin
 from mcdreforged.plugin.type.regular_plugin import RegularPlugin
 from mcdreforged.utils import file_util, string_util
 
@@ -46,7 +46,6 @@ class MCDReforgedPlugin(PermanentPlugin):
 
 	def load(self):
 		self.plugin_registry.clear()
-		self.set_state(PluginState.READY)
 		self.__register_event_listeners()
 		self.__register_help_messages()
 		self.__register_commands()
