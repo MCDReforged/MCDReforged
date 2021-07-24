@@ -43,7 +43,7 @@ def test():
 		time.sleep(0.5)
 		print(threading.current_thread().getName() + ' ' + str(value))
 
-	@new_thread('awa_shenjack')
+	@new_thread('awa')
 	def bla3(value):
 		time.sleep(0.5)
 		print(threading.current_thread().getName() + ' ' + str(value))
