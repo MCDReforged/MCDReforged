@@ -20,7 +20,7 @@ def new_thread(thread_name: Optional[str or Callable] = None):
 			return thread
 		# bring the signature of the func to the wrap function
 		# so inspect.getfullargspec(func) works correctly
-		# https://stackoverflow.com/questions/39926567find/python-create-decorator-preserving-function-arguments
+		# https://stackoverflow.com/questions/39926567/python-create-decorator-preserving-function-arguments
 		wrap.__signature__ = inspect.signature(func)
 		return wrap
 	# Directly use @on_new_thread without ending brackets case
