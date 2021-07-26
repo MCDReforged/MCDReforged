@@ -448,8 +448,8 @@ class PluginManager:
 		The server_interface parameter will be automatically added as the 1st parameter
 		"""
 		# self.thread_pool.add_task(lambda: listener.execute(*args), listener.plugin)
-		with self.with_plugin_context(listener.plugin):
-			try:
+		try:
+			with self.with_plugin_context(listener.plugin):
 				listener.execute(listener.plugin.server_interface, *args)
-			except:
-				self.logger.exception('Error invoking listener {}'.format(listener))
+		except:
+			self.logger.exception('Error invoking listener {}'.format(listener))

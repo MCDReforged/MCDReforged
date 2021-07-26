@@ -53,16 +53,16 @@ class CommandManager:
 		for plugin_root_node in plugin_root_nodes:
 			plugin = plugin_root_node.plugin
 			node = plugin_root_node.node
-			with self.mcdr_server.plugin_manager.with_plugin_context(plugin):
-				try:
+			try:
+				with self.mcdr_server.plugin_manager.with_plugin_context(plugin):
 					node.execute(source, command)
-				except CommandError as error:
-					if not error.is_handled():
-						translation_key = 'command_exception.{}'.format(string_util.hump_to_underline(type(error).__name__))
-						try:
-							error.set_message(self.__translate_command_error_header(translation_key, error))
-						except KeyError:
-							self.logger.debug('Fail to translated command error with key {}'.format(translation_key), option=DebugOption.COMMAND)
-						source.reply(error.to_mc_color_text())
-				except:
-					self.logger.exception('Error when executing command "{}" with command source "{}" on {} registered by {}'.format(command, source, node, plugin))
+			except CommandError as error:
+				if not error.is_handled():
+					translation_key = 'command_exception.{}'.format(string_util.hump_to_underline(type(error).__name__))
+					try:
+						error.set_message(self.__translate_command_error_header(translation_key, error))
+					except KeyError:
+						self.logger.debug('Fail to translated command error with key {}'.format(translation_key), option=DebugOption.COMMAND)
+					source.reply(error.to_mc_color_text())
+			except:
+				self.logger.exception('Error when executing command "{}" with command source "{}" on {} registered by {}'.format(command, source, node, plugin))
