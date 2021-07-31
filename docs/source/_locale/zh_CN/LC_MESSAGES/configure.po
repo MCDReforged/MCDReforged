@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-01 20:43+0800\n"
+"POT-Creation-Date: 2021-08-01 00:26+0800\n"
 "PO-Revision-Date: 2021-01-23 13:20+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -65,7 +65,7 @@ msgid "The language that MCDR will use to display information"
 msgstr "MCDR 用于输出信息的语言。"
 
 #: ../configure.rst:25 ../configure.rst:35 ../configure.rst:51
-#: ../configure.rst:90 ../configure.rst:151 ../configure.rst:169
+#: ../configure.rst:92 ../configure.rst:153 ../configure.rst:171
 msgid "Option type: string"
 msgstr "选项类型：string"
 
@@ -177,7 +177,9 @@ msgstr "bukkit_handler"
 msgid ""
 "For Bukkit / Spigot server with Minecraft version below 1.14, and Paper /"
 " `Mohistmc <https://mohistmc.com>`__ server in all version."
-msgstr "用于 1.14 版本以下的 Bukkit / Spigot 服务器，以及所有版本的 Paper / `Mohistmc <https://mohistmc.com>`__ 服务器"
+msgstr ""
+"用于 1.14 版本以下的 Bukkit / Spigot 服务器，以及所有版本的 Paper / `Mohistmc "
+"<https://mohistmc.com>`__ 服务器"
 
 #: ../configure.rst:75
 msgid "bukkit14_handler"
@@ -226,79 +228,87 @@ msgid "For Waterfall server"
 msgstr "用于 WaterFall 服务端。"
 
 #: ../configure.rst:85
+msgid "velocity_handler"
+msgstr "velocity_handler"
+
+#: ../configure.rst:86
+msgid "For Velocity server"
+msgstr "用于 Velocity 服务端"
+
+#: ../configure.rst:87
 msgid "basic_handler"
 msgstr "basic_handler"
 
-#: ../configure.rst:86
+#: ../configure.rst:88
 msgid ""
 "The handler that parse nothing and return the raw text from the server. "
 "Don't use this unless you want to use MCDR to lanuch non Minecraft "
 "related servers."
 msgstr "不进行任何分析并返回原始文本的处理器。 除非你想使用 MCDR 启动非 Minecraft 相关的服务器，否则无需使用。"
 
-#: ../configure.rst:91
+#: ../configure.rst:93
 msgid "Default value: ``vanilla_handler``"
 msgstr "默认值：``vanilla_handler``"
 
-#: ../configure.rst:94
+#: ../configure.rst:96
 msgid "encoding / decoding"
 msgstr "encoding / decoding"
 
-#: ../configure.rst:96
+#: ../configure.rst:98
 msgid "The encoding format used to encode message to the stdin of the server."
 msgstr "用于解码服务端标准输出流的文本的编码格式。"
 
-#: ../configure.rst:98
+#: ../configure.rst:100
 msgid ""
 "Leave it blank for MCDR to auto detect the encoding. If it doesn't work "
 "(e.g. random characters in game) you needs to manually specify it depends"
 " on your os and language"
 msgstr "留空以让 MCDR 自动检测编码格式。如果它不起作用（例如游戏中出现了乱码），则需要根据你的操作系统和语言手动进行指定。"
 
-#: ../configure.rst:101
+#: ../configure.rst:103
 msgid "Option type: string or null"
 msgstr "选项类型：string 或 null"
 
-#: ../configure.rst:102
+#: ../configure.rst:104
 msgid "Default value: `` ``"
 msgstr "默认值：``空``"
 
-#: ../configure.rst:103
+#: ../configure.rst:105
 msgid "Examples: ``utf8``\\ , ``gbk``"
 msgstr "例如：``utf8`` ， ``gbk``"
 
-#: ../configure.rst:106
+#: ../configure.rst:108
 msgid "plugin_directories"
 msgstr "plugin_directories"
 
-#: ../configure.rst:108
+#: ../configure.rst:110
 msgid "The list of directory path where MCDR will search for plugin to load"
 msgstr "MCDR 搜索将要加载插件的目录列表。"
 
-#: ../configure.rst:110
+#: ../configure.rst:112
 msgid ""
 "MCDR also **adds these directories into** ``sys.path`` so plugins can "
 "import packages inside plugin folders directly"
 msgstr "MCDR 会 **将这些目录添加到** ``sys.path``，以让插件可以直接导入插件文件夹中的包。"
 
-#: ../configure.rst:113
+#: ../configure.rst:115
 msgid "Option type: a list of string"
 msgstr "选项类型：list[str]"
 
-#: ../configure.rst:114 ../configure.rst:217 ../configure.rst:242
-#: ../configure.rst:264
+#: ../configure.rst:116 ../configure.rst:219 ../configure.rst:244
+#: ../configure.rst:266
 msgid "Default value:"
 msgstr "默认值："
 
-#: ../configure.rst:122 ../configure.rst:224 ../configure.rst:249
+#: ../configure.rst:124 ../configure.rst:226 ../configure.rst:251
 msgid "Example:"
 msgstr "例如："
 
-#: ../configure.rst:132
+#: ../configure.rst:134
 msgid "rcon"
 msgstr "rcon"
 
-#: ../configure.rst:134
+#: ../configure.rst:136
 msgid ""
 "The setting for `rcon <https://wiki.vg/RCON>`__. If rcon is enabled, MCDR"
 " will start a rcon client to connect to the server after server rcon has "
@@ -307,112 +317,112 @@ msgstr ""
 "`rcon <https://wiki.vg/RCON>`__ 设置。若启用 rcon，则在 Minecraft rcon "
 "服务端启动后，MCDR将自动连接到 rcon 服务端。这样插件就可以通过 rcon 向服务端发送命令。"
 
-#: ../configure.rst:137
+#: ../configure.rst:139
 msgid "rcon.enable"
 msgstr "rcon.enable"
 
-#: ../configure.rst:139
+#: ../configure.rst:141
 msgid "The switch of rcon"
 msgstr "rcon 开关"
 
-#: ../configure.rst:142 ../configure.rst:178 ../configure.rst:194
-#: ../configure.rst:203
+#: ../configure.rst:144 ../configure.rst:180 ../configure.rst:196
+#: ../configure.rst:205
 msgid "Option type: boolean"
 msgstr "选项类型：boolean"
 
-#: ../configure.rst:143 ../configure.rst:195 ../configure.rst:204
+#: ../configure.rst:145 ../configure.rst:197 ../configure.rst:206
 msgid "Default value: ``false``"
 msgstr "默认值：``false``"
 
-#: ../configure.rst:146
+#: ../configure.rst:148
 msgid "rcon.address"
 msgstr "rcon.address"
 
-#: ../configure.rst:148
+#: ../configure.rst:150
 msgid "The address of the rcon server"
 msgstr "用于 rcon 连接的地址。"
 
-#: ../configure.rst:152
+#: ../configure.rst:154
 msgid "Default value: ``127.0.0.1``"
 msgstr "默认值：``127.0.0.1``"
 
-#: ../configure.rst:155
+#: ../configure.rst:157
 msgid "rcon.port"
 msgstr "rcon.port"
 
-#: ../configure.rst:157
+#: ../configure.rst:159
 msgid "The port of the rcon server"
 msgstr "用于 rcon 连接的端口。"
 
-#: ../configure.rst:160
+#: ../configure.rst:162
 msgid "Option type: integer"
 msgstr "选项类型：integer"
 
-#: ../configure.rst:161
+#: ../configure.rst:163
 msgid "Default value: ``25575``"
 msgstr "默认值：``25575``"
 
-#: ../configure.rst:164
+#: ../configure.rst:166
 msgid "rcon.password"
 msgstr "rcon.password"
 
-#: ../configure.rst:166
+#: ../configure.rst:168
 msgid "The password to connect to the rcon server"
 msgstr "用于 rcon 连接的密码。"
 
-#: ../configure.rst:170
+#: ../configure.rst:172
 msgid "Default value: ``password``"
 msgstr "默认值：``password``"
 
-#: ../configure.rst:173
+#: ../configure.rst:175
 msgid "check_update"
 msgstr "check_update"
 
-#: ../configure.rst:175
+#: ../configure.rst:177
 msgid "If set to true, MCDR will detect if there's a new version every 24h"
 msgstr "如果设置为 true，MCDR将会每隔24小时执行一次更新检测。"
 
-#: ../configure.rst:179
+#: ../configure.rst:181
 msgid "Default value: ``true``"
 msgstr "默认值：``true``"
 
-#: ../configure.rst:182
+#: ../configure.rst:184
 msgid "Advance"
 msgstr "高级配置"
 
-#: ../configure.rst:184
+#: ../configure.rst:186
 msgid "Configure options for advance users"
 msgstr "为进阶用户提供的选项"
 
-#: ../configure.rst:187
+#: ../configure.rst:189
 msgid "disable_console_thread"
 msgstr "disable_console_thread"
 
-#: ../configure.rst:189
+#: ../configure.rst:191
 msgid ""
 "When set to true, MCDR will not start the console thread for handling "
 "console command input"
 msgstr "设置为 true 时，MCDR 将不会启动控制台线程来处理控制台命令输入。"
 
-#: ../configure.rst:191
+#: ../configure.rst:193
 msgid "Don't change it to true unless you know what you are doing"
 msgstr "请保持默认值，除非你清楚地知道这是什么。"
 
-#: ../configure.rst:198
+#: ../configure.rst:200
 msgid "disable_console_color"
 msgstr "disable_console_color"
 
-#: ../configure.rst:200
+#: ../configure.rst:202
 msgid ""
 "When set to true, MCDR will removed all console font formatter codes in "
 "before any message gets printed onto the console"
 msgstr "设置为 true 时，MCDR 将在所有消息打印到控制台之前删除所有控制台字体格式化程序代码。"
 
-#: ../configure.rst:207
+#: ../configure.rst:209
 msgid "custom_handlers"
 msgstr "custom_handlers"
 
-#: ../configure.rst:209
+#: ../configure.rst:211
 msgid ""
 "A list of custom `server handler <customize/handler.html>`__ classes. The"
 " classed need to be subclasses of ``AbstractServerHandler``"
@@ -420,31 +430,31 @@ msgstr ""
 "自定义 `服务端处理器 <customize/handler.html>`__ 类所组成的列表。这些类应当是 "
 "AbstractServerHandler 的子类。"
 
-#: ../configure.rst:211
+#: ../configure.rst:213
 msgid ""
 "Then you can use the name of your handler in the `handler <#handler>`__ "
 "option above to use your handler"
 msgstr "这样你就可以在 `handler <#handler>`__ 选项中通过处理器的名称指派其解析标准输出文本。"
 
-#: ../configure.rst:213
+#: ../configure.rst:215
 msgid "The name of a handler is defined in the get_name method"
 msgstr "处理器名称通过 get_name 方法定义。"
 
-#: ../configure.rst:216 ../configure.rst:241
+#: ../configure.rst:218 ../configure.rst:243
 msgid "Option type: a list of string, or null"
 msgstr "选项类型：list[str] 或 null"
 
-#: ../configure.rst:231
+#: ../configure.rst:233
 msgid ""
 "In this example the custom handler package path is ``my.custom.handler`` "
 "and the class is name ``MyHandler``"
 msgstr "下面这个例子中，``my.custom.handler`` 是包路径，``MyHandler`` 是类名。"
 
-#: ../configure.rst:234
+#: ../configure.rst:236
 msgid "custom_info_reactors"
 msgstr "custom_info_reactors"
 
-#: ../configure.rst:236
+#: ../configure.rst:238
 msgid ""
 "A list of custom `info reactor <customize/reactor.html>`__ classes to "
 "handle the info instance. The classed need to be subclasses of "
@@ -453,23 +463,23 @@ msgstr ""
 "用于处理 info 实例的自定义 `info 响应器 <customize/reactor.html>`__ 类所组成的列表。这些类应当是 "
 "``AbstractInfoReactor`` 的子类。"
 
-#: ../configure.rst:238
+#: ../configure.rst:240
 msgid ""
 "All custom info reactors will be registered to the reactor list to "
 "process information from the server"
 msgstr "所有自定义 info 响应器都将注册到反应堆列表中，以处理来自服务器的信息。"
 
-#: ../configure.rst:256
+#: ../configure.rst:258
 msgid ""
 "In this example the custom reactor package path is ``my.custom.reactor`` "
 "and the class name is ``MyInfoReactor``"
 msgstr "下面这个例子中，``my.custom.reactor`` 是包路径，``MyInfoReactor`` 是类名。"
 
-#: ../configure.rst:259
+#: ../configure.rst:261
 msgid "debug"
 msgstr "debug"
 
-#: ../configure.rst:261
+#: ../configure.rst:263
 msgid ""
 "Debug logging switches. Set ``all`` to true to enable all debug logging, "
 "or set the specific option to enable specific debug logging"

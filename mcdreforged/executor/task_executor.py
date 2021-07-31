@@ -1,6 +1,6 @@
 import time
 from queue import Empty, PriorityQueue
-from threading import Lock
+from threading import Lock, Event
 from typing import Callable, Any, Optional
 
 from mcdreforged.constants import core_constant
@@ -9,10 +9,10 @@ from mcdreforged.utils.logger import DebugOption
 
 
 class Priority:
-	# High priority
+	# High priority, executes first
 	REGULAR = 0
 	INFO = 20
-	# Low priority
+	# Low priority, executes last
 
 
 class TaskData:
@@ -72,16 +72,17 @@ class TaskExecutor(ThreadExecutor):
 		else:
 			self.task_queue.put_nowait(data)
 
-	def enqueue_regular_task(self, func: Callable[[], Any]):
+	def add_regular_task(self, func: Callable[[], Any], *, wait=False):
+		done = Event()
+		if wait:
+			def wrapped():
+				real_func()
+				done.set()
+			real_func = func
+			func = wrapped
 		self.task_queue.put(TaskData(func, Priority.REGULAR))
-
-	def execute_or_enqueue(self, func: Callable[[], Any], *, wait=False):
-		if self.is_on_thread():
-			func()
-		else:
-			self.enqueue_regular_task(func)
-			if wait:
-				self.wait_till_finish_all_task()
+		if wait:
+			done.wait()
 
 	def get_this_tick_time(self) -> float:
 		"""

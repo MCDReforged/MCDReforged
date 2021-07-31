@@ -173,7 +173,7 @@ class MCDReforgedServer:
 		self.plugin_manager.refresh_all_plugins()
 		self.logger.info(self.plugin_manager.last_operation_result.to_rtext(show_path=True))
 
-	def on_plugin_changed(self):
+	def on_plugin_registry_changed(self):
 		self.command_manager.clear_command()
 		self.plugin_manager.registry_storage.export_commands(self.command_manager.register_command)
 
@@ -451,8 +451,8 @@ class MCDReforgedServer:
 
 	def __on_mcdr_start(self):
 		self.task_executor.start()
-		self.task_executor.enqueue_regular_task(self.load_plugins)
-		self.task_executor.wait_till_finish_all_task()
+		self.watch_dog.start()
+		self.load_plugins()
 		self.plugin_manager.dispatch_event(MCDRPluginEvents.MCDR_START, ())
 		if not self.config['disable_console_thread']:
 			self.console_handler.start()
@@ -461,7 +461,6 @@ class MCDReforgedServer:
 		if not self.start_server():
 			raise ServerStartError()
 		self.update_helper.start()
-		self.watch_dog.start()
 		self.server_handler_manager.start_handler_detection()
 		self.set_mcdr_state(MCDReforgedState.RUNNING)
 

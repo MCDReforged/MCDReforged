@@ -128,7 +128,8 @@ class PluginManager:
 	def register_permanent_plugins(self):
 		self.__add_permanent_plugin(MCDReforgedPlugin(self))
 		self.__add_permanent_plugin(PythonPlugin(self))
-		self.__update_registry()  # not really necessary, but in case
+		self.__sort_plugins_by_id()
+		self.__update_registry()
 
 	# ------------------------------------------------
 	#   Actual operations that add / remove a plugin
@@ -337,6 +338,12 @@ class PluginManager:
 		# reload_result		READY				UNLOADING
 		# dep_chk_result	LOADED / READY		UNLOADING
 
+		# Stuffs execution order in self.mcdr_server.task_executor
+		# 1. PLUGIN_LOADED event listeners callbacks
+		# 2. self.__update_registry (watchdog disabled)
+		# 3. PLUGIN_LOADED, PLUGIN_REMOVED event listeners callbacks
+		# This method will wait until step 2 finishes before quiting
+
 		self.registry_storage.clear()  # in case plugin invokes dispatch_event during on_load. dont let them trigger listeners
 
 		newly_loaded_plugins = {*load_result.success_list, *reload_result.success_list}
@@ -348,6 +355,9 @@ class PluginManager:
 			if plugin in newly_loaded_plugins:
 				if isinstance(plugin, RegularPlugin):
 					plugin.receive_event(MCDRPluginEvents.PLUGIN_LOADED, (plugin.old_entry_module_instance,))
+
+		update_reg = misc_util.WaitableCallable(self.__update_registry)
+		self.mcdr_server.task_executor.add_regular_task(update_reg)
 
 		for plugin in unload_result.success_list + unload_result.failed_list + reload_result.failed_list + dependency_check_result.failed_list:
 			plugin.assert_state({PluginState.UNLOADING})
@@ -362,17 +372,18 @@ class PluginManager:
 			plugin.assert_state({PluginState.READY})
 
 		self.__sort_plugins_by_id()
-		self.__update_registry()
+		update_reg.wait()
 
 	def __sort_plugins_by_id(self):
 		self.plugins = dict(sorted(self.plugins.items(), key=lambda item: item[0]))
 
 	def __update_registry(self):
-		self.registry_storage.clear()
-		for plugin in self.get_all_plugins():
-			self.registry_storage.collect(plugin.plugin_registry)
-		self.registry_storage.arrange()
-		self.mcdr_server.on_plugin_changed()
+		with self.mcdr_server.watch_dog.pausing():
+			self.registry_storage.clear()
+			for plugin in self.get_all_plugins():
+				self.registry_storage.collect(plugin.plugin_registry)
+			self.registry_storage.arrange()
+			self.mcdr_server.on_plugin_registry_changed()
 
 	def __refresh_plugins(self, reload_filter: Callable[[RegularPlugin], bool]):
 		unload_result = self.__collect_and_remove_plugins(lambda plugin: not plugin.plugin_exists())
@@ -432,24 +443,40 @@ class PluginManager:
 	# ----------------
 
 	def __dispatch_event(self, event: MCDREvent, args: Tuple[Any, ...]):
+		"""
+		Event dispatch logic implementation
+		"""
 		self.logger.debug('Dispatching {} with args ({})'.format(event, ', '.join([type(arg).__name__ for arg in args])), option=DebugOption.PLUGIN)
 		for listener in self.registry_storage.event_listeners.get(event.id, []):
-			self.trigger_listener(listener, args)
+			self.__trigger_listener(listener, args)
 
-	def dispatch_event(self, event: MCDREvent, args: Tuple[Any, ...], *, on_executor_thread=True, wait=False):
-		if on_executor_thread:
-			self.mcdr_server.task_executor.execute_or_enqueue(lambda: self.__dispatch_event(event, args), wait=wait)
-		else:  # on thread
-			self.__dispatch_event(event, args)
-
-	def trigger_listener(self, listener: EventListener, args: Tuple[Any, ...]):
+	def __trigger_listener(self, listener: EventListener, args: Tuple[Any, ...]):
 		"""
-		The terminated entry for triggering a listener
+		Event listener triggering implementation
 		The server_interface parameter will be automatically added as the 1st parameter
 		"""
-		# self.thread_pool.add_task(lambda: listener.execute(*args), listener.plugin)
 		try:
 			with self.with_plugin_context(listener.plugin):
 				listener.execute(listener.plugin.server_interface, *args)
 		except:
 			self.logger.exception('Error invoking listener {}'.format(listener))
+
+	def dispatch_event(self, event: MCDREvent, args: Tuple[Any, ...], *, run_async=True, wait=False):
+		"""
+		Event dispatching interface. Event will be added into the task queue of the task executor thread
+		"""
+		if run_async:
+			self.mcdr_server.task_executor.add_regular_task(lambda: self.__dispatch_event(event, args), wait=wait)
+		else:
+			self.__dispatch_event(event, args)
+
+	def trigger_listener(self, listener: EventListener, args: Tuple[Any, ...], *, run_async=True, wait=False):
+		"""
+		Listener triggering interface. Event will be added into the task queue of the task executor thread
+		Should only be used in specific plugin listener triggering
+		"""
+		# self.thread_pool.add_task(lambda: listener.execute(*args), listener.plugin)
+		if run_async:
+			self.mcdr_server.task_executor.add_regular_task(lambda: self.__trigger_listener(listener, args), wait=wait)
+		else:
+			self.__trigger_listener(listener, args)

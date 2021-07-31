@@ -201,7 +201,7 @@ Example:
 
 * Event id: mcdr.player_joined
 * Callback arguments: ServerInterface, player_name, Info
-* Default function name: 
+* Default function name: on_player_joined
 
 Player Left
 ~~~~~~~~~~~
@@ -211,7 +211,7 @@ A player just left the game. Plugin can do cleanups for player related objects
 
 * Event id: mcdr.player_left
 * Callback arguments: ServerInterface, player_name
-* Default function name: 
+* Default function name: on_player_left
 
 Custom Event
 ------------

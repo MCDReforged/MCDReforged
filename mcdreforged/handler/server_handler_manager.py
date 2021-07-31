@@ -44,6 +44,7 @@ class ServerHandlerManager:
 		add_handler(Beta18Handler())
 		add_handler(BungeecordHandler())
 		add_handler(WaterfallHandler())
+		add_handler(VelocityHandler())
 		if custom_handler_class_paths is not None:
 			for class_path in custom_handler_class_paths:
 				try:
