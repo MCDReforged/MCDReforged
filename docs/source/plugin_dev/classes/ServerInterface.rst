@@ -410,7 +410,7 @@ Parameter *event*: The event to dispatch. It need to be a ``PluginEvent`` instan
 
 Parameter *args*: The argument that will be used to invoke the event listeners. An ServerInterface instance will be automatically added to the beginning of the argument list
 
-Parameter *on_executor_thread*: If it's set to false. The event will be dispatched immediately no matter what the current thread is
+Parameter *on_executor_thread*: By default the event will be dispatched in a new task in task executor thread. If it's set to false. The event will be dispatched immediately
 
 **Note**: You cannot dispatch an event with the same event id to any MCDR built-in event
 

@@ -407,8 +407,8 @@ class ServerInterface:
 		LiteralEvent instance for this argument
 		:param args: The argument that will be used to invoke the event listeners. An ServerInterface instance will be
 		automatically added to the beginning of the argument list
-		:param on_executor_thread: If it's set to false. The event will be dispatched immediately no matter what the
-		current thread is
+		:param on_executor_thread: By default the event will be dispatched in a new task in task executor thread
+		If it's set to false. The event will be dispatched immediately
 		"""
 		misc_util.check_type(event, PluginEvent)
 		if MCDRPluginEvents.contains_id(event.id):

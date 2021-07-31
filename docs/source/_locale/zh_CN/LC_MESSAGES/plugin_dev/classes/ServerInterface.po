@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-30 11:43+0800\n"
+"POT-Creation-Date: 2021-08-01 02:44+0800\n"
 "PO-Revision-Date: 2021-01-24 09:17+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -556,9 +556,10 @@ msgstr "参数 *args*：用于调用事件监听器的参数。 一个 ``ServerI
 
 #: ../plugin_dev/classes/ServerInterface.rst:413
 msgid ""
-"Parameter *on_executor_thread*: If it's set to false. The event will be "
-"dispatched immediately no matter what the current thread is"
-msgstr "参数 *on_executor_thread*：如果它被设置为 False，则无论当前线程是什么，事件都会被立即触发。"
+"Parameter *on_executor_thread*: By default the event will be dispatched "
+"in a new task in task executor thread. If it's set to false. The event "
+"will be dispatched immediately"
+msgstr "参数 *on_executor_thread*：在默认值的情况下，该事件会被派发至任务执行者 (task executor) 线程中分发。如果它被设置为 False，则事件将会被立即分发。"
 
 #: ../plugin_dev/classes/ServerInterface.rst:415
 msgid ""
@@ -720,10 +721,3 @@ msgstr "通过 rcon 连接向服务端发送指令，并返回指令执行结果
 #: ../plugin_dev/classes/ServerInterface.rst:533
 msgid "Parameter *command*: The command you want to send to the rcon server"
 msgstr "参数 *command*：你要发送给 rcon 服务端的指令。"
-
-#~ msgid ""
-#~ "The path of the directory will be"
-#~ " `config/plugin_id` where `plugin_id` is "
-#~ "the id of the current plugin"
-#~ msgstr ""
-
