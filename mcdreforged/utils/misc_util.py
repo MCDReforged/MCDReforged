@@ -5,7 +5,7 @@ import importlib.machinery
 import importlib.util
 import os
 import threading
-from typing import List, Callable, Tuple, TypeVar, Any, Type
+from typing import List, Callable, Tuple, TypeVar, Any, Type, Optional
 
 from mcdreforged.minecraft.rtext import RTextBase
 from mcdreforged.plugin.meta.version import Version
@@ -85,3 +85,17 @@ def check_type(value: Any, type_: Type, error_message: str = None):
 		if error_message is None:
 			error_message = 'Except type {} but found type {}'.format(type_, type(value))
 		raise TypeError(error_message)
+
+
+class WaitableCallable:
+	def __init__(self, func: Callable):
+		self.__func = func
+		self.__event = threading.Event()
+
+	def __call__(self, *args, **kwargs):
+		rv = self.__func(*args, **kwargs)
+		self.__event.set()
+		return rv
+
+	def wait(self, timeout: Optional[float] = None):
+		self.__event.wait(timeout=timeout)
