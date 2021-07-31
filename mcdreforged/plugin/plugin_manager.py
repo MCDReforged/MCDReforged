@@ -342,6 +342,7 @@ class PluginManager:
 		# 1. PLUGIN_LOADED event listeners callbacks
 		# 2. self.__update_registry (watchdog disabled)
 		# 3. PLUGIN_LOADED, PLUGIN_REMOVED event listeners callbacks
+		# This method will wait until step 2 finishes before quiting
 
 		self.registry_storage.clear()  # in case plugin invokes dispatch_event during on_load. dont let them trigger listeners
 
@@ -355,7 +356,8 @@ class PluginManager:
 				if isinstance(plugin, RegularPlugin):
 					plugin.receive_event(MCDRPluginEvents.PLUGIN_LOADED, (plugin.old_module_instance,))
 
-		self.mcdr_server.task_executor.add_regular_task(self.__update_registry)
+		registry_updated = threading.Event()
+		self.mcdr_server.task_executor.add_regular_task(lambda: (self.__update_registry, registry_updated.set()))
 
 		for plugin in unload_result.success_list + unload_result.failed_list + reload_result.failed_list + dependency_check_result.failed_list:
 			plugin.assert_state({PluginState.UNLOADING})
@@ -370,16 +372,18 @@ class PluginManager:
 			plugin.assert_state({PluginState.READY})
 
 		self.__sort_plugins_by_id()
+		registry_updated.wait()
 
 	def __sort_plugins_by_id(self):
 		self.plugins = dict(sorted(self.plugins.items(), key=lambda item: item[0]))
 
 	def __update_registry(self):
-		self.registry_storage.clear()
-		for plugin in self.get_all_plugins():
-			self.registry_storage.collect(plugin.plugin_registry)
-		self.registry_storage.arrange()
-		self.mcdr_server.on_plugin_registry_changed()
+		with self.mcdr_server.watch_dog.pausing():
+			self.registry_storage.clear()
+			for plugin in self.get_all_plugins():
+				self.registry_storage.collect(plugin.plugin_registry)
+			self.registry_storage.arrange()
+			self.mcdr_server.on_plugin_registry_changed()
 
 	def __refresh_plugins(self, reload_filter: Callable[[RegularPlugin], bool]):
 		unload_result = self.__collect_and_remove_plugins(lambda plugin: not plugin.file_exists())

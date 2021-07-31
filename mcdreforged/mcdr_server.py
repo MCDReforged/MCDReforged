@@ -429,6 +429,7 @@ class MCDReforgedServer:
 
 	def __on_mcdr_start(self):
 		self.task_executor.start()
+		self.watch_dog.start()
 		self.load_plugins()
 		self.plugin_manager.dispatch_event(MCDRPluginEvents.MCDR_START, ())
 		if not self.config['disable_console_thread']:
@@ -438,7 +439,6 @@ class MCDReforgedServer:
 		if not self.start_server():
 			raise ServerStartError()
 		self.update_helper.start()
-		self.watch_dog.start()
 		self.server_handler_manager.start_handler_detection()
 		self.set_mcdr_state(MCDReforgedState.RUNNING)
 
