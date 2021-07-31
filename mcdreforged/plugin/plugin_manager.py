@@ -432,24 +432,40 @@ class PluginManager:
 	# ----------------
 
 	def __dispatch_event(self, event: MCDREvent, args: Tuple[Any, ...]):
+		"""
+		Event dispatch logic implementation
+		"""
 		self.logger.debug('Dispatching {} with args ({})'.format(event, ', '.join([type(arg).__name__ for arg in args])), option=DebugOption.PLUGIN)
 		for listener in self.registry_storage.event_listeners.get(event.id, []):
-			self.trigger_listener(listener, args)
+			self.__trigger_listener(listener, args)
 
-	def dispatch_event(self, event: MCDREvent, args: Tuple[Any, ...], *, on_executor_thread=True, wait=False):
-		if on_executor_thread:
-			self.mcdr_server.task_executor.execute_or_enqueue(lambda: self.__dispatch_event(event, args), wait=wait)
-		else:  # on thread
-			self.__dispatch_event(event, args)
-
-	def trigger_listener(self, listener: EventListener, args: Tuple[Any, ...]):
+	def __trigger_listener(self, listener: EventListener, args: Tuple[Any, ...]):
 		"""
-		The terminated entry for triggering a listener
+		Event listener triggering implementation
 		The server_interface parameter will be automatically added as the 1st parameter
 		"""
-		# self.thread_pool.add_task(lambda: listener.execute(*args), listener.plugin)
 		with self.with_plugin_context(listener.plugin):
 			try:
 				listener.execute(self.mcdr_server.server_interface, *args)
 			except:
 				self.logger.exception('Error invoking listener {}'.format(listener))
+
+	def dispatch_event(self, event: MCDREvent, args: Tuple[Any, ...], *, run_async=True, wait=False):
+		"""
+		Event dispatching interface. Event will be added into the task queue of the task executor thread
+		"""
+		if run_async:
+			self.mcdr_server.task_executor.add_regular_task(lambda: self.__dispatch_event(event, args), wait=wait)
+		else:
+			self.__dispatch_event(event, args)
+
+	def trigger_listener(self, listener: EventListener, args: Tuple[Any, ...], *, run_async=True, wait=False):
+		"""
+		Listener triggering interface. Event will be added into the task queue of the task executor thread
+		Should only be used in specific plugin listener triggering
+		"""
+		# self.thread_pool.add_task(lambda: listener.execute(*args), listener.plugin)
+		if run_async:
+			self.mcdr_server.task_executor.add_regular_task(lambda: self.__trigger_listener(listener, args), wait=wait)
+		else:
+			self.__trigger_listener(listener, args)
