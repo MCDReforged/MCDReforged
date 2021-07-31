@@ -82,6 +82,8 @@ Here is a table of current built-in handlers and their suitable server types
      - For Bungeecord. Please add ``-Djline.terminal=jline.UnsupportedTerminal`` before ``-jar`` in the start command for MCDR support. From `here <https://www.spigotmc.org/wiki/start-up-parameters/>`__
    * - waterfall_handler
      - For Waterfall server
+   * - velocity_handler
+     - For Velocity server
    * - basic_handler
      - The handler that parse nothing and return the raw text from the server. Don't use this unless you want to use MCDR to lanuch non Minecraft related servers.
 

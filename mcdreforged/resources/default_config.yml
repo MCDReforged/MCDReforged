@@ -29,6 +29,7 @@ start_command: java -Xms1G -Xmx2G -jar minecraft_server.jar nogui
 # cat_server_handler, For CatServer server
 # bungeecord_handler, for Bungeecord server
 # waterfall_handler,  for Waterfall server
+# velocity_handler,  for Velocity server
 handler: vanilla_handler
 
 
