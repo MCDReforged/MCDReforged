@@ -150,7 +150,7 @@ class MCDReforgedServer:
 		self.plugin_manager.refresh_all_plugins()
 		self.logger.info(self.plugin_manager.last_operation_result.to_rtext(show_path=True))
 
-	def on_plugin_changed(self):
+	def on_plugin_registry_changed(self):
 		self.command_manager.clear_command()
 		self.plugin_manager.registry_storage.export_commands(self.command_manager.register_command)
 

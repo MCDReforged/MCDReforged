@@ -129,7 +129,8 @@ class PluginManager:
 
 	def register_permanent_plugins(self):
 		self.__add_permanent_plugin(MCDReforgedPlugin(self))
-		self.__update_registry()  # not really necessary, but in case
+		self.__sort_plugins_by_id()
+		self.__update_registry()
 
 	# ------------------------------------------------
 	#   Actual operations that add / remove a plugin
@@ -337,6 +338,11 @@ class PluginManager:
 		# reload_result		READY				UNLOADING
 		# dep_chk_result	LOADED / READY		UNLOADING
 
+		# Stuffs execution order in self.mcdr_server.task_executor
+		# 1. PLUGIN_LOADED event listeners callbacks
+		# 2. self.__update_registry (watchdog disabled)
+		# 3. PLUGIN_LOADED, PLUGIN_REMOVED event listeners callbacks
+
 		self.registry_storage.clear()  # in case plugin invokes dispatch_event during on_load. dont let them trigger listeners
 
 		for plugin in load_result.success_list + reload_result.success_list:
@@ -348,6 +354,8 @@ class PluginManager:
 			if plugin in newly_loaded_plugins:
 				if isinstance(plugin, RegularPlugin):
 					plugin.receive_event(MCDRPluginEvents.PLUGIN_LOADED, (plugin.old_module_instance,))
+
+		self.mcdr_server.task_executor.add_regular_task(self.__update_registry)
 
 		for plugin in unload_result.success_list + unload_result.failed_list + reload_result.failed_list + dependency_check_result.failed_list:
 			plugin.assert_state({PluginState.UNLOADING})
@@ -362,7 +370,6 @@ class PluginManager:
 			plugin.assert_state({PluginState.READY})
 
 		self.__sort_plugins_by_id()
-		self.__update_registry()
 
 	def __sort_plugins_by_id(self):
 		self.plugins = dict(sorted(self.plugins.items(), key=lambda item: item[0]))
@@ -372,7 +379,7 @@ class PluginManager:
 		for plugin in self.get_all_plugins():
 			self.registry_storage.collect(plugin.plugin_registry)
 		self.registry_storage.arrange()
-		self.mcdr_server.on_plugin_changed()
+		self.mcdr_server.on_plugin_registry_changed()
 
 	def __refresh_plugins(self, reload_filter: Callable[[RegularPlugin], bool]):
 		unload_result = self.__collect_and_remove_plugins(lambda plugin: not plugin.file_exists())
