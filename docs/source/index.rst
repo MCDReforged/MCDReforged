@@ -11,13 +11,13 @@ This is the official documentation for `MCDReforged <https://github.com/Fallen-B
    :maxdepth: 2
    :caption: Home
 
-   Quick Start<quick_start.md>
-   Configure<configure.md>
-   Permission<permission.md>
-   Command<command.md>
+   Quick Start<quick_start.rst>
+   Configure<configure.rst>
+   Permission<permission.rst>
+   Command<command.rst>
    Plugin Development<plugin_dev/plugin_dev.rst>
    Customize<customize/customize.rst>
-   Migrate from MCDR 0.x<migrate_from_0.x.md>
+   Migrate Guide<migrate/index.rst>
 
 Indices and tables
 ==================

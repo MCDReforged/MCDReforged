@@ -1,6 +1,6 @@
 
-Migrate from MCDR 0.x
-=====================
+Migrate from MCDR 0.x to 1.x
+============================
 
 File structure
 --------------

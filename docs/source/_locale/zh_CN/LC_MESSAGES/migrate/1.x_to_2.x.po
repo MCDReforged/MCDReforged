@@ -1,0 +1,185 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Fallen_Breath
+# This file is distributed under the same license as the MCDReforged
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2021.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: MCDReforged \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-01 17:03+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.0\n"
+
+#: ../migrate/1.x_to_2.x.rst:3
+msgid "Migrate from MCDR 1.x to 2.x"
+msgstr "从 MCDR 1.x 迁移至 MCDR 2.x"
+
+#: ../migrate/1.x_to_2.x.rst:5
+msgid ""
+"Migrating from MCDR 1.x to MCDR 2.x is easier than migrating from 0.x for"
+" most plugins. Some of the MCDR 1.x plugins can work as expected without "
+"any modification"
+msgstr ""
+"对于大多数插件而言，从 MCDR 1.x 迁移至 MCDR 2.x 是一件比 0.x 迁移至 1.x 容易的事情。许多 MCDR 1.x "
+"的插件可以无需修改地正常工作"
+
+#: ../migrate/1.x_to_2.x.rst:7
+msgid ""
+"Other than plugins, the permission / configure parts of MCDR has no "
+"changes, so you can just continuously use your MCDR 1.x files"
+msgstr "除插件外，MCDR 的权限 / 配置部分并未发生变化，因此你可以接着用你的 MCDR 1.x 的文件"
+
+#: ../migrate/1.x_to_2.x.rst:10
+msgid "Plugin"
+msgstr "插件"
+
+#: ../migrate/1.x_to_2.x.rst:12
+msgid "The most changes between MCDR 1.x and MCDR 2.x is the plugin system"
+msgstr "MCDR 1.x 与 MCDR 2.x 间最大的改变为插件系统"
+
+#: ../migrate/1.x_to_2.x.rst:15
+msgid "Metadata"
+msgstr "元数据"
+
+#: ../migrate/1.x_to_2.x.rst:17
+msgid ""
+"You can no longer use ``RText`` instance as the value of your plugin "
+"metadata. ``name`` and ``description`` fields in ``RText`` class will be "
+"automatically converted into ``str`` for compatibility"
+msgstr ""
+"现在你不能使用 ``RText`` 实例作为插件元数据中键值对的值了。关于兼容性，以 ``RText`` 类存在的 ``name`` 以及 "
+"``description`` 将被自动转换为 ``str``"
+
+#: ../migrate/1.x_to_2.x.rst:19
+msgid ""
+"This changes is to ensure the consistence between ``Solo Plugin`` (the "
+"plugin format before MCDR 2.x) and ``Packed / Directory Plugin`` which "
+"use a ``.json`` file to declare their metadata"
+msgstr ""
+"该改变是用于维护 `单文件插件 <>`__ (即 MCDR 2.x 前的插件形式) 以及 `打包插件 <>`__ / `文件夹插件 <>`__ "
+"间的一致性，因为后者使用了 ``.json`` 文件来声明它们的元数据"
+
+#: ../migrate/1.x_to_2.x.rst:22
+msgid "Event"
+msgstr "事件"
+
+#: ../migrate/1.x_to_2.x.rst:24
+msgid ""
+"There are several changes to plugin event about plugin lifecycle to make "
+"the lifecycle more complete"
+msgstr "关于插件生命周期的插件事件有几处改变，使插件生命周期得以更完整"
+
+#: ../migrate/1.x_to_2.x.rst:26
+msgid "``Plugin Removed`` event is removed"
+msgstr "``插件被“删除”`` 事件被移除了"
+
+#: ../migrate/1.x_to_2.x.rst:27
+msgid "``Plugin Unload`` event will be dispatched when MCDR stopped"
+msgstr "``插件被卸载`` 事件将在 MCDR 关闭时被派发"
+
+#: ../migrate/1.x_to_2.x.rst:29
+msgid "With that the plugin lifecycle can be demonstrated with"
+msgstr ""
+
+#: ../migrate/1.x_to_2.x.rst:32
+msgid "Modules"
+msgstr "模块"
+
+#: ../migrate/1.x_to_2.x.rst:34
+msgid ""
+"Due to how MCDR 2.x plugin loading logic works, you can no longer places "
+"your external libs modules into your ``plugin/`` folder and import them, "
+"since MCDR will not append the plugin folders into ``sys.path`` any more"
+msgstr ""
+"介于 MCDR 2.x 插件加载逻辑工作方式的变化，你不再能将你的外部依赖库模块置于你的 ``plugins/`` 文件夹并 ``import``"
+" 它们了。这是因为现在 MCDR 不再会将插件文件夹追加至 ``sys.path``"
+
+#: ../migrate/1.x_to_2.x.rst:36
+msgid ""
+"For example, the following codes with the given files structure won't "
+"work in MCDR 2.x, although it works in 1.x"
+msgstr "比如，下文所示代码将无法在下述文件结构中于 MCDR 2.x 工作，尽管它能在 MCDR 1.x 中工作"
+
+#: ../migrate/1.x_to_2.x.rst:53
+msgid ""
+"To resolve this issue, you can reorganize your plugin file structure into"
+" the `Packed Plugin <>`__ format and insert your lib your packed plugin"
+msgstr "为了解决该问题，你可以重新整理插件的文件结构，将其转换为 `打包插件 <>`__ 的形式，并将你的依赖库插入你的打包插件中"
+
+#: ../migrate/1.x_to_2.x.rst:56
+msgid "ServerInterface"
+msgstr "ServerInterface"
+
+#: ../migrate/1.x_to_2.x.rst:58
+msgid ""
+"APIs used for plugin registry operation related to current plugin in "
+"``ServerInterface`` class is now split to a derived class "
+"``PluginServerInterface``, other general MCDR control APIs are not "
+"affects"
+msgstr ""
+"位于 ``ServerInterface`` 类中与当前插件相关的插件注册操作 API 现在被分离至一个派生类 "
+"``PluginServerInterface`` 中了，其余通用性的 MCDR 控制类 API 不受影响"
+
+#: ../migrate/1.x_to_2.x.rst:60
+msgid "For example, these APIs are moved to ``PluginServerInterface``"
+msgstr "举个例子，下方的 API 已被移动至 ``PluginServerInterface`` 中"
+
+#: ../migrate/1.x_to_2.x.rst:62
+msgid "``register_event_listener``"
+msgstr "``register_event_listener``"
+
+#: ../migrate/1.x_to_2.x.rst:63
+msgid "``register_command``"
+msgstr "``register_command``"
+
+#: ../migrate/1.x_to_2.x.rst:64
+msgid "``get_data_folder``"
+msgstr "``get_data_folder``"
+
+#: ../migrate/1.x_to_2.x.rst:65 ../migrate/1.x_to_2.x.rst:73
+msgid "..."
+msgstr "..."
+
+#: ../migrate/1.x_to_2.x.rst:67
+msgid "But these APIs are not affected"
+msgstr "但是这些 API 未受影响"
+
+#: ../migrate/1.x_to_2.x.rst:69
+msgid "``start``"
+msgstr "``start``"
+
+#: ../migrate/1.x_to_2.x.rst:70
+msgid "``execute``"
+msgstr "``execute``"
+
+#: ../migrate/1.x_to_2.x.rst:71
+msgid "``get_plugin_list``"
+msgstr "``get_plugin_list``"
+
+#: ../migrate/1.x_to_2.x.rst:72
+msgid "``get_permission_level``"
+msgstr "``get_permission_level``"
+
+#: ../migrate/1.x_to_2.x.rst:75
+msgid ""
+"When invoking the event listener callback of you plugin, MCDR will send a"
+" ``PluginServerInterface`` as the first parameter, so the usability of "
+"the server interface API is not affected"
+msgstr ""
+"在触发插件的事件监听器时，MCDR 会将对应的 ``PluginServerInterface`` 实例作为第一个参数来触发回调，因此插件中队 "
+"Server Interface API 的可用性并未受到影响"
+
+#: ../migrate/1.x_to_2.x.rst:77
+msgid ""
+"These changes should not affect your plugin's runnability, but it will "
+"probably mess up the type checking code inspect in your IDE to make the "
+"IDE displays a warning"
+msgstr "该改变基本上不会影响你的插件的可运作性，不过它很可能会迷惑你的 IDE 的类型检查代码审查功能并发出警告"
+

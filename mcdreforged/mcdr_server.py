@@ -471,6 +471,7 @@ class MCDReforgedServer:
 			self.logger.info(self.tr('mcdr_server.on_mcdr_stop.info'))
 
 			self.plugin_manager.dispatch_event(MCDRPluginEvents.PLUGIN_UNLOADED, ())
+			self.task_executor.wait_till_finish_all_task()
 			with self.watch_dog.pausing():  # it's ok for plugins to take some time
 				self.plugin_manager.dispatch_event(MCDRPluginEvents.MCDR_STOP, (), wait=True)
 

@@ -1,57 +1,75 @@
+
 msgid ""
 msgstr ""
-"Project-Id-Version: mcdreforged\n"
+"Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-19 13:23+0800\n"
+"POT-Creation-Date: 2021-08-01 16:26+0800\n"
 "PO-Revision-Date: 2021-01-23 17:27+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh\n"
 "Language-Team: Chinese Simplified\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Plural-Forms: nplurals=1; plural=0\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.0\n"
-"X-Generator: Poedit 2.4.2\n"
 
-msgid "This is the official documentation for `MCDReforged <https://github.com/Fallen-Breath/MCDReforged>`__."
-msgstr "这是 `MCDReforged <https://github.com/Fallen-Breath/MCDReforged>`__ 的中文文档。感谢 `Alex3236 <https://github.com/eagle3236>`__ 等对此文档的贡献。"
-
+#: ../index.rst:10
 msgid "Quick Start"
 msgstr "快速上手"
 
+#: ../index.rst:10
 msgid "Configure"
 msgstr "配置"
 
+#: ../index.rst:10
 msgid "Permission"
 msgstr "权限"
 
+#: ../index.rst:10
 msgid "Command"
 msgstr "指令"
 
+#: ../index.rst:10
 msgid "Plugin Development"
 msgstr "插件开发"
 
+#: ../index.rst:10
 msgid "Customize"
 msgstr "自定义"
 
-msgid "Migrate from MCDR 0.x"
-msgstr "迁移自 MCDR 0.x"
+#: ../index.rst:10
+msgid "Migrate Guide"
+msgstr "迁移指引"
 
+#: ../index.rst:10
 msgid "Home"
 msgstr "首页"
 
+#: ../index.rst:7
 msgid "Welcome to MCDReforged's documentation!"
 msgstr "欢迎来到 MCDReforged 文档！"
 
+#: ../index.rst:8
+msgid ""
+"This is the official documentation for `MCDReforged <https://github.com"
+"/Fallen-Breath/MCDReforged>`__."
+msgstr ""
+"这是 `MCDReforged <https://github.com/Fallen-Breath/MCDReforged>`__ "
+"的中文文档。感谢 `Alex3236 <https://github.com/eagle3236>`__ 等对此文档的贡献。"
+
+#: ../index.rst:23
 msgid "Indices and tables"
 msgstr "索引和搜索"
 
+#: ../index.rst:25
 msgid ":ref:`genindex`"
 msgstr ":ref:`genindex`"
 
+#: ../index.rst:26
 msgid ":ref:`modindex`"
 msgstr ":ref:`modindex`"
 
+#: ../index.rst:27
 msgid ":ref:`search`"
 msgstr ":ref:`search`"
