@@ -19,8 +19,6 @@
 /server/*
 /release/
 /plugins/*
-!/plugins/SamplePlugin.py
-!/plugins/test.py
 
 # plugin things
 *.mcdr
