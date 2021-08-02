@@ -356,8 +356,7 @@ class PluginManager:
 				if isinstance(plugin, RegularPlugin):
 					plugin.receive_event(MCDRPluginEvents.PLUGIN_LOADED, (plugin.old_module_instance,))
 
-		update_reg = misc_util.WaitableCallable(self.__update_registry)
-		self.mcdr_server.task_executor.add_regular_task(update_reg)
+		self.mcdr_server.task_executor.add_regular_task(self.__update_registry)
 
 		for plugin in unload_result.success_list + unload_result.failed_list + reload_result.failed_list + dependency_check_result.failed_list:
 			plugin.assert_state({PluginState.UNLOADING})
@@ -372,7 +371,6 @@ class PluginManager:
 			plugin.assert_state({PluginState.READY})
 
 		self.__sort_plugins_by_id()
-		update_reg.wait()
 
 	def __sort_plugins_by_id(self):
 		self.plugins = dict(sorted(self.plugins.items(), key=lambda item: item[0]))

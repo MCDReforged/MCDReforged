@@ -1,10 +1,11 @@
 import time
 from queue import Empty, PriorityQueue
-from threading import Lock, Event
+from threading import Lock
 from typing import Callable, Any, Optional
 
 from mcdreforged import constant
 from mcdreforged.executor.thread_executor import ThreadExecutor
+from mcdreforged.utils import misc_util
 from mcdreforged.utils.logger import DebugOption
 
 
@@ -73,16 +74,11 @@ class TaskExecutor(ThreadExecutor):
 			self.task_queue.put_nowait(data)
 
 	def add_regular_task(self, func: Callable[[], Any], *, wait=False):
-		done = Event()
 		if wait:
-			def wrapped():
-				real_func()
-				done.set()
-			real_func = func
-			func = wrapped
+			func = misc_util.WaitableCallable(func)
 		self.task_queue.put(TaskData(func, Priority.REGULAR))
 		if wait:
-			done.wait()
+			func.wait()
 
 	def get_this_tick_time(self) -> float:
 		"""
