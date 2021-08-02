@@ -108,7 +108,7 @@ Examples:
 * ``!!MCDR permission set Steve admin``: Set the permission level of player Steve to 3 (admin)
 * ``!!MCDR permission q Steve``: Query the permission level of player Steve. The value should be 3 (admin)
 
-Check the page `Permission <permission.md>`__ for more information about MCDR permission system
+Check the page `Permission <permission.rst>`__ for more information about MCDR permission system
 
 Plugin management
 ^^^^^^^^^^^^^^^^^

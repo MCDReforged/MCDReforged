@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-01 17:03+0800\n"
+"POT-Creation-Date: 2021-08-01 17:45+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -59,12 +59,14 @@ msgstr ""
 
 #: ../migrate/1.x_to_2.x.rst:19
 msgid ""
-"This changes is to ensure the consistence between ``Solo Plugin`` (the "
-"plugin format before MCDR 2.x) and ``Packed / Directory Plugin`` which "
-"use a ``.json`` file to declare their metadata"
+"This changes is to ensure the consistence between `Solo Plugin "
+"<../plugin_dev/plugin_format.html#solo-plugin>`__ (the plugin format before"
+" MCDR 2.x) and `Packed Plugin <../plugin_dev/plugin_format.html#packed-"
+"plugin>`__ / `Directory Plugin <../plugin_dev/plugin_format.html#directory-"
+"plugin>`__ which use a ``.json`` file to declare their metadata"
 msgstr ""
-"该改变是用于维护 `单文件插件 <>`__ (即 MCDR 2.x 前的插件形式) 以及 `打包插件 <>`__ / `文件夹插件 <>`__ "
-"间的一致性，因为后者使用了 ``.json`` 文件来声明它们的元数据"
+"该改变是用于维护 `单文件插件 <../plugin_dev/plugin_format.html#solo-plugin>`__ (即 MCDR 2.x "
+"前的插件形式) 以及 `打包插件 <../plugin_dev/plugin_format.html#packed-plugin>`__ / `文件夹插件 <../plugin_dev/plugin_format.html#directory-plugin>`__ 间的一致性，因为后者使用了 ``.json`` 文件来声明它们的元数据"
 
 #: ../migrate/1.x_to_2.x.rst:22
 msgid "Event"
@@ -110,8 +112,9 @@ msgstr "比如，下文所示代码将无法在下述文件结构中于 MCDR 2.x
 #: ../migrate/1.x_to_2.x.rst:53
 msgid ""
 "To resolve this issue, you can reorganize your plugin file structure into"
-" the `Packed Plugin <>`__ format and insert your lib your packed plugin"
-msgstr "为了解决该问题，你可以重新整理插件的文件结构，将其转换为 `打包插件 <>`__ 的形式，并将你的依赖库插入你的打包插件中"
+" the `Packed Plugin <../plugin_dev/plugin_format.html#packed-plugin>`__ "
+"format and insert your lib your packed plugin"
+msgstr "为了解决该问题，你可以重新整理插件的文件结构，将其转换为 `打包插件 <../plugin_dev/plugin_format.html#packed-plugin>`__ 的形式，并将你的依赖库插入你的打包插件中"
 
 #: ../migrate/1.x_to_2.x.rst:56
 msgid "ServerInterface"

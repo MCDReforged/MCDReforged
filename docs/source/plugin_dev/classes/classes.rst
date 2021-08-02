@@ -4,7 +4,7 @@ Class References
 .. toctree::
    :maxdepth: 2
 
-   ServerInterface<ServerInterface.md>
-   Info<Info.md>
-   CommandSource<CommandSource.md>
-   CommandError<CommandError.md>
+   ServerInterface<ServerInterface.rst>
+   Info<Info.rst>
+   CommandSource<CommandSource.rst>
+   CommandError<CommandError.rst>

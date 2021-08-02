@@ -320,7 +320,7 @@ msgstr "``!!MCDR permission q Steve``：查询玩家 Steve 的权限级别。其
 
 #: ../command.rst:111
 msgid ""
-"Check the page `Permission <permission.md>`__ for more information about "
+"Check the page `Permission <permission.rst>`__ for more information about "
 "MCDR permission system"
 msgstr "查看 `权限 <permission.html>`__ 页面以获取更多关于 MCDR 权限系统的信息"
 
