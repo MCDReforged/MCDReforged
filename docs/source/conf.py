@@ -69,7 +69,7 @@ html_theme_options = {
 # -- Options for sphinx-intl -------------------------------------------------
 
 # https://docs.readthedocs.io/en/stable/builds.html#build-environment
-language = os.environ.get('READTHEDOCS_LANGUAGE', 'en')
+language = os.environ.get('READTHEDOCS_LANGUAGE', 'zh_cn')
 
 # To update locale files, execute these in docs/source:
 # sphinx-build -b gettext . _locale           # Generate file structures
