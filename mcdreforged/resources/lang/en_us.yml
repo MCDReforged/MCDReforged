@@ -182,7 +182,7 @@ server_handler_manager.handler_detection.result2      : "Currently using handler
 server_handler_manager.handler_detection.result3      : "Most likely capable handler: {0}, success rate {1}% ({2}/{3})"
 update_helper.check_update.already_checking           : MCDR has already started checking update
 update_helper.check_update.check_fail                 : "Fail to detect latest version from Github: {0}"
-update_helper.check_update.is_already_latest          : MCDR is already the latset version
+update_helper.check_update.is_already_latest          : MCDR is already the latest version
 update_helper.check_update.newer_than_latest          : Current version §7{0}§r is newer than the latest version §7{1}§r in github, is it a developing version?
 update_helper.check_update.new_version_detected       : "New version detected: §7{0}§r. What's new in §7{0}§r:"
 command_exception.unknown_command                     : Unknown command
