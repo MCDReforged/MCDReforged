@@ -97,5 +97,8 @@ class WaitableCallable:
 		self.__event.set()
 		return rv
 
-	def wait(self, timeout: Optional[float] = None):
-		self.__event.wait(timeout=timeout)
+	def wait(self, timeout: Optional[float] = None) -> bool:
+		"""
+		Return if the event has been set
+		"""
+		return self.__event.wait(timeout=timeout)
