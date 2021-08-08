@@ -65,12 +65,12 @@ class ServerInterface:
 		else:
 			return self._mcdr_server.logger
 
-	def tr(self, translation_key: str, *args, language: Optional[str] = None) -> Union[str, RTextBase]:
+	def tr(self, translation_key: str, *args, language: Optional[str] = None, fallback_language: str = 'en_us') -> Union[str, RTextBase]:
 		"""
 		Return a translated text from given translation key and args
 		Check mcdreforged.mcdr_server.MCDReforgedServer.tr for detail doc
 		"""
-		return self._mcdr_server.tr(translation_key, *args, language=language)
+		return self._mcdr_server.tr(translation_key, *args, language=language, fallback_language=fallback_language)
 
 	def as_basic_server_interface(self) -> 'ServerInterface':
 		"""

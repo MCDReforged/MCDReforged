@@ -114,7 +114,7 @@ class MCDReforgedServer:
 	#         Translate
 	# --------------------------
 
-	def tr(self, translation_key: str, *args, language: Optional[str] = None, allow_failure=True) -> Union[str, RTextBase]:
+	def tr(self, translation_key: str, *args, language: Optional[str] = None, fallback_language: Optional[str] = None, allow_failure=True) -> Union[str, RTextBase]:
 		"""
 		Return a translated text corresponded to the translation key and format the text with given args
 		If args contains RText element, then the result will be a RText, otherwise the result will be a regular str
@@ -122,13 +122,15 @@ class MCDReforgedServer:
 		:param translation_key: The key of the translation
 		:param args: The args to be formatted
 		:param language: Specific language to be used in this translation
+		:param fallback_language: Fallback language used when the current language translation not found
 		:param allow_failure: If set to false, a KeyError will be risen if the translation key is not recognized
 		"""
 		return self.translation_manager.translate(
 			translation_key, args,
 			allow_failure=allow_failure,
 			language=language,
-			fallback_translations=self.plugin_manager.registry_storage.translations
+			fallback_language=fallback_language,
+			plugin_translations=self.plugin_manager.registry_storage.translations
 		)
 
 	# --------------------------
