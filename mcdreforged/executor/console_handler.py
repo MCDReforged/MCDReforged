@@ -1,3 +1,5 @@
+from prompt_toolkit import prompt, history
+
 from mcdreforged.executor.thread_executor import ThreadExecutor
 from mcdreforged.info import Info
 from mcdreforged.utils.logger import DebugOption
@@ -6,7 +8,7 @@ from mcdreforged.utils.logger import DebugOption
 class ConsoleHandler(ThreadExecutor):
 	def tick(self):
 		try:
-			text = input()
+			text = prompt("> ", history=history.InMemoryHistory())
 			parsed_result: Info
 			try:
 				parsed_result = self.mcdr_server.server_handler_manager.get_current_handler().parse_console_command(text)
