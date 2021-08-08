@@ -9,7 +9,7 @@ An MCDR plugin is a python source file with ``.py`` file extension located in pl
 
 At start up, MCDR will automatically load every plugin inside the plugin directories. Additionally, MCDR will append all the plugin directories into ``sys.path``, so plugins can import modules placed inside the plugin folders directly
 
-There is a sample plugin named ``SamplePlugin.py`` in the ``plugins/`` folder in github source and you can check its content for reference
+Check the `example plugin repository <https://github.com/MCDReforged/MCDReforged-ExamplePlugin>`__ or the `plugin template repository <https://github.com/MCDReforged/MCDReforged-PluginTemplate>`__ for more references
 
 Quick Start
 -----------
@@ -46,7 +46,14 @@ Great, you have successfully created your first plugin
 Metadata
 --------
 
-The meta data field provides the basic information of the plugin. As you can see in the `Quick Start <#quick-start>`__ section above, meta data is declared in the global scope. It's a dict contains several key-value with the name ``PLUGIN_METADATA``
+The meta data field provides the basic information of the plugin. It's declared as a json object contains several key-value
+
+Different `plugin format <plugin_format.rst>`__ has different ways to declare its metadata, but the contents of metadata are the same
+
+Declaration
+^^^^^^^^^^^
+
+As a single ``.py`` file only plugin, the metadata of `solo plugin <plugin_format.html#solo-plugin>`__ is declared in the global scope of the source file. It's a dict contains several key-value with the name ``PLUGIN_METADATA``
 
 Here's a metadata field with all possible key-values
 
@@ -55,8 +62,8 @@ Here's a metadata field with all possible key-values
    PLUGIN_METADATA = {
        'id': 'my_plugin_id',
        'version': '1.0.0',
-       'name': 'My Plugin',  # RText component is allowed
-       'description': 'A plugin to do something cool',  # RText component is allowed
+       'name': 'My Plugin',
+       'description': 'A plugin to do something cool',
        'author': 'myself',
        'link': 'https://github.com',
        'dependencies': {
@@ -65,10 +72,36 @@ Here's a metadata field with all possible key-values
        }
    }
 
+The following section `Fields <#fields>`__ will use metadata declared in python syntax as examples
+
+---------
+
+For packed plugin or directory plugin, the metadata is declared in file ``mcdreforged.plugin.json`` in json syntax
+
+Here's an example
+
+.. code-block:: json
+
+    {
+        "id": "example_plugin",
+        "version": "1.0.0",
+        "name": "Example Plugin",
+        "description": "Example plugin for MCDR",
+        "author": "Fallen_Breath",
+        "link": "https://github.com/MCDReforged/MCDReforged-ExamplePlugin",
+        "dependencies": {
+            "mcdreforged": ">=2.0.0-alpha.1"
+        }
+    }
+
+
 If a plugin doesn't not declare the meta data field, a warning will arise in the console and the fallback values will be used
 
+Fields
+^^^^^^
+
 id
-^^
+""
 
 Id, or plugin id, is the identity string of your plugin. It should consist of lowercase letters, numbers and underscores with a length of 1 to 64
 
@@ -96,7 +129,7 @@ Choose your plugin id wisely. It's highly suggested to keep your plugin id not c
 * Fallback value: the file name without the ``.py`` extension
 
 version
-^^^^^^^
+"""""""
 
 The version value indicates the version of your value. It's mostly in `semver <https://semver.org/>`__ format but it has less restriction such as you can have the core version with any length
 
@@ -117,31 +150,31 @@ Following `semver <https://semver.org/>`__ format for you version string is a go
 * Fallback value: ``0.0.0``
 
 name
-^^^^
+""""
 
-The name of your plugin. Give your plugin with a nice name with any kinds of characters. `RText <api.html#rtext>`__ is allowed here
+The name of your plugin. Give your plugin with a nice name with any kinds of characters
 
 Try not to make the name too long. For more details of your plugin, you can put them into the ``description``
 
 
 * Field key: ``name``
-* Value type: str or RTextBase
+* Value type: str
 * Fallback value: The plugin id
 
 description
-^^^^^^^^^^^
+"""""""""""
 
-The description of you plugin. Put the details of your plugin here. `RText <api.html#rtext>`__ is allowed too
+The description of you plugin. Put the details of your plugin here
 
 This field is optional, you can just ignore it if you are lazy
 
 
 * Field key: ``description``
-* Value type: str or RTextBase
+* Value type: str
 * Fallback value: None
 
 author
-^^^^^^
+""""""
 
 The authors of the plugins. If there's only a single author, you can also use a string instead of a list of string
 
@@ -153,7 +186,7 @@ This field is optional, you can just ignore it if you are lazy
 * Fallback value: None
 
 link
-^^^^
+""""
 
 The url to your plugin. You can put a link to the github repository of your plugin here. It should be an available url
 
@@ -165,7 +198,7 @@ This field is optional, you can just ignore it if you are lazy
 * Fallback value: None
 
 dependencies
-^^^^^^^^^^^^
+""""""""""""
 
 A dict of dependencies you plugin relies on. It's a dict contains several key-value pairs. The key is the id of the plugin that your plugin is relies on, and the value is the version requirement of the plugin that your plugin is relies on
 
@@ -249,6 +282,48 @@ This field is optional, you can just ignore it if your plugin doesn't have any d
 * Field key: ``dependencies``
 * Value type: Dict[str, str]
 * Fallback value: None
+
+entrypoint
+""""""""""
+
+**Not available in solo plugin**
+
+The entrypoint module for MCDR to import your plugin and do default registering things
+
+By default the value is the id of your plugin, which means ``my_plugin/__init__.py`` will be the entry point. If the value is ``my_plugin.my_entry`` then ``my_plugin/my_entry.py`` will be the entry point
+
+MCDR will perform the same execution as a solo plugin to the entrypoint, like default listener registering
+
+* Field key: ``entrypoint``
+* Value type: str
+* Fallback value: The plugin id
+
+archive_name
+""""""""""""
+
+**Not available in solo plugin**
+
+The file name of generated ``.mcdr`` packed plugin in CLI
+
+See `here <TODO>`__ for more information
+
+* Field key: ``archive_name``
+* Value type: str
+* Fallback value: None
+
+resources
+"""""""""
+
+**Not available in solo plugin**
+
+A list of file or folder names that will be packed into the generated ``.mcdr`` packed plugin file in CLI
+
+See `here <TODO>`__ for more information
+
+* Field key: ``resources``
+* Value type: List[str]
+* Fallback value: None
+
 
 Plugin Registry
 ---------------

@@ -28,7 +28,7 @@ class FunctionThread(threading.Thread):
 		if self.__return_value is self.__NONE:
 			if self.is_alive():
 				raise RuntimeError('The thread is still running')
-			raise RuntimeError('An exception has been thrown in thread')
+			raise RuntimeError('An exception has been risen in thread')
 		return self.__return_value
 
 

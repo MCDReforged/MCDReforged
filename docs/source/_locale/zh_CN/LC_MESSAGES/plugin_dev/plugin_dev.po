@@ -16,11 +16,11 @@ msgstr ""
 
 #: ../plugin_dev/plugin_dev.rst:4
 msgid "Basic"
-msgstr "基础"
+msgstr "基本知识"
 
 #: ../plugin_dev/plugin_dev.rst:4
 msgid "Plugin Format"
-msgstr ""
+msgstr "插件格式"
 
 #: ../plugin_dev/plugin_dev.rst:4
 msgid "Plugin Event"
