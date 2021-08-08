@@ -8,7 +8,7 @@ from mcdreforged.utils.logger import DebugOption
 class ConsoleHandler(ThreadExecutor):
 	def tick(self):
 		try:
-			text = prompt("> ", history=history.InMemoryHistory())
+			text = prompt("> ", history=history.FileHistory(os.path.join("config",".input_history")))
 			parsed_result: Info
 			try:
 				parsed_result = self.mcdr_server.server_handler_manager.get_current_handler().parse_console_command(text)
