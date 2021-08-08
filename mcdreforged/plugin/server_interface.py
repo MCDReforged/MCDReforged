@@ -413,7 +413,7 @@ class ServerInterface:
 		misc_util.check_type(event, PluginEvent)
 		if MCDRPluginEvents.contains_id(event.id):
 			raise ValueError('Cannot dispatch event with already exists event id {}'.format(event.id))
-		self._mcdr_server.plugin_manager.dispatch_event(event, args, run_async=on_executor_thread)
+		self._mcdr_server.plugin_manager.dispatch_event(event, args, on_executor_thread=on_executor_thread)
 
 	# ------------------------
 	#        Permission

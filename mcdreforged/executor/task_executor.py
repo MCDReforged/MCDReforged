@@ -80,6 +80,12 @@ class TaskExecutor(ThreadExecutor):
 		if wait:
 			func.wait()
 
+	def execute_on_thread(self, func: Callable[[], Any], *, wait=False):
+		if self.is_on_thread():
+			func()
+		else:
+			self.add_regular_task(func, wait=wait)
+
 	def get_this_tick_time(self) -> float:
 		"""
 		Return the duration of this tick
