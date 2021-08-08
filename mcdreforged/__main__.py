@@ -10,7 +10,8 @@ from mcdreforged.cli import cli_entry
 
 def main():
 	with patch_stdout(raw=True):
-		return cli_entry.entry_point()
+		result = cli_entry.entry_point()
+	return result
 
 
 if __name__ == '__main__':
