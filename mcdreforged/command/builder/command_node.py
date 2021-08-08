@@ -1,8 +1,9 @@
 import collections
 import inspect
 from abc import ABC
+from contextlib import contextmanager
 from types import MethodType
-from typing import List, Callable, Iterable, Set, Dict, Type, Any, Union, Optional
+from typing import List, Callable, Iterable, Set, Dict, Type, Any, Union, Optional, Collection
 
 from mcdreforged.command.builder import command_builder_util as utils
 from mcdreforged.command.builder.exception import LiteralNotMatch, NumberOutOfRange, EmptyText, \
@@ -14,6 +15,7 @@ from mcdreforged.command.command_source import CommandSource
 SOURCE_CONTEXT_CALLBACK = Union[Callable[[], Any], Callable[[CommandSource], Any], Callable[[CommandSource, dict], Any]]
 SOURCE_CONTEXT_CALLBACK_BOOL = Union[Callable[[], bool], Callable[[CommandSource], bool], Callable[[CommandSource, dict], bool]]
 SOURCE_CONTEXT_CALLBACK_STR = Union[Callable[[], str], Callable[[CommandSource], str], Callable[[CommandSource, dict], str]]
+SOURCE_CONTEXT_CALLBACK_STR_LIST = Union[Callable[[], List[str]], Callable[[CommandSource], List[str]], Callable[[CommandSource, dict], List[str]]]
 SOURCE_ERROR_CONTEXT_CALLBACK = Union[Callable[[], Any], Callable[[CommandSource], Any], Callable[[CommandSource, CommandError], Any], Callable[[CommandSource, CommandError, dict], Any]]
 
 
@@ -21,6 +23,35 @@ class ParseResult:
 	def __init__(self, value: Optional[Any], char_read: int):
 		self.value = value
 		self.char_read = char_read
+
+
+class CommandContext(dict):
+	def __init__(self, source, command: str):
+		super().__init__()
+		self.source = source
+		self.command = command
+		self.cursor = 0
+		self.node_path = []  # type: List[ArgumentNode]
+
+	@property
+	def command_read(self):
+		return self.command[:self.cursor]
+
+	@property
+	def command_remaining(self):
+		return self.command[self.cursor:]
+
+	@contextmanager
+	def enter_child(self, new_cursor: int, node: 'ArgumentNode'):
+		prev_cursor = self.cursor
+		self.cursor = new_cursor
+		self.node_path.append(node)
+		try:
+			yield
+		finally:
+			self.cursor = prev_cursor
+			self.node_path.pop(len(self.node_path) - 1)
+			self.pop(node.name, None)
 
 
 class ArgumentNode:
@@ -41,6 +72,7 @@ class ArgumentNode:
 		self.requirement = lambda source: True
 		self.requirement_failure_message_getter = None
 		self.redirect_node = None
+		self.suggestion_getter = lambda: []
 
 	# --------------
 	#   Interfaces
@@ -93,6 +125,14 @@ class ArgumentNode:
 			raise IllegalNodeOperation('Node with children nodes is not allowed to be redirected')
 		self.redirect_node = redirect_node
 		return self
+
+	def suggests(self, suggestion: SOURCE_CONTEXT_CALLBACK_STR_LIST):
+		self.suggestion_getter = suggestion
+
+	def suggests_matching(self, keywords: Collection[str]):
+		def suggest(source, context: CommandContext):
+			return [keyword for keyword in keywords if keyword.startswith(context.command_remaining)]
+		self.suggests(suggest)
 
 	def on_error(self, error_type: Type[CommandError], handler: SOURCE_ERROR_CONTEXT_CALLBACK, *, handled: bool = False) -> 'ArgumentNode':
 		"""
@@ -158,44 +198,47 @@ class ArgumentNode:
 			raise
 		return callback(*args[:spec_args_len])
 
-	def __handle_error(self, source, error: CommandError, context: dict, error_handlers: _ERROR_HANDLER_TYPE):
+	def __handle_error(self, error: CommandError, context: CommandContext, error_handlers: _ERROR_HANDLER_TYPE):
 		for error_type, handler in error_handlers.items():
 			if isinstance(error, error_type):
 				if handler.handled:
 					error.set_handled()
-				self.__smart_callback(handler.callback, source, error, context)
+				self.__smart_callback(handler.callback, context.source, error, context)
 
-	def __raise_error(self, source, error: CommandError, context: dict):
-		self.__handle_error(source, error, context, self.error_handlers)
+	def __raise_error(self, error: CommandError, context: CommandContext):
+		self.__handle_error(error, context, self.error_handlers)
 		raise error
 
-	def _execute(self, source, command: str, remaining: str, context: dict):
-		success_read = len(command) - len(remaining)
+	def _get_suggestions(self, context: CommandContext) -> List[str]:
+		return self.__smart_callback(self.suggestion_getter, context.source, context)
+
+	def _execute_command(self, context: CommandContext) -> None:
+		command = context.command  # type: str
 		try:
-			result = self.parse(remaining)
+			result = self.parse(context.command_remaining)
 		except CommandSyntaxError as error:
-			error.set_parsed_command(command[:success_read])
-			error.set_failed_command(command[:success_read + error.char_read])
-			self.__raise_error(source, error, context)
+			error.set_parsed_command(context.command_read)
+			error.set_failed_command(context.command_read + context.command_remaining[error.char_read:])
+			self.__raise_error(error, context)
 		else:
-			success_read += result.char_read
-			trimmed_remaining = utils.remove_divider_prefix(remaining[result.char_read:])
+			next_remaining = utils.remove_divider_prefix(context.command_remaining[result.char_read:])  # type: str
+			total_read = len(command) - len(next_remaining)  # type: int
 
 			if self.__does_store_thing():
 				context[self.name] = result.value
 
 			if self.requirement is not None:
-				if not self.__smart_callback(self.requirement, source, context):
-					getter = self.requirement_failure_message_getter if self.requirement_failure_message_getter is not None else lambda: None
-					failure_message = self.__smart_callback(getter, source, context)
-					self.__raise_error(source, RequirementNotMet(command[:success_read], command[:success_read], failure_message), context)
+				if not self.__smart_callback(self.requirement, context.source, context):
+					getter = self.requirement_failure_message_getter or (lambda: None)
+					failure_message = self.__smart_callback(getter, context.source, context)
+					self.__raise_error(RequirementNotMet(context.command_read, context.command_read, failure_message), context)
 
 			# Parsing finished
-			if len(trimmed_remaining) == 0:
+			if len(next_remaining) == 0:
 				if self.callback is not None:
-					self.__smart_callback(self.callback, source, context)
+					self.__smart_callback(self.callback, context.source, context)
 				else:
-					self.__raise_error(source, UnknownCommand(command[:success_read], command[:success_read]), context)
+					self.__raise_error(UnknownCommand(context.command_read, context.command_read), context)
 			# Un-parsed command string remains
 			else:
 				# Redirecting
@@ -207,51 +250,106 @@ class ArgumentNode:
 					argument_unknown = True
 				else:
 					# Pass the remaining command string to the children
+					next_literal = utils.get_element(next_remaining)
 					try:
 						# Check literal children first
-						next_literal = utils.get_element(trimmed_remaining)
+						literal_error = None
 						for child_literal in node.children_literal.get(next_literal, []):
 							try:
-								child_literal._execute(source, command, trimmed_remaining, context)
+								with context.enter_child(total_read, child_literal):
+									child_literal._execute_command(context)
 								break
-							except LiteralNotMatch:
+							except CommandError as e:
 								# it's ok for a direct literal node to fail
-								pass
+								# other literal might still have a chance to consume this command
+								literal_error = e
 						else:  # All literal children fails
+							if literal_error is not None:
+								raise literal_error
 							for child in node.children:
-								child._execute(source, command, trimmed_remaining, context)
+								with context.enter_child(total_read, child):
+									child._execute_command(context)
 								break
 							else:  # No argument child
 								argument_unknown = True
+
 					except CommandError as error:
-						self.__handle_error(source, error, context, self.child_error_handlers)
+						self.__handle_error(error, context, self.child_error_handlers)
 						raise error from None
 
 				if argument_unknown:
-					self.__raise_error(source, UnknownArgument(command[:success_read], command), context)
+					self.__raise_error(UnknownArgument(context.command_read, command), context)
+
+	def _generate_suggestions(self, context: CommandContext) -> List[str]:
+		suggestions = []  # type: List[str]
+		try:
+			result = self.parse(context.command_remaining)
+		except CommandSyntaxError:
+			return [context.command_read + s for s in self._get_suggestions(context)]
+		else:
+			success_read = len(context.command) - len(context.command_remaining) + result.char_read  # type: int
+			next_remaining = utils.remove_divider_prefix(context.command_remaining[result.char_read:])  # type: str
+			total_read = len(context.command) - len(next_remaining)  # type: int
+
+			if self.__does_store_thing():
+				context[self.name] = result.value
+
+			if self.requirement is not None and not self.__smart_callback(self.requirement, context.source, context):
+				return []
+
+			# Parsing finished
+			if len(next_remaining) == 0:
+				# total_read == success_read means DIVIDER does not exists at the end of the input string
+				# in that case, don't give any suggestions
+				if success_read == total_read:
+					return []
+
+			node = self if self.redirect_node is None else self.redirect_node
+			# Check literal children first
+			for child_literal in node.children_literal.get(utils.get_element(next_remaining), []):
+				with context.enter_child(total_read, child_literal):
+					suggestions.extend(child_literal._generate_suggestions(context))
+			else:  # All literal children fails
+				for literal_list in node.children_literal.values():
+					for child_literal in literal_list:
+						with context.enter_child(total_read, child_literal):
+							suggestions.extend(child_literal._generate_suggestions(context))
+				for child in node.children:
+					with context.enter_child(total_read, child):
+						suggestions.extend(child._generate_suggestions(context))
+
+		return suggestions
 
 
-class ExecutableNode(ArgumentNode, ABC):
+class EntryNode(ArgumentNode, ABC):
 	def execute(self, source, command):
 		"""
 		Parse and execute this command
 		Raise variable CommandError if parsing fails
 		:param CommandSource source: the source that executes this command
 		:param str command: the command string to execute
-		:rtype: None
 		"""
 		try:
-			self._execute(source, command, command, {})
+			self._execute_command(CommandContext(source, command))
 		except LiteralNotMatch as error:
 			# the root literal node fails to parse the first element
 			raise UnknownRootArgument(error.get_parsed_command(), error.get_failed_command()) from error
+
+	def generate_suggestions(self, source, command) -> List[str]:
+		"""
+		Get a list of command suggestion of given command
+		Return an empty list if parsing fails
+		:param CommandSource source: the source that executes this command
+		:param str command: the command string to execute
+		"""
+		return self._generate_suggestions(CommandContext(source, command))
 
 # ---------------------------------
 #   Argument Node implementations
 # ---------------------------------
 
 
-class Literal(ExecutableNode):
+class Literal(EntryNode):
 	"""
 	A literal argument, doesn't store any value, only for extending and readability of the command
 	The only argument type that is allowed to use the execute method
@@ -270,6 +368,7 @@ class Literal(ExecutableNode):
 			if utils.DIVIDER in literal:
 				raise TypeError('DIVIDER character "{}" cannot be inside a literal'.format(utils.DIVIDER))
 		self.literals = literals  # type: Set[str]
+		self.suggests_matching(self.literals)
 
 	def parse(self, text):
 		arg = utils.get_element(text)

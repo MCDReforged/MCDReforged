@@ -26,31 +26,32 @@ def entry_point():
 	environment_check()
 	if len(sys.argv) == 1:
 		run_mcdr()
-	else:
-		parser = ArgumentParser(
-			prog=core_constant.PACKAGE_NAME,
-			description='{} CLI'.format(core_constant.NAME),
-		)
-		subparsers = parser.add_subparsers(title='Command', help='Available commands', dest='subparser_name')
+		return
 
-		subparsers.add_parser('start', help='Start {}'.format(core_constant.NAME))
-		subparsers.add_parser('gendefault', help='Generate default configure and permission files here')
+	parser = ArgumentParser(
+		prog=core_constant.PACKAGE_NAME,
+		description='{} CLI'.format(core_constant.NAME),
+	)
+	subparsers = parser.add_subparsers(title='Command', help='Available commands', dest='subparser_name')
 
-		parser_pack = subparsers.add_parser('pack', help='Pack plugin files into a {} plugin'.format(plugin_constant.PACKED_PLUGIN_FILE_SUFFIX))
-		parser_pack.add_argument('-i', '--input', help='The input directory which the plugin is in, default: current directory', default='.')
-		parser_pack.add_argument('-o', '--output', help='The output directory to store the packed plugin, default: current directory', default='.')
-		parser_pack.add_argument('-n', '--name', help='A specific name to the output packed plugin file. If not given the metadata specific name or a default one will be used', default=None)
-		parser_pack.add_argument('--keep-pycache', help='Keep __pycache__ folder if appended', action='store_true')
+	subparsers.add_parser('start', help='Start {}'.format(core_constant.NAME))
+	subparsers.add_parser('gendefault', help='Generate default configure and permission files here')
 
-		result = parser.parse_args()
-		# print(result)
+	parser_pack = subparsers.add_parser('pack', help='Pack plugin files into a {} plugin'.format(plugin_constant.PACKED_PLUGIN_FILE_SUFFIX))
+	parser_pack.add_argument('-i', '--input', help='The input directory which the plugin is in, default: current directory', default='.')
+	parser_pack.add_argument('-o', '--output', help='The output directory to store the packed plugin, default: current directory', default='.')
+	parser_pack.add_argument('-n', '--name', help='A specific name to the output packed plugin file. If not given the metadata specific name or a default one will be used', default=None)
+	parser_pack.add_argument('--keep-pycache', help='Keep __pycache__ folder if appended', action='store_true')
 
-		if result.subparser_name == 'start':
-			run_mcdr()
-		elif result.subparser_name == 'gendefault':
-			MCDReforgedServer(generate_default_only=True)
-		elif result.subparser_name == 'pack':
-			make_packed_plugin(result.input, result.output, result.name, keep_pycache=result.keep_pycache)
+	result = parser.parse_args()
+	# print(result)
+
+	if result.subparser_name == 'start':
+		run_mcdr()
+	elif result.subparser_name == 'gendefault':
+		MCDReforgedServer(generate_default_only=True)
+	elif result.subparser_name == 'pack':
+		make_packed_plugin(result.input, result.output, result.name, keep_pycache=result.keep_pycache)
 
 
 def run_mcdr():

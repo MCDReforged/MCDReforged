@@ -24,7 +24,7 @@ class MyTestCase(unittest.TestCase):
 	#   utils
 	# ---------
 
-	def run_command(self, executor: ExecutableNode, command):
+	def run_command(self, executor: EntryNode, command):
 		self.has_hit = False
 		self.result = None
 		# noinspection PyTypeChecker
@@ -81,6 +81,9 @@ class MyTestCase(unittest.TestCase):
 		self.assertRaises(TypeError, Literal, 'ab cd')
 		self.assertRaises(TypeError, Literal, 123)
 		self.assertRaises(TypeError, Literal, ['ab', 'c '])
+
+		executor = Literal('test').then(Literal('a')).then(Literal('a').then(Literal('b').runs(self.callback_hit)))
+		self.run_command_and_check_hit(executor, 'test a b', True)
 
 	def test_3_int(self):
 		executor = Literal('int').then(Integer('i').runs(lambda s, ctx: self.set_result_from_ctx(ctx, 'i')))

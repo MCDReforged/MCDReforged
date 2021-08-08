@@ -1,15 +1,15 @@
 """
 Custom logger for MCDR
 """
-import collections
 import logging
 import os
 import sys
 import time
+import weakref
 import zipfile
 from enum import Enum, unique, auto
 from threading import RLock
-from typing import Dict, Optional, List
+from typing import Dict, Optional, List, Set
 
 from colorlog import ColoredFormatter
 
@@ -35,12 +35,13 @@ class DebugOption(Enum):
 console_color_disabled = False
 
 
-class SyncStreamHandler(logging.StreamHandler):
-	__lock_map = collections.defaultdict(RLock)
+class SyncStdoutStreamHandler(logging.StreamHandler):
+	__lock = RLock()
+	__instances = weakref.WeakSet()  # type: Set[SyncStdoutStreamHandler]
 
-	def __init__(self, stream=None):
-		super().__init__(stream)
-		self.__lock = self.__lock_map[self.stream]
+	def __init__(self):
+		super().__init__(sys.stdout)
+		self.__instances.add(self)
 
 	def emit(self, record) -> None:
 		with self.__lock:
@@ -49,6 +50,15 @@ class SyncStreamHandler(logging.StreamHandler):
 	def flush(self) -> None:
 		with self.__lock:
 			super().flush()
+
+	@classmethod
+	def update_stdout(cls, stream=None):
+		if stream is None:
+			stream = sys.stdout
+		for inst in cls.__instances:
+			with inst.__lock:
+				inst.flush()
+				inst.stream = stream
 
 
 class MCColoredFormatter(ColoredFormatter):
@@ -110,7 +120,7 @@ class MCDReforgedLogger(logging.Logger):
 		self.mcdr_server = mcdr_server
 		self.file_handler = None
 
-		self.console_handler = SyncStreamHandler(sys.stdout)
+		self.console_handler = SyncStdoutStreamHandler()
 		self.console_handler.setFormatter(self.get_console_formatter(plugin_id))
 
 		self.addHandler(self.console_handler)
@@ -161,7 +171,7 @@ class ServerLogger(logging.Logger):
 	def __init__(self, name):
 		super().__init__(name)
 
-		console_handler = SyncStreamHandler(sys.stdout)
+		console_handler = SyncStdoutStreamHandler()
 		console_handler.setFormatter(self.server_fmt)
 
 		self.addHandler(console_handler)

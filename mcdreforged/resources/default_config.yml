@@ -59,6 +59,10 @@ rcon:
 check_update: true
 
 
+# Advance console switch
+advance_console: true
+
+
 # =========================================
 # |           Advance Configure           |
 # =========================================

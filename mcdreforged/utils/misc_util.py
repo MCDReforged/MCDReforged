@@ -12,8 +12,7 @@ from mcdreforged.plugin.meta.version import Version
 
 
 def start_thread(func: Callable, args: Tuple, name: str or None = None):
-	thread = threading.Thread(target=func, args=args, name=name)
-	thread.setDaemon(True)
+	thread = threading.Thread(target=func, args=args, name=name, daemon=True)
 	thread.start()
 	return thread
 
