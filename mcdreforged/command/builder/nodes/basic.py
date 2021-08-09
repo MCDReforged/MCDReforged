@@ -168,11 +168,11 @@ class ArgumentNode:
 		self.__redirect_node = redirect_node
 		return self
 
-	def suggests(self, suggestion: SOURCE_CONTEXT_CALLBACK_STR_COLLECTION):
+	def suggests(self, suggestion: SOURCE_CONTEXT_CALLBACK_STR_COLLECTION) -> 'ArgumentNode':
 		"""
 		Set the provider for command suggestions of this node
 		:param suggestion: A callable function which accepts maximum 2 parameters (command source and context)
-		and return a list of str indicating the current command suggestions
+		and return a collection of str indicating the current command suggestions
 		:rtype: ArgumentNode
 		"""
 		self.__suggestion_getter = suggestion
@@ -420,7 +420,7 @@ class Literal(EntryNode):
 		self.literals = literals  # type: Set[str]
 		self.suggestion_getter = lambda: self.literals
 
-	def suggests(self, suggestion: SOURCE_CONTEXT_CALLBACK_STR_COLLECTION):
+	def suggests(self, suggestion: SOURCE_CONTEXT_CALLBACK_STR_COLLECTION) -> 'ArgumentNode':
 		raise IllegalNodeOperation('Literal node doe not support suggests')
 
 	def parse(self, text):

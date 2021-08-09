@@ -228,6 +228,30 @@ Then all commands which eventually executes ``do_something1`` will be:
 * ``foo quick x``
 * ``foo fast command x``
 
+suggests
+~~~~~~~~
+
+.. code-block:: python
+
+    def suggests(self, suggestion: SOURCE_CONTEXT_CALLBACK_STR_COLLECTION) -> ArgumentNode
+
+Set the provider for command suggestions of this node
+
+Parameter *suggestion*: A callable function which accepts maximum 2 parameters (command source and context) and return a collection of str indicating the current command suggestions
+
+Examples:
+
+.. code-block:: python
+
+    Literal('!!whereis'). \
+        then(
+            Text('player_name').
+            suggests(lambda: ['Steve', 'Alex']).
+            runs(lambda src, ctx: find_player(src, ctx['player_name']))
+        )
+
+When the user input ``!!whereis`` in the console and a space character, MCDR will show the suggestions ``Steve`` and ``Alex``
+
 on_error
 ~~~~~~~~
 

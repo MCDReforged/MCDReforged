@@ -6,7 +6,7 @@ from mcdreforged.command.builder.command_builder_util import DIVIDER
 from mcdreforged.command.builder.exception import NumberOutOfRange, EmptyText, \
 	InvalidNumber, InvalidInteger, InvalidFloat, UnclosedQuotedString, IllegalEscapesUsage, \
 	TextLengthOutOfRange
-from mcdreforged.command.builder.nodes.basic import ArgumentNode, ParseResult
+from mcdreforged.command.builder.nodes.basic import ArgumentNode, ParseResult, SOURCE_CONTEXT_CALLBACK_STR_COLLECTION
 # --------------------
 #   Number Arguments
 # --------------------
@@ -152,15 +152,15 @@ class QuotableText(Text):
 		raise UnclosedQuotedString(len(text))
 
 	# use quote characters to quote suggestions with DIVIDER
-	def suggests(self, original_getter):
+	def suggests(self, suggestion: SOURCE_CONTEXT_CALLBACK_STR_COLLECTION) -> 'ArgumentNode':
 		def quote_wrapper(*args, **kwargs):
 			suggestions = []
-			for s in original_getter(*args, **kwargs):
+			for s in suggestion(*args, **kwargs):
 				if DIVIDER in s:
 					s = json.dumps(s)
 				suggestions.append(s)
 			return suggestions
-		return super().suggests(misc_util.copy_signature(quote_wrapper, original_getter))
+		return super().suggests(misc_util.copy_signature(quote_wrapper, suggestion))
 
 
 class GreedyText(TextNode):

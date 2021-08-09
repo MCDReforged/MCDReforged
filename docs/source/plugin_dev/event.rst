@@ -26,6 +26,12 @@ The priority of these event listeners are always the default priority (``1000``)
 MCDR Event List
 ^^^^^^^^^^^^^^^
 
+To help understand, some MCDR events can be sorted into 3 lifecycle flows:
+
+* Plugin lifecycle: `Plugin loaded <#plugin-loaded>`__ -> `Plugin unloaded <#plugin-unloaded>`__
+* Server lifecycle: `Server start <#server-start>`__ -> `Server startup <#server-startup>`__ -> `Server stop <#server-stop>`__
+* MCDR lifecycle: `MCDR start <#mcdr-start>`__ -> `MCDR stop <#mcdr-stop>`__
+
 Plugin Loaded
 ~~~~~~~~~~~~~
 
