@@ -310,9 +310,9 @@ class MCDReforgedServer:
 		"""
 		self.logger.info('Interrupting, first strike = {}'.format(not self.is_interrupt()))
 		self.stop(forced=self.is_interrupt())
-		ret = self.is_interrupt()
+		first_try = not self.is_interrupt()
 		self.with_flag(MCDReforgedFlag.INTERRUPT)
-		return ret
+		return first_try
 
 	def stop(self, forced=False):
 		"""

@@ -60,6 +60,7 @@ check_update: true
 
 
 # Advance console switch
+# Set it to false if you want to redirect MCDR stdin/stdout
 advance_console: true
 
 

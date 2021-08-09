@@ -1,13 +1,11 @@
 import sys
-from typing import TYPE_CHECKING, Optional, Iterable, Any, Callable
+from typing import TYPE_CHECKING, Optional, Iterable, Any
 
 from prompt_toolkit import PromptSession
 from prompt_toolkit.application import get_app
 from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
 from prompt_toolkit.completion import Completion, CompleteEvent, WordCompleter
 from prompt_toolkit.document import Document
-from prompt_toolkit.formatted_text import StyleAndTextTuples
-from prompt_toolkit.lexers import Lexer
 from prompt_toolkit.output.vt100 import Vt100_Output
 from prompt_toolkit.patch_stdout import StdoutProxy
 from prompt_toolkit.shortcuts import CompleteStyle
@@ -53,7 +51,9 @@ class ConsoleHandler(ThreadExecutor):
 		except (KeyboardInterrupt, EOFError, SystemExit, IOError) as error:
 			if self.mcdr_server.is_server_running():
 				self.mcdr_server.logger.critical('Critical exception caught in {}: {} {}'.format(type(self).__name__, type(error).__name__, error))
-				self.mcdr_server.interrupt()
+				if not self.mcdr_server.interrupt():  # not first try
+					self.mcdr_server.logger.error('Console thread stopped')
+					self.stop()
 		except:
 			self.mcdr_server.logger.exception(self.mcdr_server.tr('console_handler.error'))
 
@@ -102,8 +102,8 @@ class PromptToolkitWrapper:
 		try:
 			self.prompt_session = PromptSession()
 			self.stdout_proxy = StdoutProxy(raw=True)
-		except:
-			pass
+		except Exception as e:
+			self.console_handler.mcdr_server.logger.error('Failed to enable advance console, switch back to basic input: {}'.format(e))
 		else:
 			self.__real_stdout = sys.stdout
 			sys.stdout = self.stdout_proxy
@@ -113,10 +113,16 @@ class PromptToolkitWrapper:
 
 	def stop_kits(self):
 		if self.enabled:
+			self.enabled = False
 			self.stdout_proxy.close()
 			sys.stdout = self.__real_stdout
 			SyncStdoutStreamHandler.update_stdout()
-			get_app().exit()
+			pt_app = get_app()
+			if pt_app.is_running:
+				try:
+					pt_app.exit()
+				except:
+					self.console_handler.mcdr_server.logger.exception('Fail to stop prompt toolkit app')
 
 	def get_input(self) -> Optional[str]:
 		if self.enabled:
@@ -131,8 +137,3 @@ class PromptToolkitWrapper:
 			)
 		else:
 			return input()
-
-
-class MyLexer(Lexer):
-	def lex_document(self, document: Document) -> Callable[[int], StyleAndTextTuples]:
-		pass
