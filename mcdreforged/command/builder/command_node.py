@@ -49,6 +49,22 @@ class CommandSuggestion:
 		return self.__suggest_segment
 
 
+class CommandSuggestions(list):
+	def __init__(self, *args, **kwargs):
+		super().__init__(*args, **kwargs)
+
+		# !!MCDR plg load <file_name>
+		#                 ^
+		#               cursor
+		# "<file_name>" is the complete_hint
+		self.complete_hint = None
+
+	def extend(self, __iterable: Iterable) -> None:
+		super().extend(__iterable)
+		if isinstance(__iterable, CommandSuggestions):
+			self.complete_hint = self.complete_hint or __iterable.complete_hint
+
+
 class CommandContext(dict):
 	def __init__(self, source, command: str):
 		super().__init__()
@@ -304,15 +320,15 @@ class ArgumentNode:
 				if argument_unknown:
 					self.__raise_error(UnknownArgument(context.command_read, command), context)
 
-	def _generate_suggestions(self, context: CommandContext) -> List[CommandSuggestion]:
+	def _generate_suggestions(self, context: CommandContext) -> CommandSuggestions:
 		"""
 		Return a list of tuple (suggested command, suggested argument)
 		"""
-		suggestions = []  # type: List[CommandSuggestion]
+		suggestions = CommandSuggestions()
 		try:
 			result = self.parse(context.command_remaining)
 		except CommandSyntaxError:
-			return [CommandSuggestion(context.command_read, s) for s in self._get_suggestions(context)]
+			return CommandSuggestions([CommandSuggestion(context.command_read, s) for s in self._get_suggestions(context)])
 		else:
 			success_read = len(context.command) - len(context.command_remaining) + result.char_read  # type: int
 			next_remaining = utils.remove_divider_prefix(context.command_remaining[result.char_read:])  # type: str
@@ -322,21 +338,22 @@ class ArgumentNode:
 				context[self.name] = result.value
 
 			if self.requirement is not None and not self.__smart_callback(self.requirement, context.source, context):
-				return []
+				return CommandSuggestions()
 
 			# Parsing finished
 			if len(next_remaining) == 0:
 				# total_read == success_read means DIVIDER does not exists at the end of the input string
 				# in that case, don't give any suggestions
 				if success_read == total_read:
-					return []
+					return CommandSuggestions()
 
 			node = self if self.redirect_node is None else self.redirect_node
 			# Check literal children first
-			for child_literal in node.children_literal.get(utils.get_element(next_remaining), []):
+			children_literal = node.children_literal.get(utils.get_element(next_remaining), [])
+			for child_literal in children_literal:
 				with context.enter_child(total_read, child_literal):
 					suggestions.extend(child_literal._generate_suggestions(context))
-			else:  # All literal children fails
+			if len(children_literal) == 0:
 				for literal_list in node.children_literal.values():
 					for child_literal in literal_list:
 						with context.enter_child(total_read, child_literal):
@@ -344,6 +361,9 @@ class ArgumentNode:
 				for child in node.children:
 					with context.enter_child(total_read, child):
 						suggestions.extend(child._generate_suggestions(context))
+						if len(next_remaining) == 0:
+							suggestions.complete_hint = '<{}>'.format(child.name)
+					break
 
 		return suggestions
 
@@ -362,7 +382,7 @@ class EntryNode(ArgumentNode, ABC):
 			# the root literal node fails to parse the first element
 			raise UnknownRootArgument(error.get_parsed_command(), error.get_failed_command()) from error
 
-	def generate_suggestions(self, source, command) -> List[CommandSuggestion]:
+	def generate_suggestions(self, source, command) -> CommandSuggestions:
 		"""
 		Get a list of command suggestion of given command
 		Return an empty list if parsing fails

@@ -3,9 +3,10 @@ from typing import TYPE_CHECKING, Optional, Iterable, Any
 
 from prompt_toolkit import PromptSession
 from prompt_toolkit.application import get_app
-from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
 from prompt_toolkit.completion import Completion, CompleteEvent, WordCompleter
 from prompt_toolkit.document import Document
+from prompt_toolkit.layout.menus import MultiColumnCompletionMenuControl
+from prompt_toolkit.layout.processors import Processor, TransformationInput, Transformation
 from prompt_toolkit.output.vt100 import Vt100_Output
 from prompt_toolkit.patch_stdout import StdoutProxy
 from prompt_toolkit.shortcuts import CompleteStyle
@@ -46,7 +47,7 @@ class ConsoleHandler(ThreadExecutor):
 				if self.mcdr_server.logger.should_log_debug(DebugOption.HANDLER):
 					self.mcdr_server.logger.debug('Parsed text from {}:'.format(type(self).__name__), no_check=True)
 					for line in parsed_result.format_text().splitlines():
-						self.mcdr_server.logger.debug('    {}'.format(line), no_check=True)
+						self.mcdr_server.logger.debug('	{}'.format(line), no_check=True)
 				self.mcdr_server.reactor_manager.put_info(parsed_result)
 		except (KeyboardInterrupt, EOFError, SystemExit, IOError) as error:
 			if self.mcdr_server.is_server_running():
@@ -90,6 +91,23 @@ class CommandCompleter(WordCompleter):
 		return super().get_completions(document, complete_event)
 
 
+class CommandArgumentSuggester(Processor):
+	def __init__(self, command_manager: 'CommandManager'):
+		super().__init__()
+		self.command_manager = command_manager
+
+	def apply_transformation(self, ti: TransformationInput) -> Transformation:
+		# last line and cursor at end
+		if ti.lineno == ti.document.line_count - 1 and ti.document.is_cursor_at_the_end:
+			buffer = ti.buffer_control.buffer
+			if not buffer.suggestion:
+				input_ = ti.document.text
+				suggestions = self.command_manager.suggest_command(input_, ConsoleSuggestionCommandSource())
+				if suggestions.complete_hint is not None:
+					return Transformation(fragments=ti.fragments + [('class:auto-suggestion', suggestions.complete_hint)])
+		return Transformation(fragments=ti.fragments)
+
+
 class PromptToolkitWrapper:
 	def __init__(self, console_handler: ConsoleHandler):
 		self.console_handler = console_handler  # type: ConsoleHandler
@@ -100,6 +118,7 @@ class PromptToolkitWrapper:
 
 	def start_kits(self):
 		try:
+			self.__tweak_kits()
 			self.prompt_session = PromptSession()
 			self.stdout_proxy = StdoutProxy(raw=True)
 		except Exception as e:
@@ -108,8 +127,20 @@ class PromptToolkitWrapper:
 			self.__real_stdout = sys.stdout
 			sys.stdout = self.stdout_proxy
 			SyncStdoutStreamHandler.update_stdout()
-			Vt100_Output.bell = lambda self_: None  # monkey patch to yeet the bell sound
 			self.enabled = True
+
+	@staticmethod
+	def __tweak_kits():
+		# monkey patch to yeet the bell sound
+		Vt100_Output.bell = lambda self_: None
+
+		# monkey patch to set min_rows to 2
+		# since with reserve_space_for_menu=3, 2 row of completion menu can be displayed
+		def min_rows_is_2(*args, **kwargs):
+			kwargs['min_rows'] = 2
+			real_ctor(*args, **kwargs)
+		real_ctor = MultiColumnCompletionMenuControl.__init__
+		MultiColumnCompletionMenuControl.__init__ = min_rows_is_2
 
 	def stop_kits(self):
 		if self.enabled:
@@ -127,12 +158,13 @@ class PromptToolkitWrapper:
 	def get_input(self) -> Optional[str]:
 		if self.enabled:
 			assert self.console_handler.is_on_thread()
+			command_manager = self.console_handler.mcdr_server.command_manager
 			return self.prompt_session.prompt(
 				'> ',
-				completer=CommandCompleter(self.console_handler.mcdr_server.command_manager),
-				enable_history_search=True,
-				auto_suggest=AutoSuggestFromHistory(),
+				completer=CommandCompleter(command_manager),
+				complete_while_typing=True,
 				complete_style=CompleteStyle.MULTI_COLUMN,
+				input_processors=[CommandArgumentSuggester(command_manager)],
 				reserve_space_for_menu=3
 			)
 		else:

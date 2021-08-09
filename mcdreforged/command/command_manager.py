@@ -6,7 +6,7 @@ from enum import Enum, auto
 from typing import TYPE_CHECKING, Dict, List
 
 import mcdreforged.command.builder.command_builder_util as utils
-from mcdreforged.command.builder.command_node import CommandSuggestion
+from mcdreforged.command.builder.command_node import CommandSuggestion, CommandSuggestions
 from mcdreforged.command.builder.exception import CommandError, RequirementNotMet
 from mcdreforged.command.command_source import InfoCommandSource, CommandSource
 from mcdreforged.plugin.plugin_registry import PluginCommandNode
@@ -51,7 +51,7 @@ class CommandManager:
 	def _traverse(self, command: str, source: CommandSource, purpose: TraversePurpose) -> None or List[CommandSuggestion]:
 		first_literal_element = utils.get_element(command)
 		plugin_root_nodes = self.root_nodes.get(first_literal_element, [])
-		suggestions = []
+		suggestions = CommandSuggestions()
 
 		if purpose == TraversePurpose.EXECUTE and isinstance(source, InfoCommandSource):
 			if len(plugin_root_nodes) > 0 and source.is_console:
@@ -59,7 +59,7 @@ class CommandManager:
 				source.get_info().cancel_send_to_server()
 
 		if purpose == TraversePurpose.SUGGEST and len(plugin_root_nodes) == 0:
-			return [CommandSuggestion('', literal) for literal in self.root_nodes.keys()]
+			return CommandSuggestions([CommandSuggestion('', literal) for literal in self.root_nodes.keys()])
 
 		for plugin_root_node in plugin_root_nodes:
 			plugin = plugin_root_node.plugin
@@ -88,5 +88,5 @@ class CommandManager:
 	def execute_command(self, command: str, source: CommandSource):
 		self._traverse(command, source, TraversePurpose.EXECUTE)
 
-	def suggest_command(self, command: str, source: CommandSource) -> List[CommandSuggestion]:
+	def suggest_command(self, command: str, source: CommandSource) -> CommandSuggestions:
 		return self._traverse(command, source, TraversePurpose.SUGGEST)
