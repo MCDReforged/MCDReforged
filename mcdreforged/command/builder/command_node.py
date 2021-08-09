@@ -25,6 +25,30 @@ class ParseResult:
 		self.char_read = char_read
 
 
+class CommandSuggestion:
+	def __init__(self, command_read: str, suggest_segment: str):
+		self.__suggest_segment = suggest_segment
+		self.__command_read = command_read
+
+	def __hash__(self):
+		return hash(self.__suggest_segment) + hash(self.__command_read) * 31
+
+	def __eq__(self, other):
+		return isinstance(other, type(self)) and self.__dict__ == other.__dict__
+
+	@property
+	def command(self) -> str:
+		return self.__command_read + self.__suggest_segment
+
+	@property
+	def existed_input(self) -> str:
+		return self.__command_read
+
+	@property
+	def suggest_input(self) -> str:
+		return self.__suggest_segment
+
+
 class CommandContext(dict):
 	def __init__(self, source, command: str):
 		super().__init__()
@@ -280,12 +304,15 @@ class ArgumentNode:
 				if argument_unknown:
 					self.__raise_error(UnknownArgument(context.command_read, command), context)
 
-	def _generate_suggestions(self, context: CommandContext) -> List[str]:
-		suggestions = []  # type: List[str]
+	def _generate_suggestions(self, context: CommandContext) -> List[CommandSuggestion]:
+		"""
+		Return a list of tuple (suggested command, suggested argument)
+		"""
+		suggestions = []  # type: List[CommandSuggestion]
 		try:
 			result = self.parse(context.command_remaining)
 		except CommandSyntaxError:
-			return [context.command_read + s for s in self._get_suggestions(context)]
+			return [CommandSuggestion(context.command_read, s) for s in self._get_suggestions(context)]
 		else:
 			success_read = len(context.command) - len(context.command_remaining) + result.char_read  # type: int
 			next_remaining = utils.remove_divider_prefix(context.command_remaining[result.char_read:])  # type: str
@@ -335,7 +362,7 @@ class EntryNode(ArgumentNode, ABC):
 			# the root literal node fails to parse the first element
 			raise UnknownRootArgument(error.get_parsed_command(), error.get_failed_command()) from error
 
-	def generate_suggestions(self, source, command) -> List[str]:
+	def generate_suggestions(self, source, command) -> List[CommandSuggestion]:
 		"""
 		Get a list of command suggestion of given command
 		Return an empty list if parsing fails

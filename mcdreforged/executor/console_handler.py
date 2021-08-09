@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING, Optional, Iterable, Any
 
 from prompt_toolkit import PromptSession
 from prompt_toolkit.application import get_app
+from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
 from prompt_toolkit.completion import Completion, CompleteEvent, WordCompleter
 from prompt_toolkit.document import Document
 from prompt_toolkit.output.vt100 import Vt100_Output
@@ -14,6 +15,7 @@ from mcdreforged.executor.thread_executor import ThreadExecutor
 from mcdreforged.info import Info
 from mcdreforged.permission.permission_level import PermissionLevel
 from mcdreforged.plugin.server_interface import ServerInterface
+from mcdreforged.utils import misc_util
 from mcdreforged.utils.logger import DebugOption, SyncStdoutStreamHandler
 
 if TYPE_CHECKING:
@@ -73,7 +75,7 @@ class ConsoleSuggestionCommandSource(CommandSource):
 		pass
 
 
-class MyCustomCompleter(WordCompleter):
+class CommandCompleter(WordCompleter):
 	def __init__(self, command_manager: 'CommandManager'):
 		super().__init__([], sentence=True)
 		self.command_manager = command_manager
@@ -81,7 +83,8 @@ class MyCustomCompleter(WordCompleter):
 	def get_completions(self, document: Document, complete_event: CompleteEvent) -> Iterable[Completion]:
 		input_ = document.current_line_before_cursor
 		suggestions = self.command_manager.suggest_command(input_, ConsoleSuggestionCommandSource())
-		self.words = list(sorted(set(suggestions)))
+		self.words = misc_util.unique_list([suggestion.command for suggestion in suggestions])
+		self.display_dict = dict([(suggestion.command, suggestion.suggest_input) for suggestion in suggestions])
 		return super().get_completions(document, complete_event)
 
 
@@ -118,8 +121,9 @@ class PromptToolkitWrapper:
 			assert self.console_handler.is_on_thread()
 			return self.prompt_session.prompt(
 				'> ',
-				completer=MyCustomCompleter(self.console_handler.mcdr_server.command_manager),
+				completer=CommandCompleter(self.console_handler.mcdr_server.command_manager),
 				enable_history_search=True,
+				auto_suggest=AutoSuggestFromHistory(),
 				complete_style=CompleteStyle.MULTI_COLUMN,
 				reserve_space_for_menu=3
 			)

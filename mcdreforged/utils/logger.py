@@ -36,27 +36,31 @@ console_color_disabled = False
 
 
 class SyncStdoutStreamHandler(logging.StreamHandler):
-	__lock = RLock()
+	__write_lock = RLock()
+	__instance_lock = RLock()
 	__instances = weakref.WeakSet()  # type: Set[SyncStdoutStreamHandler]
 
 	def __init__(self):
 		super().__init__(sys.stdout)
-		self.__instances.add(self)
+		with self.__instance_lock:
+			self.__instances.add(self)
 
 	def emit(self, record) -> None:
-		with self.__lock:
+		with self.__write_lock:
 			super().emit(record)
 
 	def flush(self) -> None:
-		with self.__lock:
+		with self.__write_lock:
 			super().flush()
 
 	@classmethod
 	def update_stdout(cls, stream=None):
 		if stream is None:
 			stream = sys.stdout
-		for inst in cls.__instances:
-			with inst.__lock:
+		with cls.__instance_lock:
+			instances = list(cls.__instances)
+		for inst in instances:
+			with cls.__write_lock:
 				inst.flush()
 				inst.stream = stream
 
