@@ -40,8 +40,8 @@ def entry_point():
 
 	parser_pack = subparsers.add_parser('pack', help='Pack plugin files into a {} plugin'.format(plugin_constant.PACKED_PLUGIN_FILE_SUFFIX))
 	parser_pack.add_argument('-i', '--input', help='The input directory which the plugin is in, default: current directory', default='.')
-	parser_pack.add_argument('-o', '--output', help='The output directory to store the packed plugin, default: current directory', default='.')
-	parser_pack.add_argument('-n', '--name', help='A specific name to the output packed plugin file. If not given the metadata specific name or a default one will be used', default=None)
+	parser_pack.add_argument('-o', '--output', help='The output directory to store the zipped plugin, default: current directory', default='.')
+	parser_pack.add_argument('-n', '--name', help='A specific name to the output zipped plugin file. If not given the metadata specific name or a default one will be used', default=None)
 
 	result = parser.parse_args()
 	quiet = result.quiet

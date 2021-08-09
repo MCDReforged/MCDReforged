@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-10 00:37+0800\n"
+"POT-Creation-Date: 2021-08-10 02:16+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -73,18 +73,16 @@ msgstr "pack"
 
 #: ../plugin_dev/cli.rst:54
 msgid ""
-"Pack up your `packed plugin <plugin_format.html#packed-plugin>`__, from a"
-" batch of files, to a ``.mcdr`` file"
+"Pack up your plugin source codes / resources files, from a batch of "
+"files, to a ``.mcdr`` file zipped plugin"
 msgstr ""
-"将你的 `打包插件 <plugin_format.html#packed-plugin>`__ 给打包起来，从一堆文件，到一个 ``.mcdr``"
-" 文件。"
 
 #: ../plugin_dev/cli.rst:56
 msgid ""
 "The packing is based on the ``mcdreforged.plugin.json`` metadata file in "
 "the input directory. It will pack and only pack the following "
-"files/folders into the packed plugin:"
-msgstr "打包过程基于输入文件夹中的 ``mcdreforged.plugin.json`` 元数据文件。它会也仅会将如下的文件/文件夹打包至插件中："
+"files/folders into the zipped plugin:"
+msgstr "打包过程基于输入文件夹中的 ``mcdreforged.plugin.json`` 元数据文件。它会也仅会将如下的文件/文件夹打包至压缩插件中："
 
 #: ../plugin_dev/cli.rst:58
 msgid "Folder named by the plugin id"
@@ -143,8 +141,8 @@ msgid "``-o OUTPUT``, ``--output OUTPUT``"
 msgstr "``-o OUTPUT``, ``--output OUTPUT``"
 
 #: ../plugin_dev/cli.rst:93
-msgid "The output directory to store the generated packed plugin"
-msgstr "储存生成的打包插件的文件夹"
+msgid "The output directory to store the generated zipped plugin"
+msgstr "储存生成的压缩插件的文件夹"
 
 #: ../plugin_dev/cli.rst:98
 msgid "name"
@@ -155,8 +153,8 @@ msgid "``-n NAME``, ``--name NAME``"
 msgstr "``-n NAME``, ``--name NAME``"
 
 #: ../plugin_dev/cli.rst:102
-msgid "A specific name for the output packed plugin file"
-msgstr "输出的打包插件文件的特定名称"
+msgid "A specific name for the output zipped plugin file"
+msgstr "输出的压缩插件文件的特定名称"
 
 #: ../plugin_dev/cli.rst:104
 msgid ""

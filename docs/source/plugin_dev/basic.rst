@@ -71,7 +71,7 @@ Entrypoint
 
 Entrypoint is a module specifying what module MCDR will import when loading your plugin. It's the bridge between your plugin and MCDR
 
-For `solo plugin <plugin_format.html#solo-plugin>`__ the entry point is the plugin itself. For `packed plugin <plugin_format.html#packed-plugin>`__ and `directory plugin <plugin_format.html#directory-plugin>`__ the entrypoint is declared in metadata, with default value the id of the plugin
+For `solo plugin <plugin_format.html#solo-plugin>`__ the entry point is the plugin itself. For `packed plugin <plugin_format.html#packed-plugin>`__ the entrypoint is declared in metadata, with default value the id of the plugin, which is the ``__init__.py`` file in the folder named plugin id
 
 For example:
 

@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-10 00:21+0800\n"
+"POT-Creation-Date: 2021-08-10 02:16+0800\n"
 "PO-Revision-Date: 2021-01-23 10:38+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -44,7 +44,7 @@ msgstr "下面的 `属性 <#fields>`__ 小节将会使用 python 语法进行元
 
 #: ../plugin_dev/metadata.rst:31
 msgid ""
-"For packed plugin or directory plugin, the metadata is declared in file "
+"For packed plugin, the metadata is declared in file "
 "``mcdreforged.plugin.json`` in json syntax"
 msgstr "对于打包插件或者文件夹插件而言，元数据以 json 语法在文件 ``mcdreforged.plugin.json`` 中声明。"
 
@@ -553,8 +553,8 @@ msgid "archive_name"
 msgstr "archive_name"
 
 #: ../plugin_dev/metadata.rst:260
-msgid "The file name of generated ``.mcdr`` packed plugin in CLI"
-msgstr "在 CLI 中生成的 ``.mcdr`` 打包插件的文件名。"
+msgid "The file name of generated ``.mcdr`` zipped plugin in CLI"
+msgstr "在 CLI 中生成的 ``.mcdr`` 压缩插件的文件名。"
 
 #: ../plugin_dev/metadata.rst:262
 msgid "See `here <cli.html#name>`__ for more information"
@@ -571,8 +571,8 @@ msgstr "resources"
 #: ../plugin_dev/metadata.rst:273
 msgid ""
 "A list of file or folder names that will be packed into the generated "
-"``.mcdr`` packed plugin file in CLI"
-msgstr "一个文件或文件夹名称的列表，将用于在 CLI 中打包入 ``.mcdr`` 打包插件"
+"``.mcdr`` zipped plugin file in CLI"
+msgstr "一个文件或文件夹名称的列表，将用于在 CLI 中打包入 ``.mcdr`` 压缩插件"
 
 #: ../plugin_dev/metadata.rst:275
 msgid "See `here <cli.html#pack>`__ for more information"

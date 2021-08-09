@@ -73,9 +73,8 @@ msgid "Utils"
 msgstr ""
 
 #: ../plugin_dev/classes/ServerInterface.rst:30
-#, fuzzy
 msgid "get_instance"
-msgstr "get_plugin_instance"
+msgstr "get_instance"
 
 #: ../plugin_dev/classes/ServerInterface.rst:37
 msgid ""
@@ -96,9 +95,8 @@ msgid "Check mcdreforged.mcdr_server.MCDReforgedServer.tr for detail doc"
 msgstr ""
 
 #: ../plugin_dev/classes/ServerInterface.rst:51
-#, fuzzy
 msgid "as_basic_server_interface"
-msgstr "ServerInterface"
+msgstr "as_basic_server_interface"
 
 #: ../plugin_dev/classes/ServerInterface.rst:58
 msgid ""
@@ -113,9 +111,8 @@ msgid ""
 msgstr ""
 
 #: ../plugin_dev/classes/ServerInterface.rst:63
-#, fuzzy
 msgid "as_plugin_server_interface"
-msgstr "ServerInterface"
+msgstr "as_plugin_server_interface"
 
 #: ../plugin_dev/classes/ServerInterface.rst:70
 msgid ""
@@ -345,9 +342,8 @@ msgid "Keyword Parameter *encoding*: The encoding method for the text"
 msgstr "关键字参数 *encoding*：文本的编码方法。"
 
 #: ../plugin_dev/classes/ServerInterface.rst:264
-#, fuzzy
 msgid "Plugin Queries"
-msgstr "插件操作"
+msgstr "插件查询"
 
 #: ../plugin_dev/classes/ServerInterface.rst:267
 msgid "get_plugin_metadata"
@@ -419,16 +415,14 @@ msgid ""
 msgstr "返回一个包含所有已加载插件的 ID 列表，例如：``['my_plugin_id', 'another_plugin_id']``。"
 
 #: ../plugin_dev/classes/ServerInterface.rst:324
-#, fuzzy
 msgid "get_all_metadata"
-msgstr "get_plugin_metadata"
+msgstr "get_all_metadata"
 
 #: ../plugin_dev/classes/ServerInterface.rst:330
-#, fuzzy
 msgid ""
 "Return a dict containing metadatas of all loaded plugin with (plugin_id, "
 "metadata) as key-value pair"
-msgstr "返回一个包含所有已加载插件的 ID 列表，例如：``['my_plugin_id', 'another_plugin_id']``。"
+msgstr "返回一个包含所有加载的插件元数据的字典，键值对为 (插件 id, 元数据)"
 
 #: ../plugin_dev/classes/ServerInterface.rst:333
 msgid "Plugin Operations"

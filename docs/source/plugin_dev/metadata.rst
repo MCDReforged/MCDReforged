@@ -28,7 +28,7 @@ The following section `Fields <#fields>`__ will use metadata declared in python 
 
 ---------
 
-For packed plugin or directory plugin, the metadata is declared in file ``mcdreforged.plugin.json`` in json syntax
+For packed plugin, the metadata is declared in file ``mcdreforged.plugin.json`` in json syntax
 
 Here's an example
 
@@ -257,7 +257,7 @@ archive_name
 
 **Not available in solo plugin**
 
-The file name of generated ``.mcdr`` packed plugin in CLI
+The file name of generated ``.mcdr`` zipped plugin in CLI
 
 See `here <cli.html#name>`__ for more information
 
@@ -270,7 +270,7 @@ resources
 
 **Not available in solo plugin**
 
-A list of file or folder names that will be packed into the generated ``.mcdr`` packed plugin file in CLI
+A list of file or folder names that will be packed into the generated ``.mcdr`` zipped plugin file in CLI
 
 See `here <cli.html#pack>`__ for more information
 

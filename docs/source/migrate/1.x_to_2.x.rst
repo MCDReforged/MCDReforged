@@ -16,7 +16,7 @@ Metadata
 
 You can no longer use ``RText`` instance as the value of your plugin metadata. ``name`` and ``description`` fields in ``RText`` class will be automatically converted into ``str`` for compatibility
 
-This changes is to ensure the consistence between `Solo Plugin <../plugin_dev/plugin_format.html#solo-plugin>`__ (the plugin format before MCDR 2.x) and `Packed Plugin <../plugin_dev/plugin_format.html#packed-plugin>`__ / `Directory Plugin <../plugin_dev/plugin_format.html#directory-plugin>`__ which use a ``.json`` file to declare their metadata
+This changes is to ensure the consistence between `Solo Plugin <../plugin_dev/plugin_format.html#solo-plugin>`__ (the plugin format before MCDR 2.x) and `Packed Plugin <../plugin_dev/plugin_format.html#packed-plugin>`__ which use a ``.json`` file to declare their metadata
 
 Event
 ^^^^^

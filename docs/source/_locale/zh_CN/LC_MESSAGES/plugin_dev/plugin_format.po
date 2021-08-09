@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-08 11:08+0800\n"
+"POT-Creation-Date: 2021-08-10 02:25+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,27 +34,43 @@ msgstr ""
 "在 `这个仓库里 <https://github.com/MCDReforged/MCDReforged-ExamplePlugin>`__ "
 "你可以找到各种插件格式的例子。"
 
-#: ../plugin_dev/plugin_format.rst:11
+#: ../plugin_dev/plugin_format.rst:9
+msgid "Plugin format inheriting tree:"
+msgstr "插件格式继承树"
+
+#: ../plugin_dev/plugin_format.rst:11 ../plugin_dev/plugin_format.rst:19
 msgid "Solo Plugin"
 msgstr "单文件插件"
 
-#: ../plugin_dev/plugin_format.rst:13
+#: ../plugin_dev/plugin_format.rst:12
+msgid "Packed Plugin (Abstract)"
+msgstr "打包插件（抽象）"
+
+#: ../plugin_dev/plugin_format.rst:14 ../plugin_dev/plugin_format.rst:39
+msgid "Zipped Plugin"
+msgstr "压缩插件"
+
+#: ../plugin_dev/plugin_format.rst:15 ../plugin_dev/plugin_format.rst:83
+msgid "Directory Plugin"
+msgstr "文件夹插件"
+
+#: ../plugin_dev/plugin_format.rst:21
 msgid ""
 "Solo Plugin consists of a single python ``.py`` source file. It's the "
 "plugin format which aims for easy to write and rapid development"
 msgstr "单文件插件由单个 python ``.py`` 源文件组成。它是一种注重于简易编写、快速开发的插件格式。"
 
-#: ../plugin_dev/plugin_format.rst:15
+#: ../plugin_dev/plugin_format.rst:23
 msgid ""
 "Being restricted with the one-file-only file format, some features are "
 "missing in solo plugin:"
 msgstr "受单文件的格式的限制，某些特性在单文件插件是不可用的："
 
-#: ../plugin_dev/plugin_format.rst:17
+#: ../plugin_dev/plugin_format.rst:25
 msgid "Python requirement check is not supported"
 msgstr "不支持 python 依赖的检查"
 
-#: ../plugin_dev/plugin_format.rst:18
+#: ../plugin_dev/plugin_format.rst:26
 msgid ""
 "Directly import from other plugin is not supported. Other plugin can only"
 " use `get_plugin_instance <classes/ServerInterface.html#get-plugin-"
@@ -63,57 +79,72 @@ msgstr ""
 "在其他插件中的直接导入是不支持的。其他插件只能使用 `get_plugin_instance "
 "<classes/ServerInterface.html#get-plugin-instance>`__ 来访问你的插件实例"
 
-#: ../plugin_dev/plugin_format.rst:19
+#: ../plugin_dev/plugin_format.rst:27
 msgid "Cannot be added to MCDR plugin catalogue"
 msgstr "无法被添加至 MCDR 的插件仓库中"
 
-#: ../plugin_dev/plugin_format.rst:21
+#: ../plugin_dev/plugin_format.rst:29
 msgid ""
 "When you only want to create a simple plugin as fast as possible, "
 "creating a solo plugin is always a good choice"
 msgstr "当你只想尽快编写一个简单的插件时，编写一个单文件插件总是一个不错的选择。"
 
-#: ../plugin_dev/plugin_format.rst:24
+#: ../plugin_dev/plugin_format.rst:32
 msgid "Packed Plugin"
 msgstr "打包插件"
 
-#: ../plugin_dev/plugin_format.rst:26
+#: ../plugin_dev/plugin_format.rst:34
 msgid ""
-"Packed plugin is a zip type compressed file with file extension name "
-"``.mcdr``. It's the recommended plugin format for general plugin"
-msgstr "打包插件是一个文件名后缀是 ``.mcdr`` 的 zip 类型的压缩文件。它是编写一般插件时的推荐格式。"
+"Packed plugin is the collective name for the following two plugin format,"
+" `zipped plugin <#zipped-plugin>`__ and `directory plugin <#directory-"
+"plugin>`__"
+msgstr "打包插件是下面两种插件格式，`压缩插件 <#zipped-plugin>`__ 和 `文件夹插件 <#directory-plugin>`__，的统称"
 
-#: ../plugin_dev/plugin_format.rst:28
-msgid "A minimum packed plugin consists of the following files at its zip root"
-msgstr "一个最小的打包插件在其压缩文件根目录中包含了以下的文件："
+#: ../plugin_dev/plugin_format.rst:36
+msgid ""
+"The biggest difference between packed plugin and solo plugin is that, it "
+"can consist of multiple files, rather than being limited into 1 single "
+"``.py`` file. Therefore, more features are supported in a packed plugin "
+"which make it easier to create a general plugin"
+msgstr "打包插件与单文件插件最大的区别是，它可以包含多个文件，而不是受限于单个 ``.py`` 文件。因此，打包文件支持更多的特性，这可以让插件编写更为容易。"
 
-#: ../plugin_dev/plugin_format.rst:30
+#: ../plugin_dev/plugin_format.rst:41
+msgid ""
+"Zipped plugin is a zip type compressed file with file extension name "
+"``.mcdr``. It's the recommended plugin format for distribution"
+msgstr "压缩插件是一个文件名后缀是 ``.mcdr`` 的 zip 类型的压缩文件。它是分发插件时的推荐格式。"
+
+#: ../plugin_dev/plugin_format.rst:43
+msgid "A minimum zipped plugin consists of the following files at its zip root"
+msgstr "一个最小的压缩插件在其压缩文件根目录中包含了以下的文件："
+
+#: ../plugin_dev/plugin_format.rst:45
 msgid "``mcdreforged.plugin.json``, contains the metadata of the plugin"
 msgstr "``mcdreforged.plugin.json``，储存着该插件的元数据"
 
-#: ../plugin_dev/plugin_format.rst:31
+#: ../plugin_dev/plugin_format.rst:46
 msgid "a valid python package with your plugin id"
 msgstr "一个以你的插件 id 为名的合法的 python 包"
 
-#: ../plugin_dev/plugin_format.rst:33
+#: ../plugin_dev/plugin_format.rst:48
 msgid ""
-"Here's an example file tree of a minimum packed plugin with plugin id "
+"Here's an example file tree of a minimum zipped plugin with plugin id "
 "``my_plugin``:"
-msgstr "下面是插件 id 为 ``my_plugin`` 时，最小打包插件的文件树的一个例子："
+msgstr "下面是插件 id 为 ``my_plugin`` 时，最小压缩插件的文件树的一个例子："
 
-#: ../plugin_dev/plugin_format.rst:42
+#: ../plugin_dev/plugin_format.rst:57
 msgid ""
-"Optionally, a packed plugin can have some other useful files that will be"
+"Optionally, a zipped plugin can have some other useful files that will be"
 " recognized by MCDR:"
-msgstr "可选的，打包插件可以包含其他可被 MCDR 识别的有用的文件："
+msgstr "可选的，压缩插件可以包含其他可被 MCDR 识别的有用的文件："
 
-#: ../plugin_dev/plugin_format.rst:44
+#: ../plugin_dev/plugin_format.rst:59
 msgid ""
 "``requirements.txt``, indicating the python package requirement of your "
 "plugin. It'll be checked before plugin loading"
 msgstr "``requirements.txt``，储存着你的插件所依赖的 python 依赖。在插件加载前这些依赖需求将会被检查"
 
-#: ../plugin_dev/plugin_format.rst:45
+#: ../plugin_dev/plugin_format.rst:60
 msgid ""
 "``lang/``, a folder storing translation files in json (``.json``) or yaml"
 " (``.yml``) format. MCDR will automatically load and register translation"
@@ -122,51 +153,62 @@ msgstr ""
 "``lang/``，一个储存着 json（``.json``）或者 yaml（``.yml``）格式的翻译文件的文件夹。MCDR "
 "将会自动地载入并注册这些翻译文件"
 
-#: ../plugin_dev/plugin_format.rst:47
+#: ../plugin_dev/plugin_format.rst:62
 msgid ""
-"You can include any other files or folders inside your packed plugin. You"
-" can access them via `open_bundled_file "
-"<classes/ServerInterface.html#open_bundled_file>`__ method in "
-"`ServerInterface <classes/ServerInterface.html>`__"
+"You can include any other files or folders inside your zipped plugin. You"
+" can access them via `open_bundled_file <classes/ServerInterface.html"
+"#open-bundled-file>`__ method in `ServerInterface "
+"<classes/ServerInterface.html>`__"
 msgstr ""
-"你可以在打包插件中包含其他的自定义文件或文件夹。你可以借助 `ServerInterface "
+"你可以在压缩插件中包含其他的自定义文件或文件夹。你可以借助 `ServerInterface "
 "<classes/ServerInterface.html>`__ 的 `open_bundled_file "
 "<classes/ServerInterface.html#open_bundled_file>`__ 方法来访问这些文件"
 
-#: ../plugin_dev/plugin_format.rst:49
+#: ../plugin_dev/plugin_format.rst:64
 msgid ""
-"Here's an example file tree of a valid packed plugin with more possible "
+"Here's an example file tree of a valid zipped plugin with more possible "
 "files:"
-msgstr "下面是包含着更多文件的打包插件的文件树的一个例子："
+msgstr "下面是包含着更多文件的压缩插件的文件树的一个例子："
 
-#: ../plugin_dev/plugin_format.rst:68
-msgid "Directory Plugin"
-msgstr "文件夹插件"
-
-#: ../plugin_dev/plugin_format.rst:70
+#: ../plugin_dev/plugin_format.rst:85
 msgid ""
-"Directory plugin has exactly the same file structure as `packed plugin "
-"<#packed-plugin>`__. The only difference is that all files of a directory"
+"Directory plugin has exactly the same file structure as `zipped plugin "
+"<#zipped-plugin>`__. The only difference is that all files of a directory"
 " plugins are inside a directory instead of a ``.mcdr`` zip file"
 msgstr ""
-"文件夹插件拥有着与 `打包插件 <#packed-plugin>`__ 完全一致的文件结构。唯一的区别为，打包插件的文件位于一个文件夹中，而非一个"
-" ``.mcdr`` 压缩文件中。"
+"文件夹插件拥有着与 `压缩插件 <#zipped-plugin>`__ "
+"完全一致的文件结构。唯一的区别为，文件夹插件的文件位于一个文件夹中，而非一个 ``.mcdr`` 压缩文件中。"
 
-#: ../plugin_dev/plugin_format.rst:72
+#: ../plugin_dev/plugin_format.rst:87
 msgid ""
 "Directory plugin is mostly used for debug purpose inside the plugin "
 "directory of MCDR"
 msgstr "文件夹插件主要用于在 MCDR 的插件文件夹中的插件调试"
 
-#: ../plugin_dev/plugin_format.rst:74
+#: ../plugin_dev/plugin_format.rst:89
 msgid "Here's an example file tree of a directory plugin:"
 msgstr "下面是文件夹插件的文件树的一个例子："
 
-#: ../plugin_dev/plugin_format.rst:85
+#: ../plugin_dev/plugin_format.rst:100
 msgid ""
 "Directory plugin will always be treated as \"modified\" during ``!!MCDR "
 "reload plugin`` `hot reload <../command.html#hot-reloads>`__ command"
 msgstr ""
 "在 ``!!MCDR reload plugin`` 这个 `热重载 <../command.html#hot-reloads>`__ "
 "指令中，文件夹插件总会被视为是“有变化”的插件"
+
+#~ msgid "RegularPlugin (Abstract)"
+#~ msgstr ""
+
+#~ msgid "SoloPlugin"
+#~ msgstr "单文件插件"
+
+#~ msgid "PackedPlugin (Abstract)"
+#~ msgstr ""
+
+#~ msgid "ZippedPlugin"
+#~ msgstr ""
+
+#~ msgid "DirectoryPlugin"
+#~ msgstr "文件夹插件"
 
