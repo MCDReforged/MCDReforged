@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-01 00:26+0800\n"
+"POT-Creation-Date: 2021-08-09 13:05+0800\n"
 "PO-Revision-Date: 2021-01-23 13:20+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -295,12 +295,12 @@ msgstr "MCDR 会 **将这些目录添加到** ``sys.path``，以让插件可以�
 msgid "Option type: a list of string"
 msgstr "选项类型：list[str]"
 
-#: ../configure.rst:116 ../configure.rst:219 ../configure.rst:244
-#: ../configure.rst:266
+#: ../configure.rst:116 ../configure.rst:230 ../configure.rst:255
+#: ../configure.rst:277
 msgid "Default value:"
 msgstr "默认值："
 
-#: ../configure.rst:124 ../configure.rst:226 ../configure.rst:251
+#: ../configure.rst:124 ../configure.rst:237 ../configure.rst:262
 msgid "Example:"
 msgstr "例如："
 
@@ -325,12 +325,12 @@ msgstr "rcon.enable"
 msgid "The switch of rcon"
 msgstr "rcon 开关"
 
-#: ../configure.rst:144 ../configure.rst:180 ../configure.rst:196
-#: ../configure.rst:205
+#: ../configure.rst:144 ../configure.rst:180 ../configure.rst:191
+#: ../configure.rst:207 ../configure.rst:216
 msgid "Option type: boolean"
 msgstr "选项类型：boolean"
 
-#: ../configure.rst:145 ../configure.rst:197 ../configure.rst:206
+#: ../configure.rst:145 ../configure.rst:208 ../configure.rst:217
 msgid "Default value: ``false``"
 msgstr "默认值：``false``"
 
@@ -382,47 +382,61 @@ msgstr "check_update"
 msgid "If set to true, MCDR will detect if there's a new version every 24h"
 msgstr "如果设置为 true，MCDR将会每隔24小时执行一次更新检测。"
 
-#: ../configure.rst:181
+#: ../configure.rst:181 ../configure.rst:192
 msgid "Default value: ``true``"
 msgstr "默认值：``true``"
 
 #: ../configure.rst:184
+msgid "advance_console"
+msgstr "advance_console"
+
+#: ../configure.rst:186
+msgid ""
+"Advance console switch powered by `prompt-toolkit "
+"<https://pypi.org/project/prompt-toolkit/>`__"
+msgstr "高级控制台的开关，基于 `prompt-toolkit <https://pypi.org/project/prompt-toolkit/>`__。"
+
+#: ../configure.rst:188
+msgid "Set it to false if you need to redirect the stdin/stdout of MCDR"
+msgstr "如果你需要重定向 MCDR 的标准输入/输出，把它设置为 false"
+
+#: ../configure.rst:195
 msgid "Advance"
 msgstr "高级配置"
 
-#: ../configure.rst:186
+#: ../configure.rst:197
 msgid "Configure options for advance users"
 msgstr "为进阶用户提供的选项"
 
-#: ../configure.rst:189
+#: ../configure.rst:200
 msgid "disable_console_thread"
 msgstr "disable_console_thread"
 
-#: ../configure.rst:191
+#: ../configure.rst:202
 msgid ""
 "When set to true, MCDR will not start the console thread for handling "
 "console command input"
 msgstr "设置为 true 时，MCDR 将不会启动控制台线程来处理控制台命令输入。"
 
-#: ../configure.rst:193
+#: ../configure.rst:204
 msgid "Don't change it to true unless you know what you are doing"
 msgstr "请保持默认值，除非你清楚地知道这是什么。"
 
-#: ../configure.rst:200
+#: ../configure.rst:211
 msgid "disable_console_color"
 msgstr "disable_console_color"
 
-#: ../configure.rst:202
+#: ../configure.rst:213
 msgid ""
 "When set to true, MCDR will removed all console font formatter codes in "
 "before any message gets printed onto the console"
 msgstr "设置为 true 时，MCDR 将在所有消息打印到控制台之前删除所有控制台字体格式化程序代码。"
 
-#: ../configure.rst:209
+#: ../configure.rst:220
 msgid "custom_handlers"
 msgstr "custom_handlers"
 
-#: ../configure.rst:211
+#: ../configure.rst:222
 msgid ""
 "A list of custom `server handler <customize/handler.html>`__ classes. The"
 " classed need to be subclasses of ``AbstractServerHandler``"
@@ -430,31 +444,31 @@ msgstr ""
 "自定义 `服务端处理器 <customize/handler.html>`__ 类所组成的列表。这些类应当是 "
 "AbstractServerHandler 的子类。"
 
-#: ../configure.rst:213
+#: ../configure.rst:224
 msgid ""
 "Then you can use the name of your handler in the `handler <#handler>`__ "
 "option above to use your handler"
 msgstr "这样你就可以在 `handler <#handler>`__ 选项中通过处理器的名称指派其解析标准输出文本。"
 
-#: ../configure.rst:215
+#: ../configure.rst:226
 msgid "The name of a handler is defined in the get_name method"
 msgstr "处理器名称通过 get_name 方法定义。"
 
-#: ../configure.rst:218 ../configure.rst:243
+#: ../configure.rst:229 ../configure.rst:254
 msgid "Option type: a list of string, or null"
 msgstr "选项类型：list[str] 或 null"
 
-#: ../configure.rst:233
+#: ../configure.rst:244
 msgid ""
 "In this example the custom handler package path is ``my.custom.handler`` "
 "and the class is name ``MyHandler``"
 msgstr "下面这个例子中，``my.custom.handler`` 是包路径，``MyHandler`` 是类名。"
 
-#: ../configure.rst:236
+#: ../configure.rst:247
 msgid "custom_info_reactors"
 msgstr "custom_info_reactors"
 
-#: ../configure.rst:238
+#: ../configure.rst:249
 msgid ""
 "A list of custom `info reactor <customize/reactor.html>`__ classes to "
 "handle the info instance. The classed need to be subclasses of "
@@ -463,23 +477,23 @@ msgstr ""
 "用于处理 info 实例的自定义 `info 响应器 <customize/reactor.html>`__ 类所组成的列表。这些类应当是 "
 "``AbstractInfoReactor`` 的子类。"
 
-#: ../configure.rst:240
+#: ../configure.rst:251
 msgid ""
 "All custom info reactors will be registered to the reactor list to "
 "process information from the server"
 msgstr "所有自定义 info 响应器都将注册到反应堆列表中，以处理来自服务器的信息。"
 
-#: ../configure.rst:258
+#: ../configure.rst:269
 msgid ""
 "In this example the custom reactor package path is ``my.custom.reactor`` "
 "and the class name is ``MyInfoReactor``"
 msgstr "下面这个例子中，``my.custom.reactor`` 是包路径，``MyInfoReactor`` 是类名。"
 
-#: ../configure.rst:261
+#: ../configure.rst:272
 msgid "debug"
 msgstr "debug"
 
-#: ../configure.rst:263
+#: ../configure.rst:274
 msgid ""
 "Debug logging switches. Set ``all`` to true to enable all debug logging, "
 "or set the specific option to enable specific debug logging"
