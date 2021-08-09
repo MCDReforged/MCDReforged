@@ -1,6 +1,7 @@
 import unittest
 
-from mcdreforged.command.builder.command_node import *
+from mcdreforged.command.builder.nodes.arguments import *
+from mcdreforged.command.builder.nodes.basic import *
 
 
 class MyTestCase(unittest.TestCase):

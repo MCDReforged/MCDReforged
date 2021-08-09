@@ -5,8 +5,7 @@ import threading
 import traceback
 from typing import Callable, Any, Tuple, List, Optional
 
-from mcdreforged.command.builder.command_node import Literal, QuotableText, Text, GreedyText, Integer
-from mcdreforged.command.builder.exception import UnknownArgument, RequirementNotMet, CommandError
+from mcdreforged.api.command import *
 from mcdreforged.command.command_source import CommandSource
 from mcdreforged.constants import core_constant, plugin_constant
 from mcdreforged.minecraft.rtext import RText, RAction, RTextList, RStyle, RColor
@@ -70,6 +69,9 @@ class MCDReforgedPlugin(PermanentPlugin):
 		return '!!help'
 
 	def __register_commands(self):
+		def plugin_id_node():
+			return QuotableText('plugin_id').suggests_matching(lambda: [plg.get_id() for plg in self.plugin_manager.get_regular_plugins()])
+
 		self.register_command(
 			Literal(self.get_control_command_prefix()).
 			requires(lambda src: src.has_permission(PermissionLevel.MCDR_CONTROL_LEVEL)).
@@ -109,12 +111,12 @@ class MCDReforgedPlugin(PermanentPlugin):
 				runs(lambda src: src.reply(self.get_help_message('mcdr_command.help_message_plugin'))).
 				on_error(UnknownArgument, self.on_mcdr_command_unknown_argument).
 				then(Literal('list').runs(self.list_plugin)).
-				then(Literal('info').then(GreedyText('plugin_id').runs(lambda src, ctx: self.show_plugin_info(src, ctx['plugin_id'])))).
+				then(Literal('info').then(plugin_id_node().runs(lambda src, ctx: self.show_plugin_info(src, ctx['plugin_id'])))).
 				then(Literal('load').then(GreedyText('file_name').runs(lambda src, ctx: self.load_plugin(src, ctx['file_name'])))).
 				then(Literal('enable').then(GreedyText('file_name').runs(lambda src, ctx: self.enable_plugin(src, ctx['file_name'])))).
-				then(Literal('reload').then(GreedyText('plugin_id').runs(lambda src, ctx: self.reload_plugin(src, ctx['plugin_id'])))).
-				then(Literal('unload').then(GreedyText('plugin_id').runs(lambda src, ctx: self.unload_plugin(src, ctx['plugin_id'])))).
-				then(Literal('disable').then(GreedyText('plugin_id').runs(lambda src, ctx: self.disable_plugin(src, ctx['plugin_id'])))).
+				then(Literal('reload').then(plugin_id_node().runs(lambda src, ctx: self.reload_plugin(src, ctx['plugin_id'])))).
+				then(Literal('unload').then(plugin_id_node().runs(lambda src, ctx: self.unload_plugin(src, ctx['plugin_id'])))).
+				then(Literal('disable').then(plugin_id_node().runs(lambda src, ctx: self.disable_plugin(src, ctx['plugin_id'])))).
 				then(Literal({'reloadall', 'ra'}).runs(self.reload_all_plugin))
 			).
 			then(

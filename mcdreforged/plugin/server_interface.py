@@ -4,7 +4,7 @@ import os
 import time
 from typing import Callable, TYPE_CHECKING, Tuple, Any, Union, Optional, List, IO, Dict
 
-from mcdreforged.command.builder.command_node import Literal
+from mcdreforged.command.builder.nodes.basic import Literal
 from mcdreforged.command.command_source import CommandSource, PluginCommandSource
 from mcdreforged.constants import plugin_constant
 from mcdreforged.info import Info

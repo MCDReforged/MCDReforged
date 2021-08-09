@@ -4,7 +4,7 @@ Single plugin class
 from enum import Enum, auto
 from typing import Tuple, Any, TYPE_CHECKING, Dict
 
-from mcdreforged.command.builder.command_node import Literal
+from mcdreforged.command.builder.nodes.basic import Literal
 from mcdreforged.plugin.meta.metadata import Metadata
 from mcdreforged.plugin.plugin_event import MCDREvent, EventListener, PluginEvent
 from mcdreforged.plugin.plugin_registry import PluginRegistry, HelpMessage

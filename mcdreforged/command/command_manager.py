@@ -6,8 +6,8 @@ from enum import Enum, auto
 from typing import TYPE_CHECKING, Dict, List
 
 import mcdreforged.command.builder.command_builder_util as utils
-from mcdreforged.command.builder.command_node import CommandSuggestion, CommandSuggestions
 from mcdreforged.command.builder.exception import CommandError, RequirementNotMet
+from mcdreforged.command.builder.nodes.basic import CommandSuggestion, CommandSuggestions
 from mcdreforged.command.command_source import InfoCommandSource, CommandSource
 from mcdreforged.plugin.plugin_registry import PluginCommandNode
 from mcdreforged.utils import string_util
