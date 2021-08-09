@@ -8,7 +8,7 @@ Plugin Development
    Metadata<metadata.rst>
    Plugin Format<plugin_format.rst>
    Plugin Event<event.rst>
-   Command<command.rst>
+   Command Tree<command.rst>
    API<api.rst>
    Class References<classes/classes.rst>
    Watchdog<watchdog.rst>

@@ -15,8 +15,8 @@ msgstr ""
 "Generated-By: Babel 2.9.0\n"
 
 #: ../plugin_dev/command.rst:3
-msgid "Command"
-msgstr "指令"
+msgid "Command Tree"
+msgstr "指令树"
 
 #: ../plugin_dev/command.rst:5
 msgid ""

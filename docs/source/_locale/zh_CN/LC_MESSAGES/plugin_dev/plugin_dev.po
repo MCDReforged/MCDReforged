@@ -31,8 +31,8 @@ msgid "Plugin Event"
 msgstr "插件事件"
 
 #: ../plugin_dev/plugin_dev.rst:4
-msgid "Command"
-msgstr "指令"
+msgid "Command Tree"
+msgstr "指令树"
 
 #: ../plugin_dev/plugin_dev.rst:4
 msgid "API"

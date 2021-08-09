@@ -1,6 +1,6 @@
 
-Command
-=======
+Command Tree
+============
 
 Tired of manually splitting argument and parsing commands? Being annoyed by the complicated argument conditions? Go try the MCDR command building system!
 
