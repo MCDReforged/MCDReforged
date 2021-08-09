@@ -66,6 +66,28 @@ Different `plugin format <plugin_format.rst>`__ has different ways to declare it
 
 See the `metadata document <metadata.rst>`__ for more information
 
+Entrypoint
+----------
+
+Entrypoint is a module specifying what module MCDR will import when loading your plugin. It's the bridge between your plugin and MCDR
+
+For `solo plugin <plugin_format.html#solo-plugin>`__ the entry point is the plugin itself. For `packed plugin <plugin_format.html#packed-plugin>`__ and `directory plugin <plugin_format.html#directory-plugin>`__ the entrypoint is declared in metadata, with default value the id of the plugin
+
+For example:
+
+.. code-block::
+
+    MyPlugin.mcdr
+        my_plugin/
+            __init__.py
+            source.py
+        mcdreforged.plugin.json
+
+For this packed plugin, with default entrypoint value, MCDR will import the module ``my_plugin``, which will actually loads the ``__init__.py`` in ``my_plugin/`` folder inside the ``MyPlugin.mcdr`` file. ``on_load`` function inside the ``__init__.py`` will be registered as an event listener
+
+If the entrypoint is set to ``my_plugin.source``, then MCDR will import ``my_plugin.source``, which will actually loads ``source.py`` in ``my_plugin/`` folder
+
+The entrypoint module instance is also used in `ServerInterface.get_plugin_instance <classes/ServerInterface.html#get_plugin_instance>`__. The entrypoint module instance is also what the second parameter in `Plugin loaded <event.html#plugin-loaded>`__ event is
 
 Plugin Registry
 ---------------
@@ -75,37 +97,41 @@ Plugin registry is a collection of things that plugin registered for. It will ge
 Event listeners
 ^^^^^^^^^^^^^^^
 
-There are 2 methods to register an event listener for you plugin
-
-
-#. 
-   Declare a function inside the global slope with the specific name. It's the legacy registering method to register a listener and it only works with events provided by MCDR. Check `here <event.html#default-event-listener>`__ for more detail
-
-   For example, the widely-used function below is a default `Plugin Loaded <event.html#plugin-loaded>`__ event listener
-
-   .. code-block:: python
-
-       def on_load(server, prev):
-           do_something()
+There are 3 methods to register an event listener for you plugin
 
 #. 
-   Manually invoke ``server.register_event_listener`` method to register an event listener. You can specify the callable object and the priority for the event listener
+    Declare a function inside the global slope in the `entrypoint <#entrypoint>`__ module with the specific name. It's the legacy registering method to register a listener and it only works with events provided by MCDR. Check `here <event.html#default-event-listener>`__ for more detail
 
-   Check `here <event.html#register-a-event-listener>`__ for more detail about event listener registering
+    For example, the widely-used function below is a default `Plugin Loaded <event.html#plugin-loaded>`__ event listener
 
-   Here some examples about manually register event listeners
+    .. code-block:: python
 
-   .. code-block:: python
+        def on_load(server, prev):
+            do_something()
 
-       def my_on_mcdr_general_info(server, info):
-           pass
+#. 
+    Manually invoke ``server.register_event_listener`` method to register an event listener. You can specify the callable object and the priority for the event listener
 
-       def on_my_task_done(server, my_task_info, my_task_data):  # the 2nd and 3rd parameter is determined by the plugin that emits this event
-           pass
+    Check `here <event.html#register-a-event-listener>`__ for more detail about event listener registering
 
-       def on_load(server, prev):
-           server.register_event_listener('mcdr.general_info', my_on_mcdr_general_info, priority=500)  # TODO: use better event identifier
-           server.register_event_listener('myplugin.task_done', on_my_task_done)  # TODO: use better event identifier
+    Here some examples about manually register event listeners
+
+    .. code-block:: python
+
+        def my_on_mcdr_general_info(server, info):
+            pass
+
+        def on_my_task_done(server, my_task_info, my_task_data):  # the 2nd and 3rd parameter is determined by the plugin that emits this event
+            pass
+
+        def on_load(server, prev):
+            server.register_event_listener('mcdr.general_info', my_on_mcdr_general_info, priority=500)
+            server.register_event_listener(MCDRPluginEvents.PLUGIN_UNLOADED, my_on_unload, priority=2000)
+            server.register_event_listener('myplugin.task_done', on_my_task_done)
+
+#.
+    Use `@event_listener <api.html#event-listener>`__ decorator
+
 
 Take a look at the reference of ``register_event_listener`` method in `ServerInterface <classes/ServerInterface.html#register-event-listener>`__ document for more detail
 

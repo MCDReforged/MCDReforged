@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-09 16:45+0800\n"
+"POT-Creation-Date: 2021-08-09 20:26+0800\n"
 "PO-Revision-Date: 2021-01-23 10:38+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -127,8 +127,8 @@ msgstr "字段键名：``id``"
 
 #: ../plugin_dev/metadata.rst:80 ../plugin_dev/metadata.rst:101
 #: ../plugin_dev/metadata.rst:113 ../plugin_dev/metadata.rst:125
-#: ../plugin_dev/metadata.rst:149 ../plugin_dev/metadata.rst:250
-#: ../plugin_dev/metadata.rst:263
+#: ../plugin_dev/metadata.rst:149 ../plugin_dev/metadata.rst:252
+#: ../plugin_dev/metadata.rst:265
 msgid "Value type: str"
 msgstr "字段类型：str"
 
@@ -209,7 +209,7 @@ msgstr "尽量不要使插件名称太长。你可以把插件的详细信息放
 msgid "Field key: ``name``"
 msgstr "字段键名：``name``"
 
-#: ../plugin_dev/metadata.rst:114 ../plugin_dev/metadata.rst:251
+#: ../plugin_dev/metadata.rst:114 ../plugin_dev/metadata.rst:253
 msgid "Fallback value: The plugin id"
 msgstr "备用值：插件 ID"
 
@@ -232,7 +232,7 @@ msgstr "字段键名：``description``"
 
 #: ../plugin_dev/metadata.rst:126 ../plugin_dev/metadata.rst:138
 #: ../plugin_dev/metadata.rst:150 ../plugin_dev/metadata.rst:236
-#: ../plugin_dev/metadata.rst:264 ../plugin_dev/metadata.rst:277
+#: ../plugin_dev/metadata.rst:266 ../plugin_dev/metadata.rst:279
 msgid "Fallback value: None"
 msgstr "备用值：None"
 
@@ -515,16 +515,14 @@ msgstr "字段类型：Dict[str]"
 msgid "entrypoint"
 msgstr "entrypoint"
 
-#: ../plugin_dev/metadata.rst:241 ../plugin_dev/metadata.rst:256
-#: ../plugin_dev/metadata.rst:269
+#: ../plugin_dev/metadata.rst:241 ../plugin_dev/metadata.rst:258
+#: ../plugin_dev/metadata.rst:271
 msgid "**Not available in solo plugin**"
 msgstr "**在单文件插件中不可用**"
 
 #: ../plugin_dev/metadata.rst:243
-msgid ""
-"The entrypoint module for MCDR to import your plugin and do default "
-"registering things"
-msgstr "MCDR 用于导入你的插件以及进行默认注册操作的的入口点模块。"
+msgid "The entrypoint module of your plugin"
+msgstr ""
 
 #: ../plugin_dev/metadata.rst:245
 msgid ""
@@ -543,39 +541,43 @@ msgid ""
 msgstr ""
 
 #: ../plugin_dev/metadata.rst:249
+msgid "See `here <basic.html#entrypoint>`__ for entrypoint document"
+msgstr ""
+
+#: ../plugin_dev/metadata.rst:251
 msgid "Field key: ``entrypoint``"
 msgstr "字段键名：``entrypoint``"
 
-#: ../plugin_dev/metadata.rst:254
+#: ../plugin_dev/metadata.rst:256
 msgid "archive_name"
 msgstr "archive_name"
 
-#: ../plugin_dev/metadata.rst:258
+#: ../plugin_dev/metadata.rst:260
 msgid "The file name of generated ``.mcdr`` packed plugin in CLI"
 msgstr "在 CLI 中生成的 ``.mcdr`` 打包插件的文件名。"
 
-#: ../plugin_dev/metadata.rst:260 ../plugin_dev/metadata.rst:273
+#: ../plugin_dev/metadata.rst:262 ../plugin_dev/metadata.rst:275
 msgid "See `here <TODO>`__ for more information"
 msgstr "见 `此处 <TODO>`__ 以获取更多有关 CLI 的信息。"
 
-#: ../plugin_dev/metadata.rst:262
+#: ../plugin_dev/metadata.rst:264
 msgid "Field key: ``archive_name``"
 msgstr "字段键名：``archive_name``"
 
-#: ../plugin_dev/metadata.rst:267
+#: ../plugin_dev/metadata.rst:269
 msgid "resources"
 msgstr "resources"
 
-#: ../plugin_dev/metadata.rst:271
+#: ../plugin_dev/metadata.rst:273
 msgid ""
 "A list of file or folder names that will be packed into the generated "
 "``.mcdr`` packed plugin file in CLI"
 msgstr "一个文件或文件夹名称的列表，将用于在 CLI 中打包入 ``.mcdr`` 打包插件"
 
-#: ../plugin_dev/metadata.rst:275
+#: ../plugin_dev/metadata.rst:277
 msgid "Field key: ``resources``"
 msgstr "字段键名：``resources``"
 
-#: ../plugin_dev/metadata.rst:276
+#: ../plugin_dev/metadata.rst:278
 msgid "Value type: List[str]"
 msgstr "字段类型：List[str]"

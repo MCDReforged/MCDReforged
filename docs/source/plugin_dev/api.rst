@@ -42,7 +42,7 @@ decorator
 new_thread
 ^^^^^^^^^^
 
-This is a one line solution to make your function executes asynchronously. When decorated with this decorator, functions will be executed in a new daemon thread
+This is a one line solution to make your function executes in parallels. When decorated with this decorator, functions will be executed in a new daemon thread
 
 This decorator only changes the return value of the function to the created ``Thread`` instance. Beside the return value, it reserves all signatures of the decorated function, so you can safely use the decorated function as if there's no decorating at all
 
@@ -88,7 +88,29 @@ In addition to simply and directly use a raw ``@new_thread``, it's recommend to 
 
 So when you logs something by ``server.logger``, a meaningful thread name will be displayed instead of a plain and meaningless ``Thread-3``
 
-**Notes**: Some api methods in ``ServerInterface`` class are required to be invoked in the MCDR task executor thread. Invoking them in another thread might result in an exception
+event_listener
+^^^^^^^^^^^^^^
+
+This decorator is used to register a custom event listener without involving `ServerInterface <classes/ServerInterface.html#register-event-listener>`__
+
+It accepts a single str or PluginEvent indicating the event you are listening to as parameter, and will register the function as the callback of the given listener
+
+It's highly suggested to use this decorator only in the entry point of your plugin so it can work correctly and register the event listener in the correct time
+
+Example:
+
+.. code-block:: python
+
+    @event_listener(MCDRPluginEvents.GENERAL_INFO)
+    def my_on_info(server, info):
+        server.logger.info('on info in my own listener')
+
+Which is equivalent to:
+
+.. code-block:: python
+
+    def on_load(server, old):
+        server.register_event_listener(MCDRPluginEvents.GENERAL_INFO, my_on_info)
 
 event
 -----

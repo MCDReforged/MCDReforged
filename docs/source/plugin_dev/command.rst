@@ -237,6 +237,8 @@ suggests
 
 Set the provider for command suggestions of this node
 
+`Literal <#literal>`__ node does not support this method
+
 Parameter *suggestion*: A callable function which accepts maximum 2 parameters (command source and context) and return a collection of str indicating the current command suggestions
 
 Examples:

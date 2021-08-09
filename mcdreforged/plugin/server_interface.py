@@ -278,11 +278,9 @@ class ServerInterface:
 
 	def get_plugin_instance(self, plugin_id: str) -> Optional[Any]:
 		"""
-		Return the current loaded plugin instance. With this api your plugin can access the same plugin instance to MCDR
-		It's quite important to use this instead of manually import the plugin you want if the target plugin needs to
-		react to events from MCDR
+		Return the entrypoint module instance of the specific plugin, or None if the plugin doesn't exist
 		:param plugin_id: The plugin id of the plugin you want
-		:return: A current loaded plugin instance, or None if the plugin doesn't exist
+		:return: A entrypoint module instance, or None if the plugin doesn't exist
 		"""
 		return self.__existed_plugin_info_getter(plugin_id, lambda plugin: plugin.entry_module_instance, regular=True)
 

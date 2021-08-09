@@ -44,7 +44,7 @@ msgstr "类参考"
 
 #: ../plugin_dev/plugin_dev.rst:4
 msgid "Watchdog"
-msgstr ""
+msgstr "看门狗"
 
 #: ../plugin_dev/plugin_dev.rst:4
 msgid "Some tips"

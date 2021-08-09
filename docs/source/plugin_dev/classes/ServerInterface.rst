@@ -326,9 +326,9 @@ get_plugin_instance
 
     def get_plugin_instance(self, plugin_id: str) -> Optional[Any]
 
-Return the current loaded plugin instance, or None if the plugin doesn't exist. With this api your plugin can access the same plugin instance to MCDR
+Return the `entrypoint <../basic.html#entrypoint>`__ module instance of the specific plugin, or None if the plugin doesn't exist
 
-It's quite important to use this instead of manually import the plugin you want if the target plugin needs to react to events from MCDR
+It's quite important to use this instead of manually import the plugin you want, if the target plugin is a `solo plugin <../plugin_format.html#solo-plugin>`__ and it needs to react to events from MCDR, since it's the only way to make your plugin be able to access the same plugin instance to MCDR
 
 Parameter *plugin_id*: The plugin id of the plugin you want
 
