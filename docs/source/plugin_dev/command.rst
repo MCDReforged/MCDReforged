@@ -82,7 +82,7 @@ then
 
 .. code-block:: python
 
-   def then(self, node: 'ArgumentNode') -> ArgumentNode
+    def then(self, node: 'ArgumentNode') -> ArgumentNode
 
 Attach a child node to its children list, and then return itself
 
@@ -94,32 +94,32 @@ The command tree in the `Quick Peek <#a-quick-peek>`__ section can be built with
 
 .. code-block:: python
 
-   Literal('!!email'). \
-   then(
-       Literal('list')
-   ). \
-   then(
-       Literal('remove').
-       then(
-           Integer('email_id')
-       )
-   ). \
-   then(
-       Literal('send').
-       then(
-           Text('player').
-           then(
-               GreedyText('message')
-           )
-       )
-   )
+    Literal('!!email'). \
+    then(
+        Literal('list')
+    ). \
+    then(
+        Literal('remove').
+        then(
+            Integer('email_id')
+        )
+    ). \
+    then(
+        Literal('send').
+        then(
+            Text('player').
+            then(
+                GreedyText('message')
+            )
+        )
+    )
 
 runs
 ~~~~
 
 .. code-block:: python
 
-   def runs(self, func: Union[Callable[[], Any], Callable[[CommandSource], Any], Callable[[CommandSource, dict], Any]]) -> ArgumentNode
+    def runs(self, func: Union[Callable[[], Any], Callable[[CommandSource], Any], Callable[[CommandSource, dict], Any]]) -> ArgumentNode
 
 Set the callback function of this node. When the command parsing finished at this node, the callback function will be executed
 
@@ -129,20 +129,20 @@ The callback function is allowed to accepted 0 to 2 arguments (a ``CommandSource
 
 .. code-block:: python
 
-   def callback1():
-       pass
+    def callback1():
+        pass
 
-   def callback2(source: CommandSource):
-       pass
+    def callback2(source: CommandSource):
+        pass
 
-   def callback3(source: CommandSource, context: dict):
-       pass
+    def callback3(source: CommandSource, context: dict):
+        pass
 
-   callback4 = lambda src: src.reply('pong')
-   node1.runs(callback1)
-   node2.runs(callback2)
-   node3.runs(callback3)
-   node4.runs(callback4)
+    callback4 = lambda src: src.reply('pong')
+    node1.runs(callback1)
+    node2.runs(callback2)
+    node3.runs(callback3)
+    node4.runs(callback4)
 
 Both of them can be used as the argument of the ``runs`` method
 
@@ -153,7 +153,7 @@ requires
 
 .. code-block:: python
 
-   def requires(self, requirement: Union[Callable[[], bool], Callable[[CommandSource], bool], Callable[[CommandSource, dict], bool]], failure_message_getter: Optional[Union[Callable[[], str], Callable[[CommandSource], str], Callable[[CommandSource, dict], str]]] = None) -> ArgumentNode
+    def requires(self, requirement: Union[Callable[[], bool], Callable[[CommandSource], bool], Callable[[CommandSource, dict], bool]], failure_message_getter: Optional[Union[Callable[[], str], Callable[[CommandSource], str], Callable[[CommandSource, dict], str]]] = None) -> ArgumentNode
 
 Set the requirement tester callback of the node. When entering this node, MCDR will invoke the requirement tester to see if the current command source and context match your specific condition.
 
@@ -169,16 +169,16 @@ Some Example usages:
 
 .. code-block:: python
 
-   node.requires(lambda src: src.has_permission(3))  # Permission check
-   node.requires(lambda src, ctx: ctx['page_count'] <= get_max_page())  # Dynamic range check
-   node.requires(lambda src, ctx: is_legal(ctx['target']), lambda src, ctx: 'target {} is illegal'.format(ctx['target']))  # Customized failure message
+    node.requires(lambda src: src.has_permission(3))  # Permission check
+    node.requires(lambda src, ctx: ctx['page_count'] <= get_max_page())  # Dynamic range check
+    node.requires(lambda src, ctx: is_legal(ctx['target']), lambda src, ctx: 'target {} is illegal'.format(ctx['target']))  # Customized failure message
 
 redirects
 ~~~~~~~~~
 
 .. code-block:: python
 
-   def redirects(self, redirect_node: ArgumentNode) -> ArgumentNode
+    def redirects(self, redirect_node: ArgumentNode) -> ArgumentNode
 
 Redirect all further child nodes command parsing to another given node. When you want a short command and and full-path command that will all execute the same commands, ``redirects`` will make it simpler
 
@@ -188,15 +188,15 @@ Examples:
 
 .. code-block:: python
 
-   command_node = Literal('command'). \
-       then(Literal('x').runs(do_something1)). \
-       then(Literal('y').runs(do_something2)). \
-       then(Literal('z').runs(do_something3))
+    command_node = Literal('command'). \
+        then(Literal('x').runs(do_something1)). \
+        then(Literal('y').runs(do_something2)). \
+        then(Literal('z').runs(do_something3))
 
-   long_node = Literal('a').then(Literal('long').then(Literal('way').then(Literal('to').then(Literal('the').then(command_node)))))
-   short_node = Literal('quick').redirects(command_node)
+    long_node = Literal('a').then(Literal('long').then(Literal('way').then(Literal('to').then(Literal('the').then(command_node)))))
+    short_node = Literal('quick').redirects(command_node)
 
-   root_executor = Literal('foo').then(long_node).then(short_node)
+    root_executor = Literal('foo').then(long_node).then(short_node)
 
 Command starts at *root_executor*
 
@@ -218,8 +218,8 @@ Pay attention to the difference between ``redirects`` and ``then``. ``redirects`
 
 .. code-block:: python
 
-   short_node2 = Literal('fast').then(command_node)
-   root_executor = Literal('foo').then(long_node).then(short_node).then(short_node2)
+    short_node2 = Literal('fast').then(command_node)
+    root_executor = Literal('foo').then(long_node).then(short_node).then(short_node2)
 
 Then all commands which eventually executes ``do_something1`` will be:
 
@@ -233,7 +233,7 @@ on_error
 
 .. code-block:: python
 
-   def on_error(self, error_type: Type[CommandError], handler: Union[Callable[[], Any], Callable[[CommandSource], Any], Callable[[CommandSource, CommandError], Any], Callable[[CommandSource, CommandError, dict], Any]], *, handled: bool = False) -> ArgumentNode
+    def on_error(self, error_type: Type[CommandError], handler: Union[Callable[[], Any], Callable[[CommandSource], Any], Callable[[CommandSource, CommandError], Any], Callable[[CommandSource, CommandError, dict], Any]], *, handled: bool = False) -> ArgumentNode
 
 When a command error occurs, the given will invoke the given handler to handle with the error
 
@@ -250,7 +250,7 @@ on_child_error
 
 .. code-block:: python
 
-   def on_child_error(self, error_type: Type[CommandError], handler: Union[Callable[[], Any], Callable[[CommandSource], Any], Callable[[CommandSource, CommandError], Any], Callable[[CommandSource, CommandError, dict], Any]], *, handled: bool = False) -> ArgumentNode
+    def on_child_error(self, error_type: Type[CommandError], handler: Union[Callable[[], Any], Callable[[CommandSource], Any], Callable[[CommandSource, CommandError], Any], Callable[[CommandSource, CommandError, dict], Any]], *, handled: bool = False) -> ArgumentNode
 
 Similar to `on_error <#on_error>`__, but it gets triggered only when the node receives a command error from one of the node's direct or indirect child
 
@@ -267,10 +267,10 @@ Examples:
 
 .. code-block:: python
 
-   Literal('foo').runs(lambda src: src.reply('Foo!'))  # input "foo", get reply "Foo!"
-   Literal('foo').then(
-       Literal('bar').runs(lambda src: src.reply('Foo Bar'))
-   )  # input "foo bar", get reply "Foo Bar"
+    Literal('foo').runs(lambda src: src.reply('Foo!'))  # input "foo", get reply "Foo!"
+    Literal('foo').then(
+        Literal('bar').runs(lambda src: src.reply('Foo Bar'))
+    )  # input "foo bar", get reply "Foo Bar"
 
 NumberNode
 ^^^^^^^^^^
@@ -286,7 +286,7 @@ at_min
 
 .. code-block:: python
 
-   def at_min(self, min_value) -> NumberNode
+    def at_min(self, min_value) -> NumberNode
 
 Set the lower boundary of the range restriction to *min_value*
 
@@ -295,7 +295,7 @@ at_max
 
 .. code-block:: python
 
-   def at_max(self, max_value) -> NumberNode
+    def at_max(self, max_value) -> NumberNode
 
 Set the higher boundary of the range restriction to *max_value*
 
@@ -304,7 +304,7 @@ in_range
 
 .. code-block:: python
 
-   def in_range(self, min_value, max_value) -> NumberNode
+    def in_range(self, min_value, max_value) -> NumberNode
 
 Set the lower and the higher boundary of the range restriction at the same time
 
@@ -337,7 +337,7 @@ at_min_length
 
 .. code-block:: python
 
-   def at_min_length(self, min_length) -> TextNode
+    def at_min_length(self, min_length) -> TextNode
 
 Set the lower boundary of the length range restriction to *min_length*
 
@@ -346,7 +346,7 @@ at_max_length
 
 .. code-block:: python
 
-   def at_max_length(self, max_length) -> TextNode
+    def at_max_length(self, max_length) -> TextNode
 
 Set the higher boundary of the length range restriction to *max_length*
 
@@ -355,7 +355,7 @@ in_length_range
 
 .. code-block:: python
 
-   def in_length_range(self, min_length, max_length) -> TextNode
+    def in_length_range(self, min_length, max_length) -> TextNode
 
 Set the lower and the higher boundary of the length range restriction at the same time
 
@@ -398,41 +398,41 @@ Here's a quick example of a custom Argument node, ``PointArgument``. It accepts 
 
 .. code-block:: python
 
-   class IllegalPoint(CommandSyntaxError):
-       def __init__(self, char_read: int):
-           super().__init__('Invalid Point', char_read)
+    class IllegalPoint(CommandSyntaxError):
+        def __init__(self, char_read: int):
+            super().__init__('Invalid Point', char_read)
 
 
-   class IncompletePoint(CommandSyntaxError):
-       def __init__(self, char_read: int):
-           super().__init__('Incomplete Point', char_read)
+    class IncompletePoint(CommandSyntaxError):
+        def __init__(self, char_read: int):
+            super().__init__('Incomplete Point', char_read)
 
 
-   class PointArgument(ArgumentNode):
-       def parse(self, text: str) -> ParseResult:
-           total_read = 0
-           coords = []
-           for i in range(3):
-               value, read = command_builder_util.get_float(text[total_read:])
-               if read == 0:
-                   raise IncompletePoint(total_read)
-               total_read += read
-               if value is None:
-                   raise IllegalPoint(total_read)
-               coords.append(value)
-           return ParseResult(coords, total_read)
+    class PointArgument(ArgumentNode):
+        def parse(self, text: str) -> ParseResult:
+            total_read = 0
+            coords = []
+            for i in range(3):
+                value, read = command_builder_util.get_float(text[total_read:])
+                if read == 0:
+                    raise IncompletePoint(total_read)
+                total_read += read
+                if value is None:
+                    raise IllegalPoint(total_read)
+                coords.append(value)
+            return ParseResult(coords, total_read)
 
 For its usage, here's a simple example as well as an input/output table:
 
 .. code-block:: python
 
-   def on_load(server, prev):
-       server.register_command(
-           Literal('!!mypoint').then(
-               PointArgument('pt').
-               runs(lambda src, ctx: src.reply('You have input a point ({}, {}, {})'.format(*ctx['pt'])))
-           )
-       )
+    def on_load(server, prev):
+        server.register_command(
+            Literal('!!mypoint').then(
+                PointArgument('pt').
+                runs(lambda src, ctx: src.reply('You have input a point ({}, {}, {})'.format(*ctx['pt'])))
+            )
+        )
 
 .. list-table::
    :header-rows: 1

@@ -106,7 +106,7 @@ get_server
 
 .. code-block:: python
 
-   def get_server(self) -> ServerInterface
+    def get_server(self) -> ServerInterface
 
 Return the server interface instance
 

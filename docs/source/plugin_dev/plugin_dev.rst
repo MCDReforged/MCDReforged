@@ -5,6 +5,7 @@ Plugin Development
    :maxdepth: 2
 
    Basic<basic.rst>
+   Metadata<metadata.rst>
    Plugin Format<plugin_format.rst>
    Plugin Event<event.rst>
    Command<command.rst>

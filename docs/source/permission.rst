@@ -51,15 +51,15 @@ Player name list of permission levels can be filled like this:
 
 .. code-block:: yaml
 
-   owner:
-   - Notch
-   admin:
-   - Dinnerbone
-   helper:
-   - Steve
-   - Alex
-   user:
-   guest:
-   - Noob
+    owner:
+    - Notch
+    admin:
+    - Dinnerbone
+    helper:
+    - Steve
+    - Alex
+    user:
+    guest:
+    - Noob
 
 Permission file supports hot-reload. You can use ``!!MCDR reload permission`` to reload the permission file in-game. Check the `here <command.html#hot-reloads>`__ for more detail about hot reloads

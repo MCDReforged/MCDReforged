@@ -29,7 +29,7 @@ start
 
 .. code-block:: python
 
-   def start(self) -> bool
+    def start(self) -> bool
 
 Start the server. Return if the action succeed.
 
@@ -40,7 +40,7 @@ stop
 
 .. code-block:: python
 
-   def stop(self) -> None
+    def stop(self) -> None
 
 Soft shutting down the server by sending the correct stop command to the server
 
@@ -51,7 +51,7 @@ wait_for_start
 
 .. code-block:: python
 
-   def wait_for_start(self) -> None
+    def wait_for_start(self) -> None
 
 Wait until the server is able to start. In other words, wait until the server is stopped
 
@@ -60,7 +60,7 @@ restart
 
 .. code-block:: python
 
-   def restart(self) -> None
+    def restart(self) -> None
 
 Restart the server
 
@@ -71,7 +71,7 @@ stop_exit
 
 .. code-block:: python
 
-   def stop_exit(self) -> None
+    def stop_exit(self) -> None
 
 Soft stop the server and exit MCDR
 
@@ -80,7 +80,7 @@ exit
 
 .. code-block:: python
 
-   def exit(self) -> None
+    def exit(self) -> None
 
 Exit MCDR when the server is stopped
 
@@ -90,18 +90,18 @@ Example usage:
 
 .. code-block:: python
 
-    server.stop()  # Stop the server
-    # do something A
-    server.wait_for_start()  # Make sure the server is fully stopped. It's necessary to run it in your custom thread
-    # do something B
-    server.exit()  # Exit MCDR
+     server.stop()  # Stop the server
+     # do something A
+     server.wait_for_start()  # Make sure the server is fully stopped. It's necessary to run it in your custom thread
+     # do something B
+     server.exit()  # Exit MCDR
 
 is_server_running
 ~~~~~~~~~~~~~~~~~
 
 .. code-block:: python
 
-   def is_server_running(self) -> bool
+    def is_server_running(self) -> bool
 
 Return if the server is running
 
@@ -110,7 +110,7 @@ is_server_startup
 
 .. code-block:: python
 
-   def is_server_startup(self) -> bool
+    def is_server_startup(self) -> bool
 
 Return if the server has started up
 
@@ -119,7 +119,7 @@ is_rcon_running
 
 .. code-block:: python
 
-   def is_rcon_running(self) -> bool
+    def is_rcon_running(self) -> bool
 
 Return if MCDR's rcon is running
 
@@ -128,7 +128,7 @@ get_server_pid
 
 .. code-block:: python
 
-   def get_server_pid(self) -> Optional[int]
+    def get_server_pid(self) -> Optional[int]
 
 Return the pid of the server process, None if the server is stopped
 
@@ -142,7 +142,7 @@ execute
 
 .. code-block:: python
 
-   def execute(self, text: str, *, encoding: Optional[str] = None) -> None
+    def execute(self, text: str, *, encoding: Optional[str] = None) -> None
 
 Execute a command by sending the command content to server's standard input stream
 
@@ -155,7 +155,7 @@ tell
 
 .. code-block:: python
 
-   def tell(self, player: str, text: Union[str, RTextBase], *, encoding: Optional[str] = None) -> None
+    def tell(self, player: str, text: Union[str, RTextBase], *, encoding: Optional[str] = None) -> None
 
 Use command like ``/tellraw`` to send the message to the specific player
 
@@ -170,7 +170,7 @@ say
 
 .. code-block:: python
 
-   def say(self, text: Union[str, RTextBase], *, encoding: Optional[str] = None) -> None
+    def say(self, text: Union[str, RTextBase], *, encoding: Optional[str] = None) -> None
 
 Use command like ``/tellraw @a`` to send the message to broadcast the message in game
 
@@ -183,7 +183,7 @@ broadcast
 
 .. code-block:: python
 
-   def broadcast(self, text: Union[str, RTextBase], *, encoding: Optional[str] = None) -> None
+    def broadcast(self, text: Union[str, RTextBase], *, encoding: Optional[str] = None) -> None
 
 Broadcast the message in game and to the console
 
@@ -196,7 +196,7 @@ reply
 
 .. code-block:: python
 
-   def reply(self, info: Info, text: Union[str, RTextBase], *, encoding: Optional[str] = None, console_text: Optional[Union[str, RTextBase]] = None)
+    def reply(self, info: Info, text: Union[str, RTextBase], *, encoding: Optional[str] = None, console_text: Optional[Union[str, RTextBase]] = None)
 
 Reply to the source of the Info
 
@@ -220,7 +220,7 @@ load_plugin
 
 .. code-block:: python
 
-   def load_plugin(self, plugin_file_path: str) -> bool
+    def load_plugin(self, plugin_file_path: str) -> bool
 
 Load a plugin from the given file path. Return if the plugin gets loaded successfully
 
@@ -231,7 +231,7 @@ enable_plugin
 
 .. code-block:: python
 
-   def enable_plugin(self, plugin_file_path: str) -> bool
+    def enable_plugin(self, plugin_file_path: str) -> bool
 
 Enable an unloaded plugin from the given path. Return if the plugin gets enabled successfully
 
@@ -242,7 +242,7 @@ reload_plugin
 
 .. code-block:: python
 
-   def reload_plugin(self, plugin_id: str) -> Optional[bool]
+    def reload_plugin(self, plugin_id: str) -> Optional[bool]
 
 Reload a plugin specified by plugin id. Return a bool indicating if the plugin gets reloaded successfully, or None if plugin not found
 
@@ -253,7 +253,7 @@ unload_plugin
 
 .. code-block:: python
 
-   def unload_plugin(self, plugin_id: str) -> Optional[bool]
+    def unload_plugin(self, plugin_id: str) -> Optional[bool]
 
 Unload a plugin specified by plugin id. Return a bool indicating if the plugin gets unloaded successfully, or None if plugin not found
 
@@ -264,7 +264,7 @@ disable_plugin
 
 .. code-block:: python
 
-   def disable_plugin(self, plugin_id: str) -> Optional[bool]
+    def disable_plugin(self, plugin_id: str) -> Optional[bool]
 
 Disable a plugin specified by plugin id. Return a bool indicating if the plugin gets disabled successfully, or None if plugin not found
 
@@ -275,7 +275,7 @@ refresh_all_plugins
 
 .. code-block:: python
 
-   def refresh_all_plugins(self) -> None
+    def refresh_all_plugins(self) -> None
 
 Reload all plugins, load all new plugins and then unload all removed plugins
 
@@ -284,7 +284,7 @@ refresh_changed_plugins
 
 .. code-block:: python
 
-   def refresh_all_plugins(self) -> None
+    def refresh_all_plugins(self) -> None
 
 Reload all changed plugins, load all new plugins and then unload all removed plugins
 
@@ -293,7 +293,7 @@ get_plugin_list
 
 .. code-block:: python
 
-   def get_plugin_list(self) -> List[str]
+    def get_plugin_list(self) -> List[str]
 
 Return a list containing all loaded plugin id like ["my_plugin", "another_plugin"]
 
@@ -302,7 +302,7 @@ get_plugin_metadata
 
 .. code-block:: python
 
-   def get_plugin_metadata(self, plugin_id: str) -> Optional[Metadata]
+    def get_plugin_metadata(self, plugin_id: str) -> Optional[Metadata]
 
 Return the metadata of the specified plugin, or None if the plugin doesn't exist
 
@@ -313,7 +313,7 @@ get_plugin_file_path
 
 .. code-block:: python
 
-   def get_plugin_file_path(self, plugin_id: str) -> Optional[str]
+    def get_plugin_file_path(self, plugin_id: str) -> Optional[str]
 
 Return the file path of the specified plugin, or None if the plugin doesn't exist
 
@@ -324,7 +324,7 @@ get_plugin_instance
 
 .. code-block:: python
 
-   def get_plugin_instance(self, plugin_id: str) -> Optional[Any]
+    def get_plugin_instance(self, plugin_id: str) -> Optional[Any]
 
 Return the current loaded plugin instance, or None if the plugin doesn't exist. With this api your plugin can access the same plugin instance to MCDR
 
@@ -336,14 +336,14 @@ Example:
 
 .. code-block:: python
 
-   # My API plugin with id my_api
-   def info_query_api(item):
-       pass
+    # My API plugin with id my_api
+    def info_query_api(item):
+        pass
 
 .. code-block:: python
 
-   # Another plugin that needs My API
-   server.get_plugin_instance('my_api').info_query_api(an_item)
+    # Another plugin that needs My API
+    server.get_plugin_instance('my_api').info_query_api(an_item)
 
 Plugin Registry
 ^^^^^^^^^^^^^^^
@@ -353,7 +353,7 @@ register_event_listener
 
 .. code-block:: python
 
-   def register_event_listener(self, event: Union[PluginEvent, str], callback: Callable, priority: int = 1000) -> None
+    def register_event_listener(self, event: Union[PluginEvent, str], callback: Callable, priority: int = 1000) -> None
 
 Register an event listener for the current plugin
 
@@ -370,7 +370,7 @@ register_command
 
 .. code-block:: python
 
-   def register_command(self, root_node: Literal) -> None
+    def register_command(self, root_node: Literal) -> None
 
 Register an event listener for the current plugin
 
@@ -383,7 +383,7 @@ register_help_message
 
 .. code-block:: python
 
-   def register_help_message(self, prefix: str, message: Union[str, RTextBase], permission: int = PermissionLevel.MINIMUM_LEVEL) -> None
+    def register_help_message(self, prefix: str, message: Union[str, RTextBase], permission: int = PermissionLevel.MINIMUM_LEVEL) -> None
 
 Register a help message for the current plugin, which is used in !!help command
 
@@ -400,7 +400,7 @@ dispatch_event
 
 .. code-block:: python
 
-   def dispatch_event(self, event: PluginEvent, args: Tuple[Any, ...]) -> None
+    def dispatch_event(self, event: PluginEvent, args: Tuple[Any, ...]) -> None
 
 Dispatch an event to all loaded plugins
 
@@ -420,16 +420,16 @@ For the event dispatcher plugin
 
 .. code-block:: python
 
-    server.dispatch_event(LiteralEvent('my_plugin.my_event'), (1, 'a'))
+     server.dispatch_event(LiteralEvent('my_plugin.my_event'), (1, 'a'))
 
 In the event listener plugin
 
 .. code-block:: python
 
-    def do_something(server: ServerInterface, int_data: int, str_data: str):
-        pass
+     def do_something(server: ServerInterface, int_data: int, str_data: str):
+         pass
 
-    server.register_event_listener('my_plugin.my_event', do_something)
+     server.register_event_listener('my_plugin.my_event', do_something)
 
 Plugin Utils
 ^^^^^^^^^^^^
@@ -439,7 +439,7 @@ get_data_folder
 
 .. code-block:: python
 
-    def get_data_folder(self) -> str
+     def get_data_folder(self) -> str
 
 Return a unified data directory path for the current plugin
 
@@ -457,7 +457,7 @@ get_permission_level
 
 .. code-block:: python
 
-   def get_permission_level(self, obj: Union[str, Info, CommandSource]) -> int
+    def get_permission_level(self, obj: Union[str, Info, CommandSource]) -> int
 
 Return an int indicating permission level number the given object has
 
@@ -472,7 +472,7 @@ set_permission_level
 
 .. code-block:: python
 
-   def set_permission_level(self, player: str, value: Union[int, str]) -> None
+    def set_permission_level(self, player: str, value: Union[int, str]) -> None
 
 Set the permission level of the given player. It raises ``TypeError`` if the value parameter doesn't proper represent a permission level
 
@@ -488,7 +488,7 @@ get_plugin_command_source
 
 .. code-block:: python
 
-   get_plugin_command_source(self) -> PluginCommandSource
+    get_plugin_command_source(self) -> PluginCommandSource
 
 Return a simple plugin command source for e.g. command execution
 
@@ -499,7 +499,7 @@ execute_command
 
 .. code-block:: python
 
-   def execute_command(self, command: str, source: CommandSource = None) -> None
+    def execute_command(self, command: str, source: CommandSource = None) -> None
 
 Execute a single command using the command system of MCDR
 
@@ -515,7 +515,7 @@ is_on_executor_thread
 
 .. code-block:: python
 
-   def is_on_executor_thread(self) -> bool
+    def is_on_executor_thread(self) -> bool
 
 Return if the current thread is the task executor thread
 
@@ -526,7 +526,7 @@ rcon_query
 
 .. code-block:: python
 
-   def rcon_query(self, command: str) -> Optional[str]
+    def rcon_query(self, command: str) -> Optional[str]
 
 Send command to the server through rcon connection. Return the result that server returned from rcon. Return None if rcon is not running or rcon query failed
 

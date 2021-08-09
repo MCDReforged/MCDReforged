@@ -45,10 +45,10 @@ For example, the following codes with the given files structure won't work in MC
 
 .. code-block:: python
 
-   # my_plugin.py
-   from my_lib import do_something
+    # my_plugin.py
+    from my_lib import do_something
 
-   do_something()
+    do_something()
 
 To resolve this issue, you can reorganize your plugin file structure into the `Packed Plugin <../plugin_dev/plugin_format.html#packed-plugin>`__ format and insert your lib your packed plugin
 

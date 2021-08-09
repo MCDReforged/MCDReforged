@@ -80,13 +80,13 @@ In MCDR 0.x the player joined event listener accepts 2 or 3 arguments. Both of t
 
 .. code-block:: python
 
-   def on_player_joined(server: ServerInterface, player: str):
-       pass
+    def on_player_joined(server: ServerInterface, player: str):
+        pass
 
 .. code-block:: python
 
-   def on_player_joined(server: ServerInterface, player: str, info: Info):
-       pass
+    def on_player_joined(server: ServerInterface, player: str, info: Info):
+        pass
 
 However, the former usage is removed in current MCDR version, only the latter one with 3 arguments is accepted
 
@@ -105,19 +105,19 @@ MCDR also provides a simple function decorator ``new_thread`` for lazy man, to m
 
 .. code-block:: python
 
-   from mcdreforged.api.decorator import *
+    from mcdreforged.api.decorator import *
 
-   # undecorated function
-   def my_slow_method1():
-       time.sleep(10)
+    # undecorated function
+    def my_slow_method1():
+        time.sleep(10)
 
-   @new_thread  # decorated function, will run at a new thread
-   def my_slow_method2():
-       time.sleep(10)
+    @new_thread  # decorated function, will run at a new thread
+    def my_slow_method2():
+        time.sleep(10)
 
-   @new_thread('MyThread')  # specify the thread name
-   def my_slow_method3():
-       time.sleep(10)
+    @new_thread('MyThread')  # specify the thread name
+    def my_slow_method3():
+        time.sleep(10)
 
 With the ``@new_thread`` decorator, everytime when you invoke ``my_slow_method2``\ , a new daemon thread will be started to executed it. For more details about the ``@new_thread`` decorator, check `here <plugin_dev/api.html#new-thread>`__
 

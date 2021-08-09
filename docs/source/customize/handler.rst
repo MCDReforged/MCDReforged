@@ -26,22 +26,22 @@ For example, the following codes above creates a handler than is able to handle 
 
 .. code-block:: python
 
-   from parse import parse
+    from parse import parse
 
-   from mcdreforged.handler.impl import VanillaHandler
+    from mcdreforged.handler.impl import VanillaHandler
 
 
-   class MyHandler(VanillaHandler):
-       def get_name(self) -> str:
-           return 'the_handler_for_my_server'
+    class MyHandler(VanillaHandler):
+        def get_name(self) -> str:
+            return 'the_handler_for_my_server'
 
-       def parse_server_stdout(self, text: str):
-           result = super().parse_server_stdout(text)
-           if result.player is None:
-               parsed = parse('<[{prefix}]{name}> {message}', result.content)
-               if parsed is not None and self._verify_player_name(parsed['name']):
-                   result.player, result.content = parsed['name'], parsed['message']
-           return result
+        def parse_server_stdout(self, text: str):
+            result = super().parse_server_stdout(text)
+            if result.player is None:
+                parsed = parse('<[{prefix}]{name}> {message}', result.content)
+                if parsed is not None and self._verify_player_name(parsed['name']):
+                    result.player, result.content = parsed['name'], parsed['message']
+            return result
 
 And then you are able to use this handler to handle the server. You need to do the following things in the configure file
 

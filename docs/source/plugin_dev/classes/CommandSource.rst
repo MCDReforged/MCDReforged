@@ -62,7 +62,7 @@ get_server
 
 .. code-block:: python
 
-   def get_server(self) -> ServerInterface
+    def get_server(self) -> ServerInterface
 
 Return the server interface instance
 
@@ -71,7 +71,7 @@ get_info
 
 .. code-block:: python
 
-   def get_info(self) -> Info
+    def get_info(self) -> Info
 
 **Only in InfoCommandSource**
 
@@ -84,7 +84,7 @@ get_permission_level
 
 .. code-block:: python
 
-   def get_permission_level(self) -> int
+    def get_permission_level(self) -> int
 
 Return the permission level representing by an int that the command source has
 
@@ -93,8 +93,8 @@ has_permission
 
 .. code-block:: python
 
-   def has_permission(self, level: int) -> bool:
-       return self.get_permission_level() >= level
+    def has_permission(self, level: int) -> bool:
+        return self.get_permission_level() >= level
 
 Return if the command source has not less level than the given permission level
 
@@ -103,8 +103,8 @@ has_permission_higher_than
 
 .. code-block:: python
 
-   def has_permission_higher_than(self, level: int) -> bool:
-       return self.get_permission_level() > level
+    def has_permission_higher_than(self, level: int) -> bool:
+        return self.get_permission_level() > level
 
 Just like the `has_permission <#has-permission>`__, but this time it is a greater than judgment
 
@@ -113,7 +113,7 @@ reply
 
 .. code-block:: python
 
-   def reply(self, message: Any, **kwargs) -> None
+    def reply(self, message: Any, **kwargs) -> None
 
 Send a message to the command source. The message can be anything including RTexts
 

@@ -33,21 +33,21 @@ Plugin load event gets triggered once when a plugin is loaded. Plugins are suppo
 
 .. code-block:: python
 
-   def on_load(server: ServerInterface, prev_module):
-       server.register_command(...)
-       server.register_event_listener(...)
-       server.register_help_message(...)
+    def on_load(server: ServerInterface, prev_module):
+        server.register_command(...)
+        server.register_event_listener(...)
+        server.register_help_message(...)
 
 If it's a plugin reload, ``prev_module`` argument indicates the previous plugin instance module, otherwise if it's the first time to load the plugin, prev_module is None. With this parameter plugin can easily inherit information from the previous plugin instance. Here's an example:
 
 .. code-block:: python
 
-   def on_load(server: ServerInterface, prev_module):
-       global reload_counter
-       if prev_module is not None:
-           reload_counter = prev_module.reload_counter + 1
-       else:
-           reload_counter = 0
+    def on_load(server: ServerInterface, prev_module):
+        global reload_counter
+        if prev_module is not None:
+            reload_counter = prev_module.reload_counter + 1
+        else:
+            reload_counter = 0
 
 Since it's the first event in the lifecycle of a plugin, this event can only be registered with default event listener, so the ``on_load`` function is the entry spot of your plugin
 
@@ -78,9 +78,9 @@ Here's an example
 
 .. code-block:: python
 
-   def on_info(server: ServerInterface, info: Info):
-       if not info.is_user and re.fullmatch(r'Starting Minecraft server on \S*', info.content):
-           server.logger.info('Minecraft is starting at address {}'.format(info.content.rsplit(' ', 1)[1]))
+    def on_info(server: ServerInterface, info: Info):
+        if not info.is_user and re.fullmatch(r'Starting Minecraft server on \S*', info.content):
+            server.logger.info('Minecraft is starting at address {}'.format(info.content.rsplit(' ', 1)[1]))
 
 
 * Event id: mcdr.general_info
@@ -98,10 +98,10 @@ Here's an example
 
 .. code-block:: python
 
-   def on_user_info(server: ServerInterface, info: Info):
-       if info.content == 'Restart the server!':
-           server.reply(info, 'Roger that. Server restarting...')
-           server.restart()
+    def on_user_info(server: ServerInterface, info: Info):
+        if info.content == 'Restart the server!':
+            server.reply(info, 'Roger that. Server restarting...')
+            server.restart()
 
 If you want to have a not-simple command system, rather than parsing them manually in User Info event, I will suggest you to register a command tree for you plugin. See the `command registering <basic.html#command>`__ doc
 
@@ -141,9 +141,9 @@ Example:
 
 .. code-block:: python
 
-   def on_server_stop(server: ServerInterface, server_return_code: int):
-       if server_return_code != 0:
-           server.logger.info('Is it a server crash?')
+    def on_server_stop(server: ServerInterface, server_return_code: int):
+        if server_return_code != 0:
+            server.logger.info('Is it a server crash?')
 
 
 * Event id: mcdr.server_stop
@@ -183,8 +183,8 @@ Example:
 
 .. code-block:: python
 
-   def on_player_joined(server: ServerInterface, player: str, info: Info):
-       server.say('Welcome {}'.format(player))
+    def on_player_joined(server: ServerInterface, player: str, info: Info):
+        server.say('Welcome {}'.format(player))
 
 
 * Event id: mcdr.player_joined

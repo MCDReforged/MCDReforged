@@ -16,13 +16,13 @@ MCDR is available in `pypi <https://pypi.org/project/mcdreforged>`__. It can be 
 
 .. code-block:: bash
 
-   pip install mcdreforged
+    pip install mcdreforged
 
 For Chinese users, you can added a ``-i https://pypi.tuna.tsinghua.edu.cn/simple`` prefix to the command to use `Tsinghua tuna mirror <https://mirrors.tuna.tsinghua.edu.cn/help/pypi/>`__ to speed up the installation
 
 .. code-block:: bash
 
-   pip install mcdreforged -i https://pypi.tuna.tsinghua.edu.cn/simple
+    pip install mcdreforged -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 Start up
 --------
@@ -31,8 +31,8 @@ Let's say your are going to start MCDR in a folder named ``my_mcdr_server``. The
 
 .. code-block:: bash
 
-   cd my_mcdr_server
-   python -m mcdreforged
+    cd my_mcdr_server
+    python -m mcdreforged
 
 At the first run, MCDR will generated the default configure and permission files, as well as some default folders. The file structure will be like this
 
@@ -51,7 +51,7 @@ Now put your server files into the server folder (``server`` by default), then m
 
 .. code-block:: bash
 
-   python -m mcdreforged
+    python -m mcdreforged
 
 Upgrade
 -------
@@ -60,7 +60,7 @@ With the help of `pypi <https://pypi.org/project/mcdreforged/>`__, MCDR can be e
 
 .. code-block:: bash
 
-   pip install mcdreforged --upgrade
+    pip install mcdreforged --upgrade
 
 That's it! 
 
@@ -68,7 +68,7 @@ For Chinese users, you can use tuna mirror to speed up the upgrading too
 
 .. code-block:: bash
 
-   pip install mcdreforged --upgrade -i https://pypi.tuna.tsinghua.edu.cn/simple
+    pip install mcdreforged --upgrade -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 Development builds are available in `Test PyPi <https://test.pypi.org/project/mcdreforged/#history>`__, you can install them if you have special needs
 
@@ -91,24 +91,24 @@ Then you can start MCDR with the same command as above
 
 .. code-block:: bash
 
-   python -m mcdreforged
+    python -m mcdreforged
 
 Alternatively you can execute ``MCDReforged.py`` with python to start MCDR
 
 .. code-block:: bash
 
-   python MCDReforged.py
+    python MCDReforged.py
 
 ``MCDReforged.py`` is just a simple wrapper for launching MCDR with the following codes
 
 .. code-block:: python
 
-   import sys
+    import sys
 
-   from mcdreforged.__main__ import main
+    from mcdreforged.__main__ import main
 
-   if __name__ == '__main__':
-       sys.exit(main())
+    if __name__ == '__main__':
+        sys.exit(main())
 
 ``MCDReforged.py`` also works for MCDR installed by ``pip`` command
 

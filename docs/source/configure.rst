@@ -117,18 +117,18 @@ MCDR also **adds these directories into** ``sys.path`` so plugins can import pac
 
 .. code-block:: yaml
 
-   plugin_directories:
-   - plugins
+    plugin_directories:
+    - plugins
 
 
 * Example:
 
 .. code-block:: yaml
 
-   plugin_directories:
-   - plugins
-   - path/to/my/plugin/directory
-   - another/plugin/directory
+    plugin_directories:
+    - plugins
+    - path/to/my/plugin/directory
+    - another/plugin/directory
 
 rcon
 ~~~~
@@ -231,15 +231,15 @@ The name of a handler is defined in the get_name method
 
 .. code-block:: yaml
 
-   custom_handlers:
+    custom_handlers:
 
 
 * Example:
 
 .. code-block:: yaml
 
-   custom_handlers:
-   - my.customize.handler.MyHandler
+    custom_handlers:
+    - my.customize.handler.MyHandler
 
 In this example the custom handler package path is ``my.custom.handler`` and the class is name ``MyHandler``
 
@@ -256,15 +256,15 @@ All custom info reactors will be registered to the reactor list to process infor
 
 .. code-block:: yaml
 
-   custom_info_reactors:
+    custom_info_reactors:
 
 
 * Example:
 
 .. code-block:: yaml
 
-   custom_info_reactors:
-   - my.customize.reactor.MyInfoReactor
+    custom_info_reactors:
+    - my.customize.reactor.MyInfoReactor
 
 In this example the custom reactor package path is ``my.custom.reactor`` and the class name is ``MyInfoReactor``
 
@@ -278,11 +278,11 @@ Debug logging switches. Set ``all`` to true to enable all debug logging, or set 
 
 .. code-block:: yaml
 
-   debug:
-     all: false
-     mcdr: false
-     handler: false
-     reactor: false
-     plugin: false
-     permission: false
-     command: false
+    debug:
+      all: false
+      mcdr: false
+      handler: false
+      reactor: false
+      plugin: false
+      permission: false
+      command: false

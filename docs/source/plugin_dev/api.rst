@@ -11,7 +11,7 @@ all
 
 .. code-block:: python
 
-   from mcdreforged.api.all import *
+    from mcdreforged.api.all import *
 
 This is the simplest way to import everything you want for plugin development. It's a life saver for lazy man
 
@@ -26,13 +26,13 @@ For example, if you want the class ``Literal`` and ``IllegalArgument`` for build
 
 .. code-block:: python
 
-   from mcdreforged.api.command import Literal, IllegalArgument
+    from mcdreforged.api.command import Literal, IllegalArgument
 
 Of course if you are lazy enough you can just
 
 .. code-block:: python
 
-   from mcdreforged.api.command import *
+    from mcdreforged.api.command import *
 
 decorator
 ---------
@@ -52,22 +52,22 @@ Example:
 
 .. code-block:: python
 
-   from mcdreforged.api.decorator import new_thread
+    from mcdreforged.api.decorator import new_thread
 
-   def do_something1(text: str):
-       print(text)
-       time.sleep(5)
-       return text
+    def do_something1(text: str):
+        print(text)
+        time.sleep(5)
+        return text
 
-   @new_thread
-   def do_something2(text: str):
-       print(text)
-       time.sleep(5)
-       return text
+    @new_thread
+    def do_something2(text: str):
+        print(text)
+        time.sleep(5)
+        return text
 
-   def on_info(server, info):
-       # do_something1('hello')
-       do_something2('there')
+    def on_info(server, info):
+        # do_something1('hello')
+        do_something2('there')
 
 The only difference between ``do_something1`` and ``do_something2`` is that ``do_something2`` is decorated by ``@new_thread``. So when executing ``do_something2``, it won't lag the following execution of MCDR like ``do_something1`` since ``do_something2`` will execute on another thread
 
@@ -75,16 +75,16 @@ If you want to wait for the decorated function to complete, you can simple use t
 
 .. code-block:: python
 
-   do_something2('task').join()
+    do_something2('task').join()
 
 In addition to simply and directly use a raw ``@new_thread``, it's recommend to add a thread name argument for the decorator
 
 .. code-block:: python
 
-   @new_thread('My Plugin Thread')
-   def do_something3(text: str):
-       print(threading.current_thread().getName())  # will be "My Plugin Thread"
-       time.sleep(10)
+    @new_thread('My Plugin Thread')
+    def do_something3(text: str):
+        print(threading.current_thread().getName())  # will be "My Plugin Thread"
+        time.sleep(10)
 
 So when you logs something by ``server.logger``, a meaningful thread name will be displayed instead of a plain and meaningless ``Thread-3``
 
@@ -113,7 +113,7 @@ RconConnection
 
 .. code-block:: python
 
-   def __init__(self, address: str, port: int, password: str, *, logger: Optional[Logger] = None)
+    def __init__(self, address: str, port: int, password: str, *, logger: Optional[Logger] = None)
 
 Create a rcon client instance
 
@@ -130,7 +130,7 @@ connect
 
 .. code-block:: python
 
-   def connect(self) -> bool
+    def connect(self) -> bool
 
 Start a connection to the rcon server and tries to login. If login success it will return ``True``, otherwise ``False``
 
@@ -139,7 +139,7 @@ disconnect
 
 .. code-block:: python
 
-   def disconnect(self)
+    def disconnect(self)
 
 Disconnect from the server
 
@@ -148,7 +148,7 @@ send_command
 
 .. code-block:: python
 
-   def send_command(self, command: str, max_retry_time: int = 3) -> Optional[str]
+    def send_command(self, command: str, max_retry_time: int = 3) -> Optional[str]
 
 Send  command to the rcon server, and return the command execution result form the server
 
@@ -223,7 +223,7 @@ to_json_object
 
 .. code-block:: python
 
-   def to_json_object(self)
+    def to_json_object(self)
 
 Abstract method
 
@@ -234,7 +234,7 @@ to_json_str
 
 .. code-block:: python
 
-   def to_json_str(self) -> str
+    def to_json_str(self) -> str
 
 Return a json formatted str representing it's data. It can be used as the second parameter in command ``/tellraw <target> <message>`` and more
 
@@ -243,7 +243,7 @@ to_plain_text
 
 .. code-block:: python
 
-   def to_plain_text(self) -> str
+    def to_plain_text(self) -> str
 
 Abstract method
 
@@ -254,7 +254,7 @@ copy
 
 .. code-block:: python
 
-   def copy(self) -> RTextBase
+    def copy(self) -> RTextBase
 
 Abstract method
 
@@ -265,7 +265,7 @@ set_color
 
 .. code-block:: python
 
-   def set_color(self, color: RColor) -> RTextBase
+    def set_color(self, color: RColor) -> RTextBase
 
 Abstract method
 
@@ -276,7 +276,7 @@ set_styles
 
 .. code-block:: python
 
-   def set_styles(self, styles: Union[RStyle, Iterable[RStyle]]) -> RTextBase
+    def set_styles(self, styles: Union[RStyle, Iterable[RStyle]]) -> RTextBase
 
 Abstract method
 
@@ -287,7 +287,7 @@ set_click_event
 
 .. code-block:: python
 
-   def set_click_event(self, action: RAction, value: str) -> RTextBase
+    def set_click_event(self, action: RAction, value: str) -> RTextBase
 
 Set the click event with given *action* and *value* and return the text component itself
 
@@ -302,7 +302,7 @@ set_hover_text
 
 .. code-block:: python
 
-   def set_hover_text(self, *args) -> RTextBase
+    def set_hover_text(self, *args) -> RTextBase
 
 Set the hover text with given *\*args* and return the text component itself
 
@@ -317,7 +317,7 @@ The regular text component class
 
 .. code-block:: python
 
-   def __init__(self, text, color: Optional[RColor] = None, styles: Optional[Union[RStyle, Iterable[RStyle]]] = None)
+    def __init__(self, text, color: Optional[RColor] = None, styles: Optional[Union[RStyle, Iterable[RStyle]]] = None)
 
 Create an ``RText`` object with specific text, color and style. ``styles`` can be a ``RStyle`` or a collection of ``RStyle``
 
@@ -331,7 +331,7 @@ RTextTranslation
 
 .. code-block:: python
 
-   def __init__(self, translation_key, color: RColor = RColor.reset, styles: Optional[Union[RStyle, Iterable[RStyle]]] = None)
+    def __init__(self, translation_key, color: RColor = RColor.reset, styles: Optional[Union[RStyle, Iterable[RStyle]]] = None)
 
 Create a RTextTranslation object with specific translation_key. The rest of the parameters are the same to ``RText``
 
@@ -347,7 +347,7 @@ RTextList
 
 .. code-block:: python
 
-   def __init__(self, *args)
+    def __init__(self, *args)
 
 Use the given *\*args* to create a ``RTextList``
 
@@ -358,7 +358,7 @@ append
 
 .. code-block:: python
 
-   def append(self, *args) -> RTextList
+    def append(self, *args) -> RTextList
 
 Add several elements to the end of the current ``RTextList``, then return the ``RTextList`` component itself
 
@@ -369,7 +369,7 @@ is_empty
 
 .. code-block:: python
 
-   def is_empty(self) -> bool
+    def is_empty(self) -> bool
 
 Return a bool indicating if the ``RTextList`` is empty. In other words, has no child element
 
@@ -380,8 +380,8 @@ Who doesn't want a complete type checking to help you reduce silly mistakes etc.
 
 .. code-block:: python
 
-   from mcdreforged.api.types import ServerInterface, Info
+    from mcdreforged.api.types import ServerInterface, Info
 
-   def on_info(server: ServerInterface, info: Info):
-       # Now auto completion for server and info parameters should be available for IDE
-       pass
+    def on_info(server: ServerInterface, info: Info):
+        # Now auto completion for server and info parameters should be available for IDE
+        pass

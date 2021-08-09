@@ -12,7 +12,7 @@ get_parsed_command
 
 .. code-block:: python
 
-   def get_parsed_command(self) -> str
+    def get_parsed_command(self) -> str
 
 Return a prefix of the input command that has been successfully parsed
 
@@ -21,7 +21,7 @@ get_failed_command
 
 .. code-block:: python
 
-   def get_failed_command(self) -> str:
+    def get_failed_command(self) -> str:
 
 Return a prefix of the input command that is parsing when the failure occurs
 
@@ -30,6 +30,6 @@ set_handled
 
 .. code-block:: python
 
-   def set_handled(self) -> None
+    def set_handled(self) -> None
 
 When handling the command error by error listener on the command tree node, you can use this method to tell MCDR the command error has been handled, so MCDR will not display the default command failure message to the command source like ``Unknown argument: !!MCDR reload this<--``
