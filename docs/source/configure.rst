@@ -185,16 +185,16 @@ advanced_console
 
 Advance console switch powered by `prompt-toolkit <https://pypi.org/project/prompt-toolkit/>`__
 
-Set it to false if you need to redirect the stdin/stdout of MCDR
+Set it to false if you need to redirect the stdin/stdout of MCDR or just don't like it
 
 
 * Option type: boolean
 * Default value: ``true``
 
-Advance
-^^^^^^^
+Advanced
+^^^^^^^^
 
-Configure options for advance users
+Configure options for advanced users
 
 disable_console_thread
 ~~~~~~~~~~~~~~~~~~~~~~

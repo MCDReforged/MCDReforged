@@ -305,7 +305,7 @@ msgstr ""
 " 页面。"
 
 #: ../plugin_dev/api.rst:186
-msgid "This is an advance text component library for Minecraft"
+msgid "This is an advanced text component library for Minecraft"
 msgstr "这是一个用于Minecraft的高级文本组件库。"
 
 #: ../plugin_dev/api.rst:188

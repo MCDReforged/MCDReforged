@@ -183,7 +183,7 @@ rtext
 
 Recommend to read the page `Raw JSON text format <https://minecraft.gamepedia.com/Raw_JSON_text_format>`__ in Minecraft Wiki first
 
-This is an advance text component library for Minecraft
+This is an advanced text component library for Minecraft
 
 Inspired by the `MCD stext API <https://github.com/TISUnion/rtext>`__ made by `Pandaria98 <https://github.com/Pandaria98>`__
 

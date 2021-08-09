@@ -64,9 +64,9 @@ check_update: true
 advanced_console: true
 
 
-# =========================================
-# |           Advance Configure           |
-# =========================================
+# ==========================================
+# |           Advanced Configure           |
+# ==========================================
 
 
 # When set to true, MCDR will not start the console thread for handling console command input
