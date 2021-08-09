@@ -16,7 +16,7 @@ Event listening
 
 If you don't care about info from non-user source, listen to `User Info event <event.html#user-info>`__ instead of `General Info event <event.html#general-info>`__, which can improve MCDR's performance when the server is spamming with non-user info (e.g. Pasting schematic with Litematica mod) in the console
 
-If you only care about commands from users, instead of listening to `User Info event <event.html#user-info>`__, you can `register a command tree <command.rst>`__ to MCDR. It's much more efficient than handling yourself inside `User Info event <event.html#user-info>`__
+If you only care about commands from users, instead of listening to `User Info event <event.html#user-info>`__, you can `register a command tree <command.html>`__ to MCDR. It's much more efficient than handling yourself inside `User Info event <event.html#user-info>`__
 
 `MCDR Stop event <event.html#mcdr-stop>`__ allows you to have as many time as you want to save your data. Be carefully, don't enter an endless loop, MCDR is waiting for you to exit
 

@@ -62,9 +62,9 @@ The meta data field provides the basic information of the plugin. It's declared 
         }
     }
 
-Different `plugin format <plugin_format.rst>`__ has different ways to declare its metadata, but the contents of metadata are the same
+Different `plugin format <plugin_format.html>`__ has different ways to declare its metadata, but the contents of metadata are the same
 
-See the `metadata document <metadata.rst>`__ for more information
+See the `metadata document <metadata.html>`__ for more information
 
 Entrypoint
 ----------

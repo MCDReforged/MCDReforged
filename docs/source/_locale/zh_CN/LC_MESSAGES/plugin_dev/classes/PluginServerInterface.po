@@ -1,0 +1,234 @@
+
+msgid ""
+msgstr ""
+"Project-Id-Version: MCDReforged \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-10 01:54+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.0\n"
+
+#: ../plugin_dev/classes/PluginServerInterface.rst:2
+msgid "PluginServerInterface"
+msgstr "PluginServerInterface"
+
+#: ../plugin_dev/classes/PluginServerInterface.rst:4
+msgid ""
+"Derived from `ServerInterface <ServerInterface.html>`__, "
+"PluginServerInterface adds the ability for plugins to control the plugin "
+"itself on the basis of ServerInterface"
+msgstr ""
+"从 `ServerInterface <ServerInterface.html>`__ 中派生，PluginServerInterface 在 "
+"ServerInterface 的基础上为插件添加了控制插件自己的能力"
+
+#: ../plugin_dev/classes/PluginServerInterface.rst:7
+msgid "Method"
+msgstr "方法"
+
+#: ../plugin_dev/classes/PluginServerInterface.rst:10
+msgid "Plugin Registry"
+msgstr "插件注册"
+
+#: ../plugin_dev/classes/PluginServerInterface.rst:13
+msgid "register_event_listener"
+msgstr "register_event_listener"
+
+#: ../plugin_dev/classes/PluginServerInterface.rst:19
+#: ../plugin_dev/classes/PluginServerInterface.rst:34
+msgid "Register an event listener for the current plugin"
+msgstr "为当前插件注册一个事件监听器。"
+
+#: ../plugin_dev/classes/PluginServerInterface.rst:21
+msgid ""
+"Parameter *event*: The id of the event, or a PluginEvent instance. It "
+"indicates the target event for the plugin to listen"
+msgstr "参数 *event*：事件的 ID，或 ``PluginEvent`` 实例。它表示插件要监听的目标事件。"
+
+#: ../plugin_dev/classes/PluginServerInterface.rst:23
+msgid "Parameter *callback*: The callback listener method for the event"
+msgstr "参数 *callback*：事件的回调的监听器方法。"
+
+#: ../plugin_dev/classes/PluginServerInterface.rst:25
+msgid ""
+"Parameter *priority*: The priority of the listener. It will be set to the"
+" default value 1000 if it's not specified"
+msgstr "参数 *priority*：监听器的优先级。如果没有指定，将被设置为默认值 ``1000``。"
+
+#: ../plugin_dev/classes/PluginServerInterface.rst:28
+msgid "register_command"
+msgstr "register_command"
+
+#: ../plugin_dev/classes/PluginServerInterface.rst:36
+msgid ""
+"Parameter *root_node*: The root node of your command tree. It should be a"
+" ``Literal`` node"
+msgstr "参数 *root_node*：指令树的根节点。 它应为一个 ``Literal`` 节点。"
+
+#: ../plugin_dev/classes/PluginServerInterface.rst:39
+msgid "register_help_message"
+msgstr "register_help_message"
+
+#: ../plugin_dev/classes/PluginServerInterface.rst:45
+msgid ""
+"Register a help message for the current plugin, which is used in !!help "
+"command"
+msgstr "为当前插件注册一个帮助信息，以在 !!help 指令中显示。"
+
+#: ../plugin_dev/classes/PluginServerInterface.rst:47
+msgid ""
+"Parameter *prefix*: The help command of your plugin. When player click on"
+" the displayed message it will suggest this prefix parameter to the "
+"player. It's recommend to set it to the entry command of your plugin"
+msgstr "参数 *prefix*：你的插件的帮助指令。 当玩家点击显示的信息时，会向玩家提示这个前缀参数。 建议将其设置为你的插件的入口指令。"
+
+#: ../plugin_dev/classes/PluginServerInterface.rst:49
+msgid "Parameter *message*: A neat command description"
+msgstr "参数 *message*：一个整洁的指令描述。"
+
+#: ../plugin_dev/classes/PluginServerInterface.rst:51
+msgid ""
+"Parameter *permission*: The minimum permission level for the user to see "
+"this help message. With default, anyone can see this message"
+msgstr "参数 *permission*：用户看到此帮助信息的最低权限。默认情况下，任何人都可以看到此信息。"
+
+#: ../plugin_dev/classes/PluginServerInterface.rst:54
+msgid "register_translation"
+msgstr "register_translation"
+
+#: ../plugin_dev/classes/PluginServerInterface.rst:60
+msgid ""
+"Register a translation mapping for a specific language for the current "
+"plugin"
+msgstr "为当前插件注册给定语言的一个翻译映射表。"
+
+#: ../plugin_dev/classes/PluginServerInterface.rst:62
+msgid "Parameter *language*: The language of this translation"
+msgstr "参数 *language*：该翻译的语言"
+
+#: ../plugin_dev/classes/PluginServerInterface.rst:64
+msgid ""
+"Parameter *mapping*: A dict which maps translation keys into translated "
+"text"
+msgstr "参数 *mapping*：一个将翻译键映射为翻译文本的 dict"
+
+#: ../plugin_dev/classes/PluginServerInterface.rst:67
+msgid "Plugin Utils"
+msgstr "插件工具"
+
+#: ../plugin_dev/classes/PluginServerInterface.rst:70
+msgid "get_self_metadata"
+msgstr "get_self_metadata"
+
+#: ../plugin_dev/classes/PluginServerInterface.rst:76
+msgid "Return the metadata of the plugin itself"
+msgstr "返回当前插件的元数据"
+
+#: ../plugin_dev/classes/PluginServerInterface.rst:79
+msgid "get_data_folder"
+msgstr "get_data_folder"
+
+#: ../plugin_dev/classes/PluginServerInterface.rst:85
+msgid "Return a unified data directory path for the current plugin"
+msgstr "为当前插件返回一个统一格式的数据文件夹。"
+
+#: ../plugin_dev/classes/PluginServerInterface.rst:87
+msgid ""
+"The path of the folder will be ``config/plugin_id/`` where ``plugin_id`` "
+"is the id of the current plugin"
+msgstr "文件夹的路径将会为 ``config/plugin_id``，其中 ``plugin_id`` 是当前插件的 id"
+
+#: ../plugin_dev/classes/PluginServerInterface.rst:89
+msgid "If the directory does not exist, create it"
+msgstr "如果该文件夹不存在，该文件夹会被自动创建"
+
+#: ../plugin_dev/classes/PluginServerInterface.rst:91
+msgid "Returns the path to the data directory"
+msgstr "返回数据文件夹的路径"
+
+#: ../plugin_dev/classes/PluginServerInterface.rst:94
+msgid "open_bundled_file"
+msgstr "open_bundled_file"
+
+#: ../plugin_dev/classes/PluginServerInterface.rst:100
+msgid "Open a file inside the plugin with readonly binary mode"
+msgstr "使用二进制只读模式，打开插件中的一个文件"
+
+#: ../plugin_dev/classes/PluginServerInterface.rst:102
+msgid ""
+"Parameter *related_file_path*: The related file path in your plugin to "
+"the file you want to open"
+msgstr "参数 *related_file_path*：你想要打开的文件位于你的插件中的相对位置"
+
+#: ../plugin_dev/classes/PluginServerInterface.rst:104
+msgid "Returns a un-decoded bytes file-like object"
+msgstr "返回一个为解码的，bytes 形式的文件型的对象的对线"
+
+#: ../plugin_dev/classes/PluginServerInterface.rst:106
+msgid ""
+"Raises ``FileNotFoundError`` if the plugin is not a packed plugin (that "
+"is, a solo plugin)"
+msgstr "如果插件并非是一个打包插件（换句话来讲，是一个单文件插件），那么将抛出 ``FileNotFoundError``"
+
+#: ../plugin_dev/classes/PluginServerInterface.rst:108
+#: ../plugin_dev/classes/PluginServerInterface.rst:142
+msgid "Example:"
+msgstr "例子："
+
+#: ../plugin_dev/classes/PluginServerInterface.rst:117
+msgid "load_config_simple"
+msgstr "load_config_simple"
+
+#: ../plugin_dev/classes/PluginServerInterface.rst:126
+msgid "A simple method to load a dict type config from a json file"
+msgstr "一个简单的，从一个 json 文件中载入一个 dict 类型的配置文件的方法"
+
+#: ../plugin_dev/classes/PluginServerInterface.rst:128
+msgid ""
+"Default config is supported. Missing key-values in the loaded config "
+"object will be filled using the default config"
+msgstr "支持默认配置文件。加载的配置中缺失的键-值对将会使用默认配置文件填充"
+
+#: ../plugin_dev/classes/PluginServerInterface.rst:130
+msgid "Parameter *file_name*: The name of the config file"
+msgstr "参数 *file_name*：配置文件的文件名"
+
+#: ../plugin_dev/classes/PluginServerInterface.rst:132
+msgid ""
+"Parameter *default_config*: A dict contains the default config. It's "
+"required when the config file is missing, or exception will be risen"
+msgstr "参数 *default_config*：一个储存着默认配置的 dict。当配置文件缺失时，这个参数是必须的，否则将抛出异常"
+
+#: ../plugin_dev/classes/PluginServerInterface.rst:134
+msgid ""
+"Parameter *in_data_folder*: If True, the parent directory of file "
+"operating is the `data folder <#get-data-folder>`__ of the plugin"
+msgstr ""
+"参数 *in_data_folder*：如果被设置为 True，则配置文件将在该插件的 `数据文件夹 <#get-data-folder>`__"
+" 中储存"
+
+#: ../plugin_dev/classes/PluginServerInterface.rst:136
+msgid ""
+"Parameter *echo_in_console*: If logging messages in console about config "
+"loading"
+msgstr "参数 *echo_in_console*：是否在控制台中打印配置文件加载相关日志"
+
+#: ../plugin_dev/classes/PluginServerInterface.rst:138
+msgid ""
+"Parameter *source_to_reply*: The `command source <CommandSource.html>`__ "
+"for replying logging messages"
+msgstr "参数 *source_to_reply*：用于回复加载配置相关日志的 `指令源 <CommandSource.html>`__"
+
+#: ../plugin_dev/classes/PluginServerInterface.rst:140
+msgid "Returns a dict contains the loaded and processed config"
+msgstr "返回一个 dict，储存着加载并处理后的配置文件"
+
+#: ../plugin_dev/classes/PluginServerInterface.rst:156
+msgid ""
+"Assuming that the plugin id is ``my_plugin``, then the config file will "
+"be in ``config/my_plugin/my_config.json``"
+msgstr "假设插件 id 为 ``my_plugin``，则配置文件将被储存于 ``config/my_plugin/my_config.json`` 中"
+

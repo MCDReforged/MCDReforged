@@ -35,13 +35,6 @@ class ServerInterface:
 	MCDR = True  # Identifier for plugins
 	__global_instance: Optional['ServerInterface'] = None  # For singleton instance storage
 
-	@classmethod
-	def get_instance(cls) -> Optional['ServerInterface']:
-		"""
-		A class method, for plugins to get a ServerInterface instance anywhere as long as MCDR is running
-		"""
-		return cls.__global_instance
-
 	def __init__(self, mcdr_server: 'MCDReforgedServer'):
 		self._mcdr_server = mcdr_server
 		if type(self) is ServerInterface:
@@ -64,6 +57,17 @@ class ServerInterface:
 			return self.__get_logger(plugin.get_id())
 		else:
 			return self._mcdr_server.logger
+
+	# ------------------------
+	#          Utils
+	# ------------------------
+
+	@classmethod
+	def get_instance(cls) -> Optional['ServerInterface']:
+		"""
+		A class method, for plugins to get a ServerInterface instance anywhere as long as MCDR is running
+		"""
+		return cls.__global_instance
 
 	def tr(self, translation_key: str, *args, language: Optional[str] = None, fallback_language: str = 'en_us') -> Union[str, RTextBase]:
 		"""
@@ -561,7 +565,9 @@ class PluginServerInterface(ServerInterface):
 
 	def register_translation(self, language: str, mapping: Dict[str, str]) -> None:
 		"""
-		Register translation mapping for a specific language for the current plugin
+		Register a translation mapping for a specific language for the current plugin
+		:param language: The language of this translation
+		:param mapping: A dict which maps translation keys into translated text
 		"""
 		self.__plugin.register_translation(language, mapping)
 
@@ -578,9 +584,9 @@ class PluginServerInterface(ServerInterface):
 	def get_data_folder(self) -> str:
 		"""
 		Return a unified data directory path for the current plugin
-		The path of the directory will be "config/plugin_id" where "plugin_id" is the id of the current plugin
+		The path of the folder will be "config/plugin_id/" where "plugin_id" is the id of the current plugin
 		If the directory does not exist, create it
-		:return: The path of the directory
+		:return: The path to the data directory
 		"""
 		plugin_data_folder = os.path.join(plugin_constant.PLUGIN_CONFIG_DIRECTORY, self.__plugin.get_id())
 		if not os.path.isdir(plugin_data_folder):
@@ -589,12 +595,13 @@ class PluginServerInterface(ServerInterface):
 
 	def open_bundled_file(self, related_file_path: str) -> IO[bytes]:
 		"""
-		Open a file inside the plugin with binary mode
-		:return: A un-decoded file-like object
+		Open a file inside the plugin with readonly binary mode
+		:param related_file_path: The related file path in your plugin to the file you want to open
+		:return: A un-decoded bytes file-like object
 		:raise: FileNotFoundError if the plugin is not a packed plugin (that is, a solo plugin)
 		"""
 		if not isinstance(self.__plugin, PackedPlugin):
-			raise FileNotFoundError('Only packed plugin supported this api')
+			raise FileNotFoundError('Only packed plugin supported this API, found plugin type: {}'.format(self.__plugin.__class__))
 		return self.__plugin.open_file(related_file_path)
 
 	def load_config_simple(
@@ -605,8 +612,9 @@ class PluginServerInterface(ServerInterface):
 		A simple method to load a dict type config from a json file
 		Default config is supported. Missing key-values in the loaded config object will be filled using the default config
 		:param file_name: The name of the config file
-		:param default_config: A dict contains the default config. It's required when the config file is missing
-		:param in_data_folder: If true, the parent directory of file operating is the data folder of the plugin
+		:param default_config: A dict contains the default config. It's required when the config file is missing,
+		or exception will be risen
+		:param in_data_folder: If True, the parent directory of file operating is the data folder of the plugin
 		:param echo_in_console: If logging messages in console about config loading
 		:param source_to_reply: The command source for replying logging messages
 		:return: A dict contains the loaded and processed config

@@ -62,11 +62,11 @@ msgstr ""
 msgid ""
 "If you only care about commands from users, instead of listening to `User"
 " Info event <event.html#user-info>`__, you can `register a command tree "
-"<command.rst>`__ to MCDR. It's much more efficient than handling yourself "
+"<command.html>`__ to MCDR. It's much more efficient than handling yourself "
 "inside `User Info event <event.html#user-info>`__"
 msgstr ""
 "如果你只关心用户输入的指令，与其监听 `用户信息事件 <event.html#general-info>`__，你还可以 `注册一棵指令树 "
-"<command.rst>`__。这比手动在 `用户信息事件 <event.html#general-info>`__ 高效不少。"
+"<command.html>`__。这比手动在 `用户信息事件 <event.html#general-info>`__ 高效不少。"
 
 #: ../plugin_dev/dev_tips.rst:21
 msgid ""

@@ -2,7 +2,9 @@
 ServerInterface
 ===============
 
-ServerInterface is the interface for plugins to interact with the server. The first argument in all plugin events is always the ServerInterface. It's recommend to use ``server`` as the parameter name of the ServerInterface argument which is widely used in this document
+ServerInterface is the interface with lots of API for plugins to interact with the server. Its sub-class `PluginServerInterface <PluginServerInterface.html>`__ contains extra APIs for plugins to control the plugin itself
+
+The first argument in all plugin events is always the PluginServerInterface. It's recommend to use ``server`` as the parameter name of the ServerInterface argument which is widely used in this document
 
 You can check the code to see the implementation for deeper understanding
 
@@ -20,6 +22,54 @@ Method
 ------
 
 Methods in the SererInterface object are also the API interface for plugins to control the server and the MCDR
+
+Utils
+^^^^^
+
+get_instance
+~~~~~~~~~~~~
+
+.. code-block:: python
+
+    @classmethod
+    def get_instance(cls) -> Optional[ServerInterface]
+
+A class method, for plugins to get a ServerInterface instance anywhere as long as MCDR is running
+
+tr
+~~
+
+.. code-block:: python
+
+    def tr(self, translation_key: str, *args, language: Optional[str] = None, fallback_language: str = 'en_us') -> Union[str, RTextBase]
+
+Return a translated text from given translation key and args
+
+Check mcdreforged.mcdr_server.MCDReforgedServer.tr for detail doc
+
+as_basic_server_interface
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+    def as_basic_server_interface(self) -> ServerInterface
+
+
+Return a ServerInterface instance. The type of the return value is exactly the ServerInterface
+
+It's used for removing the plugin information inside PluginServerInterface when you need to send a ServerInterface
+
+as_plugin_server_interface
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+    def as_plugin_server_interface(self) -> Optional[PluginServerInterface]
+
+
+Return a PluginServerInterface instance. If current thread is not a MCDR provided thread and the object is not
+
+a PluginServerInterface instance, it will return None
 
 Server Control
 ^^^^^^^^^^^^^^
@@ -210,6 +260,75 @@ Keyword Parameter *console_text*: If it's specified, console_text will be used i
 
 Keyword Parameter *encoding*: The encoding method for the text
 
+Plugin Queries
+^^^^^^^^^^^^^^
+
+get_plugin_metadata
+~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+    def get_plugin_metadata(self, plugin_id: str) -> Optional[Metadata]
+
+Return the metadata of the specified plugin, or None if the plugin doesn't exist
+
+Parameter *plugin_id*: The plugin id of the plugin to query metadata
+
+get_plugin_file_path
+~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+    def get_plugin_file_path(self, plugin_id: str) -> Optional[str]
+
+Return the file path of the specified plugin, or None if the plugin doesn't exist
+
+Parameter *plugin_id*: The plugin id of the plugin to query file path
+
+get_plugin_instance
+~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+    def get_plugin_instance(self, plugin_id: str) -> Optional[Any]
+
+Return the `entrypoint <../basic.html#entrypoint>`__ module instance of the specific plugin, or None if the plugin doesn't exist
+
+If the target plugin is a `solo plugin <../plugin_format.html#solo-plugin>`__ and it needs to react to events from MCDR, it's quite important to use this instead of manually import the plugin you want, since it's the only way to make your plugin be able to access the same plugin instance to MCDR
+
+Parameter *plugin_id*: The plugin id of the plugin you want
+
+Example:
+
+.. code-block:: python
+
+    # My API plugin with id my_api
+    def info_query_api(item):
+        pass
+
+.. code-block:: python
+
+    # Another plugin that needs My API
+    server.get_plugin_instance('my_api').info_query_api(an_item)
+
+get_plugin_list
+~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+    def get_plugin_list(self) -> List[str]
+
+Return a list containing all loaded plugin id like ["my_plugin", "another_plugin"]
+
+get_all_metadata
+~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+    def get_all_metadata(self) -> Dict[str, Metadata]
+
+Return a dict containing metadatas of all loaded plugin with (plugin_id, metadata) as key-value pair
+
 Plugin Operations
 ^^^^^^^^^^^^^^^^^
 
@@ -288,113 +407,6 @@ refresh_changed_plugins
 
 Reload all changed plugins, load all new plugins and then unload all removed plugins
 
-get_plugin_list
-~~~~~~~~~~~~~~~
-
-.. code-block:: python
-
-    def get_plugin_list(self) -> List[str]
-
-Return a list containing all loaded plugin id like ["my_plugin", "another_plugin"]
-
-get_plugin_metadata
-~~~~~~~~~~~~~~~~~~~
-
-.. code-block:: python
-
-    def get_plugin_metadata(self, plugin_id: str) -> Optional[Metadata]
-
-Return the metadata of the specified plugin, or None if the plugin doesn't exist
-
-Parameter *plugin_id*: The plugin id of the plugin to query metadata
-
-get_plugin_file_path
-~~~~~~~~~~~~~~~~~~~~
-
-.. code-block:: python
-
-    def get_plugin_file_path(self, plugin_id: str) -> Optional[str]
-
-Return the file path of the specified plugin, or None if the plugin doesn't exist
-
-Parameter *plugin_id*: The plugin id of the plugin to query file path
-
-get_plugin_instance
-~~~~~~~~~~~~~~~~~~~
-
-.. code-block:: python
-
-    def get_plugin_instance(self, plugin_id: str) -> Optional[Any]
-
-Return the `entrypoint <../basic.html#entrypoint>`__ module instance of the specific plugin, or None if the plugin doesn't exist
-
-It's quite important to use this instead of manually import the plugin you want, if the target plugin is a `solo plugin <../plugin_format.html#solo-plugin>`__ and it needs to react to events from MCDR, since it's the only way to make your plugin be able to access the same plugin instance to MCDR
-
-Parameter *plugin_id*: The plugin id of the plugin you want
-
-Example: 
-
-.. code-block:: python
-
-    # My API plugin with id my_api
-    def info_query_api(item):
-        pass
-
-.. code-block:: python
-
-    # Another plugin that needs My API
-    server.get_plugin_instance('my_api').info_query_api(an_item)
-
-Plugin Registry
-^^^^^^^^^^^^^^^
-
-register_event_listener
-~~~~~~~~~~~~~~~~~~~~~~~
-
-.. code-block:: python
-
-    def register_event_listener(self, event: Union[PluginEvent, str], callback: Callable, priority: int = 1000) -> None
-
-Register an event listener for the current plugin
-
-Raise an ``IllegalCallError`` if it's not invoked in the task executor thread
-
-Parameter *event*: The id of the event, or a PluginEvent instance. It indicates the target event for the plugin to listen
-
-Parameter *callback*: The callback listener method for the event
-
-Parameter *priority*: The priority of the listener. It will be set to the default value 1000 if it's not specified
-
-register_command
-~~~~~~~~~~~~~~~~
-
-.. code-block:: python
-
-    def register_command(self, root_node: Literal) -> None
-
-Register an event listener for the current plugin
-
-Raise an ``IllegalCallError`` if it's not invoked in the task executor thread
-
-Parameter *root_node*: The root node of your command tree. It should be a ``Literal`` node
-
-register_help_message
-~~~~~~~~~~~~~~~~~~~~~
-
-.. code-block:: python
-
-    def register_help_message(self, prefix: str, message: Union[str, RTextBase], permission: int = PermissionLevel.MINIMUM_LEVEL) -> None
-
-Register a help message for the current plugin, which is used in !!help command
-
-Raise an ``IllegalCallError`` if it's not invoked in the task executor thread
-
-Parameter *prefix*: The help command of your plugin. When player click on the displayed message it will suggest this prefix parameter to the player. It's recommend to set it to the entry command of your plugin
-
-Parameter *message*: A neat command description
-
-Parameter *permission*: The minimum permission level for the user to see this help message. With default, anyone can see this message
-
 dispatch_event
 ~~~~~~~~~~~~~~
 
@@ -426,28 +438,10 @@ In the event listener plugin
 
 .. code-block:: python
 
-     def do_something(server: ServerInterface, int_data: int, str_data: str):
-         pass
+    def do_something(server: ServerInterface, int_data: int, str_data: str):
+        pass
 
-     server.register_event_listener('my_plugin.my_event', do_something)
-
-Plugin Utils
-^^^^^^^^^^^^
-
-get_data_folder
-~~~~~~~~~~~~~~~
-
-.. code-block:: python
-
-     def get_data_folder(self) -> str
-
-Return a unified data directory path for the current plugin
-
-The path of the directory will be ``config/plugin_id`` where ``plugin_id`` is the id of the current plugin
-
-If the directory does not exist, create it
-
-Raise an ``IllegalCallError`` if it's not invoked in the task executor thread
+    server.register_event_listener('my_plugin.my_event', do_something)
 
 Permission
 ^^^^^^^^^^

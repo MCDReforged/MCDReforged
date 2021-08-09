@@ -89,13 +89,13 @@ msgstr "元数据提供了插件的基本信息。它是一个包含多个键值
 
 #: ../plugin_dev/basic.rst:65
 msgid ""
-"Different `plugin format <plugin_format.rst>`__ has different ways to "
+"Different `plugin format <plugin_format.html>`__ has different ways to "
 "declare its metadata, but the contents of metadata are the same"
-msgstr "不同的 `插件格式 <plugin_format.rst>`__ 有着不同的声明元数据的方法，但其元数据的内容是一致的。"
+msgstr "不同的 `插件格式 <plugin_format.html>`__ 有着不同的声明元数据的方法，但其元数据的内容是一致的。"
 
 #: ../plugin_dev/basic.rst:67
-msgid "See the `metadata document <metadata.rst>`__ for more information"
-msgstr "见 `元数据文档 <metadata.rst>`__ 以获取更多有关元数据的信息。"
+msgid "See the `metadata document <metadata.html>`__ for more information"
+msgstr "见 `元数据文档 <metadata.html>`__ 以获取更多有关元数据的信息。"
 
 #: ../plugin_dev/basic.rst:70
 msgid "Entrypoint"
