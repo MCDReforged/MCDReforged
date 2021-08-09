@@ -14,7 +14,7 @@ from mcdreforged.command.command_source import CommandSource
 SOURCE_CONTEXT_CALLBACK = Union[Callable[[], Any], Callable[[CommandSource], Any], Callable[[CommandSource, dict], Any]]
 SOURCE_CONTEXT_CALLBACK_BOOL = Union[Callable[[], bool], Callable[[CommandSource], bool], Callable[[CommandSource, dict], bool]]
 SOURCE_CONTEXT_CALLBACK_STR = Union[Callable[[], str], Callable[[CommandSource], str], Callable[[CommandSource, dict], str]]
-SOURCE_CONTEXT_CALLBACK_STR_LIST = Union[Callable[[], List[str]], Callable[[CommandSource], List[str]], Callable[[CommandSource, dict], List[str]]]
+SOURCE_CONTEXT_CALLBACK_STR_COLLECTION = Union[Callable[[], Collection[str]], Callable[[CommandSource], Collection[str]], Callable[[CommandSource, dict], Collection[str]]]
 SOURCE_ERROR_CONTEXT_CALLBACK = Union[Callable[[], Any], Callable[[CommandSource], Any], Callable[[CommandSource, CommandError], Any], Callable[[CommandSource, CommandError, dict], Any]]
 
 
@@ -90,7 +90,7 @@ class CommandContext(dict):
 		finally:
 			self.cursor = prev_cursor
 			self.node_path.pop(len(self.node_path) - 1)
-			self.pop(node.name, None)
+			self.pop(node.get_name(), None)
 
 
 class ArgumentNode:
@@ -102,16 +102,19 @@ class ArgumentNode:
 	_ERROR_HANDLER_TYPE = Dict[Type[CommandError], ErrorHandler]
 
 	def __init__(self, name: Optional[str]):
-		self.name = name
-		self.children_literal = collections.defaultdict(list)  # type: Dict[str, List[Literal]]
-		self.children = []  # type: List[ArgumentNode]
-		self.callback = None
-		self.error_handlers = {}  # type: ArgumentNode._ERROR_HANDLER_TYPE
-		self.child_error_handlers = {}  # type: ArgumentNode._ERROR_HANDLER_TYPE
-		self.requirement = lambda source: True
-		self.requirement_failure_message_getter = None
-		self.redirect_node = None
-		self.suggestion_getter = lambda: []
+		self.__name = name
+		self.__children_literal = collections.defaultdict(list)  # type: Dict[str, List[Literal]]
+		self.__children = []  # type: List[ArgumentNode]
+		self.__callback = None  # type: Optional[SOURCE_CONTEXT_CALLBACK]
+		self.__error_handlers = {}  # type: ArgumentNode._ERROR_HANDLER_TYPE
+		self.__child_error_handlers = {}  # type: ArgumentNode._ERROR_HANDLER_TYPE
+		self.__requirement = lambda source: True  # type: SOURCE_CONTEXT_CALLBACK_BOOL
+		self.__requirement_failure_message_getter = None  # type: Optional[SOURCE_CONTEXT_CALLBACK_STR]
+		self.__redirect_node = None  # type: Optional[ArgumentNode]
+		self.__suggestion_getter = lambda: []  # type: SOURCE_CONTEXT_CALLBACK_STR_COLLECTION
+
+	def get_name(self) -> Optional[str]:
+		return self.__name
 
 	# --------------
 	#   Interfaces
@@ -122,13 +125,13 @@ class ArgumentNode:
 		Add a child node to this node
 		:param node: a child node for new level command
 		"""
-		if self.redirect_node is not None:
+		if self.__redirect_node is not None:
 			raise IllegalNodeOperation('Redirected node is not allowed to add child nodes')
 		if isinstance(node, Literal):
 			for literal in node.literals:
-				self.children_literal[literal].append(node)
+				self.__children_literal[literal].append(node)
 		else:
-			self.children.append(node)
+			self.__children.append(node)
 		return self
 
 	def runs(self, func: SOURCE_CONTEXT_CALLBACK) -> 'ArgumentNode':
@@ -137,7 +140,7 @@ class ArgumentNode:
 		:param func: A function to execute at this node which accepts maximum 2 parameters (command source and context)
 		:rtype: ArgumentNode
 		"""
-		self.callback = func
+		self.__callback = func
 		return self
 
 	def requires(self, requirement: SOURCE_CONTEXT_CALLBACK_BOOL, failure_message_getter: Optional[SOURCE_CONTEXT_CALLBACK_STR] = None) -> 'ArgumentNode':
@@ -150,8 +153,8 @@ class ArgumentNode:
 		a default message will be used
 		:rtype: ArgumentNode
 		"""
-		self.requirement = requirement
-		self.requirement_failure_message_getter = failure_message_getter
+		self.__requirement = requirement
+		self.__requirement_failure_message_getter = failure_message_getter
 		return self
 
 	def redirects(self, redirect_node: 'ArgumentNode') -> 'ArgumentNode':
@@ -162,20 +165,18 @@ class ArgumentNode:
 		"""
 		if self.has_children():
 			raise IllegalNodeOperation('Node with children nodes is not allowed to be redirected')
-		self.redirect_node = redirect_node
+		self.__redirect_node = redirect_node
 		return self
 
-	def suggests(self, suggestion: SOURCE_CONTEXT_CALLBACK_STR_LIST):
-		self.suggestion_getter = suggestion
+	def suggests(self, suggestion: SOURCE_CONTEXT_CALLBACK_STR_COLLECTION):
+		"""
+		Set the provider for command suggestions of this node
+		:param suggestion: A callable function which accepts maximum 2 parameters (command source and context)
+		and return a list of str indicating the current command suggestions
+		:rtype: ArgumentNode
+		"""
+		self.__suggestion_getter = suggestion
 		return self
-
-	def suggests_matching(self, keywords: Collection[str] or Callable[[], Collection[str]]):
-		def suggest(source, context: CommandContext):
-			kw_collection = keywords
-			if callable(kw_collection):
-				kw_collection = kw_collection()
-			return [keyword for keyword in kw_collection if keyword.startswith(context.command_remaining)]
-		return self.suggests(suggest)
 
 	def on_error(self, error_type: Type[CommandError], handler: SOURCE_ERROR_CONTEXT_CALLBACK, *, handled: bool = False) -> 'ArgumentNode':
 		"""
@@ -186,7 +187,7 @@ class ArgumentNode:
 		"""
 		if not issubclass(error_type, CommandError):
 			raise TypeError('error_type parameter should be a class inherited from CommandError, but class {} found'.format(error_type))
-		self.error_handlers[error_type] = self.ErrorHandler(handler, handled)
+		self.__error_handlers[error_type] = self.ErrorHandler(handler, handled)
 		return self
 
 	def on_child_error(self, error_type: Type[CommandError], handler: SOURCE_ERROR_CONTEXT_CALLBACK, *, handled: bool = False) -> 'ArgumentNode':
@@ -198,7 +199,7 @@ class ArgumentNode:
 		"""
 		if not issubclass(error_type, CommandError):
 			raise TypeError('error_type parameter should be a class inherited from CommandError, but class {} found'.format(error_type))
-		self.child_error_handlers[error_type] = self.ErrorHandler(handler, handled)
+		self.__child_error_handlers[error_type] = self.ErrorHandler(handler, handled)
 		return self
 
 	# -------------------
@@ -206,7 +207,7 @@ class ArgumentNode:
 	# -------------------
 
 	def has_children(self):
-		return len(self.children) + len(self.children_literal) > 0
+		return len(self.__children) + len(self.__children_literal) > 0
 
 	def parse(self, text: str) -> ParseResult:
 		"""
@@ -226,7 +227,7 @@ class ArgumentNode:
 		In general situation, only Literal Argument doesn't store anything
 		:return: bool
 		"""
-		return self.name is not None
+		return self.__name is not None
 
 	@staticmethod
 	def __smart_callback(callback: Callable, *args):
@@ -249,11 +250,11 @@ class ArgumentNode:
 				self.__smart_callback(handler.callback, context.source, error, context)
 
 	def __raise_error(self, error: CommandError, context: CommandContext):
-		self.__handle_error(error, context, self.error_handlers)
+		self.__handle_error(error, context, self.__error_handlers)
 		raise error
 
 	def _get_suggestions(self, context: CommandContext) -> List[str]:
-		return self.__smart_callback(self.suggestion_getter, context.source, context)
+		return self.__smart_callback(self.__suggestion_getter, context.source, context)
 
 	def _execute_command(self, context: CommandContext) -> None:
 		command = context.command  # type: str
@@ -268,24 +269,24 @@ class ArgumentNode:
 			total_read = len(command) - len(next_remaining)  # type: int
 
 			if self.__does_store_thing():
-				context[self.name] = result.value
+				context[self.__name] = result.value
 
-			if self.requirement is not None:
-				if not self.__smart_callback(self.requirement, context.source, context):
-					getter = self.requirement_failure_message_getter or (lambda: None)
+			if self.__requirement is not None:
+				if not self.__smart_callback(self.__requirement, context.source, context):
+					getter = self.__requirement_failure_message_getter or (lambda: None)
 					failure_message = self.__smart_callback(getter, context.source, context)
 					self.__raise_error(RequirementNotMet(context.command_read, context.command_read, failure_message), context)
 
 			# Parsing finished
 			if len(next_remaining) == 0:
-				if self.callback is not None:
-					self.__smart_callback(self.callback, context.source, context)
+				if self.__callback is not None:
+					self.__smart_callback(self.__callback, context.source, context)
 				else:
 					self.__raise_error(UnknownCommand(context.command_read, context.command_read), context)
 			# Un-parsed command string remains
 			else:
 				# Redirecting
-				node = self if self.redirect_node is None else self.redirect_node
+				node = self if self.__redirect_node is None else self.__redirect_node
 
 				argument_unknown = False
 				# No child at all
@@ -297,7 +298,7 @@ class ArgumentNode:
 					try:
 						# Check literal children first
 						literal_error = None
-						for child_literal in node.children_literal.get(next_literal, []):
+						for child_literal in node.__children_literal.get(next_literal, []):
 							try:
 								with context.enter_child(total_read, child_literal):
 									child_literal._execute_command(context)
@@ -309,7 +310,7 @@ class ArgumentNode:
 						else:  # All literal children fails
 							if literal_error is not None:
 								raise literal_error
-							for child in node.children:
+							for child in node.__children:
 								with context.enter_child(total_read, child):
 									child._execute_command(context)
 								break
@@ -317,7 +318,7 @@ class ArgumentNode:
 								argument_unknown = True
 
 					except CommandError as error:
-						self.__handle_error(error, context, self.child_error_handlers)
+						self.__handle_error(error, context, self.__child_error_handlers)
 						raise error from None
 
 				if argument_unknown:
@@ -341,9 +342,9 @@ class ArgumentNode:
 			total_read = len(context.command) - len(next_remaining)  # type: int
 
 			if self.__does_store_thing():
-				context[self.name] = result.value
+				context[self.__name] = result.value
 
-			if self.requirement is not None and not self.__smart_callback(self.requirement, context.source, context):
+			if self.__requirement is not None and not self.__smart_callback(self.__requirement, context.source, context):
 				return CommandSuggestions()
 
 			# Parsing finished
@@ -353,22 +354,22 @@ class ArgumentNode:
 				if success_read == total_read:
 					return self_suggestions()
 
-			node = self if self.redirect_node is None else self.redirect_node
+			node = self if self.__redirect_node is None else self.__redirect_node
 			# Check literal children first
-			children_literal = node.children_literal.get(utils.get_element(next_remaining), [])
+			children_literal = node.__children_literal.get(utils.get_element(next_remaining), [])
 			for child_literal in children_literal:
 				with context.enter_child(total_read, child_literal):
 					suggestions.extend(child_literal._generate_suggestions(context))
 			if len(children_literal) == 0:
-				for literal_list in node.children_literal.values():
+				for literal_list in node.__children_literal.values():
 					for child_literal in literal_list:
 						with context.enter_child(total_read, child_literal):
 							suggestions.extend(child_literal._generate_suggestions(context))
-				for child in node.children:
+				for child in node.__children:
 					with context.enter_child(total_read, child):
 						suggestions.extend(child._generate_suggestions(context))
 						if len(next_remaining) == 0:
-							suggestions.complete_hint = '<{}>'.format(child.name)
+							suggestions.complete_hint = '<{}>'.format(child.__name)
 					break
 
 		return suggestions
@@ -417,7 +418,10 @@ class Literal(EntryNode):
 			if utils.DIVIDER in literal:
 				raise TypeError('DIVIDER character "{}" cannot be inside a literal'.format(utils.DIVIDER))
 		self.literals = literals  # type: Set[str]
-		self.suggests_matching(self.literals)
+		self.suggestion_getter = lambda: self.literals
+
+	def suggests(self, suggestion: SOURCE_CONTEXT_CALLBACK_STR_COLLECTION):
+		raise IllegalNodeOperation('Literal node doe not support suggests')
 
 	def parse(self, text):
 		arg = utils.get_element(text)

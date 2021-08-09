@@ -3,6 +3,7 @@ Misc tool collection
 """
 import importlib.machinery
 import importlib.util
+import inspect
 import os
 import threading
 from typing import List, Callable, Tuple, TypeVar, Any, Type, Optional
@@ -85,6 +86,15 @@ def check_type(value: Any, type_: Type, error_message: str = None):
 		if error_message is None:
 			error_message = 'Except type {} but found type {}'.format(type_, type(value))
 		raise TypeError(error_message)
+
+
+def copy_signature(target: Callable, origin: Callable) -> Callable:
+	"""
+	Copy the function signature of origin into target
+	"""
+	# https://stackoverflow.com/questions/39926567/python-create-decorator-preserving-function-arguments
+	target.__signature__ = inspect.signature(origin)
+	return target
 
 
 class WaitableCallable:

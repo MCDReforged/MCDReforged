@@ -71,7 +71,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 
 	def __register_commands(self):
 		def plugin_id_node():
-			return QuotableText('plugin_id').suggests_matching(lambda: [plg.get_id() for plg in self.plugin_manager.get_regular_plugins()])
+			return QuotableText('plugin_id').suggests(lambda: [plg.get_id() for plg in self.plugin_manager.get_regular_plugins()])
 
 		def plugin_file_name_node():
 			def get_not_loaded_stuffs():
@@ -80,7 +80,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 					if not self.plugin_manager.contains_plugin_file(file_path) and plugin_factory.maybe_plugin(file_path, allow_disabled=True):
 						result.append(os.path.basename(file_path))
 				return result
-			return QuotableText('file_name').suggests_matching(get_not_loaded_stuffs)
+			return QuotableText('file_name').suggests(get_not_loaded_stuffs)
 
 		def permission_player_node():
 			return QuotableText('player').suggests(lambda: self.mcdr_server.permission_manager.get_players())

@@ -1,4 +1,3 @@
-import inspect
 import json
 from abc import ABC
 
@@ -7,12 +6,12 @@ from mcdreforged.command.builder.command_builder_util import DIVIDER
 from mcdreforged.command.builder.exception import NumberOutOfRange, EmptyText, \
 	InvalidNumber, InvalidInteger, InvalidFloat, UnclosedQuotedString, IllegalEscapesUsage, \
 	TextLengthOutOfRange
-from mcdreforged.command.builder.nodes.basic import ArgumentNode, ParseResult, SOURCE_CONTEXT_CALLBACK_STR_LIST
-
-
+from mcdreforged.command.builder.nodes.basic import ArgumentNode, ParseResult
 # --------------------
 #   Number Arguments
 # --------------------
+from mcdreforged.utils import misc_util
+
 
 class NumberNode(ArgumentNode, ABC):
 	def __init__(self, name):
@@ -152,7 +151,8 @@ class QuotableText(Text):
 			i += 1
 		raise UnclosedQuotedString(len(text))
 
-	def suggests(self, original_getter: SOURCE_CONTEXT_CALLBACK_STR_LIST):
+	# use quote characters to quote suggestions with DIVIDER
+	def suggests(self, original_getter):
 		def quote_wrapper(*args, **kwargs):
 			suggestions = []
 			for s in original_getter(*args, **kwargs):
@@ -160,8 +160,7 @@ class QuotableText(Text):
 					s = json.dumps(s)
 				suggestions.append(s)
 			return suggestions
-		quote_wrapper.__signature__ = inspect.signature(original_getter)
-		return super().suggests(quote_wrapper)
+		return super().suggests(misc_util.copy_signature(quote_wrapper, original_getter))
 
 
 class GreedyText(TextNode):
