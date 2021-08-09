@@ -28,7 +28,7 @@ The following section `Fields <#fields>`__ will use metadata declared in python 
 
 ---------
 
-For packed plugin, the metadata is declared in file ``mcdreforged.plugin.json`` in json syntax
+For multi file plugin, the metadata is declared in file ``mcdreforged.plugin.json`` in json syntax
 
 Here's an example
 

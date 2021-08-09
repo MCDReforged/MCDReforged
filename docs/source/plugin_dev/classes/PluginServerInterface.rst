@@ -103,7 +103,7 @@ Parameter *related_file_path*: The related file path in your plugin to the file 
 
 Returns a un-decoded bytes file-like object
 
-Raises ``FileNotFoundError`` if the plugin is not a packed plugin (that is, a solo plugin)
+Raises ``FileNotFoundError`` if the plugin is not a multi file plugin (that is, a solo plugin)
 
 Example:
 

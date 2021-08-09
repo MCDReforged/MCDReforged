@@ -5,14 +5,14 @@ from io import BytesIO
 from typing import IO, Collection, TYPE_CHECKING, Optional
 from zipfile import ZipFile
 
-from mcdreforged.plugin.type.packed_plugin import PackedPlugin
+from mcdreforged.plugin.type.multi_file_plugin import MultiFilePlugin
 from mcdreforged.utils.exception import IllegalPluginStructure
 
 if TYPE_CHECKING:
 	from mcdreforged.plugin.plugin_manager import PluginManager
 
 
-class ZippedPlugin(PackedPlugin):
+class ZippedPlugin(MultiFilePlugin):
 	def __init__(self, plugin_manager: 'PluginManager', file_path: str):
 		super().__init__(plugin_manager, file_path)
 		self.__zip_file_cache = None  # type: Optional[ZipFile]

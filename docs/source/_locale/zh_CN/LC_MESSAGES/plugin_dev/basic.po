@@ -110,13 +110,13 @@ msgstr "在 MCDR 加载你的插件时，MCDR 会导入你指定的入口点模�
 #: ../plugin_dev/basic.rst:74
 msgid ""
 "For `solo plugin <plugin_format.html#solo-plugin>`__ the entry point is "
-"the plugin itself. For `packed plugin <plugin_format.html#packed-"
+"the plugin itself. For `multi file plugin <plugin_format.html#multi-file-"
 "plugin>`__ the entrypoint is declared in metadata, with default value the"
 " id of the plugin, which is the ``__init__.py`` file in the folder named "
 "plugin id"
 msgstr ""
-"对 `单文件插件 <plugin_format.html#solo-plugin>`__ 而言，入口点就是插件自己。对于 `打包插件 "
-"<plugin_format.html#packed-plugin>`__，入口点声明于其元数据中，默认值是插件的 id，即位于以插件 id 为名的文件夹中的 ``__init__.py``。"
+"对 `单文件插件 <plugin_format.html#solo-plugin>`__ 而言，入口点就是插件自己。对于 `多文件插件 "
+"<plugin_format.html#multi-file-plugin>`__，入口点声明于其元数据中，默认值是插件的 id，即位于以插件 id 为名的文件夹中的 ``__init__.py``。"
 
 #: ../plugin_dev/basic.rst:76
 msgid "For example:"
@@ -124,13 +124,13 @@ msgstr "举个例子："
 
 #: ../plugin_dev/basic.rst:86
 msgid ""
-"For this packed plugin, with default entrypoint value, MCDR will import "
+"For this multi file plugin, with default entrypoint value, MCDR will import "
 "the module ``my_plugin``, which will actually loads the ``__init__.py`` "
 "in ``my_plugin/`` folder inside the ``MyPlugin.mcdr`` file. ``on_load`` "
 "function inside the ``__init__.py`` will be registered as an event "
 "listener"
 msgstr ""
-"在这个打包插件中，当入口点的值为默认值时，MCDR 会导入模块  ``my_plugin``，也就是加载 ``MyPlugin.mcdr`` 内 "
+"在这个多文件插件中，当入口点的值为默认值时，MCDR 会导入模块  ``my_plugin``，也就是加载 ``MyPlugin.mcdr`` 内 "
 "``my_plugin/`` 文件夹中的 ``__init__.py``位于  中的 ``on_load`` 函数将会被注册为事件监听器。"
 
 #: ../plugin_dev/basic.rst:88

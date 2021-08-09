@@ -169,9 +169,9 @@ msgstr "返回一个为解码的，bytes 形式的文件型的对象的对线"
 
 #: ../plugin_dev/classes/PluginServerInterface.rst:106
 msgid ""
-"Raises ``FileNotFoundError`` if the plugin is not a packed plugin (that "
+"Raises ``FileNotFoundError`` if the plugin is not a multi file plugin (that "
 "is, a solo plugin)"
-msgstr "如果插件并非是一个打包插件（换句话来讲，是一个单文件插件），那么将抛出 ``FileNotFoundError``"
+msgstr "如果插件并非是一个多文件插件（换句话来讲，是一个单文件插件），那么将抛出 ``FileNotFoundError``"
 
 #: ../plugin_dev/classes/PluginServerInterface.rst:108
 #: ../plugin_dev/classes/PluginServerInterface.rst:142

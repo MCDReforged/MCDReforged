@@ -1,11 +1,11 @@
 import os
 from typing import IO
 
-from mcdreforged.plugin.type.packed_plugin import PackedPlugin
+from mcdreforged.plugin.type.multi_file_plugin import MultiFilePlugin
 from mcdreforged.utils.exception import IllegalPluginStructure
 
 
-class DirectoryPlugin(PackedPlugin):
+class DirectoryPlugin(MultiFilePlugin):
 	def open_file(self, file_path: str) -> IO[bytes]:
 		return open(os.path.join(self.plugin_path, file_path), 'rb')
 

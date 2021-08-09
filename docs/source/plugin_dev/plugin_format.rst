@@ -9,7 +9,7 @@ See `this repository <https://github.com/MCDReforged/MCDReforged-ExamplePlugin>`
 Plugin format inheriting tree:
 
 * Solo Plugin
-* Packed Plugin (Abstract)
+* Multi file Plugin (Abstract)
 
     * Zipped Plugin
     * Directory Plugin
@@ -28,12 +28,12 @@ Being restricted with the one-file-only file format, some features are missing i
 
 When you only want to create a simple plugin as fast as possible, creating a solo plugin is always a good choice
 
-Packed Plugin
--------------
+Multi file Plugin
+-----------------
 
-Packed plugin is the collective name for the following two plugin format, `zipped plugin <#zipped-plugin>`__ and `directory plugin <#directory-plugin>`__
+Multi file plugin is the collective name for the following two plugin format, `zipped plugin <#zipped-plugin>`__ and `directory plugin <#directory-plugin>`__
 
-The biggest difference between packed plugin and solo plugin is that, it can consist of multiple files, rather than being limited into 1 single ``.py`` file. Therefore, more features are supported in a packed plugin which make it easier to create a general plugin
+The biggest difference between multi file plugin and solo plugin is that, it can consist of multiple files, rather than being limited into 1 single ``.py`` file. Therefore, more features are supported in a multi file plugin which make it easier to create a general plugin
 
 Zipped Plugin
 -------------

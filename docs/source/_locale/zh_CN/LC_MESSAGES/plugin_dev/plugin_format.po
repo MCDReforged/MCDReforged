@@ -43,8 +43,8 @@ msgid "Solo Plugin"
 msgstr "单文件插件"
 
 #: ../plugin_dev/plugin_format.rst:12
-msgid "Packed Plugin (Abstract)"
-msgstr "打包插件（抽象）"
+msgid "Multi file Plugin (Abstract)"
+msgstr "多文件插件（抽象）"
 
 #: ../plugin_dev/plugin_format.rst:14 ../plugin_dev/plugin_format.rst:39
 msgid "Zipped Plugin"
@@ -90,23 +90,23 @@ msgid ""
 msgstr "当你只想尽快编写一个简单的插件时，编写一个单文件插件总是一个不错的选择。"
 
 #: ../plugin_dev/plugin_format.rst:32
-msgid "Packed Plugin"
-msgstr "打包插件"
+msgid "Multi file Plugin"
+msgstr "多文件插件"
 
 #: ../plugin_dev/plugin_format.rst:34
 msgid ""
-"Packed plugin is the collective name for the following two plugin format,"
+"Multi file plugin is the collective name for the following two plugin format,"
 " `zipped plugin <#zipped-plugin>`__ and `directory plugin <#directory-"
 "plugin>`__"
-msgstr "打包插件是下面两种插件格式，`压缩插件 <#zipped-plugin>`__ 和 `文件夹插件 <#directory-plugin>`__，的统称"
+msgstr "多文件插件是下面两种插件格式，`压缩插件 <#zipped-plugin>`__ 和 `文件夹插件 <#directory-plugin>`__，的统称"
 
 #: ../plugin_dev/plugin_format.rst:36
 msgid ""
-"The biggest difference between packed plugin and solo plugin is that, it "
+"The biggest difference between multi file plugin and solo plugin is that, it "
 "can consist of multiple files, rather than being limited into 1 single "
-"``.py`` file. Therefore, more features are supported in a packed plugin "
+"``.py`` file. Therefore, more features are supported in a multi file plugin "
 "which make it easier to create a general plugin"
-msgstr "打包插件与单文件插件最大的区别是，它可以包含多个文件，而不是受限于单个 ``.py`` 文件。因此，打包文件支持更多的特性，这可以让插件编写更为容易。"
+msgstr "多文件插件与单文件插件最大的区别是，它可以包含多个文件，而不是受限于单个 ``.py`` 文件。因此，打包文件支持更多的特性，这可以让插件编写更为容易。"
 
 #: ../plugin_dev/plugin_format.rst:41
 msgid ""
@@ -196,19 +196,4 @@ msgid ""
 msgstr ""
 "在 ``!!MCDR reload plugin`` 这个 `热重载 <../command.html#hot-reloads>`__ "
 "指令中，文件夹插件总会被视为是“有变化”的插件"
-
-#~ msgid "RegularPlugin (Abstract)"
-#~ msgstr ""
-
-#~ msgid "SoloPlugin"
-#~ msgstr "单文件插件"
-
-#~ msgid "PackedPlugin (Abstract)"
-#~ msgstr ""
-
-#~ msgid "ZippedPlugin"
-#~ msgstr ""
-
-#~ msgid "DirectoryPlugin"
-#~ msgstr "文件夹插件"
 

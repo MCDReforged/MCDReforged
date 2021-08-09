@@ -71,7 +71,7 @@ Entrypoint
 
 Entrypoint is a module specifying what module MCDR will import when loading your plugin. It's the bridge between your plugin and MCDR
 
-For `solo plugin <plugin_format.html#solo-plugin>`__ the entry point is the plugin itself. For `packed plugin <plugin_format.html#packed-plugin>`__ the entrypoint is declared in metadata, with default value the id of the plugin, which is the ``__init__.py`` file in the folder named plugin id
+For `solo plugin <plugin_format.html#solo-plugin>`__ the entry point is the plugin itself. For `multi file plugin <plugin_format.html#multi-file-plugin>`__ the entrypoint is declared in metadata, with default value the id of the plugin, which is the ``__init__.py`` file in the folder named plugin id
 
 For example:
 
@@ -83,7 +83,7 @@ For example:
             source.py
         mcdreforged.plugin.json
 
-For this packed plugin, with default entrypoint value, MCDR will import the module ``my_plugin``, which will actually loads the ``__init__.py`` in ``my_plugin/`` folder inside the ``MyPlugin.mcdr`` file. ``on_load`` function inside the ``__init__.py`` will be registered as an event listener
+For this multi file plugin, with default entrypoint value, MCDR will import the module ``my_plugin``, which will actually loads the ``__init__.py`` in ``my_plugin/`` folder inside the ``MyPlugin.mcdr`` file. ``on_load`` function inside the ``__init__.py`` will be registered as an event listener
 
 If the entrypoint is set to ``my_plugin.source``, then MCDR will import ``my_plugin.source``, which will actually loads ``source.py`` in ``my_plugin/`` folder
 

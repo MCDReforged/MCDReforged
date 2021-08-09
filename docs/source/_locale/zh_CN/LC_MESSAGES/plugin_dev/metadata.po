@@ -44,9 +44,9 @@ msgstr "下面的 `属性 <#fields>`__ 小节将会使用 python 语法进行元
 
 #: ../plugin_dev/metadata.rst:31
 msgid ""
-"For packed plugin, the metadata is declared in file "
+"For multi file plugin, the metadata is declared in file "
 "``mcdreforged.plugin.json`` in json syntax"
-msgstr "对于打包插件或者文件夹插件而言，元数据以 json 语法在文件 ``mcdreforged.plugin.json`` 中声明。"
+msgstr "对于多文件插件或者文件夹插件而言，元数据以 json 语法在文件 ``mcdreforged.plugin.json`` 中声明。"
 
 #: ../plugin_dev/metadata.rst:33
 msgid "Here's an example"

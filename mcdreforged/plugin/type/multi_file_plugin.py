@@ -14,7 +14,7 @@ from mcdreforged.plugin.type.regular_plugin import RegularPlugin
 from mcdreforged.utils.exception import BrokenMetadata, IllegalPluginStructure
 
 
-class PackedPlugin(RegularPlugin, ABC):
+class MultiFilePlugin(RegularPlugin, ABC):
 	def get_fallback_metadata_id(self) -> str:
 		raise BrokenMetadata('Missing plugin id in {}'.format(plugin_constant.PLUGIN_META_FILE))
 

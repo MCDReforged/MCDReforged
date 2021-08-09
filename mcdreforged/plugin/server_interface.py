@@ -15,7 +15,7 @@ from mcdreforged.plugin.meta.metadata import Metadata
 from mcdreforged.plugin.operation_result import SingleOperationResult, PluginOperationResult
 from mcdreforged.plugin.plugin_event import EventListener, LiteralEvent, PluginEvent, MCDRPluginEvents
 from mcdreforged.plugin.plugin_registry import DEFAULT_LISTENER_PRIORITY, HelpMessage
-from mcdreforged.plugin.type.packed_plugin import PackedPlugin
+from mcdreforged.plugin.type.multi_file_plugin import MultiFilePlugin
 from mcdreforged.plugin.type.plugin import AbstractPlugin
 from mcdreforged.utils import misc_util
 from mcdreforged.utils.exception import IllegalCallError
@@ -600,7 +600,7 @@ class PluginServerInterface(ServerInterface):
 		:return: A un-decoded bytes file-like object
 		:raise: FileNotFoundError if the plugin is not a packed plugin (that is, a solo plugin)
 		"""
-		if not isinstance(self.__plugin, PackedPlugin):
+		if not isinstance(self.__plugin, MultiFilePlugin):
 			raise FileNotFoundError('Only packed plugin supported this API, found plugin type: {}'.format(self.__plugin.__class__))
 		return self.__plugin.open_file(related_file_path)
 
