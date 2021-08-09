@@ -60,32 +60,14 @@ Note: You should not dispatch custom events in the ``on_load`` function or it wi
 Plugin Unloaded
 ~~~~~~~~~~~~~~~
 
-This event gets triggered when MCDR unload the plugin instance. It can be caused by a plugin reload or a plugin unload
+This event gets dispatched when MCDR unload the plugin instance. It can be caused by a plugin reload or a plugin unload
+
+Also, this event will be dispatched during MCDR stopping, so it's a good place for you to do some cleanup
 
 
 * Event id: mcdr.plugin_unloaded
 * Callback arguments: ServerInterface
 * Default function name: on_unload
-
-Plugin Removed
-~~~~~~~~~~~~~~
-
-This even gets triggered when MCDR remove the plugin. It can only be caused by a plugin unload. It's time to do some clean up for your plugin
-
-Another event for plugin to do some cleanup is `MCDR Stop <#mcdr-stop>`__ event 
-
-Here is an example usage
-
-.. code-block:: python
-
-   def on_remove(server: ServerInterface, info: Info):
-       my_network_connection.disconnect()
-       stop_my_new_thread()
-
-
-* Event id: mcdr.plugin_removed
-* Callback arguments: ServerInterface
-* Default function name: on_remove
 
 General Info
 ~~~~~~~~~~~~
@@ -153,6 +135,8 @@ Server Stop
 
 The server process stops. You can do something depends on the process return code
 
+MCDR will wait until all events finished their callbacks to continue executing
+
 Example:
 
 .. code-block:: python
@@ -179,7 +163,11 @@ The MCDR is starting. Only plugins which is loaded with MCDR is able to receive 
 MCDR Stop
 ~~~~~~~~~
 
-The MCDR is stopping. Time to do some clean up like `Plugin Removed <#plugin-removed>`__ event 
+The MCDR is stopping. Time to do some clean up
+
+MCDR will wait until all events finished their callbacks to continue executing
+
+Watchdog is disabled during this event dispatching, so you can safely block MCDR here to wait until your cleanup codes finishes
 
 
 * Event id: mcdr.mcdr_stop

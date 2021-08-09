@@ -26,7 +26,7 @@ There are several changes to plugin event about plugin lifecycle to make the lif
 - ``Plugin Removed`` event is removed
 - ``Plugin Unload`` event will be dispatched when MCDR stopped
 
-With that the plugin lifecycle can be demonstrated with
+With that the plugin lifecycle can be covered with 2 events, `Plugin Loaded <../plugin_dev/event.html#plugin-loaded>`__ and `Plugin Unloaded <../plugin_dev/event.html#plugin-unloaded>`__
 
 Modules
 ^^^^^^^

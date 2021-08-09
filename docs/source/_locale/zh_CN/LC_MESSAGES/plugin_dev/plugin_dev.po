@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-01 17:57+0800\n"
+"POT-Creation-Date: 2021-08-08 11:44+0800\n"
 "PO-Revision-Date: 2021-01-22 14:26+0000\n"
 "Last-Translator: \n"
 "Language: zh_CN\n"
@@ -37,6 +37,10 @@ msgstr "API"
 #: ../plugin_dev/plugin_dev.rst:4
 msgid "Class References"
 msgstr "类参考"
+
+#: ../plugin_dev/plugin_dev.rst:4
+msgid "Watchdog"
+msgstr ""
 
 #: ../plugin_dev/plugin_dev.rst:4
 msgid "Some tips"

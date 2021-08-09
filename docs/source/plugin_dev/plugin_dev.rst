@@ -10,4 +10,5 @@ Plugin Development
    Command<command.rst>
    API<api.rst>
    Class References<classes/classes.rst>
+   Watchdog<watchdog.rst>
    Some tips<dev_tips.rst>

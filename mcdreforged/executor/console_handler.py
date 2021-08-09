@@ -1,11 +1,13 @@
 import sys
-from typing import TYPE_CHECKING, Optional, Iterable, Any
+from typing import TYPE_CHECKING, Optional, Iterable, Any, Callable
 
 from prompt_toolkit import PromptSession
 from prompt_toolkit.application import get_app
 from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
 from prompt_toolkit.completion import Completion, CompleteEvent, WordCompleter
 from prompt_toolkit.document import Document
+from prompt_toolkit.formatted_text import StyleAndTextTuples
+from prompt_toolkit.lexers import Lexer
 from prompt_toolkit.output.vt100 import Vt100_Output
 from prompt_toolkit.patch_stdout import StdoutProxy
 from prompt_toolkit.shortcuts import CompleteStyle
@@ -130,3 +132,7 @@ class PromptToolkitWrapper:
 		else:
 			return input()
 
+
+class MyLexer(Lexer):
+	def lex_document(self, document: Document) -> Callable[[int], StyleAndTextTuples]:
+		pass

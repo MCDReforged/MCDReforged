@@ -52,7 +52,7 @@ msgstr "受单文件的格式的限制，某些特性在单文件插件是不可
 
 #: ../plugin_dev/plugin_format.rst:17
 msgid "Python requirement check is not supported"
-msgstr "不支持 python 依赖检查"
+msgstr "不支持 python 依赖的检查"
 
 #: ../plugin_dev/plugin_format.rst:18
 msgid ""
