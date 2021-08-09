@@ -553,8 +553,8 @@ msgid "archive_name"
 msgstr "archive_name"
 
 #: ../plugin_dev/metadata.rst:260
-msgid "The file name of generated ``.mcdr`` zipped plugin in CLI"
-msgstr "在 CLI 中生成的 ``.mcdr`` 压缩插件的文件名。"
+msgid "The file name of generated ``.mcdr`` packed plugin in CLI"
+msgstr "在 CLI 中生成的 ``.mcdr`` 打包插件的文件名。"
 
 #: ../plugin_dev/metadata.rst:262
 msgid "See `here <cli.html#name>`__ for more information"
@@ -571,8 +571,8 @@ msgstr "resources"
 #: ../plugin_dev/metadata.rst:273
 msgid ""
 "A list of file or folder names that will be packed into the generated "
-"``.mcdr`` zipped plugin file in CLI"
-msgstr "一个文件或文件夹名称的列表，将用于在 CLI 中打包入 ``.mcdr`` 压缩插件"
+"``.mcdr`` packed plugin file in CLI"
+msgstr "一个文件或文件夹名称的列表，将用于在 CLI 中打包入 ``.mcdr`` 打包插件"
 
 #: ../plugin_dev/metadata.rst:275
 msgid "See `here <cli.html#pack>`__ for more information"

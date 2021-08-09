@@ -51,9 +51,9 @@ pack
 
     python -m mcdreforged pack [-h] [-i INPUT] [-o OUTPUT] [-n NAME]
 
-Pack up your plugin source codes / resources files, from a batch of files, to a ``.mcdr`` file zipped plugin
+Pack up your plugin source codes / resources files, from a batch of files, to a ``.mcdr`` file packed plugin
 
-The packing is based on the ``mcdreforged.plugin.json`` metadata file in the input directory. It will pack and only pack the following files/folders into the zipped plugin:
+The packing is based on the ``mcdreforged.plugin.json`` metadata file in the input directory. It will pack and only pack the following files/folders into the packed plugin:
 
 * Folder named by the plugin id
 * File ``mcdreforged.plugin.json``
@@ -90,7 +90,7 @@ output
 
     ``-o OUTPUT``, ``--output OUTPUT``
 
-    The output directory to store the generated zipped plugin
+    The output directory to store the generated packed plugin
 
     default: current directory
 
@@ -99,7 +99,7 @@ name
 
     ``-n NAME``, ``--name NAME``
 
-    A specific name for the output zipped plugin file
+    A specific name for the output packed plugin file
 
     If not given it will use the `archive_name <metadata.html#archive-name>`__ field in plugin metadata
 

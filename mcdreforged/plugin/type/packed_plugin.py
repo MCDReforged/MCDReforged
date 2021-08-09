@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 	from mcdreforged.plugin.plugin_manager import PluginManager
 
 
-class ZippedPlugin(MultiFilePlugin):
+class PackedPlugin(MultiFilePlugin):
 	def __init__(self, plugin_manager: 'PluginManager', file_path: str):
 		super().__init__(plugin_manager, file_path)
 		self.__zip_file_cache = None  # type: Optional[ZipFile]

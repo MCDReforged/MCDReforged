@@ -47,8 +47,8 @@ msgid "Multi file Plugin (Abstract)"
 msgstr "多文件插件（抽象）"
 
 #: ../plugin_dev/plugin_format.rst:14 ../plugin_dev/plugin_format.rst:39
-msgid "Zipped Plugin"
-msgstr "压缩插件"
+msgid "Packed Plugin"
+msgstr "打包插件"
 
 #: ../plugin_dev/plugin_format.rst:15 ../plugin_dev/plugin_format.rst:83
 msgid "Directory Plugin"
@@ -96,9 +96,9 @@ msgstr "多文件插件"
 #: ../plugin_dev/plugin_format.rst:34
 msgid ""
 "Multi file plugin is the collective name for the following two plugin format,"
-" `zipped plugin <#zipped-plugin>`__ and `directory plugin <#directory-"
+" `packed plugin <#packed-plugin>`__ and `directory plugin <#directory-"
 "plugin>`__"
-msgstr "多文件插件是下面两种插件格式，`压缩插件 <#zipped-plugin>`__ 和 `文件夹插件 <#directory-plugin>`__，的统称"
+msgstr "多文件插件是下面两种插件格式，`打包插件 <#packed-plugin>`__ 和 `文件夹插件 <#directory-plugin>`__，的统称"
 
 #: ../plugin_dev/plugin_format.rst:36
 msgid ""
@@ -110,13 +110,13 @@ msgstr "多文件插件与单文件插件最大的区别是，它可以包含多
 
 #: ../plugin_dev/plugin_format.rst:41
 msgid ""
-"Zipped plugin is a zip type compressed file with file extension name "
+"Packed plugin is a zip type compressed file with file extension name "
 "``.mcdr``. It's the recommended plugin format for distribution"
-msgstr "压缩插件是一个文件名后缀是 ``.mcdr`` 的 zip 类型的压缩文件。它是分发插件时的推荐格式。"
+msgstr "打包插件是一个文件名后缀是 ``.mcdr`` 的 zip 类型的压缩文件。它是分发插件时的推荐格式。"
 
 #: ../plugin_dev/plugin_format.rst:43
-msgid "A minimum zipped plugin consists of the following files at its zip root"
-msgstr "一个最小的压缩插件在其压缩文件根目录中包含了以下的文件："
+msgid "A minimum packed plugin consists of the following files at its zip root"
+msgstr "一个最小的打包插件在其压缩文件根目录中包含了以下的文件："
 
 #: ../plugin_dev/plugin_format.rst:45
 msgid "``mcdreforged.plugin.json``, contains the metadata of the plugin"
@@ -128,15 +128,15 @@ msgstr "一个以你的插件 id 为名的合法的 python 包"
 
 #: ../plugin_dev/plugin_format.rst:48
 msgid ""
-"Here's an example file tree of a minimum zipped plugin with plugin id "
+"Here's an example file tree of a minimum packed plugin with plugin id "
 "``my_plugin``:"
-msgstr "下面是插件 id 为 ``my_plugin`` 时，最小压缩插件的文件树的一个例子："
+msgstr "下面是插件 id 为 ``my_plugin`` 时，最小打包插件的文件树的一个例子："
 
 #: ../plugin_dev/plugin_format.rst:57
 msgid ""
-"Optionally, a zipped plugin can have some other useful files that will be"
+"Optionally, a packed plugin can have some other useful files that will be"
 " recognized by MCDR:"
-msgstr "可选的，压缩插件可以包含其他可被 MCDR 识别的有用的文件："
+msgstr "可选的，打包插件可以包含其他可被 MCDR 识别的有用的文件："
 
 #: ../plugin_dev/plugin_format.rst:59
 msgid ""
@@ -155,28 +155,28 @@ msgstr ""
 
 #: ../plugin_dev/plugin_format.rst:62
 msgid ""
-"You can include any other files or folders inside your zipped plugin. You"
+"You can include any other files or folders inside your packed plugin. You"
 " can access them via `open_bundled_file <classes/ServerInterface.html"
 "#open-bundled-file>`__ method in `ServerInterface "
 "<classes/ServerInterface.html>`__"
 msgstr ""
-"你可以在压缩插件中包含其他的自定义文件或文件夹。你可以借助 `ServerInterface "
+"你可以在打包插件中包含其他的自定义文件或文件夹。你可以借助 `ServerInterface "
 "<classes/ServerInterface.html>`__ 的 `open_bundled_file "
 "<classes/ServerInterface.html#open_bundled_file>`__ 方法来访问这些文件"
 
 #: ../plugin_dev/plugin_format.rst:64
 msgid ""
-"Here's an example file tree of a valid zipped plugin with more possible "
+"Here's an example file tree of a valid packed plugin with more possible "
 "files:"
-msgstr "下面是包含着更多文件的压缩插件的文件树的一个例子："
+msgstr "下面是包含着更多文件的打包插件的文件树的一个例子："
 
 #: ../plugin_dev/plugin_format.rst:85
 msgid ""
-"Directory plugin has exactly the same file structure as `zipped plugin "
-"<#zipped-plugin>`__. The only difference is that all files of a directory"
+"Directory plugin has exactly the same file structure as `packed plugin "
+"<#packed-plugin>`__. The only difference is that all files of a directory"
 " plugins are inside a directory instead of a ``.mcdr`` zip file"
 msgstr ""
-"文件夹插件拥有着与 `压缩插件 <#zipped-plugin>`__ "
+"文件夹插件拥有着与 `打包插件 <#packed-plugin>`__ "
 "完全一致的文件结构。唯一的区别为，文件夹插件的文件位于一个文件夹中，而非一个 ``.mcdr`` 压缩文件中。"
 
 #: ../plugin_dev/plugin_format.rst:87

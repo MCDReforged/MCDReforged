@@ -3,9 +3,9 @@ from typing import Optional, TYPE_CHECKING
 
 from mcdreforged.constants import plugin_constant
 from mcdreforged.plugin.type.directory_plugin import DirectoryPlugin
+from mcdreforged.plugin.type.packed_plugin import PackedPlugin
 from mcdreforged.plugin.type.regular_plugin import RegularPlugin
 from mcdreforged.plugin.type.solo_plugin import SoloPlugin
-from mcdreforged.plugin.type.zipped_plugin import ZippedPlugin
 from mcdreforged.utils import string_util
 
 if TYPE_CHECKING:
@@ -27,7 +27,7 @@ def __get_plugin_class_from_path(file_path: str, allow_disabled: bool) -> Option
 		if suffix == plugin_constant.SOLO_PLUGIN_FILE_SUFFIX:  # .py
 			return SoloPlugin
 		if suffix == plugin_constant.PACKED_PLUGIN_FILE_SUFFIX:  # .mcdr
-			return ZippedPlugin
+			return PackedPlugin
 	elif os.path.isdir(file_path) and (allow_disabled or not file_path.endswith(plugin_constant.DISABLED_PLUGIN_FILE_SUFFIX)):
 		if os.path.isfile(os.path.join(file_path, plugin_constant.PLUGIN_META_FILE)) and not os.path.isfile(os.path.join(file_path, '__init__.py')):
 			return DirectoryPlugin
