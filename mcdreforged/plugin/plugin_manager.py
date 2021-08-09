@@ -107,7 +107,7 @@ class PluginManager:
 				self.__tls.pop(self.TLS_PLUGIN_KEY)
 
 	def contains_plugin_file(self, file_path: str) -> bool:
-		return file_path in self.plugin_file_path
+		return os.path.abspath(file_path) in self.plugin_file_path
 
 	def contains_plugin_id(self, plugin_id: str) -> bool:
 		"""
@@ -141,16 +141,14 @@ class PluginManager:
 			self.logger.critical('Something is not correct, a plugin with existed plugin id "{}" is added'.format(plugin_id))
 		self.plugins[plugin_id] = plugin
 		if isinstance(plugin, RegularPlugin):
-			self.plugin_file_path[plugin.plugin_path] = plugin_id
+			self.plugin_file_path[os.path.abspath(plugin.plugin_path)] = plugin_id
 
 	def __remove_plugin(self, plugin: AbstractPlugin):
 		if not plugin.is_permanent():
 			plugin_id = plugin.get_id()
-			if plugin_id in self.plugins:
-				self.plugins.pop(plugin_id)
+			self.plugins.pop(plugin_id, None)
 			if isinstance(plugin, RegularPlugin):
-				if plugin.plugin_path in self.plugin_file_path:
-					self.plugin_file_path.pop(plugin.plugin_path)
+				self.plugin_file_path.pop(os.path.abspath(plugin.plugin_path), None)
 
 	# ----------------------------
 	#   Single Plugin Operations

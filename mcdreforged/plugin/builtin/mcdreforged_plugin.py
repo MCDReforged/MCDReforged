@@ -10,6 +10,7 @@ from mcdreforged.command.command_source import CommandSource
 from mcdreforged.constants import core_constant, plugin_constant
 from mcdreforged.minecraft.rtext import RText, RAction, RTextList, RStyle, RColor
 from mcdreforged.permission.permission_level import PermissionLevel
+from mcdreforged.plugin import plugin_factory
 from mcdreforged.plugin.meta.metadata import Metadata
 from mcdreforged.plugin.plugin_event import MCDRPluginEvents, EventListener
 from mcdreforged.plugin.plugin_registry import HelpMessage
@@ -72,6 +73,18 @@ class MCDReforgedPlugin(PermanentPlugin):
 		def plugin_id_node():
 			return QuotableText('plugin_id').suggests_matching(lambda: [plg.get_id() for plg in self.plugin_manager.get_regular_plugins()])
 
+		def plugin_file_name_node():
+			def get_not_loaded_stuffs():
+				result = []
+				for file_path in self.get_files_in_plugin_directories(lambda s: True):
+					if not self.plugin_manager.contains_plugin_file(file_path) and plugin_factory.maybe_plugin(file_path, allow_disabled=True):
+						result.append(os.path.basename(file_path))
+				return result
+			return QuotableText('file_name').suggests_matching(get_not_loaded_stuffs)
+
+		def permission_player_node():
+			return QuotableText('player').suggests(lambda: self.mcdr_server.permission_manager.get_players())
+
 		self.register_command(
 			Literal(self.get_control_command_prefix()).
 			requires(lambda src: src.has_permission(PermissionLevel.MCDR_CONTROL_LEVEL)).
@@ -98,12 +111,12 @@ class MCDReforgedPlugin(PermanentPlugin):
 					Literal('list').runs(lambda src: self.list_permission(src, None)).
 					then(Text('level').runs(lambda src, ctx: self.list_permission(src, ctx['level'])))
 				).
-				then(Literal('set').then(QuotableText('player').then(Text('level').runs(lambda src, ctx: self.set_player_permission(src, ctx['player'], ctx['level']))))).
+				then(Literal('set').then(permission_player_node().then(Text('level').runs(lambda src, ctx: self.set_player_permission(src, ctx['player'], ctx['level']))))).
 				then(
 					Literal({'query', 'q'}).runs(lambda src: self.query_self_permission(src)).
-					then(QuotableText('player').runs(lambda src, ctx: self.query_player_permission(src, ctx['player'])))
+					then(permission_player_node().runs(lambda src, ctx: self.query_player_permission(src, ctx['player'])))
 				).
-				then(Literal({'remove', 'rm'}).then(QuotableText('player').runs(lambda src, ctx: self.remove_player_permission(src, ctx['player'])))).
+				then(Literal({'remove', 'rm'}).then(permission_player_node().runs(lambda src, ctx: self.remove_player_permission(src, ctx['player'])))).
 				then(Literal({'setdefault', 'setd'}).then(Text('level').runs(lambda src, ctx: self.set_default_permission(src, ctx['level']))))
 			).
 			then(
@@ -112,8 +125,8 @@ class MCDReforgedPlugin(PermanentPlugin):
 				on_error(UnknownArgument, self.on_mcdr_command_unknown_argument).
 				then(Literal('list').runs(self.list_plugin)).
 				then(Literal('info').then(plugin_id_node().runs(lambda src, ctx: self.show_plugin_info(src, ctx['plugin_id'])))).
-				then(Literal('load').then(GreedyText('file_name').runs(lambda src, ctx: self.load_plugin(src, ctx['file_name'])))).
-				then(Literal('enable').then(GreedyText('file_name').runs(lambda src, ctx: self.enable_plugin(src, ctx['file_name'])))).
+				then(Literal('load').then(plugin_file_name_node().runs(lambda src, ctx: self.load_plugin(src, ctx['file_name'])))).
+				then(Literal('enable').then(plugin_file_name_node().runs(lambda src, ctx: self.enable_plugin(src, ctx['file_name'])))).
 				then(Literal('reload').then(plugin_id_node().runs(lambda src, ctx: self.reload_plugin(src, ctx['plugin_id'])))).
 				then(Literal('unload').then(plugin_id_node().runs(lambda src, ctx: self.unload_plugin(src, ctx['plugin_id'])))).
 				then(Literal('disable').then(plugin_id_node().runs(lambda src, ctx: self.disable_plugin(src, ctx['plugin_id'])))).

@@ -22,17 +22,17 @@ class PermissionLevelItem:
 
 class PermissionLevel:
 	class __Storage(Enum):
-		GUEST	= PermissionLevelItem('guest', 0)
-		USER	= PermissionLevelItem('user', 1)
-		HELPER	= PermissionLevelItem('helper', 2)
-		ADMIN	= PermissionLevelItem('admin', 3)
-		OWNER	= PermissionLevelItem('owner', 4)
+		GUEST_	= PermissionLevelItem('guest', 0)
+		USER_	= PermissionLevelItem('user', 1)
+		HELPER_	= PermissionLevelItem('helper', 2)
+		ADMIN_	= PermissionLevelItem('admin', 3)
+		OWNER_	= PermissionLevelItem('owner', 4)
 
-	GUEST = __Storage.GUEST.value.level
-	USER = __Storage.USER.value.level
-	HELPER = __Storage.HELPER.value.level
-	ADMIN = __Storage.ADMIN.value.level
-	OWNER = __Storage.OWNER.value.level
+	GUEST = __Storage.GUEST_.value.level
+	USER = __Storage.USER_.value.level
+	HELPER = __Storage.HELPER_.value.level
+	ADMIN = __Storage.ADMIN_.value.level
+	OWNER = __Storage.OWNER_.value.level
 
 	INSTANCES = [item.value for item in __Storage]  # type: List[PermissionLevelItem]
 	LEVELS = [inst.level for inst in INSTANCES]  # type: List[int]

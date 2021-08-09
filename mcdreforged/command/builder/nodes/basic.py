@@ -6,10 +6,9 @@ from types import MethodType
 from typing import List, Callable, Iterable, Set, Dict, Type, Any, Union, Optional, Collection
 
 from mcdreforged.command.builder import command_builder_util as utils
-from mcdreforged.command.builder.exception import LiteralNotMatch, NumberOutOfRange, EmptyText, \
-	UnknownCommand, UnknownArgument, CommandSyntaxError, UnknownRootArgument, RequirementNotMet, IllegalNodeOperation, \
-	CommandError, InvalidNumber, InvalidInteger, InvalidFloat, UnclosedQuotedString, IllegalEscapesUsage, \
-	TextLengthOutOfRange
+from mcdreforged.command.builder.exception import LiteralNotMatch, UnknownCommand, UnknownArgument, CommandSyntaxError, \
+	UnknownRootArgument, RequirementNotMet, IllegalNodeOperation, \
+	CommandError
 from mcdreforged.command.command_source import CommandSource
 
 SOURCE_CONTEXT_CALLBACK = Union[Callable[[], Any], Callable[[CommandSource], Any], Callable[[CommandSource, dict], Any]]
@@ -168,11 +167,15 @@ class ArgumentNode:
 
 	def suggests(self, suggestion: SOURCE_CONTEXT_CALLBACK_STR_LIST):
 		self.suggestion_getter = suggestion
+		return self
 
-	def suggests_matching(self, keywords: Collection[str]):
+	def suggests_matching(self, keywords: Collection[str] or Callable[[], Collection[str]]):
 		def suggest(source, context: CommandContext):
-			return [keyword for keyword in keywords if keyword.startswith(context.command_remaining)]
-		self.suggests(suggest)
+			kw_collection = keywords
+			if callable(kw_collection):
+				kw_collection = kw_collection()
+			return [keyword for keyword in kw_collection if keyword.startswith(context.command_remaining)]
+		return self.suggests(suggest)
 
 	def on_error(self, error_type: Type[CommandError], handler: SOURCE_ERROR_CONTEXT_CALLBACK, *, handled: bool = False) -> 'ArgumentNode':
 		"""
@@ -324,11 +327,14 @@ class ArgumentNode:
 		"""
 		Return a list of tuple (suggested command, suggested argument)
 		"""
+		def self_suggestions():
+			return CommandSuggestions([CommandSuggestion(context.command_read, s) for s in self._get_suggestions(context)])
+
 		suggestions = CommandSuggestions()
 		try:
 			result = self.parse(context.command_remaining)
 		except CommandSyntaxError:
-			return CommandSuggestions([CommandSuggestion(context.command_read, s) for s in self._get_suggestions(context)])
+			return self_suggestions()
 		else:
 			success_read = len(context.command) - len(context.command_remaining) + result.char_read  # type: int
 			next_remaining = utils.remove_divider_prefix(context.command_remaining[result.char_read:])  # type: str
@@ -343,9 +349,9 @@ class ArgumentNode:
 			# Parsing finished
 			if len(next_remaining) == 0:
 				# total_read == success_read means DIVIDER does not exists at the end of the input string
-				# in that case, don't give any suggestions
+				# in that case, ends at this current node
 				if success_read == total_read:
-					return CommandSuggestions()
+					return self_suggestions()
 
 			node = self if self.redirect_node is None else self.redirect_node
 			# Check literal children first
@@ -391,10 +397,6 @@ class EntryNode(ArgumentNode, ABC):
 		"""
 		return self._generate_suggestions(CommandContext(source, command))
 
-# ---------------------------------
-#   Argument Node implementations
-# ---------------------------------
-
 
 class Literal(EntryNode):
 	"""
@@ -426,154 +428,3 @@ class Literal(EntryNode):
 
 	def __repr__(self):
 		return 'Literal[literals={}]'.format(self.literals)
-
-# --------------------
-#   Number Arguments
-# --------------------
-
-
-class NumberNode(ArgumentNode, ABC):
-	def __init__(self, name):
-		super().__init__(name)
-		self.__min_value = None
-		self.__max_value = None
-
-	def at_min(self, min_value) -> 'NumberNode':
-		self.__min_value = min_value
-		return self
-
-	def at_max(self, max_value) -> 'NumberNode':
-		self.__max_value = max_value
-		return self
-
-	def in_range(self, min_value, max_value) -> 'NumberNode':
-		self.at_min(min_value)
-		self.at_max(max_value)
-		return self
-
-	def _check_in_range_and_return(self, value, char_read):
-		if (self.__min_value is not None and value < self.__min_value) or (self.__max_value is not None and value > self.__max_value):
-			raise NumberOutOfRange(char_read, value, self.__min_value, self.__max_value)
-		return ParseResult(value, char_read)
-
-
-class Number(NumberNode):
-	"""
-	An Integer, or a float
-	"""
-	def parse(self, text):
-		value, read = utils.get_int(text)
-		if value is None:
-			value, read = utils.get_float(text)
-		if value is not None:
-			return self._check_in_range_and_return(value, read)
-		else:
-			raise InvalidNumber(read)
-
-
-class Integer(NumberNode):
-	"""
-	An Integer
-	"""
-	def parse(self, text):
-		value, read = utils.get_int(text)
-		if value is not None:
-			return self._check_in_range_and_return(value, read)
-		else:
-			raise InvalidInteger(read)
-
-
-class Float(NumberNode):
-	def parse(self, text):
-		value, read = utils.get_float(text)
-		if value is not None:
-			return self._check_in_range_and_return(value, read)
-		else:
-			raise InvalidFloat(read)
-
-# ------------------
-#   Text Arguments
-# ------------------
-
-
-class TextNode(ArgumentNode, ABC):
-	def __init__(self, name):
-		super().__init__(name)
-		self.__min_length = None
-		self.__max_length = None
-
-	def at_min_length(self, min_length) -> 'TextNode':
-		self.__min_length = min_length
-		return self
-
-	def at_max_length(self, max_length) -> 'TextNode':
-		self.__max_length = max_length
-		return self
-
-	def in_length_range(self, min_length, max_length) -> 'TextNode':
-		self.__min_length = min_length
-		self.__max_length = max_length
-		return self
-
-	def _check_length_in_range_and_return(self, text, char_read):
-		length = len(text)
-		if (self.__min_length is not None and length < self.__min_length) or (self.__max_length is not None and length > self.__max_length):
-			raise TextLengthOutOfRange(char_read, length, self.__min_length, self.__max_length)
-		return ParseResult(text, char_read)
-
-
-class Text(TextNode):
-	"""
-	A text argument with no space character
-	Just like a single word
-	"""
-	def parse(self, text):
-		arg = utils.get_element(text)
-		return self._check_length_in_range_and_return(arg, len(arg))
-
-
-class QuotableText(Text):
-	QUOTE_CHAR = '"'
-	ESCAPE_CHAR = '\\'
-
-	def __init__(self, name):
-		super().__init__(name)
-		self.empty_allowed = False
-
-	def allow_empty(self):
-		self.empty_allowed = True
-		return self
-
-	def parse(self, text):
-		if len(text) == 0 or text[0] != self.QUOTE_CHAR:
-			return super().parse(text)  # regular text
-		collected = []
-		i = 1
-		escaped = False
-		while i < len(text):
-			ch = text[i]
-			if escaped:
-				if ch == self.ESCAPE_CHAR or ch == self.QUOTE_CHAR:
-					collected.append(ch)
-					escaped = False
-				else:
-					raise IllegalEscapesUsage(i + 1)
-			elif ch == self.ESCAPE_CHAR:
-				escaped = True
-			elif ch == self.QUOTE_CHAR:
-				result = ''.join(collected)
-				if not self.empty_allowed and len(result) == 0:
-					raise EmptyText(i + 1)
-				return self._check_length_in_range_and_return(result, i + 1)
-			else:
-				collected.append(ch)
-			i += 1
-		raise UnclosedQuotedString(len(text))
-
-
-class GreedyText(TextNode):
-	"""
-	A greedy text argument, which will consume all remaining input
-	"""
-	def parse(self, text):
-		return self._check_length_in_range_and_return(text, len(text))

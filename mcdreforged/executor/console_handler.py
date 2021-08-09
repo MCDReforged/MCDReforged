@@ -86,7 +86,7 @@ class CommandCompleter(WordCompleter):
 	def get_completions(self, document: Document, complete_event: CompleteEvent) -> Iterable[Completion]:
 		input_ = document.current_line_before_cursor
 		suggestions = self.command_manager.suggest_command(input_, ConsoleSuggestionCommandSource())
-		self.words = misc_util.unique_list([suggestion.command for suggestion in suggestions])
+		self.words = sorted(misc_util.unique_list([suggestion.command for suggestion in suggestions]))
 		self.display_dict = dict([(suggestion.command, suggestion.suggest_input) for suggestion in suggestions])
 		return super().get_completions(document, complete_event)
 

@@ -1,10 +1,13 @@
+import inspect
+import json
 from abc import ABC
 
 from mcdreforged.command.builder import command_builder_util as utils
+from mcdreforged.command.builder.command_builder_util import DIVIDER
 from mcdreforged.command.builder.exception import NumberOutOfRange, EmptyText, \
 	InvalidNumber, InvalidInteger, InvalidFloat, UnclosedQuotedString, IllegalEscapesUsage, \
 	TextLengthOutOfRange
-from mcdreforged.command.builder.nodes.basic import ArgumentNode, ParseResult
+from mcdreforged.command.builder.nodes.basic import ArgumentNode, ParseResult, SOURCE_CONTEXT_CALLBACK_STR_LIST
 
 
 # --------------------
@@ -148,6 +151,17 @@ class QuotableText(Text):
 				collected.append(ch)
 			i += 1
 		raise UnclosedQuotedString(len(text))
+
+	def suggests(self, original_getter: SOURCE_CONTEXT_CALLBACK_STR_LIST):
+		def quote_wrapper(*args, **kwargs):
+			suggestions = []
+			for s in original_getter(*args, **kwargs):
+				if DIVIDER in s:
+					s = json.dumps(s)
+				suggestions.append(s)
+			return suggestions
+		quote_wrapper.__signature__ = inspect.signature(original_getter)
+		return super().suggests(quote_wrapper)
 
 
 class GreedyText(TextNode):

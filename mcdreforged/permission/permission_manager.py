@@ -1,6 +1,8 @@
 """
 Permission control things
 """
+from typing import Set
+
 from mcdreforged.command.command_source import CommandSource
 from mcdreforged.info import *
 from mcdreforged.permission.permission_level import PermissionLevel, PermissionLevelItem
@@ -156,3 +158,9 @@ class PermissionManager(YamlDataStorage):
 			return self.get_player_permission_level(source.player)
 		else:
 			raise TypeError('Unknown type {} in get_permission'.format(type(source)))
+
+	def get_players(self) -> Set[str]:
+		players = set()
+		for level_value in PermissionLevel.LEVELS:
+			players.update(self.get_permission_group_list(level_value))
+		return players
