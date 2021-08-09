@@ -180,8 +180,8 @@ If set to true, MCDR will detect if there's a new version every 24h
 * Option type: boolean
 * Default value: ``true``
 
-advance_console
-~~~~~~~~~~~~~~~
+advanced_console
+~~~~~~~~~~~~~~~~
 
 Advance console switch powered by `prompt-toolkit <https://pypi.org/project/prompt-toolkit/>`__
 

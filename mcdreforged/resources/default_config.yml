@@ -61,7 +61,7 @@ check_update: true
 
 # Advance console switch powered by prompt-toolkit
 # Set it to false if you need to redirect the stdin/stdout of MCDR
-advance_console: true
+advanced_console: true
 
 
 # =========================================

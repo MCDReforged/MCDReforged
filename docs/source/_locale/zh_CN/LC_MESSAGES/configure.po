@@ -387,8 +387,8 @@ msgid "Default value: ``true``"
 msgstr "默认值：``true``"
 
 #: ../configure.rst:184
-msgid "advance_console"
-msgstr "advance_console"
+msgid "advanced_console"
+msgstr "advanced_console"
 
 #: ../configure.rst:186
 msgid ""

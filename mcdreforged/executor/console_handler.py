@@ -30,7 +30,7 @@ class ConsoleHandler(ThreadExecutor):
 		self.console_kit = PromptToolkitWrapper(self)
 
 	def loop(self):
-		if self.mcdr_server.config['advance_console']:
+		if self.mcdr_server.config['advanced_console']:
 			self.console_kit.start_kits()
 		super().loop()
 
