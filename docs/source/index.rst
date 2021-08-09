@@ -15,7 +15,7 @@ This is the official documentation for `MCDReforged <https://github.com/Fallen-B
    Configure<configure.rst>
    Permission<permission.rst>
    Command<command.rst>
-   Plugin Development<plugin_dev/plugin_dev.rst>
+   Plugin Development<plugin_dev/index.rst>
    Customize<customize/customize.rst>
    Migrate Guide<migrate/index.rst>
 

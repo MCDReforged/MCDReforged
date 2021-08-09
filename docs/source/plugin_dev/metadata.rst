@@ -259,7 +259,7 @@ archive_name
 
 The file name of generated ``.mcdr`` packed plugin in CLI
 
-See `here <TODO>`__ for more information
+See `here <cli.html#name>`__ for more information
 
 * Field key: ``archive_name``
 * Value type: str
@@ -272,7 +272,7 @@ resources
 
 A list of file or folder names that will be packed into the generated ``.mcdr`` packed plugin file in CLI
 
-See `here <TODO>`__ for more information
+See `here <cli.html#pack>`__ for more information
 
 * Field key: ``resources``
 * Value type: List[str]

@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-09 20:26+0800\n"
+"POT-Creation-Date: 2021-08-10 00:21+0800\n"
 "PO-Revision-Date: 2021-01-23 10:38+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -556,8 +556,9 @@ msgstr "archive_name"
 msgid "The file name of generated ``.mcdr`` packed plugin in CLI"
 msgstr "在 CLI 中生成的 ``.mcdr`` 打包插件的文件名。"
 
-#: ../plugin_dev/metadata.rst:262 ../plugin_dev/metadata.rst:275
-msgid "See `here <TODO>`__ for more information"
+#: ../plugin_dev/metadata.rst:262
+#, fuzzy
+msgid "See `here <cli.html#name>`__ for more information"
 msgstr "见 `此处 <TODO>`__ 以获取更多有关 CLI 的信息。"
 
 #: ../plugin_dev/metadata.rst:264
@@ -574,6 +575,11 @@ msgid ""
 "``.mcdr`` packed plugin file in CLI"
 msgstr "一个文件或文件夹名称的列表，将用于在 CLI 中打包入 ``.mcdr`` 打包插件"
 
+#: ../plugin_dev/metadata.rst:275
+#, fuzzy
+msgid "See `here <cli.html#pack>`__ for more information"
+msgstr "见 `此处 <TODO>`__ 以获取更多有关 CLI 的信息。"
+
 #: ../plugin_dev/metadata.rst:277
 msgid "Field key: ``resources``"
 msgstr "字段键名：``resources``"
@@ -581,3 +587,4 @@ msgstr "字段键名：``resources``"
 #: ../plugin_dev/metadata.rst:278
 msgid "Value type: List[str]"
 msgstr "字段类型：List[str]"
+

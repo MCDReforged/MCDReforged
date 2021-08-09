@@ -32,17 +32,16 @@ def entry_point():
 		prog=core_constant.PACKAGE_NAME,
 		description='{} CLI'.format(core_constant.NAME),
 	)
-	parser.add_argument('-q', '--quiet', help='Disable output', action='store_true')
+	parser.add_argument('-q', '--quiet', help='Disable CLI output', action='store_true')
 	subparsers = parser.add_subparsers(title='Command', help='Available commands', dest='subparser_name')
 
 	subparsers.add_parser('start', help='Start {}'.format(core_constant.NAME))
-	subparsers.add_parser('gendefault', help='Generate default configure and permission files here')
+	subparsers.add_parser('gendefault', help='Generate default configure and permission files at current working directory')
 
 	parser_pack = subparsers.add_parser('pack', help='Pack plugin files into a {} plugin'.format(plugin_constant.PACKED_PLUGIN_FILE_SUFFIX))
 	parser_pack.add_argument('-i', '--input', help='The input directory which the plugin is in, default: current directory', default='.')
 	parser_pack.add_argument('-o', '--output', help='The output directory to store the packed plugin, default: current directory', default='.')
 	parser_pack.add_argument('-n', '--name', help='A specific name to the output packed plugin file. If not given the metadata specific name or a default one will be used', default=None)
-	parser_pack.add_argument('--keep-pycache', help='Keep __pycache__ folder if appended', action='store_true')
 
 	result = parser.parse_args()
 	quiet = result.quiet
@@ -52,7 +51,7 @@ def entry_point():
 	elif result.subparser_name == 'gendefault':
 		MCDReforgedServer(generate_default_only=True)
 	elif result.subparser_name == 'pack':
-		make_packed_plugin(result.input, result.output, result.name, quiet=quiet, keep_pycache=result.keep_pycache)
+		make_packed_plugin(result.input, result.output, result.name, quiet=quiet)
 
 
 def run_mcdr():
@@ -72,7 +71,7 @@ def run_mcdr():
 			pass
 
 
-def make_packed_plugin(input_dir: str, output_dir: str, file_name: Optional[str], *, quiet: bool = False, keep_pycache: bool = False):
+def make_packed_plugin(input_dir: str, output_dir: str, file_name: Optional[str], *, quiet: bool = False):
 	writeln = print if not quiet else lambda *args, **kwargs: None
 
 	if not os.path.isdir(input_dir):
@@ -102,21 +101,21 @@ def make_packed_plugin(input_dir: str, output_dir: str, file_name: Optional[str]
 		file_name = '{}-v{}'.format(meta.name.replace(' ', '') or meta.id, meta.version)
 	file_name = file_name.format(id=meta.id, version=meta.version) + plugin_constant.PACKED_PLUGIN_FILE_SUFFIX
 
-	def write(base_path: str, *, directory_only=True):
+	def write(base_path: str, *, directory_only: bool):
 		if os.path.isdir(base_path):
 			dir_arc = os.path.basename(base_path)
 			zip_file.write(base_path, arcname=dir_arc)
 			writeln('Creating directory: {} -> {}'.format(base_path, dir_arc))
 			for dir_path, dir_names, file_names in os.walk(base_path):
-				if not keep_pycache and os.path.basename(dir_path) == '__pycache__':
+				if os.path.basename(dir_path) == '__pycache__':
 					continue
 				for file_name_ in file_names + dir_names:
 					full_path = os.path.join(dir_path, file_name_)
-					if not keep_pycache and os.path.isdir(full_path) and os.path.basename(full_path) == '__pycache__':
+					if os.path.isdir(full_path) and os.path.basename(full_path) == '__pycache__':
 						continue
 					arc_name = os.path.join(os.path.basename(base_path), full_path.replace(base_path, '', 1).lstrip(os.sep))
 					zip_file.write(full_path, arcname=arc_name)
-					writeln('Writing: {} -> {}'.format(full_path, arc_name))
+					writeln('  Writing: {} -> {}'.format(full_path, arc_name))
 		elif os.path.isfile(base_path) and not directory_only:
 			arc_name = os.path.basename(base_path)
 			zip_file.write(base_path, arcname=arc_name)
@@ -124,11 +123,10 @@ def make_packed_plugin(input_dir: str, output_dir: str, file_name: Optional[str]
 
 	writeln('Packing plugin "{}" into "{}" ...'.format(meta.id, file_name))
 	with ZipFile(os.path.join(output_dir, file_name), 'w') as zip_file:
-		zip_file.write(meta_file_path, os.path.basename(meta_file_path))
-		if os.path.isfile(req_file_path):
-			zip_file.write(req_file_path, os.path.basename(req_file_path))
-		write(os.path.join(input_dir, meta.id))
-		for resource_path in meta.resources:
+		write(meta_file_path, directory_only=False)  # metadata
+		write(req_file_path, directory_only=False)  # requirement
+		write(os.path.join(input_dir, meta.id), directory_only=True)  # source module
+		for resource_path in meta.resources:  # resources
 			write(os.path.join(input_dir, resource_path), directory_only=False)
 
 	writeln('Done')

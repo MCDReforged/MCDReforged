@@ -10,6 +10,7 @@ Plugin Development
    Plugin Event<event.rst>
    Command Tree<command.rst>
    API<api.rst>
-   Class References<classes/classes.rst>
    Watchdog<watchdog.rst>
+   Command Line Interface<cli.rst>
    Some tips<dev_tips.rst>
+   Class References<classes/classes.rst>
