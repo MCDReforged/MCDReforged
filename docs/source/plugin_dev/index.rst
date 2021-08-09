@@ -12,5 +12,6 @@ Plugin Development
    API<api.rst>
    Watchdog<watchdog.rst>
    Command Line Interface<cli.rst>
+   Plugin Catalogue<plugin_catalogue.rst>
    Some tips<dev_tips.rst>
    Class References<classes/classes.rst>

@@ -557,9 +557,8 @@ msgid "The file name of generated ``.mcdr`` packed plugin in CLI"
 msgstr "在 CLI 中生成的 ``.mcdr`` 打包插件的文件名。"
 
 #: ../plugin_dev/metadata.rst:262
-#, fuzzy
 msgid "See `here <cli.html#name>`__ for more information"
-msgstr "见 `此处 <TODO>`__ 以获取更多有关 CLI 的信息。"
+msgstr "见 `此处 <cli.html#name>`__ 以获取更多有关 CLI 的信息。"
 
 #: ../plugin_dev/metadata.rst:264
 msgid "Field key: ``archive_name``"
@@ -576,9 +575,8 @@ msgid ""
 msgstr "一个文件或文件夹名称的列表，将用于在 CLI 中打包入 ``.mcdr`` 打包插件"
 
 #: ../plugin_dev/metadata.rst:275
-#, fuzzy
 msgid "See `here <cli.html#pack>`__ for more information"
-msgstr "见 `此处 <TODO>`__ 以获取更多有关 CLI 的信息。"
+msgstr "见 `此处 <cli.html#pack>`__ 以获取更多有关 CLI 的信息。"
 
 #: ../plugin_dev/metadata.rst:277
 msgid "Field key: ``resources``"
