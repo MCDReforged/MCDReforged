@@ -40,7 +40,7 @@ if os.getenv('CI', None) is not None:
 here = os.path.abspath(os.path.dirname(__file__))
 
 with open(os.path.join(here, 'requirements.txt')) as f:
-	REQUIRED = [re.match(r'^[A-Za-z.]+', line).group() for line in f.readlines() if not len(line.strip()) == 0]
+	REQUIRED = [re.match(r'^[A-Za-z.-]+', line).group() for line in f.readlines() if not len(line.strip()) == 0]
 
 print('REQUIRED = {}'.format(REQUIRED))
 
