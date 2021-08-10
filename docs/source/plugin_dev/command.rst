@@ -67,6 +67,13 @@ Matching the literal nodes, parsing the remaining command, storing the parsed va
 
 Rather than reading this document, anther good way to learn to use the MCDR command building system is to refer and imitate existing codes. You can find the command building code of ``!!MCDR`` command in the ``__register_commands`` method of class ``mcdreforged.plugin.permanent.mcdreforged_plugin.MCDReforgedPlugin``
 
+Context
+-------
+
+Context stores the information of current command parsing. It's a class inherited from dict
+
+Parsed values are stored inside context using the dict method, which means you can use ``context['arg_name']`` to access them
+
 Argument Nodes
 --------------
 
@@ -82,7 +89,7 @@ then
 
 .. code-block:: python
 
-    def then(self, node: 'ArgumentNode') -> ArgumentNode
+    def then(self, node: ArgumentNode) -> ArgumentNode
 
 Attach a child node to its children list, and then return itself
 
@@ -233,7 +240,7 @@ suggests
 
 .. code-block:: python
 
-    def suggests(self, suggestion: SOURCE_CONTEXT_CALLBACK_STR_COLLECTION) -> ArgumentNode
+    def suggests(self, suggestion: Union[Callable[[], Collection[str]], Callable[[CommandSource], Collection[str]], Callable[[CommandSource, dict], Collection[str]]]) -> ArgumentNode
 
 Set the provider for command suggestions of this node
 

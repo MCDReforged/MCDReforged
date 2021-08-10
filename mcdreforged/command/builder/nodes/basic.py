@@ -65,31 +65,51 @@ class CommandSuggestions(list):
 
 
 class CommandContext(dict):
-	def __init__(self, source, command: str):
+	def __init__(self, source: CommandSource, command: str):
 		super().__init__()
-		self.source = source
-		self.command = command
-		self.cursor = 0
-		self.node_path = []  # type: List[ArgumentNode]
+		self.__source = source
+		self.__command = command
+		self.__cursor = 0
+		self.__node_path = []  # type: List[ArgumentNode]
 
 	@property
-	def command_read(self):
-		return self.command[:self.cursor]
+	def source(self) -> CommandSource:
+		return self.__source
 
 	@property
-	def command_remaining(self):
-		return self.command[self.cursor:]
+	def command(self) -> str:
+		return self.__command
+
+	@property
+	def command_read(self) -> str:
+		return self.__command[:self.__cursor]
+
+	@property
+	def command_remaining(self) -> str:
+		return self.__command[self.__cursor:]
+
+	@property
+	def cursor(self) -> int:
+		return self.__cursor
+
+	@property
+	def node_path(self) -> List['ArgumentNode']:
+		return self.__node_path
 
 	@contextmanager
 	def enter_child(self, new_cursor: int, node: 'ArgumentNode'):
-		prev_cursor = self.cursor
-		self.cursor = new_cursor
-		self.node_path.append(node)
+		"""
+		**Only used in command parsing**
+		Enter a command node
+		"""
+		prev_cursor = self.__cursor
+		self.__cursor = new_cursor
+		self.__node_path.append(node)
 		try:
 			yield
 		finally:
-			self.cursor = prev_cursor
-			self.node_path.pop(len(self.node_path) - 1)
+			self.__cursor = prev_cursor
+			self.__node_path.pop(len(self.__node_path) - 1)
 			self.pop(node.get_name(), None)
 
 
@@ -376,6 +396,7 @@ class ArgumentNode:
 
 
 class EntryNode(ArgumentNode, ABC):
+
 	def execute(self, source, command):
 		"""
 		Parse and execute this command
