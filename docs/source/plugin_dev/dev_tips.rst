@@ -36,6 +36,8 @@ The reason is that user might have their plugins be placed in another directory 
 
 If you store your configure or data inside the plugin folder, you can't distinguish which MCDR instance the configuration file belongs to. You can either store them inside the ``config`` folder directly or a inner folder inside the ``config`` folder like ``config/my_plugin/``, so the user data can be dedicated for the MCDR instance that loads your plugin
 
+`get_data_folder <classes/PluginServerInterface.html#get-data-folder>`__ method is a nice method for lazyman
+
 For logging files, store them inside ``logs/`` folder is a good idea
 
 External packages

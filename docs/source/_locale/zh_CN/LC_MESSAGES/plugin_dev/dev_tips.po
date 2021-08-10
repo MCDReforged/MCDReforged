@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-10 11:06+0800\n"
+"POT-Creation-Date: 2021-08-10 11:09+0800\n"
 "PO-Revision-Date: 2021-01-22 14:26+0000\n"
 "Last-Translator: \n"
 "Language: zh_CN\n"
@@ -134,14 +134,20 @@ msgstr ""
 "中，这样每个加载你的插件的 MCDR 实例即可拥有独享的用户配置数据。"
 
 #: ../plugin_dev/dev_tips.rst:39
+msgid ""
+"`get_data_folder <classes/PluginServerInterface.html#get-data-folder>`__ "
+"method is a nice method for lazyman"
+msgstr "`get_data_folder <classes/PluginServerInterface.html#get-data-folder>`__ 是个不错的懒人方法"
+
+#: ../plugin_dev/dev_tips.rst:41
 msgid "For logging files, store them inside ``logs/`` folder is a good idea"
 msgstr "对于日志文件，把它们储存至 ``logs/`` 文件夹中是一个不错的选择。"
 
-#: ../plugin_dev/dev_tips.rst:42
+#: ../plugin_dev/dev_tips.rst:44
 msgid "External packages"
 msgstr "额外的 Python 包"
 
-#: ../plugin_dev/dev_tips.rst:44
+#: ../plugin_dev/dev_tips.rst:46
 msgid ""
 "Some times you plugin needs some external resource files or requires some"
 " other ``.py`` codes as libraries. For these, you need to rather write "
@@ -149,21 +155,21 @@ msgid ""
 "plugin>`__ format and insert them in your plugin, or somehow convert them"
 " into a separated plugin and declare the dependency"
 msgstr ""
-"有时候你的插件需要一些额外的资源文件，或者需要一些其他的 ``.py`` "
-"代码文件作为运行库。对于这些文件，你需要使用 `多文件插件 <plugin_format.html#multi-file-"
-"plugin>`__ 格式来编写你的插件，并将它们插入你的插件中；或者以某种方式将它们转换为独立的插件并声明依赖项"
+"有时候你的插件需要一些额外的资源文件，或者需要一些其他的 ``.py`` 代码文件作为运行库。对于这些文件，你需要使用 `多文件插件 "
+"<plugin_format.html#multi-file-plugin>`__ "
+"格式来编写你的插件，并将它们插入你的插件中；或者以某种方式将它们转换为独立的插件并声明依赖项"
 
-#: ../plugin_dev/dev_tips.rst:47
+#: ../plugin_dev/dev_tips.rst:49
 msgid "Misc"
 msgstr "其他"
 
-#: ../plugin_dev/dev_tips.rst:49
+#: ../plugin_dev/dev_tips.rst:51
 msgid ""
 "The current working directory is the folder where MCDR is in. **DO NOT** "
 "change it since that will mess up everything"
 msgstr "MCDR 的工作路径是 MCDR 所在的文件夹路径。**切勿** 修改工作路径，这将弄乱一切。"
 
-#: ../plugin_dev/dev_tips.rst:50
+#: ../plugin_dev/dev_tips.rst:52
 msgid ""
 "For the ``Info`` parameter in `General Info event <event.html#general-"
 "info>`__ etc., don't modify it, just use its public methods and read its "

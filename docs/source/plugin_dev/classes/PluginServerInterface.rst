@@ -90,6 +90,13 @@ If the directory does not exist, create it
 
 Returns the path to the data directory
 
+Example:
+
+.. code-block:: python
+
+    with open(os.path.join(server.get_data_folder(), 'my_data.txt'), 'w') as file_handler:
+        write_some_data(file_handler)
+
 open_bundled_file
 ~~~~~~~~~~~~~~~~~
 
