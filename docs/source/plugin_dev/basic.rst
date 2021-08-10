@@ -157,6 +157,20 @@ Plugin can register its help message with ``server.register_help_message`` to MC
 
 Take a look at the reference of ``register_help_message`` method in `ServerInterface <classes/ServerInterface.html#register-help-message>`__ document for more details of its usage
 
-Import other plugins
---------------------
+Import a plugin
+---------------
+
+During multi file plugin loading, MCDR will append the path of the multi file plugin to ``sys.path``. For packed plugin, it's path of the ``.mcdr`` file; For directory plugin, it's the path of the directory
+
+Therefore, you can simply import other plugin by importing its plugin id using the ``import`` statement. It's also the recommended way to do that since it provides code hints and more information for your IDE
+
+Apart from this, you can also use `get_plugin_instance <classes/ServerInterface.html#get_plugin_instance>`__ method to import the entry point of the plugin, and this is also **the only way to import a solo plugin**. For multi file plugin the result is the same as directly importing the plugin
+
+.. code-block:: python
+
+    import my_lib_plugin as libA
+    libB = server.get_plugin_instance('my_lib_plugin')
+    print(libA == libB)  # True
+
+Don't forget to declare plugin dependency in your metadata, or MCDR will not guarantee a correct plugin loading order
 

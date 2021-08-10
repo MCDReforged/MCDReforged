@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-10 10:04+0800\n"
+"POT-Creation-Date: 2021-08-10 10:59+0800\n"
 "PO-Revision-Date: 2021-01-23 10:38+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -282,6 +282,41 @@ msgstr ""
 "message>`__ 文档中有关 ``register_help_message`` 方法的参考，以了解其用法的更多详细信息。"
 
 #: ../plugin_dev/basic.rst:161
-msgid "Import other plugins"
+msgid "Import a plugin"
+msgstr "导入插件"
+
+#: ../plugin_dev/basic.rst:163
+msgid ""
+"During multi file plugin loading, MCDR will append the path of the multi "
+"file plugin to ``sys.path``. For packed plugin, it's path of the "
+"``.mcdr`` file; For directory plugin, it's the path of the directory"
 msgstr ""
+"在多文件插件被加载时，MCDR 将会把多文件插件的文件路径追加至 ``sys.path`` 中。对于打包插件而言，文件路径是 ``.mcdr`` "
+"文件的路径；对于文件夹插件而已，文件路径是其文件夹的路径。"
+
+#: ../plugin_dev/basic.rst:165
+msgid ""
+"Therefore, you can simply import other plugin by importing its plugin id "
+"using the ``import`` statement. It's also the recommended way to do that "
+"since it provides code hints and more information for your IDE"
+msgstr ""
+"因此，你可以简单的通过 ``import`` 语句导入插件 id 的方式，来导入其他插件。这也是推荐的导入方式，因为这可以为你的 IDE "
+"提供了代码高亮等信息。"
+
+#: ../plugin_dev/basic.rst:167
+msgid ""
+"Apart from this, you can also use `get_plugin_instance "
+"<classes/ServerInterface.html#get_plugin_instance>`__ method to import "
+"the entry point of the plugin, and this is also **the only way to import "
+"a solo plugin**. For multi file plugin the result is the same as directly"
+" importing the plugin"
+msgstr "除此之外，你还可以使用 `get_plugin_instance <classes/ServerInterface.html#get_plugin_instance>`__ "
+"方法来导入其他插件的入口点。这也是**导入单文件插件的唯一方法**。对于多文件插件而言，其返回的值与直接导入插件是相同的。"
+
+#: ../plugin_dev/basic.rst:175
+msgid ""
+"Don't forget to declare plugin dependency in your metadata, or MCDR will "
+"not guarantee a correct plugin loading order"
+msgstr "别忘了在你的插件元数据中声明你的插件依赖，否则 MCDR 将不能保证插件加载顺序是正确的"
+
 
