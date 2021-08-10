@@ -8,6 +8,7 @@ from mcdreforged.command.command_source import ConsoleCommandSource, PlayerComma
 from mcdreforged.utils.exception import IllegalStateError, IllegalCallError
 
 if TYPE_CHECKING:
+	from mcdreforged.mcdr_server import MCDReforgedServer
 	from mcdreforged.plugin.server_interface import ServerInterface
 
 
@@ -26,8 +27,7 @@ class Info:
 		# a increasing id number for distinguishing info instance
 		self.id = Info.__id_counter
 		Info.__id_counter += 1
-		# noinspection PyTypeChecker
-		self.__mcdr_server = None  # type: 'MCDReforgedServer'
+		self.__mcdr_server = None  # type: Optional[MCDReforgedServer]
 		self.__send_to_server = True
 		self.__command_source = None
 
@@ -85,7 +85,7 @@ class Info:
 		self.__mcdr_server = mcdr_server
 
 	def get_server(self) -> 'ServerInterface':
-		return self.__mcdr_server.server_interface
+		return self.__mcdr_server.basic_server_interface
 
 	def get_command_source(self) -> Optional[InfoCommandSource]:
 		self.__assert_attached()
