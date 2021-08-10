@@ -41,28 +41,10 @@ For logging files, store them inside ``logs/`` folder is a good idea
 External packages
 -----------------
 
-Some times you plugin needs some external resource files or requires some other ``.py`` codes as libraries. For these, you can place them inside a custom package in the plugin folder
-
-For example, if the plugin folder is ``plugins/``, then you can have the following file structure:
-
-.. code-block::
-
-   plugins/
-    ├─ my_plugin/
-    │   ├─ __init__.py
-    │   ├─ a_useful_library.py
-    │   ├─ my_resources.dat
-    │   └─ ...
-    ├─ MyPlugin.py
-    └─ ...
-
-Then your plugin ``MyPlugin.py`` can directly import your library or resource files by ``from my_plugin import a_useful_library``
-
-Don't worry, MCDR has already `appended all plugin directories into the ``sys.path`` <../configure.html#plugin-directories>`__ so import your package inside the plugin folder directly
+Some times you plugin needs some external resource files or requires some other ``.py`` codes as libraries. For these, you need to rather write your plugin in `multi file plugin <plugin_format.html#multi-file-plugin>`__ format and insert them in your plugin, or somehow convert them into a separated plugin and declare the dependency
 
 Misc
 ----
 
 * The current working directory is the folder where MCDR is in. **DO NOT** change it since that will mess up everything
 * For the ``Info`` parameter in `General Info event <event.html#general-info>`__ etc., don't modify it, just use its public methods and read its properties
-* If you want to import other plugin, use ``server.get_plugin_instance()`` instead of directly importing, so the plugin instance you get is the same as the one MCDR uses

@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-30 14:35+0800\n"
+"POT-Creation-Date: 2021-08-10 11:06+0800\n"
 "PO-Revision-Date: 2021-01-22 14:26+0000\n"
 "Last-Translator: \n"
 "Language: zh_CN\n"
@@ -62,8 +62,8 @@ msgstr ""
 msgid ""
 "If you only care about commands from users, instead of listening to `User"
 " Info event <event.html#user-info>`__, you can `register a command tree "
-"<command.html>`__ to MCDR. It's much more efficient than handling yourself "
-"inside `User Info event <event.html#user-info>`__"
+"<command.html>`__ to MCDR. It's much more efficient than handling "
+"yourself inside `User Info event <event.html#user-info>`__"
 msgstr ""
 "如果你只关心用户输入的指令，与其监听 `用户信息事件 <event.html#general-info>`__，你还可以 `注册一棵指令树 "
 "<command.html>`__。这比手动在 `用户信息事件 <event.html#general-info>`__ 高效不少。"
@@ -144,46 +144,26 @@ msgstr "额外的 Python 包"
 #: ../plugin_dev/dev_tips.rst:44
 msgid ""
 "Some times you plugin needs some external resource files or requires some"
-" other ``.py`` codes as libraries. For these, you can place them inside a"
-" custom package in the plugin folder"
+" other ``.py`` codes as libraries. For these, you need to rather write "
+"your plugin in `multi file plugin <plugin_format.html#multi-file-"
+"plugin>`__ format and insert them in your plugin, or somehow convert them"
+" into a separated plugin and declare the dependency"
 msgstr ""
 "有时候你的插件需要一些额外的资源文件，或者需要一些其他的 ``.py`` "
-"代码文件作为运行库。对于这些文件，你可以将它们放置在位于插件文件夹中的一个自定义包中。"
+"代码文件作为运行库。对于这些文件，你需要使用 `多文件插件 <plugin_format.html#multi-file-"
+"plugin>`__ 格式来编写你的插件，并将它们插入你的插件中；或者以某种方式将它们转换为独立的插件并声明依赖项"
 
-#: ../plugin_dev/dev_tips.rst:46
-msgid ""
-"For example, if the plugin folder is ``plugins/``, then you can have the "
-"following file structure:"
-msgstr "举个例子，如果插件文件夹是 ``plugins/``，其中的文件结构可以如下所示："
-
-#: ../plugin_dev/dev_tips.rst:59
-msgid ""
-"Then your plugin ``MyPlugin.py`` can directly import your library or "
-"resource files by ``from my_plugin import a_useful_library``"
-msgstr ""
-"然后你的插件 ``MyPlugin.py`` 就可以直接使用 ``from my_plugin import a_useful_library``"
-" 导入你的库或资源文件。"
-
-#: ../plugin_dev/dev_tips.rst:61
-msgid ""
-"Don't worry, MCDR has already `appended all plugin directories into the "
-"``sys.path`` <../configure.html#plugin-directories>`__ so import your "
-"package inside the plugin folder directly"
-msgstr ""
-"不用担心，MCDR 会自动地 `将所有插件文件夹添加至 <../configure.html#plugin-directories>`__ "
-"``sys.path`` 中，因此你可以直接 import 位于插件文件夹中的包。"
-
-#: ../plugin_dev/dev_tips.rst:64
+#: ../plugin_dev/dev_tips.rst:47
 msgid "Misc"
 msgstr "其他"
 
-#: ../plugin_dev/dev_tips.rst:66
+#: ../plugin_dev/dev_tips.rst:49
 msgid ""
 "The current working directory is the folder where MCDR is in. **DO NOT** "
 "change it since that will mess up everything"
 msgstr "MCDR 的工作路径是 MCDR 所在的文件夹路径。**切勿** 修改工作路径，这将弄乱一切。"
 
-#: ../plugin_dev/dev_tips.rst:67
+#: ../plugin_dev/dev_tips.rst:50
 msgid ""
 "For the ``Info`` parameter in `General Info event <event.html#general-"
 "info>`__ etc., don't modify it, just use its public methods and read its "
@@ -191,13 +171,4 @@ msgid ""
 msgstr ""
 "对于在 `标准信息事件 <event.html#general-info>`__ 等时间中的参数 "
 "``Info``，不要修改它，仅调用它的公开方法并读取它的相关属性就行了。"
-
-#: ../plugin_dev/dev_tips.rst:68
-msgid ""
-"If you want to import other plugin, use ``server.get_plugin_instance()`` "
-"instead of directly importing, so the plugin instance you get is the same"
-" as the one MCDR uses"
-msgstr ""
-"如果你需要导入其他插件，使用 ``server.get_plugin_instance()`` 而不是直接手动 "
-"import。这样可以保证你导入的插件实例同 MCDR 使用的插件实例为同一个插件实例。"
 
