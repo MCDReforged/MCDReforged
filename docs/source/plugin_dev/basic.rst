@@ -5,9 +5,9 @@ MCDR Plugin
 What is a MCDR plugin
 ---------------------
 
-An MCDR plugin is a python source file with ``.py`` file extension located in plugin directories. The list of the plugin directory can be defined inside the `configure file <../configure.html#plugin_directories>`__
+A MCDR plugin is a single ``.py`` or ``.mcdr`` file or a directory with specific file structure located in plugin directories. See `here <plugin_format.html>`__ for more information about plugin format
 
-At start up, MCDR will automatically load every plugin inside the plugin directories. Additionally, MCDR will append all the plugin directories into ``sys.path``, so plugins can import modules placed inside the plugin folders directly
+The list of the plugin directory can be defined inside the `configure file <../configure.html#plugin_directories>`__. At start up, MCDR will automatically load every plugin inside every plugin directory
 
 Check the `example plugin repository <https://github.com/MCDReforged/MCDReforged-ExamplePlugin>`__ or the `plugin template repository <https://github.com/MCDReforged/MCDReforged-PluginTemplate>`__ for more references
 
