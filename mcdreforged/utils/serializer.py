@@ -63,5 +63,8 @@ class Serializable(ABC):
 		return serialize(self)
 
 	@classmethod
-	def deserialize(cls, data: dict):
-		return deserialize(data, cls)
+	def deserialize(cls, data: dict, **kwargs):
+		return deserialize(data, cls, **kwargs)
+
+	def deserialize_from(self, data: dict):
+		vars(self).update(vars(self.deserialize(data)))
