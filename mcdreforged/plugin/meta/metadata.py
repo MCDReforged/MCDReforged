@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 	from mcdreforged.plugin.type.plugin import AbstractPlugin
 
 
-DEFAULT_LANGUAGE = 'en_us'
+_DEFAULT_LANGUAGE = 'en_us'
 
 
 class Metadata:
@@ -116,7 +116,7 @@ class Metadata:
 		"""
 		if isinstance(self.description, str):
 			return self.description
-		return self.description.get(lang, self.description.get(DEFAULT_LANGUAGE))
+		return self.description.get(lang, self.description.get(_DEFAULT_LANGUAGE))
 
 
 __SAMPLE_METADATA = {
