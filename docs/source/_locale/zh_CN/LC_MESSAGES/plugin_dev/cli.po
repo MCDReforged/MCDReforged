@@ -100,7 +100,7 @@ msgstr "文件 ``requirements.txt``，如果它存在"
 msgid ""
 "Files or folders listed in the `resources <metadata.html#resources>`__ "
 "field in metadata"
-msgstr "于元数据的 `resources <metadata.html#resources>`__ 域中列出的文件或文件夹"
+msgstr "于元数据的 `resources <metadata.html#resources>`__ 属性中列出的文件或文件夹"
 
 #: ../plugin_dev/cli.rst:64
 msgid ""
@@ -160,7 +160,7 @@ msgstr "输出的打包插件文件的特定名称"
 msgid ""
 "If not given it will use the `archive_name <metadata.html#archive-"
 "name>`__ field in plugin metadata"
-msgstr "如果该项的值未被给出，将会使用插件元数据中的 `archive_name <metadata.html#archive-name>`__ 域的值"
+msgstr "如果该项的值未被给出，将会使用插件元数据中的 `archive_name <metadata.html#archive-name>`__ 属性的值"
 
 #: ../plugin_dev/cli.rst:106
 msgid "If it's still not specific, A default name format will be used"
