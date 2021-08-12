@@ -130,7 +130,7 @@ msgid ""
 "as an event listener"
 msgstr ""
 "在这个多文件插件中，当入口点的值为默认值时，MCDR 会导入模块  ``my_plugin``，也就是加载 ``MyPlugin.mcdr`` 内"
-" ``my_plugin/`` 文件夹中的 ``__init__.py``位于  中的 ``on_load`` 函数将会被注册为事件监听器。"
+" ``my_plugin/`` 文件夹中的 ``__init__.py`` 位于 ``__init__.py`` 中的 ``on_load`` 函数将会被注册为事件监听器。"
 
 #: ../plugin_dev/basic.rst:88
 msgid ""

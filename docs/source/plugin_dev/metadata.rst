@@ -253,7 +253,7 @@ The entrypoint module of your plugin
 
 By default the value is the id of your plugin, which means ``my_plugin/__init__.py`` will be the entry point. If the value is ``my_plugin.my_entry`` then ``my_plugin/my_entry.py`` will be the entry point
 
-MCDR will perform the same execution as a solo plugin to the entrypoint, like default listener registering
+MCDR will perform the same execution as a solo plugin to the entrypoint, like default event listener registering
 
 See `here <basic.html#entrypoint>`__ for entrypoint document
 

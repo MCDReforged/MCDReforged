@@ -534,7 +534,7 @@ msgstr "**在单文件插件中不可用**"
 
 #: ../plugin_dev/metadata.rst:252
 msgid "The entrypoint module of your plugin"
-msgstr ""
+msgstr "你的插件的入口点模块"
 
 #: ../plugin_dev/metadata.rst:254
 msgid ""
@@ -549,12 +549,12 @@ msgstr ""
 #: ../plugin_dev/metadata.rst:256
 msgid ""
 "MCDR will perform the same execution as a solo plugin to the entrypoint, "
-"like default listener registering"
-msgstr ""
+"like default event listener registering"
+msgstr "MCDR 会对入口点模块进行与单文件插件相同的操作，如默认事件监听器注册"
 
 #: ../plugin_dev/metadata.rst:258
 msgid "See `here <basic.html#entrypoint>`__ for entrypoint document"
-msgstr ""
+msgstr "在 `此处 <basic.html#entrypoint>`__ 查阅入口点的文档"
 
 #: ../plugin_dev/metadata.rst:260
 msgid "Field key: ``entrypoint``"
