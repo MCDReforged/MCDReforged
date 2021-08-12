@@ -2,7 +2,7 @@
 Information of a plugin
 """
 import re
-from typing import List, Dict, TYPE_CHECKING, Optional
+from typing import List, Dict, TYPE_CHECKING, Optional, Union
 
 from mcdreforged.minecraft.rtext import RTextBase
 from mcdreforged.plugin.meta.version import Version, VersionParsingError, VersionRequirement
@@ -11,11 +11,14 @@ if TYPE_CHECKING:
 	from mcdreforged.plugin.type.plugin import AbstractPlugin
 
 
+DEFAULT_LANGUAGE = 'en_us'
+
+
 class Metadata:
 	id: str
 	version: Version
 	name: str
-	description: str
+	description: Optional[Union[str, Dict[str, str]]]  # translation: lang -> description
 	author: Optional[List[str]]
 	link: Optional[str]
 	dependencies: Dict[str, VersionRequirement]
@@ -57,9 +60,10 @@ class Metadata:
 		if isinstance(self.name, RTextBase):
 			self.name = self.name.to_plain_text()
 
-		self.description = data.get('description')
-		if isinstance(self.description, RTextBase):
-			self.description = self.description.to_plain_text()
+		description = data.get('description')
+		if isinstance(description, RTextBase):
+			description = description.to_plain_text()
+		self.description = description
 
 		self.author = data.get('author')
 		if isinstance(self.author, str):
@@ -106,12 +110,24 @@ class Metadata:
 			self.entrypoint, self.archive_name, self.resources
 		)
 
+	def get_description(self, lang: Optional[str] = None):
+		"""
+		Get translated description str
+		"""
+		if isinstance(self.description, str):
+			return self.description
+		return self.description.get(lang, self.description.get(DEFAULT_LANGUAGE))
+
 
 __SAMPLE_METADATA = {
 	'id': 'example_plugin',   # If missing it will be the file name without .py suffix
 	'version': '1.0.0',       # If missing it will be '0.0.0'
-	'name': 'Sample Plugin',  # RText is allowed
-	'description': 'Sample plugin for MCDR',  # RText is allowed
+	'name': 'Sample Plugin',
+	# single string description is also supported
+	# 'description': 'Sample plugin for MCDR',
+	'description': {
+		'en_us': 'Sample plugin for MCDR'
+	},
 	'author': [
 		'Fallen_Breath'
 	],

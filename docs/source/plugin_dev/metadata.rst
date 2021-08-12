@@ -116,13 +116,22 @@ Try not to make the name too long. For more details of your plugin, you can put 
 description
 ^^^^^^^^^^^
 
-The description of you plugin. Put the details of your plugin here
+The description of you plugin. Go write down the functionality summarize of your plugin here
 
 This field is optional, you can just ignore it if you are lazy
 
+For translation purpose, instead of using a ``str`` as the value, you can use a Dict[str, str] indicating a mapping from language to description as value, e.g.:
+
+.. code-block:: json
+
+    "description": {
+        "en_us": "My description in English",
+        "zh_cn": "我的中文简介"
+    }
+
 
 * Field key: ``description``
-* Value type: str
+* Value type: Union[str, Dict[str, str]]
 * Fallback value: None
 
 author
