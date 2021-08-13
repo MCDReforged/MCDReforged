@@ -144,7 +144,7 @@ class MCDReforgedLogger(logging.Logger):
 			do_log |= cls.debug_options.get(option, False)
 		return do_log
 
-	def debug(self, *args, option=None, no_check=False):
+	def debug(self, *args, option: Optional[DebugOption] = None, no_check: bool = False):
 		if no_check or self.should_log_debug(option):
 			super().debug(*args)
 

@@ -7,6 +7,8 @@ from mcdreforged.info import Info
 from mcdreforged.permission.permission_level import PermissionLevel
 from mcdreforged.plugin.meta.metadata import Metadata
 from mcdreforged.plugin.server_interface import ServerInterface, PluginServerInterface
+from mcdreforged.utils.logger import SyncStdoutStreamHandler, MCDReforgedLogger
+
 
 __all__ = [
 	# Usually-used ones
@@ -20,4 +22,7 @@ __all__ = [
 
 	# Permission
 	'PermissionLevel',
+
+	# Logging
+	'SyncStdoutStreamHandler', 'MCDReforgedLogger'
 ]
