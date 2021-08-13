@@ -157,6 +157,13 @@ Plugin can register its help message with ``server.register_help_message`` to MC
 
 Take a look at the reference of ``register_help_message`` method in `PluginServerInterface <classes/PluginServerInterface.html#register-help-message>`__ document for more details of its usage
 
+Translation
+^^^^^^^^^^^
+
+If your plugin needs to handle some message localization or translation things, you can let MCDR help you: register a translation via `register_translation <classes/PluginServerInterface.html#register-translation>`__ and use `tr <classes/ServerInterface.html#register-help-message>`__ to get the translated string
+
+For `multi file plugin <plugin_format.html#multi-file-plugin>`__, you can also include a ``lang/`` folder in your plugin, with translation files in json (``.json``) or yaml (``.yml``) format named like ``en_us.json``. MCDR will automatically register these translations for your plugin
+
 Import a plugin
 ---------------
 
