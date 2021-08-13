@@ -160,9 +160,9 @@ msgid ""
 "#open-bundled-file>`__ method in `ServerInterface "
 "<classes/ServerInterface.html>`__"
 msgstr ""
-"你可以在打包插件中包含其他的自定义文件或文件夹。你可以借助 `ServerInterface "
-"<classes/ServerInterface.html>`__ 的 `open_bundled_file "
-"<classes/ServerInterface.html#open_bundled_file>`__ 方法来访问这些文件"
+"你可以在打包插件中包含其他的自定义文件或文件夹。你可以借助 `PluginServerInterface "
+"<classes/PluginServerInterface.html>`__ 的 `open_bundled_file "
+"<classes/PluginServerInterface.html#open_bundled_file>`__ 方法来访问这些文件"
 
 #: ../plugin_dev/plugin_format.rst:64
 msgid ""

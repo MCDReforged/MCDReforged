@@ -91,7 +91,7 @@ So when you logs something by ``server.logger``, a meaningful thread name will b
 event_listener
 ^^^^^^^^^^^^^^
 
-This decorator is used to register a custom event listener without involving `ServerInterface <classes/ServerInterface.html#register-event-listener>`__
+This decorator is used to register a custom event listener without involving `PluginServerInterface <classes/PluginServerInterface.html#register-event-listener>`__
 
 It accepts a single str or PluginEvent indicating the event you are listening to as parameter, and will register the function as the callback of the given listener
 

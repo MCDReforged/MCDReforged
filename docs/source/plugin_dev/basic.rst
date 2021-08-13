@@ -133,7 +133,7 @@ There are 3 methods to register an event listener for you plugin
     Use `@event_listener <api.html#event-listener>`__ decorator
 
 
-Take a look at the reference of ``register_event_listener`` method in `ServerInterface <classes/ServerInterface.html#register-event-listener>`__ document for more detail
+Take a look at the reference of ``register_event_listener`` method in `PluginServerInterface <classes/PluginServerInterface.html#register-event-listener>`__ document for more detail
 
 Command
 ^^^^^^^
@@ -148,14 +148,14 @@ Assuming that you have already built a command tree with root literal node *root
 
     server.register_command(root)
 
-Take a look at the reference of ``register_command`` method in `ServerInterface <classes/ServerInterface.html#register-command>`__ document for more details of its usage
+Take a look at the reference of ``register_command`` method in `PluginServerInterface <classes/PluginServerInterface.html#register-command>`__ document for more details of its usage
 
 Help message
 ^^^^^^^^^^^^
 
 Plugin can register its help message with ``server.register_help_message`` to MCDR, so that users can use `!!help command <../command.html#help-command>`__ to view the help messages of all commands
 
-Take a look at the reference of ``register_help_message`` method in `ServerInterface <classes/ServerInterface.html#register-help-message>`__ document for more details of its usage
+Take a look at the reference of ``register_help_message`` method in `PluginServerInterface <classes/PluginServerInterface.html#register-help-message>`__ document for more details of its usage
 
 Import a plugin
 ---------------

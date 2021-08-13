@@ -215,10 +215,10 @@ msgstr ""
 #: ../plugin_dev/basic.rst:136
 msgid ""
 "Take a look at the reference of ``register_event_listener`` method in "
-"`ServerInterface <classes/ServerInterface.html#register-event-"
+"`PluginServerInterface <classes/PluginServerInterface.html#register-event-"
 "listener>`__ document for more detail"
 msgstr ""
-"请参阅 `ServerInterface <classes/ServerInterface.html#register-event-"
+"请参阅 `PluginServerInterface <classes/PluginServerInterface.html#register-event-"
 "listener>`__ 文档中有关 ``register_event_listener`` 方法的说明，以了解更多详细信息。"
 
 #: ../plugin_dev/basic.rst:139
@@ -250,10 +250,10 @@ msgstr "假设你已经使用根文字节点 *root* 构建了指令树，则你�
 #: ../plugin_dev/basic.rst:151
 msgid ""
 "Take a look at the reference of ``register_command`` method in "
-"`ServerInterface <classes/ServerInterface.html#register-command>`__ "
+"`PluginServerInterface <classes/PluginServerInterface.html#register-command>`__ "
 "document for more details of its usage"
 msgstr ""
-"查看 `ServerInterface <classes/ServerInterface.html#register-command>`__ "
+"查看 `PluginServerInterface <classes/PluginServerInterface.html#register-command>`__ "
 "文档中有关 ``register_command`` 方法的参考，以获取其用法的更多详细信息。"
 
 #: ../plugin_dev/basic.rst:154
@@ -273,10 +273,10 @@ msgstr ""
 #: ../plugin_dev/basic.rst:158
 msgid ""
 "Take a look at the reference of ``register_help_message`` method in "
-"`ServerInterface <classes/ServerInterface.html#register-help-message>`__ "
+"`PluginServerInterface <classes/PluginServerInterface.html#register-help-message>`__ "
 "document for more details of its usage"
 msgstr ""
-"查看 `ServerInterface <classes/ServerInterface.html#register-help-"
+"查看 `PluginServerInterface <classes/PluginServerInterface.html#register-help-"
 "message>`__ 文档中有关 ``register_help_message`` 方法的参考，以了解其用法的更多详细信息。"
 
 #: ../plugin_dev/basic.rst:161
