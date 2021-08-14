@@ -34,6 +34,10 @@ class ConsoleHandler(ThreadExecutor):
 			self.console_kit.start_kits()
 		super().loop()
 
+	def stop(self):
+		super().stop()
+		self.console_kit.stop_kits()
+
 	def tick(self):
 		try:
 			text = self.console_kit.get_input()
