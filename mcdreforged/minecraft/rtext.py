@@ -65,7 +65,7 @@ class RTextBase:
 		raise NotImplementedError()
 
 	def to_json_str(self) -> str:
-		return json.dumps(self.to_json_object())
+		return json.dumps(self.to_json_object(), ensure_ascii=False)
 
 	def to_plain_text(self) -> str:
 		raise NotImplementedError()
