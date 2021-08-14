@@ -1,8 +1,9 @@
 import os
 import sys
+import time
 from abc import ABC
 from threading import RLock
-from typing import TYPE_CHECKING, Optional, List, Tuple
+from typing import TYPE_CHECKING, Optional, List, Tuple, Any
 
 from mcdreforged.constants import core_constant
 from mcdreforged.plugin.meta.metadata import Metadata
@@ -17,16 +18,18 @@ if TYPE_CHECKING:
 
 GLOBAL_LOAD_LOCK = RLock()
 
+MODULE_TYPE = Any
+
 
 class RegularPlugin(AbstractPlugin, ABC):
 	def __init__(self, plugin_manager: 'PluginManager', file_path: str):
 		super().__init__(plugin_manager, file_path)
 		self.file_name = os.path.basename(file_path)
-		self.file_modify_time = None
+		self.file_modify_time = None  # type: Optional[int]
 		self.__metadata = None  # type: Optional[Metadata]
-		self.entry_module_instance = None
-		self.old_entry_module_instance = None
-		self.newly_loaded_module = []
+		self.entry_module_instance = None  # type: MODULE_TYPE
+		self.old_entry_module_instance = None  # type: MODULE_TYPE
+		self.newly_loaded_module = []  # type: List[MODULE_TYPE]
 		self.decorated_event_listeners = []  # type: List[Tuple[PluginEvent, EventListener]]
 
 	def _reset(self):
@@ -101,7 +104,7 @@ class RegularPlugin(AbstractPlugin, ABC):
 		self.assert_state({PluginState.UNINITIALIZED})
 		self.set_state(PluginState.LOADING)
 		self._on_load()
-		self.mcdr_server.logger.debug('{} {} loaded from {}, file sha256 = {}'.format(self.__class_name, self, self.plugin_path, self.file_modify_time), option=DebugOption.PLUGIN)
+		self.mcdr_server.logger.debug('{} {} loaded from {}, file modify file = {}'.format(self.__class_name, self, self.plugin_path, self.pretty_file_modify_time), option=DebugOption.PLUGIN)
 		self.set_state(PluginState.LOADED)
 
 	def ready(self):
@@ -116,7 +119,7 @@ class RegularPlugin(AbstractPlugin, ABC):
 		self.assert_state({PluginState.READY})
 		self._on_unload()
 		self._on_load()
-		self.mcdr_server.logger.debug('{} {} reloaded, file sha256 = {}'.format(self.__class_name, self, self.file_modify_time))
+		self.mcdr_server.logger.debug('{} {} reloaded, file modify file = {}'.format(self.__class_name, self, self.pretty_file_modify_time))
 
 	def unload(self):
 		self.assert_state({PluginState.LOADED, PluginState.READY})
@@ -158,6 +161,13 @@ class RegularPlugin(AbstractPlugin, ABC):
 
 	def file_changed(self):
 		return self.calculate_file_modify_time() != self.file_modify_time
+
+	@property
+	def pretty_file_modify_time(self) -> Optional[str]:
+		if self.file_modify_time is not None:
+			return time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(self.file_modify_time / 1e9))
+		else:
+			return None
 
 	def calculate_file_modify_time(self):
 		if self.plugin_exists():
