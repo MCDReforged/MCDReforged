@@ -232,11 +232,9 @@ class ArgumentNode:
 	def parse(self, text: str) -> ParseResult:
 		"""
 		Try to parse the text and get a argument. Return a ParseResult instance indicating the parsing result
-		ParseResult.success: If the parsing is success
 		ParseResult.value: The value to store in the context dict
 		ParseResult.remaining: The remain
-		:param str text: the remaining text to be parsed
-		:rtype: ParseResult
+		:param str text: the remaining text to be parsed. It's supposed to not be started with DIVIDER character
 		"""
 		raise NotImplementedError()
 
@@ -282,7 +280,7 @@ class ArgumentNode:
 			result = self.parse(context.command_remaining)
 		except CommandSyntaxError as error:
 			error.set_parsed_command(context.command_read)
-			error.set_failed_command(context.command_read + context.command_remaining[error.char_read:])
+			error.set_failed_command(context.command_read + context.command_remaining[:error.char_read])
 			self.__raise_error(error, context)
 		else:
 			next_remaining = utils.remove_divider_prefix(context.command_remaining[result.char_read:])  # type: str

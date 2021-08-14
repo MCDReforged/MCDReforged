@@ -23,14 +23,12 @@ def __get_var(text, func):
 	Return value, char_read
 	value will be None if ValueError occurs
 	"""
-	origin_text = text
-	text = remove_divider_prefix(text)
 	arg = get_element(text)
 	try:
 		value = func(arg)
 	except ValueError:
 		value = None
-	return value, len(origin_text) - len(text) + len(arg)
+	return value, len(arg)
 
 
 def get_int(text):
