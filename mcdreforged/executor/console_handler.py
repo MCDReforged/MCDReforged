@@ -158,6 +158,8 @@ class PromptToolkitWrapper:
 					pt_app.exit()
 				except:
 					self.console_handler.mcdr_server.logger.exception('Fail to stop prompt toolkit app')
+			if not self.console_handler.is_on_thread():
+				self.console_handler.join()
 
 	def get_input(self) -> Optional[str]:
 		if self.enabled:
