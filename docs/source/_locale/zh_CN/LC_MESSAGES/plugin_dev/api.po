@@ -44,7 +44,7 @@ msgstr "all"
 msgid ""
 "This is the simplest way to import everything you want for plugin "
 "development. It's a life saver for lazy man"
-msgstr "这是导入插件开发所需的所有内容的最简单方法，是懒人的救命稻草。"
+msgstr "这是导入插件开发所需的所有内容的最简单的方法，是懒人的救命稻草。"
 
 #: ../plugin_dev/api.rst:18
 msgid "Continue reading to see what it will actually import"
@@ -649,7 +649,4 @@ msgid ""
 "the server interface or command source parameter, here's the package for "
 "you to import those Usually-used classes"
 msgstr "谁不希望在编写插件时，有一个检查器来帮助你减少愚蠢的错误呢？如果你想指定类型以让 IDE 知道你在写什么，这里有一个包可以让你导入一些常用的类。"
-
-#~ msgid "Note that"
-#~ msgstr ""
 

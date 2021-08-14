@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-10 00:53+0800\n"
+"POT-Creation-Date: 2021-08-14 10:24+0800\n"
 "PO-Revision-Date: 2021-01-23 13:20+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -65,7 +65,7 @@ msgid "The language that MCDR will use to display information"
 msgstr "MCDR 用于输出信息的语言。"
 
 #: ../configure.rst:25 ../configure.rst:35 ../configure.rst:51
-#: ../configure.rst:92 ../configure.rst:153 ../configure.rst:171
+#: ../configure.rst:92 ../configure.rst:150 ../configure.rst:168
 msgid "Option type: string"
 msgstr "选项类型：string"
 
@@ -286,29 +286,23 @@ msgid "The list of directory path where MCDR will search for plugin to load"
 msgstr "MCDR 搜索将要加载插件的目录列表。"
 
 #: ../configure.rst:112
-msgid ""
-"MCDR also **adds these directories into** ``sys.path`` so plugins can "
-"import packages inside plugin folders directly"
-msgstr "MCDR 会 **将这些目录添加到** ``sys.path``，以让插件可以直接导入插件文件夹中的包。"
-
-#: ../configure.rst:115
 msgid "Option type: a list of string"
 msgstr "选项类型：list[str]"
 
-#: ../configure.rst:116 ../configure.rst:230 ../configure.rst:255
-#: ../configure.rst:277
+#: ../configure.rst:113 ../configure.rst:227 ../configure.rst:252
+#: ../configure.rst:274
 msgid "Default value:"
 msgstr "默认值："
 
-#: ../configure.rst:124 ../configure.rst:237 ../configure.rst:262
+#: ../configure.rst:121 ../configure.rst:234 ../configure.rst:259
 msgid "Example:"
 msgstr "例如："
 
-#: ../configure.rst:134
+#: ../configure.rst:131
 msgid "rcon"
 msgstr "rcon"
 
-#: ../configure.rst:136
+#: ../configure.rst:133
 msgid ""
 "The setting for `rcon <https://wiki.vg/RCON>`__. If rcon is enabled, MCDR"
 " will start a rcon client to connect to the server after server rcon has "
@@ -317,128 +311,128 @@ msgstr ""
 "`rcon <https://wiki.vg/RCON>`__ 设置。若启用 rcon，则在 Minecraft rcon "
 "服务端启动后，MCDR将自动连接到 rcon 服务端。这样插件就可以通过 rcon 向服务端发送命令。"
 
-#: ../configure.rst:139
+#: ../configure.rst:136
 msgid "rcon.enable"
 msgstr "rcon.enable"
 
-#: ../configure.rst:141
+#: ../configure.rst:138
 msgid "The switch of rcon"
 msgstr "rcon 开关"
 
-#: ../configure.rst:144 ../configure.rst:180 ../configure.rst:191
-#: ../configure.rst:207 ../configure.rst:216
+#: ../configure.rst:141 ../configure.rst:177 ../configure.rst:188
+#: ../configure.rst:204 ../configure.rst:213
 msgid "Option type: boolean"
 msgstr "选项类型：boolean"
 
-#: ../configure.rst:145 ../configure.rst:208 ../configure.rst:217
+#: ../configure.rst:142 ../configure.rst:205 ../configure.rst:214
 msgid "Default value: ``false``"
 msgstr "默认值：``false``"
 
-#: ../configure.rst:148
+#: ../configure.rst:145
 msgid "rcon.address"
 msgstr "rcon.address"
 
-#: ../configure.rst:150
+#: ../configure.rst:147
 msgid "The address of the rcon server"
 msgstr "用于 rcon 连接的地址。"
 
-#: ../configure.rst:154
+#: ../configure.rst:151
 msgid "Default value: ``127.0.0.1``"
 msgstr "默认值：``127.0.0.1``"
 
-#: ../configure.rst:157
+#: ../configure.rst:154
 msgid "rcon.port"
 msgstr "rcon.port"
 
-#: ../configure.rst:159
+#: ../configure.rst:156
 msgid "The port of the rcon server"
 msgstr "用于 rcon 连接的端口。"
 
-#: ../configure.rst:162
+#: ../configure.rst:159
 msgid "Option type: integer"
 msgstr "选项类型：integer"
 
-#: ../configure.rst:163
+#: ../configure.rst:160
 msgid "Default value: ``25575``"
 msgstr "默认值：``25575``"
 
-#: ../configure.rst:166
+#: ../configure.rst:163
 msgid "rcon.password"
 msgstr "rcon.password"
 
-#: ../configure.rst:168
+#: ../configure.rst:165
 msgid "The password to connect to the rcon server"
 msgstr "用于 rcon 连接的密码。"
 
-#: ../configure.rst:172
+#: ../configure.rst:169
 msgid "Default value: ``password``"
 msgstr "默认值：``password``"
 
-#: ../configure.rst:175
+#: ../configure.rst:172
 msgid "check_update"
 msgstr "check_update"
 
-#: ../configure.rst:177
+#: ../configure.rst:174
 msgid "If set to true, MCDR will detect if there's a new version every 24h"
 msgstr "如果设置为 true，MCDR将会每隔24小时执行一次更新检测。"
 
-#: ../configure.rst:181 ../configure.rst:192
+#: ../configure.rst:178 ../configure.rst:189
 msgid "Default value: ``true``"
 msgstr "默认值：``true``"
 
-#: ../configure.rst:184
+#: ../configure.rst:181
 msgid "advanced_console"
 msgstr "advanced_console"
 
-#: ../configure.rst:186
+#: ../configure.rst:183
 msgid ""
 "Advance console switch powered by `prompt-toolkit "
 "<https://pypi.org/project/prompt-toolkit/>`__"
 msgstr "高级控制台的开关，基于 `prompt-toolkit <https://pypi.org/project/prompt-toolkit/>`__。"
 
-#: ../configure.rst:188
+#: ../configure.rst:185
 msgid ""
 "Set it to false if you need to redirect the stdin/stdout of MCDR or just "
 "don't like it"
 msgstr "如果你需要重定向 MCDR 的标准输入/输出，或者仅仅是不喜欢这个高级控制台，把它设置为 false"
 
-#: ../configure.rst:195
+#: ../configure.rst:192
 msgid "Advanced"
 msgstr "高级配置"
 
-#: ../configure.rst:197
+#: ../configure.rst:194
 msgid "Configure options for advanced users"
 msgstr "为进阶用户提供的选项"
 
-#: ../configure.rst:200
+#: ../configure.rst:197
 msgid "disable_console_thread"
 msgstr "disable_console_thread"
 
-#: ../configure.rst:202
+#: ../configure.rst:199
 msgid ""
 "When set to true, MCDR will not start the console thread for handling "
 "console command input"
 msgstr "设置为 true 时，MCDR 将不会启动控制台线程来处理控制台命令输入。"
 
-#: ../configure.rst:204
+#: ../configure.rst:201
 msgid "Don't change it to true unless you know what you are doing"
 msgstr "请保持默认值，除非你清楚地知道这是什么。"
 
-#: ../configure.rst:211
+#: ../configure.rst:208
 msgid "disable_console_color"
 msgstr "disable_console_color"
 
-#: ../configure.rst:213
+#: ../configure.rst:210
 msgid ""
 "When set to true, MCDR will removed all console font formatter codes in "
 "before any message gets printed onto the console"
 msgstr "设置为 true 时，MCDR 将在所有消息打印到控制台之前删除所有控制台字体格式化程序代码。"
 
-#: ../configure.rst:220
+#: ../configure.rst:217
 msgid "custom_handlers"
 msgstr "custom_handlers"
 
-#: ../configure.rst:222
+#: ../configure.rst:219
 msgid ""
 "A list of custom `server handler <customize/handler.html>`__ classes. The"
 " classed need to be subclasses of ``AbstractServerHandler``"
@@ -446,31 +440,31 @@ msgstr ""
 "自定义 `服务端处理器 <customize/handler.html>`__ 类所组成的列表。这些类应当是 "
 "AbstractServerHandler 的子类。"
 
-#: ../configure.rst:224
+#: ../configure.rst:221
 msgid ""
 "Then you can use the name of your handler in the `handler <#handler>`__ "
 "option above to use your handler"
 msgstr "这样你就可以在 `handler <#handler>`__ 选项中通过处理器的名称指派其解析标准输出文本。"
 
-#: ../configure.rst:226
+#: ../configure.rst:223
 msgid "The name of a handler is defined in the get_name method"
 msgstr "处理器名称通过 get_name 方法定义。"
 
-#: ../configure.rst:229 ../configure.rst:254
+#: ../configure.rst:226 ../configure.rst:251
 msgid "Option type: a list of string, or null"
 msgstr "选项类型：list[str] 或 null"
 
-#: ../configure.rst:244
+#: ../configure.rst:241
 msgid ""
 "In this example the custom handler package path is ``my.custom.handler`` "
 "and the class is name ``MyHandler``"
 msgstr "下面这个例子中，``my.custom.handler`` 是包路径，``MyHandler`` 是类名。"
 
-#: ../configure.rst:247
+#: ../configure.rst:244
 msgid "custom_info_reactors"
 msgstr "custom_info_reactors"
 
-#: ../configure.rst:249
+#: ../configure.rst:246
 msgid ""
 "A list of custom `info reactor <customize/reactor.html>`__ classes to "
 "handle the info instance. The classed need to be subclasses of "
@@ -479,23 +473,23 @@ msgstr ""
 "用于处理 info 实例的自定义 `info 响应器 <customize/reactor.html>`__ 类所组成的列表。这些类应当是 "
 "``AbstractInfoReactor`` 的子类。"
 
-#: ../configure.rst:251
+#: ../configure.rst:248
 msgid ""
 "All custom info reactors will be registered to the reactor list to "
 "process information from the server"
 msgstr "所有自定义 info 响应器都将注册到反应堆列表中，以处理来自服务器的信息。"
 
-#: ../configure.rst:269
+#: ../configure.rst:266
 msgid ""
 "In this example the custom reactor package path is ``my.custom.reactor`` "
 "and the class name is ``MyInfoReactor``"
 msgstr "下面这个例子中，``my.custom.reactor`` 是包路径，``MyInfoReactor`` 是类名。"
 
-#: ../configure.rst:272
+#: ../configure.rst:269
 msgid "debug"
 msgstr "debug"
 
-#: ../configure.rst:274
+#: ../configure.rst:271
 msgid ""
 "Debug logging switches. Set ``all`` to true to enable all debug logging, "
 "or set the specific option to enable specific debug logging"

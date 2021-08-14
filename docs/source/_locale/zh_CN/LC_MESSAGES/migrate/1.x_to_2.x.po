@@ -181,7 +181,7 @@ msgid ""
 " ``PluginServerInterface`` as the first parameter, so the usability of "
 "the server interface API is not affected"
 msgstr ""
-"在触发插件的事件监听器时，MCDR 会将对应的 ``PluginServerInterface`` 实例作为第一个参数来触发回调，因此插件中队 "
+"在触发插件的事件监听器时，MCDR 会将对应的 ``PluginServerInterface`` 实例作为第一个参数来触发回调，因此插件中对 "
 "Server Interface API 的可用性并未受到影响"
 
 #: ../migrate/1.x_to_2.x.rst:77
@@ -189,8 +189,5 @@ msgid ""
 "These changes should not affect your plugin's runnability, but it will "
 "probably mess up the type checking code inspect in your IDE to make the "
 "IDE displays a warning"
-msgstr "该改变基本上不会影响你的插件的可运作性，不过它很可能会迷惑你的 IDE 的类型检查代码审查功能并发出警告"
-
-#~ msgid "With that the plugin lifecycle can be demonstrated with"
-#~ msgstr ""
+msgstr "该改变基本上不会影响你的插件的可运作性，不过它很可能会迷惑你的 IDE 的类型检查代码审查功能，并令其发出警告"
 
