@@ -159,23 +159,23 @@ Label describes what your plugin does. A plugin can have multiple labels
 All current available labels are shown in the following table
 
 .. list-table::
-   :header-rows: 1
+    :header-rows: 1
 
-   * - Label id
-     - Label name
-     - Description
-   * - information
-     - Information
-     - Show or get information for users
-   * - tool
-     - Tool
-     - A tool, or a game helper
-   * - management
-     - Management
-     - Manages files or other stuffs of the server
-   * - api
-     - API
-     - Works as a API or a library which provides common functionalities to other plugins
+    * - Label id
+      - Label name
+      - Description
+    * - information
+      - Information
+      - Show or get information for users
+    * - tool
+      - Tool
+      - A tool, or a game helper
+    * - management
+      - Management
+      - Manages files or other stuffs of the server
+    * - api
+      - API
+      - Works as a API or a library which provides common functionalities to other plugins
 
 Language
 --------
@@ -186,6 +186,31 @@ Plugin catalogue supports multiple language for users in different countries
 * Simplify Chinese (``zh_cn``)
 
 The default and fallback language is ``en_us``
+
+Release
+-------
+
+Plugin catalogue will automatically detect the releases in your plugin repository and extract the plugin download url in the assets, as long as the release follows the following restrictions:
+
+* Release tag name: **the same as the version of the released plugin**, can be in one of the following format
+
+.. list-table::
+    :header-rows: 1
+
+    * - Format
+      - Example
+    * - ``<version>``
+      - 1.2.3
+    * - ``v<version>``
+      - v1.2.3
+    * - ``<plugin_id>-<version>``
+      - my_plugin_1.2.3
+    * - ``<plugin_id>-v<version>``
+      - my_plugin_v1.2.3
+
+* Assets: contains 1 asset with ``.mcdr`` file extension name. Other assets will be ignored
+
+  Which also means only `Packed Plugin <plugin_format.html#packed-plugin>`__ is supported
 
 Submit Plugin
 -------------
