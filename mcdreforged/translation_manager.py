@@ -4,7 +4,7 @@ Translation support
 import collections
 import os
 from logging import Logger
-from typing import Dict, Optional, Union
+from typing import Dict, Optional, Union, List, Tuple
 
 from ruamel import yaml
 
@@ -18,9 +18,11 @@ HERE = os.path.abspath(os.path.dirname(__file__))
 
 
 class TranslationManager:
+	DEFAULT_LANGUAGE = 'en_us'
+
 	def __init__(self, logger: Logger):
 		self.logger = logger
-		self.language = None
+		self.language = self.DEFAULT_LANGUAGE
 		self.translations = collections.defaultdict(dict)  # type: Dict[str, Dict[str, str]]
 
 	def load_translations(self):
@@ -37,10 +39,10 @@ class TranslationManager:
 
 	def set_language(self, language):
 		self.language = language
-		if len(self.translations[language]) == 0:
+		if len(self.translations.get(language, {})) == 0:
 			self.logger.warning('Setting language to {} with 0 available translation'.format(language))
 
-	def translate(self, key: str, args: tuple, *, allow_failure: bool, language: Optional[str], fallback_language: Optional[str] = None, plugin_translations: Optional[Dict[str, Dict[str, str]]] = None) -> Union[str, RTextBase]:
+	def translate(self, key: str, args: tuple, kwargs: dict, *, allow_failure: bool, language: Optional[str] = None, fallback_language: Optional[str] = None, plugin_translations: Optional[Dict[str, Dict[str, str]]] = None) -> Union[str, RTextBase]:
 		if language is None:
 			language = self.language
 
@@ -58,10 +60,10 @@ class TranslationManager:
 		# Processing
 		if translated_text is not None:
 			if use_rtext:
-				return self.__apply_args(translated_text, args)
+				return self.__apply_args(translated_text, args, kwargs)
 			else:
 				if len(args) > 0:
-					translated_text = translated_text.format(*args)
+					translated_text = translated_text.format(*args, **kwargs)
 				return translated_text.strip('\n\r')
 		else:
 			if fallback_language is not None and language != fallback_language:
@@ -75,26 +77,41 @@ class TranslationManager:
 			return key if not use_rtext else RTextBase.from_any(key)
 
 	@classmethod
-	def __apply_args(cls, translated_text: str, args: tuple) -> RTextBase:
-		identifiers = []
+	def __apply_args(cls, translated_text: str, args: tuple, kwargs: dict) -> RTextBase:
+		args = list(args)
+		kwargs = kwargs.copy()
+		counter = 0
+		rtext_elements = []  # type: List[Tuple[str, RTextBase]]
+
+		def get():
+			nonlocal counter
+			rv = '@@MCDR#Translation#Placeholder#{}@@'.format(counter)
+			counter += 1
+			return rv
+
 		for i, arg in enumerate(args):
 			if isinstance(arg, RTextBase):
-				identifiers.append('@@MCDR#Translation#Placeholder#{}@@'.format(i))
-			else:
-				identifiers.append(arg)
-		texts = [translated_text.format(*identifiers)]
-		for i, arg in enumerate(args):
-			if isinstance(arg, RTextBase):
-				new_texts = []
-				for text in texts:
-					processed_text = []
-					if isinstance(text, str):
-						for j, ele in enumerate(text.split(identifiers[i])):
-							if j > 0:
-								processed_text.append(arg)
-							processed_text.append(ele)
-					else:
-						processed_text.append(text)
-					new_texts.extend(processed_text)
-				texts = new_texts
+				placeholder = get()
+				rtext_elements.append((placeholder, arg))
+				args[i] = placeholder
+		for key, value in kwargs.items():
+			if isinstance(value, RTextBase):
+				placeholder = get()
+				rtext_elements.append((placeholder, value))
+				kwargs[key] = placeholder
+
+		texts = [translated_text.format(*args, **kwargs)]
+		for placeholder, rtext in rtext_elements:
+			new_texts = []
+			for text in texts:
+				processed_text = []
+				if isinstance(text, str):
+					for j, ele in enumerate(text.split(placeholder)):
+						if j > 0:
+							processed_text.append(rtext)
+						processed_text.append(ele)
+				else:
+					processed_text.append(text)
+				new_texts.extend(processed_text)
+			texts = new_texts
 		return RTextList(*texts)

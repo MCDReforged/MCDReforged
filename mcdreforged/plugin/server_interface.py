@@ -19,7 +19,7 @@ from mcdreforged.plugin.type.multi_file_plugin import MultiFilePlugin
 from mcdreforged.plugin.type.plugin import AbstractPlugin
 from mcdreforged.utils import misc_util
 from mcdreforged.utils.exception import IllegalCallError
-from mcdreforged.utils.logger import MCDReforgedLogger
+from mcdreforged.utils.logger import MCDReforgedLogger, DebugOption
 
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
@@ -69,12 +69,18 @@ class ServerInterface:
 		"""
 		return cls.__global_instance
 
-	def tr(self, translation_key: str, *args, language: Optional[str] = None, fallback_language: str = 'en_us') -> Union[str, RTextBase]:
+	def tr(self, translation_key: str, *args, language: Optional[str] = None, fallback_language: str = 'en_us', **kwargs) -> Union[str, RTextBase]:
 		"""
-		Return a translated text from given translation key and args
-		Check mcdreforged.mcdr_server.MCDReforgedServer.tr for detail doc
+		Return a translated text corresponded to the translation key and format the text with given args and kwargs
+		If args or kwargs contains RText element, then the result will be a RText, otherwise the result will be a regular str
+		If the translation key is not recognized, the return value will be the translation key itself
+		:param translation_key: The key of the translation
+		:param args: The args to be formatted
+		:param language: Specific language to be used in this translation, or the language that MCDR is using will be used
+		:param fallback_language: Fallback language used when the current language translation not found
+		:param kwargs: The kwargs to be formatted
 		"""
-		return self._mcdr_server.tr(translation_key, *args, language=language, fallback_language=fallback_language)
+		return self._mcdr_server.tr(translation_key, *args, language=language, fallback_language=fallback_language, **kwargs)
 
 	def as_basic_server_interface(self) -> 'ServerInterface':
 		"""
@@ -202,6 +208,7 @@ class ServerInterface:
 		:param str text: The content of the command you want to send
 		:param str encoding: The encoding method for the text
 		"""
+		self.logger.debug('Sending command "{}"'.format(text), option=DebugOption.PLUGIN)
 		self._mcdr_server.send(text, encoding=encoding)
 
 	def tell(self, player: str, text: Union[str, RTextBase], *, encoding: Optional[str] = None) -> None:

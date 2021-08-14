@@ -7,8 +7,9 @@ import sys
 import time
 import weakref
 import zipfile
+from contextlib import contextmanager
 from enum import Enum, unique, auto
-from threading import RLock
+from threading import RLock, local
 from typing import Dict, Optional, List, Set
 
 from colorlog import ColoredFormatter
@@ -29,10 +30,6 @@ class DebugOption(Enum):
 	PERMISSION = auto()
 	COMMAND = auto()
 	TASK_EXECUTOR = auto()
-
-
-# global flag
-console_color_disabled = False
 
 
 class SyncStdoutStreamHandler(logging.StreamHandler):
@@ -68,15 +65,42 @@ class SyncStdoutStreamHandler(logging.StreamHandler):
 class MCColoredFormatter(ColoredFormatter):
 	MC_CODE_ITEMS = list(map(lambda item: item.value, list(RColor) + list(RStyle)))  # type: List[RItem]
 
+	# global flag
+	console_color_disabled = False
+
+	__TLS = local()
+
+	@classmethod
+	@contextmanager
+	def disable_minecraft_color_code_transform(cls):
+		cls.__set_mc_code_trans_disable(True)
+		try:
+			yield
+		finally:
+			cls.__set_mc_code_trans_disable(False)
+
+	@classmethod
+	def __is_mc_code_trans_disabled(cls) -> bool:
+		try:
+			return cls.__TLS.mc_code_trans
+		except AttributeError:
+			cls.__set_mc_code_trans_disable(False)
+			return False
+
+	@classmethod
+	def __set_mc_code_trans_disable(cls, state: bool):
+		cls.__TLS.mc_code_trans = state
+
 	def formatMessage(self, record):
 		text = super().formatMessage(record)
-		# minecraft code -> console code
-		for item in self.MC_CODE_ITEMS:
-			if item.mc_code in text:
-				text = text.replace(item.mc_code, item.console_code)
-		# clean the rest of minecraft codes
-		text = string_util.clean_minecraft_color_code(text)
-		if console_color_disabled:
+		if not self.__is_mc_code_trans_disabled():
+			# minecraft code -> console code
+			for item in self.MC_CODE_ITEMS:
+				if item.mc_code in text:
+					text = text.replace(item.mc_code, item.console_code)
+			# clean the rest of minecraft codes
+			text = string_util.clean_minecraft_color_code(text)
+		if self.console_color_disabled:
 			text = string_util.clean_console_color_code(text)
 		return text
 
@@ -146,7 +170,8 @@ class MCDReforgedLogger(logging.Logger):
 
 	def debug(self, *args, option: Optional[DebugOption] = None, no_check: bool = False):
 		if no_check or self.should_log_debug(option):
-			super().debug(*args)
+			with MCColoredFormatter.disable_minecraft_color_code_transform():
+				super().debug(*args)
 
 	def set_file(self, file_name):
 		if self.file_handler is not None:

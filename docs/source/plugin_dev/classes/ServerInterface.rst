@@ -41,11 +41,23 @@ tr
 
 .. code-block:: python
 
-    def tr(self, translation_key: str, *args, language: Optional[str] = None, fallback_language: str = 'en_us') -> Union[str, RTextBase]
+    def tr(self, translation_key: str, *args, language: Optional[str] = None, fallback_language: str = 'en_us', **kwargs) -> Union[str, RTextBase]
 
-Return a translated text from given translation key and args
+Return a translated text corresponded to the translation key and format the text with given args and kwargs
 
-Check mcdreforged.mcdr_server.MCDReforgedServer.tr for detail doc
+If args or kwargs contains `RText <../api.html#rtext>`__ element, then the result will be a RText, otherwise the result will be a regular str
+
+If the translation key is not recognized, the return value will be the translation key itself
+
+Parameter *translation_key*: The key of the translation
+
+Parameter *args*: The args to be formatted
+
+Keyword Parameter *language*: Specific language to be used in this translation, or the language that MCDR is using will be used
+
+Keyword Parameter *fallback_language*: Fallback language used when the current language translation not found
+
+Keyword Parameter *kwargs*: The kwargs to be formatted
 
 as_basic_server_interface
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -67,9 +79,7 @@ as_plugin_server_interface
     def as_plugin_server_interface(self) -> Optional[PluginServerInterface]
 
 
-Return a PluginServerInterface instance. If current thread is not a MCDR provided thread and the object is not
-
-a PluginServerInterface instance, it will return None
+Return a PluginServerInterface instance. If current thread is not a MCDR provided thread and the object is not a PluginServerInterface instance, it will return None
 
 Server Control
 ^^^^^^^^^^^^^^

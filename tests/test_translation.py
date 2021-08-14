@@ -1,17 +1,20 @@
+import functools
 import logging
 import unittest
 
+from mcdreforged.minecraft.rtext import RText, RTextBase
 from mcdreforged.translation_manager import TranslationManager
 
 
 class MyTestCase(unittest.TestCase):
-	def __init__(self, *args):
-		super().__init__(*args)
-		self.language_manager = TranslationManager(logging.getLogger())
-		self.language_manager.load_translations()
+	translation_manager: TranslationManager
+
+	def setUp(self) -> None:
+		self.translation_manager = TranslationManager(logging.getLogger())
 
 	def test_0_same_key_order(self):
-		language_key_dict = self.language_manager.translations
+		self.translation_manager.load_translations()
+		language_key_dict = self.translation_manager.translations
 		language_list = list(language_key_dict.keys())
 		base_lang = language_list[0]
 		base_keys = list(language_key_dict[base_lang].keys())
@@ -20,6 +23,24 @@ class MyTestCase(unittest.TestCase):
 			for i, key in enumerate(base_keys):
 				self.assertEqual(key, test_lang_keys[i], 'key[{}] "{}" in base language {} is not the same as test language {}'.format(i, key, base_lang, test_lang))
 			self.assertEqual(len(base_keys), len(test_lang_keys))
+
+	def test_1_translation_formatting(self):
+		translations = self.translation_manager.translations[TranslationManager.DEFAULT_LANGUAGE]
+		translations['key1'] = 'A {0} bb {c} {1}zzz'
+		tr = functools.partial(self.translation_manager.translate, allow_failure=False)
+
+		self.assertEqual('A X bb Z Yzzz', tr('key1', ('X', 'Y'), {'c': 'Z'}))
+		self.assertEqual('A X bb Z Yzzz', tr('key1', ('X', 'Y', 'dummy'), {'c': 'Z'}))
+		self.assertEqual('A X bb Z Yzzz', tr('key1', ('X', 'Y'), {'c': 'Z', 'dummy': 'dummy'}))
+
+		rtext = tr('key1', ('X', RText('Y')), {'c': 'Z'})
+		self.assertIsInstance(rtext, RTextBase)
+		self.assertEqual('A X bb Z Yzzz', rtext.to_plain_text())
+		self.assertEqual(4, len(rtext.to_json_object()))
+
+		rtext = tr('key1', ('X', RText('Y')), {'c': RText('Z')})
+		self.assertIsInstance(rtext, RTextBase)
+		self.assertEqual('A X bb Z Yzzz', rtext.to_plain_text())
 
 
 if __name__ == '__main__':

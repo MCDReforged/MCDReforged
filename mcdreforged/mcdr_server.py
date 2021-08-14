@@ -27,9 +27,9 @@ from mcdreforged.plugin.plugin_event import MCDRPluginEvents
 from mcdreforged.plugin.plugin_manager import PluginManager
 from mcdreforged.plugin.server_interface import ServerInterface
 from mcdreforged.translation_manager import TranslationManager
-from mcdreforged.utils import logger, file_util
+from mcdreforged.utils import file_util
 from mcdreforged.utils.exception import IllegalCallError, ServerStopped, ServerStartError, IllegalStateError
-from mcdreforged.utils.logger import DebugOption, MCDReforgedLogger
+from mcdreforged.utils.logger import DebugOption, MCDReforgedLogger, MCColoredFormatter
 
 
 class MCDReforgedServer:
@@ -114,19 +114,20 @@ class MCDReforgedServer:
 	#         Translate
 	# --------------------------
 
-	def tr(self, translation_key: str, *args, language: Optional[str] = None, fallback_language: Optional[str] = None, allow_failure=True) -> Union[str, RTextBase]:
+	def tr(self, translation_key: str, *args, language: Optional[str] = None, fallback_language: Optional[str] = None, allow_failure=True, **kwargs) -> Union[str, RTextBase]:
 		"""
 		Return a translated text corresponded to the translation key and format the text with given args
 		If args contains RText element, then the result will be a RText, otherwise the result will be a regular str
-		If the translation key is not recognized, the return value will be the input translation key
+		If the translation key is not recognized, the return value will be the translation key itself if allow_failure is True
 		:param translation_key: The key of the translation
 		:param args: The args to be formatted
-		:param language: Specific language to be used in this translation
+		:param language: Specific language to be used in this translation, or the language that MCDR is using will be used
 		:param fallback_language: Fallback language used when the current language translation not found
 		:param allow_failure: If set to false, a KeyError will be risen if the translation key is not recognized
+		:param kwargs: The kwargs to be formatted
 		"""
 		return self.translation_manager.translate(
-			translation_key, args,
+			translation_key, args, kwargs,
 			allow_failure=allow_failure,
 			language=language,
 			fallback_language=fallback_language,
@@ -146,7 +147,7 @@ class MCDReforgedServer:
 				self.logger.warning(line)
 
 	def on_config_changed(self):
-		logger.console_color_disabled = self.config['disable_console_color']
+		MCColoredFormatter.console_color_disabled = self.config['disable_console_color']
 		self.logger.set_debug_options(self.config['debug'])
 		if self.config.is_debug_on():
 			self.logger.info(self.tr('mcdr_server.on_config_changed.debug_mode_on'))
