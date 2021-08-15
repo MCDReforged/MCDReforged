@@ -1,3 +1,7 @@
+from .serializer import serialize, deserialize, Serializable
+
 __all__ = [
-	'serializer',
+	'serialize',
+	'deserialize',
+	'Serializable',
 ]
