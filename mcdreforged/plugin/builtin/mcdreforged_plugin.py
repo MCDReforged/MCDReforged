@@ -545,7 +545,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 			lang_texts = []
 			for lang in available_languages:
 				lang_texts.append(RText(lang, color=RColor.yellow).c(RAction.run_command, '{} setlang {}'.format(self.control_command_prefix, lang)))
-			source.reply(self.tr('mcdr_command.set_language.language_list', RText(', ').join(lang_texts)))
+			source.reply(self.tr('mcdr_command.set_language.language_list', RText.join(', ', lang_texts)))
 		else:
 			self.mcdr_server.config.set_value('language', language)
 			self.mcdr_server.translation_manager.set_language(language)

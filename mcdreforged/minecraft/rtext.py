@@ -5,7 +5,7 @@ Credit: Pandaria98 https://github.com/Pandaria98 https://github.com/TISUnion/ste
 
 import json
 from enum import Enum, auto
-from typing import Iterable, List, Union, Optional, Any
+from typing import Iterable, List, Union, Optional, Any, Tuple
 
 from colorama import Fore, Style
 
@@ -76,14 +76,6 @@ class RTextBase:
 	def copy(self) -> 'RTextBase':
 		raise NotImplementedError()
 
-	def join(self, iterable: Iterable[Any]) -> 'RTextBase':
-		result = RTextList()
-		for i, item in enumerate(iterable):
-			if i > 0:
-				result.append(self)
-			result.append(item)
-		return result
-
 	def set_color(self, color: RColor) -> 'RTextBase':
 		raise NotImplementedError()
 
@@ -112,7 +104,7 @@ class RTextBase:
 		return RTextList(other, self)
 
 	@staticmethod
-	def from_any(text):
+	def from_any(text) -> 'RTextBase':
 		"""
 		:param text: can be a RTextBase, or a str, or anything
 		:rtype: RTextBase
@@ -120,6 +112,55 @@ class RTextBase:
 		if isinstance(text, RTextBase):
 			return text
 		return RText(text)
+
+	@staticmethod
+	def join(divider: Any, iterable: Iterable[Any]) -> 'RTextBase':
+		result = RTextList()
+		for i, item in enumerate(iterable):
+			if i > 0:
+				result.append(divider)
+			result.append(item)
+		return result
+
+	@staticmethod
+	def format(fmt: str, *args, **kwargs) -> 'RTextBase':
+		args = list(args)
+		kwargs = kwargs.copy()
+		counter = 0
+		rtext_elements = []  # type: List[Tuple[str, RTextBase]]
+
+		def get():
+			nonlocal counter
+			rv = '@@MCDR#RText.format#Placeholder#{}@@'.format(counter)
+			counter += 1
+			return rv
+
+		for i, arg in enumerate(args):
+			if isinstance(arg, RTextBase):
+				placeholder = get()
+				rtext_elements.append((placeholder, arg))
+				args[i] = placeholder
+		for key, value in kwargs.items():
+			if isinstance(value, RTextBase):
+				placeholder = get()
+				rtext_elements.append((placeholder, value))
+				kwargs[key] = placeholder
+
+		texts = [fmt.format(*args, **kwargs)]
+		for placeholder, rtext in rtext_elements:
+			new_texts = []
+			for text in texts:
+				processed_text = []
+				if isinstance(text, str):
+					for j, ele in enumerate(text.split(placeholder)):
+						if j > 0:
+							processed_text.append(rtext)
+						processed_text.append(ele)
+				else:
+					processed_text.append(text)
+				new_texts.extend(processed_text)
+			texts = new_texts
+		return RTextList(*texts)
 
 
 class RText(RTextBase):

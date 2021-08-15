@@ -4,12 +4,12 @@ Translation support
 import collections
 import os
 from logging import Logger
-from typing import Optional, List, Tuple, Set
+from typing import Optional, Set
 
 from ruamel import yaml
 
 from mcdreforged.constants import core_constant
-from mcdreforged.minecraft.rtext import RTextBase, RTextList
+from mcdreforged.minecraft.rtext import RTextBase
 from mcdreforged.utils import file_util, translation_util
 from mcdreforged.utils.logger import DebugOption
 from mcdreforged.utils.types import TranslationStorage, MessageText
@@ -68,7 +68,7 @@ class TranslationManager:
 		if translated_text is not None:
 			translated_text = translated_text.strip('\n\r')
 			if use_rtext:
-				translated_text = self.__apply_args(translated_text, args, kwargs)
+				translated_text = RTextBase.format(translated_text, args, kwargs)
 			else:
 				translated_text = translated_text.format(*args, **kwargs)
 			return translated_text
@@ -77,43 +77,3 @@ class TranslationManager:
 				raise KeyError('Translation key "{}" not found'.format(key))
 			self.logger.error('Error translate text "{}" to language {}'.format(key, language))
 			return key if not use_rtext else RTextBase.from_any(key)
-
-	@classmethod
-	def __apply_args(cls, translated_text: str, args: tuple, kwargs: dict) -> RTextBase:
-		args = list(args)
-		kwargs = kwargs.copy()
-		counter = 0
-		rtext_elements = []  # type: List[Tuple[str, RTextBase]]
-
-		def get():
-			nonlocal counter
-			rv = '@@MCDR#Translation#Placeholder#{}@@'.format(counter)
-			counter += 1
-			return rv
-
-		for i, arg in enumerate(args):
-			if isinstance(arg, RTextBase):
-				placeholder = get()
-				rtext_elements.append((placeholder, arg))
-				args[i] = placeholder
-		for key, value in kwargs.items():
-			if isinstance(value, RTextBase):
-				placeholder = get()
-				rtext_elements.append((placeholder, value))
-				kwargs[key] = placeholder
-
-		texts = [translated_text.format(*args, **kwargs)]
-		for placeholder, rtext in rtext_elements:
-			new_texts = []
-			for text in texts:
-				processed_text = []
-				if isinstance(text, str):
-					for j, ele in enumerate(text.split(placeholder)):
-						if j > 0:
-							processed_text.append(rtext)
-						processed_text.append(ele)
-				else:
-					processed_text.append(text)
-				new_texts.extend(processed_text)
-			texts = new_texts
-		return RTextList(*texts)

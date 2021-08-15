@@ -282,21 +282,6 @@ Abstract method
 
 Return a copy version of itself
 
-join
-~~~~
-
-.. code-block:: python
-
-    def join(self, iterable: Iterable[Any]) -> RTextBase
-
-Just like ``join`` in class ``str``, it concatenate any number of texts with itself
-
-Example:
-
-.. code-block:: python
-
-    RText(',').join([RText('1'), '2', 3])  # 1,2,3
-
 set_color
 ~~~~~~~~~
 
@@ -346,6 +331,48 @@ Set the hover text with given *\*args* and return the text component itself
 Parameter *action*: The elements be used to create a ``RTextList`` instance. The ``RTextList`` instance is used as the actual hover text
 
 Method ``h`` is the short form of method ``set_hover_text``
+
+from_any
+~~~~~~~~
+
+.. code-block:: python
+
+    @staticmethod
+    def from_any(text) -> RTextBase
+
+Convert anything into a RText component
+
+join
+~~~~
+
+.. code-block:: python
+
+    @staticmethod
+    def join(divider: Any, iterable: Iterable[Any]) -> RTextBase
+
+Just like method `join <https://docs.python.org/3/library/stdtypes.html#str.join>`__ in class ``str``, it concatenate any number of texts with ``divider``
+
+Example:
+
+.. code-block:: python
+
+    RTextBase.join(RText(',', color=RColor.gray), [RText('1'), '2', 3])  # 1,2,3
+
+format
+~~~~~~~~
+
+.. code-block:: python
+
+    @staticmethod
+    def format(fmt: str, *args, **kwargs) -> RTextBase
+
+Just like method `format <https://docs.python.org/3/library/stdtypes.html#str.format>`__ in class ``str``, it uses ``*args`` and ``**kwargs`` to build a formatted RText component based on the formatter ``fmt``
+
+Example:
+
+.. code-block:: python
+
+    RTextBase.format('a={},b={},c={c}', RText('1', color=RColor.blue), '2', c=3)  # a=1,b=2,c=3
 
 RText
 ^^^^^
