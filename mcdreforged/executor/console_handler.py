@@ -1,4 +1,5 @@
 import sys
+from threading import RLock
 from typing import TYPE_CHECKING, Optional, Iterable, Any
 
 from prompt_toolkit import PromptSession
@@ -115,23 +116,26 @@ class CommandArgumentSuggester(Processor):
 class PromptToolkitWrapper:
 	def __init__(self, console_handler: ConsoleHandler):
 		self.console_handler = console_handler  # type: ConsoleHandler
-		self.enabled = False
+		self.__tr = console_handler.mcdr_server.tr
+		self.__logger = console_handler.mcdr_server.logger
+		self.pt_enabled = False
 		self.stdout_proxy = None  # type: Optional[StdoutProxy]
 		self.prompt_session = None  # type: Optional[PromptSession]
 		self.__real_stdout = None
+		self.__promoting = RLock()  # more for a status check
 
 	def start_kits(self):
 		try:
 			self.__tweak_kits()
 			self.prompt_session = PromptSession()
 			self.stdout_proxy = StdoutProxy(raw=True)
-		except Exception as e:
-			self.console_handler.mcdr_server.logger.error('Failed to enable advance console, switch back to basic input: {}'.format(e))
+		except:
+			self.__logger.exception('Failed to enable advanced console, switch back to basic input')
 		else:
 			self.__real_stdout = sys.stdout
 			sys.stdout = self.stdout_proxy
 			SyncStdoutStreamHandler.update_stdout()
-			self.enabled = True
+			self.pt_enabled = True
 
 	@staticmethod
 	def __tweak_kits():
@@ -147,8 +151,9 @@ class PromptToolkitWrapper:
 		MultiColumnCompletionMenuControl.__init__ = min_rows_is_2
 
 	def stop_kits(self):
-		if self.enabled:
-			self.enabled = False
+		if self.pt_enabled:
+			self.pt_enabled = False
+			self.__logger.info(self.__tr('console_handler.stopping_kits'))
 			self.stdout_proxy.close()
 			sys.stdout = self.__real_stdout
 			SyncStdoutStreamHandler.update_stdout()
@@ -157,21 +162,23 @@ class PromptToolkitWrapper:
 				try:
 					pt_app.exit()
 				except:
-					self.console_handler.mcdr_server.logger.exception('Fail to stop prompt toolkit app')
-			if not self.console_handler.is_on_thread():
-				self.console_handler.join()
+					self.__logger.exception('Fail to stop prompt toolkit app')
+			with self.__promoting:
+				# make sure in the console thread, prompt_session.prompt() ends
+				pass
 
 	def get_input(self) -> Optional[str]:
-		if self.enabled:
+		if self.pt_enabled:
 			assert self.console_handler.is_on_thread()
 			command_manager = self.console_handler.mcdr_server.command_manager
-			return self.prompt_session.prompt(
-				'> ',
-				completer=CommandCompleter(command_manager),
-				complete_while_typing=True,
-				complete_style=CompleteStyle.MULTI_COLUMN,
-				input_processors=[CommandArgumentSuggester(command_manager)],
-				reserve_space_for_menu=3
-			)
+			with self.__promoting:
+				return self.prompt_session.prompt(
+					'> ',
+					completer=CommandCompleter(command_manager),
+					complete_while_typing=True,
+					complete_style=CompleteStyle.MULTI_COLUMN,
+					input_processors=[CommandArgumentSuggester(command_manager)],
+					reserve_space_for_menu=3
+				)
 		else:
 			return input()

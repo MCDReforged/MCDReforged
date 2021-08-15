@@ -30,6 +30,7 @@ mcdr_server.on_mcdr_stop.bye                        : bye
 mcdr_server.on_mcdr_stop.stop_error                 : 关闭 MCDR 时出错，忽略并继续退出
 console_handler.parse_fail                          : 解析控制台指令 "{0}" 出错
 console_handler.error                               : 运行 ConsoleHandler 时出错
+console_handler.stopping_kits                       : 正在关闭高级控制台
 task_executor.error                                 : 运行 TaskExecutor 时出错
 watchdog.task_executor_no_response.line1            : TaskExecutor 线程已经 {0} 秒没有响应了，可能出了些问题
 watchdog.task_executor_no_response.line2            : "正在于 TaskExecutor 线程中运行的插件 (如果存在的话): {0}"

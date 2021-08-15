@@ -478,8 +478,8 @@ class MCDReforgedServer:
 			with self.watch_dog.pausing():  # it's ok for plugins to take some time
 				self.plugin_manager.dispatch_event(MCDRPluginEvents.MCDR_STOP, (), wait=True)
 
-			self.logger.info(self.tr('mcdr_server.on_mcdr_stop.bye'))
 			self.console_handler.stop()
+			self.logger.info(self.tr('mcdr_server.on_mcdr_stop.bye'))
 		except KeyboardInterrupt:  # I don't know why there sometimes will be a KeyboardInterrupt if MCDR is stopped by ctrl-c
 			pass
 		except:
