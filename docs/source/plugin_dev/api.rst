@@ -176,7 +176,7 @@ Send  command to the rcon server, and return the command execution result form t
 
 Parameter *command*: The command you want to send to the server
 
-Parameter *max_retry_time*: The maximum retry time of the operation. This method will return None if *max_retry_time* retries exceeded  
+Parameter *max_retry_time*: The maximum retry time of the operation. This method will return None if *max_retry_time* retries exceeded
 
 rtext
 -----
@@ -282,6 +282,21 @@ Abstract method
 
 Return a copy version of itself
 
+join
+~~~~
+
+.. code-block:: python
+
+    def join(self, iterable: Iterable[Any]) -> RTextBase
+
+Just like ``join`` in class ``str``, it concatenate any number of texts with itself
+
+Example:
+
+.. code-block:: python
+
+    RText(',').join([RText('1'), '2', 3])  # 1,2,3
+
 set_color
 ~~~~~~~~~
 
@@ -362,7 +377,7 @@ Example: ``RTextTranslation('advancements.nether.root.title', color=RColor.red)`
 RTextList
 ^^^^^^^^^
 
-A list of RTextBase objects 
+A list of RTextBase objects
 
 RTextList
 ~~~~~~~~~

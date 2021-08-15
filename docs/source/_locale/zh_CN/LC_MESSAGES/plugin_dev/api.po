@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-15 12:36+0800\n"
+"POT-Creation-Date: 2021-08-15 22:48+0800\n"
 "PO-Revision-Date: 2021-01-24 09:02+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -109,7 +109,7 @@ msgstr ""
 msgid "It's also a simple compatible upgrade method for old MCDR 0.x plugins"
 msgstr "这也是传统 MCDR 0.x 插件的简单的兼容升级方法。"
 
-#: ../plugin_dev/api.rst:51 ../plugin_dev/api.rst:100
+#: ../plugin_dev/api.rst:51 ../plugin_dev/api.rst:100 ../plugin_dev/api.rst:294
 msgid "Example:"
 msgstr "例如："
 
@@ -463,8 +463,8 @@ msgid "to_json_object"
 msgstr "to_json_object"
 
 #: ../plugin_dev/api.rst:250 ../plugin_dev/api.rst:270
-#: ../plugin_dev/api.rst:281 ../plugin_dev/api.rst:292
-#: ../plugin_dev/api.rst:303
+#: ../plugin_dev/api.rst:281 ../plugin_dev/api.rst:307
+#: ../plugin_dev/api.rst:318
 msgid "Abstract method"
 msgstr "抽象方法"
 
@@ -505,92 +505,102 @@ msgid "Return a copy version of itself"
 msgstr "返回其自身。"
 
 #: ../plugin_dev/api.rst:286
+msgid "join"
+msgstr "join"
+
+#: ../plugin_dev/api.rst:292
+msgid ""
+"Just like ``join`` in class ``str``, it concatenate any number of texts "
+"with itself"
+msgstr "就像 ``str`` 类的 ``join`` 一样，它使用自己连接任意数量的文本。"
+
+#: ../plugin_dev/api.rst:301
 msgid "set_color"
 msgstr "set_color"
 
-#: ../plugin_dev/api.rst:294
+#: ../plugin_dev/api.rst:309
 msgid "Set the color of the text and return the text component itself"
 msgstr "设置文本的颜色并返回文本组件本身。"
 
-#: ../plugin_dev/api.rst:297
+#: ../plugin_dev/api.rst:312
 msgid "set_styles"
 msgstr "set_styles"
 
-#: ../plugin_dev/api.rst:305
+#: ../plugin_dev/api.rst:320
 msgid "Set the styles of the text and return the text component itself"
 msgstr "设置文本的样式并返回文本组件本身。"
 
-#: ../plugin_dev/api.rst:308
+#: ../plugin_dev/api.rst:323
 msgid "set_click_event"
 msgstr "set_click_event"
 
-#: ../plugin_dev/api.rst:314
+#: ../plugin_dev/api.rst:329
 msgid ""
 "Set the click event with given *action* and *value* and return the text "
 "component itself"
 msgstr "用给定的 *action* 和 *value* 设置点击事件，并返回文本组件本身。"
 
-#: ../plugin_dev/api.rst:316
+#: ../plugin_dev/api.rst:331
 msgid "Parameter *action*: The type of the action"
 msgstr "参数 *action*：动作的类型"
 
-#: ../plugin_dev/api.rst:318
+#: ../plugin_dev/api.rst:333
 msgid "Parameter *value*: The string value of the action"
 msgstr "参数 *value*：操作的字符串值"
 
-#: ../plugin_dev/api.rst:320
+#: ../plugin_dev/api.rst:335
 msgid "Method ``c`` is the short form of method ``set_click_event``"
 msgstr "方法 ``c`` 是方法` `set_click_event`` 的简写。"
 
-#: ../plugin_dev/api.rst:323
+#: ../plugin_dev/api.rst:338
 msgid "set_hover_text"
 msgstr "set_hover_text"
 
-#: ../plugin_dev/api.rst:329
+#: ../plugin_dev/api.rst:344
 msgid ""
 "Set the hover text with given *\\*args* and return the text component "
 "itself"
 msgstr "使用给定的 *\\*args* 设置悬停文本并返回文本组件本身。"
 
-#: ../plugin_dev/api.rst:331
+#: ../plugin_dev/api.rst:346
 msgid ""
 "Parameter *action*: The elements be used to create a ``RTextList`` "
 "instance. The ``RTextList`` instance is used as the actual hover text"
 msgstr "参数 *action*：用于创建 ``RTextList`` 实例的元素。``RTextList`` 实例作为实际的悬停文本使用。"
 
-#: ../plugin_dev/api.rst:333
+#: ../plugin_dev/api.rst:348
 msgid "Method ``h`` is the short form of method ``set_hover_text``"
 msgstr "方法 ``h`` 是方法 ``set_hover_text`` 的简写。"
 
-#: ../plugin_dev/api.rst:336
+#: ../plugin_dev/api.rst:351
 msgid "RText"
 msgstr "RText"
 
-#: ../plugin_dev/api.rst:338
+#: ../plugin_dev/api.rst:353
 msgid "The regular text component class"
 msgstr "常规文本组件类"
 
-#: ../plugin_dev/api.rst:344
+#: ../plugin_dev/api.rst:359
 msgid ""
 "Create an ``RText`` object with specific text, color and style. "
 "``styles`` can be a ``RStyle`` or a collection of ``RStyle``"
 msgstr "用特定的文本，颜色和样式创建一个 ``RText`` 对象，其中样式可以是 ``RStyle`` 或 ``RStyle`` 的集合。"
 
-#: ../plugin_dev/api.rst:347 ../plugin_dev/api.rst:352
+#: ../plugin_dev/api.rst:362 ../plugin_dev/api.rst:367
 msgid "RTextTranslation"
 msgstr "RTextTranslation"
 
-#: ../plugin_dev/api.rst:349
+#: ../plugin_dev/api.rst:364
 msgid "The translation text component class. It's almost the same as ``RText``"
 msgstr "翻译文本组件类。几乎和 ``RText`` 相同。"
 
-#: ../plugin_dev/api.rst:358
+#: ../plugin_dev/api.rst:373
 msgid ""
 "Create a RTextTranslation object with specific translation_key. The rest "
 "of the parameters are the same to ``RText``"
 msgstr "使用特定的 ``translation_key`` 创建一个 ``RTextTranslation`` 对象。其余参数与 ``RText`` 相同。"
 
-#: ../plugin_dev/api.rst:360
+#: ../plugin_dev/api.rst:375
 msgid ""
 "Example: ``RTextTranslation('advancements.nether.root.title', "
 "color=RColor.red)``"
@@ -598,19 +608,19 @@ msgstr ""
 "例如：``RTextTranslation('advancements.nether.root.title', "
 "color=RColor.red)``"
 
-#: ../plugin_dev/api.rst:363 ../plugin_dev/api.rst:368
+#: ../plugin_dev/api.rst:378 ../plugin_dev/api.rst:383
 msgid "RTextList"
 msgstr "RTextList"
 
-#: ../plugin_dev/api.rst:365
+#: ../plugin_dev/api.rst:380
 msgid "A list of RTextBase objects"
 msgstr "由 RTextBase 对象组成的列表。"
 
-#: ../plugin_dev/api.rst:374
+#: ../plugin_dev/api.rst:389
 msgid "Use the given *\\*args* to create a ``RTextList``"
 msgstr "使用给定的 *\\*args* 创建 ``RTextList`` 。"
 
-#: ../plugin_dev/api.rst:376 ../plugin_dev/api.rst:387
+#: ../plugin_dev/api.rst:391 ../plugin_dev/api.rst:402
 msgid ""
 "Objects in ``*args`` can be a ``str``, a ``RTextBase`` or any classes "
 "implemented ``__str__`` method. All of them will be convert to ``RText``"
@@ -618,31 +628,31 @@ msgstr ""
 "``*args`` 中的对象可以是 ``str``，`RTextBase`` 或任何实现 __str__ 方法的类。所有的这些对象都将被转换为 "
 "``RText``。"
 
-#: ../plugin_dev/api.rst:379
+#: ../plugin_dev/api.rst:394
 msgid "append"
 msgstr "append"
 
-#: ../plugin_dev/api.rst:385
+#: ../plugin_dev/api.rst:400
 msgid ""
 "Add several elements to the end of the current ``RTextList``, then return"
 " the ``RTextList`` component itself"
 msgstr "在当前 ``RTextList`` 的末尾添加几个元素，然后返回 ``RTextList`` 组件本身。"
 
-#: ../plugin_dev/api.rst:390
+#: ../plugin_dev/api.rst:405
 msgid "is_empty"
 msgstr "is_empty"
 
-#: ../plugin_dev/api.rst:396
+#: ../plugin_dev/api.rst:411
 msgid ""
 "Return a bool indicating if the ``RTextList`` is empty. In other words, "
 "has no child element"
 msgstr "返回一个布尔值，指示 ``RTextList`` 是否为空——换句话说——有没有子元素。"
 
-#: ../plugin_dev/api.rst:399
+#: ../plugin_dev/api.rst:414
 msgid "types"
 msgstr "types"
 
-#: ../plugin_dev/api.rst:401
+#: ../plugin_dev/api.rst:416
 msgid ""
 "Who doesn't want a complete type checking to help you reduce silly "
 "mistakes etc. when coding your plugin? If you want to add type hints to "
@@ -650,29 +660,29 @@ msgid ""
 "you to import those Usually-used classes"
 msgstr "谁不希望在编写插件时，有一个检查器来帮助你减少愚蠢的错误呢？如果你想指定类型以让 IDE 知道你在写什么，这里有一个包可以让你导入一些常用的类。"
 
-#: ../plugin_dev/api.rst:413
+#: ../plugin_dev/api.rst:428
 msgid "utils"
 msgstr "utils"
 
-#: ../plugin_dev/api.rst:415
+#: ../plugin_dev/api.rst:430
 msgid "Some useful kits"
 msgstr "一些使用工具集"
 
-#: ../plugin_dev/api.rst:418
+#: ../plugin_dev/api.rst:433
 msgid "Serializable"
 msgstr "Serializable"
 
-#: ../plugin_dev/api.rst:420
+#: ../plugin_dev/api.rst:435
 msgid "A abstract class for easy serializing / deserializing"
 msgstr "一个用于便捷序列化/反序列化的抽象类。"
 
-#: ../plugin_dev/api.rst:422
+#: ../plugin_dev/api.rst:437
 msgid ""
 "Inherit it and declare the fields of your class with type annotations, "
 "that's all you need to do"
 msgstr "继承它，并在你的子类中使用类型注解声明属性，你所需要做的就这么多。"
 
-#: ../plugin_dev/api.rst:436
+#: ../plugin_dev/api.rst:451
 msgid ""
 "You can also declare default value when declaring type annotations, then "
 "during deserializing, if the value is missing, a `copy "
@@ -682,7 +692,7 @@ msgstr ""
 "你也可以在声明类型注解时声明属性的默认值，这样在反序列化的过程中，如果值缺失，则默认值的 `拷贝 <https://docs.python.org"
 "/zh-cn/3/library/copy.html#copy.copy>`__ 将会被赋值"
 
-#: ../plugin_dev/api.rst:449
+#: ../plugin_dev/api.rst:464
 msgid "Serializable class nesting is also supported"
 msgstr "类 Serializable 的嵌套也是支持的"
 
