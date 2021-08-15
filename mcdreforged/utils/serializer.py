@@ -1,5 +1,6 @@
+import copy
 from abc import ABC
-from typing import Union, TypeVar, List, Dict
+from typing import Union, TypeVar, List, Dict, Type
 
 T = TypeVar('T')
 
@@ -19,7 +20,7 @@ def serialize(obj) -> Union[None, int, float, str, list, dict]:
 		return serialize(attr_dict)
 
 
-def deserialize(data, cls: T, *, error_at_missing=False, error_at_redundancy=False) -> T:
+def deserialize(data, cls: Type[T], *, error_at_missing=False, error_at_redundancy=False) -> T:
 	# Element (None, int, float, str, list, dict)
 	if type(data) is cls:
 		return data
@@ -51,6 +52,8 @@ def deserialize(data, cls: T, *, error_at_missing=False, error_at_redundancy=Fal
 				input_key_set.remove(attr_name)
 			elif error_at_missing:
 				raise ValueError('Missing attribute {} for class {} in input object {}'.format(attr_name, cls, data))
+			elif hasattr(cls, attr_name):
+				result.__setattr__(attr_name, copy.copy(getattr(cls, attr_name)))
 		if error_at_redundancy and len(input_key_set) > 0:
 			raise ValueError('Redundancy attributes {} for class {} in input object {}'.format(input_key_set, cls, data))
 		return result
@@ -59,6 +62,10 @@ def deserialize(data, cls: T, *, error_at_missing=False, error_at_redundancy=Fal
 
 
 class Serializable(ABC):
+	def __init__(self, **kwargs):
+		if len(kwargs) > 0:
+			self.update_from(kwargs)
+
 	def serialize(self) -> dict:
 		return serialize(self)
 
@@ -66,5 +73,5 @@ class Serializable(ABC):
 	def deserialize(cls, data: dict, **kwargs):
 		return deserialize(data, cls, **kwargs)
 
-	def deserialize_from(self, data: dict):
+	def update_from(self, data: dict):
 		vars(self).update(vars(self.deserialize(data)))

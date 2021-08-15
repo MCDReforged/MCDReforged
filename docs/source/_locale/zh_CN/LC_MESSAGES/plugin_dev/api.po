@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-09 20:03+0800\n"
+"POT-Creation-Date: 2021-08-15 12:36+0800\n"
 "PO-Revision-Date: 2021-01-24 09:02+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -153,11 +153,11 @@ msgstr "event_listener"
 #: ../plugin_dev/api.rst:94
 msgid ""
 "This decorator is used to register a custom event listener without "
-"involving `PluginServerInterface <classes/PluginServerInterface.html#register-event-"
-"listener>`__"
+"involving `PluginServerInterface <classes/PluginServerInterface.html"
+"#register-event-listener>`__"
 msgstr ""
-"这个装饰器是用于在不使用 `PluginServerInterface <classes/PluginServerInterface.html#register-"
-"event-listener>`__ 的前提下注册自定义事件监听器"
+"这个装饰器是用于在不使用 `PluginServerInterface <classes/PluginServerInterface.html"
+"#register-event-listener>`__ 的前提下注册自定义事件监听器"
 
 #: ../plugin_dev/api.rst:96
 msgid ""
@@ -649,4 +649,40 @@ msgid ""
 "the server interface or command source parameter, here's the package for "
 "you to import those Usually-used classes"
 msgstr "谁不希望在编写插件时，有一个检查器来帮助你减少愚蠢的错误呢？如果你想指定类型以让 IDE 知道你在写什么，这里有一个包可以让你导入一些常用的类。"
+
+#: ../plugin_dev/api.rst:413
+msgid "utils"
+msgstr "utils"
+
+#: ../plugin_dev/api.rst:415
+msgid "Some useful kits"
+msgstr "一些使用工具集"
+
+#: ../plugin_dev/api.rst:418
+msgid "Serializable"
+msgstr "Serializable"
+
+#: ../plugin_dev/api.rst:420
+msgid "A abstract class for easy serializing / deserializing"
+msgstr "一个用于便捷序列化/反序列化的抽象类。"
+
+#: ../plugin_dev/api.rst:422
+msgid ""
+"Inherit it and declare the fields of your class with type annotations, "
+"that's all you need to do"
+msgstr "继承它，并在你的子类中使用类型注解声明属性，你所需要做的就这么多。"
+
+#: ../plugin_dev/api.rst:436
+msgid ""
+"You can also declare default value when declaring type annotations, then "
+"during deserializing, if the value is missing, a `copy "
+"<https://docs.python.org/3/library/copy.html#copy.copy>`__ of the default"
+" value will be assigned"
+msgstr ""
+"你也可以在声明类型注解时声明属性的默认值，这样在反序列化的过程中，如果值缺失，则默认值的 `拷贝 <https://docs.python.org"
+"/zh-cn/3/library/copy.html#copy.copy>`__ 将会被赋值"
+
+#: ../plugin_dev/api.rst:449
+msgid "Serializable class nesting is also supported"
+msgstr "类 Serializable 的嵌套也是支持的"
 

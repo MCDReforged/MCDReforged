@@ -407,3 +407,50 @@ Who doesn't want a complete type checking to help you reduce silly mistakes etc.
     def on_info(server: ServerInterface, info: Info):
         # Now auto completion for server and info parameters should be available for IDE
         pass
+
+
+utils
+-----
+
+Some useful kits
+
+Serializable
+^^^^^^^^^^^^
+
+A abstract class for easy serializing / deserializing
+
+Inherit it and declare the fields of your class with type annotations, that's all you need to do
+
+.. code-block:: python
+
+    class MyData(Serializable):
+        name: str
+        values: List[int]
+
+    data = MyData.deserialize({'name': 'abc', 'values': [1, 2]})
+    print(data.serialize())  # {'name': 'abc', 'values': [1, 2]}
+
+    data = MyData(name='cde')
+    print(data.serialize())  # {'name': 'cde'}
+
+You can also declare default value when declaring type annotations, then during deserializing, if the value is missing, a `copy <https://docs.python.org/3/library/copy.html#copy.copy>`__ of the default value will be assigned
+
+.. code-block:: python
+
+    class MyData(Serializable):
+        name: str = 'default'
+        values: List[int] = []
+
+    data = MyData(values=[0])
+    print(data.serialize())  # {'name': 'default', 'values': [0]}
+    print(MyData.deserialize({}).serialize())  # {'name': 'default', 'values': []}
+    print(MyData.deserialize({}).values is MyData.deserialize({}).values)  # False
+
+Serializable class nesting is also supported
+
+.. code-block:: python
+
+    class MyStorage(Serializable):
+        id: str
+        score: float
+        data: List[MyData]

@@ -1,7 +1,7 @@
 import unittest
 from typing import List, Dict
 
-from mcdreforged.utils.serializer import serialize, deserialize
+from mcdreforged.api.utils import serialize, deserialize, Serializable
 
 
 class Point:
@@ -73,6 +73,19 @@ class MyTestCase(unittest.TestCase):
 			}
 		}, ConfigImpl)
 		self.assertEqual(b, deserialize(serialize(b), ConfigImpl))
+
+	def test_3_copy(self):
+		class Cls(Serializable):
+			lst: List[int] = []
+
+		self.assertEqual(0, len(Cls.lst))
+		self.assertEqual(0, len(Cls.deserialize({}).lst))
+		obj = Cls.deserialize({})
+		for i in range(10):
+			obj.lst.append(i)
+		self.assertEqual(10, len(obj.lst))
+		self.assertEqual(0, len(Cls.deserialize({}).lst))
+		self.assertEqual(0, len(Cls().lst))
 
 
 if __name__ == '__main__':
