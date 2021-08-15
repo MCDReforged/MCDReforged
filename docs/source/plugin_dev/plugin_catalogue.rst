@@ -183,7 +183,7 @@ Language
 Plugin catalogue supports multiple language for users in different countries
 
 * English (``en_us``)
-* Simplify Chinese (``zh_cn``)
+* Simplified Chinese (``zh_cn``)
 
 The default and fallback language is ``en_us``
 

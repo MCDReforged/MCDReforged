@@ -1,11 +1,10 @@
 import os
-import re
 
 from setuptools import find_packages, setup
 
 from mcdreforged.constants import core_constant
 
-# rm -rf build/ dist/
+# rm -rf build/ dist/ mcdreforged.egg-info/
 # python setup.py sdist bdist_wheel
 # python -m twine upload --repository testpypi dist/*
 # python -m twine upload dist/*
@@ -40,7 +39,7 @@ if os.getenv('CI', None) is not None:
 here = os.path.abspath(os.path.dirname(__file__))
 
 with open(os.path.join(here, 'requirements.txt')) as f:
-	REQUIRED = [re.match(r'^[A-Za-z.-]+', line).group() for line in f.readlines() if not len(line.strip()) == 0]
+	REQUIRED = [line for line in f.readlines() if not len(line.strip()) == 0]
 
 print('REQUIRED = {}'.format(REQUIRED))
 
