@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-15 17:45+0800\n"
+"POT-Creation-Date: 2021-08-15 21:21+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -86,8 +86,10 @@ msgid ""
 msgstr "参数 *prefix*：你的插件的帮助指令。 当玩家点击显示的信息时，会向玩家提示这个前缀参数。 建议将其设置为你的插件的入口指令。"
 
 #: ../plugin_dev/classes/PluginServerInterface.rst:49
-msgid "Parameter *message*: A neat command description"
-msgstr "参数 *message*：一个整洁的指令描述。"
+msgid ""
+"Parameter *message*: A neat command description. It can be a str or a "
+"RText. Also it can be a dict maps from language to description message"
+msgstr "参数 *message*：一个整洁的指令描述。它可以为一个 str 或者 RText。除此之外它还可为一个将语言映射至描述信息的 dict"
 
 #: ../plugin_dev/classes/PluginServerInterface.rst:51
 msgid ""
@@ -233,11 +235,12 @@ msgstr "参数 *source_to_reply*：用于回复加载配置相关日志的 `指�
 #: ../plugin_dev/classes/PluginServerInterface.rst:147
 msgid ""
 "Parameter *target_class*: A class derived from `Serializable "
-"<../api.html#serializable>`__. When specified the loaded config data will "
-"be deserialized to a instance of target_class which will be returned as "
+"<../api.html#serializable>`__. When specified the loaded config data will"
+" be deserialized to a instance of target_class which will be returned as "
 "return value"
-msgstr "参数 *target_class*：一个派生自 `Serializable <../api.html#serializable>`__ 的类。当被指定时，加载的配置文件数据"
-"将会被反序列化为一个 target_class 的实例并令其作为方法的返回值。"
+msgstr ""
+"参数 *target_class*：一个派生自 `Serializable <../api.html#serializable>`__ "
+"的类。当被指定时，加载的配置文件数据将会被反序列化为一个 target_class 的实例并令其作为方法的返回值。"
 
 #: ../plugin_dev/classes/PluginServerInterface.rst:149
 msgid "Returns a dict contains the loaded and processed config"

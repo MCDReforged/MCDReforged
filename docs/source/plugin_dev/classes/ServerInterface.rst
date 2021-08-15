@@ -535,3 +535,12 @@ rcon_query
 Send command to the server through rcon connection. Return the result that server returned from rcon. Return None if rcon is not running or rcon query failed
 
 Parameter *command*: The command you want to send to the rcon server
+
+get_mcdr_language
+~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+    def get_mcdr_language(self) -> str
+
+Return the current language MCDR is using

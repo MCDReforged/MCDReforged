@@ -572,7 +572,7 @@ class PluginServerInterface(ServerInterface):
 		Register a help message for the current plugin, which is used in !!help command
 		:param prefix: The help command of your plugin. When player click on the displayed message it will suggest this
 		prefix parameter to the player. It's recommend to set it to the entry command of your plugin
-		:param message: A neat command description. It can be a str or a RText. Also it can be a dict maps from language to the help message
+		:param message: A neat command description. It can be a str or a RText. Also it can be a dict maps from language to description message
 		:param permission: The minimum permission level for the user to see this help message. With default, anyone
 		can see this message
 		"""

@@ -40,13 +40,13 @@ register_help_message
 
 .. code-block:: python
 
-    def register_help_message(self, prefix: str, message: Union[str, RTextBase], permission: int = PermissionLevel.MINIMUM_LEVEL) -> None
+    def register_help_message(self, prefix: str, message: Union[Union[str, RTextBase], Dict[str, Union[str, RTextBase]]], permission: int = PermissionLevel.MINIMUM_LEVEL) -> None
 
 Register a help message for the current plugin, which is used in !!help command
 
 Parameter *prefix*: The help command of your plugin. When player click on the displayed message it will suggest this prefix parameter to the player. It's recommend to set it to the entry command of your plugin
 
-Parameter *message*: A neat command description
+Parameter *message*: A neat command description. It can be a str or a RText. Also it can be a dict maps from language to description message
 
 Parameter *permission*: The minimum permission level for the user to see this help message. With default, anyone can see this message
 
