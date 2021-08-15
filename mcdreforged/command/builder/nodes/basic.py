@@ -97,18 +97,28 @@ class CommandContext(dict):
 		return self.__node_path
 
 	@contextmanager
-	def enter_child(self, new_cursor: int, node: 'ArgumentNode'):
+	def change_cursor(self, new_cursor: int):
 		"""
 		**Only used in command parsing**
-		Enter a command node
+		Enter change current cursor position. It affects the current status of command parsing
 		"""
 		prev_cursor = self.__cursor
 		self.__cursor = new_cursor
-		self.__node_path.append(node)
 		try:
 			yield
 		finally:
 			self.__cursor = prev_cursor
+
+	@contextmanager
+	def enter_child(self, node: 'ArgumentNode'):
+		"""
+		**Only used in command parsing**
+		Enter a command node
+		"""
+		self.__node_path.append(node)
+		try:
+			yield
+		finally:
 			self.__node_path.pop(len(self.__node_path) - 1)
 			self.pop(node.get_name(), None)
 
@@ -286,61 +296,62 @@ class ArgumentNode:
 			next_remaining = utils.remove_divider_prefix(context.command_remaining[result.char_read:])  # type: str
 			total_read = len(command) - len(next_remaining)  # type: int
 
-			if self.__does_store_thing():
-				context[self._name] = result.value
+			with context.change_cursor(total_read):
+				if self.__does_store_thing():
+					context[self._name] = result.value
 
-			if self._requirement is not None:
-				if not self.__smart_callback(self._requirement, context.source, context):
-					getter = self._requirement_failure_message_getter or (lambda: None)
-					failure_message = self.__smart_callback(getter, context.source, context)
-					self.__raise_error(RequirementNotMet(context.command_read, context.command_read, failure_message), context)
+				if self._requirement is not None:
+					if not self.__smart_callback(self._requirement, context.source, context):
+						getter = self._requirement_failure_message_getter or (lambda: None)
+						failure_message = self.__smart_callback(getter, context.source, context)
+						self.__raise_error(RequirementNotMet(context.command_read, context.command_read, failure_message), context)
 
-			# Parsing finished
-			if len(next_remaining) == 0:
-				if self._callback is not None:
-					self.__smart_callback(self._callback, context.source, context)
+				# Parsing finished
+				if len(next_remaining) == 0:
+					if self._callback is not None:
+						self.__smart_callback(self._callback, context.source, context)
+					else:
+						self.__raise_error(UnknownCommand(context.command_read, context.command_read), context)
+				# Un-parsed command string remains
 				else:
-					self.__raise_error(UnknownCommand(context.command_read, context.command_read), context)
-			# Un-parsed command string remains
-			else:
-				# Redirecting
-				node = self if self._redirect_node is None else self._redirect_node
+					# Redirecting
+					node = self if self._redirect_node is None else self._redirect_node
 
-				argument_unknown = False
-				# No child at all
-				if not node.has_children():
-					argument_unknown = True
-				else:
-					# Pass the remaining command string to the children
-					next_literal = utils.get_element(next_remaining)
-					try:
-						# Check literal children first
-						literal_error = None
-						for child_literal in node._children_literal.get(next_literal, []):
-							try:
-								with context.enter_child(total_read, child_literal):
-									child_literal._execute_command(context)
-								break
-							except CommandError as e:
-								# it's ok for a direct literal node to fail
-								# other literal might still have a chance to consume this command
-								literal_error = e
-						else:  # All literal children fails
-							if literal_error is not None:
-								raise literal_error
-							for child in node._children:
-								with context.enter_child(total_read, child):
-									child._execute_command(context)
-								break
-							else:  # No argument child
-								argument_unknown = True
+					argument_unknown = False
+					# No child at all
+					if not node.has_children():
+						argument_unknown = True
+					else:
+						# Pass the remaining command string to the children
+						next_literal = utils.get_element(next_remaining)
+						try:
+							# Check literal children first
+							literal_error = None
+							for child_literal in node._children_literal.get(next_literal, []):
+								try:
+									with context.enter_child(child_literal):
+										child_literal._execute_command(context)
+									break
+								except CommandError as e:
+									# it's ok for a direct literal node to fail
+									# other literal might still have a chance to consume this command
+									literal_error = e
+							else:  # All literal children fails
+								if literal_error is not None:
+									raise literal_error
+								for child in node._children:
+									with context.enter_child(child):
+										child._execute_command(context)
+									break
+								else:  # No argument child
+									argument_unknown = True
 
-					except CommandError as error:
-						self.__handle_error(error, context, self._child_error_handlers)
-						raise error from None
+						except CommandError as error:
+							self.__handle_error(error, context, self._child_error_handlers)
+							raise error from None
 
-				if argument_unknown:
-					self.__raise_error(UnknownArgument(context.command_read, command), context)
+					if argument_unknown:
+						self.__raise_error(UnknownArgument(context.command_read, command), context)
 
 	def _generate_suggestions(self, context: CommandContext) -> CommandSuggestions:
 		"""
@@ -359,36 +370,37 @@ class ArgumentNode:
 			next_remaining = utils.remove_divider_prefix(context.command_remaining[result.char_read:])  # type: str
 			total_read = len(context.command) - len(next_remaining)  # type: int
 
-			if self.__does_store_thing():
-				context[self._name] = result.value
+			with context.change_cursor(total_read):
+				if self.__does_store_thing():
+					context[self._name] = result.value
 
-			if self._requirement is not None and not self.__smart_callback(self._requirement, context.source, context):
-				return CommandSuggestions()
+				if self._requirement is not None and not self.__smart_callback(self._requirement, context.source, context):
+					return CommandSuggestions()
 
-			# Parsing finished
-			if len(next_remaining) == 0:
-				# total_read == success_read means DIVIDER does not exists at the end of the input string
-				# in that case, ends at this current node
-				if success_read == total_read:
-					return self_suggestions()
+				# Parsing finished
+				if len(next_remaining) == 0:
+					# total_read == success_read means DIVIDER does not exists at the end of the input string
+					# in that case, ends at this current node
+					if success_read == total_read:
+						return self_suggestions()
 
-			node = self if self._redirect_node is None else self._redirect_node
-			# Check literal children first
-			children_literal = node._children_literal.get(utils.get_element(next_remaining), [])
-			for child_literal in children_literal:
-				with context.enter_child(total_read, child_literal):
-					suggestions.extend(child_literal._generate_suggestions(context))
-			if len(children_literal) == 0:
-				for literal_list in node._children_literal.values():
-					for child_literal in literal_list:
-						with context.enter_child(total_read, child_literal):
-							suggestions.extend(child_literal._generate_suggestions(context))
-				for child in node._children:
-					with context.enter_child(total_read, child):
-						suggestions.extend(child._generate_suggestions(context))
-						if len(next_remaining) == 0:
-							suggestions.complete_hint = '<{}>'.format(child._name)
-					break
+				node = self if self._redirect_node is None else self._redirect_node
+				# Check literal children first
+				children_literal = node._children_literal.get(utils.get_element(next_remaining), [])
+				for child_literal in children_literal:
+					with context.enter_child(child_literal):
+						suggestions.extend(child_literal._generate_suggestions(context))
+				if len(children_literal) == 0:
+					for literal_list in node._children_literal.values():
+						for child_literal in literal_list:
+							with context.enter_child(child_literal):
+								suggestions.extend(child_literal._generate_suggestions(context))
+					for child in node._children:
+						with context.enter_child(child):
+							suggestions.extend(child._generate_suggestions(context))
+							if len(next_remaining) == 0:
+								suggestions.complete_hint = '<{}>'.format(child._name)
+						break
 
 		return suggestions
 
