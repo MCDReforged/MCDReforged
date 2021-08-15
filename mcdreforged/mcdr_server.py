@@ -5,7 +5,7 @@ import time
 import traceback
 from subprocess import Popen, PIPE, STDOUT
 from threading import Lock
-from typing import Optional, Union
+from typing import Optional
 
 import psutil
 
@@ -21,7 +21,6 @@ from mcdreforged.info import Info
 from mcdreforged.info_reactor.info_reactor_manager import InfoReactorManager
 from mcdreforged.mcdr_state import ServerState, MCDReforgedState, MCDReforgedFlag
 from mcdreforged.minecraft.rcon.rcon_manager import RconManager
-from mcdreforged.minecraft.rtext import RTextBase
 from mcdreforged.permission.permission_manager import PermissionManager
 from mcdreforged.plugin.plugin_event import MCDRPluginEvents
 from mcdreforged.plugin.plugin_manager import PluginManager
@@ -30,6 +29,7 @@ from mcdreforged.translation_manager import TranslationManager
 from mcdreforged.utils import file_util
 from mcdreforged.utils.exception import IllegalCallError, ServerStopped, ServerStartError, IllegalStateError
 from mcdreforged.utils.logger import DebugOption, MCDReforgedLogger, MCColoredFormatter
+from mcdreforged.utils.types import MessageText
 
 
 class MCDReforgedServer:
@@ -106,7 +106,7 @@ class MCDReforgedServer:
 
 	def on_first_start(self):
 		self.logger.info('Some of the user files are missing, check them before launch MCDR again')
-		default_config = self.config.get_default()
+		default_config = self.config.get_default_yaml()
 		file_util.touch_directory(default_config['working_directory'])
 		self.plugin_manager.set_plugin_directories(default_config['plugin_directories'])  # to touch the directory
 
@@ -114,7 +114,7 @@ class MCDReforgedServer:
 	#         Translate
 	# --------------------------
 
-	def tr(self, translation_key: str, *args, language: Optional[str] = None, fallback_language: Optional[str] = None, allow_failure=True, **kwargs) -> Union[str, RTextBase]:
+	def tr(self, translation_key: str, *args, language: Optional[str] = None, fallback_language: Optional[str] = None, allow_failure=True, **kwargs) -> MessageText:
 		"""
 		Return a translated text corresponded to the translation key and format the text with given args
 		If args contains RText element, then the result will be a RText, otherwise the result will be a regular str

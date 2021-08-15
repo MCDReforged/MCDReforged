@@ -2,7 +2,7 @@
 Single plugin class
 """
 from enum import Enum, auto
-from typing import Tuple, Any, TYPE_CHECKING, Dict
+from typing import Tuple, Any, TYPE_CHECKING
 
 from mcdreforged.command.builder.nodes.basic import Literal
 from mcdreforged.plugin.meta.metadata import Metadata
@@ -10,6 +10,7 @@ from mcdreforged.plugin.plugin_event import MCDREvent, EventListener, PluginEven
 from mcdreforged.plugin.plugin_registry import PluginRegistry, HelpMessage
 from mcdreforged.utils.exception import IllegalCallError, IllegalStateError
 from mcdreforged.utils.logger import DebugOption
+from mcdreforged.utils.types import TranslationKeyDict
 
 if TYPE_CHECKING:
 	from mcdreforged.plugin.plugin_manager import PluginManager
@@ -137,7 +138,7 @@ class AbstractPlugin:
 		for listener in self.plugin_registry.event_listeners.get(event.id, []):
 			self.plugin_manager.trigger_listener(listener, args)
 
-	def register_translation(self, language: str, mapping: Dict[str, str]):
+	def register_translation(self, language: str, mapping: TranslationKeyDict):
 		self.__assert_allow_to_register('translation')
 		self.mcdr_server.logger.debug('{} is registering translation for {} with {} entries'.format(self, language, len(mapping)), option=DebugOption.PLUGIN)
 		self.plugin_registry.register_translation(language, mapping)

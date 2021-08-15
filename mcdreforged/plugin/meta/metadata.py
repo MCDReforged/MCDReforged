@@ -4,21 +4,20 @@ Information of a plugin
 import re
 from typing import List, Dict, TYPE_CHECKING, Optional, Union
 
+from mcdreforged.constants import core_constant
 from mcdreforged.minecraft.rtext import RTextBase
 from mcdreforged.plugin.meta.version import Version, VersionParsingError, VersionRequirement
+from mcdreforged.utils.types import TranslationLanguageDict
 
 if TYPE_CHECKING:
 	from mcdreforged.plugin.type.plugin import AbstractPlugin
-
-
-_DEFAULT_LANGUAGE = 'en_us'
 
 
 class Metadata:
 	id: str
 	version: Version
 	name: str
-	description: Optional[Union[str, Dict[str, str]]]  # translation: lang -> description
+	description: Optional[Union[str, TranslationLanguageDict]]  # translation: lang -> description
 	author: Optional[List[str]]
 	link: Optional[str]
 	dependencies: Dict[str, VersionRequirement]
@@ -119,7 +118,7 @@ class Metadata:
 		"""
 		if isinstance(self.description, str):
 			return self.description
-		return self.description.get(lang, self.description.get(_DEFAULT_LANGUAGE))
+		return self.description.get(lang, self.description.get(core_constant.DEFAULT_LANGUAGE))
 
 
 __SAMPLE_METADATA = {

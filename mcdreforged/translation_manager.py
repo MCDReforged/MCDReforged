@@ -4,52 +4,59 @@ Translation support
 import collections
 import os
 from logging import Logger
-from typing import Dict, Optional, Union, List, Tuple
+from typing import Optional, List, Tuple, Set
 
 from ruamel import yaml
 
 from mcdreforged.constants import core_constant
 from mcdreforged.minecraft.rtext import RTextBase, RTextList
-from mcdreforged.utils import file_util
+from mcdreforged.utils import file_util, translation_util
 from mcdreforged.utils.logger import DebugOption
+from mcdreforged.utils.types import TranslationStorage, MessageText
 
 LANGUAGE_RESOURCE_DIRECTORY = os.path.join('resources', 'lang')
 HERE = os.path.abspath(os.path.dirname(__file__))
+LANGUAGE_DIRECTORY = os.path.join(HERE, LANGUAGE_RESOURCE_DIRECTORY)
 
 
 class TranslationManager:
-	DEFAULT_LANGUAGE = 'en_us'
-
 	def __init__(self, logger: Logger):
 		self.logger = logger
-		self.language = self.DEFAULT_LANGUAGE
-		self.translations = collections.defaultdict(dict)  # type: Dict[str, Dict[str, str]]
+		self.language = core_constant.DEFAULT_LANGUAGE
+		self.translations: TranslationStorage = collections.defaultdict(dict)
+		self.available_languages: Set[str] = set()
 
 	def load_translations(self):
-		language_directory = os.path.join(HERE, LANGUAGE_RESOURCE_DIRECTORY)
-		for file_path in file_util.list_file_with_suffix(language_directory, core_constant.LANGUAGE_FILE_SUFFIX):
+		self.translations.clear()
+		self.available_languages.clear()
+		for file_path in file_util.list_file_with_suffix(LANGUAGE_DIRECTORY, core_constant.LANGUAGE_FILE_SUFFIX):
 			language, _ = os.path.basename(file_path).rsplit('.', 1)
 			try:
-				with open(os.path.join(language_directory, file_path), encoding='utf8') as file_handler:
+				with open(os.path.join(LANGUAGE_DIRECTORY, file_path), encoding='utf8') as file_handler:
 					translations = dict(yaml.load(file_handler, Loader=yaml.Loader))
-				self.translations[language] = translations
+				for key, text in translations.items():
+					self.translations[key][language] = text
+				self.available_languages.add(language)
 				self.logger.debug('Loaded translation for {} with {} entries'.format(language, len(translations)), option=DebugOption.MCDR)
 			except:
 				self.logger.exception('Failed to load language {} from "{}"'.format(language, file_path))
 
-	def set_language(self, language):
+	def set_language(self, language: str):
 		self.language = language
-		if len(self.translations.get(language, {})) == 0:
+		if language not in self.available_languages:
 			self.logger.warning('Setting language to {} with 0 available translation'.format(language))
 
-	def translate(self, key: str, args: tuple, kwargs: dict, *, allow_failure: bool, language: Optional[str] = None, fallback_language: Optional[str] = None, plugin_translations: Optional[Dict[str, Dict[str, str]]] = None) -> Union[str, RTextBase]:
+	def translate(self, key: str, args: tuple, kwargs: dict, *, allow_failure: bool, language: Optional[str] = None, fallback_language: Optional[str] = None, plugin_translations: Optional[TranslationStorage] = None) -> MessageText:
 		if language is None:
 			language = self.language
+		if plugin_translations is None:
+			plugin_translations = {}
 
 		# Translating
-		translated_text = self.translations[language].get(key)
-		if translated_text is None and plugin_translations is not None:
-			translated_text = plugin_translations.get(language, {}).get(key)
+		try:
+			translated_text = translation_util.translate_from_dict(self.translations.get(key, {}), language, fallback_language=fallback_language)
+		except KeyError:
+			translated_text = translation_util.translate_from_dict(plugin_translations.get(key, {}), language, fallback_language=fallback_language, default=None)
 
 		# Check if there's any rtext inside args
 		use_rtext = False
@@ -66,11 +73,6 @@ class TranslationManager:
 				translated_text = translated_text.format(*args, **kwargs)
 			return translated_text
 		else:
-			if fallback_language is not None and language != fallback_language:
-				try:
-					return self.translate(key, args, allow_failure=False, language=fallback_language, fallback_language=None, plugin_translations=plugin_translations)
-				except KeyError:
-					pass
 			if not allow_failure:
 				raise KeyError('Translation key "{}" not found'.format(key))
 			self.logger.error('Error translate text "{}" to language {}'.format(key, language))

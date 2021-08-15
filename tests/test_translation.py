@@ -1,9 +1,14 @@
 import functools
 import logging
+import os
 import unittest
 
+from ruamel import yaml
+
+from mcdreforged.constants import core_constant
 from mcdreforged.minecraft.rtext import RText, RTextBase
-from mcdreforged.translation_manager import TranslationManager
+from mcdreforged.translation_manager import TranslationManager, LANGUAGE_DIRECTORY
+from mcdreforged.utils import file_util
 
 
 class MyTestCase(unittest.TestCase):
@@ -13,8 +18,13 @@ class MyTestCase(unittest.TestCase):
 		self.translation_manager = TranslationManager(logging.getLogger())
 
 	def test_0_same_key_order(self):
-		self.translation_manager.load_translations()
-		language_key_dict = self.translation_manager.translations
+		language_key_dict = {}
+		for file_path in file_util.list_file_with_suffix(LANGUAGE_DIRECTORY, core_constant.LANGUAGE_FILE_SUFFIX):
+			language, _ = os.path.basename(file_path).rsplit('.', 1)
+			with open(os.path.join(LANGUAGE_DIRECTORY, file_path), encoding='utf8') as file_handler:
+				translations = dict(yaml.load(file_handler, Loader=yaml.Loader))
+			language_key_dict[language] = translations
+
 		language_list = list(language_key_dict.keys())
 		base_lang = language_list[0]
 		base_keys = list(language_key_dict[base_lang].keys())
@@ -25,8 +35,8 @@ class MyTestCase(unittest.TestCase):
 			self.assertEqual(len(base_keys), len(test_lang_keys))
 
 	def test_1_translation_formatting(self):
-		translations = self.translation_manager.translations[TranslationManager.DEFAULT_LANGUAGE]
-		translations['key1'] = 'A {0} bb {c} {1}zzz'
+		self.translation_manager.language = 'test_lang'
+		self.translation_manager.translations['key1'] = {'test_lang': 'A {0} bb {c} {1}zzz'}
 		tr = functools.partial(self.translation_manager.translate, allow_failure=False)
 
 		self.assertEqual('A X bb Z Yzzz', tr('key1', ('X', 'Y'), {'c': 'Z'}))

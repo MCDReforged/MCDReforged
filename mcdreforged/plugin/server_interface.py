@@ -9,7 +9,6 @@ from mcdreforged.command.command_source import CommandSource, PluginCommandSourc
 from mcdreforged.constants import plugin_constant
 from mcdreforged.info import Info
 from mcdreforged.mcdr_state import MCDReforgedFlag
-from mcdreforged.minecraft.rtext import RTextBase, RText
 from mcdreforged.permission.permission_level import PermissionLevel
 from mcdreforged.plugin.meta.metadata import Metadata
 from mcdreforged.plugin.operation_result import SingleOperationResult, PluginOperationResult
@@ -21,6 +20,7 @@ from mcdreforged.utils import misc_util
 from mcdreforged.utils.exception import IllegalCallError
 from mcdreforged.utils.logger import MCDReforgedLogger, DebugOption
 from mcdreforged.utils.serializer import Serializable
+from mcdreforged.utils.types import MessageText, TranslationKeyDictRich, TranslationKeyDict
 
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
@@ -73,7 +73,7 @@ class ServerInterface:
 		"""
 		return cls.__global_instance
 
-	def tr(self, translation_key: str, *args, language: Optional[str] = None, fallback_language: str = 'en_us', **kwargs) -> Union[str, RTextBase]:
+	def tr(self, translation_key: str, *args, language: Optional[str] = None, fallback_language: str = 'en_us', **kwargs) -> MessageText:
 		"""
 		Return a translated text corresponded to the translation key and format the text with given args and kwargs
 		If args or kwargs contains RText element, then the result will be a RText, otherwise the result will be a regular str
@@ -215,7 +215,7 @@ class ServerInterface:
 		self.logger.debug('Sending command "{}"'.format(text), option=DebugOption.PLUGIN)
 		self._mcdr_server.send(text, encoding=encoding)
 
-	def tell(self, player: str, text: Union[str, RTextBase], *, encoding: Optional[str] = None) -> None:
+	def tell(self, player: str, text: MessageText, *, encoding: Optional[str] = None) -> None:
 		"""
 		Use command like /tellraw to send the message to the specific player
 		:param player: The name of the player you want to tell
@@ -226,7 +226,7 @@ class ServerInterface:
 		if command is not None:
 			self.execute(command, encoding=encoding)
 
-	def say(self, text: Union[str, RTextBase], *, encoding: Optional[str] = None) -> None:
+	def say(self, text: MessageText, *, encoding: Optional[str] = None) -> None:
 		"""
 		Use command like /tellraw @a to broadcast the message in game
 		:param text: the message you want to send
@@ -236,7 +236,7 @@ class ServerInterface:
 		if command is not None:
 			self.execute(command, encoding=encoding)
 
-	def broadcast(self, text: Union[str, RTextBase], *, encoding: Optional[str] = None) -> None:
+	def broadcast(self, text: MessageText, *, encoding: Optional[str] = None) -> None:
 		"""
 		Broadcast the message in game and to the console
 		:param text: the message you want to send
@@ -245,7 +245,7 @@ class ServerInterface:
 		self.say(text, encoding=encoding)
 		misc_util.print_text_to_console(self.logger, text)
 
-	def reply(self, info: Info, text: Union[str, RTextBase], *, encoding: Optional[str] = None, console_text: Optional[Union[str, RTextBase]] = None):
+	def reply(self, info: Info, text: MessageText, *, encoding: Optional[str] = None, console_text: Optional[MessageText] = None):
 		"""
 		Reply to the source of the Info
 		If the Info is from a player then use tell to reply the player
@@ -507,6 +507,12 @@ class ServerInterface:
 		"""
 		return self._mcdr_server.rcon_manager.send_command(command)
 
+	def get_mcdr_language(self) -> str:
+		"""
+		Return the current language MCDR is using
+		"""
+		return self._mcdr_server.translation_manager.language
+
 
 class PluginServerInterface(ServerInterface):
 	"""
@@ -561,20 +567,18 @@ class PluginServerInterface(ServerInterface):
 		"""
 		self.__plugin.register_command(root_node)
 
-	def register_help_message(self, prefix: str, message: Union[str, RTextBase], permission: int = PermissionLevel.MINIMUM_LEVEL) -> None:
+	def register_help_message(self, prefix: str, message: Union[MessageText, TranslationKeyDictRich], permission: int = PermissionLevel.MINIMUM_LEVEL) -> None:
 		"""
 		Register a help message for the current plugin, which is used in !!help command
 		:param prefix: The help command of your plugin. When player click on the displayed message it will suggest this
 		prefix parameter to the player. It's recommend to set it to the entry command of your plugin
-		:param message: A neat command description
+		:param message: A neat command description. It can be a str or a RText. Also it can be a dict maps from language to the help message
 		:param permission: The minimum permission level for the user to see this help message. With default, anyone
 		can see this message
 		"""
-		if isinstance(message, str):
-			message = RText(message)
 		self.__plugin.register_help_message(HelpMessage(self.__plugin, prefix, message, permission))
 
-	def register_translation(self, language: str, mapping: Dict[str, str]) -> None:
+	def register_translation(self, language: str, mapping: TranslationKeyDict) -> None:
 		"""
 		Register a translation mapping for a specific language for the current plugin
 		:param language: The language of this translation

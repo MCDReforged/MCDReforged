@@ -17,7 +17,7 @@ from mcdreforged.plugin.plugin_registry import HelpMessage
 from mcdreforged.plugin.type.permanent_plugin import PermanentPlugin
 from mcdreforged.plugin.type.plugin import AbstractPlugin
 from mcdreforged.plugin.type.regular_plugin import RegularPlugin
-from mcdreforged.utils import file_util, string_util
+from mcdreforged.utils import file_util, string_util, translation_util
 
 METADATA = {
 	'id': core_constant.NAME.lower(),
@@ -154,7 +154,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 	def can_see_rtext(source: CommandSource):
 		return source.is_player
 
-	def get_help_message(self, translation_key):
+	def get_help_message(self, translation_key: str):
 		lst = RTextList()
 		for line in self.tr(translation_key).splitlines(keepends=True):
 			prefix = re.search(r'(?<=§7)!!MCDR[\w ]*(?=§)', line)
@@ -485,7 +485,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 			PermissionLevel.MINIMUM_LEVEL
 		))
 
-	def process_help_command(self, source: CommandSource, context: dict):
+	def process_help_command(self, source: CommandSource, context: CommandContext):
 		page = context.get('page')
 		source.reply(self.tr('mcdr_command.help_message.title'))
 		matched = []  # type: List[HelpMessage]
@@ -504,7 +504,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 				source.reply(RTextList(
 					RText(msg.prefix, color=RColor.gray).c(RAction.suggest_command, msg.prefix),
 					': ',
-					msg.message
+					translation_util.translate_from_dict(msg.message, self.server_interface.get_mcdr_language(), default='')
 				))
 
 		if page is not None:

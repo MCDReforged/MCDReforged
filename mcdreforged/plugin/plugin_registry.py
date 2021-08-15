@@ -1,9 +1,13 @@
 import collections
-from typing import Dict, List, Callable, Any, TYPE_CHECKING
+from typing import Dict, List, Callable, Any, TYPE_CHECKING, Union
 
 from mcdreforged.command.builder.nodes.basic import Literal
+from mcdreforged.constants import core_constant
 from mcdreforged.minecraft.rtext import RTextBase
 from mcdreforged.plugin.plugin_event import EventListener
+from mcdreforged.utils import translation_util
+from mcdreforged.utils.types import TranslationStorage, TranslationKeyDictRich, MessageText, \
+	TranslationKeyDict
 
 if TYPE_CHECKING:
 	from mcdreforged.plugin.type.plugin import AbstractPlugin
@@ -13,10 +17,17 @@ DEFAULT_LISTENER_PRIORITY = 1000
 
 
 class HelpMessage:
-	def __init__(self, plugin: 'AbstractPlugin', prefix: str, message: str or RTextBase, permission: int):
+	def __init__(self, plugin: 'AbstractPlugin', prefix: str, message: Union[MessageText, TranslationKeyDictRich], permission: int):
 		self.plugin = plugin
 		self.prefix = prefix
-		self.message = RTextBase.from_any(message)
+
+		self.message: TranslationKeyDictRich = {}
+		if isinstance(message, dict):
+			for lang, msg in message.items():
+				self.message[lang] = RTextBase.from_any(msg)
+		else:
+			self.message[core_constant.DEFAULT_LANGUAGE] = RTextBase.from_any(message)
+
 		self.permission = permission
 		self.__prefix_lower = self.prefix.lower()
 
@@ -43,9 +54,9 @@ class PluginCommandNode:
 class AbstractPluginRegistry:
 	def __init__(self):
 		self.event_listeners = collections.defaultdict(list)  # type: Dict[str, List[EventListener]]
-		self.help_messages = []
-		self.command_roots = []  # type: List[PluginCommandNode]
-		self.translations = collections.defaultdict(dict)  # type: Dict[str, Dict[str, str]]
+		self.help_messages: List[HelpMessage] = []
+		self.command_roots: List[PluginCommandNode] = []
+		self.translations: TranslationStorage = collections.defaultdict(dict)
 
 	def clear(self):
 		self.event_listeners.clear()
@@ -70,10 +81,10 @@ class PluginRegistry(AbstractPluginRegistry):
 			raise TypeError('Only Literal node is accepted to be a root node')
 		self.command_roots.append(PluginCommandNode(self.plugin, node))
 
-	def register_translation(self, language: str, mapping: Dict[str, str]):
+	def register_translation(self, language: str, mapping: TranslationKeyDict):
 		# Translation should be updated immediately
-		self.translations[language] = mapping
-		self.target_storage.translations[language].update(mapping)
+		translation_util.update_storage(self.translations, language, mapping)
+		translation_util.update_storage(self.target_storage.translations, language, mapping)
 
 
 class PluginRegistryStorage(AbstractPluginRegistry):
