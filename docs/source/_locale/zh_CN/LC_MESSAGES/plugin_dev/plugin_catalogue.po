@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-14 10:18+0800\n"
+"POT-Creation-Date: 2021-08-16 00:00+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -60,109 +60,100 @@ msgid ""
 "directory the ``plugin_info.json`` is in"
 msgstr "你的插件的 ID。需要与 ``plugin_info.json`` 所在的文件夹的名称一致"
 
-#: ../plugin_dev/plugin_catalogue.rst:32 ../plugin_dev/plugin_catalogue.rst:39
-#: ../plugin_dev/plugin_catalogue.rst:72 ../plugin_dev/plugin_catalogue.rst:79
-#: ../plugin_dev/plugin_catalogue.rst:107
+#: ../plugin_dev/plugin_catalogue.rst:32 ../plugin_dev/plugin_catalogue.rst:65
+#: ../plugin_dev/plugin_catalogue.rst:72 ../plugin_dev/plugin_catalogue.rst:100
 msgid "Type: str"
 msgstr "类型：str"
 
 #: ../plugin_dev/plugin_catalogue.rst:35
-msgid "name"
-msgstr "name"
-
-#: ../plugin_dev/plugin_catalogue.rst:37
-msgid "The name of your plugin"
-msgstr "你的插件的名称"
-
-#: ../plugin_dev/plugin_catalogue.rst:42
 msgid "authors"
 msgstr "authors"
 
-#: ../plugin_dev/plugin_catalogue.rst:44 ../plugin_dev/plugin_catalogue.rst:112
+#: ../plugin_dev/plugin_catalogue.rst:37 ../plugin_dev/plugin_catalogue.rst:105
 msgid "Optional field, default: ``[]``"
 msgstr "可选的属性，默认值：``[]``"
 
-#: ../plugin_dev/plugin_catalogue.rst:46
+#: ../plugin_dev/plugin_catalogue.rst:39
 msgid ""
 "A list contains the authors of the plugin. Elements in the list can be a "
 "single str representing the name of the author, or a dict contains the "
 "author name and the url link of the author"
 msgstr "一个储存着插件作者的列表。列表中的元素可以是代表着作者名称的单个 str，也可以是一个储存着作者的名称及作者相关链接的 dict。"
 
-#: ../plugin_dev/plugin_catalogue.rst:48
+#: ../plugin_dev/plugin_catalogue.rst:41
 msgid "Example:"
 msgstr "例子："
 
-#: ../plugin_dev/plugin_catalogue.rst:65
+#: ../plugin_dev/plugin_catalogue.rst:58
 msgid "Type: List[str or dict]"
 msgstr "类型：List[str or dict]"
 
-#: ../plugin_dev/plugin_catalogue.rst:68
+#: ../plugin_dev/plugin_catalogue.rst:61
 msgid "repository"
 msgstr "repository"
 
-#: ../plugin_dev/plugin_catalogue.rst:70
+#: ../plugin_dev/plugin_catalogue.rst:63
 msgid "The url of the **github** repository of your plugin"
 msgstr "你的插件的 **github** 仓库的 url"
 
-#: ../plugin_dev/plugin_catalogue.rst:75
+#: ../plugin_dev/plugin_catalogue.rst:68
 msgid "branch"
 msgstr "branch"
 
-#: ../plugin_dev/plugin_catalogue.rst:77
+#: ../plugin_dev/plugin_catalogue.rst:70
 msgid "The branch of the git repository where your plugin is in"
 msgstr "你的插件所在的 git 仓库的分支"
 
-#: ../plugin_dev/plugin_catalogue.rst:82
+#: ../plugin_dev/plugin_catalogue.rst:75
 msgid "related_path"
 msgstr "related_path"
 
-#: ../plugin_dev/plugin_catalogue.rst:84
+#: ../plugin_dev/plugin_catalogue.rst:77
 msgid ""
 "Optional field, default: ``.``, which means your plugin files are in the "
 "root directory of your repository"
 msgstr "可选的属性，默认值：``.``，也即意味着插件的文件位于仓库的根目录"
 
-#: ../plugin_dev/plugin_catalogue.rst:86
+#: ../plugin_dev/plugin_catalogue.rst:79
 msgid "The related path of your plugin files in your repository"
 msgstr "插件文件在仓库中的相对路径"
 
-#: ../plugin_dev/plugin_catalogue.rst:88
+#: ../plugin_dev/plugin_catalogue.rst:81
 msgid ""
 "This is the root directory for plugin catalogue to fetch files from your "
 "repository. A ``mcdreforged.plugin.json`` metadata file is expected in "
 "this directory"
 msgstr "这是插件仓库获取你插件的文件时计算路径的根目录。在该目录下需要有一个 ``mcdreforged.plugin.json`` 元数据文件。"
 
-#: ../plugin_dev/plugin_catalogue.rst:90
+#: ../plugin_dev/plugin_catalogue.rst:83
 msgid "For example, if your plugin repository has following file structure"
 msgstr "举个例子，如果你插件的仓库拥有着以下的文件结构"
 
-#: ../plugin_dev/plugin_catalogue.rst:105
+#: ../plugin_dev/plugin_catalogue.rst:98
 msgid "Then the ``related_path`` would be ``source``"
 msgstr "那么属性 ``related_path`` 将为 ``source``"
 
-#: ../plugin_dev/plugin_catalogue.rst:110
+#: ../plugin_dev/plugin_catalogue.rst:103
 msgid "labels"
 msgstr "labels"
 
-#: ../plugin_dev/plugin_catalogue.rst:114
+#: ../plugin_dev/plugin_catalogue.rst:107
 msgid "A list of id of `label <#Label>`__ of your plugin. Choose them wisely"
 msgstr "你插件的 `标签 <#Label>`__ 列表，储存的值为标签的 id。好好挑选它们"
 
-#: ../plugin_dev/plugin_catalogue.rst:116
+#: ../plugin_dev/plugin_catalogue.rst:109
 msgid "Type: List[str]"
 msgstr "类型: List[str]"
 
-#: ../plugin_dev/plugin_catalogue.rst:119
+#: ../plugin_dev/plugin_catalogue.rst:112
 msgid "introduction"
 msgstr "introduction"
 
-#: ../plugin_dev/plugin_catalogue.rst:121
+#: ../plugin_dev/plugin_catalogue.rst:114
 msgid "Optional field, default: ``{}``"
 msgstr "可选的属性，默认值：``{}``"
 
-#: ../plugin_dev/plugin_catalogue.rst:123
+#: ../plugin_dev/plugin_catalogue.rst:116
 msgid ""
 "Introduction is a paragraph written in markdown syntax. It will be shown "
 "to user when they are browsing your plugin. Comparing to readme or "
@@ -172,17 +163,17 @@ msgstr ""
 "插件的介绍部分（introduction）是一个使用 markdown "
 "语法撰写的文段。它将会在用户浏览你的插件时向其展示。与自述文件（readme）或文档对比，插件介绍更注重于展示插件的特性从而吸引新用户。"
 
-#: ../plugin_dev/plugin_catalogue.rst:125
+#: ../plugin_dev/plugin_catalogue.rst:118
 msgid ""
 "For the ``introduction`` field, it's a mapping maps `language "
 "<#language>`__ into a file path"
 msgstr "对于 ``introduction`` 属性，它是一个将 `语言 <#language>`__ 映射至文件路径的映射"
 
-#: ../plugin_dev/plugin_catalogue.rst:127
+#: ../plugin_dev/plugin_catalogue.rst:120
 msgid "The key is the language"
 msgstr "其中，键为语言的 id"
 
-#: ../plugin_dev/plugin_catalogue.rst:129
+#: ../plugin_dev/plugin_catalogue.rst:122
 msgid ""
 "The value is the file path of the introduction file in your plugin "
 "repository. Field `related_path <#related-path>`__ is considered during "
@@ -191,19 +182,19 @@ msgstr ""
 "值代表了插件介绍文件在你的插件的仓库中的文件路径。属性 `related_path <#related-path>`__ 在计算真实 url "
 "时是会加入考虑的"
 
-#: ../plugin_dev/plugin_catalogue.rst:131
+#: ../plugin_dev/plugin_catalogue.rst:124
 msgid ""
 "Example with the same file structure in `related_path section <#related-"
 "path>`__:"
 msgstr "使用与 `related_path 小节 <#related-path>`__ 中相同的文件结构的一个例子："
 
-#: ../plugin_dev/plugin_catalogue.rst:140
+#: ../plugin_dev/plugin_catalogue.rst:133
 msgid ""
 "Alternatively you can don't declare this field but put your introduction "
 "file inside the same directory where ``plugin_info.json`` is"
 msgstr "或者，你也可以不声明此属性，而是将介绍文件放在 ``plugin_info.json`` 所在的同一文件夹下。"
 
-#: ../plugin_dev/plugin_catalogue.rst:142
+#: ../plugin_dev/plugin_catalogue.rst:135
 msgid ""
 "It's named by ``introduction.md`` for default language ``en_us`` and "
 "named by e.g. ``introduction-zh_cn.md`` for other language"
@@ -211,194 +202,194 @@ msgstr ""
 "对于默认语言 ``en_us``，它应当被命名为 ``introduction.md``；对于其他语言，它应当被命名为如 "
 "``introduction-zh_cn.md``"
 
-#: ../plugin_dev/plugin_catalogue.rst:152
+#: ../plugin_dev/plugin_catalogue.rst:145
 msgid "Type: Dict[str, str]"
 msgstr "类型: Dict[str, str]"
 
-#: ../plugin_dev/plugin_catalogue.rst:155
+#: ../plugin_dev/plugin_catalogue.rst:148
 msgid "Label"
 msgstr "标签"
 
-#: ../plugin_dev/plugin_catalogue.rst:157
+#: ../plugin_dev/plugin_catalogue.rst:150
 msgid "Label describes what your plugin does. A plugin can have multiple labels"
 msgstr "标签描述着插件的功能。一个插件可以拥有多个标签。"
 
-#: ../plugin_dev/plugin_catalogue.rst:159
+#: ../plugin_dev/plugin_catalogue.rst:152
 msgid "All current available labels are shown in the following table"
 msgstr "所有可用的标签都在下方表格中被列出"
 
-#: ../plugin_dev/plugin_catalogue.rst:164
+#: ../plugin_dev/plugin_catalogue.rst:157
 msgid "Label id"
 msgstr "标签 id"
 
-#: ../plugin_dev/plugin_catalogue.rst:165
+#: ../plugin_dev/plugin_catalogue.rst:158
 msgid "Label name"
 msgstr "标签名"
 
-#: ../plugin_dev/plugin_catalogue.rst:166
+#: ../plugin_dev/plugin_catalogue.rst:159
 msgid "Description"
 msgstr "描述"
 
-#: ../plugin_dev/plugin_catalogue.rst:167
+#: ../plugin_dev/plugin_catalogue.rst:160
 msgid "information"
 msgstr "information"
 
-#: ../plugin_dev/plugin_catalogue.rst:168
+#: ../plugin_dev/plugin_catalogue.rst:161
 msgid "Information"
 msgstr "信息"
 
-#: ../plugin_dev/plugin_catalogue.rst:169
+#: ../plugin_dev/plugin_catalogue.rst:162
 msgid "Show or get information for users"
 msgstr "显示或获取各类信息的插件"
 
-#: ../plugin_dev/plugin_catalogue.rst:170
+#: ../plugin_dev/plugin_catalogue.rst:163
 msgid "tool"
 msgstr "tool"
 
-#: ../plugin_dev/plugin_catalogue.rst:171
+#: ../plugin_dev/plugin_catalogue.rst:164
 msgid "Tool"
 msgstr "工具"
 
-#: ../plugin_dev/plugin_catalogue.rst:172
+#: ../plugin_dev/plugin_catalogue.rst:165
 msgid "A tool, or a game helper"
 msgstr "工具类，或游戏助手型插件"
 
-#: ../plugin_dev/plugin_catalogue.rst:173
+#: ../plugin_dev/plugin_catalogue.rst:166
 msgid "management"
 msgstr "management"
 
-#: ../plugin_dev/plugin_catalogue.rst:174
+#: ../plugin_dev/plugin_catalogue.rst:167
 msgid "Management"
 msgstr "管理"
 
-#: ../plugin_dev/plugin_catalogue.rst:175
+#: ../plugin_dev/plugin_catalogue.rst:168
 msgid "Manages files or other stuffs of the server"
 msgstr "管理服务端的文件等各种事务"
 
-#: ../plugin_dev/plugin_catalogue.rst:176
+#: ../plugin_dev/plugin_catalogue.rst:169
 msgid "api"
 msgstr "api"
 
-#: ../plugin_dev/plugin_catalogue.rst:177
+#: ../plugin_dev/plugin_catalogue.rst:170
 msgid "API"
 msgstr "API"
 
-#: ../plugin_dev/plugin_catalogue.rst:178
+#: ../plugin_dev/plugin_catalogue.rst:171
 msgid ""
 "Works as a API or a library which provides common functionalities to "
 "other plugins"
 msgstr "作为一个 API 或者一个依赖库，为其他插件提供各种通用功能"
 
-#: ../plugin_dev/plugin_catalogue.rst:181
+#: ../plugin_dev/plugin_catalogue.rst:174
 msgid "Language"
 msgstr "语言"
 
-#: ../plugin_dev/plugin_catalogue.rst:183
+#: ../plugin_dev/plugin_catalogue.rst:176
 msgid ""
 "Plugin catalogue supports multiple language for users in different "
 "countries"
 msgstr "插件仓库为不同国家的用户提供多种语言支持。"
 
-#: ../plugin_dev/plugin_catalogue.rst:185
+#: ../plugin_dev/plugin_catalogue.rst:178
 msgid "English (``en_us``)"
 msgstr "英文 (``en_us``)"
 
-#: ../plugin_dev/plugin_catalogue.rst:186
+#: ../plugin_dev/plugin_catalogue.rst:179
 msgid "Simplified Chinese (``zh_cn``)"
 msgstr "简体中文 (``zh_cn``)"
 
-#: ../plugin_dev/plugin_catalogue.rst:188
+#: ../plugin_dev/plugin_catalogue.rst:181
 msgid "The default and fallback language is ``en_us``"
 msgstr "默认的和缺省的语言为 ``en_us``"
 
-#: ../plugin_dev/plugin_catalogue.rst:191
+#: ../plugin_dev/plugin_catalogue.rst:184
 msgid "Release"
 msgstr "发布版本"
 
-#: ../plugin_dev/plugin_catalogue.rst:193
+#: ../plugin_dev/plugin_catalogue.rst:186
 msgid ""
 "Plugin catalogue will automatically detect the releases in your plugin "
 "repository and extract the plugin download url in the assets, as long as "
 "the release follows the following restrictions:"
 msgstr "插件仓库将会自动检测你的插件的仓库内的发布版本，并在其中的附件列表里获取你插件的下载链接，只要发布版本符合以下的约束："
 
-#: ../plugin_dev/plugin_catalogue.rst:195
+#: ../plugin_dev/plugin_catalogue.rst:188
 msgid ""
 "Release tag name: **the same as the version of the released plugin**, can"
 " be in one of the following format"
 msgstr "发布版本的 tag 名称：**与发布的插件的版本一致**，可为以下的格式之一："
 
-#: ../plugin_dev/plugin_catalogue.rst:200
+#: ../plugin_dev/plugin_catalogue.rst:193
 msgid "Format"
 msgstr "格式"
 
-#: ../plugin_dev/plugin_catalogue.rst:201
+#: ../plugin_dev/plugin_catalogue.rst:194
 msgid "Example"
 msgstr "例子"
 
-#: ../plugin_dev/plugin_catalogue.rst:202
+#: ../plugin_dev/plugin_catalogue.rst:195
 msgid "``<version>``"
 msgstr "``<version>``"
 
-#: ../plugin_dev/plugin_catalogue.rst:203
+#: ../plugin_dev/plugin_catalogue.rst:196
 msgid "1.2.3"
 msgstr "1.2.3"
 
-#: ../plugin_dev/plugin_catalogue.rst:204
+#: ../plugin_dev/plugin_catalogue.rst:197
 msgid "``v<version>``"
 msgstr "``v<version>``"
 
-#: ../plugin_dev/plugin_catalogue.rst:205
+#: ../plugin_dev/plugin_catalogue.rst:198
 msgid "v1.2.3"
 msgstr "v1.2.3"
 
-#: ../plugin_dev/plugin_catalogue.rst:206
+#: ../plugin_dev/plugin_catalogue.rst:199
 msgid "``<plugin_id>-<version>``"
 msgstr "``<plugin_id>-<version>``"
 
-#: ../plugin_dev/plugin_catalogue.rst:207
+#: ../plugin_dev/plugin_catalogue.rst:200
 msgid "my_plugin_1.2.3"
 msgstr "my_plugin_1.2.3"
 
-#: ../plugin_dev/plugin_catalogue.rst:208
+#: ../plugin_dev/plugin_catalogue.rst:201
 msgid "``<plugin_id>-v<version>``"
 msgstr "``<plugin_id>-v<version>``"
 
-#: ../plugin_dev/plugin_catalogue.rst:209
+#: ../plugin_dev/plugin_catalogue.rst:202
 msgid "my_plugin_v1.2.3"
 msgstr "my_plugin_v1.2.3"
 
-#: ../plugin_dev/plugin_catalogue.rst:211
+#: ../plugin_dev/plugin_catalogue.rst:204
 msgid ""
 "Assets: contains 1 asset with ``.mcdr`` file extension name. Other assets"
 " will be ignored"
 msgstr "附件：包含一个以 ``.mcdr`` 为扩展名的文件附件。其他附件将会被忽略。"
 
-#: ../plugin_dev/plugin_catalogue.rst:213
+#: ../plugin_dev/plugin_catalogue.rst:206
 msgid ""
 "Which also means only `Packed Plugin <plugin_format.html#packed-"
 "plugin>`__ is supported"
 msgstr "这也意味着仅有 `打包插件 <plugin_format.html#packed-plugin>`__ 这一种格式是被支持的。"
 
-#: ../plugin_dev/plugin_catalogue.rst:216
+#: ../plugin_dev/plugin_catalogue.rst:209
 msgid "Submit Plugin"
 msgstr "提交插件"
 
-#: ../plugin_dev/plugin_catalogue.rst:218
+#: ../plugin_dev/plugin_catalogue.rst:211
 msgid ""
 "If you want to submit your plugin, create the directory of your plugin "
 "inside the ``plugins/`` directory with necessary files, and make a pull "
 "request"
 msgstr "如果你想要提交你的插件，在 ``plugins/`` 文件夹中创建你的插件的文件夹，并创建好必须的文件，然后发出一个 Pull Request。"
 
-#: ../plugin_dev/plugin_catalogue.rst:220
+#: ../plugin_dev/plugin_catalogue.rst:213
 msgid ""
 "It's recommended to leave your github link in the `authors <#authors>`__ "
 "field so repository maintainers can simply tell if you are the owner of "
 "the plugin"
 msgstr "推荐将你的 github 链接置于 `authors <#authors>`__ 属性中，这样仓库的维护者可以很容易的判断你是否是该插件的所有者。"
 
-#: ../plugin_dev/plugin_catalogue.rst:222
+#: ../plugin_dev/plugin_catalogue.rst:215
 msgid ""
 "All changes files should only be inside the sub-directory named by your "
 "plugin id in the ``plugins/`` folder"

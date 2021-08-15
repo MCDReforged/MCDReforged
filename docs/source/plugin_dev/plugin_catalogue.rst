@@ -31,13 +31,6 @@ The id of your plugin. It needs to be the same with the name of the directory th
 
 Type: str
 
-name
-~~~~
-
-The name of your plugin
-
-Type: str
-
 authors
 ~~~~~~~
 
