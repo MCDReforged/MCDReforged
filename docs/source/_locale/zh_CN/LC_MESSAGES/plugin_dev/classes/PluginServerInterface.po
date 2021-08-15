@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-10 01:54+0800\n"
+"POT-Creation-Date: 2021-08-15 17:45+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -107,13 +107,13 @@ msgstr "为当前插件注册给定语言的一个翻译映射表。"
 
 #: ../plugin_dev/classes/PluginServerInterface.rst:62
 msgid "Parameter *language*: The language of this translation"
-msgstr "参数 *language*：该翻译的语言"
+msgstr "参数 *language*：该翻译的语言。"
 
 #: ../plugin_dev/classes/PluginServerInterface.rst:64
 msgid ""
 "Parameter *mapping*: A dict which maps translation keys into translated "
 "text"
-msgstr "参数 *mapping*：一个将翻译键映射为翻译文本的 dict"
+msgstr "参数 *mapping*：一个将翻译键映射为翻译文本的 dict。"
 
 #: ../plugin_dev/classes/PluginServerInterface.rst:67
 msgid "Plugin Utils"
@@ -125,7 +125,7 @@ msgstr "get_self_metadata"
 
 #: ../plugin_dev/classes/PluginServerInterface.rst:76
 msgid "Return the metadata of the plugin itself"
-msgstr "返回当前插件的元数据"
+msgstr "返回当前插件的元数据。"
 
 #: ../plugin_dev/classes/PluginServerInterface.rst:79
 msgid "get_data_folder"
@@ -139,96 +139,135 @@ msgstr "为当前插件返回一个统一格式的数据文件夹。"
 msgid ""
 "The path of the folder will be ``config/plugin_id/`` where ``plugin_id`` "
 "is the id of the current plugin"
-msgstr "文件夹的路径将会为 ``config/plugin_id``，其中 ``plugin_id`` 是当前插件的 id"
+msgstr "文件夹的路径将会为 ``config/plugin_id``，其中 ``plugin_id`` 是当前插件的 id。"
 
 #: ../plugin_dev/classes/PluginServerInterface.rst:89
 msgid "If the directory does not exist, create it"
-msgstr "如果该文件夹不存在，该文件夹会被自动创建"
+msgstr "如果该文件夹不存在，该文件夹会被自动创建。"
 
 #: ../plugin_dev/classes/PluginServerInterface.rst:91
 msgid "Returns the path to the data directory"
-msgstr "返回数据文件夹的路径"
+msgstr "返回数据文件夹的路径。"
 
-#: ../plugin_dev/classes/PluginServerInterface.rst:94
-msgid "open_bundled_file"
-msgstr "open_bundled_file"
-
-#: ../plugin_dev/classes/PluginServerInterface.rst:100
-msgid "Open a file inside the plugin with readonly binary mode"
-msgstr "使用二进制只读模式，打开插件中的一个文件"
-
-#: ../plugin_dev/classes/PluginServerInterface.rst:102
-msgid ""
-"Parameter *related_file_path*: The related file path in your plugin to "
-"the file you want to open"
-msgstr "参数 *related_file_path*：你想要打开的文件位于你的插件中的相对位置"
-
-#: ../plugin_dev/classes/PluginServerInterface.rst:104
-msgid "Returns a un-decoded bytes file-like object"
-msgstr "返回一个为解码的，bytes 形式的文件型的对象的对线"
-
-#: ../plugin_dev/classes/PluginServerInterface.rst:106
-msgid ""
-"Raises ``FileNotFoundError`` if the plugin is not a multi file plugin (that "
-"is, a solo plugin)"
-msgstr "如果插件并非是一个多文件插件（换句话来讲，是一个单文件插件），那么将抛出 ``FileNotFoundError``"
-
-#: ../plugin_dev/classes/PluginServerInterface.rst:108
-#: ../plugin_dev/classes/PluginServerInterface.rst:142
+#: ../plugin_dev/classes/PluginServerInterface.rst:93
+#: ../plugin_dev/classes/PluginServerInterface.rst:115
+#: ../plugin_dev/classes/PluginServerInterface.rst:151
 msgid "Example:"
 msgstr "例子："
 
-#: ../plugin_dev/classes/PluginServerInterface.rst:117
+#: ../plugin_dev/classes/PluginServerInterface.rst:101
+msgid "open_bundled_file"
+msgstr "open_bundled_file"
+
+#: ../plugin_dev/classes/PluginServerInterface.rst:107
+msgid "Open a file inside the plugin with readonly binary mode"
+msgstr "使用二进制只读模式，打开插件中的一个文件。"
+
+#: ../plugin_dev/classes/PluginServerInterface.rst:109
+msgid ""
+"Parameter *related_file_path*: The related file path in your plugin to "
+"the file you want to open"
+msgstr "参数 *related_file_path*：你想要打开的文件位于你的插件中的相对位置。"
+
+#: ../plugin_dev/classes/PluginServerInterface.rst:111
+msgid "Returns a un-decoded bytes file-like object"
+msgstr "返回一个为解码的，bytes 形式的文件型的对象。"
+
+#: ../plugin_dev/classes/PluginServerInterface.rst:113
+msgid ""
+"Raises ``FileNotFoundError`` if the plugin is not a multi file plugin "
+"(that is, a solo plugin)"
+msgstr "如果插件并非是一个多文件插件（换句话来讲，是一个单文件插件），那么将抛出 ``FileNotFoundError``。"
+
+#: ../plugin_dev/classes/PluginServerInterface.rst:124
 msgid "load_config_simple"
 msgstr "load_config_simple"
 
-#: ../plugin_dev/classes/PluginServerInterface.rst:126
-msgid "A simple method to load a dict type config from a json file"
-msgstr "一个简单的，从一个 json 文件中载入一个 dict 类型的配置文件的方法"
+#: ../plugin_dev/classes/PluginServerInterface.rst:133
+msgid ""
+"A simple method to load a dict or Serializable type config from a json "
+"file"
+msgstr "一个简单的，从一个 json 文件中载入一个 dict 或 Serializable 类型的配置文件的方法。"
 
-#: ../plugin_dev/classes/PluginServerInterface.rst:128
+#: ../plugin_dev/classes/PluginServerInterface.rst:135
 msgid ""
 "Default config is supported. Missing key-values in the loaded config "
 "object will be filled using the default config"
-msgstr "支持默认配置文件。加载的配置中缺失的键-值对将会使用默认配置文件填充"
+msgstr "支持默认配置文件。加载的配置中缺失的键-值对将会使用默认配置文件填充。"
 
-#: ../plugin_dev/classes/PluginServerInterface.rst:130
+#: ../plugin_dev/classes/PluginServerInterface.rst:137
+#: ../plugin_dev/classes/PluginServerInterface.rst:191
 msgid "Parameter *file_name*: The name of the config file"
-msgstr "参数 *file_name*：配置文件的文件名"
+msgstr "参数 *file_name*：配置文件的文件名。"
 
-#: ../plugin_dev/classes/PluginServerInterface.rst:132
+#: ../plugin_dev/classes/PluginServerInterface.rst:139
 msgid ""
 "Parameter *default_config*: A dict contains the default config. It's "
-"required when the config file is missing, or exception will be risen"
-msgstr "参数 *default_config*：一个储存着默认配置的 dict。当配置文件缺失时，这个参数是必须的，否则将抛出异常"
+"required when the config file is missing, or exception will be risen. If "
+"target_class is given and default_config is missing, the default values "
+"in target_class will be used when the config file is missing"
+msgstr ""
+"参数 *default_config*：一个储存着默认配置的 dict。当配置文件缺失时，这个参数是必须的，否则将抛出异常。如果 "
+"target_class 被给出并且 default_config 缺失，则当配置文件缺失时 target_class 的默认值将会被使用。"
 
-#: ../plugin_dev/classes/PluginServerInterface.rst:134
+#: ../plugin_dev/classes/PluginServerInterface.rst:141
 msgid ""
 "Parameter *in_data_folder*: If True, the parent directory of file "
 "operating is the `data folder <#get-data-folder>`__ of the plugin"
 msgstr ""
-"参数 *in_data_folder*：如果被设置为 True，则配置文件将在该插件的 `数据文件夹 <#get-data-folder>`__"
-" 中储存"
+"参数 *in_data_folder*：如果被设置为 True，则配置文件将在该插件的 `数据文件夹 <#get-data-folder>`__ "
+"中储存。"
 
-#: ../plugin_dev/classes/PluginServerInterface.rst:136
+#: ../plugin_dev/classes/PluginServerInterface.rst:143
 msgid ""
 "Parameter *echo_in_console*: If logging messages in console about config "
 "loading"
-msgstr "参数 *echo_in_console*：是否在控制台中打印配置文件加载相关日志"
+msgstr "参数 *echo_in_console*：是否在控制台中打印配置文件加载相关日志。"
 
-#: ../plugin_dev/classes/PluginServerInterface.rst:138
+#: ../plugin_dev/classes/PluginServerInterface.rst:145
 msgid ""
 "Parameter *source_to_reply*: The `command source <CommandSource.html>`__ "
 "for replying logging messages"
-msgstr "参数 *source_to_reply*：用于回复加载配置相关日志的 `指令源 <CommandSource.html>`__"
+msgstr "参数 *source_to_reply*：用于回复加载配置相关日志的 `指令源 <CommandSource.html>`__。"
 
-#: ../plugin_dev/classes/PluginServerInterface.rst:140
+#: ../plugin_dev/classes/PluginServerInterface.rst:147
+msgid ""
+"Parameter *target_class*: A class derived from `Serializable "
+"<../api.html#serializable>`__. When specified the loaded config data will "
+"be deserialized to a instance of target_class which will be returned as "
+"return value"
+msgstr "参数 *target_class*：一个派生自 `Serializable <../api.html#serializable>`__ 的类。当被指定时，加载的配置文件数据"
+"将会被反序列化为一个 target_class 的实例并令其作为方法的返回值。"
+
+#: ../plugin_dev/classes/PluginServerInterface.rst:149
 msgid "Returns a dict contains the loaded and processed config"
-msgstr "返回一个 dict，储存着加载并处理后的配置文件"
+msgstr "返回一个 dict，储存着加载并处理后的配置文件。"
 
-#: ../plugin_dev/classes/PluginServerInterface.rst:156
+#: ../plugin_dev/classes/PluginServerInterface.rst:177
 msgid ""
 "Assuming that the plugin id is ``my_plugin``, then the config file will "
 "be in ``config/my_plugin/my_config.json``"
 msgstr "假设插件 id 为 ``my_plugin``，则配置文件将被储存于 ``config/my_plugin/my_config.json`` 中"
+
+#: ../plugin_dev/classes/PluginServerInterface.rst:181
+msgid "save_config_simple"
+msgstr "save_config_simple"
+
+#: ../plugin_dev/classes/PluginServerInterface.rst:187
+msgid ""
+"A simple method to save your dict or Serializable type config as a json "
+"file"
+msgstr "一个简单的，将一个 dict 或者 Serializable 配置文件保存至 json 文件的方法。"
+
+#: ../plugin_dev/classes/PluginServerInterface.rst:189
+msgid "Parameter *config*: The config instance to be saved"
+msgstr "参数 *config*：将要被保存的配置文件实例。"
+
+#: ../plugin_dev/classes/PluginServerInterface.rst:193
+msgid ""
+"Parameter *in_data_folder*: If True, the parent directory of file "
+"operating is the data folder of the plugin"
+msgstr ""
+"参数 *in_data_folder*：如果被设置为 True，则配置文件将在该插件的 `数据文件夹 <#get-data-folder>`__ "
+"中储存。"
 

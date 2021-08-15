@@ -126,23 +126,25 @@ load_config_simple
 .. code-block:: python
     
     def load_config_simple(
-            self, file_name: str = 'config.json', default_config: dict = None, *,
-            in_data_folder: bool = True, echo_in_console: bool = True, source_to_reply: Optional[CommandSource] = None
-        ) -> dict
+			self, file_name: str = 'config.json', default_config: Optional = None, *,
+			in_data_folder: bool = True, echo_in_console: bool = True, source_to_reply: Optional[CommandSource] = None, target_class: Optional[Type[SerializableType]] = None
+		) -> Union[dict, SerializableType]
 
-A simple method to load a dict type config from a json file
+A simple method to load a dict or Serializable type config from a json file
 
 Default config is supported. Missing key-values in the loaded config object will be filled using the default config
 
 Parameter *file_name*: The name of the config file
 
-Parameter *default_config*: A dict contains the default config. It's required when the config file is missing, or exception will be risen
+Parameter *default_config*: A dict contains the default config. It's required when the config file is missing, or exception will be risen. If target_class is given and default_config is missing, the default values in target_class will be used when the config file is missing
 
 Parameter *in_data_folder*: If True, the parent directory of file operating is the `data folder <#get-data-folder>`__ of the plugin
 
 Parameter *echo_in_console*: If logging messages in console about config loading
 
 Parameter *source_to_reply*: The `command source <CommandSource.html>`__ for replying logging messages
+
+Parameter *target_class*: A class derived from `Serializable <../api.html#serializable>`__. When specified the loaded config data will be deserialized to a instance of target_class which will be returned as return value
 
 Returns a dict contains the loaded and processed config
 
@@ -156,8 +158,37 @@ Example:
     }
     default_config = config.copy()
 
-    def load_config(source: CommandSource):
+    def on_load(server: PluginServerInterface, prev_module):
         global config
-        config = source.get_server().load_config_simple('my_config.json', default_config, source_to_reply=source)
+        config = server.load_config_simple('my_config.json', default_config)
+
+.. code-block:: python
+
+    class Config(Serializable):
+        settingA: int = 1
+        settingB: str = 'xyz'
+
+    config: Config
+
+    def on_load(server: PluginServerInterface, prev_module):
+        global config
+        config = server.load_config_simple(target_class=Config)
 
 Assuming that the plugin id is ``my_plugin``, then the config file will be in ``config/my_plugin/my_config.json``
+
+
+save_config_simple
+~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+    def save_config_simple(self, config: Union[dict, Serializable], file_name: str = 'config.json', *, in_data_folder: bool = True) -> None
+
+A simple method to save your dict or Serializable type config as a json file
+
+Parameter *config*: The config instance to be saved
+
+Parameter *file_name*: The name of the config file
+
+Parameter *in_data_folder*: If True, the parent directory of file operating is the data folder of the plugin
+

@@ -200,3 +200,6 @@ command_exception.illegal_escapes_usage               : Illegal escapes usage
 command_exception.unclosed_quoted_string              : Unclosed quoted string
 command_exception.empty_text                          : Empty text
 python_plugin.info                                    : "{0} is running on {1} environment"
+server_interface.load_config_simple.failed            : 'Fail to read config file, using default config: {0}'
+server_interface.load_config_simple.succeed           : Config file loaded
+server_interface.load_config_simple.key_missed        : 'Found missing config key "{0}", using default value "{1}"'

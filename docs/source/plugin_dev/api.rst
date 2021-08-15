@@ -452,5 +452,5 @@ Serializable class nesting is also supported
 
     class MyStorage(Serializable):
         id: str
-        score: float
-        data: List[MyData]
+        best: MyData
+        data: Dict[str, MyData]

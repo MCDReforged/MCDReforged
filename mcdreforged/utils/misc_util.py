@@ -88,6 +88,13 @@ def check_type(value: Any, type_: Type, error_message: str = None):
 		raise TypeError(error_message)
 
 
+def check_class(class_: Type, base_class: Type, error_message: str = None):
+	if not issubclass(class_, base_class):
+		if error_message is None:
+			error_message = 'Except class derived from {} but found class {}'.format(base_class, class_)
+		raise TypeError(error_message)
+
+
 def copy_signature(target: Callable, origin: Callable) -> Callable:
 	"""
 	Copy the function signature of origin into target

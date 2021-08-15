@@ -75,3 +75,7 @@ class Serializable(ABC):
 
 	def update_from(self, data: dict):
 		vars(self).update(vars(self.deserialize(data)))
+
+	@classmethod
+	def get_default(cls):
+		return cls.deserialize({})

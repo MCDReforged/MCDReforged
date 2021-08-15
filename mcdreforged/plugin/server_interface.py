@@ -2,7 +2,7 @@ import functools
 import json
 import os
 import time
-from typing import Callable, TYPE_CHECKING, Tuple, Any, Union, Optional, List, IO, Dict
+from typing import Callable, TYPE_CHECKING, Tuple, Any, Union, Optional, List, IO, Dict, Type, TypeVar
 
 from mcdreforged.command.builder.nodes.basic import Literal
 from mcdreforged.command.command_source import CommandSource, PluginCommandSource
@@ -20,11 +20,15 @@ from mcdreforged.plugin.type.plugin import AbstractPlugin
 from mcdreforged.utils import misc_util
 from mcdreforged.utils.exception import IllegalCallError
 from mcdreforged.utils.logger import MCDReforgedLogger, DebugOption
+from mcdreforged.utils.serializer import Serializable
 
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
 	from mcdreforged.plugin.plugin_manager import PluginManager
 	from mcdreforged.plugin.type.regular_plugin import RegularPlugin
+
+
+SerializableType = TypeVar('SerializableType')
 
 
 class ServerInterface:
@@ -612,18 +616,21 @@ class PluginServerInterface(ServerInterface):
 		return self.__plugin.open_file(related_file_path)
 
 	def load_config_simple(
-			self, file_name: str = 'config.json', default_config: dict = None, *,
-			in_data_folder: bool = True, echo_in_console: bool = True, source_to_reply: Optional[CommandSource] = None
-		) -> dict:
+			self, file_name: str = 'config.json', default_config: Optional = None, *,
+			in_data_folder: bool = True, echo_in_console: bool = True, source_to_reply: Optional[CommandSource] = None, target_class: Optional[Type[SerializableType]] = None
+		) -> Union[dict, SerializableType]:
 		"""
-		A simple method to load a dict type config from a json file
+		A simple method to load a dict or Serializable type config from a json file
 		Default config is supported. Missing key-values in the loaded config object will be filled using the default config
 		:param file_name: The name of the config file
 		:param default_config: A dict contains the default config. It's required when the config file is missing,
-		or exception will be risen
+		or exception will be risen. If target_class is given and default_config is missing, the default values in target_class
+		will be used when the config file is missing
 		:param in_data_folder: If True, the parent directory of file operating is the data folder of the plugin
 		:param echo_in_console: If logging messages in console about config loading
 		:param source_to_reply: The command source for replying logging messages
+		:param target_class: A class derived from Serializable. When specified the loaded config data will be deserialized
+		to a instance of target_class which will be returned as return value
 		:return: A dict contains the loaded and processed config
 		"""
 		def log(msg):
@@ -632,33 +639,62 @@ class PluginServerInterface(ServerInterface):
 			if echo_in_console:
 				self.logger.info(msg)
 
+		if target_class is not None:
+			misc_util.check_class(target_class, Serializable)
+			target_class: Serializable
+			if default_config is None:
+				default_config = target_class.deserialize({}).serialize()
 		config_file_path = os.path.join(self.get_data_folder(), file_name) if in_data_folder else file_name
 		needs_save = False
 		try:
 			with open(config_file_path) as file_handler:
-				read_data = json.load(file_handler)
+				read_data: dict = json.load(file_handler)
 		except Exception as e:
 			if default_config is not None:  # use default config
 				result_config = default_config.copy()
 			else:  # no default config and cannot read config file, raise the error
 				raise
 			needs_save = True
-			log('Fail to read config file, using default config ({})'.format(e))
+			log(self._mcdr_server.tr('server_interface.load_config_simple.failed', e))
 		else:
+			result_config = read_data
 			if default_config is not None:
 				# constructing the result config based on the given default config
-				result_config = {}
 				for key, value in default_config.items():
 					if key in read_data:
 						result_config[key] = read_data[key]
 					else:
 						result_config[key] = value
-						log('Found missing config key "{}", using default value "{}"'.format(key, value))
+						log(self._mcdr_server.tr('server_interface.load_config_simple.key_missed', key, value))
 						needs_save = True
-			else:
-				result_config = read_data
-			log('Config file loaded')
+			log(self._mcdr_server.tr('server_interface.load_config_simple.succeed'))
+		if target_class is not None:
+			try:
+				result_config = target_class.deserialize(result_config)
+			except Exception as e:
+				result_config = target_class.get_default()
+				needs_save = True
+				log(self._mcdr_server.tr('server_interface.load_config_simple.failed', e))
+		else:
+			# remove unexpected keys
+			for key in list(result_config.keys()):
+				if key not in default_config:
+					result_config.pop(key)
 		if needs_save:
-			with open(config_file_path, 'w') as file:
-				json.dump(result_config, file, indent=4)
+			self.save_config_simple(result_config, file_name=file_name, in_data_folder=in_data_folder)
 		return result_config
+
+	def save_config_simple(self, config: Union[dict, Serializable], file_name: str = 'config.json', *, in_data_folder: bool = True) -> None:
+		"""
+		A simple method to save your dict or Serializable type config as a json file
+		:param config: The config instance to be saved
+		:param file_name: The name of the config file
+		:param in_data_folder: If True, the parent directory of file operating is the data folder of the plugin
+		"""
+		config_file_path = os.path.join(self.get_data_folder(), file_name) if in_data_folder else file_name
+		if isinstance(config, Serializable):
+			data = config.serialize()
+		else:
+			data = config
+		with open(config_file_path, 'w') as file:
+			json.dump(data, file, indent=4, ensure_ascii=False)
