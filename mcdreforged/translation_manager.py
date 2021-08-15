@@ -68,7 +68,7 @@ class TranslationManager:
 		if translated_text is not None:
 			translated_text = translated_text.strip('\n\r')
 			if use_rtext:
-				translated_text = RTextBase.format(translated_text, args, kwargs)
+				translated_text = RTextBase.format(translated_text, *args, **kwargs)
 			else:
 				translated_text = translated_text.format(*args, **kwargs)
 			return translated_text
