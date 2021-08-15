@@ -4,9 +4,9 @@ Information of a plugin
 import re
 from typing import List, Dict, TYPE_CHECKING, Optional, Union
 
-from mcdreforged.constants import core_constant
 from mcdreforged.minecraft.rtext import RTextBase
 from mcdreforged.plugin.meta.version import Version, VersionParsingError, VersionRequirement
+from mcdreforged.utils import translation_util
 from mcdreforged.utils.types import TranslationLanguageDict
 
 if TYPE_CHECKING:
@@ -118,7 +118,7 @@ class Metadata:
 		"""
 		if isinstance(self.description, str):
 			return self.description
-		return self.description.get(lang, self.description.get(core_constant.DEFAULT_LANGUAGE))
+		return translation_util.translate_from_dict(self.description, lang, default=None)
 
 
 __SAMPLE_METADATA = {
