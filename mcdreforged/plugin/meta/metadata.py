@@ -100,6 +100,9 @@ class Metadata:
 				))
 
 		self.entrypoint = data.get('entrypoint', self.id)
+		# entrypoint module should be inside the plugin module
+		if self.entrypoint != self.id and not self.entrypoint.startswith(self.id + '.'):
+			raise ValueError('Invalid entry point "{}" for plugin id "{}"'.format(self.entrypoint, self.id))
 		self.archive_name = data.get('archive_name')
 		self.resources = data.get('resources', [])
 
