@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-26 12:49+0800\n"
+"POT-Creation-Date: 2021-08-15 22:41+0800\n"
 "PO-Revision-Date: 2021-01-23 08:54+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -82,8 +82,8 @@ msgstr "如果服务器已启动则显示的标志"
 
 #: ../command.rst:26
 msgid ""
-"If MCDR will exit after the server stop, aka if the server exists naturally by itself, or the server is stopped / "
-"killed by MCDR"
+"If MCDR will exit after the server stop, aka if the server exists "
+"naturally by itself, or the server is stopped / killed by MCDR"
 msgstr "MCDR 是否会在服务端停止后关闭，也即服务器是自然关闭的还是被 MCDR 停止/杀死"
 
 #: ../command.rst:27
@@ -320,8 +320,8 @@ msgstr "``!!MCDR permission q Steve``：查询玩家 Steve 的权限级别。其
 
 #: ../command.rst:111
 msgid ""
-"Check the page `Permission <permission.html>`__ for more information about "
-"MCDR permission system"
+"Check the page `Permission <permission.html>`__ for more information "
+"about MCDR permission system"
 msgstr "查看 `权限 <permission.html>`__ 页面以获取更多关于 MCDR 权限系统的信息"
 
 #: ../command.rst:114
@@ -492,45 +492,67 @@ msgid ""
 msgstr "加载文件名为 `another_plugin.py` 的插件。注意，由于此插件未加载，故你只能使用文件名来指定它。"
 
 #: ../command.rst:180
-msgid "Update checking"
-msgstr "更新检查"
+msgid "Misc"
+msgstr "杂项"
 
-#: ../command.rst:182
+#: ../command.rst:183
+msgid "Set language"
+msgstr "设置语言"
+
+#: ../command.rst:185
+msgid "``!!MCDR setlang <language>``"
+msgstr "``!!MCDR setlang <language>``"
+
+#: ../command.rst:187
+msgid ""
+"Set the language of MCDR to ``<language>``. Notes that it will not be "
+"saved to the config file"
+msgstr "将 MCDR 的语言设置为 ``<language>``，不会被保存至配置文件。"
+
+#: ../command.rst:189
+msgid "Having a temporary language changing method is always nice"
+msgstr "有一个临时的语言改变方法总是好的。"
+
+#: ../command.rst:192
+msgid "Check update"
+msgstr "检查更新"
+
+#: ../command.rst:194
 msgid ""
 "``!!MCDR checkupdate``, or ``!!MCDR cu``. Use it to manually check update"
 " from github"
 msgstr "使用 ``!!MCDR checkupdate`` 或 ``!!MCDR cu`` 可手动检查来自 github 的更新。"
 
-#: ../command.rst:184
+#: ../command.rst:196
 msgid ""
 "It will try to get the latest release version in github, and check if "
 "it's newer than the current version. If it is, it will show the update "
 "logs from the github release"
 msgstr "它将尝试在 github 中获取最新版本，并检查它是否比当前版本更新。 如果是，它将显示 github 上的更新日志。"
 
-#: ../command.rst:187
+#: ../command.rst:199
 msgid "!!help command"
 msgstr "!!help 指令"
 
-#: ../command.rst:189
+#: ../command.rst:201
 msgid ""
 "``!!help`` command is place to display the help messages of all commands."
 " It works as an index of all commands"
 msgstr "``!!help`` 指令将显示所有指令的帮助消息。它作为着一个包含所有指令的索引。"
 
-#: ../command.rst:191
+#: ../command.rst:203
 msgid ""
 "The content of this command can be registered by plugins, so a new user "
 "can easily browse all available commands that it can access"
 msgstr "此指令的内容可以由插件注册，所以一个新的用户可以借此轻松浏览所有可用的指令。"
 
-#: ../command.rst:193
+#: ../command.rst:205
 msgid ""
 "Any user is allowed to use this command, and MCDR will list all command "
 "help messages that the user has enough permission level to see"
 msgstr "任何用户都可以使用此指令，MCDR 将列出该用户有权查看的所有指令帮助消息。"
 
-#: ../command.rst:195
+#: ../command.rst:207
 msgid ""
 "Without any plugin, you may see the result below after you entered the "
 "``!!help`` command"

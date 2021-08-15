@@ -5,7 +5,7 @@ Credit: Pandaria98 https://github.com/Pandaria98 https://github.com/TISUnion/ste
 
 import json
 from enum import Enum, auto
-from typing import Iterable, List, Union, Optional
+from typing import Iterable, List, Union, Optional, Any
 
 from colorama import Fore, Style
 
@@ -75,6 +75,14 @@ class RTextBase:
 
 	def copy(self) -> 'RTextBase':
 		raise NotImplementedError()
+
+	def join(self, iterable: Iterable[Any]) -> 'RTextBase':
+		result = RTextList()
+		for i, item in enumerate(iterable):
+			if i > 0:
+				result.append(self)
+			result.append(item)
+		return result
 
 	def set_color(self, color: RColor) -> 'RTextBase':
 		raise NotImplementedError()

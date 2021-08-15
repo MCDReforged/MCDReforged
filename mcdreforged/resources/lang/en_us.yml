@@ -48,18 +48,18 @@ mcdr_command.help_message: |
   §7!!MCDR permission§r: Show permission command help message
   §7!!MCDR plugin§r: Show plugin command help message
   §7!!MCDR checkupdate§r: Check update from Github
-mcdr_command.help_message_reload: |
+mcdr_command.help_message.reload: |
   §7!!MCDR reload plugin§r: Load / Reload / Unloaded §lchanged§r plugins
   §7!!MCDR reload config§r: Reload config file
   §7!!MCDR reload permission§r: Reload permission file
   §7!!MCDR reload all§r: Reload everything above
-mcdr_command.help_message_permission: |
+mcdr_command.help_message.permission: |
   §7!!MCDR permission list §e[<level>]§r: List all player's permission. Only list permission level §e[<level>]§r if §e[<level>]§r has set
   §7!!MCDR permission set §b<player>§r §e<level>§r: Set the permission level of §b<player>§r to §e<level>§r
   §7!!MCDR permission query §b[<player>]§r: Query the permission level of §b<player>§r. If §b<player>§r is not set, query the permission level of the command sender
   §7!!MCDR permission remove §b<player>§r: Remove §b<player>§r from the permission database
   §7!!MCDR permission setdefault §e<level>§r: Set the default permission level to §e<level>§r
-mcdr_command.help_message_plugin: |
+mcdr_command.help_message.plugin: |
   §7!!MCDR plugin list§r: List all plugins
   §7!!MCDR plugin info §6<plugin_id>§r: Display the information of the plugin with id §6<plugin_id>§r
   §7!!MCDR plugin load §e<file_name>§r: Load a plugin with file name §e<file_name>§r
@@ -68,6 +68,8 @@ mcdr_command.help_message_plugin: |
   §7!!MCDR plugin unload §6<plugin_id>§r: Unload a plugin with id §6<plugin_id>§r
   §7!!MCDR plugin disable §6<plugin_id>§r: Disable a plugin with id §6<plugin_id>§r
   §7!!MCDR plugin reloadall§r: Load / Reload / Unloaded §lall§r not disabled plugins
+mcdr_command.help_message.setlang: |
+  §7!!MCDR setlang §e<language>§r: Set the language of MCDR to §e<language>§r. Notes that it will not be saved to the config file
 mcdr_command.command_not_found                        : Command not found, type "§7{0}§r" to see help
 mcdr_command.command_not_found_suggest                : Click to input "§7{0}§r"
 mcdr_command.refresh_changed_plugins.fail             : §cFail§r to reload changed plugins
@@ -127,6 +129,9 @@ mcdr_command.help_message.help_command                : Display command help mes
 mcdr_command.help_message.page_number                 : Page §6{0}§r
 mcdr_command.help_message.previous_page_hover         : Click to display the previous page
 mcdr_command.help_message.next_page_hover             : Click to display the next page
+mcdr_command.set_language.not_available               : Language §e{0}§r is not available
+mcdr_command.set_language.language_list               : "Available languages: {0}"
+mcdr_command.set_language.success                     : "Set language of MCDR to §e{0}§r. Notes that it will not be saved to the config file"
 permission_manager.load.fail                          : Fail to load permission file {0}, using default empty data
 permission_manager.set_default_permission_level.done  : The default permission level has set to §e{0}§r
 permission_manager.set_permission_level.done          : The permission level of player §b{0}§r has set to §e{1}§r

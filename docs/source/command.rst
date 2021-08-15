@@ -176,8 +176,20 @@ These commands do the following things:
 #. Unload the plugin with id ``another_plugin``
 #. Reload the plugin with file name ``another_plugin.py``. Note that since this plugin is not loaded, you can only use file name to specify it
 
-Update checking
-^^^^^^^^^^^^^^^
+Misc
+^^^^
+
+Set language
+~~~~~~~~~~~~
+
+``!!MCDR setlang <language>``
+
+Set the language of MCDR to ``<language>``. Notes that it will not be saved to the config file
+
+Having a temporary language changing method is always nice
+
+Check update
+~~~~~~~~~~~~~~~
 
 ``!!MCDR checkupdate``, or ``!!MCDR cu``. Use it to manually check update from github
 

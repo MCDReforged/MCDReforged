@@ -62,12 +62,12 @@ class MCDReforgedPlugin(PermanentPlugin):
 		# avoid using self.metadata here since it might not be initialized
 		return 'MCDReforgedPlugin[version={}]'.format(METADATA['version'])
 
-	@classmethod
-	def get_control_command_prefix(cls):
+	@property
+	def control_command_prefix(self):
 		return '!!MCDR'
 
-	@classmethod
-	def get_help_command_prefix(cls):
+	@property
+	def help_command_prefix(self):
 		return '!!help'
 
 	def __register_commands(self):
@@ -87,14 +87,14 @@ class MCDReforgedPlugin(PermanentPlugin):
 			return QuotableText('player').suggests(lambda: self.mcdr_server.permission_manager.get_players())
 
 		self.register_command(
-			Literal(self.get_control_command_prefix()).
+			Literal(self.control_command_prefix).
 			requires(lambda src: src.has_permission(PermissionLevel.MCDR_CONTROL_LEVEL)).
 			runs(lambda src: src.reply(self.get_help_message('mcdr_command.help_message'))).
 			on_error(RequirementNotMet, self.on_mcdr_command_permission_denied, handled=True).
 			on_error(UnknownArgument, self.on_mcdr_command_unknown_argument, handled=True).
 			then(
 				Literal({'r', 'reload'}).
-				runs(lambda src: src.reply(self.get_help_message('mcdr_command.help_message_reload'))).
+				runs(lambda src: src.reply(self.get_help_message('mcdr_command.help_message.reload'))).
 				on_error(UnknownArgument, self.on_mcdr_command_unknown_argument).
 				then(Literal({'plugin', 'plg'}).runs(self.refresh_changed_plugins)).
 				then(Literal({'config', 'cfg'}).runs(self.reload_config)).
@@ -106,7 +106,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 			).
 			then(
 				Literal({'permission', 'perm'}).
-				runs(lambda src: src.reply(self.get_help_message('mcdr_command.help_message_permission'))).
+				runs(lambda src: src.reply(self.get_help_message('mcdr_command.help_message.permission'))).
 				on_error(UnknownArgument, self.on_mcdr_command_unknown_argument).
 				then(
 					Literal('list').runs(lambda src: self.list_permission(src, None)).
@@ -122,7 +122,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 			).
 			then(
 				Literal({'plugin', 'plg'}).
-				runs(lambda src: src.reply(self.get_help_message('mcdr_command.help_message_plugin'))).
+				runs(lambda src: src.reply(self.get_help_message('mcdr_command.help_message.plugin'))).
 				on_error(UnknownArgument, self.on_mcdr_command_unknown_argument).
 				then(Literal('list').runs(self.list_plugin)).
 				then(Literal('info').then(plugin_id_node().runs(lambda src, ctx: self.show_plugin_info(src, ctx['plugin_id'])))).
@@ -134,11 +134,21 @@ class MCDReforgedPlugin(PermanentPlugin):
 				then(Literal({'reloadall', 'ra'}).runs(self.reload_all_plugin))
 			).
 			then(
+				Literal('setlang').
+				runs(lambda src: src.reply(self.get_help_message('mcdr_command.help_message.setlang'))).
+				on_error(UnknownArgument, self.on_mcdr_command_unknown_argument).
+				then(
+					Text('language').
+					suggests(lambda: self.mcdr_server.translation_manager.available_languages).
+					runs(lambda src, ctx: self.set_language(src, ctx['language']))
+				)
+			).
+			then(
 				Literal({'checkupdate', 'cu'}).runs(lambda src: self.mcdr_server.update_helper.check_update(condition_check=lambda: True, reply_func=src.reply))
 			)
 		)
 		self.register_command(
-			Literal(self.get_help_command_prefix()).
+			Literal(self.help_command_prefix).
 			runs(self.process_help_command).
 			then(
 				Integer('page').at_min(1).
@@ -157,7 +167,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 	def get_help_message(self, translation_key: str):
 		lst = RTextList()
 		for line in self.tr(translation_key).splitlines(keepends=True):
-			prefix = re.search(r'(?<=§7)!!MCDR[\w ]*(?=§)', line)
+			prefix = re.search(r'(?<=§7)' + self.control_command_prefix + r'[\w ]*(?=§)', line)
 			if prefix is not None:
 				lst.append(RText(line).c(RAction.suggest_command, prefix.group()))
 			else:
@@ -168,7 +178,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 		source.reply(RText(self.mcdr_server.tr('mcdr_command.permission_denied'), color=RColor.red))
 
 	def on_mcdr_command_unknown_argument(self, source: CommandSource, error: CommandError):
-		command = error.get_parsed_command()
+		command = error.get_parsed_command().rstrip(' ')
 		source.reply(
 			RText(self.tr('mcdr_command.command_not_found', command)).
 			h(self.tr('mcdr_command.command_not_found_suggest', command)).
@@ -264,14 +274,14 @@ class MCDReforgedPlugin(PermanentPlugin):
 					'mcdr_command.list_permission.show_default',
 					self.mcdr_server.permission_manager.get_default_permission_level()
 				))
-				.c(RAction.suggest_command, '!!MCDR permission setdefault ')
+				.c(RAction.suggest_command, '{} permission setdefault '.format(self.control_command_prefix))
 				.h(self.tr('mcdr_command.list_permission.suggest_setdefault'))
 			)
 		for permission_level in PermissionLevel.INSTANCES:
 			if specified_level is None or permission_level == specified_level:
 				source.reply(
 					RText('§7[§e{}§7]§r'.format(permission_level.name))
-					.c(RAction.run_command, '!!MCDR permission list {}'.format(permission_level.name))
+					.c(RAction.run_command, '{} permission list {}'.format(self.control_command_prefix, permission_level.name))
 					.h(self.tr('mcdr_command.list_permission.suggest_list', permission_level.name))
 				)
 				for player in self.mcdr_server.permission_manager.get_permission_group_list(permission_level.name):
@@ -279,10 +289,10 @@ class MCDReforgedPlugin(PermanentPlugin):
 					if self.can_see_rtext(source):
 						texts += RTextList(
 							RText(' [✎]', color=RColor.gray)
-							.c(RAction.suggest_command, '!!MCDR permission set {} '.format(string_util.auto_quotes(player)))
+							.c(RAction.suggest_command, '{} permission set {} '.format(self.control_command_prefix, string_util.auto_quotes(player)))
 							.h(self.tr('mcdr_command.list_permission.suggest_set', player)),
 							RText(' [×]', color=RColor.gray)
-							.c(RAction.suggest_command, '!!MCDR permission remove {}'.format(string_util.auto_quotes(player)))
+							.c(RAction.suggest_command, '{} permission remove {}'.format(self.control_command_prefix, string_util.auto_quotes(player)))
 							.h(self.tr('mcdr_command.list_permission.suggest_disable', player)),
 						)
 					source.reply(texts)
@@ -352,22 +362,22 @@ class MCDReforgedPlugin(PermanentPlugin):
 			texts = RTextList(
 				'§7-§r ',
 				displayed_name.
-				c(RAction.run_command, '!!MCDR plugin info {}'.format(meta.id)).
+				c(RAction.run_command, '{} plugin info {}'.format(self.control_command_prefix, meta.id)).
 				h(self.tr('mcdr_command.list_plugin.suggest_info', plugin.get_identifier()))
 			)
 			if self.can_see_rtext(source) and not plugin.is_permanent():
 				texts.append(
 					' ',
 					RText('[↻]', color=RColor.gray)
-					.c(RAction.run_command, '!!MCDR plugin reload {}'.format(meta.id))
+					.c(RAction.run_command, '{} plugin reload {}'.format(self.control_command_prefix, meta.id))
 					.h(self.tr('mcdr_command.list_plugin.suggest_reload', meta.id)),
 					' ',
 					RText('[↓]', color=RColor.gray)
-					.c(RAction.run_command, '!!MCDR plugin unload {}'.format(meta.id))
+					.c(RAction.run_command, '{} plugin unload {}'.format(self.control_command_prefix, meta.id))
 					.h(self.tr('mcdr_command.list_plugin.suggest_unload', meta.id)),
 					' ',
 					RText('[×]', color=RColor.gray)
-					.c(RAction.run_command, '!!MCDR plugin disable {}'.format(meta.id))
+					.c(RAction.run_command, '{} plugin disable {}'.format(self.control_command_prefix, meta.id))
 					.h(self.tr('mcdr_command.list_plugin.suggest_disable', meta.id))
 				)
 			source.reply(texts)
@@ -387,7 +397,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 				texts.append(
 					' ',
 					RText('[✔]', color=RColor.gray)
-					.c(RAction.run_command, '!!MCDR plugin enable {}'.format(file_name))
+					.c(RAction.run_command, '{} plugin enable {}'.format(self.control_command_prefix, file_name))
 					.h(self.tr('mcdr_command.list_plugin.suggest_enable', file_name))
 				)
 			source.reply(texts)
@@ -400,7 +410,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 				texts.append(
 					' ',
 					RText('[↑]', color=RColor.gray)
-					.c(RAction.run_command, '!!MCDR plugin load {}'.format(file_name))
+					.c(RAction.run_command, '{} plugin load {}'.format(self.control_command_prefix, file_name))
 					.h(self.tr('mcdr_command.list_plugin.suggest_load', file_name))
 				)
 			source.reply(texts)
@@ -474,13 +484,13 @@ class MCDReforgedPlugin(PermanentPlugin):
 	def __register_help_messages(self):
 		self.register_help_message(HelpMessage(
 			self,
-			self.get_control_command_prefix(),
+			self.control_command_prefix,
 			self.plugin_manager.mcdr_server.tr('mcdr_command.help_message.mcdr_command'),
 			PermissionLevel.MCDR_CONTROL_LEVEL
 		))
 		self.register_help_message(HelpMessage(
 			self,
-			self.get_help_command_prefix(),
+			self.help_command_prefix,
 			self.plugin_manager.mcdr_server.tr('mcdr_command.help_message.help_command'),
 			PermissionLevel.MINIMUM_LEVEL
 		))
@@ -513,13 +523,30 @@ class MCDReforgedPlugin(PermanentPlugin):
 			color = {False: RColor.dark_gray, True: RColor.gray}
 			prev_page = RText('<-', color=color[has_prev])
 			if has_prev:
-				prev_page.c(RAction.run_command, '!!help {}'.format(page - 1)).h(self.tr('mcdr_command.help_message.previous_page_hover'))
+				prev_page.c(RAction.run_command, '{} {}'.format(self.help_command_prefix, page - 1)).h(self.tr('mcdr_command.help_message.previous_page_hover'))
 			next_page = RText('->', color=color[has_next])
 			if has_next:
-				next_page.c(RAction.run_command, '!!help {}'.format(page + 1)).h(self.tr('mcdr_command.help_message.next_page_hover'))
+				next_page.c(RAction.run_command, '{} {}'.format(self.help_command_prefix, page + 1)).h(self.tr('mcdr_command.help_message.next_page_hover'))
 
 			source.reply(RTextList(
 				prev_page,
 				' {} '.format(self.tr('mcdr_command.help_message.page_number', page)),
 				next_page
 			))
+
+	# =======================
+	#          Misc
+	# =======================
+
+	def set_language(self, source: CommandSource, language: str):
+		available_languages = self.mcdr_server.translation_manager.available_languages
+		if language not in available_languages:
+			source.reply(self.tr('mcdr_command.set_language.not_available', language))
+			lang_texts = []
+			for lang in available_languages:
+				lang_texts.append(RText(lang, color=RColor.yellow).c(RAction.run_command, '{} setlang {}'.format(self.control_command_prefix, lang)))
+			source.reply(self.tr('mcdr_command.set_language.language_list', RText(', ').join(lang_texts)))
+		else:
+			self.mcdr_server.config.set_value('language', language)
+			self.mcdr_server.translation_manager.set_language(language)
+			source.reply(self.tr('mcdr_command.set_language.success', language))
