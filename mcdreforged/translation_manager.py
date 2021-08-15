@@ -59,12 +59,12 @@ class TranslationManager:
 
 		# Processing
 		if translated_text is not None:
+			translated_text = translated_text.strip('\n\r')
 			if use_rtext:
-				return self.__apply_args(translated_text, args, kwargs)
+				translated_text = self.__apply_args(translated_text, args, kwargs)
 			else:
-				if len(args) > 0:
-					translated_text = translated_text.format(*args, **kwargs)
-				return translated_text.strip('\n\r')
+				translated_text = translated_text.format(*args, **kwargs)
+			return translated_text
 		else:
 			if fallback_language is not None and language != fallback_language:
 				try:
