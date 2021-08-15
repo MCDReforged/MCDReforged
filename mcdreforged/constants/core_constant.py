@@ -11,14 +11,15 @@ PACKAGE_NAME = 'mcdreforged'
 
 # MCDR Version Storage
 # Related: docs/source/conf.py
-VERSION = '2.0.0-beta.6'       # semver (1.2.3-alpha.4)
-VERSION_PYPI = '2.0.0b6'  # pythonic ver (1.2.3a4)
+VERSION = '2.0.0-beta.7'       # semver (1.2.3-alpha.4)
+VERSION_PYPI = '2.0.0b7'  # pythonic ver (1.2.3a4)
 
 GITHUB_URL = 'https://github.com/Fallen-Breath/MCDReforged'
 GITHUB_API_LATEST = 'https://api.github.com/repos/Fallen-Breath/MCDReforged/releases/latest'
 
 LOGGING_FILE = os.path.join('logs', '{}.log'.format(NAME_SHORT))
 LANGUAGE_FILE_SUFFIX = '.yml'
+DEFAULT_LANGUAGE = 'en_us'
 
 PLUGIN_THREAD_POOL_SIZE = 4
 MAX_TASK_QUEUE_SIZE = 2048
