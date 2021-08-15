@@ -7,7 +7,7 @@ from typing import List, Callable
 
 class Version:
 	EXTRA_ID_PATTERN = re.compile(r'|[-0-9A-Za-z]+(\.[-0-9A-Za-z]+)*')
-	WILDCARDS = {'x', 'X', '*'}
+	WILDCARDS = ('*', 'x', 'X')
 	WILDCARD = -1
 
 	def __init__(self, version_str: str, allow_wildcard=True):
@@ -52,7 +52,7 @@ class Version:
 			raise VersionParsingError('Empty version string')
 
 	def __str__(self):
-		version_str = '.'.join(map(str, self.component))
+		version_str = '.'.join(map(lambda c: str(c) if c != self.WILDCARD else self.WILDCARDS[0], self.component))
 		if self.pre is not None:
 			version_str += '-' + self.pre
 		if self.build is not None:

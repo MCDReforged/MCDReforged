@@ -151,6 +151,17 @@ class VersionTest(unittest.TestCase):
 		self.assertTrue(req.accept('1.0+build3'))
 		self.assertTrue(req.accept('1.2.3'))
 
+	def test_str(self):
+		for version in (
+			'1.0.0', '1.2.3-pre.5', '1.2.3-pre.5-build.x',
+			'0', '1.1', '*', ('x', '*'), ('1.2.X', '1.2.*'), '43215.*-alpha.100'
+		):
+			if isinstance(version, tuple):
+				version, expected = version
+			else:
+				expected = version
+			self.assertEqual(expected, str(Version(version)))
+
 
 if __name__ == '__main__':
 	unittest.main()
