@@ -96,6 +96,8 @@ class Version:
 		else:
 			return 0
 
+DEFAULT_CRITERION_OPERATOR = '='
+
 
 class Criterion:
 	def __init__(self, opt: str, base_version: Version, criterion: Callable[[Version, Version], bool]):
@@ -107,7 +109,7 @@ class Criterion:
 		return self.criterion(self.base_version, target)
 
 	def __str__(self):
-		return '{}{}'.format(self.opt, self.base_version)
+		return '{}{}'.format(self.opt if self.opt != DEFAULT_CRITERION_OPERATOR else '', self.base_version)
 
 
 class VersionRequirement:
@@ -133,7 +135,7 @@ class VersionRequirement:
 						base_version = requirement[len(prefix):]
 						break
 				else:
-					opt = '='
+					opt = DEFAULT_CRITERION_OPERATOR
 					base_version = requirement
 				self.criterions.append(Criterion(opt, Version(base_version), self.CRITERIONS[opt]))
 

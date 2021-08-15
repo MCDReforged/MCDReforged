@@ -161,6 +161,12 @@ class VersionTest(unittest.TestCase):
 			else:
 				expected = version
 			self.assertEqual(expected, str(Version(version)))
+			self.assertEqual(expected, str(VersionRequirement(version)))
+		for req in (
+			'>=1.0.0', '<=1.2.3-pre.5', '~1.2.3-pre.5-build.x',
+			'>0', '^1.1.*',
+		):
+			self.assertEqual(req, str(VersionRequirement(req)))
 
 
 if __name__ == '__main__':
