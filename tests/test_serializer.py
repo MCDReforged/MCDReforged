@@ -1,5 +1,5 @@
 import unittest
-from typing import List, Dict
+from typing import List, Dict, Union, Optional
 
 from mcdreforged.api.utils import serialize, deserialize, Serializable
 
@@ -86,6 +86,50 @@ class MyTestCase(unittest.TestCase):
 		self.assertEqual(10, len(obj.lst))
 		self.assertEqual(0, len(Cls.deserialize({}).lst))
 		self.assertEqual(0, len(Cls().lst))
+
+	def test_4_protected_fields(self):
+		class Cls(Serializable):
+			data: int = 1
+			__secret: str
+
+			def __init__(self, **kwargs):
+				super().__init__(**kwargs)
+				self.__secret = 'a'
+				self.__secret2 = 'x'
+
+			def get_secret(self):
+				return self.__secret
+
+			def get_secret2(self):
+				return self.__secret2
+
+		c = Cls(data=2)
+		self.assertEqual('a', c.get_secret())
+		self.assertEqual('x', c.get_secret2())
+		self.assertEqual({'data': 2}, c.serialize())
+		self.assertEqual('a', Cls.deserialize({'__secret': 'b'}).get_secret())
+		self.assertEqual('x', Cls.deserialize({'__secret2': 'y'}).get_secret2())
+
+	def test_5_union(self):
+		class Cls(Serializable):
+			a: Union[int, str, list]
+			b: Optional[float] = None
+
+		c = Cls.deserialize({'a': 1})
+		self.assertEqual(c.a, 1)
+		self.assertEqual(c.b, None)
+
+		c = Cls.deserialize({'a': 'x', 'b': None})
+		self.assertEqual(c.a, 'x')
+		self.assertEqual(c.b, None)
+
+		c = Cls.deserialize({'a': [1], 'b': 1.2})
+		self.assertEqual(c.a, [1])
+		self.assertEqual(c.b, 1.2)
+
+		self.assertRaises(TypeError, Cls.deserialize, {'a': {}, 'b': 1.2})
+		self.assertRaises(TypeError, Cls.deserialize, {'a': None, 'b': 1.2})
+		self.assertRaises(TypeError, Cls.deserialize, {'a': 1, 'b': 'y'})
 
 
 if __name__ == '__main__':

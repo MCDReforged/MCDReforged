@@ -34,26 +34,28 @@ def deserialize(data, cls: Type[T], *, error_at_missing=False, error_at_redundan
 	# List
 	elif isinstance(data, list) and getattr(cls, '__origin__', None) == List[int].__origin__:
 		element_type = getattr(cls, '__args__')[0]
-		return list(map(lambda e: deserialize(e, element_type), data))
+		return list(map(lambda e: deserialize(e, element_type, error_at_missing=error_at_missing, error_at_redundancy=error_at_redundancy), data))
 	# Dict
 	elif isinstance(data, dict) and getattr(cls, '__origin__', None) == Dict[int, int].__origin__:
 		key_type = getattr(cls, '__args__')[0]
 		val_type = getattr(cls, '__args__')[1]
 		instance = {}
 		for key, value in data.items():
-			instance[deserialize(key, key_type)] = deserialize(value, val_type)
+			deserialized_key = deserialize(key, key_type, error_at_missing=error_at_missing, error_at_redundancy=error_at_redundancy)
+			deserialized_value = deserialize(value, val_type, error_at_missing=error_at_missing, error_at_redundancy=error_at_redundancy)
+			instance[deserialized_key] = deserialized_value
 		return instance
 	# Object
 	elif isinstance(data, dict):
 		try:
 			result = cls()
 		except TypeError:
-			raise TypeError('Parameter cls needs to be a type instance but {} found'.format(type(cls))) from None
+			raise TypeError('Parameter cls needs to be a type instance since data is a dict, but {} found'.format(type(cls))) from None
 		input_key_set = set(data.keys())
 		for attr_name, attr_type in getattr(cls, '__annotations__', {}).items():
 			if not attr_name.startswith('_'):
 				if attr_name in data:
-					result.__setattr__(attr_name, deserialize(data[attr_name], attr_type))
+					result.__setattr__(attr_name, deserialize(data[attr_name], attr_type, error_at_missing=error_at_missing, error_at_redundancy=error_at_redundancy))
 					input_key_set.remove(attr_name)
 				elif error_at_missing:
 					raise ValueError('Missing attribute {} for class {} in input object {}'.format(attr_name, cls, data))
@@ -64,8 +66,16 @@ def deserialize(data, cls: Type[T], *, error_at_missing=False, error_at_redundan
 		if isinstance(result, Serializable):
 			result.on_deserialization()
 		return result
+	# Union
+	elif getattr(cls, '__origin__', None) == Union:
+		for possible_cls in getattr(cls, '__args__'):
+			try:
+				return deserialize(data, possible_cls, error_at_missing=error_at_missing, error_at_redundancy=error_at_redundancy)
+			except (TypeError, ValueError):
+				pass
+		raise TypeError('Data in type {} cannot match any candidate of target class {}'.format(type(data), cls))
 	else:
-		raise TypeError('Unsupported input type: expected class {} but found data {}'.format(cls, type(data)))
+		raise TypeError('Unsupported input type: expected class {} but found data with class {}'.format(cls, type(data)))
 
 
 class Serializable(ABC):
