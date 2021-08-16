@@ -60,6 +60,8 @@ def deserialize(data, cls: Type[T], *, error_at_missing=False, error_at_redundan
 				result.__setattr__(attr_name, copy.copy(getattr(cls, attr_name)))
 		if error_at_redundancy and len(input_key_set) > 0:
 			raise ValueError('Redundancy attributes {} for class {} in input object {}'.format(input_key_set, cls, data))
+		if isinstance(result, Serializable):
+			result.on_deserialization()
 		return result
 	else:
 		raise TypeError('Unsupported input type: expected class {} but found data {}'.format(cls, type(data)))
@@ -83,3 +85,9 @@ class Serializable(ABC):
 	@classmethod
 	def get_default(cls):
 		return cls.deserialize({})
+
+	def on_deserialization(self):
+		"""
+		Invoked after being deserialized
+		"""
+		pass
