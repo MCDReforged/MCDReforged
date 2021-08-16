@@ -3,7 +3,7 @@ import os
 import sys
 from argparse import ArgumentParser
 from typing import Optional
-from zipfile import ZipFile
+from zipfile import ZipFile, ZIP_DEFLATED
 
 from mcdreforged.plugin.meta.metadata import Metadata
 
@@ -122,7 +122,7 @@ def make_packed_plugin(input_dir: str, output_dir: str, file_name: Optional[str]
 			writeln('Writing single file: {} -> {}'.format(base_path, arc_name))
 
 	writeln('Packing plugin "{}" into "{}" ...'.format(meta.id, file_name))
-	with ZipFile(os.path.join(output_dir, file_name), 'w') as zip_file:
+	with ZipFile(os.path.join(output_dir, file_name), 'w', ZIP_DEFLATED) as zip_file:
 		write(meta_file_path, directory_only=False)  # metadata
 		write(req_file_path, directory_only=False)  # requirement
 		write(os.path.join(input_dir, meta.id), directory_only=True)  # source module
