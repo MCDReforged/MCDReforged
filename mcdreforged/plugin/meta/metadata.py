@@ -112,7 +112,7 @@ class Metadata:
 			self.entrypoint, self.archive_name, self.resources
 		)
 
-	def get_description(self, lang: Optional[str] = None):
+	def get_description(self, lang: Optional[str] = None) -> str:
 		"""
 		Get translated description str
 		"""

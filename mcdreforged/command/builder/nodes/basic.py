@@ -26,8 +26,8 @@ class ParseResult:
 
 class CommandSuggestion:
 	def __init__(self, command_read: str, suggest_segment: str):
-		self.__suggest_segment = suggest_segment
 		self.__command_read = command_read
+		self.__suggest_segment = suggest_segment
 
 	def __hash__(self):
 		return hash(self.__suggest_segment) + hash(self.__command_read) * 31
@@ -46,6 +46,9 @@ class CommandSuggestion:
 	@property
 	def suggest_input(self) -> str:
 		return self.__suggest_segment
+
+	def __str__(self):
+		return '{} -> {}'.format(self.__command_read, self.__suggest_segment)
 
 
 class CommandSuggestions(list):
@@ -358,9 +361,12 @@ class ArgumentNode:
 		Return a list of tuple (suggested command, suggested argument)
 		"""
 		def self_suggestions():
-			return CommandSuggestions([CommandSuggestion(context.command_read, s) for s in self._get_suggestions(context)])
+			return CommandSuggestions([CommandSuggestion(command_read_at_the_beginning, s) for s in self._get_suggestions(context)])
 
 		suggestions = CommandSuggestions()
+		# [!!aa bb cc] dd
+		# read         suggested
+		command_read_at_the_beginning = context.command_read
 		try:
 			result = self.parse(context.command_remaining)
 		except CommandSyntaxError:
