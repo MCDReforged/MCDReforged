@@ -32,9 +32,9 @@ Let's say your are going to start MCDR in a folder named ``my_mcdr_server``. The
 .. code-block:: bash
 
     cd my_mcdr_server
-    python -m mcdreforged
+    python -m mcdreforged init
 
-At the first run, MCDR will generated the default configure and permission files, as well as some default folders. The file structure will be like this
+MCDR will generated the default configure and permission files, as well as some default folders. The file structure will be like this
 
 .. code-block::
 
@@ -47,7 +47,9 @@ At the first run, MCDR will generated the default configure and permission files
     ├─ config.yml
     └─ permission.yml
 
-Now put your server files into the server folder (``server`` by default), then modify the configuration file ``config.yml`` and permission file ``permission.yml`` correctly. After you can start MCDR again and it correctly launch and handle the server
+Now put your server files into the server folder (``server`` by default), then modify the configuration file ``config.yml`` and permission file ``permission.yml`` correctly
+
+After that you can start MCDR, and it will start handling the server correctly
 
 .. code-block:: bash
 

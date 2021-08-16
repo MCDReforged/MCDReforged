@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-30 17:31+0800\n"
+"POT-Creation-Date: 2021-08-17 00:52+0800\n"
 "PO-Revision-Date: 2021-01-23 09:12+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -70,26 +70,30 @@ msgstr "假设你想在 ``my_mcdr_server`` 文件夹中运行 MCDR，那么你�
 
 #: ../quick_start.rst:37
 msgid ""
-"At the first run, MCDR will generated the default configure and "
-"permission files, as well as some default folders. The file structure "
-"will be like this"
-msgstr "在首次启动时，MCDR 会生成默认的配置文件、权限文件，以及一些默认的文件夹。此时的路径结构将会如下所示："
+"MCDR will generated the default configure and permission files, as well "
+"as some default folders. The file structure will be like this"
+msgstr "MCDR 将生成默认的配置文件、权限文件，以及一些默认的文件夹。此时的路径结构将会如下所示："
 
 #: ../quick_start.rst:50
 msgid ""
 "Now put your server files into the server folder (``server`` by default),"
 " then modify the configuration file ``config.yml`` and permission file "
-"``permission.yml`` correctly. After you can start MCDR again and it "
-"correctly launch and handle the server"
+"``permission.yml`` correctly"
 msgstr ""
 "现在，把你的服务端文件放入服务端文件夹里（默认为 ``server`` 文件夹），然后修改配置文件 ``config.yml`` 以及权限文件 "
-"``permission.yml`` 以满足你的需求。完成后，你可以再次启动 MCDR，这次它将正确地启动并操控服务器运行了。"
+"``permission.yml`` 以满足你的需求。"
 
-#: ../quick_start.rst:57
+#: ../quick_start.rst:52
+msgid ""
+"After that you can start MCDR, and it will start handling the server "
+"correctly"
+msgstr "完成后，你就可以启动 MCDR，它将开始正确地操控服务器运行。"
+
+#: ../quick_start.rst:59
 msgid "Upgrade"
 msgstr "更新"
 
-#: ../quick_start.rst:59
+#: ../quick_start.rst:61
 msgid ""
 "With the help of `pypi <https://pypi.org/project/mcdreforged/>`__, MCDR "
 "can be easily upgraded via a single command"
@@ -97,15 +101,15 @@ msgstr ""
 "在 `pypi <https://pypi.org/project/mcdreforged/>`__ 的帮助下，MCDR "
 "可以轻松地通过这个命令升级："
 
-#: ../quick_start.rst:65
+#: ../quick_start.rst:67
 msgid "That's it!"
 msgstr "就酱！"
 
-#: ../quick_start.rst:67
+#: ../quick_start.rst:69
 msgid "For Chinese users, you can use tuna mirror to speed up the upgrading too"
 msgstr "如果你是国内用户，你同样可以借助清华 pypi 镜像来加速 MCDR 的升级："
 
-#: ../quick_start.rst:73
+#: ../quick_start.rst:75
 msgid ""
 "Development builds are available in `Test PyPi "
 "<https://test.pypi.org/project/mcdreforged/#history>`__, you can install "
@@ -114,17 +118,17 @@ msgstr ""
 "开发版本可在 `Test PyPi <https://test.pypi.org/project/mcdreforged/#history>`__"
 " 中找到。如果你有特殊需要，你可以安装它们。"
 
-#: ../quick_start.rst:76
+#: ../quick_start.rst:78
 msgid "Launch from source"
 msgstr "从源码启动"
 
-#: ../quick_start.rst:78
+#: ../quick_start.rst:80
 msgid ""
 "Instead of installing MCDR from pypi, you can execute the source file of "
 "MCDR directly."
 msgstr "除了借助 pypi 进行安装，你还可以直接从源代码执行 MCDR。"
 
-#: ../quick_start.rst:80
+#: ../quick_start.rst:82
 msgid ""
 "Download the source files of MCDR in the `github release page "
 "<https://github.com/Fallen-Breath/MCDReforged/releases>`__, and "
@@ -133,25 +137,25 @@ msgstr ""
 "在 `Github 发布页面 <https://github.com/Fallen-Breath/MCDReforged/releases>`__"
 " 中下载 MCDR 源代码，并解压到你的服务器文件夹"
 
-#: ../quick_start.rst:90
+#: ../quick_start.rst:92
 msgid "Then you can start MCDR with the same command as above"
 msgstr "然后就可以使用和同上所述的指令启动 MCDR："
 
-#: ../quick_start.rst:96
+#: ../quick_start.rst:98
 msgid "Alternatively you can execute ``MCDReforged.py`` with python to start MCDR"
 msgstr "当然你也可以通过运行 ``MCDReforged.py`` 来启动 MCDR："
 
-#: ../quick_start.rst:102
+#: ../quick_start.rst:104
 msgid ""
 "``MCDReforged.py`` is just a simple wrapper for launching MCDR with the "
 "following codes"
 msgstr "``MCDReforged.py`` 只是一个简单的启动 MCDR 的包装，它的代码如下所示"
 
-#: ../quick_start.rst:113
+#: ../quick_start.rst:115
 msgid "``MCDReforged.py`` also works for MCDR installed by ``pip`` command"
 msgstr "运行 ``MCDReforged.py`` 同样适用于从 ``pypi`` 安装的 MCDR。"
 
-#: ../quick_start.rst:115
+#: ../quick_start.rst:117
 msgid ""
 "For windows users, if you have bound a correct python interpreter to "
 "``*.py`` files you can also double click the ``MCDReforged.py`` to start "

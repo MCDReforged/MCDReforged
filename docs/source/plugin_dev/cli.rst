@@ -33,6 +33,24 @@ start
 
 The same as ``python -m mcdreforged``, it launches MCDR
 
+init
+^^^^
+
+.. code-block::
+
+    python -m mcdreforged init [-h]
+
+Prepare the working environment of MCDR
+
+Create commonly used folders and generate default configure and permission files, including:
+
+* logs/
+* configs/
+* plugins/
+* server/
+* config.yml
+* permission.yml
+
 gendefault
 ^^^^^^^^^^
 
