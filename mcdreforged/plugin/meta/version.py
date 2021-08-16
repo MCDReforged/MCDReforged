@@ -2,13 +2,45 @@
 Plugin Version
 """
 import re
-from typing import List, Callable
+from typing import List, Callable, Tuple, Optional
+
+
+# beta.3 -> (beta, 3), random -> (random, None)
+class ExtraElement:
+	DIVIDER = '.'
+	body: str
+	num: Optional[int]
+
+	def __init__(self, segment_str: str):
+		segments = segment_str.rsplit(self.DIVIDER, 1)
+		try:
+			self.body, self.num = segments[0], int(segments[1])
+		except (IndexError, ValueError):
+			self.body, self.num = segment_str, None
+
+	def __str__(self):
+		if self.num is None:
+			return self.body
+		return '{}{}{}'.format(self.body, self.DIVIDER, self.num)
+
+	def __lt__(self, other):
+		if not isinstance(other, type(self)):
+			raise TypeError()
+		if self.num is None or other.num is None:
+			return str(self) < str(other)
+		else:
+			return (self.body, self.num) < (other.body, other.num)
 
 
 class Version:
-	EXTRA_ID_PATTERN = re.compile(r'|[-0-9A-Za-z]+(\.[-0-9A-Za-z]+)*')
+	EXTRA_ID_PATTERN = re.compile(r'|[-+0-9A-Za-z]+(\.[-+0-9A-Za-z]+)*')
 	WILDCARDS = ('*', 'x', 'X')
 	WILDCARD = -1
+
+	component: List[int]
+	has_wildcard: bool
+	pre: Optional[ExtraElement]
+	build: Optional[ExtraElement]
 
 	def __init__(self, version_str: str, allow_wildcard=True):
 		"""
@@ -17,11 +49,12 @@ class Version:
 		if not isinstance(version_str, str):
 			raise VersionParsingError('Invalid input version string')
 
-		def separate_extra(text, char):
+		def separate_extra(text, char) -> Tuple[str, Optional[ExtraElement]]:
 			if char in text:
-				text, extra = text.split(char, 1)
-				if not self.EXTRA_ID_PATTERN.fullmatch(extra):
-					raise VersionParsingError('Invalid build string: ' + extra)
+				text, extra_str = text.split(char, 1)
+				if not self.EXTRA_ID_PATTERN.fullmatch(extra_str):
+					raise VersionParsingError('Invalid build string: ' + extra_str)
+				extra = ExtraElement(extra_str)
 			else:
 				extra = None
 			return text, extra
@@ -54,9 +87,9 @@ class Version:
 	def __str__(self):
 		version_str = '.'.join(map(lambda c: str(c) if c != self.WILDCARD else self.WILDCARDS[0], self.component))
 		if self.pre is not None:
-			version_str += '-' + self.pre
+			version_str += '-' + str(self.pre)
 		if self.build is not None:
-			version_str += '+' + self.build
+			version_str += '+' + str(self.build)
 		return version_str
 
 	def __getitem__(self, index):
@@ -95,6 +128,7 @@ class Version:
 			return 1
 		else:
 			return 0
+
 
 DEFAULT_CRITERION_OPERATOR = '='
 
@@ -153,5 +187,3 @@ class VersionRequirement:
 
 class VersionParsingError(ValueError):
 	pass
-
-

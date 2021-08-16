@@ -4,7 +4,7 @@ from mcdreforged.plugin.meta.version import *
 
 
 class VersionTest(unittest.TestCase):
-	def test_version_parsing(self):
+	def test_0_version_parsing(self):
 		self.assertIsInstance(Version('1.0.0'), Version)
 		self.assertIsInstance(Version('1.0.0-pre4'), Version)
 		self.assertIsInstance(Version('1.0.0-pre.4'), Version)
@@ -12,6 +12,7 @@ class VersionTest(unittest.TestCase):
 		self.assertIsInstance(Version('1.998.0-alpha.100'), Version)
 		self.assertIsInstance(Version('1.5.2-alpha.7+build10'), Version)
 		self.assertIsInstance(Version('1.5.2-beta.100+build.2'), Version)
+		self.assertIsInstance(Version('1.5.2--------w++++++++x'), Version)
 		self.assertIsInstance(Version('0.0.0'), Version)
 		self.assertIsInstance(Version('0.0.x'), Version)
 		self.assertIsInstance(Version('0.x.*'), Version)
@@ -32,7 +33,7 @@ class VersionTest(unittest.TestCase):
 		self.assertRaises(VersionParsingError, Version, '1.2.')
 		self.assertRaises(VersionParsingError, Version, '1.0.x', allow_wildcard=False)
 
-	def test_compare(self):
+	def test_1_compare(self):
 		self.assertTrue(Version('1.2.3') == Version('1.2.3'))
 		self.assertFalse(Version('1.2.3') < Version('1.2.3'))
 		self.assertFalse(Version('1.2.3') > Version('1.2.3'))
@@ -44,7 +45,14 @@ class VersionTest(unittest.TestCase):
 		self.assertFalse(Version('1.2.3') == Version('1.3.3'))
 		self.assertTrue(Version('1.2.3') != Version('1.3.3'))
 
-	def test_compare_wildcard(self):
+		self.assertTrue(Version('1.2.3-alpha') < Version('1.2.3-beta'))
+		self.assertTrue(Version('1.2.3-beta') < Version('1.2.3-beta.1'))
+		self.assertTrue(Version('1.2.3-beta') < Version('1.2.3-beta.w'))
+		self.assertTrue(Version('1.2.3-beta.1') < Version('1.2.3-beta.2'))
+		self.assertTrue(Version('1.2.3-beta.9') < Version('1.2.3-beta.10'))
+		self.assertTrue(Version('1.2.3-beta.100+build.1') == Version('1.2.3-beta.100+build.2'))
+
+	def test_2_compare_wildcard(self):
 		self.assertTrue(Version('1.2.3') >= Version('1.2.x'))
 		self.assertFalse(Version('1.2.3') >= Version('1.3.x'))
 		self.assertTrue(Version('1.2.3') >= Version('1.x'))
@@ -52,7 +60,7 @@ class VersionTest(unittest.TestCase):
 		self.assertTrue(Version('1.3.0-pre1') >= Version('1.3.x'))
 		self.assertTrue(Version('1.3.0-pre1') == Version('1.3.x+build2'))
 
-	def test_version_requirement_parsing(self):
+	def test_3_version_requirement_parsing(self):
 		self.assertIsInstance(VersionRequirement('>=1.0'), VersionRequirement)
 		self.assertIsInstance(VersionRequirement('>=1.0 <2.0'), VersionRequirement)
 		self.assertIsInstance(VersionRequirement('10'), VersionRequirement)
@@ -65,7 +73,7 @@ class VersionTest(unittest.TestCase):
 		self.assertRaises(VersionParsingError, VersionRequirement, '<=2 >1 ~0 ^')
 		self.assertRaises(VersionParsingError, VersionRequirement, 'abc')
 
-	def test_requirement_equal(self):
+	def test_4_requirement_equal(self):
 		for req in [VersionRequirement('1.4.0'), VersionRequirement('=1.4.0')]:
 			self.assertTrue(req.accept('1.4.0'))
 			self.assertTrue(req.accept('1.4.0+build2'))
@@ -89,7 +97,7 @@ class VersionTest(unittest.TestCase):
 		self.assertTrue(req.accept('1.3.0'))
 		self.assertFalse(req.accept('2.0'))
 
-	def test_requirement_less(self):
+	def test_5_requirement_less(self):
 		req = VersionRequirement('<1.2.3')
 		self.assertTrue(req.accept('1.2.3-'))
 		self.assertTrue(req.accept('1.2.3-pre1'))
@@ -107,7 +115,7 @@ class VersionTest(unittest.TestCase):
 		self.assertFalse(req.accept('1.0.0'))
 		self.assertFalse(req.accept('1.0-pre1'))
 
-	def test_requirement_greater(self):
+	def test_6_requirement_greater(self):
 		req = VersionRequirement('>2.1.x')
 		self.assertTrue(req.accept('2.2'))
 		self.assertTrue(req.accept('2.2.2'))
@@ -121,11 +129,11 @@ class VersionTest(unittest.TestCase):
 		self.assertTrue(req.accept('2.1-pre.3'))
 		self.assertFalse(req.accept('2.1-pre.1'))
 
-	def test_requirement_range(self):
+	def test_7_requirement_range(self):
 		req = VersionRequirement('>=1.2.0 <1.4.3')
 		self.assertTrue(req.accept('1.2.1'))
 
-	def test_requirement_other(self):
+	def test_8_requirement_other(self):
 		req = VersionRequirement('^1.2.3-pre.5')
 		self.assertTrue(req.accept('1.2.3-pre.5'))
 		self.assertTrue(req.accept('1.2.3-pre.5-build.x'))
@@ -151,9 +159,9 @@ class VersionTest(unittest.TestCase):
 		self.assertTrue(req.accept('1.0+build3'))
 		self.assertTrue(req.accept('1.2.3'))
 
-	def test_str(self):
+	def test_9_str(self):
 		for version in (
-			'1.0.0', '1.2.3-pre.5', '1.2.3-pre.5-build.x',
+			'1.0.0', '1.2.3-pre.5', '1.2.3-pre.qwq', '1.2.3-pre.5+build.x',
 			'0', '1.1', '*', ('x', '*'), ('1.2.X', '1.2.*'), '43215.*-alpha.100'
 		):
 			if isinstance(version, tuple):
