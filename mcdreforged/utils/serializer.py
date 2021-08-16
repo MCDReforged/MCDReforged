@@ -14,6 +14,10 @@ def serialize(obj) -> Union[None, int, float, str, list, dict]:
 		return dict(map(lambda t: (t[0], serialize(t[1])), obj.items()))
 	try:
 		attr_dict = vars(obj)
+		# don't serialize protected fields
+		for attr_name in list(attr_dict.keys()):
+			if attr_name.startswith('_'):
+				attr_dict.pop(attr_name)
 	except TypeError:
 		raise TypeError('Unsupported input type {}'.format(type(obj))) from None
 	else:
