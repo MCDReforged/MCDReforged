@@ -51,13 +51,14 @@ def deserialize(data, cls: Type[T], *, error_at_missing=False, error_at_redundan
 			raise TypeError('Parameter cls needs to be a type instance but {} found'.format(type(cls))) from None
 		input_key_set = set(data.keys())
 		for attr_name, attr_type in getattr(cls, '__annotations__', {}).items():
-			if attr_name in data:
-				result.__setattr__(attr_name, deserialize(data[attr_name], attr_type))
-				input_key_set.remove(attr_name)
-			elif error_at_missing:
-				raise ValueError('Missing attribute {} for class {} in input object {}'.format(attr_name, cls, data))
-			elif hasattr(cls, attr_name):
-				result.__setattr__(attr_name, copy.copy(getattr(cls, attr_name)))
+			if not attr_name.startswith('_'):
+				if attr_name in data:
+					result.__setattr__(attr_name, deserialize(data[attr_name], attr_type))
+					input_key_set.remove(attr_name)
+				elif error_at_missing:
+					raise ValueError('Missing attribute {} for class {} in input object {}'.format(attr_name, cls, data))
+				elif hasattr(cls, attr_name):
+					result.__setattr__(attr_name, copy.copy(getattr(cls, attr_name)))
 		if error_at_redundancy and len(input_key_set) > 0:
 			raise ValueError('Redundancy attributes {} for class {} in input object {}'.format(input_key_set, cls, data))
 		if isinstance(result, Serializable):
