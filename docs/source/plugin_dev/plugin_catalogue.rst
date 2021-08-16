@@ -185,6 +185,7 @@ Release
 
 Plugin catalogue will automatically detect the releases in your plugin repository and extract the plugin download url in the assets, as long as the release follows the following restrictions:
 
+* Pre-release: It should not be a pre-release
 * Release tag name: **the same as the version of the released plugin**, can be in one of the following format
 
 .. list-table::

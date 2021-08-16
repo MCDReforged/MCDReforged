@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-16 00:00+0800\n"
+"POT-Creation-Date: 2021-08-16 08:49+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -314,83 +314,88 @@ msgid ""
 msgstr "插件仓库将会自动检测你的插件的仓库内的发布版本，并在其中的附件列表里获取你插件的下载链接，只要发布版本符合以下的约束："
 
 #: ../plugin_dev/plugin_catalogue.rst:188
+msgid "Pre-release: It should not be a pre-release"
+msgstr "Pre-release：该发布版不应该是一个 pre-release"
+
+#: ../plugin_dev/plugin_catalogue.rst:189
 msgid ""
 "Release tag name: **the same as the version of the released plugin**, can"
 " be in one of the following format"
 msgstr "发布版本的 tag 名称：**与发布的插件的版本一致**，可为以下的格式之一："
 
-#: ../plugin_dev/plugin_catalogue.rst:193
+#: ../plugin_dev/plugin_catalogue.rst:194
 msgid "Format"
 msgstr "格式"
 
-#: ../plugin_dev/plugin_catalogue.rst:194
+#: ../plugin_dev/plugin_catalogue.rst:195
 msgid "Example"
 msgstr "例子"
 
-#: ../plugin_dev/plugin_catalogue.rst:195
+#: ../plugin_dev/plugin_catalogue.rst:196
 msgid "``<version>``"
 msgstr "``<version>``"
 
-#: ../plugin_dev/plugin_catalogue.rst:196
+#: ../plugin_dev/plugin_catalogue.rst:197
 msgid "1.2.3"
 msgstr "1.2.3"
 
-#: ../plugin_dev/plugin_catalogue.rst:197
+#: ../plugin_dev/plugin_catalogue.rst:198
 msgid "``v<version>``"
 msgstr "``v<version>``"
 
-#: ../plugin_dev/plugin_catalogue.rst:198
+#: ../plugin_dev/plugin_catalogue.rst:199
 msgid "v1.2.3"
 msgstr "v1.2.3"
 
-#: ../plugin_dev/plugin_catalogue.rst:199
+#: ../plugin_dev/plugin_catalogue.rst:200
 msgid "``<plugin_id>-<version>``"
 msgstr "``<plugin_id>-<version>``"
 
-#: ../plugin_dev/plugin_catalogue.rst:200
+#: ../plugin_dev/plugin_catalogue.rst:201
 msgid "my_plugin_1.2.3"
 msgstr "my_plugin_1.2.3"
 
-#: ../plugin_dev/plugin_catalogue.rst:201
+#: ../plugin_dev/plugin_catalogue.rst:202
 msgid "``<plugin_id>-v<version>``"
 msgstr "``<plugin_id>-v<version>``"
 
-#: ../plugin_dev/plugin_catalogue.rst:202
+#: ../plugin_dev/plugin_catalogue.rst:203
 msgid "my_plugin_v1.2.3"
 msgstr "my_plugin_v1.2.3"
 
-#: ../plugin_dev/plugin_catalogue.rst:204
+#: ../plugin_dev/plugin_catalogue.rst:205
 msgid ""
 "Assets: contains 1 asset with ``.mcdr`` file extension name. Other assets"
 " will be ignored"
 msgstr "附件：包含一个以 ``.mcdr`` 为扩展名的文件附件。其他附件将会被忽略。"
 
-#: ../plugin_dev/plugin_catalogue.rst:206
+#: ../plugin_dev/plugin_catalogue.rst:207
 msgid ""
 "Which also means only `Packed Plugin <plugin_format.html#packed-"
 "plugin>`__ is supported"
 msgstr "这也意味着仅有 `打包插件 <plugin_format.html#packed-plugin>`__ 这一种格式是被支持的。"
 
-#: ../plugin_dev/plugin_catalogue.rst:209
+#: ../plugin_dev/plugin_catalogue.rst:210
 msgid "Submit Plugin"
 msgstr "提交插件"
 
-#: ../plugin_dev/plugin_catalogue.rst:211
+#: ../plugin_dev/plugin_catalogue.rst:212
 msgid ""
 "If you want to submit your plugin, create the directory of your plugin "
 "inside the ``plugins/`` directory with necessary files, and make a pull "
 "request"
 msgstr "如果你想要提交你的插件，在 ``plugins/`` 文件夹中创建你的插件的文件夹，并创建好必须的文件，然后发出一个 Pull Request。"
 
-#: ../plugin_dev/plugin_catalogue.rst:213
+#: ../plugin_dev/plugin_catalogue.rst:214
 msgid ""
 "It's recommended to leave your github link in the `authors <#authors>`__ "
 "field so repository maintainers can simply tell if you are the owner of "
 "the plugin"
 msgstr "推荐将你的 github 链接置于 `authors <#authors>`__ 属性中，这样仓库的维护者可以很容易的判断你是否是该插件的所有者。"
 
-#: ../plugin_dev/plugin_catalogue.rst:215
+#: ../plugin_dev/plugin_catalogue.rst:216
 msgid ""
 "All changes files should only be inside the sub-directory named by your "
 "plugin id in the ``plugins/`` folder"
 msgstr "所有变更的文件仅可位于 ``plugins/`` 文件夹里的，以你的插件 id 命名的子文件夹中"
+
