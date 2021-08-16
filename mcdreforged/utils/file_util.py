@@ -19,6 +19,6 @@ def list_file_with_suffix(directory: str, suffix: str):
 	return list_file(directory, lambda file_path: file_path.endswith(suffix))
 
 
-def touch_directory(directory):
-	if not os.path.isdir(directory):
-		os.makedirs(directory)
+def touch_directory(directory_path: str):
+	if not os.path.isdir(directory_path):
+		os.makedirs(directory_path)

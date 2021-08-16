@@ -36,6 +36,7 @@ def entry_point():
 	subparsers = parser.add_subparsers(title='Command', help='Available commands', dest='subparser_name')
 
 	subparsers.add_parser('start', help='Start {}'.format(core_constant.NAME))
+	subparsers.add_parser('init', help='Prepare the working environment of {}'.format(core_constant.NAME))
 	subparsers.add_parser('gendefault', help='Generate default configure and permission files at current working directory')
 
 	parser_pack = subparsers.add_parser('pack', help='Pack plugin files into a {} plugin'.format(plugin_constant.PACKED_PLUGIN_FILE_SUFFIX))
@@ -48,8 +49,10 @@ def entry_point():
 
 	if result.subparser_name == 'start':
 		run_mcdr()
+	elif result.subparser_name == 'init':
+		initialize_environment()
 	elif result.subparser_name == 'gendefault':
-		MCDReforgedServer(generate_default_only=True)
+		generate_default_stuffs()
 	elif result.subparser_name == 'pack':
 		make_packed_plugin(result.input, result.output, result.name, quiet=quiet)
 
@@ -69,6 +72,14 @@ def run_mcdr():
 			# If it's not initialized, config file or permission file is missing
 			# Just dont do anything to let the user to check the files
 			pass
+
+
+def initialize_environment():
+	MCDReforgedServer(initialize_environment=True)
+
+
+def generate_default_stuffs():
+	MCDReforgedServer(generate_default_only=True)
 
 
 def make_packed_plugin(input_dir: str, output_dir: str, file_name: Optional[str], *, quiet: bool = False):

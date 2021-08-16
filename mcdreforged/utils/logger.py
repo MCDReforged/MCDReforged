@@ -173,7 +173,7 @@ class MCDReforgedLogger(logging.Logger):
 			with MCColoredFormatter.disable_minecraft_color_code_transform():
 				super().debug(*args)
 
-	def set_file(self, file_name):
+	def set_file(self, file_name: str):
 		if self.file_handler is not None:
 			self.removeHandler(self.file_handler)
 		file_util.touch_directory(os.path.dirname(file_name))

@@ -35,7 +35,7 @@ from mcdreforged.utils.types import MessageText
 class MCDReforgedServer:
 	process: Optional[Popen]
 
-	def __init__(self, *, generate_default_only: bool = False):
+	def __init__(self, *, generate_default_only: bool = False, initialize_environment: bool = False):
 		"""
 		:param generate_default_only: If set to true, MCDR will only generate the default configure and permission files
 		"""
@@ -66,32 +66,46 @@ class MCDReforgedServer:
 		self.command_manager = CommandManager(self)
 		self.plugin_manager = PluginManager(self)
 
-		# --- Input arguments processing --- #
+		# --- Input arguments "generate_default_only" processing --- #
 		if generate_default_only:
 			self.config.save_default()
 			self.permission_manager.save_default()
 			return
 
 		# --- Initialize fields instance --- #
-		self.logger.set_file(core_constant.LOGGING_FILE)  # will create logs/ folder
-		self.translation_manager.load_translations()
-		self.plugin_manager.touch_directory()  # will create plugins/ folder
+		# Check if there's any file missing
+		# If there's any, MCDR environment might not be probably setup
+
+		if initialize_environment:
+			# Prepare config / permission files if they're missing
+			if not self.config.file_presents():
+				self.config.save_default()
+				default_config = self.config.get_default_yaml()
+				file_util.touch_directory(default_config['working_directory'])  # create server/ folder
+			if not self.permission_manager.file_presents():
+				self.permission_manager.save_default()
+
 		file_missing = False
 		try:
-			self.load_config(allowed_missing_file=False)  # loads config, language, handlers
+			# loads config, language, handlers
+			# config change will lead to creating plugin folders
+			self.load_config(allowed_missing_file=False)
 		except FileNotFoundError:
-			self.logger.error('Config is missing, default config generated')
-			self.config.save_default()
+			self.logger.error('Configure is missing')
 			file_missing = True
 		try:
 			self.permission_manager.load_permission_file(allowed_missing_file=False)
 		except FileNotFoundError:
-			self.logger.error('Permission file is missing, default permission file generated')
-			self.permission_manager.save_default()
+			self.logger.error('Permission file is missing')
 			file_missing = True
 		if file_missing:
-			self.on_first_start()
+			self.on_file_missing()
 			return
+
+		# MCDR environment is setup, creating default folders and loading stuffs
+		self.logger.set_file(core_constant.LOGGING_FILE)  # will create logs/ folder
+		self.translation_manager.load_translations()
+		self.plugin_manager.touch_directory()  # will create config/ folder
 		self.plugin_manager.register_permanent_plugins()
 
 		# --- Done --- #
@@ -104,11 +118,9 @@ class MCDReforgedServer:
 		except:
 			pass
 
-	def on_first_start(self):
-		self.logger.info('Some of the user files are missing, check them before launch MCDR again')
-		default_config = self.config.get_default_yaml()
-		file_util.touch_directory(default_config['working_directory'])
-		self.plugin_manager.set_plugin_directories(default_config['plugin_directories'])  # to touch the directory
+	def on_file_missing(self):
+		self.logger.info('Looks like MCDR is not initialized at current directory {}'.format(os.getcwd()))
+		self.logger.info('Use "{} -m {} init" to initialize MCDR first'.format(sys.executable, core_constant.PACKAGE_NAME))
 
 	# --------------------------
 	#         Translate

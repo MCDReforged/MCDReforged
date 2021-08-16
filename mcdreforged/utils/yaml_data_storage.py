@@ -19,6 +19,9 @@ class YamlDataStorage:
 		self.__has_changes = False
 		self._data_operation_lock = RLock()
 
+	def file_presents(self) -> bool:
+		return os.path.isfile(self.__file_path)
+
 	def _load_data(self, allowed_missing_file) -> bool:
 		"""
 		:param bool allowed_missing_file: If set to True, missing data file will result in a FileNotFoundError(),
@@ -26,7 +29,7 @@ class YamlDataStorage:
 		:return: if there is any missing data entry
 		:raise: FileNotFoundError
 		"""
-		if os.path.isfile(self.__file_path):
+		if self.file_presents():
 			with open(self.__file_path, encoding='utf8') as file:
 				users_data = yaml.round_trip_load(file)
 		else:
