@@ -36,8 +36,8 @@ def entry_point():
 	subparsers = parser.add_subparsers(title='Command', help='Available commands', dest='subparser_name')
 
 	subparsers.add_parser('start', help='Start {}'.format(core_constant.NAME))
-	subparsers.add_parser('init', help='Prepare the working environment of {}'.format(core_constant.NAME))
-	subparsers.add_parser('gendefault', help='Generate default configure and permission files at current working directory')
+	subparsers.add_parser('init', help='Prepare the working environment of {}. Create commonly used folders and generate default configure and permission files'.format(core_constant.NAME))
+	subparsers.add_parser('gendefault', help='Generate default configure and permission files at current working directory. Existed files are overwritten')
 
 	parser_pack = subparsers.add_parser('pack', help='Pack plugin files into a {} plugin'.format(plugin_constant.PACKED_PLUGIN_FILE_SUFFIX))
 	parser_pack.add_argument('-i', '--input', help='The input directory which the plugin is in, default: current directory', default='.')
