@@ -6,6 +6,7 @@ from prompt_toolkit import PromptSession
 from prompt_toolkit.application import get_app
 from prompt_toolkit.completion import Completion, CompleteEvent, WordCompleter
 from prompt_toolkit.document import Document
+from prompt_toolkit.layout import Dimension
 from prompt_toolkit.layout.menus import MultiColumnCompletionMenuControl
 from prompt_toolkit.layout.processors import Processor, TransformationInput, Transformation
 from prompt_toolkit.output.vt100 import Vt100_Output
@@ -64,6 +65,32 @@ class ConsoleHandler(ThreadExecutor):
 			self.mcdr_server.logger.exception(self.mcdr_server.tr('console_handler.error'))
 
 
+class MCDRPromptSession(PromptSession):
+	def __init__(self, *args, **kwargs):
+		super().__init__(*args, **kwargs)
+		self.has_complete_this_line = False
+
+	def _get_default_buffer_control_height(self) -> Dimension:
+		dim = super()._get_default_buffer_control_height()
+		# When there's no complete this line, don't reverse space for the autocompletion menu
+		if not self.has_complete_this_line and self.default_buffer.complete_state is None:
+			dim = Dimension()
+		return dim
+
+	def get_complete_state_checker(self) -> Processor:
+		class CompleteStateChecker(Processor):
+			def apply_transformation(self, ti: TransformationInput) -> Transformation:
+				if len(ti.document.text) == 0:
+					session.has_complete_this_line = False
+				if buff.complete_state is not None:
+					session.has_complete_this_line = True
+				return Transformation(fragments=ti.fragments)
+
+		buff = self.default_buffer
+		session = self
+		return CompleteStateChecker()
+
+
 class ConsoleSuggestionCommandSource(CommandSource):
 	@property
 	def is_player(self) -> bool:
@@ -120,14 +147,14 @@ class PromptToolkitWrapper:
 		self.__logger = console_handler.mcdr_server.logger
 		self.pt_enabled = False
 		self.stdout_proxy = None  # type: Optional[StdoutProxy]
-		self.prompt_session = None  # type: Optional[PromptSession]
+		self.prompt_session = None  # type: Optional[MCDRPromptSession]
 		self.__real_stdout = None
 		self.__promoting = RLock()  # more for a status check
 
 	def start_kits(self):
 		try:
 			self.__tweak_kits()
-			self.prompt_session = PromptSession()
+			self.prompt_session = MCDRPromptSession()
 			self.stdout_proxy = StdoutProxy(raw=True)
 		except:
 			self.__logger.exception('Failed to enable advanced console, switch back to basic input')
@@ -177,8 +204,11 @@ class PromptToolkitWrapper:
 					completer=CommandCompleter(command_manager),
 					complete_while_typing=True,
 					complete_style=CompleteStyle.MULTI_COLUMN,
-					input_processors=[CommandArgumentSuggester(command_manager)],
-					reserve_space_for_menu=3
+					reserve_space_for_menu=3,
+					input_processors=[
+						CommandArgumentSuggester(command_manager),
+						self.prompt_session.get_complete_state_checker()
+					]
 				)
 		else:
 			return input()
