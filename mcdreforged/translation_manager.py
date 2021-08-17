@@ -56,8 +56,10 @@ class TranslationManager:
 		try:
 			translated_text = translation_util.translate_from_dict(self.translations.get(key, {}), language, fallback_language=fallback_language)
 		except KeyError:
-			translated_text = translation_util.translate_from_dict(plugin_translations.get(key, {}), language, fallback_language=fallback_language, default=None)
-
+			try:
+				translated_text = translation_util.translate_from_dict(plugin_translations.get(key, {}), language, fallback_language=fallback_language, default=None)
+			except KeyError:
+				translated_text = None
 		# Check if there's any rtext inside args
 		use_rtext = False
 		for arg in args:
@@ -67,13 +69,16 @@ class TranslationManager:
 		# Processing
 		if translated_text is not None:
 			translated_text = translated_text.strip('\n\r')
-			if use_rtext:
-				translated_text = RTextBase.format(translated_text, *args, **kwargs)
-			else:
-				translated_text = translated_text.format(*args, **kwargs)
+			try:
+				if use_rtext:
+					translated_text = RTextBase.format(translated_text, *args, **kwargs)
+				else:
+					translated_text = translated_text.format(*args, **kwargs)
+			except Exception as e:
+				raise ValueError('Failed to apply args {} and kwargs {} to translated_text {}: {}'.format(args, kwargs, translated_text, e))
 			return translated_text
 		else:
 			if not allow_failure:
-				raise KeyError('Translation key "{}" not found'.format(key))
+				raise KeyError('Translation key "{}" not found with language {}, fallback_language {}'.format(key, language, fallback_language))
 			self.logger.error('Error translate text "{}" to language {}'.format(key, language))
 			return key if not use_rtext else RTextBase.from_any(key)

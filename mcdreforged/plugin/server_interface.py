@@ -6,7 +6,7 @@ from typing import Callable, TYPE_CHECKING, Tuple, Any, Union, Optional, List, I
 
 from mcdreforged.command.builder.nodes.basic import Literal
 from mcdreforged.command.command_source import CommandSource, PluginCommandSource
-from mcdreforged.constants import plugin_constant
+from mcdreforged.constants import plugin_constant, core_constant
 from mcdreforged.info import Info
 from mcdreforged.mcdr_state import MCDReforgedFlag
 from mcdreforged.permission.permission_level import PermissionLevel
@@ -73,7 +73,7 @@ class ServerInterface:
 		"""
 		return cls.__global_instance
 
-	def tr(self, translation_key: str, *args, language: Optional[str] = None, fallback_language: str = 'en_us', **kwargs) -> MessageText:
+	def tr(self, translation_key: str, *args, language: Optional[str] = None, fallback_language: str = core_constant.DEFAULT_LANGUAGE, **kwargs) -> MessageText:
 		"""
 		Return a translated text corresponded to the translation key and format the text with given args and kwargs
 		If args or kwargs contains RText element, then the result will be a RText, otherwise the result will be a regular str

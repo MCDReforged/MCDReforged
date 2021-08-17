@@ -25,7 +25,7 @@ def translate_from_dict(translations: TranslationKeyDictRich, language: str, *, 
 	if result is None:
 		result = default
 	if result is _NONE:
-		raise KeyError('Unknown translations {}'.format(translations))
+		raise KeyError('Failed to translate from dict with translations {}, language {}, fallback_language {}'.format(translations, language, fallback_language))
 	return result
 
 
