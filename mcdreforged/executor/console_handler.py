@@ -149,6 +149,7 @@ class PromptToolkitWrapper:
 		self.stdout_proxy = None  # type: Optional[StdoutProxy]
 		self.prompt_session = None  # type: Optional[MCDRPromptSession]
 		self.__real_stdout = None
+		self.__real_stderr = None
 		self.__promoting = RLock()  # more for a status check
 
 	def start_kits(self):
@@ -160,7 +161,9 @@ class PromptToolkitWrapper:
 			self.__logger.exception('Failed to enable advanced console, switch back to basic input')
 		else:
 			self.__real_stdout = sys.stdout
+			self.__real_stderr = sys.stderr
 			sys.stdout = self.stdout_proxy
+			sys.stderr = self.stdout_proxy
 			SyncStdoutStreamHandler.update_stdout()
 			self.pt_enabled = True
 
@@ -183,6 +186,7 @@ class PromptToolkitWrapper:
 			self.__logger.info(self.__tr('console_handler.stopping_kits'))
 			self.stdout_proxy.close()
 			sys.stdout = self.__real_stdout
+			sys.stderr = self.__real_stderr
 			SyncStdoutStreamHandler.update_stdout()
 			pt_app = get_app()
 			if pt_app.is_running:
