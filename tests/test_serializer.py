@@ -4,7 +4,7 @@ from typing import List, Dict, Union, Optional
 from mcdreforged.api.utils import serialize, deserialize, Serializable
 
 
-class Point:
+class Point(Serializable):
 	x: float = 1.1
 	y: float = 1.2
 
@@ -18,7 +18,7 @@ class Point:
 		return isinstance(other, type(self)) and other.x == self.x and other.y == self.y
 
 
-class ConfigImpl:
+class ConfigImpl(Serializable):
 	a: int = 1
 	b: str = 'b'
 	c: Point = Point()
@@ -130,6 +130,18 @@ class MyTestCase(unittest.TestCase):
 		self.assertRaises(TypeError, Cls.deserialize, {'a': {}, 'b': 1.2})
 		self.assertRaises(TypeError, Cls.deserialize, {'a': None, 'b': 1.2})
 		self.assertRaises(TypeError, Cls.deserialize, {'a': 1, 'b': 'y'})
+
+	def test_6_construct(self):
+		class Points(Serializable):
+			main: Point = None
+			any: Optional[Serializable] = None
+			collection: List[Point] = []
+
+		p = Point(x=2, y=3)
+		self.assertEqual(Point.deserialize({'x': 2, 'y': 3}), p)
+		self.assertIs(Points(main=p).main, p)
+		self.assertIs(Points(any=p).any, p)
+		self.assertRaises(KeyError, Points, ping='pong')
 
 
 if __name__ == '__main__':

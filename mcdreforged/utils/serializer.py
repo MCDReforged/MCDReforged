@@ -80,8 +80,11 @@ def deserialize(data, cls: Type[T], *, error_at_missing=False, error_at_redundan
 
 class Serializable(ABC):
 	def __init__(self, **kwargs):
-		if len(kwargs) > 0:
-			self.update_from(kwargs)
+		annotations = getattr(type(self), '__annotations__', {})
+		for key in kwargs.keys():
+			if key not in annotations:
+				raise KeyError('Unknown key received in __init__: {}'.format(key))
+		vars(self).update(kwargs)
 
 	def serialize(self) -> dict:
 		return serialize(self)
