@@ -74,15 +74,15 @@ Context stores the information of current command parsing. It's a class inherite
 
 Parsed values are stored inside context using the dict method, which means you can use ``context['arg_name']`` to access them
 
-Argument Nodes
+Command Nodes
 --------------
 
-A list of MCDR built-in argument nodes and their usage
+A list of MCDR built-in command nodes and their usage
 
 AbstractNode
 ^^^^^^^^^^^^
 
-Argument Node is base node of all argument nodes. It's also a abstract class. It provides several methods for building up the command tree
+Abstract Node is base class of all command nodes. It's also a abstract class. It provides several methods for building up the command tree
 
 then
 ~~~~
@@ -305,6 +305,15 @@ Examples:
         Literal('bar').runs(lambda src: src.reply('Foo Bar'))
     )  # input "foo bar", get reply "Foo Bar"
 
+
+
+ArgumentNode
+^^^^^^^^^^^^
+
+Argument node is an abstract base class for all nodes which store parsed values
+
+It has a str field ``name`` which is used as the key used in storing parsed value in context
+
 NumberNode
 ^^^^^^^^^^
 
@@ -441,7 +450,7 @@ Here's a quick example of a custom Argument node, ``PointArgument``. It accepts 
             super().__init__('Incomplete Point', char_read)
 
 
-    class PointArgument(AbstractNode):
+    class PointArgument(ArgumentNode):
         def parse(self, text: str) -> ParseResult:
             total_read = 0
             coords = []

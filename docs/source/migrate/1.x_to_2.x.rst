@@ -75,3 +75,12 @@ But these APIs are not affected
 When invoking the event listener callback of you plugin, MCDR will send a ``PluginServerInterface`` as the first parameter, so the usability of the server interface API is not affected
 
 These changes should not affect your plugin's runnability, but it will probably mess up the type checking code inspect in your IDE to make the IDE displays a warning
+
+Command
+^^^^^^^
+
+The original ``ArgumentNode`` class is now split into ``AbstractNode`` and ``ArgumentNode``. Most of the functionalities are inside ``AbstractNode`` but the name field is moved to ``ArgumentNode``
+
+For your custom command node classes, you might only need to change some related type hints
+
+Documents: `AbstractNode <../plugin_dev/command.html#abstractnode>`__, `ArgumentNode <../plugin_dev/command.html#argumentnode>`__
