@@ -79,7 +79,7 @@ Argument Nodes
 
 A list of MCDR built-in argument nodes and their usage
 
-ArgumentNode
+AbstractNode
 ^^^^^^^^^^^^
 
 Argument Node is base node of all argument nodes. It's also a abstract class. It provides several methods for building up the command tree
@@ -89,7 +89,7 @@ then
 
 .. code-block:: python
 
-    def then(self, node: ArgumentNode) -> ArgumentNode
+    def then(self, node: AbstractNode) -> AbstractNode
 
 Attach a child node to its children list, and then return itself
 
@@ -126,7 +126,7 @@ runs
 
 .. code-block:: python
 
-    def runs(self, func: Union[Callable[[], Any], Callable[[CommandSource], Any], Callable[[CommandSource, dict], Any]]) -> ArgumentNode
+    def runs(self, func: Union[Callable[[], Any], Callable[[CommandSource], Any], Callable[[CommandSource, dict], Any]]) -> AbstractNode
 
 Set the callback function of this node. When the command parsing finished at this node, the callback function will be executed
 
@@ -160,7 +160,7 @@ requires
 
 .. code-block:: python
 
-    def requires(self, requirement: Union[Callable[[], bool], Callable[[CommandSource], bool], Callable[[CommandSource, dict], bool]], failure_message_getter: Optional[Union[Callable[[], str], Callable[[CommandSource], str], Callable[[CommandSource, dict], str]]] = None) -> ArgumentNode
+    def requires(self, requirement: Union[Callable[[], bool], Callable[[CommandSource], bool], Callable[[CommandSource, dict], bool]], failure_message_getter: Optional[Union[Callable[[], str], Callable[[CommandSource], str], Callable[[CommandSource, dict], str]]] = None) -> AbstractNode
 
 Set the requirement tester callback of the node. When entering this node, MCDR will invoke the requirement tester to see if the current command source and context match your specific condition.
 
@@ -185,7 +185,7 @@ redirects
 
 .. code-block:: python
 
-    def redirects(self, redirect_node: ArgumentNode) -> ArgumentNode
+    def redirects(self, redirect_node: AbstractNode) -> AbstractNode
 
 Redirect all further child nodes command parsing to another given node. When you want a short command and and full-path command that will all execute the same commands, ``redirects`` will make it simpler
 
@@ -240,7 +240,7 @@ suggests
 
 .. code-block:: python
 
-    def suggests(self, suggestion: Union[Callable[[], Collection[str]], Callable[[CommandSource], Collection[str]], Callable[[CommandSource, dict], Collection[str]]]) -> ArgumentNode
+    def suggests(self, suggestion: Union[Callable[[], Collection[str]], Callable[[CommandSource], Collection[str]], Callable[[CommandSource, dict], Collection[str]]]) -> AbstractNode
 
 Set the provider for command suggestions of this node
 
@@ -266,7 +266,7 @@ on_error
 
 .. code-block:: python
 
-    def on_error(self, error_type: Type[CommandError], handler: Union[Callable[[], Any], Callable[[CommandSource], Any], Callable[[CommandSource, CommandError], Any], Callable[[CommandSource, CommandError, dict], Any]], *, handled: bool = False) -> ArgumentNode
+    def on_error(self, error_type: Type[CommandError], handler: Union[Callable[[], Any], Callable[[CommandSource], Any], Callable[[CommandSource, CommandError], Any], Callable[[CommandSource, CommandError, dict], Any]], *, handled: bool = False) -> AbstractNode
 
 When a command error occurs, the given will invoke the given handler to handle with the error
 
@@ -283,7 +283,7 @@ on_child_error
 
 .. code-block:: python
 
-    def on_child_error(self, error_type: Type[CommandError], handler: Union[Callable[[], Any], Callable[[CommandSource], Any], Callable[[CommandSource, CommandError], Any], Callable[[CommandSource, CommandError, dict], Any]], *, handled: bool = False) -> ArgumentNode
+    def on_child_error(self, error_type: Type[CommandError], handler: Union[Callable[[], Any], Callable[[CommandSource], Any], Callable[[CommandSource, CommandError], Any], Callable[[CommandSource, CommandError, dict], Any]], *, handled: bool = False) -> AbstractNode
 
 Similar to `on_error <#on_error>`__, but it gets triggered only when the node receives a command error from one of the node's direct or indirect child
 
@@ -423,7 +423,7 @@ Customize
 
 MCDR also supports customize an argument node. It might save you same repeated work on building your command
 
-To create a custom a argument node, you need to declare a class inherited from ``ArgumentNode``, and then implement the ``parse`` method logic. That's it, the custom node class is ready to be used
+To create a custom a argument node, you need to declare a class inherited from ``AbstractNode``, and then implement the ``parse`` method logic. That's it, the custom node class is ready to be used
 
 Custom exception provides a precise way to handle your exception with ``on_error`` method. If you want to raise a custom exception when your argument node fails to parsing the text, you need to have the custom exception inherited from ``CommandSyntaxError``
 
@@ -441,7 +441,7 @@ Here's a quick example of a custom Argument node, ``PointArgument``. It accepts 
             super().__init__('Incomplete Point', char_read)
 
 
-    class PointArgument(ArgumentNode):
+    class PointArgument(AbstractNode):
         def parse(self, text: str) -> ParseResult:
             total_read = 0
             coords = []

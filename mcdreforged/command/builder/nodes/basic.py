@@ -73,7 +73,7 @@ class CommandContext(dict):
 		self.__source = source
 		self.__command = command
 		self.__cursor = 0
-		self.__node_path = []  # type: List[ArgumentNode]
+		self.__node_path = []  # type: List[AbstractNode]
 
 	@property
 	def source(self) -> CommandSource:
@@ -96,37 +96,40 @@ class CommandContext(dict):
 		return self.__cursor
 
 	@property
-	def node_path(self) -> List['ArgumentNode']:
+	def node_path(self) -> List['AbstractNode']:
 		return self.__node_path
 
 	@contextmanager
-	def change_cursor(self, new_cursor: int):
+	def read_command(self, current_node: 'AbstractNode', result: ParseResult, new_cursor: int):
 		"""
 		**Only used in command parsing**
-		Enter change current cursor position. It affects the current status of command parsing
+		Change the current cursor position, and store the parsing value
 		"""
 		prev_cursor = self.__cursor
 		self.__cursor = new_cursor
+		if isinstance(current_node, ArgumentNode):
+			self[current_node.get_name()] = result.value
 		try:
 			yield
 		finally:
 			self.__cursor = prev_cursor
+			if isinstance(current_node, ArgumentNode):
+				self.pop(current_node.get_name(), None)
 
 	@contextmanager
-	def enter_child(self, node: 'ArgumentNode'):
+	def enter_child(self, node: 'AbstractNode'):
 		"""
 		**Only used in command parsing**
-		Enter a command node
+		Enter a command node, maintain the node_path
 		"""
 		self.__node_path.append(node)
 		try:
 			yield
 		finally:
 			self.__node_path.pop(len(self.__node_path) - 1)
-			self.pop(node.get_name(), None)
 
 
-class ArgumentNode:
+class AbstractNode:
 	class ErrorHandler:
 		def __init__(self, callback: SOURCE_ERROR_CONTEXT_CALLBACK, handled: bool):
 			self.callback = callback
@@ -134,26 +137,22 @@ class ArgumentNode:
 
 	_ERROR_HANDLER_TYPE = Dict[Type[CommandError], ErrorHandler]
 
-	def __init__(self, name: Optional[str]):
-		self._name = name
+	def __init__(self):
 		self._children_literal = collections.defaultdict(list)  # type: Dict[str, List[Literal]]
-		self._children = []  # type: List[ArgumentNode]
+		self._children = []  # type: List[AbstractNode]
 		self._callback = None  # type: Optional[SOURCE_CONTEXT_CALLBACK]
-		self._error_handlers = {}  # type: ArgumentNode._ERROR_HANDLER_TYPE
-		self._child_error_handlers = {}  # type: ArgumentNode._ERROR_HANDLER_TYPE
+		self._error_handlers = {}  # type: AbstractNode._ERROR_HANDLER_TYPE
+		self._child_error_handlers = {}  # type: AbstractNode._ERROR_HANDLER_TYPE
 		self._requirement = lambda source: True  # type: SOURCE_CONTEXT_CALLBACK_BOOL
 		self._requirement_failure_message_getter = None  # type: Optional[SOURCE_CONTEXT_CALLBACK_STR]
-		self._redirect_node = None  # type: Optional[ArgumentNode]
+		self._redirect_node = None  # type: Optional[AbstractNode]
 		self._suggestion_getter = lambda: []  # type: SOURCE_CONTEXT_CALLBACK_STR_COLLECTION
-
-	def get_name(self) -> Optional[str]:
-		return self._name
 
 	# --------------
 	#   Interfaces
 	# --------------
 
-	def then(self, node: 'ArgumentNode') -> 'ArgumentNode':
+	def then(self, node: 'AbstractNode') -> 'AbstractNode':
 		"""
 		Add a child node to this node
 		:param node: a child node for new level command
@@ -167,16 +166,16 @@ class ArgumentNode:
 			self._children.append(node)
 		return self
 
-	def runs(self, func: SOURCE_CONTEXT_CALLBACK) -> 'ArgumentNode':
+	def runs(self, func: SOURCE_CONTEXT_CALLBACK) -> 'AbstractNode':
 		"""
 		Executes the given function if the command string ends here
 		:param func: A function to execute at this node which accepts maximum 2 parameters (command source and context)
-		:rtype: ArgumentNode
+		:rtype: AbstractNode
 		"""
 		self._callback = func
 		return self
 
-	def requires(self, requirement: SOURCE_CONTEXT_CALLBACK_BOOL, failure_message_getter: Optional[SOURCE_CONTEXT_CALLBACK_STR] = None) -> 'ArgumentNode':
+	def requires(self, requirement: SOURCE_CONTEXT_CALLBACK_BOOL, failure_message_getter: Optional[SOURCE_CONTEXT_CALLBACK_STR] = None) -> 'AbstractNode':
 		"""
 		Set the requirement for the command source to enter this node
 		:param requirement: A callable function which accepts maximum 2 parameters (command source and context)
@@ -184,34 +183,34 @@ class ArgumentNode:
 		:param failure_message_getter: The reason to show in the exception when the requirement is not met.
 		It's a callable function which accepts maximum 2 parameters (command source and context). If it's not specified,
 		a default message will be used
-		:rtype: ArgumentNode
+		:rtype: AbstractNode
 		"""
 		self._requirement = requirement
 		self._requirement_failure_message_getter = failure_message_getter
 		return self
 
-	def redirects(self, redirect_node: 'ArgumentNode') -> 'ArgumentNode':
+	def redirects(self, redirect_node: 'AbstractNode') -> 'AbstractNode':
 		"""
 		Redirect the child branches of this node to the child branches of the given node
-		:type redirect_node: ArgumentNode
-		:rtype: ArgumentNode
+		:type redirect_node: AbstractNode
+		:rtype: AbstractNode
 		"""
 		if self.has_children():
 			raise IllegalNodeOperation('Node with children nodes is not allowed to be redirected')
 		self._redirect_node = redirect_node
 		return self
 
-	def suggests(self, suggestion: SOURCE_CONTEXT_CALLBACK_STR_COLLECTION) -> 'ArgumentNode':
+	def suggests(self, suggestion: SOURCE_CONTEXT_CALLBACK_STR_COLLECTION) -> 'AbstractNode':
 		"""
 		Set the provider for command suggestions of this node
 		:param suggestion: A callable function which accepts maximum 2 parameters (command source and context)
 		and return a collection of str indicating the current command suggestions
-		:rtype: ArgumentNode
+		:rtype: AbstractNode
 		"""
 		self._suggestion_getter = suggestion
 		return self
 
-	def on_error(self, error_type: Type[CommandError], handler: SOURCE_ERROR_CONTEXT_CALLBACK, *, handled: bool = False) -> 'ArgumentNode':
+	def on_error(self, error_type: Type[CommandError], handler: SOURCE_ERROR_CONTEXT_CALLBACK, *, handled: bool = False) -> 'AbstractNode':
 		"""
 		When a command error occurs, invoke the handler
 		:param error_type: A class that is subclass of CommandError
@@ -223,7 +222,7 @@ class ArgumentNode:
 		self._error_handlers[error_type] = self.ErrorHandler(handler, handled)
 		return self
 
-	def on_child_error(self, error_type: Type[CommandError], handler: SOURCE_ERROR_CONTEXT_CALLBACK, *, handled: bool = False) -> 'ArgumentNode':
+	def on_child_error(self, error_type: Type[CommandError], handler: SOURCE_ERROR_CONTEXT_CALLBACK, *, handled: bool = False) -> 'AbstractNode':
 		"""
 		When receives a command error from one of the node's child, invoke the handler
 		:param error_type: A class that is subclass of CommandError
@@ -239,6 +238,9 @@ class ArgumentNode:
 	#   Interfaces ends
 	# -------------------
 
+	def _get_usage(self) -> str:
+		raise NotImplementedError()
+
 	def has_children(self):
 		return len(self._children) + len(self._children_literal) > 0
 
@@ -250,15 +252,6 @@ class ArgumentNode:
 		:param str text: the remaining text to be parsed. It's supposed to not be started with DIVIDER character
 		"""
 		raise NotImplementedError()
-
-	def __does_store_thing(self):
-		"""
-		If this argument stores something into the context after parsing the given command string
-		For example it might need to store an int after parsing an integer
-		In general situation, only Literal Argument doesn't store anything
-		:return: bool
-		"""
-		return self._name is not None
 
 	@staticmethod
 	def __smart_callback(callback: Callable, *args):
@@ -299,10 +292,7 @@ class ArgumentNode:
 			next_remaining = utils.remove_divider_prefix(context.command_remaining[result.char_read:])  # type: str
 			total_read = len(command) - len(next_remaining)  # type: int
 
-			with context.change_cursor(total_read):
-				if self.__does_store_thing():
-					context[self._name] = result.value
-
+			with context.read_command(self, result, total_read):
 				if self._requirement is not None:
 					if not self.__smart_callback(self._requirement, context.source, context):
 						getter = self._requirement_failure_message_getter or (lambda: None)
@@ -376,10 +366,7 @@ class ArgumentNode:
 			next_remaining = utils.remove_divider_prefix(context.command_remaining[result.char_read:])  # type: str
 			total_read = len(context.command) - len(next_remaining)  # type: int
 
-			with context.change_cursor(total_read):
-				if self.__does_store_thing():
-					context[self._name] = result.value
-
+			with context.read_command(self, result, total_read):
 				if self._requirement is not None and not self.__smart_callback(self._requirement, context.source, context):
 					return CommandSuggestions()
 
@@ -401,18 +388,18 @@ class ArgumentNode:
 						for child_literal in literal_list:
 							with context.enter_child(child_literal):
 								suggestions.extend(child_literal._generate_suggestions(context))
+					usages = []
 					for child in node._children:
 						with context.enter_child(child):
 							suggestions.extend(child._generate_suggestions(context))
 							if len(next_remaining) == 0:
-								suggestions.complete_hint = '<{}>'.format(child._name)
-						break
-
+								usages.append(child._get_usage())
+					if len(next_remaining) == 0:
+						suggestions.complete_hint = '|'.join(usages)
 		return suggestions
 
 
-class EntryNode(ArgumentNode, ABC):
-
+class EntryNode(AbstractNode, ABC):
 	def execute(self, source, command):
 		"""
 		Parse and execute this command
@@ -442,7 +429,7 @@ class Literal(EntryNode):
 	The only argument type that is allowed to use the execute method
 	"""
 	def __init__(self, literal: str or Iterable[str]):
-		super().__init__(None)
+		super().__init__()
 		if isinstance(literal, str):
 			literals = {literal}
 		elif isinstance(literal, Iterable):
@@ -457,7 +444,10 @@ class Literal(EntryNode):
 		self.literals = literals  # type: Set[str]
 		self._suggestion_getter = lambda: self.literals
 
-	def suggests(self, suggestion: SOURCE_CONTEXT_CALLBACK_STR_COLLECTION) -> 'ArgumentNode':
+	def _get_usage(self) -> str:
+		return '|'.join(sorted(self.literals))
+
+	def suggests(self, suggestion: SOURCE_CONTEXT_CALLBACK_STR_COLLECTION) -> 'AbstractNode':
 		raise IllegalNodeOperation('Literal node doe not support suggests')
 
 	def parse(self, text):
@@ -469,3 +459,15 @@ class Literal(EntryNode):
 
 	def __repr__(self):
 		return 'Literal[literals={}]'.format(self.literals)
+
+
+class ArgumentNode(AbstractNode, ABC):
+	def __init__(self, name: str):
+		super().__init__()
+		self.__name = name
+
+	def get_name(self) -> str:
+		return self.__name
+
+	def _get_usage(self) -> str:
+		return '<{}>'.format(self.__name)

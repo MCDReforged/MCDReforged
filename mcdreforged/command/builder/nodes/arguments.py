@@ -6,7 +6,8 @@ from mcdreforged.command.builder.command_builder_util import DIVIDER
 from mcdreforged.command.builder.exception import NumberOutOfRange, EmptyText, \
 	InvalidNumber, InvalidInteger, InvalidFloat, UnclosedQuotedString, IllegalEscapesUsage, \
 	TextLengthOutOfRange
-from mcdreforged.command.builder.nodes.basic import ArgumentNode, ParseResult, SOURCE_CONTEXT_CALLBACK_STR_COLLECTION
+from mcdreforged.command.builder.nodes.basic import AbstractNode, ParseResult, SOURCE_CONTEXT_CALLBACK_STR_COLLECTION, \
+	ArgumentNode
 # --------------------
 #   Number Arguments
 # --------------------
@@ -152,7 +153,7 @@ class QuotableText(Text):
 		raise UnclosedQuotedString(len(text))
 
 	# use quote characters to quote suggestions with DIVIDER
-	def suggests(self, suggestion: SOURCE_CONTEXT_CALLBACK_STR_COLLECTION) -> 'ArgumentNode':
+	def suggests(self, suggestion: SOURCE_CONTEXT_CALLBACK_STR_COLLECTION) -> 'AbstractNode':
 		def quote_wrapper(*args, **kwargs):
 			suggestions = []
 			for s in suggestion(*args, **kwargs):

@@ -4,14 +4,14 @@ from mcdreforged.command.builder.exception import LiteralNotMatch, NumberOutOfRa
 	CommandError, InvalidNumber, InvalidInteger, InvalidFloat, UnclosedQuotedString, IllegalEscapesUsage
 from mcdreforged.command.builder.nodes.arguments import Number, Integer, Float, Text, QuotableText, \
 	GreedyText
-from mcdreforged.command.builder.nodes.basic import ArgumentNode, Literal, ParseResult, CommandContext
+from mcdreforged.command.builder.nodes.basic import AbstractNode, Literal, ParseResult, CommandContext
 
 __all__ = [
 	# ------------------
 	#   Argument Nodes
 	# ------------------
 
-	'ArgumentNode',
+	'AbstractNode',
 	'Literal',
 	'Number', 'Integer', 'Float',
 	'Text', 'QuotableText', 'GreedyText',

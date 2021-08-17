@@ -233,14 +233,14 @@ msgid "A list of MCDR built-in argument nodes and their usage"
 msgstr "MCDR 内置参数节点列表及其用法。"
 
 #: ../plugin_dev/command.rst:83
-msgid "ArgumentNode"
-msgstr "ArgumentNode"
+msgid "AbstractNode"
+msgstr "AbstractNode"
 
 #: ../plugin_dev/command.rst:85
 msgid ""
 "Argument Node is base node of all argument nodes. It's also a abstract "
 "class. It provides several methods for building up the command tree"
-msgstr "ArgumentNode 是所有参数节点的基础节点，也是一个类。它提供了几种构建指令树的方法。"
+msgstr "AbstractNode 是所有参数节点的基础节点，也是一个类。它提供了几种构建指令树的方法。"
 
 #: ../plugin_dev/command.rst:88
 msgid "then"
@@ -736,9 +736,9 @@ msgstr "MCDR 支持自定义参数节点。它也许能节省一些你为构建�
 #: ../plugin_dev/command.rst:426
 msgid ""
 "To create a custom a argument node, you need to declare a class inherited"
-" from ``ArgumentNode``, and then implement the ``parse`` method logic. "
+" from ``AbstractNode``, and then implement the ``parse`` method logic. "
 "That's it, the custom node class is ready to be used"
-msgstr "要创建自定义参数节点，你需要声明一个继承自 ``ArgumentNode`` 的类，然后实现 ``parse`` 的方法逻辑。"
+msgstr "要创建自定义参数节点，你需要声明一个继承自 ``AbstractNode`` 的类，然后实现 ``parse`` 的方法逻辑。"
 
 #: ../plugin_dev/command.rst:428
 msgid ""
