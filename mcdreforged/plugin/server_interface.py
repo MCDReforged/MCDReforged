@@ -513,6 +513,12 @@ class ServerInterface:
 		"""
 		return self._mcdr_server.translation_manager.language
 
+	def get_mcdr_config(self) -> dict:
+		"""
+		Return the current config of MCDR as a dict
+		"""
+		return self._mcdr_server.config.to_dict()
+
 	def schedule_task(self, callable_: Callable[[], Any]) -> None:
 		"""
 		Schedule a callback task to be run in task executor thread

@@ -19,6 +19,16 @@ class YamlDataStorage:
 		self.__has_changes = False
 		self._data_operation_lock = RLock()
 
+	def to_dict(self) -> dict:
+		def process(data: dict) -> dict:
+			ret = {}
+			for key, value in data.items():
+				if isinstance(value, dict):
+					value = process(value)
+				ret[key] = value
+			return ret
+		return process(self._data)
+
 	def file_presents(self) -> bool:
 		return os.path.isfile(self.__file_path)
 
