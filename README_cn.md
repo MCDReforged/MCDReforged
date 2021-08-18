@@ -1,4 +1,5 @@
-# MCDReforged
+MCDReforged
+===========
 
 [![Python Versions](https://img.shields.io/pypi/pyversions/mcdreforged.svg)](https://pypi.org/project/mcdreforged)
 [![PyPI Version](https://img.shields.io/pypi/v/mcdreforged.svg)](https://pypi.org/project/mcdreforged)
@@ -19,13 +20,15 @@ MCDReforged（以下简称 MCDR）是一个可以在完全不对 Minecraft 服�
 
 QQ 群: [1101314858](https://jq.qq.com/?k=5gUuw9A)
 
-## 优势
+优势
+----
 
 - 运行于服务端之上，完全不需要修改服务端，保留原汁原味的原版特性
 - 可热重载的插件系统，无需重启服务端即可更新插件
 - 多平台/服务端的兼容性，支持在 Linux / Windows 下运行 vanilla、paper 以及 bungeecord 等服务端
 
-## 它是如何工作的？
+它是如何工作的？
+-------------
 
 MCDR 使用了 [Popen](https://docs.python.org/zh-cn/3/library/subprocess.html#subprocess.Popen) 来将服务端作为一个子进程启动，因此它便拥有了控制服务端标准输入/输出流的能力
 
@@ -35,11 +38,13 @@ Minecraft 服务器的控制台输出拥有着稳定的输出格式，并包含�
 
 就这样！如果你愿意的话，你可以将 MCDR 视为一个盯着服务端控制台看的，可以根据服务端的输出快速地做出响应并向服务端输入相关指令的，一个机器人
 
-## 插件
+插件
+----
 
 [这里](https://github.com/MCDReforged/PluginCatalogue) 是一个 MCDR 的插件收集仓库
 
-## 文档
+文档
+----
 
 想要了解更多关于 MCDR 的详情？去看文档吧
 <https://mcdreforged.readthedocs.io/zh_CN/latest/>

@@ -1,4 +1,5 @@
-# MCDReforged
+MCDReforged
+===========
 
 [![Python Versions](https://img.shields.io/pypi/pyversions/mcdreforged.svg)](https://pypi.org/project/mcdreforged)
 [![PyPI Version](https://img.shields.io/pypi/v/mcdreforged.svg)](https://pypi.org/project/mcdreforged)
@@ -19,13 +20,15 @@ Great thanks to chino_desu and his [MCDaemon 1.0](https://github.com/kafuuchino-
 
 Contact me on discord: `Fallen_Breath#1215`
 
-## Advantage
+Advantage
+---------
 
 - It's running above the server. It doesn't need to modify the server at all which keep everything vanilla
 - Hot-reloadable plugin system. You don't need to shut down the server to update the plugins
 - Multi platform / server compatibility. Supports vanilla, paper, bungeecord etc. on Linux / Windows
 
-## How it works?
+How it works?
+-------------
 
 MCDR uses [Popen](https://docs.python.org/3/library/subprocess.html#subprocess.Popen) to start the server as a sub-process, then it has the ability to control the standard input / out stream of the server
 
@@ -35,10 +38,12 @@ With the help of Minecraft command system, MCDR can send Minecraft commands via 
 
 That's it, you can even think of MCDR as a robot that stares at the server console and can quickly respond to server output and input related commands if you like
 
-## Plugin
+Plugin
+------
 
 [Here](https://github.com/MCDReforged/PluginCatalogue) is a MCDR plugin collection repository
 
-## Document
+Document
+--------
 
 Check <https://mcdreforged.readthedocs.io/> for more details of MCDR
