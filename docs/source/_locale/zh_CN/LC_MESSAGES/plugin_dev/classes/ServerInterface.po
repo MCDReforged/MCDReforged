@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-15 21:17+0800\n"
+"POT-Creation-Date: 2021-08-18 12:01+0800\n"
 "PO-Revision-Date: 2021-01-24 09:17+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -754,4 +754,18 @@ msgstr "get_mcdr_language"
 #: ../plugin_dev/classes/ServerInterface.rst:546
 msgid "Return the current language MCDR is using"
 msgstr "返回 MCDR 当前使用的语言。"
+
+#: ../plugin_dev/classes/ServerInterface.rst:549
+msgid "schedule_task"
+msgstr "schedule_task"
+
+#: ../plugin_dev/classes/ServerInterface.rst:555
+msgid "Schedule a task to be run in task executor thread"
+msgstr "在任务执行者 (task executor) 线程中添加一个任务"
+
+#: ../plugin_dev/classes/ServerInterface.rst:557
+msgid ""
+"Parameter *callable_*: The callable object to be run. It should accept 0 "
+"parameter"
+msgstr "参数 *callable_* : 将要被执行的可调用对象。它应当接受 0 个参数"
 

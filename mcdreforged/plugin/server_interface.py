@@ -513,6 +513,13 @@ class ServerInterface:
 		"""
 		return self._mcdr_server.translation_manager.language
 
+	def schedule_task(self, callable_: Callable[[], Any]) -> None:
+		"""
+		Schedule a callback task to be run in task executor thread
+		:param callable_: The callable object to be run. It should accept 0 parameter
+		"""
+		self._mcdr_server.task_executor.add_regular_task(callable_)
+
 
 class PluginServerInterface(ServerInterface):
 	"""

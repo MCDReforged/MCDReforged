@@ -544,3 +544,14 @@ get_mcdr_language
     def get_mcdr_language(self) -> str
 
 Return the current language MCDR is using
+
+schedule_task
+~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+    def schedule_task(self, callable_: Callable[[], Any]) -> None
+
+Schedule a task to be run in task executor thread
+
+Parameter *callable_*: The callable object to be run. It should accept 0 parameter
