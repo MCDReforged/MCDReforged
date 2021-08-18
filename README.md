@@ -1,5 +1,4 @@
-MCDReforged
---------
+# MCDReforged
 
 [![Python Versions](https://img.shields.io/pypi/pyversions/mcdreforged.svg)](https://pypi.org/project/mcdreforged)
 [![PyPI Version](https://img.shields.io/pypi/v/mcdreforged.svg)](https://pypi.org/project/mcdreforged)
@@ -34,7 +33,7 @@ Since the console output of a Minecraft server has a stable format and contains 
 
 With the help of Minecraft command system, MCDR can send Minecraft commands via the standard input stream to affect the actual Minecraft server
 
-That's it, you can even think of MCDR as a robot that stares at the server console and can quickly respond to server output and input related commands if you like 
+That's it, you can even think of MCDR as a robot that stares at the server console and can quickly respond to server output and input related commands if you like
 
 ## Plugin
 
@@ -42,4 +41,4 @@ That's it, you can even think of MCDR as a robot that stares at the server conso
 
 ## Document
 
-Check https://mcdreforged.readthedocs.io/ for more details of MCDR
+Check <https://mcdreforged.readthedocs.io/> for more details of MCDR

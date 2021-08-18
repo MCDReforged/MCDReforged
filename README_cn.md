@@ -1,5 +1,4 @@
-MCDReforged
---------
+# MCDReforged
 
 [![Python Versions](https://img.shields.io/pypi/pyversions/mcdreforged.svg)](https://pypi.org/project/mcdreforged)
 [![PyPI Version](https://img.shields.io/pypi/v/mcdreforged.svg)](https://pypi.org/project/mcdreforged)
@@ -42,4 +41,5 @@ Minecraft 服务器的控制台输出拥有着稳定的输出格式，并包含�
 
 ## 文档
 
-想要了解更多关于 MCDR 的详情？去看文档吧 https://mcdreforged.readthedocs.io/zh_CN/latest/
+想要了解更多关于 MCDR 的详情？去看文档吧
+<https://mcdreforged.readthedocs.io/zh_CN/latest/>
