@@ -677,7 +677,7 @@ msgstr ""
 
 #: ../plugin_dev/classes/ServerInterface.rst:488
 msgid "Command"
-msgstr "Command"
+msgstr "指令"
 
 #: ../plugin_dev/classes/ServerInterface.rst:491
 msgid "get_plugin_command_source"
