@@ -2,10 +2,8 @@ import os
 import sys
 import time
 from abc import ABC
-from threading import RLock
 from typing import TYPE_CHECKING, Optional, List, Tuple, Any
 
-from mcdreforged.constants import core_constant
 from mcdreforged.plugin.meta.metadata import Metadata
 from mcdreforged.plugin.plugin_event import MCDRPluginEvents, EventListener, PluginEvent
 from mcdreforged.plugin.plugin_registry import DEFAULT_LISTENER_PRIORITY
@@ -15,8 +13,6 @@ from mcdreforged.utils.logger import DebugOption
 
 if TYPE_CHECKING:
 	from mcdreforged.plugin.plugin_manager import PluginManager
-
-GLOBAL_LOAD_LOCK = RLock()
 
 MODULE_TYPE = Any
 
@@ -29,7 +25,6 @@ class RegularPlugin(AbstractPlugin, ABC):
 		self.__metadata = None  # type: Optional[Metadata]
 		self.entry_module_instance = None  # type: MODULE_TYPE
 		self.old_entry_module_instance = None  # type: MODULE_TYPE
-		self.newly_loaded_module = []  # type: List[MODULE_TYPE]
 		self.decorated_event_listeners = []  # type: List[Tuple[PluginEvent, EventListener]]
 
 	def _reset(self):
@@ -61,16 +56,12 @@ class RegularPlugin(AbstractPlugin, ABC):
 	#   Instance Operation
 	# ----------------------
 
+	def is_own_module(self, module_name: str) -> bool:
+		raise NotImplementedError()
+
 	def _load_entry_instance(self):
-		with GLOBAL_LOAD_LOCK:
-			previous_modules = sys.modules.copy()
-			self.old_entry_module_instance = self.entry_module_instance
-			try:
-				with self.plugin_manager.with_plugin_context(self):
-					self.entry_module_instance = self._get_module_instance()
-			finally:
-				self.newly_loaded_module = [module for module in sys.modules if module not in previous_modules and not module.startswith(core_constant.PACKAGE_NAME)]
-				self.mcdr_server.logger.debug('Newly loaded modules of {}: {}'.format(self, self.newly_loaded_module), option=DebugOption.PLUGIN)
+		with self.plugin_manager.with_plugin_context(self):
+			self.entry_module_instance = self._get_module_instance()
 
 	# ---------------------
 	#   To be Implemented
@@ -86,15 +77,10 @@ class RegularPlugin(AbstractPlugin, ABC):
 		self._reset()
 
 	def _on_unload(self):
-		with GLOBAL_LOAD_LOCK:
-			for module in self.newly_loaded_module:
-				try:
-					sys.modules.pop(module)
-				except KeyError:
-					self.mcdr_server.logger.critical('Module {} not found when unloading plugin {}'.format(module, repr(self)))
-				else:
-					self.mcdr_server.logger.debug('Removed module {} when unloading plugin {}'.format(module, repr(self)), option=DebugOption.PLUGIN)
-			self.newly_loaded_module.clear()
+		for module_name in sys.modules.copy().keys():
+			if self.is_own_module(module_name):
+				rv = sys.modules.pop(module_name, None)
+				self.mcdr_server.logger.debug('Removed module {} when unloading plugin {}, success = {}'.format(module_name, repr(self), rv is not None), option=DebugOption.PLUGIN)
 
 	# --------------
 	#   Life Cycle

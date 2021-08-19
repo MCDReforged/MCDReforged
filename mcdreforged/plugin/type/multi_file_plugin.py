@@ -24,6 +24,10 @@ class MultiFilePlugin(RegularPlugin, ABC):
 	def list_directory(self, directory_name: str) -> Collection[str]:
 		return os.listdir(os.path.join(self.plugin_path, directory_name))
 
+	def is_own_module(self, module_name: str) -> bool:
+		plugin_id = self.get_id()
+		return module_name == plugin_id or module_name.startswith('{}.'.format(plugin_id))
+
 	def _get_module_instance(self):
 		return importlib.import_module(self.get_metadata().entrypoint)
 

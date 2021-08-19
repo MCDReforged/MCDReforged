@@ -11,6 +11,12 @@ class SoloPlugin(RegularPlugin):
 		file_name = string_util.remove_suffix(self.file_name, plugin_constant.SOLO_PLUGIN_FILE_SUFFIX)
 		return re.sub(r'[^a-z0-9]', '_', file_name.lower())
 
+	def is_own_module(self, module_name: str) -> bool:
+		# misc_util.load_source_from_file_path() won't store the module instance into sys.path
+		# and for solo plugin, that module instance is the only module instance it has
+		# so the return value is always False
+		return False
+
 	def _get_module_instance(self):
 		return misc_util.load_source_from_file_path(self.plugin_path)
 
