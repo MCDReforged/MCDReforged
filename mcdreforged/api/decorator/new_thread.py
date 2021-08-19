@@ -18,9 +18,13 @@ class FunctionThread(threading.Thread):
 	def __init__(self, target, name, args, kwargs):
 		super().__init__(target=target, args=args, kwargs=kwargs, name=name, daemon=True)
 		self.__return_value = self.__NONE
+		self.__error = None
 
 		def wrapped_target(*args_, **kwargs_):
-			self.__return_value = target(*args_, **kwargs_)
+			try:
+				self.__return_value = target(*args_, **kwargs_)
+			except Exception as e:
+				self.__error = e
 
 		self._target = wrapped_target
 
@@ -30,7 +34,7 @@ class FunctionThread(threading.Thread):
 		if self.__return_value is self.__NONE:
 			if self.is_alive():
 				raise RuntimeError('The thread is still running')
-			raise RuntimeError('An exception has been risen in thread')
+			raise self.__error
 		return self.__return_value
 
 

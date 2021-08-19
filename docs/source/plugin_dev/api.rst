@@ -71,7 +71,19 @@ Example:
 
 The only difference between ``do_something1`` and ``do_something2`` is that ``do_something2`` is decorated by ``@new_thread``. So when executing ``do_something2``, it won't lag the following execution of MCDR like ``do_something1`` since ``do_something2`` will execute on another thread
 
-If you want to wait for the decorated function to complete, you can simple use the ``join`` method from class ``threading.Thread``. Remember the return value of the decorated function has already been changed in to the ``Thread`` instance
+About the returned value of the decorated function, it's a ``FunctionThread`` object. Inherited from ``Thread``, it has 1 extra method comparing to the ``Thread`` class:
+
+.. code-block:: python
+
+    def get_return_value(self, block: bool = False, timeout: Optional[float] = None)
+
+As the name of the method, it's used to get the return value of the original function. An ``RuntimeError`` will be risen if ``block=False`` and the thread is still alive, then if exception occurs in the thread the exception will be risen here
+
+.. code-block:: python
+
+    print(do_something2('task').get_return_value(block=True))  # will be "task"
+
+If you only want to wait for the decorated function to complete, you can simple use the ``join`` method from class ``threading.Thread``. Remember the return value of the decorated function has already been changed in to the ``FunctionThread`` instance
 
 .. code-block:: python
 
@@ -87,6 +99,12 @@ In addition to simply and directly use a raw ``@new_thread``, it's recommend to 
         time.sleep(10)
 
 So when you logs something by ``server.logger``, a meaningful thread name will be displayed instead of a plain and meaningless ``Thread-3``
+
+In case you want to access the original un-decorated function, you can access the ``original`` field of the decorated function
+
+.. code-block:: python
+
+    print(do_something2.original('task'))  # will be "task"
 
 event_listener
 ^^^^^^^^^^^^^^

@@ -559,8 +559,12 @@ schedule_task
 
 .. code-block:: python
 
-    def schedule_task(self, callable_: Callable[[], Any]) -> None
+    def schedule_task(self, callable_: Callable[[], Any], *, block: bool = False, timeout: Optional[float] = None) -> None
 
 Schedule a task to be run in task executor thread
 
 Parameter *callable_*: The callable object to be run. It should accept 0 parameter
+
+Keyword Parameter *block*: If blocks until the callable finished execution
+
+Keyword Parameter *timeout*: The timeout of the blocking operation if ``block=True``
