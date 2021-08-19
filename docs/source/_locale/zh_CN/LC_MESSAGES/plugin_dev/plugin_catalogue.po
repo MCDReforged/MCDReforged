@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-16 08:49+0800\n"
+"POT-Creation-Date: 2021-08-19 20:41+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -352,16 +352,16 @@ msgid "``<plugin_id>-<version>``"
 msgstr "``<plugin_id>-<version>``"
 
 #: ../plugin_dev/plugin_catalogue.rst:201
-msgid "my_plugin_1.2.3"
-msgstr "my_plugin_1.2.3"
+msgid "my_plugin-1.2.3"
+msgstr "my_plugin-1.2.3"
 
 #: ../plugin_dev/plugin_catalogue.rst:202
 msgid "``<plugin_id>-v<version>``"
 msgstr "``<plugin_id>-v<version>``"
 
 #: ../plugin_dev/plugin_catalogue.rst:203
-msgid "my_plugin_v1.2.3"
-msgstr "my_plugin_v1.2.3"
+msgid "my_plugin-v1.2.3"
+msgstr "my_plugin-v1.2.3"
 
 #: ../plugin_dev/plugin_catalogue.rst:205
 msgid ""

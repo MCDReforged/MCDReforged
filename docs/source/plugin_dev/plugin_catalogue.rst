@@ -198,9 +198,9 @@ Plugin catalogue will automatically detect the releases in your plugin repositor
     * - ``v<version>``
       - v1.2.3
     * - ``<plugin_id>-<version>``
-      - my_plugin_1.2.3
+      - my_plugin-1.2.3
     * - ``<plugin_id>-v<version>``
-      - my_plugin_v1.2.3
+      - my_plugin-v1.2.3
 
 * Assets: contains 1 asset with ``.mcdr`` file extension name. Other assets will be ignored
 
