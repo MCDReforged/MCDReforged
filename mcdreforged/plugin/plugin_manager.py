@@ -441,12 +441,12 @@ class PluginManager:
 		for listener in self.registry_storage.event_listeners.get(event.id, []):
 			self.trigger_listener(listener, args)
 
-	def dispatch_event(self, event: MCDREvent, args: Tuple[Any, ...], *, on_executor_thread=True, wait=False):
+	def dispatch_event(self, event: MCDREvent, args: Tuple[Any, ...], *, on_executor_thread=True, block: bool = False, timeout: Optional[float] = None):
 		"""
 		Event dispatching interface
 		"""
 		if on_executor_thread:
-			self.mcdr_server.task_executor.execute_on_thread(lambda: self.__dispatch_event(event, args), wait=wait)
+			self.mcdr_server.task_executor.execute_on_thread(lambda: self.__dispatch_event(event, args), block=block, timeout=timeout)
 		else:
 			self.__dispatch_event(event, args)
 

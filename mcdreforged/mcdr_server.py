@@ -377,7 +377,7 @@ class MCDReforgedServer:
 		self.process = None
 		self.set_server_state(ServerState.STOPPED)
 		self.remove_flag(MCDReforgedFlag.SERVER_STARTUP | MCDReforgedFlag.SERVER_RCON_READY)  # removes this two
-		self.plugin_manager.dispatch_event(MCDRPluginEvents.SERVER_STOP, (return_code,), wait=True)
+		self.plugin_manager.dispatch_event(MCDRPluginEvents.SERVER_STOP, (return_code,), block=True)
 
 		if self.is_interrupt():
 			self.logger.info(self.tr('mcdr_server.on_server_stop.user_interrupted'))
@@ -470,7 +470,7 @@ class MCDReforgedServer:
 		self.watch_dog.start()
 		self.task_executor.start()
 		self.plugin_manager.register_permanent_plugins()
-		self.task_executor.execute_on_thread(self.load_plugins, wait=True)
+		self.task_executor.execute_on_thread(self.load_plugins, block=True)
 		self.plugin_manager.dispatch_event(MCDRPluginEvents.MCDR_START, ())
 		if not self.config['disable_console_thread']:
 			self.console_handler.start()
@@ -491,7 +491,7 @@ class MCDReforgedServer:
 			self.plugin_manager.dispatch_event(MCDRPluginEvents.PLUGIN_UNLOADED, ())
 			self.task_executor.wait_till_finish_all_task()
 			with self.watch_dog.pausing():  # it's ok for plugins to take some time
-				self.plugin_manager.dispatch_event(MCDRPluginEvents.MCDR_STOP, (), wait=True)
+				self.plugin_manager.dispatch_event(MCDRPluginEvents.MCDR_STOP, (), block=True)
 
 			self.console_handler.stop()
 			self.logger.info(self.tr('mcdr_server.on_mcdr_stop.bye'))

@@ -519,12 +519,14 @@ class ServerInterface:
 		"""
 		return self._mcdr_server.config.to_dict()
 
-	def schedule_task(self, callable_: Callable[[], Any]) -> None:
+	def schedule_task(self, callable_: Callable[[], Any], *, block: bool = False, timeout: Optional[float] = None) -> None:
 		"""
 		Schedule a callback task to be run in task executor thread
 		:param callable_: The callable object to be run. It should accept 0 parameter
+		:param block: If blocks until the callable finished execution
+		:param timeout: The timeout of the blocking operation if block=True
 		"""
-		self._mcdr_server.task_executor.add_regular_task(callable_)
+		self._mcdr_server.task_executor.add_regular_task(callable_, block=block, timeout=timeout)
 
 
 class PluginServerInterface(ServerInterface):

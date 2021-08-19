@@ -73,18 +73,18 @@ class TaskExecutor(ThreadExecutor):
 		else:
 			self.task_queue.put_nowait(data)
 
-	def add_regular_task(self, func: Callable[[], Any], *, wait=False):
-		if wait:
+	def add_regular_task(self, func: Callable[[], Any], *, block: bool = False, timeout: Optional[float] = None):
+		if block:
 			func = misc_util.WaitableCallable(func)
 		self.task_queue.put(TaskData(func, Priority.REGULAR))
-		if wait:
-			func.wait()
+		if block:
+			func.wait(timeout)
 
-	def execute_on_thread(self, func: Callable[[], Any], *, wait=False):
+	def execute_on_thread(self, func: Callable[[], Any], *, block: bool = False, timeout: Optional[float] = None):
 		if self.is_on_thread():
 			func()
 		else:
-			self.add_regular_task(func, wait=wait)
+			self.add_regular_task(func, block=block, timeout=timeout)
 
 	def get_this_tick_time(self) -> float:
 		"""
