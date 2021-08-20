@@ -156,7 +156,7 @@ class PromptToolkitWrapper:
 		try:
 			self.__tweak_kits()
 			self.prompt_session = MCDRPromptSession()
-			self.stdout_proxy = StdoutProxy(raw=True)
+			self.stdout_proxy = StdoutProxy(sleep_between_writes=0.01, raw=True)
 		except:
 			self.__logger.exception('Failed to enable advanced console, switch back to basic input')
 		else:
