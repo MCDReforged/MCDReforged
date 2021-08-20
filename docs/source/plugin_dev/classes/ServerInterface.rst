@@ -49,6 +49,8 @@ If args or kwargs contains `RText <../api.html#rtext>`__ element, then the resul
 
 If the translation key is not recognized, the return value will be the translation key itself
 
+See `here <../basic.html#translation>`__ for the ways to register translations for your plugin
+
 Parameter *translation_key*: The key of the translation
 
 Parameter *args*: The args to be formatted
