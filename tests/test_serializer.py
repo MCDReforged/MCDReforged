@@ -40,6 +40,34 @@ class ConfigImpl(Serializable):
 
 class MyTestCase(unittest.TestCase):
 	def test_0_simple(self):
+		for obj in (
+			False, True, 0, 1, -1, 1.2, 1E9 + 7, '', 'test', None,
+			[1, None, 'a'], {'x': 2, 1.3: None},
+			{'a': 1, 'b': 'xx', 'c': [1, 2, 3], 'd': {'w': 'ww'}}
+		):
+			self.assertEqual(obj, serialize(obj))
+			self.assertEqual(obj, deserialize(obj, type(obj)))
+
+		# special case for int value converting to float
+		self.assertEqual(1.0, deserialize(1, float))
+
+		# tuple deserialized into list
+		self.assertEqual([], serialize(()))
+		self.assertEqual([1, 2, [3]], serialize((1, 2, (3, ))))
+
+		# not supported types
+		self.assertRaises(TypeError, serialize, {1, 2})
+		self.assertRaises(TypeError, serialize, int)
+
+		# list & dict
+		# no inner element recursively deserializing due to no type hint
+		for obj in (
+			[lambda: 'rua', iter([1, 2])],
+			{1: set({}), 'a': range(10)}
+		):
+			self.assertEqual(obj, deserialize(obj, type(obj)))
+
+	def test_1_simple_class(self):
 		point = Point()
 		point.x = 0.1
 		point.y = 0.2
@@ -51,12 +79,7 @@ class MyTestCase(unittest.TestCase):
 		self.assertRaises(ValueError, deserialize, {'z': 1}, Point, error_at_redundancy=True)
 		self.assertRaises(TypeError, deserialize, {'x': []}, Point)
 
-	def test_1_dict(self):
-		data = {'a': 1, 'b': 'xx', 'c': [1, 2, 3], 'd': {'w': 'ww'}}
-		self.assertEqual(data, serialize(data))
-		self.assertEqual(data, deserialize(data, dict))
-
-	def test_2_complex(self):
+	def test_2_complex_class(self):
 		a = ConfigImpl()
 		self.assertEqual(a, deserialize(serialize(a), ConfigImpl))
 		b = deserialize({
@@ -74,7 +97,7 @@ class MyTestCase(unittest.TestCase):
 		}, ConfigImpl)
 		self.assertEqual(b, deserialize(serialize(b), ConfigImpl))
 
-	def test_3_copy(self):
+	def test_3_copy_default_value(self):
 		class Cls(Serializable):
 			lst: List[int] = []
 
