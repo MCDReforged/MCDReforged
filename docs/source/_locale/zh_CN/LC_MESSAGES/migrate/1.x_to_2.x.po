@@ -92,7 +92,7 @@ msgid ""
 "With that the plugin lifecycle can be covered with 2 events, `Plugin "
 "Loaded <../plugin_dev/event.html#plugin-loaded>`__ and `Plugin Unloaded "
 "<../plugin_dev/event.html#plugin-unloaded>`__"
-msgstr "这样，插件生命周期就可以用 2 个事件，，来覆盖完全"
+msgstr "这样，插件生命周期就可以用 2 个事件，来覆盖完全"
 
 #: ../migrate/1.x_to_2.x.rst:32
 msgid "Modules"
