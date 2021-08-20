@@ -6,7 +6,7 @@ T = TypeVar('T')
 
 
 def serialize(obj) -> Union[None, int, float, str, list, dict]:
-	if obj is None or isinstance(obj, int) or isinstance(obj, float) or isinstance(obj, str):
+	if type(obj) in (type(None), int, float, str, bool):
 		return obj
 	elif isinstance(obj, list) or isinstance(obj, tuple):
 		return list(map(serialize, obj))
@@ -18,7 +18,7 @@ def serialize(obj) -> Union[None, int, float, str, list, dict]:
 		for attr_name in list(attr_dict.keys()):
 			if attr_name.startswith('_'):
 				attr_dict.pop(attr_name)
-	except TypeError:
+	except:
 		raise TypeError('Unsupported input type {}'.format(type(obj))) from None
 	else:
 		return serialize(attr_dict)
@@ -26,6 +26,7 @@ def serialize(obj) -> Union[None, int, float, str, list, dict]:
 
 def deserialize(data, cls: Type[T], *, error_at_missing=False, error_at_redundancy=False) -> T:
 	# Element (None, int, float, str, list, dict)
+	# For list and dict, since it doesn't have any type hint, we choose to simply return the data
 	if type(data) is cls:
 		return data
 	# float thing
