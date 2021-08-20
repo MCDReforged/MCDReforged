@@ -50,9 +50,9 @@ def entry_point():
 	if result.subparser_name == 'start':
 		run_mcdr()
 	elif result.subparser_name == 'init':
-		initialize_environment()
+		initialize_environment(quiet=quiet)
 	elif result.subparser_name == 'gendefault':
-		generate_default_stuffs()
+		generate_default_stuffs(quiet=quiet)
 	elif result.subparser_name == 'pack':
 		make_packed_plugin(result.input, result.output, result.name, quiet=quiet)
 
@@ -74,12 +74,16 @@ def run_mcdr():
 			pass
 
 
-def initialize_environment():
+def initialize_environment(*, quiet: bool = False):
 	MCDReforgedServer(initialize_environment=True)
+	if not quiet:
+		print('Initialized environment for {} in {}'.format(core_constant.NAME, os.getcwd()))
 
 
-def generate_default_stuffs():
+def generate_default_stuffs(*, quiet: bool = False):
 	MCDReforgedServer(generate_default_only=True)
+	if not quiet:
+		print('Generated default configure and permission files in {}'.format(os.getcwd()))
 
 
 def make_packed_plugin(input_dir: str, output_dir: str, file_name: Optional[str], *, quiet: bool = False):

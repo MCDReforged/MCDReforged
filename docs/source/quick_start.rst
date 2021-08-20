@@ -27,7 +27,7 @@ For Chinese users, you can added a ``-i https://pypi.tuna.tsinghua.edu.cn/simple
 Start up
 --------
 
-Let's say your are going to start MCDR in a folder named ``my_mcdr_server``. Then you can run the following commands:
+Let's say your are going to start MCDR in a folder named ``my_mcdr_server``. Then you can run the following commands to initialize the environment for MCDR first:
 
 .. code-block:: bash
 
@@ -49,7 +49,7 @@ MCDR will generated the default configure and permission files, as well as some 
 
 Now put your server files into the server folder (``server`` by default), then modify the configuration file ``config.yml`` and permission file ``permission.yml`` correctly
 
-After that you can start MCDR, and it will start handling the server correctly
+After that you can launch MCDR, and it will start handling the server correctly
 
 .. code-block:: bash
 
