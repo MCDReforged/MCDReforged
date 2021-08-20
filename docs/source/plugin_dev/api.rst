@@ -510,21 +510,21 @@ Enum class will be serialized into its value
 
 .. code-block:: python
 
-    class MyEnumerate(Enum):
-        first = 'value1'
-        second = 'value2'
-        third = 'value3'
+    class Gender(Enum):
+        male = 'man'
+        female = 'woman'
 
 
     class MyData(Serializable):
-        id: MyEnumerate = MyEnumerate.first
-        name: str = 'my_name'
+        name: str = 'zhang_san'
+        gender: Gender = Gender.male
 
 
     data = MyData.get_default()
-    print(data.serialize())         # {'id': 'value1', 'name': 'my_name'}
-    data.id = MyEnumerate.third
-    print(data.serialize())         # {'id': 'value3', 'name': 'my_name'}
+    print(data.serialize())                                     # {'name': 'zhang_san', 'gender': 'man'}
+    data.id = Gender.female
+    print(data.serialize())                                     # {'name': 'zhang_san', 'gender': 'woman'}
+    MyData.deserialize({'name': 'li_si', 'gender': 'woman'})    # -> Mydata(name='li_si', gender=Gender.female)
 
 Serializable class nesting is also supported
 
