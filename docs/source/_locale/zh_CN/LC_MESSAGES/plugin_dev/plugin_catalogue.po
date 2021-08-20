@@ -18,11 +18,11 @@ msgstr "插件仓库"
 
 #: ../plugin_dev/plugin_catalogue.rst:4
 msgid ""
-"The official MCDR plugin catalogue is the ``next`` branch of repository "
+"The official MCDR plugin catalogue is the ``master`` branch of repository "
 "https://github.com/MCDReforged/PluginCatalogue. Users can browse plugins "
 "here and developers can submit their plugins to the catalogue"
 msgstr ""
-"MCDR 的官方插件仓库位于 https://github.com/MCDReforged/PluginCatalogue 的 ``next`` "
+"MCDR 的官方插件仓库位于 https://github.com/MCDReforged/PluginCatalogue 的 ``master`` "
 "分支。用户可以在此处阅览插件，开发者也可以将他们的插件提交至该仓库。"
 
 #: ../plugin_dev/plugin_catalogue.rst:6

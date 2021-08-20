@@ -1,7 +1,7 @@
 Plugin Catalogue
 ================
 
-The official MCDR plugin catalogue is the ``next`` branch of repository https://github.com/MCDReforged/PluginCatalogue. Users can browse plugins here and developers can submit their plugins to the catalogue
+The official MCDR plugin catalogue is the ``master`` branch of repository https://github.com/MCDReforged/PluginCatalogue. Users can browse plugins here and developers can submit their plugins to the catalogue
 
 The catalogue is updated once files change, and every 30 minutes via github action
 
