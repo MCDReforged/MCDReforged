@@ -1,24 +1,27 @@
 import copy
 from abc import ABC
 from typing import Union, TypeVar, List, Dict, Type
+from enum import EnumMeta, Enum, Flag, IntEnum, IntFlag
 
 T = TypeVar('T')
 
 
 def serialize(obj) -> Union[None, int, float, str, list, dict]:
-	if obj is None or isinstance(obj, int) or isinstance(obj, float) or isinstance(obj, str):
+	if type(obj) in (type(None), int, float, str, bool):
 		return obj
 	elif isinstance(obj, list) or isinstance(obj, tuple):
 		return list(map(serialize, obj))
 	elif isinstance(obj, dict):
 		return dict(map(lambda t: (t[0], serialize(t[1])), obj.items()))
+	elif isinstance(obj, Enum):
+		return obj.value
 	try:
 		attr_dict = vars(obj)
 		# don't serialize protected fields
 		for attr_name in list(attr_dict.keys()):
 			if attr_name.startswith('_'):
 				attr_dict.pop(attr_name)
-	except TypeError:
+	except:
 		raise TypeError('Unsupported input type {}'.format(type(obj))) from None
 	else:
 		return serialize(attr_dict)
@@ -26,6 +29,7 @@ def serialize(obj) -> Union[None, int, float, str, list, dict]:
 
 def deserialize(data, cls: Type[T], *, error_at_missing=False, error_at_redundancy=False) -> T:
 	# Element (None, int, float, str, list, dict)
+	# For list and dict, since it doesn't have any type hint, we choose to simply return the data
 	if type(data) is cls:
 		return data
 	# float thing
@@ -45,6 +49,9 @@ def deserialize(data, cls: Type[T], *, error_at_missing=False, error_at_redundan
 			deserialized_value = deserialize(value, val_type, error_at_missing=error_at_missing, error_at_redundancy=error_at_redundancy)
 			instance[deserialized_key] = deserialized_value
 		return instance
+	# Enum
+	elif isinstance(cls, EnumMeta) and cls not in [Enum, Flag, IntEnum, IntFlag]:
+		return cls(data)
 	# Object
 	elif isinstance(data, dict):
 		try:

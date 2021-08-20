@@ -506,6 +506,26 @@ You can also declare default value when declaring type annotations, then during 
     print(MyData.deserialize({}).serialize())  # {'name': 'default', 'values': []}
     print(MyData.deserialize({}).values is MyData.deserialize({}).values)  # False
 
+Enum class will be serialized into its value
+
+.. code-block:: python
+
+    class MyEnumerate(Enum):
+        first = 'value1'
+        second = 'value2'
+        third = 'value3'
+
+
+    class MyData(Serializable):
+        id: MyEnumerate = MyEnumerate.first
+        name: str = 'my_name'
+
+
+    data = MyData.get_default()
+    print(data.serialize())         # {'id': 'value1', 'name': 'my_name'}
+    data.id = MyEnumerate.third
+    print(data.serialize())         # {'id': 'value3', 'name': 'my_name'}
+
 Serializable class nesting is also supported
 
 .. code-block:: python

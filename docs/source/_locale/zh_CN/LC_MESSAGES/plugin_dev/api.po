@@ -739,8 +739,10 @@ msgid ""
 msgstr ""
 "你也可以在声明类型注解时声明属性的默认值，这样在反序列化的过程中，如果值缺失，则默认值的 `拷贝 <https://docs.python.org"
 "/zh-cn/3/library/copy.html#copy.copy>`__ 将会被赋值"
-
 #: ../plugin_dev/api.rst:509
+msgid "Enum class will be serialized into its value"
+msgstr "类 Enum 会被序列化为它的枚举值"
+#: ../plugin_dev/api.rst:529
 msgid "Serializable class nesting is also supported"
 msgstr "类 Serializable 的嵌套也是支持的"
 
