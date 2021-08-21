@@ -1,7 +1,7 @@
 import copy
 from abc import ABC
 from typing import Union, TypeVar, List, Dict, Type
-from enum import EnumMeta, Enum, Flag, IntEnum, IntFlag
+from enum import EnumMeta, Enum
 
 T = TypeVar('T')
 
