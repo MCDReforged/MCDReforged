@@ -1,4 +1,5 @@
 import unittest
+from enum import Enum, auto, IntFlag, IntEnum, Flag
 from typing import List, Dict, Union, Optional
 
 from mcdreforged.api.utils import serialize, deserialize, Serializable
@@ -165,6 +166,52 @@ class MyTestCase(unittest.TestCase):
 		self.assertIs(Points(main=p).main, p)
 		self.assertIs(Points(any=p).any, p)
 		self.assertRaises(KeyError, Points, ping='pong')
+
+	def test_7_enum(self):
+		class Gender(Enum):
+			male = 'man'
+			female = 'woman'
+
+		class MyData(Serializable):
+			name: str = 'zhang_san'
+			gender: Gender = Gender.male
+
+		data = MyData.get_default()
+		self.assertEqual({'name': 'zhang_san', 'gender': 'male'}, data.serialize())
+		data.gender = Gender.female
+		self.assertEqual({'name': 'zhang_san', 'gender': 'female'}, data.serialize())
+		self.assertEqual(Gender.female, MyData.deserialize({'name': 'li_si', 'gender': 'female'}).gender)
+		self.assertRaises(KeyError, MyData.deserialize, {'gender': 'none'})
+
+		# auto()
+		for base_class in (Enum, IntEnum, Flag, IntFlag):
+			class TestEnum(base_class):
+				RED = auto()
+				BLUE = auto()
+				GREEN = auto()
+
+			class TestData(Serializable):
+				data: TestEnum
+
+			try:
+				# noinspection PyTypeChecker
+				for my_enum in TestEnum:
+					serialized = TestData(data=my_enum).serialize()
+					# self.assertEqual(my_enum.value, serialized['data'], msg='w')
+					self.assertEqual(my_enum, TestData.deserialize(serialized).data)
+			except:
+				print('Error when testing with base class {}'.format(base_class))
+				raise
+
+		# special enum value
+		class TestEnum(Enum):
+			A = auto()
+			SET = set()
+			RANGE = range(5)
+
+		for enum in TestEnum:
+			self.assertIsInstance(serialize(enum), str)
+			self.assertEqual(enum, deserialize(serialize(enum), TestEnum))
 
 
 if __name__ == '__main__':
