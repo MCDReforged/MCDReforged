@@ -60,6 +60,7 @@ class RegularPlugin(AbstractPlugin, ABC):
 		raise NotImplementedError()
 
 	def _load_entry_instance(self):
+		self.old_entry_module_instance = self.entry_module_instance
 		with self.plugin_manager.with_plugin_context(self):
 			self.entry_module_instance = self._get_module_instance()
 
