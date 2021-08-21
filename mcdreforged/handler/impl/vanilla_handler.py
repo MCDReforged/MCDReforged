@@ -1,6 +1,6 @@
 import json
 import re
-from typing import Optional, Any, Tuple
+from typing import Optional, Any
 
 from parse import parse
 
