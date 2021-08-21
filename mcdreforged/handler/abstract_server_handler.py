@@ -176,6 +176,28 @@ class AbstractServerHandler:
 		"""
 		raise NotImplementedError()
 
+	def parse_server_version(self, info: Info) -> Optional[str]:
+		"""
+		Check if the info contains a server version message
+		If it is, returns server version, otherwise returns None
+
+		:param Info info: The info instance that will be checked
+		:return: The name of the player or None
+		:rtype: str or None
+		"""
+		raise NotImplementedError()
+
+	def parse_server_ip(self, info: Info) -> Optional[str]:
+		"""
+		Check if the info contains a server ip
+		If it is, returns server ip and port, otherwise returns None
+
+		:param Info info: The info instance that will be checked
+		:return: The name of the player or None
+		:rtype: str or None
+		"""
+		raise NotImplementedError()
+
 	def test_server_startup_done(self, info: Info) -> bool:
 		"""
 		Check if the info indicates a server startup message and return a bool

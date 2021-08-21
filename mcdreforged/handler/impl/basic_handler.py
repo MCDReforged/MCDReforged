@@ -30,6 +30,12 @@ class BasicHandler(AbstractServerHandler):
 	def parse_player_left(self, info):
 		return None
 
+	def parse_server_version(self, info: Info) -> Optional[str]:
+		return None
+
+	def parse_server_ip(self, info: Info) -> Optional[str]:
+		return None
+
 	def test_server_startup_done(self, info) -> bool:
 		return False
 

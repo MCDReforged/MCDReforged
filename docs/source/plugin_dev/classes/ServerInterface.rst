@@ -49,8 +49,6 @@ If args or kwargs contains `RText <../api.html#rtext>`__ element, then the resul
 
 If the translation key is not recognized, the return value will be the translation key itself
 
-See `here <../basic.html#translation>`__ for the ways to register translations for your plugin
-
 Parameter *translation_key*: The key of the translation
 
 Parameter *args*: The args to be formatted
@@ -195,6 +193,16 @@ get_server_pid
 Return the pid of the server process, None if the server is stopped
 
 Notes the process with this pid is a bash process, which is the parent process of real server process you might be interested in
+
+get_server_info
+~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+    def get_server_info(self) -> Optional[ServerInfo]
+
+Return current server info parsed from server standard output, which include 3 attributes, Server version name``version`` (like ``1.17 Release Candidate 1``, instead of ``1.17-rc1``), IP address``ip`` and port ``port``
+
 
 Text Interaction
 ^^^^^^^^^^^^^^^^
