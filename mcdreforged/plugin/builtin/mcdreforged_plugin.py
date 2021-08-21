@@ -7,7 +7,7 @@ from typing import Callable, Any, Tuple, List, Optional
 
 from mcdreforged.api.command import *
 from mcdreforged.command.command_source import CommandSource
-from mcdreforged.constants import core_constant, plugin_constant
+from mcdreforged.constants import core_constant
 from mcdreforged.minecraft.rtext import RText, RAction, RTextList, RStyle, RColor
 from mcdreforged.permission.permission_level import PermissionLevel
 from mcdreforged.plugin import plugin_factory
@@ -349,8 +349,8 @@ class MCDReforgedPlugin(PermanentPlugin):
 		return result
 
 	def list_plugin(self, source: CommandSource):
-		not_loaded_plugin_list = self.get_files_in_plugin_directories(lambda fp: fp.endswith(plugin_constant.SOLO_PLUGIN_FILE_SUFFIX) and not self.mcdr_server.plugin_manager.contains_plugin_file(fp))  # type: List[str]
-		disabled_plugin_list = self.get_files_in_plugin_directories(lambda fp: fp.endswith(plugin_constant.DISABLED_PLUGIN_FILE_SUFFIX))  # type: List[str]
+		not_loaded_plugin_list = self.get_files_in_plugin_directories(lambda fp: plugin_factory.maybe_plugin(fp) and not self.mcdr_server.plugin_manager.contains_plugin_file(fp))  # type: List[str]
+		disabled_plugin_list = self.get_files_in_plugin_directories(plugin_factory.is_disabled_plugin)  # type: List[str]
 		current_plugins = list(self.mcdr_server.plugin_manager.get_all_plugins())  # type: List[AbstractPlugin]
 
 		source.reply(self.tr('mcdr_command.list_plugin.info_loaded_plugin', len(current_plugins)))
