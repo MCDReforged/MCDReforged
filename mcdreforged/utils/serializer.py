@@ -50,7 +50,7 @@ def deserialize(data, cls: Type[T], *, error_at_missing=False, error_at_redundan
 			instance[deserialized_key] = deserialized_value
 		return instance
 	# Enum
-	elif isinstance(cls, EnumMeta) and cls not in [Enum, Flag, IntEnum, IntFlag]:
+	elif isinstance(cls, EnumMeta):
 		return cls(data)
 	# Object
 	elif isinstance(data, dict):
