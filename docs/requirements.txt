@@ -1,5 +1,4 @@
 sphinx                  # core
 sphinx-intl             # locale
-recommonmark            # markdown support in sphinx
 sphinx-markdown-tables  # for markdown table
 sphinx-rtd-theme        # the theme of the webside
