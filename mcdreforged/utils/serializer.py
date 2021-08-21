@@ -51,7 +51,7 @@ def deserialize(data, cls: Type[T], *, error_at_missing=False, error_at_redundan
 		return instance
 	# Enum
 	elif isinstance(cls, EnumMeta):
-		return cls(data)
+		return cls[data]
 	# Object
 	elif isinstance(data, dict):
 		try:
