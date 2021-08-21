@@ -77,19 +77,19 @@ Development builds are available in `Test PyPi <https://test.pypi.org/project/mc
 Launch from source
 ------------------
 
-Instead of installing MCDR from pypi, you can execute the source file of MCDR directly. 
+Instead of installing MCDR from pypi, you can execute the source file of MCDR directly. Notes: This is mostly for development purpose
 
-Download the source files of MCDR in the `github release page <https://github.com/Fallen-Breath/MCDReforged/releases>`__, and decompress the file to your server folder
+Download the source files of MCDR via cloning the repository or github action, and decompress the file if needed
 
 .. code-block::
 
-   my_mcdr_server/
+   my_mcdr_server_in_source/
     ├─ mcdreforged/
     │   └─ ..
     ├─ MCDReforged.py
     └─ ..
 
-Then you can start MCDR with the same command as above
+Enter directory ``my_mcdr_server_in_source/`` and you can start MCDR with the same command as above
 
 .. code-block:: bash
 
