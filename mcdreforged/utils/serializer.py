@@ -1,7 +1,7 @@
 import copy
 from abc import ABC
 from typing import Union, TypeVar, List, Dict, Type
-from enum import EnumMeta, Enum, Flag, IntEnum, IntFlag
+from enum import EnumMeta
 
 T = TypeVar('T')
 
@@ -13,7 +13,7 @@ def serialize(obj) -> Union[None, int, float, str, list, dict]:
 		return list(map(serialize, obj))
 	elif isinstance(obj, dict):
 		return dict(map(lambda t: (t[0], serialize(t[1])), obj.items()))
-	elif isinstance(obj, Enum):
+	elif isinstance(obj.__class__, EnumMeta):
 		return obj.value
 	try:
 		attr_dict = vars(obj)
@@ -50,7 +50,7 @@ def deserialize(data, cls: Type[T], *, error_at_missing=False, error_at_redundan
 			instance[deserialized_key] = deserialized_value
 		return instance
 	# Enum
-	elif isinstance(cls, EnumMeta) and cls not in [Enum, Flag, IntEnum, IntFlag]:
+	elif isinstance(cls, EnumMeta):
 		return cls(data)
 	# Object
 	elif isinstance(data, dict):
