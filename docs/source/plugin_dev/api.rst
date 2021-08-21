@@ -506,7 +506,7 @@ You can also declare default value when declaring type annotations, then during 
     print(MyData.deserialize({}).serialize())  # {'name': 'default', 'values': []}
     print(MyData.deserialize({}).values is MyData.deserialize({}).values)  # False
 
-Enum class will be serialized into its value
+Enum class will be serialized into its member name
 
 .. code-block:: python
 
@@ -521,10 +521,10 @@ Enum class will be serialized into its value
 
 
     data = MyData.get_default()
-    print(data.serialize())                                     # {'name': 'zhang_san', 'gender': 'man'}
+    print(data.serialize())                                     # {'name': 'zhang_san', 'gender': 'male'}
     data.gender = Gender.female
-    print(data.serialize())                                     # {'name': 'zhang_san', 'gender': 'woman'}
-    MyData.deserialize({'name': 'li_si', 'gender': 'woman'})    # -> MyData(name='li_si', gender=Gender.female)
+    print(data.serialize())                                     # {'name': 'zhang_san', 'gender': 'female'}
+    MyData.deserialize({'name': 'li_si', 'gender': 'female'})    # -> MyData(name='li_si', gender=Gender.female)
 
 Serializable class nesting is also supported
 
