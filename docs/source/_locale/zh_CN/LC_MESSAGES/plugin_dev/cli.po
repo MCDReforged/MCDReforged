@@ -114,6 +114,7 @@ msgid ""
 "Pack up your plugin source codes / resources files, from a batch of "
 "files, to a ``.mcdr`` file packed plugin"
 msgstr ""
+"使用批处理文件将你的插件源码和资源文件打包为 ``.mcdr`` 文件"
 
 #: ../plugin_dev/cli.rst:74
 msgid ""
