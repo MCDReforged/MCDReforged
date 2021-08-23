@@ -1,7 +1,8 @@
 import copy
 from abc import ABC
-from typing import Union, TypeVar, List, Dict, Type
 from enum import EnumMeta
+from threading import Lock
+from typing import Union, TypeVar, List, Dict, Type, Any
 
 T = TypeVar('T')
 
@@ -86,12 +87,29 @@ def deserialize(data, cls: Type[T], *, error_at_missing=False, error_at_redundan
 
 
 class Serializable(ABC):
+	__annotations_cache: dict = None
+	__annotations_lock = Lock()
+
 	def __init__(self, **kwargs):
-		annotations = getattr(type(self), '__annotations__', {})
 		for key in kwargs.keys():
-			if key not in annotations:
-				raise KeyError('Unknown key received in __init__: {}'.format(key))
+			if key not in self.get_annotations_fields():
+				raise KeyError('Unknown key received in __init__ of class {}: {}'.format(self.__class__, key))
 		vars(self).update(kwargs)
+
+	@classmethod
+	def __get_annotation_dict(cls) -> dict:
+		public_fields = {}
+		for attr_name, attr_type in getattr(cls, '__annotations__', {}).items():
+			if not attr_name.startswith('_'):
+				public_fields[attr_name] = attr_type
+		return public_fields
+
+	@classmethod
+	def get_annotations_fields(cls) -> Dict[str, Type]:
+		with cls.__annotations_lock:
+			if cls.__annotations_cache is None:
+				cls.__annotations_cache = cls.__get_annotation_dict()
+		return cls.__annotations_cache
 
 	def serialize(self) -> dict:
 		return serialize(self)
@@ -112,3 +130,7 @@ class Serializable(ABC):
 		Invoked after being deserialized
 		"""
 		pass
+
+	def set_field(self, name: str, value: Any):
+		if name in self.__annotations_cache:
+			vars(self)[name] = value

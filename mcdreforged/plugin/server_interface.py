@@ -16,6 +16,8 @@ from mcdreforged.plugin.plugin_event import EventListener, LiteralEvent, PluginE
 from mcdreforged.plugin.plugin_registry import DEFAULT_LISTENER_PRIORITY, HelpMessage
 from mcdreforged.plugin.type.multi_file_plugin import MultiFilePlugin
 from mcdreforged.plugin.type.plugin import AbstractPlugin
+from mcdreforged.preference.preference_manager import PreferenceItem
+from mcdreforged.translation.translation_text import RTextMCDRTranslation
 from mcdreforged.utils import misc_util
 from mcdreforged.utils.exception import IllegalCallError
 from mcdreforged.utils.logger import MCDReforgedLogger, DebugOption
@@ -85,6 +87,17 @@ class ServerInterface:
 		:param kwargs: The kwargs to be formatted
 		"""
 		return self._mcdr_server.tr(translation_key, *args, language=language, fallback_language=fallback_language, **kwargs)
+
+	def rtr(self, translation_key: str, *args, **kwargs) -> RTextMCDRTranslation:
+		"""
+		Return a RText component, that only translates itself right before displaying or serializing
+		:param translation_key: The key of the translation
+		:param args: The args to be formatted
+		:param kwargs: The kwargs to be formatted
+		"""
+		text = RTextMCDRTranslation(translation_key, *args, **kwargs)
+		text.set_translator(self.tr)  # not that necessary, just in case
+		return text
 
 	def as_basic_server_interface(self) -> 'ServerInterface':
 		"""
@@ -222,7 +235,8 @@ class ServerInterface:
 		:param text: the message you want to send to the player
 		:param encoding: The encoding method for the text
 		"""
-		command = self._mcdr_server.server_handler_manager.get_current_handler().get_send_message_command(player, text)
+		with RTextMCDRTranslation.language_context(self._mcdr_server.preference_manager.get_preferred_language(player)):
+			command = self._mcdr_server.server_handler_manager.get_current_handler().get_send_message_command(player, text)
 		if command is not None:
 			self.execute(command, encoding=encoding)
 
@@ -527,6 +541,9 @@ class ServerInterface:
 		:param timeout: The timeout of the blocking operation if block=True
 		"""
 		self._mcdr_server.task_executor.add_regular_task(callable_, block=block, timeout=timeout)
+
+	def get_preference(self, obj: Union[str, CommandSource]) -> Optional[PreferenceItem]:
+		return self._mcdr_server.preference_manager.get_preference(obj)
 
 
 class PluginServerInterface(ServerInterface):

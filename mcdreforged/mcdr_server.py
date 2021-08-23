@@ -25,7 +25,8 @@ from mcdreforged.permission.permission_manager import PermissionManager
 from mcdreforged.plugin.plugin_event import MCDRPluginEvents
 from mcdreforged.plugin.plugin_manager import PluginManager
 from mcdreforged.plugin.server_interface import ServerInterface
-from mcdreforged.translation_manager import TranslationManager
+from mcdreforged.preference.preference_manager import PreferenceManager
+from mcdreforged.translation.translation_manager import TranslationManager
 from mcdreforged.utils import file_util
 from mcdreforged.utils.exception import IllegalCallError, ServerStopped, ServerStartError, IllegalStateError
 from mcdreforged.utils.logger import DebugOption, MCDReforgedLogger, MCColoredFormatter
@@ -65,6 +66,7 @@ class MCDReforgedServer:
 		self.reactor_manager = InfoReactorManager(self)
 		self.command_manager = CommandManager(self)
 		self.plugin_manager = PluginManager(self)
+		self.preference_manager = PreferenceManager(self)
 
 		# --- Input arguments "generate_default_only" processing --- #
 		if generate_default_only:
@@ -123,6 +125,9 @@ class MCDReforgedServer:
 	# --------------------------
 	#         Translate
 	# --------------------------
+
+	def get_language(self) -> str:
+		return self.translation_manager.language
 
 	def tr(self, translation_key: str, *args, language: Optional[str] = None, fallback_language: Optional[str] = None, allow_failure=True, **kwargs) -> MessageText:
 		"""
@@ -469,6 +474,7 @@ class MCDReforgedServer:
 	def __on_mcdr_start(self):
 		self.watch_dog.start()
 		self.task_executor.start()
+		self.preference_manager.load_preferences()
 		self.plugin_manager.register_permanent_plugins()
 		self.task_executor.execute_on_thread(self.load_plugins, block=True)
 		self.plugin_manager.dispatch_event(MCDRPluginEvents.MCDR_START, ())

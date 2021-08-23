@@ -9,7 +9,7 @@ from typing import Callable, Dict, Optional, Any, Tuple, List, TYPE_CHECKING, De
 
 from mcdreforged.constants import core_constant, plugin_constant
 from mcdreforged.plugin import plugin_factory
-from mcdreforged.plugin.builtin.mcdreforged_plugin import MCDReforgedPlugin
+from mcdreforged.plugin.builtin.mcdreforged_plugin.mcdreforged_plugin import MCDReforgedPlugin
 from mcdreforged.plugin.builtin.python_plugin import PythonPlugin
 from mcdreforged.plugin.meta.dependency_walker import DependencyWalker
 from mcdreforged.plugin.operation_result import PluginOperationResult, SingleOperationResult

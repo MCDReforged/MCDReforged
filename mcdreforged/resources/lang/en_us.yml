@@ -132,6 +132,9 @@ mcdr_command.help_message.next_page_hover             : Click to display the nex
 mcdr_command.set_language.not_available               : Language §e{0}§r is not available
 mcdr_command.set_language.language_list               : "Available languages: {0}"
 mcdr_command.set_language.success                     : "Set language of MCDR to §e{0}§r. Notes that it will not be saved to the config file"
+mcdr_command.preference.player_required               : You need to be a player to execute this command
+mcdr_command.preference.list.title                    : MCDR Preference List
+mcdr_command.preference.set.done                      : Set preference "{0}" to "{1}"
 permission_manager.load.fail                          : Fail to load permission file {0}, using default empty data
 permission_manager.set_default_permission_level.done  : The default permission level has set to §e{0}§r
 permission_manager.set_permission_level.done          : The permission level of player §b{0}§r has set to §e{1}§r

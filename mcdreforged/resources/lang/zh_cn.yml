@@ -132,6 +132,9 @@ mcdr_command.help_message.next_page_hover             : 点击显示下一页
 mcdr_command.set_language.not_available               : 语言 §e{0}§r 不可用
 mcdr_command.set_language.language_list               : "可用的语言列表: {0}"
 mcdr_command.set_language.success                     : "已将 MCDR 的语言设置为 §e{0}§r，注意这不会被保存至配置文件"
+mcdr_command.preference.player_required               : 你需要是一名玩家才能执行此命令
+mcdr_command.preference.list.title                    : MCDR 偏好列表
+mcdr_command.preference.set.done                      : 已将偏好 "{0}" 设置为 "{1}"
 permission_manager.load.fail                          : 加载权限文件 §7{0}§r §c失败§r，使用默认的空数据
 permission_manager.set_default_permission_level.done  : 默认权限等级已设置为 §e{0}§r
 permission_manager.set_permission_level.done          : 玩家 §b{0}§r 的权限等级已设置为 §e{1}§r
