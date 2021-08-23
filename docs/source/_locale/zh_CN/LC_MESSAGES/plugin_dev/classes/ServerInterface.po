@@ -717,7 +717,7 @@ msgid ""
 "command. If it's not specified MCDR will use `get_plugin_command_source "
 "<#get-plugin-command-source>`__ as fallback command source"
 msgstr ""
-"参数 *source*：用于执行该条指令的指令源。如果它未被指定，MCDR 将会使用 <#get-plugin-command-"
+"参数 *source*：用于执行该条指令的指令源。如果它未被指定，MCDR 将会使用 `get_plugin_command_source <#get-plugin-command-"
 "source>`__ 来获得默认的指令源"
 
 #: ../plugin_dev/classes/ServerInterface.rst:517

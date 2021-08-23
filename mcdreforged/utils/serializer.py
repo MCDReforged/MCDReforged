@@ -16,7 +16,7 @@ def serialize(obj) -> Union[None, int, float, str, list, dict]:
 	elif isinstance(obj.__class__, EnumMeta):
 		return obj.name
 	try:
-		attr_dict = vars(obj)
+		attr_dict = vars(obj).copy()
 		# don't serialize protected fields
 		for attr_name in list(attr_dict.keys()):
 			if attr_name.startswith('_'):

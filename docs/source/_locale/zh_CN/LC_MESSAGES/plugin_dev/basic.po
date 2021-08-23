@@ -347,7 +347,7 @@ msgid ""
 msgstr ""
 "除此之外，你还可以使用 `get_plugin_instance "
 "<classes/ServerInterface.html#get_plugin_instance>`__ "
-"方法来导入其他插件的入口点。这也是**导入单文件插件的唯一方法**。对于多文件插件而言，其返回的值与直接导入插件是相同的。"
+"方法来导入其他插件的入口点。这也是 **导入单文件插件的唯一方法**。对于多文件插件而言，其返回的值与直接导入插件是相同的。"
 
 #: ../plugin_dev/basic.rst:184
 msgid ""
