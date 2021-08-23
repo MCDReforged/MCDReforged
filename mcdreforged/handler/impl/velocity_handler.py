@@ -51,8 +51,7 @@ class VelocityHandler(AbstractServerHandler):
 		if not info.is_user:
 			parsed = parse('Listening on /{}:{:d}', info.content)
 			if parsed is not None:
-				ip = parse('[{ip}]', parsed[0])
-				return parsed[0] if ip is None else ip['ip'], parsed[1]
+				return parsed[0], parsed[1]
 		return None
 
 	def test_server_startup_done(self, info: Info) -> bool:
