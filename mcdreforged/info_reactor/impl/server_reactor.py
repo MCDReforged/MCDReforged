@@ -28,7 +28,7 @@ class ServerReactor(AbstractInfoReactor):
 			if ip is not None:
 				self.mcdr_server.logger.debug(f'Server ip detected: {ip[0]}:{ip[1]}', option=DebugOption.REACTOR)
 				try:
-					self.mcdr_server.server_info.set_ip(*ip)
+					self.mcdr_server.server_info.set_ip(ip[0], ip[1])
 				except ValueError as e:
 					self.mcdr_server.logger.error(str(e))
 
@@ -40,4 +40,3 @@ class ServerReactor(AbstractInfoReactor):
 			if handler.test_server_stopping(info):  # notes that it might happen more than once in the server lifecycle
 				self.mcdr_server.logger.debug('Server stopping detected', option=DebugOption.REACTOR)
 				self.mcdr_server.rcon_manager.disconnect()
-				self.mcdr_server.server_info.clear()

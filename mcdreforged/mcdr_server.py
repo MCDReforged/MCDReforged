@@ -376,6 +376,7 @@ class MCDReforgedServer:
 		except Exception as e:
 			self.logger.warning('Error when closing stdout: {}'.format(e))
 		self.process = None
+		self.server_info.clear()
 		self.set_server_state(ServerState.STOPPED)
 		self.remove_flag(MCDReforgedFlag.SERVER_STARTUP | MCDReforgedFlag.SERVER_RCON_READY)  # removes this two
 		self.plugin_manager.dispatch_event(MCDRPluginEvents.SERVER_STOP, (return_code,), block=True)

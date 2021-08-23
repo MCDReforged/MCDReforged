@@ -38,8 +38,6 @@ class ServerInfo:
 	port = None
 
 	def set_ip(self, ip: str, port: int):
-		if not 0 <= port <= 65535:
-			raise ValueError('Illegal port: {}'.format(port))
 		self.ip = ip
 		self.port = port
 
@@ -222,7 +220,7 @@ class ServerInterface:
 		"""
 		Return the info of the server process
 		Including server version name (str, not version id), ip (str), port (int)
-		All these will be None if server doesn't have a vanilla-like logging style
+		These attributes will be None if server is down or it doesn't output these information in acceptable format
 		:return: class ServerInfo
 		"""
 		return copy(self._mcdr_server.server_info)
