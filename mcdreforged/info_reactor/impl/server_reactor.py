@@ -27,10 +27,7 @@ class ServerReactor(AbstractInfoReactor):
 			ip = handler.parse_server_ip(info)
 			if ip is not None:
 				self.mcdr_server.logger.debug(f'Server ip detected: {ip[0]}:{ip[1]}', option=DebugOption.REACTOR)
-				try:
-					self.mcdr_server.server_info.set_ip(ip[0], ip[1])
-				except ValueError as e:
-					self.mcdr_server.logger.error(str(e))
+				self.mcdr_server.server_info.set_ip(ip[0], ip[1])
 
 			if handler.test_rcon_started(info):
 				self.mcdr_server.logger.debug('Server rcon started detected', option=DebugOption.REACTOR)
