@@ -39,7 +39,7 @@ Plugin load event gets triggered once when a plugin is loaded. Plugins are suppo
 
 .. code-block:: python
 
-    def on_load(server: ServerInterface, prev_module):
+    def on_load(server: PluginServerInterface, prev_module):
         server.register_command(...)
         server.register_event_listener(...)
         server.register_help_message(...)
@@ -48,7 +48,7 @@ If it's a plugin reload, ``prev_module`` argument indicates the previous plugin 
 
 .. code-block:: python
 
-    def on_load(server: ServerInterface, prev_module):
+    def on_load(server: PluginServerInterface, prev_module):
         global reload_counter
         if prev_module is not None:
             reload_counter = prev_module.reload_counter + 1
