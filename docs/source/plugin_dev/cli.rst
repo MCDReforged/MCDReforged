@@ -69,7 +69,7 @@ pack
 
     python -m mcdreforged pack [-h] [-i INPUT] [-o OUTPUT] [-n NAME]
 
-Pack up your plugin source codes / resources files, from a batch of files, to a ``.mcdr`` file packed plugin
+Pack up your plugin source codes / resources files, from a batch of files, to a ``.mcdr`` packed plugin file
 
 The packing is based on the ``mcdreforged.plugin.json`` metadata file in the input directory. It will pack and only pack the following files/folders into the packed plugin:
 

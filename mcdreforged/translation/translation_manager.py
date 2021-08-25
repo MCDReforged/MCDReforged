@@ -15,8 +15,7 @@ from mcdreforged.utils.logger import DebugOption
 from mcdreforged.utils.types import TranslationStorage, MessageText
 
 LANGUAGE_RESOURCE_DIRECTORY = os.path.join('resources', 'lang')
-HERE = os.path.abspath(os.path.dirname(__file__))
-LANGUAGE_DIRECTORY = os.path.join(HERE, LANGUAGE_RESOURCE_DIRECTORY)
+LANGUAGE_DIRECTORY = os.path.join(core_constant.PACKAGE_PATH, LANGUAGE_RESOURCE_DIRECTORY)
 
 
 class TranslationManager:

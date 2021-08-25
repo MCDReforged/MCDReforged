@@ -17,6 +17,8 @@ from mcdreforged.plugin.plugin_event import EventListener, LiteralEvent, PluginE
 from mcdreforged.plugin.plugin_registry import DEFAULT_LISTENER_PRIORITY, HelpMessage
 from mcdreforged.plugin.type.multi_file_plugin import MultiFilePlugin
 from mcdreforged.plugin.type.plugin import AbstractPlugin
+from mcdreforged.preference.preference_manager import PreferenceItem
+from mcdreforged.translation.translation_text import RTextMCDRTranslation
 from mcdreforged.utils import misc_util
 from mcdreforged.utils.exception import IllegalCallError
 from mcdreforged.utils.logger import MCDReforgedLogger, DebugOption
@@ -99,6 +101,19 @@ class ServerInterface:
 		:param kwargs: The kwargs to be formatted
 		"""
 		return self._mcdr_server.tr(translation_key, *args, language=language, fallback_language=fallback_language, **kwargs)
+
+	def rtr(self, translation_key: str, *args, **kwargs) -> RTextMCDRTranslation:
+		"""
+		Return a RText derived component RTextMCDRTranslation, that only translates itself right before displaying or serializing
+		Using this method instead of tr() allows you to display your texts in user's preferred language automatically
+		Of course you can construct RTextMCDRTranslation yourself instead of using this method if you want
+		:param translation_key: The key of the translation
+		:param args: The args to be formatted
+		:param kwargs: The kwargs to be formatted
+		"""
+		text = RTextMCDRTranslation(translation_key, *args, **kwargs)
+		text.set_translator(self.tr)  # not that necessary tbh, just in case self.tr != ServerInterface.get_instance().tr somehow
+		return text
 
 	def as_basic_server_interface(self) -> 'ServerInterface':
 		"""
@@ -244,7 +259,8 @@ class ServerInterface:
 		:param text: the message you want to send to the player
 		:param encoding: The encoding method for the text
 		"""
-		command = self._mcdr_server.server_handler_manager.get_current_handler().get_send_message_command(player, text)
+		with RTextMCDRTranslation.language_context(self._mcdr_server.preference_manager.get_preferred_language(player)):
+			command = self._mcdr_server.server_handler_manager.get_current_handler().get_send_message_command(player, text)
 		if command is not None:
 			self.execute(command, encoding=encoding)
 
@@ -508,6 +524,20 @@ class ServerInterface:
 		misc_util.check_type(command, str)
 		misc_util.check_type(source, CommandSource)
 		self._mcdr_server.command_manager.execute_command(command, source)
+
+	# ------------------------
+	#        Preference
+	# ------------------------
+
+	def get_preference(self, obj: Union[str, CommandSource]) -> PreferenceItem:
+		"""
+		Return the MCDR preference of the given object. The object can be a str indicating the name of a player, or a
+		command source. For command source, only PlayerCommandSource and ConsoleCommandSource are supported
+		:param obj: The object to querying preference
+		:raise: TypeError, if the type of the given object is not supported for preference querying
+		"""
+		pref = self._mcdr_server.preference_manager.get_preference(obj, strict_type_check=True)
+		return PreferenceItem.deserialize(pref.serialize())  # make a copy
 
 	# ------------------------
 	#           Misc

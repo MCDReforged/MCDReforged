@@ -469,6 +469,49 @@ Who doesn't want a complete type checking to help you reduce silly mistakes etc.
         pass
 
 
+RTextMCDRTranslation
+^^^^^^^^^^^^^^^^^^^^
+
+The translation text component used in MCDR
+
+When MCDR is running, it will use the `tr <classes/ServerInterface.html#tr>`__ method in ``ServerInterface`` class as the translating method, and the language of MCDR as the fallback translation language
+
+RTextMCDRTranslation
+~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+    def __init__(self, translation_key: str, *args, **kwargs)
+
+Create a ``RTextMCDRTranslation`` component with necessary parameters for translation
+
+language_context
+~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+    @classmethod
+    @contextmanager
+    def language_context(cls, language: str)
+
+Create a context where all ``RTextMCDRTranslation`` will use the given language to translate within this context
+
+It's mostly used when you want a translated str or Minecraft json text object corresponding to this component under a specific language
+
+MCDR will automatically apply this context with `user's preferred language <../preference.html#language>`__ right before sending messages to a player or the console
+
+Example:
+
+.. code-block:: python
+
+    def reply_message_line_by_line(source: CommandSource):
+        with RTextMCDRTranslation.language_context(source.get_server().get_preference(source).language):
+            text: RTextMCDRTranslation = source.get_server().rtr('my_plugin.some_message')
+            text_as_str: str = text.to_plain_text()  # translation operation happens here
+            source.get_server().logger.info('Lines of my translation')
+            for line in text_as_str.splitlines():
+                source.get_server().logger.info('- {}'.format(line))
+
 utils
 -----
 

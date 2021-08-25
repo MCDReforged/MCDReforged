@@ -135,6 +135,8 @@ def make_packed_plugin(input_dir: str, output_dir: str, file_name: Optional[str]
 			arc_name = os.path.basename(base_path)
 			zip_file.write(base_path, arcname=arc_name)
 			writeln('Writing single file: {} -> {}'.format(base_path, arc_name))
+		else:
+			writeln('[WARN] {} not found! ignored'.format(base_path))
 
 	writeln('Packing plugin "{}" into "{}" ...'.format(meta.id, file_name))
 	with ZipFile(os.path.join(output_dir, file_name), 'w', ZIP_DEFLATED) as zip_file:

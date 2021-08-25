@@ -160,11 +160,9 @@ Take a look at the reference of ``register_help_message`` method in `PluginServe
 Translation
 ^^^^^^^^^^^
 
-If your plugin needs to handle some message localization or translation things, you can let MCDR help you: register a translation via `register_translation <classes/PluginServerInterface.html#register-translation>`__ and use `tr <classes/ServerInterface.html#register-help-message>`__ to get the translated string
+If your plugin needs to handle some message localization or translation things, you can let MCDR help you: register a translation via `register_translation <classes/PluginServerInterface.html#register-translation>`__ and use `tr <classes/ServerInterface.html#tr>`__ to get the translated string
 
-For `multi file plugin <plugin_format.html#multi-file-plugin>`__, you can also include a ``lang/`` folder in your plugin, with translation files in json (``.json``) or yaml (``.yml``) format named like ``en_us.json``. MCDR will automatically register these translations for your plugin
-
-It's highly recommended to use your plugin id as the prefix of your translation key, so there will be no translation conflicts between plugins. e.g. use ``my_plugin.some.text`` instead of `some.text`` as translation key
+See the `translation section <dev_tips.html#translation>`__ in dev tips for some suggestions about using translation
 
 Import a plugin
 ---------------

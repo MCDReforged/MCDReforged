@@ -33,6 +33,7 @@
 
 # random files
 /test.py
+/custom_handler/
 /plugins_test/*
 /plugins0.x/*
 /plugins_dev/*

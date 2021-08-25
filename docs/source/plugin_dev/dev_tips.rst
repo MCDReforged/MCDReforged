@@ -11,6 +11,20 @@ Use ``server.register_help_message()`` to add some necessary tips for your plugi
 
 Of course if your plugin is supposed to only be used by player with enough permission level, specify the *permission* argument when registering
 
+Translation
+-----------
+
+For `multi file plugin <plugin_format.html#multi-file-plugin>`__, you can also include a ``lang/`` folder in your plugin, with translation files in json (``.json``) or yaml (``.yml``) format named like ``en_us.json``. MCDR will automatically register these translations for your plugin
+
+It's highly recommended to use your plugin id as the prefix of your translation key, so there will be no translation conflicts between plugins. e.g. use ``my_plugin.some.text`` instead of `some.text`` as translation key
+
+For the difference between 2 translation method in ``ServerInterface``, let's use Minecraft code (yarn mapping) as an example:
+
+* `ServerInterface.tr <plugin_dev/classes/ServerInterface.html#tr>`__ is ``I18n.translate()``
+* `ServerInterface.rtr <plugin_dev/classes/ServerInterface.html#tr>`__, or `RTextMCDRTranslation <plugin_dev/api.html#rtextmcdrtranslation>`__ is ``new TranslatableText()``
+
+In general, the second method is recommended for translating things in your plugin, since it smartly use the proper language for the player or the console to send message, and use MCDR's language for general translation things including message logging
+
 Event listening
 ---------------
 

@@ -5,7 +5,7 @@ Credit: Pandaria98 https://github.com/Pandaria98 https://github.com/TISUnion/ste
 
 import json
 from enum import Enum, auto
-from typing import Iterable, List, Union, Optional, Any, Tuple
+from typing import Iterable, List, Union, Optional, Any, Tuple, Set, NamedTuple
 
 from colorama import Fore, Style
 
@@ -61,7 +61,7 @@ class RAction(Enum):
 
 
 class RTextBase:
-	def to_json_object(self):
+	def to_json_object(self) -> Union[dict, list]:
 		raise NotImplementedError()
 
 	def to_json_str(self) -> str:
@@ -163,22 +163,32 @@ class RTextBase:
 		return RTextList(*texts)
 
 
+class _ClickEvent(NamedTuple):
+	action: RAction
+	value: str
+
+
 class RText(RTextBase):
 	def __init__(self, text, color: Optional[RColor] = None, styles: Optional[Union[RStyle, Iterable[RStyle]]] = None):
-		if isinstance(text, type(self)):
-			self._copy_from(text)
-		else:
-			self.data = {'text': str(text)}  # type: dict
-			if color is not None:
-				self.set_color(color)
-			if styles is not None:
-				self.set_styles(styles)
+		self.__text: str = str(text)
+		self.__color: Optional[RColor] = None
+		self.__styles: Set[RStyle] = set()
+		self.__click_event: Optional[_ClickEvent] = None
+		self.__hover_text_list: list = []
+		if color is not None:
+			self.set_color(color)
+		if styles is not None:
+			self.set_styles(styles)
 
 	def _copy_from(self, text: 'RText'):
-		self.data = text.data.copy()
+		self.__text = text.__text
+		self.__color = text.__color
+		self.__styles = text.__styles.copy()
+		self.__click_event = text.__click_event
+		self.__hover_text_list = text.__hover_text_list.copy()
 
 	def set_color(self, color: RColor):
-		self.data['color'] = color.name
+		self.__color = color
 		return self
 
 	def set_styles(self, styles: Union[RStyle, Iterable[RStyle]]):
@@ -188,41 +198,45 @@ class RText(RTextBase):
 			styles = set(styles)
 		else:
 			raise TypeError('Unsupported style type {}'.format(type(styles)))
-		for style in RStyle:
-			if style in styles:
-				self.data[style.name] = True
-			elif style.name in self.data:
-				self.data.pop(style.name)
+		self.__styles = styles
 		return self
 
 	def set_click_event(self, action: RAction, value: str):
-		self.data['clickEvent'] = {
-			'action': action.name,
-			'value': value
-		}
+		self.__click_event = _ClickEvent(action, value)
 		return self
 
 	def set_hover_text(self, *args):
-		self.data['hoverEvent'] = {
-			'action': 'show_text',
-			'value': {
-				'text': '',
-				'extra': RTextList(*args).to_json_object(),
-			}
-		}
+		self.__hover_text_list = list(args)
 		return self
 
-	def to_json_object(self):
-		return self.data
+	def to_json_object(self) -> Union[dict, list]:
+		obj = {'text': self.__text}
+		if self.__color is not None:
+			obj['color'] = self.__color.name
+		for style in self.__styles:
+			obj[style.name] = True
+		if self.__click_event is not None:
+			obj['clickEvent'] = {
+				'action': self.__click_event.action.name,
+				'value': self.__click_event.value
+			}
+		if len(self.__hover_text_list) > 0:
+			obj['hoverEvent'] = {
+				'action': 'show_text',
+				'value': {
+					'text': '',
+					'extra': RTextList(*self.__hover_text_list).to_json_object(),
+				}
+			}
+		return obj
 
 	def to_plain_text(self) -> str:
-		return self.data['text']
+		return self.__text
 
 	def to_colored_text(self) -> str:
-		color = RColorConvertor.RCOLOR_NAME_TO_CONSOLE[self.data['color']] if 'color' in self.data else ''
-		for style in RStyle:
-			if self.data.get(style.name, False):
-				color += style.value.console_code
+		color = RColorConvertor.RCOLOR_NAME_TO_CONSOLE[self.__color.name] if self.__color is not None else ''
+		for style in self.__styles:
+			color += style.value.console_code
 		return color + self.to_plain_text() + Style.RESET_ALL
 
 	def copy(self) -> 'RText':
@@ -232,13 +246,22 @@ class RText(RTextBase):
 
 
 class RTextTranslation(RText):
-	def __init__(self, translation_key, color: RColor = RColor.reset, styles: Optional[Union[RStyle, Iterable[RStyle]]] = None):
+	def __init__(self, translation_key: str, color: RColor = RColor.reset, styles: Optional[Union[RStyle, Iterable[RStyle]]] = None):
 		super().__init__(translation_key, color, styles)
-		self.data.pop('text')
-		self.data['translate'] = translation_key
+		self.__translation_key: str = translation_key
 
 	def to_plain_text(self) -> str:
-		return self.data['translate']
+		return self.__translation_key
+
+	def to_json_object(self) -> Union[dict, list]:
+		obj = super().to_json_object()
+		obj.pop('text')
+		obj['translate'] = self.__translation_key
+		return obj
+
+	def _copy_from(self, text: 'RTextTranslation'):
+		super()._copy_from(text)
+		self.__translation_key = text.__translation_key
 
 	def copy(self) -> 'RTextTranslation':
 		copied = RTextTranslation('')
@@ -286,7 +309,7 @@ class RTextList(RTextBase):
 	def is_empty(self) -> bool:
 		return len(self.children) == 0
 
-	def to_json_object(self) -> list:
+	def to_json_object(self) -> Union[dict, list]:
 		ret = ['' if self.header_empty else self.header.to_json_object()]
 		ret.extend(map(lambda rtext: rtext.to_json_object(), self.children))
 		return ret

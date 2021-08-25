@@ -357,6 +357,8 @@ class AbstractNode:
 		# [!!aa bb cc] dd
 		# read         suggested
 		command_read_at_the_beginning = context.command_read
+		if len(context.command_remaining) == 0:
+			return self_suggestions()
 		try:
 			result = self.parse(context.command_remaining)
 		except CommandSyntaxError:

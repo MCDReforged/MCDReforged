@@ -11,7 +11,7 @@ __all__ = [
 _NONE = object()
 
 
-def translate_from_dict(translations: TranslationKeyDictRich, language: str, *, fallback_language: str = core_constant.DEFAULT_LANGUAGE, default: Optional[MessageText] = _NONE) -> MessageText:
+def translate_from_dict(translations: TranslationKeyDictRich, language: str, *, fallback_language: Optional[str] = core_constant.DEFAULT_LANGUAGE, default: Optional[MessageText] = _NONE) -> MessageText:
 	"""
 	Select a translation for given language based on a translation dict
 	:param language: The language
@@ -20,7 +20,7 @@ def translate_from_dict(translations: TranslationKeyDictRich, language: str, *, 
 	:param default: The fallback value. If not specified and translation not found, KeyError will be risen
 	"""
 	result = translations.get(language)
-	if result is None:
+	if result is None and fallback_language is not None:
 		result = translations.get(fallback_language)
 	if result is None:
 		result = default

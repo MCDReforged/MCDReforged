@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-15 22:41+0800\n"
+"POT-Creation-Date: 2021-08-25 23:32+0800\n"
 "PO-Revision-Date: 2021-01-23 08:54+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -15,6 +15,7 @@ msgstr ""
 "Generated-By: Babel 2.9.0\n"
 
 #: ../command.rst:3 ../command.rst:47 ../command.rst:77 ../command.rst:123
+#: ../command.rst:190
 msgid "Command"
 msgstr "指令"
 
@@ -125,15 +126,15 @@ msgstr ""
 "``!!MCDR reload`` 指令可以热重载 MCDR。它也可以缩写为 ``!!MCDR r``。 执行指令 `!!MCDR reload`"
 " 即可获取热重载指令的帮助信息。"
 
-#: ../command.rst:42 ../command.rst:72 ../command.rst:118
+#: ../command.rst:42 ../command.rst:72 ../command.rst:118 ../command.rst:185
 msgid "Here's a table of the commands"
 msgstr "以下为指令列表："
 
-#: ../command.rst:48 ../command.rst:78 ../command.rst:124
+#: ../command.rst:48 ../command.rst:78 ../command.rst:124 ../command.rst:191
 msgid "Short form"
 msgstr "缩写"
 
-#: ../command.rst:49 ../command.rst:79 ../command.rst:125
+#: ../command.rst:49 ../command.rst:79 ../command.rst:125 ../command.rst:192
 msgid "Function"
 msgstr "功能"
 
@@ -298,7 +299,7 @@ msgid ""
 "integer, the level of the permission"
 msgstr "<level> 参数应该是一个表示权限等级的字符串或整数。它可以是权限全名或表示权限等级的整数。"
 
-#: ../command.rst:104
+#: ../command.rst:104 ../command.rst:208
 msgid "Examples:"
 msgstr "例如："
 
@@ -491,68 +492,116 @@ msgid ""
 "this plugin is not loaded, you can only use file name to specify it"
 msgstr "加载文件名为 `another_plugin.py` 的插件。注意，由于此插件未加载，故你只能使用文件名来指定它。"
 
-#: ../command.rst:180
+#: ../command.rst:181
+msgid "Preference settings"
+msgstr "偏好设置"
+
+#: ../command.rst:183
+msgid "``!!MCDR preference`` commands is to control the preference of MCDR"
+msgstr "``!!MCDR preference`` 指令可用于操控 MCDR 的偏好。"
+
+#: ../command.rst:193
+msgid "!!MCDR preference"
+msgstr "!!MCDR preference"
+
+#: ../command.rst:194
+msgid "!!MCDR pref"
+msgstr "!!MCDR pref"
+
+#: ../command.rst:195
+msgid "Show preference command help message"
+msgstr "显示偏好指令帮助信息"
+
+#: ../command.rst:196
+msgid "!!MCDR preference list"
+msgstr "!!MCDR preference list"
+
+#: ../command.rst:197
+msgid "!!MCDR pref list"
+msgstr "!!MCDR pref list"
+
+#: ../command.rst:198
+msgid "Display the preference list"
+msgstr "显示偏好列表"
+
+#: ../command.rst:199
+msgid "!!MCDR preference <pref_name>"
+msgstr ""
+
+#: ../command.rst:200
+msgid "!!MCDR pref <pref_name>"
+msgstr ""
+
+#: ../command.rst:201
+msgid "Display the details of preference <pref_name>"
+msgstr "显示偏好 <pref_name> 的详情"
+
+#: ../command.rst:202
+msgid "!!MCDR preference <pref_name> <value>"
+msgstr "!!MCDR preference <pref_name> <value>"
+
+#: ../command.rst:203
+msgid "!!MCDR pref <pref_name> <value>"
+msgstr "!!MCDR pref <pref_name> <value>"
+
+#: ../command.rst:204
+msgid "Set the value of preference <pref_name> to <value>"
+msgstr "设定偏好 <pref_name> 的值为 <value>"
+
+#: ../command.rst:206
+msgid "See `here <preference.html>`__ for more information about MCDR preference"
+msgstr "查看 `偏好 <preference.html>`__ 页面以获取更多关于 MCDR 偏好的信息"
+
+#: ../command.rst:210
+msgid ""
+"``!!MCDR pref set language zh_cn``: Set the value of preference "
+"``language`` to ``zh_cn``"
+msgstr "``!!MCDR pref set language zh_cn``: 将偏好 ``language`` 的值设置为 ``zh_cn``"
+
+#: ../command.rst:213
 msgid "Misc"
 msgstr "杂项"
 
-#: ../command.rst:183
-msgid "Set language"
-msgstr "设置语言"
-
-#: ../command.rst:185
-msgid "``!!MCDR setlang <language>``"
-msgstr "``!!MCDR setlang <language>``"
-
-#: ../command.rst:187
-msgid ""
-"Set the language of MCDR to ``<language>``. Notes that it will not be "
-"saved to the config file"
-msgstr "将 MCDR 的语言设置为 ``<language>``，不会被保存至配置文件。"
-
-#: ../command.rst:189
-msgid "Having a temporary language changing method is always nice"
-msgstr "有一个临时的语言改变方法总是好的。"
-
-#: ../command.rst:192
+#: ../command.rst:216
 msgid "Check update"
 msgstr "检查更新"
 
-#: ../command.rst:194
+#: ../command.rst:218
 msgid ""
 "``!!MCDR checkupdate``, or ``!!MCDR cu``. Use it to manually check update"
 " from github"
 msgstr "使用 ``!!MCDR checkupdate`` 或 ``!!MCDR cu`` 可手动检查来自 github 的更新。"
 
-#: ../command.rst:196
+#: ../command.rst:220
 msgid ""
 "It will try to get the latest release version in github, and check if "
 "it's newer than the current version. If it is, it will show the update "
 "logs from the github release"
 msgstr "它将尝试在 github 中获取最新版本，并检查它是否比当前版本更新。 如果是，它将显示 github 上的更新日志。"
 
-#: ../command.rst:199
+#: ../command.rst:223
 msgid "!!help command"
 msgstr "!!help 指令"
 
-#: ../command.rst:201
+#: ../command.rst:225
 msgid ""
 "``!!help`` command is place to display the help messages of all commands."
 " It works as an index of all commands"
 msgstr "``!!help`` 指令将显示所有指令的帮助消息。它作为着一个包含所有指令的索引。"
 
-#: ../command.rst:203
+#: ../command.rst:227
 msgid ""
 "The content of this command can be registered by plugins, so a new user "
 "can easily browse all available commands that it can access"
 msgstr "此指令的内容可以由插件注册，所以一个新的用户可以借此轻松浏览所有可用的指令。"
 
-#: ../command.rst:205
+#: ../command.rst:229
 msgid ""
 "Any user is allowed to use this command, and MCDR will list all command "
 "help messages that the user has enough permission level to see"
 msgstr "任何用户都可以使用此指令，MCDR 将列出该用户有权查看的所有指令帮助消息。"
 
-#: ../command.rst:207
+#: ../command.rst:231
 msgid ""
 "Without any plugin, you may see the result below after you entered the "
 "``!!help`` command"

@@ -75,7 +75,7 @@ msgstr "默认值：``en_us``"
 
 #: ../configure.rst:27
 msgid "Available options: ``en_us``\\ , ``zh_cn``"
-msgstr "可用选项：``en_us`` ， ``zh_cn``"
+msgstr "可用选项：``en_us``，``zh_cn``"
 
 #: ../configure.rst:30
 msgid "working_directory"
