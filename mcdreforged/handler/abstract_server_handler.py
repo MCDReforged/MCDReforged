@@ -1,6 +1,6 @@
 import re
 import time
-from typing import Optional, Any, Union, Iterable
+from typing import Optional, Any, Union, Iterable, Tuple
 
 from parse import parse
 
@@ -173,6 +173,28 @@ class AbstractServerHandler:
 		:param Info info: The info instance that will be checked
 		:return: The name of the player or None
 		:rtype: str or None
+		"""
+		raise NotImplementedError()
+
+	def parse_server_version(self, info: Info) -> Optional[str]:
+		"""
+		Check if the info contains a server version message
+		If it is, returns server version, otherwise returns None
+
+		:param Info info: The info instance that will be checked
+		:return: The name of the player or None
+		:rtype: str or None
+		"""
+		raise NotImplementedError()
+
+	def parse_server_ip(self, info: Info) -> Optional[Tuple[str, int]]:
+		"""
+		Check if the info contains a server ip
+		If it is, returns server ip and port, otherwise returns None
+
+		:param Info info: The info instance that will be checked
+		:return: The name of the player or None
+		:rtype: Tuple[str, int] or None
 		"""
 		raise NotImplementedError()
 

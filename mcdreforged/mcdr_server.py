@@ -24,7 +24,7 @@ from mcdreforged.minecraft.rcon.rcon_manager import RconManager
 from mcdreforged.permission.permission_manager import PermissionManager
 from mcdreforged.plugin.plugin_event import MCDRPluginEvents
 from mcdreforged.plugin.plugin_manager import PluginManager
-from mcdreforged.plugin.server_interface import ServerInterface
+from mcdreforged.plugin.server_interface import ServerInterface, ServerInfo
 from mcdreforged.preference.preference_manager import PreferenceManager
 from mcdreforged.translation.translation_manager import TranslationManager
 from mcdreforged.utils import file_util
@@ -46,6 +46,7 @@ class MCDReforgedServer:
 		self.flags = MCDReforgedFlag.NONE
 		self.starting_server_lock = Lock()  # to prevent multiple start_server() call
 		self.stop_lock = Lock()  # to prevent multiple stop() call
+		self.server_info = ServerInfo()
 
 		# will be assigned in on_config_changed()
 		self.encoding_method = None  # type: Optional[str]
@@ -380,6 +381,7 @@ class MCDReforgedServer:
 		except Exception as e:
 			self.logger.warning('Error when closing stdout: {}'.format(e))
 		self.process = None
+		self.server_info.clear()
 		self.set_server_state(ServerState.STOPPED)
 		self.remove_flag(MCDReforgedFlag.SERVER_STARTUP | MCDReforgedFlag.SERVER_RCON_READY)  # removes this two
 		self.plugin_manager.dispatch_event(MCDRPluginEvents.SERVER_STOP, (return_code,), block=True)

@@ -3,6 +3,7 @@ import json
 import os
 import time
 from typing import Callable, TYPE_CHECKING, Tuple, Any, Union, Optional, List, IO, Dict, Type, TypeVar
+from copy import copy
 
 from mcdreforged.command.builder.nodes.basic import Literal
 from mcdreforged.command.command_source import CommandSource, PluginCommandSource
@@ -31,6 +32,19 @@ if TYPE_CHECKING:
 
 
 SerializableType = TypeVar('SerializableType')
+
+
+class ServerInfo:
+	version = None
+	ip = None
+	port = None
+
+	def set_ip(self, ip: str, port: int):
+		self.ip = ip
+		self.port = port
+
+	def clear(self):
+		self.version, self.ip, self.port = None, None, None
 
 
 class ServerInterface:
@@ -217,6 +231,14 @@ class ServerInterface:
 			return self._mcdr_server.process.pid
 		return None
 
+	def get_server_info(self) -> Optional[ServerInfo]:
+		"""
+		Return the info of the server process
+		Including server version name (str, not version id), ip (str), port (int)
+		These attributes will be None if server is down or it doesn't output these information in acceptable format
+		:return: class ServerInfo
+		"""
+		return copy(self._mcdr_server.server_info)
 	# ------------------------
 	#     Text Interaction
 	# ------------------------

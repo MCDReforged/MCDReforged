@@ -52,6 +52,20 @@ class VanillaHandler(AbstractServerHandler):
 			return info.content.split(' ')[0]
 		return None
 
+	def parse_server_version(self, info: Info):
+		if not info.is_user:
+			parsed = parse('Starting minecraft server version {version}', info.content)
+			if parsed is not None:
+				return parsed['version']
+		return None
+
+	def parse_server_ip(self, info: Info):
+		if not info.is_user:
+			parsed = parse('Starting Minecraft server on {}:{:d}', info.content)
+			if parsed is not None:
+				return parsed[0], parsed[1]
+		return None
+
 	def test_server_startup_done(self, info: Info):
 		# 1.13+ Done (3.500s)! For help, type "help"
 		# 1.13- Done (3.500s)! For help, type "help" or "?"

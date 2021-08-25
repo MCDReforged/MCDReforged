@@ -35,7 +35,13 @@ class MyTestCase(unittest.TestCase):
 		info = self.handler.parse_server_stdout('[00:39:33] [Server thread/INFO]: Fallen_Breath left the game')
 		self.assertEqual('Fallen_Breath', self.handler.parse_player_left(info))
 
-	def test_3_server_events(self):
+	def test_3_server_info(self):
+		info = self.handler.parse_server_stdout('[00:38:41] [Server thread/INFO]: Starting minecraft server version 1.14.4')
+		self.assertEqual('1.14.4', self.handler.parse_server_version(info))
+		info = self.handler.parse_server_stdout('[00:38:42] [Server thread/INFO]: Starting Minecraft server on *:25565')
+		self.assertEqual(('*', 25565), self.handler.parse_server_ip(info))
+
+	def test_4_server_events(self):
 		info = self.handler.parse_server_stdout('[00:39:13] [Server thread/INFO]: Done (17.555s)! For help, type "help"')
 		self.assertEqual(True, self.handler.test_server_startup_done(info))
 		info = self.handler.parse_server_stdout('[00:39:13] [RCON Listener #1/INFO]: RCON running on 0.0.0.0:25575')
@@ -43,7 +49,7 @@ class MyTestCase(unittest.TestCase):
 		info = self.handler.parse_server_stdout('[00:39:38] [Server thread/INFO]: Stopping server')
 		self.assertEqual(True, self.handler.test_server_stopping(info))
 
-	def test_4_lifecycle(self):
+	def test_5_lifecycle(self):
 		for line in TEXT.splitlines():
 			info = self.handler.parse_server_stdout(line)
 			# no exception

@@ -19,6 +19,16 @@ class ServerReactor(AbstractInfoReactor):
 				self.mcdr_server.with_flag(MCDReforgedFlag.SERVER_STARTUP)
 				self.mcdr_server.plugin_manager.dispatch_event(MCDRPluginEvents.SERVER_STARTUP, ())
 
+			version = handler.parse_server_version(info)
+			if version:
+				self.mcdr_server.logger.debug(f'Server version detected: {version}', option=DebugOption.REACTOR)
+				self.mcdr_server.server_info.version = version
+
+			ip = handler.parse_server_ip(info)
+			if ip is not None:
+				self.mcdr_server.logger.debug(f'Server ip detected: {ip[0]}:{ip[1]}', option=DebugOption.REACTOR)
+				self.mcdr_server.server_info.set_ip(ip[0], ip[1])
+
 			if handler.test_rcon_started(info):
 				self.mcdr_server.logger.debug('Server rcon started detected', option=DebugOption.REACTOR)
 				self.mcdr_server.with_flag(MCDReforgedFlag.SERVER_RCON_READY)
