@@ -4,7 +4,7 @@ from typing import Optional, Dict, TYPE_CHECKING, Union
 
 from mcdreforged.command.command_source import CommandSource, PlayerCommandSource, ConsoleCommandSource
 from mcdreforged.constants import core_constant, plugin_constant
-from mcdreforged.utils.serializer import Serializable
+from mcdreforged.utils.serializer import Serializable, deserialize, serialize
 
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
@@ -15,27 +15,26 @@ CONSOLE_ALIAS = '#@MCDR_Console@#'
 
 
 class PreferenceItem(Serializable):
-	language: Optional[str] = None
+	language: Optional[str]
 
 
-class PreferenceStorage(Serializable):
-	player_preferences: Dict[str, PreferenceItem] = {}
+PreferenceStorage = Dict[str, PreferenceItem]
 
 
 class PreferenceManager:
 	def __init__(self, mcdr_server: 'MCDReforgedServer'):
 		self.mcdr_server: 'MCDReforgedServer' = mcdr_server
 		self.logger = mcdr_server.logger
-		self.preferences: Optional[PreferenceStorage] = None
+		self.preferences: PreferenceStorage = {}
 
 	def load_preferences(self):
 		try:
 			with open(PREFERENCE_FILE, 'r', encoding='utf8') as file:
-				self.preferences = PreferenceStorage.deserialize(json.load(file))
+				self.preferences = deserialize(json.load(file), PreferenceStorage, error_at_missing=True, error_at_redundancy=True)
 		except Exception as e:
 			if not isinstance(e, FileNotFoundError):
 				self.logger.exception('Failed to load preference file')
-			self.preferences = PreferenceStorage.get_default()
+			self.preferences = {}
 			self.save_preferences()
 
 	def save_preferences(self):
@@ -44,7 +43,7 @@ class PreferenceManager:
 			if not os.path.isdir(dir_path):
 				os.makedirs(dir_path)
 			with open(PREFERENCE_FILE, 'w', encoding='utf8') as file:
-				json.dump(self.preferences.serialize(), file, indent=4, ensure_ascii=False)
+				json.dump(serialize(self.preferences), file, indent=4, ensure_ascii=False)
 		except:
 			self.logger.exception('Failed to save preference file')
 
@@ -64,11 +63,11 @@ class PreferenceManager:
 			player_name = None
 			if strict_type_check:
 				raise TypeError('Unsupported object type during preference querying: {}'.format(type(obj)))
-		pref = self.preferences.player_preferences.get(player_name)
+		pref = self.preferences.get(player_name)
 		if pref is None:
 			pref = self.get_default_preference()
 			if auto_add and player_name is not None:
-				self.preferences.player_preferences[player_name] = pref
+				self.preferences[player_name] = pref
 				self.save_preferences()
 		return pref
 
