@@ -85,12 +85,13 @@ class MCDReforgedPlugin(PermanentPlugin):
 
 	def get_help_message(self, source: CommandSource, translation_key: str):
 		lst = RTextList()
-		for line in self.tr(translation_key).get_translated_text(self.server_interface.get_preference(source).language).to_plain_text().splitlines(keepends=True):
-			prefix = re.search(r'(?<=§7)' + self.control_command_prefix + r'[\w ]*(?=§)', line)
-			if prefix is not None:
-				lst.append(RText(line).c(RAction.suggest_command, prefix.group()))
-			else:
-				lst.append(line)
+		with RTextMCDRTranslation.language_context(self.server_interface.get_preference(source).language):
+			for line in self.tr(translation_key).to_plain_text().splitlines(keepends=True):
+				prefix = re.search(r'(?<=§7)' + self.control_command_prefix + r'[\w ]*(?=§)', line)
+				if prefix is not None:
+					lst.append(RText(line).c(RAction.suggest_command, prefix.group()))
+				else:
+					lst.append(line)
 		return lst
 
 	def on_mcdr_command_permission_denied(self, source: CommandSource, error: CommandError):

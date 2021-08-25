@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING, NamedTuple, Callable, Collection, Any, Type, Dict, List
 
+from mcdreforged.command.builder.exception import RequirementNotMet
 from mcdreforged.command.builder.nodes.arguments import QuotableText
 from mcdreforged.command.builder.nodes.basic import Literal, ArgumentNode
 from mcdreforged.command.command_source import CommandSource
@@ -36,10 +37,20 @@ class PreferenceCommand(SubCommand):
 	def available_languages(self) -> Collection[str]:
 		return self.mcdr_server.translation_manager.available_languages
 
+	def allowed_to_use(self, source: CommandSource) -> bool:
+		try:
+			self.mcdr_server.preference_manager.get_preference(source, strict_type_check=True)
+		except TypeError:
+			return False
+		else:
+			return True
+
 	def get_command_node(self) -> Literal:
 		root_node = (
 			self.public_command_root({'preference', 'pref'}).
 			runs(lambda src: src.reply(self.get_help_message(src, 'mcdr_command.help_message.preference'))).
+			requires(lambda src: self.allowed_to_use).
+			on_error(RequirementNotMet, lambda src: src.reply(self.tr('mcdr_command.preference.unsupported_command_source', type(src)).set_color(RColor.red)), handled=True).
 			then(Literal('list').runs(lambda src: self.show_preference_list(src)))
 		)
 		for pref in self.preferences.values():
@@ -54,16 +65,22 @@ class PreferenceCommand(SubCommand):
 			)
 		return root_node
 
+	def __detail_hint(self, text: RTextBase, pref_name: str) -> RTextBase:
+		return (
+			text.
+			h(self.tr('mcdr_command.preference.list.detail_hint', RText(pref_name, PREF_COLOR))).
+			c(RAction.run_command, '{} preference {}'.format(self.control_command_prefix, pref_name))
+		)
+
 	def show_preference_list(self, source: CommandSource):
 		pref = self.mcdr_server.preference_manager.get_preference(source, auto_add=True)
 		source.reply(self.tr('mcdr_command.preference.list.title'))
 		for pref_name in pref.get_annotations_fields().keys():
 			value = getattr(pref, pref_name, RText('N/A', RColor.gray))
-			source.reply(
-				RTextList(RText('- ', RColor.gray), RText(pref_name, PREF_COLOR), RText(': ', RColor.gray), RText(value, VALUE_COLOR)).
-				h(self.tr('mcdr_command.preference.list.detail_hint', RText(pref_name, PREF_COLOR))).
-				c(RAction.run_command, '{} preference {}'.format(self.control_command_prefix, pref_name))
-			)
+			source.reply(self.__detail_hint(
+				RTextList(RText('- ', RColor.gray), RText(pref_name, PREF_COLOR), RText(': ', RColor.gray), RText(value, VALUE_COLOR)),
+				pref_name
+			))
 
 	def show_preference_item(self, source: CommandSource, pref_name: str):
 		pref_mgr = self.mcdr_server.preference_manager
@@ -90,7 +107,7 @@ class PreferenceCommand(SubCommand):
 			text.set_styles(styles)
 			return text.h(hover_text)
 
-		source.reply(self.tr('mcdr_command.preference.item.name', RText(pref_name, PREF_COLOR)))
+		source.reply(self.tr('mcdr_command.preference.item.name', self.__detail_hint(RText(pref_name, PREF_COLOR), pref_name)))
 		source.reply(self.tr('mcdr_command.preference.item.value', RText(current_value, VALUE_COLOR)))
 		source.reply(self.tr('mcdr_command.preference.item.suggestions', RText.join(', ', map(get_suggestion_text, entry.suggester()))))
 

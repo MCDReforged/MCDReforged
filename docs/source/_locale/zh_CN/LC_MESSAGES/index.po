@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-01 16:26+0800\n"
+"POT-Creation-Date: 2021-08-25 23:06+0800\n"
 "PO-Revision-Date: 2021-01-23 17:27+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh\n"
@@ -23,12 +23,16 @@ msgid "Configure"
 msgstr "配置"
 
 #: ../index.rst:10
+msgid "Command"
+msgstr "指令"
+
+#: ../index.rst:10
 msgid "Permission"
 msgstr "权限"
 
 #: ../index.rst:10
-msgid "Command"
-msgstr "指令"
+msgid "Preference"
+msgstr "偏好"
 
 #: ../index.rst:10
 msgid "Plugin Development"
@@ -58,18 +62,19 @@ msgstr ""
 "这是 `MCDReforged <https://github.com/Fallen-Breath/MCDReforged>`__ "
 "的中文文档。感谢 `Alex3236 <https://github.com/eagle3236>`__ 等对此文档的贡献。"
 
-#: ../index.rst:23
+#: ../index.rst:24
 msgid "Indices and tables"
 msgstr "索引和搜索"
 
-#: ../index.rst:25
+#: ../index.rst:26
 msgid ":ref:`genindex`"
 msgstr ":ref:`genindex`"
 
-#: ../index.rst:26
+#: ../index.rst:27
 msgid ":ref:`modindex`"
 msgstr ":ref:`modindex`"
 
-#: ../index.rst:27
+#: ../index.rst:28
 msgid ":ref:`search`"
 msgstr ":ref:`search`"
+

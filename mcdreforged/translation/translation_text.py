@@ -26,9 +26,8 @@ class RTextMCDRTranslation(RTextBase):
 	def set_translator(self, translate_function: Callable):
 		self.__translator = translate_function
 
-	def get_translated_text(self, language: Optional[str] = None) -> RTextBase:
-		if language is None:
-			language = getattr(self.__TLS, 'language', None)
+	def __get_translated_text(self) -> RTextBase:
+		language = getattr(self.__TLS, 'language', None)
 		if language is None:
 			from mcdreforged.plugin.server_interface import ServerInterface
 			server: Optional[ServerInterface] = ServerInterface.get_instance()
@@ -52,14 +51,14 @@ class RTextMCDRTranslation(RTextBase):
 		finally:
 			cls.__TLS.language = prev
 
-	def to_json_object(self, language: Optional[str] = None) -> Union[dict, list]:
-		return self.get_translated_text(language).to_json_object()
+	def to_json_object(self) -> Union[dict, list]:
+		return self.__get_translated_text().to_json_object()
 
-	def to_plain_text(self, language: Optional[str] = None) -> str:
-		return self.get_translated_text(language).to_plain_text()
+	def to_plain_text(self) -> str:
+		return self.__get_translated_text().to_plain_text()
 
-	def to_colored_text(self, language: Optional[str] = None) -> str:
-		return self.get_translated_text(language).to_colored_text()
+	def to_colored_text(self) -> str:
+		return self.__get_translated_text().to_colored_text()
 
 	def copy(self) -> 'RTextBase':
 		copied = RTextMCDRTranslation(self.translation_key, *self.args, **self.kwargs)

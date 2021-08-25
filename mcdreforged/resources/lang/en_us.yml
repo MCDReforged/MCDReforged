@@ -71,7 +71,8 @@ mcdr_command.help_message.plugin: |
   §7!!MCDR plugin reloadall§r: Load / Reload / Unloaded §lall§r not disabled plugins
 mcdr_command.help_message.preference: |
   §7!!MCDR preference list: Display the preference list
-  §7!!MCDR preference §e<pref_name> §6<value>§r: Set the value of prefenence §e<pref_name>§r to §6<value>§r
+  §7!!MCDR preference §e<pref_name>§r: Display the details of preference §e<pref_name>§r
+  §7!!MCDR preference §e<pref_name>§r §6<value>§r: Set the value of preference §e<pref_name>§r to §6<value>§r
 mcdr_command.command_not_found                        : Command not found, type "§7{0}§r" to see help
 mcdr_command.command_not_found_suggest                : Click to input "§7{0}§r"
 mcdr_command.refresh_changed_plugins.fail             : §cFail§r to reload changed plugins
@@ -131,10 +132,7 @@ mcdr_command.help_message.help_command                : Display command help mes
 mcdr_command.help_message.page_number                 : Page §6{0}§r
 mcdr_command.help_message.previous_page_hover         : Click to display the previous page
 mcdr_command.help_message.next_page_hover             : Click to display the next page
-mcdr_command.set_language.not_available               : Language §e{0}§r is not available
-mcdr_command.set_language.language_list               : "Available languages: {0}"
-mcdr_command.set_language.success                     : "Set language of MCDR to §e{0}§r. Notes that it will not be saved to the config file"
-mcdr_command.preference.player_required               : You need to be a player to execute this command
+mcdr_command.preference.unsupported_command_source    : Unsupported Command Source {0}
 mcdr_command.preference.list.title                    : MCDR Preference List
 mcdr_command.preference.list.detail_hint              : Click to display details of preference {0}
 mcdr_command.preference.item.name                     : Preference {0} details

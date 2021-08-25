@@ -61,6 +61,26 @@ Keyword Parameter *fallback_language*: Fallback language used when the current l
 
 Keyword Parameter *kwargs*: The kwargs to be formatted
 
+rtr
+~~~
+
+.. code-block:: python
+
+    def rtr(self, translation_key: str, *args, **kwargs) -> RTextMCDRTranslation
+
+
+Return a RText derived component `RTextMCDRTranslation <../api.html#rtextmcdrtranslation>`__, that only translates itself right before displaying or serializing
+
+Using this method instead of `tr() <#tr>`__ allows you to display your texts in `user's preferred language <../../preference.html#language>`__ automatically
+
+Of course you can construct ``RTextMCDRTranslation`` yourself instead of using this method if you want
+
+Parameter *translation_key*: The key of the translation
+
+Parameter *args*: The args to be formatted
+
+Keyword Parameter *kwargs*: The kwargs to be formatted
+
 as_basic_server_interface
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -512,6 +532,23 @@ Execute a single command using the command system of MCDR
 Parameter *command*: The command you want to execute
 
 Parameter *source*: The command source that is used to execute the command. If it's not specified MCDR will use `get_plugin_command_source <#get-plugin-command-source>`__ as fallback command source
+
+Preference
+^^^^^^^^^^
+
+get_preference
+~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+    def get_preference(self, obj: Union[str, CommandSource]) -> PreferenceItem
+
+
+Return the MCDR preference of the given object. The object can be a str indicating the name of a player, or a command source. For command source, only ``PlayerCommandSource`` and ``ConsoleCommandSource`` are supported
+
+Parameter *obj*: The object to querying preference
+
+It raises ``TypeError`` if the type of the given object is not supported for preference querying
 
 Misc
 ^^^^

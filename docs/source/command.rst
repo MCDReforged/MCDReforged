@@ -176,17 +176,41 @@ These commands do the following things:
 #. Unload the plugin with id ``another_plugin``
 #. Reload the plugin with file name ``another_plugin.py``. Note that since this plugin is not loaded, you can only use file name to specify it
 
+
+Preference settings
+^^^^^^^^^^^^^^^^^^^
+
+``!!MCDR preference`` commands is to control the preference of MCDR
+
+Here's a table of the commands
+
+.. list-table::
+   :header-rows: 1
+
+   * - Command
+     - Short form
+     - Function
+   * - !!MCDR preference
+     - !!MCDR pref
+     - Show preference command help message
+   * - !!MCDR preference list
+     - !!MCDR pref list
+     - Display the preference list
+   * - !!MCDR preference <pref_name>
+     - !!MCDR pref <pref_name>
+     - Display the details of preference <pref_name>
+   * - !!MCDR preference <pref_name> <value>
+     - !!MCDR pref <pref_name> <value>
+     - Set the value of preference <pref_name> to <value>
+
+See `here <preference.html>`__ for more information about MCDR preference
+
+Examples:
+
+* ``!!MCDR pref set language zh_cn``: Set the value of preference ``language`` to ``zh_cn``
+
 Misc
 ^^^^
-
-Set language
-~~~~~~~~~~~~
-
-``!!MCDR setlang <language>``
-
-Set the language of MCDR to ``<language>``. Notes that it will not be saved to the config file
-
-Having a temporary language changing method is always nice
 
 Check update
 ~~~~~~~~~~~~~~~

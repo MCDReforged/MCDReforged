@@ -92,11 +92,14 @@ class ServerInterface:
 		"""
 		Return a RText derived component RTextMCDRTranslation, that only translates itself right before displaying or serializing
 		Using this method instead of tr() allows you to display your texts in user's preferred language automatically
+		Of course you can construct RTextMCDRTranslation yourself instead of using this method if you want
 		:param translation_key: The key of the translation
 		:param args: The args to be formatted
 		:param kwargs: The kwargs to be formatted
 		"""
-		return RTextMCDRTranslation(translation_key, *args, **kwargs)
+		text = RTextMCDRTranslation(translation_key, *args, **kwargs)
+		text.set_translator(self.tr)  # not that necessary tbh, just in case self.tr != ServerInterface.get_instance().tr somehow
+		return text
 
 	def as_basic_server_interface(self) -> 'ServerInterface':
 		"""
@@ -504,14 +507,15 @@ class ServerInterface:
 	#        Preference
 	# ------------------------
 
-	def get_preference(self, obj: Union[str, CommandSource]) -> Optional[PreferenceItem]:
+	def get_preference(self, obj: Union[str, CommandSource]) -> PreferenceItem:
 		"""
 		Return the MCDR preference of the given object. The object can be a str indicating the name of a player, or a
-		command source. If it's a command source, then only PlayerCommandSource and ConsoleCommandSource are supported
+		command source. For command source, only PlayerCommandSource and ConsoleCommandSource are supported
 		:param obj: The object to querying preference
 		:raise: TypeError, if the type of the given object is not supported for preference querying
 		"""
-		return self._mcdr_server.preference_manager.get_preference(obj, strict_type_check=True)
+		pref = self._mcdr_server.preference_manager.get_preference(obj, strict_type_check=True)
+		return PreferenceItem.deserialize(pref.serialize())  # make a copy
 
 	# ------------------------
 	#           Misc
