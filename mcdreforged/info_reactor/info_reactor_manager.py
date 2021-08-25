@@ -70,3 +70,11 @@ class InfoReactorManager:
 				kwargs = {}
 				self.last_queue_full_warn_time = current_time
 			logging_method(self.mcdr_server.tr('info_reactor_manager.info_queue.full'), **kwargs)
+
+	def on_server_start(self):
+		for reactor in self.reactors:
+			reactor.on_server_start()
+
+	def on_server_stop(self):
+		for reactor in self.reactors:
+			reactor.on_server_stop()

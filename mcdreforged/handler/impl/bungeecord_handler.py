@@ -50,7 +50,7 @@ class BungeecordHandler(AbstractServerHandler):
 	def parse_server_version(self, info: Info):
 		return None
 
-	def parse_server_ip(self, info: Info):
+	def parse_server_address(self, info: Info):
 		# Listening on /0.0.0.0:25577
 		if not info.is_user:
 			parsed = parse('Listening on /{}:{:d}', info.content)

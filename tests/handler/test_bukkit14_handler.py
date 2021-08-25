@@ -39,7 +39,7 @@ class MyTestCase(unittest.TestCase):
 		info = self.handler.parse_server_stdout('[00:38:41] [Server thread/INFO]: Starting minecraft server version 1.14.4')
 		self.assertEqual('1.14.4', self.handler.parse_server_version(info))
 		info = self.handler.parse_server_stdout('[00:38:42] [Server thread/INFO]: Starting Minecraft server on *:25565')
-		self.assertEqual(('*', 25565), self.handler.parse_server_ip(info))
+		self.assertEqual(('*', 25565), self.handler.parse_server_address(info))
 
 	def test_4_server_events(self):
 		info = self.handler.parse_server_stdout('[00:39:13] [Server thread/INFO]: Done (17.555s)! For help, type "help"')

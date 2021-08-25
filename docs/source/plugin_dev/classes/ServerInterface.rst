@@ -216,14 +216,22 @@ Return the pid of the server process, None if the server is stopped
 
 Notes the process with this pid is a bash process, which is the parent process of real server process you might be interested in
 
-get_server_info
-~~~~~~~~~~~~~~~
+get_server_information
+~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: python
 
-    def get_server_info(self) -> Optional[ServerInfo]
+    def get_server_information(self) -> Optional[ServerInformation]
 
-Return current server info parsed from server standard output, which include 3 attributes, Server version name ``version`` (like ``1.17 Release Candidate 1``, instead of ``1.17-rc1``), IP address``ip`` and port ``port``
+Return a ``ServerInformation`` object indicating the information of the current server, interred from the output of the server
+
+It has following fields:
+
+* Server version name ``version``, a str. e.g. ``1.15.2``, ``1.17 Release Candidate 1``
+* Server IP address ``ip``, a str. e.g. ``127.0.0.1``
+* Server port ``port``, an int. e.g. ``25565``
+
+Field(s) above might be None if the server is offline, or the related information has not been parsed
 
 Text Interaction
 ^^^^^^^^^^^^^^^^

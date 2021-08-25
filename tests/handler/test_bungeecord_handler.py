@@ -32,7 +32,7 @@ class MyTestCase(unittest.TestCase):
 	def test_3_server_info(self):
 		# Proxy has no game version
 		info = self.handler.parse_server_stdout('02:07:26 [信息] Listening on /0.0.0.0:25777')
-		self.assertEqual(('0.0.0.0', 25777), self.handler.parse_server_ip(info))
+		self.assertEqual(('0.0.0.0', 25777), self.handler.parse_server_address(info))
 
 	def test_4_server_events(self):
 		info = self.handler.parse_server_stdout('02:07:26 [信息] Listening on /0.0.0.0:25777')

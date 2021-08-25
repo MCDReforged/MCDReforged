@@ -44,7 +44,7 @@ class VelocityHandler(AbstractServerHandler):
 	def parse_server_version(self, info: Info):
 		return None
 
-	def parse_server_ip(self, info: Info):
+	def parse_server_address(self, info: Info):
 		# Listening on /192.168.0.1:25577
 		# Listening on /[0:0:0:0:0:0:0:0%0]:25577
 		# Listening on /0:0:0:0:0:0:0:0%0:25577

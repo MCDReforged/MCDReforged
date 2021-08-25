@@ -187,14 +187,13 @@ class AbstractServerHandler:
 		"""
 		raise NotImplementedError()
 
-	def parse_server_ip(self, info: Info) -> Optional[Tuple[str, int]]:
+	def parse_server_address(self, info: Info) -> Optional[Tuple[str, int]]:
 		"""
-		Check if the info contains a server ip
+		Check if the info contains the address which the server is listening on
 		If it is, returns server ip and port, otherwise returns None
 
 		:param Info info: The info instance that will be checked
-		:return: The name of the player or None
-		:rtype: Tuple[str, int] or None
+		:return: A tuple containing the ip and the port
 		"""
 		raise NotImplementedError()
 

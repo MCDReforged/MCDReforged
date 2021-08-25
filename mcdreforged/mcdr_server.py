@@ -19,12 +19,13 @@ from mcdreforged.executor.watchdog import WatchDog
 from mcdreforged.handler.server_handler_manager import ServerHandlerManager
 from mcdreforged.info import Info
 from mcdreforged.info_reactor.info_reactor_manager import InfoReactorManager
+from mcdreforged.info_reactor.server_information import ServerInformation
 from mcdreforged.mcdr_state import ServerState, MCDReforgedState, MCDReforgedFlag
 from mcdreforged.minecraft.rcon.rcon_manager import RconManager
 from mcdreforged.permission.permission_manager import PermissionManager
 from mcdreforged.plugin.plugin_event import MCDRPluginEvents
 from mcdreforged.plugin.plugin_manager import PluginManager
-from mcdreforged.plugin.server_interface import ServerInterface, ServerInfo
+from mcdreforged.plugin.server_interface import ServerInterface
 from mcdreforged.preference.preference_manager import PreferenceManager
 from mcdreforged.translation.translation_manager import TranslationManager
 from mcdreforged.utils import file_util
@@ -42,11 +43,11 @@ class MCDReforgedServer:
 		"""
 		self.mcdr_state = MCDReforgedState.INITIALIZING
 		self.server_state = ServerState.STOPPED
+		self.server_information = ServerInformation()
 		self.process = None  # type: Optional[PIPE]
 		self.flags = MCDReforgedFlag.NONE
 		self.starting_server_lock = Lock()  # to prevent multiple start_server() call
 		self.stop_lock = Lock()  # to prevent multiple stop() call
-		self.server_info = ServerInfo()
 
 		# will be assigned in on_config_changed()
 		self.encoding_method = None  # type: Optional[str]
@@ -199,6 +200,15 @@ class MCDReforgedServer:
 	def on_plugin_registry_changed(self):
 		self.command_manager.clear_command()
 		self.plugin_manager.registry_storage.export_commands(self.command_manager.register_command)
+
+	# ---------------------------
+	#      General Setters
+	# ---------------------------
+	# for field read-only access, simply use directly reference
+	# but for field writing operation, use setters
+
+	def set_task_executor(self, new_task_executor: TaskExecutor):
+		self.task_executor = new_task_executor
 
 	# ---------------------------
 	#   State Getters / Setters
@@ -367,6 +377,7 @@ class MCDReforgedServer:
 		self.set_server_state(ServerState.RUNNING)
 		self.with_flag(MCDReforgedFlag.EXIT_AFTER_STOP)  # Set after server state is set to RUNNING, or MCDR might have a chance to exit if the server is started by other thread
 		self.logger.info(self.tr('mcdr_server.start_server.pid_info', self.process.pid))
+		self.reactor_manager.on_server_start()
 		self.plugin_manager.dispatch_event(MCDRPluginEvents.SERVER_START, ())
 
 	def __on_server_stop(self):
@@ -381,9 +392,9 @@ class MCDReforgedServer:
 		except Exception as e:
 			self.logger.warning('Error when closing stdout: {}'.format(e))
 		self.process = None
-		self.server_info.clear()
 		self.set_server_state(ServerState.STOPPED)
 		self.remove_flag(MCDReforgedFlag.SERVER_STARTUP | MCDReforgedFlag.SERVER_RCON_READY)  # removes this two
+		self.reactor_manager.on_server_stop()
 		self.plugin_manager.dispatch_event(MCDRPluginEvents.SERVER_STOP, (return_code,), block=True)
 
 		if self.is_interrupt():

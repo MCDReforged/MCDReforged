@@ -6,7 +6,13 @@ if TYPE_CHECKING:
 
 class AbstractInfoReactor:
 	def __init__(self, mcdr_server: 'MCDReforgedServer'):
-		self.mcdr_server = mcdr_server
+		self.mcdr_server: 'MCDReforgedServer' = mcdr_server
 
 	def react(self, info):
 		raise NotImplementedError()
+
+	def on_server_start(self):
+		pass
+
+	def on_server_stop(self):
+		pass

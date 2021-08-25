@@ -59,7 +59,7 @@ class VanillaHandler(AbstractServerHandler):
 				return parsed['version']
 		return None
 
-	def parse_server_ip(self, info: Info):
+	def parse_server_address(self, info: Info):
 		if not info.is_user:
 			parsed = parse('Starting Minecraft server on {}:{:d}', info.content)
 			if parsed is not None:
