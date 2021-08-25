@@ -53,7 +53,7 @@ class PreferenceManager:
 			language=self.mcdr_server.get_language()
 		)
 
-	def get_preference(self, obj: Union[str, CommandSource], *, auto_add: bool = False) -> Optional[PreferenceItem]:
+	def get_preference(self, obj: Union[str, CommandSource], *, auto_add: bool = False, strict_type_check: bool = False) -> PreferenceItem:
 		if isinstance(obj, str):
 			player_name = obj
 		elif isinstance(obj, PlayerCommandSource):
@@ -62,6 +62,8 @@ class PreferenceManager:
 			player_name = CONSOLE_ALIAS
 		else:
 			player_name = None
+			if strict_type_check:
+				raise TypeError('Unsupported object type during preference querying: {}'.format(type(obj)))
 		pref = self.preferences.player_preferences.get(player_name)
 		if pref is None:
 			pref = self.get_default_preference()

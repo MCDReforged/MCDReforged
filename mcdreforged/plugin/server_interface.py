@@ -90,14 +90,13 @@ class ServerInterface:
 
 	def rtr(self, translation_key: str, *args, **kwargs) -> RTextMCDRTranslation:
 		"""
-		Return a RText component, that only translates itself right before displaying or serializing
+		Return a RText derived component RTextMCDRTranslation, that only translates itself right before displaying or serializing
+		Using this method instead of tr() allows you to display your texts in user's preferred language automatically
 		:param translation_key: The key of the translation
 		:param args: The args to be formatted
 		:param kwargs: The kwargs to be formatted
 		"""
-		text = RTextMCDRTranslation(translation_key, *args, **kwargs)
-		text.set_translator(self.tr)  # not that necessary, just in case
-		return text
+		return RTextMCDRTranslation(translation_key, *args, **kwargs)
 
 	def as_basic_server_interface(self) -> 'ServerInterface':
 		"""
@@ -502,6 +501,19 @@ class ServerInterface:
 		self._mcdr_server.command_manager.execute_command(command, source)
 
 	# ------------------------
+	#        Preference
+	# ------------------------
+
+	def get_preference(self, obj: Union[str, CommandSource]) -> Optional[PreferenceItem]:
+		"""
+		Return the MCDR preference of the given object. The object can be a str indicating the name of a player, or a
+		command source. If it's a command source, then only PlayerCommandSource and ConsoleCommandSource are supported
+		:param obj: The object to querying preference
+		:raise: TypeError, if the type of the given object is not supported for preference querying
+		"""
+		return self._mcdr_server.preference_manager.get_preference(obj, strict_type_check=True)
+
+	# ------------------------
 	#           Misc
 	# ------------------------
 
@@ -541,9 +553,6 @@ class ServerInterface:
 		:param timeout: The timeout of the blocking operation if block=True
 		"""
 		self._mcdr_server.task_executor.add_regular_task(callable_, block=block, timeout=timeout)
-
-	def get_preference(self, obj: Union[str, CommandSource]) -> Optional[PreferenceItem]:
-		return self._mcdr_server.preference_manager.get_preference(obj)
 
 
 class PluginServerInterface(ServerInterface):
