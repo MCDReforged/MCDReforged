@@ -2,7 +2,7 @@ import json
 import os
 from typing import Optional, Dict, TYPE_CHECKING, Union
 
-from mcdreforged.command.command_source import CommandSource, PlayerCommandSource
+from mcdreforged.command.command_source import CommandSource, PlayerCommandSource, ConsoleCommandSource
 from mcdreforged.constants import core_constant, plugin_constant
 from mcdreforged.utils.serializer import Serializable
 
@@ -11,6 +11,7 @@ if TYPE_CHECKING:
 
 
 PREFERENCE_FILE = os.path.join(plugin_constant.PLUGIN_CONFIG_DIRECTORY, core_constant.PACKAGE_NAME, 'preferences.json')
+CONSOLE_ALIAS = '#@MCDR_Console@#'
 
 
 class PreferenceItem(Serializable):
@@ -57,6 +58,8 @@ class PreferenceManager:
 			player_name = obj
 		elif isinstance(obj, PlayerCommandSource):
 			player_name = obj.player
+		elif isinstance(obj, ConsoleCommandSource):
+			player_name = CONSOLE_ALIAS
 		else:
 			player_name = None
 		pref = self.preferences.player_preferences.get(player_name)

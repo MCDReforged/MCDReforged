@@ -10,7 +10,7 @@ class SetLanguageCommand(SubCommand):
 	def get_command_node(self) -> Literal:
 		return (
 			self.control_command_root({'setlanguage', 'setlang'}).
-			runs(lambda src: src.reply(self.get_help_message(src, 'mcdr_command.help_message.setlang'))).
+			runs(lambda src: src.reply(self.get_help_message(src, 'mcdr_command.help_message.setlanguage'))).
 			on_error(UnknownArgument, self.on_mcdr_command_unknown_argument).
 			then(
 				Text('language').
@@ -29,5 +29,5 @@ class SetLanguageCommand(SubCommand):
 			source.reply(self.tr('mcdr_command.set_language.language_list', RText.join(', ', lang_texts)))
 		else:
 			self.mcdr_server.config.set_value('language', language)
-			self.mcdr_server.translation_manager.set_language(language)
+			self.mcdr_server.translation_manager.set_language(language, )
 			source.reply(self.tr('mcdr_command.set_language.success', language))

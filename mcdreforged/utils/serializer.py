@@ -2,7 +2,7 @@ import copy
 from abc import ABC
 from enum import EnumMeta
 from threading import Lock
-from typing import Union, TypeVar, List, Dict, Type, Any
+from typing import Union, TypeVar, List, Dict, Type
 
 T = TypeVar('T')
 
@@ -130,7 +130,3 @@ class Serializable(ABC):
 		Invoked after being deserialized
 		"""
 		pass
-
-	def set_field(self, name: str, value: Any):
-		if name in self.__annotations_cache:
-			vars(self)[name] = value

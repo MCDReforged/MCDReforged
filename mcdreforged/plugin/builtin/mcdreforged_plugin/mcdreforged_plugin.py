@@ -10,6 +10,7 @@ from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.check_update_command
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.help_command import HelpCommand
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.permission_command import PermissionCommand
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.plugin_command import PluginCommand
+from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.preference_command import PreferenceCommand
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.reload_command import ReloadCommand
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.set_language_command import SetLanguageCommand
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.status_command import StatusCommand
@@ -33,13 +34,14 @@ class MCDReforgedPlugin(PermanentPlugin):
 	def __init__(self, plugin_manager):
 		super().__init__(plugin_manager)
 		self._set_metadata(Metadata(METADATA, plugin=self))
+		self.command_help = HelpCommand(self)
 		self.command_status = StatusCommand(self)
 		self.command_reload = ReloadCommand(self)
 		self.command_permission = PermissionCommand(self)
 		self.command_plugin = PluginCommand(self)
-		self.command_set_language = SetLanguageCommand(self)
 		self.command_check_update = CheckUpdateCommand(self)
-		self.command_help = HelpCommand(self)
+		self.command_set_language = SetLanguageCommand(self)
+		self.command_preference = PreferenceCommand(self)
 
 	def tr(self, key: str, *args, **kwargs) -> RTextMCDRTranslation:
 		return self.server_interface.rtr(key, *args, **kwargs)
@@ -75,7 +77,8 @@ class MCDReforgedPlugin(PermanentPlugin):
 			then(self.command_permission.get_command_node()).
 			then(self.command_plugin.get_command_node()).
 			then(self.command_set_language.get_command_node()).
-			then(self.command_check_update.get_command_node())
+			then(self.command_check_update.get_command_node()).
+			then(self.command_preference.get_command_node())
 		)
 		self.register_command(self.command_help.get_command_node())
 
@@ -85,7 +88,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 
 	def get_help_message(self, source: CommandSource, translation_key: str):
 		lst = RTextList()
-		for line in self.tr(translation_key).get_translated_text(self.server_interface.get_preference(source)).to_plain_text().splitlines(keepends=True):
+		for line in self.tr(translation_key).get_translated_text(self.server_interface.get_preference(source).language).to_plain_text().splitlines(keepends=True):
 			prefix = re.search(r'(?<=§7)' + self.control_command_prefix + r'[\w ]*(?=§)', line)
 			if prefix is not None:
 				lst.append(RText(line).c(RAction.suggest_command, prefix.group()))

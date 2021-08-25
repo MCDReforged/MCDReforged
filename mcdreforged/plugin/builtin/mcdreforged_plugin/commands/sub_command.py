@@ -9,7 +9,9 @@ from mcdreforged.permission.permission_level import PermissionLevel
 from mcdreforged.translation.translation_text import RTextMCDRTranslation
 
 if TYPE_CHECKING:
+	from mcdreforged.mcdr_server import MCDReforgedServer
 	from mcdreforged.plugin.builtin.mcdreforged_plugin.mcdreforged_plugin import MCDReforgedPlugin
+	from mcdreforged.plugin.server_interface import PluginServerInterface
 
 
 class FunctionCallResult(NamedTuple):
@@ -20,8 +22,6 @@ class FunctionCallResult(NamedTuple):
 class SubCommand(ABC):
 	def __init__(self, mcdr_plugin: 'MCDReforgedPlugin'):
 		self.mcdr_plugin = mcdr_plugin
-		self.mcdr_server = mcdr_plugin.mcdr_server
-		self.server_interface = mcdr_plugin.server_interface
 
 	def get_command_node(self) -> Literal:
 		raise NotImplementedError()
@@ -32,6 +32,14 @@ class SubCommand(ABC):
 
 	def tr(self, key: str, *args, **kwargs) -> RTextMCDRTranslation:
 		return self.mcdr_plugin.tr(key, *args, **kwargs)
+
+	@property
+	def mcdr_server(self) -> 'MCDReforgedServer':
+		return self.mcdr_plugin.mcdr_server
+
+	@property
+	def server_interface(self) -> 'PluginServerInterface':
+		return self.mcdr_plugin.server_interface
 
 	@property
 	def control_command_prefix(self):

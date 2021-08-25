@@ -52,7 +52,7 @@ class RTextMCDRTranslation(RTextBase):
 		finally:
 			cls.__TLS.language = prev
 
-	def to_json_object(self, language: Optional[str] = None):
+	def to_json_object(self, language: Optional[str] = None) -> Union[dict, list]:
 		return self.get_translated_text(language).to_json_object()
 
 	def to_plain_text(self, language: Optional[str] = None) -> str:
