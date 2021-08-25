@@ -48,7 +48,6 @@ mcdr_command.help_message: |
   §7!!MCDR plugin§r: 显示插件相关的帮助信息
   §7!!MCDR preference§r: 显示偏好相关的帮助信息
   §7!!MCDR reload§r: 显示重载相关的帮助信息
-  §7!!MCDR setlanguage§r: 临时地设置 MCDR 的语言
   §7!!MCDR status§r: 显示 MCDR 状态
 mcdr_command.help_message.reload: |
   §7!!MCDR reload plugin§r: 加载 / 重载 / 卸载§l有修改的§r插件
@@ -70,8 +69,6 @@ mcdr_command.help_message.plugin: |
   §7!!MCDR plugin unload §6<plugin_id>§r: 卸载 id 为 §6<plugin_id>§r 的插件
   §7!!MCDR plugin disable §6<plugin_id>§r: 禁用 id 为 §6<plugin_id>§r 的插件
   §7!!MCDR plugin reloadall§r: 加载 / 重载 / 卸载§l所有§r插件
-mcdr_command.help_message.setlanguage: |
-  §7!!MCDR setlang §e<language>§r : 将 MCDR 的语言设置为 §e<language>§r，不会被保存至配置文件
 mcdr_command.help_message.preference: |
   §7!!MCDR preference list: 显示偏好列表
   §7!!MCDR preference §e<pref_name> §6<value>§r: 设定偏好 §e<pref_name>§r 的值为 §6<value>§r

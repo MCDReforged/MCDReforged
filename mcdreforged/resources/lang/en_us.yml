@@ -48,7 +48,6 @@ mcdr_command.help_message: |
   §7!!MCDR plugin§r: Show plugin command help message
   §7!!MCDR preference§r: Show preference command help message
   §7!!MCDR reload§r: Show reload command help message
-  §7!!MCDR setlanguage§r: Set the language of MCDR temporary
   §7!!MCDR status§r: Show MCDR status
 mcdr_command.help_message.reload: |
   §7!!MCDR reload plugin§r: Load / Reload / Unloaded §lchanged§r plugins
@@ -70,8 +69,6 @@ mcdr_command.help_message.plugin: |
   §7!!MCDR plugin unload §6<plugin_id>§r: Unload a plugin with id §6<plugin_id>§r
   §7!!MCDR plugin disable §6<plugin_id>§r: Disable a plugin with id §6<plugin_id>§r
   §7!!MCDR plugin reloadall§r: Load / Reload / Unloaded §lall§r not disabled plugins
-mcdr_command.help_message.setlanguage: |
-  §7!!MCDR setlang §e<language>§r: Set the language of MCDR to §e<language>§r. Notes that it will not be saved to the config file
 mcdr_command.help_message.preference: |
   §7!!MCDR preference list: Display the preference list
   §7!!MCDR preference §e<pref_name> §6<value>§r: Set the value of prefenence §e<pref_name>§r to §6<value>§r

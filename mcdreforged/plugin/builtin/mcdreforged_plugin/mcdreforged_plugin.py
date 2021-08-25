@@ -12,7 +12,6 @@ from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.permission_command i
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.plugin_command import PluginCommand
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.preference_command import PreferenceCommand
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.reload_command import ReloadCommand
-from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.set_language_command import SetLanguageCommand
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.status_command import StatusCommand
 from mcdreforged.plugin.meta.metadata import Metadata
 from mcdreforged.plugin.type.permanent_plugin import PermanentPlugin
@@ -40,7 +39,6 @@ class MCDReforgedPlugin(PermanentPlugin):
 		self.command_permission = PermissionCommand(self)
 		self.command_plugin = PluginCommand(self)
 		self.command_check_update = CheckUpdateCommand(self)
-		self.command_set_language = SetLanguageCommand(self)
 		self.command_preference = PreferenceCommand(self)
 
 	def tr(self, key: str, *args, **kwargs) -> RTextMCDRTranslation:
@@ -76,7 +74,6 @@ class MCDReforgedPlugin(PermanentPlugin):
 			then(self.command_reload.get_command_node()).
 			then(self.command_permission.get_command_node()).
 			then(self.command_plugin.get_command_node()).
-			then(self.command_set_language.get_command_node()).
 			then(self.command_check_update.get_command_node()).
 			then(self.command_preference.get_command_node())
 		)
