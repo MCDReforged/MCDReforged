@@ -25,6 +25,7 @@ class FunctionThread(threading.Thread):
 				self.__return_value = target(*args_, **kwargs_)
 			except Exception as e:
 				self.__error = e
+				raise e from None
 
 		self._target = wrapped_target
 
