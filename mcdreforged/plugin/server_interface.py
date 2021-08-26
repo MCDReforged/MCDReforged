@@ -7,7 +7,7 @@ from typing import Callable, TYPE_CHECKING, Tuple, Any, Union, Optional, List, I
 from mcdreforged.command.builder.nodes.basic import Literal
 from mcdreforged.command.command_source import CommandSource, PluginCommandSource
 from mcdreforged.constants import plugin_constant
-from mcdreforged.info import Info
+from mcdreforged.info_reactor.info import Info
 from mcdreforged.info_reactor.server_information import ServerInformation
 from mcdreforged.mcdr_state import MCDReforgedFlag
 from mcdreforged.permission.permission_level import PermissionLevel
@@ -27,6 +27,7 @@ from mcdreforged.utils.types import MessageText, TranslationKeyDictRich, Transla
 
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
+	from mcdreforged.handler.abstract_server_handler import AbstractServerHandler
 	from mcdreforged.plugin.plugin_manager import PluginManager
 	from mcdreforged.plugin.type.regular_plugin import RegularPlugin
 
@@ -238,6 +239,10 @@ class ServerInterface:
 		self.logger.debug('Sending command "{}"'.format(text), option=DebugOption.PLUGIN)
 		self._mcdr_server.send(text, encoding=encoding)
 
+	@property
+	def __server_handler(self) -> 'AbstractServerHandler':
+		return self._mcdr_server.server_handler_manager.get_current_handler()
+
 	def tell(self, player: str, text: MessageText, *, encoding: Optional[str] = None) -> None:
 		"""
 		Use command like /tellraw to send the message to the specific player
@@ -246,7 +251,7 @@ class ServerInterface:
 		:param encoding: The encoding method for the text
 		"""
 		with RTextMCDRTranslation.language_context(self._mcdr_server.preference_manager.get_preferred_language(player)):
-			command = self._mcdr_server.server_handler_manager.get_current_handler().get_send_message_command(player, text)
+			command = self.__server_handler.get_send_message_command(player, text, self.get_server_information())
 		if command is not None:
 			self.execute(command, encoding=encoding)
 
@@ -256,7 +261,7 @@ class ServerInterface:
 		:param text: the message you want to send
 		:param encoding: The encoding method for the text
 		"""
-		command = self._mcdr_server.server_handler_manager.get_current_handler().get_broadcast_message_command(text)
+		command = self.__server_handler.get_broadcast_message_command(text, self.get_server_information())
 		if command is not None:
 			self.execute(command, encoding=encoding)
 

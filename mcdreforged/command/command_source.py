@@ -8,7 +8,7 @@ from mcdreforged.utils import misc_util
 
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
-	from mcdreforged.info import Info
+	from mcdreforged.info_reactor.info import Info
 	from mcdreforged.plugin.server_interface import ServerInterface
 	from mcdreforged.plugin.type.plugin import AbstractPlugin
 	from mcdreforged.preference.preference_manager import PreferenceItem

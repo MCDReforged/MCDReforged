@@ -4,7 +4,8 @@ from typing import Optional, Any, Union, Iterable, Tuple
 
 from parse import parse
 
-from mcdreforged.info import InfoSource, Info
+from mcdreforged.info_reactor.info import InfoSource, Info
+from mcdreforged.info_reactor.server_information import ServerInformation
 from mcdreforged.utils import string_util
 
 '''
@@ -39,13 +40,13 @@ class AbstractServerHandler:
 		"""
 		raise NotImplementedError()
 
-	def get_send_message_command(self, target: str, message: Any) -> Optional[str]:
+	def get_send_message_command(self, target: str, message: Any, server_information: ServerInformation) -> Optional[str]:
 		"""
 		The command to send a message to a target
 		"""
 		raise NotImplementedError()
 
-	def get_broadcast_message_command(self, message: Any) -> Optional[str]:
+	def get_broadcast_message_command(self, message: Any, server_information: ServerInformation) -> Optional[str]:
 		"""
 		The command to broadcast a message in the server
 		"""

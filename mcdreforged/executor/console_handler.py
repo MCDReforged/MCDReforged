@@ -15,7 +15,7 @@ from prompt_toolkit.shortcuts import CompleteStyle
 
 from mcdreforged.command.command_source import CommandSource
 from mcdreforged.executor.thread_executor import ThreadExecutor
-from mcdreforged.info import Info
+from mcdreforged.info_reactor.info import Info
 from mcdreforged.permission.permission_level import PermissionLevel
 from mcdreforged.plugin.server_interface import ServerInterface
 from mcdreforged.utils import misc_util

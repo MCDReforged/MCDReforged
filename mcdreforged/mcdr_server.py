@@ -17,7 +17,7 @@ from mcdreforged.executor.task_executor import TaskExecutor
 from mcdreforged.executor.update_helper import UpdateHelper
 from mcdreforged.executor.watchdog import WatchDog
 from mcdreforged.handler.server_handler_manager import ServerHandlerManager
-from mcdreforged.info import Info
+from mcdreforged.info_reactor.info import Info
 from mcdreforged.info_reactor.info_reactor_manager import InfoReactorManager
 from mcdreforged.info_reactor.server_information import ServerInformation
 from mcdreforged.mcdr_state import ServerState, MCDReforgedState, MCDReforgedFlag

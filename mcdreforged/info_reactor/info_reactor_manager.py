@@ -6,9 +6,9 @@ import time
 from typing import TYPE_CHECKING, List, Optional
 
 from mcdreforged.constants import core_constant
-from mcdreforged.info import Info
 from mcdreforged.info_reactor.abstract_info_reactor import AbstractInfoReactor
 from mcdreforged.info_reactor.impl import PlayerReactor, ServerReactor, GeneralReactor
+from mcdreforged.info_reactor.info import Info
 from mcdreforged.utils import misc_util
 from mcdreforged.utils.logger import ServerLogger, DebugOption
 
