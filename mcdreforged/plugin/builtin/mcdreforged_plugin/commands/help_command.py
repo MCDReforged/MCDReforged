@@ -3,10 +3,9 @@ from typing import NamedTuple, Any, List
 from mcdreforged.command.builder.nodes.arguments import Integer
 from mcdreforged.command.builder.nodes.basic import Literal, CommandContext
 from mcdreforged.command.command_source import CommandSource
-from mcdreforged.minecraft.rtext import RText, RAction, RColor, RTextBase
+from mcdreforged.minecraft.rtext import RText, RAction, RColor
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.sub_command import SubCommand
 from mcdreforged.plugin.plugin_registry import HelpMessage
-from mcdreforged.utils import translation_util
 
 HELP_MESSAGE_PER_PAGE = 10
 
@@ -30,8 +29,9 @@ class HelpCommand(SubCommand):
 	def process_help_command(self, source: CommandSource, context: CommandContext):
 		page = context.get('page')
 		source.reply(self.tr('mcdr_command.help_message.title'))
-		matched = []  # type: List[HelpMessage]
-		for msg in self.mcdr_server.plugin_manager.registry_storage.help_messages:  # type: HelpMessage
+		matched: List[HelpMessage] = []
+		msg: HelpMessage
+		for msg in self.mcdr_server.plugin_manager.registry_storage.help_messages:
 			if source.has_permission(msg.permission):
 				matched.append(msg)
 		matched_count = len(matched)
@@ -43,11 +43,7 @@ class HelpCommand(SubCommand):
 		for i in range(left, right):
 			if 0 <= i < matched_count:
 				msg = matched[i]
-				if isinstance(msg.message, RTextBase):
-					msg_text = msg.message
-				else:
-					msg_text = translation_util.translate_from_dict(msg.message, self.server_interface.get_mcdr_language(), default='')
-				source.reply(RText.format('{}: {}', RText(msg.prefix, color=RColor.gray).c(RAction.suggest_command, msg.prefix), msg_text))
+				source.reply(RText.format('{}: {}', RText(msg.prefix, color=RColor.gray).c(RAction.suggest_command, msg.prefix), msg.message))
 
 		if page is not None:
 			has_prev = 0 < left < matched_count

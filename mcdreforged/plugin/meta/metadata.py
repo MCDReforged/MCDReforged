@@ -113,7 +113,7 @@ class Metadata:
 			self.entrypoint, self.archive_name, self.resources
 		)
 
-	def get_description(self, lang: Optional[str] = None) -> str:
+	def get_description(self, lang: Optional[str] = None) -> Optional[str]:
 		"""
 		Get translated description str
 		"""
@@ -122,12 +122,13 @@ class Metadata:
 		return translation_util.translate_from_dict(self.description, lang, default=None)
 
 	def get_description_rtr(self) -> RTextMCDRTranslation:
-		def fake_tr(key: str, language: str):
-			return self.get_description(language)
+		def fake_tr(key: str, language: str) -> str:
+			ret = self.get_description(language)
+			if ret is None:
+				raise KeyError('Failed to translate description {} with language {}'.format(self.description, language))
+			return ret
 
-		text = RTextMCDRTranslation('')
-		text.set_translator(fake_tr)
-		return text
+		return RTextMCDRTranslation('').set_translator(fake_tr)
 
 
 __SAMPLE_METADATA = {

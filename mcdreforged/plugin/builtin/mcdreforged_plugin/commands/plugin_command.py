@@ -139,7 +139,7 @@ class PluginCommand(SubCommand):
 			if meta.link is not None:
 				source.reply(RTextList('Link: ', RText(meta.link, color=RColor.blue, styles=RStyle.underlined).c(RAction.open_url, meta.link)))
 			if meta.description is not None:
-				source.reply(meta.get_description(self.mcdr_server.translation_manager.language))
+				source.reply(meta.get_description_rtr())
 
 	def __not_loaded_plugin_file_manipulate(self, source: CommandSource, file_name: str, operation_name: str, func: Callable[[str], Any]):
 		plugin_paths = self.get_files_in_plugin_directories(lambda fp: os.path.basename(fp) == file_name)

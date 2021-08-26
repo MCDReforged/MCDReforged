@@ -4,6 +4,7 @@ from typing import Union, Iterable, Optional, List, Callable
 
 from mcdreforged.constants import core_constant
 from mcdreforged.minecraft.rtext import RTextBase, RAction, RStyle, RColor, RText
+from mcdreforged.utils import translation_util
 
 
 class RTextMCDRTranslation(RTextBase):
@@ -26,6 +27,13 @@ class RTextMCDRTranslation(RTextBase):
 	def set_translator(self, translate_function: Callable) -> 'RTextMCDRTranslation':
 		self.__translator = translate_function
 		return self
+
+	@classmethod
+	def from_translation_dict(cls, translation_dict) -> 'RTextMCDRTranslation':
+		def fake_tr(key: str, language: str):
+			return translation_util.translate_from_dict(translation_dict, language)
+
+		return RTextMCDRTranslation('').set_translator(fake_tr)
 
 	def __get_translated_text(self) -> RTextBase:
 		language = getattr(self.__TLS, 'language', None)
