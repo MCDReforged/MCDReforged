@@ -240,7 +240,7 @@ msgstr "事件 ID：mcdr.user_info"
 
 #: ../plugin_dev/event.rst:117
 msgid "Default function name: on_user_info"
-msgstr "默认函数名称：user_info"
+msgstr "默认函数名称：on_user_info"
 
 #: ../plugin_dev/event.rst:120
 msgid "Server Start"
@@ -292,7 +292,7 @@ msgstr "服务端进程终止。你可以通过判断进程的返回码执行不
 msgid ""
 "MCDR will wait until all events finished their callbacks to continue "
 "executing"
-msgstr ""
+msgstr "MCDR 将等待所有派发的事件触发的回调函数运行完成，再继续运行下去。"
 
 #: ../plugin_dev/event.rst:146 ../plugin_dev/event.rst:188
 msgid "Example:"
