@@ -9,14 +9,16 @@ Commands can be registered by MCDR itself and by plugins. This page only introdu
 !!MCDR command
 --------------
 
-``!!MCDR`` commands is the way for users to control MCDR on console, or in game. All of these command requires permission level 3 (admin) to be executed.
+``!!MCDR`` commands is the way for users to control MCDR on console, or in game. All of these following commands require permission level 3 (admin) to be executed unless extra nodes exist
 
 Assuming you already have the permission to control MCDR, then you can enter ``!!MCDR`` to the console or in game chat and you will see the help message of MCDR
+
+If you only have permission level 1 (user) or above, then the version of MCDR will be displayed via ``!!MCDR`` command
 
 Status display
 ^^^^^^^^^^^^^^
 
-``!!MCDR status`` displayer the status of MCDR. It will display the following contents:
+``!!MCDR status`` displays the status of MCDR. It will display the following contents:
 
 
 * The version of MCDR
@@ -180,7 +182,7 @@ These commands do the following things:
 Preference settings
 ^^^^^^^^^^^^^^^^^^^
 
-``!!MCDR preference`` commands is to control the preference of MCDR
+``!!MCDR preference`` commands is to control the preference of MCDR. It only requires permission level 1 (user) to operate
 
 Here's a table of the commands
 
@@ -199,9 +201,12 @@ Here's a table of the commands
    * - !!MCDR preference <pref_name>
      - !!MCDR pref <pref_name>
      - Display the details of preference <pref_name>
-   * - !!MCDR preference <pref_name> <value>
-     - !!MCDR pref <pref_name> <value>
+   * - !!MCDR preference <pref_name> set <value>
+     - !!MCDR pref <pref_name> set <value>
      - Set the value of preference <pref_name> to <value>
+   * - !!MCDR preference <pref_name> reset
+     - !!MCDR pref <pref_name> reset
+     - Reset preference <pref_name> to the default value
 
 See `here <preference.html>`__ for more information about MCDR preference
 

@@ -72,7 +72,8 @@ mcdr_command.help_message.plugin: |
 mcdr_command.help_message.preference: |
   §7!!MCDR preference list: Display the preference list
   §7!!MCDR preference §e<pref_name>§r: Display the details of preference §e<pref_name>§r
-  §7!!MCDR preference §e<pref_name>§r §6<value>§r: Set the value of preference §e<pref_name>§r to §6<value>§r
+  §7!!MCDR preference §e<pref_name>§r set §6<value>§r: Set the value of preference §e<pref_name>§r to §6<value>§r
+  §7!!MCDR preference §e<pref_name>§r reset: Reset preference §e<pref_name>§r to the default value
 mcdr_command.command_not_found                        : Command not found, type "§7{0}§r" to see help
 mcdr_command.command_not_found_suggest                : Click to input "§7{0}§r"
 mcdr_command.refresh_changed_plugins.fail             : §cFail§r to reload changed plugins

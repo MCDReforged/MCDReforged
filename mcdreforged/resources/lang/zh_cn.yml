@@ -72,7 +72,8 @@ mcdr_command.help_message.plugin: |
 mcdr_command.help_message.preference: |
   §7!!MCDR preference list: 显示偏好列表
   §7!!MCDR preference §e<pref_name>§r: 显示偏好 §e<pref_name>§r 的详情
-  §7!!MCDR preference §e<pref_name>§r §6<value>§r: 设定偏好 §e<pref_name>§r 的值为 §6<value>§r
+  §7!!MCDR preference §e<pref_name>§r set §6<value>§r: 设定偏好 §e<pref_name>§r 的值为 §6<value>§r
+  §7!!MCDR preference §e<pref_name>§r reset: 将偏好 §e<pref_name>§r 重置为默认值
 mcdr_command.command_not_found                        : 参数错误，输入 "§7{0}§r" 以查看帮助
 mcdr_command.command_not_found_suggest                : 点击以输入 "§7{0}§r"
 mcdr_command.refresh_changed_plugins.fail             : 重载变化的插件§c失败§r
