@@ -133,11 +133,11 @@ class PluginCommand(SubCommand):
 				' ',
 				RText('v{}'.format(meta.version), color=RColor.gray)
 			))
-			source.reply('ID: {}'.format(meta.id))
+			source.reply(self.tr('mcdr_command.plugin_info.id', meta.id))
 			if meta.author is not None:
-				source.reply('Authors: {}'.format(', '.join(meta.author)))
+				source.reply(self.tr('mcdr_command.plugin_info.author', ', '.join(meta.author)))
 			if meta.link is not None:
-				source.reply(RTextList('Link: ', RText(meta.link, color=RColor.blue, styles=RStyle.underlined).c(RAction.open_url, meta.link)))
+				source.reply(self.tr('mcdr_command.plugin_info.link', RText(meta.link, color=RColor.blue, styles=RStyle.underlined).c(RAction.open_url, meta.link)))
 			if meta.description is not None:
 				source.reply(meta.get_description_rtr())
 

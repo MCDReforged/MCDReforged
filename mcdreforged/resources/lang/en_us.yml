@@ -114,6 +114,9 @@ mcdr_command.list_plugin.suggest_enable               : Click to enable plugin "
 mcdr_command.list_plugin.suggest_reload               : Click to reload plugin "§e{0}§r"
 mcdr_command.list_plugin.suggest_unload               : Click to unload plugin "§e{0}§r"
 mcdr_command.list_plugin.suggest_load                 : Click to load plugin "§e{0}§r"
+mcdr_command.plugin_info.id                           : 'ID: {0}'
+mcdr_command.plugin_info.author                       : 'Author: {0}'
+mcdr_command.plugin_info.link                         : 'Link: {0}'
 mcdr_command.invalid_plugin_id                        : Invalid plugin id "§e{0}§r"
 mcdr_command.invalid_plugin_file_name                 : Invalid plugin file name "§e{0}§r"
 mcdr_command.disable_plugin.fail                      : §cFail§r to disable plugin "§e{0}§r"

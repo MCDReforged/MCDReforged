@@ -114,6 +114,9 @@ mcdr_command.list_plugin.suggest_enable               : 点击以启用插件 "�
 mcdr_command.list_plugin.suggest_reload               : 点击以重载插件 "§e{0}§r"
 mcdr_command.list_plugin.suggest_unload               : 点击以卸载插件 "§e{0}§r"
 mcdr_command.list_plugin.suggest_load                 : 点击以加载插件 "§e{0}§r"
+mcdr_command.plugin_info.id                           : 'ID: {0}'
+mcdr_command.plugin_info.author                       : '作者: {0}'
+mcdr_command.plugin_info.link                         : '链接: {0}'
 mcdr_command.invalid_plugin_id                        : 无效的插件id "§e{0}§r"
 mcdr_command.invalid_plugin_file_name                 : 无效的插件文件名 "§e{0}§r"
 mcdr_command.disable_plugin.fail                      : 插件 "§e{0}§r" 禁用§c失败§r
