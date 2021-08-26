@@ -142,7 +142,7 @@ msgstr "事件 ID：mcdr.plugin_loaded"
 
 #: ../plugin_dev/event.rst:63
 msgid "Callback arguments: PluginServerInterface, prev_module"
-msgstr "回调参数：PluginServerInterface，prev_plugin_module"
+msgstr "回调参数：PluginServerInterface，prev_module"
 
 #: ../plugin_dev/event.rst:64
 msgid "Default function name: on_load"
