@@ -2,9 +2,9 @@ import collections
 from typing import Dict, List, Callable, Any, TYPE_CHECKING, Union
 
 from mcdreforged.command.builder.nodes.basic import Literal
-from mcdreforged.constants import core_constant
 from mcdreforged.minecraft.rtext import RTextBase
 from mcdreforged.plugin.plugin_event import EventListener
+from mcdreforged.translation.translation_text import RTextMCDRTranslation
 from mcdreforged.utils import translation_util
 from mcdreforged.utils.types import TranslationStorage, TranslationKeyDictRich, MessageText, \
 	TranslationKeyDict
@@ -21,12 +21,13 @@ class HelpMessage:
 		self.plugin = plugin
 		self.prefix = prefix
 
-		self.message: TranslationKeyDictRich = {}
-		if isinstance(message, dict):
-			for lang, msg in message.items():
-				self.message[lang] = RTextBase.from_any(msg)
+		self.message: RTextBase
+		if isinstance(message, RTextMCDRTranslation):
+			self.message = message
+		elif isinstance(message, dict):
+			self.message = RTextMCDRTranslation.from_translation_dict(message)
 		else:
-			self.message[core_constant.DEFAULT_LANGUAGE] = RTextBase.from_any(message)
+			self.message = RTextBase.from_any(message)
 
 		self.permission = permission
 		self.__prefix_lower = self.prefix.lower()

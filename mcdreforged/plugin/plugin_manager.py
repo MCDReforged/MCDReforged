@@ -9,7 +9,7 @@ from typing import Callable, Dict, Optional, Any, Tuple, List, TYPE_CHECKING, De
 
 from mcdreforged.constants import core_constant, plugin_constant
 from mcdreforged.plugin import plugin_factory
-from mcdreforged.plugin.builtin.mcdreforged_plugin import MCDReforgedPlugin
+from mcdreforged.plugin.builtin.mcdreforged_plugin.mcdreforged_plugin import MCDReforgedPlugin
 from mcdreforged.plugin.builtin.python_plugin import PythonPlugin
 from mcdreforged.plugin.meta.dependency_walker import DependencyWalker
 from mcdreforged.plugin.operation_result import PluginOperationResult, SingleOperationResult
@@ -306,17 +306,18 @@ class PluginManager:
 	# Current behavior for plugin operations
 	# 1. Actual plugin operations
 	#   For plugin refresh
-	#     1. Unload plugins whose file is removed
-	#     2. Load new plugins
-	#     3. Reload existed (and matches filter) plugins whose state is ready. if reload fail unload it
+	#      1. Unload plugins whose file is removed
+	#      2. Load new plugins
+	#      3. Reload existed (and matches filter) plugins whose state is ready. if reload fail unload it
 	#
 	#   For single plugin operation
-	#     1. Enable / disable plugin
+	#      1. Enable / disable plugin
 	#
 	# 2. Plugin Processing  (method __post_plugin_process)
-	#     1. Check dependencies, unload plugins that has dependencies not satisfied
-	#     2. Call on_load for new / reloaded plugins by topo order
-	#     3. Call on_unload for unloaded plugins
+	#      1. Check dependencies, unload plugins that has dependencies not satisfied
+	#      2. Call on_unload for unloaded plugins
+	#      3. Call on_load for new / reloaded plugins by topo order
+	#    Dispatch PLUGIN_UNLOADED before PLUGIN_LOADED, so file renamed plugin keeps the same event order (unload -> load) with reloaded plugin
 
 	def __post_plugin_process(self, load_result=None, unload_result=None, reload_result=None):
 		"""
@@ -342,24 +343,37 @@ class PluginManager:
 		self.registry_storage.clear()  # in case plugin invokes dispatch_event during on_load. dont let them trigger listeners
 
 		newly_loaded_plugins = {*load_result.success_list, *reload_result.success_list}
+		to_be_removed_plugins = unload_result.success_list + unload_result.failed_list + reload_result.failed_list + dependency_check_result.failed_list
+
+		# collect removed plugin module instance
+		removed_plugins_module_instance = {}
+		for plugin in to_be_removed_plugins:
+			if isinstance(plugin, RegularPlugin):
+				removed_plugins_module_instance[plugin.get_id()] = plugin.entry_module_instance
+
+		# get ready
 		for plugin in dependency_check_result.success_list:
 			if plugin in newly_loaded_plugins:
 				plugin.ready()
 
-		for plugin in dependency_check_result.success_list:
-			if plugin in newly_loaded_plugins:
-				if isinstance(plugin, RegularPlugin):
-					plugin.receive_event(MCDRPluginEvents.PLUGIN_LOADED, (plugin.old_entry_module_instance,))
-
-		for plugin in unload_result.success_list + unload_result.failed_list + reload_result.failed_list + dependency_check_result.failed_list:
+		# PLUGIN_UNLOADED event
+		for plugin in to_be_removed_plugins:
 			plugin.assert_state({PluginState.UNLOADING})
 			# plugins might just be newly loaded but failed on dependency check, dont dispatch event to them
 			if plugin not in newly_loaded_plugins:
 				plugin.receive_event(MCDRPluginEvents.PLUGIN_UNLOADED, ())
-			# plugin.receive_event(MCDRPluginEvents.PLUGIN_REMOVED, ())
 			plugin.remove()
 
-		# they should be
+		# PLUGIN_LOADED event
+		for plugin in dependency_check_result.success_list:
+			if plugin in newly_loaded_plugins:
+				if isinstance(plugin, RegularPlugin):
+					old_entry_module_instance = plugin.old_entry_module_instance
+					if old_entry_module_instance is None:
+						old_entry_module_instance = removed_plugins_module_instance.get(plugin.get_id(), None)
+					plugin.receive_event(MCDRPluginEvents.PLUGIN_LOADED, (old_entry_module_instance,))
+
+		# they should all be ready
 		for plugin in self.get_regular_plugins():
 			plugin.assert_state({PluginState.READY})
 

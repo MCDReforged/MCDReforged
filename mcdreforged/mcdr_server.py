@@ -17,15 +17,17 @@ from mcdreforged.executor.task_executor import TaskExecutor
 from mcdreforged.executor.update_helper import UpdateHelper
 from mcdreforged.executor.watchdog import WatchDog
 from mcdreforged.handler.server_handler_manager import ServerHandlerManager
-from mcdreforged.info import Info
+from mcdreforged.info_reactor.info import Info
 from mcdreforged.info_reactor.info_reactor_manager import InfoReactorManager
+from mcdreforged.info_reactor.server_information import ServerInformation
 from mcdreforged.mcdr_state import ServerState, MCDReforgedState, MCDReforgedFlag
 from mcdreforged.minecraft.rcon.rcon_manager import RconManager
 from mcdreforged.permission.permission_manager import PermissionManager
 from mcdreforged.plugin.plugin_event import MCDRPluginEvents
 from mcdreforged.plugin.plugin_manager import PluginManager
 from mcdreforged.plugin.server_interface import ServerInterface
-from mcdreforged.translation_manager import TranslationManager
+from mcdreforged.preference.preference_manager import PreferenceManager
+from mcdreforged.translation.translation_manager import TranslationManager
 from mcdreforged.utils import file_util
 from mcdreforged.utils.exception import IllegalCallError, ServerStopped, ServerStartError, IllegalStateError
 from mcdreforged.utils.logger import DebugOption, MCDReforgedLogger, MCColoredFormatter
@@ -41,6 +43,7 @@ class MCDReforgedServer:
 		"""
 		self.mcdr_state = MCDReforgedState.INITIALIZING
 		self.server_state = ServerState.STOPPED
+		self.server_information = ServerInformation()
 		self.process = None  # type: Optional[PIPE]
 		self.flags = MCDReforgedFlag.NONE
 		self.starting_server_lock = Lock()  # to prevent multiple start_server() call
@@ -65,6 +68,7 @@ class MCDReforgedServer:
 		self.reactor_manager = InfoReactorManager(self)
 		self.command_manager = CommandManager(self)
 		self.plugin_manager = PluginManager(self)
+		self.preference_manager = PreferenceManager(self)
 
 		# --- Input arguments "generate_default_only" processing --- #
 		if generate_default_only:
@@ -124,7 +128,10 @@ class MCDReforgedServer:
 	#         Translate
 	# --------------------------
 
-	def tr(self, translation_key: str, *args, language: Optional[str] = None, fallback_language: Optional[str] = None, allow_failure=True, **kwargs) -> MessageText:
+	def get_language(self) -> str:
+		return self.translation_manager.language
+
+	def tr(self, translation_key: str, *args, language: Optional[str] = None, allow_failure=True, **kwargs) -> MessageText:
 		"""
 		Return a translated text corresponded to the translation key and format the text with given args
 		If args contains RText element, then the result will be a RText, otherwise the result will be a regular str
@@ -132,7 +139,6 @@ class MCDReforgedServer:
 		:param translation_key: The key of the translation
 		:param args: The args to be formatted
 		:param language: Specific language to be used in this translation, or the language that MCDR is using will be used
-		:param fallback_language: Fallback language used when the current language translation not found
 		:param allow_failure: If set to false, a KeyError will be risen if the translation key is not recognized
 		:param kwargs: The kwargs to be formatted
 		"""
@@ -140,7 +146,7 @@ class MCDReforgedServer:
 			translation_key, args, kwargs,
 			allow_failure=allow_failure,
 			language=language,
-			fallback_language=fallback_language,
+			fallback_language=self.translation_manager.language,
 			plugin_translations=self.plugin_manager.registry_storage.translations
 		)
 
@@ -193,6 +199,15 @@ class MCDReforgedServer:
 	def on_plugin_registry_changed(self):
 		self.command_manager.clear_command()
 		self.plugin_manager.registry_storage.export_commands(self.command_manager.register_command)
+
+	# ---------------------------
+	#      General Setters
+	# ---------------------------
+	# for field read-only access, simply use directly reference
+	# but for field writing operation, use setters
+
+	def set_task_executor(self, new_task_executor: TaskExecutor):
+		self.task_executor = new_task_executor
 
 	# ---------------------------
 	#   State Getters / Setters
@@ -361,6 +376,7 @@ class MCDReforgedServer:
 		self.set_server_state(ServerState.RUNNING)
 		self.with_flag(MCDReforgedFlag.EXIT_AFTER_STOP)  # Set after server state is set to RUNNING, or MCDR might have a chance to exit if the server is started by other thread
 		self.logger.info(self.tr('mcdr_server.start_server.pid_info', self.process.pid))
+		self.reactor_manager.on_server_start()
 		self.plugin_manager.dispatch_event(MCDRPluginEvents.SERVER_START, ())
 
 	def __on_server_stop(self):
@@ -377,6 +393,7 @@ class MCDReforgedServer:
 		self.process = None
 		self.set_server_state(ServerState.STOPPED)
 		self.remove_flag(MCDReforgedFlag.SERVER_STARTUP | MCDReforgedFlag.SERVER_RCON_READY)  # removes this two
+		self.reactor_manager.on_server_stop()
 		self.plugin_manager.dispatch_event(MCDRPluginEvents.SERVER_STOP, (return_code,), block=True)
 
 		if self.is_interrupt():
@@ -469,6 +486,7 @@ class MCDReforgedServer:
 	def __on_mcdr_start(self):
 		self.watch_dog.start()
 		self.task_executor.start()
+		self.preference_manager.load_preferences()
 		self.plugin_manager.register_permanent_plugins()
 		self.task_executor.execute_on_thread(self.load_plugins, block=True)
 		self.plugin_manager.dispatch_event(MCDRPluginEvents.MCDR_START, ())

@@ -7,7 +7,7 @@ from ruamel import yaml
 
 from mcdreforged.constants import core_constant
 from mcdreforged.minecraft.rtext import RText, RTextBase
-from mcdreforged.translation_manager import TranslationManager, LANGUAGE_DIRECTORY
+from mcdreforged.translation.translation_manager import TranslationManager, LANGUAGE_DIRECTORY
 from mcdreforged.utils import file_util
 
 

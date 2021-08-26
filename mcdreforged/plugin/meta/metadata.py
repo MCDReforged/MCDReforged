@@ -6,6 +6,7 @@ from typing import List, Dict, TYPE_CHECKING, Optional, Union
 
 from mcdreforged.minecraft.rtext import RTextBase
 from mcdreforged.plugin.meta.version import Version, VersionParsingError, VersionRequirement
+from mcdreforged.translation.translation_text import RTextMCDRTranslation
 from mcdreforged.utils import translation_util
 from mcdreforged.utils.types import TranslationLanguageDict
 
@@ -112,13 +113,22 @@ class Metadata:
 			self.entrypoint, self.archive_name, self.resources
 		)
 
-	def get_description(self, lang: Optional[str] = None) -> str:
+	def get_description(self, lang: Optional[str] = None) -> Optional[str]:
 		"""
 		Get translated description str
 		"""
 		if isinstance(self.description, str):
 			return self.description
 		return translation_util.translate_from_dict(self.description, lang, default=None)
+
+	def get_description_rtr(self) -> RTextMCDRTranslation:
+		def fake_tr(key: str, language: str) -> str:
+			ret = self.get_description(language)
+			if ret is None:
+				raise KeyError('Failed to translate description {} with language {}'.format(self.description, language))
+			return ret
+
+		return RTextMCDRTranslation('').set_translator(fake_tr)
 
 
 __SAMPLE_METADATA = {

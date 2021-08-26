@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-30 17:27+0800\n"
+"POT-Creation-Date: 2021-08-26 13:52+0800\n"
 "PO-Revision-Date: 2021-01-22 14:26+0000\n"
 "Last-Translator: \n"
 "Language: zh_CN\n"
@@ -28,156 +28,192 @@ msgstr "CommandSource 是一个指指令执行源的抽象模型。它提供了�
 msgid "Class inheriting tree:"
 msgstr "类继承树状图"
 
-#: ../plugin_dev/classes/CommandSource.rst:16
+#: ../plugin_dev/classes/CommandSource.rst:17
 msgid ""
 "Plugins can declare a class inherited from ``CommandSource`` to create "
 "their own command source"
 msgstr "插件可以定义一个由 ``CommandSource`` 继承而来的类来自定义自己的指令源"
 
-#: ../plugin_dev/classes/CommandSource.rst:19
+#: ../plugin_dev/classes/CommandSource.rst:20
 msgid "Property"
 msgstr "属性"
 
-#: ../plugin_dev/classes/CommandSource.rst:22
+#: ../plugin_dev/classes/CommandSource.rst:23
 msgid "source_type"
 msgstr "source_type"
 
-#: ../plugin_dev/classes/CommandSource.rst:24
+#: ../plugin_dev/classes/CommandSource.rst:25
 msgid "If the source is a player command source, its value is ``0``"
 msgstr "如果命令来源是玩家，其值为 ``0``；"
 
-#: ../plugin_dev/classes/CommandSource.rst:26
+#: ../plugin_dev/classes/CommandSource.rst:27
 msgid "If the source is a console command source, its value is ``1``"
-msgstr "如果命令源是控制台，其值为 ``1``。"
+msgstr "如果指令源是控制台，其值为 ``1``。"
 
-#: ../plugin_dev/classes/CommandSource.rst:28
+#: ../plugin_dev/classes/CommandSource.rst:29
 msgid "Type: int"
 msgstr "类型：int"
 
-#: ../plugin_dev/classes/CommandSource.rst:31
+#: ../plugin_dev/classes/CommandSource.rst:32
 msgid "is_player"
 msgstr "is_player"
 
-#: ../plugin_dev/classes/CommandSource.rst:33
-#: ../plugin_dev/classes/CommandSource.rst:42
+#: ../plugin_dev/classes/CommandSource.rst:34
+#: ../plugin_dev/classes/CommandSource.rst:43
 msgid "An ``@property`` decorated method"
 msgstr "一个 ``@property`` 装饰方法。"
 
-#: ../plugin_dev/classes/CommandSource.rst:35
+#: ../plugin_dev/classes/CommandSource.rst:36
 msgid "If the command source is a player command source"
 msgstr "命令是否来自玩家。"
 
-#: ../plugin_dev/classes/CommandSource.rst:37
-#: ../plugin_dev/classes/CommandSource.rst:46
+#: ../plugin_dev/classes/CommandSource.rst:38
+#: ../plugin_dev/classes/CommandSource.rst:47
 msgid "Type: bool"
 msgstr "类型：bool"
 
-#: ../plugin_dev/classes/CommandSource.rst:40
+#: ../plugin_dev/classes/CommandSource.rst:41
 msgid "is_console"
 msgstr "is_console"
 
-#: ../plugin_dev/classes/CommandSource.rst:44
+#: ../plugin_dev/classes/CommandSource.rst:45
 msgid "If the command source is a console command source"
 msgstr "命令是否来自控制台。"
 
-#: ../plugin_dev/classes/CommandSource.rst:49
+#: ../plugin_dev/classes/CommandSource.rst:50
 msgid "player"
 msgstr "player"
 
-#: ../plugin_dev/classes/CommandSource.rst:51
+#: ../plugin_dev/classes/CommandSource.rst:52
 msgid "**Only in PlayerCommandSource**"
 msgstr "**仅在 PlayerCommandSource 中存在**"
 
-#: ../plugin_dev/classes/CommandSource.rst:53
+#: ../plugin_dev/classes/CommandSource.rst:54
 msgid "The name of the player"
 msgstr "玩家的名称"
 
-#: ../plugin_dev/classes/CommandSource.rst:55
+#: ../plugin_dev/classes/CommandSource.rst:56
 msgid "Type: str"
 msgstr "类型：str"
 
-#: ../plugin_dev/classes/CommandSource.rst:58
+#: ../plugin_dev/classes/CommandSource.rst:59
 msgid "Method"
 msgstr "方法"
 
-#: ../plugin_dev/classes/CommandSource.rst:61
+#: ../plugin_dev/classes/CommandSource.rst:62
 msgid "get_server"
 msgstr "get_server"
 
-#: ../plugin_dev/classes/CommandSource.rst:67
+#: ../plugin_dev/classes/CommandSource.rst:68
 msgid "Return the server interface instance"
 msgstr "返回 ServerInterface 实例。"
 
-#: ../plugin_dev/classes/CommandSource.rst:70
+#: ../plugin_dev/classes/CommandSource.rst:71
 msgid "get_info"
 msgstr "get_info"
 
-#: ../plugin_dev/classes/CommandSource.rst:76
+#: ../plugin_dev/classes/CommandSource.rst:77
 msgid "**Only in InfoCommandSource**"
 msgstr "**仅在 InfoCommandSource 中存在**"
 
-#: ../plugin_dev/classes/CommandSource.rst:78
+#: ../plugin_dev/classes/CommandSource.rst:79
 msgid "Return the Info instance that this command source is created from"
-msgstr "返回此命令源创建的 info 实例。"
+msgstr "返回此指令源创建的 info 实例。"
 
-#: ../plugin_dev/classes/CommandSource.rst:80
+#: ../plugin_dev/classes/CommandSource.rst:81
 msgid ""
 "It's only available in command source originated from an info created by "
 "MCDR"
 msgstr "它仅在由 Info 创建出的指令源中有效"
 
-#: ../plugin_dev/classes/CommandSource.rst:83
+#: ../plugin_dev/classes/CommandSource.rst:84
 msgid "get_permission_level"
 msgstr "get_permission_level"
 
-#: ../plugin_dev/classes/CommandSource.rst:89
+#: ../plugin_dev/classes/CommandSource.rst:90
 msgid ""
 "Return the permission level representing by an int that the command "
 "source has"
-msgstr "返回一个整数，表示命令源的权限级别。"
+msgstr "返回一个整数，表示指令源的权限级别。"
 
-#: ../plugin_dev/classes/CommandSource.rst:92
+#: ../plugin_dev/classes/CommandSource.rst:93
+msgid "get_preference"
+msgstr "get_preference"
+
+#: ../plugin_dev/classes/CommandSource.rst:99
+msgid "Return the preference of the command source"
+msgstr "返回此指令源的偏好。"
+
+#: ../plugin_dev/classes/CommandSource.rst:101
+msgid ""
+"See `get_preference <ServerInterface.html#get-preference>`__ for related "
+"information"
+msgstr "见 `get_preference <ServerInterface.html#get-preference>`__ 以获得相关信息。"
+
+#: ../plugin_dev/classes/CommandSource.rst:104
+msgid "preferred_language_context"
+msgstr "preferred_language_context"
+
+#: ../plugin_dev/classes/CommandSource.rst:111
+msgid ""
+"A quick helper method to use the language value in preference to create a"
+" context with ``RTextMCDRTranslation.language_context``"
+msgstr ""
+"一个快速的助手方法，使用该指令源的偏好中的语言来创建一个 ``RTextMCDRTranslation.language_context`` "
+"上下文。"
+
+#: ../plugin_dev/classes/CommandSource.rst:113
+msgid ""
+"See `RTextMCDRTranslation <../api.html#rtextmcdrtranslation>`__ for "
+"related information"
+msgstr "见 `RTextMCDRTranslation <../api.html#rtextmcdrtranslation>`__ 以获得相关信息。"
+
+#: ../plugin_dev/classes/CommandSource.rst:115
+msgid "Example usage:"
+msgstr "示例用法："
+
+#: ../plugin_dev/classes/CommandSource.rst:123
 msgid "has_permission"
 msgstr "has_permission"
 
-#: ../plugin_dev/classes/CommandSource.rst:99
+#: ../plugin_dev/classes/CommandSource.rst:130
 msgid ""
 "Return if the command source has not less level than the given permission"
 " level"
-msgstr "若命令源权限级别低于给定的权限级别，则返回 ``False``，否则返回 ``True``。"
+msgstr "若指令源权限级别低于给定的权限级别，则返回 ``False``，否则返回 ``True``。"
 
-#: ../plugin_dev/classes/CommandSource.rst:102
+#: ../plugin_dev/classes/CommandSource.rst:133
 msgid "has_permission_higher_than"
 msgstr "has_permission_higher_than"
 
-#: ../plugin_dev/classes/CommandSource.rst:109
+#: ../plugin_dev/classes/CommandSource.rst:140
 msgid ""
 "Just like the `has_permission <#has-permission>`__, but this time it is a"
 " greater than judgment"
-msgstr "与 `has_permission <#has-permission>`__ 相似，但命令源权限需 *高于* 给定的权限才返回 ``True``。"
+msgstr "与 `has_permission <#has-permission>`__ 相似，但指令源权限需 *高于* 给定的权限才返回 ``True``。"
 
-#: ../plugin_dev/classes/CommandSource.rst:112
+#: ../plugin_dev/classes/CommandSource.rst:143
 msgid "reply"
 msgstr "reply"
 
-#: ../plugin_dev/classes/CommandSource.rst:118
+#: ../plugin_dev/classes/CommandSource.rst:149
 msgid ""
 "Send a message to the command source. The message can be anything "
 "including RTexts"
-msgstr "发送消息到命令源。消息可以是包括 RText 对象在内的任何内容。"
+msgstr "发送消息到指令源。消息可以是包括 RText 对象在内的任何内容。"
 
-#: ../plugin_dev/classes/CommandSource.rst:120
+#: ../plugin_dev/classes/CommandSource.rst:151
 msgid ""
 "The message will be converted to str using ``str()`` function unless it's"
 " a RTextBase object"
 msgstr "除非它是一个 RTextBase 对象 ，否则将使用 ``str()`` 函数转换为 str 类型。"
 
-#: ../plugin_dev/classes/CommandSource.rst:122
+#: ../plugin_dev/classes/CommandSource.rst:153
 msgid ""
 "Keyword Parameter *encoding*: The encoding method for the text. It's only"
 " used in PlayerCommandSource to optionally specify the encoding method. "
 "Check `here <ServerInterface.html#execute>`__ for more details"
 msgstr ""
-"关键词参数 *encoding*: 文本的编码方法。仅在 PlayerCommandSource 类中可用。可选地指定编码方法。请查看"
-" `此处 <ServerInterface.html#execute>`__ 以了解更多详情。"
+"关键词参数 *encoding*: 文本的编码方法。仅在 PlayerCommandSource 类中可用。可选地指定编码方法。请查看 `此处 "
+"<ServerInterface.html#execute>`__ 以了解更多详情。"
 

@@ -9,9 +9,10 @@ Class inheriting tree:
 .. code-block::
 
    CommandSource
-    └─ InfoCommandSource
-        ├─ PlayerCommandSource
-        └─ ConsoleCommandSource
+    ├─ InfoCommandSource
+    │   ├─ PlayerCommandSource
+    │   └─ ConsoleCommandSource
+    └─ PluginCommandSource
 
 Plugins can declare a class inherited from ``CommandSource`` to create their own command source
 
@@ -87,6 +88,36 @@ get_permission_level
     def get_permission_level(self) -> int
 
 Return the permission level representing by an int that the command source has
+
+get_preference
+^^^^^^^^^^^^^^
+
+.. code-block:: python
+
+    def get_preference(self) -> PreferenceItem
+
+Return the preference of the command source
+
+See `get_preference <ServerInterface.html#get-preference>`__ for related information
+
+preferred_language_context
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: python
+
+    @contextmanager
+    def preferred_language_context(self)
+
+A quick helper method to use the language value in preference to create a context with ``RTextMCDRTranslation.language_context``
+
+See `RTextMCDRTranslation <../api.html#rtextmcdrtranslation>`__ for related information
+
+Example usage:
+
+.. code-block:: python
+
+    with source.preferred_language_context():
+        text.set_click_event(RAction.suggest_command, source.get_server().rtr('my_plugin.placeholder').to_plain_text())
 
 has_permission
 ^^^^^^^^^^^^^^

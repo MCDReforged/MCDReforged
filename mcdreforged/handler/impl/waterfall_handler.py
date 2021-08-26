@@ -4,7 +4,7 @@ from parse import parse
 
 from mcdreforged.handler.impl.bukkit_handler import BukkitHandler
 from mcdreforged.handler.impl.bungeecord_handler import BungeecordHandler
-from mcdreforged.info import Info
+from mcdreforged.info_reactor.info import Info
 
 
 class WaterfallHandler(BungeecordHandler):

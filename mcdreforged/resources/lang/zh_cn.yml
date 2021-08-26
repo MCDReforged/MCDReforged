@@ -43,11 +43,12 @@ config.missing_config: |
 mcdr_command.permission_denied                      : §c权限不足§r
 mcdr_command.help_message: |
   §7!!MCDR§r: 显示这条消息
-  §7!!MCDR reload§r: 显示重载相关的帮助信息
-  §7!!MCDR status§r: 显示 MCDR 状态
+  §7!!MCDR checkupdate§r: 从 Github 检测更新
   §7!!MCDR permission§r: 显示权限相关的帮助信息
   §7!!MCDR plugin§r: 显示插件相关的帮助信息
-  §7!!MCDR checkupdate§r: 从 Github 检测更新
+  §7!!MCDR preference§r: 显示偏好相关的帮助信息
+  §7!!MCDR reload§r: 显示重载相关的帮助信息
+  §7!!MCDR status§r: 显示 MCDR 状态
 mcdr_command.help_message.reload: |
   §7!!MCDR reload plugin§r: 加载 / 重载 / 卸载§l有修改的§r插件
   §7!!MCDR reload config§r: 重载配置文件
@@ -68,8 +69,11 @@ mcdr_command.help_message.plugin: |
   §7!!MCDR plugin unload §6<plugin_id>§r: 卸载 id 为 §6<plugin_id>§r 的插件
   §7!!MCDR plugin disable §6<plugin_id>§r: 禁用 id 为 §6<plugin_id>§r 的插件
   §7!!MCDR plugin reloadall§r: 加载 / 重载 / 卸载§l所有§r插件
-mcdr_command.help_message.setlang: |
-  §7!!MCDR setlang §e<language>§r: 将 MCDR 的语言设置为 §e<language>§r，不会被保存至配置文件
+mcdr_command.help_message.preference: |
+  §7!!MCDR preference list§r: 显示偏好列表
+  §7!!MCDR preference §e<pref_name>§r: 显示偏好 §e<pref_name>§r 的详情
+  §7!!MCDR preference §e<pref_name>§r set §6<value>§r: 设定偏好 §e<pref_name>§r 的值为 §6<value>§r
+  §7!!MCDR preference §e<pref_name>§r reset: 将偏好 §e<pref_name>§r 重置为默认值
 mcdr_command.command_not_found                        : 参数错误，输入 "§7{0}§r" 以查看帮助
 mcdr_command.command_not_found_suggest                : 点击以输入 "§7{0}§r"
 mcdr_command.refresh_changed_plugins.fail             : 重载变化的插件§c失败§r
@@ -110,6 +114,9 @@ mcdr_command.list_plugin.suggest_enable               : 点击以启用插件 "�
 mcdr_command.list_plugin.suggest_reload               : 点击以重载插件 "§e{0}§r"
 mcdr_command.list_plugin.suggest_unload               : 点击以卸载插件 "§e{0}§r"
 mcdr_command.list_plugin.suggest_load                 : 点击以加载插件 "§e{0}§r"
+mcdr_command.plugin_info.id                           : 'ID: {0}'
+mcdr_command.plugin_info.author                       : '作者: {0}'
+mcdr_command.plugin_info.link                         : '链接: {0}'
 mcdr_command.invalid_plugin_id                        : 无效的插件id "§e{0}§r"
 mcdr_command.invalid_plugin_file_name                 : 无效的插件文件名 "§e{0}§r"
 mcdr_command.disable_plugin.fail                      : 插件 "§e{0}§r" 禁用§c失败§r
@@ -129,9 +136,17 @@ mcdr_command.help_message.help_command                : 显示指令帮助信息
 mcdr_command.help_message.page_number                 : 第 §6{0}§r 页
 mcdr_command.help_message.previous_page_hover         : 点击显示上一页
 mcdr_command.help_message.next_page_hover             : 点击显示下一页
-mcdr_command.set_language.not_available               : 语言 §e{0}§r 不可用
-mcdr_command.set_language.language_list               : "可用的语言列表: {0}"
-mcdr_command.set_language.success                     : "已将 MCDR 的语言设置为 §e{0}§r，注意这不会被保存至配置文件"
+mcdr_command.preference.unsupported_command_source    : 不支持的指令源 {0}
+mcdr_command.preference.list.title                    : MCDR 偏好列表
+mcdr_command.preference.list.detail_hint              : 点击以显示偏好 {0} 的详情
+mcdr_command.preference.item.name                     : 偏好项 {0} 的详情
+mcdr_command.preference.item.value                    : '当前值: {0}'
+mcdr_command.preference.item.suggestions              : '建议选项: {0}'
+mcdr_command.preference.item.current                  : 当前值
+mcdr_command.preference.item.default                  : 默认值
+mcdr_command.preference.item.set_suggestion_hint      : '点击以将偏好 {0} 的值设置为 {1}'
+mcdr_command.preference.set.done                      : 已将偏好 "{0}" 设置为 "{1}"
+mcdr_command.preference.unknown_language              : 未知的语言 {0}
 permission_manager.load.fail                          : 加载权限文件 §7{0}§r §c失败§r，使用默认的空数据
 permission_manager.set_default_permission_level.done  : 默认权限等级已设置为 §e{0}§r
 permission_manager.set_permission_level.done          : 玩家 §b{0}§r 的权限等级已设置为 §e{1}§r

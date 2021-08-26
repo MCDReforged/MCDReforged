@@ -1,14 +1,17 @@
 from abc import ABC
+from contextlib import contextmanager
 from typing import TYPE_CHECKING, Any, Optional
 
 from mcdreforged.permission.permission_level import PermissionLevel
+from mcdreforged.translation.translation_text import RTextMCDRTranslation
 from mcdreforged.utils import misc_util
 
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
-	from mcdreforged.info import Info
+	from mcdreforged.info_reactor.info import Info
 	from mcdreforged.plugin.server_interface import ServerInterface
 	from mcdreforged.plugin.type.plugin import AbstractPlugin
+	from mcdreforged.preference.preference_manager import PreferenceItem
 
 
 class CommandSource:
@@ -25,6 +28,14 @@ class CommandSource:
 
 	def get_permission_level(self) -> int:
 		raise NotImplementedError()
+
+	def get_preference(self) -> 'PreferenceItem':
+		return self.get_server().get_preference(self)
+
+	@contextmanager
+	def preferred_language_context(self):
+		with RTextMCDRTranslation.language_context(self.get_preference().language):
+			yield
 
 	def has_permission(self, level: int) -> bool:
 		return self.get_permission_level() >= level
@@ -112,7 +123,8 @@ class ConsoleCommandSource(InfoCommandSource):
 		"""
 		if console_text is not None:
 			message = console_text
-		misc_util.print_text_to_console(self._mcdr_server.logger, message)
+		with self.preferred_language_context():
+			misc_util.print_text_to_console(self._mcdr_server.logger, message)
 
 	def __str__(self):
 		return 'Console'

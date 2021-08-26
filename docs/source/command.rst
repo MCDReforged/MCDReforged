@@ -9,14 +9,16 @@ Commands can be registered by MCDR itself and by plugins. This page only introdu
 !!MCDR command
 --------------
 
-``!!MCDR`` commands is the way for users to control MCDR on console, or in game. All of these command requires permission level 3 (admin) to be executed.
+``!!MCDR`` commands is the way for users to control MCDR on console, or in game. All of these following commands require permission level 3 (admin) to be executed unless extra nodes exist
 
 Assuming you already have the permission to control MCDR, then you can enter ``!!MCDR`` to the console or in game chat and you will see the help message of MCDR
+
+If you only have permission level 1 (user) or above, then the version of MCDR will be displayed via ``!!MCDR`` command
 
 Status display
 ^^^^^^^^^^^^^^
 
-``!!MCDR status`` displayer the status of MCDR. It will display the following contents:
+``!!MCDR status`` displays the status of MCDR. It will display the following contents:
 
 
 * The version of MCDR
@@ -176,17 +178,44 @@ These commands do the following things:
 #. Unload the plugin with id ``another_plugin``
 #. Reload the plugin with file name ``another_plugin.py``. Note that since this plugin is not loaded, you can only use file name to specify it
 
+
+Preference settings
+^^^^^^^^^^^^^^^^^^^
+
+``!!MCDR preference`` commands is to control the preference of MCDR. It only requires permission level 1 (user) to operate
+
+Here's a table of the commands
+
+.. list-table::
+   :header-rows: 1
+
+   * - Command
+     - Short form
+     - Function
+   * - !!MCDR preference
+     - !!MCDR pref
+     - Show preference command help message
+   * - !!MCDR preference list
+     - !!MCDR pref list
+     - Display the preference list
+   * - !!MCDR preference <pref_name>
+     - !!MCDR pref <pref_name>
+     - Display the details of preference <pref_name>
+   * - !!MCDR preference <pref_name> set <value>
+     - !!MCDR pref <pref_name> set <value>
+     - Set the value of preference <pref_name> to <value>
+   * - !!MCDR preference <pref_name> reset
+     - !!MCDR pref <pref_name> reset
+     - Reset preference <pref_name> to the default value
+
+See `here <preference.html>`__ for more information about MCDR preference
+
+Examples:
+
+* ``!!MCDR pref set language zh_cn``: Set the value of preference ``language`` to ``zh_cn``
+
 Misc
 ^^^^
-
-Set language
-~~~~~~~~~~~~
-
-``!!MCDR setlang <language>``
-
-Set the language of MCDR to ``<language>``. Notes that it will not be saved to the config file
-
-Having a temporary language changing method is always nice
 
 Check update
 ~~~~~~~~~~~~~~~

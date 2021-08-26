@@ -6,8 +6,9 @@ from typing import Callable, TYPE_CHECKING, Tuple, Any, Union, Optional, List, I
 
 from mcdreforged.command.builder.nodes.basic import Literal
 from mcdreforged.command.command_source import CommandSource, PluginCommandSource
-from mcdreforged.constants import plugin_constant, core_constant
-from mcdreforged.info import Info
+from mcdreforged.constants import plugin_constant
+from mcdreforged.info_reactor.info import Info
+from mcdreforged.info_reactor.server_information import ServerInformation
 from mcdreforged.mcdr_state import MCDReforgedFlag
 from mcdreforged.permission.permission_level import PermissionLevel
 from mcdreforged.plugin.meta.metadata import Metadata
@@ -16,6 +17,8 @@ from mcdreforged.plugin.plugin_event import EventListener, LiteralEvent, PluginE
 from mcdreforged.plugin.plugin_registry import DEFAULT_LISTENER_PRIORITY, HelpMessage
 from mcdreforged.plugin.type.multi_file_plugin import MultiFilePlugin
 from mcdreforged.plugin.type.plugin import AbstractPlugin
+from mcdreforged.preference.preference_manager import PreferenceItem
+from mcdreforged.translation.translation_text import RTextMCDRTranslation
 from mcdreforged.utils import misc_util
 from mcdreforged.utils.exception import IllegalCallError
 from mcdreforged.utils.logger import MCDReforgedLogger, DebugOption
@@ -24,6 +27,7 @@ from mcdreforged.utils.types import MessageText, TranslationKeyDictRich, Transla
 
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
+	from mcdreforged.handler.abstract_server_handler import AbstractServerHandler
 	from mcdreforged.plugin.plugin_manager import PluginManager
 	from mcdreforged.plugin.type.regular_plugin import RegularPlugin
 
@@ -73,7 +77,7 @@ class ServerInterface:
 		"""
 		return cls.__global_instance
 
-	def tr(self, translation_key: str, *args, language: Optional[str] = None, fallback_language: str = core_constant.DEFAULT_LANGUAGE, **kwargs) -> MessageText:
+	def tr(self, translation_key: str, *args, language: Optional[str] = None, **kwargs) -> MessageText:
 		"""
 		Return a translated text corresponded to the translation key and format the text with given args and kwargs
 		If args or kwargs contains RText element, then the result will be a RText, otherwise the result will be a regular str
@@ -81,10 +85,22 @@ class ServerInterface:
 		:param translation_key: The key of the translation
 		:param args: The args to be formatted
 		:param language: Specific language to be used in this translation, or the language that MCDR is using will be used
-		:param fallback_language: Fallback language used when the current language translation not found
 		:param kwargs: The kwargs to be formatted
 		"""
-		return self._mcdr_server.tr(translation_key, *args, language=language, fallback_language=fallback_language, **kwargs)
+		return self._mcdr_server.tr(translation_key, *args, language=language, **kwargs)
+
+	def rtr(self, translation_key: str, *args, **kwargs) -> RTextMCDRTranslation:
+		"""
+		Return a RText derived component RTextMCDRTranslation, that only translates itself right before displaying or serializing
+		Using this method instead of tr() allows you to display your texts in user's preferred language automatically
+		Of course you can construct RTextMCDRTranslation yourself instead of using this method if you want
+		:param translation_key: The key of the translation
+		:param args: The args to be formatted
+		:param kwargs: The kwargs to be formatted
+		"""
+		text = RTextMCDRTranslation(translation_key, *args, **kwargs)
+		text.set_translator(self.tr)  # not that necessary tbh, just in case self.tr != ServerInterface.get_instance().tr somehow
+		return text
 
 	def as_basic_server_interface(self) -> 'ServerInterface':
 		"""
@@ -202,6 +218,14 @@ class ServerInterface:
 			return self._mcdr_server.process.pid
 		return None
 
+	def get_server_information(self) -> ServerInformation:
+		"""
+		Return a ServerInformation object indicating the information of the current server, interred from the output of the server
+		Field(s) might be None if the server is offline, or the related information has not been parsed
+		:return: a ServerInformation object
+		"""
+		return self._mcdr_server.server_information.copy()
+
 	# ------------------------
 	#     Text Interaction
 	# ------------------------
@@ -215,6 +239,10 @@ class ServerInterface:
 		self.logger.debug('Sending command "{}"'.format(text), option=DebugOption.PLUGIN)
 		self._mcdr_server.send(text, encoding=encoding)
 
+	@property
+	def __server_handler(self) -> 'AbstractServerHandler':
+		return self._mcdr_server.server_handler_manager.get_current_handler()
+
 	def tell(self, player: str, text: MessageText, *, encoding: Optional[str] = None) -> None:
 		"""
 		Use command like /tellraw to send the message to the specific player
@@ -222,7 +250,8 @@ class ServerInterface:
 		:param text: the message you want to send to the player
 		:param encoding: The encoding method for the text
 		"""
-		command = self._mcdr_server.server_handler_manager.get_current_handler().get_send_message_command(player, text)
+		with RTextMCDRTranslation.language_context(self._mcdr_server.preference_manager.get_preferred_language(player)):
+			command = self.__server_handler.get_send_message_command(player, text, self.get_server_information())
 		if command is not None:
 			self.execute(command, encoding=encoding)
 
@@ -232,7 +261,7 @@ class ServerInterface:
 		:param text: the message you want to send
 		:param encoding: The encoding method for the text
 		"""
-		command = self._mcdr_server.server_handler_manager.get_current_handler().get_broadcast_message_command(text)
+		command = self.__server_handler.get_broadcast_message_command(text, self.get_server_information())
 		if command is not None:
 			self.execute(command, encoding=encoding)
 
@@ -486,6 +515,20 @@ class ServerInterface:
 		misc_util.check_type(command, str)
 		misc_util.check_type(source, CommandSource)
 		self._mcdr_server.command_manager.execute_command(command, source)
+
+	# ------------------------
+	#        Preference
+	# ------------------------
+
+	def get_preference(self, obj: Union[str, CommandSource]) -> PreferenceItem:
+		"""
+		Return the MCDR preference of the given object. The object can be a str indicating the name of a player, or a
+		command source. For command source, only PlayerCommandSource and ConsoleCommandSource are supported
+		:param obj: The object to querying preference
+		:raise: TypeError, if the type of the given object is not supported for preference querying
+		"""
+		pref = self._mcdr_server.preference_manager.get_preference(obj, strict_type_check=True)
+		return PreferenceItem.deserialize(pref.serialize())  # make a copy
 
 	# ------------------------
 	#           Misc

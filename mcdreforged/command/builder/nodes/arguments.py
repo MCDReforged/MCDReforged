@@ -170,3 +170,14 @@ class GreedyText(TextNode):
 	"""
 	def parse(self, text):
 		return self._check_length_in_range_and_return(text, len(text))
+
+
+# -------------------
+#   Other Arguments
+# -------------------
+
+class Boolean(ArgumentNode):
+	def parse(self, text: str) -> ParseResult:
+		arg = utils.get_element(text)
+		return ParseResult(arg.lower() == 'true', len(arg))
+

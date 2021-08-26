@@ -29,7 +29,12 @@ class MyTestCase(unittest.TestCase):
 		info = self.handler.parse_server_stdout('02:07:42 [信息] [Fallen_Breath] -> UpstreamBridge has disconnected')
 		self.assertEqual('Fallen_Breath', self.handler.parse_player_left(info))
 
-	def test_3_server_events(self):
+	def test_3_server_info(self):
+		# Proxy has no game version
+		info = self.handler.parse_server_stdout('02:07:26 [信息] Listening on /0.0.0.0:25777')
+		self.assertEqual(('0.0.0.0', 25777), self.handler.parse_server_address(info))
+
+	def test_4_server_events(self):
 		info = self.handler.parse_server_stdout('02:07:26 [信息] Listening on /0.0.0.0:25777')
 		self.assertEqual(True, self.handler.test_server_startup_done(info))
 		info = self.handler.parse_server_stdout('02:07:26 [信息] Listening on /0.0.0.0:25777')
@@ -37,7 +42,7 @@ class MyTestCase(unittest.TestCase):
 		info = self.handler.parse_server_stdout('02:07:46 [信息] Closing listener [id: 0x8fc98cbe, L:/0:0:0:0:0:0:0:0:25777]')
 		self.assertEqual(True, self.handler.test_server_stopping(info))
 
-	def test_4_lifecycle(self):
+	def test_5_lifecycle(self):
 		for line in TEXT.splitlines():
 			try:
 				info = self.handler.parse_server_stdout(line)

@@ -4,7 +4,8 @@ from typing import Optional, Any
 from parse import parse
 
 from mcdreforged.handler.impl.vanilla_handler import VanillaHandler
-from mcdreforged.info import Info
+from mcdreforged.info_reactor.info import Info
+from mcdreforged.info_reactor.server_information import ServerInformation
 from mcdreforged.minecraft.rtext import RTextBase
 from mcdreforged.utils import string_util
 
@@ -18,10 +19,10 @@ class Beta18Handler(VanillaHandler):
 			content = str(message)
 		return string_util.clean_minecraft_color_code(content)
 
-	def get_send_message_command(self, target: str, message: Any) -> Optional[str]:
+	def get_send_message_command(self, target: str, message: Any, server_information: ServerInformation) -> Optional[str]:
 		return 'tell {} {}'.format(target, self.format_message(message))
 
-	def get_broadcast_message_command(self, message: Any) -> Optional[str]:
+	def get_broadcast_message_command(self, message: Any, server_information: ServerInformation) -> Optional[str]:
 		return 'say {}'.format(self.format_message(message))
 
 	# 2020-12-27 02:56:35 [INFO] Loading properties

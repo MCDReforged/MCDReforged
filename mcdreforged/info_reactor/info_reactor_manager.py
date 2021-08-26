@@ -6,9 +6,9 @@ import time
 from typing import TYPE_CHECKING, List, Optional
 
 from mcdreforged.constants import core_constant
-from mcdreforged.info import Info
 from mcdreforged.info_reactor.abstract_info_reactor import AbstractInfoReactor
 from mcdreforged.info_reactor.impl import PlayerReactor, ServerReactor, GeneralReactor
+from mcdreforged.info_reactor.info import Info
 from mcdreforged.utils import misc_util
 from mcdreforged.utils.logger import ServerLogger, DebugOption
 
@@ -70,3 +70,11 @@ class InfoReactorManager:
 				kwargs = {}
 				self.last_queue_full_warn_time = current_time
 			logging_method(self.mcdr_server.tr('info_reactor_manager.info_queue.full'), **kwargs)
+
+	def on_server_start(self):
+		for reactor in self.reactors:
+			reactor.on_server_start()
+
+	def on_server_stop(self):
+		for reactor in self.reactors:
+			reactor.on_server_stop()

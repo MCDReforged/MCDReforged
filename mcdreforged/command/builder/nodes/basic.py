@@ -269,9 +269,9 @@ class AbstractNode:
 	def __handle_error(self, error: CommandError, context: CommandContext, error_handlers: _ERROR_HANDLER_TYPE):
 		for error_type, handler in error_handlers.items():
 			if isinstance(error, error_type):
+				self.__smart_callback(handler.callback, context.source, error, context)
 				if handler.handled:
 					error.set_handled()
-				self.__smart_callback(handler.callback, context.source, error, context)
 
 	def __raise_error(self, error: CommandError, context: CommandContext):
 		self.__handle_error(error, context, self._error_handlers)
@@ -357,6 +357,8 @@ class AbstractNode:
 		# [!!aa bb cc] dd
 		# read         suggested
 		command_read_at_the_beginning = context.command_read
+		if len(context.command_remaining) == 0:
+			return self_suggestions()
 		try:
 			result = self.parse(context.command_remaining)
 		except CommandSyntaxError:

@@ -27,13 +27,18 @@ class MyTestCase(unittest.TestCase):
 		info = self.handler.parse_server_stdout('[00:20:32 INFO]: [connected player] TestName (/127.0.0.1:13456) has disconnected')
 		self.assertEqual('TestName', self.handler.parse_player_left(info))
 
-	def test_3_server_events(self):
+	def test_3_server_info(self):
+		# Proxy has no game version
+		info = self.handler.parse_server_stdout('[00:23:40 INFO]: Listening on /[0:0:0:0:0:0:0:0]:25577')
+		self.assertEqual(('[0:0:0:0:0:0:0:0]', 25577), self.handler.parse_server_address(info))
+
+	def test_4_server_events(self):
 		info = self.handler.parse_server_stdout('[00:19:04 INFO]: Done (3.11s)!')
 		self.assertEqual(True, self.handler.test_server_startup_done(info))
 		info = self.handler.parse_server_stdout('[00:21:40 INFO]: Shutting down the proxy...')
 		self.assertEqual(True, self.handler.test_server_stopping(info))
 
-	def test_4_lifecycle(self):
+	def test_5_lifecycle(self):
 		for line in TEXT.splitlines():
 			try:
 				info = self.handler.parse_server_stdout(line)

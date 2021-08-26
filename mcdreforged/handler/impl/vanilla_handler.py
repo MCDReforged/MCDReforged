@@ -5,7 +5,8 @@ from typing import Optional, Any
 from parse import parse
 
 from mcdreforged.handler.abstract_server_handler import AbstractServerHandler
-from mcdreforged.info import Info
+from mcdreforged.info_reactor.info import Info
+from mcdreforged.info_reactor.server_information import ServerInformation
 from mcdreforged.minecraft.rtext import RTextBase
 
 
@@ -13,15 +14,29 @@ class VanillaHandler(AbstractServerHandler):
 	def get_stop_command(self) -> str:
 		return 'stop'
 
-	def get_send_message_command(self, target: str, message: Any) -> Optional[str]:
+	@classmethod
+	def format_message(cls, message: Any) -> str:
 		if isinstance(message, RTextBase):
-			content = message.to_json_str()
+			return message.to_json_str()
 		else:
-			content = json.dumps(str(message))
-		return 'tellraw {} {}'.format(target, content)
+			return json.dumps(str(message))
 
-	def get_broadcast_message_command(self, message: Any) -> Optional[str]:
-		return self.get_send_message_command('@a', message)
+	def get_send_message_command(self, target: str, message: Any, server_information: ServerInformation) -> Optional[str]:
+		can_do_execute = False
+		try:
+			from mcdreforged.plugin.meta.version import Version
+			version = Version(server_information.version.split(' ')[0])
+			if version >= Version('1.13.0'):
+				can_do_execute = True
+		except:
+			pass
+		command = 'tellraw {} {}'.format(target, self.format_message(message))
+		if can_do_execute:
+			command = 'execute at @p run ' + command
+		return command
+
+	def get_broadcast_message_command(self, message: Any, server_information: ServerInformation) -> Optional[str]:
+		return self.get_send_message_command('@a', message, server_information)
 
 	@classmethod
 	def get_content_parsing_formatter(cls):
@@ -50,6 +65,20 @@ class VanillaHandler(AbstractServerHandler):
 		# Steve left the game
 		if not info.is_user and re.fullmatch(r'\w{1,16} left the game', info.content):
 			return info.content.split(' ')[0]
+		return None
+
+	def parse_server_version(self, info: Info):
+		if not info.is_user:
+			parsed = parse('Starting minecraft server version {version}', info.content)
+			if parsed is not None:
+				return parsed['version']
+		return None
+
+	def parse_server_address(self, info: Info):
+		if not info.is_user:
+			parsed = parse('Starting Minecraft server on {}:{:d}', info.content)
+			if parsed is not None:
+				return parsed[0], parsed[1]
 		return None
 
 	def test_server_startup_done(self, info: Info):

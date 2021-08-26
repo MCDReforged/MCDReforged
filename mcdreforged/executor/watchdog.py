@@ -45,7 +45,7 @@ class WatchDog(ThreadExecutor):
 			task_executor.set_name(task_executor.get_name() + ' (no response)')
 
 			new_executor = TaskExecutor(self.mcdr_server, previous_executor=task_executor)
-			self.mcdr_server.task_executor = new_executor
+			self.mcdr_server.set_task_executor(new_executor)
 			new_executor.start()
 
 	def start(self):

@@ -29,7 +29,13 @@ class MyTestCase(unittest.TestCase):
 		info = self.handler.parse_server_stdout('2021-01-09 01:41:52 [INFO] _somebody_ lost connection: disconnect.quitting')
 		self.assertEqual('_somebody_', self.handler.parse_player_left(info))
 
-	def test_3_server_events(self):
+	def test_3_server_info(self):
+		info = self.handler.parse_server_stdout('2021-01-09 01:41:09 [INFO] Starting minecraft server version Beta 1.8.1')
+		self.assertEqual('Beta 1.8.1', self.handler.parse_server_version(info))
+		info = self.handler.parse_server_stdout('2021-01-09 01:41:09 [INFO] Starting Minecraft server on *:25565')
+		self.assertEqual(('*', 25565), self.handler.parse_server_address(info))
+
+	def test_4_server_events(self):
 		info = self.handler.parse_server_stdout('2021-01-09 01:41:17 [INFO] Done (7202843100ns)! For help, type "help" or "?"')
 		self.assertEqual(True, self.handler.test_server_startup_done(info))
 		# No rcon
@@ -37,7 +43,7 @@ class MyTestCase(unittest.TestCase):
 		info = self.handler.parse_server_stdout('2021-01-09 01:41:56 [INFO] Stopping server')
 		self.assertEqual(True, self.handler.test_server_stopping(info))
 
-	def test_4_lifecycle(self):
+	def test_5_lifecycle(self):
 		for line in TEXT.splitlines():
 			try:
 				info = self.handler.parse_server_stdout(line)

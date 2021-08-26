@@ -41,7 +41,7 @@ tr
 
 .. code-block:: python
 
-    def tr(self, translation_key: str, *args, language: Optional[str] = None, fallback_language: str = 'en_us', **kwargs) -> Union[str, RTextBase]
+    def tr(self, translation_key: str, *args, language: Optional[str] = None, **kwargs) -> Union[str, RTextBase]
 
 Return a translated text corresponded to the translation key and format the text with given args and kwargs
 
@@ -57,7 +57,25 @@ Parameter *args*: The args to be formatted
 
 Keyword Parameter *language*: Specific language to be used in this translation, or the language that MCDR is using will be used
 
-Keyword Parameter *fallback_language*: Fallback language used when the current language translation not found
+Keyword Parameter *kwargs*: The kwargs to be formatted
+
+rtr
+~~~
+
+.. code-block:: python
+
+    def rtr(self, translation_key: str, *args, **kwargs) -> RTextMCDRTranslation
+
+
+Return a RText derived component `RTextMCDRTranslation <../api.html#rtextmcdrtranslation>`__, that only translates itself right before displaying or serializing
+
+Using this method instead of `tr() <#tr>`__ allows you to display your texts in `user's preferred language <../../preference.html#language>`__ automatically
+
+Of course you can construct ``RTextMCDRTranslation`` yourself instead of using this method if you want
+
+Parameter *translation_key*: The key of the translation
+
+Parameter *args*: The args to be formatted
 
 Keyword Parameter *kwargs*: The kwargs to be formatted
 
@@ -195,6 +213,23 @@ get_server_pid
 Return the pid of the server process, None if the server is stopped
 
 Notes the process with this pid is a bash process, which is the parent process of real server process you might be interested in
+
+get_server_information
+~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+    def get_server_information(self) -> Optional[ServerInformation]
+
+Return a ``ServerInformation`` object indicating the information of the current server, interred from the output of the server
+
+It has following fields:
+
+* Server version name ``version``, a str. e.g. ``1.15.2``, ``1.17 Release Candidate 1``
+* Server IP address ``ip``, a str. e.g. ``127.0.0.1``
+* Server port ``port``, an int. e.g. ``25565``
+
+Field(s) above might be None if the server is offline, or the related information has not been parsed
 
 Text Interaction
 ^^^^^^^^^^^^^^^^
@@ -512,6 +547,23 @@ Execute a single command using the command system of MCDR
 Parameter *command*: The command you want to execute
 
 Parameter *source*: The command source that is used to execute the command. If it's not specified MCDR will use `get_plugin_command_source <#get-plugin-command-source>`__ as fallback command source
+
+Preference
+^^^^^^^^^^
+
+get_preference
+~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+    def get_preference(self, obj: Union[str, CommandSource]) -> PreferenceItem
+
+
+Return the MCDR preference of the given object. The object can be a str indicating the name of a player, or a command source. For command source, only ``PlayerCommandSource`` and ``ConsoleCommandSource`` are supported
+
+Parameter *obj*: The object to querying preference
+
+It raises ``TypeError`` if the type of the given object is not supported for preference querying
 
 Misc
 ^^^^

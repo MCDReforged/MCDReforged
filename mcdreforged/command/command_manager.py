@@ -39,16 +39,16 @@ class CommandManager:
 		for literal in plugin_node.node.literals:
 			self.root_nodes[literal].append(plugin_node)
 
-	def __translate_command_error_header(self, translation_key: str, error: CommandError):
-		if isinstance(error, RequirementNotMet):
-			if error.get_reason() is not RequirementNotMet.DEFAULT_REASON:
-				return error.get_reason()
-			args = ()
-		else:
-			args = error.get_error_data()
-		return self.mcdr_server.tr(translation_key, *args, allow_failure=False)
-
 	def _traverse(self, command: str, source: CommandSource, purpose: TraversePurpose) -> None or List[CommandSuggestion]:
+		def __translate_command_error_header(translation_key_: str, error_: CommandError) -> str:
+			if isinstance(error_, RequirementNotMet):
+				if error_.get_reason() is not RequirementNotMet.DEFAULT_REASON:
+					return error_.get_reason()
+				args = ()
+			else:
+				args = error_.get_error_data()
+			return self.mcdr_server.tr(translation_key_, *args, allow_failure=False, language=source.get_preference().language)
+
 		first_literal_element = utils.get_element(command)
 		plugin_root_nodes = self.root_nodes.get(first_literal_element, [])
 		suggestions = CommandSuggestions()
@@ -75,7 +75,7 @@ class CommandManager:
 				if not error.is_handled():
 					translation_key = 'command_exception.{}'.format(string_util.hump_to_underline(type(error).__name__))
 					try:
-						error.set_message(self.__translate_command_error_header(translation_key, error))
+						error.set_message(__translate_command_error_header(translation_key, error))
 					except KeyError:
 						self.logger.debug('Fail to translated command error with key {}'.format(translation_key), option=DebugOption.COMMAND)
 					source.reply(error.to_mc_color_text())

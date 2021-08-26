@@ -4,19 +4,20 @@ from typing import Any, Optional
 from parse import parse
 
 from mcdreforged.handler.abstract_server_handler import AbstractServerHandler
-from mcdreforged.handler.impl.beta18_handler import Beta18Handler
-from mcdreforged.info import Info
+from mcdreforged.info_reactor.info import Info
+from mcdreforged.info_reactor.server_information import ServerInformation
 
 
 class BungeecordHandler(AbstractServerHandler):
 	def get_stop_command(self) -> str:
 		return 'end'
 
-	def get_send_message_command(self, target: str, message: Any) -> Optional[str]:
+	def get_send_message_command(self, target: str, message: Any, server_information: ServerInformation) -> Optional[str]:
 		return None
 
-	def get_broadcast_message_command(self, message: Any) -> Optional[str]:
-		return 'alertraw {}'.format(Beta18Handler.format_message(message))
+	def get_broadcast_message_command(self, message: Any, server_information: ServerInformation) -> Optional[str]:
+		from mcdreforged.handler.impl import VanillaHandler
+		return 'alertraw {}'.format(VanillaHandler.format_message(message))
 
 	@classmethod
 	def get_content_parsing_formatter(cls):
@@ -45,6 +46,17 @@ class BungeecordHandler(AbstractServerHandler):
 			parsed = parse('[{name}] -> UpstreamBridge has disconnected', info.content)
 			if parsed is not None:
 				return parsed['name']
+		return None
+
+	def parse_server_version(self, info: Info):
+		return None
+
+	def parse_server_address(self, info: Info):
+		# Listening on /0.0.0.0:25577
+		if not info.is_user:
+			parsed = parse('Listening on /{}:{:d}', info.content)
+			if parsed is not None:
+				return parsed[0], parsed[1]
 		return None
 
 	def test_server_startup_done(self, info: Info) -> bool:

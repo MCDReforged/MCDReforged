@@ -10,6 +10,7 @@ import requests
 from mcdreforged.constants import core_constant
 from mcdreforged.executor.thread_executor import ThreadExecutor
 from mcdreforged.minecraft.rtext import RText, RAction, RColor, RStyle, RTextBase
+from mcdreforged.translation.translation_text import RTextMCDRTranslation
 from mcdreforged.utils import misc_util
 
 
@@ -28,12 +29,15 @@ class UpdateHelper(ThreadExecutor):
 		self.__last_query_time = time.time()
 		misc_util.start_thread(self.__check_update, (condition_check, reply_func), 'CheckUpdate')
 
+	def tr(self, key: str, *args, **kwargs) -> RTextBase:
+		return RTextMCDRTranslation(key, *args, **kwargs).set_translator(self.mcdr_server.tr)
+
 	def __check_update(self, condition_check: Callable[[], bool], reply_func: Callable[[Union[str or RTextBase]], Any]):
 		if not condition_check():
 			return
 		acquired = self.update_lock.acquire(blocking=False)
 		if not acquired:
-			reply_func(self.mcdr_server.tr('update_helper.check_update.already_checking'))
+			reply_func(self.tr('update_helper.check_update.already_checking'))
 			return
 		try:
 			response = None
@@ -42,7 +46,7 @@ class UpdateHelper(ThreadExecutor):
 				latest_version = response['tag_name']  # type: str
 				update_log = response['body']
 			except Exception as e:
-				reply_func(self.mcdr_server.tr('update_helper.check_update.check_fail', repr(e)))
+				reply_func(self.tr('update_helper.check_update.check_fail', repr(e)))
 				if isinstance(e, KeyError) and type(response) is dict and 'message' in response:
 					reply_func(response['message'])
 					if 'documentation_url' in response:
@@ -58,11 +62,11 @@ class UpdateHelper(ThreadExecutor):
 					self.mcdr_server.logger.exception('Fail to compare between versions "{}" and "{}"'.format(core_constant.VERSION, latest_version))
 					return
 				if cmp_result == 0:
-					reply_func(self.mcdr_server.tr('update_helper.check_update.is_already_latest'))
+					reply_func(self.tr('update_helper.check_update.is_already_latest'))
 				elif cmp_result == 1:
-					reply_func(self.mcdr_server.tr('update_helper.check_update.newer_than_latest', core_constant.VERSION, latest_version))
+					reply_func(self.tr('update_helper.check_update.newer_than_latest', core_constant.VERSION, latest_version))
 				else:
-					reply_func(self.mcdr_server.tr('update_helper.check_update.new_version_detected', latest_version))
+					reply_func(self.tr('update_helper.check_update.new_version_detected', latest_version))
 					for line in update_log.splitlines():
 						reply_func('    {}'.format(line))
 		finally:

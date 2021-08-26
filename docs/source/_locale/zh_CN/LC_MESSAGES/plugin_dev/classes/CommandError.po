@@ -63,6 +63,6 @@ msgid ""
 "the command source like ``Unknown argument: !!MCDR reload this<--``"
 msgstr ""
 "在处理命令树节点上的错误监听器引发的指令错误时，你可以使用这个方法告诉 MCDR 错误已被处理。这样 MCDR "
-"将不会向命令源显示默认的命令故障消息，如 如果从控制台输入此信息，则表示 MCDR 是否应将内容发送到服务器的标准输入流 ``Unknown "
+"将不会向指令源显示默认的命令故障消息，如 如果从控制台输入此信息，则表示 MCDR 是否应将内容发送到服务器的标准输入流 ``Unknown "
 "argument: !!MCDR reload this<--`` 。"
 

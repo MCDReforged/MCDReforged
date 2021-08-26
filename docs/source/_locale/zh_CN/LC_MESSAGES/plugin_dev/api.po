@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-19 19:46+0800\n"
+"POT-Creation-Date: 2021-08-25 23:24+0800\n"
 "PO-Revision-Date: 2021-01-24 09:02+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -110,7 +110,7 @@ msgid "It's also a simple compatible upgrade method for old MCDR 0.x plugins"
 msgstr "这也是传统 MCDR 0.x 插件的简单的兼容升级方法。"
 
 #: ../plugin_dev/api.rst:51 ../plugin_dev/api.rst:118 ../plugin_dev/api.rst:373
-#: ../plugin_dev/api.rst:389
+#: ../plugin_dev/api.rst:389 ../plugin_dev/api.rst:503
 msgid "Example:"
 msgstr "例如："
 
@@ -138,7 +138,9 @@ msgid ""
 "original function. An ``RuntimeError`` will be risen if ``block=False`` "
 "and the thread is still alive, then if exception occurs in the thread the"
 " exception will be risen here"
-msgstr "正如该方法的名字所示，该方法是用获取原函数的返回值。如果 ``block=False`` 且线程仍在运行，``RuntimeError`` 将被抛出。如果线程运行过程中有异常发生，则此异常将被抛出。"
+msgstr ""
+"正如该方法的名字所示，该方法是用获取原函数的返回值。如果 ``block=False`` 且线程仍在运行，``RuntimeError`` "
+"将被抛出。如果线程运行过程中有异常发生，则此异常将被抛出。"
 
 #: ../plugin_dev/api.rst:86
 msgid ""
@@ -708,29 +710,76 @@ msgid ""
 "you to import those Usually-used classes"
 msgstr "谁不希望在编写插件时，有一个检查器来帮助你减少愚蠢的错误呢？如果你想指定类型以让 IDE 知道你在写什么，这里有一个包可以让你导入一些常用的类。"
 
-#: ../plugin_dev/api.rst:473
+#: ../plugin_dev/api.rst:473 ../plugin_dev/api.rst:480
+msgid "RTextMCDRTranslation"
+msgstr "RTextMCDRTranslation"
+
+#: ../plugin_dev/api.rst:475
+msgid "The translation text component used in MCDR"
+msgstr "MCDR 翻译文本组件类"
+
+#: ../plugin_dev/api.rst:477
+msgid ""
+"When MCDR is running, it will use the `tr "
+"<classes/ServerInterface.html#tr>`__ method in ``ServerInterface`` class "
+"as the translating method, and the language of MCDR as the fallback "
+"translation language"
+msgstr ""
+"当 MCDR 正在运行时，它将使用 ``ServerInterface`` 类中的 `tr "
+"<classes/ServerInterface.html#tr>`__ 方法作为翻译的方法，并使用 MCDR 的语言作为默认语言。"
+
+#: ../plugin_dev/api.rst:486
+msgid ""
+"Create a ``RTextMCDRTranslation`` component with necessary parameters for"
+" translation"
+msgstr "使用与翻译相关的必要参数创建一个 ``RTextMCDRTranslation`` 组件。"
+
+#: ../plugin_dev/api.rst:489
+msgid "language_context"
+msgstr "language_context"
+
+#: ../plugin_dev/api.rst:497
+msgid ""
+"Create a context where all ``RTextMCDRTranslation`` will use the given "
+"language to translate within this context"
+msgstr "创建一个上下文，在其中所有的 ``RTextMCDRTranslation`` 将会使用给定的语言来进行翻译。"
+
+#: ../plugin_dev/api.rst:499
+msgid ""
+"It's mostly used when you want a translated str or Minecraft json text "
+"object corresponding to this component under a specific language"
+msgstr "它主要在你想要在特定语言下，获得该文本组件对应的翻译后的字符串或翻译后的 Minecraft json 文本时使用。"
+
+#: ../plugin_dev/api.rst:501
+msgid ""
+"MCDR will automatically apply this context with `user's preferred "
+"language <../preference.html#language>`__ right before sending messages "
+"to a player or the console"
+msgstr "MCDR 将自动地于发送信息至玩家或控制台前，使用 `用户的偏好语言 <../preference.html#language>`__ 应用该上下文管理器。"
+
+#: ../plugin_dev/api.rst:516
 msgid "utils"
 msgstr "utils"
 
-#: ../plugin_dev/api.rst:475
+#: ../plugin_dev/api.rst:518
 msgid "Some useful kits"
 msgstr "一些使用工具集"
 
-#: ../plugin_dev/api.rst:478
+#: ../plugin_dev/api.rst:521
 msgid "Serializable"
 msgstr "Serializable"
 
-#: ../plugin_dev/api.rst:480
+#: ../plugin_dev/api.rst:523
 msgid "A abstract class for easy serializing / deserializing"
 msgstr "一个用于便捷序列化/反序列化的抽象类。"
 
-#: ../plugin_dev/api.rst:482
+#: ../plugin_dev/api.rst:525
 msgid ""
 "Inherit it and declare the fields of your class with type annotations, "
 "that's all you need to do"
 msgstr "继承它，并在你的子类中使用类型注解声明属性，你所需要做的就这么多。"
 
-#: ../plugin_dev/api.rst:496
+#: ../plugin_dev/api.rst:539
 msgid ""
 "You can also declare default value when declaring type annotations, then "
 "during deserializing, if the value is missing, a `copy "
@@ -740,7 +789,11 @@ msgstr ""
 "你也可以在声明类型注解时声明属性的默认值，这样在反序列化的过程中，如果值缺失，则默认值的 `拷贝 <https://docs.python.org"
 "/zh-cn/3/library/copy.html#copy.copy>`__ 将会被赋值"
 
-#: ../plugin_dev/api.rst:509
+#: ../plugin_dev/api.rst:552
+msgid "Enum class will be serialized into its member name"
+msgstr "类 Enum 会被序列化为它的枚举成员名称"
+
+#: ../plugin_dev/api.rst:572
 msgid "Serializable class nesting is also supported"
 msgstr "类 Serializable 的嵌套也是支持的"
 

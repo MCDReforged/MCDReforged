@@ -1,10 +1,11 @@
 import re
 import time
-from typing import Optional, Any, Union, Iterable
+from typing import Optional, Any, Union, Iterable, Tuple
 
 from parse import parse
 
-from mcdreforged.info import InfoSource, Info
+from mcdreforged.info_reactor.info import InfoSource, Info
+from mcdreforged.info_reactor.server_information import ServerInformation
 from mcdreforged.utils import string_util
 
 '''
@@ -39,13 +40,13 @@ class AbstractServerHandler:
 		"""
 		raise NotImplementedError()
 
-	def get_send_message_command(self, target: str, message: Any) -> Optional[str]:
+	def get_send_message_command(self, target: str, message: Any, server_information: ServerInformation) -> Optional[str]:
 		"""
 		The command to send a message to a target
 		"""
 		raise NotImplementedError()
 
-	def get_broadcast_message_command(self, message: Any) -> Optional[str]:
+	def get_broadcast_message_command(self, message: Any, server_information: ServerInformation) -> Optional[str]:
 		"""
 		The command to broadcast a message in the server
 		"""
@@ -173,6 +174,27 @@ class AbstractServerHandler:
 		:param Info info: The info instance that will be checked
 		:return: The name of the player or None
 		:rtype: str or None
+		"""
+		raise NotImplementedError()
+
+	def parse_server_version(self, info: Info) -> Optional[str]:
+		"""
+		Check if the info contains a server version message
+		If it is, returns server version, otherwise returns None
+
+		:param Info info: The info instance that will be checked
+		:return: The name of the player or None
+		:rtype: str or None
+		"""
+		raise NotImplementedError()
+
+	def parse_server_address(self, info: Info) -> Optional[Tuple[str, int]]:
+		"""
+		Check if the info contains the address which the server is listening on
+		If it is, returns server ip and port, otherwise returns None
+
+		:param Info info: The info instance that will be checked
+		:return: A tuple containing the ip and the port
 		"""
 		raise NotImplementedError()
 

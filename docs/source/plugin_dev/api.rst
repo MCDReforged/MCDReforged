@@ -469,6 +469,49 @@ Who doesn't want a complete type checking to help you reduce silly mistakes etc.
         pass
 
 
+RTextMCDRTranslation
+^^^^^^^^^^^^^^^^^^^^
+
+The translation text component used in MCDR
+
+When MCDR is running, it will use the `tr <classes/ServerInterface.html#tr>`__ method in ``ServerInterface`` class as the translating method, and the language of MCDR as the fallback translation language
+
+RTextMCDRTranslation
+~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+    def __init__(self, translation_key: str, *args, **kwargs)
+
+Create a ``RTextMCDRTranslation`` component with necessary parameters for translation
+
+language_context
+~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+    @classmethod
+    @contextmanager
+    def language_context(cls, language: str)
+
+Create a context where all ``RTextMCDRTranslation`` will use the given language to translate within this context
+
+It's mostly used when you want a translated str or Minecraft json text object corresponding to this component under a specific language
+
+MCDR will automatically apply this context with `user's preferred language <../preference.html#language>`__ right before sending messages to a player or the console
+
+Example:
+
+.. code-block:: python
+
+    def log_message_line_by_line(server: ServerInterface):
+        with RTextMCDRTranslation.language_context('en_us'):
+            text: RTextMCDRTranslation = server.rtr('my_plugin.some_message')
+            text_as_str: str = text.to_plain_text()  # translation operation happens here
+            server.logger.info('Lines of my translation')
+            for line in text_as_str.splitlines():
+                server.logger.info('- {}'.format(line))
+
 utils
 -----
 
@@ -505,6 +548,26 @@ You can also declare default value when declaring type annotations, then during 
     print(data.serialize())  # {'name': 'default', 'values': [0]}
     print(MyData.deserialize({}).serialize())  # {'name': 'default', 'values': []}
     print(MyData.deserialize({}).values is MyData.deserialize({}).values)  # False
+
+Enum class will be serialized into its member name
+
+.. code-block:: python
+
+    class Gender(Enum):
+        male = 'man'
+        female = 'woman'
+
+
+    class MyData(Serializable):
+        name: str = 'zhang_san'
+        gender: Gender = Gender.male
+
+
+    data = MyData.get_default()
+    print(data.serialize())                                     # {'name': 'zhang_san', 'gender': 'male'}
+    data.gender = Gender.female
+    print(data.serialize())                                     # {'name': 'zhang_san', 'gender': 'female'}
+    MyData.deserialize({'name': 'li_si', 'gender': 'female'})    # -> MyData(name='li_si', gender=Gender.female)
 
 Serializable class nesting is also supported
 
