@@ -16,7 +16,7 @@ Translation
 
 For `multi file plugin <plugin_format.html#multi-file-plugin>`__, you can also include a ``lang/`` folder in your plugin, with translation files in json (``.json``) or yaml (``.yml``) format named like ``en_us.json``. MCDR will automatically register these translations for your plugin
 
-It's highly recommended to use your plugin id as the prefix of your translation key, so there will be no translation conflicts between plugins. e.g. use ``my_plugin.some.text`` instead of `some.text`` as translation key
+It's highly recommended to use your plugin id as the prefix of your translation key, so there will be no translation conflicts between plugins. e.g. use ``my_plugin.some.text`` instead of ``some.text`` as translation key
 
 For the difference between 2 translation method in ``ServerInterface``, let's use Minecraft code (yarn mapping) as an example:
 

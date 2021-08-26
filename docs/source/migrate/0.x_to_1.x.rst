@@ -80,12 +80,12 @@ In MCDR 0.x the player joined event listener accepts 2 or 3 arguments. Both of t
 
 .. code-block:: python
 
-    def on_player_joined(server: ServerInterface, player: str):
+    def on_player_joined(server: PluginServerInterface, player: str):
         pass
 
 .. code-block:: python
 
-    def on_player_joined(server: ServerInterface, player: str, info: Info):
+    def on_player_joined(server: PluginServerInterface, player: str, info: Info):
         pass
 
 However, the former usage is removed in current MCDR version, only the latter one with 3 arguments is accepted

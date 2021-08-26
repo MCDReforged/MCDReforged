@@ -141,8 +141,8 @@ msgid "Event id: mcdr.plugin_loaded"
 msgstr "事件 ID：mcdr.plugin_loaded"
 
 #: ../plugin_dev/event.rst:63
-msgid "Callback arguments: ServerInterface, prev_module"
-msgstr "回调参数：ServerInterface，prev_plugin_module"
+msgid "Callback arguments: PluginServerInterface, prev_module"
+msgstr "回调参数：PluginServerInterface，prev_plugin_module"
 
 #: ../plugin_dev/event.rst:64
 msgid "Default function name: on_load"
@@ -171,8 +171,8 @@ msgstr "事件 ID：mcdr.plugin_unloaded"
 #: ../plugin_dev/event.rst:75 ../plugin_dev/event.rst:126
 #: ../plugin_dev/event.rst:136 ../plugin_dev/event.rst:166
 #: ../plugin_dev/event.rst:180
-msgid "Callback arguments: ServerInterface"
-msgstr "回调参数：ServerInterface"
+msgid "Callback arguments: PluginServerInterface"
+msgstr "回调参数：PluginServerInterface"
 
 #: ../plugin_dev/event.rst:76
 msgid "Default function name: on_unload"
@@ -200,8 +200,8 @@ msgid "Event id: mcdr.general_info"
 msgstr "事件 ID：mcdr.general_info"
 
 #: ../plugin_dev/event.rst:93 ../plugin_dev/event.rst:116
-msgid "Callback arguments: ServerInterface, Info"
-msgstr "回调参数：ServerInterface，Info"
+msgid "Callback arguments: PluginServerInterface, Info"
+msgstr "回调参数：PluginServerInterface，Info"
 
 #: ../plugin_dev/event.rst:94
 msgid "Default function name: on_info"
@@ -303,8 +303,8 @@ msgid "Event id: mcdr.server_stop"
 msgstr "事件 ID：mcdr.server_stop"
 
 #: ../plugin_dev/event.rst:156
-msgid "Callback arguments: ServerInterface, server_return_code"
-msgstr "回调参数：ServerInterface，server_return_code"
+msgid "Callback arguments: PluginServerInterface, server_return_code"
+msgstr "回调参数：PluginServerInterface，server_return_code"
 
 #: ../plugin_dev/event.rst:157
 msgid "Default function name: on_server_stop"
@@ -366,8 +366,8 @@ msgid "Event id: mcdr.player_joined"
 msgstr "事件 ID：mcdr.plugin_joined"
 
 #: ../plugin_dev/event.rst:197
-msgid "Callback arguments: ServerInterface, player_name, Info"
-msgstr "回调参数：ServerInterface，player_name，Info"
+msgid "Callback arguments: PluginServerInterface, player_name, Info"
+msgstr "回调参数：PluginServerInterface，player_name，Info"
 
 #: ../plugin_dev/event.rst:198
 msgid "Default function name: on_player_joined"
@@ -388,8 +388,8 @@ msgid "Event id: mcdr.player_left"
 msgstr "事件 ID：mcdr.plugin_left"
 
 #: ../plugin_dev/event.rst:207
-msgid "Callback arguments: ServerInterface, player_name"
-msgstr "回调参数：ServerInterface，player_name"
+msgid "Callback arguments: PluginServerInterface, player_name"
+msgstr "回调参数：PluginServerInterface，player_name"
 
 #: ../plugin_dev/event.rst:208
 msgid "Default function name: on_player_left"

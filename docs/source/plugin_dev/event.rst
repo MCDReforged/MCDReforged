@@ -60,7 +60,7 @@ Since it's the first event in the lifecycle of a plugin, this event can only be 
 Note: You should not dispatch custom events in the ``on_load`` function or it will do nothing. The event listener storage of MCDR has not been initialized yet
 
 * Event id: mcdr.plugin_loaded
-* Callback arguments: ServerInterface, prev_module
+* Callback arguments: PluginServerInterface, prev_module
 * Default function name: on_load
 
 Plugin Unloaded
@@ -72,7 +72,7 @@ Also, this event will be dispatched during MCDR stopping, so it's a good place f
 
 
 * Event id: mcdr.plugin_unloaded
-* Callback arguments: ServerInterface
+* Callback arguments: PluginServerInterface
 * Default function name: on_unload
 
 General Info
@@ -84,13 +84,13 @@ Here's an example
 
 .. code-block:: python
 
-    def on_info(server: ServerInterface, info: Info):
+    def on_info(server: PluginServerInterface, info: Info):
         if not info.is_user and re.fullmatch(r'Starting Minecraft server on \S*', info.content):
             server.logger.info('Minecraft is starting at address {}'.format(info.content.rsplit(' ', 1)[1]))
 
 
 * Event id: mcdr.general_info
-* Callback arguments: ServerInterface, Info
+* Callback arguments: PluginServerInterface, Info
 * Default function name: on_info
 
 User Info
@@ -104,7 +104,7 @@ Here's an example
 
 .. code-block:: python
 
-    def on_user_info(server: ServerInterface, info: Info):
+    def on_user_info(server: PluginServerInterface, info: Info):
         if info.content == 'Restart the server!':
             server.reply(info, 'Roger that. Server restarting...')
             server.restart()
@@ -113,7 +113,7 @@ If you want to have a not-simple command system, rather than parsing them manual
 
 
 * Event id: mcdr.user_info
-* Callback arguments: ServerInterface, Info
+* Callback arguments: PluginServerInterface, Info
 * Default function name: on_user_info
 
 Server Start
@@ -123,7 +123,7 @@ The server process is just started by MCDR
 
 
 * Event id: mcdr.server_start
-* Callback arguments: ServerInterface
+* Callback arguments: PluginServerInterface
 * Default function name: on_server_start
 
 Server Startup
@@ -133,7 +133,7 @@ The server has fully started up. For example, a vanilla Minecraft server outputs
 
 
 * Event id: mcdr.server_startup
-* Callback arguments: ServerInterface
+* Callback arguments: PluginServerInterface
 * Default function name: on_server_startup
 
 Server Stop
@@ -147,13 +147,13 @@ Example:
 
 .. code-block:: python
 
-    def on_server_stop(server: ServerInterface, server_return_code: int):
+    def on_server_stop(server: PluginServerInterface, server_return_code: int):
         if server_return_code != 0:
             server.logger.info('Is it a server crash?')
 
 
 * Event id: mcdr.server_stop
-* Callback arguments: ServerInterface, server_return_code
+* Callback arguments: PluginServerInterface, server_return_code
 * Default function name: on_server_stop
 
 MCDR Start
@@ -163,7 +163,7 @@ The MCDR is starting. Only plugins which is loaded with MCDR is able to receive 
 
 
 * Event id: mcdr.mcdr_start
-* Callback arguments: ServerInterface
+* Callback arguments: PluginServerInterface
 * Default function name: on_mcdr_start
 
 MCDR Stop
@@ -177,7 +177,7 @@ Watchdog is disabled during this event dispatching, so you can safely block MCDR
 
 
 * Event id: mcdr.mcdr_stop
-* Callback arguments: ServerInterface
+* Callback arguments: PluginServerInterface
 * Default function name: on_mcdr_stop
 
 Player Joined
@@ -189,12 +189,12 @@ Example:
 
 .. code-block:: python
 
-    def on_player_joined(server: ServerInterface, player: str, info: Info):
+    def on_player_joined(server: PluginServerInterface, player: str, info: Info):
         server.say('Welcome {}'.format(player))
 
 
 * Event id: mcdr.player_joined
-* Callback arguments: ServerInterface, player_name, Info
+* Callback arguments: PluginServerInterface, player_name, Info
 * Default function name: on_player_joined
 
 Player Left
@@ -204,7 +204,7 @@ A player just left the game. Plugin can do cleanups for player related objects
 
 
 * Event id: mcdr.player_left
-* Callback arguments: ServerInterface, player_name
+* Callback arguments: PluginServerInterface, player_name
 * Default function name: on_player_left
 
 Custom Event

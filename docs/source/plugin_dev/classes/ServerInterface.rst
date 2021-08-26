@@ -485,7 +485,7 @@ In the event listener plugin
 
 .. code-block:: python
 
-    def do_something(server: ServerInterface, int_data: int, str_data: str):
+    def do_something(server: PluginServerInterface, int_data: int, str_data: str):
         pass
 
     server.register_event_listener('my_plugin.my_event', do_something)

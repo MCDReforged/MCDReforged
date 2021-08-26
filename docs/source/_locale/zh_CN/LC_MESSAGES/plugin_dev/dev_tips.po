@@ -61,11 +61,11 @@ msgstr ""
 msgid ""
 "It's highly recommended to use your plugin id as the prefix of your "
 "translation key, so there will be no translation conflicts between "
-"plugins. e.g. use ``my_plugin.some.text`` instead of `some.text`` as "
+"plugins. e.g. use ``my_plugin.some.text`` instead of ``some.text`` as "
 "translation key"
 msgstr ""
 "强烈建议使用插件 ID 作为翻译键的前缀，这样插件之间就不会出现翻译冲突。例如，使用 ``my_plugin.some.text`` 而不是 "
-"`some.text`` 作为翻译键"
+"``some.text`` 作为翻译键"
 
 #: ../plugin_dev/dev_tips.rst:21
 msgid ""
