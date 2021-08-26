@@ -70,7 +70,7 @@ mcdr_command.help_message.plugin: |
   §7!!MCDR plugin disable §6<plugin_id>§r: 禁用 id 为 §6<plugin_id>§r 的插件
   §7!!MCDR plugin reloadall§r: 加载 / 重载 / 卸载§l所有§r插件
 mcdr_command.help_message.preference: |
-  §7!!MCDR preference list: 显示偏好列表
+  §7!!MCDR preference list§r: 显示偏好列表
   §7!!MCDR preference §e<pref_name>§r: 显示偏好 §e<pref_name>§r 的详情
   §7!!MCDR preference §e<pref_name>§r set §6<value>§r: 设定偏好 §e<pref_name>§r 的值为 §6<value>§r
   §7!!MCDR preference §e<pref_name>§r reset: 将偏好 §e<pref_name>§r 重置为默认值

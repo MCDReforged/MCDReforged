@@ -70,7 +70,7 @@ mcdr_command.help_message.plugin: |
   §7!!MCDR plugin disable §6<plugin_id>§r: Disable a plugin with id §6<plugin_id>§r
   §7!!MCDR plugin reloadall§r: Load / Reload / Unloaded §lall§r not disabled plugins
 mcdr_command.help_message.preference: |
-  §7!!MCDR preference list: Display the preference list
+  §7!!MCDR preference list§r: Display the preference list
   §7!!MCDR preference §e<pref_name>§r: Display the details of preference §e<pref_name>§r
   §7!!MCDR preference §e<pref_name>§r set §6<value>§r: Set the value of preference §e<pref_name>§r to §6<value>§r
   §7!!MCDR preference §e<pref_name>§r reset: Reset preference §e<pref_name>§r to the default value
