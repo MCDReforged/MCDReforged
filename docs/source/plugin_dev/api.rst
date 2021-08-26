@@ -504,13 +504,13 @@ Example:
 
 .. code-block:: python
 
-    def reply_message_line_by_line(source: CommandSource):
-        with RTextMCDRTranslation.language_context(source.get_server().get_preference(source).language):
-            text: RTextMCDRTranslation = source.get_server().rtr('my_plugin.some_message')
+    def log_message_line_by_line(server: ServerInterface):
+        with RTextMCDRTranslation.language_context('en_us'):
+            text: RTextMCDRTranslation = server.rtr('my_plugin.some_message')
             text_as_str: str = text.to_plain_text()  # translation operation happens here
-            source.get_server().logger.info('Lines of my translation')
+            server.logger.info('Lines of my translation')
             for line in text_as_str.splitlines():
-                source.get_server().logger.info('- {}'.format(line))
+                server.logger.info('- {}'.format(line))
 
 utils
 -----

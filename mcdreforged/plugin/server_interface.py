@@ -6,7 +6,7 @@ from typing import Callable, TYPE_CHECKING, Tuple, Any, Union, Optional, List, I
 
 from mcdreforged.command.builder.nodes.basic import Literal
 from mcdreforged.command.command_source import CommandSource, PluginCommandSource
-from mcdreforged.constants import plugin_constant, core_constant
+from mcdreforged.constants import plugin_constant
 from mcdreforged.info import Info
 from mcdreforged.info_reactor.server_information import ServerInformation
 from mcdreforged.mcdr_state import MCDReforgedFlag
@@ -76,7 +76,7 @@ class ServerInterface:
 		"""
 		return cls.__global_instance
 
-	def tr(self, translation_key: str, *args, language: Optional[str] = None, fallback_language: str = core_constant.DEFAULT_LANGUAGE, **kwargs) -> MessageText:
+	def tr(self, translation_key: str, *args, language: Optional[str] = None, **kwargs) -> MessageText:
 		"""
 		Return a translated text corresponded to the translation key and format the text with given args and kwargs
 		If args or kwargs contains RText element, then the result will be a RText, otherwise the result will be a regular str
@@ -84,10 +84,9 @@ class ServerInterface:
 		:param translation_key: The key of the translation
 		:param args: The args to be formatted
 		:param language: Specific language to be used in this translation, or the language that MCDR is using will be used
-		:param fallback_language: Fallback language used when the current language translation not found
 		:param kwargs: The kwargs to be formatted
 		"""
-		return self._mcdr_server.tr(translation_key, *args, language=language, fallback_language=fallback_language, **kwargs)
+		return self._mcdr_server.tr(translation_key, *args, language=language, **kwargs)
 
 	def rtr(self, translation_key: str, *args, **kwargs) -> RTextMCDRTranslation:
 		"""

@@ -41,7 +41,7 @@ tr
 
 .. code-block:: python
 
-    def tr(self, translation_key: str, *args, language: Optional[str] = None, fallback_language: str = 'en_us', **kwargs) -> Union[str, RTextBase]
+    def tr(self, translation_key: str, *args, language: Optional[str] = None, **kwargs) -> Union[str, RTextBase]
 
 Return a translated text corresponded to the translation key and format the text with given args and kwargs
 
@@ -56,8 +56,6 @@ Parameter *translation_key*: The key of the translation
 Parameter *args*: The args to be formatted
 
 Keyword Parameter *language*: Specific language to be used in this translation, or the language that MCDR is using will be used
-
-Keyword Parameter *fallback_language*: Fallback language used when the current language translation not found
 
 Keyword Parameter *kwargs*: The kwargs to be formatted
 

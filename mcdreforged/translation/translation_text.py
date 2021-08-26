@@ -23,8 +23,9 @@ class RTextMCDRTranslation(RTextBase):
 		if server is not None:
 			self.set_translator(server.tr)
 
-	def set_translator(self, translate_function: Callable):
+	def set_translator(self, translate_function: Callable) -> 'RTextMCDRTranslation':
 		self.__translator = translate_function
+		return self
 
 	def __get_translated_text(self) -> RTextBase:
 		language = getattr(self.__TLS, 'language', None)

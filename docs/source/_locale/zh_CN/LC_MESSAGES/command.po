@@ -561,7 +561,6 @@ msgid "!!MCDR preference <pref_name> reset"
 msgstr "!!MCDR preference <pref_name> reset"
 
 #: ../command.rst:208
-#, fuzzy
 msgid "!!MCDR pref <pref_name> reset"
 msgstr "!!MCDR pref <pref_name> reset"
 
