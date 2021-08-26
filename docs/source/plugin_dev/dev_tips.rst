@@ -20,8 +20,8 @@ It's highly recommended to use your plugin id as the prefix of your translation 
 
 For the difference between 2 translation method in ``ServerInterface``, let's use Minecraft code (yarn mapping) as an example:
 
-* `ServerInterface.tr <plugin_dev/classes/ServerInterface.html#tr>`__ is ``I18n.translate()``
-* `ServerInterface.rtr <plugin_dev/classes/ServerInterface.html#tr>`__, or `RTextMCDRTranslation <plugin_dev/api.html#rtextmcdrtranslation>`__ is ``new TranslatableText()``
+* `ServerInterface.tr <classes/ServerInterface.html#tr>`__ is ``I18n.translate()``
+* `ServerInterface.rtr <classes/ServerInterface.html#rtr>`__, or `RTextMCDRTranslation <api.html#rtextmcdrtranslation>`__ is ``new TranslatableText()``
 
 In general, the second method is recommended for translating things in your plugin, since it smartly use the proper language for the player or the console to send message, and use MCDR's language for general translation things including message logging
 

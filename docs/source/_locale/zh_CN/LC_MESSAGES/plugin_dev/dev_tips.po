@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-25 23:49+0800\n"
+"POT-Creation-Date: 2021-08-26 21:31+0800\n"
 "PO-Revision-Date: 2021-01-22 14:26+0000\n"
 "Last-Translator: \n"
 "Language: zh_CN\n"
@@ -75,21 +75,21 @@ msgstr "对于 ``ServerInterface`` 中两种不同的翻译方法，我们可以
 
 #: ../plugin_dev/dev_tips.rst:23
 msgid ""
-"`ServerInterface.tr <plugin_dev/classes/ServerInterface.html#tr>`__ is "
+"`ServerInterface.tr <classes/ServerInterface.html#tr>`__ is "
 "``I18n.translate()``"
 msgstr ""
-"`ServerInterface.tr <plugin_dev/classes/ServerInterface.html#tr>`__ 就是 "
+"`ServerInterface.tr <classes/ServerInterface.html#tr>`__ 就是 "
 "``I18n.translate()``。"
 
 #: ../plugin_dev/dev_tips.rst:24
 msgid ""
-"`ServerInterface.rtr <plugin_dev/classes/ServerInterface.html#tr>`__, or "
-"`RTextMCDRTranslation <plugin_dev/api.html#rtextmcdrtranslation>`__ is "
-"``new TranslatableText()``"
+"`ServerInterface.rtr <classes/ServerInterface.html#rtr>`__, or "
+"`RTextMCDRTranslation <api.html#rtextmcdrtranslation>`__ is ``new "
+"TranslatableText()``"
 msgstr ""
-"`ServerInterface.rtr <plugin_dev/classes/ServerInterface.html#tr>`__，或者 "
-"`RTextMCDRTranslation <plugin_dev/api.html#rtextmcdrtranslation>`__，就是 "
-"``new TranslatableText()``。"
+"`ServerInterface.rtr <classes/ServerInterface.html#rtr>`__，或者 "
+"`RTextMCDRTranslation <api.html#rtextmcdrtranslation>`__，就是 ``new "
+"TranslatableText()``。"
 
 #: ../plugin_dev/dev_tips.rst:26
 msgid ""
