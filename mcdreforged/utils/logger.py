@@ -46,10 +46,6 @@ class SyncStdoutStreamHandler(logging.StreamHandler):
 		with self.__write_lock:
 			super().emit(record)
 
-	def flush(self) -> None:
-		with self.__write_lock:
-			super().flush()
-
 	@classmethod
 	def update_stdout(cls, stream=None):
 		if stream is None:
@@ -57,9 +53,11 @@ class SyncStdoutStreamHandler(logging.StreamHandler):
 		with cls.__instance_lock:
 			instances = list(cls.__instances)
 		for inst in instances:
-			with cls.__write_lock:
-				inst.flush()
+			inst.acquire()  # use Handler's lock
+			try:
 				inst.stream = stream
+			finally:
+				inst.release()
 
 
 class MCColoredFormatter(ColoredFormatter):
@@ -189,7 +187,7 @@ class MCDReforgedLogger(logging.Logger):
 			zipf.write(file_name, arcname=os.path.basename(file_name), compress_type=zipfile.ZIP_DEFLATED)
 			zipf.close()
 			os.remove(file_name)
-		self.file_handler = logging.FileHandler(file_name, encoding='utf8')
+		self.file_handler = logging.FileHandler(file_name, encoding='utf8', delay=True)
 		self.file_handler.setFormatter(self.FILE_FMT)
 		self.addHandler(self.file_handler)
 
