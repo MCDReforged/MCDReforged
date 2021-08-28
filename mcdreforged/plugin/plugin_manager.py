@@ -455,7 +455,7 @@ class PluginManager:
 		for listener in self.registry_storage.event_listeners.get(event.id, []):
 			self.trigger_listener(listener, args)
 
-	def dispatch_event(self, event: MCDREvent, args: Tuple[Any, ...], *, on_executor_thread=True, block: bool = False, timeout: Optional[float] = None):
+	def dispatch_event(self, event: MCDREvent, args: Tuple[Any, ...], *, on_executor_thread: bool = True, block: bool = False, timeout: Optional[float] = None):
 		"""
 		Event dispatching interface
 		"""

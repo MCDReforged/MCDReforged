@@ -42,7 +42,7 @@ class CommandManager:
 	def _traverse(self, command: str, source: CommandSource, purpose: TraversePurpose) -> None or List[CommandSuggestion]:
 		def __translate_command_error_header(translation_key_: str, error_: CommandError) -> str:
 			if isinstance(error_, RequirementNotMet):
-				if error_.get_reason() is not RequirementNotMet.DEFAULT_REASON:
+				if error_.has_custom_reason():
 					return error_.get_reason()
 				args = ()
 			else:
@@ -78,7 +78,7 @@ class CommandManager:
 						error.set_message(__translate_command_error_header(translation_key, error))
 					except KeyError:
 						self.logger.debug('Fail to translated command error with key {}'.format(translation_key), option=DebugOption.COMMAND)
-					source.reply(error.to_mc_color_text())
+					source.reply(error.to_rtext())
 			except:
 				self.logger.exception('Error when executing command "{}" with command source "{}" on {} registered by {}'.format(command, source, node, plugin))
 

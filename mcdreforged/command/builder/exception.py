@@ -1,6 +1,9 @@
 from abc import ABC
 from typing import Optional
 
+from mcdreforged.minecraft.rtext import RTextBase, RText, RColor
+from mcdreforged.utils.types import MessageText
+
 
 class CommandErrorBase(Exception, ABC):
 	pass
@@ -17,19 +20,37 @@ class CommandError(CommandErrorBase, ABC):
 	"""
 	The basic error, for errors raising when a command source is executing a command
 	"""
-	def __init__(self, message: str, parsed_command: str, failed_command: str):
-		self.__message = message
-		self._parsed_command = parsed_command
-		self._failed_command = failed_command
-		self.__handled = False
+	def __init__(self, message: MessageText, parsed_command: str, failed_command: str):
+		#  !!something wroooong command
+		#  [--parsed--|-error-]
+		#  [------failed------]
+
+		self.__message: MessageText = message
+		self._parsed_command: str = parsed_command
+		self._failed_command: str = failed_command
+		self.__handled: bool = False
 
 	def __str__(self):
 		return '{}: {}<--'.format(self.__message, self._failed_command)
 
-	def to_mc_color_text(self):
-		return '§c{}: §r{}§c{}§4<--'.format(self.__message, self._parsed_command, self._failed_command[len(self._parsed_command):])
+	@property
+	def _error_command(self) -> str:
+		return self._failed_command[len(self._parsed_command):]
+
+	def to_rtext(self) -> RTextBase:
+		return RTextBase.format(
+			'{}: {}{}{}',
+			RTextBase.from_any(self.__message).copy().set_color(RColor.red),
+			RText(self._parsed_command, RColor.dark_red),
+			RText(self._error_command, RColor.red),
+			RText('<--', RColor.dark_red)
+		)
 
 	def get_error_data(self) -> tuple:
+		"""
+		Data that might be helpful to the error display
+		Can be used in formatting processing
+		"""
 		return ()
 
 	def set_message(self, message: str):
@@ -79,13 +100,16 @@ class RequirementNotMet(CommandError):
 	"""
 	The specified requirement for the command source to enter this node is not met
 	"""
-	DEFAULT_REASON = object()
+	__NO_REASON = RText('Requirement not met')
 
-	def __init__(self, parsed_command: str, failed_command: str, reason: Optional[str]):
-		self.__reason = reason if reason is not None else self.DEFAULT_REASON
+	def __init__(self, parsed_command: str, failed_command: str, reason: Optional[MessageText]):
+		self.__reason: MessageText = reason if reason is not None else self.__NO_REASON
 		super().__init__(self.__reason, parsed_command, failed_command)
 
-	def get_reason(self) -> Optional[str]:
+	def has_custom_reason(self) -> bool:
+		return self.__reason is not self.__NO_REASON
+
+	def get_reason(self) -> MessageText:
 		return self.__reason
 
 	def get_error_data(self) -> tuple:

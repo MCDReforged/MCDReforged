@@ -166,6 +166,7 @@ class PromptToolkitWrapper:
 			sys.stderr = self.stdout_proxy
 			SyncStdoutStreamHandler.update_stdout()
 			self.pt_enabled = True
+			self.__logger.debug('Prompt Toolkits enabled')
 
 	@staticmethod
 	def __tweak_kits():

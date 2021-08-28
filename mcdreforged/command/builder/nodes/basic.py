@@ -3,19 +3,26 @@ import inspect
 from abc import ABC
 from contextlib import contextmanager
 from types import MethodType
-from typing import List, Callable, Iterable, Set, Dict, Type, Any, Union, Optional, Collection
+from typing import List, Callable, Iterable, Set, Dict, Type, Any, Union, Optional, Collection, NamedTuple
 
 from mcdreforged.command.builder import command_builder_util as utils
 from mcdreforged.command.builder.exception import LiteralNotMatch, UnknownCommand, UnknownArgument, CommandSyntaxError, \
 	UnknownRootArgument, RequirementNotMet, IllegalNodeOperation, \
 	CommandError
 from mcdreforged.command.command_source import CommandSource
+from mcdreforged.utils.types import MessageText
 
 SOURCE_CONTEXT_CALLBACK = Union[Callable[[], Any], Callable[[CommandSource], Any], Callable[[CommandSource, dict], Any]]
 SOURCE_CONTEXT_CALLBACK_BOOL = Union[Callable[[], bool], Callable[[CommandSource], bool], Callable[[CommandSource, dict], bool]]
-SOURCE_CONTEXT_CALLBACK_STR = Union[Callable[[], str], Callable[[CommandSource], str], Callable[[CommandSource, dict], str]]
+SOURCE_CONTEXT_CALLBACK_MSG = Union[Callable[[], MessageText], Callable[[CommandSource], MessageText], Callable[[CommandSource, dict], MessageText]]
 SOURCE_CONTEXT_CALLBACK_STR_COLLECTION = Union[Callable[[], Collection[str]], Callable[[CommandSource], Collection[str]], Callable[[CommandSource, dict], Collection[str]]]
 SOURCE_ERROR_CONTEXT_CALLBACK = Union[Callable[[], Any], Callable[[CommandSource], Any], Callable[[CommandSource, CommandError], Any], Callable[[CommandSource, CommandError, dict], Any]]
+
+RUNS_CALLBACK = SOURCE_CONTEXT_CALLBACK
+ERROR_HANDLER_CALLBACK = SOURCE_ERROR_CONTEXT_CALLBACK
+FAIL_MSG_CALLBACK = SOURCE_CONTEXT_CALLBACK_MSG
+SUGGESTS_CALLBACK = SOURCE_CONTEXT_CALLBACK_STR_COLLECTION
+REQUIRES_CALLBACK = SOURCE_CONTEXT_CALLBACK_BOOL
 
 
 class ParseResult:
@@ -51,7 +58,7 @@ class CommandSuggestion:
 		return '{} -> {}'.format(self.__command_read, self.__suggest_segment)
 
 
-class CommandSuggestions(list):
+class CommandSuggestions(List[CommandSuggestion]):
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
 
@@ -67,7 +74,7 @@ class CommandSuggestions(list):
 			self.complete_hint = self.complete_hint or __iterable.complete_hint
 
 
-class CommandContext(dict):
+class CommandContext(Dict[str, Any]):
 	def __init__(self, source: CommandSource, command: str):
 		super().__init__()
 		self.__source = source
@@ -129,24 +136,26 @@ class CommandContext(dict):
 			self.__node_path.pop(len(self.__node_path) - 1)
 
 
-class AbstractNode:
-	class ErrorHandler:
-		def __init__(self, callback: SOURCE_ERROR_CONTEXT_CALLBACK, handled: bool):
-			self.callback = callback
-			self.handled = handled
+class _ErrorHandler(NamedTuple):
+	callback: ERROR_HANDLER_CALLBACK
+	handled: bool
 
-	_ERROR_HANDLER_TYPE = Dict[Type[CommandError], ErrorHandler]
+
+_ERROR_HANDLER_TYPE = Dict[Type[CommandError], _ErrorHandler]
+
+
+class AbstractNode:
 
 	def __init__(self):
-		self._children_literal = collections.defaultdict(list)  # type: Dict[str, List[Literal]]
-		self._children = []  # type: List[AbstractNode]
-		self._callback = None  # type: Optional[SOURCE_CONTEXT_CALLBACK]
-		self._error_handlers = {}  # type: AbstractNode._ERROR_HANDLER_TYPE
-		self._child_error_handlers = {}  # type: AbstractNode._ERROR_HANDLER_TYPE
-		self._requirement = lambda source: True  # type: SOURCE_CONTEXT_CALLBACK_BOOL
-		self._requirement_failure_message_getter = None  # type: Optional[SOURCE_CONTEXT_CALLBACK_STR]
-		self._redirect_node = None  # type: Optional[AbstractNode]
-		self._suggestion_getter = lambda: []  # type: SOURCE_CONTEXT_CALLBACK_STR_COLLECTION
+		self._children_literal: Dict[str, List[Literal]] = collections.defaultdict(list)  # mapping from literal text to related Literal nodes
+		self._children: List[AbstractNode] = []
+		self._callback: Optional[RUNS_CALLBACK] = None
+		self._error_handlers: _ERROR_HANDLER_TYPE = {}
+		self._child_error_handlers: _ERROR_HANDLER_TYPE = {}
+		self._requirement: REQUIRES_CALLBACK = lambda source: True
+		self._requirement_failure_message_getter: Optional[FAIL_MSG_CALLBACK] = None
+		self._redirect_node: Optional[AbstractNode] = None
+		self._suggestion_getter: SUGGESTS_CALLBACK = lambda: []
 
 	# --------------
 	#   Interfaces
@@ -166,7 +175,7 @@ class AbstractNode:
 			self._children.append(node)
 		return self
 
-	def runs(self, func: SOURCE_CONTEXT_CALLBACK) -> 'AbstractNode':
+	def runs(self, func: RUNS_CALLBACK) -> 'AbstractNode':
 		"""
 		Executes the given function if the command string ends here
 		:param func: A function to execute at this node which accepts maximum 2 parameters (command source and context)
@@ -175,7 +184,7 @@ class AbstractNode:
 		self._callback = func
 		return self
 
-	def requires(self, requirement: SOURCE_CONTEXT_CALLBACK_BOOL, failure_message_getter: Optional[SOURCE_CONTEXT_CALLBACK_STR] = None) -> 'AbstractNode':
+	def requires(self, requirement: REQUIRES_CALLBACK, failure_message_getter: Optional[FAIL_MSG_CALLBACK] = None) -> 'AbstractNode':
 		"""
 		Set the requirement for the command source to enter this node
 		:param requirement: A callable function which accepts maximum 2 parameters (command source and context)
@@ -200,7 +209,7 @@ class AbstractNode:
 		self._redirect_node = redirect_node
 		return self
 
-	def suggests(self, suggestion: SOURCE_CONTEXT_CALLBACK_STR_COLLECTION) -> 'AbstractNode':
+	def suggests(self, suggestion: SUGGESTS_CALLBACK) -> 'AbstractNode':
 		"""
 		Set the provider for command suggestions of this node
 		:param suggestion: A callable function which accepts maximum 2 parameters (command source and context)
@@ -210,7 +219,7 @@ class AbstractNode:
 		self._suggestion_getter = suggestion
 		return self
 
-	def on_error(self, error_type: Type[CommandError], handler: SOURCE_ERROR_CONTEXT_CALLBACK, *, handled: bool = False) -> 'AbstractNode':
+	def on_error(self, error_type: Type[CommandError], handler: ERROR_HANDLER_CALLBACK, *, handled: bool = False) -> 'AbstractNode':
 		"""
 		When a command error occurs, invoke the handler
 		:param error_type: A class that is subclass of CommandError
@@ -219,10 +228,10 @@ class AbstractNode:
 		"""
 		if not issubclass(error_type, CommandError):
 			raise TypeError('error_type parameter should be a class inherited from CommandError, but class {} found'.format(error_type))
-		self._error_handlers[error_type] = self.ErrorHandler(handler, handled)
+		self._error_handlers[error_type] = _ErrorHandler(handler, handled)
 		return self
 
-	def on_child_error(self, error_type: Type[CommandError], handler: SOURCE_ERROR_CONTEXT_CALLBACK, *, handled: bool = False) -> 'AbstractNode':
+	def on_child_error(self, error_type: Type[CommandError], handler: ERROR_HANDLER_CALLBACK, *, handled: bool = False) -> 'AbstractNode':
 		"""
 		When receives a command error from one of the node's child, invoke the handler
 		:param error_type: A class that is subclass of CommandError
@@ -231,7 +240,7 @@ class AbstractNode:
 		"""
 		if not issubclass(error_type, CommandError):
 			raise TypeError('error_type parameter should be a class inherited from CommandError, but class {} found'.format(error_type))
-		self._child_error_handlers[error_type] = self.ErrorHandler(handler, handled)
+		self._child_error_handlers[error_type] = _ErrorHandler(handler, handled)
 		return self
 
 	# -------------------
@@ -283,16 +292,16 @@ class AbstractNode:
 	def _execute_command(self, context: CommandContext) -> None:
 		command = context.command  # type: str
 		try:
-			result = self.parse(context.command_remaining)
+			parse_result = self.parse(context.command_remaining)
 		except CommandSyntaxError as error:
 			error.set_parsed_command(context.command_read)
 			error.set_failed_command(context.command_read + context.command_remaining[:error.char_read])
 			self.__raise_error(error, context)
 		else:
-			next_remaining = utils.remove_divider_prefix(context.command_remaining[result.char_read:])  # type: str
+			next_remaining = utils.remove_divider_prefix(context.command_remaining[parse_result.char_read:])  # type: str
 			total_read = len(command) - len(next_remaining)  # type: int
 
-			with context.read_command(self, result, total_read):
+			with context.read_command(self, parse_result, total_read):
 				if self._requirement is not None:
 					if not self.__smart_callback(self._requirement, context.source, context):
 						getter = self._requirement_failure_message_getter or (lambda: None)
@@ -449,7 +458,7 @@ class Literal(EntryNode):
 	def _get_usage(self) -> str:
 		return '|'.join(sorted(self.literals))
 
-	def suggests(self, suggestion: SOURCE_CONTEXT_CALLBACK_STR_COLLECTION) -> 'AbstractNode':
+	def suggests(self, suggestion: SUGGESTS_CALLBACK) -> 'AbstractNode':
 		raise IllegalNodeOperation('Literal node doe not support suggests')
 
 	def parse(self, text):
