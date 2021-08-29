@@ -2,9 +2,17 @@ import copy
 from abc import ABC
 from enum import EnumMeta
 from threading import Lock
-from typing import Union, TypeVar, List, Dict, Type
+from typing import Union, TypeVar, List, Dict, Type, get_type_hints
 
 T = TypeVar('T')
+
+
+def _get_origin(cls: Type):
+	return getattr(cls, '__origin__', None)
+
+
+def _get_args(cls: Type) -> tuple:
+	return getattr(cls, '__args__', None)
 
 
 def serialize(obj) -> Union[None, int, float, str, list, dict]:
@@ -37,13 +45,13 @@ def deserialize(data, cls: Type[T], *, error_at_missing=False, error_at_redundan
 	elif cls is float and isinstance(data, int):
 		return float(data)
 	# List
-	elif isinstance(data, list) and getattr(cls, '__origin__', None) == List[int].__origin__:
-		element_type = getattr(cls, '__args__')[0]
+	elif isinstance(data, list) and _get_origin(cls) == List[int].__origin__:
+		element_type = _get_args(cls)[0]
 		return list(map(lambda e: deserialize(e, element_type, error_at_missing=error_at_missing, error_at_redundancy=error_at_redundancy), data))
 	# Dict
-	elif isinstance(data, dict) and getattr(cls, '__origin__', None) == Dict[int, int].__origin__:
-		key_type = getattr(cls, '__args__')[0]
-		val_type = getattr(cls, '__args__')[1]
+	elif isinstance(data, dict) and _get_origin(cls) == Dict[int, int].__origin__:
+		key_type = _get_args(cls)[0]
+		val_type = _get_args(cls)[1]
 		instance = {}
 		for key, value in data.items():
 			deserialized_key = deserialize(key, key_type, error_at_missing=error_at_missing, error_at_redundancy=error_at_redundancy)
@@ -60,7 +68,7 @@ def deserialize(data, cls: Type[T], *, error_at_missing=False, error_at_redundan
 		except TypeError:
 			raise TypeError('Parameter cls needs to be a type instance since data is a dict, but {} found'.format(type(cls))) from None
 		input_key_set = set(data.keys())
-		for attr_name, attr_type in getattr(cls, '__annotations__', {}).items():
+		for attr_name, attr_type in get_type_hints(cls).items():
 			if not attr_name.startswith('_'):
 				if attr_name in data:
 					result.__setattr__(attr_name, deserialize(data[attr_name], attr_type, error_at_missing=error_at_missing, error_at_redundancy=error_at_redundancy))
@@ -75,8 +83,8 @@ def deserialize(data, cls: Type[T], *, error_at_missing=False, error_at_redundan
 			result.on_deserialization()
 		return result
 	# Union
-	elif getattr(cls, '__origin__', None) == Union:
-		for possible_cls in getattr(cls, '__args__'):
+	elif _get_origin(cls) == Union:
+		for possible_cls in _get_args(cls):
 			try:
 				return deserialize(data, possible_cls, error_at_missing=error_at_missing, error_at_redundancy=error_at_redundancy)
 			except (TypeError, ValueError):
@@ -99,7 +107,7 @@ class Serializable(ABC):
 	@classmethod
 	def __get_annotation_dict(cls) -> dict:
 		public_fields = {}
-		for attr_name, attr_type in getattr(cls, '__annotations__', {}).items():
+		for attr_name, attr_type in get_type_hints(cls).items():
 			if not attr_name.startswith('_'):
 				public_fields[attr_name] = attr_type
 		return public_fields
