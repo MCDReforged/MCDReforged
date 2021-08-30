@@ -7,6 +7,10 @@ from typing import Union, TypeVar, List, Dict, Type, get_type_hints
 T = TypeVar('T')
 
 
+def _get_type_hints(cls: Type):
+	return get_type_hints(cls)
+
+
 def _get_origin(cls: Type):
 	return getattr(cls, '__origin__', None)
 
@@ -68,7 +72,7 @@ def deserialize(data, cls: Type[T], *, error_at_missing=False, error_at_redundan
 		except TypeError:
 			raise TypeError('Parameter cls needs to be a type instance since data is a dict, but {} found'.format(type(cls))) from None
 		input_key_set = set(data.keys())
-		for attr_name, attr_type in get_type_hints(cls).items():
+		for attr_name, attr_type in _get_type_hints(cls).items():
 			if not attr_name.startswith('_'):
 				if attr_name in data:
 					result.__setattr__(attr_name, deserialize(data[attr_name], attr_type, error_at_missing=error_at_missing, error_at_redundancy=error_at_redundancy))
@@ -107,7 +111,7 @@ class Serializable(ABC):
 	@classmethod
 	def __get_annotation_dict(cls) -> dict:
 		public_fields = {}
-		for attr_name, attr_type in get_type_hints(cls).items():
+		for attr_name, attr_type in _get_type_hints(cls).items():
 			if not attr_name.startswith('_'):
 				public_fields[attr_name] = attr_type
 		return public_fields

@@ -10,6 +10,7 @@ import requests
 from mcdreforged.constants import core_constant
 from mcdreforged.executor.thread_executor import ThreadExecutor
 from mcdreforged.minecraft.rtext import RText, RAction, RColor, RStyle, RTextBase
+from mcdreforged.plugin.meta.version import Version
 from mcdreforged.translation.translation_text import RTextMCDRTranslation
 from mcdreforged.utils import misc_util
 
@@ -47,7 +48,7 @@ class UpdateHelper(ThreadExecutor):
 				update_log = response['body']
 			except Exception as e:
 				reply_func(self.tr('update_helper.check_update.check_fail', repr(e)))
-				if isinstance(e, KeyError) and type(response) is dict and 'message' in response:
+				if isinstance(e, KeyError) and isinstance(response, dict) and 'message' in response:
 					reply_func(response['message'])
 					if 'documentation_url' in response:
 						reply_func(
@@ -57,13 +58,14 @@ class UpdateHelper(ThreadExecutor):
 						)
 			else:
 				try:
-					cmp_result = misc_util.version_compare(core_constant.VERSION, latest_version.lstrip('v'))
+					version_current = Version(core_constant.VERSION, allow_wildcard=False)
+					version_fetched = Version(latest_version.lstrip('v'), allow_wildcard=False)
 				except:
 					self.mcdr_server.logger.exception('Fail to compare between versions "{}" and "{}"'.format(core_constant.VERSION, latest_version))
 					return
-				if cmp_result == 0:
+				if version_current == version_fetched:
 					reply_func(self.tr('update_helper.check_update.is_already_latest'))
-				elif cmp_result == 1:
+				elif version_current > version_fetched:
 					reply_func(self.tr('update_helper.check_update.newer_than_latest', core_constant.VERSION, latest_version))
 				else:
 					reply_func(self.tr('update_helper.check_update.new_version_detected', latest_version))

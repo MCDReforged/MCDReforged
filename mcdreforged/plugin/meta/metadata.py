@@ -2,6 +2,7 @@
 Information of a plugin
 """
 import re
+import reprlib
 from typing import List, Dict, TYPE_CHECKING, Optional, Union
 
 from mcdreforged.minecraft.rtext import RTextBase, RText
@@ -65,8 +66,8 @@ class Metadata:
 		description = data.get('description')
 		if isinstance(description, RTextBase):
 			description = description.to_plain_text()
-		misc_util.check_type(self.name, [type(None), str, dict])
 		self.description = description
+		misc_util.check_type(self.description, [type(None), str, dict])
 
 		self.author = data.get('author')
 		if isinstance(self.author, str):
@@ -114,11 +115,7 @@ class Metadata:
 		misc_util.check_type(self.resources, list)
 
 	def __repr__(self):
-		return '{}[id={},version={},name={},description={},author={},link={},dependencies={},entrypoint={},archive_name={},resources={}]'.format(
-			self.__class__.__name__,
-			self.id, self.version, self.name, self.description, self.author, self.link, self.dependencies,
-			self.entrypoint, self.archive_name, self.resources
-		)
+		return reprlib.repr(self)
 
 	def get_description(self, lang: Optional[str] = None) -> Optional[str]:
 		"""

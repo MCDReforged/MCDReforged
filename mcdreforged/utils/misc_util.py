@@ -1,39 +1,18 @@
 """
 Misc tool collection
 """
-import importlib.machinery
-import importlib.util
+import importlib
 import inspect
-import os
 import threading
 from typing import List, Callable, Tuple, TypeVar, Any, Type, Optional, Union, Iterable
 
 from mcdreforged.minecraft.rtext import RTextBase
-from mcdreforged.plugin.meta.version import Version
 
 
-def start_thread(func: Callable, args: Tuple, name: str or None = None):
+def start_thread(func: Callable, args: Tuple, name: Optional[str] = None):
 	thread = threading.Thread(target=func, args=args, name=name, daemon=True)
 	thread.start()
 	return thread
-
-
-def load_source_from_file_path(source_path: str, module_name=None):
-	if not os.path.isfile(source_path):
-		raise TypeError('Source path {} is not a file'.format(source_path))
-	if module_name is None:
-		module_name = source_path.replace('/', '_').replace('\\', '_').replace('.', '_')
-
-	# https://docs.python.org/3/library/importlib.html#importing-a-source-file-directly
-	# https://docs.python.org/zh-cn/3.6/library/importlib.html#importing-a-source-file-directly
-	spec = importlib.util.spec_from_file_location(module_name, source_path)
-	module = importlib.util.module_from_spec(spec)
-	# noinspection PyUnresolvedReferences
-	spec.loader.exec_module(module)
-	# Optional; only necessary if you want to be able to import the module
-	# by name later.
-	# sys.modules[module_name] = module
-	return module
 
 
 def load_class(path: str):
@@ -68,12 +47,6 @@ def get_all_base_class(cls):
 	for base in cls.__bases__:
 		ret.extend(get_all_base_class(base))
 	return unique_list(ret)
-
-
-def version_compare(v1: str, v2: str) -> int:
-	version1 = Version(v1, allow_wildcard=False)
-	version2 = Version(v2, allow_wildcard=False)
-	return version1.compare_to(version2)
 
 
 def print_text_to_console(logger, text):
