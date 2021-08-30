@@ -160,7 +160,7 @@ requires
 
 .. code-block:: python
 
-    def requires(self, requirement: Union[Callable[[], bool], Callable[[CommandSource], bool], Callable[[CommandSource, dict], bool]], failure_message_getter: Optional[Union[Callable[[], str], Callable[[CommandSource], str], Callable[[CommandSource, dict], str]]] = None) -> AbstractNode
+    def requires(self, requirement: Union[Callable[[], bool], Callable[[CommandSource], bool], Callable[[CommandSource, dict], bool]], failure_message_getter: Optional[Union[Callable[[], Union[str, RTextBase]], Callable[[CommandSource], Union[str, RTextBase]], Callable[[CommandSource, dict], Union[str, RTextBase]]]] = None) -> AbstractNode
 
 Set the requirement tester callback of the node. When entering this node, MCDR will invoke the requirement tester to see if the current command source and context match your specific condition.
 
@@ -170,7 +170,7 @@ If the tester callback return False, a ``RequirementNotMet`` exception will be r
 
 Parameter *requirement*: A callable that accepts up to 2 arguments and returns a bool. Argument list: ``CommandSource``, ``dict`` (context)
 
-Parameter *failure_message_getter*: An optional callable that accepts up to 2 arguments and returns a str. Argument list: ``CommandSource``, ``dict`` (context)
+Parameter *failure_message_getter*: An optional callable that accepts up to 2 arguments and returns a str or a `RTextBase <api.html#rtext>`__. Argument list: ``CommandSource``, ``dict`` (context)
 
 Some Example usages:
 
@@ -306,6 +306,9 @@ Examples:
     )  # input "foo bar", get reply "Foo Bar"
 
 
+
+Argument Nodes
+--------------
 
 ArgumentNode
 ^^^^^^^^^^^^
