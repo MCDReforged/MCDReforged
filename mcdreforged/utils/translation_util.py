@@ -33,9 +33,9 @@ def update_storage(storage: TranslationStorage, language: str, mapping: Translat
 	__update_storage(storage, language, mapping)
 
 
-def __update_storage(storage: TranslationStorage, language: str, mapping: TranslationKeyDictNested, path: str = ''):
+def __update_storage(storage: TranslationStorage, language: str, mapping: TranslationKeyDictNested, path: Optional[str] = None):
 	for key, item in mapping.items():
-		current_path = f'{path}.{key}' if len(path) != 0 else key
+		current_path = f'{path}.{key}' if path is not None else key
 		if isinstance(item, str):
 			storage[current_path][language] = item
 		elif isinstance(item, dict):
