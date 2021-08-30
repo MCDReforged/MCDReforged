@@ -213,6 +213,23 @@ class MyTestCase(unittest.TestCase):
 			self.assertIsInstance(serialize(enum), str)
 			self.assertEqual(enum, deserialize(serialize(enum), TestEnum))
 
+	def test_8_subclass(self):
+		class A:
+			a: int = 1
+
+		class B:
+			b: str = 'bb'
+
+		class C(A, B):
+			c: bool = False
+
+		o = C()
+		o.a, o.b, o.c = 2, 'BB', True
+		o2 = deserialize(serialize(o), type(o))
+		self.assertEqual(o2.a, o.a)
+		self.assertEqual(o2.b, o.b)
+		self.assertEqual(o2.c, o.c)
+
 
 if __name__ == '__main__':
 	unittest.main()
