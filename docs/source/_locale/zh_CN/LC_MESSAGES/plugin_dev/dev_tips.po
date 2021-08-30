@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-30 19:05+0800\n"
+"POT-Creation-Date: 2021-08-30 22:26+0800\n"
 "PO-Revision-Date: 2021-01-22 14:26+0000\n"
 "Last-Translator: \n"
 "Language: zh_CN\n"
@@ -69,14 +69,13 @@ msgstr ""
 
 #: ../plugin_dev/dev_tips.rst:21
 msgid ""
-"The translation key could expressed as node name which under root node or"
-" the path of a nested multi-level nodes. For example, the following "
+"The translation key could be expressed as node name which under root node"
+" or the path of a nested multi-level nodes. For example, the following "
 "definitions of the translation key ``my_plugin.some.text`` in a language "
-"file in yaml format are equivalent."
+"file in yaml (``.yml``) format are equivalent."
 msgstr ""
-"翻译键可以表示为根节点下的子节点名称，或嵌套的多层节点的路径。"
-"例如，以下对于翻译键 `my_plugin.some.text` 在 yaml 格式的语言文件中的定义都是等价的。"
-
+"翻译键可以被表示为根节点下的子节点名称，或嵌套的多层节点的路径。例如，以下对于翻译键 ``my_plugin.some.text`` 在 "
+"yaml（``.yml``）格式的语言文件中的定义都是等价的。"
 
 #: ../plugin_dev/dev_tips.rst:35
 msgid ""

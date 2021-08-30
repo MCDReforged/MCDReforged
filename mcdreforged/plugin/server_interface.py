@@ -640,7 +640,7 @@ class PluginServerInterface(ServerInterface):
 		"""
 		Register a translation mapping for a specific language for the current plugin
 		:param language: The language of this translation
-		:param mapping: A dict which maps translation keys into translated text. Also translation key can be a path which could find out translated text
+		:param mapping: A dict which maps translation keys into translated text. The translation key could be expressed as node name which under root node or the path of a nested multi-level nodes
 		"""
 		self.__plugin.register_translation(language, mapping)
 

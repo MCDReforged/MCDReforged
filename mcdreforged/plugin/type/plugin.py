@@ -140,7 +140,5 @@ class AbstractPlugin:
 
 	def register_translation(self, language: str, mapping: TranslationKeyDictNested):
 		self.__assert_allow_to_register('translation')
-		self.mcdr_server.logger.debug(
-			'{} is registering translation for {} with at least {} entries'.format(self, language, len(mapping)),
-			option=DebugOption.PLUGIN)
+		self.mcdr_server.logger.debug('{} is registering translation for {} with at least {} entries'.format(self, language, len(mapping)), option=DebugOption.PLUGIN)
 		self.plugin_registry.register_translation(language, mapping)

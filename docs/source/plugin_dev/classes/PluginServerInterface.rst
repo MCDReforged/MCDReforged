@@ -55,13 +55,13 @@ register_translation
 
 .. code-block:: python
 
-    def register_translation(self, language: str, mapping: Dict[str, Union[str, Dict[str, Union[str, Dict]]]]) -> None
+    def register_translation(self, language: str, mapping: Dict[str, Union[str, dict]]) -> None
 
 Register a translation mapping for a specific language for the current plugin
 
 Parameter *language*: The language of this translation
 
-Parameter *mapping*: A dict which maps translation keys into translated text. Also translation key can be a path which could find out translated text
+Parameter *mapping*: A dict which maps translation keys into translated text. The translation key could be expressed as node name which under root node or the path of a nested multi-level nodes. The dict can be nested for multiple levels, and the path is the str separated by ``.`` and connected by the names of the nodes of each level starting from the root node
 
 Plugin Utils
 ^^^^^^^^^^^^
