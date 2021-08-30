@@ -3,7 +3,7 @@ MCDR update things
 """
 import time
 from threading import Lock
-from typing import Callable, Any, Union
+from typing import Callable, Any, Union, Optional
 
 import requests
 
@@ -18,7 +18,8 @@ from mcdreforged.utils import misc_util
 class UpdateHelper(ThreadExecutor):
 	def __init__(self, mcdr_server):
 		super().__init__(mcdr_server)
-		self.update_lock = Lock()
+		self.__api_fetcher = GithubApiFetcher(core_constant.GITHUB_API_LATEST)
+		self.__update_lock = Lock()
 		self.__last_query_time = 0
 
 	def tick(self):
@@ -36,30 +37,30 @@ class UpdateHelper(ThreadExecutor):
 	def __check_update(self, condition_check: Callable[[], bool], reply_func: Callable[[Union[str or RTextBase]], Any]):
 		if not condition_check():
 			return
-		acquired = self.update_lock.acquire(blocking=False)
+		acquired = self.__update_lock.acquire(blocking=False)
 		if not acquired:
 			reply_func(self.tr('update_helper.check_update.already_checking'))
 			return
 		try:
 			response = None
 			try:
-				response = requests.get(core_constant.GITHUB_API_LATEST, timeout=5).json()
-				latest_version = response['tag_name']  # type: str
-				update_log = response['body']
+				response = self.__api_fetcher.fetch()
+				latest_version: str = response['tag_name']
+				update_log: str = response['body']
 			except Exception as e:
 				reply_func(self.tr('update_helper.check_update.check_fail', repr(e)))
 				if isinstance(e, KeyError) and isinstance(response, dict) and 'message' in response:
 					reply_func(response['message'])
 					if 'documentation_url' in response:
 						reply_func(
-							RText(response['documentation_url'], color=RColor.blue, styles=RStyle.underlined)
-							.h(response['documentation_url'])
-							.c(RAction.open_url, response['documentation_url'])
+							RText(response['documentation_url'], color=RColor.blue, styles=RStyle.underlined).
+							h(response['documentation_url']).
+							c(RAction.open_url, response['documentation_url'])
 						)
 			else:
 				try:
 					version_current = Version(core_constant.VERSION, allow_wildcard=False)
-					version_fetched = Version(latest_version.lstrip('v'), allow_wildcard=False)
+					version_fetched = Version(latest_version.lstrip('vV'), allow_wildcard=False)
 				except:
 					self.mcdr_server.logger.exception('Fail to compare between versions "{}" and "{}"'.format(core_constant.VERSION, latest_version))
 					return
@@ -72,4 +73,20 @@ class UpdateHelper(ThreadExecutor):
 					for line in update_log.splitlines():
 						reply_func('    {}'.format(line))
 		finally:
-			self.update_lock.release()
+			self.__update_lock.release()
+
+
+class GithubApiFetcher:
+	def __init__(self, url: str):
+		self.url = url
+		self.__etag = 'dummy'
+		self.__cached_response: Optional[dict] = None
+
+	def fetch(self) -> dict:
+		response = requests.get(self.url, headers={'If-None-Match': self.__etag}, timeout=10)
+		self.__etag = response.headers.get('ETag', self.__etag)
+		if response.status_code != 304:  # 304 means content keeps unchanged
+			if response.status_code != 200:
+				raise Exception('Un-expected status code {}: {}'.format(response.status_code, response.content))
+			self.__cached_response = response.json()
+		return self.__cached_response
