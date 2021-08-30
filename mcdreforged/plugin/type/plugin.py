@@ -126,7 +126,7 @@ class AbstractPlugin:
 	def register_help_message(self, help_message: HelpMessage):
 		self.__assert_allow_to_register('help message')
 		self.plugin_registry.register_help_message(help_message)
-		self.mcdr_server.logger.debug('Plugin Added help message "{}"'.format(help_message), option=DebugOption.PLUGIN)
+		self.mcdr_server.logger.debug('{} registered help message "{}"'.format(self, help_message), option=DebugOption.PLUGIN)
 
 	def receive_event(self, event: MCDREvent, args: Tuple[Any, ...]):
 		"""
@@ -140,5 +140,5 @@ class AbstractPlugin:
 
 	def register_translation(self, language: str, mapping: TranslationKeyDictNested):
 		self.__assert_allow_to_register('translation')
-		self.mcdr_server.logger.debug('{} is registering translation for {} with at least {} entries'.format(self, language, len(mapping)), option=DebugOption.PLUGIN)
 		self.plugin_registry.register_translation(language, mapping)
+		self.mcdr_server.logger.debug('{} registered translation for {} with at least {} entries'.format(self, language, len(mapping)), option=DebugOption.PLUGIN)
