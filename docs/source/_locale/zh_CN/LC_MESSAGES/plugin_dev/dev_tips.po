@@ -164,9 +164,9 @@ msgstr ""
 #: ../plugin_dev/dev_tips.rst:56
 msgid ""
 "For easier use there's a decorator named `new_thread "
-"<api.html#new_thread>`__ to help you make your function run in another "
+"<api.html#new-thread>`__ to help you make your function run in another "
 "thread asynchronously"
-msgstr "为了更易于使用，你可以使用一个名为 `new_thread <api.html#new_thread>`__ 的函数装饰器来使你的函数异步地执行。"
+msgstr "为了更易于使用，你可以使用一个名为 `new_thread <api.html#new-thread>`__ 的函数装饰器来使你的函数异步地执行。"
 
 #: ../plugin_dev/dev_tips.rst:59
 msgid "User config, data and log files"

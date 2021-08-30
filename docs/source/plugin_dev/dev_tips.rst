@@ -53,7 +53,7 @@ Multi-threading
 
 If you want to do some tasks in your plugin that might take some time to finished, such as network querying or massive file operation, it's recommended to execute your code into a separated thread instead of directly executing them into your event listener function. Otherwise it might block the pending task execution
 
-For easier use there's a decorator named `new_thread <api.html#new_thread>`__ to help you make your function run in another thread asynchronously
+For easier use there's a decorator named `new_thread <api.html#new-thread>`__ to help you make your function run in another thread asynchronously
 
 User config, data and log files
 -------------------------------

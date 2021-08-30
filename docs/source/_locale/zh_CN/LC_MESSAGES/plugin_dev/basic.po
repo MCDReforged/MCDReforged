@@ -301,7 +301,7 @@ msgid ""
 "See the `translation section <dev_tips.html#translation>`__ in dev tips "
 "for some suggestions about using translation"
 msgstr ""
-"参阅插件开发提示中的`翻译 <dev_tips.html#translation>`__ 章节"
+"参阅插件开发提示中的 `翻译 <dev_tips.html#translation>`__ 章节"
 "关于使用翻译的一些建议。"
 
 #: ../plugin_dev/basic.rst:168
