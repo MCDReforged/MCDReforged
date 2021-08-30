@@ -7,6 +7,7 @@ from prompt_toolkit.application import get_app
 from prompt_toolkit.completion import Completion, CompleteEvent, WordCompleter
 from prompt_toolkit.document import Document
 from prompt_toolkit.layout import Dimension
+# noinspection PyProtectedMember
 from prompt_toolkit.layout.menus import MultiColumnCompletionMenuControl
 from prompt_toolkit.layout.processors import Processor, TransformationInput, Transformation
 from prompt_toolkit.output.vt100 import Vt100_Output

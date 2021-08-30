@@ -4,10 +4,10 @@ Information of a plugin
 import re
 from typing import List, Dict, TYPE_CHECKING, Optional, Union
 
-from mcdreforged.minecraft.rtext import RTextBase
+from mcdreforged.minecraft.rtext import RTextBase, RText
 from mcdreforged.plugin.meta.version import Version, VersionParsingError, VersionRequirement
 from mcdreforged.translation.translation_text import RTextMCDRTranslation
-from mcdreforged.utils import translation_util
+from mcdreforged.utils import translation_util, misc_util
 from mcdreforged.utils.types import TranslationLanguageDict
 
 if TYPE_CHECKING:
@@ -55,14 +55,17 @@ class Metadata:
 				warn('{}, use fallback id {} instead'.format(use_fallback_id_reason, self.id))
 			else:
 				raise ValueError('Plugin id not found in metadata')
+		misc_util.check_type(self.id, str)
 
 		self.name = data.get('name', self.id)
 		if isinstance(self.name, RTextBase):
 			self.name = self.name.to_plain_text()
+		misc_util.check_type(self.name, str)
 
 		description = data.get('description')
 		if isinstance(description, RTextBase):
 			description = description.to_plain_text()
+		misc_util.check_type(self.name, [type(None), str, dict])
 		self.description = description
 
 		self.author = data.get('author')
@@ -73,10 +76,10 @@ class Metadata:
 				self.author[i] = str(self.author[i])
 			if len(self.author) == 0:
 				self.author = None
+		misc_util.check_type(self.author, [type(None), list])
 
 		self.link = data.get('link')
-		if not isinstance(self.link, str):
-			self.link = None
+		misc_util.check_type(self.link, [type(None), str])
 
 		version_str = data.get('version')
 		if version_str:
@@ -100,11 +103,15 @@ class Metadata:
 				))
 
 		self.entrypoint = data.get('entrypoint', self.id)
+		misc_util.check_type(self.entrypoint, str)
 		# entrypoint module should be inside the plugin module
 		if self.entrypoint != self.id and not self.entrypoint.startswith(self.id + '.'):
 			raise ValueError('Invalid entry point "{}" for plugin id "{}"'.format(self.entrypoint, self.id))
+
 		self.archive_name = data.get('archive_name')
 		self.resources = data.get('resources', [])
+		misc_util.check_type(self.archive_name, [type(None), str])
+		misc_util.check_type(self.resources, list)
 
 	def __repr__(self):
 		return '{}[id={},version={},name={},description={},author={},link={},dependencies={},entrypoint={},archive_name={},resources={}]'.format(
@@ -121,14 +128,10 @@ class Metadata:
 			return self.description
 		return translation_util.translate_from_dict(self.description, lang, default=None)
 
-	def get_description_rtr(self) -> RTextMCDRTranslation:
-		def fake_tr(key: str, language: str) -> str:
-			ret = self.get_description(language)
-			if ret is None:
-				raise KeyError('Failed to translate description {} with language {}'.format(self.description, language))
-			return ret
-
-		return RTextMCDRTranslation('').set_translator(fake_tr)
+	def get_description_rtext(self) -> RTextBase:
+		if isinstance(self.description, str):
+			return RText(self.description)
+		return RTextMCDRTranslation.from_translation_dict(self.description)
 
 
 __SAMPLE_METADATA = {

@@ -6,7 +6,7 @@ import importlib.util
 import inspect
 import os
 import threading
-from typing import List, Callable, Tuple, TypeVar, Any, Type, Optional
+from typing import List, Callable, Tuple, TypeVar, Any, Type, Optional, Union, Iterable
 
 from mcdreforged.minecraft.rtext import RTextBase
 from mcdreforged.plugin.meta.version import Version
@@ -81,10 +81,12 @@ def print_text_to_console(logger, text):
 		logger.info(line)
 
 
-def check_type(value: Any, type_: Type, error_message: str = None):
-	if not isinstance(value, type_):
+def check_type(value: Any, types: Union[Type, Iterable[Type]], error_message: str = None):
+	if not isinstance(types, Iterable):
+		types = [types]
+	if not any(map(lambda t: isinstance(value, t), types)):
 		if error_message is None:
-			error_message = 'Except type {} but found type {}'.format(type_, type(value))
+			error_message = 'Except type {} but found type {}'.format(types, type(value))
 		raise TypeError(error_message)
 
 
