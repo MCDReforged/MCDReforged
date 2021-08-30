@@ -1,7 +1,7 @@
 from typing import Optional
 
 from mcdreforged.constants import core_constant
-from mcdreforged.utils.types import TranslationKeyDictRich, MessageText, TranslationKeyDict, TranslationStorage
+from mcdreforged.utils.types import TranslationKeyDictRich, MessageText, TranslationStorage, TranslationKeyDictNested
 
 __all__ = [
 	'translate_from_dict',
@@ -29,7 +29,14 @@ def translate_from_dict(translations: TranslationKeyDictRich, language: str, *, 
 	return result
 
 
-def update_storage(storage: TranslationStorage, language: str, mapping: TranslationKeyDict):
-	for key, text in mapping.items():
-		storage[key][language] = text
+def update_storage(storage: TranslationStorage, language: str, mapping: TranslationKeyDictNested):
+	__update_storage(storage, language, mapping)
 
+
+def __update_storage(storage: TranslationStorage, language: str, mapping: TranslationKeyDictNested, path: Optional[str] = None):
+	for key, item in mapping.items():
+		current_path = f'{path}.{key}' if path is not None else key
+		if isinstance(item, str):
+			storage[current_path][language] = item
+		elif isinstance(item, dict):
+			__update_storage(storage, language, item, current_path)

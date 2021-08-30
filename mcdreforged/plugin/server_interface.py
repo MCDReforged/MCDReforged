@@ -23,7 +23,7 @@ from mcdreforged.utils import misc_util
 from mcdreforged.utils.exception import IllegalCallError
 from mcdreforged.utils.logger import MCDReforgedLogger, DebugOption
 from mcdreforged.utils.serializer import Serializable
-from mcdreforged.utils.types import MessageText, TranslationKeyDictRich, TranslationKeyDict
+from mcdreforged.utils.types import MessageText, TranslationKeyDictRich, TranslationKeyDictNested
 
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
@@ -636,11 +636,11 @@ class PluginServerInterface(ServerInterface):
 		"""
 		self.__plugin.register_help_message(HelpMessage(self.__plugin, prefix, message, permission))
 
-	def register_translation(self, language: str, mapping: TranslationKeyDict) -> None:
+	def register_translation(self, language: str, mapping: TranslationKeyDictNested) -> None:
 		"""
 		Register a translation mapping for a specific language for the current plugin
 		:param language: The language of this translation
-		:param mapping: A dict which maps translation keys into translated text
+		:param mapping: A dict which maps translation keys into translated text. The translation key could be expressed as node name which under root node or the path of a nested multi-level nodes
 		"""
 		self.__plugin.register_translation(language, mapping)
 
