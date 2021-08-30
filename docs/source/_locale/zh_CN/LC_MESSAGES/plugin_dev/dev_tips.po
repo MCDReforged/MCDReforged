@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-26 21:31+0800\n"
+"POT-Creation-Date: 2021-08-30 19:05+0800\n"
 "PO-Revision-Date: 2021-01-22 14:26+0000\n"
 "Last-Translator: \n"
 "Language: zh_CN\n"
@@ -12,7 +12,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.9.0\n"
+"Generated-By: Babel 2.9.1\n"
 
 #: ../plugin_dev/dev_tips.rst:3
 msgid "Some tips to plugin development"
@@ -69,11 +69,22 @@ msgstr ""
 
 #: ../plugin_dev/dev_tips.rst:21
 msgid ""
+"The translation key could expressed as node name which under root node or"
+" the path of a nested multi-level nodes. For example, the following "
+"definitions of the translation key ``my_plugin.some.text`` in a language "
+"file in yaml format are equivalent."
+msgstr ""
+"翻译键可以表示为根节点下的子节点名称，或嵌套的多层节点的路径。"
+"例如，以下对于翻译键 `my_plugin.some.text` 在 yaml 格式的语言文件中的定义都是等价的。"
+
+
+#: ../plugin_dev/dev_tips.rst:35
+msgid ""
 "For the difference between 2 translation method in ``ServerInterface``, "
 "let's use Minecraft code (yarn mapping) as an example:"
 msgstr "对于 ``ServerInterface`` 中两种不同的翻译方法，我们可以使用 Minecraft 的代码（yarn 反混淆表）来进行类比区分"
 
-#: ../plugin_dev/dev_tips.rst:23
+#: ../plugin_dev/dev_tips.rst:37
 msgid ""
 "`ServerInterface.tr <classes/ServerInterface.html#tr>`__ is "
 "``I18n.translate()``"
@@ -81,7 +92,7 @@ msgstr ""
 "`ServerInterface.tr <classes/ServerInterface.html#tr>`__ 就是 "
 "``I18n.translate()``。"
 
-#: ../plugin_dev/dev_tips.rst:24
+#: ../plugin_dev/dev_tips.rst:38
 msgid ""
 "`ServerInterface.rtr <classes/ServerInterface.html#rtr>`__, or "
 "`RTextMCDRTranslation <api.html#rtextmcdrtranslation>`__ is ``new "
@@ -91,7 +102,7 @@ msgstr ""
 "`RTextMCDRTranslation <api.html#rtextmcdrtranslation>`__，就是 ``new "
 "TranslatableText()``。"
 
-#: ../plugin_dev/dev_tips.rst:26
+#: ../plugin_dev/dev_tips.rst:40
 msgid ""
 "In general, the second method is recommended for translating things in "
 "your plugin, since it smartly use the proper language for the player or "
@@ -101,11 +112,11 @@ msgstr ""
 "通常来说，第二种方法是在你的插件中进行翻译的推荐方法，因为它可以聪明地为玩家或控制台挑选恰当的语言来进行消息回复，并使用 MCDR "
 "的语言来进行其他方面的翻译，如日志消息输出。"
 
-#: ../plugin_dev/dev_tips.rst:29
+#: ../plugin_dev/dev_tips.rst:43
 msgid "Event listening"
 msgstr "事件监听"
 
-#: ../plugin_dev/dev_tips.rst:31
+#: ../plugin_dev/dev_tips.rst:45
 msgid ""
 "If you don't care about info from non-user source, listen to `User Info "
 "event <event.html#user-info>`__ instead of `General Info event "
@@ -117,7 +128,7 @@ msgstr ""
 "<event.html#general-info>`__。这可以在服务端刷屏非用户信息时（如使用 Litematica mod 粘贴蓝图）提升 "
 "MCDR 的性能表现。"
 
-#: ../plugin_dev/dev_tips.rst:33
+#: ../plugin_dev/dev_tips.rst:47
 msgid ""
 "If you only care about commands from users, instead of listening to `User"
 " Info event <event.html#user-info>`__, you can `register a command tree "
@@ -127,7 +138,7 @@ msgstr ""
 "如果你只关心用户输入的指令，与其监听 `用户信息事件 <event.html#general-info>`__，你还可以 `注册一棵指令树 "
 "<command.html>`__。这比手动在 `用户信息事件 <event.html#general-info>`__ 高效不少。"
 
-#: ../plugin_dev/dev_tips.rst:35
+#: ../plugin_dev/dev_tips.rst:49
 msgid ""
 "`MCDR Stop event <event.html#mcdr-stop>`__ allows you to have as many "
 "time as you want to save your data. Be carefully, don't enter an endless "
@@ -136,11 +147,11 @@ msgstr ""
 "`MCDR 终止事件 <event.html#mcdr-stop>`__ 能给你充足的时间来进行保存数据等操作。不过要小心，不要死循环了，MCDR"
 " 在等着你运算完成。"
 
-#: ../plugin_dev/dev_tips.rst:38
+#: ../plugin_dev/dev_tips.rst:52
 msgid "Multi-threading"
 msgstr "多线程"
 
-#: ../plugin_dev/dev_tips.rst:40
+#: ../plugin_dev/dev_tips.rst:54
 msgid ""
 "If you want to do some tasks in your plugin that might take some time to "
 "finished, such as network querying or massive file operation, it's "
@@ -151,25 +162,25 @@ msgstr ""
 "如果你想要在你的插件中执行需要一些时间才能完成的任务，如网络操作或者文件操作，建议将你的代码放到一个独立的线程里执行，而不是直接在你注册的事件监听器函数中执行。否则"
 " MCDR 余下任务的执行可能会被阻塞。"
 
-#: ../plugin_dev/dev_tips.rst:42
+#: ../plugin_dev/dev_tips.rst:56
 msgid ""
 "For easier use there's a decorator named `new_thread "
 "<api.html#new_thread>`__ to help you make your function run in another "
 "thread asynchronously"
 msgstr "为了更易于使用，你可以使用一个名为 `new_thread <api.html#new_thread>`__ 的函数装饰器来使你的函数异步地执行。"
 
-#: ../plugin_dev/dev_tips.rst:45
+#: ../plugin_dev/dev_tips.rst:59
 msgid "User config, data and log files"
 msgstr "用户配置、数据及日志文件"
 
-#: ../plugin_dev/dev_tips.rst:47
+#: ../plugin_dev/dev_tips.rst:61
 msgid ""
 "If you want to store some user configure or user data file, it's "
 "recommend to store them inside the ``config`` folder rather than store "
 "them inside the plugin folder"
 msgstr "如果你需要储存一些用户配置或数据文件，推荐将它们储存到 ``config`` 文件夹中而不是储存到插件文件夹中。"
 
-#: ../plugin_dev/dev_tips.rst:49
+#: ../plugin_dev/dev_tips.rst:63
 msgid ""
 "The reason is that user might have their plugins be placed in another "
 "directory or even have multiple MCDR instances to load a same plugin "
@@ -180,7 +191,7 @@ msgstr ""
 "实例共享使用一个相同的插件文件夹。这是可以通过修改配置文件选项 `plugin_directories <../configure.html"
 "#plugin-directories>`__ 来实现的。"
 
-#: ../plugin_dev/dev_tips.rst:51
+#: ../plugin_dev/dev_tips.rst:65
 msgid ""
 "If you store your configure or data inside the plugin folder, you can't "
 "distinguish which MCDR instance the configuration file belongs to. You "
@@ -192,7 +203,7 @@ msgstr ""
 "``config`` 文件夹，或者 ``config`` 中的一个子文件夹如 ``config/my_plugin/`` "
 "中，这样每个加载你的插件的 MCDR 实例即可拥有独享的用户配置数据。"
 
-#: ../plugin_dev/dev_tips.rst:53
+#: ../plugin_dev/dev_tips.rst:67
 msgid ""
 "`get_data_folder <classes/PluginServerInterface.html#get-data-folder>`__ "
 "method is a nice method for lazyman"
@@ -200,15 +211,15 @@ msgstr ""
 "`get_data_folder <classes/PluginServerInterface.html#get-data-folder>`__ "
 "是个不错的懒人方法"
 
-#: ../plugin_dev/dev_tips.rst:55
+#: ../plugin_dev/dev_tips.rst:69
 msgid "For logging files, store them inside ``logs/`` folder is a good idea"
 msgstr "对于日志文件，把它们储存至 ``logs/`` 文件夹中是一个不错的选择。"
 
-#: ../plugin_dev/dev_tips.rst:58
+#: ../plugin_dev/dev_tips.rst:72
 msgid "External packages"
 msgstr "额外的 Python 包"
 
-#: ../plugin_dev/dev_tips.rst:60
+#: ../plugin_dev/dev_tips.rst:74
 msgid ""
 "Some times you plugin needs some external resource files or requires some"
 " other ``.py`` codes as libraries. For these, you need to rather write "
@@ -220,17 +231,17 @@ msgstr ""
 "<plugin_format.html#multi-file-plugin>`__ "
 "格式来编写你的插件，并将它们插入你的插件中；或者以某种方式将它们转换为独立的插件并声明依赖项"
 
-#: ../plugin_dev/dev_tips.rst:63
+#: ../plugin_dev/dev_tips.rst:77
 msgid "Misc"
 msgstr "其他"
 
-#: ../plugin_dev/dev_tips.rst:65
+#: ../plugin_dev/dev_tips.rst:79
 msgid ""
 "The current working directory is the folder where MCDR is in. **DO NOT** "
 "change it since that will mess up everything"
 msgstr "MCDR 的工作路径是 MCDR 所在的文件夹路径。**切勿** 修改工作路径，这将弄乱一切。"
 
-#: ../plugin_dev/dev_tips.rst:66
+#: ../plugin_dev/dev_tips.rst:80
 msgid ""
 "For the ``Info`` parameter in `General Info event <event.html#general-"
 "info>`__ etc., don't modify it, just use its public methods and read its "

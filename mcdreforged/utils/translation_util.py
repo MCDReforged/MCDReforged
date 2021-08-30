@@ -1,7 +1,7 @@
-from typing import Optional, Tuple, List
+from typing import Optional
 
 from mcdreforged.constants import core_constant
-from mcdreforged.utils.types import TranslationKeyDictRich, MessageText, TranslationKeyDictNested, TranslationStorage
+from mcdreforged.utils.types import TranslationKeyDictRich, MessageText, TranslationStorage, TranslationKeyDictNested
 
 __all__ = [
 	'translate_from_dict',
@@ -29,19 +29,10 @@ def translate_from_dict(translations: TranslationKeyDictRich, language: str, *, 
 	return result
 
 
-def update_storage(storage: TranslationStorage, language: str, mapping: TranslationKeyDictNested):
-	# DFS
-	stack: List[Tuple[str, TranslationKeyDictNested]] = []  # [('root.node.child', item), ...]
+def update_storage(storage: TranslationStorage, language: str, mapping: TranslationKeyDictNested, path: str = ''):
 	for key, item in mapping.items():
-		if dict == type(item):
-			stack.append((key, item))
-		else:
-			storage[key][language] = item
-	while len(stack) != 0:
-		path, contains = stack.pop()
-		for node, item in contains.items():
-			key = f'{path}.{node}'
-			if dict == type(item):
-				stack.append((key, item))
-			else:
-				storage[key][language] = item
+		current_path = f'{path}.{key}' if path != 0 else key
+		if isinstance(item, str):
+			storage[current_path][language] = item
+		elif isinstance(item, dict):
+			update_storage(storage, language, item, current_path)

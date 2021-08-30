@@ -18,6 +18,20 @@ For `multi file plugin <plugin_format.html#multi-file-plugin>`__, you can also i
 
 It's highly recommended to use your plugin id as the prefix of your translation key, so there will be no translation conflicts between plugins. e.g. use ``my_plugin.some.text`` instead of ``some.text`` as translation key
 
+The translation key could expressed as node name which under root node or the path of a nested multi-level nodes. For example, the following definitions of the translation key ``my_plugin.some.text`` in a language file in yaml format are equivalent.
+
+.. code-block:: yaml
+
+    my_plugin.some.text: Text of translation key.
+
+
+.. code-block:: yaml
+
+    my_plugin:
+      some:
+        text: Text of translation key.
+
+
 For the difference between 2 translation method in ``ServerInterface``, let's use Minecraft code (yarn mapping) as an example:
 
 * `ServerInterface.tr <classes/ServerInterface.html#tr>`__ is ``I18n.translate()``

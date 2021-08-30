@@ -7,7 +7,7 @@ from mcdreforged.plugin.plugin_event import EventListener
 from mcdreforged.translation.translation_text import RTextMCDRTranslation
 from mcdreforged.utils import translation_util
 from mcdreforged.utils.types import TranslationStorage, TranslationKeyDictRich, MessageText, \
-	TranslationKeyDict
+	TranslationKeyDictNested
 
 if TYPE_CHECKING:
 	from mcdreforged.plugin.type.plugin import AbstractPlugin
@@ -82,7 +82,7 @@ class PluginRegistry(AbstractPluginRegistry):
 			raise TypeError('Only Literal node is accepted to be a root node')
 		self.command_roots.append(PluginCommandNode(self.plugin, node))
 
-	def register_translation(self, language: str, mapping: TranslationKeyDict):
+	def register_translation(self, language: str, mapping: TranslationKeyDictNested):
 		# Translation should be updated immediately
 		translation_util.update_storage(self.translations, language, mapping)
 		translation_util.update_storage(self.target_storage.translations, language, mapping)
