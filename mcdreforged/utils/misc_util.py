@@ -79,6 +79,15 @@ def copy_signature(target: Callable, origin: Callable) -> Callable:
 	return target
 
 
+def represent(obj: Any) -> str:
+	"""
+	aka repr
+	"""
+	return '{}[{}]'.format(type(obj).__name__, ','.join([
+		'{}={}'.format(k, repr(v)) for k, v in vars(obj).items() if not k.startswith('_')
+	]))
+
+
 class WaitableCallable:
 	def __init__(self, func: Callable):
 		self.__func = func

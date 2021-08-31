@@ -2,7 +2,6 @@
 Information of a plugin
 """
 import re
-import reprlib
 from typing import List, Dict, TYPE_CHECKING, Optional, Union
 
 from mcdreforged.minecraft.rtext import RTextBase, RText
@@ -115,7 +114,7 @@ class Metadata:
 		misc_util.check_type(self.resources, list)
 
 	def __repr__(self):
-		return reprlib.repr(self)
+		return misc_util.represent(self)
 
 	def get_description(self, lang: Optional[str] = None) -> Optional[str]:
 		"""
