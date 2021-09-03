@@ -759,7 +759,7 @@ class PluginServerInterface(ServerInterface):
 		else:
 			data = config
 		target_folder = os.path.dirname(config_file_path)
-		if not os.path.isdir(target_folder):
+		if len(target_folder) > 0 and not os.path.isdir(target_folder):
 			os.makedirs(target_folder)
 		with open(config_file_path, 'w') as file:
 			json.dump(data, file, indent=4, ensure_ascii=False)
