@@ -40,10 +40,13 @@ def serialize(obj) -> Union[None, int, float, str, list, dict]:
 		return serialize(attr_dict)
 
 
-_BASIC_CLASSES = (None, int, float, str, list, dict)
+_BASIC_CLASSES = (type(None), bool, int, float, str, list, dict)
 
 
 def deserialize(data, cls: Type[T], *, error_at_missing=False, error_at_redundancy=False) -> T:
+	# in case None instead of NoneType is passed
+	if cls is None:
+		cls = type(None)
 	# Union
 	# Unpack Union first since the target class is not confirmed yet
 	if _get_origin(cls) == Union:
@@ -55,17 +58,17 @@ def deserialize(data, cls: Type[T], *, error_at_missing=False, error_at_redundan
 		raise TypeError('Data in type {} cannot match any candidate of target class {}'.format(type(data), cls))
 	# Element (None, int, float, str, list, dict)
 	# For list and dict, since it doesn't have any type hint, we choose to simply return the data
-	elif type(data) is cls:
+	elif cls in _BASIC_CLASSES and type(data) is cls:
 		return data
 	# float thing
 	elif cls is float and isinstance(data, int):
 		return float(data)
 	# List
-	elif isinstance(data, list) and _get_origin(cls) == List[int].__origin__:
+	elif _get_origin(cls) == List[int].__origin__ and isinstance(data, list):
 		element_type = _get_args(cls)[0]
 		return list(map(lambda e: deserialize(e, element_type, error_at_missing=error_at_missing, error_at_redundancy=error_at_redundancy), data))
 	# Dict
-	elif isinstance(data, dict) and _get_origin(cls) == Dict[int, int].__origin__:
+	elif _get_origin(cls) == Dict[int, int].__origin__ and isinstance(data, dict):
 		key_type = _get_args(cls)[0]
 		val_type = _get_args(cls)[1]
 		instance = {}
@@ -75,14 +78,14 @@ def deserialize(data, cls: Type[T], *, error_at_missing=False, error_at_redundan
 			instance[deserialized_key] = deserialized_value
 		return instance
 	# Enum
-	elif isinstance(cls, EnumMeta):
+	elif isinstance(cls, EnumMeta) and isinstance(data, str):
 		return cls[data]
 	# Object
-	elif cls not in _BASIC_CLASSES and isinstance(data, dict):
+	elif cls not in _BASIC_CLASSES and isinstance(cls, type) and isinstance(data, dict):
 		try:
 			result = cls()
-		except TypeError:
-			raise TypeError('Parameter cls needs to be a type instance since data is a dict, but {} found'.format(type(cls))) from None
+		except:
+			raise TypeError('Failed to construct instance of class {}'.format(type(cls)))
 		input_key_set = set(data.keys())
 		for attr_name, attr_type in _get_type_hints(cls).items():
 			if not attr_name.startswith('_'):
