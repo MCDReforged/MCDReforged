@@ -79,6 +79,7 @@ class MyTestCase(unittest.TestCase):
 		self.assertRaises(ValueError, deserialize, {'x': 1}, Point, error_at_missing=True)
 		self.assertRaises(ValueError, deserialize, {'z': 1}, Point, error_at_redundancy=True)
 		self.assertRaises(TypeError, deserialize, {'x': []}, Point)
+		self.assertRaises(TypeError, deserialize, {'x': set()}, Point)
 
 	def test_2_complex_class(self):
 		a = ConfigImpl()
@@ -97,6 +98,7 @@ class MyTestCase(unittest.TestCase):
 			}
 		}, ConfigImpl)
 		self.assertEqual(b, deserialize(serialize(b), ConfigImpl))
+		self.assertRaises(TypeError, deserialize, {'e': object()}, ConfigImpl)
 
 	def test_3_copy_default_value(self):
 		class Cls(Serializable):
@@ -243,6 +245,15 @@ class MyTestCase(unittest.TestCase):
 		self.assertEqual(o2.a, o.a)
 		self.assertEqual(o2.b, o.b)
 		self.assertEqual(o2.c, o.c)
+
+	def test_9_not_friendly_constructor(self):
+		class BadClass:
+			value: int
+
+			def __init__(self, value: int):  # there shouldn't be necessary parameter in the constructor
+				self.value = value
+
+		self.assertRaises(TypeError, deserialize, {'value': 1}, BadClass)
 
 
 if __name__ == '__main__':

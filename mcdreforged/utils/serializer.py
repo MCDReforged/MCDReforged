@@ -16,7 +16,7 @@ def _get_origin(cls: Type):
 
 
 def _get_args(cls: Type) -> tuple:
-	return getattr(cls, '__args__', None)
+	return getattr(cls, '__args__', ())
 
 
 def serialize(obj) -> Union[None, int, float, str, list, dict]:
