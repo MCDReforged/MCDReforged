@@ -205,8 +205,8 @@ msgstr "支持默认配置文件。加载的配置中缺失的键-值对将会�
 
 #: ../plugin_dev/classes/PluginServerInterface.rst:137
 #: ../plugin_dev/classes/PluginServerInterface.rst:191
-msgid "Parameter *file_name*: The name of the config file"
-msgstr "参数 *file_name*：配置文件的文件名。"
+msgid "Parameter *file_name*: The name of the config file. It can also be a path to the config file"
+msgstr "参数 *file_name*：配置文件的文件名。它也可为配置文件的路径"
 
 #: ../plugin_dev/classes/PluginServerInterface.rst:139
 msgid ""

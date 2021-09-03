@@ -684,7 +684,7 @@ class PluginServerInterface(ServerInterface):
 		"""
 		A simple method to load a dict or Serializable type config from a json file
 		Default config is supported. Missing key-values in the loaded config object will be filled using the default config
-		:param file_name: The name of the config file
+		:param file_name: The name of the config file. It can also be a path to the config file
 		:param default_config: A dict contains the default config. It's required when the config file is missing,
 		or exception will be risen. If target_class is given and default_config is missing, the default values in target_class
 		will be used when the config file is missing
@@ -750,7 +750,7 @@ class PluginServerInterface(ServerInterface):
 		"""
 		A simple method to save your dict or Serializable type config as a json file
 		:param config: The config instance to be saved
-		:param file_name: The name of the config file
+		:param file_name: The name of the config file. It can also be a path to the config file
 		:param in_data_folder: If True, the parent directory of file operating is the data folder of the plugin
 		"""
 		config_file_path = os.path.join(self.get_data_folder(), file_name) if in_data_folder else file_name
