@@ -109,7 +109,7 @@ class MyTestCase(unittest.TestCase):
 			obj.lst.append(i)
 		self.assertEqual(10, len(obj.lst))
 		self.assertEqual(0, len(Cls.deserialize({}).lst))
-		self.assertEqual(0, len(Cls().lst))
+		self.assertFalse(Cls.deserialize({}).lst is Cls.lst)
 
 	def test_4_protected_fields(self):
 		class Cls(Serializable):
@@ -135,21 +135,35 @@ class MyTestCase(unittest.TestCase):
 		self.assertEqual('x', Cls.deserialize({'__secret2': 'y'}).get_secret2())
 
 	def test_5_union(self):
+		class Item:
+			idx: int
+
 		class Cls(Serializable):
 			a: Union[int, str, list]
 			b: Optional[float] = None
+			c: Union[float, dict]
+			d: Union[float, dict, Item]
 
-		c = Cls.deserialize({'a': 1})
-		self.assertEqual(c.a, 1)
-		self.assertEqual(c.b, None)
+		cls = Cls.deserialize({'a': 1})
+		self.assertEqual(cls.a, 1)
+		self.assertEqual(cls.b, None)
 
-		c = Cls.deserialize({'a': 'x', 'b': None})
-		self.assertEqual(c.a, 'x')
-		self.assertEqual(c.b, None)
+		cls = Cls.deserialize({'a': 'x', 'b': None})
+		self.assertEqual(cls.a, 'x')
+		self.assertEqual(cls.b, None)
 
-		c = Cls.deserialize({'a': [1], 'b': 1.2})
-		self.assertEqual(c.a, [1])
-		self.assertEqual(c.b, 1.2)
+		cls = Cls.deserialize({'a': [1], 'b': 1.2})
+		self.assertEqual(cls.a, [1])
+		self.assertEqual(cls.b, 1.2)
+
+		self.assertEqual(Cls.deserialize({'c': 1.1}).c, 1.1)
+		# the float converting attempt should be failed
+		self.assertEqual(Cls.deserialize({'c': {'x': 'y'}}).c, {'x': 'y'})
+
+		# dict converting tried first
+		cls = Cls.deserialize({'d': {'idx': 10}})
+		self.assertNotIsInstance(cls.d, Item)
+		self.assertEqual(cls.d, {'idx': 10})
 
 		self.assertRaises(TypeError, Cls.deserialize, {'a': {}, 'b': 1.2})
 		self.assertRaises(TypeError, Cls.deserialize, {'a': None, 'b': 1.2})

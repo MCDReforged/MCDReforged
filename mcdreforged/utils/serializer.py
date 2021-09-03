@@ -40,10 +40,22 @@ def serialize(obj) -> Union[None, int, float, str, list, dict]:
 		return serialize(attr_dict)
 
 
+_BASIC_CLASS = (None, int, float, str, list, dict)
+
+
 def deserialize(data, cls: Type[T], *, error_at_missing=False, error_at_redundancy=False) -> T:
+	# Union
+	# Unpack Union first since the target class is not confirmed yet
+	if _get_origin(cls) == Union:
+		for possible_cls in _get_args(cls):
+			try:
+				return deserialize(data, possible_cls, error_at_missing=error_at_missing, error_at_redundancy=error_at_redundancy)
+			except (TypeError, ValueError):
+				pass
+		raise TypeError('Data in type {} cannot match any candidate of target class {}'.format(type(data), cls))
 	# Element (None, int, float, str, list, dict)
 	# For list and dict, since it doesn't have any type hint, we choose to simply return the data
-	if type(data) is cls:
+	elif type(data) is cls:
 		return data
 	# float thing
 	elif cls is float and isinstance(data, int):
@@ -66,7 +78,7 @@ def deserialize(data, cls: Type[T], *, error_at_missing=False, error_at_redundan
 	elif isinstance(cls, EnumMeta):
 		return cls[data]
 	# Object
-	elif isinstance(data, dict):
+	elif cls not in _BASIC_CLASS and isinstance(data, dict):
 		try:
 			result = cls()
 		except TypeError:
@@ -86,14 +98,6 @@ def deserialize(data, cls: Type[T], *, error_at_missing=False, error_at_redundan
 		if isinstance(result, Serializable):
 			result.on_deserialization()
 		return result
-	# Union
-	elif _get_origin(cls) == Union:
-		for possible_cls in _get_args(cls):
-			try:
-				return deserialize(data, possible_cls, error_at_missing=error_at_missing, error_at_redundancy=error_at_redundancy)
-			except (TypeError, ValueError):
-				pass
-		raise TypeError('Data in type {} cannot match any candidate of target class {}'.format(type(data), cls))
 	else:
 		raise TypeError('Unsupported input type: expected class {} but found data with class {}'.format(cls, type(data)))
 
