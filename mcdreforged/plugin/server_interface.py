@@ -762,4 +762,5 @@ class PluginServerInterface(ServerInterface):
 		if len(target_folder) > 0 and not os.path.isdir(target_folder):
 			os.makedirs(target_folder)
 		with open(config_file_path, 'w') as file:
+			# config file should be nicely readable, so here come the indent and non-ascii chars
 			json.dump(data, file, indent=4, ensure_ascii=False)

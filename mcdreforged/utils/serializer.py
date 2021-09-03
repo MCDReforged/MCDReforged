@@ -40,7 +40,7 @@ def serialize(obj) -> Union[None, int, float, str, list, dict]:
 		return serialize(attr_dict)
 
 
-_BASIC_CLASS = (None, int, float, str, list, dict)
+_BASIC_CLASSES = (None, int, float, str, list, dict)
 
 
 def deserialize(data, cls: Type[T], *, error_at_missing=False, error_at_redundancy=False) -> T:
@@ -78,7 +78,7 @@ def deserialize(data, cls: Type[T], *, error_at_missing=False, error_at_redundan
 	elif isinstance(cls, EnumMeta):
 		return cls[data]
 	# Object
-	elif cls not in _BASIC_CLASS and isinstance(data, dict):
+	elif cls not in _BASIC_CLASSES and isinstance(data, dict):
 		try:
 			result = cls()
 		except TypeError:
