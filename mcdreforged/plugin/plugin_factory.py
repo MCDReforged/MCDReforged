@@ -13,10 +13,11 @@ if TYPE_CHECKING:
 
 
 def __get_suffix(file_path: str):
-	index = file_path.rfind('.')
+	file_name = os.path.basename(file_path)
+	index = file_name.rfind('.')
 	if index == -1:
 		return ''
-	return file_path[index:]
+	return file_name[index:]
 
 
 def __get_plugin_class_from_path(file_path: str, allow_disabled: bool) -> Optional[type]:
