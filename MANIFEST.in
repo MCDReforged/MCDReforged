@@ -1,2 +1,3 @@
 recursive-include mcdreforged/resources *
+include LICENSE
 include requirements.txt
