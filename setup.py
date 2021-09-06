@@ -18,7 +18,7 @@ REQUIRES_PYTHON = '>=3.6.0'
 
 CLASSIFIERS = [
 	# https://pypi.org/classifiers/
-	'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
+	'License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)',
 	'Programming Language :: Python',
 	'Programming Language :: Python :: 3',
 	'Programming Language :: Python :: 3.6',
@@ -59,6 +59,5 @@ setup(
 	packages=find_packages(exclude=['tests', '*.tests', '*.tests.*', 'tests.*']),
 	install_requires=REQUIRED,
 	include_package_data=True,
-	license='GPL-3.0',
 	classifiers=CLASSIFIERS,
 )
