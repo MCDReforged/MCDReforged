@@ -739,9 +739,10 @@ class PluginServerInterface(ServerInterface):
 				log(self._mcdr_server.tr('server_interface.load_config_simple.failed', e))
 		else:
 			# remove unexpected keys
-			for key in list(result_config.keys()):
-				if key not in default_config:
-					result_config.pop(key)
+			if default_config is not None:
+				for key in list(result_config.keys()):
+					if key not in default_config:
+						result_config.pop(key)
 		if needs_save:
 			self.save_config_simple(result_config, file_name=file_name, in_data_folder=in_data_folder)
 		return result_config
