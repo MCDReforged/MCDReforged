@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING, Optional, Iterable, Any
 
 from prompt_toolkit import PromptSession
 from prompt_toolkit.application import get_app
-from prompt_toolkit.completion import Completion, CompleteEvent, WordCompleter
+from prompt_toolkit.completion import Completion, CompleteEvent, WordCompleter, ThreadedCompleter
 from prompt_toolkit.document import Document
 from prompt_toolkit.layout import Dimension
 # noinspection PyProtectedMember
@@ -179,6 +179,8 @@ class PromptToolkitWrapper:
 		def min_rows_is_2(*args, **kwargs):
 			kwargs['min_rows'] = 2
 			real_ctor(*args, **kwargs)
+
+		# noinspection PyTypeChecker
 		real_ctor = MultiColumnCompletionMenuControl.__init__
 		MultiColumnCompletionMenuControl.__init__ = min_rows_is_2
 
@@ -204,17 +206,20 @@ class PromptToolkitWrapper:
 		if self.pt_enabled:
 			assert self.console_handler.is_on_thread()
 			command_manager = self.console_handler.mcdr_server.command_manager
+			completer = ThreadedCompleter(CommandCompleter(command_manager))
+			input_processors = [
+				CommandArgumentSuggester(command_manager),
+				self.prompt_session.get_complete_state_checker()
+			]
 			with self.__promoting:
 				return self.prompt_session.prompt(
 					'> ',
-					completer=CommandCompleter(command_manager),
+					completer=completer,
+					complete_in_thread=True,
 					complete_while_typing=True,
 					complete_style=CompleteStyle.MULTI_COLUMN,
 					reserve_space_for_menu=3,
-					input_processors=[
-						CommandArgumentSuggester(command_manager),
-						self.prompt_session.get_complete_state_checker()
-					]
+					input_processors=input_processors
 				)
 		else:
 			return input()
