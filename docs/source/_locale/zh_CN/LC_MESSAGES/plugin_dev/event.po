@@ -363,7 +363,7 @@ msgstr "一名玩家加入了游戏。 MCDR 仅将玩家的名称解析为字符
 
 #: ../plugin_dev/event.rst:196
 msgid "Event id: mcdr.player_joined"
-msgstr "事件 ID：mcdr.plugin_joined"
+msgstr "事件 ID：mcdr.player_joined"
 
 #: ../plugin_dev/event.rst:197
 msgid "Callback arguments: PluginServerInterface, player_name, Info"
@@ -385,7 +385,7 @@ msgstr "一名玩家离开了游戏。插件可以清理与玩家相关的对象
 
 #: ../plugin_dev/event.rst:206
 msgid "Event id: mcdr.player_left"
-msgstr "事件 ID：mcdr.plugin_left"
+msgstr "事件 ID：mcdr.player_left"
 
 #: ../plugin_dev/event.rst:207
 msgid "Callback arguments: PluginServerInterface, player_name"
