@@ -93,10 +93,10 @@ class TaskExecutor(ThreadExecutor):
 		"""
 		if self.__last_tick_time is None:  # not started yet
 			return 0
-		return time.time() - self.__last_tick_time
+		return time.monotonic() - self.__last_tick_time
 
 	def tick(self):
-		self.__last_tick_time = time.time()
+		self.__last_tick_time = time.monotonic()
 		try:
 			task = self.task_queue.get(timeout=0.01)
 		except Empty:

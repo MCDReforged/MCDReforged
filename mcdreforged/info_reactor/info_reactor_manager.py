@@ -62,7 +62,7 @@ class InfoReactorManager:
 		try:
 			self.mcdr_server.task_executor.enqueue_info_task(lambda: self.process_info(info), info.is_user)
 		except queue.Full:
-			current_time = time.time()
+			current_time = time.monotonic()
 			logging_method = self.mcdr_server.logger.debug
 			kwargs = {'option': DebugOption.REACTOR}
 			if self.last_queue_full_warn_time is None or current_time - self.last_queue_full_warn_time >= core_constant.REACTOR_QUEUE_FULL_WARN_INTERVAL_SEC:

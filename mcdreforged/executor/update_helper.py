@@ -23,12 +23,12 @@ class UpdateHelper(ThreadExecutor):
 		self.__last_query_time = 0
 
 	def tick(self):
-		if time.time() - self.__last_query_time >= 60 * 60 * 24:
+		if time.monotonic() - self.__last_query_time >= 60 * 60 * 24:
 			self.check_update(lambda: self.mcdr_server.config['check_update'] is True, self.mcdr_server.logger.info)
 		time.sleep(1)
 
 	def check_update(self, condition_check: Callable[[], bool], reply_func: Callable[[Union[str or RTextBase]], Any]):
-		self.__last_query_time = time.time()
+		self.__last_query_time = time.monotonic()
 		misc_util.start_thread(self.__check_update, (condition_check, reply_func), 'CheckUpdate')
 
 	def tr(self, key: str, *args, **kwargs) -> RTextBase:

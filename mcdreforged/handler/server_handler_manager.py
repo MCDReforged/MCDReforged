@@ -25,7 +25,6 @@ class ServerHandlerManager:
 
 		# Automation for lazy
 		self.__detection_running = False
-		self.__detection_start_time = None
 		self.__detection_text_count = 0
 		self.__detection_success_count = collections.defaultdict(lambda: 0)
 
@@ -83,7 +82,6 @@ class ServerHandlerManager:
 			self.__detection_running = True
 			self.__detection_text_count = 0
 			self.__detection_success_count.clear()
-			self.__detection_start_time = time.time()
 			misc_util.start_thread(self.__detection_thread, (), 'HandlerDetector')
 
 	def is_detection_running(self) -> bool:
