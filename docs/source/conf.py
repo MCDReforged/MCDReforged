@@ -85,8 +85,6 @@ gettext_compact = False  # optional
 
 html_static_path = ['../static']
 
-html_context = {
-	'css_files': [
-		'_static/css/theme_overrides.css',  # override wide tables in RTD theme
-	]
-}
+html_css_files = [
+	'css/theme_overrides.css',  # override wide tables in RTD theme
+]
