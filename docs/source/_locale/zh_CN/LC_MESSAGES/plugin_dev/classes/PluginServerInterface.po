@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-30 22:34+0800\n"
+"POT-Creation-Date: 2021-09-28 23:55+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -159,7 +159,7 @@ msgstr "返回数据文件夹的路径。"
 
 #: ../plugin_dev/classes/PluginServerInterface.rst:93
 #: ../plugin_dev/classes/PluginServerInterface.rst:115
-#: ../plugin_dev/classes/PluginServerInterface.rst:151
+#: ../plugin_dev/classes/PluginServerInterface.rst:154
 msgid "Example:"
 msgstr "例子："
 
@@ -191,24 +191,26 @@ msgstr "如果插件并非是一个多文件插件（换句话来讲，是一个
 msgid "load_config_simple"
 msgstr "load_config_simple"
 
-#: ../plugin_dev/classes/PluginServerInterface.rst:133
+#: ../plugin_dev/classes/PluginServerInterface.rst:134
 msgid ""
 "A simple method to load a dict or Serializable type config from a json "
 "file"
 msgstr "一个简单的，从一个 json 文件中载入一个 dict 或 Serializable 类型的配置文件的方法。"
 
-#: ../plugin_dev/classes/PluginServerInterface.rst:135
+#: ../plugin_dev/classes/PluginServerInterface.rst:136
 msgid ""
 "Default config is supported. Missing key-values in the loaded config "
 "object will be filled using the default config"
 msgstr "支持默认配置文件。加载的配置中缺失的键-值对将会使用默认配置文件填充。"
 
-#: ../plugin_dev/classes/PluginServerInterface.rst:137
-#: ../plugin_dev/classes/PluginServerInterface.rst:191
-msgid "Parameter *file_name*: The name of the config file. It can also be a path to the config file"
+#: ../plugin_dev/classes/PluginServerInterface.rst:138
+#: ../plugin_dev/classes/PluginServerInterface.rst:197
+msgid ""
+"Parameter *file_name*: The name of the config file. It can also be a path"
+" to the config file"
 msgstr "参数 *file_name*：配置文件的文件名。它也可为配置文件的路径"
 
-#: ../plugin_dev/classes/PluginServerInterface.rst:139
+#: ../plugin_dev/classes/PluginServerInterface.rst:140
 msgid ""
 "Parameter *default_config*: A dict contains the default config. It's "
 "required when the config file is missing, or exception will be risen. If "
@@ -218,7 +220,7 @@ msgstr ""
 "参数 *default_config*：一个储存着默认配置的 dict。当配置文件缺失时，这个参数是必须的，否则将抛出异常。如果 "
 "target_class 被给出并且 default_config 缺失，则当配置文件缺失时 target_class 的默认值将会被使用。"
 
-#: ../plugin_dev/classes/PluginServerInterface.rst:141
+#: ../plugin_dev/classes/PluginServerInterface.rst:142
 msgid ""
 "Parameter *in_data_folder*: If True, the parent directory of file "
 "operating is the `data folder <#get-data-folder>`__ of the plugin"
@@ -226,19 +228,19 @@ msgstr ""
 "参数 *in_data_folder*：如果被设置为 True，则配置文件将在该插件的 `数据文件夹 <#get-data-folder>`__ "
 "中储存。"
 
-#: ../plugin_dev/classes/PluginServerInterface.rst:143
+#: ../plugin_dev/classes/PluginServerInterface.rst:144
 msgid ""
 "Parameter *echo_in_console*: If logging messages in console about config "
 "loading"
 msgstr "参数 *echo_in_console*：是否在控制台中打印配置文件加载相关日志。"
 
-#: ../plugin_dev/classes/PluginServerInterface.rst:145
+#: ../plugin_dev/classes/PluginServerInterface.rst:146
 msgid ""
 "Parameter *source_to_reply*: The `command source <CommandSource.html>`__ "
 "for replying logging messages"
 msgstr "参数 *source_to_reply*：用于回复加载配置相关日志的 `指令源 <CommandSource.html>`__。"
 
-#: ../plugin_dev/classes/PluginServerInterface.rst:147
+#: ../plugin_dev/classes/PluginServerInterface.rst:148
 msgid ""
 "Parameter *target_class*: A class derived from `Serializable "
 "<../api.html#serializable>`__. When specified the loaded config data will"
@@ -248,35 +250,43 @@ msgstr ""
 "参数 *target_class*：一个派生自 `Serializable <../api.html#serializable>`__ "
 "的类。当被指定时，加载的配置文件数据将会被反序列化为一个 target_class 的实例并令其作为方法的返回值。"
 
-#: ../plugin_dev/classes/PluginServerInterface.rst:149
+#: ../plugin_dev/classes/PluginServerInterface.rst:150
+msgid "Parameter *encoding*: The encoding method to read the config file"
+msgstr "参数 *encoding*：读取配置文件的编码方式。"
+
+#: ../plugin_dev/classes/PluginServerInterface.rst:152
 msgid "Returns a dict contains the loaded and processed config"
 msgstr "返回一个 dict，储存着加载并处理后的配置文件。"
 
-#: ../plugin_dev/classes/PluginServerInterface.rst:177
+#: ../plugin_dev/classes/PluginServerInterface.rst:180
 msgid ""
 "Assuming that the plugin id is ``my_plugin``, then the config file will "
 "be in ``config/my_plugin/my_config.json``"
 msgstr "假设插件 id 为 ``my_plugin``，则配置文件将被储存于 ``config/my_plugin/my_config.json`` 中"
 
-#: ../plugin_dev/classes/PluginServerInterface.rst:181
+#: ../plugin_dev/classes/PluginServerInterface.rst:184
 msgid "save_config_simple"
 msgstr "save_config_simple"
 
-#: ../plugin_dev/classes/PluginServerInterface.rst:187
+#: ../plugin_dev/classes/PluginServerInterface.rst:193
 msgid ""
 "A simple method to save your dict or Serializable type config as a json "
 "file"
 msgstr "一个简单的，将一个 dict 或者 Serializable 配置文件保存至 json 文件的方法。"
 
-#: ../plugin_dev/classes/PluginServerInterface.rst:189
+#: ../plugin_dev/classes/PluginServerInterface.rst:195
 msgid "Parameter *config*: The config instance to be saved"
 msgstr "参数 *config*：将要被保存的配置文件实例。"
 
-#: ../plugin_dev/classes/PluginServerInterface.rst:193
+#: ../plugin_dev/classes/PluginServerInterface.rst:199
 msgid ""
 "Parameter *in_data_folder*: If True, the parent directory of file "
 "operating is the data folder of the plugin"
 msgstr ""
 "参数 *in_data_folder*：如果被设置为 True，则配置文件将在该插件的 `数据文件夹 <#get-data-folder>`__ "
 "中储存。"
+
+#: ../plugin_dev/classes/PluginServerInterface.rst:201
+msgid "Parameter *encoding*: The encoding method to write the config file"
+msgstr "参数 *encoding*：写入配置文件的编码方式。"
 

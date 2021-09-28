@@ -679,7 +679,8 @@ class PluginServerInterface(ServerInterface):
 
 	def load_config_simple(
 			self, file_name: str = 'config.json', default_config: Optional = None, *,
-			in_data_folder: bool = True, echo_in_console: bool = True, source_to_reply: Optional[CommandSource] = None, target_class: Optional[Type[SerializableType]] = None
+			in_data_folder: bool = True, echo_in_console: bool = True, source_to_reply: Optional[CommandSource] = None,
+			target_class: Optional[Type[SerializableType]] = None, encoding: str = 'utf8'
 		) -> Union[dict, SerializableType]:
 		"""
 		A simple method to load a dict or Serializable type config from a json file
@@ -693,6 +694,7 @@ class PluginServerInterface(ServerInterface):
 		:param source_to_reply: The command source for replying logging messages
 		:param target_class: A class derived from Serializable. When specified the loaded config data will be deserialized
 		to a instance of target_class which will be returned as return value
+		:param encoding: The encoding method to read the config file
 		:return: A dict contains the loaded and processed config
 		"""
 		def log(msg):
@@ -705,11 +707,11 @@ class PluginServerInterface(ServerInterface):
 			misc_util.check_class(target_class, Serializable)
 			target_class: Serializable
 			if default_config is None:
-				default_config = target_class.deserialize({}).serialize()
+				default_config = target_class.get_default().serialize()
 		config_file_path = os.path.join(self.get_data_folder(), file_name) if in_data_folder else file_name
 		needs_save = False
 		try:
-			with open(config_file_path) as file_handler:
+			with open(config_file_path, encoding=encoding) as file_handler:
 				read_data: dict = json.load(file_handler)
 		except Exception as e:
 			if default_config is not None:  # use default config
@@ -747,12 +749,16 @@ class PluginServerInterface(ServerInterface):
 			self.save_config_simple(result_config, file_name=file_name, in_data_folder=in_data_folder)
 		return result_config
 
-	def save_config_simple(self, config: Union[dict, Serializable], file_name: str = 'config.json', *, in_data_folder: bool = True) -> None:
+	def save_config_simple(
+			self, config: Union[dict, Serializable], file_name: str = 'config.json', *,
+			in_data_folder: bool = True, encoding: str = 'utf8'
+	) -> None:
 		"""
 		A simple method to save your dict or Serializable type config as a json file
 		:param config: The config instance to be saved
 		:param file_name: The name of the config file. It can also be a path to the config file
 		:param in_data_folder: If True, the parent directory of file operating is the data folder of the plugin
+		:param encoding: The encoding method to write the config file
 		"""
 		config_file_path = os.path.join(self.get_data_folder(), file_name) if in_data_folder else file_name
 		if isinstance(config, Serializable):
@@ -762,6 +768,6 @@ class PluginServerInterface(ServerInterface):
 		target_folder = os.path.dirname(config_file_path)
 		if len(target_folder) > 0 and not os.path.isdir(target_folder):
 			os.makedirs(target_folder)
-		with open(config_file_path, 'w', encoding='utf8') as file:
+		with open(config_file_path, 'w', encoding=encoding) as file:
 			# config file should be nicely readable, so here come the indent and non-ascii chars
 			json.dump(data, file, indent=4, ensure_ascii=False)

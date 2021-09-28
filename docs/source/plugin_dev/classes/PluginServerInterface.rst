@@ -126,9 +126,10 @@ load_config_simple
 .. code-block:: python
     
     def load_config_simple(
-			self, file_name: str = 'config.json', default_config: Optional = None, *,
-			in_data_folder: bool = True, echo_in_console: bool = True, source_to_reply: Optional[CommandSource] = None, target_class: Optional[Type[SerializableType]] = None
-		) -> Union[dict, SerializableType]
+            self, file_name: str = 'config.json', default_config: Optional = None, *,
+            in_data_folder: bool = True, echo_in_console: bool = True, source_to_reply: Optional[CommandSource] = None,
+            target_class: Optional[Type[SerializableType]] = None, encoding: str = 'utf8'
+        ) -> Union[dict, SerializableType]
 
 A simple method to load a dict or Serializable type config from a json file
 
@@ -145,6 +146,8 @@ Parameter *echo_in_console*: If logging messages in console about config loading
 Parameter *source_to_reply*: The `command source <CommandSource.html>`__ for replying logging messages
 
 Parameter *target_class*: A class derived from `Serializable <../api.html#serializable>`__. When specified the loaded config data will be deserialized to a instance of target_class which will be returned as return value
+
+Parameter *encoding*: The encoding method to read the config file
 
 Returns a dict contains the loaded and processed config
 
@@ -182,7 +185,10 @@ save_config_simple
 
 .. code-block:: python
 
-    def save_config_simple(self, config: Union[dict, Serializable], file_name: str = 'config.json', *, in_data_folder: bool = True) -> None
+    def save_config_simple(
+            self, config: Union[dict, Serializable], file_name: str = 'config.json', *,
+            in_data_folder: bool = True, encoding: str = 'utf8'
+    ) -> None
 
 A simple method to save your dict or Serializable type config as a json file
 
@@ -191,4 +197,6 @@ Parameter *config*: The config instance to be saved
 Parameter *file_name*: The name of the config file. It can also be a path to the config file
 
 Parameter *in_data_folder*: If True, the parent directory of file operating is the data folder of the plugin
+
+Parameter *encoding*: The encoding method to write the config file
 
