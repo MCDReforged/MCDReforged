@@ -14,7 +14,7 @@ if TYPE_CHECKING:
 	from mcdreforged.preference.preference_manager import PreferenceItem
 
 
-class CommandSource:
+class CommandSource(ABC):
 	@property
 	def is_player(self) -> bool:
 		raise NotImplementedError()

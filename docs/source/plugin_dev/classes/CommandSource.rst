@@ -19,15 +19,6 @@ Plugins can declare a class inherited from ``CommandSource`` to create their own
 Property
 --------
 
-source_type
-^^^^^^^^^^^
-
-If the source is a player command source, its value is ``0``
-
-If the source is a console command source, its value is ``1``
-
-Type: int
-
 is_player
 ^^^^^^^^^
 
