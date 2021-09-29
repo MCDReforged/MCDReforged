@@ -134,3 +134,5 @@ name
     * ``MyCustomPlugin-v{version}`` -> ``MyCustomPlugin-v1.2.3``
     * ``{id}_{version}`` -> ``my_plugin_1.2.3``
 
+    If file extension is included in the name and the file extension is a valid `packed plugin <plugin_format.html#packed-plugin>`__ extension (``.mcdr`` or ``.pyz``), then the included file extension will be used. Otherwise the default ``.mcdr`` file extension will be appended to the end
+

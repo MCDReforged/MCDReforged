@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-10 02:25+0800\n"
+"POT-Creation-Date: 2021-09-30 17:06+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.9.0\n"
+"Generated-By: Babel 2.9.1\n"
 
 #: ../plugin_dev/plugin_format.rst:3
 msgid "Plugin Format"
@@ -50,7 +50,7 @@ msgstr "多文件插件（抽象）"
 msgid "Packed Plugin"
 msgstr "打包插件"
 
-#: ../plugin_dev/plugin_format.rst:15 ../plugin_dev/plugin_format.rst:83
+#: ../plugin_dev/plugin_format.rst:15 ../plugin_dev/plugin_format.rst:87
 msgid "Directory Plugin"
 msgstr "文件夹插件"
 
@@ -95,24 +95,29 @@ msgstr "多文件插件"
 
 #: ../plugin_dev/plugin_format.rst:34
 msgid ""
-"Multi file plugin is the collective name for the following two plugin format,"
-" `packed plugin <#packed-plugin>`__ and `directory plugin <#directory-"
-"plugin>`__"
-msgstr "多文件插件是下面两种插件格式，`打包插件 <#packed-plugin>`__ 和 `文件夹插件 <#directory-plugin>`__，的统称"
+"Multi file plugin is the collective name for the following two plugin "
+"format, `packed plugin <#packed-plugin>`__ and `directory plugin "
+"<#directory-plugin>`__"
+msgstr ""
+"多文件插件是下面两种插件格式，`打包插件 <#packed-plugin>`__ 和 `文件夹插件 <#directory-"
+"plugin>`__，的统称"
 
 #: ../plugin_dev/plugin_format.rst:36
 msgid ""
-"The biggest difference between multi file plugin and solo plugin is that, it "
-"can consist of multiple files, rather than being limited into 1 single "
-"``.py`` file. Therefore, more features are supported in a multi file plugin "
-"which make it easier to create a general plugin"
-msgstr "多文件插件与单文件插件最大的区别是，它可以包含多个文件，而不是受限于单个 ``.py`` 文件。因此，打包文件支持更多的特性，这可以让插件编写更为容易。"
+"The biggest difference between multi file plugin and solo plugin is that,"
+" it can consist of multiple files, rather than being limited into 1 "
+"single ``.py`` file. Therefore, more features are supported in a multi "
+"file plugin which make it easier to create a general plugin"
+msgstr ""
+"多文件插件与单文件插件最大的区别是，它可以包含多个文件，而不是受限于单个 ``.py`` "
+"文件。因此，打包文件支持更多的特性，这可以让插件编写更为容易。"
 
 #: ../plugin_dev/plugin_format.rst:41
 msgid ""
 "Packed plugin is a zip type compressed file with file extension name "
-"``.mcdr``. It's the recommended plugin format for distribution"
-msgstr "打包插件是一个文件名后缀是 ``.mcdr`` 的 zip 类型的压缩文件。它是分发插件时的推荐格式。"
+"``.mcdr`` or ``.pyz``. It's the recommended plugin format for "
+"distribution"
+msgstr "打包插件是一个文件名后缀是 ``.mcdr`` 或 ``.pyz`` 的 zip 类型的压缩文件。它是分发插件时的推荐格式。"
 
 #: ../plugin_dev/plugin_format.rst:43
 msgid "A minimum packed plugin consists of the following files at its zip root"
@@ -170,7 +175,26 @@ msgid ""
 "files:"
 msgstr "下面是包含着更多文件的打包插件的文件树的一个例子："
 
-#: ../plugin_dev/plugin_format.rst:85
+#: ../plugin_dev/plugin_format.rst:81
+msgid ""
+"In addition to ``.mcdr`` file extension, the python `zip app "
+"<https://docs.python.org/3/library/zipapp.html>`__ file extension "
+"``.pyz`` is also valid for a packed plugin."
+msgstr ""
+"除了 ``.mcdr`` 文件扩展名外，python `zip app <https://docs.python.org/zh-cn/3/library/zipapp.html>`__ "
+"扩展名 ``.pyz`` 也是打包插件的一个可用扩展名"
+
+#: ../plugin_dev/plugin_format.rst:83
+msgid ""
+"Although it's not as obvious to be a MCDR plugin as ``.mcdr``, but for "
+"those plugins who provide the functionality to run in command line "
+"outside MCDR environment, using `.pyz` extension can explicitly show that"
+" they support command line operation"
+msgstr ""
+"尽管 ``.pyz`` 并不像 ``.mcdr`` 那样，能让人轻易地从文件名看出这是一个 MCDR 插件，但是对于那些支持脱离 MCDR "
+"直接于控制台中运行的插件而言，使用 ``.pyz`` 扩展名能明确地表示“可于控制台中运行”这一性质"
+
+#: ../plugin_dev/plugin_format.rst:89
 msgid ""
 "Directory plugin has exactly the same file structure as `packed plugin "
 "<#packed-plugin>`__. The only difference is that all files of a directory"
@@ -179,17 +203,17 @@ msgstr ""
 "文件夹插件拥有着与 `打包插件 <#packed-plugin>`__ "
 "完全一致的文件结构。唯一的区别为，文件夹插件的文件位于一个文件夹中，而非一个 ``.mcdr`` 压缩文件中。"
 
-#: ../plugin_dev/plugin_format.rst:87
+#: ../plugin_dev/plugin_format.rst:91
 msgid ""
 "Directory plugin is mostly used for debug purpose inside the plugin "
 "directory of MCDR"
 msgstr "文件夹插件主要用于在 MCDR 的插件文件夹中的插件调试"
 
-#: ../plugin_dev/plugin_format.rst:89
+#: ../plugin_dev/plugin_format.rst:93
 msgid "Here's an example file tree of a directory plugin:"
 msgstr "下面是文件夹插件的文件树的一个例子："
 
-#: ../plugin_dev/plugin_format.rst:100
+#: ../plugin_dev/plugin_format.rst:104
 msgid ""
 "Directory plugin will always be treated as \"modified\" during ``!!MCDR "
 "reload plugin`` `hot reload <../command.html#hot-reloads>`__ command"

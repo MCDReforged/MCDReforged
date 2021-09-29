@@ -38,7 +38,7 @@ The biggest difference between multi file plugin and solo plugin is that, it can
 Packed Plugin
 -------------
 
-Packed plugin is a zip type compressed file with file extension name ``.mcdr``. It's the recommended plugin format for distribution
+Packed plugin is a zip type compressed file with file extension name ``.mcdr`` or ``.pyz``. It's the recommended plugin format for distribution
 
 A minimum packed plugin consists of the following files at its zip root
 
@@ -77,6 +77,10 @@ Here's an example file tree of a valid packed plugin with more possible files:
            zh_cn.json
        mcdreforged.plugin.json
        requirements.txt
+
+In addition to ``.mcdr`` file extension, the python `zip app <https://docs.python.org/3/library/zipapp.html>`__ file extension ``.pyz`` is also valid for a packed plugin.
+
+Although it's not as obvious to be a MCDR plugin as ``.mcdr``, but for those plugins who provide the functionality to run in command line outside MCDR environment, using `.pyz` extension can explicitly show that they support command line operation
 
 
 Directory Plugin

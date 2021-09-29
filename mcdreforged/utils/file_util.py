@@ -22,3 +22,11 @@ def list_file_with_suffix(directory: str, suffix: str):
 def touch_directory(directory_path: str):
 	if not os.path.isdir(directory_path):
 		os.makedirs(directory_path)
+
+
+def get_file_suffix(file_path: str):
+	file_name = os.path.basename(file_path)
+	index = file_name.rfind('.')
+	if index == -1:
+		return ''
+	return file_name[index:]

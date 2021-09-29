@@ -6,6 +6,7 @@ from typing import Optional
 from zipfile import ZipFile, ZIP_DEFLATED
 
 from mcdreforged.plugin.meta.metadata import Metadata
+from mcdreforged.utils import file_util
 
 try:
 	from mcdreforged.constants import core_constant, plugin_constant
@@ -39,7 +40,7 @@ def entry_point():
 	subparsers.add_parser('init', help='Prepare the working environment of {}. Create commonly used folders and generate default configure and permission files'.format(core_constant.NAME))
 	subparsers.add_parser('gendefault', help='Generate default configure and permission files at current working directory. Existed files will be overwritten')
 
-	parser_pack = subparsers.add_parser('pack', help='Pack plugin files into a {} plugin'.format(plugin_constant.PACKED_PLUGIN_FILE_SUFFIX))
+	parser_pack = subparsers.add_parser('pack', help='Pack plugin files into a packed plugin')
 	parser_pack.add_argument('-i', '--input', help='The input directory which the plugin is in, default: current directory', default='.')
 	parser_pack.add_argument('-o', '--output', help='The output directory to store the zipped plugin, default: current directory', default='.')
 	parser_pack.add_argument('-n', '--name', help='A specific name to the output zipped plugin file. If not given the metadata specific name or a default one will be used', default=None)
@@ -114,7 +115,10 @@ def make_packed_plugin(input_dir: str, output_dir: str, file_name: Optional[str]
 		file_name = meta.archive_name
 	if file_name is None:
 		file_name = '{}-v{}'.format(meta.name.replace(' ', '') or meta.id, meta.version)
-	file_name = file_name.format(id=meta.id, version=meta.version) + plugin_constant.PACKED_PLUGIN_FILE_SUFFIX
+
+	file_name = file_name.format(id=meta.id, version=meta.version)
+	if file_util.get_file_suffix(file_name) not in plugin_constant.PACKED_PLUGIN_FILE_SUFFIXES:
+		file_name += plugin_constant.PACKED_PLUGIN_FILE_SUFFIXES[0]
 
 	def write(base_path: str, *, directory_only: bool):
 		if os.path.isdir(base_path):

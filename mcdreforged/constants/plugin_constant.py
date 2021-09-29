@@ -9,7 +9,7 @@ PLUGIN_CONFIG_DIRECTORY = 'config'
 SOLO_PLUGIN_FILE_SUFFIX = '.py'
 
 # The file prefix for a packed plugin (a zipped file)
-PACKED_PLUGIN_FILE_SUFFIX = '.mcdr'
+PACKED_PLUGIN_FILE_SUFFIXES = ('.mcdr', '.pyz')
 
 # The name of the meta file inside a packed plugin
 PLUGIN_META_FILE = 'mcdreforged.plugin.json'
