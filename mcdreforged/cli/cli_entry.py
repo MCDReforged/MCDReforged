@@ -119,11 +119,14 @@ def make_packed_plugin(input_dir: str, output_dir: str, file_name: Optional[str]
 	file_name = file_name.format(id=meta.id, version=meta.version)
 	if file_util.get_file_suffix(file_name) not in plugin_constant.PACKED_PLUGIN_FILE_SUFFIXES:
 		file_name += plugin_constant.PACKED_PLUGIN_FILE_SUFFIXES[0]
+	file_counter = 0
 
 	def write(base_path: str, *, directory_only: bool):
+		nonlocal file_counter
 		if os.path.isdir(base_path):
 			dir_arc = os.path.basename(base_path)
 			zip_file.write(base_path, arcname=dir_arc)
+			file_counter += 1
 			writeln('Creating directory: {} -> {}'.format(base_path, dir_arc))
 			for dir_path, dir_names, file_names in os.walk(base_path):
 				if os.path.basename(dir_path) == '__pycache__':
@@ -134,10 +137,12 @@ def make_packed_plugin(input_dir: str, output_dir: str, file_name: Optional[str]
 						continue
 					arc_name = os.path.join(os.path.basename(base_path), full_path.replace(base_path, '', 1).lstrip(os.sep))
 					zip_file.write(full_path, arcname=arc_name)
+					file_counter += 1
 					writeln('  Writing: {} -> {}'.format(full_path, arc_name))
 		elif os.path.isfile(base_path) and not directory_only:
 			arc_name = os.path.basename(base_path)
 			zip_file.write(base_path, arcname=arc_name)
+			file_counter += 1
 			writeln('Writing single file: {} -> {}'.format(base_path, arc_name))
 		else:
 			writeln('[WARN] {} not found! ignored'.format(base_path))
@@ -150,4 +155,5 @@ def make_packed_plugin(input_dir: str, output_dir: str, file_name: Optional[str]
 		for resource_path in meta.resources:  # resources
 			write(os.path.join(input_dir, resource_path), directory_only=False)
 
+	writeln('Packed {} files/folders into "{}"'.format(file_counter, file_name))
 	writeln('Done')
