@@ -40,6 +40,7 @@ class MyTestCase(unittest.TestCase):
 		self.assertEqual(None, self.handler.parse_server_stdout('[09:00:00] [Server thread/INFO]: <Prefix Steve> Hello').player)
 		self.assertEqual(None, self.handler.parse_server_stdout('[09:00:00] [Server thread/INFO]: <[Prefix]Steve> Hello').player)
 
+		# test color codes
 		self.assertEqual('Alex', self.handler.parse_server_stdout('[09:00:00] [Server thread/INFO]: <§eAlex§r> color').player)
 
 	def test_2_player_events(self):
