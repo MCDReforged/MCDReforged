@@ -11,12 +11,13 @@ from mcdreforged.utils import string_util
 '''
 AbstractServerHandler
  ├─ BasicHandler
- ├─ VanillaHandler
- │   ├─ BukkitHandler
- │   │   ├─ Bukkit14Handler
- │   │   └─ CatServerHandler
- │   ├─ ForgeHandler
- │   └─ Beta18Handler
+ ├─ AbstractMinecraftHandler
+ │   ├─ VanillaHandler
+ │   │   ├─ ForgeHandler
+ │   │   └─ Beta18Handler
+ │   └─ BukkitHandler
+ │       ├─ Bukkit14Handler
+ │       └─ CatServerHandler
  └─ BungeecordHandler
      └─ WaterfallHandler
 '''
