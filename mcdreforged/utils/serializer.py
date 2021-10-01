@@ -8,7 +8,10 @@ T = TypeVar('T')
 
 
 def _get_type_hints(cls: Type):
-	return get_type_hints(cls)
+	try:
+		return get_type_hints(cls)
+	except:
+		return get_type_hints(cls, globalns={})
 
 
 def _get_origin(cls: Type):
