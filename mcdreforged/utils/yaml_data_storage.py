@@ -2,7 +2,7 @@ import os
 from logging import Logger
 from threading import RLock
 
-from ruamel import yaml
+from ruamel.yaml import YAML
 from ruamel.yaml.comments import CommentedMap
 
 from mcdreforged.utils import resources_util
@@ -41,7 +41,7 @@ class YamlDataStorage:
 		"""
 		if self.file_presents():
 			with open(self.__file_path, encoding='utf8') as file:
-				users_data = yaml.round_trip_load(file)
+				users_data = YAML().load(file)
 		else:
 			if not allowed_missing_file:
 				raise FileNotFoundError()
@@ -85,7 +85,7 @@ class YamlDataStorage:
 		with self._data_operation_lock:
 			self._pre_save(data)
 			with open(self.__file_path, 'w', encoding='utf8') as file:
-				yaml.round_trip_dump(data, file, width=4096)  # specifying width=4096 to prevent yaml breaks long string into multiple lines
+				YAML().dump(data, file)
 
 	def save(self):
 		self.__save(self._data)

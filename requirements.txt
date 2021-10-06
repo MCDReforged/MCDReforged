@@ -1,7 +1,7 @@
-ruamel.yaml>=0.16.12
-requests>=2.25.1
-colorlog>=4.6.2
+ruamel.yaml~=0.17.16
+requests~=2.26.0
+colorlog>=6.4
 colorama>=0.4.4
 psutil>=5.8.0
 parse>=1.18.0
-prompt-toolkit>=3.0.19
+prompt-toolkit<=3.0.19
