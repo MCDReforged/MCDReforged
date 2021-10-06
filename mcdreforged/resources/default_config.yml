@@ -36,7 +36,11 @@ handler: vanilla_handler
 # The encoding / decoding format used to encode / decode message to the server.
 # Examples: "utf8", "gbk"
 # Leave it blank for MCDR to auto detect system encoding
+
+# MCDR -> Server
 encoding:
+
+# Server -> MCDR
 decoding:
 
 
