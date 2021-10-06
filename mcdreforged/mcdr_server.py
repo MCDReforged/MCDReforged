@@ -5,9 +5,10 @@ import time
 import traceback
 from subprocess import Popen, PIPE, STDOUT
 from threading import Lock
-from typing import Optional
+from typing import Optional, Callable, Any
 
 import psutil
+from ruamel.yaml import YAMLError
 
 from mcdreforged.command.command_manager import CommandManager
 from mcdreforged.config import Config
@@ -90,18 +91,30 @@ class MCDReforgedServer:
 		# Check if there's any file missing
 		# If there's any, MCDR environment might not be probably setup
 		file_missing = False
-		try:
-			# loads config, language, handlers
-			# config change will lead to creating plugin folders
-			self.load_config(allowed_missing_file=False, echo=not initialize_environment)
-		except FileNotFoundError:
-			self.logger.error('Configure is missing')
-			file_missing = True
-		try:
-			self.permission_manager.load_permission_file(allowed_missing_file=False)
-		except FileNotFoundError:
-			self.logger.error('Permission file is missing')
-			file_missing = True
+
+		def load(kind: str, func: Callable[[], Any]) -> bool:
+			nonlocal file_missing
+			try:
+				func()
+			except FileNotFoundError:
+				self.logger.error('{} is missing'.format(kind.title()))
+				file_missing = True
+			except YAMLError as e:
+				self.logger.error('Failed to load {}: {}'.format(kind, type(e).__name__))
+				for line in str(e).splitlines():
+					self.logger.error(line)
+				return False
+			else:
+				return True
+
+		# load_config: config, language, handlers, plugin directories, reactors, handlers
+		# load_permission_file: permission
+		# config change will lead to creating plugin folders
+		loading_success = \
+			load('configure', lambda: self.load_config(allowed_missing_file=False, echo=not initialize_environment)) and \
+			load('permission', lambda: self.permission_manager.load_permission_file(allowed_missing_file=False))
+		if not loading_success:
+			return
 		if file_missing:
 			self.on_file_missing()
 			return

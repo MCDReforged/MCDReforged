@@ -35,7 +35,7 @@ class YamlDataStorage:
 	def _load_data(self, allowed_missing_file) -> bool:
 		"""
 		:param bool allowed_missing_file: If set to True, missing data file will result in a FileNotFoundError(),
-		otherwise it will treat it as an empty config gile
+		otherwise it will treat it as an empty config file
 		:return: if there is any missing data entry
 		:raise: FileNotFoundError
 		"""
