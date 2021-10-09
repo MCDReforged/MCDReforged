@@ -4,4 +4,4 @@ colorlog>=6.4
 colorama>=0.4.4
 psutil>=5.8.0
 parse>=1.18.0
-prompt-toolkit<=3.0.19
+prompt-toolkit~=3.0.19
