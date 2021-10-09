@@ -49,7 +49,6 @@ def new_thread(thread_name: Optional[str or Callable] = None):
 		@functools.wraps(func)  # to preserve the origin function information
 		def wrap(*args, **kwargs):
 			thread = FunctionThread(target=func, args=args, kwargs=kwargs, name=thread_name)
-			thread.setDaemon(True)
 			thread.start()
 			return thread
 		# bring the signature of the func to the wrap function
