@@ -113,10 +113,10 @@ class MCDReforgedServer:
 		loading_success = \
 			load('configure', lambda: self.load_config(allowed_missing_file=False, echo=not initialize_environment)) and \
 			load('permission', lambda: self.permission_manager.load_permission_file(allowed_missing_file=False))
-		if not loading_success:
-			return
 		if file_missing:
 			self.on_file_missing()
+			return
+		if not loading_success:
 			return
 
 		# MCDR environment has been setup, so continue creating default folders and loading stuffs
