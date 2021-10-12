@@ -1,4 +1,4 @@
-**English** | [中文](https://github.com/Fallen-Breath/MCDReforged/blob/master/README_cn.md)
+**English** | [中文](README_cn.md)
 
 <p align="center">
     <img src="logo.png" alt="MCDR logo" width="200" height="200">
