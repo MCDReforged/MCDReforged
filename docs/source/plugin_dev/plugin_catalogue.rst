@@ -202,7 +202,7 @@ Plugin catalogue will automatically detect the releases in your plugin repositor
     * - ``<plugin_id>-v<version>``
       - my_plugin-v1.2.3
 
-* Assets: contains 1 asset with ``.mcdr`` file extension name. Other assets will be ignored
+* Assets: contains 1 asset with ``.mcdr`` or ``.pyz`` file extension name. Other assets will be ignored
 
   Which also means only `Packed Plugin <plugin_format.html#packed-plugin>`__ is supported
 

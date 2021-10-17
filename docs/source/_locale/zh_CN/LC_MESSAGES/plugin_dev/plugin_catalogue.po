@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-19 20:41+0800\n"
+"POT-Creation-Date: 2021-10-17 13:03+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,12 +18,12 @@ msgstr "插件仓库"
 
 #: ../plugin_dev/plugin_catalogue.rst:4
 msgid ""
-"The official MCDR plugin catalogue is the ``master`` branch of repository "
-"https://github.com/MCDReforged/PluginCatalogue. Users can browse plugins "
-"here and developers can submit their plugins to the catalogue"
+"The official MCDR plugin catalogue is the ``master`` branch of repository"
+" https://github.com/MCDReforged/PluginCatalogue. Users can browse plugins"
+" here and developers can submit their plugins to the catalogue"
 msgstr ""
-"MCDR 的官方插件仓库位于 https://github.com/MCDReforged/PluginCatalogue 的 ``master`` "
-"分支。用户可以在此处阅览插件，开发者也可以将他们的插件提交至该仓库。"
+"MCDR 的官方插件仓库位于 https://github.com/MCDReforged/PluginCatalogue 的 "
+"``master`` 分支。用户可以在此处阅览插件，开发者也可以将他们的插件提交至该仓库。"
 
 #: ../plugin_dev/plugin_catalogue.rst:6
 msgid ""
@@ -365,9 +365,9 @@ msgstr "my_plugin-v1.2.3"
 
 #: ../plugin_dev/plugin_catalogue.rst:205
 msgid ""
-"Assets: contains 1 asset with ``.mcdr`` file extension name. Other assets"
-" will be ignored"
-msgstr "附件：包含一个以 ``.mcdr`` 为扩展名的文件附件。其他附件将会被忽略。"
+"Assets: contains 1 asset with ``.mcdr`` or ``.pyz`` file extension name. "
+"Other assets will be ignored"
+msgstr "附件：包含一个以 ``.mcdr`` 或 ``.pyz`` 为扩展名的文件附件。其他附件将会被忽略。"
 
 #: ../plugin_dev/plugin_catalogue.rst:207
 msgid ""
