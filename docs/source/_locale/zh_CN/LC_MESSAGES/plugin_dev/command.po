@@ -451,10 +451,10 @@ msgstr "`字面量 <#literal>`__ 节点不支持这个方法"
 #: ../plugin_dev/command.rst:249
 msgid ""
 "Parameter *suggestion*: A callable function which accepts maximum 2 "
-"parameters (command source and context) and return a collection of str "
+"parameters (command source and context) and return an iterable of str "
 "indicating the current command suggestions"
 msgstr ""
-"参数 *suggestion*：一个最多接受 2 个参数并返回一个 str 容器的可调用对象。参数列表：``CommandSource`` , "
+"参数 *suggestion*：一个最多接受 2 个参数并返回一个 Iterable[str] 的可调用对象。参数列表：``CommandSource`` , "
 "``dict`` （上下文）"
 
 #: ../plugin_dev/command.rst:262

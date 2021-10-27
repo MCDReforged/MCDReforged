@@ -3,7 +3,7 @@ import inspect
 from abc import ABC
 from contextlib import contextmanager
 from types import MethodType
-from typing import List, Callable, Iterable, Set, Dict, Type, Any, Union, Optional, Collection, NamedTuple
+from typing import List, Callable, Iterable, Set, Dict, Type, Any, Union, Optional, NamedTuple
 
 from mcdreforged.command.builder import command_builder_util as utils
 from mcdreforged.command.builder.exception import LiteralNotMatch, UnknownCommand, UnknownArgument, CommandSyntaxError, \
@@ -12,17 +12,17 @@ from mcdreforged.command.builder.exception import LiteralNotMatch, UnknownComman
 from mcdreforged.command.command_source import CommandSource
 from mcdreforged.utils.types import MessageText
 
-SOURCE_CONTEXT_CALLBACK = Union[Callable[[], Any], Callable[[CommandSource], Any], Callable[[CommandSource, dict], Any]]
-SOURCE_CONTEXT_CALLBACK_BOOL = Union[Callable[[], bool], Callable[[CommandSource], bool], Callable[[CommandSource, dict], bool]]
-SOURCE_CONTEXT_CALLBACK_MSG = Union[Callable[[], MessageText], Callable[[CommandSource], MessageText], Callable[[CommandSource, dict], MessageText]]
-SOURCE_CONTEXT_CALLBACK_STR_COLLECTION = Union[Callable[[], Collection[str]], Callable[[CommandSource], Collection[str]], Callable[[CommandSource, dict], Collection[str]]]
-SOURCE_ERROR_CONTEXT_CALLBACK = Union[Callable[[], Any], Callable[[CommandSource], Any], Callable[[CommandSource, CommandError], Any], Callable[[CommandSource, CommandError, dict], Any]]
+__SOURCE_CONTEXT_CALLBACK = Union[Callable[[], Any], Callable[[CommandSource], Any], Callable[[CommandSource, dict], Any]]
+__SOURCE_CONTEXT_CALLBACK_BOOL = Union[Callable[[], bool], Callable[[CommandSource], bool], Callable[[CommandSource, dict], bool]]
+__SOURCE_CONTEXT_CALLBACK_MSG = Union[Callable[[], MessageText], Callable[[CommandSource], MessageText], Callable[[CommandSource, dict], MessageText]]
+__SOURCE_CONTEXT_CALLBACK_STR_ITERABLE = Union[Callable[[], Iterable[str]], Callable[[CommandSource], Iterable[str]], Callable[[CommandSource, dict], Iterable[str]]]
+__SOURCE_ERROR_CONTEXT_CALLBACK = Union[Callable[[], Any], Callable[[CommandSource], Any], Callable[[CommandSource, CommandError], Any], Callable[[CommandSource, CommandError, dict], Any]]
 
-RUNS_CALLBACK = SOURCE_CONTEXT_CALLBACK
-ERROR_HANDLER_CALLBACK = SOURCE_ERROR_CONTEXT_CALLBACK
-FAIL_MSG_CALLBACK = SOURCE_CONTEXT_CALLBACK_MSG
-SUGGESTS_CALLBACK = SOURCE_CONTEXT_CALLBACK_STR_COLLECTION
-REQUIRES_CALLBACK = SOURCE_CONTEXT_CALLBACK_BOOL
+RUNS_CALLBACK = __SOURCE_CONTEXT_CALLBACK
+ERROR_HANDLER_CALLBACK = __SOURCE_ERROR_CONTEXT_CALLBACK
+FAIL_MSG_CALLBACK = __SOURCE_CONTEXT_CALLBACK_MSG
+SUGGESTS_CALLBACK = __SOURCE_CONTEXT_CALLBACK_STR_ITERABLE
+REQUIRES_CALLBACK = __SOURCE_CONTEXT_CALLBACK_BOOL
 
 
 class ParseResult:
@@ -213,7 +213,7 @@ class AbstractNode:
 		"""
 		Set the provider for command suggestions of this node
 		:param suggestion: A callable function which accepts maximum 2 parameters (command source and context)
-		and return a collection of str indicating the current command suggestions
+		and return an iterable of str indicating the current command suggestions
 		:rtype: AbstractNode
 		"""
 		self._suggestion_getter = suggestion
@@ -286,7 +286,7 @@ class AbstractNode:
 		self.__handle_error(error, context, self._error_handlers)
 		raise error
 
-	def _get_suggestions(self, context: CommandContext) -> List[str]:
+	def _get_suggestions(self, context: CommandContext) -> Iterable[str]:
 		return self.__smart_callback(self._suggestion_getter, context.source, context)
 
 	def _execute_command(self, context: CommandContext) -> None:
