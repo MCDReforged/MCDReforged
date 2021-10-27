@@ -46,5 +46,12 @@ class StatusCommand(SubCommand):
 			self.tr('mcdr_command.print_mcdr_status.extra_line2', self.mcdr_server.task_executor.task_queue.qsize(), core_constant.MAX_TASK_QUEUE_SIZE),
 			self.tr('mcdr_command.print_mcdr_status.extra_line3', threading.active_count())
 		]))
+		thread_pool_counts = 0
 		for thread in threading.enumerate():
-			source.reply('  §r-§r {}'.format(thread.getName()))
+			name = thread.getName()
+			if not name.startswith('ThreadPoolExecutor-'):
+				source.reply('  §7-§r {}'.format(name))
+			else:
+				thread_pool_counts += 1
+		if thread_pool_counts > 0:
+			source.reply('  §7-§r ThreadPoolExecutor thread x{}'.format(thread_pool_counts))
