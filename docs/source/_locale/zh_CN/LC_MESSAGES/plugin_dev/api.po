@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-25 23:24+0800\n"
+"POT-Creation-Date: 2021-11-02 18:27+0800\n"
 "PO-Revision-Date: 2021-01-24 09:02+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -23,7 +23,7 @@ msgid ""
 "When your plugin needs to import something from MCDR, rather than "
 "directly import the package you want, you can import the packages in "
 "``mcdreforged.api``"
-msgstr "当你的插件需要从 MCDR 导入，而不是直接导入所需的包时，你可以在 ``mcdreforged.api`` 中导入这些包。"
+msgstr "当你需要从 MCDR 中导入些东西时，除了直接从 MCDR 的内部实现中导入外，你还可以从 ``mcdreforged.api`` 中进行导入。"
 
 #: ../plugin_dev/api.rst:7
 msgid ""
@@ -33,8 +33,8 @@ msgid ""
 " If MCDR refactors the target class and moves its location in the future,"
 " only importing from the api package can keep your plugin unaffected"
 msgstr ""
-"``mcdreforged.api`` 是供插件开发者导入的包。通过仅从 API 包导入，插件中目标类的导入可以与目标类的实际位置脱钩。若以后 "
-"MCDR 重构了目标类，移动了目标类的位置，只从 API 包导入可以保证你的插件不受影响。"
+"``mcdreforged.api`` 是供插件开发者导入的包。如果你仅从 api 包进行导入目标类，就可以保证插件导入目标类的导入路径与目标类的实际路径解耦。如果以后 "
+"MCDR 重构了目标类，亦或是移动了目标类的位置，那么仅从 api 包中导入目标类的插件就能丝毫不受影响。"
 
 #: ../plugin_dev/api.rst:10
 msgid "all"
@@ -110,7 +110,7 @@ msgid "It's also a simple compatible upgrade method for old MCDR 0.x plugins"
 msgstr "这也是传统 MCDR 0.x 插件的简单的兼容升级方法。"
 
 #: ../plugin_dev/api.rst:51 ../plugin_dev/api.rst:118 ../plugin_dev/api.rst:373
-#: ../plugin_dev/api.rst:389 ../plugin_dev/api.rst:503
+#: ../plugin_dev/api.rst:389 ../plugin_dev/api.rst:489
 msgid "Example:"
 msgstr "例如："
 
@@ -698,27 +698,15 @@ msgid ""
 "has no child element"
 msgstr "返回一个布尔值，指示 ``RTextList`` 是否为空——换句话说——有没有子元素。"
 
-#: ../plugin_dev/api.rst:459
-msgid "types"
-msgstr "types"
-
-#: ../plugin_dev/api.rst:461
-msgid ""
-"Who doesn't want a complete type checking to help you reduce silly "
-"mistakes etc. when coding your plugin? If you want to add type hints to "
-"the server interface or command source parameter, here's the package for "
-"you to import those Usually-used classes"
-msgstr "谁不希望在编写插件时，有一个检查器来帮助你减少愚蠢的错误呢？如果你想指定类型以让 IDE 知道你在写什么，这里有一个包可以让你导入一些常用的类。"
-
-#: ../plugin_dev/api.rst:473 ../plugin_dev/api.rst:480
+#: ../plugin_dev/api.rst:459 ../plugin_dev/api.rst:466
 msgid "RTextMCDRTranslation"
 msgstr "RTextMCDRTranslation"
 
-#: ../plugin_dev/api.rst:475
+#: ../plugin_dev/api.rst:461
 msgid "The translation text component used in MCDR"
 msgstr "MCDR 翻译文本组件类"
 
-#: ../plugin_dev/api.rst:477
+#: ../plugin_dev/api.rst:463
 msgid ""
 "When MCDR is running, it will use the `tr "
 "<classes/ServerInterface.html#tr>`__ method in ``ServerInterface`` class "
@@ -728,58 +716,72 @@ msgstr ""
 "当 MCDR 正在运行时，它将使用 ``ServerInterface`` 类中的 `tr "
 "<classes/ServerInterface.html#tr>`__ 方法作为翻译的方法，并使用 MCDR 的语言作为默认语言。"
 
-#: ../plugin_dev/api.rst:486
+#: ../plugin_dev/api.rst:472
 msgid ""
 "Create a ``RTextMCDRTranslation`` component with necessary parameters for"
 " translation"
 msgstr "使用与翻译相关的必要参数创建一个 ``RTextMCDRTranslation`` 组件。"
 
-#: ../plugin_dev/api.rst:489
+#: ../plugin_dev/api.rst:475
 msgid "language_context"
 msgstr "language_context"
 
-#: ../plugin_dev/api.rst:497
+#: ../plugin_dev/api.rst:483
 msgid ""
 "Create a context where all ``RTextMCDRTranslation`` will use the given "
 "language to translate within this context"
 msgstr "创建一个上下文，在其中所有的 ``RTextMCDRTranslation`` 将会使用给定的语言来进行翻译。"
 
-#: ../plugin_dev/api.rst:499
+#: ../plugin_dev/api.rst:485
 msgid ""
 "It's mostly used when you want a translated str or Minecraft json text "
 "object corresponding to this component under a specific language"
 msgstr "它主要在你想要在特定语言下，获得该文本组件对应的翻译后的字符串或翻译后的 Minecraft json 文本时使用。"
 
-#: ../plugin_dev/api.rst:501
+#: ../plugin_dev/api.rst:487
 msgid ""
 "MCDR will automatically apply this context with `user's preferred "
 "language <../preference.html#language>`__ right before sending messages "
 "to a player or the console"
-msgstr "MCDR 将自动地于发送信息至玩家或控制台前，使用 `用户的偏好语言 <../preference.html#language>`__ 应用该上下文管理器。"
+msgstr ""
+"MCDR 将自动地于发送信息至玩家或控制台前，使用 `用户的偏好语言 <../preference.html#language>`__ "
+"应用该上下文管理器。"
 
-#: ../plugin_dev/api.rst:516
+#: ../plugin_dev/api.rst:503
+msgid "types"
+msgstr "types"
+
+#: ../plugin_dev/api.rst:505
+msgid ""
+"Who doesn't want a complete type checking to help you reduce silly "
+"mistakes etc. when coding your plugin? If you want to add type hints to "
+"the server interface or command source parameter, here's the package for "
+"you to import those Usually-used classes"
+msgstr "谁不希望在编写插件时，有一个检查器来帮助你减少愚蠢的错误呢？如果你想指定类型以让 IDE 知道你在写什么，这里有一个包可以让你导入一些常用的类。"
+
+#: ../plugin_dev/api.rst:517
 msgid "utils"
 msgstr "utils"
 
-#: ../plugin_dev/api.rst:518
+#: ../plugin_dev/api.rst:519
 msgid "Some useful kits"
 msgstr "一些使用工具集"
 
-#: ../plugin_dev/api.rst:521
+#: ../plugin_dev/api.rst:522
 msgid "Serializable"
 msgstr "Serializable"
 
-#: ../plugin_dev/api.rst:523
+#: ../plugin_dev/api.rst:524
 msgid "A abstract class for easy serializing / deserializing"
 msgstr "一个用于便捷序列化/反序列化的抽象类。"
 
-#: ../plugin_dev/api.rst:525
+#: ../plugin_dev/api.rst:526
 msgid ""
 "Inherit it and declare the fields of your class with type annotations, "
 "that's all you need to do"
 msgstr "继承它，并在你的子类中使用类型注解声明属性，你所需要做的就这么多。"
 
-#: ../plugin_dev/api.rst:539
+#: ../plugin_dev/api.rst:540
 msgid ""
 "You can also declare default value when declaring type annotations, then "
 "during deserializing, if the value is missing, a `copy "
@@ -789,11 +791,11 @@ msgstr ""
 "你也可以在声明类型注解时声明属性的默认值，这样在反序列化的过程中，如果值缺失，则默认值的 `拷贝 <https://docs.python.org"
 "/zh-cn/3/library/copy.html#copy.copy>`__ 将会被赋值"
 
-#: ../plugin_dev/api.rst:552
+#: ../plugin_dev/api.rst:553
 msgid "Enum class will be serialized into its member name"
 msgstr "类 Enum 会被序列化为它的枚举成员名称"
 
-#: ../plugin_dev/api.rst:572
+#: ../plugin_dev/api.rst:573
 msgid "Serializable class nesting is also supported"
 msgstr "类 Serializable 的嵌套也是支持的"
 

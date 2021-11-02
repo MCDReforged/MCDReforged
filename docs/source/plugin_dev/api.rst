@@ -455,20 +455,6 @@ is_empty
 
 Return a bool indicating if the ``RTextList`` is empty. In other words, has no child element
 
-types
------
-
-Who doesn't want a complete type checking to help you reduce silly mistakes etc. when coding your plugin? If you want to add type hints to the server interface or command source parameter, here's the package for you to import those Usually-used classes
-
-.. code-block:: python
-
-    from mcdreforged.api.types import ServerInterface, Info
-
-    def on_info(server: PluginServerInterface, info: Info):
-        # Now auto completion for server and info parameters should be available for IDE
-        pass
-
-
 RTextMCDRTranslation
 ^^^^^^^^^^^^^^^^^^^^
 
@@ -511,6 +497,21 @@ Example:
             server.logger.info('Lines of my translation')
             for line in text_as_str.splitlines():
                 server.logger.info('- {}'.format(line))
+
+
+types
+-----
+
+Who doesn't want a complete type checking to help you reduce silly mistakes etc. when coding your plugin? If you want to add type hints to the server interface or command source parameter, here's the package for you to import those Usually-used classes
+
+.. code-block:: python
+
+    from mcdreforged.api.types import ServerInterface, Info
+
+    def on_info(server: PluginServerInterface, info: Info):
+        # Now auto completion for server and info parameters should be available for IDE
+        pass
+
 
 utils
 -----
