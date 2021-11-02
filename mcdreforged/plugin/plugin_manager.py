@@ -250,7 +250,7 @@ class PluginManager:
 			if os.path.isdir(plugin_directory):
 				for file in os.listdir(plugin_directory):
 					file_path = os.path.join(plugin_directory, file)
-					if plugin_factory.maybe_plugin(file_path):
+					if plugin_factory.is_plugin(file_path):
 						if not self.contains_plugin_file(file_path) and filter(file_path):
 							plugin = self.__load_plugin(file_path)
 							if plugin is None:
@@ -422,7 +422,7 @@ class PluginManager:
 		with self.__mani_lock:
 			self.logger.info(self.mcdr_server.tr('plugin_manager.enable_plugin.entered', file_path))
 			new_file_path = string_util.remove_suffix(file_path, plugin_constant.DISABLED_PLUGIN_FILE_SUFFIX)
-			if plugin_factory.maybe_plugin(file_path, allow_disabled=True):
+			if plugin_factory.is_disabled_plugin(file_path):
 				os.rename(file_path, new_file_path)
 				self.load_plugin(new_file_path)
 

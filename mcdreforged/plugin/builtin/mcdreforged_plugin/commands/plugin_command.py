@@ -7,11 +7,9 @@ from mcdreforged.command.builder.nodes.basic import Literal
 from mcdreforged.command.command_source import CommandSource
 from mcdreforged.minecraft.rtext import RText, RAction, RTextList, RStyle, RColor
 from mcdreforged.permission.permission_level import PermissionLevel
-from mcdreforged.plugin import plugin_factory
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.sub_command import SubCommand
 from mcdreforged.plugin.type.plugin import AbstractPlugin
 from mcdreforged.plugin.type.regular_plugin import RegularPlugin
-from mcdreforged.utils import file_util
 
 if TYPE_CHECKING:
 	from mcdreforged.plugin.builtin.mcdreforged_plugin.mcdreforged_plugin import MCDReforgedPlugin
@@ -26,14 +24,11 @@ class PluginCommand(SubCommand):
 		def plugin_id_node():
 			return QuotableText('plugin_id').suggests(lambda: [plg.get_id() for plg in self.plugin_manager.get_regular_plugins()])
 
-		def plugin_file_name_node():
-			def get_not_loaded_stuffs():
-				result = []
-				for file_path in self.get_files_in_plugin_directories(lambda s: True):
-					if not self.plugin_manager.contains_plugin_file(file_path) and plugin_factory.maybe_plugin(file_path, allow_disabled=True):
-						result.append(os.path.basename(file_path))
-				return result
-			return QuotableText('file_name').suggests(get_not_loaded_stuffs)
+		def unloaded_plugin_node():
+			return QuotableText('file_name').suggests(lambda: map(os.path.basename, self.server_interface.get_unloaded_plugin_list()))
+
+		def disabled_plugin_node():
+			return QuotableText('file_name').suggests(lambda: map(os.path.basename, self.server_interface.get_disabled_plugin_list()))
 
 		return (
 			self.control_command_root({'plugin', 'plg'}).
@@ -41,23 +36,17 @@ class PluginCommand(SubCommand):
 			on_error(UnknownArgument, self.on_mcdr_command_unknown_argument).
 			then(Literal('list').runs(self.list_plugin)).
 			then(Literal('info').then(plugin_id_node().runs(lambda src, ctx: self.show_plugin_info(src, ctx['plugin_id'])))).
-			then(Literal('load').then(plugin_file_name_node().runs(lambda src, ctx: self.load_plugin(src, ctx['file_name'])))).
-			then(Literal('enable').then(plugin_file_name_node().runs(lambda src, ctx: self.enable_plugin(src, ctx['file_name'])))).
+			then(Literal('load').then(unloaded_plugin_node().runs(lambda src, ctx: self.load_plugin(src, ctx['file_name'])))).
+			then(Literal('enable').then(disabled_plugin_node().runs(lambda src, ctx: self.enable_plugin(src, ctx['file_name'])))).
 			then(Literal('reload').then(plugin_id_node().runs(lambda src, ctx: self.reload_plugin(src, ctx['plugin_id'])))).
 			then(Literal('unload').then(plugin_id_node().runs(lambda src, ctx: self.unload_plugin(src, ctx['plugin_id'])))).
 			then(Literal('disable').then(plugin_id_node().runs(lambda src, ctx: self.disable_plugin(src, ctx['plugin_id'])))).
 			then(Literal({'reloadall', 'ra'}).runs(self.reload_all_plugin))
 		)
 
-	def get_files_in_plugin_directories(self, filter: Callable[[str], bool]) -> List[str]:
-		result = []
-		for plugin_directory in self.mcdr_server.plugin_manager.plugin_directories:
-			result.extend(file_util.list_all(plugin_directory, filter))
-		return result
-
 	def list_plugin(self, source: CommandSource):
-		not_loaded_plugin_list = self.get_files_in_plugin_directories(lambda fp: plugin_factory.maybe_plugin(fp) and not self.mcdr_server.plugin_manager.contains_plugin_file(fp))  # type: List[str]
-		disabled_plugin_list = self.get_files_in_plugin_directories(plugin_factory.is_disabled_plugin)  # type: List[str]
+		not_loaded_plugin_list: List[str] = self.server_interface.get_unloaded_plugin_list()
+		disabled_plugin_list: List[str] = self.server_interface.get_disabled_plugin_list()
 		current_plugins = list(self.mcdr_server.plugin_manager.get_all_plugins())  # type: List[AbstractPlugin]
 
 		source.reply(self.tr('mcdr_command.list_plugin.info_loaded_plugin', len(current_plugins)))
@@ -141,8 +130,10 @@ class PluginCommand(SubCommand):
 			if meta.description is not None:
 				source.reply(meta.get_description_rtext())
 
-	def __not_loaded_plugin_file_manipulate(self, source: CommandSource, file_name: str, operation_name: str, func: Callable[[str], Any]):
-		plugin_paths = self.get_files_in_plugin_directories(lambda fp: os.path.basename(fp) == file_name)
+	def __not_loaded_plugin_file_manipulate(self, source: CommandSource, file_name: str, operation_name: str, func: Callable[[str], Any], possible_plugin_path: List[str]):
+		plugin_paths = list(filter(lambda fp: fp == file_name, possible_plugin_path))
+		if len(plugin_paths) == 0:
+			plugin_paths = list(filter(lambda fp: os.path.basename(fp) == file_name, possible_plugin_path))
 		if len(plugin_paths) == 0:
 			source.reply(self.tr('mcdr_command.invalid_plugin_file_name', file_name))
 		else:
@@ -175,10 +166,10 @@ class PluginCommand(SubCommand):
 		self.__existed_regular_plugin_manipulate(source, plugin_id, 'unload_plugin', lambda plg: self.server_interface.unload_plugin(plg.get_id()))
 
 	def load_plugin(self, source: CommandSource, file_name: str):
-		self.__not_loaded_plugin_file_manipulate(source, file_name, 'load_plugin', lambda pth: self.server_interface.load_plugin(pth))
+		self.__not_loaded_plugin_file_manipulate(source, file_name, 'load_plugin', lambda pth: self.server_interface.load_plugin(pth), self.server_interface.get_unloaded_plugin_list())
 
 	def enable_plugin(self, source: CommandSource, file_name: str):
-		self.__not_loaded_plugin_file_manipulate(source, file_name, 'enable_plugin', lambda pth: self.server_interface.enable_plugin(pth))
+		self.__not_loaded_plugin_file_manipulate(source, file_name, 'enable_plugin', lambda pth: self.server_interface.enable_plugin(pth), self.server_interface.get_disabled_plugin_list())
 
 	def reload_all_plugin(self, source: CommandSource):
 		ret = self.function_call(source, self.mcdr_server.plugin_manager.refresh_all_plugins, 'reload_all_plugin', log_success=False)

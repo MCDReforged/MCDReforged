@@ -11,6 +11,7 @@ from mcdreforged.info_reactor.info import Info
 from mcdreforged.info_reactor.server_information import ServerInformation
 from mcdreforged.mcdr_state import MCDReforgedFlag
 from mcdreforged.permission.permission_level import PermissionLevel
+from mcdreforged.plugin import plugin_factory
 from mcdreforged.plugin.meta.metadata import Metadata
 from mcdreforged.plugin.operation_result import SingleOperationResult, PluginOperationResult
 from mcdreforged.plugin.plugin_event import EventListener, LiteralEvent, PluginEvent, MCDRPluginEvents
@@ -19,7 +20,7 @@ from mcdreforged.plugin.type.multi_file_plugin import MultiFilePlugin
 from mcdreforged.plugin.type.plugin import AbstractPlugin
 from mcdreforged.preference.preference_manager import PreferenceItem
 from mcdreforged.translation.translation_text import RTextMCDRTranslation
-from mcdreforged.utils import misc_util
+from mcdreforged.utils import misc_util, file_util
 from mcdreforged.utils.exception import IllegalCallError
 from mcdreforged.utils.logger import MCDReforgedLogger, DebugOption
 from mcdreforged.utils.serializer import Serializable
@@ -333,6 +334,30 @@ class ServerInterface:
 		Return a list containing all loaded plugin id like ["my_plugin", "another_plugin"]
 		"""
 		return [plugin.get_id() for plugin in self._mcdr_server.plugin_manager.get_regular_plugins()]
+
+	def __get_files_in_plugin_directories(self) -> List[str]:
+		result = []
+		for plugin_directory in self._mcdr_server.plugin_manager.plugin_directories:
+			result.extend(file_util.list_all(plugin_directory))
+		return result
+
+	def get_unloaded_plugin_list(self) -> List[str]:
+		"""
+		Return a list containing all unloaded plugin file path like ["plugins/MyPlugin.mcdr"]
+		"""
+		return list(filter(
+			lambda file_path: not self._mcdr_server.plugin_manager.contains_plugin_file(file_path) and plugin_factory.is_plugin(file_path),
+			self.__get_files_in_plugin_directories()
+		))
+
+	def get_disabled_plugin_list(self) -> List[str]:
+		"""
+		Return a list containing all disabled plugin file path like ["plugins/MyPlugin.mcdr.disabled"]
+		"""
+		return list(filter(
+			lambda file_path: plugin_factory.is_disabled_plugin(file_path),
+			self.__get_files_in_plugin_directories()
+		))
 
 	def get_all_metadata(self) -> Dict[str, Metadata]:
 		"""
