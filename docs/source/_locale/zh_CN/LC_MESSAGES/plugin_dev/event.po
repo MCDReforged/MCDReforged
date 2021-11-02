@@ -186,9 +186,9 @@ msgstr "标准信息"
 msgid ""
 "A new line of text is output from the stdout of the server, or a text is "
 "input from the console. MCDR has already parsed the text into an `Info "
-"<classes/Info>`__ object. In this event plugin can response to the info"
+"<classes/Info.html>`__ object. In this event plugin can response to the info"
 msgstr ""
-"服务器输出新一行文本，或者从控制台中输入文本时，触发此事件。 MCDR 将把文本解析为 `Info <classes/Info>`__ "
+"服务器输出新一行文本，或者从控制台中输入文本时，触发此事件。 MCDR 将把文本解析为 `Info <classes/Info.html>`__ "
 "对象。在这种情况下，插件可以响应信息。"
 
 #: ../plugin_dev/event.rst:83 ../plugin_dev/event.rst:103
