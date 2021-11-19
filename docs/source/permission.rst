@@ -17,13 +17,13 @@ There are 5 different levels of permission in total:
      - Description
    * - owner
      - 4
-     - Highest level for those who have the ability to access the physical server
+     - Highest level for those who have the ability to access the physical server. e.g. Server owner
    * - admin
      - 3
-     - People with power to control the MCDR and the server
+     - People with power to control the MCDR and the Minecraft server. e.g. Minecraft OPs
    * - helper
      - 2
-     - A group of helper of admin
+     - A group of helper of admin. e.g. Trusted members
    * - user
      - 1
      - A group that normal player will be in

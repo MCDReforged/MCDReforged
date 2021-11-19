@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-26 12:18+0800\n"
+"POT-Creation-Date: 2021-11-19 17:42+0800\n"
 "PO-Revision-Date: 2021-01-23 08:51+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -53,8 +53,10 @@ msgid "4"
 msgstr "4"
 
 #: ../permission.rst:20
-msgid "Highest level for those who have the ability to access the physical server"
-msgstr "最高权限，所有者，具有控制物理服务器的能力"
+msgid ""
+"Highest level for those who have the ability to access the physical "
+"server. e.g. Server owner"
+msgstr "最高权限，所有者，具有控制物理服务器的能力吗。例子：服务器拥有者"
 
 #: ../permission.rst:21
 msgid "admin"
@@ -65,8 +67,10 @@ msgid "3"
 msgstr "3"
 
 #: ../permission.rst:23
-msgid "People with power to control the MCDR and the server"
-msgstr "管理员，拥有控制 MCDR 与服务器的能力"
+msgid ""
+"People with power to control the MCDR and the Minecraft server. e.g. "
+"Minecraft OPs"
+msgstr "管理员，拥有控制 MCDR 与 Minecraft 服务器的能力。例子：Minecraft 中的 OP"
 
 #: ../permission.rst:24
 msgid "helper"
@@ -77,8 +81,8 @@ msgid "2"
 msgstr "2"
 
 #: ../permission.rst:26
-msgid "A group of helper of admin"
-msgstr "助手，可以协助管理员进行服务器管理"
+msgid "A group of helper of admin. e.g. Trusted members"
+msgstr "助手，可以协助管理员进行服务器管理。例子：值得信赖的成员"
 
 #: ../permission.rst:27
 msgid "user"
@@ -102,7 +106,7 @@ msgstr "0"
 
 #: ../permission.rst:32
 msgid "The lowest level for guest or trollers"
-msgstr "最低权限，如访客"
+msgstr "最低权限，如访客或者熊孩子"
 
 #: ../permission.rst:35
 msgid ""
