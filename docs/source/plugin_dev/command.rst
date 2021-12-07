@@ -430,6 +430,50 @@ The principle of ``GreedyText`` is quite simple: It greedily take out all remain
 
 It's not a smart decision to append any child nodes to a ``GreedyText``, since the child nodes can never get any remaining command
 
+Boolean
+^^^^^^^
+
+A simple boolean argument, only accepts ``true`` and ``false`` and store them as a bool. Case is ignored
+
+Raises ``InvalidBoolean`` if the input is not accepted
+
+Enumeration
+^^^^^^^^^^^
+
+A node associating with an Enum class for reading an enum value of the given class
+
+A Enum class is required as the parameter to its constructor
+
+Raises ``InvalidEnumeration`` if the input argument is not a valid name for the given enum class
+
+.. code-block::python
+
+    def __init__(self, name: str, enum_class: Type[Enum]):
+
+Example usage:
+
+.. code-block::python
+
+    class MyColor(Enum):
+        red = 'red color'
+        blue = 'blue color'
+        green = 'green color'
+
+    def callback(source: CommandSource, context: CommandContext):
+        source.reply('You chose ' + context['arg'].value)
+
+    root = Literal('test').then(Enumeration('arg').runs(callback))
+
+.. list-table::
+   :header-rows: 1
+
+   * - Input
+     - Output
+   * - test blue
+     - You chose blue color
+   * - test yellow
+     - Invalid enumeration: yellow<--
+
 Customize
 ---------
 

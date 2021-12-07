@@ -4,6 +4,25 @@ from mcdreforged.command.builder.nodes.arguments import *
 from mcdreforged.command.builder.nodes.basic import *
 
 
+class TestCommandSource(CommandSource):
+	@property
+	def is_player(self) -> bool:
+		return False
+
+	@property
+	def is_console(self) -> bool:
+		return False
+
+	def get_server(self):
+		raise RuntimeError()
+
+	def get_permission_level(self) -> int:
+		raise RuntimeError()
+
+	def reply(self, message: Any, **kwargs) -> None:
+		raise RuntimeError()
+
+
 class MyTestCase(unittest.TestCase):
 	# -------------
 	#   callbacks
@@ -297,6 +316,39 @@ class MyTestCase(unittest.TestCase):
 		self.run_command_and_check_hit(Literal('test').runs(func3), 'test', True)
 		self.run_command_and_check_hit(Literal('test').runs(_C().method), 'test', True)
 		self.assert_raises_and_check_hit(False, TypeError, self.run_command, Literal('test').runs(func4), 'test')
+
+	def test_16_enumeration(self):
+		def func(src, ctx):
+			self.result = ctx['bl']
+		root = Literal('test').then(Boolean('bl').runs(func))
+		self.run_command_and_check_result(root, 'test true', True)
+		self.run_command_and_check_result(root, 'test tRue', True)
+		self.run_command_and_check_result(root, 'test FALSE', False)
+		self.assertRaises(InvalidBoolean, self.run_command, root, 'test T')
+
+	def test_17_enumeration(self):
+		class MyEnum(Enum):
+			a = 1
+			bb = 2
+			c = 'c'
+			efg = ()
+
+		def func(src, ctx):
+			self.assertIsInstance(ctx['e'], MyEnum)
+			self.result = ctx['e']
+			self.has_hit = True
+
+		node = Enumeration('e', MyEnum)
+		root = Literal('test').then(node.runs(func))
+		self.run_command_and_check_result(root, 'test a', MyEnum.a)
+		self.run_command_and_check_result(root, 'test efg', MyEnum.efg)
+		self.assertRaises(InvalidEnumeration, self.run_command, root, 'test nope')
+		self.assertRaises(InvalidEnumeration, self.run_command, root, 'test A')
+
+		suggestions = list(map(lambda s: s.suggest_input, root.generate_suggestions(TestCommandSource(), 'test ')))
+		self.assertEqual(len(MyEnum), len(suggestions))
+		for suggestion in suggestions:
+			self.run_command_and_check_hit(root, 'test {}'.format(suggestion), True)
 
 
 if __name__ == '__main__':

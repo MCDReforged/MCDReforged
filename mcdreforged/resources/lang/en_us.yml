@@ -215,6 +215,8 @@ command_exception.number_out_of_range                 : Number {0} out of range 
 command_exception.invalid_number                      : Invalid number
 command_exception.invalid_integer                     : Invalid integer
 command_exception.invalid_float                       : Invalid float
+command_exception.invalid_boolean                     : Invalid boolean
+command_exception.invalid_enumeration                 : Invalid enumeration
 command_exception.text_length_out_of_range            : Text length {0} out of range [{1}, {2}]
 command_exception.illegal_escapes_usage               : Illegal escapes usage
 command_exception.unclosed_quoted_string              : Unclosed quoted string

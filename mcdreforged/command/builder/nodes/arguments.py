@@ -1,13 +1,15 @@
 import json
 from abc import ABC
+from enum import Enum
+from typing import Type, Iterable, Union
 
 from mcdreforged.command.builder import command_builder_util as utils
 from mcdreforged.command.builder.command_builder_util import DIVIDER
 from mcdreforged.command.builder.exception import NumberOutOfRange, EmptyText, \
 	InvalidNumber, InvalidInteger, InvalidFloat, UnclosedQuotedString, IllegalEscapesUsage, \
-	TextLengthOutOfRange
+	TextLengthOutOfRange, InvalidBoolean, InvalidEnumeration
 from mcdreforged.command.builder.nodes.basic import AbstractNode, ParseResult, SUGGESTS_CALLBACK, \
-	ArgumentNode
+	ArgumentNode, CommandContext
 # --------------------
 #   Number Arguments
 # --------------------
@@ -33,7 +35,7 @@ class NumberNode(ArgumentNode, ABC):
 		self.at_max(max_value)
 		return self
 
-	def _check_in_range_and_return(self, value, char_read):
+	def _check_in_range_and_return(self, value: Union[int, float], char_read: int):
 		if (self.__min_value is not None and value < self.__min_value) or (self.__max_value is not None and value > self.__max_value):
 			raise NumberOutOfRange(char_read, value, self.__min_value, self.__max_value)
 		return ParseResult(value, char_read)
@@ -43,7 +45,7 @@ class Number(NumberNode):
 	"""
 	An Integer, or a float
 	"""
-	def parse(self, text):
+	def parse(self, text: str) -> ParseResult:
 		value, read = utils.get_int(text)
 		if value is None:
 			value, read = utils.get_float(text)
@@ -57,7 +59,7 @@ class Integer(NumberNode):
 	"""
 	An Integer
 	"""
-	def parse(self, text):
+	def parse(self, text: str) -> ParseResult:
 		value, read = utils.get_int(text)
 		if value is not None:
 			return self._check_in_range_and_return(value, read)
@@ -66,7 +68,7 @@ class Integer(NumberNode):
 
 
 class Float(NumberNode):
-	def parse(self, text):
+	def parse(self, text: str) -> ParseResult:
 		value, read = utils.get_float(text)
 		if value is not None:
 			return self._check_in_range_and_return(value, read)
@@ -97,7 +99,7 @@ class TextNode(ArgumentNode, ABC):
 		self.__max_length = max_length
 		return self
 
-	def _check_length_in_range_and_return(self, text, char_read):
+	def _check_length_in_range_and_return(self, text: str, char_read: int):
 		length = len(text)
 		if (self.__min_length is not None and length < self.__min_length) or (self.__max_length is not None and length > self.__max_length):
 			raise TextLengthOutOfRange(char_read, length, self.__min_length, self.__max_length)
@@ -109,7 +111,7 @@ class Text(TextNode):
 	A text argument with no space character
 	Just like a single word
 	"""
-	def parse(self, text):
+	def parse(self, text: str) -> ParseResult:
 		arg = utils.get_element(text)
 		return self._check_length_in_range_and_return(arg, len(arg))
 
@@ -126,7 +128,7 @@ class QuotableText(Text):
 		self.empty_allowed = True
 		return self
 
-	def parse(self, text):
+	def parse(self, text: str) -> ParseResult:
 		if len(text) == 0 or text[0] != self.QUOTE_CHAR:
 			return super().parse(text)  # regular text
 		collected = []
@@ -150,7 +152,7 @@ class QuotableText(Text):
 			else:
 				collected.append(ch)
 			i += 1
-		raise UnclosedQuotedString(len(text))
+		raise UnclosedQuotedString(text)
 
 	# use quote characters to quote suggestions with DIVIDER
 	def suggests(self, suggestion: SUGGESTS_CALLBACK) -> 'AbstractNode':
@@ -168,7 +170,7 @@ class GreedyText(TextNode):
 	"""
 	A greedy text argument, which will consume all remaining input
 	"""
-	def parse(self, text):
+	def parse(self, text: str) -> ParseResult:
 		return self._check_length_in_range_and_return(text, len(text))
 
 
@@ -177,7 +179,41 @@ class GreedyText(TextNode):
 # -------------------
 
 class Boolean(ArgumentNode):
+	"""
+	A simple boolean argument, only accepts ``true`` and ``false`` and store them as a bool. Case is ignored
+	"""
+	def _get_suggestions(self, context: CommandContext) -> Iterable[str]:
+		return ['true', 'false']
+
 	def parse(self, text: str) -> ParseResult:
 		arg = utils.get_element(text)
-		return ParseResult(arg.lower() == 'true', len(arg))
+		if arg.lower() == 'true':
+			value = True
+		elif arg.lower() == 'false':
+			value = False
+		else:
+			raise InvalidBoolean(arg)
+		return ParseResult(value, len(arg))
+
+
+class Enumeration(ArgumentNode):
+	"""
+	A node associating with an Enum class for reading an enum value of the given class
+	"""
+	def __init__(self, name: str, enum_class: Type[Enum]):
+		super().__init__(name)
+		self.__enum_class: Type[Enum] = enum_class
+
+	def _get_suggestions(self, context: CommandContext) -> Iterable[str]:
+		return map(lambda e: e.name, self.__enum_class)
+
+	def parse(self, text: str) -> ParseResult:
+		arg = utils.get_element(text)
+		try:
+			enum = self.__enum_class[arg]
+		except KeyError:
+			raise InvalidEnumeration(arg) from None
+		else:
+			return ParseResult(enum, len(arg))
+
 

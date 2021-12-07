@@ -1,5 +1,5 @@
 from abc import ABC
-from typing import Optional
+from typing import Optional, Union
 
 from mcdreforged.minecraft.rtext import RTextBase, RText, RColor
 from mcdreforged.utils.types import MessageText
@@ -125,10 +125,10 @@ class CommandSyntaxError(CommandError, ABC):
 	General illegal argument error
 	Used in integer parsing failure etc.
 	"""
-	def __init__(self, message: str, char_read: int):
-		super().__init__(message, '?', '?')
+	def __init__(self, message: str, char_read: Union[int, str]):
+		super().__init__(message, '', '?' if isinstance(char_read, int) else char_read)
 		self.message = message
-		self.char_read = char_read
+		self.char_read = char_read if isinstance(char_read, int) else len(char_read)
 
 	def set_parsed_command(self, parsed_command):
 		self._parsed_command = parsed_command
@@ -153,7 +153,7 @@ class LiteralNotMatch(CommandSyntaxError):
 
 
 class AbstractOutOfRange(IllegalArgument, ABC):
-	def __init__(self, message: str, char_read: int, value, range_l, range_r):
+	def __init__(self, message: str, char_read: Union[int, str], value, range_l, range_r):
 		"""
 		:param value: The actual value
 		:param range_l: The left boundary
@@ -179,22 +179,22 @@ class NumberOutOfRange(AbstractOutOfRange):
 	"""
 	The parsed number value is out of the restriction range
 	"""
-	def __init__(self, char_read: int, value, range_l, range_r):
+	def __init__(self, char_read: Union[int, str], value, range_l, range_r):
 		super().__init__('Value out of range [{}, {}]'.format(self._get_boundary_text(range_l), self._get_boundary_text(range_r)), char_read, value, range_l, range_r)
 
 
 class InvalidNumber(IllegalArgument):
-	def __init__(self, char_read: int):
+	def __init__(self, char_read: Union[int, str]):
 		super().__init__('Invalid number', char_read)
 
 
 class InvalidInteger(IllegalArgument):
-	def __init__(self, char_read: int):
+	def __init__(self, char_read: Union[int, str]):
 		super().__init__('Invalid integer', char_read)
 
 
 class InvalidFloat(IllegalArgument):
-	def __init__(self, char_read: int):
+	def __init__(self, char_read: Union[int, str]):
 		super().__init__('Invalid float', char_read)
 
 
@@ -205,7 +205,7 @@ class TextLengthOutOfRange(AbstractOutOfRange):
 	"""
 	The length of the given text is out of the restriction range
 	"""
-	def __init__(self, char_read: int, value, range_l, range_r):
+	def __init__(self, char_read: Union[int, str], value, range_l, range_r):
 		super().__init__('Text length {} out of range [{}, {}]'.format(value, self._get_boundary_text(range_l), self._get_boundary_text(range_r)), char_read, value, range_l, range_r)
 
 
@@ -213,7 +213,7 @@ class IllegalEscapesUsage(IllegalArgument):
 	"""
 	The text is empty, and it's not allowed to be
 	"""
-	def __init__(self, char_read: int):
+	def __init__(self, char_read: Union[int, str]):
 		super().__init__('Illegal usage of escapes', char_read)
 
 
@@ -221,7 +221,7 @@ class UnclosedQuotedString(IllegalArgument):
 	"""
 	The text is empty, and it's not allowed to be
 	"""
-	def __init__(self, char_read: int):
+	def __init__(self, char_read: Union[int, str]):
 		super().__init__('Unclosed quoted string', char_read)
 
 
@@ -229,5 +229,18 @@ class EmptyText(IllegalArgument):
 	"""
 	The text is empty, and it's not allowed to be
 	"""
-	def __init__(self, char_read: int):
+	def __init__(self, char_read: Union[int, str]):
 		super().__init__('Empty text is not allowed', char_read)
+
+
+# Other Arguments
+
+
+class InvalidBoolean(IllegalArgument):
+	def __init__(self, char_read: Union[int, str]):
+		super().__init__('Invalid boolean', char_read)
+
+
+class InvalidEnumeration(IllegalArgument):
+	def __init__(self, char_read: Union[int, str]):
+		super().__init__('Invalid enumeration', char_read)

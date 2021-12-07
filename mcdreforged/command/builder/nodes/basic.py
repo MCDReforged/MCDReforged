@@ -25,10 +25,9 @@ SUGGESTS_CALLBACK = __SOURCE_CONTEXT_CALLBACK_STR_ITERABLE
 REQUIRES_CALLBACK = __SOURCE_CONTEXT_CALLBACK_BOOL
 
 
-class ParseResult:
-	def __init__(self, value: Optional[Any], char_read: int):
-		self.value = value
-		self.char_read = char_read
+class ParseResult(NamedTuple):
+	value: Optional[Any]
+	char_read: int
 
 
 class CommandSuggestion:

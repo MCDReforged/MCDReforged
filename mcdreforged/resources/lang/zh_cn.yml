@@ -215,6 +215,8 @@ command_exception.number_out_of_range                 : 数字 {0} 超出范围 
 command_exception.invalid_number                      : 无效的数字
 command_exception.invalid_integer                     : 无效的整数
 command_exception.invalid_float                       : 无效的浮点数
+command_exception.invalid_boolean                     : 无效的布尔值
+command_exception.invalid_enumeration                 : 无效的枚举值
 command_exception.text_length_out_of_range            : 文本长度 {0} 超出范围 [{1}, {2}]
 command_exception.illegal_escapes_usage               : 转义符的非法使用
 command_exception.unclosed_quoted_string              : 未封闭的引号

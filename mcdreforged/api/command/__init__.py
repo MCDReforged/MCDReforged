@@ -1,9 +1,9 @@
 from mcdreforged.command.builder import command_builder_util
 from mcdreforged.command.builder.exception import LiteralNotMatch, NumberOutOfRange, IllegalArgument, EmptyText, \
 	UnknownCommand, UnknownArgument, CommandSyntaxError, UnknownRootArgument, RequirementNotMet, IllegalNodeOperation, \
-	CommandError, InvalidNumber, InvalidInteger, InvalidFloat, UnclosedQuotedString, IllegalEscapesUsage
+	CommandError, InvalidNumber, InvalidInteger, InvalidFloat, UnclosedQuotedString, IllegalEscapesUsage, InvalidBoolean
 from mcdreforged.command.builder.nodes.arguments import Number, Integer, Float, Text, QuotableText, \
-	GreedyText
+	GreedyText, Boolean
 from mcdreforged.command.builder.nodes.basic import AbstractNode, Literal, ParseResult, CommandContext, ArgumentNode
 
 __all__ = [
@@ -15,6 +15,7 @@ __all__ = [
 	'Literal',
 	'Number', 'Integer', 'Float',
 	'Text', 'QuotableText', 'GreedyText',
+	'Boolean',
 
 	# ------------------
 	#     Exceptions
@@ -29,6 +30,7 @@ __all__ = [
 	'IllegalArgument', 'LiteralNotMatch',
 	'NumberOutOfRange', 'InvalidNumber', 'InvalidInteger', 'InvalidFloat',
 	'IllegalEscapesUsage', 'UnclosedQuotedString', 'EmptyText',
+	'InvalidBoolean',
 
 	# ------------------
 	#       Utils
