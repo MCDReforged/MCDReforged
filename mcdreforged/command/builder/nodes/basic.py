@@ -144,7 +144,7 @@ class _ErrorHandler(NamedTuple):
 _ERROR_HANDLER_TYPE = Dict[Type[CommandError], _ErrorHandler]
 
 
-class AbstractNode:
+class AbstractNode(ABC):
 
 	def __init__(self):
 		self._children_literal: Dict[str, List[Literal]] = collections.defaultdict(list)  # mapping from literal text to related Literal nodes
