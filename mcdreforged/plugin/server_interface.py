@@ -729,7 +729,6 @@ class PluginServerInterface(ServerInterface):
 				self.logger.info(msg)
 
 		if target_class is not None:
-			misc_util.check_class(target_class, Serializable)
 			target_class: Serializable
 			if default_config is None:
 				default_config = target_class.get_default().serialize()
