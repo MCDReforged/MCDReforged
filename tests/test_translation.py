@@ -3,7 +3,7 @@ import logging
 import os
 import unittest
 
-from ruamel import yaml
+from ruamel.yaml import YAML
 
 from mcdreforged.constants import core_constant
 from mcdreforged.minecraft.rtext import RText, RTextBase
@@ -22,7 +22,7 @@ class MyTestCase(unittest.TestCase):
 		for file_path in file_util.list_file_with_suffix(LANGUAGE_DIRECTORY, core_constant.LANGUAGE_FILE_SUFFIX):
 			language, _ = os.path.basename(file_path).rsplit('.', 1)
 			with open(os.path.join(LANGUAGE_DIRECTORY, file_path), encoding='utf8') as file_handler:
-				translations = dict(yaml.load(file_handler, Loader=yaml.Loader))
+				translations = dict(YAML().load(file_handler))
 			language_key_dict[language] = translations
 
 		language_list = list(language_key_dict.keys())

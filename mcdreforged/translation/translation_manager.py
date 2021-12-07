@@ -6,7 +6,7 @@ import os
 from logging import Logger
 from typing import Optional, Set
 
-from ruamel import yaml
+from ruamel.yaml import YAML
 
 from mcdreforged.constants import core_constant
 from mcdreforged.minecraft.rtext import RTextBase
@@ -32,7 +32,7 @@ class TranslationManager:
 			language, _ = os.path.basename(file_path).rsplit('.', 1)
 			try:
 				with open(os.path.join(LANGUAGE_DIRECTORY, file_path), encoding='utf8') as file_handler:
-					translations = dict(yaml.load(file_handler, Loader=yaml.Loader))
+					translations = dict(YAML().load(file_handler))
 				for key, text in translations.items():
 					self.translations[key][language] = text
 				self.available_languages.add(language)

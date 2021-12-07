@@ -6,7 +6,7 @@ from abc import ABC
 from typing import IO, Collection
 
 import pkg_resources
-from ruamel import yaml
+from ruamel.yaml import YAML
 
 from mcdreforged.constants import plugin_constant
 from mcdreforged.plugin.meta.metadata import Metadata
@@ -73,7 +73,7 @@ class MultiFilePlugin(RegularPlugin, ABC):
 					if file_extension == 'json':
 						translations = json.load(file_handler)
 					elif file_extension == 'yml':
-						translations = dict(yaml.load(file_handler, Loader=yaml.Loader))
+						translations = dict(YAML().load(file_handler))
 					else:
 						continue
 				self.register_translation(language, translations)
