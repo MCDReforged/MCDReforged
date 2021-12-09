@@ -237,9 +237,9 @@ msgstr ""
 
 #: ../plugin_dev/basic.rst:143
 msgid ""
-"Check the `command <command>`__ document for more detail about building a"
+"Check the `command <command.html>`__ document for more detail about building a"
 " command tree"
-msgstr "查看 `指令 <command>`__ 文档以获取有关构建指令树的更多详细信息。"
+msgstr "查看 `指令 <command.html>`__ 文档以获取有关构建指令树的更多详细信息。"
 
 #: ../plugin_dev/basic.rst:145
 msgid ""

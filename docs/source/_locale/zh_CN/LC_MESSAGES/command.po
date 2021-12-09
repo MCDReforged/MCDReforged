@@ -32,10 +32,10 @@ msgstr ""
 msgid ""
 "Commands can be registered by MCDR itself and by plugins. This page only "
 "introduces about commands from MCDR. For plugin registered command, check"
-" `here <plugin_dev/command>`__"
+" `here <plugin_dev/command.html>`__"
 msgstr ""
 "指令可以由 MCDR 本身和插件注册。本页面只介绍来自 MCDR 的指令。对于插件注册指令，请在 `此处 "
-"<plugin_dev/command>`__ 查看。"
+"<plugin_dev/command.html>`__ 查看。"
 
 #: ../command.rst:10
 msgid "!!MCDR command"
