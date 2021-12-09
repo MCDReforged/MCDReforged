@@ -119,7 +119,7 @@ MCDR also provides a simple function decorator ``new_thread`` for lazy man, to m
     def my_slow_method3():
         time.sleep(10)
 
-With the ``@new_thread`` decorator, everytime when you invoke ``my_slow_method2``\ , a new daemon thread will be started to executed it. For more details about the ``@new_thread`` decorator, check `here <plugin_dev/api.html#new-thread>`__
+With the ``@new_thread`` decorator, everytime when you invoke ``my_slow_method2``\ , a new daemon thread will be started to executed it. For more details about the ``@new_thread`` decorator, check `here <../plugin_dev/api.html#new-thread>`__
 
 Package location
 ^^^^^^^^^^^^^^^^

@@ -267,10 +267,10 @@ msgid ""
 "With the ``@new_thread`` decorator, everytime when you invoke "
 "``my_slow_method2``\\ , a new daemon thread will be started to executed "
 "it. For more details about the ``@new_thread`` decorator, check `here "
-"<plugin_dev/api.html#new-thread>`__"
+"<../plugin_dev/api.html#new-thread>`__"
 msgstr ""
 "使用 ``@new_thread`` 修饰器，则每次调用 ``my_slow_method2``\\ 时，都会创建一个新的守护线程来执行它。关于 "
-"``@new_thread`` 的详细信息，请查看 `此处 <plugin_dev/api.html#new-thread>`__。"
+"``@new_thread`` 的详细信息，请查看 `此处 <../plugin_dev/api.html#new-thread>`__。"
 
 #: ../migrate/0.x_to_1.x.rst:125
 msgid "Package location"
