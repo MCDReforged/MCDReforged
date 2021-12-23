@@ -141,9 +141,8 @@ class MCDReforgedLogger(logging.Logger):
 
 	debug_options = {}  # type: Dict[DebugOption, bool]
 
-	def __init__(self, mcdr_server, plugin_id=None):
+	def __init__(self, plugin_id: Optional[str] = None):
 		super().__init__(self.DEFAULT_NAME)
-		self.mcdr_server = mcdr_server
 		self.file_handler = None
 
 		self.console_handler = SyncStdoutStreamHandler()

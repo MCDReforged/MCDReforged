@@ -54,7 +54,7 @@ class ServerInterface:
 
 	@functools.lru_cache(maxsize=512, typed=True)
 	def __get_logger(self, plugin_id: str):
-		return MCDReforgedLogger(self._mcdr_server, plugin_id)
+		return MCDReforgedLogger(plugin_id)
 
 	@property
 	def logger(self) -> MCDReforgedLogger:
@@ -611,7 +611,7 @@ class PluginServerInterface(ServerInterface):
 	def logger(self) -> MCDReforgedLogger:
 		if self.__logger_for_plugin is None:
 			try:
-				self.__logger_for_plugin = MCDReforgedLogger(self._mcdr_server, self.__plugin.get_id())
+				self.__logger_for_plugin = MCDReforgedLogger(self.__plugin.get_id())
 			except:
 				return super().logger
 		return self.__logger_for_plugin

@@ -55,7 +55,7 @@ class MCDReforgedServer:
 		self.decoding_method = None  # type: Optional[str]
 
 		# --- Constructing fields --- #
-		self.logger = MCDReforgedLogger(self)
+		self.logger = MCDReforgedLogger()
 		self.config = Config(self.logger)
 		self.permission_manager = PermissionManager(self)
 		self.basic_server_interface = ServerInterface(self)
