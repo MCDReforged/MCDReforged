@@ -317,7 +317,7 @@ class MyTestCase(unittest.TestCase):
 		self.run_command_and_check_hit(Literal('test').runs(_C().method), 'test', True)
 		self.assert_raises_and_check_hit(False, TypeError, self.run_command, Literal('test').runs(func4), 'test')
 
-	def test_16_enumeration(self):
+	def test_16_boolean(self):
 		def func(src, ctx):
 			self.result = ctx['bl']
 		root = Literal('test').then(Boolean('bl').runs(func))
