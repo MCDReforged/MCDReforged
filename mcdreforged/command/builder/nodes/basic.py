@@ -65,7 +65,7 @@ class CommandSuggestions(List[CommandSuggestion]):
 		#                 ^
 		#               cursor
 		# "<file_name>" is the complete_hint
-		self.complete_hint = None
+		self.complete_hint: Optional[str] = None
 
 	def extend(self, __iterable: Iterable) -> None:
 		super().extend(__iterable)

@@ -1,10 +1,11 @@
 import sys
-from threading import RLock
+from threading import RLock, Lock
 from typing import TYPE_CHECKING, Optional, Iterable, Any
 
 from prompt_toolkit import PromptSession
 from prompt_toolkit.application import get_app
-from prompt_toolkit.completion import Completion, CompleteEvent, WordCompleter, ThreadedCompleter
+from prompt_toolkit.buffer import CompletionState, Buffer
+from prompt_toolkit.completion import Completion, CompleteEvent, WordCompleter
 from prompt_toolkit.document import Document
 from prompt_toolkit.layout import Dimension
 # noinspection PyProtectedMember
@@ -14,6 +15,7 @@ from prompt_toolkit.output.vt100 import Vt100_Output
 from prompt_toolkit.patch_stdout import StdoutProxy
 from prompt_toolkit.shortcuts import CompleteStyle
 
+from mcdreforged.command.builder.nodes.basic import CommandSuggestions
 from mcdreforged.command.command_source import CommandSource
 from mcdreforged.executor.thread_executor import ThreadExecutor
 from mcdreforged.info_reactor.info import Info
@@ -66,32 +68,6 @@ class ConsoleHandler(ThreadExecutor):
 			self.mcdr_server.logger.exception(self.mcdr_server.tr('console_handler.error'))
 
 
-class MCDRPromptSession(PromptSession):
-	def __init__(self, *args, **kwargs):
-		super().__init__(*args, **kwargs)
-		self.has_complete_this_line = False
-
-	def _get_default_buffer_control_height(self) -> Dimension:
-		dim = super()._get_default_buffer_control_height()
-		# When there's no complete this line, don't reverse space for the autocompletion menu
-		if not self.has_complete_this_line and self.default_buffer.complete_state is None:
-			dim = Dimension()
-		return dim
-
-	def get_complete_state_checker(self) -> Processor:
-		class CompleteStateChecker(Processor):
-			def apply_transformation(self, ti: TransformationInput) -> Transformation:
-				if len(ti.document.text) == 0:
-					session.has_complete_this_line = False
-				if buff.complete_state is not None:
-					session.has_complete_this_line = True
-				return Transformation(fragments=ti.fragments)
-
-		buff = self.default_buffer
-		session = self
-		return CompleteStateChecker()
-
-
 class ConsoleSuggestionCommandSource(CommandSource):
 	@property
 	def is_player(self) -> bool:
@@ -111,23 +87,48 @@ class ConsoleSuggestionCommandSource(CommandSource):
 		pass
 
 
-class CommandCompleter(WordCompleter):
+class CachedSuggestionProvider:
 	def __init__(self, command_manager: 'CommandManager'):
+		self.__command_manager = command_manager
+		self.__lock = Lock()
+		self.__calc_lock = Lock()
+		self.__cache_input: Optional[str] = None
+		self.__cache_suggestion: Optional[CommandSuggestions] = None
+
+	def suggest(self, input_: str) -> CommandSuggestions:
+		with self.__lock:
+			if input_ == self.__cache_input:
+				return self.__cache_suggestion
+		acq = self.__calc_lock.acquire(blocking=False)
+		if not acq:
+			return CommandSuggestions()  # empty suggestion
+		try:
+			suggestion = self.__command_manager.suggest_command(input_, ConsoleSuggestionCommandSource())
+			with self.__lock:
+				self.__cache_input = input_
+				self.__cache_suggestion = suggestion
+			return self.__cache_suggestion
+		finally:
+			self.__calc_lock.release()
+
+
+class CommandCompleter(WordCompleter):
+	def __init__(self, suggester: CachedSuggestionProvider):
 		super().__init__([], sentence=True)
-		self.command_manager = command_manager
+		self.suggester = suggester
 
 	def get_completions(self, document: Document, complete_event: CompleteEvent) -> Iterable[Completion]:
 		input_ = document.current_line_before_cursor
-		suggestions = self.command_manager.suggest_command(input_, ConsoleSuggestionCommandSource())
+		suggestions = self.suggester.suggest(input_)
 		self.words = sorted(misc_util.unique_list([suggestion.command for suggestion in suggestions]))
 		self.display_dict = dict([(suggestion.command, suggestion.suggest_input) for suggestion in suggestions])
 		return super().get_completions(document, complete_event)
 
 
 class CommandArgumentSuggester(Processor):
-	def __init__(self, command_manager: 'CommandManager'):
+	def __init__(self, suggester: CachedSuggestionProvider):
 		super().__init__()
-		self.command_manager = command_manager
+		self.suggester = suggester
 
 	def apply_transformation(self, ti: TransformationInput) -> Transformation:
 		# last line and cursor at end
@@ -135,20 +136,66 @@ class CommandArgumentSuggester(Processor):
 			buffer = ti.buffer_control.buffer
 			if not buffer.suggestion:
 				input_ = ti.document.text
-				suggestions = self.command_manager.suggest_command(input_, ConsoleSuggestionCommandSource())
+				suggestions = self.suggester.suggest(input_)
 				if suggestions.complete_hint is not None:
 					return Transformation(fragments=ti.fragments + [('class:auto-suggestion', suggestions.complete_hint)])
 		return Transformation(fragments=ti.fragments)
 
 
+class MCDRPromptSession(PromptSession):
+	def __init__(self, console_handler: ConsoleHandler):
+		self.__console_handler: ConsoleHandler = console_handler
+		# noinspection PyArgumentEqualDefault
+		super().__init__(
+			complete_in_thread=True,  # this will do the ThreadedCompleter wrapping automatically
+			complete_while_typing=True,
+			complete_style=CompleteStyle.MULTI_COLUMN,
+			reserve_space_for_menu=3
+		)
+		suggester = CachedSuggestionProvider(self.__console_handler.mcdr_server.command_manager)
+		self.completer = CommandCompleter(suggester)
+		self.input_processors = [
+			CommandArgumentSuggester(suggester),
+			self.__get_complete_state_checker()
+		]
+		self.has_complete_this_line = False
+
+	@staticmethod
+	def _has_completion_now(buffer: Buffer) -> bool:
+		# Completion calculation might be happening right now in another thread, so make a reference copy first.
+		complete_state: Optional[CompletionState] = buffer.complete_state
+		# Similarly, in addition to checking if it's None, we should checking its completions field as well
+		return complete_state is not None and complete_state.completions
+
+	def _get_default_buffer_control_height(self) -> Dimension:
+		dim = super()._get_default_buffer_control_height()
+		# When there's no complete this line, don't reverse space for the autocompletion menu
+		if not self.has_complete_this_line and not self._has_completion_now(self.default_buffer):
+			dim = Dimension()
+		return dim
+
+	def __get_complete_state_checker(self) -> Processor:
+		class __CompleteStateChecker(Processor):
+			def apply_transformation(self, ti: TransformationInput) -> Transformation:
+				if len(ti.document.text) == 0:
+					session.has_complete_this_line = False
+				if session._has_completion_now(buff):
+					session.has_complete_this_line = True
+				return Transformation(fragments=ti.fragments)
+
+		buff = self.default_buffer
+		session = self
+		return __CompleteStateChecker()
+
+
 class PromptToolkitWrapper:
 	def __init__(self, console_handler: ConsoleHandler):
-		self.console_handler = console_handler  # type: ConsoleHandler
+		self.__console_handler: ConsoleHandler = console_handler
 		self.__tr = console_handler.mcdr_server.tr
 		self.__logger = console_handler.mcdr_server.logger
 		self.pt_enabled = False
-		self.stdout_proxy = None  # type: Optional[StdoutProxy]
-		self.prompt_session = None  # type: Optional[MCDRPromptSession]
+		self.stdout_proxy: Optional[StdoutProxy] = None
+		self.prompt_session: Optional[MCDRPromptSession] = None
 		self.__real_stdout = None
 		self.__real_stderr = None
 		self.__promoting = RLock()  # more for a status check
@@ -156,7 +203,7 @@ class PromptToolkitWrapper:
 	def start_kits(self):
 		try:
 			self.__tweak_kits()
-			self.prompt_session = MCDRPromptSession()
+			self.prompt_session = MCDRPromptSession(self.__console_handler)
 			self.stdout_proxy = StdoutProxy(sleep_between_writes=0.01, raw=True)
 		except:
 			self.__logger.exception('Failed to enable advanced console, switch back to basic input')
@@ -204,22 +251,8 @@ class PromptToolkitWrapper:
 
 	def get_input(self) -> Optional[str]:
 		if self.pt_enabled:
-			assert self.console_handler.is_on_thread()
-			command_manager = self.console_handler.mcdr_server.command_manager
-			completer = ThreadedCompleter(CommandCompleter(command_manager))
-			input_processors = [
-				CommandArgumentSuggester(command_manager),
-				self.prompt_session.get_complete_state_checker()
-			]
+			assert self.__console_handler.is_on_thread()
 			with self.__promoting:
-				return self.prompt_session.prompt(
-					'> ',
-					completer=completer,
-					complete_in_thread=True,
-					complete_while_typing=True,
-					complete_style=CompleteStyle.MULTI_COLUMN,
-					reserve_space_for_menu=3,
-					input_processors=input_processors
-				)
+				return self.prompt_session.prompt('> ')
 		else:
 			return input()
