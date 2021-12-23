@@ -27,16 +27,16 @@ def __get_plugin_class_from_path(file_path: str, allow_disabled: bool) -> Option
 	return None
 
 
-def __test_if_is_plugin(file_path: str, *, allow_disabled: bool) -> bool:
+def __maybe_plugin(file_path: str, *, allow_disabled: bool) -> bool:
 	return __get_plugin_class_from_path(file_path, allow_disabled) is not None
 
 
 def is_plugin(file_path: str) -> bool:
-	return __test_if_is_plugin(file_path, allow_disabled=False)
+	return __maybe_plugin(file_path, allow_disabled=False)
 
 
 def is_disabled_plugin(file_path: str) -> bool:
-	return not __test_if_is_plugin(file_path, allow_disabled=False) and __test_if_is_plugin(file_path, allow_disabled=True)
+	return not __maybe_plugin(file_path, allow_disabled=False) and __maybe_plugin(file_path, allow_disabled=True)
 
 
 def create_regular_plugin(plugin_manager: 'PluginManager', file_path: str) -> RegularPlugin:

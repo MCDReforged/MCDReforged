@@ -365,7 +365,25 @@ get_plugin_list
 
     def get_plugin_list(self) -> List[str]
 
-Return a list containing all loaded plugin id like ["my_plugin", "another_plugin"]
+Return a list containing all **loaded** plugin id like ``["my_plugin", "another_plugin"]``
+
+get_unloaded_plugin_list
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+    def get_unloaded_plugin_list(self) -> List[str]
+
+Return a list containing all **unloaded** plugin file path like ``["plugins/MyPlugin.mcdr"]``
+
+get_disabled_plugin_list
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+    def get_disabled_plugin_list(self) -> List[str]
+
+Return a list containing all **disabled** plugin file path like ``["plugins/MyPlugin.mcdr.disabled"]``
 
 get_all_metadata
 ~~~~~~~~~~~~~~~~
