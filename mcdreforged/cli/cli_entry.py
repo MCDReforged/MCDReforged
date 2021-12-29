@@ -2,6 +2,7 @@
 import os
 import sys
 import subprocess
+import re
 import json
 from argparse import ArgumentParser
 from typing import Optional
@@ -56,7 +57,7 @@ def entry_point():
 	parser_workspace.add_argument('-l', '--link',         help="The plugin link",                                    default=None)
 	parser_workspace.add_argument('-r', '--resources',    help="The plugin resources files, split with ':'",         default=None)
 	parser_workspace.add_argument('-e', '--entrypoint',   help="The plugin's entry point",                           default=None)
-	parser_workspace.add_argument('-A', '--archive-name', help="The plugin's archive name",                        default=None)
+	parser_workspace.add_argument('-A', '--archive-name', help="The plugin's archive name",                          default=None)
 
 	result = parser.parse_args()
 	quiet = result.quiet
@@ -70,10 +71,8 @@ def entry_point():
 	elif result.subparser_name == 'pack':
 		make_packed_plugin(result.input, result.output, result.name, quiet=quiet)
 	elif result.subparser_name == 'init_plugin':
-		authors = result.author
-		resources = result.resources
 		try:
-			init_plugin_workspace(result.path, result.id, result.name, result.description, authors, result.link, resources, result.entrypoint, result.archive_name, quiet=quiet)
+			init_plugin_workspace(result.path, result.id, result.name, result.description, result.author, result.link, result.resources, result.entrypoint, result.archive_name, quiet=quiet)
 		except KeyboardInterrupt as e:
 			print('signal: interrupt')
 
@@ -177,7 +176,7 @@ def make_packed_plugin(input_dir: str, output_dir: str, file_name: Optional[str]
 	writeln('Packed {} files/folders into "{}"'.format(file_counter, file_name))
 	writeln('Done')
 
-def init_plugin_workspace(path: str, pid: str, name: str, description: str, authors: str, link: str, resources: list[str], entrypoint: str, archive_name: str, *, quiet: bool = False):
+def init_plugin_workspace(path: str, pid: str, name: str, description: str, authors: str, link: str, resources: str, entrypoint: str, archive_name: str, *, quiet: bool = False):
 	writeln = print if not quiet else lambda *args, **kwargs: None
 	if quiet:
 		def ask(*args, default=None, **kwargs):
@@ -189,26 +188,39 @@ def init_plugin_workspace(path: str, pid: str, name: str, description: str, auth
 
 	if path is None:
 		path = ask('Plugin work directory', default='.')
-
 	metafile = os.path.join(path, plugin_constant.PLUGIN_META_FILE)
 	if os.path.exists(metafile):
 		writeln('[ERROR] Meta file "{}" already exists'.format(metafile))
 		sys.exit(1)
 
 	if pid is None:
-		pid = ask('Id', default=os.path.basename(os.path.abspath(path))).strip()
+		pid = ask('Id', default=os.path.basename(os.path.abspath(path)).lower()).strip()
+	if re.fullmatch(r'[0-9a-z_]{1,64}', pid) is None:
+		writeln('[ERROR] Plugin ID "{}" is invalid (match express: [0-9a-z_]{{1,64}})'.format(pid))
+		sys.exit(1)
+
 	if name is None:
 		name = ask('Name', default=pid).strip()
+
 	if description is None:
 		description = ask('Description', default='This is a plugin for MCDR').strip()
+
 	if authors is None:
 		authors = ask("Author(s), split with ':'")
+
 	if link is None:
 		link = ask('Main page link', skip=True)
+
 	if resources is None:
 		resources = ask("Resource(s), split with ':'", skip=True)
+
 	if entrypoint is None:
 		entrypoint = ask('Entry point', skip=True)
+
+	if entrypoint is not None and entrypoint != pid and not entrypoint.startswith(pid + '.'):
+		writeln('Invalid entry point "{0}" for plugin id "{1}"'.format(entrypoint, pid))
+		sys.exit(1)
+
 	if archive_name is None:
 		archive_name = ask('Archive name', skip=True)
 
@@ -239,52 +251,52 @@ def init_plugin_workspace(path: str, pid: str, name: str, description: str, auth
 	with open(os.path.join(path, 'requirements.txt'), 'w') as fd:
 		fd.write('# Add your python package requirements here, just like regular requirements.txt\n')
 
-	entry, point = (pid, '__init__.py') if entrypoint is None else entrypoint.split('.', 1)
+	if entrypoint is None:
+		entry, point = (pid, '__init__')
+	else:
+		entry, point = entrypoint.rsplit('.', 1)
+		entry = pid if len(entry) == 0 else entry.replace('.', os.sep)
 	if not os.path.exists(os.path.join(path, entry)):
-		os.mkdir(os.path.join(path, entry))
-	entrypointf = os.path.join(path, entry, point)
+		os.makedirs(os.path.join(path, entry))
+	entrypointf = os.path.join(path, entry, point + '.py')
 	with open(entrypointf, 'w') as fd:
 		fd.write('# Write your codes here\n')
 		writeln('Created entrypoint "{}"'.format(entrypointf))
 
-
-	status, _ = run_sh_cmd('git --version')
-	if status == 0:
-		if not os.path.exists(os.path.join(path, '.git')):
-			writeln('Initing git workspace...')
-			must_run_cmd('git -C {c} init -q'.format(c=path), quiet=quiet)
-		gitlink = ask("Input this plugin's git repository link", skip=True)
-		if gitlink is not None:
-			must_run_cmd('git -C {c} remote add origin {l}'.format(c=path, l=gitlink), quiet=quiet)
-			writeln('Commiting...')
-			must_run_cmd('git -C {c} add .'.format(c=path), quiet=quiet)
-			must_run_cmd("git -C {c} commit -q -m 'First commit'".format(c=path), quiet=quiet)
-			must_run_cmd('git -C {c} push -q -u origin master'.format(c=path), quiet=quiet)
-	else:
-		writeln('[WARN] Cannot find command `git`')
+	# status, _ = run_sh_cmd('git --version')
+	# if status == 0:
+	# 	if not os.path.exists(os.path.join(path, '.git')):
+	# 		writeln('Initing git workspace...')
+	# 		must_run_cmd('git -C {c} init -q'.format(c=path), quiet=quiet)
+	# 	gitlink = ask("Input this plugin's git repository link", skip=True)
+	# 	if gitlink is not None:
+	# 		must_run_cmd('git -C {c} remote add origin {l}'.format(c=path, l=gitlink), quiet=quiet)
+	# 		writeln('Commiting...')
+	# 		must_run_cmd('git -C {c} add .'.format(c=path), quiet=quiet)
+	# 		must_run_cmd("git -C {c} commit -q -m 'First commit'".format(c=path), quiet=quiet)
+	# 		must_run_cmd('git -C {c} push -q -u origin master'.format(c=path), quiet=quiet)
+	# else:
+	# 	writeln('[WARN] Cannot find command `git`')
 
 def try_decodes(string, encodes):
-  for e in encodes:
-    try:
-      return string.decode(e)
-    except UnicodeDecodeError:
-      pass
-  raise UnicodeDecodeError('Failed to decode {}, with encodes {}'.format(repr(string), str(encodes)))
+	for e in encodes:
+		try:
+			return string.decode(e)
+		except UnicodeDecodeError:
+			pass
+	raise UnicodeDecodeError('Failed to decode {}, with encodes {}'.format(repr(string), str(encodes)))
 
 def run_sh_cmd(source: str):
-  proc = subprocess.Popen(
-    source, shell=True,
-    stdout=subprocess.PIPE, stderr=subprocess.STDOUT, stdin=sys.stdin,
-    bufsize=-1)
-  stdout = b''
-  while True:
-    buf = proc.stdout.read()
-    if len(buf) == 0:
-      break
-    stdout += buf
-  exitid = proc.wait()
-  stdout = try_decodes(stdout, ['utf-8', 'gbk']) if len(stdout) > 0 else ''
-  return exitid, stdout
+	proc = subprocess.Popen(source, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, stdin=sys.stdin, bufsize=-1)
+	stdout = b''
+	while True:
+		buf = proc.stdout.read()
+		if len(buf) == 0:
+			break
+		stdout += buf
+	exitid = proc.wait()
+	stdout = try_decodes(stdout, ['utf-8', 'gbk']) if len(stdout) > 0 else ''
+	return exitid, stdout
 
 def must_run_cmd(source: str, quiet: bool = False):
 	status, out = run_sh_cmd(source)
