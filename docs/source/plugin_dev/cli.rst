@@ -136,3 +136,171 @@ name
 
     If file extension is included in the name and the file extension is a valid `packed plugin <plugin_format.html#packed-plugin>`__ extension (``.mcdr`` or ``.pyz``), then the included file extension will be used. Otherwise the default ``.mcdr`` file extension will be appended to the end
 
+init_plugin
+^^^^^^^^^^^
+
+.. code-block::
+
+    python -m mcdreforged [-q] init_plugin [-h] [-p PATH] [-i ID] [-n NAME] [-d DESCRIPTION] [-a AUTHOR] [-l LINK] [-r RESOURCES] [-e ENTRYPOINT] [-A ARCHIVE_NAME]
+
+Prepare the workspace of MCDR plugin
+
+See more details: :doc:`metadata <metadata>`.
+
+quiet
+"""""
+
+    ``-q``, ``--quiet``
+
+    If use quiet mode, then will disable any ask and output, it will use the argument value or the default value
+
+path
+""""
+
+    ``-p PATH``, ``--path PATH``
+
+    The work directory which the plugin will be in
+
+    default: current directory
+
+id
+""
+
+    ``-i ID``, ``--id ID``
+
+    The identity string of your plugin. It should consist of lowercase letters, numbers and underscores with a length of 1 to 64
+
+    default: current directory name (may not vaild)
+
+name
+""""
+
+    ``-n NAME``, ``--name NAME``
+
+    The name of your plugin.
+
+    default: plugin id
+
+description
+"""""""""""
+
+    ``-d DESCRIPTION``, ``--description DESCRIPTION``
+
+    The description of you plugin.
+
+    default: This is a plugin for MCDR
+
+author
+""""""
+
+    ``-a AUTHOR``, ``--author AUTHOR``
+
+    The author list of the plugins. split with ``:``
+
+    For example:
+
+    ``-a Fallen_Breath`` => ``"author": ["Fallen_Breath"]``
+
+    ``-a Fallen_Breath:Author2`` => ``"author": ["Fallen_Breath", "Author2"]``
+
+    default: None
+
+link
+""""
+
+    ``-l LINK``, ``--link LINK``
+
+    The url to your plugin.
+
+    default: None
+
+resources
+"""""""""
+
+    ``-r RESOURCES``, ``--resources RESOURCES``
+
+    The resource list, split with ``:``
+
+    For example:
+
+    ``-r lang`` => ``"resources": ["lang"]``
+
+    ``-r lang:example`` => ``"resources": ["lang", "example"]``
+
+    default: None
+
+entrypoint
+""""""""""
+
+    ``-e ENTRYPOINT``, ``--entrypoint ENTRYPOINT``
+
+    The entrypoint module of your plugin
+
+    default: None
+
+archive_name
+""""""""""""
+
+    ``-A ARCHIVE_NAME``, ``--archive_name ARCHIVE_NAME``
+
+    The file name of generated ``.mcdr`` packed plugin in command ``pack``
+
+    default: None
+
+Create commonly used folders and generate default configure files, including:
+
+* <plugin_id>/<entrypoint>.py
+* mcdreforged.plugin.json
+* requirements.txt
+
+Example:
+
+.. code-block::
+
+    $ mkdir hello_world && cd hello_world
+    $ python3 -m mcdreforged init_plugin
+    Plugin work directory (default "."): 
+    Id (default "hello_world"): 
+    Name (default "hello_world"): HelloWorldPlugin
+    Description (default "This is a plugin for MCDR"): This is a hello world plugin for MCDR
+    Author(s), split with ':': zyxkad
+    Main page link (enter to skip): https://example.com/hello_world_plugin.html
+    Resource(s), split with ':' (enter to skip): lang
+    Entry point (enter to skip): hello_world.source
+    Archive name (enter to skip): 
+    Created meta file "./mcdreforged.plugin.json"
+    Created entrypoint "./hello_world/source.py"
+    $ ls -al
+    total 16
+    drwxr-xr-x   5 root  staff  160 29 Dec 13:57 .
+    drwxr-xr-x  11 root  staff  352 29 Dec 13:55 ..
+    drwxr-xr-x   3 root  staff   96 29 Dec 13:57 hello_world
+    -rw-r--r--   1 root  staff  385 29 Dec 13:57 mcdreforged.plugin.json
+    -rw-r--r--   1 root  staff   80 29 Dec 13:57 requirements.txt
+    $ ls -al ./hello_world
+    total 8
+    drwxr-xr-x  3 liuhairong  staff   96 29 Dec 13:57 .
+    drwxr-xr-x  5 liuhairong  staff  160 29 Dec 13:57 ..
+    -rw-r--r--  1 liuhairong  staff   24 29 Dec 13:57 source.py
+    $ cat ./mcdreforged.plugin.json
+    {
+        "id": "hello_world",
+        "version": "1.0.0",
+        "name": "HelloWorldPlugin",
+        "description": "This is a hello world plugin for MCDR",
+        "dependencies": {
+            "mcdreforged": ">=2.0.0"
+        },
+        "entrypoint": "hello_world.source",
+        "author": [
+            "zyxkad"
+        ],
+        "link": "https://example.com/hello_world_plugin.html",
+        "resources": [
+            "lang"
+        ]
+    }
+    $ cat ./requirements.txt 
+    # Add your python package requirements here, just like regular requirements.txt
+    $ cat ./hello_world/source.py 
+    # Write your codes here
