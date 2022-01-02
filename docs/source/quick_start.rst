@@ -4,10 +4,12 @@ Quick Start
 
 This is a quick start tutorial of `MCDReforged <https://github.com/Fallen-Breath/MCDReforged>`__ (abbreviated as MCDR, omitted below)
 
-Requirements
+Preparation
 ------------
 
-MCDR requires python3 runtime. The python version need to be at least 3.6
+* MCDR requires python3 runtime. The python version need to be at least 3.6 with pip installed.
+* Literally, MCDR is a daemon system for Minecraft. You need a full Minecraft server prepared to get the maxium power of MCDR.
+* For Chinese users, you may need to set the pypi source to a mirror server to speed up the installing or upgrading. Here we recommend `Tsinghua tuna mirror <https://mirrors.tuna.tsinghua.edu.cn/help/pypi/>`__.
 
 Install
 -------
@@ -17,12 +19,6 @@ MCDR is available in `pypi <https://pypi.org/project/mcdreforged>`__. It can be 
 .. code-block:: bash
 
     pip install mcdreforged
-
-For Chinese users, you can added a ``-i https://pypi.tuna.tsinghua.edu.cn/simple`` prefix to the command to use `Tsinghua tuna mirror <https://mirrors.tuna.tsinghua.edu.cn/help/pypi/>`__ to speed up the installation
-
-.. code-block:: bash
-
-    pip install mcdreforged -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 Start up
 --------
@@ -47,13 +43,27 @@ MCDR will generated the default configure and permission files, as well as some 
     ├─ config.yml
     └─ permission.yml
 
-Now put your server files into the server folder (``server`` by default), then modify the configuration file ``config.yml`` and permission file ``permission.yml`` correctly
+Now put your server files into the server folder (``server`` by default), then modify the configuration file ``config.yml`` and permission file ``permission.yml`` correctly (see `Configure <configure.html>`__ and `Permission <permission.html>`__)
 
 After that you can launch MCDR, and it will start handling the server correctly
 
 .. code-block:: bash
 
     python -m mcdreforged
+
+Plugins
+-------
+
+The power of MCDR is all about its plugin system.
+
+`This <https://github.com/MCDReforged/PluginCatalogue>`__ is the official plugin catalogue for MCDR. You can find some really cool plugins there.
+
+Some advice:
+
+* The README or documentation is very important. Read it carefully before using something.
+* Before asking a question, consider if it's your problem.
+* `Ask questions in a smart way <http://www.catb.org/~esr/faqs/smart-questions.html>`__.
+* Communicate in a friendly manner.
 
 Upgrade
 -------
@@ -64,20 +74,14 @@ With the help of `pypi <https://pypi.org/project/mcdreforged/>`__, MCDR can be e
 
     pip install mcdreforged --upgrade
 
-That's it! 
-
-For Chinese users, you can use tuna mirror to speed up the upgrading too
-
-.. code-block:: bash
-
-    pip install mcdreforged --upgrade -i https://pypi.tuna.tsinghua.edu.cn/simple
+That's it!
 
 Development builds are available in `Test PyPi <https://test.pypi.org/project/mcdreforged/#history>`__, you can install them if you have special needs
 
 Launch from source
 ------------------
 
-Instead of installing MCDR from pypi, you can execute the source file of MCDR directly. Notes: This is mostly for development purpose
+Instead of installing MCDR from pypi, you can execute the source file of MCDR directly. Notes: This is mostly for development purpose, **DO NOT USE IT FOR PRODUCTION ENVIRONMENTS!**
 
 Download the source files of MCDR via cloning the repository or github action, and decompress the file if needed
 
