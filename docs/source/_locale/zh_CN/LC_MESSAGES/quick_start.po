@@ -38,9 +38,9 @@ msgstr "MCDR 依赖 python3 运行环境。请确保你的 python 版本大于 3
 
 #: ../quick_start.rst:11
 msgid ""
-"Literally, MCDR is a daemon system for Minecraft. You need a full "
+"In most cases, MCDR is a daemon system for Minecraft, so you need a full "
 "Minecraft server prepared to get the maxium power of MCDR."
-msgstr "字面意思，MCDR 是 Minecraft 的一个守护系统。你需要准备好一个完整的Minecraft 服务端。"
+msgstr "多数情况下，MCDR 是 Minecraft 的一个守护系统，所以你需要准备好一个完整的 Minecraft 服务端以发挥它的最大效用。"
 
 #: ../quick_start.rst:12
 msgid ""

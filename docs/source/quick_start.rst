@@ -8,7 +8,7 @@ Preparation
 ------------
 
 * MCDR requires python3 runtime. The python version need to be at least 3.6 with pip installed.
-* Literally, MCDR is a daemon system for Minecraft. You need a full Minecraft server prepared to get the maxium power of MCDR.
+* In most cases, MCDR is a daemon system for Minecraft, so you need a full Minecraft server prepared to get the maxium power of MCDR.
 * For Chinese users, you may need to set the pypi source to a mirror server to speed up the installing or upgrading. Here we recommend `Tsinghua tuna mirror <https://mirrors.tuna.tsinghua.edu.cn/help/pypi/>`__.
 
 Install
