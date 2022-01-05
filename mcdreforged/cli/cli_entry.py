@@ -1,4 +1,3 @@
-
 import os
 import sys
 import subprocess
@@ -263,46 +262,3 @@ def init_plugin_workspace(path: str, pid: str, name: str, description: str, auth
 		fd.write('# Write your codes here\n')
 		writeln('Created entrypoint "{}"'.format(entrypointf))
 
-	# status, _ = run_sh_cmd('git --version')
-	# if status == 0:
-	# 	if not os.path.exists(os.path.join(path, '.git')):
-	# 		writeln('Initing git workspace...')
-	# 		must_run_cmd('git -C {c} init -q'.format(c=path), quiet=quiet)
-	# 	gitlink = ask("Input this plugin's git repository link", skip=True)
-	# 	if gitlink is not None:
-	# 		must_run_cmd('git -C {c} remote add origin {l}'.format(c=path, l=gitlink), quiet=quiet)
-	# 		writeln('Commiting...')
-	# 		must_run_cmd('git -C {c} add .'.format(c=path), quiet=quiet)
-	# 		must_run_cmd("git -C {c} commit -q -m 'First commit'".format(c=path), quiet=quiet)
-	# 		must_run_cmd('git -C {c} push -q -u origin master'.format(c=path), quiet=quiet)
-	# else:
-	# 	writeln('[WARN] Cannot find command `git`')
-
-def try_decodes(string, encodes):
-	for e in encodes:
-		try:
-			return string.decode(e)
-		except UnicodeDecodeError:
-			pass
-	raise UnicodeDecodeError('Failed to decode {}, with encodes {}'.format(repr(string), str(encodes)))
-
-def run_sh_cmd(source: str):
-	proc = subprocess.Popen(source, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, stdin=sys.stdin, bufsize=-1)
-	stdout = b''
-	while True:
-		buf = proc.stdout.read()
-		if len(buf) == 0:
-			break
-		stdout += buf
-	exitid = proc.wait()
-	stdout = try_decodes(stdout, ['utf-8', 'gbk']) if len(stdout) > 0 else ''
-	return exitid, stdout
-
-def must_run_cmd(source: str, quiet: bool = False):
-	status, out = run_sh_cmd(source)
-	if status != 0:
-		if not quiet:
-			print(out)
-			print('[ERROR] Run command `{}` error!'.format(source))
-		sys.exit(status)
-	return out

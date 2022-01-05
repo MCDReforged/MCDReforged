@@ -145,7 +145,7 @@ init_plugin
 
 Prepare the workspace of MCDR plugin
 
-See more details: :doc:`metadata <metadata>`.
+See :doc:`metadata <metadata>` for more information.
 
 quiet
 """""
@@ -254,10 +254,12 @@ Create commonly used folders and generate default configure files, including:
 * requirements.txt
 
 Example:
+""""""""
 
 .. code-block::
 
-    $ mkdir hello_world && cd hello_world
+    $ mkdir hello_world
+    $ cd hello_world
     $ python3 -m mcdreforged init_plugin
     Plugin work directory (default "."): 
     Id (default "hello_world"): 
@@ -279,9 +281,9 @@ Example:
     -rw-r--r--   1 root  staff   80 29 Dec 13:57 requirements.txt
     $ ls -al ./hello_world
     total 8
-    drwxr-xr-x  3 liuhairong  staff   96 29 Dec 13:57 .
-    drwxr-xr-x  5 liuhairong  staff  160 29 Dec 13:57 ..
-    -rw-r--r--  1 liuhairong  staff   24 29 Dec 13:57 source.py
+    drwxr-xr-x  3 root  staff   96 29 Dec 13:57 .
+    drwxr-xr-x  5 root  staff  160 29 Dec 13:57 ..
+    -rw-r--r--  1 root  staff   24 29 Dec 13:57 source.py
     $ cat ./mcdreforged.plugin.json
     {
         "id": "hello_world",
@@ -293,7 +295,7 @@ Example:
         },
         "entrypoint": "hello_world.source",
         "author": [
-            "zyxkad"
+            "Your Name"
         ],
         "link": "https://example.com/hello_world_plugin.html",
         "resources": [
