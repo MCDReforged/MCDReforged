@@ -522,7 +522,7 @@ msgstr "get_unloaded_plugin_list"
 msgid ""
 "Return a list containing all **unloaded** plugin file path like "
 "``[\"plugins/MyPlugin.mcdr\"]``"
-msgstr "返回一个包含所有 **未加载** 插件的文件路径列表，例如：``[\"my_plugin_id\", \"another_plugin_id\"]``。"
+msgstr "返回一个包含所有 **未加载** 插件的文件路径列表，例如：``[\"plugins/MyPlugin.mcdr\"]``。"
 
 #: ../plugin_dev/classes/ServerInterface.rst:380
 msgid "get_disabled_plugin_list"
@@ -532,7 +532,7 @@ msgstr "get_disabled_plugin_list"
 msgid ""
 "Return a list containing all **disabled** plugin file path like "
 "``[\"plugins/MyPlugin.mcdr.disabled\"]``"
-msgstr "返回一个包含所有 **禁用** 插件的文件路径列表，例如：``[\"my_plugin_id\", \"another_plugin_id\"]``。"
+msgstr "返回一个包含所有 **被禁用** 插件的文件路径列表，例如：``[\"plugins/MyPlugin.mcdr.disabled\"]``。"
 
 #: ../plugin_dev/classes/ServerInterface.rst:389
 msgid "get_all_metadata"
