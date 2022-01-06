@@ -257,6 +257,9 @@ class PromptToolkitWrapper:
 			assert self.__console_handler.is_on_thread()
 			with self.__promoting:
 				# It's possible for prompt-toolkit to return a string wth multiple lines when pasting (#146)
-				return self.prompt_session.prompt('> ').splitlines()
+				input_ = self.prompt_session.prompt('> ')
+				if input_ is None:
+					input_ = ''
+				return input_.splitlines()
 		else:
 			return [input()]
