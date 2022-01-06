@@ -45,10 +45,10 @@ msgstr "多数情况下，MCDR 是 Minecraft 的一个守护系统，所以你�
 #: ../quick_start.rst:12
 msgid ""
 "For Chinese users, you may need to set the pypi source to a mirror server"
-" to speed up the installing or upgrading. Here we recommend `Tsinghua "
+" to speed up the installing or upgrading. For example, you could try `Tsinghua "
 "tuna mirror <https://mirrors.tuna.tsinghua.edu.cn/help/pypi/>`__."
 msgstr ""
-"对于中国用户，你可能需要将 pypi 源设置为镜像服务器，以加快安装或升级的速度。这里我们推荐 `清华大学开源软件镜像站 "
+"对于中国用户，你可能需要将 pypi 源设置为镜像服务器，以加快安装或升级的速度。比如，你可以试试 `清华大学开源软件镜像站 "
 "<https://mirrors.tuna.tsinghua.edu.cn/help/pypi/>`__。"
 
 #: ../quick_start.rst:15
