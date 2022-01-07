@@ -1,6 +1,6 @@
 import unittest
 from enum import Enum, auto, IntFlag, IntEnum, Flag
-from typing import List, Dict, Union, Optional
+from typing import List, Dict, Union, Optional, Any
 
 from mcdreforged.api.utils import serialize, deserialize, Serializable
 
@@ -254,6 +254,20 @@ class MyTestCase(unittest.TestCase):
 				self.value = value
 
 		self.assertRaises(TypeError, deserialize, {'value': 1}, BadClass)
+
+	def test_10_any(self):
+		class A(Serializable):
+			a: Any = 2
+			b: Dict[str, Any] = {'b': True}
+
+		a = A.get_default()
+		self.assertEqual(a.a, 2)
+		self.assertEqual(a.b.get('b'), True)
+
+		a = deserialize({'a': 'x', 'b': {'key': 'value', 'something': set()}}, A)
+		self.assertEqual(a.a, 'x')
+		self.assertEqual(a.b.get('key'), 'value')
+		self.assertIsInstance(a.b.get('something'), set)
 
 
 if __name__ == '__main__':
