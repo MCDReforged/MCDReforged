@@ -129,6 +129,13 @@ class VersionTest(unittest.TestCase):
 		self.assertTrue(req.accept('2.1-pre.3'))
 		self.assertFalse(req.accept('2.1-pre.1'))
 
+		req = VersionRequirement('>=2.1.4-')
+		self.assertTrue(req.accept('2.1.4'))
+		self.assertTrue(req.accept('2.1.4-'))
+		self.assertTrue(req.accept('2.1.4-alpha.3'))
+		self.assertTrue(req.accept('2.1.4-rc1'))
+		self.assertFalse(req.accept('2.1.3'))
+
 	def test_7_requirement_range(self):
 		req = VersionRequirement('>=1.2.0 <1.4.3')
 		self.assertTrue(req.accept('1.2.1'))
