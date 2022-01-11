@@ -159,7 +159,7 @@ path
 
     ``-p PATH``, ``--path PATH``
 
-    The work directory which the plugin will be in
+    The workspace which the plugin will be in
 
     default: current directory
 
@@ -261,11 +261,11 @@ Example:
     $ mkdir hello_world
     $ cd hello_world
     $ python3 -m mcdreforged init_plugin
-    Plugin work directory (default "."): 
+    Plugin workspace (default "."): 
     Id (default "hello_world"): 
     Name (default "hello_world"): HelloWorldPlugin
     Description (default "This is a plugin for MCDR"): This is a hello world plugin for MCDR
-    Author(s), split with ':': zyxkad
+    Author(s), split with ':': Your Name:Another Author
     Main page link (enter to skip): https://example.com/hello_world_plugin.html
     Resource(s), split with ':' (enter to skip): lang
     Entry point (enter to skip): hello_world.source
@@ -295,7 +295,8 @@ Example:
         },
         "entrypoint": "hello_world.source",
         "author": [
-            "Your Name"
+            "Your Name",
+            "Another Author"
         ],
         "link": "https://example.com/hello_world_plugin.html",
         "resources": [

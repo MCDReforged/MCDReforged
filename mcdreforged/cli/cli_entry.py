@@ -186,7 +186,7 @@ def init_plugin_workspace(path: str, pid: str, name: str, description: str, auth
 			return default if len(r) == 0 else r
 
 	if path is None:
-		path = ask('Plugin work directory', default='.')
+		path = ask('Plugin workspace', default='.')
 	metafile = os.path.join(path, plugin_constant.PLUGIN_META_FILE)
 	if os.path.exists(metafile):
 		writeln('[ERROR] Meta file "{}" already exists'.format(metafile))
@@ -243,11 +243,11 @@ def init_plugin_workspace(path: str, pid: str, name: str, description: str, auth
 	if archive_name is not None:
 		metadata['archive_name'] = archive_name
 
-	with open(metafile, 'w') as fd:
+	with open(metafile, 'w', encoding='utf8') as fd:
 		json.dump(metadata, fd, indent=4)
 		writeln('Created meta file "{}"'.format(metafile))
 
-	with open(os.path.join(path, 'requirements.txt'), 'w') as fd:
+	with open(os.path.join(path, 'requirements.txt'), 'w', encoding='utf8') as fd:
 		fd.write('# Add your python package requirements here, just like regular requirements.txt\n')
 
 	if entrypoint is None:
@@ -258,7 +258,7 @@ def init_plugin_workspace(path: str, pid: str, name: str, description: str, auth
 	if not os.path.exists(os.path.join(path, entry)):
 		os.makedirs(os.path.join(path, entry))
 	entrypointf = os.path.join(path, entry, point + '.py')
-	with open(entrypointf, 'w') as fd:
+	with open(entrypointf, 'w', encoding='utf8') as fd:
 		fd.write('# Write your codes here\n')
 		writeln('Created entrypoint "{}"'.format(entrypointf))
 
