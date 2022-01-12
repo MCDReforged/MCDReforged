@@ -141,7 +141,7 @@ init_plugin
 
 .. code-block::
 
-    python -m mcdreforged [-q] init_plugin [-h] [-p PATH] [-i ID] [-n NAME] [-d DESCRIPTION] [-a AUTHOR] [-l LINK] [-r RESOURCES] [-e ENTRYPOINT] [-A ARCHIVE_NAME]
+    python -m mcdreforged [-q] init_plugin [-h] [-p PATH] [-i ID] [-n NAME] [-d DESCRIPTION] [-a AUTHOR] [-l LINK] [-r RESOURCES] [-e ENTRYPOINT] [-A ARCHIVE_NAME] [-v MCDR_VERSION]
 
 Prepare the workspace of MCDR plugin
 
@@ -247,6 +247,15 @@ archive_name
 
     default: None
 
+mcdr_version
+""""""""""""
+
+    ``-v MCDR_VERSION``, ``--mcdr_version MCDR_VERSION``
+
+    The MCDR dependency version
+
+    default: greater or equal to current MCDR version (>=[current MCDR version])
+
 Create commonly used folders and generate default configure files, including:
 
 * <plugin_id>/<entrypoint>.py
@@ -258,52 +267,53 @@ Example:
 
 .. code-block::
 
-    $ mkdir hello_world
-    $ cd hello_world
-    $ python3 -m mcdreforged init_plugin
+    bash-3.2# mkdir hello_world
+    bash-3.2# cd hello_world/
+    bash-3.2# python3 -m mcdreforged init_plugin
     Plugin workspace (default "."): 
     Id (default "hello_world"): 
     Name (default "hello_world"): HelloWorldPlugin
-    Description (default "This is a plugin for MCDR"): This is a hello world plugin for MCDR
+    Description (default "This is a plugin for MCDR"): This is an example plugin
     Author(s), split with ':': Your Name:Another Author
     Main page link (enter to skip): https://example.com/hello_world_plugin.html
     Resource(s), split with ':' (enter to skip): lang
     Entry point (enter to skip): hello_world.source
     Archive name (enter to skip): 
+    MCDR dependency version (default ">=2.3.0"): 
     Created meta file "./mcdreforged.plugin.json"
     Created entrypoint "./hello_world/source.py"
-    $ ls -al
+    bash-3.2# ls -al
     total 16
-    drwxr-xr-x   5 root  staff  160 29 Dec 13:57 .
-    drwxr-xr-x  11 root  staff  352 29 Dec 13:55 ..
-    drwxr-xr-x   3 root  staff   96 29 Dec 13:57 hello_world
-    -rw-r--r--   1 root  staff  385 29 Dec 13:57 mcdreforged.plugin.json
-    -rw-r--r--   1 root  staff   80 29 Dec 13:57 requirements.txt
-    $ ls -al ./hello_world
+    drwxr-xr-x   5 root        staff  160 12 Jan 10:46 .
+    drwxr-xr-x  12 liuhairong  staff  384 12 Jan 10:45 ..
+    drwxr-xr-x   3 root        staff   96 12 Jan 10:46 hello_world
+    -rw-r--r--   1 root        staff  402 12 Jan 10:46 mcdreforged.plugin.json
+    -rw-r--r--   1 root        staff   80 12 Jan 10:46 requirements.txt
+    bash-3.2# ls -al ./hello_world
     total 8
-    drwxr-xr-x  3 root  staff   96 29 Dec 13:57 .
-    drwxr-xr-x  5 root  staff  160 29 Dec 13:57 ..
-    -rw-r--r--  1 root  staff   24 29 Dec 13:57 source.py
-    $ cat ./mcdreforged.plugin.json
+    drwxr-xr-x  3 root  staff   96 12 Jan 10:46 .
+    drwxr-xr-x  5 root  staff  160 12 Jan 10:46 ..
+    -rw-r--r--  1 root  staff   24 12 Jan 10:46 source.py
+    bash-3.2# cat ./mcdreforged.plugin.json
     {
         "id": "hello_world",
         "version": "1.0.0",
         "name": "HelloWorldPlugin",
-        "description": "This is a hello world plugin for MCDR",
+        "description": "This is an example plugin",
         "dependencies": {
-            "mcdreforged": ">=2.0.0"
+            "mcdreforged": ">=2.3.0"
         },
         "entrypoint": "hello_world.source",
         "author": [
-            "Your Name",
-            "Another Author"
+            "Another Author",
+            "Your Name"
         ],
         "link": "https://example.com/hello_world_plugin.html",
         "resources": [
             "lang"
         ]
-    }
-    $ cat ./requirements.txt 
+    }bash-3.2# cat ./requirements.txt 
     # Add your python package requirements here, just like regular requirements.txt
-    $ cat ./hello_world/source.py 
+    bash-3.2# cat ./hello_world/source.py 
     # Write your codes here
+    bash-3.2#
