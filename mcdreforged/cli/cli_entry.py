@@ -229,7 +229,7 @@ def init_plugin_workspace(path: str, pid: str, name: str, description: str, auth
 		'name': name,
 		'description': description,
 		'dependencies': {
-			'mcdreforged': '>=2.0.0'
+			'mcdreforged': '>=' + core_constant.VERSION
 		}
 	}
 	if entrypoint is not None:
