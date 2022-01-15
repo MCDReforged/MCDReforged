@@ -141,7 +141,7 @@ init_plugin
 
 .. code-block::
 
-    python -m mcdreforged [-q] init_plugin [-h] [-p PATH] [-i ID] [-n NAME] [-d DESCRIPTION] [-a AUTHOR] [-l LINK] [-r RESOURCES] [-e ENTRYPOINT] [-A ARCHIVE_NAME] [-v MCDR_VERSION]
+    python -m mcdreforged [-q] init_plugin [-h] [-p PATH] [-i ID] [-n NAME] [-d DESCRIPTION] [-a AUTHOR] [-l LINK] [-r RESOURCES] [-e ENTRYPOINT] [-A ARCHIVE_NAME]
 
 Prepare the workspace of MCDR plugin
 
@@ -247,15 +247,6 @@ archive_name
 
     default: None
 
-mcdr_version
-""""""""""""
-
-    ``-v MCDR_VERSION``, ``--mcdr_version MCDR_VERSION``
-
-    The MCDR dependency version
-
-    default: greater or equal to current MCDR version (>=[current MCDR version])
-
 Create commonly used folders and generate default configure files, including:
 
 * <plugin_id>/<entrypoint>.py
@@ -279,16 +270,15 @@ Example:
     Resource(s), split with ':' (enter to skip): lang
     Entry point (enter to skip): hello_world.source
     Archive name (enter to skip): 
-    MCDR dependency version (default ">=2.3.0"): 
     Created meta file "./mcdreforged.plugin.json"
     Created entrypoint "./hello_world/source.py"
     bash-3.2# ls -al
     total 16
-    drwxr-xr-x   5 root        staff  160 12 Jan 10:46 .
-    drwxr-xr-x  12 liuhairong  staff  384 12 Jan 10:45 ..
-    drwxr-xr-x   3 root        staff   96 12 Jan 10:46 hello_world
-    -rw-r--r--   1 root        staff  402 12 Jan 10:46 mcdreforged.plugin.json
-    -rw-r--r--   1 root        staff   80 12 Jan 10:46 requirements.txt
+    drwxr-xr-x   5 root staff  160 12 Jan 10:46 .
+    drwxr-xr-x  12 root staff  384 12 Jan 10:45 ..
+    drwxr-xr-x   3 root staff   96 12 Jan 10:46 hello_world
+    -rw-r--r--   1 root staff  402 12 Jan 10:46 mcdreforged.plugin.json
+    -rw-r--r--   1 root staff   80 12 Jan 10:46 requirements.txt
     bash-3.2# ls -al ./hello_world
     total 8
     drwxr-xr-x  3 root  staff   96 12 Jan 10:46 .
@@ -300,9 +290,6 @@ Example:
         "version": "1.0.0",
         "name": "HelloWorldPlugin",
         "description": "This is an example plugin",
-        "dependencies": {
-            "mcdreforged": ">=2.3.0"
-        },
         "entrypoint": "hello_world.source",
         "author": [
             "Another Author",

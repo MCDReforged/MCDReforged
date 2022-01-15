@@ -57,7 +57,8 @@ def entry_point():
 	parser_workspace.add_argument('-r', '--resources',    help="The plugin resources files, split with ':'",         default=None)
 	parser_workspace.add_argument('-e', '--entrypoint',   help="The plugin's entry point",                           default=None)
 	parser_workspace.add_argument('-A', '--archive-name', help="The plugin's archive name",                          default=None)
-	parser_workspace.add_argument('-v', '--mcdr-version', help="MCDR dependency version",                            default=None)
+	#### NOTE: remove this option https://github.com/Fallen-Breath/MCDReforged/pull/144#discussion_r783662710
+	# parser_workspace.add_argument('-v', '--mcdr-version', help="MCDR dependency version",                            default=None)
 
 	result = parser.parse_args()
 	quiet = result.quiet
@@ -72,7 +73,7 @@ def entry_point():
 		make_packed_plugin(result.input, result.output, result.name, quiet=quiet)
 	elif result.subparser_name == 'init_plugin':
 		try:
-			init_plugin_workspace(result.path, result.id, result.name, result.description, result.author, result.link, result.resources, result.entrypoint, result.archive_name, result.mcdr_version, quiet=quiet)
+			init_plugin_workspace(result.path, result.id, result.name, result.description, result.author, result.link, result.resources, result.entrypoint, result.archive_name, quiet=quiet)
 		except KeyboardInterrupt as e:
 			print('signal: interrupt')
 
@@ -176,7 +177,7 @@ def make_packed_plugin(input_dir: str, output_dir: str, file_name: Optional[str]
 	writeln('Packed {} files/folders into "{}"'.format(file_counter, file_name))
 	writeln('Done')
 
-def init_plugin_workspace(path: str, pid: str, name: str, description: str, authors: str, link: str, resources: str, entrypoint: str, archive_name: str, mcdrvs: str, *, quiet: bool = False):
+def init_plugin_workspace(path: str, pid: str, name: str, description: str, authors: str, link: str, resources: str, entrypoint: str, archive_name: str, *, quiet: bool = False):
 	writeln = print if not quiet else lambda *args, **kwargs: None
 	if quiet:
 		def ask(*args, default=None, **kwargs):
@@ -224,17 +225,17 @@ def init_plugin_workspace(path: str, pid: str, name: str, description: str, auth
 	if archive_name is None:
 		archive_name = ask('Archive name', skip=True)
 
-	if mcdrvs is None:
-		mcdrvs = ask('MCDR dependency version', default='>=' + core_constant.VERSION)
+	# if mcdrvs is None:
+	# 	mcdrvs = ask('MCDR dependency version', default='>=' + core_constant.VERSION)
 
 	metadata = {
 		'id': pid,
 		'version': '1.0.0',
 		'name': name,
-		'description': description,
-		'dependencies': {
-			'mcdreforged': mcdrvs
-		}
+		'description': description
+		# 'dependencies': {
+		# 	'mcdreforged': mcdrvs
+		# }
 	}
 	if entrypoint is not None:
 		metadata['entrypoint'] = entrypoint
