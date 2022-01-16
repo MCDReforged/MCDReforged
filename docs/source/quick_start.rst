@@ -77,7 +77,7 @@ Development builds are available in `Test PyPi <https://test.pypi.org/project/mc
 Launch from source
 ------------------
 
-Instead of installing MCDR from pypi, you can execute the source file of MCDR directly. Notes: This is mostly for development purpose
+Instead of installing MCDR from pypi, you can execute the source file of MCDR directly. **Notes: This is mostly for development purpose, DO NOT use it under a production environment**
 
 Download the source files of MCDR via cloning the repository or github action, and decompress the file if needed
 
