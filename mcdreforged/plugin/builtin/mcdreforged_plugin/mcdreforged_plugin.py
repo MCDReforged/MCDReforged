@@ -18,7 +18,7 @@ from mcdreforged.plugin.type.permanent_plugin import PermanentPlugin
 from mcdreforged.translation.translation_text import RTextMCDRTranslation
 
 METADATA = {
-	'id': core_constant.NAME.lower(),
+	'id': core_constant.PACKAGE_NAME,
 	'version': core_constant.VERSION,
 	'name': core_constant.NAME,
 	'description': 'The core of {}'.format(core_constant.NAME),
