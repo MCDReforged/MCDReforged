@@ -137,9 +137,9 @@ msgstr "通过克隆仓库或者 github action 下载 MCDR 的源文件，如果
 
 #: ../quick_start.rst:92
 msgid ""
-"MCDR will refuse to start if the mcdreforged python package is not "
+"MCDR will delay to start if the mcdreforged python package is not "
 "detected"
-msgstr "若未检测到 mcdreforged 的 Python 包，MCDR 将拒绝启动。"
+msgstr "若未检测到 mcdreforged 的 Python 包，MCDR 将延迟启动。"
 
 #: ../quick_start.rst:94
 msgid ""

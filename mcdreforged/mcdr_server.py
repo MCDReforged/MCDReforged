@@ -147,9 +147,9 @@ class MCDReforgedServer:
 		except pkg_resources.ResolutionError:
 			self.logger.warning('It looks like you\'re launching from source as {} is not found in python packages'.format(mcdr_pkg))
 			self.logger.warning('In this way, the plugin system might not work correctly')
-			self.logger.warning('In a production environment, you should install {} from PyPI'.format(mcdr_pkg))
-			self.logger.warning('See documention ({}) for more infomation'.format(core_constant.DOCUMENTION_URL))
-			sys.exit(1)
+			self.logger.warning('In a production environment, you should install {} from PyPI, see documention ({}) for more infomation'.format(mcdr_pkg, core_constant.DOCUMENTION_URL))
+			self.logger.warning('MCDReforged will launch after 10 seconds...')
+			time.sleep(10)
 
 	def on_file_missing(self):
 		self.logger.info('Looks like MCDR is not initialized at current directory {}'.format(os.getcwd()))
