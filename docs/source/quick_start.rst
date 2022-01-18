@@ -87,6 +87,7 @@ Download the source files of MCDR via cloning the repository or github action, a
     ├─ mcdreforged/
     │   └─ ..
     ├─ MCDReforged.py
+    ├─ setup.py
     └─ ..
 
 MCDR will delay to start if the mcdreforged python package is not detected
