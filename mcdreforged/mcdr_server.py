@@ -145,9 +145,11 @@ class MCDReforgedServer:
 		try:
 			pkg_resources.require(mcdr_pkg)
 		except pkg_resources.ResolutionError:
-			self.logger.warning('Package {} is not found in python packages'.format(mcdr_pkg))
-			self.logger.warning('Have you used pip to install {}?'.format(mcdr_pkg))
-			self.logger.warning('As a result, the plugin system might not work correctly')
+			self.logger.warning('It looks like you\'re launching from source as {} is not found in python packages'.format(mcdr_pkg))
+			self.logger.warning('In this way, the plugin system might not work correctly')
+			self.logger.warning('In a production environment, you should install {} from PyPI'.format(mcdr_pkg))
+			self.logger.warning('See documention ({}) for more infomation'.format(core_constant.DOCUMENTION_URL))
+			sys.exit(1)
 
 	def on_file_missing(self):
 		self.logger.info('Looks like MCDR is not initialized at current directory {}'.format(os.getcwd()))
