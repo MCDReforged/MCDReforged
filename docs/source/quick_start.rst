@@ -92,7 +92,7 @@ Download the source files of MCDR via cloning the repository or github action, a
 
 MCDR will delay to start if the mcdreforged python package is not detected
 
-So enter the directory ``my_mcdr_server_in_source/``, and run the following command to create egg_info to bypass the detection
+So enter the directory ``my_mcdr_server_in_source/``, and run the following command to create egg_info to pass the detection
 
 .. code-block:: bash
 
