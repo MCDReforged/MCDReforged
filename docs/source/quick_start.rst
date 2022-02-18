@@ -87,9 +87,18 @@ Download the source files of MCDR via cloning the repository or github action, a
     ├─ mcdreforged/
     │   └─ ..
     ├─ MCDReforged.py
+    ├─ setup.py
     └─ ..
 
-Enter directory ``my_mcdr_server_in_source/`` and you can start MCDR with the same command as above
+MCDR will delay to start if the mcdreforged python package is not detected
+
+So enter the directory ``my_mcdr_server_in_source/``, and run the following command to create egg_info to pass the detection
+
+.. code-block:: bash
+
+    python setup.py egg_info
+
+After that, MCDR can be launched normally
 
 .. code-block:: bash
 

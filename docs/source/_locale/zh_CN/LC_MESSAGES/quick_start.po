@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-21 11:37+0800\n"
+"POT-Creation-Date: 2022-01-18 17:25+0800\n"
 "PO-Revision-Date: 2021-01-23 09:12+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -12,7 +12,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.9.0\n"
+"Generated-By: Babel 2.9.1\n"
 
 #: ../quick_start.rst:3
 msgid "Quick Start"
@@ -137,25 +137,35 @@ msgstr "通过克隆仓库或者 github action 下载 MCDR 的源文件，如果
 
 #: ../quick_start.rst:92
 msgid ""
-"Enter directory ``my_mcdr_server_in_source/`` and you can start MCDR with"
-" the same command as above"
-msgstr "进入目录 ``my_mcdr_server_in_source/``，然后你就可以使用和同上所述的指令启动 MCDR了："
+"MCDR will delay to start if the mcdreforged python package is not "
+"detected"
+msgstr "若未检测到 mcdreforged 的 Python 包，MCDR 将延迟启动。"
 
-#: ../quick_start.rst:98
+#: ../quick_start.rst:94
+msgid ""
+"So enter the directory ``my_mcdr_server_in_source/``, and run the "
+"following command to create egg_info to pass the detection"
+msgstr "因此，进入 ``my_mcdr_server_in_source/`` 目录，运行以下命令，创建 egg_info 以通过检测："
+
+#: ../quick_start.rst:100
+msgid "After that, MCDR can be launched normally"
+msgstr "在这之后，便可正常启动 MCDR："
+
+#: ../quick_start.rst:106
 msgid "Alternatively you can execute ``MCDReforged.py`` with python to start MCDR"
 msgstr "当然你也可以通过运行 ``MCDReforged.py`` 来启动 MCDR："
 
-#: ../quick_start.rst:104
+#: ../quick_start.rst:112
 msgid ""
 "``MCDReforged.py`` is just a simple wrapper for launching MCDR with the "
 "following codes"
 msgstr "``MCDReforged.py`` 只是一个简单的启动 MCDR 的包装，它的代码如下所示"
 
-#: ../quick_start.rst:115
+#: ../quick_start.rst:123
 msgid "``MCDReforged.py`` also works for MCDR installed by ``pip`` command"
 msgstr "运行 ``MCDReforged.py`` 同样适用于从 ``pypi`` 安装的 MCDR。"
 
-#: ../quick_start.rst:117
+#: ../quick_start.rst:125
 msgid ""
 "For windows users, if you have bound a correct python interpreter to "
 "``*.py`` files you can also double click the ``MCDReforged.py`` to start "
