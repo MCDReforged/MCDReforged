@@ -7,6 +7,7 @@ from subprocess import Popen, PIPE, STDOUT
 from threading import Lock
 from typing import Optional, Callable, Any
 
+import pkg_resources
 import psutil
 from ruamel.yaml import YAMLError
 
@@ -71,6 +72,8 @@ class MCDReforgedServer:
 		self.plugin_manager = PluginManager(self)
 		self.preference_manager = PreferenceManager(self)
 
+		self.__check_environment()
+
 		# --- Input arguments "generate_default_only" processing --- #
 		if generate_default_only:
 			self.config.save_default()
@@ -132,6 +135,21 @@ class MCDReforgedServer:
 				self.__kill_server()
 		except:
 			pass
+
+	def __check_environment(self):
+		"""
+		Some checks at initialization
+		In dev environment, you can use setup.py to create `mcdreforged.egg-info/` so the package check will pass
+		"""
+		mcdr_pkg = core_constant.PACKAGE_NAME  # should be "mcdreforged"
+		try:
+			pkg_resources.require(mcdr_pkg)
+		except pkg_resources.ResolutionError:
+			self.logger.warning('It looks like you\'re launching from source as {} is not found in python packages'.format(mcdr_pkg))
+			self.logger.warning('In this way, the plugin system might not work correctly')
+			self.logger.warning('In a production environment, you should install {} from PyPI, see documention ({}) for more infomation'.format(mcdr_pkg, core_constant.DOCUMENTION_URL))
+			self.logger.warning('MCDReforged will launch after 10 seconds...')
+			time.sleep(10)
 
 	def on_file_missing(self):
 		self.logger.info('Looks like MCDR is not initialized at current directory {}'.format(os.getcwd()))

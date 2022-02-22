@@ -4,6 +4,7 @@ from setuptools import find_packages, setup
 
 from mcdreforged.constants import core_constant
 
+# === cheatsheet ===
 # rm -rf build/ dist/ mcdreforged.egg-info/
 # python setup.py sdist bdist_wheel
 # python -m twine upload --repository testpypi dist/*
