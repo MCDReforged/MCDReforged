@@ -135,7 +135,7 @@ def make_packed_plugin(input_dir: str, output_dir: str, file_name: Optional[str]
 					full_path = os.path.join(dir_path, file_name_)
 					if os.path.isdir(full_path) and os.path.basename(full_path) == '__pycache__':
 						continue
-					arc_name = os.path.join(os.path.basename(base_path), full_path.replace(base_path, '', 1).lstrip(os.sep))
+					arc_name = os.path.join(dir_arc, full_path.replace(base_path, '', 1).lstrip(os.sep))
 					zip_file.write(full_path, arcname=arc_name)
 					file_counter += 1
 					writeln('  Writing: {} -> {}'.format(full_path, arc_name))
