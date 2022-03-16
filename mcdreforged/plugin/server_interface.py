@@ -182,8 +182,9 @@ class ServerInterface:
 	def set_exit_after_stop_flag(self, flag_value: bool) -> None:
 		"""
 		Set the flag that indicating if MCDR should exit when the server has stopped
-		If set to true, after the server stops MCDR will exit,
-		otherwise MCDR will just keep running
+		If set to true, after the server stops MCDR will exit, otherwise (set to false) MCDR will just keep running
+		The flag value will be set to true everything when the server starts
+		The flag value is displayed in line 5 in command `!!MCDR status`
 		"""
 		if flag_value:
 			self._mcdr_server.with_flag(MCDReforgedFlag.EXIT_AFTER_STOP)
