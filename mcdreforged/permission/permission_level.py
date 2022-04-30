@@ -1,6 +1,9 @@
 import collections
 from enum import Enum
-from typing import Optional, Dict, List
+from typing import Optional, Dict, List, Union
+
+
+PermissionParam = Union[str, int]
 
 
 class PermissionLevelItem:
@@ -55,7 +58,7 @@ class PermissionLevel:
 			raise ValueError('Value {} out of range [{}, {}]'.format(level, cls.MINIMUM_LEVEL, cls.MAXIMUM_LEVEL))
 
 	@classmethod
-	def from_value(cls, value):
+	def from_value(cls, value: PermissionParam):
 		"""
 		Convert any type of permission level into int value. Examples:
 			'guest'	-> 0
@@ -82,7 +85,7 @@ class PermissionLevel:
 		return level
 
 	@classmethod
-	def get_level(cls, value) -> Optional[PermissionLevelItem]:
+	def get_level(cls, value: PermissionParam) -> Optional[PermissionLevelItem]:
 		"""
 		Fail-proof version of from_value
 		"""
