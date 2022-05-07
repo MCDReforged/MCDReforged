@@ -1,6 +1,6 @@
 import sys
 from threading import RLock, Lock
-from typing import TYPE_CHECKING, Optional, Iterable, Any
+from typing import TYPE_CHECKING, Optional, Iterable, Any, List
 
 from prompt_toolkit import PromptSession
 from prompt_toolkit.application import get_app
@@ -45,19 +45,22 @@ class ConsoleHandler(ThreadExecutor):
 
 	def tick(self):
 		try:
-			text = self.console_kit.get_input()
-			if not isinstance(text, str):
+			inputs = self.console_kit.get_input()
+			if not isinstance(inputs, list):
 				raise IOError()
-			try:
-				parsed_result: Info = self.mcdr_server.server_handler_manager.get_current_handler().parse_console_command(text)
-			except:
-				self.mcdr_server.logger.exception(self.mcdr_server.tr('console_handler.parse_fail', text))
-			else:
-				if self.mcdr_server.logger.should_log_debug(DebugOption.HANDLER):
-					self.mcdr_server.logger.debug('Parsed text from {}:'.format(type(self).__name__), no_check=True)
-					for line in parsed_result.format_text().splitlines():
-						self.mcdr_server.logger.debug('	{}'.format(line), no_check=True)
-				self.mcdr_server.reactor_manager.put_info(parsed_result)
+			for text in inputs:
+				if not isinstance(text, str):
+					raise IOError()
+				try:
+					parsed_result: Info = self.mcdr_server.server_handler_manager.get_current_handler().parse_console_command(text)
+				except:
+					self.mcdr_server.logger.exception(self.mcdr_server.tr('console_handler.parse_fail', text))
+				else:
+					if self.mcdr_server.logger.should_log_debug(DebugOption.HANDLER):
+						self.mcdr_server.logger.debug('Parsed text from {}:'.format(type(self).__name__), no_check=True)
+						for line in parsed_result.format_text().splitlines():
+							self.mcdr_server.logger.debug('	{}'.format(line), no_check=True)
+					self.mcdr_server.reactor_manager.put_info(parsed_result)
 		except (KeyboardInterrupt, EOFError, SystemExit, IOError) as error:
 			if self.mcdr_server.is_server_running():
 				self.mcdr_server.logger.critical('Critical exception caught in {}: {} {}'.format(type(self).__name__, type(error).__name__, error))
@@ -249,10 +252,14 @@ class PromptToolkitWrapper:
 				# make sure in the console thread, prompt_session.prompt() ends
 				pass
 
-	def get_input(self) -> Optional[str]:
+	def get_input(self) -> List[str]:
 		if self.pt_enabled:
 			assert self.__console_handler.is_on_thread()
 			with self.__promoting:
-				return self.prompt_session.prompt('> ')
+				# It's possible for prompt-toolkit to return a string wth multiple lines when pasting (#146)
+				input_ = self.prompt_session.prompt('> ')
+				if input_ is None:
+					input_ = ''
+				return input_.splitlines()
 		else:
-			return input()
+			return [input()]

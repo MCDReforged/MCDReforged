@@ -12,7 +12,7 @@
 language: en_us
 
 
-# The working directory of the server. If you use default value server/ I will suggest you to put all the files related to the server to the server/ directory
+# The working directory of the server. If you use the default value server/ I will suggest you put all the files related to the server into the server/ directory
 working_directory: server
 
 
@@ -51,7 +51,7 @@ plugin_directories:
 
 
 # rcon setting
-# if enable, plugins can use rcon to query command from the server
+# if enabled, plugins can use rcon to query commands from the server
 rcon:
   enable: false
   address: 127.0.0.1
@@ -78,15 +78,15 @@ advanced_console: true
 disable_console_thread: false
 
 
-# When set to true, MCDR will removed all console font formatter codes in before any message gets printed onto the console
+# When set to true, MCDR will remove all console font formatter codes before any message gets printed onto the console
 disable_console_color: false
 
 
-# A list of customize info reactor classes to handle the info instance. The classed need to be subclasses of AbstractServerHandler
+# A list of customizing info reactor classes to handle the info instance. The classes need to be subclasses of AbstractServerHandler
 custom_handlers:
 
 
-# A list of customize info reactor classes to handle the info instance. The classed need to be subclasses of AbstractInfoReactor
+# A list of customizing info reactor classes to handle the info instance. The classes need to be subclasses of AbstractInfoReactor
 custom_info_reactors:
 
 
@@ -106,5 +106,5 @@ debug:
 # |           Missing Configure           |
 # =========================================
 
-# Options below were missing and set by MCDR with default value
-# Remember to check and update the them as soon as possible
+# Options below were missing and set by MCDR with the default value
+# Remember to check and update them as soon as possible

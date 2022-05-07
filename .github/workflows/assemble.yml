@@ -1,0 +1,29 @@
+name: Assemble a Dev Source Compressed File
+
+on: workflow_call
+
+jobs:
+  assemble:
+    runs-on: ubuntu-latest
+    name: Assemble a dev source compressed file
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Create Dev Build
+        run: |
+          mkdir MCDReforged
+          mv * MCDReforged || true
+          cd MCDReforged
+          rm -rf .git tests
+          rm -f .gitignore logo_long.png setup.py MANIFEST.in *.md
+          mkdir server
+          mkdir config
+          rm -f plugins/*
+          rm -rf docs docs_prev
+          cd ..
+          zip -r MCDReforged-dev.zip ./MCDReforged
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: MCDReforged dev source for ${{ github.sha }}
+          path: MCDReforged-dev.zip

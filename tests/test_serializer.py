@@ -1,6 +1,7 @@
+import sys
 import unittest
 from enum import Enum, auto, IntFlag, IntEnum, Flag
-from typing import List, Dict, Union, Optional
+from typing import List, Dict, Union, Optional, Any
 
 from mcdreforged.api.utils import serialize, deserialize, Serializable
 
@@ -254,6 +255,40 @@ class MyTestCase(unittest.TestCase):
 				self.value = value
 
 		self.assertRaises(TypeError, deserialize, {'value': 1}, BadClass)
+
+	def test_10_any(self):
+		class A(Serializable):
+			a: Any = 2
+			b: Dict[str, Any] = {'b': True}
+
+		a = A.get_default()
+		self.assertEqual(a.a, 2)
+		self.assertEqual(a.b.get('b'), True)
+
+		a = deserialize({'a': 'x', 'b': {'key': 'value', 'something': set()}}, A)
+		self.assertEqual(a.a, 'x')
+		self.assertEqual(a.b.get('key'), 'value')
+		self.assertIsInstance(a.b.get('something'), set)
+
+	def test_11_py310_type_hint(self):
+		if sys.version_info.major >= 3 and sys.version_info.minor >= 10:  # >= python 3.10
+			# suppressing these inspections so no complain with python <3.10
+			# noinspection PyTypeHints,PyUnresolvedReferences
+			class A(Serializable):
+				a: list[int] = [1]
+				b: dict[str, bool] = {'yes': True}
+
+			a = A.get_default()
+			self.assertIsInstance(a.a, list)
+			self.assertEqual(a.a, [1])
+			self.assertIsInstance(a.b, dict)
+			self.assertEqual(a.b.get('yes'), True)
+
+			a = deserialize({'a': [3, 4], 'b': {'no': False}}, A)
+			self.assertEqual(a.a, [3, 4])
+			self.assertEqual(a.b.get('no'), False)
+		else:
+			print('Ignored type hint test using python 3.10 feature')
 
 
 if __name__ == '__main__':

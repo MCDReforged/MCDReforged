@@ -17,7 +17,7 @@ def start_thread(func: Callable, args: Tuple, name: Optional[str] = None):
 
 def load_class(path: str):
 	"""
-	:param path: the path to the class, e.g. mcdreforged.info.Info
+	:param path: the path to the class, e.g. mcdreforged.info_reactor.info.Info
 	:return: The class
 	"""
 	try:

@@ -53,29 +53,27 @@ class TranslationManager:
 
 		# Translating
 		try:
-			translated_text = translation_util.translate_from_dict(self.translations.get(key, {}), language, fallback_language=fallback_language)
+			translated_formatter = translation_util.translate_from_dict(self.translations.get(key, {}), language, fallback_language=fallback_language)
 		except KeyError:
 			try:
-				translated_text = translation_util.translate_from_dict(plugin_translations.get(key, {}), language, fallback_language=fallback_language, default=None)
+				translated_formatter = translation_util.translate_from_dict(plugin_translations.get(key, {}), language, fallback_language=fallback_language, default=None)
 			except KeyError:
-				translated_text = None
-		# Check if there's any rtext inside args
-		use_rtext = False
-		for arg in args:
-			if isinstance(arg, RTextBase):
-				use_rtext = True
+				translated_formatter = None
+
+		# Check if there's any rtext inside args and kwargs
+		use_rtext = any([isinstance(e, RTextBase) for e in list(args) + list(kwargs.values())])
 
 		# Processing
-		if translated_text is not None:
-			translated_text = translated_text.strip('\n\r')
+		if translated_formatter is not None:
+			translated_formatter = translated_formatter.strip('\n\r')
 			try:
 				if use_rtext:
-					translated_text = RTextBase.format(translated_text, *args, **kwargs)
+					translated_formatter = RTextBase.format(translated_formatter, *args, **kwargs)
 				else:
-					translated_text = translated_text.format(*args, **kwargs)
+					translated_formatter = translated_formatter.format(*args, **kwargs)
 			except Exception as e:
-				raise ValueError('Failed to apply args {} and kwargs {} to translated_text {}: {}'.format(args, kwargs, translated_text, e))
-			return translated_text
+				raise ValueError('Failed to apply args {} and kwargs {} to translated_text {}: {}'.format(args, kwargs, translated_formatter, e))
+			return translated_formatter
 		else:
 			if not allow_failure:
 				raise KeyError('Translation key "{}" not found with language {}, fallback_language {}'.format(key, language, fallback_language))

@@ -10,7 +10,7 @@ from mcdreforged.constants import plugin_constant
 from mcdreforged.info_reactor.info import Info
 from mcdreforged.info_reactor.server_information import ServerInformation
 from mcdreforged.mcdr_state import MCDReforgedFlag
-from mcdreforged.permission.permission_level import PermissionLevel
+from mcdreforged.permission.permission_level import PermissionLevel, PermissionParam
 from mcdreforged.plugin import plugin_factory
 from mcdreforged.plugin.meta.metadata import Metadata
 from mcdreforged.plugin.operation_result import SingleOperationResult, PluginOperationResult
@@ -182,8 +182,9 @@ class ServerInterface:
 	def set_exit_after_stop_flag(self, flag_value: bool) -> None:
 		"""
 		Set the flag that indicating if MCDR should exit when the server has stopped
-		If set to true, after the server stops MCDR will exit,
-		otherwise MCDR will just keep running
+		If set to true, after the server stops MCDR will exit, otherwise (set to false) MCDR will just keep running
+		The flag value will be set to true everything when the server starts
+		The flag value is displayed in line 5 in command `!!MCDR status`
 		"""
 		if flag_value:
 			self._mcdr_server.with_flag(MCDReforgedFlag.EXIT_AFTER_STOP)
@@ -504,7 +505,7 @@ class ServerInterface:
 		else:
 			raise TypeError('Unsupported permission level querying for type {}'.format(type(obj)))
 
-	def set_permission_level(self, player: str, value: Union[int, str]) -> None:
+	def set_permission_level(self, player: str, value: PermissionParam) -> None:
 		"""
 		Set the permission level of the given player
 		:param player: The name of the player that you want to set his/her permission level
@@ -515,7 +516,7 @@ class ServerInterface:
 		level = PermissionLevel.get_level(value)
 		if level is None:
 			raise TypeError('Parameter level needs to be a permission related value')
-		self._mcdr_server.permission_manager.set_permission_level(player, value)
+		self._mcdr_server.permission_manager.set_permission_level(player, level)
 
 	# ------------------------
 	#         Command

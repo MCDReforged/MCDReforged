@@ -2,7 +2,7 @@ import copy
 from abc import ABC
 from enum import EnumMeta
 from threading import Lock
-from typing import Union, TypeVar, List, Dict, Type, get_type_hints
+from typing import Union, TypeVar, List, Dict, Type, get_type_hints, Any
 
 T = TypeVar('T')
 
@@ -50,9 +50,12 @@ def deserialize(data, cls: Type[T], *, error_at_missing=False, error_at_redundan
 	# in case None instead of NoneType is passed
 	if cls is None:
 		cls = type(None)
+	# if its type is Any, then simply return the data
+	if cls is Any:
+		return data
 	# Union
 	# Unpack Union first since the target class is not confirmed yet
-	if _get_origin(cls) == Union:
+	elif _get_origin(cls) == Union:
 		for possible_cls in _get_args(cls):
 			try:
 				return deserialize(data, possible_cls, error_at_missing=error_at_missing, error_at_redundancy=error_at_redundancy)

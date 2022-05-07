@@ -5,17 +5,21 @@ from typing import Set
 
 from mcdreforged.command.command_source import CommandSource
 from mcdreforged.info_reactor.info import *
-from mcdreforged.permission.permission_level import PermissionLevel, PermissionLevelItem
+from mcdreforged.permission.permission_level import PermissionLevel, PermissionLevelItem, PermissionParam
 from mcdreforged.utils import misc_util
 from mcdreforged.utils.logger import DebugOption
 from mcdreforged.utils.yaml_data_storage import YamlDataStorage
+
+if TYPE_CHECKING:
+	from mcdreforged.mcdr_server import MCDReforgedServer
+
 
 PERMISSION_FILE = 'permission.yml'
 DEFAULT_PERMISSION_RESOURCE_PATH = 'resources/default_permission.yml'
 
 
 class PermissionManager(YamlDataStorage):
-	def __init__(self, mcdr_server):
+	def __init__(self, mcdr_server: 'MCDReforgedServer'):
 		super().__init__(mcdr_server.logger, PERMISSION_FILE, DEFAULT_PERMISSION_RESOURCE_PATH)
 		self.mcdr_server = mcdr_server
 
@@ -23,14 +27,14 @@ class PermissionManager(YamlDataStorage):
 	# File Operating
 	# --------------
 
-	def load_permission_file(self, *, allowed_missing_file=True):
+	def load_permission_file(self, *, allowed_missing_file: bool = True):
 		"""
 		Load the permission file from disk
 		"""
 		self._load_data(allowed_missing_file)
 
-	def _pre_save(self, data):
-		# Deduplicate the permission data=
+	def _pre_save(self, data: dict):
+		# Deduplicate the permission data
 		for key, value in data.items():
 			if key in PermissionLevel.NAMES and isinstance(value, list):
 				data[key] = misc_util.unique_list(data[key])
@@ -43,10 +47,9 @@ class PermissionManager(YamlDataStorage):
 	# Permission processing
 	# ---------------------
 
-	def get_default_permission_level(self):
+	def get_default_permission_level(self) -> str:
 		"""
 		Return the default permission level
-		:rtype: str
 		"""
 		return self._data['default_level']
 
@@ -59,12 +62,12 @@ class PermissionManager(YamlDataStorage):
 		self.save()
 		self.mcdr_server.logger.info(self.mcdr_server.tr('permission_manager.set_default_permission_level.done', level.name))
 
-	def get_permission_group_list(self, value):
+	def get_permission_group_list(self, value: PermissionParam):
 		"""
 		Return the list of the player who has permission level <level>
 		Example return value: ['Steve', 'Alex']
 
-		:param str or int value: a permission related object
+		:param value: a permission related object
 		:rtype: list[str]
 		"""
 		level_name = PermissionLevel.from_value(value).name
@@ -72,16 +75,15 @@ class PermissionManager(YamlDataStorage):
 			self._data[level_name] = []
 		return self._data[level_name]
 
-	def add_player(self, player, level_name=None):
+	def add_player(self, player: str, level_name: Optional[str] = None) -> int:
 		"""
 		Add a new player with permission level level_name
 		If level_name is not set use default level
 		Then save the permission data to file
 
-		:param str player: the name of the player
-		:param str level_name: the permission level name
+		:param player: the name of the player
+		:param level_name: the permission level name
 		:return: the permission of the player after operation done
-		:rtype: int
 		"""
 		if level_name is None:
 			level_name = self.get_default_permission_level()
@@ -91,13 +93,13 @@ class PermissionManager(YamlDataStorage):
 		self.save()
 		return PermissionLevel.from_value(level_name).level
 
-	def remove_player(self, player):
+	def remove_player(self, player: str):
 		"""
 		Remove a player from data, then save the permission data to file
 		If the player has multiple permission level, remove them all
 		And then save the permission data to file
 
-		:param str player: the name of the player
+		:param player: the name of the player
 		"""
 		while True:
 			level = self.get_player_permission_level(player, auto_add=False)
@@ -107,37 +109,36 @@ class PermissionManager(YamlDataStorage):
 		self.mcdr_server.logger.debug('Removed player {}'.format(player), option=DebugOption.PERMISSION)
 		self.save()
 
-	def set_permission_level(self, player, new_level):
+	def set_permission_level(self, player: str, new_level: PermissionLevelItem):
 		"""
 		Set new permission level of the player
 		Basically it will remove the player first, then add the player with given permission level
 		Then save the permission data to file
 
-		:param str player: the name of the player
-		:param PermissionLevelItem new_level: the permission level name
+		:param player: the name of the player
+		:param new_level: the permission level name
 		"""
 		self.remove_player(player)
 		self.add_player(player, new_level.name)
 		self.mcdr_server.logger.info(self.mcdr_server.tr('permission_manager.set_permission_level.done', player, new_level.name))
 
-	def touch_player(self, player):
+	def touch_player(self, player: str):
 		"""
 		Add player if it's not in permission data
 
-		:param str player: the name of the player
+		:param player: the name of the player
 		"""
 		self.get_player_permission_level(player)
 
-	def get_player_permission_level(self, player, *, auto_add=True):
+	def get_player_permission_level(self, player: str, *, auto_add: bool = True) -> Optional[int]:
 		"""
 		If the player is not in the permission data set its level to default_level,
 		unless parameter auto_add is set to False, then it will return None
 		If the player is in multiple permission level group it will return the highest one
 
-		:param str player: the name of the player
-		:param bool auto_add: if it's True when player is invalid he will receive the default permission level
+		:param player: the name of the player
+		:param auto_add: if it's True when player is invalid he will receive the default permission level
 		:return the permission level from a player's name. If auto_add is False and player invalid return None
-		:rtype: int or None
 		"""
 		for level_value in PermissionLevel.LEVELS[::-1]:  # high -> low
 			if player in self.get_permission_group_list(level_value):
