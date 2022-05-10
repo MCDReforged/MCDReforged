@@ -370,7 +370,8 @@ class MCDReforgedServer:
 		:rtype: bool
 		"""
 		self.logger.info('Interrupting, first strike = {}'.format(not self.is_interrupt()))
-		self.stop(forced=self.is_interrupt())
+		if self.is_server_running():
+			self.stop(forced=self.is_interrupt())
 		first_try = not self.is_interrupt()
 		self.with_flag(MCDReforgedFlag.INTERRUPT)
 		return first_try
