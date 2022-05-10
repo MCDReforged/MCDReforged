@@ -362,21 +362,20 @@ class MCDReforgedServer:
 		else:
 			raise IllegalCallError("Server process has already been terminated")
 
-	def interrupt(self):
+	def interrupt(self) -> bool:
 		"""
 		Interrupt MCDR
 		The first call will softly stop the server and the later calls will kill the server
 		Return if it's the first try
-		:rtype: bool
 		"""
-		self.logger.info('Interrupting, first strike = {}'.format(not self.is_interrupt()))
+		first_interrupt = not self.is_interrupt()
+		self.logger.info('Interrupting, first strike = {}'.format(first_interrupt))
 		if self.is_server_running():
-			self.stop(forced=self.is_interrupt())
-		first_try = not self.is_interrupt()
+			self.stop(forced=not first_interrupt)
 		self.with_flag(MCDReforgedFlag.INTERRUPT)
-		return first_try
+		return first_interrupt
 
-	def stop(self, forced=False):
+	def stop(self, forced: bool = False):
 		"""
 		Stop the server
 
