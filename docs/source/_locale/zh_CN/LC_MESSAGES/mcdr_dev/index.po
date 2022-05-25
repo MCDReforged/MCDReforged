@@ -1,0 +1,45 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2021, Fallen_Breath
+# This file is distributed under the same license as the MCDReforged
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: MCDReforged \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-05-26 02:41+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.0\n"
+
+#: ../mcdr_dev/index.rst:9
+msgid "Basic"
+msgstr "基础知识"
+
+#: ../mcdr_dev/index.rst:9
+msgid "Document"
+msgstr "文档"
+
+#: ../mcdr_dev/index.rst:9
+msgid "Publication"
+msgstr "发布"
+
+#: ../mcdr_dev/index.rst:3
+msgid "MCDReforged Development"
+msgstr "MCDReforged 开发"
+
+#: ../mcdr_dev/index.rst:5
+msgid ""
+"This part of the document is for developing MCDReforged itself. Check "
+"`here <../plugin_dev/index.html>`__ if you want to develop a MCDR plugin"
+msgstr "这一部分是关于开发 MCDReforged 本身的文档。如果你想开发 MCDR 插件的话，去 `这 <../plugin_dev/index.html>`__ 看看吧。"
+
+#: ../mcdr_dev/index.rst:7
+msgid "If you are just a user of MCDR, run! Don't read!"
+msgstr "如果你仅仅是一个 MCDR 的用户，快跑！别看！"
+
