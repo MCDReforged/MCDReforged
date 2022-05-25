@@ -727,7 +727,7 @@ class PluginServerInterface(ServerInterface):
 			if isinstance(source_to_reply, CommandSource):
 				source_to_reply.reply(msg)
 			# don't do double-echo if the source is a console command source
-			if echo_in_console and not source_to_reply.is_console:
+			if echo_in_console and not (source_to_reply is not None and source_to_reply.is_console):
 				self.logger.info(msg)
 
 		if target_class is not None:
