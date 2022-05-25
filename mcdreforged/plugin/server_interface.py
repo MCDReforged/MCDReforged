@@ -723,10 +723,11 @@ class PluginServerInterface(ServerInterface):
 		:param encoding: The encoding method to read the config file
 		:return: A dict contains the loaded and processed config
 		"""
-		def log(msg):
+		def log(msg: str):
 			if isinstance(source_to_reply, CommandSource):
 				source_to_reply.reply(msg)
-			if echo_in_console:
+			# don't do double-echo if the source is a console command source
+			if echo_in_console and not source_to_reply.is_console:
 				self.logger.info(msg)
 
 		if target_class is not None:
