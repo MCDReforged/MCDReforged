@@ -107,10 +107,14 @@ class PluginManager:
 				self.__tls.pop(self.TLS_PLUGIN_KEY)
 
 	def contains_plugin_file(self, file_path: str) -> bool:
+		"""
+		Check if the given path corresponds to an already loaded plugin
+		"""
 		return os.path.abspath(file_path) in self.plugin_file_path
 
 	def contains_plugin_id(self, plugin_id: str) -> bool:
 		"""
+		Check if the given plugin id represents a loaded plugin
 		Includes permanent plugins
 		"""
 		return plugin_id in self.plugins
@@ -244,21 +248,35 @@ class PluginManager:
 	#   Regular Plugin Collector & Handlers
 	# ---------------------------------------
 
-	def __collect_and_process_new_plugins(self, filter: Callable[[str], bool]) -> SingleOperationResult:
-		result = SingleOperationResult()
+	def __collect_possible_plugin_file_paths(self) -> List[str]:
+		paths = []
 		for plugin_directory in self.plugin_directories:
 			if os.path.isdir(plugin_directory):
 				for file in os.listdir(plugin_directory):
 					file_path = os.path.join(plugin_directory, file)
 					if plugin_factory.is_plugin(file_path):
-						if not self.contains_plugin_file(file_path) and filter(file_path):
-							plugin = self.__load_plugin(file_path)
-							if plugin is None:
-								result.fail(file_path)
-							else:
-								result.succeed(plugin)
+						paths.append(file_path)
 			else:
 				self.logger.warning('Plugin directory "{}" not found'.format(plugin_directory))
+		return paths
+
+	def __collect_and_process_new_plugins(self, filter: Callable[[str], bool], *, possible_paths: Optional[List[str]] = None) -> SingleOperationResult:
+		"""
+		:param filter: A str predicate function for testing if the plugin file path is acceptable
+		:param possible_paths: Optional. If you have already done self.__collect_possible_plugin_file_paths() before,
+		you can pass the previous result as the argument to reuse that, so less time cost
+		"""
+		if possible_paths is None:
+			possible_paths = self.__collect_possible_plugin_file_paths()
+
+		result = SingleOperationResult()
+		for file_path in possible_paths:
+			if not self.contains_plugin_file(file_path) and filter(file_path):
+				plugin = self.__load_plugin(file_path)
+				if plugin is None:
+					result.fail(file_path)
+				else:
+					result.succeed(plugin)
 		return result
 
 	def __collect_and_remove_plugins(self, filter: Callable[[RegularPlugin], bool], specific: Optional[RegularPlugin] = None) -> SingleOperationResult:
@@ -391,8 +409,10 @@ class PluginManager:
 		self.mcdr_server.on_plugin_registry_changed()
 
 	def __refresh_plugins(self, reload_filter: Callable[[RegularPlugin], bool]):
-		unload_result = self.__collect_and_remove_plugins(lambda plugin: not plugin.plugin_exists())
-		load_result = self.__collect_and_process_new_plugins(lambda fp: True)
+		possible_paths = self.__collect_possible_plugin_file_paths()
+		possible_paths_set = set(possible_paths)
+		unload_result = self.__collect_and_remove_plugins(lambda plugin: not plugin.plugin_exists() or plugin.plugin_path not in possible_paths_set)
+		load_result = self.__collect_and_process_new_plugins(lambda fp: True, possible_paths=possible_paths)
 		reload_result = self.__reload_ready_plugins(reload_filter)
 		self.__post_plugin_process(load_result, unload_result, reload_result)
 

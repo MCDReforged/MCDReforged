@@ -638,7 +638,7 @@ get_mcdr_config
 
 .. code-block:: python
 
-    get_mcdr_config(self) -> dict
+    def get_mcdr_config(self) -> dict
 
 Return the current config of MCDR as a dict
 

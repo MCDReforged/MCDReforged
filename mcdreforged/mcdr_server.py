@@ -117,7 +117,7 @@ class MCDReforgedServer:
 			load('configure', lambda: self.load_config(allowed_missing_file=False, echo=not initialize_environment)) and \
 			load('permission', lambda: self.permission_manager.load_permission_file(allowed_missing_file=False))
 		if file_missing:
-			self.on_file_missing()
+			self.__on_file_missing()
 			return
 		if not loading_success:
 			return
@@ -139,19 +139,19 @@ class MCDReforgedServer:
 	def __check_environment(self):
 		"""
 		Some checks at initialization
-		In dev environment, you can use setup.py to create `mcdreforged.egg-info/` so the package check will pass
+		In dev environment, you can use setup.py to create `mcdreforged.egg-info/` so the package check can pass
 		"""
 		mcdr_pkg = core_constant.PACKAGE_NAME  # should be "mcdreforged"
 		try:
 			pkg_resources.require(mcdr_pkg)
 		except pkg_resources.ResolutionError:
-			self.logger.warning('It looks like you\'re launching from source as {} is not found in python packages'.format(mcdr_pkg))
+			self.logger.warning('It looks like you\'re launching MCDR from source, since {} is not found in python packages'.format(mcdr_pkg))
 			self.logger.warning('In this way, the plugin system might not work correctly')
 			self.logger.warning('In a production environment, you should install {} from PyPI, see document ({}) for more information'.format(mcdr_pkg, core_constant.DOCUMENTION_URL))
-			self.logger.warning('MCDR will launch after 10 seconds...')
-			time.sleep(10)
+			self.logger.warning('MCDR will launch after 20 seconds...')
+			time.sleep(20)
 
-	def on_file_missing(self):
+	def __on_file_missing(self):
 		self.logger.info('Looks like MCDR is not initialized at current directory {}'.format(os.getcwd()))
 		self.logger.info('Use "python -m {} init" to initialize MCDR first'.format(core_constant.PACKAGE_NAME))
 
@@ -362,20 +362,20 @@ class MCDReforgedServer:
 		else:
 			raise IllegalCallError("Server process has already been terminated")
 
-	def interrupt(self):
+	def interrupt(self) -> bool:
 		"""
 		Interrupt MCDR
 		The first call will softly stop the server and the later calls will kill the server
 		Return if it's the first try
-		:rtype: bool
 		"""
-		self.logger.info('Interrupting, first strike = {}'.format(not self.is_interrupt()))
-		self.stop(forced=self.is_interrupt())
-		first_try = not self.is_interrupt()
+		first_interrupt = not self.is_interrupt()
+		self.logger.info('Interrupting, first strike = {}'.format(first_interrupt))
+		if self.is_server_running():
+			self.stop(forced=not first_interrupt)
 		self.with_flag(MCDReforgedFlag.INTERRUPT)
-		return first_try
+		return first_interrupt
 
-	def stop(self, forced=False):
+	def stop(self, forced: bool = False):
 		"""
 		Stop the server
 

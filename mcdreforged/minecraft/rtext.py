@@ -4,6 +4,7 @@ Credit: Pandaria98 https://github.com/Pandaria98 https://github.com/TISUnion/ste
 """
 
 import json
+from abc import ABC
 from enum import Enum, auto
 from typing import Iterable, List, Union, Optional, Any, Tuple, Set, NamedTuple
 
@@ -60,7 +61,7 @@ class RAction(Enum):
 	copy_to_clipboard = auto()
 
 
-class RTextBase:
+class RTextBase(ABC):
 	def to_json_object(self) -> Union[dict, list]:
 		raise NotImplementedError()
 
@@ -162,6 +163,60 @@ class RTextBase:
 			texts = new_texts
 		return RTextList(*texts)
 
+	@classmethod
+	def from_json_object(cls, data: Union[str, list, dict]) -> 'RTextBase':
+		if isinstance(data, str):
+			return cls.from_any(data)
+		if isinstance(data, list):
+			if len(data) == 0:
+				raise ValueError('Empty list')
+			lst = list(map(cls.from_json_object, data))
+			text = RTextList()
+			if data[0] != '':
+				text.set_header_text(lst[0])
+			text.append(*lst[1:])
+			return text
+		elif isinstance(data, dict):
+			if 'text' in data:
+				text = RText(data['text'])
+			elif 'translate' in data:
+				if 'with' in data:
+					args = data['with']
+				else:
+					args = []
+				text = RTextTranslation(data['translate']).arg(*map(cls.from_json_object, args))
+			else:
+				raise ValueError('No method to create RText from {}'.format(data))
+			if 'extra' in data:
+				siblings = data['extra']
+				if isinstance(siblings, list):
+					text_list = RTextList()
+					text_list.set_header_text(text)
+					text_list.append(*map(cls.from_json_object, siblings))
+					text = text_list
+			styles = []
+			for style in RStyle:
+				if data.get(style.name, False):
+					styles.append(style)
+			text.set_styles(styles)
+			try:
+				text.set_color(RColor[data['color']])
+			except KeyError:
+				pass
+			try:
+				click_event = ['clickEvent']
+				if isinstance(click_event, dict):
+					text.set_click_event(RAction[click_event['action']], click_event['value'])
+			except KeyError:
+				pass
+			try:
+				hover_event = data['hoverEvent']
+				if isinstance(hover_event, dict) and hover_event['action'] == 'show_text':
+					text.set_hover_text(cls.from_json_object(hover_event['value']))
+			except KeyError:
+				pass
+			return text
+
 
 class _ClickEvent(NamedTuple):
 	action: RAction
@@ -249,6 +304,11 @@ class RTextTranslation(RText):
 	def __init__(self, translation_key: str, color: RColor = RColor.reset, styles: Optional[Union[RStyle, Iterable[RStyle]]] = None):
 		super().__init__(translation_key, color, styles)
 		self.__translation_key: str = translation_key
+		self.__args = ()
+
+	def arg(self, *args: Any) -> 'RTextTranslation':
+		self.__args = args
+		return self
 
 	def to_plain_text(self) -> str:
 		return self.__translation_key
@@ -257,11 +317,14 @@ class RTextTranslation(RText):
 		obj = super().to_json_object()
 		obj.pop('text')
 		obj['translate'] = self.__translation_key
+		if len(self.__args) > 0:
+			obj['with'] = list(map(lambda arg: arg.to_json_object() if isinstance(arg, RTextBase) else arg, self.__args))
 		return obj
 
 	def _copy_from(self, text: 'RTextTranslation'):
 		super()._copy_from(text)
 		self.__translation_key = text.__translation_key
+		self.__args = text.__args
 
 	def copy(self) -> 'RTextTranslation':
 		copied = RTextTranslation('')
@@ -293,6 +356,11 @@ class RTextList(RTextBase):
 
 	def set_hover_text(self, *args):
 		self.header.set_hover_text(*args)
+		self.header_empty = False
+		return self
+
+	def set_header_text(self, header_text: RTextBase):
+		self.header = header_text
 		self.header_empty = False
 		return self
 
