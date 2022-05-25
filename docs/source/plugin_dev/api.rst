@@ -377,7 +377,7 @@ Example:
     RTextBase.join(RText(',', color=RColor.gray), [RText('1'), '2', 3])  # 1,2,3
 
 format
-~~~~~~~~
+~~~~~~
 
 .. code-block:: python
 
@@ -391,6 +391,22 @@ Example:
 .. code-block:: python
 
     RTextBase.format('a={},b={},c={c}', RText('1', color=RColor.blue), '2', c=3)  # a=1,b=2,c=3
+
+from_json_object
+~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+    @classmethod
+    def from_json_object(cls, data: Union[str, list, dict]) -> RTextBase
+
+Convert a json object into a RText component
+
+Example:
+
+.. code-block:: python
+
+    text = RTextBase.from_json_object({'text': 'my text', 'color': 'red'})
 
 RText
 ^^^^^
