@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-18 17:25+0800\n"
+"POT-Creation-Date: 2022-05-26 02:13+0800\n"
 "PO-Revision-Date: 2021-01-23 09:12+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -12,7 +12,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.9.1\n"
+"Generated-By: Babel 2.9.0\n"
 
 #: ../quick_start.rst:3
 msgid "Quick Start"
@@ -58,24 +58,30 @@ msgstr ""
 "后缀来使用 `清华 pypi 镜像 <https://mirrors.tuna.tsinghua.edu.cn/help/pypi/>`__ "
 "来加速 MCDR 的下载安装。"
 
-#: ../quick_start.rst:28
+#: ../quick_start.rst:27
+msgid ""
+"**DO NOT** download the source files of MCDR and execute them directly, "
+"unless you're a developer of MCDR and you know what you are doing"
+msgstr "**不要**直接下载 MCDR 的源代码并从中启动 MCDR，除非你是一个知道你自己在做什么的 MCDR 开发者。"
+
+#: ../quick_start.rst:30
 msgid "Start up"
 msgstr "启动"
 
-#: ../quick_start.rst:30
+#: ../quick_start.rst:32
 msgid ""
 "Let's say your are going to start MCDR in a folder named "
 "``my_mcdr_server``. Then you can run the following commands to initialize"
 " the environment for MCDR first:"
 msgstr "假设你想在 ``my_mcdr_server`` 这一个文件夹中运行 MCDR，那么你可以运行以下指令以初始化 MCDR 的运行环境："
 
-#: ../quick_start.rst:37
+#: ../quick_start.rst:39
 msgid ""
 "MCDR will generated the default configure and permission files, as well "
 "as some default folders. The file structure will be like this"
 msgstr "MCDR 将生成默认的配置文件、权限文件，以及一些默认的文件夹。此时的路径结构将会如下所示："
 
-#: ../quick_start.rst:50
+#: ../quick_start.rst:52
 msgid ""
 "Now put your server files into the server folder (``server`` by default),"
 " then modify the configuration file ``config.yml`` and permission file "
@@ -84,17 +90,17 @@ msgstr ""
 "现在，把你的服务端文件放入服务端文件夹里（默认为 ``server`` 文件夹），然后修改配置文件 ``config.yml`` 以及权限文件 "
 "``permission.yml`` 以满足你的需求。"
 
-#: ../quick_start.rst:52
+#: ../quick_start.rst:54
 msgid ""
 "After that you can launch MCDR, and it will start handling the server "
 "correctly"
 msgstr "完成后，你就可以启动 MCDR，它将开始正确地操控服务器运行。"
 
-#: ../quick_start.rst:59
+#: ../quick_start.rst:61
 msgid "Upgrade"
 msgstr "更新"
 
-#: ../quick_start.rst:61
+#: ../quick_start.rst:63
 msgid ""
 "With the help of `pypi <https://pypi.org/project/mcdreforged/>`__, MCDR "
 "can be easily upgraded via a single command"
@@ -102,15 +108,15 @@ msgstr ""
 "在 `pypi <https://pypi.org/project/mcdreforged/>`__ 的帮助下，MCDR "
 "可以轻松地通过这个命令升级："
 
-#: ../quick_start.rst:67
+#: ../quick_start.rst:69
 msgid "That's it!"
 msgstr "就酱！"
 
-#: ../quick_start.rst:69
+#: ../quick_start.rst:71
 msgid "For Chinese users, you can use tuna mirror to speed up the upgrading too"
 msgstr "如果你是国内用户，你同样可以借助清华 pypi 镜像来加速 MCDR 的升级："
 
-#: ../quick_start.rst:75
+#: ../quick_start.rst:77
 msgid ""
 "Development builds are available in `Test PyPi "
 "<https://test.pypi.org/project/mcdreforged/#history>`__, you can install "
@@ -118,60 +124,4 @@ msgid ""
 msgstr ""
 "开发版本可在 `Test PyPi <https://test.pypi.org/project/mcdreforged/#history>`__"
 " 中找到。如果你有特殊需要，你可以安装它们。"
-
-#: ../quick_start.rst:78
-msgid "Launch from source"
-msgstr "从源码启动"
-
-#: ../quick_start.rst:80
-msgid ""
-"Instead of installing MCDR from pypi, you can execute the source file of "
-"MCDR directly. **Notes: This is mostly for development purpose, DO NOT "
-"use it under a production environment**"
-msgstr "除了借助 pypi 进行安装，你还可以直接从源代码执行 MCDR。**注意，这一种启动方式主要用于开发 MCDR，请勿在生产环境中使用。**"
-
-#: ../quick_start.rst:82
-msgid ""
-"Download the source files of MCDR via cloning the repository or github "
-"action, and decompress the file if needed"
-msgstr "通过克隆仓库或者 github action 下载 MCDR 的源文件，如果需要的话将文件解压。"
-
-#: ../quick_start.rst:92
-msgid ""
-"MCDR will delay to start if the mcdreforged python package is not "
-"detected"
-msgstr "若未检测到 mcdreforged 的 Python 包，MCDR 将延迟启动。"
-
-#: ../quick_start.rst:94
-msgid ""
-"So enter the directory ``my_mcdr_server_in_source/``, and run the "
-"following command to create egg_info to pass the detection"
-msgstr "因此，进入 ``my_mcdr_server_in_source/`` 目录，运行以下命令，创建 egg_info 以通过检测："
-
-#: ../quick_start.rst:100
-msgid "After that, MCDR can be launched normally"
-msgstr "在这之后，便可正常启动 MCDR："
-
-#: ../quick_start.rst:106
-msgid "Alternatively you can execute ``MCDReforged.py`` with python to start MCDR"
-msgstr "当然你也可以通过运行 ``MCDReforged.py`` 来启动 MCDR："
-
-#: ../quick_start.rst:112
-msgid ""
-"``MCDReforged.py`` is just a simple wrapper for launching MCDR with the "
-"following codes"
-msgstr "``MCDReforged.py`` 只是一个简单的启动 MCDR 的包装，它的代码如下所示"
-
-#: ../quick_start.rst:123
-msgid "``MCDReforged.py`` also works for MCDR installed by ``pip`` command"
-msgstr "运行 ``MCDReforged.py`` 同样适用于从 ``pypi`` 安装的 MCDR。"
-
-#: ../quick_start.rst:125
-msgid ""
-"For windows users, if you have bound a correct python interpreter to "
-"``*.py`` files you can also double click the ``MCDReforged.py`` to start "
-"MCDR"
-msgstr ""
-"对于 Windows 用户，如果你已将 ``*.py`` 文件的打开方式绑定到了一个正确的 Python 解释器，那么你也可以双击 "
-"``MCDReforged.py`` 来启动 MCDR。"
 

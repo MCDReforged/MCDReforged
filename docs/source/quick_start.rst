@@ -24,6 +24,8 @@ For Chinese users, you can added a ``-i https://pypi.tuna.tsinghua.edu.cn/simple
 
     pip install mcdreforged -i https://pypi.tuna.tsinghua.edu.cn/simple
 
+**DO NOT** download the source files of MCDR and execute them directly, unless you're a developer of MCDR and you know what you are doing
+
 Start up
 --------
 
@@ -74,53 +76,3 @@ For Chinese users, you can use tuna mirror to speed up the upgrading too
 
 Development builds are available in `Test PyPi <https://test.pypi.org/project/mcdreforged/#history>`__, you can install them if you have special needs
 
-Launch from source
-------------------
-
-Instead of installing MCDR from pypi, you can execute the source file of MCDR directly. **Notes: This is mostly for development purpose, DO NOT use it under a production environment**
-
-Download the source files of MCDR via cloning the repository or github action, and decompress the file if needed
-
-.. code-block::
-
-   my_mcdr_server_in_source/
-    ├─ mcdreforged/
-    │   └─ ..
-    ├─ MCDReforged.py
-    ├─ setup.py
-    └─ ..
-
-MCDR will delay to start if the mcdreforged python package is not detected
-
-So enter the directory ``my_mcdr_server_in_source/``, and run the following command to create egg_info to pass the detection
-
-.. code-block:: bash
-
-    python setup.py egg_info
-
-After that, MCDR can be launched normally
-
-.. code-block:: bash
-
-    python -m mcdreforged
-
-Alternatively you can execute ``MCDReforged.py`` with python to start MCDR
-
-.. code-block:: bash
-
-    python MCDReforged.py
-
-``MCDReforged.py`` is just a simple wrapper for launching MCDR with the following codes
-
-.. code-block:: python
-
-    import sys
-
-    from mcdreforged.__main__ import main
-
-    if __name__ == '__main__':
-        sys.exit(main())
-
-``MCDReforged.py`` also works for MCDR installed by ``pip`` command
-
-For windows users, if you have bound a correct python interpreter to ``*.py`` files you can also double click the ``MCDReforged.py`` to start MCDR
