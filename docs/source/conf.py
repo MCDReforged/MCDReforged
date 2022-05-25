@@ -19,7 +19,7 @@ sys.path.insert(0, os.path.abspath(os.path.join('..', '..')))
 import os
 
 project = 'MCDReforged'
-copyright = '2021, Fallen_Breath'
+copyright = '2022, Fallen_Breath'
 author = 'Fallen_Breath'
 
 # The full version, including alpha/beta/rc tags
