@@ -114,7 +114,7 @@ class MCDReforgedServer:
 		# load_permission_file: permission
 		# config change will lead to creating plugin folders
 		loading_success = \
-			load('configure', lambda: self.load_config(allowed_missing_file=False, echo=not initialize_environment)) and \
+			load('configuration', lambda: self.load_config(allowed_missing_file=False, echo=not initialize_environment)) and \
 			load('permission', lambda: self.permission_manager.load_permission_file(allowed_missing_file=False))
 		if file_missing:
 			self.__on_file_missing()
