@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-25 23:44+0800\n"
+"POT-Creation-Date: 2022-06-12 14:16+0800\n"
 "PO-Revision-Date: 2021-01-23 10:38+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -33,8 +33,8 @@ msgstr ""
 
 #: ../plugin_dev/basic.rst:10
 msgid ""
-"The list of the plugin directory can be defined inside the `configure "
-"file <../configure.html#plugin_directories>`__. At start up, MCDR will "
+"The list of the plugin directory can be defined inside the `configuration"
+" file <../configure.html#plugin_directories>`__. At start up, MCDR will "
 "automatically load every plugin inside every plugin directory"
 msgstr ""
 "插件目录的列表可以在 `配置文件 <../configure.html#plugin_directories>`__ 中定义。启动时，MCDR "
@@ -237,8 +237,8 @@ msgstr ""
 
 #: ../plugin_dev/basic.rst:143
 msgid ""
-"Check the `command <command.html>`__ document for more detail about building a"
-" command tree"
+"Check the `command <command.html>`__ document for more detail about "
+"building a command tree"
 msgstr "查看 `指令 <command.html>`__ 文档以获取有关构建指令树的更多详细信息。"
 
 #: ../plugin_dev/basic.rst:145
@@ -300,9 +300,7 @@ msgstr ""
 msgid ""
 "See the `translation section <dev_tips.html#translation>`__ in dev tips "
 "for some suggestions about using translation"
-msgstr ""
-"参阅插件开发提示中的 `翻译 <dev_tips.html#translation>`__ 章节"
-"关于使用翻译的一些建议。"
+msgstr "参阅插件开发提示中的 `翻译 <dev_tips.html#translation>`__ 章节关于使用翻译的一些建议。"
 
 #: ../plugin_dev/basic.rst:168
 msgid "Import a plugin"
@@ -343,3 +341,4 @@ msgid ""
 "Don't forget to declare plugin dependency in your metadata, or MCDR will "
 "not guarantee a correct plugin loading order"
 msgstr "别忘了在你的插件元数据中声明你的插件依赖，否则 MCDR 将不能保证插件加载顺序是正确的"
+

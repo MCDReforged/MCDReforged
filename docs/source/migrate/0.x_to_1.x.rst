@@ -21,9 +21,9 @@ The logging folder is renamed from ``log/`` to ``logs/``
 Config
 ------
 
-There come quite a lot of changes to the config file. Although MCDR will still work if you keep the old config file, it's highly recommend to make a new default configure file, and fill your old configures into the new configure file
+There come quite a lot of changes to the config file. Although MCDR will still work if you keep the old config file, it's highly recommend to make a new default configuration file, and fill your old configures into the new configuration file
 
-You can rename the old ``config.yml`` to a temporary name like ``old_config.yml``, then start MCDR. MCDR will generate a new default configure file and exit. Then open these 2 configure file and migrate
+You can rename the old ``config.yml`` to a temporary name like ``old_config.yml``, then start MCDR. MCDR will generate a new default configuration file and exit. Then open these 2 configuration file and migrate
 
 Permission
 ----------

@@ -59,7 +59,6 @@ msgid ""
 msgstr "显然，在我们开发 MCDR 时，我们可不想要这些警告以及启动延迟。我们可以通过创建一个局部的 MCDR 包信息来绕过这一检测。下面是绕过检测的方法："
 
 #: ../mcdr_dev/basic.rst:27
-#, fuzzy
 msgid ""
 "Enter the directory ``my_mcdr_server_in_source/``, and run the following "
 "command to create egg_info"

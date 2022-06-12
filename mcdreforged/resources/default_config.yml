@@ -1,9 +1,9 @@
-# Configure file for MCDReforged
+# Configuration file for MCDReforged
 # Check https://mcdreforged.readthedocs.io/en/latest/configure.html for detail
 
 
 # =========================================
-# |            Basic Configure            |
+# |          Basic Configuration          |
 # =========================================
 
 
@@ -69,7 +69,7 @@ advanced_console: true
 
 
 # ==========================================
-# |           Advanced Configure           |
+# |         Advanced Configuration         |
 # ==========================================
 
 
@@ -103,7 +103,7 @@ debug:
 
 
 # =========================================
-# |           Missing Configure           |
+# |         Missing Configuration         |
 # =========================================
 
 # Options below were missing and set by MCDR with the default value

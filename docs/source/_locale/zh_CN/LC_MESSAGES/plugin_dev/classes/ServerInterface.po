@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-16 23:15+0800\n"
+"POT-Creation-Date: 2022-06-12 14:16+0800\n"
 "PO-Revision-Date: 2021-01-24 09:17+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -390,7 +390,7 @@ msgstr "参数 *text*：你要发送的指令内容。"
 #: ../plugin_dev/classes/ServerInterface.rst:305
 msgid ""
 "Keyword Parameter *encoding*: The encoding method for the text. Leave it "
-"empty to use the encoding method from the configure of MCDR"
+"empty to use the encoding method from the configuration of MCDR"
 msgstr "关键字参数 *encoding*：文本的编码方法。留空以使用 MCDR 配置文件中的编码方法。"
 
 #: ../plugin_dev/classes/ServerInterface.rst:267

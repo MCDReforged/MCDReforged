@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-27 10:43+0800\n"
+"POT-Creation-Date: 2022-06-12 14:16+0800\n"
 "PO-Revision-Date: 2021-01-23 19:44+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -79,12 +79,12 @@ msgstr "例如，上面的以下代码创建一个处理器，以在此服务器
 #: ../customize/handler.rst:46
 msgid ""
 "And then you are able to use this handler to handle the server. You need "
-"to do the following things in the configure file"
+"to do the following things in the configuration file"
 msgstr "于是，你可以使用此处理器来处理服务端。你需要在配置文件中执行以下操作："
 
 #: ../customize/handler.rst:49
 msgid ""
-"Set the ``handler`` option in the configure file to "
+"Set the ``handler`` option in the configuration file to "
 "``the_handler_for_my_server``"
 msgstr "将配置文件中的 ``handler`` 选项设置为 ``the_handler_for_my_server``。"
 
@@ -99,3 +99,4 @@ msgstr ""
 #: ../customize/handler.rst:57
 msgid "That's all you need to do"
 msgstr "就这样。"
+

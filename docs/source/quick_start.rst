@@ -36,7 +36,7 @@ Let's say your are going to start MCDR in a folder named ``my_mcdr_server``. The
     cd my_mcdr_server
     python -m mcdreforged init
 
-MCDR will generated the default configure and permission files, as well as some default folders. The file structure will be like this
+MCDR will generated the default configuration and permission files, as well as some default folders. The file structure will be like this
 
 .. code-block::
 

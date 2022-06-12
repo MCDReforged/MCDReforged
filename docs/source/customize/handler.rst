@@ -43,10 +43,10 @@ For example, the following codes above creates a handler than is able to handle 
                     result.player, result.content = parsed['name'], parsed['message']
             return result
 
-And then you are able to use this handler to handle the server. You need to do the following things in the configure file
+And then you are able to use this handler to handle the server. You need to do the following things in the configuration file
 
 
-#. Set the ``handler`` option in the configure file to ``the_handler_for_my_server``
+#. Set the ``handler`` option in the configuration file to ``the_handler_for_my_server``
 #. Added the path to the custom handler in the `custom_handlers <../configure.html#custom-handlers>`__ option, e.g:
 
 .. code-block::

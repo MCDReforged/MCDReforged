@@ -42,7 +42,7 @@ init
 
 Prepare the working environment of MCDR
 
-Create commonly used folders and generate default configure and permission files, including:
+Create commonly used folders and generate default configuration and permission files, including:
 
 * logs/
 * configs/
@@ -58,7 +58,7 @@ gendefault
 
     python -m mcdreforged gendefault [-h]
 
-Generate default configure and permission files at current working directory
+Generate default configuration and permission files at current working directory
 
 Note that it will overwrite existing files
 

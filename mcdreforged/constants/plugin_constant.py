@@ -2,7 +2,7 @@
 Constants related to plugin for MCDR
 """
 
-# the directory inside MCDR working directory that stores plugins' configure files
+# the directory inside MCDR working directory that stores plugins' configuration files
 PLUGIN_CONFIG_DIRECTORY = 'config'
 
 # The file prefix for a solo plugin (a single .py file)

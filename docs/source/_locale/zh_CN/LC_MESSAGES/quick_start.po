@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-26 02:13+0800\n"
+"POT-Creation-Date: 2022-06-12 14:20+0800\n"
 "PO-Revision-Date: 2021-01-23 09:12+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -77,8 +77,8 @@ msgstr "假设你想在 ``my_mcdr_server`` 这一个文件夹中运行 MCDR，�
 
 #: ../quick_start.rst:39
 msgid ""
-"MCDR will generated the default configure and permission files, as well "
-"as some default folders. The file structure will be like this"
+"MCDR will generated the default configuration and permission files, as "
+"well as some default folders. The file structure will be like this"
 msgstr "MCDR 将生成默认的配置文件、权限文件，以及一些默认的文件夹。此时的路径结构将会如下所示："
 
 #: ../quick_start.rst:52

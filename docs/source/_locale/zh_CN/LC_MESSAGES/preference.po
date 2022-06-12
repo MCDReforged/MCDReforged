@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-25 23:31+0800\n"
+"POT-Creation-Date: 2022-06-12 14:20+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -48,7 +48,7 @@ msgstr "MCDR 向玩家或控制台发送翻译文本的首选语言"
 #: ../preference.rst:16
 msgid ""
 "Default value: The same as the `language <configure.html#language>`__ "
-"value in MCDR configure"
+"value in MCDR configuration"
 msgstr "默认值：同 MCDR 配置中的 `language <configure.html#language>`__ 选项。"
 
 #: ../preference.rst:17

@@ -41,7 +41,7 @@ class MCDReforgedServer:
 
 	def __init__(self, *, generate_default_only: bool = False, initialize_environment: bool = False):
 		"""
-		:param generate_default_only: If set to true, MCDR will only generate the default configure and permission files
+		:param generate_default_only: If set to true, MCDR will only generate the default configuration and permission files
 		"""
 		self.mcdr_state = MCDReforgedState.INITIALIZING
 		self.server_state = ServerState.STOPPED

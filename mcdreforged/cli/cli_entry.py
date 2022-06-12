@@ -37,8 +37,8 @@ def entry_point():
 	subparsers = parser.add_subparsers(title='Command', help='Available commands', dest='subparser_name')
 
 	subparsers.add_parser('start', help='Start {}'.format(core_constant.NAME))
-	subparsers.add_parser('init', help='Prepare the working environment of {}. Create commonly used folders and generate default configure and permission files'.format(core_constant.NAME))
-	subparsers.add_parser('gendefault', help='Generate default configure and permission files at current working directory. Existed files will be overwritten')
+	subparsers.add_parser('init', help='Prepare the working environment of {}. Create commonly used folders and generate default configuration and permission files'.format(core_constant.NAME))
+	subparsers.add_parser('gendefault', help='Generate default configuration and permission files at current working directory. Existed files will be overwritten')
 
 	parser_pack = subparsers.add_parser('pack', help='Pack plugin files into a packed plugin')
 	parser_pack.add_argument('-i', '--input', help='The input directory which the plugin is in, default: current directory', default='.')
@@ -84,7 +84,7 @@ def initialize_environment(*, quiet: bool = False):
 def generate_default_stuffs(*, quiet: bool = False):
 	MCDReforgedServer(generate_default_only=True)
 	if not quiet:
-		print('Generated default configure and permission files in {}'.format(os.getcwd()))
+		print('Generated default configuration and permission files in {}'.format(os.getcwd()))
 
 
 def make_packed_plugin(input_dir: str, output_dir: str, file_name: Optional[str], *, quiet: bool = False):

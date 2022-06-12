@@ -2,11 +2,11 @@
 Configure
 =========
 
-The configure file of MCDR is ``config.yml``. It's located and should be located in the working directory of MCDR
+The configuration file of MCDR is ``config.yml``. It's located and should be located in the working directory of MCDR
 
-At startup, MCDR will try to load the configure file. If the configure file is not present, MCDR will generate a default config file and exit. Otherwise, MCDR will load the config file and compare its content with the default configure file. If your configure file has any missing options, MCDR will add default values to the end of your configure file
+At startup, MCDR will try to load the configuration file. If the configuration file is not present, MCDR will generate a default config file and exit. Otherwise, MCDR will load the config file and compare its content with the default configuration file. If your configuration file has any missing options, MCDR will add default values to the end of your configuration file
 
-The configure file use `YAML <https://en.wikipedia.org/wiki/YAML>`__ format
+The configuration file use `YAML <https://en.wikipedia.org/wiki/YAML>`__ format
 
 You can use command ``!!MCDR reload config`` or its short form ``!!MCDR r cfg`` to reload the config file when MCDR is running. Check the `here <command.html#hot-reloads>`__ for more detail about hot reloads
 
@@ -191,7 +191,7 @@ Set it to false if you need to redirect the stdin/stdout of MCDR or just don't l
 Advanced
 ^^^^^^^^
 
-Configure options for advanced users
+Configuration options for advanced users
 
 disable_console_thread
 ~~~~~~~~~~~~~~~~~~~~~~

@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-14 10:24+0800\n"
+"POT-Creation-Date: 2022-06-12 14:21+0800\n"
 "PO-Revision-Date: 2021-01-23 13:20+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -20,22 +20,23 @@ msgstr "配置"
 
 #: ../configure.rst:5
 msgid ""
-"The configure file of MCDR is ``config.yml``. It's located and should be "
-"located in the working directory of MCDR"
+"The configuration file of MCDR is ``config.yml``. It's located and should"
+" be located in the working directory of MCDR"
 msgstr "MCDR 的配置文件是 ``config.yml``。它位于，也应位于 MCDR 的工作目录中。"
 
 #: ../configure.rst:7
 msgid ""
-"At startup, MCDR will try to load the configure file. If the configure "
-"file is not present, MCDR will generate a default config file and exit. "
-"Otherwise, MCDR will load the config file and compare its content with "
-"the default configure file. If your configure file has any missing "
-"options, MCDR will add default values to the end of your configure file"
+"At startup, MCDR will try to load the configuration file. If the "
+"configuration file is not present, MCDR will generate a default config "
+"file and exit. Otherwise, MCDR will load the config file and compare its "
+"content with the default configuration file. If your configuration file "
+"has any missing options, MCDR will add default values to the end of your "
+"configuration file"
 msgstr "在启动时，MCDR 将尝试加载配置文件，并将缺失的选项（如果有）添加到你的配置文件末尾。如果配置文件不存在，MCDR 则将生成默认配置文件并退出。"
 
 #: ../configure.rst:9
 msgid ""
-"The configure file use `YAML <https://en.wikipedia.org/wiki/YAML>`__ "
+"The configuration file use `YAML <https://en.wikipedia.org/wiki/YAML>`__ "
 "format"
 msgstr "配置文件使用 `YAML <https://zh.wikipedia.org/wiki/YAML>`__ 格式。"
 
@@ -401,7 +402,7 @@ msgid "Advanced"
 msgstr "高级配置"
 
 #: ../configure.rst:194
-msgid "Configure options for advanced users"
+msgid "Configuration options for advanced users"
 msgstr "为进阶用户提供的选项"
 
 #: ../configure.rst:197

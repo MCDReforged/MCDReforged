@@ -58,11 +58,11 @@ For easier use there's a decorator named `new_thread <api.html#new-thread>`__ to
 User config, data and log files
 -------------------------------
 
-If you want to store some user configure or user data file, it's recommend to store them inside the ``config`` folder rather than store them inside the plugin folder
+If you want to store some user configuration or user data file, it's recommend to store them inside the ``config`` folder rather than store them inside the plugin folder
 
-The reason is that user might have their plugins be placed in another directory or even have multiple MCDR instances to load a same plugin collection directory, by a configure option named `plugin_directories <../configure.html#plugin-directories>`__
+The reason is that user might have their plugins be placed in another directory or even have multiple MCDR instances to load a same plugin collection directory, by a configuration option named `plugin_directories <../configure.html#plugin-directories>`__
 
-If you store your configure or data inside the plugin folder, you can't distinguish which MCDR instance the configuration file belongs to. You can either store them inside the ``config`` folder directly or a inner folder inside the ``config`` folder like ``config/my_plugin/``, so the user data can be dedicated for the MCDR instance that loads your plugin
+If you store your configuration or data inside the plugin folder, you can't distinguish which MCDR instance the configuration file belongs to. You can either store them inside the ``config`` folder directly or a inner folder inside the ``config`` folder like ``config/my_plugin/``, so the user data can be dedicated for the MCDR instance that loads your plugin
 
 `get_data_folder <classes/PluginServerInterface.html#get-data-folder>`__ method is a nice method for lazyman
 
