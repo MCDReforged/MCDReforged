@@ -62,7 +62,7 @@ msgstr ""
 msgid ""
 "**DO NOT** download the source files of MCDR and execute them directly, "
 "unless you're a developer of MCDR and you know what you are doing"
-msgstr "**不要**直接下载 MCDR 的源代码并从中启动 MCDR，除非你是一个知道你自己在做什么的 MCDR 开发者。"
+msgstr "**不要** 直接下载 MCDR 的源代码并从中启动 MCDR，除非你是一个知道你自己在做什么的 MCDR 开发者。"
 
 #: ../quick_start.rst:30
 msgid "Start up"
