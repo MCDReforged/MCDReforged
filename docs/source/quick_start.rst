@@ -40,14 +40,14 @@ MCDR will generated the default configuration and permission files, as well as s
 
 .. code-block::
 
-   my_mcdr_server/
-    ├─ config/
-    ├─ logs/
-    │   └─ MCDR.log
-    ├─ plugins/
-    ├─ server/
-    ├─ config.yml
-    └─ permission.yml
+    my_mcdr_server/
+     ├─ config/
+     ├─ logs/
+     │   └─ MCDR.log
+     ├─ plugins/
+     ├─ server/
+     ├─ config.yml
+     └─ permission.yml
 
 Now put your server files into the server folder (``server`` by default), then modify the configuration file ``config.yml`` and permission file ``permission.yml`` correctly
 

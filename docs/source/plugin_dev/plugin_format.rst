@@ -49,10 +49,10 @@ Here's an example file tree of a minimum packed plugin with plugin id ``my_plugi
 
 ::
 
-   MyPlugin.mcdr
-       my_plugin/
-           __init__.py
-       mcdreforged.plugin.json
+    MyPlugin.mcdr
+        my_plugin/
+            __init__.py
+        mcdreforged.plugin.json
 
 Optionally, a packed plugin can have some other useful files that will be recognized by MCDR:
 
@@ -65,18 +65,18 @@ Here's an example file tree of a valid packed plugin with more possible files:
 
 ::
 
-   MyPlugin.mcdr
-       my_plugin/
-           __init__.py
-           my_lib.py
-       my_data/
-           default_config.json
-           some_data.txt
-       lang/
-           en_us.json
-           zh_cn.json
-       mcdreforged.plugin.json
-       requirements.txt
+    MyPlugin.mcdr
+        my_plugin/
+            __init__.py
+            my_lib.py
+        my_data/
+            default_config.json
+            some_data.txt
+        lang/
+            en_us.json
+            zh_cn.json
+        mcdreforged.plugin.json
+        requirements.txt
 
 In addition to ``.mcdr`` file extension, the python `zip app <https://docs.python.org/3/library/zipapp.html>`__ file extension ``.pyz`` is also valid for a packed plugin.
 
@@ -94,11 +94,11 @@ Here's an example file tree of a directory plugin:
 
 ::
 
-   MyPlugin/
-       my_plugin/
-           __init__.py
-           my_lib.py
-       mcdreforged.plugin.json
-       requirements.txt
+    MyPlugin/
+        my_plugin/
+            __init__.py
+            my_lib.py
+        mcdreforged.plugin.json
+        requirements.txt
 
 Directory plugin will always be treated as "modified" during ``!!MCDR reload plugin`` `hot reload <../command.html#hot-reloads>`__ command

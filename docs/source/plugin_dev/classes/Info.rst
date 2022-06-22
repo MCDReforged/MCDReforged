@@ -115,7 +115,7 @@ get_command_source
 
 .. code-block::
 
-   def get_command_source(self) -> Optional[CommandSource]
+    def get_command_source(self) -> Optional[CommandSource]
 
 Extract an command source object from this info instance. ConsoleCommandSource if this info is from console, or PlayerCommandSource if this info is from a player in game
 
@@ -126,7 +126,7 @@ to_command_source
 
 .. code-block::
 
-   def to_command_source(self) -> CommandSource
+    def to_command_source(self) -> CommandSource
 
 The same to method ``get_command_source``\ , but it raises a ``IllegalCallError`` if it can't extract a command source
 
@@ -135,7 +135,7 @@ should_send_to_server
 
 .. code-block::
 
-   def should_send_to_server(self) -> bool
+    def should_send_to_server(self) -> bool
 
 Representing if MCDR should send the content to the standard input stream of the server if this info is input from the console
 
@@ -144,6 +144,6 @@ cancel_send_to_server
 
 .. code-block::
 
-   def cancel_send_to_server(self) -> None
+    def cancel_send_to_server(self) -> None
 
 Prevent this info from being sent to the standard input stream of the server

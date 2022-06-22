@@ -163,11 +163,11 @@ Then you can do the following commands
 
 .. code-block::
 
-   !!MCDR plg info my_plugin
-   !!MCDR plugin reload my_plugin
-   !!MCDR plugin enable another_plugin.py.disabled
-   !!MCDR plugin unload another_plugin
-   !!MCDR plugin load another_plugin.py
+    !!MCDR plg info my_plugin
+    !!MCDR plugin reload my_plugin
+    !!MCDR plugin enable another_plugin.py.disabled
+    !!MCDR plugin unload another_plugin
+    !!MCDR plugin load another_plugin.py
 
 These commands do the following things:
 
@@ -237,6 +237,6 @@ Without any plugin, you may see the result below after you entered the ``!!help`
 
 .. code-block::
 
-   MCDR command help message list
-   !!MCDR: MCDR control command
-   !!help: MCDR command help messages
+    MCDR command help message list
+    !!MCDR: MCDR control command
+    !!help: MCDR command help messages

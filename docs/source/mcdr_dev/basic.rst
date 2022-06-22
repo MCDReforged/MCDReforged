@@ -11,12 +11,12 @@ Download the source files of MCDR via cloning the repository or github action, a
 
 .. code-block::
 
-   my_mcdr_server_in_source/
-    ├─ mcdreforged/
-    │   └─ ..
-    ├─ MCDReforged.py
-    ├─ setup.py
-    └─ ..
+    my_mcdr_server_in_source/
+     ├─ mcdreforged/
+     │   └─ ..
+     ├─ MCDReforged.py
+     ├─ setup.py
+     └─ ..
 
 MCDR will delay to start and print some warnings if the ``mcdreforged`` python package is not detected, and this is a common thing if you are launching MCDR from source
 

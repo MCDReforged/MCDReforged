@@ -37,11 +37,11 @@ For example, the following codes with the given files structure won't work in MC
 
 .. code-block::
 
-   plugins/
-       my_lib/
-           __init__.py
-           my_tool.py
-       my_plugin.py
+    plugins/
+        my_lib/
+            __init__.py
+            my_tool.py
+        my_plugin.py
 
 .. code-block:: python
 

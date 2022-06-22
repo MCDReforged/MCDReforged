@@ -12,12 +12,12 @@ Plugin information is stored in the ``plugins/`` directory in the repository. Ea
 
 .. code-block::
 
-   plugins/
-    ├─ my_plugin
-    │   └─ plugin_info.json
-    └─ another_plugin
-        ├─ plugin_info.json
-        └─ some_other_files.txt
+    plugins/
+     ├─ my_plugin
+     │   └─ plugin_info.json
+     └─ another_plugin
+         ├─ plugin_info.json
+         └─ some_other_files.txt
 
 Plugin Info
 ^^^^^^^^^^^
@@ -136,11 +136,11 @@ It's named by ``introduction.md`` for default language ``en_us`` and named by e.
 
 .. code-block::
 
-   plugins/
-    └─ my_plugin
-        ├─ plugin_info.json
-        ├─ introduction.md
-        └─ introduction-zh_cn.md
+    plugins/
+     └─ my_plugin
+         ├─ plugin_info.json
+         ├─ introduction.md
+         └─ introduction-zh_cn.md
 
 Type: Dict[str, str]
 

@@ -17,8 +17,8 @@ In this example, we have a vanilla server, but some of the players have a prefix
 
 .. code-block::
 
-   <[Builder]Steve> Hello
-   <[Builder]Steve> !!MCDR status
+    <[Builder]Steve> Hello
+    <[Builder]Steve> !!MCDR status
 
 For the default vanilla handler, ``[Builder]Steve`` is an illegal player name. Luckily all possible prefixes of the players in the server follows the same format ``[Prefix] PlayerName``. So it's possible to make a dedicated handler for the server
 
@@ -51,7 +51,7 @@ And then you are able to use this handler to handle the server. You need to do t
 
 .. code-block::
 
-   custom_handlers:
-   - the.package.to.my.handler.MyHandler
+    custom_handlers:
+    - the.package.to.my.handler.MyHandler
 
 That's all you need to do
