@@ -32,14 +32,14 @@ open it and enter these code
     }
 
 
-   def on_load(server, old):
-       server.logger.info('Hello world!')
+    def on_load(server, old):
+        server.logger.info('Hello world!')
 
 Return to MCDR console, enter ``!!MCDR reload plugin``, and you should see the hello world message from your plugin
 
 .. code-block::
 
-   [TaskExecutor/INFO] [hello_world]: Hello world!
+    [TaskExecutor/INFO] [hello_world]: Hello world!
 
 Great, you have successfully created your first plugin
 
