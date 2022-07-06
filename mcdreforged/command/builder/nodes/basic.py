@@ -161,6 +161,13 @@ class AbstractNode(ABC):
 			sig.bind(*args[:spec_args_len])  # test if using full arg length is ok
 		except TypeError:
 			raise
+
+		# make sure all passed CommandContext are copies
+		args = list(args)
+		for i in range(len(args)):
+			if isinstance(args[i], CommandContext):
+				args[i] = args[i].copy()
+
 		return callback(*args[:spec_args_len])
 
 	def __handle_error(self, error: CommandError, context: CommandContext, error_handlers: _ERROR_HANDLER_TYPE):

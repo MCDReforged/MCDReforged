@@ -2,9 +2,10 @@ import typing
 from contextlib import contextmanager
 from typing import List, Iterable, Dict, Any, Optional, NamedTuple
 
+from mcdreforged.command.command_source import CommandSource
+
 if typing.TYPE_CHECKING:
 	from mcdreforged.command.builder.nodes.basic import AbstractNode, ArgumentNode
-	from mcdreforged.command.command_source import CommandSource
 
 
 class ParseResult(NamedTuple):
@@ -63,6 +64,13 @@ class CommandContext(Dict[str, Any]):
 		self.__cursor = 0
 		self.__node_path = []  # type: List[AbstractNode]
 
+	def copy(self) -> 'CommandContext':
+		copied = CommandContext(self.source, self.command)
+		copied.update(self)
+		copied.__cursor = self.__cursor
+		copied.__node_path = self.__node_path.copy()
+		return copied
+
 	@property
 	def source(self) -> 'CommandSource':
 		return self.__source
@@ -87,10 +95,14 @@ class CommandContext(Dict[str, Any]):
 	def node_path(self) -> List['AbstractNode']:
 		return self.__node_path
 
+	# -------------------------
+	#      Not public APIs
+	# -------------------------
+
 	@contextmanager
 	def read_command(self, current_node: 'AbstractNode', result: 'ParseResult', new_cursor: int):
 		"""
-		**Only used in command parsing**
+		**Not public API, only used in command parsing**
 		Change the current cursor position, and store the parsing value
 		"""
 		from mcdreforged.command.builder.nodes.basic import ArgumentNode
@@ -110,7 +122,7 @@ class CommandContext(Dict[str, Any]):
 	@contextmanager
 	def enter_child(self, node: 'AbstractNode'):
 		"""
-		**Only used in command parsing**
+		**Not public API, only used in command parsing**
 		Enter a command node, maintain the node_path
 		"""
 		self.__node_path.append(node)
