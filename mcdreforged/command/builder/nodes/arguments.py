@@ -5,11 +5,12 @@ from typing import Type, Iterable, Union
 
 from mcdreforged.command.builder import command_builder_util as utils
 from mcdreforged.command.builder.command_builder_util import DIVIDER
+from mcdreforged.command.builder.common import ParseResult, CommandContext
 from mcdreforged.command.builder.exception import NumberOutOfRange, EmptyText, \
 	InvalidNumber, InvalidInteger, InvalidFloat, UnclosedQuotedString, IllegalEscapesUsage, \
 	TextLengthOutOfRange, InvalidBoolean, InvalidEnumeration
-from mcdreforged.command.builder.nodes.basic import AbstractNode, ParseResult, SUGGESTS_CALLBACK, \
-	ArgumentNode, CommandContext
+from mcdreforged.command.builder.nodes.basic import AbstractNode, SUGGESTS_CALLBACK, \
+	ArgumentNode
 # --------------------
 #   Number Arguments
 # --------------------
