@@ -91,7 +91,7 @@ class RegularPlugin(AbstractPlugin, ABC):
 		self.assert_state({PluginState.UNINITIALIZED})
 		self.set_state(PluginState.LOADING)
 		self._on_load()
-		self.mcdr_server.logger.debug('{} {} loaded from {}, file modify file = {}'.format(self.__class_name, self, self.plugin_path, self.pretty_file_modify_time), option=DebugOption.PLUGIN)
+		self.mcdr_server.logger.debug('{} {} loaded from {}, file modify time = {}'.format(self.__class_name, self, self.plugin_path, self.pretty_file_modify_time), option=DebugOption.PLUGIN)
 		self.set_state(PluginState.LOADED)
 
 	def ready(self):
@@ -106,7 +106,7 @@ class RegularPlugin(AbstractPlugin, ABC):
 		self.assert_state({PluginState.READY})
 		self._on_unload()
 		self._on_load()
-		self.mcdr_server.logger.debug('{} {} reloaded, file modify file = {}'.format(self.__class_name, self, self.pretty_file_modify_time))
+		self.mcdr_server.logger.debug('{} {} reloaded, file modify time = {}'.format(self.__class_name, self, self.pretty_file_modify_time))
 
 	def unload(self):
 		self.assert_state({PluginState.LOADED, PluginState.READY})

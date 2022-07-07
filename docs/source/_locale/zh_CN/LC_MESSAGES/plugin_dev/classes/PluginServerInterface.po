@@ -62,6 +62,10 @@ msgstr "参数 *priority*：监听器的优先级。如果没有指定，将被�
 msgid "register_command"
 msgstr "register_command"
 
+#: ../plugin_dev/classes/PluginServerInterface.rst:34
+msgid "Register an command for the current plugin"
+msgstr "为当前插件注册一个指令。"
+
 #: ../plugin_dev/classes/PluginServerInterface.rst:36
 msgid ""
 "Parameter *root_node*: The root node of your command tree. It should be a"
