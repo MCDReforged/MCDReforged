@@ -2,9 +2,10 @@ from mcdreforged.command.builder import command_builder_util
 from mcdreforged.command.builder.common import CommandContext, ParseResult
 from mcdreforged.command.builder.exception import LiteralNotMatch, NumberOutOfRange, IllegalArgument, EmptyText, \
 	UnknownCommand, UnknownArgument, CommandSyntaxError, UnknownRootArgument, RequirementNotMet, IllegalNodeOperation, \
-	CommandError, InvalidNumber, InvalidInteger, InvalidFloat, UnclosedQuotedString, IllegalEscapesUsage, InvalidBoolean
+	CommandError, InvalidNumber, InvalidInteger, InvalidFloat, UnclosedQuotedString, IllegalEscapesUsage, InvalidBoolean, \
+	InvalidEnumeration
 from mcdreforged.command.builder.nodes.arguments import Number, Integer, Float, Text, QuotableText, \
-	GreedyText, Boolean
+	GreedyText, Boolean, Enumeration
 from mcdreforged.command.builder.nodes.basic import AbstractNode, Literal, ArgumentNode
 
 __all__ = [
@@ -16,7 +17,7 @@ __all__ = [
 	'Literal',
 	'Number', 'Integer', 'Float',
 	'Text', 'QuotableText', 'GreedyText',
-	'Boolean',
+	'Boolean', 'Enumeration',
 
 	# ------------------
 	#     Exceptions
@@ -31,7 +32,7 @@ __all__ = [
 	'IllegalArgument', 'LiteralNotMatch',
 	'NumberOutOfRange', 'InvalidNumber', 'InvalidInteger', 'InvalidFloat',
 	'IllegalEscapesUsage', 'UnclosedQuotedString', 'EmptyText',
-	'InvalidBoolean',
+	'InvalidBoolean', 'InvalidEnumeration',
 
 	# ------------------
 	#       Utils
