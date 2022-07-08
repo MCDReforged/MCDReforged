@@ -488,12 +488,12 @@ Here's a quick example of a custom Argument node, ``PointArgument``. It accepts 
 .. code-block:: python
 
     class IllegalPoint(CommandSyntaxError):
-        def __init__(self, char_read: int):
+        def __init__(self, char_read: str):
             super().__init__('Invalid Point', char_read)
 
 
     class IncompletePoint(CommandSyntaxError):
-        def __init__(self, char_read: int):
+        def __init__(self, char_read: str):
             super().__init__('Incomplete Point', char_read)
 
 
