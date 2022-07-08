@@ -846,39 +846,39 @@ msgstr ""
 "类型的参数输入作为坐标，并将它们作为点储存到列表中。如果它获得非浮点输入，则抛出 ``IllegalPoint`` "
 "异常。如果指令在读取完三个浮点数之前结束，则抛出 ``IncompletePoint`` 异常。"
 
-#: ../plugin_dev/command.rst:514
+#: ../plugin_dev/command.rst:510
 msgid "For its usage, here's a simple example as well as an input/output table:"
 msgstr "对于它的用法，这是一个简单的示例，以及一个对应的输入/输出表："
 
-#: ../plugin_dev/command.rst:531
+#: ../plugin_dev/command.rst:527
 msgid "!!mypoint 1 2 3"
 msgstr "!!mypoint 1 2 3"
 
-#: ../plugin_dev/command.rst:532
+#: ../plugin_dev/command.rst:528
 msgid "You have input a point (1.0, 2.0, 3.0)"
 msgstr "You have input a point (1.0, 2.0, 3.0)"
 
-#: ../plugin_dev/command.rst:533
+#: ../plugin_dev/command.rst:529
 msgid "!!mypoint 1 2"
 msgstr "!!mypoint 1 2"
 
-#: ../plugin_dev/command.rst:534
+#: ../plugin_dev/command.rst:530
 msgid "Incomplete Point: !!mypoint 1 2<--"
 msgstr "Incomplete Point: !!mypoint 1 2<--"
 
-#: ../plugin_dev/command.rst:535
+#: ../plugin_dev/command.rst:531
 msgid "!!mypoint xxx"
 msgstr "!!mypoint xxx"
 
-#: ../plugin_dev/command.rst:536
+#: ../plugin_dev/command.rst:532
 msgid "Invalid Point: !!mypoint xxx<--"
 msgstr "Invalid Point: !!mypoint xxx<--"
 
-#: ../plugin_dev/command.rst:537
+#: ../plugin_dev/command.rst:533
 msgid "!!mypoint 1 2 x"
 msgstr "!!mypoint 1 2 x"
 
-#: ../plugin_dev/command.rst:538
+#: ../plugin_dev/command.rst:534
 msgid "Invalid Point: !!mypoint 1 2 x<--"
 msgstr "Invalid Point: !!mypoint 1 2 x<--"
 

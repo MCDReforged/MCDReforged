@@ -499,17 +499,13 @@ Here's a quick example of a custom Argument node, ``PointArgument``. It accepts 
 
     class PointArgument(ArgumentNode):
         def parse(self, text: str) -> ParseResult:
-            total_read = 0
-            coords = []
-            for i in range(3):
-                value, read = command_builder_util.get_float(text[total_read:])
-                if read == 0:
-                    raise IncompletePoint(total_read)
-                total_read += read
-                if value is None:
-                    raise IllegalPoint(total_read)
-                coords.append(value)
-            return ParseResult(coords, total_read)
+            try:
+                coords = list(map(float, text.split()))
+                if len(coords) != 3:
+                    raise IncompletePoint(text)
+            except ValueError:
+                raise IllegalPoint(text)
+            return ParseResult(coords, len(text))
 
 For its usage, here's a simple example as well as an input/output table:
 
