@@ -500,12 +500,14 @@ Here's a quick example of a custom Argument node, ``PointArgument``. It accepts 
     class PointArgument(ArgumentNode):
         def parse(self, text: str) -> ParseResult:
             try:
-                coords = list(map(float, text.split()))
-                if len(coords) != 3:
+                texts = text.split()[:3]
+                coords = list(map(float, texts))
+                if len(coords) < 3:
                     raise IncompletePoint(text)
             except ValueError:
                 raise IllegalPoint(text)
-            return ParseResult(coords, len(text))
+            else:
+                return ParseResult(coords, len(' '.join(texts)))
 
 For its usage, here's a simple example as well as an input/output table:
 
