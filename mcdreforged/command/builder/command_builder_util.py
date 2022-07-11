@@ -1,4 +1,4 @@
-from typing import Union, Any
+from typing import Any, Tuple, Optional
 
 DIVIDER = ' '
 
@@ -20,7 +20,7 @@ def get_element(text) -> str:
 		return text[:pos]
 
 
-def __get_var(text, func) -> Union[Any, int]:
+def __get_var(text, func) -> Tuple[Optional[Any], int]:
 	"""
 	Return value, char_read
 	value will be None if ValueError occurs
@@ -33,9 +33,9 @@ def __get_var(text, func) -> Union[Any, int]:
 	return value, len(arg)
 
 
-def get_int(text) -> Union[int, int]:
+def get_int(text) -> Tuple[Optional[int], int]:
 	return __get_var(text, int)
 
 
-def get_float(text) -> Union[float, int]:
+def get_float(text) -> Tuple[Optional[float], int]:
 	return __get_var(text, float)
