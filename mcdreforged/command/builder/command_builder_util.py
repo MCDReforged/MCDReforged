@@ -1,4 +1,4 @@
-from typing import Any, Tuple, Optional
+from typing import Tuple, Optional, TypeVar, Callable
 
 DIVIDER = ' '
 
@@ -7,7 +7,7 @@ def remove_divider_prefix(text: str) -> str:
 	return text.lstrip(DIVIDER)
 
 
-def get_element(text) -> str:
+def get_element(text: str) -> str:
 	"""
 	"my test command" -> "my"
 	:type text: str
@@ -20,7 +20,10 @@ def get_element(text) -> str:
 		return text[:pos]
 
 
-def __get_var(text, func) -> Tuple[Optional[Any], int]:
+T = TypeVar('T')
+
+
+def __get_var(text: str, func: Callable[[str], T]) -> Tuple[Optional[T], int]:
 	"""
 	Return value, char_read
 	value will be None if ValueError occurs
@@ -33,9 +36,9 @@ def __get_var(text, func) -> Tuple[Optional[Any], int]:
 	return value, len(arg)
 
 
-def get_int(text) -> Tuple[Optional[int], int]:
+def get_int(text: str) -> Tuple[Optional[int], int]:
 	return __get_var(text, int)
 
 
-def get_float(text) -> Tuple[Optional[float], int]:
+def get_float(text: str) -> Tuple[Optional[float], int]:
 	return __get_var(text, float)
