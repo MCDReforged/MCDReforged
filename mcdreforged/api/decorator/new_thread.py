@@ -43,7 +43,7 @@ def new_thread(arg: Optional[Union[str, Callable]] = None):
 	The name of the thread can be specified in parameter
 
 	The return value of the decorated function is changed to the thread instance that executes this function
-	the decorated function has 1 extra field:
+	The decorated function has 1 extra field:
 	- `original` field: stores the original undecorated function
 	"""
 	def wrapper(func):
