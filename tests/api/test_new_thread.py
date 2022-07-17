@@ -24,7 +24,7 @@ class MyTestCase(unittest.TestCase):
 		@new_thread('awa')
 		def bla3(value):
 			self.assertNotEqual(threading.current_thread(), threading.main_thread())
-			self.assertEqual(threading.current_thread().getName(), 'awa')
+			self.assertEqual(threading.current_thread().name, 'awa')
 
 		threads = []
 		for i, func in enumerate([bla1, bla2, bla3]):
@@ -47,7 +47,7 @@ class MyTestCase(unittest.TestCase):
 
 		t: FunctionThread = func2()
 		self.assertTrue(t.is_alive())
-		self.assertTrue(t.isDaemon())
+		self.assertTrue(t.daemon)
 		with self.assertRaises(RuntimeError):
 			# the thread is still running, operation failed
 			t.get_return_value()

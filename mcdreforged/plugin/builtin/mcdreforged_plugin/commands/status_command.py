@@ -48,7 +48,7 @@ class StatusCommand(SubCommand):
 		]))
 		thread_pool_counts = 0
 		for thread in threading.enumerate():
-			name = thread.getName()
+			name = thread.name
 			if not name.startswith('ThreadPoolExecutor-'):
 				source.reply('  §7-§r {}'.format(name))
 			else:

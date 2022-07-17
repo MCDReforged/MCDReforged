@@ -95,7 +95,7 @@ In addition to simply and directly use a raw ``@new_thread``, it's recommend to 
 
     @new_thread('My Plugin Thread')
     def do_something3(text: str):
-        print(threading.current_thread().getName())  # will be "My Plugin Thread"
+        print(threading.current_thread().name)  # will be "My Plugin Thread"
         time.sleep(10)
 
 So when you logs something by ``server.logger``, a meaningful thread name will be displayed instead of a plain and meaningless ``Thread-3``
