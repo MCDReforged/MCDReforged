@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-09 17:10+0800\n"
+"POT-Creation-Date: 2022-07-19 21:09+0800\n"
 "PO-Revision-Date: 2021-01-23 12:20+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -94,8 +94,9 @@ msgstr "插件生命周期：`插件被加载 <#plugin-loaded>`__ -> `插件被�
 msgid ""
 "Server lifecycle: `Server start <#server-start>`__ -> `Server startup "
 "<#server-startup>`__ -> `Server stop <#server-stop>`__"
-msgstr "服务端生命周期：`服务端启动 <#server-start>`__ -> `服务端启动完成 "
-"<#server-startup>`__ -> `服务端终止 <#server-stop>`__"
+msgstr ""
+"服务端生命周期：`服务端启动 <#server-start>`__ -> `服务端启动完成 <#server-startup>`__ -> "
+"`服务端终止 <#server-stop>`__"
 
 #: ../plugin_dev/event.rst:33
 msgid "MCDR lifecycle: `MCDR start <#mcdr-start>`__ -> `MCDR stop <#mcdr-stop>`__"
@@ -119,7 +120,7 @@ msgid ""
 "plugin, prev_module is None. With this parameter plugin can easily "
 "inherit information from the previous plugin instance. Here's an example:"
 msgstr ""
-"插件重载时，``prev_module`` 参数会代表之前的插件实例。若第一次加载插件，则 ``prev_module`` 为 "
+"插件重载时，``prev_module`` 参数会代表之前的插件模块实例。若第一次加载插件，则 ``prev_module`` 为 "
 "None。你使用该参数时，可让插件继承以前的插件实例中的内容，例如："
 
 #: ../plugin_dev/event.rst:58
@@ -141,8 +142,8 @@ msgid "Event id: mcdr.plugin_loaded"
 msgstr "事件 ID：mcdr.plugin_loaded"
 
 #: ../plugin_dev/event.rst:63
-msgid "Callback arguments: PluginServerInterface, prev_module"
-msgstr "回调参数：PluginServerInterface，prev_module"
+msgid "Callback arguments: PluginServerInterface, object (previous module)"
+msgstr "回调参数：PluginServerInterface，object（之前的模块）"
 
 #: ../plugin_dev/event.rst:64
 msgid "Default function name: on_load"
@@ -186,7 +187,8 @@ msgstr "标准信息"
 msgid ""
 "A new line of text is output from the stdout of the server, or a text is "
 "input from the console. MCDR has already parsed the text into an `Info "
-"<classes/Info.html>`__ object. In this event plugin can response to the info"
+"<classes/Info.html>`__ object. In this event plugin can response to the "
+"info"
 msgstr ""
 "服务器输出新一行文本，或者从控制台中输入文本时，触发此事件。 MCDR 将把文本解析为 `Info <classes/Info.html>`__ "
 "对象。在这种情况下，插件可以响应信息。"
@@ -303,8 +305,8 @@ msgid "Event id: mcdr.server_stop"
 msgstr "事件 ID：mcdr.server_stop"
 
 #: ../plugin_dev/event.rst:156
-msgid "Callback arguments: PluginServerInterface, server_return_code"
-msgstr "回调参数：PluginServerInterface，server_return_code"
+msgid "Callback arguments: PluginServerInterface, int"
+msgstr "回调参数：PluginServerInterface，int"
 
 #: ../plugin_dev/event.rst:157
 msgid "Default function name: on_server_stop"
@@ -366,8 +368,8 @@ msgid "Event id: mcdr.player_joined"
 msgstr "事件 ID：mcdr.player_joined"
 
 #: ../plugin_dev/event.rst:197
-msgid "Callback arguments: PluginServerInterface, player_name, Info"
-msgstr "回调参数：PluginServerInterface，player_name，Info"
+msgid "Callback arguments: PluginServerInterface, str, Info"
+msgstr "回调参数：PluginServerInterface，str，Info"
 
 #: ../plugin_dev/event.rst:198
 msgid "Default function name: on_player_joined"
@@ -388,8 +390,8 @@ msgid "Event id: mcdr.player_left"
 msgstr "事件 ID：mcdr.player_left"
 
 #: ../plugin_dev/event.rst:207
-msgid "Callback arguments: PluginServerInterface, player_name"
-msgstr "回调参数：PluginServerInterface，player_name"
+msgid "Callback arguments: PluginServerInterface, str"
+msgstr "回调参数：PluginServerInterface，str"
 
 #: ../plugin_dev/event.rst:208
 msgid "Default function name: on_player_left"

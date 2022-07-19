@@ -60,7 +60,7 @@ Since it's the first event in the lifecycle of a plugin, this event can only be 
 Note: You should not dispatch custom events in the ``on_load`` function or it will do nothing. The event listener storage of MCDR has not been initialized yet
 
 * Event id: mcdr.plugin_loaded
-* Callback arguments: PluginServerInterface, prev_module
+* Callback arguments: PluginServerInterface, object (previous module)
 * Default function name: on_load
 
 Plugin Unloaded
@@ -153,7 +153,7 @@ Example:
 
 
 * Event id: mcdr.server_stop
-* Callback arguments: PluginServerInterface, server_return_code
+* Callback arguments: PluginServerInterface, int
 * Default function name: on_server_stop
 
 MCDR Start
@@ -194,7 +194,7 @@ Example:
 
 
 * Event id: mcdr.player_joined
-* Callback arguments: PluginServerInterface, player_name, Info
+* Callback arguments: PluginServerInterface, str, Info
 * Default function name: on_player_joined
 
 Player Left
@@ -204,7 +204,7 @@ A player just left the game. Plugin can do cleanups for player related objects
 
 
 * Event id: mcdr.player_left
-* Callback arguments: PluginServerInterface, player_name
+* Callback arguments: PluginServerInterface, str
 * Default function name: on_player_left
 
 Custom Event
