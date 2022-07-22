@@ -76,3 +76,24 @@ For Chinese users, you can use tuna mirror to speed up the upgrading too
 
 Development builds are available in `Test PyPi <https://test.pypi.org/project/mcdreforged/#history>`__, you can install them if you have special needs
 
+Use UTF-8
+---------
+
+This step is optional, but to avoid compatibility issues, we recommend that everyone do it
+
+First, modify your startup command by adding ``-Dfile.encoding=UTF-8`` after the Java executable
+
+The modified command will look like this
+
+.. code-block:: bash
+
+    java -Dfile.encoding=UTF-8 -Xms1G -Xmx2G -jar minecraft_server.jar nogui
+
+Then, modify the configuration file ``config.yml``:
+
+.. code-block:: yaml
+
+    encoding: utf8
+    decoding: utf8
+
+This way, the server and MCDR will all use UTF-8.

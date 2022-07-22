@@ -1,0 +1,91 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, Fallen_Breath
+# This file is distributed under the same license as the MCDReforged
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr "Project-Id-Version: MCDReforged \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-07-22 21:12+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.1\n"
+
+#: ../faq.rst:2
+msgid "Frequently Asked Questions"
+msgstr ""
+
+#: ../faq.rst:5
+msgid "``ValueError: check_hostname requires server_hostname`` when installing "
+"using pip"
+msgstr "安装时报错 ``ValueError: check_hostname requires server_hostname``"
+
+#: ../faq.rst:7
+msgid "If you're using Clash For Windows:"
+msgstr "如果你使用 Clash For Windows："
+
+#: ../faq.rst:9
+msgid "**Method 1:** Turn on ``Settings → System Proxy → Specify Protocol``"
+msgstr "**法一：** 在 Clash For Windows 中打开 ``Settings → System Proxy → Specify Protocol``。"
+
+#: ../faq.rst:10
+msgid "**Method 2:** Use ``Service Mode`` with ``TUN Mode`` instead of ``System "
+"Proxy``."
+msgstr "**法二：** 在 Clash For Windows 中打开 ``Service Mode`` 和 ``TUN Mode``，关闭 ``System Proxy``"
+
+#: ../faq.rst:12
+msgid "If you're using other proxy software:"
+msgstr "如果你使用其它代理软件："
+
+#: ../faq.rst:14
+msgid "**Method 3:** Use something like Proxifier instead of system proxy."
+msgstr "**法三：** 使用 Proxifier 等软件实现全局代理，并关闭系统代理。"
+
+#: ../faq.rst:15
+msgid "**Method 4:** Turn off the proxy in the software or system settings."
+msgstr "**法四：** 关闭代理。:)"
+
+#: ../faq.rst:17
+msgid "If you're not using proxy at all:"
+msgstr "如果你完全没有使用代理："
+
+#: ../faq.rst:19
+msgid "Well, idk how to solve it. Maybe you should google it?"
+msgstr "我也不清楚是什么情况。你可以尝试到群里问问 :("
+
+#: ../faq.rst:22
+msgid "Configuration file format error due to unescaped path in ``start_command``"
+msgstr "``start_command`` 中路径未转义导致的配置文件格式错误"
+
+#: ../faq.rst:24
+msgid "**Method 1:** Use a batch script instead of start_command"
+msgstr "**法一：** 使用批处理脚本代替启动命令。"
+
+#: ../faq.rst:26
+msgid "Create a batch script named ``srart.bat`` in the server folder with full start command:"
+msgstr "在 ``server`` 文件夹（即服务端根目录）新建 ``start.bat`` 并填入你的启动命令："
+
+#: ../faq.rst:32
+msgid "Then set ``start_command`` to ``start.bat`` in the MCDR configuration "
+"file."
+msgstr "然后将 MCDR 配置文件中的 ``start_command`` 设置为 ``start.bat`` 即可。"
+
+#: ../faq.rst:34
+msgid "**Method 2:** Escape the start command according to YAML rules."
+msgstr "**法二：** 按照 YAML 规则进行转义。"
+
+#: ../faq.rst:37
+msgid "Commands from client does not respond, returns garbled code, or appears "
+"Decode/EncodeError"
+msgstr "客户端输入指令无响应、返回乱码，或出现 Decode/EncodeError"
+
+#: ../faq.rst:39
+msgid "GBK sucks. `Use UTF-8 <quick_start.html#use-utf-8>`__."
+msgstr "GBK 烂透了。`使用 UTF-8 <quick_start.html#use-utf-8>`__。"
+

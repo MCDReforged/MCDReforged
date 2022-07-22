@@ -12,6 +12,7 @@ This is the official documentation for `MCDReforged <https://github.com/Fallen-B
    :caption: Home
 
    Quick Start<quick_start.rst>
+   Frequently Asked Questions<faq.rst>
    Configure<configure.rst>
    Command<command.rst>
    Permission<permission.rst>
