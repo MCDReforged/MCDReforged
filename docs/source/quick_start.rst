@@ -4,6 +4,16 @@ Quick Start
 
 This is a quick start tutorial of `MCDReforged <https://github.com/Fallen-Breath/MCDReforged>`__ (abbreviated as MCDR, omitted below)
 
+Other Tutorials (Chinese)
+-------------------------
+
+Here is a list of some other people's tutorials, simpler than this one, for newbies who don't know anything.
+
+Note that these tutorials may not work with the latest MCDR.
+
+* Video `Minecraft server control tool MCDR tutorial <https://www.bilibili.com/video/BV18Z4y1q7Cz>`__ by shenjack\_ & zhang_anzhi
+* Article `MCDReforged: from Beginner to Proficient <https://mcdr.alex3236.top>`__ by alex3236
+
 Requirements
 ------------
 
