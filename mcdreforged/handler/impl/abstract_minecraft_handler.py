@@ -19,7 +19,8 @@ class AbstractMinecraftHandler(AbstractServerHandler, ABC):
 	@classmethod
 	def get_player_message_parsing_formatter(cls) -> List[str]:
 		"""
-		Return a str or a str collection that is used in method _content_parse for parsing
+		Return a str or a str collection that is used in method parse_server_stdout for parsing player message
+		requires str field "name" and "message" in the formatters
 		"""
 		return [
 			'<{name}> {message}',
