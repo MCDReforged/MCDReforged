@@ -143,7 +143,7 @@ class MCDReforgedLogger(logging.Logger):
 
 	def __init__(self, plugin_id: Optional[str] = None):
 		super().__init__(self.DEFAULT_NAME)
-		self.file_handler = None
+		self.file_handler: Optional[logging.FileHandler] = None
 
 		self.console_handler = SyncStdoutStreamHandler()
 		self.console_handler.setFormatter(self.get_console_formatter(plugin_id))
@@ -189,6 +189,12 @@ class MCDReforgedLogger(logging.Logger):
 		self.file_handler = logging.FileHandler(file_name, encoding='utf8')
 		self.file_handler.setFormatter(self.FILE_FMT)
 		self.addHandler(self.file_handler)
+
+	def unset_file(self):
+		if self.file_handler is not None:
+			self.removeHandler(self.file_handler)
+			self.file_handler.close()
+			self.file_handler = None
 
 
 class ServerLogger(logging.Logger):

@@ -731,7 +731,7 @@ class PluginServerInterface(ServerInterface):
 				self.logger.info(msg)
 
 		if target_class is not None:
-			target_class: Serializable
+			target_class: Type[Serializable]
 			if default_config is None:
 				default_config = target_class.get_default().serialize()
 		config_file_path = os.path.join(self.get_data_folder(), file_name) if in_data_folder else file_name

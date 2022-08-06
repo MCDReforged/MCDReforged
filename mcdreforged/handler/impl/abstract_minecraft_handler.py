@@ -1,7 +1,7 @@
 import json
 import re
 from abc import ABC
-from typing import Optional, Any
+from typing import Optional, Any, List
 
 from parse import parse
 
@@ -15,6 +15,17 @@ from mcdreforged.utils import string_util
 class AbstractMinecraftHandler(AbstractServerHandler, ABC):
 	def get_stop_command(self) -> str:
 		return 'stop'
+
+	@classmethod
+	def get_player_message_parsing_formatter(cls) -> List[str]:
+		"""
+		Return a str or a str collection that is used in method parse_server_stdout for parsing player message
+		requires str field "name" and "message" in the formatters
+		"""
+		return [
+			'<{name}> {message}',
+			'[Not Secure] <{name}> {message}',  # since mc 1.19, when a player sends an un-verified chat message
+		]
 
 	@classmethod
 	def format_message(cls, message: Any) -> str:
@@ -54,9 +65,12 @@ class AbstractMinecraftHandler(AbstractServerHandler, ABC):
 
 	def parse_server_stdout(self, text: str):
 		result = super().parse_server_stdout(text)
-		parsed = parse('<{name}> {message}', result.content)
-		if parsed is not None and self._verify_player_name(parsed['name']):
-			result.player, result.content = parsed['name'], parsed['message']
+
+		for formatter in self.get_player_message_parsing_formatter():
+			parsed = parse(formatter, result.content)
+			if parsed is not None and self._verify_player_name(parsed['name']):
+				result.player, result.content = parsed['name'], parsed['message']
+				break
 		return result
 
 	def parse_player_joined(self, info: Info):
