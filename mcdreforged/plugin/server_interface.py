@@ -53,8 +53,10 @@ class ServerInterface:
 			ServerInterface.__global_instance = self
 
 	@functools.lru_cache(maxsize=512, typed=True)
-	def __get_logger(self, plugin_id: str):
-		return MCDReforgedLogger(plugin_id)
+	def _get_logger(self, plugin_id: str) -> MCDReforgedLogger:
+		logger = MCDReforgedLogger(plugin_id)
+		logger.addHandler(self._mcdr_server.logger.file_handler)
+		return logger
 
 	@property
 	def logger(self) -> MCDReforgedLogger:
@@ -63,7 +65,7 @@ class ServerInterface:
 		"""
 		plugin = self._mcdr_server.plugin_manager.get_current_running_plugin()
 		if plugin is not None:
-			return self.__get_logger(plugin.get_id())
+			return self._get_logger(plugin.get_id())
 		else:
 			return self._mcdr_server.logger
 
@@ -612,9 +614,10 @@ class PluginServerInterface(ServerInterface):
 	def logger(self) -> MCDReforgedLogger:
 		if self.__logger_for_plugin is None:
 			try:
-				self.__logger_for_plugin = MCDReforgedLogger(self.__plugin.get_id())
+				logger = self.__logger_for_plugin = self._get_logger(self.__plugin.get_id())
 			except:
-				return super().logger
+				logger = self._mcdr_server.logger
+			self.__logger_for_plugin = logger
 		return self.__logger_for_plugin
 
 	def as_plugin_server_interface(self) -> Optional['PluginServerInterface']:
