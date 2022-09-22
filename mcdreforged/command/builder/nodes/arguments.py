@@ -8,8 +8,8 @@ from mcdreforged.command.builder.command_builder_util import DIVIDER
 from mcdreforged.command.builder.common import ParseResult, CommandContext
 from mcdreforged.command.builder.exception import NumberOutOfRange, EmptyText, \
 	InvalidNumber, InvalidInteger, InvalidFloat, UnclosedQuotedString, IllegalEscapesUsage, \
-	TextLengthOutOfRange, InvalidBoolean, InvalidEnumeration
-from mcdreforged.command.builder.nodes.basic import AbstractNode, SUGGESTS_CALLBACK, \
+	TextLengthOutOfRange, InvalidBoolean, InvalidEnumeration, AbstractOutOfRange
+from mcdreforged.command.builder.nodes.basic import SUGGESTS_CALLBACK, \
 	ArgumentNode
 # --------------------
 #   Number Arguments
@@ -40,6 +40,16 @@ class NumberNode(ArgumentNode, ABC):
 		if (self.__min_value is not None and value < self.__min_value) or (self.__max_value is not None and value > self.__max_value):
 			raise NumberOutOfRange(char_read, value, self.__min_value, self.__max_value)
 		return ParseResult(value, char_read)
+
+	def __str__(self):
+		if self.__min_value is not None or self.__max_value is not None:
+			extra = ' within [{}, {}]'.format(AbstractOutOfRange.get_boundary_text(self.__min_value), AbstractOutOfRange.get_boundary_text(self.__max_value))
+		else:
+			extra = ''
+		return super().__str__() + extra
+
+	def __repr__(self):
+		return '{}[name={},min={},max={}]'.format(self.__class__.__name__, self.get_name(), self.__min_value, self.__max_value)
 
 
 class Number(NumberNode):
@@ -106,6 +116,16 @@ class TextNode(ArgumentNode, ABC):
 			raise TextLengthOutOfRange(char_read, length, self.__min_length, self.__max_length)
 		return ParseResult(text, char_read)
 
+	def __str__(self):
+		if self.__min_length is not None or self.__max_length is not None:
+			extra = ' in length [{}, {}]'.format(AbstractOutOfRange.get_boundary_text(self.__min_length), AbstractOutOfRange.get_boundary_text(self.__max_length))
+		else:
+			extra = ''
+		return super().__str__() + extra
+
+	def __repr__(self):
+		return '{}[name={},min_len={},max_len={}]'.format(self.__class__.__name__, self.get_name(), self.__min_length, self.__max_length)
+
 
 class Text(TextNode):
 	"""
@@ -156,7 +176,7 @@ class QuotableText(Text):
 		raise UnclosedQuotedString(text)
 
 	# use quote characters to quote suggestions with DIVIDER
-	def suggests(self, suggestion: SUGGESTS_CALLBACK) -> 'AbstractNode':
+	def suggests(self, suggestion: SUGGESTS_CALLBACK) -> 'QuotableText':
 		def quote_wrapper(*args, **kwargs):
 			suggestions = []
 			for s in suggestion(*args, **kwargs):
@@ -164,6 +184,8 @@ class QuotableText(Text):
 					s = json.dumps(s)
 				suggestions.append(s)
 			return suggestions
+
+		# noinspection PyTypeChecker
 		return super().suggests(misc_util.copy_signature(quote_wrapper, suggestion))
 
 
@@ -217,4 +239,9 @@ class Enumeration(ArgumentNode):
 		else:
 			return ParseResult(enum, len(arg))
 
+	def __str__(self):
+		return super().__str__() + ' @ {}'.format(self.__class__.__name__, self.get_name(), self.__enum_class.__name__)
+
+	def __repr__(self):
+		return '{}[name={},enum_class={}]'.format(self.__class__.__name__, self.get_name(), self.__enum_class)
 

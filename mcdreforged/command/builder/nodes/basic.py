@@ -131,6 +131,9 @@ class AbstractNode(ABC):
 		self._child_error_handlers[error_type] = _ErrorHandler(handler, handled)
 		return self
 
+	def print_tree(self, line_writer: Callable[[str], Any] = print):
+		_print_tree(self, line_writer)
+
 	# -------------------
 	#   Interfaces ends
 	# -------------------
@@ -140,6 +143,13 @@ class AbstractNode(ABC):
 
 	def has_children(self):
 		return len(self._children) + len(self._children_literal) > 0
+
+	def get_children(self) -> List['AbstractNode']:
+		children = []
+		for literal_list in self._children_literal.values():
+			children.extend(literal_list)
+		children.extend(self._children)
+		return children
 
 	def parse(self, text: str) -> ParseResult:
 		"""
@@ -363,6 +373,11 @@ class Literal(EntryNode):
 		else:
 			raise LiteralNotMatch('Invalid Argument', len(arg))
 
+	def __str__(self):
+		import json
+		literals = list(map(json.dumps, self.literals))
+		return 'Literal {}'.format(tuple(literals)[0] if len(literals) == 1 else set(literals))
+
 	def __repr__(self):
 		return 'Literal[literals={}]'.format(self.literals)
 
@@ -377,3 +392,35 @@ class ArgumentNode(AbstractNode, ABC):
 
 	def _get_usage(self) -> str:
 		return '<{}>'.format(self.__name)
+
+	def __str__(self):
+		return '{} <{}>'.format(self.__class__.__name__, self.get_name())
+
+	def __repr__(self):
+		return '{}[name={}]'.format(self.__class__.__name__, self.__name)
+
+
+def _print_tree(root: AbstractNode, line_writer: Callable[[str], Any]):
+	def is_root(node: AbstractNode) -> bool:
+		return node == root
+
+	def get_item_line(node: AbstractNode, is_last: bool) -> str:
+		if is_root(node):
+			return ''
+		return '└── ' if is_last else '├── '
+
+	def get_parent_line(node: AbstractNode, is_last: bool) -> str:
+		if is_root(node):
+			return ''
+		return '    ' if is_last else '│   '
+
+	def do_print(node: AbstractNode, prefix: str, is_last: bool):
+		line = str(node)
+		line = get_item_line(node, is_last) + line
+		line_writer(prefix + line)
+
+		children = node.get_children()
+		for i, child in enumerate(children):
+			do_print(child, prefix + get_parent_line(node, is_last), i == len(children) - 1)
+
+	do_print(root, '', False)

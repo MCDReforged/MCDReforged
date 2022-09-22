@@ -165,11 +165,11 @@ class AbstractOutOfRange(IllegalArgument, ABC):
 		self.__range_r = range_r
 
 	@classmethod
-	def _get_boundary_text(cls, value) -> str:
+	def get_boundary_text(cls, value) -> str:
 		return str(value) if value is not None else '/'
 
 	def get_error_data(self) -> tuple:
-		return self.__value, self._get_boundary_text(self.__range_l), self._get_boundary_text(self.__range_r)
+		return self.__value, self.get_boundary_text(self.__range_l), self.get_boundary_text(self.__range_r)
 
 
 # Number things
@@ -180,7 +180,7 @@ class NumberOutOfRange(AbstractOutOfRange):
 	The parsed number value is out of the restriction range
 	"""
 	def __init__(self, char_read: Union[int, str], value, range_l, range_r):
-		super().__init__('Value out of range [{}, {}]'.format(self._get_boundary_text(range_l), self._get_boundary_text(range_r)), char_read, value, range_l, range_r)
+		super().__init__('Value out of range [{}, {}]'.format(self.get_boundary_text(range_l), self.get_boundary_text(range_r)), char_read, value, range_l, range_r)
 
 
 class InvalidNumber(IllegalArgument):
@@ -206,7 +206,7 @@ class TextLengthOutOfRange(AbstractOutOfRange):
 	The length of the given text is out of the restriction range
 	"""
 	def __init__(self, char_read: Union[int, str], value, range_l, range_r):
-		super().__init__('Text length {} out of range [{}, {}]'.format(value, self._get_boundary_text(range_l), self._get_boundary_text(range_r)), char_read, value, range_l, range_r)
+		super().__init__('Text length {} out of range [{}, {}]'.format(value, self.get_boundary_text(range_l), self.get_boundary_text(range_r)), char_read, value, range_l, range_r)
 
 
 class IllegalEscapesUsage(IllegalArgument):
