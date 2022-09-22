@@ -649,7 +649,7 @@ class PluginServerInterface(ServerInterface):
 
 	def register_command(self, root_node: Literal) -> None:
 		"""
-		Register an event listener for the current plugin
+		Register a command for the current plugin
 		:param root_node: the root node of your command tree. It should be a Literal node
 		"""
 		self.__plugin.register_command(root_node)

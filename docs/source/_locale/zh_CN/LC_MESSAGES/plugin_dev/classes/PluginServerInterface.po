@@ -63,7 +63,7 @@ msgid "register_command"
 msgstr "register_command"
 
 #: ../plugin_dev/classes/PluginServerInterface.rst:34
-msgid "Register an command for the current plugin"
+msgid "Register a command for the current plugin"
 msgstr "为当前插件注册一个指令。"
 
 #: ../plugin_dev/classes/PluginServerInterface.rst:36

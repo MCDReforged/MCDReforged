@@ -31,7 +31,7 @@ register_command
 
     def register_command(self, root_node: Literal) -> None
 
-Register an command for the current plugin
+Register a command for the current plugin
 
 Parameter *root_node*: The root node of your command tree. It should be a ``Literal`` node
 
