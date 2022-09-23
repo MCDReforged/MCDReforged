@@ -34,10 +34,8 @@ def load_class(path: str):
 T = TypeVar('T')
 
 
-def unique_list(lst: List[T]) -> List[T]:
-	ret = list(set(lst))
-	ret.sort(key=lst.index)
-	return ret
+def unique_list(lst: Iterable[T]) -> List[T]:
+	return list(dict.fromkeys(lst).keys())
 
 
 def get_all_base_class(cls):

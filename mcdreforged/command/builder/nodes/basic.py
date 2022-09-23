@@ -10,6 +10,7 @@ from mcdreforged.command.builder.exception import LiteralNotMatch, UnknownComman
 	UnknownRootArgument, RequirementNotMet, IllegalNodeOperation, \
 	CommandError
 from mcdreforged.command.command_source import CommandSource
+from mcdreforged.utils import misc_util
 from mcdreforged.utils.types import MessageText
 
 __SOURCE_CONTEXT_CALLBACK = Union[Callable[[], Any], Callable[[CommandSource], Any], Callable[[CommandSource, dict], Any]]
@@ -145,16 +146,11 @@ class AbstractNode(ABC):
 		return len(self._children) + len(self._children_literal) > 0
 
 	def get_children(self) -> List['AbstractNode']:
-		def extend(nodes: Iterable['AbstractNode']):
-			for node in nodes:
-				if node not in children_set:
-					children.append(node)
-					children_set.add(node)
-		children, children_set = [], set()
+		children = []
 		for literal_list in self._children_literal.values():
-			extend(literal_list)
-		extend(self._children)
-		return children
+			children.extend(literal_list)
+		children.extend(self._children)
+		return misc_util.unique_list(children)
 
 	def parse(self, text: str) -> ParseResult:
 		"""
