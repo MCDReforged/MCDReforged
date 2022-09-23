@@ -220,8 +220,11 @@ class AbstractNode(ABC):
 
 				# Parsing finished
 				if len(next_remaining) == 0:
-					if self._callback is not None:
-						self.__smart_callback(self._callback, context.source, context)
+					callback = self._callback
+					if callback is None and self._redirect_node is not None:
+						callback = self._redirect_node._callback
+					if callback is not None:
+						self.__smart_callback(callback, context.source, context)
 					else:
 						self.__raise_error(UnknownCommand(context.command_read, context.command_read), context)
 				# Un-parsed command string remains
