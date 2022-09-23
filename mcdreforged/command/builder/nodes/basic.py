@@ -145,10 +145,15 @@ class AbstractNode(ABC):
 		return len(self._children) + len(self._children_literal) > 0
 
 	def get_children(self) -> List['AbstractNode']:
-		children = []
+		def extend(nodes: Iterable['AbstractNode']):
+			for node in nodes:
+				if node not in children_set:
+					children.append(node)
+					children_set.add(node)
+		children, children_set = [], set()
 		for literal_list in self._children_literal.values():
-			children.extend(literal_list)
-		children.extend(self._children)
+			extend(literal_list)
+		extend(self._children)
 		return children
 
 	def parse(self, text: str) -> ParseResult:
@@ -375,8 +380,7 @@ class Literal(EntryNode):
 
 	def __str__(self):
 		import json
-		literals = list(map(json.dumps, self.literals))
-		return 'Literal {}'.format(tuple(literals)[0] if len(literals) == 1 else set(literals))
+		return 'Literal {}'.format(json.dumps(tuple(self.literals)[0]) if len(self.literals) == 1 else set(self.literals))
 
 	def __repr__(self):
 		return 'Literal[literals={}]'.format(self.literals)
