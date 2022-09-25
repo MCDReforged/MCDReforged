@@ -89,7 +89,8 @@ class SimpleCommandBuilder:
 			for command, callback in self.__commands.items():
 				node = root
 				for segment in command.split(' '):
-					node = self.__get_or_create_child(node, segment)
+					if len(segment) > 0:
+						node = self.__get_or_create_child(node, segment)
 				node.runs(callback)
 			self.__build_cache = root.get_children()
 		return self.__build_cache
