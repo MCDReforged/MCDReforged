@@ -328,7 +328,9 @@ class EntryNode(AbstractNode, ABC):
 		:param str command: the command string to execute
 		"""
 		try:
-			self._execute_command(CommandContext(source, command))
+			context = CommandContext(source, command)
+			with context.enter_child(self):
+				self._execute_command(context)
 		except LiteralNotMatch as error:
 			# the root literal node fails to parse the first element
 			raise UnknownRootArgument(error.get_parsed_command(), error.get_failed_command()) from error
@@ -340,7 +342,9 @@ class EntryNode(AbstractNode, ABC):
 		:param CommandSource source: the source that executes this command
 		:param str command: the command string to execute
 		"""
-		return self._generate_suggestions(CommandContext(source, command))
+		context = CommandContext(source, command)
+		with context.enter_child(self):
+			return self._generate_suggestions(context)
 
 
 class Literal(EntryNode):
