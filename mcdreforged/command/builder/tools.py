@@ -1,9 +1,10 @@
-from typing import Dict, Callable, TYPE_CHECKING, Optional, List, Any
+from typing import Dict, Callable, TYPE_CHECKING, Optional, List
 
 from mcdreforged.command.builder.nodes.basic import RUNS_CALLBACK, Literal, AbstractNode, ArgumentNode
 
 if TYPE_CHECKING:
 	from mcdreforged.plugin.server_interface import PluginServerInterface
+	from mcdreforged.utils import tree_printer
 
 
 class SimpleCommandBuilder:
@@ -100,6 +101,6 @@ class SimpleCommandBuilder:
 			else:
 				raise self.Error('Not-literal root node is not supported'.format(node))
 
-	def print_tree(self, line_printer: Callable[[str], Any]):
+	def print_tree(self, line_printer: 'tree_printer.LineWriter'):
 		for node in self.build():
 			node.print_tree(line_printer)

@@ -10,7 +10,7 @@ from mcdreforged.command.builder.exception import LiteralNotMatch, UnknownComman
 	UnknownRootArgument, RequirementNotMet, IllegalNodeOperation, \
 	CommandError
 from mcdreforged.command.command_source import CommandSource
-from mcdreforged.utils import misc_util
+from mcdreforged.utils import misc_util, tree_printer
 from mcdreforged.utils.types import MessageText
 
 __SOURCE_CONTEXT_CALLBACK = Union[Callable[[], Any], Callable[[CommandSource], Any], Callable[[CommandSource, dict], Any]]
@@ -132,8 +132,13 @@ class AbstractNode(ABC):
 		self._child_error_handlers[error_type] = _ErrorHandler(handler, handled)
 		return self
 
-	def print_tree(self, line_writer: Callable[[str], Any] = print):
-		_print_tree(self, line_writer)
+	def print_tree(self, line_writer: tree_printer.LineWriter = print):
+		def make_tree(cmd_node: AbstractNode) -> tree_printer.Node:
+			node = tree_printer.Node(str(cmd_node))
+			for child in cmd_node.get_children():
+				node.add_child(make_tree(child))
+			return node
+		tree_printer.print_tree(make_tree(self), line_writer)
 
 	# -------------------
 	#   Interfaces ends
@@ -406,28 +411,3 @@ class ArgumentNode(AbstractNode, ABC):
 	def __repr__(self):
 		return '{}[name={}]'.format(self.__class__.__name__, self.__name)
 
-
-def _print_tree(root: AbstractNode, line_writer: Callable[[str], Any]):
-	def is_root(node: AbstractNode) -> bool:
-		return node == root
-
-	def get_item_line(node: AbstractNode, is_last: bool) -> str:
-		if is_root(node):
-			return ''
-		return '└── ' if is_last else '├── '
-
-	def get_parent_line(node: AbstractNode, is_last: bool) -> str:
-		if is_root(node):
-			return ''
-		return '    ' if is_last else '│   '
-
-	def do_print(node: AbstractNode, prefix: str, is_last: bool):
-		line = str(node)
-		line = get_item_line(node, is_last) + line
-		line_writer(prefix + line)
-
-		children = node.get_children()
-		for i, child in enumerate(children):
-			do_print(child, prefix + get_parent_line(node, is_last), i == len(children) - 1)
-
-	do_print(root, '', False)
