@@ -49,17 +49,15 @@ class StatusCommand(SubCommand):
 		process = self.mcdr_server.process
 		source.reply(self.tr('mcdr_command.print_mcdr_status.extra.pid', process.pid if process is not None else '§rN/A§r'))
 		if process is not None:
-			def make_tree(proc: psutil.Process) -> tree_printer.Node:
-				node = tree_printer.Node('{}: {}'.format(proc.name(), proc.pid))
-				for child_proc in proc.children():
-					node.add_child(make_tree(child_proc))
-				return node
 			try:
-				tree = make_tree(psutil.Process(process.pid))
+				tree_printer.print_tree(
+					psutil.Process(process.pid),
+					lambda proc: proc.children(),
+					lambda proc: '{}: {}'.format(proc.name(), proc.pid),
+					lambda line: source.reply('  ' + line)
+				)
 			except psutil.NoSuchProcess:
 				self.mcdr_server.logger.exception('Fail to fetch process tree from pid {}', process.pid)
-			else:
-				tree_printer.print_tree(tree, lambda line: source.reply('  ' + line))
 
 		source.reply(self.tr('mcdr_command.print_mcdr_status.extra.queue', self.mcdr_server.task_executor.task_queue.qsize(), core_constant.MAX_TASK_QUEUE_SIZE))
 

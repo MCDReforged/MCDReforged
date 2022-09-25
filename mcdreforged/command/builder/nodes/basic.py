@@ -133,12 +133,7 @@ class AbstractNode(ABC):
 		return self
 
 	def print_tree(self, line_writer: tree_printer.LineWriter = print):
-		def make_tree(cmd_node: AbstractNode) -> tree_printer.Node:
-			node = tree_printer.Node(str(cmd_node))
-			for child in cmd_node.get_children():
-				node.add_child(make_tree(child))
-			return node
-		tree_printer.print_tree(make_tree(self), line_writer)
+		tree_printer.print_tree(self, lambda node: node.get_children(), str, line_writer)
 
 	# -------------------
 	#   Interfaces ends
