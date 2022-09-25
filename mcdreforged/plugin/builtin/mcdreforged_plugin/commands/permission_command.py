@@ -1,7 +1,6 @@
 import re
 from typing import Optional
 
-from mcdreforged.command.builder.exception import UnknownArgument
 from mcdreforged.command.builder.nodes.arguments import Text, QuotableText
 from mcdreforged.command.builder.nodes.basic import Literal
 from mcdreforged.command.command_source import CommandSource
@@ -25,7 +24,6 @@ class PermissionCommand(SubCommand):
 		return (
 			self.control_command_root({'permission', 'perm'}).
 			runs(lambda src: src.reply(self.get_help_message(src, 'mcdr_command.help_message.permission'))).
-			on_error(UnknownArgument, self.on_mcdr_command_unknown_argument).
 			then(
 				Literal('list').runs(lambda src: self.list_permission(src, None)).
 				then(Text('level').runs(lambda src, ctx: self.list_permission(src, ctx['level'])))
