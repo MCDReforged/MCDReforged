@@ -32,8 +32,8 @@ Status display
 The following status can only be seen by users with permission 4 (owner)
 
 
-* The PID of the server. Notices that this PID is the pid of the bash program that the server is running in
-* Info Queue load. If the server is spamming text the queue might be filled
+* The PID of the server. Notices that this PID is the pid of the bash program that the server is running in. Additionally the pid tree will be showed so you can have a look at the process structure of your server
+* Info queue load. If the server is spamming text the queue might be filled
 * The current thread list
 
 Hot reloads
