@@ -15,6 +15,14 @@ all
 
 This is the simplest way to import everything you want for plugin development. It's a life saver for lazy man
 
+You can also use the following way as an approach with more security since it doesn't use ``*``
+
+.. code-block:: python
+
+    import mcdreforged.api.all as mcdr
+
+    # access stuffs with mcdr.Something
+
 Continue reading to see what it will actually import
 
 command
