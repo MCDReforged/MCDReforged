@@ -375,7 +375,7 @@ class MCDReforgedServer:
 		self.with_flag(MCDReforgedFlag.INTERRUPT)
 		return first_interrupt
 
-	def stop(self, forced: bool = False):
+	def stop(self, forced: bool = False) -> bool:
 		"""
 		Stop the server
 
@@ -385,7 +385,7 @@ class MCDReforgedServer:
 		with self.stop_lock:
 			if not self.is_server_running():
 				self.logger.warning(self.tr('mcdr_server.stop.stop_when_stopped'))
-				return
+				return False
 			self.set_server_state(ServerState.STOPPING)
 			if not forced:
 				try:
@@ -398,6 +398,7 @@ class MCDReforgedServer:
 					self.__kill_server()
 				except IllegalCallError:
 					pass
+			return True
 
 	# --------------------------
 	#      Server Logics
