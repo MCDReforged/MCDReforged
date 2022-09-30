@@ -11,7 +11,6 @@ from ruamel.yaml import YAML
 from mcdreforged.constants import core_constant
 from mcdreforged.minecraft.rtext import RTextBase
 from mcdreforged.utils import file_util, translation_util
-from mcdreforged.utils.logger import DebugOption
 from mcdreforged.utils.types import TranslationStorage, MessageText
 
 LANGUAGE_RESOURCE_DIRECTORY = os.path.join('resources', 'lang')
@@ -36,7 +35,7 @@ class TranslationManager:
 				for key, text in translations.items():
 					self.translations[key][language] = text
 				self.available_languages.add(language)
-				self.logger.debug('Loaded translation for {} with {} entries'.format(language, len(translations)), option=DebugOption.MCDR)
+				self.logger.debug('Loaded translation for {} with {} entries'.format(language, len(translations)))
 			except:
 				self.logger.exception('Failed to load language {} from "{}"'.format(language, file_path))
 
