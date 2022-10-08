@@ -47,10 +47,10 @@ class SimpleCommandBuilder:
 		If an element is surrounding with "<" and ">", it will be considered as an argument node, e.g. "<my_arg>"
 		Otherwise it will be considered as a literal node, e.g. "my_literal"
 
-		You need to give definitions of argument nodes with the `SimpleCommandBuilder.arg` method
-		You can also define your custom literal nodes with the `SimpleCommandBuilder.literal` method
+		You need to give definitions of argument nodes with the ``SimpleCommandBuilder.arg`` method
+		You can also define your custom literal nodes with the ``SimpleCommandBuilder.literal`` method
 
-		:param callback: The callback function of this command, which will be passed to `AbstractNode.runs`
+		:param callback: The callback function of this command, which will be passed to ``AbstractNode.runs``
 		"""
 		self.__commands[command] = callback
 		self.__clean_cache()
@@ -58,13 +58,18 @@ class SimpleCommandBuilder:
 
 	def arg(self, arg_name: str, node: Callable[[str], ArgumentNode]) -> 'SimpleCommandBuilder':
 		"""
-		Define an argument node for an argument name. All argument nodes appeared in `SimpleCommandBuilder.command` must be defined
+		Define an argument node for an argument name. All argument nodes appeared in ``SimpleCommandBuilder.command`` must be defined
 
 		:param arg_name: The name of the argument node. It can be quoted with "<>" if you want. Examples: "my_arg", "<my_arg>"
-		:param node: A argument node constructor, that accepts the argument name as the only parameter and return an ArgumentNode object
+		:param node: An argument node constructor, that accepts the argument name as the only parameter and return an ArgumentNode object
+
 		Notes that almost all MCDR builtin argument node classes can be constructed with 1 argument name parameter (e.g. Text, Number),
 		so you can just use the name of the argument class here
-		Examples: `builder.arg('my_arg', QuotableText)`, `builder.arg('my_arg', lambda name: Integer(name).at_min(0))`
+
+		Examples::
+
+			builder.arg('my_arg', QuotableText)
+			builder.arg('my_arg', lambda name: Integer(name).at_min(0))
 		"""
 		if not self.__is_arg(arg_name):
 			arg_name = self.__make_arg(arg_name)
@@ -123,7 +128,7 @@ class SimpleCommandBuilder:
 		"!!foo", "!!foo bar", "!!foo baz", the root "!!foo" node will be reused, and there will be only 1 "!!foo" node eventually
 
 		:return: A list of the built command tree root nodes. The result is cached until you instruct the builder again
-		:raise: SimpleCommandBuilder.Error if there are undefined argument nodes
+		:raises SimpleCommandBuilder.Error: if there are undefined argument nodes
 		"""
 		if self.__build_cache is None:
 			root = Literal('#TEMP')
@@ -150,7 +155,7 @@ class SimpleCommandBuilder:
 	def print_tree(self, line_printer: 'tree_printer.LineWriter'):
 		"""
 		A helper method for lazyman to print the built command trees
-		:raise: SimpleCommandBuilder.Error if build fails
+		:raise SimpleCommandBuilder.Error: if build fails
 		"""
 		for node in self.build():
 			node.print_tree(line_printer)
