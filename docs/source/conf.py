@@ -32,7 +32,6 @@ release = '2.0'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your customize
 # ones.
 extensions = [
-	'sphinx_markdown_tables',
 	'sphinx.ext.autodoc',
 	'sphinx.ext.napoleon',
 	'sphinx.ext.viewcode'

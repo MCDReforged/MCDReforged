@@ -1,6 +1,5 @@
 sphinx>=4.1.2            # core
 sphinx-intl              # locale
-sphinx-markdown-tables   # for markdown table
 sphinx-rtd-theme>=1.0.0  # the theme of the webside
 Babel==2.9.1             # Unified the version to prevent different versions from appearing in .po comments
 markdown<3.4.0           # Fix broken doc build
