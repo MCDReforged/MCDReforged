@@ -15,6 +15,8 @@ Every time when a user info is being processed, MCDR will try to parse the user 
 
 If an command error occurs and the error has not been set to handled, MCDR will sent the default translated command error message to the command source
 
+.. _cmd-tree-quick-peek:
+
 A Quick Peek
 ------------
 
@@ -65,19 +67,29 @@ This is a quick overview of the implantation logic part of command building syst
 
 Matching the literal nodes, parsing the remaining command, storing the parsed value inside the context dict, this is how the command system works
 
-Rather than reading this document, anther good way to learn to use the MCDR command building system is to refer and imitate existing codes. You can find the command building code of ``!!MCDR`` command in the ``__register_commands`` method of class ``mcdreforged.plugin.permanent.mcdreforged_plugin.MCDReforgedPlugin``
+Ways to build your command tree
+-------------------------------
+
+If you are familiar with Mojang's `brigadier <https://github.com/Mojang/brigadier>`__ which is used in Minecraft,
+or if you need to access the full features of MCDR's command tree building system, continue reading the following
+:ref:`cmd-tree-class-ref` section to see how to create command nodes, adding children nodes and setting node attributes
+
+If you are new to this kind of tree based command building system and don't know how to handle with command tree, you can try the :ref:`cmd-tree-builder` tool for easier command tree building
+
+Rather than reading this document, anther good way to learn to use the MCDR command building system is to refer and imitate existing codes
+You can also find the command building code of ``!!MCDR`` command in the ``__register_commands`` method of class ``mcdreforged.plugin.permanent.mcdreforged_plugin.MCDReforgedPlugin``
+
+.. _cmd-tree-class-ref:
+
+Classes Reference
+-----------------
 
 Context
--------
+^^^^^^^
 
 Context stores the information of current command parsing. It's a class inherited from dict
 
 Parsed values are stored inside context using the dict method, which means you can use ``context['arg_name']`` to access them
-
-Command Nodes
---------------
-
-A list of MCDR built-in command nodes and their usage
 
 AbstractNode
 ^^^^^^^^^^^^
@@ -97,7 +109,7 @@ It's used for building the command tree structure
 
 Parameter *node*: A node instance to be added to current node's children list
 
-The command tree in the `Quick Peek <#a-quick-peek>`__ section can be built with the following codes
+The command tree in the :ref:`cmd-tree-quick-peek` section can be built with the following codes
 
 .. code-block:: python
 
@@ -305,11 +317,6 @@ Examples:
         Literal('bar').runs(lambda src: src.reply('Foo Bar'))
     )  # input "foo bar", get reply "Foo Bar"
 
-
-
-Argument Nodes
---------------
-
 ArgumentNode
 ^^^^^^^^^^^^
 
@@ -473,6 +480,52 @@ Example usage:
      - You chose blue color
    * - test yellow
      - Invalid enumeration: yellow<--
+
+.. _cmd-tree-builder:
+
+Simple Command Builder
+----------------------
+
+.. versionadded:: v2.6.0
+
+Being confused about the command tree? Get tired of tree-based command building? Try this tree-free command builder and experience a nice and clean command building process
+
+Declare & Define, that's all you need
+
+Usage
+^^^^^
+
+The command tree in the :ref:`cmd-tree-quick-peek` section can be built with the following codes
+
+.. code-block:: python
+
+    from mcdreforged.api.command import SimpleCommandBuilder
+
+    def on_load(server: PluginServerInterface, prev_module):
+        builder = SimpleCommandBuilder()
+
+        # declare your commands
+        builder.command('!!email list', list_email)
+        builder.command('!!email remove <email_id>', remove_email)
+        builder.command('!!email send <player> <message>', send_email)
+
+        # define your command nodes
+        builder.arg('email_id', Integer)
+        builder.arg('player', Text)
+        builder.arg('message', GreedyText)
+
+        # done, now register the commands to the server
+        builder.register(server)
+
+Where ``list_email``, ``remove_email`` and ``send_email`` are callback functions of the corresponding commands
+
+That's it!
+
+Reference
+^^^^^^^^^
+
+.. autoclass:: mcdreforged.command.builder.tools.SimpleCommandBuilder
+    :members:
 
 Customize
 ---------

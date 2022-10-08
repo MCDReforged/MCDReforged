@@ -1,10 +1,10 @@
 from typing import Dict, Callable, TYPE_CHECKING, Optional, List
 
 from mcdreforged.command.builder.nodes.basic import RUNS_CALLBACK, Literal, AbstractNode, ArgumentNode
+from mcdreforged.utils import tree_printer
 
 if TYPE_CHECKING:
 	from mcdreforged.plugin.server_interface import PluginServerInterface
-	from mcdreforged.utils import tree_printer
 
 
 class SimpleCommandBuilder:
@@ -31,64 +31,6 @@ class SimpleCommandBuilder:
 
 	def __clean_cache(self):
 		self.__build_cache = None
-
-	# --------------
-	#   Interfaces
-	# --------------
-
-	def command(self, command: str, callback: RUNS_CALLBACK) -> 'SimpleCommandBuilder':
-		"""
-		Define a command and its callback
-
-		:param command: A command path string, e.g. "!!calc add <value_a> <value_b>"
-		A command path string is made up of several elements separated by spaces. It describes a path from
-		the root node of to the target node in the command tree, which contains enough information to build a command tree
-
-		If an element is surrounding with "<" and ">", it will be considered as an argument node, e.g. "<my_arg>"
-		Otherwise it will be considered as a literal node, e.g. "my_literal"
-
-		You need to give definitions of argument nodes with the ``SimpleCommandBuilder.arg`` method
-		You can also define your custom literal nodes with the ``SimpleCommandBuilder.literal`` method
-
-		:param callback: The callback function of this command, which will be passed to ``AbstractNode.runs``
-		"""
-		self.__commands[command] = callback
-		self.__clean_cache()
-		return self
-
-	def arg(self, arg_name: str, node: Callable[[str], ArgumentNode]) -> 'SimpleCommandBuilder':
-		"""
-		Define an argument node for an argument name. All argument nodes appeared in ``SimpleCommandBuilder.command`` must be defined
-
-		:param arg_name: The name of the argument node. It can be quoted with "<>" if you want. Examples: "my_arg", "<my_arg>"
-		:param node: An argument node constructor, that accepts the argument name as the only parameter and return an ArgumentNode object
-
-		Notes that almost all MCDR builtin argument node classes can be constructed with 1 argument name parameter (e.g. Text, Number),
-		so you can just use the name of the argument class here
-
-		Examples::
-
-			builder.arg('my_arg', QuotableText)
-			builder.arg('my_arg', lambda name: Integer(name).at_min(0))
-		"""
-		if not self.__is_arg(arg_name):
-			arg_name = self.__make_arg(arg_name)
-		self.__arguments[arg_name] = node
-		self.__clean_cache()
-		return self
-
-	def literal(self, literal_name: str, node: Callable[[str], Literal]) -> 'SimpleCommandBuilder':
-		"""
-		Define a literal node for a literal name. It's useful when you want to have some custom literal nodes
-		If you just want a regular literal node, you don't need to invoke this method, since the builder will just use
-		the default Literal constructor for node construction
-
-		:param literal_name: The name of the literal node
-		:param node: A literal node constructor, that accepts the literal name as the only parameter and return a Literal object
-		"""
-		self.__literals[literal_name] = node
-		self.__clean_cache()
-		return self
 
 	def __get_or_create_child(self, parent: AbstractNode, node_name: str) -> AbstractNode:
 		child_map: Dict[str, AbstractNode] = {}
@@ -118,17 +60,78 @@ class SimpleCommandBuilder:
 		return child
 
 	# --------------
+	#   Interfaces
+	# --------------
+
+	def command(self, command: str, callback: RUNS_CALLBACK) -> 'SimpleCommandBuilder':
+		"""
+		Define a command and its callback
+
+		:param command: A command path string, e.g. ``"!!calc add <value_a> <value_b>"``
+
+		A command path string is made up of several elements separated by spaces.
+		These elements are the names of corresponding command node. They describe a path from the root node
+		to the target node in the command tree
+
+		If a node has a name surrounding with ``"<"`` and ``">"``, it will be considered as an argument node, e.g. ``"<my_arg>"``.
+		Otherwise it will be considered as a literal node, e.g. ``"my_literal"``
+
+		You need to give definitions of argument nodes with the :meth:`arg` method.
+		You can also define your custom literal nodes with the :meth:`literal` method
+
+		:param callback: The callback function of this command, which will be passed to :meth:`AbstractNode.runs`
+		"""
+		self.__commands[command] = callback
+		self.__clean_cache()
+		return self
+
+	def arg(self, arg_name: str, node: Callable[[str], ArgumentNode]) -> 'SimpleCommandBuilder':
+		"""
+		Define an argument node for an argument name. All argument names appeared in :meth:`command` must be defined
+
+		:param arg_name: The name of the argument node. It can be quoted with ``"<>"`` if you want. Examples: ``"my_arg"``, ``"<my_arg>"``
+		:param node: An argument node constructor, that accepts the argument name as the only parameter and return an :class:`ArgumentNode` object
+
+		Notes that almost all MCDR builtin argument node classes can be constructed with 1 argument name parameter (e.g. :class:`Text`, :class:`Number`),
+		so you can just use the name of the argument class here
+
+		Examples::
+
+			builder.arg('my_arg', QuotableText)
+			builder.arg('my_arg', lambda name: Integer(name).at_min(0))
+		"""
+		if not self.__is_arg(arg_name):
+			arg_name = self.__make_arg(arg_name)
+		self.__arguments[arg_name] = node
+		self.__clean_cache()
+		return self
+
+	def literal(self, literal_name: str, node: Callable[[str], Literal]) -> 'SimpleCommandBuilder':
+		"""
+		Define a literal node for a literal name. It's useful when you want to have some custom literal nodes.
+		If you just want a regular literal node, you don't need to invoke this method, since the builder will use
+		the default :class:`Literal` constructor for node construction
+
+		:param literal_name: The name of the literal node
+		:param node: A literal node constructor, that accepts the literal name as the only parameter and return a :class:`Literal` object
+		"""
+		self.__literals[literal_name] = node
+		self.__clean_cache()
+		return self
+
+	# --------------
 	#    Outputs
 	# --------------
 
 	def build(self) -> List[AbstractNode]:
 		"""
 		Build the command trees
-		Nodes that same command tree nodes in the given command paths will be merged. e.g. if you define 3 commands with path
-		"!!foo", "!!foo bar", "!!foo baz", the root "!!foo" node will be reused, and there will be only 1 "!!foo" node eventually
+
+		Nodes with same name will be reused. e.g. if you define 3 commands with path ``"!!foo"``, ``"!!foo bar"`` and "``!!foo baz"``,
+		the root ``"!!foo"`` node will be reused, and there will be only 1 ``"!!foo"`` node eventually
 
 		:return: A list of the built command tree root nodes. The result is cached until you instruct the builder again
-		:raises SimpleCommandBuilder.Error: if there are undefined argument nodes
+		:raise SimpleCommandBuilder.Error: if there are undefined argument nodes
 		"""
 		if self.__build_cache is None:
 			root = Literal('#TEMP')
@@ -143,8 +146,10 @@ class SimpleCommandBuilder:
 
 	def register(self, server: 'PluginServerInterface'):
 		"""
-		A helper method for lazyman to build and register all commands to the MCDR server
-		:raise: SimpleCommandBuilder.Error if build fails, or there are rooted non-literal nodes
+		A helper method for lazyman, to build with method :meth:`build` and register built commands to the MCDR server
+
+		:param server: The :class:`PluginServerInterface` object of your plugin
+		:raise SimpleCommandBuilder.Error: if build fails, or there are rooted non-literal nodes
 		"""
 		for node in self.build():
 			if isinstance(node, Literal):
@@ -152,10 +157,16 @@ class SimpleCommandBuilder:
 			else:
 				raise self.Error('Not-literal root node is not supported'.format(node))
 
-	def print_tree(self, line_printer: 'tree_printer.LineWriter'):
+	def print_tree(self, line_printer: tree_printer.LineWriter):
 		"""
-		A helper method for lazyman to print the built command trees
+		A helper method for lazyman, to build with method :meth:`build` and print the built command trees
+
+		:param line_printer: A printer function that accepts a str
 		:raise SimpleCommandBuilder.Error: if build fails
+
+		Example::
+
+			builder.print_tree(server.logger.info)
 		"""
 		for node in self.build():
 			node.print_tree(line_printer)
