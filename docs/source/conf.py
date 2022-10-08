@@ -67,16 +67,24 @@ html_theme_options = {
 
 # https://docs.readthedocs.io/en/stable/builds.html#build-environment
 # available languages: en_US, zh_CN
-language = os.environ.get('READTHEDOCS_LANGUAGE', 'zh_CN')
-
-# To update locale files, execute these in docs/source:
-# sphinx-build -b gettext . _locale           # Generate file structures
-# sphinx-intl update -p _locale -l zh_CN      # Update translation files
+if 'SPHINXBUILD' in os.environ:
+	# we are inside the sphinx-build command process, apply the target language
+	language = os.environ.get('READTHEDOCS_LANGUAGE', 'zh_CN')
+else:
+	# we are NOT inside the sphinx-build command, maybe it's updating translation
+	# en_US is required to be used when updating translation so the base language is correct
+	language = 'en_US'
 
 # po files will be created in this directory
 # path is example but recommended.
 locale_dirs = ['_locale']
 gettext_compact = False  # optional
+
+
+# -- Options for sphinx.ext.autodoc -------------------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html
+
+autodoc_member_order = 'bysource'
 
 
 # -- save the table width ----------------------------------------------------
