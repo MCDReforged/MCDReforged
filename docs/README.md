@@ -13,7 +13,7 @@ python3 of course
 
 ## Build document
 
-```
+```bash
 cd docs/
 make clean
 make html
@@ -25,7 +25,7 @@ If you want to switch the language, modify line 72 in `docs/source/conf.py` or s
 
 ## Update zh_CN translation
 
-```
+```bash
 cd docs/source/
 sphinx-build -b gettext . _locale
 sphinx-intl update -p _locale -l zh_CN
@@ -36,3 +36,10 @@ Then check che changed `.po` files in `docs/source/_locale/zh_CN/`. For the chan
 - Empty translations will be generated for new texts
 - `#, fuzzy` comments will be added to the translation for changed texts. Fixed the translation and remove the `#, fuzzy` comment
 - Translations for removed texts will be moved to the bottom of the `.po` file and be commented out
+
+## Auto build server
+
+```bash
+cd docs/source/
+sphinx-autobuild . ../build/html
+```
