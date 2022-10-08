@@ -67,8 +67,6 @@ class SimpleCommandBuilder:
 		"""
 		Define a command and its callback
 
-		:param command: A command path string, e.g. ``"!!calc add <value_a> <value_b>"``
-
 		A command path string is made up of several elements separated by spaces.
 		These elements are the names of corresponding command node. They describe a path from the root node
 		to the target node in the command tree
@@ -79,7 +77,8 @@ class SimpleCommandBuilder:
 		You need to give definitions of argument nodes with the :meth:`arg` method.
 		You can also define your custom literal nodes with the :meth:`literal` method
 
-		:param callback: The callback function of this command, which will be passed to :meth:`AbstractNode.runs`
+		:param command: A command path string, e.g. ``"!!calc add <value_a> <value_b>"``
+		:param callback: The callback function of this command, which will be passed to :meth:`~mcdreforged.command.builder.nodes.basic.AbstractNode.then`
 		"""
 		self.__commands[command] = callback
 		self.__clean_cache()
@@ -89,9 +88,6 @@ class SimpleCommandBuilder:
 		"""
 		Define an argument node for an argument name. All argument names appeared in :meth:`command` must be defined
 
-		:param arg_name: The name of the argument node. It can be quoted with ``"<>"`` if you want. Examples: ``"my_arg"``, ``"<my_arg>"``
-		:param node: An argument node constructor, that accepts the argument name as the only parameter and return an :class:`ArgumentNode` object
-
 		Notes that almost all MCDR builtin argument node classes can be constructed with 1 argument name parameter (e.g. :class:`Text`, :class:`Number`),
 		so you can just use the name of the argument class here
 
@@ -99,6 +95,9 @@ class SimpleCommandBuilder:
 
 			builder.arg('my_arg', QuotableText)
 			builder.arg('my_arg', lambda name: Integer(name).at_min(0))
+
+		:param arg_name: The name of the argument node. It can be quoted with ``"<>"`` if you want. Examples: ``"my_arg"``, ``"<my_arg>"``
+		:param node: An argument node constructor, that accepts the argument name as the only parameter and return an :class:`ArgumentNode` object
 		"""
 		if not self.__is_arg(arg_name):
 			arg_name = self.__make_arg(arg_name)
@@ -110,10 +109,10 @@ class SimpleCommandBuilder:
 		"""
 		Define a literal node for a literal name. It's useful when you want to have some custom literal nodes.
 		If you just want a regular literal node, you don't need to invoke this method, since the builder will use
-		the default :class:`Literal` constructor for node construction
+		the default :class:`~mcdreforged.command.builder.nodes.basic.Literal` constructor for node construction
 
 		:param literal_name: The name of the literal node
-		:param node: A literal node constructor, that accepts the literal name as the only parameter and return a :class:`Literal` object
+		:param node: A literal node constructor, that accepts the literal name as the only parameter and return a :class:`~mcdreforged.command.builder.nodes.basic.Literal` object
 		"""
 		self.__literals[literal_name] = node
 		self.__clean_cache()
@@ -157,16 +156,16 @@ class SimpleCommandBuilder:
 			else:
 				raise self.Error('Not-literal root node is not supported'.format(node))
 
-	def print_tree(self, line_printer: tree_printer.LineWriter):
+	def print_tree(self, line_writer: tree_printer.LineWriter):
 		"""
 		A helper method for lazyman, to build with method :meth:`build` and print the built command trees
-
-		:param line_printer: A printer function that accepts a str
-		:raise SimpleCommandBuilder.Error: if build fails
 
 		Example::
 
 			builder.print_tree(server.logger.info)
+
+		:param line_writer: A printer function that accepts a str
+		:raise SimpleCommandBuilder.Error: if build fails
 		"""
 		for node in self.build():
-			node.print_tree(line_printer)
+			node.print_tree(line_writer)

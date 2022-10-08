@@ -84,6 +84,14 @@ You can also find the command building code of ``!!MCDR`` command in the ``__reg
 Classes Reference
 -----------------
 
+.. autoclass:: mcdreforged.command.builder.common.CommandContext
+
+.. automodule:: mcdreforged.command.builder.nodes.basic
+    :members:
+
+.. automodule:: mcdreforged.command.builder.nodes.arguments
+    :members:
+
 Context
 ^^^^^^^
 
@@ -99,153 +107,14 @@ Abstract Node is base class of all command nodes. It's also a abstract class. It
 then
 ~~~~
 
-.. code-block:: python
-
-    def then(self, node: AbstractNode) -> AbstractNode
-
-Attach a child node to its children list, and then return itself
-
-It's used for building the command tree structure
-
-Parameter *node*: A node instance to be added to current node's children list
-
-The command tree in the :ref:`cmd-tree-quick-peek` section can be built with the following codes
-
-.. code-block:: python
-
-    Literal('!!email'). \
-    then(
-        Literal('list')
-    ). \
-    then(
-        Literal('remove').
-        then(
-            Integer('email_id')
-        )
-    ). \
-    then(
-        Literal('send').
-        then(
-            Text('player').
-            then(
-                GreedyText('message')
-            )
-        )
-    )
-
 runs
 ~~~~
-
-.. code-block:: python
-
-    def runs(self, func: Union[Callable[[], Any], Callable[[CommandSource], Any], Callable[[CommandSource, dict], Any]]) -> AbstractNode
-
-Set the callback function of this node. When the command parsing finished at this node, the callback function will be executed
-
-Parameter *func*: A callable that accepts up to 2 arguments. Argument list: ``CommandSource``, ``dict`` (context)
-
-The callback function is allowed to accepted 0 to 2 arguments (a ``CommandSource`` as command source and a ``dict`` as context). For example, the following 4 functions are available callbacks
-
-.. code-block:: python
-
-    def callback1():
-        pass
-
-    def callback2(source: CommandSource):
-        pass
-
-    def callback3(source: CommandSource, context: dict):
-        pass
-
-    callback4 = lambda src: src.reply('pong')
-    node1.runs(callback1)
-    node2.runs(callback2)
-    node3.runs(callback3)
-    node4.runs(callback4)
-
-Both of them can be used as the argument of the ``runs`` method
-
-This dynamic callback argument adaptation is used in all callback invoking of the command nodes
 
 requires
 ~~~~~~~~
 
-.. code-block:: python
-
-    def requires(self, requirement: Union[Callable[[], bool], Callable[[CommandSource], bool], Callable[[CommandSource, dict], bool]], failure_message_getter: Optional[Union[Callable[[], Union[str, RTextBase]], Callable[[CommandSource], Union[str, RTextBase]], Callable[[CommandSource, dict], Union[str, RTextBase]]]] = None) -> AbstractNode
-
-Set the requirement tester callback of the node. When entering this node, MCDR will invoke the requirement tester to see if the current command source and context match your specific condition.
-
-If the tester callback return True, nothing will happen, MCDR will continue parsing the rest of the command
-
-If the tester callback return False, a ``RequirementNotMet`` exception will be risen. At this time if the *failure_message_getter* parameter is available, MCDR will invoke *failure_message_getter* to get the message string as the ``RequirementNotMet`` exception, otherwise a default message will be used
-
-Parameter *requirement*: A callable that accepts up to 2 arguments and returns a bool. Argument list: ``CommandSource``, ``dict`` (context)
-
-Parameter *failure_message_getter*: An optional callable that accepts up to 2 arguments and returns a str or a `RTextBase <api.html#rtext>`__. Argument list: ``CommandSource``, ``dict`` (context)
-
-Some Example usages:
-
-.. code-block:: python
-
-    node.requires(lambda src: src.has_permission(3))  # Permission check
-    node.requires(lambda src, ctx: ctx['page_count'] <= get_max_page())  # Dynamic range check
-    node.requires(lambda src, ctx: is_legal(ctx['target']), lambda src, ctx: 'target {} is illegal'.format(ctx['target']))  # Customized failure message
-
 redirects
 ~~~~~~~~~
-
-.. code-block:: python
-
-    def redirects(self, redirect_node: AbstractNode) -> AbstractNode
-
-Redirect all further child nodes command parsing to another given node. When you want a short command and and full-path command that will all execute the same commands, ``redirects`` will make it simpler
-
-Parameter *redirect_node*: A node instance which current node is redirecting to
-
-Examples:
-
-.. code-block:: python
-
-    command_node = Literal('command'). \
-        then(Literal('x').runs(do_something1)). \
-        then(Literal('y').runs(do_something2)). \
-        then(Literal('z').runs(do_something3))
-
-    long_node = Literal('a').then(Literal('long').then(Literal('way').then(Literal('to').then(Literal('the').then(command_node)))))
-    short_node = Literal('quick').redirects(command_node)
-
-    root_executor = Literal('foo').then(long_node).then(short_node)
-
-Command starts at *root_executor*
-
-These commands:
-
-
-* "foo a long way to the command x"
-* "foo a long way to the command y"
-* "foo a long way to the command z"
-
-are the same to
-
-
-* "foo quick x"
-* "foo quick y"
-* "foo quick z"
-
-Pay attention to the difference between ``redirects`` and ``then``. ``redirects`` is to redirect the child nodes, and ``then`` is to add a child node. If you do something like this:
-
-.. code-block:: python
-
-    short_node2 = Literal('fast').then(command_node)
-    root_executor = Literal('foo').then(long_node).then(short_node).then(short_node2)
-
-Then all commands which eventually executes ``do_something1`` will be:
-
-
-* ``foo a long way to the command x``
-* ``foo quick x``
-* ``foo fast command x``
 
 suggests
 ~~~~~~~~
@@ -275,20 +144,6 @@ When the user input ``!!whereis`` in the console and a space character, MCDR wil
 
 on_error
 ~~~~~~~~
-
-.. code-block:: python
-
-    def on_error(self, error_type: Type[CommandError], handler: Union[Callable[[], Any], Callable[[CommandSource], Any], Callable[[CommandSource, CommandError], Any], Callable[[CommandSource, CommandError, dict], Any]], *, handled: bool = False) -> AbstractNode
-
-When a command error occurs, the given will invoke the given handler to handle with the error
-
-Parameter *error_type*: A class that is subclass of CommandError
-
-Parameter *handler*: A callable that accepts up to 3 arguments. Argument list: ``CommandSource``, ``CommandError``, ``dict`` (context)
-
-Keyword Parameter *handled*: If handled is set to True, ``error.set_handled()`` is called automatically when invoking the handler callback
-
-For uses about ``error.set_handled()``, check the `CommandError <classes/CommandError.html#set-handled>`__ class reference
 
 on_child_error
 ~~~~~~~~~~~~~~

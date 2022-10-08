@@ -18,12 +18,26 @@ from mcdreforged.utils import misc_util
 
 
 class NumberNode(ArgumentNode, ABC):
+	"""
+	The base class of all number related argument nodes
+
+	It's inherited by ``Number``, ``Integer`` and ``Float``. It represents a type of number based node
+
+	For a ``NumberNode`` instance, you can restrict the range of the number argument. If the parsed number is out of range, a ``NumberOutOfRange`` exception will be risen
+
+	By default, there's no range restriction
+	"""
 	def __init__(self, name):
 		super().__init__(name)
 		self.__min_value = None
 		self.__max_value = None
 
 	def at_min(self, min_value) -> 'NumberNode':
+		"""
+		Set the lower boundary of the range restriction
+
+		:param min_value: the lower boundary of the range restriction
+		"""
 		self.__min_value = min_value
 		return self
 
@@ -129,7 +143,7 @@ class TextNode(ArgumentNode, ABC):
 
 class Text(TextNode):
 	"""
-	A text argument with no space character
+	A text argument with no space character.
 	Just like a single word
 	"""
 	def parse(self, text: str) -> ParseResult:
@@ -138,6 +152,9 @@ class Text(TextNode):
 
 
 class QuotableText(Text):
+	"""
+
+	"""
 	QUOTE_CHAR = '"'
 	ESCAPE_CHAR = '\\'
 

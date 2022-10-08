@@ -36,6 +36,11 @@ Self = TypeVar('Self', bound='AbstractNode')
 
 
 class AbstractNode(ABC):
+	"""
+	:class:`AbstractNode` is base class of all command nodes. It's also an abstract class.
+	It provides several methods for building up the command tree
+	"""
+
 	def __init__(self):
 		self._children_literal: Dict[str, List[Literal]] = collections.defaultdict(list)  # mapping from literal text to related Literal nodes
 		self._children: List[AbstractNode] = []
@@ -53,8 +58,24 @@ class AbstractNode(ABC):
 
 	def then(self: Self, node: 'AbstractNode') -> Self:
 		"""
-		Add a child node to this node
-		:param node: a child node for new level command
+		Attach a child node to its children list, and then return itself
+
+		It's used for building the command tree structure
+
+		:param node: A node instance to be added to current node's children list
+
+		Example::
+
+			Literal('!!email'). \\
+			then(Literal('list')). \\
+			then(Literal('remove'). \\
+				then(Integer('email_id'))
+			). \\
+			then(Literal('send'). \\
+				then(Text('player'). \\
+					then(GreedyText('message'))
+				)
+			)
 		"""
 		if self._redirect_node is not None:
 			raise IllegalNodeOperation('Redirected node is not allowed to add child nodes')
@@ -67,20 +88,53 @@ class AbstractNode(ABC):
 
 	def runs(self: Self, func: RUNS_CALLBACK) -> Self:
 		"""
-		Executes the given function if the command string ends here
-		:param func: A function to execute at this node which accepts maximum 2 parameters (command source and context)
+		Set the callback function of this node. When the command parsing finished at this node, the callback function will be executed
+
+		The callback function is allowed to accept 0 to 2 arguments (a ``CommandSource`` as command source and a ``dict`` as context). For example, the following 4 functions are available callbacks::
+
+			def callback1():
+				pass
+
+			def callback2(source: CommandSource):
+				pass
+
+			def callback3(source: CommandSource, context: dict):
+				pass
+
+			callback4 = lambda src: src.reply('pong')
+			node1.runs(callback1)
+			node2.runs(callback2)
+			node3.runs(callback3)
+			node4.runs(callback4)
+
+		Both of them can be used as the argument of the ``runs`` method
+
+		This dynamic callback argument adaptation is used in all callback invoking of the command nodes
+
+		:param func: A callable that accepts up to 2 arguments. Argument list: :class:`CommandSource`, :class:`dict` (:class:`CommandContext`)
 		"""
 		self._callback = func
 		return self
 
 	def requires(self: Self, requirement: REQUIRES_CALLBACK, failure_message_getter: Optional[FAIL_MSG_CALLBACK] = None) -> Self:
 		"""
-		Set the requirement for the command source to enter this node
-		:param requirement: A callable function which accepts maximum 2 parameters (command source and context)
-		and return a bool indicating whether the source is allowed to executes this command or not
-		:param failure_message_getter: The reason to show in the exception when the requirement is not met.
-		It's a callable function which accepts maximum 2 parameters (command source and context). If it's not specified,
-		a default message will be used
+		Set the requirement tester callback of the node. When entering this node, MCDR will invoke the requirement tester
+		to see if the current command source and context match your specific condition.
+
+		If the tester callback return True, nothing will happen, MCDR will continue parsing the rest of the command
+
+		If the tester callback return False, a ``RequirementNotMet`` exception will be risen.
+		At this time if the *failure_message_getter* parameter is available, MCDR will invoke *failure_message_getter* to get the message string
+		of the ``RequirementNotMet`` exception, otherwise a default message will be used
+
+		:param requirement: A callable that accepts up to 2 arguments and returns a bool. Argument list: :class:`CommandSource`, :class:`dict` (:class:`CommandContext`)
+		:param failure_message_getter: An optional callable that accepts up to 2 arguments and returns a str or a :class:`RTextBase`. Argument list: :class:`CommandSource`, :class:`dict` (:class:`CommandContext`)
+
+		Example usages::
+
+			node.requires(lambda src: src.has_permission(3))  # Permission check
+			node.requires(lambda src, ctx: ctx['page_count'] <= get_max_page())  # Dynamic range check
+			node.requires(lambda src, ctx: is_legal(ctx['target']), lambda src, ctx: 'target {} is illegal'.format(ctx['target']))  # Customized failure message
 		"""
 		self._requirement = requirement
 		self._requirement_failure_message_getter = failure_message_getter
@@ -88,8 +142,17 @@ class AbstractNode(ABC):
 
 	def redirects(self: Self, redirect_node: 'AbstractNode') -> Self:
 		"""
-		Redirect the child branches of this node to the child branches of the given node
-		:type redirect_node: AbstractNode
+		Redirect all further child nodes command parsing to another given node
+
+		Example use cases:
+
+		* You want a short command and full-path command that will all execute the same commands
+		* You want to repeatedly re-enter a command node's children when parsing commands
+
+		Pay attention to the difference between :meth:`redirects` and :meth:`then`. :meth:`redirects` is to redirect the child nodes,
+		and :meth:`then` is to add a child node
+
+		:param redirect_node: A node instance which current node is redirecting to
 		"""
 		if self.has_children():
 			raise IllegalNodeOperation('Node with children nodes is not allowed to be redirected')
@@ -99,18 +162,35 @@ class AbstractNode(ABC):
 	def suggests(self: Self, suggestion: SUGGESTS_CALLBACK) -> Self:
 		"""
 		Set the provider for command suggestions of this node
+
+		:class:`Literal` node does not support this method
+
+		Examples::
+
+			Literal('!!whereis'). \\
+				then(
+					Text('player_name').
+					suggests(lambda: ['Steve', 'Alex']).
+					runs(lambda src, ctx: find_player(src, ctx['player_name']))
+				)
+
+		When the user input ``!!whereis`` in the console and a space character, MCDR will show the suggestions ``'Steve'`` and ``'Alex'``
+
 		:param suggestion: A callable function which accepts maximum 2 parameters (command source and context)
-		and return an iterable of str indicating the current command suggestions
+			and return an iterable of str indicating the current command suggestions
 		"""
 		self._suggestion_getter = suggestion
 		return self
 
 	def on_error(self: Self, error_type: Type[CommandError], handler: ERROR_HANDLER_CALLBACK, *, handled: bool = False) -> Self:
 		"""
-		When a command error occurs, invoke the handler
-		:param error_type: A class that is subclass of CommandError
-		:param handler: A callback function which accepts maximum 3 parameters (command source, error and context)
-		:param handled: If handled is set to True, error.set_handled() is called automatically when invoking the handler callback
+		When a command error occurs, the given will invoke the given handler to handle with the error
+
+		:param error_type: A class that is subclass of :class:`CommandError`
+		:param handler: A callable that accepts up to 3 arguments. Argument list: :class:`CommandSource`, :class:`CommandError`, :class:`dict` (:class:`CommandContext`)
+		:keyword handled: If handled is set to True, ``error.set_handled()`` is called automatically when invoking the handler callback
+
+		For uses about ``error.set_handled()``, check the :meth:`CommandError.set_handled` class reference
 		"""
 		if not issubclass(error_type, CommandError):
 			raise TypeError('error_type parameter should be a class inherited from CommandError, but class {} found'.format(error_type))
@@ -119,10 +199,7 @@ class AbstractNode(ABC):
 
 	def on_child_error(self: Self, error_type: Type[CommandError], handler: ERROR_HANDLER_CALLBACK, *, handled: bool = False) -> Self:
 		"""
-		When receives a command error from one of the node's child, invoke the handler
-		:param error_type: A class that is subclass of CommandError
-		:param handler: A callback function which accepts maximum 3 parameters (command source, error and context)
-		:param handled: If handled is set to True, error.set_handled() is called automatically when invoking the handler callback
+		Similar to :meth:`on_error`, but it gets triggered only when the node receives a command error from one of the node's direct or indirect child
 		"""
 		if not issubclass(error_type, CommandError):
 			raise TypeError('error_type parameter should be a class inherited from CommandError, but class {} found'.format(error_type))
@@ -130,6 +207,11 @@ class AbstractNode(ABC):
 		return self
 
 	def print_tree(self, line_writer: tree_printer.LineWriter = print):
+		"""
+		Print the command tree in a read-able format
+
+		:param line_writer: A printer function that accepts a str
+		"""
 		tree_printer.print_tree(self, lambda node: node.get_children(), str, line_writer)
 
 	# -------------------
@@ -151,10 +233,12 @@ class AbstractNode(ABC):
 
 	def parse(self, text: str) -> ParseResult:
 		"""
-		Try to parse the text and get a argument. Return a ParseResult instance indicating the parsing result
-		ParseResult.value: The value to store in the context dict
-		ParseResult.remaining: The remain
-		:param str text: the remaining text to be parsed. It's supposed to not be started with DIVIDER character
+		Try to parse the text and get an argument
+
+		* ``ParseResult.value``: The value to store in the context dict
+		* ``ParseResult.remaining``: The remaining unparsed text
+
+		:param str text: the text to be parsed. It's supposed to not be started with DIVIDER character
 		"""
 		raise NotImplementedError()
 
@@ -317,12 +401,13 @@ class AbstractNode(ABC):
 
 
 class EntryNode(AbstractNode, ABC):
-	def execute(self, source, command):
+	def execute(self, source: CommandSource, command: str):
 		"""
 		Parse and execute this command
-		Raise variable CommandError if parsing fails
-		:param CommandSource source: the source that executes this command
-		:param str command: the command string to execute
+
+		:param source: the source that executes this command
+		:param command: the command string to execute
+		:raise CommandError: if parsing fails
 		"""
 		try:
 			context = CommandContext(source, command)
@@ -332,12 +417,14 @@ class EntryNode(AbstractNode, ABC):
 			# the root literal node fails to parse the first element
 			raise UnknownRootArgument(error.get_parsed_command(), error.get_failed_command()) from error
 
-	def generate_suggestions(self, source, command) -> CommandSuggestions:
+	def generate_suggestions(self, source: CommandSource, command: str) -> CommandSuggestions:
 		"""
 		Get a list of command suggestion of given command
+
 		Return an empty list if parsing fails
-		:param CommandSource source: the source that executes this command
-		:param str command: the command string to execute
+
+		:param source: the source that executes this command
+		:param command: the command string to execute
 		"""
 		context = CommandContext(source, command)
 		with context.enter_child(self):
@@ -346,8 +433,11 @@ class EntryNode(AbstractNode, ABC):
 
 class Literal(EntryNode):
 	"""
-	A literal argument, doesn't store any value, only for extending and readability of the command
-	The only argument type that is allowed to use the execute method
+	Literal node is a special node. It doesn't output any value. It's more like a command branch carrier
+
+	Literal node can accept a str as its literal in its constructor. A literal node accepts the parsing command only when the next element of the parsing command exactly matches the literal of the node
+
+	Literal node is the only node that can start a command execution
 	"""
 	def __init__(self, literal: str or Iterable[str]):
 		super().__init__()
@@ -387,6 +477,11 @@ class Literal(EntryNode):
 
 
 class ArgumentNode(AbstractNode, ABC):
+	"""
+	Argument node is an abstract base class for all nodes which store parsed values
+
+	It has a str field ``name`` which is used as the key used in storing parsed value in context
+	"""
 	def __init__(self, name: str):
 		super().__init__()
 		self.__name = name
