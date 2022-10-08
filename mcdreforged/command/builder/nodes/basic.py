@@ -2,7 +2,7 @@ import collections
 import inspect
 from abc import ABC
 from types import MethodType
-from typing import List, Callable, Iterable, Set, Dict, Type, Any, Union, Optional, NamedTuple
+from typing import List, Callable, Iterable, Set, Dict, Type, Any, Union, Optional, NamedTuple, TypeVar
 
 from mcdreforged.command.builder import command_builder_util as utils
 from mcdreforged.command.builder.common import ParseResult, CommandContext, CommandSuggestions, CommandSuggestion
@@ -32,6 +32,7 @@ class _ErrorHandler(NamedTuple):
 
 
 _ERROR_HANDLER_TYPE = Dict[Type[CommandError], _ErrorHandler]
+Self = TypeVar('Self', bound='AbstractNode')
 
 
 class AbstractNode(ABC):
@@ -50,7 +51,7 @@ class AbstractNode(ABC):
 	#   Interfaces
 	# --------------
 
-	def then(self, node: 'AbstractNode') -> 'AbstractNode':
+	def then(self: Self, node: 'AbstractNode') -> Self:
 		"""
 		Add a child node to this node
 		:param node: a child node for new level command
@@ -64,16 +65,15 @@ class AbstractNode(ABC):
 			self._children.append(node)
 		return self
 
-	def runs(self, func: RUNS_CALLBACK) -> 'AbstractNode':
+	def runs(self: Self, func: RUNS_CALLBACK) -> Self:
 		"""
 		Executes the given function if the command string ends here
 		:param func: A function to execute at this node which accepts maximum 2 parameters (command source and context)
-		:rtype: AbstractNode
 		"""
 		self._callback = func
 		return self
 
-	def requires(self, requirement: REQUIRES_CALLBACK, failure_message_getter: Optional[FAIL_MSG_CALLBACK] = None) -> 'AbstractNode':
+	def requires(self: Self, requirement: REQUIRES_CALLBACK, failure_message_getter: Optional[FAIL_MSG_CALLBACK] = None) -> Self:
 		"""
 		Set the requirement for the command source to enter this node
 		:param requirement: A callable function which accepts maximum 2 parameters (command source and context)
@@ -81,34 +81,31 @@ class AbstractNode(ABC):
 		:param failure_message_getter: The reason to show in the exception when the requirement is not met.
 		It's a callable function which accepts maximum 2 parameters (command source and context). If it's not specified,
 		a default message will be used
-		:rtype: AbstractNode
 		"""
 		self._requirement = requirement
 		self._requirement_failure_message_getter = failure_message_getter
 		return self
 
-	def redirects(self, redirect_node: 'AbstractNode') -> 'AbstractNode':
+	def redirects(self: Self, redirect_node: 'AbstractNode') -> Self:
 		"""
 		Redirect the child branches of this node to the child branches of the given node
 		:type redirect_node: AbstractNode
-		:rtype: AbstractNode
 		"""
 		if self.has_children():
 			raise IllegalNodeOperation('Node with children nodes is not allowed to be redirected')
 		self._redirect_node = redirect_node
 		return self
 
-	def suggests(self, suggestion: SUGGESTS_CALLBACK) -> 'AbstractNode':
+	def suggests(self: Self, suggestion: SUGGESTS_CALLBACK) -> Self:
 		"""
 		Set the provider for command suggestions of this node
 		:param suggestion: A callable function which accepts maximum 2 parameters (command source and context)
 		and return an iterable of str indicating the current command suggestions
-		:rtype: AbstractNode
 		"""
 		self._suggestion_getter = suggestion
 		return self
 
-	def on_error(self, error_type: Type[CommandError], handler: ERROR_HANDLER_CALLBACK, *, handled: bool = False) -> 'AbstractNode':
+	def on_error(self: Self, error_type: Type[CommandError], handler: ERROR_HANDLER_CALLBACK, *, handled: bool = False) -> Self:
 		"""
 		When a command error occurs, invoke the handler
 		:param error_type: A class that is subclass of CommandError
@@ -120,7 +117,7 @@ class AbstractNode(ABC):
 		self._error_handlers[error_type] = _ErrorHandler(handler, handled)
 		return self
 
-	def on_child_error(self, error_type: Type[CommandError], handler: ERROR_HANDLER_CALLBACK, *, handled: bool = False) -> 'AbstractNode':
+	def on_child_error(self: Self, error_type: Type[CommandError], handler: ERROR_HANDLER_CALLBACK, *, handled: bool = False) -> Self:
 		"""
 		When receives a command error from one of the node's child, invoke the handler
 		:param error_type: A class that is subclass of CommandError
