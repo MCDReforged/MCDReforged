@@ -67,13 +67,7 @@ html_theme_options = {
 
 # https://docs.readthedocs.io/en/stable/builds.html#build-environment
 # available languages: en_US, zh_CN
-if 'SPHINXBUILD' in os.environ:
-	# we are inside the sphinx-build command process, apply the target language
-	language = os.environ.get('READTHEDOCS_LANGUAGE', 'zh_CN')
-else:
-	# we are NOT inside the sphinx-build command, maybe it's updating translation
-	# en_US is required to be used when updating translation so the base language is correct
-	language = 'en_US'
+language = os.environ.get('READTHEDOCS_LANGUAGE', 'en_US')
 
 # po files will be created in this directory
 # path is example but recommended.

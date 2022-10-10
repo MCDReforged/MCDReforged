@@ -27,7 +27,7 @@ If you want to switch the language, modify line 72 in `docs/source/conf.py` or s
 
 ```bash
 cd docs/source/
-sphinx-build -b gettext . _locale
+sphinx-build -b gettext . _locale -D language=en_US  # en_US is required to be used when updating translation so the base language is correct
 sphinx-intl update -p _locale -l zh_CN
 ```
 
@@ -42,4 +42,7 @@ Then check che changed `.po` files in `docs/source/_locale/zh_CN/`. For the chan
 ```bash
 cd docs/source/
 sphinx-autobuild . ../build/html
+
+# if you prefer Chinese
+# sphinx-autobuild . ../build/html -D language=zh_CN
 ```
