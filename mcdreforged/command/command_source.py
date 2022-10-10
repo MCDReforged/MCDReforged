@@ -15,51 +15,123 @@ if TYPE_CHECKING:
 
 
 class CommandSource(ABC):
+	"""
+	:class:`CommandSource`: is an abstracted command executor model. It provides several methods for command execution
+
+	Class inheriting tree::
+
+		CommandSource
+		 ├─ InfoCommandSource
+		 │   ├─ PlayerCommandSource
+		 │   └─ ConsoleCommandSource
+		 └─ PluginCommandSource
+
+	Plugins can declare a class inherited from :class:`CommandSource` to create their own command source
+	"""
+
 	@property
 	def is_player(self) -> bool:
+		"""
+		If the command source is a player command source
+
+		:return: ``True`` if it's a player command source, ``False`` otherwise
+		"""
 		raise NotImplementedError()
 
 	@property
 	def is_console(self) -> bool:
+		"""
+		If the command source is a console command source
+
+		:return: ``True`` if it's a console command source, ``False`` otherwise
+		"""
 		raise NotImplementedError()
 
 	def get_server(self) -> 'ServerInterface':
+		"""
+		Return the server interface instance
+		"""
 		raise NotImplementedError()
 
 	def get_permission_level(self) -> int:
+		"""
+		Return the permission level that the command source has
+
+		The permission level is represented by int
+		"""
 		raise NotImplementedError()
 
 	def get_preference(self) -> 'PreferenceItem':
+		"""
+		Return the preference of the command source
+
+		.. seealso::
+
+			:class:`~mcdreforged.plugin.server_interface.ServerInterface`'s method :meth:`~mcdreforged.plugin.server_interface.ServerInterface.get_preference`
+		"""
 		return self.get_server().get_preference(self)
 
 	@contextmanager
 	def preferred_language_context(self):
+		"""
+		A quick helper method to use the language value in preference to create a context with ``RTextMCDRTranslation.language_context``
+
+		.. seealso::
+
+			Class :class:`~mcdreforged.translation.translation_text.RTextMCDRTranslation`
+
+		Example usage::
+
+			with source.preferred_language_context():
+				message = source.get_server().rtr('my_plugin.placeholder').to_plain_text()
+				text.set_click_event(RAction.suggest_command, message)
+		"""
 		with RTextMCDRTranslation.language_context(self.get_preference().language):
 			yield
 
 	def has_permission(self, level: int) -> bool:
+		"""
+		A helper method for testing permission requirement
+
+		:param level: The permission level to be tested
+		:return: If the command source has not less permission level than the given permission level
+		"""
 		return self.get_permission_level() >= level
 
 	def has_permission_higher_than(self, level: int) -> bool:
+		"""
+		Just like the :meth:`CommandSource.has_permission`, but this time it is a greater than judgment
+
+		:param level: The permission level to be tested
+		:return: If the command source has greater permission level than the given permission level
+		"""
 		return self.get_permission_level() > level
 
 	def reply(self, message: Any, **kwargs) -> None:
 		"""
-		Reply to the command source
-		:param message: The message you want to send. It will be mapped with str() unless it's a RTextBase
+		Send a message to the command source. The message can be anything including RTexts
+
+		The message will be converted to str using ``str()`` function unless it's a :class:`RTextBase` object
+
+		:param message: The message you want to send
+		:keyword encoding: The encoding method for the message. It's only used in :class:`PlayerCommandSource`
+		:keyword console_text: Message override when it's a :class:`ConsoleCommandSource`
 		"""
 		raise NotImplementedError()
 
 
 class InfoCommandSource(CommandSource, ABC):
 	"""
-	Command source generated from info
+	Command source originated from an info created by MCDR
 	"""
 	def __init__(self, mcdr_server: 'MCDReforgedServer', info: 'Info'):
 		self._mcdr_server = mcdr_server
 		self.__info = info
 
 	def get_info(self) -> 'Info':
+		"""
+		Return the Info instance that this command source is created from
+		"""
 		return self.__info
 
 	def get_server(self) -> 'ServerInterface':
@@ -80,7 +152,9 @@ class PlayerCommandSource(InfoCommandSource):
 		if not info.is_from_server:
 			raise TypeError('{} should be built from server info'.format(self.__class__.__name__))
 		super().__init__(mcdr_server, info)
-		self.player = player
+
+		self.player: str = player
+		"""The name of the player"""
 
 	@property
 	def is_player(self) -> bool:
@@ -92,7 +166,7 @@ class PlayerCommandSource(InfoCommandSource):
 
 	def reply(self, message: Any, *, encoding: Optional[str] = None, **kwargs):
 		"""
-		:keyword encoding: encoding method for server_interface.tell
+		:keyword encoding: encoding method to be used in :meth:`ServerInterface.tell`
 		"""
 		self._mcdr_server.basic_server_interface.tell(self.player, message, encoding=encoding)
 
@@ -119,7 +193,7 @@ class ConsoleCommandSource(InfoCommandSource):
 
 	def reply(self, message: Any, *, console_text: Optional[Any] = None, **kwargs):
 		"""
-		:keyword console_text: If it's specified, use it instead of param message
+		:keyword console_text: If it's specified, overwrite the value of parameter ``message`` with it
 		"""
 		if console_text is not None:
 			message = console_text

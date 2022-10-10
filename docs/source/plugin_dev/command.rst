@@ -72,25 +72,12 @@ Ways to build your command tree
 
 If you are familiar with Mojang's `brigadier <https://github.com/Mojang/brigadier>`__ which is used in Minecraft,
 or if you need to access the full features of MCDR's command tree building system, continue reading the following
-:ref:`cmd-tree-class-ref` section to see how to create command nodes, adding children nodes and setting node attributes
+[TODO] section to see how to create command nodes, adding children nodes and setting node attributes
 
 If you are new to this kind of tree based command building system and don't know how to handle with command tree, you can try the :ref:`cmd-tree-builder` tool for easier command tree building
 
 Rather than reading this document, anther good way to learn to use the MCDR command building system is to refer and imitate existing codes
 You can also find the command building code of ``!!MCDR`` command in the ``__register_commands`` method of class ``mcdreforged.plugin.permanent.mcdreforged_plugin.MCDReforgedPlugin``
-
-.. _cmd-tree-class-ref:
-
-Classes Reference
------------------
-
-.. autoclass:: mcdreforged.command.builder.common.CommandContext
-
-.. automodule:: mcdreforged.command.builder.nodes.basic
-    :members:
-
-.. automodule:: mcdreforged.command.builder.nodes.arguments
-    :members:
 
 Context
 ^^^^^^^
@@ -375,12 +362,6 @@ The command tree in the :ref:`cmd-tree-quick-peek` section can be built with the
 Where ``list_email``, ``remove_email`` and ``send_email`` are callback functions of the corresponding commands
 
 That's it!
-
-Reference
-^^^^^^^^^
-
-.. autoclass:: mcdreforged.command.builder.tools.SimpleCommandBuilder
-    :members:
 
 Customize
 ---------

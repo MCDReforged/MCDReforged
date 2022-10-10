@@ -78,7 +78,7 @@ class SimpleCommandBuilder:
 		You can also define your custom literal nodes with the :meth:`literal` method
 
 		:param command: A command path string, e.g. ``"!!calc add <value_a> <value_b>"``
-		:param callback: The callback function of this command, which will be passed to :meth:`~mcdreforged.command.builder.nodes.basic.AbstractNode.then`
+		:param callback: The callback function of this command, which will be passed to :meth:`AbstractNode.then<mcdreforged.command.builder.nodes.basic.AbstractNode.then>`
 		"""
 		self.__commands[command] = callback
 		self.__clean_cache()
@@ -88,7 +88,8 @@ class SimpleCommandBuilder:
 		"""
 		Define an argument node for an argument name. All argument names appeared in :meth:`command` must be defined
 
-		Notes that almost all MCDR builtin argument node classes can be constructed with 1 argument name parameter (e.g. :class:`Text`, :class:`Number`),
+		Notes that almost all MCDR builtin argument node classes can be constructed with 1 argument name parameter
+		(e.g. :class:`~mcdreforged.command.builder.nodes.arguments.Text`, :class:`~mcdreforged.command.builder.nodes.arguments.Number`),
 		so you can just use the name of the argument class here
 
 		Examples::
@@ -97,7 +98,8 @@ class SimpleCommandBuilder:
 			builder.arg('my_arg', lambda name: Integer(name).at_min(0))
 
 		:param arg_name: The name of the argument node. It can be quoted with ``"<>"`` if you want. Examples: ``"my_arg"``, ``"<my_arg>"``
-		:param node: An argument node constructor, that accepts the argument name as the only parameter and return an :class:`ArgumentNode` object
+		:param node: An argument node constructor, that accepts the argument name as the only parameter
+			and return an:class:`~mcdreforged.command.builder.nodes.basic.ArgumentNode` object
 		"""
 		if not self.__is_arg(arg_name):
 			arg_name = self.__make_arg(arg_name)
@@ -112,7 +114,8 @@ class SimpleCommandBuilder:
 		the default :class:`~mcdreforged.command.builder.nodes.basic.Literal` constructor for node construction
 
 		:param literal_name: The name of the literal node
-		:param node: A literal node constructor, that accepts the literal name as the only parameter and return a :class:`~mcdreforged.command.builder.nodes.basic.Literal` object
+		:param node: A literal node constructor, that accepts the literal name as the only parameter
+			and return a :class:`~mcdreforged.command.builder.nodes.basic.Literal` object
 		"""
 		self.__literals[literal_name] = node
 		self.__clean_cache()
@@ -147,7 +150,7 @@ class SimpleCommandBuilder:
 		"""
 		A helper method for lazyman, to build with method :meth:`build` and register built commands to the MCDR server
 
-		:param server: The :class:`PluginServerInterface` object of your plugin
+		:param server: The :class:`~mcdreforged.plugin.server_interface.PluginServerInterface` object of your plugin
 		:raise SimpleCommandBuilder.Error: if build fails, or there are rooted non-literal nodes
 		"""
 		for node in self.build():

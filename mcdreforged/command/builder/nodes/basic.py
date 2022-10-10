@@ -238,7 +238,8 @@ class AbstractNode(ABC):
 		* ``ParseResult.value``: The value to store in the context dict
 		* ``ParseResult.remaining``: The remaining unparsed text
 
-		:param str text: the text to be parsed. It's supposed to not be started with DIVIDER character
+		:param text: the text to be parsed. It's supposed to not be started with DIVIDER character
+		:meta private:
 		"""
 		raise NotImplementedError()
 
@@ -408,6 +409,7 @@ class EntryNode(AbstractNode, ABC):
 		:param source: the source that executes this command
 		:param command: the command string to execute
 		:raise CommandError: if parsing fails
+		:meta private:
 		"""
 		try:
 			context = CommandContext(source, command)
@@ -425,6 +427,7 @@ class EntryNode(AbstractNode, ABC):
 
 		:param source: the source that executes this command
 		:param command: the command string to execute
+		:meta private:
 		"""
 		context = CommandContext(source, command)
 		with context.enter_child(self):

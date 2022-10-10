@@ -1,0 +1,812 @@
+
+msgid ""
+msgstr ""
+"Project-Id-Version:  mcdreforged\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-10-10 21:49+0800\n"
+"PO-Revision-Date: 2021-01-23 17:24+0800\n"
+"Last-Translator: Alex3236 <alex3236@qq.com>\n"
+"Language: zh_CN\n"
+"Language-Team: Chinese Simplified\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.1\n"
+
+#: ../references/command.rst:3
+msgid "Command"
+msgstr "指令"
+
+#: ../references/command.rst:6
+msgid "Basics"
+msgstr "基础"
+
+#: ../references/command.rst:12
+msgid "Command Exceptions"
+msgstr ""
+
+#: mcdreforged.command.builder.exception.IllegalNodeOperation:1 of
+msgid "This node is not allowed to do this"
+msgstr ""
+
+#: mcdreforged.command.builder.exception.CommandError:1 of
+msgid ""
+"The basic error, for errors raising when a command source is executing a "
+"command"
+msgstr "基础异常类型，用于执行指令出错时的异常抛出"
+
+#: mcdreforged.command.builder.exception.AbstractOutOfRange.get_error_data:1
+#: mcdreforged.command.builder.exception.CommandError.get_error_data:1
+#: mcdreforged.command.builder.exception.RequirementNotMet.get_error_data:1 of
+msgid ""
+"Data that might be helpful to the error display Can be used in formatting"
+" processing"
+msgstr ""
+
+#: mcdreforged.command.builder.exception.CommandError.get_failed_command
+#: mcdreforged.command.builder.exception.CommandError.get_parsed_command
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.build
+#: mcdreforged.command.command_source.CommandSource.has_permission
+#: mcdreforged.command.command_source.CommandSource.has_permission_higher_than
+#: mcdreforged.command.command_source.CommandSource.is_console
+#: mcdreforged.command.command_source.CommandSource.is_player
+#: mcdreforged.command.command_source.ConsoleCommandSource.is_console
+#: mcdreforged.command.command_source.ConsoleCommandSource.is_player
+#: mcdreforged.command.command_source.PlayerCommandSource.is_console
+#: mcdreforged.command.command_source.PlayerCommandSource.is_player
+#: mcdreforged.command.command_source.PluginCommandSource.is_console
+#: mcdreforged.command.command_source.PluginCommandSource.is_player of
+msgid "Returns"
+msgstr "返回"
+
+#: mcdreforged.command.builder.exception.CommandError.get_parsed_command:1 of
+msgid "A prefix of the input command that has been successfully parsed"
+msgstr ""
+
+#: mcdreforged.command.builder.exception.CommandError.get_failed_command:1 of
+msgid "A prefix of the input command that is parsing when the failure occurs"
+msgstr ""
+
+#: mcdreforged.command.builder.exception.CommandError.set_handled:1 of
+msgid ""
+"When handling the command error by error listener on the command tree "
+"node, you can use this method to tell MCDR the command error has been "
+"handled so MCDR will not display the default command failure message to "
+"the command source like ``Unknown argument: !!MCDR reload this<--``"
+msgstr ""
+
+#: mcdreforged.command.builder.exception.CommandError.set_handled:4 of
+msgid ""
+"It won't make any difference to the command node tree execution, but it "
+"might be useful for outer error handlers"
+msgstr ""
+
+#: mcdreforged.command.builder.exception.UnknownCommand:1 of
+msgid ""
+"When the command finishes parsing, but current node doesn't have a "
+"callback function"
+msgstr ""
+
+#: mcdreforged.command.builder.exception.UnknownArgument:1 of
+msgid ""
+"When there's remaining command string, but there's no matched Literal "
+"nodes and no general argument nodes"
+msgstr ""
+
+#: mcdreforged.command.builder.exception.UnknownRootArgument:1 of
+msgid "The same as UnknownArgument, but it fails to match at root node"
+msgstr ""
+
+#: mcdreforged.command.builder.exception.RequirementNotMet:1 of
+msgid ""
+"The specified requirement for the command source to enter this node is "
+"not met"
+msgstr ""
+
+#: mcdreforged.command.builder.exception.CommandSyntaxError:1
+#: mcdreforged.command.builder.exception.IllegalArgument:1 of
+msgid "General illegal argument error Used in integer parsing failure etc."
+msgstr ""
+
+#: mcdreforged.command.builder.exception.LiteralNotMatch:1 of
+msgid "Used by Literal node parsing failure for fail-soft"
+msgstr ""
+
+#: mcdreforged.command.builder.exception.NumberOutOfRange:1 of
+msgid "The parsed number value is out of the restriction range"
+msgstr ""
+
+#: mcdreforged.command.builder.exception.TextLengthOutOfRange:1 of
+msgid "The length of the given text is out of the restriction range"
+msgstr ""
+
+#: mcdreforged.command.builder.exception.EmptyText:1
+#: mcdreforged.command.builder.exception.IllegalEscapesUsage:1
+#: mcdreforged.command.builder.exception.UnclosedQuotedString:1 of
+msgid "The text is empty, and it's not allowed to be"
+msgstr ""
+
+#: ../references/command.rst:19
+msgid "Command Source"
+msgstr "指令源"
+
+#: mcdreforged.command.command_source.CommandSource:1 of
+msgid ""
+":class:`CommandSource`: is an abstracted command executor model. It "
+"provides several methods for command execution"
+msgstr ":class:`CommandSource` 是一个指令执行源的抽象模型。它提供了若干有助于指令执行的方法"
+
+#: mcdreforged.command.command_source.CommandSource:3 of
+msgid "Class inheriting tree::"
+msgstr "类继承树状图"
+
+#: mcdreforged.command.command_source.CommandSource:11 of
+msgid ""
+"Plugins can declare a class inherited from :class:`CommandSource` to "
+"create their own command source"
+msgstr "插件可以定义一个由 :class:`CommandSource` 继承而来的类来自定义自己的指令源"
+
+#: mcdreforged.command.command_source.CommandSource.is_player:1
+#: mcdreforged.command.command_source.ConsoleCommandSource.is_player:1
+#: mcdreforged.command.command_source.PlayerCommandSource.is_player:1
+#: mcdreforged.command.command_source.PluginCommandSource.is_player:1 of
+msgid "If the command source is a player command source"
+msgstr "指令源是否为玩家"
+
+#: mcdreforged.command.command_source.CommandSource.is_player:3
+#: mcdreforged.command.command_source.ConsoleCommandSource.is_player:3
+#: mcdreforged.command.command_source.PlayerCommandSource.is_player:3
+#: mcdreforged.command.command_source.PluginCommandSource.is_player:3 of
+msgid "``True`` if it's a player command source, ``False`` otherwise"
+msgstr "若指令源为玩家，则返回 ``True``，否则返回 ``False``"
+
+#: mcdreforged.command.command_source.CommandSource.is_console:1
+#: mcdreforged.command.command_source.ConsoleCommandSource.is_console:1
+#: mcdreforged.command.command_source.PlayerCommandSource.is_console:1
+#: mcdreforged.command.command_source.PluginCommandSource.is_console:1 of
+msgid "If the command source is a console command source"
+msgstr "指令源是否为控制台"
+
+#: mcdreforged.command.command_source.CommandSource.is_console:3
+#: mcdreforged.command.command_source.ConsoleCommandSource.is_console:3
+#: mcdreforged.command.command_source.PlayerCommandSource.is_console:3
+#: mcdreforged.command.command_source.PluginCommandSource.is_console:3 of
+msgid "``True`` if it's a console command source, ``False`` otherwise"
+msgstr "若指令源为控制台，则返回 ``True``，否则返回 ``False``"
+
+#: mcdreforged.command.command_source.CommandSource.get_server:1
+#: mcdreforged.command.command_source.InfoCommandSource.get_server:1
+#: mcdreforged.command.command_source.PluginCommandSource.get_server:1 of
+msgid "Return the server interface instance"
+msgstr "返回 ServerInterface 实例"
+
+#: mcdreforged.command.command_source.CommandSource.get_permission_level:1
+#: mcdreforged.command.command_source.InfoCommandSource.get_permission_level:1
+#: mcdreforged.command.command_source.PluginCommandSource.get_permission_level:1
+#: of
+msgid "Return the permission level that the command source has"
+msgstr "返回指令源拥有的的权限等级"
+
+#: mcdreforged.command.command_source.CommandSource.get_permission_level:3
+#: mcdreforged.command.command_source.InfoCommandSource.get_permission_level:3
+#: mcdreforged.command.command_source.PluginCommandSource.get_permission_level:3
+#: of
+msgid "The permission level is represented by int"
+msgstr "权限等级使用 int 表示"
+
+#: mcdreforged.command.command_source.CommandSource.get_preference:1 of
+msgid "Return the preference of the command source"
+msgstr "返回此指令源的偏好。"
+
+#: mcdreforged.command.command_source.CommandSource.get_preference:5 of
+msgid ""
+":class:`~mcdreforged.plugin.server_interface.ServerInterface`'s method "
+":meth:`~mcdreforged.plugin.server_interface.ServerInterface.get_preference`"
+msgstr ""
+":class:`~mcdreforged.plugin.server_interface.ServerInterface` 的方法 "
+":meth:`~mcdreforged.plugin.server_interface.ServerInterface.get_preference`"
+
+#: mcdreforged.command.command_source.CommandSource.preferred_language_context:1
+#: of
+msgid ""
+"A quick helper method to use the language value in preference to create a"
+" context with ``RTextMCDRTranslation.language_context``"
+msgstr ""
+"一个快速的辅助方法，使用该指令源的偏好中的语言来创建一个 ``RTextMCDRTranslation.language_context`` "
+"上下文。"
+
+#: mcdreforged.command.command_source.CommandSource.preferred_language_context:5
+#: of
+msgid ""
+"Class "
+":class:`~mcdreforged.translation.translation_text.RTextMCDRTranslation`"
+msgstr "类 :class:`~mcdreforged.translation.translation_text.RTextMCDRTranslation`"
+
+#: mcdreforged.command.command_source.CommandSource.preferred_language_context:7
+#: of
+msgid "Example usage::"
+msgstr "示例用法::"
+
+#: mcdreforged.command.command_source.CommandSource.has_permission:1 of
+msgid "A helper method for testing permission requirement"
+msgstr "一个用于测试权限需求的工具方法"
+
+#: mcdreforged.command.builder.nodes.arguments.NumberNode.at_min
+#: mcdreforged.command.builder.nodes.arguments.QuotableText.suggests
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.on_error
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.print_tree
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.redirects
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.requires
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.runs
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.suggests
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.then
+#: mcdreforged.command.builder.nodes.basic.Literal.suggests
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.arg
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.command
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.literal
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.print_tree
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.register
+#: mcdreforged.command.command_source.CommandSource.has_permission
+#: mcdreforged.command.command_source.CommandSource.has_permission_higher_than
+#: mcdreforged.command.command_source.CommandSource.reply
+#: mcdreforged.command.command_source.PluginCommandSource.reply of
+msgid "Parameters"
+msgstr "参数"
+
+#: mcdreforged.command.command_source.CommandSource.has_permission:3
+#: mcdreforged.command.command_source.CommandSource.has_permission_higher_than:3
+#: of
+msgid "The permission level to be tested"
+msgstr "用于比较的权限等级"
+
+#: mcdreforged.command.command_source.CommandSource.has_permission:4 of
+msgid ""
+"If the command source has not less permission level than the given "
+"permission level"
+msgstr "若指令源权限级别不低于给定的权限级别，则返回 ``True``，否则返回 ``False``。"
+
+#: mcdreforged.command.command_source.CommandSource.has_permission_higher_than:1
+#: of
+msgid ""
+"Just like the :meth:`CommandSource.has_permission`, but this time it is a"
+" greater than judgment"
+msgstr "与 :meth:`CommandSource.has_permission` 相似，但指令源权限需 *高于* 给定的权限才返回 ``True``。"
+
+#: mcdreforged.command.command_source.CommandSource.has_permission_higher_than:4
+#: of
+msgid ""
+"If the command source has greater permission level than the given "
+"permission level"
+msgstr "若指令源权限级别高于给定的权限级别，则返回 ``True``，否则返回 ``False``。"
+
+#: mcdreforged.command.command_source.CommandSource.reply:1
+#: mcdreforged.command.command_source.PluginCommandSource.reply:1 of
+msgid ""
+"Send a message to the command source. The message can be anything "
+"including RTexts"
+msgstr "发送消息到指令源。消息可以是包括 RText 对象在内的任何内容。"
+
+#: mcdreforged.command.command_source.CommandSource.reply:3
+#: mcdreforged.command.command_source.PluginCommandSource.reply:3 of
+msgid ""
+"The message will be converted to str using ``str()`` function unless it's"
+" a :class:`RTextBase` object"
+msgstr "除非它是一个 :class:`RTextBase` 对象 ，否则将使用 ``str()`` 函数转换为 str 类型。"
+
+#: mcdreforged.command.command_source.CommandSource.reply:5
+#: mcdreforged.command.command_source.PluginCommandSource.reply:5 of
+msgid "The message you want to send"
+msgstr "你想要发送的消息"
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.on_error
+#: mcdreforged.command.command_source.CommandSource.reply
+#: mcdreforged.command.command_source.ConsoleCommandSource.reply
+#: mcdreforged.command.command_source.PlayerCommandSource.reply
+#: mcdreforged.command.command_source.PluginCommandSource.reply of
+msgid "Keyword Arguments"
+msgstr "关键字参数"
+
+#: mcdreforged.command.command_source.CommandSource.reply:6
+#: mcdreforged.command.command_source.PluginCommandSource.reply:6 of
+msgid ""
+"The encoding method for the message. It's only used in "
+":class:`PlayerCommandSource`"
+msgstr "消息的编码方式。该参数仅在 :class:`PlayerCommandSource` 中使用"
+
+#: mcdreforged.command.command_source.CommandSource.reply:7
+#: mcdreforged.command.command_source.PluginCommandSource.reply:7 of
+msgid "Message override when it's a :class:`ConsoleCommandSource`"
+msgstr ""
+
+#: mcdreforged.command.command_source.InfoCommandSource:1 of
+msgid "Command source originated from an info created by MCDR"
+msgstr "源自一个由 MCDR 创建的 info 的指令源"
+
+#: mcdreforged.command.command_source.InfoCommandSource.get_info:1 of
+msgid "Return the Info instance that this command source is created from"
+msgstr "返回此指令源创建的 info 实例。"
+
+#: ../docstring mcdreforged.command.command_source.PlayerCommandSource.player:1
+#: of
+msgid "The name of the player"
+msgstr "玩家的名称"
+
+#: mcdreforged.command.command_source.PlayerCommandSource.reply:1 of
+msgid "encoding method to be used in :meth:`ServerInterface.tell`"
+msgstr "用于 :meth:`ServerInterface.tell` 的编码方式"
+
+#: mcdreforged.command.command_source.ConsoleCommandSource.reply:1 of
+msgid "If it's specified, overwrite the value of parameter ``message`` with it"
+msgstr "若被给出，将用其覆盖参数 ``message`` 的值"
+
+#: ../references/command.rst:25
+msgid "Command Nodes"
+msgstr "指令节点"
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode:1 of
+msgid ""
+":class:`AbstractNode` is base class of all command nodes. It's also an "
+"abstract class. It provides several methods for building up the command "
+"tree"
+msgstr ":class:`AbstractNode` 是所有指令节点的基础类。它同时也是一个抽象类。它提供了多种用于构建指令树的方法。"
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.then:1 of
+msgid "Attach a child node to its children list, and then return itself"
+msgstr "将子节点附加到其子列表中，然后返回自身。"
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.then:3 of
+msgid "It's used for building the command tree structure"
+msgstr "用于构建指令树结构。"
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.then:5 of
+msgid "A node instance to be added to current node's children list"
+msgstr "参数 *node*：要添加到当前节点的儿子列表中的节点实例。"
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.then:7
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.print_tree:3 of
+msgid "Example::"
+msgstr "例子::"
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.runs:1 of
+msgid ""
+"Set the callback function of this node. When the command parsing finished"
+" at this node, the callback function will be executed"
+msgstr "设置节点的回调函数。在该节点上的指令解析完成后，将执行指定的回调函数。"
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.runs:3 of
+msgid ""
+"The callback function is allowed to accept 0 to 2 arguments (a "
+"``CommandSource`` as command source and a ``dict`` as context). For "
+"example, the following 4 functions are available callbacks::"
+msgstr ""
+"回调函数允许接受 0 到 2 个参数（ ``CommandSource`` 作为指令源， ``dict`` 作为上下文）。举个例子，下面的 4 "
+"个函数均为可用的回调函数::"
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.runs:20 of
+msgid "Both of them can be used as the argument of the ``runs`` method"
+msgstr "它们都可以用作 ``runs`` 方法的参数"
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.runs:22 of
+msgid ""
+"This dynamic callback argument adaptation is used in all callback "
+"invoking of the command nodes"
+msgstr "这种动态回调参数适配在所有指令节点的回调调用中使用。"
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.runs:24 of
+msgid ""
+"A callable that accepts up to 2 arguments. Argument list: "
+":class:`CommandSource`, :class:`dict` (:class:`CommandContext`)"
+msgstr ""
+"一个最多可接收 2 个参数的可调用对象。参数列表：:class:`CommandSource`、:class:`dict` "
+"(:class:`CommandContext`)"
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.requires:1 of
+msgid ""
+"Set the requirement tester callback of the node. When entering this node,"
+" MCDR will invoke the requirement tester to see if the current command "
+"source and context match your specific condition."
+msgstr "设置节点的需要的测试器回调。进入此节点时，MCDR将调用需求测试器以查看当前指令源和上下文是否符合你设定的条件。"
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.requires:4 of
+msgid ""
+"If the tester callback return True, nothing will happen, MCDR will "
+"continue parsing the rest of the command"
+msgstr "如果测试器返回 True，则MCDR将继续解析指令的其余部分。"
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.requires:6 of
+msgid ""
+"If the tester callback return False, a ``RequirementNotMet`` exception "
+"will be risen. At this time if the *failure_message_getter* parameter is "
+"available, MCDR will invoke *failure_message_getter* to get the message "
+"string of the ``RequirementNotMet`` exception, otherwise a default "
+"message will be used"
+msgstr ""
+"如果测试器返回 ``False``，则会引发 ``RequirementNotMet`` 异常。此时，如果 "
+"``failure_message_getter`` 参数可用，MCDR 将调用 ``failure_message_getter`` "
+"以获取消息字符串作为 RequirementNotMet 的异常消息，否则将使用默认消息。"
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.requires:10 of
+msgid ""
+"A callable that accepts up to 2 arguments and returns a bool. Argument "
+"list: :class:`CommandSource`, :class:`dict` (:class:`CommandContext`)"
+msgstr ""
+"一个最多可接收 2 个参数的，返回一个 bool 的可调用对象。参数列表：:class:`CommandSource`、:class:`dict`"
+" (:class:`CommandContext`)"
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.requires:11 of
+msgid ""
+"An optional callable that accepts up to 2 arguments and returns a str or "
+"a :class:`RTextBase`. Argument list: :class:`CommandSource`, "
+":class:`dict` (:class:`CommandContext`)"
+msgstr ""
+"一个最多可接收 2 个参数的，返回一个 str 或 :class:`RTextBase` "
+"的可调用对象。参数列表：:class:`CommandSource`、:class:`dict` "
+"(:class:`CommandContext`)"
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.requires:13 of
+msgid "Example usages::"
+msgstr "示例用法::"
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.redirects:1 of
+msgid "Redirect all further child nodes command parsing to another given node"
+msgstr "将所有其他子节点指令解析重定向到另一个给定节点"
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.redirects:3 of
+msgid "Example use cases:"
+msgstr "用途示例："
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.redirects:5 of
+msgid ""
+"You want a short command and full-path command that will all execute the "
+"same commands"
+msgstr "你需要一个简短的指令和一个全路径指令来执行相同的指令"
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.redirects:6 of
+msgid ""
+"You want to repeatedly re-enter a command node's children when parsing "
+"commands"
+msgstr "你需要在解析指令时重复多次进入一个节点的儿子"
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.redirects:8 of
+msgid ""
+"Pay attention to the difference between :meth:`redirects` and "
+":meth:`then`. :meth:`redirects` is to redirect the child nodes, and "
+":meth:`then` is to add a child node"
+msgstr ""
+"注意 :meth:`redirects` 和 :meth:`then` 之间的区别。:meth:`redirects` 是重定向子节点，而 "
+":meth:`then` 是添加子节点"
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.redirects:11 of
+msgid "A node instance which current node is redirecting to"
+msgstr "当前节点的重定向目标"
+
+#: mcdreforged.command.builder.nodes.arguments.QuotableText.suggests:1
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.suggests:1
+#: mcdreforged.command.builder.nodes.basic.Literal.suggests:1 of
+msgid "Set the provider for command suggestions of this node"
+msgstr "设置该节点的指令建议提供函数。"
+
+#: mcdreforged.command.builder.nodes.arguments.QuotableText.suggests:3
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.suggests:3
+#: mcdreforged.command.builder.nodes.basic.Literal.suggests:3 of
+msgid ":class:`Literal` node does not support this method"
+msgstr "字面量节点 :class:`Literal` 不支持这个方法"
+
+#: mcdreforged.command.builder.nodes.arguments.QuotableText.suggests:5
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.suggests:5
+#: mcdreforged.command.builder.nodes.basic.Literal.suggests:5
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.arg:7 of
+msgid "Examples::"
+msgstr "例子::"
+
+#: mcdreforged.command.builder.nodes.arguments.QuotableText.suggests:14
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.suggests:14
+#: mcdreforged.command.builder.nodes.basic.Literal.suggests:14 of
+msgid ""
+"When the user input ``!!whereis`` in the console and a space character, "
+"MCDR will show the suggestions ``'Steve'`` and ``'Alex'``"
+msgstr ""
+"当用户在控制台中输入 ``!!whereis`` 及一个空格字符时，MCDR 将会展示包含 ``'Steve'`` 及 ``'Alex'`` "
+"的输入建议。"
+
+#: mcdreforged.command.builder.nodes.arguments.QuotableText.suggests:16
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.suggests:16
+#: mcdreforged.command.builder.nodes.basic.Literal.suggests:16 of
+msgid ""
+"A callable function which accepts maximum 2 parameters (command source "
+"and context) and return an iterable of str indicating the current command"
+" suggestions"
+msgstr ""
+"一个最多接受 2 个参数并返回一个 ``Iterable[str]`` 的可调用对象。参数列表：``CommandSource`` , "
+"``dict`` （上下文）"
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.on_error:1 of
+msgid ""
+"When a command error occurs, the given will invoke the given handler to "
+"handle with the error"
+msgstr "当发生指令错误时，给定的将调用给定的处理程序以处理错误。"
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.on_error:3 of
+msgid "A class that is subclass of :class:`CommandError`"
+msgstr ":class:`CommandError` 的子类"
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.on_error:4 of
+msgid ""
+"A callable that accepts up to 3 arguments. Argument list: "
+":class:`CommandSource`, :class:`CommandError`, :class:`dict` "
+"(:class:`CommandContext`)"
+msgstr ""
+"一个最多可接收 3 个参数的可调用对象。参数列表：:class:`CommandSource`、:class:`CommandError` 和 "
+":class:`dict` (:class:`CommandContext`)"
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.on_error:5 of
+msgid ""
+"If handled is set to True, ``error.set_handled()`` is called "
+"automatically when invoking the handler callback"
+msgstr "如果将 handled 设置为 True，则在调用处理程序回调时会自动调用 ``error.set_handled()``。"
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.on_error:7 of
+msgid ""
+"For uses about ``error.set_handled()``, check the "
+":meth:`CommandError.set_handled` class reference"
+msgstr ""
+"对于 ``error.set_handled()`` 的用法，请查看 :meth:`CommandError.set_handled` "
+"类的相关说明。"
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.on_child_error:1 of
+msgid ""
+"Similar to :meth:`on_error`, but it gets triggered only when the node "
+"receives a command error from one of the node's direct or indirect child"
+msgstr "与 :meth:`on_error` 类似，不过它仅在该节点收到了一个来自其子孙节点的指令错误时触发"
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.print_tree:1 of
+msgid "Print the command tree in a read-able format"
+msgstr "以可读的格式打印指令树"
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.print_tree:3
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.print_tree:7 of
+msgid "A printer function that accepts a str"
+msgstr "一个接受一个 str 的打印函数"
+
+#: mcdreforged.command.builder.nodes.basic.Literal:1 of
+msgid ""
+"Literal node is a special node. It doesn't output any value. It's more "
+"like a command branch carrier"
+msgstr "字面值（Literal）节点是一个特殊的节点。它不输出任何值，更像是一个指令分支的载体。"
+
+#: mcdreforged.command.builder.nodes.basic.Literal:3 of
+msgid ""
+"Literal node can accept a str as its literal in its constructor. A "
+"literal node accepts the parsing command only when the next element of "
+"the parsing command exactly matches the literal of the node"
+msgstr "字面值节点可以在其构造的函数中接受 str 作为其字面值。当解析指令的下一个元素与节点的字面值完全匹配时，字面值节点才接受并解析指令。"
+
+#: mcdreforged.command.builder.nodes.basic.Literal:5 of
+msgid "Literal node is the only node that can start a command execution"
+msgstr "字面值节点是唯一可以发起指令执行的节点。"
+
+#: mcdreforged.command.builder.nodes.basic.ArgumentNode:1 of
+msgid ""
+"Argument node is an abstract base class for all nodes which store parsed "
+"values"
+msgstr "参数节点是一个抽象类，是所有储存解析值的节点类的基础。"
+
+#: mcdreforged.command.builder.nodes.basic.ArgumentNode:3 of
+msgid ""
+"It has a str field ``name`` which is used as the key used in storing "
+"parsed value in context"
+msgstr "它拥有着一个 str 属性 ``name``，用于作为键在上下文中储存解析的值"
+
+#: mcdreforged.command.builder.nodes.arguments.NumberNode:1 of
+msgid "The base class of all number related argument nodes"
+msgstr "所有数字相关参数节点的基类"
+
+#: mcdreforged.command.builder.nodes.arguments.NumberNode:3 of
+msgid ""
+"It's inherited by ``Number``, ``Integer`` and ``Float``. It represents a "
+"type of number based node"
+msgstr "它被 ``Number``，``Integer`` 和 ``Float`` 继承。它代表一种基于数字的节点。"
+
+#: mcdreforged.command.builder.nodes.arguments.NumberNode:5 of
+msgid ""
+"For a ``NumberNode`` instance, you can restrict the range of the number "
+"argument. If the parsed number is out of range, a ``NumberOutOfRange`` "
+"exception will be risen"
+msgstr "对于 NumberNode 实例，你可以限制数字参数的范围。如果解析的数字超出范围，则会抛出 ``NumberOutOfRange`` 异常。"
+
+#: mcdreforged.command.builder.nodes.arguments.NumberNode:7 of
+msgid "By default, there's no range restriction"
+msgstr "默认情况下，没有范围限制。"
+
+#: mcdreforged.command.builder.nodes.arguments.NumberNode.at_min:1 of
+msgid "Set the lower boundary of the range restriction"
+msgstr "设置数字范围的下限"
+
+#: mcdreforged.command.builder.nodes.arguments.NumberNode.at_min:3 of
+msgid "the lower boundary of the range restriction"
+msgstr "数字范围的下限"
+
+#: mcdreforged.command.builder.nodes.arguments.Number:1 of
+msgid "An Integer, or a float"
+msgstr "一个整数或一个浮点数"
+
+#: mcdreforged.command.builder.nodes.arguments.Integer:1 of
+msgid "An Integer"
+msgstr "一个整数"
+
+#: mcdreforged.command.builder.nodes.arguments.Text:1 of
+msgid "A text argument with no space character. Just like a single word"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.arguments.GreedyText:1 of
+msgid "A greedy text argument, which will consume all remaining input"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.arguments.Boolean:1 of
+msgid ""
+"A simple boolean argument, only accepts ``true`` and ``false`` and store "
+"them as a bool. Case is ignored"
+msgstr "一个简易的布尔值参数，仅支持输入 ``true`` 或 ``false``，将其储存为 bool。忽略大小写。"
+
+#: mcdreforged.command.builder.nodes.arguments.Enumeration:1 of
+msgid ""
+"A node associating with an Enum class for reading an enum value of the "
+"given class"
+msgstr "一个与给定的枚举类（Enum）相关联的节点，用于读取枚举中类的枚举值。"
+
+#: ../references/command.rst:34
+msgid "Command Builder"
+msgstr "指令构建器"
+
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.command:1 of
+msgid "Define a command and its callback"
+msgstr "定义一条指令及其回调函数"
+
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.command:3 of
+msgid ""
+"A command path string is made up of several elements separated by spaces."
+" These elements are the names of corresponding command node. They "
+"describe a path from the root node to the target node in the command tree"
+msgstr "指令路径字符串由多个由空格分隔开的元素组成，这些元素即为对应的指令节点的名字，他们描述了指令树中的一条从根节点到目标节点的路径"
+
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.command:7 of
+msgid ""
+"If a node has a name surrounding with ``\"<\"`` and ``\">\"``, it will be"
+" considered as an argument node, e.g. ``\"<my_arg>\"``. Otherwise it will"
+" be considered as a literal node, e.g. ``\"my_literal\"``"
+msgstr ""
+"如果一个节点拥有一个被 ``\"<\"`` 和 ``\">\"`` 包裹住的名字，它将被视为一个参数节点，例如 "
+"``\"<my_arg>\"``。否则，它将被是做一个字面量节点，如 ``\"my_literal\"``"
+
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.command:10 of
+msgid ""
+"You need to give definitions of argument nodes with the :meth:`arg` "
+"method. You can also define your custom literal nodes with the "
+":meth:`literal` method"
+msgstr "你需要使用 :meth:`arg` 方法来给出参数节点的定义。你也可以使用 :meth:`literal` 方法来给出自定义字面量节点的定义"
+
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.command:13 of
+msgid "A command path string, e.g. ``\"!!calc add <value_a> <value_b>\"``"
+msgstr "一个指令路径字符串，如 ``\"!!calc add <value_a> <value_b>\"``"
+
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.command:14 of
+msgid ""
+"The callback function of this command, which will be passed to "
+":meth:`AbstractNode.then<mcdreforged.command.builder.nodes.basic.AbstractNode.then>`"
+msgstr ""
+"本条指令的回调函数，将被传递给 "
+":meth:`AbstractNode.then<mcdreforged.command.builder.nodes.basic.AbstractNode.then>` 方法"
+
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.arg:1 of
+msgid ""
+"Define an argument node for an argument name. All argument names appeared"
+" in :meth:`command` must be defined"
+msgstr "为一个参数名字定义参数节点。所有在 :meth:`command` 出现的参数名字均需要被定义"
+
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.arg:3 of
+msgid ""
+"Notes that almost all MCDR builtin argument node classes can be "
+"constructed with 1 argument name parameter (e.g. "
+":class:`~mcdreforged.command.builder.nodes.arguments.Text`, "
+":class:`~mcdreforged.command.builder.nodes.arguments.Number`), so you can"
+" just use the name of the argument class here"
+msgstr ""
+"注意到几乎所有的 MCDR 内置参数节点均可使用 1 个参数名参数来构造（如 "
+":class:`~mcdreforged.command.builder.nodes.arguments.Text`、"
+":class:`~mcdreforged.command.builder.nodes.arguments.Number`），因此你可以直接在这里填入参数节点的类名"
+
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.arg:12 of
+msgid ""
+"The name of the argument node. It can be quoted with ``\"<>\"`` if you "
+"want. Examples: ``\"my_arg\"``, ``\"<my_arg>\"``"
+msgstr "参数节点的名称。可选地，它可以被 ``\"<>\"`` 括住。例子：``\"my_arg\"``、``\"<my_arg>\"``"
+
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.arg:13 of
+msgid ""
+"An argument node constructor, that accepts the argument name as the only "
+"parameter and return "
+"an:class:`~mcdreforged.command.builder.nodes.basic.ArgumentNode` object"
+msgstr ""
+"一个参数节点的构造函数，接受参数节点名字作为其唯一一个参数，返回一个 "
+":class:`~mcdreforged.command.builder.nodes.basic.ArgumentNode` 实例"
+
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.literal:1 of
+msgid ""
+"Define a literal node for a literal name. It's useful when you want to "
+"have some custom literal nodes. If you just want a regular literal node, "
+"you don't need to invoke this method, since the builder will use the "
+"default :class:`~mcdreforged.command.builder.nodes.basic.Literal` "
+"constructor for node construction"
+msgstr ""
+"为一个字面量名字定义一个字面量节点。如果你想要一些拥有自定义功能的字面量节点它将会很有用。如果你仅仅一个普通的字面量节点，你无需调用这个方法来给出定义，因为本构建器会使用默认的"
+" :class:`~mcdreforged.command.builder.nodes.basic.Literal` 构造函数来构造字面量节点"
+
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.literal:5 of
+msgid "The name of the literal node"
+msgstr "字面量节点的名字"
+
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.literal:6 of
+msgid ""
+"A literal node constructor, that accepts the literal name as the only "
+"parameter and return a "
+":class:`~mcdreforged.command.builder.nodes.basic.Literal` object"
+msgstr ""
+"一个字面量节点的构造函数，接受字面量节点名字作为其唯一一个参数，返回一个 "
+":class:`~mcdreforged.command.builder.nodes.basic.Literal` 实例"
+
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.build:1 of
+msgid "Build the command trees"
+msgstr "构建指令树"
+
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.build:3 of
+msgid ""
+"Nodes with same name will be reused. e.g. if you define 3 commands with "
+"path ``\"!!foo\"``, ``\"!!foo bar\"`` and \"``!!foo baz\"``, the root "
+"``\"!!foo\"`` node will be reused, and there will be only 1 ``\"!!foo\"``"
+" node eventually"
+msgstr ""
+"拥有相同名字的节点将被复用。比如，如果你定义了 3 个指令了，指令路径分别为 ``\"!!foo\"``、``\"!!foo bar\"`` 和 "
+"\"``!!foo baz\"``，那么根节点 ``\"!!foo\"`` 将被复用，最后将会只有一个 ``\"!!foo\"`` 节点"
+
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.build:6 of
+msgid ""
+"A list of the built command tree root nodes. The result is cached until "
+"you instruct the builder again"
+msgstr "一个列表，储存着构建完成的指令树的根节点。构建结果将被缓存，直到你再次操作这个指令构建器"
+
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.build
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.print_tree
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.register of
+msgid "Raises"
+msgstr "抛出"
+
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.build:7 of
+msgid "if there are undefined argument nodes"
+msgstr "如果存在未定义的参数节点"
+
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.register:1 of
+msgid ""
+"A helper method for lazyman, to build with method :meth:`build` and "
+"register built commands to the MCDR server"
+msgstr "一个为懒人提供的工具方法，使用方法 :meth:`build` 构建指令树，并将构建结果向 MCDR 注册"
+
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.register:3 of
+msgid ""
+"The :class:`~mcdreforged.plugin.server_interface.PluginServerInterface` "
+"object of your plugin"
+msgstr "你的插件的 :class:`~mcdreforged.plugin.server_interface.PluginServerInterface` 实例"
+
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.register:4 of
+msgid "if build fails, or there are rooted non-literal nodes"
+msgstr "如果构建失败，或者存在非字面量的根节点"
+
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.print_tree:1 of
+msgid ""
+"A helper method for lazyman, to build with method :meth:`build` and print"
+" the built command trees"
+msgstr "一个为懒人提供的工具方法，使用方法 :meth:`build` 构建指令树，并将指令树打印出来"
+
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.print_tree:8 of
+msgid "if build fails"
+msgstr "如果构建失败"

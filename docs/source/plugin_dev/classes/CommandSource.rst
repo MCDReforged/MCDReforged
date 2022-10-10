@@ -2,20 +2,6 @@
 CommandSource
 =============
 
-CommandSource is an abstracted command executor model. It provides several methods for command execution
-
-Class inheriting tree:
-
-.. code-block::
-
-    CommandSource
-     ├─ InfoCommandSource
-     │   ├─ PlayerCommandSource
-     │   └─ ConsoleCommandSource
-     └─ PluginCommandSource
-
-Plugins can declare a class inherited from ``CommandSource`` to create their own command source
-
 Property
 --------
 

@@ -41,8 +41,14 @@ Then check che changed `.po` files in `docs/source/_locale/zh_CN/`. For the chan
 
 ```bash
 cd docs/source/
-sphinx-autobuild . ../build/html
-
-# if you prefer Chinese
-# sphinx-autobuild . ../build/html -D language=zh_CN
+sphinx-autobuild . ../build/htm --watch ../../mcdreforged
 ```
+
+Added `-D language=zh_CN` to the end if you want to autobuild a Chinese version of the doc
+
+---------
+
+TODO
+
+- independent references pages
+- api package pos in docstring

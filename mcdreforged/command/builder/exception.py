@@ -57,15 +57,23 @@ class CommandError(CommandErrorBase, ABC):
 		self.__message = message
 
 	def get_parsed_command(self) -> str:
+		"""
+		:return: A prefix of the input command that has been successfully parsed
+		"""
 		return self._parsed_command
 
 	def get_failed_command(self) -> str:
+		"""
+		:return: A prefix of the input command that is parsing when the failure occurs
+		"""
 		return self._failed_command
 
 	def set_handled(self) -> None:
 		"""
-		It won't make any difference to the command node tree execution
-		But it might be useful for outer error handlers
+		When handling the command error by error listener on the command tree node, you can use this method to tell MCDR the command error has been handled
+		so MCDR will not display the default command failure message to the command source like ``Unknown argument: !!MCDR reload this<--``
+
+		It won't make any difference to the command node tree execution, but it might be useful for outer error handlers
 		"""
 		self.__handled = True
 

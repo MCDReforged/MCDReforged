@@ -34,7 +34,9 @@ release = '2.0'
 extensions = [
 	'sphinx.ext.autodoc',
 	'sphinx.ext.napoleon',
-	'sphinx.ext.viewcode'
+	'sphinx.ext.viewcode',
+	'sphinx_copybutton',
+	'sphinx-prompt',
 ]
 
 source_suffix = ['.rst']
@@ -46,6 +48,10 @@ templates_path = ['templates']
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = ['build', 'Thumbs.db', '.DS_Store']
+
+
+def setup(app):
+	autodoc_setup(app)
 
 
 # -- Options for HTML output -------------------------------------------------
@@ -77,8 +83,14 @@ gettext_compact = False  # optional
 
 # -- Options for sphinx.ext.autodoc -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html
-
 autodoc_member_order = 'bysource'
+
+
+def autodoc_setup(app):
+	# https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html#event-autodoc-skip-member
+	def autodoc_skip_member_handler(app_, what, name, obj, skip, options):
+		return skip
+	app.connect('autodoc-skip-member', autodoc_skip_member_handler)
 
 
 # -- save the table width ----------------------------------------------------
