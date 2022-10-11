@@ -75,9 +75,6 @@ class CommandContext(Dict[str, Any]):
 		self.__node_path = []  # type: List[AbstractNode]
 
 	def copy(self) -> 'CommandContext':
-		"""
-		:meta private:
-		"""
 		copied = CommandContext(self.source, self.command)
 		copied.update(self)
 		copied.__cursor = self.__cursor

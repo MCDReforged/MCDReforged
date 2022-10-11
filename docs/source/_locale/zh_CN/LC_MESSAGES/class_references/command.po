@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-11 17:00+0800\n"
+"POT-Creation-Date: 2022-10-11 20:49+0800\n"
 "PO-Revision-Date: 2021-01-23 17:24+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -14,17 +14,22 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.1\n"
 
-#: ../class_references/command.rst:3
+#: ../class_references/command.rst:5
 msgid "Command"
 msgstr "指令"
 
-#: ../class_references/command.rst:5
-msgid ":ref:`API package<api-package>` path: ``mcdreforged.api.command``"
-msgstr ":ref:`API 包<api-package>` 路径: ``mcdreforged.api.command``"
+#: ../class_references/command.rst:7
+msgid ":ref:`API package <api-package>` path: ``mcdreforged.api.command.*``"
+msgstr ":ref:`API 包 <api-package>` 路径: ``mcdreforged.api.command.*``"
 
-#: ../class_references/command.rst:9
+#: ../class_references/command.rst:11
 msgid "Command Source"
 msgstr "指令源"
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode:1
+#: mcdreforged.command.command_source.CommandSource:1 of
+msgid "Bases: :py:class:`~abc.ABC`"
+msgstr ""
 
 #: mcdreforged.command.command_source.CommandSource:1 of
 msgid ""
@@ -43,10 +48,7 @@ msgid ""
 "create their own command source"
 msgstr "插件可以定义一个由 :class:`CommandSource` 继承而来的类来自定义自己的指令源"
 
-#: mcdreforged.command.command_source.CommandSource.is_player:1
-#: mcdreforged.command.command_source.ConsoleCommandSource.is_player:1
-#: mcdreforged.command.command_source.PlayerCommandSource.is_player:1
-#: mcdreforged.command.command_source.PluginCommandSource.is_player:1 of
+#: mcdreforged.command.command_source.CommandSource.is_player:1 of
 msgid "If the command source is a player command source"
 msgstr "指令源是否为玩家"
 
@@ -59,54 +61,31 @@ msgstr "指令源是否为玩家"
 #: mcdreforged.command.command_source.CommandSource.has_permission
 #: mcdreforged.command.command_source.CommandSource.has_permission_higher_than
 #: mcdreforged.command.command_source.CommandSource.is_console
-#: mcdreforged.command.command_source.CommandSource.is_player
-#: mcdreforged.command.command_source.ConsoleCommandSource.is_console
-#: mcdreforged.command.command_source.ConsoleCommandSource.is_player
-#: mcdreforged.command.command_source.PlayerCommandSource.is_console
-#: mcdreforged.command.command_source.PlayerCommandSource.is_player
-#: mcdreforged.command.command_source.PluginCommandSource.is_console
-#: mcdreforged.command.command_source.PluginCommandSource.is_player of
+#: mcdreforged.command.command_source.CommandSource.is_player of
 msgid "Returns"
 msgstr "返回"
 
-#: mcdreforged.command.command_source.CommandSource.is_player:3
-#: mcdreforged.command.command_source.ConsoleCommandSource.is_player:3
-#: mcdreforged.command.command_source.PlayerCommandSource.is_player:3
-#: mcdreforged.command.command_source.PluginCommandSource.is_player:3 of
+#: mcdreforged.command.command_source.CommandSource.is_player:3 of
 msgid "``True`` if it's a player command source, ``False`` otherwise"
 msgstr "若指令源为玩家，则返回 ``True``，否则返回 ``False``"
 
-#: mcdreforged.command.command_source.CommandSource.is_console:1
-#: mcdreforged.command.command_source.ConsoleCommandSource.is_console:1
-#: mcdreforged.command.command_source.PlayerCommandSource.is_console:1
-#: mcdreforged.command.command_source.PluginCommandSource.is_console:1 of
+#: mcdreforged.command.command_source.CommandSource.is_console:1 of
 msgid "If the command source is a console command source"
 msgstr "指令源是否为控制台"
 
-#: mcdreforged.command.command_source.CommandSource.is_console:3
-#: mcdreforged.command.command_source.ConsoleCommandSource.is_console:3
-#: mcdreforged.command.command_source.PlayerCommandSource.is_console:3
-#: mcdreforged.command.command_source.PluginCommandSource.is_console:3 of
+#: mcdreforged.command.command_source.CommandSource.is_console:3 of
 msgid "``True`` if it's a console command source, ``False`` otherwise"
 msgstr "若指令源为控制台，则返回 ``True``，否则返回 ``False``"
 
-#: mcdreforged.command.command_source.CommandSource.get_server:1
-#: mcdreforged.command.command_source.InfoCommandSource.get_server:1
-#: mcdreforged.command.command_source.PluginCommandSource.get_server:1 of
+#: mcdreforged.command.command_source.CommandSource.get_server:1 of
 msgid "Return the server interface instance"
 msgstr "返回 ServerInterface 实例"
 
-#: mcdreforged.command.command_source.CommandSource.get_permission_level:1
-#: mcdreforged.command.command_source.InfoCommandSource.get_permission_level:1
-#: mcdreforged.command.command_source.PluginCommandSource.get_permission_level:1
-#: of
+#: mcdreforged.command.command_source.CommandSource.get_permission_level:1 of
 msgid "Return the permission level that the command source has"
 msgstr "返回指令源拥有的的权限等级"
 
-#: mcdreforged.command.command_source.CommandSource.get_permission_level:3
-#: mcdreforged.command.command_source.InfoCommandSource.get_permission_level:3
-#: mcdreforged.command.command_source.PluginCommandSource.get_permission_level:3
-#: of
+#: mcdreforged.command.command_source.CommandSource.get_permission_level:3 of
 msgid "The permission level is represented by int"
 msgstr "权限等级使用 int 表示"
 
@@ -170,8 +149,7 @@ msgstr "一个用于测试权限需求的工具方法"
 #: mcdreforged.command.builder.tools.SimpleCommandBuilder.register
 #: mcdreforged.command.command_source.CommandSource.has_permission
 #: mcdreforged.command.command_source.CommandSource.has_permission_higher_than
-#: mcdreforged.command.command_source.CommandSource.reply
-#: mcdreforged.command.command_source.PluginCommandSource.reply of
+#: mcdreforged.command.command_source.CommandSource.reply of
 msgid "Parameters"
 msgstr "参数"
 
@@ -201,44 +179,42 @@ msgid ""
 "permission level"
 msgstr "若指令源权限级别高于给定的权限级别，则返回 ``True``，否则返回 ``False``。"
 
-#: mcdreforged.command.command_source.CommandSource.reply:1
-#: mcdreforged.command.command_source.PluginCommandSource.reply:1 of
+#: mcdreforged.command.command_source.CommandSource.reply:1 of
 msgid ""
 "Send a message to the command source. The message can be anything "
 "including RTexts"
 msgstr "发送消息到指令源。消息可以是包括 RText 对象在内的任何内容。"
 
-#: mcdreforged.command.command_source.CommandSource.reply:3
-#: mcdreforged.command.command_source.PluginCommandSource.reply:3 of
+#: mcdreforged.command.command_source.CommandSource.reply:3 of
 msgid ""
 "The message will be converted to str using ``str()`` function unless it's"
 " a :class:`RTextBase` object"
 msgstr "除非它是一个 :class:`RTextBase` 对象 ，否则将使用 ``str()`` 函数转换为 str 类型。"
 
-#: mcdreforged.command.command_source.CommandSource.reply:5
-#: mcdreforged.command.command_source.PluginCommandSource.reply:5 of
+#: mcdreforged.command.command_source.CommandSource.reply:5 of
 msgid "The message you want to send"
 msgstr "你想要发送的消息"
 
 #: mcdreforged.command.builder.nodes.basic.AbstractNode.on_error
-#: mcdreforged.command.command_source.CommandSource.reply
-#: mcdreforged.command.command_source.ConsoleCommandSource.reply
-#: mcdreforged.command.command_source.PlayerCommandSource.reply
-#: mcdreforged.command.command_source.PluginCommandSource.reply of
+#: mcdreforged.command.command_source.CommandSource.reply of
 msgid "Keyword Arguments"
 msgstr "关键字参数"
 
-#: mcdreforged.command.command_source.CommandSource.reply:6
-#: mcdreforged.command.command_source.PluginCommandSource.reply:6 of
+#: mcdreforged.command.command_source.CommandSource.reply:6 of
 msgid ""
 "The encoding method for the message. It's only used in "
 ":class:`PlayerCommandSource`"
 msgstr "消息的编码方式。该参数仅在 :class:`PlayerCommandSource` 中使用"
 
-#: mcdreforged.command.command_source.CommandSource.reply:7
-#: mcdreforged.command.command_source.PluginCommandSource.reply:7 of
+#: mcdreforged.command.command_source.CommandSource.reply:7 of
 msgid "Message override when it's a :class:`ConsoleCommandSource`"
 msgstr "当为 :class:`ConsoleCommandSource` 时的消息覆写"
+
+#: mcdreforged.command.command_source.InfoCommandSource:1 of
+msgid ""
+"Bases: :py:class:`~mcdreforged.command.command_source.CommandSource`, "
+":py:class:`~abc.ABC`"
+msgstr ""
 
 #: mcdreforged.command.command_source.InfoCommandSource:1 of
 msgid "Command source originated from an info created by MCDR"
@@ -248,20 +224,7 @@ msgstr "源自一个由 MCDR 创建的 info 的指令源"
 msgid "Return the Info instance that this command source is created from"
 msgstr "返回此指令源创建的 info 实例。"
 
-#: ../docstring mcdreforged.command.command_source.PlayerCommandSource.player:1
-#: of
-msgid "The name of the player"
-msgstr "玩家的名称"
-
-#: mcdreforged.command.command_source.PlayerCommandSource.reply:1 of
-msgid "encoding method to be used in :meth:`ServerInterface.tell`"
-msgstr "用于 :meth:`ServerInterface.tell` 的编码方式"
-
-#: mcdreforged.command.command_source.ConsoleCommandSource.reply:1 of
-msgid "If it's specified, overwrite the value of parameter ``message`` with it"
-msgstr "若被给出，将用其覆盖参数 ``message`` 的值"
-
-#: ../class_references/command.rst:15
+#: ../class_references/command.rst:18
 msgid "Command Nodes"
 msgstr "指令节点"
 
@@ -435,10 +398,10 @@ msgstr "例子::"
 #: mcdreforged.command.builder.nodes.basic.AbstractNode.suggests:14 of
 msgid ""
 "When the user input ``!!whereis`` in the console and a space character, "
-"MCDR will show the suggestions ``'Steve'`` and ``'Alex'``"
+"MCDR will show the suggestions ``\"Steve\"`` and ``\"Alex\"``"
 msgstr ""
-"当用户在控制台中输入 ``!!whereis`` 及一个空格字符时，MCDR 将会展示包含 ``'Steve'`` 及 ``'Alex'`` "
-"的输入建议。"
+"当用户在控制台中输入 ``!!whereis`` 及一个空格字符时，MCDR 将会展示包含 ``\"Steve\"`` 及 "
+"``\"Alex\"`` 的输入建议。"
 
 #: mcdreforged.command.builder.nodes.basic.AbstractNode.suggests:16 of
 msgid ""
@@ -498,6 +461,10 @@ msgid "A printer function that accepts a str"
 msgstr "一个接受一个 str 的打印函数"
 
 #: mcdreforged.command.builder.nodes.basic.Literal:1 of
+msgid "Bases: :py:class:`~mcdreforged.command.builder.nodes.basic.EntryNode`"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.basic.Literal:1 of
 msgid ""
 "Literal node is a special node. It doesn't output any value. It's more "
 "like a command branch carrier"
@@ -516,6 +483,12 @@ msgstr "字面值节点是唯一可以发起指令执行的节点。"
 
 #: mcdreforged.command.builder.nodes.basic.ArgumentNode:1 of
 msgid ""
+"Bases: :py:class:`~mcdreforged.command.builder.nodes.basic.AbstractNode`,"
+" :py:class:`~abc.ABC`"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.basic.ArgumentNode:1 of
+msgid ""
 "Argument node is an abstract base class for all nodes which store parsed "
 "values"
 msgstr "参数节点是一个抽象类，是所有储存解析值的节点类的基础。"
@@ -525,6 +498,13 @@ msgid ""
 "It has a str field ``name`` which is used as the key used in storing "
 "parsed value in context"
 msgstr "它拥有着一个 str 属性 ``name``，用于作为键在上下文中储存解析的值"
+
+#: mcdreforged.command.builder.nodes.arguments.NumberNode:1
+#: mcdreforged.command.builder.nodes.arguments.TextNode:1 of
+msgid ""
+"Bases: :py:class:`~mcdreforged.command.builder.nodes.basic.ArgumentNode`,"
+" :py:class:`~abc.ABC`"
+msgstr ""
 
 #: mcdreforged.command.builder.nodes.arguments.NumberNode:1 of
 msgid "The base class of all number related argument nodes"
@@ -583,6 +563,12 @@ msgstr "合法的数字范围将会是 ``[min_value, max_value]``。边界值将
 #: mcdreforged.command.builder.nodes.arguments.NumberNode.in_range:7 of
 msgid ":meth:`at_min`, :meth:`at_max`"
 msgstr ":meth:`at_min`, :meth:`at_max`"
+
+#: mcdreforged.command.builder.nodes.arguments.Float:1
+#: mcdreforged.command.builder.nodes.arguments.Integer:1
+#: mcdreforged.command.builder.nodes.arguments.Number:1 of
+msgid "Bases: :py:class:`~mcdreforged.command.builder.nodes.arguments.NumberNode`"
+msgstr ""
 
 #: mcdreforged.command.builder.nodes.arguments.Number:1 of
 msgid "An integer, or a float"
@@ -682,6 +668,11 @@ msgstr "合法的长度范围将会是 ``[min_length, max_length]``。边界值�
 msgid ":meth:`at_min_length`, :meth:`at_max_length`"
 msgstr ":meth:`at_min_length`, :meth:`at_max_length`"
 
+#: mcdreforged.command.builder.nodes.arguments.GreedyText:1
+#: mcdreforged.command.builder.nodes.arguments.Text:1 of
+msgid "Bases: :py:class:`~mcdreforged.command.builder.nodes.arguments.TextNode`"
+msgstr ""
+
 #: mcdreforged.command.builder.nodes.arguments.Text:1 of
 msgid "A text argument with no space character"
 msgstr "一个不包含空格字符的文本参数"
@@ -689,6 +680,10 @@ msgstr "一个不包含空格字符的文本参数"
 #: mcdreforged.command.builder.nodes.arguments.Text:3 of
 msgid "It will keep reading chars continuously until it meets a space character"
 msgstr "它会持续读取字符，直到遇到一个空格字符"
+
+#: mcdreforged.command.builder.nodes.arguments.QuotableText:1 of
+msgid "Bases: :py:class:`~mcdreforged.command.builder.nodes.arguments.Text`"
+msgstr ""
 
 #: mcdreforged.command.builder.nodes.arguments.QuotableText:1 of
 msgid "A text argument with support for inputting space characters"
@@ -743,6 +738,11 @@ msgid ""
 "command"
 msgstr "将任何子节点附加到 :class:`GreedyText` 上不是明智的决定，因为那样的话子节点将永远无法读到任何剩余指令"
 
+#: mcdreforged.command.builder.nodes.arguments.Boolean:1
+#: mcdreforged.command.builder.nodes.arguments.Enumeration:1 of
+msgid "Bases: :py:class:`~mcdreforged.command.builder.nodes.basic.ArgumentNode`"
+msgstr ""
+
 #: mcdreforged.command.builder.nodes.arguments.Boolean:1 of
 msgid ""
 "A simple boolean argument, only accepts ``true`` and ``false`` and store "
@@ -775,7 +775,7 @@ msgstr ""
 "如果输入参数不是所提供的枚举类中的合法枚举名，抛出 "
 ":class:`~mcdreforged.command.builder.exception.InvalidEnumeration` 异常"
 
-#: ../class_references/command.rst:24
+#: ../class_references/command.rst:29
 msgid "Command Builder"
 msgstr "指令构建器"
 
@@ -943,31 +943,42 @@ msgstr "一个为懒人提供的工具方法，使用方法 :meth:`build` 构建
 msgid "if build fails"
 msgstr "如果构建失败"
 
-#: ../class_references/command.rst:31
+#: ../class_references/command.rst:36
 msgid "Exceptions"
 msgstr "异常"
+
+#: mcdreforged.command.builder.exception.CommandErrorBase:1 of
+msgid "Bases: :py:class:`Exception`, :py:class:`~abc.ABC`"
+msgstr ""
 
 #: mcdreforged.command.builder.exception.CommandErrorBase:1 of
 msgid "The base exception class for all command related errors"
 msgstr "所有指令相关错误的异常基类"
 
 #: mcdreforged.command.builder.exception.IllegalNodeOperation:1 of
+msgid "Bases: :py:class:`~mcdreforged.command.builder.exception.CommandErrorBase`"
+msgstr ""
+
+#: mcdreforged.command.builder.exception.IllegalNodeOperation:1 of
 msgid "The operation is unsupported by this node"
 msgstr "该节点不支持此操作"
+
+#: mcdreforged.command.builder.exception.CommandError:1 of
+msgid ""
+"Bases: "
+":py:class:`~mcdreforged.command.builder.exception.CommandErrorBase`, "
+":py:class:`~abc.ABC`"
+msgstr ""
 
 #: mcdreforged.command.builder.exception.CommandError:1 of
 msgid "The basic exception, for errors raised when parsing a command"
 msgstr "解析指令出错时抛出的异常基类"
 
-#: mcdreforged.command.builder.exception.AbstractOutOfRange.get_error_data:1
-#: mcdreforged.command.builder.exception.CommandError.get_error_data:1
-#: mcdreforged.command.builder.exception.RequirementNotMet.get_error_data:1 of
+#: mcdreforged.command.builder.exception.CommandError.get_error_data:1 of
 msgid "Data that might be helpful for error report"
 msgstr "有助于生成错误报告的数据"
 
-#: mcdreforged.command.builder.exception.AbstractOutOfRange.get_error_data:3
-#: mcdreforged.command.builder.exception.CommandError.get_error_data:3
-#: mcdreforged.command.builder.exception.RequirementNotMet.get_error_data:3 of
+#: mcdreforged.command.builder.exception.CommandError.get_error_data:3 of
 msgid "It will be used in error message str formatting"
 msgstr "它将被用于错误信息的字符串 ``format`` 操作"
 
@@ -999,6 +1010,12 @@ msgid ""
 "might be useful for outer error handlers"
 msgstr "这不会影响指令树的错误处理逻辑，不过它对外层的逻辑有用"
 
+#: mcdreforged.command.builder.exception.RequirementNotMet:1
+#: mcdreforged.command.builder.exception.UnknownArgument:1
+#: mcdreforged.command.builder.exception.UnknownCommand:1 of
+msgid "Bases: :py:class:`~mcdreforged.command.builder.exception.CommandError`"
+msgstr ""
+
 #: mcdreforged.command.builder.exception.UnknownCommand:1 of
 msgid ""
 "When the command finishes parsing, but current node doesn't have a "
@@ -1018,8 +1035,21 @@ msgid ""
 msgstr "指令源进入本节点所需的需求未被满足"
 
 #: mcdreforged.command.builder.exception.CommandSyntaxError:1 of
+msgid ""
+"Bases: :py:class:`~mcdreforged.command.builder.exception.CommandError`, "
+":py:class:`~abc.ABC`"
+msgstr ""
+
+#: mcdreforged.command.builder.exception.CommandSyntaxError:1 of
 msgid "The basic exception for command parsing error"
 msgstr "指令解析出错的异常基类"
+
+#: mcdreforged.command.builder.exception.IllegalArgument:1 of
+msgid ""
+"Bases: "
+":py:class:`~mcdreforged.command.builder.exception.CommandSyntaxError`, "
+":py:class:`~abc.ABC`"
+msgstr ""
 
 #: mcdreforged.command.builder.exception.IllegalArgument:1 of
 msgid ""
@@ -1028,12 +1058,37 @@ msgid ""
 msgstr "参数节点解析出错的异常基类，通常由错误的参数语法导致"
 
 #: mcdreforged.command.builder.exception.AbstractOutOfRange:1 of
+msgid ""
+"Bases: "
+":py:class:`~mcdreforged.command.builder.exception.IllegalArgument`, "
+":py:class:`~abc.ABC`"
+msgstr ""
+
+#: mcdreforged.command.builder.exception.AbstractOutOfRange:1 of
 msgid "The basic exception for out-of-range like argument parsing error"
 msgstr "超出范围相关错误的异常基类"
+
+#: mcdreforged.command.builder.exception.NumberOutOfRange:1
+#: mcdreforged.command.builder.exception.TextLengthOutOfRange:1 of
+msgid ""
+"Bases: "
+":py:class:`~mcdreforged.command.builder.exception.AbstractOutOfRange`"
+msgstr ""
 
 #: mcdreforged.command.builder.exception.NumberOutOfRange:1 of
 msgid "The parsed number value is out of the restriction range"
 msgstr "解析出的数值超出了限制范围"
+
+#: mcdreforged.command.builder.exception.EmptyText:1
+#: mcdreforged.command.builder.exception.IllegalEscapesUsage:1
+#: mcdreforged.command.builder.exception.InvalidBoolean:1
+#: mcdreforged.command.builder.exception.InvalidEnumeration:1
+#: mcdreforged.command.builder.exception.InvalidFloat:1
+#: mcdreforged.command.builder.exception.InvalidInteger:1
+#: mcdreforged.command.builder.exception.InvalidNumber:1
+#: mcdreforged.command.builder.exception.UnclosedQuotedString:1 of
+msgid "Bases: :py:class:`~mcdreforged.command.builder.exception.IllegalArgument`"
+msgstr ""
 
 #: mcdreforged.command.builder.exception.InvalidNumber:1 of
 msgid "The parsed value is not a valid number"
@@ -1071,9 +1126,13 @@ msgstr "解析结果不是一个合法的布尔值"
 msgid "The parsed value is not a valid Enum"
 msgstr "解析结果不是一个合法的枚举值"
 
-#: ../class_references/command.rst:37
+#: ../class_references/command.rst:43
 msgid "Misc"
 msgstr "杂项"
+
+#: mcdreforged.command.builder.common.CommandContext:1 of
+msgid "Bases: :py:class:`~typing.Dict`\\ [:py:class:`str`, :py:obj:`~typing.Any`]"
+msgstr ""
 
 #: mcdreforged.command.builder.common.CommandContext:1 of
 msgid ""

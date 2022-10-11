@@ -180,7 +180,7 @@ class AbstractNode(ABC):
 					runs(lambda src, ctx: find_player(src, ctx['player_name']))
 				)
 
-		When the user input ``!!whereis`` in the console and a space character, MCDR will show the suggestions ``'Steve'`` and ``'Alex'``
+		When the user input ``!!whereis`` in the console and a space character, MCDR will show the suggestions ``"Steve"`` and ``"Alex"``
 
 		:param suggestion: A callable function which accepts up to 2 parameters and return an iterable of str indicating the current command suggestions.
 			Argument list: :class:`~mcdreforged.command.command_source.CommandSource`, :class:`dict` (:class:`~mcdreforged.command.builder.common.CommandContext`)
@@ -469,9 +469,6 @@ class Literal(EntryNode):
 		return '|'.join(sorted(self.literals))
 
 	def suggests(self, suggestion: SUGGESTS_CALLBACK) -> 'AbstractNode':
-		"""
-		:meta private:
-		"""
 		raise IllegalNodeOperation('Literal node doe not support suggests')
 
 	def parse(self, text):

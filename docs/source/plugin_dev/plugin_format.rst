@@ -14,6 +14,7 @@ Plugin format inheriting tree:
     * Packed Plugin
     * Directory Plugin
 
+.. _plugin-format-solo:
 
 Solo Plugin
 -----------

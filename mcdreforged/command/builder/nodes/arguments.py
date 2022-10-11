@@ -267,9 +267,6 @@ class QuotableText(Text):
 
 	# use quote characters to quote suggestions with DIVIDER
 	def suggests(self, suggestion: SUGGESTS_CALLBACK) -> 'QuotableText':
-		"""
-		:meta private:
-		"""
 		def quote_wrapper(*args, **kwargs):
 			suggestions = []
 			for s in suggestion(*args, **kwargs):

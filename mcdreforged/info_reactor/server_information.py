@@ -3,9 +3,18 @@ from typing import Optional
 
 
 class ServerInformation:
+	"""
+	Information of the current server, interred from the output of the server
+	"""
+
 	version: Optional[str] = None
+	"""Server version name, e.g. ``"1.15.2"``, ``"1.17 Release Candidate 1"``"""
+
 	ip: Optional[str] = None
+	"""Server IP address, e.g. ``"127.0.0.1"``"""
+
 	port: Optional[int] = None
+	"""Server port, e.g. ``25565``"""
 
 	def clear(self):
 		self.version, self.ip, self.port = None, None, None

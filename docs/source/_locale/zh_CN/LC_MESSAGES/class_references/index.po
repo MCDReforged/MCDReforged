@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-11 17:16+0800\n"
+"POT-Creation-Date: 2022-10-11 19:55+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,7 +19,15 @@ msgstr ""
 
 #: ../class_references/index.rst:8
 msgid "Command"
-msgstr "指令"
+msgstr "指令相关"
+
+#: ../class_references/index.rst:8
+msgid "ServerInterface"
+msgstr "ServerInterface"
+
+#: ../class_references/index.rst:8
+msgid "PluginServerInterface"
+msgstr "PluginServerInterface"
 
 #: ../class_references/index.rst:2
 msgid "Class References"

@@ -9,3 +9,5 @@ If you are just a user of MCDR, run! Don't read!
    :maxdepth: 2
 
    Command<command.rst>
+   ServerInterface<ServerInterface.rst>
+   PluginServerInterface<PluginServerInterface.rst>

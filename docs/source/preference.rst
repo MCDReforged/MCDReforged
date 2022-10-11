@@ -8,6 +8,8 @@ The preference data is stored in ``config/mcdreforged/preferences.json``
 
 See the `preference command <command.html#preference-settings>`__ for the way to control it via command
 
+.. _preference-language:
+
 language
 --------
 

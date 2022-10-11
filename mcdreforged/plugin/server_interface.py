@@ -5,7 +5,7 @@ import time
 from typing import Callable, TYPE_CHECKING, Tuple, Any, Union, Optional, List, IO, Dict, Type, TypeVar
 
 from mcdreforged.command.builder.nodes.basic import Literal
-from mcdreforged.command.command_source import CommandSource, PluginCommandSource
+from mcdreforged.command.command_source import CommandSource, PluginCommandSource, PlayerCommandSource, ConsoleCommandSource
 from mcdreforged.constants import plugin_constant
 from mcdreforged.info_reactor.info import Info
 from mcdreforged.info_reactor.server_information import ServerInformation
@@ -38,10 +38,15 @@ SerializableType = TypeVar('SerializableType')
 
 class ServerInterface:
 	"""
-	An interface class for plugins to control the server
+	ServerInterface is the interface with lots of API for plugins to interact with the server.
+	Its subclass :class:`PluginServerInterface` contains extra APIs for plugins to control the plugin itself
+
+	It's recommend to use ``server`` as the variable name of the ServerInterface. This is widely used in this document
 	"""
 
-	MCDR = True  # Identifier for plugins
+	MCDR = True
+	"""An identifier field for MCDR"""
+
 	__global_instance: Optional['ServerInterface'] = None  # For singleton instance storage
 
 	def __init__(self, mcdr_server: 'MCDReforgedServer'):
@@ -61,7 +66,7 @@ class ServerInterface:
 	@property
 	def logger(self) -> MCDReforgedLogger:
 		"""
-		Yes, a nice logger for you to use
+		A nice logger for you to log message to the console
 		"""
 		plugin = self._mcdr_server.plugin_manager.get_current_running_plugin()
 		if plugin is not None:
@@ -70,7 +75,7 @@ class ServerInterface:
 			return self._mcdr_server.logger
 
 	# ------------------------
-	#          Utils
+	#		  Utils
 	# ------------------------
 
 	@classmethod
@@ -83,8 +88,15 @@ class ServerInterface:
 	def tr(self, translation_key: str, *args, language: Optional[str] = None, **kwargs) -> MessageText:
 		"""
 		Return a translated text corresponded to the translation key and format the text with given args and kwargs
-		If args or kwargs contains RText element, then the result will be a RText, otherwise the result will be a regular str
+
+		If args or kwargs contains :class:`RText <mcdreforged.minecraft.rtext.RTextBase>` element,
+		then the result will be a :class:`RText <mcdreforged.minecraft.rtext.RTextBase>`,
+		otherwise the result will be a regular str
+
 		If the translation key is not recognized, the return value will be the translation key itself
+
+		See :ref:`here <plugin-translation>` for the ways to register translations for your plugin
+
 		:param translation_key: The key of the translation
 		:param args: The args to be formatted
 		:param language: Specific language to be used in this translation, or the language that MCDR is using will be used
@@ -94,9 +106,13 @@ class ServerInterface:
 
 	def rtr(self, translation_key: str, *args, **kwargs) -> RTextMCDRTranslation:
 		"""
-		Return a RText derived component RTextMCDRTranslation, that only translates itself right before displaying or serializing
-		Using this method instead of tr() allows you to display your texts in user's preferred language automatically
-		Of course you can construct RTextMCDRTranslation yourself instead of using this method if you want
+		Return a :class:`~mcdreforged.translation.translation_text.RTextMCDRTranslation` component,
+		that only translates itself right before displaying or serializing
+
+		Using this method instead of :meth:`tr` allows you to display your texts in :ref:`user's preferred language <preference-language>` automatically
+
+		Of course you can construct :class:`~mcdreforged.translation.translation_text.RTextMCDRTranslation` yourself instead of using this method if you want
+
 		:param translation_key: The key of the translation
 		:param args: The args to be formatted
 		:param kwargs: The kwargs to be formatted
@@ -107,15 +123,16 @@ class ServerInterface:
 
 	def as_basic_server_interface(self) -> 'ServerInterface':
 		"""
-		Return a ServerInterface instance. The type of the return value is exactly the ServerInterface
-		It's used for removing the plugin information inside PluginServerInterface when you need to send a ServerInterface
+		Return a :class:`ServerInterface` instance. The type of the return value is exactly the :class:`ServerInterface`
+
+		It's used for removing the plugin information inside :class:`PluginServerInterface` when you need to send a :class:`ServerInterface` as parameter
 		"""
 		return self.get_instance()
 
 	def as_plugin_server_interface(self) -> Optional['PluginServerInterface']:
 		"""
-		Return a PluginServerInterface instance. If current thread is not a MCDR provided thread and the object is not
-		a PluginServerInterface instance, it will return None
+		Return a :class:`PluginServerInterface` instance. If current thread is not a MCDR provided thread and the object is not
+		a :class:`PluginServerInterface` instance, it will return None
 		"""
 		plugin = self._mcdr_server.plugin_manager.get_current_running_plugin()
 		if plugin is not None:
@@ -123,28 +140,33 @@ class ServerInterface:
 		return None
 
 	# ------------------------
-	#      Server Control
+	#	  Server Control
 	# ------------------------
 
 	def start(self) -> bool:
 		"""
-		Start the server
-		:return: If the action succeed it's True. If the server is running or being starting by other plugin return False
+		Start the server. Return if the action succeed.
+
+		If the server is running or being starting by other plugin it will return ``False``
+
+		:return: If the action succeed
 		"""
 		return self._mcdr_server.start_server()
 
 	def stop(self) -> None:
 		"""
 		Soft shutting down the server by sending the correct stop command to the server
-		MCDR will keep running unless exit() is invoked
+
+		This option will not stop MCDR. MCDR will keep running unless :meth:`exit` is invoked
 		"""
 		self._mcdr_server.remove_flag(MCDReforgedFlag.EXIT_AFTER_STOP)
 		self._mcdr_server.stop(forced=False)
 
 	def kill(self) -> None:
 		"""
-		Kill the server process group
-		MCDR will keep running unless exit() is invoked
+		Kill the entire server process group. A hard shutting down
+
+		MCDR will keep running unless :meth:`exit` is invoked
 		"""
 		self._mcdr_server.stop(forced=True)
 
@@ -158,7 +180,10 @@ class ServerInterface:
 	def restart(self) -> None:
 		"""
 		Restart the server
-		It will first soft stop the server and then wait until the server is stopped, then start the server up
+
+		It will first :meth:`soft stop <stop>` the server
+		and then :meth:`wait <wait_for_start>` until the server is stopped,
+		finally :meth:start <start>` the server up
 		"""
 		if self.is_server_running():
 			self.stop()
@@ -167,15 +192,26 @@ class ServerInterface:
 
 	def stop_exit(self) -> None:
 		"""
-		Soft stop the server and exit MCDR
+		:meth:`soft stop <stop>` the server and exit MCDR
 		"""
 		self._mcdr_server.stop(forced=False)
 
 	def exit(self) -> None:
 		"""
 		Exit MCDR when the server is stopped
-		Basically it's the same to invoking set_exit_after_stop_flag(True), but with an extra server not running check
-		:raise: IllegalCallError, if the server is not stopped
+
+		Basically it's the same to invoking :meth:`set_exit_after_stop_flag` with parameter ``True``,
+		but with an extra server not running check
+
+		Example usage::
+
+			server.stop()  # Stop the server
+			# do something A
+			server.wait_for_start()  # Make sure the server is fully stopped. It's necessary to run it in your custom thread
+			# do something B
+			server.exit()  # Exit MCDR
+
+		:raise IllegalCallError: If the server is not stopped
 		"""
 		if self._mcdr_server.is_server_running():
 			raise IllegalCallError('Cannot exit MCDR when the server is running')
@@ -184,9 +220,12 @@ class ServerInterface:
 	def set_exit_after_stop_flag(self, flag_value: bool) -> None:
 		"""
 		Set the flag that indicating if MCDR should exit when the server has stopped
-		If set to true, after the server stops MCDR will exit, otherwise (set to false) MCDR will just keep running
-		The flag value will be set to true everything when the server starts
-		The flag value is displayed in line 5 in command `!!MCDR status`
+
+		If set to ``True``, after the server stops MCDR will exit, otherwise (set to ``False``) MCDR will just keep running
+
+		The flag value will be set to ``True`` everytime when the server starts
+
+		The flag value is displayed in line 5 in command ``!!MCDR status``
 		"""
 		if flag_value:
 			self._mcdr_server.with_flag(MCDReforgedFlag.EXIT_AFTER_STOP)
@@ -214,8 +253,10 @@ class ServerInterface:
 	def get_server_pid(self) -> Optional[int]:
 		"""
 		Return the pid of the server process
+
 		Notes the process with this pid is a bash process, which is the parent process of real server process
 		you might be interested in
+
 		:return: The pid of the server. None if the server is stopped
 		"""
 		if self._mcdr_server.process is not None:
@@ -224,21 +265,24 @@ class ServerInterface:
 
 	def get_server_information(self) -> ServerInformation:
 		"""
-		Return a ServerInformation object indicating the information of the current server, interred from the output of the server
-		Field(s) might be None if the server is offline, or the related information has not been parsed
-		:return: a ServerInformation object
+		Return a :class:`~mcdreforged.info_reactor.server_information.ServerInformation` object indicating
+		the information of the current server, interred from the output of the server
+
+		It's field(s) might be None if the server is offline, or the related information has not been parsed
 		"""
 		return self._mcdr_server.server_information.copy()
 
 	# ------------------------
-	#     Text Interaction
+	#	 Text Interaction
 	# ------------------------
 
 	def execute(self, text: str, *, encoding: Optional[str] = None) -> None:
 		"""
 		Execute a command by sending the command content to server's standard input stream
-		:param str text: The content of the command you want to send
-		:param str encoding: The encoding method for the text
+
+		:param text: The content of the command you want to send
+		:param encoding: The encoding method for the text.
+			Leave it empty to use the encoding method from the configuration of MCDR
 		"""
 		self.logger.debug('Sending command "{}"'.format(text), option=DebugOption.PLUGIN)
 		self._mcdr_server.send(text, encoding=encoding)
@@ -249,10 +293,12 @@ class ServerInterface:
 
 	def tell(self, player: str, text: MessageText, *, encoding: Optional[str] = None) -> None:
 		"""
-		Use command like /tellraw to send the message to the specific player
+		Use command like ``/tellraw`` to send the message to the specific player
+
 		:param player: The name of the player you want to tell
-		:param text: the message you want to send to the player
-		:param encoding: The encoding method for the text
+		:param text: The message you want to send to the player
+		:param encoding: The encoding method for the text.
+			Leave it empty to use the encoding method from the configuration of MCDR
 		"""
 		with RTextMCDRTranslation.language_context(self._mcdr_server.preference_manager.get_preferred_language(player)):
 			command = self.__server_handler.get_send_message_command(player, text, self.get_server_information())
@@ -261,9 +307,11 @@ class ServerInterface:
 
 	def say(self, text: MessageText, *, encoding: Optional[str] = None) -> None:
 		"""
-		Use command like /tellraw @a to broadcast the message in game
-		:param text: the message you want to send
-		:param encoding: The encoding method for the text
+		Use command like ``/tellraw @a`` to broadcast the message in game
+
+		:param text: The message you want to send
+		:param encoding: The encoding method for the text.
+			Leave it empty to use the encoding method from the configuration of MCDR
 		"""
 		command = self.__server_handler.get_broadcast_message_command(text, self.get_server_information())
 		if command is not None:
@@ -272,22 +320,29 @@ class ServerInterface:
 	def broadcast(self, text: MessageText, *, encoding: Optional[str] = None) -> None:
 		"""
 		Broadcast the message in game and to the console
-		:param text: the message you want to send
-		:param encoding: The encoding method for the text
+
+		:param text: The message you want to send
+		:param encoding: The encoding method for the text.
+			Leave it empty to use the encoding method from the configuration of MCDR
 		"""
 		self.say(text, encoding=encoding)
 		misc_util.print_text_to_console(self.logger, text)
 
+	# noinspection PyMethodMayBeStatic
 	def reply(self, info: Info, text: MessageText, *, encoding: Optional[str] = None, console_text: Optional[MessageText] = None):
 		"""
 		Reply to the source of the Info
-		If the Info is from a player then use tell to reply the player
-		Otherwise if the Info is from the console use logger.info to output to the console
-		In the rest of the situations, the Info is not from a user, a IllegalCallError is raised
+
+		If the Info is from a player, then use tell to reply the player;
+		if the Info is from the console, then use ``server.logger.info`` to output to the console;
+		In the rest of the situations, the Info is not from a user,
+		a :class:`~mcdreforged.utils.exception.IllegalCallError` is raised
+
 		:param info: the Info you want to reply to
-		:param text: the message you want to send
-		:param console_text: If it's specified, console_text will be used instead of text when replying to console
+		:param text: The message you want to send
+		:param console_text: If it's specified, *console_text* will be used instead of text when replying to console
 		:param encoding: The encoding method for the text
+		:raise IllegalCallError: If the Info is not from a user
 		"""
 		source = info.get_command_source()
 		if source is None:
@@ -298,7 +353,7 @@ class ServerInterface:
 		source.reply(text, encoding=encoding)
 
 	# ------------------------
-	#      Plugin Queries
+	#	  Plugin Queries
 	# ------------------------
 
 	def __existed_plugin_info_getter(self, plugin_id: str, handler: Callable[['AbstractPlugin'], Any], *, regular: bool):
@@ -313,6 +368,7 @@ class ServerInterface:
 	def get_plugin_metadata(self, plugin_id: str) -> Optional[Metadata]:
 		"""
 		Return the metadata of the specified plugin, or None if the plugin doesn't exist
+
 		:param plugin_id: The plugin id of the plugin to query metadata
 		"""
 		return self.__existed_plugin_info_getter(plugin_id, lambda plugin: plugin.get_metadata(), regular=False)
@@ -320,21 +376,39 @@ class ServerInterface:
 	def get_plugin_file_path(self, plugin_id: str) -> Optional[str]:
 		"""
 		Return the file path of the specified plugin, or None if the plugin doesn't exist
+
 		:param plugin_id: The plugin id of the plugin to query file path
 		"""
 		return self.__existed_plugin_info_getter(plugin_id, lambda plugin: plugin.plugin_path, regular=False)
 
 	def get_plugin_instance(self, plugin_id: str) -> Optional[Any]:
 		"""
-		Return the entrypoint module instance of the specific plugin, or None if the plugin doesn't exist
-		:param plugin_id: The plugin id of the plugin you want
+		Return the :ref:`entrypoint <plugin-entrypoint>` module instance of the specific plugin,
+		or None if the plugin doesn't exist
+
+		If the target plugin is a :ref:`solo plugin <plugin-format-solo>` and it needs to react to events from MCDR,
+		it's quite important to use this instead of manually import the plugin you want,
+		since it's the only way to make your plugin be able to access the same plugin instance to MCDR
+
+		Example usage:
+
+			The entrypoint module of my API plugin with id ``my_api``::
+
+				def some_api(item):
+					pass
+
+			Another plugin that needs my API plugin::
+
+				server.get_plugin_instance('my_api').some_api(an_item)
+
+		:param plugin_id: The plugin id of the plugin you want to get entrypoint module instance
 		:return: A entrypoint module instance, or None if the plugin doesn't exist
 		"""
 		return self.__existed_plugin_info_getter(plugin_id, lambda plugin: plugin.entry_module_instance, regular=True)
 
 	def get_plugin_list(self) -> List[str]:
 		"""
-		Return a list containing all loaded plugin id like ["my_plugin", "another_plugin"]
+		Return a list containing all **loaded** plugin id like ``["my_plugin", "another_plugin"]``
 		"""
 		return [plugin.get_id() for plugin in self._mcdr_server.plugin_manager.get_regular_plugins()]
 
@@ -346,7 +420,7 @@ class ServerInterface:
 
 	def get_unloaded_plugin_list(self) -> List[str]:
 		"""
-		Return a list containing all unloaded plugin file path like ["plugins/MyPlugin.mcdr"]
+		Return a list containing all **unloaded** plugin file path like ``["plugins/MyPlugin.mcdr"]``
 		"""
 		return list(filter(
 			lambda file_path: not self._mcdr_server.plugin_manager.contains_plugin_file(file_path) and plugin_factory.is_plugin(file_path),
@@ -355,7 +429,7 @@ class ServerInterface:
 
 	def get_disabled_plugin_list(self) -> List[str]:
 		"""
-		Return a list containing all disabled plugin file path like ["plugins/MyPlugin.mcdr.disabled"]
+		Return a list containing all **disabled** plugin file path like ["plugins/MyPlugin.mcdr.disabled"]
 		"""
 		return list(filter(
 			lambda file_path: plugin_factory.is_disabled_plugin(file_path),
@@ -372,7 +446,7 @@ class ServerInterface:
 		return result
 
 	# ------------------------
-	#     Plugin Operations
+	#	 Plugin Operations
 	# ------------------------
 
 	# Notes: All plugin manipulation will trigger a dependency check, which might cause unwanted plugin operations
@@ -420,6 +494,7 @@ class ServerInterface:
 	def load_plugin(self, plugin_file_path: str) -> bool:
 		"""
 		Load a plugin from the given file path
+
 		:param plugin_file_path: The file path of the plugin to load. Example: "plugins/my_plugin.py"
 		:return: If the plugin gets loaded successfully
 		"""
@@ -427,7 +502,8 @@ class ServerInterface:
 
 	def enable_plugin(self, plugin_file_path: str) -> bool:
 		"""
-		Enable an unloaded plugin from the given path
+		Enable a disabled plugin from the given path
+
 		:param plugin_file_path: The file path of the plugin to enable. Example: "plugins/my_plugin.py.disabled"
 		:return: If the plugin gets enabled successfully
 		"""
@@ -436,7 +512,8 @@ class ServerInterface:
 	def reload_plugin(self, plugin_id: str) -> Optional[bool]:
 		"""
 		Reload a plugin specified by plugin id
-		:param plugin_id: The id of the plugin to reload. Example: "my_plugin"
+
+		:param plugin_id: The id of the plugin to reload. Example: ``"my_plugin"``
 		:return: A bool indicating if the plugin gets reloaded successfully, or None if plugin not found
 		"""
 		return self.__existed_regular_plugin_manipulate(plugin_id, lambda mgr: mgr.reload_plugin, lambda lor: lor.reload_result, check_loaded=True)
@@ -444,15 +521,17 @@ class ServerInterface:
 	def unload_plugin(self, plugin_id: str) -> Optional[bool]:
 		"""
 		Unload a plugin specified by plugin id
-		:param plugin_id: The id of the plugin to unload. Example: "my_plugin"
+
+		:param plugin_id: The id of the plugin to unload. Example: ``"my_plugin"``
 		:return: A bool indicating if the plugin gets unloaded successfully, or None if plugin not found
 		"""
 		return self.__existed_regular_plugin_manipulate(plugin_id, lambda mgr: mgr.unload_plugin, lambda lor: lor.unload_result, check_loaded=False)
 
 	def disable_plugin(self, plugin_id: str) -> Optional[bool]:
 		"""
-		Disable an unloaded plugin from the given path
-		:param plugin_id: The id of the plugin to disable. Example: "my_plugin"
+		Disable an unloaded plugin specified by plugin id
+
+		:param plugin_id: The id of the plugin to disable. Example: ``"my_plugin"``
 		:return: A bool indicating if the plugin gets disabled successfully, or None if plugin not found
 		"""
 		return self.__existed_regular_plugin_manipulate(plugin_id, lambda mgr: mgr.disable_plugin, lambda lor: lor.unload_result, check_loaded=False)
@@ -465,20 +544,37 @@ class ServerInterface:
 
 	def refresh_changed_plugins(self) -> None:
 		"""
-		Reload all changed plugins, load all new plugins and then unload all removed plugins
+		Reload all **changed** plugins, load all new plugins and then unload all removed plugins
 		"""
 		self._mcdr_server.plugin_manager.refresh_changed_plugins()
 
 	def dispatch_event(self, event: PluginEvent, args: Tuple[Any, ...], *, on_executor_thread: bool = True) -> None:
 		"""
 		Dispatch an event to all loaded plugins
+
 		The event will be immediately dispatch if it's on the task executor thread, or gets enqueued if it's on other thread
-		:param event: The event to dispatch. It need to be a PluginEvent instance. For simple usage, you can create a
-		LiteralEvent instance for this argument
-		:param args: The argument that will be used to invoke the event listeners. An ServerInterface instance will be
-		automatically added to the beginning of the argument list
+
+		.. note:: You cannot dispatch an event with the same event id to any MCDR built-in event
+
+		Example:
+
+			For the event dispatcher plugin::
+
+				server.dispatch_event(LiteralEvent('my_plugin.my_event'), (1, 'a'))
+
+			For the event listener plugin::
+
+				def do_something(server: PluginServerInterface, int_data: int, str_data: str):
+					pass
+
+				server.register_event_listener('my_plugin.my_event', do_something)
+
+		:param event: The event to dispatch. It needs to be a :class:`~mcdreforged.plugin.plugin_event.PluginEvent`
+			instance. For simple usage, you can create a :class:`~mcdreforged.plugin.plugin_event.LiteralEvent` instance for this argument
+		:param args: The argument that will be used to invoke the event listeners. An :class:`PluginServerInterface` instance
+			will be automatically added to the beginning of the argument list
 		:param on_executor_thread: By default the event will be dispatched in a new task in task executor thread
-		If it's set to false. The event will be dispatched immediately
+			If it's set to False. The event will be dispatched immediately
 		"""
 		misc_util.check_type(event, PluginEvent)
 		if MCDRPluginEvents.contains_id(event.id):
@@ -486,15 +582,19 @@ class ServerInterface:
 		self._mcdr_server.plugin_manager.dispatch_event(event, args, on_executor_thread=on_executor_thread)
 
 	# ------------------------
-	#        Permission
+	#		Permission
 	# ------------------------
 
 	def get_permission_level(self, obj: Union[str, Info, CommandSource]) -> int:
 		"""
 		Return an int indicating permission level number the given object has
-		The object could be a str indicating the name of a player, an Info instance or a command source
-		:param obj: The object your are querying
-		:raise: TypeError, if the type of the given object is not supported for permission querying
+
+		The object could be a str indicating the name of a player,
+		an :class:`~mcdreforged.info_reactor.info.Info` instance
+		or a :class:`command source <mcdreforged.command.command_source.CommandSource>`
+
+		:param obj: The object you are querying
+		:raise TypeError: If the type of the given object is not supported for permission querying
 		"""
 		if isinstance(obj, Info):  # Info instance
 			obj = obj.get_command_source()
@@ -510,10 +610,11 @@ class ServerInterface:
 	def set_permission_level(self, player: str, value: PermissionParam) -> None:
 		"""
 		Set the permission level of the given player
+
 		:param player: The name of the player that you want to set his/her permission level
 		:param value: The target permission level you want to set the player to. It can be an int or a str as long as
-		it's related to the permission level. Available examples: 1, '1', 'user'
-		:raise: TypeError if the value parameter doesn't proper represent a permission level
+			it's related to the permission level. Available examples: ``1``, ``"1"``, ``"user"``
+		:raise TypeError: If the value parameter doesn't properly represent a permission level
 		"""
 		level = PermissionLevel.get_level(value)
 		if level is None:
@@ -521,22 +622,24 @@ class ServerInterface:
 		self._mcdr_server.permission_manager.set_permission_level(player, level)
 
 	# ------------------------
-	#         Command
+	#		 Command
 	# ------------------------
 
 	def get_plugin_command_source(self) -> PluginCommandSource:
 		"""
 		Return a simple plugin command source for e.g. command execution
-		It's not player or console, it has maximum permission level, it use ServerInterface.logger for replying
+
+		It's not player or console, it has maximum permission level, it uses :attr:`logger` for replying
 		"""
 		return PluginCommandSource(self, None)
 
 	def execute_command(self, command: str, source: CommandSource = None) -> None:
 		"""
-		Execute a single command using the command system of MCDR
-		:param str command: The command you want to execute
-		:param CommandSource source: The command source that is used to execute the command. If it's not specified MCDR
-		will use ServerInterface.get_plugin_command_source as fallback command source
+		Execute a single command
+
+		:param command: The command you want to execute
+		:param source: The command source that is used to execute the command. If it's not specified MCDR
+			will use :meth:`get_plugin_command_source` to get a fallback command source
 		"""
 		if source is None:
 			source = self.get_plugin_command_source()
@@ -545,26 +648,29 @@ class ServerInterface:
 		self._mcdr_server.command_manager.execute_command(command, source)
 
 	# ------------------------
-	#        Preference
+	#		Preference
 	# ------------------------
 
-	def get_preference(self, obj: Union[str, CommandSource]) -> PreferenceItem:
+	def get_preference(self, obj: Union[str, PlayerCommandSource, ConsoleCommandSource]) -> PreferenceItem:
 		"""
 		Return the MCDR preference of the given object. The object can be a str indicating the name of a player, or a
-		command source. For command source, only PlayerCommandSource and ConsoleCommandSource are supported
+		command source. For command source, only :class:`~mcdreforged.command.command_source.PlayerCommandSource`
+		and :class:`~mcdreforged.command.command_source.ConsoleCommandSource` are supported
+
 		:param obj: The object to querying preference
-		:raise: TypeError, if the type of the given object is not supported for preference querying
+		:raise TypeError: If the type of the given object is not supported for preference querying
 		"""
 		pref = self._mcdr_server.preference_manager.get_preference(obj, strict_type_check=True)
 		return PreferenceItem.deserialize(pref.serialize())  # make a copy
 
 	# ------------------------
-	#           Misc
+	#		   Misc
 	# ------------------------
 
 	def is_on_executor_thread(self) -> bool:
 		"""
 		Return if the current thread is the task executor thread
+
 		Task executor thread is the main thread to parse messages and trigger listeners where some ServerInterface APIs
 		are required to be invoked on
 		"""
@@ -573,7 +679,8 @@ class ServerInterface:
 	def rcon_query(self, command: str) -> Optional[str]:
 		"""
 		Send command to the server through rcon connection
-		:param str command: The command you want to send to the rcon server
+
+		:param command: The command you want to send to the rcon server
 		:return: The result that server returned from rcon. Return None if rcon is not running or rcon query failed
 		"""
 		return self._mcdr_server.rcon_manager.send_command(command)
@@ -593,16 +700,18 @@ class ServerInterface:
 	def schedule_task(self, callable_: Callable[[], Any], *, block: bool = False, timeout: Optional[float] = None) -> None:
 		"""
 		Schedule a callback task to be run in task executor thread
+
 		:param callable_: The callable object to be run. It should accept 0 parameter
 		:param block: If blocks until the callable finished execution
-		:param timeout: The timeout of the blocking operation if block=True
+		:param timeout: The timeout of the blocking operation if ``block=True``
 		"""
 		self._mcdr_server.task_executor.add_regular_task(callable_, block=block, timeout=timeout)
 
 
 class PluginServerInterface(ServerInterface):
 	"""
-	An extended ServerInterface class that adds the ability for plugins to control the plugin itself
+	Derived from :class:`ServerInterface`, :class:`PluginServerInterface` adds the ability
+	for plugins to control the plugin itself on the basis of :class:`ServerInterface`
 	"""
 
 	def __init__(self, mcdr_server: 'MCDReforgedServer', plugin: AbstractPlugin):
@@ -631,15 +740,17 @@ class PluginServerInterface(ServerInterface):
 		return PluginCommandSource(self, self.__plugin)
 
 	# ------------------------
-	#     Plugin Registry
+	#	 Plugin Registry
 	# ------------------------
 
 	def register_event_listener(self, event: Union[PluginEvent, str], callback: Callable, priority: Optional[int] = None) -> None:
 		"""
 		Register an event listener for the current plugin
-		:param event: The id of the event, or a PluginEvent instance. It indicates the target event for the plugin to listen
+
+		:param event: The id of the event, or a :class:`~mcdreforged.plugin.plugin_event.PluginEvent` instance.
+			It indicates the target event for the plugin to listen
 		:param callback: The callback listener method for the event
-		:param priority: The priority of the listener. It will be set to the default value 1000 if it's not specified
+		:param priority: The priority of the listener. It will be set to the default value ``1000`` if it's not specified
 		"""
 		if priority is None:
 			priority = DEFAULT_LISTENER_PRIORITY
@@ -650,31 +761,36 @@ class PluginServerInterface(ServerInterface):
 	def register_command(self, root_node: Literal) -> None:
 		"""
 		Register a command for the current plugin
-		:param root_node: the root node of your command tree. It should be a Literal node
+
+		:param root_node: the root node of your command tree. It should be a :class:`~mcdreforged.command.builder.nodes.basic.Literal` node
 		"""
 		self.__plugin.register_command(root_node)
 
 	def register_help_message(self, prefix: str, message: Union[MessageText, TranslationKeyDictRich], permission: int = PermissionLevel.MINIMUM_LEVEL) -> None:
 		"""
-		Register a help message for the current plugin, which is used in !!help command
+		Register a help message for the current plugin, which is used in ``!!help`` command
+
 		:param prefix: The help command of your plugin. When player click on the displayed message it will suggest this
-		prefix parameter to the player. It's recommend to set it to the entry command of your plugin
-		:param message: A neat command description. It can be a str or a RText. Also it can be a dict maps from language to description message
-		:param permission: The minimum permission level for the user to see this help message. With default, anyone
-		can see this message
+			prefix parameter to the player. It's recommend to set it to the entry command of your plugin
+		:param message: A neat command description. It can be a str or a :class:`RText <mcdreforged.minecraft.rtext.RTextBase>`
+			Also, it can be a dict maps from language to description message
+		:param permission: The minimum permission level for the user to see this help message.
+			With default permission, anyone can see this message
 		"""
 		self.__plugin.register_help_message(HelpMessage(self.__plugin, prefix, message, permission))
 
 	def register_translation(self, language: str, mapping: TranslationKeyDictNested) -> None:
 		"""
 		Register a translation mapping for a specific language for the current plugin
+
 		:param language: The language of this translation
-		:param mapping: A dict which maps translation keys into translated text. The translation key could be expressed as node name which under root node or the path of a nested multi-level nodes
+		:param mapping: A dict which maps translation keys into translated text.
+			The translation key could be expressed as node name which under root node or the path of a nested multi-level nodes
 		"""
 		self.__plugin.register_translation(language, mapping)
 
 	# ------------------------
-	#      Plugin Utils
+	#	  Plugin Utils
 	# ------------------------
 
 	def get_self_metadata(self) -> Metadata:
@@ -686,8 +802,15 @@ class PluginServerInterface(ServerInterface):
 	def get_data_folder(self) -> str:
 		"""
 		Return a unified data directory path for the current plugin
-		The path of the folder will be "config/plugin_id/" where "plugin_id" is the id of the current plugin
-		If the directory does not exist, create it
+
+		The path of the folder will be ``config/plugin_id/`` where ``plugin_id`` is the id of the current plugin
+		if the directory does not exist, create it
+
+		Example::
+
+			with open(os.path.join(server.get_data_folder(), 'my_data.txt'), 'w') as file_handler:
+				write_some_data(file_handler)
+
 		:return: The path to the data directory
 		"""
 		plugin_data_folder = os.path.join(plugin_constant.PLUGIN_CONFIG_DIRECTORY, self.__plugin.get_id())
@@ -698,9 +821,16 @@ class PluginServerInterface(ServerInterface):
 	def open_bundled_file(self, related_file_path: str) -> IO[bytes]:
 		"""
 		Open a file inside the plugin with readonly binary mode
+
+		Example::
+
+			with server.open_bundled_file('message.txt') as file_handler:
+				message = file_handler.read().decode('utf8')
+			server.logger.info('A message from the file: {}'.format(message))
+
 		:param related_file_path: The related file path in your plugin to the file you want to open
 		:return: A un-decoded bytes file-like object
-		:raise: FileNotFoundError if the plugin is not a packed plugin (that is, a solo plugin)
+		:raise FileNotFoundError: if the plugin is not a packed plugin (that is, a solo plugin)
 		"""
 		if not isinstance(self.__plugin, MultiFilePlugin):
 			raise FileNotFoundError('Only packed plugin supported this API, found plugin type: {}'.format(self.__plugin.__class__))
@@ -713,17 +843,46 @@ class PluginServerInterface(ServerInterface):
 		) -> Union[dict, SerializableType]:
 		"""
 		A simple method to load a dict or Serializable type config from a json file
+
 		Default config is supported. Missing key-values in the loaded config object will be filled using the default config
+		
+		Example 1::
+
+			config = {
+				'settingA': 1
+				'settingB': 'xyz'
+			}
+			default_config = config.copy()
+
+			def on_load(server: PluginServerInterface, prev_module):
+				global config
+				config = server.load_config_simple('my_config.json', default_config)
+
+		Example 2::
+
+			class Config(Serializable):
+				settingA: int = 1
+				settingB: str = 'xyz'
+
+			config: Config
+
+			def on_load(server: PluginServerInterface, prev_module):
+				global config
+				config = server.load_config_simple(target_class=Config)
+			
+		Assuming that the plugin id is ``my_plugin``, then the config file will be in ``config/my_plugin/my_config.json``
+
 		:param file_name: The name of the config file. It can also be a path to the config file
 		:param default_config: A dict contains the default config. It's required when the config file is missing,
-		or exception will be risen. If target_class is given and default_config is missing, the default values in target_class
-		will be used when the config file is missing
-		:param in_data_folder: If True, the parent directory of file operating is the data folder of the plugin
+			or exception will be risen. If *target_class* is given and *default_config* is missing, the default values in *target_class*
+			will be used when the config file is missing
+		:param in_data_folder: If True, the parent directory of file operating is the :meth:`data folder <get_data_folder>` of the plugin
 		:param echo_in_console: If logging messages in console about config loading
 		:param source_to_reply: The command source for replying logging messages
-		:param target_class: A class derived from Serializable. When specified the loaded config data will be deserialized
-		to a instance of target_class which will be returned as return value
-		:param encoding: The encoding method to read the config file
+		:param target_class: A class derived from :class:`~mcdreforged.utils.serializer.Serializable`.
+			When specified the loaded config data will be deserialized
+			to an instance of *target_class* which will be returned as return value
+		:param encoding: The encoding method to read the config file. Default ``"utf8"``
 		:return: A dict contains the loaded and processed config
 		"""
 		def log(msg: str):
@@ -784,10 +943,11 @@ class PluginServerInterface(ServerInterface):
 	) -> None:
 		"""
 		A simple method to save your dict or Serializable type config as a json file
+
 		:param config: The config instance to be saved
 		:param file_name: The name of the config file. It can also be a path to the config file
-		:param in_data_folder: If True, the parent directory of file operating is the data folder of the plugin
-		:param encoding: The encoding method to write the config file
+		:param in_data_folder: If True, the parent directory of file operating is the :meth:`data folder <get_data_folder>` of the plugin
+		:param encoding: The encoding method to write the config file. Default ``"utf8"``
 		"""
 		config_file_path = os.path.join(self.get_data_folder(), file_name) if in_data_folder else file_name
 		if isinstance(config, Serializable):

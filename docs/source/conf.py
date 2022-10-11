@@ -84,6 +84,7 @@ gettext_compact = False  # optional
 # -- Options for sphinx.ext.autodoc -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html
 autodoc_member_order = 'bysource'
+autodoc_inherit_docstrings = False  # so overridden methods won't pop up
 
 
 def autodoc_setup(app):

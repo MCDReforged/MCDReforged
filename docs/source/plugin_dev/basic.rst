@@ -66,6 +66,8 @@ Different `plugin format <plugin_format.html>`__ has different ways to declare i
 
 See the `metadata document <metadata.html>`__ for more information
 
+.. _plugin-entrypoint:
+
 Entrypoint
 ----------
 
@@ -156,6 +158,8 @@ Help message
 Plugin can register its help message with ``server.register_help_message`` to MCDR, so that users can use `!!help command <../command.html#help-command>`__ to view the help messages of all commands
 
 Take a look at the reference of ``register_help_message`` method in `PluginServerInterface <classes/PluginServerInterface.html#register-help-message>`__ document for more details of its usage
+
+.. _plugin-translation:
 
 Translation
 ^^^^^^^^^^^
