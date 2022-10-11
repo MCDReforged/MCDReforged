@@ -1,18 +1,10 @@
 
+.. _class-ref-command:
+
 Command
 =======
 
-Basics
-------
-
-.. autoclass:: mcdreforged.command.builder.common.CommandContext
-
-
-Command Exceptions
---------------------
-
-.. automodule:: mcdreforged.command.builder.exception
-    :members:
+:ref:`API package<api-package>` path: ``mcdreforged.api.command``
 
 
 Command Source
@@ -34,4 +26,21 @@ Command Builder
 ---------------
 
 .. autoclass:: mcdreforged.command.builder.tools.SimpleCommandBuilder
+    :members:
+
+
+Exceptions
+----------
+
+.. automodule:: mcdreforged.command.builder.exception
+    :members:
+
+Misc
+----
+
+.. autoclass:: mcdreforged.command.builder.common.CommandContext
+    :members:
+
+
+.. automodule:: mcdreforged.command.builder.command_builder_util
     :members:

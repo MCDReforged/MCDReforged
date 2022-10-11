@@ -57,6 +57,16 @@ class CommandSuggestions(List[CommandSuggestion]):
 
 
 class CommandContext(Dict[str, Any]):
+	"""
+	A :class:`CommandContext` stores the information of the command parsing process. It's a class inherited from dict
+
+	The most common use case for :class:`CommandContext` is storing the parsed result from
+	:class:`argument nodes<mcdreforged.command.builder.nodes.basic.ArgumentNode>`.
+	The name of the argument node and the parsed result will be stored as a key-value pair in :class:`CommandContext`,
+	which means you can use dict method like ``context['arg_name']`` to access these argument values
+
+	:class:`CommandContext` also provides some other useful methods for getting information of the current command context
+	"""
 	def __init__(self, source: 'CommandSource', command: str):
 		super().__init__()
 		self.__source = source
@@ -65,6 +75,9 @@ class CommandContext(Dict[str, Any]):
 		self.__node_path = []  # type: List[AbstractNode]
 
 	def copy(self) -> 'CommandContext':
+		"""
+		:meta private:
+		"""
 		copied = CommandContext(self.source, self.command)
 		copied.update(self)
 		copied.__cursor = self.__cursor
@@ -73,26 +86,44 @@ class CommandContext(Dict[str, Any]):
 
 	@property
 	def source(self) -> 'CommandSource':
+		"""
+		The command source that triggered the current command parsing
+		"""
 		return self.__source
 
 	@property
 	def command(self) -> str:
+		"""
+		The complete command string being parsing
+		"""
 		return self.__command
 
 	@property
 	def command_read(self) -> str:
+		"""
+		The already-parsed command
+		"""
 		return self.__command[:self.__cursor]
 
 	@property
 	def command_remaining(self) -> str:
+		"""
+		The to-be-parsed command, i.e. the remaining command
+		"""
 		return self.__command[self.__cursor:]
 
 	@property
 	def cursor(self) -> int:
+		"""
+		The index of the complete command str, the cursor of the command parsing process
+		"""
 		return self.__cursor
 
 	@property
 	def node_path(self) -> List['AbstractNode']:
+		"""
+		The path from the root node of the command tree to the current command node
+		"""
 		return self.__node_path
 
 	# -------------------------
@@ -104,6 +135,8 @@ class CommandContext(Dict[str, Any]):
 		"""
 		**Not public API, only used in command parsing**
 		Change the current cursor position, and store the parsing value
+
+		:meta private:
 		"""
 		from mcdreforged.command.builder.nodes.basic import ArgumentNode
 
@@ -124,6 +157,8 @@ class CommandContext(Dict[str, Any]):
 		"""
 		**Not public API, only used in command parsing**
 		Enter a command node, maintain the node_path
+
+		:meta private:
 		"""
 		self.__node_path.append(node)
 		try:

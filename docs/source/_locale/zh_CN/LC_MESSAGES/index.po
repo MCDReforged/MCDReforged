@@ -51,9 +51,8 @@ msgid "Development"
 msgstr "开发"
 
 #: ../index.rst:10
-#, fuzzy
-msgid "References"
-msgstr "偏好"
+msgid "Class References"
+msgstr "类参考"
 
 #: ../index.rst:10
 msgid "Home"

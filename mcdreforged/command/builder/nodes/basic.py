@@ -90,7 +90,10 @@ class AbstractNode(ABC):
 		"""
 		Set the callback function of this node. When the command parsing finished at this node, the callback function will be executed
 
-		The callback function is allowed to accept 0 to 2 arguments (a ``CommandSource`` as command source and a ``dict`` as context). For example, the following 4 functions are available callbacks::
+		The callback function is allowed to accept 0 to 2 arguments
+		(a :class:`~mcdreforged.command.command_source.CommandSource` as command source
+		and a :class:`dict` (:class:`~mcdreforged.command.builder.common.CommandContext`) as context).
+		For example, the following 4 functions are available callbacks::
 
 			def callback1():
 				pass
@@ -111,7 +114,8 @@ class AbstractNode(ABC):
 
 		This dynamic callback argument adaptation is used in all callback invoking of the command nodes
 
-		:param func: A callable that accepts up to 2 arguments. Argument list: :class:`CommandSource`, :class:`dict` (:class:`CommandContext`)
+		:param func: A callable that accepts up to 2 arguments.
+			Argument list: :class:`~mcdreforged.command.command_source.CommandSource`, :class:`dict` (:class:`~mcdreforged.command.builder.common.CommandContext`)
 		"""
 		self._callback = func
 		return self
@@ -127,8 +131,10 @@ class AbstractNode(ABC):
 		At this time if the *failure_message_getter* parameter is available, MCDR will invoke *failure_message_getter* to get the message string
 		of the ``RequirementNotMet`` exception, otherwise a default message will be used
 
-		:param requirement: A callable that accepts up to 2 arguments and returns a bool. Argument list: :class:`CommandSource`, :class:`dict` (:class:`CommandContext`)
-		:param failure_message_getter: An optional callable that accepts up to 2 arguments and returns a str or a :class:`RTextBase`. Argument list: :class:`CommandSource`, :class:`dict` (:class:`CommandContext`)
+		:param requirement: A callable that accepts up to 2 arguments and returns a bool.
+			Argument list: :class:`~mcdreforged.command.command_source.CommandSource`, :class:`dict` (:class:`~mcdreforged.command.builder.common.CommandContext`)
+		:param failure_message_getter: An optional callable that accepts up to 2 arguments and returns a str or a :class:`~mcdreforged.minecraft.rtext.RTextBase`.
+			Argument list: :class:`~mcdreforged.command.command_source.CommandSource`, :class:`dict` (:class:`~mcdreforged.command.builder.common.CommandContext`)
 
 		Example usages::
 
@@ -176,8 +182,8 @@ class AbstractNode(ABC):
 
 		When the user input ``!!whereis`` in the console and a space character, MCDR will show the suggestions ``'Steve'`` and ``'Alex'``
 
-		:param suggestion: A callable function which accepts maximum 2 parameters (command source and context)
-			and return an iterable of str indicating the current command suggestions
+		:param suggestion: A callable function which accepts up to 2 parameters and return an iterable of str indicating the current command suggestions.
+			Argument list: :class:`~mcdreforged.command.command_source.CommandSource`, :class:`dict` (:class:`~mcdreforged.command.builder.common.CommandContext`)
 		"""
 		self._suggestion_getter = suggestion
 		return self
@@ -187,10 +193,11 @@ class AbstractNode(ABC):
 		When a command error occurs, the given will invoke the given handler to handle with the error
 
 		:param error_type: A class that is subclass of :class:`CommandError`
-		:param handler: A callable that accepts up to 3 arguments. Argument list: :class:`CommandSource`, :class:`CommandError`, :class:`dict` (:class:`CommandContext`)
-		:keyword handled: If handled is set to True, ``error.set_handled()`` is called automatically when invoking the handler callback
-
-		For uses about ``error.set_handled()``, check the :meth:`CommandError.set_handled` class reference
+		:param handler: A callable that accepts up to 3 arguments.
+			Argument list: :class:`~mcdreforged.command.builder.exception.CommandError`, :class:`~mcdreforged.command.command_source.CommandSource`,
+			:class:`dict` (:class:`~mcdreforged.command.builder.common.CommandContext`)
+		:keyword handled: If handled is set to True, :meth:`CommandError.set_handled<mcdreforged.command.builder.exception.CommandError.set_handled>`
+			is called automatically when invoking the handler callback
 		"""
 		if not issubclass(error_type, CommandError):
 			raise TypeError('error_type parameter should be a class inherited from CommandError, but class {} found'.format(error_type))
@@ -462,6 +469,9 @@ class Literal(EntryNode):
 		return '|'.join(sorted(self.literals))
 
 	def suggests(self, suggestion: SUGGESTS_CALLBACK) -> 'AbstractNode':
+		"""
+		:meta private:
+		"""
 		raise IllegalNodeOperation('Literal node doe not support suggests')
 
 	def parse(self, text):

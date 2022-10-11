@@ -4,12 +4,11 @@
 # package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-10 16:34+0800\n"
+"POT-Creation-Date: 2022-10-11 17:16+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,11 +17,19 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.1\n"
 
-#: ../plugin_dev/references/index.rst:4
+#: ../class_references/index.rst:8
 msgid "Command"
-msgstr ""
+msgstr "指令"
 
-#: ../plugin_dev/references/index.rst:2
-msgid "References"
-msgstr ""
+#: ../class_references/index.rst:2
+msgid "Class References"
+msgstr "类参考"
+
+#: ../class_references/index.rst:4
+msgid "The class references of MCDR"
+msgstr "MCDR 的类参考文档"
+
+#: ../class_references/index.rst:6
+msgid "If you are just a user of MCDR, run! Don't read!"
+msgstr "如果你仅仅是一个 MCDR 的用户，快跑！别看！"
 

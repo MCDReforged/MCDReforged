@@ -8,7 +8,15 @@ if TYPE_CHECKING:
 
 
 class SimpleCommandBuilder:
+	"""
+	A tree-free command builder for easier command building. Declare & Define, that's all you need
+
+	.. versionadded:: v2.6.0
+	"""
 	class Error(Exception):
+		"""
+		Custom exception to be thrown in :class:`SimpleCommandBuilder`
+		"""
 		pass
 
 	def __init__(self):
@@ -99,7 +107,7 @@ class SimpleCommandBuilder:
 
 		:param arg_name: The name of the argument node. It can be quoted with ``"<>"`` if you want. Examples: ``"my_arg"``, ``"<my_arg>"``
 		:param node: An argument node constructor, that accepts the argument name as the only parameter
-			and return an:class:`~mcdreforged.command.builder.nodes.basic.ArgumentNode` object
+			and return an :class:`~mcdreforged.command.builder.nodes.basic.ArgumentNode` object
 		"""
 		if not self.__is_arg(arg_name):
 			arg_name = self.__make_arg(arg_name)

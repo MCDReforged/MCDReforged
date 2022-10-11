@@ -52,3 +52,4 @@ TODO
 
 - independent references pages
 - api package pos in docstring
+- yeet all `。`

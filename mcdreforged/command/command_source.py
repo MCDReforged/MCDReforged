@@ -21,10 +21,10 @@ class CommandSource(ABC):
 	Class inheriting tree::
 
 		CommandSource
-		 ├─ InfoCommandSource
-		 │   ├─ PlayerCommandSource
-		 │   └─ ConsoleCommandSource
-		 └─ PluginCommandSource
+		├── InfoCommandSource
+		│   ├── PlayerCommandSource
+		│   └── ConsoleCommandSource
+		└── PluginCommandSource
 
 	Plugins can declare a class inherited from :class:`CommandSource` to create their own command source
 	"""

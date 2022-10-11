@@ -1,0 +1,606 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, Fallen_Breath
+# This file is distributed under the same license as the MCDReforged
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: MCDReforged \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-10-10 16:34+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.1\n"
+
+#: ../plugin_dev/references/command.rst:3
+msgid "Command"
+msgstr ""
+
+#: ../plugin_dev/references/command.rst:7
+msgid "Basics"
+msgstr ""
+
+#: mcdreforged.command.builder.exception.CommandError:1 of
+msgid ""
+"The basic error, for errors raising when a command source is executing a "
+"command"
+msgstr ""
+
+#: ../plugin_dev/references/command.rst:14
+msgid "Command Source"
+msgstr ""
+
+#: mcdreforged.command.command_source.CommandSource.reply:1
+#: mcdreforged.command.command_source.PluginCommandSource.reply:1 of
+msgid ""
+"Reply to the command source :param message: The message you want to send."
+" It will be mapped with str() unless it's a RTextBase"
+msgstr ""
+
+#: mcdreforged.command.command_source.InfoCommandSource:1 of
+msgid "Command source generated from info"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.on_error
+#: mcdreforged.command.command_source.ConsoleCommandSource.reply
+#: mcdreforged.command.command_source.PlayerCommandSource.reply of
+msgid "Keyword Arguments"
+msgstr ""
+
+#: mcdreforged.command.command_source.PlayerCommandSource.reply:1 of
+msgid "encoding method for server_interface.tell"
+msgstr ""
+
+#: mcdreforged.command.command_source.ConsoleCommandSource.reply:1 of
+msgid "If it's specified, use it instead of param message"
+msgstr ""
+
+#: ../plugin_dev/references/command.rst:20
+msgid "Command Nodes"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode:1 of
+msgid ""
+":class:`AbstractNode` is base class of all command nodes. It's also an "
+"abstract class. It provides several methods for building up the command "
+"tree"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.then:1 of
+msgid "Attach a child node to its children list, and then return itself"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.then:3 of
+msgid "It's used for building the command tree structure"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.arguments.Boolean.parse
+#: mcdreforged.command.builder.nodes.arguments.Enumeration.parse
+#: mcdreforged.command.builder.nodes.arguments.Float.parse
+#: mcdreforged.command.builder.nodes.arguments.GreedyText.parse
+#: mcdreforged.command.builder.nodes.arguments.Integer.parse
+#: mcdreforged.command.builder.nodes.arguments.Number.parse
+#: mcdreforged.command.builder.nodes.arguments.NumberNode.at_min
+#: mcdreforged.command.builder.nodes.arguments.QuotableText.parse
+#: mcdreforged.command.builder.nodes.arguments.QuotableText.suggests
+#: mcdreforged.command.builder.nodes.arguments.Text.parse
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.on_error
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.parse
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.print_tree
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.redirects
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.requires
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.runs
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.suggests
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.then
+#: mcdreforged.command.builder.nodes.basic.EntryNode.execute
+#: mcdreforged.command.builder.nodes.basic.EntryNode.generate_suggestions
+#: mcdreforged.command.builder.nodes.basic.Literal.parse
+#: mcdreforged.command.builder.nodes.basic.Literal.suggests
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.arg
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.command
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.literal
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.print_tree
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.register of
+msgid "Parameters"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.then:5 of
+msgid "A node instance to be added to current node's children list"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.then:7
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.print_tree:3 of
+msgid "Example::"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.runs:1 of
+msgid ""
+"Set the callback function of this node. When the command parsing finished"
+" at this node, the callback function will be executed"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.runs:3 of
+msgid ""
+"The callback function is allowed to accept 0 to 2 arguments (a "
+"``CommandSource`` as command source and a ``dict`` as context). For "
+"example, the following 4 functions are available callbacks::"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.runs:20 of
+msgid "Both of them can be used as the argument of the ``runs`` method"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.runs:22 of
+msgid ""
+"This dynamic callback argument adaptation is used in all callback "
+"invoking of the command nodes"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.runs:24 of
+msgid ""
+"A callable that accepts up to 2 arguments. Argument list: "
+":class:`CommandSource`, :class:`dict` (:class:`CommandContext`)"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.requires:1 of
+msgid ""
+"Set the requirement tester callback of the node. When entering this node,"
+" MCDR will invoke the requirement tester to see if the current command "
+"source and context match your specific condition."
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.requires:4 of
+msgid ""
+"If the tester callback return True, nothing will happen, MCDR will "
+"continue parsing the rest of the command"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.requires:6 of
+msgid ""
+"If the tester callback return False, a ``RequirementNotMet`` exception "
+"will be risen. At this time if the *failure_message_getter* parameter is "
+"available, MCDR will invoke *failure_message_getter* to get the message "
+"string of the ``RequirementNotMet`` exception, otherwise a default "
+"message will be used"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.requires:10 of
+msgid ""
+"A callable that accepts up to 2 arguments and returns a bool. Argument "
+"list: :class:`CommandSource`, :class:`dict` (:class:`CommandContext`)"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.requires:11 of
+msgid ""
+"An optional callable that accepts up to 2 arguments and returns a str or "
+"a :class:`RTextBase`. Argument list: :class:`CommandSource`, "
+":class:`dict` (:class:`CommandContext`)"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.requires:13 of
+msgid "Example usages::"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.redirects:1 of
+msgid "Redirect all further child nodes command parsing to another given node"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.redirects:3 of
+msgid "Example use cases:"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.redirects:5 of
+msgid ""
+"You want a short command and full-path command that will all execute the "
+"same commands"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.redirects:6 of
+msgid ""
+"You want to repeatedly re-enter a command node's children when parsing "
+"commands"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.redirects:8 of
+msgid ""
+"Pay attention to the difference between :meth:`redirects` and "
+":meth:`then`. :meth:`redirects` is to redirect the child nodes, and "
+":meth:`then` is to add a child node"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.redirects:11 of
+msgid "A node instance which current node is redirecting to"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.arguments.QuotableText.suggests:1
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.suggests:1
+#: mcdreforged.command.builder.nodes.basic.Literal.suggests:1 of
+msgid "Set the provider for command suggestions of this node"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.arguments.QuotableText.suggests:3
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.suggests:3
+#: mcdreforged.command.builder.nodes.basic.Literal.suggests:3 of
+msgid ":class:`Literal` node does not support this method"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.arguments.QuotableText.suggests:5
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.suggests:5
+#: mcdreforged.command.builder.nodes.basic.Literal.suggests:5
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.arg:6 of
+msgid "Examples::"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.arguments.QuotableText.suggests:14
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.suggests:14
+#: mcdreforged.command.builder.nodes.basic.Literal.suggests:14 of
+msgid ""
+"When the user input ``!!whereis`` in the console and a space character, "
+"MCDR will show the suggestions ``'Steve'`` and ``'Alex'``"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.arguments.QuotableText.suggests:16
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.suggests:16
+#: mcdreforged.command.builder.nodes.basic.Literal.suggests:16 of
+msgid ""
+"A callable function which accepts maximum 2 parameters (command source "
+"and context) and return an iterable of str indicating the current command"
+" suggestions"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.on_error:1 of
+msgid ""
+"When a command error occurs, the given will invoke the given handler to "
+"handle with the error"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.on_error:3 of
+msgid "A class that is subclass of :class:`CommandError`"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.on_error:4 of
+msgid ""
+"A callable that accepts up to 3 arguments. Argument list: "
+":class:`CommandSource`, :class:`CommandError`, :class:`dict` "
+"(:class:`CommandContext`)"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.on_error:5 of
+msgid ""
+"If handled is set to True, ``error.set_handled()`` is called "
+"automatically when invoking the handler callback"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.on_error:7 of
+msgid ""
+"For uses about ``error.set_handled()``, check the "
+":meth:`CommandError.set_handled` class reference"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.on_child_error:1 of
+msgid ""
+"Similar to :meth:`on_error`, but it gets triggered only when the node "
+"receives a command error from one of the node's direct or indirect child"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.print_tree:1 of
+msgid "Print the command tree in a read-able format"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.print_tree:3
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.print_tree:7 of
+msgid "A printer function that accepts a str"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.arguments.Boolean.parse:1
+#: mcdreforged.command.builder.nodes.arguments.Enumeration.parse:1
+#: mcdreforged.command.builder.nodes.arguments.Float.parse:1
+#: mcdreforged.command.builder.nodes.arguments.GreedyText.parse:1
+#: mcdreforged.command.builder.nodes.arguments.Integer.parse:1
+#: mcdreforged.command.builder.nodes.arguments.Number.parse:1
+#: mcdreforged.command.builder.nodes.arguments.QuotableText.parse:1
+#: mcdreforged.command.builder.nodes.arguments.Text.parse:1
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.parse:1
+#: mcdreforged.command.builder.nodes.basic.Literal.parse:1 of
+msgid "Try to parse the text and get an argument"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.arguments.Boolean.parse:3
+#: mcdreforged.command.builder.nodes.arguments.Enumeration.parse:3
+#: mcdreforged.command.builder.nodes.arguments.Float.parse:3
+#: mcdreforged.command.builder.nodes.arguments.GreedyText.parse:3
+#: mcdreforged.command.builder.nodes.arguments.Integer.parse:3
+#: mcdreforged.command.builder.nodes.arguments.Number.parse:3
+#: mcdreforged.command.builder.nodes.arguments.QuotableText.parse:3
+#: mcdreforged.command.builder.nodes.arguments.Text.parse:3
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.parse:3
+#: mcdreforged.command.builder.nodes.basic.Literal.parse:3 of
+msgid "``ParseResult.value``: The value to store in the context dict"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.arguments.Boolean.parse:4
+#: mcdreforged.command.builder.nodes.arguments.Enumeration.parse:4
+#: mcdreforged.command.builder.nodes.arguments.Float.parse:4
+#: mcdreforged.command.builder.nodes.arguments.GreedyText.parse:4
+#: mcdreforged.command.builder.nodes.arguments.Integer.parse:4
+#: mcdreforged.command.builder.nodes.arguments.Number.parse:4
+#: mcdreforged.command.builder.nodes.arguments.QuotableText.parse:4
+#: mcdreforged.command.builder.nodes.arguments.Text.parse:4
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.parse:4
+#: mcdreforged.command.builder.nodes.basic.Literal.parse:4 of
+msgid "``ParseResult.remaining``: The remaining unparsed text"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.arguments.Boolean.parse:6
+#: mcdreforged.command.builder.nodes.arguments.Enumeration.parse:6
+#: mcdreforged.command.builder.nodes.arguments.Float.parse:6
+#: mcdreforged.command.builder.nodes.arguments.GreedyText.parse:6
+#: mcdreforged.command.builder.nodes.arguments.Integer.parse:6
+#: mcdreforged.command.builder.nodes.arguments.Number.parse:6
+#: mcdreforged.command.builder.nodes.arguments.QuotableText.parse:6
+#: mcdreforged.command.builder.nodes.arguments.Text.parse:6
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.parse:6
+#: mcdreforged.command.builder.nodes.basic.Literal.parse:6 of
+msgid ""
+"the text to be parsed. It's supposed to not be started with DIVIDER "
+"character"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.basic.EntryNode.execute:1 of
+msgid "Parse and execute this command"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.basic.EntryNode.execute:3
+#: mcdreforged.command.builder.nodes.basic.EntryNode.generate_suggestions:5 of
+msgid "the source that executes this command"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.basic.EntryNode.execute:4
+#: mcdreforged.command.builder.nodes.basic.EntryNode.generate_suggestions:6 of
+msgid "the command string to execute"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.basic.EntryNode.execute
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.build
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.print_tree
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.register of
+msgid "Raises"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.basic.EntryNode.execute:5 of
+msgid "if parsing fails"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.basic.EntryNode.generate_suggestions:1 of
+msgid "Get a list of command suggestion of given command"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.basic.EntryNode.generate_suggestions:3 of
+msgid "Return an empty list if parsing fails"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.basic.Literal:1 of
+msgid ""
+"Literal node is a special node. It doesn't output any value. It's more "
+"like a command branch carrier"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.basic.Literal:3 of
+msgid ""
+"Literal node can accept a str as its literal in its constructor. A "
+"literal node accepts the parsing command only when the next element of "
+"the parsing command exactly matches the literal of the node"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.basic.Literal:5 of
+msgid "Literal node is the only node that can start a command execution"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.basic.ArgumentNode:1 of
+msgid ""
+"Argument node is an abstract base class for all nodes which store parsed "
+"values"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.basic.ArgumentNode:3 of
+msgid ""
+"It has a str field ``name`` which is used as the key used in storing "
+"parsed value in context"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.arguments.NumberNode:1 of
+msgid "The base class of all number related argument nodes"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.arguments.NumberNode:3 of
+msgid ""
+"It's inherited by ``Number``, ``Integer`` and ``Float``. It represents a "
+"type of number based node"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.arguments.NumberNode:5 of
+msgid ""
+"For a ``NumberNode`` instance, you can restrict the range of the number "
+"argument. If the parsed number is out of range, a ``NumberOutOfRange`` "
+"exception will be risen"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.arguments.NumberNode:7 of
+msgid "By default, there's no range restriction"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.arguments.NumberNode.at_min:1 of
+msgid "Set the lower boundary of the range restriction"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.arguments.NumberNode.at_min:3 of
+msgid "the lower boundary of the range restriction"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.arguments.Number:1 of
+msgid "An Integer, or a float"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.arguments.Integer:1 of
+msgid "An Integer"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.arguments.Text:1 of
+msgid "A text argument with no space character. Just like a single word"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.arguments.GreedyText:1 of
+msgid "A greedy text argument, which will consume all remaining input"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.arguments.Boolean:1 of
+msgid ""
+"A simple boolean argument, only accepts ``true`` and ``false`` and store "
+"them as a bool. Case is ignored"
+msgstr ""
+
+#: mcdreforged.command.builder.nodes.arguments.Enumeration:1 of
+msgid ""
+"A node associating with an Enum class for reading an enum value of the "
+"given class"
+msgstr ""
+
+#: ../plugin_dev/references/command.rst:30
+msgid "Command Builder"
+msgstr ""
+
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.command:1 of
+msgid "Define a command and its callback"
+msgstr ""
+
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.command:3 of
+msgid ""
+"A command path string is made up of several elements separated by spaces."
+" These elements are the names of corresponding command node. They "
+"describe a path from the root node to the target node in the command tree"
+msgstr ""
+
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.command:7 of
+msgid ""
+"If a node has a name surrounding with ``\"<\"`` and ``\">\"``, it will be"
+" considered as an argument node, e.g. ``\"<my_arg>\"``. Otherwise it will"
+" be considered as a literal node, e.g. ``\"my_literal\"``"
+msgstr ""
+
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.command:10 of
+msgid ""
+"You need to give definitions of argument nodes with the :meth:`arg` "
+"method. You can also define your custom literal nodes with the "
+":meth:`literal` method"
+msgstr ""
+
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.command:13 of
+msgid "A command path string, e.g. ``\"!!calc add <value_a> <value_b>\"``"
+msgstr ""
+
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.command:14 of
+msgid ""
+"The callback function of this command, which will be passed to "
+":meth:`~mcdreforged.command.builder.nodes.basic.AbstractNode.then`"
+msgstr ""
+
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.arg:1 of
+msgid ""
+"Define an argument node for an argument name. All argument names appeared"
+" in :meth:`command` must be defined"
+msgstr ""
+
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.arg:3 of
+msgid ""
+"Notes that almost all MCDR builtin argument node classes can be "
+"constructed with 1 argument name parameter (e.g. :class:`Text`, "
+":class:`Number`), so you can just use the name of the argument class here"
+msgstr ""
+
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.arg:11 of
+msgid ""
+"The name of the argument node. It can be quoted with ``\"<>\"`` if you "
+"want. Examples: ``\"my_arg\"``, ``\"<my_arg>\"``"
+msgstr ""
+
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.arg:12 of
+msgid ""
+"An argument node constructor, that accepts the argument name as the only "
+"parameter and return an :class:`ArgumentNode` object"
+msgstr ""
+
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.literal:1 of
+msgid ""
+"Define a literal node for a literal name. It's useful when you want to "
+"have some custom literal nodes. If you just want a regular literal node, "
+"you don't need to invoke this method, since the builder will use the "
+"default :class:`~mcdreforged.command.builder.nodes.basic.Literal` "
+"constructor for node construction"
+msgstr ""
+
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.literal:5 of
+msgid "The name of the literal node"
+msgstr ""
+
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.literal:6 of
+msgid ""
+"A literal node constructor, that accepts the literal name as the only "
+"parameter and return a "
+":class:`~mcdreforged.command.builder.nodes.basic.Literal` object"
+msgstr ""
+
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.build:1 of
+msgid "Build the command trees"
+msgstr ""
+
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.build:3 of
+msgid ""
+"Nodes with same name will be reused. e.g. if you define 3 commands with "
+"path ``\"!!foo\"``, ``\"!!foo bar\"`` and \"``!!foo baz\"``, the root "
+"``\"!!foo\"`` node will be reused, and there will be only 1 ``\"!!foo\"``"
+" node eventually"
+msgstr ""
+
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.build of
+msgid "Returns"
+msgstr ""
+
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.build:6 of
+msgid ""
+"A list of the built command tree root nodes. The result is cached until "
+"you instruct the builder again"
+msgstr ""
+
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.build:7 of
+msgid "if there are undefined argument nodes"
+msgstr ""
+
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.register:1 of
+msgid ""
+"A helper method for lazyman, to build with method :meth:`build` and "
+"register built commands to the MCDR server"
+msgstr ""
+
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.register:3 of
+msgid "The :class:`PluginServerInterface` object of your plugin"
+msgstr ""
+
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.register:4 of
+msgid "if build fails, or there are rooted non-literal nodes"
+msgstr ""
+
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.print_tree:1 of
+msgid ""
+"A helper method for lazyman, to build with method :meth:`build` and print"
+" the built command trees"
+msgstr ""
+
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.print_tree:8 of
+msgid "if build fails"
+msgstr ""
+
