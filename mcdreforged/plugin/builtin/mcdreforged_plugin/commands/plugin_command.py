@@ -4,7 +4,8 @@ from typing import TYPE_CHECKING, Callable, List, Tuple, Any
 from mcdreforged.command.builder.nodes.arguments import QuotableText
 from mcdreforged.command.builder.nodes.basic import Literal
 from mcdreforged.command.command_source import CommandSource
-from mcdreforged.minecraft.rtext import RText, RAction, RTextList, RStyle, RColor
+from mcdreforged.minecraft.rtext.style import RColor, RStyle, RAction
+from mcdreforged.minecraft.rtext.text import RTextList, RText
 from mcdreforged.permission.permission_level import PermissionLevel
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.sub_command import SubCommand
 from mcdreforged.plugin.type.plugin import AbstractPlugin

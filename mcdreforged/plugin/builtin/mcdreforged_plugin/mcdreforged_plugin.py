@@ -4,7 +4,8 @@ from mcdreforged.command.builder.exception import RequirementNotMet, UnknownArgu
 from mcdreforged.command.builder.nodes.basic import Literal
 from mcdreforged.command.command_source import CommandSource
 from mcdreforged.constants import core_constant
-from mcdreforged.minecraft.rtext import RText, RAction, RTextList, RColor
+from mcdreforged.minecraft.rtext.style import RColor, RAction
+from mcdreforged.minecraft.rtext.text import RTextList, RText
 from mcdreforged.permission.permission_level import PermissionLevel
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.check_update_command import CheckUpdateCommand
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.help_command import HelpCommand

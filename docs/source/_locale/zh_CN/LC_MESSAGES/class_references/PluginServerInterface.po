@@ -113,11 +113,11 @@ msgstr "你的插件的帮助指令。当玩家点击显示的信息时，会向
 #: of
 msgid ""
 "A neat command description. It can be a str or a :class:`RText "
-"<mcdreforged.minecraft.rtext.RTextBase>` Also, it can be a dict maps from"
+"<mcdreforged.minecraft.rtext.text.RTextBase>` Also, it can be a dict maps from"
 " language to description message"
 msgstr ""
 "一个整洁的指令描述。它可以为一个 str 或者 :class:`RText "
-"<mcdreforged.minecraft.rtext.RTextBase>`。除此之外它还可为一个将语言映射至描述信息的 dict"
+"<mcdreforged.minecraft.rtext.text.RTextBase>`。除此之外它还可为一个将语言映射至描述信息的 dict"
 
 #: mcdreforged.plugin.server_interface.PluginServerInterface.register_help_message:7
 #: of

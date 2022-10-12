@@ -6,8 +6,6 @@ import inspect
 import threading
 from typing import List, Callable, Tuple, TypeVar, Any, Type, Optional, Union, Iterable
 
-from mcdreforged.minecraft.rtext import RTextBase
-
 
 def start_thread(func: Callable, args: Tuple, name: Optional[str] = None):
 	thread = threading.Thread(target=func, args=args, name=name, daemon=True)
@@ -48,6 +46,7 @@ def get_all_base_class(cls):
 
 
 def print_text_to_console(logger, text):
+	from mcdreforged.minecraft.rtext.text import RTextBase
 	for line in RTextBase.from_any(text).to_colored_text().splitlines():
 		logger.info(line)
 

@@ -3,7 +3,8 @@ from contextlib import contextmanager
 from typing import Union, Iterable, Optional, List, Callable
 
 from mcdreforged.constants import core_constant
-from mcdreforged.minecraft.rtext import RTextBase, RAction, RStyle, RColor, RText
+from mcdreforged.minecraft.rtext.style import RColor, RStyle, RAction
+from mcdreforged.minecraft.rtext.text import RTextBase, RText
 from mcdreforged.utils import translation_util
 
 

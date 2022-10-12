@@ -1,64 +1,10 @@
-"""
-Advanced text container for Minecraft
-Credit: Pandaria98 https://github.com/Pandaria98 https://github.com/TISUnion/stext
-"""
-
 import json
 from abc import ABC
-from enum import Enum, auto
 from typing import Iterable, List, Union, Optional, Any, Tuple, Set, NamedTuple
 
-from colorama import Fore, Style
+from colorama import Style
 
-
-class RItem:
-	def __init__(self, mc_code: str, console_code: str):
-		self.mc_code = mc_code
-		self.console_code = console_code
-
-
-class RColor(Enum):
-	black = RItem('§0', Fore.BLACK)
-	dark_blue = RItem('§1', Fore.BLUE)
-	dark_green = RItem('§2', Fore.GREEN)
-	dark_aqua = RItem('§3', Fore.CYAN)
-	dark_red = RItem('§4', Fore.RED)
-	dark_purple = RItem('§5', Fore.MAGENTA)
-	gold = RItem('§6', Fore.YELLOW)
-	gray = RItem('§7', Style.RESET_ALL)
-	dark_gray = RItem('§8', Style.RESET_ALL)
-	blue = RItem('§9', Fore.LIGHTBLUE_EX)
-	green = RItem('§a', Fore.LIGHTGREEN_EX)
-	aqua = RItem('§b', Fore.LIGHTCYAN_EX)
-	red = RItem('§c', Fore.LIGHTRED_EX)
-	light_purple = RItem('§d', Fore.LIGHTMAGENTA_EX)
-	yellow = RItem('§e', Fore.LIGHTYELLOW_EX)
-	white = RItem('§f', Style.RESET_ALL)
-
-	reset = RItem('§r', Style.RESET_ALL)
-
-
-class RColorConvertor:
-	MC_COLOR_TO_CONSOLE = dict([(rcolor.value.mc_code, rcolor.value.console_code) for rcolor in RColor])
-	MC_COLOR_TO_RCOLOR = dict([(rcolor.value.mc_code, rcolor) for rcolor in RColor])
-	RCOLOR_TO_CONSOLE = dict([(rcolor, rcolor.value.console_code) for rcolor in RColor])
-	RCOLOR_NAME_TO_CONSOLE = dict([(rcolor.name, rcolor.value.console_code) for rcolor in RColor])
-
-
-class RStyle(Enum):
-	bold = RItem('§l', Style.BRIGHT)
-	italic = RItem('§o', '')
-	underlined = RItem('§n', '')
-	strikethrough = RItem('§m', '')
-	obfuscated = RItem('§k', '')
-
-
-class RAction(Enum):
-	suggest_command = auto()
-	run_command = auto()
-	open_url = auto()
-	open_file = auto()
-	copy_to_clipboard = auto()
+from mcdreforged.minecraft.rtext.style import RStyle, RColor, RAction, RColorConvertor
 
 
 class RTextBase(ABC):
@@ -300,38 +246,6 @@ class RText(RTextBase):
 		return copied
 
 
-class RTextTranslation(RText):
-	def __init__(self, translation_key: str, color: RColor = RColor.reset, styles: Optional[Union[RStyle, Iterable[RStyle]]] = None):
-		super().__init__(translation_key, color, styles)
-		self.__translation_key: str = translation_key
-		self.__args = ()
-
-	def arg(self, *args: Any) -> 'RTextTranslation':
-		self.__args = args
-		return self
-
-	def to_plain_text(self) -> str:
-		return self.__translation_key
-
-	def to_json_object(self) -> Union[dict, list]:
-		obj = super().to_json_object()
-		obj.pop('text')
-		obj['translate'] = self.__translation_key
-		if len(self.__args) > 0:
-			obj['with'] = list(map(lambda arg: arg.to_json_object() if isinstance(arg, RTextBase) else arg, self.__args))
-		return obj
-
-	def _copy_from(self, text: 'RTextTranslation'):
-		super()._copy_from(text)
-		self.__translation_key = text.__translation_key
-		self.__args = text.__args
-
-	def copy(self) -> 'RTextTranslation':
-		copied = RTextTranslation('')
-		copied._copy_from(self)
-		return copied
-
-
 class RTextList(RTextBase):
 	def __init__(self, *args):
 		self.header = RText('')
@@ -393,4 +307,36 @@ class RTextList(RTextBase):
 		copied.header = self.header.copy()
 		copied.header_empty = self.header_empty
 		copied.children = [child.copy() for child in self.children]
+		return copied
+
+
+class RTextTranslation(RText):
+	def __init__(self, translation_key: str, color: RColor = RColor.reset, styles: Optional[Union[RStyle, Iterable[RStyle]]] = None):
+		super().__init__(translation_key, color, styles)
+		self.__translation_key: str = translation_key
+		self.__args = ()
+
+	def arg(self, *args: Any) -> 'RTextTranslation':
+		self.__args = args
+		return self
+
+	def to_plain_text(self) -> str:
+		return self.__translation_key
+
+	def to_json_object(self) -> Union[dict, list]:
+		obj = super().to_json_object()
+		obj.pop('text')
+		obj['translate'] = self.__translation_key
+		if len(self.__args) > 0:
+			obj['with'] = list(map(lambda arg: arg.to_json_object() if isinstance(arg, RTextBase) else arg, self.__args))
+		return obj
+
+	def _copy_from(self, text: 'RTextTranslation'):
+		super()._copy_from(text)
+		self.__translation_key = text.__translation_key
+		self.__args = text.__args
+
+	def copy(self) -> 'RTextTranslation':
+		copied = RTextTranslation('')
+		copied._copy_from(self)
 		return copied

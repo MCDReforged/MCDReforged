@@ -89,8 +89,8 @@ class ServerInterface:
 		"""
 		Return a translated text corresponded to the translation key and format the text with given args and kwargs
 
-		If args or kwargs contains :class:`RText <mcdreforged.minecraft.rtext.RTextBase>` element,
-		then the result will be a :class:`RText <mcdreforged.minecraft.rtext.RTextBase>`,
+		If args or kwargs contains :class:`RText <mcdreforged.minecraft.rtext.text.RTextBase>` element,
+		then the result will be a :class:`RText <mcdreforged.minecraft.rtext.text.RTextBase>`,
 		otherwise the result will be a regular str
 
 		If the translation key is not recognized, the return value will be the translation key itself
@@ -772,7 +772,7 @@ class PluginServerInterface(ServerInterface):
 
 		:param prefix: The help command of your plugin. When player click on the displayed message it will suggest this
 			prefix parameter to the player. It's recommend to set it to the entry command of your plugin
-		:param message: A neat command description. It can be a str or a :class:`RText <mcdreforged.minecraft.rtext.RTextBase>`
+		:param message: A neat command description. It can be a str or a :class:`RText <mcdreforged.minecraft.rtext.text.RTextBase>`
 			Also, it can be a dict maps from language to description message
 		:param permission: The minimum permission level for the user to see this help message.
 			With default permission, anyone can see this message

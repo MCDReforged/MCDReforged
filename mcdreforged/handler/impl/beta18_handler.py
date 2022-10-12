@@ -6,7 +6,7 @@ from parse import parse
 from mcdreforged.handler.impl.vanilla_handler import VanillaHandler
 from mcdreforged.info_reactor.info import Info
 from mcdreforged.info_reactor.server_information import ServerInformation
-from mcdreforged.minecraft.rtext import RTextBase
+from mcdreforged.minecraft.rtext.text import RTextBase
 from mcdreforged.utils import string_util
 
 

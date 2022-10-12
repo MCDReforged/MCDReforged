@@ -2,7 +2,7 @@ import collections
 from typing import Dict, List, Callable, Any, TYPE_CHECKING, Union
 
 from mcdreforged.command.builder.nodes.basic import Literal
-from mcdreforged.minecraft.rtext import RTextBase
+from mcdreforged.minecraft.rtext.text import RTextBase
 from mcdreforged.plugin.plugin_event import EventListener
 from mcdreforged.translation.translation_text import RTextMCDRTranslation
 from mcdreforged.utils import translation_util

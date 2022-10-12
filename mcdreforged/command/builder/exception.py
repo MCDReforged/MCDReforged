@@ -1,7 +1,7 @@
 from abc import ABC
 from typing import Optional, Union
 
-from mcdreforged.minecraft.rtext import RTextBase, RText, RColor
+from mcdreforged.minecraft.rtext.text import RTextBase, RText, RColor
 from mcdreforged.utils.types import MessageText
 
 

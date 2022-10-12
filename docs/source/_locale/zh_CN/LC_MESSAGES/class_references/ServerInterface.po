@@ -67,13 +67,13 @@ msgstr "返回一个代表着翻译键的翻译文本，并使用提供的 args 
 #: mcdreforged.plugin.server_interface.ServerInterface.tr:3 of
 msgid ""
 "If args or kwargs contains :class:`RText "
-"<mcdreforged.minecraft.rtext.RTextBase>` element, then the result will be"
-" a :class:`RText <mcdreforged.minecraft.rtext.RTextBase>`, otherwise the "
+"<mcdreforged.minecraft.rtext.text.RTextBase>` element, then the result will be"
+" a :class:`RText <mcdreforged.minecraft.rtext.text.RTextBase>`, otherwise the "
 "result will be a regular str"
 msgstr ""
 "如果 args 或者 kwargs 包含 :class:`RText "
-"<mcdreforged.minecraft.rtext.RTextBase>` 元素，则结果将为一个 :class:`RText "
-"<mcdreforged.minecraft.rtext.RTextBase>`，否则结果将是一个 str。"
+"<mcdreforged.minecraft.rtext.text.RTextBase>` 元素，则结果将为一个 :class:`RText "
+"<mcdreforged.minecraft.rtext.text.RTextBase>`，否则结果将是一个 str。"
 
 #: mcdreforged.plugin.server_interface.ServerInterface.tr:7 of
 msgid ""
