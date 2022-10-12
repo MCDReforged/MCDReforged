@@ -11,3 +11,4 @@ If you are just a user of MCDR, run! Don't read!
    Command<command.rst>
    ServerInterface<ServerInterface.rst>
    PluginServerInterface<PluginServerInterface.rst>
+   Minecraft Tools<minecraft_tools.rst>

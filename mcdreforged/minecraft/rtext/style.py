@@ -62,9 +62,26 @@ class RStyle(Enum):
 
 
 class RAction(Enum):
+	"""
+	Minecraft click event actions
+	"""
+
 	suggest_command = auto()
+	"""Fill the chat bar with given text"""
+
 	run_command = auto()
+	"""Run the given text as command"""
+
 	open_url = auto()
+	"""Open given url"""
+
 	open_file = auto()
+	"""Open file from given path"""
+
 	copy_to_clipboard = auto()
+	"""
+	Copy given text to clipboard
+	
+	.. note:: Available in Minecraft 1.15+
+	"""
 

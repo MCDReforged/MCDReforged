@@ -29,9 +29,22 @@ class Packet:
 
 
 class RconConnection:
-	BUFFER_SIZE = 2**10
+	"""
+	A simply rcon client for connect to any Minecraft servers that supports rcon protocol
+	"""
+
+	BUFFER_SIZE = 2 ** 10
 
 	def __init__(self, address: str, port: int, password: str, *, logger: Optional[Logger] = None):
+		"""
+		Create a rcon client instance
+
+		:param address: The address of the rcon server
+		:param port: The port if the rcon server
+		:param password: The password of the rcon connection
+		:keyword logger: Optional, an instance of ``logging.Logger``.
+			It's used to output some warning information like failing to receive a packet
+		"""
 		self.logger = logger
 		self.address = address
 		self.port = port
@@ -64,6 +77,11 @@ class RconConnection:
 		return packet
 
 	def connect(self) -> bool:
+		"""
+		Start a connection to the rcon server and try to log in
+
+		:return: If connect and login success
+		"""
 		if self.socket is not None:
 			try:
 				self.disconnect()
@@ -78,12 +96,22 @@ class RconConnection:
 		return success
 
 	def disconnect(self):
+		"""
+		Disconnect from the server
+		"""
 		if self.socket is None:
 			return
 		self.socket.close()
 		self.socket = None
 
 	def send_command(self, command: str, max_retry_time: int = 3) -> Optional[str]:
+		"""
+		Send a command to the rcon server
+
+		:param command: The command you want to send to the server
+		:param max_retry_time: The maximum retry time of the operation
+		:return: The command execution result form the server, or None if *max_retry_time* retries exceeded
+		"""
 		with self.command_lock:
 			for i in range(max_retry_time):
 				try:

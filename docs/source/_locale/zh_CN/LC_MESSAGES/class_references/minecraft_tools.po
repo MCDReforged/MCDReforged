@@ -1,0 +1,475 @@
+
+msgid ""
+msgstr ""
+"Project-Id-Version:  mcdreforged\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-10-12 16:34+0800\n"
+"PO-Revision-Date: 2021-01-24 09:02+0800\n"
+"Last-Translator: Alex3236 <alex3236@qq.com>\n"
+"Language: zh_CN\n"
+"Language-Team: Chinese Simplified\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.1\n"
+
+#: ../class_references/minecraft_tools.rst:3
+msgid "Minecraft Tools"
+msgstr "Minecraft 工具"
+
+#: ../class_references/minecraft_tools.rst:6
+msgid "RText"
+msgstr "RText"
+
+#: ../class_references/minecraft_tools.rst:9
+msgid "Text Styles"
+msgstr "文本样式"
+
+#: mcdreforged.minecraft.rtext:1 of
+msgid "Advanced text component library for Minecraft"
+msgstr "Minecraft 高级文本组件库"
+
+#: mcdreforged.minecraft.rtext:3 of
+msgid ""
+"Credit: `Pandaria98 <https://github.com/Pandaria98>`__ 's `stext API "
+"<https://github.com/TISUnion/stext>`__ library"
+msgstr ""
+"感谢 `Pandaria98 <https://github.com/Pandaria98>`__ 的`stext API "
+"<https://github.com/TISUnion/stext>`__ 库"
+
+#: mcdreforged.minecraft.rtext.style.RItem:1 of
+msgid "A general Minecraft text style item"
+msgstr "一个 Minecraft 文本样式的通用组件"
+
+#: ../docstring mcdreforged.minecraft.rtext.style.RItem.mc_code:1 of
+msgid "It's code in Minecraft"
+msgstr "它在 Minecraft 中的样式代码"
+
+#: ../docstring mcdreforged.minecraft.rtext.style.RItem.console_code:1 of
+msgid "It's code in console"
+msgstr "它在控制台中的样式代码"
+
+#: mcdreforged.minecraft.rtext.style.RColor:1 of
+msgid "Minecraft text colors"
+msgstr "Minecraft 文本颜色"
+
+#: mcdreforged.minecraft.rtext.style.RStyle:1 of
+msgid "Minecraft text styles"
+msgstr "Minecraft 文本样式"
+
+#: mcdreforged.minecraft.rtext.style.RAction:1 of
+msgid "Minecraft click event actions"
+msgstr "Minecraft 文本点击事件的动作"
+
+#: ../docstring mcdreforged.minecraft.rtext.style.RAction.suggest_command:1 of
+msgid "Fill the chat bar with given text"
+msgstr "使用给定的文本填充聊天栏"
+
+#: ../docstring mcdreforged.minecraft.rtext.style.RAction.run_command:1 of
+msgid "Run the given text as command"
+msgstr "将给定的文本作为指令运行"
+
+#: ../docstring mcdreforged.minecraft.rtext.style.RAction.open_url:1 of
+msgid "Open given url"
+msgstr "打开给定链接"
+
+#: ../docstring mcdreforged.minecraft.rtext.style.RAction.open_file:1 of
+msgid "Open file from given path"
+msgstr "从给定路径打开文件"
+
+#: ../docstring mcdreforged.minecraft.rtext.style.RAction.copy_to_clipboard:1
+#: of
+msgid "Copy given text to clipboard"
+msgstr "将给定文本复制到剪切板"
+
+#: ../docstring mcdreforged.minecraft.rtext.style.RAction.copy_to_clipboard:3
+#: of
+msgid "Available in Minecraft 1.15+"
+msgstr "在 Minecraft 1.15+ 中可用"
+
+#: ../class_references/minecraft_tools.rst:31
+msgid "Text Components"
+msgstr "文本组件"
+
+#: mcdreforged.minecraft.rtext.text.RTextBase:1 of
+msgid "An abstract base class of Minecraft text component"
+msgstr "Minecraft 文本组件的抽象基类"
+
+#: mcdreforged.minecraft.rtext.text.RTextBase.to_json_object:1 of
+msgid ""
+"Return an object representing its data that can be serialized into a json"
+" string"
+msgstr "返回一个代表其数据的对象，该对象可以被序列化为 json 字符串"
+
+#: mcdreforged.minecraft.rtext.text.RTextBase.to_json_str:1 of
+msgid "Return a json formatted str representing its data"
+msgstr "返回一个代表其数据的 json 格式字符串"
+
+#: mcdreforged.minecraft.rtext.text.RTextBase.to_json_str:3 of
+msgid ""
+"It can be used as the second parameter in Minecraft command ``/tellraw "
+"<target> <message>`` and more"
+msgstr "它可以作为如 Minecraft 命令 ``/tellraw <target> <message>`` 中的第二个参数"
+
+#: mcdreforged.minecraft.rtext.text.RTextBase.to_plain_text:1 of
+msgid "Return a plain text for console display"
+msgstr "返回纯文本以供控制台显示"
+
+#: mcdreforged.minecraft.rtext.text.RTextBase.to_plain_text:3 of
+msgid "Click event and hover event will be ignored"
+msgstr "点击事件和悬停事件将被忽略"
+
+#: mcdreforged.minecraft.rtext.text.RTextBase.copy:1 of
+msgid "Return a deep copy version of itself"
+msgstr "返回自身的一个深拷贝副本"
+
+#: mcdreforged.minecraft.rtext.text.RTextBase.set_color:1 of
+msgid "Set the color of the text and return the text component itself"
+msgstr "设置文本的颜色，并返回文本组件本身"
+
+#: mcdreforged.minecraft.rtext.text.RTextBase.set_styles:1 of
+msgid "Set the styles of the text and return the text component itself"
+msgstr "设置文本的样式，并返回文本组件本身"
+
+#: mcdreforged.minecraft.rtext.text.RTextBase.set_click_event:1 of
+msgid "Set the click event"
+msgstr "设置点击事件"
+
+#: mcdreforged.minecraft.rtext.text.RTextBase.set_click_event:3 of
+msgid "Method :meth:`c` is the short form of :meth:`set_click_event`"
+msgstr "方法 :meth:`c` 是方法 :meth:`set_click_event` 的简写"
+
+#: mcdreforged.minecraft.rcon.rcon_connection.RconConnection.__init__
+#: mcdreforged.minecraft.rcon.rcon_connection.RconConnection.send_command
+#: mcdreforged.minecraft.rtext.text.RText.__init__
+#: mcdreforged.minecraft.rtext.text.RTextBase.format
+#: mcdreforged.minecraft.rtext.text.RTextBase.from_json_object
+#: mcdreforged.minecraft.rtext.text.RTextBase.join
+#: mcdreforged.minecraft.rtext.text.RTextBase.set_click_event
+#: mcdreforged.minecraft.rtext.text.RTextBase.set_hover_text
+#: mcdreforged.minecraft.rtext.text.RTextList.__init__
+#: mcdreforged.minecraft.rtext.text.RTextTranslation.__init__
+#: mcdreforged.minecraft.rtext.text.RTextTranslation.arg
+#: mcdreforged.translation.translation_text.RTextMCDRTranslation.__init__
+#: mcdreforged.translation.translation_text.RTextMCDRTranslation.language_context
+#: of
+msgid "Parameters"
+msgstr "参数"
+
+#: mcdreforged.minecraft.rtext.text.RTextBase.set_click_event:5 of
+msgid "The type of the action"
+msgstr "动作类型"
+
+#: mcdreforged.minecraft.rtext.text.RTextBase.set_click_event:6 of
+msgid "The string value of the action"
+msgstr "动作的字符串值"
+
+#: mcdreforged.minecraft.rcon.rcon_connection.RconConnection.connect
+#: mcdreforged.minecraft.rcon.rcon_connection.RconConnection.send_command
+#: mcdreforged.minecraft.rtext.text.RTextBase.set_click_event
+#: mcdreforged.minecraft.rtext.text.RTextBase.set_hover_text of
+msgid "Returns"
+msgstr "返回值"
+
+#: mcdreforged.minecraft.rtext.text.RTextBase.set_click_event:7
+#: mcdreforged.minecraft.rtext.text.RTextBase.set_hover_text:7 of
+msgid "The text component itself"
+msgstr "自身"
+
+#: mcdreforged.minecraft.rtext.text.RTextBase.set_hover_text:1 of
+msgid "Set the hover text"
+msgstr "设置悬浮文本"
+
+#: mcdreforged.minecraft.rtext.text.RTextBase.set_hover_text:3 of
+msgid "Method :meth:`h` is the short form of :meth:`set_hover_text`"
+msgstr "方法 :meth:`h` 是方法 :meth:`set_hover_text` 的简写"
+
+#: mcdreforged.minecraft.rtext.text.RTextBase.set_hover_text:5 of
+msgid ""
+"The elements be used to create a :class:`RTextList` instance. The "
+":class:`RTextList` instance is used as the actual hover text"
+msgstr "用于创建 :class:`RTextList` 实例的元素。:class:`RTextList` 实例将作为实际的悬浮文本"
+
+#: mcdreforged.minecraft.rtext.text.RTextBase.c:1 of
+msgid "The short form of :meth:`set_click_event`"
+msgstr "方法 :meth:`set_click_event` 的简写"
+
+#: mcdreforged.minecraft.rtext.text.RTextBase.h:1 of
+msgid "The short form of :meth:`set_hover_text`"
+msgstr "方法 :meth:`set_hover_text` 的简写"
+
+#: mcdreforged.minecraft.rtext.text.RTextBase.from_any:1 of
+msgid "Convert anything into a RText component"
+msgstr "将任意对象转换为一个 RText 组件"
+
+#: mcdreforged.minecraft.rtext.text.RTextBase.join:1 of
+msgid ""
+"Just like method :meth:`str.join`, it concatenates any number of texts "
+"with *divider*"
+msgstr "就像 :meth:`str.join` 方法一样，它使用 `*divider* 连接任意数量的文本"
+
+#: mcdreforged.minecraft.rtext.text.RTextBase.format:3
+#: mcdreforged.minecraft.rtext.text.RTextBase.from_json_object:3
+#: mcdreforged.minecraft.rtext.text.RTextBase.join:3
+#: mcdreforged.minecraft.rtext.text.RTextTranslation.__init__:6
+#: mcdreforged.translation.translation_text.RTextMCDRTranslation.language_context:8
+#: of
+msgid "Example::"
+msgstr "例子::"
+
+#: mcdreforged.minecraft.rtext.text.RTextBase.join:9 of
+msgid "The divider between elements. The divider object will be reused"
+msgstr "元素间的分隔符。这个分隔符对象将被复用"
+
+#: mcdreforged.minecraft.rtext.text.RTextBase.join:10 of
+msgid "The elements to be joined"
+msgstr "将被 join 的元素"
+
+#: mcdreforged.minecraft.rtext.text.RTextBase.format:1 of
+msgid ""
+"Just like method :meth:`str.format`, it uses *\\*args* and *\\*\\*kwargs*"
+" to build a formatted RText component based on the formatter *fmt*"
+msgstr ""
+"就像 ``str`` 类的 `format <https://docs.python.org/zh-"
+"cn/3/library/stdtypes.html#str.format>`__ 方法一样，它使用 ``*args`` 及 "
+"``**kwargs`` 在 ``fmt`` 的基础上进行格式化并生成一个 RText 组件。"
+
+#: mcdreforged.minecraft.rtext.text.RTextBase.format:9 of
+msgid "The formatter string"
+msgstr "格式字符串"
+
+#: mcdreforged.minecraft.rtext.text.RTextBase.format:10 of
+msgid "The given arguments"
+msgstr "用于格式化的参数"
+
+#: mcdreforged.minecraft.rtext.text.RTextBase.format:11 of
+msgid "The given keyword arguments"
+msgstr "用于格式化的关键字参数"
+
+#: mcdreforged.minecraft.rtext.text.RTextBase.from_json_object:1 of
+msgid "Convert a json object into a :class:`RText <RTextBase>` component"
+msgstr "将一个 json 对象转换为一个 :class:`RText <RTextBase>` 组件"
+
+#: mcdreforged.minecraft.rtext.text.RTextBase.from_json_object:11 of
+msgid "A json object"
+msgstr "一个 json 对象"
+
+#: mcdreforged.minecraft.rtext.text.RText:1
+#: mcdreforged.minecraft.rtext.text.RTextList:1
+#: mcdreforged.translation.translation_text.RTextMCDRTranslation:1 of
+msgid "Bases: :py:class:`~mcdreforged.minecraft.rtext.text.RTextBase`"
+msgstr ""
+
+#: mcdreforged.minecraft.rtext.text.RText:1 of
+msgid "The regular text component class"
+msgstr "常规文本组件类"
+
+#: mcdreforged.minecraft.rtext.text.RText.__init__:1 of
+msgid ""
+"Create a :class:`RText` object with specific text, optional color and "
+"optional style"
+msgstr "给定文本创建一个 :class:`RText` 对象，可选文本颜色及样式"
+
+#: mcdreforged.minecraft.rtext.text.RText.__init__:3 of
+msgid "The content of the text. It will be converted into str"
+msgstr "文本内容。它将被转换为 str"
+
+#: mcdreforged.minecraft.rtext.text.RText.__init__:4
+#: mcdreforged.minecraft.rtext.text.RTextTranslation.__init__:11 of
+msgid "Optional, the color of the text"
+msgstr "可选参数，文本的颜色"
+
+#: mcdreforged.minecraft.rtext.text.RText.__init__:5 of
+msgid ""
+"Optional, the style of the text. It can be a single "
+":class:`~mcdreforged.minecraft.rtext.style.RStyle` or an iterable of "
+":class:`~mcdreforged.minecraft.rtext.style.RStyle`"
+msgstr ""
+"可选参数，文本的样式。它可以是单一一个 "
+":class:`~mcdreforged.minecraft.rtext.style.RStyle`，也可以是 "
+":class:`~mcdreforged.minecraft.rtext.style.RStyle` 的一个可迭代对象"
+
+#: mcdreforged.minecraft.rtext.text.RTextList:1 of
+msgid "A list of :class:`RTextBase` objects, a compound text component"
+msgstr "一个储存着若干个 :class:`RTextBase` 对象的列表，即一个复合文本组件"
+
+#: mcdreforged.minecraft.rtext.text.RTextList.__init__:1 of
+msgid "Use the given *\\*args* to create a :class:`RTextList`"
+msgstr "使用给定的 *\\*args* 创建一个 :class:`RTextList`"
+
+#: mcdreforged.minecraft.rtext.text.RTextList.__init__:3 of
+msgid ""
+"The items in this :class:`RTextList`. They can be :class:`str`, "
+":class:`RTextBase` or any class implements ``__str__`` method. All non- "
+":class:`RTextBase` items will be converted to :class:`RText`"
+msgstr ""
+"此 :class:`RTextList` 中的元素。它们可以是 :class:`str`，:class:`RTextBase` 或任何实现了 "
+"``__str__`` 方法的类。所有的非 :class:`RTextBase` 元素都将被转换为 :class:`RText`"
+
+#: mcdreforged.minecraft.rtext.text.RTextTranslation:1 of
+msgid "Bases: :py:class:`~mcdreforged.minecraft.rtext.text.RText`"
+msgstr ""
+
+#: mcdreforged.minecraft.rtext.text.RTextTranslation:1 of
+msgid ""
+"The translation text component class. It's almost the same as "
+":class:`RText`"
+msgstr "翻译文本组件类。几乎和 :class:`RText` 相同。"
+
+#: mcdreforged.minecraft.rtext.text.RTextTranslation.__init__:1 of
+msgid ""
+"Create a :class:`RTextTranslation` object with specific translation key. "
+"The rest of the parameters are the same to the constructor of "
+":class:`RText`"
+msgstr "使用特定的翻译键创建一个 ``RTextTranslation`` 对象。其余参数与 :class:`RText` 相同。"
+
+#: mcdreforged.minecraft.rtext.text.RTextTranslation.__init__:4 of
+msgid ""
+"Use method :meth:`arg` to set the translation arguments, if the "
+"translation requires some arguments"
+msgstr "如果这个翻译需要一些参数，你可以使用方法 :meth:`arg: 来设置"
+
+#: mcdreforged.minecraft.rtext.text.RTextTranslation.__init__:10
+#: mcdreforged.translation.translation_text.RTextMCDRTranslation.__init__:3 of
+msgid "The translation key"
+msgstr "翻译键"
+
+#: mcdreforged.minecraft.rtext.text.RTextTranslation.__init__:12 of
+msgid ""
+"Optional, the style of the text. It can be a single "
+":class:`~mcdreforged.minecraft.rtext.style.RStyle` or a collection of "
+":class:`~mcdreforged.minecraft.rtext.style.RStyle`"
+msgstr ""
+"可选参数，文本的样式。它可以是单一一个 "
+":class:`~mcdreforged.minecraft.rtext.style.RStyle`，也可以是 "
+":class:`~mcdreforged.minecraft.rtext.style.RStyle` 的一个可迭代对象"
+
+#: mcdreforged.minecraft.rtext.text.RTextTranslation.arg:1 of
+msgid "Set the translation arguments"
+msgstr "设置翻译参数"
+
+#: mcdreforged.minecraft.rtext.text.RTextTranslation.arg:3
+#: mcdreforged.translation.translation_text.RTextMCDRTranslation.__init__:4 of
+msgid "The translation arguments"
+msgstr "翻译的参数"
+
+#: mcdreforged.translation.translation_text.RTextMCDRTranslation:1 of
+msgid "The translation text component used in MCDR"
+msgstr "MCDR 翻译文本组件类"
+
+#: mcdreforged.translation.translation_text.RTextMCDRTranslation:3 of
+msgid ""
+"When MCDR is running, it will use the "
+":meth:`~mcdreforged.plugin.server_interface.ServerInterface.tr` method in"
+" :class:`~mcdreforged.plugin.server_interface.ServerInterface` class as "
+"the translating method, and the language of MCDR as the fallback "
+"translation language"
+msgstr ""
+"当 MCDR 正在运行时，它将使用 "
+":class:`~mcdreforged.plugin.server_interface.ServerInterface` 类中的 "
+":meth:`~mcdreforged.plugin.server_interface.ServerInterface.tr` "
+"方法作为翻译的方法，并使用 MCDR 的语言作为默认语言。"
+
+#: mcdreforged.translation.translation_text.RTextMCDRTranslation.__init__:1 of
+msgid ""
+"Create a :class:`RTextMCDRTranslation` component with necessary "
+"parameters for translation"
+msgstr "使用与翻译相关的必要参数创建一个 ``RTextMCDRTranslation`` 组件。"
+
+#: mcdreforged.translation.translation_text.RTextMCDRTranslation.__init__:5 of
+msgid "The translation keyword arguments"
+msgstr "翻译的关键字参数"
+
+#: mcdreforged.translation.translation_text.RTextMCDRTranslation.language_context:1
+#: of
+msgid ""
+"Create a context where all :class:`RTextMCDRTranslation` will use the "
+"given language to translate within"
+msgstr "创建一个上下文，在其中所有的 :class:`RTextMCDRTranslation` 将会使用给定的语言来进行翻译。"
+
+#: mcdreforged.translation.translation_text.RTextMCDRTranslation.language_context:3
+#: of
+msgid ""
+"It's mostly used when you want a translated str or Minecraft json text "
+"object corresponding to this component under a specific language"
+msgstr "它主要在你想要在特定语言下，获得该文本组件对应的翻译后的字符串或翻译后的 Minecraft json 文本时使用。"
+
+#: mcdreforged.translation.translation_text.RTextMCDRTranslation.language_context:5
+#: of
+msgid ""
+"MCDR will automatically apply this context with :ref:`user's preferred "
+"language <preference-language>` right before sending messages to a player"
+" or the console"
+msgstr "MCDR 将自动地于发送信息至玩家或控制台前，使用 :ref:`用户的偏好语言 <preference-language>` 应用该上下文管理器。"
+
+#: mcdreforged.translation.translation_text.RTextMCDRTranslation.language_context:19
+#: of
+msgid "The language to be used during translation inside the context"
+msgstr "在上下文中进行翻译时所用的语言"
+
+#: ../class_references/minecraft_tools.rst:59
+msgid "Rcon"
+msgstr "Rcon"
+
+#: mcdreforged.minecraft.rcon.rcon_connection.RconConnection:1 of
+msgid ""
+"A simply rcon client for connect to any Minecraft servers that supports "
+"rcon protocol"
+msgstr "一个简单的 rcon 客户端，用于连接到任何支持 rcon 协议的 Minecraft 服务端"
+
+#: mcdreforged.minecraft.rcon.rcon_connection.RconConnection.__init__:1 of
+msgid "Create a rcon client instance"
+msgstr "创建一个 rcon 客户端实例"
+
+#: mcdreforged.minecraft.rcon.rcon_connection.RconConnection.__init__:3 of
+msgid "The address of the rcon server"
+msgstr "rcon 服务器的地址"
+
+#: mcdreforged.minecraft.rcon.rcon_connection.RconConnection.__init__:4 of
+msgid "The port if the rcon server"
+msgstr "rcon 服务器的端口"
+
+#: mcdreforged.minecraft.rcon.rcon_connection.RconConnection.__init__:5 of
+msgid "The password of the rcon connection"
+msgstr "rcon 服务器的密码"
+
+#: mcdreforged.minecraft.rcon.rcon_connection.RconConnection.__init__ of
+msgid "Keyword Arguments"
+msgstr "关键字参数"
+
+#: mcdreforged.minecraft.rcon.rcon_connection.RconConnection.__init__:6 of
+msgid ""
+"Optional, an instance of ``logging.Logger``. It's used to output some "
+"warning information like failing to receive a packet"
+msgstr "可选参数，一个 ``logging.Logger`` 实例。它用于输出一些警告信息，例如接受数据包失败"
+
+#: mcdreforged.minecraft.rcon.rcon_connection.RconConnection.connect:1 of
+msgid "Start a connection to the rcon server and try to log in"
+msgstr "启动与 rcon 服务器的连接并尝试登录"
+
+#: mcdreforged.minecraft.rcon.rcon_connection.RconConnection.connect:3 of
+msgid "If connect and login success"
+msgstr "连接与登录是否成功"
+
+#: mcdreforged.minecraft.rcon.rcon_connection.RconConnection.disconnect:1 of
+msgid "Disconnect from the server"
+msgstr "断开与服务器的连接。"
+
+#: mcdreforged.minecraft.rcon.rcon_connection.RconConnection.send_command:1 of
+msgid "Send a command to the rcon server"
+msgstr "将命令发送到 rcon 服务器"
+
+#: mcdreforged.minecraft.rcon.rcon_connection.RconConnection.send_command:3 of
+msgid "The command you want to send to the server"
+msgstr "要发送到服务器的命令"
+
+#: mcdreforged.minecraft.rcon.rcon_connection.RconConnection.send_command:4 of
+msgid "The maximum retry time of the operation"
+msgstr "操作的最大重试次数"
+
+#: mcdreforged.minecraft.rcon.rcon_connection.RconConnection.send_command:5 of
+msgid ""
+"The command execution result form the server, or None if *max_retry_time*"
+" retries exceeded"
+msgstr "服务器的命令执行结果。如果重试次数超过 *max_retry_time*，则将返回 None"
