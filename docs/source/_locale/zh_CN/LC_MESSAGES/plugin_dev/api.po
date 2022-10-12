@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-12 16:41+0800\n"
+"POT-Creation-Date: 2022-10-12 17:59+0800\n"
 "PO-Revision-Date: 2021-01-24 09:02+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -41,34 +41,42 @@ msgstr ""
 msgid "all"
 msgstr "all"
 
-#: ../plugin_dev/api.rst:18
+#: ../plugin_dev/api.rst:14
+msgid "Module path: ``mcdreforged.api.all``"
+msgstr "模块路径：``mcdreforged.api.all``"
+
+#: ../plugin_dev/api.rst:20
 msgid ""
 "This is the simplest way to import everything you want for plugin "
 "development. It's a life saver for lazy man"
 msgstr "这是导入插件开发所需的所有内容的最简单的方法，是懒人的救命稻草。"
 
-#: ../plugin_dev/api.rst:20
+#: ../plugin_dev/api.rst:22
 msgid ""
 "You can also use the following way as an approach with more security "
 "since it doesn't use ``*``"
 msgstr "你也可以使用如下所示，不使用 ``*`` 的更安全的操作"
 
-#: ../plugin_dev/api.rst:28
+#: ../plugin_dev/api.rst:30
 msgid "Continue reading to see what it will actually import"
 msgstr "继续阅读以了解实际导入的内容。"
 
-#: ../plugin_dev/api.rst:31
+#: ../plugin_dev/api.rst:33
 msgid "command"
 msgstr "command"
 
-#: ../plugin_dev/api.rst:33
+#: ../plugin_dev/api.rst:35
+msgid "Module path: ``mcdreforged.api.command``"
+msgstr "模块路径：``mcdreforged.api.command``"
+
+#: ../plugin_dev/api.rst:37
 msgid ""
 "``command`` package contains the necessities for building a command tree "
 "or create your own command, including command tree node classes, command "
 "exceptions and some command utils"
 msgstr "``command`` 包包含了建立命令树或创建自己的命令的必要条件，包括命令树节点类、命令异常和一些命令实用工具。"
 
-#: ../plugin_dev/api.rst:35
+#: ../plugin_dev/api.rst:39
 msgid ""
 "For example, if you want the class ``Literal`` and ``IllegalArgument`` "
 "for building your command tree ``on_error`` exception handling, you can "
@@ -77,32 +85,36 @@ msgstr ""
 "例如，若你希望使用 ``Literal`` 和 ``IllegalArgument`` 来构建你命令树并处理 ``on_error`` "
 "异常，则可以这样做："
 
-#: ../plugin_dev/api.rst:41
+#: ../plugin_dev/api.rst:45
 msgid "Of course if you are lazy enough you can just"
 msgstr "当然，如果你嫌麻烦，那么也可以："
 
-#: ../plugin_dev/api.rst:48
+#: ../plugin_dev/api.rst:52
 msgid "decorator"
 msgstr "decorator"
 
-#: ../plugin_dev/api.rst:50
+#: ../plugin_dev/api.rst:54
+msgid "Module path: ``mcdreforged.api.decorator``"
+msgstr "模块路径：``mcdreforged.api.decorator``"
+
+#: ../plugin_dev/api.rst:56
 msgid ""
 "``decorator`` package contains some useful function decorators for plugin"
 " development"
 msgstr "``decorator`` 包包含了一些对插件开发有用的函数装饰器。"
 
-#: ../plugin_dev/api.rst:53
+#: ../plugin_dev/api.rst:59
 msgid "new_thread"
 msgstr "new_thread"
 
-#: ../plugin_dev/api.rst:55
+#: ../plugin_dev/api.rst:61
 msgid ""
 "This is a one line solution to make your function executes in parallels. "
 "When decorated with this decorator, functions will be executed in a new "
 "daemon thread"
 msgstr "这是一个让你的函数多线程异步执行的一行代码解决方案。当使用这个装饰器时，函数将在一个新的守护线程中执行。"
 
-#: ../plugin_dev/api.rst:57
+#: ../plugin_dev/api.rst:63
 msgid ""
 "This decorator only changes the return value of the function to the "
 "created ``Thread`` instance. Beside the return value, it reserves all "
@@ -112,15 +124,15 @@ msgstr ""
 "这个装饰器只将函数的返回值改为创建的 ``Thread`` "
 "实例。除了返回值，它还保留了被装饰的函数的所有签名，所以你可以安全地使用被装饰的函数，就像它们没有被装饰一样。"
 
-#: ../plugin_dev/api.rst:59
+#: ../plugin_dev/api.rst:65
 msgid "It's also a simple compatible upgrade method for old MCDR 0.x plugins"
 msgstr "这也是传统 MCDR 0.x 插件的简单的兼容升级方法。"
 
-#: ../plugin_dev/api.rst:61 ../plugin_dev/api.rst:128 ../plugin_dev/api.rst:159
+#: ../plugin_dev/api.rst:67 ../plugin_dev/api.rst:134 ../plugin_dev/api.rst:165
 msgid "Example:"
 msgstr "例如："
 
-#: ../plugin_dev/api.rst:82
+#: ../plugin_dev/api.rst:88
 msgid ""
 "The only difference between ``do_something1`` and ``do_something2`` is "
 "that ``do_something2`` is decorated by ``@new_thread``. So when executing"
@@ -131,14 +143,14 @@ msgstr ""
 "``@new_thread`` 装饰。所以当执行 ``do_something2`` 时，它不会像 ``do_something1`` 那样阻塞 "
 "MCDR 之后的操作，因为 ``do_something2`` 会在另一个线程上执行。"
 
-#: ../plugin_dev/api.rst:84
+#: ../plugin_dev/api.rst:90
 msgid ""
 "About the returned value of the decorated function, it's a "
 "``FunctionThread`` object. Inherited from ``Thread``, it has 1 extra "
 "method comparing to the ``Thread`` class:"
 msgstr "关于被装饰的函数的返回值，它是一个 ``FunctionThread`` 对象。继承自 ``Thread``，它拥有 1 个额外的方法："
 
-#: ../plugin_dev/api.rst:90
+#: ../plugin_dev/api.rst:96
 msgid ""
 "As the name of the method, it's used to get the return value of the "
 "original function. An ``RuntimeError`` will be risen if ``block=False`` "
@@ -148,7 +160,7 @@ msgstr ""
 "正如该方法的名字所示，该方法是用获取原函数的返回值。如果 ``block=False`` 且线程仍在运行，``RuntimeError`` "
 "将被抛出。如果线程运行过程中有异常发生，则此异常将被抛出。"
 
-#: ../plugin_dev/api.rst:96
+#: ../plugin_dev/api.rst:102
 msgid ""
 "If you only want to wait for the decorated function to complete, you can "
 "simple use the ``join`` method from class ``threading.Thread``. Remember "
@@ -158,29 +170,29 @@ msgstr ""
 "如果你仅想等待被装饰的函数完成，你可以简单地使用类 ``threading.Thread`` 中的 ``join`` "
 "方法。记住被装饰函数的返回值已经被修改为 ``Thread`` 实例。"
 
-#: ../plugin_dev/api.rst:102
+#: ../plugin_dev/api.rst:108
 msgid ""
 "In addition to simply and directly use a raw ``@new_thread``, it's "
 "recommend to add a thread name argument for the decorator"
 msgstr "除了简单直接使用原始的 ``@new_thread`` 之外，建议为装饰器添加一个线程名参数。"
 
-#: ../plugin_dev/api.rst:111
+#: ../plugin_dev/api.rst:117
 msgid ""
 "So when you logs something by ``server.logger``, a meaningful thread name"
 " will be displayed instead of a plain and meaningless ``Thread-3``"
 msgstr "这样，当你通过 ``server.logger`` 输出某些内容时，将显示一个有意义的线程名称，而不是简单无意义的 ``Thread-3``。"
 
-#: ../plugin_dev/api.rst:113
+#: ../plugin_dev/api.rst:119
 msgid ""
 "In case you want to access the original un-decorated function, you can "
 "access the ``original`` field of the decorated function"
 msgstr "如果你需要访问原未被装饰的函数，你可以访问被装饰的函数的 ``original`` 属性："
 
-#: ../plugin_dev/api.rst:120
+#: ../plugin_dev/api.rst:126
 msgid "event_listener"
 msgstr "event_listener"
 
-#: ../plugin_dev/api.rst:122
+#: ../plugin_dev/api.rst:128
 msgid ""
 "This decorator is used to register a custom event listener without "
 "involving `PluginServerInterface <classes/PluginServerInterface.html"
@@ -189,41 +201,41 @@ msgstr ""
 "这个装饰器是用于在不使用 `PluginServerInterface <classes/PluginServerInterface.html"
 "#register-event-listener>`__ 的前提下注册自定义事件监听器"
 
-#: ../plugin_dev/api.rst:124
+#: ../plugin_dev/api.rst:130
 msgid ""
 "It accepts a single str or PluginEvent indicating the event you are "
 "listening to as parameter, and will register the function as the callback"
 " of the given listener"
 msgstr "它接受单个 str 或 PluginEvent 作为参数，代表着你打算监听的事件，然后它将会将被装饰的函数作为对应监听器的回调函数"
 
-#: ../plugin_dev/api.rst:126
+#: ../plugin_dev/api.rst:132
 msgid ""
 "It's highly suggested to use this decorator only in the entry point of "
 "your plugin so it can work correctly and register the event listener in "
 "the correct time"
 msgstr "强烈建议你仅在插件的 `入口点 <basic.html#entrypoint>`__ 使用此装饰器，以便它可以正常工作，且在正确的时间注册事件监听器"
 
-#: ../plugin_dev/api.rst:136 ../plugin_dev/api.rst:168
+#: ../plugin_dev/api.rst:142 ../plugin_dev/api.rst:174
 msgid "Which is equivalent to:"
 msgstr "等价于："
 
-#: ../plugin_dev/api.rst:144
+#: ../plugin_dev/api.rst:150
 msgid "spam_proof"
 msgstr "spam_proof"
 
-#: ../plugin_dev/api.rst:146
+#: ../plugin_dev/api.rst:152
 msgid ""
 "Use a lock to protect the decorated function from being invoked on "
 "multiple threads at the same time"
 msgstr "用一个锁来保护被装饰的函数，避免它被多个线程同时调用"
 
-#: ../plugin_dev/api.rst:148
+#: ../plugin_dev/api.rst:154
 msgid ""
 "If a multiple-invocation happens, only the first invocation can be "
 "executed normally, other invocations will be skipped"
 msgstr "在“多重同时调用”发生时，只有第一个函数调用能被成功执行，其他的函数调用将被跳过"
 
-#: ../plugin_dev/api.rst:150
+#: ../plugin_dev/api.rst:156
 msgid ""
 "The type of the lock can be specified with the ``lock_class`` parameter, "
 "for example it can be ``threading.RLock`` (default) or ``threading.Lock``"
@@ -231,35 +243,39 @@ msgstr ""
 "锁的类型可以用 ``lock_class`` 参数指定，比如可以设为 ``threading.RLock`` (默认值)或者 "
 "``threading.Lock``"
 
-#: ../plugin_dev/api.rst:152
+#: ../plugin_dev/api.rst:158
 msgid ""
 "The return value of the decorated function is modified into a bool, "
 "indicating if this invocation is executed normally"
 msgstr "被装饰的函数的返回值被修改为一个 bool，代表这次函数调用是否正常地执行了"
 
-#: ../plugin_dev/api.rst:154
+#: ../plugin_dev/api.rst:160
 msgid "The decorated function has 2 extra fields:"
 msgstr "被修饰的函数拥有着 2 个额外的属性："
 
-#: ../plugin_dev/api.rst:156
+#: ../plugin_dev/api.rst:162
 msgid "``original`` field: stores the original undecorated function"
 msgstr "``original`` 属性：储存着原始的未被修饰的函数对象"
 
-#: ../plugin_dev/api.rst:157
+#: ../plugin_dev/api.rst:163
 msgid "``lock`` field: stores the lock object used in the spam proof logic"
 msgstr "``lock`` 属性：储存着防重复调用逻辑中使用的锁对象"
 
-#: ../plugin_dev/api.rst:186
+#: ../plugin_dev/api.rst:192
 msgid "event"
 msgstr "event"
 
-#: ../plugin_dev/api.rst:188
+#: ../plugin_dev/api.rst:194
+msgid "Module path: ``mcdreforged.api.event``"
+msgstr "模块路径：``mcdreforged.api.event``"
+
+#: ../plugin_dev/api.rst:196
 msgid ""
 "``event`` package contains the classes for creating custom events, and "
 "classes of MCDR built-in events"
 msgstr "``event`` 包包含用于创建自定义事件的类和 MCDR 内置事件的类。"
 
-#: ../plugin_dev/api.rst:190
+#: ../plugin_dev/api.rst:198
 msgid ""
 "You might already read the `dispatch_event <classes/ServerInterface.html"
 "#dispatch-event>`__ method in ``ServerInterface`` class. It only accepts "
@@ -272,11 +288,15 @@ msgstr ""
 "``PluginEvent`` 实例作为第一个参数。所以，如果你想分发你的自定义事件，为了简单起见，请创建一个 ``LiteralEvent`` "
 "或一个继承自 ``PluginEvent`` 的自定义事件类。"
 
-#: ../plugin_dev/api.rst:193
+#: ../plugin_dev/api.rst:201
 msgid "exception"
 msgstr "exception"
 
-#: ../plugin_dev/api.rst:195
+#: ../plugin_dev/api.rst:203
+msgid "Module path: ``mcdreforged.api.exception``"
+msgstr "模块路径：``mcdreforged.api.exception``"
+
+#: ../plugin_dev/api.rst:205
 msgid ""
 "There some custom exceptions that is used in MCDR runtime e.g. "
 "`ServerInterface <classes/ServerInterface.html>`__ methods. Here comes "
@@ -285,11 +305,15 @@ msgstr ""
 "MCDR 运行时会使用一些自定义的异常，例如在调用 `ServerInterface "
 "<classes/ServerInterface.html>`__ 的方法时。这是导入它们的方法。"
 
-#: ../plugin_dev/api.rst:198
+#: ../plugin_dev/api.rst:208
 msgid "rcon"
 msgstr "rcon"
 
-#: ../plugin_dev/api.rst:200
+#: ../plugin_dev/api.rst:210
+msgid "Module path: ``mcdreforged.api.rcon``"
+msgstr "模块路径：``mcdreforged.api.rcon``"
+
+#: ../plugin_dev/api.rst:212
 msgid ""
 "Package ``rcon`` contains a single class ``RconConnection``. It's is a "
 "simply rcon client for connect to any Minecraft servers that supports "
@@ -298,15 +322,19 @@ msgstr ""
 "``rcon`` 包仅包含一个类—— ``RconConnection``。这是一个简单的 rcon 客户端，用于连接到任何支持 rcon 协议的"
 " Minecraft 服务端。"
 
-#: ../plugin_dev/api.rst:202
+#: ../plugin_dev/api.rst:214
 msgid "Class references: :ref:`class-ref-rcon`"
 msgstr "类参考：:ref:`class-ref-rcon`"
 
-#: ../plugin_dev/api.rst:205
+#: ../plugin_dev/api.rst:217
 msgid "rtext"
 msgstr "rtext"
 
-#: ../plugin_dev/api.rst:207
+#: ../plugin_dev/api.rst:219
+msgid "Module path: ``mcdreforged.api.rtext``"
+msgstr "模块路径：``mcdreforged.api.rtext``"
+
+#: ../plugin_dev/api.rst:221
 msgid ""
 "Recommend to read the page `Raw JSON text format "
 "<https://minecraft.gamepedia.com/Raw_JSON_text_format>`__ in Minecraft "
@@ -316,11 +344,11 @@ msgstr ""
 "<https://wiki.biligame.com/mc/%E5%8E%9F%E5%A7%8BJSON%E6%96%87%E6%9C%AC%E6%A0%BC%E5%BC%8F>`__"
 " 页面。"
 
-#: ../plugin_dev/api.rst:209
+#: ../plugin_dev/api.rst:223
 msgid "This is an advanced text component library for Minecraft"
 msgstr "这是一个用于Minecraft的高级文本组件库。"
 
-#: ../plugin_dev/api.rst:211
+#: ../plugin_dev/api.rst:225
 msgid ""
 "Inspired by the `MCD stext API <https://github.com/TISUnion/rtext>`__ "
 "made by `Pandaria98 <https://github.com/Pandaria98>`__"
@@ -328,15 +356,19 @@ msgstr ""
 "这部分受 `Pandaria98 <https://github.com/Pandaria98>`__ 制作的 `MCD stext API "
 "<https://github.com/TISUnion/rtext>`__ 的启发，在此表达感谢。"
 
-#: ../plugin_dev/api.rst:213
+#: ../plugin_dev/api.rst:227
 msgid "Class references: :ref:`class-ref-rtext`"
 msgstr "类参考：:ref:`class-ref-rtext`"
 
-#: ../plugin_dev/api.rst:216
+#: ../plugin_dev/api.rst:230
 msgid "types"
 msgstr "types"
 
-#: ../plugin_dev/api.rst:218
+#: ../plugin_dev/api.rst:232
+msgid "Module path: ``mcdreforged.api.types``"
+msgstr "模块路径：``mcdreforged.api.types``"
+
+#: ../plugin_dev/api.rst:234
 msgid ""
 "Who doesn't want a complete type checking to help you reduce silly "
 "mistakes etc. when coding your plugin? If you want to add type hints to "
@@ -344,42 +376,19 @@ msgid ""
 "you to import those Usually-used classes"
 msgstr "谁不希望在编写插件时，有一个检查器来帮助你减少愚蠢的错误呢？如果你想指定类型以让 IDE 知道你在写什么，这里有一个包可以让你导入一些常用的类。"
 
-#: ../plugin_dev/api.rst:230
+#: ../plugin_dev/api.rst:246
 msgid "utils"
 msgstr "utils"
 
-#: ../plugin_dev/api.rst:232
+#: ../plugin_dev/api.rst:248
 msgid "Some useful kits"
 msgstr "一些使用工具集"
 
-#: ../plugin_dev/api.rst:235
-msgid "Serializable"
-msgstr "Serializable"
+#: ../plugin_dev/api.rst:250
+msgid "Module path: ``mcdreforged.api.utils``"
+msgstr "模块路径：``mcdreforged.api.utils``"
 
-#: ../plugin_dev/api.rst:237
-msgid "A abstract class for easy serializing / deserializing"
-msgstr "一个用于便捷序列化/反序列化的抽象类。"
+#: ../plugin_dev/api.rst:252
+msgid "Class references: :ref:`class-ref-utilities`"
+msgstr "类参考：:ref:`class-ref-utilities`"
 
-#: ../plugin_dev/api.rst:239
-msgid ""
-"Inherit it and declare the fields of your class with type annotations, "
-"that's all you need to do"
-msgstr "继承它，并在你的子类中使用类型注解声明属性，你所需要做的就这么多。"
-
-#: ../plugin_dev/api.rst:253
-msgid ""
-"You can also declare default value when declaring type annotations, then "
-"during deserializing, if the value is missing, a `copy "
-"<https://docs.python.org/3/library/copy.html#copy.copy>`__ of the default"
-" value will be assigned"
-msgstr ""
-"你也可以在声明类型注解时声明属性的默认值，这样在反序列化的过程中，如果值缺失，则默认值的 `拷贝 <https://docs.python.org"
-"/zh-cn/3/library/copy.html#copy.copy>`__ 将会被赋值"
-
-#: ../plugin_dev/api.rst:266
-msgid "Enum class will be serialized into its member name"
-msgstr "类 Enum 会被序列化为它的枚举成员名称"
-
-#: ../plugin_dev/api.rst:286
-msgid "Serializable class nesting is also supported"
-msgstr "类 Serializable 的嵌套也是支持的"

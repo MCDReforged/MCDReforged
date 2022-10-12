@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-11 20:30+0800\n"
+"POT-Creation-Date: 2022-10-12 17:55+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,8 +22,9 @@ msgid "ServerInterface"
 msgstr "ServerInterface"
 
 #: ../class_references/ServerInterface.rst:5
-msgid ":ref:`API package <api-package>` path: ``mcdreforged.api.types.ServerInterface``"
-msgstr ":ref:`API 包 <api-package>` 路径: ``mcdreforged.api.types.ServerInterface``"
+#, fuzzy
+msgid ":ref:`API package <api-package>` path: ``mcdreforged.api.types``"
+msgstr ":ref:`API 包 <api-package>` 路径: ``mcdreforged.api.types``"
 
 #: mcdreforged.plugin.server_interface.ServerInterface:1 of
 msgid ""
@@ -67,9 +68,9 @@ msgstr "返回一个代表着翻译键的翻译文本，并使用提供的 args 
 #: mcdreforged.plugin.server_interface.ServerInterface.tr:3 of
 msgid ""
 "If args or kwargs contains :class:`RText "
-"<mcdreforged.minecraft.rtext.text.RTextBase>` element, then the result will be"
-" a :class:`RText <mcdreforged.minecraft.rtext.text.RTextBase>`, otherwise the "
-"result will be a regular str"
+"<mcdreforged.minecraft.rtext.text.RTextBase>` element, then the result "
+"will be a :class:`RText <mcdreforged.minecraft.rtext.text.RTextBase>`, "
+"otherwise the result will be a regular str"
 msgstr ""
 "如果 args 或者 kwargs 包含 :class:`RText "
 "<mcdreforged.minecraft.rtext.text.RTextBase>` 元素，则结果将为一个 :class:`RText "
@@ -174,7 +175,9 @@ msgid ""
 "It's used for removing the plugin information inside "
 ":class:`PluginServerInterface` when you need to send a "
 ":class:`ServerInterface` as parameter"
-msgstr "它可用于在你想要传递一个 :class:`ServerInterface` 时，移除 :class:`ServerInterface` 中包含着的插件信息"
+msgstr ""
+"它可用于在你想要传递一个 :class:`ServerInterface` 时，移除 :class:`ServerInterface` "
+"中包含着的插件信息"
 
 #: mcdreforged.plugin.server_interface.ServerInterface.as_plugin_server_interface:1
 #: of
@@ -248,10 +251,12 @@ msgstr "重新启动服务端"
 
 #: mcdreforged.plugin.server_interface.ServerInterface.restart:3 of
 msgid ""
-"It will first :meth:`soft stop <stop>` the server and then "
-":meth:`wait <wait_for_start>` until the server is stopped, finally "
-":meth:start <start>` the server up"
-msgstr "它首先会 :meth:`软停止 <stop>` 服务端，然后 :meth:`等 <wait_for_start>` 到服务端完全停止后，再 :meth:启动 <start>` 服务端。"
+"It will first :meth:`soft stop <stop>` the server and then :meth:`wait "
+"<wait_for_start>` until the server is stopped, finally :meth:start "
+"<start>` the server up"
+msgstr ""
+"它首先会 :meth:`软停止 <stop>` 服务端，然后 :meth:`等 <wait_for_start>` 到服务端完全停止后，再 "
+":meth:启动 <start>` 服务端。"
 
 #: mcdreforged.plugin.server_interface.ServerInterface.stop_exit:1 of
 msgid ":meth:`soft stop <stop>` the server and exit MCDR"

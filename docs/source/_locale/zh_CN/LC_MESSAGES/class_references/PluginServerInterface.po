@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-11 21:12+0800\n"
+"POT-Creation-Date: 2022-10-12 17:55+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,12 +22,10 @@ msgid "PluginServerInterface"
 msgstr "PluginServerInterface"
 
 #: ../class_references/PluginServerInterface.rst:5
-msgid ""
-":ref:`API package <api-package>` path: "
-"``mcdreforged.api.types.PluginServerInterface``"
+msgid ":ref:`API package <api-package>` path: ``mcdreforged.api.types``"
 msgstr ""
 ":ref:`API 包 <api-package>` 路径: "
-"``mcdreforged.api.types.PluginServerInterface``"
+"``mcdreforged.api.types``"
 
 #: mcdreforged.plugin.server_interface.PluginServerInterface:1 of
 msgid ""
@@ -113,8 +111,8 @@ msgstr "你的插件的帮助指令。当玩家点击显示的信息时，会向
 #: of
 msgid ""
 "A neat command description. It can be a str or a :class:`RText "
-"<mcdreforged.minecraft.rtext.text.RTextBase>` Also, it can be a dict maps from"
-" language to description message"
+"<mcdreforged.minecraft.rtext.text.RTextBase>` Also, it can be a dict maps"
+" from language to description message"
 msgstr ""
 "一个整洁的指令描述。它可以为一个 str 或者 :class:`RText "
 "<mcdreforged.minecraft.rtext.text.RTextBase>`。除此之外它还可为一个将语言映射至描述信息的 dict"
@@ -316,3 +314,4 @@ msgstr "将要被保存的配置文件实例。"
 #: of
 msgid "The encoding method to write the config file. Default ``\"utf8\"``"
 msgstr "写入配置文件的编码方式。默认值 ``\"utf8\"``"
+

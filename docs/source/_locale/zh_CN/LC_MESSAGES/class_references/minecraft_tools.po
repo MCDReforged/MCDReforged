@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-12 16:34+0800\n"
+"POT-Creation-Date: 2022-10-12 17:55+0800\n"
 "PO-Revision-Date: 2021-01-24 09:02+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -18,11 +18,15 @@ msgstr ""
 msgid "Minecraft Tools"
 msgstr "Minecraft 工具"
 
-#: ../class_references/minecraft_tools.rst:6
+#: ../class_references/minecraft_tools.rst:8
 msgid "RText"
 msgstr "RText"
 
-#: ../class_references/minecraft_tools.rst:9
+#: ../class_references/minecraft_tools.rst:10
+msgid ":ref:`API package <api-package>` path: ``mcdreforged.api.rtext``"
+msgstr ":ref:`API 包 <api-package>` 路径: ``mcdreforged.api.rtext``"
+
+#: ../class_references/minecraft_tools.rst:13
 msgid "Text Styles"
 msgstr "文本样式"
 
@@ -88,7 +92,7 @@ msgstr "将给定文本复制到剪切板"
 msgid "Available in Minecraft 1.15+"
 msgstr "在 Minecraft 1.15+ 中可用"
 
-#: ../class_references/minecraft_tools.rst:31
+#: ../class_references/minecraft_tools.rst:35
 msgid "Text Components"
 msgstr "文本组件"
 
@@ -408,9 +412,13 @@ msgstr "MCDR 将自动地于发送信息至玩家或控制台前，使用 :ref:`
 msgid "The language to be used during translation inside the context"
 msgstr "在上下文中进行翻译时所用的语言"
 
-#: ../class_references/minecraft_tools.rst:59
+#: ../class_references/minecraft_tools.rst:65
 msgid "Rcon"
 msgstr "Rcon"
+
+#: ../class_references/minecraft_tools.rst:67
+msgid ":ref:`API package <api-package>` path: ``mcdreforged.api.rcon``"
+msgstr ":ref:`API 包 <api-package>` 路径: ``mcdreforged.api.rcon``"
 
 #: mcdreforged.minecraft.rcon.rcon_connection.RconConnection:1 of
 msgid ""
@@ -473,3 +481,4 @@ msgid ""
 "The command execution result form the server, or None if *max_retry_time*"
 " retries exceeded"
 msgstr "服务器的命令执行结果。如果重试次数超过 *max_retry_time*，则将返回 None"
+

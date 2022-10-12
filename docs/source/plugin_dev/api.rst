@@ -11,6 +11,8 @@ When your plugin needs to import something from MCDR, rather than directly impor
 all
 ---
 
+Module path: ``mcdreforged.api.all``
+
 .. code-block:: python
 
     from mcdreforged.api.all import *
@@ -30,6 +32,8 @@ Continue reading to see what it will actually import
 command
 -------
 
+Module path: ``mcdreforged.api.command``
+
 ``command`` package contains the necessities for building a command tree or create your own command, including command tree node classes, command exceptions and some command utils
 
 For example, if you want the class ``Literal`` and ``IllegalArgument`` for building your command tree ``on_error`` exception handling, you can do it like this
@@ -46,6 +50,8 @@ Of course if you are lazy enough you can just
 
 decorator
 ---------
+
+Module path: ``mcdreforged.api.decorator``
 
 ``decorator`` package contains some useful function decorators for plugin development
 
@@ -185,6 +191,8 @@ Which is equivalent to:
 event
 -----
 
+Module path: ``mcdreforged.api.event``
+
 ``event`` package contains the classes for creating custom events, and classes of MCDR built-in events
 
 You might already read the `dispatch_event <classes/ServerInterface.html#dispatch-event>`__ method in ``ServerInterface`` class. It only accepts a ``PluginEvent`` instance as its first parameter. So if you want to dispatch your custom event, create a ``LiteralEvent`` for simpleness or a custom event class inherited from ``PluginEvent``
@@ -192,10 +200,14 @@ You might already read the `dispatch_event <classes/ServerInterface.html#dispatc
 exception
 ---------
 
+Module path: ``mcdreforged.api.exception``
+
 There some custom exceptions that is used in MCDR runtime e.g. `ServerInterface <classes/ServerInterface.html>`__ methods. Here comes the way to import them
 
 rcon
 ----
+
+Module path: ``mcdreforged.api.rcon``
 
 Package ``rcon`` contains a single class ``RconConnection``. It's is a simply rcon client for connect to any Minecraft servers that supports rcon protocol
 
@@ -203,6 +215,8 @@ Class references: :ref:`class-ref-rcon`
 
 rtext
 -----
+
+Module path: ``mcdreforged.api.rtext``
 
 Recommend to read the page `Raw JSON text format <https://minecraft.gamepedia.com/Raw_JSON_text_format>`__ in Minecraft Wiki first
 
@@ -214,6 +228,8 @@ Class references: :ref:`class-ref-rtext`
 
 types
 -----
+
+Module path: ``mcdreforged.api.types``
 
 Who doesn't want a complete type checking to help you reduce silly mistakes etc. when coding your plugin? If you want to add type hints to the server interface or command source parameter, here's the package for you to import those Usually-used classes
 
@@ -231,63 +247,6 @@ utils
 
 Some useful kits
 
-Serializable
-^^^^^^^^^^^^
+Module path: ``mcdreforged.api.utils``
 
-A abstract class for easy serializing / deserializing
-
-Inherit it and declare the fields of your class with type annotations, that's all you need to do
-
-.. code-block:: python
-
-    class MyData(Serializable):
-        name: str
-        values: List[int]
-
-    data = MyData.deserialize({'name': 'abc', 'values': [1, 2]})
-    print(data.serialize())  # {'name': 'abc', 'values': [1, 2]}
-
-    data = MyData(name='cde')
-    print(data.serialize())  # {'name': 'cde'}
-
-You can also declare default value when declaring type annotations, then during deserializing, if the value is missing, a `copy <https://docs.python.org/3/library/copy.html#copy.copy>`__ of the default value will be assigned
-
-.. code-block:: python
-
-    class MyData(Serializable):
-        name: str = 'default'
-        values: List[int] = []
-
-    data = MyData(values=[0])
-    print(data.serialize())  # {'name': 'default', 'values': [0]}
-    print(MyData.deserialize({}).serialize())  # {'name': 'default', 'values': []}
-    print(MyData.deserialize({}).values is MyData.deserialize({}).values)  # False
-
-Enum class will be serialized into its member name
-
-.. code-block:: python
-
-    class Gender(Enum):
-        male = 'man'
-        female = 'woman'
-
-
-    class MyData(Serializable):
-        name: str = 'zhang_san'
-        gender: Gender = Gender.male
-
-
-    data = MyData.get_default()
-    print(data.serialize())                                     # {'name': 'zhang_san', 'gender': 'male'}
-    data.gender = Gender.female
-    print(data.serialize())                                     # {'name': 'zhang_san', 'gender': 'female'}
-    MyData.deserialize({'name': 'li_si', 'gender': 'female'})    # -> MyData(name='li_si', gender=Gender.female)
-
-Serializable class nesting is also supported
-
-.. code-block:: python
-
-    class MyStorage(Serializable):
-        id: str
-        best: MyData
-        data: Dict[str, MyData]
+Class references: :ref:`class-ref-utilities`

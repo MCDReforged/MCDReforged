@@ -7,6 +7,8 @@ Minecraft Tools
 RText
 -----
 
+:ref:`API package <api-package>` path: ``mcdreforged.api.rtext``
+
 Text Styles
 ^^^^^^^^^^^
 
@@ -61,6 +63,8 @@ Text Components
 
 Rcon
 ----
+
+:ref:`API package <api-package>` path: ``mcdreforged.api.rcon``
 
 .. autoclass:: mcdreforged.minecraft.rcon.rcon_connection.RconConnection
     :members:

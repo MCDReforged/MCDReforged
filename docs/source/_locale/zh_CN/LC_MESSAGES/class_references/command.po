@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-12 15:50+0800\n"
+"POT-Creation-Date: 2022-10-12 17:55+0800\n"
 "PO-Revision-Date: 2021-01-23 17:24+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -19,8 +19,8 @@ msgid "Command"
 msgstr "指令"
 
 #: ../class_references/command.rst:7
-msgid ":ref:`API package <api-package>` path: ``mcdreforged.api.command.*``"
-msgstr ":ref:`API 包 <api-package>` 路径: ``mcdreforged.api.command.*``"
+msgid ":ref:`API package <api-package>` path: ``mcdreforged.api.command``"
+msgstr ":ref:`API 包 <api-package>` 路径: ``mcdreforged.api.command``"
 
 #: ../class_references/command.rst:11
 msgid "Command Source"

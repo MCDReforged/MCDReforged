@@ -2,7 +2,7 @@
 PluginServerInterface
 =====================
 
-:ref:`API package <api-package>` path: ``mcdreforged.api.types.PluginServerInterface``
+:ref:`API package <api-package>` path: ``mcdreforged.api.types``
 
 .. currentmodule:: mcdreforged.plugin.server_interface
 

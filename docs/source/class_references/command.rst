@@ -4,7 +4,7 @@
 Command
 =======
 
-:ref:`API package <api-package>` path: ``mcdreforged.api.command.*``
+:ref:`API package <api-package>` path: ``mcdreforged.api.command``
 
 
 Command Source

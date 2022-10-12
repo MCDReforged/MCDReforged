@@ -1,6 +1,6 @@
 import copy
 from abc import ABC
-from enum import EnumMeta
+from enum import EnumMeta, Enum
 from threading import Lock
 from typing import Union, TypeVar, List, Dict, Type, get_type_hints, Any
 
@@ -111,15 +111,99 @@ def deserialize(data, cls: Type[T], *, error_at_missing=False, error_at_redundan
 		raise TypeError('Unsupported input type: expected class {} but found data with class {}'.format(cls, type(data)))
 
 
+Self = TypeVar('Self', bound='Serializable')
+
+
 class Serializable(ABC):
+	"""
+	An abstract class for easy serializing / deserializing
+
+	Inherit it and declare the fields of your class with type annotations, that's all you need to do
+
+	Example::
+
+		>>> class MyData(Serializable):
+		... 	name: str
+		... 	values: List[int]
+
+		>>> data = MyData.deserialize({'name': 'abc', 'values': [1, 2]})
+		>>> data.serialize()
+		{'name': 'abc', 'values': [1, 2]}
+
+		>>> data = MyData(name='cde')
+		>>> data.serialize()
+		{'name': 'cde'}
+
+	:class:`Serializable` class nesting is also supported::
+
+		class MyStorage(Serializable):
+			id: str
+			best: MyData
+			data: Dict[str, MyData]
+
+	You can also declare default value when declaring type annotations, then during deserializing,
+	if the value is missing, a `copy <https://docs.python.org/3/library/copy.html#copy.copy>`__ of the default value will be assigned
+
+	::
+
+		>>> class MyData(Serializable):
+		... 	name: str = 'default'
+		... 	values: List[int] = []
+
+		>>> data = MyData(values=[0])
+		>>> data.serialize()
+		{'name': 'default', 'values': [0]}
+		>>> MyData.deserialize({}).serialize()
+		{'name': 'default', 'values': []}
+		>>> MyData.deserialize({}).values is MyData.deserialize({}).values
+		False
+
+	Enum class will be serialized into its member name::
+
+		>>> class Gender(Enum):
+		... 	male = 'man'
+		... 	female = 'woman'
+
+		>>> class MyData(Serializable):
+		... 	name: str = 'zhang_san'
+		... 	gender: Gender = Gender.male
+
+		>>> data = MyData.get_default()
+		>>> data.serialize()
+		{'name': 'zhang_san', 'gender': 'male'}
+		>>> data.gender = Gender.female
+		>>> data.serialize()
+		{'name': 'zhang_san', 'gender': 'female'}
+		>>> MyData.deserialize({'name': 'li_si', 'gender': 'female'}).gender == Gender.female
+		True
+	"""
 	__annotations_cache: dict = None
 	__annotations_lock = Lock()
+	__none_attr = object()
 
 	def __init__(self, **kwargs):
+		"""
+		Create a :class:`Serializable` object with given field values
+
+		Unspecified field with default value in the type annotation will be set to a copy of the default value
+
+		:param kwargs: A dict storing to-be-set values of its fields.
+			It's keys are field names and values are field values
+		"""
+		cls = self.__class__
 		for key in kwargs.keys():
 			if key not in self.get_annotations_fields():
-				raise KeyError('Unknown key received in __init__ of class {}: {}'.format(self.__class__, key))
-		vars(self).update(kwargs)
+				raise KeyError('Unknown key received in __init__ of class {}: {}'.format(cls, key))
+		for attr_name, attr_type in _get_type_hints(cls).items():
+			if not attr_name.startswith('_'):
+				if attr_name in kwargs:
+					value = kwargs.get(attr_name)
+				elif hasattr(cls, attr_name):
+					value = copy.copy(getattr(cls, attr_name))
+				else:
+					value = cls.__none_attr
+				if value is not cls.__none_attr:
+					self.__setattr__(attr_name, value)
 
 	@classmethod
 	def __get_annotation_dict(cls) -> dict:
@@ -137,21 +221,34 @@ class Serializable(ABC):
 		return cls.__annotations_cache
 
 	def serialize(self) -> dict:
+		"""
+		Serialize itself into a dict
+		"""
 		return serialize(self)
 
 	@classmethod
-	def deserialize(cls, data: dict, **kwargs):
+	def deserialize(cls: Type[Self], data: dict, **kwargs) -> Self:
+		"""
+		Deserialize a dict into an object of this class
+		"""
 		return deserialize(data, cls, **kwargs)
 
 	def update_from(self, data: dict):
 		vars(self).update(vars(self.deserialize(data)))
 
 	@classmethod
-	def get_default(cls):
+	def get_default(cls: Type[Self]) -> Self:
+		"""
+		Create an object of this class with default values
+
+		Actually it invokes :meth:`deserialize` with an empty dict
+		"""
 		return cls.deserialize({})
 
 	def on_deserialization(self):
 		"""
 		Invoked after being deserialized
+
+		:meta private:
 		"""
 		pass
