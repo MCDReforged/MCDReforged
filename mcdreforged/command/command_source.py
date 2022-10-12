@@ -61,15 +61,17 @@ class CommandSource(ABC):
 		"""
 		raise NotImplementedError()
 
-	def get_preference(self) -> 'PreferenceItem':
+	def get_preference(self) -> Optional['PreferenceItem']:
 		"""
 		Return the preference of the command source
+
+		Only :class:`PlayerCommandSource` and :class:`ConsoleCommandSource` are supported, otherwise None will be returned
 
 		.. seealso::
 
 			:class:`~mcdreforged.plugin.server_interface.ServerInterface`'s method :meth:`~mcdreforged.plugin.server_interface.ServerInterface.get_preference`
 		"""
-		return self.get_server().get_preference(self)
+		return None
 
 	@contextmanager
 	def preferred_language_context(self):
@@ -164,6 +166,9 @@ class PlayerCommandSource(InfoCommandSource):
 	def is_console(self) -> bool:
 		return False
 
+	def get_preference(self) -> Optional['PreferenceItem']:
+		return self.get_server().get_preference(self)
+
 	def reply(self, message: Any, *, encoding: Optional[str] = None, **kwargs):
 		"""
 		:keyword encoding: encoding method to be used in :meth:`ServerInterface.tell`
@@ -190,6 +195,9 @@ class ConsoleCommandSource(InfoCommandSource):
 	@property
 	def is_console(self) -> bool:
 		return True
+
+	def get_preference(self) -> Optional['PreferenceItem']:
+		return self.get_server().get_preference(self)
 
 	def reply(self, message: Any, *, console_text: Optional[Any] = None, **kwargs):
 		"""
