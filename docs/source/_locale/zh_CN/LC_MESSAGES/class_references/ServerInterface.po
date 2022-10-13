@@ -22,7 +22,6 @@ msgid "ServerInterface"
 msgstr "ServerInterface"
 
 #: ../class_references/ServerInterface.rst:5
-#, fuzzy
 msgid ":ref:`API package <api-package>` path: ``mcdreforged.api.types``"
 msgstr ":ref:`API 包 <api-package>` 路径: ``mcdreforged.api.types``"
 

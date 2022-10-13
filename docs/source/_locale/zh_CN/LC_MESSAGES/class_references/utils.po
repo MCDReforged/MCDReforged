@@ -4,7 +4,6 @@
 # package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
@@ -24,7 +23,7 @@ msgstr "实用工具"
 
 #: ../class_references/utils.rst:7
 msgid ":ref:`API package <api-package>` path: ``mcdreforged.api.utils``"
-msgstr ""
+msgstr ":ref:`API 包 <api-package>` 路径: ``mcdreforged.api.utils``"
 
 #: mcdreforged.utils.serializer.Serializable:1 of
 msgid "An abstract class for easy serializing / deserializing"
@@ -60,7 +59,7 @@ msgstr "枚举类会被序列化为它的枚举成员名称::"
 
 #: mcdreforged.utils.serializer.Serializable.__init__:1 of
 msgid "Create a :class:`Serializable` object with given field values"
-msgstr "使用给定的属性值创建一个 :class:`Serializable 对象"
+msgstr "使用给定的属性值创建一个 :class:`Serializable` 对象"
 
 #: mcdreforged.utils.serializer.Serializable.__init__:3 of
 msgid ""

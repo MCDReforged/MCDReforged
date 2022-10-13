@@ -110,9 +110,9 @@ msgstr "related_path"
 
 #: ../plugin_dev/plugin_catalogue.rst:77
 msgid ""
-"Optional field, default: ``.``, which means your plugin files are in the "
+"Optional field, default: ``\".\"``, which means your plugin files are in the "
 "root directory of your repository"
-msgstr "可选的属性，默认值：``.``，也即意味着插件的文件位于仓库的根目录"
+msgstr "可选的属性，默认值：``\".\"``，也即意味着插件的文件位于仓库的根目录"
 
 #: ../plugin_dev/plugin_catalogue.rst:79
 msgid "The related path of your plugin files in your repository"

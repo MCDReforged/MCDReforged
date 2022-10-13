@@ -13,3 +13,4 @@ If you are just a user of MCDR, run! Don't read!
    PluginServerInterface<PluginServerInterface.rst>
    Minecraft Tools<minecraft_tools.rst>
    Utilities<utils.rst>
+   Decorators<decorators.rst>

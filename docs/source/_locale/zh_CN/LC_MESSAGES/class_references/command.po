@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-12 17:55+0800\n"
+"POT-Creation-Date: 2022-10-13 11:32+0800\n"
 "PO-Revision-Date: 2021-01-23 17:24+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -139,8 +139,10 @@ msgstr "一个用于测试权限需求的工具方法"
 #: mcdreforged.command.builder.command_builder_util.remove_divider_prefix
 #: mcdreforged.command.builder.nodes.arguments.NumberNode.at_max
 #: mcdreforged.command.builder.nodes.arguments.NumberNode.at_min
+#: mcdreforged.command.builder.nodes.arguments.NumberNode.in_range
 #: mcdreforged.command.builder.nodes.arguments.TextNode.at_max_length
 #: mcdreforged.command.builder.nodes.arguments.TextNode.at_min_length
+#: mcdreforged.command.builder.nodes.arguments.TextNode.in_length_range
 #: mcdreforged.command.builder.nodes.basic.AbstractNode.on_error
 #: mcdreforged.command.builder.nodes.basic.AbstractNode.print_tree
 #: mcdreforged.command.builder.nodes.basic.AbstractNode.redirects
@@ -524,12 +526,12 @@ msgstr "它被 :class:`Number`，:class:`Integer` 和 :class:`Float` 继承。�
 
 #: mcdreforged.command.builder.nodes.arguments.NumberNode:5 of
 msgid ""
-"For a :class`NumberNode` instance, you can restrict the range of the "
+"For a :class:`NumberNode` instance, you can restrict the range of the "
 "parsed number value. If the parsed number is out of range, a "
 ":class:`~mcdreforged.command.builder.exception.NumberOutOfRange` "
 "exception will be risen"
 msgstr ""
-"对于一个 :class`NumberNode` 实例，你可以限制数字的范围。如果解析的数字超出范围，将抛出 "
+"对于一个 :class:`NumberNode` 实例，你可以限制数字的范围。如果解析的数字超出范围，将抛出 "
 ":class:`~mcdreforged.command.builder.exception.NumberOutOfRange` 异常"
 
 #: mcdreforged.command.builder.nodes.arguments.NumberNode:9 of
@@ -542,7 +544,8 @@ msgid ""
 "inclusive"
 msgstr "设置数字范围的下限。边界值将包含于范围内"
 
-#: mcdreforged.command.builder.nodes.arguments.NumberNode.at_min:3 of
+#: mcdreforged.command.builder.nodes.arguments.NumberNode.at_min:3
+#: mcdreforged.command.builder.nodes.arguments.NumberNode.in_range:9 of
 msgid "the lower boundary of the range restriction"
 msgstr "数字范围的下限"
 
@@ -552,7 +555,8 @@ msgid ""
 "inclusive"
 msgstr "设置数字范围的上限。边界值将包含于范围内"
 
-#: mcdreforged.command.builder.nodes.arguments.NumberNode.at_max:3 of
+#: mcdreforged.command.builder.nodes.arguments.NumberNode.at_max:3
+#: mcdreforged.command.builder.nodes.arguments.NumberNode.in_range:10 of
 msgid "the higher boundary of the range restriction"
 msgstr "数字范围的上限"
 
@@ -644,7 +648,8 @@ msgid ""
 "inclusive"
 msgstr "设置长度范围的下限。边界值将包含于范围内"
 
-#: mcdreforged.command.builder.nodes.arguments.TextNode.at_min_length:3 of
+#: mcdreforged.command.builder.nodes.arguments.TextNode.at_min_length:3
+#: mcdreforged.command.builder.nodes.arguments.TextNode.in_length_range:9 of
 msgid "the lower boundary of the length range restriction"
 msgstr "长度范围的下限"
 
@@ -654,7 +659,8 @@ msgid ""
 "inclusive"
 msgstr "设置长度范围的上限。边界值将包含于范围内"
 
-#: mcdreforged.command.builder.nodes.arguments.TextNode.at_max_length:3 of
+#: mcdreforged.command.builder.nodes.arguments.TextNode.at_max_length:3
+#: mcdreforged.command.builder.nodes.arguments.TextNode.in_length_range:10 of
 msgid "the higher boundary of the length range restriction"
 msgstr "长度范围的上限"
 
@@ -675,6 +681,7 @@ msgid ":meth:`at_min_length`, :meth:`at_max_length`"
 msgstr ":meth:`at_min_length`, :meth:`at_max_length`"
 
 #: mcdreforged.command.builder.nodes.arguments.GreedyText:1
+#: mcdreforged.command.builder.nodes.arguments.QuotableText:1
 #: mcdreforged.command.builder.nodes.arguments.Text:1 of
 msgid "Bases: :py:class:`~mcdreforged.command.builder.nodes.arguments.TextNode`"
 msgstr ""
@@ -686,10 +693,6 @@ msgstr "一个不包含空格字符的文本参数"
 #: mcdreforged.command.builder.nodes.arguments.Text:3 of
 msgid "It will keep reading chars continuously until it meets a space character"
 msgstr "它会持续读取字符，直到遇到一个空格字符"
-
-#: mcdreforged.command.builder.nodes.arguments.QuotableText:1 of
-msgid "Bases: :py:class:`~mcdreforged.command.builder.nodes.arguments.Text`"
-msgstr ""
 
 #: mcdreforged.command.builder.nodes.arguments.QuotableText:1 of
 msgid "A text argument with support for inputting space characters"
@@ -751,9 +754,9 @@ msgstr ""
 
 #: mcdreforged.command.builder.nodes.arguments.Boolean:1 of
 msgid ""
-"A simple boolean argument, only accepts ``true`` and ``false`` and store "
-"them as a bool. Case is ignored"
-msgstr "一个简易的布尔值参数，仅支持输入 ``true`` 或 ``false``，将其储存为 bool。忽略大小写。"
+"A simple boolean argument, only accepts ``true`` and ``false``, and store"
+" them as the corresponding bool value. Case is ignored"
+msgstr "一个简易的布尔值参数，仅支持输入 ``true`` 或 ``false``，并将其储存为对应的 bool 值。忽略大小写。"
 
 #: mcdreforged.command.builder.nodes.arguments.Boolean:3 of
 msgid ""
@@ -1230,4 +1233,7 @@ msgstr "一个储存着 (值, 读取字符个数) 的元组。如果解析失败
 #: mcdreforged.command.builder.command_builder_util.get_float:1 of
 msgid "Get a float from the remaining input"
 msgstr "从剩余的输入字符串中获取一个 float"
+
+#~ msgid "Bases: :py:class:`~mcdreforged.command.builder.nodes.arguments.Text`"
+#~ msgstr ""
 

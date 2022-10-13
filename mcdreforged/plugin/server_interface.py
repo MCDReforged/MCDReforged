@@ -803,7 +803,7 @@ class PluginServerInterface(ServerInterface):
 		"""
 		Return a unified data directory path for the current plugin
 
-		The path of the folder will be ``config/plugin_id/`` where ``plugin_id`` is the id of the current plugin
+		The path of the folder will be ``"config/plugin_id"/`` where ``plugin_id`` is the id of the current plugin
 		if the directory does not exist, create it
 
 		Example::
@@ -818,7 +818,7 @@ class PluginServerInterface(ServerInterface):
 			os.makedirs(plugin_data_folder)
 		return plugin_data_folder
 
-	def open_bundled_file(self, related_file_path: str) -> IO[bytes]:
+	def open_bundled_file(self, relative_file_path: str) -> IO[bytes]:
 		"""
 		Open a file inside the plugin with readonly binary mode
 
@@ -828,13 +828,13 @@ class PluginServerInterface(ServerInterface):
 				message = file_handler.read().decode('utf8')
 			server.logger.info('A message from the file: {}'.format(message))
 
-		:param related_file_path: The related file path in your plugin to the file you want to open
+		:param relative_file_path: The related file path in your plugin to the file you want to open
 		:return: A un-decoded bytes file-like object
 		:raise FileNotFoundError: if the plugin is not a packed plugin (that is, a solo plugin)
 		"""
 		if not isinstance(self.__plugin, MultiFilePlugin):
 			raise FileNotFoundError('Only packed plugin supported this API, found plugin type: {}'.format(self.__plugin.__class__))
-		return self.__plugin.open_file(related_file_path)
+		return self.__plugin.open_file(relative_file_path)
 
 	def load_config_simple(
 			self, file_name: str = 'config.json', default_config: Optional = None, *,
@@ -870,7 +870,7 @@ class PluginServerInterface(ServerInterface):
 				global config
 				config = server.load_config_simple(target_class=Config)
 			
-		Assuming that the plugin id is ``my_plugin``, then the config file will be in ``config/my_plugin/my_config.json``
+		Assuming that the plugin id is ``my_plugin``, then the config file will be in ``"config/my_plugin/my_config.json"``
 
 		:param file_name: The name of the config file. It can also be a path to the config file
 		:param default_config: A dict contains the default config. It's required when the config file is missing,

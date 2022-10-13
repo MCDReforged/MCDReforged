@@ -48,6 +48,8 @@ Of course if you are lazy enough you can just
 
     from mcdreforged.api.command import *
 
+Class references: :ref:`class-ref-command`
+
 decorator
 ---------
 
@@ -55,138 +57,7 @@ Module path: ``mcdreforged.api.decorator``
 
 ``decorator`` package contains some useful function decorators for plugin development
 
-new_thread
-^^^^^^^^^^
-
-This is a one line solution to make your function executes in parallels. When decorated with this decorator, functions will be executed in a new daemon thread
-
-This decorator only changes the return value of the function to the created ``Thread`` instance. Beside the return value, it reserves all signatures of the decorated function, so you can safely use the decorated function as if there's no decorating at all
-
-It's also a simple compatible upgrade method for old MCDR 0.x plugins
-
-Example:
-
-.. code-block:: python
-
-    from mcdreforged.api.decorator import new_thread
-
-    def do_something1(text: str):
-        print(text)
-        time.sleep(5)
-        return text
-
-    @new_thread
-    def do_something2(text: str):
-        print(text)
-        time.sleep(5)
-        return text
-
-    def on_info(server, info):
-        # do_something1('hello')
-        do_something2('there')
-
-The only difference between ``do_something1`` and ``do_something2`` is that ``do_something2`` is decorated by ``@new_thread``. So when executing ``do_something2``, it won't lag the following execution of MCDR like ``do_something1`` since ``do_something2`` will execute on another thread
-
-About the returned value of the decorated function, it's a ``FunctionThread`` object. Inherited from ``Thread``, it has 1 extra method comparing to the ``Thread`` class:
-
-.. code-block:: python
-
-    def get_return_value(self, block: bool = False, timeout: Optional[float] = None)
-
-As the name of the method, it's used to get the return value of the original function. An ``RuntimeError`` will be risen if ``block=False`` and the thread is still alive, then if exception occurs in the thread the exception will be risen here
-
-.. code-block:: python
-
-    print(do_something2('task').get_return_value(block=True))  # will be "task"
-
-If you only want to wait for the decorated function to complete, you can simple use the ``join`` method from class ``threading.Thread``. Remember the return value of the decorated function has already been changed in to the ``FunctionThread`` instance
-
-.. code-block:: python
-
-    do_something2('task').join()
-
-In addition to simply and directly use a raw ``@new_thread``, it's recommend to add a thread name argument for the decorator
-
-.. code-block:: python
-
-    @new_thread('My Plugin Thread')
-    def do_something3(text: str):
-        print(threading.current_thread().name)  # will be "My Plugin Thread"
-        time.sleep(10)
-
-So when you logs something by ``server.logger``, a meaningful thread name will be displayed instead of a plain and meaningless ``Thread-3``
-
-In case you want to access the original un-decorated function, you can access the ``original`` field of the decorated function
-
-.. code-block:: python
-
-    print(do_something2.original('task'))  # will be "task"
-
-event_listener
-^^^^^^^^^^^^^^
-
-This decorator is used to register a custom event listener without involving `PluginServerInterface <classes/PluginServerInterface.html#register-event-listener>`__
-
-It accepts a single str or PluginEvent indicating the event you are listening to as parameter, and will register the function as the callback of the given listener
-
-It's highly suggested to use this decorator only in the entry point of your plugin so it can work correctly and register the event listener in the correct time
-
-Example:
-
-.. code-block:: python
-
-    @event_listener(MCDRPluginEvents.GENERAL_INFO)
-    def my_on_info(server, info):
-        server.logger.info('on info in my own listener')
-
-Which is equivalent to:
-
-.. code-block:: python
-
-    def on_load(server, old):
-        server.register_event_listener(MCDRPluginEvents.GENERAL_INFO, my_on_info)
-
-spam_proof
-^^^^^^^^^^
-
-Use a lock to protect the decorated function from being invoked on multiple threads at the same time
-
-If a multiple-invocation happens, only the first invocation can be executed normally, other invocations will be skipped
-
-The type of the lock can be specified with the ``lock_class`` parameter, for example it can be ``threading.RLock`` (default) or ``threading.Lock``
-
-The return value of the decorated function is modified into a bool, indicating if this invocation is executed normally
-
-The decorated function has 2 extra fields:
-
-- ``original`` field: stores the original undecorated function
-- ``lock`` field: stores the lock object used in the spam proof logic
-
-Example:
-
-.. code-block:: python
-
-    @spam_proof
-    def some_work(arg):
-        # doing some important logics
-        foo = 1
-
-Which is equivalent to:
-
-.. code-block:: python
-
-    lock = threading.RLock()
-
-    def some_work(arg) -> bool:
-        acquired = lock.acquire(blocking=False)
-        if acquired:
-            try:
-                # doing some important logics
-                foo = 1
-            finally:
-                lock.release()
-        return acquired
-
+Class references: :ref:`class-ref-decorators`
 
 event
 -----

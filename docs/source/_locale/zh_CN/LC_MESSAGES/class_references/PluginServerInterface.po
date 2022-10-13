@@ -63,7 +63,7 @@ msgid ""
 ":class:`~mcdreforged.plugin.plugin_event.PluginEvent` instance. It "
 "indicates the target event for the plugin to listen"
 msgstr ""
-"事件的 ID，或 class:`~mcdreforged.plugin.plugin_event.PluginEvent` "
+"事件的 ID，或 :class:`~mcdreforged.plugin.plugin_event.PluginEvent` "
 "实例。它表示插件要监听的目标事件。"
 
 #: mcdreforged.plugin.server_interface.PluginServerInterface.register_event_listener:5
@@ -144,7 +144,7 @@ msgid ""
 "a nested multi-level nodes"
 msgstr ""
 "一个将翻译键映射为翻译文本的 dict。翻译键可以被表示为根节点下的子节点名称，或嵌套的多层节点的路径。dict "
-"可嵌套多层，路径为从根节点开始每一层节点的名称相连、通过 ``.`` 分隔的 str。"
+"可嵌套多层，路径为从根节点开始每一层节点的名称相连、通过 ``\".\"`` 分隔的 str。"
 
 #: ../class_references/PluginServerInterface.rst:20
 msgid "Plugin Utils"
@@ -163,10 +163,10 @@ msgstr "为当前插件返回一个统一格式的数据文件夹。"
 #: mcdreforged.plugin.server_interface.PluginServerInterface.get_data_folder:3
 #: of
 msgid ""
-"The path of the folder will be ``config/plugin_id/`` where ``plugin_id`` "
+"The path of the folder will be ``\"config/plugin_id\"/`` where ``plugin_id`` "
 "is the id of the current plugin if the directory does not exist, create "
 "it"
-msgstr "文件夹的路径将会为 ``config/plugin_id``，其中 ``plugin_id`` 是当前插件的 id。"
+msgstr "文件夹的路径将会为 ``\"config/plugin_id\"``，其中 ``plugin_id`` 是当前插件的 id。"
 
 #: mcdreforged.plugin.server_interface.PluginServerInterface.get_data_folder:6
 #: mcdreforged.plugin.server_interface.PluginServerInterface.open_bundled_file:3
@@ -198,7 +198,6 @@ msgstr "你想要打开的文件位于你的插件中的相对位置。"
 
 #: mcdreforged.plugin.server_interface.PluginServerInterface.open_bundled_file:10
 #: of
-#, fuzzy
 msgid "A un-decoded bytes file-like object"
 msgstr "一个未解码的，bytes 形式的文件型的对象。"
 
@@ -240,8 +239,8 @@ msgstr "例 2::"
 #: of
 msgid ""
 "Assuming that the plugin id is ``my_plugin``, then the config file will "
-"be in ``config/my_plugin/my_config.json``"
-msgstr "假设插件 id 为 ``my_plugin``，此时配置文件将被储存于 ``config/my_plugin/my_config.json`` 中"
+"be in ``\"config/my_plugin/my_config.json\"``"
+msgstr "假设插件 id 为 ``my_plugin``，此时配置文件将被储存于 ``\"config/my_plugin/my_config.json\"`` 中"
 
 #: mcdreforged.plugin.server_interface.PluginServerInterface.load_config_simple:31
 #: mcdreforged.plugin.server_interface.PluginServerInterface.save_config_simple:4

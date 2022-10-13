@@ -23,7 +23,7 @@ class NumberNode(ArgumentNode, ABC):
 
 	It's inherited by :class:`Number`, :class:`Integer` and :class:`Float`. It represents a type of number based node
 
-	For a :class`NumberNode` instance, you can restrict the range of the parsed number value.
+	For a :class:`NumberNode` instance, you can restrict the range of the parsed number value.
 	If the parsed number is out of range,
 	a :class:`~mcdreforged.command.builder.exception.NumberOutOfRange` exception will be risen
 
@@ -64,6 +64,9 @@ class NumberNode(ArgumentNode, ABC):
 		.. seealso::
 
 			:meth:`at_min`, :meth:`at_max`
+
+		:param min_value: the lower boundary of the range restriction
+		:param max_value: the higher boundary of the range restriction
 		"""
 		self.at_min(min_value)
 		self.at_max(max_value)
@@ -179,6 +182,9 @@ class TextNode(ArgumentNode, ABC):
 		.. seealso::
 
 			:meth:`at_min_length`, :meth:`at_max_length`
+
+		:param min_length: the lower boundary of the length range restriction
+		:param max_length: the higher boundary of the length range restriction
 		"""
 		self.__min_length = min_length
 		self.__max_length = max_length
@@ -212,7 +218,7 @@ class Text(TextNode):
 		return self._check_length_in_range_and_return(arg, len(arg))
 
 
-class QuotableText(Text):
+class QuotableText(TextNode):
 	"""
 	A text argument with support for inputting space characters
 
@@ -297,9 +303,11 @@ class GreedyText(TextNode):
 
 class Boolean(ArgumentNode):
 	"""
-	A simple boolean argument, only accepts ``true`` and ``false`` and store them as a bool. Case is ignored
+	A simple boolean argument, only accepts ``true`` and ``false``, and store them as the corresponding bool value. Case is ignored
 
 	Raises :class:`~mcdreforged.command.builder.exception.InvalidBoolean` if the input is not accepted
+
+	.. versionadded:: v2.3.0
 	"""
 	def _get_suggestions(self, context: CommandContext) -> Iterable[str]:
 		return ['true', 'false']
@@ -332,6 +340,8 @@ class Enumeration(ArgumentNode):
 			green = 'green color'
 
 		node = Enumeration('arg', MyColor)
+
+	.. versionadded:: v2.3.0
 	"""
 	def __init__(self, name: str, enum_class: Type[Enum]):
 		super().__init__(name)

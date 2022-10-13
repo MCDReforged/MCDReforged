@@ -9,10 +9,10 @@ RText
 
 :ref:`API package <api-package>` path: ``mcdreforged.api.rtext``
 
+.. automodule:: mcdreforged.minecraft.rtext
+
 Text Styles
 ^^^^^^^^^^^
-
-.. automodule:: mcdreforged.minecraft.rtext
 
 .. currentmodule:: mcdreforged.minecraft.rtext.style
 

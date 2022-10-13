@@ -39,7 +39,7 @@ msgid ""
 "Credit: `Pandaria98 <https://github.com/Pandaria98>`__ 's `stext API "
 "<https://github.com/TISUnion/stext>`__ library"
 msgstr ""
-"感谢 `Pandaria98 <https://github.com/Pandaria98>`__ 的`stext API "
+"感谢 `Pandaria98 <https://github.com/Pandaria98>`__ 的 `stext API "
 "<https://github.com/TISUnion/stext>`__ 库"
 
 #: mcdreforged.minecraft.rtext.style.RItem:1 of
@@ -211,7 +211,7 @@ msgstr "将任意对象转换为一个 RText 组件"
 msgid ""
 "Just like method :meth:`str.join`, it concatenates any number of texts "
 "with *divider*"
-msgstr "就像 :meth:`str.join` 方法一样，它使用 `*divider* 连接任意数量的文本"
+msgstr "就像 :meth:`str.join` 方法一样，它使用 *divider* 连接任意数量的文本"
 
 #: mcdreforged.minecraft.rtext.text.RTextBase.format:3
 #: mcdreforged.minecraft.rtext.text.RTextBase.from_json_object:3
@@ -235,9 +235,8 @@ msgid ""
 "Just like method :meth:`str.format`, it uses *\\*args* and *\\*\\*kwargs*"
 " to build a formatted RText component based on the formatter *fmt*"
 msgstr ""
-"就像 ``str`` 类的 `format <https://docs.python.org/zh-"
-"cn/3/library/stdtypes.html#str.format>`__ 方法一样，它使用 ``*args`` 及 "
-"``**kwargs`` 在 ``fmt`` 的基础上进行格式化并生成一个 RText 组件。"
+"就像 :meth:`str.format` 方法一样，它使用 *\\*args* 及 "
+"*\\*\\*kwargs* 在 *fmt* 的基础上进行格式化并生成一个 RText 组件。"
 
 #: mcdreforged.minecraft.rtext.text.RTextBase.format:9 of
 msgid "The formatter string"
@@ -326,13 +325,13 @@ msgid ""
 "Create a :class:`RTextTranslation` object with specific translation key. "
 "The rest of the parameters are the same to the constructor of "
 ":class:`RText`"
-msgstr "使用特定的翻译键创建一个 ``RTextTranslation`` 对象。其余参数与 :class:`RText` 相同。"
+msgstr "使用特定的翻译键创建一个 :class:`RTextTranslation` 对象。其余参数与 :class:`RText` 相同。"
 
 #: mcdreforged.minecraft.rtext.text.RTextTranslation.__init__:4 of
 msgid ""
 "Use method :meth:`arg` to set the translation arguments, if the "
 "translation requires some arguments"
-msgstr "如果这个翻译需要一些参数，你可以使用方法 :meth:`arg: 来设置"
+msgstr "如果这个翻译需要一些参数，你可以使用方法 :meth:`arg` 来设置"
 
 #: mcdreforged.minecraft.rtext.text.RTextTranslation.__init__:10
 #: mcdreforged.translation.translation_text.RTextMCDRTranslation.__init__:3 of
@@ -379,7 +378,7 @@ msgstr ""
 msgid ""
 "Create a :class:`RTextMCDRTranslation` component with necessary "
 "parameters for translation"
-msgstr "使用与翻译相关的必要参数创建一个 ``RTextMCDRTranslation`` 组件。"
+msgstr "使用与翻译相关的必要参数创建一个 :class:`RTextMCDRTranslation` 组件。"
 
 #: mcdreforged.translation.translation_text.RTextMCDRTranslation.__init__:5 of
 msgid "The translation keyword arguments"
