@@ -15,8 +15,8 @@ msgstr ""
 "Generated-By: Babel 2.9.1\n"
 
 #: ../class_references/command.rst:5
-msgid "Command"
-msgstr "指令"
+msgid "Command Stuffs"
+msgstr "指令相关"
 
 #: ../class_references/command.rst:7
 msgid ":ref:`API package <api-package>` path: ``mcdreforged.api.command``"

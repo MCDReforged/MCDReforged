@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-13 21:20+0800\n"
+"POT-Creation-Date: 2022-10-13 21:36+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,8 +30,12 @@ msgid "Info and Info Reactor"
 msgstr "Info 和 Info 响应器"
 
 #: ../code_references/index.rst:8
-msgid "Command"
-msgstr "指令"
+msgid "Command Stuffs"
+msgstr "指令相关"
+
+#: ../code_references/index.rst:8
+msgid "Plugin Stuffs"
+msgstr "插件相关"
 
 #: ../code_references/index.rst:8
 msgid "Minecraft Tools"

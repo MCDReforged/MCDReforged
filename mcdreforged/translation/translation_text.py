@@ -2,7 +2,6 @@ import threading
 from contextlib import contextmanager
 from typing import Union, Iterable, Optional, List, Callable, TypeVar
 
-from mcdreforged.constants import core_constant
 from mcdreforged.minecraft.rtext.style import RColor, RStyle, RAction
 from mcdreforged.minecraft.rtext.text import RTextBase, RText
 from mcdreforged.utils import translation_util
@@ -56,12 +55,7 @@ class RTextMCDRTranslation(RTextBase):
 	def __get_translated_text(self) -> RTextBase:
 		language = getattr(self.__TLS, 'language', None)
 		if language is None:
-			from mcdreforged.plugin.server_interface import ServerInterface
-			server: Optional[ServerInterface] = ServerInterface.get_instance()
-			if server is not None:
-				language = server.get_mcdr_language()
-			else:
-				language = core_constant.DEFAULT_LANGUAGE
+			language = translation_util.get_mcdr_language()
 		processed_text = self.__translator(self.translation_key, *self.args, **self.kwargs, language=language)
 		processed_text = RTextBase.from_any(processed_text)
 		for process in self.__post_process:

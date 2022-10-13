@@ -1,8 +1,8 @@
 
 .. _class-ref-command:
 
-Command
-=======
+Command Stuffs
+==============
 
 :ref:`API package <api-package>` path: ``mcdreforged.api.command``
 

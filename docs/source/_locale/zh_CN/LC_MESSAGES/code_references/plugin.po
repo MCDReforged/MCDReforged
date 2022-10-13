@@ -1,0 +1,174 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, Fallen_Breath
+# This file is distributed under the same license as the MCDReforged
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: MCDReforged \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-10-13 22:28+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.1\n"
+
+#: ../code_references/plugin.rst:3
+msgid "Plugin Stuffs"
+msgstr "插件相关"
+
+#: ../code_references/plugin.rst:6
+msgid "Metadata"
+msgstr "元数据"
+
+#: mcdreforged.plugin.meta.metadata.Metadata:1 of
+msgid "The metadata of a MCDR plugin"
+msgstr ""
+
+#: ../docstring mcdreforged.plugin.meta.metadata.Metadata.id:1 of
+msgid "The id of the plugin. Should match regexp ``r'[a-z0-9_]{1,64}'``"
+msgstr ""
+
+#: ../docstring mcdreforged.plugin.meta.metadata.Metadata.name:1 of
+#, fuzzy
+msgid "The name of the plugin"
+msgstr "插件事件的 ID"
+
+#: ../docstring mcdreforged.plugin.meta.metadata.Metadata.description:1 of
+#, fuzzy
+msgid "The description of the plugin"
+msgstr "插件事件的 ID"
+
+#: ../docstring mcdreforged.plugin.meta.metadata.Metadata.description:3 of
+msgid ""
+"It can be a regular str or a ``Dict[str, str]`` indicating a mapping from"
+" language to description"
+msgstr ""
+
+#: ../docstring mcdreforged.plugin.meta.metadata.Metadata.author:1 of
+#, fuzzy
+msgid "The authors of the plugin"
+msgstr "插件事件的 ID"
+
+#: ../docstring mcdreforged.plugin.meta.metadata.Metadata.link:1 of
+msgid "The url to the plugin, e.g. link to a github repository"
+msgstr ""
+
+#: ../docstring mcdreforged.plugin.meta.metadata.Metadata.version:1 of
+msgid "The version of the plugin, in a less restrictive semver format"
+msgstr ""
+
+#: ../docstring mcdreforged.plugin.meta.metadata.Metadata.dependencies:1 of
+msgid "A dict of dependencies the plugin relies on"
+msgstr ""
+
+#: ../docstring mcdreforged.plugin.meta.metadata.Metadata.dependencies of
+msgid "Key"
+msgstr ""
+
+#: ../docstring mcdreforged.plugin.meta.metadata.Metadata.dependencies:3 of
+#, fuzzy
+msgid "The id of the dependent plugin"
+msgstr "插件事件的 ID"
+
+#: ../docstring mcdreforged.plugin.meta.metadata.Metadata.dependencies of
+msgid "Value"
+msgstr ""
+
+#: ../docstring mcdreforged.plugin.meta.metadata.Metadata.dependencies:4 of
+msgid "The version requirement the dependent plugin"
+msgstr ""
+
+#: ../docstring mcdreforged.plugin.meta.metadata.Metadata.entrypoint:1 of
+#, fuzzy
+msgid "The entrypoint module of the plugin"
+msgstr "插件事件的 ID"
+
+#: ../docstring mcdreforged.plugin.meta.metadata.Metadata.entrypoint:3 of
+msgid "It should be import-able"
+msgstr ""
+
+#: mcdreforged.plugin.meta.metadata.Metadata.get_description:1 of
+msgid "Return a translated description in str"
+msgstr ""
+
+#: mcdreforged.plugin.meta.metadata.Metadata.get_description
+#: mcdreforged.plugin.plugin_event.LiteralEvent.__init__ of
+msgid "Parameters"
+msgstr "参数"
+
+#: mcdreforged.plugin.meta.metadata.Metadata.get_description:3 of
+msgid ""
+"Optional, the language to translate to. When not specified it will use "
+"the language of MCDR"
+msgstr ""
+
+#: mcdreforged.plugin.meta.metadata.Metadata.get_description of
+msgid "Returns"
+msgstr ""
+
+#: mcdreforged.plugin.meta.metadata.Metadata.get_description:4 of
+msgid "Translated description"
+msgstr ""
+
+#: mcdreforged.plugin.meta.metadata.Metadata.get_description_rtext:1 of
+msgid ""
+"Return a translated description in :class:`RText "
+"<mcdreforged.minecraft.rtext.text.RTextBase>`"
+msgstr ""
+
+#: ../code_references/plugin.rst:15
+msgid "Plugin Event"
+msgstr "插件事件"
+
+#: mcdreforged.plugin.plugin_event.PluginEvent:1 of
+msgid "The abstract base class of plugin event"
+msgstr "插件事件的抽象基类"
+
+#: mcdreforged.plugin.plugin_event.PluginEvent:3 of
+msgid "A plugin event has an :attr:`id` field as its identifier"
+msgstr "插件事件拥有一个 :attr:`id` 属性，作为其标识符"
+
+#: ../docstring mcdreforged.plugin.plugin_event.LiteralEvent.__init__:3
+#: mcdreforged.plugin.plugin_event.PluginEvent.id:1 of
+msgid "The id of the plugin event"
+msgstr "插件事件的 ID"
+
+#: mcdreforged.plugin.plugin_event.LiteralEvent:1
+#: mcdreforged.plugin.plugin_event.MCDREvent:1 of
+msgid "Bases: :py:class:`~mcdreforged.plugin.plugin_event.PluginEvent`"
+msgstr ""
+
+#: mcdreforged.plugin.plugin_event.LiteralEvent:1 of
+msgid "A simple and minimum implementation of :class:`PluginEvent`"
+msgstr ":class:`PluginEvent` 的简单且最小实现"
+
+#: mcdreforged.plugin.plugin_event.LiteralEvent:3 of
+msgid ""
+"All information you need to construct a :class:`LiteralEvent` object is "
+"only the event id"
+msgstr "构造一个 :class:`LiteralEvent` 对象所需的所有信息仅有事件 ID"
+
+#: mcdreforged.plugin.plugin_event.LiteralEvent.__init__:1 of
+msgid "Create a :class:`LiteralEvent`"
+msgstr "创建一个 :class:`LiteralEvent`"
+
+#: mcdreforged.plugin.plugin_event.MCDREvent:1 of
+msgid "Plugin event that used in MCDR"
+msgstr "MCDR 使用的插件事件"
+
+#: mcdreforged.plugin.plugin_event.MCDREvent:3 of
+msgid "Generally, only MCDR is supposed to construct :class:`MCDREvent`"
+msgstr "一般来说，只有 MCDR 才被允许构造 :class:`MCDREvent`"
+
+#: mcdreforged.plugin.plugin_event.MCDRPluginEvents:1 of
+msgid "A collection of all possible :class:`MCDREvent` objects used in MCDR"
+msgstr "MCDR 中使用的，所有可能的 :class:`MCDREvent` 对象的集合"
+
+#~ msgid "Get translated description str"
+#~ msgstr ""
+
