@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-13 11:32+0800\n"
+"POT-Creation-Date: 2022-10-14 00:38+0800\n"
 "PO-Revision-Date: 2021-01-23 17:24+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -14,15 +14,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.1\n"
 
-#: ../class_references/command.rst:5
+#: ../code_references/command.rst:5
 msgid "Command Stuffs"
 msgstr "指令相关"
 
-#: ../class_references/command.rst:7
+#: ../code_references/command.rst:7
 msgid ":ref:`API package <api-package>` path: ``mcdreforged.api.command``"
 msgstr ":ref:`API 包 <api-package>` 路径: ``mcdreforged.api.command``"
 
-#: ../class_references/command.rst:11
+#: ../code_references/command.rst:11
 msgid "Command Source"
 msgstr "指令源"
 
@@ -97,7 +97,7 @@ msgstr "返回此指令源的偏好。"
 msgid ""
 "Only :class:`PlayerCommandSource` and :class:`ConsoleCommandSource` are "
 "supported, otherwise None will be returned"
-msgstr ""
+msgstr "只有 :class:`PlayerCommandSource` 和 :class:`ConsoleCommandSource` 是受支持的，否则将返回 None"
 
 #: mcdreforged.command.command_source.CommandSource.get_preference:7 of
 msgid ""
@@ -232,7 +232,7 @@ msgstr "源自一个由 MCDR 创建的 info 的指令源"
 msgid "Return the Info instance that this command source is created from"
 msgstr "返回此指令源创建的 info 对象"
 
-#: ../class_references/command.rst:18
+#: ../code_references/command.rst:18
 msgid "Command Nodes"
 msgstr "指令节点"
 
@@ -681,7 +681,6 @@ msgid ":meth:`at_min_length`, :meth:`at_max_length`"
 msgstr ":meth:`at_min_length`, :meth:`at_max_length`"
 
 #: mcdreforged.command.builder.nodes.arguments.GreedyText:1
-#: mcdreforged.command.builder.nodes.arguments.QuotableText:1
 #: mcdreforged.command.builder.nodes.arguments.Text:1 of
 msgid "Bases: :py:class:`~mcdreforged.command.builder.nodes.arguments.TextNode`"
 msgstr ""
@@ -693,6 +692,10 @@ msgstr "一个不包含空格字符的文本参数"
 #: mcdreforged.command.builder.nodes.arguments.Text:3 of
 msgid "It will keep reading chars continuously until it meets a space character"
 msgstr "它会持续读取字符，直到遇到一个空格字符"
+
+#: mcdreforged.command.builder.nodes.arguments.QuotableText:1 of
+msgid "Bases: :py:class:`~mcdreforged.command.builder.nodes.arguments.Text`"
+msgstr ""
 
 #: mcdreforged.command.builder.nodes.arguments.QuotableText:1 of
 msgid "A text argument with support for inputting space characters"
@@ -784,7 +787,7 @@ msgstr ""
 "如果输入参数不是所提供的枚举类中的合法枚举名，抛出 "
 ":class:`~mcdreforged.command.builder.exception.InvalidEnumeration` 异常"
 
-#: ../class_references/command.rst:29
+#: ../code_references/command.rst:29
 msgid "Command Builder"
 msgstr "指令构建器"
 
@@ -952,7 +955,7 @@ msgstr "一个为懒人提供的工具方法，使用方法 :meth:`build` 构建
 msgid "if build fails"
 msgstr "如果构建失败"
 
-#: ../class_references/command.rst:36
+#: ../code_references/command.rst:36
 msgid "Exceptions"
 msgstr "异常"
 
@@ -1135,7 +1138,7 @@ msgstr "解析结果不是一个合法的布尔值"
 msgid "The parsed value is not a valid Enum"
 msgstr "解析结果不是一个合法的枚举值"
 
-#: ../class_references/command.rst:43
+#: ../code_references/command.rst:43
 msgid "Misc"
 msgstr "杂项"
 
@@ -1233,7 +1236,4 @@ msgstr "一个储存着 (值, 读取字符个数) 的元组。如果解析失败
 #: mcdreforged.command.builder.command_builder_util.get_float:1 of
 msgid "Get a float from the remaining input"
 msgstr "从剩余的输入字符串中获取一个 float"
-
-#~ msgid "Bases: :py:class:`~mcdreforged.command.builder.nodes.arguments.Text`"
-#~ msgstr ""
 

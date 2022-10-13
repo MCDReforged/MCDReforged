@@ -10,6 +10,11 @@ Metadata
 
 .. autoclass:: mcdreforged.plugin.meta.version.Version
     :members:
+    :special-members: __init__
+
+.. autoclass:: mcdreforged.plugin.meta.version.VersionRequirement
+    :members:
+    :special-members: __init__
 
 Plugin Event
 ------------

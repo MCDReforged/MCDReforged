@@ -20,7 +20,7 @@ class Metadata:
 	"""
 
 	id: str
-	"""The id of the plugin. Should match regexp ``r'[a-z0-9_]{1,64}'``"""
+	"""The id of the plugin. Should match regexp ``[a-z0-9_]{1,64}``"""
 
 	version: Version
 	"""The version of the plugin, in a less restrictive semver format"""
@@ -53,7 +53,7 @@ class Metadata:
 	"""
 	The entrypoint module of the plugin
 	
-	It should be import-able
+	The entrypoint should be import-able
 	"""
 
 	archive_name: Optional[str]  # used in MCDR CLI only
@@ -150,10 +150,10 @@ class Metadata:
 
 	def get_description(self, lang: Optional[str] = None) -> Optional[str]:
 		"""
-		Return a translated description in str
+		Return a translated plugin description in str
 
 		:param lang: Optional, the language to translate to. When not specified it will use the language of MCDR
-		:return: Translated description
+		:return: Translated plugin description
 		"""
 		if isinstance(self.description, str):
 			return self.description
@@ -163,7 +163,7 @@ class Metadata:
 
 	def get_description_rtext(self) -> RTextBase:
 		"""
-		Return a translated description in :class:`RText <mcdreforged.minecraft.rtext.text.RTextBase>`
+		Return a translated plugin description in :class:`RText <mcdreforged.minecraft.rtext.text.RTextBase>`
 		"""
 		if isinstance(self.description, str):
 			return RText(self.description)
