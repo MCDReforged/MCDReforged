@@ -11,7 +11,10 @@ Workflow
 
 MCDR maintains a dict to store registered commands. Any value in the storage dict is a list of literal node as a root node of a command tree, and the related key is the literal value of the root literal node. With it, MCDR can quickly find the possible command tree that might accept the incoming command
 
-Every time when a user info is being processed, MCDR will try to parse the user input as a command. It will takes the first segment of the user input as a key to query the command tree storage dict. **If it gets any, it will prevent the info to be sent to the standard input stream of the server** by invoking ``info.cancel_send_to_server()``, then it will let the found command trees to handle the command.
+Every time when a user info is being processed, MCDR will try to parse the user input as a command.
+It will takes the first segment of the user input as a key to query the command tree storage dict.
+**If it gets any, it will prevent the info to be sent to the standard input stream of the server** by invoking method :meth:`~mcdreforged.info_reactor.info.Info.cancel_send_to_server()`,
+then it will let the found command trees to handle the command.
 
 If an command error occurs and the error has not been set to handled, MCDR will sent the default translated command error message to the command source
 

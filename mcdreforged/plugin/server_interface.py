@@ -32,7 +32,6 @@ if TYPE_CHECKING:
 	from mcdreforged.plugin.plugin_manager import PluginManager
 	from mcdreforged.plugin.type.regular_plugin import RegularPlugin
 
-
 SerializableType = TypeVar('SerializableType')
 
 
@@ -840,7 +839,7 @@ class PluginServerInterface(ServerInterface):
 			self, file_name: str = 'config.json', default_config: Optional = None, *,
 			in_data_folder: bool = True, echo_in_console: bool = True, source_to_reply: Optional[CommandSource] = None,
 			target_class: Optional[Type[SerializableType]] = None, encoding: str = 'utf8'
-		) -> Union[dict, SerializableType]:
+	) -> Union[dict, SerializableType]:
 		"""
 		A simple method to load a dict or Serializable type config from a json file
 
@@ -885,6 +884,7 @@ class PluginServerInterface(ServerInterface):
 		:param encoding: The encoding method to read the config file. Default ``"utf8"``
 		:return: A dict contains the loaded and processed config
 		"""
+
 		def log(msg: str):
 			if isinstance(source_to_reply, CommandSource):
 				source_to_reply.reply(msg)

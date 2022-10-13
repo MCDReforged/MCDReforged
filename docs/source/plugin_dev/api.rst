@@ -66,14 +66,16 @@ Module path: ``mcdreforged.api.event``
 
 ``event`` package contains the classes for creating custom events, and classes of MCDR built-in events
 
-You might already read the `dispatch_event <classes/ServerInterface.html#dispatch-event>`__ method in ``ServerInterface`` class. It only accepts a ``PluginEvent`` instance as its first parameter. So if you want to dispatch your custom event, create a ``LiteralEvent`` for simpleness or a custom event class inherited from ``PluginEvent``
+You might already read the :meth:`~mcdreforged.plugin.server_interface.ServerInterface.dispatch_event` method in ``ServerInterface`` class.
+It only accepts a ``PluginEvent`` instance as its first parameter. So if you want to dispatch your custom event,
+create a ``LiteralEvent`` for simpleness or a custom event class inherited from ``PluginEvent``
 
 exception
 ---------
 
 Module path: ``mcdreforged.api.exception``
 
-There some custom exceptions that is used in MCDR runtime e.g. `ServerInterface <classes/ServerInterface.html>`__ methods. Here comes the way to import them
+There some custom exceptions that is used in MCDR runtime e.g. :class:`~mcdreforged.plugin.server_interface.ServerInterface` methods. Here comes the way to import them
 
 rcon
 ----

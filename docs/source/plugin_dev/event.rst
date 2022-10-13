@@ -60,7 +60,7 @@ Since it's the first event in the lifecycle of a plugin, this event can only be 
 Note: You should not dispatch custom events in the ``on_load`` function or it will do nothing. The event listener storage of MCDR has not been initialized yet
 
 :Event id: ``mcdr.plugin_loaded``
-:Callback arguments: :class:`~mcdreforged.plugin.server_interface.PluginServerInterface`, :class:`object` (previous module)
+:Callback arguments: :class:`~mcdreforged.plugin.server_interface.PluginServerInterface`, :class:`Any` (previous module)
 :Default function name: ``on_load``
 
 Plugin Unloaded
@@ -77,7 +77,8 @@ Also, this event will be dispatched during MCDR stopping, so it's a good place f
 General Info
 ~~~~~~~~~~~~
 
-A new line of text is output from the stdout of the server, or a text is input from the console. MCDR has already parsed the text into an `Info <classes/Info.html>`__ object. In this event plugin can response to the info
+A new line of text is output from the stdout of the server, or a text is input from the console.
+MCDR has already parsed the text into an :class:`~mcdreforged.info_reactor.info.Info` object. In this event plugin can response to the info
 
 Here's an example
 
@@ -95,7 +96,8 @@ Here's an example
 User Info
 ~~~~~~~~~
 
-User Info event is very similar to General Info event, but it only gets triggered when the info is sent by a user, more precisely, ``info.is_user`` is ``True``
+User Info event is very similar to General Info event, but it only gets triggered when the info is sent by a user, more precisely,
+:meth:`info.is_user<mcdreforged.info_reactor.info.Info.is_user>` is ``True``
 
 If you want a simple way to handle user input, you can use this event
 
@@ -209,6 +211,7 @@ A player just left the game. Plugin can do cleanups for player related objects
 Custom Event
 ------------
 
-Besides MCDR itself, plugins can also dispatch its own event. All you need to do is invoking ``server.dispatch_event`` api with the event and some arguments. Check `here <classes/ServerInterface.html#dispatch-event>`__ for more details of the api
+Besides MCDR itself, plugins can also dispatch its own event. All you need to do is invoking
+:meth:`ServerInterface.dispatch_event<mcdreforged.plugin.server_interface.ServerInterface.dispatch_event>` api with the event and some arguments
 
 Customizing event is a good way to broadcast a message between plugins. It's also a good indirectly way for your plugin to react to requests from other plugins 

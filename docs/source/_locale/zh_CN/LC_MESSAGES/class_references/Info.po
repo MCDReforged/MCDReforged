@@ -102,7 +102,6 @@ msgid ""
 msgstr "信息源是否是 :attr:`InfoSource.CONSOLE` (``1``)，即是信息否来自控制台"
 
 #: mcdreforged.info_reactor.info.Info.is_from_server:1 of
-#, fuzzy
 msgid ""
 "If the source of the info is :attr:`InfoSource.SERVER` (``0``), i.e. from"
 " the server"

@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-12 14:16+0800\n"
+"POT-Creation-Date: 2022-10-13 21:01+0800\n"
 "PO-Revision-Date: 2021-01-23 10:38+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -12,7 +12,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.9.0\n"
+"Generated-By: Babel 2.9.1\n"
 
 #: ../plugin_dev/basic.rst:3
 msgid "MCDR Plugin"
@@ -31,7 +31,7 @@ msgstr ""
 "MCDR 插件是位于插件目录中的一个以 ``.py`` 或 ``.mcdr`` 为后缀的文件，也可以是一个具有特定文件结构的目录。见 `此处 "
 "<plugin_format.html>`__ 以获得更多有关插件格式的信息。"
 
-#: ../plugin_dev/basic.rst:10
+#: ../plugin_dev/basic.rst:11
 msgid ""
 "The list of the plugin directory can be defined inside the `configuration"
 " file <../configure.html#plugin_directories>`__. At start up, MCDR will "
@@ -40,7 +40,7 @@ msgstr ""
 "插件目录的列表可以在 `配置文件 <../configure.html#plugin_directories>`__ 中定义。启动时，MCDR "
 "会自动加载每个插件目录中的每个插件。"
 
-#: ../plugin_dev/basic.rst:12
+#: ../plugin_dev/basic.rst:14
 msgid ""
 "Check the `example plugin repository <https://github.com/MCDReforged"
 "/MCDReforged-ExamplePlugin>`__ or the `plugin template repository "
@@ -51,61 +51,61 @@ msgstr ""
 "ExamplePlugin>`__ 或者 `插件模板仓库 <https://github.com/MCDReforged/MCDReforged-"
 "PluginTemplate>`__ 来获得更多的参考。"
 
-#: ../plugin_dev/basic.rst:15
+#: ../plugin_dev/basic.rst:18
 msgid "Quick Start"
 msgstr "快速开始"
 
-#: ../plugin_dev/basic.rst:17
+#: ../plugin_dev/basic.rst:20
 msgid ""
 "Open one of the plugin directories of MCDR, create a file named "
 "``HelloWorld.py``"
 msgstr "打开你设置的 MCDR 的插件目录之一，创建一个名为 ``HelloWorld.py`` 的文件。"
 
-#: ../plugin_dev/basic.rst:24
+#: ../plugin_dev/basic.rst:27
 msgid "open it and enter these code"
 msgstr "打开它并输入如下代码："
 
-#: ../plugin_dev/basic.rst:38
+#: ../plugin_dev/basic.rst:41
 msgid ""
 "Return to MCDR console, enter ``!!MCDR reload plugin``, and you should "
 "see the hello world message from your plugin"
 msgstr "返回MCDR控制台，输入 ``!!MCDR reload plugin`` 。你应该会看到插件发送了一条 hello world。"
 
-#: ../plugin_dev/basic.rst:44
+#: ../plugin_dev/basic.rst:47
 msgid "Great, you have successfully created your first plugin"
 msgstr "好耶，你成功写出了你的第一个插件！"
 
-#: ../plugin_dev/basic.rst:47
+#: ../plugin_dev/basic.rst:50
 msgid "Metadata"
 msgstr "元数据"
 
-#: ../plugin_dev/basic.rst:49
+#: ../plugin_dev/basic.rst:52
 msgid ""
 "The meta data field provides the basic information of the plugin. It's "
 "declared as a json object contains several key-value, e.g.:"
 msgstr "元数据提供了插件的基本信息。它是一个包含多个键值对的 json 对象，如："
 
-#: ../plugin_dev/basic.rst:65
+#: ../plugin_dev/basic.rst:68
 msgid ""
 "Different `plugin format <plugin_format.html>`__ has different ways to "
 "declare its metadata, but the contents of metadata are the same"
 msgstr "不同的 `插件格式 <plugin_format.html>`__ 有着不同的声明元数据的方法，但其元数据的内容是一致的。"
 
-#: ../plugin_dev/basic.rst:67
+#: ../plugin_dev/basic.rst:70
 msgid "See the `metadata document <metadata.html>`__ for more information"
 msgstr "见 `元数据文档 <metadata.html>`__ 以获取更多有关元数据的信息。"
 
-#: ../plugin_dev/basic.rst:70
+#: ../plugin_dev/basic.rst:75
 msgid "Entrypoint"
 msgstr "入口点"
 
-#: ../plugin_dev/basic.rst:72
+#: ../plugin_dev/basic.rst:77
 msgid ""
 "Entrypoint is a module specifying what module MCDR will import when "
 "loading your plugin. It's the bridge between your plugin and MCDR"
 msgstr "在 MCDR 加载你的插件时，MCDR 会导入你指定的入口点模块。入口点是你的插件与 MCDR 间的桥梁。"
 
-#: ../plugin_dev/basic.rst:74
+#: ../plugin_dev/basic.rst:79
 msgid ""
 "For `solo plugin <plugin_format.html#solo-plugin>`__ the entry point is "
 "the plugin itself. For `multi file plugin <plugin_format.html#multi-file-"
@@ -117,11 +117,11 @@ msgstr ""
 "<plugin_format.html#multi-file-plugin>`__，入口点声明于其元数据中，默认值是插件的 id，即位于以插件 "
 "id 为名的文件夹中的 ``__init__.py``。"
 
-#: ../plugin_dev/basic.rst:76
+#: ../plugin_dev/basic.rst:83
 msgid "For example:"
 msgstr "举个例子："
 
-#: ../plugin_dev/basic.rst:86
+#: ../plugin_dev/basic.rst:93
 msgid ""
 "For this multi file plugin, with default entrypoint value, MCDR will "
 "import the module ``my_plugin``, which will actually loads the "
@@ -133,7 +133,7 @@ msgstr ""
 " ``my_plugin/`` 文件夹中的 ``__init__.py`` 位于 ``__init__.py`` 中的 ``on_load`` "
 "函数将会被注册为事件监听器。"
 
-#: ../plugin_dev/basic.rst:88
+#: ../plugin_dev/basic.rst:97
 msgid ""
 "If the entrypoint is set to ``my_plugin.source``, then MCDR will import "
 "``my_plugin.source``, which will actually loads ``source.py`` in "
@@ -142,23 +142,22 @@ msgstr ""
 "如果入口点被设置为了 ``my_plugin.source``，那么 MCDR 将会导入模块 ``my_plugin.source``，也就是加载"
 " ``my_plugin/`` 文件夹中的 ``source.py``"
 
-#: ../plugin_dev/basic.rst:90
+#: ../plugin_dev/basic.rst:99
 msgid ""
 "The entrypoint module instance is also used in "
-"`ServerInterface.get_plugin_instance "
-"<classes/ServerInterface.html#get_plugin_instance>`__. The entrypoint "
-"module instance is also what the second parameter in `Plugin loaded "
-"<event.html#plugin-loaded>`__ event is"
+":meth:`~mcdreforged.plugin.server_interface.ServerInterface.get_plugin_instance`."
+" The entrypoint module instance is also what the second parameter in "
+"`Plugin loaded <event.html#plugin-loaded>`__ event is"
 msgstr ""
-"入口点模块的实例被用于 `ServerInterface.get_plugin_instance "
-"<classes/ServerInterface.html#get_plugin_instance>`__ 中，也是 `插件被加载 "
-"<event.html#plugin-loaded>`__ 事件的第二个参数"
+"入口点模块的实例被用于 "
+":meth:`~mcdreforged.plugin.server_interface.ServerInterface.get_plugin_instance`"
+" 中，也是 `插件被加载 <event.html#plugin-loaded>`__ 事件的第二个参数"
 
-#: ../plugin_dev/basic.rst:93
+#: ../plugin_dev/basic.rst:103
 msgid "Plugin Registry"
 msgstr "插件注册表"
 
-#: ../plugin_dev/basic.rst:95
+#: ../plugin_dev/basic.rst:105
 msgid ""
 "Plugin registry is a collection of things that plugin registered for. It "
 "will get cleaned up every time before the plugin gets loaded, so you'd "
@@ -167,15 +166,15 @@ msgstr ""
 "插件注册表是一个插件注册的东西的集合。在每次加载插件之前，它都会被清空，因此你最好在 `插件被加载 <event.html#plugin-"
 "loaded>`__ 事件中注册它们。"
 
-#: ../plugin_dev/basic.rst:98
+#: ../plugin_dev/basic.rst:109
 msgid "Event listeners"
 msgstr "事件监听器"
 
-#: ../plugin_dev/basic.rst:100
+#: ../plugin_dev/basic.rst:111
 msgid "There are 3 methods to register an event listener for you plugin"
 msgstr "有 3 种方法可以注册事件侦听器的插件。"
 
-#: ../plugin_dev/basic.rst:103
+#: ../plugin_dev/basic.rst:114
 msgid ""
 "Declare a function inside the global slope in the `entrypoint "
 "<#entrypoint>`__ module with the specific name. It's the legacy "
@@ -186,127 +185,118 @@ msgstr ""
 "使用特定名称在 `入口点 <#entrypoint>`__ 模块全局范围内声明一个函数。它是注册监听器的老办法，仅适用于 MCDR "
 "提供的事件。有关详细信息，请查看 `此处 <event.html#default-event-listener>`__ 。"
 
-#: ../plugin_dev/basic.rst:105
+#: ../plugin_dev/basic.rst:118
 msgid ""
 "For example, the widely-used function below is a default `Plugin Loaded "
 "<event.html#plugin-loaded>`__ event listener"
 msgstr "例如，下面广泛使用的函数是默认的 `插件被加载 <event.html#plugin-loaded>`__ 事件监听器。"
 
-#: ../plugin_dev/basic.rst:113
+#: ../plugin_dev/basic.rst:126
 msgid ""
-"Manually invoke ``server.register_event_listener`` method to register an "
-"event listener. You can specify the callable object and the priority for "
-"the event listener"
-msgstr "手动调用 ``server.register_event_listener`` 方法来注册事件监听器。你可以为事件监听器指定可调用对象和优先级。"
+"Manually invoke "
+":meth:`~mcdreforged.plugin.server_interface.PluginServerInterface.register_event_listener`"
+" method to register an event listener. You can specify the callable "
+"object and the priority for the event listener"
+msgstr ""
+"手动调用 "
+":meth:`~mcdreforged.plugin.server_interface.PluginServerInterface.register_event_listener`"
+" 方法来注册事件监听器。你可以为事件监听器指定可调用对象和优先级。"
 
-#: ../plugin_dev/basic.rst:115
+#: ../plugin_dev/basic.rst:129
 msgid ""
 "Check `here <event.html#register-a-event-listener>`__ for more detail "
 "about event listener registering"
 msgstr "查看 `此处 <event.html#register-a-event-listener>`__ 以获取有关事件监听器注册的更多详细信息。"
 
-#: ../plugin_dev/basic.rst:117
+#: ../plugin_dev/basic.rst:131
 msgid "Here some examples about manually register event listeners"
 msgstr "以下是一些关于手动注册事件监听器的例子："
 
-#: ../plugin_dev/basic.rst:133
-msgid "Use `@event_listener <api.html#event-listener>`__ decorator"
-msgstr ""
-
-#: ../plugin_dev/basic.rst:136
+#: ../plugin_dev/basic.rst:147
 msgid ""
-"Take a look at the reference of ``register_event_listener`` method in "
-"`PluginServerInterface <classes/PluginServerInterface.html#register-"
-"event-listener>`__ document for more detail"
-msgstr ""
-"请参阅 `PluginServerInterface <classes/PluginServerInterface.html#register-"
-"event-listener>`__ 文档中有关 ``register_event_listener`` 方法的说明，以了解更多详细信息。"
+"Use :func:`~mcdreforged.api.decorator.event_listener.event_listener` "
+"decorator"
+msgstr "使用 :func:`~mcdreforged.api.decorator.event_listener.event_listener` 装饰器"
 
-#: ../plugin_dev/basic.rst:139
+#: ../plugin_dev/basic.rst:151
 msgid "Command"
 msgstr "指令"
 
-#: ../plugin_dev/basic.rst:141
+#: ../plugin_dev/basic.rst:153
 msgid ""
-"Rather than manually parsing ``info.content`` inside user info event "
-"callback like ``on_user_info``, MCDR provides a command system for "
+"Rather than manually parsing "
+":attr:`info.content<mcdreforged.info_reactor.info.Info.content>` inside user info "
+"event callback like ``on_user_info``, MCDR provides a command system for "
 "plugins to register their commands"
 msgstr ""
-"除了在如 ``on_user_info`` 的用户信息事件回调中手动解析用户输入 ``info.content``，MCDR "
+"除了在如 ``on_user_info`` 的用户信息事件回调中手动解析用户输入 :attr:`info.content<mcdreforged.info_reactor.info.Info.content>`，MCDR "
 "还为插件提供了一个指令构建系统来帮助插件注册它们的指令。"
 
-#: ../plugin_dev/basic.rst:143
+#: ../plugin_dev/basic.rst:156
 msgid ""
 "Check the `command <command.html>`__ document for more detail about "
 "building a command tree"
 msgstr "查看 `指令 <command.html>`__ 文档以获取有关构建指令树的更多详细信息。"
 
-#: ../plugin_dev/basic.rst:145
+#: ../plugin_dev/basic.rst:158
 msgid ""
 "Assuming that you have already built a command tree with root literal "
-"node *root*, then you can use the following code to register your command"
-" tree in MCDR"
-msgstr "假设你已经使用根文字节点 *root* 构建了指令树，则你可以使用以下代码在 MCDR 中注册这一棵指令树："
-
-#: ../plugin_dev/basic.rst:151
-msgid ""
-"Take a look at the reference of ``register_command`` method in "
-"`PluginServerInterface <classes/PluginServerInterface.html#register-"
-"command>`__ document for more details of its usage"
+"node *root*, then you can use the "
+":meth:`~mcdreforged.plugin.server_interface.PluginServerInterface.register_command`"
+" method to register your command tree in MCDR"
 msgstr ""
-"查看 `PluginServerInterface <classes/PluginServerInterface.html#register-"
-"command>`__ 文档中有关 ``register_command`` 方法的参考，以获取其用法的更多详细信息。"
+"假设你已经使用根文字节点 *root* 构建了指令树，则你可以使用 "
+":meth:`~mcdreforged.plugin.server_interface.PluginServerInterface.register_command`"
+" 方法在 MCDR 中注册这一棵指令树："
 
-#: ../plugin_dev/basic.rst:154
+#: ../plugin_dev/basic.rst:166
 msgid "Help message"
 msgstr "帮助信息"
 
-#: ../plugin_dev/basic.rst:156
+#: ../plugin_dev/basic.rst:168
 msgid ""
 "Plugin can register its help message with "
-"``server.register_help_message`` to MCDR, so that users can use `!!help "
-"command <../command.html#help-command>`__ to view the help messages of "
-"all commands"
+":meth:`~mcdreforged.plugin.server_interface.PluginServerInterface.register_help_message`"
+" to MCDR, so that users can use `!!help command <../command.html#help-"
+"command>`__ to view the help messages of all commands"
 msgstr ""
-"插件可以使用 ``server.register_help_message`` 将其帮助消息注册到MCDR，以便用户使用 `!!help 指令 "
-"<../command.html#help-command>`__ 来查看所有插件的帮助消息。"
+"插件可以使用 "
+":meth:`~mcdreforged.plugin.server_interface.PluginServerInterface.register_help_message`"
+" 将其帮助消息注册到 MCDR，以便用户使用 `!!help 指令 <../command.html#help-command>`__ "
+"来查看所有插件的帮助消息。"
 
-#: ../plugin_dev/basic.rst:158
-msgid ""
-"Take a look at the reference of ``register_help_message`` method in "
-"`PluginServerInterface <classes/PluginServerInterface.html#register-help-"
-"message>`__ document for more details of its usage"
-msgstr ""
-"查看 `PluginServerInterface <classes/PluginServerInterface.html#register-"
-"help-message>`__ 文档中有关 ``register_help_message`` 方法的参考，以了解其用法的更多详细信息。"
-
-#: ../plugin_dev/basic.rst:161
+#: ../plugin_dev/basic.rst:174
 msgid "Translation"
 msgstr "翻译"
 
-#: ../plugin_dev/basic.rst:163
+#: ../plugin_dev/basic.rst:176
 msgid ""
 "If your plugin needs to handle some message localization or translation "
 "things, you can let MCDR help you: register a translation via "
-"`register_translation <classes/PluginServerInterface.html#register-"
-"translation>`__ and use `tr <classes/ServerInterface.html#tr>`__ to get "
+":meth:`~mcdreforged.plugin.server_interface.PluginServerInterface.register_translation`"
+" method and use "
+":meth:`~mcdreforged.plugin.server_interface.ServerInterface.tr` or "
+":meth:`~mcdreforged.plugin.server_interface.ServerInterface.rtr` to get "
 "the translated string"
 msgstr ""
-"如果你的插件需要处理一些诸如信息本地化的翻译工作，你可以让 MCDR 来帮你：通过 `register_translation "
-"<classes/PluginServerInterface.html#register-translation>`__ 注册一个翻译，并使用 "
-"`tr <classes/ServerInterface.html#tr>`__ 来获取翻译后的字符串。"
+"如果你的插件需要处理一些诸如信息本地化的翻译工作，你可以让 MCDR 来帮你：通过 "
+":meth:`~mcdreforged.plugin.server_interface.PluginServerInterface.register_translation`"
+" 注册一个翻译，并使用 "
+":meth:`~mcdreforged.plugin.server_interface.ServerInterface.tr` 或者 "
+":meth:`~mcdreforged.plugin.server_interface.ServerInterface.rtr` "
+"来获取翻译后的字符串。"
 
-#: ../plugin_dev/basic.rst:165
+#: ../plugin_dev/basic.rst:180
 msgid ""
 "See the `translation section <dev_tips.html#translation>`__ in dev tips "
 "for some suggestions about using translation"
 msgstr "参阅插件开发提示中的 `翻译 <dev_tips.html#translation>`__ 章节关于使用翻译的一些建议。"
 
-#: ../plugin_dev/basic.rst:168
+#: ../plugin_dev/basic.rst:183
 msgid "Import a plugin"
 msgstr "导入插件"
 
-#: ../plugin_dev/basic.rst:170
+#: ../plugin_dev/basic.rst:185
 msgid ""
 "During multi file plugin loading, MCDR will append the path of the multi "
 "file plugin to ``sys.path``. For packed plugin, it's path of the "
@@ -315,7 +305,7 @@ msgstr ""
 "在多文件插件被加载时，MCDR 将会把多文件插件的文件路径追加至 ``sys.path`` 中。对于打包插件而言，文件路径是 ``.mcdr`` "
 "文件的路径；对于文件夹插件而已，文件路径是其文件夹的路径。"
 
-#: ../plugin_dev/basic.rst:172
+#: ../plugin_dev/basic.rst:188
 msgid ""
 "Therefore, you can simply import other plugin by importing its plugin id "
 "using the ``import`` statement. It's also the recommended way to do that "
@@ -324,19 +314,19 @@ msgstr ""
 "因此，你可以简单的通过 ``import`` 语句导入插件 id 的方式，来导入其他插件。这也是推荐的导入方式，因为这可以为你的 IDE "
 "提供了代码高亮等信息。"
 
-#: ../plugin_dev/basic.rst:174
+#: ../plugin_dev/basic.rst:191
 msgid ""
-"Apart from this, you can also use `get_plugin_instance "
-"<classes/ServerInterface.html#get_plugin_instance>`__ method to import "
-"the entry point of the plugin, and this is also **the only way to import "
-"a solo plugin**. For multi file plugin the result is the same as directly"
-" importing the plugin"
+"Apart from this, you can also use "
+":meth:`~mcdreforged.plugin.server_interface.ServerInterface.get_plugin_instance`"
+" method to import the entry point of the plugin,and this is also **the "
+"only way to import a solo plugin**. For multi file plugin the result is "
+"the same as directly importing the plugin"
 msgstr ""
-"除此之外，你还可以使用 `get_plugin_instance "
-"<classes/ServerInterface.html#get_plugin_instance>`__ 方法来导入其他插件的入口点。这也是 "
-"**导入单文件插件的唯一方法**。对于多文件插件而言，其返回的值与直接导入插件是相同的。"
+"除此之外，你还可以使用 "
+":meth:`~mcdreforged.plugin.server_interface.ServerInterface.get_plugin_instance`"
+" 方法来导入其他插件的入口点。这也是 **导入单文件插件的唯一方法**。对于多文件插件而言，其返回的值与直接导入插件是相同的。"
 
-#: ../plugin_dev/basic.rst:182
+#: ../plugin_dev/basic.rst:201
 msgid ""
 "Don't forget to declare plugin dependency in your metadata, or MCDR will "
 "not guarantee a correct plugin loading order"
