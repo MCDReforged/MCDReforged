@@ -124,7 +124,7 @@ msgstr "若在获取返回值时线程仍然存活。这可能是因为线程仍
 
 #: mcdreforged.api.decorator.new_thread.FunctionThread.get_return_value of
 msgid "Returns"
-msgstr "返回值"
+msgstr "返回"
 
 #: mcdreforged.api.decorator.new_thread.FunctionThread.get_return_value:20 of
 msgid "The return value of the original function"

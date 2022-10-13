@@ -510,7 +510,7 @@ class MCDReforgedServer:
 		else:
 			if self.logger.should_log_debug(option=DebugOption.HANDLER):
 				self.logger.debug('Parsed text from server stdout:', no_check=True)
-				for line in parsed_result.format_text().splitlines():
+				for line in parsed_result.debug_format_text().splitlines():
 					self.logger.debug('    {}'.format(line), no_check=True)
 		self.server_handler_manager.detect_text(text)
 		self.reactor_manager.put_info(parsed_result)

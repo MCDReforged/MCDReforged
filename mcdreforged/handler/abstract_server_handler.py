@@ -78,14 +78,12 @@ class AbstractServerHandler:
 		"""
 		if type(text) is not str:
 			raise TypeError('The text to parse should be a string')
-		result = Info()
-		result.raw_content = text
+		result = Info(InfoSource.CONSOLE, text)
 		t = time.localtime(time.time())
 		result.hour = t.tm_hour
 		result.min = t.tm_min
 		result.sec = t.tm_sec
 		result.content = text
-		result.source = InfoSource.CONSOLE
 		return result
 
 	@classmethod
@@ -96,9 +94,7 @@ class AbstractServerHandler:
 		"""
 		if type(text) is not str:
 			raise TypeError('The text to parse should be a string')
-		result = Info()
-		result.source = InfoSource.SERVER
-		result.raw_content = text
+		result = Info(InfoSource.SERVER, text)
 		result.content = string_util.clean_console_color_code(text)
 		return result
 

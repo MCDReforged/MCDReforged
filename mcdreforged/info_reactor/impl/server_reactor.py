@@ -3,7 +3,7 @@ Analyzing and reacting events related to server
 """
 
 from mcdreforged.info_reactor.abstract_info_reactor import AbstractInfoReactor
-from mcdreforged.info_reactor.info import InfoSource
+from mcdreforged.info_reactor.info import InfoSource, Info
 from mcdreforged.info_reactor.server_information import ServerInformation
 from mcdreforged.mcdr_state import MCDReforgedFlag
 from mcdreforged.plugin.plugin_event import MCDRPluginEvents
@@ -18,7 +18,7 @@ class ServerReactor(AbstractInfoReactor):
 	def on_server_start(self):
 		self.server_info.clear()
 
-	def react(self, info):
+	def react(self, info: Info):
 		if info.source == InfoSource.SERVER:
 			handler = self.mcdr_server.server_handler_manager.get_current_handler()
 

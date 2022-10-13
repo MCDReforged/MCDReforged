@@ -1,0 +1,236 @@
+
+msgid ""
+msgstr ""
+"Project-Id-Version:  mcdreforged\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-10-13 20:11+0800\n"
+"PO-Revision-Date: 2021-01-22 14:26+0000\n"
+"Last-Translator: \n"
+"Language: zh_CN\n"
+"Language-Team: Chinese Simplified\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.1\n"
+
+#: ../class_references/info.rst:3
+msgid "Info and Info Reactor"
+msgstr "Info 和 Info 响应器"
+
+#: ../class_references/info.rst:7
+msgid "Info"
+msgstr "Info"
+
+#: mcdreforged.info_reactor.info.Info:1 of
+msgid ""
+"An :class:`Info` instance contains the parsed result from the server or "
+"from the console"
+msgstr "一个 :class:`Info` 信息对象包含了从服务器或控制台解析的结果"
+
+#: ../docstring mcdreforged.info_reactor.info.Info.id:1 of
+msgid "A monotonously increasing unique id"
+msgstr "一个单调递增的唯一 ID"
+
+#: ../docstring mcdreforged.info_reactor.info.Info.hour:1 of
+msgid "Time information from the parsed text - hour"
+msgstr "来自被解析文本的时间信息 - 小时"
+
+#: ../docstring mcdreforged.info_reactor.info.Info.min:1 of
+msgid "Time information from the parsed text - minute"
+msgstr "来自被解析文本的时间信息 - 分钟"
+
+#: ../docstring mcdreforged.info_reactor.info.Info.sec:1 of
+msgid "Time information from the parsed text - second"
+msgstr "来自被解析文本的时间信息 - 秒"
+
+#: ../docstring mcdreforged.info_reactor.info.Info.raw_content:1 of
+msgid "Very raw unparsed content from the server stdout."
+msgstr "服务器标准输出中未解析的原始内容"
+
+#: ../docstring mcdreforged.info_reactor.info.Info.raw_content:3 of
+msgid "It's also the content to be echoed to the stdout"
+msgstr "它也是将要回显到标准输出的内容"
+
+#: ../docstring mcdreforged.info_reactor.info.Info.content:1 of
+msgid "The parsed message text"
+msgstr "解析完毕的信息文本"
+
+#: ../docstring mcdreforged.info_reactor.info.Info.content:3 of
+msgid ""
+"If the text is sent by a player it will be what the player said. "
+"Otherwise it will be the content that removes stuffs like timestamp or "
+"thread name"
+msgstr "如果该信息是玩家的聊天信息，则其值为玩家的聊天内容。否则其值为除去时间/线程名等信息后的内容"
+
+#: ../docstring mcdreforged.info_reactor.info.Info.player:1 of
+msgid "The name of the player"
+msgstr "玩家名称"
+
+#: ../docstring mcdreforged.info_reactor.info.Info.player:3 of
+msgid "If it's not sent by a player the value will be None"
+msgstr "若信息不是来自玩家的聊天信息，则为 None。"
+
+#: ../docstring mcdreforged.info_reactor.info.Info.source:1 of
+msgid ""
+"A int (actually :class:`InfoSource`, a subclass of int) representing the "
+"the type of the info"
+msgstr "一个 int（实际上是 :class:`InfoSource`，一个 int 的子类），表示该信息的类型"
+
+#: ../docstring mcdreforged.info_reactor.info.Info.source:3 of
+msgid "For info from the server, its value is ``0``"
+msgstr "若该信息是来自服务端的标准输出流，则为 ``0``。"
+
+#: ../docstring mcdreforged.info_reactor.info.Info.source:5 of
+msgid "For info from the console, its value is ``1``"
+msgstr "若来自控制台输入，则为 ``1``。"
+
+#: ../docstring mcdreforged.info_reactor.info.Info.source:7 of
+msgid "See :class:`InfoSource` for all possible values"
+msgstr "见 :class:`InfoSource` 以了解所有可能的取值"
+
+#: ../docstring mcdreforged.info_reactor.info.Info.logging_level:1 of
+msgid ""
+"The logging level of the server's stdout, such as ``\"INFO\"`` or "
+"``\"WARN\"``"
+msgstr "该信息的 logging 级别，例如 ``\"INFO\"`` 或者 ``\"WARN\"``。"
+
+#: mcdreforged.info_reactor.info.Info.is_from_console:1 of
+msgid ""
+"If the source of the info is :attr:`InfoSource.CONSOLE` (``1``), i.e. "
+"from the console"
+msgstr "信息源是否是 :attr:`InfoSource.CONSOLE` (``1``)，即是信息否来自控制台"
+
+#: mcdreforged.info_reactor.info.Info.is_from_server:1 of
+#, fuzzy
+msgid ""
+"If the source of the info is :attr:`InfoSource.SERVER` (``0``), i.e. from"
+" the server"
+msgstr "信息源是否是 :attr:`InfoSource.SERVER` (``0``)，即是信息否来自服务端"
+
+#: mcdreforged.info_reactor.info.Info.is_player:1 of
+msgid "If the source is from a player in the server"
+msgstr "信息是否来自于服务端中的玩家"
+
+#: mcdreforged.info_reactor.info.Info.is_user:1 of
+msgid ""
+"If the source is from a user, i.e. if the source is from the console or "
+"from a player in the server"
+msgstr "信息是否来自于用户，即是否来自控制台或服务端中的玩家"
+
+#: mcdreforged.info_reactor.info.Info.get_server:1 of
+msgid "Return the server interface instance"
+msgstr "返回 ServerInterface 实例"
+
+#: mcdreforged.info_reactor.info.Info.get_command_source:1 of
+msgid "Extract a command source object from this object:"
+msgstr "从此对象中提取出一个指令源对象"
+
+#: mcdreforged.info_reactor.info.Info.get_command_source:3 of
+msgid ""
+":class:`~mcdreforged.command.command_source.ConsoleCommandSource` if this"
+" info is from console"
+msgstr ":class:`~mcdreforged.command.command_source.ConsoleCommandSource`，如果该信息来自控制台"
+
+#: mcdreforged.info_reactor.info.Info.get_command_source:4 of
+msgid ""
+":class:`~mcdreforged.command.command_source.PlayerCommandSource` if this "
+"info is from a player in the server"
+msgstr ":class:`~mcdreforged.command.command_source.PlayerCommandSource`，如果该信息来自服务端中的玩家"
+
+#: mcdreforged.info_reactor.info.Info.get_command_source of
+msgid "Returns"
+msgstr "返回"
+
+#: mcdreforged.info_reactor.info.Info.get_command_source:6 of
+msgid "The command source instance, or None if it can't extract a command source"
+msgstr "返回指令源实例。如果无法提取指令源，则返回 None。"
+
+#: mcdreforged.info_reactor.info.Info.to_command_source:1 of
+msgid ""
+"The same to method :meth:`get_command_source`, but it raises a "
+":class:`~mcdreforged.utils.exception.IllegalCallError` if it can't "
+"extract a command source"
+msgstr ""
+"与方法 :meth:`get_command_source` 一样，只不过它会在无法提取指令源时抛出一个 "
+":class:`~mcdreforged.utils.exception.IllegalCallError`"
+
+#: mcdreforged.info_reactor.info.Info.to_command_source of
+msgid "Raises"
+msgstr "抛出"
+
+#: mcdreforged.info_reactor.info.Info.to_command_source:4 of
+msgid "if a command source cannot be extracted from this object"
+msgstr "如果此无法从这个对象中提取指令源"
+
+#: mcdreforged.info_reactor.info.Info.should_send_to_server:1 of
+msgid ""
+"Representing if MCDR should send the content to the standard input stream"
+" of the server if this info is input from the console"
+msgstr "如果从控制台输入此信息，则表示 MCDR 是否应将内容发送到服务器的标准输入流。"
+
+#: mcdreforged.info_reactor.info.Info.cancel_send_to_server:1 of
+msgid ""
+"Prevent this info from being sent to the standard input stream of the "
+"server"
+msgstr "将该信息取消发送至服务端标准输入流。"
+
+#: mcdreforged.info_reactor.info.InfoSource:1 of
+msgid "Bases: :py:class:`int`, :py:class:`~enum.Enum`"
+msgstr ""
+
+#: mcdreforged.info_reactor.info.InfoSource:1 of
+msgid "Sources where an :class:`Info` object comes from"
+msgstr "一个消息（:class:`Info`）对象的来源"
+
+#: ../docstring mcdreforged.info_reactor.info.InfoSource.SERVER:1 of
+msgid "From the standard output stream of the server"
+msgstr "来自服务端的标准输出流"
+
+#: ../docstring mcdreforged.info_reactor.info.InfoSource.CONSOLE:1 of
+msgid "From input from console"
+msgstr "来自控制台的输入"
+
+#: ../class_references/info.rst:18
+msgid "Info Reactor"
+msgstr "Info 响应器"
+
+#: mcdreforged.info_reactor.abstract_info_reactor.AbstractInfoReactor:1 of
+msgid "The abstract base class for info reactors"
+msgstr "Info 响应器的抽象基类"
+
+#: ../docstring
+#: mcdreforged.info_reactor.abstract_info_reactor.AbstractInfoReactor.mcdr_server:1
+#: of
+msgid "The MCDR server object"
+msgstr "MCDR 服务端对象"
+
+#: mcdreforged.info_reactor.abstract_info_reactor.AbstractInfoReactor.react:1
+#: of
+msgid "React to an :class:`~mcdreforged.info_reactor.info.Info` object"
+msgstr "对一个 :class:`~mcdreforged.info_reactor.info.Info` 对象做出响应"
+
+#: mcdreforged.info_reactor.abstract_info_reactor.AbstractInfoReactor.react:3
+#: of
+msgid "It will be invoked on the task executor thread"
+msgstr "它将在任务执行者 (task executor) 线程被调用"
+
+#: mcdreforged.info_reactor.abstract_info_reactor.AbstractInfoReactor.react of
+msgid "Parameters"
+msgstr "参数"
+
+#: mcdreforged.info_reactor.abstract_info_reactor.AbstractInfoReactor.react:5
+#: of
+msgid "The info to be reacted to"
+msgstr "被响应的信息"
+
+#: mcdreforged.info_reactor.abstract_info_reactor.AbstractInfoReactor.on_server_start:1
+#: of
+msgid "Gets invoked when the server starts"
+msgstr "在服务端启动时将被调用"
+
+#: mcdreforged.info_reactor.abstract_info_reactor.AbstractInfoReactor.on_server_stop:1
+#: of
+msgid "Gets invoked when the server stops"
+msgstr "在服务端停止的时候将被调用"
+

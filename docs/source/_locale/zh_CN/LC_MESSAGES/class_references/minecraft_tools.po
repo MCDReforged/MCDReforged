@@ -174,7 +174,7 @@ msgstr "动作的字符串值"
 #: mcdreforged.minecraft.rtext.text.RTextBase.set_click_event
 #: mcdreforged.minecraft.rtext.text.RTextBase.set_hover_text of
 msgid "Returns"
-msgstr "返回值"
+msgstr "返回"
 
 #: mcdreforged.minecraft.rtext.text.RTextBase.set_click_event:7
 #: mcdreforged.minecraft.rtext.text.RTextBase.set_hover_text:7 of

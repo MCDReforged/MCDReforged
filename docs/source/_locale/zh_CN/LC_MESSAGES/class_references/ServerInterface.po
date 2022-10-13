@@ -212,7 +212,7 @@ msgstr "如果服务端正在运行或正在由其他插件启动，它将返回
 #: mcdreforged.plugin.server_interface.ServerInterface.start
 #: mcdreforged.plugin.server_interface.ServerInterface.unload_plugin of
 msgid "Returns"
-msgstr "返回值"
+msgstr "返回"
 
 #: mcdreforged.plugin.server_interface.ServerInterface.start:5 of
 msgid "If the action succeed"

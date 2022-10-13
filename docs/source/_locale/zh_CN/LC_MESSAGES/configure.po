@@ -471,7 +471,7 @@ msgid ""
 "handle the info instance. The classed need to be subclasses of "
 "``AbstractInfoReactor``"
 msgstr ""
-"用于处理 info 实例的自定义 `info 响应器 <customize/reactor.html>`__ 类所组成的列表。这些类应当是 "
+"用于处理 info 对象的自定义 `info 响应器 <customize/reactor.html>`__ 类所组成的列表。这些类应当是 "
 "``AbstractInfoReactor`` 的子类。"
 
 #: ../configure.rst:248

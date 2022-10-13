@@ -230,7 +230,7 @@ msgstr "源自一个由 MCDR 创建的 info 的指令源"
 
 #: mcdreforged.command.command_source.InfoCommandSource.get_info:1 of
 msgid "Return the Info instance that this command source is created from"
-msgstr "返回此指令源创建的 info 实例。"
+msgstr "返回此指令源创建的 info 对象"
 
 #: ../class_references/command.rst:18
 msgid "Command Nodes"

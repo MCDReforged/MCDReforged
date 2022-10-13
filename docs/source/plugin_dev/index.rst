@@ -14,4 +14,3 @@ Plugin Development
    Command Line Interface<cli.rst>
    Plugin Catalogue<plugin_catalogue.rst>
    Some tips<dev_tips.rst>
-   Class References<classes/index.rst>

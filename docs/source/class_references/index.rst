@@ -14,3 +14,4 @@ If you are just a user of MCDR, run! Don't read!
    Minecraft Tools<minecraft_tools.rst>
    Utilities<utils.rst>
    Decorators<decorators.rst>
+   Info and Info Reactor<info.rst>

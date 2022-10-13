@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-13 11:10+0800\n"
+"POT-Creation-Date: 2022-10-13 16:50+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -40,6 +40,10 @@ msgstr "实用工具"
 #: ../class_references/index.rst:8
 msgid "Decorators"
 msgstr "装饰器"
+
+#: ../class_references/index.rst:8
+msgid "Info and Info Reactor"
+msgstr "Info 和 Info 响应器"
 
 #: ../class_references/index.rst:2
 msgid "Class References"

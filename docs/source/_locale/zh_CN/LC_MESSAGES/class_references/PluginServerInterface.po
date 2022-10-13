@@ -179,7 +179,7 @@ msgstr "例子::"
 #: mcdreforged.plugin.server_interface.PluginServerInterface.open_bundled_file
 #: of
 msgid "Returns"
-msgstr "返回值"
+msgstr "返回"
 
 #: mcdreforged.plugin.server_interface.PluginServerInterface.get_data_folder:11
 #: of
