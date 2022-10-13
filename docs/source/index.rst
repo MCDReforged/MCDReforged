@@ -20,7 +20,7 @@ This is the official documentation for `MCDReforged <https://github.com/Fallen-B
    Customize<customize/customize.rst>
    Migrate Guide<migrate/index.rst>
    Development<mcdr_dev/index.rst>
-   Class References<class_references/index.rst>
+   Code References<code_references/index.rst>
 
 Indices and tables
 ==================
