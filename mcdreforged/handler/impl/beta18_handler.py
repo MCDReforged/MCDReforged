@@ -11,6 +11,9 @@ from mcdreforged.utils import string_util
 
 
 class Beta18Handler(VanillaHandler):
+	"""
+	Yes, a handler for Minecraft beta 1.8
+	"""
 	@classmethod
 	def format_message(cls, message: Any) -> str:
 		if isinstance(message, RTextBase):

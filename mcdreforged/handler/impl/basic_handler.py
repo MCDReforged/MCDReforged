@@ -9,6 +9,11 @@ from mcdreforged.info_reactor.server_information import ServerInformation
 
 
 class BasicHandler(AbstractServerHandler):
+	"""
+	The basic plain handler, providing the minimum parsed information
+
+	It's used as the fallback handler when every other dedicated handler failed
+	"""
 	def get_stop_command(self) -> str:
 		return ''
 

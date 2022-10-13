@@ -9,6 +9,9 @@ from mcdreforged.info_reactor.server_information import ServerInformation
 
 
 class BungeecordHandler(AbstractServerHandler):
+	"""
+	A handler for Bungeecord servers
+	"""
 	def get_stop_command(self) -> str:
 		return 'end'
 

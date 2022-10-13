@@ -4,6 +4,9 @@ from mcdreforged.handler.impl.abstract_minecraft_handler import AbstractMinecraf
 
 
 class BukkitHandler(AbstractMinecraftHandler):
+	"""
+	A handler for bukkit and bukkit-like Minecraft servers
+	"""
 	@classmethod
 	def get_content_parsing_formatter(cls):
 		return '[{hour:d}:{min:d}:{sec:d} {logging}]: {content}'

@@ -9,6 +9,9 @@ from mcdreforged.info_reactor.server_information import ServerInformation
 
 
 class VelocityHandler(AbstractServerHandler):
+	"""
+	A handler for Velocity servers
+	"""
 	def get_stop_command(self) -> str:
 		return 'shutdown'
 

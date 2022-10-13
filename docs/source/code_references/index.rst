@@ -10,10 +10,11 @@ If you are just a user of MCDR, run! Don't read!
 
    ServerInterface<ServerInterface.rst>
    PluginServerInterface<PluginServerInterface.rst>
-   Info and Info Reactor<info.rst>
    Command Stuffs<command.rst>
    Plugin Stuffs<plugin.rst>
    Minecraft Tools<minecraft_tools.rst>
    Decorators<decorators.rst>
+   Info and Info Reactor<info.rst>
+   Server Handler<server_handler.rst>
    Utilities<utils.rst>
    Misc<misc.rst>

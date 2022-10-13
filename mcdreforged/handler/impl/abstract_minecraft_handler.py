@@ -13,6 +13,9 @@ from mcdreforged.utils import string_util
 
 
 class AbstractMinecraftHandler(AbstractServerHandler, ABC):
+	"""
+	An abstract handler for Minecraft Java Edition servers
+	"""
 	def get_stop_command(self) -> str:
 		return 'stop'
 

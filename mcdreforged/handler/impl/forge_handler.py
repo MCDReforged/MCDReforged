@@ -2,6 +2,10 @@ from mcdreforged.handler.impl.vanilla_handler import VanillaHandler
 
 
 class ForgeHandler(VanillaHandler):
+	"""
+	A handler for forge Minecraft servers
+	"""
+
 	# [18:26:03] [Server thread/INFO] [FML]: Unloading dimension 1
 	# [18:26:03] [Server thread/INFO] [minecraft/DedicatedServer]: Done (9.855s)! For help, type "help" or "?"
 	# [18:29:30] [Server thread/INFO] [minecraft/DedicatedServer]: <Steve> tests

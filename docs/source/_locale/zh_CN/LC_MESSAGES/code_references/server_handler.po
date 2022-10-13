@@ -1,0 +1,353 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, Fallen_Breath
+# This file is distributed under the same license as the MCDReforged
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: MCDReforged \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-10-14 01:44+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.1\n"
+
+#: ../code_references/server_handler.rst:3
+msgid "Server Handler"
+msgstr "服务端处理器"
+
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler:1 of
+msgid "The abstract base class for server handler"
+msgstr "服务端处理器的抽象基类"
+
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler:3 of
+msgid "Class inheriting tree::"
+msgstr "类继承树状图::"
+
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.get_stop_command:1
+#: of
+msgid "The command to stop the server"
+msgstr ""
+
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.get_send_message_command:1
+#: of
+msgid "The command to send a message to a target"
+msgstr ""
+
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.get_broadcast_message_command:1
+#: of
+msgid "The command to broadcast a message in the server"
+msgstr ""
+
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.pre_parse_server_stdout:1
+#: of
+msgid "A parsing preprocessor. Invoked before any parsing operation"
+msgstr ""
+
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.pre_parse_server_stdout:3
+#: of
+msgid ""
+"Remove useless / annoying things like control characters in the text "
+"before parsing"
+msgstr ""
+
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_console_command
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_player_joined
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_player_left
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_server_address
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_server_stdout
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_server_version
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.pre_parse_server_stdout
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.test_rcon_started
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.test_server_startup_done
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.test_server_stopping
+#: of
+msgid "Parameters"
+msgstr ""
+
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_server_stdout:7
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.pre_parse_server_stdout:5
+#: of
+msgid "A line of the server stdout to be parsed"
+msgstr ""
+
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_console_command:1
+#: of
+msgid "Parse console input"
+msgstr ""
+
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_console_command:3
+#: of
+msgid "A line of console input to be parsed"
+msgstr ""
+
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_console_command
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_player_joined
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_player_left
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_server_address
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_server_stdout
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_server_version
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.test_rcon_started
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.test_server_startup_done
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.test_server_stopping
+#: of
+msgid "Returns"
+msgstr ""
+
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_console_command:4
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_server_stdout:8
+#: of
+msgid "An :class:`~mcdreforged.info_reactor.info.Info` object as the result"
+msgstr ""
+
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.get_content_parsing_formatter:1
+#: of
+msgid ""
+"Return a str or a str iterable that is used in method "
+":meth:`_content_parse` for parsing"
+msgstr ""
+
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.get_content_parsing_formatter:3
+#: of
+msgid ""
+"These strings will be passed as the 1st parameter to ``parse.parse``, "
+"they are both supposed to contain at least the following fields:"
+msgstr ""
+
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.get_content_parsing_formatter:6
+#: of
+msgid "``hour``"
+msgstr ""
+
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.get_content_parsing_formatter:7
+#: of
+msgid "``min``"
+msgstr ""
+
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.get_content_parsing_formatter:8
+#: of
+msgid "``sec``"
+msgstr ""
+
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.get_content_parsing_formatter:9
+#: of
+msgid "``logging``"
+msgstr ""
+
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.get_content_parsing_formatter:10
+#: of
+msgid "``content``"
+msgstr ""
+
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_server_stdout:1
+#: of
+msgid ""
+"Main parsing operation. Parse a string from the stdout of the server It "
+"may raise any exceptions if the format of the input string is not correct"
+msgstr ""
+
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_server_stdout:4
+#: of
+msgid ""
+"In this implementation it achieves raw parsing, returns an almost un-"
+"parsed Info instance Use as the first step of the parsing process, or as "
+"the return value if you give up parsing this text"
+msgstr ""
+
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_player_joined:1
+#: of
+msgid "Check if the info indicating a player joined message"
+msgstr ""
+
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_player_joined:3
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_player_left:3
+#: of
+msgid "If it is, returns the name of the player, otherwise returns None"
+msgstr ""
+
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_player_joined:5
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_player_left:5
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_server_address:5
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_server_version:5
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.test_rcon_started:3
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.test_server_startup_done:3
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.test_server_stopping:3
+#: of
+msgid "The info object to be checked"
+msgstr ""
+
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_player_joined:6
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_player_left:6
+#: of
+msgid "The name of the player, or None"
+msgstr ""
+
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_player_left:1
+#: of
+msgid "Check if the info indicates a player left message"
+msgstr ""
+
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_server_version:1
+#: of
+msgid "Check if the info contains a server version message"
+msgstr ""
+
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_server_version:3
+#: of
+msgid "If it is, returns server version, otherwise returns None"
+msgstr ""
+
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_server_version:6
+#: of
+msgid "The version of the server, or None"
+msgstr ""
+
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_server_address:1
+#: of
+msgid "Check if the info contains the address which the server is listening on"
+msgstr ""
+
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_server_address:3
+#: of
+msgid "If it is, returns server ip and port, otherwise returns None"
+msgstr ""
+
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_server_address:6
+#: of
+msgid "A tuple containing the ip and the port, or None"
+msgstr ""
+
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.test_server_startup_done:1
+#: of
+msgid "Check if the info indicates a server startup message"
+msgstr ""
+
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.test_server_startup_done:4
+#: of
+msgid "If the info indicates a server startup message"
+msgstr ""
+
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.test_rcon_started:1
+#: of
+msgid "Check if rcon has started"
+msgstr ""
+
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.test_rcon_started:4
+#: of
+msgid "If rcon has started"
+msgstr ""
+
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.test_server_stopping:1
+#: of
+msgid "Check if the server is stopping"
+msgstr ""
+
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.test_server_stopping:4
+#: of
+msgid "If the server is stopping"
+msgstr ""
+
+#: mcdreforged.handler.impl.basic_handler.BasicHandler:1 of
+msgid "The basic plain handler"
+msgstr ""
+
+#~ msgid ""
+#~ "Remove useless / annoying things like"
+#~ " control characters in the text "
+#~ "before parse"
+#~ msgstr ""
+
+#~ msgid "Return type"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Base parsing, returns an almost un-"
+#~ "parsed Info instance Don't use this "
+#~ "unless"
+#~ msgstr ""
+
+#~ msgid "An Info instance"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Return a str or a str collection"
+#~ " that is used in method "
+#~ "_content_parse for parsing"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "In this implementation it achieves raw"
+#~ " parsing, returns an almost un-parsed"
+#~ " Info instance Use as the first "
+#~ "step of the parsing process, or as"
+#~ " the return value if you give "
+#~ "up parsing this text :param str "
+#~ "text: A line of the server stdout"
+#~ " to be parsed :return: An Info "
+#~ "instance :rtype: Info"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Check if the info indicating a "
+#~ "player joined message If it is, "
+#~ "returns the name of the player, "
+#~ "otherwise returns None"
+#~ msgstr ""
+
+#~ msgid "The info instance that will be checked"
+#~ msgstr ""
+
+#~ msgid "The name of the player or None"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Check if the info indicates a "
+#~ "player left message If it is, "
+#~ "returns the name of the player, "
+#~ "otherwise returns None"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Check if the info contains a "
+#~ "server version message If it is, "
+#~ "returns server version, otherwise returns "
+#~ "None"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Check if the info contains the "
+#~ "address which the server is listening"
+#~ " on If it is, returns server ip"
+#~ " and port, otherwise returns None"
+#~ msgstr ""
+
+#~ msgid "A tuple containing the ip and the port"
+#~ msgstr ""
+
+#~ msgid "Check if the info indicates a server startup message and return a bool"
+#~ msgstr ""
+
+#~ msgid "Check if rcon has started and return a bool"
+#~ msgstr ""
+
+#~ msgid "Check if the server is stopping and return a bool"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "In this implementation it achieves raw"
+#~ " parsing, returns an almost un-parsed"
+#~ " Info instance Use as the first "
+#~ "step of the parsing process, or as"
+#~ " the return value if you give "
+#~ "up parsing this text :param str "
+#~ "text: A line of the server stdout"
+#~ " to be parsed :return: An "
+#~ ":class:`~mcdreforged.info_reactor.info.Info` object as "
+#~ "the result"
+#~ msgstr ""
+
