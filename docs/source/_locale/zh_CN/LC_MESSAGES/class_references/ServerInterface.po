@@ -19,7 +19,7 @@ msgstr ""
 
 #: ../class_references/ServerInterface.rst:3
 msgid "ServerInterface"
-msgstr "ServerInterface"
+msgstr "服务端接口 - 通用"
 
 #: ../class_references/ServerInterface.rst:5
 msgid ":ref:`API package <api-package>` path: ``mcdreforged.api.types``"

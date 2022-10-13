@@ -19,15 +19,15 @@ msgstr ""
 
 #: ../class_references/index.rst:8
 msgid "Command"
-msgstr "指令相关"
+msgstr "指令"
 
 #: ../class_references/index.rst:8
 msgid "ServerInterface"
-msgstr "ServerInterface"
+msgstr "服务端接口 - 通用"
 
 #: ../class_references/index.rst:8
 msgid "PluginServerInterface"
-msgstr "PluginServerInterface"
+msgstr "服务端接口 - 插件"
 
 #: ../class_references/index.rst:8
 msgid "Minecraft Tools"

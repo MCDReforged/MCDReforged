@@ -19,7 +19,7 @@ msgstr ""
 
 #: ../class_references/PluginServerInterface.rst:3
 msgid "PluginServerInterface"
-msgstr "PluginServerInterface"
+msgstr "服务端接口 - 插件"
 
 #: ../class_references/PluginServerInterface.rst:5
 msgid ":ref:`API package <api-package>` path: ``mcdreforged.api.types``"
