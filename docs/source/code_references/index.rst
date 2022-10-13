@@ -15,3 +15,4 @@ If you are just a user of MCDR, run! Don't read!
    Minecraft Tools<minecraft_tools.rst>
    Decorators<decorators.rst>
    Utilities<utils.rst>
+   Misc<misc.rst>
