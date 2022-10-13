@@ -218,7 +218,7 @@ class Text(TextNode):
 		return self._check_length_in_range_and_return(arg, len(arg))
 
 
-class QuotableText(TextNode):
+class QuotableText(Text):
 	"""
 	A text argument with support for inputting space characters
 
