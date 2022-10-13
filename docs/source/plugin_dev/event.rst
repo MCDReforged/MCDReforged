@@ -59,9 +59,9 @@ Since it's the first event in the lifecycle of a plugin, this event can only be 
 
 Note: You should not dispatch custom events in the ``on_load`` function or it will do nothing. The event listener storage of MCDR has not been initialized yet
 
-* Event id: mcdr.plugin_loaded
-* Callback arguments: PluginServerInterface, object (previous module)
-* Default function name: on_load
+:Event id: ``mcdr.plugin_loaded``
+:Callback arguments: :class:`~mcdreforged.plugin.server_interface.PluginServerInterface`, :class:`object` (previous module)
+:Default function name: ``on_load``
 
 Plugin Unloaded
 ~~~~~~~~~~~~~~~
@@ -70,10 +70,9 @@ This event gets dispatched when MCDR unload the plugin instance. It can be cause
 
 Also, this event will be dispatched during MCDR stopping, so it's a good place for you to do some cleanup
 
-
-* Event id: mcdr.plugin_unloaded
-* Callback arguments: PluginServerInterface
-* Default function name: on_unload
+:Event id: ``mcdr.plugin_unloaded``
+:Callback arguments: :class:`~mcdreforged.plugin.server_interface.PluginServerInterface`
+:Default function name: ``on_unload``
 
 General Info
 ~~~~~~~~~~~~
@@ -89,9 +88,9 @@ Here's an example
             server.logger.info('Minecraft is starting at address {}'.format(info.content.rsplit(' ', 1)[1]))
 
 
-* Event id: mcdr.general_info
-* Callback arguments: PluginServerInterface, Info
-* Default function name: on_info
+:Event id: ``mcdr.general_info``
+:Callback arguments: :class:`~mcdreforged.plugin.server_interface.PluginServerInterface`, :class:`~mcdreforged.info_reactor.info.Info`
+:Default function name: ``on_info``
 
 User Info
 ~~~~~~~~~
@@ -112,9 +111,9 @@ Here's an example
 If you want to have a not-simple command system, rather than parsing them manually in User Info event, I will suggest you to register a command tree for you plugin. See the `command registering <basic.html#command>`__ doc
 
 
-* Event id: mcdr.user_info
-* Callback arguments: PluginServerInterface, Info
-* Default function name: on_user_info
+:Event id: ``mcdr.user_info``
+:Callback arguments: :class:`~mcdreforged.plugin.server_interface.PluginServerInterface`, :class:`~mcdreforged.info_reactor.info.Info`
+:Default function name: ``on_user_info``
 
 Server Start
 ~~~~~~~~~~~~
@@ -122,9 +121,9 @@ Server Start
 The server process is just started by MCDR
 
 
-* Event id: mcdr.server_start
-* Callback arguments: PluginServerInterface
-* Default function name: on_server_start
+:Event id: ``mcdr.server_start``
+:Callback arguments: :class:`~mcdreforged.plugin.server_interface.PluginServerInterface`
+:Default function name: ``on_server_start``
 
 Server Startup
 ~~~~~~~~~~~~~~
@@ -132,9 +131,9 @@ Server Startup
 The server has fully started up. For example, a vanilla Minecraft server outputs ``Done (1.0s)! For help, type "help"``
 
 
-* Event id: mcdr.server_startup
-* Callback arguments: PluginServerInterface
-* Default function name: on_server_startup
+:Event id: ``mcdr.server_startup``
+:Callback arguments: :class:`~mcdreforged.plugin.server_interface.PluginServerInterface`
+:Default function name: ``on_server_startup``
 
 Server Stop
 ~~~~~~~~~~~
@@ -152,9 +151,9 @@ Example:
             server.logger.info('Is it a server crash?')
 
 
-* Event id: mcdr.server_stop
-* Callback arguments: PluginServerInterface, int
-* Default function name: on_server_stop
+:Event id: ``mcdr.server_stop``
+:Callback arguments: :class:`~mcdreforged.plugin.server_interface.PluginServerInterface`, :class:`int`
+:Default function name: ``on_server_stop``
 
 MCDR Start
 ~~~~~~~~~~
@@ -162,9 +161,9 @@ MCDR Start
 The MCDR is starting. Only plugins which is loaded with MCDR is able to receive this event
 
 
-* Event id: mcdr.mcdr_start
-* Callback arguments: PluginServerInterface
-* Default function name: on_mcdr_start
+:Event id: ``mcdr.mcdr_start``
+:Callback arguments: :class:`~mcdreforged.plugin.server_interface.PluginServerInterface`
+:Default function name: ``on_mcdr_start``
 
 MCDR Stop
 ~~~~~~~~~
@@ -176,9 +175,9 @@ MCDR will wait until all events finished their callbacks to continue executing
 Watchdog is disabled during this event dispatching, so you can safely block MCDR here to wait until your cleanup codes finishes
 
 
-* Event id: mcdr.mcdr_stop
-* Callback arguments: PluginServerInterface
-* Default function name: on_mcdr_stop
+:Event id: ``mcdr.mcdr_stop``
+:Callback arguments: :class:`~mcdreforged.plugin.server_interface.PluginServerInterface`
+:Default function name: ``on_mcdr_stop``
 
 Player Joined
 ~~~~~~~~~~~~~
@@ -193,9 +192,9 @@ Example:
         server.say('Welcome {}'.format(player))
 
 
-* Event id: mcdr.player_joined
-* Callback arguments: PluginServerInterface, str, Info
-* Default function name: on_player_joined
+:Event id: ``mcdr.player_joined``
+:Callback arguments: :class:`~mcdreforged.plugin.server_interface.PluginServerInterface`, :class:`str`, :class:`~mcdreforged.info_reactor.info.Info`
+:Default function name: ``on_player_joined``
 
 Player Left
 ~~~~~~~~~~~
@@ -203,9 +202,9 @@ Player Left
 A player just left the game. Plugin can do cleanups for player related objects
 
 
-* Event id: mcdr.player_left
-* Callback arguments: PluginServerInterface, str
-* Default function name: on_player_left
+:Event id: ``mcdr.player_left``
+:Callback arguments: :class:`~mcdreforged.plugin.server_interface.PluginServerInterface`, :class:`str`
+:Default function name: ``on_player_left``
 
 Custom Event
 ------------
