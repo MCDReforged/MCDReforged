@@ -369,10 +369,7 @@ class ServerInterface:
 		source = info.get_command_source()
 		if source is None:
 			raise IllegalCallError('Cannot reply to the given info instance')
-		if not source.is_console:
-			if console_text is not None:
-				text = console_text
-		source.reply(text, encoding=encoding)
+		source.reply(text, encoding=encoding, console_text=console_text)
 
 	# ------------------------
 	#	  Plugin Queries
