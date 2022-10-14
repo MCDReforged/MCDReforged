@@ -212,9 +212,9 @@ msgstr "如果插件并非是一个多文件插件（换句话来讲，是一个
 #: mcdreforged.plugin.server_interface.PluginServerInterface.load_config_simple:1
 #: of
 msgid ""
-"A simple method to load a dict or Serializable type config from a json "
+"A simple method to load a dict or :class:`~mcdreforged.utils.serializer.Serializable` type config from a json "
 "file"
-msgstr "一个简单的，从一个 json 文件中载入一个 dict 或 Serializable 类型的配置文件的方法"
+msgstr "一个简单的，从一个 json 文件中载入一个 dict 或 :class:`~mcdreforged.utils.serializer.Serializable` 类型的配置文件的方法"
 
 #: mcdreforged.plugin.server_interface.PluginServerInterface.load_config_simple:3
 #: of
@@ -306,9 +306,9 @@ msgstr "*encoding* 参数"
 #: mcdreforged.plugin.server_interface.PluginServerInterface.save_config_simple:1
 #: of
 msgid ""
-"A simple method to save your dict or Serializable type config as a json "
+"A simple method to save your dict or :class:`~mcdreforged.utils.serializer.Serializable` type config as a json "
 "file"
-msgstr "一个简单的，将一个 dict 或者 Serializable 配置文件保存至 json 文件的方法"
+msgstr "一个简单的，将一个 dict 或 :class:`~mcdreforged.utils.serializer.Serializable` 配置文件保存至 json 文件的方法"
 
 #: mcdreforged.plugin.server_interface.PluginServerInterface.save_config_simple:3
 #: of

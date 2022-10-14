@@ -1,10 +1,11 @@
 import unittest
 from abc import ABC
 from enum import Enum
-from typing import Any, Type
+from typing import Type
 
 from mcdreforged.api.command import *
 from mcdreforged.api.types import CommandSource
+from mcdreforged.utils.types import MessageText
 
 
 class TestCommandSource(CommandSource):
@@ -22,7 +23,7 @@ class TestCommandSource(CommandSource):
 	def get_permission_level(self) -> int:
 		raise RuntimeError()
 
-	def reply(self, message: Any, **kwargs) -> None:
+	def reply(self, message: MessageText, **kwargs) -> None:
 		raise RuntimeError()
 
 

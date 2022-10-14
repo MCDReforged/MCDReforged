@@ -867,7 +867,7 @@ class PluginServerInterface(ServerInterface):
 			target_class: Optional[Type[SerializableType]] = None, encoding: str = 'utf8'
 	) -> Union[dict, SerializableType]:
 		"""
-		A simple method to load a dict or Serializable type config from a json file
+		A simple method to load a dict or :class:`~mcdreforged.utils.serializer.Serializable` type config from a json file
 
 		Default config is supported. Missing key-values in the loaded config object will be filled using the default config
 		
@@ -971,7 +971,7 @@ class PluginServerInterface(ServerInterface):
 			in_data_folder: bool = True, encoding: str = 'utf8'
 	) -> None:
 		"""
-		A simple method to save your dict or Serializable type config as a json file
+		A simple method to save your dict or :class:`~mcdreforged.utils.serializer.Serializable` type config as a json file
 
 		:param config: The config instance to be saved
 		:param file_name: The name of the config file. It can also be a path to the config file

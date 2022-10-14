@@ -19,7 +19,7 @@ def unique_list(lst: Iterable[T]) -> List[T]:
 	return list(dict.fromkeys(lst).keys())
 
 
-def print_text_to_console(logger, text):
+def print_text_to_console(logger, text: Any):
 	from mcdreforged.minecraft.rtext.text import RTextBase
 	for line in RTextBase.from_any(text).to_colored_text().splitlines():
 		logger.info(line)

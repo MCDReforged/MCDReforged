@@ -1,10 +1,11 @@
 from abc import ABC
 from contextlib import contextmanager
-from typing import TYPE_CHECKING, Any, Optional
+from typing import TYPE_CHECKING, Optional
 
 from mcdreforged.permission.permission_level import PermissionLevel
 from mcdreforged.translation.translation_text import RTextMCDRTranslation
 from mcdreforged.utils import misc_util
+from mcdreforged.utils.types import MessageText
 
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
@@ -78,7 +79,8 @@ class CommandSource(ABC):
 	@contextmanager
 	def preferred_language_context(self):
 		"""
-		A quick helper method to use the language value in preference to create a context with ``RTextMCDRTranslation.language_context``
+		A quick helper method to use the language value in preference to create a context
+		with :meth:`RTextMCDRTranslation.language_context <mcdreforged.translation.translation_text.RTextMCDRTranslation.language_context>`
 
 		.. seealso::
 
@@ -113,11 +115,9 @@ class CommandSource(ABC):
 		"""
 		return self.get_permission_level() > level
 
-	def reply(self, message: Any, **kwargs) -> None:
+	def reply(self, message: MessageText, **kwargs) -> None:
 		"""
 		Send a message to the command source. The message can be anything including RTexts
-
-		The message will be converted to str using ``str()`` function unless it's a :class:`RTextBase` object
 
 		:param message: The message you want to send
 		:keyword encoding: The encoding method for the message. It's only used in :class:`PlayerCommandSource`
@@ -173,7 +173,7 @@ class PlayerCommandSource(InfoCommandSource):
 	def get_preference(self) -> Optional['PreferenceItem']:
 		return self.get_server().get_preference(self)
 
-	def reply(self, message: Any, *, encoding: Optional[str] = None, **kwargs):
+	def reply(self, message: MessageText, *, encoding: Optional[str] = None, **kwargs):
 		"""
 		:keyword encoding: encoding method to be used in :meth:`ServerInterface.tell`
 		"""
@@ -203,7 +203,7 @@ class ConsoleCommandSource(InfoCommandSource):
 	def get_preference(self) -> Optional['PreferenceItem']:
 		return self.get_server().get_preference(self)
 
-	def reply(self, message: Any, *, console_text: Optional[Any] = None, **kwargs):
+	def reply(self, message: MessageText, *, console_text: Optional[MessageText] = None, **kwargs):
 		"""
 		:keyword console_text: If it's specified, overwrite the value of parameter ``message`` with it
 		"""
@@ -239,7 +239,7 @@ class PluginCommandSource(CommandSource):
 	def get_permission_level(self) -> int:
 		return PermissionLevel.PLUGIN_LEVEL
 
-	def reply(self, message: Any, **kwargs) -> None:
+	def reply(self, message: MessageText, **kwargs) -> None:
 		misc_util.print_text_to_console(self.__logger, message)
 
 	def __str__(self):
