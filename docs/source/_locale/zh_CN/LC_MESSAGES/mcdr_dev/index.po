@@ -37,7 +37,7 @@ msgstr "MCDReforged 开发"
 msgid ""
 "This part of the document is for developing MCDReforged itself. Check "
 "`here <../plugin_dev/index.html>`__ if you want to develop a MCDR plugin"
-msgstr "这一部分是关于开发 MCDReforged 本身的文档。如果你想开发 MCDR 插件的话，去 `这 <../plugin_dev/index.html>`__ 看看吧。"
+msgstr "这一部分是关于开发 MCDReforged 本身的文档。如果你想开发 MCDR 插件的话，去 `这 <../plugin_dev/index.html>`__ 看看吧"
 
 #: ../mcdr_dev/index.rst:7
 msgid "If you are just a user of MCDR, run! Don't read!"

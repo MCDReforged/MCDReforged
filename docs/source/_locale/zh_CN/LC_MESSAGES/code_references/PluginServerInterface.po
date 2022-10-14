@@ -43,7 +43,7 @@ msgstr "插件注册"
 #: mcdreforged.plugin.server_interface.PluginServerInterface.register_event_listener:1
 #: of
 msgid "Register an event listener for the current plugin"
-msgstr "为当前插件注册一个事件监听器。"
+msgstr "为当前插件注册一个事件监听器"
 
 #: mcdreforged.plugin.server_interface.PluginServerInterface.load_config_simple
 #: mcdreforged.plugin.server_interface.PluginServerInterface.open_bundled_file
@@ -64,12 +64,12 @@ msgid ""
 "indicates the target event for the plugin to listen"
 msgstr ""
 "事件的 ID，或 :class:`~mcdreforged.plugin.plugin_event.PluginEvent` "
-"实例。它表示插件要监听的目标事件。"
+"实例。它表示插件要监听的目标事件"
 
 #: mcdreforged.plugin.server_interface.PluginServerInterface.register_event_listener:5
 #: of
 msgid "The callback listener method for the event"
-msgstr "事件的回调的监听器方法。"
+msgstr "事件的回调的监听器方法"
 
 #: mcdreforged.plugin.server_interface.PluginServerInterface.register_event_listener:6
 #: of
@@ -90,14 +90,14 @@ msgid ""
 ":class:`~mcdreforged.command.builder.nodes.basic.Literal` node"
 msgstr ""
 "指令树的根节点。 它应为一个 :class:`~mcdreforged.command.builder.nodes.basic.Literal` "
-"节点。"
+"节点"
 
 #: mcdreforged.plugin.server_interface.PluginServerInterface.register_help_message:1
 #: of
 msgid ""
 "Register a help message for the current plugin, which is used in "
 "``!!help`` command"
-msgstr "为当前插件注册一个帮助信息，以在 ``!!help`` 指令中显示。"
+msgstr "为当前插件注册一个帮助信息，以在 ``!!help`` 指令中显示"
 
 #: mcdreforged.plugin.server_interface.PluginServerInterface.register_help_message:3
 #: of
@@ -122,19 +122,19 @@ msgstr ""
 msgid ""
 "The minimum permission level for the user to see this help message. With "
 "default permission, anyone can see this message"
-msgstr "用户看到此帮助信息的最低权限。在默认参数的情况下，任何人都可以看到此信息。"
+msgstr "用户看到此帮助信息的最低权限。在默认参数的情况下，任何人都可以看到此信息"
 
 #: mcdreforged.plugin.server_interface.PluginServerInterface.register_translation:1
 #: of
 msgid ""
 "Register a translation mapping for a specific language for the current "
 "plugin"
-msgstr "为当前插件注册给定语言的一个翻译映射表。"
+msgstr "为当前插件注册给定语言的一个翻译映射表"
 
 #: mcdreforged.plugin.server_interface.PluginServerInterface.register_translation:3
 #: of
 msgid "The language of this translation"
-msgstr "该翻译的语言。"
+msgstr "该翻译的语言"
 
 #: mcdreforged.plugin.server_interface.PluginServerInterface.register_translation:4
 #: of
@@ -144,7 +144,7 @@ msgid ""
 "a nested multi-level nodes"
 msgstr ""
 "一个将翻译键映射为翻译文本的 dict。翻译键可以被表示为根节点下的子节点名称，或嵌套的多层节点的路径。dict "
-"可嵌套多层，路径为从根节点开始每一层节点的名称相连、通过 ``\".\"`` 分隔的 str。"
+"可嵌套多层，路径为从根节点开始每一层节点的名称相连、通过 ``\".\"`` 分隔的 str"
 
 #: ../class_references/PluginServerInterface.rst:20
 msgid "Plugin Utils"
@@ -153,12 +153,12 @@ msgstr "插件工具"
 #: mcdreforged.plugin.server_interface.PluginServerInterface.get_self_metadata:1
 #: of
 msgid "Return the metadata of the plugin itself"
-msgstr "返回当前插件的元数据。"
+msgstr "返回当前插件的元数据"
 
 #: mcdreforged.plugin.server_interface.PluginServerInterface.get_data_folder:1
 #: of
 msgid "Return a unified data directory path for the current plugin"
-msgstr "为当前插件返回一个统一格式的数据文件夹。"
+msgstr "为当前插件返回一个统一格式的数据文件夹"
 
 #: mcdreforged.plugin.server_interface.PluginServerInterface.get_data_folder:3
 #: of
@@ -166,7 +166,7 @@ msgid ""
 "The path of the folder will be ``\"config/plugin_id\"/`` where ``plugin_id`` "
 "is the id of the current plugin if the directory does not exist, create "
 "it"
-msgstr "文件夹的路径将会为 ``\"config/plugin_id\"``，其中 ``plugin_id`` 是当前插件的 id。"
+msgstr "文件夹的路径将会为 ``\"config/plugin_id\"``，其中 ``plugin_id`` 是当前插件的 id"
 
 #: mcdreforged.plugin.server_interface.PluginServerInterface.get_data_folder:6
 #: mcdreforged.plugin.server_interface.PluginServerInterface.open_bundled_file:3
@@ -184,22 +184,22 @@ msgstr "返回"
 #: mcdreforged.plugin.server_interface.PluginServerInterface.get_data_folder:11
 #: of
 msgid "The path to the data directory"
-msgstr "返回数据文件夹的路径。"
+msgstr "返回数据文件夹的路径"
 
 #: mcdreforged.plugin.server_interface.PluginServerInterface.open_bundled_file:1
 #: of
 msgid "Open a file inside the plugin with readonly binary mode"
-msgstr "使用二进制只读模式，打开插件中的一个文件。"
+msgstr "使用二进制只读模式，打开插件中的一个文件"
 
 #: mcdreforged.plugin.server_interface.PluginServerInterface.open_bundled_file:9
 #: of
 msgid "The related file path in your plugin to the file you want to open"
-msgstr "你想要打开的文件位于你的插件中的相对位置。"
+msgstr "你想要打开的文件位于你的插件中的相对位置"
 
 #: mcdreforged.plugin.server_interface.PluginServerInterface.open_bundled_file:10
 #: of
 msgid "A un-decoded bytes file-like object"
-msgstr "一个未解码的，bytes 形式的文件型的对象。"
+msgstr "一个未解码的，bytes 形式的文件型的对象"
 
 #: mcdreforged.plugin.server_interface.PluginServerInterface.open_bundled_file
 #: of
@@ -216,14 +216,14 @@ msgstr "如果插件并非是一个多文件插件（换句话来讲，是一个
 msgid ""
 "A simple method to load a dict or Serializable type config from a json "
 "file"
-msgstr "一个简单的，从一个 json 文件中载入一个 dict 或 Serializable 类型的配置文件的方法。"
+msgstr "一个简单的，从一个 json 文件中载入一个 dict 或 Serializable 类型的配置文件的方法"
 
 #: mcdreforged.plugin.server_interface.PluginServerInterface.load_config_simple:3
 #: of
 msgid ""
 "Default config is supported. Missing key-values in the loaded config "
 "object will be filled using the default config"
-msgstr "支持默认配置文件。加载的配置中缺失的键-值对将会使用默认配置文件填充。"
+msgstr "支持默认配置文件。加载的配置中缺失的键-值对将会使用默认配置文件填充"
 
 #: mcdreforged.plugin.server_interface.PluginServerInterface.load_config_simple:5
 #: of
@@ -257,7 +257,7 @@ msgid ""
 " used when the config file is missing"
 msgstr ""
 "一个储存着默认配置的 dict。当配置文件缺失时，这个参数是必须的，否则将抛出异常。如果 *target_class* 被给出并且 "
-"*default_config* 缺失，则当配置文件缺失时 *target_class* 的默认值将会被使用。"
+"*default_config* 缺失，则当配置文件缺失时 *target_class* 的默认值将会被使用"
 
 #: mcdreforged.plugin.server_interface.PluginServerInterface.load_config_simple:35
 #: mcdreforged.plugin.server_interface.PluginServerInterface.save_config_simple:5
@@ -285,7 +285,7 @@ msgid ""
 "instance of *target_class* which will be returned as return value"
 msgstr ""
 "一个派生自 :class:`~mcdreforged.utils.serializer.Serializable` "
-"的类。当被指定时，加载的配置文件数据将会被反序列化为一个 *target_class* 的实例并令其作为方法的返回值。"
+"的类。当被指定时，加载的配置文件数据将会被反序列化为一个 *target_class* 的实例并令其作为方法的返回值"
 
 #: mcdreforged.plugin.server_interface.PluginServerInterface.load_config_simple:41
 #: of
@@ -302,12 +302,12 @@ msgstr "一个储存着加载并处理后的配置文件的 dict"
 msgid ""
 "A simple method to save your dict or Serializable type config as a json "
 "file"
-msgstr "一个简单的，将一个 dict 或者 Serializable 配置文件保存至 json 文件的方法。"
+msgstr "一个简单的，将一个 dict 或者 Serializable 配置文件保存至 json 文件的方法"
 
 #: mcdreforged.plugin.server_interface.PluginServerInterface.save_config_simple:3
 #: of
 msgid "The config instance to be saved"
-msgstr "将要被保存的配置文件实例。"
+msgstr "将要被保存的配置文件实例"
 
 #: mcdreforged.plugin.server_interface.PluginServerInterface.save_config_simple:6
 #: of

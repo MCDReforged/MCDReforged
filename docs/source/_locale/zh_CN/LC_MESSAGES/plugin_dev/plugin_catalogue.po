@@ -23,13 +23,13 @@ msgid ""
 " here and developers can submit their plugins to the catalogue"
 msgstr ""
 "MCDR 的官方插件仓库位于 https://github.com/MCDReforged/PluginCatalogue 的 "
-"``master`` 分支。用户可以在此处阅览插件，开发者也可以将他们的插件提交至该仓库。"
+"``master`` 分支。用户可以在此处阅览插件，开发者也可以将他们的插件提交至该仓库"
 
 #: ../plugin_dev/plugin_catalogue.rst:6
 msgid ""
 "The catalogue is updated once files change, and every 30 minutes via "
 "github action"
-msgstr "该仓库在文件变更时会更新。除此之外，每 30 分钟，该仓库也会通过 github action 更新。"
+msgstr "该仓库在文件变更时会更新。除此之外，每 30 分钟，该仓库也会通过 github action 更新"
 
 #: ../plugin_dev/plugin_catalogue.rst:9
 msgid "File structures"
@@ -78,7 +78,7 @@ msgid ""
 "A list contains the authors of the plugin. Elements in the list can be a "
 "single str representing the name of the author, or a dict contains the "
 "author name and the url link of the author"
-msgstr "一个储存着插件作者的列表。列表中的元素可以是代表着作者名称的单个 str，也可以是一个储存着作者的名称及作者相关链接的 dict。"
+msgstr "一个储存着插件作者的列表。列表中的元素可以是代表着作者名称的单个 str，也可以是一个储存着作者的名称及作者相关链接的 dict"
 
 #: ../plugin_dev/plugin_catalogue.rst:41
 msgid "Example:"
@@ -123,7 +123,7 @@ msgid ""
 "This is the root directory for plugin catalogue to fetch files from your "
 "repository. A ``mcdreforged.plugin.json`` metadata file is expected in "
 "this directory"
-msgstr "这是插件仓库获取你插件的文件时计算路径的根目录。在该目录下需要有一个 ``mcdreforged.plugin.json`` 元数据文件。"
+msgstr "这是插件仓库获取你插件的文件时计算路径的根目录。在该目录下需要有一个 ``mcdreforged.plugin.json`` 元数据文件"
 
 #: ../plugin_dev/plugin_catalogue.rst:83
 msgid "For example, if your plugin repository has following file structure"
@@ -161,7 +161,7 @@ msgid ""
 " to attract new users"
 msgstr ""
 "插件的介绍部分（introduction）是一个使用 markdown "
-"语法撰写的文段。它将会在用户浏览你的插件时向其展示。与自述文件（readme）或文档对比，插件介绍更注重于展示插件的特性从而吸引新用户。"
+"语法撰写的文段。它将会在用户浏览你的插件时向其展示。与自述文件（readme）或文档对比，插件介绍更注重于展示插件的特性从而吸引新用户"
 
 #: ../plugin_dev/plugin_catalogue.rst:118
 msgid ""
@@ -192,7 +192,7 @@ msgstr "使用与 `related_path 小节 <#related-path>`__ 中相同的文件结�
 msgid ""
 "Alternatively you can don't declare this field but put your introduction "
 "file inside the same directory where ``plugin_info.json`` is"
-msgstr "或者，你也可以不声明此属性，而是将介绍文件放在 ``plugin_info.json`` 所在的同一文件夹下。"
+msgstr "或者，你也可以不声明此属性，而是将介绍文件放在 ``plugin_info.json`` 所在的同一文件夹下"
 
 #: ../plugin_dev/plugin_catalogue.rst:135
 msgid ""
@@ -212,7 +212,7 @@ msgstr "标签"
 
 #: ../plugin_dev/plugin_catalogue.rst:150
 msgid "Label describes what your plugin does. A plugin can have multiple labels"
-msgstr "标签描述着插件的功能。一个插件可以拥有多个标签。"
+msgstr "标签描述着插件的功能。一个插件可以拥有多个标签"
 
 #: ../plugin_dev/plugin_catalogue.rst:152
 msgid "All current available labels are shown in the following table"
@@ -288,7 +288,7 @@ msgstr "语言"
 msgid ""
 "Plugin catalogue supports multiple language for users in different "
 "countries"
-msgstr "插件仓库为不同国家的用户提供多种语言支持。"
+msgstr "插件仓库为不同国家的用户提供多种语言支持"
 
 #: ../plugin_dev/plugin_catalogue.rst:178
 msgid "English (``en_us``)"
@@ -367,13 +367,13 @@ msgstr "my_plugin-v1.2.3"
 msgid ""
 "Assets: contains 1 asset with ``.mcdr`` or ``.pyz`` file extension name. "
 "Other assets will be ignored"
-msgstr "附件：包含一个以 ``.mcdr`` 或 ``.pyz`` 为扩展名的文件附件。其他附件将会被忽略。"
+msgstr "附件：包含一个以 ``.mcdr`` 或 ``.pyz`` 为扩展名的文件附件。其他附件将会被忽略"
 
 #: ../plugin_dev/plugin_catalogue.rst:207
 msgid ""
 "Which also means only `Packed Plugin <plugin_format.html#packed-"
 "plugin>`__ is supported"
-msgstr "这也意味着仅有 `打包插件 <plugin_format.html#packed-plugin>`__ 这一种格式是被支持的。"
+msgstr "这也意味着仅有 `打包插件 <plugin_format.html#packed-plugin>`__ 这一种格式是被支持的"
 
 #: ../plugin_dev/plugin_catalogue.rst:210
 msgid "Submit Plugin"
@@ -384,14 +384,14 @@ msgid ""
 "If you want to submit your plugin, create the directory of your plugin "
 "inside the ``plugins/`` directory with necessary files, and make a pull "
 "request"
-msgstr "如果你想要提交你的插件，在 ``plugins/`` 文件夹中创建你的插件的文件夹，并创建好必须的文件，然后发出一个 Pull Request。"
+msgstr "如果你想要提交你的插件，在 ``plugins/`` 文件夹中创建你的插件的文件夹，并创建好必须的文件，然后发出一个 Pull Request"
 
 #: ../plugin_dev/plugin_catalogue.rst:214
 msgid ""
 "It's recommended to leave your github link in the `authors <#authors>`__ "
 "field so repository maintainers can simply tell if you are the owner of "
 "the plugin"
-msgstr "推荐将你的 github 链接置于 `authors <#authors>`__ 属性中，这样仓库的维护者可以很容易的判断你是否是该插件的所有者。"
+msgstr "推荐将你的 github 链接置于 `authors <#authors>`__ 属性中，这样仓库的维护者可以很容易的判断你是否是该插件的所有者"
 
 #: ../plugin_dev/plugin_catalogue.rst:216
 msgid ""

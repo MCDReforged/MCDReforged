@@ -69,7 +69,7 @@ msgstr "玩家名称"
 
 #: ../docstring mcdreforged.info_reactor.info.Info.player:3 of
 msgid "If it's not sent by a player the value will be None"
-msgstr "若信息不是来自玩家的聊天信息，则为 None。"
+msgstr "若信息不是来自玩家的聊天信息，则为 None"
 
 #: ../docstring mcdreforged.info_reactor.info.Info.source:1 of
 msgid ""
@@ -79,11 +79,11 @@ msgstr "一个 int（实际上是 :class:`InfoSource`，一个 int 的子类）�
 
 #: ../docstring mcdreforged.info_reactor.info.Info.source:3 of
 msgid "For info from the server, its value is ``0``"
-msgstr "若该信息是来自服务端的标准输出流，则为 ``0``。"
+msgstr "若该信息是来自服务端的标准输出流，则为 ``0``"
 
 #: ../docstring mcdreforged.info_reactor.info.Info.source:5 of
 msgid "For info from the console, its value is ``1``"
-msgstr "若来自控制台输入，则为 ``1``。"
+msgstr "若来自控制台输入，则为 ``1``"
 
 #: ../docstring mcdreforged.info_reactor.info.Info.source:7 of
 msgid "See :class:`InfoSource` for all possible values"
@@ -93,7 +93,7 @@ msgstr "见 :class:`InfoSource` 以了解所有可能的取值"
 msgid ""
 "The logging level of the server's stdout, such as ``\"INFO\"`` or "
 "``\"WARN\"``"
-msgstr "该信息的 logging 级别，例如 ``\"INFO\"`` 或者 ``\"WARN\"``。"
+msgstr "该信息的 logging 级别，例如 ``\"INFO\"`` 或者 ``\"WARN\"``"
 
 #: mcdreforged.info_reactor.info.Info.is_from_console:1 of
 msgid ""
@@ -143,7 +143,7 @@ msgstr "返回"
 
 #: mcdreforged.info_reactor.info.Info.get_command_source:6 of
 msgid "The command source instance, or None if it can't extract a command source"
-msgstr "返回指令源实例。如果无法提取指令源，则返回 None。"
+msgstr "返回指令源实例。如果无法提取指令源，则返回 None"
 
 #: mcdreforged.info_reactor.info.Info.to_command_source:1 of
 msgid ""
@@ -166,13 +166,13 @@ msgstr "如果此无法从这个对象中提取指令源"
 msgid ""
 "Representing if MCDR should send the content to the standard input stream"
 " of the server if this info is input from the console"
-msgstr "如果从控制台输入此信息，则表示 MCDR 是否应将内容发送到服务器的标准输入流。"
+msgstr "如果从控制台输入此信息，则表示 MCDR 是否应将内容发送到服务器的标准输入流"
 
 #: mcdreforged.info_reactor.info.Info.cancel_send_to_server:1 of
 msgid ""
 "Prevent this info from being sent to the standard input stream of the "
 "server"
-msgstr "将该信息取消发送至服务端标准输入流。"
+msgstr "将该信息取消发送至服务端标准输入流"
 
 #: mcdreforged.info_reactor.info.InfoSource:1 of
 msgid "Bases: :py:class:`int`, :py:class:`~enum.Enum`"

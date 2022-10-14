@@ -25,7 +25,7 @@ msgid ""
 " to trigger command parsing or dispatch plugin events"
 msgstr ""
 "Info 响应器是响应 :class:`~mcdreforged.info_reactor.info.Info` 实例的组件。MCDR "
-"使用响应器触发命令解析或插件分发事件。"
+"使用响应器触发命令解析或插件分发事件"
 
 #: ../customize/reactor.rst:8
 msgid ""
@@ -36,7 +36,7 @@ msgid ""
 "usages. But yes, as always, use with cautions"
 msgstr ""
 "如果你想向 MCDR 添加更多的行为，比如分发新的事件等，你可以设计自己的信息响应器。信息响应器可以访问 "
-"``MCDReforgedServer`` 对象——这是 MCDR 的核心对象。因此它有更多可能的用法。不过同样的，和以往一样，请谨慎使用。"
+"``MCDReforgedServer`` 对象——这是 MCDR 的核心对象。因此它有更多可能的用法。不过同样的，和以往一样，请谨慎使用"
 
 #: ../customize/reactor.rst:12
 msgid ""
@@ -51,7 +51,7 @@ msgstr ""
 ":class:`~mcdreforged.info_reactor.abstract_info_reactor.AbstractInfoReactor`"
 " 继承。然后，你需要实现 "
 ":meth:`~mcdreforged.info_reactor.abstract_info_reactor.AbstractInfoReactor.react`"
-"   方法以给它添加一些功能。"
+"   方法以给它添加一些功能"
 
 #: ../customize/reactor.rst:15
 msgid ""
@@ -61,5 +61,5 @@ msgid ""
 "start working automatically"
 msgstr ""
 "完成对响应器编写后， 你需要将响应器类路径添加到配置文件的 `custom_info_reactors <../configure.html"
-"#custom-info-reactors>`__ 选项中，然后你的响应器将开始工作。"
+"#custom-info-reactors>`__ 选项中，然后你的响应器将开始工作"
 

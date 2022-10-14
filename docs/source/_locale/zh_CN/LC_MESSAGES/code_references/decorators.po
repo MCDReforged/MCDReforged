@@ -34,7 +34,7 @@ msgid ""
 "This is a one line solution to make your function executes in parallels. "
 "When decorated with this decorator, functions will be executed in a new "
 "daemon thread"
-msgstr "这是一个让你的函数多线程异步执行的一行代码解决方案。当使用这个装饰器时，函数将在一个新的守护线程中执行。"
+msgstr "这是一个让你的函数多线程异步执行的一行代码解决方案。当使用这个装饰器时，函数将在一个新的守护线程中执行"
 
 #: mcdreforged.api.decorator.new_thread.new_thread:4 of
 msgid ""
@@ -82,7 +82,7 @@ msgid ""
 "will be displayed instead of a plain and meaningless ``Thread-3``"
 msgstr ""
 "线程的名字。建议总是使用这个参数来指定线程名，因此当你通过 ``server.logger`` "
-"输出某些内容时，一个有意义的线程名称，而非一个无意义的 ``Thread-3``，将被显示。"
+"输出某些内容时，一个有意义的线程名称，而非一个无意义的 ``Thread-3``，将被显示"
 
 #: mcdreforged.api.decorator.new_thread.FunctionThread:1 of
 msgid ""

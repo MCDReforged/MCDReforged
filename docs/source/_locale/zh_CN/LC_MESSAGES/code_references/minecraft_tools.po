@@ -236,7 +236,7 @@ msgid ""
 " to build a formatted RText component based on the formatter *fmt*"
 msgstr ""
 "就像 :meth:`str.format` 方法一样，它使用 *\\*args* 及 "
-"*\\*\\*kwargs* 在 *fmt* 的基础上进行格式化并生成一个 RText 组件。"
+"*\\*\\*kwargs* 在 *fmt* 的基础上进行格式化并生成一个 RText 组件"
 
 #: mcdreforged.minecraft.rtext.text.RTextBase.format:9 of
 msgid "The formatter string"
@@ -318,14 +318,14 @@ msgstr ""
 msgid ""
 "The translation text component class. It's almost the same as "
 ":class:`RText`"
-msgstr "翻译文本组件类。几乎和 :class:`RText` 相同。"
+msgstr "翻译文本组件类。几乎和 :class:`RText` 相同"
 
 #: mcdreforged.minecraft.rtext.text.RTextTranslation.__init__:1 of
 msgid ""
 "Create a :class:`RTextTranslation` object with specific translation key. "
 "The rest of the parameters are the same to the constructor of "
 ":class:`RText`"
-msgstr "使用特定的翻译键创建一个 :class:`RTextTranslation` 对象。其余参数与 :class:`RText` 相同。"
+msgstr "使用特定的翻译键创建一个 :class:`RTextTranslation` 对象。其余参数与 :class:`RText` 相同"
 
 #: mcdreforged.minecraft.rtext.text.RTextTranslation.__init__:4 of
 msgid ""
@@ -372,13 +372,13 @@ msgstr ""
 "当 MCDR 正在运行时，它将使用 "
 ":class:`~mcdreforged.plugin.server_interface.ServerInterface` 类中的 "
 ":meth:`~mcdreforged.plugin.server_interface.ServerInterface.tr` "
-"方法作为翻译的方法，并使用 MCDR 的语言作为默认语言。"
+"方法作为翻译的方法，并使用 MCDR 的语言作为默认语言"
 
 #: mcdreforged.translation.translation_text.RTextMCDRTranslation.__init__:1 of
 msgid ""
 "Create a :class:`RTextMCDRTranslation` component with necessary "
 "parameters for translation"
-msgstr "使用与翻译相关的必要参数创建一个 :class:`RTextMCDRTranslation` 组件。"
+msgstr "使用与翻译相关的必要参数创建一个 :class:`RTextMCDRTranslation` 组件"
 
 #: mcdreforged.translation.translation_text.RTextMCDRTranslation.__init__:5 of
 msgid "The translation keyword arguments"
@@ -389,14 +389,14 @@ msgstr "翻译的关键字参数"
 msgid ""
 "Create a context where all :class:`RTextMCDRTranslation` will use the "
 "given language to translate within"
-msgstr "创建一个上下文，在其中所有的 :class:`RTextMCDRTranslation` 将会使用给定的语言来进行翻译。"
+msgstr "创建一个上下文，在其中所有的 :class:`RTextMCDRTranslation` 将会使用给定的语言来进行翻译"
 
 #: mcdreforged.translation.translation_text.RTextMCDRTranslation.language_context:3
 #: of
 msgid ""
 "It's mostly used when you want a translated str or Minecraft json text "
 "object corresponding to this component under a specific language"
-msgstr "它主要在你想要在特定语言下，获得该文本组件对应的翻译后的字符串或翻译后的 Minecraft json 文本时使用。"
+msgstr "它主要在你想要在特定语言下，获得该文本组件对应的翻译后的字符串或翻译后的 Minecraft json 文本时使用"
 
 #: mcdreforged.translation.translation_text.RTextMCDRTranslation.language_context:5
 #: of
@@ -404,7 +404,7 @@ msgid ""
 "MCDR will automatically apply this context with :ref:`user's preferred "
 "language <preference-language>` right before sending messages to a player"
 " or the console"
-msgstr "MCDR 将自动地于发送信息至玩家或控制台前，使用 :ref:`用户的偏好语言 <preference-language>` 应用该上下文管理器。"
+msgstr "MCDR 将自动地于发送信息至玩家或控制台前，使用 :ref:`用户的偏好语言 <preference-language>` 应用该上下文管理器"
 
 #: mcdreforged.translation.translation_text.RTextMCDRTranslation.language_context:19
 #: of
@@ -461,7 +461,7 @@ msgstr "连接与登录是否成功"
 
 #: mcdreforged.minecraft.rcon.rcon_connection.RconConnection.disconnect:1 of
 msgid "Disconnect from the server"
-msgstr "断开与服务器的连接。"
+msgstr "断开与服务器的连接"
 
 #: mcdreforged.minecraft.rcon.rcon_connection.RconConnection.send_command:1 of
 msgid "Send a command to the rcon server"

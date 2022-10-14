@@ -33,7 +33,7 @@ msgstr "一个用于便捷序列化/反序列化的抽象类"
 msgid ""
 "Inherit it and declare the fields of your class with type annotations, "
 "that's all you need to do"
-msgstr "继承它，并在你的子类中使用类型注解声明属性，你所需要做的就这么多。"
+msgstr "继承它，并在你的子类中使用类型注解声明属性，你所需要做的就这么多"
 
 #: mcdreforged.utils.serializer.Serializable:5 of
 msgid "Example::"

@@ -22,7 +22,7 @@ msgstr "插件事件"
 msgid ""
 "Plugin events are the most important way for plugins to interact with the"
 " server and the console"
-msgstr "插件事件是插件与控制台和服务器交互的重要方式。"
+msgstr "插件事件是插件与控制台和服务器交互的重要方式"
 
 #: ../plugin_dev/event.rst:7
 msgid ""
@@ -49,7 +49,7 @@ msgid ""
 "Plugin Registry in the document of `MCDR Plugin <basic.html>`__"
 msgstr ""
 "请参阅 `MCDR 插件 <basic.html>`__ 文档中的插件注册表中的 `事件监听器 <basic.html#event-"
-"listeners>`__ 部分。"
+"listeners>`__ 部分"
 
 #: ../plugin_dev/event.rst:17
 msgid "MCDR Event"
@@ -68,7 +68,7 @@ msgid ""
 "event."
 msgstr ""
 "所有的 MCDR 事件监听器都有一个 "
-"“默认函数名称”。当你在插件文件内创建一个函数名称与“默认函数名称”相同的函数时，该函数会自动注册为相应的事件监听器。"
+"“默认函数名称”。当你在插件文件内创建一个函数名称与“默认函数名称”相同的函数时，该函数会自动注册为相应的事件监听器"
 
 #: ../plugin_dev/event.rst:24
 msgid ""
@@ -111,7 +111,7 @@ msgid ""
 "Plugin load event gets triggered once when a plugin is loaded. Plugins "
 "are supposed to register some event listeners, commands and help messages"
 " as well as initialize their fields here"
-msgstr "插件被加载事件将在插件加载后被触发一次，若你需要注册一些事件监听器/命令/帮助消息，以及初始化参数，那么你应该将它们置于这个函数里。"
+msgstr "插件被加载事件将在插件加载后被触发一次，若你需要注册一些事件监听器/命令/帮助消息，以及初始化参数，那么你应该将它们置于这个函数里"
 
 #: ../plugin_dev/event.rst:47
 msgid ""
@@ -128,14 +128,14 @@ msgid ""
 "Since it's the first event in the lifecycle of a plugin, this event can "
 "only be registered with default event listener, so the ``on_load`` "
 "function is the entry spot of your plugin"
-msgstr "由于它是插件生命周期中的第一个事件，因此只能使用默认事件侦听器注册该事件，因此 ``on_load`` 函数是插件的入口点。"
+msgstr "由于它是插件生命周期中的第一个事件，因此只能使用默认事件侦听器注册该事件，因此 ``on_load`` 函数是插件的入口点"
 
 #: ../plugin_dev/event.rst:60
 msgid ""
 "Note: You should not dispatch custom events in the ``on_load`` function "
 "or it will do nothing. The event listener storage of MCDR has not been "
 "initialized yet"
-msgstr "注意：你不应该在 ``on_load`` 函数中分发自定义事件，否则它将无效。 MCDR的事件侦听器存储此时尚未初始化。"
+msgstr "注意：你不应该在 ``on_load`` 函数中分发自定义事件，否则它将无效。 MCDR的事件侦听器存储此时尚未初始化"
 
 #: ../plugin_dev/event.rst
 msgid "Event id"
@@ -173,7 +173,7 @@ msgstr "插件被卸载"
 msgid ""
 "This event gets dispatched when MCDR unload the plugin instance. It can "
 "be caused by a plugin reload or a plugin unload"
-msgstr "当 MCDR 卸载插件实例时，将派发该事件。这可能是由插件重载或卸载引起的。"
+msgstr "当 MCDR 卸载插件实例时，将派发该事件。这可能是由插件重载或卸载引起的"
 
 #: ../plugin_dev/event.rst:71
 msgid ""
@@ -207,7 +207,7 @@ msgid ""
 " can response to the info"
 msgstr ""
 "服务器输出新一行文本，或者从控制台中输入文本时，触发此事件。 MCDR 将把文本解析为 "
-":class:`~mcdreforged.info_reactor.info.Info` 对象。在这种情况下，插件可以响应信息。"
+":class:`~mcdreforged.info_reactor.info.Info` 对象。在这种情况下，插件可以响应信息"
 
 #: ../plugin_dev/event.rst:83 ../plugin_dev/event.rst:104
 msgid "Here's an example"
@@ -241,11 +241,11 @@ msgid ""
 "``True``"
 msgstr ""
 "*用户信息* 事件与 *标准信息* 事件非常相似，但仅在用户发送信息时——更准确地说，:meth:`info.is_user<mcdreforged.info_reactor.info.Info.is_user>` 为 ``True`` "
-"时——才会触发。"
+"时——才会触发"
 
 #: ../plugin_dev/event.rst:102
 msgid "If you want a simple way to handle user input, you can use this event"
-msgstr "如果你需要一种简单的方式来处理用户输入，则可以使用此事件。"
+msgstr "如果你需要一种简单的方式来处理用户输入，则可以使用此事件"
 
 #: ../plugin_dev/event.rst:113
 msgid ""
@@ -255,7 +255,7 @@ msgid ""
 " doc"
 msgstr ""
 "如果你想要更复杂的命令系统，而不是在用户信息事件中手动解析它们，则建议你为插件注册一个命令树。参见 `指令注册 "
-"<basic.html#command>`__ 。"
+"<basic.html#command>`__ "
 
 #: ../plugin_dev/event.rst:116
 msgid "``mcdr.user_info``"
@@ -271,7 +271,7 @@ msgstr "服务端启动"
 
 #: ../plugin_dev/event.rst:123
 msgid "The server process is just started by MCDR"
-msgstr "服务端进程刚被 MCDR 启动时触发。"
+msgstr "服务端进程刚被 MCDR 启动时触发"
 
 #: ../plugin_dev/event.rst:126
 msgid "``mcdr.server_start``"
@@ -291,7 +291,7 @@ msgid ""
 "outputs ``Done (1.0s)! For help, type \"help\"``"
 msgstr ""
 "服务器已完全启动时——例如，原版 Minecraft 服务器输出 ``Done (1.0s)! For help, type \"help\"``"
-" 时——被触发。"
+" 时——被触发"
 
 #: ../plugin_dev/event.rst:136
 msgid "``mcdr.server_startup``"
@@ -309,13 +309,13 @@ msgstr "服务端终止"
 msgid ""
 "The server process stops. You can do something depends on the process "
 "return code"
-msgstr "服务端进程终止。你可以通过判断进程的返回码执行不同操作。"
+msgstr "服务端进程终止。你可以通过判断进程的返回码执行不同操作"
 
 #: ../plugin_dev/event.rst:145 ../plugin_dev/event.rst:175
 msgid ""
 "MCDR will wait until all events finished their callbacks to continue "
 "executing"
-msgstr "MCDR 将等待所有派发的事件触发的回调函数运行完成，再继续运行下去。"
+msgstr "MCDR 将等待所有派发的事件触发的回调函数运行完成，再继续运行下去"
 
 #: ../plugin_dev/event.rst:147 ../plugin_dev/event.rst:189
 msgid "Example:"
@@ -345,7 +345,7 @@ msgstr "MCDR 启动"
 msgid ""
 "The MCDR is starting. Only plugins which is loaded with MCDR is able to "
 "receive this event"
-msgstr "MCDR 正在启动。只有成功加载的插件才能接收此事件。"
+msgstr "MCDR 正在启动。只有成功加载的插件才能接收此事件"
 
 #: ../plugin_dev/event.rst:166
 msgid "``mcdr.mcdr_start``"
@@ -367,7 +367,7 @@ msgstr "MCDR 正在关闭，该做一些清理工作了"
 msgid ""
 "Watchdog is disabled during this event dispatching, so you can safely "
 "block MCDR here to wait until your cleanup codes finishes"
-msgstr "Watchdog 在这个过程中将会被临时禁用，因此你可以放心地在这里阻塞 MCDR 至你的清理操作结束。"
+msgstr "Watchdog 在这个过程中将会被临时禁用，因此你可以放心地在这里阻塞 MCDR 至你的清理操作结束"
 
 #: ../plugin_dev/event.rst:180
 msgid "``mcdr.mcdr_stop``"
@@ -386,7 +386,7 @@ msgid ""
 "A player just joined the game. MCDR only parses the name of the player to"
 " a string, plugin can use the info instance for more custom information "
 "parsing"
-msgstr "一名玩家加入了游戏。 MCDR 仅将玩家的名称解析为字符串，插件可以使用返回的 ``Info`` 实例进行更多自定义信息解析。"
+msgstr "一名玩家加入了游戏。 MCDR 仅将玩家的名称解析为字符串，插件可以使用返回的 ``Info`` 实例进行更多自定义信息解析"
 
 #: ../plugin_dev/event.rst:197
 msgid "``mcdr.player_joined``"
@@ -412,7 +412,7 @@ msgstr "玩家离开"
 msgid ""
 "A player just left the game. Plugin can do cleanups for player related "
 "objects"
-msgstr "一名玩家离开了游戏。插件可以清理与玩家相关的对象。"
+msgstr "一名玩家离开了游戏。插件可以清理与玩家相关的对象"
 
 #: ../plugin_dev/event.rst:207
 msgid "``mcdr.player_left``"
@@ -450,4 +450,4 @@ msgid ""
 "Customizing event is a good way to broadcast a message between plugins. "
 "It's also a good indirectly way for your plugin to react to requests from"
 " other plugins"
-msgstr "自定义事件是在插件之间传递消息的好办法。这也是一种不错的间接让插件响应其他插件请求的方式。"
+msgstr "自定义事件是在插件之间传递消息的好办法。这也是一种不错的间接让插件响应其他插件请求的方式"

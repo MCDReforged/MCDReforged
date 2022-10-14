@@ -91,7 +91,7 @@ msgstr "权限等级使用 int 表示"
 
 #: mcdreforged.command.command_source.CommandSource.get_preference:1 of
 msgid "Return the preference of the command source"
-msgstr "返回此指令源的偏好。"
+msgstr "返回此指令源的偏好"
 
 #: mcdreforged.command.command_source.CommandSource.get_preference:3 of
 msgid ""
@@ -114,7 +114,7 @@ msgid ""
 " context with ``RTextMCDRTranslation.language_context``"
 msgstr ""
 "一个快速的辅助方法，使用该指令源的偏好中的语言来创建一个 ``RTextMCDRTranslation.language_context`` "
-"上下文。"
+"上下文"
 
 #: mcdreforged.command.command_source.CommandSource.preferred_language_context:5
 #: of
@@ -171,33 +171,33 @@ msgstr "用于比较的权限等级"
 msgid ""
 "If the command source has not less permission level than the given "
 "permission level"
-msgstr "若指令源权限级别不低于给定的权限级别，则返回 ``True``，否则返回 ``False``。"
+msgstr "若指令源权限级别不低于给定的权限级别，则返回 ``True``，否则返回 ``False``"
 
 #: mcdreforged.command.command_source.CommandSource.has_permission_higher_than:1
 #: of
 msgid ""
 "Just like the :meth:`CommandSource.has_permission`, but this time it is a"
 " greater than judgment"
-msgstr "与 :meth:`CommandSource.has_permission` 相似，但指令源权限需 *高于* 给定的权限才返回 ``True``。"
+msgstr "与 :meth:`CommandSource.has_permission` 相似，但指令源权限需 *高于* 给定的权限才返回 ``True``"
 
 #: mcdreforged.command.command_source.CommandSource.has_permission_higher_than:4
 #: of
 msgid ""
 "If the command source has greater permission level than the given "
 "permission level"
-msgstr "若指令源权限级别高于给定的权限级别，则返回 ``True``，否则返回 ``False``。"
+msgstr "若指令源权限级别高于给定的权限级别，则返回 ``True``，否则返回 ``False``"
 
 #: mcdreforged.command.command_source.CommandSource.reply:1 of
 msgid ""
 "Send a message to the command source. The message can be anything "
 "including RTexts"
-msgstr "发送消息到指令源。消息可以是包括 RText 对象在内的任何内容。"
+msgstr "发送消息到指令源。消息可以是包括 RText 对象在内的任何内容"
 
 #: mcdreforged.command.command_source.CommandSource.reply:3 of
 msgid ""
 "The message will be converted to str using ``str()`` function unless it's"
 " a :class:`RTextBase` object"
-msgstr "除非它是一个 :class:`RTextBase` 对象 ，否则将使用 ``str()`` 函数转换为 str 类型。"
+msgstr "除非它是一个 :class:`RTextBase` 对象 ，否则将使用 ``str()`` 函数转换为 str 类型"
 
 #: mcdreforged.command.command_source.CommandSource.reply:5 of
 msgid "The message you want to send"
@@ -241,19 +241,19 @@ msgid ""
 ":class:`AbstractNode` is base class of all command nodes. It's also an "
 "abstract class. It provides several methods for building up the command "
 "tree"
-msgstr ":class:`AbstractNode` 是所有指令节点的基础类。它同时也是一个抽象类。它提供了多种用于构建指令树的方法。"
+msgstr ":class:`AbstractNode` 是所有指令节点的基础类。它同时也是一个抽象类。它提供了多种用于构建指令树的方法"
 
 #: mcdreforged.command.builder.nodes.basic.AbstractNode.then:1 of
 msgid "Attach a child node to its children list, and then return itself"
-msgstr "将子节点附加到其子列表中，然后返回自身。"
+msgstr "将子节点附加到其子列表中，然后返回自身"
 
 #: mcdreforged.command.builder.nodes.basic.AbstractNode.then:3 of
 msgid "It's used for building the command tree structure"
-msgstr "用于构建指令树结构。"
+msgstr "用于构建指令树结构"
 
 #: mcdreforged.command.builder.nodes.basic.AbstractNode.then:5 of
 msgid "A node instance to be added to current node's children list"
-msgstr "参数 *node*：要添加到当前节点的儿子列表中的节点实例。"
+msgstr "参数 *node*：要添加到当前节点的儿子列表中的节点实例"
 
 #: mcdreforged.command.builder.nodes.basic.AbstractNode.then:7
 #: mcdreforged.command.builder.tools.SimpleCommandBuilder.print_tree:3 of
@@ -264,7 +264,7 @@ msgstr "例子::"
 msgid ""
 "Set the callback function of this node. When the command parsing finished"
 " at this node, the callback function will be executed"
-msgstr "设置节点的回调函数。在该节点上的指令解析完成后，将执行指定的回调函数。"
+msgstr "设置节点的回调函数。在该节点上的指令解析完成后，将执行指定的回调函数"
 
 #: mcdreforged.command.builder.nodes.basic.AbstractNode.runs:3 of
 msgid ""
@@ -289,7 +289,7 @@ msgstr "它们都可以用作 ``runs`` 方法的参数"
 msgid ""
 "This dynamic callback argument adaptation is used in all callback "
 "invoking of the command nodes"
-msgstr "这种动态回调参数适配在所有指令节点的回调调用中使用。"
+msgstr "这种动态回调参数适配在所有指令节点的回调调用中使用"
 
 #: mcdreforged.command.builder.nodes.basic.AbstractNode.runs:27 of
 msgid ""
@@ -306,13 +306,13 @@ msgid ""
 "Set the requirement tester callback of the node. When entering this node,"
 " MCDR will invoke the requirement tester to see if the current command "
 "source and context match your specific condition."
-msgstr "设置节点的需要的测试器回调。进入此节点时，MCDR将调用需求测试器以查看当前指令源和上下文是否符合你设定的条件。"
+msgstr "设置节点的需要的测试器回调。进入此节点时，MCDR将调用需求测试器以查看当前指令源和上下文是否符合你设定的条件"
 
 #: mcdreforged.command.builder.nodes.basic.AbstractNode.requires:4 of
 msgid ""
 "If the tester callback return True, nothing will happen, MCDR will "
 "continue parsing the rest of the command"
-msgstr "如果测试器返回 True，则MCDR将继续解析指令的其余部分。"
+msgstr "如果测试器返回 True，则MCDR将继续解析指令的其余部分"
 
 #: mcdreforged.command.builder.nodes.basic.AbstractNode.requires:6 of
 msgid ""
@@ -324,7 +324,7 @@ msgid ""
 msgstr ""
 "如果测试器返回 ``False``，则会引发 ``RequirementNotMet`` 异常。此时，如果 "
 "``failure_message_getter`` 参数可用，MCDR 将调用 ``failure_message_getter`` "
-"以获取消息字符串作为 RequirementNotMet 的异常消息，否则将使用默认消息。"
+"以获取消息字符串作为 RequirementNotMet 的异常消息，否则将使用默认消息"
 
 #: mcdreforged.command.builder.nodes.basic.AbstractNode.requires:10 of
 msgid ""
@@ -388,7 +388,7 @@ msgstr "当前节点的重定向目标"
 
 #: mcdreforged.command.builder.nodes.basic.AbstractNode.suggests:1 of
 msgid "Set the provider for command suggestions of this node"
-msgstr "设置该节点的指令建议提供函数。"
+msgstr "设置该节点的指令建议提供函数"
 
 #: mcdreforged.command.builder.nodes.basic.AbstractNode.suggests:3 of
 msgid ":class:`Literal` node does not support this method"
@@ -409,7 +409,7 @@ msgid ""
 "MCDR will show the suggestions ``\"Steve\"`` and ``\"Alex\"``"
 msgstr ""
 "当用户在控制台中输入 ``!!whereis`` 及一个空格字符时，MCDR 将会展示包含 ``\"Steve\"`` 及 "
-"``\"Alex\"`` 的输入建议。"
+"``\"Alex\"`` 的输入建议"
 
 #: mcdreforged.command.builder.nodes.basic.AbstractNode.suggests:16 of
 msgid ""
@@ -427,7 +427,7 @@ msgstr ""
 msgid ""
 "When a command error occurs, the given will invoke the given handler to "
 "handle with the error"
-msgstr "当发生指令错误时，给定的将调用给定的处理程序以处理错误。"
+msgstr "当发生指令错误时，给定的将调用给定的处理程序以处理错误"
 
 #: mcdreforged.command.builder.nodes.basic.AbstractNode.on_error:3 of
 msgid "A class that is subclass of :class:`CommandError`"
@@ -476,18 +476,18 @@ msgstr ""
 msgid ""
 "Literal node is a special node. It doesn't output any value. It's more "
 "like a command branch carrier"
-msgstr "字面值节点是一个特殊的节点。它不输出任何值，更像是一个指令分支的载体。"
+msgstr "字面值节点是一个特殊的节点。它不输出任何值，更像是一个指令分支的载体"
 
 #: mcdreforged.command.builder.nodes.basic.Literal:3 of
 msgid ""
 "Literal node can accept a str as its literal in its constructor. A "
 "literal node accepts the parsing command only when the next element of "
 "the parsing command exactly matches the literal of the node"
-msgstr "字面值节点可以在其构造的函数中接受 str 作为其字面值。当解析指令的下一个元素与节点的字面值完全匹配时，字面值节点才接受并解析指令。"
+msgstr "字面值节点可以在其构造的函数中接受 str 作为其字面值。当解析指令的下一个元素与节点的字面值完全匹配时，字面值节点才接受并解析指令"
 
 #: mcdreforged.command.builder.nodes.basic.Literal:5 of
 msgid "Literal node is the only node that can start a command execution"
-msgstr "字面值节点是唯一可以发起指令执行的节点。"
+msgstr "字面值节点是唯一可以发起指令执行的节点"
 
 #: mcdreforged.command.builder.nodes.basic.ArgumentNode:1 of
 msgid ""
@@ -499,7 +499,7 @@ msgstr ""
 msgid ""
 "Argument node is an abstract base class for all nodes which store parsed "
 "values"
-msgstr "参数节点是一个抽象类，是所有储存解析值的节点类的基础。"
+msgstr "参数节点是一个抽象类，是所有储存解析值的节点类的基础"
 
 #: mcdreforged.command.builder.nodes.basic.ArgumentNode:3 of
 msgid ""
@@ -522,7 +522,7 @@ msgstr "所有数字相关参数节点的基类"
 msgid ""
 "It's inherited by :class:`Number`, :class:`Integer` and :class:`Float`. "
 "It represents a type of number based node"
-msgstr "它被 :class:`Number`，:class:`Integer` 和 :class:`Float` 继承。它代表一种基于数字的节点。"
+msgstr "它被 :class:`Number`，:class:`Integer` 和 :class:`Float` 继承。它代表一种基于数字的节点"
 
 #: mcdreforged.command.builder.nodes.arguments.NumberNode:5 of
 msgid ""
@@ -536,7 +536,7 @@ msgstr ""
 
 #: mcdreforged.command.builder.nodes.arguments.NumberNode:9 of
 msgid "By default, there's no range restriction"
-msgstr "默认情况下，没有范围限制。"
+msgstr "默认情况下，没有范围限制"
 
 #: mcdreforged.command.builder.nodes.arguments.NumberNode.at_min:1 of
 msgid ""
@@ -706,14 +706,14 @@ msgid ""
 "It works just like a :class:`Text` argument node, but it gives user a way"
 " to input text with space character: Use two double quotes to enclose the"
 " text content"
-msgstr "它的工作方式与 :class:`Text` 节点一样，但是它提供了一种输入带有空格的文本的方法：使用两个双引号将文本内容括起来。"
+msgstr "它的工作方式与 :class:`Text` 节点一样，但是它提供了一种输入带有空格的文本的方法：使用两个双引号将文本内容括起来"
 
 #: mcdreforged.command.builder.nodes.arguments.QuotableText:6 of
 msgid ""
 "If you use two double quotes to enclose the text content, You can use "
 "escape character ``\\`` to escape double quotes ``\"`` and escape "
 "character ``\\`` itself"
-msgstr "使用双引号括住文本内容后，你可以使用转义字符 ``\\`` 来转义 ``\"`` 或 ``\\`` 本身。"
+msgstr "使用双引号括住文本内容后，你可以使用转义字符 ``\\`` 来转义 ``\"`` 或 ``\\`` 本身"
 
 #: mcdreforged.command.builder.nodes.arguments.QuotableText:9 of
 msgid ""
@@ -759,7 +759,7 @@ msgstr ""
 msgid ""
 "A simple boolean argument, only accepts ``true`` and ``false``, and store"
 " them as the corresponding bool value. Case is ignored"
-msgstr "一个简易的布尔值参数，仅支持输入 ``true`` 或 ``false``，并将其储存为对应的 bool 值。忽略大小写。"
+msgstr "一个简易的布尔值参数，仅支持输入 ``true`` 或 ``false``，并将其储存为对应的 bool 值。忽略大小写"
 
 #: mcdreforged.command.builder.nodes.arguments.Boolean:3 of
 msgid ""
@@ -773,7 +773,7 @@ msgstr ""
 msgid ""
 "A node associating with an Enum class for reading an enum value of the "
 "given class"
-msgstr "一个与给定的枚举类（Enum）相关联的节点，用于读取枚举中类的枚举值。"
+msgstr "一个与给定的枚举类（Enum）相关联的节点，用于读取枚举中类的枚举值"
 
 #: mcdreforged.command.builder.nodes.arguments.Enumeration:3 of
 msgid "An Enum class is required as the parameter to its constructor"

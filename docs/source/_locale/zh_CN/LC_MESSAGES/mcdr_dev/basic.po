@@ -29,27 +29,27 @@ msgstr "从源码启动"
 msgid ""
 "When you are developing MCDR, you may want to launch MCDR from its source"
 " file directly, and here's the way to do that"
-msgstr "在你开发 MCDR 的时候，你应该会想从 MCDR 的源码直接启动 MCDR。下面将会介绍从源码启动 MCDR 的方法。"
+msgstr "在你开发 MCDR 的时候，你应该会想从 MCDR 的源码直接启动 MCDR。下面将会介绍从源码启动 MCDR 的方法"
 
 #: ../mcdr_dev/basic.rst:10
 msgid ""
 "Download the source files of MCDR via cloning the repository or github "
 "action, and decompress the file if needed"
-msgstr "通过克隆仓库或者 github action 下载 MCDR 的源文件，如果需要的话将文件解压。"
+msgstr "通过克隆仓库或者 github action 下载 MCDR 的源文件，如果需要的话将文件解压"
 
 #: ../mcdr_dev/basic.rst:21
 msgid ""
 "MCDR will delay to start and print some warnings if the ``mcdreforged`` "
 "python package is not detected, and this is a common thing if you are "
 "launching MCDR from source"
-msgstr "在未检测到 ``mcdreforeged`` 这一 python 包时，MCDR 将延迟启动并输出一些警告信息，这在从源码启动时是一件很常见的事情。"
+msgstr "在未检测到 ``mcdreforeged`` 这一 python 包时，MCDR 将延迟启动并输出一些警告信息，这在从源码启动时是一件很常见的事情"
 
 #: ../mcdr_dev/basic.rst:23
 msgid ""
 "This mechanism is designed to help those newbies who follow outdated "
 "tutorials and try to launch MCDR from source, and guide them to use the "
 "correct method to launch MCDR"
-msgstr "该机制是为了帮助那些参照着过时的教程尝试源码启动 MCDR 的新手用户，指引他们使用正确的方式来启动 MCDR。"
+msgstr "该机制是为了帮助那些参照着过时的教程尝试源码启动 MCDR 的新手用户，指引他们使用正确的方式来启动 MCDR"
 
 #: ../mcdr_dev/basic.rst:25
 msgid ""
@@ -66,14 +66,14 @@ msgstr "进入 ``my_mcdr_server_in_source/`` 目录，运行以下命令，创�
 
 #: ../mcdr_dev/basic.rst:33
 msgid "That's it. After that command, MCDR can be launched normally"
-msgstr "这样就行了。在你执行完上述这一条指令后，MCDR 将可以不带任何警告地正常启动。"
+msgstr "这样就行了。在你执行完上述这一条指令后，MCDR 将可以不带任何警告地正常启动"
 
 #: ../mcdr_dev/basic.rst:35
 msgid ""
 "Don't forget to regenerate the egg_info by using the same command after "
 "you changed the information of the mcdreforged package, e.g. the version "
 "of MCDR"
-msgstr "别忘了在你改变了 mcdreforged 包的信息，如 MCDR 的版本时，再次使用这一指令来重新生成 egg_info。"
+msgstr "别忘了在你改变了 mcdreforged 包的信息，如 MCDR 的版本时，再次使用这一指令来重新生成 egg_info"
 
 #: ../mcdr_dev/basic.rst:38
 msgid "Launch via python script"
@@ -85,7 +85,7 @@ msgid ""
 "python interpreter to execute ``MCDReforged.py`` to launch MCDR"
 msgstr ""
 "除了使用 ``python -m mcdreforged`` 来启动 MCDR 外，你还可以用 python 解释器执行 "
-"``MCDReforged.py`` 来启动 MCDR。"
+"``MCDReforged.py`` 来启动 MCDR"
 
 #: ../mcdr_dev/basic.rst:46
 msgid ""
@@ -97,7 +97,7 @@ msgstr "``MCDReforged.py`` 只是一个简单的启动 MCDR 的包装，它的�
 msgid ""
 "``MCDReforged.py`` also works for MCDR installed by ``pip`` command, "
 "which means that it works in production environment too"
-msgstr "运行 ``MCDReforged.py`` 同样适用于从 ``pypi`` 安装的 MCDR，这意味着它同样适用于生产环境中。"
+msgstr "运行 ``MCDReforged.py`` 同样适用于从 ``pypi`` 安装的 MCDR，这意味着它同样适用于生产环境中"
 
 #: ../mcdr_dev/basic.rst:59
 msgid ""
@@ -106,5 +106,5 @@ msgid ""
 "MCDR"
 msgstr ""
 "对于 Windows 用户，如果你已将 ``*.py`` 文件的打开方式绑定到了一个正确的 Python 解释器，那么你也可以双击 "
-"``MCDReforged.py`` 来启动 MCDR。"
+"``MCDReforged.py`` 来启动 MCDR"
 

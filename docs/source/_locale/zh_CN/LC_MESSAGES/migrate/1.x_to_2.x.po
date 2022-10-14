@@ -203,13 +203,13 @@ msgid ""
 "``AbstractNode`` but the name field is moved to ``ArgumentNode``"
 msgstr ""
 "原先的类 ``ArgumentNode`` 现在已被拆分为 ``AbstractNode`` 和 ``ArgumentNode``。 "
-"原类的大多数功能都在 ``AbstractNode`` 中，但 ``name`` 属性被移动到了 ``ArgumentNode`` 中。"
+"原类的大多数功能都在 ``AbstractNode`` 中，但 ``name`` 属性被移动到了 ``ArgumentNode`` 中"
 
 #: ../migrate/1.x_to_2.x.rst:84
 msgid ""
 "For your custom command node classes, you might only need to change some "
 "related type hints"
-msgstr "对于你的自定义指令节点的类，你可能只需要修改一些相关的类型提示。"
+msgstr "对于你的自定义指令节点的类，你可能只需要修改一些相关的类型提示"
 
 #: ../migrate/1.x_to_2.x.rst:86
 msgid ""

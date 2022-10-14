@@ -26,7 +26,7 @@ msgid ""
 "user inputs. For them, MCDR will try to parse the input as a command"
 msgstr ""
 "指令是用户与 MCDR 交互的最常见方式。 MCDR 将来自服务器的所有控制台输入和玩家聊天信息视为用户输入。对于这类输入，MCDR "
-"将尝试将其视为指令并进行解析。"
+"将尝试将其视为指令并进行解析"
 
 #: ../command.rst:7
 msgid ""
@@ -35,7 +35,7 @@ msgid ""
 " `here <plugin_dev/command.html>`__"
 msgstr ""
 "指令可以由 MCDR 本身和插件注册。本页面只介绍来自 MCDR 的指令。对于插件注册指令，请在 `此处 "
-"<plugin_dev/command.html>`__ 查看。"
+"<plugin_dev/command.html>`__ 查看"
 
 #: ../command.rst:10
 msgid "!!MCDR command"
@@ -46,14 +46,14 @@ msgid ""
 "``!!MCDR`` commands is the way for users to control MCDR on console, or "
 "in game. All of these following commands require permission level 3 "
 "(admin) to be executed unless extra nodes exist"
-msgstr "``!!MCDR`` 指令是用户在控制台或游戏中控制 MCDR 的方式。 这些指令至少需要权限级别 3 (admin) 才能执行。"
+msgstr "``!!MCDR`` 指令是用户在控制台或游戏中控制 MCDR 的方式。 这些指令至少需要权限级别 3 (admin) 才能执行"
 
 #: ../command.rst:14
 msgid ""
 "Assuming you already have the permission to control MCDR, then you can "
 "enter ``!!MCDR`` to the console or in game chat and you will see the help"
 " message of MCDR"
-msgstr "若你已经有控制 MCDR 的权限，那么你可以在控制台或游戏聊天框中输入 ``!!MCDR``，你将会看到 MCDR 指令的帮助消息。"
+msgstr "若你已经有控制 MCDR 的权限，那么你可以在控制台或游戏聊天框中输入 ``!!MCDR``，你将会看到 MCDR 指令的帮助消息"
 
 #: ../command.rst:16
 msgid ""
@@ -131,7 +131,7 @@ msgid ""
 " the help message of the hot reload commands"
 msgstr ""
 "``!!MCDR reload`` 指令可以热重载 MCDR。它也可以缩写为 ``!!MCDR r``。 执行指令 `!!MCDR reload`"
-" 即可获取热重载指令的帮助信息。"
+" 即可获取热重载指令的帮助信息"
 
 #: ../command.rst:44 ../command.rst:74 ../command.rst:120 ../command.rst:187
 msgid "Here's a table of the commands"
@@ -217,7 +217,7 @@ msgid ""
 " commands"
 msgstr ""
 "``!!MCDR permission`` 指令用于操作玩家权限。它的缩写是 ``!!MCDR perm``。 执行指令 `!!MCDR "
-"perm` 将显示权限操作指令的帮助信息。"
+"perm` 将显示权限操作指令的帮助信息"
 
 #: ../command.rst:82
 msgid "!!MCDR permission"
@@ -297,14 +297,14 @@ msgstr "设置默认权限级别为 <level>"
 
 #: ../command.rst:102
 msgid "The <player> argument should be a string indicating the name of the player"
-msgstr "其中，<player> 参数应为一个玩家名。"
+msgstr "其中，<player> 参数应为一个玩家名"
 
 #: ../command.rst:104
 msgid ""
 "The <level> argument should be a string or a integer indicating a "
 "permission level. It can be a string, the name of the permission, or a "
 "integer, the level of the permission"
-msgstr "<level> 参数应该是一个表示权限等级的字符串或整数。它可以是权限全名或表示权限等级的整数。"
+msgstr "<level> 参数应该是一个表示权限等级的字符串或整数。它可以是权限全名或表示权限等级的整数"
 
 #: ../command.rst:106 ../command.rst:213
 msgid "Examples:"
@@ -343,7 +343,7 @@ msgid ""
 "the help message of the commands"
 msgstr ""
 "``!!MCDR plugin`` 是插件操作指令。它的缩写是 ``!!MCDR plg``。 执行指令 ``!!MCDR plg`` "
-"将显示该指令的帮助信息。"
+"将显示该指令的帮助信息"
 
 #: ../command.rst:128
 msgid "!!MCDR plugin list"
@@ -445,13 +445,13 @@ msgstr "加载 / 重载 / 卸载 **所有** 未禁用的插件"
 msgid ""
 "The <plugin_id> argument is a string of the unique plugin id of the "
 "plugin you want to manipulate"
-msgstr "<plugin_id> 参数应为操作目标的插件 ID。"
+msgstr "<plugin_id> 参数应为操作目标的插件 ID"
 
 #: ../command.rst:156
 msgid ""
 "The <file_name> argument is a string of the file name of the plugin file "
 "you want to load or enable"
-msgstr "<file_name> 参数应为要加载或启用插件的文件名。"
+msgstr "<file_name> 参数应为要加载或启用插件的文件名"
 
 #: ../command.rst:158
 msgid "Example:"
@@ -465,7 +465,7 @@ msgid ""
 msgstr ""
 "假设现在有一个 Id 为 ``my_plugin`` 的插件已被加载，一个路径为 "
 "``plugins/another_plugin.py.disabled`` 的插件被 ID 为 ``another_plugin`` "
-"的插件禁用。"
+"的插件禁用"
 
 #: ../command.rst:162
 msgid "Then you can do the following commands"
@@ -497,7 +497,7 @@ msgstr "卸载 ID 为 ``another_plugin`` 的插件；"
 msgid ""
 "Reload the plugin with file name ``another_plugin.py``. Note that since "
 "this plugin is not loaded, you can only use file name to specify it"
-msgstr "加载文件名为 `another_plugin.py` 的插件。注意，由于此插件未加载，故你只能使用文件名来指定它。"
+msgstr "加载文件名为 `another_plugin.py` 的插件。注意，由于此插件未加载，故你只能使用文件名来指定它"
 
 #: ../command.rst:183
 msgid "Preference settings"
@@ -591,14 +591,14 @@ msgstr "检查更新"
 msgid ""
 "``!!MCDR checkupdate``, or ``!!MCDR cu``. Use it to manually check update"
 " from github"
-msgstr "使用 ``!!MCDR checkupdate`` 或 ``!!MCDR cu`` 可手动检查来自 github 的更新。"
+msgstr "使用 ``!!MCDR checkupdate`` 或 ``!!MCDR cu`` 可手动检查来自 github 的更新"
 
 #: ../command.rst:225
 msgid ""
 "It will try to get the latest release version in github, and check if "
 "it's newer than the current version. If it is, it will show the update "
 "logs from the github release"
-msgstr "它将尝试在 github 中获取最新版本，并检查它是否比当前版本更新。 如果是，它将显示 github 上的更新日志。"
+msgstr "它将尝试在 github 中获取最新版本，并检查它是否比当前版本更新。 如果是，它将显示 github 上的更新日志"
 
 #: ../command.rst:228
 msgid "!!help command"
@@ -608,19 +608,19 @@ msgstr "!!help 指令"
 msgid ""
 "``!!help`` command is place to display the help messages of all commands."
 " It works as an index of all commands"
-msgstr "``!!help`` 指令将显示所有指令的帮助消息。它作为着一个包含所有指令的索引。"
+msgstr "``!!help`` 指令将显示所有指令的帮助消息。它作为着一个包含所有指令的索引"
 
 #: ../command.rst:232
 msgid ""
 "The content of this command can be registered by plugins, so a new user "
 "can easily browse all available commands that it can access"
-msgstr "此指令的内容可以由插件注册，所以一个新的用户可以借此轻松浏览所有可用的指令。"
+msgstr "此指令的内容可以由插件注册，所以一个新的用户可以借此轻松浏览所有可用的指令"
 
 #: ../command.rst:234
 msgid ""
 "Any user is allowed to use this command, and MCDR will list all command "
 "help messages that the user has enough permission level to see"
-msgstr "任何用户都可以使用此指令，MCDR 将列出该用户有权查看的所有指令帮助消息。"
+msgstr "任何用户都可以使用此指令，MCDR 将列出该用户有权查看的所有指令帮助消息"
 
 #: ../command.rst:236
 msgid ""

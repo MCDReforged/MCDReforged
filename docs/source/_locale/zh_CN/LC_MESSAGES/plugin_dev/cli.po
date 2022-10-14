@@ -23,7 +23,7 @@ msgid ""
 "you launch MCDR"
 msgstr ""
 "MCDR 提供了一些实用的命令行接口（CLI）工具。如果你在启动 MCDR 的时候在启动指令末尾追加一些参数。使用方法很简单：在你启动 MCDR "
-"的命令末尾追加一些参数。"
+"的命令末尾追加一些参数"
 
 #: ../plugin_dev/cli.rst:7
 msgid "Have a try to display CLI help messages using following command"
@@ -51,7 +51,7 @@ msgstr "start"
 
 #: ../plugin_dev/cli.rst:34
 msgid "The same as ``python -m mcdreforged``, it launches MCDR"
-msgstr "同 ``python -m mcdreforged`` 一样，启动 MCDR。"
+msgstr "同 ``python -m mcdreforged`` 一样，启动 MCDR"
 
 #: ../plugin_dev/cli.rst:37
 msgid "init"
@@ -99,11 +99,11 @@ msgstr "gendefault"
 msgid ""
 "Generate default configuration and permission files at current working "
 "directory"
-msgstr "在当前工作目录下生成默认配置文件。"
+msgstr "在当前工作目录下生成默认配置文件"
 
 #: ../plugin_dev/cli.rst:63
 msgid "Note that it will overwrite existing files"
-msgstr "注意，这将会覆盖现有的文件。"
+msgstr "注意，这将会覆盖现有的文件"
 
 #: ../plugin_dev/cli.rst:66
 msgid "pack"

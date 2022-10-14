@@ -23,7 +23,7 @@ msgid ""
 "When your plugin needs to import something from MCDR, rather than "
 "directly import the package you want, you can import the packages in "
 "``mcdreforged.api``"
-msgstr "当你需要从 MCDR 中导入些东西时，除了直接从 MCDR 的内部实现中导入外，你还可以从 ``mcdreforged.api`` 中进行导入。"
+msgstr "当你需要从 MCDR 中导入些东西时，除了直接从 MCDR 的内部实现中导入外，你还可以从 ``mcdreforged.api`` 中进行导入"
 
 #: ../plugin_dev/api.rst:9
 msgid ""
@@ -35,7 +35,7 @@ msgid ""
 msgstr ""
 "``mcdreforged.api`` 是供插件开发者导入的包。如果你仅从 api "
 "包进行导入目标类，就可以保证插件导入目标类的导入路径与目标类的实际路径解耦。如果以后 MCDR 重构了目标类，亦或是移动了目标类的位置，那么仅从 "
-"api 包中导入目标类的插件就能丝毫不受影响。"
+"api 包中导入目标类的插件就能丝毫不受影响"
 
 #: ../plugin_dev/api.rst:12
 msgid "all"
@@ -49,7 +49,7 @@ msgstr "模块路径: ``mcdreforged.api.all``"
 msgid ""
 "This is the simplest way to import everything you want for plugin "
 "development. It's a life saver for lazy man"
-msgstr "这是导入插件开发所需的所有内容的最简单的方法，是懒人的救命稻草。"
+msgstr "这是导入插件开发所需的所有内容的最简单的方法，是懒人的救命稻草"
 
 #: ../plugin_dev/api.rst:22
 msgid ""
@@ -59,7 +59,7 @@ msgstr "你也可以使用如下所示，不使用 ``*`` 的更安全的操作"
 
 #: ../plugin_dev/api.rst:30
 msgid "Continue reading to see what it will actually import"
-msgstr "继续阅读以了解实际导入的内容。"
+msgstr "继续阅读以了解实际导入的内容"
 
 #: ../plugin_dev/api.rst:33
 msgid "command"
@@ -74,7 +74,7 @@ msgid ""
 "``command`` package contains the necessities for building a command tree "
 "or create your own command, including command tree node classes, command "
 "exceptions and some command utils"
-msgstr "``command`` 包包含了建立命令树或创建自己的命令的必要条件，包括命令树节点类、命令异常和一些命令实用工具。"
+msgstr "``command`` 包包含了建立命令树或创建自己的命令的必要条件，包括命令树节点类、命令异常和一些命令实用工具"
 
 #: ../plugin_dev/api.rst:39
 msgid ""
@@ -105,7 +105,7 @@ msgstr "模块路径: ``mcdreforged.api.decorator``"
 msgid ""
 "``decorator`` package contains some useful function decorators for plugin"
 " development"
-msgstr "``decorator`` 包包含了一些对插件开发有用的函数装饰器。"
+msgstr "``decorator`` 包包含了一些对插件开发有用的函数装饰器"
 
 #: ../plugin_dev/api.rst:60
 msgid "Class references: :ref:`class-ref-decorators`"
@@ -123,7 +123,7 @@ msgstr "模块路径: ``mcdreforged.api.event``"
 msgid ""
 "``event`` package contains the classes for creating custom events, and "
 "classes of MCDR built-in events"
-msgstr "``event`` 包包含用于创建自定义事件的类和 MCDR 内置事件的类。"
+msgstr "``event`` 包包含用于创建自定义事件的类和 MCDR 内置事件的类"
 
 #: ../plugin_dev/api.rst:69
 msgid ""
@@ -138,7 +138,7 @@ msgstr ""
 " :meth:`~mcdreforged.plugin.server_interface.ServerInterface.dispatch_event` "
 "方法。它只接受一个"
 " ``PluginEvent`` 实例作为第一个参数。所以，如果你想分发你的自定义事件，为了简单起见，请创建一个 "
-"``LiteralEvent`` 或一个继承自 ``PluginEvent`` 的自定义事件类。"
+"``LiteralEvent`` 或一个继承自 ``PluginEvent`` 的自定义事件类"
 
 #: ../plugin_dev/api.rst:72
 msgid "exception"
@@ -154,7 +154,7 @@ msgid ""
 ":class:`~mcdreforged.plugin.server_interface.ServerInterface` methods. "
 "Here comes the way to import them"
 msgstr ""
-"MCDR 运行时会使用一些自定义的异常，例如在调用 :class:`~mcdreforged.plugin.server_interface.ServerInterface` 的方法时。这是导入它们的方法。"
+"MCDR 运行时会使用一些自定义的异常，例如在调用 :class:`~mcdreforged.plugin.server_interface.ServerInterface` 的方法时。这是导入它们的方法"
 
 #: ../plugin_dev/api.rst:79
 msgid "rcon"
@@ -171,7 +171,7 @@ msgid ""
 "rcon protocol"
 msgstr ""
 "``rcon`` 包仅包含一个类—— ``RconConnection``。这是一个简单的 rcon 客户端，用于连接到任何支持 rcon 协议的"
-" Minecraft 服务端。"
+" Minecraft 服务端"
 
 #: ../plugin_dev/api.rst:85
 msgid "Class references: :ref:`class-ref-rcon`"
@@ -193,11 +193,11 @@ msgid ""
 msgstr ""
 "建议先阅读 Minecraft Wiki 中的 `原始JSON文本格式 "
 "<https://wiki.biligame.com/mc/%E5%8E%9F%E5%A7%8BJSON%E6%96%87%E6%9C%AC%E6%A0%BC%E5%BC%8F>`__"
-" 页面。"
+" 页面"
 
 #: ../plugin_dev/api.rst:94
 msgid "This is an advanced text component library for Minecraft"
-msgstr "这是一个用于Minecraft的高级文本组件库。"
+msgstr "这是一个用于Minecraft的高级文本组件库"
 
 #: ../plugin_dev/api.rst:96
 msgid ""
@@ -205,7 +205,7 @@ msgid ""
 "made by `Pandaria98 <https://github.com/Pandaria98>`__"
 msgstr ""
 "这部分受 `Pandaria98 <https://github.com/Pandaria98>`__ 制作的 `MCD stext API "
-"<https://github.com/TISUnion/rtext>`__ 的启发，在此表达感谢。"
+"<https://github.com/TISUnion/rtext>`__ 的启发，在此表达感谢"
 
 #: ../plugin_dev/api.rst:98
 msgid "Class references: :ref:`class-ref-rtext`"
@@ -225,7 +225,7 @@ msgid ""
 "mistakes etc. when coding your plugin? If you want to add type hints to "
 "the server interface or command source parameter, here's the package for "
 "you to import those Usually-used classes"
-msgstr "谁不希望在编写插件时，有一个检查器来帮助你减少愚蠢的错误呢？如果你想指定类型以让 IDE 知道你在写什么，这里有一个包可以让你导入一些常用的类。"
+msgstr "谁不希望在编写插件时，有一个检查器来帮助你减少愚蠢的错误呢？如果你想指定类型以让 IDE 知道你在写什么，这里有一个包可以让你导入一些常用的类"
 
 #: ../plugin_dev/api.rst:117
 msgid "utils"

@@ -35,14 +35,14 @@ msgid ""
 msgstr ""
 "使用 "
 ":meth:`~mcdreforged.plugin.server_interface.PluginServerInterface.register_help_message`"
-" 来为你的插件添加一些必要的提示，这样玩家就可以使用 ``!!help`` 命令来了解如何使用你的插件。"
+" 来为你的插件添加一些必要的提示，这样玩家就可以使用 ``!!help`` 命令来了解如何使用你的插件"
 
 #: ../plugin_dev/dev_tips.rst:13
 msgid ""
 "Of course if your plugin is supposed to only be used by player with "
 "enough permission level, specify the *permission* argument when "
 "registering"
-msgstr "当然，如果你的插件只能被有足够权限的玩家使用，请在注册时指定 *permission* 参数。"
+msgstr "当然，如果你的插件只能被有足够权限的玩家使用，请在注册时指定 *permission* 参数"
 
 #: ../plugin_dev/dev_tips.rst:16
 msgid "Translation"
@@ -57,7 +57,7 @@ msgid ""
 msgstr ""
 "对于 `多文件插件 <plugin_format.html#multi-file-plugin>`__，你还可以在你的插件中放置一个名为 "
 "``lang/`` 的文件夹，其中含有 json（``.json``）或者 yaml（``.yml``）格式的翻译文件。MCDR "
-"将会自动为你的插件注册这些翻译文件。"
+"将会自动为你的插件注册这些翻译文件"
 
 #: ../plugin_dev/dev_tips.rst:21
 msgid ""
@@ -77,7 +77,7 @@ msgid ""
 "file in yaml (``.yml``) format are equivalent."
 msgstr ""
 "翻译键可以被表示为根节点下的子节点名称，或嵌套的多层节点的路径。例如，以下对于翻译键 ``my_plugin.some.text`` 在 "
-"yaml（``.yml``）格式的语言文件中的定义都是等价的。"
+"yaml（``.yml``）格式的语言文件中的定义都是等价的"
 
 #: ../plugin_dev/dev_tips.rst:39
 msgid ""
@@ -114,7 +114,7 @@ msgid ""
 "translation things including message logging"
 msgstr ""
 "通常来说，第二种方法是在你的插件中进行翻译的推荐方法，因为它可以聪明地为玩家或控制台挑选恰当的语言来进行消息回复，并使用 MCDR "
-"的语言来进行其他方面的翻译，如日志消息输出。"
+"的语言来进行其他方面的翻译，如日志消息输出"
 
 #: ../plugin_dev/dev_tips.rst:48
 msgid "Event listening"
@@ -130,7 +130,7 @@ msgid ""
 msgstr ""
 "如果你不关心非用户的信息源，与其监听 `标准信息事件 <event.html#general-info>`__，不如监听 `用户信息事件 "
 "<event.html#general-info>`__。这可以在服务端刷屏非用户信息时（如使用 Litematica mod 粘贴蓝图）提升 "
-"MCDR 的性能表现。"
+"MCDR 的性能表现"
 
 #: ../plugin_dev/dev_tips.rst:53
 msgid ""
@@ -141,7 +141,7 @@ msgid ""
 msgstr ""
 "如果你只关心用户输入的指令，与其监听 `用户信息事件 <event.html#general-info>`__，你还可以 `注册一棵指令树 "
 "<command.html>`__。这比手动在 `用户信息事件 <event.html#general-info>`__ "
-"里处理的开发效率要高不少。"
+"里处理的开发效率要高不少"
 
 #: ../plugin_dev/dev_tips.rst:56
 msgid ""
@@ -150,7 +150,7 @@ msgid ""
 "loop, MCDR is waiting for you to exit"
 msgstr ""
 "`MCDR 终止事件 <event.html#mcdr-stop>`__ 能给你充足的时间来进行保存数据等操作。不过要小心，不要死循环了，MCDR"
-" 在等着你运算完成。"
+" 在等着你运算完成"
 
 #: ../plugin_dev/dev_tips.rst:60
 msgid "Multi-threading"
@@ -165,14 +165,14 @@ msgid ""
 "might block the pending task execution"
 msgstr ""
 "如果你想要在你的插件中执行需要一些时间才能完成的任务，如网络操作或者文件操作，建议将你的代码放到一个独立的线程里执行，而不是直接在你注册的事件监听器函数中执行。否则"
-" MCDR 余下任务的执行可能会被阻塞。"
+" MCDR 余下任务的执行可能会被阻塞"
 
 #: ../plugin_dev/dev_tips.rst:64
 msgid ""
 "For easier use there's a decorator named `new_thread <api.html#new-"
 "thread>`__ to help you make your function run in another thread "
 "asynchronously"
-msgstr "为了更易于使用，你可以使用一个名为 `new_thread <api.html#new-thread>`__ 的函数装饰器来使你的函数异步地执行。"
+msgstr "为了更易于使用，你可以使用一个名为 `new_thread <api.html#new-thread>`__ 的函数装饰器来使你的函数异步地执行"
 
 #: ../plugin_dev/dev_tips.rst:67
 msgid "User config, data and log files"
@@ -183,7 +183,7 @@ msgid ""
 "If you want to store some user configuration or user data file, it's "
 "recommend to store them inside the ``config`` folder rather than store "
 "them inside the plugin folder"
-msgstr "如果你需要储存一些用户配置或数据文件，推荐将它们储存到 ``config`` 文件夹中而不是储存到插件文件夹中。"
+msgstr "如果你需要储存一些用户配置或数据文件，推荐将它们储存到 ``config`` 文件夹中而不是储存到插件文件夹中"
 
 #: ../plugin_dev/dev_tips.rst:71
 msgid ""
@@ -194,7 +194,7 @@ msgid ""
 msgstr ""
 "其中的原因是，用户可能会把他们的插件放置在另外非默认的文件夹中，甚至可能会让多个 MCDR "
 "实例共享使用一个相同的插件文件夹。这是可以通过修改配置文件选项 `plugin_directories <../configure.html"
-"#plugin-directories>`__ 来实现的。"
+"#plugin-directories>`__ 来实现的"
 
 #: ../plugin_dev/dev_tips.rst:73
 msgid ""
@@ -207,7 +207,7 @@ msgid ""
 msgstr ""
 "如果你将你的配置数据文件储存在了插件文件夹中，那你就无法区分出该配置文件是属于哪一个 MCDR 实例了。因此，你可以将这些文件直接储存至 "
 "``config`` 文件夹，或者 ``config`` 中的一个子文件夹如 ``config/my_plugin/`` "
-"中，这样每个加载你的插件的 MCDR 实例即可拥有独享的用户配置数据。"
+"中，这样每个加载你的插件的 MCDR 实例即可拥有独享的用户配置数据"
 
 #: ../plugin_dev/dev_tips.rst:75
 msgid ""
@@ -219,7 +219,7 @@ msgstr ""
 
 #: ../plugin_dev/dev_tips.rst:77
 msgid "For logging files, store them inside ``logs/`` folder is a good idea"
-msgstr "对于日志文件，把它们储存至 ``logs/`` 文件夹中是一个不错的选择。"
+msgstr "对于日志文件，把它们储存至 ``logs/`` 文件夹中是一个不错的选择"
 
 #: ../plugin_dev/dev_tips.rst:80
 msgid "External packages"
@@ -245,7 +245,7 @@ msgstr "其他"
 msgid ""
 "The current working directory is the folder where MCDR is in. **DO NOT** "
 "change it since that will mess up everything"
-msgstr "MCDR 的工作路径是 MCDR 所在的文件夹路径。**切勿** 修改工作路径，这将弄乱一切。"
+msgstr "MCDR 的工作路径是 MCDR 所在的文件夹路径。**切勿** 修改工作路径，这将弄乱一切"
 
 #: ../plugin_dev/dev_tips.rst:88
 msgid ""
@@ -254,5 +254,5 @@ msgid ""
 "just use its public methods and read its properties"
 msgstr ""
 "对于在 `标准信息事件 <event.html#general-info>`__ 等时间中的参数 "
-":class:`~mcdreforged.info_reactor.info.Info`，不要修改它，仅调用它的公开方法并读取它的相关属性就行了。"
+":class:`~mcdreforged.info_reactor.info.Info`，不要修改它，仅调用它的公开方法并读取它的相关属性就行了"
 

@@ -24,7 +24,7 @@ msgstr "插件格式"
 msgid ""
 "There are 3 types of valid format of a MCDR plugin, each of them has its "
 "own advantages and disadvantages depending on the user cases"
-msgstr "目前，MCDR 拥有着 3 种可用的插件格式类型，每种插件格式在不同的使用场景下都有各自的优缺点。"
+msgstr "目前，MCDR 拥有着 3 种可用的插件格式类型，每种插件格式在不同的使用场景下都有各自的优缺点"
 
 #: ../plugin_dev/plugin_format.rst:7
 msgid ""
@@ -32,7 +32,7 @@ msgid ""
 "ExamplePlugin>`__ for examples of all plugin formats"
 msgstr ""
 "在 `这个仓库里 <https://github.com/MCDReforged/MCDReforged-ExamplePlugin>`__ "
-"你可以找到各种插件格式的例子。"
+"你可以找到各种插件格式的例子"
 
 #: ../plugin_dev/plugin_format.rst:9
 msgid "Plugin format inheriting tree:"
@@ -58,7 +58,7 @@ msgstr "文件夹插件"
 msgid ""
 "Solo Plugin consists of a single python ``.py`` source file. It's the "
 "plugin format which aims for easy to write and rapid development"
-msgstr "单文件插件由单个 python ``.py`` 源文件组成。它是一种注重于简易编写、快速开发的插件格式。"
+msgstr "单文件插件由单个 python ``.py`` 源文件组成。它是一种注重于简易编写、快速开发的插件格式"
 
 #: ../plugin_dev/plugin_format.rst:24
 msgid ""
@@ -89,7 +89,7 @@ msgstr "无法被添加至 MCDR 的插件仓库中"
 msgid ""
 "When you only want to create a simple plugin as fast as possible, "
 "creating a solo plugin is always a good choice"
-msgstr "当你只想尽快编写一个简单的插件时，编写一个单文件插件总是一个不错的选择。"
+msgstr "当你只想尽快编写一个简单的插件时，编写一个单文件插件总是一个不错的选择"
 
 #: ../plugin_dev/plugin_format.rst:33
 msgid "Multi file Plugin"
@@ -112,14 +112,14 @@ msgid ""
 "file plugin which make it easier to create a general plugin"
 msgstr ""
 "多文件插件与单文件插件最大的区别是，它可以包含多个文件，而不是受限于单个 ``.py`` "
-"文件。因此，打包文件支持更多的特性，这可以让插件编写更为容易。"
+"文件。因此，打包文件支持更多的特性，这可以让插件编写更为容易"
 
 #: ../plugin_dev/plugin_format.rst:42
 msgid ""
 "Packed plugin is a zip type compressed file with file extension name "
 "``.mcdr`` or ``.pyz``. It's the recommended plugin format for "
 "distribution"
-msgstr "打包插件是一个文件名后缀是 ``.mcdr`` 或 ``.pyz`` 的 zip 类型的压缩文件。它是分发插件时的推荐格式。"
+msgstr "打包插件是一个文件名后缀是 ``.mcdr`` 或 ``.pyz`` 的 zip 类型的压缩文件。它是分发插件时的推荐格式"
 
 #: ../plugin_dev/plugin_format.rst:44
 msgid "A minimum packed plugin consists of the following files at its zip root"
@@ -204,7 +204,7 @@ msgid ""
 " plugins are inside a directory instead of a ``.mcdr`` zip file"
 msgstr ""
 "文件夹插件拥有着与 `打包插件 <#packed-plugin>`__ "
-"完全一致的文件结构。唯一的区别为，文件夹插件的文件位于一个文件夹中，而非一个 ``.mcdr`` 压缩文件中。"
+"完全一致的文件结构。唯一的区别为，文件夹插件的文件位于一个文件夹中，而非一个 ``.mcdr`` 压缩文件中"
 
 #: ../plugin_dev/plugin_format.rst:92
 msgid ""
