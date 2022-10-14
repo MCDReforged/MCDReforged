@@ -2,7 +2,7 @@ from enum import Enum, auto
 
 from colorama import Fore, Style
 
-from mcdreforged.utils import misc_util
+from mcdreforged.utils import class_util
 
 
 class RItem:
@@ -16,7 +16,7 @@ class RItem:
 		"""It's code in console"""
 
 	def __repr__(self):
-		return misc_util.represent(self)
+		return class_util.represent(self)
 
 
 class RColor(Enum):

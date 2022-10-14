@@ -7,7 +7,7 @@ from typing import List, Dict, TYPE_CHECKING, Optional, Union
 from mcdreforged.minecraft.rtext.text import RTextBase, RText
 from mcdreforged.plugin.meta.version import Version, VersionParsingError, VersionRequirement
 from mcdreforged.translation.translation_text import RTextMCDRTranslation
-from mcdreforged.utils import translation_util, misc_util
+from mcdreforged.utils import translation_util, misc_util, class_util
 from mcdreforged.utils.types import TranslationLanguageDict
 
 if TYPE_CHECKING:
@@ -146,7 +146,7 @@ class Metadata:
 		misc_util.check_type(self.resources, list)
 
 	def __repr__(self):
-		return misc_util.represent(self)
+		return class_util.represent(self)
 
 	def get_description(self, lang: Optional[str] = None) -> Optional[str]:
 		"""

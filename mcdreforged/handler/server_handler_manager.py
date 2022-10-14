@@ -4,7 +4,7 @@ from typing import Dict, Optional, Tuple, List, TYPE_CHECKING, Set
 
 from mcdreforged.handler.abstract_server_handler import AbstractServerHandler
 from mcdreforged.handler.impl import *
-from mcdreforged.utils import misc_util
+from mcdreforged.utils import misc_util, class_util
 from mcdreforged.utils.logger import DebugOption
 
 if TYPE_CHECKING:
@@ -47,7 +47,7 @@ class ServerHandlerManager:
 		if custom_handler_class_paths is not None:
 			for class_path in custom_handler_class_paths:
 				try:
-					handler_class = misc_util.load_class(class_path)
+					handler_class = class_util.load_class(class_path)
 				except:
 					self.mcdr_server.logger.exception('Fail to load info handler from "{}"'.format(class_path))
 				else:

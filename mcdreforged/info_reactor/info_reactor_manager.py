@@ -9,7 +9,7 @@ from mcdreforged.constants import core_constant
 from mcdreforged.info_reactor.abstract_info_reactor import AbstractInfoReactor
 from mcdreforged.info_reactor.impl import PlayerReactor, ServerReactor, GeneralReactor
 from mcdreforged.info_reactor.info import Info
-from mcdreforged.utils import misc_util
+from mcdreforged.utils import class_util
 from mcdreforged.utils.logger import ServerLogger, DebugOption
 
 if TYPE_CHECKING:
@@ -33,7 +33,7 @@ class InfoReactorManager:
 		if custom_reactor_class_paths is not None:
 			for class_path in custom_reactor_class_paths:
 				try:
-					reactor_class = misc_util.load_class(class_path)
+					reactor_class = class_util.load_class(class_path)
 				except:
 					self.mcdr_server.logger.exception('Fail to load info reactor from "{}"'.format(class_path))
 				else:
