@@ -22,6 +22,9 @@ PreferenceStorage = Dict[str, PreferenceItem]
 
 
 class PreferenceManager:
+	"""
+	.. versionadded:: v2.1.0
+	"""
 	def __init__(self, mcdr_server: 'MCDReforgedServer'):
 		self.mcdr_server: 'MCDReforgedServer' = mcdr_server
 		self.logger = mcdr_server.logger

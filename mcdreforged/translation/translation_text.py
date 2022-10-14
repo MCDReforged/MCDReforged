@@ -17,6 +17,8 @@ class RTextMCDRTranslation(RTextBase):
 	When MCDR is running, it will use the :meth:`~mcdreforged.plugin.server_interface.ServerInterface.tr` method
 	in :class:`~mcdreforged.plugin.server_interface.ServerInterface` class as the translating method,
 	and the language of MCDR as the fallback translation language
+
+	.. versionadded:: v2.1.0
 	"""
 
 	__TLS = threading.local()

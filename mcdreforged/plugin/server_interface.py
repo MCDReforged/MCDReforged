@@ -117,6 +117,8 @@ class ServerInterface:
 		:param translation_key: The key of the translation
 		:param args: The args to be formatted
 		:param kwargs: The kwargs to be formatted
+
+		.. versionadded:: v2.1.0
 		"""
 		text = RTextMCDRTranslation(translation_key, *args, **kwargs)
 		text.set_translator(self.tr)  # not that necessary tbh, just in case self.tr != ServerInterface.get_instance().tr somehow
@@ -287,6 +289,8 @@ class ServerInterface:
 		the information of the current server, interred from the output of the server
 
 		It's field(s) might be None if the server is offline, or the related information has not been parsed
+
+		.. versionadded:: v2.1.0
 		"""
 		return self._mcdr_server.server_information.copy()
 
@@ -439,6 +443,8 @@ class ServerInterface:
 	def get_unloaded_plugin_list(self) -> List[str]:
 		"""
 		Return a list containing all **unloaded** plugin file path like ``["plugins/MyPlugin.mcdr"]``
+
+		.. versionadded:: v2.3.0
 		"""
 		return list(filter(
 			lambda file_path: not self._mcdr_server.plugin_manager.contains_plugin_file(file_path) and plugin_factory.is_plugin(file_path),
@@ -448,6 +454,8 @@ class ServerInterface:
 	def get_disabled_plugin_list(self) -> List[str]:
 		"""
 		Return a list containing all **disabled** plugin file path like ["plugins/MyPlugin.mcdr.disabled"]
+
+		.. versionadded:: v2.3.0
 		"""
 		return list(filter(
 			lambda file_path: plugin_factory.is_disabled_plugin(file_path),
@@ -677,6 +685,8 @@ class ServerInterface:
 
 		:param obj: The object to querying preference
 		:raise TypeError: If the type of the given object is not supported for preference querying
+
+		.. versionadded:: v2.1.0
 		"""
 		pref = self._mcdr_server.preference_manager.get_preference(obj, strict_type_check=True)
 		return PreferenceItem.deserialize(pref.serialize())  # make a copy
@@ -902,6 +912,9 @@ class PluginServerInterface(ServerInterface):
 			to an instance of *target_class* which will be returned as return value
 		:param encoding: The encoding method to read the config file. Default ``"utf8"``
 		:return: A dict contains the loaded and processed config
+
+		.. versionadded:: v2.2.0
+			The *encoding* parameter
 		"""
 
 		def log(msg: str):
@@ -967,6 +980,9 @@ class PluginServerInterface(ServerInterface):
 		:param file_name: The name of the config file. It can also be a path to the config file
 		:param in_data_folder: If True, the parent directory of file operating is the :meth:`data folder <get_data_folder>` of the plugin
 		:param encoding: The encoding method to write the config file. Default ``"utf8"``
+
+		.. versionadded:: v2.2.0
+			The *encoding* parameter
 		"""
 		config_file_path = os.path.join(self.get_data_folder(), file_name) if in_data_folder else file_name
 		if isinstance(config, Serializable):

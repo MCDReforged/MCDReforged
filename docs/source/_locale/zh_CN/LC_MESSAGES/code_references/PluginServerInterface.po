@@ -297,6 +297,12 @@ msgstr "读取配置文件的编码方式。默认值 ``\"utf8\"``"
 msgid "A dict contains the loaded and processed config"
 msgstr "一个储存着加载并处理后的配置文件的 dict"
 
+#: mcdreforged.plugin.server_interface.PluginServerInterface.load_config_simple:44
+#: mcdreforged.plugin.server_interface.PluginServerInterface.save_config_simple:8
+#: of
+msgid "The *encoding* parameter"
+msgstr "*encoding* 参数"
+
 #: mcdreforged.plugin.server_interface.PluginServerInterface.save_config_simple:1
 #: of
 msgid ""

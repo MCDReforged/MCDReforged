@@ -70,6 +70,8 @@ class CommandSource(ABC):
 		.. seealso::
 
 			:class:`~mcdreforged.plugin.server_interface.ServerInterface`'s method :meth:`~mcdreforged.plugin.server_interface.ServerInterface.get_preference`
+
+		.. versionadded:: v2.1.0
 		"""
 		return None
 
@@ -87,6 +89,8 @@ class CommandSource(ABC):
 			with source.preferred_language_context():
 				message = source.get_server().rtr('my_plugin.placeholder').to_plain_text()
 				text.set_click_event(RAction.suggest_command, message)
+
+		.. versionadded:: v2.1.0
 		"""
 		with RTextMCDRTranslation.language_context(self.get_preference().language):
 			yield

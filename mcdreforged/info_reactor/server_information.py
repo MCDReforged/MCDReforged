@@ -5,6 +5,8 @@ from typing import Optional
 class ServerInformation:
 	"""
 	Information of the current server, interred from the output of the server
+
+	.. versionadded:: v2.1.0
 	"""
 
 	version: Optional[str] = None

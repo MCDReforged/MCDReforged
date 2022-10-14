@@ -198,6 +198,8 @@ class RTextBase(ABC):
 			'red'
 
 		:param data: A json object
+
+		.. versionadded:: v2.4.0
 		"""
 		if isinstance(data, str):
 			return cls.from_any(data)
