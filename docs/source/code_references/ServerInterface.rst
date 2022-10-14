@@ -34,6 +34,7 @@ Server Control
 .. automethod:: ServerInterface.is_server_startup
 .. automethod:: ServerInterface.is_rcon_running
 .. automethod:: ServerInterface.get_server_pid
+.. automethod:: ServerInterface.get_server_pid_all
 .. automethod:: ServerInterface.get_server_information
 
 Text Interaction

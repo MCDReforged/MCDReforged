@@ -4,6 +4,8 @@ import os
 import time
 from typing import Callable, TYPE_CHECKING, Tuple, Any, Union, Optional, List, IO, Dict, Type, TypeVar
 
+import psutil
+
 from mcdreforged.command.builder.nodes.basic import Literal
 from mcdreforged.command.command_source import CommandSource, PluginCommandSource, PlayerCommandSource, ConsoleCommandSource
 from mcdreforged.constants import plugin_constant
@@ -261,6 +263,23 @@ class ServerInterface:
 		if self._mcdr_server.process is not None:
 			return self._mcdr_server.process.pid
 		return None
+
+	def get_server_pid_all(self) -> List[int]:
+		"""
+		Return a list of pid of all processes in the server's process group
+
+		:return: A list of pid. It will be empty if the server is stopped or the pid query failed
+
+		.. versionadded:: v2.6.0
+		"""
+		pids = []
+		if self._mcdr_server.process is not None:
+			try:
+				for process in psutil.Process(self._mcdr_server.process.pid).children(recursive=True):
+					pids.append(process.pid)
+			except psutil.NoSuchProcess:
+				pids.clear()
+		return pids
 
 	def get_server_information(self) -> ServerInformation:
 		"""

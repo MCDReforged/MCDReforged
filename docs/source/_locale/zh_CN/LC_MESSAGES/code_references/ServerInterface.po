@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-12 17:55+0800\n"
+"POT-Creation-Date: 2022-10-14 16:17+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,11 +17,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.1\n"
 
-#: ../class_references/ServerInterface.rst:3
+#: ../code_references/ServerInterface.rst:3
 msgid "ServerInterface"
 msgstr "服务端接口 - 通用"
 
-#: ../class_references/ServerInterface.rst:5
+#: ../code_references/ServerInterface.rst:5
 msgid ":ref:`API package <api-package>` path: ``mcdreforged.api.types``"
 msgstr ":ref:`API 包 <api-package>` 路径: ``mcdreforged.api.types``"
 
@@ -40,7 +40,7 @@ msgid ""
 "ServerInterface. This is widely used in this document"
 msgstr "建议使用 ``server`` 作为 ServerInterface 变量的名字，这在本文档中被广泛使用"
 
-#: ../class_references/ServerInterface.rst:12
+#: ../code_references/ServerInterface.rst:12
 msgid "Utils"
 msgstr "实用工具"
 
@@ -188,7 +188,7 @@ msgstr ""
 "返回一个 :class:`PluginServerInterface` 实例。如果当前的线程并非是 MCDR 提供的线程，并且本对象并非是一个 "
 ":class:`PluginServerInterface` 实例，返回 None"
 
-#: ../class_references/ServerInterface.rst:23
+#: ../code_references/ServerInterface.rst:23
 msgid "Server Control"
 msgstr "服务端控制"
 
@@ -206,6 +206,7 @@ msgstr "如果服务端正在运行或正在由其他插件启动，它将返回
 #: mcdreforged.plugin.server_interface.ServerInterface.enable_plugin
 #: mcdreforged.plugin.server_interface.ServerInterface.get_plugin_instance
 #: mcdreforged.plugin.server_interface.ServerInterface.get_server_pid
+#: mcdreforged.plugin.server_interface.ServerInterface.get_server_pid_all
 #: mcdreforged.plugin.server_interface.ServerInterface.load_plugin
 #: mcdreforged.plugin.server_interface.ServerInterface.rcon_query
 #: mcdreforged.plugin.server_interface.ServerInterface.reload_plugin
@@ -339,6 +340,18 @@ msgstr "注意，这个 pid 对应的是一个 bash 进程，它是真实服务�
 msgid "The pid of the server. None if the server is stopped"
 msgstr "返回服务端进程的 pid，如果服务端已经停止，则返回 None"
 
+#: mcdreforged.plugin.server_interface.ServerInterface.get_server_pid_all:1
+#: of
+msgid "Return a list of pid of all processes in the server's process group"
+msgstr "返回一个储存了服务端进程组内所有进程的 pid 的列表"
+
+#: mcdreforged.plugin.server_interface.ServerInterface.get_server_pid_all:3
+#: of
+msgid ""
+"A list of pid. It will be empty if the server is stopped or the "
+"pid query failed"
+msgstr "一个 pid 列表。如果服务端已经停止，或者 pid 查询失败，则这个列表将为空"
+
 #: mcdreforged.plugin.server_interface.ServerInterface.get_server_information:1
 #: of
 msgid ""
@@ -358,7 +371,7 @@ msgid ""
 "information has not been parsed"
 msgstr "如果服务端未启动，或者相关的信息未被解析，则其若干个属性可能为 None"
 
-#: ../class_references/ServerInterface.rst:40
+#: ../code_references/ServerInterface.rst:41
 msgid "Text Interaction"
 msgstr "文本交互"
 
@@ -440,7 +453,7 @@ msgstr "文本的编码方法"
 msgid "If the Info is not from a user"
 msgstr "如果这个 Info 并非来自一位用户"
 
-#: ../class_references/ServerInterface.rst:49
+#: ../code_references/ServerInterface.rst:50
 msgid "Plugin Queries"
 msgstr "插件查询"
 
@@ -535,11 +548,11 @@ msgid ""
 "metadata) as key-value pair"
 msgstr "返回一个包含所有加载的插件元数据的字典，键值对为 (插件 id, 元数据)"
 
-#: ../class_references/ServerInterface.rst:60
+#: ../code_references/ServerInterface.rst:61
 msgid "Plugin Operations"
 msgstr "插件操作"
 
-#: ../class_references/ServerInterface.rst:63
+#: ../code_references/ServerInterface.rst:64
 msgid ""
 "All plugin manipulation will trigger a dependency check, which might "
 "cause unwanted plugin operations"
@@ -680,7 +693,7 @@ msgid ""
 "thread If it's set to False. The event will be dispatched immediately"
 msgstr "在默认值的情况下，该事件会被派发至任务执行者 (task executor) 线程中分发。如果它被设置为 False，则事件将会被立即分发"
 
-#: ../class_references/ServerInterface.rst:75
+#: ../code_references/ServerInterface.rst:76
 msgid "Permission"
 msgstr "权限"
 
@@ -735,7 +748,7 @@ msgstr ""
 msgid "If the value parameter doesn't properly represent a permission level"
 msgstr "如果数值参数不是一个正确的权限级别"
 
-#: ../class_references/ServerInterface.rst:81
+#: ../code_references/ServerInterface.rst:82
 msgid "Command"
 msgstr "指令"
 
@@ -766,7 +779,7 @@ msgid ""
 "fallback command source"
 msgstr "用于执行该条指令的指令源。如果它未被指定，MCDR 将会使用 :meth:`get_plugin_command_source` 来获得默认的指令源"
 
-#: ../class_references/ServerInterface.rst:87
+#: ../code_references/ServerInterface.rst:88
 msgid "Preference"
 msgstr "偏好"
 
@@ -790,7 +803,7 @@ msgstr "你要查询的偏好的对象"
 msgid "If the type of the given object is not supported for preference querying"
 msgstr "若给定对象的类型不支持偏好查询"
 
-#: ../class_references/ServerInterface.rst:92
+#: ../code_references/ServerInterface.rst:93
 msgid "Misc"
 msgstr "杂项"
 
