@@ -436,10 +436,10 @@ msgstr "custom_handlers"
 #: ../configure.rst:219
 msgid ""
 "A list of custom `server handler <customize/handler.html>`__ classes. The"
-" classed need to be subclasses of ``AbstractServerHandler``"
+" classed need to be subclasses of :class:`~mcdreforged.handler.impl.abstract_minecraft_handler.AbstractMinecraftHandler`"
 msgstr ""
 "自定义 `服务端处理器 <customize/handler.html>`__ 类所组成的列表。这些类应当是 "
-"AbstractServerHandler 的子类"
+":class:`~mcdreforged.handler.impl.abstract_minecraft_handler.AbstractMinecraftHandler` 的子类"
 
 #: ../configure.rst:221
 msgid ""

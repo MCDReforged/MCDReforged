@@ -6,7 +6,7 @@ Info reactors are the components to react to a parsed :class:`~mcdreforged.info_
 MCDR uses reactors to trigger command parsing or dispatch plugin events
 
 If you want to add more behaviors to MCDR, like dispatching new events and so on, rather than use a plugin, you can design you own info reactor.
-Since info reactors can access to the inner ``MCDReforgedServer`` object which is the core object of MCDR, so it may have much more possible usages.
+Since info reactors can access to the inner :class:`~mcdreforged.mcdr_server.MCDReforgedServer` object which is the core object of MCDR, so it may have much more possible usages.
 But yes, as always, use with cautions
 
 Similar to `custom server handler <handler.html>`__\ , you info reactor class needs to inherit from the class :class:`~mcdreforged.info_reactor.abstract_info_reactor.AbstractInfoReactor`.

@@ -37,8 +37,8 @@ msgstr ""
 #: ../customize/handler.rst:9
 msgid ""
 "To design a server handler, you need to inherit from an existed server "
-"handler class, or the base class ``AbstractServerHandler``"
-msgstr "要设计服务端处理器，你需要从现有的服务端处理器类或 ``AbstractServerHandler`` 基类继承"
+"handler class, or the base class :class:`~mcdreforged.handler.impl.abstract_minecraft_handler.AbstractMinecraftHandler`"
+msgstr "要设计服务端处理器，你需要从现有的服务端处理器类或 :class:`~mcdreforged.handler.impl.abstract_minecraft_handler.AbstractMinecraftHandler` 基类继承"
 
 #: ../customize/handler.rst:11
 msgid ""
