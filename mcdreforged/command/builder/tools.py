@@ -71,7 +71,7 @@ class SimpleCommandBuilder:
 	#   Interfaces
 	# --------------
 
-	def command(self, command: str, callback: RUNS_CALLBACK) -> 'SimpleCommandBuilder':
+	def command(self, command: str, callback: RUNS_CALLBACK):
 		"""
 		Define a command and its callback
 
@@ -90,9 +90,8 @@ class SimpleCommandBuilder:
 		"""
 		self.__commands[command] = callback
 		self.__clean_cache()
-		return self
 
-	def arg(self, arg_name: str, node: Callable[[str], ArgumentNode]) -> 'SimpleCommandBuilder':
+	def arg(self, arg_name: str, node: Callable[[str], ArgumentNode]):
 		"""
 		Define an argument node for an argument name. All argument names appeared in :meth:`command` must be defined
 
@@ -113,9 +112,8 @@ class SimpleCommandBuilder:
 			arg_name = self.__make_arg(arg_name)
 		self.__arguments[arg_name] = node
 		self.__clean_cache()
-		return self
 
-	def literal(self, literal_name: str, node: Callable[[str], Literal]) -> 'SimpleCommandBuilder':
+	def literal(self, literal_name: str, node: Callable[[str], Literal]):
 		"""
 		Define a literal node for a literal name. It's useful when you want to have some custom literal nodes.
 		If you just want a regular literal node, you don't need to invoke this method, since the builder will use
@@ -127,7 +125,6 @@ class SimpleCommandBuilder:
 		"""
 		self.__literals[literal_name] = node
 		self.__clean_cache()
-		return self
 
 	# --------------
 	#    Outputs
