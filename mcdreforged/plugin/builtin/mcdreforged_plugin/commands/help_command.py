@@ -3,7 +3,8 @@ from typing import NamedTuple, Any, List
 from mcdreforged.command.builder.nodes.arguments import Integer
 from mcdreforged.command.builder.nodes.basic import Literal, CommandContext
 from mcdreforged.command.command_source import CommandSource
-from mcdreforged.minecraft.rtext import RText, RAction, RColor
+from mcdreforged.minecraft.rtext.style import RColor, RAction
+from mcdreforged.minecraft.rtext.text import RText
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.sub_command import SubCommand
 from mcdreforged.plugin.plugin_registry import HelpMessage
 

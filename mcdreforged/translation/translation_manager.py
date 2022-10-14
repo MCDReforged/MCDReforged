@@ -9,7 +9,7 @@ from typing import Optional, Set
 from ruamel.yaml import YAML
 
 from mcdreforged.constants import core_constant
-from mcdreforged.minecraft.rtext import RTextBase
+from mcdreforged.minecraft.rtext.text import RTextBase
 from mcdreforged.utils import file_util, translation_util
 from mcdreforged.utils.types import TranslationStorage, MessageText
 

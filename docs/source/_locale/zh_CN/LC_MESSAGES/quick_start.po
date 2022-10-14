@@ -24,7 +24,7 @@ msgid ""
 "/Fallen-Breath/MCDReforged>`__ (abbreviated as MCDR, omitted below)"
 msgstr ""
 "这是一个 `MCDReforged <https://github.com/Fallen-Breath/MCDReforged>`__ （简称为 "
-"MCDR，下同）的快速上手教程。"
+"MCDR，下同）的快速上手教程"
 
 #: ../quick_start.rst:8
 msgid "Requirements"
@@ -32,7 +32,7 @@ msgstr "依赖"
 
 #: ../quick_start.rst:10
 msgid "MCDR requires python3 runtime. The python version need to be at least 3.6"
-msgstr "MCDR 依赖 python3 运行环境。请确保你的 python 版本大于 3.6。"
+msgstr "MCDR 依赖 python3 运行环境。请确保你的 python 版本大于 3.6"
 
 #: ../quick_start.rst:13
 msgid "Install"
@@ -56,13 +56,13 @@ msgid ""
 msgstr ""
 "对于国内用户，你可以在 pip 指令的末尾添加 ``-i https://pypi.tuna.tsinghua.edu.cn/simple`` "
 "后缀来使用 `清华 pypi 镜像 <https://mirrors.tuna.tsinghua.edu.cn/help/pypi/>`__ "
-"来加速 MCDR 的下载安装。"
+"来加速 MCDR 的下载安装"
 
 #: ../quick_start.rst:27
 msgid ""
 "**DO NOT** download the source files of MCDR and execute them directly, "
 "unless you're a developer of MCDR and you know what you are doing"
-msgstr "**不要** 直接下载 MCDR 的源代码并从中启动 MCDR，除非你是一个知道你自己在做什么的 MCDR 开发者。"
+msgstr "**不要** 直接下载 MCDR 的源代码并从中启动 MCDR，除非你是一个知道你自己在做什么的 MCDR 开发者"
 
 #: ../quick_start.rst:30
 msgid "Start up"
@@ -88,13 +88,13 @@ msgid ""
 "``permission.yml`` correctly"
 msgstr ""
 "现在，把你的服务端文件放入服务端文件夹里（默认为 ``server`` 文件夹），然后修改配置文件 ``config.yml`` 以及权限文件 "
-"``permission.yml`` 以满足你的需求。"
+"``permission.yml`` 以满足你的需求"
 
 #: ../quick_start.rst:54
 msgid ""
 "After that you can launch MCDR, and it will start handling the server "
 "correctly"
-msgstr "完成后，你就可以启动 MCDR，它将开始正确地操控服务器运行。"
+msgstr "完成后，你就可以启动 MCDR，它将开始正确地操控服务器运行"
 
 #: ../quick_start.rst:61
 msgid "Upgrade"
@@ -123,5 +123,5 @@ msgid ""
 "them if you have special needs"
 msgstr ""
 "开发版本可在 `Test PyPi <https://test.pypi.org/project/mcdreforged/#history>`__"
-" 中找到。如果你有特殊需要，你可以安装它们。"
+" 中找到。如果你有特殊需要，你可以安装它们"
 

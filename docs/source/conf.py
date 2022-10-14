@@ -34,7 +34,9 @@ release = '2.0'
 extensions = [
 	'sphinx.ext.autodoc',
 	'sphinx.ext.napoleon',
-	'sphinx.ext.viewcode'
+	'sphinx.ext.viewcode',
+	'sphinx_copybutton',
+	'sphinx-prompt',
 ]
 
 source_suffix = ['.rst']
@@ -46,6 +48,10 @@ templates_path = ['templates']
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = ['build', 'Thumbs.db', '.DS_Store']
+
+
+def setup(app):
+	autodoc_setup(app)
 
 
 # -- Options for HTML output -------------------------------------------------
@@ -67,13 +73,7 @@ html_theme_options = {
 
 # https://docs.readthedocs.io/en/stable/builds.html#build-environment
 # available languages: en_US, zh_CN
-if 'SPHINXBUILD' in os.environ:
-	# we are inside the sphinx-build command process, apply the target language
-	language = os.environ.get('READTHEDOCS_LANGUAGE', 'zh_CN')
-else:
-	# we are NOT inside the sphinx-build command, maybe it's updating translation
-	# en_US is required to be used when updating translation so the base language is correct
-	language = 'en_US'
+language = os.environ.get('READTHEDOCS_LANGUAGE', 'en_US')
 
 # po files will be created in this directory
 # path is example but recommended.
@@ -83,8 +83,15 @@ gettext_compact = False  # optional
 
 # -- Options for sphinx.ext.autodoc -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html
-
 autodoc_member_order = 'bysource'
+autodoc_inherit_docstrings = False  # so overridden methods won't pop up
+
+
+def autodoc_setup(app):
+	# https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html#event-autodoc-skip-member
+	def autodoc_skip_member_handler(app_, what, name, obj, skip, options):
+		return skip
+	app.connect('autodoc-skip-member', autodoc_skip_member_handler)
 
 
 # -- save the table width ----------------------------------------------------

@@ -1,0 +1,95 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, Fallen_Breath
+# This file is distributed under the same license as the MCDReforged
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: MCDReforged \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-10-12 17:55+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.1\n"
+
+#: ../class_references/utils.rst:5
+msgid "Utilities"
+msgstr "实用工具"
+
+#: ../class_references/utils.rst:7
+msgid ":ref:`API package <api-package>` path: ``mcdreforged.api.utils``"
+msgstr ":ref:`API 包 <api-package>` 路径: ``mcdreforged.api.utils``"
+
+#: mcdreforged.utils.serializer.Serializable:1 of
+msgid "An abstract class for easy serializing / deserializing"
+msgstr "一个用于便捷序列化/反序列化的抽象类"
+
+#: mcdreforged.utils.serializer.Serializable:3 of
+msgid ""
+"Inherit it and declare the fields of your class with type annotations, "
+"that's all you need to do"
+msgstr "继承它，并在你的子类中使用类型注解声明属性，你所需要做的就这么多"
+
+#: mcdreforged.utils.serializer.Serializable:5 of
+msgid "Example::"
+msgstr "例子::"
+
+#: mcdreforged.utils.serializer.Serializable:19 of
+msgid ":class:`Serializable` class nesting is also supported::"
+msgstr "类 :class:`Serializable` 的嵌套也是支持的::"
+
+#: mcdreforged.utils.serializer.Serializable:26 of
+msgid ""
+"You can also declare default value when declaring type annotations, then "
+"during deserializing, if the value is missing, a `copy "
+"<https://docs.python.org/3/library/copy.html#copy.copy>`__ of the default"
+" value will be assigned"
+msgstr ""
+"你也可以在声明类型注解时声明属性的默认值，这样在反序列化的过程中，如果值缺失，则默认值的 `拷贝 <https://docs.python.org"
+"/zh-cn/3/library/copy.html#copy.copy>`__ 将会被赋值"
+
+#: mcdreforged.utils.serializer.Serializable:43 of
+msgid "Enum class will be serialized into its member name::"
+msgstr "枚举类会被序列化为它的枚举成员名称::"
+
+#: mcdreforged.utils.serializer.Serializable.__init__:1 of
+msgid "Create a :class:`Serializable` object with given field values"
+msgstr "使用给定的属性值创建一个 :class:`Serializable` 对象"
+
+#: mcdreforged.utils.serializer.Serializable.__init__:3 of
+msgid ""
+"Unspecified field with default value in the type annotation will be set "
+"to a copy of the default value"
+msgstr "未指定的，在类型注解中含有默认值的属性，将被设为默认值的一个拷贝"
+
+#: mcdreforged.utils.serializer.Serializable.__init__ of
+msgid "Parameters"
+msgstr "参数"
+
+#: mcdreforged.utils.serializer.Serializable.__init__:5 of
+msgid ""
+"A dict storing to-be-set values of its fields. It's keys are field names "
+"and values are field values"
+msgstr "一个储存着用于设置属性的值的 dict。dict 的键为属性名，值为属性值"
+
+#: mcdreforged.utils.serializer.Serializable.serialize:1 of
+msgid "Serialize itself into a dict"
+msgstr "将自身序列化为一个 dict"
+
+#: mcdreforged.utils.serializer.Serializable.deserialize:1 of
+msgid "Deserialize a dict into an object of this class"
+msgstr "将一个 dict 反序列化为一个这个类的实例"
+
+#: mcdreforged.utils.serializer.Serializable.get_default:1 of
+msgid "Create an object of this class with default values"
+msgstr "构造一个使用默认值的这个类的实例"
+
+#: mcdreforged.utils.serializer.Serializable.get_default:3 of
+msgid "Actually it invokes :meth:`deserialize` with an empty dict"
+msgstr "实际上它将用一个空的 dict 作为参数来调用 :meth:`deserialize`"
+

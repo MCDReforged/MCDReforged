@@ -1,98 +1,95 @@
-"""
-Advanced text container for Minecraft
-Credit: Pandaria98 https://github.com/Pandaria98 https://github.com/TISUnion/stext
-"""
-
 import json
 from abc import ABC
-from enum import Enum, auto
-from typing import Iterable, List, Union, Optional, Any, Tuple, Set, NamedTuple
+from typing import Iterable, List, Union, Optional, Any, Tuple, Set, NamedTuple, TypeVar
 
-from colorama import Fore, Style
+from colorama import Style
 
+from mcdreforged.minecraft.rtext.style import RStyle, RColor, RAction, RColorConvertor
 
-class RItem:
-	def __init__(self, mc_code: str, console_code: str):
-		self.mc_code = mc_code
-		self.console_code = console_code
-
-
-class RColor(Enum):
-	black = RItem('§0', Fore.BLACK)
-	dark_blue = RItem('§1', Fore.BLUE)
-	dark_green = RItem('§2', Fore.GREEN)
-	dark_aqua = RItem('§3', Fore.CYAN)
-	dark_red = RItem('§4', Fore.RED)
-	dark_purple = RItem('§5', Fore.MAGENTA)
-	gold = RItem('§6', Fore.YELLOW)
-	gray = RItem('§7', Style.RESET_ALL)
-	dark_gray = RItem('§8', Style.RESET_ALL)
-	blue = RItem('§9', Fore.LIGHTBLUE_EX)
-	green = RItem('§a', Fore.LIGHTGREEN_EX)
-	aqua = RItem('§b', Fore.LIGHTCYAN_EX)
-	red = RItem('§c', Fore.LIGHTRED_EX)
-	light_purple = RItem('§d', Fore.LIGHTMAGENTA_EX)
-	yellow = RItem('§e', Fore.LIGHTYELLOW_EX)
-	white = RItem('§f', Style.RESET_ALL)
-
-	reset = RItem('§r', Style.RESET_ALL)
-
-
-class RColorConvertor:
-	MC_COLOR_TO_CONSOLE = dict([(rcolor.value.mc_code, rcolor.value.console_code) for rcolor in RColor])
-	MC_COLOR_TO_RCOLOR = dict([(rcolor.value.mc_code, rcolor) for rcolor in RColor])
-	RCOLOR_TO_CONSOLE = dict([(rcolor, rcolor.value.console_code) for rcolor in RColor])
-	RCOLOR_NAME_TO_CONSOLE = dict([(rcolor.name, rcolor.value.console_code) for rcolor in RColor])
-
-
-class RStyle(Enum):
-	bold = RItem('§l', Style.BRIGHT)
-	italic = RItem('§o', '')
-	underlined = RItem('§n', '')
-	strikethrough = RItem('§m', '')
-	obfuscated = RItem('§k', '')
-
-
-class RAction(Enum):
-	suggest_command = auto()
-	run_command = auto()
-	open_url = auto()
-	open_file = auto()
-	copy_to_clipboard = auto()
+Self = TypeVar('Self', bound='RTextBase')
 
 
 class RTextBase(ABC):
+	"""
+	An abstract base class of Minecraft text component
+	"""
 	def to_json_object(self) -> Union[dict, list]:
+		"""
+		Return an object representing its data that can be serialized into a json string
+		"""
 		raise NotImplementedError()
 
 	def to_json_str(self) -> str:
+		"""
+		Return a json formatted str representing its data
+
+		It can be used as the second parameter in Minecraft command ``/tellraw <target> <message>`` and more
+		"""
 		return json.dumps(self.to_json_object(), ensure_ascii=False)
 
 	def to_plain_text(self) -> str:
+		"""
+		Return a plain text for console display
+
+		Click event and hover event will be ignored
+		"""
 		raise NotImplementedError()
 
 	def to_colored_text(self) -> str:
 		raise NotImplementedError()
 
-	def copy(self) -> 'RTextBase':
+	def copy(self: Self) -> Self:
+		"""
+		Return a deep copy version of itself
+		"""
 		raise NotImplementedError()
 
-	def set_color(self, color: RColor) -> 'RTextBase':
+	def set_color(self: Self, color: RColor) -> Self:
+		"""
+		Set the color of the text and return the text component itself
+		"""
 		raise NotImplementedError()
 
-	def set_styles(self, styles: Union[RStyle, Iterable[RStyle]]) -> 'RTextBase':
+	def set_styles(self: Self, styles: Union[RStyle, Iterable[RStyle]]) -> Self:
+		"""
+		Set the styles of the text and return the text component itself
+		"""
 		raise NotImplementedError()
 
-	def set_click_event(self, action: RAction, value: str) -> 'RTextBase':
+	def set_click_event(self: Self, action: RAction, value: str) -> Self:
+		"""
+		Set the click event
+		
+		Method :meth:`c` is the short form of :meth:`set_click_event`
+
+		:param action: The type of the action
+		:param value: The string value of the action
+		:return: The text component itself
+		"""
 		raise NotImplementedError()
 
-	def set_hover_text(self, *args) -> 'RTextBase':
+	def set_hover_text(self: Self, *args) -> Self:
+		"""
+		Set the hover text
+
+		Method :meth:`h` is the short form of :meth:`set_hover_text`
+
+		:param args: The elements be used to create a :class:`RTextList` instance.
+			The :class:`RTextList` instance is used as the actual hover text
+		:return: The text component itself
+		"""
 		raise NotImplementedError()
 
-	def c(self, action: RAction, value: str) -> 'RTextBase':
+	def c(self: Self, action: RAction, value: str) -> Self:
+		"""
+		The short form of :meth:`set_click_event`
+		"""
 		return self.set_click_event(action, value)
 
-	def h(self, *args) -> 'RTextBase':
+	def h(self: Self, *args) -> Self:
+		"""
+		The short form of :meth:`set_hover_text`
+		"""
 		return self.set_hover_text(*args)
 
 	def __str__(self):
@@ -107,8 +104,7 @@ class RTextBase(ABC):
 	@staticmethod
 	def from_any(text) -> 'RTextBase':
 		"""
-		:param text: can be a RTextBase, or a str, or anything
-		:rtype: RTextBase
+		Convert anything into a RText component
 		"""
 		if isinstance(text, RTextBase):
 			return text
@@ -116,6 +112,18 @@ class RTextBase(ABC):
 
 	@staticmethod
 	def join(divider: Any, iterable: Iterable[Any]) -> 'RTextBase':
+		"""
+		Just like method :meth:`str.join`, it concatenates any number of texts with *divider*
+
+		Example::
+
+			>>> text = RTextBase.join(',', [RText('1'), '2', 3])
+			>>> text.to_plain_text()
+			'1,2,3'
+
+		:param divider: The divider between elements. The divider object will be reused
+		:param iterable: The elements to be joined
+		"""
 		result = RTextList()
 		for i, item in enumerate(iterable):
 			if i > 0:
@@ -125,6 +133,19 @@ class RTextBase(ABC):
 
 	@staticmethod
 	def format(fmt: str, *args, **kwargs) -> 'RTextBase':
+		"""
+		Just like method :meth:`str.format`, it uses *\\*args* and *\\*\\*kwargs* to build a formatted RText component based on the formatter *fmt*
+
+		Example::
+
+			>>> text = RTextBase.format('a={},b={},c={c}', RText('1', color=RColor.blue), '2', c=3)
+			>>> text.to_plain_text()
+			'a=1,b=2,c=3'
+
+		:param fmt: The formatter string
+		:param args: The given arguments
+		:param kwargs: The given keyword arguments
+		"""
 		args = list(args)
 		kwargs = kwargs.copy()
 		counter = 0
@@ -165,6 +186,19 @@ class RTextBase(ABC):
 
 	@classmethod
 	def from_json_object(cls, data: Union[str, list, dict]) -> 'RTextBase':
+		"""
+		Convert a json object into a :class:`RText <RTextBase>` component
+
+		Example::
+
+			>>> text = RTextBase.from_json_object({'text': 'my text', 'color': 'red'})
+			>>> text.to_plain_text()
+			'my text'
+			>>> text.to_json_object()['color']
+			'red'
+
+		:param data: A json object
+		"""
 		if isinstance(data, str):
 			return cls.from_any(data)
 		if isinstance(data, list):
@@ -224,7 +258,19 @@ class _ClickEvent(NamedTuple):
 
 
 class RText(RTextBase):
+	"""
+	The regular text component class
+	"""
+
 	def __init__(self, text, color: Optional[RColor] = None, styles: Optional[Union[RStyle, Iterable[RStyle]]] = None):
+		"""
+		Create a :class:`RText` object with specific text, optional color and optional style
+
+		:param text: The content of the text. It will be converted into str
+		:param color: Optional, the color of the text
+		:param styles: Optional, the style of the text. It can be a single :class:`~mcdreforged.minecraft.rtext.style.RStyle`
+			or an iterable of :class:`~mcdreforged.minecraft.rtext.style.RStyle`
+		"""
 		self.__text: str = str(text)
 		self.__color: Optional[RColor] = None
 		self.__styles: Set[RStyle] = set()
@@ -242,11 +288,11 @@ class RText(RTextBase):
 		self.__click_event = text.__click_event
 		self.__hover_text_list = text.__hover_text_list.copy()
 
-	def set_color(self, color: RColor):
+	def set_color(self: Self, color: RColor) -> Self:
 		self.__color = color
 		return self
 
-	def set_styles(self, styles: Union[RStyle, Iterable[RStyle]]):
+	def set_styles(self: Self, styles: Union[RStyle, Iterable[RStyle]]) -> Self:
 		if isinstance(styles, RStyle):
 			styles = {styles}
 		elif isinstance(styles, Iterable):
@@ -256,11 +302,11 @@ class RText(RTextBase):
 		self.__styles = styles
 		return self
 
-	def set_click_event(self, action: RAction, value: str):
+	def set_click_event(self: Self, action: RAction, value: str) -> Self:
 		self.__click_event = _ClickEvent(action, value)
 		return self
 
-	def set_hover_text(self, *args):
+	def set_hover_text(self: Self, *args) -> Self:
 		self.__hover_text_list = list(args)
 		return self
 
@@ -300,71 +346,49 @@ class RText(RTextBase):
 		return copied
 
 
-class RTextTranslation(RText):
-	def __init__(self, translation_key: str, color: RColor = RColor.reset, styles: Optional[Union[RStyle, Iterable[RStyle]]] = None):
-		super().__init__(translation_key, color, styles)
-		self.__translation_key: str = translation_key
-		self.__args = ()
-
-	def arg(self, *args: Any) -> 'RTextTranslation':
-		self.__args = args
-		return self
-
-	def to_plain_text(self) -> str:
-		return self.__translation_key
-
-	def to_json_object(self) -> Union[dict, list]:
-		obj = super().to_json_object()
-		obj.pop('text')
-		obj['translate'] = self.__translation_key
-		if len(self.__args) > 0:
-			obj['with'] = list(map(lambda arg: arg.to_json_object() if isinstance(arg, RTextBase) else arg, self.__args))
-		return obj
-
-	def _copy_from(self, text: 'RTextTranslation'):
-		super()._copy_from(text)
-		self.__translation_key = text.__translation_key
-		self.__args = text.__args
-
-	def copy(self) -> 'RTextTranslation':
-		copied = RTextTranslation('')
-		copied._copy_from(self)
-		return copied
-
-
 class RTextList(RTextBase):
+	"""
+	A list of :class:`RTextBase` objects, a compound text component
+	"""
 	def __init__(self, *args):
+		"""
+		Use the given *\\*args* to create a :class:`RTextList`
+
+		:param args: The items in this :class:`RTextList`. They can be :class:`str`, :class:`RTextBase`
+			or any class implements ``__str__`` method. All non- :class:`RTextBase` items
+			will be converted to :class:`RText`
+		"""
 		self.header = RText('')
 		self.header_empty = True
 		self.children = []  # type: List[RTextBase]
 		self.append(*args)
 
-	def set_color(self, color: RColor):
+	def set_color(self: Self, color: RColor) -> Self:
 		self.header.set_color(color)
 		self.header_empty = False
 		return self
 
-	def set_styles(self, styles: Union[RStyle, Iterable[RStyle]]):
+	def set_styles(self: Self, styles: Union[RStyle, Iterable[RStyle]]) -> Self:
 		self.header.set_styles(styles)
 		self.header_empty = False
 		return self
 
-	def set_click_event(self, action: RAction, value):
+	def set_click_event(self: Self, action: RAction, value) -> Self:
 		self.header.set_click_event(action, value)
 		self.header_empty = False
 		return self
 
-	def set_hover_text(self, *args):
+	def set_hover_text(self: Self, *args) -> Self:
 		self.header.set_hover_text(*args)
 		self.header_empty = False
 		return self
 
-	def set_header_text(self, header_text: RTextBase):
+	def set_header_text(self: Self, header_text: RTextBase) -> Self:
 		self.header = header_text
 		self.header_empty = False
 		return self
 
-	def append(self, *args) -> 'RTextList':
+	def append(self: Self, *args) -> Self:
 		for obj in args:
 			if isinstance(obj, RTextList):
 				self.children.extend(obj.children)
@@ -393,4 +417,60 @@ class RTextList(RTextBase):
 		copied.header = self.header.copy()
 		copied.header_empty = self.header_empty
 		copied.children = [child.copy() for child in self.children]
+		return copied
+
+
+class RTextTranslation(RText):
+	"""
+	The translation text component class. It's almost the same as :class:`RText`
+	"""
+	def __init__(self, translation_key: str, color: RColor = RColor.reset, styles: Optional[Union[RStyle, Iterable[RStyle]]] = None):
+		"""
+		Create a :class:`RTextTranslation` object with specific translation key.
+		The rest of the parameters are the same to the constructor of :class:`RText`
+
+		Use method :meth:`arg` to set the translation arguments, if the translation requires some arguments
+
+		Example::
+
+			RTextTranslation('advancements.nether.root.title', color=RColor.red)
+
+		:param translation_key: The translation key
+		:param color: Optional, the color of the text
+		:param styles: Optional, the style of the text. It can be a single :class:`~mcdreforged.minecraft.rtext.style.RStyle`
+			or a collection of :class:`~mcdreforged.minecraft.rtext.style.RStyle`
+		"""
+
+		super().__init__(translation_key, color, styles)
+		self.__translation_key: str = translation_key
+		self.__args = ()
+
+	def arg(self: Self, *args: Any) -> Self:
+		"""
+		Set the translation arguments
+
+		:param args: The translation arguments
+		"""
+		self.__args = args
+		return self
+
+	def to_plain_text(self) -> str:
+		return self.__translation_key
+
+	def to_json_object(self) -> Union[dict, list]:
+		obj = super().to_json_object()
+		obj.pop('text')
+		obj['translate'] = self.__translation_key
+		if len(self.__args) > 0:
+			obj['with'] = list(map(lambda arg: arg.to_json_object() if isinstance(arg, RTextBase) else arg, self.__args))
+		return obj
+
+	def _copy_from(self, text: 'RTextTranslation'):
+		super()._copy_from(text)
+		self.__translation_key = text.__translation_key
+		self.__args = text.__args
+
+	def copy(self) -> 'RTextTranslation':
+		copied = RTextTranslation('')
+		copied._copy_from(self)
 		return copied

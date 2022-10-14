@@ -8,10 +8,14 @@ from mcdreforged.info_reactor.info import Info
 
 
 class WaterfallHandler(BungeecordHandler):
-	# The logging format of waterfall server is paper like
+	"""
+	A handler for `Waterfall <https://github.com/PaperMC/Waterfall>`__ servers
+
+	The logging format of waterfall server is paper like (waterfall is PaperMC's bungeecord fork shmm)
+	"""
+
 	# [02:18:30 INFO]: Enabled plugin cmd_list version git:cmd_list:1.15-SNAPSHOT:f1c32f8:1489 by SpigotMC
 	# [02:18:29 INFO] [ViaVersion]: Loading 1.12.2 -> 1.13 mappings..."
-
 	@classmethod
 	def get_content_parsing_formatter(cls):
 		return (

@@ -3,7 +3,10 @@ from mcdreforged.handler.impl.vanilla_handler import VanillaHandler
 
 
 class Bukkit14Handler(BukkitHandler):
-	# 1.14.4+ bukkit / spigot change it's console logger into vanilla like format
+	"""
+	A handler for `bukkit and spigot <https://www.spigotmc.org/wiki/buildtools>`__ Minecraft servers in 1.14+
+	"""
+	# 1.14.4+ bukkit / spigot change its console logger into vanilla like format
 	# idk why they did this
 	# paper is not included
 

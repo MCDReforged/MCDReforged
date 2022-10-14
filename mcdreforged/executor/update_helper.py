@@ -9,7 +9,8 @@ import requests
 
 from mcdreforged.constants import core_constant
 from mcdreforged.executor.thread_executor import ThreadExecutor
-from mcdreforged.minecraft.rtext import RText, RAction, RColor, RStyle, RTextBase
+from mcdreforged.minecraft.rtext.style import RAction, RColor, RStyle
+from mcdreforged.minecraft.rtext.text import RText, RTextBase
 from mcdreforged.plugin.meta.version import Version
 from mcdreforged.translation.translation_text import RTextMCDRTranslation
 from mcdreforged.utils import misc_util

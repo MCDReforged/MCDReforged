@@ -216,7 +216,7 @@ When set to true, MCDR will removed all console font formatter codes in before a
 custom_handlers
 ~~~~~~~~~~~~~~~
 
-A list of custom `server handler <customize/handler.html>`__ classes. The classed need to be subclasses of ``AbstractServerHandler``
+A list of custom `server handler <customize/handler.html>`__ classes. The classed need to be subclasses of :class:`~mcdreforged.handler.impl.abstract_minecraft_handler.AbstractMinecraftHandler`
 
 Then you can use the name of your handler in the `handler <#handler>`__ option above to use your handler
 

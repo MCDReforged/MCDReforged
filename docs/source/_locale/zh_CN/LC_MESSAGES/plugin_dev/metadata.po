@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-12 20:06+0800\n"
+"POT-Creation-Date: 2022-10-14 00:38+0800\n"
 "PO-Revision-Date: 2021-01-23 10:38+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -12,7 +12,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.9.0\n"
+"Generated-By: Babel 2.9.1\n"
 
 #: ../plugin_dev/metadata.rst:3
 msgid "Metadata"
@@ -30,23 +30,23 @@ msgid ""
 "``PLUGIN_METADATA``"
 msgstr ""
 "作为一个仅有单一 ``.py`` 文件组成的插件，`单文件插件 <plugin_format.html#solo-plugin>`__ "
-"的元数据声明于其源文件的全局作用域中。它是一个包含着多个键值对的，名为 ``PLUGIN_METADATA`` 的 dict 对象。"
+"的元数据声明于其源文件的全局作用域中。它是一个包含着多个键值对的，名为 ``PLUGIN_METADATA`` 的 dict 对象"
 
 #: ../plugin_dev/metadata.rst:10
 msgid "Here's a metadata field with all possible key-values"
-msgstr "以下是一个元数据字段，其中包含所有可能的键值。"
+msgstr "以下是一个元数据字段，其中包含所有可能的键值"
 
 #: ../plugin_dev/metadata.rst:27
 msgid ""
 "The following section `Fields <#fields>`__ will use metadata declared in "
 "python syntax as examples"
-msgstr "下面的 `属性 <#fields>`__ 小节将会使用 python 语法进行元数据声明举例。"
+msgstr "下面的 `属性 <#fields>`__ 小节将会使用 python 语法进行元数据声明举例"
 
 #: ../plugin_dev/metadata.rst:31
 msgid ""
 "For multi file plugin, the metadata is declared in file "
 "``mcdreforged.plugin.json`` in json syntax"
-msgstr "对于多文件插件或者文件夹插件而言，元数据以 json 语法在文件 ``mcdreforged.plugin.json`` 中声明。"
+msgstr "对于多文件插件或者文件夹插件而言，元数据以 json 语法在文件 ``mcdreforged.plugin.json`` 中声明"
 
 #: ../plugin_dev/metadata.rst:33
 msgid "Here's an example"
@@ -56,7 +56,7 @@ msgstr "下面是一个例子："
 msgid ""
 "If a plugin doesn't not declare the meta data field, a warning will arise"
 " in the console and the fallback values will be used"
-msgstr "如果插件未声明元数据字段，则控制台中将出现警告，并使用备用值。"
+msgstr "如果插件未声明元数据字段，则控制台中将出现警告，并使用备用值"
 
 #: ../plugin_dev/metadata.rst:53
 msgid "Fields"
@@ -71,7 +71,7 @@ msgid ""
 "Id, or plugin id, is the identity string of your plugin. It should "
 "consist of lowercase letters, numbers and underscores with a length of 1 "
 "to 64"
-msgstr "ID（即插件 ID）是你插件的“身份证号”。它应由小写字母，数字和下划线组成，长度为 1 到 64。"
+msgstr "ID（即插件 ID）是你插件的“身份证号”。它应由小写字母，数字和下划线组成，长度为 1 到 64"
 
 #: ../plugin_dev/metadata.rst:60
 msgid "Here's some available plugin ids:"
@@ -113,13 +113,13 @@ msgid ""
 "existed plugin, the new plugin will fail to load"
 msgstr ""
 "MCDR 使用插件 ID 来区分不同的插件并检查插件间的依赖。 MCDR 中加载的所有插件都应使用不同的插件 "
-"ID。如果新加载的插件具有与现有插件完全相同的插件 ID，则新插件将无法加载。"
+"ID。如果新加载的插件具有与现有插件完全相同的插件 ID，则新插件将无法加载"
 
 #: ../plugin_dev/metadata.rst:76
 msgid ""
 "Choose your plugin id wisely. It's highly suggested to keep your plugin "
 "id not changed after release your plugin"
-msgstr "请明智地选择你的插件 ID。强烈建议你在发布插件后不要再更改插件 ID。"
+msgstr "请明智地选择你的插件 ID。强烈建议你在发布插件后不要再更改插件 ID"
 
 #: ../plugin_dev/metadata.rst:79
 msgid "Field key: ``id``"
@@ -141,12 +141,12 @@ msgstr "version"
 
 #: ../plugin_dev/metadata.rst:86
 msgid ""
-"The version value indicates the version of your value. It's mostly in "
+"The version value indicates the version of your plugin. It's mostly in "
 "`semver <https://semver.org/>`__ format but it has less restriction such "
 "as you can have the core version with any length"
 msgstr ""
 "version 字段代表你的插件版本。它基本上采用了 `语义化版本 <https://semver.org/lang/zh-CN/>`__ "
-"的格式，不过限制较少，如你可以定义任意长度的版本号。"
+"的格式，不过限制较少，如你可以定义任意长度的版本号"
 
 #: ../plugin_dev/metadata.rst:88
 msgid "Here's some available version:"
@@ -178,7 +178,7 @@ msgid ""
 "is a good idea. It's easier to maintain and for people to understand"
 msgstr ""
 "遵循 `语义化版本 <https://semver.org/lang/zh-CN/>`__ "
-"格式为你的插件定义版本字符串是一个好主意——易于维护、易于理解。"
+"格式为你的插件定义版本字符串是一个好主意——易于维护、易于理解"
 
 #: ../plugin_dev/metadata.rst:100
 msgid "Field key: ``version``"
@@ -196,13 +196,13 @@ msgstr "name"
 msgid ""
 "The name of your plugin. Give your plugin with a nice name with any kinds"
 " of characters"
-msgstr "你的插件名称——给你的插件起一个好听的名字吧。"
+msgstr "你的插件名称——给你的插件起一个好听的名字吧"
 
 #: ../plugin_dev/metadata.rst:109
 msgid ""
 "Try not to make the name too long. For more details of your plugin, you "
 "can put them into the ``description``"
-msgstr "尽量不要使插件名称太长。你可以把插件的详细信息放在 ``description`` 之中。"
+msgstr "尽量不要使插件名称太长。你可以把插件的详细信息放在 ``description`` 之中"
 
 #: ../plugin_dev/metadata.rst:112
 msgid "Field key: ``name``"
@@ -220,12 +220,12 @@ msgstr "description"
 msgid ""
 "The description of you plugin. Go write down the functionality summarize "
 "of your plugin here"
-msgstr "你的插件描述。在这里写下你的插件的功能总结吧。"
+msgstr "你的插件描述。在这里写下你的插件的功能总结吧"
 
 #: ../plugin_dev/metadata.rst:121 ../plugin_dev/metadata.rst:142
 #: ../plugin_dev/metadata.rst:154
 msgid "This field is optional, you can just ignore it if you are lazy"
-msgstr "此字段是可选的。如果你想偷懒的话可以不填写。"
+msgstr "此字段是可选的。如果你想偷懒的话可以不填写"
 
 #: ../plugin_dev/metadata.rst:123
 msgid ""
@@ -256,7 +256,7 @@ msgstr "author"
 msgid ""
 "The authors of the plugins. If there's only a single author, you can also"
 " use a string instead of a list of string"
-msgstr "插件作者。如果只有一个作者，可使用 string 而非 list。"
+msgstr "插件作者。如果只有一个作者，可使用 string 而非 list"
 
 #: ../plugin_dev/metadata.rst:145
 msgid "Field key: ``author``"
@@ -274,7 +274,7 @@ msgstr "link"
 msgid ""
 "The url to your plugin. You can put a link to the github repository of "
 "your plugin here. It should be an available url"
-msgstr "你的插件的网址。你可以将其指向插件的 github 链接。它的值应为一个可访问的网址。"
+msgstr "你的插件的网址。你可以将其指向插件的 github 链接。它的值应为一个可访问的网址"
 
 #: ../plugin_dev/metadata.rst:157
 msgid "Field key: ``link``"
@@ -290,13 +290,13 @@ msgid ""
 " key-value pairs. The key is the id of the plugin that your plugin is "
 "relies on, and the value is the version requirement of the plugin that "
 "your plugin is relies on"
-msgstr "插件的依赖关系。应为一个字典，其中包含多个键值对。键为插件所依赖的插件 ID，值是插件所依赖插件的版本要求。"
+msgstr "插件的依赖关系。应为一个字典，其中包含多个键值对。键为插件所依赖的插件 ID，值是插件所依赖插件的版本要求"
 
 #: ../plugin_dev/metadata.rst:166
 msgid ""
 "If your plugin has requirement to the version of MCDR, use "
 "``mcdreforged`` as the plugin id"
-msgstr "如果你的插件对 MCDR 版本有需求，请使用 mcdreforged 作为插件 ID。"
+msgstr "如果你的插件对 MCDR 版本有需求，请使用 mcdreforged 作为插件 ID"
 
 #: ../plugin_dev/metadata.rst:168
 msgid ""
@@ -304,7 +304,7 @@ msgid ""
 " version. Criterions are divided by space character, each criterion is "
 "made up of an operator and a base version string. Wildcard is allowed "
 "when describing the base version"
-msgstr "版本要求是一个包含若干个版本约束的字符串。约束按空格划分，每个每个由一个运算符和一个基础版本字符串组成。描述基版本时允许使用通配符。"
+msgstr "版本要求是一个包含若干个版本约束的字符串。约束按空格划分，每个每个由一个运算符和一个基础版本字符串组成。描述基版本时允许使用通配符"
 
 #: ../plugin_dev/metadata.rst:170
 msgid "List of the operators:"
@@ -489,13 +489,13 @@ msgid ""
 msgstr ""
 "查看 `此处(EN) <https://docs.npmjs.com/about-semantic-versioning>`__ 或 "
 "`此处(中文) <https://www.kancloud.cn/shellway/npm-doc/199995>`__ "
-"以获取版本要求的更多详细信息。"
+"以获取版本要求的更多详细信息"
 
 #: ../plugin_dev/metadata.rst:224
 msgid ""
 "If there are multiple declared criterions, the target version is accepted"
 " only when it's accepted by all criterions"
-msgstr "如果存在多个声明的条件，则仅当所有条件都接受目标版本时，才接受目标版本。"
+msgstr "如果存在多个声明的条件，则仅当所有条件都接受目标版本时，才接受目标版本"
 
 #: ../plugin_dev/metadata.rst:226
 msgid "Here a dependencies example:"
@@ -507,13 +507,13 @@ msgid ""
 "your plugin will get loaded successfully. Missing dependency, dependency "
 "version not match or dependency loop will result in a dependency check "
 "failure"
-msgstr "MCDR 将确保仅在满足所有依赖项要求时，你的插件才能成功加载。依赖项缺失，依赖项版本不匹配或出现依赖环路，都会导致依赖关系检查失败。"
+msgstr "MCDR 将确保仅在满足所有依赖项要求时，你的插件才能成功加载。依赖项缺失，依赖项版本不匹配或出现依赖环路，都会导致依赖关系检查失败"
 
 #: ../plugin_dev/metadata.rst:240
 msgid ""
 "This field is optional, you can just ignore it if your plugin doesn't "
 "have any dependency"
-msgstr "该字段是可选的，如果你的插件没有任何依赖关系，则可以忽略它。"
+msgstr "该字段是可选的，如果你的插件没有任何依赖关系，则可以忽略它"
 
 #: ../plugin_dev/metadata.rst:243
 msgid "Field key: ``dependencies``"
@@ -566,11 +566,11 @@ msgstr "archive_name"
 
 #: ../plugin_dev/metadata.rst:269
 msgid "The file name of generated ``.mcdr`` packed plugin in CLI"
-msgstr "在 CLI 中生成的 ``.mcdr`` 打包插件的文件名。"
+msgstr "在 CLI 中生成的 ``.mcdr`` 打包插件的文件名"
 
 #: ../plugin_dev/metadata.rst:271
 msgid "See `here <cli.html#name>`__ for more information"
-msgstr "见 `此处 <cli.html#name>`__ 以获取更多有关 CLI 的信息。"
+msgstr "见 `此处 <cli.html#name>`__ 以获取更多有关 CLI 的信息"
 
 #: ../plugin_dev/metadata.rst:273
 msgid "Field key: ``archive_name``"
@@ -588,7 +588,7 @@ msgstr "一个文件或文件夹名称的列表，将用于在 CLI 中打包入 
 
 #: ../plugin_dev/metadata.rst:284
 msgid "See `here <cli.html#pack>`__ for more information"
-msgstr "见 `此处 <cli.html#pack>`__ 以获取更多有关 CLI 的信息。"
+msgstr "见 `此处 <cli.html#pack>`__ 以获取更多有关 CLI 的信息"
 
 #: ../plugin_dev/metadata.rst:286
 msgid "Field key: ``resources``"

@@ -6,7 +6,7 @@ import unittest
 from ruamel.yaml import YAML
 
 from mcdreforged.constants import core_constant
-from mcdreforged.minecraft.rtext import RText, RTextBase
+from mcdreforged.minecraft.rtext.text import RText, RTextBase
 from mcdreforged.translation.translation_manager import TranslationManager, LANGUAGE_DIRECTORY
 from mcdreforged.utils import file_util
 

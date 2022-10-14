@@ -4,7 +4,7 @@ Information of a plugin
 import re
 from typing import List, Dict, TYPE_CHECKING, Optional, Union
 
-from mcdreforged.minecraft.rtext import RTextBase, RText
+from mcdreforged.minecraft.rtext.text import RTextBase, RText
 from mcdreforged.plugin.meta.version import Version, VersionParsingError, VersionRequirement
 from mcdreforged.translation.translation_text import RTextMCDRTranslation
 from mcdreforged.utils import translation_util, misc_util
@@ -15,23 +15,55 @@ if TYPE_CHECKING:
 
 
 class Metadata:
+	"""
+	The metadata of a MCDR plugin
+	"""
+
 	id: str
+	"""The id of the plugin. Should match regexp ``[a-z0-9_]{1,64}``"""
+
 	version: Version
+	"""The version of the plugin, in a less restrictive semver format"""
+
 	name: str
+	"""The name of the plugin"""
+
 	description: Optional[Union[str, TranslationLanguageDict]]  # translation: lang -> description
+	"""
+	The description of the plugin
+	
+	It can be a regular str or a ``Dict[str, str]`` indicating a mapping from language to description
+	"""
+
 	author: Optional[List[str]]
+	"""The authors of the plugin"""
+
 	link: Optional[str]
+	"""The url to the plugin, e.g. link to a github repository"""
+
 	dependencies: Dict[str, VersionRequirement]
+	"""
+	A dict of dependencies the plugin relies on
+	
+	:Key: The id of the dependent plugin
+	:Value: The version requirement the dependent plugin
+	"""
 
 	entrypoint: str
-	archive_name: Optional[str]
-	resources: Optional[List[str]]
+	"""
+	The entrypoint module of the plugin
+	
+	The entrypoint should be import-able
+	"""
+
+	archive_name: Optional[str]  # used in MCDR CLI only
+	resources: Optional[List[str]]  # used in MCDR CLI only
 
 	FALLBACK_VERSION = '0.0.0'
 
 	def __init__(self, data: Optional[dict], *, plugin: Optional['AbstractPlugin'] = None):
 		"""
-		:param AbstractPlugin plugin: the plugin which this metadata is belong to
+		:param AbstractPlugin plugin: the plugin which this metadata is belonged to
 		:param dict or None data: a dict with information of the plugin
 		"""
 		if not isinstance(data, dict):
@@ -118,13 +150,21 @@ class Metadata:
 
 	def get_description(self, lang: Optional[str] = None) -> Optional[str]:
 		"""
-		Get translated description str
+		Return a translated plugin description in str
+
+		:param lang: Optional, the language to translate to. When not specified it will use the language of MCDR
+		:return: Translated plugin description
 		"""
 		if isinstance(self.description, str):
 			return self.description
+		if lang is None:
+			lang = translation_util.get_mcdr_language()
 		return translation_util.translate_from_dict(self.description, lang, default=None)
 
 	def get_description_rtext(self) -> RTextBase:
+		"""
+		Return a translated plugin description in :class:`RText <mcdreforged.minecraft.rtext.text.RTextBase>`
+		"""
 		if isinstance(self.description, str):
 			return RText(self.description)
 		return RTextMCDRTranslation.from_translation_dict(self.description)

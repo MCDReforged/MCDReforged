@@ -15,7 +15,7 @@ from typing import Dict, Optional, List, Set
 from colorlog import ColoredFormatter
 
 from mcdreforged.constants import core_constant
-from mcdreforged.minecraft.rtext import RColor, RStyle, RItem
+from mcdreforged.minecraft.rtext.style import RColor, RStyle, RItem
 from mcdreforged.utils import string_util, file_util
 
 

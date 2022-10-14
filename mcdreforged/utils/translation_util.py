@@ -11,6 +11,16 @@ __all__ = [
 _NONE = object()
 
 
+def get_mcdr_language() -> str:
+	from mcdreforged.plugin.server_interface import ServerInterface
+	server: Optional[ServerInterface] = ServerInterface.get_instance()
+	if server is not None:
+		language = server.get_mcdr_language()
+	else:
+		language = core_constant.DEFAULT_LANGUAGE
+	return language
+
+
 def translate_from_dict(translations: TranslationKeyDictRich, language: str, *, fallback_language: Optional[str] = core_constant.DEFAULT_LANGUAGE, default: Optional[MessageText] = _NONE) -> MessageText:
 	"""
 	Select a translation for given language based on a translation dict

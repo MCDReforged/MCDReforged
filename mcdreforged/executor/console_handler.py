@@ -58,7 +58,7 @@ class ConsoleHandler(ThreadExecutor):
 				else:
 					if self.mcdr_server.logger.should_log_debug(DebugOption.HANDLER):
 						self.mcdr_server.logger.debug('Parsed text from {}:'.format(type(self).__name__), no_check=True)
-						for line in parsed_result.format_text().splitlines():
+						for line in parsed_result.debug_format_text().splitlines():
 							self.mcdr_server.logger.debug('	{}'.format(line), no_check=True)
 					self.mcdr_server.reactor_manager.put_info(parsed_result)
 		except (KeyboardInterrupt, EOFError, SystemExit, IOError) as error:

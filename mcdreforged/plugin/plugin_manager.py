@@ -399,7 +399,7 @@ class PluginManager:
 		self.__sort_plugins_by_id()
 
 	def __sort_plugins_by_id(self):
-		self.plugins = dict(sorted(self.plugins.items(), key=lambda item: item[0]))
+		self.plugins = dict(sorted(map(tuple, self.plugins.items()), key=lambda item: item[0]))
 
 	def __update_registry(self):
 		self.registry_storage.clear()

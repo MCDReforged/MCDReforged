@@ -12,15 +12,42 @@ __all__ = [
 def spam_proof(arg=None, *, lock_class=RLock):
 	"""
 	Use a lock to protect the decorated function from being invoked on multiple threads at the same time
+
 	If a multiple-invocation happens, only the first invocation can be executed normally, other invocations
 	will be skipped
-	The type of the lock can be specified with the `lock_class` parameter, for example
-	it can be `threading.RLock` (default) or `threading.Lock`
+
+	The type of the lock can be specified with the *lock_class* parameter, for example
+	it can be ``threading.RLock`` (default) or ``threading.Lock``
 
 	The return value of the decorated function is modified into a bool, indicating if this invocation is executed normally
+
 	The decorated function has 2 extra fields:
-	- `original` field: stores the original undecorated function
-	- `lock` field: stores the lock object used in the spam proof logic
+
+	- ``original`` field: stores the original undecorated function
+	- ``lock`` field: stores the lock object used in the spam proof logic
+
+	Example::
+
+		@spam_proof
+		def some_work(arg):
+			# doing some important logics
+			foo = 1
+
+	The above example is equivalent to::
+
+		lock = threading.RLock()
+
+		def some_work(arg) -> bool:
+			acquired = lock.acquire(blocking=False)
+			if acquired:
+				try:
+					# doing some important logics
+					foo = 1
+				finally:
+					lock.release()
+			return acquired
+
+	.. versionadded:: v2.5.0
 	"""
 	def wrapper(func):
 		@functools.wraps(func)  # to preserve the origin function information

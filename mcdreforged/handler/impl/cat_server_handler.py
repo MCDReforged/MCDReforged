@@ -4,9 +4,13 @@ from mcdreforged.utils import string_util
 
 
 class CatServerHandler(BukkitHandler):
-	# https://github.com/Luohuayu/CatServer
-	# CatServer uses vanilla logging format but spigot like player joined message
-	# And has color code around the player left message
+	"""
+	A handler for `CatServer <https://github.com/Luohuayu/CatServer>`__ Minecraft servers
+
+	CatServer uses vanilla logging format but spigot like player joined message
+
+	And has color code around the player left message
+	"""
 
 	@staticmethod
 	def __cleaned_info(info):

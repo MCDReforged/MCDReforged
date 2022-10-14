@@ -1,24 +1,49 @@
 from abc import ABC
 from typing import Optional, Union
 
-from mcdreforged.minecraft.rtext import RTextBase, RText, RColor
+from mcdreforged.minecraft.rtext.text import RTextBase, RText, RColor
 from mcdreforged.utils.types import MessageText
 
 
 class CommandErrorBase(Exception, ABC):
+	"""
+	The base exception class for all command related errors
+
+	Class inheriting tree::
+	
+		CommandErrorBase
+		├── IllegalNodeOperation
+		└── CommandError
+			├── UnknownCommand
+			├── UnknownArgument
+			├── RequirementNotMet
+			└── CommandSyntaxError
+				└── IllegalArgument
+					├── AbstractOutOfRange
+					│   ├── NumberOutOfRange
+					│   └── TextLengthOutOfRange
+					├── InvalidNumber
+					├── InvalidInteger
+					├── InvalidFloat
+					├── IllegalEscapesUsage
+					├── UnclosedQuotedString
+					├── EmptyText
+					├── InvalidBoolean
+					└── InvalidEnumeration
+	"""
 	pass
 
 
 class IllegalNodeOperation(CommandErrorBase):
 	"""
-	This node is not allowed to do this
+	The operation is unsupported by this node
 	"""
 	pass
 
 
 class CommandError(CommandErrorBase, ABC):
 	"""
-	The basic error, for errors raising when a command source is executing a command
+	The basic exception, for errors raised when parsing a command
 	"""
 	def __init__(self, message: MessageText, parsed_command: str, failed_command: str):
 		#  !!something wroooong command
@@ -33,23 +58,20 @@ class CommandError(CommandErrorBase, ABC):
 	def __str__(self):
 		return '{}: {}<--'.format(self.__message, self._failed_command)
 
-	@property
-	def _error_command(self) -> str:
-		return self._failed_command[len(self._parsed_command):]
-
 	def to_rtext(self) -> RTextBase:
 		return RTextBase.format(
 			'{}: {}{}{}',
 			RTextBase.from_any(self.__message).copy().set_color(RColor.red),
-			RText(self._parsed_command, RColor.dark_red),
-			RText(self._error_command, RColor.red),
+			RText(self.get_parsed_command(), RColor.dark_red),
+			RText(self.get_error_segment(), RColor.red),
 			RText('<--', RColor.dark_red)
 		)
 
 	def get_error_data(self) -> tuple:
 		"""
-		Data that might be helpful to the error display
-		Can be used in formatting processing
+		Data that might be helpful for error report
+
+		It will be used in error message str formatting
 		"""
 		return ()
 
@@ -57,15 +79,29 @@ class CommandError(CommandErrorBase, ABC):
 		self.__message = message
 
 	def get_parsed_command(self) -> str:
+		"""
+		:return: A prefix of the input command that has been successfully parsed
+		"""
 		return self._parsed_command
 
 	def get_failed_command(self) -> str:
+		"""
+		:return: A prefix of the input command that is parsing when the failure occurs
+		"""
 		return self._failed_command
+
+	def get_error_segment(self) -> str:
+		"""
+		:return: The command segment that causes the error
+		"""
+		return self._failed_command[len(self._parsed_command):]
 
 	def set_handled(self) -> None:
 		"""
-		It won't make any difference to the command node tree execution
-		But it might be useful for outer error handlers
+		When handling the command error by error listener on the command tree node, you can use this method to tell MCDR the command error has been handled
+		so MCDR will not display the default command failure message to the command source like ``Unknown argument: !!MCDR reload this<--``
+
+		It won't make any difference to the command node tree execution, but it might be useful for outer error handlers
 		"""
 		self.__handled = True
 
@@ -75,7 +111,7 @@ class CommandError(CommandErrorBase, ABC):
 
 class UnknownCommand(CommandError):
 	"""
-	When the command finishes parsing, but current node doesn't have a callback function
+	When the command finishes parsing, but current node doesn't have a command callback function
 	"""
 	def __init__(self, parsed_command, failed_command):
 		super().__init__('Unknown Command', parsed_command, failed_command)
@@ -83,7 +119,7 @@ class UnknownCommand(CommandError):
 
 class UnknownArgument(CommandError):
 	"""
-	When there's remaining command string, but there's no matched Literal nodes and no general argument nodes
+	When there's remaining command string, but there's no matched children command nodes
 	"""
 	def __init__(self, parsed_command: str, failed_command: str):
 		super().__init__('Unknown Argument', parsed_command, failed_command)
@@ -91,7 +127,11 @@ class UnknownArgument(CommandError):
 
 class UnknownRootArgument(UnknownArgument):
 	"""
-	The same as UnknownArgument, but it fails to match at root node
+	The same as :class:`UnknownArgument`, but it fails to match at root node
+
+	Internal-use only
+
+	:meta private:
 	"""
 	pass
 
@@ -122,8 +162,7 @@ class RequirementNotMet(CommandError):
 
 class CommandSyntaxError(CommandError, ABC):
 	"""
-	General illegal argument error
-	Used in integer parsing failure etc.
+	The basic exception for command parsing error
 	"""
 	def __init__(self, message: str, char_read: Union[int, str]):
 		super().__init__(message, '', '?' if isinstance(char_read, int) else char_read)
@@ -139,8 +178,7 @@ class CommandSyntaxError(CommandError, ABC):
 
 class IllegalArgument(CommandSyntaxError, ABC):
 	"""
-	General illegal argument error
-	Used in integer parsing failure etc.
+	The basic exception for argument parsing error, usually caused by wrong argument syntax
 	"""
 	pass
 
@@ -148,11 +186,18 @@ class IllegalArgument(CommandSyntaxError, ABC):
 class LiteralNotMatch(CommandSyntaxError):
 	"""
 	Used by Literal node parsing failure for fail-soft
+
+	Internal-use only
+
+	:meta private:
 	"""
 	pass
 
 
 class AbstractOutOfRange(IllegalArgument, ABC):
+	"""
+	The basic exception for out-of-range like argument parsing error
+	"""
 	def __init__(self, message: str, char_read: Union[int, str], value, range_l, range_r):
 		"""
 		:param value: The actual value
@@ -184,16 +229,25 @@ class NumberOutOfRange(AbstractOutOfRange):
 
 
 class InvalidNumber(IllegalArgument):
+	"""
+	The parsed value is not a valid number
+	"""
 	def __init__(self, char_read: Union[int, str]):
 		super().__init__('Invalid number', char_read)
 
 
 class InvalidInteger(IllegalArgument):
+	"""
+	The parsed value is not a valid integer
+	"""
 	def __init__(self, char_read: Union[int, str]):
 		super().__init__('Invalid integer', char_read)
 
 
 class InvalidFloat(IllegalArgument):
+	"""
+	The parsed value is not a valid float
+	"""
 	def __init__(self, char_read: Union[int, str]):
 		super().__init__('Invalid float', char_read)
 
@@ -211,7 +265,7 @@ class TextLengthOutOfRange(AbstractOutOfRange):
 
 class IllegalEscapesUsage(IllegalArgument):
 	"""
-	The text is empty, and it's not allowed to be
+	The text contains illegal ``\\`` usage
 	"""
 	def __init__(self, char_read: Union[int, str]):
 		super().__init__('Illegal usage of escapes', char_read)
@@ -219,7 +273,7 @@ class IllegalEscapesUsage(IllegalArgument):
 
 class UnclosedQuotedString(IllegalArgument):
 	"""
-	The text is empty, and it's not allowed to be
+	The quote is unclosed
 	"""
 	def __init__(self, char_read: Union[int, str]):
 		super().__init__('Unclosed quoted string', char_read)
@@ -227,7 +281,7 @@ class UnclosedQuotedString(IllegalArgument):
 
 class EmptyText(IllegalArgument):
 	"""
-	The text is empty, and it's not allowed to be
+	The text is empty, which is not allowed
 	"""
 	def __init__(self, char_read: Union[int, str]):
 		super().__init__('Empty text is not allowed', char_read)
@@ -237,10 +291,16 @@ class EmptyText(IllegalArgument):
 
 
 class InvalidBoolean(IllegalArgument):
+	"""
+	The parsed value is not a valid boolean
+	"""
 	def __init__(self, char_read: Union[int, str]):
 		super().__init__('Invalid boolean', char_read)
 
 
 class InvalidEnumeration(IllegalArgument):
+	"""
+	The parsed value is not a valid Enum
+	"""
 	def __init__(self, char_read: Union[int, str]):
 		super().__init__('Invalid enumeration', char_read)

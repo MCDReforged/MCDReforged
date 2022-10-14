@@ -1,0 +1,243 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, Fallen_Breath
+# This file is distributed under the same license as the MCDReforged
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: MCDReforged \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-10-13 14:27+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.1\n"
+
+#: ../class_references/decorators.rst:5
+msgid "Decorators"
+msgstr "装饰器"
+
+#: ../class_references/decorators.rst:7
+msgid ":ref:`API package <api-package>` path: ``mcdreforged.api.decorator``"
+msgstr ":ref:`API 包 <api-package>` 路径: ``mcdreforged.api.decorator``"
+
+#: ../class_references/decorators.rst:10
+msgid "@new_thread"
+msgstr "@new_thread"
+
+#: mcdreforged.api.decorator.new_thread.new_thread:1 of
+msgid ""
+"This is a one line solution to make your function executes in parallels. "
+"When decorated with this decorator, functions will be executed in a new "
+"daemon thread"
+msgstr "这是一个让你的函数多线程异步执行的一行代码解决方案。当使用这个装饰器时，函数将在一个新的守护线程中执行"
+
+#: mcdreforged.api.decorator.new_thread.new_thread:4 of
+msgid ""
+"This decorator only changes the return value of the function to the "
+"created ``Thread`` object. Beside the return value, it reserves all "
+"signatures of the decorated function, so you can safely use the decorated"
+" function as if there's no decorating at all"
+msgstr ""
+"这个装饰器只将函数的返回值改为创建的 ``Thread`` "
+"对象。除了返回值，它还保留了被装饰的函数的所有签名，所以你可以安全地使用被装饰的函数，就像它们没有被装饰一样"
+
+#: mcdreforged.api.decorator.new_thread.new_thread:8 of
+msgid "It's also a simple compatible upgrade method for old MCDR 0.x plugins"
+msgstr "这也是旧的 MCDR 0.x 插件的简单的兼容升级方法"
+
+#: mcdreforged.api.decorator.new_thread.new_thread:10 of
+msgid ""
+"The return value of the decorated function is changed to the ``Thread`` "
+"object that executes this function"
+msgstr "被装饰的函数的返回值被修改为用于执行这个函数的 thread 对象"
+
+#: mcdreforged.api.decorator.new_thread.new_thread:12 of
+msgid "The decorated function has 1 extra field:"
+msgstr "被修饰的函数拥有着 1 个额外的属性："
+
+#: mcdreforged.api.decorator.new_thread.new_thread:14 of
+msgid "``original`` field: The original undecorated function"
+msgstr "``original`` 属性：储存着原始的未被修饰的函数对象"
+
+#: mcdreforged.api.decorator.new_thread.FunctionThread.get_return_value:5
+#: mcdreforged.api.decorator.new_thread.new_thread:16 of
+msgid "Examples::"
+msgstr "例子::"
+
+#: mcdreforged.api.decorator.event_listener.event_listener
+#: mcdreforged.api.decorator.new_thread.FunctionThread.get_return_value
+#: mcdreforged.api.decorator.new_thread.new_thread of
+msgid "Parameters"
+msgstr "参数"
+
+#: mcdreforged.api.decorator.new_thread.new_thread:32 of
+msgid ""
+"The name of the thread. It's recommend to specify the thread name, so "
+"when you log something by ``server.logger``, a meaningful thread name "
+"will be displayed instead of a plain and meaningless ``Thread-3``"
+msgstr ""
+"线程的名字。建议总是使用这个参数来指定线程名，因此当你通过 ``server.logger`` "
+"输出某些内容时，一个有意义的线程名称，而非一个无意义的 ``Thread-3``，将被显示"
+
+#: mcdreforged.api.decorator.new_thread.FunctionThread:1 of
+msgid ""
+"A Thread subclass which is used in decorator :func:`new_thread` to wrap a"
+" synchronized function call"
+msgstr "一个 Thread 的子类，用于在装饰器 :func:`new_thread` 中包裹一个同步的函数调用"
+
+#: mcdreforged.api.decorator.new_thread.FunctionThread.get_return_value:1 of
+msgid "Get the return value of the original function"
+msgstr "获取原函数的返回值"
+
+#: mcdreforged.api.decorator.new_thread.FunctionThread.get_return_value:3 of
+msgid ""
+"If an exception has occurred during the original function call, the "
+"exception will be risen again here"
+msgstr "如果调用原函数时抛出了异常，则那个异常将在这里被重新抛出"
+
+#: mcdreforged.api.decorator.new_thread.FunctionThread.get_return_value:16 of
+msgid ""
+"If it should join the thread before getting the return value to make sure"
+" the function invocation finishes"
+msgstr "是否应该在获取返回值前 join 此线程，以确保函数调用结束"
+
+#: mcdreforged.api.decorator.new_thread.FunctionThread.get_return_value:17 of
+msgid "The maximum timeout for the thread join"
+msgstr "线程 join 的最大超时时间"
+
+#: mcdreforged.api.decorator.event_listener.event_listener
+#: mcdreforged.api.decorator.new_thread.FunctionThread.get_return_value of
+msgid "Raises"
+msgstr "抛出"
+
+#: mcdreforged.api.decorator.new_thread.FunctionThread.get_return_value:18 of
+msgid ""
+"If the thread is still alive when getting return value. Might be caused "
+"by ``block=False`` while the thread is still running, or thread join "
+"operation times out"
+msgstr "若在获取返回值时线程仍然存活。这可能是因为线程仍在运行且 ``block=False``，或者线程 join 操作超时"
+
+#: mcdreforged.api.decorator.new_thread.FunctionThread.get_return_value of
+msgid "Returns"
+msgstr "返回"
+
+#: mcdreforged.api.decorator.new_thread.FunctionThread.get_return_value:20 of
+msgid "The return value of the original function"
+msgstr "原函数的返回值"
+
+#: ../class_references/decorators.rst:18
+msgid "@event_listener"
+msgstr "@event_listener"
+
+#: mcdreforged.api.decorator.event_listener.event_listener:1 of
+msgid ""
+"This decorator is used to register a custom event listener without "
+"involving "
+":meth:`~mcdreforged.plugin.server_interface.PluginServerInterface.register_event_listener`"
+msgstr ""
+"这个装饰器是用于在不使用 "
+":meth:`~mcdreforged.plugin.server_interface.PluginServerInterface.register_event_listener`"
+" 的前提下注册自定义事件监听器"
+
+#: mcdreforged.api.decorator.event_listener.event_listener:4 of
+msgid ""
+"It accepts a single str or "
+":class:`~mcdreforged.plugin.plugin_event.PluginEvent` indicating the "
+"event you are listening to as parameter, and will register the function "
+"as the callback of the given listener"
+msgstr ""
+"它接受单个 str 或 :class:`~mcdreforged.plugin.plugin_event.PluginEvent` "
+"作为参数，代表着你打算监听的事件，然后它将会将被装饰的函数作为对应监听器的回调函数"
+
+#: mcdreforged.api.decorator.event_listener.event_listener:8 of
+msgid ""
+"It's highly suggested to use this decorator only in the :ref:`entry point"
+" <plugin-entrypoint>` of your plugin, so it can work correctly and "
+"register the event listener in the correct time"
+msgstr ""
+"强烈建议你仅在插件的 :ref:`入口点 <plugin-entrypoint>` "
+"使用此装饰器，来保证它可以正确地工作，且在正确的时间注册事件监听器"
+
+#: mcdreforged.api.decorator.event_listener.event_listener:11
+#: mcdreforged.api.decorator.spam_proof.spam_proof:16 of
+msgid "Example::"
+msgstr "例子::"
+
+#: mcdreforged.api.decorator.event_listener.event_listener:17
+#: mcdreforged.api.decorator.spam_proof.spam_proof:23 of
+msgid "The above example is equivalent to::"
+msgstr "上述例子等价于::"
+
+#: mcdreforged.api.decorator.event_listener.event_listener:22 of
+msgid "The event to register a listener"
+msgstr "由于注册事件监听器的事件"
+
+#: mcdreforged.api.decorator.event_listener.event_listener of
+msgid "Keyword Arguments"
+msgstr "关键字参数"
+
+#: mcdreforged.api.decorator.event_listener.event_listener:23 of
+msgid "Optional, the priority of the event listener"
+msgstr "可选参数，事件监听器的优先级"
+
+#: mcdreforged.api.decorator.event_listener.event_listener:24 of
+msgid "If given *event* is invalid"
+msgstr "如果给定的 *event* 非法"
+
+#: mcdreforged.api.decorator.event_listener.event_listener:25 of
+msgid ""
+"If it fails to acquire a "
+":class:`~mcdreforged.plugin.server_interface.PluginServerInterface` "
+"(mostly due to the current thread is not a MCDR provided thread, so MCDR "
+"cannot figure out what the current plugin is)"
+msgstr ""
+"如果获取 :class:`~mcdreforged.plugin.server_interface.PluginServerInterface` "
+"对象失败 (大概率因为当前线程并非是 MCDR 提供的线程，因此 MCDR 得知当前的插件是什么)"
+
+#: ../class_references/decorators.rst:23
+msgid "@spam_proof"
+msgstr "@spam_proof"
+
+#: mcdreforged.api.decorator.spam_proof.spam_proof:1 of
+msgid ""
+"Use a lock to protect the decorated function from being invoked on "
+"multiple threads at the same time"
+msgstr "用一个锁来保护被装饰的函数，避免它被多个线程同时调用"
+
+#: mcdreforged.api.decorator.spam_proof.spam_proof:3 of
+msgid ""
+"If a multiple-invocation happens, only the first invocation can be "
+"executed normally, other invocations will be skipped"
+msgstr "在“多重同时调用”发生时，只有第一个函数调用能被成功执行，其他的函数调用将被跳过"
+
+#: mcdreforged.api.decorator.spam_proof.spam_proof:6 of
+msgid ""
+"The type of the lock can be specified with the *lock_class* parameter, "
+"for example it can be ``threading.RLock`` (default) or ``threading.Lock``"
+msgstr ""
+"锁的类型可以用 *lock_class* 参数指定，比如可以设为 ``threading.RLock`` (默认值) 或者 "
+"``threading.Lock``"
+
+#: mcdreforged.api.decorator.spam_proof.spam_proof:9 of
+msgid ""
+"The return value of the decorated function is modified into a bool, "
+"indicating if this invocation is executed normally"
+msgstr "被装饰的函数的返回值被修改为一个 bool，代表这次函数调用是否正常地执行了"
+
+#: mcdreforged.api.decorator.spam_proof.spam_proof:11 of
+msgid "The decorated function has 2 extra fields:"
+msgstr "被修饰的函数拥有着 2 个额外的属性："
+
+#: mcdreforged.api.decorator.spam_proof.spam_proof:13 of
+msgid "``original`` field: stores the original undecorated function"
+msgstr "``original`` 属性：储存着原始的未被修饰的函数对象"
+
+#: mcdreforged.api.decorator.spam_proof.spam_proof:14 of
+msgid "``lock`` field: stores the lock object used in the spam proof logic"
+msgstr "``lock`` 属性：储存着防重复调用逻辑中使用的锁对象"
+

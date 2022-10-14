@@ -2,7 +2,7 @@
 Plugin Version
 """
 import re
-from typing import List, Callable, Tuple, Optional
+from typing import List, Callable, Tuple, Optional, Union
 
 
 # beta.3 -> (beta, 3), random -> (random, None)
@@ -33,6 +33,15 @@ class ExtraElement:
 
 
 class Version:
+	"""
+	A version container that stores semver like version string
+
+	Example:
+
+	* ``"1.2.3"``
+	* ``"1.0.*"``
+	* ``"1.2.3-pre4+build.5"``
+	"""
 	EXTRA_ID_PATTERN = re.compile(r'|[-+0-9A-Za-z]+(\.[-+0-9A-Za-z]+)*')
 	WILDCARDS = ('*', 'x', 'X')
 	WILDCARD = -1
@@ -42,9 +51,10 @@ class Version:
 	pre: Optional[ExtraElement]
 	build: Optional[ExtraElement]
 
-	def __init__(self, version_str: str, allow_wildcard=True):
+	def __init__(self, version_str: str, *, allow_wildcard: bool = True):
 		"""
-		:param str version_str: the version str like '1.2.3-pre4+build.5'
+		:param version_str: The version string to be parsed
+		:keyword allow_wildcard: If wildcard (``"*"``, ``"x"``, ``"X"``) is allowed. Default: ``True``
 		"""
 		if not isinstance(version_str, str):
 			raise VersionParsingError('Invalid input version string')
@@ -92,7 +102,7 @@ class Version:
 			version_str += '+' + str(self.build)
 		return version_str
 
-	def __getitem__(self, index):
+	def __getitem__(self, index: int) -> int:
 		if index < len(self.component):
 			return self.component[index]
 		else:
@@ -139,7 +149,7 @@ class Criterion:
 		self.base_version = base_version
 		self.criterion = criterion
 
-	def test(self, target: str or Version):
+	def test(self, target: Union[Version, str]):
 		return self.criterion(self.base_version, target)
 
 	def __str__(self):
@@ -147,6 +157,11 @@ class Criterion:
 
 
 class VersionRequirement:
+	"""
+	A version requirement tester
+
+	It can test if a given :class:`Version` object matches its requirement
+	"""
 	CRITERIONS = {
 		'<=': lambda base, ver: ver <= base,
 		'>=': lambda base, ver: ver >= base,
@@ -158,6 +173,10 @@ class VersionRequirement:
 	}
 
 	def __init__(self, requirements: str):
+		"""
+		:param requirements: The requirement string, which contains several version predicates connected by space character.
+			e.g. ``">=1.0.x"``, ``"^2.9"``, ``">=1.2.0 <1.4.3"``
+		"""
 		if not isinstance(requirements, str):
 			raise VersionParsingError('Requirements should be a str, not {}'.format(type(requirements).__name__))
 		self.criterions = []  # type: List[Criterion]
@@ -173,7 +192,7 @@ class VersionRequirement:
 					base_version = requirement
 				self.criterions.append(Criterion(opt, Version(base_version), self.CRITERIONS[opt]))
 
-	def accept(self, version: Version or str):
+	def accept(self, version: Union[Version, str]):
 		if isinstance(version, str):
 			version = Version(version)
 		for criterion in self.criterions:
