@@ -5,6 +5,7 @@ from typing import Union, Iterable, Optional, List, Callable, TypeVar
 from mcdreforged.minecraft.rtext.style import RColor, RStyle, RAction
 from mcdreforged.minecraft.rtext.text import RTextBase, RText
 from mcdreforged.utils import translation_util
+from mcdreforged.utils.types import TranslationKeyDictRich
 
 Self = TypeVar('Self', bound='RTextMCDRTranslation')
 
@@ -20,7 +21,6 @@ class RTextMCDRTranslation(RTextBase):
 
 	__TLS = threading.local()
 	__TLS.language = None
-	__TLS.fallback_language = None
 
 	def __init__(self, translation_key: str, *args, **kwargs):
 		"""
@@ -46,7 +46,7 @@ class RTextMCDRTranslation(RTextBase):
 		return self
 
 	@classmethod
-	def from_translation_dict(cls, translation_dict) -> 'RTextMCDRTranslation':
+	def from_translation_dict(cls, translation_dict: TranslationKeyDictRich) -> 'RTextMCDRTranslation':
 		def fake_tr(key: str, language: str):
 			return translation_util.translate_from_dict(translation_dict, language)
 

@@ -5,7 +5,7 @@ from mcdreforged.utils import string_util
 
 class CatServerHandler(BukkitHandler):
 	"""
-	A handler for CatServer servers (https://github.com/Luohuayu/CatServer)
+	A handler for `CatServer <https://github.com/Luohuayu/CatServer>`__ Minecraft servers
 
 	CatServer uses vanilla logging format but spigot like player joined message
 

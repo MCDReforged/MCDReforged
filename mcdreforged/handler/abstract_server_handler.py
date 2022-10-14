@@ -1,12 +1,13 @@
 import re
 import time
-from typing import Optional, Any, Union, Iterable, Tuple
+from typing import Optional, Union, Iterable, Tuple
 
 from parse import parse
 
 from mcdreforged.info_reactor.info import InfoSource, Info
 from mcdreforged.info_reactor.server_information import ServerInformation
 from mcdreforged.utils import string_util
+from mcdreforged.utils.types import MessageText
 
 
 class AbstractServerHandler:
@@ -46,13 +47,13 @@ class AbstractServerHandler:
 		"""
 		raise NotImplementedError()
 
-	def get_send_message_command(self, target: str, message: Any, server_information: ServerInformation) -> Optional[str]:
+	def get_send_message_command(self, target: str, message: MessageText, server_information: ServerInformation) -> Optional[str]:
 		"""
 		The command to send a message to a target
 		"""
 		raise NotImplementedError()
 
-	def get_broadcast_message_command(self, message: Any, server_information: ServerInformation) -> Optional[str]:
+	def get_broadcast_message_command(self, message: MessageText, server_information: ServerInformation) -> Optional[str]:
 		"""
 		The command to broadcast a message in the server
 		"""
@@ -93,9 +94,11 @@ class AbstractServerHandler:
 	@classmethod
 	def _get_server_stdout_raw_result(cls, text: str) -> Info:
 		"""
-		This is a raw parsing, returns an almost un-parsed Info instance
+		This method does a raw parsing and returns an almost un-parsed :class:`~mcdreforged.info_reactor.info.Info` object
 
-		Use as the first step of the parsing process, or as the return value if you give up parsing this text
+		Use as the first step of the parsing process, or as the parsing result if you give up parsing this text
+
+		:meta public:
 		"""
 		if type(text) is not str:
 			raise TypeError('The text to parse should be a string')
@@ -116,22 +119,27 @@ class AbstractServerHandler:
 		- ``sec``
 		- ``logging``
 		- ``content``
+
+		The return value of the first succeeded ``parse.parse`` call will be used
+		for filling fields of the :class:`~mcdreforged.info_reactor.info.Info` object
 		"""
 		raise NotImplementedError()
 
 	@classmethod
 	def _content_parse(cls, info: Info):
 		"""
-		A common method to parse several elements from an un-parsed Info instance
+		A commonly used method to parse several generic elements from an un-parsed :class:`~mcdreforged.info_reactor.info.Info` object
 
 		Elements expected to be parsed includes:
-		- info.hour
-		- info.min
-		- info.sec
-		- info.logging
-		- info.content
+
+		- :attr:`info.hour <mcdreforged.info_reactor.info.Info.hour>`
+		- :attr:`info.min <mcdreforged.info_reactor.info.Info.min>`
+		- :attr:`info.sec <mcdreforged.info_reactor.info.Info.sec>`
+		- :attr:`info.logging <mcdreforged.info_reactor.info.Info.logging>`
+		- :attr:`info.content <mcdreforged.info_reactor.info.Info.content>`
 
 		:param info: The to-be-processed :class:`~mcdreforged.info_reactor.info.Info` object
+		:meta public:
 		"""
 		formatters = cls.get_content_parsing_formatter()
 		if isinstance(formatters, str):
@@ -155,18 +163,23 @@ class AbstractServerHandler:
 
 	def parse_server_stdout(self, text: str) -> Info:
 		"""
-		Main parsing operation. Parse a string from the stdout of the server
+		Main parsing operation. Parse a string from the stdout of the server and output a parsed info
+
 		It may raise any exceptions if the format of the input string is not correct
 
-		In this implementation it achieves raw parsing, returns an almost un-parsed Info instance
-		Use as the first step of the parsing process, or as the return value if you give up parsing this text
+		In this default implementation, it firstly uses :meth:`_get_server_stdout_raw_result`
+		to get a raw :class:`~mcdreforged.info_reactor.info.Info` object,
+		then use :meth:`_content_parse` to fill generic information into the :class:`~mcdreforged.info_reactor.info.Info` object,
+		finally returns that as a simply-parsed info
 
-		:param str text: A line of the server stdout to be parsed
+		If the server handler is able to parse more information, you can do more post-parsing operations after invoking this method via ``super()``
+
+		:param text: A line of the server stdout to be parsed
 		:return: An :class:`~mcdreforged.info_reactor.info.Info` object as the result
 		"""
-		result = self._get_server_stdout_raw_result(text)
-		self._content_parse(result)
-		return result
+		info = self._get_server_stdout_raw_result(text)
+		self._content_parse(info)
+		return info
 
 	def parse_player_joined(self, info: Info) -> Optional[str]:
 		"""
@@ -205,7 +218,7 @@ class AbstractServerHandler:
 		"""
 		Check if the info contains the address which the server is listening on
 
-		If it is, returns server ip and port, otherwise returns None
+		If it is, returns server ip and port it's listening on, otherwise returns None
 
 		:param info: The info object to be checked
 		:return: A tuple containing the ip and the port, or None

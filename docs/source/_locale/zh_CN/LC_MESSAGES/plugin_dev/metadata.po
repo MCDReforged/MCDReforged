@@ -146,7 +146,7 @@ msgid ""
 "as you can have the core version with any length"
 msgstr ""
 "version 字段代表你的插件版本。它基本上采用了 `语义化版本 <https://semver.org/lang/zh-CN/>`__ "
-"的格式，不过限制较少，如你可以定义任意长度的版本号。"
+"的格式，不过限制较少，如你可以定义任意长度的版本号"
 
 #: ../plugin_dev/metadata.rst:88
 msgid "Here's some available version:"

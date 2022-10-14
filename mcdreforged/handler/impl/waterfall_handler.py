@@ -9,7 +9,7 @@ from mcdreforged.info_reactor.info import Info
 
 class WaterfallHandler(BungeecordHandler):
 	"""
-	A handler for Waterfall servers
+	A handler for `Waterfall <https://github.com/PaperMC/Waterfall>`__ servers
 
 	The logging format of waterfall server is paper like (waterfall is PaperMC's bungeecord fork shmm)
 	"""

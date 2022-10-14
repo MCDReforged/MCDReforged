@@ -1,11 +1,12 @@
 """
 The basic plain handler
 """
-from typing import Any, Optional, Tuple
+from typing import Optional, Tuple
 
 from mcdreforged.handler.abstract_server_handler import AbstractServerHandler
 from mcdreforged.info_reactor.info import Info
 from mcdreforged.info_reactor.server_information import ServerInformation
+from mcdreforged.utils.types import MessageText
 
 
 class BasicHandler(AbstractServerHandler):
@@ -17,10 +18,10 @@ class BasicHandler(AbstractServerHandler):
 	def get_stop_command(self) -> str:
 		return ''
 
-	def get_send_message_command(self, target: str, message: Any, server_information: ServerInformation) -> Optional[str]:
+	def get_send_message_command(self, target: str, message: MessageText, server_information: ServerInformation) -> Optional[str]:
 		return None
 
-	def get_broadcast_message_command(self, message: Any, server_information: ServerInformation) -> Optional[str]:
+	def get_broadcast_message_command(self, message: MessageText, server_information: ServerInformation) -> Optional[str]:
 		return None
 
 	@classmethod

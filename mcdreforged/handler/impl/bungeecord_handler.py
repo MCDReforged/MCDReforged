@@ -1,24 +1,25 @@
 import re
-from typing import Any, Optional
+from typing import Optional
 
 from parse import parse
 
 from mcdreforged.handler.abstract_server_handler import AbstractServerHandler
 from mcdreforged.info_reactor.info import Info
 from mcdreforged.info_reactor.server_information import ServerInformation
+from mcdreforged.utils.types import MessageText
 
 
 class BungeecordHandler(AbstractServerHandler):
 	"""
-	A handler for Bungeecord servers
+	A handler for `Bungeecord <https://github.com/SpigotMC/BungeeCord>`__ servers
 	"""
 	def get_stop_command(self) -> str:
 		return 'end'
 
-	def get_send_message_command(self, target: str, message: Any, server_information: ServerInformation) -> Optional[str]:
+	def get_send_message_command(self, target: str, message: MessageText, server_information: ServerInformation) -> Optional[str]:
 		return None
 
-	def get_broadcast_message_command(self, message: Any, server_information: ServerInformation) -> Optional[str]:
+	def get_broadcast_message_command(self, message: MessageText, server_information: ServerInformation) -> Optional[str]:
 		from mcdreforged.handler.impl import VanillaHandler
 		return 'alertraw {}'.format(VanillaHandler.format_message(message))
 

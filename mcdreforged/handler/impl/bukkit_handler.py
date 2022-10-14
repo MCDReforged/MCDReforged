@@ -5,7 +5,8 @@ from mcdreforged.handler.impl.abstract_minecraft_handler import AbstractMinecraf
 
 class BukkitHandler(AbstractMinecraftHandler):
 	"""
-	A handler for bukkit and bukkit-like Minecraft servers
+	A handler for `bukkit <https://www.spigotmc.org/wiki/buildtools>`__
+	and bukkit-like (e.g. `Paper <https://github.com/PaperMC/Paper>`__) Minecraft servers
 	"""
 	@classmethod
 	def get_content_parsing_formatter(cls):

@@ -3,7 +3,7 @@ from mcdreforged.handler.impl.vanilla_handler import VanillaHandler
 
 class ForgeHandler(VanillaHandler):
 	"""
-	A handler for forge Minecraft servers
+	A handler for `Forge <https://files.minecraftforge.net>`__ Minecraft servers
 	"""
 
 	# [18:26:03] [Server thread/INFO] [FML]: Unloading dimension 1
