@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-13 14:27+0800\n"
+"POT-Creation-Date: 2022-10-13 21:15+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,15 +17,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.1\n"
 
-#: ../class_references/decorators.rst:5
+#: ../code_references/decorators.rst:5
 msgid "Decorators"
 msgstr "装饰器"
 
-#: ../class_references/decorators.rst:7
+#: ../code_references/decorators.rst:7
 msgid ":ref:`API package <api-package>` path: ``mcdreforged.api.decorator``"
 msgstr ":ref:`API 包 <api-package>` 路径: ``mcdreforged.api.decorator``"
 
-#: ../class_references/decorators.rst:10
+#: ../code_references/decorators.rst:10
 msgid "@new_thread"
 msgstr "@new_thread"
 
@@ -130,7 +130,7 @@ msgstr "返回"
 msgid "The return value of the original function"
 msgstr "原函数的返回值"
 
-#: ../class_references/decorators.rst:18
+#: ../code_references/decorators.rst:18
 msgid "@event_listener"
 msgstr "@event_listener"
 
@@ -199,7 +199,7 @@ msgstr ""
 "如果获取 :class:`~mcdreforged.plugin.server_interface.PluginServerInterface` "
 "对象失败 (大概率因为当前线程并非是 MCDR 提供的线程，因此 MCDR 得知当前的插件是什么)"
 
-#: ../class_references/decorators.rst:23
+#: ../code_references/decorators.rst:23
 msgid "@spam_proof"
 msgstr "@spam_proof"
 

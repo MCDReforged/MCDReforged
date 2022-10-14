@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-12 17:55+0800\n"
+"POT-Creation-Date: 2022-10-14 16:40+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,15 +17,13 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.1\n"
 
-#: ../class_references/PluginServerInterface.rst:3
+#: ../code_references/PluginServerInterface.rst:3
 msgid "PluginServerInterface"
 msgstr "服务端接口 - 插件"
 
-#: ../class_references/PluginServerInterface.rst:5
+#: ../code_references/PluginServerInterface.rst:5
 msgid ":ref:`API package <api-package>` path: ``mcdreforged.api.types``"
-msgstr ""
-":ref:`API 包 <api-package>` 路径: "
-"``mcdreforged.api.types``"
+msgstr ":ref:`API 包 <api-package>` 路径: ``mcdreforged.api.types``"
 
 #: mcdreforged.plugin.server_interface.PluginServerInterface:1 of
 msgid ""
@@ -36,7 +34,7 @@ msgstr ""
 "从 :class:`ServerInterface` 中派生，:class:`PluginServerInterface` 在 "
 ":class:`ServerInterface` 的基础上为插件添加了控制插件自己的能力"
 
-#: ../class_references/PluginServerInterface.rst:12
+#: ../code_references/PluginServerInterface.rst:12
 msgid "Plugin Registry"
 msgstr "插件注册"
 
@@ -146,7 +144,7 @@ msgstr ""
 "一个将翻译键映射为翻译文本的 dict。翻译键可以被表示为根节点下的子节点名称，或嵌套的多层节点的路径。dict "
 "可嵌套多层，路径为从根节点开始每一层节点的名称相连、通过 ``\".\"`` 分隔的 str"
 
-#: ../class_references/PluginServerInterface.rst:20
+#: ../code_references/PluginServerInterface.rst:20
 msgid "Plugin Utils"
 msgstr "插件工具"
 
@@ -163,9 +161,9 @@ msgstr "为当前插件返回一个统一格式的数据文件夹"
 #: mcdreforged.plugin.server_interface.PluginServerInterface.get_data_folder:3
 #: of
 msgid ""
-"The path of the folder will be ``\"config/plugin_id\"/`` where ``plugin_id`` "
-"is the id of the current plugin if the directory does not exist, create "
-"it"
+"The path of the folder will be ``\"config/plugin_id\"/`` where "
+"``plugin_id`` is the id of the current plugin if the directory does not "
+"exist, create it"
 msgstr "文件夹的路径将会为 ``\"config/plugin_id\"``，其中 ``plugin_id`` 是当前插件的 id"
 
 #: mcdreforged.plugin.server_interface.PluginServerInterface.get_data_folder:6
@@ -240,7 +238,9 @@ msgstr "例 2::"
 msgid ""
 "Assuming that the plugin id is ``my_plugin``, then the config file will "
 "be in ``\"config/my_plugin/my_config.json\"``"
-msgstr "假设插件 id 为 ``my_plugin``，此时配置文件将被储存于 ``\"config/my_plugin/my_config.json\"`` 中"
+msgstr ""
+"假设插件 id 为 ``my_plugin``，此时配置文件将被储存于 "
+"``\"config/my_plugin/my_config.json\"`` 中"
 
 #: mcdreforged.plugin.server_interface.PluginServerInterface.load_config_simple:31
 #: mcdreforged.plugin.server_interface.PluginServerInterface.save_config_simple:4

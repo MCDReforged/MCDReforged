@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-12 17:55+0800\n"
+"POT-Creation-Date: 2022-10-13 21:15+0800\n"
 "PO-Revision-Date: 2021-01-24 09:02+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -14,21 +14,17 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.1\n"
 
-#: ../class_references/minecraft_tools.rst:3
+#: ../code_references/minecraft_tools.rst:3
 msgid "Minecraft Tools"
 msgstr "Minecraft 工具"
 
-#: ../class_references/minecraft_tools.rst:8
+#: ../code_references/minecraft_tools.rst:8
 msgid "RText"
 msgstr "RText"
 
-#: ../class_references/minecraft_tools.rst:10
+#: ../code_references/minecraft_tools.rst:10
 msgid ":ref:`API package <api-package>` path: ``mcdreforged.api.rtext``"
 msgstr ":ref:`API 包 <api-package>` 路径: ``mcdreforged.api.rtext``"
-
-#: ../class_references/minecraft_tools.rst:13
-msgid "Text Styles"
-msgstr "文本样式"
 
 #: mcdreforged.minecraft.rtext:1 of
 msgid "Advanced text component library for Minecraft"
@@ -41,6 +37,10 @@ msgid ""
 msgstr ""
 "感谢 `Pandaria98 <https://github.com/Pandaria98>`__ 的 `stext API "
 "<https://github.com/TISUnion/stext>`__ 库"
+
+#: ../code_references/minecraft_tools.rst:15
+msgid "Text Styles"
+msgstr "文本样式"
 
 #: mcdreforged.minecraft.rtext.style.RItem:1 of
 msgid "A general Minecraft text style item"
@@ -92,7 +92,7 @@ msgstr "将给定文本复制到剪切板"
 msgid "Available in Minecraft 1.15+"
 msgstr "在 Minecraft 1.15+ 中可用"
 
-#: ../class_references/minecraft_tools.rst:35
+#: ../code_references/minecraft_tools.rst:35
 msgid "Text Components"
 msgstr "文本组件"
 
@@ -235,8 +235,8 @@ msgid ""
 "Just like method :meth:`str.format`, it uses *\\*args* and *\\*\\*kwargs*"
 " to build a formatted RText component based on the formatter *fmt*"
 msgstr ""
-"就像 :meth:`str.format` 方法一样，它使用 *\\*args* 及 "
-"*\\*\\*kwargs* 在 *fmt* 的基础上进行格式化并生成一个 RText 组件"
+"就像 :meth:`str.format` 方法一样，它使用 *\\*args* 及 *\\*\\*kwargs* 在 *fmt* "
+"的基础上进行格式化并生成一个 RText 组件"
 
 #: mcdreforged.minecraft.rtext.text.RTextBase.format:9 of
 msgid "The formatter string"
@@ -411,11 +411,11 @@ msgstr "MCDR 将自动地于发送信息至玩家或控制台前，使用 :ref:`
 msgid "The language to be used during translation inside the context"
 msgstr "在上下文中进行翻译时所用的语言"
 
-#: ../class_references/minecraft_tools.rst:65
+#: ../code_references/minecraft_tools.rst:65
 msgid "Rcon"
 msgstr "Rcon"
 
-#: ../class_references/minecraft_tools.rst:67
+#: ../code_references/minecraft_tools.rst:67
 msgid ":ref:`API package <api-package>` path: ``mcdreforged.api.rcon``"
 msgstr ":ref:`API 包 <api-package>` 路径: ``mcdreforged.api.rcon``"
 
