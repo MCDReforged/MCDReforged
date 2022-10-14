@@ -12,7 +12,10 @@ LineWriter = Callable[[str], Any]
 T = TypeVar('T')
 
 
-def print_tree(root: T, children_getter: Callable[[T], Iterable[T]], name_getter: Callable[[T], str], line_writer: LineWriter):
+def print_tree(
+		root: T, children_getter: Callable[[T], Iterable[T]], name_getter: Callable[[T], str], line_writer: LineWriter, *,
+		use_tab: bool = False
+):
 	def is_root(node: T) -> bool:
 		return node == root
 
@@ -24,7 +27,10 @@ def print_tree(root: T, children_getter: Callable[[T], Iterable[T]], name_getter
 	def get_parent_line(node: T, is_last: bool) -> str:
 		if is_root(node):
 			return ''
-		return '    ' if is_last else '│   '
+		if use_tab:
+			return '\t' if is_last else '│\t'
+		else:
+			return '    ' if is_last else '│   '
 
 	def do_print(node: T, prefix: str, is_last: bool):
 		line = name_getter(node)
