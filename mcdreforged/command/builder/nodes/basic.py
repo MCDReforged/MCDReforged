@@ -479,8 +479,7 @@ class Literal(EntryNode):
 			raise LiteralNotMatch('Invalid Argument', len(arg))
 
 	def __str__(self):
-		import json
-		return 'Literal {}'.format(json.dumps(tuple(self.literals)[0]) if len(self.literals) == 1 else set(self.literals))
+		return 'Literal {}'.format(repr(tuple(self.literals)[0]) if len(self.literals) == 1 else set(self.literals))
 
 	def __repr__(self):
 		return 'Literal[literals={}]'.format(self.literals)
