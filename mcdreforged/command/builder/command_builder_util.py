@@ -32,8 +32,10 @@ def get_element(text: str) -> str:
 		'foo'
 		>>> get_element('fooooo')
 		'fooooo'
+		>>> get_element(' foo')
+		''
 
-	:param text: The remaining input to be parsed
+	:param text: The remaining input to be parsed. It should not start with :data:`DIVIDER`
 	"""
 	pos = text.find(DIVIDER)
 	if pos == -1:
@@ -67,8 +69,10 @@ def get_int(text: str) -> Tuple[Optional[int], int]:
 		(1234, 4)
 		>>> get_int('foo bar')
 		(None, 3)
+		>>> get_int(' 1234 abc')
+		(None, 0)
 
-	:param text: The remaining input to be parsed
+	:param text: The remaining input to be parsed. It should not start with :data:`DIVIDER`
 	:return: a tuple of value, char_read. The value will be None if parsing failed
 	"""
 	return __get_var(text, int)
@@ -84,8 +88,10 @@ def get_float(text: str) -> Tuple[Optional[float], int]:
 		(123.4, 5)
 		>>> get_float('foo bar')
 		(None, 3)
+		>>> get_int(' 123.4 abc')
+		(None, 0)
 
-	:param text: The remaining input to be parsed
+	:param text: The remaining input to be parsed. It should not start with :data:`DIVIDER`
 	:return: a tuple of value, char_read. The value will be None if parsing failed
 	"""
 	return __get_var(text, float)

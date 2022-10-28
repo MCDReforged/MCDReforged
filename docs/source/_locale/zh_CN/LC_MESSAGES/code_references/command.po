@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-28 22:15+0800\n"
+"POT-Creation-Date: 2022-10-28 22:50+0800\n"
 "PO-Revision-Date: 2021-01-23 17:24+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -158,6 +158,7 @@ msgstr "一个用于测试权限需求的工具方法"
 #: mcdreforged.command.builder.nodes.basic.AbstractNode.runs
 #: mcdreforged.command.builder.nodes.basic.AbstractNode.suggests
 #: mcdreforged.command.builder.nodes.basic.AbstractNode.then
+#: mcdreforged.command.builder.tools.Requirements.argument_exists
 #: mcdreforged.command.builder.tools.Requirements.has_permission
 #: mcdreforged.command.builder.tools.SimpleCommandBuilder.arg
 #: mcdreforged.command.builder.tools.SimpleCommandBuilder.command
@@ -987,32 +988,44 @@ msgid ""
 msgstr "在 :meth:`SimpleCommandBuilder.build` 中，当一个节点被构造后，所有的后续处理函数将被作用于这个节点对象上"
 
 #: mcdreforged.command.builder.tools.NodeDefinition.requires:1 of
-msgid "See :meth:`AbstractNode.requires() <mcdreforged.command.builder.nodes.basic.AbstractNode.requires>`"
-msgstr "见 :meth:`AbstractNode.requires() <mcdreforged.command.builder.nodes.basic.AbstractNode.requires>`"
+msgid ""
+"See :meth:`AbstractNode.requires() "
+"<mcdreforged.command.builder.nodes.basic.AbstractNode.requires>`"
+msgstr ""
+"见 :meth:`AbstractNode.requires() "
+"<mcdreforged.command.builder.nodes.basic.AbstractNode.requires>`"
 
 #: mcdreforged.command.builder.tools.NodeDefinition.suggests:1 of
-msgid "See :meth:`AbstractNode.suggests() <mcdreforged.command.builder.nodes.basic.AbstractNode.suggests>`"
-msgstr "见 :meth:`AbstractNode.suggests() <mcdreforged.command.builder.nodes.basic.AbstractNode.suggests>`"
+msgid ""
+"See :meth:`AbstractNode.suggests() "
+"<mcdreforged.command.builder.nodes.basic.AbstractNode.suggests>`"
+msgstr ""
+"见 :meth:`AbstractNode.suggests() "
+"<mcdreforged.command.builder.nodes.basic.AbstractNode.suggests>`"
 
 #: mcdreforged.command.builder.tools.NodeDefinition.on_error:1 of
-msgid "See :meth:`AbstractNode.on_error() <mcdreforged.command.builder.nodes.basic.AbstractNode.on_error>`"
-msgstr "见 :meth:`AbstractNode.on_error() <mcdreforged.command.builder.nodes.basic.AbstractNode.on_error>`"
+msgid ""
+"See :meth:`AbstractNode.on_error() "
+"<mcdreforged.command.builder.nodes.basic.AbstractNode.on_error>`"
+msgstr ""
+"见 :meth:`AbstractNode.on_error() "
+"<mcdreforged.command.builder.nodes.basic.AbstractNode.on_error>`"
 
 #: mcdreforged.command.builder.tools.NodeDefinition.on_child_error:1 of
 msgid ""
-"See "
-":meth:`AbstractNode.on_child_error() <mcdreforged.command.builder.nodes.basic.AbstractNode.on_child_error>`"
+"See :meth:`AbstractNode.on_child_error() "
+"<mcdreforged.command.builder.nodes.basic.AbstractNode.on_child_error>`"
 msgstr ""
-"见 "
-":meth:`AbstractNode.on_child_error() <mcdreforged.command.builder.nodes.basic.AbstractNode.on_child_error>`"
+"见 :meth:`AbstractNode.on_child_error() "
+"<mcdreforged.command.builder.nodes.basic.AbstractNode.on_child_error>`"
 
 #: ../code_references/command.rst:39
 msgid "Tools"
 msgstr "工具"
 
 #: mcdreforged.command.builder.tools.Requirements:1 of
-msgid "Some pre-cooked callback function makers for requirements testing"
-msgstr "一些常用的用于需求测试的回调函数"
+msgid "A common callback function factory for command node requirement testing"
+msgstr "一些常用的，用于指令节点需求测试的回调函数工厂"
 
 #: mcdreforged.command.builder.tools.Requirements:9 of
 msgid ""
@@ -1041,6 +1054,14 @@ msgstr "检查指令源是否为玩家"
 #: mcdreforged.command.builder.tools.Requirements.is_console:1 of
 msgid "Check if the command source indicates the console"
 msgstr "检查指令源是否为控制台"
+
+#: mcdreforged.command.builder.tools.Requirements.argument_exists:1 of
+msgid "Check if the given argument has been assigned in current command context"
+msgstr "检查给定的参数是否在当前的指令上下文中已被赋值"
+
+#: mcdreforged.command.builder.tools.Requirements.argument_exists:3 of
+msgid "The name of the argument to be checked"
+msgstr "将要检查的参数的名称"
 
 #: ../code_references/command.rst:45
 msgid "Exceptions"
@@ -1305,18 +1326,18 @@ msgstr "将被移除分隔符前缀的文本"
 msgid "Get an element from the remaining input"
 msgstr "从剩余的输入字符串中获取一个元素"
 
-#: mcdreforged.command.builder.command_builder_util.get_element:12
-#: mcdreforged.command.builder.command_builder_util.get_float:10
-#: mcdreforged.command.builder.command_builder_util.get_int:10 of
-msgid "The remaining input to be parsed"
-msgstr "将被解析的剩余输入串"
+#: mcdreforged.command.builder.command_builder_util.get_element:14
+#: mcdreforged.command.builder.command_builder_util.get_float:12
+#: mcdreforged.command.builder.command_builder_util.get_int:12 of
+msgid "The remaining input to be parsed. It should not start with :data:`DIVIDER`"
+msgstr "将被解析的剩余输入串。它不应以 :data:`DIVIDER` 为前缀"
 
 #: mcdreforged.command.builder.command_builder_util.get_int:1 of
 msgid "Get an int from the remaining input"
 msgstr "从剩余的输入字符串中获取一个 int"
 
-#: mcdreforged.command.builder.command_builder_util.get_float:11
-#: mcdreforged.command.builder.command_builder_util.get_int:11 of
+#: mcdreforged.command.builder.command_builder_util.get_float:13
+#: mcdreforged.command.builder.command_builder_util.get_int:13 of
 msgid "a tuple of value, char_read. The value will be None if parsing failed"
 msgstr "一个储存着 (值, 读取字符个数) 的元组。如果解析失败，值将会为 None"
 

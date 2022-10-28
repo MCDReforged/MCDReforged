@@ -470,6 +470,54 @@ class SimpleCommandBuilderTestCase(CommandTestCase):
 		self.assertEqual(1, len(nodes[0].get_children()))
 		self.assertIsNot(nodes[0], nodes[0].get_children()[0])
 
+	def test_7_node_def_using(self):
+		for i in range(2):
+			builder = SimpleCommandBuilder()
+			builder.command('a <b>', lambda: None)
+
+			def_ = builder.arg('b', Integer)
+			if i == 1:
+				def_ = builder.literal('a')
+			self.assertIsInstance(def_, NodeDefinition)
+			def_.requires(lambda n: False)
+			def_.on_error(RequirementNotMet, self.callback_hit)
+
+			nodes = builder.build()
+			self.assertEqual(1, len(nodes))
+			self.assertRaises(RequirementNotMet, self.run_command, nodes[0], 'a 1')
+			self.check_hit(True)
+
+	def test_8_node_def_process_amount(self):
+		def post_processor(node):
+			nonlocal cnt
+			cnt += 1
+
+		cnt = 0
+
+		builder = SimpleCommandBuilder()
+		builder.command('a <arg>', lambda: None)
+		builder.command('b <arg>', lambda: None)
+		builder.command('c <arg> <arg>', lambda: None)
+		builder.arg('arg', Integer).post_process(post_processor)
+
+		builder.build()
+		self.assertEqual(4, cnt)
+
+
+class CommandToolsTestCase(CommandTestCase):
+	def test_1_requirements(self):
+		builder = SimpleCommandBuilder()
+		builder.command('r a test', self.callback_hit)
+		builder.command('r b <arg> test', self.callback_hit)
+		builder.arg('arg', Integer)
+		builder.literal('test').requires(Requirements.argument_exists('arg'))
+
+		nodes = builder.build()
+		self.assertEqual(1, len(nodes))
+		self.assertRaises(RequirementNotMet, self.run_command, nodes[0], 'r a test')
+		self.check_hit(False)
+		self.run_command_and_check_hit(nodes[0], 'r b 123 test', True)
+
 
 if __name__ == '__main__':
 	unittest.main()

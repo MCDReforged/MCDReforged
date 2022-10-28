@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 
 class Requirements:
 	"""
-	Some pre-cooked callback function makers for requirements testing
+	A common callback function factory for command node requirement testing
 
 	Example usage::
 
@@ -23,6 +23,7 @@ class Requirements:
 		Method :meth:`AbstractNode.requires() <mcdreforged.command.builder.nodes.basic.AbstractNode.requires>`,
 		method :meth:`NodeDefinition.requires() <mcdreforged.command.builder.tools.NodeDefinition.requires>`
 	"""
+
 	@classmethod
 	def has_permission(cls, level: int) -> Callable[[CommandSource], bool]:
 		"""
@@ -50,6 +51,17 @@ class Requirements:
 		"""
 		def callback(source: CommandSource) -> bool:
 			return source.is_console
+		return callback
+
+	@classmethod
+	def argument_exists(cls, arg_name: str) -> Callable[[CommandSource, dict], bool]:
+		"""
+		Check if the given argument has been assigned in current command context
+
+		:param arg_name: The name of the argument to be checked
+		"""
+		def callback(source: CommandSource, context: dict) -> bool:
+			return arg_name in context
 		return callback
 
 

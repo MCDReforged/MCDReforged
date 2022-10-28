@@ -48,7 +48,7 @@ def represent(obj: Any) -> str:
 
 def print_class_inheriting_tree(cls: Type, line_writer: tree_printer.LineWriter = print):
 	"""
-	Remember to load import all subclasses before invoking this
+	Remember to import all subclasses before invoking this
 	"""
 	tree_printer.print_tree(
 		cls,
