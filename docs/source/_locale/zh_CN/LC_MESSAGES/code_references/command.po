@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-28 22:50+0800\n"
+"POT-Creation-Date: 2022-10-28 23:41+0800\n"
 "PO-Revision-Date: 2021-01-23 17:24+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -464,8 +464,8 @@ msgid ""
 msgstr "与 :meth:`on_error` 类似，不过它仅在该节点收到了一个来自其子孙节点的指令错误时触发"
 
 #: mcdreforged.command.builder.nodes.basic.AbstractNode.print_tree:1 of
-msgid "Print the command tree in a read-able format"
-msgstr "以可读的格式打印指令树"
+msgid "Print the command tree in a read-able format. Mostly used in debugging"
+msgstr "以可读的格式打印指令树。常用于调试"
 
 #: mcdreforged.command.builder.nodes.basic.AbstractNode.print_tree:3
 #: mcdreforged.command.builder.tools.SimpleCommandBuilder.print_tree:7 of

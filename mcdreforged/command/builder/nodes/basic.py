@@ -215,9 +215,11 @@ class AbstractNode(ABC):
 
 	def print_tree(self, line_writer: tree_printer.LineWriter = print):
 		"""
-		Print the command tree in a read-able format
+		Print the command tree in a read-able format. Mostly used in debugging
 
 		:param line_writer: A printer function that accepts a str
+
+		.. versionadded:: v2.6.0
 		"""
 		tree_printer.print_tree(self, lambda node: node.get_children(), str, line_writer)
 
