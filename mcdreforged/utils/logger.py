@@ -127,9 +127,12 @@ class MCDReforgedLogger(logging.Logger):
 
 	@property
 	def __file_formatter(self):
-		extra = '' if self.__plugin_id is None else ' [{}]'.format(self.__plugin_id)
+		# it's not necessary to try to consider self.__plugin_id here
+		# since the only FileHandler to be created is the logger of the mcdr_server
+		# which doesn't have the plugin id thing
+		# for loggers for plugins, see mcdreforged.plugin.server_interface.ServerInterface._get_logger
 		return NoColorFormatter(
-			f'[%(name)s] [%(asctime)s] [%(threadName)s/%(levelname)s]{extra}: %(message)s',
+			f'[%(name)s] [%(asctime)s] [%(threadName)s/%(levelname)s]: %(message)s',
 			datefmt='%Y-%m-%d %H:%M:%S'
 		)
 
