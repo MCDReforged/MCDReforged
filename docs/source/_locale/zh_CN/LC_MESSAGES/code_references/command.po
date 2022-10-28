@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-14 17:33+0800\n"
+"POT-Creation-Date: 2022-10-28 22:15+0800\n"
 "PO-Revision-Date: 2021-01-23 17:24+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -57,7 +57,9 @@ msgstr "指令源是否为玩家"
 #: mcdreforged.command.builder.exception.CommandError.get_error_segment
 #: mcdreforged.command.builder.exception.CommandError.get_failed_command
 #: mcdreforged.command.builder.exception.CommandError.get_parsed_command
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.arg
 #: mcdreforged.command.builder.tools.SimpleCommandBuilder.build
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.literal
 #: mcdreforged.command.command_source.CommandSource.has_permission
 #: mcdreforged.command.command_source.CommandSource.has_permission_higher_than
 #: mcdreforged.command.command_source.CommandSource.is_console
@@ -113,11 +115,11 @@ msgstr ""
 #: of
 msgid ""
 "A quick helper method to use the language value in preference to create a"
-" context with :meth:`RTextMCDRTranslation.language_context "
+" context with :meth:`RTextMCDRTranslation.language_context() "
 "<mcdreforged.translation.translation_text.RTextMCDRTranslation.language_context>`"
 msgstr ""
-"一个快速的工具方法，使用该指令源的偏好中的语言来创建一个 :meth:`RTextMCDRTranslation.language_context"
-" "
+"一个快速的工具方法，使用该指令源的偏好中的语言来创建一个 "
+":meth:`RTextMCDRTranslation.language_context() "
 "<mcdreforged.translation.translation_text.RTextMCDRTranslation.language_context>`"
 " 上下文"
 
@@ -129,6 +131,7 @@ msgid ""
 msgstr "类 :class:`~mcdreforged.translation.translation_text.RTextMCDRTranslation`"
 
 #: mcdreforged.command.builder.nodes.arguments.Enumeration:8
+#: mcdreforged.command.builder.tools.Requirements:3
 #: mcdreforged.command.command_source.CommandSource.preferred_language_context:8
 #: of
 msgid "Example usage::"
@@ -155,6 +158,7 @@ msgstr "一个用于测试权限需求的工具方法"
 #: mcdreforged.command.builder.nodes.basic.AbstractNode.runs
 #: mcdreforged.command.builder.nodes.basic.AbstractNode.suggests
 #: mcdreforged.command.builder.nodes.basic.AbstractNode.then
+#: mcdreforged.command.builder.tools.Requirements.has_permission
 #: mcdreforged.command.builder.tools.SimpleCommandBuilder.arg
 #: mcdreforged.command.builder.tools.SimpleCommandBuilder.command
 #: mcdreforged.command.builder.tools.SimpleCommandBuilder.literal
@@ -872,6 +876,12 @@ msgstr ""
 "一个参数节点的构造函数，接受参数节点名字作为其唯一一个参数，返回一个 "
 ":class:`~mcdreforged.command.builder.nodes.basic.ArgumentNode` 实例"
 
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.arg:15 of
+msgid ""
+"A :class:`NodeDefinition` object. With that you can further customize "
+"this node definition"
+msgstr "一个 :class:`NodeDefinition` 对象。借助它，你可以进一步的自定义这个节点定义"
+
 #: mcdreforged.command.builder.tools.SimpleCommandBuilder.literal:1 of
 msgid ""
 "Define a literal node for a literal name. It's useful when you want to "
@@ -891,10 +901,17 @@ msgstr "字面量节点的名字"
 msgid ""
 "A literal node constructor, that accepts the literal name as the only "
 "parameter and return a "
-":class:`~mcdreforged.command.builder.nodes.basic.Literal` object"
+":class:`~mcdreforged.command.builder.nodes.basic.Literal` object. "
+"Optional"
 msgstr ""
 "一个字面量节点的构造函数，接受字面量节点名字作为其唯一一个参数，返回一个 "
-":class:`~mcdreforged.command.builder.nodes.basic.Literal` 实例"
+":class:`~mcdreforged.command.builder.nodes.basic.Literal` 实例。参数为可选参数"
+
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.literal:8 of
+msgid ""
+"A :class:`NodeDefinitionImpl` object. With that you can further customize"
+" this node definition"
+msgstr "一个 :class:`NodeDefinition` 对象。借助它，你可以进一步的自定义这个节点定义"
 
 #: mcdreforged.command.builder.tools.SimpleCommandBuilder.build:1 of
 msgid "Build the command trees"
@@ -954,7 +971,78 @@ msgstr "一个为懒人提供的工具方法，使用方法 :meth:`build` 构建
 msgid "if build fails"
 msgstr "如果构建失败"
 
-#: ../code_references/command.rst:36
+#: mcdreforged.command.builder.tools.NodeDefinition:1 of
+msgid "A node definition class holding extra customization information"
+msgstr "一个储存着额外的自定义信息的节点定义类"
+
+#: mcdreforged.command.builder.tools.NodeDefinition.post_process:1 of
+msgid "Added a post-process function to the current node definition"
+msgstr "为当前节点定义增加一个后续处理函数"
+
+#: mcdreforged.command.builder.tools.NodeDefinition.post_process:3 of
+msgid ""
+"During method :meth:`SimpleCommandBuilder.build`, after a node is "
+"constructed, all the post-process functions will be applied to the node "
+"object"
+msgstr "在 :meth:`SimpleCommandBuilder.build` 中，当一个节点被构造后，所有的后续处理函数将被作用于这个节点对象上"
+
+#: mcdreforged.command.builder.tools.NodeDefinition.requires:1 of
+msgid "See :meth:`AbstractNode.requires() <mcdreforged.command.builder.nodes.basic.AbstractNode.requires>`"
+msgstr "见 :meth:`AbstractNode.requires() <mcdreforged.command.builder.nodes.basic.AbstractNode.requires>`"
+
+#: mcdreforged.command.builder.tools.NodeDefinition.suggests:1 of
+msgid "See :meth:`AbstractNode.suggests() <mcdreforged.command.builder.nodes.basic.AbstractNode.suggests>`"
+msgstr "见 :meth:`AbstractNode.suggests() <mcdreforged.command.builder.nodes.basic.AbstractNode.suggests>`"
+
+#: mcdreforged.command.builder.tools.NodeDefinition.on_error:1 of
+msgid "See :meth:`AbstractNode.on_error() <mcdreforged.command.builder.nodes.basic.AbstractNode.on_error>`"
+msgstr "见 :meth:`AbstractNode.on_error() <mcdreforged.command.builder.nodes.basic.AbstractNode.on_error>`"
+
+#: mcdreforged.command.builder.tools.NodeDefinition.on_child_error:1 of
+msgid ""
+"See "
+":meth:`AbstractNode.on_child_error() <mcdreforged.command.builder.nodes.basic.AbstractNode.on_child_error>`"
+msgstr ""
+"见 "
+":meth:`AbstractNode.on_child_error() <mcdreforged.command.builder.nodes.basic.AbstractNode.on_child_error>`"
+
+#: ../code_references/command.rst:39
+msgid "Tools"
+msgstr "工具"
+
+#: mcdreforged.command.builder.tools.Requirements:1 of
+msgid "Some pre-cooked callback function makers for requirements testing"
+msgstr "一些常用的用于需求测试的回调函数"
+
+#: mcdreforged.command.builder.tools.Requirements:9 of
+msgid ""
+"Method :meth:`AbstractNode.requires() "
+"<mcdreforged.command.builder.nodes.basic.AbstractNode.requires>`, method "
+":meth:`NodeDefinition.requires() "
+"<mcdreforged.command.builder.tools.NodeDefinition.requires>`"
+msgstr ""
+"方法 :meth:`AbstractNode.requires() "
+"<mcdreforged.command.builder.nodes.basic.AbstractNode.requires>`、方法 "
+":meth:`NodeDefinition.requires() "
+"<mcdreforged.command.builder.tools.NodeDefinition.requires>`"
+
+#: mcdreforged.command.builder.tools.Requirements.has_permission:1 of
+msgid "Check if the command source has the given permission level"
+msgstr "检查指令源是否拥有给定的权限等级"
+
+#: mcdreforged.command.builder.tools.Requirements.has_permission:3 of
+msgid "The minimum accepted permission level"
+msgstr "最小的可被接受的权限等级"
+
+#: mcdreforged.command.builder.tools.Requirements.is_player:1 of
+msgid "Check if the command source indicates a player"
+msgstr "检查指令源是否为玩家"
+
+#: mcdreforged.command.builder.tools.Requirements.is_console:1 of
+msgid "Check if the command source indicates the console"
+msgstr "检查指令源是否为控制台"
+
+#: ../code_references/command.rst:45
 msgid "Exceptions"
 msgstr "异常"
 
@@ -1137,7 +1225,7 @@ msgstr "解析结果不是一个合法的布尔值"
 msgid "The parsed value is not a valid Enum"
 msgstr "解析结果不是一个合法的枚举值"
 
-#: ../code_references/command.rst:43
+#: ../code_references/command.rst:52
 msgid "Misc"
 msgstr "杂项"
 
@@ -1235,10 +1323,4 @@ msgstr "一个储存着 (值, 读取字符个数) 的元组。如果解析失败
 #: mcdreforged.command.builder.command_builder_util.get_float:1 of
 msgid "Get a float from the remaining input"
 msgstr "从剩余的输入字符串中获取一个 float"
-
-#~ msgid ""
-#~ "The message will be converted to "
-#~ "str using ``str()`` function unless it's"
-#~ " a :class:`RTextBase` object"
-#~ msgstr "除非它是一个 :class:`RTextBase` 对象 ，否则将使用 ``str()`` 函数转换为 str 类型"
 

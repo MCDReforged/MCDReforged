@@ -7,7 +7,7 @@ from mcdreforged.command.builder.exception import LiteralNotMatch, NumberOutOfRa
 from mcdreforged.command.builder.nodes.arguments import Number, Integer, Float, Text, QuotableText, \
 	GreedyText, Boolean, Enumeration
 from mcdreforged.command.builder.nodes.basic import AbstractNode, Literal, ArgumentNode
-from mcdreforged.command.builder.tools import SimpleCommandBuilder
+from mcdreforged.command.builder.tools import SimpleCommandBuilder, Requirements
 
 __all__ = [
 	# ------------------
@@ -50,4 +50,5 @@ __all__ = [
 	# ------------------
 
 	'SimpleCommandBuilder',
+	'Requirements'
 ]

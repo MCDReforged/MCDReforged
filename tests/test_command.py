@@ -419,6 +419,7 @@ class SimpleCommandBuilderTestCase(CommandTestCase):
 				nonlocal cnt
 				cnt += 1
 				return clazz(n)
+
 			builder.arg(name, make_arg)
 
 		cnt = 0

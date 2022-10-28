@@ -32,6 +32,15 @@ Command Builder
     :members:
 
 
+.. autoclass:: mcdreforged.command.builder.tools.NodeDefinition
+    :members:
+
+Tools
+-----
+
+.. autoclass:: mcdreforged.command.builder.tools.Requirements
+    :members:
+
 Exceptions
 ----------
 

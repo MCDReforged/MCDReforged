@@ -1,10 +1,128 @@
-from typing import Dict, Callable, TYPE_CHECKING, Optional, List
+from abc import ABC
+from typing import Dict, Callable, TYPE_CHECKING, Optional, List, TypeVar, Generic, Any, Type
 
-from mcdreforged.command.builder.nodes.basic import RUNS_CALLBACK, Literal, AbstractNode, ArgumentNode
+from mcdreforged.command.builder.exception import CommandError
+from mcdreforged.command.builder.nodes.basic import RUNS_CALLBACK, Literal, AbstractNode, ArgumentNode, REQUIRES_CALLBACK, FAIL_MSG_CALLBACK, SUGGESTS_CALLBACK, ERROR_HANDLER_CALLBACK
+from mcdreforged.command.command_source import CommandSource
 from mcdreforged.utils import tree_printer
 
 if TYPE_CHECKING:
 	from mcdreforged.plugin.server_interface import PluginServerInterface
+
+
+class Requirements:
+	"""
+	Some pre-cooked callback function makers for requirements testing
+
+	Example usage::
+
+		node.requires(Requirements.has_permission(1))
+
+	.. seealso::
+
+		Method :meth:`AbstractNode.requires() <mcdreforged.command.builder.nodes.basic.AbstractNode.requires>`,
+		method :meth:`NodeDefinition.requires() <mcdreforged.command.builder.tools.NodeDefinition.requires>`
+	"""
+	@classmethod
+	def has_permission(cls, level: int) -> Callable[[CommandSource], bool]:
+		"""
+		Check if the command source has the given permission level
+
+		:param level: The minimum accepted permission level
+		"""
+		def callback(source: CommandSource) -> bool:
+			return source.has_permission(level)
+		return callback
+
+	@classmethod
+	def is_player(cls) -> Callable[[CommandSource], bool]:
+		"""
+		Check if the command source indicates a player
+		"""
+		def callback(source: CommandSource) -> bool:
+			return source.is_player
+		return callback
+
+	@classmethod
+	def is_console(cls) -> Callable[[CommandSource], bool]:
+		"""
+		Check if the command source indicates the console
+		"""
+		def callback(source: CommandSource) -> bool:
+			return source.is_console
+		return callback
+
+
+NodeType = TypeVar('NodeType', bound=AbstractNode)
+ArgNodeType = TypeVar('ArgNodeType', bound=ArgumentNode)
+Self = TypeVar('Self', bound='NodeDefinition')
+
+
+class NodeDefinition(Generic[NodeType], ABC):
+	"""
+	A node definition class holding extra customization information
+	"""
+
+	def post_process(self: Self, post_processor: Callable[[NodeType], Any]) -> Self:
+		"""
+		Added a post-process function to the current node definition
+
+		During method :meth:`SimpleCommandBuilder.build`, after a node is constructed,
+		all the post-process functions will be applied to the node object
+		"""
+		raise NotImplementedError()
+
+	def requires(self: Self, requirement: REQUIRES_CALLBACK, failure_message_getter: Optional[FAIL_MSG_CALLBACK] = None) -> Self:
+		"""
+		See :meth:`AbstractNode.requires() <mcdreforged.command.builder.nodes.basic.AbstractNode.requires>`
+		"""
+		raise NotImplementedError()
+
+	def suggests(self: Self, suggestion: SUGGESTS_CALLBACK) -> Self:
+		"""
+		See :meth:`AbstractNode.suggests() <mcdreforged.command.builder.nodes.basic.AbstractNode.suggests>`
+		"""
+		raise NotImplementedError()
+
+	def on_error(self: Self, error_type: Type[CommandError], handler: ERROR_HANDLER_CALLBACK, *, handled: bool = False) -> Self:
+		"""
+		See :meth:`AbstractNode.on_error() <mcdreforged.command.builder.nodes.basic.AbstractNode.on_error>`
+		"""
+		raise NotImplementedError()
+
+	def on_child_error(self: Self, error_type: Type[CommandError], handler: ERROR_HANDLER_CALLBACK, *, handled: bool = False) -> Self:
+		"""
+		See :meth:`AbstractNode.on_child_error() <mcdreforged.command.builder.nodes.basic.AbstractNode.on_child_error>`
+		"""
+		raise NotImplementedError()
+
+
+class _NodeDefinitionImpl(NodeDefinition):
+	def __init__(self, node_factory: Callable[[str], NodeType]):
+		self.__node_factory = node_factory
+		self.__node_processors: List[Callable[[NodeType], Any]] = []
+
+	def create_node(self, node_name: str) -> NodeType:
+		node = self.__node_factory(node_name)
+		for processor in self.__node_processors:
+			processor(node)
+		return node
+
+	def post_process(self, post_processor: Callable[[NodeType], Any]) -> Self:
+		self.__node_processors.append(post_processor)
+		return self
+
+	def requires(self: Self, requirement: REQUIRES_CALLBACK, failure_message_getter: Optional[FAIL_MSG_CALLBACK] = None) -> Self:
+		return self.post_process(lambda n: n.requires(requirement, failure_message_getter))
+
+	def suggests(self: Self, suggestion: SUGGESTS_CALLBACK) -> Self:
+		return self.post_process(lambda n: n.suggests(suggestion))
+
+	def on_error(self: Self, error_type: Type[CommandError], handler: ERROR_HANDLER_CALLBACK, *, handled: bool = False) -> Self:
+		return self.post_process(lambda n: n.on_error(error_type, handler, handled=handled))
+
+	def on_child_error(self: Self, error_type: Type[CommandError], handler: ERROR_HANDLER_CALLBACK, *, handled: bool = False) -> Self:
+		return self.post_process(lambda n: n.on_child_error(error_type, handler, handled=handled))
 
 
 class SimpleCommandBuilder:
@@ -19,10 +137,12 @@ class SimpleCommandBuilder:
 		"""
 		pass
 
+	__DEFAULT_LITERAL_DEFINITION = _NodeDefinitionImpl(Literal)
+
 	def __init__(self):
 		self.__commands: Dict[str, RUNS_CALLBACK] = {}
-		self.__literals: Dict[str, Callable[[str], Literal]] = {}
-		self.__arguments: Dict[str, Callable[[str], ArgumentNode]] = {}
+		self.__literals: Dict[str, _NodeDefinitionImpl[Literal]] = {}
+		self.__arguments: Dict[str, _NodeDefinitionImpl[ArgumentNode]] = {}
 		self.__build_cache: Optional[List[AbstractNode]] = None
 
 	@classmethod
@@ -40,7 +160,7 @@ class SimpleCommandBuilder:
 	def __clean_cache(self):
 		self.__build_cache = None
 
-	def __get_or_create_child(self, parent: AbstractNode, node_name: str) -> AbstractNode:
+	def __locate_or_create_child(self, parent: AbstractNode, node_name: str) -> AbstractNode:
 		child_map: Dict[str, AbstractNode] = {}
 		for child in parent.get_children():
 			if isinstance(child, Literal):
@@ -54,15 +174,15 @@ class SimpleCommandBuilder:
 
 		child = child_map.get(node_name)
 		if child is None:
-			child_factory: Callable[[str], AbstractNode]
+			child_factory: _NodeDefinitionImpl[AbstractNode]
 			if self.__is_arg(node_name):
 				child_factory = self.__arguments.get(node_name)
 				if child_factory is None:
 					raise self.Error('Undefined arg {}'.format(node_name))
 			else:
-				child_factory = self.__literals.get(node_name, Literal)
+				child_factory = self.__literals.get(node_name, self.__DEFAULT_LITERAL_DEFINITION)
 
-			child = child_factory(self.__strip_arg(node_name))
+			child = child_factory.create_node(self.__strip_arg(node_name))
 			parent.then(child)
 
 		return child
@@ -91,7 +211,7 @@ class SimpleCommandBuilder:
 		self.__commands[command] = callback
 		self.__clean_cache()
 
-	def arg(self, arg_name: str, node: Callable[[str], ArgumentNode]):
+	def arg(self, arg_name: str, node_factory: Callable[[str], ArgNodeType]) -> NodeDefinition[ArgNodeType]:
 		"""
 		Define an argument node for an argument name. All argument names appeared in :meth:`command` must be defined
 
@@ -105,26 +225,34 @@ class SimpleCommandBuilder:
 			builder.arg('my_arg', lambda name: Integer(name).at_min(0))
 
 		:param arg_name: The name of the argument node. It can be quoted with ``"<>"`` if you want. Examples: ``"my_arg"``, ``"<my_arg>"``
-		:param node: An argument node constructor, that accepts the argument name as the only parameter
+		:param node_factory: An argument node constructor, that accepts the argument name as the only parameter
 			and return an :class:`~mcdreforged.command.builder.nodes.basic.ArgumentNode` object
+		:return: A :class:`NodeDefinition` object. With that you can further customize this node definition
 		"""
 		if not self.__is_arg(arg_name):
 			arg_name = self.__make_arg(arg_name)
-		self.__arguments[arg_name] = node
+		definition = _NodeDefinitionImpl(node_factory)
+		self.__arguments[arg_name] = definition
 		self.__clean_cache()
+		return definition
 
-	def literal(self, literal_name: str, node: Callable[[str], Literal]):
+	def literal(self, literal_name: str, node_factory: Optional[Callable[[str], Literal]] = None) -> NodeDefinition[Literal]:
 		"""
 		Define a literal node for a literal name. It's useful when you want to have some custom literal nodes.
 		If you just want a regular literal node, you don't need to invoke this method, since the builder will use
 		the default :class:`~mcdreforged.command.builder.nodes.basic.Literal` constructor for node construction
 
 		:param literal_name: The name of the literal node
-		:param node: A literal node constructor, that accepts the literal name as the only parameter
-			and return a :class:`~mcdreforged.command.builder.nodes.basic.Literal` object
+		:param node_factory: A literal node constructor, that accepts the literal name as the only parameter
+			and return a :class:`~mcdreforged.command.builder.nodes.basic.Literal` object. Optional
+		:return: A :class:`NodeDefinitionImpl` object. With that you can further customize this node definition
 		"""
-		self.__literals[literal_name] = node
+		if node_factory is None:
+			node_factory = Literal
+		definition = _NodeDefinitionImpl(node_factory)
+		self.__literals[literal_name] = definition
 		self.__clean_cache()
+		return definition
 
 	# --------------
 	#    Outputs
@@ -146,7 +274,7 @@ class SimpleCommandBuilder:
 				node = root
 				for segment in command.split(' '):
 					if len(segment) > 0:
-						node = self.__get_or_create_child(node, segment)
+						node = self.__locate_or_create_child(node, segment)
 				node.runs(callback)
 			self.__build_cache = root.get_children()
 		return self.__build_cache

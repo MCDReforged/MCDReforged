@@ -80,7 +80,7 @@ class CommandSource(ABC):
 	def preferred_language_context(self):
 		"""
 		A quick helper method to use the language value in preference to create a context
-		with :meth:`RTextMCDRTranslation.language_context <mcdreforged.translation.translation_text.RTextMCDRTranslation.language_context>`
+		with :meth:`RTextMCDRTranslation.language_context() <mcdreforged.translation.translation_text.RTextMCDRTranslation.language_context>`
 
 		.. seealso::
 
