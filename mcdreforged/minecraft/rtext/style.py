@@ -70,13 +70,33 @@ class RAction(Enum):
 	"""Fill the chat bar with given text"""
 
 	run_command = auto()
-	"""Run the given text as command"""
+	"""
+	Run the given text as command
+	
+	(Minecraft <1.19.1) If the given text doesn't start with ``"/"``, the given text will be considered as a chat message and sent to the server,
+	so it can be used to automatically execute MCDR command after the player click the decorated text
+	
+	.. attention:: 
+	
+		In vanilla Minecraft >=1.19.1, only strings starting with ``"/"``, i.e. command strings, can be used as the text value of :attr:`run_command` action
+		
+		For other strings that don't start with ``"/"``, the client will reject to send the chat message
+		
+		See `Issue #203 <https://github.com/Fallen-Breath/MCDReforged/issues/203>`__
+	"""
 
 	open_url = auto()
 	"""Open given url"""
 
 	open_file = auto()
-	"""Open file from given path"""
+	"""
+	Open file from given path
+	
+	.. note:: 
+	
+		Actually vanilla Minecraft doesn't allow texts sent by command contain :attr:`open_file` actions,
+		so don't be surprised if this :attr:`open_file` doesn't work
+	"""
 
 	copy_to_clipboard = auto()
 	"""

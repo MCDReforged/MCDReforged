@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-13 21:15+0800\n"
+"POT-Creation-Date: 2022-11-01 01:50+0800\n"
 "PO-Revision-Date: 2021-01-24 09:02+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -74,6 +74,37 @@ msgstr "使用给定的文本填充聊天栏"
 msgid "Run the given text as command"
 msgstr "将给定的文本作为指令运行"
 
+#: ../docstring mcdreforged.minecraft.rtext.style.RAction.run_command:3 of
+msgid ""
+"(Minecraft <1.19.1) If the given text doesn't start with ``\"/\"``, the "
+"given text will be considered as a chat message and sent to the server, "
+"so it can be used to automatically execute MCDR command after the player "
+"click the decorated text"
+msgstr ""
+"(Minecraft <1.19.1) 如果给定的文本不以 ``\"/\"`` "
+"开头，给定的文本将会被当做聊天信息发送至服务端。借此，玩家在点击被修饰的文本后可以自动执行 MCDR 指令"
+
+#: ../docstring mcdreforged.minecraft.rtext.style.RAction.run_command:8 of
+msgid ""
+"In vanilla Minecraft >=1.19.1, only strings starting with ``\"/\"``, i.e."
+" command strings, can be used as the text value of :attr:`run_command` "
+"action"
+msgstr ""
+"在原版 Minecraft >=1.19.1 中，只有以 ``\"/\"`` 开头的字符串，即代表指令的字符串，可以被用作 "
+":attr:`run_command` 动作的值"
+
+#: ../docstring mcdreforged.minecraft.rtext.style.RAction.run_command:10 of
+msgid ""
+"For other strings that don't start with ``\"/\"``, the client will reject"
+" to send the chat message"
+msgstr "对于其他不以 ``\"/\"`` 开头的字符串，客户端将拒接发送对应的聊天消息"
+
+#: ../docstring mcdreforged.minecraft.rtext.style.RAction.run_command:12 of
+msgid ""
+"See `Issue #203 <https://github.com/Fallen-"
+"Breath/MCDReforged/issues/203>`__"
+msgstr "见 `Issue #203 <https://github.com/Fallen-Breath/MCDReforged/issues/203>`__"
+
 #: ../docstring mcdreforged.minecraft.rtext.style.RAction.open_url:1 of
 msgid "Open given url"
 msgstr "打开给定链接"
@@ -81,6 +112,13 @@ msgstr "打开给定链接"
 #: ../docstring mcdreforged.minecraft.rtext.style.RAction.open_file:1 of
 msgid "Open file from given path"
 msgstr "从给定路径打开文件"
+
+#: ../docstring mcdreforged.minecraft.rtext.style.RAction.open_file:5 of
+msgid ""
+"Actually vanilla Minecraft doesn't allow texts sent by command contain "
+":attr:`open_file` actions, so don't be surprised if this "
+":attr:`open_file` doesn't work"
+msgstr "事实上原版 Minecraft 并不允许指令中的文本包含 :attr:`open_file` 动作，因此当你发现这个 :attr:`open_file` 不起作用时别太惊讶"
 
 #: ../docstring mcdreforged.minecraft.rtext.style.RAction.copy_to_clipboard:1
 #: of
