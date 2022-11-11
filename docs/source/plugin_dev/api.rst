@@ -108,7 +108,7 @@ Who doesn't want a complete type checking to help you reduce silly mistakes etc.
 
 .. code-block:: python
 
-    from mcdreforged.api.types import ServerInterface, Info
+    from mcdreforged.api.types import PluginServerInterface, Info
 
     def on_info(server: PluginServerInterface, info: Info):
         # Now auto completion for server and info parameters should be available for IDE
