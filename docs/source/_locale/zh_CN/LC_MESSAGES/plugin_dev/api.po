@@ -233,7 +233,7 @@ msgstr "utils"
 
 #: ../plugin_dev/api.rst:119
 msgid "Some useful kits"
-msgstr "一些使用工具集"
+msgstr "一些实用工具集"
 
 #: ../plugin_dev/api.rst:121
 msgid "Module path: ``mcdreforged.api.utils``"
