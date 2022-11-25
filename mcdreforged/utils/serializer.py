@@ -1,8 +1,14 @@
 import copy
+import sys
 from abc import ABC
 from enum import EnumMeta, Enum
 from threading import Lock
 from typing import Union, TypeVar, List, Dict, Type, get_type_hints, Any
+
+_has_literal = sys.version_info >= (3, 8)
+if _has_literal:
+	from typing import Literal
+
 
 T = TypeVar('T')
 
@@ -86,6 +92,13 @@ def deserialize(data, cls: Type[T], *, error_at_missing=False, error_at_redundan
 	# Enum
 	elif isinstance(cls, EnumMeta) and isinstance(data, str):
 		return cls[data]
+	# Literal from python 3.8
+	elif _has_literal and _get_origin(cls) == Literal:
+		literals = _get_args(cls)
+		if data in literals:
+			return data
+		else:
+			raise ValueError('Input object {} does''t matches given literal {}'.format(data, cls))
 	# Object
 	elif cls not in _BASIC_CLASSES and isinstance(cls, type) and isinstance(data, dict):
 		try:
