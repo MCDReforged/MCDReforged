@@ -5,8 +5,9 @@ from enum import EnumMeta, Enum
 from threading import Lock
 from typing import Union, TypeVar, List, Dict, Type, get_type_hints, Any
 
-_has_literal = sys.version_info >= (3, 8)
-if _has_literal:
+_py38 = sys.version_info >= (3, 8)
+
+if _py38:
 	from typing import Literal
 
 
@@ -93,7 +94,7 @@ def deserialize(data, cls: Type[T], *, error_at_missing=False, error_at_redundan
 	elif isinstance(cls, EnumMeta) and isinstance(data, str):
 		return cls[data]
 	# Literal from python 3.8
-	elif _has_literal and _get_origin(cls) == Literal:
+	elif _py38 and _get_origin(cls) == Literal:
 		literals = _get_args(cls)
 		if data in literals:
 			return data

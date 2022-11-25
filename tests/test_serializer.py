@@ -5,8 +5,10 @@ from typing import List, Dict, Union, Optional, Any
 
 from mcdreforged.api.utils import serialize, deserialize, Serializable
 
-_has_literal = sys.version_info >= (3, 8)
-if _has_literal:
+_py38 = sys.version_info >= (3, 8)
+_py310 = sys.version_info >= (3, 10)
+
+if _py38:
 	from typing import Literal
 
 
@@ -275,7 +277,7 @@ class MyTestCase(unittest.TestCase):
 		self.assertIsInstance(a.b.get('something'), set)
 
 	def test_11_py310_type_hint(self):
-		if sys.version_info >= (3, 10):  # >= python 3.10
+		if _py310:
 			# suppressing these inspections so no complain with python <3.10
 			# noinspection PyTypeHints,PyUnresolvedReferences
 			class A(Serializable):
@@ -295,7 +297,7 @@ class MyTestCase(unittest.TestCase):
 			print('Ignored type hint test which uses python 3.10 feature')
 
 	def test_12_py308_literal(self):
-		if _has_literal:
+		if _py38:
 			class A(Serializable):
 				a: Literal[1, 2, '3'] = 2
 				b: Dict[str, Literal['x', 'y', 'z']]
