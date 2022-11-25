@@ -36,9 +36,9 @@ class PluginManager:
 		self.logger = mcdr_server.logger
 
 		# id -> Plugin plugin storage
-		self.plugins = {}   # type: Dict[str, AbstractPlugin]
+		self.plugins: Dict[str, AbstractPlugin] = {}
 		# file_path -> id mapping
-		self.plugin_file_path = {}  # type: Dict[str, str]
+		self.plugin_file_path: Dict[str, str] = {}
 		# storage for event listeners, help messages and commands
 		self.registry_storage = PluginRegistryStorage(self)
 
@@ -214,14 +214,12 @@ class PluginManager:
 
 	def __reload_plugin(self, plugin):
 		"""
-		Try to reload an existed plugin
+		Try to reload an existed plugin and unloaded plugin
 		If fails, unload the plugin and then the plugin state will be set to UNLOADED
 		:param AbstractPlugin plugin: The plugin instance to be reloaded
 		:return: If the plugin reloads successfully without error
 		:rtype: bool
 		"""
-		plugin.receive_event(MCDRPluginEvents.PLUGIN_UNLOADED, ())
-		self.__remove_plugin(plugin)
 		try:
 			plugin.reload()
 		except:
@@ -260,9 +258,9 @@ class PluginManager:
 				self.logger.warning('Plugin directory "{}" not found'.format(plugin_directory))
 		return paths
 
-	def __collect_and_process_new_plugins(self, filter: Callable[[str], bool], *, possible_paths: Optional[List[str]] = None) -> SingleOperationResult:
+	def __collect_and_process_new_plugins(self, filter_: Callable[[str], bool], *, possible_paths: Optional[List[str]] = None) -> SingleOperationResult:
 		"""
-		:param filter: A str predicate function for testing if the plugin file path is acceptable
+		:param filter_: A str predicate function for testing if the plugin file path is acceptable
 		:param possible_paths: Optional. If you have already done self.__collect_possible_plugin_file_paths() before,
 		you can pass the previous result as the argument to reuse that, so less time cost
 		"""
@@ -271,7 +269,7 @@ class PluginManager:
 
 		result = SingleOperationResult()
 		for file_path in possible_paths:
-			if not self.contains_plugin_file(file_path) and filter(file_path):
+			if not self.contains_plugin_file(file_path) and filter_(file_path):
 				plugin = self.__load_plugin(file_path)
 				if plugin is None:
 					result.fail(file_path)
@@ -279,28 +277,78 @@ class PluginManager:
 					result.succeed(plugin)
 		return result
 
-	def __collect_and_remove_plugins(self, filter: Callable[[RegularPlugin], bool], specific: Optional[RegularPlugin] = None) -> SingleOperationResult:
-		result = SingleOperationResult()
+	def __collect_regular_plugins(
+			self, select_filter: Callable[[RegularPlugin], bool], specific: Optional[RegularPlugin],
+			operation_name: str = 'operate', collect_filter: Callable[[RegularPlugin], bool] = lambda p: True
+	) -> List[RegularPlugin]:
+		"""
+		collected = selected + affected
+		:return: A list of plugin in topo order
+		"""
 		plugin_list = self.get_regular_plugins() if specific is None else [specific]
-		for plugin in plugin_list:
-			if filter(plugin):
-				result.record(plugin, self.__unload_plugin(plugin))
+		selected_plugins = list(filter(select_filter, plugin_list))
+		selected_plugins_set = set(selected_plugins)
+
+		walker = DependencyWalker(self)
+		walker.walk()
+		affected_plugin_ids: List[str] = []
+
+		for plugin in selected_plugins:
+			affected_plugin_ids.extend(walker.get_children(plugin.get_id()))
+
+		collected_plugins: List[RegularPlugin] = []  # plugins, in topo order
+		for plugin_id in sorted(misc_util.unique_list(affected_plugin_ids), key=walker.get_topo_order):
+			plugin = self.get_regular_plugin_from_id(plugin_id)
+			assert plugin is not None
+			if collect_filter(plugin):
+				collected_plugins.append(plugin)
+
+		affected_plugins = list(filter(lambda plg: plg not in selected_plugins_set, collected_plugins))
+		if self.logger.should_log_debug(DebugOption.PLUGIN):
+			self.logger.debug('Collected {}x plugin'.format(len(collected_plugins)) + ':' if len(collected_plugins) > 0 else '', no_check=True)
+			if len(collected_plugins) > 0:
+				self.logger.debug('- selected {}x: {}'.format(len(selected_plugins), ', '.join(map(str, selected_plugins))), no_check=True)
+				self.logger.debug('- affected {}x: {}'.format(len(affected_plugins), ', '.join(map(str, affected_plugins))), no_check=True)
+		if len(affected_plugins) > 0:
+			self.logger.info('Collected {}x extra plugins for {} due to dependency associations: {}'.format(len(affected_plugins), operation_name, ', '.join(map(str, affected_plugins))))
+
+		return collected_plugins
+
+	def __unload_given_plugins(self, filter_: Callable[[RegularPlugin], bool], specific: Optional[RegularPlugin] = None) -> SingleOperationResult:
+		affected_plugins = self.__collect_regular_plugins(filter_, specific, 'unload')
+		result = SingleOperationResult()
+		for plugin in affected_plugins:
+			result.record(plugin, self.__unload_plugin(plugin))
 		return result
 
-	def __reload_ready_plugins(self, filter: Callable[[RegularPlugin], bool], specific: Optional[RegularPlugin] = None) -> SingleOperationResult:
+	def __reload_ready_plugins(self, filter_: Callable[[RegularPlugin], bool], specific: Optional[RegularPlugin] = None) -> SingleOperationResult:
+		def state_check(plg: RegularPlugin):
+			return plg.in_states({PluginState.READY})
+
+		affected_plugins = self.__collect_regular_plugins(lambda plg: state_check(plg) and filter_(plg), specific, 'reload', state_check)
 		result = SingleOperationResult()
-		plugin_list = self.get_regular_plugins() if specific is None else [specific]
-		for plugin in plugin_list:
-			if plugin.in_states({PluginState.READY}) and filter(plugin):
-				result.record(plugin, self.__reload_plugin(plugin))
+
+		# child first, parent last
+		for plugin in reversed(affected_plugins):
+			self.__unload_plugin(plugin)
+		for plugin in reversed(affected_plugins):
+			plugin.receive_event(MCDRPluginEvents.PLUGIN_UNLOADED, ())
+
+		# parent first, child last
+		# actually the order is not sensitive here, but why not
+		for plugin in affected_plugins:
+			result.record(plugin, self.__reload_plugin(plugin))
 		return result
 
 	def __check_plugin_dependencies(self) -> SingleOperationResult:
+		"""
+		The order of elements in the result's success_list matche the dependency topo order
+		"""
 		result = SingleOperationResult()
 		walker = DependencyWalker(self)
 		walk_result = walker.walk()
 		for item in walk_result:
-			plugin = self.plugins.get(item.plugin_id)  # should be not None
+			plugin = self.plugins[item.plugin_id]
 			result.record(plugin, item.success)
 			if not item.success:
 				self.logger.error(self.mcdr_server.tr('plugin_manager.check_plugin_dependencies.item_failed', plugin, item.reason))
@@ -308,7 +356,6 @@ class PluginManager:
 		self.logger.debug(self.mcdr_server.tr('plugin_manager.check_plugin_dependencies.topo_order'), option=DebugOption.PLUGIN)
 		for plugin in result.success_list:
 			self.logger.debug('- {}'.format(plugin), option=DebugOption.PLUGIN)
-		# the success list order matches the dependency topo order
 		return result
 
 	# ---------------------------
@@ -352,11 +399,11 @@ class PluginManager:
 		self.last_operation_result.record(load_result, unload_result, reload_result, dependency_check_result)
 
 		# Expected plugin states:
-		# 					success_list		fail_list
-		# load_result		LOADED				N/A
-		# unload_result		UNLOADING			UNLOADING
-		# reload_result		READY				UNLOADING
-		# dep_chk_result	LOADED / READY		UNLOADING
+		#                   success_list        fail_list
+		# load_result       LOADED              N/A
+		# unload_result     UNLOADING           UNLOADING
+		# reload_result     LOADED              UNLOADING
+		# dep_chk_result    LOADED              UNLOADING
 
 		self.registry_storage.clear()  # in case plugin invokes dispatch_event during on_load. dont let them trigger listeners
 
@@ -411,7 +458,7 @@ class PluginManager:
 	def __refresh_plugins(self, reload_filter: Callable[[RegularPlugin], bool]):
 		possible_paths = self.__collect_possible_plugin_file_paths()
 		possible_paths_set = set(possible_paths)
-		unload_result = self.__collect_and_remove_plugins(lambda plugin: not plugin.plugin_exists() or plugin.plugin_path not in possible_paths_set)
+		unload_result = self.__unload_given_plugins(lambda plugin: not plugin.plugin_exists() or plugin.plugin_path not in possible_paths_set)
 		load_result = self.__collect_and_process_new_plugins(lambda fp: True, possible_paths=possible_paths)
 		reload_result = self.__reload_ready_plugins(reload_filter)
 		self.__post_plugin_process(load_result, unload_result, reload_result)
@@ -429,7 +476,7 @@ class PluginManager:
 	def unload_plugin(self, plugin: RegularPlugin):
 		with self.__mani_lock:
 			self.logger.info(self.mcdr_server.tr('plugin_manager.unload_plugin.entered', plugin))
-			unload_result = self.__collect_and_remove_plugins(lambda plg: True, specific=plugin)
+			unload_result = self.__unload_given_plugins(lambda plg: True, specific=plugin)
 			self.__post_plugin_process(unload_result=unload_result)
 
 	def reload_plugin(self, plugin: RegularPlugin):

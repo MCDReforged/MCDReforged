@@ -91,19 +91,41 @@ class AbstractPlugin:
 	#   Life Cycle
 	# --------------
 
+	#  load -> ready -> unload -> remove
+	#            ^        /
+	#             \      v
+	#              reload
+
 	def load(self):
+		"""
+		The first operation to the plugin, read some basic information
+		"""
 		raise NotImplementedError()
 
 	def ready(self):
+		"""
+		The plugin is ready to be fully loaded. It's ready to handle its entrypoint module
+		"""
 		raise NotImplementedError()
 
 	def reload(self):
+		"""
+		Reload the plugin
+		Notes: invoke :meth:`unload` before invoking this method
+		"""
 		raise NotImplementedError()
 
 	def unload(self):
+		"""
+		Unload the plugin. Due to plugin unload / reload
+		"""
 		raise NotImplementedError()
 
 	def remove(self):
+		"""
+		The last operation to the plugin
+		Notes: invoke :meth:`unload` before invoking this method
+		"""
 		raise NotImplementedError()
 
 	# -------------------

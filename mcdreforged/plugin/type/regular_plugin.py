@@ -87,29 +87,31 @@ class RegularPlugin(AbstractPlugin, ABC):
 	#   Life Cycle
 	# --------------
 
-	def load(self):
-		self.assert_state({PluginState.UNINITIALIZED})
+	def __do_load(self):
 		self.set_state(PluginState.LOADING)
 		self._on_load()
-		self.mcdr_server.logger.debug('{} {} loaded from {}, file modify time = {}'.format(self.__class_name, self, self.plugin_path, self.pretty_file_modify_time), option=DebugOption.PLUGIN)
 		self.set_state(PluginState.LOADED)
+
+	def load(self):
+		self.assert_state({PluginState.UNINITIALIZED})
+		self.__do_load()
+		self.mcdr_server.logger.debug('{} {} loaded from {}, file modify time = {}'.format(self.__class_name, self, self.plugin_path, self.pretty_file_modify_time), option=DebugOption.PLUGIN)
 
 	def ready(self):
 		"""
 		Get ready, and register default things (listeners etc.)
 		"""
-		self.assert_state({PluginState.LOADED, PluginState.READY})
+		self.assert_state({PluginState.LOADED})
 		self._on_ready()
 		self.set_state(PluginState.READY)
 
 	def reload(self):
-		self.assert_state({PluginState.READY})
-		self._on_unload()
-		self._on_load()
+		self.assert_state({PluginState.UNLOADING})
+		self.__do_load()
 		self.mcdr_server.logger.debug('{} {} reloaded, file modify time = {}'.format(self.__class_name, self, self.pretty_file_modify_time))
 
 	def unload(self):
-		self.assert_state({PluginState.LOADED, PluginState.READY})
+		self.assert_state({PluginState.LOADING, PluginState.LOADED, PluginState.READY})
 		self._on_unload()
 		self.set_state(PluginState.UNLOADING)
 
