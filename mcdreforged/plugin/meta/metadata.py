@@ -164,6 +164,8 @@ class Metadata:
 	def get_description_rtext(self) -> RTextBase:
 		"""
 		Return a translated plugin description in :class:`RText <mcdreforged.minecraft.rtext.text.RTextBase>`
+
+		.. versionadded:: v2.1.2
 		"""
 		if isinstance(self.description, str):
 			return RText(self.description)
