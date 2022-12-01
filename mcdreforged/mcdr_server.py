@@ -147,7 +147,7 @@ class MCDReforgedServer:
 		except pkg_resources.ResolutionError:
 			self.logger.warning('It looks like you\'re launching MCDR from source, since {} is not found in python packages'.format(mcdr_pkg))
 			self.logger.warning('In this way, the plugin system might not work correctly')
-			self.logger.warning('In a production environment, you should install {} from PyPI, see document ({}) for more information'.format(mcdr_pkg, core_constant.DOCUMENTION_URL))
+			self.logger.warning('In a production environment, you should install {} from PyPI, see document ({}) for more information'.format(mcdr_pkg, core_constant.DOCUMENTATION_URL))
 			self.logger.warning('MCDR will launch after 20 seconds...')
 			time.sleep(20)
 
