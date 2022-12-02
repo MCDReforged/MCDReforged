@@ -942,9 +942,7 @@ class PluginServerInterface(ServerInterface):
 			if default_config is not None:
 				# constructing the result config based on the given default config
 				for key, value in default_config.items():
-					if key in read_data:
-						result_config[key] = read_data[key]
-					else:
+					if key not in read_data:
 						result_config[key] = value
 						log(self._mcdr_server.tr('server_interface.load_config_simple.key_missed', key, value))
 						needs_save = True
