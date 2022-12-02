@@ -2,7 +2,6 @@ import traceback
 from abc import ABC
 from typing import TYPE_CHECKING, NamedTuple, Any, Callable
 
-from mcdreforged.command.builder.exception import CommandError
 from mcdreforged.command.builder.nodes.basic import Literal
 from mcdreforged.command.command_source import CommandSource
 from mcdreforged.permission.permission_level import PermissionLevel
@@ -67,12 +66,6 @@ class SubCommand(ABC):
 
 	def get_help_message(self, source: CommandSource, translation_key: str):
 		return self.mcdr_plugin.get_help_message(source, translation_key)
-
-	def on_mcdr_command_permission_denied(self, source: CommandSource, error: CommandError):
-		self.mcdr_plugin.on_mcdr_command_permission_denied(source, error)
-
-	def on_mcdr_command_unknown_argument(self, source: CommandSource, error: CommandError):
-		self.mcdr_plugin.on_mcdr_command_unknown_argument(source, error)
 
 	def _print_plugin_operation_result_if_no_error(self, source: CommandSource, ret: FunctionCallResult):
 		if ret.no_error:

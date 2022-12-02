@@ -9,7 +9,7 @@ import mcdreforged.command.builder.command_builder_util as utils
 from mcdreforged.command.builder.exception import CommandError, RequirementNotMet
 from mcdreforged.command.builder.nodes.basic import CommandSuggestion, CommandSuggestions
 from mcdreforged.command.command_source import InfoCommandSource, CommandSource
-from mcdreforged.plugin.plugin_registry import PluginCommandNode
+from mcdreforged.plugin.plugin_registry import PluginCommandHolder
 from mcdreforged.utils import string_util
 from mcdreforged.utils.logger import DebugOption
 
@@ -28,14 +28,14 @@ class CommandManager:
 		self.mcdr_server = mcdr_server
 		self.logger = self.mcdr_server.logger
 		self.tr = self.mcdr_server.tr
-		self.root_nodes = collections.defaultdict(list)  # type: Dict[str, List[PluginCommandNode]]
+		self.root_nodes = collections.defaultdict(list)  # type: Dict[str, List[PluginCommandHolder]]
 
 		self.__preserve_command_error_display_flag = False
 
 	def clear_command(self):
 		self.root_nodes.clear()
 
-	def register_command(self, plugin_node: PluginCommandNode):
+	def register_command(self, plugin_node: PluginCommandHolder):
 		for literal in plugin_node.node.literals:
 			self.root_nodes[literal].append(plugin_node)
 

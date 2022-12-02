@@ -22,7 +22,7 @@ msgstr "服务端处理器"
 msgid ""
 "Server handler is the object which parses server output and provides "
 "command interfaces to control the server"
-msgstr "服务端处理器是分析服务器输出并提供命令接口来控制服务器的对象。"
+msgstr "服务端处理器是分析服务器输出并提供命令接口来控制服务器的对象"
 
 #: ../customize/handler.rst:7
 msgid ""
@@ -32,19 +32,19 @@ msgid ""
 "use it."
 msgstr ""
 "MCDR 本身已经包含许多广泛使用的 Minecraft 服务端的处理器，但如果你有需要自定义输出格式的服务端，你可以编写自己的服务端处理器，并让"
-" MCDR 使用它。"
+" MCDR 使用它"
 
 #: ../customize/handler.rst:9
 msgid ""
 "To design a server handler, you need to inherit from an existed server "
-"handler class, or the base class ``AbstractServerHandler``"
-msgstr "要设计服务端处理器，你需要从现有的服务端处理器类或 ``AbstractServerHandler`` 基类继承。"
+"handler class, or the base class :class:`~mcdreforged.handler.impl.abstract_minecraft_handler.AbstractMinecraftHandler`"
+msgstr "要设计服务端处理器，你需要从现有的服务端处理器类或 :class:`~mcdreforged.handler.impl.abstract_minecraft_handler.AbstractMinecraftHandler` 基类继承"
 
 #: ../customize/handler.rst:11
 msgid ""
 "It's recommend to firstly have a look at the implementation of the server"
 " handlers in MCDR first and try to understand them"
-msgstr "建议首先查看 MCDR 中服务端处理器的实现，并尝试理解它们。"
+msgstr "建议首先查看 MCDR 中服务端处理器的实现，并尝试理解它们"
 
 #: ../customize/handler.rst:14
 msgid "Example"
@@ -68,7 +68,7 @@ msgid ""
 "dedicated handler for the server"
 msgstr ""
 "对于默认的原版服务端处理器，``[Builder]Steve`` 是一个非法的玩家名称。幸运的是，服务器中所有可能的玩家前缀都遵循相同的格式，即 "
-"``[前缀]玩家名称``。因此，可以为之创建专用的处理器。"
+"``[前缀]玩家名称``。因此，可以为之创建专用的处理器"
 
 #: ../customize/handler.rst:25
 msgid ""
@@ -86,7 +86,7 @@ msgstr "于是，你可以使用此处理器来处理服务端。你需要在配
 msgid ""
 "Set the ``handler`` option in the configuration file to "
 "``the_handler_for_my_server``"
-msgstr "将配置文件中的 ``handler`` 选项设置为 ``the_handler_for_my_server``。"
+msgstr "将配置文件中的 ``handler`` 选项设置为 ``the_handler_for_my_server``"
 
 #: ../customize/handler.rst:50
 msgid ""
@@ -98,5 +98,5 @@ msgstr ""
 
 #: ../customize/handler.rst:57
 msgid "That's all you need to do"
-msgstr "就这样。"
+msgstr "就这样"
 

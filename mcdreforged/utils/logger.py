@@ -15,7 +15,7 @@ from typing import Dict, Optional, List, Set
 from colorlog import ColoredFormatter
 
 from mcdreforged.constants import core_constant
-from mcdreforged.minecraft.rtext import RColor, RStyle, RItem
+from mcdreforged.minecraft.rtext.style import RColor, RStyle, RItem
 from mcdreforged.utils import string_util, file_util
 
 
@@ -124,18 +124,25 @@ class MCDReforgedLogger(logging.Logger):
 			'CRITICAL': 'red'
 		}
 	}
-	FILE_FMT = NoColorFormatter(
-		'[%(name)s] [%(asctime)s] [%(threadName)s/%(levelname)s]: %(message)s',
-		datefmt='%Y-%m-%d %H:%M:%S'
-	)
 
-	@classmethod
-	def get_console_formatter(cls, plugin_id=None):
-		extra = '' if plugin_id is None else ' [{}]'.format(plugin_id)
+	@property
+	def __file_formatter(self):
+		# it's not necessary to try to consider self.__plugin_id here
+		# since the only FileHandler to be created is the logger of the mcdr_server
+		# which doesn't have the plugin id thing
+		# for loggers for plugins, see mcdreforged.plugin.server_interface.ServerInterface._get_logger
+		return NoColorFormatter(
+			f'[%(name)s] [%(asctime)s] [%(threadName)s/%(levelname)s]: %(message)s',
+			datefmt='%Y-%m-%d %H:%M:%S'
+		)
+
+	@property
+	def __console_formatter(self):
+		extra = '' if self.__plugin_id is None else ' [{}]'.format(self.__plugin_id)
 		return MCColoredFormatter(
 			f'[%(name)s] [%(asctime)s] [%(threadName)s/%(log_color)s%(levelname)s%(reset)s]{extra}: %(message_log_color)s%(message)s%(reset)s',
-			log_colors=cls.LOG_COLORS,
-			secondary_log_colors=cls.SECONDARY_LOG_COLORS,
+			log_colors=self.LOG_COLORS,
+			secondary_log_colors=self.SECONDARY_LOG_COLORS,
 			datefmt='%H:%M:%S'
 		)
 
@@ -143,10 +150,11 @@ class MCDReforgedLogger(logging.Logger):
 
 	def __init__(self, plugin_id: Optional[str] = None):
 		super().__init__(self.DEFAULT_NAME)
-		self.file_handler = None
+		self.file_handler: Optional[logging.FileHandler] = None
+		self.__plugin_id = plugin_id
 
 		self.console_handler = SyncStdoutStreamHandler()
-		self.console_handler.setFormatter(self.get_console_formatter(plugin_id))
+		self.console_handler.setFormatter(self.__console_formatter)
 
 		self.addHandler(self.console_handler)
 		self.setLevel(logging.DEBUG)
@@ -187,11 +195,17 @@ class MCDReforgedLogger(logging.Logger):
 			zipf.close()
 			os.remove(file_name)
 		self.file_handler = logging.FileHandler(file_name, encoding='utf8')
-		self.file_handler.setFormatter(self.FILE_FMT)
+		self.file_handler.setFormatter(self.__file_formatter)
 		self.addHandler(self.file_handler)
 
+	def unset_file(self):
+		if self.file_handler is not None:
+			self.removeHandler(self.file_handler)
+			self.file_handler.close()
+			self.file_handler = None
 
-class ServerLogger(logging.Logger):
+
+class ServerOutputLogger(logging.Logger):
 	server_fmt = MCColoredFormatter('[%(name)s] %(message)s')
 
 	def __init__(self, name):

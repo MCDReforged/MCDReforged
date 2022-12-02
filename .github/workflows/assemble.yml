@@ -8,7 +8,7 @@ jobs:
     name: Assemble a dev source compressed file
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Create Dev Build
         run: |
           mkdir MCDReforged

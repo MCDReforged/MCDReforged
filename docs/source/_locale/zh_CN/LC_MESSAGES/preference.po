@@ -23,17 +23,17 @@ msgstr "偏好"
 
 #: ../preference.rst:5
 msgid "A user-based preference setting of MCDR, available for players and console"
-msgstr "基于用户的 MCDR 偏好设置。仅对玩家及控制台有效。"
+msgstr "基于用户的 MCDR 偏好设置。仅对玩家及控制台有效"
 
 #: ../preference.rst:7
 msgid "The preference data is stored in ``config/mcdreforged/preferences.json``"
-msgstr "偏好文件储存于 ``config/mcdreforged/preferences.json``。"
+msgstr "偏好文件储存于 ``config/mcdreforged/preferences.json``"
 
 #: ../preference.rst:9
 msgid ""
 "See the `preference command <command.html#preference-settings>`__ for the"
 " way to control it via command"
-msgstr "见 `偏好指令 <command.html#preference-settings>`__ 以获得使用指令来操控偏好的方法。"
+msgstr "见 `偏好指令 <command.html#preference-settings>`__ 以获得使用指令来操控偏好的方法"
 
 #: ../preference.rst:12
 msgid "language"
@@ -49,7 +49,7 @@ msgstr "MCDR 向玩家或控制台发送翻译文本的首选语言"
 msgid ""
 "Default value: The same as the `language <configure.html#language>`__ "
 "value in MCDR configuration"
-msgstr "默认值：同 MCDR 配置中的 `language <configure.html#language>`__ 选项。"
+msgstr "默认值：同 MCDR 配置中的 `language <configure.html#language>`__ 选项"
 
 #: ../preference.rst:17
 msgid "Available options: ``en_us``, ``zh_cn``"

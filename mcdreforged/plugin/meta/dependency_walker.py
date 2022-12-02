@@ -1,6 +1,6 @@
-import collections
+from contextlib import contextmanager
 from enum import unique, Enum, auto
-from typing import Dict, List, TYPE_CHECKING, Tuple
+from typing import Dict, List, TYPE_CHECKING, NamedTuple, Optional, Set, TypeVar, Generic
 
 from mcdreforged.plugin.meta.version import VersionRequirement
 from mcdreforged.utils.logger import DebugOption
@@ -29,6 +29,37 @@ class DependencyLoop(DependencyError):
 	pass
 
 
+T = TypeVar('T')
+
+
+class LoopChecker(Generic[T]):
+	def __init__(self):
+		self.__elements: Set[T] = set()
+		self.__stack: List[T] = []
+
+	@contextmanager
+	def enter(self, element: T):
+		self.__elements.add(element)
+		self.__stack.append(element)
+		try:
+			yield
+		finally:
+			self.__elements.remove(element)
+			self.__stack.pop(len(self.__stack) - 1)
+
+	def check(self, element: T) -> Optional[List[T]]:
+		if element in self.__elements:
+			start = 0
+			for i, pid in enumerate(self.__stack):
+				if pid == element:
+					start = i
+					break
+			loop_list = self.__stack[start:]
+			loop_list.append(element)
+			return loop_list
+		return None
+
+
 @unique
 class VisitingState(Enum):
 	UNVISITED = auto()
@@ -36,90 +67,158 @@ class VisitingState(Enum):
 	FAIL = auto()
 
 
-WalkResult = collections.namedtuple('WalkResult', 'plugin_id success reason')
+class DependencyGraphNode:
+	def __init__(self, plugin_id: str):
+		self.plugin_id = plugin_id
+		self.parents: List['DependencyGraphNode'] = []
+		self.children: List['DependencyGraphNode'] = []
+
+
+class PluginHolder:
+	def __init__(self, plugin_id: str):
+		self.plugin_id = plugin_id
+		self.state = VisitingState.UNVISITED
+		self.graph_node: DependencyGraphNode = DependencyGraphNode(plugin_id)
+		self.topo_order: int = -1
+		self.error: Optional[DependencyError] = None
+
+
+class WalkResult(NamedTuple):
+	plugin_id: str
+	success: bool
+	reason: Optional[DependencyError]
 
 
 class DependencyWalker:
 	def __init__(self, plugin_manager: 'PluginManager'):
-		self.plugin_manager = plugin_manager
-		self.tr = plugin_manager.mcdr_server.tr
-		self.visiting_state = {}  # type: Dict[str, VisitingState]
-		self.visiting_plugins = set()
-		self.visiting_plugin_stack = []
-		self.topo_order = []
+		self.__plugin_manager = plugin_manager
+		self.__tr = plugin_manager.mcdr_server.tr
+		self.__holders: Dict[str, PluginHolder] = {}
+		self.__loop_checker: LoopChecker[str] = LoopChecker()
+		self.__topo_order: List[str] = []
+		self.__walked = False
+		self.__walk_plugin_ids: Set[str] = set()
 
-	def get_visiting_status(self, plugin_id):
-		value = self.visiting_state.get(plugin_id)
-		if value is None:
-			value = VisitingState.UNVISITED
-			self.visiting_state[plugin_id] = value
-		return value
+	def __get_holder(self, plugin_id: str) -> PluginHolder:
+		holder = self.__holders.get(plugin_id)
+		if holder is None:
+			holder = PluginHolder(plugin_id)
+			self.__holders[plugin_id] = holder
+		return holder
 
-	def ensure_loaded(self, plugin_id: str, requirement: VersionRequirement or None):
-		visiting_status = self.get_visiting_status(plugin_id)
-		if visiting_status == VisitingState.FAIL:
-			raise DependencyParentFail(self.tr('dependency_walker.dependency_parent_failed', plugin_id))
+	def __add_edge(self, parent_id: str, child_id: str):
+		parent = self.__get_holder(parent_id).graph_node
+		child = self.__get_holder(child_id).graph_node
+		parent.children.append(child)
+		child.parents.append(parent)
 
-		if plugin_id in self.visiting_plugins:
-			start = 0
-			for i, pid in enumerate(self.visiting_plugin_stack):
-				if pid == plugin_id:
-					start = i
-					break
-			loop_list = self.visiting_plugin_stack[start:]
-			loop_list.append(plugin_id)
+	def __ensure_loaded(self, plugin_id: str, requirement: Optional[VersionRequirement]):
+		holder = self.__get_holder(plugin_id)
+		if holder.state == VisitingState.FAIL:
+			raise DependencyParentFail(self.__tr('dependency_walker.dependency_parent_failed', plugin_id))
+
+		loop_list = self.__loop_checker.check(plugin_id)
+		if loop_list is not None:
 			loop_message = ' -> '.join(loop_list)
-			raise DependencyLoop(self.tr('dependency_walker.dependency_loop', plugin_id, loop_message))
+			raise DependencyLoop(self.__tr('dependency_walker.dependency_loop', plugin_id, loop_message))
 
-		self.visiting_plugins.add(plugin_id)
-		self.visiting_plugin_stack.append(plugin_id)
-		try:
-			plugin = self.plugin_manager.get_plugin_from_id(plugin_id)
+		with self.__loop_checker.enter(plugin_id):
+			plugin = self.__plugin_manager.get_plugin_from_id(plugin_id)
 			if plugin is None:
-				raise DependencyNotFound(self.tr('dependency_walker.dependency_not_found', plugin_id))
+				raise DependencyNotFound(self.__tr('dependency_walker.dependency_not_found', plugin_id))
 			plugin_name_display = plugin.get_name()
 			plugin_version = plugin.get_metadata().version
 			plugin_dependencies = plugin.get_metadata().dependencies
 
 			if requirement is not None and isinstance(requirement, VersionRequirement) and not requirement.accept(plugin_version):
-				raise DependencyNotMet(self.tr('dependency_walker.dependency_not_met', plugin_name_display, requirement))
+				raise DependencyNotMet(self.__tr('dependency_walker.dependency_not_met', plugin_name_display, requirement))
 
-			if visiting_status == VisitingState.PASS:  # no need to do further dependencies check, already done
+			if holder.state == VisitingState.PASS:  # no need to do further dependencies check, already done
 				return
 
 			for dep_id, req in plugin_dependencies.items():
+				self.__add_edge(dep_id, plugin_id)
+			for dep_id, req in plugin_dependencies.items():
 				try:
-					self.ensure_loaded(dep_id, req)
+					self.__ensure_loaded(dep_id, req)
 				except DependencyError as e:
-					self.visiting_state[plugin_id] = VisitingState.FAIL
-					self.plugin_manager.logger.debug('Set visiting state of {} to FAIL due to "{}"'.format(plugin_id, e), option=DebugOption.PLUGIN)
+					holder.state = VisitingState.FAIL
+					self.__plugin_manager.logger.debug('Set visiting state of {} to FAIL due to "{}"'.format(plugin_id, e), option=DebugOption.PLUGIN)
 					raise
 			if not plugin.is_permanent():
-				self.topo_order.append(plugin_id)
-			self.visiting_state[plugin_id] = VisitingState.PASS
-		finally:
-			self.visiting_plugins.remove(plugin_id)
-			self.visiting_plugin_stack.pop(len(self.visiting_plugin_stack) - 1)
+				holder.topo_order = len(self.__topo_order)
+				self.__topo_order.append(plugin_id)
+			holder.state = VisitingState.PASS
 
 	def walk(self) -> List[WalkResult]:
-		self.visiting_state.clear()
-		self.visiting_plugins.clear()
-		self.visiting_plugin_stack.clear()
-		self.topo_order.clear()
-		fail_list = []  # type: List[Tuple[str, DependencyError]]
-		for plugin in self.plugin_manager.get_regular_plugins():
+		if self.__walked:
+			raise RuntimeError('Double walk not supported')
+		self.__walked = True
+
+		plugin_ids: List[str] = []
+		for plugin in self.__plugin_manager.get_regular_plugins():
+			plugin_id = plugin.get_id()
+			plugin_ids.append(plugin_id)
+			self.__walk_plugin_ids.add(plugin_id)
+
+		for plugin_id in plugin_ids:
+			holder = self.__get_holder(plugin_id)
 			try:
-				plugin_id = plugin.get_id()
-				visiting_state = self.get_visiting_status(plugin_id)
-				if visiting_state is not VisitingState.FAIL:
-					self.ensure_loaded(plugin_id, None)
+				if holder.state is not VisitingState.FAIL:
+					self.__ensure_loaded(plugin_id, None)
 				else:
-					raise DependencyError(self.tr('dependency_walker.dependency_already_failed', plugin, visiting_state))
+					raise DependencyError(self.__tr('dependency_walker.dependency_already_failed', plugin_id, holder.state))
 			except DependencyError as e:
-				fail_list.append((plugin.get_id(), e))
-		result = []
-		for plugin_id, error in fail_list:
-			result.append(WalkResult(plugin_id, False, error))
-		for plugin_id in self.topo_order:
+				holder.error = e
+
+		result: List[WalkResult] = []
+		no_error_ids: Set[str] = set()
+		for plugin_id in plugin_ids:
+			holder = self.__get_holder(plugin_id)
+			if holder.error is None:
+				assert holder.state == VisitingState.PASS
+				no_error_ids.add(plugin_id)
+			else:
+				result.append(WalkResult(plugin_id, False, holder.error))
+		assert no_error_ids == set(self.__topo_order), 'Unequal success list: {} {}'.format(no_error_ids, self.__topo_order)
+		for plugin_id in self.__topo_order:
 			result.append(WalkResult(plugin_id, True, None))
+
 		return result
+
+	def __holder_or_raise(self, plugin_id: str) -> PluginHolder:
+		if not self.__walked:
+			raise RuntimeError("Haven't walked yet")
+		if plugin_id not in self.__walk_plugin_ids:
+			raise KeyError('Given plugin {} is not in walk target'.format(plugin_id))
+		holder = self.__get_holder(plugin_id)
+		if holder.error is not None:
+			raise holder.error
+		return holder
+
+	def get_topo_order(self, plugin_id: str) -> int:
+		return self.__holder_or_raise(plugin_id).topo_order
+
+	def get_children(self, plugin_id: str) -> List[str]:
+		"""
+		:return plugin id list in topo-order, i.e. parent first.
+			Result includes the queried plugin itself
+		"""
+		holder = self.__holder_or_raise(plugin_id)
+
+		def search(node: DependencyGraphNode) -> List[DependencyGraphNode]:
+			get_children = [node]
+			for child_node in node.children:
+				get_children.extend(search(child_node))
+			return get_children
+
+		return list(filter(
+			lambda pid: pid in self.__walk_plugin_ids,
+			map(
+				lambda h: h.plugin_id,
+				sorted(
+					map(lambda n: self.__get_holder(n.plugin_id), search(holder.graph_node)),
+					key=lambda h: h.topo_order
+				)
+			)
+		))

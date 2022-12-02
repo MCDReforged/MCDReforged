@@ -1,11 +1,15 @@
 import threading
 
+import psutil
+
 from mcdreforged.command.builder.nodes.basic import Literal
 from mcdreforged.command.command_source import CommandSource
 from mcdreforged.constants import core_constant
-from mcdreforged.minecraft.rtext import RText, RColor, RAction, RStyle
+from mcdreforged.minecraft.rtext.style import RColor, RStyle, RAction
+from mcdreforged.minecraft.rtext.text import RText
 from mcdreforged.permission.permission_level import PermissionLevel
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.sub_command import SubCommand
+from mcdreforged.utils import tree_printer
 
 
 class StatusCommand(SubCommand):
@@ -39,16 +43,29 @@ class StatusCommand(SubCommand):
 			RText(self.tr('mcdr_command.print_mcdr_status.line7', self.mcdr_server.plugin_manager.get_plugin_amount())).c(RAction.suggest_command, '!!MCDR plugin list')
 		]))
 
+		# ------------ Physical server secrets ------------
 		if not source.has_permission(PermissionLevel.PHYSICAL_SERVER_CONTROL_LEVEL):
 			return
-		source.reply(RText.join('\n', [
-			self.tr('mcdr_command.print_mcdr_status.extra_line1', self.mcdr_server.process.pid if self.mcdr_server.process is not None else '§rN/A§r'),
-			self.tr('mcdr_command.print_mcdr_status.extra_line2', self.mcdr_server.task_executor.task_queue.qsize(), core_constant.MAX_TASK_QUEUE_SIZE),
-			self.tr('mcdr_command.print_mcdr_status.extra_line3', threading.active_count())
-		]))
+
+		process = self.mcdr_server.process
+		source.reply(self.tr('mcdr_command.print_mcdr_status.extra.pid', process.pid if process is not None else '§rN/A§r'))
+		if process is not None:
+			try:
+				tree_printer.print_tree(
+					psutil.Process(process.pid),
+					lambda proc: proc.children(),
+					lambda proc: '{}: {}'.format(proc.name(), proc.pid),
+					lambda line: source.reply('  ' + line)
+				)
+			except psutil.NoSuchProcess:
+				self.mcdr_server.logger.exception('Fail to fetch process tree from pid {}', process.pid)
+
+		source.reply(self.tr('mcdr_command.print_mcdr_status.extra.queue', self.mcdr_server.task_executor.task_queue.qsize(), core_constant.MAX_TASK_QUEUE_SIZE))
+
+		source.reply(self.tr('mcdr_command.print_mcdr_status.extra.thread', threading.active_count()))
 		thread_pool_counts = 0
 		for thread in threading.enumerate():
-			name = thread.getName()
+			name = thread.name
 			if not name.startswith('ThreadPoolExecutor-'):
 				source.reply('  §7-§r {}'.format(name))
 			else:

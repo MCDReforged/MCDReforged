@@ -1,11 +1,11 @@
 import os
 from typing import TYPE_CHECKING, Callable, List, Tuple, Any
 
-from mcdreforged.command.builder.exception import UnknownArgument
 from mcdreforged.command.builder.nodes.arguments import QuotableText
 from mcdreforged.command.builder.nodes.basic import Literal
 from mcdreforged.command.command_source import CommandSource
-from mcdreforged.minecraft.rtext import RText, RAction, RTextList, RStyle, RColor
+from mcdreforged.minecraft.rtext.style import RColor, RStyle, RAction
+from mcdreforged.minecraft.rtext.text import RTextList, RText
 from mcdreforged.permission.permission_level import PermissionLevel
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.sub_command import SubCommand
 from mcdreforged.plugin.type.plugin import AbstractPlugin
@@ -33,7 +33,6 @@ class PluginCommand(SubCommand):
 		return (
 			self.control_command_root({'plugin', 'plg'}).
 			runs(lambda src: src.reply(self.get_help_message(src, 'mcdr_command.help_message.plugin'))).
-			on_error(UnknownArgument, self.on_mcdr_command_unknown_argument).
 			then(Literal('list').runs(self.list_plugin)).
 			then(Literal('info').then(plugin_id_node().runs(lambda src, ctx: self.show_plugin_info(src, ctx['plugin_id'])))).
 			then(Literal('load').then(unloaded_plugin_node().runs(lambda src, ctx: self.load_plugin(src, ctx['file_name'])))).

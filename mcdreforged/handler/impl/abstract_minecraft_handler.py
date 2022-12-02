@@ -1,29 +1,58 @@
 import json
 import re
 from abc import ABC
-from typing import Optional, Any
+from typing import Optional, List
 
 from parse import parse
 
 from mcdreforged.handler.abstract_server_handler import AbstractServerHandler
 from mcdreforged.info_reactor.info import Info
 from mcdreforged.info_reactor.server_information import ServerInformation
-from mcdreforged.minecraft.rtext import RTextBase
+from mcdreforged.minecraft.rtext.text import RTextBase
 from mcdreforged.utils import string_util
+from mcdreforged.utils.types import MessageText
 
 
 class AbstractMinecraftHandler(AbstractServerHandler, ABC):
+	"""
+	An abstract handler for Minecraft Java Edition servers
+	"""
 	def get_stop_command(self) -> str:
 		return 'stop'
 
 	@classmethod
-	def format_message(cls, message: Any) -> str:
+	def get_player_message_parsing_formatter(cls) -> List[str]:
+		"""
+		Return a list of str that is used in method :meth:`parse_server_stdout` for parsing player message
+
+		These strings will be passed as the 1st parameter to ``parse.parse``,
+		they are both supposed to contain at least the following fields:
+
+		- ``name``, the name of the player
+		- ``message``, what the player said
+
+		The return value of the first succeeded ``parse.parse`` call will be used
+		for filling fields of the :class:`~mcdreforged.info_reactor.info.Info` object
+
+		If none of these formatter strings is able to be parsed successfully, then this info
+		is considered as a non-player message, i.e. has :attr:`info.player <mcdreforged.info_reactor.info.Info.hour>` equaling None
+		"""
+		return [
+			'<{name}> {message}',
+			'[Not Secure] <{name}> {message}',  # since mc 1.19, when a player sends an un-verified chat message
+		]
+
+	@classmethod
+	def format_message(cls, message: MessageText) -> str:
+		"""
+		A utility method to convert a message into a valid argument used in message sending command
+		"""
 		if isinstance(message, RTextBase):
 			return message.to_json_str()
 		else:
 			return json.dumps(str(message))
 
-	def get_send_message_command(self, target: str, message: Any, server_information: ServerInformation) -> Optional[str]:
+	def get_send_message_command(self, target: str, message: MessageText, server_information: ServerInformation) -> Optional[str]:
 		can_do_execute = False
 		try:
 			from mcdreforged.plugin.meta.version import Version
@@ -37,7 +66,7 @@ class AbstractMinecraftHandler(AbstractServerHandler, ABC):
 			command = 'execute at @p run ' + command
 		return command
 
-	def get_broadcast_message_command(self, message: Any, server_information: ServerInformation) -> Optional[str]:
+	def get_broadcast_message_command(self, message: MessageText, server_information: ServerInformation) -> Optional[str]:
 		return self.get_send_message_command('@a', message, server_information)
 
 	@classmethod
@@ -54,9 +83,12 @@ class AbstractMinecraftHandler(AbstractServerHandler, ABC):
 
 	def parse_server_stdout(self, text: str):
 		result = super().parse_server_stdout(text)
-		parsed = parse('<{name}> {message}', result.content)
-		if parsed is not None and self._verify_player_name(parsed['name']):
-			result.player, result.content = parsed['name'], parsed['message']
+
+		for formatter in self.get_player_message_parsing_formatter():
+			parsed = parse(formatter, result.content)
+			if parsed is not None and self._verify_player_name(parsed['name']):
+				result.player, result.content = parsed['name'], parsed['message']
+				break
 		return result
 
 	def parse_player_joined(self, info: Info):

@@ -74,7 +74,7 @@ Type: str
 related_path
 ~~~~~~~~~~~~
 
-Optional field, default: ``.``, which means your plugin files are in the root directory of your repository
+Optional field, default: ``"."``, which means your plugin files are in the root directory of your repository
 
 The related path of your plugin files in your repository
 

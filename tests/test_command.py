@@ -1,7 +1,11 @@
 import unittest
+from abc import ABC
+from enum import Enum
+from typing import Type
 
-from mcdreforged.command.builder.nodes.arguments import *
-from mcdreforged.command.builder.nodes.basic import *
+from mcdreforged.api.command import *
+from mcdreforged.api.types import CommandSource
+from mcdreforged.utils.types import MessageText
 
 
 class TestCommandSource(CommandSource):
@@ -19,11 +23,11 @@ class TestCommandSource(CommandSource):
 	def get_permission_level(self) -> int:
 		raise RuntimeError()
 
-	def reply(self, message: Any, **kwargs) -> None:
+	def reply(self, message: MessageText, **kwargs) -> None:
 		raise RuntimeError()
 
 
-class MyTestCase(unittest.TestCase):
+class CommandTestCase(ABC, unittest.TestCase):
 	# -------------
 	#   callbacks
 	# -------------
@@ -44,7 +48,7 @@ class MyTestCase(unittest.TestCase):
 	#   utils
 	# ---------
 
-	def run_command(self, executor: EntryNode, command):
+	def run_command(self, executor: Literal, command):
 		self.has_hit = False
 		self.result = None
 		# noinspection PyTypeChecker
@@ -69,14 +73,32 @@ class MyTestCase(unittest.TestCase):
 		self.assertRaises(error, func, *args, **kwargs)
 		self.check_hit(value)
 
+
+class CommandTreeTestCase(CommandTestCase):
+
 	# ---------
 	#   Tests
 	# ---------
 
-	def test_1_root_node(self):
-		pass
-		# self.assertRaises(RuntimeError, self.run_command, Number('num').run(self.callback_hit), '123')
-		# self.assertRaises(RuntimeError, self.run_command, Text('t').run(self.callback_hit), 'awa')
+	# noinspection PyUnresolvedReferences
+	def test_1_tree(self):
+		executor = Literal('test').\
+			then(Text('a')).\
+			then(Number('b')).\
+			then(Literal('c')).\
+			then(Literal('d'))
+		children = executor.get_children()
+
+		# Literal nodes goes first, then argument nodes
+		self.assertEqual(4, len(children))
+		self.assertIsInstance(children[0], Literal)
+		self.assertIsInstance(children[1], Literal)
+		self.assertIsInstance(children[2], Text)
+		self.assertIsInstance(children[3], Number)
+		self.assertEqual({'c'}, children[0].literals)
+		self.assertEqual({'d'}, children[1].literals)
+		self.assertEqual('a', children[2].get_name())
+		self.assertEqual('b', children[3].get_name())
 
 	def test_2_literal(self):
 		executor = Literal('test').runs(self.callback_hit)
@@ -349,6 +371,152 @@ class MyTestCase(unittest.TestCase):
 		self.assertEqual(len(MyEnum), len(suggestions))
 		for suggestion in suggestions:
 			self.run_command_and_check_hit(root, 'test {}'.format(suggestion), True)
+
+
+class SimpleCommandBuilderTestCase(CommandTestCase):
+	def test_1_basic(self):
+		builder = SimpleCommandBuilder()
+		builder.command('foo bar', self.callback_hit)
+		nodes = builder.build()
+
+		self.assertEqual(1, len(nodes))
+		self.assertEqual(1, len(nodes[0].get_children()))
+		child = nodes[0].get_children()[0]
+		self.assertIsInstance(child, Literal)
+		self.assertEqual(child.literals, {'bar'})
+		self.run_command_and_check_hit(nodes[0], 'foo bar', True)
+
+	# noinspection PyUnresolvedReferences
+	def test_2_node_order(self):
+		builder = SimpleCommandBuilder()
+		builder.command('a z', lambda: None)
+		builder.command('b b', lambda: None)
+		builder.command('c y', lambda: None)
+		nodes = builder.build()
+
+		self.assertEqual(3, len(nodes))
+		self.assertTrue(all(map(lambda n: isinstance(n, Literal), nodes)))
+		self.assertEqual(nodes[0].literals, {'a'})
+		self.assertEqual(nodes[1].literals, {'b'})
+		self.assertEqual(nodes[2].literals, {'c'})
+
+	def test_3_node_merge(self):
+		builder = SimpleCommandBuilder()
+		builder.command('foo bar', lambda: None)
+		builder.command('foo rab', lambda: None)
+		builder.command('oof bar', lambda: None)
+		builder.command('oof bar www', lambda: None)
+		nodes = builder.build()
+
+		self.assertEqual(2, len(nodes))
+		self.assertEqual(1, len(nodes[1].get_children()))
+
+	# noinspection PyUnresolvedReferences
+	def test_4_defined_arg(self):
+		def test_new_arg(name: str, clazz: Type[ArgumentNode]):
+			def make_arg(n: str):
+				self.assertEqual(name, n)
+				nonlocal cnt
+				cnt += 1
+				return clazz(n)
+
+			builder.arg(name, make_arg)
+
+		cnt = 0
+
+		builder = SimpleCommandBuilder()
+		builder.command('test another <arg>', lambda: None)
+		builder.command('test <word>', lambda: None)
+		builder.command('test <arg>', lambda: None)
+		test_new_arg('word', Text)
+		test_new_arg('arg', Number)
+		nodes = builder.build()
+
+		self.assertEqual(3, cnt)  # <word>*1, <arg>*2, 1 + 2 = 3
+		self.assertEqual(1, len(nodes))
+		self.assertEqual(3, len(nodes[0].get_children()))
+		self.assertEqual('word', nodes[0].get_children()[1].get_name())
+		self.assertEqual('arg', nodes[0].get_children()[2].get_name())
+
+	def test_5_undefined_arg(self):
+		builder = SimpleCommandBuilder()
+		builder.command('test <arg>', lambda: None)
+
+		self.assertRaises(SimpleCommandBuilder.Error, builder.build)
+
+	def test_6_defined_literal(self):
+		builder = SimpleCommandBuilder()
+		builder.command('test l1', lambda: None)
+		builder.command('test l1 l2', lambda: None)
+		builder.command('abc test', lambda: None)
+
+		node = Literal('test')
+		builder.literal('test', lambda _: node)
+
+		nodes = builder.build()
+
+		self.assertEqual(2, len(nodes))
+		self.assertIs(node, nodes[0])
+		self.assertEqual(1, len(nodes[1].get_children()))
+		self.assertIs(node, nodes[1].get_children()[0])
+
+	def test_6_undefined_literal(self):
+		builder = SimpleCommandBuilder()
+		builder.command('a a', lambda: None)
+
+		nodes = builder.build()
+
+		self.assertEqual(1, len(nodes))
+		self.assertEqual(1, len(nodes[0].get_children()))
+		self.assertIsNot(nodes[0], nodes[0].get_children()[0])
+
+	def test_7_node_def_using(self):
+		for i in range(2):
+			builder = SimpleCommandBuilder()
+			builder.command('a <b>', lambda: None)
+
+			def_ = builder.arg('b', Integer)
+			if i == 1:
+				def_ = builder.literal('a')
+			self.assertIsInstance(def_, NodeDefinition)
+			def_.requires(lambda n: False)
+			def_.on_error(RequirementNotMet, self.callback_hit)
+
+			nodes = builder.build()
+			self.assertEqual(1, len(nodes))
+			self.assertRaises(RequirementNotMet, self.run_command, nodes[0], 'a 1')
+			self.check_hit(True)
+
+	def test_8_node_def_process_amount(self):
+		def post_processor(node):
+			nonlocal cnt
+			cnt += 1
+
+		cnt = 0
+
+		builder = SimpleCommandBuilder()
+		builder.command('a <arg>', lambda: None)
+		builder.command('b <arg>', lambda: None)
+		builder.command('c <arg> <arg>', lambda: None)
+		builder.arg('arg', Integer).post_process(post_processor)
+
+		builder.build()
+		self.assertEqual(4, cnt)
+
+
+class CommandToolsTestCase(CommandTestCase):
+	def test_1_requirements(self):
+		builder = SimpleCommandBuilder()
+		builder.command('r a test', self.callback_hit)
+		builder.command('r b <arg> test', self.callback_hit)
+		builder.arg('arg', Integer)
+		builder.literal('test').requires(Requirements.argument_exists('arg'))
+
+		nodes = builder.build()
+		self.assertEqual(1, len(nodes))
+		self.assertRaises(RequirementNotMet, self.run_command, nodes[0], 'r a test')
+		self.check_hit(False)
+		self.run_command_and_check_hit(nodes[0], 'r b 123 test', True)
 
 
 if __name__ == '__main__':

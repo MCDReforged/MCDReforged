@@ -102,9 +102,9 @@ mcdr_command.print_mcdr_status.line4                  : "服务端已启动: {0}
 mcdr_command.print_mcdr_status.line5                  : "将于服务端关闭后退出: {0}"
 mcdr_command.print_mcdr_status.line6                  : "rcon: {0}"
 mcdr_command.print_mcdr_status.line7                  : "插件数量: §6{0}§r"
-mcdr_command.print_mcdr_status.extra_line1            : "服务端 PID: {0}"
-mcdr_command.print_mcdr_status.extra_line2            : "消息队列负载: §6{0}§r/§6{1}§r"
-mcdr_command.print_mcdr_status.extra_line3            : "线程数: §6{0}§r"
+mcdr_command.print_mcdr_status.extra.pid              : "服务端 PID: {0}"
+mcdr_command.print_mcdr_status.extra.queue            : "消息队列负载: §6{0}§r/§6{1}§r"
+mcdr_command.print_mcdr_status.extra.thread           : "线程数: §6{0}§r"
 mcdr_command.list_plugin.info_loaded_plugin           : §6{0}x §e已加载插件§r
 mcdr_command.list_plugin.info_disabled_plugin         : §6{0}x §e已禁用插件§r
 mcdr_command.list_plugin.info_not_loaded_plugin       : §6{0}x §e未加载插件§r

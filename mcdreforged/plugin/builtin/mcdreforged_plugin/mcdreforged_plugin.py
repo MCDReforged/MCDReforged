@@ -4,7 +4,8 @@ from mcdreforged.command.builder.exception import RequirementNotMet, UnknownArgu
 from mcdreforged.command.builder.nodes.basic import Literal
 from mcdreforged.command.command_source import CommandSource
 from mcdreforged.constants import core_constant
-from mcdreforged.minecraft.rtext import RText, RAction, RTextList, RColor
+from mcdreforged.minecraft.rtext.style import RColor, RAction
+from mcdreforged.minecraft.rtext.text import RTextList, RText
 from mcdreforged.permission.permission_level import PermissionLevel
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.check_update_command import CheckUpdateCommand
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.help_command import HelpCommand
@@ -68,8 +69,9 @@ class MCDReforgedPlugin(PermanentPlugin):
 			requires(lambda src: src.has_permission(PermissionLevel.USER)).
 			runs(self.process_mcdr_command).
 			on_error(RequirementNotMet, self.on_mcdr_command_permission_denied, handled=True).
+			on_error(UnknownArgument, self.on_mcdr_command_unknown_argument).
 			on_child_error(RequirementNotMet, self.on_mcdr_command_permission_denied, handled=True).
-			on_error(UnknownArgument, self.on_mcdr_command_unknown_argument, handled=True).
+			on_child_error(UnknownArgument, self.on_mcdr_command_unknown_argument).
 			then(self.command_status.get_command_node()).
 			then(self.command_reload.get_command_node()).
 			then(self.command_permission.get_command_node()).

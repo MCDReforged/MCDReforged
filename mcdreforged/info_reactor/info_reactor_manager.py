@@ -9,8 +9,8 @@ from mcdreforged.constants import core_constant
 from mcdreforged.info_reactor.abstract_info_reactor import AbstractInfoReactor
 from mcdreforged.info_reactor.impl import PlayerReactor, ServerReactor, GeneralReactor
 from mcdreforged.info_reactor.info import Info
-from mcdreforged.utils import misc_util
-from mcdreforged.utils.logger import ServerLogger, DebugOption
+from mcdreforged.utils import class_util
+from mcdreforged.utils.logger import ServerOutputLogger, DebugOption
 
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
@@ -20,7 +20,7 @@ class InfoReactorManager:
 	def __init__(self, mcdr_server: 'MCDReforgedServer'):
 		self.mcdr_server = mcdr_server
 		self.last_queue_full_warn_time = None
-		self.server_logger = ServerLogger('Server')
+		self.server_output_logger = ServerOutputLogger('Server')
 		self.reactors = []  # type: List[AbstractInfoReactor]
 
 	def register_reactors(self, custom_reactor_class_paths: Optional[List[str]]):
@@ -33,7 +33,7 @@ class InfoReactorManager:
 		if custom_reactor_class_paths is not None:
 			for class_path in custom_reactor_class_paths:
 				try:
-					reactor_class = misc_util.load_class(class_path)
+					reactor_class = class_util.load_class(class_path)
 				except:
 					self.mcdr_server.logger.exception('Fail to load info reactor from "{}"'.format(class_path))
 				else:
@@ -58,7 +58,7 @@ class InfoReactorManager:
 		info.attach_mcdr_server(self.mcdr_server)
 		# echo info from the server to the console
 		if info.is_from_server:
-			self.server_logger.info(info.raw_content)
+			self.server_output_logger.info(info.raw_content)
 		try:
 			self.mcdr_server.task_executor.enqueue_info_task(lambda: self.process_info(info), info.is_user)
 		except queue.Full:

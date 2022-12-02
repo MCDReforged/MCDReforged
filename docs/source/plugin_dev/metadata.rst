@@ -83,7 +83,7 @@ Choose your plugin id wisely. It's highly suggested to keep your plugin id not c
 version
 ^^^^^^^
 
-The version value indicates the version of your value. It's mostly in `semver <https://semver.org/>`__ format but it has less restriction such as you can have the core version with any length
+The version value indicates the version of your plugin. It's mostly in `semver <https://semver.org/>`__ format but it has less restriction such as you can have the core version with any length
 
 Here's some available version:
 

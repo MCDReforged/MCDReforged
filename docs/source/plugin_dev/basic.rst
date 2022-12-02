@@ -5,11 +5,14 @@ MCDR Plugin
 What is a MCDR plugin
 ---------------------
 
-A MCDR plugin is a single ``.py`` or ``.mcdr`` file or a directory with specific file structure located in plugin directories. See `here <plugin_format.html>`__ for more information about plugin format
+A MCDR plugin is a single ``.py`` or ``.mcdr`` file or a directory with specific file structure located in plugin directories.
+See `here <plugin_format.html>`__ for more information about plugin format
 
-The list of the plugin directory can be defined inside the `configuration file <../configure.html#plugin_directories>`__. At start up, MCDR will automatically load every plugin inside every plugin directory
+The list of the plugin directory can be defined inside the `configuration file <../configure.html#plugin_directories>`__.
+At start up, MCDR will automatically load every plugin inside every plugin directory
 
-Check the `example plugin repository <https://github.com/MCDReforged/MCDReforged-ExamplePlugin>`__ or the `plugin template repository <https://github.com/MCDReforged/MCDReforged-PluginTemplate>`__ for more references
+Check the `example plugin repository <https://github.com/MCDReforged/MCDReforged-ExamplePlugin>`__ or
+the `plugin template repository <https://github.com/MCDReforged/MCDReforged-PluginTemplate>`__ for more references
 
 Quick Start
 -----------
@@ -66,12 +69,16 @@ Different `plugin format <plugin_format.html>`__ has different ways to declare i
 
 See the `metadata document <metadata.html>`__ for more information
 
+.. _plugin-entrypoint:
+
 Entrypoint
 ----------
 
 Entrypoint is a module specifying what module MCDR will import when loading your plugin. It's the bridge between your plugin and MCDR
 
-For `solo plugin <plugin_format.html#solo-plugin>`__ the entry point is the plugin itself. For `multi file plugin <plugin_format.html#multi-file-plugin>`__ the entrypoint is declared in metadata, with default value the id of the plugin, which is the ``__init__.py`` file in the folder named plugin id
+For `solo plugin <plugin_format.html#solo-plugin>`__ the entry point is the plugin itself.
+For `multi file plugin <plugin_format.html#multi-file-plugin>`__ the entrypoint is declared in metadata,
+with default value the id of the plugin, which is the ``__init__.py`` file in the folder named plugin id
 
 For example:
 
@@ -83,16 +90,20 @@ For example:
             source.py
         mcdreforged.plugin.json
 
-For this multi file plugin, with default entrypoint value, MCDR will import the module ``my_plugin``, which will actually loads the ``__init__.py`` in ``my_plugin/`` folder inside the ``MyPlugin.mcdr`` file. ``on_load`` function inside the ``__init__.py`` will be registered as an event listener
+For this multi file plugin, with default entrypoint value, MCDR will import the module ``my_plugin``,
+which will actually loads the ``__init__.py`` in ``my_plugin/`` folder inside the ``MyPlugin.mcdr`` file.
+``on_load`` function inside the ``__init__.py`` will be registered as an event listener
 
 If the entrypoint is set to ``my_plugin.source``, then MCDR will import ``my_plugin.source``, which will actually loads ``source.py`` in ``my_plugin/`` folder
 
-The entrypoint module instance is also used in `ServerInterface.get_plugin_instance <classes/ServerInterface.html#get_plugin_instance>`__. The entrypoint module instance is also what the second parameter in `Plugin loaded <event.html#plugin-loaded>`__ event is
+The entrypoint module instance is also used in :meth:`~mcdreforged.plugin.server_interface.ServerInterface.get_plugin_instance`.
+The entrypoint module instance is also what the second parameter in `Plugin loaded <event.html#plugin-loaded>`__ event is
 
 Plugin Registry
 ---------------
 
-Plugin registry is a collection of things that plugin registered for. It will get cleaned up every time before the plugin gets loaded, so you'd better register them in `Plugin_Load <event.html#plugin-load>`__ event
+Plugin registry is a collection of things that plugin registered for. It will get cleaned up every time before the plugin gets loaded,
+so you'd better register them in `Plugin_Load <event.html#plugin-load>`__ event
 
 Event listeners
 ^^^^^^^^^^^^^^^
@@ -100,7 +111,9 @@ Event listeners
 There are 3 methods to register an event listener for you plugin
 
 #. 
-    Declare a function inside the global slope in the `entrypoint <#entrypoint>`__ module with the specific name. It's the legacy registering method to register a listener and it only works with events provided by MCDR. Check `here <event.html#default-event-listener>`__ for more detail
+    Declare a function inside the global slope in the `entrypoint <#entrypoint>`__ module with the specific name.
+    It's the legacy registering method to register a listener and it only works with events provided by MCDR.
+    Check `here <event.html#default-event-listener>`__ for more detail
 
     For example, the widely-used function below is a default `Plugin Loaded <event.html#plugin-loaded>`__ event listener
 
@@ -110,7 +123,8 @@ There are 3 methods to register an event listener for you plugin
             do_something()
 
 #. 
-    Manually invoke ``server.register_event_listener`` method to register an event listener. You can specify the callable object and the priority for the event listener
+    Manually invoke :meth:`~mcdreforged.plugin.server_interface.PluginServerInterface.register_event_listener` method to register an event listener.
+    You can specify the callable object and the priority for the event listener
 
     Check `here <event.html#register-a-event-listener>`__ for more detail about event listener registering
 
@@ -130,48 +144,53 @@ There are 3 methods to register an event listener for you plugin
             server.register_event_listener('myplugin.task_done', on_my_task_done)
 
 #.
-    Use `@event_listener <api.html#event-listener>`__ decorator
+    Use :func:`~mcdreforged.api.decorator.event_listener.event_listener` decorator
 
-
-Take a look at the reference of ``register_event_listener`` method in `PluginServerInterface <classes/PluginServerInterface.html#register-event-listener>`__ document for more detail
 
 Command
 ^^^^^^^
 
-Rather than manually parsing ``info.content`` inside user info event callback like ``on_user_info``, MCDR provides a command system for plugins to register their commands
+Rather than manually parsing :attr:`info.content<mcdreforged.info_reactor.info.Info.content>` inside user info event callback like ``on_user_info``,
+MCDR provides a command system for plugins to register their commands
 
 Check the `command <command.html>`__ document for more detail about building a command tree
 
-Assuming that you have already built a command tree with root literal node *root*, then you can use the following code to register your command tree in MCDR
+Assuming that you have already built a command tree with root literal node *root*, then you can use
+the :meth:`~mcdreforged.plugin.server_interface.PluginServerInterface.register_command` method to register your command tree in MCDR
 
 .. code-block:: python
 
     server.register_command(root)
 
-Take a look at the reference of ``register_command`` method in `PluginServerInterface <classes/PluginServerInterface.html#register-command>`__ document for more details of its usage
-
 Help message
 ^^^^^^^^^^^^
 
-Plugin can register its help message with ``server.register_help_message`` to MCDR, so that users can use `!!help command <../command.html#help-command>`__ to view the help messages of all commands
+Plugin can register its help message with :meth:`~mcdreforged.plugin.server_interface.PluginServerInterface.register_help_message` to MCDR,
+so that users can use `!!help command <../command.html#help-command>`__ to view the help messages of all commands
 
-Take a look at the reference of ``register_help_message`` method in `PluginServerInterface <classes/PluginServerInterface.html#register-help-message>`__ document for more details of its usage
+.. _plugin-translation:
 
 Translation
 ^^^^^^^^^^^
 
-If your plugin needs to handle some message localization or translation things, you can let MCDR help you: register a translation via `register_translation <classes/PluginServerInterface.html#register-translation>`__ and use `tr <classes/ServerInterface.html#tr>`__ to get the translated string
+If your plugin needs to handle some message localization or translation things, you can let MCDR help you:
+register a translation via :meth:`~mcdreforged.plugin.server_interface.PluginServerInterface.register_translation` method
+and use :meth:`~mcdreforged.plugin.server_interface.ServerInterface.tr` or :meth:`~mcdreforged.plugin.server_interface.ServerInterface.rtr` to get the translated string
 
 See the `translation section <dev_tips.html#translation>`__ in dev tips for some suggestions about using translation
 
 Import a plugin
 ---------------
 
-During multi file plugin loading, MCDR will append the path of the multi file plugin to ``sys.path``. For packed plugin, it's path of the ``.mcdr`` file; For directory plugin, it's the path of the directory
+During multi file plugin loading, MCDR will append the path of the multi file plugin to ``sys.path``.
+For packed plugin, it's path of the ``.mcdr`` file; For directory plugin, it's the path of the directory
 
-Therefore, you can simply import other plugin by importing its plugin id using the ``import`` statement. It's also the recommended way to do that since it provides code hints and more information for your IDE
+Therefore, you can simply import other plugin by importing its plugin id using the ``import`` statement.
+It's also the recommended way to do that since it provides code hints and more information for your IDE
 
-Apart from this, you can also use `get_plugin_instance <classes/ServerInterface.html#get_plugin_instance>`__ method to import the entry point of the plugin, and this is also **the only way to import a solo plugin**. For multi file plugin the result is the same as directly importing the plugin
+Apart from this, you can also use :meth:`~mcdreforged.plugin.server_interface.ServerInterface.get_plugin_instance` method
+to import the entry point of the plugin,and this is also **the only way to import a solo plugin**.
+For multi file plugin the result is the same as directly importing the plugin
 
 .. code-block:: python
 

@@ -1,4 +1,3 @@
-from mcdreforged.command.builder.exception import UnknownArgument
 from mcdreforged.command.builder.nodes.basic import Literal
 from mcdreforged.command.command_source import CommandSource
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.sub_command import SubCommand
@@ -9,7 +8,6 @@ class ReloadCommand(SubCommand):
 		return (
 			self.control_command_root({'r', 'reload'}).
 			runs(lambda src: src.reply(self.get_help_message(src, 'mcdr_command.help_message.reload'))).
-			on_error(UnknownArgument, self.on_mcdr_command_unknown_argument).
 			then(Literal({'plugin', 'plg'}).runs(self.refresh_changed_plugins)).
 			then(Literal({'config', 'cfg'}).runs(self.reload_config)).
 			then(Literal({'permission', 'perm'}).runs(self.reload_permission)).

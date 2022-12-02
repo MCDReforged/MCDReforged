@@ -2,7 +2,7 @@ import collections
 from typing import Dict, List, Callable, Any, TYPE_CHECKING, Union
 
 from mcdreforged.command.builder.nodes.basic import Literal
-from mcdreforged.minecraft.rtext import RTextBase
+from mcdreforged.minecraft.rtext.text import RTextBase
 from mcdreforged.plugin.plugin_event import EventListener
 from mcdreforged.translation.translation_text import RTextMCDRTranslation
 from mcdreforged.utils import translation_util
@@ -43,7 +43,7 @@ class HelpMessage:
 		return 'HelpMessage[prefix={},message={},permission={}]'.format(self.prefix, self.message, self.permission)
 
 
-class PluginCommandNode:
+class PluginCommandHolder:
 	"""
 	A Tuple like data class for tracking the plugin of the node
 	"""
@@ -56,7 +56,7 @@ class AbstractPluginRegistry:
 	def __init__(self):
 		self.event_listeners = collections.defaultdict(list)  # type: Dict[str, List[EventListener]]
 		self.help_messages: List[HelpMessage] = []
-		self.command_roots: List[PluginCommandNode] = []
+		self.command_roots: List[PluginCommandHolder] = []
 		self.translations: TranslationStorage = collections.defaultdict(dict)
 
 	def clear(self):
@@ -80,7 +80,7 @@ class PluginRegistry(AbstractPluginRegistry):
 	def register_command(self, node: Literal):
 		if not isinstance(node, Literal):
 			raise TypeError('Only Literal node is accepted to be a root node')
-		self.command_roots.append(PluginCommandNode(self.plugin, node))
+		self.command_roots.append(PluginCommandHolder(self.plugin, node))
 
 	def register_translation(self, language: str, mapping: TranslationKeyDictNested):
 		# Translation should be updated immediately
@@ -104,6 +104,6 @@ class PluginRegistryStorage(AbstractPluginRegistry):
 		for listeners in self.event_listeners.values():
 			listeners.sort()
 
-	def export_commands(self, exporter: Callable[[PluginCommandNode], Any]):
+	def export_commands(self, exporter: Callable[[PluginCommandHolder], Any]):
 		for node in self.command_roots:
 			exporter(node)

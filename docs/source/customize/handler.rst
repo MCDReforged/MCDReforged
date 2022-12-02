@@ -6,7 +6,7 @@ Server handler is the object which parses server output and provides command int
 
 MCDR itself has already includes a number of server handlers for widely-used Minecraft related servers, but in case you have a server with custom output format, you can write you own server handler, and assign MCDR to use it.
 
-To design a server handler, you need to inherit from an existed server handler class, or the base class ``AbstractServerHandler``
+To design a server handler, you need to inherit from an existed server handler class, or the base class :class:`~mcdreforged.handler.impl.abstract_minecraft_handler.AbstractMinecraftHandler`
 
 It's recommend to firstly have a look at the implementation of the server handlers in MCDR first and try to understand them 
 

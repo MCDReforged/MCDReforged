@@ -5,6 +5,10 @@ from typing import List, Dict, Union, Optional, Any
 
 from mcdreforged.api.utils import serialize, deserialize, Serializable
 
+_has_literal = sys.version_info >= (3, 8)
+if _has_literal:
+	from typing import Literal
+
 
 class Point(Serializable):
 	x: float = 1.1
@@ -271,7 +275,7 @@ class MyTestCase(unittest.TestCase):
 		self.assertIsInstance(a.b.get('something'), set)
 
 	def test_11_py310_type_hint(self):
-		if sys.version_info.major >= 3 and sys.version_info.minor >= 10:  # >= python 3.10
+		if sys.version_info >= (3, 10):  # >= python 3.10
 			# suppressing these inspections so no complain with python <3.10
 			# noinspection PyTypeHints,PyUnresolvedReferences
 			class A(Serializable):
@@ -288,7 +292,33 @@ class MyTestCase(unittest.TestCase):
 			self.assertEqual(a.a, [3, 4])
 			self.assertEqual(a.b.get('no'), False)
 		else:
-			print('Ignored type hint test using python 3.10 feature')
+			print('Ignored type hint test which uses python 3.10 feature')
+
+	def test_12_py308_literal(self):
+		if _has_literal:
+			class A(Serializable):
+				a: Literal[1, 2, '3'] = 2
+				b: Dict[str, Literal['x', 'y', 'z']]
+
+			a = A.get_default()
+			self.assertEqual(a.a, 2)
+
+			a = deserialize({'a': '3', 'b': {'k': 'x'}}, A)
+			self.assertEqual(a.a, '3')
+			self.assertEqual(a.b, {'k': 'x'})
+
+			a = deserialize({'b': {}}, A)
+			self.assertEqual(a.a, 2)
+			self.assertEqual(a.b, {})
+
+			with self.assertRaises(ValueError):
+				deserialize({'a': 4}, A)
+			with self.assertRaises(ValueError):
+				deserialize({'b': {'k': 'u'}}, A)
+
+
+		else:
+			print('Ignored Literal test which uses python 3.8 feature')
 
 
 if __name__ == '__main__':

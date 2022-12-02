@@ -1,6 +1,6 @@
 from typing import Union, Dict
 
-from mcdreforged.minecraft.rtext import RTextBase
+from mcdreforged.minecraft.rtext.text import RTextBase
 
 MessageText = Union[str, RTextBase]
 TranslationLanguageDict = Dict[str, str]  # language -> text

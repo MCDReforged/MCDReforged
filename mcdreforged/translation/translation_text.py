@@ -1,18 +1,37 @@
 import threading
 from contextlib import contextmanager
-from typing import Union, Iterable, Optional, List, Callable
+from typing import Union, Iterable, Optional, List, Callable, TypeVar
 
-from mcdreforged.constants import core_constant
-from mcdreforged.minecraft.rtext import RTextBase, RAction, RStyle, RColor, RText
+from mcdreforged.minecraft.rtext.style import RColor, RStyle, RAction
+from mcdreforged.minecraft.rtext.text import RTextBase, RText
 from mcdreforged.utils import translation_util
+from mcdreforged.utils.types import TranslationKeyDictRich
+
+Self = TypeVar('Self', bound='RTextMCDRTranslation')
 
 
 class RTextMCDRTranslation(RTextBase):
+	"""
+	The translation text component used in MCDR
+
+	When MCDR is running, it will use the :meth:`~mcdreforged.plugin.server_interface.ServerInterface.tr` method
+	in :class:`~mcdreforged.plugin.server_interface.ServerInterface` class as the translating method,
+	and the language of MCDR as the fallback translation language
+
+	.. versionadded:: v2.1.0
+	"""
+
 	__TLS = threading.local()
 	__TLS.language = None
-	__TLS.fallback_language = None
 
 	def __init__(self, translation_key: str, *args, **kwargs):
+		"""
+		Create a :class:`RTextMCDRTranslation` component with necessary parameters for translation
+
+		:param translation_key: The translation key
+		:param args: The translation arguments
+		:param kwargs: The translation keyword arguments
+		"""
 		self.translation_key: str = translation_key
 		self.args = args
 		self.kwargs = kwargs
@@ -29,7 +48,7 @@ class RTextMCDRTranslation(RTextBase):
 		return self
 
 	@classmethod
-	def from_translation_dict(cls, translation_dict) -> 'RTextMCDRTranslation':
+	def from_translation_dict(cls, translation_dict: TranslationKeyDictRich) -> 'RTextMCDRTranslation':
 		def fake_tr(key: str, language: str):
 			return translation_util.translate_from_dict(translation_dict, language)
 
@@ -38,12 +57,7 @@ class RTextMCDRTranslation(RTextBase):
 	def __get_translated_text(self) -> RTextBase:
 		language = getattr(self.__TLS, 'language', None)
 		if language is None:
-			from mcdreforged.plugin.server_interface import ServerInterface
-			server: Optional[ServerInterface] = ServerInterface.get_instance()
-			if server is not None:
-				language = server.get_mcdr_language()
-			else:
-				language = core_constant.DEFAULT_LANGUAGE
+			language = translation_util.get_mcdr_language()
 		processed_text = self.__translator(self.translation_key, *self.args, **self.kwargs, language=language)
 		processed_text = RTextBase.from_any(processed_text)
 		for process in self.__post_process:
@@ -53,6 +67,27 @@ class RTextMCDRTranslation(RTextBase):
 	@classmethod
 	@contextmanager
 	def language_context(cls, language: str):
+		"""
+		Create a context where all :class:`RTextMCDRTranslation` will use the given language to translate within
+
+		It's mostly used when you want a translated str or Minecraft json text object corresponding to this component under a specific language
+
+		MCDR will automatically apply this context with :ref:`user's preferred language <preference-language>`
+		right before sending messages to a player or the console
+
+		Example::
+
+			def log_message_line_by_line(server: ServerInterface):
+				with RTextMCDRTranslation.language_context('en_us'):
+					text: RTextMCDRTranslation = server.rtr('my_plugin.some_message')
+					text_as_str: str = text.to_plain_text()  # The translation operation happens here
+					server.logger.info('Lines of my translation')
+					for line in text_as_str.splitlines():
+						server.logger.info('- {}'.format(line))
+
+
+		:param language: The language to be used during translation inside the context
+		"""
 		prev = getattr(cls.__TLS, 'language', None)
 		cls.__TLS.language = language
 		try:
@@ -74,18 +109,18 @@ class RTextMCDRTranslation(RTextBase):
 		copied.set_translator(self.__translator)
 		return copied
 
-	def set_color(self, color: RColor) -> 'RTextBase':
+	def set_color(self: Self, color: RColor) -> Self:
 		self.__post_process.append(lambda rt: rt.set_color(color))
 		return self
 
-	def set_styles(self, styles: Union[RStyle, Iterable[RStyle]]) -> 'RTextBase':
+	def set_styles(self: Self, styles: Union[RStyle, Iterable[RStyle]]) -> Self:
 		self.__post_process.append(lambda rt: rt.set_styles(styles))
 		return self
 
-	def set_click_event(self, action: RAction, value: str) -> 'RTextBase':
+	def set_click_event(self: Self, action: RAction, value: str) -> Self:
 		self.__post_process.append(lambda rt: rt.set_click_event(action, value))
 		return self
 
-	def set_hover_text(self, *args) -> 'RTextBase':
+	def set_hover_text(self: Self, *args) -> Self:
 		self.__post_process.append(lambda rt: rt.set_hover_text(*args))
 		return self

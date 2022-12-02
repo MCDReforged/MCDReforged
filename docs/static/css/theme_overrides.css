@@ -12,3 +12,18 @@
         overflow: visible !important;
     }
 }
+
+/* +50px width for the main doc container nav */
+.wy-nav-content {
+    max-width: 850px !important;
+}
+
+/* prevent keyword in codeblock in docstring from being italic */
+html.writer-html4 .rst-content dl:not(.docutils) .k, html.writer-html5 .rst-content dl[class]:not(.option-list):not(.field-list):not(.footnote):not(.glossary):not(.simple) .k {
+    font-style: inherit !important;
+}
+
+/* ofc */
+.highlight {
+    tab-size: 4;
+}

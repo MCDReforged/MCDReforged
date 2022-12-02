@@ -1,6 +1,7 @@
 """
 Info and InfoSource
 """
+from enum import Enum
 from typing import TYPE_CHECKING, Optional
 
 from mcdreforged.command.command_source import ConsoleCommandSource, PlayerCommandSource, \
@@ -12,20 +13,28 @@ if TYPE_CHECKING:
 	from mcdreforged.plugin.server_interface import ServerInterface
 
 
-class InfoSource:
-	# the text is from the stdout of the server
-	SERVER = 0
+class InfoSource(int, Enum):
+	"""
+	Sources where an :class:`Info` object comes from
+	"""
 
-	# the text is from user input
+	SERVER = 0
+	"""From the standard output stream of the server"""
+
 	CONSOLE = 1
+	"""From input from console"""
 
 
 class Info:
+	"""
+	An :class:`Info` instance contains the parsed result from the server or from the console
+	"""
 	__id_counter = 0
 
-	def __init__(self):
-		# a increasing id number for distinguishing info instance
-		self.id = Info.__id_counter
+	def __init__(self, source: InfoSource, raw_content: str):
+		self.id: int = Info.__id_counter
+		"""A monotonously increasing unique id"""
+
 		Info.__id_counter += 1
 		self.__mcdr_server = None  # type: Optional[MCDReforgedServer]
 		self.__send_to_server = True
@@ -35,40 +44,75 @@ class Info:
 		#   Public fields
 		# -----------------
 
-		# time information from the parsed text
-		self.hour = None  # type: Optional[int]
-		self.min = None  # type: Optional[int]
-		self.sec = None  # type: Optional[int]
+		self.hour: Optional[int] = None
+		"""Time information from the parsed text - hour"""
+		self.min: Optional[int] = None
+		"""Time information from the parsed text - minute"""
+		self.sec: Optional[int] = None
+		"""Time information from the parsed text - second"""
 
-		# very raw content, it's also the content to be echoed to the stdout
-		self.raw_content = None  # type: Optional[str]
+		self.raw_content: str = raw_content
+		"""
+		Very raw unparsed content from the server stdout.
 
-		# if the text is sent by a player the value will be what the player said. if not the value will be the pain text
-		self.content = None  # type: Optional[str]
+		It's also the content to be echoed to the stdout
+		"""
 
-		# the name of the player. if it's not sent by a player the value will be None
-		self.player = None  # type: Optional[str]
+		self.content: Optional[str] = None
+		"""
+		The parsed message text
+		
+		If the text is sent by a player it will be what the player said.
+		Otherwise it will be the content that removes stuffs like timestamp or thread name
+		"""
 
-		# the value type is InfoSource
-		self.source = None  # type: Optional[int]
+		self.player: Optional[str] = None
+		"""
+		The name of the player
+		
+		If it's not sent by a player the value will be None
+		"""
 
-		# the logging level of the server's stdout, such as "INFO" or "WARN"
-		self.logging_level = None  # type: Optional[str]
+		self.source: InfoSource = source
+		"""
+		A int (actually :class:`InfoSource`, a subclass of int) representing the the type of the info
+
+		For info from the server, its value is ``0``
+		
+		For info from the console, its value is ``1``
+		
+		See :class:`InfoSource` for all possible values
+		"""
+
+		self.logging_level: Optional[str] = None
+		"""The logging level of the server's stdout, such as ``"INFO"`` or ``"WARN"``"""
 
 	@property
-	def is_from_console(self):
+	def is_from_console(self) -> bool:
+		"""
+		If the source of the info is :attr:`InfoSource.CONSOLE` (``1``), i.e. from the console
+		"""
 		return self.source == InfoSource.CONSOLE
 
 	@property
-	def is_from_server(self):
+	def is_from_server(self) -> bool:
+		"""
+		If the source of the info is :attr:`InfoSource.SERVER` (``0``), i.e. from the server
+		"""
 		return self.source == InfoSource.SERVER
 
 	@property
-	def is_player(self):
+	def is_player(self) -> bool:
+		"""
+		If the source is from a player in the server
+		"""
 		return self.is_from_server and self.player is not None
 
 	@property
-	def is_user(self):
+	def is_user(self) -> bool:
+		"""
+		If the source is from a user, i.e. if the source is from the console or from a player in the server
+		"""
 		return self.is_from_console or self.is_player
 
 	# --------------
@@ -85,9 +129,20 @@ class Info:
 		self.__mcdr_server = mcdr_server
 
 	def get_server(self) -> 'ServerInterface':
+		"""
+		Return the server interface instance
+		"""
 		return self.__mcdr_server.basic_server_interface
 
 	def get_command_source(self) -> Optional[InfoCommandSource]:
+		"""
+		Extract a command source object from this object:
+
+		* :class:`~mcdreforged.command.command_source.ConsoleCommandSource` if this info is from console
+		* :class:`~mcdreforged.command.command_source.PlayerCommandSource` if this info is from a player in the server
+
+		:return: The command source instance, or None if it can't extract a command source
+		"""
 		self.__assert_attached()
 		if self.__command_source is None:
 			if self.is_from_console:
@@ -97,22 +152,35 @@ class Info:
 		return self.__command_source
 
 	def to_command_source(self) -> InfoCommandSource:
+		"""
+		The same to method :meth:`get_command_source`,
+		but it raises a :class:`~mcdreforged.utils.exception.IllegalCallError` if it can't extract a command source
+
+		:raise IllegalCallError: if a command source cannot be extracted from this object
+		"""
 		source = self.get_command_source()
 		if source is None:
 			raise IllegalCallError()
 		return source
 
 	def should_send_to_server(self) -> bool:
+		"""
+		Representing if MCDR should send the content to the standard input stream of the server
+		if this info is input from the console
+		"""
 		return self.__send_to_server
 
 	def cancel_send_to_server(self) -> None:
+		"""
+		Prevent this info from being sent to the standard input stream of the server
+		"""
 		self.__send_to_server = False
 
 	# --------------------------------
 	#   Formatting and Magic methods
 	# --------------------------------
 
-	def format_text(self):
+	def debug_format_text(self):
 		try:
 			time_message = '{:0>2}:{:0>2}:{:0>2}'.format(self.hour, self.min, self.sec)
 		except:
@@ -125,20 +193,18 @@ class Info:
 		])
 
 	def __str__(self):
-		return '; '.join(self.format_text().splitlines())
+		return '; '.join(self.debug_format_text().splitlines())
 
 	def __deepcopy__(self, memo):
 		"""
-		Just dont copy the mcdr_server instance
+		Just don't copy the mcdr_server instance
 		"""
 		existed = memo.get(self)
 		if existed is not None:
 			return existed
-		memo[self] = dupe = Info()
+		memo[self] = dupe = Info(self.source, self.raw_content)
 		dupe.hour, dupe.min, dupe.sec = self.hour, self.min, self.sec
-		dupe.raw_content = self.raw_content
 		dupe.content = self.content
 		dupe.player = self.player
-		dupe.source = self.source
 		dupe.logging_level = self.logging_level
 		return dupe

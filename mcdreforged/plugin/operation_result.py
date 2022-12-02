@@ -1,7 +1,8 @@
 import os
 from typing import List, TYPE_CHECKING
 
-from mcdreforged.minecraft.rtext import RTextList, RText, RAction, RTextBase
+from mcdreforged.minecraft.rtext.style import RAction
+from mcdreforged.minecraft.rtext.text import RTextList, RTextBase, RText
 
 if TYPE_CHECKING:
 	from mcdreforged.plugin.type.plugin import AbstractPlugin

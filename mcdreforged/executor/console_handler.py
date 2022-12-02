@@ -1,6 +1,6 @@
 import sys
 from threading import RLock, Lock
-from typing import TYPE_CHECKING, Optional, Iterable, Any, List
+from typing import TYPE_CHECKING, Optional, Iterable, List
 
 from prompt_toolkit import PromptSession
 from prompt_toolkit.application import get_app
@@ -23,6 +23,7 @@ from mcdreforged.permission.permission_level import PermissionLevel
 from mcdreforged.plugin.server_interface import ServerInterface
 from mcdreforged.utils import misc_util
 from mcdreforged.utils.logger import DebugOption, SyncStdoutStreamHandler
+from mcdreforged.utils.types import MessageText
 
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
@@ -58,7 +59,7 @@ class ConsoleHandler(ThreadExecutor):
 				else:
 					if self.mcdr_server.logger.should_log_debug(DebugOption.HANDLER):
 						self.mcdr_server.logger.debug('Parsed text from {}:'.format(type(self).__name__), no_check=True)
-						for line in parsed_result.format_text().splitlines():
+						for line in parsed_result.debug_format_text().splitlines():
 							self.mcdr_server.logger.debug('	{}'.format(line), no_check=True)
 					self.mcdr_server.reactor_manager.put_info(parsed_result)
 		except (KeyboardInterrupt, EOFError, SystemExit, IOError) as error:
@@ -84,7 +85,7 @@ class ConsoleSuggestionCommandSource(CommandSource):
 	def get_permission_level(self) -> int:
 		return PermissionLevel.CONSOLE_LEVEL
 
-	def reply(self, message: Any, **kwargs) -> None:
+	def reply(self, message: MessageText, **kwargs) -> None:
 		pass
 
 
