@@ -34,7 +34,7 @@ if TYPE_CHECKING:
 	from mcdreforged.plugin.plugin_manager import PluginManager
 	from mcdreforged.plugin.type.regular_plugin import RegularPlugin
 
-SerializableType = TypeVar('SerializableType')
+SerializableType = TypeVar('SerializableType', bound=Serializable)
 
 
 class ServerInterface:
@@ -921,10 +921,8 @@ class PluginServerInterface(ServerInterface):
 			if echo_in_console and not (source_to_reply is not None and source_to_reply.is_console):
 				self.logger.info(msg)
 
-		if target_class is not None:
-			target_class: Type[Serializable]
-			if default_config is None:
-				default_config = target_class.get_default().serialize()
+		if target_class is not None and default_config is None:
+			default_config = target_class.get_default().serialize()
 		config_file_path = os.path.join(self.get_data_folder(), file_name) if in_data_folder else file_name
 		needs_save = False
 		try:
