@@ -719,7 +719,7 @@ class PluginServerInterface(ServerInterface):
 		:param echo_in_console: If logging messages in console about config loading
 		:param source_to_reply: The command source for replying logging messages
 		:param target_class: A class derived from Serializable. When specified the loaded config data will be deserialized
-		to a instance of target_class which will be returned as return value
+		to an instance of target_class which will be returned as return value
 		:param encoding: The encoding method to read the config file
 		:return: A dict contains the loaded and processed config
 		"""
@@ -751,9 +751,7 @@ class PluginServerInterface(ServerInterface):
 			if default_config is not None:
 				# constructing the result config based on the given default config
 				for key, value in default_config.items():
-					if key in read_data:
-						result_config[key] = read_data[key]
-					else:
+					if key not in read_data:
 						result_config[key] = value
 						log(self._mcdr_server.tr('server_interface.load_config_simple.key_missed', key, value))
 						needs_save = True
