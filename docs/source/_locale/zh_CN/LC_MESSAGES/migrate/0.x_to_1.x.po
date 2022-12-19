@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-13 21:01+0800\n"
+"POT-Creation-Date: 2022-12-19 11:18+0800\n"
 "PO-Revision-Date: 2021-01-23 08:50+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -258,45 +258,44 @@ msgstr ""
 
 #: ../migrate/0.x_to_1.x.rst:111
 msgid ""
-"MCDR also provides a simple function decorator ``new_thread`` for lazy "
-"man, to make a function multi threaded when being invoked. Here's an "
-"quick example:"
-msgstr "MCDR 还提供了一个简单的函数装饰器 ``new_thread``，用于在调用函数时使函数为多线程。下面是一个示例："
+"MCDR also provides a simple function decorator :func:`@new_thread "
+"<mcdreforged.api.decorator.new_thread.new_thread>` for lazy man, to make "
+"a function multi threaded when being invoked. Here's an quick example:"
+msgstr "MCDR 还提供了一个简单的函数装饰器 :func:`@new_thread <mcdreforged.api.decorator.new_thread.new_thread>`，它可以让函数在被调用时多线程地运行。下面是一个示例："
 
 #: ../migrate/0.x_to_1.x.rst:129
 msgid ""
-"With the ``@new_thread`` decorator, everytime when you invoke "
-"``my_slow_method2``\\ , a new daemon thread will be started to executed "
-"it. For more details about the ``@new_thread`` decorator, check `here "
-"<../plugin_dev/api.html#new-thread>`__"
+"With the :func:`@new_thread "
+"<mcdreforged.api.decorator.new_thread.new_thread>` decorator, everytime "
+"when you invoke ``my_slow_method2``\\ , a new daemon thread will be "
+"started to executed it"
 msgstr ""
-"使用 ``@new_thread`` 修饰器，则每次调用 ``my_slow_method2``\\ 时，都会创建一个新的守护线程来执行它。关于 "
-"``@new_thread`` 的详细信息，请查看 `此处 <../plugin_dev/api.html#new-thread>`__"
+"在使用 :func:`@new_thread <mcdreforged.api.decorator.new_thread.new_thread>` 修饰器时，每次调用 ``my_slow_method2``\\ 都会创建一个新的守护线程来执行这个函数"
 
-#: ../migrate/0.x_to_1.x.rst:133
+#: ../migrate/0.x_to_1.x.rst:132
 msgid "Package location"
 msgstr "模块位置"
 
-#: ../migrate/0.x_to_1.x.rst:135
+#: ../migrate/0.x_to_1.x.rst:134
 msgid ""
 "If your plugin imports some of the mcdr utils, like ``RText`` or "
 "``Rcon``\\ , you need to take a look at the package location"
 msgstr "如果你的插件需要导入一些 MCDR 内置模块，如 RText 或 Rcon，请查看模块的位置"
 
-#: ../migrate/0.x_to_1.x.rst:137
+#: ../migrate/0.x_to_1.x.rst:136
 msgid ""
 "Current MCDR collects all useful classes / functions in the "
 "``mcdreforged.api`` package. It's recommended to import the package you "
 "want in this ``api`` package"
 msgstr "MCDR 集合了所有有用的类/函数至 ``mcdreforged.api`` 包中。建议从 ``api`` 包中导入所需的模块"
 
-#: ../migrate/0.x_to_1.x.rst:139
+#: ../migrate/0.x_to_1.x.rst:138
 msgid ""
 "Use ``from mcdreforged.api.rtext import *`` if you want to use all rtext "
 "classes"
 msgstr "如需导入所有 RText 类，可使用 ``from mcdreforged.api.rtext import *``"
 
-#: ../migrate/0.x_to_1.x.rst:141
+#: ../migrate/0.x_to_1.x.rst:140
 msgid ""
 "Use ``from mcdreforged.api.rcon import *`` if you want to use all rcon "
 "classes. Class ``Rcon`` is renamed to ``RconConnection`` by the way"
@@ -304,42 +303,42 @@ msgstr ""
 "如需导入所有 Rcon 类，可使用 ``from mcdreforged.api.rcon import *`` 。注意，``Rcon`` "
 "类已被重命名为 ``RconConnection``"
 
-#: ../migrate/0.x_to_1.x.rst:143
+#: ../migrate/0.x_to_1.x.rst:142
 msgid ""
 "For lazy man, you can safely use ``from mcdreforged.api.all import *`` to"
 " import all useful things to the plugin"
 msgstr "对于懒人，你可以使用 ``from mcdreforged.api.all import *`` 来向插件中导入所有内置模块"
 
-#: ../migrate/0.x_to_1.x.rst:146
+#: ../migrate/0.x_to_1.x.rst:145
 msgid "Server Instance API"
 msgstr "服务器实例 API"
 
-#: ../migrate/0.x_to_1.x.rst:148
+#: ../migrate/0.x_to_1.x.rst:147
 msgid ""
 "Method ``reply`` now raises a ``TypeError`` if the given *info* parameter"
 " is not from a user"
 msgstr "如果给定的 *info* 参数不是来自用户，则 ``reply`` 方法将产生一个 ``TypeError``"
 
-#: ../migrate/0.x_to_1.x.rst:150
+#: ../migrate/0.x_to_1.x.rst:149
 msgid "Method ``add_help_message`` is renamed to ``register_help_message``"
 msgstr "``add_help_message`` 方法已重命名为 ``register_help_message``"
 
-#: ../migrate/0.x_to_1.x.rst:153
+#: ../migrate/0.x_to_1.x.rst:152
 msgid "Others"
 msgstr "其它"
 
-#: ../migrate/0.x_to_1.x.rst:156
+#: ../migrate/0.x_to_1.x.rst:155
 msgid "console_command_prefix"
 msgstr "console_command_prefix"
 
-#: ../migrate/0.x_to_1.x.rst:158
+#: ../migrate/0.x_to_1.x.rst:157
 msgid ""
 "The option ``console_command_prefix`` is removed, which was used to "
 "prevent input starts with ``!!`` to be sent to the standard input stream "
 "of the server by default"
 msgstr "``console_command_prefix`` 已被移除——它曾用于防止将 ``!!`` 开头的控制台输入被发送至服务器标准输入流"
 
-#: ../migrate/0.x_to_1.x.rst:160
+#: ../migrate/0.x_to_1.x.rst:159
 msgid ""
 "In current version, MCDR will not prevent that kind of console input to "
 "be sent to the server unless it matches an registered command tree root "
@@ -349,7 +348,7 @@ msgstr ""
 "在当前版本中，MCDR 不会阻止将此类控制台输入发送到服务器，除非它与已注册指令树的根节点匹配。点击 `此处 "
 "<plugin_dev/command.html#workflow>`__ 以了解该指令系统如何工作"
 
-#: ../migrate/0.x_to_1.x.rst:163
+#: ../migrate/0.x_to_1.x.rst:162
 msgid ""
 "As a result, if you plugin use manually parsing method to parse command "
 "to parse a user command in ``on_user_info`` etc., you need to invoke "
@@ -358,5 +357,6 @@ msgid ""
 "be sent to the server standard input stream"
 msgstr ""
 "因此，如果插件使用手动解析方法解析 ``on_user_info`` 等里面的用户指令，则需要在指令处理中调用 "
-":meth:`~mcdreforged.info_reactor.info.Info.cancel_send_to_server` 方法，否则在控制台中输入的指令可能会被发送到服务器标准输入流中"
+":meth:`~mcdreforged.info_reactor.info.Info.cancel_send_to_server` "
+"方法，否则在控制台中输入的指令可能会被发送到服务器标准输入流中"
 

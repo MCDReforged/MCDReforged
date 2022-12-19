@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-13 21:09+0800\n"
+"POT-Creation-Date: 2022-12-19 11:18+0800\n"
 "PO-Revision-Date: 2021-01-22 14:26+0000\n"
 "Last-Translator: \n"
 "Language: zh_CN\n"
@@ -140,8 +140,7 @@ msgid ""
 "handling yourself inside `User Info event <event.html#user-info>`__"
 msgstr ""
 "如果你只关心用户输入的指令，与其监听 `用户信息事件 <event.html#general-info>`__，你还可以 `注册一棵指令树 "
-"<command.html>`__。这比手动在 `用户信息事件 <event.html#general-info>`__ "
-"里处理的开发效率要高不少"
+"<command.html>`__。这比手动在 `用户信息事件 <event.html#general-info>`__ 里处理的开发效率要高不少"
 
 #: ../plugin_dev/dev_tips.rst:56
 msgid ""
@@ -169,10 +168,10 @@ msgstr ""
 
 #: ../plugin_dev/dev_tips.rst:64
 msgid ""
-"For easier use there's a decorator named `new_thread <api.html#new-"
-"thread>`__ to help you make your function run in another thread "
-"asynchronously"
-msgstr "为了更易于使用，你可以使用一个名为 `new_thread <api.html#new-thread>`__ 的函数装饰器来使你的函数异步地执行"
+"For easier use there's a decorator named :func:`@new_thread "
+"<mcdreforged.api.decorator.new_thread.new_thread>` to help you make your "
+"function run in another thread asynchronously"
+msgstr "为了更易于使用，你可以使用一个名为 :func:`@new_thread <mcdreforged.api.decorator.new_thread.new_thread>` 的函数装饰器来使你的函数异步地执行"
 
 #: ../plugin_dev/dev_tips.rst:67
 msgid "User config, data and log files"
