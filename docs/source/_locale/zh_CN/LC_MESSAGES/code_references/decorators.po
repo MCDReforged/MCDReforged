@@ -197,7 +197,7 @@ msgid ""
 "cannot figure out what the current plugin is)"
 msgstr ""
 "如果获取 :class:`~mcdreforged.plugin.server_interface.PluginServerInterface` "
-"对象失败 (大概率因为当前线程并非是 MCDR 提供的线程，因此 MCDR 得知当前的插件是什么)"
+"对象失败 (大概率因为当前线程并非是 MCDR 提供的线程，因此 MCDR 无法得知当前的插件是什么)"
 
 #: ../code_references/decorators.rst:23
 msgid "@spam_proof"
