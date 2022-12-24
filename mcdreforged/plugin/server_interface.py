@@ -277,6 +277,7 @@ class ServerInterface:
 		pids = []
 		if self._mcdr_server.process is not None:
 			try:
+				pids.append(self._mcdr_server.process.pid)
 				for process in psutil.Process(self._mcdr_server.process.pid).children(recursive=True):
 					pids.append(process.pid)
 			except psutil.NoSuchProcess:
