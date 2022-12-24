@@ -27,7 +27,7 @@ jobs:
     - name: Setup python
       uses: actions/setup-python@v3
       with:
-        python-version: 3.6
+        python-version: 3.9
 
     - uses: actions/cache@v2
       with:
