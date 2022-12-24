@@ -158,14 +158,13 @@ class PluginManager:
 	#   Single Plugin Operations
 	# ----------------------------
 
-	def __load_plugin(self, file_path):
+	def __load_plugin(self, file_path: str) -> Optional[RegularPlugin]:
 		"""
 		Try to load a plugin from the given file
 		If succeeds, add the plugin to the plugin list, the plugin state will be set to LOADED
 		If fails, nothing will happen
-		:param str file_path: The path to the plugin file, a *.py
+		:param file_path: The path to the plugin file
 		:return: the new plugin instance if succeeds, otherwise None
-		:rtype: RegularPlugin or None
 		"""
 		plugin = plugin_factory.create_regular_plugin(self, file_path)
 		try:
@@ -189,14 +188,12 @@ class PluginManager:
 				plugin.remove()  # quickly remove this plugin
 				return None
 
-	def __unload_plugin(self, plugin):
+	def __unload_plugin(self, plugin: AbstractPlugin) -> bool:
 		"""
 		Try to load a plugin from the given file
 		Whether it succeeds or not, the plugin instance will be removed from the plugin list
 		The plugin state will be set to UNLOADING
-		:param AbstractPlugin plugin: The plugin instance to be unloaded
 		:return: If there's an exception during plugin unloading
-		:rtype: bool
 		"""
 		try:
 			plugin.unload()
@@ -212,13 +209,11 @@ class PluginManager:
 			self.__remove_plugin(plugin)
 		return ret
 
-	def __reload_plugin(self, plugin):
+	def __reload_plugin(self, plugin: AbstractPlugin) -> bool:
 		"""
-		Try to reload an existed plugin and unloaded plugin
+		Try to reload an existed and unloaded plugin
 		If fails, unload the plugin and then the plugin state will be set to UNLOADED
-		:param AbstractPlugin plugin: The plugin instance to be reloaded
 		:return: If the plugin reloads successfully without error
-		:rtype: bool
 		"""
 		try:
 			plugin.reload()

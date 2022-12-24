@@ -1,5 +1,5 @@
 import os
-from typing import Optional, TYPE_CHECKING
+from typing import Optional, TYPE_CHECKING, Type
 
 from mcdreforged.constants import plugin_constant
 from mcdreforged.plugin.type.directory_plugin import DirectoryPlugin
@@ -12,14 +12,14 @@ if TYPE_CHECKING:
 	from mcdreforged.plugin.plugin_manager import PluginManager
 
 
-def __get_plugin_class_from_path(file_path: str, allow_disabled: bool) -> Optional[type]:
+def __get_plugin_class_from_path(file_path: str, allow_disabled: bool) -> Optional[Type[RegularPlugin]]:
 	if os.path.isfile(file_path):
 		if file_path.endswith(plugin_constant.DISABLED_PLUGIN_FILE_SUFFIX) and allow_disabled:
 			file_path = string_util.remove_suffix(file_path, plugin_constant.DISABLED_PLUGIN_FILE_SUFFIX)
 		suffix = file_util.get_file_suffix(file_path)
 		if suffix == plugin_constant.SOLO_PLUGIN_FILE_SUFFIX:  # .py
 			return SoloPlugin
-		if suffix in plugin_constant.PACKED_PLUGIN_FILE_SUFFIXES:  # .mcdr
+		if suffix in plugin_constant.PACKED_PLUGIN_FILE_SUFFIXES:  # .mcdr, .pyz
 			return PackedPlugin
 	elif os.path.isdir(file_path) and (allow_disabled or not file_path.endswith(plugin_constant.DISABLED_PLUGIN_FILE_SUFFIX)):
 		if os.path.isfile(os.path.join(file_path, plugin_constant.PLUGIN_META_FILE)) and not os.path.isfile(os.path.join(file_path, '__init__.py')):
