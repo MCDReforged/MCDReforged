@@ -4,7 +4,9 @@ on: workflow_call
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    # We need Python 3.6, but Ubuntu 22 doesn't have python3.6, so we need to use Ubuntu 20 here
+    # see: https://github.com/actions/setup-python/issues/544
+    runs-on: ubuntu-20.04
     strategy:
       matrix:
         python-version: [ '3.6', '3.7', '3.8', '3.9', '3.10', '3.11' ]
@@ -17,7 +19,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}

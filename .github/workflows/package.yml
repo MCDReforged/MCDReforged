@@ -27,9 +27,9 @@ jobs:
     - name: Setup python
       uses: actions/setup-python@v3
       with:
-        python-version: 3.6
+        python-version: 3.9
 
-    - uses: actions/cache@v2
+    - uses: actions/cache@v3
       with:
         path: ~/.cache/pip
         key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
@@ -60,7 +60,7 @@ jobs:
         user: __token__
         password: ${{ secrets.PYPI_API_TOKEN }}
 
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v3
       with:
         name: MCDReforged package distribution for ${{ github.sha }}
         path: dist/
