@@ -23,7 +23,7 @@ jobs:
           cd ..
           zip -r MCDReforged-dev.zip ./MCDReforged
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: MCDReforged dev source for ${{ github.sha }}
           path: MCDReforged-dev.zip
