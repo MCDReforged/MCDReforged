@@ -2,7 +2,7 @@
 Single plugin class
 """
 from enum import Enum, auto
-from typing import Tuple, Any, TYPE_CHECKING
+from typing import Tuple, Any, TYPE_CHECKING, Collection, Optional
 
 from mcdreforged.command.builder.nodes.basic import Literal
 from mcdreforged.plugin.meta.metadata import Metadata
@@ -18,9 +18,9 @@ if TYPE_CHECKING:
 
 class PluginState(Enum):
 	UNINITIALIZED = auto()  # just created the instance
-	LOADING = auto()        # loading the .py entrance file
-	LOADED = auto()         # loaded the .py entrance file
-	READY = auto()          # called "on load" event, ready to do anything
+	LOADING = auto()        # loading the .py entrance file / metadata of a multi-file plugin
+	LOADED = auto()         # loaded the .py entrance file / metadata of a multi-file plugin
+	READY = auto()          # registered module & default listeners & translations, now it's ready to do anything
 	UNLOADING = auto()      # just removed from the plugin list, ready to call "on unload" event
 	UNLOADED = auto()       # unloaded, should never access it
 
@@ -74,13 +74,13 @@ class AbstractPlugin:
 	#   Plugin State
 	# ----------------
 
-	def set_state(self, state):
+	def set_state(self, state: PluginState):
 		self.state = state
 
-	def in_states(self, states):
+	def in_states(self, states: Collection[PluginState]):
 		return self.state in states
 
-	def assert_state(self, states, extra_message=None):
+	def assert_state(self, states: Collection[PluginState], extra_message: Optional[str] = None):
 		if not self.in_states(states):
 			msg = '{} state assertion failed, excepts {} but founded {}.'.format(repr(self), states, self.state)
 			if extra_message is not None:

@@ -204,6 +204,7 @@ class PluginManager:
 			ret = False
 		else:
 			self.logger.info(self.mcdr_server.tr('plugin_manager.unload_plugin.success', plugin.get_name()))
+			plugin.receive_event(MCDRPluginEvents.PLUGIN_UNLOADED, ())
 			ret = True
 		finally:
 			self.__remove_plugin(plugin)
@@ -326,31 +327,11 @@ class PluginManager:
 		# child first, parent last
 		for plugin in reversed(affected_plugins):
 			self.__unload_plugin(plugin)
-		for plugin in reversed(affected_plugins):
-			plugin.receive_event(MCDRPluginEvents.PLUGIN_UNLOADED, ())
 
 		# parent first, child last
 		# actually the order is not sensitive here, but why not
 		for plugin in affected_plugins:
 			result.record(plugin, self.__reload_plugin(plugin))
-		return result
-
-	def __check_plugin_dependencies(self) -> SingleOperationResult:
-		"""
-		The order of elements in the result's success_list matche the dependency topo order
-		"""
-		result = SingleOperationResult()
-		walker = DependencyWalker(self)
-		walk_result = walker.walk()
-		for item in walk_result:
-			plugin = self.plugins[item.plugin_id]
-			result.record(plugin, item.success)
-			if not item.success:
-				self.logger.error(self.mcdr_server.tr('plugin_manager.check_plugin_dependencies.item_failed', plugin, item.reason))
-				self.__unload_plugin(plugin)
-		self.logger.debug(self.mcdr_server.tr('plugin_manager.check_plugin_dependencies.topo_order'), option=DebugOption.PLUGIN)
-		for plugin in result.success_list:
-			self.logger.debug('- {}'.format(plugin), option=DebugOption.PLUGIN)
 		return result
 
 	# ---------------------------
@@ -379,6 +360,26 @@ class PluginManager:
 	#      3. Call on_load for new / reloaded plugins by topo order
 	#    Dispatch PLUGIN_UNLOADED before PLUGIN_LOADED, so file renamed plugin keeps the same event order (unload -> load) with reloaded plugin
 
+	# Perfect behavior:
+	# do in reversed topo order:
+	#   1. dispatch plugin unload event
+	#   2. unload plugin object
+	#
+	# do in topo order:
+	#   1. load plugin
+	#   2. dispatch on_load event
+	#
+	#
+	# load: load, check dept, finalized
+	# unload: unload, finalized
+	# reload: unload, load, check dept, finalized
+	#
+	# when to dispatch event:
+	# - unload: immediately
+	# - load: after dept check
+
+	# New operations will be queued and delayed
+
 	def __post_plugin_process(self, load_result=None, unload_result=None, reload_result=None):
 		"""
 		When returns, all events / operations are finished processing
@@ -390,7 +391,20 @@ class PluginManager:
 		if reload_result is None:
 			reload_result = SingleOperationResult()
 
-		dependency_check_result = self.__check_plugin_dependencies()
+		walker = DependencyWalker(self)
+		walk_result = walker.walk()
+		dependency_check_result = SingleOperationResult()  # topo order in success_list
+		for item in walk_result:
+			plugin = self.plugins[item.plugin_id]
+			dependency_check_result.record(plugin, item.success)
+			if not item.success:
+				self.logger.error(self.mcdr_server.tr('plugin_manager.check_plugin_dependencies.item_failed', plugin, item.reason))
+				self.__unload_plugin(plugin)
+
+		self.logger.debug(self.mcdr_server.tr('plugin_manager.check_plugin_dependencies.topo_order'), option=DebugOption.PLUGIN)
+		for plugin in dependency_check_result.success_list:
+			self.logger.debug('- {}'.format(plugin), option=DebugOption.PLUGIN)
+
 		self.last_operation_result.record(load_result, unload_result, reload_result, dependency_check_result)
 
 		# Expected plugin states:
@@ -405,24 +419,21 @@ class PluginManager:
 		newly_loaded_plugins = {*load_result.success_list, *reload_result.success_list}
 		to_be_removed_plugins = unload_result.success_list + unload_result.failed_list + reload_result.failed_list + dependency_check_result.failed_list
 
-		# collect removed plugin module instance
+		# collect removed plugin module instance in case e.g. reloading when a plugin file was renamed
+		# so its on_load event can still have the old entry module
 		removed_plugins_module_instance = {}
 		for plugin in to_be_removed_plugins:
 			if isinstance(plugin, RegularPlugin):
 				removed_plugins_module_instance[plugin.get_id()] = plugin.entry_module_instance
 
+		# do remove
+		for plugin in to_be_removed_plugins:
+			plugin.remove()
+
 		# get ready
 		for plugin in dependency_check_result.success_list:
 			if plugin in newly_loaded_plugins:
 				plugin.ready()
-
-		# PLUGIN_UNLOADED event
-		for plugin in to_be_removed_plugins:
-			plugin.assert_state({PluginState.UNLOADING})
-			# plugins might just be newly loaded but failed on dependency check, dont dispatch event to them
-			if plugin not in newly_loaded_plugins:
-				plugin.receive_event(MCDRPluginEvents.PLUGIN_UNLOADED, ())
-			plugin.remove()
 
 		# PLUGIN_LOADED event
 		for plugin in dependency_check_result.success_list:
