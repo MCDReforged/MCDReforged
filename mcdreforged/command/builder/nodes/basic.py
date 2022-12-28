@@ -471,7 +471,7 @@ class Literal(EntryNode):
 		return '|'.join(sorted(self.literals))
 
 	def suggests(self, suggestion: SUGGESTS_CALLBACK) -> 'AbstractNode':
-		raise IllegalNodeOperation('Literal node doe not support suggests')
+		raise IllegalNodeOperation('Literal node does not support suggests')
 
 	def parse(self, text):
 		arg = utils.get_element(text)
