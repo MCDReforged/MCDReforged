@@ -24,6 +24,7 @@ from mcdreforged.preference.preference_manager import PreferenceItem
 from mcdreforged.translation.translation_text import RTextMCDRTranslation
 from mcdreforged.utils import misc_util, file_util
 from mcdreforged.utils.exception import IllegalCallError
+from mcdreforged.utils.future import Future
 from mcdreforged.utils.logger import MCDReforgedLogger, DebugOption
 from mcdreforged.utils.serializer import Serializable
 from mcdreforged.utils.types import MessageText, TranslationKeyDictRich, TranslationKeyDictNested
@@ -475,44 +476,51 @@ class ServerInterface:
 
 	# Notes: All plugin manipulation will trigger a dependency check, which might cause unwanted plugin operations
 
-	def __check_if_success(self, operation_result: SingleOperationResult, check_loaded: bool) -> bool:
+	def __check_if_success(self, operation_result: PluginOperationResult, result_extractor: Callable[[PluginOperationResult], SingleOperationResult], check_loaded: bool) -> bool:
 		"""
 		Check if there's any plugin inside the given operation result (load result / reload result etc.)
 		Then check if the plugin passed the dependency check if param check_loaded is True
 		"""
-		success = operation_result.has_success()
+		opt_result = result_extractor(self._mcdr_server.plugin_manager.last_operation_result)
+		success = opt_result.has_success()
 		if success and check_loaded:
-			plugin = operation_result.success_list[0]
-			success = plugin in self._mcdr_server.plugin_manager.last_operation_result.dependency_check_result.success_list
+			plugin = opt_result.success_list[0]
+			success = plugin in operation_result.dependency_check_result.success_list
 		return success
 
-	def __not_loaded_regular_plugin_manipulate(self, plugin_file_path: str, handler: Callable[['PluginManager'], Callable[[str], Any]]) -> bool:
+	def __not_loaded_regular_plugin_manipulate(self, plugin_file_path: str, handler: Callable[['PluginManager'], Callable[[str], Optional[Future[PluginOperationResult]]]]) -> bool:
 		"""
 		Manipulate a not loaded regular plugin from a given file path
 		:param plugin_file_path: The path to the not loaded new plugin
 		:param handler: What you want to do with Plugin Manager to the given file path
 		:return: If success
 		"""
-		self._mcdr_server.plugin_manager.last_operation_result.clear()
-		handler(self._mcdr_server.plugin_manager)(plugin_file_path)
-		return self.__check_if_success(self._mcdr_server.plugin_manager.last_operation_result.load_result, check_loaded=True)  # the operations is always loading a plugin
+		future = handler(self._mcdr_server.plugin_manager)(plugin_file_path)
+		if future.is_finished():
+			return self.__check_if_success(future.get(), lambda result: result.load_result, check_loaded=True)  # the operations is always loading a plugin
+		else:
+			return False  # TODO handle unknown result caused by chained sync plugin operation
 
-	def __existed_regular_plugin_manipulate(self, plugin_id: str, handler: Callable[['PluginManager'], Callable[['RegularPlugin'], Any]], result_getter: Callable[[PluginOperationResult], SingleOperationResult], check_loaded: bool) -> bool or None:
+	def __existed_regular_plugin_manipulate(
+			self, plugin_id: str, handler: Callable[['PluginManager'], Callable[['RegularPlugin'], Any]],
+			result_extractor: Callable[[PluginOperationResult], SingleOperationResult], check_loaded: bool
+	) -> Optional[bool]:
 		"""
 		Manipulate a loaded regular plugin from a given plugin id
 		:param plugin_id: The plugin id of the plugin you want to manipulate
 		:param handler: What callable you want to use with Plugin Manager to the plugin id,
 		the returned callable accepts the plugin instance
-		:param result_getter: How to get the single operation result from the plugin operation result.
+		:param result_extractor: How to get the single operation result from the plugin operation result.
 		It's used to determine if the operation succeeded
 		:return: If success, None if plugin not found
 		"""
 		plugin = self._mcdr_server.plugin_manager.get_regular_plugin_from_id(plugin_id)
 		if plugin is not None:
-			self._mcdr_server.plugin_manager.last_operation_result.clear()
-			handler(self._mcdr_server.plugin_manager)(plugin)
-			opt_result = result_getter(self._mcdr_server.plugin_manager.last_operation_result)
-			return self.__check_if_success(opt_result, check_loaded)
+			future = handler(self._mcdr_server.plugin_manager)(plugin)
+			if future.is_finished():
+				return self.__check_if_success(future.get(), result_extractor, check_loaded)
+			else:
+				return None
 		return None
 
 	def load_plugin(self, plugin_file_path: str) -> bool:

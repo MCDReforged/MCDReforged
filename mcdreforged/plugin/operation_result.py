@@ -36,6 +36,12 @@ class SingleOperationResult:
 	def has_failed(self):
 		return len(self.failed_list) > 0
 
+	def copy(self) -> 'SingleOperationResult':
+		copied = SingleOperationResult()
+		copied.success_list.extend(self.success_list)
+		copied.failed_list.extend(self.failed_list)
+		return copied
+
 
 class PluginOperationResult:
 	def __init__(self, plugin_manager: 'PluginManager'):
@@ -46,11 +52,16 @@ class PluginOperationResult:
 		self.reload_result = SingleOperationResult()
 		self.dependency_check_result = SingleOperationResult()
 
-	def record(self, load_result, unload_result, reload_result, dependencies_resolve_result):
-		self.load_result = load_result
-		self.unload_result = unload_result
-		self.reload_result = reload_result
-		self.dependency_check_result = dependencies_resolve_result
+	def record(self, load_result: SingleOperationResult, unload_result: SingleOperationResult, reload_result: SingleOperationResult, dependencies_resolve_result: SingleOperationResult):
+		self.load_result = load_result.copy()
+		self.unload_result = unload_result.copy()
+		self.reload_result = reload_result.copy()
+		self.dependency_check_result = dependencies_resolve_result.copy()
+
+	def copy(self) -> 'PluginOperationResult':
+		copied = PluginOperationResult(self.__plugin_manager)
+		copied.record(self.load_result, self.unload_result, self.reload_result, self.dependency_check_result)
+		return copied
 
 	def clear(self):
 		self.load_result.clear()

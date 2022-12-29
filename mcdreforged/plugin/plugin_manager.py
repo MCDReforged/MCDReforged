@@ -3,6 +3,7 @@ Plugin management
 """
 import collections
 import os
+import queue
 import threading
 from contextlib import contextmanager
 from typing import Callable, Dict, Optional, Any, Tuple, List, TYPE_CHECKING, Deque
@@ -20,6 +21,7 @@ from mcdreforged.plugin.type.permanent_plugin import PermanentPlugin
 from mcdreforged.plugin.type.plugin import AbstractPlugin, PluginState
 from mcdreforged.plugin.type.regular_plugin import RegularPlugin
 from mcdreforged.utils import file_util, string_util, misc_util
+from mcdreforged.utils.future import Future
 from mcdreforged.utils.logger import DebugOption
 from mcdreforged.utils.thread_local_storage import ThreadLocalStorage
 
@@ -35,7 +37,7 @@ class PluginManager:
 		self.mcdr_server = mcdr_server
 		self.logger = mcdr_server.logger
 
-		# id -> Plugin plugin storage
+		# plugin storage, id -> Plugin
 		self.plugins: Dict[str, AbstractPlugin] = {}
 		# file_path -> id mapping
 		self.plugin_file_path: Dict[str, str] = {}
@@ -50,8 +52,10 @@ class PluginManager:
 		# thread local storage, to store current plugin
 		self.__tls = ThreadLocalStorage()
 
-		# plugin manipulation lock
+		# plugin manipulation logics
 		self.__mani_lock = threading.RLock()
+		self.__mani_thread: Optional[threading.Thread] = None
+		self.__mani_queue = queue.Queue()
 
 	@classmethod
 	def touch_directory(cls):
@@ -338,49 +342,40 @@ class PluginManager:
 	#   Multi-Plugin Operations
 	# ---------------------------
 
-	# MCDR 0.x behavior for reload
-	# 1. reload existed (and changed) plugins. if reload fail unload it
-	# 2. load new plugins, and ignore those plugins which just got unloaded because reloading failed
-	# 3. unload removed plugins
-	# 4. call on_load for new loaded plugins
-
 	# Current behavior for plugin operations
-	# 1. Actual plugin operations
-	#   For plugin refresh
-	#      1. Unload plugins whose file is removed
-	#      2. Load new plugins
-	#      3. Reload existed (and matches filter) plugins whose state is ready. if reload fail unload it
 	#
-	#   For single plugin operation
-	#      1. Enable / disable plugin
+	# Steps to take
+	#   load: load, check dept, finalization
+	#   unload: unload, finalization
+	#   reload: unload, load, check dept, finalization
 	#
-	# 2. Plugin Processing  (method __post_plugin_process)
-	#      1. Check dependencies, unload plugins that has dependencies not satisfied
-	#      2. Call on_unload for unloaded plugins
-	#      3. Call on_load for new / reloaded plugins by topo order
-	#    Dispatch PLUGIN_UNLOADED before PLUGIN_LOADED, so file renamed plugin keeps the same event order (unload -> load) with reloaded plugin
-
-	# Perfect behavior:
-	# do in reversed topo order:
-	#   1. dispatch plugin unload event
-	#   2. unload plugin object
+	# Common path: unload, load, check dept, finalization
 	#
-	# do in topo order:
-	#   1. load plugin
-	#   2. dispatch on_load event
+	# In detailed:
+	# 1. Do unload in reversed topo order:
+	#   a. dispatch plugin unload event
+	#   b. unload plugin object
 	#
+	# 2. Load plugins
+	# 3. Check dependencies
 	#
-	# load: load, check dept, finalized
-	# unload: unload, finalized
-	# reload: unload, load, check dept, finalized
+	# 4. Finalization (:meth:`__post_plugin_process`)
+	#   a. Remove / Get-ready plugin objects
+	#   b. Do load in topo order: dispatch on_load event
+	#   c. Update registry
+	#   d. Sort plugins
 	#
-	# when to dispatch event:
-	# - unload: immediately
+	# When to dispatch load/unload event:
 	# - load: after dept check
+	# - unload: immediately
+	#
+	# New sync operations will be queued and delayed
+	#   see :meth:`__run_manipulation`
 
-	# New operations will be queued and delayed
-
-	def __post_plugin_process(self, load_result=None, unload_result=None, reload_result=None):
+	def __post_plugin_process(
+			self, load_result: Optional[SingleOperationResult] = None, unload_result: Optional[SingleOperationResult] = None,
+			reload_result: Optional[SingleOperationResult] = None
+	) -> PluginOperationResult:
 		"""
 		When returns, all events / operations are finished processing
 		"""
@@ -406,6 +401,7 @@ class PluginManager:
 			self.logger.debug('- {}'.format(plugin), option=DebugOption.PLUGIN)
 
 		self.last_operation_result.record(load_result, unload_result, reload_result, dependency_check_result)
+		ret = self.last_operation_result.copy()
 
 		# Expected plugin states:
 		#                   success_list        fail_list
@@ -451,6 +447,8 @@ class PluginManager:
 		self.__update_registry()
 		self.__sort_plugins_by_id()
 
+		return ret
+
 	def __sort_plugins_by_id(self):
 		self.plugins = dict(sorted(map(tuple, self.plugins.items()), key=lambda item: item[0]))
 
@@ -461,60 +459,97 @@ class PluginManager:
 		self.registry_storage.arrange()
 		self.mcdr_server.on_plugin_registry_changed()
 
-	def __refresh_plugins(self, reload_filter: Callable[[RegularPlugin], bool]):
+	def __refresh_plugins(self, reload_filter: Callable[[RegularPlugin], bool]) -> PluginOperationResult:
 		possible_paths = self.__collect_possible_plugin_file_paths()
 		possible_paths_set = set(possible_paths)
 		unload_result = self.__unload_given_plugins(lambda plugin: not plugin.plugin_exists() or plugin.plugin_path not in possible_paths_set)
 		load_result = self.__collect_and_process_new_plugins(lambda fp: True, possible_paths=possible_paths)
 		reload_result = self.__reload_ready_plugins(reload_filter)
-		self.__post_plugin_process(load_result, unload_result, reload_result)
+		return self.__post_plugin_process(load_result, unload_result, reload_result)
 
 	# --------------
 	#   Interfaces
 	# --------------
 
-	def load_plugin(self, file_path: str):
+	def __run_manipulation(self, action: Callable[[], PluginOperationResult]) -> Future[PluginOperationResult]:
+		"""
+		Async manipulations: Blocked and wait via self.__mani_lock
+
+		Sync manipulations: Run directly for the 1st action, store in queue for other actions.
+		The delayed actions in queue will be executed after the 1st action is done
+		"""
 		with self.__mani_lock:
+			future: Future[PluginOperationResult] = Future()
+			self.__mani_queue.put((action, future))
+			if self.__mani_thread != threading.current_thread():
+				self.__mani_thread = threading.current_thread()
+				try:
+					while True:
+						try:
+							queued_action, queued_future = self.__mani_queue.get_nowait()
+						except queue.Empty:
+							break
+						else:
+							result = queued_action()
+							queued_future.set_result(result)
+				finally:
+					self.__mani_thread = None
+			else:
+				self.logger.debug('Detected chained sync plugin manipulation, queueing', option=DebugOption.PLUGIN)
+
+			return future
+
+	def load_plugin(self, file_path: str) -> Future[PluginOperationResult]:
+		def load_plugin_action() -> PluginOperationResult:
 			self.logger.info(self.mcdr_server.tr('plugin_manager.load_plugin.entered', file_path))
 			load_result = self.__collect_and_process_new_plugins(lambda fp: fp == file_path)
-			self.__post_plugin_process(load_result=load_result)
+			return self.__post_plugin_process(load_result=load_result)
+		return self.__run_manipulation(load_plugin_action)
 
-	def unload_plugin(self, plugin: RegularPlugin):
-		with self.__mani_lock:
+	def unload_plugin(self, plugin: RegularPlugin) -> Future[PluginOperationResult]:
+		def unload_plugin_action() -> PluginOperationResult:
 			self.logger.info(self.mcdr_server.tr('plugin_manager.unload_plugin.entered', plugin))
 			unload_result = self.__unload_given_plugins(lambda plg: True, specific=plugin)
-			self.__post_plugin_process(unload_result=unload_result)
+			return self.__post_plugin_process(unload_result=unload_result)
+		return self.__run_manipulation(unload_plugin_action)
 
-	def reload_plugin(self, plugin: RegularPlugin):
-		with self.__mani_lock:
+	def reload_plugin(self, plugin: RegularPlugin) -> Future[PluginOperationResult]:
+		def reload_plugin_action() -> PluginOperationResult:
 			self.logger.info(self.mcdr_server.tr('plugin_manager.reload_plugin.entered', plugin))
 			reload_result = self.__reload_ready_plugins(lambda plg: True, specific=plugin)
-			self.__post_plugin_process(reload_result=reload_result)
+			return self.__post_plugin_process(reload_result=reload_result)
+		return self.__run_manipulation(reload_plugin_action)
 
-	def enable_plugin(self, file_path: str):
-		with self.__mani_lock:
-			self.logger.info(self.mcdr_server.tr('plugin_manager.enable_plugin.entered', file_path))
-			new_file_path = string_util.remove_suffix(file_path, plugin_constant.DISABLED_PLUGIN_FILE_SUFFIX)
-			if plugin_factory.is_disabled_plugin(file_path):
-				os.rename(file_path, new_file_path)
-				self.load_plugin(new_file_path)
+	def enable_plugin(self, file_path: str) -> Optional[Future[PluginOperationResult]]:
+		self.logger.info(self.mcdr_server.tr('plugin_manager.enable_plugin.entered', file_path))
+		new_file_path = string_util.remove_suffix(file_path, plugin_constant.DISABLED_PLUGIN_FILE_SUFFIX)
+		if plugin_factory.is_disabled_plugin(file_path):
+			os.rename(file_path, new_file_path)
+			return self.load_plugin(new_file_path)
+		else:
+			return None
 
-	def disable_plugin(self, plugin: RegularPlugin):
-		with self.__mani_lock:
-			self.logger.info(self.mcdr_server.tr('plugin_manager.disable_plugin.entered', plugin))
-			self.unload_plugin(plugin)
+	def disable_plugin(self, plugin: RegularPlugin) -> Future[PluginOperationResult]:
+		def done_callback():
 			if plugin.plugin_exists():
 				os.rename(plugin.plugin_path, plugin.plugin_path + plugin_constant.DISABLED_PLUGIN_FILE_SUFFIX)
 
-	def refresh_all_plugins(self):
-		with self.__mani_lock:
+		self.logger.info(self.mcdr_server.tr('plugin_manager.disable_plugin.entered', plugin))
+		future = self.unload_plugin(plugin)
+		future.add_done_callback(done_callback)
+		return future
+
+	def refresh_all_plugins(self) -> Future[PluginOperationResult]:
+		def refresh_all_plugins_action() -> PluginOperationResult:
 			self.logger.info(self.mcdr_server.tr('plugin_manager.refresh_all_plugins.entered'))
 			return self.__refresh_plugins(lambda plg: True)
+		return self.__run_manipulation(refresh_all_plugins_action)
 
-	def refresh_changed_plugins(self):
-		with self.__mani_lock:
+	def refresh_changed_plugins(self) -> Future[PluginOperationResult]:
+		def refresh_changed_plugins_action() -> PluginOperationResult:
 			self.logger.info(self.mcdr_server.tr('plugin_manager.refresh_changed_plugins.entered'))
 			return self.__refresh_plugins(lambda plg: plg.file_changed())
+		return self.__run_manipulation(refresh_changed_plugins_action)
 
 	# ----------------
 	#   Plugin Event

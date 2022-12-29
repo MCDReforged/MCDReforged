@@ -267,8 +267,9 @@ class AbstractNode(ABC):
 		# make sure all passed CommandContext are copies
 		args = list(args)
 		for i in range(len(args)):
-			if isinstance(args[i], CommandContext):
-				args[i] = args[i].copy()
+			arg = args[i]
+			if isinstance(arg, CommandContext):
+				args[i] = arg.copy()
 
 		return callback(*args[:spec_args_len])
 
