@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 class PackedPlugin(MultiFilePlugin):
 	def __init__(self, plugin_manager: 'PluginManager', file_path: str):
 		super().__init__(plugin_manager, file_path)
-		self.__zip_file_cache = None  # type: Optional[ZipFile]
+		self.__zip_file_cache: Optional[ZipFile] = None
 
 	@property
 	def __zip_file(self) -> ZipFile:
@@ -42,7 +42,7 @@ class PackedPlugin(MultiFilePlugin):
 	def list_directory(self, directory_name: str) -> Collection[str]:
 		result = []
 		directory_name = self.__format_path(directory_name).rstrip('/\\') + '/'
-		for file_info in self.__zip_file_cache.infolist():
+		for file_info in self.__zip_file.infolist():
 			# is inside the dir and is directly inside
 			if file_info.filename.startswith(directory_name):
 				file_name = file_info.filename.replace(directory_name, '', 1)
@@ -51,13 +51,13 @@ class PackedPlugin(MultiFilePlugin):
 		return result
 
 	def _check_subdir_legality(self):
-		for file_info in self.__zip_file_cache.infolist():
+		for file_info in self.__zip_file.infolist():
 			if file_info.is_dir():
 				package_name: str = file_info.filename[:-1]  # removing the ending '/'
 				if '/' in package_name:  # not at root
 					continue
 				try:
-					init_info = self.__zip_file_cache.getinfo(os.path.join(package_name, '__init__.py'))
+					init_info = self.__zip_file.getinfo(os.path.join(package_name, '__init__.py'))
 				except KeyError:
 					is_module = False
 				else:
