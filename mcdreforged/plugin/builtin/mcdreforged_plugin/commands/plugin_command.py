@@ -1,5 +1,5 @@
 import os
-from typing import TYPE_CHECKING, Callable, List, Tuple, Any
+from typing import TYPE_CHECKING, Callable, List, Tuple
 
 from mcdreforged.command.builder.nodes.arguments import QuotableText
 from mcdreforged.command.builder.nodes.basic import Literal
@@ -8,17 +8,20 @@ from mcdreforged.minecraft.rtext.style import RColor, RStyle, RAction
 from mcdreforged.minecraft.rtext.text import RTextList, RText
 from mcdreforged.permission.permission_level import PermissionLevel
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.sub_command import SubCommand
+from mcdreforged.plugin.operation_result import PluginOperationResult, PluginResultType
 from mcdreforged.plugin.type.plugin import AbstractPlugin
 from mcdreforged.plugin.type.regular_plugin import RegularPlugin
+from mcdreforged.utils.future import Future
 
 if TYPE_CHECKING:
 	from mcdreforged.plugin.builtin.mcdreforged_plugin.mcdreforged_plugin import MCDReforgedPlugin
+	from mcdreforged.plugin.plugin_manager import PluginManager
 
 
 class PluginCommand(SubCommand):
 	def __init__(self, mcdr_plugin: 'MCDReforgedPlugin'):
 		super().__init__(mcdr_plugin)
-		self.plugin_manager = self.mcdr_server.plugin_manager
+		self.plugin_manager: 'PluginManager' = self.mcdr_server.plugin_manager
 
 	def get_command_node(self) -> Literal:
 		def plugin_id_node():
@@ -129,46 +132,59 @@ class PluginCommand(SubCommand):
 			if meta.description is not None:
 				source.reply(meta.get_description_rtext())
 
-	def __not_loaded_plugin_file_manipulate(self, source: CommandSource, file_name: str, operation_name: str, func: Callable[[str], Any], possible_plugin_path: List[str]):
+	def __execute_and_report_plugin_manipulate(
+			self, source: CommandSource, operation_name: str, func: Callable[[], Future[PluginOperationResult]],
+			plugin_alias: str, result_type_to_check_success: PluginResultType
+	):
+		ret = self.function_call(source, func, operation_name, log_success=False, msg_args=(plugin_alias,))
+		if ret.no_error:
+			def report(result: PluginOperationResult):
+				if result.get_if_success(result_type_to_check_success):
+					source.reply(self.tr('mcdr_command.{}.success'.format(operation_name), plugin_alias))
+				else:
+					source.reply(self.tr('mcdr_command.{}.fail'.format(operation_name), plugin_alias))
+
+			ret.return_value.add_done_callback(report)
+		else:
+			source.reply(self.tr('mcdr_command.{}.fail'.format(operation_name), plugin_alias))
+		self._print_plugin_operation_result_if_no_error(source, ret)
+
+	def __not_loaded_plugin_file_manipulate(
+			self, source: CommandSource, file_name: str, func: Callable[[str], Future[PluginOperationResult]],
+			operation_name: str, possible_plugin_path: List[str]
+	):
 		plugin_paths = list(filter(lambda fp: fp == file_name, possible_plugin_path))
 		if len(plugin_paths) == 0:
 			plugin_paths = list(filter(lambda fp: os.path.basename(fp) == file_name, possible_plugin_path))
 		if len(plugin_paths) == 0:
 			source.reply(self.tr('mcdr_command.invalid_plugin_file_name', file_name))
 		else:
-			result = self.function_call(source, lambda: func(plugin_paths[0]), operation_name, log_success=False, msg_args=(file_name,))
-			if result.return_value is True:
-				source.reply(self.tr('mcdr_command.{}.success'.format(operation_name), file_name))
-			else:
-				source.reply(self.tr('mcdr_command.{}.fail'.format(operation_name), file_name))
-			self._print_plugin_operation_result_if_no_error(source, result)
+			self.__execute_and_report_plugin_manipulate(source, operation_name, lambda: func(plugin_paths[0]), file_name, PluginResultType.LOAD)
 
-	def __existed_regular_plugin_manipulate(self, source: CommandSource, plugin_id: str, operation_name: str, func: Callable[[RegularPlugin], Any]):
+	def __existed_regular_plugin_manipulate(
+			self, source: CommandSource, plugin_id: str, func: Callable[[RegularPlugin], Future[PluginOperationResult]],
+			operation_name: str, result_type_to_check_success: PluginResultType
+	):
 		plugin = self.mcdr_server.plugin_manager.get_regular_plugin_from_id(plugin_id)
 		if plugin is None or not plugin.is_regular():
 			source.reply(self.tr('mcdr_command.invalid_plugin_id', plugin_id))
 		else:
-			result = self.function_call(source, lambda: func(plugin), operation_name, log_success=False, msg_args=(plugin.get_name(),))
-			if result.return_value is True:
-				source.reply(self.tr('mcdr_command.{}.success'.format(operation_name), plugin.get_name()))
-			else:
-				source.reply(self.tr('mcdr_command.{}.fail'.format(operation_name), plugin.get_name()))
-			self._print_plugin_operation_result_if_no_error(source, result)
+			self.__execute_and_report_plugin_manipulate(source, operation_name, lambda: func(plugin), plugin.get_name(), result_type_to_check_success)
 
 	def disable_plugin(self, source: CommandSource, plugin_id: str):
-		self.__existed_regular_plugin_manipulate(source, plugin_id, 'disable_plugin', lambda plg: self.server_interface.disable_plugin(plg.get_id()))
+		self.__existed_regular_plugin_manipulate(source, plugin_id, self.plugin_manager.disable_plugin, 'disable_plugin', PluginResultType.UNLOAD)
 
 	def reload_plugin(self, source: CommandSource, plugin_id: str):
-		self.__existed_regular_plugin_manipulate(source, plugin_id, 'reload_plugin', lambda plg: self.server_interface.reload_plugin(plg.get_id()))
+		self.__existed_regular_plugin_manipulate(source, plugin_id, self.plugin_manager.reload_plugin, 'reload_plugin', PluginResultType.RELOAD)
 
 	def unload_plugin(self, source: CommandSource, plugin_id: str):
-		self.__existed_regular_plugin_manipulate(source, plugin_id, 'unload_plugin', lambda plg: self.server_interface.unload_plugin(plg.get_id()))
+		self.__existed_regular_plugin_manipulate(source, plugin_id, self.plugin_manager.unload_plugin, 'unload_plugin', PluginResultType.UNLOAD)
 
 	def load_plugin(self, source: CommandSource, file_name: str):
-		self.__not_loaded_plugin_file_manipulate(source, file_name, 'load_plugin', lambda pth: self.server_interface.load_plugin(pth), self.server_interface.get_unloaded_plugin_list())
+		self.__not_loaded_plugin_file_manipulate(source, file_name, self.plugin_manager.load_plugin, 'load_plugin', self.server_interface.get_unloaded_plugin_list())
 
 	def enable_plugin(self, source: CommandSource, file_name: str):
-		self.__not_loaded_plugin_file_manipulate(source, file_name, 'enable_plugin', lambda pth: self.server_interface.enable_plugin(pth), self.server_interface.get_disabled_plugin_list())
+		self.__not_loaded_plugin_file_manipulate(source, file_name, self.plugin_manager.enable_plugin, 'enable_plugin', self.server_interface.get_disabled_plugin_list())
 
 	def reload_all_plugin(self, source: CommandSource):
 		ret = self.function_call(source, self.mcdr_server.plugin_manager.refresh_all_plugins, 'reload_all_plugin', log_success=False)

@@ -15,7 +15,7 @@ from mcdreforged.mcdr_state import MCDReforgedFlag
 from mcdreforged.permission.permission_level import PermissionLevel, PermissionParam
 from mcdreforged.plugin import plugin_factory
 from mcdreforged.plugin.meta.metadata import Metadata
-from mcdreforged.plugin.operation_result import SingleOperationResult, PluginOperationResult
+from mcdreforged.plugin.operation_result import PluginOperationResult, PluginResultType
 from mcdreforged.plugin.plugin_event import EventListener, LiteralEvent, PluginEvent, MCDRPluginEvents
 from mcdreforged.plugin.plugin_registry import DEFAULT_LISTENER_PRIORITY, HelpMessage
 from mcdreforged.plugin.type.multi_file_plugin import MultiFilePlugin
@@ -476,41 +476,26 @@ class ServerInterface:
 
 	# Notes: All plugin manipulation will trigger a dependency check, which might cause unwanted plugin operations
 
-	def __check_if_success(self, operation_result: PluginOperationResult, result_extractor: Callable[[PluginOperationResult], SingleOperationResult], check_loaded: bool) -> bool:
-		"""
-		Check if there's any plugin inside the given operation result (load result / reload result etc.)
-		Then check if the plugin passed the dependency check if param check_loaded is True
-		"""
-		opt_result = result_extractor(self._mcdr_server.plugin_manager.last_operation_result)
-		success = opt_result.has_success()
-		if success and check_loaded:
-			plugin = opt_result.success_list[0]
-			success = plugin in operation_result.dependency_check_result.success_list
-		return success
-
-	def __not_loaded_regular_plugin_manipulate(self, plugin_file_path: str, handler: Callable[['PluginManager'], Callable[[str], Optional[Future[PluginOperationResult]]]]) -> bool:
+	def __not_loaded_regular_plugin_manipulate(self, plugin_file_path: str, handler: Callable[['PluginManager'], Callable[[str], Future[PluginOperationResult]]]) -> bool:
 		"""
 		Manipulate a not loaded regular plugin from a given file path
 		:param plugin_file_path: The path to the not loaded new plugin
 		:param handler: What you want to do with Plugin Manager to the given file path
 		:return: If success
 		"""
-		future = handler(self._mcdr_server.plugin_manager)(plugin_file_path)
+		future: Future[PluginOperationResult] = handler(self._mcdr_server.plugin_manager)(plugin_file_path)
 		if future.is_finished():
-			return self.__check_if_success(future.get(), lambda result: result.load_result, check_loaded=True)  # the operations is always loading a plugin
+			return future.get().get_if_success(PluginResultType.LOAD)  # the operations are always loading a plugin
 		else:
 			return False  # TODO handle unknown result caused by chained sync plugin operation
 
-	def __existed_regular_plugin_manipulate(
-			self, plugin_id: str, handler: Callable[['PluginManager'], Callable[['RegularPlugin'], Any]],
-			result_extractor: Callable[[PluginOperationResult], SingleOperationResult], check_loaded: bool
-	) -> Optional[bool]:
+	def __existed_regular_plugin_manipulate(self, plugin_id: str, handler: Callable[['PluginManager'], Callable[['RegularPlugin'], Any]],result_type: PluginResultType) -> Optional[bool]:
 		"""
 		Manipulate a loaded regular plugin from a given plugin id
 		:param plugin_id: The plugin id of the plugin you want to manipulate
 		:param handler: What callable you want to use with Plugin Manager to the plugin id,
 		the returned callable accepts the plugin instance
-		:param result_extractor: How to get the single operation result from the plugin operation result.
+		:param result_type: The type of the result. It's used to determine how to get the single operation result from the plugin operation result.
 		It's used to determine if the operation succeeded
 		:return: If success, None if plugin not found
 		"""
@@ -518,7 +503,7 @@ class ServerInterface:
 		if plugin is not None:
 			future = handler(self._mcdr_server.plugin_manager)(plugin)
 			if future.is_finished():
-				return self.__check_if_success(future.get(), result_extractor, check_loaded)
+				return future.get().get_if_success(result_type)
 			else:
 				return None
 		return None
@@ -548,7 +533,7 @@ class ServerInterface:
 		:param plugin_id: The id of the plugin to reload. Example: ``"my_plugin"``
 		:return: A bool indicating if the plugin gets reloaded successfully, or None if plugin not found
 		"""
-		return self.__existed_regular_plugin_manipulate(plugin_id, lambda mgr: mgr.reload_plugin, lambda lor: lor.reload_result, check_loaded=True)
+		return self.__existed_regular_plugin_manipulate(plugin_id, lambda mgr: mgr.reload_plugin, PluginResultType.RELOAD)
 
 	def unload_plugin(self, plugin_id: str) -> Optional[bool]:
 		"""
@@ -557,7 +542,7 @@ class ServerInterface:
 		:param plugin_id: The id of the plugin to unload. Example: ``"my_plugin"``
 		:return: A bool indicating if the plugin gets unloaded successfully, or None if plugin not found
 		"""
-		return self.__existed_regular_plugin_manipulate(plugin_id, lambda mgr: mgr.unload_plugin, lambda lor: lor.unload_result, check_loaded=False)
+		return self.__existed_regular_plugin_manipulate(plugin_id, lambda mgr: mgr.unload_plugin, PluginResultType.UNLOAD)
 
 	def disable_plugin(self, plugin_id: str) -> Optional[bool]:
 		"""
@@ -566,7 +551,7 @@ class ServerInterface:
 		:param plugin_id: The id of the plugin to disable. Example: ``"my_plugin"``
 		:return: A bool indicating if the plugin gets disabled successfully, or None if plugin not found
 		"""
-		return self.__existed_regular_plugin_manipulate(plugin_id, lambda mgr: mgr.disable_plugin, lambda lor: lor.unload_result, check_loaded=False)
+		return self.__existed_regular_plugin_manipulate(plugin_id, lambda mgr: mgr.disable_plugin, PluginResultType.UNLOAD)
 
 	def refresh_all_plugins(self) -> None:
 		"""

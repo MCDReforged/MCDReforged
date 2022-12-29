@@ -1,12 +1,13 @@
 import os
-from typing import List, TYPE_CHECKING
+from enum import Enum
+from typing import List, TYPE_CHECKING, NamedTuple, Callable
 
 from mcdreforged.minecraft.rtext.style import RAction
 from mcdreforged.minecraft.rtext.text import RTextList, RTextBase, RText
 
 if TYPE_CHECKING:
+	from mcdreforged.mcdr_server import MCDReforgedServer
 	from mcdreforged.plugin.type.plugin import AbstractPlugin
-	from mcdreforged.plugin.plugin_manager import PluginManager
 
 
 class SingleOperationResult:
@@ -26,50 +27,48 @@ class SingleOperationResult:
 		else:
 			self.fail(plugin)
 
-	def clear(self):
-		self.success_list.clear()
-		self.failed_list.clear()
-
 	def has_success(self):
 		return len(self.success_list) > 0
 
 	def has_failed(self):
 		return len(self.failed_list) > 0
 
-	def copy(self) -> 'SingleOperationResult':
-		copied = SingleOperationResult()
-		copied.success_list.extend(self.success_list)
-		copied.failed_list.extend(self.failed_list)
-		return copied
+
+class PluginResultType(Enum):
+	class _TypeImpl(NamedTuple):
+		result_extractor: Callable[['PluginOperationResult'], 'SingleOperationResult']
+		check_dependency: bool
+
+	LOAD = _TypeImpl(lambda result: result.load_result, True)
+	UNLOAD = _TypeImpl(lambda result: result.unload_result, False)
+	RELOAD = _TypeImpl(lambda result: result.reload_result, True)
 
 
 class PluginOperationResult:
-	def __init__(self, plugin_manager: 'PluginManager'):
-		self.__plugin_manager = plugin_manager
-		self.__mcdr_server = plugin_manager.mcdr_server
-		self.load_result = SingleOperationResult()
-		self.unload_result = SingleOperationResult()
-		self.reload_result = SingleOperationResult()
-		self.dependency_check_result = SingleOperationResult()
+	def __init__(self, load_result: SingleOperationResult, unload_result: SingleOperationResult, reload_result: SingleOperationResult, dependencies_resolve_result: SingleOperationResult):
+		self.load_result = load_result
+		self.unload_result = unload_result
+		self.reload_result = reload_result
+		self.dependency_check_result = dependencies_resolve_result
 
-	def record(self, load_result: SingleOperationResult, unload_result: SingleOperationResult, reload_result: SingleOperationResult, dependencies_resolve_result: SingleOperationResult):
-		self.load_result = load_result.copy()
-		self.unload_result = unload_result.copy()
-		self.reload_result = reload_result.copy()
-		self.dependency_check_result = dependencies_resolve_result.copy()
+	@classmethod
+	def of_empty(cls) -> 'PluginOperationResult':
+		empty = SingleOperationResult()
+		return PluginOperationResult(empty, empty, empty, empty)
 
-	def copy(self) -> 'PluginOperationResult':
-		copied = PluginOperationResult(self.__plugin_manager)
-		copied.record(self.load_result, self.unload_result, self.reload_result, self.dependency_check_result)
-		return copied
+	def get_if_success(self, result_type: PluginResultType):
+		"""
+		Check if there's any plugin inside the given operation result (load result / reload result etc.)
+		Then check if the plugin passed the dependency check if param check_loaded is True
+		"""
+		target_result = result_type.value.result_extractor(self)
+		success = target_result.has_success()
+		if success and result_type.value.check_dependency:
+			plugin = target_result.success_list[0]
+			success = plugin in self.dependency_check_result.success_list
+		return success
 
-	def clear(self):
-		self.load_result.clear()
-		self.unload_result.clear()
-		self.reload_result.clear()
-		self.dependency_check_result.clear()
-
-	def to_rtext(self, *, show_path: bool) -> RTextBase:
+	def to_rtext(self, mcdr_server: 'MCDReforgedServer', *, show_path: bool) -> RTextBase:
 		def add_element(msg: RTextList, element):
 			msg.append(element)
 			msg.append('; ')
@@ -82,7 +81,7 @@ class PluginOperationResult:
 						text_list.append(ele if show_path else os.path.basename(ele))
 					else:
 						text_list.append(str(ele))
-				add_element(msg, RText(self.__mcdr_server.tr(key, len(lst))).h('\n'.join(text_list)))
+				add_element(msg, RText(mcdr_server.tr(key, len(lst))).h('\n'.join(text_list)))
 
 		message = RTextList()
 		add_if_not_empty(message, list(filter(lambda plg: plg in self.dependency_check_result.success_list, self.load_result.success_list)), 'plugin_operation_result.info_loaded_succeeded')
@@ -93,10 +92,10 @@ class PluginOperationResult:
 		add_if_not_empty(message, self.reload_result.failed_list, 'plugin_operation_result.info_reloaded_failed')
 		add_if_not_empty(message, self.dependency_check_result.failed_list, 'plugin_operation_result.info_dependency_check_failed')
 		if message.is_empty():
-			add_element(message, self.__mcdr_server.tr('plugin_operation_result.info_none'))
+			add_element(message, mcdr_server.tr('plugin_operation_result.info_none'))
 		message.append(
-			RText(self.__mcdr_server.tr('plugin_operation_result.info_plugin_amount', self.__plugin_manager.get_plugin_amount())).
-				h('\n'.join(map(str, self.__plugin_manager.get_all_plugins()))).
+			RText(mcdr_server.tr('plugin_operation_result.info_plugin_amount', mcdr_server.plugin_manager.get_plugin_amount())).
+				h('\n'.join(map(str, mcdr_server.plugin_manager.get_all_plugins()))).
 				c(RAction.suggest_command, '!!MCDR plugin list')
 		)
 		return message

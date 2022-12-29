@@ -1,11 +1,13 @@
 import traceback
 from abc import ABC
-from typing import TYPE_CHECKING, NamedTuple, Any, Callable
+from typing import TYPE_CHECKING, Callable, Generic, TypeVar
 
 from mcdreforged.command.builder.nodes.basic import Literal
 from mcdreforged.command.command_source import CommandSource
 from mcdreforged.permission.permission_level import PermissionLevel
+from mcdreforged.plugin.operation_result import PluginOperationResult
 from mcdreforged.translation.translation_text import RTextMCDRTranslation
+from mcdreforged.utils.future import Future
 
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
@@ -13,9 +15,14 @@ if TYPE_CHECKING:
 	from mcdreforged.plugin.server_interface import PluginServerInterface
 
 
-class FunctionCallResult(NamedTuple):
-	return_value: Any
-	no_error: bool
+T = TypeVar('T')
+
+
+# can't do Generic + NamedTuple
+class FunctionCallResult(Generic[T]):
+	def __init__(self, return_value: T, no_error: bool):
+		self.return_value = return_value
+		self.no_error = no_error
 
 
 class SubCommand(ABC):
@@ -67,11 +74,13 @@ class SubCommand(ABC):
 	def get_help_message(self, source: CommandSource, translation_key: str):
 		return self.mcdr_plugin.get_help_message(source, translation_key)
 
-	def _print_plugin_operation_result_if_no_error(self, source: CommandSource, ret: FunctionCallResult):
+	def _print_plugin_operation_result_if_no_error(self, source: CommandSource, ret: FunctionCallResult[Future[PluginOperationResult]]):
 		if ret.no_error:
-			source.reply(self.mcdr_server.plugin_manager.last_operation_result.to_rtext(show_path=source.has_permission(PermissionLevel.PHYSICAL_SERVER_CONTROL_LEVEL)))
+			def reply(result: PluginOperationResult):
+				source.reply(result.to_rtext(self.mcdr_server, show_path=source.has_permission(PermissionLevel.PHYSICAL_SERVER_CONTROL_LEVEL)))
+			ret.return_value.add_done_callback(reply)
 
-	def function_call(self, source: CommandSource, func: Callable[[], Any], name: str, log_success=True, log_fail=True, msg_args=()) -> FunctionCallResult:
+	def function_call(self, source: CommandSource, func: Callable[[], T], name: str, log_success=True, log_fail=True, msg_args=()) -> FunctionCallResult[T]:
 		try:
 			ret = FunctionCallResult(func(), True)
 			if log_success:

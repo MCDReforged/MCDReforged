@@ -1,13 +1,7 @@
-from enum import Enum, auto
 from threading import RLock
 from typing import Generic, TypeVar, Callable, Any
 
 T = TypeVar('T')
-
-
-class _State(Enum):
-	PENDING = auto()
-	FINISHED = auto()
 
 
 class Future(Generic[T]):
@@ -15,16 +9,21 @@ class Future(Generic[T]):
 
 	def __init__(self):
 		self.__value = self._NONE
-		self.__state = _State.PENDING
 		self.__lock = RLock()
 		self.__done_callbacks = []
 
+	@classmethod
+	def completed(cls, value: T) -> 'Future[T]':
+		future = Future()
+		future.set_result(value)
+		return future
+
 	def __invoke_callbacks(self, value: T):
-		for callback in self.__done_callbacks:
-			try:
-				callback(value)
-			except:
-				pass  # TODO: expose the exception
+		with self.__lock:
+			callbacks = self.__done_callbacks.copy()
+			self.__done_callbacks.clear()
+		for callback in callbacks:
+			callback(value)
 
 	def set_result(self, value: T):
 		"""
@@ -32,21 +31,20 @@ class Future(Generic[T]):
 		"""
 		with self.__lock:
 			self.__value = value
-			self.__state = _State.FINISHED
 		self.__invoke_callbacks(value)
 
 	def is_finished(self):
-		return self.__state == _State.FINISHED
+		return self.__value is not self._NONE
 
 	def get(self) -> T:
 		if self.__value is not self._NONE:
 			return self.__value
 		else:
-			raise
+			raise ValueError('Future is not finished yet')
 
 	def add_done_callback(self, callback: Callable[[T], Any]):
 		with self.__lock:
-			if self.is_finished():
-				callback(self.get())
-			else:
+			if not self.is_finished():
 				self.__done_callbacks.append(callback)
+				return
+		callback(self.get())

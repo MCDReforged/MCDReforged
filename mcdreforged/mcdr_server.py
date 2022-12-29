@@ -224,8 +224,8 @@ class MCDReforgedServer:
 		self.connect_rcon()
 
 	def load_plugins(self):
-		self.plugin_manager.refresh_all_plugins()
-		self.logger.info(self.plugin_manager.last_operation_result.to_rtext(show_path=True))
+		future = self.plugin_manager.refresh_all_plugins()
+		self.logger.info(future.get().to_rtext(self, show_path=True))
 
 	def on_plugin_registry_changed(self):
 		self.command_manager.clear_command()

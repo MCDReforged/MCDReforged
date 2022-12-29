@@ -60,7 +60,7 @@ class Requirements:
 
 		:param arg_name: The name of the argument to be checked
 		"""
-		def callback(source: CommandSource, context: dict) -> bool:
+		def callback(_source: CommandSource, context: dict) -> bool:
 			return arg_name in context
 		return callback
 

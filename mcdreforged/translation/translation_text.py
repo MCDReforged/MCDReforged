@@ -49,7 +49,7 @@ class RTextMCDRTranslation(RTextBase):
 
 	@classmethod
 	def from_translation_dict(cls, translation_dict: TranslationKeyDictRich) -> 'RTextMCDRTranslation':
-		def fake_tr(key: str, language: str):
+		def fake_tr(_key: str, language: str):
 			return translation_util.translate_from_dict(translation_dict, language)
 
 		return RTextMCDRTranslation('').set_translator(fake_tr)
