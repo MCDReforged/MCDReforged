@@ -31,6 +31,11 @@ class _ErrorHandler(NamedTuple):
 	handled: bool
 
 
+class _Requirement(NamedTuple):
+	requirement: REQUIRES_CALLBACK
+	failure_message_getter: Optional[FAIL_MSG_CALLBACK]
+
+
 _ERROR_HANDLER_TYPE = Dict[Type[CommandError], _ErrorHandler]
 Self = TypeVar('Self', bound='AbstractNode')
 
@@ -47,8 +52,7 @@ class AbstractNode(ABC):
 		self._callback: Optional[RUNS_CALLBACK] = None
 		self._error_handlers: _ERROR_HANDLER_TYPE = {}
 		self._child_error_handlers: _ERROR_HANDLER_TYPE = {}
-		self._requirement: REQUIRES_CALLBACK = lambda source: True
-		self._requirement_failure_message_getter: Optional[FAIL_MSG_CALLBACK] = None
+		self._requirements: List[_Requirement] = []
 		self._redirect_node: Optional[AbstractNode] = None
 		self._suggestion_getter: SUGGESTS_CALLBACK = lambda: []
 
@@ -131,6 +135,10 @@ class AbstractNode(ABC):
 		At this time if the *failure_message_getter* parameter is available, MCDR will invoke *failure_message_getter* to get the message string
 		of the ``RequirementNotMet`` exception, otherwise a default message will be used
 
+		.. versionadded:: v2.7.0
+			Multiple :meth:`requires` call results in an "and" combination of all given requirements,
+			i.e. the current command context is satisfied iif. all given requirements are satisfied
+
 		:param requirement: A callable that accepts up to 2 arguments and returns a bool.
 			Argument list: :class:`~mcdreforged.command.command_source.CommandSource`, :class:`dict` (:class:`~mcdreforged.command.builder.common.CommandContext`)
 		:param failure_message_getter: An optional callable that accepts up to 2 arguments and returns a str or a :class:`~mcdreforged.minecraft.rtext.text.RTextBase`.
@@ -138,12 +146,11 @@ class AbstractNode(ABC):
 
 		Example usages::
 
-			node.requires(lambda src: src.has_permission(3))  # Permission check
-			node.requires(lambda src, ctx: ctx['page_count'] <= get_max_page())  # Dynamic range check
-			node.requires(lambda src, ctx: is_legal(ctx['target']), lambda src, ctx: 'target {} is illegal'.format(ctx['target']))  # Customized failure message
+			node1.requires(lambda src: src.has_permission(3))  # Permission check
+			node2.requires(lambda src, ctx: ctx['page_count'] <= get_max_page())  # Dynamic range check
+			node3.requires(lambda src, ctx: is_legal(ctx['target']), lambda src, ctx: 'target {} is illegal'.format(ctx['target']))  # Customized failure message
 		"""
-		self._requirement = requirement
-		self._requirement_failure_message_getter = failure_message_getter
+		self._requirements.append(_Requirement(requirement, failure_message_getter))
 		return self
 
 	def redirects(self: Self, redirect_node: 'AbstractNode') -> Self:
@@ -284,6 +291,16 @@ class AbstractNode(ABC):
 		self.__handle_error(error, context, self._error_handlers)
 		raise error
 
+	def __check_requirements(self, context: CommandContext) -> Optional[FAIL_MSG_CALLBACK]:
+		"""
+		:return: None: requirement check passed;
+		failure_message_getter: requirement check failed
+		"""
+		for req in self._requirements:
+			if not self.__smart_callback(req.requirement, context.source, context):
+				return req.failure_message_getter or (lambda: None)
+		return None
+
 	def _get_suggestions(self, context: CommandContext) -> Iterable[str]:
 		return self.__smart_callback(self._suggestion_getter, context.source, context)
 
@@ -300,11 +317,10 @@ class AbstractNode(ABC):
 			total_read = len(command) - len(next_remaining)  # type: int
 
 			with context.read_command(self, parse_result, total_read):
-				if self._requirement is not None:
-					if not self.__smart_callback(self._requirement, context.source, context):
-						getter = self._requirement_failure_message_getter or (lambda: None)
-						failure_message = self.__smart_callback(getter, context.source, context)
-						self.__raise_error(RequirementNotMet(context.command_read, context.command_read, failure_message), context)
+				getter = self.__check_requirements(context)
+				if getter is not None:  # requirement check failed
+					failure_message = self.__smart_callback(getter, context.source, context)
+					self.__raise_error(RequirementNotMet(context.command_read, context.command_read, failure_message), context)
 
 				# Parsing finished
 				if len(next_remaining) == 0:
@@ -379,7 +395,7 @@ class AbstractNode(ABC):
 			total_read = len(context.command) - len(next_remaining)  # type: int
 
 			with context.read_command(self, result, total_read):
-				if self._requirement is not None and not self.__smart_callback(self._requirement, context.source, context):
+				if self.__check_requirements(context) is not None:
 					return CommandSuggestions()
 
 				# Parsing finished
@@ -509,4 +525,3 @@ class ArgumentNode(AbstractNode, ABC):
 
 	def __repr__(self):
 		return '{}[name={}]'.format(self.__class__.__name__, self.__name)
-

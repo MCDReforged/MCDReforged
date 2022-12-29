@@ -237,6 +237,14 @@ class CommandTreeTestCase(CommandTestCase):
 		self.assertRaises(UnknownCommand, self.run_command, executor, 'test literal dead')
 
 	def test_11_permission(self):
+		def assert_requirement_not_met_message(root: Literal, command: str, message: str):
+			try:
+				self.run_command(root, command)
+			except RequirementNotMet as e:
+				self.assertEqual((message,), e.get_error_data())
+			else:
+				self.assertTrue(False, "RequirementNotMet doesn't raise")
+
 		executor = Literal('permission').then(
 			Literal('cannot').requires(lambda s: False).runs(self.callback_hit)
 		).then(
@@ -250,10 +258,23 @@ class CommandTreeTestCase(CommandTestCase):
 		self.assertRaises(RequirementNotMet, self.run_command, executor, 'permission cannot')
 		self.assertRaises(RequirementNotMet, self.run_command, executor, 'permission fail')
 		self.assertRaises(RequirementNotMet, self.run_command, executor, 'permission pass fail')
-		try:
-			self.run_command(executor, 'permission fail')
-		except RequirementNotMet as e:
-			self.assertEqual(('FAIL MESSAGE',), e.get_error_data())
+		assert_requirement_not_met_message(executor, 'permission fail', 'FAIL MESSAGE')
+
+		# chained requires
+		executor = (
+			Literal('permission').
+			requires(lambda: flag_1, lambda: 'err1').
+			requires(lambda: flag_2, lambda: 'err2').
+			runs(self.callback_hit)
+		)
+		flag_1, flag_2 = True, True
+		self.run_command_and_check_hit(executor, 'permission', True)
+		flag_1, flag_2 = False, True
+		assert_requirement_not_met_message(executor, 'permission', 'err1')
+		flag_1, flag_2 = True, False
+		assert_requirement_not_met_message(executor, 'permission', 'err2')
+		flag_1, flag_2 = False, False
+		assert_requirement_not_met_message(executor, 'permission', 'err1')
 
 	def test_12_redirect(self):
 		executor1 = Literal('tp').then(

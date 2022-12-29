@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-28 23:41+0800\n"
+"POT-Creation-Date: 2022-12-29 21:19+0800\n"
 "PO-Revision-Date: 2021-01-23 17:24+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -332,6 +332,13 @@ msgstr ""
 
 #: mcdreforged.command.builder.nodes.basic.AbstractNode.requires:10 of
 msgid ""
+"Multiple :meth:`requires` call results in an \"and\" combination of all "
+"given requirements, i.e. the current command context is satisfied iif. "
+"all given requirements are satisfied"
+msgstr "若多次调用 :meth:`requires`，则将使用“与”逻辑合并所有需求，即仅当所有需求都被满足时测试才算通过"
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.requires:14 of
+msgid ""
 "A callable that accepts up to 2 arguments and returns a bool. Argument "
 "list: :class:`~mcdreforged.command.command_source.CommandSource`, "
 ":class:`dict` "
@@ -341,7 +348,7 @@ msgstr ""
 "的可调用对象。参数列表：:class:`~mcdreforged.command.command_source.CommandSource`、:class:`dict`"
 " (:class:`~mcdreforged.command.builder.common.CommandContext`)"
 
-#: mcdreforged.command.builder.nodes.basic.AbstractNode.requires:12 of
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.requires:16 of
 msgid ""
 "An optional callable that accepts up to 2 arguments and returns a str or "
 "a :class:`~mcdreforged.minecraft.rtext.text.RTextBase`. Argument list: "
@@ -353,7 +360,7 @@ msgstr ""
 "的可调用对象。参数列表：:class:`~mcdreforged.command.command_source.CommandSource`、:class:`dict`"
 " (:class:`~mcdreforged.command.builder.common.CommandContext`)"
 
-#: mcdreforged.command.builder.nodes.basic.AbstractNode.requires:15 of
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.requires:19 of
 msgid "Example usages::"
 msgstr "示例用法::"
 
