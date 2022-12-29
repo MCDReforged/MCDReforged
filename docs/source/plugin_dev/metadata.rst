@@ -55,7 +55,7 @@ Fields
 id
 ^^
 
-Id, or plugin id, is the identity string of your plugin. It should consist of lowercase letters, numbers and underscores with a length of 1 to 64
+ID, or plugin id, is the identity string of your plugin. It should consist of lowercase letters, numbers and underscores with a length of 1 to 64
 
 Here's some available plugin ids:
 
@@ -75,10 +75,15 @@ MCDR uses plugin id to distinguish between different plugins and check the depen
 
 Choose your plugin id wisely. It's highly suggested to keep your plugin id not changed after release your plugin
 
+.. attention::
+
+    Be careful about potential package name conflict. It is not recommended to take an id that is the same as the
+    standard library / third-party library name for your plugin, e.g. ``test``, otherwise MCDR might not able to load your plugin correctly
+
 
 * Field key: ``id``
 * Value type: str
-* Fallback value: the file name without the ``.py`` extension
+* Fallback value: the file name without the ``.py`` extension if it's a solo plugin
 
 version
 ^^^^^^^
