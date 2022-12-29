@@ -2,6 +2,7 @@ import os
 import sys
 import time
 from abc import ABC
+from types import ModuleType
 from typing import TYPE_CHECKING, Optional, List, Tuple, Any
 
 from mcdreforged.plugin.meta.metadata import Metadata
@@ -62,13 +63,13 @@ class RegularPlugin(AbstractPlugin, ABC):
 	def _load_entry_instance(self):
 		self.old_entry_module_instance = self.entry_module_instance
 		with self.plugin_manager.with_plugin_context(self):
-			self.entry_module_instance = self._get_module_instance()
+			self.entry_module_instance = self._import_entrypoint_module()
 
 	# ---------------------
 	#   To be Implemented
 	# ---------------------
 
-	def _get_module_instance(self):
+	def _import_entrypoint_module(self) -> ModuleType:
 		raise NotImplementedError()
 
 	def _on_ready(self):

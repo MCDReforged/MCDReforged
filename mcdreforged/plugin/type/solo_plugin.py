@@ -4,6 +4,7 @@ import importlib.util
 import os
 import re
 import sys
+from types import ModuleType
 from typing import TYPE_CHECKING
 
 from mcdreforged.constants import plugin_constant
@@ -27,7 +28,7 @@ class SoloPlugin(RegularPlugin):
 	def is_own_module(self, module_name: str) -> bool:
 		return module_name == self.module_name
 
-	def _get_module_instance(self):
+	def _import_entrypoint_module(self) -> ModuleType:
 		if not os.path.isfile(self.plugin_path):
 			raise TypeError('Source path {} of {} is not a file'.format(self.plugin_path, self))
 

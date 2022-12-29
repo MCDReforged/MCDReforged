@@ -3,6 +3,8 @@ import json
 import os
 import sys
 from abc import ABC
+from pathlib import Path
+from types import ModuleType
 from typing import IO, Collection
 
 import pkg_resources
@@ -28,8 +30,16 @@ class MultiFilePlugin(RegularPlugin, ABC):
 		plugin_id = self.get_id()
 		return module_name == plugin_id or module_name.startswith('{}.'.format(plugin_id))
 
-	def _get_module_instance(self):
-		return importlib.import_module(self.get_metadata().entrypoint)
+	def _import_entrypoint_module(self) -> ModuleType:
+		mod = importlib.import_module(self.get_metadata().entrypoint)
+		if mod.__file__ is not None:
+			mod_path = Path(mod.__file__).absolute()
+			plugin_path = Path(self.plugin_path).absolute()
+			if plugin_path != mod_path and plugin_path not in mod_path.parents:
+				self.mcdr_server.logger.warning('Suspicious entrypoint module path for plugin %s, package name conflict?', self)
+				self.mcdr_server.logger.warning('- Plugin file path: %s', plugin_path)
+				self.mcdr_server.logger.warning('- Loaded entrypoint path: %s', mod_path)
+		return mod
 
 	def _on_load(self):
 		super()._on_load()
