@@ -47,11 +47,24 @@ And then you are able to use this handler to handle the server. You need to do t
 
 
 #. Set the ``handler`` option in the configuration file to ``the_handler_for_my_server``
+#. Place your ``my_handler.py`` into a valid python package in the working directory of MCDR, e.g.
+
+.. code-block::
+
+    my_mcdr_server/
+     ├─ handlers/
+     │   ├─ __init__.py
+     │   └─ my_handler.py           <-----------
+     │
+     ├─ server/
+     ├─ config.yml
+     └─ permission.yml
+
 #. Added the path to the custom handler in the `custom_handlers <../configure.html#custom-handlers>`__ option, e.g:
 
 .. code-block::
 
     custom_handlers:
-    - the.package.to.my.handler.MyHandler
+    - handlers.MyHandler
 
 That's all you need to do

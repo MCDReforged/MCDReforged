@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-12 14:16+0800\n"
+"POT-Creation-Date: 2022-12-29 20:40+0800\n"
 "PO-Revision-Date: 2021-01-23 19:44+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -12,7 +12,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.9.0\n"
+"Generated-By: Babel 2.9.1\n"
 
 #: ../customize/handler.rst:3
 msgid "Server Handler"
@@ -37,8 +37,12 @@ msgstr ""
 #: ../customize/handler.rst:9
 msgid ""
 "To design a server handler, you need to inherit from an existed server "
-"handler class, or the base class :class:`~mcdreforged.handler.impl.abstract_minecraft_handler.AbstractMinecraftHandler`"
-msgstr "要设计服务端处理器，你需要从现有的服务端处理器类或 :class:`~mcdreforged.handler.impl.abstract_minecraft_handler.AbstractMinecraftHandler` 基类继承"
+"handler class, or the base class "
+":class:`~mcdreforged.handler.impl.abstract_minecraft_handler.AbstractMinecraftHandler`"
+msgstr ""
+"要设计服务端处理器，你需要从现有的服务端处理器类或 "
+":class:`~mcdreforged.handler.impl.abstract_minecraft_handler.AbstractMinecraftHandler`"
+" 基类继承"
 
 #: ../customize/handler.rst:11
 msgid ""
@@ -90,13 +94,19 @@ msgstr "将配置文件中的 ``handler`` 选项设置为 ``the_handler_for_my_s
 
 #: ../customize/handler.rst:50
 msgid ""
+"Place your ``my_handler.py`` into a valid python package in the working "
+"directory of MCDR, e.g."
+msgstr "在MCDR 工作路径中将你的 ``my_handler.py`` 放进一个合法的 python 包中，如"
+
+#: ../customize/handler.rst:63
+msgid ""
 "Added the path to the custom handler in the `custom_handlers "
 "<../configure.html#custom-handlers>`__ option, e.g:"
 msgstr ""
 "在 `custom_handlers <../configure.html#custom-handlers>`__ "
 "选项中添加自定义处理器的路径。例如："
 
-#: ../customize/handler.rst:57
+#: ../customize/handler.rst:70
 msgid "That's all you need to do"
 msgstr "就这样"
 
