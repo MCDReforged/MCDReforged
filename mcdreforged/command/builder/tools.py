@@ -22,6 +22,8 @@ class Requirements:
 
 		Method :meth:`AbstractNode.requires() <mcdreforged.command.builder.nodes.basic.AbstractNode.requires>`,
 		method :meth:`NodeDefinition.requires() <mcdreforged.command.builder.tools.NodeDefinition.requires>`
+
+	.. versionadded:: v2.6.0
 	"""
 
 	@classmethod
