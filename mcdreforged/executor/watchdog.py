@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 
 
 class WatchDog(ThreadExecutor):
-	TASK_EXECUTOR_NO_RESPOND_THRESHOLD = 10  # seconds
+	DEFAULT_NO_RESPOND_THRESHOLD = 10  # seconds
 
 	def __init__(self, mcdr_server: 'MCDReforgedServer'):
 		super().__init__(mcdr_server)
@@ -35,9 +35,14 @@ class WatchDog(ThreadExecutor):
 
 	def check_task_executor_state(self):
 		task_executor = self.mcdr_server.task_executor
-		if task_executor.get_this_tick_time() > self.TASK_EXECUTOR_NO_RESPOND_THRESHOLD and self.__monitoring:
+		no_respond_threshold = self.mcdr_server.config['watchdog_threshold']  # in seconds
+		if not isinstance(no_respond_threshold, int):
+			no_respond_threshold = self.DEFAULT_NO_RESPOND_THRESHOLD
+		if no_respond_threshold <= 0:
+			return
+		if task_executor.get_this_tick_time() > no_respond_threshold and self.__monitoring:
 			plugin = self.mcdr_server.plugin_manager.get_current_running_plugin(thread=task_executor.get_thread())
-			self.mcdr_server.logger.warning(self.mcdr_server.tr('watchdog.task_executor_no_response.line1', self.TASK_EXECUTOR_NO_RESPOND_THRESHOLD))
+			self.mcdr_server.logger.warning(self.mcdr_server.tr('watchdog.task_executor_no_response.line1', no_respond_threshold))
 			self.mcdr_server.logger.warning(self.mcdr_server.tr('watchdog.task_executor_no_response.line2', plugin))
 			self.mcdr_server.logger.warning(self.mcdr_server.tr('watchdog.task_executor_no_response.line3'))
 

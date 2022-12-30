@@ -265,6 +265,20 @@ All custom info reactors will be registered to the reactor list to process infor
 
 In this example the custom reactor package path is ``my.custom.reactor`` and the class name is ``MyInfoReactor``
 
+.. _config-watchdog_threshold:
+
+watchdog_threshold
+~~~~~~~~~~~~~~~~~~
+
+The required time interval in second for :ref:`watchdog` to consider the task executor thread is not responding. Set it to 0 to disable :ref:`watchdog`
+
+* Option type: int or float
+* Default value:
+
+.. code-block:: yaml
+
+    watchdog_threshold: 10
+
 debug
 ~~~~~
 

@@ -90,6 +90,10 @@ custom_handlers:
 custom_info_reactors:
 
 
+# The required time interval in second for watchdog to consider the task executor thread is not responding. Set it to 0 to disable watchdog
+watchdog_threshold: 10
+
+
 # Debug mode switches
 debug:
   all: false
