@@ -13,5 +13,5 @@ Similar to `custom server handler <handler.html>`__\ , you info reactor class ne
 Then you need to implement the :meth:`~mcdreforged.info_reactor.abstract_info_reactor.AbstractInfoReactor.react` method to give it some functionalities
 
 After you finish coding your reactor, you need to add you reactor class path to
-the `custom_info_reactors <../configure.html#custom-info-reactors>`__ option of the configuration file,
+the `custom_info_reactors <../configuration.html#custom-info-reactors>`__ option of the configuration file,
 then your reactor will start working automatically

@@ -1,8 +1,6 @@
 
-.. _watchdog:
-
 Watchdog
-=========
+========
 
 Watchdog is a daemon thread monitoring the task executor thread
 
@@ -12,4 +10,5 @@ so that bad-designed plugin will not able to block the logic of MCDR forever
 
 The 10s execution time limit can be configured with the :ref:`config-watchdog_threshold` option in the configure file
 
-If you want to do some time costly tasks in your plugin, execute them in a new thread is highly recommended. `@new_thread <api.html#new-thread>`__ decorator provides an easy way to do that
+If you want to do some time costly tasks in your plugin, execute them in a new thread is highly recommended.
+The :func:`@new_thread <mcdreforged.api.decorator.new_thread.new_thread>` decorator provides an easy way to do that

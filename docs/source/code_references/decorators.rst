@@ -4,7 +4,7 @@
 Decorators
 ==========
 
-:ref:`API package <api-package>` path: ``mcdreforged.api.decorator``
+:doc:`API package </plugin_dev/api>` path: ``mcdreforged.api.decorator``
 
 @new_thread
 -----------

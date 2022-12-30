@@ -1,3 +1,6 @@
+
+.. _index-plugin-dev:
+
 Plugin Development
 ==================
 

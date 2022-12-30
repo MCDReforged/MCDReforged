@@ -4,7 +4,7 @@
 Utilities
 =========
 
-:ref:`API package <api-package>` path: ``mcdreforged.api.utils``
+:doc:`API package </plugin_dev/api>` path: ``mcdreforged.api.utils``
 
 .. autoclass:: mcdreforged.utils.serializer.Serializable
     :members:

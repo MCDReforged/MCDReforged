@@ -47,9 +47,9 @@ msgstr "MCDR 向玩家或控制台发送翻译文本的首选语言"
 
 #: ../preference.rst:16
 msgid ""
-"Default value: The same as the `language <configure.html#language>`__ "
+"Default value: The same as the `language <configuration.html#language>`__ "
 "value in MCDR configuration"
-msgstr "默认值：同 MCDR 配置中的 `language <configure.html#language>`__ 选项"
+msgstr "默认值：同 MCDR 配置中的 `language <configuration.html#language>`__ 选项"
 
 #: ../preference.rst:17
 msgid "Available options: ``en_us``, ``zh_cn``"

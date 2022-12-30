@@ -1,4 +1,6 @@
 
+.. _page-command:
+
 Command Tree
 ============
 

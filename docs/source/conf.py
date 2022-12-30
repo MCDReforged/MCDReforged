@@ -33,6 +33,7 @@ release = '2.0'
 # ones.
 extensions = [
 	'sphinx.ext.autodoc',
+	'sphinx.ext.autosectionlabel',
 	'sphinx.ext.napoleon',
 	'sphinx.ext.viewcode',
 	'sphinx_copybutton',
@@ -85,6 +86,11 @@ gettext_compact = False  # optional
 # https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html
 autodoc_member_order = 'bysource'
 autodoc_inherit_docstrings = False  # so overridden methods won't pop up
+
+
+# -- Options for sphinx.ext.autosectionlabel -------------------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/extensions/autosectionlabel.html
+autosectionlabel_prefix_document = True
 
 
 def autodoc_setup(app):

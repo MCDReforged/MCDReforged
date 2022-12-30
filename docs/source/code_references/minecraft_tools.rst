@@ -7,7 +7,7 @@ Minecraft Tools
 RText
 -----
 
-:ref:`API package <api-package>` path: ``mcdreforged.api.rtext``
+:doc:`API package </plugin_dev/api>` path: ``mcdreforged.api.rtext``
 
 .. automodule:: mcdreforged.minecraft.rtext
 
@@ -64,7 +64,7 @@ Text Components
 Rcon
 ----
 
-:ref:`API package <api-package>` path: ``mcdreforged.api.rcon``
+:doc:`API package </plugin_dev/api>` path: ``mcdreforged.api.rcon``
 
 .. autoclass:: mcdreforged.minecraft.rcon.rcon_connection.RconConnection
     :members:

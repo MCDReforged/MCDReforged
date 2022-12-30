@@ -1,6 +1,4 @@
 
-.. _api-package:
-
 API Packages for Plugins
 ========================
 

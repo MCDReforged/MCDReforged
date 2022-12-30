@@ -108,7 +108,7 @@ In current MCDR, all event listeners callbacks are invoked in a single thread na
 If your plugin depends on multithreading from MCDR to do some parallel operations, or your plugin need to do some I/O or network operations which might take some times,
 you'd better create a new thread to execute them manually, so MCDR won't be blocked by these
 
-MCDR also provides a simple function decorator ``new_thread`` for lazy man, to make a function multi threaded when being invoked. Here's an quick example:
+MCDR also provides a simple function decorator :func:`@new_thread <mcdreforged.api.decorator.new_thread.new_thread>` for lazy man, to make a function multi threaded when being invoked. Here's an quick example:
 
 .. code-block:: python
 
@@ -126,8 +126,8 @@ MCDR also provides a simple function decorator ``new_thread`` for lazy man, to m
     def my_slow_method3():
         time.sleep(10)
 
-With the ``@new_thread`` decorator, everytime when you invoke ``my_slow_method2``\ , a new daemon thread will be started to executed it.
-For more details about the ``@new_thread`` decorator, check `here <../plugin_dev/api.html#new-thread>`__
+With the :func:`@new_thread <mcdreforged.api.decorator.new_thread.new_thread>` decorator,
+everytime when you invoke ``my_slow_method2``\ , a new daemon thread will be started to executed it
 
 Package location
 ^^^^^^^^^^^^^^^^

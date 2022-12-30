@@ -34,10 +34,10 @@ msgstr ""
 #: ../plugin_dev/basic.rst:11
 msgid ""
 "The list of the plugin directory can be defined inside the `configuration"
-" file <../configure.html#plugin_directories>`__. At start up, MCDR will "
+" file <../configuration.html#plugin_directories>`__. At start up, MCDR will "
 "automatically load every plugin inside every plugin directory"
 msgstr ""
-"插件目录的列表可以在 `配置文件 <../configure.html#plugin_directories>`__ 中定义。启动时，MCDR "
+"插件目录的列表可以在 `配置文件 <../configuration.html#plugin_directories>`__ 中定义。启动时，MCDR "
 "会自动加载每个插件目录中的每个插件"
 
 #: ../plugin_dev/basic.rst:14

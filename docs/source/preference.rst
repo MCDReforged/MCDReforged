@@ -15,5 +15,5 @@ language
 
 The preferred language for MCDR to send translation texts to the player or to the console
 
-* Default value: The same as the `language <configure.html#language>`__ value in MCDR configuration
+* Default value: The same as the `language <configuration.html#language>`__ value in MCDR configuration
 * Available options: ``en_us``, ``zh_cn``

@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-29 21:19+0800\n"
+"POT-Creation-Date: 2022-12-30 11:44+0800\n"
 "PO-Revision-Date: 2021-01-23 17:24+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -19,8 +19,8 @@ msgid "Command Stuffs"
 msgstr "指令相关"
 
 #: ../code_references/command.rst:7
-msgid ":ref:`API package <api-package>` path: ``mcdreforged.api.command``"
-msgstr ":ref:`API 包 <api-package>` 路径: ``mcdreforged.api.command``"
+msgid ":doc:`API package </plugin_dev/api>` path: ``mcdreforged.api.command``"
+msgstr ":doc:`API  包 </plugin_dev/api>` 路径: ``mcdreforged.api.command``"
 
 #: ../code_references/command.rst:11
 msgid "Command Source"
@@ -257,7 +257,7 @@ msgstr "用于构建指令树结构"
 
 #: mcdreforged.command.builder.nodes.basic.AbstractNode.then:5 of
 msgid "A node instance to be added to current node's children list"
-msgstr "参数 *node*：要添加到当前节点的儿子列表中的节点实例"
+msgstr "要添加到当前节点的儿子列表中的节点实例"
 
 #: mcdreforged.command.builder.nodes.basic.AbstractNode.then:7
 #: mcdreforged.command.builder.tools.SimpleCommandBuilder.print_tree:3 of

@@ -1,6 +1,6 @@
 
-Configure
-=========
+Configuration
+=============
 
 The configuration file of MCDR is ``config.yml``. It's located and should be located in the working directory of MCDR
 
@@ -270,7 +270,7 @@ In this example the custom reactor package path is ``my.custom.reactor`` and the
 watchdog_threshold
 ~~~~~~~~~~~~~~~~~~
 
-The required time interval in second for :ref:`watchdog` to consider the task executor thread is not responding. Set it to 0 to disable :ref:`watchdog`
+The required time interval in second for :doc:`/plugin_dev/watchdog` to consider the task executor thread is not responding. Set it to 0 to disable :doc:`/plugin_dev/watchdog`
 
 * Option type: int or float
 * Default value:

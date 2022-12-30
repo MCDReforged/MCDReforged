@@ -101,9 +101,9 @@ msgstr "在MCDR 工作路径中将你的 ``my_handler.py`` 放进一个合法的
 #: ../customize/handler.rst:63
 msgid ""
 "Added the path to the custom handler in the `custom_handlers "
-"<../configure.html#custom-handlers>`__ option, e.g:"
+"<../configuration.html#custom-handlers>`__ option, e.g:"
 msgstr ""
-"在 `custom_handlers <../configure.html#custom-handlers>`__ "
+"在 `custom_handlers <../configuration.html#custom-handlers>`__ "
 "选项中添加自定义处理器的路径。例如："
 
 #: ../customize/handler.rst:70

@@ -56,10 +56,10 @@ msgstr ""
 #: ../customize/reactor.rst:15
 msgid ""
 "After you finish coding your reactor, you need to add you reactor class "
-"path to the `custom_info_reactors <../configure.html#custom-info-"
+"path to the `custom_info_reactors <../configuration.html#custom-info-"
 "reactors>`__ option of the configuration file, then your reactor will "
 "start working automatically"
 msgstr ""
-"完成对响应器编写后， 你需要将响应器类路径添加到配置文件的 `custom_info_reactors <../configure.html"
+"完成对响应器编写后， 你需要将响应器类路径添加到配置文件的 `custom_info_reactors <../configuration.html"
 "#custom-info-reactors>`__ 选项中，然后你的响应器将开始工作"
 

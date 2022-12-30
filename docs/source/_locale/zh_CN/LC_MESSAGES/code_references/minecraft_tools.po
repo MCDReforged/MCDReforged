@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-01 01:50+0800\n"
+"POT-Creation-Date: 2022-12-30 11:44+0800\n"
 "PO-Revision-Date: 2021-01-24 09:02+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -23,8 +23,8 @@ msgid "RText"
 msgstr "RText"
 
 #: ../code_references/minecraft_tools.rst:10
-msgid ":ref:`API package <api-package>` path: ``mcdreforged.api.rtext``"
-msgstr ":ref:`API 包 <api-package>` 路径: ``mcdreforged.api.rtext``"
+msgid ":doc:`API package </plugin_dev/api>` path: ``mcdreforged.api.rtext``"
+msgstr ":doc:`API  包 </plugin_dev/api>` 路径: ``mcdreforged.api.rtext``"
 
 #: mcdreforged.minecraft.rtext:1 of
 msgid "Advanced text component library for Minecraft"
@@ -118,7 +118,9 @@ msgid ""
 "Actually vanilla Minecraft doesn't allow texts sent by command contain "
 ":attr:`open_file` actions, so don't be surprised if this "
 ":attr:`open_file` doesn't work"
-msgstr "事实上原版 Minecraft 并不允许指令中的文本包含 :attr:`open_file` 动作，因此当你发现这个 :attr:`open_file` 不起作用时别太惊讶"
+msgstr ""
+"事实上原版 Minecraft 并不允许指令中的文本包含 :attr:`open_file` 动作，因此当你发现这个 "
+":attr:`open_file` 不起作用时别太惊讶"
 
 #: ../docstring mcdreforged.minecraft.rtext.style.RAction.copy_to_clipboard:1
 #: of
@@ -454,8 +456,8 @@ msgid "Rcon"
 msgstr "Rcon"
 
 #: ../code_references/minecraft_tools.rst:67
-msgid ":ref:`API package <api-package>` path: ``mcdreforged.api.rcon``"
-msgstr ":ref:`API 包 <api-package>` 路径: ``mcdreforged.api.rcon``"
+msgid ":doc:`API package </plugin_dev/api>` path: ``mcdreforged.api.rcon``"
+msgstr ":doc:`API  包 </plugin_dev/api>` 路径: ``mcdreforged.api.rcon``"
 
 #: mcdreforged.minecraft.rcon.rcon_connection.RconConnection:1 of
 msgid ""

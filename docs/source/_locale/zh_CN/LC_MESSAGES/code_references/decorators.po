@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-13 21:15+0800\n"
+"POT-Creation-Date: 2022-12-30 11:44+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,8 +22,8 @@ msgid "Decorators"
 msgstr "装饰器"
 
 #: ../code_references/decorators.rst:7
-msgid ":ref:`API package <api-package>` path: ``mcdreforged.api.decorator``"
-msgstr ":ref:`API 包 <api-package>` 路径: ``mcdreforged.api.decorator``"
+msgid ":doc:`API package </plugin_dev/api>` path: ``mcdreforged.api.decorator``"
+msgstr ":doc:`API  包 </plugin_dev/api>` 路径: ``mcdreforged.api.decorator``"
 
 #: ../code_references/decorators.rst:10
 msgid "@new_thread"
