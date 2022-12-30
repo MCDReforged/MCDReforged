@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-14 16:17+0800\n"
+"POT-Creation-Date: 2022-12-30 10:54+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -340,16 +340,14 @@ msgstr "注意，这个 pid 对应的是一个 bash 进程，它是真实服务�
 msgid "The pid of the server. None if the server is stopped"
 msgstr "返回服务端进程的 pid，如果服务端已经停止，则返回 None"
 
-#: mcdreforged.plugin.server_interface.ServerInterface.get_server_pid_all:1
-#: of
+#: mcdreforged.plugin.server_interface.ServerInterface.get_server_pid_all:1 of
 msgid "Return a list of pid of all processes in the server's process group"
 msgstr "返回一个储存了服务端进程组内所有进程的 pid 的列表"
 
-#: mcdreforged.plugin.server_interface.ServerInterface.get_server_pid_all:3
-#: of
+#: mcdreforged.plugin.server_interface.ServerInterface.get_server_pid_all:3 of
 msgid ""
-"A list of pid. It will be empty if the server is stopped or the "
-"pid query failed"
+"A list of pid. It will be empty if the server is stopped or the pid query"
+" failed"
 msgstr "一个 pid 列表。如果服务端已经停止，或者 pid 查询失败，则这个列表将为空"
 
 #: mcdreforged.plugin.server_interface.ServerInterface.get_server_information:1
@@ -558,6 +556,28 @@ msgid ""
 "cause unwanted plugin operations"
 msgstr "所有的插件操作都会触发依赖性检查——这可能会导致不必要的插件操作"
 
+#: ../code_references/ServerInterface.rst:66
+msgid ""
+"It's not suggested to trigger plugin operations during :ref:`on_load "
+"<event-plugin-load>` or :ref:`on_unload <event-plugin-unload>` plugin "
+"events. During these events, MCDR is in a process of an ongoing plugin "
+"operation, which is not suitable to triggered another plugin operation"
+msgstr ""
+"不推荐在插件事件 :ref:`插件被加载 <event-plugin-load>` 或 :ref:`插件被卸载 <event-plugin-"
+"unload>` 期间进行插件操作在这些事件发生时，MCDR 正处于一次进行中的插件操作流程之中，此时并不适合触发另一次插件操作"
+
+#: ../code_references/ServerInterface.rst:69
+msgid ""
+"If you do trigger a plugin operation during :ref:`on_load <event-plugin-"
+"load>` or :ref:`on_unload <event-plugin-unload>` plugin events, MCDR will"
+" delay the new operations till the first operation finishes. In this "
+"delayed operation case, the return value of following APIs will always be"
+" false or None"
+msgstr ""
+"如果你确实在 插件事件 :ref:`插件被加载 <event-plugin-load>` 或 :ref:`插件被卸载 <event-plugin-"
+"unload>` 期间进行了插件操作，MCDR 将会延迟这些插件操作的执行至首个插件操作结束。对于这种延后执行的情况，下述 API "
+"的返回值将总会是 false 或 None"
+
 #: mcdreforged.plugin.server_interface.ServerInterface.load_plugin:1 of
 msgid "Load a plugin from the given file path"
 msgstr "从给定的文件路径加载一个插件"
@@ -653,7 +673,7 @@ msgstr "如果该事件在任务执行者线程上，则会被立即触发。如
 msgid ""
 "You cannot dispatch an event with the same event id to any MCDR built-in "
 "event"
-msgstr "你不能发送与任何一个 MCDR 内置事件拥有相同事件 ID 的事件"
+msgstr "你不能分发与任何一个 MCDR 内置事件拥有相同事件 ID 的事件"
 
 #: mcdreforged.plugin.server_interface.ServerInterface.dispatch_event:8 of
 msgid "Example"
@@ -675,7 +695,7 @@ msgid ""
 ":class:`~mcdreforged.plugin.plugin_event.LiteralEvent` instance for this "
 "argument"
 msgstr ""
-"参数 *event*：要发送的事件。它必须是一个 "
+"参数 *event*：要分发的事件。它必须是一个 "
 ":class:`~mcdreforged.plugin.plugin_event.PluginEvent` "
 "实例。为了更简单地使用，你可以为这个参数创建一个 "
 ":class:`~mcdreforged.plugin.plugin_event.LiteralEvent` 实例"
@@ -693,7 +713,7 @@ msgid ""
 "thread If it's set to False. The event will be dispatched immediately"
 msgstr "在默认值的情况下，该事件会被派发至任务执行者 (task executor) 线程中分发。如果它被设置为 False，则事件将会被立即分发"
 
-#: ../code_references/ServerInterface.rst:76
+#: ../code_references/ServerInterface.rst:82
 msgid "Permission"
 msgstr "权限"
 
@@ -748,7 +768,7 @@ msgstr ""
 msgid "If the value parameter doesn't properly represent a permission level"
 msgstr "如果数值参数不是一个正确的权限级别"
 
-#: ../code_references/ServerInterface.rst:82
+#: ../code_references/ServerInterface.rst:88
 msgid "Command"
 msgstr "指令"
 
@@ -779,7 +799,7 @@ msgid ""
 "fallback command source"
 msgstr "用于执行该条指令的指令源。如果它未被指定，MCDR 将会使用 :meth:`get_plugin_command_source` 来获得默认的指令源"
 
-#: ../code_references/ServerInterface.rst:88
+#: ../code_references/ServerInterface.rst:94
 msgid "Preference"
 msgstr "偏好"
 
@@ -803,7 +823,7 @@ msgstr "你要查询的偏好的对象"
 msgid "If the type of the given object is not supported for preference querying"
 msgstr "若给定对象的类型不支持偏好查询"
 
-#: ../code_references/ServerInterface.rst:93
+#: ../code_references/ServerInterface.rst:99
 msgid "Misc"
 msgstr "杂项"
 

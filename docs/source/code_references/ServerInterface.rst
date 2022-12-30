@@ -63,6 +63,12 @@ Plugin Operations
 .. warning::
     All plugin manipulation will trigger a dependency check, which might cause unwanted plugin operations
 
+    It's not suggested to trigger plugin operations during :ref:`on_load <event-plugin-load>` or :ref:`on_unload <event-plugin-unload>` plugin events.
+    During these events, MCDR is in a process of an ongoing plugin operation, which is not suitable to triggered another plugin operation
+
+    If you do trigger a plugin operation during :ref:`on_load <event-plugin-load>` or :ref:`on_unload <event-plugin-unload>` plugin events,
+    MCDR will delay the new operations till the first operation finishes. In this delayed operation case, the return value of following APIs will always be false or None
+
 .. automethod:: ServerInterface.load_plugin
 .. automethod:: ServerInterface.enable_plugin
 .. automethod:: ServerInterface.reload_plugin
