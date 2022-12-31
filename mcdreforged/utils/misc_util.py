@@ -3,7 +3,7 @@ Misc tool collection
 """
 import inspect
 import threading
-from typing import List, Callable, Tuple, TypeVar, Any, Type, Optional, Union, Iterable
+from typing import List, Callable, Tuple, TypeVar, Any, Optional, Iterable
 
 
 def start_thread(func: Callable, args: Tuple, name: Optional[str] = None):
@@ -25,19 +25,12 @@ def print_text_to_console(logger, text: Any):
 		logger.info(line)
 
 
-def check_type(value: Any, types: Union[Type, Iterable[Type]], error_message: str = None):
-	if not isinstance(types, Iterable):
-		types = [types]
-	if not any(map(lambda t: isinstance(value, t), types)):
-		if error_message is None:
-			error_message = 'Except type {} but found type {}'.format(types, type(value))
-		raise TypeError(error_message)
-
-
 def copy_signature(target: Callable, origin: Callable) -> Callable:
 	"""
 	Copy the function signature of origin into target
 	"""
+	assert callable(target) and callable(origin)
+
 	# https://stackoverflow.com/questions/39926567/python-create-decorator-preserving-function-arguments
 	target.__signature__ = inspect.signature(origin)
 	return target

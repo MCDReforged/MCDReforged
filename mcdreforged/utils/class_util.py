@@ -1,5 +1,5 @@
 import importlib
-from typing import Any, Type
+from typing import Any, Type, Union, Iterable
 
 from mcdreforged.utils import misc_util, tree_printer
 
@@ -24,7 +24,21 @@ def load_class(path: str):
 def check_class(class_: Type, base_class: Type, error_message: str = None):
 	if not issubclass(class_, base_class):
 		if error_message is None:
-			error_message = 'Except class derived from {} but found class {}'.format(base_class, class_)
+			error_message = 'Except class derived from {}, but found class {}'.format(base_class, class_)
+		raise TypeError(error_message)
+
+
+def check_type(value: Any, types: Union[Type, Iterable[Type]], error_message: str = None):
+	def mapper(x):
+		if x is None:
+			return type(x)
+		return x
+
+	if not isinstance(types, Iterable):
+		types = (types,)
+	if not isinstance(value, tuple(map(mapper, types))):
+		if error_message is None:
+			error_message = 'Except type {}, but found type {}'.format(types, type(value))
 		raise TypeError(error_message)
 
 

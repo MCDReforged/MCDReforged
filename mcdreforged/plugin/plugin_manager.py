@@ -20,7 +20,7 @@ from mcdreforged.plugin.plugin_thread import PluginThreadPool
 from mcdreforged.plugin.type.permanent_plugin import PermanentPlugin
 from mcdreforged.plugin.type.plugin import AbstractPlugin, PluginState
 from mcdreforged.plugin.type.regular_plugin import RegularPlugin
-from mcdreforged.utils import file_util, string_util, misc_util
+from mcdreforged.utils import file_util, string_util, misc_util, class_util
 from mcdreforged.utils.future import Future
 from mcdreforged.utils.logger import DebugOption
 from mcdreforged.utils.thread_local_storage import ThreadLocalStorage
@@ -502,6 +502,8 @@ class PluginManager:
 			self.logger.info(self.mcdr_server.tr('plugin_manager.load_plugin.entered', file_path))
 			load_result = self.__collect_and_process_new_plugins(lambda fp: fp == file_path)
 			return self.__finalization_plugin_manipulation(load_result=load_result)
+
+		class_util.check_type(file_path, str)
 		return self.__run_manipulation(load_plugin_action)
 
 	def unload_plugin(self, plugin: RegularPlugin) -> Future[PluginOperationResult]:
@@ -509,6 +511,8 @@ class PluginManager:
 			self.logger.info(self.mcdr_server.tr('plugin_manager.unload_plugin.entered', plugin))
 			unload_result = self.__unload_given_plugins(lambda plg: True, specific=plugin)
 			return self.__finalization_plugin_manipulation(unload_result=unload_result)
+
+		class_util.check_type(plugin, RegularPlugin)
 		return self.__run_manipulation(unload_plugin_action)
 
 	def reload_plugin(self, plugin: RegularPlugin) -> Future[PluginOperationResult]:
@@ -516,9 +520,12 @@ class PluginManager:
 			self.logger.info(self.mcdr_server.tr('plugin_manager.reload_plugin.entered', plugin))
 			reload_result = self.__reload_ready_plugins(lambda plg: True, specific=plugin)
 			return self.__finalization_plugin_manipulation(reload_result=reload_result)
+
+		class_util.check_type(plugin, RegularPlugin)
 		return self.__run_manipulation(reload_plugin_action)
 
 	def enable_plugin(self, file_path: str) -> Future[PluginOperationResult]:
+		class_util.check_type(file_path, str)
 		self.logger.info(self.mcdr_server.tr('plugin_manager.enable_plugin.entered', file_path))
 		new_file_path = string_util.remove_suffix(file_path, plugin_constant.DISABLED_PLUGIN_FILE_SUFFIX)
 		if plugin_factory.is_disabled_plugin(file_path):
@@ -541,12 +548,14 @@ class PluginManager:
 		def refresh_all_plugins_action() -> PluginOperationResult:
 			self.logger.info(self.mcdr_server.tr('plugin_manager.refresh_all_plugins.entered'))
 			return self.__refresh_plugins(lambda plg: True)
+
 		return self.__run_manipulation(refresh_all_plugins_action)
 
 	def refresh_changed_plugins(self) -> Future[PluginOperationResult]:
 		def refresh_changed_plugins_action() -> PluginOperationResult:
 			self.logger.info(self.mcdr_server.tr('plugin_manager.refresh_changed_plugins.entered'))
 			return self.__refresh_plugins(lambda plg: plg.file_changed())
+
 		return self.__run_manipulation(refresh_changed_plugins_action)
 
 	# ----------------

@@ -22,7 +22,7 @@ from mcdreforged.plugin.type.multi_file_plugin import MultiFilePlugin
 from mcdreforged.plugin.type.plugin import AbstractPlugin
 from mcdreforged.preference.preference_manager import PreferenceItem
 from mcdreforged.translation.translation_text import RTextMCDRTranslation
-from mcdreforged.utils import misc_util, file_util
+from mcdreforged.utils import misc_util, file_util, class_util
 from mcdreforged.utils.exception import IllegalCallError
 from mcdreforged.utils.future import Future
 from mcdreforged.utils.logger import MCDReforgedLogger, DebugOption
@@ -593,7 +593,7 @@ class ServerInterface:
 		:param on_executor_thread: By default the event will be dispatched in a new task in task executor thread
 			If it's set to False. The event will be dispatched immediately
 		"""
-		misc_util.check_type(event, PluginEvent)
+		class_util.check_type(event, PluginEvent)
 		if MCDRPluginEvents.contains_id(event.id):
 			raise ValueError('Cannot dispatch event with already exists event id {}'.format(event.id))
 		self._mcdr_server.plugin_manager.dispatch_event(event, args, on_executor_thread=on_executor_thread)
@@ -660,8 +660,8 @@ class ServerInterface:
 		"""
 		if source is None:
 			source = self.get_plugin_command_source()
-		misc_util.check_type(command, str)
-		misc_util.check_type(source, CommandSource)
+		class_util.check_type(command, str)
+		class_util.check_type(source, CommandSource)
 		self._mcdr_server.command_manager.execute_command(command, source)
 
 	# ------------------------

@@ -10,7 +10,7 @@ from mcdreforged.command.builder.exception import LiteralNotMatch, UnknownComman
 	UnknownRootArgument, RequirementNotMet, IllegalNodeOperation, \
 	CommandError
 from mcdreforged.command.command_source import CommandSource
-from mcdreforged.utils import misc_util, tree_printer
+from mcdreforged.utils import misc_util, tree_printer, class_util
 from mcdreforged.utils.types import MessageText
 
 __SOURCE_CONTEXT_CALLBACK = Union[Callable[[], Any], Callable[[CommandSource], Any], Callable[[CommandSource, dict], Any]]
@@ -83,6 +83,7 @@ class AbstractNode(ABC):
 		"""
 		if self._redirect_node is not None:
 			raise IllegalNodeOperation('Redirected node is not allowed to add child nodes')
+		class_util.check_type(node, AbstractNode)
 		if isinstance(node, Literal):
 			for literal in node.literals:
 				self._children_literal[literal].append(node)
@@ -121,6 +122,7 @@ class AbstractNode(ABC):
 		:param func: A callable that accepts up to 2 arguments.
 			Argument list: :class:`~mcdreforged.command.command_source.CommandSource`, :class:`dict` (:class:`~mcdreforged.command.builder.common.CommandContext`)
 		"""
+		class_util.check_type(func, Callable)
 		self._callback = func
 		return self
 
@@ -150,6 +152,8 @@ class AbstractNode(ABC):
 			node2.requires(lambda src, ctx: ctx['page_count'] <= get_max_page())  # Dynamic range check
 			node3.requires(lambda src, ctx: is_legal(ctx['target']), lambda src, ctx: 'target {} is illegal'.format(ctx['target']))  # Customized failure message
 		"""
+		class_util.check_type(requirement, Callable)
+		class_util.check_type(failure_message_getter, [Callable, None])
 		self._requirements.append(_Requirement(requirement, failure_message_getter))
 		return self
 
@@ -169,6 +173,7 @@ class AbstractNode(ABC):
 		"""
 		if self.has_children():
 			raise IllegalNodeOperation('Node with children nodes is not allowed to be redirected')
+		class_util.check_type(redirect_node, AbstractNode)
 		self._redirect_node = redirect_node
 		return self
 
@@ -192,6 +197,7 @@ class AbstractNode(ABC):
 		:param suggestion: A callable function which accepts up to 2 parameters and return an iterable of str indicating the current command suggestions.
 			Argument list: :class:`~mcdreforged.command.command_source.CommandSource`, :class:`dict` (:class:`~mcdreforged.command.builder.common.CommandContext`)
 		"""
+		class_util.check_type(suggestion, Callable)
 		self._suggestion_getter = suggestion
 		return self
 
@@ -208,6 +214,8 @@ class AbstractNode(ABC):
 		"""
 		if not issubclass(error_type, CommandError):
 			raise TypeError('error_type parameter should be a class inherited from CommandError, but class {} found'.format(error_type))
+		class_util.check_type(error_type, Type)
+		class_util.check_type(handler, Callable)
 		self._error_handlers[error_type] = _ErrorHandler(handler, handled)
 		return self
 
@@ -217,6 +225,8 @@ class AbstractNode(ABC):
 		"""
 		if not issubclass(error_type, CommandError):
 			raise TypeError('error_type parameter should be a class inherited from CommandError, but class {} found'.format(error_type))
+		class_util.check_type(error_type, Type)
+		class_util.check_type(handler, Callable)
 		self._child_error_handlers[error_type] = _ErrorHandler(handler, handled)
 		return self
 
