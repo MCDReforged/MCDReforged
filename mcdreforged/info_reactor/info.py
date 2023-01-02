@@ -36,7 +36,7 @@ class Info:
 		"""A monotonously increasing unique id"""
 
 		Info.__id_counter += 1
-		self.__mcdr_server = None  # type: Optional[MCDReforgedServer]
+		self.__mcdr_server: Optional['MCDReforgedServer'] = None
 		self.__send_to_server = True
 		self.__command_source = None
 
@@ -123,7 +123,12 @@ class Info:
 		if self.__mcdr_server is None:
 			raise IllegalStateError('MCDR server is not attached to this Info instance yet')
 
-	def attach_mcdr_server(self, mcdr_server):
+	def attach_mcdr_server(self, mcdr_server: 'MCDReforgedServer'):
+		"""
+		**Not public API**
+
+		:meta private:
+		"""
 		if self.__mcdr_server is not None:
 			raise IllegalStateError('An Info instance can only attach the MCDR server once')
 		self.__mcdr_server = mcdr_server
