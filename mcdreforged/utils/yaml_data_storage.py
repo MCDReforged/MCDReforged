@@ -6,7 +6,7 @@ from typing import Tuple
 from ruamel.yaml import YAML
 from ruamel.yaml.comments import CommentedMap
 
-from mcdreforged.utils import resources_util, misc_util
+from mcdreforged.utils import resources_util, misc_util, file_util
 from mcdreforged.utils.lazy_item import LazyItem
 
 
@@ -80,7 +80,7 @@ class YamlDataStorage:
 
 	def __save(self, data: CommentedMap):
 		self._pre_save(data)
-		with open(self.__file_path, 'w', encoding='utf8') as file:
+		with file_util.safe_write(self.__file_path, encoding='utf8') as file:
 			YAML().dump(data, file)
 
 	def save(self):

@@ -1,5 +1,6 @@
+import contextlib
 import os
-from typing import Callable
+from typing import Callable, ContextManager, TextIO
 
 
 def list_all(directory: str, filter: Callable[[str], bool] = lambda file_path: True):
@@ -30,3 +31,12 @@ def get_file_suffix(file_path: str):
 	if index == -1:
 		return ''
 	return file_name[index:]
+
+
+@contextlib.contextmanager
+def safe_write(target_file_path: str, *, encoding: str) -> ContextManager[TextIO]:
+	temp_file_path = target_file_path + '.tmp'
+	with open(temp_file_path, 'w', encoding=encoding) as file:
+		yield file
+	os.replace(temp_file_path, target_file_path)
+
