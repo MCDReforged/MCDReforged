@@ -30,6 +30,7 @@ from mcdreforged.utils.serializer import Serializable
 from mcdreforged.utils.types import MessageText, TranslationKeyDictRich, TranslationKeyDictNested
 
 if TYPE_CHECKING:
+	from mcdreforged.config import MCDReforgedConfig
 	from mcdreforged.mcdr_server import MCDReforgedServer
 	from mcdreforged.handler.abstract_server_handler import AbstractServerHandler
 	from mcdreforged.plugin.plugin_manager import PluginManager
@@ -599,7 +600,47 @@ class ServerInterface:
 		self._mcdr_server.plugin_manager.dispatch_event(event, args, on_executor_thread=on_executor_thread)
 
 	# ------------------------
-	#		Permission
+	#      Configuration
+	# ------------------------
+
+	def get_mcdr_language(self) -> str:
+		"""
+		Return the current language MCDR is using
+		"""
+		return self._mcdr_server.translation_manager.language
+
+	def get_mcdr_config(self) -> dict:
+		"""
+		Return the current config of MCDR as a dict
+		"""
+		return self._mcdr_server.config.to_dict()
+
+	def modify_mcdr_config(self, changes: Dict[Union[Tuple[str], str], Any]):
+		"""
+		Modify the configuration of MCDR
+
+		The modification will be written to the disk and take effect immediately
+
+		Example usages::
+
+			server.modify_mcdr_config({'encoding': 'utf8'})
+			server.modify_mcdr_config({'rcon.address': 223, 'rcon.port': 223})
+			server.modify_mcdr_config({('debug', 'command'): True})
+
+		:param changes:
+
+			A dict storing the changes to the config. For the entries of the dict:
+			The key can be a tuple storing the path to the config value, or a str that concat the path with ``"."``;
+			The value is the config value to be set. Currently, MCDR will not validate the type of the value
+		"""
+		cfg: 'MCDReforgedConfig' = self._mcdr_server.config
+		with cfg.locking():
+			cfg.set_values(changes)
+			cfg.save()
+			self._mcdr_server.on_config_changed(echo=False)
+
+	# ------------------------
+	#       Permission
 	# ------------------------
 
 	def get_permission_level(self, obj: Union[str, Info, CommandSource]) -> int:
@@ -639,7 +680,7 @@ class ServerInterface:
 		self._mcdr_server.permission_manager.set_permission_level(player, level)
 
 	# ------------------------
-	#		 Command
+	#         Command
 	# ------------------------
 
 	def get_plugin_command_source(self) -> PluginCommandSource:
@@ -703,18 +744,6 @@ class ServerInterface:
 		:return: The result that server returned from rcon. Return None if rcon is not running or rcon query failed
 		"""
 		return self._mcdr_server.rcon_manager.send_command(command)
-
-	def get_mcdr_language(self) -> str:
-		"""
-		Return the current language MCDR is using
-		"""
-		return self._mcdr_server.translation_manager.language
-
-	def get_mcdr_config(self) -> dict:
-		"""
-		Return the current config of MCDR as a dict
-		"""
-		return self._mcdr_server.config.to_dict()
 
 	def schedule_task(self, callable_: Callable[[], Any], *, block: bool = False, timeout: Optional[float] = None) -> None:
 		"""

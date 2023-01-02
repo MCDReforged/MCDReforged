@@ -1,9 +1,9 @@
-from typing import TypeVar, Callable
+from typing import TypeVar, Callable, Generic
 
 T = TypeVar('T')
 
 
-class LazyItem:
+class LazyItem(Generic[T]):
 	__NONE = object()
 
 	def __init__(self, provider: Callable[[], T]):

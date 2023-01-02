@@ -1,8 +1,9 @@
 """
 MCDR config file stuffs
 """
+import contextlib
 from logging import Logger
-from typing import Any
+from typing import Any, Tuple, Dict, Union
 
 from mcdreforged.utils.yaml_data_storage import YamlDataStorage
 
@@ -10,7 +11,7 @@ CONFIG_FILE = 'config.yml'
 DEFAULT_CONFIG_RESOURCE_PATH = 'resources/default_config.yml'
 
 
-class Config(YamlDataStorage):
+class MCDReforgedConfig(YamlDataStorage):
 	def __init__(self, logger: Logger):
 		super().__init__(logger, CONFIG_FILE, DEFAULT_CONFIG_RESOURCE_PATH)
 
@@ -20,13 +21,29 @@ class Config(YamlDataStorage):
 	def __getitem__(self, option: str):
 		return self._data[option]
 
-	def set_value(self, option: str, value: Any):
-		if option in self._data and type(self[option]) == type(value):
-			self._data[option] = value
-		elif option not in self._data:
-			raise KeyError('Cannot set option {} since the config does not contains it'.format(option))
-		else:
-			raise ValueError('Cannot set option {} in type {} to value {} in type {}'.format(option, type(self[option]), value, type(value)))
+	@contextlib.contextmanager
+	def locking(self):
+		with self._data_operation_lock:
+			yield
+
+	def set_values(self, changes: Dict[Union[Tuple[str], str], Any]):
+		"""
+		Example keys: 'path.to.value', ('path', 'to', 'value')
+		:param changes: change map
+		"""
+		with self._data_operation_lock:
+			for keys, value in changes.items():
+				if isinstance(keys, str):
+					keys = tuple(keys.split('.'))
+				assert len(keys) > 0
+				data = self._data
+				for i, key in enumerate(keys):
+					if key not in data:
+						raise KeyError('Unknown config key {} at index {}'.format(keys, i))
+					if i < len(keys) - 1:
+						data = data[key]
+					else:
+						data[key] = value
 
 	# -------------------------
 	#   Actual data analyzers

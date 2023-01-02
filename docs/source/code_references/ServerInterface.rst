@@ -78,6 +78,13 @@ Plugin Operations
 .. automethod:: ServerInterface.refresh_changed_plugins
 .. automethod:: ServerInterface.dispatch_event
 
+Configuration
+-------------
+
+.. automethod:: ServerInterface.get_mcdr_language
+.. automethod:: ServerInterface.get_mcdr_config
+.. automethod:: ServerInterface.modify_mcdr_config
+
 Permission
 ----------
 
@@ -100,6 +107,4 @@ Misc
 
 .. automethod:: ServerInterface.is_on_executor_thread
 .. automethod:: ServerInterface.rcon_query
-.. automethod:: ServerInterface.get_mcdr_language
-.. automethod:: ServerInterface.get_mcdr_config
 .. automethod:: ServerInterface.schedule_task

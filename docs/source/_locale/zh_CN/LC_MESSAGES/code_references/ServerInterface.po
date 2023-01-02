@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-30 11:44+0800\n"
+"POT-Creation-Date: 2023-01-02 18:07+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -99,6 +99,7 @@ msgstr "见 :ref:`此处 <plugin-translation>` 以了解为你的插件注册翻
 #: mcdreforged.plugin.server_interface.ServerInterface.get_plugin_metadata
 #: mcdreforged.plugin.server_interface.ServerInterface.get_preference
 #: mcdreforged.plugin.server_interface.ServerInterface.load_plugin
+#: mcdreforged.plugin.server_interface.ServerInterface.modify_mcdr_config
 #: mcdreforged.plugin.server_interface.ServerInterface.rcon_query
 #: mcdreforged.plugin.server_interface.ServerInterface.reload_plugin
 #: mcdreforged.plugin.server_interface.ServerInterface.reply
@@ -276,7 +277,7 @@ msgstr ""
 
 #: mcdreforged.plugin.server_interface.ServerInterface.exit:6 of
 msgid "Example usage::"
-msgstr "示例用法::"
+msgstr "示例用法："
 
 #: mcdreforged.plugin.server_interface.ServerInterface.exit
 #: mcdreforged.plugin.server_interface.ServerInterface.get_permission_level
@@ -713,6 +714,40 @@ msgid ""
 msgstr "在默认值的情况下，该事件会被派发至任务执行者 (task executor) 线程中分发。如果它被设置为 False，则事件将会被立即分发"
 
 #: ../code_references/ServerInterface.rst:82
+msgid "Configuration"
+msgstr "配置"
+
+#: mcdreforged.plugin.server_interface.ServerInterface.get_mcdr_language:1 of
+msgid "Return the current language MCDR is using"
+msgstr "返回 MCDR 当前使用的语言"
+
+#: mcdreforged.plugin.server_interface.ServerInterface.get_mcdr_config:1 of
+msgid "Return the current config of MCDR as a dict"
+msgstr "返回一个 dict 表示 MCDR 当前使用的配置信息"
+
+#: mcdreforged.plugin.server_interface.ServerInterface.modify_mcdr_config:1 of
+msgid "Modify the configuration of MCDR"
+msgstr "修改 MCDR 的配置"
+
+#: mcdreforged.plugin.server_interface.ServerInterface.modify_mcdr_config:3 of
+msgid "The modification will be written to the disk and take effect immediately"
+msgstr "修改操作会立即被写入磁盘并在 MCDR 中生效"
+
+#: mcdreforged.plugin.server_interface.ServerInterface.modify_mcdr_config:5 of
+msgid "Example usages::"
+msgstr "示例用法:"
+
+#: mcdreforged.plugin.server_interface.ServerInterface.modify_mcdr_config:11 of
+msgid ""
+"A dict storing the changes to the config. For the entries of the dict: "
+"The key can be a tuple storing the path to the config value, or a str "
+"that concat the path with ``\".\"``; The value is the config value to be "
+"set. Currently, MCDR will not validate the type of the value"
+msgstr ""
+"一个储存了对配置文件的修改的 dict。对于 dict 中的键值：键可以是一个储存了指向配置值的路径的 tuple，或者一个用 ``\".\"`` "
+"将路径拼接而成的 str；值为被修改配置的值，目前 MCDR 不会验证值的类型是否正确"
+
+#: ../code_references/ServerInterface.rst:89
 msgid "Permission"
 msgstr "权限"
 
@@ -767,7 +802,7 @@ msgstr ""
 msgid "If the value parameter doesn't properly represent a permission level"
 msgstr "如果数值参数不是一个正确的权限级别"
 
-#: ../code_references/ServerInterface.rst:88
+#: ../code_references/ServerInterface.rst:95
 msgid "Command"
 msgstr "指令"
 
@@ -798,7 +833,7 @@ msgid ""
 "fallback command source"
 msgstr "用于执行该条指令的指令源。如果它未被指定，MCDR 将会使用 :meth:`get_plugin_command_source` 来获得默认的指令源"
 
-#: ../code_references/ServerInterface.rst:94
+#: ../code_references/ServerInterface.rst:101
 msgid "Preference"
 msgstr "偏好"
 
@@ -822,7 +857,7 @@ msgstr "你要查询的偏好的对象"
 msgid "If the type of the given object is not supported for preference querying"
 msgstr "若给定对象的类型不支持偏好查询"
 
-#: ../code_references/ServerInterface.rst:99
+#: ../code_references/ServerInterface.rst:106
 msgid "Misc"
 msgstr "杂项"
 
@@ -851,14 +886,6 @@ msgid ""
 "The result that server returned from rcon. Return None if rcon is not "
 "running or rcon query failed"
 msgstr "服务端返回的 rcon 指令执行结果。如果 rcon 没有运行或 rcon 执行失败，则返回 None"
-
-#: mcdreforged.plugin.server_interface.ServerInterface.get_mcdr_language:1 of
-msgid "Return the current language MCDR is using"
-msgstr "返回 MCDR 当前使用的语言"
-
-#: mcdreforged.plugin.server_interface.ServerInterface.get_mcdr_config:1 of
-msgid "Return the current config of MCDR as a dict"
-msgstr "返回一个 dict 表示 MCDR 当前使用的配置信息"
 
 #: mcdreforged.plugin.server_interface.ServerInterface.schedule_task:1 of
 msgid "Schedule a callback task to be run in task executor thread"

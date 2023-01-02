@@ -19,6 +19,15 @@ def unique_list(lst: Iterable[T]) -> List[T]:
 	return list(dict.fromkeys(lst).keys())
 
 
+def deep_copy_dict(source: dict) -> dict:
+	ret = {}
+	for key, value in source.items():
+		if isinstance(value, dict):
+			value = deep_copy_dict(value)
+		ret[key] = value
+	return ret
+
+
 def print_text_to_console(logger, text: Any):
 	from mcdreforged.minecraft.rtext.text import RTextBase
 	for line in RTextBase.from_any(text).to_colored_text().splitlines():

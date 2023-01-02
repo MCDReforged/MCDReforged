@@ -1,33 +1,27 @@
 import os
 from logging import Logger
 from threading import RLock
+from typing import Tuple
 
 from ruamel.yaml import YAML
 from ruamel.yaml.comments import CommentedMap
 
-from mcdreforged.utils import resources_util
+from mcdreforged.utils import resources_util, misc_util
 from mcdreforged.utils.lazy_item import LazyItem
 
 
 class YamlDataStorage:
 	def __init__(self, logger: Logger, file_path: str, default_file_path: str):
-		self.logger = logger
+		self._logger = logger
 		self.__file_path = file_path
 		self.__default_file_path = default_file_path
-		self._data = CommentedMap()
 		self.__default_data = LazyItem(lambda: resources_util.get_yaml(self.__default_file_path))
-		self.__has_changes = False
+		self._data = CommentedMap()
 		self._data_operation_lock = RLock()
 
 	def to_dict(self) -> dict:
-		def process(data: dict) -> dict:
-			ret = {}
-			for key, value in data.items():
-				if isinstance(value, dict):
-					value = process(value)
-				ret[key] = value
-			return ret
-		return process(self._data)
+		with self._data_operation_lock:
+			return misc_util.deep_copy_dict(self._data)
 
 	def file_presents(self) -> bool:
 		return os.path.isfile(self.__file_path)
@@ -46,20 +40,22 @@ class YamlDataStorage:
 			if not allowed_missing_file:
 				raise FileNotFoundError()
 			users_data = {}
-		self.__has_changes = False
-		fixed_result = self.__fix(dict(self.__default_data.get()), users_data)
+		fixed_result, has_missing = self.__fix(dict(self.__default_data.get()), users_data)
 		with self._data_operation_lock:
 			self._data = fixed_result
-		if self.__has_changes:
+		if has_missing:
 			self.save()
-		return self.__has_changes
+		return has_missing
 
-	def __fix(self, current_data: dict, users_data: CommentedMap, key_path='') -> dict:
+	def __fix(self, current_data: dict, users_data: CommentedMap, key_path='') -> Tuple[dict, bool]:
+		"""
+		:return: pair of (fixed result, has missing)
+		"""
 		if not isinstance(users_data, dict):
-			self.__has_changes = True
-			return current_data
+			return current_data, True
 		else:
 			result = users_data.copy()
+			has_missing = False
 			divider = ' -> ' if len(key_path) > 0 else ''
 			for key in current_data.keys():
 				current_key_path = key_path + divider + key
@@ -67,28 +63,29 @@ class YamlDataStorage:
 					# if key presents in user's data
 					if isinstance(current_data[key], dict):
 						# dive deeper
-						result[key] = self.__fix(current_data[key], users_data[key], current_key_path)
+						result[key], missing = self.__fix(current_data[key], users_data[key], current_key_path)
+						has_missing |= missing
 					else:
 						# use the value in user's data
 						result[key] = users_data[key]
 				else:
 					# missing config key
 					result[key] = current_data[key]
-					self.__has_changes = True
-					self.logger.warning('Option "{}" missing, use default value "{}"'.format(current_key_path, current_data[key]))
-			return result
+					has_missing = True
+					self._logger.warning('Option "{}" missing, use default value "{}"'.format(current_key_path, current_data[key]))
+			return result, has_missing
 
 	def _pre_save(self, data: CommentedMap):
 		pass
 
 	def __save(self, data: CommentedMap):
-		with self._data_operation_lock:
-			self._pre_save(data)
-			with open(self.__file_path, 'w', encoding='utf8') as file:
-				YAML().dump(data, file)
+		self._pre_save(data)
+		with open(self.__file_path, 'w', encoding='utf8') as file:
+			YAML().dump(data, file)
 
 	def save(self):
-		self.__save(self._data)
+		with self._data_operation_lock:
+			self.__save(self._data)
 
 	def get_default_yaml(self):
 		return self.__default_data.get()

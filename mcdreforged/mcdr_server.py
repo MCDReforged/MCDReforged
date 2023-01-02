@@ -12,7 +12,7 @@ import psutil
 from ruamel.yaml import YAMLError
 
 from mcdreforged.command.command_manager import CommandManager
-from mcdreforged.config import Config
+from mcdreforged.config import MCDReforgedConfig
 from mcdreforged.constants import core_constant
 from mcdreforged.executor.console_handler import ConsoleHandler
 from mcdreforged.executor.task_executor import TaskExecutor
@@ -57,7 +57,7 @@ class MCDReforgedServer:
 
 		# --- Constructing fields --- #
 		self.logger = MCDReforgedLogger()
-		self.config = Config(self.logger)
+		self.config = MCDReforgedConfig(self.logger)
 		self.permission_manager = PermissionManager(self)
 		self.basic_server_interface = ServerInterface(self)
 		self.task_executor = TaskExecutor(self)
