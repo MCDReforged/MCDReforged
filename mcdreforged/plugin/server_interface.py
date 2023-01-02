@@ -30,7 +30,7 @@ from mcdreforged.utils.serializer import Serializable
 from mcdreforged.utils.types import MessageText, TranslationKeyDictRich, TranslationKeyDictNested
 
 if TYPE_CHECKING:
-	from mcdreforged.config import MCDReforgedConfig
+	from mcdreforged.mcdr_config import MCDReforgedConfig
 	from mcdreforged.mcdr_server import MCDReforgedServer
 	from mcdreforged.handler.abstract_server_handler import AbstractServerHandler
 	from mcdreforged.plugin.plugin_manager import PluginManager

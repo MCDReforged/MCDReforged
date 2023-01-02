@@ -1,6 +1,6 @@
 import unittest
 
-from mcdreforged.config import DEFAULT_CONFIG_RESOURCE_PATH
+from mcdreforged.mcdr_config import DEFAULT_CONFIG_RESOURCE_PATH
 from mcdreforged.utils import resources_util
 
 

@@ -12,7 +12,6 @@ import psutil
 from ruamel.yaml import YAMLError
 
 from mcdreforged.command.command_manager import CommandManager
-from mcdreforged.config import MCDReforgedConfig
 from mcdreforged.constants import core_constant
 from mcdreforged.executor.console_handler import ConsoleHandler
 from mcdreforged.executor.task_executor import TaskExecutor
@@ -22,6 +21,7 @@ from mcdreforged.handler.server_handler_manager import ServerHandlerManager
 from mcdreforged.info_reactor.info import Info
 from mcdreforged.info_reactor.info_reactor_manager import InfoReactorManager
 from mcdreforged.info_reactor.server_information import ServerInformation
+from mcdreforged.mcdr_config import MCDReforgedConfig
 from mcdreforged.mcdr_state import ServerState, MCDReforgedState, MCDReforgedFlag
 from mcdreforged.minecraft.rcon.rcon_manager import RconManager
 from mcdreforged.permission.permission_manager import PermissionManager
