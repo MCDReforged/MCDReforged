@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-02 18:07+0800\n"
+"POT-Creation-Date: 2023-01-02 19:08+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -734,18 +734,22 @@ msgid "The modification will be written to the disk and take effect immediately"
 msgstr "修改操作会立即被写入磁盘并在 MCDR 中生效"
 
 #: mcdreforged.plugin.server_interface.ServerInterface.modify_mcdr_config:5 of
+msgid "Currently, MCDR will not validate the type of the value"
+msgstr "目前 MCDR 不会验证值的类型是否正确"
+
+#: mcdreforged.plugin.server_interface.ServerInterface.modify_mcdr_config:7 of
 msgid "Example usages::"
 msgstr "示例用法:"
 
-#: mcdreforged.plugin.server_interface.ServerInterface.modify_mcdr_config:11 of
+#: mcdreforged.plugin.server_interface.ServerInterface.modify_mcdr_config:13 of
 msgid ""
 "A dict storing the changes to the config. For the entries of the dict: "
 "The key can be a tuple storing the path to the config value, or a str "
 "that concat the path with ``\".\"``; The value is the config value to be "
-"set. Currently, MCDR will not validate the type of the value"
+"set"
 msgstr ""
-"一个储存了对配置文件的修改的 dict。对于 dict 中的键值：键可以是一个储存了指向配置值的路径的 tuple，或者一个用 ``\".\"`` "
-"将路径拼接而成的 str；值为被修改配置的值，目前 MCDR 不会验证值的类型是否正确"
+"一个储存了对配置文件的修改的 dict。对于 dict 中的键值：键可以是一个储存了指向配置值的路径的 tuple，或者一个用 ``\".\"``"
+" 将路径拼接而成的 str；值为被修改配置的值"
 
 #: ../code_references/ServerInterface.rst:89
 msgid "Permission"

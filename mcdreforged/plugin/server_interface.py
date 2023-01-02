@@ -621,17 +621,21 @@ class ServerInterface:
 
 		The modification will be written to the disk and take effect immediately
 
+		Currently, MCDR will not validate the type of the value
+
 		Example usages::
 
 			server.modify_mcdr_config({'encoding': 'utf8'})
-			server.modify_mcdr_config({'rcon.address': 223, 'rcon.port': 223})
+			server.modify_mcdr_config({'rcon.address': '127.0.0.1', 'rcon.port': 23000})
 			server.modify_mcdr_config({('debug', 'command'): True})
 
 		:param changes:
 
 			A dict storing the changes to the config. For the entries of the dict:
 			The key can be a tuple storing the path to the config value, or a str that concat the path with ``"."``;
-			The value is the config value to be set. Currently, MCDR will not validate the type of the value
+			The value is the config value to be set
+
+		.. versionadded:: v2.7.0
 		"""
 		cfg: 'MCDReforgedConfig' = self._mcdr_server.config
 		with cfg.locking():
