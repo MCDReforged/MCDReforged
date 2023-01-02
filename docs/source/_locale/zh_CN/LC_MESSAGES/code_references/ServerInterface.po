@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-02 19:08+0800\n"
+"POT-Creation-Date: 2023-01-02 19:39+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -751,7 +751,23 @@ msgstr ""
 "一个储存了对配置文件的修改的 dict。对于 dict 中的键值：键可以是一个储存了指向配置值的路径的 tuple，或者一个用 ``\".\"``"
 " 将路径拼接而成的 str；值为被修改配置的值"
 
-#: ../code_references/ServerInterface.rst:89
+#: mcdreforged.plugin.server_interface.ServerInterface.reload_config_file:1 of
+msgid "Reload the configuration of MCDR from config file"
+msgstr "从配置文件重载 MCDR 的配置"
+
+#: mcdreforged.plugin.server_interface.ServerInterface.reload_config_file:3 of
+msgid "It has the same effect as command ``!!MCDR reload config``"
+msgstr "其效果与指令 ``!!MCDR reload config`` 相同"
+
+#: mcdreforged.plugin.server_interface.ServerInterface.reload_config_file of
+msgid "Keyword Arguments"
+msgstr "关键字参数"
+
+#: mcdreforged.plugin.server_interface.ServerInterface.reload_config_file:5 of
+msgid "If the config changing messages should be logged"
+msgstr "是否输出配置文件变更的相关日志"
+
+#: ../code_references/ServerInterface.rst:90
 msgid "Permission"
 msgstr "权限"
 
@@ -806,7 +822,17 @@ msgstr ""
 msgid "If the value parameter doesn't properly represent a permission level"
 msgstr "如果数值参数不是一个正确的权限级别"
 
-#: ../code_references/ServerInterface.rst:95
+#: mcdreforged.plugin.server_interface.ServerInterface.reload_permission_file:1
+#: of
+msgid "Reload the permission of MCDR from permission file"
+msgstr "从权限文件重载 MCDR 的权限数据"
+
+#: mcdreforged.plugin.server_interface.ServerInterface.reload_permission_file:3
+#: of
+msgid "It has the same effect as command ``!!MCDR reload permission``"
+msgstr "其效果与指令 ``!!MCDR reload permission`` 相同"
+
+#: ../code_references/ServerInterface.rst:97
 msgid "Command"
 msgstr "指令"
 
@@ -837,7 +863,7 @@ msgid ""
 "fallback command source"
 msgstr "用于执行该条指令的指令源。如果它未被指定，MCDR 将会使用 :meth:`get_plugin_command_source` 来获得默认的指令源"
 
-#: ../code_references/ServerInterface.rst:101
+#: ../code_references/ServerInterface.rst:103
 msgid "Preference"
 msgstr "偏好"
 
@@ -861,7 +887,7 @@ msgstr "你要查询的偏好的对象"
 msgid "If the type of the given object is not supported for preference querying"
 msgstr "若给定对象的类型不支持偏好查询"
 
-#: ../code_references/ServerInterface.rst:106
+#: ../code_references/ServerInterface.rst:108
 msgid "Misc"
 msgstr "杂项"
 

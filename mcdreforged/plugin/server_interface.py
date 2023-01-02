@@ -30,7 +30,6 @@ from mcdreforged.utils.serializer import Serializable
 from mcdreforged.utils.types import MessageText, TranslationKeyDictRich, TranslationKeyDictNested
 
 if TYPE_CHECKING:
-	from mcdreforged.mcdr_config import MCDReforgedConfig
 	from mcdreforged.mcdr_server import MCDReforgedServer
 	from mcdreforged.handler.abstract_server_handler import AbstractServerHandler
 	from mcdreforged.plugin.plugin_manager import PluginManager
@@ -637,11 +636,21 @@ class ServerInterface:
 
 		.. versionadded:: v2.7.0
 		"""
-		cfg: 'MCDReforgedConfig' = self._mcdr_server.config
-		with cfg.locking():
-			cfg.set_values(changes)
-			cfg.save()
-			self._mcdr_server.on_config_changed(echo=False)
+		self._mcdr_server.config.set_values(changes)
+		self._mcdr_server.config.save()
+		self._mcdr_server.on_config_changed(log=False)
+
+	def reload_config_file(self, *, log: bool = False):
+		"""
+		Reload the configuration of MCDR from config file
+
+		It has the same effect as command ``!!MCDR reload config``
+
+		:keyword log: If the config changing messages should be logged
+
+		.. versionadded:: v2.7.0
+		"""
+		self._mcdr_server.load_config(log=log)
 
 	# ------------------------
 	#       Permission
@@ -682,6 +691,16 @@ class ServerInterface:
 		if level is None:
 			raise TypeError('Parameter level needs to be a permission related value')
 		self._mcdr_server.permission_manager.set_permission_level(player, level)
+
+	def reload_permission_file(self):
+		"""
+		Reload the permission of MCDR from permission file
+
+		It has the same effect as command ``!!MCDR reload permission``
+
+		.. versionadded:: v2.7.0
+		"""
+		self._mcdr_server.permission_manager.load_permission_file()
 
 	# ------------------------
 	#         Command

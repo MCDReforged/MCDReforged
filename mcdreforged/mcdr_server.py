@@ -50,6 +50,7 @@ class MCDReforgedServer:
 		self.flags = MCDReforgedFlag.NONE
 		self.starting_server_lock = Lock()  # to prevent multiple start_server() call
 		self.stop_lock = Lock()  # to prevent multiple stop() call
+		self.config_change_lock = Lock()
 
 		# will be assigned in on_config_changed()
 		self.encoding_method = None  # type: Optional[str]
@@ -114,7 +115,7 @@ class MCDReforgedServer:
 		# load_permission_file: permission
 		# config change will lead to creating plugin folders
 		loading_success = \
-			load('configuration', lambda: self.load_config(allowed_missing_file=False, echo=not initialize_environment)) and \
+			load('configuration', lambda: self.load_config(allowed_missing_file=False, log=not initialize_environment)) and \
 			load('permission', lambda: self.permission_manager.load_permission_file(allowed_missing_file=False))
 		if file_missing:
 			self.__on_file_missing()
@@ -185,43 +186,44 @@ class MCDReforgedServer:
 	#          Loaders
 	# --------------------------
 
-	def load_config(self, *, allowed_missing_file: bool = True, echo: bool = True):
+	def load_config(self, *, allowed_missing_file: bool = True, log: bool = True):
 		has_missing = self.config.read_config(allowed_missing_file)
-		# load the language first to make sure tr() is available
-		self.on_config_changed(echo)
-		if echo and has_missing:
+		# load the language before warning missing config to make sure translation is available
+		self.on_config_changed(log=log)
+		if log and has_missing:
 			for line in self.tr('config.missing_config').splitlines():
 				self.logger.warning(line)
 
-	def on_config_changed(self, echo: bool):
-		MCColoredFormatter.console_color_disabled = self.config['disable_console_color']
-		self.logger.set_debug_options(self.config['debug'])
-		if echo and self.config.is_debug_on():
-			self.logger.info(self.tr('mcdr_server.on_config_changed.debug_mode_on'))
+	def on_config_changed(self, *, log: bool):
+		with self.config_change_lock:
+			MCColoredFormatter.console_color_disabled = self.config['disable_console_color']
+			self.logger.set_debug_options(self.config['debug'])
+			if log and self.config.is_debug_on():
+				self.logger.info(self.tr('mcdr_server.on_config_changed.debug_mode_on'))
 
-		self.translation_manager.set_language(self.config['language'])
-		if echo:
-			self.logger.info(self.tr('mcdr_server.on_config_changed.language_set', self.config['language']))
+			self.translation_manager.set_language(self.config['language'])
+			if log:
+				self.logger.info(self.tr('mcdr_server.on_config_changed.language_set', self.config['language']))
 
-		self.encoding_method = self.config['encoding'] if self.config['encoding'] is not None else sys.getdefaultencoding()
-		self.decoding_method = self.config['decoding'] if self.config['decoding'] is not None else locale.getpreferredencoding()
-		if echo:
-			self.logger.info(self.tr('mcdr_server.on_config_changed.encoding_decoding_set', self.encoding_method, self.decoding_method))
+			self.encoding_method = self.config['encoding'] if self.config['encoding'] is not None else sys.getdefaultencoding()
+			self.decoding_method = self.config['decoding'] if self.config['decoding'] is not None else locale.getpreferredencoding()
+			if log:
+				self.logger.info(self.tr('mcdr_server.on_config_changed.encoding_decoding_set', self.encoding_method, self.decoding_method))
 
-		self.plugin_manager.set_plugin_directories(self.config['plugin_directories'])
-		if echo:
-			self.logger.info(self.tr('mcdr_server.on_config_changed.plugin_directories_set', self.encoding_method, self.decoding_method))
-			for directory in self.plugin_manager.plugin_directories:
-				self.logger.info('- {}'.format(directory))
+			self.plugin_manager.set_plugin_directories(self.config['plugin_directories'])
+			if log:
+				self.logger.info(self.tr('mcdr_server.on_config_changed.plugin_directories_set', self.encoding_method, self.decoding_method))
+				for directory in self.plugin_manager.plugin_directories:
+					self.logger.info('- {}'.format(directory))
 
-		self.reactor_manager.register_reactors(self.config['custom_info_reactors'])
+			self.reactor_manager.register_reactors(self.config['custom_info_reactors'])
 
-		self.server_handler_manager.register_handlers(self.config['custom_handlers'])
-		self.server_handler_manager.set_handler(self.config['handler'])
-		if echo:
-			self.logger.info(self.tr('mcdr_server.on_config_changed.handler_set', self.config['handler']))
+			self.server_handler_manager.register_handlers(self.config['custom_handlers'])
+			self.server_handler_manager.set_handler(self.config['handler'])
+			if log:
+				self.logger.info(self.tr('mcdr_server.on_config_changed.handler_set', self.config['handler']))
 
-		self.connect_rcon()
+			self.connect_rcon()
 
 	def load_plugins(self):
 		future = self.plugin_manager.refresh_all_plugins()

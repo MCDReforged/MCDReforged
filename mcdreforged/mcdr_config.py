@@ -1,7 +1,6 @@
 """
 MCDR config file stuffs
 """
-import contextlib
 from logging import Logger
 from typing import Any, Tuple, Dict, Union
 
@@ -20,11 +19,6 @@ class MCDReforgedConfig(YamlDataStorage):
 
 	def __getitem__(self, option: str):
 		return self._data[option]
-
-	@contextlib.contextmanager
-	def locking(self):
-		with self._data_operation_lock:
-			yield
 
 	def set_values(self, changes: Dict[Union[Tuple[str], str], Any]):
 		"""

@@ -84,12 +84,14 @@ Configuration
 .. automethod:: ServerInterface.get_mcdr_language
 .. automethod:: ServerInterface.get_mcdr_config
 .. automethod:: ServerInterface.modify_mcdr_config
+.. automethod:: ServerInterface.reload_config_file
 
 Permission
 ----------
 
 .. automethod:: ServerInterface.get_permission_level
 .. automethod:: ServerInterface.set_permission_level
+.. automethod:: ServerInterface.reload_permission_file
 
 Command
 -------
