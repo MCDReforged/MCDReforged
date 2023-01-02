@@ -14,12 +14,6 @@ class MCDReforgedConfig(YamlDataStorage):
 	def __init__(self, logger: Logger):
 		super().__init__(logger, CONFIG_FILE, DEFAULT_CONFIG_RESOURCE_PATH)
 
-	def read_config(self, allowed_missing_file: bool):
-		return self._load_data(allowed_missing_file)
-
-	def __getitem__(self, option: str):
-		return self._data[option]
-
 	def set_values(self, changes: Dict[Union[Tuple[str], str], Any]):
 		"""
 		Example keys: 'path.to.value', ('path', 'to', 'value')

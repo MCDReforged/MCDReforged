@@ -19,6 +19,9 @@ class YamlDataStorage:
 		self._data = CommentedMap()
 		self._data_operation_lock = RLock()
 
+	def __getitem__(self, option: str):
+		return self._data[option]
+
 	def to_dict(self) -> dict:
 		with self._data_operation_lock:
 			return misc_util.deep_copy_dict(self._data)
@@ -26,7 +29,7 @@ class YamlDataStorage:
 	def file_presents(self) -> bool:
 		return os.path.isfile(self.__file_path)
 
-	def _load_data(self, allowed_missing_file) -> bool:
+	def read_config(self, allowed_missing_file: bool):
 		"""
 		:param bool allowed_missing_file: If set to True, missing data file will result in a FileNotFoundError(),
 		otherwise it will treat it as an empty config file

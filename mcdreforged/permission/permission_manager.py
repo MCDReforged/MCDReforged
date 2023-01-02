@@ -18,20 +18,10 @@ PERMISSION_FILE = 'permission.yml'
 DEFAULT_PERMISSION_RESOURCE_PATH = 'resources/default_permission.yml'
 
 
-class PermissionManager(YamlDataStorage):
-	def __init__(self, mcdr_server: 'MCDReforgedServer'):
-		super().__init__(mcdr_server.logger, PERMISSION_FILE, DEFAULT_PERMISSION_RESOURCE_PATH)
-		self.mcdr_server = mcdr_server
-
-	# --------------
-	# File Operating
-	# --------------
-
-	def load_permission_file(self, *, allowed_missing_file: bool = True):
-		"""
-		Load the permission file from disk
-		"""
-		self._load_data(allowed_missing_file)
+class PermissionStorage(YamlDataStorage):
+	# Enable item setting via []
+	def __setitem__(self, key, value):
+		self._data[key] = value
 
 	def _pre_save(self, data: dict):
 		# Deduplicate the permission data
@@ -43,6 +33,22 @@ class PermissionManager(YamlDataStorage):
 			if key in PermissionLevel.NAMES and value is not None and len(value) == 0:
 				data[key] = None
 
+
+class PermissionManager:
+	def __init__(self, mcdr_server: 'MCDReforgedServer'):
+		self.mcdr_server = mcdr_server
+		self.storage = PermissionStorage(mcdr_server.logger, PERMISSION_FILE, DEFAULT_PERMISSION_RESOURCE_PATH)
+
+	# --------------
+	# File Operating
+	# --------------
+
+	def load_permission_file(self, *, allowed_missing_file: bool = True):
+		"""
+		Load the permission file from disk
+		"""
+		self.storage.read_config(allowed_missing_file)
+
 	# ---------------------
 	# Permission processing
 	# ---------------------
@@ -51,15 +57,15 @@ class PermissionManager(YamlDataStorage):
 		"""
 		Return the default permission level
 		"""
-		return self._data['default_level']
+		return self.storage['default_level']
 
 	def set_default_permission_level(self, level: PermissionLevelItem):
 		"""
 		Set default permission level
 		A message will be informed using server logger
 		"""
-		self._data['default_level'] = level.name
-		self.save()
+		self.storage['default_level'] = level.name
+		self.storage.save()
 		self.mcdr_server.logger.info(self.mcdr_server.tr('permission_manager.set_default_permission_level.done', level.name))
 
 	def get_permission_group_list(self, value: PermissionParam):
@@ -71,9 +77,9 @@ class PermissionManager(YamlDataStorage):
 		:rtype: list[str]
 		"""
 		level_name = PermissionLevel.from_value(value).name
-		if self._data[level_name] is None:
-			self._data[level_name] = []
-		return self._data[level_name]
+		if self.storage[level_name] is None:
+			self.storage[level_name] = []
+		return self.storage[level_name]
 
 	def add_player(self, player: str, level_name: Optional[str] = None) -> int:
 		"""
@@ -90,7 +96,7 @@ class PermissionManager(YamlDataStorage):
 		PermissionLevel.from_value(level_name)  # validity check
 		self.get_permission_group_list(level_name).append(player)
 		self.mcdr_server.logger.debug('Added player {} with permission level {}'.format(player, level_name), option=DebugOption.PERMISSION)
-		self.save()
+		self.storage.save()
 		return PermissionLevel.from_value(level_name).level
 
 	def remove_player(self, player: str):
@@ -107,7 +113,7 @@ class PermissionManager(YamlDataStorage):
 				break
 			self.get_permission_group_list(level).remove(player)
 		self.mcdr_server.logger.debug('Removed player {}'.format(player), option=DebugOption.PERMISSION)
-		self.save()
+		self.storage.save()
 
 	def set_permission_level(self, player: str, new_level: PermissionLevelItem):
 		"""
