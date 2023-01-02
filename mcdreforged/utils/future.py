@@ -1,5 +1,5 @@
-from threading import RLock
-from typing import Generic, TypeVar, Callable, Any
+from threading import RLock, Event
+from typing import Generic, TypeVar, Callable, Any, Optional
 
 T = TypeVar('T')
 
@@ -48,3 +48,23 @@ class Future(Generic[T]):
 				self.__done_callbacks.append(callback)
 				return
 		callback(self.get())
+
+
+class WaitableCallable:
+	"""
+	A callable wrapper that can be waited util its first call
+	"""
+	def __init__(self, func: Callable):
+		self.__func = func
+		self.__event = Event()
+
+	def __call__(self, *args, **kwargs):
+		rv = self.__func(*args, **kwargs)
+		self.__event.set()
+		return rv
+
+	def wait(self, timeout: Optional[float] = None) -> bool:
+		"""
+		Return if the event has been set
+		"""
+		return self.__event.wait(timeout=timeout)

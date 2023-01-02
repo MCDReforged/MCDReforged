@@ -35,19 +35,3 @@ def copy_signature(target: Callable, origin: Callable) -> Callable:
 	target.__signature__ = inspect.signature(origin)
 	return target
 
-
-class WaitableCallable:
-	def __init__(self, func: Callable):
-		self.__func = func
-		self.__event = threading.Event()
-
-	def __call__(self, *args, **kwargs):
-		rv = self.__func(*args, **kwargs)
-		self.__event.set()
-		return rv
-
-	def wait(self, timeout: Optional[float] = None) -> bool:
-		"""
-		Return if the event has been set
-		"""
-		return self.__event.wait(timeout=timeout)

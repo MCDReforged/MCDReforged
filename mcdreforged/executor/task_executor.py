@@ -5,7 +5,7 @@ from typing import Callable, Any, Optional
 
 from mcdreforged.constants import core_constant
 from mcdreforged.executor.thread_executor import ThreadExecutor
-from mcdreforged.utils import misc_util
+from mcdreforged.utils.future import WaitableCallable
 from mcdreforged.utils.logger import DebugOption
 
 
@@ -75,7 +75,7 @@ class TaskExecutor(ThreadExecutor):
 
 	def add_regular_task(self, func: Callable[[], Any], *, block: bool = False, timeout: Optional[float] = None):
 		if block:
-			func = misc_util.WaitableCallable(func)
+			func = WaitableCallable(func)
 		self.task_queue.put(TaskData(func, Priority.REGULAR))
 		if block:
 			func.wait(timeout)
