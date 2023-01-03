@@ -53,13 +53,22 @@ def serialize(obj) -> Union[None, int, float, str, list, dict]:
 _BASIC_CLASSES = (type(None), bool, int, float, str, list, dict)
 
 
-def deserialize(data, cls: Type[T], *, error_at_missing=False, error_at_redundancy=False) -> T:
+def deserialize(data: Any, cls: Type[T], *, error_at_missing: bool = False, error_at_redundancy: bool = False) -> T:
+	def mismatch(*expected_class: Type):
+		if expected_class != (cls,):
+			classes = ' or '.join(map(str, expected_class))
+			raise TypeError('Mismatched input type: expected class {} (deduced from {}) but found data with class {}'.format(classes, cls, type(data)))
+		else:
+			raise TypeError('Mismatched input type: expected class {} but found data with class {}'.format(cls, type(data)))
+
 	# in case None instead of NoneType is passed
 	if cls is None:
 		cls = type(None)
-	# if its type is Any, then simply return the data
+
+	# if the target class is Any, then simply return the data
 	if cls is Any:
 		return data
+
 	# Union
 	# Unpack Union first since the target class is not confirmed yet
 	elif _get_origin(cls) == Union:
@@ -69,30 +78,50 @@ def deserialize(data, cls: Type[T], *, error_at_missing=False, error_at_redundan
 			except (TypeError, ValueError):
 				pass
 		raise TypeError('Data in type {} cannot match any candidate of target class {}'.format(type(data), cls))
+
 	# Element (None, int, float, str, list, dict)
 	# For list and dict, since it doesn't have any type hint, we choose to simply return the data
-	elif cls in _BASIC_CLASSES and type(data) is cls:
-		return data
-	# float thing
-	elif cls is float and isinstance(data, int):
-		return float(data)
+	elif cls in _BASIC_CLASSES:
+		if type(data) is cls:
+			return data
+		# int is ok for float
+		elif cls is float and isinstance(data, int):
+			return float(data)
+		else:
+			if cls is float:
+				mismatch(float, int)
+			else:
+				mismatch(cls)
+
 	# List
-	elif _get_origin(cls) == List[int].__origin__ and isinstance(data, list):
-		element_type = _get_args(cls)[0]
-		return list(map(lambda e: deserialize(e, element_type, error_at_missing=error_at_missing, error_at_redundancy=error_at_redundancy), data))
+	elif _get_origin(cls) == List[int].__origin__:
+		if isinstance(data, list):
+			element_type = _get_args(cls)[0]
+			return list(map(lambda e: deserialize(e, element_type, error_at_missing=error_at_missing, error_at_redundancy=error_at_redundancy), data))
+		else:
+			mismatch(list)
+
 	# Dict
-	elif _get_origin(cls) == Dict[int, int].__origin__ and isinstance(data, dict):
-		key_type = _get_args(cls)[0]
-		val_type = _get_args(cls)[1]
-		instance = {}
-		for key, value in data.items():
-			deserialized_key = deserialize(key, key_type, error_at_missing=error_at_missing, error_at_redundancy=error_at_redundancy)
-			deserialized_value = deserialize(value, val_type, error_at_missing=error_at_missing, error_at_redundancy=error_at_redundancy)
-			instance[deserialized_key] = deserialized_value
-		return instance
+	elif _get_origin(cls) == Dict[int, int].__origin__:
+		if isinstance(data, dict):
+			key_type = _get_args(cls)[0]
+			val_type = _get_args(cls)[1]
+			instance = {}
+			for key, value in data.items():
+				deserialized_key = deserialize(key, key_type, error_at_missing=error_at_missing, error_at_redundancy=error_at_redundancy)
+				deserialized_value = deserialize(value, val_type, error_at_missing=error_at_missing, error_at_redundancy=error_at_redundancy)
+				instance[deserialized_key] = deserialized_value
+			return instance
+		else:
+			mismatch(dict)
+
 	# Enum
-	elif isinstance(cls, EnumMeta) and isinstance(data, str):
-		return cls[data]
+	elif isinstance(cls, EnumMeta):
+		if isinstance(data, str):
+			return cls[data]
+		else:
+			mismatch(str)
+
 	# Literal from python 3.8
 	elif _py38 and _get_origin(cls) == Literal:
 		literals = _get_args(cls)
@@ -100,29 +129,35 @@ def deserialize(data, cls: Type[T], *, error_at_missing=False, error_at_redundan
 			return data
 		else:
 			raise ValueError('Input object {} does''t matches given literal {}'.format(data, cls))
+
 	# Object
-	elif cls not in _BASIC_CLASSES and isinstance(cls, type) and isinstance(data, dict):
-		try:
-			result = cls()
-		except:
-			raise TypeError('Failed to construct instance of class {}'.format(type(cls)))
-		input_key_set = set(data.keys())
-		for attr_name, attr_type in _get_type_hints(cls).items():
-			if not attr_name.startswith('_'):
-				if attr_name in data:
-					result.__setattr__(attr_name, deserialize(data[attr_name], attr_type, error_at_missing=error_at_missing, error_at_redundancy=error_at_redundancy))
-					input_key_set.remove(attr_name)
-				elif error_at_missing:
-					raise ValueError('Missing attribute {} for class {} in input object {}'.format(attr_name, cls, data))
-				elif hasattr(cls, attr_name):
-					result.__setattr__(attr_name, copy.copy(getattr(cls, attr_name)))
-		if error_at_redundancy and len(input_key_set) > 0:
-			raise ValueError('Redundancy attributes {} for class {} in input object {}'.format(input_key_set, cls, data))
-		if isinstance(result, Serializable):
-			result.on_deserialization()
-		return result
+	elif cls not in _BASIC_CLASSES and isinstance(cls, type):
+		if isinstance(data, dict):
+			try:
+				result = cls()
+			except:
+				raise TypeError('Failed to construct instance of class {}'.format(type(cls)))
+			input_key_set = set(data.keys())
+			for attr_name, attr_type in _get_type_hints(cls).items():
+				if not attr_name.startswith('_'):
+					if attr_name in data:
+						result.__setattr__(attr_name, deserialize(data[attr_name], attr_type, error_at_missing=error_at_missing, error_at_redundancy=error_at_redundancy))
+						input_key_set.remove(attr_name)
+					elif error_at_missing:
+						raise ValueError('Missing attribute {} for class {} in input object {}'.format(attr_name, cls, data))
+					elif hasattr(cls, attr_name):
+						result.__setattr__(attr_name, copy.copy(getattr(cls, attr_name)))
+			if error_at_redundancy and len(input_key_set) > 0:
+				raise ValueError('Redundancy attributes {} for class {} in input object {}'.format(input_key_set, cls, data))
+			if isinstance(result, Serializable):
+				result.on_deserialization()
+			return result
+		else:
+			mismatch(dict)
+
+	# Unsupported
 	else:
-		raise TypeError('Unsupported input type: expected class {} but found data with class {}'.format(cls, type(data)))
+		raise TypeError('Unsupported target class: {}'.format(cls))
 
 
 Self = TypeVar('Self', bound='Serializable')
