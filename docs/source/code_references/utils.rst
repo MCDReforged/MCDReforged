@@ -6,6 +6,6 @@ Utilities
 
 :doc:`API package </plugin_dev/api>` path: ``mcdreforged.api.utils``
 
-.. autoclass:: mcdreforged.utils.serializer.Serializable
+.. automodule:: mcdreforged.utils.serializer
     :members:
     :special-members: __init__

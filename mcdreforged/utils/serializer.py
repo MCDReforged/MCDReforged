@@ -29,7 +29,22 @@ def _get_args(cls: Type) -> tuple:
 	return getattr(cls, '__args__', ())
 
 
-def serialize(obj) -> Union[None, int, float, str, list, dict]:
+def serialize(obj: Any) -> Union[None, int, float, str, list, dict]:
+	"""
+	A utility function to serialize any object into a json-like python object.
+	Here, being json-like means that the return value can be passed to e.g. :func:`json.dumps` directly
+
+	Serialization rules:
+
+	*   Immutable object, including :data:`None`, :class:`int`, :class:`float`, :class:`str` and :class:`bool`, will be directly returned
+	*   :class:`list` and :class:`tuple` will be serialized into a :class:`list` will all the items serialized
+	*   :class:`dict` will be converted into a :class:`dict` will all the keys and values serialized
+	*   Normal object will be converted to a :class:`dict` with all of its public fields.
+		The keys are the name of the fields and the values are the serialized field values
+
+	:param obj: The object to be serialized
+	:return: The serialized result
+	"""
 	if type(obj) in (type(None), int, float, str, bool):
 		return obj
 	elif isinstance(obj, list) or isinstance(obj, tuple):
@@ -54,6 +69,58 @@ _BASIC_CLASSES = (type(None), bool, int, float, str, list, dict)
 
 
 def deserialize(data: Any, cls: Type[T], *, error_at_missing: bool = False, error_at_redundancy: bool = False) -> T:
+	"""
+	A utility function to deserialize a json-like object into an object in given class
+
+	If the target class contains nested items / fields, corresponding detailed type annotations are required.
+	The items / fields will be deserialized recursively
+
+	Supported target classes:
+
+	*   Immutable object: :data:`None`, :class:`int`, :class:`float`, :class:`str` and :class:`bool`
+
+		* The class of the input data should equal to target class. No implicit type conversion will happen
+		* As an exception, :class:`float` also accepts an :class:`int` as the input data
+
+	*   Standard container: :class:`list`, :class:`dict`. Type of its content should be type annotated
+
+		* :class:`typing.List`, :class:`list`: Target class needs to be e.g. ``List[int]`` or ``list[int]`` (python 3.9+)
+		* :class:`typing.Dict`, :class:`dict`: Target class needs to be e.g. ``Dict[str, bool]`` or ``dict[str, bool]`` (python 3.9+)
+
+	*   Types in the :external:doc:`typing <library/typing>` module:
+
+		*   :data:`typing.Union`: Iterate through its available candidate classes, and return the first successful deserialization result
+		*   :data:`typing.Optional`: Actually it will be converted to a :data:`typing.Union` automatically
+		*   :data:`typing.Any`: The input data will be directed returned as the result
+		*   :data:`typing.Literal`: The input data needs to be in parameter the of :data:`~typing.Literal`, then the input data will be returned as the result
+
+	*   Normal class: The class should have its fields type annotated. It's constructor should accept 0 input parameter.
+		Example class::
+
+			class MyClass:
+				some_str: str
+				a_list: List[int]
+
+		The input data needs to be a dict. Keys and values in the dict correspond to the field names and serialized field values. Example dict::
+
+			{'some_str': 'foo', 'a_list': [1, 2, 3]}
+
+		Fields are set via ``__setattr__``, non-public fields will be ignored.
+
+	:param data: The json-like object to be deserialized
+	:param cls: The target class of the generated object
+	:keyword error_at_missing: A flag indicating if an exception should be risen
+		if there are any not-assigned fields when deserializing an object. Default false
+	:keyword error_at_redundancy: A flag indicating if an exception should be risen
+		if there are any unknown input attributes when deserializing an object. Default false
+	:raise TypeError: If input data doesn't match target class, or target class is unsupported
+	:raise ValueError: If input data is invalid, including :data:`Literal <typing.Literal>` mismatch
+		and those error flag in kwargs taking effect
+	:return: An object in class ``cls``
+
+	.. versionadded:: v2.7.0
+		Added :data:`typing.Literal` support
+	"""
 	def mismatch(*expected_class: Type):
 		if expected_class != (cls,):
 			classes = ' or '.join(map(str, expected_class))
@@ -144,11 +211,11 @@ def deserialize(data: Any, cls: Type[T], *, error_at_missing: bool = False, erro
 						result.__setattr__(attr_name, deserialize(data[attr_name], attr_type, error_at_missing=error_at_missing, error_at_redundancy=error_at_redundancy))
 						input_key_set.remove(attr_name)
 					elif error_at_missing:
-						raise ValueError('Missing attribute {} for class {} in input object {}'.format(attr_name, cls, data))
+						raise ValueError('Missing field {} for class {} in input object {}'.format(attr_name, cls, data))
 					elif hasattr(cls, attr_name):
 						result.__setattr__(attr_name, copy.copy(getattr(cls, attr_name)))
 			if error_at_redundancy and len(input_key_set) > 0:
-				raise ValueError('Redundancy attributes {} for class {} in input object {}'.format(input_key_set, cls, data))
+				raise ValueError('Unknown input attributes {} for class {} in input object {}'.format(input_key_set, cls, data))
 			if isinstance(result, Serializable):
 				result.on_deserialization()
 			return result
@@ -176,6 +243,9 @@ class Serializable(ABC):
 		... 	values: List[int]
 
 		>>> data = MyData.deserialize({'name': 'abc', 'values': [1, 2]})
+		>>> print(data.name, data.values)
+		abc [1, 2]
+
 		>>> data.serialize()
 		{'name': 'abc', 'values': [1, 2]}
 
@@ -191,21 +261,24 @@ class Serializable(ABC):
 			data: Dict[str, MyData]
 
 	You can also declare default value when declaring type annotations, then during deserializing,
-	if the value is missing, a `copy <https://docs.python.org/3/library/copy.html#copy.copy>`__ of the default value will be assigned
+	if the value is missing, a :func:`copy.copy` of the default value will be assigned
 
 	::
 
-		>>> class MyData(Serializable):
-		... 	name: str = 'default'
-		... 	values: List[int] = []
+		>>> class MyArray(Serializable):
+		... 	array: List[int] = [0]
 
-		>>> data = MyData(values=[0])
-		>>> data.serialize()
-		{'name': 'default', 'values': [0]}
-		>>> MyData.deserialize({}).serialize()
-		{'name': 'default', 'values': []}
-		>>> MyData.deserialize({}).values is MyData.deserialize({}).values
-		False
+		>>> a = MyArray(array=[1])
+		>>> print(a.array)
+		[1]
+		>>> b, c = MyArray.deserialize({}), MyArray.deserialize({})
+		>>> print(b.array)
+		[0]
+
+		>>> b.array == c.array == MyArray.array
+		True
+		>>> b.array is not c.array is not MyArray.array
+		True
 
 	Enum class will be serialized into its member name::
 
@@ -213,17 +286,17 @@ class Serializable(ABC):
 		... 	male = 'man'
 		... 	female = 'woman'
 
-		>>> class MyData(Serializable):
+		>>> class Person(Serializable):
 		... 	name: str = 'zhang_san'
 		... 	gender: Gender = Gender.male
 
-		>>> data = MyData.get_default()
+		>>> data = Person.get_default()
 		>>> data.serialize()
 		{'name': 'zhang_san', 'gender': 'male'}
 		>>> data.gender = Gender.female
 		>>> data.serialize()
 		{'name': 'zhang_san', 'gender': 'female'}
-		>>> MyData.deserialize({'name': 'li_si', 'gender': 'female'}).gender == Gender.female
+		>>> Person.deserialize({'name': 'li_si', 'gender': 'female'}).gender == Gender.female
 		True
 	"""
 	__annotations_cache: dict = None
@@ -234,7 +307,7 @@ class Serializable(ABC):
 		"""
 		Create a :class:`Serializable` object with given field values
 
-		Unspecified field with default value in the type annotation will be set to a copy of the default value
+		Unspecified public fields with default value in the type annotation will be set to a copy (:func:`copy.copy`) of the default value
 
 		:param kwargs: A dict storing to-be-set values of its fields.
 			It's keys are field names and values are field values
@@ -271,14 +344,16 @@ class Serializable(ABC):
 
 	def serialize(self) -> dict:
 		"""
-		Serialize itself into a dict
+		Serialize itself into a dict via function :func:`serialize`
 		"""
 		return serialize(self)
 
 	@classmethod
 	def deserialize(cls: Type[Self], data: dict, **kwargs) -> Self:
 		"""
-		Deserialize a dict into an object of this class
+		Deserialize a dict into an object of this class via function :func:`deserialize`
+
+		When there are missing fields, automatically copy the class's default value if possible. See :meth:`__init__` for more details
 		"""
 		return deserialize(data, cls, **kwargs)
 
@@ -290,13 +365,16 @@ class Serializable(ABC):
 		"""
 		Create an object of this class with default values
 
-		Actually it invokes :meth:`deserialize` with an empty dict
+		Actually it's implemented by invoking :meth:`Serializable.deserialize <mcdreforged.utils.serializer.Serializable.deserialize>`
+		with an empty dict
 		"""
 		return cls.deserialize({})
 
 	def on_deserialization(self):
 		"""
 		Invoked after being deserialized
+
+		Don't use, it's not a public API yet
 
 		:meta private:
 		"""
