@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-30 11:44+0800\n"
+"POT-Creation-Date: 2023-01-06 00:30+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -67,7 +67,7 @@ msgstr "``original`` 属性：储存着原始的未被修饰的函数对象"
 #: mcdreforged.api.decorator.new_thread.FunctionThread.get_return_value:5
 #: mcdreforged.api.decorator.new_thread.new_thread:16 of
 msgid "Examples::"
-msgstr "例子::"
+msgstr "例子："
 
 #: mcdreforged.api.decorator.event_listener.event_listener
 #: mcdreforged.api.decorator.new_thread.FunctionThread.get_return_value
@@ -77,11 +77,12 @@ msgstr "参数"
 
 #: mcdreforged.api.decorator.new_thread.new_thread:32 of
 msgid ""
-"The name of the thread. It's recommend to specify the thread name, so "
-"when you log something by ``server.logger``, a meaningful thread name "
-"will be displayed instead of a plain and meaningless ``Thread-3``"
+"A :class:`str`, the name of the thread. It's recommend to specify the "
+"thread name, so when you log something by ``server.logger``, a meaningful"
+" thread name will be displayed instead of a plain and meaningless "
+"``Thread-3``"
 msgstr ""
-"线程的名字。建议总是使用这个参数来指定线程名，因此当你通过 ``server.logger`` "
+"一个 :class:`str`，表示线程的名字。建议总是使用这个参数来指定线程名，因此当你通过 ``server.logger`` "
 "输出某些内容时，一个有意义的线程名称，而非一个无意义的 ``Thread-3``，将被显示"
 
 #: mcdreforged.api.decorator.new_thread.FunctionThread:1 of
@@ -164,12 +165,12 @@ msgstr ""
 "使用此装饰器，来保证它可以正确地工作，且在正确的时间注册事件监听器"
 
 #: mcdreforged.api.decorator.event_listener.event_listener:11
-#: mcdreforged.api.decorator.spam_proof.spam_proof:16 of
+#: mcdreforged.api.decorator.spam_proof.spam_proof:13 of
 msgid "Example::"
-msgstr "例子::"
+msgstr "例子："
 
 #: mcdreforged.api.decorator.event_listener.event_listener:17
-#: mcdreforged.api.decorator.spam_proof.spam_proof:23 of
+#: mcdreforged.api.decorator.spam_proof.spam_proof:20 of
 msgid "The above example is equivalent to::"
 msgstr "上述例子等价于::"
 
@@ -177,7 +178,8 @@ msgstr "上述例子等价于::"
 msgid "The event to register a listener"
 msgstr "由于注册事件监听器的事件"
 
-#: mcdreforged.api.decorator.event_listener.event_listener of
+#: mcdreforged.api.decorator.event_listener.event_listener
+#: mcdreforged.api.decorator.spam_proof.spam_proof of
 msgid "Keyword Arguments"
 msgstr "关键字参数"
 
@@ -217,27 +219,35 @@ msgstr "在“多重同时调用”发生时，只有第一个函数调用能被
 
 #: mcdreforged.api.decorator.spam_proof.spam_proof:6 of
 msgid ""
-"The type of the lock can be specified with the *lock_class* parameter, "
-"for example it can be ``threading.RLock`` (default) or ``threading.Lock``"
-msgstr ""
-"锁的类型可以用 *lock_class* 参数指定，比如可以设为 ``threading.RLock`` (默认值) 或者 "
-"``threading.Lock``"
-
-#: mcdreforged.api.decorator.spam_proof.spam_proof:9 of
-msgid ""
 "The return value of the decorated function is modified into a bool, "
 "indicating if this invocation is executed normally"
 msgstr "被装饰的函数的返回值被修改为一个 bool，代表这次函数调用是否正常地执行了"
 
-#: mcdreforged.api.decorator.spam_proof.spam_proof:11 of
+#: mcdreforged.api.decorator.spam_proof.spam_proof:8 of
 msgid "The decorated function has 2 extra fields:"
 msgstr "被修饰的函数拥有着 2 个额外的属性："
 
-#: mcdreforged.api.decorator.spam_proof.spam_proof:13 of
+#: mcdreforged.api.decorator.spam_proof.spam_proof:10 of
 msgid "``original`` field: stores the original undecorated function"
 msgstr "``original`` 属性：储存着原始的未被修饰的函数对象"
 
-#: mcdreforged.api.decorator.spam_proof.spam_proof:14 of
+#: mcdreforged.api.decorator.spam_proof.spam_proof:11 of
 msgid "``lock`` field: stores the lock object used in the spam proof logic"
 msgstr "``lock`` 属性：储存着防重复调用逻辑中使用的锁对象"
+
+#: mcdreforged.api.decorator.spam_proof.spam_proof:34 of
+msgid ""
+"The type of the lock. It can be :class:`threading.Lock` or "
+":class:`threading.RLock` (default)"
+msgstr "锁的类型。它可以是 :class:`threading.Lock` 或者 :class:`threading.RLock` (默认值)"
+
+#: mcdreforged.api.decorator.spam_proof.spam_proof:35 of
+msgid ""
+"(optional) The callback function that will be invoked with all parameters"
+" of the decorated function when the invocation is skipped"
+msgstr "（可选参数）一个回调函数，将在在被装饰的函数调用被跳过时被调，参数为被装饰函数的所有参数"
+
+#: mcdreforged.api.decorator.spam_proof.spam_proof:39 of
+msgid "Added ``skip_callback`` keyword argument"
+msgstr "添加 ``skip_callback`` 关键字参数"
 

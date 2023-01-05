@@ -2,12 +2,12 @@ import functools
 import threading
 from typing import Optional, Callable, Union
 
+from mcdreforged.utils import misc_util
+
 __all__ = [
 	'new_thread',
 	'FunctionThread'
 ]
-
-from mcdreforged.utils import misc_util
 
 
 class FunctionThread(threading.Thread):
@@ -95,7 +95,7 @@ def new_thread(arg: Optional[Union[str, Callable]] = None):
 		>>> t.join()
 		My Plugin Thread
 
-	:param arg: The name of the thread. It's recommend to specify the thread name, so when you
+	:param arg: A :class:`str`, the name of the thread. It's recommend to specify the thread name, so when you
 		log something by ``server.logger``, a meaningful thread name will be displayed
 		instead of a plain and meaningless ``Thread-3``
 	"""
