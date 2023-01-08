@@ -6,7 +6,7 @@ from typing import List, Dict, Union, Optional, Any
 from mcdreforged.api.utils import serialize, deserialize, Serializable
 
 _py38 = sys.version_info >= (3, 8)
-_py310 = sys.version_info >= (3, 10)
+_py39 = sys.version_info >= (3, 9)
 
 if _py38:
 	from typing import Literal
@@ -276,9 +276,10 @@ class MyTestCase(unittest.TestCase):
 		self.assertEqual(a.b.get('key'), 'value')
 		self.assertIsInstance(a.b.get('something'), set)
 
-	def test_11_py310_type_hint(self):
-		if _py310:
-			# suppressing these inspections so no complain with python <3.10
+	def test_11_py39_type_hint(self):
+		# see pep-0585
+		if _py39:
+			# suppressing these inspections so no complain with python <3.9
 			# noinspection PyTypeHints,PyUnresolvedReferences
 			class A(Serializable):
 				a: list[int] = [1]
@@ -294,7 +295,7 @@ class MyTestCase(unittest.TestCase):
 			self.assertEqual(a.a, [3, 4])
 			self.assertEqual(a.b.get('no'), False)
 		else:
-			print('Ignored type hint test which uses python 3.10 feature')
+			print('Ignored type hint test which uses python 3.9 feature')
 
 	def test_12_py308_literal(self):
 		if _py38:
@@ -317,10 +318,6 @@ class MyTestCase(unittest.TestCase):
 				deserialize({'a': 4}, A)
 			with self.assertRaises(ValueError):
 				deserialize({'b': {'k': 'u'}}, A)
-
-
-		else:
-			print('Ignored Literal test which uses python 3.8 feature')
 
 
 if __name__ == '__main__':
