@@ -161,7 +161,7 @@ def deserialize(data: Any, cls: Type[T], *, error_at_missing: bool = False, erro
 				mismatch(cls)
 
 	# List
-	elif _get_origin(cls) == List[int].__origin__:
+	elif _get_origin(cls) == getattr(List[int], '__origin__'):
 		if isinstance(data, list):
 			element_type = _get_args(cls)[0]
 			return list(map(lambda e: deserialize(e, element_type, error_at_missing=error_at_missing, error_at_redundancy=error_at_redundancy), data))
@@ -169,7 +169,7 @@ def deserialize(data: Any, cls: Type[T], *, error_at_missing: bool = False, erro
 			mismatch(list)
 
 	# Dict
-	elif _get_origin(cls) == Dict[int, int].__origin__:
+	elif _get_origin(cls) == getattr(Dict[int, int], '__origin__'):
 		if isinstance(data, dict):
 			key_type = _get_args(cls)[0]
 			val_type = _get_args(cls)[1]
