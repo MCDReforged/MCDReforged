@@ -54,7 +54,7 @@ class ServerInterface:
 	def __init__(self, mcdr_server: 'MCDReforgedServer'):
 		self._mcdr_server = mcdr_server
 		if type(self) is ServerInterface:
-			# singleton, should only occurs during MCDReforgedServer construction
+			# singleton, should only occur during MCDReforgedServer construction
 			if ServerInterface.__global_instance is not None:
 				self._mcdr_server.logger.warning('Double assigning the singleton instance in {}'.format(self.__class__.__name__), stack_info=True)
 			ServerInterface.__global_instance = self
@@ -113,7 +113,7 @@ class ServerInterface:
 
 		Using this method instead of :meth:`tr` allows you to display your texts in :ref:`user's preferred language <preference-language>` automatically
 
-		Of course you can construct :class:`~mcdreforged.translation.translation_text.RTextMCDRTranslation` yourself instead of using this method if you want
+		Of course, you can construct :class:`~mcdreforged.translation.translation_text.RTextMCDRTranslation` yourself instead of using this method if you want
 
 		:param translation_key: The key of the translation
 		:param args: The args to be formatted
@@ -463,7 +463,7 @@ class ServerInterface:
 
 	def get_all_metadata(self) -> Dict[str, Metadata]:
 		"""
-		Return a dict containing metadatas of all loaded plugin with (plugin_id, metadata) as key-value pair
+		Return a dict containing metadata of all loaded plugin with (plugin_id, metadata) as key-value pair
 		"""
 		result = {}
 		for plugin in self._mcdr_server.plugin_manager.get_all_plugins():

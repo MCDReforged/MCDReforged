@@ -3,17 +3,13 @@ import os
 from typing import Callable, ContextManager, TextIO
 
 
-def list_all(directory: str, filter: Callable[[str], bool] = lambda file_path: True):
-	ret = []
-	for file in os.listdir(directory):
-		file_path = os.path.join(directory, file)
-		if filter(file_path):
-			ret.append(file_path)
-	return ret
+def list_all(directory: str, predicate: Callable[[str], bool] = lambda file_path: True):
+	caditates = [os.path.join(directory, file) for file in os.listdir(directory)]
+	return list(filter(predicate, caditates))
 
 
-def list_file(directory: str, filter: Callable[[str], bool] = lambda file_path: True):
-	return list_all(directory, lambda file_path: os.path.isfile(file_path) and filter(file_path))
+def list_file(directory: str, predicate: Callable[[str], bool] = lambda file_path: True):
+	return list_all(directory, lambda file_path: os.path.isfile(file_path) and predicate(file_path))
 
 
 def list_file_with_suffix(directory: str, suffix: str):

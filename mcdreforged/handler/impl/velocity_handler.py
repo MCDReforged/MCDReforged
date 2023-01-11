@@ -27,7 +27,7 @@ class VelocityHandler(AbstractServerHandler):
 		# It's the same as WaterfallHandler, but since it's a different server here comes an individual copy
 		return (
 			'[{hour:d}:{min:d}:{sec:d} {logging}]: {content}',
-			'[{hour:d}:{min:d}:{sec:d} {logging}] {dummy}: {content}'  # somethings there is an extra element after the heading [] and :
+			'[{hour:d}:{min:d}:{sec:d} {logging}] {dummy}: {content}'  # something there is an extra element after the heading [] and :
 		)
 
 	def parse_player_joined(self, info: Info) -> Optional[str]:

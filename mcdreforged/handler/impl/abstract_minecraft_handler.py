@@ -9,6 +9,7 @@ from mcdreforged.handler.abstract_server_handler import AbstractServerHandler
 from mcdreforged.info_reactor.info import Info
 from mcdreforged.info_reactor.server_information import ServerInformation
 from mcdreforged.minecraft.rtext.text import RTextBase
+from mcdreforged.plugin.meta.version import VersionParsingError
 from mcdreforged.utils import string_util
 from mcdreforged.utils.types import MessageText
 
@@ -34,7 +35,7 @@ class AbstractMinecraftHandler(AbstractServerHandler, ABC):
 		The return value of the first succeeded ``parse.parse`` call will be used
 		for filling fields of the :class:`~mcdreforged.info_reactor.info.Info` object
 
-		If none of these formatter strings is able to be parsed successfully, then this info
+		If none of these formatter strings can be parsed successfully, then this info
 		is considered as a non-player message, i.e. has :attr:`info.player <mcdreforged.info_reactor.info.Info.hour>` equaling None
 		"""
 		return [
@@ -59,7 +60,7 @@ class AbstractMinecraftHandler(AbstractServerHandler, ABC):
 			version = Version(server_information.version.split(' ')[0])
 			if version >= Version('1.13.0'):
 				can_do_execute = True
-		except:
+		except VersionParsingError:
 			pass
 		command = 'tellraw {} {}'.format(target, self.format_message(message))
 		if can_do_execute:

@@ -410,7 +410,7 @@ class AbstractNode(ABC):
 
 				# Parsing finished
 				if len(next_remaining) == 0:
-					# total_read == success_read means DIVIDER does not exists at the end of the input string
+					# total_read == success_read means DIVIDER does not exist at the end of the input string
 					# in that case, ends at this current node
 					if success_read == total_read:
 						return self_suggestions()

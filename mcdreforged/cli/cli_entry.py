@@ -71,7 +71,7 @@ def run_mcdr():
 			mcdreforged_server.start()
 		else:
 			# If it's not initialized, config file or permission file is missing
-			# Just dont do anything to let the user to check the files
+			# Just don't do anything to let the user check the files
 			pass
 
 

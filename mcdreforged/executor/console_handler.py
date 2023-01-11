@@ -166,7 +166,7 @@ class MCDRPromptSession(PromptSession):
 	def _has_completion_now(buffer: Buffer) -> bool:
 		# Completion calculation might be happening right now in another thread, so make a reference copy first.
 		complete_state: Optional[CompletionState] = buffer.complete_state
-		# Similarly, in addition to checking if it's None, we should checking its completions field as well
+		# Similarly, in addition to checking if it's None, we should check its completions field as well
 		return complete_state is not None and complete_state.completions
 
 	def _get_default_buffer_control_height(self) -> Dimension:

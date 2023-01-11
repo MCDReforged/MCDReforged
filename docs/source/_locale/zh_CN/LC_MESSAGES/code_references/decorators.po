@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-06 00:30+0800\n"
+"POT-Creation-Date: 2023-01-12 00:57+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -165,7 +165,8 @@ msgstr ""
 "使用此装饰器，来保证它可以正确地工作，且在正确的时间注册事件监听器"
 
 #: mcdreforged.api.decorator.event_listener.event_listener:11
-#: mcdreforged.api.decorator.spam_proof.spam_proof:13 of
+#: mcdreforged.api.decorator.spam_proof.spam_proof:13
+#: mcdreforged.api.decorator.spam_proof.spam_proof:38 of
 msgid "Example::"
 msgstr "例子："
 
@@ -247,7 +248,7 @@ msgid ""
 " of the decorated function when the invocation is skipped"
 msgstr "（可选参数）一个回调函数，将在在被装饰的函数调用被跳过时被调，参数为被装饰函数的所有参数"
 
-#: mcdreforged.api.decorator.spam_proof.spam_proof:39 of
+#: mcdreforged.api.decorator.spam_proof.spam_proof:60 of
 msgid "Added ``skip_callback`` keyword argument"
 msgstr "添加 ``skip_callback`` 关键字参数"
 

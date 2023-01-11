@@ -48,23 +48,23 @@ class SubCommand(ABC):
 		return self.mcdr_plugin.server_interface
 
 	@property
-	def control_command_prefix(self):
+	def control_command_prefix(self) -> str:
 		return self.mcdr_plugin.control_command_prefix
 
 	@property
-	def help_command_prefix(self):
+	def help_command_prefix(self) -> str:
 		return self.mcdr_plugin.help_command_prefix
 
 	@staticmethod
-	def control_command_root(literal):
+	def control_command_root(literal) -> Literal:
 		return Literal(literal).requires(lambda src: src.has_permission(PermissionLevel.MCDR_CONTROL_LEVEL))
 
 	@staticmethod
-	def public_command_root(literal):
+	def public_command_root(literal) -> Literal:
 		return Literal(literal).requires(lambda src: src.has_permission(PermissionLevel.USER))
 
 	@staticmethod
-	def can_see_rtext(source: CommandSource):
+	def can_see_rtext(source: CommandSource) -> bool:
 		return source.is_player
 
 	# ---------------------------------

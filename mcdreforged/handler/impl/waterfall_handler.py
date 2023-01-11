@@ -20,7 +20,7 @@ class WaterfallHandler(BungeecordHandler):
 	def get_content_parsing_formatter(cls):
 		return (
 			BukkitHandler.get_content_parsing_formatter(),
-			'[{hour:d}:{min:d}:{sec:d} {logging}] {dummy}: {content}'  # somethings there is an extra element after the heading [] and :
+			'[{hour:d}:{min:d}:{sec:d} {logging}] {dummy}: {content}'  # something there is an extra element after the heading [] and :
 		)
 
 	def parse_player_joined(self, info: Info) -> Optional[str]:

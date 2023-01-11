@@ -20,7 +20,7 @@ mcdr_server.send.send_when_stopped.text             : "Command being sent: {0}"
 mcdr_server.receive.wait_stop                       : Waiting for server process to stop
 mcdr_server.receive.decode_fail                     : Fail to decode text "{0}"
 mcdr_server.on_mcdr_start.console_disabled          : Console thread disabled
-mcdr_server.on_server_stop.show_stopcode            : Server process stopped with code {0}
+mcdr_server.on_server_stop.show_return_code            : Server process stopped with code {0}
 mcdr_server.tick.pre_parse_fail                     : Fail to pre parse text from stdout of the server, use original text
 mcdr_server.run.error                               : Error ticking MCDR
 mcdr_server.on_server_stop.user_interrupted         : Server has been interrupted by user

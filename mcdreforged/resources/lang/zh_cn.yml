@@ -20,7 +20,7 @@ mcdr_server.send.send_when_stopped.text             : "被输入的指令: {0}"
 mcdr_server.receive.wait_stop                       : 等待服务端进程停止
 mcdr_server.receive.decode_fail                     : 解析文本 "{0}" 出错
 mcdr_server.on_mcdr_start.console_disabled          : 控制台线程已禁用
-mcdr_server.on_server_stop.show_stopcode            : "服务端进程返回代码: {0}"
+mcdr_server.on_server_stop.show_return_code            : "服务端进程返回代码: {0}"
 mcdr_server.tick.pre_parse_fail                     : 预解析服务端标准输出流失败，使用源文本
 mcdr_server.run.error                               : 运行 MCDR 时出错
 mcdr_server.on_server_stop.user_interrupted         : 服务端已被用户终止

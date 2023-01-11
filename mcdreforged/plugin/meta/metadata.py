@@ -121,7 +121,7 @@ class Metadata:
 				warn('Version "{}" of {} is invalid ({}), ignore and use fallback version instead {}'.format(version_str, plugin_name_text, e, self.FALLBACK_VERSION))
 				version_str = None
 		else:
-			warn('{} doesn\'t specific a version, use fallback version {}'.format(plugin_name_text, self.FALLBACK_VERSION))
+			warn("{} doesn't specific a version, use fallback version {}".format(plugin_name_text, self.FALLBACK_VERSION))
 		if version_str is None:
 			self.version = Version(self.FALLBACK_VERSION)
 

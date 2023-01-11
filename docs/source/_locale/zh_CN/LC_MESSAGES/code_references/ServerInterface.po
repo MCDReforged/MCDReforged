@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-02 19:39+0800\n"
+"POT-Creation-Date: 2023-01-12 00:57+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -155,7 +155,7 @@ msgstr ""
 
 #: mcdreforged.plugin.server_interface.ServerInterface.rtr:6 of
 msgid ""
-"Of course you can construct "
+"Of course, you can construct "
 ":class:`~mcdreforged.translation.translation_text.RTextMCDRTranslation` "
 "yourself instead of using this method if you want"
 msgstr ""
@@ -543,7 +543,7 @@ msgstr "返回一个包含所有 **被禁用** 插件的文件路径列表，例
 
 #: mcdreforged.plugin.server_interface.ServerInterface.get_all_metadata:1 of
 msgid ""
-"Return a dict containing metadatas of all loaded plugin with (plugin_id, "
+"Return a dict containing metadata of all loaded plugin with (plugin_id, "
 "metadata) as key-value pair"
 msgstr "返回一个包含所有加载的插件元数据的字典，键值对为 (插件 id, 元数据)"
 

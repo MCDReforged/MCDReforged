@@ -123,7 +123,7 @@ class MCDReforgedServer:
 		if not loading_success:
 			return
 
-		# MCDR environment has been setup, so continue creating default folders and loading stuffs
+		# MCDR environment has been set up, so continue creating default folders and loading stuffs
 		self.logger.set_file(core_constant.LOGGING_FILE)  # will create logs/ folder
 		self.plugin_manager.touch_directory()  # will create config/ folder
 
@@ -148,7 +148,7 @@ class MCDReforgedServer:
 		except pkg_resources.ResolutionError:
 			self.logger.warning('It looks like you\'re launching MCDR from source, since {} is not found in python packages'.format(mcdr_pkg))
 			self.logger.warning('In this way, the plugin system might not work correctly')
-			self.logger.warning('In a production environment, you should install {} from PyPI, see document ({}) for more information'.format(mcdr_pkg, core_constant.DOCUMENTION_URL))
+			self.logger.warning('In a production environment, you should install {} from PyPI, see document ({}) for more information'.format(mcdr_pkg, core_constant.DOCUMENTATION_URL))
 			self.logger.warning('MCDR will launch after 20 seconds...')
 			time.sleep(20)
 
@@ -415,7 +415,7 @@ class MCDReforgedServer:
 
 	def __on_server_stop(self):
 		return_code = self.process.poll()
-		self.logger.info(self.tr('mcdr_server.on_server_stop.show_stopcode', return_code))
+		self.logger.info(self.tr('mcdr_server.on_server_stop.show_return_code', return_code))
 		try:
 			self.process.stdin.close()
 		except Exception as e:

@@ -128,7 +128,7 @@ class MCDReforgedLogger(logging.Logger):
 	@property
 	def __file_formatter(self):
 		# it's not necessary to try to consider self.__plugin_id here
-		# since the only FileHandler to be created is the logger of the mcdr_server
+		# since the only FileHandler to be created is the in logger of the mcdr_server
 		# which doesn't have the plugin id thing
 		# for loggers for plugins, see mcdreforged.plugin.server_interface.ServerInterface._get_logger
 		return NoColorFormatter(
