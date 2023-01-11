@@ -58,7 +58,7 @@ class PluginCommand(SubCommand):
 			if not self.can_see_rtext(source):
 				displayed_name += RText(' ({})'.format(plugin.get_identifier()), color=RColor.gray)
 			texts = RTextList(
-				'§7-§r ',
+				RText('- ', RColor.gray),
 				displayed_name.
 				c(RAction.run_command, '{} plugin info {}'.format(self.control_command_prefix, meta.id)).
 				h(self.tr('mcdr_command.list_plugin.suggest_info', plugin.get_identifier()))

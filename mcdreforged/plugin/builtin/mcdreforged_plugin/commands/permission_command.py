@@ -92,12 +92,12 @@ class PermissionCommand(SubCommand):
 		for permission_level in PermissionLevel.INSTANCES:
 			if specified_level is None or permission_level == specified_level:
 				source.reply(
-					RText('§7[§e{}§7]§r'.format(permission_level.name))
+					RTextList(RText('[', RColor.gray), RText(permission_level.name, RColor.yellow), RText(']', RColor.gray))
 					.c(RAction.run_command, '{} permission list {}'.format(self.control_command_prefix, permission_level.name))
 					.h(self.tr('mcdr_command.list_permission.suggest_list', permission_level.name))
 				)
 				for player in self.mcdr_server.permission_manager.get_permission_group_list(permission_level.name):
-					texts = RText('§7-§r {}'.format(player))
+					texts = RTextList(RText('- ', RColor.gray), player)
 					if self.can_see_rtext(source):
 						texts += RTextList(
 							RText(' [✎]', color=RColor.gray)

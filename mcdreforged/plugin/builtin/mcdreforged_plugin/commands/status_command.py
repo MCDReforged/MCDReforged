@@ -48,7 +48,7 @@ class StatusCommand(SubCommand):
 			return
 
 		process = self.mcdr_server.process
-		source.reply(self.tr('mcdr_command.print_mcdr_status.extra.pid', process.pid if process is not None else '§rN/A§r'))
+		source.reply(self.tr('mcdr_command.print_mcdr_status.extra.pid', process.pid if process is not None else RText('N/A', RColor.gray)))
 		if process is not None:
 			try:
 				tree_printer.print_tree(
@@ -67,8 +67,8 @@ class StatusCommand(SubCommand):
 		for thread in threading.enumerate():
 			name = thread.name
 			if not name.startswith('ThreadPoolExecutor-'):
-				source.reply('  §7-§r {}'.format(name))
+				source.reply(RText('  - ', RColor.gray) + name)
 			else:
 				thread_pool_counts += 1
 		if thread_pool_counts > 0:
-			source.reply('  §7-§r ThreadPoolExecutor thread x{}'.format(thread_pool_counts))
+			source.reply(RText('  - ', RColor.gray) + 'ThreadPoolExecutor thread x{}'.format(thread_pool_counts))
