@@ -48,26 +48,26 @@ def spam_proof(arg=None, *, lock_class=RLock, skip_callback: Optional[Callable] 
 	:keyword skip_callback: (optional) The callback function that will be invoked with all parameters of the decorated function
 		when the invocation is skipped
 
-		Example::
+	Keyword ``skip_callback`` example::
 
-			>>> def my_callback(value):
-			...     print('skip', value)
+		>>> def my_callback(value):
+		...     print('skip', value)
 
-			>>> @spam_proof(skip_callback=my_callback)
-			... def some_work(value):
-			...     event.wait()
+		>>> @spam_proof(skip_callback=my_callback)
+		... def some_work(value):
+		...     event.wait()
 
-			>>> def threaded_invoke():
-			... 	print(some_work(0.1))  # invocation normal
+		>>> def threaded_invoke():
+		... 	print(some_work(0.1))  # invocation normal
 
-			>>> from threading import Thread, Event
-			>>> t, event = Thread(target=threaded_invoke), Event()
-			>>> t.start()
-			>>> some_work(123)  # invocation skipped
-			skip 123
-			False
-			>>> _ = event.set(), t.join()
-			True
+		>>> from threading import Thread, Event
+		>>> t, event = Thread(target=threaded_invoke), Event()
+		>>> t.start()
+		>>> some_work(123)  # invocation skipped
+		skip 123
+		False
+		>>> _ = event.set(), t.join()
+		True
 
 	.. versionadded:: v2.5.0
 	.. versionadded:: v2.7.0
