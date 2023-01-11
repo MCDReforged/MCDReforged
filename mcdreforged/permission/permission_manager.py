@@ -49,6 +49,12 @@ class PermissionManager:
 		"""
 		self.storage.read_config(allowed_missing_file)
 
+	def file_presents(self) -> bool:
+		return self.storage.file_presents()
+
+	def save_default(self):
+		self.storage.save_default()
+
 	# ---------------------
 	# Permission processing
 	# ---------------------
