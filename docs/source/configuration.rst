@@ -42,14 +42,33 @@ The console command to launch the server
 
 Some examples:
 
+if you want to launch a Minecraft server
 
-* ``java -Xms1G -Xmx2G -jar minecraft_server.jar nogui``\ , if you want to launch a Minecraft server
-* 
-  ``./start.sh``\ , if you have already written a startup script in the working directory
+.. code-block:: yaml
 
-* 
-  Option type: string
+    start_command: java -Xms1G -Xmx2G -jar minecraft_server.jar nogui
 
+if you have already written a startup script in the :ref:`working directory <configuration:working_directory>`
+
+.. code-block:: yaml
+
+    start_command: ./start.sh
+
+If there are some special character (e.g. ``"`` and ``\``) that yaml doesn't like in the command
+
+.. code-block:: yaml
+
+    # use "" to wrap the command and escape " and \
+    start_command: "\"C:\\Program Files\\Java\\jdk-17.0.3.1\\bin\\java.exe\" -Xms1G -Xmx2G -jar minecraft_server.jar"
+
+    # use '' to wrap the command
+    start_command: '"C:\Program Files\Java\jdk-17.0.3.1\bin\java.exe" -Xms1G -Xmx2G -jar minecraft_server.jar'
+
+    # use multi-line string
+    start_command: |-
+      "C:\Program Files\Java\jdk-17.0.3.1\bin\java.exe" -Xms1G -Xmx2G -jar minecraft_server.jar
+
+* Option type: string
 * Default value: ``java -Xms1G -Xmx2G -jar minecraft_server.jar nogui``
 
 handler
