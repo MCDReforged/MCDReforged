@@ -302,7 +302,11 @@ class ServerInterface:
 
 	def execute(self, text: str, *, encoding: Optional[str] = None) -> None:
 		"""
-		Execute a command by sending the command content to server's standard input stream
+		Execute a server command by sending the command content to server's standard input stream
+
+		.. seealso::
+
+			:meth:`execute_command` if you want to execute command in MCDR's command system
 
 		:param text: The content of the command you want to send
 		:param encoding: The encoding method for the text.
@@ -716,7 +720,11 @@ class ServerInterface:
 
 	def execute_command(self, command: str, source: CommandSource = None) -> None:
 		"""
-		Execute a single command
+		Execute a single command in MCDR's command system
+
+		.. seealso::
+
+			:meth:`execute` if you want to send some text to server's standard input stream
 
 		:param command: The command you want to execute
 		:param source: The command source that is used to execute the command. If it's not specified MCDR

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-12 00:57+0800\n"
+"POT-Creation-Date: 2023-01-14 17:50+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -44,7 +44,8 @@ msgstr "建议使用 ``server`` 作为 ServerInterface 变量的名字，这在�
 msgid "Utils"
 msgstr "实用工具"
 
-#: ../docstring mcdreforged.plugin.server_interface.ServerInterface.MCDR:1 of
+#: ../../docstring mcdreforged.plugin.server_interface.ServerInterface.MCDR:1
+#: of
 msgid "An identifier field for MCDR"
 msgstr "MCDR 的标识符属性"
 
@@ -376,16 +377,22 @@ msgstr "文本交互"
 
 #: mcdreforged.plugin.server_interface.ServerInterface.execute:1 of
 msgid ""
-"Execute a command by sending the command content to server's standard "
-"input stream"
-msgstr "通过将指令内容发送到服务端的标准输入流来执行指令"
+"Execute a server command by sending the command content to server's "
+"standard input stream"
+msgstr "通过将指令内容发送到服务端的标准输入流来执行服务端指令"
 
-#: mcdreforged.plugin.server_interface.ServerInterface.execute:3 of
+#: mcdreforged.plugin.server_interface.ServerInterface.execute:5 of
+msgid ""
+":meth:`execute_command` if you want to execute command in MCDR's command "
+"system"
+msgstr "方法 :meth:`execute_command`，如果你想要在 MCDR 的指令系统中执行指令"
+
+#: mcdreforged.plugin.server_interface.ServerInterface.execute:7 of
 msgid "The content of the command you want to send"
 msgstr "你要发送的指令内容"
 
 #: mcdreforged.plugin.server_interface.ServerInterface.broadcast:4
-#: mcdreforged.plugin.server_interface.ServerInterface.execute:4
+#: mcdreforged.plugin.server_interface.ServerInterface.execute:8
 #: mcdreforged.plugin.server_interface.ServerInterface.say:4
 #: mcdreforged.plugin.server_interface.ServerInterface.tell:5 of
 msgid ""
@@ -849,14 +856,20 @@ msgid ""
 msgstr "该指令源不是玩家或控制台，它拥有最高的权限等级，它使用 :attr:`logger` 来处理回复"
 
 #: mcdreforged.plugin.server_interface.ServerInterface.execute_command:1 of
-msgid "Execute a single command"
-msgstr "执行一条指令"
+msgid "Execute a single command in MCDR's command system"
+msgstr "在 MCDR 的指令系统中执行一条指令"
 
-#: mcdreforged.plugin.server_interface.ServerInterface.execute_command:3 of
+#: mcdreforged.plugin.server_interface.ServerInterface.execute_command:5 of
+msgid ""
+":meth:`execute` if you want to send some text to server's standard input "
+"stream"
+msgstr "方法 :meth:`execute`，如果你想要往服务端的标准输入流中发送文本"
+
+#: mcdreforged.plugin.server_interface.ServerInterface.execute_command:7 of
 msgid "The command you want to execute"
 msgstr "你想要执行的指令"
 
-#: mcdreforged.plugin.server_interface.ServerInterface.execute_command:4 of
+#: mcdreforged.plugin.server_interface.ServerInterface.execute_command:8 of
 msgid ""
 "The command source that is used to execute the command. If it's not "
 "specified MCDR will use :meth:`get_plugin_command_source` to get a "
