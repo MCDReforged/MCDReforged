@@ -26,9 +26,9 @@ If you want to switch the language, modify line 72 in `docs/source/conf.py` or s
 ## Update zh_CN translation
 
 ```bash
-cd docs/source/
-sphinx-build -b gettext . _locale -D language=en_US  # en_US is required to be used when updating translation so the base language is correct
-sphinx-intl update -p _locale -l zh_CN
+cd docs/
+sphinx-build -b gettext ./source ./source/_locale -D language=en_US  # en_US is required to be used when updating translation so the base language is correct
+sphinx-intl update -p ./source/_locale -l zh_CN
 ```
 
 Then check che changed `.po` files in `docs/source/_locale/zh_CN/`. For the changes:
@@ -41,8 +41,8 @@ Then check che changed `.po` files in `docs/source/_locale/zh_CN/`. For the chan
 ## Auto build server
 
 ```bash
-cd docs/source/
-sphinx-autobuild . ../build/html --watch ../../mcdreforged
+cd docs/
+sphinx-autobuild ./source ./build/html --watch ../mcdreforged
 ```
 
 Added `-D language=zh_CN` to the end if you want to autobuild a Chinese version of the doc
