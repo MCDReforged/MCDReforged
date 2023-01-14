@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-12 00:57+0800\n"
+"POT-Creation-Date: 2023-01-14 21:35+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,6 +28,18 @@ msgstr "服务端处理器的抽象基类"
 #: mcdreforged.handler.abstract_server_handler.AbstractServerHandler:3 of
 msgid "Class inheriting tree::"
 msgstr "类继承树状图::"
+
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.get_name:1
+#: of
+msgid "The name of the server handler"
+msgstr "服务端处理器的名字"
+
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.get_name:3
+#: of
+msgid ""
+"The name is used as the identifier of this server handler in MCDR "
+"configuration"
+msgstr "这个名字作为此服务端处理器的标识符，将在 MCDR 的配置文件中用到"
 
 #: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.get_stop_command:1
 #: of

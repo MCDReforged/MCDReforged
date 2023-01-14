@@ -9,9 +9,8 @@ If you want to add more behaviors to MCDR, like dispatching new events and so on
 Since info reactors can access to the inner :class:`~mcdreforged.mcdr_server.MCDReforgedServer` object which is the core object of MCDR, so it may have much more possible usages.
 But yes, as always, use with cautions
 
-Similar to `custom server handler <handler.html>`__\ , you info reactor class needs to inherit from the class :class:`~mcdreforged.info_reactor.abstract_info_reactor.AbstractInfoReactor`.
+Similar to custom :doc:`/customize/handler`, you info reactor class needs to inherit from the class :class:`~mcdreforged.info_reactor.abstract_info_reactor.AbstractInfoReactor`.
 Then you need to implement the :meth:`~mcdreforged.info_reactor.abstract_info_reactor.AbstractInfoReactor.react` method to give it some functionalities
 
-After you finish coding your reactor, you need to add you reactor class path to
-the `custom_info_reactors <../configuration.html#custom-info-reactors>`__ option of the configuration file,
-then your reactor will start working automatically
+After you finish coding your reactor, you need to add you reactor class path to the :ref:`configuration:custom_info_reactors`
+option of the configuration file, then your reactor will start working automatically

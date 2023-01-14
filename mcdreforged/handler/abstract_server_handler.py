@@ -35,6 +35,11 @@ class AbstractServerHandler:
 	# ---------------------
 
 	def get_name(self) -> str:
+		"""
+		The name of the server handler
+
+		The name is used as the identifier of this server handler in MCDR configuration
+		"""
 		return string_util.hump_to_underline(type(self).__name__)
 
 	# ------------------

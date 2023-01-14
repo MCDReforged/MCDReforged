@@ -4,7 +4,7 @@ Command
 
 Command is the most common way for users to interact with MCDR. MCDR consider all console input and player chat messages from the server as user inputs. For them, MCDR will try to parse the input as a command
 
-Commands can be registered by MCDR itself and by plugins. This page only introduces about commands from MCDR. For plugin registered command, check `here <plugin_dev/command.html>`__
+Commands can be registered by MCDR itself and by plugins. This page only introduces about commands from MCDR. For the way to register command for MCDR plugin, check :doc:`here </plugin_dev/command>`
 
 !!MCDR command
 --------------
@@ -110,7 +110,7 @@ Examples:
 * ``!!MCDR permission set Steve admin``: Set the permission level of player Steve to 3 (admin)
 * ``!!MCDR permission q Steve``: Query the permission level of player Steve. The value should be 3 (admin)
 
-Check the page `Permission <permission.html>`__ for more information about MCDR permission system
+Check the :doc:`/permission` document for more information about MCDR permission system
 
 Plugin management
 ^^^^^^^^^^^^^^^^^
@@ -208,7 +208,7 @@ Here's a table of the commands
      - !!MCDR pref <pref_name> reset
      - Reset preference <pref_name> to the default value
 
-See `here <preference.html>`__ for more information about MCDR preference
+See :doc:`here </preference>` for more information about MCDR preference
 
 Examples:
 

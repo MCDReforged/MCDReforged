@@ -60,7 +60,7 @@ And then you are able to use this handler to handle the server. You need to do t
      ├─ config.yml
      └─ permission.yml
 
-#. Added the path to the custom handler in the `custom_handlers <../configuration.html#custom-handlers>`__ option, e.g:
+#. Added the path to the custom handler in the :ref:`configuration:custom_handlers` option, e.g:
 
 .. code-block::
 

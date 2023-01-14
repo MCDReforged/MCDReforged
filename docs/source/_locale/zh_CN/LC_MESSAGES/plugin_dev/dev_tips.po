@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-30 11:45+0800\n"
+"POT-Creation-Date: 2023-01-14 20:55+0800\n"
 "PO-Revision-Date: 2021-01-22 14:26+0000\n"
 "Last-Translator: \n"
 "Language: zh_CN\n"
@@ -50,12 +50,12 @@ msgstr "翻译"
 
 #: ../plugin_dev/dev_tips.rst:18
 msgid ""
-"For `multi file plugin <plugin_format.html#multi-file-plugin>`__, you can"
-" also include a ``lang/`` folder in your plugin, with translation files "
-"in json (``.json``) or yaml (``.yml``) format named like ``en_us.json``. "
-"MCDR will automatically register these translations for your plugin"
+"For :ref:`plugin_dev/plugin_format:Multi file Plugin`, you can also "
+"include a ``lang/`` folder in your plugin, with translation files in json"
+" (``.json``) or yaml (``.yml``) format named like ``en_us.json``. MCDR "
+"will automatically register these translations for your plugin"
 msgstr ""
-"对于 `多文件插件 <plugin_format.html#multi-file-plugin>`__，你还可以在你的插件中放置一个名为 "
+"对于 :ref:`plugin_dev/plugin_format:Multi file Plugin`，你还可以在你的插件中放置一个名为 "
 "``lang/`` 的文件夹，其中含有 json（``.json``）或者 yaml（``.yml``）格式的翻译文件。MCDR "
 "将会自动为你的插件注册这些翻译文件"
 
@@ -127,9 +127,8 @@ msgid ""
 "improve MCDR's performance when the server is spamming with non-user info"
 " (e.g. Pasting schematic with Litematica mod) in the console"
 msgstr ""
-"如果你不关心非用户的信息源，与其监听 :ref:`event-general-info` 事件，不如监听 :ref:`event-user-info` 事件。"
-"这可以在服务端刷屏非用户信息时（如使用 Litematica mod 粘贴蓝图）提升 "
-"MCDR 的性能表现"
+"如果你不关心非用户的信息源，与其监听 :ref:`event-general-info` 事件，不如监听 :ref:`event-user-"
+"info` 事件。这可以在服务端刷屏非用户信息时（如使用 Litematica mod 粘贴蓝图）提升 MCDR 的性能表现"
 
 #: ../plugin_dev/dev_tips.rst:53
 msgid ""
@@ -138,23 +137,23 @@ msgid ""
 "command>` to MCDR. It's much more efficient to develop than handling "
 "yourself inside :ref:`event-user-info` event"
 msgstr ""
-"如果你只关心用户输入的指令，与其监听 :ref:`event-user-info` 事件，你还可以 :ref:`注册一棵指令树 "
-"<page-command>`。这比手动在 :ref:`event-user-info` 事件里处理的开发效率要高不少"
+"如果你只关心用户输入的指令，与其监听 :ref:`event-user-info` 事件，你还可以 :ref:`注册一棵指令树 <page-"
+"command>`。这比手动在 :ref:`event-user-info` 事件里处理的开发效率要高不少"
 
-#: ../plugin_dev/dev_tips.rst:56
+#: ../plugin_dev/dev_tips.rst:57
 msgid ""
-"`MCDR Stop event <event.html#mcdr-stop>`__ allows you to have as many "
-"time as you want to save your data. Be carefully, don't enter an endless "
-"loop, MCDR is waiting for you to exit"
+":ref:`plugin_dev/event:MCDR Stop` event allows you to have as many time "
+"as you want to save your data. Be carefully, don't enter an endless loop,"
+" MCDR is waiting for you to exit"
 msgstr ""
-"`MCDR 终止事件 <event.html#mcdr-stop>`__ 能给你充足的时间来进行保存数据等操作。不过要小心，不要死循环了，MCDR"
+":ref:`plugin_dev/event:MCDR Stop` 事件 能给你充足的时间来进行保存数据等操作。不过要小心，不要死循环了，MCDR"
 " 在等着你运算完成"
 
-#: ../plugin_dev/dev_tips.rst:60
+#: ../plugin_dev/dev_tips.rst:61
 msgid "Multi-threading"
 msgstr "多线程"
 
-#: ../plugin_dev/dev_tips.rst:62
+#: ../plugin_dev/dev_tips.rst:63
 msgid ""
 "If you want to do some tasks in your plugin that might take some time to "
 "finished, such as network querying or massive file operation, it's "
@@ -165,7 +164,7 @@ msgstr ""
 "如果你想要在你的插件中执行需要一些时间才能完成的任务，如网络操作或者文件操作，建议将你的代码放到一个独立的线程里执行，而不是直接在你注册的事件监听器函数中执行。否则"
 " MCDR 余下任务的执行可能会被阻塞"
 
-#: ../plugin_dev/dev_tips.rst:64
+#: ../plugin_dev/dev_tips.rst:67
 msgid ""
 "For easier use there's a decorator named :func:`@new_thread "
 "<mcdreforged.api.decorator.new_thread.new_thread>` to help you make your "
@@ -174,29 +173,29 @@ msgstr ""
 "为了更易于使用，你可以使用一个名为 :func:`@new_thread "
 "<mcdreforged.api.decorator.new_thread.new_thread>` 的函数装饰器来使你的函数异步地执行"
 
-#: ../plugin_dev/dev_tips.rst:67
+#: ../plugin_dev/dev_tips.rst:71
 msgid "User config, data and log files"
 msgstr "用户配置、数据及日志文件"
 
-#: ../plugin_dev/dev_tips.rst:69
+#: ../plugin_dev/dev_tips.rst:73
 msgid ""
 "If you want to store some user configuration or user data file, it's "
 "recommend to store them inside the ``config`` folder rather than store "
 "them inside the plugin folder"
 msgstr "如果你需要储存一些用户配置或数据文件，推荐将它们储存到 ``config`` 文件夹中而不是储存到插件文件夹中"
 
-#: ../plugin_dev/dev_tips.rst:71
+#: ../plugin_dev/dev_tips.rst:76
 msgid ""
 "The reason is that user might have their plugins be placed in another "
 "directory or even have multiple MCDR instances to load a same plugin "
-"collection directory, by a configuration option named `plugin_directories"
-" <../configuration.html#plugin-directories>`__"
+"collection directory, by a configuration option named "
+":ref:`configuration:plugin_directories`"
 msgstr ""
 "其中的原因是，用户可能会把他们的插件放置在另外非默认的文件夹中，甚至可能会让多个 MCDR "
-"实例共享使用一个相同的插件文件夹。这是可以通过修改配置文件选项 `plugin_directories "
-"<../configuration.html#plugin-directories>`__ 来实现的"
+"实例共享使用一个相同的插件文件夹。这是可以通过修改配置文件选项 :ref:`configuration:plugin_directories` "
+"来实现的"
 
-#: ../plugin_dev/dev_tips.rst:73
+#: ../plugin_dev/dev_tips.rst:80
 msgid ""
 "If you store your configuration or data inside the plugin folder, you "
 "can't distinguish which MCDR instance the configuration file belongs to. "
@@ -209,7 +208,7 @@ msgstr ""
 "``config`` 文件夹，或者 ``config`` 中的一个子文件夹如 ``config/my_plugin/`` "
 "中，这样每个加载你的插件的 MCDR 实例即可拥有独享的用户配置数据"
 
-#: ../plugin_dev/dev_tips.rst:75
+#: ../plugin_dev/dev_tips.rst:85
 msgid ""
 ":meth:`~mcdreforged.plugin.server_interface.PluginServerInterface.get_data_folder`"
 " method is a nice method for lazyman"
@@ -217,37 +216,37 @@ msgstr ""
 ":meth:`~mcdreforged.plugin.server_interface.PluginServerInterface.get_data_folder`"
 " 是个不错的懒人方法"
 
-#: ../plugin_dev/dev_tips.rst:77
+#: ../plugin_dev/dev_tips.rst:87
 msgid "For logging files, store them inside ``logs/`` folder is a good idea"
 msgstr "对于日志文件，把它们储存至 ``logs/`` 文件夹中是一个不错的选择"
 
-#: ../plugin_dev/dev_tips.rst:80
+#: ../plugin_dev/dev_tips.rst:90
 msgid "External packages"
 msgstr "额外的 Python 包"
 
-#: ../plugin_dev/dev_tips.rst:82
+#: ../plugin_dev/dev_tips.rst:92
 msgid ""
 "Some times you plugin needs some external resource files or requires some"
 " other ``.py`` codes as libraries. For these, you need to rather write "
-"your plugin in `multi file plugin <plugin_format.html#multi-file-"
-"plugin>`__ format and insert them in your plugin, or somehow convert them"
-" into a separated plugin and declare the dependency"
+"your plugin in :ref:`plugin_dev/plugin_format:Multi file Plugin` format "
+"and insert them in your plugin, or somehow convert them into a separated "
+"plugin and declare the dependency"
 msgstr ""
-"有时候你的插件需要一些额外的资源文件，或者需要一些其他的 ``.py`` 代码文件作为运行库。对于这些文件，你需要使用 `多文件插件 "
-"<plugin_format.html#multi-file-plugin>`__ "
+"有时候你的插件需要一些额外的资源文件，或者需要一些其他的 ``.py`` 代码文件作为运行库。对于这些文件，你需要使用 "
+":ref:`plugin_dev/plugin_format:Multi file Plugin` "
 "格式来编写你的插件，并将它们插入你的插件中；或者以某种方式将它们转换为独立的插件并声明依赖项"
 
-#: ../plugin_dev/dev_tips.rst:85
+#: ../plugin_dev/dev_tips.rst:97
 msgid "Misc"
 msgstr "其他"
 
-#: ../plugin_dev/dev_tips.rst:87
+#: ../plugin_dev/dev_tips.rst:99
 msgid ""
 "The current working directory is the folder where MCDR is in. **DO NOT** "
 "change it since that will mess up everything"
 msgstr "MCDR 的工作路径是 MCDR 所在的文件夹路径。**切勿** 修改工作路径，这将弄乱一切"
 
-#: ../plugin_dev/dev_tips.rst:88
+#: ../plugin_dev/dev_tips.rst:100
 msgid ""
 "For the :class:`~mcdreforged.info_reactor.info.Info` parameter in :ref"
 ":`event-general-info` event etc., don't modify it, just use its public "

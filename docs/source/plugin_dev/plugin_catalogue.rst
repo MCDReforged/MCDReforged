@@ -3,7 +3,7 @@ Plugin Catalogue
 
 The official MCDR plugin catalogue is the ``master`` branch of repository https://github.com/MCDReforged/PluginCatalogue. Users can browse plugins here and developers can submit their plugins to the catalogue
 
-The catalogue is updated once files change, and every 30 minutes via github action
+The catalogue is updated once files change, and every 1 hour via github action
 
 File structures
 ---------------
@@ -104,7 +104,7 @@ labels
 
 Optional field, default: ``[]``
 
-A list of id of `label <#Label>`__ of your plugin. Choose them wisely
+A list of id of :ref:`plugin_dev/plugin_catalogue:Label` of your plugin. Choose them wisely
 
 Type: List[str]
 
@@ -115,13 +115,13 @@ Optional field, default: ``{}``
 
 Introduction is a paragraph written in markdown syntax. It will be shown to user when they are browsing your plugin. Comparing to readme or document, introduction focuses more on showing the features of the plugin to attract new users
 
-For the ``introduction`` field, it's a mapping maps `language <#language>`__ into a file path
+For the :ref:`plugin_dev/plugin_catalogue:introduction` field, it's a mapping maps :ref:`plugin_dev/plugin_catalogue:language` into a file path
 
 The key is the language
 
-The value is the file path of the introduction file in your plugin repository. Field `related_path <#related-path>`__ is considered during the calculation of the real url
+The value is the file path of the introduction file in your plugin repository. Field :ref:`plugin_dev/plugin_catalogue:related_path` is considered during the calculation of the real url
 
-Example with the same file structure in `related_path section <#related-path>`__:
+Example with the same file structure in :ref:`plugin_dev/plugin_catalogue:related_path`:
 
 .. code-block:: json
 
@@ -204,13 +204,13 @@ Plugin catalogue will automatically detect the releases in your plugin repositor
 
 * Assets: contains 1 asset with ``.mcdr`` or ``.pyz`` file extension name. Other assets will be ignored
 
-  Which also means only `Packed Plugin <plugin_format.html#packed-plugin>`__ is supported
+  Which also means only :ref:`plugin_dev/plugin_format:Packed Plugin` is supported
 
 Submit Plugin
 -------------
 
 If you want to submit your plugin, create the directory of your plugin inside the ``plugins/`` directory with necessary files, and make a pull request
 
-It's recommended to leave your github link in the `authors <#authors>`__ field so repository maintainers can simply tell if you are the owner of the plugin
+It's recommended to leave your github link in the :ref:`plugin_dev/plugin_catalogue:authors` field so repository maintainers can simply tell if you are the owner of the plugin
 
 All changes files should only be inside the sub-directory named by your plugin id in the ``plugins/`` folder

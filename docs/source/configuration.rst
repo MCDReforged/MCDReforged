@@ -8,7 +8,11 @@ At startup, MCDR will try to load the configuration file. If the configuration f
 
 The configuration file use `YAML <https://en.wikipedia.org/wiki/YAML>`__ format
 
-You can use command ``!!MCDR reload config`` or its short form ``!!MCDR r cfg`` to reload the config file when MCDR is running. Check the `here <command.html#hot-reloads>`__ for more detail about hot reloads
+You can use command ``!!MCDR reload config`` or its short form ``!!MCDR r cfg`` to reload the config file when MCDR is running
+
+.. seealso::
+
+    :ref:`command:Hot reloads` command, for more detail about hot reloads
 
 List of options
 ---------------
@@ -235,11 +239,11 @@ When set to true, MCDR will removed all console font formatter codes in before a
 custom_handlers
 ~~~~~~~~~~~~~~~
 
-A list of custom `server handler <customize/handler.html>`__ classes. The classed need to be subclasses of :class:`~mcdreforged.handler.impl.abstract_minecraft_handler.AbstractMinecraftHandler`
+A list of custom :doc:`/customize/handler` classes. The classed need to be subclasses of :class:`~mcdreforged.handler.abstract_server_handler.AbstractServerHandler`
 
-Then you can use the name of your handler in the `handler <#handler>`__ option above to use your handler
+Then you can use the name of your handler in the :ref:`configuration:handler` option above to use your handler
 
-The name of a handler is defined in the get_name method
+The name of a handler is defined in the :meth:`~mcdreforged.handler.abstract_server_handler.AbstractServerHandler.get_name` method
 
 
 * Option type: a list of string, or null
@@ -262,7 +266,7 @@ In this example the custom handler package path is ``my.custom.handler`` and the
 custom_info_reactors
 ~~~~~~~~~~~~~~~~~~~~
 
-A list of custom `info reactor <customize/reactor.html>`__ classes to handle the info instance. The classed need to be subclasses of ``AbstractInfoReactor``
+A list of custom :doc:`/customize/reactor` classes to handle the info instance. The classed need to be subclasses of :class:`~mcdreforged.info_reactor.abstract_info_reactor.AbstractInfoReactor`
 
 All custom info reactors will be registered to the reactor list to process information from the server
 

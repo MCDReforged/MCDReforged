@@ -177,16 +177,19 @@ msgid ""
 "Normal class: The class should have its fields type annotated. It's "
 "constructor should accept 0 input parameter. Example class::"
 msgstr ""
+"普通类：这个类应当类型注解完善其所有属性，并且其构造函数应当可接受 0 个入参。类例子："
 
 #: mcdreforged.utils.serializer.deserialize:32 of
 msgid ""
 "The input data needs to be a dict. Keys and values in the dict correspond"
 " to the field names and serialized field values. Example dict::"
-msgstr ""
+msgstr "输入数据应该是一个 dict。dict 中的键和值对应着属性的名称以及序列化的属性值。dict 例子："
 
 #: mcdreforged.utils.serializer.deserialize:36 of
 msgid "Fields are set via ``__setattr__``, non-public fields will be ignored."
 msgstr ""
+"将使用 ``__setattr__`` "
+"设置对象的属性，非公开属性将被忽略"
 
 #: mcdreforged.utils.serializer.deserialize:38 of
 msgid "The json-like object to be deserialized"
@@ -307,20 +310,4 @@ msgid ""
 msgstr ""
 "事实上它的实现是，以一个空的 dict 为参数调用 :meth:`Serializable.deserialize "
 "<mcdreforged.utils.serializer.Serializable.deserialize>`"
-
-#~ msgid ""
-#~ "Normal class: The class should have "
-#~ "its fields type annotated. It's "
-#~ "constructor should accept 0 input "
-#~ "parameter. The input data needs to "
-#~ "be a dict. Keys and values in "
-#~ "the dict correspond to the field "
-#~ "names and serialized field values. "
-#~ "Fields are set via ``__setattr__``, "
-#~ "non-public fields will be ignored. "
-#~ "Example class::"
-#~ msgstr ""
-#~ "普通类：这个类应当类型注解完善其所有属性，并且其构造函数应当可接受 0 个入参。输入数据应该是一个 "
-#~ "dict。dict 中的键和值对应着属性的名称以及序列化的属性值。使用 ``__setattr__`` "
-#~ "设置对象的属性，非公开属性将被忽略。类例子："
 

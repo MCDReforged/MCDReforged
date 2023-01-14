@@ -219,9 +219,3 @@ msgstr "一般来说，只有 MCDR 才被允许构造 :class:`MCDREvent`"
 msgid "A collection of all possible :class:`MCDREvent` objects used in MCDR"
 msgstr "MCDR 中使用的，所有可能的 :class:`MCDREvent` 对象的集合"
 
-#~ msgid "Get translated description str"
-#~ msgstr ""
-
-#~ msgid "Its comparator operators are implemented"
-#~ msgstr ""
-

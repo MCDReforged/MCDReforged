@@ -4,14 +4,17 @@ Plugin Event
 
 Plugin events are the most important way for plugins to interact with the server and the console
 
-When the server has trigger a specific event, it will list out all event listeners that have registered to this event, then MCDR will invoke the callback function of the listener with the given arguments
+When the server has trigger a specific event, it will list out all event listeners that have registered to this event,
+then MCDR will invoke the callback function of the listener with the given arguments
 
-Event Listeners have a priority value. The default priority is ``1000``. Plugins can specify the priority when they register an event listener manually. MCDR will execute event listeners in ascending order according to the priority
+Event Listeners have a priority value. The default priority is ``1000``.
+Plugins can specify the priority when they register an event listener manually.
+MCDR will execute event listeners in ascending order according to the priority
 
 Register a event listener
 -------------------------
 
-See the `Event listeners <basic.html#event-listeners>`__ section in Plugin Registry in the document of `MCDR Plugin <basic.html>`__
+See :ref:`plugin_dev/basic:Event listeners` section in :doc:`/plugin_dev/basic` document
 
 MCDR Event
 ----------
@@ -19,7 +22,10 @@ MCDR Event
 Default Event Listener
 ^^^^^^^^^^^^^^^^^^^^^^
 
-All of the MCDR events have an attribute called "Default function name". If your plugin declare a function in the global slope of the plugin file, with the same name to the "Default function name", the function will be automatically registered as a listener to the specific event.
+All of the MCDR events have an attribute called "Default function name".
+If your plugin declare a function in the global slope of the plugin file,
+with the same name to the "Default function name",
+the function will be automatically registered as a listener to the specific event.
 
 The priority of these event listeners are always the default priority (``1000``)
 
@@ -28,16 +34,17 @@ MCDR Event List
 
 To help understand, some MCDR events can be sorted into 3 lifecycle flows:
 
-* Plugin lifecycle: `Plugin loaded <#plugin-loaded>`__ -> `Plugin unloaded <#plugin-unloaded>`__
-* Server lifecycle: `Server start <#server-start>`__ -> `Server startup <#server-startup>`__ -> `Server stop <#server-stop>`__
-* MCDR lifecycle: `MCDR start <#mcdr-start>`__ -> `MCDR stop <#mcdr-stop>`__
+* Plugin lifecycle: :ref:`plugin_dev/event:Plugin Loaded` -> :ref:`plugin_dev/event:Plugin Unloaded`
+* Server lifecycle: :ref:`plugin_dev/event:Server Start` -> :ref:`plugin_dev/event:Server Startup` -> :ref:`plugin_dev/event:Server Stop`
+* MCDR lifecycle: :ref:`plugin_dev/event:MCDR Start` -> :ref:`plugin_dev/event:MCDR Stop`
 
 .. _event-plugin-load:
 
 Plugin Loaded
 ~~~~~~~~~~~~~
 
-Plugin load event gets triggered once when a plugin is loaded. Plugins are supposed to register some event listeners, commands and help messages as well as initialize their fields here
+Plugin load event gets triggered once when a plugin is loaded. Plugins are supposed to register some event listeners,
+commands and help messages as well as initialize their fields here
 
 .. code-block:: python
 
@@ -46,7 +53,10 @@ Plugin load event gets triggered once when a plugin is loaded. Plugins are suppo
         server.register_event_listener(...)
         server.register_help_message(...)
 
-If it's a plugin reload, ``prev_module`` argument indicates the previous plugin instance module, otherwise if it's the first time to load the plugin, prev_module is None. With this parameter plugin can easily inherit information from the previous plugin instance. Here's an example:
+If it's a plugin reload, ``prev_module`` argument indicates the previous plugin instance module,
+otherwise if it's the first time to load the plugin, prev_module is None.
+With this parameter plugin can easily inherit information from the previous plugin instance.
+Here's an example:
 
 .. code-block:: python
 
@@ -57,9 +67,11 @@ If it's a plugin reload, ``prev_module`` argument indicates the previous plugin 
         else:
             reload_counter = 0
 
-Since it's the first event in the lifecycle of a plugin, this event can only be registered with default event listener, so the ``on_load`` function is the entry spot of your plugin
+Since it's the first event in the lifecycle of a plugin, this event can only be registered with default event listener,
+so the ``on_load`` function is the entry spot of your plugin
 
-Note: You should not dispatch custom events in the ``on_load`` function or it will do nothing. The event listener storage of MCDR has not been initialized yet
+Note: You should not dispatch custom events in the ``on_load`` function or it will do nothing.
+The event listener storage of MCDR has not been initialized yet
 
 :Event id: ``mcdr.plugin_loaded``
 :Callback arguments: :class:`~mcdreforged.plugin.server_interface.PluginServerInterface`, :class:`Any` (previous module)
@@ -118,7 +130,8 @@ Here's an example
             server.reply(info, 'Roger that. Server restarting...')
             server.restart()
 
-If you want to have a not-simple command system, rather than parsing them manually in User Info event, I will suggest you to register a command tree for you plugin. See the `command registering <basic.html#command>`__ doc
+If you want to have a not-simple command system, rather than parsing them manually in User Info event,
+I will suggest you to register a command tree for you plugin. See the :ref:`command registering <plugin_dev/basic:command>` doc
 
 
 :Event id: ``mcdr.user_info``

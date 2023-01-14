@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-12 14:20+0800\n"
+"POT-Creation-Date: 2023-01-14 20:20+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.9.0\n"
+"Generated-By: Babel 2.9.1\n"
 
 #: ../preference.rst:3
 msgid "Preference"
@@ -29,29 +29,29 @@ msgstr "基于用户的 MCDR 偏好设置。仅对玩家及控制台有效"
 msgid "The preference data is stored in ``config/mcdreforged/preferences.json``"
 msgstr "偏好文件储存于 ``config/mcdreforged/preferences.json``"
 
-#: ../preference.rst:9
+#: ../preference.rst:11
 msgid ""
-"See the `preference command <command.html#preference-settings>`__ for the"
-" way to control it via command"
-msgstr "见 `偏好指令 <command.html#preference-settings>`__ 以获得使用指令来操控偏好的方法"
+":ref:`command:Preference settings`, for the way to control preferences "
+"via command"
+msgstr ":ref:`command:Preference settings`，以获得使用指令来操控偏好的方法"
 
-#: ../preference.rst:12
+#: ../preference.rst:16
 msgid "language"
 msgstr "language"
 
-#: ../preference.rst:14
+#: ../preference.rst:18
 msgid ""
 "The preferred language for MCDR to send translation texts to the player "
 "or to the console"
 msgstr "MCDR 向玩家或控制台发送翻译文本的首选语言"
 
-#: ../preference.rst:16
+#: ../preference.rst:20
 msgid ""
-"Default value: The same as the `language <configuration.html#language>`__ "
-"value in MCDR configuration"
-msgstr "默认值：同 MCDR 配置中的 `language <configuration.html#language>`__ 选项"
+"Default value: The same as the :ref:`configuration:language` value in "
+"MCDR configuration"
+msgstr "默认值：同 MCDR 配置中的 :ref:`configuration:language` 选项"
 
-#: ../preference.rst:17
+#: ../preference.rst:21
 msgid "Available options: ``en_us``, ``zh_cn``"
 msgstr "可用选项: ``en_us``，``zh_cn``"
 

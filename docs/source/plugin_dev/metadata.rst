@@ -5,7 +5,7 @@ Metadata
 Declaration
 -----------
 
-As a single ``.py`` file only plugin, the metadata of `solo plugin <plugin_format.html#solo-plugin>`__ is declared in the global scope of the source file. It's a dict contains several key-value with the name ``PLUGIN_METADATA``
+As a single ``.py`` file only plugin, the metadata of :ref:`plugin_dev/plugin_format:Solo Plugin` is declared in the global scope of the source file. It's a dict contains several key-value with the name ``PLUGIN_METADATA``
 
 Here's a metadata field with all possible key-values
 
@@ -252,15 +252,15 @@ This field is optional, you can just ignore it if your plugin doesn't have any d
 entrypoint
 ^^^^^^^^^^
 
-**Not available in solo plugin**
-
-The entrypoint module of your plugin
+The :ref:`plugin_dev/basic:entrypoint` module of your plugin
 
 By default the value is the id of your plugin, which means ``my_plugin/__init__.py`` will be the entry point. If the value is ``my_plugin.my_entry`` then ``my_plugin/my_entry.py`` will be the entry point
 
 MCDR will perform the same execution as a solo plugin to the entrypoint, like default event listener registering
 
-See `here <basic.html#entrypoint>`__ for entrypoint document
+.. attention::
+
+    Not available in solo plugin
 
 * Field key: ``entrypoint``
 * Value type: str
@@ -269,11 +269,15 @@ See `here <basic.html#entrypoint>`__ for entrypoint document
 archive_name
 ^^^^^^^^^^^^
 
-**Not available in solo plugin**
-
 The file name of generated ``.mcdr`` packed plugin in CLI
 
-See `here <cli.html#name>`__ for more information
+.. attention::
+
+    Not available in solo plugin
+
+.. seealso::
+
+    :ref:`plugin_dev/cli:name` option in :ref:`plugin_dev/cli:pack` command in :doc:`/plugin_dev/cli`
 
 * Field key: ``archive_name``
 * Value type: str
@@ -282,11 +286,15 @@ See `here <cli.html#name>`__ for more information
 resources
 ^^^^^^^^^
 
-**Not available in solo plugin**
-
 A list of file or folder names that will be packed into the generated ``.mcdr`` packed plugin file in CLI
 
-See `here <cli.html#pack>`__ for more information
+.. attention::
+
+    Not available in solo plugin
+
+.. seealso::
+
+    :ref:`plugin_dev/cli:pack` command in :doc:`/plugin_dev/cli`
 
 * Field key: ``resources``
 * Value type: List[str]

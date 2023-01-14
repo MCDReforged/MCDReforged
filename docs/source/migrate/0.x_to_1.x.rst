@@ -45,7 +45,9 @@ It's necessary for a plugin to declare it so MCDR can handle all the plugins cor
 
 A legacy plugin is still able to be loaded if it doesn't have the metadata field, but a warning will be shown in the console
 
-Check `here <plugin_dev/basic.html#metadata>`__ for more information about plugin metadata
+.. seealso::
+
+    :doc:`/plugin_dev/metadata` document
 
 Listener
 ^^^^^^^^
@@ -108,7 +110,8 @@ In current MCDR, all event listeners callbacks are invoked in a single thread na
 If your plugin depends on multithreading from MCDR to do some parallel operations, or your plugin need to do some I/O or network operations which might take some times,
 you'd better create a new thread to execute them manually, so MCDR won't be blocked by these
 
-MCDR also provides a simple function decorator :func:`@new_thread <mcdreforged.api.decorator.new_thread.new_thread>` for lazy man, to make a function multi threaded when being invoked. Here's an quick example:
+MCDR also provides a simple function decorator :func:`@new_thread <mcdreforged.api.decorator.new_thread.new_thread>` for lazy man,
+to make a function multi threaded when being invoked. Here's an quick example:
 
 .. code-block:: python
 
@@ -157,9 +160,12 @@ console_command_prefix
 
 The option ``console_command_prefix`` is removed, which was used to prevent input starts with ``!!`` to be sent to the standard input stream of the server by default
 
-In current version, MCDR will not prevent that kind of console input to be sent to the server unless it matches an registered command tree root node.
-See how the current command system works `here <plugin_dev/command.html#workflow>`__
+In current version, MCDR will not prevent that kind of console input to be sent to the server unless it matches an registered command tree root node
 
 As a result, if you plugin use manually parsing method to parse command to parse a user command in ``on_user_info`` etc.,
 you need to invoke :meth:`~mcdreforged.info_reactor.info.Info.cancel_send_to_server` in your command processing,
 otherwise if the command you enter on console might be sent to the server standard input stream
+
+.. seealso::
+
+    :doc:`/plugin_dev/command` document

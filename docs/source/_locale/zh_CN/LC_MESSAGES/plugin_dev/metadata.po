@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-29 17:37+0800\n"
+"POT-Creation-Date: 2023-01-14 20:28+0800\n"
 "PO-Revision-Date: 2021-01-23 10:38+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -24,12 +24,12 @@ msgstr "声明元数据"
 
 #: ../plugin_dev/metadata.rst:8
 msgid ""
-"As a single ``.py`` file only plugin, the metadata of `solo plugin "
-"<plugin_format.html#solo-plugin>`__ is declared in the global scope of "
-"the source file. It's a dict contains several key-value with the name "
-"``PLUGIN_METADATA``"
+"As a single ``.py`` file only plugin, the metadata of "
+":ref:`plugin_dev/plugin_format:Solo Plugin` is declared in the global "
+"scope of the source file. It's a dict contains several key-value with the"
+" name ``PLUGIN_METADATA``"
 msgstr ""
-"作为一个仅有单一 ``.py`` 文件组成的插件，`单文件插件 <plugin_format.html#solo-plugin>`__ "
+"作为一个仅有单一 ``.py`` 文件组成的插件，:ref:`plugin_dev/plugin_format:Solo Plugin` "
 "的元数据声明于其源文件的全局作用域中。它是一个包含着多个键值对的，名为 ``PLUGIN_METADATA`` 的 dict 对象"
 
 #: ../plugin_dev/metadata.rst:10
@@ -137,7 +137,7 @@ msgstr "字段键名：``id``"
 
 #: ../plugin_dev/metadata.rst:85 ../plugin_dev/metadata.rst:106
 #: ../plugin_dev/metadata.rst:118 ../plugin_dev/metadata.rst:163
-#: ../plugin_dev/metadata.rst:266 ../plugin_dev/metadata.rst:279
+#: ../plugin_dev/metadata.rst:266 ../plugin_dev/metadata.rst:283
 msgid "Value type: str"
 msgstr "字段类型：str"
 
@@ -256,7 +256,7 @@ msgstr "字段类型：Union[str, Dict[str, str]]"
 
 #: ../plugin_dev/metadata.rst:140 ../plugin_dev/metadata.rst:152
 #: ../plugin_dev/metadata.rst:164 ../plugin_dev/metadata.rst:250
-#: ../plugin_dev/metadata.rst:280 ../plugin_dev/metadata.rst:293
+#: ../plugin_dev/metadata.rst:284 ../plugin_dev/metadata.rst:301
 msgid "Fallback value: None"
 msgstr "备用值：None"
 
@@ -539,16 +539,11 @@ msgstr "字段类型：Dict[str, str]"
 msgid "entrypoint"
 msgstr "entrypoint"
 
-#: ../plugin_dev/metadata.rst:255 ../plugin_dev/metadata.rst:272
-#: ../plugin_dev/metadata.rst:285
-msgid "**Not available in solo plugin**"
-msgstr "**在单文件插件中不可用**"
+#: ../plugin_dev/metadata.rst:255
+msgid "The :ref:`plugin_dev/basic:entrypoint` module of your plugin"
+msgstr "你的插件的 :ref:`plugin_dev/basic:entrypoint` 模块"
 
 #: ../plugin_dev/metadata.rst:257
-msgid "The entrypoint module of your plugin"
-msgstr "你的插件的入口点模块"
-
-#: ../plugin_dev/metadata.rst:259
 msgid ""
 "By default the value is the id of your plugin, which means "
 "``my_plugin/__init__.py`` will be the entry point. If the value is "
@@ -558,15 +553,16 @@ msgstr ""
 "在默认情况下，其值为你的插件的 id。这意味着 ``my_plugin/__init__.py`` 将会成为入口点。如果其值为 "
 "``my_plugin.my_entry``，那么 ``my_plugin/my_entry.py`` 将成为入口点"
 
-#: ../plugin_dev/metadata.rst:261
+#: ../plugin_dev/metadata.rst:259
 msgid ""
 "MCDR will perform the same execution as a solo plugin to the entrypoint, "
 "like default event listener registering"
 msgstr "MCDR 会对入口点模块进行与单文件插件相同的操作，如默认事件监听器注册"
 
-#: ../plugin_dev/metadata.rst:263
-msgid "See `here <basic.html#entrypoint>`__ for entrypoint document"
-msgstr "在 `此处 <basic.html#entrypoint>`__ 查阅入口点的文档"
+#: ../plugin_dev/metadata.rst:263 ../plugin_dev/metadata.rst:276
+#: ../plugin_dev/metadata.rst:293
+msgid "Not available in solo plugin"
+msgstr "在单文件插件中不可用"
 
 #: ../plugin_dev/metadata.rst:265
 msgid "Field key: ``entrypoint``"
@@ -576,37 +572,39 @@ msgstr "字段键名：``entrypoint``"
 msgid "archive_name"
 msgstr "archive_name"
 
-#: ../plugin_dev/metadata.rst:274
+#: ../plugin_dev/metadata.rst:272
 msgid "The file name of generated ``.mcdr`` packed plugin in CLI"
 msgstr "在 CLI 中生成的 ``.mcdr`` 打包插件的文件名"
 
-#: ../plugin_dev/metadata.rst:276
-msgid "See `here <cli.html#name>`__ for more information"
-msgstr "见 `此处 <cli.html#name>`__ 以获取更多有关 CLI 的信息"
+#: ../plugin_dev/metadata.rst:280
+msgid ""
+":ref:`plugin_dev/cli:name` option in :ref:`plugin_dev/cli:pack` command "
+"in :doc:`/plugin_dev/cli`"
+msgstr ":doc:`/plugin_dev/cli` 中 :ref:`plugin_dev/cli:pack` 指令的 :ref:`plugin_dev/cli:name` 选项"
 
-#: ../plugin_dev/metadata.rst:278
+#: ../plugin_dev/metadata.rst:282
 msgid "Field key: ``archive_name``"
 msgstr "字段键名：``archive_name``"
 
-#: ../plugin_dev/metadata.rst:283
+#: ../plugin_dev/metadata.rst:287
 msgid "resources"
 msgstr "resources"
 
-#: ../plugin_dev/metadata.rst:287
+#: ../plugin_dev/metadata.rst:289
 msgid ""
 "A list of file or folder names that will be packed into the generated "
 "``.mcdr`` packed plugin file in CLI"
 msgstr "一个文件或文件夹名称的列表，将用于在 CLI 中打包入 ``.mcdr`` 打包插件"
 
-#: ../plugin_dev/metadata.rst:289
-msgid "See `here <cli.html#pack>`__ for more information"
-msgstr "见 `此处 <cli.html#pack>`__ 以获取更多有关 CLI 的信息"
+#: ../plugin_dev/metadata.rst:297
+msgid ":ref:`plugin_dev/cli:pack` command in :doc:`/plugin_dev/cli`"
+msgstr ":doc:`/plugin_dev/cli` 中的 :ref:`plugin_dev/cli:pack`"
 
-#: ../plugin_dev/metadata.rst:291
+#: ../plugin_dev/metadata.rst:299
 msgid "Field key: ``resources``"
 msgstr "字段键名：``resources``"
 
-#: ../plugin_dev/metadata.rst:292
+#: ../plugin_dev/metadata.rst:300
 msgid "Value type: List[str]"
 msgstr "字段类型：List[str]"
 

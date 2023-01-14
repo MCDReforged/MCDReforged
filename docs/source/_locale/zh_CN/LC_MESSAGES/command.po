@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-25 21:11+0800\n"
+"POT-Creation-Date: 2023-01-14 20:44+0800\n"
 "PO-Revision-Date: 2021-01-23 08:54+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -31,11 +31,11 @@ msgstr ""
 #: ../command.rst:7
 msgid ""
 "Commands can be registered by MCDR itself and by plugins. This page only "
-"introduces about commands from MCDR. For plugin registered command, check"
-" `here <plugin_dev/command.html>`__"
+"introduces about commands from MCDR. For the way to register command for "
+"MCDR plugin, check :doc:`here </plugin_dev/command>`"
 msgstr ""
-"指令可以由 MCDR 本身和插件注册。本页面只介绍来自 MCDR 的指令。对于插件注册指令，请在 `此处 "
-"<plugin_dev/command.html>`__ 查看"
+"指令可以由 MCDR 本身和插件注册。本页面只介绍来自 MCDR 的指令。关于为 MCDR 插件注册指令的方法，请在 :doc:`此处 "
+"</plugin_dev/command>` 查看"
 
 #: ../command.rst:10
 msgid "!!MCDR command"
@@ -328,9 +328,9 @@ msgstr "``!!MCDR permission q Steve``：查询玩家 Steve 的权限级别。其
 
 #: ../command.rst:113
 msgid ""
-"Check the page `Permission <permission.html>`__ for more information "
-"about MCDR permission system"
-msgstr "查看 `权限 <permission.html>`__ 页面以获取更多关于 MCDR 权限系统的信息"
+"Check the :doc:`/permission` document for more information about MCDR "
+"permission system"
+msgstr "查看 :doc:`/permission` 文档以获取更多关于 MCDR 权限系统的信息"
 
 #: ../command.rst:116
 msgid "Plugin management"
@@ -464,8 +464,7 @@ msgid ""
 "``another_plugin``"
 msgstr ""
 "假设现在有一个 Id 为 ``my_plugin`` 的插件已被加载，一个路径为 "
-"``plugins/another_plugin.py.disabled`` 的插件被 ID 为 ``another_plugin`` "
-"的插件禁用"
+"``plugins/another_plugin.py.disabled`` 的插件被 ID 为 ``another_plugin`` 的插件禁用"
 
 #: ../command.rst:162
 msgid "Then you can do the following commands"
@@ -570,8 +569,8 @@ msgid "Reset preference <pref_name> to the default value"
 msgstr "将偏好 <pref_name> 重置为默认值"
 
 #: ../command.rst:211
-msgid "See `here <preference.html>`__ for more information about MCDR preference"
-msgstr "查看 `偏好 <preference.html>`__ 页面以获取更多关于 MCDR 偏好的信息"
+msgid "See :doc:`here </preference>` for more information about MCDR preference"
+msgstr "查看 :doc:`/preference` 文档以获取更多关于 MCDR 偏好的信息"
 
 #: ../command.rst:215
 msgid ""

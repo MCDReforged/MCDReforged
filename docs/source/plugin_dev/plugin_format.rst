@@ -24,7 +24,8 @@ Solo Plugin consists of a single python ``.py`` source file. It's the plugin for
 Being restricted with the one-file-only file format, some features are missing in solo plugin:
 
 1. Python requirement check is not supported
-2. Directly import from other plugin is not supported. Other plugin can only use :meth:`~mcdreforged.plugin.server_interface.ServerInterface.get_plugin_instance` to access your plugin
+2. Directly import from other plugin is not supported. Other plugin can only use
+   :meth:`~mcdreforged.plugin.server_interface.ServerInterface.get_plugin_instance` to access your plugin
 3. Cannot be added to MCDR plugin catalogue
 
 When you only want to create a simple plugin as fast as possible, creating a solo plugin is always a good choice
@@ -32,9 +33,10 @@ When you only want to create a simple plugin as fast as possible, creating a sol
 Multi file Plugin
 -----------------
 
-Multi file plugin is the collective name for the following two plugin format, `packed plugin <#packed-plugin>`__ and `directory plugin <#directory-plugin>`__
+Multi file plugin is the collective name for the following two plugin format, :ref:`plugin_dev/plugin_format:Packed Plugin` and :ref:`plugin_dev/plugin_format:Directory Plugin`
 
-The biggest difference between multi file plugin and solo plugin is that, it can consist of multiple files, rather than being limited into 1 single ``.py`` file. Therefore, more features are supported in a multi file plugin which make it easier to create a general plugin
+The biggest difference between multi file plugin and solo plugin is that, it can consist of multiple files,
+rather than being limited into 1 single ``.py`` file. Therefore, more features are supported in a multi file plugin which make it easier to create a general plugin
 
 Packed Plugin
 -------------
@@ -60,7 +62,9 @@ Optionally, a packed plugin can have some other useful files that will be recogn
 * ``requirements.txt``, indicating the python package requirement of your plugin. It'll be checked before plugin loading
 * ``lang/``, a folder storing translation files in json (``.json``) or yaml (``.yml``) format. MCDR will automatically load and register translation files in this folder
 
-You can include any other files or folders inside your packed plugin. You can access them via :meth:`~mcdreforged.plugin.server_interface.PluginServerInterface.open_bundled_file` method in :class:`~mcdreforged.plugin.server_interface.ServerInterface`
+You can include any other files or folders inside your packed plugin.
+You can access them via :meth:`~mcdreforged.plugin.server_interface.PluginServerInterface.open_bundled_file` method
+in :class:`~mcdreforged.plugin.server_interface.ServerInterface`
 
 Here's an example file tree of a valid packed plugin with more possible files:
 
@@ -79,15 +83,17 @@ Here's an example file tree of a valid packed plugin with more possible files:
         mcdreforged.plugin.json
         requirements.txt
 
-In addition to ``.mcdr`` file extension, the python `zip app <https://docs.python.org/3/library/zipapp.html>`__ file extension ``.pyz`` is also valid for a packed plugin.
+In addition to ``.mcdr`` file extension, the python :external:doc:`zip app <library/zipapp>` file extension ``.pyz`` is also valid for a packed plugin.
 
-Although it's not as obvious to be a MCDR plugin as ``.mcdr``, but for those plugins who provide the functionality to run in command line outside MCDR environment, using `.pyz` extension can explicitly show that they support command line operation
+Although it's not as obvious to be a MCDR plugin as ``.mcdr``, but for those plugins who provide the functionality to run in command line outside MCDR environment,
+using `.pyz` extension can explicitly show that they support command line operation
 
 
 Directory Plugin
 ----------------
 
-Directory plugin has exactly the same file structure as `packed plugin <#packed-plugin>`__. The only difference is that all files of a directory plugins are inside a directory instead of a ``.mcdr`` zip file
+Directory plugin has exactly the same file structure as :ref:`plugin_dev/plugin_format:Packed Plugin`.
+The only difference is that all files of a directory plugins are inside a directory instead of a ``.mcdr`` zip file
 
 Directory plugin is mostly used for debug purpose inside the plugin directory of MCDR
 
@@ -102,4 +108,4 @@ Here's an example file tree of a directory plugin:
         mcdreforged.plugin.json
         requirements.txt
 
-Directory plugin will always be treated as "modified" during ``!!MCDR reload plugin`` `hot reload <../command.html#hot-reloads>`__ command
+Directory plugin will always be treated as "modified" during ``!!MCDR reload plugin`` :ref:`command:Hot reloads` command

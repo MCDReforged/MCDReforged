@@ -3,14 +3,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-12 14:20+0800\n"
+"POT-Creation-Date: 2023-01-14 21:00+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.9.0\n"
+"Generated-By: Babel 2.9.1\n"
 
 #: ../plugin_dev/cli.rst:3
 msgid "Command Line Interface"
@@ -112,10 +112,11 @@ msgstr "pack"
 #: ../plugin_dev/cli.rst:72
 msgid ""
 "Pack up your plugin source codes / resources files, from a batch of "
-"files, to a ``.mcdr`` packed plugin file"
+"files, to a ``.mcdr`` :ref:`packed plugin file "
+"<plugin_dev/plugin_format:Packed Plugin>`"
 msgstr ""
-"将你插件的源文件 / 资源文件打包起来，从一组零散的文件，到一个 ``.mcdr`` 格式的 `打包插件 <plugin_format.html"
-"#packed-plugin>`__ 文件"
+"将你插件的源文件 / 资源文件打包起来，从一组零散的文件，到一个 ``.mcdr`` 格式的 "
+":ref:`打包插件 <plugin_dev/plugin_format:Packed Plugin>` 文件"
 
 #: ../plugin_dev/cli.rst:74
 msgid ""
@@ -138,9 +139,9 @@ msgstr "文件 ``requirements.txt``，如果它存在"
 
 #: ../plugin_dev/cli.rst:79
 msgid ""
-"Files or folders listed in the `resources <metadata.html#resources>`__ "
-"field in metadata"
-msgstr "于元数据的 `resources <metadata.html#resources>`__ 属性中列出的文件或文件夹"
+"Files or folders listed in the :ref:`plugin_dev/metadata:resources` field"
+" in metadata"
+msgstr "于元数据的 :ref:`plugin_dev/metadata:resources` 属性中列出的文件或文件夹"
 
 #: ../plugin_dev/cli.rst:82
 msgid ""
@@ -198,9 +199,9 @@ msgstr "输出的打包插件文件的特定名称"
 
 #: ../plugin_dev/cli.rst:122
 msgid ""
-"If not given it will use the `archive_name <metadata.html#archive-"
-"name>`__ field in plugin metadata"
-msgstr "如果该项的值未被给出，将会使用插件元数据中的 `archive_name <metadata.html#archive-name>`__ 属性的值"
+"If not given it will use the :ref:`plugin_dev/metadata:archive_name` "
+"field in plugin metadata"
+msgstr "如果该项的值未被给出，将会使用插件元数据中的 :ref:`plugin_dev/metadata:archive_name` 属性的值"
 
 #: ../plugin_dev/cli.rst:124
 msgid "If it's still not specific, A default name format will be used"
@@ -244,11 +245,11 @@ msgstr "``{id}_{version}`` -> ``my_plugin_1.2.3``"
 #: ../plugin_dev/cli.rst:137
 msgid ""
 "If file extension is included in the name and the file extension is a "
-"valid `packed plugin <plugin_format.html#packed-plugin>`__ extension "
-"(``.mcdr`` or ``.pyz``), then the included file extension will be used. "
-"Otherwise the default ``.mcdr`` file extension will be appended to the "
-"end"
+"valid :ref:`plugin_dev/plugin_format:Packed Plugin` extension (``.mcdr`` "
+"or ``.pyz``), then the included file extension will be used. Otherwise "
+"the default ``.mcdr`` file extension will be appended to the end"
 msgstr ""
-"如果该项的值中包含文件扩展名，且该文件扩展名为一个可用的 `打包插件 <plugin_format.html#packed-plugin>`__ "
-"扩展名（``.mcdr`` 或 ``.pyz``），则其中包括的文件扩展名将会被使用。否则，默认扩展名 ``.mcdr`` 将会被追加至末尾"
+"如果该项的值中包含文件扩展名，且该文件扩展名为一个可用的 :ref:`plugin_dev/plugin_format:Packed "
+"Plugin` 扩展名（``.mcdr`` 或 ``.pyz``），则其中包括的文件扩展名将会被使用。否则，默认扩展名 ``.mcdr`` "
+"将会被追加至末尾"
 

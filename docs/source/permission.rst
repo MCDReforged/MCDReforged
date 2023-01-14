@@ -62,4 +62,8 @@ Player name list of permission levels can be filled like this:
     guest:
     - Noob
 
-Permission file supports hot-reload. You can use ``!!MCDR reload permission`` to reload the permission file in-game. Check the `here <command.html#hot-reloads>`__ for more detail about hot reloads
+Permission file supports hot-reload. You can use ``!!MCDR reload permission`` to reload the permission file in-game
+
+.. seealso::
+
+    :ref:`command:Hot reloads` command, for more detail about hot reloads

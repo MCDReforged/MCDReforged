@@ -3,14 +3,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-17 13:03+0800\n"
+"POT-Creation-Date: 2023-01-14 20:39+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.9.0\n"
+"Generated-By: Babel 2.9.1\n"
 
 #: ../plugin_dev/plugin_catalogue.rst:2
 msgid "Plugin Catalogue"
@@ -27,9 +27,9 @@ msgstr ""
 
 #: ../plugin_dev/plugin_catalogue.rst:6
 msgid ""
-"The catalogue is updated once files change, and every 30 minutes via "
-"github action"
-msgstr "该仓库在文件变更时会更新。除此之外，每 30 分钟，该仓库也会通过 github action 更新"
+"The catalogue is updated once files change, and every 1 hour via github "
+"action"
+msgstr "该仓库在文件变更时会更新。除此之外，每 1 小时，该仓库也会通过 github action 更新"
 
 #: ../plugin_dev/plugin_catalogue.rst:9
 msgid "File structures"
@@ -110,8 +110,8 @@ msgstr "related_path"
 
 #: ../plugin_dev/plugin_catalogue.rst:77
 msgid ""
-"Optional field, default: ``\".\"``, which means your plugin files are in the "
-"root directory of your repository"
+"Optional field, default: ``\".\"``, which means your plugin files are in "
+"the root directory of your repository"
 msgstr "可选的属性，默认值：``\".\"``，也即意味着插件的文件位于仓库的根目录"
 
 #: ../plugin_dev/plugin_catalogue.rst:79
@@ -138,8 +138,10 @@ msgid "labels"
 msgstr "labels"
 
 #: ../plugin_dev/plugin_catalogue.rst:107
-msgid "A list of id of `label <#Label>`__ of your plugin. Choose them wisely"
-msgstr "你插件的 `标签 <#Label>`__ 列表，储存的值为标签的 id。好好挑选它们"
+msgid ""
+"A list of id of :ref:`plugin_dev/plugin_catalogue:Label` of your plugin. "
+"Choose them wisely"
+msgstr "你插件的 :ref:`plugin_dev/plugin_catalogue:Label` 列表，储存的值为标签的 id。好好挑选它们"
 
 #: ../plugin_dev/plugin_catalogue.rst:109
 msgid "Type: List[str]"
@@ -165,9 +167,9 @@ msgstr ""
 
 #: ../plugin_dev/plugin_catalogue.rst:118
 msgid ""
-"For the ``introduction`` field, it's a mapping maps `language "
-"<#language>`__ into a file path"
-msgstr "对于 ``introduction`` 属性，它是一个将 `语言 <#language>`__ 映射至文件路径的映射"
+"For the :ref:`plugin_dev/plugin_catalogue:introduction` field, it's a "
+"mapping maps :ref:`plugin_dev/plugin_catalogue:language` into a file path"
+msgstr "对于 :ref:`plugin_dev/plugin_catalogue:introduction` 属性，它是一个将 :ref:`plugin_dev/plugin_catalogue:language` 映射至文件路径的映射"
 
 #: ../plugin_dev/plugin_catalogue.rst:120
 msgid "The key is the language"
@@ -176,17 +178,17 @@ msgstr "其中，键为语言的 id"
 #: ../plugin_dev/plugin_catalogue.rst:122
 msgid ""
 "The value is the file path of the introduction file in your plugin "
-"repository. Field `related_path <#related-path>`__ is considered during "
-"the calculation of the real url"
+"repository. Field :ref:`plugin_dev/plugin_catalogue:related_path` is "
+"considered during the calculation of the real url"
 msgstr ""
-"值代表了插件介绍文件在你的插件的仓库中的文件路径。属性 `related_path <#related-path>`__ 在计算真实 url "
+"值代表了插件介绍文件在你的插件的仓库中的文件路径。属性 :ref:`plugin_dev/plugin_catalogue:related_path` 在计算真实 url "
 "时是会加入考虑的"
 
 #: ../plugin_dev/plugin_catalogue.rst:124
 msgid ""
-"Example with the same file structure in `related_path section <#related-"
-"path>`__:"
-msgstr "使用与 `related_path 小节 <#related-path>`__ 中相同的文件结构的一个例子："
+"Example with the same file structure in "
+":ref:`plugin_dev/plugin_catalogue:related_path`:"
+msgstr "使用与 :ref:`plugin_dev/plugin_catalogue:related_path` 中相同的文件结构的一个例子："
 
 #: ../plugin_dev/plugin_catalogue.rst:133
 msgid ""
@@ -371,9 +373,9 @@ msgstr "附件：包含一个以 ``.mcdr`` 或 ``.pyz`` 为扩展名的文件附
 
 #: ../plugin_dev/plugin_catalogue.rst:207
 msgid ""
-"Which also means only `Packed Plugin <plugin_format.html#packed-"
-"plugin>`__ is supported"
-msgstr "这也意味着仅有 `打包插件 <plugin_format.html#packed-plugin>`__ 这一种格式是被支持的"
+"Which also means only :ref:`plugin_dev/plugin_format:Packed Plugin` is "
+"supported"
+msgstr "这也意味着仅有 :ref:`plugin_dev/plugin_format:Packed Plugin` 这一种格式是被支持的"
 
 #: ../plugin_dev/plugin_catalogue.rst:210
 msgid "Submit Plugin"
@@ -388,10 +390,12 @@ msgstr "如果你想要提交你的插件，在 ``plugins/`` 文件夹中创建�
 
 #: ../plugin_dev/plugin_catalogue.rst:214
 msgid ""
-"It's recommended to leave your github link in the `authors <#authors>`__ "
-"field so repository maintainers can simply tell if you are the owner of "
-"the plugin"
-msgstr "推荐将你的 github 链接置于 `authors <#authors>`__ 属性中，这样仓库的维护者可以很容易的判断你是否是该插件的所有者"
+"It's recommended to leave your github link in the "
+":ref:`plugin_dev/plugin_catalogue:authors` field so repository "
+"maintainers can simply tell if you are the owner of the plugin"
+msgstr ""
+"推荐将你的 github 链接置于 :ref:`plugin_dev/plugin_catalogue:authors` "
+"属性中，这样仓库的维护者可以很容易的判断你是否是该插件的所有者"
 
 #: ../plugin_dev/plugin_catalogue.rst:216
 msgid ""

@@ -69,14 +69,14 @@ pack
 
     python -m mcdreforged pack [-h] [-i INPUT] [-o OUTPUT] [-n NAME]
 
-Pack up your plugin source codes / resources files, from a batch of files, to a ``.mcdr`` packed plugin file
+Pack up your plugin source codes / resources files, from a batch of files, to a ``.mcdr`` :ref:`packed plugin file <plugin_dev/plugin_format:Packed Plugin>`
 
 The packing is based on the ``mcdreforged.plugin.json`` metadata file in the input directory. It will pack and only pack the following files/folders into the packed plugin:
 
 * Folder named by the plugin id
 * File ``mcdreforged.plugin.json``
 * File ``requirements.txt``, if it exists
-* Files or folders listed in the `resources <metadata.html#resources>`__ field in metadata
+* Files or folders listed in the :ref:`plugin_dev/metadata:resources` field in metadata
 
 
 During plugin packing, all directory with name ``__pycache__`` will be ignored
@@ -119,7 +119,7 @@ name
 
     A specific name for the output packed plugin file
 
-    If not given it will use the `archive_name <metadata.html#archive-name>`__ field in plugin metadata
+    If not given it will use the :ref:`plugin_dev/metadata:archive_name` field in plugin metadata
 
     If it's still not specific, A default name format will be used
 
@@ -134,5 +134,6 @@ name
     * ``MyCustomPlugin-v{version}`` -> ``MyCustomPlugin-v1.2.3``
     * ``{id}_{version}`` -> ``my_plugin_1.2.3``
 
-    If file extension is included in the name and the file extension is a valid `packed plugin <plugin_format.html#packed-plugin>`__ extension (``.mcdr`` or ``.pyz``), then the included file extension will be used. Otherwise the default ``.mcdr`` file extension will be appended to the end
+    If file extension is included in the name and the file extension is a valid :ref:`plugin_dev/plugin_format:Packed Plugin` extension (``.mcdr`` or ``.pyz``),
+    then the included file extension will be used. Otherwise the default ``.mcdr`` file extension will be appended to the end
 
