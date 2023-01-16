@@ -3,9 +3,10 @@ import os
 import sys
 import time
 import traceback
+from pathlib import Path
 from subprocess import Popen, PIPE, STDOUT
 from threading import Lock
-from typing import Optional, Callable, Any
+from typing import Optional, Callable, Any, List
 
 import pkg_resources
 import psutil
@@ -139,16 +140,35 @@ class MCDReforgedServer:
 
 	def __check_environment(self):
 		"""
-		Some checks at initialization
+		Environment check at initialization. Warn and sleep if any of following conditions is met
+
+		* mcdreforged package not found
+		* current __file__ is not inside the mcdreforged package
+
 		In dev environment, you can use setup.py to create `mcdreforged.egg-info/` so the package check can pass
 		"""
+		from_source_reason = None
 		mcdr_pkg = core_constant.PACKAGE_NAME  # should be "mcdreforged"
 		try:
-			pkg_resources.require(mcdr_pkg)
+			distributions: List[pkg_resources.Distribution] = pkg_resources.require(mcdr_pkg)
 		except pkg_resources.ResolutionError:
-			self.logger.warning('It looks like you\'re launching MCDR from source, since {} is not found in python packages'.format(mcdr_pkg))
-			self.logger.warning('In this way, the plugin system might not work correctly')
-			self.logger.warning('In a production environment, you should install {} from PyPI, see document ({}) for more information'.format(mcdr_pkg, core_constant.DOCUMENTATION_URL))
+			from_source_reason = '{} distribution is not found in python packages'.format(mcdr_pkg)
+		else:
+			for distribution in distributions:
+				if distribution.project_name == mcdr_pkg:
+					current_path = Path(__file__).absolute()
+					distribution_path = Path(distribution.location).absolute()
+
+					# distribution_path/mcdreforged/mcdr_server.py
+					if current_path.parent.parent != distribution_path:
+						from_source_reason = 'current source path ({}) is not in {} distribution path ({})'.format(current_path, mcdr_pkg, distribution_path)
+					break
+
+		if from_source_reason is not None:
+			self.logger.warning('Looks like you\'re launching MCDR from source, since {}'.format(from_source_reason))
+			self.logger.warning('In this way, the plugin system might not work correctly, and the maintainability of MCDR will be very poor')
+			self.logger.warning('In a production environment, you should install {} from PyPI, NOT from source codes'.format(mcdr_pkg))
+			self.logger.warning('See document ({}) for more information'.format(core_constant.DOCUMENTATION_URL))
 			self.logger.warning('MCDR will launch after 20 seconds...')
 			time.sleep(20)
 
