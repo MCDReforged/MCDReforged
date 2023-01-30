@@ -160,7 +160,7 @@ class MCDReforgedServer:
 					distribution_path = Path(distribution.location).absolute()
 
 					# distribution_path/mcdreforged/mcdr_server.py
-					if current_path.parent.parent != distribution_path:
+					if not current_path.parent.parent.samefile(distribution_path):
 						from_source_reason = 'current source path ({}) is not in {} distribution path ({})'.format(current_path, mcdr_pkg, distribution_path)
 					break
 
