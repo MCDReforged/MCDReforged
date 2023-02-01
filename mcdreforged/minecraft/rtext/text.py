@@ -4,7 +4,7 @@ from typing import Iterable, List, Union, Optional, Any, Tuple, Set, NamedTuple,
 
 from colorama import Style
 
-from mcdreforged.minecraft.rtext.style import RStyle, RColor, RAction, RColorConvertor
+from mcdreforged.minecraft.rtext.style import RStyle, RColor, RAction, RColorClassic, RColorRGB, RItemLegacy
 
 Self = TypeVar('Self', bound='RTextBase')
 
@@ -36,6 +36,11 @@ class RTextBase(ABC):
 		raise NotImplementedError()
 
 	def to_colored_text(self) -> str:
+		"""
+		Return a colored text stained with ANSI escape code for console display
+
+		Click event and hover event will be ignored
+		"""
 		raise NotImplementedError()
 
 	def copy(self: Self) -> Self:
@@ -236,8 +241,8 @@ class RTextBase(ABC):
 					styles.append(style)
 			text.set_styles(styles)
 			try:
-				text.set_color(RColor[data['color']])
-			except KeyError:
+				text.set_color(RColor.from_mc_value(data['color']))
+			except ValueError:
 				pass
 			try:
 				click_event = ['clickEvent']
@@ -282,13 +287,6 @@ class RText(RTextBase):
 			self.set_color(color)
 		if styles is not None:
 			self.set_styles(styles)
-
-	def _copy_from(self, text: 'RText'):
-		self.__text = text.__text
-		self.__color = text.__color
-		self.__styles = text.__styles.copy()
-		self.__click_event = text.__click_event
-		self.__hover_text_list = text.__hover_text_list.copy()
 
 	def set_color(self: Self, color: RColor) -> Self:
 		self.__color = color
@@ -337,10 +335,23 @@ class RText(RTextBase):
 		return self.__text
 
 	def to_colored_text(self) -> str:
-		color = RColorConvertor.RCOLOR_NAME_TO_CONSOLE[self.__color.name] if self.__color is not None else ''
+		if isinstance(self.__color, RColorClassic):
+			color = self.__color.console_code
+		elif isinstance(self.__color, RColorRGB):
+			color = self.__color.to_classic().console_code
+		else:
+			color = ''
 		for style in self.__styles:
-			color += style.value.console_code
+			if isinstance(style, RItemLegacy):
+				color += style.console_code
 		return color + self.to_plain_text() + Style.RESET_ALL
+
+	def _copy_from(self, text: 'RText'):
+		self.__text = text.__text
+		self.__color = text.__color
+		self.__styles = text.__styles.copy()
+		self.__click_event = text.__click_event
+		self.__hover_text_list = text.__hover_text_list.copy()
 
 	def copy(self) -> 'RText':
 		copied = RText('')

@@ -2,9 +2,15 @@ import json
 import re
 
 
-def remove_suffix(text: str, suffix: str):
+def remove_suffix(text: str, suffix: str) -> str:
 	pos = text.rfind(suffix)
 	return text[:pos] if pos >= 0 else text
+
+
+def remove_prefix(text: str, prefix: str) -> str:
+	if text.startswith(prefix):
+		text = text[len(prefix):]
+	return text
 
 
 def clean_minecraft_color_code(text):

@@ -15,7 +15,7 @@ from typing import Dict, Optional, List, Set
 from colorlog import ColoredFormatter
 
 from mcdreforged.constants import core_constant
-from mcdreforged.minecraft.rtext.style import RColor, RStyle, RItem
+from mcdreforged.minecraft.rtext.style import RColor, RStyle, RItemLegacy
 from mcdreforged.utils import string_util, file_util
 
 
@@ -61,7 +61,7 @@ class SyncStdoutStreamHandler(logging.StreamHandler):
 
 
 class MCColoredFormatter(ColoredFormatter):
-	MC_CODE_ITEMS = list(map(lambda item: item.value, list(RColor) + list(RStyle)))  # type: List[RItem]
+	MC_CODE_ITEMS: List[RItemLegacy] = list(filter(lambda item: isinstance(item, RItemLegacy), list(RColor) + list(RStyle)))
 
 	# global flag
 	console_color_disabled = False

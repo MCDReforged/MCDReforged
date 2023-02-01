@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-02 00:40+0800\n"
+"POT-Creation-Date: 2023-02-19 01:37+0800\n"
 "PO-Revision-Date: 2021-01-24 09:02+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -18,11 +18,11 @@ msgstr ""
 msgid "Minecraft Tools"
 msgstr "Minecraft 工具"
 
-#: ../code_references/minecraft_tools.rst:8
+#: ../code_references/minecraft_tools.rst:6
 msgid "RText"
 msgstr "RText"
 
-#: ../code_references/minecraft_tools.rst:10
+#: ../code_references/minecraft_tools.rst:8
 msgid ":doc:`API package </plugin_dev/api>` path: ``mcdreforged.api.rtext``"
 msgstr ":doc:`API  包 </plugin_dev/api>` 路径: ``mcdreforged.api.rtext``"
 
@@ -38,25 +38,136 @@ msgstr ""
 "感谢 `Pandaria98 <https://github.com/Pandaria98>`__ 的 `stext API "
 "<https://github.com/TISUnion/stext>`__ 库"
 
-#: ../code_references/minecraft_tools.rst:15
+#: ../code_references/minecraft_tools.rst:13
 msgid "Text Styles"
 msgstr "文本样式"
-
-#: mcdreforged.minecraft.rtext.style.RItem:1 of
-msgid "A general Minecraft text style item"
-msgstr "一个 Minecraft 文本样式的通用组件"
-
-#: ../../docstring mcdreforged.minecraft.rtext.style.RItem.mc_code:1 of
-msgid "It's code in Minecraft"
-msgstr "它在 Minecraft 中的样式代码"
-
-#: ../../docstring mcdreforged.minecraft.rtext.style.RItem.console_code:1 of
-msgid "It's code in console"
-msgstr "它在控制台中的样式代码"
 
 #: mcdreforged.minecraft.rtext.style.RColor:1 of
 msgid "Minecraft text colors"
 msgstr "Minecraft 文本颜色"
+
+#: mcdreforged.minecraft.rtext.style.RColor.from_mc_value:1 of
+msgid ""
+"A factory function to create a :class:`RColor` object from a valid "
+"Minecraft color value"
+msgstr "一个工厂函数，从给定的 Minecraft 颜色值构造一个 :class:`RColor` 对象"
+
+#: mcdreforged.minecraft.rcon.rcon_connection.RconConnection.__init__
+#: mcdreforged.minecraft.rcon.rcon_connection.RconConnection.send_command
+#: mcdreforged.minecraft.rtext.style.RColor.from_mc_value
+#: mcdreforged.minecraft.rtext.style.RColorRGB.__init__
+#: mcdreforged.minecraft.rtext.style.RColorRGB.from_code
+#: mcdreforged.minecraft.rtext.style.RColorRGB.from_rgb
+#: mcdreforged.minecraft.rtext.text.RText.__init__
+#: mcdreforged.minecraft.rtext.text.RTextBase.format
+#: mcdreforged.minecraft.rtext.text.RTextBase.from_json_object
+#: mcdreforged.minecraft.rtext.text.RTextBase.join
+#: mcdreforged.minecraft.rtext.text.RTextBase.set_click_event
+#: mcdreforged.minecraft.rtext.text.RTextBase.set_hover_text
+#: mcdreforged.minecraft.rtext.text.RTextList.__init__
+#: mcdreforged.minecraft.rtext.text.RTextTranslation.__init__
+#: mcdreforged.minecraft.rtext.text.RTextTranslation.arg
+#: mcdreforged.minecraft.rtext.text.RTextTranslation.fallback
+#: mcdreforged.translation.translation_text.RTextMCDRTranslation.__init__
+#: mcdreforged.translation.translation_text.RTextMCDRTranslation.language_context
+#: of
+msgid "Parameters"
+msgstr "参数"
+
+#: mcdreforged.minecraft.rtext.style.RColor.from_mc_value:3 of
+msgid ""
+"The value of the ``color`` field in Minecraft text component. e.g. "
+"``\"red\"``, ``\"blue\"``, ``\"#00AAFF\"``"
+msgstr "Minecraft 文本容器 中 ``color`` 属性的值，如 ``\"red\"``、``\"blue\"``、``\"#00AAFF\"``"
+
+#: mcdreforged.minecraft.rcon.rcon_connection.RconConnection.connect
+#: mcdreforged.minecraft.rcon.rcon_connection.RconConnection.send_command
+#: mcdreforged.minecraft.rtext.style.RColor.from_mc_value
+#: mcdreforged.minecraft.rtext.text.RTextBase.set_click_event
+#: mcdreforged.minecraft.rtext.text.RTextBase.set_hover_text of
+msgid "Returns"
+msgstr "返回"
+
+#: mcdreforged.minecraft.rtext.style.RColor.from_mc_value:5 of
+msgid "A corresponding :class:`RColor` object"
+msgstr "与之对应的 :class:`RColor` 对象"
+
+#: mcdreforged.minecraft.rtext.style.RColor.r:1 of
+msgid "The red portion of the color in [0, 255]"
+msgstr "颜色的红色分量，范围为 [0, 255]"
+
+#: mcdreforged.minecraft.rtext.style.RColor.g:1 of
+msgid "The green portion of the color in [0, 255]"
+msgstr "颜色的绿色分量，范围为 [0, 255]"
+
+#: mcdreforged.minecraft.rtext.style.RColor.b:1 of
+msgid "The blue portion of the color in [0, 255]"
+msgstr "颜色的蓝色分量，范围为 [0, 255]"
+
+#: mcdreforged.minecraft.rtext.style.RColorClassic:1 of
+msgid "Classic Minecraft text color defined with color name"
+msgstr "使用颜色名字定义的经典 Minecraft 文本颜色"
+
+#: mcdreforged.minecraft.rtext.style.RColorClassic:5 of
+msgid ""
+"Do not construct the class yourself. Use class fields in :class:`RColor` "
+"if you want to use classic colors"
+msgstr "不要自己构造这个类。如果你想使用经典颜色，请使用 :class:`RColor` 雷属性"
+
+#: mcdreforged.minecraft.rtext.style.RColorClassic.to_rgb:1 of
+msgid ""
+"Converts to the corresponding :class:`RColorRGB` object with the exact "
+"same color"
+msgstr "转换为与之对应的，颜色值完全一致的 :class:`RColorRGB` 对象"
+
+#: mcdreforged.minecraft.rtext.style.RColorRGB:1 of
+msgid ""
+"Minecraft text color type in hexadecimal color format, with which you can"
+" specify the red / green / blue values of the color precisely"
+msgstr "使用十六进制 RGB 颜色格式定义的 Minecraft 文本颜色。借助它你可以精准地指定颜色的 RGB 值"
+
+#: mcdreforged.minecraft.rtext.style.RColorRGB:4 of
+msgid "Available in Minecraft 1.16+"
+msgstr "在 Minecraft 1.16+ 中可用"
+
+#: mcdreforged.minecraft.rtext.style.RColorRGB.__init__:1
+#: mcdreforged.minecraft.rtext.style.RColorRGB.from_code:3 of
+msgid ""
+"An int in hex 0xRRGGBB format, or a str like ``\"RRGGBB\"``, "
+"``\"0xRRGGBB\"`` or ``\"#RRGGBB\"``"
+msgstr ""
+"一个 int，其值在十六进制下为 0xRRGGBB 格式，或者一个形如 ``\"RRGGBB\"``、``\"0xRRGGBB\"`` 或 "
+"``\"#RRGGBB\"`` 的字符串"
+
+#: mcdreforged.minecraft.rtext.style.RColorRGB.from_code:1 of
+msgid ""
+"A factory function to create a :class:`RColorRGB` object using a single "
+"RGB code"
+msgstr "一个工厂函数，使用 RGB 颜色代码构造一个 :class:`RColorRGB` 对象"
+
+#: mcdreforged.minecraft.rtext.style.RColorRGB.from_rgb:1 of
+msgid ""
+"A factory function to create a :class:`RColorRGB` object using 3 RGB "
+"values"
+msgstr "一个工厂函数，使用 3 个 RGB 颜色值构造一个 :class:`RColorRGB` 对象"
+
+#: mcdreforged.minecraft.rtext.style.RColorRGB.from_rgb:3 of
+msgid "The red portion of the color"
+msgstr "颜色的红色分量"
+
+#: mcdreforged.minecraft.rtext.style.RColorRGB.from_rgb:4 of
+msgid "The green portion of the color"
+msgstr "颜色的绿色分量"
+
+#: mcdreforged.minecraft.rtext.style.RColorRGB.from_rgb:5 of
+msgid "The blue portion of the color"
+msgstr "颜色的蓝色分量"
+
+#: mcdreforged.minecraft.rtext.style.RColorRGB.to_classic:1 of
+msgid ""
+"Converts to the :class:`RColorClassic` object with the closest Euclidean "
+"distance in the RGB color space"
+msgstr "转换为在 RGB 颜色空间中与之欧氏距离最近的 :class:`RColorClassic` 对象"
 
 #: mcdreforged.minecraft.rtext.style.RStyle:1 of
 msgid "Minecraft text styles"
@@ -133,7 +244,7 @@ msgstr "将给定文本复制到剪切板"
 msgid "Available in Minecraft 1.15+"
 msgstr "在 Minecraft 1.15+ 中可用"
 
-#: ../code_references/minecraft_tools.rst:35
+#: ../code_references/minecraft_tools.rst:37
 msgid "Text Components"
 msgstr "文本组件"
 
@@ -161,9 +272,14 @@ msgstr "它可以作为如 Minecraft 命令 ``/tellraw <target> <message>`` 中�
 msgid "Return a plain text for console display"
 msgstr "返回纯文本以供控制台显示"
 
+#: mcdreforged.minecraft.rtext.text.RTextBase.to_colored_text:3
 #: mcdreforged.minecraft.rtext.text.RTextBase.to_plain_text:3 of
 msgid "Click event and hover event will be ignored"
 msgstr "点击事件和悬停事件将被忽略"
+
+#: mcdreforged.minecraft.rtext.text.RTextBase.to_colored_text:1 of
+msgid "Return a colored text stained with ANSI escape code for console display"
+msgstr "返回由 ANSI 转移代码染色的带颜色文本以供控制台显示"
 
 #: mcdreforged.minecraft.rtext.text.RTextBase.copy:1 of
 msgid "Return a deep copy version of itself"
@@ -185,24 +301,6 @@ msgstr "设置点击事件"
 msgid "Method :meth:`c` is the short form of :meth:`set_click_event`"
 msgstr "方法 :meth:`c` 是方法 :meth:`set_click_event` 的简写"
 
-#: mcdreforged.minecraft.rcon.rcon_connection.RconConnection.__init__
-#: mcdreforged.minecraft.rcon.rcon_connection.RconConnection.send_command
-#: mcdreforged.minecraft.rtext.text.RText.__init__
-#: mcdreforged.minecraft.rtext.text.RTextBase.format
-#: mcdreforged.minecraft.rtext.text.RTextBase.from_json_object
-#: mcdreforged.minecraft.rtext.text.RTextBase.join
-#: mcdreforged.minecraft.rtext.text.RTextBase.set_click_event
-#: mcdreforged.minecraft.rtext.text.RTextBase.set_hover_text
-#: mcdreforged.minecraft.rtext.text.RTextList.__init__
-#: mcdreforged.minecraft.rtext.text.RTextTranslation.__init__
-#: mcdreforged.minecraft.rtext.text.RTextTranslation.arg
-#: mcdreforged.minecraft.rtext.text.RTextTranslation.fallback
-#: mcdreforged.translation.translation_text.RTextMCDRTranslation.__init__
-#: mcdreforged.translation.translation_text.RTextMCDRTranslation.language_context
-#: of
-msgid "Parameters"
-msgstr "参数"
-
 #: mcdreforged.minecraft.rtext.text.RTextBase.set_click_event:5 of
 msgid "The type of the action"
 msgstr "动作类型"
@@ -210,13 +308,6 @@ msgstr "动作类型"
 #: mcdreforged.minecraft.rtext.text.RTextBase.set_click_event:6 of
 msgid "The string value of the action"
 msgstr "动作的字符串值"
-
-#: mcdreforged.minecraft.rcon.rcon_connection.RconConnection.connect
-#: mcdreforged.minecraft.rcon.rcon_connection.RconConnection.send_command
-#: mcdreforged.minecraft.rtext.text.RTextBase.set_click_event
-#: mcdreforged.minecraft.rtext.text.RTextBase.set_hover_text of
-msgid "Returns"
-msgstr "返回"
 
 #: mcdreforged.minecraft.rtext.text.RTextBase.set_click_event:7
 #: mcdreforged.minecraft.rtext.text.RTextBase.set_hover_text:7 of
@@ -534,4 +625,3 @@ msgid ""
 "The command execution result form the server, or None if *max_retry_time*"
 " retries exceeded"
 msgstr "服务器的命令执行结果。如果重试次数超过 *max_retry_time*，则将返回 None"
-

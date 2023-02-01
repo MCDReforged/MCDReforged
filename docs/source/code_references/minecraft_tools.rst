@@ -2,8 +2,6 @@
 Minecraft Tools
 ===============
 
-.. _class-ref-rtext:
-
 RText
 -----
 
@@ -16,12 +14,16 @@ Text Styles
 
 .. currentmodule:: mcdreforged.minecraft.rtext.style
 
-.. autoclass:: RItem
-    :members:
-
 .. autoclass:: RColor
     :members:
     :undoc-members:
+
+.. autoclass:: RColorClassic
+    :members:
+
+.. autoclass:: RColorRGB
+    :members:
+    :special-members: __init__
 
 .. autoclass:: RStyle
     :members:
@@ -58,8 +60,6 @@ Text Components
     :show-inheritance:
     :members:
     :special-members: __init__
-
-.. _class-ref-rcon:
 
 Rcon
 ----

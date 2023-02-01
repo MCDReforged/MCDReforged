@@ -82,7 +82,7 @@ Module path: ``mcdreforged.api.rcon``
 
 Package ``rcon`` contains a single class ``RconConnection``. It's is a simply rcon client for connect to any Minecraft servers that supports rcon protocol
 
-Class references: :ref:`class-ref-rcon`
+Class references: :ref:`code_references/minecraft_tools:Rcon`
 
 rtext
 -----
@@ -95,7 +95,7 @@ This is an advanced text component library for Minecraft
 
 Inspired by the `MCD stext API <https://github.com/TISUnion/rtext>`__ made by `Pandaria98 <https://github.com/Pandaria98>`__
 
-Class references: :ref:`class-ref-rtext`
+Class references: :ref:`code_references/minecraft_tools:RText`
 
 types
 -----
