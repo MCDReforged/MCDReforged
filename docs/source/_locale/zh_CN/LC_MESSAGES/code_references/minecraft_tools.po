@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-30 11:44+0800\n"
+"POT-Creation-Date: 2023-02-02 00:40+0800\n"
 "PO-Revision-Date: 2021-01-24 09:02+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -46,11 +46,11 @@ msgstr "文本样式"
 msgid "A general Minecraft text style item"
 msgstr "一个 Minecraft 文本样式的通用组件"
 
-#: ../docstring mcdreforged.minecraft.rtext.style.RItem.mc_code:1 of
+#: ../../docstring mcdreforged.minecraft.rtext.style.RItem.mc_code:1 of
 msgid "It's code in Minecraft"
 msgstr "它在 Minecraft 中的样式代码"
 
-#: ../docstring mcdreforged.minecraft.rtext.style.RItem.console_code:1 of
+#: ../../docstring mcdreforged.minecraft.rtext.style.RItem.console_code:1 of
 msgid "It's code in console"
 msgstr "它在控制台中的样式代码"
 
@@ -66,15 +66,16 @@ msgstr "Minecraft 文本样式"
 msgid "Minecraft click event actions"
 msgstr "Minecraft 文本点击事件的动作"
 
-#: ../docstring mcdreforged.minecraft.rtext.style.RAction.suggest_command:1 of
+#: ../../docstring mcdreforged.minecraft.rtext.style.RAction.suggest_command:1
+#: of
 msgid "Fill the chat bar with given text"
 msgstr "使用给定的文本填充聊天栏"
 
-#: ../docstring mcdreforged.minecraft.rtext.style.RAction.run_command:1 of
+#: ../../docstring mcdreforged.minecraft.rtext.style.RAction.run_command:1 of
 msgid "Run the given text as command"
 msgstr "将给定的文本作为指令运行"
 
-#: ../docstring mcdreforged.minecraft.rtext.style.RAction.run_command:3 of
+#: ../../docstring mcdreforged.minecraft.rtext.style.RAction.run_command:3 of
 msgid ""
 "(Minecraft <1.19.1) If the given text doesn't start with ``\"/\"``, the "
 "given text will be considered as a chat message and sent to the server, "
@@ -84,7 +85,7 @@ msgstr ""
 "(Minecraft <1.19.1) 如果给定的文本不以 ``\"/\"`` "
 "开头，给定的文本将会被当做聊天信息发送至服务端。借此，玩家在点击被修饰的文本后可以自动执行 MCDR 指令"
 
-#: ../docstring mcdreforged.minecraft.rtext.style.RAction.run_command:8 of
+#: ../../docstring mcdreforged.minecraft.rtext.style.RAction.run_command:8 of
 msgid ""
 "In vanilla Minecraft >=1.19.1, only strings starting with ``\"/\"``, i.e."
 " command strings, can be used as the text value of :attr:`run_command` "
@@ -93,27 +94,27 @@ msgstr ""
 "在原版 Minecraft >=1.19.1 中，只有以 ``\"/\"`` 开头的字符串，即代表指令的字符串，可以被用作 "
 ":attr:`run_command` 动作的值"
 
-#: ../docstring mcdreforged.minecraft.rtext.style.RAction.run_command:10 of
+#: ../../docstring mcdreforged.minecraft.rtext.style.RAction.run_command:10 of
 msgid ""
 "For other strings that don't start with ``\"/\"``, the client will reject"
 " to send the chat message"
 msgstr "对于其他不以 ``\"/\"`` 开头的字符串，客户端将拒接发送对应的聊天消息"
 
-#: ../docstring mcdreforged.minecraft.rtext.style.RAction.run_command:12 of
+#: ../../docstring mcdreforged.minecraft.rtext.style.RAction.run_command:12 of
 msgid ""
 "See `Issue #203 <https://github.com/Fallen-"
 "Breath/MCDReforged/issues/203>`__"
 msgstr "见 `Issue #203 <https://github.com/Fallen-Breath/MCDReforged/issues/203>`__"
 
-#: ../docstring mcdreforged.minecraft.rtext.style.RAction.open_url:1 of
+#: ../../docstring mcdreforged.minecraft.rtext.style.RAction.open_url:1 of
 msgid "Open given url"
 msgstr "打开给定链接"
 
-#: ../docstring mcdreforged.minecraft.rtext.style.RAction.open_file:1 of
+#: ../../docstring mcdreforged.minecraft.rtext.style.RAction.open_file:1 of
 msgid "Open file from given path"
 msgstr "从给定路径打开文件"
 
-#: ../docstring mcdreforged.minecraft.rtext.style.RAction.open_file:5 of
+#: ../../docstring mcdreforged.minecraft.rtext.style.RAction.open_file:5 of
 msgid ""
 "Actually vanilla Minecraft doesn't allow texts sent by command contain "
 ":attr:`open_file` actions, so don't be surprised if this "
@@ -122,13 +123,13 @@ msgstr ""
 "事实上原版 Minecraft 并不允许指令中的文本包含 :attr:`open_file` 动作，因此当你发现这个 "
 ":attr:`open_file` 不起作用时别太惊讶"
 
-#: ../docstring mcdreforged.minecraft.rtext.style.RAction.copy_to_clipboard:1
-#: of
+#: ../../docstring
+#: mcdreforged.minecraft.rtext.style.RAction.copy_to_clipboard:1 of
 msgid "Copy given text to clipboard"
 msgstr "将给定文本复制到剪切板"
 
-#: ../docstring mcdreforged.minecraft.rtext.style.RAction.copy_to_clipboard:3
-#: of
+#: ../../docstring
+#: mcdreforged.minecraft.rtext.style.RAction.copy_to_clipboard:3 of
 msgid "Available in Minecraft 1.15+"
 msgstr "在 Minecraft 1.15+ 中可用"
 
@@ -195,6 +196,7 @@ msgstr "方法 :meth:`c` 是方法 :meth:`set_click_event` 的简写"
 #: mcdreforged.minecraft.rtext.text.RTextList.__init__
 #: mcdreforged.minecraft.rtext.text.RTextTranslation.__init__
 #: mcdreforged.minecraft.rtext.text.RTextTranslation.arg
+#: mcdreforged.minecraft.rtext.text.RTextTranslation.fallback
 #: mcdreforged.translation.translation_text.RTextMCDRTranslation.__init__
 #: mcdreforged.translation.translation_text.RTextMCDRTranslation.language_context
 #: of
@@ -396,6 +398,18 @@ msgstr "设置翻译参数"
 #: mcdreforged.translation.translation_text.RTextMCDRTranslation.__init__:4 of
 msgid "The translation arguments"
 msgstr "翻译的参数"
+
+#: mcdreforged.minecraft.rtext.text.RTextTranslation.fallback:1 of
+msgid "Set the translation fallback"
+msgstr "设置翻译缺省文本"
+
+#: mcdreforged.minecraft.rtext.text.RTextTranslation.fallback:5 of
+msgid "Works in Minecraft >= 1.19.4 only"
+msgstr "仅适用于 Minecraft >= 1.19.4"
+
+#: mcdreforged.minecraft.rtext.text.RTextTranslation.fallback:7 of
+msgid "The fallback text if the translation is unknown"
+msgstr "用于在翻译键未被识别时显示的缺省文本"
 
 #: mcdreforged.translation.translation_text.RTextMCDRTranslation:1 of
 msgid "The translation text component used in MCDR"

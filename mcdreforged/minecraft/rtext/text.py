@@ -445,7 +445,8 @@ class RTextTranslation(RText):
 
 		super().__init__(translation_key, color, styles)
 		self.__translation_key: str = translation_key
-		self.__args = ()
+		self.__args: tuple = ()
+		self.__fallback: Optional[str] = None
 
 	def arg(self: Self, *args: Any) -> Self:
 		"""
@@ -454,6 +455,19 @@ class RTextTranslation(RText):
 		:param args: The translation arguments
 		"""
 		self.__args = args
+		return self
+
+	def fallback(self: Self, fallback: str) -> Self:
+		"""
+		Set the translation fallback
+
+		.. attention::
+
+			Works in Minecraft >= 1.19.4 only
+
+		:param fallback: The fallback text if the translation is unknown
+		"""
+		self.__fallback = fallback
 		return self
 
 	def to_plain_text(self) -> str:
@@ -465,6 +479,8 @@ class RTextTranslation(RText):
 		obj['translate'] = self.__translation_key
 		if len(self.__args) > 0:
 			obj['with'] = list(map(lambda arg: arg.to_json_object() if isinstance(arg, RTextBase) else arg, self.__args))
+		if self.__fallback is not None:
+			obj['fallback'] = self.__fallback
 		return obj
 
 	def _copy_from(self, text: 'RTextTranslation'):
