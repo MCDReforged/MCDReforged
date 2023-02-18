@@ -20,6 +20,10 @@ Global Arguments
 ----------------
 
 * ``-q``, ``--quiet``: Disable CLI output
+* ``-V``, ``--version``: Print MCDR version and exit
+
+.. versionadded:: v2.8.0
+    The ``-V`` and ``--version`` arguments
 
 Sub Commands
 ------------

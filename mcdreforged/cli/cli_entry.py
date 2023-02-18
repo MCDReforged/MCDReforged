@@ -34,6 +34,7 @@ def entry_point():
 		description='{} CLI'.format(core_constant.NAME),
 	)
 	parser.add_argument('-q', '--quiet', help='Disable CLI output', action='store_true')
+	parser.add_argument('-V', '--version', help='Print {} version and exit'.format(core_constant.NAME), action='store_true')
 	subparsers = parser.add_subparsers(title='Command', help='Available commands', dest='subparser_name')
 
 	subparsers.add_parser('start', help='Start {}'.format(core_constant.NAME))
@@ -45,17 +46,26 @@ def entry_point():
 	parser_pack.add_argument('-o', '--output', help='The output directory to store the zipped plugin, default: current directory', default='.')
 	parser_pack.add_argument('-n', '--name', help='A specific name to the output zipped plugin file. If not given the metadata specific name or a default one will be used', default=None)
 
-	result = parser.parse_args()
-	quiet = result.quiet
+	args = parser.parse_args()
 
-	if result.subparser_name == 'start':
+	if args.version:
+		show_version(quiet=args.quiet)
+		return
+
+	if args.subparser_name == 'start':
 		run_mcdr()
-	elif result.subparser_name == 'init':
-		initialize_environment(quiet=quiet)
-	elif result.subparser_name == 'gendefault':
-		generate_default_stuffs(quiet=quiet)
-	elif result.subparser_name == 'pack':
-		make_packed_plugin(result.input, result.output, result.name, quiet=quiet)
+	elif args.subparser_name == 'init':
+		initialize_environment(quiet=args.quiet)
+	elif args.subparser_name == 'gendefault':
+		generate_default_stuffs(quiet=args.quiet)
+	elif args.subparser_name == 'pack':
+		make_packed_plugin(args.input, args.output, args.name, quiet=args.quiet)
+
+
+def show_version(*, quiet: bool = False):
+	if quiet:
+		return
+	print('{} {}'.format(core_constant.NAME, core_constant.VERSION))
 
 
 def run_mcdr():

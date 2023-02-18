@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-14 21:00+0800\n"
+"POT-Creation-Date: 2023-02-19 02:41+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -41,173 +41,181 @@ msgstr "全局参数"
 msgid "``-q``, ``--quiet``: Disable CLI output"
 msgstr "``-q``, ``--quiet``：禁用 CLI 信息输出"
 
+#: ../plugin_dev/cli.rst:23
+msgid "``-V``, ``--version``: Print MCDR version and exit"
+msgstr "``-V``, ``--version``：打印 MCDR 的版本并退出"
+
 #: ../plugin_dev/cli.rst:25
+msgid "The ``-V`` and ``--version`` arguments"
+msgstr "参数 ``-V``、``--version``"
+
+#: ../plugin_dev/cli.rst:29
 msgid "Sub Commands"
 msgstr "子命令"
 
-#: ../plugin_dev/cli.rst:28
+#: ../plugin_dev/cli.rst:32
 msgid "start"
 msgstr "start"
 
-#: ../plugin_dev/cli.rst:34
+#: ../plugin_dev/cli.rst:38
 msgid "The same as ``python -m mcdreforged``, it launches MCDR"
 msgstr "同 ``python -m mcdreforged`` 一样，启动 MCDR"
 
-#: ../plugin_dev/cli.rst:37
+#: ../plugin_dev/cli.rst:41
 msgid "init"
 msgstr "init"
 
-#: ../plugin_dev/cli.rst:43
+#: ../plugin_dev/cli.rst:47
 msgid "Prepare the working environment of MCDR"
 msgstr "准备 MCDR 的工作环境"
 
-#: ../plugin_dev/cli.rst:45
+#: ../plugin_dev/cli.rst:49
 msgid ""
 "Create commonly used folders and generate default configuration and "
 "permission files, including:"
 msgstr "在当前工作目录下生成默认配置、权限文件，及常用的文件夹，包含："
 
-#: ../plugin_dev/cli.rst:47
+#: ../plugin_dev/cli.rst:51
 msgid "logs/"
 msgstr "logs/"
 
-#: ../plugin_dev/cli.rst:48
+#: ../plugin_dev/cli.rst:52
 msgid "configs/"
 msgstr "configs/"
 
-#: ../plugin_dev/cli.rst:49
+#: ../plugin_dev/cli.rst:53
 msgid "plugins/"
 msgstr "plugins/"
 
-#: ../plugin_dev/cli.rst:50
+#: ../plugin_dev/cli.rst:54
 msgid "server/"
 msgstr "server/"
 
-#: ../plugin_dev/cli.rst:51
+#: ../plugin_dev/cli.rst:55
 msgid "config.yml"
 msgstr "config.yml"
 
-#: ../plugin_dev/cli.rst:52
+#: ../plugin_dev/cli.rst:56
 msgid "permission.yml"
 msgstr "permission.yml"
 
-#: ../plugin_dev/cli.rst:55
+#: ../plugin_dev/cli.rst:59
 msgid "gendefault"
 msgstr "gendefault"
 
-#: ../plugin_dev/cli.rst:61
+#: ../plugin_dev/cli.rst:65
 msgid ""
 "Generate default configuration and permission files at current working "
 "directory"
 msgstr "在当前工作目录下生成默认配置文件"
 
-#: ../plugin_dev/cli.rst:63
+#: ../plugin_dev/cli.rst:67
 msgid "Note that it will overwrite existing files"
 msgstr "注意，这将会覆盖现有的文件"
 
-#: ../plugin_dev/cli.rst:66
+#: ../plugin_dev/cli.rst:70
 msgid "pack"
 msgstr "pack"
 
-#: ../plugin_dev/cli.rst:72
+#: ../plugin_dev/cli.rst:76
 msgid ""
 "Pack up your plugin source codes / resources files, from a batch of "
 "files, to a ``.mcdr`` :ref:`packed plugin file "
 "<plugin_dev/plugin_format:Packed Plugin>`"
 msgstr ""
-"将你插件的源文件 / 资源文件打包起来，从一组零散的文件，到一个 ``.mcdr`` 格式的 "
-":ref:`打包插件 <plugin_dev/plugin_format:Packed Plugin>` 文件"
+"将你插件的源文件 / 资源文件打包起来，从一组零散的文件，到一个 ``.mcdr`` 格式的 :ref:`打包插件 "
+"<plugin_dev/plugin_format:Packed Plugin>` 文件"
 
-#: ../plugin_dev/cli.rst:74
+#: ../plugin_dev/cli.rst:78
 msgid ""
 "The packing is based on the ``mcdreforged.plugin.json`` metadata file in "
 "the input directory. It will pack and only pack the following "
 "files/folders into the packed plugin:"
 msgstr "打包过程基于输入文件夹中的 ``mcdreforged.plugin.json`` 元数据文件。它会也仅会将如下的文件/文件夹打包至打包插件中："
 
-#: ../plugin_dev/cli.rst:76
+#: ../plugin_dev/cli.rst:80
 msgid "Folder named by the plugin id"
 msgstr "以插件 id 命名的文件夹"
 
-#: ../plugin_dev/cli.rst:77
+#: ../plugin_dev/cli.rst:81
 msgid "File ``mcdreforged.plugin.json``"
 msgstr "文件 ``mcdreforged.plugin.json``"
 
-#: ../plugin_dev/cli.rst:78
+#: ../plugin_dev/cli.rst:82
 msgid "File ``requirements.txt``, if it exists"
 msgstr "文件 ``requirements.txt``，如果它存在"
 
-#: ../plugin_dev/cli.rst:79
+#: ../plugin_dev/cli.rst:83
 msgid ""
 "Files or folders listed in the :ref:`plugin_dev/metadata:resources` field"
 " in metadata"
 msgstr "于元数据的 :ref:`plugin_dev/metadata:resources` 属性中列出的文件或文件夹"
 
-#: ../plugin_dev/cli.rst:82
+#: ../plugin_dev/cli.rst:86
 msgid ""
 "During plugin packing, all directory with name ``__pycache__`` will be "
 "ignored"
 msgstr "在插件的打包过程中，所有以 ``__pycache__`` 为名的文件夹将会被忽略"
 
-#: ../plugin_dev/cli.rst:85
+#: ../plugin_dev/cli.rst:89
 msgid "input"
 msgstr "input"
 
-#: ../plugin_dev/cli.rst:87
+#: ../plugin_dev/cli.rst:91
 msgid "``-i INPUT``, ``--input INPUT``"
 msgstr "``-i INPUT``, ``--input INPUT``"
 
-#: ../plugin_dev/cli.rst:89
+#: ../plugin_dev/cli.rst:93
 msgid "The input directory which the plugin is in"
 msgstr "输入文件夹，也就是插件所在的文件夹"
 
-#: ../plugin_dev/cli.rst:91
+#: ../plugin_dev/cli.rst:95
 msgid "For example, if you have following file structure"
 msgstr "举个例子，如果你有着如下的文件结构"
 
-#: ../plugin_dev/cli.rst:102
+#: ../plugin_dev/cli.rst:106
 msgid "Then the ``work_place/`` folder would be the input directory"
 msgstr "那么文件夹 ``work_place/`` 将会是输入文件夹"
 
-#: ../plugin_dev/cli.rst:104 ../plugin_dev/cli.rst:113
+#: ../plugin_dev/cli.rst:108 ../plugin_dev/cli.rst:117
 msgid "default: current directory"
 msgstr "默认值：当前所在的文件夹"
 
-#: ../plugin_dev/cli.rst:107
+#: ../plugin_dev/cli.rst:111
 msgid "output"
 msgstr "output"
 
-#: ../plugin_dev/cli.rst:109
+#: ../plugin_dev/cli.rst:113
 msgid "``-o OUTPUT``, ``--output OUTPUT``"
 msgstr "``-o OUTPUT``, ``--output OUTPUT``"
 
-#: ../plugin_dev/cli.rst:111
+#: ../plugin_dev/cli.rst:115
 msgid "The output directory to store the generated packed plugin"
 msgstr "储存生成的打包插件的文件夹"
 
-#: ../plugin_dev/cli.rst:116
+#: ../plugin_dev/cli.rst:120
 msgid "name"
 msgstr "name"
 
-#: ../plugin_dev/cli.rst:118
+#: ../plugin_dev/cli.rst:122
 msgid "``-n NAME``, ``--name NAME``"
 msgstr "``-n NAME``, ``--name NAME``"
 
-#: ../plugin_dev/cli.rst:120
+#: ../plugin_dev/cli.rst:124
 msgid "A specific name for the output packed plugin file"
 msgstr "输出的打包插件文件的特定名称"
 
-#: ../plugin_dev/cli.rst:122
+#: ../plugin_dev/cli.rst:126
 msgid ""
 "If not given it will use the :ref:`plugin_dev/metadata:archive_name` "
 "field in plugin metadata"
 msgstr "如果该项的值未被给出，将会使用插件元数据中的 :ref:`plugin_dev/metadata:archive_name` 属性的值"
 
-#: ../plugin_dev/cli.rst:124
+#: ../plugin_dev/cli.rst:128
 msgid "If it's still not specific, A default name format will be used"
 msgstr "如果该项的值仍未给出，将会使用默认的命名格式"
 
-#: ../plugin_dev/cli.rst:126
+#: ../plugin_dev/cli.rst:130
 msgid ""
 "You can use formatter in your name string. String like ``{arg_name}`` in "
 "name will be replaced automatically. Use ``{{`` or ``}}`` for single "
@@ -216,33 +224,33 @@ msgstr ""
 "你可以在你的文件名字符串中使用格式化字符。形如 ``{arg_name}`` 的名字将会被自动替换。使用 ``{{`` 和  ``}}`` "
 "来描述单个 ``{`` 和 ``}``"
 
-#: ../plugin_dev/cli.rst:128
+#: ../plugin_dev/cli.rst:132
 msgid "``id``: The plugin id"
 msgstr "``id``：插件 id"
 
-#: ../plugin_dev/cli.rst:129
+#: ../plugin_dev/cli.rst:133
 msgid "``version``: The version of the plugin"
 msgstr "``version``：插件版本"
 
-#: ../plugin_dev/cli.rst:131
+#: ../plugin_dev/cli.rst:135
 msgid ""
 "For example, with ``id=my_plugin`` and ``version=1.2.3``, the following "
 "formatting will happen"
 msgstr "举个例子，在 ``id=my_plugin``、``version=1.2.3`` 的情况下，将会出现下方的格式化过程"
 
-#: ../plugin_dev/cli.rst:133
+#: ../plugin_dev/cli.rst:137
 msgid "``MyCustomPlugin-release`` -> ``MyCustomPlugin-release``"
 msgstr "``MyCustomPlugin-release`` -> ``MyCustomPlugin-release``"
 
-#: ../plugin_dev/cli.rst:134
+#: ../plugin_dev/cli.rst:138
 msgid "``MyCustomPlugin-v{version}`` -> ``MyCustomPlugin-v1.2.3``"
 msgstr "``MyCustomPlugin-v{version}`` -> ``MyCustomPlugin-v1.2.3``"
 
-#: ../plugin_dev/cli.rst:135
+#: ../plugin_dev/cli.rst:139
 msgid "``{id}_{version}`` -> ``my_plugin_1.2.3``"
 msgstr "``{id}_{version}`` -> ``my_plugin_1.2.3``"
 
-#: ../plugin_dev/cli.rst:137
+#: ../plugin_dev/cli.rst:141
 msgid ""
 "If file extension is included in the name and the file extension is a "
 "valid :ref:`plugin_dev/plugin_format:Packed Plugin` extension (``.mcdr`` "
