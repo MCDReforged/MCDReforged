@@ -742,17 +742,42 @@ class ServerInterface:
 
 	def get_preference(self, obj: Union[str, PlayerCommandSource, ConsoleCommandSource]) -> PreferenceItem:
 		"""
-		Return the MCDR preference of the given object. The object can be a str indicating the name of a player, or a
+		Get the MCDR preference of the given object
+
+		The object can be a str indicating the name of a player, or a
 		command source. For command source, only :class:`~mcdreforged.command.command_source.PlayerCommandSource`
 		and :class:`~mcdreforged.command.command_source.ConsoleCommandSource` are supported
 
-		:param obj: The object to querying preference
+		:param obj: The object to query preference
 		:raise TypeError: If the type of the given object is not supported for preference querying
 
 		.. versionadded:: v2.1.0
 		"""
-		pref = self._mcdr_server.preference_manager.get_preference(obj, strict_type_check=True)
-		return PreferenceItem.deserialize(pref.serialize())  # make a copy
+		return self._mcdr_server.preference_manager.get_preference(obj, strict_type_check=True)
+
+	def get_default_preference(self) -> PreferenceItem:
+		"""
+		Get the default MCDR preference
+
+		.. versionadded:: v2.8.0
+		"""
+		return self._mcdr_server.preference_manager.get_default_preference()
+
+	def set_preference(self, obj: Union[str, PlayerCommandSource, ConsoleCommandSource], preference: PreferenceItem):
+		"""
+		Set the MCDR preference of the given object
+
+		The object can be a str indicating the name of a player, or a
+		command source. For command source, only :class:`~mcdreforged.command.command_source.PlayerCommandSource`
+		and :class:`~mcdreforged.command.command_source.ConsoleCommandSource` are supported
+
+		:param obj: The object to set preference
+		:param preference: The preference to be set
+		:raise TypeError: If the type of the given object is not supported for preference querying
+
+		.. versionadded:: v2.8.0
+		"""
+		return self._mcdr_server.preference_manager.set_preference(obj, preference)
 
 	# ------------------------
 	#		   Misc

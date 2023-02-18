@@ -11,15 +11,22 @@ if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
 
 
-PREFERENCE_FILE = os.path.join(plugin_constant.PLUGIN_CONFIG_DIRECTORY, core_constant.PACKAGE_NAME, 'preferences.json')
-CONSOLE_ALIAS = '#@MCDR_Console@#'
-
-
 class PreferenceItem(Serializable):
 	language: Optional[str]
 
+	def copy(self) -> 'PreferenceItem':
+		# not very efficient, but it's enough
+		return self.deserialize(self.serialize())
 
+
+class InvalidPreferenceSource(TypeError):
+	pass
+
+
+PREFERENCE_FILE = os.path.join(plugin_constant.PLUGIN_CONFIG_DIRECTORY, core_constant.PACKAGE_NAME, 'preferences.json')
+CONSOLE_ALIAS = '#@MCDR_Console@#'
 PreferenceStorage = Dict[str, PreferenceItem]
+PreferenceSource = Union[str, CommandSource]
 
 
 class PreferenceManager:
@@ -39,9 +46,9 @@ class PreferenceManager:
 			if not isinstance(e, FileNotFoundError):
 				self.logger.exception('Failed to load preference file')
 			self.preferences = {}
-			self.save_preferences()
+			self.__save_preferences()
 
-	def save_preferences(self):
+	def __save_preferences(self):
 		try:
 			dir_path = os.path.dirname(PREFERENCE_FILE)
 			if not os.path.isdir(dir_path):
@@ -53,10 +60,11 @@ class PreferenceManager:
 
 	def get_default_preference(self) -> PreferenceItem:
 		return PreferenceItem(
-			language=self.mcdr_server.get_language()
+			language=self.mcdr_server.get_language(),
 		)
 
-	def get_preference(self, obj: Union[str, CommandSource], *, auto_add: bool = False, strict_type_check: bool = False) -> PreferenceItem:
+	@classmethod
+	def __get_name(cls, obj: PreferenceSource, *, strict_type_check: bool = False) -> Optional[str]:
 		if isinstance(obj, str):
 			player_name = obj
 		elif isinstance(obj, PlayerCommandSource):
@@ -66,19 +74,28 @@ class PreferenceManager:
 		else:
 			player_name = None
 			if strict_type_check:
-				raise TypeError('Unsupported object type during preference querying: {}'.format(type(obj)))
-		pref = self.preferences.get(player_name)
+				raise InvalidPreferenceSource('Unsupported object type during preference querying: {}'.format(type(obj)))
+		return player_name
+
+	def get_preference(self, obj: PreferenceSource, *, auto_add: bool = False, strict_type_check: bool = False) -> PreferenceItem:
+		name = self.__get_name(obj, strict_type_check=strict_type_check)
+		pref: Optional[PreferenceItem] = self.preferences.get(name) if name is not None else None
 		if pref is None:
 			pref = self.get_default_preference()
-			if auto_add and player_name is not None:
-				self.preferences[player_name] = pref
-				self.save_preferences()
+			if auto_add and name is not None:
+				self.preferences[name] = pref
+				self.__save_preferences()
+		else:
+			pref = pref.copy()
 		return pref
 
-	def get_preferred_language(self, obj: Union[str, CommandSource]) -> str:
+	def set_preference(self, obj: PreferenceSource, pref: PreferenceItem):
+		name: str = self.__get_name(obj)
+		self.preferences[name] = pref.copy()
+		self.__save_preferences()
+
+	def get_preferred_language(self, obj: PreferenceSource) -> str:
 		pref = self.get_preference(obj)
 		if pref is not None:
 			return pref.language
 		return self.mcdr_server.translation_manager.language
-
-

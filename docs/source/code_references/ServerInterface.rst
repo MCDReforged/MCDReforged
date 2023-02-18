@@ -103,6 +103,8 @@ Preference
 ----------
 
 .. automethod:: ServerInterface.get_preference
+.. automethod:: ServerInterface.get_default_preference
+.. automethod:: ServerInterface.set_preference
 
 Misc
 ----

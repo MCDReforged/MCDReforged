@@ -124,6 +124,6 @@ class PreferenceCommand(SubCommand):
 			return
 		pref = self.pref_mgr.get_preference(source, auto_add=True)
 		pref.language = new_lang
-		self.pref_mgr.save_preferences()
+		self.pref_mgr.set_preference(source, pref)
 		source.reply(self.tr('mcdr_command.preference.set.done', RText('language', RColor.yellow), RText(new_lang, RColor.gold)))
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-14 17:50+0800\n"
+"POT-Creation-Date: 2023-02-19 02:12+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -108,6 +108,7 @@ msgstr "见 :ref:`此处 <plugin-translation>` 以了解为你的插件注册翻
 #: mcdreforged.plugin.server_interface.ServerInterface.say
 #: mcdreforged.plugin.server_interface.ServerInterface.schedule_task
 #: mcdreforged.plugin.server_interface.ServerInterface.set_permission_level
+#: mcdreforged.plugin.server_interface.ServerInterface.set_preference
 #: mcdreforged.plugin.server_interface.ServerInterface.tell
 #: mcdreforged.plugin.server_interface.ServerInterface.tr
 #: mcdreforged.plugin.server_interface.ServerInterface.unload_plugin of
@@ -284,7 +285,8 @@ msgstr "示例用法："
 #: mcdreforged.plugin.server_interface.ServerInterface.get_permission_level
 #: mcdreforged.plugin.server_interface.ServerInterface.get_preference
 #: mcdreforged.plugin.server_interface.ServerInterface.reply
-#: mcdreforged.plugin.server_interface.ServerInterface.set_permission_level of
+#: mcdreforged.plugin.server_interface.ServerInterface.set_permission_level
+#: mcdreforged.plugin.server_interface.ServerInterface.set_preference of
 msgid "Raises"
 msgstr "抛出"
 
@@ -881,26 +883,49 @@ msgid "Preference"
 msgstr "偏好"
 
 #: mcdreforged.plugin.server_interface.ServerInterface.get_preference:1 of
+msgid "Get the MCDR preference of the given object"
+msgstr "获取给定对象的 MCDR 偏好"
+
+#: mcdreforged.plugin.server_interface.ServerInterface.get_preference:3
+#: mcdreforged.plugin.server_interface.ServerInterface.set_preference:3 of
 msgid ""
-"Return the MCDR preference of the given object. The object can be a str "
-"indicating the name of a player, or a command source. For command source,"
-" only :class:`~mcdreforged.command.command_source.PlayerCommandSource` "
-"and :class:`~mcdreforged.command.command_source.ConsoleCommandSource` are"
-" supported"
+"The object can be a str indicating the name of a player, or a command "
+"source. For command source, only "
+":class:`~mcdreforged.command.command_source.PlayerCommandSource` and "
+":class:`~mcdreforged.command.command_source.ConsoleCommandSource` are "
+"supported"
 msgstr ""
-"返回给定对象的 MCDR 偏好。该对象可以是一个表示玩家名称的 str，或者是一个指令源。指令源仅支持 "
+"该对象可以是一个表示玩家名称的 str，或者是一个指令源。指令源仅支持 "
 ":class:`~mcdreforged.command.command_source.PlayerCommandSource` 以及 "
 ":class:`~mcdreforged.command.command_source.ConsoleCommandSource`"
 
-#: mcdreforged.plugin.server_interface.ServerInterface.get_preference:5 of
-msgid "The object to querying preference"
+#: mcdreforged.plugin.server_interface.ServerInterface.get_preference:7 of
+msgid "The object to query preference"
 msgstr "你要查询的偏好的对象"
 
-#: mcdreforged.plugin.server_interface.ServerInterface.get_preference:6 of
+#: mcdreforged.plugin.server_interface.ServerInterface.get_preference:8
+#: mcdreforged.plugin.server_interface.ServerInterface.set_preference:9 of
 msgid "If the type of the given object is not supported for preference querying"
 msgstr "若给定对象的类型不支持偏好查询"
 
-#: ../code_references/ServerInterface.rst:108
+#: mcdreforged.plugin.server_interface.ServerInterface.get_default_preference:1
+#: of
+msgid "Get the default MCDR preference"
+msgstr "返回默认的 MCDR 偏好"
+
+#: mcdreforged.plugin.server_interface.ServerInterface.set_preference:1 of
+msgid "Set the MCDR preference of the given object"
+msgstr "设置给定对象的 MCDR 偏好"
+
+#: mcdreforged.plugin.server_interface.ServerInterface.set_preference:7 of
+msgid "The object to set preference"
+msgstr "你要设置的偏好的对象"
+
+#: mcdreforged.plugin.server_interface.ServerInterface.set_preference:8 of
+msgid "The preference to be set"
+msgstr "设置给定对象的 MCDR 偏好"
+
+#: ../code_references/ServerInterface.rst:110
 msgid "Misc"
 msgstr "杂项"
 
@@ -945,4 +970,10 @@ msgstr "是否需要阻塞至可调用对象执行结束"
 #: mcdreforged.plugin.server_interface.ServerInterface.schedule_task:5 of
 msgid "The timeout of the blocking operation if ``block=True``"
 msgstr "若 ``block=True``，最大的阻塞时间"
+
+#~ msgid ""
+#~ "The preference to be set. A copy"
+#~ " will be made when storing the "
+#~ "preference"
+#~ msgstr "你要设置的偏好值"
 
