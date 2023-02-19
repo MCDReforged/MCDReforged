@@ -172,15 +172,15 @@ def __register_legacy_rcolor():
 	register('dark_red',     0xAA0000, '§4', Fore.RED)
 	register('dark_purple',  0xAA00AA, '§5', Fore.MAGENTA)
 	register('gold',         0xFFAA00, '§6', Fore.YELLOW)
-	register('gray',         0xAAAAAA, '§7', Style.RESET_ALL)
-	register('dark_gray',    0x555555, '§8', Style.RESET_ALL)
+	register('gray',         0xAAAAAA, '§7', Style.DIM)
+	register('dark_gray',    0x555555, '§8', Style.DIM)
 	register('blue',         0x5555FF, '§9', Fore.LIGHTBLUE_EX)
 	register('green',        0x55FF55, '§a', Fore.LIGHTGREEN_EX)
 	register('aqua',         0x55FFFF, '§b', Fore.LIGHTCYAN_EX)
 	register('red',          0xFF5555, '§c', Fore.LIGHTRED_EX)
 	register('light_purple', 0xFF55FF, '§d', Fore.LIGHTMAGENTA_EX)
 	register('yellow',       0xFFFF55, '§e', Fore.LIGHTYELLOW_EX)
-	register('white',        0xFFFFFF, '§f', Style.RESET_ALL)
+	register('white',        0xFFFFFF, '§f', Fore.WHITE)
 
 	# default text color is white, so use 0xFFFFFF
 	register('reset',        0xFFFFFF, '§r', Style.RESET_ALL)
