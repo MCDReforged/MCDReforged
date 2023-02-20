@@ -55,13 +55,14 @@ class AbstractMinecraftHandler(AbstractServerHandler, ABC):
 
 	def get_send_message_command(self, target: str, message: MessageText, server_information: ServerInformation) -> Optional[str]:
 		can_do_execute = False
-		try:
-			from mcdreforged.plugin.meta.version import Version
-			version = Version(server_information.version.split(' ')[0])
-			if version >= Version('1.13.0'):
-				can_do_execute = True
-		except VersionParsingError:
-			pass
+		if server_information.version is not None:
+			try:
+				from mcdreforged.plugin.meta.version import Version
+				version = Version(server_information.version.split(' ')[0])
+				if version >= Version('1.13.0'):
+					can_do_execute = True
+			except VersionParsingError:
+				pass
 		command = 'tellraw {} {}'.format(target, self.format_message(message))
 		if can_do_execute:
 			command = 'execute at @p run ' + command
