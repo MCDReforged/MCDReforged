@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-19 01:37+0800\n"
+"POT-Creation-Date: 2023-02-20 22:22+0800\n"
 "PO-Revision-Date: 2021-01-24 09:02+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -91,6 +91,14 @@ msgstr "返回"
 #: mcdreforged.minecraft.rtext.style.RColor.from_mc_value:5 of
 msgid "A corresponding :class:`RColor` object"
 msgstr "与之对应的 :class:`RColor` 对象"
+
+#: mcdreforged.minecraft.rtext.style.RColor.from_mc_value of
+msgid "Raises"
+msgstr "抛出"
+
+#: mcdreforged.minecraft.rtext.style.RColor.from_mc_value:6 of
+msgid "If the given value is not a valid Minecraft color"
+msgstr "若给定的值不是一个合法的 Minecraft 颜色"
 
 #: mcdreforged.minecraft.rtext.style.RColor.r:1 of
 msgid "The red portion of the color in [0, 255]"
@@ -625,3 +633,4 @@ msgid ""
 "The command execution result form the server, or None if *max_retry_time*"
 " retries exceeded"
 msgstr "服务器的命令执行结果。如果重试次数超过 *max_retry_time*，则将返回 None"
+

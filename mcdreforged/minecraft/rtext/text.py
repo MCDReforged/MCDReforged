@@ -240,10 +240,11 @@ class RTextBase(ABC):
 				if data.get(style.name, False):
 					styles.append(style)
 			text.set_styles(styles)
-			try:
-				text.set_color(RColor.from_mc_value(data['color']))
-			except ValueError:
-				pass
+			if 'color' in data:
+				try:
+					text.set_color(RColor.from_mc_value(data['color']))
+				except ValueError:
+					pass
 			try:
 				click_event = ['clickEvent']
 				if isinstance(click_event, dict):

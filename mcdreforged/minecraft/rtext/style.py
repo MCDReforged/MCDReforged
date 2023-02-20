@@ -131,6 +131,7 @@ class RColor(RItem, ABC, metaclass=__RColorMeta):
 		:param value: The value of the ``color`` field in Minecraft text component.
 			e.g. ``"red"``, ``"blue"``, ``"#00AAFF"``
 		:return: A corresponding :class:`RColor` object
+		:raise ValueError: If the given value is not a valid Minecraft color
 		"""
 		if value in cls._registry:
 			return cls._registry[value]
