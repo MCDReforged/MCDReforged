@@ -99,6 +99,11 @@ Then the ``related_path`` would be ``source``
 
 Type: str
 
+.. note::
+
+    It's highly recommend to keep your plugin's ``related_path`` field unchanged after the plugin is published,
+    otherwise the plugin catalogue might not be able to locate and fetch the metadata of older releases of your plugin
+
 labels
 ~~~~~~
 
