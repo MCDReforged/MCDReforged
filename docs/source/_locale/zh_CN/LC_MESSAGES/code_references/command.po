@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-30 11:44+0800\n"
+"POT-Creation-Date: 2023-02-25 16:55+0800\n"
 "PO-Revision-Date: 2021-01-23 17:24+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -160,6 +160,7 @@ msgstr "一个用于测试权限需求的工具方法"
 #: mcdreforged.command.builder.nodes.basic.AbstractNode.then
 #: mcdreforged.command.builder.tools.Requirements.argument_exists
 #: mcdreforged.command.builder.tools.Requirements.has_permission
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.add_children_for
 #: mcdreforged.command.builder.tools.SimpleCommandBuilder.arg
 #: mcdreforged.command.builder.tools.SimpleCommandBuilder.command
 #: mcdreforged.command.builder.tools.SimpleCommandBuilder.literal
@@ -938,18 +939,30 @@ msgstr ""
 #: mcdreforged.command.builder.tools.SimpleCommandBuilder.build:6 of
 msgid ""
 "A list of the built command tree root nodes. The result is cached until "
-"you instruct the builder again"
-msgstr "一个列表，储存着构建完成的指令树的根节点。构建结果将被缓存，直到你再次操作这个指令构建器"
+"you instruct the builder again. You can use :meth:`clean_cache` to "
+"explicitly clean the build cache"
+msgstr ""
+"一个列表，储存着构建完成的指令树的根节点。构建结果将被缓存，直到你再次操作这个指令构建器。借助 "
+":meth:`clean_cache`，你可以主动地清空构建结果缓存"
 
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.add_children_for
 #: mcdreforged.command.builder.tools.SimpleCommandBuilder.build
 #: mcdreforged.command.builder.tools.SimpleCommandBuilder.print_tree
 #: mcdreforged.command.builder.tools.SimpleCommandBuilder.register of
 msgid "Raises"
 msgstr "抛出"
 
-#: mcdreforged.command.builder.tools.SimpleCommandBuilder.build:7 of
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.build:8 of
 msgid "if there are undefined argument nodes"
 msgstr "如果存在未定义的参数节点"
+
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.clean_cache:1 of
+msgid "Clean the build cache"
+msgstr "清空构建结果缓存"
+
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.clean_cache:3 of
+msgid "See method :meth:`build`"
+msgstr "见方法 :meth:`build`"
 
 #: mcdreforged.command.builder.tools.SimpleCommandBuilder.register:1 of
 msgid ""
@@ -966,18 +979,34 @@ msgstr ""
 " 实例"
 
 #: mcdreforged.command.builder.tools.SimpleCommandBuilder.register:4 of
-msgid "if build fails, or there are rooted non-literal nodes"
-msgstr "如果构建失败，或者存在非字面量的根节点"
+msgid "if build fails, or there are rooted non-literal nodes in the build result"
+msgstr "如果构建失败，或者构建结果中存在非字面量的根节点"
+
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.add_children_for:1 of
+msgid ""
+"A helper method for lazyman, to build command trees with method "
+":meth:`build` and attach all built tree nodes as the children of the "
+"given node via "
+":meth:`~mcdreforged.command.builder.nodes.basic.AbstractNode.then`"
+msgstr ""
+"一个为懒人提供的工具方法，使用方法 :meth:`build` 构建指令树，随后借助 "
+":meth:`~mcdreforged.command.builder.nodes.basic.AbstractNode.then` "
+"方法，将构建结果添加为给定指令节点的子节点"
+
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.add_children_for:4 of
+msgid "The command node that will become the parent of the built children nodes"
+msgstr "将作为构建结果节点的父亲的指令节点"
+
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.add_children_for:5
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.print_tree:8 of
+msgid "if build fails"
+msgstr "若构建失败"
 
 #: mcdreforged.command.builder.tools.SimpleCommandBuilder.print_tree:1 of
 msgid ""
 "A helper method for lazyman, to build with method :meth:`build` and print"
 " the built command trees"
 msgstr "一个为懒人提供的工具方法，使用方法 :meth:`build` 构建指令树，并将指令树打印出来"
-
-#: mcdreforged.command.builder.tools.SimpleCommandBuilder.print_tree:8 of
-msgid "if build fails"
-msgstr "如果构建失败"
 
 #: mcdreforged.command.builder.tools.NodeDefinition:1 of
 msgid "A node definition class holding extra customization information"
@@ -1315,7 +1344,8 @@ msgid ""
 "node"
 msgstr "从指令树的根节点到当前节点的路径"
 
-#: ../docstring mcdreforged.command.builder.command_builder_util.DIVIDER:1 of
+#: ../../docstring mcdreforged.command.builder.command_builder_util.DIVIDER:1
+#: of
 msgid "The char to divide elements in a command string —— space"
 msgstr "在指令字符串中用于分割元素的分隔符——空格"
 

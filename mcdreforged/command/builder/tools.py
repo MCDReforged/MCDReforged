@@ -171,9 +171,6 @@ class SimpleCommandBuilder:
 	def __strip_arg(cls, node_name: str) -> str:
 		return node_name[1:-1] if cls.__is_arg(node_name) else node_name
 
-	def __clean_cache(self):
-		self.__build_cache = None
-
 	def __locate_or_create_child(self, parent: AbstractNode, node_name: str) -> AbstractNode:
 		child_map: Dict[str, AbstractNode] = {}
 		for child in parent.get_children():
@@ -223,7 +220,7 @@ class SimpleCommandBuilder:
 		:param callback: The callback function of this command, which will be passed to :meth:`AbstractNode.then<mcdreforged.command.builder.nodes.basic.AbstractNode.then>`
 		"""
 		self.__commands[command] = callback
-		self.__clean_cache()
+		self.clean_cache()
 
 	def arg(self, arg_name: str, node_factory: Callable[[str], ArgNodeType]) -> NodeDefinition[ArgNodeType]:
 		"""
@@ -247,7 +244,7 @@ class SimpleCommandBuilder:
 			arg_name = self.__make_arg(arg_name)
 		definition = _NodeDefinitionImpl(node_factory)
 		self.__arguments[arg_name] = definition
-		self.__clean_cache()
+		self.clean_cache()
 		return definition
 
 	def literal(self, literal_name: str, node_factory: Optional[Callable[[str], Literal]] = None) -> NodeDefinition[Literal]:
@@ -265,7 +262,7 @@ class SimpleCommandBuilder:
 			node_factory = Literal
 		definition = _NodeDefinitionImpl(node_factory)
 		self.__literals[literal_name] = definition
-		self.__clean_cache()
+		self.clean_cache()
 		return definition
 
 	# --------------
@@ -279,7 +276,8 @@ class SimpleCommandBuilder:
 		Nodes with same name will be reused. e.g. if you define 3 commands with path ``"!!foo"``, ``"!!foo bar"`` and "``!!foo baz"``,
 		the root ``"!!foo"`` node will be reused, and there will be only 1 ``"!!foo"`` node eventually
 
-		:return: A list of the built command tree root nodes. The result is cached until you instruct the builder again
+		:return: A list of the built command tree root nodes. The result is cached until you instruct the builder again.
+			You can use :meth:`clean_cache` to explicitly clean the build cache
 		:raise SimpleCommandBuilder.Error: if there are undefined argument nodes
 		"""
 		if self.__build_cache is None:
@@ -293,18 +291,39 @@ class SimpleCommandBuilder:
 			self.__build_cache = root.get_children()
 		return self.__build_cache
 
+	def clean_cache(self):
+		"""
+		Clean the build cache
+
+		See method :meth:`build`
+		"""
+		self.__build_cache = None
+
 	def register(self, server: 'PluginServerInterface'):
 		"""
 		A helper method for lazyman, to build with method :meth:`build` and register built commands to the MCDR server
 
 		:param server: The :class:`~mcdreforged.plugin.server_interface.PluginServerInterface` object of your plugin
-		:raise SimpleCommandBuilder.Error: if build fails, or there are rooted non-literal nodes
+		:raise SimpleCommandBuilder.Error: if build fails, or there are rooted non-literal nodes in the build result
 		"""
 		for node in self.build():
 			if isinstance(node, Literal):
 				server.register_command(node)
 			else:
 				raise self.Error('Not-literal root node is not supported'.format(node))
+
+	def add_children_for(self, parent_node: AbstractNode):
+		"""
+		A helper method for lazyman, to build command trees with method :meth:`build`
+		and attach all built tree nodes as the children of the given node via :meth:`~mcdreforged.command.builder.nodes.basic.AbstractNode.then`
+
+		:param parent_node: The command node that will become the parent of the built children nodes
+		:raise SimpleCommandBuilder.Error: if build fails
+
+		.. versionadded:: v2.8.0
+		"""
+		for node in self.build():
+			parent_node.then(node)
 
 	def print_tree(self, line_writer: tree_printer.LineWriter):
 		"""
