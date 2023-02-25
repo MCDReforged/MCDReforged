@@ -1,7 +1,7 @@
 from typing import Optional
 
 from mcdreforged.constants import core_constant
-from mcdreforged.utils.types import TranslationKeyDictRich, MessageText, TranslationStorage, TranslationKeyDictNested
+from mcdreforged.utils.types import TranslationKeyDictRich, MessageText, TranslationStorage, TranslationKeyDictNested, TranslationKeyDict
 
 __all__ = [
 	'translate_from_dict',
@@ -39,14 +39,23 @@ def translate_from_dict(translations: TranslationKeyDictRich, language: str, *, 
 	return result
 
 
+def unpack_nest_translation(translation: TranslationKeyDictNested) -> TranslationKeyDict:
+	def traverse(mapping: TranslationKeyDictNested, path: str = ''):
+		for key, item in mapping.items():
+			if key == '.':
+				current_path = path
+			else:
+				current_path = key if path == '' else path + '.' + key
+			if isinstance(item, str):
+				result[current_path] = item
+			elif isinstance(item, dict):
+				traverse(item, current_path)
+
+	result = {}
+	traverse(translation, '')
+	return result
+
+
 def update_storage(storage: TranslationStorage, language: str, mapping: TranslationKeyDictNested):
-	__update_storage(storage, language, mapping)
-
-
-def __update_storage(storage: TranslationStorage, language: str, mapping: TranslationKeyDictNested, path: Optional[str] = None):
-	for key, item in mapping.items():
-		current_path = f'{path}.{key}' if path is not None else key
-		if isinstance(item, str):
-			storage[current_path][language] = item
-		elif isinstance(item, dict):
-			__update_storage(storage, language, item, current_path)
+	for key, value in unpack_nest_translation(mapping).items():
+		storage[key][language] = value

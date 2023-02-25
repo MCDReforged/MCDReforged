@@ -32,7 +32,7 @@ class TranslationManager:
 			try:
 				with open(os.path.join(LANGUAGE_DIRECTORY, file_path), encoding='utf8') as file_handler:
 					translations = dict(YAML().load(file_handler))
-				for key, text in translations.items():
+				for key, text in translation_util.unpack_nest_translation(translations).items():
 					self.translations[key][language] = text
 				self.available_languages.add(language)
 				self.logger.debug('Loaded translation for {} with {} entries'.format(language, len(translations)))
