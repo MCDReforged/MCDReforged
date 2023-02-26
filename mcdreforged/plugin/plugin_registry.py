@@ -1,5 +1,5 @@
 import collections
-from typing import Dict, List, Callable, Any, TYPE_CHECKING, Union
+from typing import Dict, List, Callable, Any, TYPE_CHECKING, Union, NamedTuple
 
 from mcdreforged.command.builder.nodes.basic import Literal
 from mcdreforged.minecraft.rtext.text import RTextBase
@@ -43,13 +43,12 @@ class HelpMessage:
 		return 'HelpMessage[prefix={},message={},permission={}]'.format(self.prefix, self.message, self.permission)
 
 
-class PluginCommandHolder:
+class PluginCommandHolder(NamedTuple):
 	"""
-	A Tuple like data class for tracking the plugin of the node
+	A tuple for tracking the plugin of the node
 	"""
-	def __init__(self, plugin: 'AbstractPlugin', node: Literal):
-		self.plugin = plugin
-		self.node = node
+	plugin: 'AbstractPlugin'
+	node: Literal
 
 
 class AbstractPluginRegistry:
