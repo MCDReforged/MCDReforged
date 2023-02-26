@@ -309,8 +309,6 @@ class AbstractNode(ABC):
 		for req in self._requirements:
 			if not self.__smart_callback(req.requirement, context.source, context):
 				return req.failure_message_getter or (lambda: None)
-		if self._redirect_node is not None:
-			return self._redirect_node.__check_requirements(context)
 		return None
 
 	def _get_suggestions(self, context: CommandContext) -> Iterable[str]:
