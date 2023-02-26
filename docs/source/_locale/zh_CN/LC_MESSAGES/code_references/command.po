@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-25 16:55+0800\n"
+"POT-Creation-Date: 2023-02-26 11:36+0800\n"
 "PO-Revision-Date: 2021-01-23 17:24+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -367,25 +367,55 @@ msgstr "示例用法::"
 
 #: mcdreforged.command.builder.nodes.basic.AbstractNode.redirects:1 of
 msgid "Redirect all further child nodes command parsing to another given node"
-msgstr "将所有其他子节点指令解析重定向到另一个给定节点"
+msgstr "将所有后续的子节点指令解析重定向到另一个给定节点"
 
 #: mcdreforged.command.builder.nodes.basic.AbstractNode.redirects:3 of
+msgid "Redirected stuffs:"
+msgstr "重定向的逻辑："
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.redirects:5 of
+msgid "Children node traversal"
+msgstr "子节点的遍历"
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.redirects:6 of
+msgid "Command callback, if current node doesn't have a callback"
+msgstr "指令回调函数，若当前节点并不包含指令回调函数"
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.redirects:8 of
+msgid "Unredirected stuffs:"
+msgstr "未重定向的逻辑："
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.redirects:10 of
+msgid ""
+"Command parsing, i.e. parsing the literal / argument value of the node "
+"from command"
+msgstr "指令解析，即从指令中解析节点的字面量 / 参数值"
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.redirects:11 of
+msgid "Requirement testing"
+msgstr "节点需求测试"
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.redirects:12 of
+msgid "Suggestion fetching"
+msgstr "指令建议获取"
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.redirects:14 of
 msgid "Example use cases:"
 msgstr "用途示例："
 
-#: mcdreforged.command.builder.nodes.basic.AbstractNode.redirects:5 of
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.redirects:16 of
 msgid ""
 "You want a short command and full-path command that will all execute the "
 "same commands"
 msgstr "你需要一个简短的指令和一个全路径指令来执行相同的指令"
 
-#: mcdreforged.command.builder.nodes.basic.AbstractNode.redirects:6 of
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.redirects:17 of
 msgid ""
 "You want to repeatedly re-enter a command node's children when parsing "
 "commands"
 msgstr "你需要在解析指令时重复多次进入一个节点的儿子"
 
-#: mcdreforged.command.builder.nodes.basic.AbstractNode.redirects:8 of
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.redirects:19 of
 msgid ""
 "Pay attention to the difference between :meth:`redirects` and "
 ":meth:`then`. :meth:`redirects` is to redirect the child nodes, and "
@@ -394,7 +424,7 @@ msgstr ""
 "注意 :meth:`redirects` 和 :meth:`then` 之间的区别。:meth:`redirects` 是重定向子节点，而 "
 ":meth:`then` 是添加子节点"
 
-#: mcdreforged.command.builder.nodes.basic.AbstractNode.redirects:11 of
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.redirects:22 of
 msgid "A node instance which current node is redirecting to"
 msgstr "当前节点的重定向目标"
 

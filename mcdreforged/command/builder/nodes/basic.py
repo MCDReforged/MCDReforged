@@ -161,6 +161,17 @@ class AbstractNode(ABC):
 		"""
 		Redirect all further child nodes command parsing to another given node
 
+		Redirected stuffs:
+
+		* Children node traversal
+		* Command callback, if current node doesn't have a callback
+
+		Unredirected stuffs:
+
+		* Command parsing, i.e. parsing the literal / argument value of the node from command
+		* Requirement testing
+		* Suggestion fetching
+
 		Example use cases:
 
 		* You want a short command and full-path command that will all execute the same commands

@@ -277,17 +277,32 @@ class CommandTreeTestCase(CommandTestCase):
 		assert_requirement_not_met_message(executor, 'permission', 'err1')
 
 	def test_12_redirect(self):
-		executor1 = Literal('tp').then(
+		allow_teleport = True
+		allow_tp = True
+
+		executor1 = Literal('tp').requires(lambda s: allow_tp).then(
 			Literal('here').then(
 				Literal('there').runs(self.callback_hit)
 			)
 		)
-		let_it_pass = True
-		executor2 = Literal('teleport').requires(lambda s: let_it_pass).redirects(executor1)
+		executor2 = Literal('teleport').requires(lambda s: allow_teleport).redirects(executor1)
 		self.run_command_and_check_hit(executor1, 'tp here there', True)
 		self.run_command_and_check_hit(executor2, 'teleport here there', True)
 		self.assertRaises(UnknownCommand, self.run_command, executor2, 'teleport here')
-		let_it_pass = False
+
+		allow_tp = True
+		allow_teleport = False
+		self.run_command_and_check_hit(executor1, 'tp here there', True)
+		self.assertRaises(RequirementNotMet, self.run_command, executor2, 'teleport here there')
+
+		allow_tp = False
+		allow_teleport = True
+		self.assertRaises(RequirementNotMet, self.run_command, executor1, 'tp here there')
+		self.run_command_and_check_hit(executor2, 'teleport here there', True)
+
+		allow_tp = False
+		allow_teleport = False
+		self.assertRaises(RequirementNotMet, self.run_command, executor1, 'tp here there')
 		self.assertRaises(RequirementNotMet, self.run_command, executor2, 'teleport here there')
 
 	def test_13_error_listener(self):
