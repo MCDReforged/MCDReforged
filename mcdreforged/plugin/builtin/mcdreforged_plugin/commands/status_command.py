@@ -64,11 +64,18 @@ class StatusCommand(SubCommand):
 
 		source.reply(self.tr('mcdr_command.print_mcdr_status.extra.thread', threading.active_count()))
 		thread_pool_counts = 0
+		thread_names = []
 		for thread in threading.enumerate():
 			name = thread.name
 			if not name.startswith('ThreadPoolExecutor-'):
-				source.reply(RText('  - ', RColor.gray) + name)
+				thread_names.append(name)
 			else:
 				thread_pool_counts += 1
 		if thread_pool_counts > 0:
-			source.reply(RText('  - ', RColor.gray) + 'ThreadPoolExecutor thread x{}'.format(thread_pool_counts))
+			source.reply(RTextList(RText('  - ', RColor.gray), 'ThreadPoolExecutor thread x{}'.format(thread_pool_counts)))
+		for name in sorted(set(thread_names)):
+			count = thread_names.count(name)
+			if count > 1:
+				source.reply(RTextList(RText('  - ', RColor.gray), '{} ({})'.format(name, count)))
+			else:
+				source.reply(RTextList(RText('  - ', RColor.gray), '{}'.format(name)))
