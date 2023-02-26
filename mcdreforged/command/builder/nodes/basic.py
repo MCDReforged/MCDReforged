@@ -157,7 +157,7 @@ class AbstractNode(ABC):
 		self._requirements.append(_Requirement(requirement, failure_message_getter))
 		return self
 
-	def redirects(self: Self, redirect_node: 'AbstractNode') -> Self:
+	def redirects(self: Self, redirect_node: 'AbstractNode', *, extend: bool = False) -> Self:
 		"""
 		Redirect all further child nodes command parsing to another given node
 
@@ -170,11 +170,16 @@ class AbstractNode(ABC):
 		and :meth:`then` is to add a child node
 
 		:param redirect_node: A node instance which current node is redirecting to
+		:param extend: Extend the requirements of redirect_node to this node
 		"""
+		if redirect_node is self:
+			raise ValueError('Cannot redirect node to itself')
 		if self.has_children():
 			raise IllegalNodeOperation('Node with children nodes is not allowed to be redirected')
 		class_util.check_type(redirect_node, AbstractNode)
 		self._redirect_node = redirect_node
+		if extend:
+			self._requirements.extend(self._redirect_node._requirements)
 		return self
 
 	def suggests(self: Self, suggestion: SUGGESTS_CALLBACK) -> Self:
