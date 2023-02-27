@@ -29,7 +29,7 @@ def _get_args(cls: Type) -> tuple:
 	return getattr(cls, '__args__', ())
 
 
-def serialize(obj: Any) -> Union[None, int, float, str, list, dict]:
+def serialize(obj: Any) -> Union[None, int, float, str, bool, list, dict]:
 	"""
 	A utility function to serialize any object into a json-like python object.
 	Here, being json-like means that the return value can be passed to e.g. :func:`json.dumps` directly
