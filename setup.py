@@ -60,6 +60,7 @@ setup(
 	python_requires=REQUIRES_PYTHON,
 	url=URL,
 	packages=find_packages(exclude=['tests', '*.tests', '*.tests.*', 'tests.*']),
+	package_data={core_constant.PACKAGE_NAME: ["py.typed"]},
 	install_requires=REQUIRED,
 	include_package_data=True,
 	classifiers=CLASSIFIERS,
