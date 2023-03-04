@@ -22,7 +22,7 @@
 }
 
 /* Gray algolia logo */
-.DocSearch-Logo {
+.DocSearch-Logo > svg {
     filter: grayscale(1) brightness(2);
 }
 

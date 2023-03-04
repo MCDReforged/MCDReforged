@@ -68,20 +68,20 @@ if (language.startsWith("zh")) {
 };
 
 // Switchgear
-algolia_enabled = !document.cookie.includes('algolia=false')
+algolia_enabled = !document.cookie.includes('algolia=false');
 
 if (algolia_enabled) {
   docsearch(config);
 }
 
-switchgear = document.createElement('a')
-switchgear.innerText = algolia_enabled ? translations.switchgear.disable : translations.switchgear.enable
+switchgear = document.createElement('a');
+switchgear.innerText = algolia_enabled ? translations.switchgear.disable : translations.switchgear.enable;
 switchgear.onclick = function () {
   if (algolia_enabled) {
-    document.cookie = 'algolia=false'
+    document.cookie = 'algolia=false';
   } else {
-    document.cookie = 'algolia=true'
+    document.cookie = 'algolia=true';
   }
-  location.reload()
+  location.reload();
 }
-document.getElementById('rtd-search-form').append(switchgear)
+document.getElementById('rtd-search-form').append(switchgear);
