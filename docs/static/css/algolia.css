@@ -1,0 +1,37 @@
+/* --- Algolia Docsearch Styles --- */
+
+.wy-nav-side {
+    overflow: visible;
+}
+
+.wy-side-scroll {
+    overflow: inherit;
+}
+
+/* Override sphinx theme styles */
+.DocSearch-Input {
+    border: none !important;
+    box-shadow: none !important;
+    font-size: 1.2em !important;
+    padding: 0 0 0 8px !important;
+}
+
+.DocSearch-Button {
+    width: 100% !important;
+    margin: 0 !important;
+}
+
+/* Gray algolia logo */
+.DocSearch-Logo {
+    filter: grayscale(1) brightness(2);
+}
+
+/* Switchgear */
+#rtd-search-form > a {
+    color: #a5c0cf !important;
+    font-size: 0.5em;
+}
+
+#rtd-search-form > a:hover {
+    color: white !important;
+}
