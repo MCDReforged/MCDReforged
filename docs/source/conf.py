@@ -69,6 +69,7 @@ html_theme = 'sphinx_rtd_theme'
 html_static_path = ['../static']
 
 html_css_files = [
+	# Save the table width
 	# override wide tables in RTD theme
 	# https://rackerlabs.github.io/docs-rackspace/tools/rtd-tables.html
 	'css/theme_overrides.css',  
