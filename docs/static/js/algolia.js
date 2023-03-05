@@ -1,3 +1,6 @@
+// Algolia Docsearch implement
+// https://docsearch.algolia.com/docs/api
+
 const translations = {
   placeholder: '\u641c\u7d22\u6587\u6863',
   button: {
@@ -36,19 +39,19 @@ const translations = {
   },
 };
 
-// Get current langeage
-if (typeof READTHEDOCS_DATA !== 'undefined') {
-  language = READTHEDOCS_DATA.language
-} else {
-  language = document.documentElement.lang
-}
-
 config = {
   appId: 'A1XIV9INYQ',
   apiKey: '43120950d3053488e5146d70643f567f', // public apiKey
   indexName: 'mcdreforgeddocs', // en_US by default
   container: '#rtd-search-form',
   debug: false
+}
+
+// Get current langeage
+if (typeof READTHEDOCS_DATA !== 'undefined') {
+  language = READTHEDOCS_DATA.language
+} else {
+  language = document.documentElement.lang
 }
 
 // Set translations
@@ -68,6 +71,7 @@ if (language.startsWith("zh")) {
 };
 
 // Switchgear
+// add a switchgear to allow users to still use the original search system
 algolia_enabled = !document.cookie.includes('algolia=false');
 
 if (algolia_enabled) {
