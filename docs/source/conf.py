@@ -69,7 +69,12 @@ html_theme = 'sphinx_rtd_theme'
 html_static_path = ['../static']
 
 html_css_files = [
-	'css/theme_overrides.css',  # override wide tables in RTD theme
+	# override wide tables in RTD theme
+	# https://rackerlabs.github.io/docs-rackspace/tools/rtd-tables.html
+	'css/theme_overrides.css',  
+
+	# Algolia Docsearch
+	# https://docsearch.algolia.com/docs/DocSearch-v3
 	'css/algolia.css',
 	'https://cdn.jsdelivr.net/npm/@docsearch/css@3'
 ]
