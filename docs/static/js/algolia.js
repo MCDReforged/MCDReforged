@@ -47,7 +47,7 @@ config = {
   debug: false
 }
 
-// Get current langeage
+// Get current language
 if (typeof READTHEDOCS_DATA !== 'undefined') {
   language = READTHEDOCS_DATA.language
 } else {
