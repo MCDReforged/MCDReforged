@@ -2,39 +2,39 @@
 // https://docsearch.algolia.com/docs/api
 
 const translations = {
-  placeholder: '\u641c\u7d22\u6587\u6863',
+  placeholder: '搜索文档',
   button: {
-    buttonText: '\u641c\u7d22',
-    buttonAriaLabel: '\u641c\u7d22',
+    buttonText: '搜索',
+    buttonAriaLabel: '搜索',
   },
   modal: {
     searchBox: {
-      resetButtonTitle: '\u6e05\u9664\u641c\u7d22\u5185\u5bb9',
-      resetButtonAriaLabel: '\u6e05\u9664\u641c\u7d22\u5185\u5bb9',
-      cancelButtonText: '\u53d6\u6d88',
-      cancelButtonAriaLabel: '\u53d6\u6d88',
+      resetButtonTitle: '清除搜索内容',
+      resetButtonAriaLabel: '清除搜索内容',
+      cancelButtonText: '取消',
+      cancelButtonAriaLabel: '取消',
     },
     startScreen: {
-      recentSearchesTitle: '\u6700\u8fd1\u641c\u7d22',
-      noRecentSearchesText: '\u65e0\u6700\u8fd1\u641c\u7d22',
-      saveRecentSearchButtonTitle: '\u4fdd\u5b58\u641c\u7d22\u7ed3\u679c',
-      removeRecentSearchButtonTitle: '\u4ece\u5386\u53f2\u4e2d\u5220\u9664',
-      favoriteSearchesTitle: '\u6536\u85cf',
-      removeFavoriteSearchButtonTitle: '\u4ece\u6536\u85cf\u5939\u4e2d\u5220\u9664'
+      recentSearchesTitle: '最近搜索',
+      noRecentSearchesText: '无最近搜索',
+      saveRecentSearchButtonTitle: '保存搜索结果',
+      removeRecentSearchButtonTitle: '从历史中删除',
+      favoriteSearchesTitle: '收藏',
+      removeFavoriteSearchButtonTitle: '从收藏夹中删除'
     },
     errorScreen: {
-      titleText: '\u65e0\u6cd5\u83b7\u53d6\u7ed3\u679c',
-      helpText: '\u68c0\u67e5\u7f51\u7edc\u8fde\u63a5'
+      titleText: '无法获取结果',
+      helpText: '检查网络连接'
     },
     footer: {
-      selectText: '\u9009\u62e9',
-      selectKeyAriaLabel: '\u56de\u8f66\u952e',
-      navigateText: '\u5bfc\u822a',
-      navigateUpKeyAriaLabel: '\u5411\u4e0a\u7bad\u5934',
-      navigateDownKeyAriaLabel: '\u5411\u4e0b\u7bad\u5934',
-      closeText: '\u5173\u95ed',
+      selectText: '选择',
+      selectKeyAriaLabel: '回车键',
+      navigateText: '导航',
+      navigateUpKeyAriaLabel: '向上箭头',
+      navigateDownKeyAriaLabel: '向下箭头',
+      closeText: '关闭',
       closeKeyAriaLabel: 'ESC',
-      searchByText: '\u91c7\u7528',
+      searchByText: '采用',
     }
   },
 };
@@ -60,8 +60,8 @@ if (language.startsWith("zh")) {
   config.indexName = 'mcdreforgeddocs-zh_CN';
   config.placeholder = translations.placeholder;
   translations.switchgear = {
-    enable: '\u4f7f\u7528 Algolia Docsearch',
-    disable: '\u4f7f\u7528\u4f20\u7edf\u641c\u7d22\u65b9\u5f0f'
+    enable: '使用 Algolia Docsearch',
+    disable: '使用传统搜索方式'
   }
 } else {
   translations.switchgear = {
