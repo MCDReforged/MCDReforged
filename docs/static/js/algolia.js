@@ -1,7 +1,18 @@
 // Algolia Docsearch implement
 // https://docsearch.algolia.com/docs/api
 
-const translations = {
+const switchgear_i18n = {
+  en: {
+    enable: 'Use Algolia Docsearch',
+    disable: 'Use Legacy Search'
+  },
+  zh: {
+    enable: '使用 Algolia Docsearch',
+    disable: '使用传统搜索方式'
+  }
+}
+
+const algolia_i18n = {
   placeholder: '搜索文档',
   button: {
     buttonText: '搜索',
@@ -35,7 +46,13 @@ const translations = {
       closeText: '关闭',
       closeKeyAriaLabel: 'ESC',
       searchByText: '采用',
-    }
+    },
+    noResultsScreen: {
+      noResultsText: '没有关于此关键字的结果:',
+      suggestedQueryText: '试试搜索',
+      reportMissingResultsText: '文档中存在包含此关键字的内容？',
+      reportMissingResultsLinkText: '告诉我们',
+    },
   },
 };
 
@@ -56,19 +73,13 @@ if (typeof READTHEDOCS_DATA !== 'undefined') {
 
 // Set translations
 if (language.startsWith("zh")) {
-  config.translations = translations;
+  config.translations = algolia_i18n;
   config.indexName = 'mcdreforgeddocs-zh_CN';
-  config.placeholder = translations.placeholder;
-  translations.switchgear = {
-    enable: '使用 Algolia Docsearch',
-    disable: '使用传统搜索方式'
-  }
+  config.placeholder = algolia_i18n.placeholder;
+  switchgear_tr = switchgear_i18n.zh;
 } else {
-  translations.switchgear = {
-    enable: 'Use Algolia Docsearch',
-    disable: 'Use Legacy Search'
-  }
-};
+  switchgear_tr = switchgear_i18n.en;
+}
 
 // Switchgear
 // add a switchgear to allow users to still use the original search system
@@ -79,7 +90,7 @@ if (algolia_enabled) {
 }
 
 switchgear = document.createElement('a');
-switchgear.innerText = algolia_enabled ? translations.switchgear.disable : translations.switchgear.enable;
+switchgear.innerText = algolia_enabled ? switchgear_tr.disable : switchgear_tr.enable;
 switchgear.onclick = function () {
   if (algolia_enabled) {
     document.cookie = 'algolia=false';
