@@ -188,7 +188,7 @@ class Info:
 	def debug_format_text(self):
 		try:
 			time_message = '{:0>2}:{:0>2}:{:0>2}'.format(self.hour, self.min, self.sec)
-		except:
+		except Exception:
 			time_message = 'Invalid'
 		return '\n'.join([
 			'Time: {}; ID: {}'.format(time_message, self.id),

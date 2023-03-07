@@ -46,7 +46,7 @@ class PluginThread(threading.Thread):
 						self.thread_pool.working_count += 1
 						try:
 							task_data.callback()
-						except:
+						except Exception:
 							self.thread_pool.mcdr_server.logger.exception('Exception in thread created by {}'.format(plugin))
 						finally:
 							self.thread_pool.working_count -= 1

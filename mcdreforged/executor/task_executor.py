@@ -105,7 +105,7 @@ class TaskExecutor(ThreadExecutor):
 		else:
 			try:
 				task.func()
-			except:
+			except Exception:
 				self.mcdr_server.logger.exception(self.mcdr_server.tr('task_executor.error'))
 			finally:
 				self.task_queue.task_done()

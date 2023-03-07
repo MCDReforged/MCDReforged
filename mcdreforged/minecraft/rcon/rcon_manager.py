@@ -39,7 +39,7 @@ class RconManager:
 			try:
 				self.rcon.disconnect()
 				self.logger.info(self.mcdr_server.tr('rcon_manager.disconnect.disconnected'))
-			except:
+			except Exception:
 				self.mcdr_server.logger.error(self.mcdr_server.tr('rcon_manager.disconnect.disconnect_fail'))
 		self.rcon = None
 

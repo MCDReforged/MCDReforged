@@ -34,7 +34,7 @@ class InfoReactorManager:
 			for class_path in custom_reactor_class_paths:
 				try:
 					reactor_class = class_util.load_class(class_path)
-				except:
+				except Exception:
 					self.mcdr_server.logger.exception('Fail to load info reactor from "{}"'.format(class_path))
 				else:
 					if issubclass(reactor_class, AbstractInfoReactor):
@@ -47,7 +47,7 @@ class InfoReactorManager:
 		for reactor in self.reactors:
 			try:
 				reactor.react(info)
-			except:
+			except Exception:
 				self.mcdr_server.logger.exception(self.mcdr_server.tr('info_reactor_manager.react.error', type(reactor).__name__))
 
 		# send command input from the console to the server's stdin

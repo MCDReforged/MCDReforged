@@ -17,7 +17,7 @@ T = TypeVar('T')
 def _get_type_hints(cls: Type):
 	try:
 		return get_type_hints(cls)
-	except:
+	except Exception:
 		return get_type_hints(cls, globalns={})
 
 
@@ -59,7 +59,7 @@ def serialize(obj: Any) -> Union[None, int, float, str, list, dict]:
 		for attr_name in list(attr_dict.keys()):
 			if attr_name.startswith('_'):
 				attr_dict.pop(attr_name)
-	except:
+	except Exception:
 		raise TypeError('Unsupported input type {}'.format(type(obj))) from None
 	else:
 		return serialize(attr_dict)
@@ -202,7 +202,7 @@ def deserialize(data: Any, cls: Type[T], *, error_at_missing: bool = False, erro
 		if isinstance(data, dict):
 			try:
 				result = cls()
-			except:
+			except Exception:
 				raise TypeError('Failed to construct instance of class {}'.format(type(cls)))
 			input_key_set = set(data.keys())
 			for attr_name, attr_type in _get_type_hints(cls).items():

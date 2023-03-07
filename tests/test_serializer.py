@@ -222,7 +222,7 @@ class MyTestCase(unittest.TestCase):
 					serialized = TestData(data=my_enum).serialize()
 					# self.assertEqual(my_enum.value, serialized['data'], msg='w')
 					self.assertEqual(my_enum, TestData.deserialize(serialized).data)
-			except:
+			except Exception:
 				print('Error when testing with base class {}'.format(base_class))
 				raise
 

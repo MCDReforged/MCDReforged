@@ -61,5 +61,5 @@ class WatchDog(ThreadExecutor):
 		try:
 			time.sleep(0.1)
 			self.check_task_executor_state()
-		except:
+		except Exception:
 			self.mcdr_server.logger.exception('Error ticking watch dog')

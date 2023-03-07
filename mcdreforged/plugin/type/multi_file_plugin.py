@@ -45,7 +45,7 @@ class MultiFilePlugin(RegularPlugin, ABC):
 		super()._on_load()
 		try:
 			meta_file = self.open_file(plugin_constant.PLUGIN_META_FILE)
-		except:
+		except Exception:
 			raise IllegalPluginStructure('Metadata file {} not found'.format(plugin_constant.PLUGIN_META_FILE)) from None
 		with meta_file:
 			self._set_metadata(Metadata(json.load(meta_file), plugin=self))
@@ -64,7 +64,7 @@ class MultiFilePlugin(RegularPlugin, ABC):
 		# It's fail-proof for packed plugin
 		try:
 			self._load_entry_instance()
-		except:
+		except Exception:
 			self.mcdr_server.logger.exception('Fail to load the entry point of {}'.format(self))
 		else:
 			super()._on_ready()
@@ -87,7 +87,7 @@ class MultiFilePlugin(RegularPlugin, ABC):
 					else:
 						continue
 				self.register_translation(language, translations)
-			except:
+			except Exception:
 				self.mcdr_server.logger.exception('Fail to load default translation from file {} in {}'.format(file_path, repr(self)))
 
 	def _check_subdir_legality(self):
@@ -100,7 +100,7 @@ class MultiFilePlugin(RegularPlugin, ABC):
 	def __check_requirements(self):
 		try:
 			req_file = self.open_file(plugin_constant.PLUGIN_REQUIREMENTS_FILE)
-		except:
+		except Exception:
 			return
 		with req_file:
 			requirements = []

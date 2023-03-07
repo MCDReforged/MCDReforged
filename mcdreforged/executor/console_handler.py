@@ -54,7 +54,7 @@ class ConsoleHandler(ThreadExecutor):
 					raise IOError()
 				try:
 					parsed_result: Info = self.mcdr_server.server_handler_manager.get_current_handler().parse_console_command(text)
-				except:
+				except Exception:
 					self.mcdr_server.logger.exception(self.mcdr_server.tr('console_handler.parse_fail', text))
 				else:
 					if self.mcdr_server.logger.should_log_debug(DebugOption.HANDLER):
@@ -66,7 +66,7 @@ class ConsoleHandler(ThreadExecutor):
 			if not self.mcdr_server.is_mcdr_about_to_exit():
 				self.mcdr_server.logger.critical('Critical exception caught in {}: {} {}'.format(type(self).__name__, type(error).__name__, error))
 				self.mcdr_server.interrupt()
-		except:
+		except Exception:
 			self.mcdr_server.logger.exception(self.mcdr_server.tr('console_handler.error'))
 
 
@@ -207,7 +207,7 @@ class PromptToolkitWrapper:
 			self.__tweak_kits()
 			self.prompt_session = MCDRPromptSession(self.__console_handler)
 			self.stdout_proxy = StdoutProxy(sleep_between_writes=0.01, raw=True)
-		except:
+		except Exception:
 			self.__logger.exception('Failed to enable advanced console, switch back to basic input')
 		else:
 			self.__real_stdout = sys.stdout
@@ -245,7 +245,7 @@ class PromptToolkitWrapper:
 			if pt_app.is_running:
 				try:
 					pt_app.exit()
-				except:
+				except Exception:
 					self.__logger.exception('Fail to stop prompt toolkit app')
 			with self.__promoting:
 				# make sure in the console thread, prompt_session.prompt() ends

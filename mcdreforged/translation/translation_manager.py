@@ -36,7 +36,7 @@ class TranslationManager:
 					self.translations[key][language] = text
 				self.available_languages.add(language)
 				self.logger.debug('Loaded translation for {} with {} entries'.format(language, len(translations)))
-			except:
+			except Exception:
 				self.logger.exception('Failed to load language {} from "{}"'.format(language, file_path))
 
 	def set_language(self, language: str):

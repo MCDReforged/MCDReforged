@@ -163,6 +163,6 @@ class RegularPlugin(AbstractPlugin, ABC):
 		if self.plugin_exists():
 			try:
 				return os.stat(self.plugin_path).st_mtime_ns
-			except:
+			except Exception:
 				pass
 		return None

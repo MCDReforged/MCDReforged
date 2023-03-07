@@ -85,7 +85,7 @@ class RconConnection:
 		if self.socket is not None:
 			try:
 				self.disconnect()
-			except:
+			except Exception:
 				pass
 		self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		self.socket.connect((self.address, self.port))
@@ -124,14 +124,14 @@ class RconConnection:
 							break
 						result += packet.payload
 					return result
-				except:
+				except Exception:
 					if self.logger is not None:
 						self.logger.warning('Rcon Fail to received packet')
 					try:
 						self.disconnect()
 						if self.connect():  # next try
 							continue
-					except:
+					except Exception:
 						pass
 					break
 		return None

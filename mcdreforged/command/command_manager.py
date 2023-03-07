@@ -79,7 +79,7 @@ class CommandManager:
 					except KeyError:
 						self.logger.debug('Fail to translated command error with key {}'.format(translation_key), option=DebugOption.COMMAND)
 					source.reply(error.to_rtext())
-			except:
+			except Exception:
 				self.logger.exception('Error when executing command "{}" with command source "{}" on {} registered by {}'.format(command, source, node, plugin))
 
 		if purpose == TraversePurpose.SUGGEST:

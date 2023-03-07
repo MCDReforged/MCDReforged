@@ -73,7 +73,7 @@ def run_mcdr():
 	print('{} is open source, u can find it here: {}'.format(core_constant.NAME, core_constant.GITHUB_URL))
 	try:
 		mcdreforged_server = MCDReforgedServer()
-	except:
+	except Exception:
 		print('Fail to initialize {}'.format(core_constant.NAME_SHORT))
 		raise
 	else:

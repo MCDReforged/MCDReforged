@@ -135,7 +135,7 @@ class MCDReforgedServer:
 		try:
 			if self.process and self.process.poll() is None:
 				self.__kill_server()
-		except:
+		except Exception:
 			pass
 
 	def __check_environment(self):
@@ -360,7 +360,7 @@ class MCDReforgedServer:
 				start_command = self.config['start_command']
 				self.logger.info(self.tr('mcdr_server.start_server.starting', start_command))
 				self.process = Popen(start_command, cwd=self.config['working_directory'], stdin=PIPE, stdout=PIPE, stderr=STDOUT, shell=True)
-			except:
+			except Exception:
 				self.logger.exception(self.tr('mcdr_server.start_server.start_fail'))
 				return False
 			else:
@@ -412,7 +412,7 @@ class MCDReforgedServer:
 			if not forced:
 				try:
 					self.send(self.server_handler_manager.get_current_handler().get_stop_command())
-				except:
+				except Exception:
 					self.logger.error(self.tr('mcdr_server.stop.stop_fail'))
 					forced = True
 			if forced:
@@ -500,7 +500,7 @@ class MCDReforgedServer:
 		else:
 			try:
 				decoded_text = text.decode(self.decoding_method)  # type: str
-			except:
+			except Exception:
 				self.logger.error(self.tr('mcdr_server.receive.decode_fail', text))
 				raise
 			return decoded_text.rstrip('\n\r').lstrip('\n\r')
@@ -517,13 +517,13 @@ class MCDReforgedServer:
 			return
 		try:
 			text = self.server_handler_manager.get_current_handler().pre_parse_server_stdout(text)
-		except:
+		except Exception:
 			self.logger.warning(self.tr('mcdr_server.tick.pre_parse_fail'))
 
 		parsed_result: Info
 		try:
 			parsed_result = self.server_handler_manager.get_current_handler().parse_server_stdout(text)
-		except:
+		except Exception:
 			if self.logger.should_log_debug(option=DebugOption.HANDLER):  # traceback.format_exc() is costly
 				self.logger.debug('Fail to parse text "{}" from stdout of the server, using raw handler'.format(text), no_check=True)
 				for line in traceback.format_exc().splitlines():
@@ -569,7 +569,7 @@ class MCDReforgedServer:
 			self.logger.info(self.tr('mcdr_server.on_mcdr_stop.bye'))
 		except KeyboardInterrupt:  # I don't know why there sometimes will be a KeyboardInterrupt if MCDR is stopped by ctrl-c
 			pass
-		except:
+		except Exception:
 			self.logger.exception(self.tr('mcdr_server.on_mcdr_stop.stop_error'))
 		finally:
 			self.set_mcdr_state(MCDReforgedState.STOPPED)
@@ -603,7 +603,7 @@ class MCDReforgedServer:
 					time.sleep(0.01)
 			except KeyboardInterrupt:
 				self.interrupt()
-			except:
+			except Exception:
 				if self.is_interrupt():
 					break
 				else:

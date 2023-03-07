@@ -190,7 +190,7 @@ class PluginManager:
 				self.logger.error(self.mcdr_server.tr('plugin_manager.load_plugin.duplicate', plugin.get_name(), plugin.plugin_path, existed_plugin.get_name(), existed_plugin.plugin_path))
 				try:
 					plugin.unload()
-				except:
+				except Exception:
 					# should never come here
 					self.logger.exception(self.mcdr_server.tr('plugin_manager.load_plugin.unload_duplication_fail', plugin.get_name(), plugin.plugin_path))
 				plugin.remove()  # quickly remove this plugin
@@ -205,7 +205,7 @@ class PluginManager:
 		"""
 		try:
 			plugin.unload()
-		except:
+		except Exception:
 			# should never come here
 			plugin.set_state(PluginState.UNLOADING)  # a fallback set state
 			self.logger.exception(self.mcdr_server.tr('plugin_manager.unload_plugin.fail', plugin.get_name()))
@@ -245,7 +245,7 @@ class PluginManager:
 				self.logger.error(self.mcdr_server.tr('plugin_manager.load_plugin.duplicate', plugin.get_name(), plugin.plugin_path, existed_plugin.get_name(), existed_plugin.plugin_path))
 				try:
 					plugin.unload()
-				except:
+				except Exception:
 					# should never come here
 					self.logger.exception(self.mcdr_server.tr('plugin_manager.load_plugin.unload_duplication_fail', plugin.get_name(), plugin.plugin_path))
 				return False
@@ -597,5 +597,5 @@ class PluginManager:
 		try:
 			with self.with_plugin_context(listener.plugin):
 				listener.execute(listener.plugin.server_interface, *args)
-		except:
+		except Exception:
 			self.logger.exception('Error invoking listener {}'.format(listener))

@@ -90,7 +90,7 @@ class SubCommand(ABC):
 			if log_success:
 				source.reply(self.tr('mcdr_command.{}.success'.format(name), *msg_args))
 			return ret
-		except:
+		except Exception:
 			if log_fail:
 				source.reply(self.tr('mcdr_command.{}.fail'.format(name), *msg_args))
 			self.mcdr_server.logger.error(traceback.format_exc())

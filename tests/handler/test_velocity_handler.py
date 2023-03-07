@@ -42,7 +42,7 @@ class MyTestCase(unittest.TestCase):
 		for line in TEXT.splitlines():
 			try:
 				info = self.handler.parse_server_stdout(line)
-			except:
+			except Exception:
 				print('error when parsing line "{}"'.format(line))
 				raise
 

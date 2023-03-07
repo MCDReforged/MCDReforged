@@ -48,7 +48,7 @@ class ServerHandlerManager:
 			for class_path in custom_handler_class_paths:
 				try:
 					handler_class = class_util.load_class(class_path)
-				except:
+				except Exception:
 					self.mcdr_server.logger.exception('Fail to load info handler from "{}"'.format(class_path))
 				else:
 					if issubclass(handler_class, AbstractServerHandler):
@@ -115,7 +115,7 @@ class ServerHandlerManager:
 				if handler is not self.basic_handler:
 					try:
 						handler.parse_server_stdout(handler.pre_parse_server_stdout(text))
-					except:
+					except Exception:
 						pass
 					else:
 						self.__detection_success_count[handler] += 1

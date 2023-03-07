@@ -55,7 +55,7 @@ class PreferenceManager:
 				os.makedirs(dir_path)
 			with file_util.safe_write(PREFERENCE_FILE, encoding='utf8') as file:
 				json.dump(serialize(self.preferences), file, indent=4, ensure_ascii=False)
-		except:
+		except Exception:
 			self.logger.exception('Failed to save preference file')
 
 	def get_default_preference(self) -> PreferenceItem:

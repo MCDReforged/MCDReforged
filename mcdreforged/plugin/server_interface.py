@@ -828,7 +828,7 @@ class PluginServerInterface(ServerInterface):
 		if self.__logger_for_plugin is None:
 			try:
 				logger = self.__logger_for_plugin = self._get_logger(self.__plugin.get_id())
-			except:
+			except Exception:
 				logger = self._mcdr_server.logger
 			self.__logger_for_plugin = logger
 		return self.__logger_for_plugin
