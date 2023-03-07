@@ -1,0 +1,35 @@
+/* --- Algolia Docsearch Styles --- */
+
+/* Some sphinx ajustment */
+/* https://github.com/readthedocs/sphinx_rtd_theme/issues/761 */
+.wy-nav-side {
+    overflow: visible;
+}
+
+.wy-side-scroll {
+    overflow: inherit;
+}
+
+/* Override sphinx theme styles for search box */
+.DocSearch-Input {
+    border: none !important;
+    box-shadow: none !important;
+    font-size: 1.2em !important;
+    padding: 0 0 0 8px !important;
+}
+
+/* Match sphinx width */
+.DocSearch-Button {
+    width: 100% !important;
+    margin: 0 !important;
+}
+
+/* Switchgear styles */
+#rtd-search-form > a {
+    color: #a5c0cf !important;
+    font-size: 0.5em;
+}
+
+#rtd-search-form > a:hover {
+    color: white !important;
+}
