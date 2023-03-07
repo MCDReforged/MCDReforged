@@ -8,6 +8,8 @@ import threading
 from contextlib import contextmanager
 from typing import Callable, Dict, Optional, Any, Tuple, List, TYPE_CHECKING, Deque
 
+import pkg_resources
+
 from mcdreforged.constants import core_constant, plugin_constant
 from mcdreforged.plugin import plugin_factory
 from mcdreforged.plugin.builtin.mcdreforged_plugin.mcdreforged_plugin import MCDReforgedPlugin
@@ -171,8 +173,12 @@ class PluginManager:
 		plugin = plugin_factory.create_regular_plugin(self, file_path)
 		try:
 			plugin.load()
-		except:
-			self.logger.exception(self.mcdr_server.tr('plugin_manager.load_plugin.fail', plugin.get_name()))
+		except Exception as e:
+			if isinstance(e, pkg_resources.ResolutionError):
+				self.logger.error(self.mcdr_server.tr('plugin_manager.load_plugin.fail', plugin.get_name()))
+				self.logger.error(self.mcdr_server.tr('plugin_manager.load_plugin.resolution_error', plugin.get_name(), '{}: {}'.format(type(e).__name__, e)))
+			else:
+				self.logger.exception(self.mcdr_server.tr('plugin_manager.load_plugin.fail', plugin.get_name()))
 			return None
 		else:
 			existed_plugin = self.plugins.get(plugin.get_id())
@@ -220,8 +226,12 @@ class PluginManager:
 		"""
 		try:
 			plugin.reload()
-		except:
-			self.logger.exception(self.mcdr_server.tr('plugin_manager.reload_plugin.fail', plugin.get_name()))
+		except Exception as e:
+			if isinstance(e, pkg_resources.ResolutionError):
+				self.logger.error(self.mcdr_server.tr('plugin_manager.reload_plugin.fail', plugin.get_name()))
+				self.logger.error(self.mcdr_server.tr('plugin_manager.load_plugin.resolution_error', plugin.get_name(), '{}: {}'.format(type(e).__name__, e)))
+			else:
+				self.logger.exception(self.mcdr_server.tr('plugin_manager.reload_plugin.fail', plugin.get_name()))
 			self.__unload_plugin(plugin)
 			return False
 		else:

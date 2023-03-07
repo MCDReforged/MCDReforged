@@ -273,6 +273,7 @@ plugin_manager:
     success: Plugin {0} loaded
     duplicate: Plugin {0} ({1}) has duplicate id as existed plugin {2} ({3}), removed
     unload_duplication_fail: Fail to unload duplicated plugin {0} ({1})
+    resolution_error: 'Unsatisfied Python library requirement for plugin {0}: {1}'
   unload_plugin:
     entered: Unloading plugin {0}
     fail: Fail to unload plugin {0}
