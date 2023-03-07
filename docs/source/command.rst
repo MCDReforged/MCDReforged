@@ -214,15 +214,67 @@ Examples:
 
 * ``!!MCDR pref set language zh_cn``: Set the value of preference ``language`` to ``zh_cn``
 
-Misc
-^^^^
-
 Check update
-~~~~~~~~~~~~~~~
+^^^^^^^^^^^^
 
 ``!!MCDR checkupdate``, or ``!!MCDR cu``. Use it to manually check update from github
 
 It will try to get the latest release version in github, and check if it's newer than the current version. If it is, it will show the update logs from the github release
+
+Debug
+^^^^^
+
+``!!MCDR debug`` contains serval utilities for debugging MCDR or MCDR plugins.
+They are mostly designed for developers, so you can skip this if you are a MCDR user
+
+Thread Dump
+~~~~~~~~~~~
+
+Dump stack trace information of given threads. A easy way to figure out what are your threads doing
+
+You can use ``#all`` as the thread name to dump all threads
+
+Format::
+
+    !!MCDR debug thread_dump #all
+    !!MCDR debug thread_dump <thread_name>
+
+Translation Test
+~~~~~~~~~~~~~~~~
+
+Query translation results by translation key, or dump all translations within given path
+
+Format::
+
+    !!MCDR debug translation get <translation_key>
+    !!MCDR debug translation dump <json_path>
+
+Examples::
+
+    !!MCDR debug translation get one.of.my.translation.key
+    !!MCDR debug translation get server_interface.load_config_simple.succeed
+    !!MCDR debug translation dump .
+    !!MCDR debug translation dump mcdr_server
+    !!MCDR debug translation dump mcdr_server.on_server_stop
+
+Command Tree Display
+~~~~~~~~~~~~~~~~~~~~
+
+Dump command trees with :meth:`~mcdreforged.command.builder.nodes.basic.AbstractNode.print_tree` method
+
+You can filter out command trees to be dumped with plugin id or root node name
+
+Format::
+
+    !!MCDR debug command_dump all
+    !!MCDR debug command_dump plugin <plugin_id>
+    !!MCDR debug command_dump node <literal_name>
+
+Examples::
+
+    !!MCDR debug command_dump plugin my_plugin
+    !!MCDR debug command_dump node !!MyCommand
+
 
 !!help command
 --------------

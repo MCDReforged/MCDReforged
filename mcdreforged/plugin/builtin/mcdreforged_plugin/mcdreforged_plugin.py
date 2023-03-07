@@ -8,6 +8,7 @@ from mcdreforged.minecraft.rtext.style import RColor, RAction
 from mcdreforged.minecraft.rtext.text import RTextList, RText
 from mcdreforged.permission.permission_level import PermissionLevel
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.check_update_command import CheckUpdateCommand
+from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.debug_command import DebugCommand
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.help_command import HelpCommand
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.permission_command import PermissionCommand
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.plugin_command import PluginCommand
@@ -34,13 +35,14 @@ class MCDReforgedPlugin(PermanentPlugin):
 	def __init__(self, plugin_manager):
 		super().__init__(plugin_manager)
 		self._set_metadata(Metadata(METADATA, plugin=self))
+		self.command_check_update = CheckUpdateCommand(self)
+		self.command_debug = DebugCommand(self)
 		self.command_help = HelpCommand(self)
-		self.command_status = StatusCommand(self)
-		self.command_reload = ReloadCommand(self)
 		self.command_permission = PermissionCommand(self)
 		self.command_plugin = PluginCommand(self)
-		self.command_check_update = CheckUpdateCommand(self)
 		self.command_preference = PreferenceCommand(self)
+		self.command_reload = ReloadCommand(self)
+		self.command_status = StatusCommand(self)
 
 	def tr(self, key: str, *args, **kwargs) -> RTextMCDRTranslation:
 		return self.server_interface.rtr(key, *args, **kwargs)
@@ -72,12 +74,13 @@ class MCDReforgedPlugin(PermanentPlugin):
 			on_error(UnknownArgument, self.on_mcdr_command_unknown_argument).
 			on_child_error(RequirementNotMet, self.on_mcdr_command_permission_denied, handled=True).
 			on_child_error(UnknownArgument, self.on_mcdr_command_unknown_argument).
-			then(self.command_status.get_command_node()).
-			then(self.command_reload.get_command_node()).
+			then(self.command_check_update.get_command_node()).
+			then(self.command_debug.get_command_node()).
 			then(self.command_permission.get_command_node()).
 			then(self.command_plugin.get_command_node()).
-			then(self.command_check_update.get_command_node()).
-			then(self.command_preference.get_command_node())
+			then(self.command_preference.get_command_node()).
+			then(self.command_reload.get_command_node()).
+			then(self.command_status.get_command_node())
 		)
 		self.register_command(self.command_help.get_command_node())
 

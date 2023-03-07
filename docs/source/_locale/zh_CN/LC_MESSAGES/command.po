@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-14 20:44+0800\n"
+"POT-Creation-Date: 2023-03-08 02:03+0800\n"
 "PO-Revision-Date: 2021-01-23 08:54+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -579,49 +579,107 @@ msgid ""
 msgstr "``!!MCDR pref set language zh_cn``: 将偏好 ``language`` 的值设置为 ``zh_cn``"
 
 #: ../command.rst:218
-msgid "Misc"
-msgstr "杂项"
-
-#: ../command.rst:221
 msgid "Check update"
 msgstr "检查更新"
 
-#: ../command.rst:223
+#: ../command.rst:220
 msgid ""
 "``!!MCDR checkupdate``, or ``!!MCDR cu``. Use it to manually check update"
 " from github"
 msgstr "使用 ``!!MCDR checkupdate`` 或 ``!!MCDR cu`` 可手动检查来自 github 的更新"
 
-#: ../command.rst:225
+#: ../command.rst:222
 msgid ""
 "It will try to get the latest release version in github, and check if "
 "it's newer than the current version. If it is, it will show the update "
 "logs from the github release"
 msgstr "它将尝试在 github 中获取最新版本，并检查它是否比当前版本更新。 如果是，它将显示 github 上的更新日志"
 
-#: ../command.rst:228
+#: ../command.rst:225
+msgid "Debug"
+msgstr "调试"
+
+#: ../command.rst:227
+msgid ""
+"``!!MCDR debug`` contains serval utilities for debugging MCDR or MCDR "
+"plugins. They are mostly designed for developers, so you can skip this if"
+" you are a MCDR user"
+msgstr ""
+"``!!MCDR debug`` 包含了不少用于调试 MCDR 或 MCDR 插件的实用工具。它们主要是为开发者设计的，因此如果你是一位 MCDR"
+" 的用户，你可以跳过这一部分"
+
+#: ../command.rst:231
+msgid "Thread Dump"
+msgstr "线程转储"
+
+#: ../command.rst:233
+msgid ""
+"Dump stack trace information of given threads. A easy way to figure out "
+"what are your threads doing"
+msgstr "导出所有指定线程的堆栈追踪信息。一个用于快速分析你的线程正在干什么的方式"
+
+#: ../command.rst:235
+msgid "You can use ``#all`` as the thread name to dump all threads"
+msgstr "你可以使用 ``#all`` 作为线程名来导出所有线程的信息"
+
+#: ../command.rst:237 ../command.rst:247 ../command.rst:267
+msgid "Format::"
+msgstr "格式："
+
+#: ../command.rst:243
+msgid "Translation Test"
+msgstr "翻译测试"
+
+#: ../command.rst:245
+msgid ""
+"Query translation results by translation key, or dump all translations "
+"within given path"
+msgstr "查询给定翻译键的翻译结果，或者导出以给定路径为前缀的所有翻译键"
+
+#: ../command.rst:252 ../command.rst:273
+msgid "Examples::"
+msgstr "例子："
+
+#: ../command.rst:261
+msgid "Command Tree Display"
+msgstr "指令树展示"
+
+#: ../command.rst:263
+msgid ""
+"Dump command trees with "
+":meth:`~mcdreforged.command.builder.nodes.basic.AbstractNode.print_tree` "
+"method"
+msgstr "使用方法 :meth:`~mcdreforged.command.builder.nodes.basic.AbstractNode.print_tree` 导出指令树"
+
+#: ../command.rst:265
+msgid ""
+"You can filter out command trees to be dumped with plugin id or root node"
+" name"
+msgstr "你可以通过插件 id 或根节点名来过滤指令树"
+
+#: ../command.rst:280
 msgid "!!help command"
 msgstr "!!help 指令"
 
-#: ../command.rst:230
+#: ../command.rst:282
 msgid ""
 "``!!help`` command is place to display the help messages of all commands."
 " It works as an index of all commands"
 msgstr "``!!help`` 指令将显示所有指令的帮助消息。它作为着一个包含所有指令的索引"
 
-#: ../command.rst:232
+#: ../command.rst:284
 msgid ""
 "The content of this command can be registered by plugins, so a new user "
 "can easily browse all available commands that it can access"
 msgstr "此指令的内容可以由插件注册，所以一个新的用户可以借此轻松浏览所有可用的指令"
 
-#: ../command.rst:234
+#: ../command.rst:286
 msgid ""
 "Any user is allowed to use this command, and MCDR will list all command "
 "help messages that the user has enough permission level to see"
 msgstr "任何用户都可以使用此指令，MCDR 将列出该用户有权查看的所有指令帮助消息"
 
-#: ../command.rst:236
+#: ../command.rst:288
 msgid ""
 "Without any plugin, you may see the result below after you entered the "
 "``!!help`` command"

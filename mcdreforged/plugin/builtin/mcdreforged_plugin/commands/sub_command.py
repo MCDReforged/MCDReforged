@@ -56,6 +56,10 @@ class SubCommand(ABC):
 		return self.mcdr_plugin.help_command_prefix
 
 	@staticmethod
+	def owner_command_root(literal) -> Literal:
+		return Literal(literal).requires(lambda src: src.has_permission(PermissionLevel.PHYSICAL_SERVER_CONTROL_LEVEL))
+
+	@staticmethod
 	def control_command_root(literal) -> Literal:
 		return Literal(literal).requires(lambda src: src.has_permission(PermissionLevel.MCDR_CONTROL_LEVEL))
 

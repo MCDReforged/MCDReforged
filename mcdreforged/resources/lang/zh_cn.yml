@@ -148,6 +148,15 @@ mcdr_command:
       §7!!MCDR preference §e<pref_name>§r: 显示偏好 §e<pref_name>§r 的详情
       §7!!MCDR preference §e<pref_name>§r set §6<value>§r: 设定偏好 §e<pref_name>§r 的值为 §6<value>§r
       §7!!MCDR preference §e<pref_name>§r reset: 将偏好 §e<pref_name>§r 重置为默认值
+    debug: |
+      §7!!MCDR debug thread_dump §6[#all|<thread_name>]§r: 导出所有指定线程的堆栈追踪信息
+      §7!!MCDR debug translation get §6<translation_key>§r: 导出给定翻译键的翻译信息
+      §7!!MCDR debug translation dump §6<json_path>§r: 导出以给定路径为前缀的所有翻译键，例如 "mcdr_server.on_server_stop"
+      §7!!MCDR debug command_dump all§r: 导出所有指令树
+      §7!!MCDR debug command_dump plugin §6<plugin_id>§r: 导出给定插件注册的所有指令树
+      §7!!MCDR debug command_dump node §6<literal_name>§r: 导出树根为给定名字所有指令树
+      §7!!MCDR debug logger_filter set §6<regexp>§r: 为 MCDR 的 logger 设置一个正则表达式过滤器。这不会影响服务端消息的显示
+      §7!!MCDR debug logger_filter clear§r: 清除 MCDR logger 的正则表达式过滤器
     title: MCDR 指令帮助信息列表
     mcdr_command: MCDR 控制指令
     help_command: 显示指令帮助信息

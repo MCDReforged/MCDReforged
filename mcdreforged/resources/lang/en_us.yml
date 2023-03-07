@@ -148,6 +148,13 @@ mcdr_command:
       §7!!MCDR preference §e<pref_name>§r: Display the details of preference §e<pref_name>§r
       §7!!MCDR preference §e<pref_name>§r set §6<value>§r: Set the value of preference §e<pref_name>§r to §6<value>§r
       §7!!MCDR preference §e<pref_name>§r reset: Reset preference §e<pref_name>§r to the default value
+    debug: |
+      §7!!MCDR debug thread_dump §6[#all|<thread_name>]§r: Dump stack trace information of given threads
+      §7!!MCDR debug translation get §6<translation_key>§r: Get the translation dict for given translation key
+      §7!!MCDR debug translation dump §6<json_path>§r: Dump all translations starting with given path, e.g. "mcdr_server.on_server_stop"
+      §7!!MCDR debug command_dump all§r: Dump all command trees
+      §7!!MCDR debug command_dump plugin §6<plugin_id>§r: Dump all command trees registered by given plugin
+      §7!!MCDR debug command_dump node §6<literal_name>§r: Dump all command trees with root with given name
     title: MCDR command help message list
     mcdr_command: MCDR control command
     help_command: Display command help messages
