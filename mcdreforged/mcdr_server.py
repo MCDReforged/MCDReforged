@@ -32,7 +32,7 @@ from mcdreforged.plugin.server_interface import ServerInterface
 from mcdreforged.preference.preference_manager import PreferenceManager
 from mcdreforged.translation.translation_manager import TranslationManager
 from mcdreforged.utils import file_util
-from mcdreforged.utils.exception import IllegalCallError, ServerStopped, ServerStartError, IllegalStateError
+from mcdreforged.utils.exception import IllegalCallError, ServerStopped, ServerStartError, IllegalStateError, DecodeError
 from mcdreforged.utils.logger import DebugOption, MCDReforgedLogger, MCColoredFormatter
 from mcdreforged.utils.types import MessageText
 
@@ -488,7 +488,7 @@ class MCDReforgedServer:
 		:raise: ServerStopped
 		"""
 		try:
-			text = next(iter(self.process.stdout))  # type: bytes
+			text: bytes = next(iter(self.process.stdout))
 		except StopIteration:  # server process has stopped
 			for i in range(core_constant.WAIT_TIME_AFTER_SERVER_STDOUT_END_SEC * 10):
 				if self.process.poll() is not None:
@@ -499,10 +499,10 @@ class MCDReforgedServer:
 			raise ServerStopped()
 		else:
 			try:
-				decoded_text = text.decode(self.decoding_method)  # type: str
-			except Exception:
-				self.logger.error(self.tr('mcdr_server.receive.decode_fail', text))
-				raise
+				decoded_text: str = text.decode(self.decoding_method)
+			except Exception as e:
+				self.logger.error(self.tr('mcdr_server.receive.decode_fail', text, e))
+				raise DecodeError(e)
 			return decoded_text.rstrip('\n\r').lstrip('\n\r')
 
 	def __tick(self):
@@ -512,6 +512,8 @@ class MCDReforgedServer:
 		"""
 		try:
 			text = self.__receive()
+		except DecodeError:
+			return
 		except ServerStopped:
 			self.__on_server_stop()
 			return

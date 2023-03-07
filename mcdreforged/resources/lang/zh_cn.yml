@@ -29,7 +29,7 @@ mcdr_server:
       text: '被输入的指令: {0}'
   receive:
     wait_stop: 等待服务端进程停止
-    decode_fail: 解析文本 "{0}" 出错
+    decode_fail: '解析文本 {0} 出错: {1}'
   on_mcdr_start:
     console_disabled: 控制台线程已禁用
   on_server_stop:

@@ -29,7 +29,7 @@ mcdr_server:
       text: 'Command being sent: {0}'
   receive:
     wait_stop: Waiting for server process to stop
-    decode_fail: Fail to decode text "{0}"
+    decode_fail: 'Fail to decode text {0}: {1}'
   on_mcdr_start:
     console_disabled: Console thread disabled
   on_server_stop:

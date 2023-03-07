@@ -21,6 +21,10 @@ class ServerStopped(RuntimeError):
 	pass
 
 
+class DecodeError(ValueError):
+	pass
+
+
 class IllegalPluginStructure(Exception):
 	pass
 
