@@ -5,6 +5,7 @@ from typing import Type
 
 from mcdreforged.api.command import *
 from mcdreforged.api.types import CommandSource
+from mcdreforged.command.builder.nodes.basic import CallbackError
 from mcdreforged.utils.types import MessageText
 
 
@@ -373,7 +374,14 @@ class CommandTreeTestCase(CommandTestCase):
 		self.run_command_and_check_hit(Literal('test').runs(func2), 'test', True)
 		self.run_command_and_check_hit(Literal('test').runs(func3), 'test', True)
 		self.run_command_and_check_hit(Literal('test').runs(_C().method), 'test', True)
-		self.assert_raises_and_check_hit(False, TypeError, self.run_command, Literal('test').runs(func4), 'test')
+		try:
+			self.run_command(Literal('test').runs(func4), 'test')
+		except Exception as e:
+			self.assertIsInstance(e, CallbackError)
+			self.assertIsInstance(e.exception, TypeError)
+			self.check_hit(False)
+		else:
+			self.fail('Expected CallbackError but nothing raised')
 
 	def test_16_boolean(self):
 		def func(src, ctx):

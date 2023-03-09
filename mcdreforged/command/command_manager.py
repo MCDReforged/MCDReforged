@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING, Dict, List
 
 import mcdreforged.command.builder.command_builder_util as utils
 from mcdreforged.command.builder.exception import CommandError, RequirementNotMet
-from mcdreforged.command.builder.nodes.basic import CommandSuggestion, CommandSuggestions
+from mcdreforged.command.builder.nodes.basic import CommandSuggestion, CommandSuggestions, CallbackError
 from mcdreforged.command.command_source import InfoCommandSource, CommandSource
 from mcdreforged.plugin.plugin_registry import PluginCommandHolder
 from mcdreforged.utils import string_util
@@ -79,8 +79,19 @@ class CommandManager:
 					except KeyError:
 						self.logger.debug('Fail to translated command error with key {}'.format(translation_key), option=DebugOption.COMMAND)
 					source.reply(error.to_rtext())
-			except Exception:
-				self.logger.exception('Error when executing command "{}" with command source "{}" on {} registered by {}'.format(command, source, node, plugin))
+			except Exception as error:
+				data = {
+					'source': source,
+					'node': node,
+					'plugin': plugin
+				}
+				if isinstance(error, CallbackError):
+					data['for'] = error.action
+					data['path'] = '[{}]'.format(', '.join(map(str, error.context.node_path)))
+					exc_info = error.exc_info
+				else:
+					exc_info = True
+				self.logger.error('Error when executing command {}, {}'.format(repr(command), ', '.join(map(lambda item: '{} {}'.format(*item), data.items()))), exc_info=exc_info)
 
 		if purpose == TraversePurpose.SUGGEST:
 			return suggestions

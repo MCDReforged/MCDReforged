@@ -1,5 +1,6 @@
 import collections
 import inspect
+import sys
 from abc import ABC
 from types import MethodType
 from typing import List, Callable, Iterable, Set, Dict, Type, Any, Union, Optional, NamedTuple, TypeVar
@@ -24,6 +25,14 @@ ERROR_HANDLER_CALLBACK = __SOURCE_ERROR_CONTEXT_CALLBACK
 FAIL_MSG_CALLBACK = __SOURCE_CONTEXT_CALLBACK_MSG
 SUGGESTS_CALLBACK = __SOURCE_CONTEXT_CALLBACK_STR_ITERABLE
 REQUIRES_CALLBACK = __SOURCE_CONTEXT_CALLBACK_BOOL
+
+
+class CallbackError(Exception):
+	def __init__(self, exception: Exception, context: CommandContext, action: str):
+		self.exception = exception
+		self.context = context.copy()
+		self.action = action
+		self.exc_info = sys.exc_info()
 
 
 class _ErrorHandler(NamedTuple):
@@ -304,7 +313,10 @@ class AbstractNode(ABC):
 	def __handle_error(self, error: CommandError, context: CommandContext, error_handlers: _ERROR_HANDLER_TYPE):
 		for error_type, handler in error_handlers.items():
 			if isinstance(error, error_type):
-				self.__smart_callback(handler.callback, context.source, error, context)
+				try:
+					self.__smart_callback(handler.callback, context.source, error, context)
+				except Exception as e:
+					raise CallbackError(e, context, 'error handling')
 				if handler.handled:
 					error.set_handled()
 
@@ -318,12 +330,20 @@ class AbstractNode(ABC):
 		failure_message_getter: requirement check failed
 		"""
 		for req in self._requirements:
-			if not self.__smart_callback(req.requirement, context.source, context):
-				return req.failure_message_getter or (lambda: None)
+			try:
+				ok = self.__smart_callback(req.requirement, context.source, context)
+			except Exception as e:
+				raise CallbackError(e, context, 'requirements check')
+			else:
+				if not ok:
+					return req.failure_message_getter or (lambda: None)
 		return None
 
 	def _get_suggestions(self, context: CommandContext) -> Iterable[str]:
-		return self.__smart_callback(self._suggestion_getter, context.source, context)
+		try:
+			return self.__smart_callback(self._suggestion_getter, context.source, context)
+		except Exception as e:
+			raise CallbackError(e, context, 'suggestions fetching')
 
 	def _execute_command(self, context: CommandContext) -> None:
 		command = context.command  # type: str
@@ -340,7 +360,10 @@ class AbstractNode(ABC):
 			with context.read_command(self, parse_result, total_read):
 				getter = self.__check_requirements(context)
 				if getter is not None:  # requirement check failed
-					failure_message = self.__smart_callback(getter, context.source, context)
+					try:
+						failure_message = self.__smart_callback(getter, context.source, context)
+					except Exception as e:
+						raise CallbackError(e, context, 'failure message fetching')
 					self.__raise_error(RequirementNotMet(context.command_read, context.command_read, failure_message), context)
 
 				# Parsing finished
@@ -349,7 +372,10 @@ class AbstractNode(ABC):
 					if callback is None and self._redirect_node is not None:
 						callback = self._redirect_node._callback
 					if callback is not None:
-						self.__smart_callback(callback, context.source, context)
+						try:
+							self.__smart_callback(callback, context.source, context)
+						except Exception as e:
+							raise CallbackError(e, context, 'command callback')
 					else:
 						self.__raise_error(UnknownCommand(context.command_read, context.command_read), context)
 				# Un-parsed command string remains
