@@ -15,6 +15,8 @@ if TYPE_CHECKING:
 	from mcdreforged.preference.preference_manager import PreferenceItem
 
 
+class NotPlayerCommandSourceError(RuntimeError): pass
+
 class CommandSource(ABC):
 	"""
 	:class:`CommandSource`: is an abstracted command executor model. It provides several methods for command execution
@@ -38,6 +40,16 @@ class CommandSource(ABC):
 		:return: ``True`` if it's a player command source, ``False`` otherwise
 		"""
 		raise NotImplementedError()
+
+	@property
+	def player(self) -> str:
+		"""
+		Return the player's name if the command source is a player command source
+		
+		:return: The player's name
+		:raise NotPlayerCommandSourceError: if the source isn't a player command source
+		"""
+		raise NotPlayerCommandSourceError()
 
 	@property
 	def is_console(self) -> bool:
@@ -159,12 +171,22 @@ class PlayerCommandSource(InfoCommandSource):
 			raise TypeError('{} should be built from server info'.format(self.__class__.__name__))
 		super().__init__(mcdr_server, info)
 
-		self.player: str = player
+		self._player: str = player
 		"""The name of the player"""
 
 	@property
 	def is_player(self) -> bool:
 		return True
+
+	@property
+	def player(self) -> str:
+		return self._player
+
+	# This setter is for backward compatible, since `player` is a public field before
+	# or should it be readonly?
+	@player.setter
+	def player(self, player: str):
+		self._player = player
 
 	@property
 	def is_console(self) -> bool:
