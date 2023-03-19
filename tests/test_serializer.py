@@ -319,6 +319,28 @@ class MyTestCase(unittest.TestCase):
 			with self.assertRaises(ValueError):
 				deserialize({'b': {'k': 'u'}}, A)
 
+	def test_13_serialize_order(self):
+		class Data(Serializable):
+			a: int
+			b: Dict[str, str] = {'b': True}
+
+		x = Data()
+		self.assertEqual(['b'], list(filter(lambda k: not k.startswith('_'), vars(x).keys())))
+		self.assertEqual(['b'], list(x.serialize().keys()))
+
+		# order of known fields are preserved
+		y = Data()
+		y.a = 2
+		self.assertEqual(['b', 'a'], list(filter(lambda k: not k.startswith('_'), vars(y).keys())))
+		self.assertEqual(['a', 'b'], list(y.serialize().keys()))
+
+		# unknown fields are thrown to the end
+		z = Data()
+		z.c = 'foobar'
+		z.a = 2
+		self.assertEqual(['b', 'c', 'a'], list(filter(lambda k: not k.startswith('_'), vars(z).keys())))
+		self.assertEqual(['a', 'b', 'c'], list(z.serialize().keys()))
+
 
 if __name__ == '__main__':
 	unittest.main()

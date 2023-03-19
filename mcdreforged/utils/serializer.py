@@ -42,6 +42,10 @@ def serialize(obj: Any) -> Union[None, int, float, str, list, dict]:
 	*   Normal object will be converted to a :class:`dict` with all of its public fields.
 		The keys are the name of the fields and the values are the serialized field values
 
+	.. versionadded:: v2.8.0
+
+		If the object is a :class:`Serializable`, the value field order will follow the order in the annotation
+
 	:param obj: The object to be serialized
 	:return: The serialized result
 	"""
@@ -53,12 +57,22 @@ def serialize(obj: Any) -> Union[None, int, float, str, list, dict]:
 		return dict(map(lambda t: (t[0], serialize(t[1])), obj.items()))
 	elif isinstance(obj.__class__, EnumMeta):
 		return obj.name
+
 	try:
-		attr_dict = vars(obj).copy()
+		attr_dict: Dict[str, Any] = vars(obj).copy()
 		# don't serialize protected fields
 		for attr_name in list(attr_dict.keys()):
 			if attr_name.startswith('_'):
 				attr_dict.pop(attr_name)
+		if isinstance(obj, Serializable):
+			order_dict = {}
+			for i, attr_name in enumerate(_get_type_hints(type(obj)).keys()):
+				if not attr_name.startswith('_'):
+					order_dict[attr_name] = i
+			attr_dict = dict(sorted(
+				map(tuple, attr_dict.items()),
+				key=lambda item: order_dict.get(item[0], len(order_dict))
+			))
 	except Exception:
 		raise TypeError('Unsupported input type {}'.format(type(obj))) from None
 	else:
