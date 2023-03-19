@@ -67,8 +67,7 @@ msgid ""
 "This is the official documentation for `MCDReforged <https://github.com"
 "/Fallen-Breath/MCDReforged>`__."
 msgstr ""
-"这是 `MCDReforged <https://github.com/Fallen-Breath/MCDReforged>`__ "
-"的中文文档。感谢 `Alex3236 <https://github.com/alex3236>`__ 等对此文档的贡献"
+"这是 `MCDReforged <https://github.com/Fallen-Breath/MCDReforged>`__ 的中文文档。"
 
 #: ../index.rst:26
 msgid "Indices and tables"
