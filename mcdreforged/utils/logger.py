@@ -60,7 +60,7 @@ class SyncStdoutStreamHandler(logging.StreamHandler):
 				inst.release()
 
 
-class MCColoredFormatter(ColoredFormatter):
+class MCColorFormatControl:
 	MC_CODE_ITEMS: List[RItemLegacy] = list(filter(lambda item: isinstance(item, RItemLegacy), list(RColor) + list(RStyle)))
 
 	# global flag
@@ -89,8 +89,7 @@ class MCColoredFormatter(ColoredFormatter):
 	def __set_mc_code_trans_disable(cls, state: bool):
 		cls.__TLS.mc_code_trans = state
 
-	def formatMessage(self, record):
-		text = super().formatMessage(record)
+	def _modify_message_text(self, text: str) -> str:
 		if not self.__is_mc_code_trans_disabled():
 			# minecraft code -> console code
 			for item in self.MC_CODE_ITEMS:
@@ -101,6 +100,18 @@ class MCColoredFormatter(ColoredFormatter):
 		if self.console_color_disabled:
 			text = string_util.clean_console_color_code(text)
 		return text
+
+
+class MCDReforgedFormatter(ColoredFormatter, MCColorFormatControl):
+	def formatMessage(self, record):
+		text = super().formatMessage(record)
+		return self._modify_message_text(text)
+
+
+class ServerOutputFormatter(logging.Formatter, MCColorFormatControl):
+	def formatMessage(self, record):
+		text = super().formatMessage(record)
+		return self._modify_message_text(text)
 
 
 class NoColorFormatter(logging.Formatter):
@@ -139,7 +150,7 @@ class MCDReforgedLogger(logging.Logger):
 	@property
 	def __console_formatter(self):
 		extra = '' if self.__plugin_id is None else ' [{}]'.format(self.__plugin_id)
-		return MCColoredFormatter(
+		return MCDReforgedFormatter(
 			f'[%(name)s] [%(asctime)s] [%(threadName)s/%(log_color)s%(levelname)s%(reset)s]{extra}: %(message_log_color)s%(message)s%(reset)s',
 			log_colors=self.LOG_COLORS,
 			secondary_log_colors=self.SECONDARY_LOG_COLORS,
@@ -175,7 +186,7 @@ class MCDReforgedLogger(logging.Logger):
 
 	def debug(self, *args, option: Optional[DebugOption] = None, no_check: bool = False):
 		if no_check or self.should_log_debug(option):
-			with MCColoredFormatter.disable_minecraft_color_code_transform():
+			with MCColorFormatControl.disable_minecraft_color_code_transform():
 				super().debug(*args)
 
 	def set_file(self, file_name: str):
@@ -206,7 +217,7 @@ class MCDReforgedLogger(logging.Logger):
 
 
 class ServerOutputLogger(logging.Logger):
-	server_fmt = MCColoredFormatter('[%(name)s] %(message)s')
+	server_fmt = ServerOutputFormatter('[%(name)s] %(message)s')
 
 	def __init__(self, name):
 		super().__init__(name)

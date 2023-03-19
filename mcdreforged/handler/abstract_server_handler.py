@@ -1,8 +1,9 @@
+import functools
 import re
 import time
-from typing import Optional, Union, Iterable, Tuple
+from typing import Optional, Union, Iterable, Tuple, List
 
-from parse import parse
+import parse
 
 from mcdreforged.info_reactor.info import InfoSource, Info
 from mcdreforged.info_reactor.server_information import ServerInformation
@@ -127,8 +128,21 @@ class AbstractServerHandler:
 
 		The return value of the first succeeded ``parse.parse`` call will be used
 		for filling fields of the :class:`~mcdreforged.info_reactor.info.Info` object
+
+		The return value should be a constant value
 		"""
 		raise NotImplementedError()
+
+	@classmethod
+	@functools.lru_cache(maxsize=8)
+	def _get_content_parsers(cls) -> List[parse.Parser]:
+		"""
+		The return value is cached for reuse. Do not modify
+		"""
+		formatters = cls.get_content_parsing_formatter()
+		if isinstance(formatters, str):
+			formatters = (formatters,)
+		return list(map(parse.Parser, formatters))
 
 	@classmethod
 	def _content_parse(cls, info: Info):
@@ -146,11 +160,8 @@ class AbstractServerHandler:
 		:param info: The to-be-processed :class:`~mcdreforged.info_reactor.info.Info` object
 		:meta public:
 		"""
-		formatters = cls.get_content_parsing_formatter()
-		if isinstance(formatters, str):
-			formatters = (formatters,)
-		for formatter in formatters:
-			parsed = parse(formatter, info.content)
+		for parser in cls._get_content_parsers():
+			parsed = parser.parse(info.content)
 			if parsed is not None:
 				logging_level = parsed['logging']
 				if re.fullmatch(r'\w+', logging_level) is None:

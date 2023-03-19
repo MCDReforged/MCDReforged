@@ -33,7 +33,7 @@ from mcdreforged.preference.preference_manager import PreferenceManager
 from mcdreforged.translation.translation_manager import TranslationManager
 from mcdreforged.utils import file_util
 from mcdreforged.utils.exception import IllegalCallError, ServerStopped, ServerStartError, IllegalStateError, DecodeError
-from mcdreforged.utils.logger import DebugOption, MCDReforgedLogger, MCColoredFormatter
+from mcdreforged.utils.logger import DebugOption, MCDReforgedLogger, MCColorFormatControl
 from mcdreforged.utils.types import MessageText
 
 
@@ -47,7 +47,7 @@ class MCDReforgedServer:
 		self.mcdr_state = MCDReforgedState.INITIALIZING
 		self.server_state = ServerState.STOPPED
 		self.server_information = ServerInformation()
-		self.process = None  # type: Optional[PIPE]
+		self.process: Optional[Popen] = None
 		self.flags = MCDReforgedFlag.NONE
 		self.starting_server_lock = Lock()  # to prevent multiple start_server() call
 		self.stop_lock = Lock()  # to prevent multiple stop() call
@@ -216,7 +216,7 @@ class MCDReforgedServer:
 
 	def on_config_changed(self, *, log: bool):
 		with self.config_change_lock:
-			MCColoredFormatter.console_color_disabled = self.config['disable_console_color']
+			MCColorFormatControl.console_color_disabled = self.config['disable_console_color']
 			self.logger.set_debug_options(self.config['debug'])
 			if log and self.config.is_debug_on():
 				self.logger.info(self.tr('mcdr_server.on_config_changed.debug_mode_on'))
