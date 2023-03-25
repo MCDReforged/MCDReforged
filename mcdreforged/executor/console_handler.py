@@ -18,11 +18,10 @@ from prompt_toolkit.patch_stdout import StdoutProxy
 from prompt_toolkit.shortcuts import CompleteStyle
 
 from mcdreforged.command.builder.nodes.basic import CommandSuggestions
-from mcdreforged.command.command_source import CommandSource
+from mcdreforged.command.command_source import ConsoleCommandSource
 from mcdreforged.executor.thread_executor import ThreadExecutor
 from mcdreforged.info_reactor.info import Info
 from mcdreforged.permission.permission_level import PermissionLevel
-from mcdreforged.plugin.server_interface import ServerInterface
 from mcdreforged.utils import misc_util
 from mcdreforged.utils.logger import DebugOption, SyncStdoutStreamHandler
 from mcdreforged.utils.types import MessageText
@@ -72,18 +71,7 @@ class ConsoleHandler(ThreadExecutor):
 			self.mcdr_server.logger.exception(self.mcdr_server.tr('console_handler.error'))
 
 
-class ConsoleSuggestionCommandSource(CommandSource):
-	@property
-	def is_player(self) -> bool:
-		return False
-
-	@property
-	def is_console(self) -> bool:
-		return True
-
-	def get_server(self) -> 'ServerInterface':
-		return ServerInterface.get_instance()
-
+class ConsoleSuggestionCommandSource(ConsoleCommandSource):
 	def get_permission_level(self) -> int:
 		return PermissionLevel.CONSOLE_LEVEL
 
@@ -106,8 +94,10 @@ class CachedSuggestionProvider:
 		acq = self.__calc_lock.acquire(blocking=False)
 		if not acq:
 			return CommandSuggestions()  # empty suggestion
+		info = self.__command_manager.mcdr_server.server_handler_manager.get_current_handler().parse_console_command(input_)
+		command_source = ConsoleSuggestionCommandSource(self.__command_manager.mcdr_server, info)
 		try:
-			suggestion = self.__command_manager.suggest_command(input_, ConsoleSuggestionCommandSource())
+			suggestion = self.__command_manager.suggest_command(input_, command_source)
 			with self.__lock:
 				self.__cache_input = input_
 				self.__cache_suggestion = suggestion

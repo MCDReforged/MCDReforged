@@ -10,14 +10,6 @@ from mcdreforged.utils.types import MessageText
 
 
 class TestCommandSource(CommandSource):
-	@property
-	def is_player(self) -> bool:
-		return False
-
-	@property
-	def is_console(self) -> bool:
-		return False
-
 	def get_server(self):
 		raise RuntimeError()
 

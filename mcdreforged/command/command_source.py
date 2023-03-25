@@ -2,6 +2,8 @@ from abc import ABC
 from contextlib import contextmanager
 from typing import TYPE_CHECKING, Optional
 
+from typing_extensions import TypeGuard
+
 from mcdreforged.permission.permission_level import PermissionLevel
 from mcdreforged.translation.translation_text import RTextMCDRTranslation
 from mcdreforged.utils import misc_util
@@ -31,22 +33,22 @@ class CommandSource(ABC):
 	"""
 
 	@property
-	def is_player(self) -> bool:
+	def is_player(self) -> TypeGuard['PlayerCommandSource']:
 		"""
 		If the command source is a player command source
 
 		:return: ``True`` if it's a player command source, ``False`` otherwise
 		"""
-		raise NotImplementedError()
+		return isinstance(self, PlayerCommandSource)
 
 	@property
-	def is_console(self) -> bool:
+	def is_console(self) -> TypeGuard['ConsoleCommandSource']:
 		"""
 		If the command source is a console command source
 
 		:return: ``True`` if it's a console command source, ``False`` otherwise
 		"""
-		raise NotImplementedError()
+		return isinstance(self, ConsoleCommandSource)
 
 	def get_server(self) -> 'ServerInterface':
 		"""
@@ -162,14 +164,6 @@ class PlayerCommandSource(InfoCommandSource):
 		self.player: str = player
 		"""The name of the player"""
 
-	@property
-	def is_player(self) -> bool:
-		return True
-
-	@property
-	def is_console(self) -> bool:
-		return False
-
 	def get_preference(self) -> Optional['PreferenceItem']:
 		return self.get_server().get_preference(self)
 
@@ -191,14 +185,6 @@ class ConsoleCommandSource(InfoCommandSource):
 		if not info.is_from_console:
 			raise TypeError('{} should be built from console info'.format(self.__class__.__name__))
 		super().__init__(mcdr_server, info)
-
-	@property
-	def is_player(self) -> bool:
-		return False
-
-	@property
-	def is_console(self) -> bool:
-		return True
 
 	def get_preference(self) -> Optional['PreferenceItem']:
 		return self.get_server().get_preference(self)
@@ -224,14 +210,6 @@ class PluginCommandSource(CommandSource):
 		self.__server = server.as_basic_server_interface()
 		self.__logger = self.__server.logger
 		self.__plugin = plugin
-
-	@property
-	def is_player(self) -> bool:
-		return False
-
-	@property
-	def is_console(self) -> bool:
-		return False
 
 	def get_server(self) -> 'ServerInterface':
 		return self.__server
