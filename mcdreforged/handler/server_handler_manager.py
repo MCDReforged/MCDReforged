@@ -1,4 +1,5 @@
 import collections
+import queue
 import time
 from typing import Dict, Optional, Tuple, List, TYPE_CHECKING, Set
 
@@ -12,9 +13,6 @@ if TYPE_CHECKING:
 
 
 class ServerHandlerManager:
-	HANDLER_DETECTION_MINIMUM_SAMPLE_COUNT = 20   # At least 20 messages
-	HANDLER_DETECTION_MINIMUM_SAMPLING_TIME = 60  # will do sample for 1 minute
-
 	def __init__(self, mcdr_server: 'MCDReforgedServer'):
 		self.mcdr_server = mcdr_server
 		self.logger = mcdr_server.logger
@@ -24,9 +22,7 @@ class ServerHandlerManager:
 		self.basic_handler = None  # type: Optional[AbstractServerHandler]
 
 		# Automation for lazy
-		self.__detection_running = False
-		self.__detection_text_count = 0
-		self.__detection_success_count = collections.defaultdict(lambda: 0)
+		self.__handler_detector = HandlerDetector(self)
 
 	def register_handlers(self, custom_handler_class_paths: Optional[List[str]]):
 		def add_handler(hdr: AbstractServerHandler):
@@ -76,32 +72,74 @@ class ServerHandlerManager:
 		return self.basic_handler
 
 	# Automation for lazy
+	def start_handler_detection(self):
+		self.__handler_detector.start_handler_detection()
+
+	def detect_text(self, text: str):
+		self.__handler_detector.detect_text(text)
+
+
+class HandlerDetector:
+	HANDLER_DETECTION_MINIMUM_SAMPLE_COUNT = 20   # At least 20 messages
+	HANDLER_DETECTION_MINIMUM_SAMPLING_TIME = 60  # will do sample for 1 minute
+
+	def __init__(self, manager: 'ServerHandlerManager'):
+		self.manager = manager
+		self.mcdr_server: 'MCDReforgedServer' = manager.mcdr_server
+		self.running_flag = False
+		self.text_queue = queue.Queue()
+		self.text_count = 0
+		self.success_count = collections.defaultdict(lambda: 0)
 
 	def start_handler_detection(self):
 		if not self.is_detection_running():
-			self.__detection_running = True
-			self.__detection_text_count = 0
-			self.__detection_success_count.clear()
+			self.running_flag = True
+			self.text_count = 0
+			self.success_count.clear()
 			misc_util.start_thread(self.__detection_thread, (), 'HandlerDetector')
 
 	def is_detection_running(self) -> bool:
-		return self.__detection_running
+		return self.running_flag
 
 	def __detection_thread(self):
-		time.sleep(self.HANDLER_DETECTION_MINIMUM_SAMPLING_TIME)
-		while self.__detection_text_count < self.HANDLER_DETECTION_MINIMUM_SAMPLE_COUNT:
-			time.sleep(1)
+		start_time = time.time()
+		while True:
+			time_elapsed = time.time() - start_time
+			if time_elapsed >= self.HANDLER_DETECTION_MINIMUM_SAMPLING_TIME and self.text_count >= self.HANDLER_DETECTION_MINIMUM_SAMPLE_COUNT:
+				break
+			try:
+				text: str = self.text_queue.get(block=True, timeout=1)
+			except queue.Empty:
+				continue
+
+			self.text_count += 1
+			for handler in self.manager.handlers.values():
+				if handler is not self.manager.basic_handler:
+					try:
+						handler.parse_server_stdout(handler.pre_parse_server_stdout(text))
+					except Exception:
+						pass
+					else:
+						self.success_count[handler] += 1
+
+		self.running_flag = False
+		while True:  # clean the queue
+			try:
+				self.text_queue.get(block=False)
+			except queue.Empty:
+				break
+
 		lst = self.finalize_detection_result()  # type: List[Tuple[AbstractServerHandler, int]]
 		if len(lst) == 0:
 			return
-		total = self.__detection_text_count
+		total = self.text_count
 		best_count = lst[0][1]
 		end = 1
 		while end < len(lst) and lst[end][1] == best_count:
 			end += 1
 		best_handlers = set(map(lambda item: item[0], lst[:end]))
-		current_handler = self.get_current_handler()
-		current_count = self.__detection_success_count[self.get_current_handler()]
+		current_handler = self.manager.get_current_handler()
+		current_count = self.success_count[self.manager.get_current_handler()]
 		if current_handler not in best_handlers:
 			self.mcdr_server.logger.warning(self.mcdr_server.tr('server_handler_manager.handler_detection.result1'))
 			self.mcdr_server.logger.warning(self.mcdr_server.tr('server_handler_manager.handler_detection.result2', current_handler.get_name(), round(100.0 * current_count / total, 2), current_count, total))
@@ -110,19 +148,10 @@ class ServerHandlerManager:
 
 	def detect_text(self, text: str):
 		if self.is_detection_running():
-			self.__detection_text_count += 1
-			for handler in self.handlers.values():
-				if handler is not self.basic_handler:
-					try:
-						handler.parse_server_stdout(handler.pre_parse_server_stdout(text))
-					except Exception:
-						pass
-					else:
-						self.__detection_success_count[handler] += 1
+			self.text_queue.put(text)
 
 	def finalize_detection_result(self):
-		self.__detection_running = False
-		current_handler_set = set(self.handlers.values())  # type: Set[AbstractServerHandler]
-		lst = list(filter(lambda item: item[0] in current_handler_set, self.__detection_success_count.items()))  # type: List[Tuple[AbstractServerHandler, int]]
+		current_handler_set = set(self.manager.handlers.values())  # type: Set[AbstractServerHandler]
+		lst = list(filter(lambda item: item[0] in current_handler_set, self.success_count.items()))  # type: List[Tuple[AbstractServerHandler, int]]
 		lst.sort(key=lambda item: item[1], reverse=True)
 		return lst
