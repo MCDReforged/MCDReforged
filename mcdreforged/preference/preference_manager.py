@@ -14,10 +14,6 @@ if TYPE_CHECKING:
 class PreferenceItem(Serializable):
 	language: Optional[str]
 
-	def copy(self) -> 'PreferenceItem':
-		# not very efficient, but it's enough
-		return self.deserialize(self.serialize())
-
 
 class InvalidPreferenceSource(TypeError):
 	pass

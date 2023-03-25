@@ -98,9 +98,10 @@ autosectionlabel_prefix_document = True
 # -- Options for sphinx.ext.intersphinx -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/extensions/intersphinx.html
 intersphinx_mapping = {
+	# curl https://docs.python.org/3/objects.inv -o python3-objects.inv
 	'python': ('https://docs.python.org/3', None if RTD else (None, './python3-objects.inv'))  # always fetch from internet in rtd env
 }
-# disable all auto external references
+# disable all auto external document references
 # implicit ref for general std domain is bad
 intersphinx_disabled_reftypes = [
 	'std:*'

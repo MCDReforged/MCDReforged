@@ -81,7 +81,7 @@ class PreferenceCommand(SubCommand):
 	def show_preference_list(self, source: CommandSource):
 		pref = self.pref_mgr.get_preference(source, auto_add=True)
 		source.reply(self.tr('mcdr_command.preference.list.title'))
-		for pref_name in pref.get_annotations_fields().keys():
+		for pref_name in pref.get_field_annotations().keys():
 			value = getattr(pref, pref_name, RText('N/A', RColor.gray))
 			source.reply(self.__detail_hint(
 				RTextList(RText('- ', RColor.gray), RText(pref_name, PREF_COLOR), RText(': ', RColor.gray), RText(value, VALUE_COLOR)),

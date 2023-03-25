@@ -1,9 +1,11 @@
 import copy
+import functools
 import sys
 from abc import ABC
 from enum import EnumMeta, Enum
-from threading import Lock
 from typing import Union, TypeVar, List, Dict, Type, get_type_hints, Any
+
+from typing_extensions import Self
 
 _py38 = sys.version_info >= (3, 8)
 
@@ -218,16 +220,22 @@ def deserialize(data: Any, cls: Type[T], *, error_at_missing: bool = False, erro
 				result = cls()
 			except Exception:
 				raise TypeError('Failed to construct instance of class {}'.format(type(cls)))
+
+			def set_result_attr(attr_name_, attr_value_):
+				if isinstance(result, Serializable):
+					result.validate_attribute(attr_name_, attr_value_)
+				result.__setattr__(attr_name_, attr_value_)
+
 			input_key_set = set(data.keys())
 			for attr_name, attr_type in _get_type_hints(cls).items():
 				if not attr_name.startswith('_'):
 					if attr_name in data:
-						result.__setattr__(attr_name, deserialize(data[attr_name], attr_type, error_at_missing=error_at_missing, error_at_redundancy=error_at_redundancy))
+						set_result_attr(attr_name, deserialize(data[attr_name], attr_type, error_at_missing=error_at_missing, error_at_redundancy=error_at_redundancy))
 						input_key_set.remove(attr_name)
 					elif error_at_missing:
 						raise ValueError('Missing field {} for class {} in input object {}'.format(attr_name, cls, data))
 					elif hasattr(cls, attr_name):
-						result.__setattr__(attr_name, copy.copy(getattr(cls, attr_name)))
+						set_result_attr(attr_name, copy.copy(getattr(cls, attr_name)))
 			if error_at_redundancy and len(input_key_set) > 0:
 				raise ValueError('Unknown input attributes {} for class {} in input object {}'.format(input_key_set, cls, data))
 			if isinstance(result, Serializable):
@@ -239,9 +247,6 @@ def deserialize(data: Any, cls: Type[T], *, error_at_missing: bool = False, erro
 	# Unsupported
 	else:
 		raise TypeError('Unsupported target class: {}'.format(cls))
-
-
-Self = TypeVar('Self', bound='Serializable')
 
 
 class Serializable(ABC):
@@ -313,9 +318,6 @@ class Serializable(ABC):
 		>>> Person.deserialize({'name': 'li_si', 'gender': 'female'}).gender == Gender.female
 		True
 	"""
-	__annotations_cache: dict = None
-	__annotations_lock = Lock()
-	__none_attr = object()
 
 	def __init__(self, **kwargs):
 		"""
@@ -326,35 +328,28 @@ class Serializable(ABC):
 		:param kwargs: A dict storing to-be-set values of its fields.
 			It's keys are field names and values are field values
 		"""
-		cls = self.__class__
-		for key in kwargs.keys():
-			if key not in self.get_annotations_fields():
-				raise KeyError('Unknown key received in __init__ of class {}: {}'.format(cls, key))
-		for attr_name, attr_type in _get_type_hints(cls).items():
-			if not attr_name.startswith('_'):
-				if attr_name in kwargs:
-					value = kwargs.get(attr_name)
-				elif hasattr(cls, attr_name):
-					value = copy.copy(getattr(cls, attr_name))
-				else:
-					value = cls.__none_attr
-				if value is not cls.__none_attr:
-					self.__setattr__(attr_name, value)
+		self.__update_from(kwargs)
 
 	@classmethod
-	def __get_annotation_dict(cls) -> dict:
-		public_fields = {}
+	@functools.lru_cache()
+	def get_field_annotations(cls) -> Dict[str, Type]:
+		"""
+		A helper method to extract field annotations of the class
+
+		Only public fields will be extracted. Protected and private fields will be ignored
+
+		The return value will be cached for reuse
+
+		:return: A dict of the field annotation of the class. The keys are the field name,
+			and the values are the type annotation of the field
+
+		.. versionadded:: v2.8.0
+		"""
+		field_annotations = {}
 		for attr_name, attr_type in _get_type_hints(cls).items():
 			if not attr_name.startswith('_'):
-				public_fields[attr_name] = attr_type
-		return public_fields
-
-	@classmethod
-	def get_annotations_fields(cls) -> Dict[str, Type]:
-		with cls.__annotations_lock:
-			if cls.__annotations_cache is None:
-				cls.__annotations_cache = cls.__get_annotation_dict()
-		return cls.__annotations_cache
+				field_annotations[attr_name] = attr_type
+		return field_annotations
 
 	def serialize(self) -> dict:
 		"""
@@ -371,25 +366,89 @@ class Serializable(ABC):
 		"""
 		return deserialize(data, cls, **kwargs)
 
-	def update_from(self, data: dict):
-		vars(self).update(vars(self.deserialize(data)))
+	def __update_from(self, data: dict):
+		cls = self.__class__
+		none = object()
+
+		for key in data.keys():
+			if key not in self.get_field_annotations():
+				raise KeyError('Unknown key received in __init__ of class {}: {}'.format(cls, key))
+
+		for attr_name, attr_type in self.get_field_annotations().items():
+			if attr_name in data:
+				value = data[attr_name]
+			elif hasattr(cls, attr_name):
+				value = copy.copy(getattr(cls, attr_name))
+			else:
+				value = none
+			if value is not none:
+				self.__setattr__(attr_name, value)
 
 	@classmethod
 	def get_default(cls: Type[Self]) -> Self:
 		"""
 		Create an object of this class with default values
 
-		Actually it's implemented by invoking :meth:`Serializable.deserialize <mcdreforged.utils.serializer.Serializable.deserialize>`
-		with an empty dict
+		Actually it just invokes the constructor of the class with 0 argument
 		"""
-		return cls.deserialize({})
+		return cls()
 
-	def on_deserialization(self):
+	def copy(self) -> Self:
 		"""
-		Invoked after being deserialized
+		Make a deep copy of the object. Only fields declared in the class annotation will be copied
 
-		Don't use, it's not a public API yet
+		.. versionadded:: v2.8.0
+		"""
+		other = self.get_default()
+		other.__update_from(self.serialize())
+		return other
 
-		:meta private:
+	def validate_attribute(self, attr_name: str, attr_value: Any, **kwargs):
+		"""
+		A method that will be invoked before setting value to an attribute during the deserialization
+
+		You can validate the to-be-set attribute value in this method, and raise some :exc:`ValueError` for bad values
+
+		:param attr_name: The name of the attribute to be set
+		:param attr_value: The value of the attribute to be set
+		:keyword kwargs: Placeholder
+		:raise ValueError: If the validation failed
+
+		.. versionadded:: v2.8.0
 		"""
 		pass
+
+	def on_deserialization(self, **kwargs):
+		"""
+		Invoked after being fully deserialized
+
+		You can do some custom initialization here
+
+		:keyword kwargs: Placeholder
+
+		.. versionadded:: v2.8.0
+		"""
+		pass
+
+	def __eq__(self, other: Any) -> bool:
+		"""
+		Two :class:`Serializable` are equal iif.:
+
+		1.  They are of the same type
+		2.  For each attribute listed in the class annotation, either both of them don't have this attribute,
+			or the values of this attribute are the same.
+
+		.. versionadded:: v2.8.0
+		"""
+		if self is other:
+			return True
+		if not isinstance(other, type(self)):
+			return False
+
+		for attr_name in self.get_field_annotations():
+			if hasattr(self, attr_name) != hasattr(other, attr_name):
+				return False
+			if hasattr(self, attr_name) and hasattr(other, attr_name) and getattr(self, attr_name) != getattr(other, attr_name):
+				return False
+
+		return True

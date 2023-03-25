@@ -22,9 +22,6 @@ class Point(Serializable):
 	def __repr__(self):
 		return self.__str__()
 
-	def __eq__(self, other):
-		return isinstance(other, type(self)) and other.x == self.x and other.y == self.y
-
 
 class ConfigImpl(Serializable):
 	a: int = 1
@@ -38,12 +35,6 @@ class ConfigImpl(Serializable):
 
 	def __repr__(self):
 		return self.__str__()
-
-	def __eq__(self, other):
-		return isinstance(other, type(self)) and \
-			other.a == self.a and other.b == self.b and \
-			other.c == self.c and other.d == self.d and \
-			other.e == self.e
 
 
 class MyTestCase(unittest.TestCase):
@@ -79,6 +70,7 @@ class MyTestCase(unittest.TestCase):
 		point = Point()
 		point.x = 0.1
 		point.y = 0.2
+		self.assertEqual(point, point)
 		self.assertEqual(serialize(point), {'x': 0.1, 'y': 0.2})
 		self.assertEqual(deserialize({'x': 0.1, 'y': 0.2}, Point), point)
 		self.assertEqual(deserialize({'x': 0.1, 'y': 0.2}, Point, error_at_missing=True, error_at_redundancy=True), point)
@@ -89,9 +81,12 @@ class MyTestCase(unittest.TestCase):
 		self.assertRaises(TypeError, deserialize, {'x': set()}, Point)
 
 	def test_2_complex_class(self):
-		a = ConfigImpl()
-		self.assertEqual(a, deserialize(serialize(a), ConfigImpl))
-		b = deserialize({
+		a1 = ConfigImpl()
+		a2 = ConfigImpl()
+		self.assertEqual(a1, deserialize(serialize(a1), ConfigImpl))
+		self.assertEqual(a1, a2)
+
+		data = {
 			'a': 11,
 			'b': 'bb',
 			'c': {'x': 3, 'y': 4},
@@ -103,8 +98,19 @@ class MyTestCase(unittest.TestCase):
 				'home': {'x': 33, 'y': 24},
 				'park': {'x': -3, 'y': 2.4}
 			}
-		}, ConfigImpl)
-		self.assertEqual(b, deserialize(serialize(b), ConfigImpl))
+		}
+		b1 = deserialize(data, ConfigImpl)
+		b2 = deserialize(data, ConfigImpl)
+		b3 = deserialize(data, ConfigImpl)
+		b4 = deserialize(data, ConfigImpl)
+		b3.a = 22
+		b4.e['park'] = Point(x=7, y=9)
+		self.assertEqual(b1, deserialize(serialize(b1), ConfigImpl))
+		self.assertEqual(b1, b2)
+		self.assertEqual(b2, b1)
+		self.assertNotEqual(b1, b3)
+		self.assertNotEqual(b1, b4)
+
 		self.assertRaises(TypeError, deserialize, {'e': object()}, ConfigImpl)
 
 	def test_3_copy_default_value(self):
@@ -340,6 +346,85 @@ class MyTestCase(unittest.TestCase):
 		z.a = 2
 		self.assertEqual(['b', 'c', 'a'], list(filter(lambda k: not k.startswith('_'), vars(z).keys())))
 		self.assertEqual(['a', 'b', 'c'], list(z.serialize().keys()))
+
+	def test_14_deepcopy(self):
+		class Data(Serializable):
+			a: int = 543
+			b: Dict[str, str] = {'b': 'B'}
+			c: List[Dict[int, int]] = [{1: 11}, {2: -2, 3: -3}]
+
+		x = Data(a=308, b={}, c=[{3: 9}, {6: 36}])
+		y = x.copy()
+		self.assertEqual(x, y)
+		self.assertIsNot(x.b, y.b)
+		self.assertIsNot(x.c, y.c)
+		for i in range(len(x.c)):
+			self.assertIsNot(x.c[i], y.c[i])
+
+		z = y.copy()
+		z.b['X'] = 'x'
+		self.assertNotEqual(x, z)
+
+	def test_15_deserialize_validation_callback(self):
+		this = self
+		counter = 0
+
+		class Data(Serializable):
+			attr: List[int] = [3]
+
+			def validate_attribute(self, attr_name: str, attr_value: Any, **kwargs):
+				this.assertEqual(attr_name, 'attr')
+				this.assertEqual(value_1, attr_value)
+				nonlocal counter
+				counter += 1
+				raise ValueError('foobar')
+
+		value_1 = [1, 2, 4, 3]
+
+		# nothing happens in non-deserialization operations
+		a = Data(attr=value_1)
+		a.copy()
+		a.get_default()
+		self.assertEqual(0, counter)
+
+		# callback gets invoked once
+		self.assertRaisesRegex(ValueError, 'foobar', lambda: Data.deserialize({'attr': value_1}))
+		self.assertEqual(1, counter)
+
+	def test_16_deserialize_finish_callback(self):
+		counter = 0
+
+		class Data(Serializable):
+			def on_deserialization(self, **kwargs):
+				nonlocal counter
+				counter += 1
+
+		# nothing happens in non-deserialization operations
+		a = Data()
+		a.copy()
+		a.get_default()
+		self.assertEqual(0, counter)
+
+		# callback gets invoked once
+		Data.deserialize({})
+		self.assertEqual(1, counter)
+
+	def test_17_get_field_annotations(self):
+		class Data(Serializable):
+			a: int
+			b: Optional[float]
+			c: Dict[str, Union[str, int]]
+			d: List[Any]
+
+		x = Data.get_field_annotations()
+		self.assertIsInstance(x, dict)
+		self.assertEqual(x.get('a'), int)
+		self.assertEqual(x.get('b'), Optional[float])
+		self.assertEqual(x.get('c'), Dict[str, Union[str, int]])
+		self.assertEqual(x.get('d'), List[Any])
+
+		y = Data.get_field_annotations()
+		self.assertIs(x, y)  # test cache
 
 
 if __name__ == '__main__':

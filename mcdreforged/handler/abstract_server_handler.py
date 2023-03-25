@@ -134,7 +134,7 @@ class AbstractServerHandler:
 		raise NotImplementedError()
 
 	@classmethod
-	@functools.lru_cache(maxsize=8)
+	@functools.lru_cache()
 	def _get_content_parsers(cls) -> List[parse.Parser]:
 		"""
 		The return value is cached for reuse. Do not modify

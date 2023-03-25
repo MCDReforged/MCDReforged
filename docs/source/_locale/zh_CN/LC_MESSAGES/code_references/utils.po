@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-25 22:02+0800\n"
+"POT-Creation-Date: 2023-03-26 02:57+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -72,6 +72,7 @@ msgid ""
 msgstr "如果对象是一个 :class:`Serializable`，那么其属性的顺序将与注解中顺序的保持一致"
 
 #: mcdreforged.utils.serializer.Serializable.__init__
+#: mcdreforged.utils.serializer.Serializable.validate_attribute
 #: mcdreforged.utils.serializer.deserialize
 #: mcdreforged.utils.serializer.serialize of
 msgid "Parameters"
@@ -81,6 +82,7 @@ msgstr "参数"
 msgid "The object to be serialized"
 msgstr "被序列化的对象"
 
+#: mcdreforged.utils.serializer.Serializable.get_field_annotations
 #: mcdreforged.utils.serializer.deserialize
 #: mcdreforged.utils.serializer.serialize of
 msgid "Returns"
@@ -202,6 +204,8 @@ msgstr "被反序列化的 json 样式的对象"
 msgid "The target class of the generated object"
 msgstr "目标类，同时也是返回值的类型"
 
+#: mcdreforged.utils.serializer.Serializable.on_deserialization
+#: mcdreforged.utils.serializer.Serializable.validate_attribute
 #: mcdreforged.utils.serializer.deserialize of
 msgid "Keyword Arguments"
 msgstr "关键字参数"
@@ -218,6 +222,7 @@ msgid ""
 "unknown input attributes when deserializing an object. Default false"
 msgstr "一个用于标识在反序列化一个对象的过程中，若出现未知的输入属性，是否应该抛出异常的 flag。默认值为 false"
 
+#: mcdreforged.utils.serializer.Serializable.validate_attribute
 #: mcdreforged.utils.serializer.deserialize of
 msgid "Raises"
 msgstr "抛出"
@@ -287,6 +292,26 @@ msgid ""
 "and values are field values"
 msgstr "一个储存着用于设置属性的值的 dict。dict 的键为属性名，值为属性值"
 
+#: mcdreforged.utils.serializer.Serializable.get_field_annotations:1 of
+msgid "A helper method to extract field annotations of the class"
+msgstr "一个用来提取类的属性注解声明的辅助方法"
+
+#: mcdreforged.utils.serializer.Serializable.get_field_annotations:3 of
+msgid ""
+"Only public fields will be extracted. Protected and private fields will "
+"be ignored"
+msgstr "只有公开属性会被提取。保护或私有的属性会被忽略"
+
+#: mcdreforged.utils.serializer.Serializable.get_field_annotations:5 of
+msgid "The return value will be cached for reuse"
+msgstr "返回值会被缓存，以便于复用"
+
+#: mcdreforged.utils.serializer.Serializable.get_field_annotations:7 of
+msgid ""
+"A dict of the field annotation of the class. The keys are the field name,"
+" and the values are the type annotation of the field"
+msgstr "一个储存了这个类声明的属性注解的 dict。其中键为属性名，值为对应属性的类型注解"
+
 #: mcdreforged.utils.serializer.Serializable.serialize:1 of
 msgid "Serialize itself into a dict via function :func:`serialize`"
 msgstr "借助函数 :func:`serialize`，将自身序列化为一个 dict"
@@ -308,11 +333,49 @@ msgid "Create an object of this class with default values"
 msgstr "构造一个使用默认值的这个类的实例"
 
 #: mcdreforged.utils.serializer.Serializable.get_default:3 of
+msgid "Actually it just invokes the constructor of the class with 0 argument"
+msgstr "事实上，这个方法做的仅仅是不带参数地调用这个类的构造函数"
+
+#: mcdreforged.utils.serializer.Serializable.copy:1 of
 msgid ""
-"Actually it's implemented by invoking :meth:`Serializable.deserialize "
-"<mcdreforged.utils.serializer.Serializable.deserialize>` with an empty "
-"dict"
-msgstr ""
-"事实上它的实现是，以一个空的 dict 为参数调用 :meth:`Serializable.deserialize "
-"<mcdreforged.utils.serializer.Serializable.deserialize>`"
+"Make a deep copy of the object. Only fields declared in the class "
+"annotation will be copied"
+msgstr "创建一份此对象的深拷贝。只有在类的注解中声明了的属性会被拷贝"
+
+#: mcdreforged.utils.serializer.Serializable.validate_attribute:1 of
+msgid ""
+"A method that will be invoked before setting value to an attribute during"
+" the deserialization"
+msgstr "一个将于反序列化期间，在设置属性值之前被调用的方法"
+
+#: mcdreforged.utils.serializer.Serializable.validate_attribute:3 of
+msgid ""
+"You can validate the to-be-set attribute value in this method, and raise "
+"some :exc:`ValueError` for bad values"
+msgstr "你可以在这个方法中验证即将设置的属性值，并对期望之外的值抛出 :exc:`ValueError` 异常"
+
+#: mcdreforged.utils.serializer.Serializable.validate_attribute:5 of
+msgid "The name of the attribute to be set"
+msgstr "将被设置的属性的名字"
+
+#: mcdreforged.utils.serializer.Serializable.validate_attribute:6 of
+msgid "The value of the attribute to be set"
+msgstr "将被设置的属性值"
+
+#: mcdreforged.utils.serializer.Serializable.on_deserialization:5
+#: mcdreforged.utils.serializer.Serializable.validate_attribute:7 of
+msgid "Placeholder"
+msgstr "占位符"
+
+#: mcdreforged.utils.serializer.Serializable.validate_attribute:8 of
+msgid "If the validation failed"
+msgstr "若验证失败"
+
+#: mcdreforged.utils.serializer.Serializable.on_deserialization:1 of
+msgid "Invoked after being fully deserialized"
+msgstr "一个将在反序列化完成后被调用的方法"
+
+#: mcdreforged.utils.serializer.Serializable.on_deserialization:3 of
+msgid "You can do some custom initialization here"
+msgstr "你可以在这里做一些自定义的初始化操作"
 
