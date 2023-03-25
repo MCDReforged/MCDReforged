@@ -1,15 +1,90 @@
+import fnmatch
 import json
 import os
-from typing import Optional
+import re
+from typing import Optional, Any, List, Callable
 from zipfile import ZipFile, ZIP_DEFLATED
 
 from mcdreforged.constants import plugin_constant
 from mcdreforged.plugin.meta.metadata import Metadata
 from mcdreforged.utils import file_util
 
+PathPredicate = Callable[[str], bool]
 
-def make_packed_plugin(input_dir: str, output_dir: str, file_name: Optional[str], *, quiet: bool = False):
-	writeln = print if not quiet else lambda *args, **kwargs: None
+
+class IgnoreFilter:
+	def __init__(self, patterns: List[str]):
+		self.general_patterns = []
+		self.dir_patterns = []
+
+		def add(p: str, pattern_list: list):
+			regex_pattern = fnmatch.translate(p)
+			regex_pattern = regex_pattern.replace(r'\*\*/', '(?:.+/)?')
+			regex_pattern = regex_pattern.replace(r'/\*\*', '(?:/.+)?')
+			print(p, regex_pattern, 'dir' if pattern_list is self.dir_patterns else 'gen')
+			pattern_list.append(re.compile(regex_pattern))
+
+		for pattern in patterns:
+			pattern = pattern.strip()
+			if pattern.startswith("#") or len(pattern) == 0:
+				continue
+
+			is_negation = pattern.startswith('!')
+			if is_negation:
+				pattern = pattern[1:]
+
+			if '/' in pattern[:-1]:  # match from root-dir
+				pattern = pattern[1:]
+			elif not pattern.startswith('**/'):  # match from any sub-dir
+				pattern = '**/' + pattern
+
+			if pattern.endswith('/'):  # yes, it's a dir
+				add(pattern[:-1], self.dir_patterns)  # ignore the dir itself
+				add(pattern + '**', self.general_patterns)  # files inside the dir
+			else:
+				add(pattern, self.general_patterns)  # ignore the file inside
+				add(pattern + '/**', self.general_patterns)  # just in case it's a dir, add everything inside
+
+	def is_ignored(self, path: str):
+		patterns = self.general_patterns.copy()
+		if os.path.isdir(path):
+			patterns.extend(self.dir_patterns)
+		path = path.replace(os.sep, '/')
+		for pattern in patterns:
+			if pattern.match(path):
+				return True
+		return False
+
+
+def read_ignore_file(file: str, writeln: Callable[[str], Any]) -> Optional[IgnoreFilter]:
+	if len(file) == 0:
+		return None
+	try:
+		with open(file, 'r', encoding='utf8') as f:
+			lines = f.readlines()
+	except Exception as e:
+		writeln('Failed to read ignore file {}: {}'.format(file, e))
+		return None
+	else:
+		return IgnoreFilter(lines)
+
+
+def make_packed_plugin(args: Any, *, quiet: bool = False):
+	input_dir: str = args.input
+	output_dir: str = args.output
+	file_name: Optional[str] = args.name
+
+	writeln = print if not quiet else lambda *args_, **kwargs_: None
+
+	if len(args.ignore_patterns) > 0:
+		writeln('Using ignore file patterns {}'.format(args.ignore_patterns))
+		ignore_filter = IgnoreFilter(args.ignore_patterns)
+	else:
+		ignore_filter = read_ignore_file(os.path.join(input_dir, args.ignore_file), writeln)
+		if ignore_filter is not None:
+			writeln('Loaded ignore file patterns from {}'.format(args.ignore_file))
+		else:
+			ignore_filter = IgnoreFilter([])
 
 	if not os.path.isdir(input_dir):
 		writeln('Invalid input directory {}'.format(input_dir))
@@ -43,6 +118,8 @@ def make_packed_plugin(input_dir: str, output_dir: str, file_name: Optional[str]
 	file_counter = 0
 
 	def write(base_path: str, *, directory_only: bool):
+		if ignore_filter.is_ignored(base_path):
+			return
 		nonlocal file_counter
 		if os.path.isdir(base_path):
 			dir_arc = os.path.basename(base_path)
@@ -50,16 +127,14 @@ def make_packed_plugin(input_dir: str, output_dir: str, file_name: Optional[str]
 			file_counter += 1
 			writeln('Creating directory: {} -> {}'.format(base_path, dir_arc))
 			for dir_path, dir_names, file_names in os.walk(base_path):
-				if os.path.basename(dir_path) == '__pycache__':
-					continue
 				for file_name_ in file_names + dir_names:
 					full_path = os.path.join(dir_path, file_name_)
-					if os.path.isdir(full_path) and os.path.basename(full_path) == '__pycache__':
+					if ignore_filter.is_ignored(full_path):
 						continue
 					arc_name = os.path.join(dir_arc, full_path.replace(base_path, '', 1).lstrip(os.sep))
 					zip_file.write(full_path, arcname=arc_name)
 					file_counter += 1
-					writeln('  Writing: {} -> {}'.format(full_path, arc_name))
+					writeln('  Written: {} -> {}'.format(full_path, arc_name))
 		elif os.path.isfile(base_path) and not directory_only:
 			arc_name = os.path.basename(base_path)
 			zip_file.write(base_path, arcname=arc_name)

@@ -35,9 +35,11 @@ def entry_point():
 	subparsers.add_parser('gendefault', help='Generate default configuration and permission files at current working directory. Existed files will be overwritten')
 
 	parser_pack = subparsers.add_parser('pack', help='Pack plugin files into a packed plugin')
-	parser_pack.add_argument('-i', '--input', help='The input directory which the plugin is in, default: current directory', default='.')
-	parser_pack.add_argument('-o', '--output', help='The output directory to store the zipped plugin, default: current directory', default='.')
+	parser_pack.add_argument('-i', '--input', help='The input directory which the plugin is in. Default: current directory', default='.')
+	parser_pack.add_argument('-o', '--output', help='The output directory to store the zipped plugin. Default: current directory', default='.')
 	parser_pack.add_argument('-n', '--name', help='A specific name to the output zipped plugin file. If not given the metadata specific name or a default one will be used', default=None)
+	parser_pack.add_argument('--ignore-patterns', nargs='+', metavar='IGNORE_PATTERN', help='A list of gitignore-like pattern, indicating a set of files and directories to be ignored during plugin packing. Overwrites values from --ignore-file', default=[])
+	parser_pack.add_argument('--ignore-file', help="The path to a utf8-encoded gitignore-like file. It's content will be used as the --ignore-patterns parameter. Default: .gitignore", default='.gitignore')
 
 	args = parser.parse_args()
 
@@ -52,4 +54,4 @@ def entry_point():
 	elif args.subparser_name == 'gendefault':
 		generate_default_stuffs(quiet=args.quiet)
 	elif args.subparser_name == 'pack':
-		make_packed_plugin(args.input, args.output, args.name, quiet=args.quiet)
+		make_packed_plugin(args, quiet=args.quiet)

@@ -2,10 +2,11 @@
 .idea/
 
 # python things
-*/__pycache__
+__pycache__
 *.pyc
 /venv/
-/.pytest_cache
+.pytest_cache
+.mypy_cache
 
 # pypi
 /build/

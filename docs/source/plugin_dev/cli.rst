@@ -105,7 +105,7 @@ input
 
     Then the ``work_place/`` folder would be the input directory
 
-    default: current directory
+    Default: current directory
 
 output
 """"""
@@ -114,7 +114,7 @@ output
 
     The output directory to store the generated packed plugin
 
-    default: current directory
+    Default: current directory
 
 name
 """"
@@ -140,4 +140,63 @@ name
 
     If file extension is included in the name and the file extension is a valid :ref:`plugin_dev/plugin_format:Packed Plugin` extension (``.mcdr`` or ``.pyz``),
     then the included file extension will be used. Otherwise the default ``.mcdr`` file extension will be appended to the end
+
+ignore patterns
+"""""""""""""""
+
+    ``--ignore-patterns IGNORE_PATTERN [IGNORE_PATTERN ...]``
+
+    A list of gitignore-like pattern, indicating a set of files and directories to be ignored during plugin packing
+
+    It supports a subset of `.gitignore syntax <https://git-scm.com/docs/gitignore#_pattern_format>`__. The following features are not supported:
+
+    * Negate patterns, i.e. patterns starts with ``!``
+    * Tailing space character escaping
+    * Heading hashtag character escaping
+
+    It overwrites values from :ref:`-\\\\-ignore-file <plugin_dev/cli:ignore file>`. It will filter nothing if the value is empty, or the file doesn't exist or not readable
+
+    Notes: The root directory when calculating related path is the current working directory, not the :ref:`plugin_dev/cli:input` directory
+
+    Default: empty list
+
+    Example:
+
+    .. code-block:: bash
+
+        --ignore-patterns __pycache__ foobar/*.txt **/trash/bin/
+
+    .. versionadded:: v2.8.0
+
+ignore file
+"""""""""""
+
+    ``--ignore-file IGNORE_FILE``
+
+    The path to a utf8-encoded gitignore-like file. It's content will be used as the :ref:`-\\\\-ignore-patterns <plugin_dev/cli:ignore patterns>` parameter.
+
+    Default: ``".gitignore"``, which means that it will automatically read the .gitignore file in the current working directory
+
+    Here's a table of the eventually behavior for ``--ignore-patterns`` and ``--ignore-file``:
+
+    .. list-table::
+        :header-rows: 1
+
+        * - ``--ignore-patterns``
+          - ``--ignore-file``
+          - Behavior
+        * - Unset
+          - Unset
+          - Read the ignore list from .gitignore
+        * - Unset
+          - Set
+          - Read the ignore list from given file
+        * - Set
+          - Unset
+          - Use patterns from ``--ignore-patterns``
+        * - Set
+          - Set
+          - Use patterns from ``--ignore-patterns``
+
+    .. versionadded:: v2.8.0
 

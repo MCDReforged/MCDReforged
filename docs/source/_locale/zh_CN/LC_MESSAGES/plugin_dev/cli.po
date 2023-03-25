@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-19 02:41+0800\n"
+"POT-Creation-Date: 2023-03-25 22:29+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -178,7 +178,7 @@ msgid "Then the ``work_place/`` folder would be the input directory"
 msgstr "那么文件夹 ``work_place/`` 将会是输入文件夹"
 
 #: ../plugin_dev/cli.rst:108 ../plugin_dev/cli.rst:117
-msgid "default: current directory"
+msgid "Default: current directory"
 msgstr "默认值：当前所在的文件夹"
 
 #: ../plugin_dev/cli.rst:111
@@ -261,3 +261,123 @@ msgstr ""
 "Plugin` 扩展名（``.mcdr`` 或 ``.pyz``），则其中包括的文件扩展名将会被使用。否则，默认扩展名 ``.mcdr`` "
 "将会被追加至末尾"
 
+#: ../plugin_dev/cli.rst:145
+msgid "ignore patterns"
+msgstr "ignore patterns"
+
+#: ../plugin_dev/cli.rst:147
+msgid "``--ignore-patterns IGNORE_PATTERN [IGNORE_PATTERN ...]``"
+msgstr "``--ignore-patterns IGNORE_PATTERN [IGNORE_PATTERN ...]``"
+
+#: ../plugin_dev/cli.rst:149
+msgid ""
+"A list of gitignore-like pattern, indicating a set of files and "
+"directories to be ignored during plugin packing"
+msgstr "一个类似 gitignore 格式的模式串列表，表示一个文件忽略列表，将在打包插件时用于过滤文件和文件夹"
+
+#: ../plugin_dev/cli.rst:151
+msgid ""
+"It supports a subset of `.gitignore syntax <https://git-"
+"scm.com/docs/gitignore#_pattern_format>`__. The following features are "
+"not supported:"
+msgstr ""
+"它支持 `.gitignore 语法 <https://git-"
+"scm.com/docs/gitignore#_pattern_format>`__ 的一个子集。它不支持下述特性："
+
+#: ../plugin_dev/cli.rst:153
+msgid "Negate patterns, i.e. patterns starts with ``!``"
+msgstr "反向匹配，也即以 ``!`` 开头的模式串"
+
+#: ../plugin_dev/cli.rst:154
+msgid "Tailing space character escaping"
+msgstr "转义作为后缀的空格字符"
+
+#: ../plugin_dev/cli.rst:155
+msgid "Heading hashtag character escaping"
+msgstr "转义作为前缀的 # 字符"
+
+#: ../plugin_dev/cli.rst:157
+msgid ""
+"It overwrites values from :ref:`-\\\\\\\\-ignore-file "
+"<plugin_dev/cli:ignore file>`. It will filter nothing if the value is "
+"empty, or the file doesn't exist or not readable"
+msgstr ""
+"它将覆盖参数 :ref:`-\\\\\\\\-ignore-file <plugin_dev/cli:ignore file>` "
+"提供的值。如果值为空或者文件不存在 / 无法读取，什么都将不会被过滤"
+
+#: ../plugin_dev/cli.rst:159
+msgid ""
+"Notes: The root directory when calculating related path is the current "
+"working directory, not the :ref:`plugin_dev/cli:input` directory"
+msgstr "注意：用于计算相对路径时的根目录是当前的工作路径，而非 :ref:`plugin_dev/cli:input` 中的路径"
+
+#: ../plugin_dev/cli.rst:161
+msgid "Default: empty list"
+msgstr "默认值：空列表"
+
+#: ../plugin_dev/cli.rst:163
+msgid "Example:"
+msgstr "例子："
+
+#: ../plugin_dev/cli.rst:172
+msgid "ignore file"
+msgstr "ignore file"
+
+#: ../plugin_dev/cli.rst:174
+msgid "``--ignore-file IGNORE_FILE``"
+msgstr "``--ignore-file IGNORE_FILE``"
+
+#: ../plugin_dev/cli.rst:176
+msgid ""
+"The path to a utf8-encoded gitignore-like file. It's content will be used"
+" as the :ref:`-\\\\\\\\-ignore-patterns <plugin_dev/cli:ignore patterns>`"
+" parameter."
+msgstr ""
+"指向一格 utf8 编码的类似 gitignore 的文件。文件中的内容将被用作 :ref:`-\\\\\\\\-ignore-patterns "
+"<plugin_dev/cli:ignore patterns>` 的参数"
+
+#: ../plugin_dev/cli.rst:178
+msgid ""
+"Default: ``\".gitignore\"``, which means that it will automatically read "
+"the .gitignore file in the current working directory"
+msgstr "默认值：``\".gitignore\"``，这意味着它将会自动读取当前工作路径下的 .gitignore 文件"
+
+#: ../plugin_dev/cli.rst:180
+msgid ""
+"Here's a table of the eventually behavior for ``--ignore-patterns`` and "
+"``--ignore-file``:"
+msgstr "下面是一个关于 ``--ignore-patterns`` 和 ``--ignore-file`` 组合使用时，实际表现的表格："
+
+#: ../plugin_dev/cli.rst:185
+msgid "``--ignore-patterns``"
+msgstr "``--ignore-patterns``"
+
+#: ../plugin_dev/cli.rst:186
+msgid "``--ignore-file``"
+msgstr "``--ignore-file``"
+
+#: ../plugin_dev/cli.rst:187
+msgid "Behavior"
+msgstr "表现"
+
+#: ../plugin_dev/cli.rst:188 ../plugin_dev/cli.rst:189
+#: ../plugin_dev/cli.rst:191 ../plugin_dev/cli.rst:195
+msgid "Unset"
+msgstr "未设置"
+
+#: ../plugin_dev/cli.rst:190
+msgid "Read the ignore list from .gitignore"
+msgstr "从 .gitignore 文件中读取忽略列表"
+
+#: ../plugin_dev/cli.rst:192 ../plugin_dev/cli.rst:194
+#: ../plugin_dev/cli.rst:197 ../plugin_dev/cli.rst:198
+msgid "Set"
+msgstr "已设置"
+
+#: ../plugin_dev/cli.rst:193
+msgid "Read the ignore list from given file"
+msgstr "从给定的文件中读取忽略列表"
+
+#: ../plugin_dev/cli.rst:196 ../plugin_dev/cli.rst:199
+msgid "Use patterns from ``--ignore-patterns``"
+msgstr "使用 ``--ignore-patterns`` 的值"
