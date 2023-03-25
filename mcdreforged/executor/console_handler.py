@@ -1,6 +1,8 @@
 import sys
+import threading
+import time
 from threading import RLock, Lock
-from typing import TYPE_CHECKING, Optional, Iterable, List
+from typing import TYPE_CHECKING, Optional, Iterable, List, Sized
 
 from prompt_toolkit import PromptSession
 from prompt_toolkit.application import get_app
@@ -190,6 +192,29 @@ class MCDRPromptSession(PromptSession):
 		return __CompleteStateChecker()
 
 
+class MCDRStdoutProxy(StdoutProxy):
+	def __init__(self):
+		super().__init__(sleep_between_writes=0.01, raw=True)
+		self.__sleep_duration = self.sleep_between_writes
+
+	def _write_and_flush(self, loop, text):
+		# make sure the queue does not accumulate too much, in case stdout spams
+		assert threading.current_thread() == self._flush_thread, '_write_and_flush called on unexpected thread {}'.format(threading.current_thread().name)
+		self.sleep_between_writes = self.__sleep_duration
+		ready_queue = getattr(loop, '_ready')  # asyncio.base_events.BaseEventLoop._ready
+		if loop is not None and isinstance(ready_queue, Sized) and len(ready_queue) >= 2:
+			event = threading.Event()
+			loop.call_soon_threadsafe(event.set)
+
+			t = time.time()
+			event.wait(timeout=3)
+			elapsed = time.time() - t
+
+			self.sleep_between_writes = max(0, self.__sleep_duration - elapsed)
+
+		super()._write_and_flush(loop, text)
+
+
 class PromptToolkitWrapper:
 	def __init__(self, console_handler: ConsoleHandler):
 		self.__console_handler: ConsoleHandler = console_handler
@@ -206,7 +231,7 @@ class PromptToolkitWrapper:
 		try:
 			self.__tweak_kits()
 			self.prompt_session = MCDRPromptSession(self.__console_handler)
-			self.stdout_proxy = StdoutProxy(sleep_between_writes=0.01, raw=True)
+			self.stdout_proxy = MCDRStdoutProxy()
 		except Exception:
 			self.__logger.exception('Failed to enable advanced console, switch back to basic input')
 		else:
