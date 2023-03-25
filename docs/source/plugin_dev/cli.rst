@@ -82,9 +82,6 @@ The packing is based on the ``mcdreforged.plugin.json`` metadata file in the inp
 * File ``requirements.txt``, if it exists
 * Files or folders listed in the :ref:`plugin_dev/metadata:resources` field in metadata
 
-
-During plugin packing, all directory with name ``__pycache__`` will be ignored
-
 input
 """""
 
@@ -146,13 +143,14 @@ ignore patterns
 
     ``--ignore-patterns IGNORE_PATTERN [IGNORE_PATTERN ...]``
 
-    A list of gitignore-like pattern, indicating a set of files and directories to be ignored during plugin packing
+    A list of gitignore-like pattern, indicating a set of files and directories to be excluded during plugin packing
 
-    It supports a subset of `.gitignore syntax <https://git-scm.com/docs/gitignore#_pattern_format>`__. The following features are not supported:
+    It supports a subset of `.gitignore syntax <https://git-scm.com/docs/gitignore#_pattern_format>`__. Here are some differences:
 
-    * Negate patterns, i.e. patterns starts with ``!``
-    * Tailing space character escaping
-    * Heading hashtag character escaping
+    *   When using normal patterns with  patterns, i.e. patterns starts with ``!``,
+        whether a file is excluded depends on the type of the latest matching pattern in the pattern list
+    *   Tailing space character escaping is not supported
+    *   Heading hashtag character escaping is not supported
 
     It overwrites values from :ref:`-\\\\-ignore-file <plugin_dev/cli:ignore file>`. It will filter nothing if the value is empty, or the file doesn't exist or not readable
 

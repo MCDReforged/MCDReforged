@@ -2,7 +2,7 @@ import fnmatch
 import json
 import os
 import re
-from typing import Optional, Any, List, Callable
+from typing import Optional, Any, List, Callable, NamedTuple
 from zipfile import ZipFile, ZIP_DEFLATED
 
 from mcdreforged.constants import plugin_constant
@@ -13,21 +13,24 @@ PathPredicate = Callable[[str], bool]
 
 
 class IgnoreFilter:
-	def __init__(self, patterns: List[str]):
-		self.general_patterns = []
-		self.dir_patterns = []
+	class Pattern(NamedTuple):
+		regex: re.Pattern
+		negation: bool
+		dir_only: bool
 
-		def add(p: str, pattern_list: list):
-			regex_pattern = fnmatch.translate(p)
-			regex_pattern = regex_pattern.replace(r'\*\*/', '(?:.+/)?')
-			regex_pattern = regex_pattern.replace(r'/\*\*', '(?:/.+)?')
-			print(p, regex_pattern, 'dir' if pattern_list is self.dir_patterns else 'gen')
-			pattern_list.append(re.compile(regex_pattern))
+	def __init__(self, patterns: List[str]):
+		self.patterns: List[IgnoreFilter.Pattern] = []
 
 		for pattern in patterns:
 			pattern = pattern.strip()
 			if pattern.startswith("#") or len(pattern) == 0:
 				continue
+
+			def add(p: str, dir_only: bool):
+				regex_pattern = fnmatch.translate(p)
+				regex_pattern = regex_pattern.replace(r'\*\*/', '(?:.+/)?')
+				regex_pattern = regex_pattern.replace(r'/\*\*', '(?:/.+)?')
+				self.patterns.append(self.Pattern(re.compile(regex_pattern), is_negation, dir_only))
 
 			is_negation = pattern.startswith('!')
 			if is_negation:
@@ -39,21 +42,22 @@ class IgnoreFilter:
 				pattern = '**/' + pattern
 
 			if pattern.endswith('/'):  # yes, it's a dir
-				add(pattern[:-1], self.dir_patterns)  # ignore the dir itself
-				add(pattern + '**', self.general_patterns)  # files inside the dir
+				add(pattern[:-1], True)  # ignore the dir itself
+				add(pattern + '**', False)  # files inside the dir
 			else:
-				add(pattern, self.general_patterns)  # ignore the file inside
-				add(pattern + '/**', self.general_patterns)  # just in case it's a dir, add everything inside
+				add(pattern, False)  # ignore the file inside
+				add(pattern + '/**', False)  # just in case it's a dir, add everything inside
 
 	def is_ignored(self, path: str):
-		patterns = self.general_patterns.copy()
-		if os.path.isdir(path):
-			patterns.extend(self.dir_patterns)
 		path = path.replace(os.sep, '/')
-		for pattern in patterns:
-			if pattern.match(path):
-				return True
-		return False
+		is_dir = os.path.isdir(path)
+		is_ignored = False
+		for pattern in self.patterns:
+			if pattern.dir_only and not is_dir:
+				continue
+			if pattern.regex.match(path):
+				is_ignored = not pattern.negation
+		return is_ignored
 
 
 def read_ignore_file(file: str, writeln: Callable[[str], Any]) -> Optional[IgnoreFilter]:
