@@ -4,12 +4,12 @@ for MCDR
 
 ## Requirement
 
+Requires python >= 3.8
+
 ```
 cd docs/
 pip install -r requirements.txt
 ```
-
-python3 of course
 
 ## Build document
 
