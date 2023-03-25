@@ -1,6 +1,8 @@
 from abc import ABC
 from typing import Dict, Callable, TYPE_CHECKING, Optional, List, TypeVar, Generic, Any, Type
 
+from typing_extensions import Self
+
 from mcdreforged.command.builder.exception import CommandError
 from mcdreforged.command.builder.nodes.basic import RUNS_CALLBACK, Literal, AbstractNode, ArgumentNode, REQUIRES_CALLBACK, FAIL_MSG_CALLBACK, SUGGESTS_CALLBACK, ERROR_HANDLER_CALLBACK
 from mcdreforged.command.command_source import CommandSource
@@ -69,7 +71,6 @@ class Requirements:
 
 NodeType = TypeVar('NodeType', bound=AbstractNode)
 ArgNodeType = TypeVar('ArgNodeType', bound=ArgumentNode)
-Self = TypeVar('Self', bound='NodeDefinition')
 
 
 class NodeDefinition(Generic[NodeType], ABC):
@@ -77,7 +78,7 @@ class NodeDefinition(Generic[NodeType], ABC):
 	A node definition class holding extra customization information
 	"""
 
-	def post_process(self: Self, post_processor: Callable[[NodeType], Any]) -> Self:
+	def post_process(self, post_processor: Callable[[NodeType], Any]) -> Self:
 		"""
 		Added a post-process function to the current node definition
 
@@ -86,25 +87,25 @@ class NodeDefinition(Generic[NodeType], ABC):
 		"""
 		raise NotImplementedError()
 
-	def requires(self: Self, requirement: REQUIRES_CALLBACK, failure_message_getter: Optional[FAIL_MSG_CALLBACK] = None) -> Self:
+	def requires(self, requirement: REQUIRES_CALLBACK, failure_message_getter: Optional[FAIL_MSG_CALLBACK] = None) -> Self:
 		"""
 		See :meth:`AbstractNode.requires() <mcdreforged.command.builder.nodes.basic.AbstractNode.requires>`
 		"""
 		raise NotImplementedError()
 
-	def suggests(self: Self, suggestion: SUGGESTS_CALLBACK) -> Self:
+	def suggests(self, suggestion: SUGGESTS_CALLBACK) -> Self:
 		"""
 		See :meth:`AbstractNode.suggests() <mcdreforged.command.builder.nodes.basic.AbstractNode.suggests>`
 		"""
 		raise NotImplementedError()
 
-	def on_error(self: Self, error_type: Type[CommandError], handler: ERROR_HANDLER_CALLBACK, *, handled: bool = False) -> Self:
+	def on_error(self, error_type: Type[CommandError], handler: ERROR_HANDLER_CALLBACK, *, handled: bool = False) -> Self:
 		"""
 		See :meth:`AbstractNode.on_error() <mcdreforged.command.builder.nodes.basic.AbstractNode.on_error>`
 		"""
 		raise NotImplementedError()
 
-	def on_child_error(self: Self, error_type: Type[CommandError], handler: ERROR_HANDLER_CALLBACK, *, handled: bool = False) -> Self:
+	def on_child_error(self, error_type: Type[CommandError], handler: ERROR_HANDLER_CALLBACK, *, handled: bool = False) -> Self:
 		"""
 		See :meth:`AbstractNode.on_child_error() <mcdreforged.command.builder.nodes.basic.AbstractNode.on_child_error>`
 		"""
@@ -126,16 +127,16 @@ class _NodeDefinitionImpl(NodeDefinition):
 		self.__node_processors.append(post_processor)
 		return self
 
-	def requires(self: Self, requirement: REQUIRES_CALLBACK, failure_message_getter: Optional[FAIL_MSG_CALLBACK] = None) -> Self:
+	def requires(self, requirement: REQUIRES_CALLBACK, failure_message_getter: Optional[FAIL_MSG_CALLBACK] = None) -> Self:
 		return self.post_process(lambda n: n.requires(requirement, failure_message_getter))
 
-	def suggests(self: Self, suggestion: SUGGESTS_CALLBACK) -> Self:
+	def suggests(self, suggestion: SUGGESTS_CALLBACK) -> Self:
 		return self.post_process(lambda n: n.suggests(suggestion))
 
-	def on_error(self: Self, error_type: Type[CommandError], handler: ERROR_HANDLER_CALLBACK, *, handled: bool = False) -> Self:
+	def on_error(self, error_type: Type[CommandError], handler: ERROR_HANDLER_CALLBACK, *, handled: bool = False) -> Self:
 		return self.post_process(lambda n: n.on_error(error_type, handler, handled=handled))
 
-	def on_child_error(self: Self, error_type: Type[CommandError], handler: ERROR_HANDLER_CALLBACK, *, handled: bool = False) -> Self:
+	def on_child_error(self, error_type: Type[CommandError], handler: ERROR_HANDLER_CALLBACK, *, handled: bool = False) -> Self:
 		return self.post_process(lambda n: n.on_child_error(error_type, handler, handled=handled))
 
 

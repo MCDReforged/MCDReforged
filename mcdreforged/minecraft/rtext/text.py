@@ -1,12 +1,11 @@
 import json
 from abc import ABC
-from typing import Iterable, List, Union, Optional, Any, Tuple, Set, NamedTuple, TypeVar
+from typing import Iterable, List, Union, Optional, Any, Tuple, Set, NamedTuple
 
 from colorama import Style
+from typing_extensions import Self
 
 from mcdreforged.minecraft.rtext.style import RStyle, RColor, RAction, RColorClassic, RColorRGB, RItemLegacy
-
-Self = TypeVar('Self', bound='RTextBase')
 
 
 class RTextBase(ABC):
@@ -43,25 +42,25 @@ class RTextBase(ABC):
 		"""
 		raise NotImplementedError()
 
-	def copy(self: Self) -> Self:
+	def copy(self) -> Self:
 		"""
 		Return a deep copy version of itself
 		"""
 		raise NotImplementedError()
 
-	def set_color(self: Self, color: RColor) -> Self:
+	def set_color(self, color: RColor) -> Self:
 		"""
 		Set the color of the text and return the text component itself
 		"""
 		raise NotImplementedError()
 
-	def set_styles(self: Self, styles: Union[RStyle, Iterable[RStyle]]) -> Self:
+	def set_styles(self, styles: Union[RStyle, Iterable[RStyle]]) -> Self:
 		"""
 		Set the styles of the text and return the text component itself
 		"""
 		raise NotImplementedError()
 
-	def set_click_event(self: Self, action: RAction, value: str) -> Self:
+	def set_click_event(self, action: RAction, value: str) -> Self:
 		"""
 		Set the click event
 		
@@ -73,7 +72,7 @@ class RTextBase(ABC):
 		"""
 		raise NotImplementedError()
 
-	def set_hover_text(self: Self, *args) -> Self:
+	def set_hover_text(self, *args) -> Self:
 		"""
 		Set the hover text
 
@@ -85,13 +84,13 @@ class RTextBase(ABC):
 		"""
 		raise NotImplementedError()
 
-	def c(self: Self, action: RAction, value: str) -> Self:
+	def c(self, action: RAction, value: str) -> Self:
 		"""
 		The short form of :meth:`set_click_event`
 		"""
 		return self.set_click_event(action, value)
 
-	def h(self: Self, *args) -> Self:
+	def h(self, *args) -> Self:
 		"""
 		The short form of :meth:`set_hover_text`
 		"""
@@ -289,11 +288,11 @@ class RText(RTextBase):
 		if styles is not None:
 			self.set_styles(styles)
 
-	def set_color(self: Self, color: RColor) -> Self:
+	def set_color(self, color: RColor) -> Self:
 		self.__color = color
 		return self
 
-	def set_styles(self: Self, styles: Union[RStyle, Iterable[RStyle]]) -> Self:
+	def set_styles(self, styles: Union[RStyle, Iterable[RStyle]]) -> Self:
 		if isinstance(styles, RStyle):
 			styles = {styles}
 		elif isinstance(styles, Iterable):
@@ -303,11 +302,11 @@ class RText(RTextBase):
 		self.__styles = styles
 		return self
 
-	def set_click_event(self: Self, action: RAction, value: str) -> Self:
+	def set_click_event(self, action: RAction, value: str) -> Self:
 		self.__click_event = _ClickEvent(action, value)
 		return self
 
-	def set_hover_text(self: Self, *args) -> Self:
+	def set_hover_text(self, *args) -> Self:
 		self.__hover_text_list = list(args)
 		return self
 
@@ -377,32 +376,32 @@ class RTextList(RTextBase):
 		self.children = []  # type: List[RTextBase]
 		self.append(*args)
 
-	def set_color(self: Self, color: RColor) -> Self:
+	def set_color(self, color: RColor) -> Self:
 		self.header.set_color(color)
 		self.header_empty = False
 		return self
 
-	def set_styles(self: Self, styles: Union[RStyle, Iterable[RStyle]]) -> Self:
+	def set_styles(self, styles: Union[RStyle, Iterable[RStyle]]) -> Self:
 		self.header.set_styles(styles)
 		self.header_empty = False
 		return self
 
-	def set_click_event(self: Self, action: RAction, value) -> Self:
+	def set_click_event(self, action: RAction, value) -> Self:
 		self.header.set_click_event(action, value)
 		self.header_empty = False
 		return self
 
-	def set_hover_text(self: Self, *args) -> Self:
+	def set_hover_text(self, *args) -> Self:
 		self.header.set_hover_text(*args)
 		self.header_empty = False
 		return self
 
-	def set_header_text(self: Self, header_text: RTextBase) -> Self:
+	def set_header_text(self, header_text: RTextBase) -> Self:
 		self.header = header_text
 		self.header_empty = False
 		return self
 
-	def append(self: Self, *args) -> Self:
+	def append(self, *args) -> Self:
 		for obj in args:
 			if isinstance(obj, RTextList):
 				self.children.extend(obj.children)
@@ -460,7 +459,7 @@ class RTextTranslation(RText):
 		self.__args: tuple = ()
 		self.__fallback: Optional[str] = None
 
-	def arg(self: Self, *args: Any) -> Self:
+	def arg(self, *args: Any) -> Self:
 		"""
 		Set the translation arguments
 
@@ -469,7 +468,7 @@ class RTextTranslation(RText):
 		self.__args = args
 		return self
 
-	def fallback(self: Self, fallback: str) -> Self:
+	def fallback(self, fallback: str) -> Self:
 		"""
 		Set the translation fallback
 

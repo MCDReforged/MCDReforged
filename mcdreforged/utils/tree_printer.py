@@ -1,5 +1,7 @@
 from typing import Callable, Any, TypeVar, Iterable, Sized, Generic
 
+from typing_extensions import Self
+
 __all__ = [
 	'LineWriter',
 	'TreePrinter',
@@ -8,7 +10,6 @@ __all__ = [
 
 
 T = TypeVar('T')
-Self = TypeVar('Self', bound='TreePrinter')
 LineWriter = Callable[[str], Any]
 _ChildrenGetter = Callable[[T], Iterable[T]]
 _NameGetter = Callable[[T], str]
@@ -22,24 +23,24 @@ class TreePrinter(Generic[T]):
 		self.__use_tab = False
 		self.__use_ascii = False
 
-	def getters(self: Self, children_getter: _ChildrenGetter, name_getter: _NameGetter) -> Self:
+	def getters(self, children_getter: _ChildrenGetter, name_getter: _NameGetter) -> Self:
 		self.__children_getter = children_getter
 		self.__name_getter = name_getter
 		return self
 
-	def writer(self: Self, line_writer: LineWriter) -> Self:
+	def writer(self, line_writer: LineWriter) -> Self:
 		self.__line_writer = line_writer
 		return self
 
-	def tab(self: Self) -> Self:
+	def tab(self) -> Self:
 		self.__use_tab = True
 		return self
 
-	def ascii(self: Self) -> Self:
+	def ascii(self) -> Self:
 		self.__use_ascii = True
 		return self
 
-	def print(self: Self, root: T) -> Self:
+	def print(self, root: T) -> Self:
 		def is_root(node: T) -> bool:
 			return node == root
 

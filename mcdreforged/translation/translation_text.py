@@ -1,13 +1,13 @@
 import threading
 from contextlib import contextmanager
-from typing import Union, Iterable, Optional, List, Callable, TypeVar
+from typing import Union, Iterable, Optional, List, Callable
+
+from typing_extensions import Self
 
 from mcdreforged.minecraft.rtext.style import RColor, RStyle, RAction
 from mcdreforged.minecraft.rtext.text import RTextBase, RText
 from mcdreforged.utils import translation_util
 from mcdreforged.utils.types import TranslationKeyDictRich
-
-Self = TypeVar('Self', bound='RTextMCDRTranslation')
 
 
 class RTextMCDRTranslation(RTextBase):
@@ -109,18 +109,18 @@ class RTextMCDRTranslation(RTextBase):
 		copied.set_translator(self.__translator)
 		return copied
 
-	def set_color(self: Self, color: RColor) -> Self:
+	def set_color(self, color: RColor) -> Self:
 		self.__post_process.append(lambda rt: rt.set_color(color))
 		return self
 
-	def set_styles(self: Self, styles: Union[RStyle, Iterable[RStyle]]) -> Self:
+	def set_styles(self, styles: Union[RStyle, Iterable[RStyle]]) -> Self:
 		self.__post_process.append(lambda rt: rt.set_styles(styles))
 		return self
 
-	def set_click_event(self: Self, action: RAction, value: str) -> Self:
+	def set_click_event(self, action: RAction, value: str) -> Self:
 		self.__post_process.append(lambda rt: rt.set_click_event(action, value))
 		return self
 
-	def set_hover_text(self: Self, *args) -> Self:
+	def set_hover_text(self, *args) -> Self:
 		self.__post_process.append(lambda rt: rt.set_hover_text(*args))
 		return self

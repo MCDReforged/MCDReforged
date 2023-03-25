@@ -3,7 +3,9 @@ import inspect
 import sys
 from abc import ABC
 from types import MethodType
-from typing import List, Callable, Iterable, Set, Dict, Type, Any, Union, Optional, NamedTuple, TypeVar
+from typing import List, Callable, Iterable, Set, Dict, Type, Any, Union, Optional, NamedTuple
+
+from typing_extensions import Self
 
 from mcdreforged.command.builder import command_builder_util as utils
 from mcdreforged.command.builder.common import ParseResult, CommandContext, CommandSuggestions, CommandSuggestion
@@ -46,7 +48,6 @@ class _Requirement(NamedTuple):
 
 
 _ERROR_HANDLER_TYPE = Dict[Type[CommandError], _ErrorHandler]
-Self = TypeVar('Self', bound='AbstractNode')
 
 
 class AbstractNode(ABC):
@@ -69,7 +70,7 @@ class AbstractNode(ABC):
 	#   Interfaces
 	# --------------
 
-	def then(self: Self, node: 'AbstractNode') -> Self:
+	def then(self, node: 'AbstractNode') -> Self:
 		"""
 		Attach a child node to its children list, and then return itself
 
@@ -100,7 +101,7 @@ class AbstractNode(ABC):
 			self._children.append(node)
 		return self
 
-	def runs(self: Self, func: RUNS_CALLBACK) -> Self:
+	def runs(self, func: RUNS_CALLBACK) -> Self:
 		"""
 		Set the callback function of this node. When the command parsing finished at this node, the callback function will be executed
 
@@ -135,7 +136,7 @@ class AbstractNode(ABC):
 		self._callback = func
 		return self
 
-	def requires(self: Self, requirement: REQUIRES_CALLBACK, failure_message_getter: Optional[FAIL_MSG_CALLBACK] = None) -> Self:
+	def requires(self, requirement: REQUIRES_CALLBACK, failure_message_getter: Optional[FAIL_MSG_CALLBACK] = None) -> Self:
 		"""
 		Set the requirement tester callback of the node. When entering this node, MCDR will invoke the requirement tester
 		to see if the current command source and context match your specific condition.
@@ -166,7 +167,7 @@ class AbstractNode(ABC):
 		self._requirements.append(_Requirement(requirement, failure_message_getter))
 		return self
 
-	def redirects(self: Self, redirect_node: 'AbstractNode') -> Self:
+	def redirects(self, redirect_node: 'AbstractNode') -> Self:
 		"""
 		Redirect all further child nodes command parsing to another given node
 
@@ -197,7 +198,7 @@ class AbstractNode(ABC):
 		self._redirect_node = redirect_node
 		return self
 
-	def suggests(self: Self, suggestion: SUGGESTS_CALLBACK) -> Self:
+	def suggests(self, suggestion: SUGGESTS_CALLBACK) -> Self:
 		"""
 		Set the provider for command suggestions of this node
 
@@ -221,7 +222,7 @@ class AbstractNode(ABC):
 		self._suggestion_getter = suggestion
 		return self
 
-	def on_error(self: Self, error_type: Type[CommandError], handler: ERROR_HANDLER_CALLBACK, *, handled: bool = False) -> Self:
+	def on_error(self, error_type: Type[CommandError], handler: ERROR_HANDLER_CALLBACK, *, handled: bool = False) -> Self:
 		"""
 		When a command error occurs, the given will invoke the given handler to handle with the error
 
@@ -239,7 +240,7 @@ class AbstractNode(ABC):
 		self._error_handlers[error_type] = _ErrorHandler(handler, handled)
 		return self
 
-	def on_child_error(self: Self, error_type: Type[CommandError], handler: ERROR_HANDLER_CALLBACK, *, handled: bool = False) -> Self:
+	def on_child_error(self, error_type: Type[CommandError], handler: ERROR_HANDLER_CALLBACK, *, handled: bool = False) -> Self:
 		"""
 		Similar to :meth:`on_error`, but it gets triggered only when the node receives a command error from one of the node's direct or indirect child
 		"""
