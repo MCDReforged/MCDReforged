@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-05 01:38+0800\n"
+"POT-Creation-Date: 2023-03-25 22:02+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -65,13 +65,19 @@ msgid ""
 "serialized field values"
 msgstr "普通的对象会被转换成一个包含了其所有公开属性的 :class:`dict`。键为属性的名字，值为序列化后的属性值"
 
+#: mcdreforged.utils.serializer.serialize:14 of
+msgid ""
+"If the object is a :class:`Serializable`, the value field order will "
+"follow the order in the annotation"
+msgstr "如果对象是一个 :class:`Serializable`，那么其属性的顺序将与注解中顺序的保持一致"
+
 #: mcdreforged.utils.serializer.Serializable.__init__
 #: mcdreforged.utils.serializer.deserialize
 #: mcdreforged.utils.serializer.serialize of
 msgid "Parameters"
 msgstr "参数"
 
-#: mcdreforged.utils.serializer.serialize:12 of
+#: mcdreforged.utils.serializer.serialize:16 of
 msgid "The object to be serialized"
 msgstr "被序列化的对象"
 
@@ -80,7 +86,7 @@ msgstr "被序列化的对象"
 msgid "Returns"
 msgstr "返回值"
 
-#: mcdreforged.utils.serializer.serialize:13 of
+#: mcdreforged.utils.serializer.serialize:17 of
 msgid "The serialized result"
 msgstr "序列化结果"
 
@@ -176,8 +182,7 @@ msgstr ""
 msgid ""
 "Normal class: The class should have its fields type annotated. It's "
 "constructor should accept 0 input parameter. Example class::"
-msgstr ""
-"普通类：这个类应当类型注解完善其所有属性，并且其构造函数应当可接受 0 个入参。类例子："
+msgstr "普通类：这个类应当类型注解完善其所有属性，并且其构造函数应当可接受 0 个入参。类例子："
 
 #: mcdreforged.utils.serializer.deserialize:32 of
 msgid ""
@@ -187,9 +192,7 @@ msgstr "输入数据应该是一个 dict。dict 中的键和值对应着属性�
 
 #: mcdreforged.utils.serializer.deserialize:36 of
 msgid "Fields are set via ``__setattr__``, non-public fields will be ignored."
-msgstr ""
-"将使用 ``__setattr__`` "
-"设置对象的属性，非公开属性将被忽略"
+msgstr "将使用 ``__setattr__`` 设置对象的属性，非公开属性将被忽略"
 
 #: mcdreforged.utils.serializer.deserialize:38 of
 msgid "The json-like object to be deserialized"
@@ -227,7 +230,9 @@ msgstr "若输入数据与目标类不匹配，或者目标类不在支持范围
 msgid ""
 "If input data is invalid, including :data:`Literal <typing.Literal>` "
 "mismatch and those error flag in kwargs taking effect"
-msgstr "如果输入数据非法，这包括 :data:`Literal <typing.Literal>` 匹配失败，以及那些 kwargs 里的抛异常 flag 起了效果"
+msgstr ""
+"如果输入数据非法，这包括 :data:`Literal <typing.Literal>` 匹配失败，以及那些 kwargs 里的抛异常 flag"
+" 起了效果"
 
 #: mcdreforged.utils.serializer.deserialize:47 of
 msgid "An object in class ``cls``"

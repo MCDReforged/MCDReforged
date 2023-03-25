@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-14 21:35+0800\n"
+"POT-Creation-Date: 2023-03-25 22:02+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -184,6 +184,11 @@ msgid ""
 msgstr ""
 "首个成功的 ``parse.parse`` 调用的返回值会被用于填充 "
 ":class:`~mcdreforged.info_reactor.info.Info` 对象的数据"
+
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.get_content_parsing_formatter:15
+#: of
+msgid "The return value should be a constant value"
+msgstr "返回值应当为一个固定值"
 
 #: mcdreforged.handler.abstract_server_handler.AbstractServerHandler._content_parse:1
 #: of
