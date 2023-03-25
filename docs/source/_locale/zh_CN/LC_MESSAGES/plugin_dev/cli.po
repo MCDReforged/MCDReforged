@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-26 00:57+0800\n"
+"POT-Creation-Date: 2023-03-26 00:58+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -38,86 +38,90 @@ msgid "Global Arguments"
 msgstr "全局参数"
 
 #: ../plugin_dev/cli.rst:22
-msgid "``-q``, ``--quiet``: Disable CLI output"
-msgstr "``-q``, ``--quiet``：禁用 CLI 信息输出"
+msgid "``-h``, ``--help``: Show help message and exit"
+msgstr "``-h``, ``--help``：展示帮助信息并退出"
 
 #: ../plugin_dev/cli.rst:23
 msgid "``-V``, ``--version``: Print MCDR version and exit"
 msgstr "``-V``, ``--version``：打印 MCDR 的版本并退出"
 
-#: ../plugin_dev/cli.rst:25
+#: ../plugin_dev/cli.rst:24
+msgid "``-q``, ``--quiet``: Disable CLI output"
+msgstr "``-q``, ``--quiet``：禁用 CLI 信息输出"
+
+#: ../plugin_dev/cli.rst:26
 msgid "The ``-V`` and ``--version`` arguments"
 msgstr "参数 ``-V``、``--version``"
 
-#: ../plugin_dev/cli.rst:29
+#: ../plugin_dev/cli.rst:30
 msgid "Sub Commands"
 msgstr "子命令"
 
-#: ../plugin_dev/cli.rst:32
+#: ../plugin_dev/cli.rst:33
 msgid "start"
 msgstr "start"
 
-#: ../plugin_dev/cli.rst:38
+#: ../plugin_dev/cli.rst:39
 msgid "The same as ``python -m mcdreforged``, it launches MCDR"
 msgstr "同 ``python -m mcdreforged`` 一样，启动 MCDR"
 
-#: ../plugin_dev/cli.rst:41
+#: ../plugin_dev/cli.rst:42
 msgid "init"
 msgstr "init"
 
-#: ../plugin_dev/cli.rst:47
+#: ../plugin_dev/cli.rst:48
 msgid "Prepare the working environment of MCDR"
 msgstr "准备 MCDR 的工作环境"
 
-#: ../plugin_dev/cli.rst:49
+#: ../plugin_dev/cli.rst:50
 msgid ""
 "Create commonly used folders and generate default configuration and "
 "permission files, including:"
 msgstr "在当前工作目录下生成默认配置、权限文件，及常用的文件夹，包含："
 
-#: ../plugin_dev/cli.rst:51
+#: ../plugin_dev/cli.rst:52
 msgid "logs/"
 msgstr "logs/"
 
-#: ../plugin_dev/cli.rst:52
+#: ../plugin_dev/cli.rst:53
 msgid "configs/"
 msgstr "configs/"
 
-#: ../plugin_dev/cli.rst:53
+#: ../plugin_dev/cli.rst:54
 msgid "plugins/"
 msgstr "plugins/"
 
-#: ../plugin_dev/cli.rst:54
+#: ../plugin_dev/cli.rst:55
 msgid "server/"
 msgstr "server/"
 
-#: ../plugin_dev/cli.rst:55
+#: ../plugin_dev/cli.rst:56
 msgid "config.yml"
 msgstr "config.yml"
 
-#: ../plugin_dev/cli.rst:56
+#: ../plugin_dev/cli.rst:57
 msgid "permission.yml"
 msgstr "permission.yml"
 
-#: ../plugin_dev/cli.rst:59
+#: ../plugin_dev/cli.rst:60
 msgid "gendefault"
 msgstr "gendefault"
 
-#: ../plugin_dev/cli.rst:65
+#: ../plugin_dev/cli.rst:66
 msgid ""
 "Generate default configuration and permission files at current working "
 "directory"
 msgstr "在当前工作目录下生成默认配置文件"
 
-#: ../plugin_dev/cli.rst:67
+#: ../plugin_dev/cli.rst:68
 msgid "Note that it will overwrite existing files"
 msgstr "注意，这将会覆盖现有的文件"
 
-#: ../plugin_dev/cli.rst:70
+#: ../plugin_dev/cli.rst:71
 msgid "pack"
 msgstr "pack"
 
-#: ../plugin_dev/cli.rst:76
+#: ../plugin_dev/cli.rst:77
 msgid ""
 "Pack up your plugin source codes / resources files, from a batch of "
 "files, to a ``.mcdr`` :ref:`packed plugin file "
@@ -126,90 +130,90 @@ msgstr ""
 "将你插件的源文件 / 资源文件打包起来，从一组零散的文件，到一个 ``.mcdr`` 格式的 :ref:`打包插件 "
 "<plugin_dev/plugin_format:Packed Plugin>` 文件"
 
-#: ../plugin_dev/cli.rst:78
+#: ../plugin_dev/cli.rst:79
 msgid ""
 "The packing is based on the ``mcdreforged.plugin.json`` metadata file in "
 "the input directory. It will pack and only pack the following "
 "files/folders into the packed plugin:"
 msgstr "打包过程基于输入文件夹中的 ``mcdreforged.plugin.json`` 元数据文件。它会也仅会将如下的文件/文件夹打包至打包插件中："
 
-#: ../plugin_dev/cli.rst:80
+#: ../plugin_dev/cli.rst:81
 msgid "Folder named by the plugin id"
 msgstr "以插件 id 命名的文件夹"
 
-#: ../plugin_dev/cli.rst:81
+#: ../plugin_dev/cli.rst:82
 msgid "File ``mcdreforged.plugin.json``"
 msgstr "文件 ``mcdreforged.plugin.json``"
 
-#: ../plugin_dev/cli.rst:82
+#: ../plugin_dev/cli.rst:83
 msgid "File ``requirements.txt``, if it exists"
 msgstr "文件 ``requirements.txt``，如果它存在"
 
-#: ../plugin_dev/cli.rst:83
+#: ../plugin_dev/cli.rst:84
 msgid ""
 "Files or folders listed in the :ref:`plugin_dev/metadata:resources` field"
 " in metadata"
 msgstr "于元数据的 :ref:`plugin_dev/metadata:resources` 属性中列出的文件或文件夹"
 
-#: ../plugin_dev/cli.rst:86
+#: ../plugin_dev/cli.rst:87
 msgid "input"
 msgstr "input"
 
-#: ../plugin_dev/cli.rst:88
+#: ../plugin_dev/cli.rst:89
 msgid "``-i INPUT``, ``--input INPUT``"
 msgstr "``-i INPUT``, ``--input INPUT``"
 
-#: ../plugin_dev/cli.rst:90
+#: ../plugin_dev/cli.rst:91
 msgid "The input directory which the plugin is in"
 msgstr "输入文件夹，也就是插件所在的文件夹"
 
-#: ../plugin_dev/cli.rst:92
+#: ../plugin_dev/cli.rst:93
 msgid "For example, if you have following file structure"
 msgstr "举个例子，如果你有着如下的文件结构"
 
-#: ../plugin_dev/cli.rst:103
+#: ../plugin_dev/cli.rst:104
 msgid "Then the ``work_place/`` folder would be the input directory"
 msgstr "那么文件夹 ``work_place/`` 将会是输入文件夹"
 
-#: ../plugin_dev/cli.rst:105 ../plugin_dev/cli.rst:114
+#: ../plugin_dev/cli.rst:106 ../plugin_dev/cli.rst:115
 msgid "Default: current directory"
 msgstr "默认值：当前所在的文件夹"
 
-#: ../plugin_dev/cli.rst:108
+#: ../plugin_dev/cli.rst:109
 msgid "output"
 msgstr "output"
 
-#: ../plugin_dev/cli.rst:110
+#: ../plugin_dev/cli.rst:111
 msgid "``-o OUTPUT``, ``--output OUTPUT``"
 msgstr "``-o OUTPUT``, ``--output OUTPUT``"
 
-#: ../plugin_dev/cli.rst:112
+#: ../plugin_dev/cli.rst:113
 msgid "The output directory to store the generated packed plugin"
 msgstr "储存生成的打包插件的文件夹"
 
-#: ../plugin_dev/cli.rst:117
+#: ../plugin_dev/cli.rst:118
 msgid "name"
 msgstr "name"
 
-#: ../plugin_dev/cli.rst:119
+#: ../plugin_dev/cli.rst:120
 msgid "``-n NAME``, ``--name NAME``"
 msgstr "``-n NAME``, ``--name NAME``"
 
-#: ../plugin_dev/cli.rst:121
+#: ../plugin_dev/cli.rst:122
 msgid "A specific name for the output packed plugin file"
 msgstr "输出的打包插件文件的特定名称"
 
-#: ../plugin_dev/cli.rst:123
+#: ../plugin_dev/cli.rst:124
 msgid ""
 "If not given it will use the :ref:`plugin_dev/metadata:archive_name` "
 "field in plugin metadata"
 msgstr "如果该项的值未被给出，将会使用插件元数据中的 :ref:`plugin_dev/metadata:archive_name` 属性的值"
 
-#: ../plugin_dev/cli.rst:125
+#: ../plugin_dev/cli.rst:126
 msgid "If it's still not specific, A default name format will be used"
 msgstr "如果该项的值仍未给出，将会使用默认的命名格式"
 
-#: ../plugin_dev/cli.rst:127
+#: ../plugin_dev/cli.rst:128
 msgid ""
 "You can use formatter in your name string. String like ``{arg_name}`` in "
 "name will be replaced automatically. Use ``{{`` or ``}}`` for single "
@@ -218,33 +222,33 @@ msgstr ""
 "你可以在你的文件名字符串中使用格式化字符。形如 ``{arg_name}`` 的名字将会被自动替换。使用 ``{{`` 和  ``}}`` "
 "来描述单个 ``{`` 和 ``}``"
 
-#: ../plugin_dev/cli.rst:129
+#: ../plugin_dev/cli.rst:130
 msgid "``id``: The plugin id"
 msgstr "``id``：插件 id"
 
-#: ../plugin_dev/cli.rst:130
+#: ../plugin_dev/cli.rst:131
 msgid "``version``: The version of the plugin"
 msgstr "``version``：插件版本"
 
-#: ../plugin_dev/cli.rst:132
+#: ../plugin_dev/cli.rst:133
 msgid ""
 "For example, with ``id=my_plugin`` and ``version=1.2.3``, the following "
 "formatting will happen"
 msgstr "举个例子，在 ``id=my_plugin``、``version=1.2.3`` 的情况下，将会出现下方的格式化过程"
 
-#: ../plugin_dev/cli.rst:134
+#: ../plugin_dev/cli.rst:135
 msgid "``MyCustomPlugin-release`` -> ``MyCustomPlugin-release``"
 msgstr "``MyCustomPlugin-release`` -> ``MyCustomPlugin-release``"
 
-#: ../plugin_dev/cli.rst:135
+#: ../plugin_dev/cli.rst:136
 msgid "``MyCustomPlugin-v{version}`` -> ``MyCustomPlugin-v1.2.3``"
 msgstr "``MyCustomPlugin-v{version}`` -> ``MyCustomPlugin-v1.2.3``"
 
-#: ../plugin_dev/cli.rst:136
+#: ../plugin_dev/cli.rst:137
 msgid "``{id}_{version}`` -> ``my_plugin_1.2.3``"
 msgstr "``{id}_{version}`` -> ``my_plugin_1.2.3``"
 
-#: ../plugin_dev/cli.rst:138
+#: ../plugin_dev/cli.rst:139
 msgid ""
 "If file extension is included in the name and the file extension is a "
 "valid :ref:`plugin_dev/plugin_format:Packed Plugin` extension (``.mcdr`` "
@@ -255,21 +259,21 @@ msgstr ""
 "Plugin` 扩展名（``.mcdr`` 或 ``.pyz``），则其中包括的文件扩展名将会被使用。否则，默认扩展名 ``.mcdr`` "
 "将会被追加至末尾"
 
-#: ../plugin_dev/cli.rst:142
+#: ../plugin_dev/cli.rst:143
 msgid "ignore patterns"
 msgstr "ignore patterns"
 
-#: ../plugin_dev/cli.rst:144
+#: ../plugin_dev/cli.rst:145
 msgid "``--ignore-patterns IGNORE_PATTERN [IGNORE_PATTERN ...]``"
 msgstr "``--ignore-patterns IGNORE_PATTERN [IGNORE_PATTERN ...]``"
 
-#: ../plugin_dev/cli.rst:146
+#: ../plugin_dev/cli.rst:147
 msgid ""
 "A list of gitignore-like pattern, indicating a set of files and "
 "directories to be excluded during plugin packing"
 msgstr "一个类似 gitignore 格式的模式串列表，表示一个文件忽略列表，将在打包插件时用于排除文件和文件夹"
 
-#: ../plugin_dev/cli.rst:148
+#: ../plugin_dev/cli.rst:149
 msgid ""
 "It supports a subset of `.gitignore syntax <https://git-"
 "scm.com/docs/gitignore#_pattern_format>`__. Here are some differences:"
@@ -277,22 +281,22 @@ msgstr ""
 "它支持 `.gitignore 语法 <https://git-"
 "scm.com/docs/gitignore#_pattern_format>`__ 的一个子集。下面是一些差异点："
 
-#: ../plugin_dev/cli.rst:150
+#: ../plugin_dev/cli.rst:151
 msgid ""
 "When using normal patterns with  patterns, i.e. patterns starts with "
 "``!``, whether a file is excluded depends on the type of the latest "
 "matching pattern in the pattern list"
 msgstr "当使用反向匹配的模式串，即以 ``!`` 开头的模式串时，一个文件是否被排除，取决于列表中相对位置最靠后的模式串的类型"
 
-#: ../plugin_dev/cli.rst:152
+#: ../plugin_dev/cli.rst:153
 msgid "Tailing space character escaping is not supported"
 msgstr "不支持后缀空格字符的转义"
 
-#: ../plugin_dev/cli.rst:153
+#: ../plugin_dev/cli.rst:154
 msgid "Heading hashtag character escaping is not supported"
 msgstr "不支持前缀 ``#`` 字符的转义"
 
-#: ../plugin_dev/cli.rst:155
+#: ../plugin_dev/cli.rst:156
 msgid ""
 "It overwrites values from :ref:`-\\\\\\\\-ignore-file "
 "<plugin_dev/cli:ignore file>`. It will filter nothing if the value is "
@@ -301,29 +305,29 @@ msgstr ""
 "它将覆盖参数 :ref:`-\\\\\\\\-ignore-file <plugin_dev/cli:ignore file>` "
 "提供的值。如果值为空或者文件不存在 / 无法读取，什么都将不会被过滤"
 
-#: ../plugin_dev/cli.rst:157
+#: ../plugin_dev/cli.rst:158
 msgid ""
 "Notes: The root directory when calculating related path is the current "
 "working directory, not the :ref:`plugin_dev/cli:input` directory"
 msgstr "注意：用于计算相对路径时的根目录是当前的工作路径，而非 :ref:`plugin_dev/cli:input` 中的路径"
 
-#: ../plugin_dev/cli.rst:159
+#: ../plugin_dev/cli.rst:160
 msgid "Default: empty list"
 msgstr "默认值：空列表"
 
-#: ../plugin_dev/cli.rst:161
+#: ../plugin_dev/cli.rst:162
 msgid "Example:"
 msgstr "例子："
 
-#: ../plugin_dev/cli.rst:170
+#: ../plugin_dev/cli.rst:171
 msgid "ignore file"
 msgstr "ignore file"
 
-#: ../plugin_dev/cli.rst:172
+#: ../plugin_dev/cli.rst:173
 msgid "``--ignore-file IGNORE_FILE``"
 msgstr "``--ignore-file IGNORE_FILE``"
 
-#: ../plugin_dev/cli.rst:174
+#: ../plugin_dev/cli.rst:175
 msgid ""
 "The path to a utf8-encoded gitignore-like file. It's content will be used"
 " as the :ref:`-\\\\\\\\-ignore-patterns <plugin_dev/cli:ignore patterns>`"
@@ -332,49 +336,49 @@ msgstr ""
 "指向一格 utf8 编码的类似 gitignore 的文件。文件中的内容将被用作 :ref:`-\\\\\\\\-ignore-patterns "
 "<plugin_dev/cli:ignore patterns>` 的参数"
 
-#: ../plugin_dev/cli.rst:176
+#: ../plugin_dev/cli.rst:177
 msgid ""
 "Default: ``\".gitignore\"``, which means that it will automatically read "
 "the .gitignore file in the current working directory"
 msgstr "默认值：``\".gitignore\"``，这意味着它将会自动读取当前工作路径下的 .gitignore 文件"
 
-#: ../plugin_dev/cli.rst:178
+#: ../plugin_dev/cli.rst:179
 msgid ""
 "Here's a table of the eventually behavior for ``--ignore-patterns`` and "
 "``--ignore-file``:"
 msgstr "下面是一个关于 ``--ignore-patterns`` 和 ``--ignore-file`` 组合使用时，实际表现的表格："
 
-#: ../plugin_dev/cli.rst:183
+#: ../plugin_dev/cli.rst:184
 msgid "``--ignore-patterns``"
 msgstr "``--ignore-patterns``"
 
-#: ../plugin_dev/cli.rst:184
+#: ../plugin_dev/cli.rst:185
 msgid "``--ignore-file``"
 msgstr "``--ignore-file``"
 
-#: ../plugin_dev/cli.rst:185
+#: ../plugin_dev/cli.rst:186
 msgid "Behavior"
 msgstr "表现"
 
-#: ../plugin_dev/cli.rst:186 ../plugin_dev/cli.rst:187
-#: ../plugin_dev/cli.rst:189 ../plugin_dev/cli.rst:193
+#: ../plugin_dev/cli.rst:187 ../plugin_dev/cli.rst:188
+#: ../plugin_dev/cli.rst:190 ../plugin_dev/cli.rst:194
 msgid "Unset"
 msgstr "未设置"
 
-#: ../plugin_dev/cli.rst:188
+#: ../plugin_dev/cli.rst:189
 msgid "Read the ignore list from .gitignore"
 msgstr "从 .gitignore 文件中读取忽略列表"
 
-#: ../plugin_dev/cli.rst:190 ../plugin_dev/cli.rst:192
-#: ../plugin_dev/cli.rst:195 ../plugin_dev/cli.rst:196
+#: ../plugin_dev/cli.rst:191 ../plugin_dev/cli.rst:193
+#: ../plugin_dev/cli.rst:196 ../plugin_dev/cli.rst:197
 msgid "Set"
 msgstr "已设置"
 
-#: ../plugin_dev/cli.rst:191
+#: ../plugin_dev/cli.rst:192
 msgid "Read the ignore list from given file"
 msgstr "从给定的文件中读取忽略列表"
 
-#: ../plugin_dev/cli.rst:194 ../plugin_dev/cli.rst:197
+#: ../plugin_dev/cli.rst:195 ../plugin_dev/cli.rst:198
 msgid "Use patterns from ``--ignore-patterns``"
 msgstr "使用 ``--ignore-patterns`` 的值"
 

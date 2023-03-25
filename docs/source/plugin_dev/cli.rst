@@ -19,8 +19,9 @@ The CLI command format is:
 Global Arguments
 ----------------
 
-* ``-q``, ``--quiet``: Disable CLI output
+* ``-h``, ``--help``: Show help message and exit
 * ``-V``, ``--version``: Print MCDR version and exit
+* ``-q``, ``--quiet``: Disable CLI output
 
 .. versionadded:: v2.8.0
     The ``-V`` and ``--version`` arguments
