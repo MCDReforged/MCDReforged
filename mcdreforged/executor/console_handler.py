@@ -191,7 +191,7 @@ class MCDRStdoutProxy(StdoutProxy):
 		# make sure the queue does not accumulate too much, in case stdout spams
 		assert threading.current_thread() == self._flush_thread, '_write_and_flush called on unexpected thread {}'.format(threading.current_thread().name)
 		self.sleep_between_writes = self.__sleep_duration
-		ready_queue = getattr(loop, '_ready')  # asyncio.base_events.BaseEventLoop._ready
+		ready_queue = getattr(loop, '_ready', None)  # asyncio.base_events.BaseEventLoop._ready
 		if loop is not None and isinstance(ready_queue, Sized) and len(ready_queue) >= 2:
 			event = threading.Event()
 			loop.call_soon_threadsafe(event.set)
