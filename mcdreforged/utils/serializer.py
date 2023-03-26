@@ -31,7 +31,7 @@ def _get_args(cls: Type) -> tuple:
 	return getattr(cls, '__args__', ())
 
 
-def serialize(obj: Any) -> Union[None, int, float, str, list, dict]:
+def serialize(obj: Any) -> Union[None, int, float, str, bool, list, dict]:
 	"""
 	A utility function to serialize any object into a json-like python object.
 	Here, being json-like means that the return value can be passed to e.g. :func:`json.dumps` directly
@@ -214,7 +214,7 @@ def deserialize(data: Any, cls: Type[T], *, error_at_missing: bool = False, erro
 			raise ValueError('Input object {} does''t matches given literal {}'.format(data, cls))
 
 	# Object
-	elif cls not in _BASIC_CLASSES and isinstance(cls, type):
+	elif isinstance(cls, type):
 		if isinstance(data, dict):
 			try:
 				result = cls()

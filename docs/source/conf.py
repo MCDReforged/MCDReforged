@@ -66,6 +66,25 @@ def setup(app):
 #
 html_theme = 'sphinx_rtd_theme'
 
+html_static_path = ['../static']
+
+html_css_files = [
+	# Save the table width
+	# override wide tables in RTD theme
+	# https://rackerlabs.github.io/docs-rackspace/tools/rtd-tables.html
+	'css/theme_overrides.css',  
+
+	# Algolia Docsearch
+	# https://docsearch.algolia.com/docs/DocSearch-v3
+	'css/algolia.css',
+	'https://cdn.jsdelivr.net/npm/@docsearch/css@3'
+]
+
+html_js_files = [
+	('https://cdn.jsdelivr.net/npm/@docsearch/js@3', {'defer': 'defer'}),
+	('js/algolia.js', {'defer': 'defer'})
+]
+
 
 # Show a deeper toctree in the sidebar
 # https://stackoverflow.com/questions/27669376/show-entire-toctree-in-read-the-docs-sidebar
@@ -116,11 +135,3 @@ def autodoc_setup(app):
 	app.connect('autodoc-skip-member', autodoc_skip_member_handler)
 
 
-# -- save the table width ----------------------------------------------------
-# https://rackerlabs.github.io/docs-rackspace/tools/rtd-tables.html
-
-html_static_path = ['../static']
-
-html_css_files = [
-	'css/theme_overrides.css',  # override wide tables in RTD theme
-]
