@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-26 00:58+0800\n"
+"POT-Creation-Date: 2023-03-26 19:28+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -315,7 +315,7 @@ msgstr "注意：用于计算相对路径时的根目录是当前的工作路径
 msgid "Default: empty list"
 msgstr "默认值：空列表"
 
-#: ../plugin_dev/cli.rst:162
+#: ../plugin_dev/cli.rst:162 ../plugin_dev/cli.rst:216
 msgid "Example:"
 msgstr "例子："
 
@@ -381,4 +381,39 @@ msgstr "从给定的文件中读取忽略列表"
 #: ../plugin_dev/cli.rst:195 ../plugin_dev/cli.rst:198
 msgid "Use patterns from ``--ignore-patterns``"
 msgstr "使用 ``--ignore-patterns`` 的值"
+
+#: ../plugin_dev/cli.rst:204
+msgid "shebang"
+msgstr "shebang"
+
+#: ../plugin_dev/cli.rst:206
+msgid "``--shebang SHEBANG``"
+msgstr "``--shebang SHEBANG``"
+
+#: ../plugin_dev/cli.rst:208
+msgid ""
+"Add a ``#!``-prefixed `shebang "
+"<https://en.wikipedia.org/wiki/Shebang_(Unix)>`__ line at the beginning "
+"of the packed plugin. It will also make the packed plugin executable on "
+"POSIX"
+msgstr ""
+"在打包插件文件的开头添加以 ``#!`` 为前缀的 `shebang "
+"<https://zh.wikipedia.org/wiki/Shebang>`__ 行。除此之外，还会在 POSIX "
+"平台上把打包插件文件设为可执行的"
+
+#: ../plugin_dev/cli.rst:211
+msgid ""
+"By default no shebang line will be added, and not make the packed plugin "
+"file executable"
+msgstr "默认情况下，不会添加 shebang 行，也不让打包插件可执行"
+
+#: ../plugin_dev/cli.rst:213
+msgid ""
+"If your packed plugin is a valid python :external:doc:`zip app "
+"<library/zipapp>` archive, i,e. it contains a working ``__main__.py``, "
+"you can use this option to make your packed plugin executable in bash "
+"environment"
+msgstr ""
+"如果你的打包插件是一个合法的 :external:doc:`zip app <library/zipapp>` 文件，即它包含一个可用的 "
+"``__main__.py``，你就可以借助此选项，让你的打包插件在 bash 环境中可执行"
 

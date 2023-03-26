@@ -6,7 +6,7 @@ MCDR also provides some useful tool kits via command line interface (CLI). The u
 
 Have a try to display CLI help messages using following command
 
-.. code-block::
+.. code-block:: bash
 
     python -m mcdreforged -h
 
@@ -14,7 +14,7 @@ The CLI command format is:
 
 .. code-block::
 
-     mcdreforged [global args] <sub_command> [sub_command args]
+     mcdreforged [global_args] <sub_command> [sub_command_args]
 
 Global Arguments
 ----------------
@@ -32,7 +32,7 @@ Sub Commands
 start
 ^^^^^
 
-.. code-block::
+.. code-block:: bash
 
     python -m mcdreforged start [-h]
 
@@ -41,7 +41,7 @@ The same as ``python -m mcdreforged``, it launches MCDR
 init
 ^^^^
 
-.. code-block::
+.. code-block:: bash
 
     python -m mcdreforged init [-h]
 
@@ -59,7 +59,7 @@ Create commonly used folders and generate default configuration and permission f
 gendefault
 ^^^^^^^^^^
 
-.. code-block::
+.. code-block:: bash
 
     python -m mcdreforged gendefault [-h]
 
@@ -70,7 +70,7 @@ Note that it will overwrite existing files
 pack
 ^^^^
 
-.. code-block::
+.. code-block:: bash
 
     python -m mcdreforged pack [-h] [-i INPUT] [-o OUTPUT] [-n NAME]
 
@@ -92,7 +92,7 @@ input
 
     For example, if you have following file structure
 
-    .. code-block::
+    .. code-block:: bash
 
         work_place/
            my_plugin/
@@ -199,3 +199,24 @@ ignore file
 
     .. versionadded:: v2.8.0
 
+
+shebang
+"""""""
+
+    ``--shebang SHEBANG``
+
+    Add a ``#!``-prefixed `shebang <https://en.wikipedia.org/wiki/Shebang_(Unix)>`__ line at the beginning of the packed plugin.
+    It will also make the packed plugin executable on POSIX
+
+    By default no shebang line will be added, and not make the packed plugin file executable
+
+    If your packed plugin is a valid python :external:doc:`zip app <library/zipapp>` archive, i,e. it contains a working ``__main__.py``,
+    you can use this option to make your packed plugin executable in bash environment
+
+    Example:
+
+    .. code-block:: bash
+
+        --shebang "/usr/bin/env python3"
+
+    .. versionadded:: v2.8.0

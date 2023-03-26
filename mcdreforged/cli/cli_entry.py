@@ -40,6 +40,7 @@ def entry_point():
 	parser_pack.add_argument('-n', '--name', help='A specific name to the output zipped plugin file. If not given the metadata specific name or a default one will be used', default=None)
 	parser_pack.add_argument('--ignore-patterns', nargs='+', metavar='IGNORE_PATTERN', help='A list of gitignore-like pattern, indicating a set of files and directories to be ignored during plugin packing. Overwrites values from --ignore-file', default=[])
 	parser_pack.add_argument('--ignore-file', help="The path to a utf8-encoded gitignore-like file. It's content will be used as the --ignore-patterns parameter. Default: .gitignore", default='.gitignore')
+	parser_pack.add_argument('--shebang', help='Add a "#!"-prefixed shebang line at the beginning of the packed plugin. It will also make the packed plugin executable on POSIX. By default no shebang line will be added. Example: --shebang "/usr/bin/env python3"')
 
 	args = parser.parse_args()
 

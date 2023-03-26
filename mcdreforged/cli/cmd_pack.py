@@ -2,6 +2,8 @@ import fnmatch
 import json
 import os
 import re
+import stat
+import zipapp
 from typing import Optional, Any, List, Callable, NamedTuple
 from zipfile import ZipFile, ZIP_DEFLATED
 
@@ -148,12 +150,21 @@ def make_packed_plugin(args: Any, *, quiet: bool = False):
 			writeln('[WARN] {} not found! ignored'.format(base_path))
 
 	writeln('Packing plugin "{}" into "{}" ...'.format(meta.id, file_name))
-	with ZipFile(os.path.join(output_dir, file_name), 'w', ZIP_DEFLATED) as zip_file:
-		write(meta_file_path, directory_only=False)  # metadata
-		write(req_file_path, directory_only=False)  # requirement
-		write(os.path.join(input_dir, meta.id), directory_only=True)  # source module
-		for resource_path in meta.resources:  # resources
-			write(os.path.join(input_dir, resource_path), directory_only=False)
+	packed_plugin_path = os.path.join(output_dir, file_name)
+	with open(packed_plugin_path, 'wb') as fd:
+		if args.shebang:
+			shebang = b'#!' + args.shebang.encode(getattr(zipapp, 'shebang_encoding', 'utf8')) + b'\n'
+			fd.write(shebang)
+			writeln('Added shebang {}'.format(shebang))
+
+		with ZipFile(fd, 'w', ZIP_DEFLATED) as zip_file:
+			write(meta_file_path, directory_only=False)  # metadata
+			write(req_file_path, directory_only=False)  # requirement
+			write(os.path.join(input_dir, meta.id), directory_only=True)  # source module
+			for resource_path in meta.resources:  # resources
+				write(os.path.join(input_dir, resource_path), directory_only=False)
+	if args.shebang:
+		os.chmod(packed_plugin_path, os.stat(packed_plugin_path).st_mode | stat.S_IEXEC)
 
 	writeln('Packed {} files/folders into "{}"'.format(file_counter, file_name))
 	writeln('Done')
