@@ -1,23 +1,36 @@
+import platform
 import sys
 from argparse import ArgumentParser
 
-from mcdreforged.cli.cmd_gendefault import generate_default_stuffs
-from mcdreforged.cli.cmd_init import initialize_environment
-from mcdreforged.cli.cmd_pack import make_packed_plugin
-from mcdreforged.cli.cmd_run import run_mcdr
-from mcdreforged.cli.cmd_version import show_version
 from mcdreforged.constants import core_constant
 
 
 def environment_check():
+	"""
+	This should even work in python2.7+
+	"""
+	def print_stderr(text):
+		sys.stderr.write(text + '\n')
+
 	python_version = sys.version_info.major + sys.version_info.minor * 0.1
 	if python_version < 3.6:
-		print('Python 3.6+ is needed')
-		raise Exception('Python version {} is too old'.format(python_version))
+		print_stderr('Python 3.6+ is needed to run {}'.format(core_constant.NAME))
+		print('Current Python version {} is too old'.format(platform.python_version()))
+		sys.exit(1)
+	if python_version < 3.8:
+		print_stderr("Notice: {} will drop the support for Python <=3.7 after the end of Python 3.7's lifecycle on June 27th, 2023".format(core_constant.NAME))
+		print_stderr('Current Python version: {}'.format(platform.python_version()))
 
 
 def entry_point():
 	environment_check()
+
+	from mcdreforged.cli.cmd_gendefault import generate_default_stuffs
+	from mcdreforged.cli.cmd_init import initialize_environment
+	from mcdreforged.cli.cmd_pack import make_packed_plugin
+	from mcdreforged.cli.cmd_run import run_mcdr
+	from mcdreforged.cli.cmd_version import show_version
+
 	if len(sys.argv) == 1:
 		run_mcdr()
 		return
