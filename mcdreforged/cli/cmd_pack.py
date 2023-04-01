@@ -4,7 +4,7 @@ import os
 import re
 import stat
 import zipapp
-from typing import Optional, Any, List, Callable, NamedTuple
+from typing import Optional, Any, List, Callable, NamedTuple, Pattern
 from zipfile import ZipFile, ZIP_DEFLATED
 
 from mcdreforged.constants import plugin_constant
@@ -16,7 +16,7 @@ PathPredicate = Callable[[str], bool]
 
 class IgnoreFilter:
 	class Pattern(NamedTuple):
-		regex: re.Pattern
+		regex: Pattern
 		negation: bool
 		dir_only: bool
 
