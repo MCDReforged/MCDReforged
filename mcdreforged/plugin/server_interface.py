@@ -1,5 +1,6 @@
 import functools
 import json
+import logging
 import os
 import time
 from typing import Callable, TYPE_CHECKING, Tuple, Any, Union, Optional, List, IO, Dict, Type, TypeVar
@@ -66,7 +67,7 @@ class ServerInterface:
 		return logger
 
 	@property
-	def logger(self) -> MCDReforgedLogger:
+	def logger(self) -> logging.Logger:
 		"""
 		A nice logger for you to log message to the console
 		"""
@@ -824,7 +825,7 @@ class PluginServerInterface(ServerInterface):
 		self.__logger_for_plugin = None  # type: Optional[MCDReforgedLogger]
 
 	@property
-	def logger(self) -> MCDReforgedLogger:
+	def logger(self) -> logging.Logger:
 		if self.__logger_for_plugin is None:
 			try:
 				logger = self.__logger_for_plugin = self._get_logger(self.__plugin.get_id())
