@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-26 02:57+0800\n"
+"POT-Creation-Date: 2023-04-04 03:28+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -204,6 +204,7 @@ msgstr "被反序列化的 json 样式的对象"
 msgid "The target class of the generated object"
 msgstr "目标类，同时也是返回值的类型"
 
+#: mcdreforged.utils.serializer.Serializable.copy
 #: mcdreforged.utils.serializer.Serializable.on_deserialization
 #: mcdreforged.utils.serializer.Serializable.validate_attribute
 #: mcdreforged.utils.serializer.deserialize of
@@ -338,9 +339,21 @@ msgstr "事实上，这个方法做的仅仅是不带参数地调用这个类的
 
 #: mcdreforged.utils.serializer.Serializable.copy:1 of
 msgid ""
-"Make a deep copy of the object. Only fields declared in the class "
-"annotation will be copied"
-msgstr "创建一份此对象的深拷贝。只有在类的注解中声明了的属性会被拷贝"
+"Make a copy of the object. Only fields declared in the class annotation "
+"will be copied"
+msgstr "创建一份此对象的拷贝。只有在类的注解中声明了的属性会被拷贝"
+
+#: mcdreforged.utils.serializer.Serializable.copy:3 of
+msgid "By default, a deep copy will be made"
+msgstr "默认情况下，创建深拷贝"
+
+#: mcdreforged.utils.serializer.Serializable.copy:5 of
+msgid "If this operation make a deep copy. True: deep copy, False: shallow copy"
+msgstr "是否应该创建深拷贝。True：深拷贝，False：浅拷贝"
+
+#: mcdreforged.utils.serializer.Serializable.copy:9 of
+msgid "Added ``deep`` keyword argument"
+msgstr "添加 ``deep`` 关键字参数"
 
 #: mcdreforged.utils.serializer.Serializable.validate_attribute:1 of
 msgid ""

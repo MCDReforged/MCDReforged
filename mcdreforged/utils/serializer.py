@@ -400,13 +400,16 @@ class Serializable(ABC):
 
 		By default, a deep copy will be made
 
-		:keyword deep: If this operation make a deep copy
+		:keyword deep: If this operation make a deep copy. True: deep copy, False: shallow copy
 
 		.. versionadded:: v2.8.0
+
+		.. versionadded:: v2.8.3
+			Added ``deep`` keyword argument
 		"""
 		def value_provider(attr_name: str):
 			value = getattr(self, attr_name, _NONE)
-			if value is not _NONE:
+			if deep and value is not _NONE:
 				if isinstance(value, Serializable):
 					value = value.copy()
 				else:
