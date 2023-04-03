@@ -3,7 +3,7 @@ import functools
 import sys
 from abc import ABC
 from enum import EnumMeta, Enum
-from typing import Union, TypeVar, List, Dict, Type, get_type_hints, Any
+from typing import Union, TypeVar, List, Dict, Type, get_type_hints, Any, Callable
 
 from typing_extensions import Self
 
@@ -249,6 +249,9 @@ def deserialize(data: Any, cls: Type[T], *, error_at_missing: bool = False, erro
 		raise TypeError('Unsupported target class: {}'.format(cls))
 
 
+_NONE = object()
+
+
 class Serializable(ABC):
 	"""
 	An abstract class for easy serializing / deserializing
@@ -328,7 +331,11 @@ class Serializable(ABC):
 		:param kwargs: A dict storing to-be-set values of its fields.
 			It's keys are field names and values are field values
 		"""
-		self.__update_from(kwargs)
+		for key in kwargs.keys():
+			if key not in self.get_field_annotations():
+				raise KeyError('Unknown key received in __init__ of class {}: {}'.format(type(self), key))
+
+		self.__init_from(kwargs)
 
 	@classmethod
 	@functools.lru_cache()
@@ -366,24 +373,6 @@ class Serializable(ABC):
 		"""
 		return deserialize(data, cls, **kwargs)
 
-	def __update_from(self, data: dict):
-		cls = self.__class__
-		none = object()
-
-		for key in data.keys():
-			if key not in self.get_field_annotations():
-				raise KeyError('Unknown key received in __init__ of class {}: {}'.format(cls, key))
-
-		for attr_name, attr_type in self.get_field_annotations().items():
-			if attr_name in data:
-				value = data[attr_name]
-			elif hasattr(cls, attr_name):
-				value = copy.copy(getattr(cls, attr_name))
-			else:
-				value = none
-			if value is not none:
-				self.__setattr__(attr_name, value)
-
 	@classmethod
 	def get_default(cls: Type[Self]) -> Self:
 		"""
@@ -393,14 +382,39 @@ class Serializable(ABC):
 		"""
 		return cls()
 
-	def copy(self) -> Self:
+	def __set_attributes(self, value_provider: Callable[[str], Any], *, copy_default: bool):
+		cls = self.__class__
+		for attr_name, attr_type in self.get_field_annotations().items():
+			value = value_provider(attr_name)
+			if value is _NONE and copy_default and hasattr(cls, attr_name):
+				value = copy.copy(getattr(cls, attr_name))
+			if value is not _NONE:
+				setattr(self, attr_name, value)
+
+	def __init_from(self, data: dict):
+		self.__set_attributes(lambda attr_name: data.get(attr_name, _NONE), copy_default=True)
+
+	def copy(self, *, deep: bool = True) -> Self:
 		"""
-		Make a deep copy of the object. Only fields declared in the class annotation will be copied
+		Make a copy of the object. Only fields declared in the class annotation will be copied
+
+		By default, a deep copy will be made
+
+		:keyword deep: If this operation make a deep copy
 
 		.. versionadded:: v2.8.0
 		"""
+		def value_provider(attr_name: str):
+			value = getattr(self, attr_name, _NONE)
+			if value is not _NONE:
+				if isinstance(value, Serializable):
+					value = value.copy()
+				else:
+					value = deserialize(serialize(value), type(value))
+			return value
+
 		other = self.get_default()
-		other.__update_from(self.serialize())
+		other.__set_attributes(value_provider, copy_default=False)
 		return other
 
 	def validate_attribute(self, attr_name: str, attr_value: Any, **kwargs):
@@ -452,3 +466,15 @@ class Serializable(ABC):
 				return False
 
 		return True
+
+	def __repr__(self) -> str:
+		"""
+		Return an informative string to represent the object
+
+		.. versionadded:: v2.8.3
+		"""
+		fields = []
+		for attr_name in self.get_field_annotations():
+			if hasattr(self, attr_name):
+				fields.append('{}={}'.format(attr_name, repr(getattr(self, attr_name))))
+		return '{}[{}]'.format(type(self).__name__, ', '.join(fields))

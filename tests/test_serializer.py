@@ -16,12 +16,6 @@ class Point(Serializable):
 	x: float = 1.1
 	y: float = 1.2
 
-	def __str__(self):
-		return '({}, {})'.format(self.x, self.y)
-
-	def __repr__(self):
-		return self.__str__()
-
 
 class ConfigImpl(Serializable):
 	a: int = 1
@@ -29,12 +23,6 @@ class ConfigImpl(Serializable):
 	c: Point = Point()
 	d: List[Point] = []
 	e: Dict[str, Point] = {}
-
-	def __str__(self):
-		return 'a={}, b={}, c={}, d={}, e={}'.format(self.a, self.b, self.c, self.d, self.e)
-
-	def __repr__(self):
-		return self.__str__()
 
 
 class MyTestCase(unittest.TestCase):
@@ -348,12 +336,17 @@ class MyTestCase(unittest.TestCase):
 		self.assertEqual(['a', 'b', 'c'], list(z.serialize().keys()))
 
 	def test_14_deepcopy(self):
+		class Item(Serializable):
+			a: str
+			b: float
+
 		class Data(Serializable):
 			a: int = 543
 			b: Dict[str, str] = {'b': 'B'}
 			c: List[Dict[int, int]] = [{1: 11}, {2: -2, 3: -3}]
+			d: Item
 
-		x = Data(a=308, b={}, c=[{3: 9}, {6: 36}])
+		x = Data(a=308, b={}, c=[{3: 9}, {6: 36}], d=Item(a='x', b=3.4))
 		y = x.copy()
 		self.assertEqual(x, y)
 		self.assertIsNot(x.b, y.b)
