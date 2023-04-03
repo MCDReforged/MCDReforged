@@ -394,6 +394,21 @@ class Serializable(ABC):
 	def __init_from(self, data: dict):
 		self.__set_attributes(lambda attr_name: data.get(attr_name, _NONE), copy_default=True)
 
+	def merge_from(self, other: Self):
+		"""
+		Merge attributes from another instance into the current one
+
+		.. note::
+
+			:meth:`merge_from` won't create copies of the attribute values being merged
+
+			If you want the merged values to be independent, you can make a :meth:`deep copy <copy>`
+			of the other object first, and then merge from the copy
+
+		:param other: The other object to merge attributes from
+		"""
+		self.__set_attributes(lambda attr_name: getattr(other, attr_name, _NONE), copy_default=False)
+
 	def copy(self, *, deep: bool = True) -> Self:
 		"""
 		Make a copy of the object. Only fields declared in the class annotation will be copied

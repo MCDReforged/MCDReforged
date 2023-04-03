@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-04 03:28+0800\n"
+"POT-Creation-Date: 2023-04-04 03:39+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -72,6 +72,7 @@ msgid ""
 msgstr "如果对象是一个 :class:`Serializable`，那么其属性的顺序将与注解中顺序的保持一致"
 
 #: mcdreforged.utils.serializer.Serializable.__init__
+#: mcdreforged.utils.serializer.Serializable.merge_from
 #: mcdreforged.utils.serializer.Serializable.validate_attribute
 #: mcdreforged.utils.serializer.deserialize
 #: mcdreforged.utils.serializer.serialize of
@@ -337,6 +338,27 @@ msgstr "构造一个使用默认值的这个类的实例"
 msgid "Actually it just invokes the constructor of the class with 0 argument"
 msgstr "事实上，这个方法做的仅仅是不带参数地调用这个类的构造函数"
 
+#: mcdreforged.utils.serializer.Serializable.merge_from:1 of
+msgid "Merge attributes from another instance into the current one"
+msgstr "将另一个实例的属性合并到当前实例中"
+
+#: mcdreforged.utils.serializer.Serializable.merge_from:5 of
+msgid ""
+":meth:`merge_from` won't create copies of the attribute values being "
+"merged"
+msgstr "合并时，不会创建被合并属性的拷贝"
+
+#: mcdreforged.utils.serializer.Serializable.merge_from:7 of
+msgid ""
+"If you want the merged values to be independent, you can make a "
+":meth:`deep copy <copy>` of the other object first, and then merge from "
+"the copy"
+msgstr "如果你想要合并后的属性与另一个实例再无关联，你可以首先创建一个另一对象的 :meth:`深拷贝 <copy>`，然后合并这个拷贝"
+
+#: mcdreforged.utils.serializer.Serializable.merge_from:10 of
+msgid "The other object to merge attributes from"
+msgstr "被合并属性的对象"
+
 #: mcdreforged.utils.serializer.Serializable.copy:1 of
 msgid ""
 "Make a copy of the object. Only fields declared in the class annotation "
@@ -391,4 +413,3 @@ msgstr "一个将在反序列化完成后被调用的方法"
 #: mcdreforged.utils.serializer.Serializable.on_deserialization:3 of
 msgid "You can do some custom initialization here"
 msgstr "你可以在这里做一些自定义的初始化操作"
-
