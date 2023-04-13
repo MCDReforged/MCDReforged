@@ -406,6 +406,8 @@ class Serializable(ABC):
 			of the other object first, and then merge from the copy
 
 		:param other: The other object to merge attributes from
+
+		.. versionadded:: v2.9.0
 		"""
 		self.__set_attributes(lambda attr_name: getattr(other, attr_name, _NONE), copy_default=False)
 
@@ -419,7 +421,7 @@ class Serializable(ABC):
 
 		.. versionadded:: v2.8.0
 
-		.. versionadded:: v2.8.3
+		.. versionadded:: v2.9.0
 			Added ``deep`` keyword argument
 		"""
 		def value_provider(attr_name: str):
