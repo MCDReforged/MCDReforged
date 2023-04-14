@@ -400,7 +400,7 @@ class Serializable(ABC):
 
 		.. note::
 
-			:meth:`merge_from` won't create copies of the attribute values being merged
+			It won't create copies of the attribute values being merged
 
 			If you want the merged values to be independent, you can make a :meth:`deep copy <copy>`
 			of the other object first, and then merge from the copy

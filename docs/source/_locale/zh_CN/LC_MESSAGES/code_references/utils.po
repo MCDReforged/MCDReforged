@@ -344,7 +344,7 @@ msgstr "将另一个实例的属性合并到当前实例中"
 
 #: mcdreforged.utils.serializer.Serializable.merge_from:5 of
 msgid ""
-":meth:`merge_from` won't create copies of the attribute values being "
+"It won't create copies of the attribute values being "
 "merged"
 msgstr "合并时，不会创建被合并属性的拷贝"
 
