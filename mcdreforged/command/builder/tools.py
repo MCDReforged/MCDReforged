@@ -270,18 +270,22 @@ class SimpleCommandBuilder:
 	#    Outputs
 	# --------------
 
-	def build(self) -> List[AbstractNode]:
+	def build(self, *, use_cache: bool = True) -> List[AbstractNode]:
 		"""
 		Build the command trees
 
 		Nodes with same name will be reused. e.g. if you define 3 commands with path ``"!!foo"``, ``"!!foo bar"`` and "``!!foo baz"``,
 		the root ``"!!foo"`` node will be reused, and there will be only 1 ``"!!foo"`` node eventually
 
+		:keyword use_cache: If set to false, do not use cache and always build new command trees
 		:return: A list of the built command tree root nodes. The result is cached until you instruct the builder again.
 			You can use :meth:`clean_cache` to explicitly clean the build cache
 		:raise SimpleCommandBuilder.Error: if there are undefined argument nodes
+
+		.. versionadded:: v2.9.0
+			Added ``use_cache`` keyword argument
 		"""
-		if self.__build_cache is None:
+		if not use_cache or self.__build_cache is None:
 			root = Literal('#TEMP')
 			for command, callback in self.__commands.items():
 				node = root
