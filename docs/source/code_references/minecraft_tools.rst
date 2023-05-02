@@ -14,11 +14,19 @@ Text Styles
 
 .. currentmodule:: mcdreforged.minecraft.rtext.style
 
+.. autoclass:: RItem
+    :members:
+
+.. autoclass:: RItemClassic
+    :show-inheritance:
+    :members:
+
 .. autoclass:: RColor
     :members:
     :undoc-members:
 
 .. autoclass:: RColorClassic
+    :show-inheritance:
     :members:
 
 .. autoclass:: RColorRGB
@@ -28,6 +36,10 @@ Text Styles
 .. autoclass:: RStyle
     :members:
     :undoc-members:
+
+.. autoclass:: RStyleClassic
+    :show-inheritance:
+    :members:
 
 .. autoclass:: RAction
     :members:

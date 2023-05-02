@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-20 22:22+0800\n"
+"POT-Creation-Date: 2023-05-02 12:15+0800\n"
 "PO-Revision-Date: 2021-01-24 09:02+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -41,6 +41,41 @@ msgstr ""
 #: ../code_references/minecraft_tools.rst:13
 msgid "Text Styles"
 msgstr "文本样式"
+
+#: mcdreforged.minecraft.rtext.style.RItem:1 of
+msgid "A general Minecraft text style item"
+msgstr "Minecraft 文本样式"
+
+#: mcdreforged.minecraft.rtext.style.RItem.name:1 of
+msgid "Its value in Minecraft text component"
+msgstr "其在 Minecraft 文本容器中的 value 值"
+
+#: mcdreforged.minecraft.rtext.style.RItemClassic:1 of
+msgid ""
+"Bases: :py:class:`~mcdreforged.minecraft.rtext.style.RItem`, "
+":py:class:`~abc.ABC`"
+msgstr ""
+
+#: mcdreforged.minecraft.rtext.style.RItemClassic:1 of
+msgid ""
+"A type of :class:`RItem` that can be represented with a classic "
+"\"§\"-prefixed formatting code, or a \"\\\\033[31m\" styled console ANSI "
+"escape code"
+msgstr ""
+"一种传统的 :class:`RItem` 对象，可以使用以 \"§\" 为前缀的传统样式代码，或一个 \"\\\\033[31m\" 风格的 "
+"ANSI 转义代码来表示"
+
+#: mcdreforged.minecraft.rtext.style.RItemClassic.mc_code:1 of
+msgid "Its code in Minecraft, with \"§\" prefix"
+msgstr "在 Minecraft 中的样式代码，以 \"§\" 为前缀"
+
+#: mcdreforged.minecraft.rtext.style.RItemClassic.console_code:1 of
+msgid "Its code in console, i.e. ANSI escape code"
+msgstr "在控制台中的样式代码，即 ANSI 转义代码"
+
+#: mcdreforged.minecraft.rtext.style.RItemClassic.console_code:3 of
+msgid "It might be an empty str if there's no appropriate code"
+msgstr "如果没有合适的转义代码，其值可能为空串"
 
 #: mcdreforged.minecraft.rtext.style.RColor:1 of
 msgid "Minecraft text colors"
@@ -113,14 +148,20 @@ msgid "The blue portion of the color in [0, 255]"
 msgstr "颜色的蓝色分量，范围为 [0, 255]"
 
 #: mcdreforged.minecraft.rtext.style.RColorClassic:1 of
+msgid ""
+"Bases: :py:class:`~mcdreforged.minecraft.rtext.style.RItemClassic`, "
+":py:class:`~mcdreforged.minecraft.rtext.style.RColor`"
+msgstr ""
+
+#: mcdreforged.minecraft.rtext.style.RColorClassic:1 of
 msgid "Classic Minecraft text color defined with color name"
-msgstr "使用颜色名字定义的经典 Minecraft 文本颜色"
+msgstr "使用颜色名字定义的传统 Minecraft 文本颜色"
 
 #: mcdreforged.minecraft.rtext.style.RColorClassic:5 of
 msgid ""
 "Do not construct the class yourself. Use class fields in :class:`RColor` "
 "if you want to use classic colors"
-msgstr "不要自己构造这个类。如果你想使用经典颜色，请使用 :class:`RColor` 雷属性"
+msgstr "不要自己构造这个类。如果你想使用传统颜色，请使用 :class:`RColor` 类的属性"
 
 #: mcdreforged.minecraft.rtext.style.RColorClassic.to_rgb:1 of
 msgid ""
@@ -180,6 +221,18 @@ msgstr "转换为在 RGB 颜色空间中与之欧氏距离最近的 :class:`RCol
 #: mcdreforged.minecraft.rtext.style.RStyle:1 of
 msgid "Minecraft text styles"
 msgstr "Minecraft 文本样式"
+
+#: mcdreforged.minecraft.rtext.style.RStyleClassic:1 of
+msgid ""
+"Bases: :py:class:`~mcdreforged.minecraft.rtext.style.RItemClassic`, "
+":py:class:`~mcdreforged.minecraft.rtext.style.RStyle`"
+msgstr ""
+
+#: mcdreforged.minecraft.rtext.style.RStyleClassic:1 of
+msgid ""
+"Classic Minecraft text style with corresponding \"§\"-prefixed formatting"
+" code"
+msgstr "传统 Minecraft 文本样式，拥有着对应的以 \"§\" 为前缀的样式代码"
 
 #: mcdreforged.minecraft.rtext.style.RAction:1 of
 msgid "Minecraft click event actions"
@@ -252,7 +305,7 @@ msgstr "将给定文本复制到剪切板"
 msgid "Available in Minecraft 1.15+"
 msgstr "在 Minecraft 1.15+ 中可用"
 
-#: ../code_references/minecraft_tools.rst:37
+#: ../code_references/minecraft_tools.rst:49
 msgid "Text Components"
 msgstr "文本组件"
 
@@ -564,11 +617,11 @@ msgstr "MCDR 将自动地于发送信息至玩家或控制台前，使用 :ref:`
 msgid "The language to be used during translation inside the context"
 msgstr "在上下文中进行翻译时所用的语言"
 
-#: ../code_references/minecraft_tools.rst:65
+#: ../code_references/minecraft_tools.rst:77
 msgid "Rcon"
 msgstr "Rcon"
 
-#: ../code_references/minecraft_tools.rst:67
+#: ../code_references/minecraft_tools.rst:79
 msgid ":doc:`API package </plugin_dev/api>` path: ``mcdreforged.api.rcon``"
 msgstr ":doc:`API  包 </plugin_dev/api>` 路径: ``mcdreforged.api.rcon``"
 

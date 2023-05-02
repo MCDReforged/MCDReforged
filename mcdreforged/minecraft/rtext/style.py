@@ -53,10 +53,10 @@ class RItem(__NamedObject):
 		raise NotImplementedError()
 
 
-class RItemLegacy(RItem, ABC):
+class RItemClassic(RItem, ABC):
 	"""
 	A type of :class:`RItem` that can be represented with a classic "§"-prefixed formatting code,
-	or a "\033[31m" styled console ANSI escape code
+	or a "\\\\033[31m" styled console ANSI escape code
 	"""
 	def __init__(self, name: str, mc_code: str, console_code: str):
 		self.__name: str = name
@@ -100,24 +100,24 @@ class RColor(RItem, ABC, metaclass=__RColorMeta):
 	"""
 	Minecraft text colors
 	"""
-	black:        'RColor'
-	dark_blue:    'RColor'
-	dark_green:   'RColor'
-	dark_aqua:    'RColor'
-	dark_red:     'RColor'
-	dark_purple:  'RColor'
-	gold:         'RColor'
-	gray:         'RColor'
-	dark_gray:    'RColor'
-	blue:         'RColor'
-	green:        'RColor'
-	aqua:         'RColor'
-	red:          'RColor'
-	light_purple: 'RColor'
-	yellow:       'RColor'
-	white:        'RColor'
+	black:        'RColorClassic'
+	dark_blue:    'RColorClassic'
+	dark_green:   'RColorClassic'
+	dark_aqua:    'RColorClassic'
+	dark_red:     'RColorClassic'
+	dark_purple:  'RColorClassic'
+	gold:         'RColorClassic'
+	gray:         'RColorClassic'
+	dark_gray:    'RColorClassic'
+	blue:         'RColorClassic'
+	green:        'RColorClassic'
+	aqua:         'RColorClassic'
+	red:          'RColorClassic'
+	light_purple: 'RColorClassic'
+	yellow:       'RColorClassic'
+	white:        'RColorClassic'
 
-	reset:        'RColor'
+	reset:        'RColorClassic'
 
 	def __init__(self, rgb_code: int):
 		class_util.check_type(rgb_code, int)
@@ -162,7 +162,7 @@ class RColor(RItem, ABC, metaclass=__RColorMeta):
 		return (self._rgb_code >> 0) & 0xFF
 
 
-def __register_legacy_rcolor():
+def __register_classic_rcolor():
 	def register(name: str, rgb_hex: int, mc_code: str, console_code: str):
 		RColor.register_item(name, RColorClassic(name, rgb_hex, mc_code, console_code))
 
@@ -187,7 +187,7 @@ def __register_legacy_rcolor():
 	register('reset',        0xFFFFFF, '§r', Style.RESET_ALL)
 
 
-class RColorClassic(RItemLegacy, RColor):
+class RColorClassic(RItemClassic, RColor):
 	"""
 	Classic Minecraft text color defined with color name
 
@@ -197,7 +197,7 @@ class RColorClassic(RItemLegacy, RColor):
 	"""
 	def __init__(self, name: str, rgb_code: int, mc_code: str, console_code: str):
 		super().__init__(name, mc_code, console_code)
-		super(RItemLegacy, self).__init__(rgb_code)
+		super(RItemClassic, self).__init__(rgb_code)
 		self.__rgb_cache: Optional['RColorRGB'] = None
 
 	def to_rgb(self) -> 'RColorRGB':
@@ -286,7 +286,7 @@ class RColorRGB(RColor):
 		return '#{:06X}'.format(self._rgb_code)
 
 
-__register_legacy_rcolor()
+__register_classic_rcolor()
 
 
 # ------------------------------------------------
@@ -302,16 +302,16 @@ class RStyle(RItem, ABC, metaclass=__RStyleMeta):
 	"""
 	Minecraft text styles
 	"""
-	bold:          'RStyle'
-	italic:        'RStyle'
-	underlined:    'RStyle'
-	strikethrough: 'RStyle'
-	obfuscated:    'RStyle'
+	bold:          'RStyleClassic'
+	italic:        'RStyleClassic'
+	underlined:    'RStyleClassic'
+	strikethrough: 'RStyleClassic'
+	obfuscated:    'RStyleClassic'
 
 
 def __register_rstyle():
 	def register(name: str, mc_code: str, console_code: str):
-		RStyle.register_item(name, _RStyleImpl(name, mc_code, console_code))
+		RStyle.register_item(name, RStyleClassic(name, mc_code, console_code))
 
 	register('bold',          '§l', Style.BRIGHT)
 	register('italic',        '§o', '')
@@ -320,8 +320,10 @@ def __register_rstyle():
 	register('obfuscated',    '§k', '')
 
 
-class _RStyleImpl(RItemLegacy, RStyle):
-	pass
+class RStyleClassic(RItemClassic, RStyle):
+	"""
+	Classic Minecraft text style with corresponding "§"-prefixed formatting code
+	"""
 
 
 __register_rstyle()

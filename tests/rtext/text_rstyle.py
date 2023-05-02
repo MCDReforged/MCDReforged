@@ -9,6 +9,10 @@ class RTextColorTestCase(unittest.TestCase):
 		self.assertIsInstance(RColor.green, RColor)
 		self.assertIsInstance(RColor.reset, RColor)
 
+		self.assertIsInstance(RColor.red, RColorClassic)
+		self.assertIsInstance(RColor.green, RColorClassic)
+		self.assertIsInstance(RColor.reset, RColorClassic)
+
 	def test_1_color_create(self):
 		self.assertIs(RColor.blue, RColor.from_mc_value('blue'))
 		self.assertIs(RColor.yellow, RColor.from_mc_value('yellow'))
@@ -47,12 +51,26 @@ class RTextColorTestCase(unittest.TestCase):
 		self.assertIsInstance(color, RColorRGB)
 		self.assertIs(color.to_classic(), color.to_classic())
 
+	def test_5_classic_fields(self):
+		self.assertEqual('blue', RColor.blue.name)
+		self.assertEqual(True, RColor.blue.mc_code.startswith('§'))
+		self.assertEqual(True, RColor.blue.console_code.startswith('\033'))
+
 
 class RTextStyleTestCase(unittest.TestCase):
 	def test_0_style_registry(self):
 		self.assertIsInstance(RStyle.bold, RStyle)
 		self.assertIsInstance(RStyle.underlined, RStyle)
 		self.assertIsInstance(RStyle.italic, RStyle)
+
+		self.assertIsInstance(RStyle.bold, RStyleClassic)
+		self.assertIsInstance(RStyle.underlined, RStyleClassic)
+		self.assertIsInstance(RStyle.italic, RStyleClassic)
+
+	def test_1_classic_fields(self):
+		self.assertEqual('bold', RStyle.bold.name)
+		self.assertEqual(True, RStyle.bold.mc_code.startswith('§'))
+		self.assertEqual(True, RStyle.bold.console_code.startswith('\033'))
 
 
 if __name__ == '__main__':

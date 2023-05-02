@@ -5,7 +5,7 @@ from typing import Iterable, List, Union, Optional, Any, Tuple, Set, NamedTuple
 from colorama import Style
 from typing_extensions import Self
 
-from mcdreforged.minecraft.rtext.style import RStyle, RColor, RAction, RColorClassic, RColorRGB, RItemLegacy
+from mcdreforged.minecraft.rtext.style import RStyle, RColor, RAction, RColorClassic, RColorRGB, RItemClassic
 
 
 class RTextBase(ABC):
@@ -342,7 +342,7 @@ class RText(RTextBase):
 		else:
 			color = ''
 		for style in self.__styles:
-			if isinstance(style, RItemLegacy):
+			if isinstance(style, RItemClassic):
 				color += style.console_code
 		return color + self.to_plain_text() + Style.RESET_ALL
 
