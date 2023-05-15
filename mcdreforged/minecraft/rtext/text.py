@@ -245,7 +245,7 @@ class RTextBase(ABC):
 				except ValueError:
 					pass
 			try:
-				click_event = ['clickEvent']
+				click_event = data['clickEvent']
 				if isinstance(click_event, dict):
 					text.set_click_event(RAction[click_event['action']], click_event['value'])
 			except KeyError:
