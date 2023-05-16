@@ -58,7 +58,7 @@ class StatusCommand(SubCommand):
 					lambda line: source.reply('  ' + line)
 				)
 			except psutil.NoSuchProcess:
-				self.mcdr_server.logger.exception('Fail to fetch process tree from pid {}', process.pid)
+				self.mcdr_server.logger.exception('Fail to fetch process tree from pid {}'.format(process.pid))
 
 		source.reply(self.tr('mcdr_command.print_mcdr_status.extra.queue', self.mcdr_server.task_executor.task_queue.qsize(), core_constant.MAX_TASK_QUEUE_SIZE))
 
