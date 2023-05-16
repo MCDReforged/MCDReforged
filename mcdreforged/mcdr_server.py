@@ -540,6 +540,7 @@ class MCDReforgedServer:
 		self.reactor_manager.put_info(parsed_result)
 
 	def __on_mcdr_start(self):
+		self.__register_signal_handler()
 		self.watch_dog.start()
 		self.task_executor.start()
 		self.preference_manager.load_preferences()
@@ -555,6 +556,15 @@ class MCDReforgedServer:
 		self.update_helper.start()
 		self.server_handler_manager.start_handler_detection()
 		self.set_mcdr_state(MCDReforgedState.RUNNING)
+
+	def __register_signal_handler(self):
+		def callback(sig: int, frame):
+			self.logger.warning('Received signal {} ({}), interrupting MCDR'.format(signal.Signals(sig).name, sig))
+			self.interrupt()
+
+		import signal
+		signal.signal(signal.SIGINT, callback)   # ctrl + c
+		signal.signal(signal.SIGTERM, callback)  # graceful termination
 
 	def __on_mcdr_stop(self):
 		try:
@@ -576,7 +586,7 @@ class MCDReforgedServer:
 		finally:
 			self.set_mcdr_state(MCDReforgedState.STOPPED)
 
-	def start(self):
+	def run_mcdr(self):
 		"""
 		The entry method to start MCDR
 		Try to start the server. if succeeded the console thread will start and MCDR will start ticking

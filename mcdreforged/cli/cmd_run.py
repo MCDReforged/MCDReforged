@@ -15,7 +15,7 @@ def run_mcdr():
 		raise
 
 	if mcdreforged_server.is_initialized():
-		mcdreforged_server.start()
+		mcdreforged_server.run_mcdr()
 	else:
 		# If it's not initialized, config file or permission file is missing
 		# Just don't do anything to let the user check the files
