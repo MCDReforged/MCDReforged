@@ -56,7 +56,7 @@ msgstr "4"
 msgid ""
 "Highest level for those who have the ability to access the physical "
 "server. e.g. Server owner"
-msgstr "最高权限，所有者，具有控制物理服务器的能力吗。例子：服务器拥有者"
+msgstr "最高权限，所有者，具有控制物理服务器的能力。例子：服务器拥有者"
 
 #: ../permission.rst:21
 msgid "admin"
