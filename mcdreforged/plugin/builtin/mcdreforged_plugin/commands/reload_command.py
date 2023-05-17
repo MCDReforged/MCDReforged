@@ -15,7 +15,7 @@ class ReloadCommand(SubCommand):
 		)
 
 	def refresh_changed_plugins(self, source: CommandSource):
-		ret = self.function_call(source, self.mcdr_server.plugin_manager.refresh_changed_plugins, 'refresh_changed_plugins', log_success=False)
+		ret = self.function_call(source, self.mcdr_server.plugin_manager.refresh_changed_plugins, 'refresh_changed_plugins', reply_success=False)
 		self._print_plugin_operation_result_if_no_error(source, ret)
 
 	def reload_config(self, source: CommandSource):

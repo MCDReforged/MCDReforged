@@ -136,7 +136,7 @@ class PluginCommand(SubCommand):
 			self, source: CommandSource, operation_name: str, func: Callable[[], Future[PluginOperationResult]],
 			plugin_alias: str, result_type_to_check_success: PluginResultType
 	):
-		ret = self.function_call(source, func, operation_name, log_success=False, msg_args=(plugin_alias,))
+		ret = self.function_call(source, func, operation_name, reply_success=False, msg_args=(plugin_alias,))
 		if ret.no_error:
 			def report(result: PluginOperationResult):
 				if result.get_if_success(result_type_to_check_success):
@@ -187,5 +187,5 @@ class PluginCommand(SubCommand):
 		self.__not_loaded_plugin_file_manipulate(source, file_name, self.plugin_manager.enable_plugin, 'enable_plugin', self.server_interface.get_disabled_plugin_list())
 
 	def reload_all_plugin(self, source: CommandSource):
-		ret = self.function_call(source, self.mcdr_server.plugin_manager.refresh_all_plugins, 'reload_all_plugin', log_success=False)
+		ret = self.function_call(source, self.mcdr_server.plugin_manager.refresh_all_plugins, 'reload_all_plugin', reply_success=False)
 		self._print_plugin_operation_result_if_no_error(source, ret)

@@ -84,14 +84,17 @@ class SubCommand(ABC):
 				source.reply(result.to_rtext(self.mcdr_server, show_path=source.has_permission(PermissionLevel.PHYSICAL_SERVER_CONTROL_LEVEL)))
 			ret.return_value.add_done_callback(reply)
 
-	def function_call(self, source: CommandSource, func: Callable[[], T], name: str, log_success=True, log_fail=True, msg_args=()) -> FunctionCallResult[T]:
+	def function_call(
+			self, source: CommandSource, func: Callable[[], T], name: str, *,
+			reply_success: bool = True, reply_fail: bool = True, msg_args: tuple = ()
+	) -> FunctionCallResult[T]:
 		try:
 			ret = FunctionCallResult(func(), True)
-			if log_success:
+			if reply_success:
 				source.reply(self.tr('mcdr_command.{}.success'.format(name), *msg_args))
 			return ret
 		except Exception:
-			if log_fail:
+			if reply_fail:
 				source.reply(self.tr('mcdr_command.{}.fail'.format(name), *msg_args))
 			self.mcdr_server.logger.error(traceback.format_exc())
 			return FunctionCallResult(None, False)
