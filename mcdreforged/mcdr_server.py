@@ -289,7 +289,7 @@ class MCDReforgedServer:
 	def should_exit_after_stop(self):
 		return MCDReforgedFlag.EXIT_AFTER_STOP in self.flags
 
-	def with_flag(self, flag: MCDReforgedFlag):
+	def add_flag(self, flag: MCDReforgedFlag):
 		self.flags |= flag
 		self.logger.debug('Added MCDReforgedFlag {}'.format(flag), option=DebugOption.MCDR)
 
@@ -394,7 +394,7 @@ class MCDReforgedServer:
 		self.logger.info('Interrupting, first strike = {}'.format(first_interrupt))
 		if self.is_server_running():
 			self.stop(forced=not first_interrupt)
-		self.with_flag(MCDReforgedFlag.INTERRUPT)
+		self.add_flag(MCDReforgedFlag.INTERRUPT)
 		return first_interrupt
 
 	def stop(self, forced: bool = False) -> bool:
@@ -428,7 +428,7 @@ class MCDReforgedServer:
 
 	def __on_server_start(self):
 		self.set_server_state(ServerState.RUNNING)
-		self.with_flag(MCDReforgedFlag.EXIT_AFTER_STOP)  # Set after server state is set to RUNNING, or MCDR might have a chance to exit if the server is started by other thread
+		self.add_flag(MCDReforgedFlag.EXIT_AFTER_STOP)  # Set after server state is set to RUNNING, or MCDR might have a chance to exit if the server is started by other thread
 		self.logger.info(self.tr('mcdr_server.start_server.pid_info', self.process.pid))
 		self.reactor_manager.on_server_start()
 		self.plugin_manager.dispatch_event(MCDRPluginEvents.SERVER_START, ())

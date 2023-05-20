@@ -225,7 +225,7 @@ class ServerInterface:
 		"""
 		ok = self._mcdr_server.stop(forced=False)
 		if ok:
-			self._mcdr_server.with_flag(MCDReforgedFlag.EXIT_AFTER_STOP)
+			self._mcdr_server.add_flag(MCDReforgedFlag.EXIT_AFTER_STOP)
 		return ok
 
 	def exit(self) -> bool:
@@ -248,7 +248,7 @@ class ServerInterface:
 		"""
 		if self._mcdr_server.is_server_running():
 			return False
-		self._mcdr_server.with_flag(MCDReforgedFlag.EXIT_AFTER_STOP)
+		self._mcdr_server.add_flag(MCDReforgedFlag.EXIT_AFTER_STOP)
 		return True
 
 	def set_exit_after_stop_flag(self, flag_value: bool) -> None:
@@ -262,7 +262,7 @@ class ServerInterface:
 		The flag value is displayed in line 5 in command ``!!MCDR status``
 		"""
 		if flag_value:
-			self._mcdr_server.with_flag(MCDReforgedFlag.EXIT_AFTER_STOP)
+			self._mcdr_server.add_flag(MCDReforgedFlag.EXIT_AFTER_STOP)
 		else:
 			self._mcdr_server.remove_flag(MCDReforgedFlag.EXIT_AFTER_STOP)
 

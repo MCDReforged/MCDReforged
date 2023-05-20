@@ -24,7 +24,7 @@ class ServerReactor(AbstractInfoReactor):
 
 			if handler.test_server_startup_done(info):
 				self.mcdr_server.logger.debug('Server startup detected', option=DebugOption.REACTOR)
-				self.mcdr_server.with_flag(MCDReforgedFlag.SERVER_STARTUP)
+				self.mcdr_server.add_flag(MCDReforgedFlag.SERVER_STARTUP)
 				self.mcdr_server.plugin_manager.dispatch_event(MCDRPluginEvents.SERVER_STARTUP, ())
 
 			version = handler.parse_server_version(info)
@@ -39,7 +39,7 @@ class ServerReactor(AbstractInfoReactor):
 
 			if handler.test_rcon_started(info):
 				self.mcdr_server.logger.debug('Server rcon started detected', option=DebugOption.REACTOR)
-				self.mcdr_server.with_flag(MCDReforgedFlag.SERVER_RCON_READY)
+				self.mcdr_server.add_flag(MCDReforgedFlag.SERVER_RCON_READY)
 				self.mcdr_server.connect_rcon()
 
 			if handler.test_server_stopping(info):  # notes that it might happen more than once in the server lifecycle
