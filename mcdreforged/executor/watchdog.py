@@ -34,12 +34,13 @@ class WatchDog(ThreadExecutor):
 			self.resume()
 
 	def check_task_executor_state(self):
-		task_executor = self.mcdr_server.task_executor
 		no_respond_threshold = self.mcdr_server.config['watchdog_threshold']  # in seconds
 		if not isinstance(no_respond_threshold, (int, float)):
 			no_respond_threshold = self.DEFAULT_NO_RESPOND_THRESHOLD
 		if no_respond_threshold <= 0:
 			return
+
+		task_executor = self.mcdr_server.task_executor
 		if task_executor.get_this_tick_time() > no_respond_threshold and self.__monitoring:
 			plugin = self.mcdr_server.plugin_manager.get_current_running_plugin(thread=task_executor.get_thread())
 			self.mcdr_server.logger.warning(self.mcdr_server.tr('watchdog.task_executor_no_response.line1', no_respond_threshold))
