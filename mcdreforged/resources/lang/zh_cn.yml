@@ -22,7 +22,8 @@ mcdr_server:
     killing: 正在杀死服务端进程组
     process_killed: 进程 {0} (pid {1}) 已杀死
   interrupt:
-    hint: 正在中断 MCDR，首次操作 = {0}
+    soft: 正在终止 MCDR。再次执行以强制杀死服务端
+    hard: 正在终止 MCDR 并杀死服务端
   send:
     send_when_stopped:
       .: 服务端已关闭，不能向其标准输入流输入指令

@@ -400,7 +400,7 @@ class MCDReforgedServer:
 		Return if it's the first try
 		"""
 		first_interrupt = not self.is_interrupt()
-		self.logger.info(self.tr('mcdr_server.interrupt.hint', first_interrupt))
+		self.logger.info(self.tr('mcdr_server.interrupt.{}'.format('soft' if first_interrupt else 'hard')))
 		if self.is_server_running():
 			self.stop(forced=not first_interrupt)
 		self.add_flag(MCDReforgedFlag.INTERRUPT)

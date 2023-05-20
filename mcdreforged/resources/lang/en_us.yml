@@ -22,7 +22,8 @@ mcdr_server:
     killing: Killing server process group
     process_killed: Process {0} (pid {1}) killed
   interrupt:
-    hint: Interrupting, first strike = {0}
+    soft: Interrupting MCDR, first strike. Interrupt again to kill the servers
+    hard: Interrupting MCDR and killing the servers
   send:
     send_when_stopped:
       .: Server has been terminated, cannot send command to its stdin
