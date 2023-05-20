@@ -19,10 +19,10 @@ mcdr_server:
     stop_when_stopped: 服务端不能在关闭时再次关闭
     stop_fail: 服务端关闭出错，强制关闭
   kill_server:
-    killing: 正在终止服务端进程组
-    process_killed: 进程 {0} 已终止
+    killing: 正在杀死服务端进程组
+    process_killed: 进程 {0} (pid {1}) 已杀死
   interrupt:
-    hint: 中断 MCDR 中，首次操作 = {0}
+    hint: 正在中断 MCDR，首次操作 = {0}
   send:
     send_when_stopped:
       .: 服务端已关闭，不能向其标准输入流输入指令
@@ -270,7 +270,7 @@ mcdr_command:
     restart.success: 正在重启服务端
     restart.failed: 重启服务端失败
     restart.spam: 服务端已在重启中，勿重复操作
-    kill.success: 正在杀死服务端
+    kill.success: 已杀死服务端进程组
     kill.failed: 杀死服务端失败
     see_console: 见控制台以了解详情信息
 python_plugin:

@@ -17,10 +17,6 @@ class IllegalStateError(RuntimeError):
 	pass
 
 
-class ServerStopped(RuntimeError):
-	pass
-
-
 class DecodeError(ValueError):
 	pass
 

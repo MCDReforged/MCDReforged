@@ -20,7 +20,7 @@ mcdr_server:
     stop_fail: Error stopping server, force the server to stop now
   kill_server:
     killing: Killing server process group
-    process_killed: Process {0} killed
+    process_killed: Process {0} (pid {1}) killed
   interrupt:
     hint: Interrupting, first strike = {0}
   send:
@@ -268,7 +268,7 @@ mcdr_command:
     restart.success: Restarting the server, do not spam
     restart.failed: Failed to restart the server
     restart.spam: The server is already restarting
-    kill.success: Killed the server
+    kill.success: Killed the server process group
     kill.failed: Failed to kill the server
     see_console: Check the console for more information
 python_plugin:

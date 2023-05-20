@@ -4,7 +4,7 @@ import sys
 import time
 import traceback
 from pathlib import Path
-from subprocess import Popen, PIPE, STDOUT
+from subprocess import Popen, PIPE, STDOUT, TimeoutExpired
 from threading import Lock, Condition
 from typing import Optional, Callable, Any, List
 
@@ -32,7 +32,7 @@ from mcdreforged.plugin.server_interface import ServerInterface
 from mcdreforged.preference.preference_manager import PreferenceManager
 from mcdreforged.translation.translation_manager import TranslationManager
 from mcdreforged.utils import file_util
-from mcdreforged.utils.exception import IllegalCallError, ServerStopped, ServerStartError, IllegalStateError, DecodeError
+from mcdreforged.utils.exception import ServerStartError, IllegalStateError, DecodeError
 from mcdreforged.utils.logger import DebugOption, MCDReforgedLogger, MCColorFormatControl
 from mcdreforged.utils.types import MessageText
 
@@ -377,15 +377,21 @@ class MCDReforgedServer:
 		if self.process and self.process.poll() is None:
 			self.logger.info(self.tr('mcdr_server.kill_server.killing'))
 			try:
-				for child in psutil.Process(self.process.pid).children(recursive=True):
-					child.kill()
-					self.logger.info(self.tr('mcdr_server.kill_server.process_killed', child.pid))
+				root = psutil.Process(self.process.pid)
+				processes = [root]
+				processes.extend(root.children(recursive=True))
+				for proc in reversed(processes):  # child first, parent last
+					try:
+						proc_pid, proc_name = proc.pid, proc.name()  # in case we cannot get them after the process dies
+						proc.kill()
+						self.logger.info(self.tr('mcdr_server.kill_server.process_killed', proc_name, proc_pid))
+					except psutil.NoSuchProcess:
+						pass
 			except psutil.NoSuchProcess:
 				pass
-			self.process.kill()
-			self.logger.info(self.tr('mcdr_server.kill_server.process_killed', self.process.pid))
+			self.process.poll()
 		else:
-			raise IllegalCallError("Server process has already been terminated")
+			self.logger.warning('Try to kill the server when the server process has already been terminated')
 
 	def interrupt(self) -> bool:
 		"""
@@ -394,7 +400,7 @@ class MCDReforgedServer:
 		Return if it's the first try
 		"""
 		first_interrupt = not self.is_interrupt()
-		self.logger.info('Interrupting, first strike = {}'.format(first_interrupt))
+		self.logger.info(self.tr('mcdr_server.interrupt.hint', first_interrupt))
 		if self.is_server_running():
 			self.stop(forced=not first_interrupt)
 		self.add_flag(MCDReforgedFlag.INTERRUPT)
@@ -419,10 +425,7 @@ class MCDReforgedServer:
 					self.logger.error(self.tr('mcdr_server.stop.stop_fail'))
 					forced = True
 			if forced:
-				try:
-					self.__kill_server()
-				except IllegalCallError:
-					pass
+				self.__kill_server()
 			return True
 
 	# --------------------------
@@ -482,24 +485,26 @@ class MCDReforgedServer:
 			self.logger.warning(self.tr('mcdr_server.send.send_when_stopped'))
 			self.logger.warning(self.tr('mcdr_server.send.send_when_stopped.text', text if len(text) <= 32 else text[:32] + '...'))
 
-	def __receive(self):
+	def __receive(self) -> Optional[str]:
 		"""
 		Try to receive a str from server's stdout. This will block the current thread
-		If server has stopped it will wait up to 10s for the server process to exit, then raise a ServerStopped exception
 
-		:rtype: str
-		:raise: ServerStopped
+		If server has stopped it will wait up to 60s for the server process to exit, then return None
 		"""
 		try:
 			text: bytes = next(iter(self.process.stdout))
 		except StopIteration:  # server process has stopped
-			for i in range(core_constant.WAIT_TIME_AFTER_SERVER_STDOUT_END_SEC * 10):
-				if self.process.poll() is not None:
-					break
-				time.sleep(0.1)
-				if i % 10 == 0:
+			for i in range(core_constant.WAIT_TIME_AFTER_SERVER_STDOUT_END_SEC):
+				try:
+					self.process.wait(1)
+				except TimeoutExpired:
 					self.logger.info(self.tr('mcdr_server.receive.wait_stop'))
-			raise ServerStopped()
+				else:
+					break
+			else:
+				self.logger.warning('The server is still not stopped after {}s after its stdout was closed, killing'.format(core_constant.WAIT_TIME_AFTER_SERVER_STDOUT_END_SEC))
+				self.__kill_server()
+			return None
 		else:
 			try:
 				decoded_text: str = text.decode(self.decoding_method)
@@ -517,9 +522,11 @@ class MCDReforgedServer:
 			text = self.__receive()
 		except DecodeError:
 			return
-		except ServerStopped:
+
+		if text is None:  # server stops
 			self.__on_server_stop()
 			return
+
 		try:
 			text = self.server_handler_manager.get_current_handler().pre_parse_server_stdout(text)
 		except Exception:
