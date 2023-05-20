@@ -1,4 +1,4 @@
-sphinx>=6.1.3            # core
+sphinx>=6.2.1            # core
 sphinx-intl>=2.1.0       # locale
 sphinx-rtd-theme>=1.2.0  # the theme of the webside
 Babel==2.9.1             # Unified the version to prevent different versions from appearing in .po comments
