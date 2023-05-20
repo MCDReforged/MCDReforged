@@ -569,7 +569,11 @@ class MCDReforgedServer:
 
 	def __register_signal_handler(self):
 		def callback(sig: int, frame):
-			self.logger.warning('Received signal {} ({}), interrupting MCDR'.format(signal.Signals(sig).name, sig))
+			try:
+				signal_name = signal.Signals(sig).name
+			except ValueError:
+				signal_name = 'unknown'
+			self.logger.warning('Received signal {} ({}), interrupting MCDR'.format(signal_name, sig))
 			self.interrupt()
 
 		import signal
