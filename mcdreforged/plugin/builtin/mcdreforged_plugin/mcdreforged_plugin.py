@@ -14,6 +14,7 @@ from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.permission_command i
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.plugin_command import PluginCommand
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.preference_command import PreferenceCommand
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.reload_command import ReloadCommand
+from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.server_command import ServerCommand
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.status_command import StatusCommand
 from mcdreforged.plugin.meta.metadata import Metadata
 from mcdreforged.plugin.type.permanent_plugin import PermanentPlugin
@@ -27,7 +28,7 @@ METADATA = {
 	'author': [
 		'Fallen_Breath'
 	],
-	'link': 'https://github.com/Fallen-Breath/MCDReforged'
+	'link': core_constant.GITHUB_URL
 }
 
 
@@ -42,6 +43,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 		self.command_plugin = PluginCommand(self)
 		self.command_preference = PreferenceCommand(self)
 		self.command_reload = ReloadCommand(self)
+		self.command_server = ServerCommand(self)
 		self.command_status = StatusCommand(self)
 
 	def tr(self, key: str, *args, **kwargs) -> RTextMCDRTranslation:
@@ -80,6 +82,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 			then(self.command_plugin.get_command_node()).
 			then(self.command_preference.get_command_node()).
 			then(self.command_reload.get_command_node()).
+			then(self.command_server.get_command_node()).
 			then(self.command_status.get_command_node())
 		)
 		self.register_command(self.command_help.get_command_node())

@@ -39,7 +39,7 @@ The following status can only be seen by users with permission 4 (owner)
 Hot reloads
 ^^^^^^^^^^^
 
-``!!MCDR reload`` commands are the places to hot-reload things. Its short form is ``!!MCDR r``. Directly enter command ``!!MCDR reload`` will show the help message of the hot reload commands
+``!!MCDR reload`` sub-commands are the places to hot-reload things. Its short form is ``!!MCDR r``. Directly enter command ``!!MCDR reload`` will show the help message of the hot reload commands
 
 Here's a table of the commands
 
@@ -69,7 +69,7 @@ Here's a table of the commands
 Permission management
 ^^^^^^^^^^^^^^^^^^^^^
 
-``!!MCDR permission`` commands are used to manipulate player's permission. Its short form is ``!!MCDR perm``. Directly enter command ``!!MCDR perm`` will show the help message of the permission manipulation commands
+``!!MCDR permission`` sub-commands are used to manipulate player's permission. Its short form is ``!!MCDR perm``. Directly enter command ``!!MCDR perm`` will show the help message of the permission manipulation commands
 
 Here's a table of the commands
 
@@ -182,7 +182,7 @@ These commands do the following things:
 Preference settings
 ^^^^^^^^^^^^^^^^^^^
 
-``!!MCDR preference`` commands is to control the preference of MCDR. It only requires permission level 1 (user) to operate
+``!!MCDR preference`` sub-commands are used to control the preference of MCDR. It only requires permission level 1 (user) to operate
 
 Here's a table of the commands
 
@@ -220,6 +220,35 @@ Check update
 ``!!MCDR checkupdate``, or ``!!MCDR cu``. Use it to manually check update from github
 
 It will try to get the latest release version in github, and check if it's newer than the current version. If it is, it will show the update logs from the github release
+
+Server Control
+^^^^^^^^^^^^^^
+
+``!!MCDR server`` sub-commands are used control the daemonized server
+
+Here's a table of the commands
+
+.. list-table::
+   :header-rows: 1
+
+   * - Command
+     - Function
+   * - !!MCDR server
+     - Show server control command help message
+   * - !!MCDR server start
+     - Start the server
+   * - !!MCDR server stop
+     - Stop the server, but keep MCDR running
+   * - !!MCDR server stop_exit
+     - Stop the server and exit MCDR
+   * - !!MCDR server exit
+     - Exit MCDR. The server should already be stopped
+   * - !!MCDR server restart
+     - Restart the server
+   * - !!MCDR server kill
+     - Kill the server, and all of its child processes
+
+These commands are also parts of the :doc:`ServerInterface API </code_references/ServerInterface>`
 
 Debug
 ^^^^^

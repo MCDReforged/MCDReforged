@@ -122,6 +122,7 @@ mcdr_command:
       §7!!MCDR plugin§r: Show plugin command help message
       §7!!MCDR preference§r: Show preference command help message
       §7!!MCDR reload§r: Show reload command help message
+      §7!!MCDR server§r: Show server command help message
       §7!!MCDR status§r: Show MCDR status
     reload: |
       §7!!MCDR reload plugin§r: Load / Reload / Unloaded §lchanged§r plugins
@@ -148,6 +149,13 @@ mcdr_command:
       §7!!MCDR preference §e<pref_name>§r: Display the details of preference §e<pref_name>§r
       §7!!MCDR preference §e<pref_name>§r set §6<value>§r: Set the value of preference §e<pref_name>§r to §6<value>§r
       §7!!MCDR preference §e<pref_name>§r reset: Reset preference §e<pref_name>§r to the default value
+    server: |
+      §7!!MCDR server start§r: Start the server
+      §7!!MCDR server stop§r: Stop the server, but keep MCDR running
+      §7!!MCDR server stop_exit§r: Stop the server and exit MCDR
+      §7!!MCDR server exit§r: Exit MCDR. The server should already be stopped
+      §7!!MCDR server restart§r: Restart the server
+      §7!!MCDR server kill§r: Kill the server, and all of its child processes
     debug: |
       §7!!MCDR debug thread_dump §6[#all|<thread_name>]§r: Dump stack trace information of given threads
       §7!!MCDR debug translation get §6<translation_key>§r: Get the translation dict for given translation key
@@ -248,6 +256,21 @@ mcdr_command:
     set:
       done: Set preference {0} to {1}
     unknown_language: Unknown language {0}
+  server:
+    start.success: Starting the server
+    start.failed: Failed to start the server
+    stop.success: Stopping the server
+    stop.failed: Failed to stop the server
+    stop_exit.success: Stopping the server and exiting MCDR
+    stop_exit.failed: Failed to start the server and exit MCDR
+    exit.success: Exiting MCDR
+    exit.failed: Failed to exit MCDR. Make sure the server has already stopped
+    restart.success: Restarting the server, do not spam
+    restart.failed: Failed to restart the server
+    restart.spam: The server is already restarting
+    kill.success: Killed the server
+    kill.failed: Failed to kill the server
+    see_console: Check the console for more information
 python_plugin:
   info: '{0} is running on {1} environment'
 

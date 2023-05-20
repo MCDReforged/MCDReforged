@@ -122,6 +122,7 @@ mcdr_command:
       §7!!MCDR plugin§r: 显示插件相关的帮助信息
       §7!!MCDR preference§r: 显示偏好相关的帮助信息
       §7!!MCDR reload§r: 显示重载相关的帮助信息
+      §7!!MCDR server§r: 显示控制服务端相关的帮助信息
       §7!!MCDR status§r: 显示 MCDR 状态
     reload: |
       §7!!MCDR reload plugin§r: 加载 / 重载 / 卸载§l有修改的§r插件
@@ -148,6 +149,13 @@ mcdr_command:
       §7!!MCDR preference §e<pref_name>§r: 显示偏好 §e<pref_name>§r 的详情
       §7!!MCDR preference §e<pref_name>§r set §6<value>§r: 设定偏好 §e<pref_name>§r 的值为 §6<value>§r
       §7!!MCDR preference §e<pref_name>§r reset: 将偏好 §e<pref_name>§r 重置为默认值
+    server: |
+      §7!!MCDR server start§r: 启动服务端
+      §7!!MCDR server stop§r: 关闭服务端，且 MCDR 会继续运行
+      §7!!MCDR server stop_exit§r: 关闭服务端并退出 MCDR
+      §7!!MCDR server exit§r: 退出 MCDR。服务端应已关闭
+      §7!!MCDR server restart§r: 重启服务端
+      §7!!MCDR server kill§r: 杀死服务端，以及其所有子进程
     debug: |
       §7!!MCDR debug thread_dump §6[#all|<thread_name>]§r: 导出所有指定线程的堆栈追踪信息
       §7!!MCDR debug translation get §6<translation_key>§r: 导出给定翻译键的翻译信息
@@ -250,6 +258,21 @@ mcdr_command:
     set:
       done: 已将偏好 "{0}" 设置为 "{1}"
     unknown_language: 未知的语言 {0}
+  server:
+    start.success: 正在启动服务端
+    start.failed: 启动服务端失败
+    stop.success: 正在关闭服务端
+    stop.failed: 关闭服务端失败
+    stop_exit.success: 正在关闭服务端并退出MCDR
+    stop_exit.failed: 启动服务端并退出MCDR失败
+    exit.success: 正在退出MCDR
+    exit.failed: 退出MCDR失败，请确保服务端已关闭
+    restart.success: 正在重启服务端
+    restart.failed: 重启服务端失败
+    restart.spam: 服务端已在重启中，勿重复操作
+    kill.success: 正在杀死服务端
+    kill.failed: 杀死服务端失败
+    see_console: 见控制台以了解详情信息
 python_plugin:
   info: '{0}正于{1}环境中运行'
 

@@ -211,9 +211,8 @@ class ServerInterface:
 		:return: If the operation succeed.
 			The operation fails if the server is already stopped
 		"""
-		if not self.is_server_running():
+		if not self.stop():
 			return False
-		self.stop()
 		self.wait_for_start()
 		return self.start()
 
@@ -224,8 +223,10 @@ class ServerInterface:
 		:return: If the operation succeed.
 			The operation fails if the server is already stopped
 		"""
-		self._mcdr_server.with_flag(MCDReforgedFlag.EXIT_AFTER_STOP)
-		return self._mcdr_server.stop(forced=False)
+		ok = self._mcdr_server.stop(forced=False)
+		if ok:
+			self._mcdr_server.with_flag(MCDReforgedFlag.EXIT_AFTER_STOP)
+		return ok
 
 	def exit(self) -> bool:
 		"""
