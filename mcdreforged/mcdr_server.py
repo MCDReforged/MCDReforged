@@ -5,7 +5,7 @@ import time
 import traceback
 from pathlib import Path
 from subprocess import Popen, PIPE, STDOUT
-from threading import Lock
+from threading import Lock, Condition
 from typing import Optional, Callable, Any, List
 
 import pkg_resources
@@ -46,6 +46,7 @@ class MCDReforgedServer:
 		"""
 		self.mcdr_state = MCDReforgedState.INITIALIZING
 		self.server_state = ServerState.STOPPED
+		self.server_state_cv = Condition()
 		self.server_information = ServerInformation()
 		self.process: Optional[Popen] = None
 		self.flags = MCDReforgedFlag.NONE
@@ -311,6 +312,8 @@ class MCDReforgedServer:
 	def set_server_state(self, state):
 		self.server_state = state
 		self.logger.debug('Server state has set to "{}"'.format(state), option=DebugOption.MCDR)
+		with self.server_state_cv:
+			self.server_state_cv.notify_all()
 
 	def set_mcdr_state(self, state):
 		self.mcdr_state = state
@@ -612,7 +615,8 @@ class MCDReforgedServer:
 				if self.is_server_running():
 					self.__tick()
 				else:
-					time.sleep(0.01)
+					with self.server_state_cv:
+						self.server_state_cv.wait(0.01)
 			except KeyboardInterrupt:
 				self.interrupt()
 			except Exception:

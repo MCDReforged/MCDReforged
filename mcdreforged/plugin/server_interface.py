@@ -2,7 +2,6 @@ import functools
 import json
 import logging
 import os
-import time
 from typing import Callable, TYPE_CHECKING, Tuple, Any, Union, Optional, List, IO, Dict, Type, TypeVar
 
 import psutil
@@ -188,9 +187,10 @@ class ServerInterface:
 
 		.. note:: The current thread will be blocked
 		"""
-		# TODO use better implementation e.g. threading stuffs
-		while self.is_server_running():
-			time.sleep(0.01)
+		cv = self._mcdr_server.server_state_cv
+		with cv:
+			while self.is_server_running():
+				cv.wait(0.1)
 
 	def wait_for_start(self) -> None:
 		"""
