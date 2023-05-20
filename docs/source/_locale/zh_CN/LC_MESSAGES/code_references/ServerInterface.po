@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-19 02:12+0800\n"
+"POT-Creation-Date: 2023-05-20 20:27+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -207,20 +207,27 @@ msgstr "如果服务端正在运行或正在由其他插件启动，它将返回
 
 #: mcdreforged.plugin.server_interface.ServerInterface.disable_plugin
 #: mcdreforged.plugin.server_interface.ServerInterface.enable_plugin
+#: mcdreforged.plugin.server_interface.ServerInterface.exit
 #: mcdreforged.plugin.server_interface.ServerInterface.get_plugin_instance
 #: mcdreforged.plugin.server_interface.ServerInterface.get_server_pid
 #: mcdreforged.plugin.server_interface.ServerInterface.get_server_pid_all
+#: mcdreforged.plugin.server_interface.ServerInterface.kill
 #: mcdreforged.plugin.server_interface.ServerInterface.load_plugin
 #: mcdreforged.plugin.server_interface.ServerInterface.rcon_query
 #: mcdreforged.plugin.server_interface.ServerInterface.reload_plugin
+#: mcdreforged.plugin.server_interface.ServerInterface.restart
 #: mcdreforged.plugin.server_interface.ServerInterface.start
+#: mcdreforged.plugin.server_interface.ServerInterface.stop
+#: mcdreforged.plugin.server_interface.ServerInterface.stop_exit
 #: mcdreforged.plugin.server_interface.ServerInterface.unload_plugin of
 msgid "Returns"
 msgstr "返回"
 
 #: mcdreforged.plugin.server_interface.ServerInterface.start:5 of
-msgid "If the action succeed"
-msgstr "启动是否成功"
+msgid ""
+"If the operation succeed. The operation fails if the server is already "
+"started, or cannot start due to invalid command or current MCDR state"
+msgstr "操作是否成功。若服务端已启动，或者服务端因指令错误或 MCDR 状态无法启动，操作将会失败"
 
 #: mcdreforged.plugin.server_interface.ServerInterface.stop:1 of
 msgid ""
@@ -234,6 +241,15 @@ msgid ""
 ":meth:`exit` is invoked"
 msgstr "此操作不会关闭 MCDR。MCDR 会继续运行，除非 :meth:`exit` 被调用"
 
+#: mcdreforged.plugin.server_interface.ServerInterface.kill:5
+#: mcdreforged.plugin.server_interface.ServerInterface.restart:7
+#: mcdreforged.plugin.server_interface.ServerInterface.stop:5
+#: mcdreforged.plugin.server_interface.ServerInterface.stop_exit:3 of
+msgid ""
+"If the operation succeed. The operation fails if the server is already "
+"stopped"
+msgstr "操作是否成功。若服务端已停止，操作将会失败"
+
 #: mcdreforged.plugin.server_interface.ServerInterface.kill:1 of
 msgid "Kill the entire server process group. A hard shutting down"
 msgstr "杀死整个服务端进程组，即硬停止服务端"
@@ -242,11 +258,21 @@ msgstr "杀死整个服务端进程组，即硬停止服务端"
 msgid "MCDR will keep running unless :meth:`exit` is invoked"
 msgstr "MCDR 会继续运行，除非 :meth:`exit` 被调用"
 
+#: mcdreforged.plugin.server_interface.ServerInterface.wait_until_stop:1 of
+msgid "Wait until the server is stopped"
+msgstr "等待，直到服务端停止"
+
+#: mcdreforged.plugin.server_interface.ServerInterface.wait_until_stop:3 of
+msgid "The current thread will be blocked"
+msgstr "当前线程将被阻塞"
+
 #: mcdreforged.plugin.server_interface.ServerInterface.wait_for_start:1 of
-msgid ""
-"Wait until the server is able to start. In other words, wait until the "
-"server is stopped"
-msgstr "等待，直到到服务端能够被启动——换句话说，就是等待服务端停止"
+msgid "Wait until the server is able to start"
+msgstr "等待，直到到服务端能够被启动"
+
+#: mcdreforged.plugin.server_interface.ServerInterface.wait_for_start:3 of
+msgid "Actually it's an alias of :meth:`wait_until_stop`"
+msgstr "事实上，这是 :meth:`wait_until_stop` 的一个别名"
 
 #: mcdreforged.plugin.server_interface.ServerInterface.restart:1 of
 msgid "Restart the server"
@@ -255,11 +281,11 @@ msgstr "重新启动服务端"
 #: mcdreforged.plugin.server_interface.ServerInterface.restart:3 of
 msgid ""
 "It will first :meth:`soft stop <stop>` the server and then :meth:`wait "
-"<wait_for_start>` until the server is stopped, finally :meth:start "
+"<wait_for_start>` until the server is stopped, finally :meth:`start "
 "<start>` the server up"
 msgstr ""
 "它首先会 :meth:`软停止 <stop>` 服务端，然后 :meth:`等 <wait_for_start>` 到服务端完全停止后，再 "
-"`:meth:启动 <start>` 服务端"
+":meth:`启动 <start>` 服务端"
 
 #: mcdreforged.plugin.server_interface.ServerInterface.stop_exit:1 of
 msgid ":meth:`soft stop <stop>` the server and exit MCDR"
@@ -281,37 +307,30 @@ msgstr ""
 msgid "Example usage::"
 msgstr "示例用法："
 
-#: mcdreforged.plugin.server_interface.ServerInterface.exit
-#: mcdreforged.plugin.server_interface.ServerInterface.get_permission_level
-#: mcdreforged.plugin.server_interface.ServerInterface.get_preference
-#: mcdreforged.plugin.server_interface.ServerInterface.reply
-#: mcdreforged.plugin.server_interface.ServerInterface.set_permission_level
-#: mcdreforged.plugin.server_interface.ServerInterface.set_preference of
-msgid "Raises"
-msgstr "抛出"
-
 #: mcdreforged.plugin.server_interface.ServerInterface.exit:14 of
-msgid "If the server is not stopped"
-msgstr "当服务端停止时，退出 MCDR"
+msgid ""
+"If the operation succeed. The operation fails if the server is still "
+"running"
+msgstr "操作是否成功。若服务端仍在运行，操作将会失败"
 
 #: mcdreforged.plugin.server_interface.ServerInterface.set_exit_after_stop_flag:1
 #: of
 msgid ""
 "Set the flag that indicating if MCDR should exit when the server has "
 "stopped"
-msgstr "设置用于指示 MCDR 在服务器停止时是否应退出的标志"
+msgstr "设置用于指示 MCDR 在服务端停止时是否应退出的标志"
 
 #: mcdreforged.plugin.server_interface.ServerInterface.set_exit_after_stop_flag:3
 #: of
 msgid ""
 "If set to ``True``, after the server stops MCDR will exit, otherwise (set"
 " to ``False``) MCDR will just keep running"
-msgstr "如果设置为 ``True``，MCDR 将在服务器停止后退出，否则（设置为 ``False`` 时）MCDR 将继续运行"
+msgstr "如果设置为 ``True``，MCDR 将在服务端停止后退出，否则（设置为 ``False`` 时）MCDR 将继续运行"
 
 #: mcdreforged.plugin.server_interface.ServerInterface.set_exit_after_stop_flag:5
 #: of
 msgid "The flag value will be set to ``True`` everytime when the server starts"
-msgstr "当服务器启动时，该标志将被设置为 ``True``"
+msgstr "当服务端启动时，该标志将被设置为 ``True``"
 
 #: mcdreforged.plugin.server_interface.ServerInterface.set_exit_after_stop_flag:7
 #: of
@@ -373,7 +392,7 @@ msgid ""
 "information has not been parsed"
 msgstr "如果服务端未启动，或者相关的信息未被解析，则其若干个属性可能为 None"
 
-#: ../code_references/ServerInterface.rst:41
+#: ../code_references/ServerInterface.rst:42
 msgid "Text Interaction"
 msgstr "文本交互"
 
@@ -457,11 +476,19 @@ msgstr "如果指定了该参数，那么在回复控制台时，将使用 *cons
 msgid "The encoding method for the text"
 msgstr "文本的编码方法"
 
+#: mcdreforged.plugin.server_interface.ServerInterface.get_permission_level
+#: mcdreforged.plugin.server_interface.ServerInterface.get_preference
+#: mcdreforged.plugin.server_interface.ServerInterface.reply
+#: mcdreforged.plugin.server_interface.ServerInterface.set_permission_level
+#: mcdreforged.plugin.server_interface.ServerInterface.set_preference of
+msgid "Raises"
+msgstr "抛出"
+
 #: mcdreforged.plugin.server_interface.ServerInterface.reply:12 of
 msgid "If the Info is not from a user"
 msgstr "如果这个 Info 并非来自一位用户"
 
-#: ../code_references/ServerInterface.rst:50
+#: ../code_references/ServerInterface.rst:51
 msgid "Plugin Queries"
 msgstr "插件查询"
 
@@ -556,17 +583,17 @@ msgid ""
 "metadata) as key-value pair"
 msgstr "返回一个包含所有加载的插件元数据的字典，键值对为 (插件 id, 元数据)"
 
-#: ../code_references/ServerInterface.rst:61
+#: ../code_references/ServerInterface.rst:62
 msgid "Plugin Operations"
 msgstr "插件操作"
 
-#: ../code_references/ServerInterface.rst:64
+#: ../code_references/ServerInterface.rst:65
 msgid ""
 "All plugin manipulation will trigger a dependency check, which might "
 "cause unwanted plugin operations"
 msgstr "所有的插件操作都会触发依赖性检查——这可能会导致不必要的插件操作"
 
-#: ../code_references/ServerInterface.rst:66
+#: ../code_references/ServerInterface.rst:67
 msgid ""
 "It's not suggested to trigger plugin operations during :ref:`on_load "
 "<event-plugin-load>` or :ref:`on_unload <event-plugin-unload>` plugin "
@@ -576,7 +603,7 @@ msgstr ""
 "不推荐在插件事件 :ref:`插件被加载 <event-plugin-load>` 或 :ref:`插件被卸载 <event-plugin-"
 "unload>` 期间进行插件操作在这些事件发生时，MCDR 正处于一次进行中的插件操作流程之中，此时并不适合触发另一次插件操作"
 
-#: ../code_references/ServerInterface.rst:69
+#: ../code_references/ServerInterface.rst:70
 msgid ""
 "If you do trigger a plugin operation during :ref:`on_load <event-plugin-"
 "load>` or :ref:`on_unload <event-plugin-unload>` plugin events, MCDR will"
@@ -722,7 +749,7 @@ msgid ""
 "thread If it's set to False. The event will be dispatched immediately"
 msgstr "在默认值的情况下，该事件会被派发至任务执行者 (task executor) 线程中分发。如果它被设置为 False，则事件将会被立即分发"
 
-#: ../code_references/ServerInterface.rst:82
+#: ../code_references/ServerInterface.rst:83
 msgid "Configuration"
 msgstr "配置"
 
@@ -776,7 +803,7 @@ msgstr "关键字参数"
 msgid "If the config changing messages should be logged"
 msgstr "是否输出配置文件变更的相关日志"
 
-#: ../code_references/ServerInterface.rst:90
+#: ../code_references/ServerInterface.rst:91
 msgid "Permission"
 msgstr "权限"
 
@@ -841,7 +868,7 @@ msgstr "从权限文件重载 MCDR 的权限数据"
 msgid "It has the same effect as command ``!!MCDR reload permission``"
 msgstr "其效果与指令 ``!!MCDR reload permission`` 相同"
 
-#: ../code_references/ServerInterface.rst:97
+#: ../code_references/ServerInterface.rst:98
 msgid "Command"
 msgstr "指令"
 
@@ -878,7 +905,7 @@ msgid ""
 "fallback command source"
 msgstr "用于执行该条指令的指令源。如果它未被指定，MCDR 将会使用 :meth:`get_plugin_command_source` 来获得默认的指令源"
 
-#: ../code_references/ServerInterface.rst:103
+#: ../code_references/ServerInterface.rst:104
 msgid "Preference"
 msgstr "偏好"
 
@@ -925,7 +952,7 @@ msgstr "你要设置的偏好的对象"
 msgid "The preference to be set"
 msgstr "设置给定对象的 MCDR 偏好"
 
-#: ../code_references/ServerInterface.rst:110
+#: ../code_references/ServerInterface.rst:111
 msgid "Misc"
 msgstr "杂项"
 
@@ -970,10 +997,4 @@ msgstr "是否需要阻塞至可调用对象执行结束"
 #: mcdreforged.plugin.server_interface.ServerInterface.schedule_task:5 of
 msgid "The timeout of the blocking operation if ``block=True``"
 msgstr "若 ``block=True``，最大的阻塞时间"
-
-#~ msgid ""
-#~ "The preference to be set. A copy"
-#~ " will be made when storing the "
-#~ "preference"
-#~ msgstr "你要设置的偏好值"
 

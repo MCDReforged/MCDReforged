@@ -25,6 +25,7 @@ Server Control
 .. automethod:: ServerInterface.start
 .. automethod:: ServerInterface.stop
 .. automethod:: ServerInterface.kill
+.. automethod:: ServerInterface.wait_until_stop
 .. automethod:: ServerInterface.wait_for_start
 .. automethod:: ServerInterface.restart
 .. automethod:: ServerInterface.stop_exit

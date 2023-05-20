@@ -154,54 +154,80 @@ class ServerInterface:
 
 		If the server is running or being starting by other plugin it will return ``False``
 
-		:return: If the action succeed
+		:return: If the operation succeed.
+			The operation fails if the server is already started, or cannot start due to invalid command or current MCDR state
 		"""
 		return self._mcdr_server.start_server()
 
-	def stop(self) -> None:
+	def stop(self) -> bool:
 		"""
 		Soft shutting down the server by sending the correct stop command to the server
 
 		This option will not stop MCDR. MCDR will keep running unless :meth:`exit` is invoked
+
+		:return: If the operation succeed.
+			The operation fails if the server is already stopped
 		"""
 		self._mcdr_server.remove_flag(MCDReforgedFlag.EXIT_AFTER_STOP)
-		self._mcdr_server.stop(forced=False)
+		return self._mcdr_server.stop(forced=False)
 
-	def kill(self) -> None:
+	def kill(self) -> bool:
 		"""
 		Kill the entire server process group. A hard shutting down
 
 		MCDR will keep running unless :meth:`exit` is invoked
-		"""
-		self._mcdr_server.stop(forced=True)
 
-	def wait_for_start(self) -> None:
+		:return: If the operation succeed.
+			The operation fails if the server is already stopped
 		"""
-		Wait until the server is able to start. In other words, wait until the server is stopped
+		return self._mcdr_server.stop(forced=True)
+
+	def wait_until_stop(self) -> None:
 		"""
+		Wait until the server is stopped
+
+		.. note:: The current thread will be blocked
+		"""
+		# TODO use better implementation e.g. threading stuffs
 		while self.is_server_running():
 			time.sleep(0.01)
 
-	def restart(self) -> None:
+	def wait_for_start(self) -> None:
+		"""
+		Wait until the server is able to start
+
+		Actually it's an alias of :meth:`wait_until_stop`
+		"""
+		self.wait_until_stop()
+
+	def restart(self) -> bool:
 		"""
 		Restart the server
 
 		It will first :meth:`soft stop <stop>` the server
 		and then :meth:`wait <wait_for_start>` until the server is stopped,
-		finally :meth:start <start>` the server up
-		"""
-		if self.is_server_running():
-			self.stop()
-			self.wait_for_start()
-			self.start()
+		finally :meth:`start <start>` the server up
 
-	def stop_exit(self) -> None:
+		:return: If the operation succeed.
+			The operation fails if the server is already stopped
+		"""
+		if not self.is_server_running():
+			return False
+		self.stop()
+		self.wait_for_start()
+		return self.start()
+
+	def stop_exit(self) -> bool:
 		"""
 		:meth:`soft stop <stop>` the server and exit MCDR
-		"""
-		self._mcdr_server.stop(forced=False)
 
-	def exit(self) -> None:
+		:return: If the operation succeed.
+			The operation fails if the server is already stopped
+		"""
+		self._mcdr_server.with_flag(MCDReforgedFlag.EXIT_AFTER_STOP)
+		return self._mcdr_server.stop(forced=False)
+
+	def exit(self) -> bool:
 		"""
 		Exit MCDR when the server is stopped
 
@@ -216,11 +242,13 @@ class ServerInterface:
 			# do something B
 			server.exit()  # Exit MCDR
 
-		:raise IllegalCallError: If the server is not stopped
+		:return: If the operation succeed.
+			The operation fails if the server is still running
 		"""
 		if self._mcdr_server.is_server_running():
-			raise IllegalCallError('Cannot exit MCDR when the server is running')
+			return False
 		self._mcdr_server.with_flag(MCDReforgedFlag.EXIT_AFTER_STOP)
+		return True
 
 	def set_exit_after_stop_flag(self, flag_value: bool) -> None:
 		"""
@@ -496,7 +524,7 @@ class ServerInterface:
 		else:
 			return False  # TODO handle unknown result caused by chained sync plugin operation
 
-	def __existed_regular_plugin_manipulate(self, plugin_id: str, handler: Callable[['PluginManager'], Callable[['RegularPlugin'], Any]],result_type: PluginResultType) -> Optional[bool]:
+	def __existed_regular_plugin_manipulate(self, plugin_id: str, handler: Callable[['PluginManager'], Callable[['RegularPlugin'], Any]], result_type: PluginResultType) -> Optional[bool]:
 		"""
 		Manipulate a loaded regular plugin from a given plugin id
 		:param plugin_id: The plugin id of the plugin you want to manipulate
