@@ -313,7 +313,9 @@ class ServerInterface:
 		:param encoding: The encoding method for the text.
 			Leave it empty to use the encoding method from the configuration of MCDR
 		"""
-		self.logger.debug('Sending command "{}"'.format(text), option=DebugOption.PLUGIN)
+		logger = self.logger
+		if isinstance(logger, MCDReforgedLogger):  # make type checker happy
+			logger.debug('Sending command "{}"'.format(text), option=DebugOption.PLUGIN)
 		self._mcdr_server.send(text, encoding=encoding)
 
 	@property
