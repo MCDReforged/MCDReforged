@@ -4,7 +4,7 @@ from typing import Iterable
 
 @unique
 class MCDReforgedFlag(Flag):
-	NONE = auto()
+	NONE = auto()               # placeholder
 	INTERRUPT = auto()			# ctrl-c flag
 	SERVER_STARTUP = auto()		# set to True after server startup
 	SERVER_RCON_READY = auto() 	# set to True after server started its rcon. used to start the rcon server
@@ -34,7 +34,3 @@ class ServerState(EnumStateBase):
 	STOPPED		= 'server_state.stopped'		# Server is stopped
 	STOPPING	= 'server_state.stopping'		# Server is being stopped by MCDR
 	RUNNING		= 'server_state.running'		# Server is running
-	# PRE_STOPPED	= 'server_state.pre_stopped' 	# Server is stopped, and it's going to dispatch_event SERVER_STOP
-
-	def is_server_stopped(self):
-		return self.in_state({self.STOPPED})
