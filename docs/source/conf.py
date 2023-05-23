@@ -42,6 +42,10 @@ extensions = [
 	'sphinx.ext.viewcode',
 	'sphinx_copybutton',
 	'sphinx-prompt',
+
+	# workaround for broken search utility and broken doc version popup
+	# https://github.com/readthedocs/sphinx_rtd_theme/issues/1451
+	'sphinxcontrib.jquery',
 ]
 
 source_suffix = ['.rst']
