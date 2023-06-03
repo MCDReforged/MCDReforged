@@ -94,7 +94,10 @@ html_js_files = [
 # https://stackoverflow.com/questions/27669376/show-entire-toctree-in-read-the-docs-sidebar
 html_theme_options = {
 	'navigation_depth': 6,
+	'logo_only': True,
 }
+
+html_logo = 'banner.png'
 
 
 # -- Options for sphinx-intl -------------------------------------------------
