@@ -7,6 +7,7 @@ from typing_extensions import TypeGuard
 from mcdreforged.permission.permission_level import PermissionLevel
 from mcdreforged.translation.translation_text import RTextMCDRTranslation
 from mcdreforged.utils import misc_util
+from mcdreforged.utils.exception import IllegalCallError
 from mcdreforged.utils.types import MessageText
 
 if TYPE_CHECKING:
@@ -64,19 +65,28 @@ class CommandSource(ABC):
 		"""
 		raise NotImplementedError()
 
-	def get_preference(self) -> Optional['PreferenceItem']:
+	def get_preference(self) -> 'PreferenceItem':
 		"""
 		Return the preference of the command source
 
-		Only :class:`PlayerCommandSource` and :class:`ConsoleCommandSource` are supported, otherwise None will be returned
+		By default, the default preference of MCDR from
+		:meth:`ServerInterface.get_default_preference() <mcdreforged.plugin.server_interface.ServerInterface.get_preference>`
+		will be returned
+
+		Subclasses might override this method to return customized preference.
+		e.g. :class:`PlayerCommandSource` will return the preference of the corresponding player
 
 		.. seealso::
 
-			:class:`~mcdreforged.plugin.server_interface.ServerInterface`'s method :meth:`~mcdreforged.plugin.server_interface.ServerInterface.get_preference`
+			method :meth:`ServerInterface.get_preference() <mcdreforged.plugin.server_interface.ServerInterface.get_preference>`
 
 		.. versionadded:: v2.1.0
 		"""
-		return None
+		from mcdreforged.plugin.server_interface import ServerInterface
+		server = ServerInterface.get_instance()
+		if server is None:
+			raise IllegalCallError('Cannot get default preference when MCDR is not running')
+		return server.get_default_preference()
 
 	@contextmanager
 	def preferred_language_context(self):
@@ -164,7 +174,7 @@ class PlayerCommandSource(InfoCommandSource):
 		self.player: str = player
 		"""The name of the player"""
 
-	def get_preference(self) -> Optional['PreferenceItem']:
+	def get_preference(self) -> 'PreferenceItem':
 		return self.get_server().get_preference(self)
 
 	def reply(self, message: MessageText, *, encoding: Optional[str] = None, **kwargs):
@@ -186,7 +196,7 @@ class ConsoleCommandSource(InfoCommandSource):
 			raise TypeError('{} should be built from console info'.format(self.__class__.__name__))
 		super().__init__(mcdr_server, info)
 
-	def get_preference(self) -> Optional['PreferenceItem']:
+	def get_preference(self) -> 'PreferenceItem':
 		return self.get_server().get_preference(self)
 
 	def reply(self, message: MessageText, *, console_text: Optional[MessageText] = None, **kwargs):

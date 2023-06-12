@@ -48,6 +48,7 @@ __pycache__
 
 # sphinx documentation
 /docs/build/
+/docs/source/_locale/_static/
 **/.doctrees/
 **/*.mo
 **/*.pot
