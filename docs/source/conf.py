@@ -12,6 +12,8 @@
 #
 import os
 import sys
+
+# add REPOS root, so the mcdreforged package is import-able
 sys.path.insert(0, os.path.abspath(os.path.join('..', '..')))
 
 
@@ -23,7 +25,13 @@ copyright = '2023, Fallen_Breath'
 author = 'Fallen_Breath'
 
 # The full version, including alpha/beta/rc tags
-release = '2.0'
+try:
+	import mcdreforged.constants.core_constant as core_constant
+	release = core_constant.VERSION
+	print('Loaded MCDR version {}'.format(release))
+except (ImportError, AttributeError) as e:
+	release = '2.0'
+	print('Load MCDR version failed ({}), use fallback version {}'.format(e, release))
 
 
 # -- General configuration ---------------------------------------------------
