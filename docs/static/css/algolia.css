@@ -6,10 +6,6 @@
     overflow: visible;
 }
 
-.wy-side-scroll {
-    overflow: inherit;
-}
-
 /* Override sphinx theme styles for search box */
 .DocSearch-Input {
     border: none !important;

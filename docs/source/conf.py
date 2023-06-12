@@ -12,6 +12,8 @@
 #
 import os
 import sys
+
+# add REPOS root, so the mcdreforged package is import-able
 sys.path.insert(0, os.path.abspath(os.path.join('..', '..')))
 
 
@@ -23,7 +25,13 @@ copyright = '2023, Fallen_Breath'
 author = 'Fallen_Breath'
 
 # The full version, including alpha/beta/rc tags
-release = '2.0'
+try:
+	import mcdreforged.constants.core_constant as core_constant
+	release = core_constant.VERSION
+	print('Loaded MCDR version {}'.format(release))
+except (ImportError, AttributeError) as e:
+	release = '2.0'
+	print('Load MCDR version failed ({}), use fallback version {}'.format(e, release))
 
 
 # -- General configuration ---------------------------------------------------
@@ -42,6 +50,10 @@ extensions = [
 	'sphinx.ext.viewcode',
 	'sphinx_copybutton',
 	'sphinx-prompt',
+
+	# workaround for broken search utility and broken doc version popup
+	# https://github.com/readthedocs/sphinx_rtd_theme/issues/1451
+	'sphinxcontrib.jquery',
 ]
 
 source_suffix = ['.rst']
@@ -90,7 +102,10 @@ html_js_files = [
 # https://stackoverflow.com/questions/27669376/show-entire-toctree-in-read-the-docs-sidebar
 html_theme_options = {
 	'navigation_depth': 6,
+	'logo_only': True,
 }
+
+html_logo = 'banner.png'
 
 
 # -- Options for sphinx-intl -------------------------------------------------
