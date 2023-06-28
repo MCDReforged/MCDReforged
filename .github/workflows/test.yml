@@ -4,12 +4,10 @@ on: workflow_call
 
 jobs:
   test:
-    # We need Python 3.6, but Ubuntu 22 doesn't have python3.6, so we need to use Ubuntu 20 here
-    # see: https://github.com/actions/setup-python/issues/544
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [ '3.6', '3.7', '3.8', '3.9', '3.10', '3.11' ]
+        python-version: [ '3.8', '3.9', '3.10', '3.11' ]
     name: Test with python ${{ matrix.python-version }}
 
     steps:

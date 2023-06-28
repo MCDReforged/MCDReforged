@@ -7,7 +7,18 @@ This is a quick start tutorial of `MCDReforged <https://github.com/Fallen-Breath
 Requirements
 ------------
 
-MCDR requires python3 runtime. The python version need to be at least 3.6
+MCDR requires Python3 runtime. The Python version need to be at least 3.8.
+The detailed Python version requirements are as shown in the table below
+
+.. list-table::
+   :header-rows: 1
+
+   * - MCDR version
+     - Python requirement
+   * - < 2.10
+     - >= 3.6
+   * - >= 2.10
+     - >= 3.8
 
 Install
 -------

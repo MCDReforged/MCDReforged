@@ -13,13 +13,10 @@ def environment_check():
 		sys.stderr.write(text + '\n')
 
 	python_version = sys.version_info.major + sys.version_info.minor * 0.1
-	if python_version < 3.6:
-		print_stderr('Python 3.6+ is needed to run {}'.format(core_constant.NAME))
+	if python_version < 3.8:
+		print_stderr('Python 3.8+ is needed to run {}'.format(core_constant.NAME))
 		print('Current Python version {} is too old'.format(platform.python_version()))
 		sys.exit(1)
-	if python_version < 3.8:
-		print_stderr("Notice: {} will drop the support for Python <=3.7 after the end of Python 3.7's lifecycle on June 27th, 2023".format(core_constant.NAME))
-		print_stderr('Current Python version: {}'.format(platform.python_version()))
 
 
 def entry_point():

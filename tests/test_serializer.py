@@ -1,15 +1,11 @@
 import sys
 import unittest
 from enum import Enum, auto, IntFlag, IntEnum, Flag
-from typing import List, Dict, Union, Optional, Any
+from typing import List, Dict, Union, Optional, Any, Literal
 
 from mcdreforged.api.utils import serialize, deserialize, Serializable
 
-_py38 = sys.version_info >= (3, 8)
 _py39 = sys.version_info >= (3, 9)
-
-if _py38:
-	from typing import Literal
 
 
 class Point(Serializable):
@@ -291,27 +287,26 @@ class MyTestCase(unittest.TestCase):
 		else:
 			print('Ignored type hint test which uses python 3.9 feature')
 
-	def test_12_py308_literal(self):
-		if _py38:
-			class A(Serializable):
-				a: Literal[1, 2, '3'] = 2
-				b: Dict[str, Literal['x', 'y', 'z']]
+	def test_12_literal(self):
+		class A(Serializable):
+			a: Literal[1, 2, '3'] = 2
+			b: Dict[str, Literal['x', 'y', 'z']]
 
-			a = A.get_default()
-			self.assertEqual(a.a, 2)
+		a = A.get_default()
+		self.assertEqual(a.a, 2)
 
-			a = deserialize({'a': '3', 'b': {'k': 'x'}}, A)
-			self.assertEqual(a.a, '3')
-			self.assertEqual(a.b, {'k': 'x'})
+		a = deserialize({'a': '3', 'b': {'k': 'x'}}, A)
+		self.assertEqual(a.a, '3')
+		self.assertEqual(a.b, {'k': 'x'})
 
-			a = deserialize({'b': {}}, A)
-			self.assertEqual(a.a, 2)
-			self.assertEqual(a.b, {})
+		a = deserialize({'b': {}}, A)
+		self.assertEqual(a.a, 2)
+		self.assertEqual(a.b, {})
 
-			with self.assertRaises(ValueError):
-				deserialize({'a': 4}, A)
-			with self.assertRaises(ValueError):
-				deserialize({'b': {'k': 'u'}}, A)
+		with self.assertRaises(ValueError):
+			deserialize({'a': 4}, A)
+		with self.assertRaises(ValueError):
+			deserialize({'b': {'k': 'u'}}, A)
 
 	def test_13_serialize_order(self):
 		class Data(Serializable):

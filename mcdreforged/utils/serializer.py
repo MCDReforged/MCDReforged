@@ -1,17 +1,10 @@
 import copy
 import functools
-import sys
 from abc import ABC
 from enum import EnumMeta, Enum
-from typing import Union, TypeVar, List, Dict, Type, get_type_hints, Any, Callable
+from typing import Union, TypeVar, List, Dict, Type, get_type_hints, Any, Callable, Literal
 
 from typing_extensions import Self
-
-_py38 = sys.version_info >= (3, 8)
-
-if _py38:
-	from typing import Literal
-
 
 T = TypeVar('T')
 
@@ -205,8 +198,8 @@ def deserialize(data: Any, cls: Type[T], *, error_at_missing: bool = False, erro
 		else:
 			mismatch(str)
 
-	# Literal from python 3.8
-	elif _py38 and _get_origin(cls) == Literal:
+	# Literal
+	elif _get_origin(cls) == Literal:
 		literals = _get_args(cls)
 		if data in literals:
 			return data
