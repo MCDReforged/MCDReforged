@@ -13,19 +13,25 @@ def remove_prefix(text: str, prefix: str) -> str:
 	return text
 
 
-def clean_minecraft_color_code(text):
-	return re.sub('§[a-z0-9]', '', str(text))
+class __Regexps:
+	MINECRAFT_COLOR_CODE = re.compile(r'§[a-z0-9]')
+	CONSOLE_COLOR_CODE = re.compile(r'\033\[(\d+(;\d+)?)?m')
+	HUMP_NAME = re.compile(r'([a-z]|\d)([A-Z])')
 
 
-def clean_console_color_code(text):
-	return re.sub(r'\033\[(\d+(;\d+)?)?m', '', text)
+def clean_minecraft_color_code(text: str):
+	return __Regexps.MINECRAFT_COLOR_CODE.sub('', str(text))
+
+
+def clean_console_color_code(text: str):
+	return __Regexps.CONSOLE_COLOR_CODE.sub('', text)
 
 
 def hump_to_underline(name: str) -> str:
 	"""
 	ThisIsAnHumpName -> this_is_an_hump_name
 	"""
-	return re.sub(r'([a-z]|\d)([A-Z])', r'\1_\2', name).lower()
+	return __Regexps.HUMP_NAME.sub(r'\1_\2', name).lower()
 
 
 def auto_quotes(text: str):
