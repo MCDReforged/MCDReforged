@@ -1,3 +1,4 @@
+import queue
 import sys
 import threading
 import time
@@ -186,6 +187,39 @@ class MCDRStdoutProxy(StdoutProxy):
 	def __init__(self):
 		super().__init__(sleep_between_writes=0.01, raw=True)
 		self.__sleep_duration = self.sleep_between_writes
+		self._flush_queue.maxsize = 1000
+
+	def _write_thread(self) -> None:
+		"""
+		Almost the same as :meth:`StdoutProxy._write_thread`. See line comments for modifications
+		"""
+		# noinspection PyProtectedMember
+		from prompt_toolkit.patch_stdout import _Done
+		done = False
+
+		while not done:
+			item = self._flush_queue.get()
+			if isinstance(item, _Done):
+				break
+			if not item:
+				continue
+
+			text = [item]
+			for i in range(100 - 1):  # MCDR modification: take 100 items at max each round
+				try:
+					item = self._flush_queue.get_nowait()
+				except queue.Empty:
+					break
+				else:
+					if isinstance(item, _Done):
+						done = True
+					else:
+						text.append(item)
+
+			app_loop = self._get_app_loop()
+			self._write_and_flush(app_loop, ''.join(text))
+			if app_loop is not None:
+				time.sleep(self.sleep_between_writes)
 
 	def _write_and_flush(self, loop, text):
 		# make sure the queue does not accumulate too much, in case stdout spams
