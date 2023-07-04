@@ -66,6 +66,7 @@ class SyncStdoutStreamHandler(logging.StreamHandler):
 
 class MCColorFormatControl:
 	MC_CODE_ITEMS: List[RItemClassic] = list(filter(lambda item: isinstance(item, RItemClassic), list(RColor) + list(RStyle)))
+	assert all(map(lambda item: item.mc_code.startswith('§'), MC_CODE_ITEMS)), 'MC code items should start with §'
 
 	# global flag
 	console_color_disabled = False
@@ -97,11 +98,12 @@ class MCColorFormatControl:
 	def modify_message_text(cls, text: str) -> str:
 		if not cls.__is_mc_code_trans_disabled():
 			# minecraft code -> console code
-			for item in cls.MC_CODE_ITEMS:
-				if item.mc_code in text:
-					text = text.replace(item.mc_code, item.console_code)
-			# clean the rest of minecraft codes
-			text = string_util.clean_minecraft_color_code(text)
+			if '§' in text:
+				for item in cls.MC_CODE_ITEMS:
+					if item.mc_code in text:
+						text = text.replace(item.mc_code, item.console_code)
+				# clean the rest of minecraft codes
+				text = string_util.clean_minecraft_color_code(text)
 		if cls.console_color_disabled:
 			text = string_util.clean_console_color_code(text)
 		return text
