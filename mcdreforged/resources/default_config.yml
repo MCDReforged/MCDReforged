@@ -94,6 +94,11 @@ custom_info_reactors:
 watchdog_threshold: 10
 
 
+# When set to true, MCDR will start a handler detection thread on MCDR startup for a while,
+# for detecting possible wrong configuration of the handler option
+handler_detection: true
+
+
 # Debug mode switches
 debug:
   all: false

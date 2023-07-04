@@ -564,7 +564,8 @@ class MCDReforgedServer:
 		if not self.start_server():
 			raise ServerStartError()
 		self.update_helper.start()
-		self.server_handler_manager.start_handler_detection()
+		if self.config['handler_detection']:
+			self.server_handler_manager.start_handler_detection()
 		self.set_mcdr_state(MCDReforgedState.RUNNING)
 
 	def __register_signal_handler(self):
