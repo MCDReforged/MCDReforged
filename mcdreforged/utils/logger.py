@@ -59,6 +59,10 @@ class SyncStdoutStreamHandler(logging.StreamHandler):
 			finally:
 				inst.release()
 
+	def write_direct(self, s: str):
+		with self.__write_lock:
+			self.stream.write(s)
+
 
 class MCColorFormatControl:
 	MC_CODE_ITEMS: List[RItemClassic] = list(filter(lambda item: isinstance(item, RItemClassic), list(RColor) + list(RStyle)))
@@ -89,15 +93,16 @@ class MCColorFormatControl:
 	def __set_mc_code_trans_disable(cls, state: bool):
 		cls.__TLS.mc_code_trans = state
 
-	def _modify_message_text(self, text: str) -> str:
-		if not self.__is_mc_code_trans_disabled():
+	@classmethod
+	def modify_message_text(cls, text: str) -> str:
+		if not cls.__is_mc_code_trans_disabled():
 			# minecraft code -> console code
-			for item in self.MC_CODE_ITEMS:
+			for item in cls.MC_CODE_ITEMS:
 				if item.mc_code in text:
 					text = text.replace(item.mc_code, item.console_code)
 			# clean the rest of minecraft codes
 			text = string_util.clean_minecraft_color_code(text)
-		if self.console_color_disabled:
+		if cls.console_color_disabled:
 			text = string_util.clean_console_color_code(text)
 		return text
 
@@ -105,13 +110,7 @@ class MCColorFormatControl:
 class MCDReforgedFormatter(ColoredFormatter, MCColorFormatControl):
 	def formatMessage(self, record):
 		text = super().formatMessage(record)
-		return self._modify_message_text(text)
-
-
-class ServerOutputFormatter(logging.Formatter, MCColorFormatControl):
-	def formatMessage(self, record):
-		text = super().formatMessage(record)
-		return self._modify_message_text(text)
+		return self.modify_message_text(text)
 
 
 class NoColorFormatter(logging.Formatter):
@@ -216,14 +215,11 @@ class MCDReforgedLogger(logging.Logger):
 			self.file_handler = None
 
 
-class ServerOutputLogger(logging.Logger):
-	server_fmt = ServerOutputFormatter('[%(name)s] %(message)s')
-
+class ServerOutputLogger:
 	def __init__(self, name):
-		super().__init__(name)
+		self.name = name
+		self.handler = SyncStdoutStreamHandler()
 
-		console_handler = SyncStdoutStreamHandler()
-		console_handler.setFormatter(self.server_fmt)
-
-		self.addHandler(console_handler)
-		self.setLevel(logging.DEBUG)
+	def info(self, msg: str):
+		msg = MCColorFormatControl.modify_message_text(msg)
+		self.handler.write_direct('[{}] {}\n'.format(self.name, msg))
