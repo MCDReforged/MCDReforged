@@ -89,7 +89,7 @@ class HandlerDetector:
 		self.running_flag = False
 		self.text_queue = queue.Queue()
 		self.text_count = 0
-		self.success_count = collections.defaultdict(lambda: 0)
+		self.success_count: Dict[AbstractServerHandler, int] = collections.defaultdict(int)
 
 	def start_handler_detection(self):
 		if not self.is_detection_running():
