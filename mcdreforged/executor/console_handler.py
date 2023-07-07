@@ -263,7 +263,7 @@ class PromptToolkitWrapper:
 			self.__real_stderr = sys.stderr
 			sys.stdout = self.stdout_proxy
 			sys.stderr = self.stdout_proxy
-			SyncStdoutStreamHandler.update_stdout()
+			SyncStdoutStreamHandler.update_stdout(sys.stdout)
 			self.pt_enabled = True
 			self.__logger.debug('Prompt Toolkits enabled')
 
@@ -289,7 +289,7 @@ class PromptToolkitWrapper:
 			self.stdout_proxy.close()
 			sys.stdout = self.__real_stdout
 			sys.stderr = self.__real_stderr
-			SyncStdoutStreamHandler.update_stdout()
+			SyncStdoutStreamHandler.update_stdout(sys.stdout)
 			pt_app = get_app()
 			if pt_app.is_running:
 				try:

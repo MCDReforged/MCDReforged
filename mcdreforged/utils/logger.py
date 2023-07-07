@@ -5,12 +5,11 @@ import logging
 import os
 import sys
 import time
-import weakref
 import zipfile
 from contextlib import contextmanager
 from enum import Enum, unique, auto
-from threading import RLock, local
-from typing import Dict, Optional, List, Set
+from threading import local, Lock
+from typing import Dict, Optional, List, IO
 
 from colorlog import ColoredFormatter
 
@@ -32,36 +31,39 @@ class DebugOption(Enum):
 	TASK_EXECUTOR = auto()
 
 
+class _SyncWriteStream:
+	"""
+	A stream wrapper with its method "write" synchronized.
+	All accesses to other attributes are forwarded to the wrapped stream
+	"""
+	def __init__(self, stream: IO[str]):
+		self.sws_stream = stream
+		self.sws_lock = Lock()
+
+	def write(self, s: str):
+		with self.sws_lock:
+			self.sws_stream.write(s)
+
+	def __getattribute__(self, item: str):
+		if item in ('write', 'sws_stream', 'sws_lock'):
+			return object.__getattribute__(self, item)
+		else:
+			return self.sws_stream.__getattribute__(item)
+
+
 class SyncStdoutStreamHandler(logging.StreamHandler):
-	__write_lock = RLock()
-	__instance_lock = RLock()
-	__instances = weakref.WeakSet()  # type: Set[SyncStdoutStreamHandler]
+	__sws = _SyncWriteStream(sys.stdout)
 
 	def __init__(self):
-		super().__init__(sys.stdout)
-		with self.__instance_lock:
-			self.__instances.add(self)
-
-	def emit(self, record) -> None:
-		with self.__write_lock:
-			super().emit(record)
+		super().__init__(type(self).__sws)
 
 	@classmethod
-	def update_stdout(cls, stream=None):
-		if stream is None:
-			stream = sys.stdout
-		with cls.__instance_lock:
-			instances = list(cls.__instances)
-		for inst in instances:
-			inst.acquire()  # use Handler's lock
-			try:
-				inst.stream = stream
-			finally:
-				inst.release()
+	def update_stdout(cls, stream: IO[str]):
+		cls.__sws.sws_stream = stream
 
-	def write_direct(self, s: str):
-		with self.__write_lock:
-			self.stream.write(s)
+	@classmethod
+	def write_direct(cls, s: str):
+		cls.__sws.write(s)
 
 
 class MCColorFormatControl:
