@@ -504,6 +504,7 @@ class MCDReforgedServer:
 			else:
 				self.logger.warning('The server is still not stopped after {}s after its stdout was closed, killing'.format(core_constant.WAIT_TIME_AFTER_SERVER_STDOUT_END_SEC))
 				self.__kill_server()
+			self.process.wait()
 			return None
 		else:
 			try:
