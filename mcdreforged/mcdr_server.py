@@ -512,7 +512,7 @@ class MCDReforgedServer:
 			except Exception as e:
 				self.logger.error(self.tr('mcdr_server.receive.decode_fail', text, e))
 				raise DecodeError(e)
-			return decoded_text.rstrip('\n\r').lstrip('\n\r')
+			return decoded_text.strip('\n\r')
 
 	def __tick(self):
 		"""
