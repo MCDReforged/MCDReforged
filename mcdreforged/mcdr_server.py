@@ -268,7 +268,7 @@ class MCDReforgedServer:
 	# ---------------------------
 
 	def is_server_running(self):
-		return self.server_state.in_state({ServerState.RUNNING, ServerState.STOPPING})
+		return self.server_state.in_state(ServerState.RUNNING, ServerState.STOPPING)
 
 	# Flags
 
@@ -285,7 +285,7 @@ class MCDReforgedServer:
 		return self.mcdr_in_state(MCDReforgedState.STOPPED)
 
 	def is_mcdr_about_to_exit(self):
-		return self.mcdr_in_state({MCDReforgedState.PRE_STOPPED, MCDReforgedState.STOPPED})
+		return self.mcdr_in_state(MCDReforgedState.PRE_STOPPED, MCDReforgedState.STOPPED)
 
 	def should_exit_after_stop(self):
 		return MCDReforgedFlag.EXIT_AFTER_STOP in self.flags
@@ -300,11 +300,11 @@ class MCDReforgedServer:
 
 	# State
 
-	def server_in_state(self, states):
-		return self.server_state.in_state(states)
+	def server_in_state(self, *states: ServerState) -> bool:
+		return self.server_state.in_state(*states)
 
-	def mcdr_in_state(self, states):
-		return self.mcdr_state.in_state(states)
+	def mcdr_in_state(self, *states: MCDReforgedState) -> bool:
+		return self.mcdr_state.in_state(*states)
 
 	def is_initialized(self):
 		return self.mcdr_in_state(MCDReforgedState.INITIALIZED)

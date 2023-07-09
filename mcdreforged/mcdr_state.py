@@ -1,5 +1,6 @@
 from enum import Enum, unique, Flag, auto
-from typing import Iterable
+
+from typing_extensions import Self
 
 
 @unique
@@ -12,11 +13,7 @@ class MCDReforgedFlag(Flag):
 
 
 class EnumStateBase(Enum):
-	def in_state(self, states):
-		if type(states) is type(self):
-			return self is states
-		elif not isinstance(states, Iterable):
-			states = (states,)
+	def in_state(self: Self, *states: Self):
 		return self in states
 
 
