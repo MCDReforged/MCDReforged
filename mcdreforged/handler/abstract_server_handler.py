@@ -144,6 +144,8 @@ class AbstractServerHandler:
 			formatters = (formatters,)
 		return list(map(parse.Parser, formatters))
 
+	__worlds_only_regex = re.compile(r'\w+')
+
 	@classmethod
 	def _content_parse(cls, info: Info):
 		"""
@@ -164,7 +166,7 @@ class AbstractServerHandler:
 			parsed = parser.parse(info.content)
 			if parsed is not None:
 				logging_level = parsed['logging']
-				if re.fullmatch(r'\w+', logging_level) is None:
+				if cls.__worlds_only_regex.fullmatch(logging_level) is None:
 					# logging level should be text only, just in case
 					# might happen in e.g. WaterfallHandler parsing "[01:23:45 INFO] [Test]: ping"
 					continue

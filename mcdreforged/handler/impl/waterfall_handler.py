@@ -1,6 +1,6 @@
 from typing import Optional
 
-from parse import parse
+import parse
 
 from mcdreforged.handler.impl.bukkit_handler import BukkitHandler
 from mcdreforged.handler.impl.bungeecord_handler import BungeecordHandler
@@ -28,10 +28,12 @@ class WaterfallHandler(BungeecordHandler):
 		# sadly no player id display here
 		return None
 
+	__player_left_parser = parse.Parser('[/{ip}|{name}] -> UpstreamBridge has disconnected')
+
 	def parse_player_left(self, info):
 		# [/127.0.0.1:14426|Fallen_Breath] -> UpstreamBridge has disconnected
 		if not info.is_user:
-			parsed = parse('[/{ip}|{name}] -> UpstreamBridge has disconnected', info.content)
+			parsed = self.__player_left_parser.parse(info.content)
 			if parsed is not None:
 				return parsed['name']
 		return None

@@ -1,7 +1,7 @@
 import re
 from typing import Optional
 
-from parse import parse
+import parse
 
 from mcdreforged.handler.impl.vanilla_handler import VanillaHandler
 from mcdreforged.info_reactor.info import Info
@@ -35,18 +35,22 @@ class Beta18Handler(VanillaHandler):
 	def get_content_parsing_formatter(cls):
 		return '{y:d}-{m:d}-{d:d} {hour:d}:{min:d}:{sec:d} [{logging}] {content}'
 
+	__player_joined_parser = parse.Parser('{name} [{}] logged in with entity id {} at ({})')
+	__player_left_parser = parse.Parser('{name} lost connection: {}')
+	__server_startup_done_regex = re.compile(r'Done \([0-9.]*ns\)! For help, type "help" or "\?"')
+
 	def parse_player_joined(self, info):
 		# Steve [/127.0.0.1:2993] logged in with entity id 3827 at (-130.5, 69.0, 253.5)
 		if not info.is_user:
 			# there's an extra space character after {name}
-			parsed = parse('{name} [{}] logged in with entity id {} at ({})', info.content)
+			parsed = self.__player_joined_parser.parse(info.content)
 			if parsed is not None and self._verify_player_name(parsed['name']):
 				return parsed['name']
 		return None
 
 	def parse_player_left(self, info: Info):
 		# Steve lost connection: disconnect.quitting
-		if info.is_from_server and parse('{name} lost connection: {}', info.content) is not None:
+		if info.is_from_server and self.__player_left_parser.parse(info.content) is not None:
 			return info.content.split(' ')[0]
 		return None
 
@@ -54,7 +58,7 @@ class Beta18Handler(VanillaHandler):
 		# Done (6368115300ns)! For help, type "help" or "?"
 		if info.is_user:
 			return False
-		match = re.fullmatch(r'Done \([0-9.]*ns\)! For help, type "help" or "\?"', info.content)
+		match = self.__server_startup_done_regex.fullmatch(info.content)
 		return match is not None
 
 	def test_rcon_started(self, info: Info):

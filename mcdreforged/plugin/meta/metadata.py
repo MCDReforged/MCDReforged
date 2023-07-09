@@ -59,6 +59,7 @@ class Metadata:
 	archive_name: Optional[str]  # used in MCDR CLI only
 	resources: Optional[List[str]]  # used in MCDR CLI only
 
+	PLUGIN_ID_REGEX = re.compile(r'[a-z0-9_]{1,64}')
 	FALLBACK_VERSION = '0.0.0'
 
 	def __init__(self, data: Optional[dict], *, plugin: Optional['AbstractPlugin'] = None):
@@ -79,7 +80,7 @@ class Metadata:
 		self.id = data.get('id')
 		if self.id is None:
 			use_fallback_id_reason = 'Plugin ID of {} not found'.format(plugin_name_text)
-		elif not isinstance(self.id, str) or re.fullmatch(r'[a-z0-9_]{1,64}', self.id) is None:
+		elif not isinstance(self.id, str) or self.PLUGIN_ID_REGEX.fullmatch(self.id) is None:
 			use_fallback_id_reason = 'Plugin ID "{}" of {} is invalid'.format(self.id, plugin_name_text)
 		if use_fallback_id_reason is not None:
 			if plugin is not None:

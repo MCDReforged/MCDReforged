@@ -1,9 +1,10 @@
+import functools
 import json
 import re
 from abc import ABC
 from typing import Optional, List
 
-from parse import parse
+import parse
 
 from mcdreforged.handler.abstract_server_handler import AbstractServerHandler
 from mcdreforged.info_reactor.info import Info
@@ -44,6 +45,15 @@ class AbstractMinecraftHandler(AbstractServerHandler, ABC):
 		]
 
 	@classmethod
+	@functools.lru_cache()
+	def __get_player_message_parsers(cls) -> List[parse.Parser]:
+		"""
+		The return value is cached for reuse. Do not modify
+		"""
+		formatters = cls.get_player_message_parsing_formatter()
+		return list(map(parse.Parser, formatters))
+
+	@classmethod
 	def format_message(cls, message: MessageText) -> str:
 		"""
 		A utility method to convert a message into a valid argument used in message sending command
@@ -79,44 +89,53 @@ class AbstractMinecraftHandler(AbstractServerHandler, ABC):
 		raw_result.content = string_util.clean_minecraft_color_code(raw_result.content)
 		return raw_result
 
+	__player_name_regex = re.compile(r'\w{1,16}')
+
 	@classmethod
 	def _verify_player_name(cls, name: str):
-		return re.fullmatch(r'\w+', name) is not None
+		return cls.__player_name_regex.fullmatch(name) is not None
 
 	def parse_server_stdout(self, text: str):
 		result = super().parse_server_stdout(text)
 
-		for formatter in self.get_player_message_parsing_formatter():
-			parsed = parse(formatter, result.content)
+		for parser in self.__get_player_message_parsers():
+			parsed = parser.parse(result.content)
 			if parsed is not None and self._verify_player_name(parsed['name']):
 				result.player, result.content = parsed['name'], parsed['message']
 				break
 		return result
 
+	__player_joined_parser = parse.Parser('{name}[{}] logged in with entity id {} at ({})')
+	__player_left_regex = re.compile(r'\w{1,16} left the game')
+	__server_version_parser = parse.Parser('Starting minecraft server version {version}')
+	__server_address_parser = parse.Parser('Starting Minecraft server on {}:{:d}')
+	__server_startup_done_regex = re.compile(r'Done \([0-9.]*s\)! For help, type "help"( or "\?")?')
+	__rcon_started_regex = re.compile(r'RCON running on [\w.]+:\d+')
+
 	def parse_player_joined(self, info: Info):
 		# Steve[/127.0.0.1:9864] logged in with entity id 131 at (187.2703, 146.79014, 404.84718)
 		if not info.is_user:
-			parsed = parse('{name}[{}] logged in with entity id {} at ({})', info.content)
+			parsed = self.__player_joined_parser.parse(info.content)
 			if parsed is not None and self._verify_player_name(parsed['name']):
 				return parsed['name']
 		return None
 
 	def parse_player_left(self, info: Info):
 		# Steve left the game
-		if not info.is_user and re.fullmatch(r'\w{1,16} left the game', info.content):
+		if not info.is_user and self.__player_left_regex.fullmatch(info.content):
 			return info.content.split(' ')[0]
 		return None
 
 	def parse_server_version(self, info: Info):
 		if not info.is_user:
-			parsed = parse('Starting minecraft server version {version}', info.content)
+			parsed = self.__server_version_parser.parse(info.content)
 			if parsed is not None:
 				return parsed['version']
 		return None
 
 	def parse_server_address(self, info: Info):
 		if not info.is_user:
-			parsed = parse('Starting Minecraft server on {}:{:d}', info.content)
+			parsed = self.__server_address_parser.parse(info.content)
 			if parsed is not None:
 				return parsed[0], parsed[1]
 		return None
@@ -124,11 +143,11 @@ class AbstractMinecraftHandler(AbstractServerHandler, ABC):
 	def test_server_startup_done(self, info: Info):
 		# 1.13+ Done (3.500s)! For help, type "help"
 		# 1.13- Done (3.500s)! For help, type "help" or "?"
-		return info.is_from_server and re.fullmatch(r'Done \([0-9.]*s\)! For help, type "help"( or "\?")?', info.content) is not None
+		return info.is_from_server and self.__server_startup_done_regex.fullmatch(info.content) is not None
 
 	def test_rcon_started(self, info: Info):
 		# RCON running on 0.0.0.0:25575
-		return info.is_from_server and re.fullmatch(r'RCON running on [\w.]+:\d+', info.content) is not None
+		return info.is_from_server and self.__rcon_started_regex.fullmatch(info.content) is not None
 
 	def test_server_stopping(self, info: Info):
 		# Stopping server

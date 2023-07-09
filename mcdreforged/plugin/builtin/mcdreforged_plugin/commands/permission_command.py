@@ -12,9 +12,11 @@ from mcdreforged.utils import string_util
 
 
 class Validator:
-	@staticmethod
-	def player_name(player):
-		return re.fullmatch(r'\w{1,16}', player)
+	__player_name_regex = re.compile(r'\w{1,16}')
+
+	@classmethod
+	def player_name(cls, player):
+		return cls.__player_name_regex.fullmatch(player)
 
 
 class PermissionCommand(SubCommand):
