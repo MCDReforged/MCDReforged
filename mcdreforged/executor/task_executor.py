@@ -1,7 +1,7 @@
+import collections
+import queue
 import time
-from queue import Empty, PriorityQueue
-from threading import Lock
-from typing import Callable, Any, Optional
+from typing import Callable, Any, Optional, Deque, NamedTuple
 
 from mcdreforged.constants import core_constant
 from mcdreforged.executor.thread_executor import ThreadExecutor
@@ -9,39 +9,40 @@ from mcdreforged.utils.future import WaitableCallable
 from mcdreforged.utils.logger import DebugOption
 
 
-class Priority:
-	# High priority, executes first
-	REGULAR = 0
-	INFO = 20
-	# Low priority, executes last
+class TaskData(NamedTuple):
+	func: Callable
+	vip: bool
 
 
-class TaskData:
-	ID_COUNTER = 0
-	ID_COUNTER_LOCK = Lock()
+class DoubleQueue(queue.Queue[TaskData]):
+	def __init__(self, maxsize: int):
+		super().__init__(maxsize)
+		self.__queue0: Deque[TaskData]  # VIP
+		self.__queue1: Deque[TaskData]  # Regular
 
-	def __init__(self, func: Callable, priority: int):
-		if not isinstance(func, Callable):
-			raise TypeError('func should be a callable object')
-		self.func = func
-		self.priority = priority
-		with TaskData.ID_COUNTER_LOCK:
-			self.id = TaskData.ID_COUNTER
-			TaskData.ID_COUNTER += 1
+	def _init(self, maxsize: int) -> None:
+		self.__queue0 = collections.deque()
+		self.__queue1 = collections.deque()
 
-	def __lt__(self, other):
-		if not isinstance(other, type(self)):
-			return False
-		if self.priority != other.priority:
-			return self.priority < other.priority
+	def _qsize(self) -> int:
+		return len(self.__queue0) + len(self.__queue1)
+
+	def _put(self, item: TaskData):
+		if item.vip:
+			self.__queue0.append(item)
 		else:
-			return self.id < other.id
+			self.__queue1.append(item)
+
+	def _get(self) -> TaskData:
+		if len(self.__queue0) > 0:
+			return self.__queue0.popleft()
+		return self.__queue1.popleft()
 
 
 class TaskExecutor(ThreadExecutor):
 	def __init__(self, mcdr_server, *, previous_executor: 'Optional[TaskExecutor]' = None):
 		super().__init__(mcdr_server)
-		self.task_queue = PriorityQueue(maxsize=core_constant.MAX_TASK_QUEUE_SIZE)
+		self.task_queue = DoubleQueue(maxsize=core_constant.MAX_TASK_QUEUE_SIZE)
 		self.__last_tick_time = None
 		self.__soft_stopped = False
 		if previous_executor is not None:
@@ -52,7 +53,7 @@ class TaskExecutor(ThreadExecutor):
 		while True:
 			try:
 				task = other.task_queue.get(block=False)
-			except Empty:
+			except queue.Empty:
 				break
 			else:
 				count += 1
@@ -67,7 +68,7 @@ class TaskExecutor(ThreadExecutor):
 		self.__soft_stopped = True
 
 	def enqueue_info_task(self, func: Callable[[], Any], is_user: bool):
-		data = TaskData(func, Priority.INFO)
+		data = TaskData(func, False)
 		if is_user:
 			self.task_queue.put(data)
 		else:
@@ -76,7 +77,7 @@ class TaskExecutor(ThreadExecutor):
 	def add_regular_task(self, func: Callable[[], Any], *, block: bool = False, timeout: Optional[float] = None):
 		if block:
 			func = WaitableCallable(func)
-		self.task_queue.put(TaskData(func, Priority.REGULAR))
+		self.task_queue.put(TaskData(func, True))
 		if block:
 			func.wait(timeout)
 
@@ -99,7 +100,7 @@ class TaskExecutor(ThreadExecutor):
 		self.__last_tick_time = time.monotonic()
 		try:
 			task = self.task_queue.get(timeout=0.01)
-		except Empty:
+		except queue.Empty:
 			if self.__soft_stopped:
 				self.stop()
 		else:
