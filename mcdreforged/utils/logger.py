@@ -7,7 +7,7 @@ import sys
 import time
 import zipfile
 from contextlib import contextmanager
-from enum import Enum, unique, auto
+from enum import auto, Flag
 from threading import local, Lock
 from typing import Dict, Optional, List, IO
 
@@ -18,9 +18,12 @@ from mcdreforged.minecraft.rtext.style import RColor, RStyle, RItemClassic
 from mcdreforged.utils import string_util, file_util
 
 
-@unique
-class DebugOption(Enum):
-	# remember to sync with the debug field in the default config file
+class DebugOption(Flag):
+	"""
+	Remember to sync with the "debug" option in the default config file
+	"""
+	mask: int
+
 	ALL = auto()
 	MCDR = auto()
 	HANDLER = auto()
@@ -29,6 +32,17 @@ class DebugOption(Enum):
 	PERMISSION = auto()
 	COMMAND = auto()
 	TASK_EXECUTOR = auto()
+
+
+def __pre_fetch_debug_option_value():
+	"""
+	DebugOption.value call is more costly than simple attribute access
+	"""
+	for option in DebugOption:
+		option.mask = option.value
+
+
+__pre_fetch_debug_option_value()
 
 
 class _SyncWriteStream:
@@ -160,7 +174,7 @@ class MCDReforgedLogger(logging.Logger):
 			datefmt='%H:%M:%S'
 		)
 
-	debug_options = {}  # type: Dict[DebugOption, bool]
+	debug_options: int = 0
 
 	def __init__(self, plugin_id: Optional[str] = None):
 		super().__init__(self.DEFAULT_NAME)
@@ -174,18 +188,21 @@ class MCDReforgedLogger(logging.Logger):
 		self.setLevel(logging.DEBUG)
 
 	def set_debug_options(self, debug_options: Dict[str, bool]):
+		cls = type(self)
+		cls.debug_options = 0
 		for key, value in debug_options.items():
-			option = DebugOption[key.upper()]
-			MCDReforgedLogger.debug_options[option] = value
-		for option, value in MCDReforgedLogger.debug_options.items():
-			self.debug('Debug option {} is set to {}'.format(option, value), option=option)
+			if value:
+				option = DebugOption[key.upper()]
+				cls.debug_options |= option.mask
+				self.debug('Debug option {} is set to {}'.format(option, value), option=option)
 
 	@classmethod
 	def should_log_debug(cls, option: Optional[DebugOption] = None):
-		do_log = cls.debug_options.get(DebugOption.ALL, False)
+		# noinspection PyTypeChecker
+		flags: int = DebugOption.ALL.mask
 		if option is not None:
-			do_log |= cls.debug_options.get(option, False)
-		return do_log
+			flags |= option.mask
+		return (cls.debug_options & flags) != 0
 
 	def debug(self, *args, option: Optional[DebugOption] = None, no_check: bool = False):
 		if no_check or self.should_log_debug(option):
