@@ -87,6 +87,11 @@ class Info:
 		self.logging_level: Optional[str] = None
 		"""The logging level of the server's stdout, such as ``"INFO"`` or ``"WARN"``"""
 
+		# -----------------
+		#      Caches
+		# -----------------
+		self.__is_user = self.is_from_console or self.is_player
+
 	@property
 	def is_from_console(self) -> bool:
 		"""
@@ -113,7 +118,7 @@ class Info:
 		"""
 		If the source is from a user, i.e. if the source is from the console or from a player in the server
 		"""
-		return self.is_from_console or self.is_player
+		return self.__is_user
 
 	# --------------
 	#      API
