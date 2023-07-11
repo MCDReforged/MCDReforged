@@ -226,8 +226,8 @@ class MCDReforgedServer:
 			if log:
 				self.logger.info(self.tr('mcdr_server.on_config_changed.language_set', self.config['language']))
 
-			self.encoding_method = self.config['encoding'] if self.config['encoding'] is not None else sys.getdefaultencoding()
-			self.decoding_method = self.config['decoding'] if self.config['decoding'] is not None else locale.getpreferredencoding()
+			self.encoding_method = self.config['encoding'] or locale.getpreferredencoding()
+			self.decoding_method = self.config['decoding'] or locale.getpreferredencoding()
 			if log:
 				self.logger.info(self.tr('mcdr_server.on_config_changed.encoding_decoding_set', self.encoding_method, self.decoding_method))
 
