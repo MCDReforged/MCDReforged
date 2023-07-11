@@ -54,6 +54,10 @@ extensions = [
 	# workaround for broken search utility and broken doc version popup
 	# https://github.com/readthedocs/sphinx_rtd_theme/issues/1451
 	'sphinxcontrib.jquery',
+
+	# For codeblock tabs
+	# https://github.com/pradyunsg/sphinx-inline-tabs
+	'sphinx_inline_tabs',
 ]
 
 source_suffix = ['.rst']
@@ -89,7 +93,10 @@ html_css_files = [
 	# Algolia Docsearch
 	# https://docsearch.algolia.com/docs/DocSearch-v3
 	'css/algolia.css',
-	'https://cdn.jsdelivr.net/npm/@docsearch/css@3'
+	'https://cdn.jsdelivr.net/npm/@docsearch/css@3',
+
+	# Tweak styles of the sphinx_inline_tabs extension
+	'css/codeblock_tab.css',
 ]
 
 html_js_files = [

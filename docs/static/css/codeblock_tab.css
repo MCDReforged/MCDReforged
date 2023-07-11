@@ -1,0 +1,17 @@
+/* tweak tab size */
+:root {
+    --tabs--padding-x: 1em;
+}
+.tab-set > label {
+    padding: 0.3em var(--tabs--padding-x) 0.3em;
+}
+
+/* remove duplicated border line */
+.tab-content {
+    box-shadow: none;
+}
+
+/* make the tab text unselectable */
+.tab-label {
+    user-select: none;
+}
