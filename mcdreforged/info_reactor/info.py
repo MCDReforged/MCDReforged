@@ -66,12 +66,7 @@ class Info:
 		Otherwise it will be the content that removes stuffs like timestamp or thread name
 		"""
 
-		self.player: Optional[str] = None
-		"""
-		The name of the player
-		
-		If it's not sent by a player the value will be None
-		"""
+		self.__player: Optional[str] = None  # See the player property
 
 		self.source: InfoSource = source
 		"""
@@ -90,7 +85,25 @@ class Info:
 		# -----------------
 		#      Caches
 		# -----------------
+		self.__is_user: bool = False
+		self.__update_cache()
+
+	def __update_cache(self):
 		self.__is_user = self.is_from_console or self.is_player
+
+	@property
+	def player(self) -> Optional[str]:
+		"""
+		The name of the player
+
+		If it's not sent by a player the value will be None
+		"""
+		return self.__player
+
+	@player.setter
+	def player(self, player: str):
+		self.__player = player
+		self.__update_cache()
 
 	@property
 	def is_from_console(self) -> bool:
