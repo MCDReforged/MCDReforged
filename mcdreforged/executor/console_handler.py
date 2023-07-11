@@ -222,7 +222,7 @@ class MCDRStdoutProxy(StdoutProxy):
 				time.sleep(self.sleep_between_writes)
 
 	def _write_and_flush(self, loop, text):
-		# make sure the queue does not accumulate too much, in case stdout spams
+		# make sure the event loop queue does not accumulate too much, in case stdout spams
 		assert threading.current_thread() == self._flush_thread, '_write_and_flush called on unexpected thread {}'.format(threading.current_thread().name)
 		self.sleep_between_writes = self.__sleep_duration
 		ready_queue = getattr(loop, '_ready', None)  # asyncio.base_events.BaseEventLoop._ready

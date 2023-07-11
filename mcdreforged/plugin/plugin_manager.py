@@ -576,7 +576,8 @@ class PluginManager:
 		"""
 		Event dispatch logic implementation
 		"""
-		self.logger.debug('Dispatching {} with args ({})'.format(event, ', '.join([type(arg).__name__ for arg in args])), option=DebugOption.PLUGIN)
+		if self.logger.should_log_debug(DebugOption.PLUGIN):
+			self.logger.debug('Dispatching {} with args ({})'.format(event, ', '.join([type(arg).__name__ for arg in args])), no_check=True)
 		for listener in self.registry_storage.event_listeners.get(event.id, []):
 			self.trigger_listener(listener, args)
 
