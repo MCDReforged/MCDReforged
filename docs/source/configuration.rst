@@ -384,6 +384,21 @@ The required time interval in second for :doc:`/plugin_dev/watchdog` to consider
 
     watchdog_threshold: 10
 
+handler_detection
+~~~~~~~~~~~~~~~~~~
+
+By default, MCDR will start a handler detection on MCDR startup for a while,
+to detect possible configuration mistake of the :ref:`configuration:handler` option
+
+Set it to false to disable the handler detection for a few less performance loss after MCDR startup, mostly for profiling MCDR
+
+* Option type: boolean
+* Default value:
+
+.. code-block:: yaml
+
+    handler_detection: true
+
 debug
 ~~~~~
 

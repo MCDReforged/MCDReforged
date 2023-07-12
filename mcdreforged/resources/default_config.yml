@@ -95,8 +95,8 @@ custom_info_reactors:
 watchdog_threshold: 10
 
 
-# When set to true, MCDR will start a handler detection thread on MCDR startup for a while,
-# for detecting possible wrong configuration of the handler option
+# When set to true, MCDR will start a handler detection on MCDR startup for a while,
+# to detect possible configuration mistake of the :ref:`configuration:handler` option
 handler_detection: true
 
 

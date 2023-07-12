@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-13 02:04+0800\n"
+"POT-Creation-Date: 2023-07-13 02:52+0800\n"
 "PO-Revision-Date: 2021-01-23 13:20+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -67,7 +67,7 @@ msgid "The language that MCDR will use to display information"
 msgstr "MCDR 用于输出信息的语言"
 
 #: ../configuration.rst:29 ../configuration.rst:39 ../configuration.rst:105
-#: ../configuration.rst:143 ../configuration.rst:242 ../configuration.rst:260
+#: ../configuration.rst:143 ../configuration.rst:255 ../configuration.rst:273
 msgid "Option type: string"
 msgstr "选项类型：string"
 
@@ -324,34 +324,34 @@ msgid ""
 "example, Windows may use GBK as the default charset for Chinese users"
 msgstr "你的操作系统使用的字符集可能不是 UTF-8，比如中文 Windows 可能使用 GBK 作为默认字符集"
 
-#: ../configuration.rst:163
+#: ../configuration.rst:176
 msgid ""
 "Non-UTF-8 charset tends to cause annoying codec problems during encoding "
 "/ decoding, resulting in MCDR being unable to communicate normally with "
 "the server"
 msgstr "非 UTF-8 字符集在编解码过程中可能会引起烦人的编解码问题，导致 MCDR 无法与服务端正常通信"
 
-#: ../configuration.rst:166
+#: ../configuration.rst:179
 msgid ""
 "To make everything related to the server use UTF-8, you can follow the "
 "steps below:"
 msgstr "为了让与服务端相关的一切编解码都用上 UTF-8，你可以参照如下方法："
 
-#: ../configuration.rst:168
+#: ../configuration.rst:181
 msgid ""
 "Ask MCDR to use UTF-8 to communicate with the Minecrate server, i.e. set "
 "both ``encoding`` and ``decoding`` in the MCDR configuration to ``utf8``"
 msgstr ""
-"让 MCDR 使用 UTF-8 与 Minecraft 服务器通信，即在 MCDR 配置中将 ``encoding`` 和 ``decoding`` 设置为 "
-"utf8"
+"让 MCDR 使用 UTF-8 与 Minecraft 服务器通信，即在 MCDR 配置中将 ``encoding`` 和 "
+"``decoding`` 设置为 utf8"
 
-#: ../configuration.rst:176
+#: ../configuration.rst:189
 msgid ""
 "Make sure the JVM that launches Minecraft also uses UTF-8 as the default "
 "charset. You can achieve that with any of the following actions:"
 msgstr "确保启动 Minecraft 的 JVM 也使用 UTF-8 作为默认字符集。你可以通过以下任一操作来实现："
 
-#: ../configuration.rst:179
+#: ../configuration.rst:192
 msgid ""
 "(Recommend) Modify the start command for your server. Add a "
 "``-Dfile.encoding=UTF-8`` JVM property before the ``-jar`` argument, just"
@@ -360,20 +360,20 @@ msgstr ""
 "（推荐）修改服务器的启动命令。在 ``-jar`` 参数之前添加一个 ``-Dfile.encoding=UTF-8`` JVM 属性，就像 "
 ":ref:`configuration:start_command` 部分中的示例那样"
 
-#: ../configuration.rst:187
+#: ../configuration.rst:200
 msgid ""
 "Insert ``-Dfile.encoding=UTF-8`` into environment variable "
 "``JAVA_TOOL_OPTIONS``"
 msgstr "将 ``-Dfile.encoding=UTF-8`` 插入环境变量 ``JAVA_TOOL_OPTIONS`` 中"
 
-#: ../configuration.rst:189
+#: ../configuration.rst:202
 msgid ""
 "Then, the Minecraft server should run using UTF-8 as the charset for its "
 "standard IO streams, and MCDR should be able communicate with the server "
 "perfectly"
 msgstr "然后，Minecraft 服务器在运行时就会使用 UTF-8 作为其标准 IO 流的字符集，同时 MCDR 将能完美地与服务器通信"
 
-#: ../configuration.rst:192
+#: ../configuration.rst:205
 msgid ""
 "Of course, if you're sure that your operating system uses UTF-8 as the "
 "default character set, then there's no need for any configuration. You "
@@ -383,45 +383,45 @@ msgstr ""
 "当然，如果你确定你的操作系统使用的默认字符集是 UTF-8，那你什么都不需要做。你甚至可以将这两个 ``encoding``/ "
 "``decoding`` 选项留空来使用默认的系统字符集。"
 
-#: ../configuration.rst:195
+#: ../configuration.rst:208
 msgid "Option type: string or null"
 msgstr "选项类型：string 或 null"
 
-#: ../configuration.rst:196
+#: ../configuration.rst:209
 msgid "Default value: ``utf8``, ``utf8``"
 msgstr "默认值：``空``"
 
-#: ../configuration.rst:197
+#: ../configuration.rst:210
 #, fuzzy
 msgid "Examples: ``utf8``, ``gbk``"
 msgstr "例如：``utf8`` ， ``gbk``"
 
-#: ../configuration.rst:200
+#: ../configuration.rst:213
 msgid "plugin_directories"
 msgstr "plugin_directories"
 
-#: ../configuration.rst:202
+#: ../configuration.rst:215
 msgid "The list of directory path where MCDR will search for plugin to load"
 msgstr "MCDR 搜索将要加载插件的目录列表"
 
-#: ../configuration.rst:204
+#: ../configuration.rst:217
 msgid "Option type: a list of string"
 msgstr "选项类型：list[str]"
 
-#: ../configuration.rst:205 ../configuration.rst:319 ../configuration.rst:344
-#: ../configuration.rst:368 ../configuration.rst:380
+#: ../configuration.rst:218 ../configuration.rst:332 ../configuration.rst:357
+#: ../configuration.rst:381 ../configuration.rst:396 ../configuration.rst:408
 msgid "Default value:"
 msgstr "默认值："
 
-#: ../configuration.rst:213 ../configuration.rst:326 ../configuration.rst:351
+#: ../configuration.rst:226 ../configuration.rst:339 ../configuration.rst:364
 msgid "Example:"
 msgstr "例如："
 
-#: ../configuration.rst:223
+#: ../configuration.rst:236
 msgid "rcon"
 msgstr "rcon"
 
-#: ../configuration.rst:225
+#: ../configuration.rst:238
 msgid ""
 "The setting for `rcon <https://wiki.vg/RCON>`__. If rcon is enabled, MCDR"
 " will start a rcon client to connect to the server after server rcon has "
@@ -430,128 +430,128 @@ msgstr ""
 "`rcon <https://wiki.vg/RCON>`__ 设置。若启用 rcon，则在 Minecraft rcon "
 "服务端启动后，MCDR将自动连接到 rcon 服务端。这样插件就可以通过 rcon 向服务端发送命令"
 
-#: ../configuration.rst:228
+#: ../configuration.rst:241
 msgid "rcon.enable"
 msgstr "rcon.enable"
 
-#: ../configuration.rst:230
+#: ../configuration.rst:243
 msgid "The switch of rcon"
 msgstr "rcon 开关"
 
-#: ../configuration.rst:233 ../configuration.rst:269 ../configuration.rst:280
-#: ../configuration.rst:296 ../configuration.rst:305
+#: ../configuration.rst:246 ../configuration.rst:282 ../configuration.rst:293
+#: ../configuration.rst:309 ../configuration.rst:318 ../configuration.rst:395
 msgid "Option type: boolean"
 msgstr "选项类型：boolean"
 
-#: ../configuration.rst:234 ../configuration.rst:297 ../configuration.rst:306
+#: ../configuration.rst:247 ../configuration.rst:310 ../configuration.rst:319
 msgid "Default value: ``false``"
 msgstr "默认值：``false``"
 
-#: ../configuration.rst:237
+#: ../configuration.rst:250
 msgid "rcon.address"
 msgstr "rcon.address"
 
-#: ../configuration.rst:239
+#: ../configuration.rst:252
 msgid "The address of the rcon server"
 msgstr "用于 rcon 连接的地址"
 
-#: ../configuration.rst:243
+#: ../configuration.rst:256
 msgid "Default value: ``127.0.0.1``"
 msgstr "默认值：``127.0.0.1``"
 
-#: ../configuration.rst:246
+#: ../configuration.rst:259
 msgid "rcon.port"
 msgstr "rcon.port"
 
-#: ../configuration.rst:248
+#: ../configuration.rst:261
 msgid "The port of the rcon server"
 msgstr "用于 rcon 连接的端口"
 
-#: ../configuration.rst:251
+#: ../configuration.rst:264
 msgid "Option type: integer"
 msgstr "选项类型：integer"
 
-#: ../configuration.rst:252
+#: ../configuration.rst:265
 msgid "Default value: ``25575``"
 msgstr "默认值：``25575``"
 
-#: ../configuration.rst:255
+#: ../configuration.rst:268
 msgid "rcon.password"
 msgstr "rcon.password"
 
-#: ../configuration.rst:257
+#: ../configuration.rst:270
 msgid "The password to connect to the rcon server"
 msgstr "用于 rcon 连接的密码"
 
-#: ../configuration.rst:261
+#: ../configuration.rst:274
 msgid "Default value: ``password``"
 msgstr "默认值：``password``"
 
-#: ../configuration.rst:264
+#: ../configuration.rst:277
 msgid "check_update"
 msgstr "check_update"
 
-#: ../configuration.rst:266
+#: ../configuration.rst:279
 msgid "If set to true, MCDR will detect if there's a new version every 24h"
 msgstr "如果设置为 true，MCDR将会每隔24小时执行一次更新检测"
 
-#: ../configuration.rst:270 ../configuration.rst:281
+#: ../configuration.rst:283 ../configuration.rst:294
 msgid "Default value: ``true``"
 msgstr "默认值：``true``"
 
-#: ../configuration.rst:273
+#: ../configuration.rst:286
 msgid "advanced_console"
 msgstr "advanced_console"
 
-#: ../configuration.rst:275
+#: ../configuration.rst:288
 msgid ""
 "Advance console switch powered by `prompt-toolkit "
 "<https://pypi.org/project/prompt-toolkit/>`__"
 msgstr "高级控制台的开关，基于 `prompt-toolkit <https://pypi.org/project/prompt-toolkit/>`__"
 
-#: ../configuration.rst:277
+#: ../configuration.rst:290
 msgid ""
 "Set it to false if you need to redirect the stdin/stdout of MCDR or just "
 "don't like it"
 msgstr "如果你需要重定向 MCDR 的标准输入/输出，或者仅仅是不喜欢这个高级控制台，把它设置为 false"
 
-#: ../configuration.rst:284
+#: ../configuration.rst:297
 msgid "Advanced"
 msgstr "高级配置"
 
-#: ../configuration.rst:286
+#: ../configuration.rst:299
 msgid "Configuration options for advanced users"
 msgstr "为进阶用户提供的选项"
 
-#: ../configuration.rst:289
+#: ../configuration.rst:302
 msgid "disable_console_thread"
 msgstr "disable_console_thread"
 
-#: ../configuration.rst:291
+#: ../configuration.rst:304
 msgid ""
 "When set to true, MCDR will not start the console thread for handling "
 "console command input"
 msgstr "设置为 true 时，MCDR 将不会启动控制台线程来处理控制台命令输入"
 
-#: ../configuration.rst:293
+#: ../configuration.rst:306
 msgid "Don't change it to true unless you know what you are doing"
 msgstr "请保持默认值，除非你清楚地知道这是什么"
 
-#: ../configuration.rst:300
+#: ../configuration.rst:313
 msgid "disable_console_color"
 msgstr "disable_console_color"
 
-#: ../configuration.rst:302
+#: ../configuration.rst:315
 msgid ""
 "When set to true, MCDR will removed all console font formatter codes in "
 "before any message gets printed onto the console"
 msgstr "设置为 true 时，MCDR 将在所有消息打印到控制台之前删除所有控制台字体格式化程序代码"
 
-#: ../configuration.rst:309
+#: ../configuration.rst:322
 msgid "custom_handlers"
 msgstr "custom_handlers"
 
-#: ../configuration.rst:311
+#: ../configuration.rst:324
 msgid ""
 "A list of custom :doc:`/customize/handler` classes. The classed need to "
 "be subclasses of "
@@ -561,13 +561,13 @@ msgstr ""
 ":class:`~mcdreforged.handler.abstract_server_handler.AbstractServerHandler`"
 " 的子类"
 
-#: ../configuration.rst:313
+#: ../configuration.rst:326
 msgid ""
 "Then you can use the name of your handler in the "
 ":ref:`configuration:handler` option above to use your handler"
 msgstr "这样你就可以在 :ref:`configuration:handler` 选项中通过处理器的名称指派其解析标准输出文本"
 
-#: ../configuration.rst:315
+#: ../configuration.rst:328
 msgid ""
 "The name of a handler is defined in the "
 ":meth:`~mcdreforged.handler.abstract_server_handler.AbstractServerHandler.get_name`"
@@ -577,21 +577,21 @@ msgstr ""
 ":meth:`~mcdreforged.handler.abstract_server_handler.AbstractServerHandler.get_name`"
 " 方法定义"
 
-#: ../configuration.rst:318 ../configuration.rst:343
+#: ../configuration.rst:331 ../configuration.rst:356
 msgid "Option type: a list of string, or null"
 msgstr "选项类型：list[str] 或 null"
 
-#: ../configuration.rst:333
+#: ../configuration.rst:346
 msgid ""
 "In this example the custom handler package path is ``my.custom.handler`` "
 "and the class is name ``MyHandler``"
 msgstr "下面这个例子中，``my.custom.handler`` 是包路径，``MyHandler`` 是类名"
 
-#: ../configuration.rst:336
+#: ../configuration.rst:349
 msgid "custom_info_reactors"
 msgstr "custom_info_reactors"
 
-#: ../configuration.rst:338
+#: ../configuration.rst:351
 msgid ""
 "A list of custom :doc:`/customize/reactor` classes to handle the info "
 "instance. The classed need to be subclasses of "
@@ -601,23 +601,23 @@ msgstr ""
 ":class:`~mcdreforged.info_reactor.abstract_info_reactor.AbstractInfoReactor`"
 " 的子类"
 
-#: ../configuration.rst:340
+#: ../configuration.rst:353
 msgid ""
 "All custom info reactors will be registered to the reactor list to "
 "process information from the server"
 msgstr "所有自定义 info 响应器都将注册到反应堆列表中，以处理来自服务器的信息"
 
-#: ../configuration.rst:358
+#: ../configuration.rst:371
 msgid ""
 "In this example the custom reactor package path is ``my.custom.reactor`` "
 "and the class name is ``MyInfoReactor``"
 msgstr "下面这个例子中，``my.custom.reactor`` 是包路径，``MyInfoReactor`` 是类名"
 
-#: ../configuration.rst:363
+#: ../configuration.rst:376
 msgid "watchdog_threshold"
 msgstr "watchdog_threshold"
 
-#: ../configuration.rst:365
+#: ../configuration.rst:378
 msgid ""
 "The required time interval in second for :doc:`/plugin_dev/watchdog` to "
 "consider the task executor thread is not responding. Set it to 0 to "
@@ -626,15 +626,34 @@ msgstr ""
 "使得 :doc:`/plugin_dev/watchdog` 认为任务执行者 (task executor) "
 "线程已经未响应所需的时间间隔。将其设为 0 以禁用 :doc:`/plugin_dev/watchdog`"
 
-#: ../configuration.rst:367
+#: ../configuration.rst:380
 msgid "Option type: int or float"
 msgstr "选项类型：int 或 float"
 
-#: ../configuration.rst:375
+#: ../configuration.rst:388
+msgid "handler_detection"
+msgstr "handler_detection"
+
+#: ../configuration.rst:390
+msgid ""
+"By default, MCDR will start a handler detection on MCDR startup for a "
+"while, to detect possible configuration mistake of the "
+":ref:`configuration:handler` option"
+msgstr ""
+"在默认情况下，MCDR 会在启动时弃用服务端处理器正确性检测，并运行一段时间，用于检测可能出现的 :ref:`服务端处理器 "
+"<configuration:handler>` 配置错误"
+
+#: ../configuration.rst:393
+msgid ""
+"Set it to false to disable the handler detection for a few less "
+"performance loss after MCDR startup, mostly for profiling MCDR"
+msgstr "将其设为 false 以禁用服务端处理器检测逻辑，以减少部分 MCDR 开始运行时的性能损耗。这主要在性能分析 MCDR 时使用"
+
+#: ../configuration.rst:403
 msgid "debug"
 msgstr "debug"
 
-#: ../configuration.rst:377
+#: ../configuration.rst:405
 msgid ""
 "Debug logging switches. Set ``all`` to true to enable all debug logging, "
 "or set the specific option to enable specific debug logging"
