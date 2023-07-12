@@ -4,5 +4,6 @@ sphinx-rtd-theme>=1.2.0  # the theme of the webside
 Babel==2.9.1             # Unified the version to prevent different versions from appearing in .po comments
 sphinx-autobuild         # autobuild server
 sphinx_copybutton        # add copy button on codeblock
+sphinxcontrib-mermaid    # add mermaid graph support
 sphinx_inline_tabs       # codeblock tabs are nice
 sphinx-prompt            # make ">>>" prefix in prompt section unselectable

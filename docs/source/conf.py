@@ -58,6 +58,10 @@ extensions = [
 	# For codeblock tabs
 	# https://github.com/pradyunsg/sphinx-inline-tabs
 	'sphinx_inline_tabs',
+
+	# Mermaid graphs
+	# https://github.com/mgaitan/sphinxcontrib-mermaid
+	'sphinxcontrib.mermaid',
 ]
 
 source_suffix = ['.rst']
