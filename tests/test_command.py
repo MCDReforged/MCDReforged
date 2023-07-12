@@ -539,6 +539,27 @@ class SimpleCommandBuilderTestCase(CommandTestCase):
 		builder.build()
 		self.assertEqual(4, cnt)
 
+	def test_9_command_method_as_decorator(self):
+		builder = SimpleCommandBuilder()
+
+		@builder.command('foo a')
+		def foobar_a():
+			self.set_result('foobar_a')
+
+		@builder.command('foo b')
+		@builder.command('foo c <arg>')
+		def foobar_bc():
+			self.set_result('foobar_bc')
+
+		builder.arg('arg', Integer)
+		nodes = builder.build()
+		self.assertEqual(1, len(nodes))
+
+		node = nodes[0]
+		self.run_command_and_check_result(node, 'foo a', 'foobar_a')
+		self.run_command_and_check_result(node, 'foo b', 'foobar_bc')
+		self.run_command_and_check_result(node, 'foo c 123', 'foobar_bc')
+
 
 class CommandToolsTestCase(CommandTestCase):
 	def test_1_requirements(self):

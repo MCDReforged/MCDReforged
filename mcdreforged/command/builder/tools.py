@@ -1,5 +1,5 @@
 from abc import ABC
-from typing import Dict, Callable, TYPE_CHECKING, Optional, List, TypeVar, Generic, Any, Type
+from typing import Dict, Callable, TYPE_CHECKING, Optional, List, TypeVar, Generic, Any, Type, overload
 
 from typing_extensions import Self
 
@@ -71,6 +71,8 @@ class Requirements:
 
 NodeType = TypeVar('NodeType', bound=AbstractNode)
 ArgNodeType = TypeVar('ArgNodeType', bound=ArgumentNode)
+CommandCallbackFunc = TypeVar('CommandCallbackFunc', bound=RUNS_CALLBACK)
+CommandCallbackDecorator = Callable[[CommandCallbackFunc], CommandCallbackFunc]
 
 
 class NodeDefinition(Generic[NodeType], ABC):
@@ -202,8 +204,12 @@ class SimpleCommandBuilder:
 	# --------------
 	#   Interfaces
 	# --------------
+	@overload
+	def command(self, command: str) -> CommandCallbackDecorator: ...
+	@overload
+	def command(self, command: str, callback: RUNS_CALLBACK) -> None: ...
 
-	def command(self, command: str, callback: RUNS_CALLBACK):
+	def command(self, command: str, callback: Optional[RUNS_CALLBACK] = None):
 		"""
 		Define a command and its callback
 
@@ -217,9 +223,37 @@ class SimpleCommandBuilder:
 		You need to give definitions of argument nodes with the :meth:`arg` method.
 		You can also define your custom literal nodes with the :meth:`literal` method
 
+		Examples::
+		
+			builder.command('!!email list', list_email)
+			builder.command('!!email remove <email_id>', remove_email)
+			builder.command('!!email send <player> <message>', send_email)
+			
+		Alternative, you can use this method as a decorator to decorate the callback function by passing the first argument::
+
+			# This syntactic sugar does the same thing as `builder.command('!!email list', list_email)`
+			@builder.command('!!email list')
+			def list_email(source: CommandSource, context: CommandContext):
+				pass
+
+			# You can even chain the decorator. All given commands will use function `foo_bar()` as the callback
+			@builder.command('!!email foo')
+			@builder.command('!!email bar')
+			def foo_bar(source: CommandSource, context: CommandContext):
+				pass
+
 		:param command: A command path string, e.g. ``"!!calc add <value_a> <value_b>"``
 		:param callback: The callback function of this command, which will be passed to :meth:`AbstractNode.then<mcdreforged.command.builder.nodes.basic.AbstractNode.then>`
+
+		.. versionadded:: v2.10.0
+			It can now be used as a decorator for callback functions
 		"""
+		if callback is None:  # decorator mode
+			def decorator(func):
+				self.command(command, func)
+				return func
+			return decorator
+
 		self.__commands[command] = callback
 		self.clean_cache()
 

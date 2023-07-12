@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-13 01:32+0800\n"
+"POT-Creation-Date: 2023-07-13 00:50+0800\n"
 "PO-Revision-Date: 2021-01-23 17:24+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -452,7 +452,8 @@ msgstr "字面量节点 :class:`Literal` 不支持这个方法"
 #: mcdreforged.command.builder.command_builder_util.get_int:3
 #: mcdreforged.command.builder.command_builder_util.remove_divider_prefix:3
 #: mcdreforged.command.builder.nodes.basic.AbstractNode.suggests:5
-#: mcdreforged.command.builder.tools.SimpleCommandBuilder.arg:7 of
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.arg:7
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.command:13 of
 msgid "Examples::"
 msgstr "例子::"
 
@@ -881,11 +882,17 @@ msgid ""
 ":meth:`literal` method"
 msgstr "你需要使用 :meth:`arg` 方法来给出参数节点的定义。你也可以使用 :meth:`literal` 方法来给出自定义字面量节点的定义"
 
-#: mcdreforged.command.builder.tools.SimpleCommandBuilder.command:13 of
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.command:19 of
+msgid ""
+"Alternative, you can use this method as a decorator to decorate the "
+"callback function by passing the first argument::"
+msgstr "除此之外，你还可以把此方法用作一个装饰器，来装饰指令回调函数。只需仅传入第一个参数即可："
+
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.command:32 of
 msgid "A command path string, e.g. ``\"!!calc add <value_a> <value_b>\"``"
 msgstr "一个指令路径字符串，如 ``\"!!calc add <value_a> <value_b>\"``"
 
-#: mcdreforged.command.builder.tools.SimpleCommandBuilder.command:14 of
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.command:33 of
 msgid ""
 "The callback function of this command, which will be passed to "
 ":meth:`AbstractNode.then<mcdreforged.command.builder.nodes.basic.AbstractNode.then>`"
@@ -893,6 +900,10 @@ msgstr ""
 "本条指令的回调函数，将被传递给 "
 ":meth:`AbstractNode.then<mcdreforged.command.builder.nodes.basic.AbstractNode.then>`"
 " 方法"
+
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.command:35 of
+msgid "It can now be used as a decorator for callback functions"
+msgstr "现在它可以用作一个装饰回调函数的装饰器了"
 
 #: mcdreforged.command.builder.tools.SimpleCommandBuilder.arg:1 of
 msgid ""
