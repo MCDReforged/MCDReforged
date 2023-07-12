@@ -25,15 +25,31 @@ Install
 
 MCDR is available in `pypi <https://pypi.org/project/mcdreforged>`__. It can be installed via ``pip`` command
 
-.. code-block:: bash
+.. tab:: Windows
 
-    pip install mcdreforged
+    .. code-block:: bat
+
+        pip install mcdreforged
+
+.. tab:: Linux
+
+    .. code-block:: bash
+
+        pip3 install mcdreforged
 
 For Chinese users, you can added a ``-i https://pypi.tuna.tsinghua.edu.cn/simple`` prefix to the command to use `Tsinghua tuna mirror <https://mirrors.tuna.tsinghua.edu.cn/help/pypi/>`__ to speed up the installation
 
-.. code-block:: bash
+.. tab:: Windows
 
-    pip install mcdreforged -i https://pypi.tuna.tsinghua.edu.cn/simple
+    .. code-block:: bat
+
+        pip install mcdreforged -i https://pypi.tuna.tsinghua.edu.cn/simple
+
+.. tab:: Linux
+
+    .. code-block:: bash
+
+        pip3 install mcdreforged -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 **DO NOT** download the source files of MCDR and execute them directly, unless you're a developer of MCDR and you know what you are doing
 
@@ -45,7 +61,7 @@ Let's say your are going to start MCDR in a folder named ``my_mcdr_server``. The
 .. code-block:: bash
 
     cd my_mcdr_server
-    python -m mcdreforged init
+    mcdreforged init
 
 MCDR will generated the default configuration and permission files, as well as some default folders. The file structure will be like this
 
@@ -66,16 +82,24 @@ After that you can launch MCDR, and it will start handling the server correctly
 
 .. code-block:: bash
 
-    python -m mcdreforged
+    mcdreforged
 
 Upgrade
 -------
 
 With the help of `pypi <https://pypi.org/project/mcdreforged/>`__, MCDR can be easily upgraded via a single command
 
-.. code-block:: bash
+.. tab:: Windows
 
-    pip install mcdreforged -U
+    .. code-block:: bat
+
+        pip install mcdreforged -U
+
+.. tab:: Linux
+
+    .. code-block:: bash
+
+        pip3 install mcdreforged -U
 
 That's it! 
 

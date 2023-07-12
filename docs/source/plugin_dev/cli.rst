@@ -4,13 +4,33 @@ Command Line Interface
 
 MCDR also provides some useful tool kits via command line interface (CLI). The usage is simple: Add some arguments at the end of the command you launch MCDR
 
+Starting from v2.10, MCDR will generate a startup script under the Python executable path during installation.
+Therefore, you can directly use the ``mcdreforged`` command to start MCDR
+
 Have a try to display CLI help messages using following command
 
-.. code-block:: bash
+.. tab:: >= v2.10
 
-    python -m mcdreforged -h
+    .. code-block:: bash
 
-The CLI command format is:
+        mcdreforged -h
+
+.. tab:: < v2.10 (Windows)
+
+    .. code-block:: bash
+
+        python -m mcdreforged -h
+
+.. tab:: < v2.10 (Linux)
+
+    .. code-block:: bash
+
+        python3 -m mcdreforged -h
+
+The following document will use ``mcdreforged`` as the command for demonstration.
+For MCDR < v2.10, you need to add the ``python -m`` prefix to the commands used below
+
+The overall CLI command format is:
 
 .. code-block::
 
@@ -34,16 +54,16 @@ start
 
 .. code-block:: bash
 
-    python -m mcdreforged start [-h]
+    mcdreforged start [-h]
 
-The same as ``python -m mcdreforged``, it launches MCDR
+The same as ``mcdreforged``, it launches MCDR
 
 init
 ^^^^
 
 .. code-block:: bash
 
-    python -m mcdreforged init [-h]
+    mcdreforged init [-h]
 
 Prepare the working environment of MCDR
 
@@ -61,7 +81,7 @@ gendefault
 
 .. code-block:: bash
 
-    python -m mcdreforged gendefault [-h]
+    mcdreforged gendefault [-h]
 
 Generate default configuration and permission files at current working directory
 
@@ -72,7 +92,7 @@ pack
 
 .. code-block:: bash
 
-    python -m mcdreforged pack [-h] [-i INPUT] [-o OUTPUT] [-n NAME]
+    mcdreforged pack [-h] [-i INPUT] [-o OUTPUT] [-n NAME]
 
 Pack up your plugin source codes / resources files, from a batch of files, to a ``.mcdr`` :ref:`packed plugin file <plugin_dev/plugin_format:Packed Plugin>`
 
