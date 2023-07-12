@@ -28,7 +28,7 @@ The language that MCDR will use to display information
 
 * Option type: string
 * Default value: ``en_us``
-* Available options: ``en_us``\ , ``zh_cn``
+* Available options: ``en_us``, ``zh_cn``
 
 working_directory
 ~~~~~~~~~~~~~~~~~
@@ -46,34 +46,64 @@ The console command to launch the server
 
 Some examples:
 
-if you want to launch a Minecraft server
+If you want to launch a Minecraft server, you can:
 
 .. code-block:: yaml
 
-    start_command: java -Xms1G -Xmx2G -jar minecraft_server.jar nogui
+    start_command: java -Xms1G -Xmx2G -Dfile.encoding=UTF-8 -jar minecraft_server.jar nogui
 
-if you have already written a startup script in the :ref:`working directory <configuration:working_directory>`
+If you have already written a startup script in the :ref:`working directory <configuration:working_directory>`, you can:
 
-.. code-block:: yaml
+.. tab:: Windows
 
-    start_command: ./start.sh
+    .. code-block:: yaml
 
-If there are some special character (e.g. ``"`` and ``\``) that yaml doesn't like in the command
+        start_command: start.bat
 
-.. code-block:: yaml
+.. tab:: Linux
 
-    # use "" to wrap the command and escape " and \
-    start_command: "\"C:\\Program Files\\Java\\jdk-17.0.3.1\\bin\\java.exe\" -Xms1G -Xmx2G -jar minecraft_server.jar"
+    .. code-block:: yaml
 
-    # use '' to wrap the command
-    start_command: '"C:\Program Files\Java\jdk-17.0.3.1\bin\java.exe" -Xms1G -Xmx2G -jar minecraft_server.jar'
+        start_command: ./start.sh
 
-    # use multi-line string
-    start_command: |-
-      "C:\Program Files\Java\jdk-17.0.3.1\bin\java.exe" -Xms1G -Xmx2G -jar minecraft_server.jar
+If there are some special character (e.g. ``"`` and ``\``) that yaml doesn't like in the command, you can either:
+
+.. tab:: Windows
+
+    .. code-block:: yaml
+
+        # use "" to wrap the command and escape " and \
+        start_command: "\"C:\\Program Files\\Java\\jdk-17.0.3.1\\bin\\java.exe\" -Xms1G -Xmx2G -Dfile.encoding=UTF-8 -jar minecraft_server.jar"
+
+        # use '' to wrap the command
+        start_command: '"C:\Program Files\Java\jdk-17.0.3.1\bin\java.exe" -Xms1G -Xmx2G -Dfile.encoding=UTF-8 -jar minecraft_server.jar'
+
+        # use multi-line string
+        start_command: |-
+          "C:\Program Files\Java\jdk-17.0.3.1\bin\java.exe" -Xms1G -Xmx2G -Dfile.encoding=UTF-8 -jar minecraft_server.jar
+
+.. tab:: Linux
+
+    .. code-block:: yaml
+
+        # use "" to wrap the command and escape " and \
+        start_command: "\"/path/to my/java\" -Xms1G -Xmx2G -Dfile.encoding=UTF-8 -jar minecraft_server.jar"
+
+        # use '' to wrap the command
+        start_command: '"/path/to my/java" -Xms1G -Xmx2G -Dfile.encoding=UTF-8 -jar minecraft_server.jar'
+
+        # use multi-line string
+        start_command: |-
+          "/path/to my/java" -Xms1G -Xmx2G -Dfile.encoding=UTF-8 -jar minecraft_server.jar
+
+.. note::
+
+    For Minecraft servers, you might want to add a ``-Dfile.encoding=UTF-8`` JVM property before the ``-jar`` argument, like the examples above
+
+    See :ref:`configuration:encoding / decoding` section for more information of UTF-8 charset for Minecraft servers
 
 * Option type: string
-* Default value: ``java -Xms1G -Xmx2G -jar minecraft_server.jar nogui``
+* Default value: ``java -Xms1G -Xmx2G -Dfile.encoding=UTF-8 -jar minecraft_server.jar nogui``
 
 handler
 ~~~~~~~
@@ -110,22 +140,74 @@ Here is a table of current built-in handlers and their suitable server types
    * - basic_handler
      - The handler that parse nothing and return the raw text from the server. Don't use this unless you want to use MCDR to lanuch non Minecraft related servers.
 
-
-
 * Option type: string
 * Default value: ``vanilla_handler``
 
 encoding / decoding
 ~~~~~~~~~~~~~~~~~~~
 
-The encoding format used to encode message to the stdin of the server. 
+The codec format to encode messages to stdin / decode messages from stdout of the server
 
-Leave it blank for MCDR to auto detect the encoding. If it doesn't work (e.g. random characters in game) you needs to manually specify it depends on your os and language
+Leave it blank for MCDR to use the system encoding. If it doesn't work (e.g. random characters appear in the console),
+you need to manually set them to the correct encoding / decoding methods used by the server
 
+For Minecraft servers, if you are on an operating system that doesn't using UTF-8 as the default charset,
+it's highly suggested to ensure all encoding / decoding use UTF-8 charset, due to the following facts:
+
+1.  Python 3 uses UTF-8 to store strings
+2.  Minecraft servers always use UTF-8 for reading stdin
+3.  Minecraft servers use the default charset of the operating system for writing stdout / stderr / log files
+4.  The default charset of your operating system might not be UTF-8.
+    For example, Windows may use GBK as the default charset for Chinese users
+
+.. mermaid::
+    :alt: pipe
+    :align: center
+
+    sequenceDiagram
+        participant MCDR
+        participant pipe
+        participant Minecraft
+        MCDR->>pipe: send "hello" (encoding)
+        pipe->>Minecraft: stdin (UTF-8)
+        Minecraft-->>pipe: stdout/stderr (OS charset)
+        pipe-->>MCDR: receive "world" (decoding)
+
+Non-UTF-8 charset tends to cause annoying codec problems during encoding / decoding,
+resulting in MCDR being unable to communicate normally with the server
+
+To make everything related to the server use UTF-8, you can follow the steps below:
+
+*   Ask MCDR to use UTF-8 to communicate with the Minecrate server,
+    i.e. set both ``encoding`` and ``decoding`` in the MCDR configuration to ``utf8``
+
+    .. code-block:: yaml
+
+        encoding: utf8
+        decoding: utf8
+
+*   Make sure the JVM that launches Minecraft also uses UTF-8 as the default charset.
+    You can achieve that with any of the following actions:
+
+    *   (Recommend) Modify the start command for your server. Add a ``-Dfile.encoding=UTF-8`` JVM property before the ``-jar`` argument,
+        just like the examples in the :ref:`configuration:start_command` sections
+
+        .. code-block:: yaml
+
+            start_command: java -Xms1G -Xmx2G -Dfile.encoding=UTF-8 -jar minecraft_server.jar
+                                              ^^^^^^^^^^^^^^^^^^^^^
+
+    *   Insert ``-Dfile.encoding=UTF-8`` into environment variable ``JAVA_TOOL_OPTIONS``
+
+Then, the Minecraft server should run using UTF-8 as the charset for its standard IO streams,
+and MCDR should be able communicate with the server perfectly
+
+Of course, if you're sure that your operating system uses UTF-8 as the default character set,
+then there's no need for any configuration. You can even leave these 2 options ``encoding``/ ``decoding`` blank to use the default system charset
 
 * Option type: string or null
-* Default value: `` ``
-* Examples: ``utf8``\ , ``gbk``
+* Default value: ``utf8``, ``utf8``
+* Examples: ``utf8``, ``gbk``
 
 plugin_directories
 ~~~~~~~~~~~~~~~~~~
