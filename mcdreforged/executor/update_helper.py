@@ -1,11 +1,12 @@
 """
 MCDR update things
 """
+import json
 import time
+import urllib.error
+import urllib.request
 from threading import Lock
 from typing import Callable, Any, Union, Optional
-
-import requests
 
 from mcdreforged.constants import core_constant
 from mcdreforged.executor.thread_executor import ThreadExecutor
@@ -83,11 +84,17 @@ class GithubApiFetcher:
 		self.__etag = 'dummy'
 		self.__cached_response: Optional[dict] = None
 
-	def fetch(self) -> dict:
-		response = requests.get(self.url, headers={'If-None-Match': self.__etag}, timeout=10)
-		self.__etag = response.headers.get('ETag', self.__etag)
-		if response.status_code != 304:  # 304 means content keeps unchanged
-			if response.status_code != 200:
-				raise Exception('Un-expected status code {}: {}'.format(response.status_code, response.content))
-			self.__cached_response = response.json()
+	def fetch(self) -> Optional[dict]:
+		try:
+			req = urllib.request.Request(self.url, headers={'If-None-Match': self.__etag}, method='GET')
+			with urllib.request.urlopen(req, timeout=10) as response:
+				self.__etag = response.getheader('ETag', self.__etag)
+				status_code = response.getcode()
+				if status_code != 304:  # 304 means content keeps unchanged
+					if status_code != 200:
+						raise Exception('Unexpected status code {}: {}'.format(status_code, response.read()))
+					self.__cached_response = json.loads(response.read())
+		except urllib.error.HTTPError as e:
+			raise Exception('Unexpected status code {}: {}'.format(e.code, e.read()))
+
 		return self.__cached_response
