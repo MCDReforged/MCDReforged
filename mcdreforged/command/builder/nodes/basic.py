@@ -16,11 +16,32 @@ from mcdreforged.command.command_source import CommandSource
 from mcdreforged.utils import misc_util, tree_printer, class_util
 from mcdreforged.utils.types import MessageText
 
-__SOURCE_CONTEXT_CALLBACK = Union[Callable[[], Any], Callable[[CommandSource], Any], Callable[[CommandSource, dict], Any]]
-__SOURCE_CONTEXT_CALLBACK_BOOL = Union[Callable[[], bool], Callable[[CommandSource], bool], Callable[[CommandSource, dict], bool]]
-__SOURCE_CONTEXT_CALLBACK_MSG = Union[Callable[[], MessageText], Callable[[CommandSource], MessageText], Callable[[CommandSource, dict], MessageText]]
-__SOURCE_CONTEXT_CALLBACK_STR_ITERABLE = Union[Callable[[], Iterable[str]], Callable[[CommandSource], Iterable[str]], Callable[[CommandSource, dict], Iterable[str]]]
-__SOURCE_ERROR_CONTEXT_CALLBACK = Union[Callable[[], Any], Callable[[CommandSource], Any], Callable[[CommandSource, CommandError], Any], Callable[[CommandSource, CommandError, dict], Any]]
+__SOURCE_CONTEXT_CALLBACK = Union[
+	Callable[[], Any],
+	Callable[[CommandSource], Any],
+	Callable[[CommandSource, dict], Any]
+]
+__SOURCE_CONTEXT_CALLBACK_BOOL = Union[
+	Callable[[], bool],
+	Callable[[CommandSource], bool],
+	Callable[[CommandSource, dict], bool]
+]
+__SOURCE_CONTEXT_CALLBACK_MSG = Union[
+	Callable[[], MessageText],
+	Callable[[CommandSource], MessageText],
+	Callable[[CommandSource, dict], MessageText]
+]
+__SOURCE_CONTEXT_CALLBACK_STR_ITERABLE = Union[
+	Callable[[], Iterable[str]],
+	Callable[[CommandSource], Iterable[str]],
+	Callable[[CommandSource, dict], Iterable[str]]
+]
+__SOURCE_ERROR_CONTEXT_CALLBACK = Union[
+	Callable[[], Any],
+	Callable[[CommandSource], Any],
+	Callable[[CommandSource, CommandError], Any],
+	Callable[[CommandSource, CommandError, dict], Any]
+]
 
 RUNS_CALLBACK = __SOURCE_CONTEXT_CALLBACK
 ERROR_HANDLER_CALLBACK = __SOURCE_ERROR_CONTEXT_CALLBACK
@@ -235,7 +256,7 @@ class AbstractNode(ABC):
 		"""
 		if not issubclass(error_type, CommandError):
 			raise TypeError('error_type parameter should be a class inherited from CommandError, but class {} found'.format(error_type))
-		class_util.check_type(error_type, Type)
+		class_util.check_type(error_type, type)
 		class_util.check_type(handler, Callable)
 		self._error_handlers[error_type] = _ErrorHandler(handler, handled)
 		return self
@@ -246,7 +267,7 @@ class AbstractNode(ABC):
 		"""
 		if not issubclass(error_type, CommandError):
 			raise TypeError('error_type parameter should be a class inherited from CommandError, but class {} found'.format(error_type))
-		class_util.check_type(error_type, Type)
+		class_util.check_type(error_type, type)
 		class_util.check_type(handler, Callable)
 		self._child_error_handlers[error_type] = _ErrorHandler(handler, handled)
 		return self
