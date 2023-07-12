@@ -11,10 +11,12 @@ from mcdreforged.command.builder.exception import NumberOutOfRange, EmptyText, \
 	TextLengthOutOfRange, InvalidBoolean, InvalidEnumeration, AbstractOutOfRange
 from mcdreforged.command.builder.nodes.basic import SUGGESTS_CALLBACK, \
 	ArgumentNode
+from mcdreforged.utils import misc_util
+
+
 # --------------------
 #   Number Arguments
 # --------------------
-from mcdreforged.utils import misc_util
 
 
 class NumberNode(ArgumentNode, ABC):
