@@ -492,7 +492,7 @@ class MCDReforgedServer:
 		If server has stopped it will wait up to 60s for the server process to exit, then return None
 		"""
 		try:
-			text: bytes = next(iter(self.process.stdout))
+			line_buf: bytes = next(iter(self.process.stdout))
 		except StopIteration:  # server process has stopped
 			for i in range(core_constant.WAIT_TIME_AFTER_SERVER_STDOUT_END_SEC):
 				try:
@@ -508,11 +508,11 @@ class MCDReforgedServer:
 			return None
 		else:
 			try:
-				decoded_text: str = text.decode(self.decoding_method)
+				line_text: str = line_buf.decode(self.decoding_method)
 			except Exception as e:
-				self.logger.error(self.tr('mcdr_server.receive.decode_fail', text, e))
-				raise DecodeError(e)
-			return decoded_text.strip('\n\r')
+				self.logger.error(self.tr('mcdr_server.receive.decode_fail', line_buf, e))
+				raise DecodeError()
+			return line_text.strip('\n\r')
 
 	def __tick(self):
 		"""
