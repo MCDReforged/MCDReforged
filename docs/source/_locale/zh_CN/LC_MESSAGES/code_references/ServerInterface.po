@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-20 20:27+0800\n"
+"POT-Creation-Date: 2023-07-14 20:57+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -41,6 +41,146 @@ msgid ""
 msgstr "建议使用 ``server`` 作为 ServerInterface 变量的名字，这在本文档中被广泛使用"
 
 #: ../code_references/ServerInterface.rst:12
+msgid "Instance Getters"
+msgstr "实例获取"
+
+#: mcdreforged.plugin.server_interface.ServerInterface.get_instance:1 of
+msgid ""
+"A class method, for plugins to get a ServerInterface instance anywhere as"
+" long as MCDR is running"
+msgstr "一个类方法，用于为插件在任何地方获取一个 ServerInterface 实例，只要 MCDR 正在运行"
+
+#: mcdreforged.plugin.server_interface.ServerInterface.as_basic_server_interface:1
+#: of
+msgid ""
+"Return a :class:`ServerInterface` instance. The type of the return value "
+"is exactly the :class:`ServerInterface`"
+msgstr "返回一个 :class:`ServerInterface` 实例。返回值的类型是 :class:`ServerInterface`"
+
+#: mcdreforged.plugin.server_interface.ServerInterface.as_basic_server_interface:3
+#: of
+msgid ""
+"It's used for removing the plugin information inside "
+":class:`PluginServerInterface` when you need to send a "
+":class:`ServerInterface` as parameter"
+msgstr ""
+"它可用于在你想要传递一个 :class:`ServerInterface` 时，移除 :class:`ServerInterface` "
+"中包含着的插件信息"
+
+#: mcdreforged.plugin.server_interface.ServerInterface.as_plugin_server_interface:1
+#: of
+msgid "Return a :class:`PluginServerInterface` instance."
+msgstr "返回一个 :class:`PluginServerInterface` 实例"
+
+#: mcdreforged.plugin.server_interface.ServerInterface.as_plugin_server_interface:3
+#: of
+msgid ""
+"If the object is exactly a :class:`PluginServerInterface` instance, "
+"return itself"
+msgstr "如果该对象就是一个 :class:`PluginServerInterface` 实例，则直接返回它自己"
+
+#: mcdreforged.plugin.server_interface.ServerInterface.as_plugin_server_interface:5
+#: of
+msgid ""
+"If the plugin context is available, return the "
+":class:`PluginServerInterface` for the related plugin. Currently, plugin "
+"context is only available inside the following scenarios:"
+msgstr "如果当前存在可用的插件上下文，返回相关插件对应的 :class:`PluginServerInterface`。目前，插件上下文仅在如下场景中可用："
+
+#: mcdreforged.plugin.server_interface.ServerInterface.as_plugin_server_interface:8
+#: of
+msgid ":ref:`Plugin entrypoint <plugin-entrypoint>` module loading"
+msgstr ":ref:`入口点模块 <plugin-entrypoint>` 的加载"
+
+#: mcdreforged.plugin.server_interface.ServerInterface.as_plugin_server_interface:9
+#: of
+msgid ":doc:`Event listener </plugin_dev/event>` callback invocation"
+msgstr ":doc:`事件监听器 </plugin_dev/event>` 回调函数的调用"
+
+#: mcdreforged.plugin.server_interface.ServerInterface.as_plugin_server_interface:10
+#: of
+msgid ":doc:`Command </plugin_dev/command>` callback invocation"
+msgstr ":doc:`指令 </plugin_dev/command>` 回调函数的调用"
+
+#: mcdreforged.plugin.server_interface.ServerInterface.si:1 of
+msgid "Alias / Shortform of :meth:`get_instance`, and never returns None"
+msgstr ":meth:`get_instance` 的别名 / 缩写，永不返回 None"
+
+#: mcdreforged.plugin.server_interface.ServerInterface.get_permission_level
+#: mcdreforged.plugin.server_interface.ServerInterface.get_preference
+#: mcdreforged.plugin.server_interface.ServerInterface.psi
+#: mcdreforged.plugin.server_interface.ServerInterface.reply
+#: mcdreforged.plugin.server_interface.ServerInterface.set_permission_level
+#: mcdreforged.plugin.server_interface.ServerInterface.set_preference
+#: mcdreforged.plugin.server_interface.ServerInterface.si of
+msgid "Raises"
+msgstr "抛出"
+
+#: mcdreforged.plugin.server_interface.ServerInterface.si:4 of
+msgid "If MCDR is not running"
+msgstr "如果 MCDR 未在运行"
+
+#: mcdreforged.plugin.server_interface.ServerInterface.si_opt:1 of
+msgid ""
+"Alias / Shortform of :meth:`get_instance`, get an optional "
+":class:`ServerInterface` instance"
+msgstr ":meth:`get_instance` 的别名 / 缩写，返回一个可能存在的 :class:`ServerInterface` 实例"
+
+#: mcdreforged.plugin.server_interface.ServerInterface.disable_plugin
+#: mcdreforged.plugin.server_interface.ServerInterface.enable_plugin
+#: mcdreforged.plugin.server_interface.ServerInterface.exit
+#: mcdreforged.plugin.server_interface.ServerInterface.get_plugin_instance
+#: mcdreforged.plugin.server_interface.ServerInterface.get_server_pid
+#: mcdreforged.plugin.server_interface.ServerInterface.get_server_pid_all
+#: mcdreforged.plugin.server_interface.ServerInterface.kill
+#: mcdreforged.plugin.server_interface.ServerInterface.load_plugin
+#: mcdreforged.plugin.server_interface.ServerInterface.psi_opt
+#: mcdreforged.plugin.server_interface.ServerInterface.rcon_query
+#: mcdreforged.plugin.server_interface.ServerInterface.reload_plugin
+#: mcdreforged.plugin.server_interface.ServerInterface.restart
+#: mcdreforged.plugin.server_interface.ServerInterface.si_opt
+#: mcdreforged.plugin.server_interface.ServerInterface.start
+#: mcdreforged.plugin.server_interface.ServerInterface.stop
+#: mcdreforged.plugin.server_interface.ServerInterface.stop_exit
+#: mcdreforged.plugin.server_interface.ServerInterface.unload_plugin of
+msgid "Returns"
+msgstr "返回"
+
+#: mcdreforged.plugin.server_interface.ServerInterface.si_opt:4 of
+msgid "The :class:`ServerInterface` instance, or None if failed"
+msgstr ":class:`ServerInterface` 实例。如果失败则为 None"
+
+#: mcdreforged.plugin.server_interface.ServerInterface.psi:1 of
+msgid ""
+"Shortform of the combination of :meth:`get_instance` + "
+":meth:`as_plugin_server_interface`, and never returns None"
+msgstr "组合 :meth:`get_instance` + :meth:`as_plugin_server_interface` 的缩写，永不返回 None"
+
+#: mcdreforged.plugin.server_interface.ServerInterface.psi:4 of
+msgid ""
+"Get :class:`PluginServerInterface` failed. This might occur because MCDR "
+"is not running (see :meth:`si`), or plugin context is unavailable (see "
+":meth:`as_plugin_server_interface`)"
+msgstr ""
+"获取 :class:`PluginServerInterface` 失败。原因可能是 MCDR 未在运行（见 "
+":meth:`si`），或者插件上下文不可用（见 :meth:`as_plugin_server_interface`）"
+
+#: mcdreforged.plugin.server_interface.ServerInterface.psi_opt:1 of
+msgid ""
+"Shortform of the combination of :meth:`get_instance` + "
+":meth:`as_plugin_server_interface`, get an optional "
+":class:`PluginServerInterface` instance"
+msgstr ""
+"组合 :meth:`get_instance` + :meth:`as_plugin_server_interface` "
+"的缩写，返回一个可能存在的 :class:`PluginServerInterface` 实例"
+
+#: mcdreforged.plugin.server_interface.ServerInterface.psi_opt:4 of
+msgid ""
+"The :class:`PluginServerInterface` instance for the current plugin, or "
+"None if failed"
+msgstr "当前插件的 :class:`PluginServerInterface` 实例。如果失败则为 None"
+
+#: ../code_references/ServerInterface.rst:23
 msgid "Utils"
 msgstr "实用工具"
 
@@ -52,12 +192,6 @@ msgstr "MCDR 的标识符属性"
 #: mcdreforged.plugin.server_interface.ServerInterface.logger:1 of
 msgid "A nice logger for you to log message to the console"
 msgstr "一个好用的将信息记录到控制台的 logger"
-
-#: mcdreforged.plugin.server_interface.ServerInterface.get_instance:1 of
-msgid ""
-"A class method, for plugins to get a ServerInterface instance anywhere as"
-" long as MCDR is running"
-msgstr "一个类方法，用于为插件在任何地方获取一个 ServerInterface 实例，只要 MCDR 正在运行"
 
 #: mcdreforged.plugin.server_interface.ServerInterface.tr:1 of
 msgid ""
@@ -164,34 +298,7 @@ msgstr ""
 "当然如果你愿意的话，除了使用该方法，你也可以自己手动构建 "
 ":class:`~mcdreforged.translation.translation_text.RTextMCDRTranslation`"
 
-#: mcdreforged.plugin.server_interface.ServerInterface.as_basic_server_interface:1
-#: of
-msgid ""
-"Return a :class:`ServerInterface` instance. The type of the return value "
-"is exactly the :class:`ServerInterface`"
-msgstr "返回一个 :class:`ServerInterface` 实例。返回值的类型是 :class:`ServerInterface`"
-
-#: mcdreforged.plugin.server_interface.ServerInterface.as_basic_server_interface:3
-#: of
-msgid ""
-"It's used for removing the plugin information inside "
-":class:`PluginServerInterface` when you need to send a "
-":class:`ServerInterface` as parameter"
-msgstr ""
-"它可用于在你想要传递一个 :class:`ServerInterface` 时，移除 :class:`ServerInterface` "
-"中包含着的插件信息"
-
-#: mcdreforged.plugin.server_interface.ServerInterface.as_plugin_server_interface:1
-#: of
-msgid ""
-"Return a :class:`PluginServerInterface` instance. If current thread is "
-"not a MCDR provided thread and the object is not a "
-":class:`PluginServerInterface` instance, it will return None"
-msgstr ""
-"返回一个 :class:`PluginServerInterface` 实例。如果当前的线程并非是 MCDR 提供的线程，并且本对象并非是一个 "
-":class:`PluginServerInterface` 实例，返回 None"
-
-#: ../code_references/ServerInterface.rst:23
+#: ../code_references/ServerInterface.rst:31
 msgid "Server Control"
 msgstr "服务端控制"
 
@@ -204,24 +311,6 @@ msgid ""
 "If the server is running or being starting by other plugin it will return"
 " ``False``"
 msgstr "如果服务端正在运行或正在由其他插件启动，它将返回 ``False``"
-
-#: mcdreforged.plugin.server_interface.ServerInterface.disable_plugin
-#: mcdreforged.plugin.server_interface.ServerInterface.enable_plugin
-#: mcdreforged.plugin.server_interface.ServerInterface.exit
-#: mcdreforged.plugin.server_interface.ServerInterface.get_plugin_instance
-#: mcdreforged.plugin.server_interface.ServerInterface.get_server_pid
-#: mcdreforged.plugin.server_interface.ServerInterface.get_server_pid_all
-#: mcdreforged.plugin.server_interface.ServerInterface.kill
-#: mcdreforged.plugin.server_interface.ServerInterface.load_plugin
-#: mcdreforged.plugin.server_interface.ServerInterface.rcon_query
-#: mcdreforged.plugin.server_interface.ServerInterface.reload_plugin
-#: mcdreforged.plugin.server_interface.ServerInterface.restart
-#: mcdreforged.plugin.server_interface.ServerInterface.start
-#: mcdreforged.plugin.server_interface.ServerInterface.stop
-#: mcdreforged.plugin.server_interface.ServerInterface.stop_exit
-#: mcdreforged.plugin.server_interface.ServerInterface.unload_plugin of
-msgid "Returns"
-msgstr "返回"
 
 #: mcdreforged.plugin.server_interface.ServerInterface.start:5 of
 msgid ""
@@ -392,7 +481,7 @@ msgid ""
 "information has not been parsed"
 msgstr "如果服务端未启动，或者相关的信息未被解析，则其若干个属性可能为 None"
 
-#: ../code_references/ServerInterface.rst:42
+#: ../code_references/ServerInterface.rst:50
 msgid "Text Interaction"
 msgstr "文本交互"
 
@@ -476,19 +565,11 @@ msgstr "如果指定了该参数，那么在回复控制台时，将使用 *cons
 msgid "The encoding method for the text"
 msgstr "文本的编码方法"
 
-#: mcdreforged.plugin.server_interface.ServerInterface.get_permission_level
-#: mcdreforged.plugin.server_interface.ServerInterface.get_preference
-#: mcdreforged.plugin.server_interface.ServerInterface.reply
-#: mcdreforged.plugin.server_interface.ServerInterface.set_permission_level
-#: mcdreforged.plugin.server_interface.ServerInterface.set_preference of
-msgid "Raises"
-msgstr "抛出"
-
 #: mcdreforged.plugin.server_interface.ServerInterface.reply:12 of
 msgid "If the Info is not from a user"
 msgstr "如果这个 Info 并非来自一位用户"
 
-#: ../code_references/ServerInterface.rst:51
+#: ../code_references/ServerInterface.rst:59
 msgid "Plugin Queries"
 msgstr "插件查询"
 
@@ -583,17 +664,17 @@ msgid ""
 "metadata) as key-value pair"
 msgstr "返回一个包含所有加载的插件元数据的字典，键值对为 (插件 id, 元数据)"
 
-#: ../code_references/ServerInterface.rst:62
+#: ../code_references/ServerInterface.rst:70
 msgid "Plugin Operations"
 msgstr "插件操作"
 
-#: ../code_references/ServerInterface.rst:65
+#: ../code_references/ServerInterface.rst:73
 msgid ""
 "All plugin manipulation will trigger a dependency check, which might "
 "cause unwanted plugin operations"
 msgstr "所有的插件操作都会触发依赖性检查——这可能会导致不必要的插件操作"
 
-#: ../code_references/ServerInterface.rst:67
+#: ../code_references/ServerInterface.rst:75
 msgid ""
 "It's not suggested to trigger plugin operations during :ref:`on_load "
 "<event-plugin-load>` or :ref:`on_unload <event-plugin-unload>` plugin "
@@ -603,7 +684,7 @@ msgstr ""
 "不推荐在插件事件 :ref:`插件被加载 <event-plugin-load>` 或 :ref:`插件被卸载 <event-plugin-"
 "unload>` 期间进行插件操作在这些事件发生时，MCDR 正处于一次进行中的插件操作流程之中，此时并不适合触发另一次插件操作"
 
-#: ../code_references/ServerInterface.rst:70
+#: ../code_references/ServerInterface.rst:78
 msgid ""
 "If you do trigger a plugin operation during :ref:`on_load <event-plugin-"
 "load>` or :ref:`on_unload <event-plugin-unload>` plugin events, MCDR will"
@@ -749,7 +830,7 @@ msgid ""
 "thread If it's set to False. The event will be dispatched immediately"
 msgstr "在默认值的情况下，该事件会被派发至任务执行者 (task executor) 线程中分发。如果它被设置为 False，则事件将会被立即分发"
 
-#: ../code_references/ServerInterface.rst:83
+#: ../code_references/ServerInterface.rst:91
 msgid "Configuration"
 msgstr "配置"
 
@@ -803,7 +884,7 @@ msgstr "关键字参数"
 msgid "If the config changing messages should be logged"
 msgstr "是否输出配置文件变更的相关日志"
 
-#: ../code_references/ServerInterface.rst:91
+#: ../code_references/ServerInterface.rst:99
 msgid "Permission"
 msgstr "权限"
 
@@ -868,7 +949,7 @@ msgstr "从权限文件重载 MCDR 的权限数据"
 msgid "It has the same effect as command ``!!MCDR reload permission``"
 msgstr "其效果与指令 ``!!MCDR reload permission`` 相同"
 
-#: ../code_references/ServerInterface.rst:98
+#: ../code_references/ServerInterface.rst:106
 msgid "Command"
 msgstr "指令"
 
@@ -905,7 +986,7 @@ msgid ""
 "fallback command source"
 msgstr "用于执行该条指令的指令源。如果它未被指定，MCDR 将会使用 :meth:`get_plugin_command_source` 来获得默认的指令源"
 
-#: ../code_references/ServerInterface.rst:104
+#: ../code_references/ServerInterface.rst:112
 msgid "Preference"
 msgstr "偏好"
 
@@ -952,7 +1033,7 @@ msgstr "你要设置的偏好的对象"
 msgid "The preference to be set"
 msgstr "设置给定对象的 MCDR 偏好"
 
-#: ../code_references/ServerInterface.rst:111
+#: ../code_references/ServerInterface.rst:119
 msgid "Misc"
 msgstr "杂项"
 
@@ -997,4 +1078,32 @@ msgstr "是否需要阻塞至可调用对象执行结束"
 #: mcdreforged.plugin.server_interface.ServerInterface.schedule_task:5 of
 msgid "The timeout of the blocking operation if ``block=True``"
 msgstr "若 ``block=True``，最大的阻塞时间"
+
+#~ msgid ""
+#~ "If MCDR is not running. Can be "
+#~ "suppressed with ``raise_on_none=False`` and "
+#~ "then ``None`` will be returned"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Shortform of the combination of "
+#~ ":meth:`get_instance` + :meth:`as_plugin_server_interface`"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "get PluginServerInterface failed (current "
+#~ "thread is not a MCDR provided "
+#~ "thread). Can be suppressed with "
+#~ "``raise_on_none=False`` and then ``None`` will"
+#~ " be returned"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "If current thread is not a MCDR"
+#~ " provided thread and the object is"
+#~ " not a :class:`PluginServerInterface` instance,"
+#~ " it will return None"
+#~ msgstr ""
+#~ "如果当前的线程并非是 MCDR 提供的线程，并且本对象并非是一个 "
+#~ ":class:`PluginServerInterface` 实例，将返回 None"
 

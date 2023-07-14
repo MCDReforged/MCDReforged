@@ -2,6 +2,7 @@ import functools
 import json
 import logging
 import os
+import threading
 from typing import Callable, TYPE_CHECKING, Tuple, Any, Union, Optional, List, IO, Dict, Type, TypeVar
 
 import psutil
@@ -77,7 +78,7 @@ class ServerInterface:
 			return self._mcdr_server.logger
 
 	# ------------------------
-	#		  Utils
+	#    Instance Getters
 	# ------------------------
 
 	@classmethod
@@ -86,6 +87,87 @@ class ServerInterface:
 		A class method, for plugins to get a ServerInterface instance anywhere as long as MCDR is running
 		"""
 		return cls.__global_instance
+
+	def as_basic_server_interface(self) -> 'ServerInterface':
+		"""
+		Return a :class:`ServerInterface` instance. The type of the return value is exactly the :class:`ServerInterface`
+
+		It's used for removing the plugin information inside :class:`PluginServerInterface` when you need to send a :class:`ServerInterface` as parameter
+		"""
+		return self.get_instance()
+
+	def as_plugin_server_interface(self) -> Optional['PluginServerInterface']:
+		"""
+		Return a :class:`PluginServerInterface` instance.
+
+		If the object is exactly a :class:`PluginServerInterface` instance, return itself
+
+		If the plugin context is available, return the :class:`PluginServerInterface` for the related plugin.
+		Currently, plugin context is only available inside the following scenarios:
+
+		1.  :ref:`Plugin entrypoint <plugin-entrypoint>` module loading
+		2.  :doc:`Event listener </plugin_dev/event>` callback invocation
+		3.  :doc:`Command </plugin_dev/command>` callback invocation
+		"""
+		plugin = self._mcdr_server.plugin_manager.get_current_running_plugin()
+		if plugin is not None:
+			return plugin.server_interface
+		return None
+
+	@classmethod
+	def si(cls) -> 'ServerInterface':
+		"""
+		Alias / Shortform of :meth:`get_instance`,
+		and never returns None
+
+		:raise RuntimeError: If MCDR is not running
+		"""
+		si = cls.get_instance()
+		if si is None:
+			raise RuntimeError('get ServerInterface failed, MCDR is not running')
+		return si
+
+	@classmethod
+	def si_opt(cls) -> Optional['ServerInterface']:
+		"""
+		Alias / Shortform of :meth:`get_instance`,
+		get an optional :class:`ServerInterface` instance
+
+		:return: The :class:`ServerInterface` instance, or None if failed
+		"""
+		return cls.get_instance()
+
+	@classmethod
+	def psi(cls) -> 'PluginServerInterface':
+		"""
+		Shortform of the combination of :meth:`get_instance` + :meth:`as_plugin_server_interface`,
+		and never returns None
+
+		:raise RuntimeError: Get :class:`PluginServerInterface` failed. This might occur because
+			MCDR is not running (see :meth:`si`),
+			or plugin context is unavailable (see :meth:`as_plugin_server_interface`)
+		"""
+		psi = cls.si().as_plugin_server_interface()
+		if psi is None:
+			raise RuntimeError('get PluginServerInterface failed, current thread {} does not contain enough plugin context'.format(threading.current_thread()))
+		return psi
+
+	@classmethod
+	def psi_opt(cls) -> Optional['PluginServerInterface']:
+		"""
+		Shortform of the combination of :meth:`get_instance` + :meth:`as_plugin_server_interface`,
+		get an optional :class:`PluginServerInterface` instance
+
+		:return: The :class:`PluginServerInterface` instance for the current plugin, or None if failed
+		"""
+		si = cls.get_instance()
+		if si is not None:
+			return si.as_plugin_server_interface()
+		return None
+
+	# ------------------------
+	#          Utils
+	# ------------------------
 
 	def tr(self, translation_key: str, *args, language: Optional[str] = None, **kwargs) -> MessageText:
 		"""
@@ -125,26 +207,8 @@ class ServerInterface:
 		text.set_translator(self.tr)  # not that necessary tbh, just in case self.tr != ServerInterface.get_instance().tr somehow
 		return text
 
-	def as_basic_server_interface(self) -> 'ServerInterface':
-		"""
-		Return a :class:`ServerInterface` instance. The type of the return value is exactly the :class:`ServerInterface`
-
-		It's used for removing the plugin information inside :class:`PluginServerInterface` when you need to send a :class:`ServerInterface` as parameter
-		"""
-		return self.get_instance()
-
-	def as_plugin_server_interface(self) -> Optional['PluginServerInterface']:
-		"""
-		Return a :class:`PluginServerInterface` instance. If current thread is not a MCDR provided thread and the object is not
-		a :class:`PluginServerInterface` instance, it will return None
-		"""
-		plugin = self._mcdr_server.plugin_manager.get_current_running_plugin()
-		if plugin is not None:
-			return plugin.server_interface
-		return None
-
 	# ------------------------
-	#	  Server Control
+	#      Server Control
 	# ------------------------
 
 	def start(self) -> bool:
@@ -327,7 +391,7 @@ class ServerInterface:
 		return self._mcdr_server.server_information.copy()
 
 	# ------------------------
-	#	 Text Interaction
+	#     Text Interaction
 	# ------------------------
 
 	def execute(self, text: str, *, encoding: Optional[str] = None) -> None:
@@ -410,7 +474,7 @@ class ServerInterface:
 		source.reply(text, encoding=encoding, console_text=console_text)
 
 	# ------------------------
-	#	  Plugin Queries
+	#      Plugin Queries
 	# ------------------------
 
 	def __existed_plugin_info_getter(self, plugin_id: str, handler: Callable[['AbstractPlugin'], Any], *, regular: bool):
@@ -507,7 +571,7 @@ class ServerInterface:
 		return result
 
 	# ------------------------
-	#	 Plugin Operations
+	#     Plugin Operations
 	# ------------------------
 
 	# Notes: All plugin manipulation will trigger a dependency check, which might cause unwanted plugin operations
@@ -769,7 +833,7 @@ class ServerInterface:
 		self._mcdr_server.command_manager.execute_command(command, source)
 
 	# ------------------------
-	#		Preference
+	#    	Preference
 	# ------------------------
 
 	def get_preference(self, obj: Union[str, PlayerCommandSource, ConsoleCommandSource]) -> PreferenceItem:
@@ -812,7 +876,7 @@ class ServerInterface:
 		return self._mcdr_server.preference_manager.set_preference(obj, preference)
 
 	# ------------------------
-	#		   Misc
+	#    	   Misc
 	# ------------------------
 
 	def is_on_executor_thread(self) -> bool:
@@ -876,7 +940,7 @@ class PluginServerInterface(ServerInterface):
 		return PluginCommandSource(self, self.__plugin)
 
 	# ------------------------
-	#	 Plugin Registry
+	#     Plugin Registry
 	# ------------------------
 
 	def register_event_listener(self, event: Union[PluginEvent, str], callback: Callable, priority: Optional[int] = None) -> None:
@@ -926,7 +990,7 @@ class PluginServerInterface(ServerInterface):
 		self.__plugin.register_translation(language, mapping)
 
 	# ------------------------
-	#	  Plugin Utils
+	#      Plugin Utils
 	# ------------------------
 
 	def get_self_metadata(self) -> Metadata:

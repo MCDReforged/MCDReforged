@@ -1,4 +1,3 @@
-import threading
 from typing import Callable, Union, Optional
 
 from mcdreforged.plugin.plugin_event import PluginEvent
@@ -36,13 +35,10 @@ def event_listener(event: Union[PluginEvent, str], *, priority: Optional[int] = 
 	:keyword priority: Optional, the priority of the event listener
 	:raise TypeError: If given *event* is invalid
 	:raise RuntimeError: If it fails to acquire a :class:`~mcdreforged.plugin.server_interface.PluginServerInterface`
-		(mostly due to the current thread is not a MCDR provided thread, so MCDR cannot figure out what the current plugin is)
+		(see :meth:`~mcdreforged.plugin.server_interface.ServerInterface.as_plugin_server_interface` for more details)
 	"""
-	def wrapper(callback: Callable):
-		server = ServerInterface.get_instance().as_plugin_server_interface()
-		if server is None:
-			raise RuntimeError('Cannot get current executing plugin, current thread: {}'.format(threading.current_thread()))
-		server.register_event_listener(event, callback, priority)
+	def wrapper(callback: Callable) -> Callable:
+		ServerInterface.psi().register_event_listener(event, callback, priority)
 		return callback
 
 	if not isinstance(event, (PluginEvent, str)):

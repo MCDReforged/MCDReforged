@@ -8,16 +8,24 @@ ServerInterface
 
 .. autoclass:: ServerInterface
 
+Instance Getters
+----------------
+
+.. automethod:: ServerInterface.get_instance
+.. automethod:: ServerInterface.as_basic_server_interface
+.. automethod:: ServerInterface.as_plugin_server_interface
+.. automethod:: ServerInterface.si
+.. automethod:: ServerInterface.si_opt
+.. automethod:: ServerInterface.psi
+.. automethod:: ServerInterface.psi_opt
+
 Utils
 -----
 
 .. autoattribute:: ServerInterface.MCDR
 .. autoproperty:: ServerInterface.logger
-.. automethod:: ServerInterface.get_instance
 .. automethod:: ServerInterface.tr
 .. automethod:: ServerInterface.rtr
-.. automethod:: ServerInterface.as_basic_server_interface
-.. automethod:: ServerInterface.as_plugin_server_interface
 
 Server Control
 --------------
