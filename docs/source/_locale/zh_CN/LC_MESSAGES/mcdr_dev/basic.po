@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-26 02:37+0800\n"
+"POT-Creation-Date: 2023-07-16 23:36+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.9.0\n"
+"Generated-By: Babel 2.9.1\n"
 
 #: ../mcdr_dev/basic.rst:3
 msgid "Basics"
@@ -81,25 +81,40 @@ msgstr "从 python 脚本启动"
 
 #: ../mcdr_dev/basic.rst:40
 msgid ""
-"Besides using ``python -m mcdreforged`` to launch MCDR, you can also use "
-"python interpreter to execute ``MCDReforged.py`` to launch MCDR"
-msgstr ""
-"除了使用 ``python -m mcdreforged`` 来启动 MCDR 外，你还可以用 python 解释器执行 "
-"``MCDReforged.py`` 来启动 MCDR"
+"In development environment, you cannot use command ``mcdreforged`` to "
+"launch MCDR -- that's only available in production environment"
+msgstr "在开发环境中，你无法使用 ``mcdreforged`` 指令来启动 MCDR——那只在生产环境中可用"
 
-#: ../mcdr_dev/basic.rst:46
+#: ../mcdr_dev/basic.rst:42
+msgid ""
+"To launch MCDR in development, you can run the following command in the "
+"root of the MCDR repository:"
+msgstr "为了在开发环境中启动 MCDR，你可以在 MCDR 仓库根路径中执行下述指令："
+
+#: ../mcdr_dev/basic.rst:56
+msgid "The above command also works in production environment"
+msgstr "上述指令在生产环境中也可以使用"
+
+#: ../mcdr_dev/basic.rst:58
+msgid ""
+"Besides that, you can also use python to execute the ``MCDReforged.py`` "
+"in the repository to launch MCDR"
+msgstr ""
+"除此之外，你还可以用 python 解释器执行 ``MCDReforged.py`` 来启动 MCDR"
+
+#: ../mcdr_dev/basic.rst:64
 msgid ""
 "``MCDReforged.py`` is just a simple wrapper for launching MCDR with the "
 "following codes"
 msgstr "``MCDReforged.py`` 只是一个简单的启动 MCDR 的包装，它的代码如下所示"
 
-#: ../mcdr_dev/basic.rst:57
+#: ../mcdr_dev/basic.rst:75
 msgid ""
 "``MCDReforged.py`` also works for MCDR installed by ``pip`` command, "
 "which means that it works in production environment too"
 msgstr "运行 ``MCDReforged.py`` 同样适用于从 ``pypi`` 安装的 MCDR，这意味着它同样适用于生产环境中"
 
-#: ../mcdr_dev/basic.rst:59
+#: ../mcdr_dev/basic.rst:77
 msgid ""
 "For windows users, if you have bound a correct python interpreter to "
 "``*.py`` files you can also double click the ``MCDReforged.py`` to start "

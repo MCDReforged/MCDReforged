@@ -37,7 +37,25 @@ Don't forget to regenerate the egg_info by using the same command after you chan
 Launch via python script
 ------------------------
 
-Besides using ``python -m mcdreforged`` to launch MCDR, you can also use python interpreter to execute ``MCDReforged.py`` to launch MCDR
+In development environment, you cannot use command ``mcdreforged`` to launch MCDR -- that's only available in production environment
+
+To launch MCDR in development, you can run the following command in the root of the MCDR repository:
+
+.. tab:: Windows
+
+    .. code-block:: bat
+
+        python -m mcdreforged
+
+.. tab:: Linux
+
+    .. code-block:: bash
+
+        python3 -m mcdreforged
+
+The above command also works in production environment
+
+Besides that, you can also use python to execute the ``MCDReforged.py`` in the repository to launch MCDR
 
 .. code-block:: bash
 
