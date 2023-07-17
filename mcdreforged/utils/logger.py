@@ -193,10 +193,10 @@ class MCColorFormatControl:
 		return text
 
 
-class MCDReforgedFormatter(ColoredFormatter, MCColorFormatControl):
-	def formatMessage(self, record):
+class MCDReforgedFormatter(ColoredFormatter):
+	def formatMessage(self, record: logging.LogRecord):
 		text = super().formatMessage(record)
-		return self.modify_message_text(text)
+		return MCColorFormatControl.modify_message_text(text)
 
 
 class NoColorFormatter(logging.Formatter):
@@ -207,10 +207,10 @@ class NoColorFormatter(logging.Formatter):
 class PluginIdAwareFormatter(logging.Formatter):
 	PLUGIN_ID_KEY = 'plugin_id'
 
-	def __init__(self, fmt_class: Type[logging.Formatter], fmt_str_with_key: str, fmt_without_key: str, **kwargs):
+	def __init__(self, fmt_class: Type[logging.Formatter], fmt_str_with_key: str, fmt_str_without_key: str, **kwargs):
 		super().__init__()
 		self.fmt_with_key = fmt_class(fmt_str_with_key, **kwargs)
-		self.fmt_without_key = fmt_class(fmt_without_key, **kwargs)
+		self.fmt_without_key = fmt_class(fmt_str_without_key, **kwargs)
 
 	def format(self, record: logging.LogRecord):
 		if hasattr(record, self.PLUGIN_ID_KEY):
@@ -283,8 +283,8 @@ class MCDReforgedLogger(logging.Logger):
 		return (cls.debug_options & flags) != 0
 
 	def _log(self, *args, **kwargs) -> None:
-		extra_args = kwargs.get('extra', {})
 		if self.__plugin_id is not None:
+			extra_args = kwargs.get('extra', {})
 			extra_args[PluginIdAwareFormatter.PLUGIN_ID_KEY] = self.__plugin_id
 			kwargs['extra'] = extra_args
 
@@ -296,7 +296,7 @@ class MCDReforgedLogger(logging.Logger):
 			with MCColorFormatControl.disable_minecraft_color_code_transform():
 				super().debug(*args)
 
-	def set_file(self, file_name: str):
+	def set_file(self, file_path: str):
 		"""
 		**Not public API**
 
@@ -304,8 +304,8 @@ class MCDReforgedLogger(logging.Logger):
 		"""
 		if self.file_handler is not None:
 			self.unset_file()
-		file_util.touch_directory(os.path.dirname(file_name))
-		self.file_handler = ZippingDayRotatingFileHandler(file_name, self.ROTATE_DAY_COUNT)
+		file_util.touch_directory(os.path.dirname(file_path))
+		self.file_handler = ZippingDayRotatingFileHandler(file_path, self.ROTATE_DAY_COUNT)
 		self.file_handler.setFormatter(self.FILE_FORMATTER)
 		self.addHandler(self.file_handler)
 
