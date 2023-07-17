@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-13 01:28+0800\n"
+"POT-Creation-Date: 2023-07-18 02:58+0800\n"
 "PO-Revision-Date: 2021-01-23 09:12+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -67,11 +67,11 @@ msgstr "安装"
 
 #: ../quick_start.rst:26
 msgid ""
-"MCDR is available in `pypi <https://pypi.org/project/mcdreforged>`__. It "
-"can be installed via ``pip`` command"
+"MCDR is available in `pypi <https://pypi.org/project/mcdreforged>`__, "
+"which means it can be installed via the ``pip`` command:"
 msgstr ""
-"MCDR 在 `pypi <https://pypi.org/project/mcdreforged>`__ 中可用。它可以通过 ``pip`` "
-"命令安装："
+"MCDR 已于 `pypi <https://pypi.org/project/mcdreforged>`__ 中发布，因此你可以通过 "
+"``pip`` 命令来安装 MCDR："
 
 #: ../quick_start.rst:40
 msgid ""
@@ -79,11 +79,11 @@ msgid ""
 "https://pypi.tuna.tsinghua.edu.cn/simple`` prefix to the command to use "
 "`Tsinghua tuna mirror "
 "<https://mirrors.tuna.tsinghua.edu.cn/help/pypi/>`__ to speed up the "
-"installation"
+"installation:"
 msgstr ""
 "对于国内用户，你可以在 pip 指令的末尾添加 ``-i https://pypi.tuna.tsinghua.edu.cn/simple`` "
 "后缀来使用 `清华 pypi 镜像 <https://mirrors.tuna.tsinghua.edu.cn/help/pypi/>`__ "
-"来加速 MCDR 的下载安装"
+"来加速 MCDR 的下载安装："
 
 #: ../quick_start.rst:54
 msgid ""
@@ -91,24 +91,30 @@ msgid ""
 "unless you're a developer of MCDR and you know what you are doing"
 msgstr "**不要** 直接下载 MCDR 的源代码并从中启动 MCDR，除非你是一个知道你自己在做什么的 MCDR 开发者"
 
-#: ../quick_start.rst:57
+#: ../quick_start.rst:56
+msgid ""
+"After MCDR has been installed using pip, you can verify the installation "
+"with the following command:"
+msgstr "在使用 pip 安装 MCDR 后，你可以用以下指令来验证安装是否成功："
+
+#: ../quick_start.rst:64
 msgid "Start up"
 msgstr "启动"
 
-#: ../quick_start.rst:59
+#: ../quick_start.rst:66
 msgid ""
 "Let's say your are going to start MCDR in a folder named "
 "``my_mcdr_server``. Then you can run the following commands to initialize"
 " the environment for MCDR first:"
 msgstr "假设你想在 ``my_mcdr_server`` 这一个文件夹中运行 MCDR，那么你可以运行以下指令以初始化 MCDR 的运行环境："
 
-#: ../quick_start.rst:66
+#: ../quick_start.rst:73
 msgid ""
 "MCDR will generated the default configuration and permission files, as "
 "well as some default folders. The file structure will be like this"
 msgstr "MCDR 将生成默认的配置文件、权限文件，以及一些默认的文件夹。此时的路径结构将会如下所示："
 
-#: ../quick_start.rst:79
+#: ../quick_start.rst:86
 msgid ""
 "Now put your server files into the server folder (``server`` by default),"
 " then modify the configuration file ``config.yml`` and permission file "
@@ -117,17 +123,17 @@ msgstr ""
 "现在，把你的服务端文件放入服务端文件夹里（默认为 ``server`` 文件夹），然后修改配置文件 ``config.yml`` 以及权限文件 "
 "``permission.yml`` 以满足你的需求"
 
-#: ../quick_start.rst:81
+#: ../quick_start.rst:88
 msgid ""
 "After that you can launch MCDR, and it will start handling the server "
 "correctly"
 msgstr "完成后，你就可以启动 MCDR，它将开始正确地操控服务器运行"
 
-#: ../quick_start.rst:88
+#: ../quick_start.rst:95
 msgid "Upgrade"
 msgstr "更新"
 
-#: ../quick_start.rst:90
+#: ../quick_start.rst:97
 msgid ""
 "With the help of `pypi <https://pypi.org/project/mcdreforged/>`__, MCDR "
 "can be easily upgraded via a single command"
@@ -135,15 +141,15 @@ msgstr ""
 "在 `pypi <https://pypi.org/project/mcdreforged/>`__ 的帮助下，MCDR "
 "可以轻松地通过这个命令升级："
 
-#: ../quick_start.rst:104
+#: ../quick_start.rst:111
 msgid "That's it!"
 msgstr "就酱！"
 
-#: ../quick_start.rst:106
+#: ../quick_start.rst:113
 msgid "For Chinese users, you can use tuna mirror to speed up the upgrading too"
 msgstr "如果你是国内用户，你同样可以借助清华 pypi 镜像来加速 MCDR 的升级："
 
-#: ../quick_start.rst:112
+#: ../quick_start.rst:127
 msgid ""
 "Development builds are available in `Test PyPi "
 "<https://test.pypi.org/project/mcdreforged/#history>`__, you can install "
@@ -152,33 +158,33 @@ msgstr ""
 "开发版本可在 `Test PyPi <https://test.pypi.org/project/mcdreforged/#history>`__"
 " 中找到。如果你有特殊需要，你可以安装它们"
 
-#: ../quick_start.rst:115
+#: ../quick_start.rst:130
 msgid "Next"
 msgstr "下一步"
 
-#: ../quick_start.rst:117
+#: ../quick_start.rst:132
 msgid ""
 "Now, you've got the basics of how to set up, run, and upgrade MCDR. "
 "What's next? Feel free to check out other parts of the documentation"
 msgstr "现在，你已经掌握了部署、运行以及升级 MCDR 的方法。接下来，你可以进一步探索文档的其他部分"
 
-#: ../quick_start.rst:119
+#: ../quick_start.rst:134
 msgid "Check how to configure MCDR: :doc:`/configuration`"
 msgstr "查看配置 MCDR 的方式：:doc:`/configuration`"
 
-#: ../quick_start.rst:120
+#: ../quick_start.rst:135
 msgid "Discover the MCDR command system: :doc:`/command`"
 msgstr "探索 MCDR 的命令系统：:doc:`/command`"
 
-#: ../quick_start.rst:121
+#: ../quick_start.rst:136
 msgid "Take a look at MCDR's built-in permission system: :doc:`/permission`"
 msgstr "了解 MCDR 的内置权限系统：:doc:`/permission`"
 
-#: ../quick_start.rst:122
+#: ../quick_start.rst:137
 msgid "Learn more about MCDR command line interface: :doc:`/plugin_dev/cli`"
 msgstr "学习更多关于 MCDR 命令行接口的信息：:doc:`/plugin_dev/cli`"
 
-#: ../quick_start.rst:123
+#: ../quick_start.rst:138
 msgid "Dive into the document to explore more about MCDR ..."
 msgstr "深入文档以探索更多关于 MCDR 的内容……"
 

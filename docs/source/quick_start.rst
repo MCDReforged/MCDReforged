@@ -23,7 +23,7 @@ The detailed Python version requirements are as shown in the table below
 Install
 -------
 
-MCDR is available in `pypi <https://pypi.org/project/mcdreforged>`__. It can be installed via ``pip`` command
+MCDR is available in `pypi <https://pypi.org/project/mcdreforged>`__, which means it can be installed via the ``pip`` command:
 
 .. tab:: Windows
 
@@ -37,7 +37,7 @@ MCDR is available in `pypi <https://pypi.org/project/mcdreforged>`__. It can be 
 
         pip3 install mcdreforged
 
-For Chinese users, you can added a ``-i https://pypi.tuna.tsinghua.edu.cn/simple`` prefix to the command to use `Tsinghua tuna mirror <https://mirrors.tuna.tsinghua.edu.cn/help/pypi/>`__ to speed up the installation
+For Chinese users, you can added a ``-i https://pypi.tuna.tsinghua.edu.cn/simple`` prefix to the command to use `Tsinghua tuna mirror <https://mirrors.tuna.tsinghua.edu.cn/help/pypi/>`__ to speed up the installation:
 
 .. tab:: Windows
 
@@ -52,6 +52,13 @@ For Chinese users, you can added a ``-i https://pypi.tuna.tsinghua.edu.cn/simple
         pip3 install mcdreforged -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 **DO NOT** download the source files of MCDR and execute them directly, unless you're a developer of MCDR and you know what you are doing
+
+After MCDR has been installed using pip, you can verify the installation with the following command:
+
+.. code-block-mcdr-version:: bash
+
+    $ mcdreforged
+    MCDReforged v@@MCDR_VERSION@@
 
 Start up
 --------
@@ -105,9 +112,17 @@ That's it!
 
 For Chinese users, you can use tuna mirror to speed up the upgrading too
 
-.. code-block:: bash
+.. tab:: Windows
 
-    pip install mcdreforged -U -i https://pypi.tuna.tsinghua.edu.cn/simple
+    .. code-block:: bat
+
+        pip install mcdreforged -U -i https://pypi.tuna.tsinghua.edu.cn/simple
+
+.. tab:: Linux
+
+    .. code-block:: bash
+
+        pip3 install mcdreforged -U -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 Development builds are available in `Test PyPi <https://test.pypi.org/project/mcdreforged/#history>`__, you can install them if you have special needs
 
