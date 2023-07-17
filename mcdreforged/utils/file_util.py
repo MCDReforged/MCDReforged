@@ -1,6 +1,6 @@
 import contextlib
 import os
-from typing import Callable, ContextManager, TextIO
+from typing import Callable, ContextManager, TextIO, Union
 
 
 def list_all(directory: str, predicate: Callable[[str], bool] = lambda file_path: True):
@@ -16,7 +16,7 @@ def list_file_with_suffix(directory: str, suffix: str):
 	return list_file(directory, lambda file_path: file_path.endswith(suffix))
 
 
-def touch_directory(directory_path: str):
+def touch_directory(directory_path: Union[str, os.PathLike]):
 	if not os.path.isdir(directory_path):
 		os.makedirs(directory_path)
 
