@@ -269,7 +269,7 @@ msgstr "用于构建指令树结构"
 
 #: mcdreforged.command.builder.nodes.basic.AbstractNode.then:5 of
 msgid "A node instance to be added to current node's children list"
-msgstr "要添加到当前节点的儿子列表中的节点实例"
+msgstr "要添加到当前节点的子列表中的节点实例"
 
 #: mcdreforged.command.builder.nodes.basic.AbstractNode.then:7
 #: mcdreforged.command.builder.tools.SimpleCommandBuilder.print_tree:3 of
@@ -424,7 +424,7 @@ msgstr "你需要一个简短的指令和一个全路径指令来执行相同的
 msgid ""
 "You want to repeatedly re-enter a command node's children when parsing "
 "commands"
-msgstr "你需要在解析指令时重复多次进入一个节点的儿子"
+msgstr "当解析“命令”时，你希望重复进入一个命令节点的子节点。"
 
 #: mcdreforged.command.builder.nodes.basic.AbstractNode.redirects:19 of
 msgid ""
