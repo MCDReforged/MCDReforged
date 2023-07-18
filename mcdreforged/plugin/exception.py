@@ -1,0 +1,2 @@
+class RequirementCheckFailure(Exception):
+	pass

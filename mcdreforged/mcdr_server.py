@@ -3,12 +3,12 @@ import os
 import sys
 import time
 import traceback
+from importlib.metadata import PackageNotFoundError, Distribution
 from pathlib import Path
 from subprocess import Popen, PIPE, STDOUT, TimeoutExpired
 from threading import Lock, Condition
-from typing import Optional, Callable, Any, List
+from typing import Optional, Callable, Any
 
-import pkg_resources
 import psutil
 from ruamel.yaml import YAMLError
 
@@ -151,19 +151,31 @@ class MCDReforgedServer:
 		from_source_reason = None
 		mcdr_pkg = core_constant.PACKAGE_NAME  # should be "mcdreforged"
 		try:
-			distributions: List[pkg_resources.Distribution] = pkg_resources.require(mcdr_pkg)
-		except pkg_resources.ResolutionError:
+			distribution = Distribution.from_name(mcdr_pkg)
+		except PackageNotFoundError:
 			from_source_reason = '{} distribution is not found in python packages'.format(mcdr_pkg)
 		else:
-			for distribution in distributions:
-				if distribution.project_name == mcdr_pkg:
-					current_path = Path(__file__).absolute()
-					distribution_path = Path(distribution.location).absolute()
+			current_file = Path(__file__).absolute()
+			dist_module_path = 'unknown'
+			for file in distribution.files or []:
+				dist_file = Path(file.locate())
 
-					# distribution_path/mcdreforged/mcdr_server.py
-					if not current_path.parent.parent.samefile(distribution_path):
-						from_source_reason = 'current source path ({}) is not in {} distribution path ({})'.format(current_path, mcdr_pkg, distribution_path)
-					break
+				# find the mcdr_server.py in a mcdreforged directory in the distribution files
+				if dist_file.name != current_file.name:
+					continue
+
+				dist_path = dist_file.parent
+				if dist_path != dist_path.parent / mcdr_pkg:
+					continue
+
+				dist_module_path = dist_path
+				try:
+					if current_file.samefile(dist_file):
+						break
+				except OSError:
+					pass
+			else:
+				from_source_reason = 'current source file ({}) is not in {} distribution module ({})'.format(current_file, mcdr_pkg, dist_module_path)
 
 		if from_source_reason is not None:
 			self.logger.warning('Looks like you\'re launching MCDR from source, since {}'.format(from_source_reason))

@@ -1,16 +1,17 @@
 import importlib
 import json
 import os
+import re
 import sys
 from abc import ABC
 from pathlib import Path
 from types import ModuleType
 from typing import IO, Collection
 
-import pkg_resources
 from ruamel.yaml import YAML
 
 from mcdreforged.constants import plugin_constant
+from mcdreforged.plugin.exception import RequirementCheckFailure
 from mcdreforged.plugin.meta.metadata import Metadata
 from mcdreforged.plugin.type.regular_plugin import RegularPlugin
 from mcdreforged.utils.exception import BrokenMetadata, IllegalPluginStructure
@@ -97,13 +98,41 @@ class MultiFilePlugin(RegularPlugin, ABC):
 		"""
 		raise NotImplementedError()
 
+	COMMENT_REGEX = re.compile(r'(^|\s+)#.*$')
+
 	def __check_requirements(self):
 		try:
 			req_file = self.open_file(plugin_constant.PLUGIN_REQUIREMENTS_FILE)
 		except Exception:
 			return
 		with req_file:
-			requirements = []
-			for line in req_file.readlines():
-				requirements.append(line.decode('utf8').strip('\r\n'))
-		pkg_resources.require(requirements)
+			import packaging.requirements as pr
+			import packaging.version as pv
+			import importlib.metadata as im
+
+			for line_buf in req_file.readlines():
+				# ref: pip._internal.req.req_file.ignore_comments
+				line: str = line_buf.decode('utf8')
+				line = self.COMMENT_REGEX.sub('', line).strip()
+				if len(line) == 0:
+					continue
+
+				try:
+					req = pr.Requirement(line)  # InvalidRequirement
+					dist = im.distribution(req.name)  # PackageNotFoundError
+					version = pv.Version(dist.version)  # InvalidVersion
+					if not req.specifier.contains(version, True):
+						raise RequirementCheckFailure('version unsatisfied for required package {}: expect {}, but installed {}'.format(
+							repr(req.name), repr(str(req.specifier)), repr(version)
+						))
+				except pr.InvalidRequirement as e:
+					# no raise here, since we don't fully support the complete requirements.txt schema
+					self.mcdr_server.logger.warning('Invalid / Unsupported requirement declaration {}:'.format(repr(line)))
+					for err_line in str(e).splitlines():
+						self.mcdr_server.logger.warning('    {}'.format(err_line))
+				except im.PackageNotFoundError as e:
+					raise RequirementCheckFailure('required package {} not installed'.format(repr(str(e))))
+				except pv.InvalidVersion as e:
+					raise RequirementCheckFailure('installed package {} version {} does not conform to PEP 440: {}'.format(
+						repr(req.name), repr(dist.version), e
+					))

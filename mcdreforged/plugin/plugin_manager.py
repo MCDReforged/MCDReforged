@@ -8,12 +8,11 @@ import threading
 from contextlib import contextmanager
 from typing import Callable, Dict, Optional, Any, Tuple, List, TYPE_CHECKING, Deque
 
-import pkg_resources
-
 from mcdreforged.constants import core_constant, plugin_constant
 from mcdreforged.plugin import plugin_factory
 from mcdreforged.plugin.builtin.mcdreforged_plugin.mcdreforged_plugin import MCDReforgedPlugin
 from mcdreforged.plugin.builtin.python_plugin import PythonPlugin
+from mcdreforged.plugin.exception import RequirementCheckFailure
 from mcdreforged.plugin.meta.dependency_walker import DependencyWalker
 from mcdreforged.plugin.operation_result import PluginOperationResult, SingleOperationResult
 from mcdreforged.plugin.plugin_event import MCDRPluginEvents, MCDREvent, EventListener
@@ -174,9 +173,9 @@ class PluginManager:
 		try:
 			plugin.load()
 		except Exception as e:
-			if isinstance(e, pkg_resources.ResolutionError):
+			if isinstance(e, RequirementCheckFailure):
 				self.logger.error(self.mcdr_server.tr('plugin_manager.load_plugin.fail', plugin.get_name()))
-				self.logger.error(self.mcdr_server.tr('plugin_manager.load_plugin.resolution_error', plugin.get_name(), '{}: {}'.format(type(e).__name__, e)))
+				self.logger.error(self.mcdr_server.tr('plugin_manager.load_plugin.resolution_error', plugin.get_name(), str(e)))
 			else:
 				self.logger.exception(self.mcdr_server.tr('plugin_manager.load_plugin.fail', plugin.get_name()))
 			return None
@@ -227,9 +226,9 @@ class PluginManager:
 		try:
 			plugin.reload()
 		except Exception as e:
-			if isinstance(e, pkg_resources.ResolutionError):
+			if isinstance(e, RequirementCheckFailure):
 				self.logger.error(self.mcdr_server.tr('plugin_manager.reload_plugin.fail', plugin.get_name()))
-				self.logger.error(self.mcdr_server.tr('plugin_manager.load_plugin.resolution_error', plugin.get_name(), '{}: {}'.format(type(e).__name__, e)))
+				self.logger.error(self.mcdr_server.tr('plugin_manager.load_plugin.resolution_error', plugin.get_name(), str(e)))
 			else:
 				self.logger.exception(self.mcdr_server.tr('plugin_manager.reload_plugin.fail', plugin.get_name()))
 			self.__unload_plugin(plugin)
