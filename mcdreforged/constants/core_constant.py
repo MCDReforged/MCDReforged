@@ -8,6 +8,7 @@ import os
 NAME_SHORT = 'MCDR'
 NAME = 'MCDReforged'
 PACKAGE_NAME = 'mcdreforged'
+CLI_COMMAND = PACKAGE_NAME
 
 # MCDR Version Storage
 # Related: docs/source/conf.py
