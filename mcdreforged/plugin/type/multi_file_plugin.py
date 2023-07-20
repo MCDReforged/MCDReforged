@@ -15,6 +15,7 @@ from mcdreforged.plugin.exception import RequirementCheckFailure
 from mcdreforged.plugin.meta.metadata import Metadata
 from mcdreforged.plugin.type.regular_plugin import RegularPlugin
 from mcdreforged.utils.exception import BrokenMetadata, IllegalPluginStructure
+from mcdreforged.utils.logger import DebugOption
 
 
 class MultiFilePlugin(RegularPlugin, ABC):
@@ -86,6 +87,7 @@ class MultiFilePlugin(RegularPlugin, ABC):
 					elif file_extension in ['yml', 'yaml']:
 						translations = dict(YAML().load(file_handler))
 					else:
+						self.mcdr_server.logger.debug('Skipping unknown translation file {} in {}'.format(file_path, repr(self)), option=DebugOption.PLUGIN)
 						continue
 				self.register_translation(language, translations)
 			except Exception:
