@@ -83,7 +83,7 @@ class MultiFilePlugin(RegularPlugin, ABC):
 				with self.open_file(file_path) as file_handler:
 					if file_extension == 'json':
 						translations = json.load(file_handler)
-					elif file_extension == 'yml':
+					elif file_extension in ['yml', 'yaml']:
 						translations = dict(YAML().load(file_handler))
 					else:
 						continue
