@@ -14,7 +14,7 @@ class TaskData(NamedTuple):
 	vip: bool
 
 
-class DoubleQueue(queue.Queue[TaskData]):
+class DoubleQueue(queue.Queue):
 	def __init__(self, maxsize: int):
 		super().__init__(maxsize)
 		self.__queue0: Deque[TaskData]  # VIP
