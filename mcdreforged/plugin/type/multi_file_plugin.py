@@ -112,9 +112,9 @@ class MultiFilePlugin(RegularPlugin, ABC):
 			import packaging.version as pv
 			import importlib.metadata as im
 
-			for line_buf in req_file.readlines():
+			req_file_str = req_file.read().decode('utf8')
+			for i, line in enumerate(req_file_str.splitlines()):
 				# ref: pip._internal.req.req_file.ignore_comments
-				line: str = line_buf.decode('utf8')
 				line = self.COMMENT_REGEX.sub('', line).strip()
 				if len(line) == 0:
 					continue
@@ -129,7 +129,7 @@ class MultiFilePlugin(RegularPlugin, ABC):
 						))
 				except pr.InvalidRequirement as e:
 					# no raise here, since we don't fully support the complete requirements.txt schema
-					self.mcdr_server.logger.warning('Invalid / Unsupported requirement declaration {}:'.format(repr(line)))
+					self.mcdr_server.logger.warning('Invalid / Unsupported requirement declaration {} in line {}:'.format(repr(line), i + 1))
 					for err_line in str(e).splitlines():
 						self.mcdr_server.logger.warning('    {}'.format(err_line))
 				except im.PackageNotFoundError as e:
