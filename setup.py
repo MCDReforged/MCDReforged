@@ -36,7 +36,7 @@ CLASSIFIERS = [
 
 ENTRY_POINTS = {
 	'console_scripts': [
-		'{} = {}.cli.cli_entry:entry_point'.format(core_constant.CLI_COMMAND, core_constant.PACKAGE_NAME)
+		'{} = {}.mcdr_entrypoint:entrypoint'.format(core_constant.CLI_COMMAND, core_constant.PACKAGE_NAME)
 	]
 }
 print('ENTRY_POINTS = {}'.format(ENTRY_POINTS))

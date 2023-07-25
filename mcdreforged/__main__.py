@@ -1,14 +1,12 @@
 """
-Entry for MCDR
+Entrypoint for the mcdreforged module
 """
-import sys
-
-from mcdreforged.cli import cli_entry
+from mcdreforged import mcdr_entrypoint
 
 
 def main():
-	return cli_entry.entry_point()
+	return mcdr_entrypoint.entrypoint()
 
 
 if __name__ == '__main__':
-	sys.exit(main())
+	main()
