@@ -34,3 +34,8 @@ jobs:
           pip install pytest
           pip install pytest-cov
           pytest tests --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
+
+      - name: Ensure MCDR is runnable
+        run: |
+          # it should load at least most of the MCDR modules
+          python -m mcdreforged -V

@@ -33,7 +33,7 @@ def entry_point():
 		return
 
 	parser = ArgumentParser(
-		prog=core_constant.PACKAGE_NAME,
+		prog=core_constant.CLI_COMMAND,
 		description='{} CLI'.format(core_constant.NAME),
 	)
 	parser.add_argument('-q', '--quiet', help='Disable CLI output', action='store_true')

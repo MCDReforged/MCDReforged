@@ -1,6 +1,5 @@
 import locale
 import os
-import sys
 import time
 import traceback
 from importlib.metadata import PackageNotFoundError, Distribution
@@ -187,7 +186,8 @@ class MCDReforgedServer:
 
 	def __on_file_missing(self):
 		self.logger.info('Looks like MCDR is not initialized at current directory {}'.format(os.getcwd()))
-		self.logger.info('Use "{} -m {} init" to initialize MCDR first'.format(sys.argv[0], core_constant.PACKAGE_NAME))
+		self.logger.info('Use command "{} init" to initialize MCDR first'.format(core_constant.CLI_COMMAND))
+		self.logger.info('See document https://mcdreforged.readthedocs.io/en/latest/quick_start.html#start-up')
 
 	# --------------------------
 	#         Translate
