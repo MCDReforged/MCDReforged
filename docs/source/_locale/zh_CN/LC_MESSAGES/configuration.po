@@ -401,7 +401,7 @@ msgid "plugin_directories"
 msgstr "plugin_directories"
 
 #: ../configuration.rst:215
-msgid "The list of directory path where MCDR will search for plugin to load"
+msgid "The list of directory path where MCDR will search for plugins to load"
 msgstr "MCDR 搜索将要加载插件的目录列表"
 
 #: ../configuration.rst:217

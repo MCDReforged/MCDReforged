@@ -1,5 +1,5 @@
-# Configuration file for MCDReforged
-# Check https://mcdreforged.readthedocs.io/en/latest/configure.html for detail
+# The configuration file for MCDReforged
+# See the document https://mcdreforged.readthedocs.io/en/latest/configuration.html for more details
 
 
 # =========================================
@@ -21,22 +21,22 @@ start_command: java -Xms1G -Xmx2G -Dfile.encoding=UTF-8 -jar minecraft_server.ja
 
 
 # The handler to the specific way to parse the standard output text of the server and the correct command for server control
-# vanilla_handler, for Vanilla / Carpet / Fabric server
-# beta18_handler, for Vanilla server in beta1.8 versions
-# bukkit_handler, For Bukkit / Spigot server with Minecraft version below 1.14, and Paper / Mohist server in all version
-# bukkit14_handler, For Bukkit / Spigot server with Minecraft version 1.14 and above
-# forge_handler, For Forge server
-# cat_server_handler, For CatServer server
-# bungeecord_handler, for Bungeecord server
-# waterfall_handler,  for Waterfall server
-# velocity_handler,  for Velocity server
+#   vanilla_handler    , for Vanilla / Carpet / Fabric server
+#   beta18_handler     , for Vanilla server in beta1.8 versions
+#   bukkit_handler     , for Bukkit / Spigot server with Minecraft version below 1.14, and Paper / Mohist server in all version
+#   bukkit14_handler   , for Bukkit / Spigot server with Minecraft version 1.14 and above
+#   forge_handler      , for Forge server
+#   cat_server_handler , for CatServer server
+#   bungeecord_handler , for Bungeecord server
+#   waterfall_handler  , for Waterfall server
+#   velocity_handler   , for Velocity server
 handler: vanilla_handler
 
 
-# The encoding / decoding format used to encode / decode message to the server.
-# Examples: "utf8", "gbk"
-# Leave it blank for MCDR to automatically detect system encoding
+# The codec format to encode messages to stdin / decode messages from stdout of the server
+# Leave it blank for MCDR to use the system encoding
 # For vanilla Minecraft servers, you need to set "encoding" to utf8, since they always read stdin with UTF-8
+# Examples: "utf8", "gbk"
 
 # MCDR -> Server
 encoding: utf8
@@ -45,14 +45,14 @@ encoding: utf8
 decoding: utf8
 
 
-# The list of directory path where MCDR will search for plugin to load
+# The list of directory path where MCDR will search for plugins to load
 # Example: "path/to/my/plugin/directory"
 plugin_directories:
 - plugins
 
 
-# rcon setting
-# if enabled, plugins can use rcon to query commands from the server
+# Minecraft RCON setting
+# If enabled, plugins can use rcon to query commands from the server
 rcon:
   enable: false
   address: 127.0.0.1

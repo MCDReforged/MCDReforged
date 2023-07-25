@@ -84,7 +84,9 @@ class YamlDataStorage:
 	def __save(self, data: CommentedMap):
 		self._pre_save(data)
 		with file_util.safe_write(self.__file_path, encoding='utf8') as file:
-			YAML().dump(data, file)
+			yaml = YAML()
+			yaml.width = 1048576  # prevent yaml breaks long string into multiple lines
+			yaml.dump(data, file)
 
 	def save(self):
 		with self._data_operation_lock:

@@ -212,7 +212,7 @@ then there's no need for any configuration. You can even leave these 2 options `
 plugin_directories
 ~~~~~~~~~~~~~~~~~~
 
-The list of directory path where MCDR will search for plugin to load
+The list of directory path where MCDR will search for plugins to load
 
 * Option type: a list of string
 * Default value: 
