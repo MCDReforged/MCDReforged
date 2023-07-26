@@ -310,4 +310,6 @@ class PromptToolkitWrapper:
 					input_ = ''
 				return input_.splitlines()
 		else:
-			return [input()]
+			# Cannot just use input()
+			# See #47
+			return [sys.stdin.readline().rstrip('\r\n')]
