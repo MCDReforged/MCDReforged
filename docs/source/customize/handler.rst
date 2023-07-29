@@ -69,11 +69,11 @@ And then you are able to use this handler to handle the server. You need to do t
 3.  Added the path to the custom handler in the :ref:`configuration:custom_handlers` option,
     then set the :ref:`configuration:handler` option to the result of method ``get_name()`` of your handler class, e.g.:
 
-.. code-block:: yaml
+    .. code-block:: yaml
 
-    handler: the_handler_for_my_server
+        handler: the_handler_for_my_server
 
-    custom_handlers:
-    - handlers.my_handler.MyHandler
+        custom_handlers:
+        - handlers.my_handler.MyHandler
 
 That's all you need to do
