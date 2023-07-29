@@ -46,8 +46,8 @@ For example, the following codes above creates a handler than is able to handle 
 And then you are able to use this handler to handle the server. You need to do the following things in the configuration file
 
 
-#.  Set the ``handler`` option in the configuration file to ``the_handler_for_my_server``
-#.  Place your ``my_handler.py`` into a valid python package in the working directory of MCDR, e.g.
+1.  Set the ``handler`` option in the configuration file to ``the_handler_for_my_server``
+2.  Place your ``my_handler.py`` into a valid python package in the working directory of MCDR, e.g.
 
     .. code-block::
 
@@ -66,7 +66,7 @@ And then you are able to use this handler to handle the server. You need to do t
 
         from handlers.my_handler import MyHandler
 
-#.  Added the path to the custom handler in the :ref:`configuration:custom_handlers` option,
+3.  Added the path to the custom handler in the :ref:`configuration:custom_handlers` option,
     then set the :ref:`configuration:handler` option to the result of method ``get_name()`` of your handler class, e.g.:
 
 .. code-block:: yaml
