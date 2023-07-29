@@ -204,6 +204,7 @@ class SimpleCommandBuilder:
 	# --------------
 	#   Interfaces
 	# --------------
+
 	@overload
 	def command(self, command: str) -> CommandCallbackDecorator: ...
 	@overload
