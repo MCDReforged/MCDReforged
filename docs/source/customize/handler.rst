@@ -46,25 +46,34 @@ For example, the following codes above creates a handler than is able to handle 
 And then you are able to use this handler to handle the server. You need to do the following things in the configuration file
 
 
-#. Set the ``handler`` option in the configuration file to ``the_handler_for_my_server``
-#. Place your ``my_handler.py`` into a valid python package in the working directory of MCDR, e.g.
+#.  Set the ``handler`` option in the configuration file to ``the_handler_for_my_server``
+#.  Place your ``my_handler.py`` into a valid python package in the working directory of MCDR, e.g.
 
-.. code-block::
+    .. code-block::
 
-    my_mcdr_server/
-     ├─ handlers/
-     │   ├─ __init__.py
-     │   └─ my_handler.py           <-----------
-     │
-     ├─ server/
-     ├─ config.yml
-     └─ permission.yml
+        my_mcdr_server/
+         ├─ handlers/
+         │   ├─ __init__.py
+         │   └─ my_handler.py           <-----------
+         │
+         ├─ server/
+         ├─ config.yml
+         └─ permission.yml
 
-#. Added the path to the custom handler in the :ref:`configuration:custom_handlers` option, e.g:
+    Now your handler class is accessible with the following python code:
 
-.. code-block::
+    .. code-block:: python
+
+        from handlers.my_handler import MyHandler
+
+#.  Added the path to the custom handler in the :ref:`configuration:custom_handlers` option,
+    then set the :ref:`configuration:handler` option to the result of method ``get_name()`` of your handler class, e.g.:
+
+.. code-block:: yaml
+
+    handler: the_handler_for_my_server
 
     custom_handlers:
-    - handlers.MyHandler
+    - handlers.my_handler.MyHandler
 
 That's all you need to do

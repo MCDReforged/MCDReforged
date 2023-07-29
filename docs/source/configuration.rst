@@ -341,9 +341,9 @@ The name of a handler is defined in the :meth:`~mcdreforged.handler.abstract_ser
 .. code-block:: yaml
 
     custom_handlers:
-    - my.customize.handler.MyHandler
+    - handlers.my_handler.MyHandler
 
-In this example the custom handler package path is ``my.custom.handler`` and the class is name ``MyHandler``
+In this example the custom handler package path is ``handlers.my_handler`` and the class is name ``MyHandler``
 
 custom_info_reactors
 ~~~~~~~~~~~~~~~~~~~~
