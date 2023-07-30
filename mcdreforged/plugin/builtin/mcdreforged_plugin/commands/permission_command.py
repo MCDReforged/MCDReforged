@@ -12,7 +12,7 @@ from mcdreforged.utils import string_util
 
 
 class Validator:
-	__player_name_regex = re.compile(r'\w{1,16}')
+	__player_name_regex = re.compile(r'\w{3,16}')
 
 	@classmethod
 	def player_name(cls, player):
