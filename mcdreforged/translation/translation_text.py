@@ -6,7 +6,7 @@ from typing_extensions import Self
 
 from mcdreforged.minecraft.rtext.style import RColor, RStyle, RAction
 from mcdreforged.minecraft.rtext.text import RTextBase, RText
-from mcdreforged.utils import translation_util
+from mcdreforged.utils import translation_util, class_util
 from mcdreforged.utils.types import TranslationKeyDictRich
 
 
@@ -124,3 +124,6 @@ class RTextMCDRTranslation(RTextBase):
 	def set_hover_text(self, *args) -> Self:
 		self.__post_process.append(lambda rt: rt.set_hover_text(*args))
 		return self
+
+	def __repr__(self) -> str:
+		return class_util.represent(self)

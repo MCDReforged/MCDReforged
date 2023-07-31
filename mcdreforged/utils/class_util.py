@@ -1,5 +1,5 @@
 import importlib
-from typing import Any, Type, Union, Iterable
+from typing import Any, Type, Union, Iterable, Optional, Collection
 
 from mcdreforged.utils import misc_util, tree_printer
 
@@ -51,12 +51,15 @@ def get_all_base_class(cls):
 	return misc_util.unique_list(ret)
 
 
-def represent(obj: Any) -> str:
+def represent(obj: Any, fields: Optional[dict] = None, *, blacklist: Collection[str] = ()) -> str:
 	"""
 	aka repr
 	"""
+	if fields is None:
+		fields = {k: v for k, v in vars(obj).items() if not k.startswith('_')}
+	blacklist = set(blacklist)
 	return '{}[{}]'.format(type(obj).__name__, ','.join([
-		'{}={}'.format(k, repr(v)) for k, v in vars(obj).items() if not k.startswith('_')
+		'{}={}'.format(k, repr(v)) for k, v in fields.items() if k not in blacklist
 	]))
 
 

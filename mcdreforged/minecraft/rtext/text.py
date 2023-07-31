@@ -6,6 +6,7 @@ from colorama import Style
 from typing_extensions import Self
 
 from mcdreforged.minecraft.rtext.style import RStyle, RColor, RAction, RColorClassic, RColorRGB, RItemClassic
+from mcdreforged.utils import class_util
 
 
 class RTextBase(ABC):
@@ -358,6 +359,15 @@ class RText(RTextBase):
 		copied._copy_from(self)
 		return copied
 
+	def __repr__(self) -> str:
+		return class_util.represent(self, fields={
+			'text': self.__text,
+			'color': self.__color,
+			'styles': self.__styles,
+			'click_event': self.__click_event,
+			'hover_texts': self.__hover_text_list
+		})
+
 
 class RTextList(RTextBase):
 	"""
@@ -432,6 +442,12 @@ class RTextList(RTextBase):
 		copied.children = [child.copy() for child in self.children]
 		return copied
 
+	def __repr__(self) -> str:
+		return class_util.represent(self, {
+			'header': None if self.header_empty else self.header,
+			'children': self.children
+		})
+
 
 class RTextTranslation(RText):
 	"""
@@ -503,3 +519,14 @@ class RTextTranslation(RText):
 		copied = RTextTranslation('')
 		copied._copy_from(self)
 		return copied
+
+	def __repr__(self) -> str:
+		return class_util.represent(self, fields={
+			'key': self.__translation_key,
+			'args': self.__args,
+			'fallback': self.__fallback,
+			'color': self.__color,
+			'styles': self.__styles,
+			'click_event': self.__click_event,
+			'hover_texts': self.__hover_text_list
+		})
