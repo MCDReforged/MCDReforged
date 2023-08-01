@@ -1,11 +1,12 @@
 import re
+from typing import List
 
 from mcdreforged.command.builder.exception import RequirementNotMet, UnknownArgument, CommandError
 from mcdreforged.command.builder.nodes.basic import Literal
 from mcdreforged.command.command_source import CommandSource
 from mcdreforged.constants import core_constant
 from mcdreforged.minecraft.rtext.style import RColor, RAction
-from mcdreforged.minecraft.rtext.text import RTextList, RText
+from mcdreforged.minecraft.rtext.text import RText, RTextBase
 from mcdreforged.permission.permission_level import PermissionLevel
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.check_update_command import CheckUpdateCommand
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.debug_command import DebugCommand
@@ -91,8 +92,8 @@ class MCDReforgedPlugin(PermanentPlugin):
 	#    Command Stuffs
 	# --------------------
 
-	def get_help_message(self, source: CommandSource, translation_key: str):
-		lst = RTextList()
+	def get_help_message(self, source: CommandSource, translation_key: str) -> List[RTextBase]:
+		lst = []
 		with source.preferred_language_context():
 			for line in self.tr(translation_key).to_plain_text().splitlines(keepends=True):
 				prefix = re.search(r'(?<=§7)' + self.control_command_prefix + r'[\w ]*(?=§)', line)
@@ -119,6 +120,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 
 	def process_mcdr_command(self, source: CommandSource):
 		if source.has_permission(PermissionLevel.MCDR_CONTROL_LEVEL):
-			source.reply(self.get_help_message(source, 'mcdr_command.help_message'))
+			for line in self.get_help_message(source, 'mcdr_command.help_message'):
+				source.reply(line)
 		else:
 			self.command_status.print_mcdr_status(source)

@@ -45,7 +45,7 @@ class DebugCommand(SubCommand):
 
 		return (
 			self.owner_command_root('debug').
-			runs(lambda src: src.reply(self.get_help_message(src, 'mcdr_command.help_message.debug'))).
+			runs(lambda src: self.reply_help_message(src, 'mcdr_command.help_message.debug')).
 			then(
 				Literal('thread_dump').
 				runs(lambda src: self.show_thread_dump(src, None)).

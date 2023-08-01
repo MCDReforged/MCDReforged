@@ -26,7 +26,7 @@ class PermissionCommand(SubCommand):
 
 		return (
 			self.control_command_root({'permission', 'perm'}).
-			runs(lambda src: src.reply(self.get_help_message(src, 'mcdr_command.help_message.permission'))).
+			runs(lambda src: self.reply_help_message(src, 'mcdr_command.help_message.permission')).
 			then(
 				Literal('list').runs(lambda src: self.list_permission(src, None)).
 				then(Text('level').runs(lambda src, ctx: self.list_permission(src, ctx['level'])))

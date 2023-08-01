@@ -75,8 +75,9 @@ class SubCommand(ABC):
 	#     Refs to MCDReforgedPlugin
 	# ---------------------------------
 
-	def get_help_message(self, source: CommandSource, translation_key: str):
-		return self.mcdr_plugin.get_help_message(source, translation_key)
+	def reply_help_message(self, source: CommandSource, translation_key: str):
+		for line in self.mcdr_plugin.get_help_message(source, translation_key):
+			source.reply(line)
 
 	def _print_plugin_operation_result_if_no_error(self, source: CommandSource, ret: FunctionCallResult[Future[PluginOperationResult]]):
 		if ret.no_error:
