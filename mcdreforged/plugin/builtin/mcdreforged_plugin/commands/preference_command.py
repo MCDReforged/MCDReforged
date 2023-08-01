@@ -53,7 +53,7 @@ class PreferenceCommand(SubCommand):
 	def get_command_node(self) -> Literal:
 		root_node = (
 			self.public_command_root({'preference', 'pref'}).
-			runs(lambda src: src.reply(self.get_help_message(src, 'mcdr_command.help_message.preference'))).
+			runs(lambda src: self.reply_help_message(src, 'mcdr_command.help_message.preference')).
 			requires(self.allowed_to_use).
 			on_error(RequirementNotMet, lambda src: src.reply(self.tr('mcdr_command.preference.unsupported_command_source', type(src)).set_color(RColor.red)), handled=True).
 			then(Literal('list').runs(lambda src: self.show_preference_list(src)))

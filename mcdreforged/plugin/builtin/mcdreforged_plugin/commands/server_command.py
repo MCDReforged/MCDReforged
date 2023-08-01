@@ -21,7 +21,7 @@ class ServerCommand(SubCommand):
 	def get_command_node(self) -> Literal:
 		node = (
 			self.owner_command_root('server').
-			runs(lambda src: src.reply(self.get_help_message(src, 'mcdr_command.help_message.server')))
+			runs(lambda src: self.reply_help_message(src, 'mcdr_command.help_message.server'))
 		)
 		functions: List[ServerControlFunction] = [
 			self.server_interface.start,

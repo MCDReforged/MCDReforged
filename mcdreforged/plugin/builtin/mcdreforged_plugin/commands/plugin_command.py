@@ -35,7 +35,7 @@ class PluginCommand(SubCommand):
 
 		return (
 			self.control_command_root({'plugin', 'plg'}).
-			runs(lambda src: src.reply(self.get_help_message(src, 'mcdr_command.help_message.plugin'))).
+			runs(lambda src: self.reply_help_message(src, 'mcdr_command.help_message.plugin')).
 			then(Literal('list').runs(self.list_plugin)).
 			then(Literal('info').then(plugin_id_node().runs(lambda src, ctx: self.show_plugin_info(src, ctx['plugin_id'])))).
 			then(Literal('load').then(unloaded_plugin_node().runs(lambda src, ctx: self.load_plugin(src, ctx['file_name'])))).

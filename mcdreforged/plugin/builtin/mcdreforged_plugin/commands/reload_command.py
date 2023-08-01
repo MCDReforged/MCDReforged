@@ -7,7 +7,7 @@ class ReloadCommand(SubCommand):
 	def get_command_node(self) -> Literal:
 		return (
 			self.control_command_root({'r', 'reload'}).
-			runs(lambda src: src.reply(self.get_help_message(src, 'mcdr_command.help_message.reload'))).
+			runs(lambda src: self.reply_help_message(src, 'mcdr_command.help_message.reload')).
 			then(Literal({'plugin', 'plg'}).runs(self.refresh_changed_plugins)).
 			then(Literal({'config', 'cfg'}).runs(self.reload_config)).
 			then(Literal({'permission', 'perm'}).runs(self.reload_permission)).
