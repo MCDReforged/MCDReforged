@@ -89,7 +89,7 @@ class AbstractMinecraftHandler(AbstractServerHandler, ABC):
 		raw_result.content = string_util.clean_minecraft_color_code(raw_result.content)
 		return raw_result
 
-	__player_name_regex = re.compile(r'\w{1,16}')
+	__player_name_regex = re.compile(r'[a-zA-Z0-9_]{3,16}')
 
 	@classmethod
 	def _verify_player_name(cls, name: str):
@@ -106,7 +106,7 @@ class AbstractMinecraftHandler(AbstractServerHandler, ABC):
 		return result
 
 	__player_joined_parser = parse.Parser('{name}[{}] logged in with entity id {} at ({})')
-	__player_left_regex = re.compile(r'\w{1,16} left the game')
+	__player_left_regex = re.compile(r'[a-zA-Z0-9_]{3,16} left the game')
 	__server_version_parser = parse.Parser('Starting minecraft server version {version}')
 	__server_address_parser = parse.Parser('Starting Minecraft server on {}:{:d}')
 	__server_startup_done_regex = re.compile(r'Done \([0-9.]*s\)! For help, type "help"( or "\?")?')
