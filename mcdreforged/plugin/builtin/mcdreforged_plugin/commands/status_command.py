@@ -34,14 +34,15 @@ class StatusCommand(SubCommand):
 
 		if not source.has_permission(PermissionLevel.MCDR_CONTROL_LEVEL):
 			return
-		source.reply(RText.join('\n', [
+		for line in [
 			RText(self.tr('mcdr_command.print_mcdr_status.line2', self.tr(self.mcdr_server.mcdr_state.value))),
 			RText(self.tr('mcdr_command.print_mcdr_status.line3', self.tr(self.mcdr_server.server_state.value))),
 			RText(self.tr('mcdr_command.print_mcdr_status.line4', bool_formatter(self.mcdr_server.is_server_startup()))),
 			RText(self.tr('mcdr_command.print_mcdr_status.line5', bool_formatter(self.mcdr_server.should_exit_after_stop()))),
 			RText(self.tr('mcdr_command.print_mcdr_status.line6', rcon_status_dict[self.server_interface.is_rcon_running()])),
 			RText(self.tr('mcdr_command.print_mcdr_status.line7', self.mcdr_server.plugin_manager.get_plugin_amount())).c(RAction.suggest_command, '!!MCDR plugin list')
-		]))
+		]:
+			source.reply(line)
 
 		# ------------ Physical server secrets ------------
 		if not source.has_permission(PermissionLevel.PHYSICAL_SERVER_CONTROL_LEVEL):
