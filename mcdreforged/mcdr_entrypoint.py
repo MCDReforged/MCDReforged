@@ -5,8 +5,10 @@ import sys
 from mcdreforged.constants import core_constant
 from mcdreforged.mcdr_boostrap import boostrap
 
+__all__ = ['entrypoint']
 
-def environment_check():
+
+def __environment_check():
 	"""
 	This should even work in python 2.7+
 	"""
@@ -24,7 +26,7 @@ def entrypoint():
 	All MCDR launches start from here
 	"""
 	boostrap()
-	environment_check()
+	__environment_check()
 
 	from mcdreforged.cli import cli_entry
 	cli_entry.cli_dispatch()
