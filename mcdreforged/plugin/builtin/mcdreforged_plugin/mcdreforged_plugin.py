@@ -95,7 +95,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 	def get_help_message(self, source: CommandSource, translation_key: str) -> List[RTextBase]:
 		lst = []
 		with source.preferred_language_context():
-			for line in self.tr(translation_key).to_plain_text().splitlines(keepends=True):
+			for line in self.tr(translation_key).to_plain_text().splitlines(keepends=False):
 				prefix = re.search(r'(?<=§7)' + self.control_command_prefix + r'[\w ]*(?=§)', line)
 				if prefix is not None:
 					lst.append(RText(line).c(RAction.suggest_command, prefix.group()))
