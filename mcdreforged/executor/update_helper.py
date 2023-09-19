@@ -89,12 +89,9 @@ class GithubApiFetcher:
 			req = urllib.request.Request(self.url, headers={'If-None-Match': self.__etag}, method='GET')
 			with urllib.request.urlopen(req, timeout=10) as response:
 				self.__etag = response.getheader('ETag', self.__etag)
-				status_code = response.getcode()
-				if status_code != 304:  # 304 means content keeps unchanged
-					if status_code != 200:
-						raise Exception('Unexpected status code {}: {}'.format(status_code, response.read()))
-					self.__cached_response = json.loads(response.read())
+				self.__cached_response = json.loads(response.read())
 		except urllib.error.HTTPError as e:
-			raise Exception('Unexpected status code {}: {}'.format(e.code, e.read()))
+			if e.code != 304:  # 304 means content keeps unchanged
+				raise
 
 		return self.__cached_response
