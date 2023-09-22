@@ -4,6 +4,7 @@ Information of a plugin
 import re
 from typing import List, Dict, TYPE_CHECKING, Optional, Union
 
+from mcdreforged.constants import deprecations
 from mcdreforged.minecraft.rtext.text import RTextBase, RText
 from mcdreforged.plugin.meta.version import Version, VersionParsingError, VersionRequirement
 from mcdreforged.translation.translation_text import RTextMCDRTranslation
@@ -20,7 +21,13 @@ class Metadata:
 	"""
 
 	id: str
-	"""The id of the plugin. Should match regexp ``[a-z0-9_]{1,64}``"""
+	"""
+	The id of the plugin. Should match regexp ``[a-z][a-z0-9_]{0,63}``
+	
+	.. versionchanged:: v2.11.0
+		
+		Plugin id starts with non-alphabet character is no longer disallowed
+	"""
 
 	version: Version
 	"""The version of the plugin, in a less restrictive semver format"""
@@ -46,7 +53,7 @@ class Metadata:
 	A dict of dependencies the plugin relies on
 	
 	:Key: The id of the dependent plugin
-	:Value: The version requirement the dependent plugin
+	:Value: The version requirement of the dependent plugin
 	"""
 
 	entrypoint: str
@@ -59,7 +66,8 @@ class Metadata:
 	archive_name: Optional[str]  # used in MCDR CLI only
 	resources: Optional[List[str]]  # used in MCDR CLI only
 
-	PLUGIN_ID_REGEX = re.compile(r'[a-z0-9_]{1,64}')
+	PLUGIN_ID_REGEX_OLD = re.compile(r'[a-z0-9_]{1,64}')
+	PLUGIN_ID_REGEX = re.compile(r'[a-z][a-z0-9_]{0,63}')
 	FALLBACK_VERSION = '0.0.0'
 
 	def __init__(self, data: Optional[dict], *, plugin: Optional['AbstractPlugin'] = None):
@@ -80,8 +88,16 @@ class Metadata:
 		self.id = data.get('id')
 		if self.id is None:
 			use_fallback_id_reason = 'Plugin ID of {} not found'.format(plugin_name_text)
-		elif not isinstance(self.id, str) or self.PLUGIN_ID_REGEX.fullmatch(self.id) is None:
-			use_fallback_id_reason = 'Plugin ID "{}" of {} is invalid'.format(self.id, plugin_name_text)
+		else:
+			bad_id = not isinstance(self.id, str)
+			if self.PLUGIN_ID_REGEX.fullmatch(self.id) is None:
+				if self.PLUGIN_ID_REGEX_OLD.fullmatch(self.id) is not None:
+					warn(str(deprecations.PLUGIN_ID_STARTS_WITH_NON_ALPHABET))
+					warn('Plugin ID: {}'.format(self.id))
+				else:
+					bad_id = True
+			if bad_id:
+				use_fallback_id_reason = 'Plugin ID "{}" of {} is invalid'.format(self.id, plugin_name_text)
 		if use_fallback_id_reason is not None:
 			if plugin is not None:
 				self.id = plugin.get_fallback_metadata_id()

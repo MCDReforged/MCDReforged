@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-14 01:17+0800\n"
+"POT-Creation-Date: 2023-09-22 16:47+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -29,61 +29,65 @@ msgstr "元数据"
 msgid "The metadata of a MCDR plugin"
 msgstr "一个 MCDR 插件的元数据"
 
-#: ../docstring mcdreforged.plugin.meta.metadata.Metadata.id:1 of
-msgid "The id of the plugin. Should match regexp ``[a-z0-9_]{1,64}``"
-msgstr "插件的 ID。应该与正则表达式 ``[a-z0-9_]{1,64}`` 匹配"
+#: ../../docstring mcdreforged.plugin.meta.metadata.Metadata.id:1 of
+msgid "The id of the plugin. Should match regexp ``[a-z][a-z0-9_]{0,63}``"
+msgstr "插件的 ID。应该与正则表达式 ``[a-z][a-z0-9_]{0,63}`` 匹配"
 
-#: ../docstring mcdreforged.plugin.meta.metadata.Metadata.name:1 of
+#: ../../docstring mcdreforged.plugin.meta.metadata.Metadata.id:5 of
+msgid "Plugin id starts with non-alphabet character is no longer disallowed"
+msgstr "不再允许以非字母字符开头的插件 ID"
+
+#: ../../docstring mcdreforged.plugin.meta.metadata.Metadata.name:1 of
 msgid "The name of the plugin"
 msgstr "插件的名字"
 
-#: ../docstring mcdreforged.plugin.meta.metadata.Metadata.description:1 of
+#: ../../docstring mcdreforged.plugin.meta.metadata.Metadata.description:1 of
 msgid "The description of the plugin"
 msgstr "插件的描述"
 
-#: ../docstring mcdreforged.plugin.meta.metadata.Metadata.description:3 of
+#: ../../docstring mcdreforged.plugin.meta.metadata.Metadata.description:3 of
 msgid ""
 "It can be a regular str or a ``Dict[str, str]`` indicating a mapping from"
 " language to description"
 msgstr "它可以是一个正常的 str，或者一个代表从语言到描述映射关系的 ``Dict[str, str]``"
 
-#: ../docstring mcdreforged.plugin.meta.metadata.Metadata.author:1 of
+#: ../../docstring mcdreforged.plugin.meta.metadata.Metadata.author:1 of
 msgid "The authors of the plugin"
 msgstr "插件的作者"
 
-#: ../docstring mcdreforged.plugin.meta.metadata.Metadata.link:1 of
+#: ../../docstring mcdreforged.plugin.meta.metadata.Metadata.link:1 of
 msgid "The url to the plugin, e.g. link to a github repository"
 msgstr "插件的网址，如指向 github 仓库的链接"
 
-#: ../docstring mcdreforged.plugin.meta.metadata.Metadata.version:1 of
+#: ../../docstring mcdreforged.plugin.meta.metadata.Metadata.version:1 of
 msgid "The version of the plugin, in a less restrictive semver format"
 msgstr "插件的版本，格式为一种约束弱化版的语义化版本格式"
 
-#: ../docstring mcdreforged.plugin.meta.metadata.Metadata.dependencies:1 of
+#: ../../docstring mcdreforged.plugin.meta.metadata.Metadata.dependencies:1 of
 msgid "A dict of dependencies the plugin relies on"
 msgstr "一个储存了插件依赖的 dict"
 
-#: ../docstring mcdreforged.plugin.meta.metadata.Metadata.dependencies of
+#: ../../docstring mcdreforged.plugin.meta.metadata.Metadata.dependencies of
 msgid "Key"
 msgstr "键"
 
-#: ../docstring mcdreforged.plugin.meta.metadata.Metadata.dependencies:3 of
+#: ../../docstring mcdreforged.plugin.meta.metadata.Metadata.dependencies:3 of
 msgid "The id of the dependent plugin"
 msgstr "被依赖的插件的 ID"
 
-#: ../docstring mcdreforged.plugin.meta.metadata.Metadata.dependencies of
+#: ../../docstring mcdreforged.plugin.meta.metadata.Metadata.dependencies of
 msgid "Value"
 msgstr "值"
 
-#: ../docstring mcdreforged.plugin.meta.metadata.Metadata.dependencies:4 of
-msgid "The version requirement the dependent plugin"
+#: ../../docstring mcdreforged.plugin.meta.metadata.Metadata.dependencies:4 of
+msgid "The version requirement of the dependent plugin"
 msgstr "被依赖插件的版本要求"
 
-#: ../docstring mcdreforged.plugin.meta.metadata.Metadata.entrypoint:1 of
+#: ../../docstring mcdreforged.plugin.meta.metadata.Metadata.entrypoint:1 of
 msgid "The entrypoint module of the plugin"
 msgstr "插件的入口点"
 
-#: ../docstring mcdreforged.plugin.meta.metadata.Metadata.entrypoint:3 of
+#: ../../docstring mcdreforged.plugin.meta.metadata.Metadata.entrypoint:3 of
 msgid "The entrypoint should be import-able"
 msgstr "入口点应当是是可以 import 的"
 
@@ -168,8 +172,8 @@ msgid ""
 "connected by space character. e.g. ``\">=1.0.x\"``, ``\"^2.9\"``, "
 "``\">=1.2.0 <1.4.3\"``"
 msgstr ""
-"版本要求字符串，含若干个通过空格字符连接的版本谓词。例子: ``\">=1.0.x\"``, ``\"^2.9\"``, "
-"``\">=1.2.0 <1.4.3\"``"
+"版本要求字符串，含若干个通过空格字符连接的版本谓词。例子: ``\">=1.0.x\"``, ``\"^2.9\"``, ``\">=1.2.0 "
+"<1.4.3\"``"
 
 #: ../code_references/plugin.rst:20
 msgid "Plugin Event"
@@ -183,7 +187,7 @@ msgstr "插件事件的抽象基类"
 msgid "A plugin event has an :attr:`id` field as its identifier"
 msgstr "插件事件拥有一个 :attr:`id` 属性，作为其标识符"
 
-#: ../docstring mcdreforged.plugin.plugin_event.LiteralEvent.__init__:3
+#: ../../docstring mcdreforged.plugin.plugin_event.LiteralEvent.__init__:3
 #: mcdreforged.plugin.plugin_event.PluginEvent.id:1 of
 msgid "The id of the plugin event"
 msgstr "插件事件的 ID"
