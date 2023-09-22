@@ -1,0 +1,82 @@
+{
+  "$id": "https://json.schemastore.org/mcdreforged-plugin.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-_]{1,63}$",
+      "description": "The identifier of the plugin"
+    },
+    "version": {
+      "type": "string",
+      "description": "The version of the plugin, in a less restrictive semver format"
+    },
+    "name": {
+      "type": "string",
+      "description": "The name of the plugin"
+    },
+    "description": {
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "The description of the plugin"
+        },
+        {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "description": "The description of the plugin in the given language"
+          },
+          "description": "The description translation mapping of the plugin. It maps from language to description string"
+        }
+      ]
+    },
+    "author": {
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "The author of the plugin"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "description": "The name of the author"
+          },
+          "description": "The author(s) of the plugin"
+        }
+      ]
+    },
+    "link": {
+      "type": "string",
+      "description": "The url to the plugin, e.g. link to a github repository"
+    },
+    "dependencies": {
+      "type": "object",
+      "description": "A dict of dependencies the plugin relies on\nKey: The id of the dependent plugin\nValue: The version requirement of the dependent plugin",
+      "additionalProperties": {
+        "type": "string",
+        "description": "The version requirement of the dependent plugin"
+      }
+    },
+    "entrypoint": {
+      "type": "string",
+      "description": "The entrypoint module of the plugin. The entrypoint should be import-able"
+    },
+
+    "archive_name": {
+      "type": "string",
+      "description": "The file name of generated .mcdr packed plugin in CLI"
+    },
+    "resources": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "description": "Path to the resource file / folder"
+      },
+      "description": "A list of file or folder names that will be packed into the generated .mcdr packed plugin file in CLI"
+    }
+  },
+  "type": "object"
+}
