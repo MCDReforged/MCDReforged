@@ -402,44 +402,27 @@ class AbstractNode(ABC):
 						self.__raise_error(UnknownCommand(context.command_read, context.command_read), context)
 				# Un-parsed command string remains
 				else:
-					# Redirecting
-					node = self if self._redirect_node is None else self._redirect_node
-
-					argument_unknown = False
-					# No child at all
-					if not node.has_children():
-						argument_unknown = True
-					else:
-						# Pass the remaining command string to the children
-						next_literal = utils.get_element(next_remaining)
-						try:
-							# Check literal children first
-							literal_error = None
-							for child_literal in node._children_literal.get(next_literal, []):
-								try:
-									with context.enter_child(child_literal):
-										child_literal._execute_command(context)
-									break
-								except CommandError as e:
-									# it's ok for a direct literal node to fail
-									# other literal might still have a chance to consume this command
-									literal_error = e
-							else:  # All literal children fails
-								if literal_error is not None:
-									raise literal_error
-								for child in node._children:
-									with context.enter_child(child):
-										child._execute_command(context)
-									break
-								else:  # No argument child
-									argument_unknown = True
-
-						except CommandError as error:
-							self.__handle_error(error, context, self._child_error_handlers)
-							raise error from None
-
-					if argument_unknown:
+					node = self if self._redirect_node is None else self._redirect_node  # Redirecting
+					next_literal = utils.get_element(next_remaining)
+					candidates = node._children_literal.get(next_literal, []) + node._children
+					if len(candidates) == 0:
 						self.__raise_error(UnknownArgument(context.command_read, command), context)
+
+					# it's ok for a node to fail
+					# other nodes still have a chance to consume this command
+					error: Optional[CommandError] = None
+					for child in candidates:
+						try:
+							with context.enter_child(child):
+								child._execute_command(context)
+							break
+						except CommandError as e:
+							if error is None:
+								error = e
+					else:
+						assert error is not None, 'there should be some children, candidates={}'.format(candidates)
+						self.__handle_error(error, context, self._child_error_handlers)
+						raise error
 
 	def _generate_suggestions(self, context: CommandContext) -> CommandSuggestions:
 		"""

@@ -32,10 +32,10 @@ class CommandTestCase(ABC, unittest.TestCase):
 		pass
 
 	def set_result_from_ctx(self, ctx, key):
-		self.result = ctx[key]
+		self.set_result(ctx[key])
 
 	def set_result(self, result):
-		self.result = result
+		self.__results.append(result)
 
 	# ---------
 	#   utils
@@ -43,7 +43,7 @@ class CommandTestCase(ABC, unittest.TestCase):
 
 	def run_command(self, executor: Literal, command):
 		self.has_hit = False
-		self.result = None
+		self.__results: list = []
 		# noinspection PyTypeChecker
 		executor.execute(None, command)
 
@@ -51,8 +51,14 @@ class CommandTestCase(ABC, unittest.TestCase):
 		self.assertEqual(self.has_hit, value)
 
 	def check_result(self, result):
-		self.assertEqual(type(self.result), type(result))
-		self.assertEqual(self.result, result)
+		self.check_results([result])
+
+	def check_results(self, results: list):
+		err_msg = 'expected {}, found {}'.format(results, self.__results)
+		self.assertEqual(len(results), len(self.__results), err_msg)
+		for i in range(len(results)):
+			self.assertEqual(type(results[i]), type(self.__results[i]), err_msg)
+			self.assertEqual(results[i], self.__results[i], err_msg)
 
 	def run_command_and_check_result(self, executor, command, result):
 		self.run_command(executor, command)
@@ -61,6 +67,14 @@ class CommandTestCase(ABC, unittest.TestCase):
 	def run_command_and_check_hit(self, executor, command, value: bool):
 		self.run_command(executor, command)
 		self.check_hit(value)
+
+	def assert_raises_and_check_result(self, result, error, func, *args, **kwargs):
+		self.assertRaises(error, func, *args, **kwargs)
+		self.check_result(result)
+
+	def assert_raises_and_check_results(self, results: list, error, func, *args, **kwargs):
+		self.assertRaises(error, func, *args, **kwargs)
+		self.check_results(results)
 
 	def assert_raises_and_check_hit(self, value: bool, error, func, *args, **kwargs):
 		self.assertRaises(error, func, *args, **kwargs)
@@ -308,26 +322,26 @@ class CommandTreeTestCase(CommandTestCase):
 			then(
 				QuotableText('t').in_length_range(5, 10)
 			).on_child_error(
-				IllegalEscapesUsage, lambda s, e: self.callback_hit(s, {})
+				IllegalEscapesUsage, lambda s, e: self.set_result(1)
 			)
 		).then(
-			Integer('w').on_error(InvalidInteger, lambda s, e: self.callback_hit(s, {}))
+			Integer('w').on_error(InvalidInteger, lambda s, e: self.set_result(2))
 		).on_error(
-			UnknownCommand, lambda s, e: self.callback_hit(s, {})
+			UnknownCommand, lambda s, e: self.set_result(3)
 		).on_child_error(
-			TextLengthOutOfRange, lambda s, e: self.callback_hit(s, {})
+			TextLengthOutOfRange, lambda s, e: self.set_result(4)
 		)
 		self.assertRaises(UnknownCommand, self.run_command, executor, 'error ping')
 		self.assertRaises(UnknownArgument, self.run_command, executor, 'error ping awa')
-		self.assert_raises_and_check_hit(True, UnknownCommand, self.run_command, executor, 'error')
-		self.assert_raises_and_check_hit(True, UnknownCommand, self.run_command, executor, 'error')
-		self.assert_raises_and_check_hit(True, InvalidInteger, self.run_command, executor, 'error 10x')
-		self.assert_raises_and_check_hit(True, CommandError, self.run_command, executor, 'error 10x')  # using parent error class
+		self.assert_raises_and_check_result(3, UnknownCommand, self.run_command, executor, 'error')
+		self.assert_raises_and_check_result(3, UnknownCommand, self.run_command, executor, 'error')
+		self.assert_raises_and_check_result(2, InvalidInteger, self.run_command, executor, 'error 10x')
+		self.assert_raises_and_check_result(2, CommandError, self.run_command, executor, 'error 10x')  # use parent error class is also ok
 
-		self.assert_raises_and_check_hit(False, UnknownCommand, self.run_command, executor, 'error text')
-		self.assert_raises_and_check_hit(True, TextLengthOutOfRange, self.run_command, executor, 'error text abc')
-		self.assert_raises_and_check_hit(True, IllegalEscapesUsage, self.run_command, executor, r'error text "ab\c"')
-		self.assert_raises_and_check_hit(False, UnclosedQuotedString, self.run_command, executor, 'error text "abc')
+		self.assert_raises_and_check_result(2, UnknownCommand, self.run_command, executor, 'error text')  # it tries on the integer
+		self.assert_raises_and_check_results([2, 4], TextLengthOutOfRange, self.run_command, executor, 'error text abc')
+		self.assert_raises_and_check_results([1, 2], IllegalEscapesUsage, self.run_command, executor, r'error text "ab\c"')
+		self.assert_raises_and_check_result(2, UnclosedQuotedString, self.run_command, executor, 'error text "abc')
 
 	def test_14_error_listener_only_1_catch(self):
 		# https://github.com/Fallen-Breath/MCDReforged/issues/109
@@ -377,7 +391,7 @@ class CommandTreeTestCase(CommandTestCase):
 
 	def test_16_boolean(self):
 		def func(src, ctx):
-			self.result = ctx['bl']
+			self.set_result_from_ctx(ctx, 'bl')
 		root = Literal('test').then(Boolean('bl').runs(func))
 		self.run_command_and_check_result(root, 'test true', True)
 		self.run_command_and_check_result(root, 'test tRue', True)
@@ -393,7 +407,7 @@ class CommandTreeTestCase(CommandTestCase):
 
 		def func(src, ctx):
 			self.assertIsInstance(ctx['e'], MyEnum)
-			self.result = ctx['e']
+			self.set_result(ctx['e'])
 			self.has_hit = True
 
 		node = Enumeration('e', MyEnum)
