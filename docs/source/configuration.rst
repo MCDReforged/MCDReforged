@@ -122,7 +122,7 @@ Here is a table of current built-in handlers and their suitable server types
    * - vanilla_handler
      - For Vanilla / Carpet / Fabric server
    * - beta18_handler
-     - For vanilla server in beta 1.8 version. Maybe it works for other beta versions but it's only tested in beta 1.8.1.
+     - For Vanilla server in legacy versions, e.g. < 1.7, or even beta1.8. Tested in 1.6.4 and beta1.8.1.
    * - bukkit_handler
      - For Bukkit / Spigot server with Minecraft version below 1.14, and Paper / `Mohistmc <https://mohistmc.com>`__ server in all version.
    * - bukkit14_handler

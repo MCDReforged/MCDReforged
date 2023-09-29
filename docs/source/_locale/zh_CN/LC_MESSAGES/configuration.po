@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-13 02:52+0800\n"
+"POT-Creation-Date: 2023-09-29 13:11+0800\n"
 "PO-Revision-Date: 2021-01-23 13:20+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -193,9 +193,9 @@ msgstr "beta18_handler"
 
 #: ../configuration.rst:125
 msgid ""
-"For vanilla server in beta 1.8 version. Maybe it works for other beta "
-"versions but it's only tested in beta 1.8.1."
-msgstr "用于 beta 1.8 版本的原版服务端。可能适用于其它 beta 版本的服务端，但只在 beta 1.8.1 版本中进行了测试"
+"For Vanilla server in legacy versions, e.g. < 1.7, or even beta1.8. "
+"Tested in 1.6.4 and beta1.8.1."
+msgstr "用于低版本的原版服务端，如 MC < 1.7 的低版本，甚至到 beta1.8 版本。只在 1.6.4 和 beta 1.8.1 版本中进行了测试"
 
 #: ../configuration.rst:126
 msgid "bukkit_handler"
