@@ -14,7 +14,7 @@ from mcdreforged.constants import core_constant
 
 NAME = core_constant.PACKAGE_NAME
 VERSION = core_constant.VERSION_PYPI
-DESCRIPTION = 'A rewritten version of MCDaemon, a python script to control your Minecraft server'
+DESCRIPTION = 'A rewritten version of MCDaemon, a python tool to control your Minecraft server'
 PROJECT_URLS = {
 	'Homepage': core_constant.GITHUB_URL,
 	'Documentation': core_constant.DOCUMENTATION_URL,
