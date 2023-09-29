@@ -594,9 +594,9 @@ msgstr "选项类型：list[str] 或 null"
 
 #: ../configuration.rst:348
 msgid ""
-"In this example the custom handler package path is ``my.custom.handler`` "
-"and the class is name ``MyHandler``"
-msgstr "下面这个例子中，``my.custom.handler`` 是包路径，``MyHandler`` 是类名"
+"In this example the custom handler package path is "
+"``handlers.my_handler`` and the class is name ``MyHandler``"
+msgstr "下面这个例子中，``handlers.my_handler`` 是包路径，``MyHandler`` 是类名"
 
 #: ../configuration.rst:351
 msgid "custom_info_reactors"

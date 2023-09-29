@@ -108,7 +108,7 @@ The command tree in the :ref:`cmd-tree-quick-peek` section can be built with the
 
 .. code-block:: python
 
-    from mcdreforged.api.command import SimpleCommandBuilder
+    from mcdreforged.api.command import SimpleCommandBuilder, Integer, Text, GreedyText
 
     def on_load(server: PluginServerInterface, prev_module):
         builder = SimpleCommandBuilder()
