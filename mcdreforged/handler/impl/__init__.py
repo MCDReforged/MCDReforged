@@ -1,4 +1,5 @@
 from mcdreforged.handler.impl.abstract_minecraft_handler import AbstractMinecraftHandler
+from mcdreforged.handler.impl.arclight_handler import ArclightHandler
 from mcdreforged.handler.impl.basic_handler import BasicHandler
 from mcdreforged.handler.impl.beta18_handler import Beta18Handler
 from mcdreforged.handler.impl.bukkit14_handler import Bukkit14Handler
@@ -16,7 +17,7 @@ __all__ = [
 	'AbstractMinecraftHandler',
 
 	'VanillaHandler', 'Beta18Handler', 'ForgeHandler',
-	'BukkitHandler', 'Bukkit14Handler', 'CatServerHandler',
+	'BukkitHandler', 'Bukkit14Handler', 'CatServerHandler', 'ArclightHandler',
 
 	'BungeecordHandler', 'WaterfallHandler',
 	'VelocityHandler'

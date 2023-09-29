@@ -5,6 +5,7 @@ from typing import Dict, Optional, Tuple, List, TYPE_CHECKING, Set
 
 from mcdreforged.handler.abstract_server_handler import AbstractServerHandler
 from mcdreforged.handler.impl import *
+from mcdreforged.handler.impl.arclight_handler import ArclightHandler
 from mcdreforged.utils import misc_util, class_util
 from mcdreforged.utils.logger import DebugOption
 
@@ -36,6 +37,7 @@ class ServerHandlerManager:
 		add_handler(Bukkit14Handler())
 		add_handler(ForgeHandler())
 		add_handler(CatServerHandler())
+		add_handler(ArclightHandler())
 		add_handler(Beta18Handler())
 		add_handler(BungeecordHandler())
 		add_handler(WaterfallHandler())

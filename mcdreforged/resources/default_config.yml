@@ -27,6 +27,7 @@ start_command: java -Xms1G -Xmx2G -Dfile.encoding=UTF-8 -jar minecraft_server.ja
 #   bukkit14_handler   , for Bukkit / Spigot server with Minecraft version 1.14 and above
 #   forge_handler      , for Forge server
 #   cat_server_handler , for CatServer server
+#   arclight_handler   , for Arclight server
 #   bungeecord_handler , for Bungeecord server
 #   waterfall_handler  , for Waterfall server
 #   velocity_handler   , for Velocity server

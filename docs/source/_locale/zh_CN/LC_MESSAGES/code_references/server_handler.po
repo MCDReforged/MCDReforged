@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-25 22:02+0800\n"
+"POT-Creation-Date: 2023-09-29 13:49+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -460,6 +460,10 @@ msgstr "CatServer 使用原版的日志格式，但是玩家加入信息的格�
 #: mcdreforged.handler.impl.cat_server_handler.CatServerHandler:5 of
 msgid "And has color code around the player left message"
 msgstr "并且玩家离开消息拥有一些颜色代码"
+
+#: mcdreforged.handler.impl.arclight_handler.ArclightHandler:1 of
+msgid "A handler for `Arclight <https://github.com/IzzelAliz/Arclight>`__ servers"
+msgstr "为 `Arclight <https://github.com/IzzelAliz/Arclight>`__ 服务端设计的服务端处理器"
 
 #: mcdreforged.handler.impl.bungeecord_handler.BungeecordHandler:1 of
 msgid ""

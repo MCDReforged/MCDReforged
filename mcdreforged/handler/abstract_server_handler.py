@@ -26,7 +26,8 @@ class AbstractServerHandler(ABC):
 		│   │   └── ForgeHandler
 		│   └── BukkitHandler
 		│       ├── Bukkit14Handler
-		│       └── CatServerHandler
+		│       ├── CatServerHandler
+		│       └── ArclightHandler
 		├── BungeecordHandler
 		│   └── WaterfallHandler
 		└── VelocityHandler

@@ -131,6 +131,8 @@ Here is a table of current built-in handlers and their suitable server types
      - For Forge server
    * - cat_server_handler
      - For `CatServer <https://github.com/Luohuayu/CatServer>`__ server
+   * - arclight_handler
+     - For `Arclight <https://github.com/IzzelAliz/Arclight>`__ server. Tested with `arclight-forge-1.20.1-1.0.1.jar`
    * - bungeecord_handler
      - For Bungeecord. Please add ``-Djline.terminal=jline.UnsupportedTerminal`` before ``-jar`` in the start command for MCDR support. From `here <https://www.spigotmc.org/wiki/start-up-parameters/>`__
    * - waterfall_handler
