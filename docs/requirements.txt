@@ -1,9 +1,12 @@
-sphinx>=6.2.1            # core
-sphinx-intl>=2.1.0       # locale
+# core
+sphinx>=6.2.1               # core
+sphinx-intl>=2.1.0          # locale
 sphinx-rtd-theme>=2.0.0rc4  # the theme of the webside
-Babel==2.9.1             # Unified the version to prevent different versions from appearing in .po comments
-sphinx-autobuild         # autobuild server
-sphinx_copybutton        # add copy button on codeblock
-sphinxcontrib-mermaid    # add mermaid graph support
-sphinx_inline_tabs       # codeblock tabs are nice
-sphinx-prompt            # make ">>>" prefix in prompt section unselectable
+Babel==2.9.1                # Unified the version to prevent different versions from appearing in .po comments
+
+# extensions
+sphinx-autobuild       # autobuild server
+sphinx_copybutton      # add copy button on codeblock
+sphinxcontrib-mermaid  # add mermaid graph support
+sphinx_inline_tabs     # codeblock tabs are nice
+sphinx-prompt          # make ">>>" prefix in prompt section unselectable
