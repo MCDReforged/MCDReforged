@@ -211,7 +211,7 @@ class MCDReforgedServer:
 			translation_key, args, kwargs,
 			allow_failure=allow_failure,
 			language=language,
-			fallback_language=self.translation_manager.language,
+			fallback_language=core_constant.DEFAULT_LANGUAGE,
 			plugin_translations=self.plugin_manager.registry_storage.translations
 		)
 
