@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-30 00:29+0800\n"
+"POT-Creation-Date: 2023-11-30 00:34+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -154,7 +154,7 @@ msgstr ""
 
 #: mcdreforged.utils.serializer.deserialize:18 of
 msgid ""
-"Custom subclass of following classes: :class:`int`, :class:`float`, "
+"Custom subclass of following base classes: :class:`int`, :class:`float`, "
 ":class:`str`, :class:`bool`, :class:`list` and :class:`dict`"
 msgstr ""
 "以下基础类型的自定义子类：:data:`None`、:class:`int`、:class:`float`、:class:`str` 以及 "
@@ -256,6 +256,10 @@ msgstr "一个类型为 ``cls`` 的对象"
 #: mcdreforged.utils.serializer.deserialize:51 of
 msgid "Added :data:`typing.Literal` support"
 msgstr "增加对 :data:`typing.Literal` 的支持"
+
+#: mcdreforged.utils.serializer.deserialize:53 of
+msgid "Added custom subclass of base classes support"
+msgstr "增加对基础类型的自定义子类的支持"
 
 #: mcdreforged.utils.serializer.Serializable:1 of
 msgid "An abstract class for easy serializing / deserializing"

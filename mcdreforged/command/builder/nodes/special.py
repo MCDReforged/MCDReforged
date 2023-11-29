@@ -8,6 +8,8 @@ class CountingLiteral(Literal):
 	"""
 	A special literal node with an extra ability: store how many times it got visited
 	during the command parsing in the command context
+
+	.. versionadded:: v2.12.0
 	"""
 	def __init__(self, literal: str or Iterable[str], counter_key: str):
 		super().__init__(literal)

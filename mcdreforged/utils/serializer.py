@@ -102,7 +102,7 @@ def deserialize(data: Any, cls: Type[T], *, error_at_missing: bool = False, erro
 		* :class:`typing.List`, :class:`list`: Target class needs to be e.g. ``List[int]`` or ``list[int]`` (python 3.9+)
 		* :class:`typing.Dict`, :class:`dict`: Target class needs to be e.g. ``Dict[str, bool]`` or ``dict[str, bool]`` (python 3.9+)
 
-	*   Custom subclass of following classes: :class:`int`, :class:`float`, :class:`str`, :class:`bool`, :class:`list` and :class:`dict`
+	*   Custom subclass of following base classes: :class:`int`, :class:`float`, :class:`str`, :class:`bool`, :class:`list` and :class:`dict`
 
 	*   Types in the :external:doc:`typing <library/typing>` module:
 
@@ -137,6 +137,8 @@ def deserialize(data: Any, cls: Type[T], *, error_at_missing: bool = False, erro
 
 	.. versionadded:: v2.7.0
 		Added :data:`typing.Literal` support
+	.. versionadded:: v2.12.0
+		Added custom subclass of base classes support
 	"""
 	def mismatch(*expected_class: Type):
 		if expected_class != (cls,):

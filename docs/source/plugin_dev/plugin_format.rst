@@ -157,3 +157,5 @@ The file structure of the target directory plugin appears as follows:
      │   └─ my_lib.py
      ├─ mcdreforged.plugin.json
      └─ requirements.txt
+
+.. versionadded:: v2.12.0
