@@ -497,7 +497,7 @@ class AbstractNode(ABC):
 
 
 class EntryNode(AbstractNode, ABC):
-	def execute(self, source: CommandSource, command: str):
+	def _entry_execute(self, source: CommandSource, command: str):
 		"""
 		Parse and execute this command
 
@@ -514,7 +514,7 @@ class EntryNode(AbstractNode, ABC):
 			# the root literal node fails to parse the first element
 			raise UnknownRootArgument(error.get_parsed_command(), error.get_failed_command()) from error
 
-	def generate_suggestions(self, source: CommandSource, command: str) -> CommandSuggestions:
+	def _entry_generate_suggestions(self, source: CommandSource, command: str) -> CommandSuggestions:
 		"""
 		Get a list of command suggestion of given command
 

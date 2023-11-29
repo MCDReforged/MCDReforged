@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING, Dict, List
 
 import mcdreforged.command.builder.command_builder_util as utils
 from mcdreforged.command.builder.exception import CommandError, RequirementNotMet
-from mcdreforged.command.builder.nodes.basic import CommandSuggestion, CommandSuggestions, CallbackError
+from mcdreforged.command.builder.nodes.basic import CommandSuggestion, CommandSuggestions, CallbackError, EntryNode
 from mcdreforged.command.command_source import InfoCommandSource, CommandSource
 from mcdreforged.plugin.plugin_registry import PluginCommandHolder
 from mcdreforged.utils import string_util
@@ -63,13 +63,15 @@ class CommandManager:
 
 		for plugin_root_node in plugin_root_nodes:
 			plugin = plugin_root_node.plugin
-			node = plugin_root_node.node
+			node: EntryNode = plugin_root_node.node
 			try:
 				with self.mcdr_server.plugin_manager.with_plugin_context(plugin):
 					if purpose == TraversePurpose.EXECUTE:
-						node.execute(source, command)
+						# noinspection PyProtectedMember
+						node._entry_execute(source, command)
 					elif purpose == TraversePurpose.SUGGEST:
-						suggestions.extend(node.generate_suggestions(source, command))
+						# noinspection PyProtectedMember
+						suggestions.extend(node._entry_generate_suggestions(source, command))
 
 			except CommandError as error:
 				if not error.is_handled():

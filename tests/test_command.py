@@ -45,7 +45,7 @@ class CommandTestCase(ABC, unittest.TestCase):
 		self.has_hit = False
 		self.result = None
 		# noinspection PyTypeChecker
-		executor.execute(None, command)
+		executor._entry_execute(None, command)
 
 	def check_hit(self, value: bool):
 		self.assertEqual(self.has_hit, value)
@@ -403,7 +403,7 @@ class CommandTreeTestCase(CommandTestCase):
 		self.assertRaises(InvalidEnumeration, self.run_command, root, 'test nope')
 		self.assertRaises(InvalidEnumeration, self.run_command, root, 'test A')
 
-		suggestions = list(map(lambda s: s.suggest_input, root.generate_suggestions(TestCommandSource(), 'test ')))
+		suggestions = list(map(lambda s: s.suggest_input, root._entry_generate_suggestions(TestCommandSource(), 'test ')))
 		self.assertEqual(len(MyEnum), len(suggestions))
 		for suggestion in suggestions:
 			self.run_command_and_check_hit(root, 'test {}'.format(suggestion), True)
