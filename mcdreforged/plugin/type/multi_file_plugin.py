@@ -19,6 +19,14 @@ from mcdreforged.utils.logger import DebugOption
 
 
 class MultiFilePlugin(RegularPlugin, ABC):
+	@property
+	def _file_root(self) -> str:
+		return self.plugin_path
+
+	@property
+	def _module_search_path(self) -> str:
+		return self._file_root
+
 	def get_fallback_metadata_id(self) -> str:
 		raise BrokenMetadata('Missing plugin id in {}'.format(plugin_constant.PLUGIN_META_FILE))
 
@@ -26,7 +34,7 @@ class MultiFilePlugin(RegularPlugin, ABC):
 		raise NotImplementedError()
 
 	def list_directory(self, directory_name: str) -> Collection[str]:
-		return os.listdir(os.path.join(self.plugin_path, directory_name))
+		return os.listdir(os.path.join(self._file_root, directory_name))
 
 	def is_own_module(self, module_name: str) -> bool:
 		plugin_id = self.get_id()
@@ -36,10 +44,10 @@ class MultiFilePlugin(RegularPlugin, ABC):
 		mod = importlib.import_module(self.get_metadata().entrypoint)
 		if mod.__file__ is not None:
 			mod_path = Path(mod.__file__).absolute()
-			plugin_path = Path(self.plugin_path).absolute()
-			if plugin_path != mod_path and plugin_path not in mod_path.parents:
+			file_root = Path(self._file_root).absolute()
+			if file_root != mod_path and not mod_path.is_relative_to(file_root):
 				self.mcdr_server.logger.warning('Suspicious entrypoint module path for plugin %s, package name conflict?', self)
-				self.mcdr_server.logger.warning('- Plugin file path: %s', plugin_path)
+				self.mcdr_server.logger.warning('- Plugin file root: %s', file_root)
 				self.mcdr_server.logger.warning('- Loaded entrypoint path: %s', mod_path)
 		return mod
 
@@ -57,12 +65,12 @@ class MultiFilePlugin(RegularPlugin, ABC):
 	def _on_unload(self):
 		super()._on_unload()
 		try:
-			sys.path.remove(self.plugin_path)
+			sys.path.remove(self._module_search_path)
 		except ValueError:
-			self.mcdr_server.logger.debug('Fail to remove path "{}" in sys.path for {}'.format(self.plugin_path, self))
+			self.mcdr_server.logger.debug('Fail to remove path "{}" in sys.path for {}'.format(self._module_search_path, self))
 
 	def _on_ready(self):
-		sys.path.append(self.plugin_path)
+		sys.path.append(self._module_search_path)
 		# It's fail-proof for packed plugin
 		try:
 			self._load_entry_instance()

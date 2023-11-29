@@ -30,6 +30,13 @@ Being restricted with the one-file-only file format, some features are missing i
 
 When you only want to create a simple plugin as fast as possible, creating a solo plugin is always a good choice
 
+Example file tree that contains a single solo plugin:
+
+::
+
+    my_mcdr_server/plugins/
+     └─ MyPlugin.py
+
 Multi file Plugin
 -----------------
 
@@ -52,10 +59,11 @@ Here's an example file tree of a minimum packed plugin with plugin id ``my_plugi
 
 ::
 
-    MyPlugin.mcdr
-        my_plugin/
-            __init__.py
-        mcdreforged.plugin.json
+    my_mcdr_server/plugins/
+     └─ MyPlugin.mcdr
+         ├─ my_plugin/
+         │   └─ __init__.py
+         └─ mcdreforged.plugin.json
 
 Optionally, a packed plugin can have some other useful files that will be recognized by MCDR:
 
@@ -70,18 +78,19 @@ Here's an example file tree of a valid packed plugin with more possible files:
 
 ::
 
-    MyPlugin.mcdr
-        my_plugin/
-            __init__.py
-            my_lib.py
-        my_data/
-            default_config.json
-            some_data.txt
-        lang/
-            en_us.json
-            zh_cn.json
-        mcdreforged.plugin.json
-        requirements.txt
+    my_mcdr_server/plugins/
+     └─ MyPlugin.mcdr
+         ├─ my_plugin/
+         │   ├─ __init__.py
+         │   └─ my_lib.py
+         ├─ my_data/
+         │   ├─ default_config.json
+         │   └─ some_data.txt
+         ├─ lang/
+         │   ├─ en_us.json
+         │   └─ zh_cn.json
+         ├─ mcdreforged.plugin.json
+         └─ requirements.txt
 
 In addition to ``.mcdr`` file extension, the python :external:doc:`zip app <library/zipapp>` file extension ``.pyz`` is also valid for a packed plugin.
 
@@ -101,11 +110,50 @@ Here's an example file tree of a directory plugin:
 
 ::
 
-    MyPlugin/
-        my_plugin/
-            __init__.py
-            my_lib.py
-        mcdreforged.plugin.json
-        requirements.txt
+    my_mcdr_server/plugins/
+     └─ MyPlugin/
+         ├─ my_plugin/
+         │   ├─ __init__.py
+         │   └─ my_lib.py
+         ├─ mcdreforged.plugin.json
+         └─ requirements.txt
 
 Directory plugin will always be treated as "modified" during ``!!MCDR reload plugin`` :ref:`command:Hot reloads` command
+
+
+Linked Directory Plugin
+-----------------------
+
+Linked directory plugin is a specialized form of directory plugin, primarily designed for MCDR plugin developers
+
+It functions similarly to a symbolic link (symlink) that links to a regular :ref:`plugin_dev/plugin_format:Directory Plugin`.
+Compared to a real symlink, it is easier to create and offers better isolation.
+
+To create a linked directory plugin, imply create a directory that includes a file named ``mcdreforged.linked_directory_plugin.json``:
+
+::
+
+    my_mcdr_server/plugins/
+     └─ MyLinkedDirectoryPlugin/
+         └─ mcdreforged.linked_directory_plugin.json
+
+The ``mcdreforged.linked_directory_plugin.json`` file contains an object with a sole key ``target``,
+which specifies the path to the actual directory plugin to be loaded:
+
+
+.. code-block:: json
+
+    {
+        "target": "/path/to/the/target/directory/plugin/"
+    }
+
+The file structure of the target directory plugin appears as follows:
+
+::
+
+    /path/to/the/target/directory/plugin/
+     ├─ my_plugin/
+     │   ├─ __init__.py
+     │   └─ my_lib.py
+     ├─ mcdreforged.plugin.json
+     └─ requirements.txt

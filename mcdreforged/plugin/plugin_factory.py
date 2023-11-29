@@ -2,7 +2,7 @@ import os
 from typing import Optional, TYPE_CHECKING, Type
 
 from mcdreforged.constants import plugin_constant
-from mcdreforged.plugin.type.directory_plugin import DirectoryPlugin
+from mcdreforged.plugin.type.directory_plugin import DirectoryPlugin, LinkedDirectoryPlugin
 from mcdreforged.plugin.type.packed_plugin import PackedPlugin
 from mcdreforged.plugin.type.regular_plugin import RegularPlugin
 from mcdreforged.plugin.type.solo_plugin import SoloPlugin
@@ -22,8 +22,11 @@ def __get_plugin_class_from_path(file_path: str, allow_disabled: bool) -> Option
 		if suffix in plugin_constant.PACKED_PLUGIN_FILE_SUFFIXES:  # .mcdr, .pyz
 			return PackedPlugin
 	elif os.path.isdir(file_path) and (allow_disabled or not file_path.endswith(plugin_constant.DISABLED_PLUGIN_FILE_SUFFIX)):
-		if os.path.isfile(os.path.join(file_path, plugin_constant.PLUGIN_META_FILE)) and not os.path.isfile(os.path.join(file_path, '__init__.py')):
-			return DirectoryPlugin
+		if not os.path.isfile(os.path.join(file_path, '__init__.py')):
+			if os.path.isfile(os.path.join(file_path, plugin_constant.PLUGIN_META_FILE)):
+				return DirectoryPlugin
+			elif os.path.isfile(os.path.join(file_path, plugin_constant.LINK_DIRECTORY_PLUGIN_FILE_NAME)):
+				return LinkedDirectoryPlugin
 	return None
 
 

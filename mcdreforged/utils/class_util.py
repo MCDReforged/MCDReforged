@@ -1,7 +1,9 @@
 import importlib
-from typing import Any, Type, Union, Iterable, Optional, Collection
+from typing import Any, Type, Union, Iterable, Optional, Collection, TypeVar
 
 from mcdreforged.utils import misc_util, tree_printer
+
+_T = TypeVar('_T')
 
 
 def load_class(path: str):
@@ -28,7 +30,7 @@ def check_class(class_: Type, base_class: Type, error_message: str = None):
 		raise TypeError(error_message)
 
 
-def check_type(value: Any, types: Union[Type, Iterable[Type]], error_message: str = None):
+def check_type(value: _T, types: Union[Type, Iterable[Type]], error_message: str = None) -> _T:
 	def mapper(x):
 		if x is None:
 			return type(x)
@@ -40,6 +42,7 @@ def check_type(value: Any, types: Union[Type, Iterable[Type]], error_message: st
 		if error_message is None:
 			error_message = 'Except type {}, but found type {}'.format(types, type(value))
 		raise TypeError(error_message)
+	return value
 
 
 def get_all_base_class(cls):

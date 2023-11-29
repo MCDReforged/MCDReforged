@@ -14,6 +14,9 @@ PACKED_PLUGIN_FILE_SUFFIXES = ('.mcdr', '.pyz')
 # The name of the meta file inside a packed plugin
 PLUGIN_META_FILE = 'mcdreforged.plugin.json'
 
+# The name of the link file for a LinkedDirectoryPlugin
+LINK_DIRECTORY_PLUGIN_FILE_NAME = 'mcdreforged.linked_directory_plugin.json'
+
 # The name of the python package requirement file
 PLUGIN_REQUIREMENTS_FILE = 'requirements.txt'
 
