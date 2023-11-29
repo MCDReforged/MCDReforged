@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-04 03:39+0800\n"
+"POT-Creation-Date: 2023-11-30 00:29+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -112,11 +112,11 @@ msgstr "支持的目标类："
 
 #: mcdreforged.utils.serializer.deserialize:8 of
 msgid ""
-"Immutable object: :data:`None`, :class:`int`, :class:`float`, "
-":class:`str` and :class:`bool`"
+"Immutable object: :data:`None`, :class:`bool`, :class:`int`, "
+":class:`float` and :class:`str`"
 msgstr ""
-"不可变对象：:data:`None`、:class:`int`、:class:`float`、:class:`str` 以及 "
-":class:`bool`"
+"不可变对象：:data:`None`、:class:`bool`、:class:`int`、:class:`float` 以及 "
+":class:`str`"
 
 #: mcdreforged.utils.serializer.deserialize:10 of
 msgid ""
@@ -153,26 +153,34 @@ msgstr ""
 "``dict[str, bool]`` (python 3.9+)"
 
 #: mcdreforged.utils.serializer.deserialize:18 of
+msgid ""
+"Custom subclass of following classes: :class:`int`, :class:`float`, "
+":class:`str`, :class:`bool`, :class:`list` and :class:`dict`"
+msgstr ""
+"以下基础类型的自定义子类：:data:`None`、:class:`int`、:class:`float`、:class:`str` 以及 "
+":class:`bool`"
+
+#: mcdreforged.utils.serializer.deserialize:20 of
 msgid "Types in the :external:doc:`typing <library/typing>` module:"
 msgstr ":external:doc:`typing <library/typing>` 模块中的类型"
 
-#: mcdreforged.utils.serializer.deserialize:20 of
+#: mcdreforged.utils.serializer.deserialize:22 of
 msgid ""
 ":data:`typing.Union`: Iterate through its available candidate classes, "
 "and return the first successful deserialization result"
 msgstr ":data:`typing.Union`：遍历所有可能的候选类，返回第一个成功的反序列化结果"
 
-#: mcdreforged.utils.serializer.deserialize:21 of
+#: mcdreforged.utils.serializer.deserialize:23 of
 msgid ""
 ":data:`typing.Optional`: Actually it will be converted to a "
 ":data:`typing.Union` automatically"
 msgstr ":data:`typing.Optional`：实际上它会被自动转换为 :data:`typing.Union`"
 
-#: mcdreforged.utils.serializer.deserialize:22 of
+#: mcdreforged.utils.serializer.deserialize:24 of
 msgid ":data:`typing.Any`: The input data will be directed returned as the result"
 msgstr ":data:`typing.Any`：输入数据会被直接作为结果返回"
 
-#: mcdreforged.utils.serializer.deserialize:23 of
+#: mcdreforged.utils.serializer.deserialize:25 of
 msgid ""
 ":data:`typing.Literal`: The input data needs to be in parameter the of "
 ":data:`~typing.Literal`, then the input data will be returned as the "
@@ -181,27 +189,27 @@ msgstr ""
 ":data:`typing.Literal`：输入数据需要存在于 :data:`~typing.Literal` "
 "的参数列表中，然后输入数据会被作为结果返回"
 
-#: mcdreforged.utils.serializer.deserialize:25 of
+#: mcdreforged.utils.serializer.deserialize:27 of
 msgid ""
 "Normal class: The class should have its fields type annotated. It's "
 "constructor should accept 0 input parameter. Example class::"
 msgstr "普通类：这个类应当类型注解完善其所有属性，并且其构造函数应当可接受 0 个入参。类例子："
 
-#: mcdreforged.utils.serializer.deserialize:32 of
+#: mcdreforged.utils.serializer.deserialize:34 of
 msgid ""
 "The input data needs to be a dict. Keys and values in the dict correspond"
 " to the field names and serialized field values. Example dict::"
 msgstr "输入数据应该是一个 dict。dict 中的键和值对应着属性的名称以及序列化的属性值。dict 例子："
 
-#: mcdreforged.utils.serializer.deserialize:36 of
+#: mcdreforged.utils.serializer.deserialize:38 of
 msgid "Fields are set via ``__setattr__``, non-public fields will be ignored."
 msgstr "将使用 ``__setattr__`` 设置对象的属性，非公开属性将被忽略"
 
-#: mcdreforged.utils.serializer.deserialize:38 of
+#: mcdreforged.utils.serializer.deserialize:40 of
 msgid "The json-like object to be deserialized"
 msgstr "被反序列化的 json 样式的对象"
 
-#: mcdreforged.utils.serializer.deserialize:39 of
+#: mcdreforged.utils.serializer.deserialize:41 of
 msgid "The target class of the generated object"
 msgstr "目标类，同时也是返回值的类型"
 
@@ -212,13 +220,13 @@ msgstr "目标类，同时也是返回值的类型"
 msgid "Keyword Arguments"
 msgstr "关键字参数"
 
-#: mcdreforged.utils.serializer.deserialize:40 of
+#: mcdreforged.utils.serializer.deserialize:42 of
 msgid ""
 "A flag indicating if an exception should be risen if there are any not-"
 "assigned fields when deserializing an object. Default false"
 msgstr "一个用于标识在反序列化一个对象的过程中，若对象存在未被赋值的属性，是否应该抛出异常的 flag。默认值为 false"
 
-#: mcdreforged.utils.serializer.deserialize:42 of
+#: mcdreforged.utils.serializer.deserialize:44 of
 msgid ""
 "A flag indicating if an exception should be risen if there are any "
 "unknown input attributes when deserializing an object. Default false"
@@ -229,11 +237,11 @@ msgstr "一个用于标识在反序列化一个对象的过程中，若出现未
 msgid "Raises"
 msgstr "抛出"
 
-#: mcdreforged.utils.serializer.deserialize:44 of
+#: mcdreforged.utils.serializer.deserialize:46 of
 msgid "If input data doesn't match target class, or target class is unsupported"
 msgstr "若输入数据与目标类不匹配，或者目标类不在支持范围"
 
-#: mcdreforged.utils.serializer.deserialize:45 of
+#: mcdreforged.utils.serializer.deserialize:47 of
 msgid ""
 "If input data is invalid, including :data:`Literal <typing.Literal>` "
 "mismatch and those error flag in kwargs taking effect"
@@ -241,11 +249,11 @@ msgstr ""
 "如果输入数据非法，这包括 :data:`Literal <typing.Literal>` 匹配失败，以及那些 kwargs 里的抛异常 flag"
 " 起了效果"
 
-#: mcdreforged.utils.serializer.deserialize:47 of
+#: mcdreforged.utils.serializer.deserialize:49 of
 msgid "An object in class ``cls``"
 msgstr "一个类型为 ``cls`` 的对象"
 
-#: mcdreforged.utils.serializer.deserialize:49 of
+#: mcdreforged.utils.serializer.deserialize:51 of
 msgid "Added :data:`typing.Literal` support"
 msgstr "增加对 :data:`typing.Literal` 的支持"
 
@@ -343,9 +351,7 @@ msgid "Merge attributes from another instance into the current one"
 msgstr "将另一个实例的属性合并到当前实例中"
 
 #: mcdreforged.utils.serializer.Serializable.merge_from:5 of
-msgid ""
-"It won't create copies of the attribute values being "
-"merged"
+msgid "It won't create copies of the attribute values being merged"
 msgstr "合并时，不会创建被合并属性的拷贝"
 
 #: mcdreforged.utils.serializer.Serializable.merge_from:7 of
@@ -413,3 +419,4 @@ msgstr "一个将在反序列化完成后被调用的方法"
 #: mcdreforged.utils.serializer.Serializable.on_deserialization:3 of
 msgid "You can do some custom initialization here"
 msgstr "你可以在这里做一些自定义的初始化操作"
+

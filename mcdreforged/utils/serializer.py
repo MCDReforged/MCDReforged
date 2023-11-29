@@ -44,8 +44,13 @@ def serialize(obj: Any) -> Union[None, int, float, str, bool, list, dict]:
 	:param obj: The object to be serialized
 	:return: The serialized result
 	"""
-	if type(obj) in (type(None), int, float, str, bool):
+	if type(obj) in (type(None), bool, int, float, str):
 		return obj
+	elif isinstance(obj, (bool, int, float, str)):
+		for cls in (bool, int, float, str):
+			if isinstance(obj, cls):
+				return cls(obj)
+		raise AssertionError()
 	elif isinstance(obj, list) or isinstance(obj, tuple):
 		return list(map(serialize, obj))
 	elif isinstance(obj, dict):
@@ -74,7 +79,8 @@ def serialize(obj: Any) -> Union[None, int, float, str, bool, list, dict]:
 		return serialize(attr_dict)
 
 
-_BASIC_CLASSES = (type(None), bool, int, float, str, list, dict)
+_BASIC_CLASSES_NO_NONE = (bool, int, float, str, list, dict)
+_BASIC_CLASSES = (type(None), *_BASIC_CLASSES_NO_NONE)
 
 
 def deserialize(data: Any, cls: Type[T], *, error_at_missing: bool = False, error_at_redundancy: bool = False) -> T:
@@ -86,7 +92,7 @@ def deserialize(data: Any, cls: Type[T], *, error_at_missing: bool = False, erro
 
 	Supported target classes:
 
-	*   Immutable object: :data:`None`, :class:`int`, :class:`float`, :class:`str` and :class:`bool`
+	*   Immutable object: :data:`None`, :class:`bool`, :class:`int`, :class:`float` and :class:`str`
 
 		* The class of the input data should equal to target class. No implicit type conversion will happen
 		* As an exception, :class:`float` also accepts an :class:`int` as the input data
@@ -95,6 +101,8 @@ def deserialize(data: Any, cls: Type[T], *, error_at_missing: bool = False, erro
 
 		* :class:`typing.List`, :class:`list`: Target class needs to be e.g. ``List[int]`` or ``list[int]`` (python 3.9+)
 		* :class:`typing.Dict`, :class:`dict`: Target class needs to be e.g. ``Dict[str, bool]`` or ``dict[str, bool]`` (python 3.9+)
+
+	*   Custom subclass of following classes: :class:`int`, :class:`float`, :class:`str`, :class:`bool`, :class:`list` and :class:`dict`
 
 	*   Types in the :external:doc:`typing <library/typing>` module:
 
@@ -141,13 +149,15 @@ def deserialize(data: Any, cls: Type[T], *, error_at_missing: bool = False, erro
 	if cls is None:
 		cls = type(None)
 
+	cls_org = _get_origin(cls)
+
 	# if the target class is Any, then simply return the data
 	if cls is Any:
 		return data
 
 	# Union
 	# Unpack Union first since the target class is not confirmed yet
-	elif _get_origin(cls) == Union:
+	elif cls_org == Union:
 		for possible_cls in _get_args(cls):
 			try:
 				return deserialize(data, possible_cls, error_at_missing=error_at_missing, error_at_redundancy=error_at_redundancy)
@@ -169,27 +179,33 @@ def deserialize(data: Any, cls: Type[T], *, error_at_missing: bool = False, erro
 			else:
 				mismatch(cls)
 
-	# List
-	elif _get_origin(cls) == getattr(List[int], '__origin__'):
+	# Custom class that inherits one of the base class (no generic)
+	elif isinstance(cls, type) and issubclass(cls, _BASIC_CLASSES_NO_NONE):
+		return cls(data)
+
+	# List (generic with type hint)
+	elif cls_org == getattr(List[int], '__origin__') or (isinstance(cls_org, type) and issubclass(cls_org, list)):
+		cls_real = cls_org if isinstance(cls_org, type) else list
 		if isinstance(data, list):
 			element_type = _get_args(cls)[0]
-			return list(map(lambda e: deserialize(e, element_type, error_at_missing=error_at_missing, error_at_redundancy=error_at_redundancy), data))
+			return cls_real(map(lambda e: deserialize(e, element_type, error_at_missing=error_at_missing, error_at_redundancy=error_at_redundancy), data))
 		else:
-			mismatch(list)
+			mismatch(cls_org)
 
-	# Dict
-	elif _get_origin(cls) == getattr(Dict[int, int], '__origin__'):
+	# Dict (generic with type hint)
+	elif cls_org == getattr(Dict[int, int], '__origin__') or (isinstance(cls_org, type) and issubclass(cls_org, dict)):
+		cls_real = cls_org if isinstance(cls_org, type) else dict
 		if isinstance(data, dict):
 			key_type = _get_args(cls)[0]
 			val_type = _get_args(cls)[1]
-			instance = {}
+			result = cls_real()
 			for key, value in data.items():
 				deserialized_key = deserialize(key, key_type, error_at_missing=error_at_missing, error_at_redundancy=error_at_redundancy)
 				deserialized_value = deserialize(value, val_type, error_at_missing=error_at_missing, error_at_redundancy=error_at_redundancy)
-				instance[deserialized_key] = deserialized_value
-			return instance
+				result[deserialized_key] = deserialized_value
+			return result
 		else:
-			mismatch(dict)
+			mismatch(cls_real)
 
 	# Enum
 	elif isinstance(cls, EnumMeta):
@@ -199,7 +215,7 @@ def deserialize(data: Any, cls: Type[T], *, error_at_missing: bool = False, erro
 			mismatch(str)
 
 	# Literal
-	elif _get_origin(cls) == Literal:
+	elif cls_org == Literal:
 		literals = _get_args(cls)
 		if data in literals:
 			return data

@@ -1,11 +1,15 @@
 import sys
 import unittest
 from enum import Enum, auto, IntFlag, IntEnum, Flag
-from typing import List, Dict, Union, Optional, Any, Literal
+from typing import List, Dict, Union, Optional, Any, Literal, TypeVar, Generic
 
 from mcdreforged.api.utils import serialize, deserialize, Serializable
 
 _py39 = sys.version_info >= (3, 9)
+
+T = TypeVar('T')
+K = TypeVar('K')
+V = TypeVar('V')
 
 
 class Point(Serializable):
@@ -413,6 +417,75 @@ class MyTestCase(unittest.TestCase):
 
 		y = Data.get_field_annotations()
 		self.assertIs(x, y)  # test cache
+
+	def test_18_inherit_base_class(self):
+		class MyInt(int):
+			pass
+
+		class MyStr(str):
+			def __init__(self, s: str):
+				if not isinstance(s, str):
+					raise TypeError(type(s))
+				self.num = int(s[:-1])
+				self.unit = s[-1]
+
+		class MyList(List[int]):
+			pass
+
+		class MyDict(dict):
+			pass
+
+		class MyDictG(Generic[K, V], dict):
+			pass
+
+		class Data(Serializable):
+			a: MyInt = MyInt(123)
+			b: MyStr = MyStr('1m')
+			c: MyList = MyList([1, 2, 3])
+			d: MyDict = MyDict({'a': 0.4})
+			e: MyDictG[MyStr, MyInt] = MyDict({'1b': 7})
+
+		x = Data.get_default().serialize()
+		self.assertEqual(type(x['a']), int)
+		self.assertEqual(type(x['b']), str)
+		self.assertEqual(type(x['c']), list)
+		self.assertEqual(type(x['d']), dict)
+		self.assertEqual(type(x['e']), dict)
+		self.assertEqual(x['a'], 123)
+		self.assertEqual(x['b'], '1m')
+		self.assertEqual(x['c'], [1, 2, 3])
+		self.assertEqual(x['d'], {'a': 0.4})
+		self.assertEqual(x['e'], {'1b': 7})
+
+		y = Data.deserialize({
+			'a': 789,
+			'b': '30s',
+			'c': [-4],
+			'e': {'3x': 0},
+		})
+		self.assertEqual(type(y.a), MyInt)
+		self.assertEqual(type(y.b), MyStr)
+		self.assertEqual(type(y.c), MyList)
+		self.assertEqual(type(y.d), MyDict)
+		self.assertEqual(type(y.e), MyDictG)
+		self.assertEqual(type(y.e), MyDictG)
+		self.assertEqual(y.a, 789)
+		self.assertEqual(y.b, '30s')
+		self.assertEqual(y.b.num, 30)
+		self.assertEqual(y.b.unit, 's')
+		self.assertEqual(y.c, [-4])
+		self.assertEqual(y.d, {'a': 0.4})
+		self.assertEqual(y.d['a'], 0.4)
+		self.assertEqual(y.e, {'3x': 0})
+		self.assertEqual(y.e['3x'], 0)
+
+		k, v = next(iter(y.e.items()))
+		self.assertEqual(type(k), MyStr)
+		self.assertEqual(k, MyStr('3x'))
+		self.assertEqual(k, '3x')
+		self.assertEqual(type(v), MyInt)
+		self.assertEqual(v, MyInt(0))
+		self.assertEqual(v, 0)
 
 
 if __name__ == '__main__':
