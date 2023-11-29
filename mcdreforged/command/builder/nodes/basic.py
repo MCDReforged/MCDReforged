@@ -299,6 +299,14 @@ class AbstractNode(ABC):
 		children.extend(self._children)
 		return misc_util.unique_list(children)
 
+	def _on_visited(self, context: CommandContext, parsed_result: ParseResult):
+		"""
+		Invoked when this node is visited, right after the node successfully parses a command segment
+
+		A node can use the context dict to store its provided value here
+		"""
+		pass
+
 	def parse(self, text: str) -> ParseResult:
 		"""
 		Try to parse the text and get an argument
@@ -379,7 +387,7 @@ class AbstractNode(ABC):
 			next_remaining = utils.remove_divider_prefix(context.command_remaining[parse_result.char_read:])  # type: str
 			total_read = len(command) - len(next_remaining)  # type: int
 
-			with context.read_command(self, parse_result, total_read):
+			with context.visit_node(self, parse_result, total_read):
 				getter = self.__check_requirements(context)
 				if getter is not None:  # requirement check failed
 					try:
@@ -463,7 +471,7 @@ class AbstractNode(ABC):
 			next_remaining = utils.remove_divider_prefix(context.command_remaining[result.char_read:])  # type: str
 			total_read = len(context.command) - len(next_remaining)  # type: int
 
-			with context.read_command(self, result, total_read):
+			with context.visit_node(self, result, total_read):
 				if self.__check_requirements(context) is not None:
 					return CommandSuggestions()
 
@@ -582,6 +590,9 @@ class ArgumentNode(AbstractNode, ABC):
 	def __init__(self, name: str):
 		super().__init__()
 		self.__name = name
+
+	def _on_visited(self, context: CommandContext, parsed_result: ParseResult):
+		context[self.__name] = parsed_result.value
 
 	def get_name(self) -> str:
 		return self.__name

@@ -5,7 +5,7 @@ from typing import List, Iterable, Dict, Any, Optional, NamedTuple
 from mcdreforged.command.command_source import CommandSource
 
 if typing.TYPE_CHECKING:
-	from mcdreforged.command.builder.nodes.basic import AbstractNode, ArgumentNode
+	from mcdreforged.command.builder.nodes.basic import AbstractNode
 
 
 class ParseResult(NamedTuple):
@@ -128,26 +128,25 @@ class CommandContext(Dict[str, Any]):
 	# -------------------------
 
 	@contextmanager
-	def read_command(self, current_node: 'AbstractNode', result: 'ParseResult', new_cursor: int):
+	def visit_node(self, current_node: 'AbstractNode', result: 'ParseResult', new_cursor: int):
 		"""
 		**Not public API, only used in command parsing**
 		Change the current cursor position, and store the parsing value
 
 		:meta private:
 		"""
-		from mcdreforged.command.builder.nodes.basic import ArgumentNode
-
 		prev_cursor = self.__cursor
-		self.__cursor = new_cursor
+		prev_data = dict(self)
 
-		if isinstance(current_node, ArgumentNode):
-			self[current_node.get_name()] = result.value
+		self.__cursor = new_cursor
 		try:
+			# noinspection PyProtectedMember
+			current_node._on_visited(self, result)
 			yield
 		finally:
 			self.__cursor = prev_cursor
-			if isinstance(current_node, ArgumentNode):
-				self.pop(current_node.get_name(), None)
+			self.clear()
+			self.update(prev_data)
 
 	@contextmanager
 	def enter_child(self, node: 'AbstractNode'):

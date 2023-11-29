@@ -6,6 +6,7 @@ from typing import Type
 from mcdreforged.api.command import *
 from mcdreforged.api.types import CommandSource
 from mcdreforged.command.builder.nodes.basic import CallbackError
+from mcdreforged.command.builder.nodes.special import CountingLiteral
 from mcdreforged.utils.types import MessageText
 
 
@@ -407,6 +408,19 @@ class CommandTreeTestCase(CommandTestCase):
 		self.assertEqual(len(MyEnum), len(suggestions))
 		for suggestion in suggestions:
 			self.run_command_and_check_hit(root, 'test {}'.format(suggestion), True)
+
+	def test_17_counting_literal(self):
+		def callback(src, ctx):
+			self.result = (ctx.get('foo'), ctx.get('bar'))
+
+		root = Literal('test').runs(callback)
+		root.then(CountingLiteral('ping', 'foo').redirects(root))
+		root.then(CountingLiteral('pong', 'bar').redirects(root))
+
+		self.run_command_and_check_result(root, 'test', (None, None))
+		self.run_command_and_check_result(root, 'test ping', (1, None))
+		self.run_command_and_check_result(root, 'test ping pong ping', (2, 1))
+		self.run_command_and_check_result(root, 'test pong pong pong', (None, 3))
 
 
 class SimpleCommandBuilderTestCase(CommandTestCase):

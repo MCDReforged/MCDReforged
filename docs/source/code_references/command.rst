@@ -25,6 +25,10 @@ Command Nodes
     :show-inheritance:
     :members:
 
+.. automodule:: mcdreforged.command.builder.nodes.special
+    :show-inheritance:
+    :members:
+
 Command Builder
 ---------------
 
