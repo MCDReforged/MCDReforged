@@ -155,7 +155,7 @@ class AbstractPlugin:
 		Directly dispatch an event towards this plugin
 		Not suggested to invoke directly in general case since it doesn't have priority control
 		"""
-		self.assert_state({PluginState.READY, PluginState.UNLOADING}, 'Only plugin in READY or UNLOADING state is allowed to receive events')
+		self.assert_state({PluginState.READY}, 'Only plugin in READY state is allowed to receive events')
 		self.mcdr_server.logger.debug('{} directly received {}'.format(self, event), option=DebugOption.PLUGIN)
 		for listener in self.plugin_registry.event_listeners.get(event.id, []):
 			self.plugin_manager.trigger_listener(listener, args)

@@ -202,6 +202,8 @@ class PluginManager:
 		The plugin state will be set to UNLOADING
 		:return: If there's an exception during plugin unloading
 		"""
+		if plugin.in_states({PluginState.READY}):
+			plugin.receive_event(MCDRPluginEvents.PLUGIN_UNLOADED, ())
 		try:
 			plugin.unload()
 		except Exception:
@@ -211,7 +213,6 @@ class PluginManager:
 			ret = False
 		else:
 			self.logger.info(self.mcdr_server.tr('plugin_manager.unload_plugin.success', plugin.get_name()))
-			plugin.receive_event(MCDRPluginEvents.PLUGIN_UNLOADED, ())
 			ret = True
 		finally:
 			self.__remove_plugin(plugin)
