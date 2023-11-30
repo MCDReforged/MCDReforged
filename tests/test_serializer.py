@@ -1,3 +1,4 @@
+import re
 import sys
 import unittest
 from enum import Enum, auto, IntFlag, IntEnum, Flag
@@ -486,6 +487,32 @@ class MyTestCase(unittest.TestCase):
 		self.assertEqual(type(v), MyInt)
 		self.assertEqual(v, MyInt(0))
 		self.assertEqual(v, 0)
+
+	def test_19_re_pattern(self):
+		for regex_val in [r'^[a-zA-Z]{3}\d$', rb'^[a-zA-Z]{3}\d$']:
+			class Data(Serializable):
+				regex: re.Pattern = re.compile(regex_val)
+
+			regex_str = regex_val
+			if isinstance(regex_str, bytes):
+				regex_str = regex_str.decode('utf8')
+
+			x = Data.get_default()
+			self.assertEqual(type(x.regex), re.Pattern)
+			self.assertEqual(x.regex.pattern, regex_val)
+
+			y = x.serialize()
+			self.assertIsInstance(y['regex'], str)
+			self.assertEqual({'regex': regex_str}, y)
+
+			z = Data.deserialize(y)
+			self.assertEqual(type(z.regex), re.Pattern)
+			self.assertEqual(z.regex.pattern, regex_str)
+
+			with self.assertRaises(ValueError) as cm:
+				Data.deserialize({'regex': r'[a-z'})
+			self.assertIsInstance(cm.exception, ValueError)
+			self.assertTrue('Invalid regular expression'.lower() in str(cm.exception).lower())
 
 
 if __name__ == '__main__':

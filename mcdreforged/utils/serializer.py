@@ -1,5 +1,6 @@
 import copy
 import functools
+import re
 from abc import ABC
 from enum import EnumMeta, Enum
 from typing import Union, TypeVar, List, Dict, Type, get_type_hints, Any, Callable, Literal
@@ -34,12 +35,16 @@ def serialize(obj: Any) -> Union[None, int, float, str, bool, list, dict]:
 	*   Immutable object, including :data:`None`, :class:`int`, :class:`float`, :class:`str` and :class:`bool`, will be directly returned
 	*   :class:`list` and :class:`tuple` will be serialized into a :class:`list` will all the items serialized
 	*   :class:`dict` will be converted into a :class:`dict` will all the keys and values serialized
+	*   :class:`re.Pattern` will be converted to a :class:`str`, with the value of :attr:`re.Pattern.pattern`.
+	    Notes: if :attr:`re.Pattern.pattern` returns :class:`bytes`, it will be decoded into a utf8 :class:`str`
 	*   Normal object will be converted to a :class:`dict` with all of its public fields.
 		The keys are the name of the fields and the values are the serialized field values
 
 	.. versionadded:: v2.8.0
-
 		If the object is a :class:`Serializable`, the value field order will follow the order in the annotation
+
+	.. versionadded:: v2.12.0
+		Added custom subclass of base classes and :class:`re.Pattern` support
 
 	:param obj: The object to be serialized
 	:return: The serialized result
@@ -57,6 +62,13 @@ def serialize(obj: Any) -> Union[None, int, float, str, bool, list, dict]:
 		return dict(map(lambda t: (t[0], serialize(t[1])), obj.items()))
 	elif isinstance(obj.__class__, EnumMeta):
 		return obj.name
+	elif isinstance(obj, re.Pattern):
+		if isinstance(obj.pattern, str):
+			return obj.pattern
+		elif isinstance(obj.pattern, bytes):
+			return obj.pattern.decode('utf8')
+		else:
+			raise TypeError('bad pattern property type for the given Pattern object: {}'.format(type(obj.pattern)))
 
 	try:
 		attr_dict: Dict[str, Any] = vars(obj).copy()
@@ -111,6 +123,8 @@ def deserialize(data: Any, cls: Type[T], *, error_at_missing: bool = False, erro
 		*   :data:`typing.Any`: The input data will be directed returned as the result
 		*   :data:`typing.Literal`: The input data needs to be in parameter the of :data:`~typing.Literal`, then the input data will be returned as the result
 
+	*   Regular expression pattern (:class:`re.Pattern`). The input data should be a :class:`str`
+
 	*   Normal class: The class should have its fields type annotated. It's constructor should accept 0 input parameter.
 		Example class::
 
@@ -138,7 +152,7 @@ def deserialize(data: Any, cls: Type[T], *, error_at_missing: bool = False, erro
 	.. versionadded:: v2.7.0
 		Added :data:`typing.Literal` support
 	.. versionadded:: v2.12.0
-		Added custom subclass of base classes support
+		Added custom subclass of base classes and :class:`re.Pattern` support
 	"""
 	def mismatch(*expected_class: Type):
 		if expected_class != (cls,):
@@ -223,6 +237,16 @@ def deserialize(data: Any, cls: Type[T], *, error_at_missing: bool = False, erro
 			return data
 		else:
 			raise ValueError('Input object {} does''t matches given literal {}'.format(data, cls))
+
+	# regex
+	elif cls == re.Pattern:
+		if isinstance(data, str):
+			try:
+				return re.compile(data)
+			except re.error as e:
+				raise ValueError('Invalid regular expression {!r}: {}'.format(data, e))
+		else:
+			mismatch(str)
 
 	# Object
 	elif isinstance(cls, type):

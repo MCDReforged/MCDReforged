@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-30 00:34+0800\n"
+"POT-Creation-Date: 2023-11-30 16:22+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -60,6 +60,16 @@ msgstr ":class:`dict` 会被转换成一个所有键和值都被序列化的 :cl
 
 #: mcdreforged.utils.serializer.serialize:9 of
 msgid ""
+":class:`re.Pattern` will be converted to a :class:`str`, with the value "
+"of :attr:`re.Pattern.pattern`. Notes: if :attr:`re.Pattern.pattern` "
+"returns :class:`bytes`, it will be decoded into a utf8 :class:`str`"
+msgstr ""
+":class:`re.Pattern` 会被转换为一个 :class:`str`，其值为 "
+":attr:`re.Pattern.pattern`。注意：如果 :attr:`re.Pattern.pattern` 返回了一个 "
+":class:`bytes`，它将会被转换成一个 utf8 编码的 :class:`str`"
+
+#: mcdreforged.utils.serializer.serialize:11 of
+msgid ""
 "Normal object will be converted to a :class:`dict` with all of its public"
 " fields. The keys are the name of the fields and the values are the "
 "serialized field values"
@@ -71,6 +81,11 @@ msgid ""
 "follow the order in the annotation"
 msgstr "如果对象是一个 :class:`Serializable`，那么其属性的顺序将与注解中顺序的保持一致"
 
+#: mcdreforged.utils.serializer.deserialize:55
+#: mcdreforged.utils.serializer.serialize:17 of
+msgid "Added custom subclass of base classes and :class:`re.Pattern` support"
+msgstr "增加对基础类型的自定义子类、正则表达式对象（:class:`re.Pattern`）的支持"
+
 #: mcdreforged.utils.serializer.Serializable.__init__
 #: mcdreforged.utils.serializer.Serializable.merge_from
 #: mcdreforged.utils.serializer.Serializable.validate_attribute
@@ -79,7 +94,7 @@ msgstr "如果对象是一个 :class:`Serializable`，那么其属性的顺序�
 msgid "Parameters"
 msgstr "参数"
 
-#: mcdreforged.utils.serializer.serialize:16 of
+#: mcdreforged.utils.serializer.serialize:20 of
 msgid "The object to be serialized"
 msgstr "被序列化的对象"
 
@@ -89,7 +104,7 @@ msgstr "被序列化的对象"
 msgid "Returns"
 msgstr "返回值"
 
-#: mcdreforged.utils.serializer.serialize:17 of
+#: mcdreforged.utils.serializer.serialize:21 of
 msgid "The serialized result"
 msgstr "序列化结果"
 
@@ -157,8 +172,8 @@ msgid ""
 "Custom subclass of following base classes: :class:`int`, :class:`float`, "
 ":class:`str`, :class:`bool`, :class:`list` and :class:`dict`"
 msgstr ""
-"以下基础类型的自定义子类：:data:`None`、:class:`int`、:class:`float`、:class:`str` 以及 "
-":class:`bool`"
+"以下基础类型的自定义子类：:class:`int`、:class:`float`、:class:`str`、"
+":class:`bool`、:class:`list` 以及 :class:`dict`"
 
 #: mcdreforged.utils.serializer.deserialize:20 of
 msgid "Types in the :external:doc:`typing <library/typing>` module:"
@@ -191,25 +206,31 @@ msgstr ""
 
 #: mcdreforged.utils.serializer.deserialize:27 of
 msgid ""
+"Regular expression pattern (:class:`re.Pattern`). The input data should "
+"be a :class:`str`"
+msgstr "正则表达式对象（:class:`re.Pattern`）。这时输入数据应该是一个 :class:`str`"
+
+#: mcdreforged.utils.serializer.deserialize:29 of
+msgid ""
 "Normal class: The class should have its fields type annotated. It's "
 "constructor should accept 0 input parameter. Example class::"
 msgstr "普通类：这个类应当类型注解完善其所有属性，并且其构造函数应当可接受 0 个入参。类例子："
 
-#: mcdreforged.utils.serializer.deserialize:34 of
+#: mcdreforged.utils.serializer.deserialize:36 of
 msgid ""
 "The input data needs to be a dict. Keys and values in the dict correspond"
 " to the field names and serialized field values. Example dict::"
 msgstr "输入数据应该是一个 dict。dict 中的键和值对应着属性的名称以及序列化的属性值。dict 例子："
 
-#: mcdreforged.utils.serializer.deserialize:38 of
+#: mcdreforged.utils.serializer.deserialize:40 of
 msgid "Fields are set via ``__setattr__``, non-public fields will be ignored."
 msgstr "将使用 ``__setattr__`` 设置对象的属性，非公开属性将被忽略"
 
-#: mcdreforged.utils.serializer.deserialize:40 of
+#: mcdreforged.utils.serializer.deserialize:42 of
 msgid "The json-like object to be deserialized"
 msgstr "被反序列化的 json 样式的对象"
 
-#: mcdreforged.utils.serializer.deserialize:41 of
+#: mcdreforged.utils.serializer.deserialize:43 of
 msgid "The target class of the generated object"
 msgstr "目标类，同时也是返回值的类型"
 
@@ -220,13 +241,13 @@ msgstr "目标类，同时也是返回值的类型"
 msgid "Keyword Arguments"
 msgstr "关键字参数"
 
-#: mcdreforged.utils.serializer.deserialize:42 of
+#: mcdreforged.utils.serializer.deserialize:44 of
 msgid ""
 "A flag indicating if an exception should be risen if there are any not-"
 "assigned fields when deserializing an object. Default false"
 msgstr "一个用于标识在反序列化一个对象的过程中，若对象存在未被赋值的属性，是否应该抛出异常的 flag。默认值为 false"
 
-#: mcdreforged.utils.serializer.deserialize:44 of
+#: mcdreforged.utils.serializer.deserialize:46 of
 msgid ""
 "A flag indicating if an exception should be risen if there are any "
 "unknown input attributes when deserializing an object. Default false"
@@ -237,11 +258,11 @@ msgstr "一个用于标识在反序列化一个对象的过程中，若出现未
 msgid "Raises"
 msgstr "抛出"
 
-#: mcdreforged.utils.serializer.deserialize:46 of
+#: mcdreforged.utils.serializer.deserialize:48 of
 msgid "If input data doesn't match target class, or target class is unsupported"
 msgstr "若输入数据与目标类不匹配，或者目标类不在支持范围"
 
-#: mcdreforged.utils.serializer.deserialize:47 of
+#: mcdreforged.utils.serializer.deserialize:49 of
 msgid ""
 "If input data is invalid, including :data:`Literal <typing.Literal>` "
 "mismatch and those error flag in kwargs taking effect"
@@ -249,17 +270,13 @@ msgstr ""
 "如果输入数据非法，这包括 :data:`Literal <typing.Literal>` 匹配失败，以及那些 kwargs 里的抛异常 flag"
 " 起了效果"
 
-#: mcdreforged.utils.serializer.deserialize:49 of
+#: mcdreforged.utils.serializer.deserialize:51 of
 msgid "An object in class ``cls``"
 msgstr "一个类型为 ``cls`` 的对象"
 
-#: mcdreforged.utils.serializer.deserialize:51 of
+#: mcdreforged.utils.serializer.deserialize:53 of
 msgid "Added :data:`typing.Literal` support"
 msgstr "增加对 :data:`typing.Literal` 的支持"
-
-#: mcdreforged.utils.serializer.deserialize:53 of
-msgid "Added custom subclass of base classes support"
-msgstr "增加对基础类型的自定义子类的支持"
 
 #: mcdreforged.utils.serializer.Serializable:1 of
 msgid "An abstract class for easy serializing / deserializing"
