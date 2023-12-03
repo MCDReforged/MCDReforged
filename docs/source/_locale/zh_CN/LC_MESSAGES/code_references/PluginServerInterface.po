@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-03 23:15+0800\n"
+"POT-Creation-Date: 2023-12-04 00:49+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -261,6 +261,12 @@ msgid ""
 msgstr ""
 "一个储存着默认配置的 dict。当配置文件缺失时，这个参数是必须的，否则将抛出异常。如果 *target_class* 被给出并且 "
 "*default_config* 缺失，则当配置文件缺失时 *target_class* 的默认值将会被使用"
+
+#: mcdreforged.plugin.server_interface.PluginServerInterface.load_config_simple
+#: mcdreforged.plugin.server_interface.PluginServerInterface.save_config_simple
+#: of
+msgid "Keyword Arguments"
+msgstr ""
 
 #: mcdreforged.plugin.server_interface.PluginServerInterface.load_config_simple:35
 #: mcdreforged.plugin.server_interface.PluginServerInterface.save_config_simple:5

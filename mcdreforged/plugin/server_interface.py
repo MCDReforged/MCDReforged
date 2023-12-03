@@ -1163,14 +1163,20 @@ class PluginServerInterface(ServerInterface):
 						needs_save = True
 			log(self._mcdr_server.tr('server_interface.load_config_simple.succeed'))
 		if target_class is not None:
+			def set_imperfect(*_):
+				nonlocal imperfect
+				imperfect = True
+			imperfect = False
 			try:
-				result_config = target_class.deserialize(result_config)
+				result_config = target_class.deserialize(result_config, missing_callback=set_imperfect, redundancy_callback=set_imperfect)
 			except Exception as e:
 				if failure_policy == 'raise':
 					raise
 				result_config = target_class.get_default()
 				needs_save = True
 				log(self._mcdr_server.tr('server_interface.load_config_simple.failed', e))
+			else:
+				needs_save = imperfect
 		else:
 			# remove unexpected keys
 			if default_config is not None:
