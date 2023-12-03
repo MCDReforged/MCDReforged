@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-30 11:44+0800\n"
+"POT-Creation-Date: 2023-12-03 21:45+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -297,14 +297,27 @@ msgstr "读取配置文件的编码方式。默认值 ``\"utf8\"``"
 
 #: mcdreforged.plugin.server_interface.PluginServerInterface.load_config_simple:42
 #: of
+msgid ""
+"The policy of handling a config loading error. ``\"regen\"`` (default): "
+"try to re-generate the config; ``\"raise\"``: directly raise the "
+"exception"
+msgstr "用于处理配置文件加载失败错误的策略。``\"regen\"``（默认值）：尝试重新生成配置文件；``\"raise\"``: 直接抛出相关异常"
+
+#: mcdreforged.plugin.server_interface.PluginServerInterface.load_config_simple:44
+#: of
 msgid "A dict contains the loaded and processed config"
 msgstr "一个储存着加载并处理后的配置文件的 dict"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.load_config_simple:44
+#: mcdreforged.plugin.server_interface.PluginServerInterface.load_config_simple:46
 #: mcdreforged.plugin.server_interface.PluginServerInterface.save_config_simple:8
 #: of
 msgid "The *encoding* parameter"
 msgstr "*encoding* 参数"
+
+#: mcdreforged.plugin.server_interface.PluginServerInterface.load_config_simple:48
+#: of
+msgid "The *failure_policy* parameter"
+msgstr "*failure_policy* 参数"
 
 #: mcdreforged.plugin.server_interface.PluginServerInterface.save_config_simple:1
 #: of

@@ -3,6 +3,7 @@ import json
 import logging
 import os
 import threading
+import typing
 from typing import Callable, TYPE_CHECKING, Tuple, Any, Union, Optional, List, IO, Dict, Type, TypeVar
 
 import psutil
@@ -1039,7 +1040,8 @@ class PluginServerInterface(ServerInterface):
 	def load_config_simple(
 			self, file_name: str = 'config.json', default_config: Optional = None, *,
 			in_data_folder: bool = True, echo_in_console: bool = True, source_to_reply: Optional[CommandSource] = None,
-			target_class: Optional[Type[SerializableType]] = None, encoding: str = 'utf8'
+			target_class: Optional[Type[SerializableType]] = None, encoding: str = 'utf8',
+			failure_policy: typing.Literal['regen', 'raise'] = 'regen',
 	) -> Union[dict, SerializableType]:
 		"""
 		A simple method to load a dict or :class:`~mcdreforged.utils.serializer.Serializable` type config from a json file
@@ -1083,10 +1085,14 @@ class PluginServerInterface(ServerInterface):
 			When specified the loaded config data will be deserialized
 			to an instance of *target_class* which will be returned as return value
 		:param encoding: The encoding method to read the config file. Default ``"utf8"``
+		:param failure_policy: The policy of handling a config loading error.
+			``"regen"`` (default): try to re-generate the config; ``"raise"``: directly raise the exception
 		:return: A dict contains the loaded and processed config
 
 		.. versionadded:: v2.2.0
 			The *encoding* parameter
+		.. versionadded:: v2.12.0
+			The *failure_policy* parameter
 		"""
 
 		def log(msg: str):
@@ -1104,6 +1110,8 @@ class PluginServerInterface(ServerInterface):
 			with open(config_file_path, encoding=encoding) as file_handler:
 				read_data: dict = json.load(file_handler)
 		except Exception as e:
+			if failure_policy == 'raise' and not isinstance(e, FileNotFoundError):
+				raise
 			if default_config is not None:  # use default config
 				result_config = default_config.copy()
 			else:  # no default config and cannot read config file, raise the error
@@ -1124,6 +1132,8 @@ class PluginServerInterface(ServerInterface):
 			try:
 				result_config = target_class.deserialize(result_config)
 			except Exception as e:
+				if failure_policy == 'raise':
+					raise
 				result_config = target_class.get_default()
 				needs_save = True
 				log(self._mcdr_server.tr('server_interface.load_config_simple.failed', e))
