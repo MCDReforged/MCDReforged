@@ -3,7 +3,7 @@ import functools
 import re
 from abc import ABC
 from enum import EnumMeta, Enum
-from typing import Union, TypeVar, List, Dict, Type, get_type_hints, Any, Callable, Literal
+from typing import Union, TypeVar, List, Dict, Type, get_type_hints, Any, Callable, Literal, Optional
 
 from typing_extensions import Self
 
@@ -95,7 +95,13 @@ _BASIC_CLASSES_NO_NONE = (bool, int, float, str, list, dict)
 _BASIC_CLASSES = (type(None), *_BASIC_CLASSES_NO_NONE)
 
 
-def deserialize(data: Any, cls: Type[T], *, error_at_missing: bool = False, error_at_redundancy: bool = False) -> T:
+def deserialize(
+		data: Any, cls: Type[T], *,
+		error_at_missing: bool = False,
+		error_at_redundancy: bool = False,
+		missing_callback: Optional[Callable[[Any, Type, str], Any]] = None,
+		redundancy_callback: Optional[Callable[[Any, Type, str, Any], Any]] = None,
+) -> T:
 	"""
 	A utility function to deserialize a json-like object into an object in given class
 
@@ -144,6 +150,14 @@ def deserialize(data: Any, cls: Type[T], *, error_at_missing: bool = False, erro
 		if there are any not-assigned fields when deserializing an object. Default false
 	:keyword error_at_redundancy: A flag indicating if an exception should be risen
 		if there are any unknown input attributes when deserializing an object. Default false
+	:keyword missing_callback: A callback function that will be invoked
+		if there's a not-assigned field when deserializing an object.
+		The callback accepts 3 arguments: the *data* and the *cls* arguments from this function,
+		and the name of the missing field
+	:keyword redundancy_callback: A callback function that will be invoked
+		if there's an unknown input attribute when deserializing an object.
+		The callback accepts 4 arguments: the *data* and the *cls* arguments from this function,
+		and the name and value of the redundancy key-value pair from the dict *data*
 	:raise TypeError: If input data doesn't match target class, or target class is unsupported
 	:raise ValueError: If input data is invalid, including :data:`Literal <typing.Literal>` mismatch
 		and those error flag in kwargs taking effect
@@ -164,6 +178,12 @@ def deserialize(data: Any, cls: Type[T], *, error_at_missing: bool = False, erro
 	# in case None instead of NoneType is passed
 	if cls is None:
 		cls = type(None)
+	kwargs = dict(
+		error_at_missing=error_at_missing,
+		error_at_redundancy=error_at_redundancy,
+		missing_callback=missing_callback,
+		redundancy_callback=redundancy_callback,
+	)
 
 	cls_org = _get_origin(cls)
 
@@ -176,7 +196,7 @@ def deserialize(data: Any, cls: Type[T], *, error_at_missing: bool = False, erro
 	elif cls_org == Union:
 		for possible_cls in _get_args(cls):
 			try:
-				return deserialize(data, possible_cls, error_at_missing=error_at_missing, error_at_redundancy=error_at_redundancy)
+				return deserialize(data, possible_cls, **kwargs)
 			except (TypeError, ValueError):
 				pass
 		raise TypeError('Data in type {} cannot match any candidate of target class {}'.format(type(data), cls))
@@ -204,7 +224,7 @@ def deserialize(data: Any, cls: Type[T], *, error_at_missing: bool = False, erro
 		cls_real = cls_org if isinstance(cls_org, type) else list
 		if isinstance(data, list):
 			element_type = _get_args(cls)[0]
-			return cls_real(map(lambda e: deserialize(e, element_type, error_at_missing=error_at_missing, error_at_redundancy=error_at_redundancy), data))
+			return cls_real(map(lambda e: deserialize(e, element_type, **kwargs), data))
 		else:
 			mismatch(cls_org)
 
@@ -216,8 +236,8 @@ def deserialize(data: Any, cls: Type[T], *, error_at_missing: bool = False, erro
 			val_type = _get_args(cls)[1]
 			result = cls_real()
 			for key, value in data.items():
-				deserialized_key = deserialize(key, key_type, error_at_missing=error_at_missing, error_at_redundancy=error_at_redundancy)
-				deserialized_value = deserialize(value, val_type, error_at_missing=error_at_missing, error_at_redundancy=error_at_redundancy)
+				deserialized_key = deserialize(key, key_type, **kwargs)
+				deserialized_value = deserialize(value, val_type, **kwargs)
 				result[deserialized_key] = deserialized_value
 			return result
 		else:
@@ -261,18 +281,25 @@ def deserialize(data: Any, cls: Type[T], *, error_at_missing: bool = False, erro
 					result.validate_attribute(attr_name_, attr_value_)
 				result.__setattr__(attr_name_, attr_value_)
 
-			input_key_set = set(data.keys())
+			remaning_keys = set(data.keys())
 			for attr_name, attr_type in _get_type_hints(cls).items():
 				if not attr_name.startswith('_'):
 					if attr_name in data:
-						set_result_attr(attr_name, deserialize(data[attr_name], attr_type, error_at_missing=error_at_missing, error_at_redundancy=error_at_redundancy))
-						input_key_set.remove(attr_name)
-					elif error_at_missing:
-						raise ValueError('Missing field {} for class {} in input object {}'.format(attr_name, cls, data))
-					elif hasattr(cls, attr_name):
-						set_result_attr(attr_name, copy.copy(getattr(cls, attr_name)))
-			if error_at_redundancy and len(input_key_set) > 0:
-				raise ValueError('Unknown input attributes {} for class {} in input object {}'.format(input_key_set, cls, data))
+						set_result_attr(attr_name, deserialize(data[attr_name], attr_type, **kwargs))
+						remaning_keys.remove(attr_name)
+					else:
+						if missing_callback is not None:
+							missing_callback(data, cls, attr_name)
+						if error_at_missing:
+							raise ValueError('Missing field {} for class {} in input object {}'.format(attr_name, cls, data))
+						elif hasattr(cls, attr_name):
+							set_result_attr(attr_name, copy.copy(getattr(cls, attr_name)))
+			if redundancy_callback is not None:
+				for k, v in data.items():
+					if k in remaning_keys:
+						redundancy_callback(data, cls, k, v)
+			if error_at_redundancy and len(remaning_keys) > 0:
+				raise ValueError('Unknown input attributes {} for class {} in input object {}'.format(remaning_keys, cls, data))
 			if isinstance(result, Serializable):
 				result.on_deserialization()
 			return result

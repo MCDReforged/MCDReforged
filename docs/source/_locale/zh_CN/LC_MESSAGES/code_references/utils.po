@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-30 16:22+0800\n"
+"POT-Creation-Date: 2023-12-04 00:49+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -81,7 +81,7 @@ msgid ""
 "follow the order in the annotation"
 msgstr "如果对象是一个 :class:`Serializable`，那么其属性的顺序将与注解中顺序的保持一致"
 
-#: mcdreforged.utils.serializer.deserialize:55
+#: mcdreforged.utils.serializer.deserialize:63
 #: mcdreforged.utils.serializer.serialize:17 of
 msgid "Added custom subclass of base classes and :class:`re.Pattern` support"
 msgstr "增加对基础类型的自定义子类、正则表达式对象（:class:`re.Pattern`）的支持"
@@ -172,8 +172,8 @@ msgid ""
 "Custom subclass of following base classes: :class:`int`, :class:`float`, "
 ":class:`str`, :class:`bool`, :class:`list` and :class:`dict`"
 msgstr ""
-"以下基础类型的自定义子类：:class:`int`、:class:`float`、:class:`str`、"
-":class:`bool`、:class:`list` 以及 :class:`dict`"
+"以下基础类型的自定义子类：:class:`int`、:class:`float`、:class:`str`、:class:`bool`、:class:`list`"
+" 以及 :class:`dict`"
 
 #: mcdreforged.utils.serializer.deserialize:20 of
 msgid "Types in the :external:doc:`typing <library/typing>` module:"
@@ -253,16 +253,32 @@ msgid ""
 "unknown input attributes when deserializing an object. Default false"
 msgstr "一个用于标识在反序列化一个对象的过程中，若出现未知的输入属性，是否应该抛出异常的 flag。默认值为 false"
 
+#: mcdreforged.utils.serializer.deserialize:48 of
+msgid ""
+"A callback function that will be invoked if there's a not-assigned field "
+"when deserializing an object. The callback accepts 3 arguments: the "
+"*data* and the *cls* arguments from this function, and the name of the "
+"missing field"
+msgstr "在反序列化对象过程中，发现对象存在未被赋值的属性时，调用的回调函数。该回调函数接受 3 个参数：此函数的 *data* 和 *cls* 参数，以及对象缺失属性的名称"
+
+#: mcdreforged.utils.serializer.deserialize:52 of
+msgid ""
+"A callback function that will be invoked if there's an unknown input "
+"attribute when deserializing an object. The callback accepts 4 arguments:"
+" the *data* and the *cls* arguments from this function, and the name and "
+"value of the redundancy key-value pair from the dict *data*"
+msgstr "在反序列化对象过程中，遇到未知的输入属性时，调用的回调函数。该回调函数接受 4 个参数：此函数的 *data* 和 *cls* 参数，以及字典 *data* 中那个多余键值对的键和值"
+
 #: mcdreforged.utils.serializer.Serializable.validate_attribute
 #: mcdreforged.utils.serializer.deserialize of
 msgid "Raises"
 msgstr "抛出"
 
-#: mcdreforged.utils.serializer.deserialize:48 of
+#: mcdreforged.utils.serializer.deserialize:56 of
 msgid "If input data doesn't match target class, or target class is unsupported"
 msgstr "若输入数据与目标类不匹配，或者目标类不在支持范围"
 
-#: mcdreforged.utils.serializer.deserialize:49 of
+#: mcdreforged.utils.serializer.deserialize:57 of
 msgid ""
 "If input data is invalid, including :data:`Literal <typing.Literal>` "
 "mismatch and those error flag in kwargs taking effect"
@@ -270,11 +286,11 @@ msgstr ""
 "如果输入数据非法，这包括 :data:`Literal <typing.Literal>` 匹配失败，以及那些 kwargs 里的抛异常 flag"
 " 起了效果"
 
-#: mcdreforged.utils.serializer.deserialize:51 of
+#: mcdreforged.utils.serializer.deserialize:59 of
 msgid "An object in class ``cls``"
 msgstr "一个类型为 ``cls`` 的对象"
 
-#: mcdreforged.utils.serializer.deserialize:53 of
+#: mcdreforged.utils.serializer.deserialize:61 of
 msgid "Added :data:`typing.Literal` support"
 msgstr "增加对 :data:`typing.Literal` 的支持"
 
