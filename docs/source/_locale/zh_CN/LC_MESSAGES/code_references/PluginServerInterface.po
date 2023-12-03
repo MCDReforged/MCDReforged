@@ -309,7 +309,7 @@ msgid ""
 "The policy of handling a config loading error. ``\"regen\"`` (default): "
 "try to re-generate the config; ``\"raise\"``: directly raise the "
 "exception"
-msgstr "用于处理配置文件加载失败错误的策略。``\"regen\"``（默认值）：尝试重新生成配置文件；``\"raise\"``: 直接抛出相关异常"
+msgstr "用于处理配置文件加载失败错误的策略。``\"regen\"`` （默认值）：尝试重新生成配置文件；``\"raise\"``: 直接抛出相关异常"
 
 #: mcdreforged.plugin.server_interface.PluginServerInterface.load_config_simple:46
 #: of

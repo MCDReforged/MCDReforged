@@ -405,7 +405,7 @@ class ServerInterface:
 			:meth:`execute_command` if you want to execute command in MCDR's command system
 
 		:param text: The content of the command you want to send
-		:param encoding: The encoding method for the text.
+		:keyword encoding: The encoding method for the text.
 			Leave it empty to use the encoding method from the configuration of MCDR
 		"""
 		logger = self.logger
@@ -423,7 +423,7 @@ class ServerInterface:
 
 		:param player: The name of the player you want to tell
 		:param text: The message you want to send to the player
-		:param encoding: The encoding method for the text.
+		:keyword encoding: The encoding method for the text.
 			Leave it empty to use the encoding method from the configuration of MCDR
 		"""
 		with RTextMCDRTranslation.language_context(self._mcdr_server.preference_manager.get_preferred_language(player)):
@@ -436,7 +436,7 @@ class ServerInterface:
 		Use command like ``/tellraw @a`` to broadcast the message in game
 
 		:param text: The message you want to send
-		:param encoding: The encoding method for the text.
+		:keyword encoding: The encoding method for the text.
 			Leave it empty to use the encoding method from the configuration of MCDR
 		"""
 		command = self.__server_handler.get_broadcast_message_command(text, self.get_server_information())
@@ -448,7 +448,7 @@ class ServerInterface:
 		Broadcast the message in game and to the console
 
 		:param text: The message you want to send
-		:param encoding: The encoding method for the text.
+		:keyword encoding: The encoding method for the text.
 			Leave it empty to use the encoding method from the configuration of MCDR
 		"""
 		self.say(text, encoding=encoding)
@@ -466,8 +466,8 @@ class ServerInterface:
 
 		:param info: the Info you want to reply to
 		:param text: The message you want to send
-		:param console_text: If it's specified, *console_text* will be used instead of text when replying to console
-		:param encoding: The encoding method for the text
+		:keyword encoding: The encoding method for the text
+		:keyword console_text: If it's specified, *console_text* will be used instead of text when replying to console
 		:raise IllegalCallError: If the Info is not from a user
 		"""
 		source = info.get_command_source()
@@ -692,7 +692,7 @@ class ServerInterface:
 			instance. For simple usage, you can create a :class:`~mcdreforged.plugin.plugin_event.LiteralEvent` instance for this argument
 		:param args: The argument that will be used to invoke the event listeners. An :class:`PluginServerInterface` instance
 			will be automatically added to the beginning of the argument list
-		:param on_executor_thread: By default the event will be dispatched in a new task in task executor thread
+		:keyword on_executor_thread: By default the event will be dispatched in a new task in task executor thread
 			If it's set to False. The event will be dispatched immediately
 		"""
 		class_util.check_type(event, PluginEvent)
@@ -904,8 +904,8 @@ class ServerInterface:
 		Schedule a callback task to be run in task executor thread
 
 		:param callable_: The callable object to be run. It should accept 0 parameter
-		:param block: If blocks until the callable finished execution
-		:param timeout: The timeout of the blocking operation if ``block=True``
+		:keyword block: If blocks until the callable finished execution
+		:keyword timeout: The timeout of the blocking operation if ``block=True``
 		"""
 		self._mcdr_server.task_executor.add_regular_task(callable_, block=block, timeout=timeout)
 
@@ -1109,16 +1109,16 @@ class PluginServerInterface(ServerInterface):
 		:param default_config: A dict contains the default config. It's required when the config file is missing,
 			or exception will be risen. If *target_class* is given and *default_config* is missing, the default values in *target_class*
 			will be used when the config file is missing
-		:param in_data_folder: If True, the parent directory of file operating is the :meth:`data folder <get_data_folder>` of the plugin
-		:param echo_in_console: If logging messages in console about config loading
-		:param source_to_reply: The command source for replying logging messages
-		:param target_class: A class derived from :class:`~mcdreforged.utils.serializer.Serializable`.
+		:keyword in_data_folder: If True, the parent directory of file operating is the :meth:`data folder <get_data_folder>` of the plugin
+		:keyword echo_in_console: If logging messages in console about config loading
+		:keyword source_to_reply: The command source for replying logging messages
+		:keyword target_class: A class derived from :class:`~mcdreforged.utils.serializer.Serializable`.
 			When specified the loaded config data will be deserialized
 			to an instance of *target_class* which will be returned as return value
-		:param encoding: The encoding method to read the config file. Default ``"utf8"``
-		:param file_format: The syntax format of the config file. Default: ``None``, which means that
+		:keyword encoding: The encoding method to read the config file. Default ``"utf8"``
+		:keyword file_format: The syntax format of the config file. Default: ``None``, which means that
 			MCDR will try to detect the format from the name of the config file
-		:param failure_policy: The policy of handling a config loading error.
+		:keyword failure_policy: The policy of handling a config loading error.
 			``"regen"`` (default): try to re-generate the config; ``"raise"``: directly raise the exception
 		:return: A dict contains the loaded and processed config
 
@@ -1192,9 +1192,9 @@ class PluginServerInterface(ServerInterface):
 
 		:param config: The config instance to be saved
 		:param file_name: The name of the config file. It can also be a path to the config file
-		:param in_data_folder: If True, the parent directory of file operating is the :meth:`data folder <get_data_folder>` of the plugin
-		:param encoding: The encoding method to write the config file. Default ``"utf8"``
-		:param file_format: The syntax format of the config file. Default: ``None``, which means that
+		:keyword in_data_folder: If True, the parent directory of file operating is the :meth:`data folder <get_data_folder>` of the plugin
+		:keyword encoding: The encoding method to write the config file. Default ``"utf8"``
+		:keyword file_format: The syntax format of the config file. Default: ``None``, which means that
 			MCDR will try to detect the format from the name of the config file
 
 		.. versionadded:: v2.2.0
