@@ -7,6 +7,7 @@ import typing
 from typing import Callable, TYPE_CHECKING, Tuple, Any, Union, Optional, List, IO, Dict, Type, TypeVar
 
 import psutil
+from ruamel.yaml import YAML
 
 from mcdreforged.command.builder.nodes.basic import Literal
 from mcdreforged.command.command_source import CommandSource, PluginCommandSource, PlayerCommandSource, ConsoleCommandSource
@@ -1037,10 +1038,40 @@ class PluginServerInterface(ServerInterface):
 			raise FileNotFoundError('Only packed plugin supported this API, found plugin type: {}'.format(self.__plugin.__class__))
 		return self.__plugin.open_file(relative_file_path)
 
+	@staticmethod
+	def __get_dict_loader_from(file_name: str, file_format: Optional[typing.Literal['json', 'yaml']] = None):
+		if file_format is None:
+			ext = os.path.basename(file_name).rsplit('.', 1)[-1]
+			if ext in ['json']:
+				file_format = 'json'
+			elif ext in ['yml', 'yaml']:
+				file_format = 'yaml'
+			else:
+				raise ValueError('cannot detect file format from file path {!r}'.format(file_name))
+		if file_format == 'json':
+			class JsonWrapper:
+				def load(self, *args, **kwargs):
+					return json.load(*args, **kwargs)
+
+				def dump(self, *args, **kwargs):
+					kwargs.update(indent=4, ensure_ascii=False)
+					return json.dump(*args, **kwargs)
+			dict_loader = JsonWrapper()
+		elif file_format == 'yaml':
+			dict_loader = YAML()
+			dict_loader.width = 1048576
+		else:
+			raise ValueError('invalid file_format {!r}'.format(file_format))
+		return dict_loader
+
 	def load_config_simple(
 			self, file_name: str = 'config.json', default_config: Optional = None, *,
-			in_data_folder: bool = True, echo_in_console: bool = True, source_to_reply: Optional[CommandSource] = None,
-			target_class: Optional[Type[SerializableType]] = None, encoding: str = 'utf8',
+			in_data_folder: bool = True,
+			echo_in_console: bool = True,
+			source_to_reply: Optional[CommandSource] = None,
+			target_class: Optional[Type[SerializableType]] = None,
+			encoding: str = 'utf8',
+			file_format: Optional[typing.Literal['json', 'yaml']] = None,
 			failure_policy: typing.Literal['regen', 'raise'] = 'regen',
 	) -> Union[dict, SerializableType]:
 		"""
@@ -1085,6 +1116,8 @@ class PluginServerInterface(ServerInterface):
 			When specified the loaded config data will be deserialized
 			to an instance of *target_class* which will be returned as return value
 		:param encoding: The encoding method to read the config file. Default ``"utf8"``
+		:param file_format: The syntax format of the config file. Default: ``None``, which means that
+			MCDR will try to detect the format from the name of the config file
 		:param failure_policy: The policy of handling a config loading error.
 			``"regen"`` (default): try to re-generate the config; ``"raise"``: directly raise the exception
 		:return: A dict contains the loaded and processed config
@@ -1092,7 +1125,7 @@ class PluginServerInterface(ServerInterface):
 		.. versionadded:: v2.2.0
 			The *encoding* parameter
 		.. versionadded:: v2.12.0
-			The *failure_policy* parameter
+			The *failure_policy* and *file_format* parameters
 		"""
 
 		def log(msg: str):
@@ -1105,10 +1138,11 @@ class PluginServerInterface(ServerInterface):
 		if target_class is not None and default_config is None:
 			default_config = target_class.get_default().serialize()
 		config_file_path = os.path.join(self.get_data_folder(), file_name) if in_data_folder else file_name
+		dict_loader = self.__get_dict_loader_from(file_name, file_format)
 		needs_save = False
 		try:
 			with open(config_file_path, encoding=encoding) as file_handler:
-				read_data: dict = json.load(file_handler)
+				read_data: dict = dict_loader.load(file_handler)
 		except Exception as e:
 			if failure_policy == 'raise' and not isinstance(e, FileNotFoundError):
 				raise
@@ -1144,12 +1178,14 @@ class PluginServerInterface(ServerInterface):
 					if key not in default_config:
 						result_config.pop(key)
 		if needs_save:
-			self.save_config_simple(result_config, file_name=file_name, in_data_folder=in_data_folder)
+			self.save_config_simple(result_config, file_name=file_name, file_format=file_format, in_data_folder=in_data_folder)
 		return result_config
 
 	def save_config_simple(
 			self, config: Union[dict, Serializable], file_name: str = 'config.json', *,
-			in_data_folder: bool = True, encoding: str = 'utf8'
+			in_data_folder: bool = True,
+			encoding: str = 'utf8',
+			file_format: Optional[typing.Literal['json', 'yaml']] = None,
 	) -> None:
 		"""
 		A simple method to save your dict or :class:`~mcdreforged.utils.serializer.Serializable` type config as a json file
@@ -1158,10 +1194,15 @@ class PluginServerInterface(ServerInterface):
 		:param file_name: The name of the config file. It can also be a path to the config file
 		:param in_data_folder: If True, the parent directory of file operating is the :meth:`data folder <get_data_folder>` of the plugin
 		:param encoding: The encoding method to write the config file. Default ``"utf8"``
+		:param file_format: The syntax format of the config file. Default: ``None``, which means that
+			MCDR will try to detect the format from the name of the config file
 
 		.. versionadded:: v2.2.0
 			The *encoding* parameter
+		.. versionadded:: v2.12.0
+			The *file_format* parameter
 		"""
+		dict_loader = self.__get_dict_loader_from(file_name, file_format)
 		config_file_path = os.path.join(self.get_data_folder(), file_name) if in_data_folder else file_name
 		if isinstance(config, Serializable):
 			data = config.serialize()
@@ -1172,4 +1213,4 @@ class PluginServerInterface(ServerInterface):
 			os.makedirs(target_folder)
 		with file_util.safe_write(config_file_path, encoding=encoding) as file:
 			# config file should be nicely readable, so here come the indent and non-ascii chars
-			json.dump(data, file, indent=4, ensure_ascii=False)
+			dict_loader.dump(data, file)
