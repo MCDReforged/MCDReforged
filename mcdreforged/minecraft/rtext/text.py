@@ -335,7 +335,7 @@ class RText(RTextBase):
 	def to_plain_text(self) -> str:
 		return self.__text
 
-	def to_colored_text(self) -> str:
+	def _get_console_style_codes(self) -> str:
 		if isinstance(self.__color, RColorClassic):
 			color = self.__color.console_code
 		elif isinstance(self.__color, RColorRGB):
@@ -345,7 +345,10 @@ class RText(RTextBase):
 		for style in self.__styles:
 			if isinstance(style, RItemClassic):
 				color += style.console_code
-		return color + self.to_plain_text() + Style.RESET_ALL
+		return color
+
+	def to_colored_text(self) -> str:
+		return self._get_console_style_codes() + self.to_plain_text() + Style.RESET_ALL
 
 	def _copy_from(self, text: 'RText'):
 		self.__text = text.__text
@@ -433,7 +436,10 @@ class RTextList(RTextBase):
 		return ''.join(map(lambda rtext: rtext.to_plain_text(), self.children))
 
 	def to_colored_text(self) -> str:
-		return ''.join(map(lambda rtext: rtext.to_colored_text(), self.children))
+		# noinspection PyProtectedMember
+		head = self.header._get_console_style_codes()
+		tail = Style.RESET_ALL if len(head) > 0 else ''
+		return ''.join(map(lambda rtext: ''.join([head, rtext.to_colored_text(), tail]), self.children))
 
 	def copy(self) -> 'RTextList':
 		copied = RTextList()
