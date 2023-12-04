@@ -25,7 +25,7 @@ class RTextBase(ABC):
 
 		It can be used as the second parameter in Minecraft command ``/tellraw <target> <message>`` and more
 		"""
-		return json.dumps(self.to_json_object(), ensure_ascii=False)
+		return json.dumps(self.to_json_object(), ensure_ascii=False, separators=(',', ':'))
 
 	def to_plain_text(self) -> str:
 		"""
