@@ -416,12 +416,7 @@ class RTextList(RTextBase):
 
 	def append(self, *args) -> Self:
 		for obj in args:
-			if isinstance(obj, RTextList):
-				self.children.extend(obj.children)
-			elif isinstance(obj, RTextBase):
-				self.children.append(obj)
-			else:
-				self.children.append(RText(obj))
+			self.children.append(RTextBase.from_any(obj))
 		return self
 
 	def is_empty(self) -> bool:
