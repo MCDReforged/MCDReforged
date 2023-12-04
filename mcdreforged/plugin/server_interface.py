@@ -452,7 +452,8 @@ class ServerInterface:
 			Leave it empty to use the encoding method from the configuration of MCDR
 		"""
 		self.say(text, encoding=encoding)
-		misc_util.print_text_to_console(self.logger, text)
+		with RTextMCDRTranslation.language_context(self._mcdr_server.preference_manager.get_console_preference().language):
+			misc_util.print_text_to_console(self.logger, text)
 
 	# noinspection PyMethodMayBeStatic
 	def reply(self, info: Info, text: MessageText, *, encoding: Optional[str] = None, console_text: Optional[MessageText] = None):

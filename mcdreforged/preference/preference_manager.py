@@ -85,6 +85,9 @@ class PreferenceManager:
 			pref = pref.copy()
 		return pref
 
+	def get_console_preference(self) -> PreferenceItem:
+		return self.get_preference(CONSOLE_ALIAS, strict_type_check=True)
+
 	def set_preference(self, obj: PreferenceSource, pref: PreferenceItem):
 		name: str = self.__get_name(obj)
 		self.preferences[name] = pref.copy()
