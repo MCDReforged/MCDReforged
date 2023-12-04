@@ -12,6 +12,7 @@ from ruamel.yaml import YAML
 from mcdreforged.command.builder.nodes.basic import Literal
 from mcdreforged.command.command_source import CommandSource, PluginCommandSource, PlayerCommandSource, ConsoleCommandSource
 from mcdreforged.constants import plugin_constant
+from mcdreforged.constants.deprecations import SERVER_INTERFACE_LANGUAGE_KEYWORD
 from mcdreforged.info_reactor.info import Info
 from mcdreforged.info_reactor.server_information import ServerInformation
 from mcdreforged.mcdr_state import MCDReforgedFlag
@@ -171,7 +172,7 @@ class ServerInterface:
 	#          Utils
 	# ------------------------
 
-	def tr(self, translation_key: str, *args, language: Optional[str] = None, **kwargs) -> MessageText:
+	def tr(self, translation_key: str, *args, _mcdr_tr_language: Optional[str] = None, language: Optional[str] = None, **kwargs) -> MessageText:
 		"""
 		Return a translated text corresponded to the translation key and format the text with given args and kwargs
 
@@ -185,10 +186,15 @@ class ServerInterface:
 
 		:param translation_key: The key of the translation
 		:param args: The args to be formatted
-		:param language: Specific language to be used in this translation, or the language that MCDR is using will be used
+		:param _mcdr_tr_language: Specific language to be used in this translation, or the language that MCDR is using will be used
+		:param language: Deprecated, to be removed in v2.15. Use kwarg *_mcdr_tr_language* instead
 		:param kwargs: The kwargs to be formatted
 		"""
-		return self._mcdr_server.tr(translation_key, *args, language=language, **kwargs)
+		if language is not None and _mcdr_tr_language is None:
+			self.logger.warning('%s. Translation key: %s', SERVER_INTERFACE_LANGUAGE_KEYWORD, translation_key)
+			_mcdr_tr_language = language
+
+		return self._mcdr_server.tr(translation_key, *args, _mcdr_tr_language=_mcdr_tr_language, **kwargs)
 
 	def rtr(self, translation_key: str, *args, **kwargs) -> RTextMCDRTranslation:
 		"""

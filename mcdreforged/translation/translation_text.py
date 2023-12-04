@@ -49,8 +49,8 @@ class RTextMCDRTranslation(RTextBase):
 
 	@classmethod
 	def from_translation_dict(cls, translation_dict: TranslationKeyDictRich) -> 'RTextMCDRTranslation':
-		def fake_tr(_key: str, language: str):
-			return translation_util.translate_from_dict(translation_dict, language)
+		def fake_tr(_key: str, _mcdr_tr_language: str):
+			return translation_util.translate_from_dict(translation_dict, _mcdr_tr_language)
 
 		return RTextMCDRTranslation('').set_translator(fake_tr)
 
@@ -58,7 +58,7 @@ class RTextMCDRTranslation(RTextBase):
 		language = getattr(self.__TLS, 'language', None)
 		if language is None:
 			language = translation_util.get_mcdr_language()
-		processed_text = self.__translator(self.translation_key, *self.args, **self.kwargs, language=language)
+		processed_text = self.__translator(self.translation_key, *self.args, **self.kwargs, _mcdr_tr_language=language)
 		processed_text = RTextBase.from_any(processed_text)
 		for process in self.__post_process:
 			processed_text = process(processed_text)

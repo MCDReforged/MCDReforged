@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-14 20:57+0800\n"
+"POT-Creation-Date: 2023-12-05 01:23+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -265,8 +265,12 @@ msgid ""
 "MCDR is using will be used"
 msgstr "指定在该次翻译中使用的语言。若未指定，则使用 MCDR 所使用的语言"
 
-#: mcdreforged.plugin.server_interface.ServerInterface.rtr:10
 #: mcdreforged.plugin.server_interface.ServerInterface.tr:14 of
+msgid "Deprecated, to be removed in v2.15. Use kwarg *_mcdr_tr_language* instead"
+msgstr "已弃用，将于 v2.15 移除。请使用关键字参数 *_mcdr_tr_language* 替代"
+
+#: mcdreforged.plugin.server_interface.ServerInterface.rtr:10
+#: mcdreforged.plugin.server_interface.ServerInterface.tr:15 of
 msgid "The kwargs to be formatted"
 msgstr "用于格式化的关键字参数（kwargs）"
 
@@ -501,6 +505,17 @@ msgstr "方法 :meth:`execute_command`，如果你想要在 MCDR 的指令系统
 msgid "The content of the command you want to send"
 msgstr "你要发送的指令内容"
 
+#: mcdreforged.plugin.server_interface.ServerInterface.broadcast
+#: mcdreforged.plugin.server_interface.ServerInterface.dispatch_event
+#: mcdreforged.plugin.server_interface.ServerInterface.execute
+#: mcdreforged.plugin.server_interface.ServerInterface.reload_config_file
+#: mcdreforged.plugin.server_interface.ServerInterface.reply
+#: mcdreforged.plugin.server_interface.ServerInterface.say
+#: mcdreforged.plugin.server_interface.ServerInterface.schedule_task
+#: mcdreforged.plugin.server_interface.ServerInterface.tell of
+msgid "Keyword Arguments"
+msgstr "关键字参数"
+
 #: mcdreforged.plugin.server_interface.ServerInterface.broadcast:4
 #: mcdreforged.plugin.server_interface.ServerInterface.execute:8
 #: mcdreforged.plugin.server_interface.ServerInterface.say:4
@@ -556,14 +571,14 @@ msgid "the Info you want to reply to"
 msgstr "你要回复的 Info 目标"
 
 #: mcdreforged.plugin.server_interface.ServerInterface.reply:10 of
+msgid "The encoding method for the text"
+msgstr "文本的编码方法"
+
+#: mcdreforged.plugin.server_interface.ServerInterface.reply:11 of
 msgid ""
 "If it's specified, *console_text* will be used instead of text when "
 "replying to console"
 msgstr "如果指定了该参数，那么在回复控制台时，将使用 *console_text* 来代替 "
-
-#: mcdreforged.plugin.server_interface.ServerInterface.reply:11 of
-msgid "The encoding method for the text"
-msgstr "文本的编码方法"
 
 #: mcdreforged.plugin.server_interface.ServerInterface.reply:12 of
 msgid "If the Info is not from a user"
@@ -875,10 +890,6 @@ msgstr "从配置文件重载 MCDR 的配置"
 #: mcdreforged.plugin.server_interface.ServerInterface.reload_config_file:3 of
 msgid "It has the same effect as command ``!!MCDR reload config``"
 msgstr "其效果与指令 ``!!MCDR reload config`` 相同"
-
-#: mcdreforged.plugin.server_interface.ServerInterface.reload_config_file of
-msgid "Keyword Arguments"
-msgstr "关键字参数"
 
 #: mcdreforged.plugin.server_interface.ServerInterface.reload_config_file:5 of
 msgid "If the config changing messages should be logged"

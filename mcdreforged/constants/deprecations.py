@@ -11,3 +11,4 @@ class Deprecation(NamedTuple):
 
 
 PLUGIN_ID_STARTS_WITH_NON_ALPHABET = Deprecation('plugin id starting with non-alphabet letter', '2.11.0', '2.13')
+SERVER_INTERFACE_LANGUAGE_KEYWORD = Deprecation('ServerInterface.tr language as non-translation-keyword argument', '2.12.0', '2.15')

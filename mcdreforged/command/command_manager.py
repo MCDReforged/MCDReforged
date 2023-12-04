@@ -47,7 +47,7 @@ class CommandManager:
 				args = ()
 			else:
 				args = error_.get_error_data()
-			return self.mcdr_server.tr(translation_key_, *args, allow_failure=False, language=source.get_preference().language)
+			return self.mcdr_server.tr(translation_key_, *args, _mcdr_tr_allow_failure=False, _mcdr_tr_language=source.get_preference().language)
 
 		first_literal_element = utils.get_element(command)
 		plugin_root_nodes = self.root_nodes.get(first_literal_element, [])
