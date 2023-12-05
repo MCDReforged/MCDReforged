@@ -62,6 +62,7 @@ class AbstractPluginRegistry:
 		self.event_listeners.clear()
 		self.help_messages.clear()
 		self.command_roots.clear()
+		self.translations.clear()
 
 
 class PluginRegistry(AbstractPluginRegistry):
@@ -97,6 +98,7 @@ class PluginRegistryStorage(AbstractPluginRegistry):
 			self.event_listeners[event_id].extend(plg_listeners)
 		self.help_messages.extend(registry.help_messages)
 		self.command_roots.extend(registry.command_roots)
+		translation_util.extend_storage(self.translations, registry.translations)
 
 	def arrange(self):
 		self.help_messages.sort()

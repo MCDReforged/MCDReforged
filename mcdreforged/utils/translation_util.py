@@ -59,3 +59,11 @@ def unpack_nest_translation(translation: TranslationKeyDictNested) -> Translatio
 def update_storage(storage: TranslationStorage, language: str, mapping: TranslationKeyDictNested):
 	for key, value in unpack_nest_translation(mapping).items():
 		storage[key][language] = value
+
+
+def extend_storage(translations: TranslationStorage, other: TranslationStorage):
+	for key, lang_dict in other.items():
+		if key not in translations:
+			translations[key] = lang_dict.copy()
+		else:
+			translations[key].update(lang_dict)
