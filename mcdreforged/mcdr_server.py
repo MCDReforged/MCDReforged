@@ -196,7 +196,12 @@ class MCDReforgedServer:
 	def get_language(self) -> str:
 		return self.translation_manager.language
 
-	def tr(self, translation_key: str, *args, _mcdr_tr_language: Optional[str] = None, _mcdr_tr_allow_failure=True, **kwargs) -> MessageText:
+	def tr(
+			self, translation_key: str,
+			*args,
+			_mcdr_tr_language: Optional[str] = None, _mcdr_tr_fallback_language: Optional[str] = core_constant.DEFAULT_LANGUAGE, _mcdr_tr_allow_failure=True,
+			**kwargs
+	) -> MessageText:
 		"""
 		Return a translated text corresponded to the translation key and format the text with given args
 		If args contains RText element, then the result will be a RText, otherwise the result will be a regular str
@@ -204,6 +209,7 @@ class MCDReforgedServer:
 		:param translation_key: The key of the translation
 		:param args: The args to be formatted
 		:param _mcdr_tr_language: Specific language to be used in this translation, or the language that MCDR is using will be used
+		:param _mcdr_tr_fallback_language: The fallback language for another attempt, when the translation failed. Set it to None to disable auto-fallback
 		:param _mcdr_tr_allow_failure: If set to false, a KeyError will be risen if the translation key is not recognized
 		:param kwargs: The kwargs to be formatted
 		"""
@@ -211,7 +217,7 @@ class MCDReforgedServer:
 			translation_key, args, kwargs,
 			allow_failure=_mcdr_tr_allow_failure,
 			language=_mcdr_tr_language,
-			fallback_language=core_constant.DEFAULT_LANGUAGE,
+			fallback_language=_mcdr_tr_fallback_language,
 			plugin_translations=self.plugin_manager.registry_storage.translations
 		)
 

@@ -215,6 +215,35 @@ class ServerInterface:
 		text.set_translator(self.tr)  # not that necessary tbh, just in case self.tr != ServerInterface.get_instance().tr somehow
 		return text
 
+	def has_translation(self, translation_key: str, *, language: Optional[str] = None, no_auto_fallback: bool = False):
+		"""
+		Check if the given translation exists
+
+		Notes that if the current language fails, MCDR will try to use "en_us" for a second attempt.
+		If you don't want this auto-fallback behavior, set argument *no_auto_fallback* to True
+
+		Also, you don't need to pass ``*args`` and ``**kwargs`` for the translation into this method,
+		because existence check doesn't need those
+
+		:param translation_key: The key of the translation
+		:keyword language: Optional, the language to check for translation key existence
+		:keyword no_auto_fallback: When set to True, MCDR will not fall back to "en_us" and have another translation try, if translation failed
+
+		.. versionadded:: v2.12.0
+		"""
+		kwargs = dict(
+			_mcdr_tr_language=language,
+			_mcdr_tr_allow_failure=False
+		)
+		if no_auto_fallback:
+			kwargs.update(_mcdr_tr_fallback_language=None)
+		try:
+			self._mcdr_server.tr(translation_key, **kwargs)
+		except KeyError:
+			return False
+		else:
+			return True
+
 	# ------------------------
 	#      Server Control
 	# ------------------------

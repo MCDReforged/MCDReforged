@@ -26,6 +26,7 @@ Utils
 .. autoproperty:: ServerInterface.logger
 .. automethod:: ServerInterface.tr
 .. automethod:: ServerInterface.rtr
+.. automethod:: ServerInterface.has_translation
 
 Server Control
 --------------

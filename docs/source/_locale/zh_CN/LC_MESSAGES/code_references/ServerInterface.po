@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-05 01:23+0800\n"
+"POT-Creation-Date: 2023-12-06 00:45+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -233,6 +233,7 @@ msgstr "见 :ref:`此处 <plugin-translation>` 以了解为你的插件注册翻
 #: mcdreforged.plugin.server_interface.ServerInterface.get_plugin_instance
 #: mcdreforged.plugin.server_interface.ServerInterface.get_plugin_metadata
 #: mcdreforged.plugin.server_interface.ServerInterface.get_preference
+#: mcdreforged.plugin.server_interface.ServerInterface.has_translation
 #: mcdreforged.plugin.server_interface.ServerInterface.load_plugin
 #: mcdreforged.plugin.server_interface.ServerInterface.modify_mcdr_config
 #: mcdreforged.plugin.server_interface.ServerInterface.rcon_query
@@ -249,6 +250,7 @@ msgstr "见 :ref:`此处 <plugin-translation>` 以了解为你的插件注册翻
 msgid "Parameters"
 msgstr "参数"
 
+#: mcdreforged.plugin.server_interface.ServerInterface.has_translation:9
 #: mcdreforged.plugin.server_interface.ServerInterface.rtr:8
 #: mcdreforged.plugin.server_interface.ServerInterface.tr:11 of
 msgid "The key of the translation"
@@ -302,7 +304,48 @@ msgstr ""
 "当然如果你愿意的话，除了使用该方法，你也可以自己手动构建 "
 ":class:`~mcdreforged.translation.translation_text.RTextMCDRTranslation`"
 
-#: ../code_references/ServerInterface.rst:31
+#: mcdreforged.plugin.server_interface.ServerInterface.has_translation:1 of
+msgid "Check if the given translation exists"
+msgstr "检查给定的翻译是否存在"
+
+#: mcdreforged.plugin.server_interface.ServerInterface.has_translation:3 of
+msgid ""
+"Notes that if the current language fails, MCDR will try to use \"en_us\" "
+"for a second attempt. If you don't want this auto-fallback behavior, set "
+"argument *no_auto_fallback* to True"
+msgstr ""
+"请注意，如果当前语言翻译失败，MCDR 将尝试使用\"en_us\"进行重试。如果您不希望有这种自动重试行为，请将参数 "
+"*no_auto_fallback* 设置为 True"
+
+#: mcdreforged.plugin.server_interface.ServerInterface.has_translation:6 of
+msgid ""
+"Also, you don't need to pass ``*args`` and ``**kwargs`` for the "
+"translation into this method, because existence check doesn't need those"
+msgstr "值得注意，你不需要把传递与这个翻译相关的 ``*args`` 和 ``**kwargs`` 传给这个方法，因为存在性检查不需要它俩"
+
+#: mcdreforged.plugin.server_interface.ServerInterface.broadcast
+#: mcdreforged.plugin.server_interface.ServerInterface.dispatch_event
+#: mcdreforged.plugin.server_interface.ServerInterface.execute
+#: mcdreforged.plugin.server_interface.ServerInterface.has_translation
+#: mcdreforged.plugin.server_interface.ServerInterface.reload_config_file
+#: mcdreforged.plugin.server_interface.ServerInterface.reply
+#: mcdreforged.plugin.server_interface.ServerInterface.say
+#: mcdreforged.plugin.server_interface.ServerInterface.schedule_task
+#: mcdreforged.plugin.server_interface.ServerInterface.tell of
+msgid "Keyword Arguments"
+msgstr "关键字参数"
+
+#: mcdreforged.plugin.server_interface.ServerInterface.has_translation:10 of
+msgid "Optional, the language to check for translation key existence"
+msgstr "可选参数，用于检查翻译是否存在时使用的语言"
+
+#: mcdreforged.plugin.server_interface.ServerInterface.has_translation:11 of
+msgid ""
+"When set to True, MCDR will not fall back to \"en_us\" and have another "
+"translation try, if translation failed"
+msgstr "当设置为 True 时，如果翻译失败，MCDR 不会使用\"en_us\"进行第二次尝试"
+
+#: ../code_references/ServerInterface.rst:32
 msgid "Server Control"
 msgstr "服务端控制"
 
@@ -485,7 +528,7 @@ msgid ""
 "information has not been parsed"
 msgstr "如果服务端未启动，或者相关的信息未被解析，则其若干个属性可能为 None"
 
-#: ../code_references/ServerInterface.rst:50
+#: ../code_references/ServerInterface.rst:51
 msgid "Text Interaction"
 msgstr "文本交互"
 
@@ -504,17 +547,6 @@ msgstr "方法 :meth:`execute_command`，如果你想要在 MCDR 的指令系统
 #: mcdreforged.plugin.server_interface.ServerInterface.execute:7 of
 msgid "The content of the command you want to send"
 msgstr "你要发送的指令内容"
-
-#: mcdreforged.plugin.server_interface.ServerInterface.broadcast
-#: mcdreforged.plugin.server_interface.ServerInterface.dispatch_event
-#: mcdreforged.plugin.server_interface.ServerInterface.execute
-#: mcdreforged.plugin.server_interface.ServerInterface.reload_config_file
-#: mcdreforged.plugin.server_interface.ServerInterface.reply
-#: mcdreforged.plugin.server_interface.ServerInterface.say
-#: mcdreforged.plugin.server_interface.ServerInterface.schedule_task
-#: mcdreforged.plugin.server_interface.ServerInterface.tell of
-msgid "Keyword Arguments"
-msgstr "关键字参数"
 
 #: mcdreforged.plugin.server_interface.ServerInterface.broadcast:4
 #: mcdreforged.plugin.server_interface.ServerInterface.execute:8
@@ -584,7 +616,7 @@ msgstr "如果指定了该参数，那么在回复控制台时，将使用 *cons
 msgid "If the Info is not from a user"
 msgstr "如果这个 Info 并非来自一位用户"
 
-#: ../code_references/ServerInterface.rst:59
+#: ../code_references/ServerInterface.rst:60
 msgid "Plugin Queries"
 msgstr "插件查询"
 
@@ -679,17 +711,17 @@ msgid ""
 "metadata) as key-value pair"
 msgstr "返回一个包含所有加载的插件元数据的字典，键值对为 (插件 id, 元数据)"
 
-#: ../code_references/ServerInterface.rst:70
+#: ../code_references/ServerInterface.rst:71
 msgid "Plugin Operations"
 msgstr "插件操作"
 
-#: ../code_references/ServerInterface.rst:73
+#: ../code_references/ServerInterface.rst:74
 msgid ""
 "All plugin manipulation will trigger a dependency check, which might "
 "cause unwanted plugin operations"
 msgstr "所有的插件操作都会触发依赖性检查——这可能会导致不必要的插件操作"
 
-#: ../code_references/ServerInterface.rst:75
+#: ../code_references/ServerInterface.rst:76
 msgid ""
 "It's not suggested to trigger plugin operations during :ref:`on_load "
 "<event-plugin-load>` or :ref:`on_unload <event-plugin-unload>` plugin "
@@ -699,7 +731,7 @@ msgstr ""
 "不推荐在插件事件 :ref:`插件被加载 <event-plugin-load>` 或 :ref:`插件被卸载 <event-plugin-"
 "unload>` 期间进行插件操作在这些事件发生时，MCDR 正处于一次进行中的插件操作流程之中，此时并不适合触发另一次插件操作"
 
-#: ../code_references/ServerInterface.rst:78
+#: ../code_references/ServerInterface.rst:79
 msgid ""
 "If you do trigger a plugin operation during :ref:`on_load <event-plugin-"
 "load>` or :ref:`on_unload <event-plugin-unload>` plugin events, MCDR will"
@@ -845,7 +877,7 @@ msgid ""
 "thread If it's set to False. The event will be dispatched immediately"
 msgstr "在默认值的情况下，该事件会被派发至任务执行者 (task executor) 线程中分发。如果它被设置为 False，则事件将会被立即分发"
 
-#: ../code_references/ServerInterface.rst:91
+#: ../code_references/ServerInterface.rst:92
 msgid "Configuration"
 msgstr "配置"
 
@@ -895,7 +927,7 @@ msgstr "其效果与指令 ``!!MCDR reload config`` 相同"
 msgid "If the config changing messages should be logged"
 msgstr "是否输出配置文件变更的相关日志"
 
-#: ../code_references/ServerInterface.rst:99
+#: ../code_references/ServerInterface.rst:100
 msgid "Permission"
 msgstr "权限"
 
@@ -960,7 +992,7 @@ msgstr "从权限文件重载 MCDR 的权限数据"
 msgid "It has the same effect as command ``!!MCDR reload permission``"
 msgstr "其效果与指令 ``!!MCDR reload permission`` 相同"
 
-#: ../code_references/ServerInterface.rst:106
+#: ../code_references/ServerInterface.rst:107
 msgid "Command"
 msgstr "指令"
 
@@ -997,7 +1029,7 @@ msgid ""
 "fallback command source"
 msgstr "用于执行该条指令的指令源。如果它未被指定，MCDR 将会使用 :meth:`get_plugin_command_source` 来获得默认的指令源"
 
-#: ../code_references/ServerInterface.rst:112
+#: ../code_references/ServerInterface.rst:113
 msgid "Preference"
 msgstr "偏好"
 
@@ -1044,7 +1076,7 @@ msgstr "你要设置的偏好的对象"
 msgid "The preference to be set"
 msgstr "设置给定对象的 MCDR 偏好"
 
-#: ../code_references/ServerInterface.rst:119
+#: ../code_references/ServerInterface.rst:120
 msgid "Misc"
 msgstr "杂项"
 
@@ -1089,32 +1121,4 @@ msgstr "是否需要阻塞至可调用对象执行结束"
 #: mcdreforged.plugin.server_interface.ServerInterface.schedule_task:5 of
 msgid "The timeout of the blocking operation if ``block=True``"
 msgstr "若 ``block=True``，最大的阻塞时间"
-
-#~ msgid ""
-#~ "If MCDR is not running. Can be "
-#~ "suppressed with ``raise_on_none=False`` and "
-#~ "then ``None`` will be returned"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Shortform of the combination of "
-#~ ":meth:`get_instance` + :meth:`as_plugin_server_interface`"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "get PluginServerInterface failed (current "
-#~ "thread is not a MCDR provided "
-#~ "thread). Can be suppressed with "
-#~ "``raise_on_none=False`` and then ``None`` will"
-#~ " be returned"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "If current thread is not a MCDR"
-#~ " provided thread and the object is"
-#~ " not a :class:`PluginServerInterface` instance,"
-#~ " it will return None"
-#~ msgstr ""
-#~ "如果当前的线程并非是 MCDR 提供的线程，并且本对象并非是一个 "
-#~ ":class:`PluginServerInterface` 实例，将返回 None"
 
