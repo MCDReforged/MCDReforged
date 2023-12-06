@@ -323,12 +323,16 @@ class RText(RTextBase):
 				'value': self.__click_event.value
 			}
 		if len(self.__hover_text_list) > 0:
-			obj['hoverEvent'] = {
-				'action': 'show_text',
-				'value': {
+			if len(self.__hover_text_list) == 1:
+				hover_value = RTextBase.from_any(self.__hover_text_list[0]).to_json_object()
+			else:
+				hover_value = {
 					'text': '',
 					'extra': RTextList(*self.__hover_text_list).to_json_object(),
 				}
+			obj['hoverEvent'] = {
+				'action': 'show_text',
+				'value': hover_value,
 			}
 		return obj
 
