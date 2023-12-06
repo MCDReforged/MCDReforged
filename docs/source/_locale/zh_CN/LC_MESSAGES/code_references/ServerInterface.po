@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-06 00:45+0800\n"
+"POT-Creation-Date: 2023-12-06 17:19+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -548,7 +548,7 @@ msgstr "方法 :meth:`execute_command`，如果你想要在 MCDR 的指令系统
 msgid "The content of the command you want to send"
 msgstr "你要发送的指令内容"
 
-#: mcdreforged.plugin.server_interface.ServerInterface.broadcast:4
+#: mcdreforged.plugin.server_interface.ServerInterface.broadcast:6
 #: mcdreforged.plugin.server_interface.ServerInterface.execute:8
 #: mcdreforged.plugin.server_interface.ServerInterface.say:4
 #: mcdreforged.plugin.server_interface.ServerInterface.tell:5 of
@@ -573,7 +573,7 @@ msgstr "你想发送的信息"
 msgid "Use command like ``/tellraw @a`` to broadcast the message in game"
 msgstr "使用 ``/tellraw @a`` 等指令在游戏中广播消息"
 
-#: mcdreforged.plugin.server_interface.ServerInterface.broadcast:3
+#: mcdreforged.plugin.server_interface.ServerInterface.broadcast:5
 #: mcdreforged.plugin.server_interface.ServerInterface.reply:9
 #: mcdreforged.plugin.server_interface.ServerInterface.say:3 of
 msgid "The message you want to send"
@@ -582,6 +582,10 @@ msgstr "你要发送的消息"
 #: mcdreforged.plugin.server_interface.ServerInterface.broadcast:1 of
 msgid "Broadcast the message in game and to the console"
 msgstr "在游戏和控制台中广播消息"
+
+#: mcdreforged.plugin.server_interface.ServerInterface.broadcast:3 of
+msgid "If the server is not running, send the message to console only"
+msgstr "若服务端未在运行，则仅向控制台发送消息"
 
 #: mcdreforged.plugin.server_interface.ServerInterface.reply:1 of
 msgid "Reply to the source of the Info"

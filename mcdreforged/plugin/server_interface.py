@@ -482,11 +482,14 @@ class ServerInterface:
 		"""
 		Broadcast the message in game and to the console
 
+		If the server is not running, send the message to console only
+
 		:param text: The message you want to send
 		:keyword encoding: The encoding method for the text.
 			Leave it empty to use the encoding method from the configuration of MCDR
 		"""
-		self.say(text, encoding=encoding)
+		if self.is_server_running():
+			self.say(text, encoding=encoding)
 		with RTextMCDRTranslation.language_context(self._mcdr_server.preference_manager.get_console_preference().language):
 			misc_util.print_text_to_console(self.logger, text)
 
