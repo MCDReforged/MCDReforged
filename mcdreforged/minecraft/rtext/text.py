@@ -348,7 +348,9 @@ class RText(RTextBase):
 		return color
 
 	def to_colored_text(self) -> str:
-		return self._get_console_style_codes() + self.to_plain_text() + Style.RESET_ALL
+		head = self._get_console_style_codes()
+		tail = Style.RESET_ALL if len(head) > 0 else ''
+		return head + self.to_plain_text() + tail
 
 	def _copy_from(self, text: 'RText'):
 		self.__text = text.__text
