@@ -19,28 +19,28 @@ from mcdreforged.utils.types import MessageText
 __SOURCE_CONTEXT_CALLBACK = Union[
 	Callable[[], Any],
 	Callable[[CommandSource], Any],
-	Callable[[CommandSource, dict], Any]
+	Callable[[CommandSource, CommandContext], Any]
 ]
 __SOURCE_CONTEXT_CALLBACK_BOOL = Union[
 	Callable[[], bool],
 	Callable[[CommandSource], bool],
-	Callable[[CommandSource, dict], bool]
+	Callable[[CommandSource, CommandContext], bool]
 ]
 __SOURCE_CONTEXT_CALLBACK_MSG = Union[
 	Callable[[], MessageText],
 	Callable[[CommandSource], MessageText],
-	Callable[[CommandSource, dict], MessageText]
+	Callable[[CommandSource, CommandContext], MessageText]
 ]
 __SOURCE_CONTEXT_CALLBACK_STR_ITERABLE = Union[
 	Callable[[], Iterable[str]],
 	Callable[[CommandSource], Iterable[str]],
-	Callable[[CommandSource, dict], Iterable[str]]
+	Callable[[CommandSource, CommandContext], Iterable[str]]
 ]
 __SOURCE_ERROR_CONTEXT_CALLBACK = Union[
 	Callable[[], Any],
 	Callable[[CommandSource], Any],
 	Callable[[CommandSource, CommandError], Any],
-	Callable[[CommandSource, CommandError, dict], Any]
+	Callable[[CommandSource, CommandError, CommandContext], Any]
 ]
 
 RUNS_CALLBACK = __SOURCE_CONTEXT_CALLBACK
