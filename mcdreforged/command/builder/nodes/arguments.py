@@ -362,7 +362,7 @@ class Enumeration(ArgumentNode):
 			return ParseResult(enum, len(arg))
 
 	def __str__(self):
-		return super().__str__() + ' @ {}'.format(self.__enum_class.__name__)
+		return super().__str__() + ' ({})'.format(self.__enum_class.__name__)
 
 	def __repr__(self):
 		return '{}[name={},enum_class={}]'.format(self.__class__.__name__, self.get_name(), self.__enum_class)
