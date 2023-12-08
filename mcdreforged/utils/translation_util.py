@@ -41,15 +41,19 @@ def translate_from_dict(translations: TranslationKeyDictRich, language: str, *, 
 
 def unpack_nest_translation(translation: TranslationKeyDictNested) -> TranslationKeyDict:
 	def traverse(mapping: TranslationKeyDictNested, path: str = ''):
-		for key, item in mapping.items():
+		for key, value in mapping.items():
+			if not isinstance(key, str):
+				raise ValueError('bad key type at {!r}, should be str: ({}) {}'.format(path, type(key), key))
 			if key == '.':
 				current_path = path
 			else:
 				current_path = key if path == '' else path + '.' + key
-			if isinstance(item, str):
-				result[current_path] = item
-			elif isinstance(item, dict):
-				traverse(item, current_path)
+			if isinstance(value, str):
+				result[current_path] = value
+			elif isinstance(value, dict):
+				traverse(value, current_path)
+			else:
+				raise ValueError('bad value type at {!r}, should be str or dict: ({}) {}'.format(current_path, type(value), value))
 
 	result = {}
 	traverse(translation, '')
