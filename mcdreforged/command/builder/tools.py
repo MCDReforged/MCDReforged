@@ -82,7 +82,7 @@ class NodeDefinition(Generic[NodeType], ABC):
 
 	def post_process(self, post_processor: Callable[[NodeType], Any]) -> Self:
 		"""
-		Added a post-process function to the current node definition
+		Add a post-process function to the current node definition
 
 		During method :meth:`SimpleCommandBuilder.build`, after a node is constructed,
 		all the post-process functions will be applied to the node object
