@@ -555,8 +555,10 @@ class Serializable(ABC):
 
 		.. versionadded:: v2.8.3
 		"""
-		fields = []
+		fields = {}
 		for attr_name in self.get_field_annotations():
 			if hasattr(self, attr_name):
-				fields.append('{}={}'.format(attr_name, repr(getattr(self, attr_name))))
-		return '{}[{}]'.format(type(self).__name__, ', '.join(fields))
+				fields[attr_name] = getattr(self, attr_name)
+
+		from mcdreforged.utils import class_util
+		return class_util.represent(self, fields, parentheses='()')

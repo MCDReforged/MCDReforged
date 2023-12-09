@@ -54,16 +54,23 @@ def get_all_base_class(cls):
 	return misc_util.unique_list(ret)
 
 
-def represent(obj: Any, fields: Optional[dict] = None, *, blacklist: Collection[str] = ()) -> str:
+def represent(obj: Any, fields: Optional[dict] = None, *, blacklist: Collection[str] = (), parentheses: str = '[]') -> str:
 	"""
 	aka repr
 	"""
 	if fields is None:
 		fields = {k: v for k, v in vars(obj).items() if not k.startswith('_')}
 	blacklist = set(blacklist)
-	return '{}[{}]'.format(type(obj).__name__, ','.join([
-		'{}={}'.format(k, repr(v)) for k, v in fields.items() if k not in blacklist
-	]))
+	return ''.join([
+		type(obj).__name__,
+		parentheses[0],
+		', '.join([
+			f'{k}={v!r}'
+			for k, v in fields.items()
+			if k not in blacklist
+		]),
+		parentheses[1],
+	])
 
 
 def print_class_inheriting_tree(cls: Type, line_writer: tree_printer.LineWriter = print):
