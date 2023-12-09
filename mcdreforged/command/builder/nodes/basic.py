@@ -333,8 +333,7 @@ class AbstractNode(ABC):
 
 		# make sure all passed CommandContext are copies
 		args = list(args)
-		for i in range(len(args)):
-			arg = args[i]
+		for i, arg in enumerate(args):
 			if isinstance(arg, CommandContext):
 				args[i] = arg.copy()
 
@@ -354,10 +353,9 @@ class AbstractNode(ABC):
 		self.__handle_error(error, context, self._error_handlers)
 		raise error
 
-	def __check_requirements(self, context: CommandContext) -> Optional[FAIL_MSG_CALLBACK]:
+	def __check_requirements(self, context: CommandContext) -> Optional[_Requirement]:
 		"""
-		:return: None: requirement check passed;
-		failure_message_getter: requirement check failed
+		:return: None: requirement check passed; otherwise, the unsatisfied requirement
 		"""
 		for req in self._requirements:
 			try:
@@ -366,7 +364,7 @@ class AbstractNode(ABC):
 				raise CallbackError(e, context, 'requirements check')
 			else:
 				if not ok:
-					return req.failure_message_getter or (lambda: None)
+					return req
 		return None
 
 	def _get_suggestions(self, context: CommandContext) -> Iterable[str]:
@@ -388,12 +386,15 @@ class AbstractNode(ABC):
 			total_read = len(command) - len(next_remaining)  # type: int
 
 			with context.visit_node(self, parse_result, total_read):
-				getter = self.__check_requirements(context)
-				if getter is not None:  # requirement check failed
-					try:
-						failure_message = self.__smart_callback(getter, context.source, context)
-					except Exception as e:
-						raise CallbackError(e, context, 'failure message fetching')
+				req = self.__check_requirements(context)
+				if req is not None:  # requirement check failed
+					if req.failure_message_getter is not None:
+						try:
+							failure_message = self.__smart_callback(req.failure_message_getter, context.source, context)
+						except Exception as e:
+							raise CallbackError(e, context, 'failure message fetching')
+					else:
+						failure_message = None
 					self.__raise_error(RequirementNotMet(context.command_read, context.command_read, failure_message), context)
 
 				# Parsing finished
