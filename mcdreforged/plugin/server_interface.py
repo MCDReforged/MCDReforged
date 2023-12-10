@@ -1215,7 +1215,7 @@ class PluginServerInterface(ServerInterface):
 				needs_save = True
 				log(self._mcdr_server.tr('server_interface.load_config_simple.failed', e))
 			else:
-				needs_save = imperfect
+				needs_save |= imperfect
 		else:
 			# remove unexpected keys
 			if default_config is not None:
