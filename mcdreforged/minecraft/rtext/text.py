@@ -43,6 +43,14 @@ class RTextBase(ABC):
 		"""
 		raise NotImplementedError()
 
+	def to_legacy_text(self) -> str:
+		"""
+		Return a colored text stained with classic "§"-prefixed Minecraft formatting code
+
+		Click event and hover event will be ignored
+		"""
+		raise NotImplementedError()
+
 	def copy(self) -> Self:
 		"""
 		Return a deep copy version of itself
@@ -356,6 +364,23 @@ class RText(RTextBase):
 		tail = Style.RESET_ALL if len(head) > 0 else ''
 		return head + self.to_plain_text() + tail
 
+	def _get_legacy_style_codes(self) -> str:
+		if isinstance(self.__color, RColorClassic):
+			color = self.__color.mc_code
+		elif isinstance(self.__color, RColorRGB):
+			color = self.__color.to_classic().mc_code
+		else:
+			color = ''
+		for style in self.__styles:
+			if isinstance(style, RItemClassic):
+				color += style.mc_code
+		return color
+
+	def to_legacy_text(self) -> str:
+		head = self._get_legacy_style_codes()
+		tail = RColor.reset.mc_code if len(head) > 0 else ''
+		return head + self.to_plain_text() + tail
+
 	def _copy_from(self, text: 'RText'):
 		self.__text = text.__text
 		self.__color = text.__color
@@ -441,6 +466,12 @@ class RTextList(RTextBase):
 		head = self.header._get_console_style_codes()
 		tail = Style.RESET_ALL if len(head) > 0 else ''
 		return ''.join(map(lambda rtext: ''.join([head, rtext.to_colored_text(), tail]), self.children))
+
+	def to_legacy_text(self) -> str:
+		# noinspection PyProtectedMember
+		head = self.header._get_legacy_style_codes()
+		tail = RColor.reset.mc_code if len(head) > 0 else ''
+		return ''.join(map(lambda rtext: ''.join([head, rtext.to_legacy_text(), tail]), self.children))
 
 	def copy(self) -> 'RTextList':
 		copied = RTextList()

@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-02 12:15+0800\n"
+"POT-Creation-Date: 2023-12-10 17:52+0800\n"
 "PO-Revision-Date: 2021-01-24 09:02+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -334,13 +334,20 @@ msgid "Return a plain text for console display"
 msgstr "返回纯文本以供控制台显示"
 
 #: mcdreforged.minecraft.rtext.text.RTextBase.to_colored_text:3
+#: mcdreforged.minecraft.rtext.text.RTextBase.to_legacy_text:3
 #: mcdreforged.minecraft.rtext.text.RTextBase.to_plain_text:3 of
 msgid "Click event and hover event will be ignored"
 msgstr "点击事件和悬停事件将被忽略"
 
 #: mcdreforged.minecraft.rtext.text.RTextBase.to_colored_text:1 of
 msgid "Return a colored text stained with ANSI escape code for console display"
-msgstr "返回由 ANSI 转移代码染色的带颜色文本以供控制台显示"
+msgstr "返回由 ANSI 转移代码染色的带颜色文本，以供控制台显示"
+
+#: mcdreforged.minecraft.rtext.text.RTextBase.to_legacy_text:1 of
+msgid ""
+"Return a colored text stained with classic \"§\"-prefixed Minecraft "
+"formatting code"
+msgstr "返回由以 \"§\" 为前缀的传统 Minecraft 样式代码染色的带颜色文本"
 
 #: mcdreforged.minecraft.rtext.text.RTextBase.copy:1 of
 msgid "Return a deep copy version of itself"

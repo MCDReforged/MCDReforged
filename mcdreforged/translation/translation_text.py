@@ -104,6 +104,9 @@ class RTextMCDRTranslation(RTextBase):
 	def to_colored_text(self) -> str:
 		return self.__get_translated_text().to_colored_text()
 
+	def to_legacy_text(self) -> str:
+		return self.__get_translated_text().to_legacy_text()
+
 	def copy(self) -> 'RTextBase':
 		copied = RTextMCDRTranslation(self.translation_key, *self.args, **self.kwargs)
 		copied.__translator = self.__translator
