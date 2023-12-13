@@ -18,6 +18,18 @@ from mcdreforged.utils.exception import BrokenMetadata, IllegalPluginStructure
 from mcdreforged.utils.logger import DebugOption
 
 
+def _is_relative_to(child: Path, parent: Path) -> bool:
+	if hasattr(child, 'is_relative_to'):  # python3.9+
+		return child.is_relative_to(parent)
+	else:
+		try:
+			child.relative_to(parent)
+		except ValueError:
+			return False
+		else:
+			return True
+
+
 class MultiFilePlugin(RegularPlugin, ABC):
 	@property
 	def _file_root(self) -> str:
@@ -45,7 +57,7 @@ class MultiFilePlugin(RegularPlugin, ABC):
 		if mod.__file__ is not None:
 			mod_path = Path(mod.__file__).absolute()
 			file_root = Path(self._file_root).absolute()
-			if file_root != mod_path and not mod_path.is_relative_to(file_root):
+			if file_root != mod_path and not _is_relative_to(mod_path, file_root):
 				self.mcdr_server.logger.warning('Suspicious entrypoint module path for plugin %s, package name conflict?', self)
 				self.mcdr_server.logger.warning('- Plugin file root: %s', file_root)
 				self.mcdr_server.logger.warning('- Loaded entrypoint path: %s', mod_path)
