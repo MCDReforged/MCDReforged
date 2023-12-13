@@ -136,6 +136,14 @@ class CommandSource(ABC):
 		:keyword console_text: Message override when it's a :class:`ConsoleCommandSource`
 		"""
 		raise NotImplementedError()
+	
+	def __eq__(self, other) -> bool:
+		"""
+		.. versionadded:: v2.12.2
+
+			All MCDR builtin command sources have the implemented the `__eq__` method
+		"""
+		return super().__eq__(other)
 
 
 class InfoCommandSource(CommandSource, ABC):
@@ -183,6 +191,9 @@ class PlayerCommandSource(InfoCommandSource):
 		"""
 		self._mcdr_server.basic_server_interface.tell(self.player, message, encoding=encoding)
 
+	def __eq__(self, other) -> bool:
+		return isinstance(other, PlayerCommandSource) and self.player == other.player
+
 	def __str__(self):
 		return 'Player {}'.format(self.player)
 
@@ -208,6 +219,9 @@ class ConsoleCommandSource(InfoCommandSource):
 		with self.preferred_language_context():
 			misc_util.print_text_to_console(self._mcdr_server.logger, message)
 
+	def __eq__(self, other) -> bool:
+		return isinstance(other, ConsoleCommandSource)
+
 	def __str__(self):
 		return 'Console'
 
@@ -229,6 +243,9 @@ class PluginCommandSource(CommandSource):
 
 	def reply(self, message: MessageText, **kwargs) -> None:
 		misc_util.print_text_to_console(self.__logger, message)
+
+	def __eq__(self, other) -> bool:
+		return isinstance(other, PluginCommandSource) and self.__plugin.get_id() == other.__plugin.get_id()
 
 	def __str__(self):
 		return 'Plugin' if self.__plugin is None else 'Plugin {}'.format(self.__plugin)

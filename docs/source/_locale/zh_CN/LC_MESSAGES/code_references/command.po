@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-08 16:17+0800\n"
+"POT-Creation-Date: 2023-12-13 20:23+0800\n"
 "PO-Revision-Date: 2021-01-23 17:24+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -234,6 +234,10 @@ msgstr "消息的编码方式。该参数仅在 :class:`PlayerCommandSource` 中
 msgid "Message override when it's a :class:`ConsoleCommandSource`"
 msgstr "当为 :class:`ConsoleCommandSource` 时的消息覆写"
 
+#: mcdreforged.command.command_source.CommandSource.__eq__:3 of
+msgid "All MCDR builtin command sources have the implemented the `__eq__` method"
+msgstr "为所有 MCDR 内置的指令源实现了 `__eq__` 方法"
+
 #: mcdreforged.command.command_source.InfoCommandSource:1 of
 msgid ""
 "Bases: :py:class:`~mcdreforged.command.command_source.CommandSource`, "
@@ -248,7 +252,7 @@ msgstr "源自一个由 MCDR 创建的 info 的指令源"
 msgid "Return the Info instance that this command source is created from"
 msgstr "返回此指令源创建的 info 对象"
 
-#: ../code_references/command.rst:18
+#: ../code_references/command.rst:20
 msgid "Command Nodes"
 msgstr "指令节点"
 
@@ -851,7 +855,7 @@ msgid ""
 " visited during the command parsing in the command context"
 msgstr "一个特殊的字面值节点。相比普通的字面值节点，它有一个额外的功能：在上下文中储存其在指令解析的过程中被访问的次数"
 
-#: ../code_references/command.rst:33
+#: ../code_references/command.rst:35
 msgid "Command Builder"
 msgstr "指令构建器"
 
@@ -1125,7 +1129,7 @@ msgstr ""
 "见 :meth:`AbstractNode.on_child_error() "
 "<mcdreforged.command.builder.nodes.basic.AbstractNode.on_child_error>`"
 
-#: ../code_references/command.rst:43
+#: ../code_references/command.rst:45
 msgid "Tools"
 msgstr "工具"
 
@@ -1169,7 +1173,7 @@ msgstr "检查给定的参数是否在当前的指令上下文中已被赋值"
 msgid "The name of the argument to be checked"
 msgstr "将要检查的参数的名称"
 
-#: ../code_references/command.rst:49
+#: ../code_references/command.rst:51
 msgid "Exceptions"
 msgstr "异常"
 
@@ -1352,7 +1356,7 @@ msgstr "解析结果不是一个合法的布尔值"
 msgid "The parsed value is not a valid Enum"
 msgstr "解析结果不是一个合法的枚举值"
 
-#: ../code_references/command.rst:56
+#: ../code_references/command.rst:58
 msgid "Misc"
 msgstr "杂项"
 

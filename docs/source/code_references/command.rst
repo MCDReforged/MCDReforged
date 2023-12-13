@@ -13,6 +13,8 @@ Command Source
 .. automodule:: mcdreforged.command.command_source
     :show-inheritance:
     :members:
+    :special-members:
+    :exclude-members: __weakref__
 
 Command Nodes
 -------------
