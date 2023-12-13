@@ -10,7 +10,7 @@ from mcdreforged.command.builder.nodes.special import CountingLiteral
 from mcdreforged.utils.types import MessageText
 
 
-class TestCommandSource(CommandSource):
+class _TestCommandSource(CommandSource):
 	def get_server(self):
 		raise RuntimeError()
 
@@ -404,7 +404,7 @@ class CommandTreeTestCase(CommandTestCase):
 		self.assertRaises(InvalidEnumeration, self.run_command, root, 'test nope')
 		self.assertRaises(InvalidEnumeration, self.run_command, root, 'test A')
 
-		suggestions = list(map(lambda s: s.suggest_input, root._entry_generate_suggestions(TestCommandSource(), 'test ')))
+		suggestions = list(map(lambda s: s.suggest_input, root._entry_generate_suggestions(_TestCommandSource(), 'test ')))
 		self.assertEqual(len(MyEnum), len(suggestions))
 		for suggestion in suggestions:
 			self.run_command_and_check_hit(root, 'test {}'.format(suggestion), True)
