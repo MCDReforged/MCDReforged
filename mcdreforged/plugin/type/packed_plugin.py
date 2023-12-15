@@ -76,3 +76,14 @@ class PackedPlugin(MultiFilePlugin):
 				zipimport._zip_directory_cache.pop(self.plugin_path)
 		except KeyError:
 			self.mcdr_server.logger.exception('Fail to clean zip import cache for {}'.format(self))
+
+		if sys.version_info >= (3, 10):
+			# https://github.com/Fallen-Breath/MCDReforged/issues/283
+			try:
+				from importlib.metadata import FastPath
+				FastPath.__new__.cache_clear()
+			except Exception:
+				self.mcdr_server.logger.exception('Fail to clean the importlib internal path cache')
+			else:
+				import gc
+				gc.collect()
