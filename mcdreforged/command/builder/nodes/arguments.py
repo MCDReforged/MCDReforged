@@ -316,9 +316,9 @@ class Boolean(ArgumentNode):
 
 	def parse(self, text: str) -> ParseResult:
 		arg = utils.get_element(text)
-		if arg.lower() == 'true':
+		if arg.lower() == 'true' or arg == '1':
 			value = True
-		elif arg.lower() == 'false':
+		elif arg.lower() == 'false' or arg == '0':
 			value = False
 		else:
 			raise InvalidBoolean(arg)
