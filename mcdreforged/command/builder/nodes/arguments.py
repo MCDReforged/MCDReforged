@@ -310,6 +310,9 @@ class Boolean(ArgumentNode):
 	Raises :class:`~mcdreforged.command.builder.exception.InvalidBoolean` if the input is not accepted
 
 	.. versionadded:: v2.3.0
+
+	.. versionadded:: v2.13.0
+		Accepts ``1`` and ``0`` as well
 	"""
 	def _get_suggestions(self, context: CommandContext) -> Iterable[str]:
 		return ['true', 'false']

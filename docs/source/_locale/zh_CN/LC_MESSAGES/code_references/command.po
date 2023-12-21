@@ -827,6 +827,10 @@ msgstr ""
 "如果输入非法，抛出 :class:`~mcdreforged.command.builder.exception.InvalidBoolean` "
 "异常"
 
+#: mcdreforged.command.builder.nodes.arguments.Boolean:8 of
+msgid "Accepts ``1`` and ``0`` as well"
+msgstr "现在也接受 ``1`` 和 ``0`` 作为输入"
+
 #: mcdreforged.command.builder.nodes.arguments.Enumeration:1 of
 msgid ""
 "A node associating with an Enum class for reading an enum value of the "
