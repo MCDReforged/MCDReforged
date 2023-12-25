@@ -2,9 +2,8 @@ import typing
 from contextlib import contextmanager
 from typing import List, Iterable, Dict, Any, Optional, NamedTuple
 
-from mcdreforged.command.command_source import CommandSource
-
 if typing.TYPE_CHECKING:
+	from mcdreforged.command.command_source import CommandSource
 	from mcdreforged.command.builder.nodes.basic import AbstractNode
 
 
