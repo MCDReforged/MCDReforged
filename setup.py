@@ -48,6 +48,9 @@ if os.getenv('CI', None) is not None:
 	is_release = os.getenv('GITHUB_REF', '').startswith('refs/tags/v')
 	if build_num is not None and not is_release:
 		VERSION += '.dev{}'.format(build_num)
+	if os.getenv('GITHUB_OUTPUT', None) is not None:
+		with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+			f.write('version={}\n'.format(VERSION))
 
 # -------------------------------- Files --------------------------------
 
