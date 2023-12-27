@@ -1,6 +1,6 @@
-import sys
 from argparse import ArgumentParser
 
+import sys
 from mcdreforged.cli.cmd_gendefault import generate_default_stuffs
 from mcdreforged.cli.cmd_init import initialize_environment
 from mcdreforged.cli.cmd_pack import make_packed_plugin
@@ -11,7 +11,7 @@ from mcdreforged.constants import core_constant
 
 def cli_dispatch():
 	if len(sys.argv) == 1:
-		run_mcdr()
+		run_mcdr(auto_init=False)
 		return
 
 	parser = ArgumentParser(
@@ -22,7 +22,9 @@ def cli_dispatch():
 	parser.add_argument('-V', '--version', help='Print {} version and exit'.format(core_constant.NAME), action='store_true')
 	subparsers = parser.add_subparsers(title='Command', help='Available commands', dest='subparser_name')
 
-	subparsers.add_parser('start', help='Start {}'.format(core_constant.NAME))
+	parser_start = subparsers.add_parser('start', help='Start {}'.format(core_constant.NAME))
+	parser_start.add_argument('--auto-init', action='store_true', help='Automatically initialize the working environment if needed')
+
 	subparsers.add_parser('init', help='Prepare the working environment of {}. Create commonly used folders and generate default configuration and permission files'.format(core_constant.NAME))
 	subparsers.add_parser('gendefault', help='Generate default configuration and permission files at current working directory. Existed files will be overwritten')
 
@@ -41,7 +43,7 @@ def cli_dispatch():
 		return
 
 	if args.subparser_name == 'start':
-		run_mcdr()
+		run_mcdr(auto_init=args.auto_init)
 	elif args.subparser_name == 'init':
 		initialize_environment(quiet=args.quiet)
 	elif args.subparser_name == 'gendefault':

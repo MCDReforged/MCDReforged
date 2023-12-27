@@ -29,4 +29,4 @@ EOF
 EOT
 
 WORKDIR /mcdr
-CMD ["python3", "-m", "mcdreforged", "start"]
+CMD ["python3", "-m", "mcdreforged", "start", "--auto-init"]
