@@ -4,12 +4,12 @@ from mcdreforged.constants import core_constant
 from mcdreforged.mcdr_server import MCDReforgedServer
 
 
-def run_mcdr():
+def run_mcdr(auto_init: bool):
 	print('{} {} is starting up'.format(core_constant.NAME, core_constant.VERSION))
 	print('{} is open source, u can find it here: {}'.format(core_constant.NAME, core_constant.GITHUB_URL))
 
 	try:
-		mcdreforged_server = MCDReforgedServer()
+		mcdreforged_server = MCDReforgedServer(auto_init=auto_init)
 	except Exception as e:
 		print('Fail to initialize {}: ({}) {}'.format(core_constant.NAME_SHORT, type(e), e), file=sys.stderr)
 		raise

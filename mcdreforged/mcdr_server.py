@@ -39,7 +39,7 @@ from mcdreforged.utils.types import MessageText
 class MCDReforgedServer:
 	process: Optional[Popen]
 
-	def __init__(self, *, generate_default_only: bool = False, initialize_environment: bool = False):
+	def __init__(self, *, generate_default_only: bool = False, initialize_environment: bool = False, auto_init: bool = False):
 		"""
 		:param generate_default_only: If set to true, MCDR will only generate the default configuration and permission files
 		"""
@@ -84,7 +84,7 @@ class MCDReforgedServer:
 
 		# --- Initialize fields instance --- #
 		self.translation_manager.load_translations()  # translations are used for logging, so load them first
-		if initialize_environment:
+		if initialize_environment or auto_init:
 			# Prepare config / permission files if they're missing
 			if not self.config.file_presents():
 				self.config.save_default()

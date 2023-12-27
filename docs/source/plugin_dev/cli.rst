@@ -30,6 +30,8 @@ Have a try to display CLI help messages using following command
 The following document will use ``mcdreforged`` as the command for demonstration.
 For MCDR < v2.10, you need to add the ``python -m`` prefix to the commands used below
 
+You can always use ``python -m mcdreforged`` to run MCDR in all environment, in case the ``mcdreforged`` command does not work
+
 The overall CLI command format is:
 
 .. code-block::
@@ -54,9 +56,14 @@ start
 
 .. code-block:: bash
 
-    mcdreforged start [-h]
+    mcdreforged start [-h] [--auto-init]
 
 The same as ``mcdreforged``, it launches MCDR
+
+auto-init
+"""""""""
+
+    Automatically initialize the working environment if needed
 
 init
 ^^^^
