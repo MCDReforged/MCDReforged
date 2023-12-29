@@ -1,11 +1,10 @@
 import collections
 import queue
 import time
-from typing import Dict, Optional, Tuple, List, TYPE_CHECKING, Set
+from typing import Dict, Optional, Tuple, List, TYPE_CHECKING, Counter
 
-from mcdreforged.handler.abstract_server_handler import AbstractServerHandler
 from mcdreforged.handler.impl import *
-from mcdreforged.handler.impl.arclight_handler import ArclightHandler
+from mcdreforged.handler.server_handler import ServerHandler
 from mcdreforged.utils import misc_util, class_util
 from mcdreforged.utils.logger import DebugOption
 
@@ -17,16 +16,16 @@ class ServerHandlerManager:
 	def __init__(self, mcdr_server: 'MCDReforgedServer'):
 		self.mcdr_server = mcdr_server
 		self.logger = mcdr_server.logger
-		self.handlers = {}  # type: Dict[str, AbstractServerHandler]
-		self.__current_handler = None  # type: Optional[AbstractServerHandler]
+		self.handlers: Dict[str, ServerHandler] = {}
+		self.__current_handler: Optional[ServerHandler] = None
 		# the handler that should always work
-		self.basic_handler = None  # type: Optional[AbstractServerHandler]
+		self.basic_handler: Optional[ServerHandler] = None
 
 		# Automation for lazy
 		self.__handler_detector = HandlerDetector(self)
 
 	def register_handlers(self, custom_handler_class_paths: Optional[List[str]]):
-		def add_handler(hdr: AbstractServerHandler):
+		def add_handler(hdr: ServerHandler):
 			self.handlers[hdr.get_name()] = hdr
 
 		self.handlers.clear()
@@ -49,7 +48,7 @@ class ServerHandlerManager:
 				except Exception:
 					self.mcdr_server.logger.exception('Fail to load info handler from "{}"'.format(class_path))
 				else:
-					if issubclass(handler_class, AbstractServerHandler):
+					if issubclass(handler_class, ServerHandler):
 						handler = handler_class()
 						if handler.get_name() not in self.handlers:
 							add_handler(handler)
@@ -57,7 +56,7 @@ class ServerHandlerManager:
 						else:
 							self.mcdr_server.logger.error('Handler with name {} from path {} is already registered, ignored'.format(handler.get_name(), class_path))
 					else:
-						self.mcdr_server.logger.error('Wrong handler class "{}", expected {} but found {}'.format(class_path, AbstractServerHandler, handler_class))
+						self.mcdr_server.logger.error('Wrong handler class "{}", expected {} but found {}'.format(class_path, ServerHandler, handler_class))
 
 	def set_handler(self, handler_name: str):
 		try:
@@ -67,10 +66,10 @@ class ServerHandlerManager:
 			self.logger.error('Fallback basic handler is used, MCDR might not works correctly'.format(handler_name))
 			self.__current_handler = self.basic_handler
 
-	def get_current_handler(self) -> AbstractServerHandler:
+	def get_current_handler(self) -> ServerHandler:
 		return self.__current_handler
 
-	def get_basic_handler(self) -> AbstractServerHandler:
+	def get_basic_handler(self) -> ServerHandler:
 		return self.basic_handler
 
 	# Automation for lazy
@@ -91,7 +90,7 @@ class HandlerDetector:
 		self.running_flag = False
 		self.text_queue = queue.Queue()
 		self.text_count = 0
-		self.success_count: Dict[AbstractServerHandler, int] = collections.defaultdict(int)
+		self.success_count: Counter[ServerHandler] = collections.Counter()
 
 	def start_handler_detection(self):
 		if not self.is_detection_running():
@@ -131,29 +130,22 @@ class HandlerDetector:
 			except queue.Empty:
 				break
 
-		lst = self.finalize_detection_result()  # type: List[Tuple[AbstractServerHandler, int]]
-		if len(lst) == 0:
+		most_common: List[Tuple[ServerHandler, int]] = self.success_count.most_common()
+		if len(most_common) == 0:
 			return
 		total = self.text_count
-		best_count = lst[0][1]
-		end = 1
-		while end < len(lst) and lst[end][1] == best_count:
-			end += 1
-		best_handlers = set(map(lambda item: item[0], lst[:end]))
+		best_count = most_common[0][1]
+		best_handler_tuples = [t for t in most_common if t[1] == best_count]
+		best_handlers = [t[0] for t in best_handler_tuples]
+
 		current_handler = self.manager.get_current_handler()
-		current_count = self.success_count[self.manager.get_current_handler()]
+		current_count = self.success_count[current_handler]
 		if current_handler not in best_handlers:
 			self.mcdr_server.logger.warning(self.mcdr_server.tr('server_handler_manager.handler_detection.result1'))
 			self.mcdr_server.logger.warning(self.mcdr_server.tr('server_handler_manager.handler_detection.result2', current_handler.get_name(), round(100.0 * current_count / total, 2), current_count, total))
-			for best_handler, best_count in lst[:end]:
+			for best_handler, best_count in best_handler_tuples:
 				self.mcdr_server.logger.warning(self.mcdr_server.tr('server_handler_manager.handler_detection.result3', best_handler.get_name(), round(100.0 * best_count / total, 2), best_count, total))
 
 	def detect_text(self, text: str):
 		if self.is_detection_running():
 			self.text_queue.put(text)
-
-	def finalize_detection_result(self):
-		current_handler_set = set(self.manager.handlers.values())  # type: Set[AbstractServerHandler]
-		lst = list(filter(lambda item: item[0] in current_handler_set, self.success_count.items()))  # type: List[Tuple[AbstractServerHandler, int]]
-		lst.sort(key=lambda item: item[1], reverse=True)
-		return lst

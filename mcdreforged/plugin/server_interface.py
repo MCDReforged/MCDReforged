@@ -35,7 +35,7 @@ from mcdreforged.utils.types import MessageText, TranslationKeyDictRich, Transla
 
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
-	from mcdreforged.handler.abstract_server_handler import AbstractServerHandler
+	from mcdreforged.handler.server_handler import ServerHandler
 	from mcdreforged.plugin.plugin_manager import PluginManager
 	from mcdreforged.plugin.type.regular_plugin import RegularPlugin
 
@@ -449,7 +449,7 @@ class ServerInterface:
 		self._mcdr_server.send(text, encoding=encoding)
 
 	@property
-	def __server_handler(self) -> 'AbstractServerHandler':
+	def __server_handler(self) -> 'ServerHandler':
 		return self._mcdr_server.server_handler_manager.get_current_handler()
 
 	def tell(self, player: str, text: MessageText, *, encoding: Optional[str] = None) -> None:

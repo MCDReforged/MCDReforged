@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-29 13:49+0800\n"
+"POT-Creation-Date: 2023-12-30 01:56+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,47 +21,44 @@ msgstr ""
 msgid "Server Handler"
 msgstr "服务端处理器"
 
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler:1 of
-msgid "The abstract base class for server handler"
-msgstr "服务端处理器的抽象基类"
+#: mcdreforged.handler.server_handler.ServerHandler:1 of
+msgid "The interface class for server handler"
+msgstr "服务端处理器的接口类"
 
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler:3 of
+#: mcdreforged.handler.server_handler.ServerHandler:3 of
 msgid "Class inheriting tree::"
 msgstr "类继承树状图::"
 
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.get_name:1
-#: of
+#: mcdreforged.handler.server_handler.ServerHandler.get_name:1 of
 msgid "The name of the server handler"
 msgstr "服务端处理器的名字"
 
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.get_name:3
-#: of
+#: mcdreforged.handler.server_handler.ServerHandler.get_name:3 of
 msgid ""
 "The name is used as the identifier of this server handler in MCDR "
 "configuration"
 msgstr "这个名字作为此服务端处理器的标识符，将在 MCDR 的配置文件中用到"
 
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.get_stop_command:1
-#: of
+#: mcdreforged.handler.server_handler.ServerHandler.get_stop_command:1 of
 msgid "The command to stop the server"
 msgstr "用于关闭服务端的命令"
 
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.get_send_message_command:1
+#: mcdreforged.handler.server_handler.ServerHandler.get_send_message_command:1
 #: of
 msgid "The command to send a message to a target"
 msgstr "用于向一个目标发送一条消息的命令"
 
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.get_broadcast_message_command:1
+#: mcdreforged.handler.server_handler.ServerHandler.get_broadcast_message_command:1
 #: of
 msgid "The command to broadcast a message in the server"
 msgstr "用于将一条消息广播于服务器之中的命令"
 
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.pre_parse_server_stdout:1
+#: mcdreforged.handler.server_handler.ServerHandler.pre_parse_server_stdout:1
 #: of
 msgid "A parsing preprocessor. Invoked before any parsing operation"
 msgstr "一个解析前的预处理器，将在任何解析操作前调用"
 
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.pre_parse_server_stdout:3
+#: mcdreforged.handler.server_handler.ServerHandler.pre_parse_server_stdout:3
 #: of
 msgid ""
 "Remove useless / annoying things like control characters in the text "
@@ -69,54 +66,167 @@ msgid ""
 msgstr "用于在解析前删除文本中那些无用/影响解析的字符"
 
 #: mcdreforged.handler.abstract_server_handler.AbstractServerHandler._content_parse
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_console_command
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_player_joined
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_player_left
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_server_address
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_server_stdout
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_server_version
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.pre_parse_server_stdout
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.test_rcon_started
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.test_server_startup_done
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.test_server_stopping
-#: of
+#: mcdreforged.handler.server_handler.ServerHandler.parse_console_command
+#: mcdreforged.handler.server_handler.ServerHandler.parse_player_joined
+#: mcdreforged.handler.server_handler.ServerHandler.parse_player_left
+#: mcdreforged.handler.server_handler.ServerHandler.parse_server_address
+#: mcdreforged.handler.server_handler.ServerHandler.parse_server_stdout
+#: mcdreforged.handler.server_handler.ServerHandler.parse_server_version
+#: mcdreforged.handler.server_handler.ServerHandler.pre_parse_server_stdout
+#: mcdreforged.handler.server_handler.ServerHandler.test_rcon_started
+#: mcdreforged.handler.server_handler.ServerHandler.test_server_startup_done
+#: mcdreforged.handler.server_handler.ServerHandler.test_server_stopping of
 msgid "Parameters"
 msgstr "参数"
 
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_server_stdout:12
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.pre_parse_server_stdout:5
+#: mcdreforged.handler.server_handler.ServerHandler.parse_server_stdout:12
+#: mcdreforged.handler.server_handler.ServerHandler.pre_parse_server_stdout:5
 #: of
 msgid "A line of the server stdout to be parsed"
 msgstr "一行要被解析的服务器标准输出流字符串"
 
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_console_command:1
-#: of
+#: mcdreforged.handler.server_handler.ServerHandler.parse_console_command:1 of
 msgid "Parse console input"
 msgstr "解析控制台输入"
 
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_console_command:3
-#: of
+#: mcdreforged.handler.server_handler.ServerHandler.parse_console_command:3 of
 msgid "A line of console input to be parsed"
 msgstr "一行要被解析的控制台输入字符串"
 
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_console_command
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_player_joined
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_player_left
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_server_address
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_server_stdout
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_server_version
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.test_rcon_started
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.test_server_startup_done
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.test_server_stopping
-#: of
+#: mcdreforged.handler.server_handler.ServerHandler.parse_console_command
+#: mcdreforged.handler.server_handler.ServerHandler.parse_player_joined
+#: mcdreforged.handler.server_handler.ServerHandler.parse_player_left
+#: mcdreforged.handler.server_handler.ServerHandler.parse_server_address
+#: mcdreforged.handler.server_handler.ServerHandler.parse_server_stdout
+#: mcdreforged.handler.server_handler.ServerHandler.parse_server_version
+#: mcdreforged.handler.server_handler.ServerHandler.test_rcon_started
+#: mcdreforged.handler.server_handler.ServerHandler.test_server_startup_done
+#: mcdreforged.handler.server_handler.ServerHandler.test_server_stopping of
 msgid "Returns"
 msgstr "返回值"
 
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_console_command:4
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_server_stdout:13
-#: of
+#: mcdreforged.handler.server_handler.ServerHandler.parse_console_command:4
+#: mcdreforged.handler.server_handler.ServerHandler.parse_server_stdout:13 of
 msgid "An :class:`~mcdreforged.info_reactor.info.Info` object as the result"
 msgstr "一个作为返回值的 :class:`~mcdreforged.info_reactor.info.Info` 对象"
+
+#: mcdreforged.handler.server_handler.ServerHandler.parse_server_stdout:1 of
+msgid ""
+"Main parsing operation. Parse a string from the stdout of the server and "
+"output a parsed info"
+msgstr "解析的主操作。解析一条来自服务端标注输出流的字符串并输出一个解析后的信息"
+
+#: mcdreforged.handler.server_handler.ServerHandler.parse_server_stdout:3 of
+msgid ""
+"It may raise any exceptions if the format of the input string is not "
+"correct"
+msgstr "它可以在输入字符串格式不正确时，抛出你想要的异常"
+
+#: mcdreforged.handler.server_handler.ServerHandler.parse_server_stdout:5 of
+msgid ""
+"In this default implementation, it firstly uses "
+":meth:`_get_server_stdout_raw_result` to get a raw "
+":class:`~mcdreforged.info_reactor.info.Info` object, then use "
+":meth:`_content_parse` to fill generic information into the "
+":class:`~mcdreforged.info_reactor.info.Info` object, finally returns that"
+" as a simply-parsed info"
+msgstr ""
+"在这个默认实现中，它首先使用 :meth:`_get_server_stdout_raw_result` 来获取一个未处理的 "
+":class:`~mcdreforged.info_reactor.info.Info` 对象，然后使用 "
+":meth:`_content_parse` 来向 :class:`~mcdreforged.info_reactor.info.Info` "
+"对象填充一些基础信息，最后将其作为一个简单解析的信息返回"
+
+#: mcdreforged.handler.server_handler.ServerHandler.parse_server_stdout:10 of
+msgid ""
+"If the server handler is able to parse more information, you can do more "
+"post-parsing operations after invoking this method via ``super()``"
+msgstr "如果服务端处理器有解析出更多信息的能力，你可以在借助 ``super()`` 调用本方法后进行更多的后续解析操作"
+
+#: mcdreforged.handler.server_handler.ServerHandler.parse_player_joined:1 of
+msgid "Check if the info indicating a player joined message"
+msgstr "检查这条信息是否表示一条玩家加入信息"
+
+#: mcdreforged.handler.server_handler.ServerHandler.parse_player_joined:3
+#: mcdreforged.handler.server_handler.ServerHandler.parse_player_left:3 of
+msgid "If it is, returns the name of the player, otherwise returns None"
+msgstr "如果是，返回玩家的名字，否则返回 None"
+
+#: mcdreforged.handler.server_handler.ServerHandler.parse_player_joined:5
+#: mcdreforged.handler.server_handler.ServerHandler.parse_player_left:5
+#: mcdreforged.handler.server_handler.ServerHandler.parse_server_address:5
+#: mcdreforged.handler.server_handler.ServerHandler.parse_server_version:5
+#: mcdreforged.handler.server_handler.ServerHandler.test_rcon_started:3
+#: mcdreforged.handler.server_handler.ServerHandler.test_server_startup_done:3
+#: mcdreforged.handler.server_handler.ServerHandler.test_server_stopping:3 of
+msgid "The info object to be checked"
+msgstr "将被检查的信息对象"
+
+#: mcdreforged.handler.server_handler.ServerHandler.parse_player_joined:6
+#: mcdreforged.handler.server_handler.ServerHandler.parse_player_left:6 of
+msgid "The name of the player, or None"
+msgstr "玩家名或 None"
+
+#: mcdreforged.handler.server_handler.ServerHandler.parse_player_left:1 of
+msgid "Check if the info indicates a player left message"
+msgstr "检查这条信息是否表示一条玩家离开信息"
+
+#: mcdreforged.handler.server_handler.ServerHandler.parse_server_version:1 of
+msgid "Check if the info contains a server version message"
+msgstr "检查这条信息是否表示包含服务端版本信息"
+
+#: mcdreforged.handler.server_handler.ServerHandler.parse_server_version:3 of
+msgid "If it is, returns server version, otherwise returns None"
+msgstr "如果是，返回服务端的版本，否则返回 None"
+
+#: mcdreforged.handler.server_handler.ServerHandler.parse_server_version:6 of
+msgid "The version of the server, or None"
+msgstr "服务端的版本或 None"
+
+#: mcdreforged.handler.server_handler.ServerHandler.parse_server_address:1 of
+msgid "Check if the info contains the address which the server is listening on"
+msgstr "检查这条信息是否表示包含服务端监听的地址"
+
+#: mcdreforged.handler.server_handler.ServerHandler.parse_server_address:3 of
+msgid ""
+"If it is, returns server ip and port it's listening on, otherwise returns"
+" None"
+msgstr "如果是，返回服务端监听的 ip 及端口，否则返回 None"
+
+#: mcdreforged.handler.server_handler.ServerHandler.parse_server_address:6 of
+msgid "A tuple containing the ip and the port, or None"
+msgstr "一个包含 ip 和端口的 tuple，或 None"
+
+#: mcdreforged.handler.server_handler.ServerHandler.test_server_startup_done:1
+#: of
+msgid "Check if the info indicates a server startup message"
+msgstr "检查这条信息是否表示服务端已启动完成"
+
+#: mcdreforged.handler.server_handler.ServerHandler.test_server_startup_done:4
+#: of
+msgid "If the info indicates a server startup message"
+msgstr "这条信息是否表示服务端已启动完成"
+
+#: mcdreforged.handler.server_handler.ServerHandler.test_rcon_started:1 of
+msgid "Check if rcon has started"
+msgstr "检查这条信息是否表示 rcon 已启动"
+
+#: mcdreforged.handler.server_handler.ServerHandler.test_rcon_started:4 of
+msgid "If rcon has started"
+msgstr "这条信息是否表示 rcon 已启动"
+
+#: mcdreforged.handler.server_handler.ServerHandler.test_server_stopping:1 of
+msgid "Check if the server is stopping"
+msgstr "检查这条信息是否表示服务端正在关闭"
+
+#: mcdreforged.handler.server_handler.ServerHandler.test_server_stopping:4 of
+msgid "If the server is stopping"
+msgstr "这条信息是否表示服务端正在关闭"
+
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler:1 of
+msgid ""
+"The abstract base class for server handler, with some common "
+"implementations"
+msgstr "服务端处理器的抽象基类，带有一些常见的功能实现"
 
 #: mcdreforged.handler.abstract_server_handler.AbstractServerHandler._get_server_stdout_raw_result:1
 #: of
@@ -231,137 +341,6 @@ msgstr ":attr:`info.content <mcdreforged.info_reactor.info.Info.content>`"
 #: of
 msgid "The to-be-processed :class:`~mcdreforged.info_reactor.info.Info` object"
 msgstr "一个将被处理的 :class:`~mcdreforged.info_reactor.info.Info` 对象"
-
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_server_stdout:1
-#: of
-msgid ""
-"Main parsing operation. Parse a string from the stdout of the server and "
-"output a parsed info"
-msgstr "解析的主操作。解析一条来自服务端标注输出流的字符串并输出一个解析后的信息"
-
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_server_stdout:3
-#: of
-msgid ""
-"It may raise any exceptions if the format of the input string is not "
-"correct"
-msgstr "它可以在输入字符串格式不正确时，抛出你想要的异常"
-
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_server_stdout:5
-#: of
-msgid ""
-"In this default implementation, it firstly uses "
-":meth:`_get_server_stdout_raw_result` to get a raw "
-":class:`~mcdreforged.info_reactor.info.Info` object, then use "
-":meth:`_content_parse` to fill generic information into the "
-":class:`~mcdreforged.info_reactor.info.Info` object, finally returns that"
-" as a simply-parsed info"
-msgstr ""
-"在这个默认实现中，它首先使用 :meth:`_get_server_stdout_raw_result` 来获取一个未处理的 "
-":class:`~mcdreforged.info_reactor.info.Info` 对象，然后使用 "
-":meth:`_content_parse` 来向 :class:`~mcdreforged.info_reactor.info.Info` "
-"对象填充一些基础信息，最后将其作为一个简单解析的信息返回"
-
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_server_stdout:10
-#: of
-msgid ""
-"If the server handler is able to parse more information, you can do more "
-"post-parsing operations after invoking this method via ``super()``"
-msgstr "如果服务端处理器有解析出更多信息的能力，你可以在借助 ``super()`` 调用本方法后进行更多的后续解析操作"
-
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_player_joined:1
-#: of
-msgid "Check if the info indicating a player joined message"
-msgstr "检查这条信息是否表示一条玩家加入信息"
-
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_player_joined:3
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_player_left:3
-#: of
-msgid "If it is, returns the name of the player, otherwise returns None"
-msgstr "如果是，返回玩家的名字，否则返回 None"
-
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_player_joined:5
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_player_left:5
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_server_address:5
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_server_version:5
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.test_rcon_started:3
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.test_server_startup_done:3
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.test_server_stopping:3
-#: of
-msgid "The info object to be checked"
-msgstr "将被检查的信息对象"
-
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_player_joined:6
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_player_left:6
-#: of
-msgid "The name of the player, or None"
-msgstr "玩家名或 None"
-
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_player_left:1
-#: of
-msgid "Check if the info indicates a player left message"
-msgstr "检查这条信息是否表示一条玩家离开信息"
-
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_server_version:1
-#: of
-msgid "Check if the info contains a server version message"
-msgstr "检查这条信息是否表示包含服务端版本信息"
-
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_server_version:3
-#: of
-msgid "If it is, returns server version, otherwise returns None"
-msgstr "如果是，返回服务端的版本，否则返回 None"
-
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_server_version:6
-#: of
-msgid "The version of the server, or None"
-msgstr "服务端的版本或 None"
-
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_server_address:1
-#: of
-msgid "Check if the info contains the address which the server is listening on"
-msgstr "检查这条信息是否表示包含服务端监听的地址"
-
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_server_address:3
-#: of
-msgid ""
-"If it is, returns server ip and port it's listening on, otherwise returns"
-" None"
-msgstr "如果是，返回服务端监听的 ip 及端口，否则返回 None"
-
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.parse_server_address:6
-#: of
-msgid "A tuple containing the ip and the port, or None"
-msgstr "一个包含 ip 和端口的 tuple，或 None"
-
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.test_server_startup_done:1
-#: of
-msgid "Check if the info indicates a server startup message"
-msgstr "检查这条信息是否表示服务端已启动完成"
-
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.test_server_startup_done:4
-#: of
-msgid "If the info indicates a server startup message"
-msgstr "这条信息是否表示服务端已启动完成"
-
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.test_rcon_started:1
-#: of
-msgid "Check if rcon has started"
-msgstr "检查这条信息是否表示 rcon 已启动"
-
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.test_rcon_started:4
-#: of
-msgid "If rcon has started"
-msgstr "这条信息是否表示 rcon 已启动"
-
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.test_server_stopping:1
-#: of
-msgid "Check if the server is stopping"
-msgstr "检查这条信息是否表示服务端正在关闭"
-
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.test_server_stopping:4
-#: of
-msgid "If the server is stopping"
-msgstr "这条信息是否表示服务端正在关闭"
 
 #: mcdreforged.handler.impl.basic_handler.BasicHandler:1 of
 msgid "The basic plain handler, providing the minimum parsed information"
