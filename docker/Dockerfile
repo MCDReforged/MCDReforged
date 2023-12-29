@@ -5,26 +5,23 @@ ARG MCDR_REQUIREMENT=latest
 ARG PYPI_INDEX=https://pypi.org/simple
 
 RUN <<EOT
-set -e
+set -eux
 export PIP_ROOT_USER_ACTION=ignore
 python3 -m pip install -U pip
 if [ "$MCDR_REQUIREMENT" = "latest" ]; then
   pip3 install mcdreforged
 else
-  if [ "$PYPI_INDEX" = "https://test.pypi.org/simple" ]; then
-    pip3 install mcdreforged
-  fi
-  pip3 install "mcdreforged==${MCDR_REQUIREMENT}" -i "$PYPI_INDEX"
+  pip3 install "mcdreforged==${MCDR_REQUIREMENT}" -i "$PYPI_INDEX" --extra-index-url https://pypi.org/simple
 fi
 pip3 cache purge
 EOT
 
 RUN <<EOT
-set -e
-mkdir /pip_packages
+set -eux
+mkdir -p "$(python3 -m site --user-site)"
 cat <<EOF > /etc/pip.conf
 [global]
-target = /pip_packages
+user = true
 EOF
 EOT
 

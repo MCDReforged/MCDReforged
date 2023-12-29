@@ -6,6 +6,7 @@ on:
       - ".github/**"
       - "mcdreforged/**"
       - "tests/**"
+      - "docker/**"
       - "*.py"
 
 env:
@@ -68,11 +69,24 @@ jobs:
         name: MCDReforged package distribution for ${{ github.sha }}
         path: dist/
 
+    - name: Report PyPI URLs
+      run: |
+        version=${{ steps.distribution.outputs.version }}
+        echo -e "## PyPI Package URLs\n" >> $GITHUB_STEP_SUMMARY
+        if [ "$IS_RELEASE" = "true" ]; then
+          echo -e "### PyPI\n" >> $GITHUB_STEP_SUMMARY
+          echo -e "https://pypi.org/project/mcdreforged/${version}/\n" >> $GITHUB_STEP_SUMMARY
+          echo -e "\`\`\`\npip install mcdreforged==$version\n\`\`\`\n" >> $GITHUB_STEP_SUMMARY
+        fi
+        echo -e "### Test PyPI\n" >> $GITHUB_STEP_SUMMARY
+        echo -e "https://test.pypi.org/project/mcdreforged/$version/\n" >> $GITHUB_STEP_SUMMARY
+        echo -e "\`\`\`\npip install mcdreforged==$version -r https://test.pypi.org/simple\n\`\`\`\n" >> $GITHUB_STEP_SUMMARY
+
     outputs:
       version: ${{ steps.distribution.outputs.version }}
 
   image:
-    name: Docker images
+    name: Docker image (py${{ matrix.python }}${{ matrix.slim == 'true' && ', slim' || '' }})
     runs-on: ubuntu-latest
     needs: pypi_upload
     strategy:
@@ -98,35 +112,35 @@ jobs:
             core.setOutput('pypi_simple', 'https://test.pypi.org/simple')
           }
           
-          let meta_tags_base = [
+          let metaTagsBase = [
             'type=ref,event=branch,suffix=',
             'type=semver,pattern={{version}}',
             'type=semver,pattern={{major}}.{{minor}}',
           ]
-          let meta_tags_latest = []
-          let suffixes = [`-py${python}`]
+          let metaTagsLatest = []
+          let suffixes = [`-py${python}`]  // will be appended at the end of all metaTagsBase
 
           if (python === '3.11') {  // 3.11 is the default python version
             suffixes.push('')  // add a no-python suffixes
             if (isRelease) {
-              meta_tags_latest.push('latest')
+              metaTagsLatest.push('latest')
             }
           }
+          let metaTagsAll = suffixes.flatMap(suffix => metaTagsBase.map(t => t + suffix)).concat(metaTagsLatest)
+          console.log(`metaTagsAll 1: ${JSON.stringify(metaTagsAll)}`)
           
           if (slim === 'true') {
             core.setOutput('platforms', 'linux/amd64')
             core.setOutput('base_image_tag', `${python}-slim`)
-            suffixes = suffixes.map(item => item + '-slim');
-            meta_tags_latest = meta_tags_latest.map(item => item + '-slim');
+            metaTagsAll = metaTagsAll.map(item => item + '-slim');
           } else {
             core.setOutput('platforms', 'linux/amd64,linux/arm64')
             core.setOutput('base_image_tag', python)
           }
           console.log(`suffixes: ${JSON.stringify(suffixes)}`)
           
-          let meta_tags = suffixes.flatMap(suffix => meta_tags_base.map(t => t + suffix)).concat(meta_tags_latest)
-          core.setOutput('tags', meta_tags.join('\n'))
-          console.log(`meta_tags: ${JSON.stringify(meta_tags)}`)
+          core.setOutput('tags', metaTagsAll.join('\n'))
+          console.log(`metaTagsAll final: ${JSON.stringify(metaTagsAll)}`)
       env:
         SLIM: ${{ matrix.slim }}
         PYTHON: ${{ matrix.python }}
@@ -158,7 +172,8 @@ jobs:
         start_time=$(date +%s)
         while true; do
           if pip3 install "mcdreforged==${VERSION}" -i "${PYPI_SIMPLE}" --dry-run --ignore-installed --no-deps; then
-            echo "Version ${VERSION} exists on ${PYPI_SIMPLE}"
+            echo "Version ${VERSION} exists on ${PYPI_SIMPLE}, wait 10s and exit"
+            sleep 10
             break
           else
             current_time=$(date +%s)
@@ -189,3 +204,30 @@ jobs:
           BASE_IMAGE_TAG=${{ steps.config.outputs.base_image_tag }}
           MCDR_REQUIREMENT=${{ needs.pypi_upload.outputs.version }}
           PYPI_INDEX=${{ steps.config.outputs.pypi_simple }}
+
+    - name: Prepare extended image build workflow arguments
+      uses: actions/github-script@v7
+      id: dispatch_args
+      with:
+        script: |-
+          let tags = process.env.TAGS.trim().
+              split('\n').
+              map(t => t.substring(t.lastIndexOf(':') + 1)).
+              join(',')
+          core.setOutput('payload', JSON.stringify({
+            'base_image_tags': tags,
+            'digest': process.env.DIGEST,
+            'git_ref': process.env.GITHUB_REF,
+            'run_number': process.env.GITHUB_RUN_NUMBER,
+          }))
+      env:
+        TAGS: ${{ steps.meta.outputs.tags }}
+        DIGEST: ${{ steps.build.outputs.digest }}
+
+    - name: Trigger extended image builds
+      uses: peter-evans/repository-dispatch@v2
+      with:
+        token: ${{ secrets.REPOSITORY_DISPATCH_PAT }}
+        repository: Fallen-Breath/MCDReforged-Docker
+        event-type: trigger-workflow
+        client-payload: ${{ steps.dispatch_args.outputs.payload }}
