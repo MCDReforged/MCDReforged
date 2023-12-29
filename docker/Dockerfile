@@ -13,7 +13,7 @@ if [ "$MCDR_REQUIREMENT" = "latest" ]; then
 else
   pip3 install "mcdreforged==${MCDR_REQUIREMENT}" -i "$PYPI_INDEX" --extra-index-url https://pypi.org/simple
 fi
-pip3 cache purge
+pip3 cache purge && rm -rf ~/.cache/
 EOT
 
 RUN <<EOT
