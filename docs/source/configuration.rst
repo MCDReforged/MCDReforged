@@ -103,7 +103,7 @@ If there are some special character (e.g. ``"`` and ``\``) that yaml doesn't lik
     See :ref:`configuration:encoding / decoding` section for more information of UTF-8 charset for Minecraft servers
 
 * Option type: string
-* Default value: ``java -Xms1G -Xmx2G -Dfile.encoding=UTF-8 -jar minecraft_server.jar nogui``
+* Default value: ``echo Hello world from MCDReforged``
 
 handler
 ~~~~~~~

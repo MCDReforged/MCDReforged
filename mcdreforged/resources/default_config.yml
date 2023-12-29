@@ -16,8 +16,10 @@ language: en_us
 working_directory: server
 
 
-# The console command to start the server. Examples:
-start_command: java -Xms1G -Xmx2G -Dfile.encoding=UTF-8 -jar minecraft_server.jar nogui
+# The console command to start the server. Will be executed in shell environment
+# Example command for Minecraft server:
+#   java -Xms1G -Xmx2G -Dfile.encoding=UTF-8 -jar minecraft_server.jar nogui
+start_command: echo Hello world from MCDReforged
 
 
 # The handler to the specific way to parse the standard output text of the server and the correct command for server control
