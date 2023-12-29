@@ -23,6 +23,11 @@ cat <<EOF > /etc/pip.conf
 [global]
 user = true
 EOF
+cat <<EOF >> ~/.bashrc
+
+# Add Python user bin to PATH
+export PATH="\$PATH:$(python3 -m site --user-base)/bin"
+EOF
 EOT
 
 WORKDIR /mcdr
