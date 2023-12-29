@@ -263,6 +263,7 @@ class PromptToolkitWrapper:
 			self.__real_stderr = sys.stderr
 			sys.stdout = self.stdout_proxy
 			sys.stderr = self.stdout_proxy
+			# noinspection PyTypeChecker
 			SyncStdoutStreamHandler.update_stdout(sys.stdout)
 			self.pt_enabled = True
 			self.__logger.debug('Prompt Toolkits enabled')
