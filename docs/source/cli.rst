@@ -274,12 +274,12 @@ Example usages:
 plugin_paths
 """"""""""""
 
-The packed plugin files to be processed
+    The packed plugin files to be processed
 
 args
 """"
 
-Extra arguments passing to the pip process, e.g. ``--args "--proxy http://localhost:8080"``
+    Extra arguments passing to the pip process, e.g. ``--args "--proxy http://localhost:8080"``
 
 start
 ^^^^^
