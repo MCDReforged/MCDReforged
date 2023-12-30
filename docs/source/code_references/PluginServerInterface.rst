@@ -15,6 +15,8 @@ Plugin Registry
 .. automethod:: PluginServerInterface.register_command
 .. automethod:: PluginServerInterface.register_help_message
 .. automethod:: PluginServerInterface.register_translation
+.. automethod:: PluginServerInterface.register_server_handler
+.. automethod:: PluginServerInterface.register_info_filter
 
 Plugin Utils
 ------------

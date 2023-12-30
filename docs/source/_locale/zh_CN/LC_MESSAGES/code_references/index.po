@@ -27,7 +27,7 @@ msgstr "服务端接口 - 插件"
 
 #: ../code_references/index.rst:8
 msgid "Info and Info Reactor"
-msgstr "Info 和 Info 响应器"
+msgstr "Info 相关"
 
 #: ../code_references/index.rst:8
 msgid "Command Stuffs"

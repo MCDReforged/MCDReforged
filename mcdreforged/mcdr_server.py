@@ -6,7 +6,7 @@ from importlib.metadata import PackageNotFoundError, Distribution
 from pathlib import Path
 from subprocess import Popen, PIPE, STDOUT, TimeoutExpired
 from threading import Lock, Condition
-from typing import Optional, Callable, Any
+from typing import Optional, Callable, Any, TYPE_CHECKING, List
 
 import psutil
 from ruamel.yaml import YAMLError
@@ -19,6 +19,7 @@ from mcdreforged.executor.update_helper import UpdateHelper
 from mcdreforged.executor.watchdog import WatchDog
 from mcdreforged.handler.server_handler_manager import ServerHandlerManager
 from mcdreforged.info_reactor.info import Info
+from mcdreforged.info_reactor.info_filter import InfoFilterHolder
 from mcdreforged.info_reactor.info_reactor_manager import InfoReactorManager
 from mcdreforged.info_reactor.server_information import ServerInformation
 from mcdreforged.mcdr_config import MCDReforgedConfig
@@ -35,6 +36,9 @@ from mcdreforged.utils.exception import ServerStartError, IllegalStateError, Dec
 from mcdreforged.utils.logger import DebugOption, MCDReforgedLogger, MCColorFormatControl
 from mcdreforged.utils.types import MessageText
 
+if TYPE_CHECKING:
+	from mcdreforged.plugin.plugin_registry import PluginRegistryStorage
+
 
 class MCDReforgedServer:
 	process: Optional[Popen]
@@ -49,13 +53,14 @@ class MCDReforgedServer:
 		self.server_information = ServerInformation()
 		self.process: Optional[Popen] = None
 		self.flags = MCDReforgedFlag.NONE
+		self.info_filter_holders: List[InfoFilterHolder] = []
 		self.starting_server_lock = Lock()  # to prevent multiple start_server() call
 		self.stop_lock = Lock()  # to prevent multiple stop() call
 		self.config_change_lock = Lock()
 
 		# will be assigned in on_config_changed()
-		self.encoding_method = None  # type: Optional[str]
-		self.decoding_method = None  # type: Optional[str]
+		self.encoding_method: Optional[str] = None
+		self.decoding_method: Optional[str] = None
 
 		# --- Constructing fields --- #
 		self.logger = MCDReforgedLogger()
@@ -258,7 +263,7 @@ class MCDReforgedServer:
 			self.reactor_manager.register_reactors(self.config['custom_info_reactors'])
 
 			self.server_handler_manager.register_handlers(self.config['custom_handlers'])
-			self.server_handler_manager.set_handler(self.config['handler'])
+			self.server_handler_manager.set_configured_handler(self.config['handler'])
 			if log:
 				self.logger.info(self.tr('mcdr_server.on_config_changed.handler_set', self.config['handler']))
 
@@ -270,7 +275,12 @@ class MCDReforgedServer:
 
 	def on_plugin_registry_changed(self):
 		self.command_manager.clear_command()
-		self.plugin_manager.registry_storage.export_commands(self.command_manager.register_command)
+		self.info_filter_holders.clear()
+
+		reg: 'PluginRegistryStorage' = self.plugin_manager.registry_storage
+		reg.export_commands(self.command_manager.register_command)
+		reg.export_server_handler(self.server_handler_manager.set_plugin_provided_server_handler_holder)
+		reg.export_info_filters(self.info_filter_holders.append)
 
 	# ---------------------------
 	#      General Setters
@@ -551,22 +561,30 @@ class MCDReforgedServer:
 		except Exception:
 			self.logger.warning(self.tr('mcdr_server.tick.pre_parse_fail'))
 
-		parsed_result: Info
+		info: Info
 		try:
-			parsed_result = self.server_handler_manager.get_current_handler().parse_server_stdout(text)
+			info = self.server_handler_manager.get_current_handler().parse_server_stdout(text)
 		except Exception:
 			if self.logger.should_log_debug(option=DebugOption.HANDLER):  # traceback.format_exc() is costly
 				self.logger.debug('Fail to parse text "{}" from stdout of the server, using raw handler'.format(text), no_check=True)
 				for line in traceback.format_exc().splitlines():
 					self.logger.debug('    {}'.format(line), no_check=True)
-			parsed_result = self.server_handler_manager.get_basic_handler().parse_server_stdout(text)
+			info = self.server_handler_manager.get_basic_handler().parse_server_stdout(text)
 		else:
 			if self.logger.should_log_debug(option=DebugOption.HANDLER):
 				self.logger.debug('Parsed text from server stdout:', no_check=True)
-				for line in parsed_result.debug_format_text().splitlines():
+				for line in info.debug_format_text().splitlines():
 					self.logger.debug('    {}'.format(line), no_check=True)
 		self.server_handler_manager.detect_text(text)
-		self.reactor_manager.put_info(parsed_result)
+		info.attach_mcdr_server(self)
+
+		for ifh in self.info_filter_holders:
+			if ifh.filter.filter_server_info(info) is False:
+				if self.logger.should_log_debug(option=DebugOption.HANDLER):
+					self.logger.debug('Server info is discarded by filter {} from {}'.format(ifh.filter, ifh.plugin))
+				break
+		else:  # all filter check ok
+			self.reactor_manager.put_info(info)
 
 	def __on_mcdr_start(self):
 		self.__register_signal_handler()

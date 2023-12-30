@@ -19,3 +19,10 @@ Info Reactor
 
 .. autoclass:: mcdreforged.info_reactor.abstract_info_reactor.AbstractInfoReactor
     :members:
+
+
+Info Filter
+-----------
+
+.. autoclass:: mcdreforged.info_reactor.info_filter.InfoFilter
+    :members:

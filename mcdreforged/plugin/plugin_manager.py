@@ -455,12 +455,12 @@ class PluginManager:
 		return PluginOperationResult(load_result, unload_result, reload_result, dependency_check_result)
 
 	def __sort_plugins_by_id(self):
-		self.plugins = dict(sorted(map(tuple, self.plugins.items()), key=lambda item: item[0]))
+		self.plugins = {plugin_id: self.plugins[plugin_id] for plugin_id in sorted(self.plugins.keys())}
 
 	def __update_registry(self):
 		self.registry_storage.clear()
 		for plugin in self.get_all_plugins():
-			self.registry_storage.collect(plugin.plugin_registry)
+			self.registry_storage.collect(plugin, plugin.plugin_registry)
 		self.registry_storage.arrange()
 		self.mcdr_server.on_plugin_registry_changed()
 
@@ -578,7 +578,7 @@ class PluginManager:
 		"""
 		if self.logger.should_log_debug(DebugOption.PLUGIN):
 			self.logger.debug('Dispatching {} with args ({})'.format(event, ', '.join([type(arg).__name__ for arg in args])), no_check=True)
-		for listener in self.registry_storage.event_listeners.get(event.id, []):
+		for listener in self.registry_storage.get_event_listeners(event.id):
 			self.trigger_listener(listener, args)
 
 	def dispatch_event(self, event: MCDREvent, args: Tuple[Any, ...], *, on_executor_thread: bool = True, block: bool = False, timeout: Optional[float] = None):

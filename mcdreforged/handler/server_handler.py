@@ -1,4 +1,4 @@
-from abc import ABC
+from abc import ABC, abstractmethod
 from typing import Optional, Tuple
 
 from mcdreforged.info_reactor.info import Info
@@ -32,40 +32,45 @@ class ServerHandler(ABC):
 	#   Basic Information
 	# ---------------------
 
+	@abstractmethod
 	def get_name(self) -> str:
 		"""
 		The name of the server handler
 
 		The name is used as the identifier of this server handler in MCDR configuration
 		"""
-		raise NotImplementedError()
+		...
 
 	# ------------------
 	#   Server control
 	# ------------------
 
+	@abstractmethod
 	def get_stop_command(self) -> str:
 		"""
 		The command to stop the server
 		"""
-		raise NotImplementedError()
+		...
 
+	@abstractmethod
 	def get_send_message_command(self, target: str, message: MessageText, server_information: ServerInformation) -> Optional[str]:
 		"""
 		The command to send a message to a target
 		"""
-		raise NotImplementedError()
+		...
 
+	@abstractmethod
 	def get_broadcast_message_command(self, message: MessageText, server_information: ServerInformation) -> Optional[str]:
 		"""
 		The command to broadcast a message in the server
 		"""
-		raise NotImplementedError()
+		...
 
 	# -------------------------
 	#   Server output parsing
 	# -------------------------
 
+	@abstractmethod
 	def pre_parse_server_stdout(self, text: str) -> str:
 		"""
 		A parsing preprocessor. Invoked before any parsing operation
@@ -74,8 +79,9 @@ class ServerHandler(ABC):
 
 		:param text: A line of the server stdout to be parsed
 		"""
-		raise NotImplementedError()
+		...
 
+	@abstractmethod
 	def parse_console_command(self, text: str) -> Info:
 		"""
 		Parse console input
@@ -83,8 +89,9 @@ class ServerHandler(ABC):
 		:param text: A line of console input to be parsed
 		:return: An :class:`~mcdreforged.info_reactor.info.Info` object as the result
 		"""
-		raise NotImplementedError()
+		...
 
+	@abstractmethod
 	def parse_server_stdout(self, text: str) -> Info:
 		"""
 		Main parsing operation. Parse a string from the stdout of the server and output a parsed info
@@ -101,8 +108,9 @@ class ServerHandler(ABC):
 		:param text: A line of the server stdout to be parsed
 		:return: An :class:`~mcdreforged.info_reactor.info.Info` object as the result
 		"""
-		raise NotImplementedError()
+		...
 
+	@abstractmethod
 	def parse_player_joined(self, info: Info) -> Optional[str]:
 		"""
 		Check if the info indicating a player joined message
@@ -112,8 +120,9 @@ class ServerHandler(ABC):
 		:param info: The info object to be checked
 		:return: The name of the player, or None
 		"""
-		raise NotImplementedError()
+		...
 
+	@abstractmethod
 	def parse_player_left(self, info: Info) -> Optional[str]:
 		"""
 		Check if the info indicates a player left message
@@ -123,8 +132,9 @@ class ServerHandler(ABC):
 		:param info: The info object to be checked
 		:return: The name of the player, or None
 		"""
-		raise NotImplementedError()
+		...
 
+	@abstractmethod
 	def parse_server_version(self, info: Info) -> Optional[str]:
 		"""
 		Check if the info contains a server version message
@@ -134,8 +144,9 @@ class ServerHandler(ABC):
 		:param info: The info object to be checked
 		:return: The version of the server, or None
 		"""
-		raise NotImplementedError()
+		...
 
+	@abstractmethod
 	def parse_server_address(self, info: Info) -> Optional[Tuple[str, int]]:
 		"""
 		Check if the info contains the address which the server is listening on
@@ -145,8 +156,9 @@ class ServerHandler(ABC):
 		:param info: The info object to be checked
 		:return: A tuple containing the ip and the port, or None
 		"""
-		raise NotImplementedError()
+		...
 
+	@abstractmethod
 	def test_server_startup_done(self, info: Info) -> bool:
 		"""
 		Check if the info indicates a server startup message
@@ -154,8 +166,9 @@ class ServerHandler(ABC):
 		:param info: The info object to be checked
 		:return: If the info indicates a server startup message
 		"""
-		raise NotImplementedError()
+		...
 
+	@abstractmethod
 	def test_rcon_started(self, info: Info) -> bool:
 		"""
 		Check if rcon has started
@@ -163,8 +176,9 @@ class ServerHandler(ABC):
 		:param info: The info object to be checked
 		:return: If rcon has started
 		"""
-		raise NotImplementedError()
+		...
 
+	@abstractmethod
 	def test_server_stopping(self, info: Info) -> bool:
 		"""
 		Check if the server is stopping
@@ -172,4 +186,4 @@ class ServerHandler(ABC):
 		:param info: The info object to be checked
 		:return: If the server is stopping
 		"""
-		raise NotImplementedError()
+		...

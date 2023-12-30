@@ -19,7 +19,7 @@ if TYPE_CHECKING:
 class SoloPlugin(RegularPlugin):
 	def __init__(self, plugin_manager: 'PluginManager', file_path: str):
 		super().__init__(plugin_manager, file_path)
-		self.module_name = '__MCDR_SOLO_PLUGIN__@{}'.format(self.plugin_path)
+		self.module_name = 'MCDR_SOLO_PLUGIN@{}'.format(self.plugin_path)
 
 	def get_fallback_metadata_id(self) -> str:
 		file_name = string_util.remove_suffix(self.file_name, plugin_constant.SOLO_PLUGIN_FILE_SUFFIX)

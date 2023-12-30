@@ -80,6 +80,9 @@ info_reactor_manager:
   info_queue:
     full: Info queue has been full, is the server spamming? Ignore incoming info!
 server_handler_manager:
+  plugin_provided:
+    set: 'Using server handler {0} provided by {1}'
+    unset: 'Using server handler {0} specified by configuration'
   handler_detection:
     result1: Looks like you are not using the correct handler for the server
     result2: 'Currently using handler: {0}, success rate {1}% ({2}/{3})'

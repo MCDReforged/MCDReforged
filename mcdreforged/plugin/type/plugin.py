@@ -5,6 +5,7 @@ from enum import Enum, auto
 from typing import Tuple, Any, TYPE_CHECKING, Collection, Optional
 
 from mcdreforged.command.builder.nodes.basic import Literal
+from mcdreforged.info_reactor.info_filter import InfoFilter
 from mcdreforged.plugin.meta.metadata import Metadata
 from mcdreforged.plugin.plugin_event import MCDREvent, EventListener, PluginEvent
 from mcdreforged.plugin.plugin_registry import PluginRegistry, HelpMessage
@@ -13,6 +14,7 @@ from mcdreforged.utils.logger import DebugOption
 from mcdreforged.utils.types import TranslationKeyDictNested
 
 if TYPE_CHECKING:
+	from mcdreforged.handler.server_handler import ServerHandler
 	from mcdreforged.plugin.plugin_manager import PluginManager
 
 
@@ -150,6 +152,23 @@ class AbstractPlugin:
 		self.plugin_registry.register_help_message(help_message)
 		self.mcdr_server.logger.debug('{} registered help message "{}"'.format(self, help_message), option=DebugOption.PLUGIN)
 
+	def register_translation(self, language: str, mapping: TranslationKeyDictNested):
+		self.__assert_allow_to_register('translation')
+		self.plugin_registry.register_translation(language, mapping)
+		self.mcdr_server.logger.debug('{} registered translation for {} with at least {} entries'.format(self, language, len(mapping)), option=DebugOption.PLUGIN)
+
+	def register_server_handler(self, server_handler: 'ServerHandler'):
+		self.__assert_allow_to_register('server_handler')
+		self.plugin_registry.register_server_handler(server_handler)
+
+	def register_info_filter(self, info_filter: InfoFilter):
+		self.__assert_allow_to_register('info_filter')
+		self.plugin_registry.register_info_filter(info_filter)
+
+	# -------------------
+	#    Plugin Events
+	# -------------------
+
 	def receive_event(self, event: MCDREvent, args: Tuple[Any, ...]):
 		"""
 		Directly dispatch an event towards this plugin
@@ -157,10 +176,5 @@ class AbstractPlugin:
 		"""
 		self.assert_state({PluginState.READY}, 'Only plugin in READY state is allowed to receive events')
 		self.mcdr_server.logger.debug('{} directly received {}'.format(self, event), option=DebugOption.PLUGIN)
-		for listener in self.plugin_registry.event_listeners.get(event.id, []):
+		for listener in self.plugin_registry.get_event_listeners(event.id):
 			self.plugin_manager.trigger_listener(listener, args)
-
-	def register_translation(self, language: str, mapping: TranslationKeyDictNested):
-		self.__assert_allow_to_register('translation')
-		self.plugin_registry.register_translation(language, mapping)
-		self.mcdr_server.logger.debug('{} registered translation for {} with at least {} entries'.format(self, language, len(mapping)), option=DebugOption.PLUGIN)

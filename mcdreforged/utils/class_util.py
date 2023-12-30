@@ -30,7 +30,7 @@ def check_class(class_: Type, base_class: Type, error_message: str = None):
 		raise TypeError(error_message)
 
 
-def check_type(value: _T, types: Union[Type, Iterable[Type]], error_message: str = None) -> _T:
+def check_type(value: Any, types: Union[Type[_T], Iterable[Type[_T]]], error_message: str = None) -> _T:
 	def mapper(x):
 		if x is None:
 			return type(x)

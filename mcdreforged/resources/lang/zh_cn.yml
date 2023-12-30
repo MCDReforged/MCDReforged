@@ -80,6 +80,9 @@ info_reactor_manager:
   info_queue:
     full: 消息队列已满, 服务端是否在刷屏? 忽略新到来消息
 server_handler_manager:
+  plugin_provided:
+    set: '使用插件 {1} 提供的解析处理器 {0}'
+    unset: '使用配置文件指定的解析处理器 {0}'
   handler_detection:
     result1: 似乎你并没有使用正确的服务端解析处理器
     result2: '目前正在使用的解析处理器: {0}, 成功率 {1}% ({2}/{3})'

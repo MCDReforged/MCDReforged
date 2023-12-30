@@ -147,8 +147,8 @@ class Info:
 
 		:meta private:
 		"""
-		if self.__mcdr_server is not None:
-			raise IllegalStateError('An Info instance can only attach the MCDR server once')
+		if self.__mcdr_server is not None and self.__mcdr_server is not mcdr_server:
+			raise IllegalStateError('An Info instance can only attach one MCDR server')
 		self.__mcdr_server = mcdr_server
 
 	def get_server(self) -> 'ServerInterface':

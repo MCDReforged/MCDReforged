@@ -14,6 +14,7 @@ from mcdreforged.command.command_source import CommandSource, PluginCommandSourc
 from mcdreforged.constants import plugin_constant
 from mcdreforged.constants.deprecations import SERVER_INTERFACE_LANGUAGE_KEYWORD
 from mcdreforged.info_reactor.info import Info
+from mcdreforged.info_reactor.info_filter import InfoFilter
 from mcdreforged.info_reactor.server_information import ServerInformation
 from mcdreforged.mcdr_state import MCDReforgedFlag
 from mcdreforged.permission.permission_level import PermissionLevel, PermissionParam
@@ -1029,6 +1030,41 @@ class PluginServerInterface(ServerInterface):
 			The translation key could be expressed as node name which under root node or the path of a nested multi-level nodes
 		"""
 		self.__plugin.register_translation(language, mapping)
+
+	def register_server_handler(self, server_handler: 'ServerHandler'):
+		"""
+		Register a plugin-provided server handler
+
+		The server handler will override the configured server handler of MCDR, within the lifecycle of the current plugin
+
+		If multiple plugins provide multiple server handler, only the first one will be used, and warning messages will be logged
+
+		:param server_handler: The server handler to register
+
+		.. versionadded:: v2.13.0
+		"""
+		from mcdreforged.handler.server_handler import ServerHandler
+		class_util.check_type(server_handler, ServerHandler)
+		self.__plugin.register_server_handler(server_handler)
+
+	def register_info_filter(self, info_filter: InfoFilter):
+		"""
+		Register a plugin-provided info filter. See :class:`~mcdreforged.info_reactor.info_filter.InfoFilter` for more information
+
+		The info filter take effects within the lifecycle of the current plugin
+
+		.. warning::
+
+			The info filter callbacks will be invoked in the MCDR main thread, not the task executor thread
+
+			Make sure your function is well optimized, or it might lag MCDR, and also be aware of multithreading race condition
+
+		:param info_filter: The info filter to register
+
+		.. versionadded:: v2.13.0
+		"""
+		class_util.check_type(info_filter, InfoFilter)
+		self.__plugin.register_info_filter(info_filter)
 
 	# ------------------------
 	#      Plugin Utils
