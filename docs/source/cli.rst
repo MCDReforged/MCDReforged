@@ -30,13 +30,28 @@ Have a try to display CLI help messages using following command
 The following document will use ``mcdreforged`` as the command for demonstration.
 For MCDR < v2.10, you need to add the ``python -m`` prefix to the commands used below
 
-You can always use ``python -m mcdreforged`` to run MCDR in all environment, in case the ``mcdreforged`` command does not work
-
 The overall CLI command format is:
 
-.. code-block::
+.. code-block:: bash
 
      mcdreforged [global_args] <sub_command> [sub_command_args]
+
+
+.. note::
+
+    You can always use ``python -m mcdreforged`` to run MCDR in all environment, in case the ``mcdreforged`` command does not work
+
+    .. tab:: Windows
+
+        .. code-block:: bash
+
+            python -m mcdreforged [global_args] <sub_command> [sub_command_args]
+
+    .. tab:: Linux
+
+        .. code-block:: bash
+
+            python3 -m mcdreforged [global_args] <sub_command> [sub_command_args]
 
 Global Arguments
 ----------------
