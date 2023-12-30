@@ -234,7 +234,6 @@ msgid "arclight_handler"
 msgstr "arclight_handler"
 
 #: ../configuration.rst:135
-#, fuzzy
 msgid ""
 "For `Arclight <https://github.com/IzzelAliz/Arclight>`__ server. Tested "
 "with `arclight-forge-1.20.1-1.0.1.jar`"
@@ -399,7 +398,6 @@ msgid "Default value: ``utf8``, ``utf8``"
 msgstr "默认值：``空``"
 
 #: ../configuration.rst:212
-#, fuzzy
 msgid "Examples: ``utf8``, ``gbk``"
 msgstr "例如：``utf8`` ， ``gbk``"
 
