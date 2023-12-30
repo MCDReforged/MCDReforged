@@ -51,19 +51,16 @@ Global Arguments
 Sub Commands
 ------------
 
-start
-^^^^^
+gendefault
+^^^^^^^^^^
 
 .. code-block:: bash
 
-    mcdreforged start [-h] [--auto-init]
+    mcdreforged gendefault [-h]
 
-The same as ``mcdreforged``, it launches MCDR
+Generate default configuration and permission files at current working directory
 
-auto-init
-"""""""""
-
-    Automatically initialize the working environment if needed
+Note that it will overwrite existing files
 
 init
 ^^^^
@@ -82,17 +79,6 @@ Create commonly used folders and generate default configuration and permission f
 * server/
 * config.yml
 * permission.yml
-
-gendefault
-^^^^^^^^^^
-
-.. code-block:: bash
-
-    mcdreforged gendefault [-h]
-
-Generate default configuration and permission files at current working directory
-
-Note that it will overwrite existing files
 
 pack
 ^^^^
@@ -247,3 +233,49 @@ shebang
         --shebang "/usr/bin/env python3"
 
     .. versionadded:: v2.8.0
+
+
+pipi
+^^^^
+
+pipi == pip-install
+
+.. code-block:: bash
+
+    mcdreforged pipi [-h] [--args ARGS] [plugin_paths ...]
+
+Call ``pip install`` with the requirements.txt file in the given packed plugin to install Python packages
+
+Example usages:
+
+.. code-block:: bash
+
+    mcdreforged pipi MyPlugin.mcdr
+    mcdreforged pipi MyPlugin.mcdr /path/to/AnotherPlugin.pyz
+    mcdreforged pipi MyPlugin.mcdr --args "-i https://pypi.tuna.tsinghua.edu.cn/simple"
+
+.. versionadded:: v2.13.0
+
+plugin_paths
+""""""""""""
+
+The packed plugin files to be processed
+
+args
+""""
+
+Extra arguments passing to the pip process, e.g. ``--args "--proxy http://localhost:8080"``
+
+start
+^^^^^
+
+.. code-block:: bash
+
+    mcdreforged start [-h] [--auto-init]
+
+The same as ``mcdreforged``, it launches MCDR
+
+auto-init
+"""""""""
+
+    Automatically initialize the working environment if needed
