@@ -14,6 +14,7 @@ This is the official documentation for `MCDReforged <https://github.com/Fallen-B
    Quick Start<quick_start.rst>
    Configuration<configuration.rst>
    Command<command.rst>
+   Command Line Interface<cli.rst>
    Permission<permission.rst>
    Preference<preference.rst>
    Plugin Development<plugin_dev/index.rst>

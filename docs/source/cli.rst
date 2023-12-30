@@ -180,9 +180,9 @@ ignore patterns
     *   Tailing space character escaping is not supported
     *   Heading hashtag character escaping is not supported
 
-    It overwrites values from :ref:`-\\\\-ignore-file <plugin_dev/cli:ignore file>`. It will filter nothing if the value is empty, or the file doesn't exist or not readable
+    It overwrites values from :ref:`-\\\\-ignore-file <cli:ignore file>`. It will filter nothing if the value is empty, or the file doesn't exist or not readable
 
-    Notes: The root directory when calculating related path is the current working directory, not the :ref:`plugin_dev/cli:input` directory
+    Notes: The root directory when calculating related path is the current working directory, not the :ref:`cli:input` directory
 
     Default: empty list
 
@@ -199,7 +199,7 @@ ignore file
 
     ``--ignore-file IGNORE_FILE``
 
-    The path to a utf8-encoded gitignore-like file. It's content will be used as the :ref:`-\\\\-ignore-patterns <plugin_dev/cli:ignore patterns>` parameter.
+    The path to a utf8-encoded gitignore-like file. It's content will be used as the :ref:`-\\\\-ignore-patterns <cli:ignore patterns>` parameter.
 
     Default: ``".gitignore"``, which means that it will automatically read the .gitignore file in the current working directory
 

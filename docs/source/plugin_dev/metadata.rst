@@ -277,7 +277,7 @@ The file name of generated ``.mcdr`` packed plugin in CLI
 
 .. seealso::
 
-    :ref:`plugin_dev/cli:name` option in :ref:`plugin_dev/cli:pack` command in :doc:`/plugin_dev/cli`
+    :ref:`cli:name` option in :ref:`cli:pack` command in :doc:`/cli`
 
 * Field key: ``archive_name``
 * Value type: str
@@ -294,7 +294,7 @@ A list of file or folder names that will be packed into the generated ``.mcdr`` 
 
 .. seealso::
 
-    :ref:`plugin_dev/cli:pack` command in :doc:`/plugin_dev/cli`
+    :ref:`cli:pack` command in :doc:`/cli`
 
 * Field key: ``resources``
 * Value type: List[str]

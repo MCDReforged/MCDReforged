@@ -578,9 +578,9 @@ msgstr "在 CLI 中生成的 ``.mcdr`` 打包插件的文件名"
 
 #: ../plugin_dev/metadata.rst:280
 msgid ""
-":ref:`plugin_dev/cli:name` option in :ref:`plugin_dev/cli:pack` command "
-"in :doc:`/plugin_dev/cli`"
-msgstr ":doc:`/plugin_dev/cli` 中 :ref:`plugin_dev/cli:pack` 指令的 :ref:`plugin_dev/cli:name` 选项"
+":ref:`cli:name` option in :ref:`cli:pack` command "
+"in :doc:`/cli`"
+msgstr ":doc:`/cli` 中 :ref:`cli:pack` 指令的 :ref:`cli:name` 选项"
 
 #: ../plugin_dev/metadata.rst:282
 msgid "Field key: ``archive_name``"
@@ -597,8 +597,8 @@ msgid ""
 msgstr "一个文件或文件夹名称的列表，将用于在 CLI 中打包入 ``.mcdr`` 打包插件"
 
 #: ../plugin_dev/metadata.rst:297
-msgid ":ref:`plugin_dev/cli:pack` command in :doc:`/plugin_dev/cli`"
-msgstr ":doc:`/plugin_dev/cli` 中的 :ref:`plugin_dev/cli:pack`"
+msgid ":ref:`cli:pack` command in :doc:`/cli`"
+msgstr ":doc:`/cli` 中的 :ref:`cli:pack`"
 
 #: ../plugin_dev/metadata.rst:299
 msgid "Field key: ``resources``"

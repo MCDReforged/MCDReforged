@@ -181,8 +181,8 @@ msgid "Take a look at MCDR's built-in permission system: :doc:`/permission`"
 msgstr "了解 MCDR 的内置权限系统：:doc:`/permission`"
 
 #: ../quick_start.rst:137
-msgid "Learn more about MCDR command line interface: :doc:`/plugin_dev/cli`"
-msgstr "学习更多关于 MCDR 命令行接口的信息：:doc:`/plugin_dev/cli`"
+msgid "Learn more about MCDR command line interface: :doc:`/cli`"
+msgstr "学习更多关于 MCDR 命令行接口的用法：:doc:`/cli`"
 
 #: ../quick_start.rst:138
 msgid "Dive into the document to explore more about MCDR ..."

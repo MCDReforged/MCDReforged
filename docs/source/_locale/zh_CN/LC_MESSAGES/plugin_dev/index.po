@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-13 20:35+0800\n"
+"POT-Creation-Date: 2023-12-30 20:42+0800\n"
 "PO-Revision-Date: 2021-01-22 14:26+0000\n"
 "Last-Translator: \n"
 "Language: zh_CN\n"
@@ -14,46 +14,42 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.1\n"
 
-#: ../plugin_dev/index.rst:4
+#: ../plugin_dev/index.rst:7
 msgid "Basic"
 msgstr "基本知识"
 
-#: ../plugin_dev/index.rst:4
+#: ../plugin_dev/index.rst:7
 msgid "Metadata"
 msgstr "元数据"
 
-#: ../plugin_dev/index.rst:4
+#: ../plugin_dev/index.rst:7
 msgid "Plugin Format"
 msgstr "插件格式"
 
-#: ../plugin_dev/index.rst:4
+#: ../plugin_dev/index.rst:7
 msgid "Plugin Event"
 msgstr "插件事件"
 
-#: ../plugin_dev/index.rst:4
+#: ../plugin_dev/index.rst:7
 msgid "Command Tree"
 msgstr "指令树"
 
-#: ../plugin_dev/index.rst:4
+#: ../plugin_dev/index.rst:7
 msgid "API"
 msgstr "API"
 
-#: ../plugin_dev/index.rst:4
+#: ../plugin_dev/index.rst:7
 msgid "Watchdog"
 msgstr "看门狗"
 
-#: ../plugin_dev/index.rst:4
-msgid "Command Line Interface"
-msgstr "命令行接口"
-
-#: ../plugin_dev/index.rst:4
+#: ../plugin_dev/index.rst:7
 msgid "Plugin Catalogue"
 msgstr "插件仓库"
 
-#: ../plugin_dev/index.rst:4
+#: ../plugin_dev/index.rst:7
 msgid "Some tips"
 msgstr "一些提示"
 
-#: ../plugin_dev/index.rst:2
+#: ../plugin_dev/index.rst:5
 msgid "Plugin Development"
 msgstr "插件开发"

@@ -134,6 +134,6 @@ Now, you've got the basics of how to set up, run, and upgrade MCDR. What's next?
 * Check how to configure MCDR: :doc:`/configuration`
 * Discover the MCDR command system: :doc:`/command`
 * Take a look at MCDR's built-in permission system: :doc:`/permission`
-* Learn more about MCDR command line interface: :doc:`/plugin_dev/cli`
+* Learn more about MCDR command line interface: :doc:`/cli`
 * Dive into the document to explore more about MCDR ...
 
