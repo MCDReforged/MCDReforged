@@ -5,6 +5,9 @@ Core constants
 import os
 
 
+# will be modified in CI
+__CI_BUILD_NUM = None
+
 NAME_SHORT = 'MCDR'
 NAME = 'MCDReforged'
 PACKAGE_NAME = 'mcdreforged'
@@ -27,3 +30,8 @@ PLUGIN_THREAD_POOL_SIZE = 4
 MAX_TASK_QUEUE_SIZE = 2048
 WAIT_TIME_AFTER_SERVER_STDOUT_END_SEC = 60
 REACTOR_QUEUE_FULL_WARN_INTERVAL_SEC = 5
+
+
+if isinstance(__CI_BUILD_NUM, str) and __CI_BUILD_NUM.isdigit():
+	VERSION += '+dev.{}'.format(__CI_BUILD_NUM)
+	VERSION_PYPI += '.dev{}'.format(__CI_BUILD_NUM)

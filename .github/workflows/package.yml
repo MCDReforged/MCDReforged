@@ -45,8 +45,23 @@ jobs:
         python -m pip install -U pip
         pip install setuptools wheel
 
+    - name: Modify and get version information
+      id: version
+      run: |
+        version_file=mcdreforged/constants/core_constant.py
+        if [ "$IS_RELEASE" != "true" ]; then
+          sed -i "/^__CI_BUILD_NUM/c\__CI_BUILD_NUM = '$GITHUB_RUN_NUMBER'" "$version_file"
+        fi
+        
+        python - <<EOF
+        import os
+        from mcdreforged.constants import core_constant as cc
+        with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+          f.write('mcdr_version={}\n'.format(cc.VERSION))
+          f.write('pypi_version={}\n'.format(cc.VERSION_PYPI))
+        EOF
+
     - name: Create distribution
-      id: distribution
       run: |
         python setup.py sdist bdist_wheel
 
@@ -75,8 +90,8 @@ jobs:
           }
       env:
         GITHUB_REF: ${{ github.ref }}
-        MCDR_VERSION: ${{ steps.distribution.outputs.mcdr_version }}
-        PYPI_VERSION: ${{ steps.distribution.outputs.pypi_version }}
+        MCDR_VERSION: ${{ steps.version.outputs.mcdr_version }}
+        PYPI_VERSION: ${{ steps.version.outputs.pypi_version }}
 
     - name: Publish distribution to TestPyPI
       uses: pypa/gh-action-pypi-publish@release/v1
@@ -99,7 +114,7 @@ jobs:
 
     - name: Report PyPI URLs
       run: |
-        version=${{ steps.distribution.outputs.pypi_version }}
+        version=${{ steps.version.outputs.pypi_version }}
         echo -e "## PyPI Package URLs\n" >> $GITHUB_STEP_SUMMARY
         if [ "$IS_RELEASE" = "true" ]; then
           echo -e "### PyPI\n" >> $GITHUB_STEP_SUMMARY
@@ -111,8 +126,8 @@ jobs:
         echo -e "\`\`\`\npip install mcdreforged==$version -r https://test.pypi.org/simple\n\`\`\`\n" >> $GITHUB_STEP_SUMMARY
 
     outputs:
-      mcdr_version: ${{ steps.distribution.outputs.mcdr_version }}
-      pypi_version: ${{ steps.distribution.outputs.pypi_version }}
+      mcdr_version: ${{ steps.version.outputs.mcdr_version }}
+      pypi_version: ${{ steps.version.outputs.pypi_version }}
 
   image:
     name: Docker image (py${{ matrix.python }}${{ matrix.slim == 'true' && ', slim' || '' }})

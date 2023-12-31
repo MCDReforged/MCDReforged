@@ -42,17 +42,6 @@ ENTRY_POINTS = {
 }
 print('ENTRY_POINTS = {}'.format(ENTRY_POINTS))
 
-# github action environment
-if os.getenv('CI', None) is not None:
-	build_num = os.getenv('GITHUB_RUN_NUMBER')
-	is_release = os.getenv('GITHUB_REF', '').startswith('refs/tags/v')
-	if build_num is not None and not is_release:
-		VERSION += '.dev{}'.format(build_num)
-	if os.getenv('GITHUB_OUTPUT', None) is not None:
-		with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
-			f.write('mcdr_version={}\n'.format(core_constant.VERSION))
-			f.write('pypi_version={}\n'.format(VERSION))
-
 # -------------------------------- Files --------------------------------
 
 here = os.path.abspath(os.path.dirname(__file__))
