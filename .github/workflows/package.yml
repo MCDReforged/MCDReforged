@@ -50,6 +50,34 @@ jobs:
       run: |
         python setup.py sdist bdist_wheel
 
+    - name: Check version consistency
+      if: env.IS_RELEASE == 'true'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const tagVersion = process.env.GITHUB_REF.split('refs/tags/v')[1] || ''  // "refs/tags/v1.2.3" -> "1.2.3"
+          const mcdrVersion = process.env.MCDR_VERSION
+          const pypiVersion = process.env.PYPI_VERSION
+          const isStableRelease = process.env.IS_RELEASE === 'true' && /^[0-9.]+$/.test(tagVersion)
+          
+          console.log(`tagVersion: ${tagVersion}`)
+          console.log(`mcdrVersion: ${mcdrVersion}`)
+          console.log(`pypiVersion: ${pypiVersion}`)
+          console.log(`isStableRelease: ${isStableRelease}`)
+          
+          if (tagVersion !== mcdrVersion) {
+            core.setFailed(`tagVersion ${tagVersion} != mcdrVersion ${mcdrVersion}`)
+            return
+          }
+          if (isStableRelease && mcdrVersion !== pypiVersion) {
+            core.setFailed(`mcdrVersion ${mcdrVersion} != pypiVersion ${pypiVersion}, and it's a stable release`)
+            return
+          }
+      env:
+        GITHUB_REF: ${{ github.ref }}
+        MCDR_VERSION: ${{ steps.distribution.outputs.mcdr_version }}
+        PYPI_VERSION: ${{ steps.distribution.outputs.pypi_version }}
+
     - name: Publish distribution to TestPyPI
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
@@ -71,7 +99,7 @@ jobs:
 
     - name: Report PyPI URLs
       run: |
-        version=${{ steps.distribution.outputs.version }}
+        version=${{ steps.distribution.outputs.pypi_version }}
         echo -e "## PyPI Package URLs\n" >> $GITHUB_STEP_SUMMARY
         if [ "$IS_RELEASE" = "true" ]; then
           echo -e "### PyPI\n" >> $GITHUB_STEP_SUMMARY
@@ -83,7 +111,8 @@ jobs:
         echo -e "\`\`\`\npip install mcdreforged==$version -r https://test.pypi.org/simple\n\`\`\`\n" >> $GITHUB_STEP_SUMMARY
 
     outputs:
-      version: ${{ steps.distribution.outputs.version }}
+      mcdr_version: ${{ steps.distribution.outputs.mcdr_version }}
+      pypi_version: ${{ steps.distribution.outputs.pypi_version }}
 
   image:
     name: Docker image (py${{ matrix.python }}${{ matrix.slim == 'true' && ', slim' || '' }})
@@ -144,7 +173,7 @@ jobs:
           core.setOutput('tags', metaTagsAll.join('\n'))
           console.log(`metaTagsAll final: ${JSON.stringify(metaTagsAll)}`)
       env:
-        VERSION: ${{ needs.pypi_upload.outputs.version }}
+        VERSION: ${{ needs.pypi_upload.outputs.mcdr_version }}
         SLIM: ${{ matrix.slim }}
         PYTHON: ${{ matrix.python }}
 
@@ -190,7 +219,7 @@ jobs:
           fi
         done
       env:
-        VERSION: ${{ needs.pypi_upload.outputs.version }}
+        VERSION: ${{ needs.pypi_upload.outputs.pypi_version }}
         PYPI_SIMPLE: ${{ steps.config.outputs.pypi_simple }}
 
     - name: Build and push
@@ -205,7 +234,7 @@ jobs:
         labels: ${{ steps.meta.outputs.labels }}
         build-args: |
           BASE_IMAGE_TAG=${{ steps.config.outputs.base_image_tag }}
-          MCDR_REQUIREMENT=${{ needs.pypi_upload.outputs.version }}
+          MCDR_REQUIREMENT=${{ needs.pypi_upload.outputs.pypi_version }}
           PYPI_INDEX=${{ steps.config.outputs.pypi_simple }}
 
     - name: Prepare extended image build workflow arguments
