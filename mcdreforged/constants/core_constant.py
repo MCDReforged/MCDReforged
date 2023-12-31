@@ -14,8 +14,8 @@ PACKAGE_NAME = 'mcdreforged'
 CLI_COMMAND = PACKAGE_NAME
 
 # MCDR Version Storage
-VERSION = '2.13.0-alpha.3'       # semver (1.2.3-alpha.4)
-VERSION_PYPI = '2.13.0a3'  # pythonic ver (1.2.3a4)
+VERSION = '2.13.0-alpha.4'       # semver (1.2.3-alpha.4)
+VERSION_PYPI = '2.13.0a4'  # pythonic ver (1.2.3a4)
 
 GITHUB_URL = 'https://github.com/Fallen-Breath/MCDReforged'
 GITHUB_API_LATEST = 'https://api.github.com/repos/Fallen-Breath/MCDReforged/releases/latest'
