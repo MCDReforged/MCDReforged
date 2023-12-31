@@ -26,6 +26,11 @@ jobs:
     needs: test
     if: github.event_name == 'push'
 
+    # https://docs.pypi.org/trusted-publishers/using-a-publisher/
+    environment: pypi_release
+    permissions:
+      id-token: write
+
     steps:
     - uses: actions/checkout@v3
     - name: Setup python
@@ -96,16 +101,11 @@ jobs:
     - name: Publish distribution to TestPyPI
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
-        user: __token__
-        password: ${{ secrets.TEST_PYPI_API_TOKEN }}
         repository-url: https://test.pypi.org/legacy/
 
     - name: Publish distribution to PyPI
       if: env.IS_RELEASE == 'true'
       uses: pypa/gh-action-pypi-publish@release/v1
-      with:
-        user: __token__
-        password: ${{ secrets.PYPI_API_TOKEN }}
 
     - uses: actions/upload-artifact@v3
       with:
