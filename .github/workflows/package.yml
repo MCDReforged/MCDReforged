@@ -103,6 +103,7 @@ jobs:
       id: config
       with:
         script: |
+          const version = process.env.VERSION
           const slim = process.env.SLIM
           const python = process.env.PYTHON
           const isRelease = process.env.IS_RELEASE === 'true'
@@ -123,7 +124,7 @@ jobs:
 
           if (python === '3.11') {  // 3.11 is the default python version
             suffixes.push('')  // add a no-python suffixes
-            if (isRelease) {
+            if (isRelease && /^[0-9.]+$/.test(version)) {  // stable release only
               metaTagsLatest.push('latest')
             }
           }
@@ -143,6 +144,7 @@ jobs:
           core.setOutput('tags', metaTagsAll.join('\n'))
           console.log(`metaTagsAll final: ${JSON.stringify(metaTagsAll)}`)
       env:
+        VERSION: ${{ needs.pypi_upload.outputs.version }}
         SLIM: ${{ matrix.slim }}
         PYTHON: ${{ matrix.python }}
 
