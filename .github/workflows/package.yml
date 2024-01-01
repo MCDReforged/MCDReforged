@@ -75,7 +75,10 @@ jobs:
       uses: actions/github-script@v7
       with:
         script: |
-          const tagVersion = process.env.GITHUB_REF.split('refs/tags/v')[1] || ''  // "refs/tags/v1.2.3" -> "1.2.3"
+          // "refs/tags/v1.2.3" -> "1.2.3"
+          const gitTag = process.env.GITHUB_REF.split('refs/tags/')[1] || ''
+          const tagVersion = gitTag.replace(/^v/, '')
+          
           const mcdrVersion = process.env.MCDR_VERSION
           const pypiVersion = process.env.PYPI_VERSION
           const isStableRelease = process.env.IS_RELEASE === 'true' && /^[0-9.]+$/.test(tagVersion)
