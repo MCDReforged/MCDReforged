@@ -165,9 +165,10 @@ class CommandSyntaxError(CommandError, ABC):
 	The basic exception for command parsing error
 	"""
 	def __init__(self, message: MessageText, char_read: Union[int, str]):
-		super().__init__(message, '', '?' if isinstance(char_read, int) else char_read)
+		# parsed_command and failed_command will be set in mcdreforged.command.builder.nodes.basic.AbstractNode._execute_command
+		super().__init__(message, '', '' if isinstance(char_read, int) else char_read)
 		self.message = message
-		self.char_read = char_read if isinstance(char_read, int) else len(char_read)
+		self.char_read: int = char_read if isinstance(char_read, int) else len(char_read)
 
 	def set_parsed_command(self, parsed_command):
 		self._parsed_command = parsed_command
