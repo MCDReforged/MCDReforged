@@ -29,9 +29,11 @@ QQ 群: [1101314858](https://jq.qq.com/?k=5gUuw9A)
 
 ## 它是如何工作的？
 
-MCDR 使用了 [Popen](https://docs.python.org/zh-cn/3/library/subprocess.html#subprocess.Popen) 来将服务端作为一个子进程启动，因此它便拥有了控制服务端标准输入/输出流的能力
+MCDR 使用了 [Popen](https://docs.python.org/zh-cn/3/library/subprocess.html#subprocess.Popen) 来将服务端作为一个子进程启动，
+因此它便拥有了控制服务端标准输入/输出流的能力
 
-Minecraft 服务器的控制台输出拥有着稳定的输出格式，并包含着大量与服务器有关的有用信息（如玩家聊天信息）。借此，MCDR 可以解析并分析服务端输出，将他们抽象成不同的事件并派发给插件进行响应
+Minecraft 服务器的控制台输出拥有着稳定的输出格式，并包含着大量与服务器有关的有用信息（如玩家聊天信息）。
+借此，MCDR 可以解析并分析服务端输出，将他们抽象成不同的事件并派发给插件进行响应
 
 在 Minecraft 内置指令系统的帮助下，MCDR 可以通过向服务端标准输入流发送 Minecraft 指令来与 Minecraft 服务器做出交互
 
