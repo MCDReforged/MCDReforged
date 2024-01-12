@@ -19,17 +19,23 @@ class PluginRequirement(NamedTuple):
 
 	@classmethod
 	def of(cls, req_str: str) -> 'PluginRequirement':
-		matched = re.match(r'^[a-zA-Z0-9_]{1,64}', req_str)
+		matched = re.match(r'^[a-z0-9_]{1,64}', req_str)
 		if matched is None:
 			raise ValueError('bad plugin requirement {}'.format(repr(req_str)))
 		plugin_id = matched.group(0)
 		requirement = VersionRequirement(req_str[len(plugin_id):])
 		return PluginRequirement(plugin_id, requirement)
 
+	def __str__(self):
+		return '{}{}'.format(self.id, self.requirement)
+
 
 class PluginCandidate(NamedTuple):
 	id: PluginId
 	version: Version
+
+	def __str__(self):
+		return '{}@{}'.format(self.id, self.version)
 
 
 class PluginVersionInfo(NamedTuple):
@@ -86,9 +92,17 @@ class MyProvider(resolvelib.AbstractProvider):
 			return []
 
 		bad_versions = {c.version for c in incompatibilities.get(identifier, [])}
-		candidates = []
+		candidates: List[CT] = []
 		for version, pvi in meta.versions.items():
-			if all(r.requirement.accept(version) for r in requirements.get(identifier, [])) and version not in bad_versions:
+			def check() -> bool:
+				if version in bad_versions:
+					return False
+				for r in requirements.get(identifier, []):
+					if not r.requirement.accept(version):
+						return False
+				return True
+
+			if check():
 				candidates.append(PluginCandidate(identifier, version))
 
 		candidates.sort(key=lambda c: c.version, reverse=True)
@@ -161,6 +175,10 @@ class DependencyResolver:
 
 		try:
 			result = resolver.resolve(requirements, max_rounds=10000)
+		except resolvelib.ResolutionImpossible as e:
+			print('ResolutionImpossible!')
+			for cause in e.causes:
+				print('\t{} requires {}'.format(cause.parent, cause.requirement))
 		except resolvelib.ResolutionError as e:
 			traceback.print_exc()
 			raise

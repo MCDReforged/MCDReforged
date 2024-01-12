@@ -49,7 +49,7 @@ class Version:
 	WILDCARDS = ('*', 'x', 'X')
 	WILDCARD = -1
 
-	component: Tuple[int]
+	component: Tuple[int, ...]
 	has_wildcard: bool
 	pre: Optional[ExtraElement]
 	build: Optional[ExtraElement]
@@ -150,7 +150,7 @@ class Version:
 		return '<{} {}>'.format(self.__class__.__name__, repr(str(self)))
 
 
-DEFAULT_CRITERION_OPERATOR = '='
+DEFAULT_CRITERION_OPERATOR = '=='
 
 
 class Criterion:
@@ -163,7 +163,7 @@ class Criterion:
 		return self.criterion(self.base_version, target)
 
 	def __str__(self):
-		return '{}{}'.format(self.opt if self.opt != DEFAULT_CRITERION_OPERATOR else '', self.base_version)
+		return '{}{}'.format(self.opt, self.base_version)
 
 
 class VersionRequirement:
@@ -177,6 +177,7 @@ class VersionRequirement:
 		'>=': lambda base, ver: ver >= base,
 		'<': lambda base, ver: ver < base,
 		'>': lambda base, ver: ver > base,
+		'==': lambda base, ver: ver == base,
 		'=': lambda base, ver: ver == base,
 		'^': lambda base, ver: ver >= base and ver[0] == base[0],
 		'~': lambda base, ver: ver >= base and ver[0] == base[0] and ver[1] == base[1],

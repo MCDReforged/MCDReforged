@@ -56,7 +56,7 @@ def cli_dispatch():
 		initialize_environment(quiet=args.quiet)
 	elif args.command == 'pack':
 		make_packed_plugin(args, quiet=args.quiet)
-	elif args.subparser_name == 'pim':
+	elif args.command == 'pim':
 		cmd_pim.entry(parser_pim, args)
 	elif args.command == 'pipi':
 		pip_install_from_plugins(args.plugin_paths, extra_args=args.args, quiet=args.quiet)

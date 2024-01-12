@@ -111,7 +111,7 @@ class MetaHolder:
 
 class PluginInstaller:
 	DOWNLOAD_MIRROR_PREFIXES = [
-		'https://ghproxy.com/',
+		'https://mirror.ghproxy.com/',
 		'https://hub.gitmirror.com/',
 	]
 	DEFAULT_LANGUAGE = 'en_us'
@@ -141,20 +141,22 @@ class PluginInstaller:
 		self.get_catalogue_meta()
 		print('fetch everything.json.gz cost', time.time() - t)
 
-		t = time.time()
-		import requests
-		requests.get('https://codeload.github.com/MCDReforged/PluginCatalogue/zip/refs/heads/meta')
-		print('fetch all repos cost', time.time() - t)
-
 	def list_plugin(self) -> int:
 		meta = self.get_catalogue_meta()
 
 		table = Table(['id', 'name', 'version', 'description'])
 		na = RText('N/A', color=RColor.gray)
-		for plugin in meta.get('plugins', {}).values():
-			plugin = plugin['meta']
-			description = plugin.get('description', {})
-			table.add_row([plugin['id'], plugin.get('name', na), plugin.get('version', na), description.get(self.language, description.get(self.DEFAULT_LANGUAGE, na))])
+		for plugin_id, plugin in meta.get('plugins', {}).items():
+			if plugin['release'].get('latest_version_index') is not None:
+				release = plugin['release']['releases'][plugin['release']['latest_version_index']]
+				version = release['meta']['version']
+			else:
+				version = na
+			description = plugin['meta'].get('description', {})
+			table.add_row([
+				plugin_id, plugin['meta'].get('name', na),
+				version, description.get(self.language, description.get(self.DEFAULT_LANGUAGE, na))
+			])
 		table.dump_to(self.replier)
 		return 0
 

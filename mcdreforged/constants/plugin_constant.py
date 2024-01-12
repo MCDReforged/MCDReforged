@@ -1,6 +1,10 @@
 """
 Constants related to plugin for MCDR
 """
+from mcdreforged.constants import core_constant
+
+MCDR_PLUGIN_ID = core_constant.PACKAGE_NAME
+MCDR_PLUGIN_VERSION = core_constant.VERSION
 
 # the directory inside MCDR working directory that stores plugins' configuration files
 PLUGIN_CONFIG_DIRECTORY = 'config'
