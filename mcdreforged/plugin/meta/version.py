@@ -31,6 +31,9 @@ class ExtraElement:
 		else:
 			return (self.body, self.num) < (other.body, other.num)
 
+	def __hash__(self):
+		return hash((self.body, self.num))
+
 
 class Version:
 	"""
@@ -46,7 +49,7 @@ class Version:
 	WILDCARDS = ('*', 'x', 'X')
 	WILDCARD = -1
 
-	component: List[int]
+	component: Tuple[int]
 	has_wildcard: bool
 	pre: Optional[ExtraElement]
 	build: Optional[ExtraElement]
@@ -69,7 +72,7 @@ class Version:
 				extra = None
 			return text, extra
 
-		self.component = []
+		components = []
 		self.has_wildcard = False
 		version_str, self.build = separate_extra(version_str, '+')
 		version_str, self.pre = separate_extra(version_str, '-')
@@ -77,7 +80,7 @@ class Version:
 			raise VersionParsingError('Version string is empty')
 		for comp in version_str.split('.'):
 			if comp in self.WILDCARDS:
-				self.component.append(self.WILDCARD)
+				components.append(self.WILDCARD)
 				self.has_wildcard = True
 				if not allow_wildcard:
 					raise VersionParsingError('Wildcard {} is not allowed'.format(comp))
@@ -90,9 +93,10 @@ class Version:
 					raise VersionParsingError('Invalid version number component: {}'.format(comp))
 				if num < 0:
 					raise VersionParsingError('Unsupported negatived number component: {}'.format(num))
-				self.component.append(num)
-		if len(self.component) == 0:
+				components.append(num)
+		if len(components) == 0:
 			raise VersionParsingError('Empty version string')
+		self.component = tuple(components)
 
 	def __str__(self):
 		version_str = '.'.join(map(lambda c: str(c) if c != self.WILDCARD else self.WILDCARDS[0], self.component))
@@ -138,6 +142,12 @@ class Version:
 			return 1
 		else:
 			return 0
+
+	def __hash__(self):
+		return hash((self.component, self.pre, self.build))
+
+	def __repr__(self):
+		return '<{} {}>'.format(self.__class__.__name__, repr(str(self)))
 
 
 DEFAULT_CRITERION_OPERATOR = '='
@@ -195,13 +205,13 @@ class VersionRequirement:
 	def accept(self, version: Union[Version, str]):
 		if isinstance(version, str):
 			version = Version(version)
-		for criterion in self.criterions:
-			if not criterion.test(version):
-				return False
-		return True
+		return all(criterion.test(version) for criterion in self.criterions)
 
 	def __str__(self):
 		return ' '.join(map(str, self.criterions))
+
+	def __repr__(self):
+		return '<{} {}>'.format(self.__class__.__name__, repr(str(self)))
 
 
 class VersionParsingError(ValueError):

@@ -29,14 +29,11 @@ class BungeecordHandler(AbstractServerHandler):
 		# 09:00:01 [信息] [Steve] -> UpstreamBridge has disconnected
 		return '{hour:d}:{min:d}:{sec:d} [{logging}] {content}'
 
-	__prompt_text_regex = re.compile(r'>*\r')
+	__prompt_text_regex = re.compile(r'^>*\r')
 
 	def pre_parse_server_stdout(self, text):
 		text = super().pre_parse_server_stdout(text)
-		match = self.__prompt_text_regex.match(text)
-		if match is not None:
-			text = text.replace(match.group(), '', 1)
-		return text
+		return self.__prompt_text_regex.sub('', text, 1)
 
 	__player_joined_parser = parse.Parser('[{name},/{ip}] <-> InitialHandler has connected')
 	__player_left_parser = parse.Parser('[{name}] -> UpstreamBridge has disconnected')
