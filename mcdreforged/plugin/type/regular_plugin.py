@@ -155,7 +155,11 @@ class RegularPlugin(AbstractPlugin, ABC):
 	@property
 	def pretty_file_modify_time(self) -> Optional[str]:
 		if self.file_modify_time is not None:
-			return time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(self.file_modify_time / 1e9))
+			try:
+				return time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(self.file_modify_time / 1e9))
+			except (OSError, OverflowError, ValueError):
+				# in case time.strftime or time.localtime failed
+				return str(self.file_modify_time)
 		else:
 			return None
 
