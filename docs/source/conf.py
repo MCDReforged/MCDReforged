@@ -130,6 +130,7 @@ html_theme_options = {
 }
 
 html_logo = 'banner.png'
+html_favicon = 'favicon.svg'
 
 
 # -- Options for sphinx-intl -------------------------------------------------
