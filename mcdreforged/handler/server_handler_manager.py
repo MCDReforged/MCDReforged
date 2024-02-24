@@ -128,7 +128,7 @@ class HandlerDetector:
 				continue
 
 			self.text_count += 1
-			for handler in {*self.manager.handlers.values(), self.manager.get_current_handler()}:
+			for handler in misc_util.unique_list([*self.manager.handlers.values(), self.manager.get_current_handler()]):
 				if handler is not self.manager.get_basic_handler():
 					try:
 						handler.parse_server_stdout(handler.pre_parse_server_stdout(text))
