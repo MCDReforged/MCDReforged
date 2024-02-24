@@ -1236,7 +1236,6 @@ class PluginServerInterface(ServerInterface):
 						result_config[key] = value
 						log(self._mcdr_server.tr('server_interface.load_config_simple.key_missed', key, value))
 						needs_save = True
-			log(self._mcdr_server.tr('server_interface.load_config_simple.succeed'))
 		if target_class is not None:
 			def set_imperfect(*_):
 				nonlocal imperfect
@@ -1258,6 +1257,8 @@ class PluginServerInterface(ServerInterface):
 				for key in list(result_config.keys()):
 					if key not in default_config:
 						result_config.pop(key)
+
+		log(self._mcdr_server.tr('server_interface.load_config_simple.succeed'))
 		if needs_save:
 			self.save_config_simple(result_config, file_name=file_name, file_format=file_format, in_data_folder=in_data_folder)
 		return result_config
