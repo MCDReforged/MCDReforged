@@ -1,6 +1,7 @@
 import functools
 import re
 import time
+from abc import ABC
 from typing import List, Union, Iterable
 
 import parse
@@ -11,7 +12,7 @@ from mcdreforged.info_reactor.info import InfoSource, Info
 from mcdreforged.utils import string_util
 
 
-class AbstractServerHandler(ServerHandler):
+class AbstractServerHandler(ServerHandler, ABC):
 	"""
 	The abstract base class for server handler, with some common implementations
 	"""
