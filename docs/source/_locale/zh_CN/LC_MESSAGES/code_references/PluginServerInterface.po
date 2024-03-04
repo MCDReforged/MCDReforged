@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-30 20:06+0800\n"
+"POT-Creation-Date: 2024-03-05 01:11+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -379,19 +379,36 @@ msgstr "用于处理配置文件加载失败错误的策略。``\"regen\"`` （�
 
 #: mcdreforged.plugin.server_interface.PluginServerInterface.load_config_simple:46
 #: of
+msgid ""
+"A callback function that processes the data read from the config file. It"
+" should accept one argument and return a bool. The argument is the parsed"
+" config file, normally a dict-like object. The return value indicates if "
+"the file saving operation should be performed after the config loading "
+"Example usage: config data migration"
+msgstr ""
+"一个回调函数，用于自定义处理从配置文件中读取的数据。它应仅接受一个参数，并返回一个 "
+"bool。参数是解析后的配置文件对象，返回值表示在是否应该在配置文件加载结束时写入新的配置文件数据。用例：插件升级后迁移配置文件的数据"
+
+#: mcdreforged.plugin.server_interface.PluginServerInterface.load_config_simple:50
+#: of
 msgid "A dict contains the loaded and processed config"
 msgstr "一个储存着加载并处理后的配置文件的 dict"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.load_config_simple:48
+#: mcdreforged.plugin.server_interface.PluginServerInterface.load_config_simple:52
 #: mcdreforged.plugin.server_interface.PluginServerInterface.save_config_simple:10
 #: of
 msgid "The *encoding* parameter"
 msgstr "*encoding* 参数"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.load_config_simple:50
+#: mcdreforged.plugin.server_interface.PluginServerInterface.load_config_simple:54
 #: of
 msgid "The *failure_policy* and *file_format* parameters"
 msgstr "*failure_policy* 和 *file_format* 参数"
+
+#: mcdreforged.plugin.server_interface.PluginServerInterface.load_config_simple:56
+#: of
+msgid "The *data_processor* parameters"
+msgstr "*data_processor* 参数"
 
 #: mcdreforged.plugin.server_interface.PluginServerInterface.save_config_simple:1
 #: of

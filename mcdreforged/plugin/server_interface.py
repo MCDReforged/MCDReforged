@@ -1165,6 +1165,7 @@ class PluginServerInterface(ServerInterface):
 			encoding: str = 'utf8',
 			file_format: Optional[_FileFormat] = None,
 			failure_policy: typing.Literal['regen', 'raise'] = 'regen',
+			data_processor: Optional[Callable[[dict], bool]] = None,
 	) -> Union[dict, SerializableType]:
 		"""
 		A simple method to load a dict or :class:`~mcdreforged.utils.serializer.Serializable` type config from a json file
@@ -1212,12 +1213,18 @@ class PluginServerInterface(ServerInterface):
 			MCDR will try to detect the format from the name of the config file
 		:keyword failure_policy: The policy of handling a config loading error.
 			``"regen"`` (default): try to re-generate the config; ``"raise"``: directly raise the exception
+		:keyword data_processor: A callback function that processes the data read from the config file.
+			It should accept one argument and return a bool. The argument is the parsed config file, normally a dict-like object.
+			The return value indicates if the file saving operation should be performed after the config loading
+			Example usage: config data migration
 		:return: A dict contains the loaded and processed config
 
 		.. versionadded:: v2.2.0
 			The *encoding* parameter
 		.. versionadded:: v2.12.0
 			The *failure_policy* and *file_format* parameters
+		.. versionadded:: v2.13.0
+			The *data_processor* parameters
 		"""
 		file_name, file_format = self.__prepare_config_info(file_name, file_format)
 
@@ -1246,6 +1253,9 @@ class PluginServerInterface(ServerInterface):
 			needs_save = True
 			log(self._mcdr_server.tr('server_interface.load_config_simple.failed', e))
 		else:
+			if data_processor is not None:
+				needs_save |= data_processor(read_data)
+
 			result_config = read_data
 			if default_config is not None:
 				# constructing the result config based on the given default config
