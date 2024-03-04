@@ -25,7 +25,7 @@ Being restricted with the one-file-only file format, some features are missing i
 
 1. Python requirement check is not supported
 2. Directly import from other plugin is not supported. Other plugin can only use
-   :meth:`~mcdreforged.plugin.server_interface.ServerInterface.get_plugin_instance` to access your plugin
+   :meth:`~mcdreforged.plugin.si.server_interface.ServerInterface.get_plugin_instance` to access your plugin
 3. Cannot be added to MCDR plugin catalogue
 
 When you only want to create a simple plugin as fast as possible, creating a solo plugin is always a good choice
@@ -71,8 +71,8 @@ Optionally, a packed plugin can have some other useful files that will be recogn
 * ``lang/``, a folder storing translation files in json (``.json``) or yaml (``.yml``) format. MCDR will automatically load and register translation files in this folder
 
 You can include any other files or folders inside your packed plugin.
-You can access them via :meth:`~mcdreforged.plugin.server_interface.PluginServerInterface.open_bundled_file` method
-in :class:`~mcdreforged.plugin.server_interface.ServerInterface`
+You can access them via :meth:`~mcdreforged.plugin.si.server_interface.PluginServerInterface.open_bundled_file` method
+in :class:`~mcdreforged.plugin.si.server_interface.ServerInterface`
 
 Here's an example file tree of a valid packed plugin with more possible files:
 

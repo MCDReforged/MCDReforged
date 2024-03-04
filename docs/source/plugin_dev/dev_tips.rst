@@ -7,7 +7,7 @@ The following tips are useful to
 Help message
 ------------
 
-Use :meth:`~mcdreforged.plugin.server_interface.PluginServerInterface.register_help_message` to add some necessary tips for your plugin,
+Use :meth:`~mcdreforged.plugin.si.server_interface.PluginServerInterface.register_help_message` to add some necessary tips for your plugin,
 so the player can use ``!!help`` command to know about your plugin
 
 Of course if your plugin is supposed to only be used by player with enough permission level, specify the *permission* argument when registering
@@ -36,10 +36,10 @@ For example, the following definitions of the translation key ``my_plugin.some.t
         text: Text of translation key.
 
 
-For the difference between 2 translation method in :class:`~mcdreforged.plugin.server_interface.ServerInterface`, let's use Minecraft code (yarn mapping) as an example:
+For the difference between 2 translation method in :class:`~mcdreforged.plugin.si.server_interface.ServerInterface`, let's use Minecraft code (yarn mapping) as an example:
 
-* :meth:`~mcdreforged.plugin.server_interface.ServerInterface.tr` is ``I18n.translate()``
-* :meth:`~mcdreforged.plugin.server_interface.ServerInterface.rtr`, or :class:`~mcdreforged.translation.translation_text.RTextMCDRTranslation` is ``new TranslatableText()``
+* :meth:`~mcdreforged.plugin.si.server_interface.ServerInterface.tr` is ``I18n.translate()``
+* :meth:`~mcdreforged.plugin.si.server_interface.ServerInterface.rtr`, or :class:`~mcdreforged.translation.translation_text.RTextMCDRTranslation` is ``new TranslatableText()``
 
 In general, the second method is recommended for translating things in your plugin, since it smartly use the proper language
 for the player or the console to send message, and use MCDR's language for general translation things including message logging
@@ -82,7 +82,7 @@ you can't distinguish which MCDR instance the configuration file belongs to.
 You can either store them inside the ``config`` folder directly or a inner folder inside the ``config`` folder like ``config/my_plugin/``,
 so the user data can be dedicated for the MCDR instance that loads your plugin
 
-:meth:`~mcdreforged.plugin.server_interface.PluginServerInterface.get_data_folder` method is a nice method for lazyman
+:meth:`~mcdreforged.plugin.si.server_interface.PluginServerInterface.get_data_folder` method is a nice method for lazyman
 
 For logging files, store them inside ``logs/`` folder is a good idea
 

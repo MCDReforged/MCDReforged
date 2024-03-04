@@ -12,7 +12,7 @@ from mcdreforged.utils.future import Future
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
 	from mcdreforged.plugin.builtin.mcdreforged_plugin.mcdreforged_plugin import MCDReforgedPlugin
-	from mcdreforged.plugin.server_interface import PluginServerInterface
+	from mcdreforged.plugin.si.server_interface import PluginServerInterface
 
 
 T = TypeVar('T')

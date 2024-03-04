@@ -577,14 +577,14 @@ msgstr "MCDR 翻译文本组件类"
 #: mcdreforged.translation.translation_text.RTextMCDRTranslation:3 of
 msgid ""
 "When MCDR is running, it will use the "
-":meth:`~mcdreforged.plugin.server_interface.ServerInterface.tr` method in"
-" :class:`~mcdreforged.plugin.server_interface.ServerInterface` class as "
+":meth:`~mcdreforged.plugin.si.server_interface.ServerInterface.tr` method in"
+" :class:`~mcdreforged.plugin.si.server_interface.ServerInterface` class as "
 "the translating method, and the language of MCDR as the fallback "
 "translation language"
 msgstr ""
 "当 MCDR 正在运行时，它将使用 "
-":class:`~mcdreforged.plugin.server_interface.ServerInterface` 类中的 "
-":meth:`~mcdreforged.plugin.server_interface.ServerInterface.tr` "
+":class:`~mcdreforged.plugin.si.server_interface.ServerInterface` 类中的 "
+":meth:`~mcdreforged.plugin.si.server_interface.ServerInterface.tr` "
 "方法作为翻译的方法，并使用 MCDR 的语言作为默认语言"
 
 #: mcdreforged.translation.translation_text.RTextMCDRTranslation.__init__:1 of

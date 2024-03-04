@@ -28,7 +28,7 @@ from mcdreforged.minecraft.rcon.rcon_manager import RconManager
 from mcdreforged.permission.permission_manager import PermissionManager
 from mcdreforged.plugin.plugin_event import MCDRPluginEvents
 from mcdreforged.plugin.plugin_manager import PluginManager
-from mcdreforged.plugin.server_interface import ServerInterface
+from mcdreforged.plugin.si.server_interface import ServerInterface
 from mcdreforged.preference.preference_manager import PreferenceManager
 from mcdreforged.translation.translation_manager import TranslationManager
 from mcdreforged.utils import file_util

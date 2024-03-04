@@ -12,7 +12,7 @@ _NONE = object()
 
 
 def get_mcdr_language() -> str:
-	from mcdreforged.plugin.server_interface import ServerInterface
+	from mcdreforged.plugin.si.server_interface import ServerInterface
 	server: Optional[ServerInterface] = ServerInterface.get_instance()
 	if server is not None:
 		language = server.get_mcdr_language()
