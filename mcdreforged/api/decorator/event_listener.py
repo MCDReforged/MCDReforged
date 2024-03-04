@@ -11,7 +11,7 @@ __all__ = [
 def event_listener(event: Union[PluginEvent, str], *, priority: Optional[int] = None):
 	"""
 	This decorator is used to register a custom event listener without involving
-	:meth:`~mcdreforged.plugin.si.server_interface.PluginServerInterface.register_event_listener`
+	:meth:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_event_listener`
 
 	It accepts a single str or :class:`~mcdreforged.plugin.plugin_event.PluginEvent`
 	indicating the event you are listening to as parameter,
@@ -34,7 +34,7 @@ def event_listener(event: Union[PluginEvent, str], *, priority: Optional[int] = 
 	:param event: The event to register a listener
 	:keyword priority: Optional, the priority of the event listener
 	:raise TypeError: If given *event* is invalid
-	:raise RuntimeError: If it fails to acquire a :class:`~mcdreforged.plugin.si.server_interface.PluginServerInterface`
+	:raise RuntimeError: If it fails to acquire a :class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`
 		(see :meth:`~mcdreforged.plugin.si.server_interface.ServerInterface.as_plugin_server_interface` for more details)
 	"""
 	def wrapper(callback: Callable) -> Callable:

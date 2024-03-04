@@ -9,7 +9,7 @@ from mcdreforged.command.command_source import CommandSource
 from mcdreforged.utils import tree_printer
 
 if TYPE_CHECKING:
-	from mcdreforged.plugin.si.server_interface import PluginServerInterface
+	from mcdreforged.plugin.si.plugin_server_interface import PluginServerInterface
 
 
 class Requirements:
@@ -343,7 +343,7 @@ class SimpleCommandBuilder:
 		"""
 		A helper method for lazyman, to build with method :meth:`build` and register built commands to the MCDR server
 
-		:param server: The :class:`~mcdreforged.plugin.si.server_interface.PluginServerInterface` object of your plugin
+		:param server: The :class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface` object of your plugin
 		:raise SimpleCommandBuilder.Error: if build fails, or there are rooted non-literal nodes in the build result
 		"""
 		for node in self.build():

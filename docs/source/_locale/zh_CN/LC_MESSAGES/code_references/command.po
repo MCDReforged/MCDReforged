@@ -1046,10 +1046,10 @@ msgstr "一个为懒人提供的工具方法，使用方法 :meth:`build` 构建
 
 #: mcdreforged.command.builder.tools.SimpleCommandBuilder.register:3 of
 msgid ""
-"The :class:`~mcdreforged.plugin.si.server_interface.PluginServerInterface` "
+"The :class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface` "
 "object of your plugin"
 msgstr ""
-"你的插件的 :class:`~mcdreforged.plugin.si.server_interface.PluginServerInterface`"
+"你的插件的 :class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`"
 " 实例"
 
 #: mcdreforged.command.builder.tools.SimpleCommandBuilder.register:4 of

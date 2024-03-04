@@ -125,7 +125,7 @@ There are 3 methods to register an event listener for you plugin
             do_something()
 
 #. 
-    Manually invoke :meth:`~mcdreforged.plugin.si.server_interface.PluginServerInterface.register_event_listener` method to register an event listener.
+    Manually invoke :meth:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_event_listener` method to register an event listener.
     You can specify the callable object and the priority for the event listener
 
     Here some examples about manually register event listeners
@@ -156,7 +156,7 @@ MCDR provides a command system for plugins to register their commands
 Check the :doc:`/plugin_dev/command` document for more detail about building a command tree
 
 Assuming that you have already built a command tree with root literal node *root*, then you can use
-the :meth:`~mcdreforged.plugin.si.server_interface.PluginServerInterface.register_command` method to register your command tree in MCDR
+the :meth:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_command` method to register your command tree in MCDR
 
 .. code-block:: python
 
@@ -165,7 +165,7 @@ the :meth:`~mcdreforged.plugin.si.server_interface.PluginServerInterface.registe
 Help message
 ^^^^^^^^^^^^
 
-Plugin can register its help message with :meth:`~mcdreforged.plugin.si.server_interface.PluginServerInterface.register_help_message` to MCDR,
+Plugin can register its help message with :meth:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_help_message` to MCDR,
 so that users can use :ref:`command:!!help command` to view the help messages of all commands
 
 .. _plugin-translation:
@@ -174,7 +174,7 @@ Translation
 ^^^^^^^^^^^
 
 If your plugin needs to handle some message localization or translation things, you can let MCDR help you:
-register a translation via :meth:`~mcdreforged.plugin.si.server_interface.PluginServerInterface.register_translation` method
+register a translation via :meth:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_translation` method
 and use :meth:`~mcdreforged.plugin.si.server_interface.ServerInterface.tr` or :meth:`~mcdreforged.plugin.si.server_interface.ServerInterface.rtr` to get the translated string
 
 See the :ref:`plugin_dev/dev_tips:Translation` section in :doc:`/plugin_dev/dev_tips` for some suggestions about using translation

@@ -9,7 +9,8 @@ from mcdreforged.info_reactor.server_information import ServerInformation
 from mcdreforged.permission.permission_level import PermissionLevel
 from mcdreforged.plugin.meta.metadata import Metadata
 from mcdreforged.plugin.meta.version import Version, VersionRequirement
-from mcdreforged.plugin.si.server_interface import ServerInterface, PluginServerInterface
+from mcdreforged.plugin.si.plugin_server_interface import PluginServerInterface
+from mcdreforged.plugin.si.server_interface import ServerInterface
 from mcdreforged.preference.preference_manager import PreferenceItem
 from mcdreforged.utils.logger import SyncStdoutStreamHandler, MCDReforgedLogger
 

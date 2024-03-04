@@ -71,7 +71,7 @@ Optionally, a packed plugin can have some other useful files that will be recogn
 * ``lang/``, a folder storing translation files in json (``.json``) or yaml (``.yml``) format. MCDR will automatically load and register translation files in this folder
 
 You can include any other files or folders inside your packed plugin.
-You can access them via :meth:`~mcdreforged.plugin.si.server_interface.PluginServerInterface.open_bundled_file` method
+You can access them via :meth:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.open_bundled_file` method
 in :class:`~mcdreforged.plugin.si.server_interface.ServerInterface`
 
 Here's an example file tree of a valid packed plugin with more possible files:
