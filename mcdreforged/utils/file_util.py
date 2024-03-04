@@ -1,5 +1,6 @@
 import contextlib
 import os
+from pathlib import Path
 from typing import Callable, ContextManager, TextIO, Union
 
 
@@ -30,8 +31,11 @@ def get_file_suffix(file_path: str):
 
 
 @contextlib.contextmanager
-def safe_write(target_file_path: str, *, encoding: str) -> ContextManager[TextIO]:
-	temp_file_path = target_file_path + '.tmp'
+def safe_write(target_file_path: Union[str, Path], *, encoding: str) -> ContextManager[TextIO]:
+	if isinstance(target_file_path, str):
+		target_file_path = Path(target_file_path)
+
+	temp_file_path = target_file_path.parent / (target_file_path.name + '.tmp')
 	with open(temp_file_path, 'w', encoding=encoding) as file:
 		yield file
 	os.replace(temp_file_path, target_file_path)

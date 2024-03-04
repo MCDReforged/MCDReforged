@@ -1,11 +1,7 @@
-import functools
-import json
 import logging
 import os
 import typing
-from typing import Callable, TYPE_CHECKING, Tuple, Union, Optional, IO, Type, TypeVar
-
-from ruamel.yaml import YAML
+from typing import Callable, TYPE_CHECKING, Union, Optional, IO, Type, TypeVar
 
 from mcdreforged.command.builder.nodes.basic import Literal
 from mcdreforged.command.command_source import CommandSource, PluginCommandSource
@@ -15,10 +11,11 @@ from mcdreforged.permission.permission_level import PermissionLevel
 from mcdreforged.plugin.meta.metadata import Metadata
 from mcdreforged.plugin.plugin_event import EventListener, LiteralEvent, PluginEvent
 from mcdreforged.plugin.plugin_registry import DEFAULT_LISTENER_PRIORITY, HelpMessage
+from mcdreforged.plugin.si._simple_config_handler import FileFormat, SimpleConfigHandler
 from mcdreforged.plugin.si.server_interface import ServerInterface
 from mcdreforged.plugin.type.multi_file_plugin import MultiFilePlugin
 from mcdreforged.plugin.type.plugin import AbstractPlugin
-from mcdreforged.utils import file_util, class_util
+from mcdreforged.utils import class_util
 from mcdreforged.utils.logger import MCDReforgedLogger
 from mcdreforged.utils.serializer import Serializable
 from mcdreforged.utils.types import MessageText, TranslationKeyDictRich, TranslationKeyDictNested
@@ -29,7 +26,6 @@ if TYPE_CHECKING:
 
 
 SerializableType = TypeVar('SerializableType', bound=Serializable)
-_FileFormat = typing.Literal['json', 'yaml']
 
 
 class PluginServerInterface(ServerInterface):
@@ -195,46 +191,6 @@ class PluginServerInterface(ServerInterface):
 			raise FileNotFoundError('Only packed plugin supported this API, found plugin type: {}'.format(self.__plugin.__class__))
 		return self.__plugin.open_file(relative_file_path)
 
-	@classmethod
-	def __guess_file_format(cls, file_name: str) -> _FileFormat:
-		ext = os.path.basename(file_name).rsplit('.', 1)[-1]
-		if ext in ['json']:
-			return 'json'
-		elif ext in ['yml', 'yaml']:
-			return 'yaml'
-		else:
-			raise ValueError('cannot detect file format from file path {!r}'.format(file_name))
-
-	@classmethod
-	def __get_dict_loader_from(cls, file_format: Optional[_FileFormat] = None):
-		if file_format == 'json':
-			class JsonWrapper:
-				ext = 'json'
-				load = json.load
-				dump = functools.partial(json.dump, indent=4, ensure_ascii=False)
-			return JsonWrapper
-		elif file_format == 'yaml':
-			yaml = YAML(typ='safe')
-			yaml.width = 1048576
-
-			class YamlWrapper:
-				ext = 'yml'
-				dump = yaml.dump
-				load = yaml.load
-			return YamlWrapper
-		else:
-			raise ValueError('invalid file_format {!r}'.format(file_format))
-
-	@classmethod
-	def __prepare_config_info(cls, file_name: Optional[str] = None, file_format: Optional[_FileFormat] = None) -> Tuple[str, _FileFormat]:
-		if file_name is None:
-			if file_format is None:
-				file_format: _FileFormat = 'json'
-			file_name = 'config.' + cls.__get_dict_loader_from(file_format).ext
-		if file_format is None:
-			file_format = cls.__guess_file_format(file_name)
-		return file_name, file_format
-
 	def load_config_simple(
 			self, file_name: Optional[str] = None, default_config: Optional = None, *,
 			in_data_folder: bool = True,
@@ -242,7 +198,7 @@ class PluginServerInterface(ServerInterface):
 			source_to_reply: Optional[CommandSource] = None,
 			target_class: Optional[Type[SerializableType]] = None,
 			encoding: str = 'utf8',
-			file_format: Optional[_FileFormat] = None,
+			file_format: Optional[FileFormat] = None,
 			failure_policy: typing.Literal['regen', 'raise'] = 'regen',
 			data_processor: Optional[Callable[[dict], bool]] = None,
 	) -> Union[dict, SerializableType]:
@@ -305,7 +261,7 @@ class PluginServerInterface(ServerInterface):
 		.. versionadded:: v2.13.0
 			The *data_processor* parameters
 		"""
-		file_name, file_format = self.__prepare_config_info(file_name, file_format)
+		config_handler = SimpleConfigHandler(file_name, file_format, self.get_data_folder() if in_data_folder else '.')
 
 		def log(msg: str):
 			if isinstance(source_to_reply, CommandSource):
@@ -314,42 +270,35 @@ class PluginServerInterface(ServerInterface):
 			if echo_in_console and not (source_to_reply is not None and source_to_reply.is_console):
 				self.logger.info(msg)
 
-		if target_class is not None and default_config is None:
-			default_config = target_class.get_default().serialize()
-		config_file_path = os.path.join(self.get_data_folder(), file_name) if in_data_folder else file_name
-		dict_loader = self.__get_dict_loader_from(file_format)
+		read_data = None
 		needs_save = False
 		try:
-			with open(config_file_path, encoding=encoding) as file_handler:
-				read_data: dict = dict_loader.load(file_handler)
+			read_data = config_handler.load(encoding=encoding)
 		except Exception as e:
-			if failure_policy == 'raise' and not isinstance(e, FileNotFoundError):
+			# non file-read error, raise it
+			if failure_policy == 'raise' and not isinstance(e, OSError):
 				raise
-			if default_config is not None:  # use default config
-				result_config = default_config.copy()
-			else:  # no default config and cannot read config file, raise the error
+
+			# no default config and cannot read config file, raise the error
+			if default_config is None and target_class:
 				raise
+
 			needs_save = True
 			log(self._mcdr_server.tr('server_interface.load_config_simple.failed', e))
 		else:
 			if data_processor is not None:
 				needs_save |= data_processor(read_data)
 
-			result_config = read_data
-			if default_config is not None:
-				# constructing the result config based on the given default config
-				for key, value in default_config.items():
-					if key not in read_data:
-						result_config[key] = value
-						log(self._mcdr_server.tr('server_interface.load_config_simple.key_missed', key, value))
-						needs_save = True
 		if target_class is not None:
 			def set_imperfect(*_):
 				nonlocal imperfect
 				imperfect = True
 			imperfect = False
 			try:
-				result_config = target_class.deserialize(result_config, missing_callback=set_imperfect, redundancy_callback=set_imperfect)
+				if read_data is None:  # read failed, use default
+					result_config = target_class.get_default()
+				else:
+					result_config = target_class.deserialize(read_data, missing_callback=set_imperfect, redundancy_callback=set_imperfect)
 			except Exception as e:
 				if failure_policy == 'raise':
 					raise
@@ -357,10 +306,23 @@ class PluginServerInterface(ServerInterface):
 				needs_save = True
 				log(self._mcdr_server.tr('server_interface.load_config_simple.failed', e))
 			else:
-				needs_save |= imperfect
+				if imperfect:
+					needs_save = True
 		else:
-			# remove unexpected keys
+			if read_data is None:  # read failed, use default
+				result_config = default_config.copy()
+			else:
+				result_config = read_data
 			if default_config is not None:
+				# Notes: support level-1 nesting only
+				# constructing the result config based on the given default config
+				for key, value in default_config.items():
+					if key not in read_data:
+						result_config[key] = value
+						log(self._mcdr_server.tr('server_interface.load_config_simple.key_missed', key, value))
+						needs_save = True
+
+				# remove unexpected keys
 				for key in list(result_config.keys()):
 					if key not in default_config:
 						result_config.pop(key)
@@ -374,7 +336,7 @@ class PluginServerInterface(ServerInterface):
 			self, config: Union[dict, Serializable], file_name: str = 'config.json', *,
 			in_data_folder: bool = True,
 			encoding: str = 'utf8',
-			file_format: Optional[_FileFormat] = None,
+			file_format: Optional[FileFormat] = None,
 	) -> None:
 		"""
 		A simple method to save your dict or :class:`~mcdreforged.utils.serializer.Serializable` type config as a json file
@@ -391,17 +353,10 @@ class PluginServerInterface(ServerInterface):
 		.. versionadded:: v2.12.0
 			The *file_format* parameter
 		"""
-		file_name, file_format = self.__prepare_config_info(file_name, file_format)
-
-		dict_loader = self.__get_dict_loader_from(file_format)
-		config_file_path = os.path.join(self.get_data_folder(), file_name) if in_data_folder else file_name
 		if isinstance(config, Serializable):
 			data = config.serialize()
 		else:
 			data = config
-		target_folder = os.path.dirname(config_file_path)
-		if len(target_folder) > 0 and not os.path.isdir(target_folder):
-			os.makedirs(target_folder)
-		with file_util.safe_write(config_file_path, encoding=encoding) as file:
-			# config file should be nicely readable, so here come the indent and non-ascii chars
-			dict_loader.dump(data, file)
+
+		config_handler = SimpleConfigHandler(file_name, file_format, self.get_data_folder() if in_data_folder else '.')
+		config_handler.save(data, encoding=encoding)
