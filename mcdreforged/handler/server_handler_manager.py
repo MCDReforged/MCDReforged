@@ -157,7 +157,7 @@ class HandlerDetector:
 		if current_handler not in best_handlers:
 			current_handler_name = current_handler.get_name()
 			psh = self.manager.get_plugin_provided_server_handler_holder()
-			if current_handler is psh.server_handler:
+			if psh is not None and current_handler is psh.server_handler:
 				current_handler_name += ' ({})'.format(psh.plugin)
 
 			self.mcdr_server.logger.warning(self.mcdr_server.tr('server_handler_manager.handler_detection.result1'))
