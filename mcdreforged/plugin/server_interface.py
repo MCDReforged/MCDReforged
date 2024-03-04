@@ -950,6 +950,9 @@ class ServerInterface:
 		self._mcdr_server.task_executor.add_regular_task(callable_, block=block, timeout=timeout)
 
 
+_FileFormat = typing.Literal['json', 'yaml']
+
+
 class PluginServerInterface(ServerInterface):
 	"""
 	Derived from :class:`ServerInterface`, :class:`PluginServerInterface` adds the ability
@@ -1113,40 +1116,54 @@ class PluginServerInterface(ServerInterface):
 			raise FileNotFoundError('Only packed plugin supported this API, found plugin type: {}'.format(self.__plugin.__class__))
 		return self.__plugin.open_file(relative_file_path)
 
-	@staticmethod
-	def __get_dict_loader_from(file_name: str, file_format: Optional[typing.Literal['json', 'yaml']] = None):
-		if file_format is None:
-			ext = os.path.basename(file_name).rsplit('.', 1)[-1]
-			if ext in ['json']:
-				file_format = 'json'
-			elif ext in ['yml', 'yaml']:
-				file_format = 'yaml'
-			else:
-				raise ValueError('cannot detect file format from file path {!r}'.format(file_name))
+	@classmethod
+	def __guess_file_format(cls, file_name: str) -> _FileFormat:
+		ext = os.path.basename(file_name).rsplit('.', 1)[-1]
+		if ext in ['json']:
+			return 'json'
+		elif ext in ['yml', 'yaml']:
+			return 'yaml'
+		else:
+			raise ValueError('cannot detect file format from file path {!r}'.format(file_name))
+
+	@classmethod
+	def __get_dict_loader_from(cls, file_format: Optional[_FileFormat] = None):
 		if file_format == 'json':
 			class JsonWrapper:
-				def load(self, *args, **kwargs):
-					return json.load(*args, **kwargs)
-
-				def dump(self, *args, **kwargs):
-					kwargs.update(indent=4, ensure_ascii=False)
-					return json.dump(*args, **kwargs)
-			dict_loader = JsonWrapper()
+				ext = 'json'
+				load = json.load
+				dump = functools.partial(json.dump, indent=4, ensure_ascii=False)
+			return JsonWrapper
 		elif file_format == 'yaml':
-			dict_loader = YAML()
-			dict_loader.width = 1048576
+			yaml = YAML(typ='safe')
+			yaml.width = 1048576
+
+			class YamlWrapper:
+				ext = 'yml'
+				dump = yaml.dump
+				load = yaml.load
+			return YamlWrapper
 		else:
 			raise ValueError('invalid file_format {!r}'.format(file_format))
-		return dict_loader
+
+	@classmethod
+	def __prepare_config_info(cls, file_name: Optional[str] = None, file_format: Optional[_FileFormat] = None) -> Tuple[str, _FileFormat]:
+		if file_name is None:
+			if file_format is None:
+				file_format: _FileFormat = 'json'
+			file_name = 'config.' + cls.__get_dict_loader_from(file_format).ext
+		if file_format is None:
+			file_format = cls.__guess_file_format(file_name)
+		return file_name, file_format
 
 	def load_config_simple(
-			self, file_name: str = 'config.json', default_config: Optional = None, *,
+			self, file_name: Optional[str] = None, default_config: Optional = None, *,
 			in_data_folder: bool = True,
 			echo_in_console: bool = True,
 			source_to_reply: Optional[CommandSource] = None,
 			target_class: Optional[Type[SerializableType]] = None,
 			encoding: str = 'utf8',
-			file_format: Optional[typing.Literal['json', 'yaml']] = None,
+			file_format: Optional[_FileFormat] = None,
 			failure_policy: typing.Literal['regen', 'raise'] = 'regen',
 	) -> Union[dict, SerializableType]:
 		"""
@@ -1202,6 +1219,7 @@ class PluginServerInterface(ServerInterface):
 		.. versionadded:: v2.12.0
 			The *failure_policy* and *file_format* parameters
 		"""
+		file_name, file_format = self.__prepare_config_info(file_name, file_format)
 
 		def log(msg: str):
 			if isinstance(source_to_reply, CommandSource):
@@ -1213,7 +1231,7 @@ class PluginServerInterface(ServerInterface):
 		if target_class is not None and default_config is None:
 			default_config = target_class.get_default().serialize()
 		config_file_path = os.path.join(self.get_data_folder(), file_name) if in_data_folder else file_name
-		dict_loader = self.__get_dict_loader_from(file_name, file_format)
+		dict_loader = self.__get_dict_loader_from(file_format)
 		needs_save = False
 		try:
 			with open(config_file_path, encoding=encoding) as file_handler:
@@ -1267,7 +1285,7 @@ class PluginServerInterface(ServerInterface):
 			self, config: Union[dict, Serializable], file_name: str = 'config.json', *,
 			in_data_folder: bool = True,
 			encoding: str = 'utf8',
-			file_format: Optional[typing.Literal['json', 'yaml']] = None,
+			file_format: Optional[_FileFormat] = None,
 	) -> None:
 		"""
 		A simple method to save your dict or :class:`~mcdreforged.utils.serializer.Serializable` type config as a json file
@@ -1284,7 +1302,9 @@ class PluginServerInterface(ServerInterface):
 		.. versionadded:: v2.12.0
 			The *file_format* parameter
 		"""
-		dict_loader = self.__get_dict_loader_from(file_name, file_format)
+		file_name, file_format = self.__prepare_config_info(file_name, file_format)
+
+		dict_loader = self.__get_dict_loader_from(file_format)
 		config_file_path = os.path.join(self.get_data_folder(), file_name) if in_data_folder else file_name
 		if isinstance(config, Serializable):
 			data = config.serialize()
