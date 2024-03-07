@@ -7,7 +7,7 @@ from mcdreforged.cli.cmd_pack import make_packed_plugin
 from mcdreforged.cli.cmd_pip_install import pip_install_from_plugins
 from mcdreforged.cli.cmd_run import run_mcdr
 from mcdreforged.cli.cmd_version import show_version
-from mcdreforged.cli.pim import cmd_pim
+from mcdreforged.cli import cmd_pim
 from mcdreforged.constants import core_constant
 
 

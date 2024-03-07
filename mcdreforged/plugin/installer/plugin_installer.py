@@ -12,8 +12,8 @@ from typing import List, Tuple, Iterable
 
 from wcwidth import wcswidth
 
-from mcdreforged.cli.pim.dependency_resolver import DependencyResolver, PluginRequirement
-from mcdreforged.cli.pim.replier import Replier
+from mcdreforged.plugin.installer.dependency_resolver import DependencyResolver, PluginRequirement
+from mcdreforged.plugin.installer.replier import Replier
 from mcdreforged.minecraft.rtext.style import RStyle, RColor
 from mcdreforged.minecraft.rtext.text import RTextBase, RText
 from mcdreforged.plugin.meta.version import Version
