@@ -1,13 +1,12 @@
 from argparse import ArgumentParser
 
 import sys
+from mcdreforged.cli import cmd_pim
 from mcdreforged.cli.cmd_gendefault import generate_default_stuffs
 from mcdreforged.cli.cmd_init import initialize_environment
 from mcdreforged.cli.cmd_pack import make_packed_plugin
-from mcdreforged.cli.cmd_pip_install import pip_install_from_plugins
 from mcdreforged.cli.cmd_run import run_mcdr
 from mcdreforged.cli.cmd_version import show_version
-from mcdreforged.cli import cmd_pim
 from mcdreforged.constants import core_constant
 
 
@@ -37,10 +36,6 @@ def cli_dispatch():
 
 	parser_pim = cmd_pim.create(subparsers.add_parser)
 
-	parser_pipi = subparsers.add_parser('pipi', help='Call "pip install" with the requirements.txt file in the given packed plugin to install Python packages')
-	parser_pipi.add_argument('plugin_paths', nargs='*', help='The packed plugin files to be processed')
-	parser_pipi.add_argument('--args', help='Extra arguments passing to the pip process, e.g. --args "--proxy http://localhost:8080"')
-
 	parser_start = subparsers.add_parser('start', help='Start {}'.format(core_constant.NAME))
 	parser_start.add_argument('--auto-init', action='store_true', help='Automatically initialize the working environment if needed')
 
@@ -58,7 +53,5 @@ def cli_dispatch():
 		make_packed_plugin(args, quiet=args.quiet)
 	elif args.command == 'pim':
 		cmd_pim.entry(parser_pim, args)
-	elif args.command == 'pipi':
-		pip_install_from_plugins(args.plugin_paths, extra_args=args.args, quiet=args.quiet)
 	elif args.command == 'start':
 		run_mcdr(auto_init=args.auto_init)
