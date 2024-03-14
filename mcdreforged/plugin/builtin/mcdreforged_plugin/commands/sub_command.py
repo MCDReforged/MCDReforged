@@ -1,5 +1,5 @@
 import traceback
-from abc import ABC
+from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Callable, Generic, TypeVar
 
 from mcdreforged.command.builder.nodes.basic import Literal
@@ -29,6 +29,7 @@ class SubCommand(ABC):
 	def __init__(self, mcdr_plugin: 'MCDReforgedPlugin'):
 		self.mcdr_plugin = mcdr_plugin
 
+	@abstractmethod
 	def get_command_node(self) -> Literal:
 		raise NotImplementedError()
 

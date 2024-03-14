@@ -1,54 +1,19 @@
+import dataclasses
 import functools
-import gzip
-import io
-import json
 import operator
 import re
-import threading
 import time
-import urllib.error
-import urllib.request
 from pathlib import Path
 from typing import List, Optional
 
 from mcdreforged.minecraft.rtext.style import RColor
 from mcdreforged.minecraft.rtext.text import RText
-from mcdreforged.plugin.installer.dependency_resolver import DependencyResolver, PluginRequirement
+from mcdreforged.plugin.installer.dependency_resolver import DependencyResolver, PluginRequirement, PluginResolution, PackageResolution
+from mcdreforged.plugin.installer.meta_holder import MetaHolder, MetaCache
 from mcdreforged.plugin.installer.printer import Table
 from mcdreforged.plugin.installer.replier import Replier
-from mcdreforged.plugin.meta.version import Version
 from mcdreforged.utils import request_util
 from mcdreforged.utils.types import MessageText
-
-
-class MetaHolder:
-	META_URLS = [
-		'https://raw.githubusercontent.com/MCDReforged/PluginCatalogue/meta/{path}',
-		'https://mirror.ghproxy.com/https://raw.githubusercontent.com/MCDReforged/PluginCatalogue/meta/{path}',
-		'https://raw.gitmirror.com/MCDReforged/PluginCatalogue/meta/{path}',
-		'https://cdn.jsdelivr.net/gh/MCDReforged/PluginCatalogue@meta/{path}',
-	]
-
-	def __init__(self):
-		self.urls = self.META_URLS.copy()
-		self.__meta_cache = None
-		self.__meta_cache_lock = threading.Lock()
-
-	def fetch(self) -> dict:
-		# TODO cache TTL
-		if self.__meta_cache is not None:
-			return self.__meta_cache
-		with self.__meta_cache_lock:
-			self.__meta_cache = self.__get_meta_json('everything.json.gz')
-			return self.__meta_cache
-
-	def __get_meta_json(self, path: str) -> dict:
-		content = request_util.get_with_retry(map(lambda u: u.format(path=path), self.urls))
-		if path.endswith('.gz'):
-			buf = io.BytesIO(content)
-			with gzip.GzipFile(fileobj=buf) as gzf:
-				content = gzf.read()
-		return json.loads(content.decode('utf8'))
 
 
 def is_subsequence(keyword: str, s: str):
@@ -59,6 +24,12 @@ def is_subsequence(keyword: str, s: str):
 	return idx == len(keyword)
 
 
+@dataclasses.dataclass
+class ResolutionResult:
+	plugins: PluginResolution = dataclasses.field(default_factory=dict)
+	packages: PackageResolution = dataclasses.field(default_factory=list)
+
+
 class PluginInstaller:
 	DOWNLOAD_MIRROR_PREFIXES = [
 		'https://mirror.ghproxy.com/',
@@ -66,17 +37,19 @@ class PluginInstaller:
 	]
 	DEFAULT_LANGUAGE = 'en_us'
 
-	def __init__(self, replier: Replier, language: str = DEFAULT_LANGUAGE):
+	def __init__(self, replier: Replier, language: str = DEFAULT_LANGUAGE, meta_holder: Optional[MetaHolder] = None):
 		self.language = language
 		self.replier = replier
-		self.meta_holder = MetaHolder()
+		if meta_holder is None:
+			meta_holder = MetaHolder()
+		self.meta_holder = meta_holder
 
 	def print(self, message: MessageText):
 		self.replier.reply(message)
 
-	def get_catalogue_meta(self) -> dict:
+	def get_catalogue_meta(self) -> MetaCache:
 		self.print('Fetching catalogue meta')
-		return self.meta_holder.fetch()
+		return self.meta_holder.get()
 
 	def __download_release_file(self, url: str) -> bytes:
 		urls = [url]
@@ -89,7 +62,10 @@ class PluginInstaller:
 	def test_stuffs(self):
 		t = time.time()
 		self.get_catalogue_meta()
-		print('fetch everything.json.gz cost', time.time() - t)
+		print('fetch everything.json.xz cost', time.time() - t)
+
+	def run(self):
+		pass
 
 	def list_plugin(self, keyword: Optional[str]) -> int:
 		def check_keyword(s: str, ss: bool = True):
@@ -102,21 +78,14 @@ class PluginInstaller:
 
 		na = RText('N/A', color=RColor.gray)
 		rows = []
-		for plugin_id, plugin in meta.get('plugins', {}).items():
-			if plugin['release'].get('latest_version_index') is not None:
-				release = plugin['release']['releases'][plugin['release']['latest_version_index']]
-				meta = release['meta']
-				version = meta['version']
-			else:
-				meta = plugin['meta']
-				version = na
-			description = meta.get('description', {})
+		for plugin_id, plugin in meta.plugins.items():
+			version = plugin.latest_version or na
 
 			if keyword is not None:
 				score = (
 					check_keyword(plugin_id),
-					check_keyword(plugin['meta'].get('name', '')),
-					any(map(functools.partial(check_keyword, ss=False), description.values())),
+					check_keyword(plugin.name or ''),
+					any(map(functools.partial(check_keyword, ss=False), plugin.description.values())),
 				)
 				if not any(score):
 					continue
@@ -124,8 +93,8 @@ class PluginInstaller:
 				score = 0
 
 			rows.append((score, [
-				plugin_id, plugin['meta'].get('name', na),
-				version, description.get(self.language, description.get(self.DEFAULT_LANGUAGE, na))
+				plugin_id, plugin.name or na,
+				version, plugin.description.get(self.language, plugin.description.get(self.DEFAULT_LANGUAGE, na))
 			]))
 
 		rows.sort(key=operator.itemgetter(0), reverse=True)
@@ -143,24 +112,34 @@ class PluginInstaller:
 
 		meta = self.get_catalogue_meta()
 
-		resolver = DependencyResolver(meta, {})
+		resolver = DependencyResolver(meta)
 		result = resolver.resolve(list(map(PluginRequirement.of, plugin_ids)))
 
 		downloaded_paths = []
 		for plugin_id, version in result.items():
-			for release in meta['plugins'][plugin_id]['release'].get('releases', []):
-				if Version(release['meta']['version']) == version:
-					break
-			else:
-				self.print('No release for plugin {} v{}'.format(plugin_id, version))
-				return 1
+			release = meta.plugins[plugin_id].releases[str(version)]
 
-			asset = release['asset']
-			file_path = target_dir / asset['name']
-			self.print('Downloading {}@{} to {} ({:.1f}KB)'.format(plugin_id, version, file_path, asset['size'] / 1024.0))
-			content = self.__download_release_file(asset['browser_download_url'])
+			file_path = target_dir / release.file_name
+			self.print('Downloading {}@{} to {} ({:.1f}KB)'.format(plugin_id, version, file_path, release.file_size / 1024.0))
+			content = self.__download_release_file(release.file_url)
 			with open(file_path, 'wb') as f:
 				f.write(content)
 			downloaded_paths.append(file_path)
 
 		self.print('Downloaded {} plugins: {}'.format(len(downloaded_paths), ', '.join(map(str, downloaded_paths))))
+
+	def __create_package_resolution(self, plugin_resolution: PluginResolution) -> PackageResolution:
+		res: PackageResolution = []
+		for plugin_id, version in plugin_resolution.items():
+			r = self.meta_holder.get_release(plugin_id, str(version))
+			res.extend(r.requirements)
+		# TODO: deduplicate, ensure no conflict
+		return res
+
+	def resolve(self, plugin_requirements: List[PluginRequirement]) -> ResolutionResult:
+		resolver = DependencyResolver(self.get_catalogue_meta())
+
+		result = ResolutionResult()
+		result.plugins = resolver.resolve(plugin_requirements)
+		result.packages = self.__create_package_resolution(result.plugins)
+		return result

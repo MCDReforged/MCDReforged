@@ -7,10 +7,9 @@ import resolvelib
 from resolvelib.resolvers import RequirementInformation
 
 import sys
+from mcdreforged.plugin.installer.meta_holder import MetaCache
+from mcdreforged.plugin.installer.types import PluginId, PluginResolution, PackageResolution
 from mcdreforged.plugin.meta.version import VersionRequirement, Version
-
-PluginId = str
-PluginResolution = Dict[PluginId, Version]
 
 
 class PluginRequirement(NamedTuple):
@@ -41,7 +40,7 @@ class PluginCandidate(NamedTuple):
 class PluginVersionInfo(NamedTuple):
 	version: Version
 	plugin_requirements: Dict[PluginId, VersionRequirement]
-	package_requirements: List[str]
+	package_requirements: PackageResolution
 
 
 class PluginMeta(NamedTuple):
@@ -137,7 +136,7 @@ def pip_check(package_requirements: List[str]) -> bool:
 
 
 class DependencyResolver:
-	def __init__(self, cata_meta: dict, existing_plugins: PluginResolution):
+	def __init__(self, meta_cache: MetaCache):
 		self.plugin_metas = {}
 
 		from mcdreforged.plugin.builtin.mcdreforged_plugin import mcdreforged_plugin
@@ -151,21 +150,19 @@ class DependencyResolver:
 			self.__permanent_plugin_ids.add(meta.id)
 			self.plugin_metas[meta.id] = meta
 
-		self.existing_plugins = existing_plugins
-		for plugin_id, meta_all in cata_meta['plugins'].items():
+		for plugin_id, plugin in meta_cache.plugins.items():
 			meta = PluginMeta(id=plugin_id, versions={})
-			for release in meta_all['release']['releases']:
-				if isinstance(release['meta'], dict):
-					try:
-						version = release['meta']['version']
-						meta.versions[Version(version)] = PluginVersionInfo(
-							version=version,
-							plugin_requirements={pid: VersionRequirement(vr) for pid, vr in release['meta']['dependencies'].items()},
-							package_requirements=release['meta']['requirements'],
-						)
-					except ValueError:
-						# TODO: better handling
-						traceback.print_exc()
+			for version_str, release in plugin.releases.items():
+				try:
+					version = Version(version_str)
+					meta.versions[version] = PluginVersionInfo(
+						version=version,
+						plugin_requirements={pid: VersionRequirement(vr) for pid, vr in release.dependencies.items()},
+						package_requirements=release.requirements,
+					)
+				except ValueError:
+					# TODO: better handling
+					traceback.print_exc()
 			self.plugin_metas[plugin_id] = meta
 
 	def resolve(self, requirements: List[PluginRequirement]) -> PluginResolution:
@@ -179,6 +176,7 @@ class DependencyResolver:
 			print('ResolutionImpossible!')
 			for cause in e.causes:
 				print('\t{} requires {}'.format(cause.parent, cause.requirement))
+			raise
 		except resolvelib.ResolutionError as e:
 			traceback.print_exc()
 			raise

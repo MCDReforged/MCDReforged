@@ -1,12 +1,12 @@
 import collections
 import inspect
-import sys
 from abc import ABC
 from types import MethodType
 from typing import List, Callable, Iterable, Set, Dict, Type, Any, Union, Optional, NamedTuple
 
 from typing_extensions import Self
 
+import sys
 from mcdreforged.command.builder import command_builder_util as utils
 from mcdreforged.command.builder.common import ParseResult, CommandContext, CommandSuggestions, CommandSuggestion
 from mcdreforged.command.builder.exception import LiteralNotMatch, UnknownCommand, UnknownArgument, CommandSyntaxError, \
@@ -591,9 +591,21 @@ class ArgumentNode(AbstractNode, ABC):
 	def __init__(self, name: str):
 		super().__init__()
 		self.__name = name
+		self.__accumulate_value: bool = False
+
+	def configure(self, *, accumulate: Optional[bool] = None) -> Self:
+		# TODO: DOC
+		if accumulate is not None:
+			self.__accumulate_value = accumulate
+		return self
 
 	def _on_visited(self, context: CommandContext, parsed_result: ParseResult):
-		context[self.__name] = parsed_result.value
+		if self.__accumulate_value:
+			if self.__name not in context:
+				context[self.__name] = []
+			context[self.__name].append(parsed_result.value)
+		else:
+			context[self.__name] = parsed_result.value
 
 	def get_name(self) -> str:
 		return self.__name

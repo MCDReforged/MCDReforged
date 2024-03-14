@@ -203,7 +203,10 @@ class VersionRequirement:
 					base_version = requirement
 				self.criterions.append(Criterion(opt, Version(base_version), self.CRITERIONS[opt]))
 
-	def accept(self, version: Union[Version, str]):
+	def has_criterion(self) -> bool:
+		return len(self.criterions) > 0
+
+	def accept(self, version: Union[Version, str]) -> bool:
 		if isinstance(version, str):
 			version = Version(version)
 		return all(criterion.test(version) for criterion in self.criterions)

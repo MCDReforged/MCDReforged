@@ -12,6 +12,7 @@ from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.check_update_command
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.debug_command import DebugCommand
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.help_command import HelpCommand
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.permission_command import PermissionCommand
+from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.pim_command import PimCommand
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.plugin_command import PluginCommand
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.preference_command import PreferenceCommand
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.reload_command import ReloadCommand
@@ -41,6 +42,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 		self.command_debug = DebugCommand(self)
 		self.command_help = HelpCommand(self)
 		self.command_permission = PermissionCommand(self)
+		self.command_pim = PimCommand(self)
 		self.command_plugin = PluginCommand(self)
 		self.command_preference = PreferenceCommand(self)
 		self.command_reload = ReloadCommand(self)
@@ -80,6 +82,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 			then(self.command_check_update.get_command_node()).
 			then(self.command_debug.get_command_node()).
 			then(self.command_permission.get_command_node()).
+			then(self.command_pim.get_command_node()).
 			then(self.command_plugin.get_command_node()).
 			then(self.command_preference.get_command_node()).
 			then(self.command_reload.get_command_node()).
