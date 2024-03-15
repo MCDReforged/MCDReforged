@@ -1,3 +1,4 @@
+import dataclasses
 import gzip
 import json
 import lzma
@@ -5,10 +6,10 @@ import threading
 from typing import Optional, Dict, List
 
 from mcdreforged.utils import request_util
-from mcdreforged.utils.serializer import Serializable
 
 
-class ReleaseData(Serializable):
+@dataclasses.dataclass(frozen=True)
+class ReleaseData:
 	version: str
 	dependencies: Dict[str, str]
 	requirements: List[str]
@@ -18,16 +19,18 @@ class ReleaseData(Serializable):
 	file_sha256: str
 
 
-class PluginData(Serializable):
+@dataclasses.dataclass(frozen=True)
+class PluginData:
 	id: str
 	name: Optional[str]
 	latest_version: Optional[str]
 	description: Dict[str, str]
-	releases: Dict[str, ReleaseData]
+	releases: Dict[str, ReleaseData] = dataclasses.field(default_factory=dict)
 
 
-class MetaCache(Serializable):
-	plugins: Dict[str, PluginData]
+@dataclasses.dataclass(frozen=True)
+class MetaCache:
+	plugins: Dict[str, PluginData] = dataclasses.field(default_factory=dict)
 
 
 class MetaHolder:
@@ -63,7 +66,6 @@ class MetaHolder:
 	@classmethod
 	def _load_meta_json(cls, meta_json: dict) -> MetaCache:
 		cache = MetaCache()
-		cache.plugins = {}
 
 		for plugin_id, aop in meta_json.get('plugins', {}).items():
 			if aop.get('release') is None or aop.get('meta') is None:
@@ -75,23 +77,24 @@ class MetaHolder:
 				release = None
 				meta = aop['meta']
 
-			plugin_data = PluginData()
-			plugin_data.id = plugin_id
-			plugin_data.name = meta.get('name')
-			plugin_data.latest_version = release['meta']['version'] if release is not None else None
-			plugin_data.description = meta.get('description', {})
-			plugin_data.releases = {}
+			plugin_data = PluginData(
+				id=plugin_id,
+				name=meta.get('name'),
+				latest_version=release['meta']['version'] if release is not None else None,
+				description=meta.get('description', {}),
+			)
 			for release in aop['release']['releases']:
 				meta = release['meta']
 				asset = release['asset']
-				release_data = ReleaseData()
-				release_data.version = meta['version']
-				release_data.dependencies = meta.get('dependencies', {})
-				release_data.requirements = meta.get('requirements', [])
-				release_data.file_name = asset['name']
-				release_data.file_size = asset['size']
-				release_data.file_url = asset['browser_download_url']
-				release_data.file_sha256 = asset['hash_sha256']
+				release_data = ReleaseData(
+					version=meta['version'],
+					dependencies=meta.get('dependencies', {}),
+					requirements=meta.get('requirements', []),
+					file_name=asset['name'],
+					file_size=asset['size'],
+					file_url=asset['browser_download_url'],
+					file_sha256=asset['hash_sha256'],
+				)
 				plugin_data.releases[release_data.version] = release_data
 			cache.plugins[plugin_id] = plugin_data
 
