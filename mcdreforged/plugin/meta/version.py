@@ -2,7 +2,7 @@
 Plugin Version
 """
 import re
-from typing import List, Callable, Tuple, Optional, Union
+from typing import List, Callable, Tuple, Optional, Union, Any
 
 
 # beta.3 -> (beta, 3), random -> (random, None)
@@ -112,7 +112,7 @@ class Version:
 		else:
 			return self.WILDCARD if self.component[len(self.component) - 1] == self.WILDCARD else 0
 
-	def __lt__(self, other):
+	def __lt__(self, other: 'Version') -> bool:
 		if not isinstance(other, Version):
 			raise TypeError('Cannot compare between instances of {} and {}'.format(Version.__name__, type(other).__name__))
 		for i in range(max(len(self.component), len(other.component))):
@@ -129,10 +129,10 @@ class Version:
 		else:
 			return False
 
-	def __eq__(self, other):
-		return not self < other and not other < self
+	def __eq__(self, other: Any) -> bool:
+		return isinstance(other, Version) and not self < other and not other < self
 
-	def __le__(self, other):
+	def __le__(self, other: 'Version'):
 		return self == other or self < other
 
 	def compare_to(self, other):

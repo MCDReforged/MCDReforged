@@ -1,7 +1,6 @@
 import re
 import subprocess
-import traceback
-from typing import List, Dict, NamedTuple, Union, Mapping, Iterator, Iterable, Sequence, Set
+from typing import List, NamedTuple, Union, Mapping, Iterator, Iterable, Sequence, Optional, Dict
 
 import resolvelib
 from resolvelib.resolvers import RequirementInformation
@@ -56,6 +55,15 @@ class PluginMeta(NamedTuple):
 	def of_metadata(cls, plugin_metadata: dict) -> 'PluginMeta':
 		return cls.of(plugin_metadata['id'], plugin_metadata['version'])
 
+	@classmethod
+	def builtin_plugin_metadata_list(cls) -> List['PluginMeta']:
+		from mcdreforged.plugin.builtin.mcdreforged_plugin import mcdreforged_plugin
+		from mcdreforged.plugin.builtin import python_plugin
+		return [
+			PluginMeta.of_metadata(mcdreforged_plugin.METADATA),
+			PluginMeta.of_metadata(python_plugin.METADATA),
+		]
+
 
 PluginMetas = Dict[PluginId, PluginMeta]
 KT = PluginId  # Identifier
@@ -63,7 +71,7 @@ RT = PluginRequirement  # Requirement
 CT = PluginCandidate  # Candidate
 
 
-class MyProvider(resolvelib.AbstractProvider):
+class PluginMetaProvider(resolvelib.AbstractProvider):
 	def __init__(self, plugin_metas: PluginMetas):
 		self.plugin_metas = plugin_metas.copy()
 
@@ -124,12 +132,12 @@ def pip_check(package_requirements: List[str]) -> bool:
 		sys.executable,
 		'-m', 'pip', 'install',
 		'--dry-run',
-		'--report', '-',
+		# '--report', '-',
 		'--quiet',
 	]
 	cmd.extend(package_requirements)
 	try:
-		output = subprocess.check_output(cmd)
+		subprocess.check_output(cmd)
 	except subprocess.CalledProcessError as e:
 		return False
 	return True
@@ -137,64 +145,31 @@ def pip_check(package_requirements: List[str]) -> bool:
 
 class DependencyResolver:
 	def __init__(self, meta_cache: MetaCache):
-		self.plugin_metas = {}
-
-		from mcdreforged.plugin.builtin.mcdreforged_plugin import mcdreforged_plugin
-		from mcdreforged.plugin.builtin import python_plugin
-		permanent_plugin_meta = [
-			PluginMeta.of_metadata(mcdreforged_plugin.METADATA),
-			PluginMeta.of_metadata(python_plugin.METADATA),
-		]
-		self.__permanent_plugin_ids: Set[PluginId] = set()
-		for meta in permanent_plugin_meta:
-			self.__permanent_plugin_ids.add(meta.id)
-			self.plugin_metas[meta.id] = meta
-
+		self.plugin_metas: PluginMetas = {}
 		for plugin_id, plugin in meta_cache.plugins.items():
 			meta = PluginMeta(id=plugin_id, versions={})
 			for version_str, release in plugin.releases.items():
-				try:
-					version = Version(version_str)
-					meta.versions[version] = PluginVersionInfo(
-						version=version,
-						plugin_requirements={pid: VersionRequirement(vr) for pid, vr in release.dependencies.items()},
-						package_requirements=release.requirements,
-					)
-				except ValueError:
-					# TODO: better handling
-					traceback.print_exc()
+				version = Version(version_str)
+				meta.versions[version] = PluginVersionInfo(
+					version=version,
+					plugin_requirements={pid: VersionRequirement(vr) for pid, vr in release.dependencies.items()},
+					package_requirements=release.requirements,
+				)
 			self.plugin_metas[plugin_id] = meta
 
-	def resolve(self, requirements: List[PluginRequirement]) -> PluginResolution:
-		provider = MyProvider(self.plugin_metas)
-		reporter = resolvelib.BaseReporter()
+	def resolve(self, requirements: List[PluginRequirement], reporter: Optional[resolvelib.BaseReporter] = None) -> Union[PluginResolution, resolvelib.ResolutionError]:
+		if reporter is None:
+			reporter = resolvelib.BaseReporter()
+		provider = PluginMetaProvider(self.plugin_metas)
 		resolver = resolvelib.Resolver(provider, reporter)
 
 		try:
 			result = resolver.resolve(requirements, max_rounds=10000)
-		except resolvelib.ResolutionImpossible as e:
-			print('ResolutionImpossible!')
-			for cause in e.causes:
-				print('\t{} requires {}'.format(cause.parent, cause.requirement))
-			raise
 		except resolvelib.ResolutionError as e:
-			traceback.print_exc()
-			raise
+			return e
 		else:
-			print('ok')
-			resolution = {}
+			resolution: PluginResolution = {}
 			for pid, pc in result.mapping.items():
-				if pid not in self.__permanent_plugin_ids:
-					resolution[pid] = pc.version
-					print(pid, pc.version)
-
-			print()
-			for u, v in result.graph.iter_edges():
-				print(u, v)
-			print()
-			for k, v in result.criteria.items():
-				print(k, v)
+				resolution[pid] = pc.version
+			# XXX: handler other fields in result?
 			return resolution
-
-	def execute(self):
-		pass

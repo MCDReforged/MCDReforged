@@ -1,18 +1,16 @@
-import dataclasses
 import functools
 import operator
-import re
 import time
 from pathlib import Path
 from typing import List, Optional
 
 from mcdreforged.minecraft.rtext.style import RColor
 from mcdreforged.minecraft.rtext.text import RText
-from mcdreforged.plugin.installer.dependency_resolver import DependencyResolver, PluginRequirement, PluginResolution, PackageResolution
-from mcdreforged.plugin.installer.meta_holder import MetaHolder, MetaCache
+from mcdreforged.plugin.installer.downloader import ReleaseDownloader
+from mcdreforged.plugin.installer.meta_holder import MetaHolder, CatalogueMetaCache
 from mcdreforged.plugin.installer.printer import Table
 from mcdreforged.plugin.installer.replier import Replier
-from mcdreforged.utils import request_util
+from mcdreforged.plugin.installer.types import PackageResolution, PluginResolution
 from mcdreforged.utils.types import MessageText
 
 
@@ -24,17 +22,7 @@ def is_subsequence(keyword: str, s: str):
 	return idx == len(keyword)
 
 
-@dataclasses.dataclass
-class ResolutionResult:
-	plugins: PluginResolution = dataclasses.field(default_factory=dict)
-	packages: PackageResolution = dataclasses.field(default_factory=list)
-
-
 class PluginInstaller:
-	DOWNLOAD_MIRROR_PREFIXES = [
-		'https://mirror.ghproxy.com/',
-		'https://hub.gitmirror.com/',
-	]
 	DEFAULT_LANGUAGE = 'en_us'
 
 	def __init__(self, replier: Replier, language: str = DEFAULT_LANGUAGE, meta_holder: Optional[MetaHolder] = None):
@@ -47,25 +35,16 @@ class PluginInstaller:
 	def print(self, message: MessageText):
 		self.replier.reply(message)
 
-	def get_catalogue_meta(self) -> MetaCache:
+	def get_catalogue_meta(self) -> CatalogueMetaCache:
 		self.print('Fetching catalogue meta')
 		return self.meta_holder.get()
 
-	def __download_release_file(self, url: str) -> bytes:
-		urls = [url]
-		if re.fullmatch(r'https://github\.com/[^/]+/[^/]+/releases/.+', url):
-			for prefix in self.DOWNLOAD_MIRROR_PREFIXES:
-				urls.append(prefix + url)
-		# TODO: log if unknown
-		return request_util.get_with_retry(urls)
+	# ======================= Operations =======================
 
 	def test_stuffs(self):
 		t = time.time()
 		self.get_catalogue_meta()
 		print('fetch everything.json.xz cost', time.time() - t)
-
-	def run(self):
-		pass
 
 	def list_plugin(self, keyword: Optional[str]) -> int:
 		def check_keyword(s: str, ss: bool = True):
@@ -111,35 +90,29 @@ class PluginInstaller:
 			return 1
 
 		meta = self.get_catalogue_meta()
-
-		resolver = DependencyResolver(meta)
-		result = resolver.resolve(list(map(PluginRequirement.of, plugin_ids)))
+		for plugin_id in plugin_ids:
+			if plugin_id not in meta.plugins:
+				self.print('Plugin {!r} does not exist'.format(plugin_id))
+				return 1
 
 		downloaded_paths = []
-		for plugin_id, version in result.items():
-			release = meta.plugins[plugin_id].releases[str(version)]
+		for plugin_id in plugin_ids:
+			plugin = meta.plugins[plugin_id]
+			if plugin.latest_version is None:
+				self.print('Plugin {!r} does not have any release'.format(plugin_id))
+				return 1
+			release = plugin.releases[plugin.latest_version]
 
 			file_path = target_dir / release.file_name
-			self.print('Downloading {}@{} to {} ({:.1f}KB)'.format(plugin_id, version, file_path, release.file_size / 1024.0))
-			content = self.__download_release_file(release.file_url)
-			with open(file_path, 'wb') as f:
-				f.write(content)
+			self.print('Downloading {}@{} to {} ({:.1f}KiB)'.format(plugin_id, release.version, file_path, release.file_size / 1024.0))
+			ReleaseDownloader(release, file_path, self.replier).download(show_progress=True)
 			downloaded_paths.append(file_path)
 
-		self.print('Downloaded {} plugins: {}'.format(len(downloaded_paths), ', '.join(map(str, downloaded_paths))))
+		self.print('Downloaded {} plugin{}: {}'.format(len(plugin_ids), 's' if len(plugin_ids) > 0 else '', ', '.join(map(str, plugin_ids))))
 
 	def __create_package_resolution(self, plugin_resolution: PluginResolution) -> PackageResolution:
 		res: PackageResolution = []
 		for plugin_id, version in plugin_resolution.items():
 			r = self.meta_holder.get_release(plugin_id, str(version))
 			res.extend(r.requirements)
-		# TODO: deduplicate, ensure no conflict
 		return res
-
-	def resolve(self, plugin_requirements: List[PluginRequirement]) -> ResolutionResult:
-		resolver = DependencyResolver(self.get_catalogue_meta())
-
-		result = ResolutionResult()
-		result.plugins = resolver.resolve(plugin_requirements)
-		result.packages = self.__create_package_resolution(result.plugins)
-		return result

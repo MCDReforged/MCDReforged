@@ -22,7 +22,7 @@ def create(parser_factory: Callable[..., ArgumentParser]) -> ArgumentParser:
 	subparsers.add_parser('test', help='test command')
 
 	parser_list = subparsers.add_parser('list', help='List plugin from the official plugin catalogue')
-	parser_list.add_argument('search', nargs='?', default=None, help='Search keyword to filter the plugins')
+	parser_list.add_argument('keyword', nargs='?', default=None, help='Search keyword to filter the plugins')
 
 	parser_download = subparsers.add_parser('download', help='Download given plugins. By default, no dependency resolution will be made')
 	parser_download.add_argument('plugin_ids', nargs='+', help='Plugin IDs to be downloaded')
@@ -37,25 +37,25 @@ def create(parser_factory: Callable[..., ArgumentParser]) -> ArgumentParser:
 
 
 def __entry(parser: ArgumentParser, args: Namespace) -> int:
-	cmd = args.pim_command
+	pcmd = args.pim_command
 
-	if cmd is None:
+	if pcmd is None:
 		parser.print_help()
 		return 1
 
 	replier = NoopReplier() if args.quiet else StdoutReplier()
 	installer = PluginInstaller(replier)
 
-	if cmd == 'test':
+	if pcmd == 'test':
 		return installer.test_stuffs()
-	elif cmd == 'list':
-		return installer.list_plugin(keyword=args.search)
-	elif cmd == 'download':
+	elif pcmd == 'list':
+		return installer.list_plugin(keyword=args.keyword)
+	elif pcmd == 'download':
 		return installer.download_plugin(args.plugin_ids, args.output)
-	elif cmd == 'pipi':
+	elif pcmd == 'pipi':
 		pip_install_from_plugins(args.plugin_paths, extra_args=args.args, quiet=args.quiet)
 	else:
-		print('unknown cmd {!r}'.format(cmd))
+		print('unknown pcmd {!r}'.format(pcmd))
 		return 1
 
 
