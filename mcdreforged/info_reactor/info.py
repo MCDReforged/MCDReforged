@@ -218,7 +218,7 @@ class Info:
 	def __str__(self):
 		return '; '.join(self.debug_format_text().splitlines())
 
-	def __deepcopy__(self, memo):
+	def __deepcopy__(self, memo: dict):
 		"""
 		Just don't copy the mcdr_server instance
 		"""

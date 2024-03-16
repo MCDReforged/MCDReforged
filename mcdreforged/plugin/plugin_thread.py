@@ -17,7 +17,7 @@ TaskData = collections.namedtuple('TaskData', 'callback plugin')
 class PluginThread(threading.Thread):
 	counter = 0
 
-	def __init__(self, thread_pool, temporary=False, task=None):
+	def __init__(self, thread_pool: 'PluginThreadPool', temporary=False, task=None):
 		super().__init__()
 		self.daemon = True
 		self.thread_pool = thread_pool

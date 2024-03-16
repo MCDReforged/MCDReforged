@@ -410,7 +410,7 @@ class CommandTreeTestCase(CommandTestCase):
 			self.run_command_and_check_hit(root, 'test {}'.format(suggestion), True)
 
 	def test_17_counting_literal(self):
-		def callback(src, ctx):
+		def callback(src, ctx: dict):
 			self.result = (ctx.get('foo'), ctx.get('bar'))
 
 		root = Literal('test').runs(callback)

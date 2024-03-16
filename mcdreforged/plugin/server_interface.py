@@ -631,7 +631,7 @@ class ServerInterface:
 		else:
 			return False  # TODO handle unknown result caused by chained sync plugin operation
 
-	def __existed_regular_plugin_manipulate(self, plugin_id: str, handler: Callable[['PluginManager'], Callable[['RegularPlugin'], Any]], result_type: PluginResultType) -> Optional[bool]:
+	def __existed_regular_plugin_manipulate(self, plugin_id: str, handler: Callable[['PluginManager'], Callable[['RegularPlugin'], Future[PluginOperationResult]]], result_type: PluginResultType) -> Optional[bool]:
 		"""
 		Manipulate a loaded regular plugin from a given plugin id
 		:param plugin_id: The plugin id of the plugin you want to manipulate
