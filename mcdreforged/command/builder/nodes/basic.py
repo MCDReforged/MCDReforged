@@ -1,12 +1,13 @@
 import collections
+import functools
 import inspect
+import sys
 from abc import ABC
 from types import MethodType
 from typing import List, Callable, Iterable, Set, Dict, Type, Any, Union, Optional, NamedTuple
 
 from typing_extensions import Self
 
-import sys
 from mcdreforged.command.builder import command_builder_util as utils
 from mcdreforged.command.builder.common import ParseResult, CommandContext, CommandSuggestions, CommandSuggestion
 from mcdreforged.command.builder.exception import LiteralNotMatch, UnknownCommand, UnknownArgument, CommandSyntaxError, \
@@ -324,7 +325,14 @@ class AbstractNode(ABC):
 		sig = inspect.signature(callback)
 		spec_args = inspect.getfullargspec(callback).args
 		spec_args_len = len(spec_args)
-		if isinstance(callback, MethodType):  # class method, remove the 1st param
+
+		real_func = callback
+		for i in range(100):
+			if isinstance(real_func, functools.partial):
+				real_func = real_func.func
+			else:
+				break
+		if isinstance(real_func, MethodType):  # class method, remove the 1st param
 			spec_args_len -= 1
 		try:
 			sig.bind(*args[:spec_args_len])  # test if using full arg length is ok
