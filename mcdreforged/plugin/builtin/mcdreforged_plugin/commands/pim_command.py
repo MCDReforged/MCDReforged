@@ -64,9 +64,9 @@ class LocalMetaRegistry(MetaRegistry):
 					version=version,
 					dependencies={},
 					requirements=[],
-					file_name=plugin.plugin_path,
+					file_name='nope_name',
 					file_size=0,
-					file_url=f'file://' + plugin.plugin_path,
+					file_url='nope_url',
 					file_sha256='',
 				)}
 			)
@@ -325,17 +325,21 @@ class PimCommand(SubCommand):
 			return
 
 		target: Optional[str] = context.get('target')
-		if target is None and len(self.plugin_manager.plugin_directories) > 0:
-			target = self.plugin_manager.plugin_directories[0]
 		if target is None:
-			source.reply('target is required')
-			return
-		default_target_path = Path(target)
+			if len(self.plugin_manager.plugin_directories) > 0:
+				default_target_path = self.plugin_manager.plugin_directories[0]
+			else:
+				source.reply('target is required')
+				return
+		else:
+			default_target_path = Path(target)
 		do_update = context.get('update', 0) > 0
 		dry_run = context.get('dry_run', 0) > 0
 		skip_confirm = context.get('skip_confirm', 0) > 0
 
 		# ------------------- Verify and Collect -------------------
+
+		from mcdreforged.plugin.type.packed_plugin import PackedPlugin
 
 		def add_requirement(plg: 'AbstractPlugin', op: str):
 			plugin_requirements.append(as_requirement(plg, op))
@@ -347,7 +351,6 @@ class PimCommand(SubCommand):
 				if input_requirement_str != '*':
 					input_requirements.append(PluginRequirement.of(input_requirement_str))
 			if '*' in plugin_ids:
-				from mcdreforged.plugin.type.packed_plugin import PackedPlugin
 				for plugin in self.plugin_manager.get_regular_plugins():
 					if isinstance(plugin, PackedPlugin):
 						input_requirements.append(as_requirement(plugin, None))
@@ -420,7 +423,6 @@ class PimCommand(SubCommand):
 			else:
 				old_version = None
 			if old_version != version:
-				from mcdreforged.plugin.type.packed_plugin import PackedPlugin
 				if plugin is not None and not isinstance(plugin, PackedPlugin):
 					source.reply('Existing plugin {} is {} and cannot be reinstalled. Only packed plugin is supported'.format(plugin_id, type(plugin).__name__))
 					return
@@ -519,6 +521,8 @@ class PimCommand(SubCommand):
 			for plugin_id, data in to_install.items():
 				plugin = self.plugin_manager.get_plugin_from_id(plugin_id)
 				if plugin is not None:
+					if not isinstance(plugin, PackedPlugin):
+						raise AssertionError('to_install contains a non-packed plugin {!r}'.format(plugin))
 					path = Path(plugin.plugin_path)
 					target_dir = path.parent
 					trash_path = trashbin_path / '{}.tmp'.format(plugin_id)

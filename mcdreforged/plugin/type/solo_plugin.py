@@ -1,9 +1,9 @@
 import importlib.machinery
 import importlib.machinery
 import importlib.util
-import os
 import re
 import sys
+from pathlib import Path
 from types import ModuleType
 from typing import TYPE_CHECKING
 
@@ -17,7 +17,7 @@ if TYPE_CHECKING:
 
 
 class SoloPlugin(RegularPlugin):
-	def __init__(self, plugin_manager: 'PluginManager', file_path: str):
+	def __init__(self, plugin_manager: 'PluginManager', file_path: Path):
 		super().__init__(plugin_manager, file_path)
 		self.module_name = 'MCDR_SOLO_PLUGIN@{}'.format(self.plugin_path)
 
@@ -29,7 +29,7 @@ class SoloPlugin(RegularPlugin):
 		return module_name == self.module_name
 
 	def _import_entrypoint_module(self) -> ModuleType:
-		if not os.path.isfile(self.plugin_path):
+		if not self.plugin_path.is_file():
 			raise TypeError('Source path {} of {} is not a file'.format(self.plugin_path, self))
 
 		# https://docs.python.org/3/library/importlib.html#importing-a-source-file-directly

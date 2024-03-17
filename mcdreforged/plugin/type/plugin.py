@@ -1,7 +1,7 @@
 """
 Single plugin class
 """
-from enum import Enum, auto
+import enum
 from typing import Tuple, Any, TYPE_CHECKING, Collection, Optional
 
 from mcdreforged.command.builder.nodes.basic import Literal
@@ -18,20 +18,19 @@ if TYPE_CHECKING:
 	from mcdreforged.plugin.plugin_manager import PluginManager
 
 
-class PluginState(Enum):
-	UNINITIALIZED = auto()  # just created the instance
-	LOADING = auto()        # loading the .py entrance file / metadata of a multi-file plugin
-	LOADED = auto()         # loaded the .py entrance file / metadata of a multi-file plugin
-	READY = auto()          # registered module & default listeners & translations, now it's ready to do anything
-	UNLOADING = auto()      # just removed from the plugin list, ready to call "on unload" event
-	UNLOADED = auto()       # unloaded, should never access it
+class PluginState(enum.Enum):
+	UNINITIALIZED = enum.auto()  # just created the instance
+	LOADING = enum.auto()        # loading the .py entrance file / metadata of a multi-file plugin
+	LOADED = enum.auto()         # loaded the .py entrance file / metadata of a multi-file plugin
+	READY = enum.auto()          # registered module & default listeners & translations, now it's ready to do anything
+	UNLOADING = enum.auto()      # just removed from the plugin list, ready to call "on unload" event
+	UNLOADED = enum.auto()       # unloaded, should never access it
 
 
 class AbstractPlugin:
-	def __init__(self, plugin_manager: 'PluginManager', file_path: str):
+	def __init__(self, plugin_manager: 'PluginManager'):
 		self.plugin_manager = plugin_manager
 		self.mcdr_server = plugin_manager.mcdr_server
-		self.plugin_path = file_path
 		self.state = PluginState.UNINITIALIZED
 		self.plugin_registry = PluginRegistry(self, plugin_manager.registry_storage)
 

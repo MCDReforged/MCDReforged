@@ -3,66 +3,62 @@ import json
 import os
 import re
 import sys
-from abc import ABC
+from abc import ABC, abstractmethod
 from pathlib import Path
 from types import ModuleType
 from typing import IO, Collection
 
 from ruamel.yaml import YAML
+from typing_extensions import override
 
 from mcdreforged.constants import plugin_constant
 from mcdreforged.plugin.exception import RequirementCheckFailure
 from mcdreforged.plugin.meta.metadata import Metadata
 from mcdreforged.plugin.type.regular_plugin import RegularPlugin
+from mcdreforged.utils import path_util
 from mcdreforged.utils.exception import BrokenMetadata, IllegalPluginStructure
 from mcdreforged.utils.logger import DebugOption
 
 
-def _is_relative_to(child: Path, parent: Path) -> bool:
-	if hasattr(child, 'is_relative_to'):  # python3.9+
-		return child.is_relative_to(parent)
-	else:
-		try:
-			child.relative_to(parent)
-		except ValueError:
-			return False
-		else:
-			return True
-
-
 class MultiFilePlugin(RegularPlugin, ABC):
 	@property
-	def _file_root(self) -> str:
+	def _file_root(self) -> Path:
 		return self.plugin_path
 
 	@property
-	def _module_search_path(self) -> str:
-		return self._file_root
+	def __module_search_path(self) -> str:
+		return str(self._file_root)
 
+	@override
 	def get_fallback_metadata_id(self) -> str:
 		raise BrokenMetadata('Missing plugin id in {}'.format(plugin_constant.PLUGIN_META_FILE))
 
+	@abstractmethod
 	def open_file(self, file_path: str) -> IO[bytes]:
 		raise NotImplementedError()
 
+	@abstractmethod
 	def list_directory(self, directory_name: str) -> Collection[str]:
-		return os.listdir(os.path.join(self._file_root, directory_name))
+		raise NotImplementedError()
 
+	@override
 	def is_own_module(self, module_name: str) -> bool:
 		plugin_id = self.get_id()
 		return module_name == plugin_id or module_name.startswith('{}.'.format(plugin_id))
 
+	@override
 	def _import_entrypoint_module(self) -> ModuleType:
 		mod = importlib.import_module(self.get_metadata().entrypoint)
 		if mod.__file__ is not None:
 			mod_path = Path(mod.__file__).absolute()
 			file_root = Path(self._file_root).absolute()
-			if file_root != mod_path and not _is_relative_to(mod_path, file_root):
+			if file_root != mod_path and not path_util.is_relative_to(mod_path, file_root):
 				self.mcdr_server.logger.warning('Suspicious entrypoint module path for plugin %s, package name conflict?', self)
 				self.mcdr_server.logger.warning('- Plugin file root: %s', file_root)
 				self.mcdr_server.logger.warning('- Loaded entrypoint path: %s', mod_path)
 		return mod
 
+	@override
 	def _on_load(self):
 		super()._on_load()
 		try:
@@ -74,15 +70,17 @@ class MultiFilePlugin(RegularPlugin, ABC):
 		self.__check_requirements()
 		self._check_subdir_legality()
 
+	@override
 	def _on_unload(self):
 		super()._on_unload()
 		try:
-			sys.path.remove(self._module_search_path)
+			sys.path.remove(self.__module_search_path)
 		except ValueError:
-			self.mcdr_server.logger.debug('Fail to remove path "{}" in sys.path for {}'.format(self._module_search_path, self))
+			self.mcdr_server.logger.debug('Fail to remove path "{}" in sys.path for {}'.format(self.__module_search_path, self))
 
+	@override
 	def _on_ready(self):
-		sys.path.append(self._module_search_path)
+		sys.path.append(self.__module_search_path)
 		# It's fail-proof for packed plugin
 		try:
 			self._load_entry_instance()

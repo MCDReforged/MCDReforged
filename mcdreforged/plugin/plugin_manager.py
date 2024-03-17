@@ -36,19 +36,19 @@ class PluginManager:
 	TLS_PLUGIN_KEY = 'current_plugin'
 
 	def __init__(self, mcdr_server: 'MCDReforgedServer'):
-		self.plugin_directories: List[str] = []
+		self.plugin_directories: List[Path] = []
 		self.mcdr_server = mcdr_server
 		self.logger = mcdr_server.logger
 
 		# plugin storage, id -> Plugin
-		self.plugins: Dict[str, AbstractPlugin] = {}
-		# file_path -> id mapping
-		self.plugin_file_path: Dict[str, str] = {}
+		self.__plugins: Dict[str, AbstractPlugin] = {}
+		# absolute file_path -> id mapping
+		self.__plugin_file_paths: Dict[Path, str] = {}
 		# storage for event listeners, help messages and commands
 		self.registry_storage = PluginRegistryStorage(self)
 
 		# not used currently
-		self.thread_pool = PluginThreadPool(self.mcdr_server, max_thread=core_constant.PLUGIN_THREAD_POOL_SIZE)
+		self.__thread_pool = PluginThreadPool(self.mcdr_server, max_thread=core_constant.PLUGIN_THREAD_POOL_SIZE)
 
 		# thread local storage, to store current plugin
 		self.__tls = ThreadLocalStorage()
@@ -75,16 +75,16 @@ class PluginManager:
 		return stack[-1] if stack is not None else None
 
 	def get_plugin_amount(self) -> int:
-		return len(self.plugins)
+		return len(self.__plugins)
 
 	def get_all_plugins(self) -> List[AbstractPlugin]:
-		return list(self.plugins.values())
+		return list(self.__plugins.values())
 
 	def get_regular_plugins(self) -> List[RegularPlugin]:
-		return [plugin for plugin in self.plugins.values() if isinstance(plugin, RegularPlugin)]
+		return [plugin for plugin in self.__plugins.values() if isinstance(plugin, RegularPlugin)]
 
 	def get_plugin_from_id(self, plugin_id: str) -> Optional[AbstractPlugin]:
-		return self.plugins.get(plugin_id)
+		return self.__plugins.get(plugin_id)
 
 	def get_regular_plugin_from_id(self, plugin_id: str) -> Optional[RegularPlugin]:
 		plugin = self.get_plugin_from_id(plugin_id)
@@ -95,7 +95,7 @@ class PluginManager:
 	def set_plugin_directories(self, plugin_directories: Optional[List[str]]):
 		if plugin_directories is None:
 			plugin_directories = []
-		self.plugin_directories = misc_util.unique_list(plugin_directories)
+		self.plugin_directories = [Path(pd) for pd in misc_util.unique_list(plugin_directories)]
 		for plugin_directory in self.plugin_directories:
 			file_util.touch_directory(plugin_directory)
 
@@ -111,18 +111,18 @@ class PluginManager:
 			if len(stack) == 0:
 				self.__tls.pop(self.TLS_PLUGIN_KEY)
 
-	def contains_plugin_file(self, file_path: str) -> bool:
+	def contains_plugin_file(self, file_path: PathLike) -> bool:
 		"""
 		Check if the given path corresponds to an already loaded plugin
 		"""
-		return os.path.abspath(file_path) in self.plugin_file_path
+		return Path(file_path).absolute() in self.__plugin_file_paths
 
 	def contains_plugin_id(self, plugin_id: str) -> bool:
 		"""
 		Check if the given plugin id represents a loaded plugin
 		Includes permanent plugins
 		"""
-		return plugin_id in self.plugins
+		return plugin_id in self.__plugins
 
 	def verify_plugin_path_to_load(self, plugin_path: PathLike):
 		path = Path(plugin_path).absolute()
@@ -153,24 +153,33 @@ class PluginManager:
 
 	def __add_plugin(self, plugin: AbstractPlugin):
 		plugin_id = plugin.get_id()
-		if plugin_id in self.plugins:
+		if plugin_id in self.__plugins:
 			self.logger.critical('Something is not correct, a plugin with existed plugin id "{}" is added'.format(plugin_id))
-		self.plugins[plugin_id] = plugin
+		self.__plugins[plugin_id] = plugin
 		if isinstance(plugin, RegularPlugin):
-			self.plugin_file_path[os.path.abspath(plugin.plugin_path)] = plugin_id
+			self.__plugin_file_paths[plugin.plugin_path.absolute()] = plugin_id
 
 	def __remove_plugin(self, plugin: AbstractPlugin):
 		if not plugin.is_permanent():
 			plugin_id = plugin.get_id()
-			self.plugins.pop(plugin_id, None)
+			self.__plugins.pop(plugin_id, None)
 			if isinstance(plugin, RegularPlugin):
-				self.plugin_file_path.pop(os.path.abspath(plugin.plugin_path), None)
+				self.__plugin_file_paths.pop(plugin.plugin_path.absolute(), None)
 
 	# ----------------------------
 	#   Single Plugin Operations
 	# ----------------------------
 
-	def __load_plugin(self, file_path: str) -> Optional[RegularPlugin]:
+	@classmethod
+	def __make_plugin_path(cls, plg: AbstractPlugin) -> Any:
+		if isinstance(plg, RegularPlugin):
+			return str(plg.plugin_path)
+		elif isinstance(plg, PermanentPlugin):
+			return '@@builtin@@'
+		else:
+			return None
+
+	def __load_plugin(self, file_path: Path) -> Optional[RegularPlugin]:
 		"""
 		Try to load a plugin from the given file
 		If succeeds, add the plugin to the plugin list, the plugin state will be set to LOADED
@@ -189,13 +198,13 @@ class PluginManager:
 				self.logger.exception(self.mcdr_server.tr('plugin_manager.load_plugin.fail', plugin.get_name()))
 			return None
 		else:
-			existed_plugin = self.plugins.get(plugin.get_id())
+			existed_plugin = self.__plugins.get(plugin.get_id())
 			if existed_plugin is None:
 				self.__add_plugin(plugin)
 				self.logger.info(self.mcdr_server.tr('plugin_manager.load_plugin.success', plugin.get_name()))
 				return plugin
 			else:
-				self.logger.error(self.mcdr_server.tr('plugin_manager.load_plugin.duplicate', plugin.get_name(), plugin.plugin_path, existed_plugin.get_name(), existed_plugin.plugin_path))
+				self.logger.error(self.mcdr_server.tr('plugin_manager.load_plugin.duplicate', plugin.get_name(), plugin.plugin_path, existed_plugin.get_name(), self.__make_plugin_path(existed_plugin)))
 				try:
 					plugin.unload()
 				except Exception:
@@ -245,37 +254,37 @@ class PluginManager:
 			return False
 		else:
 			# in case the plugin id changes into an existed plugin id
-			existed_plugin = self.plugins.get(plugin.get_id())
+			existed_plugin = self.__plugins.get(plugin.get_id())
 			if existed_plugin is None:
 				self.__add_plugin(plugin)
 				self.logger.info(self.mcdr_server.tr('plugin_manager.reload_plugin.success', plugin.get_name()))
 				return True
 			else:
-				self.logger.error(self.mcdr_server.tr('plugin_manager.load_plugin.duplicate', plugin.get_name(), plugin.plugin_path, existed_plugin.get_name(), existed_plugin.plugin_path))
+				self.logger.error(self.mcdr_server.tr('plugin_manager.load_plugin.duplicate', plugin.get_name(), self.__make_plugin_path(plugin), existed_plugin.get_name(), self.__make_plugin_path(existed_plugin)))
 				try:
 					plugin.unload()
 				except Exception:
 					# should never come here
-					self.logger.exception(self.mcdr_server.tr('plugin_manager.load_plugin.unload_duplication_fail', plugin.get_name(), plugin.plugin_path))
+					self.logger.exception(self.mcdr_server.tr('plugin_manager.load_plugin.unload_duplication_fail', plugin.get_name(), self.__make_plugin_path(plugin)))
 				return False
 
 	# ---------------------------------------
 	#   Regular Plugin Collector & Handlers
 	# ---------------------------------------
 
-	def __collect_possible_plugin_file_paths(self) -> List[str]:
-		paths = []
+	def __collect_possible_plugin_file_paths(self) -> List[Path]:
+		paths: List[Path] = []
 		for plugin_directory in self.plugin_directories:
-			if os.path.isdir(plugin_directory):
+			if plugin_directory.is_dir():
 				for file in os.listdir(plugin_directory):
-					file_path = os.path.join(plugin_directory, file)
+					file_path = plugin_directory / file
 					if plugin_factory.is_plugin(file_path):
 						paths.append(file_path)
 			else:
 				self.logger.warning('Plugin directory "{}" not found'.format(plugin_directory))
 		return paths
 
-	def __load_given_new_plugins(self, plugin_paths: List[str]) -> SingleOperationResult:
+	def __load_given_new_plugins(self, plugin_paths: List[Path]) -> SingleOperationResult:
 		result = SingleOperationResult()
 		for file_path in plugin_paths:
 			plugin = self.__load_plugin(file_path)
@@ -285,7 +294,7 @@ class PluginManager:
 				result.succeed(plugin)
 		return result
 
-	def __collect_and_load_new_plugins(self, filter_: Callable[[str], bool], *, possible_paths: Optional[List[str]] = None) -> SingleOperationResult:
+	def __collect_and_load_new_plugins(self, filter_: Callable[[Path], bool], *, possible_paths: Optional[List[Path]] = None) -> SingleOperationResult:
 		"""
 		:param filter_: A str predicate function for testing if the plugin file path is acceptable
 		:param possible_paths: Optional. If you have already done self.__collect_possible_plugin_file_paths() before,
@@ -415,7 +424,7 @@ class PluginManager:
 		walk_result = walker.walk()
 		dependency_check_result = SingleOperationResult()  # topo order in success_list
 		for item in walk_result:
-			plugin = self.plugins[item.plugin_id]
+			plugin = self.__plugins[item.plugin_id]
 			dependency_check_result.record(plugin, item.success)
 			if not item.success:
 				self.logger.error(self.mcdr_server.tr('plugin_manager.check_plugin_dependencies.item_failed', plugin, item.reason))
@@ -472,7 +481,7 @@ class PluginManager:
 		return PluginOperationResult(load_result, unload_result, reload_result, dependency_check_result)
 
 	def __sort_plugins_by_id(self):
-		self.plugins = {plugin_id: self.plugins[plugin_id] for plugin_id in sorted(self.plugins.keys())}
+		self.__plugins = {plugin_id: self.__plugins[plugin_id] for plugin_id in sorted(self.__plugins.keys())}
 
 	def __update_registry(self):
 		self.registry_storage.clear()
@@ -526,20 +535,20 @@ class PluginManager:
 
 	def manipulate_plugins(
 			self, *,
-			load: Optional[List[str]] = None,
+			load: Optional[List[Path]] = None,
 			unload: Optional[List[RegularPlugin]] = None,
 			reload: Optional[List[RegularPlugin]] = None,
-			enable: Optional[List[str]] = None,
+			enable: Optional[List[Path]] = None,
 			disable: Optional[List[RegularPlugin]] = None,
 			entered_callback: Optional[Callable[[], Any]] = None,
 	):
 		# TODO: make it the only entrance of plugin manipulation
-		to_load_paths: List[str] = list(load or [])
+		to_load_paths: List[Path] = (load or []).copy()
 		to_unload_plugins: List[RegularPlugin] = (unload or []) + (disable or [])
-		to_reload_plugins: List[RegularPlugin] = list(reload or [])
+		to_reload_plugins: List[RegularPlugin] = (reload or []).copy()
 
 		for path in to_load_paths:
-			class_util.check_type(path, str)
+			class_util.check_type(path, Path)
 		for plugin in to_unload_plugins:
 			class_util.check_type(plugin, RegularPlugin)
 		for plugin in to_reload_plugins:
@@ -547,7 +556,7 @@ class PluginManager:
 
 		for path in (enable or []):
 			if plugin_factory.is_disabled_plugin(path):
-				new_file_path = string_util.remove_suffix(path, plugin_constant.DISABLED_PLUGIN_FILE_SUFFIX)
+				new_file_path = path.parent / string_util.remove_suffix(path.name, plugin_constant.DISABLED_PLUGIN_FILE_SUFFIX)
 				os.rename(path, new_file_path)
 				to_load_paths.append(new_file_path)
 
@@ -569,19 +578,20 @@ class PluginManager:
 		def done_callback(_: PluginOperationResult):
 			for plg in (disable or []):
 				if plg.plugin_exists():
-					os.rename(plg.plugin_path, plg.plugin_path + plugin_constant.DISABLED_PLUGIN_FILE_SUFFIX)
+					disabled_path = plg.plugin_path.parent / (plg.plugin_path.name + plugin_constant.DISABLED_PLUGIN_FILE_SUFFIX)
+					os.rename(plg.plugin_path, disabled_path)
 
 		future = self.__run_manipulation(manipulate_action)
 		future.add_done_callback(done_callback)
 		return future
 
-	def load_plugin(self, file_path: str) -> Future[PluginOperationResult]:
+	def load_plugin(self, file_path: Path) -> Future[PluginOperationResult]:
 		def load_plugin_action() -> PluginOperationResult:
 			self.logger.info(self.mcdr_server.tr('plugin_manager.load_plugin.entered', file_path))
 			load_result = self.__collect_and_load_new_plugins(lambda fp: fp == file_path)
 			return self.__finalizate_plugin_manipulation(load_result=load_result)
 
-		class_util.check_type(file_path, str)
+		class_util.check_type(file_path, Path)
 		return self.__run_manipulation(load_plugin_action)
 
 	def unload_plugin(self, plugin: RegularPlugin) -> Future[PluginOperationResult]:
@@ -602,10 +612,10 @@ class PluginManager:
 		class_util.check_type(plugin, RegularPlugin)
 		return self.__run_manipulation(reload_plugin_action)
 
-	def enable_plugin(self, file_path: str) -> Future[PluginOperationResult]:
+	def enable_plugin(self, file_path: Path) -> Future[PluginOperationResult]:
 		class_util.check_type(file_path, str)
 		self.logger.info(self.mcdr_server.tr('plugin_manager.enable_plugin.entered', file_path))
-		new_file_path = string_util.remove_suffix(file_path, plugin_constant.DISABLED_PLUGIN_FILE_SUFFIX)
+		new_file_path = file_path.parent / string_util.remove_suffix(file_path.name, plugin_constant.DISABLED_PLUGIN_FILE_SUFFIX)
 		if plugin_factory.is_disabled_plugin(file_path):
 			os.rename(file_path, new_file_path)
 			return self.load_plugin(new_file_path)
@@ -615,7 +625,8 @@ class PluginManager:
 	def disable_plugin(self, plugin: RegularPlugin) -> Future[PluginOperationResult]:
 		def done_callback(_: PluginOperationResult):
 			if plugin.plugin_exists():
-				os.rename(plugin.plugin_path, plugin.plugin_path + plugin_constant.DISABLED_PLUGIN_FILE_SUFFIX)
+				disabled_path = plugin.plugin_path.parent / (plugin.plugin_path.name + plugin_constant.DISABLED_PLUGIN_FILE_SUFFIX)
+				os.rename(plugin.plugin_path, disabled_path)
 
 		self.logger.info(self.mcdr_server.tr('plugin_manager.disable_plugin.entered', plugin))
 		future = self.unload_plugin(plugin)

@@ -1,6 +1,7 @@
 import os
 from enum import Enum
-from typing import List, TYPE_CHECKING, NamedTuple, Callable
+from pathlib import Path
+from typing import List, TYPE_CHECKING, NamedTuple, Callable, Union
 
 from mcdreforged.minecraft.rtext.style import RAction
 from mcdreforged.minecraft.rtext.text import RTextList, RTextBase, RText
@@ -12,16 +13,16 @@ if TYPE_CHECKING:
 
 class SingleOperationResult:
 	def __init__(self):
-		self.success_list = []  # type: List['AbstractPlugin']
-		self.failed_list = []  # type: List['AbstractPlugin' or str]
+		self.success_list: List['AbstractPlugin'] = []
+		self.failed_list: List[Union['AbstractPlugin', Path]] = []
 
 	def succeed(self, plugin: 'AbstractPlugin'):
 		self.success_list.append(plugin)
 
-	def fail(self, plugin: 'AbstractPlugin' or str):
+	def fail(self, plugin: Union['AbstractPlugin', Path]):
 		self.failed_list.append(plugin)
 
-	def record(self, plugin: 'AbstractPlugin' or str, result: bool):
+	def record(self, plugin: Union['AbstractPlugin', Path], result: bool):
 		if result:
 			self.succeed(plugin)
 		else:

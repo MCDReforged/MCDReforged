@@ -70,7 +70,7 @@ class PluginThread(threading.Thread):
 
 
 class PluginThreadPool:
-	def __init__(self, mcdr_server: 'MCDReforgedServer', max_thread):
+	def __init__(self, mcdr_server: 'MCDReforgedServer', max_thread: int):
 		self.mcdr_server = mcdr_server
 		self.threads = []
 		self.threads_write_lock = threading.Lock()

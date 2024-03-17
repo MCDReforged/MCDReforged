@@ -1,9 +1,13 @@
+import contextlib
 import os
 import sys
 import time
 from abc import ABC
+from pathlib import Path
 from types import ModuleType
 from typing import TYPE_CHECKING, Optional, List, Tuple, Any
+
+from typing_extensions import override
 
 from mcdreforged.plugin.meta.metadata import Metadata
 from mcdreforged.plugin.plugin_event import MCDRPluginEvents, EventListener, PluginEvent
@@ -19,22 +23,33 @@ MODULE_TYPE = Any
 
 
 class RegularPlugin(AbstractPlugin, ABC):
-	def __init__(self, plugin_manager: 'PluginManager', file_path: str):
-		super().__init__(plugin_manager, file_path)
-		self.file_name = os.path.basename(file_path)
-		self.file_modify_time = None  # type: Optional[int]
-		self.__metadata = None  # type: Optional[Metadata]
-		self.entry_module_instance = None  # type: MODULE_TYPE
-		self.old_entry_module_instance = None  # type: MODULE_TYPE
-		self.decorated_event_listeners = []  # type: List[Tuple[PluginEvent, EventListener]]
+	"""
+	User-provided plugin with associated file
+	"""
+	def __init__(self, plugin_manager: 'PluginManager', file_path: Path):
+		super().__init__(plugin_manager)
+		self.file_path: Path = file_path
+		self.file_name: str = file_path.name
+		self.file_modify_time: Optional[int] = None
+		self.__metadata: Optional[Metadata] = None
+		self.entry_module_instance: MODULE_TYPE = None
+		self.old_entry_module_instance: MODULE_TYPE = None
+		self.decorated_event_listeners: List[Tuple[PluginEvent, EventListener]] = []
+
+	@property
+	def plugin_path(self) -> Path:
+		# XXX: legacy usage, yeet
+		return self.file_path
 
 	def _reset(self):
 		self.file_modify_time = self.calculate_file_modify_time()
 		self.plugin_registry.clear()
 
+	@override
 	def is_regular(self) -> bool:
 		return True
 
+	@override
 	def get_metadata(self) -> Metadata:
 		if self.__metadata is None:
 			raise IllegalCallError('Meta data of plugin {} is not loaded. Plugin state = {}'.format(repr(self), self.state))
@@ -42,9 +57,6 @@ class RegularPlugin(AbstractPlugin, ABC):
 
 	def _set_metadata(self, metadata: Metadata):
 		self.__metadata = metadata
-
-	def get_fallback_metadata_id(self) -> str:
-		raise NotImplementedError()
 
 	@property
 	def __class_name(self):
@@ -93,11 +105,13 @@ class RegularPlugin(AbstractPlugin, ABC):
 		self._on_load()
 		self.set_state(PluginState.LOADED)
 
+	@override
 	def load(self):
 		self.assert_state({PluginState.UNINITIALIZED})
 		self.__do_load()
 		self.mcdr_server.logger.debug('{} {} loaded from {}, file modify time = {}'.format(self.__class_name, self, self.plugin_path, self.pretty_file_modify_time), option=DebugOption.PLUGIN)
 
+	@override
 	def ready(self):
 		"""
 		Get ready, and register default things (listeners etc.)
@@ -106,16 +120,19 @@ class RegularPlugin(AbstractPlugin, ABC):
 		self._on_ready()
 		self.set_state(PluginState.READY)
 
+	@override
 	def reload(self):
 		self.assert_state({PluginState.UNLOADING})
 		self.__do_load()
 		self.mcdr_server.logger.debug('{} {} reloaded, file modify time = {}'.format(self.__class_name, self, self.pretty_file_modify_time))
 
+	@override
 	def unload(self):
 		self.assert_state({PluginState.LOADING, PluginState.LOADED, PluginState.READY})
 		self._on_unload()
 		self.set_state(PluginState.UNLOADING)
 
+	@override
 	def remove(self):
 		self.assert_state({PluginState.UNLOADING})
 		self.set_state(PluginState.UNLOADED)
@@ -134,6 +151,7 @@ class RegularPlugin(AbstractPlugin, ABC):
 			self.register_event_listener(event, listener)
 		self.decorated_event_listeners.clear()
 
+	@override
 	def register_event_listener(self, event: PluginEvent, listener: EventListener):
 		# Special handling event listener registered with @event_listener decorator
 		# Store and register them in method _register_default_listeners
@@ -161,8 +179,6 @@ class RegularPlugin(AbstractPlugin, ABC):
 
 	def calculate_file_modify_time(self):
 		if self.plugin_exists():
-			try:
+			with contextlib.suppress(OSError):
 				return os.stat(self.plugin_path).st_mtime_ns
-			except Exception:
-				pass
 		return None

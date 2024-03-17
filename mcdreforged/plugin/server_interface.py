@@ -4,6 +4,7 @@ import logging
 import os
 import threading
 import typing
+from pathlib import Path
 from typing import Callable, TYPE_CHECKING, Tuple, Any, Union, Optional, List, IO, Dict, Type, TypeVar
 
 import psutil
@@ -31,6 +32,7 @@ from mcdreforged.utils import misc_util, file_util, class_util
 from mcdreforged.utils.exception import IllegalCallError
 from mcdreforged.utils.future import Future
 from mcdreforged.utils.logger import MCDReforgedLogger, DebugOption
+from mcdreforged.utils.path_like import PathLike
 from mcdreforged.utils.serializer import Serializable
 from mcdreforged.utils.types import MessageText, TranslationKeyDictRich, TranslationKeyDictNested
 
@@ -583,7 +585,7 @@ class ServerInterface:
 		result = []
 		for plugin_directory in self._plugin_manager.plugin_directories:
 			result.extend(file_util.list_all(plugin_directory))
-		return result
+		return list(map(str, result))
 
 	def get_unloaded_plugin_list(self) -> List[str]:
 		"""
@@ -591,10 +593,9 @@ class ServerInterface:
 
 		.. versionadded:: v2.3.0
 		"""
-		return list(filter(
-			lambda file_path: not self._plugin_manager.contains_plugin_file(file_path) and plugin_factory.is_plugin(file_path),
-			self.__get_files_in_plugin_directories()
-		))
+		def predicate(file_path: str) -> bool:
+			return not self._plugin_manager.contains_plugin_file(file_path) and plugin_factory.is_plugin(file_path)
+		return list(filter(predicate, self.__get_files_in_plugin_directories()))
 
 	def get_disabled_plugin_list(self) -> List[str]:
 		"""
@@ -602,10 +603,9 @@ class ServerInterface:
 
 		.. versionadded:: v2.3.0
 		"""
-		return list(filter(
-			lambda file_path: plugin_factory.is_disabled_plugin(file_path),
-			self.__get_files_in_plugin_directories()
-		))
+		def predicate(file_path: str) -> bool:
+			return plugin_factory.is_disabled_plugin(file_path)
+		return list(filter(predicate, self.__get_files_in_plugin_directories()))
 
 	def get_all_metadata(self) -> Dict[str, Metadata]:
 		"""
@@ -622,20 +622,30 @@ class ServerInterface:
 
 	# Notes: All plugin manipulation will trigger a dependency check, which might cause unwanted plugin operations
 
-	def __not_loaded_regular_plugin_manipulate(self, plugin_file_path: str, handler: Callable[['PluginManager'], Callable[[str], Future[PluginOperationResult]]]) -> bool:
+	def __not_loaded_regular_plugin_manipulate(
+			self,
+			plugin_file_path: PathLike,
+			handler: Callable[['PluginManager'], Callable[[Path], Future[PluginOperationResult]]]
+	) -> bool:
 		"""
 		Manipulate a not loaded regular plugin from a given file path
 		:param plugin_file_path: The path to the not loaded new plugin
 		:param handler: What you want to do with Plugin Manager to the given file path
 		:return: If success
 		"""
+		plugin_file_path = Path(plugin_file_path)
 		future: Future[PluginOperationResult] = handler(self._plugin_manager)(plugin_file_path)
 		if future.is_finished():
 			return future.get().get_if_success(PluginResultType.LOAD)  # the operations are always loading a plugin
 		else:
 			return False  # TODO handle unknown result caused by chained sync plugin operation
 
-	def __existed_regular_plugin_manipulate(self, plugin_id: str, handler: Callable[['PluginManager'], Callable[['RegularPlugin'], Future[PluginOperationResult]]], result_type: PluginResultType) -> Optional[bool]:
+	def __existed_regular_plugin_manipulate(
+			self,
+			plugin_id: str,
+			handler: Callable[['PluginManager'], Callable[['RegularPlugin'], Future[PluginOperationResult]]],
+			result_type: PluginResultType
+	) -> Optional[bool]:
 		"""
 		Manipulate a loaded regular plugin from a given plugin id
 		:param plugin_id: The plugin id of the plugin you want to manipulate
@@ -661,7 +671,9 @@ class ServerInterface:
 		:param plugin_file_path: The file path of the plugin to load. Example: "plugins/my_plugin.py"
 		:return: If the plugin gets loaded successfully
 		"""
-		return self.__not_loaded_regular_plugin_manipulate(plugin_file_path, lambda mgr: mgr.load_plugin)
+		def get_handler(mgr: 'PluginManager'):
+			return mgr.load_plugin
+		return self.__not_loaded_regular_plugin_manipulate(plugin_file_path, get_handler)
 
 	def enable_plugin(self, plugin_file_path: str) -> bool:
 		"""
@@ -670,7 +682,9 @@ class ServerInterface:
 		:param plugin_file_path: The file path of the plugin to enable. Example: "plugins/my_plugin.py.disabled"
 		:return: If the plugin gets enabled successfully
 		"""
-		return self.__not_loaded_regular_plugin_manipulate(plugin_file_path, lambda mgr: mgr.enable_plugin)
+		def get_handler(mgr: 'PluginManager'):
+			return mgr.enable_plugin
+		return self.__not_loaded_regular_plugin_manipulate(plugin_file_path, get_handler)
 
 	def reload_plugin(self, plugin_id: str) -> Optional[bool]:
 		"""
@@ -679,7 +693,9 @@ class ServerInterface:
 		:param plugin_id: The id of the plugin to reload. Example: ``"my_plugin"``
 		:return: A bool indicating if the plugin gets reloaded successfully, or None if plugin not found
 		"""
-		return self.__existed_regular_plugin_manipulate(plugin_id, lambda mgr: mgr.reload_plugin, PluginResultType.RELOAD)
+		def get_handler(mgr: 'PluginManager'):
+			return mgr.reload_plugin
+		return self.__existed_regular_plugin_manipulate(plugin_id, get_handler, PluginResultType.RELOAD)
 
 	def unload_plugin(self, plugin_id: str) -> Optional[bool]:
 		"""
@@ -688,7 +704,9 @@ class ServerInterface:
 		:param plugin_id: The id of the plugin to unload. Example: ``"my_plugin"``
 		:return: A bool indicating if the plugin gets unloaded successfully, or None if plugin not found
 		"""
-		return self.__existed_regular_plugin_manipulate(plugin_id, lambda mgr: mgr.unload_plugin, PluginResultType.UNLOAD)
+		def get_handler(mgr: 'PluginManager'):
+			return mgr.unload_plugin
+		return self.__existed_regular_plugin_manipulate(plugin_id, get_handler, PluginResultType.UNLOAD)
 
 	def disable_plugin(self, plugin_id: str) -> Optional[bool]:
 		"""
@@ -697,7 +715,9 @@ class ServerInterface:
 		:param plugin_id: The id of the plugin to disable. Example: ``"my_plugin"``
 		:return: A bool indicating if the plugin gets disabled successfully, or None if plugin not found
 		"""
-		return self.__existed_regular_plugin_manipulate(plugin_id, lambda mgr: mgr.disable_plugin, PluginResultType.UNLOAD)
+		def get_handler(mgr: 'PluginManager'):
+			return mgr.disable_plugin
+		return self.__existed_regular_plugin_manipulate(plugin_id, get_handler, PluginResultType.UNLOAD)
 
 	def refresh_all_plugins(self) -> None:
 		"""
