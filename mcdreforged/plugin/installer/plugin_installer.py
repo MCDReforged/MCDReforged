@@ -2,15 +2,15 @@ import functools
 import operator
 import time
 from pathlib import Path
-from typing import List, Optional
+from typing import Optional, List
 
 from mcdreforged.minecraft.rtext.style import RColor
 from mcdreforged.minecraft.rtext.text import RText
 from mcdreforged.plugin.installer.downloader import ReleaseDownloader
-from mcdreforged.plugin.installer.meta_holder import MetaHolder, CatalogueMetaCache
+from mcdreforged.plugin.installer.meta_holder import CatalogueMetaRegistryHolder
 from mcdreforged.plugin.installer.printer import Table
 from mcdreforged.plugin.installer.replier import Replier
-from mcdreforged.plugin.installer.types import PackageResolution, PluginResolution
+from mcdreforged.plugin.installer.types import MetaRegistry
 from mcdreforged.utils.types import MessageText
 
 
@@ -22,22 +22,19 @@ def is_subsequence(keyword: str, s: str):
 	return idx == len(keyword)
 
 
-class PluginInstaller:
-	DEFAULT_LANGUAGE = 'en_us'
-
-	def __init__(self, replier: Replier, language: str = DEFAULT_LANGUAGE, meta_holder: Optional[MetaHolder] = None):
-		self.language = language
+class PluginCatalogueAccess:
+	def __init__(self, replier: Replier, meta_holder: Optional[CatalogueMetaRegistryHolder] = None):
 		self.replier = replier
 		if meta_holder is None:
-			meta_holder = MetaHolder()
+			meta_holder = CatalogueMetaRegistryHolder()
 		self.meta_holder = meta_holder
 
 	def print(self, message: MessageText):
 		self.replier.reply(message)
 
-	def get_catalogue_meta(self) -> CatalogueMetaCache:
+	def get_catalogue_meta(self) -> MetaRegistry:
 		self.print('Fetching catalogue meta')
-		return self.meta_holder.get()
+		return self.meta_holder.get_registry()
 
 	# ======================= Operations =======================
 
@@ -73,7 +70,7 @@ class PluginInstaller:
 
 			rows.append((score, [
 				plugin_id, plugin.name or na,
-				version, plugin.description.get(self.language, plugin.description.get(self.DEFAULT_LANGUAGE, na))
+				version, plugin.description.get(self.replier.language, plugin.description.get(self.replier.DEFAULT_LANGUAGE, na))
 			]))
 
 		rows.sort(key=operator.itemgetter(0), reverse=True)
@@ -88,6 +85,8 @@ class PluginInstaller:
 		if not target_dir.is_dir():
 			self.print('{} is not a valid directory'.format(target_dir))
 			return 1
+
+		# TODO: resolve dependencies if required
 
 		meta = self.get_catalogue_meta()
 		for plugin_id in plugin_ids:
@@ -109,10 +108,3 @@ class PluginInstaller:
 			downloaded_paths.append(file_path)
 
 		self.print('Downloaded {} plugin{}: {}'.format(len(plugin_ids), 's' if len(plugin_ids) > 0 else '', ', '.join(map(str, plugin_ids))))
-
-	def __create_package_resolution(self, plugin_resolution: PluginResolution) -> PackageResolution:
-		res: PackageResolution = []
-		for plugin_id, version in plugin_resolution.items():
-			r = self.meta_holder.get_release(plugin_id, str(version))
-			res.extend(r.requirements)
-		return res

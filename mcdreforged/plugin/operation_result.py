@@ -27,10 +27,16 @@ class SingleOperationResult:
 		else:
 			self.fail(plugin)
 
-	def has_success(self):
+	def __len__(self) -> int:
+		return len(self.success_list) + len(self.failed_list)
+
+	def is_success_or_empty(self) -> bool:
+		return self.has_success() or len(self) == 0
+
+	def has_success(self) -> bool:
 		return len(self.success_list) > 0
 
-	def has_failed(self):
+	def has_failed(self) -> bool:
 		return len(self.failed_list) > 0
 
 

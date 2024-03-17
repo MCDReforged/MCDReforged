@@ -1,6 +1,7 @@
 import os
 import shlex
 import subprocess
+import sys
 import tempfile
 from argparse import ArgumentParser, Namespace
 from typing import Callable
@@ -9,19 +10,16 @@ from zipfile import ZipFile
 
 from typing_extensions import NoReturn
 
-import sys
 from mcdreforged.constants import plugin_constant
-from mcdreforged.plugin.installer.plugin_installer import PluginInstaller
-from mcdreforged.plugin.installer.replier import NoopReplier, StdoutReplier
+from mcdreforged.plugin.installer.plugin_installer import PluginCatalogueAccess
+from mcdreforged.plugin.installer.replier import NoopReplier, StdoutReplier, Replier
 
 
 def create(parser_factory: Callable[..., ArgumentParser]) -> ArgumentParser:
 	parser = parser_factory(name='pim', help='Plugin Installer for MCDReforged')
 	subparsers = parser.add_subparsers(title='Command', help='Available commands', dest='pim_command')
 
-	subparsers.add_parser('test', help='test command')
-
-	parser_list = subparsers.add_parser('list', help='List plugin from the official plugin catalogue')
+	parser_list = subparsers.add_parser('browse', help='Browse plugins in the official plugin catalogue')
 	parser_list.add_argument('keyword', nargs='?', default=None, help='Search keyword to filter the plugins')
 
 	parser_download = subparsers.add_parser('download', help='Download given plugins. By default, no dependency resolution will be made')
@@ -44,16 +42,13 @@ def __entry(parser: ArgumentParser, args: Namespace) -> int:
 		return 1
 
 	replier = NoopReplier() if args.quiet else StdoutReplier()
-	installer = PluginInstaller(replier)
 
-	if pcmd == 'test':
-		return installer.test_stuffs()
-	elif pcmd == 'list':
-		return installer.list_plugin(keyword=args.keyword)
+	if pcmd == 'browse':
+		return cmd_browse(replier, args.keyword)
 	elif pcmd == 'download':
-		return installer.download_plugin(args.plugin_ids, args.output)
+		return cmd_download(replier, args.plugin_ids, args.output)
 	elif pcmd == 'pipi':
-		pip_install_from_plugins(args.plugin_paths, extra_args=args.args, quiet=args.quiet)
+		cmd_pipi(args.plugin_paths, extra_args=args.args, quiet=args.quiet)
 	else:
 		print('unknown pcmd {!r}'.format(pcmd))
 		return 1
@@ -63,7 +58,19 @@ def entry(parser: ArgumentParser, args: Namespace) -> NoReturn:
 	sys.exit(__entry(parser, args))
 
 
-def pip_install_from_plugins(plugin_paths: List[str], extra_args: Optional[str] = None, *, quiet: bool = False) -> int:
+def cmd_browse(replier: Replier, keyword: str) -> int:
+	installer = PluginCatalogueAccess(replier)
+	installer.list_plugin(keyword)
+	return 0
+
+
+def cmd_download(replier: Replier, plugin_reqs: List[str], output_dir: str) -> int:
+	installer = PluginCatalogueAccess(replier)
+
+	return 0
+
+
+def cmd_pipi(plugin_paths: List[str], extra_args: Optional[str] = None, *, quiet: bool = False) -> int:
 	writeln = print if not quiet else lambda *args_, **kwargs_: None
 
 	# read requirements.txt

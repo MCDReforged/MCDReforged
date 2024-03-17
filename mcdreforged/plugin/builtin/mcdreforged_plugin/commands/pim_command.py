@@ -1,8 +1,13 @@
-import contextlib
+import dataclasses
+import functools
+import logging
 import os
+import re
 import shutil
+import subprocess
+import threading
 from pathlib import Path
-from typing import Optional, List, TYPE_CHECKING, Dict, Set
+from typing import Optional, List, TYPE_CHECKING, Dict, NamedTuple
 
 import resolvelib
 from typing_extensions import override
@@ -12,21 +17,23 @@ from mcdreforged.command.builder.nodes.arguments import Text, QuotableText
 from mcdreforged.command.builder.nodes.basic import Literal
 from mcdreforged.command.builder.nodes.special import CountingLiteral
 from mcdreforged.command.command_source import CommandSource
-from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.sub_command import SubCommand
-from mcdreforged.plugin.installer.dependency_resolver import PluginRequirement, DependencyResolver
+from mcdreforged.constants.core_constant import DEFAULT_LANGUAGE
+from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.sub_command import SubCommand, SubCommandEvent
+from mcdreforged.plugin.installer.dependency_resolver import PluginRequirement, PluginDependencyResolver, PackageRequirementResolver
 from mcdreforged.plugin.installer.downloader import ReleaseDownloader
-from mcdreforged.plugin.installer.meta_holder import MetaHolder
-from mcdreforged.plugin.installer.plugin_installer import PluginInstaller
+from mcdreforged.plugin.installer.meta_holder import AsyncPersistCatalogueMetaRegistryHolder
+from mcdreforged.plugin.installer.plugin_installer import PluginCatalogueAccess
 from mcdreforged.plugin.installer.replier import CommandSourceReplier
-from mcdreforged.plugin.installer.types import MetaCache, PluginData, ReleaseData, ChainMetaCache
-from mcdreforged.plugin.meta.version import VersionRequirement
+from mcdreforged.plugin.installer.types import MetaRegistry, PluginData, ReleaseData, MergedMetaRegistry
+from mcdreforged.plugin.meta.version import VersionRequirement, Version
+from mcdreforged.utils import misc_util
 
 if TYPE_CHECKING:
 	from mcdreforged.plugin.plugin_manager import PluginManager
 	from mcdreforged.plugin.type.plugin import AbstractPlugin
 
 
-class LocalMetaCache(MetaCache):
+class LocalMetaRegistry(MetaRegistry):
 	def __init__(self, plugin_manager: 'PluginManager', cache: bool = True):
 		self.__plugin_manager = plugin_manager
 		self.__do_cache = cache
@@ -42,11 +49,17 @@ class LocalMetaCache(MetaCache):
 		for plugin in self.__plugin_manager.get_all_plugins():
 			meta = plugin.get_metadata()
 			version = str(meta.version)
+			if isinstance(meta.description, str):
+				description = {DEFAULT_LANGUAGE: meta.description}
+			elif isinstance(meta.description, dict):
+				description = meta.description.copy()
+			else:
+				description = {}
 			result[meta.id] = PluginData(
 				id=meta.id,
 				name=meta.name,
 				latest_version=version,
-				description=meta.description,
+				description=description,
 				releases={version: ReleaseData(
 					version=version,
 					dependencies={},
@@ -62,28 +75,92 @@ class LocalMetaCache(MetaCache):
 		return result
 
 
+def as_requirement(plugin: 'AbstractPlugin', op: Optional[str]) -> PluginRequirement:
+	if op is not None:
+		req = op + str(plugin.get_metadata().version)
+	else:
+		req = ''
+	return PluginRequirement(
+		id=plugin.get_id(),
+		requirement=VersionRequirement(req)
+	)
+
+
+def sanitize_filename(filename: str) -> str:
+	return re.sub(r'[\\/*?"<>|:]', '_', filename.strip())
+
+
+@dataclasses.dataclass
+class OperationHolder:
+	lock: threading.Lock = dataclasses.field(default_factory=threading.Lock)
+	thread: threading.Thread = dataclasses.field(default=None)
+
+
+def async_operation(op: OperationHolder, skip_callback: callable, thread_name: str):
+	def wrapper(func):
+		@functools.wraps(func)  # to preserve the origin function information
+		def wrap(*args, **kwargs):
+			acquired = op.lock.acquire(blocking=False)
+			if acquired:
+				def run():
+					try:
+						func(*args, **kwargs)
+					finally:
+						op.operation_thread = None
+						op.lock.release()
+				try:
+					thread = threading.Thread(target=run, name=thread_name)
+					thread.start()
+					op.operation_thread = thread
+					return thread
+				except BaseException:
+					op.lock.release()
+					raise
+			else:
+				skip_callback(*args, **kwargs)
+
+		misc_util.copy_signature(wrap, func)
+		return wrap
+
+	return wrapper
+
+
 class PimCommand(SubCommand):
+	CONFIRM_WAIT_TIMEOUT = 60  # seconds
+	current_operation = OperationHolder()
+
 	def __init__(self, mcdr_plugin):
 		super().__init__(mcdr_plugin)
-		self.__meta_holder = MetaHolder()
+		self.__meta_holder = AsyncPersistCatalogueMetaRegistryHolder(
+			self.mcdr_server.logger,
+			Path(self.server_interface.get_data_folder()) / 'catalogue_meta_cache.json.xz'
+		)
+		self.__installation_source: Optional[CommandSource] = None
+		self.__installation_confirm_event = threading.Event()
+		self.__installation_abort_event = threading.Event()
 
+	@override
 	def get_command_node(self) -> Literal:
 		def install_node() -> Literal:
-			def plugin_id_node():
-				# TODO
-				return Text('plugin_id').configure(accumulate=True).suggests(lambda: [])
+			def suggest_plugin_id():
+				keys = set(self.__meta_holder.get_registry().plugins.keys())
+				keys.add('*')
+				return keys
 
 			node = Literal({'i', 'install'})
 			node.runs(self.cmd_install_plugins)
-			node.then(plugin_id_node().redirects(node))
+			node.then(
+				Text('plugin_id').configure(accumulate=True).
+				suggests(suggest_plugin_id).
+				redirects(node)
+			)
 			node.then(
 				Literal({'-t', '--target'}).
 				then(QuotableText('target').redirects(node))
 			)
-			node.then(
-				CountingLiteral({'-u', '-U', '--upgrade'}, 'upgrade').
-				redirects(node)
-			)
+			node.then(CountingLiteral({'-u', '--update'}, 'update').redirects(node))
+			node.then(CountingLiteral('--dry-run', 'dry_run').redirects(node))
+			node.then(CountingLiteral({'-y', '--yes'}, 'skip_confirm').redirects(node))
 			return node
 
 		def freeze_node() -> Literal:
@@ -96,33 +173,123 @@ class PimCommand(SubCommand):
 		def check_constraints_node() -> Literal:
 			return Literal('check').runs(self.cmd_check_constraints)
 
-		def list_node() -> Literal:
-			node = Literal('list')
-			node.runs(self.cmd_list_catalogue)
-			node.then(QuotableText('keyword').runs(self.cmd_list_catalogue))
+		def browse_node() -> Literal:
+			node = Literal('browse')
+			node.runs(self.cmd_browse_catalogue)
+			node.then(QuotableText('keyword').runs(self.cmd_browse_catalogue))
 			return node
 
 		def check_update_node() -> Literal:
-			return Literal({'cu', 'check_update'})
+			return Literal({'cu', 'check_update'}).runs(self.cmd_check_update)
 
 		root = Literal('pim')
-		root.then(install_node())
-		root.then(freeze_node())
+		root.then(browse_node())
 		root.then(check_constraints_node())
 		root.then(check_update_node())
-		root.then(list_node())
+		root.then(freeze_node())
+		root.then(install_node())
 		return root
+
+	@override
+	def on_load(self):
+		self.__meta_holder.init()
+
+	@override
+	def on_mcdr_stop(self):
+		self.__installation_abort_event.set()
+		self.__installation_confirm_event.set()
+		thread = self.current_operation.thread
+		if thread is not None:
+			thread.join(timeout=self.CONFIRM_WAIT_TIMEOUT + 1)
+
+	@override
+	def on_event(self, source: Optional[CommandSource], event: SubCommandEvent) -> bool:
+		sis = self.__installation_source
+		if event == SubCommandEvent.confirm:
+			if sis is not None and source == sis:
+				self.__installation_confirm_event.set()
+				return True
+		elif event == SubCommandEvent.abort:
+			if sis is not None and source is not None and source.get_permission_level() >= sis.get_permission_level():
+				self.__installation_abort_event.set()
+				self.__installation_confirm_event.set()
+				return True
+		return False
+
+	@property
+	def logger(self) -> logging.Logger:
+		return self.server_interface.logger
 
 	@property
 	def plugin_manager(self) -> 'PluginManager':
 		return self.mcdr_plugin.plugin_manager
 
+	def get_cata_meta(self, source: CommandSource) -> MetaRegistry:
+		def fetch_callback():
+			source.reply('Fetching plugin catalogue meta')
+		return self.__meta_holder.get_registry(fetch_callback=fetch_callback)
+
 	def __create_installer(self, source: CommandSource):
-		return PluginInstaller(
+		return PluginCatalogueAccess(
 			CommandSourceReplier(source),
-			language=source.get_preference().language,
 			meta_holder=self.__meta_holder,
 		)
+
+	def __handle_duplicated_input(self, source: CommandSource, context: CommandContext):
+		source.reply('Dont Spam')
+
+	plugin_installer_guard = async_operation(op=current_operation, skip_callback=__handle_duplicated_input, thread_name='PluginInstaller')
+
+	@plugin_installer_guard
+	def cmd_browse_catalogue(self, source: CommandSource, context: CommandContext):
+		keyword = context.get('keyword')
+		if keyword is not None:
+			source.reply('Listing catalogue with keyword {!r}'.format(keyword))
+		else:
+			source.reply('Listing catalogue')
+		plugin_installer = self.__create_installer(source)
+		plugin_installer.list_plugin(keyword)
+
+	@plugin_installer_guard
+	def cmd_check_constraints(self, source: CommandSource, context: CommandContext):
+		plugin_requirements = list(map(
+			functools.partial(as_requirement, op='=='),
+			self.plugin_manager.get_all_plugins()
+		))
+		resolver = PluginDependencyResolver(LocalMetaRegistry(self.plugin_manager))
+		ret = resolver.resolve(plugin_requirements)
+		if isinstance(ret, Exception):
+			source.reply('failed: {}'.format(ret))
+		else:
+			source.reply('success')
+
+	@plugin_installer_guard
+	def cmd_check_update(self, source: CommandSource, context: CommandContext):
+		plugin_requirements = list(map(
+			functools.partial(as_requirement, op='>='),
+			self.plugin_manager.get_all_plugins()
+		))
+		resolver = PluginDependencyResolver(MergedMetaRegistry(self.get_cata_meta(source), LocalMetaRegistry(self.plugin_manager)))
+		resolution = resolver.resolve(plugin_requirements)
+		if isinstance(resolution, Exception):
+			source.reply('failed: {}'.format(resolution))
+			return
+
+		update_able_plugins = []
+		for plugin_id, version in resolution.items():
+			plugin = self.plugin_manager.get_plugin_from_id(plugin_id)
+			old_version = plugin.get_metadata().version
+			if old_version != version:
+				from mcdreforged.plugin.type.packed_plugin import PackedPlugin
+				update_able_plugins.append((plugin_id, old_version, version, isinstance(plugin, PackedPlugin)))
+
+		if len(update_able_plugins) == 0:
+			source.reply('No updates found for {} installed plugins'.format(len(plugin_requirements)))
+			return
+
+		source.reply('Found {} plugins with update'.format(len(update_able_plugins)))
+		for plugin_id, old_version, new_version, is_packed_plugin in update_able_plugins:
+			source.reply('  {} {} -> {} (can: {})'.format(plugin_id, old_version, new_version, is_packed_plugin))
 
 	def cmd_freeze(self, source: CommandSource, context: CommandContext):
 		if context.get('all'):
@@ -149,19 +316,9 @@ class PimCommand(SubCommand):
 			for line in lines:
 				source.reply(line)
 
-	def cmd_list_catalogue(self, source: CommandSource, context: CommandContext):
-		keyword = context.get('keyword')
-		if keyword is not None:
-			source.reply('Listing catalogue with keyword {!r}'.format(keyword))
-		else:
-			source.reply('Listing catalogue')
-		plugin_installer = self.__create_installer(source)
-		plugin_installer.list_plugin(keyword)
-
-	def cmd_check_constraints(self, source: CommandSource, context: CommandContext):
-		pass
-
+	@plugin_installer_guard
 	def cmd_install_plugins(self, source: CommandSource, context: CommandContext):
+		# ------------------- Prepare -------------------
 		plugin_ids: Optional[List[str]] = context.get('plugin_id')
 		if not plugin_ids:
 			source.reply('Please give some plugin id')
@@ -174,21 +331,27 @@ class PimCommand(SubCommand):
 			source.reply('target is required')
 			return
 		default_target_path = Path(target)
-		do_upgrade = context.get('upgrade', 0) > 0
+		do_update = context.get('update', 0) > 0
+		dry_run = context.get('dry_run', 0) > 0
+		skip_confirm = context.get('skip_confirm', 0) > 0
 
-		source.reply('Plugins to installed: {}'.format(', '.join(plugin_ids)))
-		source.reply('Target directory for installation: {!r}'.format(target))
-
-		plugin_requirements: List[PluginRequirement] = []
+		# ------------------- Verify and Collect -------------------
 
 		def add_requirement(plg: 'AbstractPlugin', op: str):
-			plugin_requirements.append(PluginRequirement(
-				id=plg.get_id(),
-				requirement=VersionRequirement(op + str(plg.get_metadata().version))
-			))
+			plugin_requirements.append(as_requirement(plg, op))
+		plugin_requirements: List[PluginRequirement] = []
 
 		try:
-			input_requirements = list(map(PluginRequirement.of, plugin_ids))
+			input_requirements: List[PluginRequirement] = []
+			for input_requirement_str in plugin_ids:
+				if input_requirement_str != '*':
+					input_requirements.append(PluginRequirement.of(input_requirement_str))
+			if '*' in plugin_ids:
+				from mcdreforged.plugin.type.packed_plugin import PackedPlugin
+				for plugin in self.plugin_manager.get_regular_plugins():
+					if isinstance(plugin, PackedPlugin):
+						input_requirements.append(as_requirement(plugin, None))
+			input_requirements = misc_util.unique_list(input_requirements)
 		except ValueError as e:
 			source.reply('req parse error: {}'.format(e))
 			return
@@ -203,7 +366,7 @@ class PimCommand(SubCommand):
 					plugin_requirements.append(req)
 				else:
 					# pin unless upgrade
-					if do_upgrade:
+					if do_update:
 						add_requirement(plugin, '>=')
 					else:
 						add_requirement(plugin, '==')
@@ -214,15 +377,20 @@ class PimCommand(SubCommand):
 				# pin for unselected plugins
 				add_requirement(plugin, '==')
 
+		self.log_debug('Generated plugin requirements:')
 		for req in plugin_requirements:
-			source.reply('REQ: ' + str(req))
+			self.log_debug('{}'.format(req))
 
-		cata_meta = self.__meta_holder.get()
-		resolver = DependencyResolver(ChainMetaCache(cata_meta,LocalMetaCache(self.plugin_manager)))
-		ret = resolver.resolve(plugin_requirements)
+		# ------------------- Resolve -------------------
 
-		if isinstance(ret, Exception):
-			err = ret
+		source.reply('Resolving dependencies')
+
+		cata_meta = self.get_cata_meta(source)
+		plugin_resolver = PluginDependencyResolver(MergedMetaRegistry(cata_meta, LocalMetaRegistry(self.plugin_manager)))
+		result = plugin_resolver.resolve(plugin_requirements)
+
+		if isinstance(result, Exception):
+			err = result
 			if isinstance(err, resolvelib.ResolutionImpossible):
 				source.reply('ResolutionImpossible!')
 				for cause in err.causes:
@@ -231,80 +399,171 @@ class PimCommand(SubCommand):
 				source.reply('Resolution error: {}'.format(err))
 			return
 
-		resolution = ret
+		resolution = result
+		self.log_debug('Output plugin resolution:')
 		for plugin_id, version in resolution.items():
-			source.reply('RES: {} {}'.format(plugin_id, version))
+			self.log_debug('{} {}'.format(plugin_id, version))
 
-		# collect
-		to_install: Dict[str, ReleaseData] = {}
+		class ToInstallData(NamedTuple):
+			id: str
+			version: Version
+			old_version: Optional[str]
+			release: ReleaseData
+
+		# collect to_install
+		to_install: Dict[str, ToInstallData] = {}
+		package_requirements: List[str] = []
 		for plugin_id, version in resolution.items():
 			plugin = self.plugin_manager.get_plugin_from_id(plugin_id)
 			if plugin is not None:
-				old_ver = plugin.get_metadata().version
+				old_version = plugin.get_metadata().version
 			else:
-				old_ver = None
-			if old_ver != version:
-				source.reply('INS: {} {} -> {}'.format(plugin_id, old_ver, version))
+				old_version = None
+			if old_version != version:
+				from mcdreforged.plugin.type.packed_plugin import PackedPlugin
+				if plugin is not None and not isinstance(plugin, PackedPlugin):
+					source.reply('Existing plugin {} is {} and cannot be reinstalled. Only packed plugin is supported'.format(plugin_id, type(plugin).__name__))
+					return
 				try:
-					to_install[plugin_id] = cata_meta.plugins[plugin_id].releases[str(version)]
+					release = cata_meta.plugins[plugin_id].releases[str(version)]
 				except KeyError:
-					# TODO: proper error dump
 					raise AssertionError('unexpected to-install plugin {} version {}'.format(plugin_id, version))
+				to_install[plugin_id] = ToInstallData(
+					id=plugin_id,
+					version=version,
+					old_version=old_version,
+					release=release,
+				)
+				package_requirements.extend(release.requirements)
 
 		if len(to_install) == 0:
 			source.reply('Nothing is needed to be installed')
 			return
 
-		for plugin_id in to_install.keys():
-			plugin = self.plugin_manager.get_plugin_from_id(plugin_id)
-			from mcdreforged.plugin.type.packed_plugin import PackedPlugin
-			if not isinstance(plugin, PackedPlugin):
-				source.reply('Existing plugin {} is {} and cannot be reinstalled. Only packed plugin is supported'.format(plugin_id, type(plugin).__name__))
+		add_cnt, change_cnt = 0, 0
+		for data in to_install.values():
+			if data.old_version is not None:
+				change_cnt += 1
+			else:
+				add_cnt += 1
+
+		source.reply('Plugins to install (new {}, change {}, total {})'.format(add_cnt, change_cnt, len(to_install)))
+		for plugin_id, data in to_install.items():
+			source.reply('  {} {} -> {}'.format(plugin_id, data.old_version, data.version))
+		if len(package_requirements) > 0:
+			source.reply('Python packages to install')
+			for req in sorted(package_requirements):
+				source.reply('  {}'.format(req))
+
+		package_resolver = PackageRequirementResolver(package_requirements)
+		try:
+			output = package_resolver.check()
+		except subprocess.CalledProcessError as e:
+			source.reply('Python package dependencies resolution error')
+			for line in e.stdout.splitlines():
+				source.reply('    {}'.format(line))
+			return
+		else:
+			for line in (output or '').splitlines():
+				self.log_debug('pip output: {}'.format(line))
+
+		# ------------------- Install -------------------
+		dry_run_suffix = ' (dry-run)' if dry_run else ''
+		if not skip_confirm:
+			self.__installation_source = source
+			self.__installation_abort_event.clear()
+			self.__installation_confirm_event.clear()
+			source.reply('Entry `!!MCDR confirm` to confirm installation, or `!!MCDR abort` to abort' + dry_run_suffix)
+			ok = self.__installation_confirm_event.wait(self.CONFIRM_WAIT_TIMEOUT)
+			self.__installation_source = None
+			if self.__installation_abort_event.is_set():
+				source.reply('Plugin installation abort')
 				return
-		# TODO: confirm
+			if not ok:
+				source.reply('Plugin installation confirmation timed out')
+				return
 
 		# download
 		download_temp_dir = Path(self.server_interface.get_data_folder()) / 'pim_{}'.format(os.getpid())  # todo: better dir name
-		if download_temp_dir.is_dir():
+		if not dry_run and download_temp_dir.is_dir():
 			shutil.rmtree(download_temp_dir)
-		path_mapping: Dict[str, Path] = {}
-		existing_names: Set[str] = set()
-		with contextlib.ExitStack() as es:
-			def clean_up():
-				if download_temp_dir.is_dir():
-					shutil.rmtree(download_temp_dir)
-			es.callback(clean_up)
-			# TODO: rollback-able
+		downloaded_files: Dict[str, Path] = {}
+		trashbin_path = download_temp_dir / '_trashbin'
+		trashbin_files: Dict[Path, Path] = {}  # trashbin path -> origin path
+		newly_added_files: List[Path] = []
+		try:
+			source.reply('Downloading {} plugins'.format(len(to_install)))
+			for plugin_id, data in to_install.items():
+				download_temp_file = download_temp_dir / '{}.tmp'.format(plugin_id)
+				downloaded_files[plugin_id] = download_temp_file
+				source.reply('Downloading {}@{}: {!r}'.format(plugin_id, data.version, data.release.file_name) + dry_run_suffix)
+				if not dry_run:
+					download_temp_file.parent.mkdir(parents=True, exist_ok=True)
+					ReleaseDownloader(data.release, download_temp_file, CommandSourceReplier(source)).download()
 
-			for plugin_id, release in to_install.items():
-				file_name = release.file_name  # TODO: sanitize file name
-				if file_name in existing_names:
-					raise ValueError()  # TODO: rename
-				existing_names.add(file_name)
-				temp_path = download_temp_dir / file_name
-				path_mapping[plugin_id] = temp_path
-				source.reply('Downloading {}@{}'.format(plugin_id, release.version))
-				ReleaseDownloader(release, temp_path, CommandSourceReplier(source)).download()
+			if len(package_requirements) > 0:
+				source.reply('Installing required python packages'.format(len(to_install)))
+				if dry_run:
+					source.reply('Installed {}'.format(package_resolver.package_requirements) + dry_run_suffix)
+				else:
+					try:
+						package_resolver.install()
+					except subprocess.CalledProcessError as e:
+						source.reply('Python package installation error: {}'.format(e))
+						self.server_interface.logger.exception('Python package installation error', e)
+						return
 
 			# apply
-			for plugin_id, release in to_install.items():
+			to_load_paths: List[str] = []
+			to_unload_ids: List[str] = []
+			for plugin_id, data in to_install.items():
 				plugin = self.plugin_manager.get_plugin_from_id(plugin_id)
 				if plugin is not None:
 					path = Path(plugin.plugin_path)
 					target_dir = path.parent
-					source.reply('!! removing {}@{} at {}'.format(plugin_id, plugin.get_metadata().version, path))
-					path.unlink(missing_ok=True)
+					trash_path = trashbin_path / '{}.tmp'.format(plugin_id)
+					if not dry_run:
+						trashbin_files[trash_path] = path
+						trash_path.parent.mkdir(parents=True, exist_ok=True)
+						shutil.move(path, trash_path)
 				else:
 					target_dir = default_target_path
 
-				src = path_mapping[plugin_id]
-				dst = target_dir / src.name  # TODO: fix file collision
-				source.reply('Installing {}@{} to {}'.format(plugin_id, release.version, dst))
-				shutil.move(src, dst)
+				file_name = sanitize_filename(data.release.file_name)
+				src = downloaded_files[plugin_id]
+				dst = target_dir / file_name
+				if dst.is_file():
+					for i in range(1000):
+						parts = file_name.rsplit('.', 1)
+						parts[0] += '_{}'.format(i + 1)
+						dst = target_dir / '.'.join(parts)
+				source.reply('Installing {}@{} to {}'.format(plugin_id, data.version, dst) + dry_run_suffix)
+				if not dry_run:
+					newly_added_files.append(dst)
+					shutil.move(src, dst)
+
+				to_load_paths.append(str(dst))
+				if plugin is not None:
+					to_unload_ids.append(plugin_id)
 
 			# reload
-			# TODO: add api: batch_manipulate_plugins
-			source.reply('Reloading MCDR')
-			self.server_interface.refresh_changed_plugins()
+			source.reply('Reloading MCDR' + dry_run_suffix)
+			if not dry_run:
+				self.server_interface.manipulate_plugins(unload=to_unload_ids, load=to_load_paths)
 			source.reply('done')
+		except Exception as e:
+			self.logger.error('File operation error ({}), performing rollback'.format(e))
+			try:
+				for new_file in newly_added_files:
+					self.logger.warning('(rollback) Deleting new file {}'.format(new_file))
+					new_file.unlink(missing_ok=True)
+				for trash_path, origin_path in trashbin_files.items():
+					self.logger.warning('(rollback) Restoring old plugin {}'.format(origin_path))
+					shutil.move(trash_path, origin_path)
+			except Exception:
+				self.logger.exception('Rollback failed')
+			raise
+		finally:
+			if download_temp_dir.is_dir():
+				shutil.rmtree(download_temp_dir)
 

@@ -1,13 +1,14 @@
+import dataclasses
 import re
 import subprocess
+import sys
 from typing import List, NamedTuple, Union, Mapping, Iterator, Iterable, Sequence, Optional, Dict
 
 import resolvelib
 from resolvelib.resolvers import RequirementInformation
 
-import sys
-from mcdreforged.plugin.installer.meta_holder import MetaCache
-from mcdreforged.plugin.installer.types import PluginId, PluginResolution, PackageResolution
+from mcdreforged.plugin.installer.meta_holder import MetaRegistry
+from mcdreforged.plugin.installer.types import PluginId, PluginResolution, PackageRequirements
 from mcdreforged.plugin.meta.version import VersionRequirement, Version
 
 
@@ -36,13 +37,15 @@ class PluginCandidate(NamedTuple):
 		return '{}@{}'.format(self.id, self.version)
 
 
-class PluginVersionInfo(NamedTuple):
+@dataclasses.dataclass(frozen=True)
+class PluginVersionInfo:
 	version: Version
 	plugin_requirements: Dict[PluginId, VersionRequirement]
-	package_requirements: PackageResolution
+	package_requirements: PackageRequirements
 
 
-class PluginMeta(NamedTuple):
+@dataclasses.dataclass(frozen=True)
+class PluginMeta:
 	id: PluginId
 	versions: Dict[Version, PluginVersionInfo]  # order: new -> old
 
@@ -83,8 +86,8 @@ class PluginMetaProvider(resolvelib.AbstractProvider):
 			identifier: KT,
 			resolutions: Mapping[KT, CT],
 			candidates: Mapping[KT, Iterator[CT]],
-			information: Mapping[KT, Iterator[RequirementInformation[RT, CT]]],
-			backtrack_causes: Sequence[RequirementInformation[RT, CT]],
+			information: Mapping[KT, Iterator['RequirementInformation[RT, CT]']],
+			backtrack_causes: Sequence['RequirementInformation[RT, CT]'],
 	):
 		return 0
 
@@ -125,27 +128,28 @@ class PluginMetaProvider(resolvelib.AbstractProvider):
 		return dependencies
 
 
-def pip_check(package_requirements: List[str]) -> bool:
-	if len(package_requirements) == 0:
-		return True
-	cmd = [
-		sys.executable,
-		'-m', 'pip', 'install',
-		'--dry-run',
-		# '--report', '-',
-		'--quiet',
-	]
-	cmd.extend(package_requirements)
-	try:
-		subprocess.check_output(cmd)
-	except subprocess.CalledProcessError as e:
-		return False
-	return True
+class DependencyResolutionFailure:
+	pass
 
 
-class DependencyResolver:
-	def __init__(self, meta_cache: MetaCache):
-		self.plugin_metas: PluginMetas = {}
+class DependencyResolutionImpossible(DependencyResolutionFailure):
+	def __init__(self, e: resolvelib.ResolutionImpossible):
+		self.cause = e.causes
+
+
+class DependencyResolutionError(DependencyResolutionFailure):
+	def __init__(self, e: resolvelib.ResolutionError):
+		self.message = str(e)
+
+
+class ValidatePythonPackageFailed(DependencyResolutionFailure):
+	def __init__(self, package_requirements: PackageRequirements):
+		self.package_requirements = package_requirements
+
+
+class PluginDependencyResolver:
+	def __init__(self, meta_cache: MetaRegistry):
+		self.__plugin_metas: PluginMetas = {}
 		for plugin_id, plugin in meta_cache.plugins.items():
 			meta = PluginMeta(id=plugin_id, versions={})
 			for version_str, release in plugin.releases.items():
@@ -155,21 +159,57 @@ class DependencyResolver:
 					plugin_requirements={pid: VersionRequirement(vr) for pid, vr in release.dependencies.items()},
 					package_requirements=release.requirements,
 				)
-			self.plugin_metas[plugin_id] = meta
+			self.__plugin_metas[plugin_id] = meta
 
-	def resolve(self, requirements: List[PluginRequirement], reporter: Optional[resolvelib.BaseReporter] = None) -> Union[PluginResolution, resolvelib.ResolutionError]:
+	def resolve(self, requirements: List[PluginRequirement], reporter: Optional[resolvelib.BaseReporter] = None) -> Union[PluginResolution, DependencyResolutionFailure]:
 		if reporter is None:
 			reporter = resolvelib.BaseReporter()
-		provider = PluginMetaProvider(self.plugin_metas)
+		provider = PluginMetaProvider(self.__plugin_metas)
 		resolver = resolvelib.Resolver(provider, reporter)
 
 		try:
 			result = resolver.resolve(requirements, max_rounds=10000)
+		except resolvelib.ResolutionImpossible as e:
+			return DependencyResolutionImpossible(e)
 		except resolvelib.ResolutionError as e:
+			return DependencyResolutionError(e)
+
+		resolution: PluginResolution = {}
+		for pid, pc in result.mapping.items():
+			resolution[pid] = pc.version
+
+		return resolution
+
+
+class PackageRequirementResolver:
+	def __init__(self, package_requirements: PackageRequirements):
+		self.package_requirements = package_requirements
+
+	def check(self, *, extra_args: Iterable[str] = ()) -> Union[Optional[str], subprocess.CalledProcessError]:
+		if len(self.package_requirements) == 0:
+			return None
+		cmd = [
+			sys.executable,
+			'-X', 'utf8',
+			'-m', 'pip', 'install',
+			'--dry-run',
+			'--disable-pip-version-check',
+			*extra_args,
+			*self.package_requirements,
+		]
+		try:
+			return subprocess.check_output(cmd, stderr=subprocess.STDOUT).decode('utf8')
+		except subprocess.CalledProcessError as e:
 			return e
-		else:
-			resolution: PluginResolution = {}
-			for pid, pc in result.mapping.items():
-				resolution[pid] = pc.version
-			# XXX: handler other fields in result?
-			return resolution
+
+	def install(self, *, extra_args: Iterable[str] = ()):
+		if len(self.package_requirements) == 0:
+			return
+		cmd = [
+			sys.executable,
+			'-m', 'pip', 'install',
+			'--disable-pip-version-check',
+			*extra_args,
+			*self.package_requirements
+		]
+		subprocess.check_call(cmd)

@@ -186,7 +186,7 @@ class VersionRequirement:
 	def __init__(self, requirements: str):
 		"""
 		:param requirements: The requirement string, which contains several version predicates connected by space character.
-			e.g. ``">=1.0.x"``, ``"^2.9"``, ``">=1.2.0 <1.4.3"``
+			e.g. ``">=1.0.x"``, ``"^2.9"``, ``">=1.2.0 <1.4.3"``, `""`
 		"""
 		if not isinstance(requirements, str):
 			raise VersionParsingError('Requirements should be a str, not {}'.format(type(requirements).__name__))

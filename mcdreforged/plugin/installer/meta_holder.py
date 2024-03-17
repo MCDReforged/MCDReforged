@@ -1,17 +1,18 @@
-import gzip
 import json
+import logging
 import lzma
 import threading
-from typing import Optional, Dict
+import time
+from pathlib import Path
+from typing import Optional, Dict, Callable, Any
 
 from typing_extensions import override
 
-from mcdreforged.plugin.installer.types import MetaCache, PluginData, ReleaseData
-from mcdreforged.plugin.meta.version import Version
+from mcdreforged.plugin.installer.types import MetaRegistry, PluginData, ReleaseData, EmptyMetaRegistry
 from mcdreforged.utils import request_util
 
 
-class CatalogueMetaCache(MetaCache):
+class CatalogueMetaRegistry(MetaRegistry):
 	def __init__(self, plugin: Dict[str, PluginData]):
 		self.__plugins = plugin
 
@@ -21,28 +22,17 @@ class CatalogueMetaCache(MetaCache):
 		return self.__plugins
 
 
-class MetaHolder:
-	def __init__(self):
-		self.__meta_cache: Optional[MetaCache] = None
-		self.__meta_cache_lock = threading.Lock()
+class CatalogueMetaRegistryHolder:
+	def get_registry(self) -> MetaRegistry:
+		meta_json = self._get_meta_json()
+		return self._load_meta_json(meta_json)
 
-	def get(self) -> MetaCache:
-		# TODO cache TTL
-		if self.__meta_cache is not None:
-			return self.__meta_cache
-		with self.__meta_cache_lock:
-			if self.__meta_cache is not None:
-				return self.__meta_cache
-
-			meta_json = self._get_meta_json()
-			self.__meta_cache = self.__load_meta_json(meta_json)
-			return self.__meta_cache
-
-	def _get_meta_json(self) -> dict:
+	@classmethod
+	def _get_meta_json(cls) -> dict:
 		url = 'https://meta.mcdreforged.com/everything_slim.json.xz'
 		max_size = 20 * 2 ** 20  # 20MiB limit. In 2024-03-14, the size is only 545KiB
 
-		buf = request_util.get(url, timeout=10, max_size=max_size)
+		buf = request_util.get(url, 'MetaFetcher', timeout=10, max_size=max_size)
 
 		decompressor = lzma.LZMADecompressor()
 		content = decompressor.decompress(buf, max_size + 1)
@@ -52,14 +42,16 @@ class MetaHolder:
 		return json.loads(content.decode('utf8'))
 
 	@classmethod
-	def __load_meta_json(cls, meta_json: dict) -> MetaCache:
+	def _load_meta_json(cls, meta_json: dict) -> MetaRegistry:
 		plugins = {}
 
+		aop: dict
 		for plugin_id, aop in meta_json.get('plugins', {}).items():
-			if aop.get('release') is None or aop.get('meta') is None:
+			release_summary: dict
+			if (release_summary := aop.get('release')) is None or aop.get('meta') is None:
 				continue
-			if (idx := aop['release'].get('latest_version_index')) is not None:
-				meta = aop['release']['releases'][idx]['meta']
+			if (idx := release_summary.get('latest_version_index')) is not None:
+				meta = release_summary['releases'][idx]['meta']
 				latest_version = meta['version']
 			else:
 				meta = aop['meta']
@@ -71,9 +63,9 @@ class MetaHolder:
 				latest_version=latest_version,
 				description=meta.get('description', {}),
 			)
-			for release in aop['release']['releases']:
-				meta = release['meta']
-				asset = release['asset']
+			for release in release_summary['releases']:
+				meta: dict = release['meta']
+				asset: dict = release['asset']
 				release_data = ReleaseData(
 					version=meta['version'],
 					dependencies=meta.get('dependencies', {}),
@@ -83,29 +75,92 @@ class MetaHolder:
 					file_url=asset['browser_download_url'],
 					file_sha256=asset['hash_sha256'],
 				)
+				# verify it
+				from mcdreforged.plugin.meta.version import Version
 				Version(release_data.version)
+
 				plugin_data.releases[release_data.version] = release_data
 			plugins[plugin_id] = plugin_data
 
-		return CatalogueMetaCache(plugins)
+		return CatalogueMetaRegistry(plugins)
 
 	def get_release(self, plugin_id: str, version: str) -> ReleaseData:
-		return self.get().plugins[plugin_id].releases[version]
+		return self.get_registry().plugins[plugin_id].releases[version]
 
 
-class PersistMetaHolder(MetaHolder):
-	def __init__(self, cache_file: str):
-		super().__init__()
-		self.cache_file = cache_file
+class AsyncPersistCatalogueMetaRegistryHolder(CatalogueMetaRegistryHolder):
+	CACHE_TTL = 60 * 60
 
-	def _get_meta_json(self) -> dict:
+	def __init__(self, logger: logging.Logger, cache_path: Path):
+		self.logger = logger
+		self.cache_path = cache_path
+		self.__meta_lock = threading.Lock()
+		self.__meta: MetaRegistry = EmptyMetaRegistry()
+		self.__meta_fetch_time: float = 0
+		self.__fetch_thread: Optional[threading.Thread] = None
+		self.__fetch_thread_lock = threading.Lock()
+
+	@override
+	def get_registry(self, *, fetch_callback: Optional[Callable[[], Any]] = None) -> MetaRegistry:
+		if self.async_fetch():
+			if fetch_callback is not None:
+				fetch_callback()
+		return self.__meta
+
+	def __load(self):
+		if not self.cache_path.is_file():
+			return
+		with lzma.open(self.cache_path, 'rt', encoding='utf8') as f:
+			data = json.load(f)
+		meta = self._load_meta_json(data['meta'])
+		with self.__meta_lock:
+			self.__meta = meta
+			self.__meta_fetch_time = data['timestamp']
+
+	def __save(self, meta_json: dict, timestamp: float):
+		data = {
+			'timestamp': timestamp,
+			'meta': meta_json,
+		}
+		self.cache_path.parent.mkdir(parents=True, exist_ok=True)
+		with lzma.open(self.cache_path, 'wt', encoding='utf8') as f:
+			json.dump(data, f)
+
+	def init(self):
 		try:
-			with gzip.open(self.cache_file, 'rt', encoding='utf8') as f:
-				return json.load(f)
-		except (OSError, ValueError):
-			pass
+			if self.__load():
+				self.logger.info('Catalogue meta registry loaded from file')
+		except Exception as e:
+			self.logger.exception('Catalogue meta registry load failed: {}'.format(e))
+		self.async_fetch()
 
-		meta = super()._get_meta_json()
-		with gzip.open(self.cache_file, 'wt', encoding='utf8') as f:
-			json.dump(meta, f)
-		return meta
+	def async_fetch(self, ignore_cache: bool = False) -> bool:
+		if not ignore_cache and time.time() - self.__meta_fetch_time <= self.CACHE_TTL:
+			return False
+		with self.__fetch_thread_lock:
+			if self.__fetch_thread is not None:
+				return False
+			self.__fetch_thread = threading.Thread(target=self.__async_fetch, name='CatalogueMetaFetcher', daemon=True)
+			self.__fetch_thread.start()
+			return True
+
+	def __async_fetch(self):
+		try:
+			t = time.time()
+			meta_json = self._get_meta_json()
+			meta = self._load_meta_json(meta_json)
+		except Exception as e:
+			self.logger.exception('Catalogue meta registry fetch failed: {}'.format(e))
+		else:
+			with self.__meta_lock:
+				self.__meta_fetch_time = time.time()
+				self.__meta = meta
+				try:
+					self.__save(meta_json, self.__meta_fetch_time)
+				except Exception as e:
+					self.logger.exception('Catalogue meta registry save failed: {}'.format(e))
+				else:
+					self.logger.info('Catalogue meta registry updated, cost {:.2f}s'.format(time.time() - t))
+		finally:
+			with self.__fetch_thread_lock:
+				self.__fetch_thread = None

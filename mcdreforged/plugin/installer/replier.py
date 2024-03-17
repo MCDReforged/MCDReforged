@@ -1,5 +1,5 @@
-import abc
 import typing
+from abc import ABC, abstractmethod
 
 from mcdreforged.utils.types import MessageText
 
@@ -7,7 +7,14 @@ if typing.TYPE_CHECKING:
 	from mcdreforged.command.command_source import CommandSource
 
 
-class Replier(abc.ABC):
+class Replier(ABC):
+	DEFAULT_LANGUAGE = 'en_us'
+
+	@property
+	def language(self) -> str:
+		return self.DEFAULT_LANGUAGE
+
+	@abstractmethod
 	def reply(self, message: MessageText):
 		raise NotImplementedError()
 
@@ -28,6 +35,10 @@ class StdoutReplier(Replier):
 class CommandSourceReplier(Replier):
 	def __init__(self, command_source: 'CommandSource'):
 		self.command_source = command_source
+
+	@property
+	def language(self) -> str:
+		return self.command_source.get_preference().language
 
 	def reply(self, message: MessageText):
 		self.command_source.reply(message)

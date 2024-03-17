@@ -6,6 +6,7 @@ import os
 import queue
 import threading
 from contextlib import contextmanager
+from pathlib import Path
 from typing import Callable, Dict, Optional, Any, Tuple, List, TYPE_CHECKING, Deque
 
 from mcdreforged.constants import core_constant, plugin_constant
@@ -15,15 +16,16 @@ from mcdreforged.plugin.builtin.python_plugin import PythonPlugin
 from mcdreforged.plugin.exception import RequirementCheckFailure
 from mcdreforged.plugin.meta.dependency_walker import DependencyWalker
 from mcdreforged.plugin.operation_result import PluginOperationResult, SingleOperationResult
-from mcdreforged.plugin.plugin_event import MCDRPluginEvents, MCDREvent, EventListener
+from mcdreforged.plugin.plugin_event import MCDRPluginEvents, EventListener, PluginEvent
 from mcdreforged.plugin.plugin_registry import PluginRegistryStorage
 from mcdreforged.plugin.plugin_thread import PluginThreadPool
 from mcdreforged.plugin.type.permanent_plugin import PermanentPlugin
 from mcdreforged.plugin.type.plugin import AbstractPlugin, PluginState
 from mcdreforged.plugin.type.regular_plugin import RegularPlugin
-from mcdreforged.utils import file_util, string_util, misc_util, class_util
+from mcdreforged.utils import file_util, string_util, misc_util, class_util, path_util
 from mcdreforged.utils.future import Future
 from mcdreforged.utils.logger import DebugOption
+from mcdreforged.utils.path_like import PathLike
 from mcdreforged.utils.thread_local_storage import ThreadLocalStorage
 
 if TYPE_CHECKING:
@@ -34,7 +36,7 @@ class PluginManager:
 	TLS_PLUGIN_KEY = 'current_plugin'
 
 	def __init__(self, mcdr_server: 'MCDReforgedServer'):
-		self.plugin_directories = []  # type: List[str]
+		self.plugin_directories: List[str] = []
 		self.mcdr_server = mcdr_server
 		self.logger = mcdr_server.logger
 
@@ -121,6 +123,13 @@ class PluginManager:
 		Includes permanent plugins
 		"""
 		return plugin_id in self.plugins
+
+	def verify_plugin_path_to_load(self, plugin_path: PathLike):
+		path = Path(plugin_path).absolute()
+		for plugin_dir in self.plugin_directories:
+			if path_util.is_relative_to(path, Path(plugin_dir).absolute()):
+				return True
+		return False
 
 	# ---------------------------------------
 	#   Permanent build-in plugin operation
@@ -266,7 +275,17 @@ class PluginManager:
 				self.logger.warning('Plugin directory "{}" not found'.format(plugin_directory))
 		return paths
 
-	def __collect_and_process_new_plugins(self, filter_: Callable[[str], bool], *, possible_paths: Optional[List[str]] = None) -> SingleOperationResult:
+	def __load_given_new_plugins(self, plugin_paths: List[str]) -> SingleOperationResult:
+		result = SingleOperationResult()
+		for file_path in plugin_paths:
+			plugin = self.__load_plugin(file_path)
+			if plugin is None:
+				result.fail(file_path)
+			else:
+				result.succeed(plugin)
+		return result
+
+	def __collect_and_load_new_plugins(self, filter_: Callable[[str], bool], *, possible_paths: Optional[List[str]] = None) -> SingleOperationResult:
 		"""
 		:param filter_: A str predicate function for testing if the plugin file path is acceptable
 		:param possible_paths: Optional. If you have already done self.__collect_possible_plugin_file_paths() before,
@@ -275,15 +294,11 @@ class PluginManager:
 		if possible_paths is None:
 			possible_paths = self.__collect_possible_plugin_file_paths()
 
-		result = SingleOperationResult()
+		plugin_paths = []
 		for file_path in possible_paths:
 			if not self.contains_plugin_file(file_path) and filter_(file_path):
-				plugin = self.__load_plugin(file_path)
-				if plugin is None:
-					result.fail(file_path)
-				else:
-					result.succeed(plugin)
-		return result
+				plugin_paths.append(file_path)
+		return self.__load_given_new_plugins(plugin_paths)
 
 	def __collect_regular_plugins(
 			self, select_filter: Callable[[RegularPlugin], bool], specific: Optional[RegularPlugin],
@@ -380,8 +395,10 @@ class PluginManager:
 	# New sync operations will be queued and delayed
 	#   see :meth:`__run_manipulation`
 
-	def __finalization_plugin_manipulation(
-			self, load_result: Optional[SingleOperationResult] = None, unload_result: Optional[SingleOperationResult] = None,
+	def __finalizate_plugin_manipulation(
+			self,
+			load_result: Optional[SingleOperationResult] = None,
+			unload_result: Optional[SingleOperationResult] = None,
 			reload_result: Optional[SingleOperationResult] = None
 	) -> PluginOperationResult:
 		"""
@@ -468,9 +485,9 @@ class PluginManager:
 		possible_paths = self.__collect_possible_plugin_file_paths()
 		possible_paths_set = set(possible_paths)
 		unload_result = self.__unload_given_plugins(lambda plugin: not plugin.plugin_exists() or plugin.plugin_path not in possible_paths_set)
-		load_result = self.__collect_and_process_new_plugins(lambda fp: True, possible_paths=possible_paths)
+		load_result = self.__collect_and_load_new_plugins(lambda fp: True, possible_paths=possible_paths)
 		reload_result = self.__reload_ready_plugins(reload_filter)
-		return self.__finalization_plugin_manipulation(load_result, unload_result, reload_result)
+		return self.__finalizate_plugin_manipulation(load_result, unload_result, reload_result)
 
 	# --------------
 	#   Interfaces
@@ -507,11 +524,62 @@ class PluginManager:
 
 			return future
 
+	def manipulate_plugins(
+			self, *,
+			load: Optional[List[str]] = None,
+			unload: Optional[List[RegularPlugin]] = None,
+			reload: Optional[List[RegularPlugin]] = None,
+			enable: Optional[List[str]] = None,
+			disable: Optional[List[RegularPlugin]] = None,
+			entered_callback: Optional[Callable[[], Any]] = None,
+	):
+		# TODO: make it the only entrance of plugin manipulation
+		to_load_paths: List[str] = list(load or [])
+		to_unload_plugins: List[RegularPlugin] = (unload or []) + (disable or [])
+		to_reload_plugins: List[RegularPlugin] = list(reload or [])
+
+		for path in to_load_paths:
+			class_util.check_type(path, str)
+		for plugin in to_unload_plugins:
+			class_util.check_type(plugin, RegularPlugin)
+		for plugin in to_reload_plugins:
+			class_util.check_type(plugin, RegularPlugin)
+
+		for path in (enable or []):
+			if plugin_factory.is_disabled_plugin(path):
+				new_file_path = string_util.remove_suffix(path, plugin_constant.DISABLED_PLUGIN_FILE_SUFFIX)
+				os.rename(path, new_file_path)
+				to_load_paths.append(new_file_path)
+
+		for path in to_load_paths:
+			if not self.verify_plugin_path_to_load(path):
+				raise ValueError('Given plugin path {!r} to load is outside of MCDR''s possible plugin directories {}'.format(path, self.plugin_directories))
+
+		to_unload_plugin_ids = {p.get_id() for p in to_unload_plugins}
+		to_reload_plugin_ids = {p.get_id() for p in to_reload_plugins}
+
+		def manipulate_action():
+			if entered_callback is not None:
+				entered_callback()
+			unload_result = self.__unload_given_plugins(lambda plg: plg.get_id() in to_unload_plugin_ids)
+			load_result = self.__load_given_new_plugins(to_load_paths)
+			reload_result = self.__reload_ready_plugins(lambda plg: plg.get_id() in to_reload_plugin_ids)
+			return self.__finalizate_plugin_manipulation(load_result, unload_result, reload_result)
+
+		def done_callback(_: PluginOperationResult):
+			for plg in (disable or []):
+				if plg.plugin_exists():
+					os.rename(plg.plugin_path, plg.plugin_path + plugin_constant.DISABLED_PLUGIN_FILE_SUFFIX)
+
+		future = self.__run_manipulation(manipulate_action)
+		future.add_done_callback(done_callback)
+		return future
+
 	def load_plugin(self, file_path: str) -> Future[PluginOperationResult]:
 		def load_plugin_action() -> PluginOperationResult:
 			self.logger.info(self.mcdr_server.tr('plugin_manager.load_plugin.entered', file_path))
-			load_result = self.__collect_and_process_new_plugins(lambda fp: fp == file_path)
-			return self.__finalization_plugin_manipulation(load_result=load_result)
+			load_result = self.__collect_and_load_new_plugins(lambda fp: fp == file_path)
+			return self.__finalizate_plugin_manipulation(load_result=load_result)
 
 		class_util.check_type(file_path, str)
 		return self.__run_manipulation(load_plugin_action)
@@ -520,7 +588,7 @@ class PluginManager:
 		def unload_plugin_action() -> PluginOperationResult:
 			self.logger.info(self.mcdr_server.tr('plugin_manager.unload_plugin.entered', plugin))
 			unload_result = self.__unload_given_plugins(lambda plg: True, specific=plugin)
-			return self.__finalization_plugin_manipulation(unload_result=unload_result)
+			return self.__finalizate_plugin_manipulation(unload_result=unload_result)
 
 		class_util.check_type(plugin, RegularPlugin)
 		return self.__run_manipulation(unload_plugin_action)
@@ -529,7 +597,7 @@ class PluginManager:
 		def reload_plugin_action() -> PluginOperationResult:
 			self.logger.info(self.mcdr_server.tr('plugin_manager.reload_plugin.entered', plugin))
 			reload_result = self.__reload_ready_plugins(lambda plg: True, specific=plugin)
-			return self.__finalization_plugin_manipulation(reload_result=reload_result)
+			return self.__finalizate_plugin_manipulation(reload_result=reload_result)
 
 		class_util.check_type(plugin, RegularPlugin)
 		return self.__run_manipulation(reload_plugin_action)
@@ -572,7 +640,7 @@ class PluginManager:
 	#   Plugin Event
 	# ----------------
 
-	def __dispatch_event(self, event: MCDREvent, args: Tuple[Any, ...]):
+	def __dispatch_event(self, event: PluginEvent, args: Tuple[Any, ...]):
 		"""
 		Event dispatch logic implementation
 		"""
@@ -581,7 +649,7 @@ class PluginManager:
 		for listener in self.registry_storage.get_event_listeners(event.id):
 			self.trigger_listener(listener, args)
 
-	def dispatch_event(self, event: MCDREvent, args: Tuple[Any, ...], *, on_executor_thread: bool = True, block: bool = False, timeout: Optional[float] = None):
+	def dispatch_event(self, event: PluginEvent, args: Tuple[Any, ...], *, on_executor_thread: bool = True, block: bool = False, timeout: Optional[float] = None):
 		"""
 		Event dispatching interface
 		"""

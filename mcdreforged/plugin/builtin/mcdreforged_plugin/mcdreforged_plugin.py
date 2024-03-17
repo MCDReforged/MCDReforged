@@ -1,3 +1,4 @@
+import functools
 import re
 from typing import List
 
@@ -8,7 +9,9 @@ from mcdreforged.constants import core_constant
 from mcdreforged.minecraft.rtext.style import RColor, RAction
 from mcdreforged.minecraft.rtext.text import RText, RTextBase
 from mcdreforged.permission.permission_level import PermissionLevel
+from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.abort_subcommand import AbortSubCommand
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.check_update_command import CheckUpdateCommand
+from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.confirm_subcommand import ConfirmSubCommand
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.debug_command import DebugCommand
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.help_command import HelpCommand
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.permission_command import PermissionCommand
@@ -18,7 +21,9 @@ from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.preference_command i
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.reload_command import ReloadCommand
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.server_command import ServerCommand
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.status_command import StatusCommand
+from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.sub_command import SubCommand, SubCommandEvent
 from mcdreforged.plugin.meta.metadata import Metadata
+from mcdreforged.plugin.plugin_event import MCDRPluginEvents
 from mcdreforged.plugin.type.permanent_plugin import PermanentPlugin
 from mcdreforged.translation.translation_text import RTextMCDRTranslation
 
@@ -38,16 +43,21 @@ class MCDReforgedPlugin(PermanentPlugin):
 	def __init__(self, plugin_manager):
 		super().__init__(plugin_manager)
 		self._set_metadata(Metadata(METADATA, plugin=self))
-		self.command_check_update = CheckUpdateCommand(self)
-		self.command_debug = DebugCommand(self)
 		self.command_help = HelpCommand(self)
-		self.command_permission = PermissionCommand(self)
-		self.command_pim = PimCommand(self)
-		self.command_plugin = PluginCommand(self)
-		self.command_preference = PreferenceCommand(self)
-		self.command_reload = ReloadCommand(self)
-		self.command_server = ServerCommand(self)
 		self.command_status = StatusCommand(self)
+		self.main_sub_commands: List[SubCommand] = [
+			AbortSubCommand(self, functools.partial(self.dispatch_sub_command_event, event=SubCommandEvent.abort)),
+			CheckUpdateCommand(self),
+			ConfirmSubCommand(self, functools.partial(self.dispatch_sub_command_event, event=SubCommandEvent.confirm)),
+			DebugCommand(self),
+			PermissionCommand(self),
+			PimCommand(self),
+			PluginCommand(self),
+			PreferenceCommand(self),
+			ReloadCommand(self),
+			ServerCommand(self),
+			self.command_status,
+		]
 
 	def tr(self, key: str, *args, **kwargs) -> RTextMCDRTranslation:
 		return self.server_interface.rtr(key, *args, **kwargs)
@@ -57,6 +67,17 @@ class MCDReforgedPlugin(PermanentPlugin):
 		self.__register_commands()
 		self.server_interface.register_help_message(self.control_command_prefix, self.tr('mcdr_command.help_message.mcdr_command'))
 		self.server_interface.register_help_message(self.help_command_prefix, self.tr('mcdr_command.help_message.help_command'))
+
+		def on_load():
+			for sub_command in self.main_sub_commands:
+				sub_command.on_load()
+
+		def on_mcdr_stop(_):
+			for sub_command in self.main_sub_commands:
+				sub_command.on_mcdr_stop()
+
+		self.server_interface.register_event_listener(MCDRPluginEvents.MCDR_STOP, on_mcdr_stop)
+		on_load()
 
 	def __repr__(self):
 		# avoid using self.metadata here since it might not be initialized
@@ -71,24 +92,18 @@ class MCDReforgedPlugin(PermanentPlugin):
 		return '!!help'
 
 	def __register_commands(self):
-		self.register_command(
+		main_root = (
 			Literal(self.control_command_prefix).
 			requires(lambda src: src.has_permission(PermissionLevel.USER)).
 			runs(self.process_mcdr_command).
 			on_error(RequirementNotMet, self.on_mcdr_command_permission_denied, handled=True).
 			on_error(UnknownArgument, self.on_mcdr_command_unknown_argument).
 			on_child_error(RequirementNotMet, self.on_mcdr_command_permission_denied, handled=True).
-			on_child_error(UnknownArgument, self.on_mcdr_command_unknown_argument).
-			then(self.command_check_update.get_command_node()).
-			then(self.command_debug.get_command_node()).
-			then(self.command_permission.get_command_node()).
-			then(self.command_pim.get_command_node()).
-			then(self.command_plugin.get_command_node()).
-			then(self.command_preference.get_command_node()).
-			then(self.command_reload.get_command_node()).
-			then(self.command_server.get_command_node()).
-			then(self.command_status.get_command_node())
+			on_child_error(UnknownArgument, self.on_mcdr_command_unknown_argument)
 		)
+		for sub_command in self.main_sub_commands:
+			main_root.then(sub_command.get_command_node())
+		self.register_command(main_root)
 		self.register_command(self.command_help.get_command_node())
 
 	# --------------------
@@ -127,3 +142,15 @@ class MCDReforgedPlugin(PermanentPlugin):
 				source.reply(line)
 		else:
 			self.command_status.print_mcdr_status(source)
+
+	def dispatch_sub_command_event(self, source: CommandSource, event: SubCommandEvent):
+		handled = False
+		for sub_command in self.main_sub_commands:
+			handled |= sub_command.on_event(source, event)
+
+		if event == SubCommandEvent.confirm:
+			if not handled:
+				source.reply('Nothing to confirm')
+		elif event == SubCommandEvent.abort:
+			if not handled:
+				source.reply('Nothing to abort')

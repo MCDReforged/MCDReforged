@@ -64,6 +64,10 @@ class ServerInterface:
 				self._mcdr_server.logger.warning('Double assigning the singleton instance in {}'.format(self.__class__.__name__), stack_info=True)
 			ServerInterface.__global_instance = self
 
+	@property
+	def _plugin_manager(self) -> 'PluginManager':
+		return self._mcdr_server.plugin_manager
+
 	@functools.lru_cache(maxsize=512, typed=True)
 	def _get_logger(self, plugin_id: str) -> MCDReforgedLogger:
 		logger = MCDReforgedLogger(plugin_id)
@@ -75,7 +79,7 @@ class ServerInterface:
 		"""
 		A nice logger for you to log message to the console
 		"""
-		plugin = self._mcdr_server.plugin_manager.get_current_running_plugin()
+		plugin = self._plugin_manager.get_current_running_plugin()
 		if plugin is not None:
 			return self._get_logger(plugin.get_id())
 		else:
@@ -113,7 +117,7 @@ class ServerInterface:
 		2.  :doc:`Event listener </plugin_dev/event>` callback invocation
 		3.  :doc:`Command </plugin_dev/command>` callback invocation
 		"""
-		plugin = self._mcdr_server.plugin_manager.get_current_running_plugin()
+		plugin = self._plugin_manager.get_current_running_plugin()
 		if plugin is not None:
 			return plugin.server_interface
 		return None
@@ -521,9 +525,9 @@ class ServerInterface:
 
 	def __existed_plugin_info_getter(self, plugin_id: str, handler: Callable[['AbstractPlugin'], Any], *, regular: bool):
 		if regular:
-			plugin = self._mcdr_server.plugin_manager.get_regular_plugin_from_id(plugin_id)
+			plugin = self._plugin_manager.get_regular_plugin_from_id(plugin_id)
 		else:
-			plugin = self._mcdr_server.plugin_manager.get_plugin_from_id(plugin_id)
+			plugin = self._plugin_manager.get_plugin_from_id(plugin_id)
 		if plugin is not None:
 			return handler(plugin)
 		return None
@@ -573,11 +577,11 @@ class ServerInterface:
 		"""
 		Return a list containing all **loaded** plugin id like ``["my_plugin", "another_plugin"]``
 		"""
-		return [plugin.get_id() for plugin in self._mcdr_server.plugin_manager.get_regular_plugins()]
+		return [plugin.get_id() for plugin in self._plugin_manager.get_regular_plugins()]
 
 	def __get_files_in_plugin_directories(self) -> List[str]:
 		result = []
-		for plugin_directory in self._mcdr_server.plugin_manager.plugin_directories:
+		for plugin_directory in self._plugin_manager.plugin_directories:
 			result.extend(file_util.list_all(plugin_directory))
 		return result
 
@@ -588,7 +592,7 @@ class ServerInterface:
 		.. versionadded:: v2.3.0
 		"""
 		return list(filter(
-			lambda file_path: not self._mcdr_server.plugin_manager.contains_plugin_file(file_path) and plugin_factory.is_plugin(file_path),
+			lambda file_path: not self._plugin_manager.contains_plugin_file(file_path) and plugin_factory.is_plugin(file_path),
 			self.__get_files_in_plugin_directories()
 		))
 
@@ -608,7 +612,7 @@ class ServerInterface:
 		Return a dict containing metadata of all loaded plugin with (plugin_id, metadata) as key-value pair
 		"""
 		result = {}
-		for plugin in self._mcdr_server.plugin_manager.get_all_plugins():
+		for plugin in self._plugin_manager.get_all_plugins():
 			result[plugin.get_id()] = plugin.get_metadata()
 		return result
 
@@ -625,7 +629,7 @@ class ServerInterface:
 		:param handler: What you want to do with Plugin Manager to the given file path
 		:return: If success
 		"""
-		future: Future[PluginOperationResult] = handler(self._mcdr_server.plugin_manager)(plugin_file_path)
+		future: Future[PluginOperationResult] = handler(self._plugin_manager)(plugin_file_path)
 		if future.is_finished():
 			return future.get().get_if_success(PluginResultType.LOAD)  # the operations are always loading a plugin
 		else:
@@ -641,9 +645,9 @@ class ServerInterface:
 		It's used to determine if the operation succeeded
 		:return: If success, None if plugin not found
 		"""
-		plugin = self._mcdr_server.plugin_manager.get_regular_plugin_from_id(plugin_id)
+		plugin = self._plugin_manager.get_regular_plugin_from_id(plugin_id)
 		if plugin is not None:
-			future = handler(self._mcdr_server.plugin_manager)(plugin)
+			future = handler(self._plugin_manager)(plugin)
 			if future.is_finished():
 				return future.get().get_if_success(result_type)
 			else:
@@ -699,13 +703,61 @@ class ServerInterface:
 		"""
 		Reload all plugins, load all new plugins and then unload all removed plugins
 		"""
-		self._mcdr_server.plugin_manager.refresh_all_plugins()
+		self._plugin_manager.refresh_all_plugins()
 
 	def refresh_changed_plugins(self) -> None:
 		"""
 		Reload all **changed** plugins, load all new plugins and then unload all removed plugins
 		"""
-		self._mcdr_server.plugin_manager.refresh_changed_plugins()
+		self._plugin_manager.refresh_changed_plugins()
+
+	def manipulate_plugins(
+			self, *,
+			load: Optional[List[str]] = None,     # file path
+			unload: Optional[List[str]] = None,   # plugin id
+			reload: Optional[List[str]] = None,   # plugin id
+			enable: Optional[List[str]] = None,   # file path
+			disable: Optional[List[str]] = None,  # plugin id
+	) -> Optional[bool]:
+		"""
+		A highly-customizable plugin manipulate API that provides fine-grain control on what to be manipulated:
+		load / unload / reload / enable / disable the provided plugins, in a single action
+
+		.. note::
+
+			Here some different plugin "reload" cases and what actions you should actually provide
+
+			* ``MyPlugin.mcdr`` remains unchanged: reload "my_plugin"
+			* ``MyPlugin.mcdr`` changes its content: reload "my_plugin"
+			* ``MyPlugin.mcdr`` is replaced with an upgrade ``MyPlugin_v2.mcdr``: unload "my_plugin" and load "MyPlugin_v2.mcdr"
+
+		:param load: An optional plugin file path list containing plugins to be loaded
+		:param unload: An optional plugin file path list containing plugins to be loaded
+		:param reload: An optional plugin file path list containing plugins to be loaded
+		:param enable: An optional plugin file path list containing plugins to be loaded
+		:param disable: An optional plugin file path list containing plugins to be loaded
+		:return: true if all operation succeeded, false if failed, None if it's a not-suggested chained sync plugin operation
+
+		.. versionadded:: v2.13.0
+		"""
+		def map_to_regular(plugin_ids: Optional[List[str]]) -> Optional[List['RegularPlugin']]:
+			if plugin_ids is not None:
+				return list(map(self._plugin_manager.get_regular_plugin_from_id, plugin_ids))
+			else:
+				return None
+
+		future = self._plugin_manager.manipulate_plugins(
+			load=load,
+			unload=map_to_regular(unload),
+			reload=map_to_regular(reload),
+			enable=enable,
+			disable=map_to_regular(disable),
+		)
+		if future.is_finished():
+			por = future.get()
+			return por.load_result.is_success_or_empty() and por.reload_result.is_success_or_empty() and por.unload_result.is_success_or_empty()
+		else:
+			return False  # chained sync plugin operation
 
 	def dispatch_event(self, event: PluginEvent, args: Tuple[Any, ...], *, on_executor_thread: bool = True) -> None:
 		"""
@@ -738,7 +790,7 @@ class ServerInterface:
 		class_util.check_type(event, PluginEvent)
 		if MCDRPluginEvents.contains_id(event.id):
 			raise ValueError('Cannot dispatch event with already exists event id {}'.format(event.id))
-		self._mcdr_server.plugin_manager.dispatch_event(event, args, on_executor_thread=on_executor_thread)
+		self._plugin_manager.dispatch_event(event, args, on_executor_thread=on_executor_thread)
 
 	# ------------------------
 	#      Configuration

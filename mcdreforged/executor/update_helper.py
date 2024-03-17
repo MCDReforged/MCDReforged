@@ -3,8 +3,6 @@ MCDR update things
 """
 import json
 import time
-import urllib.error
-import urllib.request
 from threading import Lock
 from typing import Callable, Any, Union, Optional
 
@@ -14,7 +12,7 @@ from mcdreforged.minecraft.rtext.style import RAction, RColor, RStyle
 from mcdreforged.minecraft.rtext.text import RText, RTextBase
 from mcdreforged.plugin.meta.version import Version
 from mcdreforged.translation.translation_text import RTextMCDRTranslation
-from mcdreforged.utils import misc_util
+from mcdreforged.utils import misc_util, request_util
 
 
 class UpdateHelper(ThreadExecutor):
@@ -85,13 +83,5 @@ class GithubApiFetcher:
 		self.__cached_response: Optional[dict] = None
 
 	def fetch(self) -> Optional[dict]:
-		try:
-			req = urllib.request.Request(self.url, headers={'If-None-Match': self.__etag}, method='GET')
-			with urllib.request.urlopen(req, timeout=10) as response:
-				self.__etag = response.getheader('ETag', self.__etag)
-				self.__cached_response = json.loads(response.read())
-		except urllib.error.HTTPError as e:
-			if e.code != 304:  # 304 means content keeps unchanged
-				raise
-
-		return self.__cached_response
+		buf = request_util.get(self.url, 'UpdateHelper', timeout=10, max_size=16384)
+		return json.loads(buf)

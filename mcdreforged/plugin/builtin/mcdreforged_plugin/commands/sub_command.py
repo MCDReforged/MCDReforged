@@ -1,3 +1,5 @@
+import dataclasses
+import enum
 import traceback
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Callable, Generic, TypeVar
@@ -8,6 +10,7 @@ from mcdreforged.permission.permission_level import PermissionLevel
 from mcdreforged.plugin.operation_result import PluginOperationResult
 from mcdreforged.translation.translation_text import RTextMCDRTranslation
 from mcdreforged.utils.future import Future
+from mcdreforged.utils.logger import DebugOption
 
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
@@ -18,11 +21,15 @@ if TYPE_CHECKING:
 T = TypeVar('T')
 
 
-# can't do Generic + NamedTuple
+@dataclasses.dataclass(frozen=True)
 class FunctionCallResult(Generic[T]):
-	def __init__(self, return_value: T, no_error: bool):
-		self.return_value = return_value
-		self.no_error = no_error
+	return_value: T
+	no_error: bool
+
+
+class SubCommandEvent(enum.Enum):
+	confirm = enum.auto()
+	abort = enum.auto()
 
 
 class SubCommand(ABC):
@@ -33,12 +40,25 @@ class SubCommand(ABC):
 	def get_command_node(self) -> Literal:
 		raise NotImplementedError()
 
+	def on_load(self):
+		pass
+
+	def on_mcdr_stop(self):
+		pass
+
+	def on_event(self, source: CommandSource, event: SubCommandEvent) -> bool:
+		return False
+
 	# ------------------
 	#    Common Utils
 	# ------------------
 
 	def tr(self, key: str, *args, **kwargs) -> RTextMCDRTranslation:
 		return self.mcdr_plugin.tr(key, *args, **kwargs)
+
+	def log_debug(self, *args, **kwargs):
+		kwargs['option'] = DebugOption.COMMAND
+		self.mcdr_server.logger.debug(*args, **kwargs)
 
 	@property
 	def mcdr_server(self) -> 'MCDReforgedServer':

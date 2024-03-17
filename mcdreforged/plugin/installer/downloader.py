@@ -19,7 +19,8 @@ class ReleaseDownloader:
 	def __download(self, url: str, show_progress: bool):
 		req = urllib.request.Request(url, method='GET', headers={'User-Agent': request_util.ua('download')})
 		with urllib.request.urlopen(req, timeout=5) as rsp:
-			length = int(rsp.headers.get('content-length'))
+			headers: dict = rsp.headers
+			length = int(headers.get('content-length'))
 			if length != self.release.file_size:
 				raise ValueError('content-length mismatched, expected {}, found {}'.format(length, self.release.file_size))
 
