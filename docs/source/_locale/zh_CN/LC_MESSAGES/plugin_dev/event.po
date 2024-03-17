@@ -157,10 +157,10 @@ msgstr "回调参数"
 
 #: ../plugin_dev/event.rst:77
 msgid ""
-":class:`~mcdreforged.plugin.server_interface.PluginServerInterface`, "
+":class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`, "
 ":class:`Any` (previous module)"
 msgstr ""
-":class:`~mcdreforged.plugin.server_interface.PluginServerInterface`, "
+":class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`, "
 ":class:`Any` (之前的模块)"
 
 #: ../plugin_dev/event.rst
@@ -194,7 +194,7 @@ msgstr "``mcdr.plugin_unloaded``"
 #: ../plugin_dev/event.rst:90 ../plugin_dev/event.rst:150
 #: ../plugin_dev/event.rst:162 ../plugin_dev/event.rst:196
 #: ../plugin_dev/event.rst:212
-msgid ":class:`~mcdreforged.plugin.server_interface.PluginServerInterface`"
+msgid ":class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`"
 msgstr ""
 
 #: ../plugin_dev/event.rst:91
@@ -225,10 +225,10 @@ msgstr "``mcdr.general_info``"
 
 #: ../plugin_dev/event.rst:111 ../plugin_dev/event.rst:138
 msgid ""
-":class:`~mcdreforged.plugin.server_interface.PluginServerInterface`, "
+":class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`, "
 ":class:`~mcdreforged.info_reactor.info.Info`"
 msgstr ""
-":class:`~mcdreforged.plugin.server_interface.PluginServerInterface`, "
+":class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`, "
 ":class:`~mcdreforged.info_reactor.info.Info`"
 
 #: ../plugin_dev/event.rst:112
@@ -334,10 +334,10 @@ msgstr "``mcdr.server_stop``"
 
 #: ../plugin_dev/event.rst:184
 msgid ""
-":class:`~mcdreforged.plugin.server_interface.PluginServerInterface`, "
+":class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`, "
 ":class:`int`"
 msgstr ""
-":class:`~mcdreforged.plugin.server_interface.PluginServerInterface`, "
+":class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`, "
 ":class:`int`"
 
 #: ../plugin_dev/event.rst:185
@@ -401,10 +401,10 @@ msgstr "``mcdr.player_joined``"
 
 #: ../plugin_dev/event.rst:231
 msgid ""
-":class:`~mcdreforged.plugin.server_interface.PluginServerInterface`, "
+":class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`, "
 ":class:`str`, :class:`~mcdreforged.info_reactor.info.Info`"
 msgstr ""
-":class:`~mcdreforged.plugin.server_interface.PluginServerInterface`, "
+":class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`, "
 ":class:`str`, :class:`~mcdreforged.info_reactor.info.Info`"
 
 #: ../plugin_dev/event.rst:232
@@ -427,10 +427,10 @@ msgstr "``mcdr.player_left``"
 
 #: ../plugin_dev/event.rst:243
 msgid ""
-":class:`~mcdreforged.plugin.server_interface.PluginServerInterface`, "
+":class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`, "
 ":class:`str`"
 msgstr ""
-":class:`~mcdreforged.plugin.server_interface.PluginServerInterface`, "
+":class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`, "
 ":class:`str`"
 
 #: ../plugin_dev/event.rst:244
@@ -445,11 +445,11 @@ msgstr "自定义事件"
 msgid ""
 "Besides MCDR itself, plugins can also dispatch its own event. All you "
 "need to do is invoking "
-":meth:`ServerInterface.dispatch_event<mcdreforged.plugin.server_interface.ServerInterface.dispatch_event>`"
+":meth:`ServerInterface.dispatch_event<mcdreforged.plugin.si.server_interface.ServerInterface.dispatch_event>`"
 " api with the event and some arguments"
 msgstr ""
 "除了 MCDR 本身，插件还可以分发自己的事件。你需要做的就是调用带有事件和一些参数的 "
-":meth:`ServerInterface.dispatch_event<mcdreforged.plugin.server_interface.ServerInterface.dispatch_event>`"
+":meth:`ServerInterface.dispatch_event<mcdreforged.plugin.si.server_interface.ServerInterface.dispatch_event>`"
 " API"
 
 #: ../plugin_dev/event.rst:252

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-30 20:06+0800\n"
+"POT-Creation-Date: 2024-03-05 01:11+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,7 +25,7 @@ msgstr "服务端接口 - 插件"
 msgid ":doc:`API package </plugin_dev/api>` path: ``mcdreforged.api.types``"
 msgstr ":doc:`API  包 </plugin_dev/api>` 路径: ``mcdreforged.api.types``"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface:1 of
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface:1 of
 msgid ""
 "Derived from :class:`ServerInterface`, :class:`PluginServerInterface` "
 "adds the ability for plugins to control the plugin itself on the basis of"
@@ -38,25 +38,25 @@ msgstr ""
 msgid "Plugin Registry"
 msgstr "插件注册"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.register_event_listener:1
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_event_listener:1
 #: of
 msgid "Register an event listener for the current plugin"
 msgstr "为当前插件注册一个事件监听器"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.load_config_simple
-#: mcdreforged.plugin.server_interface.PluginServerInterface.open_bundled_file
-#: mcdreforged.plugin.server_interface.PluginServerInterface.register_command
-#: mcdreforged.plugin.server_interface.PluginServerInterface.register_event_listener
-#: mcdreforged.plugin.server_interface.PluginServerInterface.register_help_message
-#: mcdreforged.plugin.server_interface.PluginServerInterface.register_info_filter
-#: mcdreforged.plugin.server_interface.PluginServerInterface.register_server_handler
-#: mcdreforged.plugin.server_interface.PluginServerInterface.register_translation
-#: mcdreforged.plugin.server_interface.PluginServerInterface.save_config_simple
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.open_bundled_file
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_command
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_event_listener
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_help_message
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_info_filter
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_server_handler
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_translation
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.save_config_simple
 #: of
 msgid "Parameters"
 msgstr "参数"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.register_event_listener:3
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_event_listener:3
 #: of
 msgid ""
 "The id of the event, or a "
@@ -66,24 +66,24 @@ msgstr ""
 "事件的 ID，或 :class:`~mcdreforged.plugin.plugin_event.PluginEvent` "
 "实例。它表示插件要监听的目标事件"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.register_event_listener:5
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_event_listener:5
 #: of
 msgid "The callback listener method for the event"
 msgstr "事件的回调的监听器方法"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.register_event_listener:6
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_event_listener:6
 #: of
 msgid ""
 "The priority of the listener. It will be set to the default value "
 "``1000`` if it's not specified"
 msgstr "监听器的优先级。如果没有指定，将被设置为默认值 ``1000``"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.register_command:1
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_command:1
 #: of
 msgid "Register a command for the current plugin"
 msgstr "为当前插件注册一个指令"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.register_command:3
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_command:3
 #: of
 msgid ""
 "the root node of your command tree. It should be a "
@@ -92,14 +92,14 @@ msgstr ""
 "指令树的根节点。 它应为一个 :class:`~mcdreforged.command.builder.nodes.basic.Literal` "
 "节点"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.register_help_message:1
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_help_message:1
 #: of
 msgid ""
 "Register a help message for the current plugin, which is used in "
 "``!!help`` command"
 msgstr "为当前插件注册一个帮助信息，以在 ``!!help`` 指令中显示"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.register_help_message:3
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_help_message:3
 #: of
 msgid ""
 "The help command of your plugin. When player click on the displayed "
@@ -107,7 +107,7 @@ msgid ""
 "recommend to set it to the entry command of your plugin"
 msgstr "你的插件的帮助指令。当玩家点击显示的信息时，会向玩家提示这个前缀参数。建议将其设置为你的插件的入口指令"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.register_help_message:5
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_help_message:5
 #: of
 msgid ""
 "A neat command description. It can be a str or a :class:`RText "
@@ -117,26 +117,26 @@ msgstr ""
 "一个整洁的指令描述。它可以为一个 str 或者 :class:`RText "
 "<mcdreforged.minecraft.rtext.text.RTextBase>`。除此之外它还可为一个将语言映射至描述信息的 dict"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.register_help_message:7
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_help_message:7
 #: of
 msgid ""
 "The minimum permission level for the user to see this help message. With "
 "default permission, anyone can see this message"
 msgstr "用户看到此帮助信息的最低权限。在默认参数的情况下，任何人都可以看到此信息"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.register_translation:1
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_translation:1
 #: of
 msgid ""
 "Register a translation mapping for a specific language for the current "
 "plugin"
 msgstr "为当前插件注册给定语言的一个翻译映射表"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.register_translation:3
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_translation:3
 #: of
 msgid "The language of this translation"
 msgstr "该翻译的语言"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.register_translation:4
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_translation:4
 #: of
 msgid ""
 "A dict which maps translation keys into translated text. The translation "
@@ -146,31 +146,31 @@ msgstr ""
 "一个将翻译键映射为翻译文本的 dict。翻译键可以被表示为根节点下的子节点名称，或嵌套的多层节点的路径。dict "
 "可嵌套多层，路径为从根节点开始每一层节点的名称相连、通过 ``\".\"`` 分隔的 str"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.register_server_handler:1
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_server_handler:1
 #: of
 msgid "Register a plugin-provided server handler"
 msgstr "注册一个由插件提供的服务端解析处理器"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.register_server_handler:3
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_server_handler:3
 #: of
 msgid ""
 "The server handler will override the configured server handler of MCDR, "
 "within the lifecycle of the current plugin"
 msgstr "该服务端解析处理器会在插件的生命周期内生效，将替代由 MCDR 配置文件指定的解析处理器"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.register_server_handler:5
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_server_handler:5
 #: of
 msgid ""
 "If multiple plugins provide multiple server handler, only the first one "
 "will be used, and warning messages will be logged"
 msgstr "若多个插件都提供了服务端解析处理器，那么只有首个解析处理器会生效，并且 MCDR 将会输出警告信息"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.register_server_handler:7
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_server_handler:7
 #: of
 msgid "The server handler to register"
 msgstr "将要注册的服务端解析处理器"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.register_info_filter:1
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_info_filter:1
 #: of
 msgid ""
 "Register a plugin-provided info filter. See "
@@ -180,26 +180,26 @@ msgstr ""
 "注册一个由插件提供的信息过滤器。见 "
 ":class:`~mcdreforged.info_reactor.info_filter.InfoFilter` 以了解更多信息"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.register_info_filter:3
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_info_filter:3
 #: of
 msgid "The info filter take effects within the lifecycle of the current plugin"
 msgstr "该信息过滤器会在插件的生命周期内生效"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.register_info_filter:7
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_info_filter:7
 #: of
 msgid ""
 "The info filter callbacks will be invoked in the MCDR main thread, not "
 "the task executor thread"
 msgstr "信息过滤器的回调函数将在 MCDR 的主线程，而非任务执行者线程上被调用"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.register_info_filter:9
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_info_filter:9
 #: of
 msgid ""
 "Make sure your function is well optimized, or it might lag MCDR, and also"
 " be aware of multithreading race condition"
 msgstr "请确保你的回调函数不会消耗太多时间，否则它可能会影响 MCDR 的性能。除此之外，注意多线程下的竞态问题"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.register_info_filter:11
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_info_filter:11
 #: of
 msgid "The info filter to register"
 msgstr "将要注册的信息过滤器"
@@ -208,17 +208,17 @@ msgstr "将要注册的信息过滤器"
 msgid "Plugin Utils"
 msgstr "插件工具"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.get_self_metadata:1
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.get_self_metadata:1
 #: of
 msgid "Return the metadata of the plugin itself"
 msgstr "返回当前插件的元数据"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.get_data_folder:1
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.get_data_folder:1
 #: of
 msgid "Return a unified data directory path for the current plugin"
 msgstr "为当前插件返回一个统一格式的数据文件夹"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.get_data_folder:3
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.get_data_folder:3
 #: of
 msgid ""
 "The path of the folder will be ``\"config/plugin_id\"/`` where "
@@ -226,50 +226,50 @@ msgid ""
 "exist, create it"
 msgstr "文件夹的路径将会为 ``\"config/plugin_id\"``，其中 ``plugin_id`` 是当前插件的 id"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.get_data_folder:6
-#: mcdreforged.plugin.server_interface.PluginServerInterface.open_bundled_file:3
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.get_data_folder:6
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.open_bundled_file:3
 #: of
 msgid "Example::"
 msgstr "例子::"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.get_data_folder
-#: mcdreforged.plugin.server_interface.PluginServerInterface.load_config_simple
-#: mcdreforged.plugin.server_interface.PluginServerInterface.open_bundled_file
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.get_data_folder
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.open_bundled_file
 #: of
 msgid "Returns"
 msgstr "返回"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.get_data_folder:11
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.get_data_folder:11
 #: of
 msgid "The path to the data directory"
 msgstr "返回数据文件夹的路径"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.open_bundled_file:1
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.open_bundled_file:1
 #: of
 msgid "Open a file inside the plugin with readonly binary mode"
 msgstr "使用二进制只读模式，打开插件中的一个文件"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.open_bundled_file:9
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.open_bundled_file:9
 #: of
 msgid "The related file path in your plugin to the file you want to open"
 msgstr "你想要打开的文件位于你的插件中的相对位置"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.open_bundled_file:10
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.open_bundled_file:10
 #: of
 msgid "A un-decoded bytes file-like object"
 msgstr "一个未解码的，bytes 形式的文件型的对象"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.open_bundled_file
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.open_bundled_file
 #: of
 msgid "Raises"
 msgstr "抛出"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.open_bundled_file:11
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.open_bundled_file:11
 #: of
 msgid "if the plugin is not a packed plugin (that is, a solo plugin)"
 msgstr "如果插件并非是一个多文件插件（换句话来讲，是一个单文件插件）"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.load_config_simple:1
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple:1
 #: of
 msgid ""
 "A simple method to load a dict or "
@@ -279,24 +279,24 @@ msgstr ""
 "一个简单的，从一个 json 文件中载入一个 dict 或 "
 ":class:`~mcdreforged.utils.serializer.Serializable` 类型的配置文件的方法"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.load_config_simple:3
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple:3
 #: of
 msgid ""
 "Default config is supported. Missing key-values in the loaded config "
 "object will be filled using the default config"
 msgstr "支持默认配置文件。加载的配置中缺失的键-值对将会使用默认配置文件填充"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.load_config_simple:5
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple:5
 #: of
 msgid "Example 1::"
 msgstr "例 1::"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.load_config_simple:17
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple:17
 #: of
 msgid "Example 2::"
 msgstr "例 2::"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.load_config_simple:29
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple:29
 #: of
 msgid ""
 "Assuming that the plugin id is ``my_plugin``, then the config file will "
@@ -305,13 +305,13 @@ msgstr ""
 "假设插件 id 为 ``my_plugin``，此时配置文件将被储存于 "
 "``\"config/my_plugin/my_config.json\"`` 中"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.load_config_simple:31
-#: mcdreforged.plugin.server_interface.PluginServerInterface.save_config_simple:4
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple:31
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.save_config_simple:4
 #: of
 msgid "The name of the config file. It can also be a path to the config file"
 msgstr "配置文件的文件名。它也可为配置文件的路径"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.load_config_simple:32
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple:32
 #: of
 msgid ""
 "A dict contains the default config. It's required when the config file is"
@@ -322,31 +322,31 @@ msgstr ""
 "一个储存着默认配置的 dict。当配置文件缺失时，这个参数是必须的，否则将抛出异常。如果 *target_class* 被给出并且 "
 "*default_config* 缺失，则当配置文件缺失时 *target_class* 的默认值将会被使用"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.load_config_simple
-#: mcdreforged.plugin.server_interface.PluginServerInterface.save_config_simple
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.save_config_simple
 #: of
 msgid "Keyword Arguments"
 msgstr ""
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.load_config_simple:35
-#: mcdreforged.plugin.server_interface.PluginServerInterface.save_config_simple:5
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple:35
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.save_config_simple:5
 #: of
 msgid ""
 "If True, the parent directory of file operating is the :meth:`data folder"
 " <get_data_folder>` of the plugin"
 msgstr "如果被设置为 True，则操作配置文件时的路径将为该插件的 :meth:`数据文件夹 <get_data_folder>` 中"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.load_config_simple:36
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple:36
 #: of
 msgid "If logging messages in console about config loading"
 msgstr "是否在控制台中打印配置文件加载相关日志"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.load_config_simple:37
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple:37
 #: of
 msgid "The command source for replying logging messages"
 msgstr "用于回复加载配置相关日志的指令源"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.load_config_simple:38
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple:38
 #: of
 msgid ""
 "A class derived from :class:`~mcdreforged.utils.serializer.Serializable`."
@@ -356,20 +356,20 @@ msgstr ""
 "一个派生自 :class:`~mcdreforged.utils.serializer.Serializable` "
 "的类。当被指定时，加载的配置文件数据将会被反序列化为一个 *target_class* 的实例并令其作为方法的返回值"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.load_config_simple:41
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple:41
 #: of
 msgid "The encoding method to read the config file. Default ``\"utf8\"``"
 msgstr "读取配置文件的编码方式。默认值 ``\"utf8\"``"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.load_config_simple:42
-#: mcdreforged.plugin.server_interface.PluginServerInterface.save_config_simple:7
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple:42
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.save_config_simple:7
 #: of
 msgid ""
 "The syntax format of the config file. Default: ``None``, which means that"
 " MCDR will try to detect the format from the name of the config file"
 msgstr "配置文件的语法格式。默认值：``None``，意味着 MCDR 将尝试基于配置文件的名字来推断格式"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.load_config_simple:44
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple:44
 #: of
 msgid ""
 "The policy of handling a config loading error. ``\"regen\"`` (default): "
@@ -377,23 +377,40 @@ msgid ""
 "exception"
 msgstr "用于处理配置文件加载失败错误的策略。``\"regen\"`` （默认值）：尝试重新生成配置文件；``\"raise\"``: 直接抛出相关异常"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.load_config_simple:46
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple:46
+#: of
+msgid ""
+"A callback function that processes the data read from the config file. It"
+" should accept one argument and return a bool. The argument is the parsed"
+" config file, normally a dict-like object. The return value indicates if "
+"the file saving operation should be performed after the config loading "
+"Example usage: config data migration"
+msgstr ""
+"一个回调函数，用于自定义处理从配置文件中读取的数据。它应仅接受一个参数，并返回一个 "
+"bool。参数是解析后的配置文件对象，返回值表示在是否应该在配置文件加载结束时写入新的配置文件数据。用例：插件升级后迁移配置文件的数据"
+
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple:50
 #: of
 msgid "A dict contains the loaded and processed config"
 msgstr "一个储存着加载并处理后的配置文件的 dict"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.load_config_simple:48
-#: mcdreforged.plugin.server_interface.PluginServerInterface.save_config_simple:10
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple:52
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.save_config_simple:10
 #: of
 msgid "The *encoding* parameter"
 msgstr "*encoding* 参数"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.load_config_simple:50
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple:54
 #: of
 msgid "The *failure_policy* and *file_format* parameters"
 msgstr "*failure_policy* 和 *file_format* 参数"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.save_config_simple:1
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple:56
+#: of
+msgid "The *data_processor* parameters"
+msgstr "*data_processor* 参数"
+
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.save_config_simple:1
 #: of
 msgid ""
 "A simple method to save your dict or "
@@ -403,17 +420,17 @@ msgstr ""
 "一个简单的，将一个 dict 或 :class:`~mcdreforged.utils.serializer.Serializable` "
 "配置文件保存至 json 文件的方法"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.save_config_simple:3
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.save_config_simple:3
 #: of
 msgid "The config instance to be saved"
 msgstr "将要被保存的配置文件实例"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.save_config_simple:6
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.save_config_simple:6
 #: of
 msgid "The encoding method to write the config file. Default ``\"utf8\"``"
 msgstr "写入配置文件的编码方式。默认值 ``\"utf8\"``"
 
-#: mcdreforged.plugin.server_interface.PluginServerInterface.save_config_simple:12
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.save_config_simple:12
 #: of
 msgid "The *file_format* parameter"
 msgstr "*file_format* 参数"

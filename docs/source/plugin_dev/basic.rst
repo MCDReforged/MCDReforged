@@ -98,7 +98,7 @@ which will actually loads the ``__init__.py`` in ``my_plugin/`` folder inside th
 
 If the entrypoint is set to ``my_plugin.source``, then MCDR will import ``my_plugin.source``, which will actually loads ``source.py`` in ``my_plugin/`` folder
 
-The entrypoint module instance is also used in :meth:`~mcdreforged.plugin.server_interface.ServerInterface.get_plugin_instance`.
+The entrypoint module instance is also used in :meth:`~mcdreforged.plugin.si.server_interface.ServerInterface.get_plugin_instance`.
 The entrypoint module instance is also what the second parameter in :ref:`plugin_dev/event:Plugin Loaded` event is
 
 Plugin Registry
@@ -125,7 +125,7 @@ There are 3 methods to register an event listener for you plugin
             do_something()
 
 #. 
-    Manually invoke :meth:`~mcdreforged.plugin.server_interface.PluginServerInterface.register_event_listener` method to register an event listener.
+    Manually invoke :meth:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_event_listener` method to register an event listener.
     You can specify the callable object and the priority for the event listener
 
     Here some examples about manually register event listeners
@@ -156,7 +156,7 @@ MCDR provides a command system for plugins to register their commands
 Check the :doc:`/plugin_dev/command` document for more detail about building a command tree
 
 Assuming that you have already built a command tree with root literal node *root*, then you can use
-the :meth:`~mcdreforged.plugin.server_interface.PluginServerInterface.register_command` method to register your command tree in MCDR
+the :meth:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_command` method to register your command tree in MCDR
 
 .. code-block:: python
 
@@ -165,7 +165,7 @@ the :meth:`~mcdreforged.plugin.server_interface.PluginServerInterface.register_c
 Help message
 ^^^^^^^^^^^^
 
-Plugin can register its help message with :meth:`~mcdreforged.plugin.server_interface.PluginServerInterface.register_help_message` to MCDR,
+Plugin can register its help message with :meth:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_help_message` to MCDR,
 so that users can use :ref:`command:!!help command` to view the help messages of all commands
 
 .. _plugin-translation:
@@ -174,8 +174,8 @@ Translation
 ^^^^^^^^^^^
 
 If your plugin needs to handle some message localization or translation things, you can let MCDR help you:
-register a translation via :meth:`~mcdreforged.plugin.server_interface.PluginServerInterface.register_translation` method
-and use :meth:`~mcdreforged.plugin.server_interface.ServerInterface.tr` or :meth:`~mcdreforged.plugin.server_interface.ServerInterface.rtr` to get the translated string
+register a translation via :meth:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_translation` method
+and use :meth:`~mcdreforged.plugin.si.server_interface.ServerInterface.tr` or :meth:`~mcdreforged.plugin.si.server_interface.ServerInterface.rtr` to get the translated string
 
 See the :ref:`plugin_dev/dev_tips:Translation` section in :doc:`/plugin_dev/dev_tips` for some suggestions about using translation
 
@@ -188,7 +188,7 @@ For packed plugin, it's path of the ``.mcdr`` file; For directory plugin, it's t
 Therefore, you can simply import other plugin by importing its plugin id using the ``import`` statement.
 It's also the recommended way to do that since it provides code hints and more information for your IDE
 
-Apart from this, you can also use :meth:`~mcdreforged.plugin.server_interface.ServerInterface.get_plugin_instance` method
+Apart from this, you can also use :meth:`~mcdreforged.plugin.si.server_interface.ServerInterface.get_plugin_instance` method
 to import the entry point of the plugin,and this is also **the only way to import a solo plugin**.
 For multi file plugin the result is the same as directly importing the plugin
 

@@ -32,13 +32,13 @@ jobs:
       id-token: write
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Setup python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: 3.11
 
-    - uses: actions/cache@v3
+    - uses: actions/cache@v4
       with:
         path: ~/.cache/pip
         key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
@@ -110,7 +110,7 @@ jobs:
       if: env.IS_RELEASE == 'true'
       uses: pypa/gh-action-pypi-publish@release/v1
 
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: MCDReforged package distribution for ${{ github.sha }}
         path: dist/
@@ -143,7 +143,7 @@ jobs:
         python: ['3.10', '3.11', '3.12']  # last 3 minor versions
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Prepare build config
       uses: actions/github-script@v7
@@ -214,7 +214,7 @@ jobs:
         tags: ${{ steps.config.outputs.tags }}
         flavor: latest=false
 
-    - uses: actions/setup-python@v4
+    - uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python }}
     - name: Wait for PyPI index update

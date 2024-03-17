@@ -13,7 +13,7 @@ from mcdreforged.utils.types import MessageText
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
 	from mcdreforged.info_reactor.info import Info
-	from mcdreforged.plugin.server_interface import ServerInterface
+	from mcdreforged.plugin.si.server_interface import ServerInterface
 	from mcdreforged.plugin.type.plugin import AbstractPlugin
 	from mcdreforged.preference.preference_manager import PreferenceItem
 
@@ -70,7 +70,7 @@ class CommandSource(ABC):
 		Return the preference of the command source
 
 		By default, the default preference of MCDR from
-		:meth:`ServerInterface.get_default_preference() <mcdreforged.plugin.server_interface.ServerInterface.get_preference>`
+		:meth:`ServerInterface.get_default_preference() <mcdreforged.plugin.si.server_interface.ServerInterface.get_preference>`
 		will be returned
 
 		Subclasses might override this method to return customized preference.
@@ -78,11 +78,11 @@ class CommandSource(ABC):
 
 		.. seealso::
 
-			method :meth:`ServerInterface.get_preference() <mcdreforged.plugin.server_interface.ServerInterface.get_preference>`
+			method :meth:`ServerInterface.get_preference() <mcdreforged.plugin.si.server_interface.ServerInterface.get_preference>`
 
 		.. versionadded:: v2.1.0
 		"""
-		from mcdreforged.plugin.server_interface import ServerInterface
+		from mcdreforged.plugin.si.server_interface import ServerInterface
 		server = ServerInterface.get_instance()
 		if server is None:
 			raise IllegalCallError('Cannot get default preference when MCDR is not running')

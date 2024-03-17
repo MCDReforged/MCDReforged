@@ -10,7 +10,7 @@ from mcdreforged.utils.exception import IllegalStateError, IllegalCallError
 
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
-	from mcdreforged.plugin.server_interface import ServerInterface
+	from mcdreforged.plugin.si.server_interface import ServerInterface
 
 
 class InfoSource(int, Enum):

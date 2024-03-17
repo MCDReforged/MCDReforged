@@ -29,12 +29,12 @@ msgstr "帮助消息"
 #: ../plugin_dev/dev_tips.rst:10
 msgid ""
 "Use "
-":meth:`~mcdreforged.plugin.server_interface.PluginServerInterface.register_help_message`"
+":meth:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_help_message`"
 " to add some necessary tips for your plugin, so the player can use "
 "``!!help`` command to know about your plugin"
 msgstr ""
 "使用 "
-":meth:`~mcdreforged.plugin.server_interface.PluginServerInterface.register_help_message`"
+":meth:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_help_message`"
 " 来为你的插件添加一些必要的提示，这样玩家就可以使用 ``!!help`` 命令来了解如何使用你的插件"
 
 #: ../plugin_dev/dev_tips.rst:13
@@ -82,27 +82,27 @@ msgstr ""
 #: ../plugin_dev/dev_tips.rst:39
 msgid ""
 "For the difference between 2 translation method in "
-":class:`~mcdreforged.plugin.server_interface.ServerInterface`, let's use "
+":class:`~mcdreforged.plugin.si.server_interface.ServerInterface`, let's use "
 "Minecraft code (yarn mapping) as an example:"
 msgstr ""
-"对于 :class:`~mcdreforged.plugin.server_interface.ServerInterface` "
+"对于 :class:`~mcdreforged.plugin.si.server_interface.ServerInterface` "
 "中两种不同的翻译方法，我们可以使用 Minecraft 的代码（yarn 反混淆表）来进行类比区分"
 
 #: ../plugin_dev/dev_tips.rst:41
 msgid ""
-":meth:`~mcdreforged.plugin.server_interface.ServerInterface.tr` is "
+":meth:`~mcdreforged.plugin.si.server_interface.ServerInterface.tr` is "
 "``I18n.translate()``"
 msgstr ""
-":meth:`~mcdreforged.plugin.server_interface.ServerInterface.tr` 就是 "
+":meth:`~mcdreforged.plugin.si.server_interface.ServerInterface.tr` 就是 "
 "``I18n.translate()``"
 
 #: ../plugin_dev/dev_tips.rst:42
 msgid ""
-":meth:`~mcdreforged.plugin.server_interface.ServerInterface.rtr`, or "
+":meth:`~mcdreforged.plugin.si.server_interface.ServerInterface.rtr`, or "
 ":class:`~mcdreforged.translation.translation_text.RTextMCDRTranslation` "
 "is ``new TranslatableText()``"
 msgstr ""
-":meth:`~mcdreforged.plugin.server_interface.ServerInterface.rtr`, or "
+":meth:`~mcdreforged.plugin.si.server_interface.ServerInterface.rtr`, or "
 ":class:`~mcdreforged.translation.translation_text.RTextMCDRTranslation` "
 "就是 ``new TranslatableText()``"
 
@@ -210,10 +210,10 @@ msgstr ""
 
 #: ../plugin_dev/dev_tips.rst:85
 msgid ""
-":meth:`~mcdreforged.plugin.server_interface.PluginServerInterface.get_data_folder`"
+":meth:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.get_data_folder`"
 " method is a nice method for lazyman"
 msgstr ""
-":meth:`~mcdreforged.plugin.server_interface.PluginServerInterface.get_data_folder`"
+":meth:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.get_data_folder`"
 " 是个不错的懒人方法"
 
 #: ../plugin_dev/dev_tips.rst:87

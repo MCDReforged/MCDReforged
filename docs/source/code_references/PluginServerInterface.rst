@@ -4,7 +4,7 @@ PluginServerInterface
 
 :doc:`API package </plugin_dev/api>` path: ``mcdreforged.api.types``
 
-.. currentmodule:: mcdreforged.plugin.server_interface
+.. currentmodule:: mcdreforged.plugin.si.plugin_server_interface
 
 .. autoclass:: PluginServerInterface
 

@@ -14,8 +14,8 @@ class RTextMCDRTranslation(RTextBase):
 	"""
 	The translation text component used in MCDR
 
-	When MCDR is running, it will use the :meth:`~mcdreforged.plugin.server_interface.ServerInterface.tr` method
-	in :class:`~mcdreforged.plugin.server_interface.ServerInterface` class as the translating method,
+	When MCDR is running, it will use the :meth:`~mcdreforged.plugin.si.server_interface.ServerInterface.tr` method
+	in :class:`~mcdreforged.plugin.si.server_interface.ServerInterface` class as the translating method,
 	and the language of MCDR as the fallback translation language
 
 	.. versionadded:: v2.1.0
@@ -38,7 +38,7 @@ class RTextMCDRTranslation(RTextBase):
 		self.__translator = lambda *args_, **kwargs_: RText(self.translation_key)
 		self.__post_process: List[Callable[[RTextBase], RTextBase]] = []
 
-		from mcdreforged.plugin.server_interface import ServerInterface
+		from mcdreforged.plugin.si.server_interface import ServerInterface
 		server: Optional[ServerInterface] = ServerInterface.get_instance()
 		if server is not None:
 			self.set_translator(server.tr)

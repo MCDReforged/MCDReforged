@@ -59,25 +59,25 @@ format and insert your lib your multi file plugin
 ServerInterface
 ^^^^^^^^^^^^^^^
 
-APIs used for plugin registry operation related to current plugin in :class:`~mcdreforged.plugin.server_interface.ServerInterface`
-class is now split to a derived class :class:`~mcdreforged.plugin.server_interface.PluginServerInterface`, other general MCDR control APIs are not affects
+APIs used for plugin registry operation related to current plugin in :class:`~mcdreforged.plugin.si.server_interface.ServerInterface`
+class is now split to a derived class :class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`, other general MCDR control APIs are not affects
 
-For example, these APIs are moved to :class:`~mcdreforged.plugin.server_interface.PluginServerInterface`
+For example, these APIs are moved to :class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`
 
-* :meth:`~mcdreforged.plugin.server_interface.PluginServerInterface.register_event_listener`
-* :meth:`~mcdreforged.plugin.server_interface.PluginServerInterface.get_data_folder`
-* :meth:`~mcdreforged.plugin.server_interface.PluginServerInterface.get_data_folder`
+* :meth:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_event_listener`
+* :meth:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.get_data_folder`
+* :meth:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.get_data_folder`
 * ...
 
 But these APIs are not affected
 
-* :meth:`~mcdreforged.plugin.server_interface.ServerInterface.start`
-* :meth:`~mcdreforged.plugin.server_interface.ServerInterface.execute`
-* :meth:`~mcdreforged.plugin.server_interface.ServerInterface.get_plugin_list`
-* :meth:`~mcdreforged.plugin.server_interface.ServerInterface.get_permission_level`
+* :meth:`~mcdreforged.plugin.si.server_interface.ServerInterface.start`
+* :meth:`~mcdreforged.plugin.si.server_interface.ServerInterface.execute`
+* :meth:`~mcdreforged.plugin.si.server_interface.ServerInterface.get_plugin_list`
+* :meth:`~mcdreforged.plugin.si.server_interface.ServerInterface.get_permission_level`
 * ...
 
-When invoking the event listener callback of you plugin, MCDR will send a :class:`~mcdreforged.plugin.server_interface.PluginServerInterface`
+When invoking the event listener callback of you plugin, MCDR will send a :class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`
 as the first parameter, so the usability of the server interface API is not affected
 
 These changes should not affect your plugin's runnability, but it will probably mess up the type checking code inspect in your IDE to make the IDE displays a warning

@@ -128,14 +128,14 @@ msgstr "``event`` 包包含用于创建自定义事件的类和 MCDR 内置事�
 #: ../plugin_dev/api.rst:67
 msgid ""
 "You might already read the "
-":meth:`~mcdreforged.plugin.server_interface.ServerInterface.dispatch_event`"
+":meth:`~mcdreforged.plugin.si.server_interface.ServerInterface.dispatch_event`"
 " method in ``ServerInterface`` class. It only accepts a ``PluginEvent`` "
 "instance as its first parameter. So if you want to dispatch your custom "
 "event, create a ``LiteralEvent`` for simpleness or a custom event class "
 "inherited from ``PluginEvent``"
 msgstr ""
 "你可能已经读过 ``ServerInterface`` 类中的 "
-":meth:`~mcdreforged.plugin.server_interface.ServerInterface.dispatch_event`"
+":meth:`~mcdreforged.plugin.si.server_interface.ServerInterface.dispatch_event`"
 " 方法。它只接受一个 ``PluginEvent`` 实例作为第一个参数。所以，如果你想分发你的自定义事件，为了简单起见，请创建一个 "
 "``LiteralEvent`` 或一个继承自 ``PluginEvent`` 的自定义事件类"
 
@@ -150,11 +150,11 @@ msgstr "模块路径: ``mcdreforged.api.exception``"
 #: ../plugin_dev/api.rst:76
 msgid ""
 "There some custom exceptions that is used in MCDR runtime e.g. "
-":class:`~mcdreforged.plugin.server_interface.ServerInterface` methods. "
+":class:`~mcdreforged.plugin.si.server_interface.ServerInterface` methods. "
 "Here comes the way to import them"
 msgstr ""
 "MCDR 运行时会使用一些自定义的异常，例如在调用 "
-":class:`~mcdreforged.plugin.server_interface.ServerInterface` "
+":class:`~mcdreforged.plugin.si.server_interface.ServerInterface` "
 "的方法时。这是导入它们的方法"
 
 #: ../plugin_dev/api.rst:79
