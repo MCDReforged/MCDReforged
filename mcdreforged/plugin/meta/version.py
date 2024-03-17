@@ -154,16 +154,20 @@ DEFAULT_CRITERION_OPERATOR = '=='
 
 
 class Criterion:
-	def __init__(self, opt: str, base_version: Version, criterion: Callable[[Version, Version], bool]):
+	def __init__(self, opt: str, base_version: Version, criterion: Callable[[Version, Version], bool], is_default: bool):
 		self.opt = opt
 		self.base_version = base_version
 		self.criterion = criterion
+		self.is_default = is_default
 
 	def test(self, target: Union[Version, str]):
 		return self.criterion(self.base_version, target)
 
 	def __str__(self):
-		return '{}{}'.format(self.opt, self.base_version)
+		if self.is_default:
+			return str(self.base_version)
+		else:
+			return '{}{}'.format(self.opt, self.base_version)
 
 
 class VersionRequirement:
@@ -197,11 +201,13 @@ class VersionRequirement:
 					if requirement.startswith(prefix):
 						opt = prefix
 						base_version = requirement[len(prefix):]
+						is_default = False
 						break
 				else:
 					opt = DEFAULT_CRITERION_OPERATOR
 					base_version = requirement
-				self.criterions.append(Criterion(opt, Version(base_version), self.CRITERIONS[opt]))
+					is_default = True
+				self.criterions.append(Criterion(opt, Version(base_version), self.CRITERIONS[opt], is_default))
 
 	def has_criterion(self) -> bool:
 		return len(self.criterions) > 0
