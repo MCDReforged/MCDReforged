@@ -128,25 +128,6 @@ class PluginMetaProvider(resolvelib.AbstractProvider):
 		return dependencies
 
 
-class DependencyResolutionFailure:
-	pass
-
-
-class DependencyResolutionImpossible(DependencyResolutionFailure):
-	def __init__(self, e: resolvelib.ResolutionImpossible):
-		self.cause = e.causes
-
-
-class DependencyResolutionError(DependencyResolutionFailure):
-	def __init__(self, e: resolvelib.ResolutionError):
-		self.message = str(e)
-
-
-class ValidatePythonPackageFailed(DependencyResolutionFailure):
-	def __init__(self, package_requirements: PackageRequirements):
-		self.package_requirements = package_requirements
-
-
 class PluginDependencyResolver:
 	def __init__(self, meta_cache: MetaRegistry):
 		self.__plugin_metas: PluginMetas = {}
@@ -161,7 +142,7 @@ class PluginDependencyResolver:
 				)
 			self.__plugin_metas[plugin_id] = meta
 
-	def resolve(self, requirements: List[PluginRequirement], reporter: Optional[resolvelib.BaseReporter] = None) -> Union[PluginResolution, DependencyResolutionFailure]:
+	def resolve(self, requirements: List[PluginRequirement], reporter: Optional[resolvelib.BaseReporter] = None) -> Union[PluginResolution, resolvelib.ResolutionError]:
 		if reporter is None:
 			reporter = resolvelib.BaseReporter()
 		provider = PluginMetaProvider(self.__plugin_metas)
@@ -169,10 +150,8 @@ class PluginDependencyResolver:
 
 		try:
 			result = resolver.resolve(requirements, max_rounds=10000)
-		except resolvelib.ResolutionImpossible as e:
-			return DependencyResolutionImpossible(e)
 		except resolvelib.ResolutionError as e:
-			return DependencyResolutionError(e)
+			return e
 
 		resolution: PluginResolution = {}
 		for pid, pc in result.mapping.items():
