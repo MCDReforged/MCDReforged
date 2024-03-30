@@ -280,7 +280,7 @@ class PluginServerInterface(ServerInterface):
 				raise
 
 			# no default config and cannot read config file, raise the error
-			if default_config is None and target_class:
+			if default_config is None and target_class is None:
 				raise
 
 			needs_save = True
@@ -313,14 +313,14 @@ class PluginServerInterface(ServerInterface):
 				result_config = default_config.copy()
 			else:
 				result_config = read_data
-			if default_config is not None:
-				# Notes: support level-1 nesting only
-				# constructing the result config based on the given default config
-				for key, value in default_config.items():
-					if key not in read_data:
-						result_config[key] = value
-						log(self._mcdr_server.tr('server_interface.load_config_simple.key_missed', key, value))
-						needs_save = True
+				if default_config is not None:
+					# Notes: support level-1 nesting only
+					# constructing the result config based on the given default config
+					for key, value in default_config.items():
+						if key not in read_data:
+							result_config[key] = value
+							log(self._mcdr_server.tr('server_interface.load_config_simple.key_missed', key, value))
+							needs_save = True
 
 				# remove unexpected keys
 				for key in list(result_config.keys()):
