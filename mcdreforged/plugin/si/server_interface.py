@@ -749,6 +749,12 @@ class ServerInterface:
 
 		.. versionadded:: v2.13.0
 		"""
+		def map_to_path(paths: Optional[List[str]]) -> Optional[List[Path]]:
+			if paths is not None:
+				return list(map(Path, paths))
+			else:
+				return None
+
 		def map_to_regular(plugin_ids: Optional[List[str]]) -> Optional[List['RegularPlugin']]:
 			if plugin_ids is not None:
 				return list(map(self._plugin_manager.get_regular_plugin_from_id, plugin_ids))
@@ -756,10 +762,10 @@ class ServerInterface:
 				return None
 
 		future = self._plugin_manager.manipulate_plugins(
-			load=load,
+			load=map_to_path(load),
 			unload=map_to_regular(unload),
 			reload=map_to_regular(reload),
-			enable=enable,
+			enable=map_to_path(enable),
 			disable=map_to_regular(disable),
 		)
 		if future.is_finished():
