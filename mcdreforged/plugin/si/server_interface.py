@@ -1,8 +1,8 @@
 import functools
 import logging
 import threading
-from typing import Callable, TYPE_CHECKING, Tuple, Any, Union, Optional, List, Dict
 from pathlib import Path
+from typing import Callable, TYPE_CHECKING, Tuple, Any, Union, Optional, List, Dict
 
 import psutil
 
@@ -571,7 +571,7 @@ class ServerInterface:
 		return [plugin.get_id() for plugin in self._plugin_manager.get_regular_plugins()]
 
 	def __get_files_in_plugin_directories(self) -> List[str]:
-		result = []
+		result: List[Path] = []
 		for plugin_directory in self._plugin_manager.plugin_directories:
 			result.extend(file_util.list_all(plugin_directory))
 		return list(map(str, result))

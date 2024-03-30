@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 from typing import TYPE_CHECKING, Callable, List, Tuple
 
 from mcdreforged.command.builder.nodes.arguments import QuotableText
@@ -150,12 +151,13 @@ class PluginCommand(SubCommand):
 		self._print_plugin_operation_result_if_no_error(source, ret)
 
 	def __not_loaded_plugin_file_manipulate(
-			self, source: CommandSource, file_name: str, func: Callable[[str], Future[PluginOperationResult]],
+			self, source: CommandSource, file_name: str, func: Callable[[Path], Future[PluginOperationResult]],
 			operation_name: str, possible_plugin_path: List[str]
 	):
-		plugin_paths = list(filter(lambda fp: fp == file_name, possible_plugin_path))
+		possible_plugin_path = [Path(fp) for fp in possible_plugin_path]
+		plugin_paths = [fp for fp in possible_plugin_path if str(fp) == file_name]  # try full-match
 		if len(plugin_paths) == 0:
-			plugin_paths = list(filter(lambda fp: os.path.basename(fp) == file_name, possible_plugin_path))
+			plugin_paths = [fp for fp in possible_plugin_path if fp.name == file_name]  # try name-match
 		if len(plugin_paths) == 0:
 			source.reply(self.tr('mcdr_command.invalid_plugin_file_name', file_name))
 		else:
