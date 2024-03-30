@@ -1,6 +1,7 @@
 from typing import Optional
 
 import parse
+from typing_extensions import override
 
 from mcdreforged.handler.impl.bukkit_handler import BukkitHandler
 from mcdreforged.handler.impl.bungeecord_handler import BungeecordHandler
@@ -17,12 +18,14 @@ class WaterfallHandler(BungeecordHandler):
 	# [02:18:30 INFO]: Enabled plugin cmd_list version git:cmd_list:1.15-SNAPSHOT:f1c32f8:1489 by SpigotMC
 	# [02:18:29 INFO] [ViaVersion]: Loading 1.12.2 -> 1.13 mappings..."
 	@classmethod
+	@override
 	def get_content_parsing_formatter(cls):
 		return (
 			BukkitHandler.get_content_parsing_formatter(),
 			'[{hour:d}:{min:d}:{sec:d} {logging}] [{dummy}]: {content}'  # something there is an extra element after the heading [] and :
 		)
 
+	@override
 	def parse_player_joined(self, info: Info) -> Optional[str]:
 		# [02:18:52 INFO]: [/127.0.0.1:14426] <-> InitialHandler has connected
 		# sadly no player id display here
@@ -30,6 +33,7 @@ class WaterfallHandler(BungeecordHandler):
 
 	__player_left_parser = parse.Parser('[/{ip}|{name}] -> UpstreamBridge has disconnected')
 
+	@override
 	def parse_player_left(self, info):
 		# [/127.0.0.1:14426|Fallen_Breath] -> UpstreamBridge has disconnected
 		if not info.is_user:

@@ -1,5 +1,7 @@
 from typing import TYPE_CHECKING, NamedTuple, Callable, Collection, Any, Type, Dict, List, Optional
 
+from typing_extensions import override
+
 from mcdreforged.command.builder.exception import RequirementNotMet
 from mcdreforged.command.builder.nodes.arguments import QuotableText
 from mcdreforged.command.builder.nodes.basic import Literal, ArgumentNode
@@ -50,6 +52,7 @@ class PreferenceCommand(SubCommand):
 		else:
 			return True
 
+	@override
 	def get_command_node(self) -> Literal:
 		root_node = (
 			self.public_command_root({'preference', 'pref'}).

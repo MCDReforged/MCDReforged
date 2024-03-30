@@ -1,3 +1,5 @@
+from typing_extensions import override
+
 from mcdreforged.handler.impl.vanilla_handler import VanillaHandler
 
 
@@ -11,6 +13,7 @@ class ForgeHandler(VanillaHandler):
 	# [18:29:30] [Server thread/INFO] [minecraft/DedicatedServer]: <Steve> tests
 	# [09:00:00] [Server thread/INFO]: <Steve> Hello  // vanilla format, in some old forge servers e.g. forge 1.7.10
 	@classmethod
+	@override
 	def get_content_parsing_formatter(cls):
 		return (
 			'[{hour:d}:{min:d}:{sec:d}] [{thread}/{logging}] [{forge_logging}]: {content}',

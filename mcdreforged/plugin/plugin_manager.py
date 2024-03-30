@@ -71,7 +71,7 @@ class PluginManager:
 		Get current executing plugin in this thread
 		:param thread: If specified, it should be a Thread instance. Then it will return the executing plugin in the given thread
 		"""
-		stack = self.__tls.get(self.TLS_PLUGIN_KEY, None, thread=thread)  # type: Deque[AbstractPlugin]
+		stack: Deque[AbstractPlugin] = self.__tls.get(self.TLS_PLUGIN_KEY, None, thread=thread)
 		return stack[-1] if stack is not None else None
 
 	def get_plugin_amount(self) -> int:
@@ -101,7 +101,7 @@ class PluginManager:
 
 	@contextmanager
 	def with_plugin_context(self, plugin: AbstractPlugin):
-		stack = self.__tls.get(self.TLS_PLUGIN_KEY, default=collections.deque())  # type: Deque[AbstractPlugin]
+		stack: Deque[AbstractPlugin] = self.__tls.get(self.TLS_PLUGIN_KEY, default=collections.deque())
 		stack.append(plugin)
 		self.__tls.put(self.TLS_PLUGIN_KEY, stack)
 		try:

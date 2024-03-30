@@ -17,10 +17,11 @@ from prompt_toolkit.layout.processors import Processor, TransformationInput, Tra
 from prompt_toolkit.output.vt100 import Vt100_Output
 from prompt_toolkit.patch_stdout import StdoutProxy
 from prompt_toolkit.shortcuts import CompleteStyle
+from typing_extensions import override
 
 from mcdreforged.command.builder.nodes.basic import CommandSuggestions
 from mcdreforged.command.command_source import ConsoleCommandSource
-from mcdreforged.executor.thread_executor import ThreadExecutor
+from mcdreforged.executor.background_thread_executor import BackgroundThreadExecutor
 from mcdreforged.info_reactor.info import Info
 from mcdreforged.permission.permission_level import PermissionLevel
 from mcdreforged.utils import misc_util
@@ -32,20 +33,23 @@ if TYPE_CHECKING:
 	from mcdreforged.command.command_manager import CommandManager
 
 
-class ConsoleHandler(ThreadExecutor):
+class ConsoleHandler(BackgroundThreadExecutor):
 	def __init__(self, mcdr_server: 'MCDReforgedServer'):
 		super().__init__(mcdr_server)
 		self.console_kit = PromptToolkitWrapper(self)
 
+	@override
 	def loop(self):
 		if self.mcdr_server.config['advanced_console']:
 			self.console_kit.start_kits()
 		super().loop()
 
+	@override
 	def stop(self):
 		super().stop()
 		self.console_kit.stop_kits()
 
+	@override
 	def tick(self):
 		try:
 			inputs = self.console_kit.get_input()
@@ -73,9 +77,11 @@ class ConsoleHandler(ThreadExecutor):
 
 
 class ConsoleSuggestionCommandSource(ConsoleCommandSource):
+	@override
 	def get_permission_level(self) -> int:
 		return PermissionLevel.CONSOLE_LEVEL
 
+	@override
 	def reply(self, message: MessageText, **kwargs) -> None:
 		pass
 
@@ -112,6 +118,7 @@ class CommandCompleter(WordCompleter):
 		super().__init__([], sentence=True)
 		self.suggester = suggester
 
+	@override
 	def get_completions(self, document: Document, complete_event: CompleteEvent) -> Iterable[Completion]:
 		input_ = document.current_line_before_cursor
 		suggestions = self.suggester.suggest(input_)
@@ -125,6 +132,7 @@ class CommandArgumentSuggester(Processor):
 		super().__init__()
 		self.suggester = suggester
 
+	@override
 	def apply_transformation(self, ti: TransformationInput) -> Transformation:
 		# last line and cursor at end
 		if ti.lineno == ti.document.line_count - 1 and ti.document.is_cursor_at_the_end:
@@ -162,6 +170,7 @@ class MCDRPromptSession(PromptSession):
 		# Similarly, in addition to checking if it's None, we should check its completions field as well
 		return complete_state is not None and complete_state.completions
 
+	@override
 	def _get_default_buffer_control_height(self) -> Dimension:
 		dim = super()._get_default_buffer_control_height()
 		# When there's no complete this line, don't reverse space for the autocompletion menu
@@ -171,6 +180,7 @@ class MCDRPromptSession(PromptSession):
 
 	def __get_complete_state_checker(self) -> Processor:
 		class __CompleteStateChecker(Processor):
+			@override
 			def apply_transformation(self, ti: TransformationInput) -> Transformation:
 				if len(ti.document.text) == 0:
 					session.has_complete_this_line = False
@@ -189,6 +199,7 @@ class MCDRStdoutProxy(StdoutProxy):
 		self.__sleep_duration = self.sleep_between_writes
 		self._flush_queue.maxsize = 1000
 
+	@override
 	def _write_thread(self) -> None:
 		"""
 		Almost the same as :meth:`StdoutProxy._write_thread`. See line comments for modifications
@@ -221,6 +232,7 @@ class MCDRStdoutProxy(StdoutProxy):
 			if app_loop is not None:
 				time.sleep(self.sleep_between_writes)
 
+	@override
 	def _write_and_flush(self, loop, text):
 		# make sure the event loop queue does not accumulate too much, in case stdout spams
 		assert threading.current_thread() == self._flush_thread, '_write_and_flush called on unexpected thread {}'.format(threading.current_thread().name)

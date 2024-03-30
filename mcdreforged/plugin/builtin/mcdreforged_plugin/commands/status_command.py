@@ -1,6 +1,7 @@
 import threading
 
 import psutil
+from typing_extensions import override
 
 from mcdreforged.command.builder.nodes.basic import Literal
 from mcdreforged.command.command_source import CommandSource
@@ -13,6 +14,7 @@ from mcdreforged.utils import tree_printer
 
 
 class StatusCommand(SubCommand):
+	@override
 	def get_command_node(self) -> Literal:
 		return (
 			self.public_command_root('status').runs(self.print_mcdr_status)

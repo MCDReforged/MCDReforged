@@ -23,10 +23,6 @@ class PermanentPlugin(AbstractPlugin, ABC):
 		self.__metadata = metadata
 
 	@override
-	def is_permanent(self) -> bool:
-		return True
-
-	@override
 	def get_metadata(self) -> Metadata:
 		if self.__metadata is None:
 			raise RuntimeError('accessing metadata before initialized')

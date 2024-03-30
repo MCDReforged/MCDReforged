@@ -12,7 +12,7 @@ from contextlib import contextmanager
 from enum import auto, Flag
 from pathlib import Path
 from threading import local, Lock
-from typing import Dict, Optional, List, IO, Callable, Type
+from typing import Dict, Optional, List, IO, Type
 
 from colorlog import ColoredFormatter
 
@@ -49,8 +49,6 @@ __pre_fetch_debug_option_value()
 
 
 class ZippingDayRotatingFileHandler(logging.FileHandler):
-	rotator: Callable[[str, str], None]
-
 	def __init__(self, file_path: str, rotate_day_count: int):
 		self.rotate_day_count = rotate_day_count
 		self.file_path = Path(file_path)
@@ -203,7 +201,7 @@ class MCDReforgedFormatter(ColoredFormatter):
 
 
 class NoColorFormatter(logging.Formatter):
-	def formatMessage(self, record):
+	def formatMessage(self, record: logging.LogRecord):
 		return string_util.clean_console_color_code(super().formatMessage(record))
 
 

@@ -1,8 +1,8 @@
-from abc import ABC
+from abc import ABC, abstractmethod
 from contextlib import contextmanager
 from typing import TYPE_CHECKING, Optional
 
-from typing_extensions import TypeGuard
+from typing_extensions import TypeGuard, override
 
 from mcdreforged.permission.permission_level import PermissionLevel
 from mcdreforged.translation.translation_text import RTextMCDRTranslation
@@ -51,12 +51,14 @@ class CommandSource(ABC):
 		"""
 		return isinstance(self, ConsoleCommandSource)
 
+	@abstractmethod
 	def get_server(self) -> 'ServerInterface':
 		"""
 		Return the server interface instance
 		"""
 		raise NotImplementedError()
 
+	@abstractmethod
 	def get_permission_level(self) -> int:
 		"""
 		Return the permission level that the command source has
@@ -127,6 +129,7 @@ class CommandSource(ABC):
 		"""
 		return self.get_permission_level() > level
 
+	@abstractmethod
 	def reply(self, message: MessageText, **kwargs) -> None:
 		"""
 		Send a message to the command source. The message can be anything including RTexts
@@ -136,7 +139,7 @@ class CommandSource(ABC):
 		:keyword console_text: Message override when it's a :class:`ConsoleCommandSource`
 		"""
 		raise NotImplementedError()
-	
+
 	def __eq__(self, other) -> bool:
 		"""
 		.. versionadded:: v2.12.2
@@ -160,9 +163,11 @@ class InfoCommandSource(CommandSource, ABC):
 		"""
 		return self.__info
 
+	@override
 	def get_server(self) -> 'ServerInterface':
 		return self._mcdr_server.basic_server_interface
 
+	@override
 	def get_permission_level(self) -> int:
 		return self._mcdr_server.permission_manager.get_permission(self)
 
@@ -182,9 +187,11 @@ class PlayerCommandSource(InfoCommandSource):
 		self.player: str = player
 		"""The name of the player"""
 
+	@override
 	def get_preference(self) -> 'PreferenceItem':
 		return self.get_server().get_preference(self)
 
+	@override
 	def reply(self, message: MessageText, *, encoding: Optional[str] = None, **kwargs):
 		"""
 		:keyword encoding: encoding method to be used in :meth:`ServerInterface.tell`
@@ -207,9 +214,11 @@ class ConsoleCommandSource(InfoCommandSource):
 			raise TypeError('{} should be built from console info'.format(self.__class__.__name__))
 		super().__init__(mcdr_server, info)
 
+	@override
 	def get_preference(self) -> 'PreferenceItem':
 		return self.get_server().get_preference(self)
 
+	@override
 	def reply(self, message: MessageText, *, console_text: Optional[MessageText] = None, **kwargs):
 		"""
 		:keyword console_text: If it's specified, overwrite the value of parameter ``message`` with it
@@ -235,12 +244,15 @@ class PluginCommandSource(CommandSource):
 		self.__logger = self.__server.logger
 		self.__plugin = plugin
 
+	@override
 	def get_server(self) -> 'ServerInterface':
 		return self.__server
 
+	@override
 	def get_permission_level(self) -> int:
 		return PermissionLevel.PLUGIN_LEVEL
 
+	@override
 	def reply(self, message: MessageText, **kwargs) -> None:
 		misc_util.print_text_to_console(self.__logger, message)
 

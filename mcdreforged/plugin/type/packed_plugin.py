@@ -31,7 +31,7 @@ class PackedPlugin(MultiFilePlugin):
 		return self.__zip_file_cache
 
 	@classmethod
-	def __format_path(cls, path: str):
+	def __format_path(cls, path: str) -> str:
 		return path.replace('\\', '/')
 
 	@override

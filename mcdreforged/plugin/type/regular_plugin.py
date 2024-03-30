@@ -46,10 +46,6 @@ class RegularPlugin(AbstractPlugin, ABC):
 		self.plugin_registry.clear()
 
 	@override
-	def is_regular(self) -> bool:
-		return True
-
-	@override
 	def get_metadata(self) -> Metadata:
 		if self.__metadata is None:
 			raise IllegalCallError('Meta data of plugin {} is not loaded. Plugin state = {}'.format(repr(self), self.state))
@@ -164,10 +160,10 @@ class RegularPlugin(AbstractPlugin, ABC):
 	#   Plugin File
 	# ---------------
 
-	def plugin_exists(self):
-		return os.path.isfile(self.plugin_path)
+	def plugin_exists(self) -> bool:
+		return self.plugin_path.is_file()
 
-	def file_changed(self):
+	def file_changed(self) -> bool:
 		return self.calculate_file_modify_time() != self.file_modify_time
 
 	@property
@@ -181,7 +177,7 @@ class RegularPlugin(AbstractPlugin, ABC):
 		else:
 			return None
 
-	def calculate_file_modify_time(self):
+	def calculate_file_modify_time(self) -> Optional[int]:
 		if self.plugin_exists():
 			with contextlib.suppress(OSError):
 				return os.stat(self.plugin_path).st_mtime_ns

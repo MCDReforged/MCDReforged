@@ -21,7 +21,11 @@ def get_mcdr_language() -> str:
 	return language
 
 
-def translate_from_dict(translations: TranslationKeyDictRich, language: str, *, fallback_language: Optional[str] = core_constant.DEFAULT_LANGUAGE, default: Optional[MessageText] = _NONE) -> MessageText:
+def translate_from_dict(
+		translations: TranslationKeyDictRich, language: str,
+		*,
+		fallback_language: Optional[str] = core_constant.DEFAULT_LANGUAGE, default: Optional[MessageText] = _NONE
+) -> MessageText:
 	"""
 	Select a translation for given language based on a translation dict
 	:param language: The language

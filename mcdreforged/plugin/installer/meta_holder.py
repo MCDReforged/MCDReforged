@@ -16,8 +16,8 @@ class CatalogueMetaRegistry(MetaRegistry):
 	def __init__(self, plugin: Dict[str, PluginData]):
 		self.__plugins = plugin
 
-	@override
 	@property
+	@override
 	def plugins(self) -> Dict[str, PluginData]:
 		return self.__plugins
 

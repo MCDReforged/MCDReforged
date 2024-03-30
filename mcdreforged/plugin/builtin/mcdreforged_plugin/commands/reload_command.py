@@ -1,9 +1,12 @@
+from typing_extensions import override
+
 from mcdreforged.command.builder.nodes.basic import Literal
 from mcdreforged.command.command_source import CommandSource
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.sub_command import SubCommand
 
 
 class ReloadCommand(SubCommand):
+	@override
 	def get_command_node(self) -> Literal:
 		return (
 			self.control_command_root({'r', 'reload'}).

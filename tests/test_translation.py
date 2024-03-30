@@ -7,7 +7,7 @@ from ruamel.yaml import YAML
 
 from mcdreforged.constants import core_constant
 from mcdreforged.minecraft.rtext.text import RText, RTextBase
-from mcdreforged.translation.translation_manager import TranslationManager, LANGUAGE_DIRECTORY
+from mcdreforged.translation.translation_manager import TranslationManager, MCDR_LANGUAGE_DIRECTORY
 from mcdreforged.utils import file_util
 
 
@@ -19,9 +19,9 @@ class MyTestCase(unittest.TestCase):
 
 	def test_0_same_key_order(self):
 		language_key_dict = {}
-		for file_path in file_util.list_file_with_suffix(LANGUAGE_DIRECTORY, core_constant.LANGUAGE_FILE_SUFFIX):
+		for file_path in file_util.list_file_with_suffix(MCDR_LANGUAGE_DIRECTORY, core_constant.LANGUAGE_FILE_SUFFIX):
 			language, _ = os.path.basename(file_path).rsplit('.', 1)
-			with open(os.path.join(LANGUAGE_DIRECTORY, file_path), encoding='utf8') as file_handler:
+			with open(os.path.join(MCDR_LANGUAGE_DIRECTORY, file_path), encoding='utf8') as file_handler:
 				translations = dict(YAML().load(file_handler))
 			language_key_dict[language] = translations
 

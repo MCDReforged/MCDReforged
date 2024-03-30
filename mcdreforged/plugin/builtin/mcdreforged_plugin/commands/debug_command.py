@@ -1,7 +1,9 @@
 import json
 import threading
 import traceback
-from typing import List, Optional, Set, Dict
+from typing import List, Optional, Set, Dict, Union
+
+from typing_extensions import override
 
 from mcdreforged.command.builder.nodes.arguments import QuotableText
 from mcdreforged.command.builder.nodes.basic import Literal
@@ -29,11 +31,12 @@ def thread_dump(*, target_thread: Optional[str] = None) -> List[str]:
 	return lines
 
 
-def json_wrap(obj) -> str:
+def json_wrap(obj: Union[None, int, bool, float, str, list, dict]) -> str:
 	return json.dumps(obj, indent=4, ensure_ascii=False)
 
 
 class DebugCommand(SubCommand):
+	@override
 	def get_command_node(self) -> Literal:
 		def translation_dump_suggest() -> Set[str]:
 			result = {'.'}

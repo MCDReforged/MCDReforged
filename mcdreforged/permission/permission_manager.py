@@ -1,7 +1,9 @@
 """
 Permission control things
 """
-from typing import Set
+from typing import Set, Any, List
+
+from typing_extensions import override
 
 from mcdreforged.command.command_source import CommandSource
 from mcdreforged.info_reactor.info import *
@@ -20,9 +22,10 @@ DEFAULT_PERMISSION_RESOURCE_PATH = 'resources/default_permission.yml'
 
 class PermissionStorage(YamlDataStorage):
 	# Enable item setting via []
-	def __setitem__(self, key, value):
+	def __setitem__(self, key: str, value: Any):
 		self._data[key] = value
 
+	@override
 	def _pre_save(self, data: dict):
 		# Deduplicate the permission data
 		for key, value in data.items():
@@ -74,13 +77,12 @@ class PermissionManager:
 		self.storage.save()
 		self.mcdr_server.logger.info(self.mcdr_server.tr('permission_manager.set_default_permission_level.done', level.name))
 
-	def get_permission_group_list(self, value: PermissionParam):
+	def get_permission_group_list(self, value: PermissionParam) -> List[str]:
 		"""
 		Return the list of the player who has permission level <level>
 		Example return value: ['Steve', 'Alex']
 
 		:param value: a permission related object
-		:rtype: list[str]
 		"""
 		level_name = PermissionLevel.from_value(value).name
 		if self.storage[level_name] is None:

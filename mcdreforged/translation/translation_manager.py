@@ -13,8 +13,7 @@ from mcdreforged.minecraft.rtext.text import RTextBase
 from mcdreforged.utils import file_util, translation_util
 from mcdreforged.utils.types import TranslationStorage, MessageText
 
-LANGUAGE_RESOURCE_DIRECTORY = os.path.join('resources', 'lang')
-LANGUAGE_DIRECTORY = os.path.join(core_constant.PACKAGE_PATH, LANGUAGE_RESOURCE_DIRECTORY)
+MCDR_LANGUAGE_DIRECTORY = core_constant.PACKAGE_PATH / 'resources' / 'lang'
 
 
 class TranslationManager:
@@ -27,10 +26,10 @@ class TranslationManager:
 	def load_translations(self):
 		self.translations.clear()
 		self.available_languages.clear()
-		for file_path in file_util.list_file_with_suffix(LANGUAGE_DIRECTORY, core_constant.LANGUAGE_FILE_SUFFIX):
+		for file_path in file_util.list_file_with_suffix(MCDR_LANGUAGE_DIRECTORY, core_constant.LANGUAGE_FILE_SUFFIX):
 			language, _ = os.path.basename(file_path).rsplit('.', 1)
 			try:
-				with open(os.path.join(LANGUAGE_DIRECTORY, file_path), encoding='utf8') as file_handler:
+				with open(os.path.join(MCDR_LANGUAGE_DIRECTORY, file_path), encoding='utf8') as file_handler:
 					translations = dict(YAML().load(file_handler))
 				for key, text in translation_util.unpack_nest_translation(translations).items():
 					self.translations[key][language] = text
@@ -44,7 +43,15 @@ class TranslationManager:
 		if language not in self.available_languages:
 			self.logger.warning('Setting language to {} with 0 available translation'.format(language))
 
-	def translate(self, key: str, args: tuple, kwargs: dict, *, allow_failure: bool, language: Optional[str] = None, fallback_language: Optional[str] = None, plugin_translations: Optional[TranslationStorage] = None) -> MessageText:
+	def translate(
+			self,
+			key: str, args: tuple, kwargs: dict,
+			*,
+			allow_failure: bool,
+			language: Optional[str] = None,
+			fallback_language: Optional[str] = None,
+			plugin_translations: Optional[TranslationStorage] = None
+	) -> MessageText:
 		if language is None:
 			language = self.language
 		if plugin_translations is None:

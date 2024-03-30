@@ -1,4 +1,5 @@
 import unittest
+from typing import Iterable
 
 from mcdreforged.constants import deprecations
 from mcdreforged.plugin.meta.version import Version, VersionParsingError
@@ -6,7 +7,7 @@ from mcdreforged.plugin.meta.version import Version, VersionParsingError
 
 class DeprecationTest(unittest.TestCase):
 	@classmethod
-	def iterate_deprecations(cls):
+	def iterate_deprecations(cls) -> Iterable[deprecations.Deprecation]:
 		for name, value in vars(deprecations).items():
 			if not name.startswith('_') and isinstance(value, deprecations.Deprecation):
 				yield value

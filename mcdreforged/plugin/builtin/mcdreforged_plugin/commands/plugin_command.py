@@ -13,7 +13,6 @@ from mcdreforged.permission.permission_level import PermissionLevel
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.plugin_command_pim import PluginCommandPimExtension
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.sub_command import SubCommand, SubCommandEvent
 from mcdreforged.plugin.operation_result import PluginOperationResult, PluginResultType
-from mcdreforged.plugin.type.plugin import AbstractPlugin
 from mcdreforged.plugin.type.regular_plugin import RegularPlugin
 from mcdreforged.utils.future import Future
 
@@ -70,7 +69,7 @@ class PluginCommand(SubCommand):
 	def list_plugin(self, source: CommandSource):
 		not_loaded_plugin_list: List[str] = self.server_interface.get_unloaded_plugin_list()
 		disabled_plugin_list: List[str] = self.server_interface.get_disabled_plugin_list()
-		current_plugins = list(self.mcdr_server.plugin_manager.get_all_plugins())  # type: List[AbstractPlugin]
+		current_plugins = list(self.mcdr_server.plugin_manager.get_all_plugins())
 
 		source.reply(self.tr('mcdr_command.list_plugin.info_loaded_plugin', len(current_plugins)))
 		for plugin in current_plugins:

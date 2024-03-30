@@ -1,5 +1,7 @@
 from typing import Iterable
 
+from typing_extensions import override
+
 from mcdreforged.command.builder.common import CommandContext, ParseResult
 from mcdreforged.command.builder.nodes.basic import Literal
 
@@ -15,12 +17,15 @@ class CountingLiteral(Literal):
 		super().__init__(literal)
 		self.counter_key = counter_key
 
+	@override
 	def _on_visited(self, context: CommandContext, parsed_result: ParseResult):
 		context[self.counter_key] = context.get(self.counter_key, 0) + 1
 
+	@override
 	def __str__(self):
 		literal = repr(tuple(self.literals)[0]) if len(self.literals) == 1 else set(self.literals)
 		return 'CountingLiteral {} <{}>'.format(literal, self.counter_key)
 
+	@override
 	def __repr__(self):
 		return 'CountingLiteral[literals={},counter_key={}]'.format(self.literals, self.counter_key)

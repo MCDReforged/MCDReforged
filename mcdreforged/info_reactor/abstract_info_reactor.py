@@ -1,4 +1,4 @@
-from abc import ABC
+from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
 
 from mcdreforged.info_reactor.info import Info
@@ -16,6 +16,7 @@ class AbstractInfoReactor(ABC):
 		self.mcdr_server: 'MCDReforgedServer' = mcdr_server
 		"""The MCDR server object"""
 
+	@abstractmethod
 	def react(self, info: Info):
 		"""
 		React to an :class:`~mcdreforged.info_reactor.info.Info` object

@@ -13,7 +13,7 @@ class MCDReforgedFlag(Flag):
 
 
 class EnumStateBase(Enum):
-	def in_state(self: Self, *states: Self):
+	def in_state(self: Self, *states: Self) -> bool:
 		return self in states
 
 

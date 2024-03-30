@@ -1,5 +1,7 @@
 from typing import NamedTuple, Any, List
 
+from typing_extensions import override
+
 from mcdreforged.command.builder.nodes.arguments import Integer
 from mcdreforged.command.builder.nodes.basic import Literal, CommandContext
 from mcdreforged.command.command_source import CommandSource
@@ -17,6 +19,7 @@ class FunctionCallResult(NamedTuple):
 
 
 class HelpCommand(SubCommand):
+	@override
 	def get_command_node(self) -> Literal:
 		return (
 			Literal(self.help_command_prefix).

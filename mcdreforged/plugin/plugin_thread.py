@@ -1,17 +1,18 @@
 """
 Thread for plugin call
 """
-import collections
 import queue
 import threading
-from typing import TYPE_CHECKING, Callable
+from typing import TYPE_CHECKING, Callable, NamedTuple
 
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
 	from mcdreforged.plugin.type.plugin import AbstractPlugin
 
 
-TaskData = collections.namedtuple('TaskData', 'callback plugin')
+class TaskData(NamedTuple):
+	callback: Callable
+	plugin: 'AbstractPlugin'
 
 
 class PluginThread(threading.Thread):
@@ -36,11 +37,11 @@ class PluginThread(threading.Thread):
 						task_data = self.task
 						self.task = None
 					else:
-						task_data = self.thread_pool.task_queue.get(timeout=0.01)  # type: TaskData
+						task_data: TaskData = self.thread_pool.task_queue.get(timeout=0.01)
 				except queue.Empty:
 					pass
 				else:
-					plugin = task_data.plugin  # type: AbstractPlugin
+					plugin = task_data.plugin
 					with plugin.plugin_manager.with_plugin_context(plugin):
 						self.setName('{}@{}'.format(self, plugin.get_id()))
 						self.thread_pool.working_count += 1

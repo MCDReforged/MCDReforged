@@ -6,6 +6,7 @@ from typing import List, NamedTuple, Union, Mapping, Iterator, Iterable, Sequenc
 
 import resolvelib
 from resolvelib.resolvers import RequirementInformation
+from typing_extensions import override
 
 from mcdreforged.plugin.installer.meta_holder import MetaRegistry
 from mcdreforged.plugin.installer.types import PluginId, PluginResolution, PackageRequirements
@@ -78,9 +79,11 @@ class PluginMetaProvider(resolvelib.AbstractProvider):
 	def __init__(self, plugin_metas: PluginMetas):
 		self.plugin_metas = plugin_metas.copy()
 
+	@override
 	def identify(self, requirement_or_candidate: Union[RT, CT]) -> KT:
 		return requirement_or_candidate.id
 
+	@override
 	def get_preference(
 			self,
 			identifier: KT,
@@ -91,6 +94,7 @@ class PluginMetaProvider(resolvelib.AbstractProvider):
 	):
 		return 0
 
+	@override
 	def find_matches(
 			self,
 			identifier: KT,
@@ -118,9 +122,11 @@ class PluginMetaProvider(resolvelib.AbstractProvider):
 		candidates.sort(key=lambda c: c.version, reverse=True)
 		return candidates
 
+	@override
 	def is_satisfied_by(self, requirement: RT, candidate: CT) -> bool:
 		return requirement.id == candidate.id and requirement.requirement.accept(candidate.version)
 
+	@override
 	def get_dependencies(self, candidate: CT) -> Iterable[RT]:
 		dependencies = []
 		for pid, req in self.plugin_metas[candidate.id].versions[candidate.version].plugin_requirements.items():

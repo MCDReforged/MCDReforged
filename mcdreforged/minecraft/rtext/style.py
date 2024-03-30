@@ -1,13 +1,15 @@
-from abc import ABC, ABCMeta
+from abc import ABC, ABCMeta, abstractmethod
 from typing import Union, Optional, Dict, Iterator, TypeVar, Generic
 
 from colorama import Fore, Style
+from typing_extensions import override
 
 from mcdreforged.utils import class_util, string_util
 
 
 class __NamedObject(ABC):
 	@property
+	@abstractmethod
 	def name(self) -> str:
 		"""
 		The unique identifier used in :class:`__RRegistry`
@@ -46,6 +48,7 @@ class RItem(__NamedObject):
 	"""
 
 	@property
+	@abstractmethod
 	def name(self) -> str:
 		"""
 		Its value in Minecraft text component
@@ -65,6 +68,7 @@ class RItemClassic(RItem, ABC):
 		self.__console_code: str = console_code
 
 	@property
+	@override
 	def name(self) -> str:
 		return self.__name
 
@@ -282,6 +286,7 @@ class RColorRGB(RColor):
 	# Interface implementation
 
 	@property
+	@override
 	def name(self) -> str:
 		return '#{:06X}'.format(self._rgb_code)
 
@@ -399,6 +404,7 @@ class _RActionImpl(RAction):
 		self.__name = name
 
 	@property
+	@override
 	def name(self) -> str:
 		return self.__name
 

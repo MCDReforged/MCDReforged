@@ -1,3 +1,4 @@
+import contextlib
 import locale
 import os
 import time
@@ -41,8 +42,6 @@ if TYPE_CHECKING:
 
 
 class MCDReforgedServer:
-	process: Optional[Popen]
-
 	def __init__(self, *, generate_default_only: bool = False, initialize_environment: bool = False, auto_init: bool = False):
 		"""
 		:param generate_default_only: If set to true, MCDR will only generate the default configuration and permission files
@@ -137,11 +136,9 @@ class MCDReforgedServer:
 		self.set_mcdr_state(MCDReforgedState.INITIALIZED)
 
 	def __del__(self):
-		try:
+		with contextlib.suppress(Exception):
 			if self.process and self.process.poll() is None:
 				self.__kill_server()
-		except Exception:
-			pass
 
 	def __check_environment(self):
 		"""
@@ -204,7 +201,9 @@ class MCDReforgedServer:
 	def tr(
 			self, translation_key: str,
 			*args,
-			_mcdr_tr_language: Optional[str] = None, _mcdr_tr_fallback_language: Optional[str] = core_constant.DEFAULT_LANGUAGE, _mcdr_tr_allow_failure=True,
+			_mcdr_tr_language: Optional[str] = None,
+			_mcdr_tr_fallback_language: Optional[str] = core_constant.DEFAULT_LANGUAGE,
+			_mcdr_tr_allow_failure: bool = True,
 			**kwargs
 	) -> MessageText:
 		"""
@@ -295,27 +294,27 @@ class MCDReforgedServer:
 	#   State Getters / Setters
 	# ---------------------------
 
-	def is_server_running(self):
+	def is_server_running(self) -> bool:
 		return self.server_state.in_state(ServerState.RUNNING, ServerState.STOPPING)
 
 	# Flags
 
-	def is_server_startup(self):
+	def is_server_startup(self) -> bool:
 		return MCDReforgedFlag.SERVER_STARTUP in self.flags
 
-	def is_server_rcon_ready(self):
+	def is_server_rcon_ready(self) -> bool:
 		return MCDReforgedFlag.SERVER_RCON_READY in self.flags
 
-	def is_interrupt(self):
+	def is_interrupt(self) -> bool:
 		return MCDReforgedFlag.INTERRUPT in self.flags
 
-	def is_mcdr_exit(self):
+	def is_mcdr_exit(self) -> bool:
 		return self.mcdr_in_state(MCDReforgedState.STOPPED)
 
-	def is_mcdr_about_to_exit(self):
+	def is_mcdr_about_to_exit(self) -> bool:
 		return self.mcdr_in_state(MCDReforgedState.PRE_STOPPED, MCDReforgedState.STOPPED)
 
-	def should_exit_after_stop(self):
+	def should_exit_after_stop(self) -> bool:
 		return MCDReforgedFlag.EXIT_AFTER_STOP in self.flags
 
 	def add_flag(self, flag: MCDReforgedFlag):
@@ -334,20 +333,20 @@ class MCDReforgedServer:
 	def mcdr_in_state(self, *states: MCDReforgedState) -> bool:
 		return self.mcdr_state.in_state(*states)
 
-	def is_initialized(self):
+	def is_initialized(self) -> bool:
 		return self.mcdr_in_state(MCDReforgedState.INITIALIZED)
 
-	def set_server_state(self, state):
+	def set_server_state(self, state: ServerState):
 		self.server_state = state
 		self.logger.debug('Server state has set to "{}"'.format(state), option=DebugOption.MCDR)
 		with self.server_state_cv:
 			self.server_state_cv.notify_all()
 
-	def set_mcdr_state(self, state):
+	def set_mcdr_state(self, state: MCDReforgedState):
 		self.mcdr_state = state
 		self.logger.debug('MCDR state has set to "{}"'.format(state), option=DebugOption.MCDR)
 
-	def should_keep_looping(self):
+	def should_keep_looping(self) -> bool:
 		"""
 		A criterion for sub threads to determine if it should keep looping
 		:rtype: bool
@@ -364,14 +363,11 @@ class MCDReforgedServer:
 	#      Server Controls
 	# --------------------------
 
-	def start_server(self):
+	def start_server(self) -> bool:
 		"""
 		try to start the server process
 		return True if the server process has started successfully
 		return False if the server is not able to start
-
-		:return: a bool as above
-		:rtype: bool
 		"""
 		with self.starting_server_lock:
 			if self.is_interrupt():
@@ -489,7 +485,7 @@ class MCDReforgedServer:
 		else:
 			self.logger.info(self.tr('mcdr_server.on_server_stop.server_stop'))
 
-	def send(self, text, ending='\n', encoding=None):
+	def send(self, text: str, ending: str = '\n', encoding: Optional[str] = None):
 		"""
 		Send a text to server's stdin if the server is running
 
@@ -502,10 +498,8 @@ class MCDReforgedServer:
 			encoding = self.encoding_method
 		if isinstance(text, str):
 			encoded_text = (text + ending).encode(encoding)
-		elif isinstance(text, bytes):
-			encoded_text = text
 		else:
-			raise TypeError()
+			raise TypeError('should be a str, found {}'.format(type(text)))
 		if self.is_server_running():
 			self.process.stdin.write(encoded_text)
 			self.process.stdin.flush()
@@ -678,4 +672,8 @@ class MCDReforgedServer:
 	def connect_rcon(self):
 		self.rcon_manager.disconnect()
 		if self.config['rcon']['enable'] and self.is_server_rcon_ready():
-			self.rcon_manager.connect(self.config['rcon']['address'], self.config['rcon']['port'], self.config['rcon']['password'])
+			self.rcon_manager.connect(
+				address=str(self.config['rcon']['address']),
+				port=int(self.config['rcon']['port']),
+				password=str(self.config['rcon']['password']),
+			)

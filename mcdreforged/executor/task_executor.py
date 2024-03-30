@@ -3,8 +3,10 @@ import queue
 import time
 from typing import Callable, Any, Optional, Deque, NamedTuple
 
+from typing_extensions import override
+
 from mcdreforged.constants import core_constant
-from mcdreforged.executor.thread_executor import ThreadExecutor
+from mcdreforged.executor.background_thread_executor import BackgroundThreadExecutor
 from mcdreforged.utils.future import WaitableCallable
 from mcdreforged.utils.logger import DebugOption
 
@@ -20,26 +22,30 @@ class DoubleQueue(queue.Queue):
 		self.__queue0: Deque[TaskData]  # VIP
 		self.__queue1: Deque[TaskData]  # Regular
 
+	@override
 	def _init(self, maxsize: int) -> None:
 		self.__queue0 = collections.deque()
 		self.__queue1 = collections.deque()
 
+	@override
 	def _qsize(self) -> int:
 		return len(self.__queue0) + len(self.__queue1)
 
+	@override
 	def _put(self, item: TaskData):
 		if item.vip:
 			self.__queue0.append(item)
 		else:
 			self.__queue1.append(item)
 
+	@override
 	def _get(self) -> TaskData:
 		if len(self.__queue0) > 0:
 			return self.__queue0.popleft()
 		return self.__queue1.popleft()
 
 
-class TaskExecutor(ThreadExecutor):
+class TaskExecutor(BackgroundThreadExecutor):
 	def __init__(self, mcdr_server, *, previous_executor: 'Optional[TaskExecutor]' = None):
 		super().__init__(mcdr_server)
 		self.task_queue = DoubleQueue(maxsize=core_constant.MAX_TASK_QUEUE_SIZE)
@@ -61,7 +67,8 @@ class TaskExecutor(ThreadExecutor):
 				self.task_queue.put(task)
 		self.mcdr_server.logger.debug('Extracted {} tasks from the previous executor'.format(count), option=DebugOption.TASK_EXECUTOR)
 
-	def should_keep_looping(self):
+	@override
+	def should_keep_looping(self) -> bool:
 		return super().should_keep_looping() and not self.mcdr_server.is_mcdr_exit()
 
 	def soft_stop(self):
@@ -96,6 +103,7 @@ class TaskExecutor(ThreadExecutor):
 			return 0
 		return time.monotonic() - self.__last_tick_time
 
+	@override
 	def tick(self):
 		self.__last_tick_time = time.monotonic()
 		try:

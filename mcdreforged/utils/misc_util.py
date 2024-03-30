@@ -2,6 +2,7 @@
 Misc tool collection
 """
 import inspect
+import logging
 import threading
 from typing import List, Callable, Tuple, TypeVar, Any, Optional, Iterable
 
@@ -28,7 +29,7 @@ def deep_copy_dict(source: dict) -> dict:
 	return ret
 
 
-def print_text_to_console(logger, text: Any):
+def print_text_to_console(logger: logging.Logger, text: Any):
 	from mcdreforged.minecraft.rtext.text import RTextBase
 	for line in RTextBase.from_any(text).to_colored_text().splitlines():
 		logger.info(line)

@@ -1,3 +1,5 @@
+from typing_extensions import override
+
 from mcdreforged.handler.impl.bukkit_handler import BukkitHandler
 from mcdreforged.handler.impl.vanilla_handler import VanillaHandler
 from mcdreforged.utils import string_util
@@ -18,9 +20,11 @@ class CatServerHandler(BukkitHandler):
 		return info
 
 	@classmethod
+	@override
 	def get_content_parsing_formatter(cls):
 		return VanillaHandler.get_content_parsing_formatter()
 
+	@override
 	def parse_player_left(self, info):
 		# §eSteve left the game§r
 		return super().parse_player_left(self.__cleaned_info(info))

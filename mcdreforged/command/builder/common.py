@@ -71,7 +71,7 @@ class CommandContext(Dict[str, Any]):
 		self.__source = source
 		self.__command = command
 		self.__cursor = 0
-		self.__node_path = []  # type: List[AbstractNode]
+		self.__node_path: List[AbstractNode] = []
 
 	def copy(self) -> 'CommandContext':
 		copied = CommandContext(self.source, self.command)

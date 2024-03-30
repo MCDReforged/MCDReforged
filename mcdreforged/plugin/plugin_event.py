@@ -51,7 +51,7 @@ class MCDREvent(PluginEvent):
 
 
 class _PluginEventStorage:
-	EVENT_DICT = {}  # type: Dict[str, PluginEvent]
+	EVENT_DICT: Dict[str, PluginEvent] = {}
 
 	@classmethod
 	def register(cls, event: MCDREvent):

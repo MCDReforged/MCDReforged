@@ -3,7 +3,7 @@ Core constants
 """
 
 import os
-
+from pathlib import Path
 
 # will be modified in CI
 __CI_BUILD_NUM = None
@@ -21,7 +21,7 @@ GITHUB_URL = 'https://github.com/Fallen-Breath/MCDReforged'
 GITHUB_API_LATEST = 'https://api.mcdreforged.com/releases/latest'
 DOCUMENTATION_URL = 'https://docs.mcdreforged.com'
 
-PACKAGE_PATH = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
+PACKAGE_PATH = Path(__file__).absolute().parent.parent  # path of the mcdreforged directory
 LOGGING_FILE = os.path.join('logs', '{}.log'.format(NAME_SHORT))
 LANGUAGE_FILE_SUFFIX = '.yml'
 DEFAULT_LANGUAGE = 'en_us'

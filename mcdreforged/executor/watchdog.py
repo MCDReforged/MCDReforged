@@ -2,14 +2,16 @@ import time
 from contextlib import contextmanager
 from typing import TYPE_CHECKING
 
+from typing_extensions import override
+
+from mcdreforged.executor.background_thread_executor import BackgroundThreadExecutor
 from mcdreforged.executor.task_executor import TaskExecutor
-from mcdreforged.executor.thread_executor import ThreadExecutor
 
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
 
 
-class WatchDog(ThreadExecutor):
+class WatchDog(BackgroundThreadExecutor):
 	DEFAULT_NO_RESPOND_THRESHOLD = 10  # seconds
 
 	def __init__(self, mcdr_server: 'MCDReforgedServer'):
@@ -54,10 +56,12 @@ class WatchDog(ThreadExecutor):
 			self.mcdr_server.set_task_executor(new_executor)
 			new_executor.start()
 
+	@override
 	def start(self):
 		super().start()
 		self.__monitoring = True
 
+	@override
 	def tick(self):
 		try:
 			time.sleep(0.1)

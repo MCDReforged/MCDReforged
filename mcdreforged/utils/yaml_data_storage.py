@@ -50,7 +50,7 @@ class YamlDataStorage:
 			self.save()
 		return has_missing
 
-	def __fix(self, current_data: dict, users_data: CommentedMap, key_path='') -> Tuple[dict, bool]:
+	def __fix(self, current_data: dict, users_data: CommentedMap, key_path: str = '') -> Tuple[dict, bool]:
 		"""
 		:return: pair of (fixed result, has missing)
 		"""
@@ -92,7 +92,7 @@ class YamlDataStorage:
 		with self._data_operation_lock:
 			self.__save(self._data)
 
-	def get_default_yaml(self):
+	def get_default_yaml(self) -> CommentedMap:
 		return self.__default_data.get()
 
 	def save_default(self):

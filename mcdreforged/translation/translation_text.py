@@ -2,7 +2,7 @@ import threading
 from contextlib import contextmanager
 from typing import Union, Iterable, Optional, List, Callable
 
-from typing_extensions import Self
+from typing_extensions import Self, override
 
 from mcdreforged.minecraft.rtext.style import RColor, RStyle, RAction
 from mcdreforged.minecraft.rtext.text import RTextBase, RText
@@ -95,36 +95,45 @@ class RTextMCDRTranslation(RTextBase):
 		finally:
 			cls.__TLS.language = prev
 
+	@override
 	def to_json_object(self) -> Union[dict, list]:
 		return self.__get_translated_text().to_json_object()
 
+	@override
 	def to_plain_text(self) -> str:
 		return self.__get_translated_text().to_plain_text()
 
+	@override
 	def to_colored_text(self) -> str:
 		return self.__get_translated_text().to_colored_text()
 
+	@override
 	def to_legacy_text(self) -> str:
 		return self.__get_translated_text().to_legacy_text()
 
+	@override
 	def copy(self) -> 'RTextBase':
 		copied = RTextMCDRTranslation(self.translation_key, *self.args, **self.kwargs)
 		copied.__translator = self.__translator
 		copied.__post_process = self.__post_process.copy()
 		return copied
 
+	@override
 	def set_color(self, color: RColor) -> Self:
 		self.__post_process.append(lambda rt: rt.set_color(color))
 		return self
 
+	@override
 	def set_styles(self, styles: Union[RStyle, Iterable[RStyle]]) -> Self:
 		self.__post_process.append(lambda rt: rt.set_styles(styles))
 		return self
 
+	@override
 	def set_click_event(self, action: RAction, value: str) -> Self:
 		self.__post_process.append(lambda rt: rt.set_click_event(action, value))
 		return self
 
+	@override
 	def set_hover_text(self, *args) -> Self:
 		self.__post_process.append(lambda rt: rt.set_hover_text(*args))
 		return self

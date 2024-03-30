@@ -12,6 +12,10 @@
 #
 import os
 import sys
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+	from sphinx.application import Sphinx
 
 # add REPOS root, so the mcdreforged package is import-able
 sys.path.insert(0, os.path.abspath(os.path.join('..', '..')))
@@ -75,7 +79,7 @@ templates_path = ['templates']
 exclude_patterns = ['build', 'Thumbs.db', '.DS_Store']
 
 
-def setup(app):
+def setup(app: 'Sphinx'):
 	from typing import List
 	from sphinx.directives.code import CodeBlock
 
@@ -168,7 +172,7 @@ intersphinx_disabled_reftypes = [
 intersphinx_timeout = 30
 
 
-def autodoc_setup(app):
+def autodoc_setup(app: 'Sphinx'):
 	# https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html#event-autodoc-skip-member
 	def autodoc_skip_member_handler(app_, what, name, obj, skip, options):
 		return skip

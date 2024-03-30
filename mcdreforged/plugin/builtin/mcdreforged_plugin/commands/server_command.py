@@ -2,6 +2,8 @@ import functools
 from threading import Thread
 from typing import Callable, List, TYPE_CHECKING, Optional
 
+from typing_extensions import override
+
 from mcdreforged.command.builder.nodes.basic import Literal
 from mcdreforged.command.command_source import CommandSource
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.sub_command import SubCommand
@@ -18,6 +20,7 @@ class ServerCommand(SubCommand):
 		super().__init__(mcdr_plugin)
 		self.restart_thread: Optional[Thread] = None
 
+	@override
 	def get_command_node(self) -> Literal:
 		node = (
 			self.owner_command_root('server').

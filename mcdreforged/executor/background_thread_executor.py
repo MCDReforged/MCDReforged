@@ -1,4 +1,5 @@
 import threading
+from abc import abstractmethod
 from typing import TYPE_CHECKING, Optional
 
 from mcdreforged.utils import misc_util
@@ -7,10 +8,10 @@ if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
 
 
-class ThreadExecutor:
+class BackgroundThreadExecutor:
 	def __init__(self, mcdr_server: 'MCDReforgedServer'):
 		self.mcdr_server = mcdr_server
-		self._executor_thread = None  # type: Optional[threading.Thread]
+		self._executor_thread: Optional[threading.Thread] = None
 		self.__stopped_looping = False
 		self.__name = self.__class__.__name__
 
@@ -31,7 +32,7 @@ class ThreadExecutor:
 	def stop(self):
 		self.__stopped_looping = True
 
-	def get_name(self):
+	def get_name(self) -> str:
 		return self.__name
 
 	def set_name(self, name: str):
@@ -42,6 +43,7 @@ class ThreadExecutor:
 		while self.should_keep_looping():
 			self.tick()
 
+	@abstractmethod
 	def tick(self):
 		raise NotImplementedError()
 

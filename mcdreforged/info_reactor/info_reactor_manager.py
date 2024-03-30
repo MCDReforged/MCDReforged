@@ -21,7 +21,7 @@ class InfoReactorManager:
 		self.mcdr_server = mcdr_server
 		self.last_queue_full_warn_time = None
 		self.server_output_logger = ServerOutputLogger('Server')
-		self.reactors = []  # type: List[AbstractInfoReactor]
+		self.reactors: List[AbstractInfoReactor] = []
 
 	def register_reactors(self, custom_reactor_class_paths: Optional[List[str]]):
 		self.reactors.clear()
@@ -54,7 +54,7 @@ class InfoReactorManager:
 		if info.is_from_console and info.should_send_to_server():
 			self.mcdr_server.send(info.content)
 
-	def put_info(self, info):
+	def put_info(self, info: Info):
 		info.attach_mcdr_server(self.mcdr_server)
 		# echo info from the server to the console
 		if info.is_from_server:

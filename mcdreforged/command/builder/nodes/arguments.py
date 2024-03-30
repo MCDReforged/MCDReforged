@@ -3,6 +3,8 @@ from abc import ABC
 from enum import Enum
 from typing import Type, Iterable, Union, Optional
 
+from typing_extensions import override
+
 from mcdreforged.command.builder import command_builder_util as utils
 from mcdreforged.command.builder.command_builder_util import DIVIDER
 from mcdreforged.command.builder.common import ParseResult, CommandContext
@@ -97,6 +99,7 @@ class Number(NumberNode):
 	If the next element is not a number,
 	a :class:`~mcdreforged.command.builder.exception.InvalidNumber` exception will be risen
 	"""
+	@override
 	def parse(self, text: str) -> ParseResult:
 		value, read = utils.get_int(text)
 		if value is None:
@@ -114,6 +117,7 @@ class Integer(NumberNode):
 	If the next element is not an integer,
 	a :class:`~mcdreforged.command.builder.exception.InvalidInteger` exception will be risen
 	"""
+	@override
 	def parse(self, text: str) -> ParseResult:
 		value, read = utils.get_int(text)
 		if value is not None:
@@ -129,6 +133,7 @@ class Float(NumberNode):
 	If the next element is not a float,
 	a :class:`~mcdreforged.command.builder.exception.InvalidFloat` exception will be risen
 	"""
+	@override
 	def parse(self, text: str) -> ParseResult:
 		value, read = utils.get_float(text)
 		if value is not None:
@@ -215,6 +220,7 @@ class Text(TextNode):
 
 	It will keep reading chars continuously until it meets a space character
 	"""
+	@override
 	def parse(self, text: str) -> ParseResult:
 		arg = utils.get_element(text)
 		return self._check_length_in_range_and_return(arg, len(arg))
@@ -247,6 +253,7 @@ class QuotableText(Text):
 		self.empty_allowed = True
 		return self
 
+	@override
 	def parse(self, text: str) -> ParseResult:
 		if len(text) == 0 or text[0] != self.QUOTE_CHAR:
 			return super().parse(text)  # regular text
@@ -274,6 +281,7 @@ class QuotableText(Text):
 		raise UnclosedQuotedString(text)
 
 	# use quote characters to quote suggestions with DIVIDER
+	@override
 	def suggests(self, suggestion: SUGGESTS_CALLBACK) -> 'QuotableText':
 		def quote_wrapper(*args, **kwargs):
 			suggestions = []
@@ -295,6 +303,7 @@ class GreedyText(TextNode):
 
 	It's not a smart decision to append any child nodes to a :class:`GreedyText`, since the child nodes can never get any remaining command
 	"""
+	@override
 	def parse(self, text: str) -> ParseResult:
 		return self._check_length_in_range_and_return(text, len(text))
 
@@ -311,9 +320,11 @@ class Boolean(ArgumentNode):
 
 	.. versionadded:: v2.3.0
 	"""
+	@override
 	def _get_suggestions(self, context: CommandContext) -> Iterable[str]:
 		return ['true', 'false']
 
+	@override
 	def parse(self, text: str) -> ParseResult:
 		arg = utils.get_element(text)
 		if arg.lower() == 'true':
@@ -349,9 +360,11 @@ class Enumeration(ArgumentNode):
 		super().__init__(name)
 		self.__enum_class: Type[Enum] = enum_class
 
+	@override
 	def _get_suggestions(self, context: CommandContext) -> Iterable[str]:
 		return map(lambda e: e.name, self.__enum_class)
 
+	@override
 	def parse(self, text: str) -> ParseResult:
 		arg = utils.get_element(text)
 		try:

@@ -1,3 +1,5 @@
+from typing_extensions import override
+
 from mcdreforged.handler.impl.bukkit_handler import BukkitHandler
 from mcdreforged.handler.impl.vanilla_handler import VanillaHandler
 
@@ -11,5 +13,6 @@ class Bukkit14Handler(BukkitHandler):
 	# paper is not included
 
 	@classmethod
+	@override
 	def get_content_parsing_formatter(cls):
 		return VanillaHandler.get_content_parsing_formatter()

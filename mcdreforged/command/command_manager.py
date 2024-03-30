@@ -28,7 +28,7 @@ class CommandManager:
 		self.mcdr_server = mcdr_server
 		self.logger = self.mcdr_server.logger
 		self.tr = self.mcdr_server.tr
-		self.root_nodes = collections.defaultdict(list)  # type: Dict[str, List[PluginCommandHolder]]
+		self.root_nodes: Dict[str, List[PluginCommandHolder]] = collections.defaultdict(list)
 
 		self.__preserve_command_error_display_flag = False
 

@@ -1,12 +1,12 @@
 import importlib
-from typing import Any, Type, Union, Iterable, Optional, Collection, TypeVar
+from typing import Any, Type, Union, Iterable, Optional, Collection, TypeVar, List
 
 from mcdreforged.utils import misc_util, tree_printer
 
 _T = TypeVar('_T')
 
 
-def load_class(path: str):
+def load_class(path: str) -> Any:
 	"""
 	:param path: the path to the class, e.g. ``mcdreforged.info_reactor.info.Info``
 	:return: The class
@@ -45,7 +45,7 @@ def check_type(value: Any, types: Union[Type[_T], Iterable[Type[_T]]], error_mes
 	return value
 
 
-def get_all_base_class(cls):
+def get_all_base_class(cls: Type) -> List[Type]:
 	if cls is object:
 		return []
 	ret = [cls]

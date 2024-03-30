@@ -1,6 +1,8 @@
 import re
 from typing import Optional
 
+from typing_extensions import override
+
 from mcdreforged.command.builder.nodes.arguments import Text, QuotableText
 from mcdreforged.command.builder.nodes.basic import Literal
 from mcdreforged.command.command_source import CommandSource
@@ -20,6 +22,7 @@ class Validator:
 
 
 class PermissionCommand(SubCommand):
+	@override
 	def get_command_node(self) -> Literal:
 		def permission_player_node():
 			return QuotableText('player').suggests(lambda: self.mcdr_server.permission_manager.get_players())

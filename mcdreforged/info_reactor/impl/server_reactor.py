@@ -1,6 +1,7 @@
 """
 Analyzing and reacting events related to server
 """
+from typing_extensions import override
 
 from mcdreforged.info_reactor.abstract_info_reactor import AbstractInfoReactor
 from mcdreforged.info_reactor.info import InfoSource, Info
@@ -15,9 +16,11 @@ class ServerReactor(AbstractInfoReactor):
 	def server_info(self) -> ServerInformation:
 		return self.mcdr_server.server_information
 
+	@override
 	def on_server_start(self):
 		self.server_info.clear()
 
+	@override
 	def react(self, info: Info):
 		if info.source == InfoSource.SERVER:
 			handler = self.mcdr_server.server_handler_manager.get_current_handler()

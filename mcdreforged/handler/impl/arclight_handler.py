@@ -1,3 +1,5 @@
+from typing_extensions import override
+
 from mcdreforged.handler.impl.bukkit_handler import BukkitHandler
 
 
@@ -12,6 +14,7 @@ class ArclightHandler(BukkitHandler):
 	# [13:26:18 INFO]: [Not Secure] <Fallen_Breath> hello
 	# [13:26:28 INFO]: Fallen_Breath lost connection: Disconnected
 	@classmethod
+	@override
 	def get_content_parsing_formatter(cls):
 		return (
 			super().get_content_parsing_formatter(),

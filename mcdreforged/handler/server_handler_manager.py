@@ -1,6 +1,7 @@
 import collections
 import queue
 import time
+from logging import Logger
 from typing import Dict, Optional, Tuple, List, TYPE_CHECKING, Counter
 
 from mcdreforged.handler.impl import *
@@ -16,7 +17,7 @@ if TYPE_CHECKING:
 class ServerHandlerManager:
 	def __init__(self, mcdr_server: 'MCDReforgedServer'):
 		self.mcdr_server = mcdr_server
-		self.logger = mcdr_server.logger
+		self.logger: Logger = mcdr_server.logger
 		self.handlers: Dict[str, ServerHandler] = {}
 
 		self.__basic_handler: Optional[ServerHandler] = None  # the handler that should always work

@@ -2,11 +2,11 @@ import collections
 import functools
 import inspect
 import sys
-from abc import ABC
+from abc import ABC, abstractmethod
 from types import MethodType
 from typing import List, Callable, Iterable, Set, Dict, Type, Any, Union, Optional, NamedTuple
 
-from typing_extensions import Self
+from typing_extensions import Self, override
 
 from mcdreforged.command.builder import command_builder_util as utils
 from mcdreforged.command.builder.common import ParseResult, CommandContext, CommandSuggestions, CommandSuggestion
@@ -287,6 +287,7 @@ class AbstractNode(ABC):
 	#   Interfaces ends
 	# -------------------
 
+	@abstractmethod
 	def _get_usage(self) -> str:
 		raise NotImplementedError()
 
@@ -308,6 +309,7 @@ class AbstractNode(ABC):
 		"""
 		pass
 
+	@abstractmethod
 	def parse(self, text: str) -> ParseResult:
 		"""
 		Try to parse the text and get an argument
@@ -382,7 +384,7 @@ class AbstractNode(ABC):
 			raise CallbackError(e, context, 'suggestions fetching')
 
 	def _execute_command(self, context: CommandContext) -> None:
-		command = context.command  # type: str
+		command = context.command
 		try:
 			parse_result = self.parse(context.command_remaining)
 		except CommandSyntaxError as error:
@@ -390,8 +392,8 @@ class AbstractNode(ABC):
 			error.set_failed_command(context.command_read + context.command_remaining[:error.char_read])
 			self.__raise_error(error, context)
 		else:
-			next_remaining = utils.remove_divider_prefix(context.command_remaining[parse_result.char_read:])  # type: str
-			total_read = len(command) - len(next_remaining)  # type: int
+			next_remaining = utils.remove_divider_prefix(context.command_remaining[parse_result.char_read:])
+			total_read = len(command) - len(next_remaining)
 
 			with context.visit_node(self, parse_result, total_read):
 				req = self.__check_requirements(context)
@@ -476,9 +478,9 @@ class AbstractNode(ABC):
 		except CommandSyntaxError:
 			return self_suggestions()
 		else:
-			success_read = len(context.command) - len(context.command_remaining) + result.char_read  # type: int
-			next_remaining = utils.remove_divider_prefix(context.command_remaining[result.char_read:])  # type: str
-			total_read = len(context.command) - len(next_remaining)  # type: int
+			success_read = len(context.command) - len(context.command_remaining) + result.char_read
+			next_remaining = utils.remove_divider_prefix(context.command_remaining[result.char_read:])
+			total_read = len(context.command) - len(next_remaining)
 
 			with context.visit_node(self, result, total_read):
 				if self.__check_requirements(context) is not None:
@@ -567,15 +569,18 @@ class Literal(EntryNode):
 				raise TypeError('Literal node only accepts str but {} found'.format(type(literal)))
 			if utils.DIVIDER in literal:
 				raise TypeError('DIVIDER character "{}" cannot be inside a literal'.format(utils.DIVIDER))
-		self.literals = literals  # type: Set[str]
+		self.literals: Set[str] = literals
 		self._suggestion_getter = lambda: self.literals
 
+	@override
 	def _get_usage(self) -> str:
 		return '|'.join(sorted(self.literals))
 
+	@override
 	def suggests(self, suggestion: SUGGESTS_CALLBACK) -> 'AbstractNode':
 		raise IllegalNodeOperation('Literal node does not support suggests')
 
+	@override
 	def parse(self, text):
 		arg = utils.get_element(text)
 		if arg in self.literals:
@@ -607,6 +612,7 @@ class ArgumentNode(AbstractNode, ABC):
 			self.__accumulate_value = accumulate
 		return self
 
+	@override
 	def _on_visited(self, context: CommandContext, parsed_result: ParseResult):
 		if self.__accumulate_value:
 			if self.__name not in context:
@@ -618,6 +624,7 @@ class ArgumentNode(AbstractNode, ABC):
 	def get_name(self) -> str:
 		return self.__name
 
+	@override
 	def _get_usage(self) -> str:
 		return '<{}>'.format(self.__name)
 

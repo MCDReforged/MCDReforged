@@ -39,8 +39,8 @@ class LocalMetaRegistry(MetaRegistry):
 		self.__do_cache = cache
 		self.__cached_data: Optional[dict] = None
 
-	@override
 	@property
+	@override
 	def plugins(self) -> Dict[str, PluginData]:
 		if self.__do_cache and self.__cached_data is not None:
 			return self.__cached_data

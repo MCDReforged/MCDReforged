@@ -1,8 +1,14 @@
 import sys
+from typing import TYPE_CHECKING
+
+from typing_extensions import override
 
 from mcdreforged.constants import core_constant
 from mcdreforged.plugin.meta.metadata import Metadata
 from mcdreforged.plugin.type.permanent_plugin import PermanentPlugin
+
+if TYPE_CHECKING:
+	from mcdreforged.plugin.plugin_manager import PluginManager
 
 
 def __get_python_version():
@@ -23,10 +29,11 @@ METADATA = {
 
 
 class PythonPlugin(PermanentPlugin):
-	def __init__(self, plugin_manager):
+	def __init__(self, plugin_manager: 'PluginManager'):
 		super().__init__(plugin_manager)
 		self._set_metadata(Metadata(METADATA, plugin=self))
 
+	@override
 	def load(self):
 		self.mcdr_server.logger.info(self.mcdr_server.tr('python_plugin.info', core_constant.NAME, self.get_meta_name()))
 

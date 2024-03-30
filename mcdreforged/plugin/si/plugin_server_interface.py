@@ -37,7 +37,7 @@ class PluginServerInterface(ServerInterface):
 	def __init__(self, mcdr_server: 'MCDReforgedServer', plugin: AbstractPlugin):
 		super().__init__(mcdr_server)
 		self.__plugin = plugin
-		self.__logger_for_plugin = None  # type: Optional[MCDReforgedLogger]
+		self.__logger_for_plugin: Optional[MCDReforgedLogger] = None
 
 	@property
 	def logger(self) -> logging.Logger:

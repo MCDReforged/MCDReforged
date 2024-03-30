@@ -54,8 +54,8 @@ class MetaRegistry(ABC):
 
 
 class EmptyMetaRegistry(MetaRegistry):
-	@override
 	@property
+	@override
 	def plugins(self) -> Mapping[str, PluginData]:
 		return {}
 
@@ -78,7 +78,7 @@ class MergedMetaRegistry(MetaRegistry):
 							existing.latest_version = plugin_data.latest_version
 							existing.description = plugin_data.description
 
-	@override
 	@property
+	@override
 	def plugins(self) -> Mapping[str, PluginData]:
 		return self.__plugins

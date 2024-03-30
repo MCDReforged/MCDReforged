@@ -1,3 +1,4 @@
+import dataclasses
 import os
 from enum import Enum
 from pathlib import Path
@@ -51,19 +52,19 @@ class PluginResultType(Enum):
 	RELOAD = _TypeImpl(lambda result: result.reload_result, True)
 
 
+@dataclasses.dataclass(frozen=True)
 class PluginOperationResult:
-	def __init__(self, load_result: SingleOperationResult, unload_result: SingleOperationResult, reload_result: SingleOperationResult, dependencies_resolve_result: SingleOperationResult):
-		self.load_result = load_result
-		self.unload_result = unload_result
-		self.reload_result = reload_result
-		self.dependency_check_result = dependencies_resolve_result
+	load_result: SingleOperationResult
+	unload_result: SingleOperationResult
+	reload_result: SingleOperationResult
+	dependency_check_result: SingleOperationResult
 
 	@classmethod
 	def of_empty(cls) -> 'PluginOperationResult':
 		empty = SingleOperationResult()
 		return PluginOperationResult(empty, empty, empty, empty)
 
-	def get_if_success(self, result_type: PluginResultType):
+	def get_if_success(self, result_type: PluginResultType) -> bool:
 		"""
 		Check if there's any plugin inside the given operation result (load result / reload result etc.)
 		Then check if the plugin passed the dependency check if param check_loaded is True

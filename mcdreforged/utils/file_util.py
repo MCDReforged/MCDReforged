@@ -26,7 +26,7 @@ def list_file_with_suffix(directory: PathLike, suffix: str) -> List[Path]:
 
 def touch_directory(directory_path: PathLike) -> None:
 	if not os.path.isdir(directory_path):
-		os.makedirs(directory_path)
+		os.makedirs(directory_path, exist_ok=True)
 
 
 def get_file_suffix(file_path: Union[str, Path]) -> str:

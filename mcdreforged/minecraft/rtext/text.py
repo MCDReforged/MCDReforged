@@ -1,9 +1,9 @@
 import json
-from abc import ABC
+from abc import ABC, abstractmethod
 from typing import Iterable, List, Union, Optional, Any, Tuple, Set, NamedTuple
 
 from colorama import Style
-from typing_extensions import Self
+from typing_extensions import Self, override
 
 from mcdreforged.minecraft.rtext.style import RStyle, RColor, RAction, RColorClassic, RColorRGB, RItemClassic
 from mcdreforged.utils import class_util
@@ -13,6 +13,7 @@ class RTextBase(ABC):
 	"""
 	An abstract base class of Minecraft text component
 	"""
+	@abstractmethod
 	def to_json_object(self) -> Union[dict, list]:
 		"""
 		Return an object representing its data that can be serialized into a json string
@@ -27,6 +28,7 @@ class RTextBase(ABC):
 		"""
 		return json.dumps(self.to_json_object(), ensure_ascii=False, separators=(',', ':'))
 
+	@abstractmethod
 	def to_plain_text(self) -> str:
 		"""
 		Return a plain text for console display
@@ -35,6 +37,7 @@ class RTextBase(ABC):
 		"""
 		raise NotImplementedError()
 
+	@abstractmethod
 	def to_colored_text(self) -> str:
 		"""
 		Return a colored text stained with ANSI escape code for console display
@@ -43,6 +46,7 @@ class RTextBase(ABC):
 		"""
 		raise NotImplementedError()
 
+	@abstractmethod
 	def to_legacy_text(self) -> str:
 		"""
 		Return a colored text stained with classic "§"-prefixed Minecraft formatting code
@@ -51,24 +55,28 @@ class RTextBase(ABC):
 		"""
 		raise NotImplementedError()
 
+	@abstractmethod
 	def copy(self) -> Self:
 		"""
 		Return a deep copy version of itself
 		"""
 		raise NotImplementedError()
 
+	@abstractmethod
 	def set_color(self, color: RColor) -> Self:
 		"""
 		Set the color of the text and return the text component itself
 		"""
 		raise NotImplementedError()
 
+	@abstractmethod
 	def set_styles(self, styles: Union[RStyle, Iterable[RStyle]]) -> Self:
 		"""
 		Set the styles of the text and return the text component itself
 		"""
 		raise NotImplementedError()
 
+	@abstractmethod
 	def set_click_event(self, action: RAction, value: str) -> Self:
 		"""
 		Set the click event
@@ -81,6 +89,7 @@ class RTextBase(ABC):
 		"""
 		raise NotImplementedError()
 
+	@abstractmethod
 	def set_hover_text(self, *args) -> Self:
 		"""
 		Set the hover text
@@ -162,7 +171,7 @@ class RTextBase(ABC):
 		args = list(args)
 		kwargs = kwargs.copy()
 		counter = 0
-		rtext_elements = []  # type: List[Tuple[str, RTextBase]]
+		rtext_elements: List[Tuple[str, RTextBase]] = []
 
 		def get():
 			nonlocal counter
@@ -277,8 +286,7 @@ class RText(RTextBase):
 	"""
 	The regular text component class
 	"""
-
-	def __init__(self, text, color: Optional[RColor] = None, styles: Optional[Union[RStyle, Iterable[RStyle]]] = None):
+	def __init__(self, text: Any, color: Optional[RColor] = None, styles: Optional[Union[RStyle, Iterable[RStyle]]] = None):
 		"""
 		Create a :class:`RText` object with specific text, optional color and optional style
 
@@ -297,10 +305,12 @@ class RText(RTextBase):
 		if styles is not None:
 			self.set_styles(styles)
 
+	@override
 	def set_color(self, color: RColor) -> Self:
 		self.__color = color
 		return self
 
+	@override
 	def set_styles(self, styles: Union[RStyle, Iterable[RStyle]]) -> Self:
 		if isinstance(styles, RStyle):
 			styles = {styles}
@@ -311,14 +321,17 @@ class RText(RTextBase):
 		self.__styles = styles
 		return self
 
+	@override
 	def set_click_event(self, action: RAction, value: str) -> Self:
 		self.__click_event = _ClickEvent(action, value)
 		return self
 
+	@override
 	def set_hover_text(self, *args) -> Self:
 		self.__hover_text_list = list(args)
 		return self
 
+	@override
 	def to_json_object(self) -> Union[dict, list]:
 		obj = {'text': self.__text}
 		if self.__color is not None:
@@ -344,6 +357,7 @@ class RText(RTextBase):
 			}
 		return obj
 
+	@override
 	def to_plain_text(self) -> str:
 		return self.__text
 
@@ -359,6 +373,7 @@ class RText(RTextBase):
 				color += style.console_code
 		return color
 
+	@override
 	def to_colored_text(self) -> str:
 		head = self._get_console_style_codes()
 		tail = Style.RESET_ALL if len(head) > 0 else ''
@@ -376,6 +391,7 @@ class RText(RTextBase):
 				color += style.mc_code
 		return color
 
+	@override
 	def to_legacy_text(self) -> str:
 		head = self._get_legacy_style_codes()
 		tail = RColor.reset.mc_code if len(head) > 0 else ''
@@ -388,6 +404,7 @@ class RText(RTextBase):
 		self.__click_event = text.__click_event
 		self.__hover_text_list = text.__hover_text_list.copy()
 
+	@override
 	def copy(self) -> 'RText':
 		copied = RText('')
 		copied._copy_from(self)
@@ -417,24 +434,28 @@ class RTextList(RTextBase):
 		"""
 		self.header = RText('')
 		self.header_empty = True
-		self.children = []  # type: List[RTextBase]
+		self.children: List[RTextBase] = []
 		self.append(*args)
 
+	@override
 	def set_color(self, color: RColor) -> Self:
 		self.header.set_color(color)
 		self.header_empty = False
 		return self
 
+	@override
 	def set_styles(self, styles: Union[RStyle, Iterable[RStyle]]) -> Self:
 		self.header.set_styles(styles)
 		self.header_empty = False
 		return self
 
+	@override
 	def set_click_event(self, action: RAction, value) -> Self:
 		self.header.set_click_event(action, value)
 		self.header_empty = False
 		return self
 
+	@override
 	def set_hover_text(self, *args) -> Self:
 		self.header.set_hover_text(*args)
 		self.header_empty = False
@@ -453,26 +474,31 @@ class RTextList(RTextBase):
 	def is_empty(self) -> bool:
 		return len(self.children) == 0
 
+	@override
 	def to_json_object(self) -> Union[dict, list]:
 		ret = ['' if self.header_empty else self.header.to_json_object()]
 		ret.extend(map(lambda rtext: rtext.to_json_object(), self.children))
 		return ret
 
+	@override
 	def to_plain_text(self) -> str:
 		return ''.join(map(lambda rtext: rtext.to_plain_text(), self.children))
 
+	@override
 	def to_colored_text(self) -> str:
 		# noinspection PyProtectedMember
 		head = self.header._get_console_style_codes()
 		tail = Style.RESET_ALL if len(head) > 0 else ''
 		return ''.join(map(lambda rtext: ''.join([head, rtext.to_colored_text(), tail]), self.children))
 
+	@override
 	def to_legacy_text(self) -> str:
 		# noinspection PyProtectedMember
 		head = self.header._get_legacy_style_codes()
 		tail = RColor.reset.mc_code if len(head) > 0 else ''
 		return ''.join(map(lambda rtext: ''.join([head, rtext.to_legacy_text(), tail]), self.children))
 
+	@override
 	def copy(self) -> 'RTextList':
 		copied = RTextList()
 		copied.header = self.header.copy()
@@ -535,9 +561,11 @@ class RTextTranslation(RText):
 		self.__fallback = fallback
 		return self
 
+	@override
 	def to_plain_text(self) -> str:
 		return self.__translation_key
 
+	@override
 	def to_json_object(self) -> Union[dict, list]:
 		obj = super().to_json_object()
 		obj.pop('text')
@@ -548,11 +576,13 @@ class RTextTranslation(RText):
 			obj['fallback'] = self.__fallback
 		return obj
 
+	@override
 	def _copy_from(self, text: 'RTextTranslation'):
 		super()._copy_from(text)
 		self.__translation_key = text.__translation_key
 		self.__args = text.__args
 
+	@override
 	def copy(self) -> 'RTextTranslation':
 		copied = RTextTranslation('')
 		copied._copy_from(self)

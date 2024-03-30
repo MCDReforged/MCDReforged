@@ -1,6 +1,8 @@
 import functools
 import re
-from typing import List
+from typing import List, TYPE_CHECKING
+
+from typing_extensions import override
 
 from mcdreforged.command.builder.exception import RequirementNotMet, UnknownArgument, CommandError
 from mcdreforged.command.builder.nodes.basic import Literal
@@ -26,6 +28,10 @@ from mcdreforged.plugin.plugin_event import MCDRPluginEvents
 from mcdreforged.plugin.type.permanent_plugin import PermanentPlugin
 from mcdreforged.translation.translation_text import RTextMCDRTranslation
 
+if TYPE_CHECKING:
+	from mcdreforged.plugin.plugin_manager import PluginManager
+
+
 METADATA = {
 	'id': core_constant.PACKAGE_NAME,
 	'version': core_constant.VERSION,
@@ -39,7 +45,7 @@ METADATA = {
 
 
 class MCDReforgedPlugin(PermanentPlugin):
-	def __init__(self, plugin_manager):
+	def __init__(self, plugin_manager: 'PluginManager'):
 		super().__init__(plugin_manager)
 		self._set_metadata(Metadata(METADATA, plugin=self))
 		self.command_help = HelpCommand(self)
@@ -60,6 +66,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 	def tr(self, key: str, *args, **kwargs) -> RTextMCDRTranslation:
 		return self.server_interface.rtr(key, *args, **kwargs)
 
+	@override
 	def load(self):
 		self.plugin_registry.clear()
 		self.__register_commands()

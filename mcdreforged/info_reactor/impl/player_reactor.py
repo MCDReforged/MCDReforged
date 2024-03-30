@@ -1,6 +1,8 @@
 """
 Analyzing and reacting events related to player
 """
+from typing_extensions import override
+
 from mcdreforged.info_reactor.abstract_info_reactor import AbstractInfoReactor
 from mcdreforged.info_reactor.info import InfoSource, Info
 from mcdreforged.plugin.plugin_event import MCDRPluginEvents
@@ -8,6 +10,7 @@ from mcdreforged.utils.logger import DebugOption
 
 
 class PlayerReactor(AbstractInfoReactor):
+	@override
 	def react(self, info: Info):
 		if info.source == InfoSource.SERVER:
 			handler = self.mcdr_server.server_handler_manager.get_current_handler()

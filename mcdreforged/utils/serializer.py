@@ -82,7 +82,7 @@ def serialize(obj: Any) -> Union[None, int, float, str, bool, list, dict]:
 				if not attr_name.startswith('_'):
 					order_dict[attr_name] = i
 			attr_dict = dict(sorted(
-				map(tuple, attr_dict.items()),
+				attr_dict.items(),
 				key=lambda item: order_dict.get(item[0], len(order_dict))
 			))
 	except Exception:

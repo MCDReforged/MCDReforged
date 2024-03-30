@@ -37,7 +37,7 @@ class MCDReforgedConfig(YamlDataStorage):
 	#   Actual data analyzers
 	# -------------------------
 
-	def is_debug_on(self):
+	def is_debug_on(self) -> bool:
 		for value in self._data['debug']:
 			if value is True:
 				return True

@@ -1,6 +1,7 @@
 import typing
 from abc import ABC, abstractmethod
 
+from mcdreforged.constants import core_constant
 from mcdreforged.utils.types import MessageText
 
 if typing.TYPE_CHECKING:
@@ -8,7 +9,7 @@ if typing.TYPE_CHECKING:
 
 
 class Replier(ABC):
-	DEFAULT_LANGUAGE = 'en_us'
+	DEFAULT_LANGUAGE = core_constant.DEFAULT_LANGUAGE
 
 	@property
 	def language(self) -> str:

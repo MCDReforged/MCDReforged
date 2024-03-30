@@ -5,6 +5,7 @@ from abc import ABC
 from typing import Optional, List
 
 import parse
+from typing_extensions import override
 
 from mcdreforged.handler.abstract_server_handler import AbstractServerHandler
 from mcdreforged.info_reactor.info import Info
@@ -19,6 +20,7 @@ class AbstractMinecraftHandler(AbstractServerHandler, ABC):
 	"""
 	An abstract handler for Minecraft Java Edition servers
 	"""
+	@override
 	def get_stop_command(self) -> str:
 		return 'stop'
 
@@ -63,6 +65,7 @@ class AbstractMinecraftHandler(AbstractServerHandler, ABC):
 		else:
 			return json.dumps(str(message))
 
+	@override
 	def get_send_message_command(self, target: str, message: MessageText, server_information: ServerInformation) -> Optional[str]:
 		can_do_execute = False
 		if server_information.version is not None:
@@ -78,10 +81,12 @@ class AbstractMinecraftHandler(AbstractServerHandler, ABC):
 			command = 'execute at @p run ' + command
 		return command
 
+	@override
 	def get_broadcast_message_command(self, message: MessageText, server_information: ServerInformation) -> Optional[str]:
 		return self.get_send_message_command('@a', message, server_information)
 
 	@classmethod
+	@override
 	def _get_server_stdout_raw_result(cls, text: str) -> Info:
 		raw_result = super()._get_server_stdout_raw_result(text)
 		# Minecraft <= 1.12.x might output minecraft color codes to the console
@@ -95,6 +100,7 @@ class AbstractMinecraftHandler(AbstractServerHandler, ABC):
 	def _verify_player_name(cls, name: str):
 		return cls.__player_name_regex.fullmatch(name) is not None
 
+	@override
 	def parse_server_stdout(self, text: str):
 		result = super().parse_server_stdout(text)
 
@@ -112,6 +118,7 @@ class AbstractMinecraftHandler(AbstractServerHandler, ABC):
 	__server_startup_done_regex = re.compile(r'Done \([0-9.]*s\)! For help, type "help"( or "\?")?')
 	__rcon_started_regex = re.compile(r'RCON running on [\w.]+:\d+')
 
+	@override
 	def parse_player_joined(self, info: Info):
 		# Steve[/127.0.0.1:9864] logged in with entity id 131 at (187.2703, 146.79014, 404.84718)
 		if not info.is_user:
@@ -120,12 +127,14 @@ class AbstractMinecraftHandler(AbstractServerHandler, ABC):
 				return parsed['name']
 		return None
 
+	@override
 	def parse_player_left(self, info: Info):
 		# Steve left the game
 		if not info.is_user and self.__player_left_regex.fullmatch(info.content):
 			return info.content.split(' ')[0]
 		return None
 
+	@override
 	def parse_server_version(self, info: Info):
 		if not info.is_user:
 			parsed = self.__server_version_parser.parse(info.content)
@@ -133,6 +142,7 @@ class AbstractMinecraftHandler(AbstractServerHandler, ABC):
 				return parsed['version']
 		return None
 
+	@override
 	def parse_server_address(self, info: Info):
 		if not info.is_user:
 			parsed = self.__server_address_parser.parse(info.content)
@@ -140,15 +150,18 @@ class AbstractMinecraftHandler(AbstractServerHandler, ABC):
 				return parsed[0], parsed[1]
 		return None
 
+	@override
 	def test_server_startup_done(self, info: Info):
 		# 1.13+ Done (3.500s)! For help, type "help"
 		# 1.13- Done (3.500s)! For help, type "help" or "?"
 		return info.is_from_server and self.__server_startup_done_regex.fullmatch(info.content) is not None
 
+	@override
 	def test_rcon_started(self, info: Info):
 		# RCON running on 0.0.0.0:25575
 		return info.is_from_server and self.__rcon_started_regex.fullmatch(info.content) is not None
 
+	@override
 	def test_server_stopping(self, info: Info):
 		# Stopping server
 		return info.is_from_server and info.content == 'Stopping server'

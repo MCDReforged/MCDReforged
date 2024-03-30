@@ -2,7 +2,10 @@
 Single plugin class
 """
 import enum
+from abc import abstractmethod
 from typing import Tuple, Any, TYPE_CHECKING, Collection, Optional
+
+from typing_extensions import TypeGuard
 
 from mcdreforged.command.builder.nodes.basic import Literal
 from mcdreforged.info_reactor.info_filter import InfoFilter
@@ -16,6 +19,8 @@ from mcdreforged.utils.types import TranslationKeyDictNested
 if TYPE_CHECKING:
 	from mcdreforged.handler.server_handler import ServerHandler
 	from mcdreforged.plugin.plugin_manager import PluginManager
+	from mcdreforged.plugin.type.permanent_plugin import PermanentPlugin
+	from mcdreforged.plugin.type.regular_plugin import RegularPlugin
 
 
 class PluginState(enum.Enum):
@@ -37,12 +42,15 @@ class AbstractPlugin:
 		from mcdreforged.plugin.si.plugin_server_interface import PluginServerInterface
 		self.server_interface = PluginServerInterface(self.mcdr_server, self)
 
-	def is_permanent(self) -> bool:
-		return False
+	def is_permanent(self) -> TypeGuard['PermanentPlugin']:
+		from mcdreforged.plugin.type.permanent_plugin import PermanentPlugin
+		return isinstance(self, PermanentPlugin)
 
-	def is_regular(self) -> bool:
-		return False
+	def is_regular(self) -> TypeGuard['RegularPlugin']:
+		from mcdreforged.plugin.type.regular_plugin import RegularPlugin
+		return isinstance(self, RegularPlugin)
 
+	@abstractmethod
 	def get_metadata(self) -> Metadata:
 		raise NotImplementedError()
 
@@ -52,6 +60,7 @@ class AbstractPlugin:
 	def get_meta_name(self) -> str:
 		return self.get_metadata().name
 
+	@abstractmethod
 	def get_fallback_metadata_id(self) -> str:
 		raise NotImplementedError()
 
@@ -67,9 +76,6 @@ class AbstractPlugin:
 
 	def __str__(self):
 		return self.get_name()
-
-	def __repr__(self):
-		raise NotImplementedError()
 
 	# ----------------
 	#   Plugin State
@@ -97,18 +103,21 @@ class AbstractPlugin:
 	#             \      v
 	#              reload
 
+	@abstractmethod
 	def load(self):
 		"""
 		The first operation to the plugin, read some basic information
 		"""
 		raise NotImplementedError()
 
+	@abstractmethod
 	def ready(self):
 		"""
 		The plugin is ready to be fully loaded. It's ready to handle its entrypoint module
 		"""
 		raise NotImplementedError()
 
+	@abstractmethod
 	def reload(self):
 		"""
 		Reload the plugin
@@ -116,12 +125,14 @@ class AbstractPlugin:
 		"""
 		raise NotImplementedError()
 
+	@abstractmethod
 	def unload(self):
 		"""
 		Unload the plugin. Due to plugin unload / reload
 		"""
 		raise NotImplementedError()
 
+	@abstractmethod
 	def remove(self):
 		"""
 		The last operation to the plugin

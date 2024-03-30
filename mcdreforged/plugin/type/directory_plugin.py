@@ -50,6 +50,7 @@ class _DirectoryPluginBase(MultiFilePlugin, ABC):
 
 class DirectoryPlugin(_DirectoryPluginBase):
 	@property
+	@override
 	def _file_root(self) -> Path:
 		return self.plugin_path
 
@@ -62,8 +63,8 @@ class LinkedDirectoryPlugin(_DirectoryPluginBase):
 			target = class_util.check_type(json.load(f)['target'], str)
 		self.target_plugin_path = Path(target)
 
-	@override
 	@property
+	@override
 	def _file_root(self) -> Path:
 		return self.target_plugin_path
 

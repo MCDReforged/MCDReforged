@@ -4,24 +4,30 @@ MCDR update things
 import json
 import time
 from threading import Lock
-from typing import Callable, Any, Union, Optional
+from typing import Callable, Any, Union, Optional, TYPE_CHECKING
+
+from typing_extensions import override
 
 from mcdreforged.constants import core_constant
-from mcdreforged.executor.thread_executor import ThreadExecutor
+from mcdreforged.executor.background_thread_executor import BackgroundThreadExecutor
 from mcdreforged.minecraft.rtext.style import RAction, RColor, RStyle
 from mcdreforged.minecraft.rtext.text import RText, RTextBase
 from mcdreforged.plugin.meta.version import Version
 from mcdreforged.translation.translation_text import RTextMCDRTranslation
 from mcdreforged.utils import misc_util, request_util
 
+if TYPE_CHECKING:
+	from mcdreforged.mcdr_server import MCDReforgedServer
 
-class UpdateHelper(ThreadExecutor):
-	def __init__(self, mcdr_server):
+
+class UpdateHelper(BackgroundThreadExecutor):
+	def __init__(self, mcdr_server: 'MCDReforgedServer'):
 		super().__init__(mcdr_server)
 		self.__api_fetcher = GithubApiFetcher(core_constant.GITHUB_API_LATEST)
 		self.__update_lock = Lock()
 		self.__last_query_time = 0
 
+	@override
 	def tick(self):
 		if time.monotonic() - self.__last_query_time >= 60 * 60 * 24:
 			self.check_update(lambda: self.mcdr_server.config['check_update'] is True, self.mcdr_server.logger.info)

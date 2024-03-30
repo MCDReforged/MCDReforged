@@ -14,15 +14,15 @@ class RconManager:
 	def __init__(self, mcdr_server: 'MCDReforgedServer'):
 		self.mcdr_server = mcdr_server
 		self.logger = mcdr_server.logger
-		self.rcon = None  # type: Optional[RconConnection]
+		self.rcon: Optional[RconConnection] = None
 
 	def is_running(self) -> bool:
 		return self.rcon is not None and self.rcon.socket is not None
 
-	def connect(self, address, port, password):
+	def connect(self, address: str, port: int, password: str):
 		if self.is_running():
 			self.disconnect()
-		self.rcon = RconConnection(address, port, str(password), logger=self.logger)
+		self.rcon = RconConnection(address, port, password, logger=self.logger)
 		try:
 			success = self.rcon.connect()
 		except Exception as e:
@@ -43,7 +43,7 @@ class RconManager:
 				self.mcdr_server.logger.error(self.mcdr_server.tr('rcon_manager.disconnect.disconnect_fail'))
 		self.rcon = None
 
-	def send_command(self, command):
+	def send_command(self, command: str) -> Optional[str]:
 		if self.is_running():
 			return self.rcon.send_command(command)
 		else:

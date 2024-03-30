@@ -105,7 +105,7 @@ def make_packed_plugin(args: Any, *, quiet: bool = False):
 		return
 	try:
 		with open(meta_file_path, encoding='utf8') as meta_file:
-			meta_dict = json.load(meta_file)  # type: dict
+			meta_dict: dict = json.load(meta_file)
 		assert isinstance(meta_dict, dict)
 		meta = Metadata(meta_dict)
 	except Exception as e:
