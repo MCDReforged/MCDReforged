@@ -11,7 +11,7 @@ from mcdreforged.plugin.installer.meta_holder import CatalogueMetaRegistryHolder
 from mcdreforged.plugin.installer.printer import Table
 from mcdreforged.plugin.installer.replier import Replier
 from mcdreforged.plugin.installer.types import MetaRegistry
-from mcdreforged.utils.types import MessageText
+from mcdreforged.utils.types.message import MessageText
 
 
 def is_subsequence(keyword: str, s: str):

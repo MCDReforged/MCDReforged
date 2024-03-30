@@ -14,7 +14,7 @@ from mcdreforged.plugin.plugin_event import MCDREvent, EventListener, PluginEven
 from mcdreforged.plugin.plugin_registry import PluginRegistry, HelpMessage
 from mcdreforged.utils.exception import IllegalCallError, IllegalStateError
 from mcdreforged.utils.logger import DebugOption
-from mcdreforged.utils.types import TranslationKeyDictNested
+from mcdreforged.utils.types.message import TranslationKeyDictNested
 
 if TYPE_CHECKING:
 	from mcdreforged.handler.server_handler import ServerHandler

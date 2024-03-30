@@ -9,7 +9,7 @@ from mcdreforged.minecraft.rtext.text import RTextBase, RText
 from mcdreforged.plugin.meta.version import Version, VersionParsingError, VersionRequirement
 from mcdreforged.translation.translation_text import RTextMCDRTranslation
 from mcdreforged.utils import translation_util, class_util
-from mcdreforged.utils.types import TranslationLanguageDict
+from mcdreforged.utils.types.message import TranslationLanguageDict
 
 if TYPE_CHECKING:
 	from mcdreforged.plugin.type.plugin import AbstractPlugin

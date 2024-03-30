@@ -15,7 +15,7 @@ from mcdreforged.command.builder.exception import LiteralNotMatch, UnknownComman
 	CommandError
 from mcdreforged.command.command_source import CommandSource
 from mcdreforged.utils import misc_util, tree_printer, class_util
-from mcdreforged.utils.types import MessageText
+from mcdreforged.utils.types.message import MessageText
 
 __SOURCE_CONTEXT_CALLBACK = Union[
 	Callable[[], Any],

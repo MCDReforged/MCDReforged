@@ -2,7 +2,7 @@ import typing
 from abc import ABC, abstractmethod
 
 from mcdreforged.constants import core_constant
-from mcdreforged.utils.types import MessageText
+from mcdreforged.utils.types.message import MessageText
 
 if typing.TYPE_CHECKING:
 	from mcdreforged.command.command_source import CommandSource

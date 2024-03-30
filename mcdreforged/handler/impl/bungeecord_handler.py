@@ -7,7 +7,7 @@ from typing_extensions import override
 from mcdreforged.handler.abstract_server_handler import AbstractServerHandler
 from mcdreforged.info_reactor.info import Info
 from mcdreforged.info_reactor.server_information import ServerInformation
-from mcdreforged.utils.types import MessageText
+from mcdreforged.utils.types.message import MessageText
 
 
 class BungeecordHandler(AbstractServerHandler):

@@ -23,8 +23,8 @@ from mcdreforged.utils import misc_util, file_util, class_util
 from mcdreforged.utils.exception import IllegalCallError
 from mcdreforged.utils.future import Future
 from mcdreforged.utils.logger import MCDReforgedLogger, DebugOption
-from mcdreforged.utils.path_like import PathLike
-from mcdreforged.utils.types import MessageText
+from mcdreforged.utils.types.message import MessageText
+from mcdreforged.utils.types.path_like import PathLike
 
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer

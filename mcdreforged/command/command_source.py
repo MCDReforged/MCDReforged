@@ -8,7 +8,7 @@ from mcdreforged.permission.permission_level import PermissionLevel
 from mcdreforged.translation.translation_text import RTextMCDRTranslation
 from mcdreforged.utils import misc_util
 from mcdreforged.utils.exception import IllegalCallError
-from mcdreforged.utils.types import MessageText
+from mcdreforged.utils.types.message import MessageText
 
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer

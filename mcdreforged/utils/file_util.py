@@ -3,7 +3,7 @@ import os
 from pathlib import Path
 from typing import Callable, ContextManager, TextIO, Union, List
 
-from mcdreforged.utils.path_like import PathLike
+from mcdreforged.utils.types.path_like import PathLike
 
 
 def list_all(directory: PathLike, predicate: Callable[[Path], bool] = lambda file_path: True) -> List[Path]:

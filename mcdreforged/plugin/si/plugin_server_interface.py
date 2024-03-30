@@ -18,7 +18,7 @@ from mcdreforged.plugin.type.plugin import AbstractPlugin
 from mcdreforged.utils import class_util
 from mcdreforged.utils.logger import MCDReforgedLogger
 from mcdreforged.utils.serializer import Serializable
-from mcdreforged.utils.types import MessageText, TranslationKeyDictRich, TranslationKeyDictNested
+from mcdreforged.utils.types.message import MessageText, TranslationKeyDictRich, TranslationKeyDictNested
 
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer

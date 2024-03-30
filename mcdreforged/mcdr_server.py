@@ -35,7 +35,7 @@ from mcdreforged.translation.translation_manager import TranslationManager
 from mcdreforged.utils import file_util
 from mcdreforged.utils.exception import ServerStartError, IllegalStateError, DecodeError
 from mcdreforged.utils.logger import DebugOption, MCDReforgedLogger, MCColorFormatControl
-from mcdreforged.utils.types import MessageText
+from mcdreforged.utils.types.message import MessageText
 
 if TYPE_CHECKING:
 	from mcdreforged.plugin.plugin_registry import PluginRegistryStorage

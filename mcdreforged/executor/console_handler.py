@@ -26,7 +26,7 @@ from mcdreforged.info_reactor.info import Info
 from mcdreforged.permission.permission_level import PermissionLevel
 from mcdreforged.utils import misc_util
 from mcdreforged.utils.logger import DebugOption, SyncStdoutStreamHandler
-from mcdreforged.utils.types import MessageText
+from mcdreforged.utils.types.message import MessageText
 
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer

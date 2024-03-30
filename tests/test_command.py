@@ -7,7 +7,7 @@ from mcdreforged.api.command import *
 from mcdreforged.api.types import CommandSource
 from mcdreforged.command.builder.nodes.basic import CallbackError
 from mcdreforged.command.builder.nodes.special import CountingLiteral
-from mcdreforged.utils.types import MessageText
+from mcdreforged.utils.types.message import MessageText
 
 
 class _TestCommandSource(CommandSource):

@@ -1,7 +1,7 @@
 import json
 import threading
 import traceback
-from typing import List, Optional, Set, Dict, Union
+from typing import List, Optional, Set, Dict
 
 from typing_extensions import override
 
@@ -10,7 +10,8 @@ from mcdreforged.command.builder.nodes.basic import Literal
 from mcdreforged.command.command_source import CommandSource
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.sub_command import SubCommand
 from mcdreforged.plugin.plugin_registry import PluginCommandHolder
-from mcdreforged.utils.types import TranslationStorage
+from mcdreforged.utils.types.json_like import JsonLike
+from mcdreforged.utils.types.message import TranslationStorage
 
 
 def thread_dump(*, target_thread: Optional[str] = None) -> List[str]:
@@ -31,7 +32,7 @@ def thread_dump(*, target_thread: Optional[str] = None) -> List[str]:
 	return lines
 
 
-def json_wrap(obj: Union[None, int, bool, float, str, list, dict]) -> str:
+def json_wrap(obj: JsonLike) -> str:
 	return json.dumps(obj, indent=4, ensure_ascii=False)
 
 

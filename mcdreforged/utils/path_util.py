@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from mcdreforged.utils.path_like import PathLike
+from mcdreforged.utils.types.path_like import PathLike
 
 
 def is_relative_to(child: Path, parent: 'PathLike') -> bool:

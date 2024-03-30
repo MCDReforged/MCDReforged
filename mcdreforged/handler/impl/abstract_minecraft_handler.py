@@ -13,7 +13,7 @@ from mcdreforged.info_reactor.server_information import ServerInformation
 from mcdreforged.minecraft.rtext.text import RTextBase
 from mcdreforged.plugin.meta.version import VersionParsingError
 from mcdreforged.utils import string_util
-from mcdreforged.utils.types import MessageText
+from mcdreforged.utils.types.message import MessageText
 
 
 class AbstractMinecraftHandler(AbstractServerHandler, ABC):

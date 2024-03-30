@@ -7,7 +7,7 @@ from mcdreforged.plugin.type.packed_plugin import PackedPlugin
 from mcdreforged.plugin.type.regular_plugin import RegularPlugin
 from mcdreforged.plugin.type.solo_plugin import SoloPlugin
 from mcdreforged.utils import string_util, file_util
-from mcdreforged.utils.path_like import PathLike
+from mcdreforged.utils.types.path_like import PathLike
 
 if TYPE_CHECKING:
 	from mcdreforged.plugin.plugin_manager import PluginManager

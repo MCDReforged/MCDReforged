@@ -2,7 +2,7 @@ from abc import ABC
 from typing import Optional, Union
 
 from mcdreforged.minecraft.rtext.text import RTextBase, RText, RColor
-from mcdreforged.utils.types import MessageText
+from mcdreforged.utils.types.message import MessageText
 
 
 class CommandErrorBase(Exception, ABC):

@@ -11,7 +11,7 @@ from ruamel.yaml import YAML
 from mcdreforged.constants import core_constant
 from mcdreforged.minecraft.rtext.text import RTextBase
 from mcdreforged.utils import file_util, translation_util
-from mcdreforged.utils.types import TranslationStorage, MessageText
+from mcdreforged.utils.types.message import TranslationStorage, MessageText
 
 MCDR_LANGUAGE_DIRECTORY = core_constant.PACKAGE_PATH / 'resources' / 'lang'
 

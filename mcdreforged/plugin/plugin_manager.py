@@ -25,8 +25,8 @@ from mcdreforged.plugin.type.regular_plugin import RegularPlugin
 from mcdreforged.utils import file_util, string_util, misc_util, class_util, path_util
 from mcdreforged.utils.future import Future
 from mcdreforged.utils.logger import DebugOption
-from mcdreforged.utils.path_like import PathLike
 from mcdreforged.utils.thread_local_storage import ThreadLocalStorage
+from mcdreforged.utils.types.path_like import PathLike
 
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer

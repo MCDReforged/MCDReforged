@@ -2,14 +2,14 @@ import functools
 import json
 import os
 from pathlib import Path
-from typing import Literal, Dict, Callable, Union, Optional, Any, TextIO
+from typing import Literal, Dict, Callable, Optional, Any, TextIO
 
 from ruamel.yaml import YAML
 
 from mcdreforged.utils import file_util
+from mcdreforged.utils.types.json_like import JsonLike
 
 FileFormat = Literal['json', 'yaml']
-JsonLike = Union[dict, list]
 
 
 class SimpleConfigHandler:

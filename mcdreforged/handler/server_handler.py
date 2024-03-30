@@ -3,7 +3,7 @@ from typing import Optional, Tuple
 
 from mcdreforged.info_reactor.info import Info
 from mcdreforged.info_reactor.server_information import ServerInformation
-from mcdreforged.utils.types import MessageText
+from mcdreforged.utils.types.message import MessageText
 
 
 class ServerHandler(ABC):

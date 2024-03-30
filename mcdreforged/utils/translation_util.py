@@ -1,7 +1,7 @@
 from typing import Optional
 
 from mcdreforged.constants import core_constant
-from mcdreforged.utils.types import TranslationKeyDictRich, MessageText, TranslationStorage, TranslationKeyDictNested, TranslationKeyDict
+from mcdreforged.utils.types.message import TranslationKeyDictRich, MessageText, TranslationStorage, TranslationKeyDictNested, TranslationKeyDict
 
 __all__ = [
 	'translate_from_dict',

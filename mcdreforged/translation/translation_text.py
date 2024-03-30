@@ -7,7 +7,7 @@ from typing_extensions import Self, override
 from mcdreforged.minecraft.rtext.style import RColor, RStyle, RAction
 from mcdreforged.minecraft.rtext.text import RTextBase, RText
 from mcdreforged.utils import translation_util, class_util
-from mcdreforged.utils.types import TranslationKeyDictRich
+from mcdreforged.utils.types.message import TranslationKeyDictRich
 
 
 class RTextMCDRTranslation(RTextBase):

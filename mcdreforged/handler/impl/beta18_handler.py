@@ -9,7 +9,7 @@ from mcdreforged.info_reactor.info import Info
 from mcdreforged.info_reactor.server_information import ServerInformation
 from mcdreforged.minecraft.rtext.text import RTextBase
 from mcdreforged.utils import string_util
-from mcdreforged.utils.types import MessageText
+from mcdreforged.utils.types.message import MessageText
 
 
 class Beta18Handler(VanillaHandler):

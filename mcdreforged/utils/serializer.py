@@ -7,6 +7,8 @@ from typing import Union, TypeVar, List, Dict, Type, get_type_hints, Any, Callab
 
 from typing_extensions import Self
 
+from mcdreforged.utils.types.json_like import JsonLike
+
 T = TypeVar('T')
 
 
@@ -25,7 +27,7 @@ def _get_args(cls: Type) -> tuple:
 	return getattr(cls, '__args__', ())
 
 
-def serialize(obj: Any) -> Union[None, int, float, str, bool, list, dict]:
+def serialize(obj: Any) -> JsonLike:
 	"""
 	A utility function to serialize any object into a json-like python object.
 	Here, being json-like means that the return value can be passed to e.g. :func:`json.dumps` directly

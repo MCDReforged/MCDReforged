@@ -10,7 +10,7 @@ from mcdreforged.minecraft.rtext.text import RTextBase
 from mcdreforged.plugin.plugin_event import EventListener
 from mcdreforged.translation.translation_text import RTextMCDRTranslation
 from mcdreforged.utils import translation_util
-from mcdreforged.utils.types import TranslationStorage, TranslationKeyDictRich, MessageText, \
+from mcdreforged.utils.types.message import TranslationStorage, TranslationKeyDictRich, MessageText, \
 	TranslationKeyDictNested
 
 if TYPE_CHECKING:

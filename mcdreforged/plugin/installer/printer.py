@@ -5,7 +5,7 @@ from wcwidth import wcswidth
 from mcdreforged.minecraft.rtext.style import RStyle
 from mcdreforged.minecraft.rtext.text import RTextBase
 from mcdreforged.plugin.installer.replier import Replier
-from mcdreforged.utils.types import MessageText
+from mcdreforged.utils.types.message import MessageText
 
 
 class Table:
