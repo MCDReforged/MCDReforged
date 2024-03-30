@@ -1,14 +1,17 @@
 import os
 from pathlib import Path
-from typing import TYPE_CHECKING, Callable, List, Tuple
+from typing import TYPE_CHECKING, Callable, List, Tuple, Optional
 
-from mcdreforged.command.builder.nodes.arguments import QuotableText
+from typing_extensions import override
+
+from mcdreforged.command.builder.nodes.arguments import QuotableText, Text
 from mcdreforged.command.builder.nodes.basic import Literal
 from mcdreforged.command.command_source import CommandSource
 from mcdreforged.minecraft.rtext.style import RColor, RStyle, RAction
 from mcdreforged.minecraft.rtext.text import RTextList, RText
 from mcdreforged.permission.permission_level import PermissionLevel
-from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.sub_command import SubCommand
+from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.plugin_command_pim import PluginCommandPimExtension
+from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.sub_command import SubCommand, SubCommandEvent
 from mcdreforged.plugin.operation_result import PluginOperationResult, PluginResultType
 from mcdreforged.plugin.type.plugin import AbstractPlugin
 from mcdreforged.plugin.type.regular_plugin import RegularPlugin
@@ -23,18 +26,20 @@ class PluginCommand(SubCommand):
 	def __init__(self, mcdr_plugin: 'MCDReforgedPlugin'):
 		super().__init__(mcdr_plugin)
 		self.plugin_manager: 'PluginManager' = self.mcdr_server.plugin_manager
+		self.pim_ext = PluginCommandPimExtension(mcdr_plugin)
 
+	@override
 	def get_command_node(self) -> Literal:
 		def plugin_id_node():
-			return QuotableText('plugin_id').suggests(lambda: [plg.get_id() for plg in self.plugin_manager.get_regular_plugins()])
+			return Text('plugin_id').suggests(lambda: [plg.get_id() for plg in self.plugin_manager.get_regular_plugins()])
 
 		def unloaded_plugin_node():
-			return QuotableText('file_name').suggests(lambda: map(os.path.basename, self.server_interface.get_unloaded_plugin_list()))
+			return QuotableText('file_name').suggests(lambda: [os.path.basename(fp) for fp in self.server_interface.get_unloaded_plugin_list()])
 
 		def disabled_plugin_node():
-			return QuotableText('file_name').suggests(lambda: map(os.path.basename, self.server_interface.get_disabled_plugin_list()))
+			return QuotableText('file_name').suggests(lambda: [os.path.basename(dp) for dp in self.server_interface.get_disabled_plugin_list()])
 
-		return (
+		root = (
 			self.control_command_root({'plugin', 'plg'}).
 			runs(lambda src: self.reply_help_message(src, 'mcdr_command.help_message.plugin')).
 			then(Literal('list').runs(self.list_plugin)).
@@ -46,6 +51,21 @@ class PluginCommand(SubCommand):
 			then(Literal('disable').then(plugin_id_node().runs(lambda src, ctx: self.disable_plugin(src, ctx['plugin_id'])))).
 			then(Literal({'reloadall', 'ra'}).runs(self.reload_all_plugin))
 		)
+		for node in self.pim_ext.get_command_child_nodes():
+			root.then(node)
+		return root
+
+	@override
+	def on_load(self):
+		self.pim_ext.on_load()
+
+	@override
+	def on_mcdr_stop(self):
+		self.pim_ext.on_mcdr_stop()
+
+	@override
+	def on_event(self, source: Optional[CommandSource], event: SubCommandEvent) -> bool:
+		return self.pim_ext.on_event(source, event)
 
 	def list_plugin(self, source: CommandSource):
 		not_loaded_plugin_list: List[str] = self.server_interface.get_unloaded_plugin_list()

@@ -10,7 +10,7 @@ from pathlib import Path
 from typing import Optional, List, TYPE_CHECKING, Dict, NamedTuple
 
 import resolvelib
-from typing_extensions import override
+from typing_extensions import override, deprecated
 
 from mcdreforged.command.builder.common import CommandContext
 from mcdreforged.command.builder.nodes.arguments import Text, QuotableText
@@ -125,7 +125,7 @@ def async_operation(op: OperationHolder, skip_callback: callable, thread_name: s
 	return wrapper
 
 
-class PimCommand(SubCommand):
+class PluginCommandPimExtension(SubCommand):
 	CONFIRM_WAIT_TIMEOUT = 60  # seconds
 	current_operation = OperationHolder()
 
@@ -140,17 +140,21 @@ class PimCommand(SubCommand):
 		self.__installation_abort_event = threading.Event()
 
 	@override
+	@deprecated('use get_command_child_nodes instead')
 	def get_command_node(self) -> Literal:
+		raise NotImplementedError()
+
+	def get_command_child_nodes(self) -> List[Literal]:
 		def install_node() -> Literal:
 			def suggest_plugin_id():
 				keys = set(self.__meta_holder.get_registry().plugins.keys())
 				keys.add('*')
 				return keys
 
-			node = Literal({'i', 'install'})
+			node = Literal('install')
 			node.runs(self.cmd_install_plugins)
 			node.then(
-				Text('plugin_id').configure(accumulate=True).
+				Text('plugin_requirement').configure(accumulate=True).
 				suggests(suggest_plugin_id).
 				redirects(node)
 			)
@@ -167,7 +171,6 @@ class PimCommand(SubCommand):
 			node = Literal('freeze')
 			node.runs(self.cmd_freeze)
 			node.then(CountingLiteral({'-a', '--all'}, 'all').redirects(node))
-			node.then(Literal({'-o', '--output'}).then(QuotableText('output').redirects(node)))
 			return node
 
 		def check_constraints_node() -> Literal:
@@ -180,15 +183,22 @@ class PimCommand(SubCommand):
 			return node
 
 		def check_update_node() -> Literal:
-			return Literal({'cu', 'check_update'}).runs(self.cmd_check_update)
+			node = Literal({'cu', 'check_update'})
+			node.runs(self.cmd_check_update)
+			node.then(
+				Text('plugin_id').configure(accumulate=True).
+				suggests(lambda: [plg.get_id() for plg in self.plugin_manager.get_regular_plugins()]).
+				redirects(node)
+			)
+			return node
 
-		root = Literal('pim')
-		root.then(browse_node())
-		root.then(check_constraints_node())
-		root.then(check_update_node())
-		root.then(freeze_node())
-		root.then(install_node())
-		return root
+		return [
+			browse_node(),
+			check_constraints_node(),
+			check_update_node(),
+			freeze_node(),
+			install_node(),
+		]
 
 	@override
 	def on_load(self):
@@ -265,10 +275,17 @@ class PimCommand(SubCommand):
 
 	@plugin_installer_guard
 	def cmd_check_update(self, source: CommandSource, context: CommandContext):
-		plugin_requirements = list(map(
-			functools.partial(as_requirement, op='>='),
-			self.plugin_manager.get_all_plugins()
-		))
+		if len(plugin_ids := context.get('plugin_id', [])) > 0:
+			plugins = []
+			for plugin_id in plugin_ids:
+				plugin = self.mcdr_server.plugin_manager.get_plugin_from_id(plugin_id)
+				if plugin is None:
+					source.reply(self.tr('mcdr_command.invalid_plugin_id', plugin_id))
+				plugins.append(plugin)
+		else:
+			plugins = self.plugin_manager.get_all_plugins()
+
+		plugin_requirements = [as_requirement(plugin, op='>=') for plugin in plugins]
 		resolver = PluginDependencyResolver(MergedMetaRegistry(self.get_cata_meta(source), LocalMetaRegistry(self.plugin_manager)))
 		resolution = resolver.resolve(plugin_requirements)
 		if isinstance(resolution, Exception):
@@ -292,36 +309,26 @@ class PimCommand(SubCommand):
 			source.reply('  {} {} -> {} (can: {})'.format(plugin_id, old_version, new_version, is_packed_plugin))
 
 	def cmd_freeze(self, source: CommandSource, context: CommandContext):
-		if context.get('all'):
+		if context.get('all', 0) > 0:
+			source.reply('Freezing all plugins in plugin requirement format')
 			plugins = self.plugin_manager.get_all_plugins()
 		else:
+			source.reply('Freezing installed plugins in plugin requirement format')
 			plugins = self.plugin_manager.get_regular_plugins()
 
 		lines: List[str] = []
 		for plugin in plugins:
 			lines.append('{}=={}'.format(plugin.get_id(), plugin.get_metadata().version))
 
-		if (output := context.get('output')) is not None:
-			try:
-				with open(output, 'w', encoding='utf8') as f:
-					for line in lines:
-						f.write(line)
-						f.write('\n')
-			except Exception as e:
-				source.reply('freeze to file {!r} error: {}'.format(output, e))
-				self.server_interface.logger.exception('pim freeze error', e)
-			else:
-				source.reply('freee to file {!r} done, exported {} plugins'.format(output, len(plugins)))
-		else:
-			for line in lines:
-				source.reply(line)
+		for line in lines:
+			source.reply(line)
 
 	@plugin_installer_guard
 	def cmd_install_plugins(self, source: CommandSource, context: CommandContext):
 		# ------------------- Prepare -------------------
-		plugin_ids: Optional[List[str]] = context.get('plugin_id')
-		if not plugin_ids:
-			source.reply('Please give some plugin id')
+		input_requirement_strings: Optional[List[str]] = context.get('plugin_requirement')
+		if not input_requirement_strings:
+			source.reply('Please give some plugin specifier')
 			return
 
 		target: Optional[str] = context.get('target')
@@ -347,10 +354,10 @@ class PimCommand(SubCommand):
 
 		try:
 			input_requirements: List[PluginRequirement] = []
-			for input_requirement_str in plugin_ids:
-				if input_requirement_str != '*':
-					input_requirements.append(PluginRequirement.of(input_requirement_str))
-			if '*' in plugin_ids:
+			for s in input_requirement_strings:
+				if s != '*':
+					input_requirements.append(PluginRequirement.of(s))
+			if '*' in input_requirement_strings:
 				for plugin in self.plugin_manager.get_regular_plugins():
 					if isinstance(plugin, PackedPlugin):
 						input_requirements.append(as_requirement(plugin, None))

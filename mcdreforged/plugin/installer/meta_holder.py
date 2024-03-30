@@ -110,12 +110,16 @@ class AsyncPersistCatalogueMetaRegistryHolder(CatalogueMetaRegistryHolder):
 	def __load(self):
 		if not self.cache_path.is_file():
 			return
-		with lzma.open(self.cache_path, 'rt', encoding='utf8') as f:
-			data = json.load(f)
-		meta = self._load_meta_json(data['meta'])
+		try:
+			with lzma.open(self.cache_path, 'rt', encoding='utf8') as f:
+				data = json.load(f)
+			meta = self._load_meta_json(data['meta'])
+		except (KeyError, ValueError, OSError):
+			self.logger.exception('Failed to load cached meta from {}'.format(self.cache_path))
+			return
 		with self.__meta_lock:
 			self.__meta = meta
-			self.__meta_fetch_time = data['timestamp']
+			self.__meta_fetch_time = data.get('timestamp', 0)
 
 	def __save(self, meta_json: dict, timestamp: float):
 		data = {

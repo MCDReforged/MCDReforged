@@ -1,12 +1,13 @@
 """
 Plugin Version
 """
+import dataclasses
 import re
 from typing import List, Callable, Tuple, Optional, Union, Any
 
 
 # beta.3 -> (beta, 3), random -> (random, None)
-class ExtraElement:
+class _ExtraElement:
 	DIVIDER = '.'
 	body: str
 	num: Optional[int]
@@ -24,7 +25,7 @@ class ExtraElement:
 		return '{}{}{}'.format(self.body, self.DIVIDER, self.num)
 
 	def __lt__(self, other):
-		if not isinstance(other, type(self)):
+		if not isinstance(other, _ExtraElement):
 			raise TypeError()
 		if self.num is None or other.num is None:
 			return str(self) < str(other)
@@ -51,8 +52,8 @@ class Version:
 
 	component: Tuple[int, ...]
 	has_wildcard: bool
-	pre: Optional[ExtraElement]
-	build: Optional[ExtraElement]
+	pre: Optional[_ExtraElement]
+	build: Optional[_ExtraElement]
 
 	def __init__(self, version_str: str, *, allow_wildcard: bool = True):
 		"""
@@ -62,12 +63,12 @@ class Version:
 		if not isinstance(version_str, str):
 			raise VersionParsingError('Invalid input version string')
 
-		def separate_extra(text, char) -> Tuple[str, Optional[ExtraElement]]:
+		def separate_extra(text, char) -> Tuple[str, Optional[_ExtraElement]]:
 			if char in text:
 				text, extra_str = text.split(char, 1)
 				if not self.EXTRA_ID_PATTERN.fullmatch(extra_str):
 					raise VersionParsingError('Invalid build string: ' + extra_str)
-				extra = ExtraElement(extra_str)
+				extra = _ExtraElement(extra_str)
 			else:
 				extra = None
 			return text, extra
@@ -153,12 +154,12 @@ class Version:
 DEFAULT_CRITERION_OPERATOR = '=='
 
 
+@dataclasses.dataclass(frozen=True)
 class Criterion:
-	def __init__(self, opt: str, base_version: Version, criterion: Callable[[Version, Version], bool], is_default: bool):
-		self.opt = opt
-		self.base_version = base_version
-		self.criterion = criterion
-		self.is_default = is_default
+	opt: str
+	base_version: Version
+	criterion: Callable[[Version, Version], bool]
+	is_default: bool
 
 	def test(self, target: Union[Version, str]):
 		return self.criterion(self.base_version, target)
@@ -194,7 +195,7 @@ class VersionRequirement:
 		"""
 		if not isinstance(requirements, str):
 			raise VersionParsingError('Requirements should be a str, not {}'.format(type(requirements).__name__))
-		self.criterions = []  # type: List[Criterion]
+		self.criterions: List[Criterion] = []
 		for requirement in requirements.split(' '):
 			if len(requirement) > 0:
 				for prefix, func in self.CRITERIONS.items():
@@ -222,6 +223,14 @@ class VersionRequirement:
 
 	def __repr__(self):
 		return '<{} {}>'.format(self.__class__.__name__, repr(str(self)))
+
+	def __hash__(self):
+		return hash(str(self))
+
+	def __eq__(self, other):
+		if not isinstance(other, VersionRequirement):
+			return False
+		return self.criterions == other.criterions
 
 
 class VersionParsingError(ValueError):
