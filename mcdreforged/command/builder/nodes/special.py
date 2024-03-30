@@ -18,5 +18,9 @@ class CountingLiteral(Literal):
 	def _on_visited(self, context: CommandContext, parsed_result: ParseResult):
 		context[self.counter_key] = context.get(self.counter_key, 0) + 1
 
+	def __str__(self):
+		literal = repr(tuple(self.literals)[0]) if len(self.literals) == 1 else set(self.literals)
+		return 'CountingLiteral {} <{}>'.format(literal, self.counter_key)
+
 	def __repr__(self):
 		return 'CountingLiteral[literals={},counter_key={}]'.format(self.literals, self.counter_key)
