@@ -87,7 +87,10 @@ class ZippingDayRotatingFileHandler(logging.FileHandler):
 			self.stream.close()
 		try:
 			if base_name is None:
-				log_time = time.localtime(self.file_path.stat().st_mtime)
+				try:
+					log_time = time.localtime(self.file_path.stat().st_mtime)
+				except (OSError, OverflowError, ValueError):
+					log_time = time.localtime()
 				base_name = time.strftime('%Y-%m-%d', log_time)
 			for counter in itertools.count(start=1):
 				zip_path = self.dir_path / '{}-{}.zip'.format(base_name, counter)
