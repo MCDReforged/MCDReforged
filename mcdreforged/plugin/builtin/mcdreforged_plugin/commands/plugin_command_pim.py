@@ -1,4 +1,5 @@
 import dataclasses
+import enum
 import functools
 import logging
 import os
@@ -33,6 +34,10 @@ if TYPE_CHECKING:
 	from mcdreforged.plugin.type.plugin import AbstractPlugin
 
 
+class LocalReleaseData(ReleaseData):
+	pass
+
+
 class LocalMetaRegistry(MetaRegistry):
 	def __init__(self, plugin_manager: 'PluginManager', cache: bool = True):
 		self.__plugin_manager = plugin_manager
@@ -60,10 +65,11 @@ class LocalMetaRegistry(MetaRegistry):
 				name=meta.name,
 				latest_version=version,
 				description=description,
-				releases={version: ReleaseData(
+				releases={version: LocalReleaseData(
 					version=version,
 					dependencies={},
 					requirements=[],
+					asset_id=0,
 					file_name='nope_name',
 					file_size=0,
 					file_url='nope_url',
@@ -96,33 +102,69 @@ class OperationHolder:
 	thread: threading.Thread = dataclasses.field(default=None)
 
 
-def async_operation(op: OperationHolder, skip_callback: callable, thread_name: str):
-	def wrapper(func):
-		@functools.wraps(func)  # to preserve the origin function information
-		def wrap(*args, **kwargs):
-			acquired = op.lock.acquire(blocking=False)
-			if acquired:
-				def run():
+def async_operation(op_holder: OperationHolder, skip_callback: callable, thread_name: str):
+	def decorator(op_key: str):
+		def func_transformer(func: callable):
+			@functools.wraps(func)
+			def wrapped_func(*args, **kwargs):
+				acquired = op_holder.lock.acquire(blocking=False)
+				if acquired:
+					def run():
+						try:
+							func(*args, **kwargs)
+						finally:
+							op_holder.operation_thread = None
+							op_holder.lock.release()
 					try:
-						func(*args, **kwargs)
-					finally:
-						op.operation_thread = None
-						op.lock.release()
-				try:
-					thread = threading.Thread(target=run, name=thread_name)
-					thread.start()
-					op.operation_thread = thread
-					return thread
-				except BaseException:
-					op.lock.release()
-					raise
-			else:
-				skip_callback(*args, **kwargs)
+						thread = threading.Thread(target=run, name=thread_name)
+						thread.start()
+						op_holder.operation_thread = thread
+						return thread
+					except BaseException:
+						op_holder.lock.release()
+						raise
+				else:
+					skip_callback(*args, op_func=wrapped_func, op_key=op_key, op_thread=op_holder.operation_thread, **kwargs)
 
-		misc_util.copy_signature(wrap, func)
-		return wrap
+			misc_util.copy_signature(wrapped_func, func)
+			return wrapped_func
+		return func_transformer
+	return decorator
 
-	return wrapper
+
+class ConfirmHelperState(enum.Enum):
+	none = enum.auto()  # pre-waiting
+	waiting = enum.auto()  # waiting
+	confirmed = enum.auto()  # post-waiting
+	aborted = enum.auto()  # post-waiting
+	cancelled = enum.auto()  # post-waiting (abort silently)
+
+
+class ConfirmHelper:
+	def __init__(self):
+		self.__lock = threading.Lock()
+		self.__event = threading.Event()
+		self.__state = ConfirmHelperState.none
+
+	def wait(self, timeout: float) -> bool:
+		with self.__lock:
+			self.__state = ConfirmHelperState.waiting
+		return self.__event.wait(timeout=timeout)
+
+	def set(self, state: ConfirmHelperState):
+		with self.__lock:
+			if self.__state == ConfirmHelperState.waiting:
+				self.__state = state
+				self.__event.set()
+
+	def get(self) -> ConfirmHelperState:
+		with self.__lock:
+			return self.__state
+
+	def clear(self):
+		with self.__lock:
+			self.__event.clear()
+			self.__state = ConfirmHelperState.none
 
 
 class PluginCommandPimExtension(SubCommand):
@@ -135,9 +177,8 @@ class PluginCommandPimExtension(SubCommand):
 			self.mcdr_server.logger,
 			Path(self.server_interface.get_data_folder()) / 'catalogue_meta_cache.json.xz'
 		)
+		self.__installation_confirm_helper = ConfirmHelper()
 		self.__installation_source: Optional[CommandSource] = None
-		self.__installation_confirm_event = threading.Event()
-		self.__installation_abort_event = threading.Event()
 
 	@override
 	@deprecated('use get_command_child_nodes instead')
@@ -148,7 +189,7 @@ class PluginCommandPimExtension(SubCommand):
 		def install_node() -> Literal:
 			def suggest_plugin_id():
 				keys = set(self.__meta_holder.get_registry().plugins.keys())
-				keys.add('*')
+				keys.add('*')  # for update all
 				return keys
 
 			node = Literal('install')
@@ -173,8 +214,8 @@ class PluginCommandPimExtension(SubCommand):
 			node.then(CountingLiteral({'-a', '--all'}, 'all').redirects(node))
 			return node
 
-		def check_constraints_node() -> Literal:
-			return Literal('check').runs(self.cmd_check_constraints)
+		def validate_constraints_node() -> Literal:
+			return Literal('validate').runs(self.cmd_validate_constraints)
 
 		def browse_node() -> Literal:
 			node = Literal('browse')
@@ -192,12 +233,18 @@ class PluginCommandPimExtension(SubCommand):
 			)
 			return node
 
+		def refresh_meta_node() -> Literal:
+			node = Literal('refresh_meta')
+			node.runs(self.cmd_refresh_meta)
+			return node
+
 		return [
 			browse_node(),
-			check_constraints_node(),
 			check_update_node(),
 			freeze_node(),
 			install_node(),
+			refresh_meta_node(),
+			validate_constraints_node(),
 		]
 
 	@override
@@ -206,8 +253,7 @@ class PluginCommandPimExtension(SubCommand):
 
 	@override
 	def on_mcdr_stop(self):
-		self.__installation_abort_event.set()
-		self.__installation_confirm_event.set()
+		self.__installation_confirm_helper.set(ConfirmHelperState.aborted)
 		thread = self.current_operation.thread
 		if thread is not None:
 			thread.join(timeout=self.CONFIRM_WAIT_TIMEOUT + 1)
@@ -217,12 +263,11 @@ class PluginCommandPimExtension(SubCommand):
 		sis = self.__installation_source
 		if event == SubCommandEvent.confirm:
 			if sis is not None and source == sis:
-				self.__installation_confirm_event.set()
+				self.__installation_confirm_helper.set(ConfirmHelperState.confirmed)
 				return True
 		elif event == SubCommandEvent.abort:
 			if sis is not None and source is not None and source.get_permission_level() >= sis.get_permission_level():
-				self.__installation_abort_event.set()
-				self.__installation_confirm_event.set()
+				self.__installation_confirm_helper.set(ConfirmHelperState.aborted)
 				return True
 		return False
 
@@ -245,12 +290,25 @@ class PluginCommandPimExtension(SubCommand):
 			meta_holder=self.__meta_holder,
 		)
 
-	def __handle_duplicated_input(self, source: CommandSource, context: CommandContext):
-		source.reply('Dont Spam')
+	def __handle_duplicated_input(self, source: CommandSource, context: CommandContext, op_func: callable, op_key: str, op_thread: Optional[threading.Thread]):
+		if op_func == type(self).cmd_install_plugins:
+			sis = self.__installation_source
+			if sis is not None and sis == source:
+				# Another installation command when waiting for installation
+				# Cancel the existing one and perform another installation
+				self.__installation_confirm_helper.set(ConfirmHelperState.cancelled)
+				if op_thread is not None:
+					op_thread.join(1)
+					if op_thread.is_alive():
+						self.logger.error('Join thread {} failed, skipped new installation operation'.format(op_thread))
+						return
+				self.cmd_install_plugins(source, context)
+				return
+		source.reply('Dont Spam, current op {} {}'.format(op_func, op_key))
 
-	plugin_installer_guard = async_operation(op=current_operation, skip_callback=__handle_duplicated_input, thread_name='PluginInstaller')
+	plugin_installer_guard = async_operation(op_holder=current_operation, skip_callback=__handle_duplicated_input, thread_name='PluginInstaller')
 
-	@plugin_installer_guard
+	@plugin_installer_guard('browse')
 	def cmd_browse_catalogue(self, source: CommandSource, context: CommandContext):
 		keyword = context.get('keyword')
 		if keyword is not None:
@@ -260,8 +318,8 @@ class PluginCommandPimExtension(SubCommand):
 		plugin_installer = self.__create_installer(source)
 		plugin_installer.list_plugin(keyword)
 
-	@plugin_installer_guard
-	def cmd_check_constraints(self, source: CommandSource, context: CommandContext):
+	@plugin_installer_guard('validate')
+	def cmd_validate_constraints(self, source: CommandSource, context: CommandContext):
 		plugin_requirements = list(map(
 			functools.partial(as_requirement, op='=='),
 			self.plugin_manager.get_all_plugins()
@@ -273,7 +331,7 @@ class PluginCommandPimExtension(SubCommand):
 		else:
 			source.reply('success')
 
-	@plugin_installer_guard
+	@plugin_installer_guard('check_update')
 	def cmd_check_update(self, source: CommandSource, context: CommandContext):
 		if len(plugin_ids := context.get('plugin_id', [])) > 0:
 			plugins = []
@@ -323,7 +381,20 @@ class PluginCommandPimExtension(SubCommand):
 		for line in lines:
 			source.reply(line)
 
-	@plugin_installer_guard
+	def cmd_refresh_meta(self, source: CommandSource, context: CommandContext):
+		def callback(e: Optional[Exception]):
+			if e is None:
+				source.reply('Meta fetch done')
+			else:
+				source.reply('Meta fetch failed: {}'.format(e))
+
+		triggered = self.__meta_holder.async_fetch(ignore_cache=True, callback=callback)
+		if triggered:
+			source.reply('Meta fetch triggered')
+		else:
+			source.reply('Meta fetching already')
+
+	@plugin_installer_guard('install')
 	def cmd_install_plugins(self, source: CommandSource, context: CommandContext):
 		# ------------------- Prepare -------------------
 		input_requirement_strings: Optional[List[str]] = context.get('plugin_requirement')
@@ -437,6 +508,9 @@ class PluginCommandPimExtension(SubCommand):
 					release = cata_meta.plugins[plugin_id].releases[str(version)]
 				except KeyError:
 					raise AssertionError('unexpected to-install plugin {} version {}'.format(plugin_id, version))
+				if isinstance(release, LocalReleaseData):
+					self.logger.warning('Skipping unexpected chosen LocalReleaseData {}'.format(release))
+					continue
 				to_install[plugin_id] = ToInstallData(
 					id=plugin_id,
 					version=version,
@@ -479,13 +553,17 @@ class PluginCommandPimExtension(SubCommand):
 		# ------------------- Install -------------------
 		dry_run_suffix = ' (dry-run)' if dry_run else ''
 		if not skip_confirm:
-			self.__installation_source = source
-			self.__installation_abort_event.clear()
-			self.__installation_confirm_event.clear()
+			self.__installation_confirm_helper.clear()
 			source.reply('Entry `!!MCDR confirm` to confirm installation, or `!!MCDR abort` to abort' + dry_run_suffix)
-			ok = self.__installation_confirm_event.wait(self.CONFIRM_WAIT_TIMEOUT)
+
+			self.__installation_source = source
+			ok = self.__installation_confirm_helper.wait(self.CONFIRM_WAIT_TIMEOUT)
 			self.__installation_source = None
-			if self.__installation_abort_event.is_set():
+
+			ich_state = self.__installation_confirm_helper.get()
+			if ich_state == ConfirmHelperState.cancelled:
+				return
+			elif ich_state == ConfirmHelperState.aborted:
 				source.reply('Plugin installation abort')
 				return
 			if not ok:

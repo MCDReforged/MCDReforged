@@ -1,7 +1,5 @@
 import hashlib
 import time
-import urllib.error
-import urllib.request
 from pathlib import Path
 
 from mcdreforged.plugin.installer.meta_holder import ReleaseData
@@ -17,43 +15,41 @@ class ReleaseDownloader:
 		self.mkdir = mkdir
 
 	def __download(self, url: str, show_progress: bool):
-		req = urllib.request.Request(url, method='GET', headers={'User-Agent': request_util.ua('download')})
-		with urllib.request.urlopen(req, timeout=5) as rsp:
-			headers: dict = rsp.headers
-			length = int(headers.get('content-length'))
-			if length != self.release.file_size:
-				raise ValueError('content-length mismatched, expected {}, found {}'.format(length, self.release.file_size))
+		response = request_util.get_raw(url, 'download', timeout=(5, 30), stream=True)
 
-			def report():
-				if show_progress:
-					percent = 100 * downloaded / length
-					bar = '=' * (50 * downloaded // length)
-					bar += ' ' * (50 - len(bar))
-					self.replier.reply(f'Downloading [{bar}] {percent:.1f}%')
+		length = int(response.headers.get('content-length'))
+		if length != self.release.file_size:
+			raise ValueError('content-length mismatched, expected {}, found {}'.format(length, self.release.file_size))
+		if length >= 100 * 1024 * 1024:  # 100MiB
+			raise ValueError('File too large ({}MiB), please download manually'.format(round(length / 1024 / 1024, 1)))
 
-			downloaded = 0
-			report()
+		def report():
+			if show_progress:
+				percent = 100 * downloaded / length
+				bar = '=' * (50 * downloaded // length)
+				bar += ' ' * (50 - len(bar))
+				self.replier.reply(f'Downloading [{bar}] {percent:.1f}%')
 
-			with open(self.target_path, 'wb') as f:
-				hasher = hashlib.sha256()
-				last_report_time = time.time()
-				while True:
-					buf = rsp.read(1024)
-					if not buf:
-						break
-					downloaded += len(buf)
-					if downloaded > length:
-						raise ValueError('read too much data, read {}, length {}'.format(downloaded, length))
-					hasher.update(buf)
-					f.write(buf)
+		downloaded = 0
+		report()
 
-					t = time.time()
-					if t - last_report_time > 3 or downloaded == length:
-						report()
-						last_report_time = t
+		with open(self.target_path, 'wb') as f:
+			hasher = hashlib.sha256()
+			last_report_time = time.time()
+			for buf in response.iter_content(chunk_size=4096):
+				downloaded += len(buf)
+				if downloaded > length:
+					raise ValueError('read too much data, read {}, length {}'.format(downloaded, length))
+				hasher.update(buf)
+				f.write(buf)
 
-				if (h := hasher.hexdigest()) != self.release.file_sha256:
-					raise ValueError('SHA256 mismatched, expected {}, actual {}, length {}'.format(self.release.file_sha256, h, length))
+				t = time.time()
+				if t - last_report_time > 3 or downloaded == length:
+					report()
+					last_report_time = t
+
+			if (h := hasher.hexdigest()) != self.release.file_sha256:
+				raise ValueError('SHA256 mismatched, expected {}, actual {}, length {}'.format(self.release.file_sha256, h, length))
 
 	def download(self, *, show_progress: bool = False):
 		if self.mkdir:

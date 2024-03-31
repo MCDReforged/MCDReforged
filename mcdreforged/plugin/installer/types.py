@@ -16,6 +16,7 @@ class ReleaseData:
 	version: str
 	dependencies: Dict[PluginId, str]
 	requirements: List[str]
+	asset_id: int
 	file_name: str
 	file_size: int
 	file_url: str

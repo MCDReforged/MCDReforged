@@ -38,6 +38,8 @@ class MCDReforgedConfig(Serializable):
 	# --------- Misc Configuration ---------
 	check_update: bool = True
 	advanced_console: bool = True
+	http_proxy: Optional[str] = None
+	https_proxy: Optional[str] = None
 
 	# --------- Advanced Configuration ---------
 	disable_console_thread: bool = False

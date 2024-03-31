@@ -4,6 +4,7 @@ packaging>=23.0
 parse>=1.18.0
 prompt-toolkit~=3.0
 psutil>=5.8.0
+requests>=2.26
 resolvelib
 ruamel.yaml~=0.17
 typing-extensions>=4.1.0

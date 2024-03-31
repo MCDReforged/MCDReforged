@@ -32,7 +32,7 @@ class CatalogueMetaRegistryHolder:
 		url = 'https://meta.mcdreforged.com/everything_slim.json.xz'
 		max_size = 20 * 2 ** 20  # 20MiB limit. In 2024-03-14, the size is only 545KiB
 
-		buf = request_util.get(url, 'MetaFetcher', timeout=10, max_size=max_size)
+		buf = request_util.get_buf(url, 'MetaFetcher', timeout=10, max_size=max_size)
 
 		decompressor = lzma.LZMADecompressor()
 		content = decompressor.decompress(buf, max_size + 1)
@@ -70,6 +70,7 @@ class CatalogueMetaRegistryHolder:
 					version=meta['version'],
 					dependencies=meta.get('dependencies', {}),
 					requirements=meta.get('requirements', []),
+					asset_id=asset['id'],
 					file_name=asset['name'],
 					file_size=asset['size'],
 					file_url=asset['browser_download_url'],
@@ -112,7 +113,7 @@ class AsyncPersistCatalogueMetaRegistryHolder(CatalogueMetaRegistryHolder):
 			return
 		try:
 			with lzma.open(self.cache_path, 'rt', encoding='utf8') as f:
-				data = json.load(f)
+				data: dict = json.load(f)
 			meta = self._load_meta_json(data['meta'])
 		except (KeyError, ValueError, OSError):
 			self.logger.exception('Failed to load cached meta from {}'.format(self.cache_path))
@@ -138,23 +139,29 @@ class AsyncPersistCatalogueMetaRegistryHolder(CatalogueMetaRegistryHolder):
 			self.logger.exception('Catalogue meta registry load failed: {}'.format(e))
 		self.async_fetch()
 
-	def async_fetch(self, ignore_cache: bool = False) -> bool:
+	_FetchCallbackOpt = Optional[Callable[[Optional[Exception]], None]]
+
+	def async_fetch(self, ignore_cache: bool = False, callback: _FetchCallbackOpt = None) -> bool:
 		if not ignore_cache and time.time() - self.__meta_fetch_time <= self.CACHE_TTL:
 			return False
 		with self.__fetch_thread_lock:
 			if self.__fetch_thread is not None:
 				return False
-			self.__fetch_thread = threading.Thread(target=self.__async_fetch, name='CatalogueMetaFetcher', daemon=True)
+			self.__fetch_thread = threading.Thread(target=self.__async_fetch, args=(callback,), name='CatalogueMetaFetcher', daemon=True)
 			self.__fetch_thread.start()
 			return True
 
-	def __async_fetch(self):
+	def __async_fetch(self, callback: _FetchCallbackOpt):
+		if callback is None:
+			def callback(_):
+				pass
 		try:
 			t = time.time()
 			meta_json = self._get_meta_json()
 			meta = self._load_meta_json(meta_json)
 		except Exception as e:
 			self.logger.exception('Catalogue meta registry fetch failed: {}'.format(e))
+			callback(e)
 		else:
 			with self.__meta_lock:
 				self.__meta_fetch_time = time.time()
@@ -163,8 +170,10 @@ class AsyncPersistCatalogueMetaRegistryHolder(CatalogueMetaRegistryHolder):
 					self.__save(meta_json, self.__meta_fetch_time)
 				except Exception as e:
 					self.logger.exception('Catalogue meta registry save failed: {}'.format(e))
+					callback(e)
 				else:
 					self.logger.info('Catalogue meta registry updated, cost {:.2f}s'.format(time.time() - t))
+					callback(None)
 		finally:
 			with self.__fetch_thread_lock:
 				self.__fetch_thread = None

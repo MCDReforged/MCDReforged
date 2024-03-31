@@ -88,6 +88,11 @@ check_update: true
 advanced_console: true
 
 
+# HTTP(s) proxy setting for all http requests inside MCDR
+http_proxy:
+https_proxy:
+
+
 # ==========================================
 # |         Advanced Configuration         |
 # ==========================================

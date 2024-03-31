@@ -32,7 +32,7 @@ from mcdreforged.plugin.plugin_manager import PluginManager
 from mcdreforged.plugin.si.server_interface import ServerInterface
 from mcdreforged.preference.preference_manager import PreferenceManager
 from mcdreforged.translation.translation_manager import TranslationManager
-from mcdreforged.utils import file_util
+from mcdreforged.utils import file_util, request_util
 from mcdreforged.utils.exception import ServerStartError, IllegalStateError, DecodeError
 from mcdreforged.utils.logger import DebugOption, MCDReforgedLogger, MCColorFormatControl
 from mcdreforged.utils.types.message import MessageText
@@ -270,6 +270,8 @@ class MCDReforgedServer:
 			self.server_handler_manager.set_configured_handler(config.handler)
 			if log:
 				self.logger.info(self.tr('mcdr_server.on_config_changed.handler_set', config.handler))
+
+			request_util.set_proxies(config.http_proxy, config.https_proxy)
 
 			self.connect_rcon()
 

@@ -1,6 +1,24 @@
-import urllib.error
-import urllib.request
-from typing import Optional
+import threading
+from typing import Optional, Union, Tuple
+
+import requests
+
+_proxy_dict = {}
+_proxy_dict_lock = threading.Lock()
+
+
+def set_proxies(http_proxy: Optional[str], https_proxy: Optional[str]):
+	with _proxy_dict_lock:
+		_proxy_dict.clear()
+		if http_proxy is not None:
+			_proxy_dict['http'] = http_proxy
+		if https_proxy is not None:
+			_proxy_dict['https'] = https_proxy
+
+
+def get_proxies() -> dict:
+	with _proxy_dict_lock:
+		return _proxy_dict.copy()
 
 
 def ua(what: Optional[str] = None) -> str:
@@ -11,13 +29,21 @@ def ua(what: Optional[str] = None) -> str:
 	return s
 
 
-def get(url: str, what: str, *, timeout: Optional[float] = None, max_size: Optional[int] = None) -> bytes:
-	req = urllib.request.Request(url, method='GET', headers={'User-Agent': ua(what)})
-	with urllib.request.urlopen(req, timeout=timeout) as rsp:
-		if max_size is None:
-			buf = rsp.read()
-		else:
-			buf = rsp.read(max_size + 1)
-			if len(buf) > max_size:
-				raise ValueError('content-length too large (more than {})'.format(max_size))
+def ua_header(what: str) -> dict:
+	return {'User-Agent': ua(what)}
+
+
+def get_raw(url: str, what: str, *, timeout: Optional[Union[float, Tuple[float, float]]] = None, stream: Optional[bool] = None) -> requests.Response:
+	return requests.get(url, timeout=timeout, headers=ua_header(what), proxies=get_proxies(), stream=stream)
+
+
+def get_buf(url: str, what: str, *, timeout: Optional[Union[float, Tuple[float, float]]] = None, max_size: Optional[int] = None) -> bytes:
+	response = get_raw(url, what, timeout=timeout, stream=True)
+
+	if max_size is None:
+		return response.content
+	else:
+		buf = next(response.iter_content(chunk_size=max_size + 1), b'')
+		if len(buf) > max_size:
+			raise ValueError('content-length too large (more than {})'.format(max_size))
 		return buf
