@@ -43,7 +43,9 @@ def get_buf(url: str, what: str, *, timeout: Optional[Union[float, Tuple[float, 
 	if max_size is None:
 		return response.content
 	else:
-		buf = next(response.iter_content(chunk_size=max_size + 1), b'')
-		if len(buf) > max_size:
-			raise ValueError('content-length too large (more than {})'.format(max_size))
-		return buf
+		buf = bytearray()
+		for chunk in response.iter_content(chunk_size=4096):
+			buf += chunk
+			if len(buf) > max_size:
+				raise ValueError('body too large, read {}, max size {}'.format(len(buf), max_size))
+		return bytes(buf)

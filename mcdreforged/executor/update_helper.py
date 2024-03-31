@@ -89,5 +89,5 @@ class GithubApiFetcher:
 		self.__cached_response: Optional[dict] = None
 
 	def fetch(self) -> Optional[dict]:
-		buf = request_util.get_buf(self.url, 'UpdateHelper', timeout=10, max_size=16384)
+		buf = request_util.get_buf(self.url, 'UpdateHelper', timeout=10, max_size=32 * 1024)
 		return json.loads(buf)
