@@ -126,7 +126,7 @@ jobs:
         fi
         echo -e "### Test PyPI\n" >> $GITHUB_STEP_SUMMARY
         echo -e "https://test.pypi.org/project/mcdreforged/$version/\n" >> $GITHUB_STEP_SUMMARY
-        echo -e "\`\`\`\npip install mcdreforged==$version -r https://test.pypi.org/simple\n\`\`\`\n" >> $GITHUB_STEP_SUMMARY
+        echo -e "\`\`\`\npip install mcdreforged==$version -i https://test.pypi.org/simple\n\`\`\`\n" >> $GITHUB_STEP_SUMMARY
 
     outputs:
       mcdr_version: ${{ steps.version.outputs.mcdr_version }}
