@@ -1,7 +1,9 @@
 import unittest
 
-from mcdreforged.mcdr_config import DEFAULT_CONFIG_RESOURCE_PATH
+from mcdreforged.mcdr_config import MCDReforgedConfigManager
 from mcdreforged.utils import resources_util
+
+DEFAULT_CONFIG_RESOURCE_PATH = MCDReforgedConfigManager.DEFAULT_CONFIG_RESOURCE_PATH
 
 
 class MyTestCase(unittest.TestCase):
