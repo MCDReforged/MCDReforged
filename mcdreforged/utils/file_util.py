@@ -3,6 +3,8 @@ import os
 from pathlib import Path
 from typing import Callable, ContextManager, TextIO, Union, List
 
+from ruamel.yaml import YAML
+
 from mcdreforged.utils.types.path_like import PathLike
 
 
@@ -48,3 +50,9 @@ def safe_write(target_file_path: PathLike, *, encoding: str) -> ContextManager[T
 		yield file
 	os.replace(temp_file_path, target_file_path)
 
+
+def safe_write_yaml(file_path: PathLike, data: dict):
+	with safe_write(file_path, encoding='utf8') as file:
+		yaml = YAML()
+		yaml.width = 1048576  # prevent yaml breaks long string into multiple lines
+		yaml.dump(data, file)

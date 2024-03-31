@@ -4,10 +4,27 @@ from threading import RLock
 from typing import Tuple
 
 from ruamel.yaml import YAML
-from ruamel.yaml.comments import CommentedMap
+from ruamel.yaml.comments import CommentedMap, CommentedSeq
+from ruamel.yaml.scalarbool import ScalarBoolean
 
-from mcdreforged.utils import resources_util, misc_util, file_util
+from mcdreforged.utils import resources_util, file_util
 from mcdreforged.utils.lazy_item import LazyItem
+
+
+def transform_yaml_to_dict(source: dict) -> dict:
+	ret = {}
+	for key, value in source.items():
+		if isinstance(value, dict):
+			value = transform_yaml_to_dict(value)
+		elif isinstance(value, ScalarBoolean):  # ScalarBoolean uses int as the base class
+			value = bool(value)
+		else:
+			for cls in [bool, int, float, str, list]:
+				if isinstance(value, cls):
+					value = cls(value)
+					break
+		ret[key] = value
+	return ret
 
 
 class YamlDataStorage:
@@ -24,15 +41,16 @@ class YamlDataStorage:
 
 	def to_dict(self) -> dict:
 		with self._data_operation_lock:
-			return misc_util.deep_copy_dict(self._data)
+			return transform_yaml_to_dict(self._data)
 
 	def file_presents(self) -> bool:
 		return os.path.isfile(self.__file_path)
 
-	def read_config(self, allowed_missing_file: bool):
+	def read_config(self, allowed_missing_file: bool, save_on_missing: bool = True):
 		"""
 		:param bool allowed_missing_file: If set to True, missing data file will result in a FileNotFoundError(),
 		otherwise it will treat it as an empty config file
+		:param bool save_on_missing: Perform save() on missing
 		:return: if there is any missing data entry
 		:raise: FileNotFoundError
 		"""
@@ -46,7 +64,7 @@ class YamlDataStorage:
 		fixed_result, has_missing = self.__fix(dict(self.__default_data.get()), users_data)
 		with self._data_operation_lock:
 			self._data = fixed_result
-		if has_missing:
+		if has_missing and save_on_missing:
 			self.save()
 		return has_missing
 
@@ -83,10 +101,7 @@ class YamlDataStorage:
 
 	def __save(self, data: CommentedMap):
 		self._pre_save(data)
-		with file_util.safe_write(self.__file_path, encoding='utf8') as file:
-			yaml = YAML()
-			yaml.width = 1048576  # prevent yaml breaks long string into multiple lines
-			yaml.dump(data, file)
+		file_util.safe_write_yaml(self.__file_path, data)
 
 	def save(self):
 		with self._data_operation_lock:
@@ -97,3 +112,27 @@ class YamlDataStorage:
 
 	def save_default(self):
 		self.__save(self.get_default_yaml())
+
+	def merge_dict(self, data: dict):
+		"""
+		Does not add new keys
+		"""
+		def merge(src: dict, dst: dict):
+			for key, value in src.items():
+				old_value = dst.get(key)
+				if isinstance(value, dict) and isinstance(old_value, dict):
+					merge(value, old_value)
+				else:
+					if key in dst and old_value != value:
+						if isinstance(old_value, CommentedSeq):
+							# the comment of the last seq item belongs to the next element. keep it
+							last_comment = old_value.ca.items.get(len(old_value) - 1)
+							# cannot use clear(), cuz that uses pop(-1) and will mess up the comment index
+							while old_value:
+								old_value.pop(len(old_value) - 1)
+							old_value.extend(value)
+							old_value.ca.items[len(old_value) - 1] = last_comment
+						else:
+							dst[key] = value
+
+		merge(data, self._data)

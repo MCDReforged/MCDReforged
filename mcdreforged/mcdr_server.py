@@ -1,12 +1,12 @@
 import contextlib
 import locale
 import os
+import threading
 import time
 import traceback
 from importlib.metadata import PackageNotFoundError, Distribution
 from pathlib import Path
 from subprocess import Popen, PIPE, STDOUT, TimeoutExpired
-from threading import Lock, Condition
 from typing import Optional, Callable, Any, TYPE_CHECKING, List
 
 import psutil
@@ -23,7 +23,7 @@ from mcdreforged.info_reactor.info import Info
 from mcdreforged.info_reactor.info_filter import InfoFilterHolder
 from mcdreforged.info_reactor.info_reactor_manager import InfoReactorManager
 from mcdreforged.info_reactor.server_information import ServerInformation
-from mcdreforged.mcdr_config import MCDReforgedConfig
+from mcdreforged.mcdr_config import MCDReforgedConfigManager, MCDReforgedConfig
 from mcdreforged.mcdr_state import ServerState, MCDReforgedState, MCDReforgedFlag
 from mcdreforged.minecraft.rcon.rcon_manager import RconManager
 from mcdreforged.permission.permission_manager import PermissionManager
@@ -46,43 +46,43 @@ class MCDReforgedServer:
 		"""
 		:param generate_default_only: If set to true, MCDR will only generate the default configuration and permission files
 		"""
-		self.mcdr_state = MCDReforgedState.INITIALIZING
-		self.server_state = ServerState.STOPPED
-		self.server_state_cv = Condition()
-		self.server_information = ServerInformation()
+		self.mcdr_state: MCDReforgedState = MCDReforgedState.INITIALIZING
+		self.server_state: ServerState = ServerState.STOPPED
+		self.server_state_cv: threading.Condition = threading.Condition()
+		self.server_information: ServerInformation = ServerInformation()
 		self.process: Optional[Popen] = None
-		self.flags = MCDReforgedFlag.NONE
-		self.info_filter_holders: List[InfoFilterHolder] = []
-		self.starting_server_lock = Lock()  # to prevent multiple start_server() call
-		self.stop_lock = Lock()  # to prevent multiple stop() call
-		self.config_change_lock = Lock()
+		self.__flags = MCDReforgedFlag.NONE
+		self.__info_filter_holders: List[InfoFilterHolder] = []
+		self.__starting_server_lock = threading.Lock()  # to prevent multiple start_server() call
+		self.__stop_lock = threading.Lock()  # to prevent multiple stop() call
+		self.__config_change_lock = threading.Lock()
 
 		# will be assigned in on_config_changed()
-		self.encoding_method: Optional[str] = None
-		self.decoding_method: Optional[str] = None
+		self.__encoding_method: Optional[str] = None
+		self.__decoding_method: Optional[str] = None
 
 		# --- Constructing fields --- #
-		self.logger = MCDReforgedLogger()
-		self.config = MCDReforgedConfig(self.logger)
-		self.permission_manager = PermissionManager(self)
-		self.basic_server_interface = ServerInterface(self)
-		self.task_executor = TaskExecutor(self)
-		self.console_handler = ConsoleHandler(self)
-		self.watch_dog = WatchDog(self)
-		self.update_helper = UpdateHelper(self)
-		self.translation_manager = TranslationManager(self.logger)
-		self.rcon_manager = RconManager(self)
-		self.server_handler_manager = ServerHandlerManager(self)
-		self.reactor_manager = InfoReactorManager(self)
-		self.command_manager = CommandManager(self)
-		self.plugin_manager = PluginManager(self)
-		self.preference_manager = PreferenceManager(self)
+		self.logger: MCDReforgedLogger = MCDReforgedLogger()
+		self.config_manager: MCDReforgedConfigManager = MCDReforgedConfigManager(self.logger)
+		self.permission_manager: PermissionManager = PermissionManager(self)
+		self.basic_server_interface: ServerInterface = ServerInterface(self)
+		self.task_executor: TaskExecutor = TaskExecutor(self)
+		self.console_handler: ConsoleHandler = ConsoleHandler(self)
+		self.watch_dog: WatchDog = WatchDog(self)
+		self.update_helper: UpdateHelper = UpdateHelper(self)
+		self.translation_manager: TranslationManager = TranslationManager(self.logger)
+		self.rcon_manager: RconManager = RconManager(self)
+		self.server_handler_manager: ServerHandlerManager = ServerHandlerManager(self)
+		self.reactor_manager: InfoReactorManager = InfoReactorManager(self)
+		self.command_manager: CommandManager = CommandManager(self)
+		self.plugin_manager: PluginManager = PluginManager(self)
+		self.preference_manager: PreferenceManager = PreferenceManager(self)
 
 		self.__check_environment()
 
 		# --- Input arguments "generate_default_only" processing --- #
 		if generate_default_only:
-			self.config.save_default()
+			self.config_manager.save_default()
 			self.permission_manager.save_default()
 			return
 
@@ -90,10 +90,9 @@ class MCDReforgedServer:
 		self.translation_manager.load_translations()  # translations are used for logging, so load them first
 		if initialize_environment or auto_init:
 			# Prepare config / permission files if they're missing
-			if not self.config.file_presents():
-				self.config.save_default()
-				default_config = self.config.get_default_yaml()
-				file_util.touch_directory(default_config['working_directory'])  # create server/ folder
+			if not self.config_manager.file_presents():
+				self.config_manager.save_default()
+				file_util.touch_directory(self.config.working_directory)  # create server/ folder
 			if not self.permission_manager.file_presents():
 				self.permission_manager.save_default()
 
@@ -108,7 +107,7 @@ class MCDReforgedServer:
 			except FileNotFoundError:
 				self.logger.error('{} is missing'.format(kind.title()))
 				file_missing = True
-			except YAMLError as e:
+			except (YAMLError, ValueError) as e:
 				self.logger.error('Failed to load {}: {}'.format(kind, type(e).__name__))
 				for line in str(e).splitlines():
 					self.logger.error(line)
@@ -191,6 +190,10 @@ class MCDReforgedServer:
 		self.logger.info('Use command "{} init" to initialize MCDR first'.format(core_constant.CLI_COMMAND))
 		self.logger.info('See document https://docs.mcdreforged.com/en/latest/quick_start.html#start-up')
 
+	@property
+	def config(self) -> MCDReforgedConfig:
+		return self.config_manager.get_config()
+
 	# --------------------------
 	#         Translate
 	# --------------------------
@@ -230,7 +233,7 @@ class MCDReforgedServer:
 	# --------------------------
 
 	def load_config(self, *, allowed_missing_file: bool = True, log: bool = True):
-		has_missing = self.config.read_config(allowed_missing_file)
+		has_missing = self.config_manager.load(allowed_missing_file)
 		# load the language before warning missing config to make sure translation is available
 		self.on_config_changed(log=log)
 		if log and has_missing:
@@ -238,33 +241,35 @@ class MCDReforgedServer:
 				self.logger.warning(line)
 
 	def on_config_changed(self, *, log: bool):
-		with self.config_change_lock:
-			MCColorFormatControl.console_color_disabled = self.config['disable_console_color']
-			self.logger.set_debug_options(self.config['debug'])
-			if log and self.config.is_debug_on():
+		with self.__config_change_lock:
+			config = self.config
+
+			MCColorFormatControl.console_color_disabled = config.disable_console_color
+			self.logger.set_debug_options(config.debug)
+			if log and config.is_debug_on():
 				self.logger.info(self.tr('mcdr_server.on_config_changed.debug_mode_on'))
 
-			self.translation_manager.set_language(self.config['language'])
+			self.translation_manager.set_language(config.language)
 			if log:
-				self.logger.info(self.tr('mcdr_server.on_config_changed.language_set', self.config['language']))
+				self.logger.info(self.tr('mcdr_server.on_config_changed.language_set', config.language))
 
-			self.encoding_method = self.config['encoding'] or locale.getpreferredencoding()
-			self.decoding_method = self.config['decoding'] or locale.getpreferredencoding()
+			self.__encoding_method = config.encoding or locale.getpreferredencoding()
+			self.__decoding_method = config.decoding or locale.getpreferredencoding()
 			if log:
-				self.logger.info(self.tr('mcdr_server.on_config_changed.encoding_decoding_set', self.encoding_method, self.decoding_method))
+				self.logger.info(self.tr('mcdr_server.on_config_changed.encoding_decoding_set', self.__encoding_method, self.__decoding_method))
 
-			self.plugin_manager.set_plugin_directories(self.config['plugin_directories'])
+			self.plugin_manager.set_plugin_directories(config.plugin_directories)
 			if log:
-				self.logger.info(self.tr('mcdr_server.on_config_changed.plugin_directories_set', self.encoding_method, self.decoding_method))
+				self.logger.info(self.tr('mcdr_server.on_config_changed.plugin_directories_set', self.__encoding_method, self.__decoding_method))
 				for directory in self.plugin_manager.plugin_directories:
 					self.logger.info('- {}'.format(directory))
 
-			self.reactor_manager.register_reactors(self.config['custom_info_reactors'])
+			self.reactor_manager.register_reactors(config.custom_info_reactors)
 
-			self.server_handler_manager.register_handlers(self.config['custom_handlers'])
-			self.server_handler_manager.set_configured_handler(self.config['handler'])
+			self.server_handler_manager.register_handlers(config.custom_handlers)
+			self.server_handler_manager.set_configured_handler(config.handler)
 			if log:
-				self.logger.info(self.tr('mcdr_server.on_config_changed.handler_set', self.config['handler']))
+				self.logger.info(self.tr('mcdr_server.on_config_changed.handler_set', config.handler))
 
 			self.connect_rcon()
 
@@ -274,12 +279,12 @@ class MCDReforgedServer:
 
 	def on_plugin_registry_changed(self):
 		self.command_manager.clear_command()
-		self.info_filter_holders.clear()
+		self.__info_filter_holders.clear()
 
 		reg: 'PluginRegistryStorage' = self.plugin_manager.registry_storage
 		reg.export_commands(self.command_manager.register_command)
 		reg.export_server_handler(self.server_handler_manager.set_plugin_provided_server_handler_holder)
-		reg.export_info_filters(self.info_filter_holders.append)
+		reg.export_info_filters(self.__info_filter_holders.append)
 
 	# ---------------------------
 	#      General Setters
@@ -300,13 +305,13 @@ class MCDReforgedServer:
 	# Flags
 
 	def is_server_startup(self) -> bool:
-		return MCDReforgedFlag.SERVER_STARTUP in self.flags
+		return MCDReforgedFlag.SERVER_STARTUP in self.__flags
 
 	def is_server_rcon_ready(self) -> bool:
-		return MCDReforgedFlag.SERVER_RCON_READY in self.flags
+		return MCDReforgedFlag.SERVER_RCON_READY in self.__flags
 
 	def is_interrupt(self) -> bool:
-		return MCDReforgedFlag.INTERRUPT in self.flags
+		return MCDReforgedFlag.INTERRUPT in self.__flags
 
 	def is_mcdr_exit(self) -> bool:
 		return self.mcdr_in_state(MCDReforgedState.STOPPED)
@@ -315,14 +320,14 @@ class MCDReforgedServer:
 		return self.mcdr_in_state(MCDReforgedState.PRE_STOPPED, MCDReforgedState.STOPPED)
 
 	def should_exit_after_stop(self) -> bool:
-		return MCDReforgedFlag.EXIT_AFTER_STOP in self.flags
+		return MCDReforgedFlag.EXIT_AFTER_STOP in self.__flags
 
 	def add_flag(self, flag: MCDReforgedFlag):
-		self.flags |= flag
+		self.__flags |= flag
 		self.logger.debug('Added MCDReforgedFlag {}'.format(flag), option=DebugOption.MCDR)
 
 	def remove_flag(self, flag: MCDReforgedFlag):
-		self.flags &= ~flag
+		self.__flags &= ~flag
 		self.logger.debug('Removed MCDReforgedFlag {}'.format(flag), option=DebugOption.MCDR)
 
 	# State
@@ -369,7 +374,7 @@ class MCDReforgedServer:
 		return True if the server process has started successfully
 		return False if the server is not able to start
 		"""
-		with self.starting_server_lock:
+		with self.__starting_server_lock:
 			if self.is_interrupt():
 				self.logger.warning(self.tr('mcdr_server.start_server.already_interrupted'))
 				return False
@@ -379,14 +384,15 @@ class MCDReforgedServer:
 			if self.is_mcdr_about_to_exit():
 				self.logger.warning(self.tr('mcdr_server.start_server.about_to_exit'))
 				return False
-			cwd = self.config['working_directory']
+
+			cwd = self.config.working_directory
 			if not os.path.isdir(cwd):
 				self.logger.error(self.tr('mcdr_server.start_server.cwd_not_existed', cwd))
 				return False
 			try:
-				start_command = self.config['start_command']
+				start_command = self.config.start_command
 				self.logger.info(self.tr('mcdr_server.start_server.starting', start_command))
-				self.process = Popen(start_command, cwd=self.config['working_directory'], stdin=PIPE, stdout=PIPE, stderr=STDOUT, shell=True)
+				self.process = Popen(start_command, cwd=self.config.working_directory, stdin=PIPE, stdout=PIPE, stderr=STDOUT, shell=True)
 			except Exception:
 				self.logger.exception(self.tr('mcdr_server.start_server.start_fail'))
 				return False
@@ -437,7 +443,7 @@ class MCDReforgedServer:
 		:param forced: an optional bool. If it's False (default) MCDR will stop the server by sending the STOP_COMMAND from the
 		current handler. If it's True MCDR will just kill the server process group
 		"""
-		with self.stop_lock:
+		with self.__stop_lock:
 			if not self.is_server_running():
 				self.logger.warning(self.tr('mcdr_server.stop.stop_when_stopped'))
 				return False
@@ -495,7 +501,7 @@ class MCDReforgedServer:
 		:param str encoding: The encoding method for the text. If it's not given used the method in config
 		"""
 		if encoding is None:
-			encoding = self.encoding_method
+			encoding = self.__encoding_method
 		if isinstance(text, str):
 			encoded_text = (text + ending).encode(encoding)
 		else:
@@ -530,7 +536,7 @@ class MCDReforgedServer:
 			return None
 		else:
 			try:
-				line_text: str = line_buf.decode(self.decoding_method)
+				line_text: str = line_buf.decode(self.__decoding_method)
 			except Exception as e:
 				self.logger.error(self.tr('mcdr_server.receive.decode_fail', line_buf, e))
 				raise DecodeError()
@@ -572,7 +578,7 @@ class MCDReforgedServer:
 		self.server_handler_manager.detect_text(text)
 		info.attach_mcdr_server(self)
 
-		for ifh in self.info_filter_holders:
+		for ifh in self.__info_filter_holders:
 			if ifh.filter.filter_server_info(info) is False:
 				if self.logger.should_log_debug(option=DebugOption.HANDLER):
 					self.logger.debug('Server info is discarded by filter {} from {}'.format(ifh.filter, ifh.plugin))
@@ -588,14 +594,14 @@ class MCDReforgedServer:
 		self.plugin_manager.register_permanent_plugins()
 		self.task_executor.execute_on_thread(self.load_plugins, block=True)
 		self.plugin_manager.dispatch_event(MCDRPluginEvents.MCDR_START, ())
-		if not self.config['disable_console_thread']:
+		if not self.config.disable_console_thread:
 			self.console_handler.start()
 		else:
 			self.logger.info(self.tr('mcdr_server.on_mcdr_start.console_disabled'))
 		if not self.start_server():
 			raise ServerStartError()
 		self.update_helper.start()
-		if self.config['handler_detection']:
+		if self.config.handler_detection:
 			self.server_handler_manager.start_handler_detection()
 		self.set_mcdr_state(MCDReforgedState.RUNNING)
 
@@ -671,9 +677,10 @@ class MCDReforgedServer:
 
 	def connect_rcon(self):
 		self.rcon_manager.disconnect()
-		if self.config['rcon']['enable'] and self.is_server_rcon_ready():
+		rcon_config = self.config.rcon
+		if rcon_config.enable and self.is_server_rcon_ready():
 			self.rcon_manager.connect(
-				address=str(self.config['rcon']['address']),
-				port=int(self.config['rcon']['port']),
-				password=str(self.config['rcon']['password']),
+				address=rcon_config.address,
+				port=rcon_config.port,
+				password=rcon_config.password,
 			)

@@ -48,7 +48,7 @@ class ServerInterface:
 	__global_instance: Optional['ServerInterface'] = None  # For singleton instance storage
 
 	def __init__(self, mcdr_server: 'MCDReforgedServer'):
-		self._mcdr_server = mcdr_server
+		self._mcdr_server: 'MCDReforgedServer' = mcdr_server
 		if type(self) is ServerInterface:
 			# singleton, should only occur during MCDReforgedServer construction
 			if ServerInterface.__global_instance is not None:
@@ -821,7 +821,7 @@ class ServerInterface:
 		"""
 		Return the current config of MCDR as a dict
 		"""
-		return self._mcdr_server.config.to_dict()
+		return self._mcdr_server.config.serialize()
 
 	def modify_mcdr_config(self, changes: Dict[Union[Tuple[str], str], Any]):
 		"""
@@ -845,8 +845,8 @@ class ServerInterface:
 
 		.. versionadded:: v2.7.0
 		"""
-		self._mcdr_server.config.set_values(changes)
-		self._mcdr_server.config.save()
+		self._mcdr_server.config_manager.set_values(changes)
+		self._mcdr_server.config_manager.save()
 		self._mcdr_server.on_config_changed(log=False)
 
 	def reload_config_file(self, *, log: bool = False):

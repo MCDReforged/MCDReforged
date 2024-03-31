@@ -40,7 +40,7 @@ class ConsoleHandler(BackgroundThreadExecutor):
 
 	@override
 	def loop(self):
-		if self.mcdr_server.config['advanced_console']:
+		if self.mcdr_server.config.advanced_console:
 			self.console_kit.start_kits()
 		super().loop()
 

@@ -541,7 +541,7 @@ class PluginManager:
 			enable: Optional[List[Path]] = None,
 			disable: Optional[List[RegularPlugin]] = None,
 			entered_callback: Optional[Callable[[], Any]] = None,
-	):
+	) -> Future[PluginOperationResult]:
 		# TODO: make it the only entrance of plugin manipulation
 		to_load_paths: List[Path] = (load or []).copy()
 		to_unload_plugins: List[RegularPlugin] = (unload or []) + (disable or [])

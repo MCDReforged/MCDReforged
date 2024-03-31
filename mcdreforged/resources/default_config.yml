@@ -12,7 +12,13 @@
 language: en_us
 
 
-# The working directory of the server. If you use the default value server/ I will suggest you put all the files related to the server into the server/ directory
+# =========================================
+# |          Server Configuration         |
+# =========================================
+
+
+# The working directory of the server process
+# For default value "server", It's suggested to put all the files related to the server into the server/ directory
 working_directory: server
 
 
@@ -48,12 +54,6 @@ encoding: utf8
 decoding: utf8
 
 
-# The list of directory path where MCDR will search for plugins to load
-# Example: "path/to/my/plugin/directory"
-plugin_directories:
-- plugins
-
-
 # Minecraft RCON setting
 # If enabled, plugins can use rcon to query commands from the server
 rcon:
@@ -61,6 +61,22 @@ rcon:
   address: 127.0.0.1
   port: 25575
   password: password
+
+
+# =========================================
+# |          Plugin Configuration         |
+# =========================================
+
+
+# The list of directory path where MCDR will search for plugins to load
+# Example: "path/to/my/plugin/directory"
+plugin_directories:
+- plugins
+
+
+# =========================================
+# |           Misc Configuration          |
+# =========================================
 
 
 # If set to true, MCDR will detect if there's a new version every 24h
@@ -102,6 +118,10 @@ watchdog_threshold: 10
 # to detect possible configuration mistake of the :ref:`configuration:handler` option
 handler_detection: true
 
+
+# =========================================
+# |          Debug Configuration          |
+# =========================================
 
 # Debug mode switches
 debug:

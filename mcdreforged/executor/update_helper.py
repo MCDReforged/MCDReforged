@@ -30,7 +30,7 @@ class UpdateHelper(BackgroundThreadExecutor):
 	@override
 	def tick(self):
 		if time.monotonic() - self.__last_query_time >= 60 * 60 * 24:
-			self.check_update(lambda: self.mcdr_server.config['check_update'] is True, self.mcdr_server.logger.info)
+			self.check_update(lambda: self.mcdr_server.config.check_update, self.mcdr_server.logger.info)
 		time.sleep(1)
 
 	def check_update(self, condition_check: Callable[[], bool], reply_func: Callable[[Union[str or RTextBase]], Any]):
