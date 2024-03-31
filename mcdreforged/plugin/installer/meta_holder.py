@@ -1,8 +1,11 @@
+import gzip
 import json
 import logging
 import lzma
+import re
 import threading
 import time
+from io import BytesIO
 from pathlib import Path
 from typing import Optional, Dict, Callable, Any
 
@@ -23,22 +26,32 @@ class CatalogueMetaRegistry(MetaRegistry):
 
 
 class CatalogueMetaRegistryHolder:
+	def __init__(self, *, meta_json_url: Optional[str] = None, meta_fetch_timeout: Optional[int] = None):
+		if meta_json_url is None:
+			meta_json_url = 'https://meta.mcdreforged.com/everything_slim.json.xz'
+		if meta_fetch_timeout is None:
+			meta_fetch_timeout = 10
+		self.meta_json_url = meta_json_url
+		self.meta_fetch_timeout = meta_fetch_timeout
+
 	def get_registry(self) -> MetaRegistry:
 		meta_json = self._get_meta_json()
 		return self._load_meta_json(meta_json)
 
-	@classmethod
-	def _get_meta_json(cls) -> dict:
-		url = 'https://meta.mcdreforged.com/everything_slim.json.xz'
+	def _get_meta_json(self) -> dict:
 		max_size = 20 * 2 ** 20  # 20MiB limit. In 2024-03-14, the size is only 545KiB
+		buf = request_util.get_buf(self.meta_json_url, 'MetaFetcher', timeout=self.meta_fetch_timeout, max_size=max_size)
 
-		buf = request_util.get_buf(url, 'MetaFetcher', timeout=10, max_size=max_size)
+		if self.meta_json_url.endswith('.gz'):
+			with gzip.GzipFile(fileobj=BytesIO(buf)) as gzipf:
+				content = gzipf.read(max_size + 1)
+		elif self.meta_json_url.endswith('.xz'):
+			content = lzma.LZMADecompressor().decompress(buf, max_size + 1)
+		else:
+			content = buf
 
-		decompressor = lzma.LZMADecompressor()
-		content = decompressor.decompress(buf, max_size + 1)
 		if len(content) > max_size:
 			raise ValueError('content too large {} {}'.format(len(content), max_size))
-
 		return json.loads(content.decode('utf8'))
 
 	@classmethod
@@ -57,9 +70,15 @@ class CatalogueMetaRegistryHolder:
 				meta = aop['meta']
 				latest_version = None
 
+			repos_url = aop['plugin'].get('repository', '')
+			if (repos_match := re.fullmatch(r'https://github\.com/([^/]+)/([^/]+)/?', repos_url)) is None:
+				continue
+
 			plugin_data = PluginData(
 				id=plugin_id,
 				name=meta.get('name'),
+				repos_owner=repos_match.group(1),
+				repos_name=repos_match.group(2),
 				latest_version=latest_version,
 				description=meta.get('description', {}),
 			)
@@ -68,6 +87,7 @@ class CatalogueMetaRegistryHolder:
 				asset: dict = release['asset']
 				release_data = ReleaseData(
 					version=meta['version'],
+					tag_name=release['tag_name'],
 					dependencies=meta.get('dependencies', {}),
 					requirements=meta.get('requirements', []),
 					asset_id=asset['id'],
@@ -92,7 +112,8 @@ class CatalogueMetaRegistryHolder:
 class AsyncPersistCatalogueMetaRegistryHolder(CatalogueMetaRegistryHolder):
 	CACHE_TTL = 60 * 60
 
-	def __init__(self, logger: logging.Logger, cache_path: Path):
+	def __init__(self, logger: logging.Logger, cache_path: Path, *, meta_json_url: Optional[str] = None, meta_fetch_timeout: Optional[int] = None):
+		super().__init__(meta_json_url=meta_json_url, meta_fetch_timeout=meta_fetch_timeout)
 		self.logger = logger
 		self.cache_path = cache_path
 		self.__meta_lock = threading.Lock()

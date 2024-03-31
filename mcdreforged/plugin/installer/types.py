@@ -14,6 +14,7 @@ PackageRequirements = List[str]
 @dataclasses.dataclass(frozen=True)
 class ReleaseData:
 	version: str
+	tag_name: str
 	dependencies: Dict[PluginId, str]
 	requirements: List[str]
 	asset_id: int
@@ -27,6 +28,8 @@ class ReleaseData:
 class PluginData:
 	id: PluginId
 	name: Optional[str]
+	repos_owner: str
+	repos_name: str
 	latest_version: Optional[str]
 	description: Dict[str, str]  # lang -> text
 	releases: Dict[str, ReleaseData] = dataclasses.field(default_factory=dict)
@@ -35,6 +38,8 @@ class PluginData:
 		return PluginData(
 			id=self.id,
 			name=self.name,
+			repos_owner=self.repos_owner,
+			repos_name=self.repos_name,
 			latest_version=self.latest_version,
 			description=self.description.copy(),
 			releases=self.releases.copy(),

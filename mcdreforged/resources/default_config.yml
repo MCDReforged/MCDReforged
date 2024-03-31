@@ -74,6 +74,32 @@ plugin_directories:
 - plugins
 
 
+# The interval in seconds between each plugin catalogue meta fetch
+# Set to -1 to disable scheduled meta fetch
+catalogue_meta_fetch_interval: 3600
+
+
+# The timeout in seconds of the catalogue meta fetch
+catalogue_meta_fetch_timeout: 10
+
+
+# URL override of the plugin catalogue "everything.json" or "everything_slim.json"
+# If it ends with ".gz" or ".xz", corresponding decompression operation will be applied
+# If not provided, the url will be "https://meta.mcdreforged.com/everything_slim.json.xz"
+catalogue_meta_url:
+
+
+# Plugin file download override. Should be a valid python str.format string
+# Available variables: {url}, {repos_owner}, {repos_name}, {tag}, {asset_name}, {asset_id}
+# As an example, to use ghproxy, you can set it to: "https://mirror.ghproxy.com/{url}"
+# If not provided, the origin GitHub asset download url will be directly used
+plugin_download_url:
+
+
+# The timeout in seconds of the plugin file download
+plugin_download_timeout: 15
+
+
 # =========================================
 # |           Misc Configuration          |
 # =========================================

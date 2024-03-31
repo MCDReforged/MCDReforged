@@ -1,6 +1,7 @@
 import hashlib
 import time
 from pathlib import Path
+from typing import Optional
 
 from mcdreforged.plugin.installer.meta_holder import ReleaseData
 from mcdreforged.plugin.installer.replier import Replier
@@ -8,14 +9,34 @@ from mcdreforged.utils import request_util
 
 
 class ReleaseDownloader:
-	def __init__(self, release: ReleaseData, target_path: Path, replier: Replier, *, mkdir: bool = True):
+	def __init__(
+			self,
+			release: ReleaseData, target_path: Path, replier: Replier,
+			*,
+			mkdir: bool = True,
+			download_url_override: Optional[str] = None,
+			download_timeout: Optional[float] = 15
+	):
 		self.release = release
 		self.target_path = target_path
 		self.replier = replier
 		self.mkdir = mkdir
+		self.download_url_override = download_url_override
+		self.download_timeout = download_timeout
 
 	def __download(self, url: str, show_progress: bool):
-		response = request_util.get_raw(url, 'download', timeout=(5, 30), stream=True)
+		if self.download_url_override is not None:
+			download_url = self.download_url_override.format(
+				url=url,
+				repos_owner='',
+				repos_name='',
+				tag=self.release.tag_name,
+				asset_name=self.release.file_name,
+				asset_id=self.release.asset_id,
+			)
+		else:
+			download_url = url
+		response = request_util.get_raw(download_url, 'download', timeout=self.download_timeout, stream=True)
 
 		length = int(response.headers.get('content-length'))
 		if length != self.release.file_size:

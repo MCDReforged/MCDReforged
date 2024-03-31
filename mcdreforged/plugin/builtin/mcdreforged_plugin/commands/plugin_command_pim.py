@@ -63,16 +63,19 @@ class LocalMetaRegistry(MetaRegistry):
 			result[meta.id] = PluginData(
 				id=meta.id,
 				name=meta.name,
+				repos_owner='',
+				repos_name='',
 				latest_version=version,
 				description=description,
 				releases={version: LocalReleaseData(
 					version=version,
+					tag_name='',
 					dependencies={},
 					requirements=[],
 					asset_id=0,
-					file_name='nope_name',
+					file_name='',
 					file_size=0,
-					file_url='nope_url',
+					file_url='',
 					file_sha256='',
 				)}
 			)
@@ -175,7 +178,9 @@ class PluginCommandPimExtension(SubCommand):
 		super().__init__(mcdr_plugin)
 		self.__meta_holder = AsyncPersistCatalogueMetaRegistryHolder(
 			self.mcdr_server.logger,
-			Path(self.server_interface.get_data_folder()) / 'catalogue_meta_cache.json.xz'
+			Path(self.server_interface.get_data_folder()) / 'catalogue_meta_cache.json.xz',
+			meta_json_url=self.mcdr_server.config.catalogue_meta_url,
+			meta_fetch_timeout=self.mcdr_server.config.catalogue_meta_fetch_timeout,
 		)
 		self.__installation_confirm_helper = ConfirmHelper()
 		self.__installation_source: Optional[CommandSource] = None
@@ -224,7 +229,7 @@ class PluginCommandPimExtension(SubCommand):
 			return node
 
 		def check_update_node() -> Literal:
-			node = Literal({'cu', 'check_update'})
+			node = Literal({'checkupdate', 'cu'})
 			node.runs(self.cmd_check_update)
 			node.then(
 				Text('plugin_id').configure(accumulate=True).
@@ -288,6 +293,8 @@ class PluginCommandPimExtension(SubCommand):
 		return PluginCatalogueAccess(
 			CommandSourceReplier(source),
 			meta_holder=self.__meta_holder,
+			meta_json_url=self.mcdr_server.config.catalogue_meta_url,
+			meta_fetch_timeout=self.mcdr_server.config.catalogue_meta_fetch_timeout,
 		)
 
 	def __handle_duplicated_input(self, source: CommandSource, context: CommandContext, op_func: callable, op_key: str, op_thread: Optional[threading.Thread]):

@@ -34,6 +34,11 @@ class MCDReforgedConfig(Serializable):
 
 	# --------- Plugin Configuration ---------
 	plugin_directories: List[str] = ['plugins']
+	catalogue_meta_fetch_interval: int = 3600
+	catalogue_meta_fetch_timeout: int = 15
+	catalogue_meta_url: Optional[str] = None
+	plugin_download_url: Optional[str] = None
+	plugin_download_timeout: Optional[int] = 15
 
 	# --------- Misc Configuration ---------
 	check_update: bool = True

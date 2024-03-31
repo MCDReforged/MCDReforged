@@ -23,10 +23,16 @@ def is_subsequence(keyword: str, s: str):
 
 
 class PluginCatalogueAccess:
-	def __init__(self, replier: Replier, meta_holder: Optional[CatalogueMetaRegistryHolder] = None):
+	def __init__(
+			self, replier: Replier,
+			*,
+			meta_holder: Optional[CatalogueMetaRegistryHolder] = None,
+			meta_json_url: Optional[str] = None,
+			meta_fetch_timeout: Optional[int] = None
+	):
 		self.replier = replier
 		if meta_holder is None:
-			meta_holder = CatalogueMetaRegistryHolder()
+			meta_holder = CatalogueMetaRegistryHolder(meta_json_url=meta_json_url, meta_fetch_timeout=meta_fetch_timeout)
 		self.meta_holder = meta_holder
 
 	def print(self, message: MessageText):
