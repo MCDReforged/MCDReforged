@@ -35,7 +35,8 @@ if TYPE_CHECKING:
 
 class ConsoleHandler(BackgroundThreadExecutor):
 	def __init__(self, mcdr_server: 'MCDReforgedServer'):
-		super().__init__(mcdr_server)
+		super().__init__(mcdr_server.logger)
+		self.mcdr_server = mcdr_server
 		self.console_kit = PromptToolkitWrapper(self)
 
 	@override

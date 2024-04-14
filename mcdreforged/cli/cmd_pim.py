@@ -8,11 +8,11 @@ from typing import Callable
 from typing import Optional, List
 from zipfile import ZipFile
 
-from typing_extensions import NoReturn
-
 from mcdreforged.constants import plugin_constant
+from mcdreforged.plugin.installer.meta_holder import CatalogueMetaRegistryHolder
 from mcdreforged.plugin.installer.plugin_installer import PluginCatalogueAccess
-from mcdreforged.plugin.installer.replier import NoopReplier, StdoutReplier, Replier
+from mcdreforged.plugin.installer.types import MetaRegistry
+from mcdreforged.utils.replier import NoopReplier, StdoutReplier, Replier
 
 
 def create(parser_factory: Callable[..., ArgumentParser]) -> ArgumentParser:
@@ -34,7 +34,7 @@ def create(parser_factory: Callable[..., ArgumentParser]) -> ArgumentParser:
 	return parser
 
 
-def __entry(parser: ArgumentParser, args: Namespace) -> int:
+def entry(parser: ArgumentParser, args: Namespace):
 	pcmd = args.pim_command
 
 	if pcmd is None:
@@ -44,33 +44,34 @@ def __entry(parser: ArgumentParser, args: Namespace) -> int:
 	replier = NoopReplier() if args.quiet else StdoutReplier()
 
 	if pcmd == 'browse':
-		return cmd_browse(replier, args.keyword)
+		cmd_browse(replier, args.keyword)
 	elif pcmd == 'download':
-		return cmd_download(replier, args.plugin_ids, args.output)
+		cmd_download(replier, args.plugin_ids, args.output)
 	elif pcmd == 'pipi':
 		cmd_pipi(args.plugin_paths, extra_args=args.args, quiet=args.quiet)
 	else:
 		print('unknown pcmd {!r}'.format(pcmd))
-		return 1
+		sys.exit(1)
 
 
-def entry(parser: ArgumentParser, args: Namespace) -> NoReturn:
-	sys.exit(__entry(parser, args))
+def __fetch_meta(replier: Replier) -> MetaRegistry:
+	meta_holder = CatalogueMetaRegistryHolder()
+	replier.reply('Fetching catalogue meta')
+	return meta_holder.get_registry()
 
 
-def cmd_browse(replier: Replier, keyword: str) -> int:
-	installer = PluginCatalogueAccess(replier)
-	installer.list_plugin(keyword)
-	return 0
+def cmd_browse(replier: Replier, keyword: str):
+	meta = __fetch_meta(replier)
+	PluginCatalogueAccess.list_plugin(meta=meta, replier=replier, keyword=keyword)
 
 
-def cmd_download(replier: Replier, plugin_reqs: List[str], output_dir: str) -> int:
-	installer = PluginCatalogueAccess(replier)
+def cmd_download(replier: Replier, plugin_reqs: List[str], output_dir: str):
+	meta = __fetch_meta(replier)
+	# TODO: resolve dependencies plugin_reqs -> plugin_ids
+	PluginCatalogueAccess.download_plugin(meta=meta, replier=replier, plugin_ids=plugin_reqs, target_dir=output_dir)
 
-	return 0
 
-
-def cmd_pipi(plugin_paths: List[str], extra_args: Optional[str] = None, *, quiet: bool = False) -> int:
+def cmd_pipi(plugin_paths: List[str], extra_args: Optional[str] = None, *, quiet: bool = False):
 	writeln = print if not quiet else lambda *args_, **kwargs_: None
 
 	# read requirements.txt
@@ -114,5 +115,3 @@ def cmd_pipi(plugin_paths: List[str], extra_args: Optional[str] = None, *, quiet
 				os.unlink(temp_file.name)
 			except OSError:
 				pass
-
-	return 0

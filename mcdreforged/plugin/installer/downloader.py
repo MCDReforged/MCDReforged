@@ -4,8 +4,8 @@ from pathlib import Path
 from typing import Optional
 
 from mcdreforged.plugin.installer.meta_holder import ReleaseData
-from mcdreforged.plugin.installer.replier import Replier
 from mcdreforged.utils import request_util
+from mcdreforged.utils.replier import Replier
 
 
 class ReleaseDownloader:

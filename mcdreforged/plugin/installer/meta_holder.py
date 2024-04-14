@@ -11,6 +11,7 @@ from typing import Optional, Dict, Callable, Any
 
 from typing_extensions import override
 
+from mcdreforged.executor.background_thread_executor import BackgroundThreadExecutor
 from mcdreforged.plugin.installer.types import MetaRegistry, PluginData, ReleaseData, EmptyMetaRegistry
 from mcdreforged.utils import request_util
 
@@ -109,24 +110,46 @@ class CatalogueMetaRegistryHolder:
 		return self.get_registry().plugins[plugin_id].releases[version]
 
 
-class AsyncPersistCatalogueMetaRegistryHolder(CatalogueMetaRegistryHolder):
-	CACHE_TTL = 60 * 60
+class BackgroundMetaFetcher(BackgroundThreadExecutor):
+	def __init__(self, logger: logging.Logger, interval: float, tick_func: Callable[[], Any]):
+		super().__init__(logger)
+		self.__interval = interval
+		self.__tick_func = tick_func
 
-	def __init__(self, logger: logging.Logger, cache_path: Path, *, meta_json_url: Optional[str] = None, meta_fetch_timeout: Optional[int] = None):
+	@override
+	def get_name(self) -> str:
+		return 'CatalogueMetaFetcher'
+
+	@override
+	def tick(self):
+		self.__tick_func()
+		time.sleep(0.1)
+
+
+class PersistCatalogueMetaRegistryHolder(CatalogueMetaRegistryHolder):
+	_FetchStartCallbackOpt = Optional[Callable[[bool], None]]
+	_FetchCallbackOpt = Optional[Callable[[Optional[Exception]], None]]
+
+	def __init__(self, logger: logging.Logger, cache_path: Path, *, meta_json_url: str, meta_fetch_interval: float, meta_fetch_timeout: int):
 		super().__init__(meta_json_url=meta_json_url, meta_fetch_timeout=meta_fetch_timeout)
 		self.logger = logger
 		self.cache_path = cache_path
 		self.__meta_lock = threading.Lock()
 		self.__meta: MetaRegistry = EmptyMetaRegistry()
-		self.__meta_fetch_time: float = 0
-		self.__fetch_thread: Optional[threading.Thread] = None
-		self.__fetch_thread_lock = threading.Lock()
+		self.__meta_fetch_interval: float = meta_fetch_interval
+		self.__last_meta_fetch_time: float = 0
+		self.__last_background_fetch_time: float = 0
+		self.__fetch_lock = threading.Lock()
+		self.__background_fetcher = BackgroundMetaFetcher(self.logger, meta_fetch_interval, self.__background_fetch)
 
 	@override
-	def get_registry(self, *, fetch_callback: Optional[Callable[[], Any]] = None) -> MetaRegistry:
-		if self.async_fetch():
-			if fetch_callback is not None:
-				fetch_callback()
+	def get_registry(self) -> MetaRegistry:
+		self.__last_background_fetch_time = 0
+		return self.__meta
+
+	def get_registry_blocked(self, ignore_ttl: bool = False, start_callback: _FetchStartCallbackOpt = None, done_callback: _FetchCallbackOpt = None) -> MetaRegistry:
+		with self.__fetch_lock:
+			self.__do_fetch(ignore_ttl=ignore_ttl, start_callback=start_callback, done_callback=done_callback)
 		return self.__meta
 
 	def __load(self):
@@ -141,7 +164,8 @@ class AsyncPersistCatalogueMetaRegistryHolder(CatalogueMetaRegistryHolder):
 			return
 		with self.__meta_lock:
 			self.__meta = meta
-			self.__meta_fetch_time = data.get('timestamp', 0)
+			self.__last_meta_fetch_time = float(data.get('timestamp', 0))
+			self.__last_background_fetch_time = self.__last_meta_fetch_time
 
 	def __save(self, meta_json: dict, timestamp: float):
 		data = {
@@ -158,43 +182,57 @@ class AsyncPersistCatalogueMetaRegistryHolder(CatalogueMetaRegistryHolder):
 				self.logger.info('Catalogue meta registry loaded from file')
 		except Exception as e:
 			self.logger.exception('Catalogue meta registry load failed: {}'.format(e))
-		self.async_fetch()
+		if self.__meta_fetch_interval > 0:
+			self.__background_fetcher.start()
+		else:
+			self.logger.info('Background CatalogueMetaFetcher disabled')
 
-	_FetchCallbackOpt = Optional[Callable[[Optional[Exception]], None]]
+	def terminate(self):
+		self.__background_fetcher.stop()
 
-	def async_fetch(self, ignore_cache: bool = False, callback: _FetchCallbackOpt = None) -> bool:
-		if not ignore_cache and time.time() - self.__meta_fetch_time <= self.CACHE_TTL:
-			return False
-		with self.__fetch_thread_lock:
-			if self.__fetch_thread is not None:
-				return False
-			self.__fetch_thread = threading.Thread(target=self.__async_fetch, args=(callback,), name='CatalogueMetaFetcher', daemon=True)
-			self.__fetch_thread.start()
-			return True
+	def __background_fetch(self):
+		with self.__fetch_lock:
+			now = time.time()
+			if now - self.__last_background_fetch_time >= 4 * 24:  # every 4h
+				self.__do_fetch(ignore_ttl=False)
+				self.__last_background_fetch_time = self.__last_meta_fetch_time
 
-	def __async_fetch(self, callback: _FetchCallbackOpt):
-		if callback is None:
-			def callback(_):
+	def __do_fetch(self, ignore_ttl: bool, start_callback: _FetchStartCallbackOpt = None, done_callback: _FetchCallbackOpt = None) -> bool:
+		"""
+		:return: true: processed (succeed or fail), false: skipped
+		"""
+		if done_callback is None:
+			def done_callback(_):
 				pass
+		if start_callback is None:
+			def start_callback(_):
+				pass
+
 		try:
-			t = time.time()
+			now = time.time()
+			if not ignore_ttl and now - self.__last_meta_fetch_time <= 30 * 60:  # 30min
+				start_callback(False)
+				done_callback(None)
+				return False
+			start_time = now
+			start_callback(True)
+
 			meta_json = self._get_meta_json()
 			meta = self._load_meta_json(meta_json)
 		except Exception as e:
 			self.logger.exception('Catalogue meta registry fetch failed: {}'.format(e))
-			callback(e)
+			done_callback(e)
 		else:
 			with self.__meta_lock:
-				self.__meta_fetch_time = time.time()
+				self.__last_meta_fetch_time = time.time()
 				self.__meta = meta
 				try:
-					self.__save(meta_json, self.__meta_fetch_time)
+					self.__save(meta_json, self.__last_meta_fetch_time)
 				except Exception as e:
 					self.logger.exception('Catalogue meta registry save failed: {}'.format(e))
-					callback(e)
+					done_callback(e)
 				else:
-					self.logger.info('Catalogue meta registry updated, cost {:.2f}s'.format(time.time() - t))
-					callback(None)
-		finally:
-			with self.__fetch_thread_lock:
-				self.__fetch_thread = None
+					self.logger.info('Catalogue meta registry updated, cost {:.2f}s'.format(time.time() - start_time))
+				done_callback(None)
+
+		return True

@@ -1,7 +1,7 @@
 import collections
 import queue
 import time
-from typing import Callable, Any, Optional, Deque, NamedTuple
+from typing import Callable, Any, Optional, Deque, NamedTuple, TYPE_CHECKING
 
 from typing_extensions import override
 
@@ -14,6 +14,10 @@ from mcdreforged.utils.logger import DebugOption
 class TaskData(NamedTuple):
 	func: Callable
 	vip: bool
+
+
+if TYPE_CHECKING:
+	from mcdreforged.mcdr_server import MCDReforgedServer
 
 
 class DoubleQueue(queue.Queue):
@@ -46,8 +50,9 @@ class DoubleQueue(queue.Queue):
 
 
 class TaskExecutor(BackgroundThreadExecutor):
-	def __init__(self, mcdr_server, *, previous_executor: 'Optional[TaskExecutor]' = None):
-		super().__init__(mcdr_server)
+	def __init__(self, mcdr_server: 'MCDReforgedServer', *, previous_executor: 'Optional[TaskExecutor]' = None):
+		super().__init__(mcdr_server.logger)
+		self.mcdr_server = mcdr_server
 		self.task_queue = DoubleQueue(maxsize=core_constant.MAX_TASK_QUEUE_SIZE)
 		self.__last_tick_time = None
 		self.__soft_stopped = False

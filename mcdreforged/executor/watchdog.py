@@ -15,7 +15,8 @@ class WatchDog(BackgroundThreadExecutor):
 	DEFAULT_NO_RESPOND_THRESHOLD = 10  # seconds
 
 	def __init__(self, mcdr_server: 'MCDReforgedServer'):
-		super().__init__(mcdr_server)
+		super().__init__(mcdr_server.logger)
+		self.mcdr_server = mcdr_server
 		self.__monitoring = False
 
 	def is_monitoring(self):

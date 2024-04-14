@@ -245,6 +245,88 @@ mcdr_command:
     success: Enabled "§e{0}§r" §asuccessfully§r
   reload_all_plugin:
     fail: §cFail§r to reload all plugins
+  pim:
+    common:
+      duplicated_input: "There's ongoing operations: {0}, please wait for it to completes"
+      fetch_start: Fetching plugin catalogue meta registry
+      fetch_done: Plugin catalogue meta registry fetch done
+      fetch_failed: 'Plugin catalogue meta registry fetch failed: {0}'
+    browse:
+      name: Browse plugins
+      listing: Listing catalogue plugins
+      listing_keyed: Listing catalogue plugins with keyword "{0}"
+      title:
+        id: ID
+        name: Name
+        version: Version
+        description: Description
+    check_update:
+      name: Check plugin update
+      dependency_resolution_failed: 'Dependency resolution failed: {0}'
+      no_update:
+        all: All {0} installed plugins are up-to-date
+        given: No updates found for {0} plugin
+      found_summary: Found {0}
+      updatable:
+        what: '{0} updatable plugins'
+        title: 'Updatable plugins:'
+        hint1: Update some of them with command like "{0}",
+        hint2: or update all with command "{0}"
+      not_updatable:
+        what: '{0} not-updatable plugins'
+        title: 'Not-updatable plugins with newer version:'
+        reason:
+          constraints_not_satisfied: Requirement constraints not satisfied
+          not_packed_plugin: Not a packed plugin
+      up_to_date:
+        what: '{0} up-to-date plugins'
+      latest: 'latest version {0}'
+    freeze:
+      name: Freeze plugins
+      freezing_all: Requirement specifier for all {0} plugins
+      freezing_installed: Requirement specifier for {0} installed plugins
+    install:
+      name: Install plugins
+      no_input: No plugin specifier is given
+      no_plugin_directories: Cannot install plugin since MCDR config "plugin_directories" is empty,
+      invalid_target: Target {0} is invalid because it's not contained in the configured plugin_directories
+      parse_specifier_failed: 'Parsing plugin specifier {0} failed: {1}'
+      cannot_install_permanent: Cannot install permanent plugin {0}
+
+      resolving_dependencies: Resolving dependencies ...
+      resolution:
+        impossible: 'Resolution impossible. Unsatisfied requirements:'
+        impossible_requirements: '{0} requires {1}'
+        error: 'Resolution error: {0}'
+
+      cannot_change_not_packed: 'Existing plugin {0} is {1} and cannot be reinstalled. Only packed plugin is supported'
+      nothing_to_install: Nothing needs to be installed
+      install_summary:
+        plugin: 'Plugins to install (new {new}, change {change}, total {total}):'
+        python: Python packages to install
+
+      dry_run_suffix: ' (dry-run)'
+      confirm_hint: 'Entry {cmd_confirm} to confirm installation, or {cmd_abort} to abort'
+      confirm_aborted: Plugin installation abort
+      confirm_timeout: Plugin installation confirmation timed out
+
+      installing_package: Installing {0} required python packages
+      install_package_dry_run: Installed {0}
+      install_package_failed: 'Python package installation failed, see console for more information: {0}'
+      downloading_plugin: Downloading and installing {0} plugins
+      downloading_plugin_one: 'Downloading {id}@{version}: {name} ({hash})'
+      installing_plugin_one: 'Installing {id}@{version} to {path}'
+      reloading_plugins: Installed {0} plugins, reloading MCDR
+
+      installation_done: Installation done
+      installation_error: 'Installation error: {0}. Performing rollback'
+    refresh_meta:
+      name: Refresh plugin meta
+    validate:
+      name: Validate plugin constraints
+      success: Plugin constraints validation succeeded
+      failed: 'Plugin constraints validation failed: {0}'
+
   preference:
     unsupported_command_source: Unsupported Command Source {0}
     list:

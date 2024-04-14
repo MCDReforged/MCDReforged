@@ -45,6 +45,12 @@ class PluginData:
 			releases=self.releases.copy(),
 		)
 
+	@property
+	def latest_version_parsed(self) -> Optional[Version]:
+		if self.latest_version is not None:
+			return Version(self.latest_version)
+		return None
+
 
 class MetaRegistry(ABC):
 	@property

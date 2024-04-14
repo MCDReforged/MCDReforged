@@ -167,8 +167,6 @@ mcdr_command:
       §7!!MCDR debug command_dump all§r: 导出所有指令树
       §7!!MCDR debug command_dump plugin §6<plugin_id>§r: 导出给定插件注册的所有指令树
       §7!!MCDR debug command_dump node §6<literal_name>§r: 导出树根为给定名字所有指令树
-      §7!!MCDR debug logger_filter set §6<regexp>§r: 为 MCDR 的 logger 设置一个正则表达式过滤器。这不会影响服务端消息的显示
-      §7!!MCDR debug logger_filter clear§r: 清除 MCDR logger 的正则表达式过滤器
     title: MCDR 指令帮助信息列表
     mcdr_command: MCDR 控制指令
     help_command: 显示指令帮助信息
@@ -247,6 +245,88 @@ mcdr_command:
     success: 插件 "§e{0}§r" 启用§a成功§r
   reload_all_plugin:
     fail: 重载所有插件§c失败§r
+  pim:
+    common:
+      duplicated_input: "发现正在进行的操作: {0}，请等待它执行完成"
+      fetch_start: 正在拉取插件仓库数据
+      fetch_done: 已拉取插件仓库数据
+      fetch_failed: '插件仓库数据拉取失败: {0}'
+    browse:
+      name: 浏览插件
+      listing: 正在列出插件仓库中的插件
+      listing_keyed: '正在列出插件仓库中的插件，关键字: "{0}"'
+      title:
+        id: ID
+        name: 插件名
+        version: 版本
+        description: 描述
+    check_update:
+      name: 检查插件更新
+      dependency_resolution_failed: '依赖解析失败: {0}'
+      no_update:
+        all: 所有已安装的 {0} 个插件均为最新版本
+        given: 给定的 {0} 个插件均为最新版本
+      found_summary: 找到了 {0}
+      updatable:
+        what: '{0} 个可更新的插件'
+        title: '可更新的插件:'
+        hint1: 使用类似 "{0}" 的指令来更新部分插件，
+        hint2: 或者使用指令 "{0}" 来更新全部插件
+      not_updatable:
+        what: '{0} 个不可更新的插件'
+        title: '不可更新的，且有较新版本的插件:'
+        reason:
+          constraints_not_satisfied: 依赖约束无法满足
+          not_packed_plugin: 非打包插件
+      up_to_date:
+        what: '{0} 已是最新版的插件'
+      latest: '最新版本 {0}'
+    freeze:
+      name: 输出插件版本信息
+      freezing_all: 全部 {0} 个插件的版本信息如下
+      freezing_installed: 全部 {0} 个已安装插件的版本信息如下
+    install:
+      name: 安装插件
+      no_input: 未给出任何插件描述
+      no_plugin_directories: MCDR 配置的插件文件夹为空，无法安装新插件
+      invalid_target: 安装目标文件夹 {0} 无效，因为它不包含在配置的插件文件夹中
+      parse_specifier_failed: '解析插件描述 {0} 失败: {1}'
+      cannot_install_permanent: 无法安装内置插件 {0}
+
+      resolving_dependencies: 正在解析插件依赖 ...
+      resolution:
+        impossible: '插件依赖解析失败。无法满足的依赖项:'
+        impossible_requirements: '{0} 需要 {1}'
+        error: '插件依赖解析出错: {0}'
+
+      cannot_change_not_packed: '已有的插件 {0} 的类型为 {1}，无法被重新安装。只有打包插件是可以被重新安装'
+      nothing_to_install: 已安装的插件已满足所述需求，无需安装任何插件
+      install_summary:
+        plugin: '将被安装的插件 (新增 {new}, 修改 {change}, 总共 {total}):'
+        python: 将要被安装的 Python 包
+
+      dry_run_suffix: ' (试运行)'
+      confirm_hint: '输入 {cmd_confirm} 以确认安装，或输入 {cmd_abort} 以终止安装'
+      confirm_aborted: 插件安装终止
+      confirm_timeout: 插件安装确认超时
+
+      installing_package: 正在安装 {0} 个 Python 包依赖
+      install_package_dry_run: 已安装 {0}
+      install_package_failed: 'Python 包依赖安装失败，见控制台以了解详情: {0}'
+      downloading_plugin: 正在下载安装 {0} 个插件
+      downloading_plugin_one: '正在下载 {id}@{version}: {name} ({hash})'
+      installing_plugin_one: '正在安装 {id}@{version} 至 {path}'
+      reloading_plugins: 已安装 {0} 个插件，正在重载 MCDR
+
+      installation_done: 插件安装完成
+      installation_error: '插件安装失败: {0}。回滚中'
+    refresh_meta:
+      name: 刷新插件仓库元数据
+    validate:
+      name: 验证已安装插件约束
+      success: 插件约束验证成功
+      failed: '插件约束验证失败：{0}'
+
   preference:
     unsupported_command_source: 不支持的指令源 {0}
     list:

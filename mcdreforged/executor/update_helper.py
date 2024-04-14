@@ -22,7 +22,8 @@ if TYPE_CHECKING:
 
 class UpdateHelper(BackgroundThreadExecutor):
 	def __init__(self, mcdr_server: 'MCDReforgedServer'):
-		super().__init__(mcdr_server)
+		super().__init__(mcdr_server.logger)
+		self.mcdr_server = mcdr_server
 		self.__api_fetcher = GithubApiFetcher(core_constant.GITHUB_API_LATEST)
 		self.__update_lock = Lock()
 		self.__last_query_time = 0
