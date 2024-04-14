@@ -22,8 +22,12 @@ def unique_list(lst: Iterable[T]) -> List[T]:
 
 def print_text_to_console(logger: logging.Logger, text: Any):
 	from mcdreforged.minecraft.rtext.text import RTextBase
-	for line in RTextBase.from_any(text).to_colored_text().splitlines():
-		logger.info(line)
+	text_str = RTextBase.from_any(text).to_colored_text()
+	if len(text_str) == 0:
+		logger.info(text_str)
+	else:
+		for line in text_str.splitlines():
+			logger.info(line)
 
 
 def copy_signature(target: Callable, origin: Callable) -> Callable:
