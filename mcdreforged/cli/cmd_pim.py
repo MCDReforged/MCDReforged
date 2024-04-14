@@ -9,8 +9,8 @@ from typing import Optional, List
 from zipfile import ZipFile
 
 from mcdreforged.constants import plugin_constant
+from mcdreforged.plugin.installer.catalogue_access import PluginCatalogueAccess
 from mcdreforged.plugin.installer.meta_holder import CatalogueMetaRegistryHolder
-from mcdreforged.plugin.installer.plugin_installer import PluginCatalogueAccess
 from mcdreforged.plugin.installer.types import MetaRegistry
 from mcdreforged.utils.replier import NoopReplier, StdoutReplier, Replier
 

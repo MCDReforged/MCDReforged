@@ -22,10 +22,10 @@ from mcdreforged.constants.core_constant import DEFAULT_LANGUAGE
 from mcdreforged.minecraft.rtext.style import RColor, RAction, RStyle
 from mcdreforged.minecraft.rtext.text import RTextBase, RText, RTextList
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.sub_command import SubCommand, SubCommandEvent
+from mcdreforged.plugin.installer.catalogue_access import PluginCatalogueAccess
 from mcdreforged.plugin.installer.dependency_resolver import PluginRequirement, PluginDependencyResolver, PackageRequirementResolver
 from mcdreforged.plugin.installer.downloader import ReleaseDownloader
 from mcdreforged.plugin.installer.meta_holder import PersistCatalogueMetaRegistryHolder
-from mcdreforged.plugin.installer.plugin_installer import PluginCatalogueAccess
 from mcdreforged.plugin.installer.types import MetaRegistry, PluginData, ReleaseData, MergedMetaRegistry
 from mcdreforged.plugin.meta.version import VersionRequirement, Version
 from mcdreforged.utils import misc_util
