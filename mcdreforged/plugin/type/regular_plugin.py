@@ -1,7 +1,6 @@
 import contextlib
 import os
 import sys
-import time
 from abc import ABC
 from pathlib import Path
 from types import ModuleType
@@ -13,6 +12,7 @@ from mcdreforged.plugin.meta.metadata import Metadata
 from mcdreforged.plugin.plugin_event import MCDRPluginEvents, EventListener, PluginEvent
 from mcdreforged.plugin.plugin_registry import DEFAULT_LISTENER_PRIORITY
 from mcdreforged.plugin.type.plugin import AbstractPlugin, PluginState
+from mcdreforged.utils import time_util
 from mcdreforged.utils.exception import IllegalCallError
 from mcdreforged.utils.logger import DebugOption
 
@@ -169,11 +169,7 @@ class RegularPlugin(AbstractPlugin, ABC):
 	@property
 	def pretty_file_modify_time(self) -> Optional[str]:
 		if self.file_modify_time is not None:
-			try:
-				return time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(self.file_modify_time / 1e9))
-			except (OSError, OverflowError, ValueError):
-				# in case time.strftime or time.localtime failed
-				return str(self.file_modify_time)
+			return time_util.format_time('%Y-%m-%d %H:%M:%S', self.file_modify_time / 1e9) or str(self.file_modify_time)
 		else:
 			return None
 
