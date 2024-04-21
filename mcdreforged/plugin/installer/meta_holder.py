@@ -7,14 +7,17 @@ import threading
 import time
 from io import BytesIO
 from pathlib import Path
-from typing import Optional, Dict, Callable, Any
+from typing import Optional, Dict, Callable, Any, TYPE_CHECKING
 
 from typing_extensions import override
 
 from mcdreforged.constants import core_constant
 from mcdreforged.executor.background_thread_executor import BackgroundThreadExecutor
 from mcdreforged.plugin.installer.types import MetaRegistry, PluginData, ReleaseData, EmptyMetaRegistry
-from mcdreforged.utils import request_util
+from mcdreforged.utils import request_util, time_util
+
+if TYPE_CHECKING:
+	from mcdreforged.mcdr_server import MCDReforgedServer
 
 
 class CatalogueMetaRegistry(MetaRegistry):
@@ -131,10 +134,14 @@ class PersistCatalogueMetaRegistryHolder(CatalogueMetaRegistryHolder):
 	_FetchStartCallbackOpt = Optional[Callable[[bool], None]]
 	_FetchCallbackOpt = Optional[Callable[[Optional[Exception]], None]]
 
-	def __init__(self, logger: logging.Logger, cache_path: Path, *, meta_json_url: str, meta_fetch_interval: float, meta_fetch_timeout: int):
+	BACKGROUND_FETCH_INTERVAL = 4 * 60 * 60  # 4h
+	META_CACHE_TTL = 20 * 60  # 20min
+
+	def __init__(self, mcdr_server: 'MCDReforgedServer', cache_path: Path, *, meta_json_url: str, meta_fetch_interval: float, meta_fetch_timeout: int):
 		super().__init__(meta_json_url=meta_json_url, meta_fetch_timeout=meta_fetch_timeout)
-		self.logger = logger
-		self.cache_path = cache_path
+		self.logger = mcdr_server.logger
+		self.__tr = mcdr_server.tr
+		self.__cache_path = cache_path
 		self.__meta_lock = threading.Lock()
 		self.__meta: MetaRegistry = EmptyMetaRegistry()
 		self.__meta_fetch_interval: float = meta_fetch_interval
@@ -153,40 +160,43 @@ class PersistCatalogueMetaRegistryHolder(CatalogueMetaRegistryHolder):
 			self.__do_fetch(ignore_ttl=ignore_ttl, start_callback=start_callback, done_callback=done_callback)
 		return self.__meta
 
-	def __load(self):
-		if not self.cache_path.is_file():
+	def __load_cached_file(self):
+		if not self.__cache_path.is_file():
 			return
 		try:
-			with lzma.open(self.cache_path, 'rt', encoding='utf8') as f:
+			with lzma.open(self.__cache_path, 'rt', encoding='utf8') as f:
 				data: dict = json.load(f)
 			meta = self._load_meta_json(data['meta'])
-		except (KeyError, ValueError, OSError):
-			self.logger.exception('Failed to load cached meta from {}'.format(self.cache_path))
+		except (KeyError, ValueError, OSError) as e:
+			self.logger.exception(self.__tr('plugin_catalogue_meta_registry.load_cached_failed', self.__cache_path, e))
 			return
+
 		with self.__meta_lock:
 			self.__meta = meta
 			self.__last_meta_fetch_time = float(data.get('timestamp', 0))
 			self.__last_background_fetch_time = self.__last_meta_fetch_time
+
+		self.logger.info(self.__tr(
+			'plugin_catalogue_meta_registry.load_cached_success',
+			time_util.format_time('%Y-%m-%d %H:%M:%S', self.__last_meta_fetch_time) or 'N/A',
+		))
 
 	def __save(self, meta_json: dict, timestamp: float):
 		data = {
 			'timestamp': timestamp,
 			'meta': meta_json,
 		}
-		self.cache_path.parent.mkdir(parents=True, exist_ok=True)
-		with lzma.open(self.cache_path, 'wt', encoding='utf8') as f:
+		self.__cache_path.parent.mkdir(parents=True, exist_ok=True)
+		with lzma.open(self.__cache_path, 'wt', encoding='utf8') as f:
 			json.dump(data, f)
 
 	def init(self):
-		try:
-			if self.__load():
-				self.logger.info('Catalogue meta registry loaded from file')
-		except Exception as e:
-			self.logger.exception('Catalogue meta registry load failed: {}'.format(e))
+		self.__load_cached_file()
+
 		if self.__meta_fetch_interval > 0:
 			self.__background_fetcher.start()
 		else:
-			self.logger.info('Background CatalogueMetaFetcher disabled')
+			self.logger.info(self.__tr('plugin_catalogue_meta_registry.background_fetcher_disabled'))
 
 	def terminate(self):
 		self.__background_fetcher.stop()
@@ -194,11 +204,11 @@ class PersistCatalogueMetaRegistryHolder(CatalogueMetaRegistryHolder):
 	def __background_fetch(self):
 		with self.__fetch_lock:
 			now = time.time()
-			if now - self.__last_background_fetch_time >= 4 * 24:  # every 4h
-				self.__do_fetch(ignore_ttl=False)
+			if now - self.__last_background_fetch_time >= self.BACKGROUND_FETCH_INTERVAL:
+				self.__do_fetch(ignore_ttl=False, show_error_stacktrace=False)
 				self.__last_background_fetch_time = self.__last_meta_fetch_time
 
-	def __do_fetch(self, ignore_ttl: bool, start_callback: _FetchStartCallbackOpt = None, done_callback: _FetchCallbackOpt = None) -> bool:
+	def __do_fetch(self, ignore_ttl: bool, start_callback: _FetchStartCallbackOpt = None, done_callback: _FetchCallbackOpt = None, *, show_error_stacktrace: bool = True):
 		"""
 		:return: true: processed (succeed or fail), false: skipped
 		"""
@@ -211,17 +221,17 @@ class PersistCatalogueMetaRegistryHolder(CatalogueMetaRegistryHolder):
 
 		try:
 			now = time.time()
-			if not ignore_ttl and now - self.__last_meta_fetch_time <= 30 * 60:  # 30min
+			if not ignore_ttl and now - self.__last_meta_fetch_time <= self.META_CACHE_TTL:
 				start_callback(False)
 				done_callback(None)
-				return False
+				return
 			start_time = now
 			start_callback(True)
 
 			meta_json = self._get_meta_json()
 			meta = self._load_meta_json(meta_json)
 		except Exception as e:
-			self.logger.exception('Catalogue meta registry fetch failed: {}'.format(e))
+			(self.logger.exception if show_error_stacktrace else self.logger.error)('Catalogue meta registry fetch failed: {}'.format(e))
 			done_callback(e)
 		else:
 			with self.__meta_lock:
@@ -233,7 +243,5 @@ class PersistCatalogueMetaRegistryHolder(CatalogueMetaRegistryHolder):
 					self.logger.exception('Catalogue meta registry save failed: {}'.format(e))
 					done_callback(e)
 				else:
-					self.logger.info('Catalogue meta registry updated, cost {:.2f}s'.format(time.time() - start_time))
+					self.logger.debug('Catalogue meta registry updated, cost {:.2f}s'.format(time.time() - start_time))
 				done_callback(None)
-
-		return True

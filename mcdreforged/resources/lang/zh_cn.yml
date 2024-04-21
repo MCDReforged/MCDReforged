@@ -248,9 +248,9 @@ mcdr_command:
   pim:
     common:
       duplicated_input: "发现正在进行的操作: {0}，请等待它执行完成"
-      fetch_start: 正在拉取插件仓库数据
-      fetch_done: 已拉取插件仓库数据
-      fetch_failed: '插件仓库数据拉取失败: {0}'
+      fetch_start: 正在更新插件仓库元数据
+      fetch_done: 已更新插件仓库元数据
+      fetch_failed: '插件仓库元数据更新失败: {0}'
     browse:
       name: 浏览插件
       listing: 正在列出插件仓库中的插件
@@ -413,6 +413,10 @@ server_interface:
     failed: '读取配置文件失败，使用默认值: {0}'
     succeed: 配置文件已加载
     key_missed: 发现缺失的键 "{0}"，使用默认值"{1}"
+plugin_catalogue_meta_registry:
+  load_cached_failed: '无法从缓存文件 {0} 加载插件仓库元数据: {1}'
+  load_cached_success: 已从缓存文件加载插件仓库元数据 (更新于 {0})
+  background_fetcher_disabled: 插件仓库元数据背景更新线程已禁用
 
 # ======================== misc ========================
 

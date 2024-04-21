@@ -32,6 +32,7 @@ from mcdreforged.utils import misc_util
 from mcdreforged.utils.replier import CommandSourceReplier
 
 if TYPE_CHECKING:
+	from mcdreforged.plugin.builtin.mcdreforged_plugin.mcdreforged_plugin import MCDReforgedPlugin
 	from mcdreforged.plugin.plugin_manager import PluginManager
 	from mcdreforged.plugin.type.plugin import AbstractPlugin
 
@@ -180,10 +181,10 @@ class PluginCommandPimExtension(SubCommand):
 	CONFIRM_WAIT_TIMEOUT = 60  # seconds
 	current_operation = OperationHolder()
 
-	def __init__(self, mcdr_plugin):
+	def __init__(self, mcdr_plugin: 'MCDReforgedPlugin'):
 		super().__init__(mcdr_plugin)
 		self.__meta_holder = PersistCatalogueMetaRegistryHolder(
-			self.mcdr_server.logger,
+			self.mcdr_server,
 			Path(self.server_interface.get_data_folder()) / 'catalogue_meta_cache.json.xz',
 			meta_json_url=self.mcdr_server.config.catalogue_meta_url,
 			meta_fetch_interval=self.mcdr_server.config.catalogue_meta_fetch_interval,
@@ -660,7 +661,7 @@ class PluginCommandPimExtension(SubCommand):
 
 		source.reply(self.tr('mcdr_command.pim.install.install_summary.plugin', new=add_cnt, change=change_cnt, total=len(to_install)))
 		for plugin_id, data in to_install.items():
-			source.reply('  {} {} -> {}'.format(plugin_id, data.old_version or RText('N/A', RColor.dark_gray), data.version))
+			source.reply('  {}: {} -> {}'.format(plugin_id, data.old_version or RText('N/A', RColor.dark_gray), data.version))
 		if len(package_requirements) > 0:
 			source.reply(self.tr('mcdr_command.pim.install.install_summary.python'))
 			for req in sorted(package_requirements):

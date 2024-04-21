@@ -15,6 +15,7 @@ from mcdreforged.minecraft.rtext.text import RText, RTextBase
 from mcdreforged.plugin.meta.version import Version
 from mcdreforged.translation.translation_text import RTextMCDRTranslation
 from mcdreforged.utils import misc_util, request_util
+from mcdreforged.utils.types.message import MessageText
 
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
@@ -41,7 +42,7 @@ class UpdateHelper(BackgroundThreadExecutor):
 	def tr(self, key: str, *args, **kwargs) -> RTextBase:
 		return RTextMCDRTranslation(key, *args, **kwargs).set_translator(self.mcdr_server.tr)
 
-	def __check_update(self, condition_check: Callable[[], bool], reply_func: Callable[[Union[str or RTextBase]], Any]):
+	def __check_update(self, condition_check: Callable[[], bool], reply_func: Callable[[MessageText], Any]):
 		if not condition_check():
 			return
 		acquired = self.__update_lock.acquire(blocking=False)

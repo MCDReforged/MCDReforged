@@ -82,7 +82,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 				sub_command.on_mcdr_stop()
 
 		self.server_interface.register_event_listener(MCDRPluginEvents.MCDR_STOP, on_mcdr_stop)
-		on_load()
+		self.mcdr_server.task_executor.add_regular_task(on_load)
 
 	def __repr__(self):
 		# avoid using self.metadata here since it might not be initialized

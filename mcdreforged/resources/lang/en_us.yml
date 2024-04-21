@@ -413,6 +413,10 @@ server_interface:
     failed: 'Fail to read config file, using default config: {0}'
     succeed: Config file loaded
     key_missed: Found missing config key "{0}", using default value "{1}"
+plugin_catalogue_meta_registry:
+  load_cached_failed: 'Loading cached plugin catalogue meta from {0} failed: {1}'
+  load_cached_success: Loaded plugin catalogue meta from cache file (fetched at {0})
+  background_fetcher_disabled: Background plugin catalogue meta fetcher disabled
 
 # ======================== misc ========================
 

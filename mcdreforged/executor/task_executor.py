@@ -1,7 +1,8 @@
 import collections
+import dataclasses
 import queue
 import time
-from typing import Callable, Any, Optional, Deque, NamedTuple, TYPE_CHECKING
+from typing import Callable, Any, Optional, Deque, TYPE_CHECKING
 
 from typing_extensions import override
 
@@ -11,7 +12,8 @@ from mcdreforged.utils.future import WaitableCallable
 from mcdreforged.utils.logger import DebugOption
 
 
-class TaskData(NamedTuple):
+@dataclasses.dataclass(frozen=True)
+class TaskData:
 	func: Callable
 	vip: bool
 
