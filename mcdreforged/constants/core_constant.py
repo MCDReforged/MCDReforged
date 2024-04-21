@@ -20,6 +20,7 @@ VERSION_PYPI = '2.13.0a5'  # pythonic ver (1.2.3a4)
 GITHUB_URL = 'https://github.com/Fallen-Breath/MCDReforged'
 GITHUB_API_LATEST = 'https://api.mcdreforged.com/releases/latest'
 DOCUMENTATION_URL = 'https://docs.mcdreforged.com'
+PLUGIN_CATALOGUE_META_URL = 'https://meta.mcdreforged.com/everything_slim.json.xz'
 
 PACKAGE_PATH = Path(__file__).absolute().parent.parent  # path of the mcdreforged directory
 LOGGING_FILE = os.path.join('logs', '{}.log'.format(NAME_SHORT))

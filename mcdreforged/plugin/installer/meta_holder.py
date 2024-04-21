@@ -11,6 +11,7 @@ from typing import Optional, Dict, Callable, Any
 
 from typing_extensions import override
 
+from mcdreforged.constants import core_constant
 from mcdreforged.executor.background_thread_executor import BackgroundThreadExecutor
 from mcdreforged.plugin.installer.types import MetaRegistry, PluginData, ReleaseData, EmptyMetaRegistry
 from mcdreforged.utils import request_util
@@ -29,7 +30,7 @@ class CatalogueMetaRegistry(MetaRegistry):
 class CatalogueMetaRegistryHolder:
 	def __init__(self, *, meta_json_url: Optional[str] = None, meta_fetch_timeout: Optional[int] = None):
 		if meta_json_url is None:
-			meta_json_url = 'https://meta.mcdreforged.com/everything_slim.json.xz'
+			meta_json_url = core_constant.PLUGIN_CATALOGUE_META_URL
 		if meta_fetch_timeout is None:
 			meta_fetch_timeout = 10
 		self.meta_json_url = meta_json_url
