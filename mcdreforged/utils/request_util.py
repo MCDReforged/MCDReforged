@@ -1,5 +1,5 @@
 import threading
-from typing import Optional, Union, Tuple
+from typing import Optional, Union, Tuple, List, Iterable
 
 import requests
 
@@ -49,3 +49,13 @@ def get_buf(url: str, what: str, *, timeout: Optional[Union[float, Tuple[float, 
 			if len(buf) > max_size:
 				raise ValueError('body too large, read {}, max size {}'.format(len(buf), max_size))
 		return bytes(buf)
+
+
+def get_buf_multi(urls: Iterable[str], what: str, *, timeout: Optional[Union[float, Tuple[float, float]]] = None, max_size: Optional[int] = None):
+	errors: List[Exception] = []
+	for url in urls:
+		try:
+			return get_buf(url, what, timeout=timeout, max_size=max_size)
+		except Exception as e:
+			errors.append(e)
+	raise Exception('All attempts failed: {}'.format('; '.join(map(str, errors))))

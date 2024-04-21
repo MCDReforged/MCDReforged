@@ -4,7 +4,7 @@ MCDR update things
 import json
 import time
 from threading import Lock
-from typing import Callable, Any, Union, Optional, TYPE_CHECKING
+from typing import Callable, Any, Union, Optional, TYPE_CHECKING, List
 
 from typing_extensions import override
 
@@ -24,7 +24,7 @@ class UpdateHelper(BackgroundThreadExecutor):
 	def __init__(self, mcdr_server: 'MCDReforgedServer'):
 		super().__init__(mcdr_server.logger)
 		self.mcdr_server = mcdr_server
-		self.__api_fetcher = GithubApiFetcher(core_constant.GITHUB_API_LATEST)
+		self.__api_fetcher = GithubApiFetcher(core_constant.GITHUB_API_LATEST_URLS)
 		self.__update_lock = Lock()
 		self.__last_query_time = 0
 
@@ -84,11 +84,11 @@ class UpdateHelper(BackgroundThreadExecutor):
 
 
 class GithubApiFetcher:
-	def __init__(self, url: str):
-		self.url = url
+	def __init__(self, urls: List[str]):
+		self.urls = urls.copy()
 		self.__etag = 'dummy'
 		self.__cached_response: Optional[dict] = None
 
 	def fetch(self) -> Optional[dict]:
-		buf = request_util.get_buf(self.url, 'UpdateHelper', timeout=10, max_size=32 * 1024)
+		buf = request_util.get_buf_multi(self.urls, 'UpdateHelper', timeout=10, max_size=32 * 1024)
 		return json.loads(buf)
