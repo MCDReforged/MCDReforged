@@ -294,7 +294,7 @@ class PluginManager:
 				result.succeed(plugin)
 		return result
 
-	def __collect_and_load_new_plugins(self, filter_: Callable[[Path], bool], *, possible_paths: Optional[List[Path]] = None) -> SingleOperationResult:
+	def __collect_new_plugins(self, filter_: Callable[[Path], bool], *, possible_paths: Optional[List[Path]] = None) -> List[Path]:
 		"""
 		:param filter_: A str predicate function for testing if the plugin file path is acceptable
 		:param possible_paths: Optional. If you have already done self.__collect_possible_plugin_file_paths() before,
@@ -307,7 +307,15 @@ class PluginManager:
 		for file_path in possible_paths:
 			if not self.contains_plugin_file(file_path) and filter_(file_path):
 				plugin_paths.append(file_path)
-		return self.__load_given_new_plugins(plugin_paths)
+		return plugin_paths
+
+	def __collect_and_load_new_plugins(self, filter_: Callable[[Path], bool], *, possible_paths: Optional[List[Path]] = None) -> SingleOperationResult:
+		"""
+		:param filter_: A str predicate function for testing if the plugin file path is acceptable
+		:param possible_paths: Optional. If you have already done self.__collect_possible_plugin_file_paths() before,
+		you can pass the previous result as the argument to reuse that, so less time cost
+		"""
+		return self.__load_given_new_plugins(self.__collect_new_plugins(filter_, possible_paths=possible_paths))
 
 	def __collect_regular_plugins(
 			self, select_filter: Callable[[RegularPlugin], bool], specific: Optional[RegularPlugin],
@@ -404,7 +412,7 @@ class PluginManager:
 	# New sync operations will be queued and delayed
 	#   see :meth:`__run_manipulation`
 
-	def __finalizate_plugin_manipulation(
+	def __finalize_plugin_manipulation(
 			self,
 			load_result: Optional[SingleOperationResult] = None,
 			unload_result: Optional[SingleOperationResult] = None,
@@ -496,7 +504,7 @@ class PluginManager:
 		unload_result = self.__unload_given_plugins(lambda plugin: not plugin.plugin_exists() or plugin.plugin_path not in possible_paths_set)
 		load_result = self.__collect_and_load_new_plugins(lambda fp: True, possible_paths=possible_paths)
 		reload_result = self.__reload_ready_plugins(reload_filter)
-		return self.__finalizate_plugin_manipulation(load_result, unload_result, reload_result)
+		return self.__finalize_plugin_manipulation(load_result, unload_result, reload_result)
 
 	# --------------
 	#   Interfaces
@@ -542,7 +550,6 @@ class PluginManager:
 			disable: Optional[List[RegularPlugin]] = None,
 			entered_callback: Optional[Callable[[], Any]] = None,
 	) -> Future[PluginOperationResult]:
-		# TODO: make it the only entrance of plugin manipulation
 		to_load_paths: List[Path] = (load or []).copy()
 		to_unload_plugins: List[RegularPlugin] = (unload or []) + (disable or [])
 		to_reload_plugins: List[RegularPlugin] = (reload or []).copy()
@@ -567,13 +574,18 @@ class PluginManager:
 		to_unload_plugin_ids = {p.get_id() for p in to_unload_plugins}
 		to_reload_plugin_ids = {p.get_id() for p in to_reload_plugins}
 
+		if len(to_unload_plugin_ids) + len(to_load_paths) + len(to_reload_plugin_ids) == 0:
+			if entered_callback is not None:
+				entered_callback()
+			return Future.completed(PluginOperationResult.of_empty())
+
 		def manipulate_action():
 			if entered_callback is not None:
 				entered_callback()
 			unload_result = self.__unload_given_plugins(lambda plg: plg.get_id() in to_unload_plugin_ids)
 			load_result = self.__load_given_new_plugins(to_load_paths)
 			reload_result = self.__reload_ready_plugins(lambda plg: plg.get_id() in to_reload_plugin_ids)
-			return self.__finalizate_plugin_manipulation(load_result, unload_result, reload_result)
+			return self.__finalize_plugin_manipulation(load_result, unload_result, reload_result)
 
 		def done_callback(_: PluginOperationResult):
 			for plg in (disable or []):
@@ -586,52 +598,35 @@ class PluginManager:
 		return future
 
 	def load_plugin(self, file_path: Path) -> Future[PluginOperationResult]:
-		def load_plugin_action() -> PluginOperationResult:
-			self.logger.info(self.mcdr_server.tr('plugin_manager.load_plugin.entered', file_path))
-			load_result = self.__collect_and_load_new_plugins(lambda fp: fp == file_path)
-			return self.__finalizate_plugin_manipulation(load_result=load_result)
-
 		class_util.check_type(file_path, Path)
-		return self.__run_manipulation(load_plugin_action)
+		return self.manipulate_plugins(
+			load=self.__collect_new_plugins(lambda fp: fp == file_path),
+			entered_callback=lambda: self.logger.info(self.mcdr_server.tr('plugin_manager.load_plugin.entered', file_path)),
+		)
 
 	def unload_plugin(self, plugin: RegularPlugin) -> Future[PluginOperationResult]:
-		def unload_plugin_action() -> PluginOperationResult:
-			self.logger.info(self.mcdr_server.tr('plugin_manager.unload_plugin.entered', plugin))
-			unload_result = self.__unload_given_plugins(lambda plg: True, specific=plugin)
-			return self.__finalizate_plugin_manipulation(unload_result=unload_result)
-
 		class_util.check_type(plugin, RegularPlugin)
-		return self.__run_manipulation(unload_plugin_action)
+		return self.manipulate_plugins(
+			unload=[plugin],
+			entered_callback=lambda: self.logger.info(self.mcdr_server.tr('plugin_manager.unload_plugin.entered', plugin)),
+		)
 
 	def reload_plugin(self, plugin: RegularPlugin) -> Future[PluginOperationResult]:
-		def reload_plugin_action() -> PluginOperationResult:
-			self.logger.info(self.mcdr_server.tr('plugin_manager.reload_plugin.entered', plugin))
-			reload_result = self.__reload_ready_plugins(lambda plg: True, specific=plugin)
-			return self.__finalizate_plugin_manipulation(reload_result=reload_result)
-
 		class_util.check_type(plugin, RegularPlugin)
-		return self.__run_manipulation(reload_plugin_action)
+		return self.manipulate_plugins(
+			reload=[plugin],
+			entered_callback=lambda: self.logger.info(self.mcdr_server.tr('plugin_manager.reload_plugin.entered', plugin)),
+		)
 
 	def enable_plugin(self, file_path: Path) -> Future[PluginOperationResult]:
-		class_util.check_type(file_path, str)
+		class_util.check_type(file_path, Path)
 		self.logger.info(self.mcdr_server.tr('plugin_manager.enable_plugin.entered', file_path))
-		new_file_path = file_path.parent / string_util.remove_suffix(file_path.name, plugin_constant.DISABLED_PLUGIN_FILE_SUFFIX)
-		if plugin_factory.is_disabled_plugin(file_path):
-			os.rename(file_path, new_file_path)
-			return self.load_plugin(new_file_path)
-		else:
-			return Future.completed(PluginOperationResult.of_empty())
+		return self.manipulate_plugins(enable=[file_path])
 
 	def disable_plugin(self, plugin: RegularPlugin) -> Future[PluginOperationResult]:
-		def done_callback(_: PluginOperationResult):
-			if plugin.plugin_exists():
-				disabled_path = plugin.plugin_path.parent / (plugin.plugin_path.name + plugin_constant.DISABLED_PLUGIN_FILE_SUFFIX)
-				os.rename(plugin.plugin_path, disabled_path)
-
+		class_util.check_type(plugin, RegularPlugin)
 		self.logger.info(self.mcdr_server.tr('plugin_manager.disable_plugin.entered', plugin))
-		future = self.unload_plugin(plugin)
-		future.add_done_callback(done_callback)
-		return future
+		return self.manipulate_plugins(disable=[plugin])
 
 	def refresh_all_plugins(self) -> Future[PluginOperationResult]:
 		def refresh_all_plugins_action() -> PluginOperationResult:
