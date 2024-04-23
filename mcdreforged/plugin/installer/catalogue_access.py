@@ -3,6 +3,8 @@ import operator
 from pathlib import Path
 from typing import Optional, List, Tuple
 
+from wcwidth import wcswidth
+
 from mcdreforged.minecraft.rtext.style import RColor
 from mcdreforged.minecraft.rtext.text import RText
 from mcdreforged.plugin.installer.downloader import ReleaseDownloader
@@ -29,11 +31,20 @@ class PluginCatalogueAccess:
 			else:
 				return s and keyword.lower() in s.lower()
 
-		na = RText('N/A', color=RColor.gray)
+		def na_or_width_limited(s: Optional[str], n: int) -> MessageText:
+			if s is None:
+				return RText('N/A', color=RColor.gray)
+			if n < 0:
+				return s
+			result = ''
+			for ch in s:
+				if wcswidth(new_s := result + ch) > n:
+					return RText(result) + RText('...', color=RColor.gray)
+				result = new_s
+			return result
+
 		rows = []
 		for plugin_id, plugin in meta.plugins.items():
-			version = plugin.latest_version or na
-
 			if keyword is not None:
 				score = (
 					check_keyword(plugin_id),
@@ -46,8 +57,10 @@ class PluginCatalogueAccess:
 				score = 0
 
 			rows.append((score, [
-				plugin_id, plugin.name or na,
-				version, plugin.description.get(replier.language, plugin.description.get(replier.DEFAULT_LANGUAGE, na))
+				plugin_id,
+				na_or_width_limited(plugin.name, 48),
+				na_or_width_limited(plugin.latest_version, 30),
+				na_or_width_limited(plugin.description.get(replier.language, plugin.description.get(replier.DEFAULT_LANGUAGE)), 256)
 			]))
 
 		rows.sort(key=operator.itemgetter(0), reverse=True)
