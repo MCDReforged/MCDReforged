@@ -279,7 +279,7 @@ mcdr_command:
           constraints_not_satisfied: 依赖约束无法满足
           not_packed_plugin: 非打包插件
       up_to_date:
-        what: '{0} 已是最新版的插件'
+        what: '{0} 个已是最新的插件'
       latest: '最新版本 {0}'
     freeze:
       name: 输出插件版本信息

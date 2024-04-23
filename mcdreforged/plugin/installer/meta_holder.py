@@ -40,16 +40,16 @@ class CatalogueMetaRegistryHolder:
 		self.meta_fetch_timeout = meta_fetch_timeout
 
 	def get_registry(self) -> MetaRegistry:
-		meta_json = self._get_meta_json()
+		meta_json = self._fetch_meta_json()
 		return self._load_meta_json(meta_json)
 
-	def _get_meta_json(self) -> dict:
-		max_size = 20 * 2 ** 20  # 20MiB limit. In 2024-03-14, the size is only 545KiB
+	def _fetch_meta_json(self) -> dict:
+		max_size = 20 * 2 ** 20  # 20MiB limit. In 2024-03-14, the uncompressed size is only 545KiB
 		buf = request_util.get_buf(self.meta_json_url, 'MetaFetcher', timeout=self.meta_fetch_timeout, max_size=max_size)
 
 		if self.meta_json_url.endswith('.gz'):
-			with gzip.GzipFile(fileobj=BytesIO(buf)) as gzipf:
-				content = gzipf.read(max_size + 1)
+			with gzip.GzipFile(fileobj=BytesIO(buf)) as gzip_f:
+				content = gzip_f.read(max_size + 1)
 		elif self.meta_json_url.endswith('.xz'):
 			content = lzma.LZMADecompressor().decompress(buf, max_size + 1)
 		else:
@@ -228,7 +228,7 @@ class PersistCatalogueMetaRegistryHolder(CatalogueMetaRegistryHolder):
 			start_time = now
 			start_callback(True)
 
-			meta_json = self._get_meta_json()
+			meta_json = self._fetch_meta_json()
 			meta = self._load_meta_json(meta_json)
 		except Exception as e:
 			(self.logger.exception if show_error_stacktrace else self.logger.error)('Catalogue meta registry fetch failed: {}'.format(e))

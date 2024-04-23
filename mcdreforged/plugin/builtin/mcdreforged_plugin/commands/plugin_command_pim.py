@@ -467,7 +467,7 @@ class PluginCommandPimExtension(SubCommand):
 					reason = self.tr('mcdr_command.pim.check_update.not_updatable.reason.constraints_not_satisfied')
 				else:
 					reason = self.tr('mcdr_command.pim.check_update.not_updatable.reason.not_packed_plugin')
-				# xxx 0.1.0 (latest 0.2.0): xxx reason
+				# xxx 0.1.0 (latest 0.2.0) -- yyy reason
 				source.reply(RTextList(
 					'  ',
 					RText(entry.id),
@@ -475,7 +475,7 @@ class PluginCommandPimExtension(SubCommand):
 					RText(entry.current_version),
 					' (',
 					self.tr('mcdr_command.pim.check_update.latest', diff_version(entry.current_version, entry.latest_version)),
-					'): ',
+					') -- ',
 					reason,
 				))
 			source.reply('')
