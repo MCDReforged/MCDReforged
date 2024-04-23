@@ -6,6 +6,7 @@ from logging import Logger
 from typing import Any, Tuple, Dict, Union, Optional, List
 
 from mcdreforged.constants import core_constant
+from mcdreforged.utils.logger import DebugOption
 from mcdreforged.utils.serializer import Serializable
 from mcdreforged.utils.yaml_data_storage import YamlDataStorage
 
@@ -34,7 +35,7 @@ class MCDReforgedConfig(Serializable):
 
 	# --------- Plugin Configuration ---------
 	plugin_directories: List[str] = ['plugins']
-	catalogue_meta_fetch_interval: int = 4 * 60 * 60  # every 4 hour
+	catalogue_meta_fetch_interval: int = 6 * 60 * 60  # every 6 hour
 	catalogue_meta_fetch_timeout: int = 15
 	catalogue_meta_url: Optional[str] = None
 	plugin_download_url: Optional[str] = None
@@ -55,7 +56,7 @@ class MCDReforgedConfig(Serializable):
 	handler_detection: bool = True
 
 	# --------- Debug Configuration ---------
-	debug: dict = {}
+	debug: dict = {o.name.lower(): False for o in DebugOption}
 
 	def is_debug_on(self) -> bool:
 		for value in self.debug:

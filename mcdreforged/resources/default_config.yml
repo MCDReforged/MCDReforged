@@ -76,11 +76,11 @@ plugin_directories:
 
 # The interval in seconds between each plugin catalogue meta fetch
 # Set to -1 to disable scheduled meta fetch
-catalogue_meta_fetch_interval: 3600
+catalogue_meta_fetch_interval: 21600
 
 
 # The timeout in seconds of the catalogue meta fetch
-catalogue_meta_fetch_timeout: 10
+catalogue_meta_fetch_timeout: 15
 
 
 # URL override of the plugin catalogue "everything.json" or "everything_slim.json"
