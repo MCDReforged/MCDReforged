@@ -41,7 +41,7 @@ jobs:
     - uses: actions/cache@v4
       with:
         path: ~/.cache/pip
-        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        key: "${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}"
         restore-keys: |
           ${{ runner.os }}-pip-
 
@@ -115,10 +115,15 @@ jobs:
         name: MCDReforged package distribution for ${{ github.sha }}
         path: dist/
 
-    - name: Report PyPI URLs
+    - name: Report
       run: |
         version=${{ steps.version.outputs.pypi_version }}
-        echo -e "## PyPI Package URLs\n" >> $GITHUB_STEP_SUMMARY
+        echo -e "## Version info\n" >> $GITHUB_STEP_SUMMARY
+        echo -e "- MCDR version: \`${{ steps.version.outputs.mcdr_version }}\`" >> $GITHUB_STEP_SUMMARY
+        echo -e "- PyPI version: \`${{ steps.version.outputs.pypi_version }}\`" >> $GITHUB_STEP_SUMMARY
+        echo -e "" >> $GITHUB_STEP_SUMMARY
+  
+        echo -e "## PyPI package urls\n" >> $GITHUB_STEP_SUMMARY
         if [ "$IS_RELEASE" = "true" ]; then
           echo -e "### PyPI\n" >> $GITHUB_STEP_SUMMARY
           echo -e "https://pypi.org/project/mcdreforged/${version}/\n" >> $GITHUB_STEP_SUMMARY
@@ -252,8 +257,21 @@ jobs:
         labels: ${{ steps.meta.outputs.labels }}
         build-args: |
           BASE_IMAGE_TAG=${{ steps.config.outputs.base_image_tag }}
-          MCDR_REQUIREMENT=${{ needs.pypi_upload.outputs.pypi_version }}
+          MCDR_VERSION_REQUIREMENT=${{ needs.pypi_upload.outputs.pypi_version }}
           PYPI_INDEX=${{ steps.config.outputs.pypi_simple }}
+
+    - name: Report image build information
+      run: |
+        echo -e "### Build args\n" >> $GITHUB_STEP_SUMMARY
+        echo -e "- BASE_IMAGE_TAG: \`${{ steps.config.outputs.base_image_tag }}\`" >> $GITHUB_STEP_SUMMARY
+        echo -e "- MCDR_VERSION_REQUIREMENT: \`${{ needs.pypi_upload.outputs.pypi_version }}\`" >> $GITHUB_STEP_SUMMARY
+        echo -e "- PYPI_INDEX: \`${{ steps.config.outputs.pypi_simple }}\`" >> $GITHUB_STEP_SUMMARY
+        echo -e "" >> $GITHUB_STEP_SUMMARY
+        
+        echo -e "### Image tags\n" >> $GITHUB_STEP_SUMMARY
+        echo -e "\`\`\`" >> $GITHUB_STEP_SUMMARY
+        echo -e "${{ steps.meta.outputs.tags }}" >> $GITHUB_STEP_SUMMARY
+        echo -e "\`\`\`" >> $GITHUB_STEP_SUMMARY
 
     - name: Prepare extended image build workflow arguments
       uses: actions/github-script@v7

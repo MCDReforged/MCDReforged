@@ -1,17 +1,17 @@
 ARG BASE_IMAGE_TAG=3.11
 FROM python:${BASE_IMAGE_TAG}
 
-ARG MCDR_REQUIREMENT=latest
+ARG MCDR_VERSION_REQUIREMENT=latest
 ARG PYPI_INDEX=https://pypi.org/simple
 
 RUN <<EOT
 set -eux
 export PIP_ROOT_USER_ACTION=ignore
 python3 -m pip install -U pip
-if [ "$MCDR_REQUIREMENT" = "latest" ]; then
+if [ "$MCDR_VERSION_REQUIREMENT" = "latest" ]; then
   pip3 install mcdreforged
 else
-  pip3 install "mcdreforged==${MCDR_REQUIREMENT}" -i "$PYPI_INDEX" --extra-index-url https://pypi.org/simple
+  pip3 install "mcdreforged==${MCDR_VERSION_REQUIREMENT}" -i "$PYPI_INDEX" --extra-index-url https://pypi.org/simple
 fi
 pip3 cache purge && rm -rf ~/.cache/
 EOT
