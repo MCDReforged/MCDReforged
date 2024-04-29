@@ -10,6 +10,7 @@ from typing_extensions import TypeGuard
 from mcdreforged.command.builder.nodes.basic import Literal
 from mcdreforged.info_reactor.info_filter import InfoFilter
 from mcdreforged.plugin.meta.metadata import Metadata
+from mcdreforged.plugin.meta.version import Version
 from mcdreforged.plugin.plugin_event import MCDREvent, EventListener, PluginEvent
 from mcdreforged.plugin.plugin_registry import PluginRegistry, HelpMessage
 from mcdreforged.utils.exception import IllegalCallError, IllegalStateError
@@ -56,6 +57,9 @@ class AbstractPlugin:
 
 	def get_id(self) -> str:
 		return self.get_metadata().id
+
+	def get_version(self) -> Version:
+		return self.get_metadata().version
 
 	def get_meta_name(self) -> str:
 		return self.get_metadata().name

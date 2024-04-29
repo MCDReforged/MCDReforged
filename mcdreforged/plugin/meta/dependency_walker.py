@@ -127,7 +127,7 @@ class DependencyWalker:
 			if plugin is None:
 				raise DependencyNotFound(self.__tr('dependency_walker.dependency_not_found', plugin_id))
 			plugin_name_display = plugin.get_name()
-			plugin_version = plugin.get_metadata().version
+			plugin_version = plugin.get_version()
 			plugin_dependencies = plugin.get_metadata().dependencies
 
 			if requirement is not None and isinstance(requirement, VersionRequirement) and not requirement.accept(plugin_version):

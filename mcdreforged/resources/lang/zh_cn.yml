@@ -296,14 +296,19 @@ mcdr_command:
       resolving_dependencies: 正在解析插件依赖 ...
       resolution:
         impossible: '插件依赖解析失败。无法满足的依赖项:'
-        impossible_requirements: '{0} 需要 {1}'
+        impossible_requirements: '{0} 依赖 {1}'
         error: '插件依赖解析出错: {0}'
+        source_reason:
+          user_input: 用户指定了 {0}
+          existing: 已安装插件 {0}@{1}
+          existing_pinned: 已安装插件 {0}@{1} (不可升级)
 
       cannot_change_not_packed: '已有的插件 {0} 的类型为 {1}，无法被重新安装。只有打包插件是可以被重新安装'
       nothing_to_install: 已安装的插件已满足所述需求，无需安装任何插件
       install_summary:
         plugin: '将被安装的插件 (新增 {new}, 修改 {change}, 总共 {total}):'
         python: 将要被安装的 Python 包
+        python_entry: '{0} (被 {1} 依赖)'
 
       dry_run_suffix: ' (试运行)'
       confirm_hint: '输入 {cmd_confirm} 以确认安装，或输入 {cmd_abort} 以终止安装'

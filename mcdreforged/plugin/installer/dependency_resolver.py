@@ -1,21 +1,23 @@
 import dataclasses
 import re
 import subprocess
-import sys
-from typing import List, NamedTuple, Union, Mapping, Iterator, Iterable, Sequence, Optional, Dict
+from typing import List, Union, Mapping, Iterator, Iterable, Sequence, Optional, Dict
 
 import resolvelib
 from resolvelib.resolvers import RequirementInformation
 from typing_extensions import override
 
+import sys
 from mcdreforged.plugin.installer.meta_holder import MetaRegistry
 from mcdreforged.plugin.installer.types import PluginId, PluginResolution, PackageRequirements
 from mcdreforged.plugin.meta.version import VersionRequirement, Version
 
 
-class PluginRequirement(NamedTuple):
+@dataclasses.dataclass(frozen=True)
+class PluginRequirement:
 	id: PluginId
 	requirement: VersionRequirement
+	preferred_version: Optional[Version] = None
 
 	@classmethod
 	def of(cls, req_str: str) -> 'PluginRequirement':
@@ -30,7 +32,8 @@ class PluginRequirement(NamedTuple):
 		return '{}{}'.format(self.id, self.requirement)
 
 
-class PluginCandidate(NamedTuple):
+@dataclasses.dataclass(frozen=True)
+class PluginCandidate:
 	id: PluginId
 	version: Version
 
@@ -106,12 +109,13 @@ class PluginMetaProvider(resolvelib.AbstractProvider):
 			return []
 
 		bad_versions = {c.version for c in incompatibilities.get(identifier, [])}
+		reqs: List[RT] = list(requirements.get(identifier, []))
 		candidates: List[CT] = []
 		for version, pvi in meta.versions.items():
 			def check() -> bool:
 				if version in bad_versions:
 					return False
-				for r in requirements.get(identifier, []):
+				for r in reqs:
 					if not r.requirement.accept(version):
 						return False
 				return True
@@ -119,7 +123,8 @@ class PluginMetaProvider(resolvelib.AbstractProvider):
 			if check():
 				candidates.append(PluginCandidate(identifier, version))
 
-		candidates.sort(key=lambda c: c.version, reverse=True)
+		preferred_versions = {r.preferred_version for r in reqs if r.preferred_version is not None}
+		candidates.sort(key=lambda c: (c.version in preferred_versions, c.version), reverse=True)
 		return candidates
 
 	@override
@@ -148,7 +153,7 @@ class PluginDependencyResolver:
 				)
 			self.__plugin_metas[plugin_id] = meta
 
-	def resolve(self, requirements: List[PluginRequirement], reporter: Optional[resolvelib.BaseReporter] = None) -> Union[PluginResolution, resolvelib.ResolutionError]:
+	def resolve(self, requirements: Iterable[PluginRequirement], reporter: Optional[resolvelib.BaseReporter] = None) -> Union[PluginResolution, resolvelib.ResolutionError]:
 		if reporter is None:
 			reporter = resolvelib.BaseReporter()
 		provider = PluginMetaProvider(self.__plugin_metas)

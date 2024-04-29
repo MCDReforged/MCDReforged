@@ -298,12 +298,17 @@ mcdr_command:
         impossible: 'Resolution impossible. Unsatisfied requirements:'
         impossible_requirements: '{0} requires {1}'
         error: 'Resolution error: {0}'
+        source_reason:
+          user_input: User specified {0}
+          existing: Already installed {0}@{1}
+          existing_pinned: Already installed {0}@{1} (pinned)
 
       cannot_change_not_packed: 'Existing plugin {0} is {1} and cannot be reinstalled. Only packed plugin is supported'
       nothing_to_install: Nothing needs to be installed
       install_summary:
         plugin: 'Plugins to install (new {new}, change {change}, total {total}):'
         python: Python packages to install
+        python_entry: '{0} (request by {1})'
 
       dry_run_suffix: ' (dry-run)'
       confirm_hint: 'Entry {cmd_confirm} to confirm installation, or {cmd_abort} to abort'

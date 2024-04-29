@@ -23,7 +23,7 @@ from mcdreforged.minecraft.rtext.style import RColor, RAction, RStyle
 from mcdreforged.minecraft.rtext.text import RTextBase, RText, RTextList
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.sub_command import SubCommand, SubCommandEvent
 from mcdreforged.plugin.installer.catalogue_access import PluginCatalogueAccess
-from mcdreforged.plugin.installer.dependency_resolver import PluginRequirement, PluginDependencyResolver, PackageRequirementResolver
+from mcdreforged.plugin.installer.dependency_resolver import PluginRequirement, PluginDependencyResolver, PackageRequirementResolver, PluginCandidate
 from mcdreforged.plugin.installer.downloader import ReleaseDownloader
 from mcdreforged.plugin.installer.meta_holder import PersistCatalogueMetaRegistryHolder
 from mcdreforged.plugin.installer.types import MetaRegistry, PluginData, ReleaseData, MergedMetaRegistry
@@ -87,15 +87,22 @@ class LocalMetaRegistry(MetaRegistry):
 		return result
 
 
-def as_requirement(plugin: 'AbstractPlugin', op: Optional[str]) -> PluginRequirement:
+def as_requirement(plugin: 'AbstractPlugin', op: Optional[str], **kwargs) -> PluginRequirement:
 	if op is not None:
-		req = op + str(plugin.get_metadata().version)
+		req = op + str(plugin.get_version())
 	else:
 		req = ''
 	return PluginRequirement(
 		id=plugin.get_id(),
-		requirement=VersionRequirement(req)
+		requirement=VersionRequirement(req),
+		**kwargs,
 	)
+
+
+def is_plugin_updatable(plg: 'AbstractPlugin') -> bool:
+	"""i.e. plugin is a packed plugin"""
+	from mcdreforged.plugin.type.packed_plugin import PackedPlugin
+	return isinstance(plg, PackedPlugin)
 
 
 def sanitize_filename(filename: str) -> str:
@@ -216,9 +223,10 @@ class PluginCommandPimExtension(SubCommand):
 				Literal({'-t', '--target'}).
 				then(QuotableText('target').redirects(node))
 			)
-			node.then(CountingLiteral({'-u', '--update'}, 'update').redirects(node))
+			node.then(CountingLiteral({'-u', '--upgrade'}, 'upgrade').redirects(node))
 			node.then(CountingLiteral('--dry-run', 'dry_run').redirects(node))
 			node.then(CountingLiteral({'-y', '--yes'}, 'skip_confirm').redirects(node))
+			node.then(CountingLiteral('--no-deps', 'no_deps').redirects(node))  # TODO
 			return node
 
 		def freeze_node() -> Literal:
@@ -297,13 +305,17 @@ class PluginCommandPimExtension(SubCommand):
 		def start_fetch_callback(no_skip: bool):
 			if no_skip:
 				source.reply(self.tr('mcdr_command.pim.common.fetch_start'))
+			nonlocal has_start_fetch
+			has_start_fetch = has_start_fetch
 
 		def done_callback(e: Optional[Exception]):
 			if e is None:
-				source.reply(self.tr('mcdr_command.pim.common.fetch_done'))
+				if has_start_fetch:
+					source.reply(self.tr('mcdr_command.pim.common.fetch_done'))
 			else:
 				source.reply(self.tr('mcdr_command.pim.common.fetch_failed', e))
 
+		has_start_fetch = False
 		return self.__meta_holder.get_registry_blocked(ignore_ttl=ignore_ttl, start_callback=start_fetch_callback, done_callback=done_callback)
 
 	def __handle_duplicated_input(self, source: CommandSource, context: CommandContext, op_func: callable, op_key: str, op_thread: Optional[threading.Thread]):
@@ -390,13 +402,13 @@ class PluginCommandPimExtension(SubCommand):
 				continue
 
 			is_packed_plugin = isinstance(plugin, PackedPlugin)
-			current_version = plugin.get_metadata().version
+			current_version = plugin.get_version()
 			latest_version = cata_meta.plugins[plugin_id].latest_version_parsed if plugin_id in cata_meta.plugins else None
 			if latest_version is not None:
 				latest_version = max(latest_version, current_version)
 			entry = UpdateEntry(
 				id=plugin_id,
-				current_version=plugin.get_metadata().version,
+				current_version=plugin.get_version(),
 				update_version=version,
 				latest_version=latest_version,
 				is_packed_plugin=is_packed_plugin,
@@ -507,7 +519,7 @@ class PluginCommandPimExtension(SubCommand):
 			source.reply(self.tr('mcdr_command.pim.freeze.freezing_installed', len(plugins)))
 
 		for plugin in plugins:
-			source.reply('{}=={}'.format(plugin.get_id(), plugin.get_metadata().version))
+			source.reply('{}=={}'.format(plugin.get_id(), plugin.get_version()))
 
 	def cmd_refresh_meta(self, source: CommandSource, context: CommandContext):
 		self.__get_cata_meta(source, ignore_ttl=True)
@@ -535,7 +547,7 @@ class PluginCommandPimExtension(SubCommand):
 			else:
 				source.reply(self.tr('mcdr_command.pim.install.invalid_target', default_target_path))
 
-		do_update = context.get('update', 0) > 0
+		do_upgrade: bool = context.get('upgrade', 0) > 0
 		dry_run = context.get('dry_run', 0) > 0
 		skip_confirm = context.get('skip_confirm', 0) > 0
 
@@ -543,9 +555,21 @@ class PluginCommandPimExtension(SubCommand):
 
 		from mcdreforged.plugin.type.packed_plugin import PackedPlugin
 
-		def add_requirement(plg: 'AbstractPlugin', op: str):
-			plugin_requirements.append(as_requirement(plg, op))
-		plugin_requirements: List[PluginRequirement] = []
+		class RequirementSource(enum.Enum):
+			user_input = enum.auto()
+			existing = enum.auto()
+			existing_pinned = enum.auto()
+
+		def add_plugin_requirement(req_: PluginRequirement, req_src_: RequirementSource):
+			plugin_requirements[req_] = req_src_
+
+		def add_implicit_plugin_requirement(plg: 'AbstractPlugin', preferred_version: Optional[Version]):
+			if is_plugin_updatable(plg):
+				add_plugin_requirement(as_requirement(plg, '>=', preferred_version=preferred_version), RequirementSource.existing)
+			else:
+				add_plugin_requirement(as_requirement(plg, '==', preferred_version=preferred_version), RequirementSource.existing_pinned)
+
+		plugin_requirements: Dict[PluginRequirement, RequirementSource] = {}
 
 		input_requirements: List[PluginRequirement] = []
 		for s in input_requirement_strings:
@@ -557,30 +581,31 @@ class PluginCommandPimExtension(SubCommand):
 					return
 		if '*' in input_requirement_strings:
 			for plugin in self.plugin_manager.get_regular_plugins():
-				if isinstance(plugin, PackedPlugin):
+				if is_plugin_updatable(plugin):
 					input_requirements.append(as_requirement(plugin, None))
+
 		input_requirements = misc_util.unique_list(input_requirements)
+		input_plugin_ids = {req.id for req in input_requirements}
 		for req in input_requirements:
 			if (plugin := self.plugin_manager.get_plugin_from_id(req.id)) is None:
-				plugin_requirements.append(req)
-			else:
-				if plugin.is_permanent():
-					source.reply(self.tr('mcdr_command.pim.install.cannot_install_permanent', plugin.get_id()))
-					return
-				if req.requirement.has_criterion():
-					plugin_requirements.append(req)
-				else:
-					# pin unless upgrade
-					if do_update:
-						add_requirement(plugin, '>=')
-					else:
-						add_requirement(plugin, '==')
+				add_plugin_requirement(req, RequirementSource.user_input)
+				continue
 
-		input_plugin_ids = {req.id for req in input_requirements}
+			if plugin.is_permanent():
+				source.reply(self.tr('mcdr_command.pim.install.cannot_install_permanent', plugin.get_id()))
+				return
+
+			# update installed plugin only when necessary, if do_upgrade is not provided
+			pv = None if do_upgrade else plugin.get_version()
+			if req.requirement.has_criterion():
+				add_plugin_requirement(PluginRequirement(req.id, req.requirement, preferred_version=pv), RequirementSource.user_input)
+			else:
+				add_implicit_plugin_requirement(plugin, pv)
+
 		for plugin in self.plugin_manager.get_all_plugins():
 			if plugin.get_id() not in input_plugin_ids:
-				# pin for unselected plugins
-				add_requirement(plugin, '==')
+				# update installed plugin only when necessary
+				add_implicit_plugin_requirement(plugin, plugin.get_version())
 
 		self.log_debug('Generated plugin requirements:')
 		for req in plugin_requirements:
@@ -588,18 +613,35 @@ class PluginCommandPimExtension(SubCommand):
 
 		# ------------------- Resolve -------------------
 
-		source.reply(self.tr('mcdr_command.pim.install.resolving_dependencies'))
-
 		cata_meta = self.__get_cata_meta(source)
+
+		source.reply(self.tr('mcdr_command.pim.install.resolving_dependencies'))
 		plugin_resolver = PluginDependencyResolver(MergedMetaRegistry(cata_meta, LocalMetaRegistry(self.plugin_manager)))
-		result = plugin_resolver.resolve(plugin_requirements)
+		result = plugin_resolver.resolve(plugin_requirements.keys())
 
 		if isinstance(result, Exception):
 			err = result
 			if isinstance(err, resolvelib.ResolutionImpossible):
 				source.reply(self.tr('mcdr_command.pim.install.resolution.impossible'))
+				source.reply('')
+				showed_causes = set()
 				for cause in err.causes:
-					source.reply('  ' + self.tr('mcdr_command.pim.install.resolution.impossible_requirements', cause.parent, cause.requirement))
+					if cause in showed_causes:
+						continue
+					showed_causes.add(cause)
+					cause_req: PluginRequirement = cause.requirement
+					req_src = plugin_requirements.get(cause_req)
+					if cause.parent is not None or req_src is None:
+						source.reply('  ' + self.tr('mcdr_command.pim.install.resolution.impossible_requirements', cause.parent, cause_req))
+					else:
+						args = ()
+						if req_src == RequirementSource.user_input:
+							args = (cause_req,)
+						elif req_src in [RequirementSource.existing, RequirementSource.existing_pinned]:
+							plugin = self.plugin_manager.get_plugin_from_id(cause_req.id)
+							args = (plugin.get_id(), plugin.get_version())
+						source.reply('  ' + self.tr('mcdr_command.pim.install.resolution.source_reason.' + req_src.name, *args))
+				source.reply('')
 			else:
 				source.reply(self.tr('mcdr_command.pim.install.resolution.error', err))
 			return
@@ -618,11 +660,11 @@ class PluginCommandPimExtension(SubCommand):
 
 		# collect to_install
 		to_install: Dict[str, ToInstallData] = {}
-		package_requirements: List[str] = []
+		package_requirements: Dict[str, PluginCandidate] = {}   # req -> candidate
 		for plugin_id, version in resolution.items():
 			plugin = self.plugin_manager.get_plugin_from_id(plugin_id)
 			if plugin is not None:
-				old_version = plugin.get_metadata().version
+				old_version = plugin.get_version()
 			else:
 				old_version = None
 			if old_version != version:
@@ -644,9 +686,9 @@ class PluginCommandPimExtension(SubCommand):
 				)
 				for req in release.requirements:
 					if req.lstrip().startswith('mcdreforged'):
-						self.logger.info('Skipping mcdreforged requirement in requirements of plugin {}'.format(plugin_id))
+						self.log_debug('Skipping mcdreforged requirement in requirements of plugin {}'.format(plugin_id))
 					else:
-						package_requirements.append(req)
+						package_requirements[req] = PluginCandidate(plugin_id, version)
 
 		if len(to_install) == 0:
 			source.reply(self.tr('mcdr_command.pim.install.nothing_to_install'))
@@ -664,10 +706,10 @@ class PluginCommandPimExtension(SubCommand):
 			source.reply('  {}: {} -> {}'.format(plugin_id, data.old_version or RText('N/A', RColor.dark_gray), data.version))
 		if len(package_requirements) > 0:
 			source.reply(self.tr('mcdr_command.pim.install.install_summary.python'))
-			for req in sorted(package_requirements):
-				source.reply('  {}'.format(req))
+			for req in sorted(package_requirements.keys()):
+				source.reply('  ' + self.tr('mcdr_command.pim.install.install_summary.python_entry', req, package_requirements[req]))
 
-		package_resolver = PackageRequirementResolver(package_requirements)
+		package_resolver = PackageRequirementResolver(list(package_requirements.keys()))
 		# XXX: verify python package feasibility
 
 		# ------------------- Install -------------------
