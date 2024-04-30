@@ -1,13 +1,13 @@
 import os
 import shlex
 import subprocess
-import sys
 import tempfile
 from argparse import ArgumentParser, Namespace
 from typing import Callable
 from typing import Optional, List
 from zipfile import ZipFile
 
+import sys
 from mcdreforged.constants import plugin_constant
 from mcdreforged.plugin.installer.catalogue_access import PluginCatalogueAccess
 from mcdreforged.plugin.installer.meta_holder import CatalogueMetaRegistryHolder
@@ -22,10 +22,9 @@ def create(parser_factory: Callable[..., ArgumentParser]) -> ArgumentParser:
 	parser_list = subparsers.add_parser('browse', help='Browse plugins in the official plugin catalogue')
 	parser_list.add_argument('keyword', nargs='?', default=None, help='Search keyword to filter the plugins')
 
-	parser_download = subparsers.add_parser('download', help='Download given plugins. By default, no dependency resolution will be made')
+	parser_download = subparsers.add_parser('download', help='Download given plugins. No dependency resolution will be made')
 	parser_download.add_argument('plugin_ids', nargs='+', help='Plugin IDs to be downloaded')
 	parser_download.add_argument('-o', '--output', default='.', help='Path to store the downloaded plugins')
-	parser_download.add_argument('-d', '--dependencies', action='store_true', help='If dependencies of the given plugins should also be downloaded')
 
 	parser_pipi = subparsers.add_parser('pipi', help='Call "pip install" with the requirements.txt file in the given packed plugin to install Python packages')
 	parser_pipi.add_argument('plugin_paths', nargs='+', help='The packed plugin files to be processed')
@@ -67,7 +66,6 @@ def cmd_browse(replier: Replier, keyword: str):
 
 def cmd_download(replier: Replier, plugin_reqs: List[str], output_dir: str):
 	meta = __fetch_meta(replier)
-	# TODO: resolve dependencies plugin_reqs -> plugin_ids
 	PluginCatalogueAccess.download_plugin(meta=meta, replier=replier, plugin_ids=plugin_reqs, target_dir=output_dir)
 
 

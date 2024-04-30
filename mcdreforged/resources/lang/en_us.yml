@@ -253,13 +253,23 @@ mcdr_command:
       fetch_failed: 'Plugin catalogue meta registry fetch failed: {0}'
     browse:
       name: Browse plugins
-      listing: Listing catalogue plugins
-      listing_keyed: Listing catalogue plugins with keyword "{0}"
-      title:
-        id: ID
-        name: Name
-        version: Version
-        description: Description
+      single:
+        id: 'ID: {0}'
+        name: 'Name: {0}'
+        description: 'Description: {0}'
+        repository: 'Repository: {0}'
+        latest_version: 'Latest version: {0} (created at {1})'
+        releases: 'Release list ({0}x):'
+        version: 'Version: {0}'
+        date: 'Released date: {0}'
+        url: 'URL: {0}'
+      all:
+        keyword: 'Keyword: {0}'
+        title:
+          id: ID
+          name: Name
+          version: Version
+          description: Description
     check_update:
       name: Check plugin update
       dependency_resolution_failed: 'Dependency resolution failed: {0}'

@@ -253,13 +253,23 @@ mcdr_command:
       fetch_failed: '插件仓库元数据更新失败: {0}'
     browse:
       name: 浏览插件
-      listing: 正在列出插件仓库中的插件
-      listing_keyed: '正在列出插件仓库中的插件，关键字: "{0}"'
-      title:
-        id: ID
-        name: 插件名
-        version: 版本
-        description: 描述
+      single:
+        id: 'ID: {0}'
+        name: '插件名: {0}'
+        description: '描述: {0}'
+        repository: '仓库: {0}'
+        latest_version: '最新版本: {0} (发布于 {1})'
+        releases: '发行版列表 ({0}x):'
+        version: '版本: {0}'
+        date: '发布日期: {0}'
+        url: '链接: {0}'
+      all:
+        keyword: '关键字: {0}'
+        title:
+          id: ID
+          name: 插件名
+          version: 版本
+          description: 描述
     check_update:
       name: 检查插件更新
       dependency_resolution_failed: '依赖解析失败: {0}'

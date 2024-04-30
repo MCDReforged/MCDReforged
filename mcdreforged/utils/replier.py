@@ -9,11 +9,9 @@ if typing.TYPE_CHECKING:
 
 
 class Replier(ABC):
-	DEFAULT_LANGUAGE = core_constant.DEFAULT_LANGUAGE
-
 	@property
 	def language(self) -> str:
-		return self.DEFAULT_LANGUAGE
+		return core_constant.DEFAULT_LANGUAGE
 
 	@abstractmethod
 	def reply(self, message: MessageText):
