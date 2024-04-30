@@ -1,4 +1,5 @@
 import dataclasses
+import datetime
 import enum
 import functools
 import logging
@@ -8,7 +9,7 @@ import shutil
 import subprocess
 import threading
 from pathlib import Path
-from typing import Optional, List, TYPE_CHECKING, Dict
+from typing import Optional, List, TYPE_CHECKING, Dict, Any
 
 import resolvelib
 from typing_extensions import override, deprecated
@@ -66,13 +67,16 @@ class LocalMetaRegistry(MetaRegistry):
 			result[meta.id] = PluginData(
 				id=meta.id,
 				name=meta.name,
-				repos_owner='',
-				repos_name='',
+				repos_url='*local*',
+				repos_owner='*local*',
+				repos_name='*local*',
 				latest_version=version,
 				description=description,
 				releases={version: LocalReleaseData(
 					version=version,
 					tag_name='',
+					url='',
+					created_at=datetime.datetime.now(),
 					dependencies={},
 					requirements=[],
 					asset_id=0,
@@ -109,8 +113,8 @@ def sanitize_filename(filename: str) -> str:
 	return re.sub(r'[\\/*?"<>|:]', '_', filename.strip())
 
 
-def mkcmd(s: str) -> RTextBase:
-	return RText(s, color=RColor.gray).c(RAction.suggest_command, s)
+def mkcmd(s: str, run: bool = False) -> RTextBase:
+	return RText(s, color=RColor.gray).c(RAction.run_command if run else RAction.suggest_command, s)
 
 
 @dataclasses.dataclass
@@ -248,6 +252,14 @@ class PluginCommandPimExtension(SubCommand):
 			node = Literal('browse')
 			node.runs(self.cmd_browse_catalogue)
 			node.then(QuotableText('keyword').runs(self.cmd_browse_catalogue))
+			node.then(
+				Literal({'-i', '--id'}).
+				then(
+					QuotableText('plugin_id').
+					suggests(lambda: self.__meta_holder.get_registry().plugins.keys()).
+					redirects(node)
+				)
+			)
 			return node
 
 		def check_update_node() -> Literal:
@@ -342,25 +354,79 @@ class PluginCommandPimExtension(SubCommand):
 
 	plugin_installer_guard = async_operation(op_holder=current_operation, skip_callback=__handle_duplicated_input, thread_name='PluginInstaller')
 
+	def __browse_cmd(self, plugin_id: str):
+		return (
+			RText(plugin_id).
+			h(self.tr('mcdr_command.pim.common.browse_cmd')).
+			c(RAction.run_command, '{} plugin browse --id {}'.format(self.control_command_prefix, plugin_id))
+		)
+
 	@plugin_installer_guard('browse')
 	def cmd_browse_catalogue(self, source: CommandSource, context: CommandContext):
-		keyword = context.get('keyword')
-		if keyword is not None:
-			source.reply(self.tr('mcdr_command.pim.browse.listing_keyed', keyword))
-		else:
-			source.reply(self.tr('mcdr_command.pim.browse.listing'))
+		cata_meta = self.__get_cata_meta(source)
 
-		PluginCatalogueAccess.list_plugin(
-			meta=self.__get_cata_meta(source),
-			replier=CommandSourceReplier(source),
-			keyword=keyword,
-			table_header=(
-				self.tr('mcdr_command.pim.browse.title.id'),
-				self.tr('mcdr_command.pim.browse.title.name'),
-				self.tr('mcdr_command.pim.browse.title.version'),
-				self.tr('mcdr_command.pim.browse.title.description'),
-			),
-		)
+		def browse_one():
+			plugin_data = cata_meta.plugins.get(plugin_id)
+			if plugin_data is None:
+				source.reply('Plugin with id {} does not exist in the catalogue'.format(plugin_id))
+				return
+
+			def mkurl(s: Any, url: str) -> RTextBase:
+				return RText(s, color=RColor.blue, styles=RStyle.underlined).c(RAction.open_url, url)
+
+			na = RText('N/A', color=RColor.gray)
+			source.reply(self.tr('mcdr_command.pim.browse.single.id', plugin_data.id))
+			source.reply(self.tr('mcdr_command.pim.browse.single.name', plugin_data.name or na))
+			source.reply(self.tr('mcdr_command.pim.browse.single.description', plugin_data.description_for(source.get_preference().language) or na))
+			source.reply(self.tr('mcdr_command.pim.browse.single.repository', mkurl(f'{plugin_data.repos_owner}/{plugin_data.repos_name}', plugin_data.repos_url).h(plugin_data.repos_url)))
+
+			if len(plugin_data.releases) > 0 and plugin_data.latest_version is not None:
+				latest = plugin_data.releases[plugin_data.latest_version]
+				source.reply(self.tr('mcdr_command.pim.browse.single.latest_version', latest.version, latest.created_at.strftime('%Y-%m-%d %H:%M:%S')))
+				versions = []
+				for version, release in plugin_data.releases.items():
+					versions.append(mkurl(version, release.url).h(RTextBase.join('\n', [
+						self.tr('mcdr_command.pim.browse.single.version', version),
+						self.tr('mcdr_command.pim.browse.single.date', release.created_at.strftime('%Y-%m-%d %H:%M:%S')),
+						self.tr('mcdr_command.pim.browse.single.url', release.url),
+					])))
+
+				source.reply(self.tr('mcdr_command.pim.browse.single.releases', len(plugin_data.releases)))
+				for i in range(0, len(versions), 10):
+					line = RTextBase.join(', ', [versions[j] for j in range(i, min(i + 10, len(versions)))])
+					source.reply(line)
+
+		def browse_all():
+			keyword = context.get('keyword')
+			if keyword is not None:
+				source.reply(self.tr('mcdr_command.pim.browse.all.keyword', keyword))
+
+			if source.is_player or True:
+				# table does not display well in mc chat hud
+				for plg in PluginCatalogueAccess.filter_sort(cata_meta.plugins.values(), keyword):
+					source.reply(RTextList(
+						self.__browse_cmd(plg.id).set_color(RColor.yellow).set_styles(RStyle.bold).h(plg.name),
+						RText(': ', RColor.gray),
+						plg.description_for(source.get_preference().language)
+					))
+			else:
+				with source.preferred_language_context():  # required for table formatting
+					PluginCatalogueAccess.list_plugin(
+						meta=cata_meta,
+						replier=CommandSourceReplier(source),
+						keyword=keyword,
+						table_header=(
+							self.tr('mcdr_command.pim.browse.all.title.id'),
+							self.tr('mcdr_command.pim.browse.all.title.name'),
+							self.tr('mcdr_command.pim.browse.all.title.version'),
+							self.tr('mcdr_command.pim.browse.all.title.description'),
+						),
+					)
+
+		if (plugin_id := context.get('plugin_id')) is not None:
+			browse_one()
+		else:
+			browse_all()
 
 	@plugin_installer_guard('check_update')
 	def cmd_check_update(self, source: CommandSource, context: CommandContext):
@@ -375,8 +441,8 @@ class PluginCommandPimExtension(SubCommand):
 			plugins = self.plugin_manager.get_all_plugins()
 
 		plugin_requirements = [as_requirement(plugin, op='>=') for plugin in plugins]
-		cata_meta = self.__get_cata_meta(source)
-		resolver = PluginDependencyResolver(MergedMetaRegistry(cata_meta, LocalMetaRegistry(self.plugin_manager)))
+		cata_meta = MergedMetaRegistry(self.__get_cata_meta(source), LocalMetaRegistry(self.plugin_manager))
+		resolver = PluginDependencyResolver(cata_meta)
 		resolution = resolver.resolve(plugin_requirements)
 		if isinstance(resolution, Exception):
 			source.reply(self.tr('mcdr_command.pim.check_update.dependency_resolution_failed', resolution).set_color(RColor.red))
@@ -409,7 +475,7 @@ class PluginCommandPimExtension(SubCommand):
 
 			is_packed_plugin = isinstance(plugin, PackedPlugin)
 			current_version = plugin.get_version()
-			latest_version = cata_meta.plugins[plugin_id].latest_version_parsed if plugin_id in cata_meta.plugins else None
+			latest_version = cata_meta[plugin_id].latest_version_parsed if plugin_id in cata_meta else None
 			if latest_version is not None:
 				latest_version = max(latest_version, current_version)
 			entry = UpdateEntry(
@@ -462,7 +528,7 @@ class PluginCommandPimExtension(SubCommand):
 				# xxx 0.1.0 -> 0.2.0 (latest: 0.3.0)
 				texts = RTextList(
 					'  ',
-					RText(entry.id),
+					self.__browse_cmd(entry.id),
 					' ',
 					RText(entry.current_version),
 					RText(' -> ', RColor.gray),
@@ -488,7 +554,7 @@ class PluginCommandPimExtension(SubCommand):
 				# xxx 0.1.0 (latest 0.2.0) -- yyy reason
 				source.reply(RTextList(
 					'  ',
-					RText(entry.id),
+					self.__browse_cmd(entry.id),
 					' ',
 					RText(entry.current_version),
 					' (',
@@ -628,11 +694,11 @@ class PluginCommandPimExtension(SubCommand):
 
 		# ------------------- Resolve -------------------
 
-		cata_meta = self.__get_cata_meta(source)
+		cata_meta = MergedMetaRegistry(self.__get_cata_meta(source), LocalMetaRegistry(self.plugin_manager))
 
 		def step_resolve():
 			source.reply(self.tr('mcdr_command.pim.install.resolving_dependencies'))
-			plugin_resolver = PluginDependencyResolver(MergedMetaRegistry(cata_meta, LocalMetaRegistry(self.plugin_manager)))
+			plugin_resolver = PluginDependencyResolver(cata_meta)
 			result = plugin_resolver.resolve(
 				plugin_requirements.keys(),
 				args=PluginDependencyResolverArgs(ignore_dependencies=ctx.no_deps),
@@ -692,7 +758,7 @@ class PluginCommandPimExtension(SubCommand):
 						source.reply(self.tr('mcdr_command.pim.install.cannot_change_not_packed', plugin_id, type(plugin).__name__))
 						raise _OuterReturn()
 					try:
-						release = cata_meta.plugins[plugin_id].releases[str(version)]
+						release = cata_meta[plugin_id].releases[str(version)]
 					except KeyError:
 						raise AssertionError('unexpected to-install plugin {} version {}'.format(plugin_id, version))
 					if isinstance(release, LocalReleaseData):
@@ -724,7 +790,12 @@ class PluginCommandPimExtension(SubCommand):
 			source.reply(self.tr('mcdr_command.pim.install.install_summary.plugin', new=add_cnt, change=change_cnt, total=len(to_install)))
 			source.reply('')
 			for plugin_id, data in to_install.items():
-				source.reply('  {}: {} -> {}'.format(plugin_id, data.old_version or RText('N/A', RColor.dark_gray), data.version))
+				source.reply(RTextBase.format(
+					'  {}: {} -> {}',
+					self.__browse_cmd(plugin_id),
+					data.old_version or RText('N/A', RColor.dark_gray),
+					data.version,
+				))
 			source.reply('')
 
 			if len(package_requirements) > 0:
@@ -801,6 +872,10 @@ class PluginCommandPimExtension(SubCommand):
 						ReleaseDownloader(
 							data.release, download_temp_file, CommandSourceReplier(source),
 							download_url_override=self.mcdr_server.config.plugin_download_url,
+							download_url_override_kwargs={
+								'repos_owner': cata_meta[plugin_id].repos_owner,
+								'repos_name': cata_meta[plugin_id].repos_name,
+							},
 							download_timeout=self.mcdr_server.config.plugin_download_timeout,
 						).download()
 

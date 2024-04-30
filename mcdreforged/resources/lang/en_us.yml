@@ -251,6 +251,7 @@ mcdr_command:
       fetch_start: Fetching plugin catalogue meta registry
       fetch_done: Plugin catalogue meta registry fetch done
       fetch_failed: 'Plugin catalogue meta registry fetch failed: {0}'
+      browse_cmd: Click to display catalogue information for plugin {0}
     browse:
       name: Browse plugins
       single:

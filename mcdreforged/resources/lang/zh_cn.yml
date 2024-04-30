@@ -251,6 +251,7 @@ mcdr_command:
       fetch_start: 正在更新插件仓库元数据
       fetch_done: 已更新插件仓库元数据
       fetch_failed: '插件仓库元数据更新失败: {0}'
+      browse_cmd: 点击以展示插件 {0} 于插件仓库中的信息
     browse:
       name: 浏览插件
       single:

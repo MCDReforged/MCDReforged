@@ -15,6 +15,7 @@ class ReleaseDownloader:
 			*,
 			mkdir: bool = True,
 			download_url_override: Optional[str] = None,
+			download_url_override_kwargs: Optional[dict] = None,
 			download_timeout: Optional[float] = 15
 	):
 		self.release = release
@@ -22,17 +23,18 @@ class ReleaseDownloader:
 		self.replier = replier
 		self.mkdir = mkdir
 		self.download_url_override = download_url_override
+		self.download_url_override_kwargs: dict = download_url_override_kwargs or {}
 		self.download_timeout = download_timeout
 
 	def __download(self, url: str, show_progress: bool):
 		if self.download_url_override is not None:
 			download_url = self.download_url_override.format(
 				url=url,
-				repos_owner='',
-				repos_name='',
 				tag=self.release.tag_name,
 				asset_name=self.release.file_name,
 				asset_id=self.release.asset_id,
+				# for repos_owner, repos_name
+				**self.download_url_override_kwargs,
 			)
 		else:
 			download_url = url
@@ -80,7 +82,7 @@ class ReleaseDownloader:
 		urls = [
 			self.release.file_url,
 			self.release.file_url,
-			'https://mirror.ghproxy.com/' + self.release.file_url,
+			'https://mirror.ghproxy.com/' + self.release.file_url,  # TODO: dont hardcode this
 		]
 		for i, url in enumerate(urls):
 			try:

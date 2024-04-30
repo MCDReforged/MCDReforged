@@ -1,3 +1,4 @@
+import datetime
 import gzip
 import json
 import logging
@@ -82,6 +83,7 @@ class CatalogueMetaRegistryHolder:
 			plugin_data = PluginData(
 				id=plugin_id,
 				name=meta.get('name'),
+				repos_url=repos_url,
 				repos_owner=repos_match.group(1),
 				repos_name=repos_match.group(2),
 				latest_version=latest_version,
@@ -93,6 +95,8 @@ class CatalogueMetaRegistryHolder:
 				release_data = ReleaseData(
 					version=meta['version'],
 					tag_name=release['tag_name'],
+					url=release['url'],
+					created_at=datetime.datetime.fromisoformat(release['created_at'].rstrip('Z')),
 					dependencies=meta.get('dependencies', {}),
 					requirements=meta.get('requirements', []),
 					asset_id=asset['id'],
@@ -206,7 +210,7 @@ class PersistCatalogueMetaRegistryHolder(CatalogueMetaRegistryHolder):
 			now = time.time()
 			if now - self.__last_background_fetch_time >= self.BACKGROUND_FETCH_INTERVAL:
 				self.__do_fetch(ignore_ttl=False, show_error_stacktrace=False)
-				self.__last_background_fetch_time = self.__last_meta_fetch_time
+				self.__last_background_fetch_time = time.time()
 
 	def __do_fetch(self, ignore_ttl: bool, start_callback: _FetchStartCallbackOpt = None, done_callback: _FetchCallbackOpt = None, *, show_error_stacktrace: bool = True):
 		"""
@@ -231,7 +235,10 @@ class PersistCatalogueMetaRegistryHolder(CatalogueMetaRegistryHolder):
 			meta_json = self._fetch_meta_json()
 			meta = self._load_meta_json(meta_json)
 		except Exception as e:
-			(self.logger.exception if show_error_stacktrace else self.logger.error)('Catalogue meta registry fetch failed: {}'.format(e))
+			if show_error_stacktrace:
+				self.logger.exception('Catalogue meta registry fetch failed: {}'.format(e))
+			else:
+				self.logger.error('Catalogue meta registry fetch failed: ({}) {}'.format(type(e), e))
 			done_callback(e)
 		else:
 			with self.__meta_lock:

@@ -1,9 +1,11 @@
 import dataclasses
+import datetime
 from abc import ABC, abstractmethod
 from typing import List, Dict, Optional, Mapping
 
 from typing_extensions import override
 
+from mcdreforged.constants import core_constant
 from mcdreforged.plugin.meta.version import Version
 
 PluginId = str
@@ -15,6 +17,8 @@ PackageRequirements = List[str]
 class ReleaseData:
 	version: str
 	tag_name: str
+	url: str
+	created_at: datetime.datetime
 	dependencies: Dict[PluginId, str]
 	requirements: List[str]
 	asset_id: int
@@ -28,6 +32,7 @@ class ReleaseData:
 class PluginData:
 	id: PluginId
 	name: Optional[str]
+	repos_url: str
 	repos_owner: str
 	repos_name: str
 	latest_version: Optional[str]
@@ -38,6 +43,7 @@ class PluginData:
 		return PluginData(
 			id=self.id,
 			name=self.name,
+			repos_url=self.repos_url,
 			repos_owner=self.repos_owner,
 			repos_name=self.repos_name,
 			latest_version=self.latest_version,
@@ -51,6 +57,9 @@ class PluginData:
 			return Version(self.latest_version)
 		return None
 
+	def description_for(self, language: str) -> Optional[str]:
+		return self.description.get(language, self.description.get(core_constant.DEFAULT_LANGUAGE))
+
 
 class MetaRegistry(ABC):
 	@property
@@ -60,6 +69,9 @@ class MetaRegistry(ABC):
 
 	def __getitem__(self, plugin_id: str) -> PluginData:
 		return self.plugins[plugin_id]
+
+	def __contains__(self, plugin_id: str) -> bool:
+		return plugin_id in self.plugins
 
 	def __len__(self) -> int:
 		return len(self.plugins)
