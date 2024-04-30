@@ -78,9 +78,15 @@ RT = PluginRequirement  # Requirement
 CT = PluginCandidate  # Candidate
 
 
+@dataclasses.dataclass(frozen=True)
+class PluginDependencyResolverArgs:
+	ignore_dependencies: bool = False
+
+
 class PluginMetaProvider(resolvelib.AbstractProvider):
-	def __init__(self, plugin_metas: PluginMetas):
-		self.plugin_metas = plugin_metas.copy()
+	def __init__(self, plugin_metas: PluginMetas, args: PluginDependencyResolverArgs):
+		self.__plugin_metas = plugin_metas.copy()
+		self.__args = args
 
 	@override
 	def identify(self, requirement_or_candidate: Union[RT, CT]) -> KT:
@@ -104,7 +110,7 @@ class PluginMetaProvider(resolvelib.AbstractProvider):
 			requirements: Mapping[KT, Iterator[RT]],
 			incompatibilities: Mapping[KT, Iterator[CT]],
 	):
-		meta = self.plugin_metas.get(identifier)
+		meta = self.__plugin_metas.get(identifier)
 		if meta is None:
 			return []
 
@@ -134,8 +140,10 @@ class PluginMetaProvider(resolvelib.AbstractProvider):
 	@override
 	def get_dependencies(self, candidate: CT) -> Iterable[RT]:
 		dependencies = []
-		for pid, req in self.plugin_metas[candidate.id].versions[candidate.version].plugin_requirements.items():
-			dependencies.append(PluginRequirement(pid, req))
+		if not self.__args.ignore_dependencies:
+			pvi = self.__plugin_metas[candidate.id].versions[candidate.version]
+			for pid, req in pvi.plugin_requirements.items():
+				dependencies.append(PluginRequirement(pid, req))
 		return dependencies
 
 
@@ -153,10 +161,17 @@ class PluginDependencyResolver:
 				)
 			self.__plugin_metas[plugin_id] = meta
 
-	def resolve(self, requirements: Iterable[PluginRequirement], reporter: Optional[resolvelib.BaseReporter] = None) -> Union[PluginResolution, resolvelib.ResolutionError]:
+	def resolve(
+			self, requirements: Iterable[PluginRequirement], *,
+			args: Optional[PluginDependencyResolverArgs] = None,
+			reporter: Optional[resolvelib.BaseReporter] = None,
+			
+	) -> Union[PluginResolution, resolvelib.ResolutionError]:
+		if args is None:
+			args = PluginDependencyResolverArgs()
 		if reporter is None:
 			reporter = resolvelib.BaseReporter()
-		provider = PluginMetaProvider(self.__plugin_metas)
+		provider = PluginMetaProvider(self.__plugin_metas, args)
 		resolver = resolvelib.Resolver(provider, reporter)
 
 		try:
