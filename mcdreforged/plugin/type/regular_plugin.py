@@ -58,8 +58,12 @@ class RegularPlugin(AbstractPlugin, ABC):
 	def __class_name(self):
 		return self.__class__.__name__
 
-	def __repr__(self):
-		return '{}[file={},path={},state={}]'.format(self.__class_name, self.file_name, self.plugin_path, self.state)
+	@override
+	def _create_repr_fields(self) -> dict:
+		return {
+			**super()._create_repr_fields(),
+			'path': self.file_path,
+		}
 
 	# ----------------------
 	#   Instance Operation

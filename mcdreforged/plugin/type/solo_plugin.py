@@ -52,4 +52,5 @@ class SoloPlugin(RegularPlugin):
 	def _on_load(self):
 		super()._on_load()
 		self._load_entry_instance()
-		self._set_metadata(Metadata(getattr(self.entry_module_instance, 'PLUGIN_METADATA', None), plugin=self))
+		meta_dict = getattr(self.entry_module_instance, 'PLUGIN_METADATA', {})
+		self._set_metadata(Metadata(meta_dict, plugin=self))

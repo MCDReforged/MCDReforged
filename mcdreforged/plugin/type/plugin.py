@@ -13,6 +13,7 @@ from mcdreforged.plugin.meta.metadata import Metadata
 from mcdreforged.plugin.meta.version import Version
 from mcdreforged.plugin.plugin_event import MCDREvent, EventListener, PluginEvent
 from mcdreforged.plugin.plugin_registry import PluginRegistry, HelpMessage
+from mcdreforged.utils import class_util
 from mcdreforged.utils.exception import IllegalCallError, IllegalStateError
 from mcdreforged.utils.logger import DebugOption
 from mcdreforged.utils.types.message import TranslationKeyDictNested
@@ -77,6 +78,14 @@ class AbstractPlugin:
 	def get_identifier(self) -> str:
 		meta_data = self.get_metadata()
 		return '{}@{}'.format(meta_data.id, meta_data.version)
+
+	def _create_repr_fields(self) -> dict:
+		return {
+			'state': self.state,
+		}
+
+	def __repr__(self):
+		return class_util.represent(self, fields=self._create_repr_fields())
 
 	def __str__(self):
 		return self.get_name()

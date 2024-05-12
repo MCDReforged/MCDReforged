@@ -71,3 +71,10 @@ class LinkedDirectoryPlugin(_DirectoryPluginBase):
 	@override
 	def plugin_exists(self):
 		return self.link_file.is_file() and super().plugin_exists()
+
+	@override
+	def _create_repr_fields(self) -> dict:
+		return {
+			**super()._create_repr_fields(),
+			'target': self.target_plugin_path,
+		}
