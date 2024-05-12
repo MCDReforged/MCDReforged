@@ -16,7 +16,20 @@ class MyTestCase(unittest.TestCase):
 
 		yaml_config = YAML(typ='safe').load(data)
 		default_config = MCDReforgedConfig.get_default().serialize()
+
+		# value equality
+		self.assertIsInstance(default_config, dict)
+		self.assertIsInstance(yaml_config, dict)
 		self.assertEqual(default_config, yaml_config)
+
+		# key order equality
+		def check_keys(a: dict, b: dict, key_path: list):
+			self.assertEqual(list(a.keys()), list(b.keys()), f'key_path={key_path}')
+			for k, v in a.items():
+				if isinstance(v, dict):
+					check_keys(a[k], b[k], key_path + [k])
+
+		check_keys(default_config, yaml_config, [])
 
 
 if __name__ == '__main__':

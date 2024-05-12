@@ -20,7 +20,6 @@ class RconConfig(Serializable):
 	password: Optional[str] = 'password'
 
 
-# TODO: add unitest for field consistency with default_config.yml
 class MCDReforgedConfig(Serializable):
 	# --------- Basic Configuration ---------
 	language: str = core_constant.DEFAULT_LANGUAGE
