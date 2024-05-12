@@ -23,7 +23,6 @@ from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.reload_command impor
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.server_command import ServerCommand
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.status_command import StatusCommand
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.sub_command import SubCommand, SubCommandEvent
-from mcdreforged.plugin.meta.metadata import Metadata
 from mcdreforged.plugin.plugin_event import MCDRPluginEvents
 from mcdreforged.plugin.type.permanent_plugin import PermanentPlugin
 from mcdreforged.translation.translation_text import RTextMCDRTranslation
@@ -46,8 +45,7 @@ METADATA = {
 
 class MCDReforgedPlugin(PermanentPlugin):
 	def __init__(self, plugin_manager: 'PluginManager'):
-		super().__init__(plugin_manager)
-		self._set_metadata(Metadata(METADATA, plugin=self))
+		super().__init__(plugin_manager, METADATA)
 		self.command_help = HelpCommand(self)
 		self.command_status = StatusCommand(self)
 		self.main_sub_commands: List[SubCommand] = [

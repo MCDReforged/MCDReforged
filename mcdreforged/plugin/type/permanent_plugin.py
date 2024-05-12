@@ -1,5 +1,5 @@
 from abc import ABC
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING
 
 from typing_extensions import override
 
@@ -11,21 +11,12 @@ if TYPE_CHECKING:
 
 
 class PermanentPlugin(AbstractPlugin, ABC):
-	def __init__(self, plugin_manager: 'PluginManager'):
+	def __init__(self, plugin_manager: 'PluginManager', metadata_dict: dict):
 		super().__init__(plugin_manager)
-		self.__metadata: Optional[Metadata] = None
-
-	def _set_metadata(self, metadata: Metadata):
-		"""
-		Needs to be called inside __init__ after super call
-		"""
-		# TODO: change constructor signature
-		self.__metadata = metadata
+		self.__metadata = Metadata(metadata_dict, plugin=self)
 
 	@override
 	def get_metadata(self) -> Metadata:
-		if self.__metadata is None:
-			raise RuntimeError('accessing metadata before initialized')
 		return self.__metadata
 
 	@override
