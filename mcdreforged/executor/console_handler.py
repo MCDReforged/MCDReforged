@@ -60,15 +60,13 @@ class ConsoleHandler(BackgroundThreadExecutor):
 				if not isinstance(text, str):
 					raise IOError()
 				try:
-					parsed_result: Info = self.mcdr_server.server_handler_manager.get_current_handler().parse_console_command(text)
+					info: Info = self.mcdr_server.server_handler_manager.get_current_handler().parse_console_command(text)
 				except Exception:
 					self.mcdr_server.logger.exception(self.mcdr_server.tr('console_handler.parse_fail', text))
 				else:
 					if self.mcdr_server.logger.should_log_debug(DebugOption.HANDLER):
-						self.mcdr_server.logger.debug('Parsed text from {}:'.format(type(self).__name__), no_check=True)
-						for line in parsed_result.debug_format_text().splitlines():
-							self.mcdr_server.logger.debug('	{}'.format(line), no_check=True)
-					self.mcdr_server.reactor_manager.put_info(parsed_result)
+						self.mcdr_server.logger.debug('Parsed text from {}: {}'.format(type(self).__name__, info), no_check=True)
+					self.mcdr_server.reactor_manager.put_info(info)
 		except (KeyboardInterrupt, EOFError) as error:  # ctrl + c, ctrl + z
 			if not self.mcdr_server.is_mcdr_about_to_exit():
 				self.mcdr_server.logger.error('User interruption caught in {}: {} {}'.format(type(self).__name__, type(error).__name__, error))

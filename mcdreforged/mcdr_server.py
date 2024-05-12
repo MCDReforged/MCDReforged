@@ -574,9 +574,7 @@ class MCDReforgedServer:
 			info = self.server_handler_manager.get_basic_handler().parse_server_stdout(text)
 		else:
 			if self.logger.should_log_debug(option=DebugOption.HANDLER):
-				self.logger.debug('Parsed text from server stdout:', no_check=True)
-				for line in info.debug_format_text().splitlines():
-					self.logger.debug('    {}'.format(line), no_check=True)
+				self.logger.debug('Parsed text from server stdout: {}'.format(info), no_check=True)
 		self.server_handler_manager.detect_text(text)
 		info.attach_mcdr_server(self)
 

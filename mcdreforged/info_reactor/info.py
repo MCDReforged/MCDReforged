@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING, Optional
 
 from mcdreforged.command.command_source import ConsoleCommandSource, PlayerCommandSource, \
 	InfoCommandSource
+from mcdreforged.utils import class_util
 from mcdreforged.utils.exception import IllegalStateError, IllegalCallError
 
 if TYPE_CHECKING:
@@ -203,20 +204,8 @@ class Info:
 	#   Formatting and Magic methods
 	# --------------------------------
 
-	def debug_format_text(self):
-		try:
-			time_message = '{:0>2}:{:0>2}:{:0>2}'.format(self.hour, self.min, self.sec)
-		except Exception:
-			time_message = 'Invalid'
-		return '\n'.join([
-			'Time: {}; ID: {}'.format(time_message, self.id),
-			'Player: {}; Source: {}; Logging level: {}'.format(self.player, self.source, self.logging_level),
-			'Content: {}'.format(self.content),
-			'Raw content: {}'.format(self.raw_content)
-		])
-
-	def __str__(self):
-		return '; '.join(self.debug_format_text().splitlines())
+	def __repr__(self):
+		return class_util.represent(self)
 
 	def __deepcopy__(self, memo: dict):
 		"""
