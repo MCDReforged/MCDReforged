@@ -54,7 +54,7 @@ def get_all_base_class(cls: Type) -> List[Type]:
 	return misc_util.unique_list(ret)
 
 
-def represent(obj: Any, fields: Optional[dict] = None, *, blacklist: Collection[str] = (), parentheses: str = '[]') -> str:
+def represent(obj: Any, fields: Optional[dict] = None, *, blacklist: Collection[str] = (), parentheses: str = '()') -> str:
 	"""
 	aka repr
 	"""

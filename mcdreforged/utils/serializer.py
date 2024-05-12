@@ -563,4 +563,4 @@ class Serializable(ABC):
 				fields[attr_name] = getattr(self, attr_name)
 
 		from mcdreforged.utils import class_util
-		return class_util.represent(self, fields, parentheses='()')
+		return class_util.represent(self, fields)
