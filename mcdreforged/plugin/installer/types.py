@@ -57,6 +57,10 @@ class PluginData:
 			return Version(self.latest_version)
 		return None
 
+	@property
+	def repos_pair(self) -> str:
+		return f'{self.repos_owner}/{self.repos_name}'
+
 	def description_for(self, language: str) -> Optional[str]:
 		return self.description.get(language, self.description.get(core_constant.DEFAULT_LANGUAGE))
 

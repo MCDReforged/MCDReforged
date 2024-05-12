@@ -75,7 +75,7 @@ class PluginCatalogueAccess:
 			])
 		table.dump_to(replier)
 
-		return 0
+		return len(plugins)
 
 	@classmethod
 	def download_plugin(cls, meta: MetaRegistry, replier: Replier, plugin_ids: List[str], target_dir: str) -> int:

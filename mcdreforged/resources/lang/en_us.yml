@@ -271,6 +271,7 @@ mcdr_command:
           name: Name
           version: Version
           description: Description
+        empty: No plugin was found
     check_update:
       name: Check plugin update
       dependency_resolution_failed: 'Dependency resolution failed: {0}'
@@ -318,13 +319,14 @@ mcdr_command:
       nothing_to_install: Nothing needs to be installed
       install_summary:
         plugin: 'Plugins to install (new {new}, change {change}, total {total}):'
+        plugin_entry: '{0}: {1} -> {2}'
         python: Python packages to install
         python_entry: '{0} (request by {1})'
 
       dry_run_suffix: ' (dry-run)'
       confirm_hint: 'Entry {cmd_confirm} to confirm installation, or {cmd_abort} to abort'
       confirm_aborted: Plugin installation abort
-      confirm_timeout: Plugin installation confirmation timed out
+      confirm_timeout: Plugin installation confirmation timed out, abort
 
       installing_package: Installing {0} required python packages
       install_package_dry_run: Installed {0}

@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import Optional
 
 from mcdreforged.plugin.installer.meta_holder import ReleaseData
+from mcdreforged.plugin.si.server_interface import ServerInterface
 from mcdreforged.utils import request_util
 from mcdreforged.utils.replier import Replier
 
@@ -74,23 +75,20 @@ class ReleaseDownloader:
 			if (h := hasher.hexdigest()) != self.release.file_sha256:
 				raise ValueError('SHA256 mismatched, expected {}, actual {}, length {}'.format(self.release.file_sha256, h, length))
 
-	def download(self, *, show_progress: bool = False):
+	def download(self, *, show_progress: bool = False, retry_cnt: int = 2):
 		if self.mkdir:
 			self.target_path.parent.mkdir(parents=True, exist_ok=True)
 
-		errors = {}
-		urls = [
-			self.release.file_url,
-			self.release.file_url,
-			'https://mirror.ghproxy.com/' + self.release.file_url,  # TODO: dont hardcode this
-		]
-		for i, url in enumerate(urls):
+		errors = []
+		url = self.release.file_url
+		for i in range(retry_cnt):
 			try:
 				self.__download(url, show_progress)
 			except Exception as e:
-				# TODO: LOGGING
 				self.replier.reply('Download attempt {} failed, url {!r}, error: {}'.format(i + 1, url, e))
-				errors[url] = e
+				if not self.replier.is_console() and (si := ServerInterface.get_instance()) is not None:
+					si.logger.warning('PIM download attempt {} failed, url {!r}, error: {}'.format(i + 1, url, e))
+				errors.append(e)
 			else:
 				return
 
