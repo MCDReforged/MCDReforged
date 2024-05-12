@@ -208,8 +208,12 @@ class NoColorFormatter(logging.Formatter):
 class PluginIdAwareFormatter(logging.Formatter):
 	PLUGIN_ID_KEY = 'plugin_id'
 
-	def __init__(self, fmt_class: Type[logging.Formatter], fmt_str_with_key: str, fmt_str_without_key: str, **kwargs):
+	def __init__(self, fmt_class: Type[logging.Formatter], fmt_str_with_key: str, **kwargs):
 		super().__init__()
+		fmt_str_without_key = fmt_str_with_key.replace(' [%(plugin_id)s]', '')
+		if fmt_str_without_key == fmt_str_with_key:
+			raise ValueError(fmt_str_with_key)
+
 		self.fmt_with_key = fmt_class(fmt_str_with_key, **kwargs)
 		self.fmt_without_key = fmt_class(fmt_str_without_key, **kwargs)
 
@@ -240,14 +244,12 @@ class MCDReforgedLogger(logging.Logger):
 
 	FILE_FORMATTER = PluginIdAwareFormatter(
 		NoColorFormatter,
-		f'[%(name)s] [%(asctime)s] [%(threadName)s/%(levelname)s] [%(plugin_id)s]: %(message)s',
-		f'[%(name)s] [%(asctime)s] [%(threadName)s/%(levelname)s]: %(message)s',
+		f'[%(name)s] [%(asctime)s.%(msecs)d] [%(threadName)s/%(levelname)s] [%(filename)s:%(lineno)d(%(funcName)s)] [%(plugin_id)s]: %(message)s',
 		datefmt='%Y-%m-%d %H:%M:%S',
 	)
 	CONSOLE_FORMATTER = PluginIdAwareFormatter(
 		MCDReforgedFormatter,
 		f'[%(name)s] [%(asctime)s] [%(threadName)s/%(log_color)s%(levelname)s%(reset)s] [%(plugin_id)s]: %(message_log_color)s%(message)s%(reset)s',
-		f'[%(name)s] [%(asctime)s] [%(threadName)s/%(log_color)s%(levelname)s%(reset)s]: %(message_log_color)s%(message)s%(reset)s',
 		log_colors=LOG_COLORS,
 		secondary_log_colors=SECONDARY_LOG_COLORS,
 		datefmt='%H:%M:%S',
@@ -295,7 +297,7 @@ class MCDReforgedLogger(logging.Logger):
 	def debug(self, *args, option: Optional[DebugOption] = None, no_check: bool = False):
 		if no_check or self.should_log_debug(option):
 			with MCColorFormatControl.disable_minecraft_color_code_transform():
-				super().debug(*args)
+				super().debug(*args, stacklevel=3)
 
 	def set_file(self, file_path: str):
 		"""
