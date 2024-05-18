@@ -264,7 +264,7 @@ msgid ""
 "This function is invoked right after an "
 ":class:`~mcdreforged.info_reactor.info.Info` object is parsed from server"
 " output"
-msgstr "该函数将在 MCDR 从服务器输出解析出 :class:~mcdreforged.info_reactor.info.Info 对象后立即调用"
+msgstr "该函数将在 MCDR 从服务器输出解析出 :class:`~mcdreforged.info_reactor.info.Info` 对象后立即调用"
 
 #: mcdreforged.info_reactor.info_filter.InfoFilter.filter_server_info:12 of
 msgid "The info object, which is parsed from server output, to check"
