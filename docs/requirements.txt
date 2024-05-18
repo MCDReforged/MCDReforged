@@ -2,7 +2,7 @@
 sphinx>=6.2.1               # core
 sphinx-intl>=2.1.0          # locale
 sphinx-rtd-theme>=2.0.0rc4  # the theme of the webside
-Babel==2.9.1                # Unified the version to prevent different versions from appearing in .po comments
+Babel==2.15.0               # Unified the version to prevent different versions from appearing in .po comments
 
 # extensions
 sphinx-autobuild       # autobuild server
