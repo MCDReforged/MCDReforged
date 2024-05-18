@@ -13,7 +13,7 @@ from mcdreforged.command.builder.exception import NumberOutOfRange, EmptyText, \
 	TextLengthOutOfRange, InvalidBoolean, InvalidEnumeration, AbstractOutOfRange
 from mcdreforged.command.builder.nodes.basic import SUGGESTS_CALLBACK, \
 	ArgumentNode
-from mcdreforged.utils import misc_util
+from mcdreforged.utils import misc_util, class_util
 
 
 # --------------------
@@ -89,7 +89,11 @@ class NumberNode(ArgumentNode, ABC):
 		return super().__str__() + extra
 
 	def __repr__(self):
-		return '{}[name={},min={},max={}]'.format(self.__class__.__name__, self.get_name(), self.__min_value, self.__max_value)
+		return class_util.represent(self, {
+			'name': self.__name,
+			'min': self.__min_value,
+			'max': self.__max_value,
+		})
 
 
 class Number(NumberNode):
@@ -211,7 +215,11 @@ class TextNode(ArgumentNode, ABC):
 		return super().__str__() + extra
 
 	def __repr__(self):
-		return '{}[name={},min_len={},max_len={}]'.format(self.__class__.__name__, self.get_name(), self.__min_length, self.__max_length)
+		return class_util.represent(self, {
+			'name': self.__name,
+			'min_len': self.__min_length,
+			'max_len': self.__max_length,
+		})
 
 
 class Text(TextNode):
@@ -378,5 +386,8 @@ class Enumeration(ArgumentNode):
 		return super().__str__() + ' ({})'.format(self.__enum_class.__name__)
 
 	def __repr__(self):
-		return '{}[name={},enum_class={}]'.format(self.__class__.__name__, self.get_name(), self.__enum_class)
+		return class_util.represent(self, {
+			'name': self.__name,
+			'enum_class': self.__enum_class,
+		})
 

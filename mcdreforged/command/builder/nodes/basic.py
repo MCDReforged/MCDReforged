@@ -592,7 +592,7 @@ class Literal(EntryNode):
 		return 'Literal {}'.format(repr(tuple(self.literals)[0]) if len(self.literals) == 1 else set(self.literals))
 
 	def __repr__(self):
-		return 'Literal[literals={}]'.format(self.literals)
+		return class_util.represent(self, {'literals': self.literals})
 
 
 class ArgumentNode(AbstractNode, ABC):
@@ -611,6 +611,8 @@ class ArgumentNode(AbstractNode, ABC):
 		if accumulate is not None:
 			self.__accumulate_value = accumulate
 		return self
+
+	cfg = configure
 
 	@override
 	def _on_visited(self, context: CommandContext, parsed_result: ParseResult):
@@ -632,4 +634,4 @@ class ArgumentNode(AbstractNode, ABC):
 		return '{} <{}>'.format(self.__class__.__name__, self.get_name())
 
 	def __repr__(self):
-		return '{}[name={}]'.format(self.__class__.__name__, self.__name)
+		return class_util.represent(self, {'name': self.__name})
