@@ -340,10 +340,6 @@ mcdr_command:
       installation_error: '插件安装失败: {0}。回滚中'
     refresh_meta:
       name: 刷新插件仓库元数据
-    validate:
-      name: 验证已安装插件约束
-      success: 插件约束验证成功
-      failed: '插件约束验证失败：{0}'
 
   preference:
     unsupported_command_source: 不支持的指令源 {0}

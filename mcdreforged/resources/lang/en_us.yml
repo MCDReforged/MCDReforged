@@ -340,10 +340,6 @@ mcdr_command:
       installation_error: 'Installation error: {0}. Performing rollback'
     refresh_meta:
       name: Refresh plugin meta
-    validate:
-      name: Validate plugin constraints
-      success: Plugin constraints validation succeeded
-      failed: 'Plugin constraints validation failed: {0}'
 
   preference:
     unsupported_command_source: Unsupported Command Source {0}

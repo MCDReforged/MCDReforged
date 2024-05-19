@@ -237,6 +237,20 @@ class PluginCommandPimExtension(SubCommand):
 		raise NotImplementedError('this is not a real subcommand')
 
 	def get_command_child_nodes(self) -> List[Literal]:
+		def browse_node() -> Literal:
+			node = Literal('browse')
+			node.runs(self.cmd_browse_catalogue)
+			node.then(QuotableText('keyword').runs(self.cmd_browse_catalogue))
+			node.then(
+				Literal({'-i', '--id'}).
+				then(
+					QuotableText('plugin_id').
+					suggests(lambda: self.__meta_holder.get_registry().plugins.keys()).
+					redirects(node)
+				)
+			)
+			return node
+
 		def install_node() -> Literal:
 			def suggest_plugin_id():
 				keys = set(self.__meta_holder.get_registry().plugins.keys())
@@ -260,29 +274,6 @@ class PluginCommandPimExtension(SubCommand):
 			node.then(CountingLiteral('--no-dependencies', 'no_deps').redirects(node))
 			return node
 
-		def freeze_node() -> Literal:
-			node = Literal('freeze')
-			node.runs(self.cmd_freeze)
-			node.then(CountingLiteral({'-a', '--all'}, 'all').redirects(node))
-			return node
-
-		def validate_constraints_node() -> Literal:
-			return Literal('validate').runs(self.cmd_validate_constraints)
-
-		def browse_node() -> Literal:
-			node = Literal('browse')
-			node.runs(self.cmd_browse_catalogue)
-			node.then(QuotableText('keyword').runs(self.cmd_browse_catalogue))
-			node.then(
-				Literal({'-i', '--id'}).
-				then(
-					QuotableText('plugin_id').
-					suggests(lambda: self.__meta_holder.get_registry().plugins.keys()).
-					redirects(node)
-				)
-			)
-			return node
-
 		def check_update_node() -> Literal:
 			node = Literal({'checkupdate', 'cu'})
 			node.runs(self.cmd_check_update)
@@ -298,13 +289,18 @@ class PluginCommandPimExtension(SubCommand):
 			node.runs(self.cmd_refresh_meta)
 			return node
 
+		def freeze_node() -> Literal:
+			node = Literal('freeze')
+			node.runs(self.cmd_freeze)
+			node.then(CountingLiteral({'-a', '--all'}, 'all').redirects(node))
+			return node
+
 		return [
 			browse_node(),
 			check_update_node(),
 			freeze_node(),
 			install_node(),
 			refresh_meta_node(),
-			validate_constraints_node(),
 		]
 
 	@override
@@ -655,20 +651,6 @@ class PluginCommandPimExtension(SubCommand):
 		if len(update_able_plugins) > 0:
 			source.reply(self.tr('check_update.updatable.hint1', Texts.cmd('!!MCDR plugin install -U ' + next(iter(update_able_plugins)).id)))
 			source.reply(self.tr('check_update.updatable.hint2', Texts.cmd('!!MCDR plugin install -U *')))
-
-	@plugin_installer_guard('validate')
-	def cmd_validate_constraints(self, source: CommandSource, _: CommandContext):
-		plugin_requirements = list(map(
-			functools.partial(as_requirement, op='=='),
-			self.plugin_manager.get_all_plugins()
-		))
-		resolver = PluginDependencyResolver(LocalMetaRegistry(self.plugin_manager))
-		ret = resolver.resolve(plugin_requirements)
-		if isinstance(ret, Exception):
-			source.reply(self.tr('validate.failed', ret).set_color(RColor.red))
-			self.__show_resolve_error(source, ret, req_src_getter=lambda _: self.__PluginRequirementSource.existing_pinned)
-		else:
-			source.reply(self.tr('validate.success'))
 
 	def cmd_freeze(self, source: CommandSource, context: CommandContext):
 		if context.get('all', 0) > 0:
