@@ -293,10 +293,6 @@ mcdr_command:
       up_to_date:
         what: '{0} 个已是最新的插件'
       latest: '最新版本 {0}'
-    freeze:
-      name: 输出插件版本信息
-      freezing_all: 全部 {0} 个插件的版本信息如下
-      freezing_installed: 全部 {0} 个已安装插件的版本信息如下
     install:
       name: 安装插件
       no_input: 未给出任何插件描述

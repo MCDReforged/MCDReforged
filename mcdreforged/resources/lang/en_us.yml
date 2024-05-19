@@ -293,10 +293,6 @@ mcdr_command:
       up_to_date:
         what: '{0} up-to-date plugins'
       latest: 'latest version {0}'
-    freeze:
-      name: Freeze plugins
-      freezing_all: Requirement specifier for all {0} plugins
-      freezing_installed: Requirement specifier for {0} installed plugins
     install:
       name: Install plugins
       no_input: No plugin specifier is given

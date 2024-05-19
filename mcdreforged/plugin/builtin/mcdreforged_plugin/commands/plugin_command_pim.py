@@ -260,7 +260,7 @@ class PluginCommandPimExtension(SubCommand):
 			node = Literal('install')
 			node.runs(self.cmd_install_plugins)
 			node.then(
-				Text('plugin_requirement').configure(accumulate=True).
+				Text('plugin_specifier').configure(accumulate=True).
 				suggests(suggest_plugin_id).
 				redirects(node)
 			)
@@ -268,7 +268,7 @@ class PluginCommandPimExtension(SubCommand):
 				Literal({'-t', '--target'}).
 				then(QuotableText('target').redirects(node))
 			)
-			node.then(CountingLiteral({'-u', '--upgrade'}, 'upgrade').redirects(node))
+			node.then(CountingLiteral({'-u', '-U', '--upgrade'}, 'upgrade').redirects(node))
 			node.then(CountingLiteral('--dry-run', 'dry_run').redirects(node))
 			node.then(CountingLiteral({'-y', '--yes'}, 'skip_confirm').redirects(node))
 			node.then(CountingLiteral('--no-dependencies', 'no_deps').redirects(node))
@@ -289,16 +289,9 @@ class PluginCommandPimExtension(SubCommand):
 			node.runs(self.cmd_refresh_meta)
 			return node
 
-		def freeze_node() -> Literal:
-			node = Literal('freeze')
-			node.runs(self.cmd_freeze)
-			node.then(CountingLiteral({'-a', '--all'}, 'all').redirects(node))
-			return node
-
 		return [
 			browse_node(),
 			check_update_node(),
-			freeze_node(),
 			install_node(),
 			refresh_meta_node(),
 		]
@@ -652,25 +645,15 @@ class PluginCommandPimExtension(SubCommand):
 			source.reply(self.tr('check_update.updatable.hint1', Texts.cmd('!!MCDR plugin install -U ' + next(iter(update_able_plugins)).id)))
 			source.reply(self.tr('check_update.updatable.hint2', Texts.cmd('!!MCDR plugin install -U *')))
 
-	def cmd_freeze(self, source: CommandSource, context: CommandContext):
-		if context.get('all', 0) > 0:
-			plugins = self.plugin_manager.get_all_plugins()
-			source.reply(self.tr('freeze.freezing_all', len(plugins)))
-		else:
-			plugins = self.plugin_manager.get_regular_plugins()
-			source.reply(self.tr('freeze.freezing_installed', len(plugins)))
-
-		for plugin in plugins:
-			source.reply('{}=={}'.format(plugin.get_id(), plugin.get_version()))
-
+	@plugin_installer_guard('refresh_meta')
 	def cmd_refresh_meta(self, source: CommandSource, _: CommandContext):
 		self.__get_cata_meta(source, ignore_ttl=True)
 
 	@plugin_installer_guard('install')
 	def cmd_install_plugins(self, source: CommandSource, context: CommandContext):
 		# ------------------- Prepare -------------------
-		input_requirement_strings: Optional[List[str]] = context.get('plugin_requirement')
-		if not input_requirement_strings:
+		input_specifiers: Optional[List[str]] = context.get('plugin_specifier')
+		if not input_specifiers:
 			source.reply(self.tr('install.no_input').set_color(RColor.red))
 			return
 
@@ -717,14 +700,14 @@ class PluginCommandPimExtension(SubCommand):
 					add_plugin_requirement(as_requirement(plg, '==', preferred_version=preferred_version), self.__PluginRequirementSource.existing_pinned)
 
 			input_requirements: List[PluginRequirement] = []
-			for s in input_requirement_strings:
+			for s in input_specifiers:
 				if s != '*':
 					try:
 						input_requirements.append(PluginRequirement.of(s))
 					except ValueError as e:
 						source.reply(self.tr('install.parse_specifier_failed', repr(s), e))
 						raise _OuterReturn()
-			if '*' in input_requirement_strings:
+			if '*' in input_specifiers:
 				for plugin in self.plugin_manager.get_regular_plugins():
 					if is_plugin_updatable(plugin):
 						input_requirements.append(as_requirement(plugin, None))
