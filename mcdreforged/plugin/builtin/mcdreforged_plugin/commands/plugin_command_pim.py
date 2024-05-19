@@ -393,7 +393,7 @@ class PluginCommandPimExtension(SubCommand):
 				return
 
 			na = RText('N/A', color=RColor.gray)
-			source.reply(self.tr('browse.single.id', plugin_data.id))
+			source.reply(self.tr('browse.single.id', Texts.plugin_id(plugin_data.id)))
 			source.reply(self.tr('browse.single.name', plugin_data.name or na))
 			source.reply(self.tr('browse.single.description', plugin_data.description_for(source.get_preference().language) or na))
 			source.reply(self.tr(
@@ -410,7 +410,6 @@ class PluginCommandPimExtension(SubCommand):
 						h(RTextBase.join('\n', [
 							self.tr('browse.single.version', Texts.version(r.version)),
 							self.tr('browse.single.date', r.created_at.strftime('%Y-%m-%d %H:%M:%S')),
-							self.tr('browse.single.url', Texts.url(r.url, r.url)),
 						]))
 					)
 					if anchor:
@@ -425,7 +424,6 @@ class PluginCommandPimExtension(SubCommand):
 				source.reply(self.tr(
 					'browse.single.latest_version',
 					version_text(latest, False),
-					latest.created_at.strftime('%Y-%m-%d %H:%M:%S'),
 				))
 				versions = []
 				for release in plugin_data.releases.values():
@@ -441,7 +439,7 @@ class PluginCommandPimExtension(SubCommand):
 			if keyword is not None:
 				source.reply(self.tr('browse.all.keyword', keyword))
 
-			if source.is_player or True:
+			if source.is_player:
 				# table does not display well in mc chat hud
 				plugins = PluginCatalogueAccess.filter_sort(cata_meta.plugins.values(), keyword)
 				for plg in plugins:

@@ -259,7 +259,7 @@ mcdr_command:
         name: 'Name: {0}'
         description: 'Description: {0}'
         repository: 'Repository: {0}'
-        latest_version: 'Latest version: {0} (created at {1})'
+        latest_version: 'Latest version: {0}'
         releases: 'Release list ({0}x):'
         version: 'Version: {0}'
         date: 'Released date: {0}'

@@ -259,7 +259,7 @@ mcdr_command:
         name: '插件名: {0}'
         description: '描述: {0}'
         repository: '仓库: {0}'
-        latest_version: '最新版本: {0} (发布于 {1})'
+        latest_version: '最新版本: {0}'
         releases: '发行版列表 ({0}x):'
         version: '版本: {0}'
         date: '发布日期: {0}'
