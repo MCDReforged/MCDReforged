@@ -118,13 +118,15 @@ introduction
 
 Optional field, default: ``{}``
 
-Introduction is a paragraph written in markdown syntax. It will be shown to user when they are browsing your plugin. Comparing to readme or document, introduction focuses more on showing the features of the plugin to attract new users
+Introduction is a paragraph written in markdown syntax. It will be shown to user when they are browsing your plugin.
+Comparing to readme or document, introduction focuses more on showing the features of the plugin to attract new users
 
 For the :ref:`plugin_dev/plugin_catalogue:introduction` field, it's a mapping maps :ref:`plugin_dev/plugin_catalogue:language` into a file path
 
 The key is the language
 
-The value is the file path of the introduction file in your plugin repository. Field :ref:`plugin_dev/plugin_catalogue:related_path` is considered during the calculation of the real url
+The value is the file path of the introduction file in your plugin repository.
+Field :ref:`plugin_dev/plugin_catalogue:related_path` is considered during the calculation of the real url
 
 Example with the same file structure in :ref:`plugin_dev/plugin_catalogue:related_path`:
 
@@ -135,7 +137,18 @@ Example with the same file structure in :ref:`plugin_dev/plugin_catalogue:relate
         "zh_cn": "doc/introduction-zh_cn.md"
     }
 
-Alternatively you can don't declare this field but put your introduction file inside the same directory where ``plugin_info.json`` is
+.. tip::
+
+    A commonly-used and recommended practice is to link the introduction document to the README files in your repository
+
+    .. code-block:: json
+
+        "introduction": {
+            "en_us": "README.md",
+            "zh_cn": "README_CN.md"
+        }
+
+Alternatively, you can don't declare this field but put your introduction file inside the same directory where ``plugin_info.json`` is
 
 It's named by ``introduction.md`` for default language ``en_us`` and named by e.g. ``introduction-zh_cn.md`` for other language
 
