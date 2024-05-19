@@ -89,7 +89,7 @@ msgid ""
 "the root node of your command tree. It should be a "
 ":class:`~mcdreforged.command.builder.nodes.basic.Literal` node"
 msgstr ""
-"指令树的根节点。 它应为一个 :class:`~mcdreforged.command.builder.nodes.basic.Literal` "
+"指令树的根节点。它应为一个 :class:`~mcdreforged.command.builder.nodes.basic.Literal` "
 "节点"
 
 #: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_help_message:1

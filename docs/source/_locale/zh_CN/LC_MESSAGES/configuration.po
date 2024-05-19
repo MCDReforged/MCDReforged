@@ -278,7 +278,7 @@ msgid ""
 "The handler that parse nothing and return the raw text from the server. "
 "Don't use this unless you want to use MCDR to lanuch non Minecraft "
 "related servers."
-msgstr "不进行任何分析并返回原始文本的处理器。 除非你想使用 MCDR 启动非 Minecraft 相关的服务器，否则无需使用"
+msgstr "不进行任何分析并返回原始文本的处理器。除非你想使用 MCDR 启动非 Minecraft 相关的服务器，否则无需使用"
 
 #: ../configuration.rst:146
 msgid "Default value: ``vanilla_handler``"

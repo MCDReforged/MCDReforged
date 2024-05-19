@@ -84,7 +84,7 @@ msgid ""
 "configuration file and exit. Then open these 2 configuration file and "
 "migrate"
 msgstr ""
-"你可以将旧的 ``config.yml`` 重命名为 ``old_config.yml`` 并启动 MCDR。 MCDR "
+"你可以将旧的 ``config.yml`` 重命名为 ``old_config.yml`` 并启动 MCDR。MCDR "
 "将重新生成一份配置文件并自动退出。然后打开这两个配置文件并迁移你的配置选项"
 
 #: ../migrate/0.x_to_1.x.rst:31

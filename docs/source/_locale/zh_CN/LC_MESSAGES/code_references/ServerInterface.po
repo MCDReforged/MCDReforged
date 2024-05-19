@@ -753,7 +753,7 @@ msgstr "从给定的文件路径加载一个插件"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.load_plugin:3 of
 msgid "The file path of the plugin to load. Example: \"plugins/my_plugin.py\""
-msgstr "要加载插件的文件路径。 例如：``\"plugins/my_plugin.py\"``"
+msgstr "要加载插件的文件路径。例如：``\"plugins/my_plugin.py\"``"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.load_plugin:4 of
 msgid "If the plugin gets loaded successfully"
@@ -873,7 +873,7 @@ msgid ""
 "The argument that will be used to invoke the event listeners. An "
 ":class:`PluginServerInterface` instance will be automatically added to "
 "the beginning of the argument list"
-msgstr "用于调用事件监听器的参数。 一个 :class:`PluginServerInterface` 实例将被自动添加到参数列表的开头"
+msgstr "用于调用事件监听器的参数。一个 :class:`PluginServerInterface` 实例将被自动添加到参数列表的开头"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.dispatch_event:24 of
 msgid ""

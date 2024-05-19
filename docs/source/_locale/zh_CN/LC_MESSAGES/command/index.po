@@ -38,7 +38,7 @@ msgid ""
 "consider all console input and player chat messages from the server as "
 "user inputs. For them, MCDR will try to parse the input as a command"
 msgstr ""
-"指令是用户与 MCDR 交互的最常见方式。 MCDR 将来自服务器的所有控制台输入和玩家聊天信息视为用户输入。对于这类输入，MCDR "
+"指令是用户与 MCDR 交互的最常见方式。MCDR 将来自服务器的所有控制台输入和玩家聊天信息视为用户输入。对于这类输入，MCDR "
 "将尝试将其视为指令并进行解析"
 
 #: ../command/index.rst:8

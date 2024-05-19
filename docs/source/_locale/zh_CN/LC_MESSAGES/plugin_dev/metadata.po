@@ -112,7 +112,7 @@ msgid ""
 " If a newly loaded plugin has a plugin id exactly the same with an "
 "existed plugin, the new plugin will fail to load"
 msgstr ""
-"MCDR 使用插件 ID 来区分不同的插件并检查插件间的依赖。 MCDR 中加载的所有插件都应使用不同的插件 "
+"MCDR 使用插件 ID 来区分不同的插件并检查插件间的依赖。MCDR 中加载的所有插件都应使用不同的插件 "
 "ID。如果新加载的插件具有与现有插件完全相同的插件 ID，则新插件将无法加载"
 
 #: ../plugin_dev/metadata.rst:76

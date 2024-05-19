@@ -141,7 +141,7 @@ msgid ""
 "Note: You should not dispatch custom events in the ``on_load`` function "
 "or it will do nothing. The event listener storage of MCDR has not been "
 "initialized yet"
-msgstr "注意：你不应该在 ``on_load`` 函数中分发自定义事件，否则它将无效。 MCDR的事件侦听器存储此时尚未初始化"
+msgstr "注意：你不应该在 ``on_load`` 函数中分发自定义事件，否则它将无效。MCDR的事件侦听器存储此时尚未初始化"
 
 #: ../plugin_dev/event.rst
 msgid "Event id"
@@ -212,7 +212,7 @@ msgid ""
 ":class:`~mcdreforged.info_reactor.info.Info` object. In this event plugin"
 " can response to the info"
 msgstr ""
-"服务器输出新一行文本，或者从控制台中输入文本时，触发此事件。 MCDR 将把文本解析为 "
+"服务器输出新一行文本，或者从控制台中输入文本时，触发此事件。MCDR 将把文本解析为 "
 ":class:`~mcdreforged.info_reactor.info.Info` 对象。在这种情况下，插件可以响应信息"
 
 #: ../plugin_dev/event.rst:101 ../plugin_dev/event.rst:124
@@ -393,7 +393,7 @@ msgid ""
 "A player just joined the game. MCDR only parses the name of the player to"
 " a string, plugin can use the info instance for more custom information "
 "parsing"
-msgstr "一名玩家加入了游戏。 MCDR 仅将玩家的名称解析为字符串，插件可以使用返回的 ``Info`` 实例进行更多自定义信息解析"
+msgstr "一名玩家加入了游戏。MCDR 仅将玩家的名称解析为字符串，插件可以使用返回的 ``Info`` 实例进行更多自定义信息解析"
 
 #: ../plugin_dev/event.rst:230
 msgid "``mcdr.player_joined``"
