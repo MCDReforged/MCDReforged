@@ -148,6 +148,10 @@ mcdr_command:
       §7!!MCDR plugin unload §6<plugin_id>§r: 卸载 id 为 §6<plugin_id>§r 的插件
       §7!!MCDR plugin disable §6<plugin_id>§r: 禁用 id 为 §6<plugin_id>§r 的插件
       §7!!MCDR plugin reloadall§r: 加载 / 重载 / 卸载§l所有§r插件
+      §7!!MCDR plugin browse §e[<keyword>]§7 [-i §6<plugin_id>§7]§r: 浏览插件仓库。用关键字 §e<keyword>§r 进行筛选，或展示给定插件 §6<plugin_id>§7 的详情
+      §7!!MCDR plugin install §a<specifier>§7 [-u] [-y] ...§r: 从插件仓库安装给定描述的插件
+      §7!!MCDR plugin checkupdate §6[<plugin_id> ...]§r: 检查给定的插件是否有更新
+      §7!!MCDR plugin refreshmeta§r: 重新拉取插件仓库的元数据
     preference: |
       §7!!MCDR preference list§r: 显示偏好列表
       §7!!MCDR preference §e<pref_name>§r: 显示偏好 §e<pref_name>§r 的详情
@@ -302,6 +306,7 @@ mcdr_command:
       cannot_install_permanent: 无法安装内置插件 {0}
 
       resolving_dependencies: 正在解析插件依赖 ...
+      unknown_plugin_id: ID 为 {0} 的插件不存在
       resolution:
         impossible: '插件依赖解析失败。无法满足的依赖项:'
         impossible_requirements: '{0} 依赖 {1}'
@@ -316,7 +321,7 @@ mcdr_command:
       install_summary:
         plugin: '将被安装的插件 (新增 {new}, 修改 {change}, 总共 {total}):'
         plugin_entry: '{0}: {1} -> {2}'
-        python: 将要被安装的 Python 包
+        python: '将要被安装的 Python 包 ({0}x):'
         python_entry: '{0} (被 {1} 依赖)'
 
       dry_run_suffix: ' (试运行)'
@@ -327,14 +332,14 @@ mcdr_command:
       installing_package: 正在安装 {0} 个 Python 包依赖
       install_package_dry_run: 已安装 {0}
       install_package_failed: 'Python 包依赖安装失败，见控制台以了解详情: {0}'
-      downloading_plugin: 正在下载安装 {0} 个插件
-      downloading_plugin_one: '正在下载 {id}@{version}: {name} ({hash})'
-      installing_plugin_one: '正在安装 {id}@{version} 至 {path}'
+      downloading_installing_plugin: 正在下载安装 {0} 个插件
+      downloading_plugin_one: '正在下载 {candidate}: {name} ({hash})'
+      installing_plugin_one: '正在安装 {candidate} 至 {path}'
       reloading_plugins: 已安装 {0} 个插件，正在重载 MCDR
 
       installation_done: 插件安装完成
       installation_error: '插件安装失败: {0}。回滚中'
-    refresh_meta:
+    refreshmeta:
       name: 刷新插件仓库元数据
 
   preference:

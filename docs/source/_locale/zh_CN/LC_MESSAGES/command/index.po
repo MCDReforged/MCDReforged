@@ -22,7 +22,7 @@ msgstr ""
 
 #: ../command/index.rst:12
 msgid "!!MCDR"
-msgstr "!!MCDR"
+msgstr "!!MCDR 指令"
 
 #: ../command/index.rst:12
 msgid "!!help"

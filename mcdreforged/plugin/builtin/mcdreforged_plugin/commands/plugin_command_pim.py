@@ -10,7 +10,7 @@ import subprocess
 import threading
 import time
 from pathlib import Path
-from typing import Optional, List, TYPE_CHECKING, Dict, Any, Callable, Union
+from typing import Optional, List, TYPE_CHECKING, Dict, Any, Callable, Union, Iterable
 
 import resolvelib
 from typing_extensions import override, deprecated
@@ -135,6 +135,14 @@ class Texts:
 	def version(cls, version: Union[str, Version]) -> RTextBase:
 		return RText(version, color=RColor.gold)
 
+	@classmethod
+	def candidate(cls, plugin_id: str, version: Union[str, Version]) -> RTextBase:
+		return RTextList(
+			cls.plugin_id(plugin_id),
+			RText('@', RColor.gray),
+			cls.version(version),
+		)
+
 
 @dataclasses.dataclass
 class OperationHolder:
@@ -252,10 +260,13 @@ class PluginCommandPimExtension(SubCommand):
 			return node
 
 		def install_node() -> Literal:
-			def suggest_plugin_id():
+			def suggest_plugin_id() -> Iterable[str]:
 				keys = set(self.__meta_holder.get_registry().plugins.keys())
 				keys.add('*')  # so user can update all installed plugins
 				return keys
+
+			def suggest_target() -> Iterable[str]:
+				return [str(path) for path in self.mcdr_server.plugin_manager.plugin_directories]
 
 			node = Literal('install')
 			node.runs(self.cmd_install_plugins)
@@ -266,7 +277,11 @@ class PluginCommandPimExtension(SubCommand):
 			)
 			node.then(
 				Literal({'-t', '--target'}).
-				then(QuotableText('target').redirects(node))
+				then(
+					QuotableText('target').
+					suggests(suggest_target).
+					redirects(node)
+				)
 			)
 			node.then(CountingLiteral({'-u', '-U', '--upgrade'}, 'upgrade').redirects(node))
 			node.then(CountingLiteral('--dry-run', 'dry_run').redirects(node))
@@ -285,7 +300,7 @@ class PluginCommandPimExtension(SubCommand):
 			return node
 
 		def refresh_meta_node() -> Literal:
-			node = Literal('refresh_meta')
+			node = Literal('refreshmeta')
 			node.runs(self.cmd_refresh_meta)
 			return node
 
@@ -362,7 +377,7 @@ class PluginCommandPimExtension(SubCommand):
 				return
 		source.reply(self.tr('common.duplicated_input', self.tr('{}.name'.format(op_key))))
 
-	plugin_installer_guard = async_operation(op_holder=current_operation, skip_callback=__handle_duplicated_input, thread_name='PluginInstaller')
+	plugin_installer_guard = async_operation(op_holder=current_operation, skip_callback=__handle_duplicated_input, thread_name='PIM')
 
 	def __browse_cmd(self, plugin_id: str):
 		return (
@@ -501,7 +516,7 @@ class PluginCommandPimExtension(SubCommand):
 			for plugin_id in plugin_ids:
 				plugin = self.mcdr_server.plugin_manager.get_plugin_from_id(plugin_id)
 				if plugin is None:
-					source.reply(self.tr('mcdr_command.invalid_plugin_id', plugin_id))
+					source.reply(super().tr('mcdr_command.invalid_plugin_id', plugin_id))
 					return
 			input_plugin_ids = set(plugin_ids)
 		else:
@@ -748,6 +763,13 @@ class PluginCommandPimExtension(SubCommand):
 
 		def step_resolve():
 			source.reply(self.tr('install.resolving_dependencies'))
+
+			for req in req_srcs.keys():
+				plugin_id = req.id
+				if plugin_id not in cata_meta.plugins:
+					source.reply(self.tr('install.unknown_plugin_id', Texts.plugin_id(plugin_id)))
+					raise _OuterReturn()
+
 			resolver = PluginDependencyResolver(cata_meta)
 			result = resolver.resolve(
 				req_srcs.keys(),
@@ -825,8 +847,12 @@ class PluginCommandPimExtension(SubCommand):
 				))
 			source.reply('')
 
+			if ctx.no_deps:
+				self.log_debug('Discarded {} python packages requirements since no_deps is on'.format(len(package_requirements)))
+				package_requirements.clear()
+
 			if len(package_requirements) > 0:
-				source.reply(self.tr('install.install_summary.python'))
+				source.reply(self.tr('install.install_summary.python', len(package_requirements)))
 				source.reply('')
 				for req in sorted(package_requirements.keys()):
 					source.reply(self.INDENT + self.tr(
@@ -901,14 +927,13 @@ class PluginCommandPimExtension(SubCommand):
 								self.server_interface.logger.exception('Python package installation failed', e)
 							return
 
-				source.reply(self.tr('install.downloading_plugin', len(to_install)))
+				source.reply(self.tr('install.downloading_installing_plugin', len(to_install)))
 				for plugin_id, data in to_install.items():
 					download_temp_file = download_temp_dir / '{}.tmp'.format(plugin_id)
 					downloaded_files[plugin_id] = download_temp_file
 					source.reply(self.tr(
 						'install.downloading_plugin_one',
-						id=Texts.plugin_id(plugin_id),
-						version=Texts.version(data.version),
+						candidate=Texts.candidate(plugin_id, data.version),
 						name=data.release.file_name,
 						hash=data.release.file_sha256,
 					) + dry_run_suffix)
@@ -954,8 +979,7 @@ class PluginCommandPimExtension(SubCommand):
 							dst = target_dir / '.'.join(parts)
 					source.reply(self.tr(
 						'install.installing_plugin_one',
-						id=Texts.plugin_id(plugin_id),
-						version=Texts.version(data.version),
+						candidate=Texts.candidate(plugin_id, data.version),
 						path=str(dst),
 					) + dry_run_suffix)
 					if not ctx.dry_run:

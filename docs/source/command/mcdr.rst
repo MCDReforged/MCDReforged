@@ -9,7 +9,7 @@ Assuming you already have the permission to control MCDR, then you can enter ``!
 If you only have permission level 1 (user) or above, then the version of MCDR will be displayed via ``!!MCDR`` command
 
 Status display
-^^^^^^^^^^^^^^
+--------------
 
 ``!!MCDR status`` displays the status of MCDR. It will display the following contents:
 
@@ -24,13 +24,12 @@ Status display
 
 The following status can only be seen by users with permission 4 (owner)
 
-
 * The PID of the server. Notices that this PID is the pid of the bash program that the server is running in. Additionally the pid tree will be showed so you can have a look at the process structure of your server
 * Info queue load. If the server is spamming text the queue might be filled
 * The current thread list
 
 Hot reloads
-^^^^^^^^^^^
+-----------
 
 ``!!MCDR reload`` sub-commands are the places to hot-reload things. Its short form is ``!!MCDR r``. Directly enter command ``!!MCDR reload`` will show the help message of the hot reload commands
 
@@ -60,7 +59,7 @@ Here's a table of the commands
 
 
 Permission management
-^^^^^^^^^^^^^^^^^^^^^
+---------------------
 
 ``!!MCDR permission`` sub-commands are used to manipulate player's permission. Its short form is ``!!MCDR perm``. Directly enter command ``!!MCDR perm`` will show the help message of the permission manipulation commands
 
@@ -106,11 +105,15 @@ Examples:
 Check the :doc:`/permission` document for more information about MCDR permission system
 
 Plugin management
-^^^^^^^^^^^^^^^^^
+-----------------
 
-``!!MCDR plugin`` is the place for user to manipulate plugins. Its short form is ``!!MCDR plg``. Directly enter command ``!!MCDR plg`` will show the help message of the commands
+``!!MCDR plugin`` is the place for user to manipulate plugins. Its short form is ``!!MCDR plg``.
+Directly enter command ``!!MCDR plg`` will show the help message of the commands
 
-Here's a table of the commands
+Local plugin management
+^^^^^^^^^^^^^^^^^^^^^^^
+
+Here's the commands that can be used to manipulate local installed plugins
 
 .. list-table::
    :header-rows: 1
@@ -120,7 +123,7 @@ Here's a table of the commands
      - Function
    * - !!MCDR plugin list
      - !!MCDR plg list
-     - List all plugins
+     - List all installed plugins
    * - !!MCDR plugin info <plugin_id>
      - !!MCDR plg info <plugin_id>
      - Display the information of the plugin with id <plugin_id>
@@ -142,7 +145,6 @@ Here's a table of the commands
    * - !!MCDR plugin reloadall
      - !!MCDR plg ra
      - Load / Reload / Unloaded **all** not disabled plugins
-
 
 The <plugin_id> argument is a string of the unique plugin id of the plugin you want to manipulate
 
@@ -172,8 +174,125 @@ These commands do the following things:
 #. Reload the plugin with file name ``another_plugin.py``. Note that since this plugin is not loaded, you can only use file name to specify it
 
 
+Plugin catalogue access
+^^^^^^^^^^^^^^^^^^^^^^^
+
+The following commands provide operations based on the `https://mcdreforged.com/en/plugins <plugin catalogue>`__
+
+browse
+~~~~~~
+
+Browse plugin catalogue. List with keyword or show details of plugin with given id
+
+.. code-block:: text
+
+    !!MCDR plugin browse [<keyword>] [(-i|--id) <plugin_id>]
+
+Arguments:
+
+- ``<keyword>``: The keyword for filtering
+- ``<plugin_id>``: The plugin ID to show details of
+
+Example usages:
+
+- ``!!MCDR plugin browse``: List all plugins in the plugin catalogue
+- ``!!MCDR plugin browse backup``: List plugins with keyword ``backup`` in the plugin catalogue
+- ``!!MCDR plugin browse -i my_plugin``: Show details of plugin with ID ``my_plugin`` in the plugin catalogue
+
+install
+~~~~~~~
+
+Install plugins that satisfy the given specifier(s)
+
+.. code-block:: text
+
+    !!MCDR plugin install <specifier> [(-t|--target) <target>] [-u|-U|--upgrade] [-y|--yes] [--dry-run] [--no-dependencies] ...
+
+Arguments:
+
+- ``<specifier>``: Describes the plugins to be installed, can be provided for multiple times
+
+    Format: ``${id}${requirement}``. The requirement syntax can be found :ref:`here <plugin_dev/metadata:dependencies>`.
+    Examples:
+
+    .. code-block:: text
+
+        my_plugin
+        my_plugin<1
+        my_plugin>=1.0
+        my_plugin^=2.0.1
+
+- ``<target>``: The plugin directory to install the plugins into. The default value is the first path in the :ref:`configuration:plugin_directories` list in MCDR config
+- ``-u``, ``-U``, ``--upgrade``: An optional flag suggesting that if given plugin is already installed, then it will be upgrade if possible
+- ``--dry-run``: An optional flag for test run. If provided, no actual installation will be performed
+- ``--no-dependencies``: An optional flag to ignore all dependencies relationships during plugin resolution. No indirect depended plugin and python packages will be installed
+
+Example usages:
+
+- ``!!MCDR plugin install my_plugin``: Install a plugin with ID ``my_plugin``, using the latest compatible version
+- ``!!MCDR plugin install my_plugin<1.3``: Install a plugin with ID ``my_plugin``, using the latest compatible version, and the version should be less than ``1.3``
+- ``!!MCDR plugin install my_plugin<1.3 another_plugin==1.0.0``: On the basis of the above example, install ``another_plugin`` with exact version ``1.0.0`` as well
+- ``!!MCDR plugin install -u my_plugin``: Install plugin ``my_plugin`` if it's not installed, or upgrade ``my_plugin`` to the latest compatible version
+- ``!!MCDR plugin install -u -y *``: Upgrade all installed plugins to their latest compatible version. Confirmation check is skipped
+
+
+Example output for a complete plugin installation (Note that ``my_plugin`` does not actually exist):
+
+.. code-block:: text
+
+    > !!MCDR plg install my_plugin
+    [MCDR] [21:01:31] [PIM/INFO]: Resolving dependencies ...
+    [MCDR] [21:01:31] [PIM/INFO]: Plugins to install (new 1, change 0, total 1):
+    [MCDR] [21:01:31] [PIM/INFO]:
+    [MCDR] [21:01:31] [PIM/INFO]:     my_plugin: N/A -> 1.2.0
+    [MCDR] [21:01:31] [PIM/INFO]:
+    [MCDR] [21:01:31] [PIM/INFO]: Python packages to install (2x):
+    [MCDR] [21:01:31] [PIM/INFO]:
+    [MCDR] [21:01:31] [PIM/INFO]:     foobar (request by my_plugin@1.2.0)
+    [MCDR] [21:01:31] [PIM/INFO]:     bazlib (request by my_plugin@1.2.0)
+    [MCDR] [21:01:31] [PIM/INFO]:
+    [MCDR] [21:01:31] [PIM/INFO]: Enter !!MCDR confirm to confirm installation, or !!MCDR abort to abort
+    > !!MCDR confirm
+    [MCDR] [21:01:34] [PIM/INFO]: Installing 1 required python packages
+    Example pip output ...
+    Successfully installed foobar-1.9.4 bazlib-0.24.0
+    [MCDR] [21:01:43] [PIM/INFO]: Downloading and installing 1 plugins
+    [MCDR] [21:01:43] [PIM/INFO]: Downloading my_plugin@1.2.0: plugins/MyPlugin-v1.1.1.mcdr (example-sha256-hash)
+    [MCDR] [21:01:45] [PIM/INFO]: Installing my_plugin@1.2.0 to plugins/MyPlugin-v1.1.1.mcdr
+    [MCDR] [21:01:45] [PIM/INFO]: Installed 1 plugins, reloading MCDR
+    [MCDR] [21:01:45] [PIM/INFO]: Plugin my_plugin@1.2.0 loaded
+    [MCDR] [21:01:46] [PIM/INFO]: Installation done
+
+
+checkupdate
+~~~~~~~~~~~
+
+Check if given plugins have updates
+
+.. code-block:: text
+
+    !!MCDR plugin (checkupdate|cu) [<plugin_id> ...]
+
+Arguments:
+
+- ``<plugin_id>``: ID of the plugin to check update for. Can be provided for multiple times. If not given, check update for all plugins
+
+Example usages:
+
+- ``!!MCDR plugin checkupdate``: Check update for **all** installed plugins
+- ``!!MCDR plugin cu my_plugin another_plugin``: Check update for plugin ``my_plugin`` and ``another_plugin``
+
+refreshmeta
+~~~~~~~~~~~
+
+Perform a re-fetch for the plugin catalogue meta cache
+
+.. code-block:: text
+
+    !!MCDR plugin refreshmeta
+
 Preference settings
-^^^^^^^^^^^^^^^^^^^
+-------------------
 
 ``!!MCDR preference`` sub-commands are used to control the preference of MCDR. It only requires permission level 1 (user) to operate
 
@@ -208,14 +327,14 @@ Examples:
 * ``!!MCDR pref set language zh_cn``: Set the value of preference ``language`` to ``zh_cn``
 
 Check update
-^^^^^^^^^^^^
+------------
 
 ``!!MCDR checkupdate``, or ``!!MCDR cu``. Use it to manually check update from github
 
 It will try to get the latest release version in github, and check if it's newer than the current version. If it is, it will show the update logs from the github release
 
 Server Control
-^^^^^^^^^^^^^^
+--------------
 
 ``!!MCDR server`` sub-commands are used control the daemonized server
 
@@ -244,13 +363,13 @@ Here's a table of the commands
 These commands are also parts of the :doc:`ServerInterface API </code_references/ServerInterface>`
 
 Debug
-^^^^^
+-----
 
 ``!!MCDR debug`` contains serval utilities for debugging MCDR or MCDR plugins.
 They are mostly designed for developers, so you can skip this if you are a MCDR user
 
 Thread Dump
-~~~~~~~~~~~
+^^^^^^^^^^^
 
 Dump stack trace information of given threads. A easy way to figure out what are your threads doing
 
@@ -262,7 +381,7 @@ Format::
     !!MCDR debug thread_dump <thread_name>
 
 Translation Test
-~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^
 
 Query translation results by translation key, or dump all translations within given path
 
@@ -280,7 +399,7 @@ Examples::
     !!MCDR debug translation dump mcdr_server.on_server_stop
 
 Command Tree Display
-~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^
 
 Dump command trees with :meth:`~mcdreforged.command.builder.nodes.basic.AbstractNode.print_tree` method
 

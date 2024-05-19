@@ -148,6 +148,10 @@ mcdr_command:
       §7!!MCDR plugin unload §6<plugin_id>§r: Unload a plugin with id §6<plugin_id>§r
       §7!!MCDR plugin disable §6<plugin_id>§r: Disable a plugin with id §6<plugin_id>§r
       §7!!MCDR plugin reloadall§r: Load / Reload / Unloaded §lall§r not disabled plugins
+      §7!!MCDR plugin browse §e[<keyword>]§7 [-i §6<plugin_id>§7]§r: Browse plugin catalogue. List with §e<keyword>§r or show details of plugin with id §6<plugin_id>§7
+      §7!!MCDR plugin install §a<specifier>§7 [-u] [-y] ...§r: Install plugins that satisfy the given specifier(s)
+      §7!!MCDR plugin checkupdate §6[<plugin_id> ...]§r: Check if given plugins have updates
+      §7!!MCDR plugin refreshmeta§r: Perform a re-fetch for the plugin catalogue meta cache
     preference: |
       §7!!MCDR preference list§r: Display the preference list
       §7!!MCDR preference §e<pref_name>§r: Display the details of preference §e<pref_name>§r
@@ -302,6 +306,7 @@ mcdr_command:
       cannot_install_permanent: Cannot install permanent plugin {0}
 
       resolving_dependencies: Resolving dependencies ...
+      unknown_plugin_id: Plugin with ID {0} not found
       resolution:
         impossible: 'Resolution impossible. Unsatisfied requirements:'
         impossible_requirements: '{0} requires {1}'
@@ -316,25 +321,25 @@ mcdr_command:
       install_summary:
         plugin: 'Plugins to install (new {new}, change {change}, total {total}):'
         plugin_entry: '{0}: {1} -> {2}'
-        python: Python packages to install
+        python: 'Python packages to install ({0}x):'
         python_entry: '{0} (request by {1})'
 
       dry_run_suffix: ' (dry-run)'
-      confirm_hint: 'Entry {cmd_confirm} to confirm installation, or {cmd_abort} to abort'
+      confirm_hint: 'Enter {cmd_confirm} to confirm installation, or {cmd_abort} to abort'
       confirm_aborted: Plugin installation abort
       confirm_timeout: Plugin installation confirmation timed out, abort
 
       installing_package: Installing {0} required python packages
       install_package_dry_run: Installed {0}
       install_package_failed: 'Python package installation failed, see console for more information: {0}'
-      downloading_plugin: Downloading and installing {0} plugins
-      downloading_plugin_one: 'Downloading {id}@{version}: {name} ({hash})'
-      installing_plugin_one: 'Installing {id}@{version} to {path}'
+      downloading_installing_plugin: Downloading and installing {0} plugins
+      downloading_plugin_one: 'Downloading {candidate}: {name} ({hash})'
+      installing_plugin_one: 'Installing {candidate} to {path}'
       reloading_plugins: Installed {0} plugins, reloading MCDR
 
       installation_done: Installation done
       installation_error: 'Installation error: {0}. Performing rollback'
-    refresh_meta:
+    refreshmeta:
       name: Refresh plugin meta
 
   preference:

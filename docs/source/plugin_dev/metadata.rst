@@ -204,12 +204,17 @@ List of the operators:
      - 1.2.3, 1.5
    * - =
      - =1.2.3
+     - The same as ``==``
+     - 1.2.3
+     - 1.2, 1.2.4
+   * - ==
+     - ==1.2.3
      - The target version should equal to 1.2.3
      - 1.2.3
      - 1.2, 1.2.4
    * -
      - 1.2.3
-     - If the operator is not specified, ``=`` is used as default. In this case the target version should equal to 1.2.3
+     - If the operator is not specified, ``==`` is used as default. In this case the target version should equal to 1.2.3
      - 1.2.3
      - 1.2, 1.2.4
    * - ^
