@@ -8,6 +8,7 @@ import re
 import shutil
 import subprocess
 import threading
+import time
 from pathlib import Path
 from typing import Optional, List, TYPE_CHECKING, Dict, Any, Callable, Union
 
@@ -256,7 +257,7 @@ class PluginCommandPimExtension(SubCommand):
 			node.then(CountingLiteral({'-u', '--upgrade'}, 'upgrade').redirects(node))
 			node.then(CountingLiteral('--dry-run', 'dry_run').redirects(node))
 			node.then(CountingLiteral({'-y', '--yes'}, 'skip_confirm').redirects(node))
-			node.then(CountingLiteral('--no-dependencies', 'no_deps').redirects(node))  # TODO
+			node.then(CountingLiteral('--no-dependencies', 'no_deps').redirects(node))
 			return node
 
 		def freeze_node() -> Literal:
@@ -713,6 +714,7 @@ class PluginCommandPimExtension(SubCommand):
 
 		default_target_path = get_default_target_path()
 
+		@dataclasses.dataclass
 		class __Ctx:
 			do_upgrade: bool = context.get('upgrade', 0) > 0
 			dry_run = context.get('dry_run', 0) > 0
@@ -720,6 +722,7 @@ class PluginCommandPimExtension(SubCommand):
 			no_deps = context.get('no_deps', 0) > 0
 
 		ctx = __Ctx()
+		self.log_debug('pim install ctx: {}'.format(ctx))
 
 		# ------------------- Verify and Collect -------------------
 
@@ -899,8 +902,22 @@ class PluginCommandPimExtension(SubCommand):
 					source.reply(self.tr('install.confirm_timeout'))
 					return
 
+			def delete_remaining_download_temp():
+				for name in os.listdir(base_dir):
+					dl_path = base_dir / name
+					try:
+						if dl_path.name.startswith('pim_') and dl_path.is_dir():
+							if time.time() - dl_path.stat().st_mtime > 24 * 60 * 60:  # > 1day
+								shutil.rmtree(dl_path)
+								self.logger.info('Deleting old download temp dir {}'.format(dl_path))
+					except OSError as e_:
+						self.logger.error('Error deleting renaming download temp dir {}: {}'.format(dl_path, e_))
+
 			# download
-			download_temp_dir = Path(self.server_interface.get_data_folder()) / 'pim_{}'.format(os.getpid())  # TODO: better dir name
+			base_dir = Path(self.server_interface.get_data_folder())
+			delete_remaining_download_temp()
+
+			download_temp_dir = base_dir / 'pim_{}'.format(os.getpid())
 			if not ctx.dry_run and download_temp_dir.is_dir():
 				shutil.rmtree(download_temp_dir)
 			downloaded_files: Dict[str, Path] = {}
