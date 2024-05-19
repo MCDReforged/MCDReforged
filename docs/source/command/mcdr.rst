@@ -1,13 +1,6 @@
 
-Command
-=======
-
-Command is the most common way for users to interact with MCDR. MCDR consider all console input and player chat messages from the server as user inputs. For them, MCDR will try to parse the input as a command
-
-Commands can be registered by MCDR itself and by plugins. This page only introduces about commands from MCDR. For the way to register command for MCDR plugin, check :doc:`here </plugin_dev/command>`
-
 !!MCDR command
---------------
+==============
 
 ``!!MCDR`` commands is the way for users to control MCDR on console, or in game. All of these following commands require permission level 3 (admin) to be executed unless extra nodes exist
 
@@ -304,20 +297,3 @@ Examples::
     !!MCDR debug command_dump plugin my_plugin
     !!MCDR debug command_dump node !!MyCommand
 
-
-!!help command
---------------
-
-``!!help`` command is place to display the help messages of all commands. It works as an index of all commands
-
-The content of this command can be registered by plugins, so a new user can easily browse all available commands that it can access
-
-Any user is allowed to use this command, and MCDR will list all command help messages that the user has enough permission level to see
-
-Without any plugin, you may see the result below after you entered the ``!!help`` command
-
-.. code-block::
-
-    MCDR command help message list
-    !!MCDR: MCDR control command
-    !!help: MCDR command help messages

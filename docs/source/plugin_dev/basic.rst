@@ -166,7 +166,7 @@ Help message
 ^^^^^^^^^^^^
 
 Plugin can register its help message with :meth:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_help_message` to MCDR,
-so that users can use :ref:`command:!!help command` to view the help messages of all commands
+so that users can use :ref:`command/help:!!help command` to view the help messages of all commands
 
 .. _plugin-translation:
 

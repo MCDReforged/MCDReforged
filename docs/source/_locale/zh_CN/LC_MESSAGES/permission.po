@@ -162,5 +162,5 @@ msgstr ""
 "权限文件支持热重载。你可以使用 ``!!MCDR reload permission`` 指令来重载权限文件"
 
 #: ../permission.rst:69
-msgid ":ref:`command:Hot reloads` command, for more detail about hot reloads"
-msgstr ":ref:`command:Hot reloads` 指令章节中更多与热重载相关的指令"
+msgid ":ref:`command/mcdr:Hot reloads` command, for more detail about hot reloads"
+msgstr ":ref:`command/mcdr:Hot reloads` 指令章节中更多与热重载相关的指令"

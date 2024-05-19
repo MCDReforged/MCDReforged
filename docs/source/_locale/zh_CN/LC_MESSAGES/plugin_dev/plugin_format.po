@@ -224,9 +224,9 @@ msgstr "下面是文件夹插件的文件树的一个例子："
 #: ../plugin_dev/plugin_format.rst:121
 msgid ""
 "Directory plugin will always be treated as \"modified\" during ``!!MCDR "
-"reload plugin`` :ref:`command:Hot reloads` command"
+"reload plugin`` :ref:`command/mcdr:Hot reloads` command"
 msgstr ""
-"在 ``!!MCDR reload plugin`` 这个 :ref:`command:Hot reloads` "
+"在 ``!!MCDR reload plugin`` 这个 :ref:`command/mcdr:Hot reloads` "
 "指令中，文件夹插件总会被视为是“有变化”的插件"
 
 #: ../plugin_dev/plugin_format.rst:125

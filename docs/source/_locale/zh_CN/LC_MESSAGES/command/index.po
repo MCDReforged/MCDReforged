@@ -1,0 +1,52 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2024, Fallen_Breath
+# This file is distributed under the same license as the MCDReforged
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: MCDReforged \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-05-19 23:17+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: zh_CN\n"
+"Language-Team: zh_CN <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.15.0\n"
+
+#: ../command/index.rst:12
+msgid "!!MCDR"
+msgstr "!!MCDR"
+
+#: ../command/index.rst:12
+msgid "!!help"
+msgstr "!!help 指令"
+
+#: ../command/index.rst:2
+msgid "Command"
+msgstr "指令"
+
+#: ../command/index.rst:4
+msgid ""
+"Command is the most common way for users to interact with MCDR. MCDR "
+"consider all console input and player chat messages from the server as "
+"user inputs. For them, MCDR will try to parse the input as a command"
+msgstr ""
+"指令是用户与 MCDR 交互的最常见方式。 MCDR 将来自服务器的所有控制台输入和玩家聊天信息视为用户输入。对于这类输入，MCDR "
+"将尝试将其视为指令并进行解析"
+
+#: ../command/index.rst:8
+msgid ""
+"Commands can be registered by MCDR itself and by plugins. This page only "
+"introduces about commands from MCDR. For the way to register command for "
+"MCDR plugin, check :doc:`here </plugin_dev/command>`"
+msgstr ""
+"指令可以由 MCDR 本身和插件注册。本页面只介绍来自 MCDR 的指令。关于为 MCDR 插件注册指令的方法，请在 :doc:`此处 "
+"</plugin_dev/command>` 查看"
+

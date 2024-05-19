@@ -12,7 +12,7 @@ You can use command ``!!MCDR reload config`` or its short form ``!!MCDR r cfg`` 
 
 .. seealso::
 
-    :ref:`command:Hot reloads` command, for more detail about hot reloads
+    :ref:`command/mcdr:Hot reloads` command, for more detail about hot reloads
 
 List of options
 ---------------

@@ -47,8 +47,8 @@ msgid ""
 msgstr "当 MCDR 运行时，你可以使用 ``!!MCDR reload config`` 命令（或其缩写 ``!!MCDR r cfg``）来重载配置文件"
 
 #: ../configuration.rst:15
-msgid ":ref:`command:Hot reloads` command, for more detail about hot reloads"
-msgstr ":ref:`command:Hot reloads` 指令章节中更多与热重载相关的指令"
+msgid ":ref:`command/mcdr:Hot reloads` command, for more detail about hot reloads"
+msgstr ":ref:`command/mcdr:Hot reloads` 指令章节中更多与热重载相关的指令"
 
 #: ../configuration.rst:18
 msgid "List of options"

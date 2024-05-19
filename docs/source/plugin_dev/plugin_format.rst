@@ -118,7 +118,7 @@ Here's an example file tree of a directory plugin:
          ├─ mcdreforged.plugin.json
          └─ requirements.txt
 
-Directory plugin will always be treated as "modified" during ``!!MCDR reload plugin`` :ref:`command:Hot reloads` command
+Directory plugin will always be treated as "modified" during ``!!MCDR reload plugin`` :ref:`command/mcdr:Hot reloads` command
 
 
 Linked Directory Plugin

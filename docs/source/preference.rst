@@ -8,7 +8,7 @@ The preference data is stored in ``config/mcdreforged/preferences.json``
 
 .. seealso::
 
-    :ref:`command:Preference settings`, for the way to control preferences via command
+    :ref:`command/mcdr:Preference settings`, for the way to control preferences via command
 
 .. _preference-language:
 

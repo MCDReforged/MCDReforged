@@ -13,7 +13,7 @@ This is the official documentation for `MCDReforged <https://github.com/Fallen-B
 
    Quick Start<quick_start.rst>
    Configuration<configuration.rst>
-   Command<command.rst>
+   Command<command/index.rst>
    Permission<permission.rst>
    Preference<preference.rst>
    Customize<customize/customize.rst>
