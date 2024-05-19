@@ -3,7 +3,7 @@ from abc import ABC
 from enum import Enum
 from typing import Type, Iterable, Union, Optional
 
-from typing_extensions import override
+from typing_extensions import override, Unpack
 
 from mcdreforged.command.builder import command_builder_util as utils
 from mcdreforged.command.builder.command_builder_util import DIVIDER
@@ -36,8 +36,8 @@ class NumberNode(ArgumentNode, ABC):
 
 	NumberType = Union[int, float]
 
-	def __init__(self, name):
-		super().__init__(name)
+	def __init__(self, name, **kwargs: Unpack[ArgumentNode._InitKwargs]):
+		super().__init__(name, **kwargs)
 		self.__min_value: Optional[NumberNode.NumberType] = None
 		self.__max_value: Optional[NumberNode.NumberType] = None
 
@@ -161,8 +161,8 @@ class TextNode(ArgumentNode, ABC):
 
 	By default, there's no length range restriction
 	"""
-	def __init__(self, name):
-		super().__init__(name)
+	def __init__(self, name: str, **kwargs: Unpack[ArgumentNode._InitKwargs]):
+		super().__init__(name, **kwargs)
 		self.__min_length = None
 		self.__max_length = None
 
@@ -253,8 +253,8 @@ class QuotableText(Text):
 	QUOTE_CHAR = '"'
 	ESCAPE_CHAR = '\\'
 
-	def __init__(self, name):
-		super().__init__(name)
+	def __init__(self, name, **kwargs: Unpack[ArgumentNode._InitKwargs]):
+		super().__init__(name, **kwargs)
 		self.empty_allowed = False
 
 	def allow_empty(self):
@@ -364,8 +364,8 @@ class Enumeration(ArgumentNode):
 
 	.. versionadded:: v2.3.0
 	"""
-	def __init__(self, name: str, enum_class: Type[Enum]):
-		super().__init__(name)
+	def __init__(self, name: str, enum_class: Type[Enum], **kwargs: Unpack[ArgumentNode._InitKwargs]):
+		super().__init__(name, **kwargs)
 		self.__enum_class: Type[Enum] = enum_class
 
 	@override

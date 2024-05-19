@@ -260,7 +260,7 @@ class PluginCommandPimExtension(SubCommand):
 			node = Literal('install')
 			node.runs(self.cmd_install_plugins)
 			node.then(
-				Text('plugin_specifier').configure(accumulate=True).
+				Text('plugin_specifier', accumulate=True).
 				suggests(suggest_plugin_id).
 				redirects(node)
 			)
@@ -278,7 +278,7 @@ class PluginCommandPimExtension(SubCommand):
 			node = Literal({'checkupdate', 'cu'})
 			node.runs(self.cmd_check_update)
 			node.then(
-				Text('plugin_id').configure(accumulate=True).
+				Text('plugin_id', accumulate=True).
 				suggests(lambda: [plg.get_id() for plg in self.plugin_manager.get_regular_plugins()]).
 				redirects(node)
 			)

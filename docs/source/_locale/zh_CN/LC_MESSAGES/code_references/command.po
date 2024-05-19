@@ -3,12 +3,12 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-13 20:23+0800\n"
+"POT-Creation-Date: 2024-05-20 00:47+0800\n"
 "PO-Revision-Date: 2021-01-23 17:24+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
 "Language-Team: Chinese Simplified\n"
-"Plural-Forms: nplurals=1; plural=0\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -168,6 +168,7 @@ msgstr "一个用于测试权限需求的工具方法"
 #: mcdreforged.command.builder.nodes.basic.AbstractNode.runs
 #: mcdreforged.command.builder.nodes.basic.AbstractNode.suggests
 #: mcdreforged.command.builder.nodes.basic.AbstractNode.then
+#: mcdreforged.command.builder.nodes.basic.ArgumentNode.__init__
 #: mcdreforged.command.builder.tools.Requirements.argument_exists
 #: mcdreforged.command.builder.tools.Requirements.has_permission
 #: mcdreforged.command.builder.tools.SimpleCommandBuilder.add_children_for
@@ -219,6 +220,7 @@ msgid "The message you want to send"
 msgstr "你想要发送的消息"
 
 #: mcdreforged.command.builder.nodes.basic.AbstractNode.on_error
+#: mcdreforged.command.builder.nodes.basic.ArgumentNode.__init__
 #: mcdreforged.command.builder.tools.SimpleCommandBuilder.build
 #: mcdreforged.command.command_source.CommandSource.reply of
 msgid "Keyword Arguments"
@@ -526,6 +528,11 @@ msgstr "以可读的格式打印指令树。常用于调试"
 msgid "A printer function that accepts a str"
 msgstr "一个接受一个 str 的打印函数"
 
+#: ../../docstring
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.__weakref__:1 of
+msgid "list of weak references to the object (if defined)"
+msgstr ""
+
 #: mcdreforged.command.builder.nodes.basic.Literal:1 of
 msgid "Bases: :py:class:`~mcdreforged.command.builder.nodes.basic.EntryNode`"
 msgstr ""
@@ -564,6 +571,23 @@ msgid ""
 "It has a str field ``name`` which is used as the key used in storing "
 "parsed value in context"
 msgstr "它拥有着一个 str 属性 ``name``，用于作为键在上下文中储存解析的值"
+
+#: mcdreforged.command.builder.nodes.basic.ArgumentNode.__init__:1 of
+msgid ""
+"The name of the argument node. Should be unique within the command tree "
+"path"
+msgstr "参数节点的名字。应当在指令树路径上是唯一的"
+
+#: mcdreforged.command.builder.nodes.basic.ArgumentNode.__init__:2 of
+msgid ""
+"If set to True, then the parsed value will be stored in a list in the "
+"command context. Re-visiting of this node appends new value to the end of"
+" the list"
+msgstr "若被设为 True，则解析的值将间接地储存在一个列表中。重新访问该节点会把新解析的值追加到该列表中"
+
+#: mcdreforged.command.builder.nodes.basic.ArgumentNode.__init__:5 of
+msgid "The *accumulate* parameter"
+msgstr "*accumulate* 参数"
 
 #: mcdreforged.command.builder.nodes.arguments.NumberNode:1
 #: mcdreforged.command.builder.nodes.arguments.TextNode:1 of
@@ -855,7 +879,7 @@ msgid ""
 " visited during the command parsing in the command context"
 msgstr "一个特殊的字面值节点。相比普通的字面值节点，它有一个额外的功能：在上下文中储存其在指令解析的过程中被访问的次数"
 
-#: ../code_references/command.rst:35
+#: ../code_references/command.rst:36
 msgid "Command Builder"
 msgstr "指令构建器"
 
@@ -1046,10 +1070,12 @@ msgstr "一个为懒人提供的工具方法，使用方法 :meth:`build` 构建
 
 #: mcdreforged.command.builder.tools.SimpleCommandBuilder.register:3 of
 msgid ""
-"The :class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface` "
-"object of your plugin"
+"The "
+":class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`"
+" object of your plugin"
 msgstr ""
-"你的插件的 :class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`"
+"你的插件的 "
+":class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`"
 " 实例"
 
 #: mcdreforged.command.builder.tools.SimpleCommandBuilder.register:4 of
@@ -1129,7 +1155,7 @@ msgstr ""
 "见 :meth:`AbstractNode.on_child_error() "
 "<mcdreforged.command.builder.nodes.basic.AbstractNode.on_child_error>`"
 
-#: ../code_references/command.rst:45
+#: ../code_references/command.rst:46
 msgid "Tools"
 msgstr "工具"
 
@@ -1173,7 +1199,7 @@ msgstr "检查给定的参数是否在当前的指令上下文中已被赋值"
 msgid "The name of the argument to be checked"
 msgstr "将要检查的参数的名称"
 
-#: ../code_references/command.rst:51
+#: ../code_references/command.rst:52
 msgid "Exceptions"
 msgstr "异常"
 
@@ -1356,7 +1382,7 @@ msgstr "解析结果不是一个合法的布尔值"
 msgid "The parsed value is not a valid Enum"
 msgstr "解析结果不是一个合法的枚举值"
 
-#: ../code_references/command.rst:58
+#: ../code_references/command.rst:59
 msgid "Misc"
 msgstr "杂项"
 

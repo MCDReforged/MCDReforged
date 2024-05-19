@@ -4,7 +4,7 @@ import inspect
 import sys
 from abc import ABC, abstractmethod
 from types import MethodType
-from typing import List, Callable, Iterable, Set, Dict, Type, Any, Union, Optional, NamedTuple
+from typing import List, Callable, Iterable, Set, Dict, Type, Any, Union, Optional, NamedTuple, TypedDict
 
 from typing_extensions import Self, override
 
@@ -601,22 +601,29 @@ class ArgumentNode(AbstractNode, ABC):
 
 	It has a str field ``name`` which is used as the key used in storing parsed value in context
 	"""
-	def __init__(self, name: str):
+
+	class _InitKwargs(TypedDict):
+		accumulate: Optional[bool]
+
+	def __init__(
+			self, name: str, *,
+			accumulate: Optional[bool] = None,
+	):
+		"""
+		:param name: The name of the argument node. Should be unique within the command tree path
+		:keyword accumulate: If set to True, then the parsed value will be stored in a list in the command context.
+			Re-visiting of this node appends new value to the end of the list
+
+		.. versionadded:: v2.13.0
+			The *accumulate* parameter
+		"""
 		super().__init__()
 		self.__name = name
-		self.__accumulate_value: bool = False
-
-	def configure(self, *, accumulate: Optional[bool] = None) -> Self:
-		# TODO: DOC
-		if accumulate is not None:
-			self.__accumulate_value = accumulate
-		return self
-
-	cfg = configure
+		self.__accumulate: bool = bool(accumulate)
 
 	@override
 	def _on_visited(self, context: CommandContext, parsed_result: ParseResult):
-		if self.__accumulate_value:
+		if self.__accumulate:
 			if self.__name not in context:
 				context[self.__name] = []
 			context[self.__name].append(parsed_result.value)
