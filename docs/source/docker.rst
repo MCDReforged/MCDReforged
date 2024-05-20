@@ -147,7 +147,7 @@ Image with extra python packages installed
 
 - Image: ``mcdreforged/mcdreforged-extra``
 - Docker Hub: https://hub.docker.com/r/mcdreforged/mcdreforged-extra
-- Source code: https://github.com/Fallen-Breath/MCDReforged-Docker/blob/master/src/Dockerfile-extra
+- Source code: https://github.com/MCDReforged/docker/blob/master/src/Dockerfile-extra
 
 Theses extra packages are collected from the `Plugin Catalogue <https://github.com/MCDReforged/PluginCatalogue>`__,
 covering almost all required packages of the plugins in the catalogue
@@ -175,7 +175,7 @@ OpenJDK Images
 Images with OpenJDK installed. If you want to run MCDR with a Minecraft server, then here's what you want
 
 - Image: ``mcdreforged/mcdreforged-${jdk_distribution}``. See below for all available JDK distributions
-- Source code: https://github.com/Fallen-Breath/MCDReforged-Docker/blob/master/src
+- Source code: https://github.com/MCDReforged/docker/blob/master/src
 
 Supported OpenJDK distributions:
 

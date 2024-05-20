@@ -297,6 +297,6 @@ jobs:
       uses: peter-evans/repository-dispatch@v3
       with:
         token: ${{ secrets.REPOSITORY_DISPATCH_PAT }}
-        repository: Fallen-Breath/MCDReforged-Docker
+        repository: MCDReforged/docker
         event-type: trigger-workflow
         client-payload: ${{ steps.dispatch_args.outputs.payload }}

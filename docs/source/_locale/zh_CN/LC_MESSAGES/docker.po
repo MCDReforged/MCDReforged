@@ -245,7 +245,7 @@ msgid ""
 "Source code: https://github.com/Fallen-Breath/MCDReforged-"
 "Docker/blob/master/src/Dockerfile-extra"
 msgstr ""
-"源代码：https://github.com/Fallen-Breath/MCDReforged-Docker/blob/master/src"
+"源代码：https://github.com/MCDReforged/docker/blob/master/src"
 "/Dockerfile-extra"
 
 #: ../docker.rst:152
@@ -315,7 +315,7 @@ msgstr "镜像名：``mcdreforged/mcdreforged-${jdk_distribution}``。见下文�
 msgid ""
 "Source code: https://github.com/Fallen-Breath/MCDReforged-"
 "Docker/blob/master/src"
-msgstr "源代码：https://github.com/Fallen-Breath/MCDReforged-Docker/blob/master/src"
+msgstr "源代码：https://github.com/MCDReforged/docker/blob/master/src"
 
 #: ../docker.rst:180
 msgid "Supported OpenJDK distributions:"
