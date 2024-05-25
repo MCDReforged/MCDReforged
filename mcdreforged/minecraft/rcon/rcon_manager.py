@@ -15,6 +15,7 @@ class RconManager:
 		self.mcdr_server = mcdr_server
 		self.logger = mcdr_server.logger
 		self.rcon: Optional[RconConnection] = None
+		self.__tr = mcdr_server.create_internal_translator('rcon_manager').tr
 
 	def is_running(self) -> bool:
 		return self.rcon is not None and self.rcon.socket is not None
@@ -26,21 +27,21 @@ class RconManager:
 		try:
 			success = self.rcon.connect()
 		except Exception as e:
-			self.logger.exception(self.mcdr_server.tr('rcon_manager.connect.connection_fail', e))
+			self.logger.exception(self.__tr('connect.connection_fail', e))
 			self.rcon = None
 		else:
 			if success:
-				self.logger.info(self.mcdr_server.tr('rcon_manager.connect.connected'))
+				self.logger.info(self.__tr('connect.connected'))
 			else:
-				self.logger.info(self.mcdr_server.tr('rcon_manager.connect.wrong_password'))
+				self.logger.info(self.__tr('connect.wrong_password'))
 
 	def disconnect(self):
 		if self.is_running():
 			try:
 				self.rcon.disconnect()
-				self.logger.info(self.mcdr_server.tr('rcon_manager.disconnect.disconnected'))
+				self.logger.info(self.__tr('disconnect.disconnected'))
 			except Exception:
-				self.mcdr_server.logger.error(self.mcdr_server.tr('rcon_manager.disconnect.disconnect_fail'))
+				self.mcdr_server.logger.error(self.__tr('disconnect.disconnect_fail'))
 		self.rcon = None
 
 	def send_command(self, command: str) -> Optional[str]:

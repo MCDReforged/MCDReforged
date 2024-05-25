@@ -30,9 +30,9 @@ from mcdreforged.plugin.installer.downloader import ReleaseDownloader
 from mcdreforged.plugin.installer.meta_holder import PersistCatalogueMetaRegistryHolder
 from mcdreforged.plugin.installer.types import MetaRegistry, PluginData, ReleaseData, MergedMetaRegistry, PluginResolution
 from mcdreforged.plugin.meta.version import VersionRequirement, Version
+from mcdreforged.translation.translator import Translator
 from mcdreforged.utils import misc_util
 from mcdreforged.utils.replier import CommandSourceReplier
-from mcdreforged.utils.translator import Translator
 
 if TYPE_CHECKING:
 	from mcdreforged.plugin.builtin.mcdreforged_plugin.mcdreforged_plugin import MCDReforgedPlugin
@@ -237,7 +237,7 @@ class PluginCommandPimExtension(SubCommand):
 		)
 		self.__installation_confirm_helper = ConfirmHelper()
 		self.__installation_source: Optional[CommandSource] = None
-		self.tr = Translator('mcdr_command.pim')  # overrides parent class method
+		self.tr = Translator('mcdr_command.pim', mcdr_server=self.mcdr_server)
 
 	@override
 	@deprecated('use get_command_child_nodes instead')

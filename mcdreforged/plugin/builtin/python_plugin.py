@@ -33,7 +33,7 @@ class PythonPlugin(PermanentPlugin):
 
 	@override
 	def load(self):
-		self.mcdr_server.logger.info(self.mcdr_server.tr('python_plugin.info', core_constant.NAME, self.get_meta_name()))
+		self.mcdr_server.logger.info(self.mcdr_server.translate('mcdreforged.python_plugin.info', core_constant.NAME, self.get_meta_name()))
 
 	def __repr__(self):
 		return 'PythonPlugin[version={}]'.format(METADATA['version'])

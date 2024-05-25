@@ -32,6 +32,7 @@ from mcdreforged.plugin.plugin_manager import PluginManager
 from mcdreforged.plugin.si.server_interface import ServerInterface
 from mcdreforged.preference.preference_manager import PreferenceManager
 from mcdreforged.translation.translation_manager import TranslationManager
+from mcdreforged.translation.translator import Translator
 from mcdreforged.utils import file_util, request_util
 from mcdreforged.utils.exception import ServerStartError, IllegalStateError, DecodeError
 from mcdreforged.utils.logger import DebugOption, MCDReforgedLogger, MCColorFormatControl
@@ -77,6 +78,7 @@ class MCDReforgedServer:
 		self.command_manager: CommandManager = CommandManager(self)
 		self.plugin_manager: PluginManager = PluginManager(self)
 		self.preference_manager: PreferenceManager = PreferenceManager(self)
+		self.__tr = self.create_internal_translator('mcdr_server')
 
 		self.__check_environment()
 
@@ -201,7 +203,7 @@ class MCDReforgedServer:
 	def get_language(self) -> str:
 		return self.translation_manager.language
 
-	def tr(
+	def translate(
 			self, translation_key: str,
 			*args,
 			_mcdr_tr_language: Optional[str] = None,
@@ -228,6 +230,9 @@ class MCDReforgedServer:
 			plugin_translations=self.plugin_manager.registry_storage.translations
 		)
 
+	def create_internal_translator(self, part: str) -> Translator:
+		return Translator(('mcdreforged.' + part).rstrip('.'), mcdr_server=self)
+
 	# --------------------------
 	#          Loaders
 	# --------------------------
@@ -237,7 +242,7 @@ class MCDReforgedServer:
 		# load the language before warning missing config to make sure translation is available
 		self.on_config_changed(log=log)
 		if log and has_missing:
-			for line in self.tr('config.missing_config').splitlines():
+			for line in self.translate('mcdreforged.config.missing_config').splitlines():
 				self.logger.warning(line)
 
 	def on_config_changed(self, *, log: bool):
@@ -247,20 +252,20 @@ class MCDReforgedServer:
 			MCColorFormatControl.console_color_disabled = config.disable_console_color
 			self.logger.set_debug_options(config.debug)
 			if log and config.is_debug_on():
-				self.logger.info(self.tr('mcdr_server.on_config_changed.debug_mode_on'))
+				self.logger.info(self.__tr('on_config_changed.debug_mode_on'))
 
 			self.translation_manager.set_language(config.language)
 			if log:
-				self.logger.info(self.tr('mcdr_server.on_config_changed.language_set', config.language))
+				self.logger.info(self.__tr('on_config_changed.language_set', config.language))
 
 			self.__encoding_method = config.encoding or locale.getpreferredencoding()
 			self.__decoding_method = config.decoding or locale.getpreferredencoding()
 			if log:
-				self.logger.info(self.tr('mcdr_server.on_config_changed.encoding_decoding_set', self.__encoding_method, self.__decoding_method))
+				self.logger.info(self.__tr('on_config_changed.encoding_decoding_set', self.__encoding_method, self.__decoding_method))
 
 			self.plugin_manager.set_plugin_directories(config.plugin_directories)
 			if log:
-				self.logger.info(self.tr('mcdr_server.on_config_changed.plugin_directories_set', self.__encoding_method, self.__decoding_method))
+				self.logger.info(self.__tr('on_config_changed.plugin_directories_set', self.__encoding_method, self.__decoding_method))
 				for directory in self.plugin_manager.plugin_directories:
 					self.logger.info('- {}'.format(directory))
 
@@ -269,7 +274,7 @@ class MCDReforgedServer:
 			self.server_handler_manager.register_handlers(config.custom_handlers)
 			self.server_handler_manager.set_configured_handler(config.handler)
 			if log:
-				self.logger.info(self.tr('mcdr_server.on_config_changed.handler_set', config.handler))
+				self.logger.info(self.__tr('on_config_changed.handler_set', config.handler))
 
 			request_util.set_proxies(config.http_proxy, config.https_proxy)
 
@@ -378,25 +383,25 @@ class MCDReforgedServer:
 		"""
 		with self.__starting_server_lock:
 			if self.is_interrupt():
-				self.logger.warning(self.tr('mcdr_server.start_server.already_interrupted'))
+				self.logger.warning(self.__tr('start_server.already_interrupted'))
 				return False
 			if self.is_server_running():
-				self.logger.warning(self.tr('mcdr_server.start_server.start_twice'))
+				self.logger.warning(self.__tr('start_server.start_twice'))
 				return False
 			if self.is_mcdr_about_to_exit():
-				self.logger.warning(self.tr('mcdr_server.start_server.about_to_exit'))
+				self.logger.warning(self.__tr('start_server.about_to_exit'))
 				return False
 
 			cwd = self.config.working_directory
 			if not os.path.isdir(cwd):
-				self.logger.error(self.tr('mcdr_server.start_server.cwd_not_existed', cwd))
+				self.logger.error(self.__tr('start_server.cwd_not_existed', cwd))
 				return False
 			try:
 				start_command = self.config.start_command
-				self.logger.info(self.tr('mcdr_server.start_server.starting', start_command))
+				self.logger.info(self.__tr('start_server.starting', start_command))
 				self.process = Popen(start_command, cwd=self.config.working_directory, stdin=PIPE, stdout=PIPE, stderr=STDOUT, shell=True)
 			except Exception:
-				self.logger.exception(self.tr('mcdr_server.start_server.start_fail'))
+				self.logger.exception(self.__tr('start_server.start_fail'))
 				return False
 			else:
 				self.__on_server_start()
@@ -407,7 +412,7 @@ class MCDReforgedServer:
 		Kill the server process group
 		"""
 		if self.process and self.process.poll() is None:
-			self.logger.info(self.tr('mcdr_server.kill_server.killing'))
+			self.logger.info(self.__tr('kill_server.killing'))
 			try:
 				root = psutil.Process(self.process.pid)
 				processes = [root]
@@ -416,7 +421,7 @@ class MCDReforgedServer:
 					try:
 						proc_pid, proc_name = proc.pid, proc.name()  # in case we cannot get them after the process dies
 						proc.kill()
-						self.logger.info(self.tr('mcdr_server.kill_server.process_killed', proc_name, proc_pid))
+						self.logger.info(self.__tr('kill_server.process_killed', proc_name, proc_pid))
 					except psutil.NoSuchProcess:
 						pass
 			except psutil.NoSuchProcess:
@@ -432,7 +437,7 @@ class MCDReforgedServer:
 		Return if it's the first try
 		"""
 		first_interrupt = not self.is_interrupt()
-		self.logger.info(self.tr('mcdr_server.interrupt.{}'.format('soft' if first_interrupt else 'hard')))
+		self.logger.info(self.__tr('interrupt.{}'.format('soft' if first_interrupt else 'hard')))
 		if self.is_server_running():
 			self.stop(forced=not first_interrupt)
 		self.add_flag(MCDReforgedFlag.INTERRUPT)
@@ -447,14 +452,14 @@ class MCDReforgedServer:
 		"""
 		with self.__stop_lock:
 			if not self.is_server_running():
-				self.logger.warning(self.tr('mcdr_server.stop.stop_when_stopped'))
+				self.logger.warning(self.__tr('stop.stop_when_stopped'))
 				return False
 			self.set_server_state(ServerState.STOPPING)
 			if not forced:
 				try:
 					self.send(self.server_handler_manager.get_current_handler().get_stop_command())
 				except Exception:
-					self.logger.error(self.tr('mcdr_server.stop.stop_fail'))
+					self.logger.error(self.__tr('stop.stop_fail'))
 					forced = True
 			if forced:
 				self.__kill_server()
@@ -467,13 +472,13 @@ class MCDReforgedServer:
 	def __on_server_start(self):
 		self.set_server_state(ServerState.RUNNING)
 		self.add_flag(MCDReforgedFlag.EXIT_AFTER_STOP)  # Set after server state is set to RUNNING, or MCDR might have a chance to exit if the server is started by other thread
-		self.logger.info(self.tr('mcdr_server.start_server.pid_info', self.process.pid))
+		self.logger.info(self.__tr('start_server.pid_info', self.process.pid))
 		self.reactor_manager.on_server_start()
 		self.plugin_manager.dispatch_event(MCDRPluginEvents.SERVER_START, ())
 
 	def __on_server_stop(self):
 		return_code = self.process.poll()
-		self.logger.info(self.tr('mcdr_server.on_server_stop.show_return_code', return_code))
+		self.logger.info(self.__tr('on_server_stop.show_return_code', return_code))
 		try:
 			self.process.stdin.close()
 		except Exception as e:
@@ -489,9 +494,9 @@ class MCDReforgedServer:
 		self.plugin_manager.dispatch_event(MCDRPluginEvents.SERVER_STOP, (return_code,), block=True)
 
 		if self.is_interrupt():
-			self.logger.info(self.tr('mcdr_server.on_server_stop.user_interrupted'))
+			self.logger.info(self.__tr('on_server_stop.user_interrupted'))
 		else:
-			self.logger.info(self.tr('mcdr_server.on_server_stop.server_stop'))
+			self.logger.info(self.__tr('on_server_stop.server_stop'))
 
 	def send(self, text: str, ending: str = '\n', encoding: Optional[str] = None):
 		"""
@@ -512,8 +517,8 @@ class MCDReforgedServer:
 			self.process.stdin.write(encoded_text)
 			self.process.stdin.flush()
 		else:
-			self.logger.warning(self.tr('mcdr_server.send.send_when_stopped'))
-			self.logger.warning(self.tr('mcdr_server.send.send_when_stopped.text', text if len(text) <= 32 else text[:32] + '...'))
+			self.logger.warning(self.__tr('send.send_when_stopped'))
+			self.logger.warning(self.__tr('send.send_when_stopped.text', text if len(text) <= 32 else text[:32] + '...'))
 
 	def __receive(self) -> Optional[str]:
 		"""
@@ -528,7 +533,7 @@ class MCDReforgedServer:
 				try:
 					self.process.wait(1)
 				except TimeoutExpired:
-					self.logger.info(self.tr('mcdr_server.receive.wait_stop'))
+					self.logger.info(self.__tr('receive.wait_stop'))
 				else:
 					break
 			else:
@@ -540,7 +545,7 @@ class MCDReforgedServer:
 			try:
 				line_text: str = line_buf.decode(self.__decoding_method)
 			except Exception as e:
-				self.logger.error(self.tr('mcdr_server.receive.decode_fail', line_buf, e))
+				self.logger.error(self.__tr('receive.decode_fail', line_buf, e))
 				raise DecodeError()
 			return line_text.strip('\n\r')
 
@@ -561,7 +566,7 @@ class MCDReforgedServer:
 		try:
 			text = self.server_handler_manager.get_current_handler().pre_parse_server_stdout(text)
 		except Exception:
-			self.logger.warning(self.tr('mcdr_server.tick.pre_parse_fail'))
+			self.logger.warning(self.__tr('tick.pre_parse_fail'))
 
 		info: Info
 		try:
@@ -587,7 +592,7 @@ class MCDReforgedServer:
 			self.reactor_manager.put_info(info)
 
 	def __on_mcdr_start(self):
-		self.logger.info(self.tr('mcdr_server.on_mcdr_start.starting', core_constant.NAME, core_constant.VERSION))
+		self.logger.info(self.__tr('on_mcdr_start.starting', core_constant.NAME, core_constant.VERSION))
 		self.__register_signal_handler()
 		self.watch_dog.start()
 		self.task_executor.start()
@@ -598,7 +603,7 @@ class MCDReforgedServer:
 		if not self.config.disable_console_thread:
 			self.console_handler.start()
 		else:
-			self.logger.info(self.tr('mcdr_server.on_mcdr_start.console_disabled'))
+			self.logger.info(self.__tr('on_mcdr_start.console_disabled'))
 		if not self.start_server():
 			raise ServerStartError()
 		self.update_helper.start()
@@ -607,7 +612,7 @@ class MCDReforgedServer:
 		self.set_mcdr_state(MCDReforgedState.RUNNING)
 
 	def __register_signal_handler(self):
-		def callback(sig: int, frame):
+		def callback(sig: int, _frame):
 			try:
 				signal_name = signal.Signals(sig).name
 			except ValueError:
@@ -623,7 +628,7 @@ class MCDReforgedServer:
 		try:
 			self.set_mcdr_state(MCDReforgedState.PRE_STOPPED)
 
-			self.logger.info(self.tr('mcdr_server.on_mcdr_stop.info'))
+			self.logger.info(self.__tr('on_mcdr_stop.info'))
 
 			self.plugin_manager.dispatch_event(MCDRPluginEvents.PLUGIN_UNLOADED, ())
 			self.task_executor.wait_till_finish_all_task()
@@ -631,11 +636,11 @@ class MCDReforgedServer:
 				self.plugin_manager.dispatch_event(MCDRPluginEvents.MCDR_STOP, (), block=True)
 
 			self.console_handler.stop()
-			self.logger.info(self.tr('mcdr_server.on_mcdr_stop.bye'))
+			self.logger.info(self.__tr('on_mcdr_stop.bye'))
 		except KeyboardInterrupt:  # I don't know why there sometimes will be a KeyboardInterrupt if MCDR is stopped by ctrl-c
 			pass
 		except Exception:
-			self.logger.exception(self.tr('mcdr_server.on_mcdr_stop.stop_error'))
+			self.logger.exception(self.__tr('on_mcdr_stop.stop_error'))
 		finally:
 			self.set_mcdr_state(MCDReforgedState.STOPPED)
 
@@ -673,7 +678,7 @@ class MCDReforgedServer:
 				if self.is_interrupt():
 					break
 				else:
-					self.logger.critical(self.tr('mcdr_server.run.error'), exc_info=True)
+					self.logger.critical(self.__tr('run.error'), exc_info=True)
 		self.__on_mcdr_stop()
 
 	def connect_rcon(self):

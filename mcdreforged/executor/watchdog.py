@@ -17,6 +17,7 @@ class WatchDog(BackgroundThreadExecutor):
 	def __init__(self, mcdr_server: 'MCDReforgedServer'):
 		super().__init__(mcdr_server.logger)
 		self.mcdr_server = mcdr_server
+		self.__tr = mcdr_server.create_internal_translator('watchdog').tr
 		self.__monitoring = False
 
 	def is_monitoring(self):
@@ -46,9 +47,9 @@ class WatchDog(BackgroundThreadExecutor):
 		task_executor = self.mcdr_server.task_executor
 		if task_executor.get_this_tick_time() > no_respond_threshold and self.__monitoring:
 			plugin = self.mcdr_server.plugin_manager.get_current_running_plugin(thread=task_executor.get_thread())
-			self.mcdr_server.logger.warning(self.mcdr_server.tr('watchdog.task_executor_no_response.line1', no_respond_threshold))
-			self.mcdr_server.logger.warning(self.mcdr_server.tr('watchdog.task_executor_no_response.line2', plugin))
-			self.mcdr_server.logger.warning(self.mcdr_server.tr('watchdog.task_executor_no_response.line3'))
+			self.mcdr_server.logger.warning(self.__tr('task_executor_no_response.line1', no_respond_threshold))
+			self.mcdr_server.logger.warning(self.__tr('task_executor_no_response.line2', plugin))
+			self.mcdr_server.logger.warning(self.__tr('task_executor_no_response.line3'))
 
 			task_executor.soft_stop()  # Soft-stop it, in case it turns alive somehow
 			task_executor.set_name(task_executor.get_name() + ' (no response)')

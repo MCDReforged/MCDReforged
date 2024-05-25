@@ -122,7 +122,7 @@ class TaskExecutor(BackgroundThreadExecutor):
 			try:
 				task.func()
 			except Exception:
-				self.mcdr_server.logger.exception(self.mcdr_server.tr('task_executor.error'))
+				self.mcdr_server.logger.exception(self.mcdr_server.translate('mcdreforged.task_executor.error'))
 			finally:
 				self.task_queue.task_done()
 

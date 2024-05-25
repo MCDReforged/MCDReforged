@@ -19,6 +19,7 @@ class ServerHandlerManager:
 		self.mcdr_server = mcdr_server
 		self.logger: Logger = mcdr_server.logger
 		self.handlers: Dict[str, ServerHandler] = {}
+		self.__tr = mcdr_server.create_internal_translator('server_handler_manager').tr
 
 		self.__basic_handler: Optional[ServerHandler] = None  # the handler that should always work
 		self.__plugin_provided_server_handler_holder: Optional[PluginProvidedServerHandlerHolder] = None
@@ -71,9 +72,9 @@ class ServerHandlerManager:
 
 	def set_plugin_provided_server_handler_holder(self, psh: Optional[PluginProvidedServerHandlerHolder]):
 		if psh is not None:
-			self.logger.info(self.mcdr_server.tr('server_handler_manager.plugin_provided.set', psh.server_handler.get_name(), psh.plugin))
+			self.logger.info(self.__tr('plugin_provided.set', psh.server_handler.get_name(), psh.plugin))
 		elif self.__plugin_provided_server_handler_holder is not None:
-			self.logger.info(self.mcdr_server.tr('server_handler_manager.plugin_provided.unset', self.__current_configured_handler.get_name()))
+			self.logger.info(self.__tr('plugin_provided.unset', self.__current_configured_handler.get_name()))
 		self.__plugin_provided_server_handler_holder = psh
 
 	def get_basic_handler(self) -> ServerHandler:
@@ -106,6 +107,7 @@ class HandlerDetector:
 		self.text_queue = queue.Queue()
 		self.text_count = 0
 		self.success_count: Counter[ServerHandler] = collections.Counter()
+		self.__tr = self.mcdr_server.create_internal_translator('server_handler_manager').tr
 
 	def start_handler_detection(self):
 		if not self.is_detection_running():
@@ -161,10 +163,10 @@ class HandlerDetector:
 			if psh is not None and current_handler is psh.server_handler:
 				current_handler_name += ' ({})'.format(psh.plugin)
 
-			self.mcdr_server.logger.warning(self.mcdr_server.tr('server_handler_manager.handler_detection.result1'))
-			self.mcdr_server.logger.warning(self.mcdr_server.tr('server_handler_manager.handler_detection.result2', current_handler_name, round(100.0 * current_count / total, 2), current_count, total))
+			self.mcdr_server.logger.warning(self.__tr('handler_detection.result1'))
+			self.mcdr_server.logger.warning(self.__tr('handler_detection.result2', current_handler_name, round(100.0 * current_count / total, 2), current_count, total))
 			for best_handler, best_count in best_handler_tuples:
-				self.mcdr_server.logger.warning(self.mcdr_server.tr('server_handler_manager.handler_detection.result3', best_handler.get_name(), round(100.0 * best_count / total, 2), best_count, total))
+				self.mcdr_server.logger.warning(self.__tr('handler_detection.result3', best_handler.get_name(), round(100.0 * best_count / total, 2), best_count, total))
 
 	def detect_text(self, text: str):
 		if self.is_detection_running():

@@ -60,9 +60,10 @@ class MCDReforgedPlugin(PermanentPlugin):
 			ServerCommand(self),
 			self.command_status,
 		]
+		self.__translator = self.mcdr_server.create_internal_translator('')
 
 	def tr(self, key: str, *args, **kwargs) -> RTextMCDRTranslation:
-		return self.server_interface.rtr(key, *args, **kwargs)
+		return self.__translator(key, *args, **kwargs)
 
 	@override
 	def load(self):
@@ -126,7 +127,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 
 	def on_mcdr_command_permission_denied(self, source: CommandSource, error: CommandError):
 		if not error.is_handled():
-			source.reply(RText(self.mcdr_server.tr('mcdr_command.permission_denied'), color=RColor.red))
+			source.reply(RText(self.mcdr_server.translate('mcdreforged.mcdr_command.permission_denied'), color=RColor.red))
 
 	def on_mcdr_command_unknown_argument(self, source: CommandSource, error: CommandError):
 		if source.has_permission(PermissionLevel.MCDR_CONTROL_LEVEL):

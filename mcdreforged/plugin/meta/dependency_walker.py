@@ -92,7 +92,7 @@ class WalkResult(NamedTuple):
 class DependencyWalker:
 	def __init__(self, plugin_manager: 'PluginManager'):
 		self.__plugin_manager = plugin_manager
-		self.__tr = plugin_manager.mcdr_server.tr
+		self.__tr = plugin_manager.mcdr_server.create_internal_translator('dependency_walker').tr
 		self.__holders: Dict[str, PluginHolder] = {}
 		self.__loop_checker: LoopChecker[str] = LoopChecker()
 		self.__topo_order: List[str] = []
@@ -115,23 +115,23 @@ class DependencyWalker:
 	def __ensure_loaded(self, plugin_id: str, requirement: Optional[VersionRequirement]):
 		holder = self.__get_holder(plugin_id)
 		if holder.state == VisitingState.FAIL:
-			raise DependencyParentFail(self.__tr('dependency_walker.dependency_parent_failed', plugin_id))
+			raise DependencyParentFail(self.__tr('dependency_parent_failed', plugin_id))
 
 		loop_list = self.__loop_checker.check(plugin_id)
 		if loop_list is not None:
 			loop_message = ' -> '.join(loop_list)
-			raise DependencyLoop(self.__tr('dependency_walker.dependency_loop', plugin_id, loop_message))
+			raise DependencyLoop(self.__tr('dependency_loop', plugin_id, loop_message))
 
 		with self.__loop_checker.enter(plugin_id):
 			plugin = self.__plugin_manager.get_plugin_from_id(plugin_id)
 			if plugin is None:
-				raise DependencyNotFound(self.__tr('dependency_walker.dependency_not_found', plugin_id))
+				raise DependencyNotFound(self.__tr('dependency_not_found', plugin_id))
 			plugin_name_display = plugin.get_name()
 			plugin_version = plugin.get_version()
 			plugin_dependencies = plugin.get_metadata().dependencies
 
 			if requirement is not None and isinstance(requirement, VersionRequirement) and not requirement.accept(plugin_version):
-				raise DependencyNotMet(self.__tr('dependency_walker.dependency_not_met', plugin_name_display, requirement))
+				raise DependencyNotMet(self.__tr('dependency_not_met', plugin_name_display, requirement))
 
 			if holder.state == VisitingState.PASS:  # no need to do further dependencies check, already done
 				return
@@ -167,7 +167,7 @@ class DependencyWalker:
 				if holder.state is not VisitingState.FAIL:
 					self.__ensure_loaded(plugin_id, None)
 				else:
-					raise DependencyError(self.__tr('dependency_walker.dependency_already_failed', plugin_id, holder.state))
+					raise DependencyError(self.__tr('dependency_already_failed', plugin_id, holder.state))
 			except DependencyError as e:
 				holder.error = e
 

@@ -1,453 +1,453 @@
-# ======================== core logics ========================
+mcdreforged:
+  # ======================== core logics ========================
+  mcdr_server:
+    on_config_changed:
+      language_set: 语言已设置为 {0}
+      debug_mode_on: 调试模式开启
+      handler_set: 解析处理器已设置为 {0}
+      encoding_decoding_set: 编码 / 解码方式已设置为 {0} / {1}
+      plugin_directories_set: '插件文件夹列表:'
+    start_server:
+      already_interrupted: MCDR 已被终止
+      start_twice: 服务端不能多次启动
+      about_to_exit: MCDR 即将退出
+      cwd_not_existed: 服务端工作路径 {0} 不存在
+      starting: 正在启动服务端，启动参数为 "{0}"
+      start_fail: 服务端启动失败
+      pid_info: 服务端正在以 PID {0} 运行中
+    stop:
+      stop_when_stopped: 服务端不能在关闭时再次关闭
+      stop_fail: 服务端关闭出错，强制关闭
+    kill_server:
+      killing: 正在杀死服务端进程组
+      process_killed: 进程 {0} (pid {1}) 已杀死
+    interrupt:
+      soft: 正在终止 MCDR。再次执行以强制杀死服务端
+      hard: 正在终止 MCDR 并杀死服务端
+    send:
+      send_when_stopped:
+        .: 服务端已关闭，不能向其标准输入流输入指令
+        text: '被输入的指令: {0}'
+    receive:
+      wait_stop: 等待服务端进程停止
+      decode_fail: '解析文本 {0} 出错: {1}'
+    on_mcdr_start:
+      starting: '{0} {1} 正在启动'
+      console_disabled: 控制台线程已禁用
+    on_server_stop:
+      show_return_code: '服务端进程返回代码: {0}'
+      user_interrupted: 服务端已被用户终止
+      server_stop: 服务端已关闭
+    tick:
+      pre_parse_fail: 预解析服务端标准输出流失败，使用源文本
+    run:
+      error: 运行 MCDR 时出错
+    on_mcdr_stop:
+      info: 正在关闭 MCDR
+      bye: bye
+      stop_error: 关闭 MCDR 时出错，忽略并继续退出
+  mcdr_state:
+    initializing: §8初始化中§r
+    initialized: §7已初始化§r
+    running: §a运行中§r
+    pre_stopped: §4正在关闭§r
+    stopped: §4已关闭§r
+  server_state:
+    running: §a运行中§r
+    stopping: §c正在关闭§r
+    pre_stopped: §4即将关闭§r
+    stopped: §4已关闭§r
+  config:
+    missing_config: |
+      配置文件缺失部分选项，使用默认值
+      请尽快去检测并更新配置文件
 
-mcdr_server:
-  on_config_changed:
-    language_set: 语言已设置为 {0}
-    debug_mode_on: 调试模式开启
-    handler_set: 解析处理器已设置为 {0}
-    encoding_decoding_set: 编码 / 解码方式已设置为 {0} / {1}
-    plugin_directories_set: '插件文件夹列表:'
-  start_server:
-    already_interrupted: MCDR 已被终止
-    start_twice: 服务端不能多次启动
-    about_to_exit: MCDR 即将退出
-    cwd_not_existed: 服务端工作路径 {0} 不存在
-    starting: 正在启动服务端，启动参数为 "{0}"
-    start_fail: 服务端启动失败
-    pid_info: 服务端正在以 PID {0} 运行中
-  stop:
-    stop_when_stopped: 服务端不能在关闭时再次关闭
-    stop_fail: 服务端关闭出错，强制关闭
-  kill_server:
-    killing: 正在杀死服务端进程组
-    process_killed: 进程 {0} (pid {1}) 已杀死
-  interrupt:
-    soft: 正在终止 MCDR。再次执行以强制杀死服务端
-    hard: 正在终止 MCDR 并杀死服务端
-  send:
-    send_when_stopped:
-      .: 服务端已关闭，不能向其标准输入流输入指令
-      text: '被输入的指令: {0}'
-  receive:
-    wait_stop: 等待服务端进程停止
-    decode_fail: '解析文本 {0} 出错: {1}'
-  on_mcdr_start:
-    starting: '{0} {1} 正在启动'
-    console_disabled: 控制台线程已禁用
-  on_server_stop:
-    show_return_code: '服务端进程返回代码: {0}'
-    user_interrupted: 服务端已被用户终止
-    server_stop: 服务端已关闭
-  tick:
-    pre_parse_fail: 预解析服务端标准输出流失败，使用源文本
-  run:
-    error: 运行 MCDR 时出错
-  on_mcdr_stop:
-    info: 正在关闭 MCDR
-    bye: bye
-    stop_error: 关闭 MCDR 时出错，忽略并继续退出
-mcdr_state:
-  initializing: §8初始化中§r
-  initialized: §7已初始化§r
-  running: §a运行中§r
-  pre_stopped: §4正在关闭§r
-  stopped: §4已关闭§r
-server_state:
-  running: §a运行中§r
-  stopping: §c正在关闭§r
-  pre_stopped: §4即将关闭§r
-  stopped: §4已关闭§r
-config:
-  missing_config: |
-    配置文件缺失部分选项，使用默认值
-    请尽快去检测并更新配置文件
+  # ======================== thread executors ========================
 
-# ======================== thread executors ========================
-
-console_handler:
-  parse_fail: 解析控制台指令 "{0}" 出错
-  error: 运行 ConsoleHandler 时出错
-  stopping_kits: 正在关闭高级控制台
-task_executor:
-  error: 运行 TaskExecutor 时出错
-watchdog:
-  task_executor_no_response:
-    line1: TaskExecutor 线程已经 {0} 秒没有响应了，可能出了些问题
-    line2: '正在于 TaskExecutor 线程中运行的插件 (如果存在的话): {0}'
-    line3: 重建 TaskExecutor 中
-info_reactor_manager:
-  react:
-    error: 运行响应器 {0} 时出错
-  info_queue:
-    full: 消息队列已满, 服务端是否在刷屏? 忽略新到来消息
-server_handler_manager:
-  plugin_provided:
-    set: '使用插件 {1} 提供的解析处理器 {0}'
-    unset: '使用配置文件指定的解析处理器 {0}'
-  handler_detection:
-    result1: 似乎你并没有使用正确的服务端解析处理器
-    result2: '目前正在使用的解析处理器: {0}, 成功率 {1}% ({2}/{3})'
-    result3: '可能更为准确的解析处理器: {0}, 成功率 {1}% ({2}/{3})'
-update_helper:
-  check_update:
-    already_checking: MCDR 已在检查更新中
-    check_fail: '从 Github 检测最新版本失败: {0}'
-    is_already_latest: MCDR 已为最新版
-    newer_than_latest: 目前版本 §7{0}§r 比 Github 中的最新版 §7{1}§r 更新，这是一个开发版吗？
-    new_version_detected: '已检测到新版本: §7{0}§r。§7{0}§r 的新内容:'
-
-# ======================== commands ========================
-
-command_exception:
-  unknown_command: 未知指令
-  unknown_argument: 未知参数
-  unknown_root_argument: 未知根节点参数
-  requirement_not_met: 约束未满足
-  literal_not_match: 字面不匹配
-  number_out_of_range: 数字 {0} 超出范围 [{1}, {2}]
-  invalid_number: 无效的数字
-  invalid_integer: 无效的整数
-  invalid_float: 无效的浮点数
-  invalid_boolean: 无效的布尔值
-  invalid_enumeration: 无效的枚举值
-  text_length_out_of_range: 文本长度 {0} 超出范围 [{1}, {2}]
-  illegal_escapes_usage: 转义符的非法使用
-  unclosed_quoted_string: 未封闭的引号
-  empty_text: 空文本
-
-# ======================== builtin plugins ========================
-
-mcdr_command:
-  permission_denied: §c权限不足§r
-  help_message:
-    .: |
-      §7!!MCDR§r: 显示这条消息
-      §7!!MCDR checkupdate§r: 从 Github 检测更新
-      §7!!MCDR permission§r: 显示权限相关的帮助信息
-      §7!!MCDR plugin§r: 显示插件相关的帮助信息
-      §7!!MCDR preference§r: 显示偏好相关的帮助信息
-      §7!!MCDR reload§r: 显示重载相关的帮助信息
-      §7!!MCDR server§r: 显示控制服务端相关的帮助信息
-      §7!!MCDR status§r: 显示 MCDR 状态
-    reload: |
-      §7!!MCDR reload plugin§r: 加载 / 重载 / 卸载§l有修改的§r插件
-      §7!!MCDR reload config§r: 重载配置文件
-      §7!!MCDR reload permission§r: 重载权限文件
-      §7!!MCDR reload all§r: 重载上述所有
-    permission: |
-      §7!!MCDR permission list §e[<level>]§r: 列出所有玩家的权限等级。如果 §e[<level>]§r 被指定则仅列出权限等级 §e[<level>]§r
-      §7!!MCDR permission set §b<player>§r §e<level>§r: 将 §b<player>§r 的权限等级设置为 §e<level>§r
-      §7!!MCDR permission query §b[<player>]§r: 查询 §b<player>§r 的权限等级。当 §b<player>§r 参数被省略时，查询指令发送者的权限等级
-      §7!!MCDR permission remove §b<player>§r: 将 §b<player>§r 从权限数据库中移除
-      §7!!MCDR permission setdefault §e<level>§r: 将默认权限等级设置为 §e<level>§r
-    plugin: |
-      §7!!MCDR plugin list§r: 列出所有的插件
-      §7!!MCDR plugin info §6<plugin_id>§r: 显示 id 为 §6<plugin_id>§r 插件的信息
-      §7!!MCDR plugin load §e<file_name>§r: 加载文件名为 §e<file_name>§r 的插件
-      §7!!MCDR plugin enable §e<file_name>§r: 启用文件名为 §e<file_name>§r 的插件
-      §7!!MCDR plugin reload §6<plugin_id>§r: 重载 id 为 §6<plugin_id>§r 的插件
-      §7!!MCDR plugin unload §6<plugin_id>§r: 卸载 id 为 §6<plugin_id>§r 的插件
-      §7!!MCDR plugin disable §6<plugin_id>§r: 禁用 id 为 §6<plugin_id>§r 的插件
-      §7!!MCDR plugin reloadall§r: 加载 / 重载 / 卸载§l所有§r插件
-      §7!!MCDR plugin browse §e[<keyword>]§7 [-i §6<plugin_id>§7]§r: 浏览插件仓库。用关键字 §e<keyword>§r 进行筛选，或展示给定插件 §6<plugin_id>§7 的详情
-      §7!!MCDR plugin install §a<specifier>§7 [-u] [-y] ...§r: 从插件仓库安装给定描述的插件
-      §7!!MCDR plugin checkupdate §6[<plugin_id> ...]§r: 检查给定的插件是否有更新
-      §7!!MCDR plugin refreshmeta§r: 重新拉取插件仓库的元数据
-    preference: |
-      §7!!MCDR preference list§r: 显示偏好列表
-      §7!!MCDR preference §e<pref_name>§r: 显示偏好 §e<pref_name>§r 的详情
-      §7!!MCDR preference §e<pref_name>§r set §6<value>§r: 设定偏好 §e<pref_name>§r 的值为 §6<value>§r
-      §7!!MCDR preference §e<pref_name>§r reset: 将偏好 §e<pref_name>§r 重置为默认值
-    server: |
-      §7!!MCDR server start§r: 启动服务端
-      §7!!MCDR server stop§r: 关闭服务端，且 MCDR 会继续运行
-      §7!!MCDR server stop_exit§r: 关闭服务端并退出 MCDR
-      §7!!MCDR server exit§r: 退出 MCDR。服务端应已关闭
-      §7!!MCDR server restart§r: 重启服务端
-      §7!!MCDR server kill§r: 杀死服务端，以及其所有子进程
-    debug: |
-      §7!!MCDR debug thread_dump §6[#all|<thread_name>]§r: 导出所有指定线程的堆栈追踪信息
-      §7!!MCDR debug translation get §6<translation_key>§r: 导出给定翻译键的翻译信息
-      §7!!MCDR debug translation dump §6<json_path>§r: 导出以给定路径为前缀的所有翻译键，例如 "mcdr_server.on_server_stop"
-      §7!!MCDR debug command_dump all§r: 导出所有指令树
-      §7!!MCDR debug command_dump plugin §6<plugin_id>§r: 导出给定插件注册的所有指令树
-      §7!!MCDR debug command_dump node §6<literal_name>§r: 导出树根为给定名字所有指令树
-    title: MCDR 指令帮助信息列表
-    mcdr_command: MCDR 控制指令
-    help_command: 显示指令帮助信息
-    page_number: 第 §6{0}§r 页
-    previous_page_hover: 点击显示上一页
-    next_page_hover: 点击显示下一页
-  command_not_found: 参数错误，输入 "§7{0}§r" 以查看帮助
-  command_not_found_suggest: 点击以输入 "§7{0}§r"
-  refresh_changed_plugins:
-    fail: 重载变化的插件§c失败§r
-  reload_config:
-    fail: 配置文件重载§c失败§r
-    success: 配置文件重载§a成功§r
-  reload_permission:
-    fail: 权限文件重载§c失败§r
-    success: 权限文件重载§a成功§r
-  permission_not_enough: §c权限等级不足§r
-  invalid_permission_level: §c无效的权限等级§r
-  invalid_player_name: §c无效的玩家名称§r
-  query_player_permission:
-    self: 你的权限等级为 §e{0}§r
-    player: 玩家 §b{0}§r 的权限等级为 §e{1}§r
-    player_unknown: 玩家 §b{0}§r 的权限等级未知
-  remove_player_permission:
-    player_removed: 已移除玩家 §b{0}§r
-  list_permission:
-    show_default: '默认等级: §e{0}§r'
-    suggest_setdefault: 点击以设置默认权限等级
-    suggest_list: 点击以查看权限等级 §e{0}§r 的玩家列表
-    suggest_set: 点击以设置玩家 §b{0}§r 的权限等级
-    suggest_disable: 点击以将玩家 §b{0}§r 从权限数据库中移除
-  print_mcdr_status:
-    online: §a在线§r
-    offline: §7离线§r
-    line1: '§l{0}§r 版本: §e{1}§r'
-    line2: 'MCDR 状态: {0}'
-    line3: '服务端状态: {0}'
-    line4: '服务端已启动: {0}'
-    line5: '将于服务端关闭后退出: {0}'
-    line6: 'rcon: {0}'
-    line7: '插件数量: §6{0}§r'
-    extra:
-      pid: '服务端 PID: {0}'
-      queue: '消息队列负载: §6{0}§r/§6{1}§r'
-      thread: '线程数: §6{0}§r'
-  list_plugin:
-    info_loaded_plugin: §6{0}x §e已加载插件§r
-    info_disabled_plugin: §6{0}x §e已禁用插件§r
-    info_not_loaded_plugin: §6{0}x §e未加载插件§r
-    suggest_info: 点击以显示插件 "§e{0}§r" 的信息
-    suggest_disable: 点击以禁用插件 "§e{0}§r"
-    suggest_enable: 点击以启用插件 "§e{0}§r"
-    suggest_reload: 点击以重载插件 "§e{0}§r"
-    suggest_unload: 点击以卸载插件 "§e{0}§r"
-    suggest_load: 点击以加载插件 "§e{0}§r"
-  plugin_info:
-    id: 'ID: {0}'
-    author: '作者: {0}'
-    link: '链接: {0}'
-  invalid_plugin_id: 无效的插件id "§e{0}§r"
-  invalid_plugin_file_name: 无效的插件文件名 "§e{0}§r"
-  disable_plugin:
-    fail: 插件 "§e{0}§r" 禁用§c失败§r
-    success: 插件 "§e{0}§r" 禁用§a成功§r
-  reload_plugin:
-    fail: 插件 "§e{0}§r" 重载§c失败§r
-    success: 插件 "§e{0}§r" 重载§a成功§r
-  unload_plugin:
-    fail: 插件 "§e{0}§r" 卸载§c失败§r
-    success: 插件 "§e{0}§r" 卸载§a成功§r
-  load_plugin:
-    fail: 插件 "§e{0}§r" 加载§c失败§r
-    success: 插件 "§e{0}§r" 加载§a成功§r
-  enable_plugin:
-    fail: 插件 "§e{0}§r" 启用§c失败§r
-    success: 插件 "§e{0}§r" 启用§a成功§r
-  reload_all_plugin:
-    fail: 重载所有插件§c失败§r
-  pim:
-    common:
-      duplicated_input: "发现正在进行的操作: {0}，请等待它执行完成"
-      fetch_start: 正在更新插件仓库元数据
-      fetch_done: 已更新插件仓库元数据
-      fetch_failed: '插件仓库元数据更新失败: {0}'
-      browse_cmd: 点击以展示插件 {0} 于插件仓库中的信息
-    browse:
-      name: 浏览插件
-      single:
-        id: 'ID: {0}'
-        name: '插件名: {0}'
-        description: '描述: {0}'
-        repository: '仓库: {0}'
-        latest_version: '最新版本: {0}'
-        releases: '发行版列表 ({0}x):'
-        version: '版本: {0}'
-        date: '发布日期: {0}'
-        url: '链接: {0}'
-      all:
-        keyword: '关键字: {0}'
-        title:
-          id: ID
-          name: 插件名
-          version: 版本
-          description: 描述
-        empty: 未找到满足条件的插件
+  console_handler:
+    parse_fail: 解析控制台指令 "{0}" 出错
+    error: 运行 ConsoleHandler 时出错
+    stopping_kits: 正在关闭高级控制台
+  task_executor:
+    error: 运行 TaskExecutor 时出错
+  watchdog:
+    task_executor_no_response:
+      line1: TaskExecutor 线程已经 {0} 秒没有响应了，可能出了些问题
+      line2: '正在于 TaskExecutor 线程中运行的插件 (如果存在的话): {0}'
+      line3: 重建 TaskExecutor 中
+  info_reactor_manager:
+    react:
+      error: 运行响应器 {0} 时出错
+    info_queue:
+      full: 消息队列已满, 服务端是否在刷屏? 忽略新到来消息
+  server_handler_manager:
+    plugin_provided:
+      set: '使用插件 {1} 提供的解析处理器 {0}'
+      unset: '使用配置文件指定的解析处理器 {0}'
+    handler_detection:
+      result1: 似乎你并没有使用正确的服务端解析处理器
+      result2: '目前正在使用的解析处理器: {0}, 成功率 {1}% ({2}/{3})'
+      result3: '可能更为准确的解析处理器: {0}, 成功率 {1}% ({2}/{3})'
+  update_helper:
     check_update:
-      name: 检查插件更新
-      dependency_resolution_failed: '依赖解析失败: {0}'
-      no_update:
-        all: 所有已安装的 {0} 个插件均为最新版本
-        given: 给定的 {0} 个插件均为最新版本
-      found_summary: 找到了 {0}
-      updatable:
-        what: '{0} 个可更新的插件'
-        title: '可更新的插件:'
-        hint1: 使用类似 "{0}" 的指令来更新部分插件，
-        hint2: 或者使用指令 "{0}" 来更新全部插件
-      not_updatable:
-        what: '{0} 个不可更新的插件'
-        title: '不可更新的，且有较新版本的插件:'
-        reason:
-          constraints_not_satisfied: 依赖约束无法满足
-          not_packed_plugin: 非打包插件
-      up_to_date:
-        what: '{0} 个已是最新的插件'
-      latest: '最新版本 {0}'
-    install:
-      name: 安装插件
-      no_input: 未给出任何插件描述
-      no_plugin_directories: MCDR 配置的插件文件夹为空，无法安装新插件
-      invalid_target: 安装目标文件夹 {0} 无效，因为它不包含在配置的插件文件夹中
-      parse_specifier_failed: '解析插件描述 {0} 失败: {1}'
-      cannot_install_permanent: 无法安装内置插件 {0}
+      already_checking: MCDR 已在检查更新中
+      check_fail: '从 Github 检测最新版本失败: {0}'
+      is_already_latest: MCDR 已为最新版
+      newer_than_latest: 目前版本 §7{0}§r 比 Github 中的最新版 §7{1}§r 更新，这是一个开发版吗？
+      new_version_detected: '已检测到新版本: §7{0}§r。§7{0}§r 的新内容:'
 
-      resolving_dependencies: 正在解析插件依赖 ...
-      unknown_plugin_id: ID 为 {0} 的插件不存在
-      resolution:
-        impossible: '插件依赖解析失败。无法满足的依赖项:'
-        impossible_requirements: '{0} 依赖 {1}'
-        error: '插件依赖解析出错: {0}'
-        source_reason:
-          user_input: 用户指定了 {0}
-          existing: 已安装插件 {0}@{1}
-          existing_pinned: 已安装插件 {0}@{1} (固定)
+  # ======================== commands ========================
 
-      cannot_change_not_packed: '已有的插件 {0} 的类型为 {1}，无法被重新安装。只有打包插件是可以被重新安装'
-      nothing_to_install: 已安装的插件已满足所述需求，无需安装任何插件
-      install_summary:
-        plugin: '将被安装的插件 (新增 {new}, 修改 {change}, 总共 {total}):'
-        plugin_entry: '{0}: {1} -> {2}'
-        python: '将要被安装的 Python 包 ({0}x):'
-        python_entry: '{0} (被 {1} 依赖)'
+  command_exception:
+    unknown_command: 未知指令
+    unknown_argument: 未知参数
+    unknown_root_argument: 未知根节点参数
+    requirement_not_met: 约束未满足
+    literal_not_match: 字面不匹配
+    number_out_of_range: 数字 {0} 超出范围 [{1}, {2}]
+    invalid_number: 无效的数字
+    invalid_integer: 无效的整数
+    invalid_float: 无效的浮点数
+    invalid_boolean: 无效的布尔值
+    invalid_enumeration: 无效的枚举值
+    text_length_out_of_range: 文本长度 {0} 超出范围 [{1}, {2}]
+    illegal_escapes_usage: 转义符的非法使用
+    unclosed_quoted_string: 未封闭的引号
+    empty_text: 空文本
 
-      dry_run_suffix: ' (试运行)'
-      confirm_hint: '输入 {cmd_confirm} 以确认安装，或输入 {cmd_abort} 以终止安装'
-      confirm_aborted: 插件安装终止
-      confirm_timeout: 插件安装确认超时，安装终止
+  # ======================== builtin plugins ========================
 
-      installing_package: 正在安装 {0} 个 Python 包依赖
-      install_package_dry_run: 已安装 {0}
-      install_package_failed: 'Python 包依赖安装失败，见控制台以了解详情: {0}'
-      downloading_installing_plugin: 正在下载安装 {0} 个插件
-      downloading_plugin_one: '正在下载 {candidate}: {name} ({hash})'
-      installing_plugin_one: '正在安装 {candidate} 至 {path}'
-      reloading_plugins: 已安装 {0} 个插件，正在重载 MCDR
+  mcdr_command:
+    permission_denied: §c权限不足§r
+    help_message:
+      .: |
+        §7!!MCDR§r: 显示这条消息
+        §7!!MCDR checkupdate§r: 从 Github 检测更新
+        §7!!MCDR permission§r: 显示权限相关的帮助信息
+        §7!!MCDR plugin§r: 显示插件相关的帮助信息
+        §7!!MCDR preference§r: 显示偏好相关的帮助信息
+        §7!!MCDR reload§r: 显示重载相关的帮助信息
+        §7!!MCDR server§r: 显示控制服务端相关的帮助信息
+        §7!!MCDR status§r: 显示 MCDR 状态
+      reload: |
+        §7!!MCDR reload plugin§r: 加载 / 重载 / 卸载§l有修改的§r插件
+        §7!!MCDR reload config§r: 重载配置文件
+        §7!!MCDR reload permission§r: 重载权限文件
+        §7!!MCDR reload all§r: 重载上述所有
+      permission: |
+        §7!!MCDR permission list §e[<level>]§r: 列出所有玩家的权限等级。如果 §e[<level>]§r 被指定则仅列出权限等级 §e[<level>]§r
+        §7!!MCDR permission set §b<player>§r §e<level>§r: 将 §b<player>§r 的权限等级设置为 §e<level>§r
+        §7!!MCDR permission query §b[<player>]§r: 查询 §b<player>§r 的权限等级。当 §b<player>§r 参数被省略时，查询指令发送者的权限等级
+        §7!!MCDR permission remove §b<player>§r: 将 §b<player>§r 从权限数据库中移除
+        §7!!MCDR permission setdefault §e<level>§r: 将默认权限等级设置为 §e<level>§r
+      plugin: |
+        §7!!MCDR plugin list§r: 列出所有的插件
+        §7!!MCDR plugin info §6<plugin_id>§r: 显示 id 为 §6<plugin_id>§r 插件的信息
+        §7!!MCDR plugin load §e<file_name>§r: 加载文件名为 §e<file_name>§r 的插件
+        §7!!MCDR plugin enable §e<file_name>§r: 启用文件名为 §e<file_name>§r 的插件
+        §7!!MCDR plugin reload §6<plugin_id>§r: 重载 id 为 §6<plugin_id>§r 的插件
+        §7!!MCDR plugin unload §6<plugin_id>§r: 卸载 id 为 §6<plugin_id>§r 的插件
+        §7!!MCDR plugin disable §6<plugin_id>§r: 禁用 id 为 §6<plugin_id>§r 的插件
+        §7!!MCDR plugin reloadall§r: 加载 / 重载 / 卸载§l所有§r插件
+        §7!!MCDR plugin browse §e[<keyword>]§7 [-i §6<plugin_id>§7]§r: 浏览插件仓库。用关键字 §e<keyword>§r 进行筛选，或展示给定插件 §6<plugin_id>§7 的详情
+        §7!!MCDR plugin install §a<specifier>§7 [-u] [-y] ...§r: 从插件仓库安装给定描述的插件
+        §7!!MCDR plugin checkupdate §6[<plugin_id> ...]§r: 检查给定的插件是否有更新
+        §7!!MCDR plugin refreshmeta§r: 重新拉取插件仓库的元数据
+      preference: |
+        §7!!MCDR preference list§r: 显示偏好列表
+        §7!!MCDR preference §e<pref_name>§r: 显示偏好 §e<pref_name>§r 的详情
+        §7!!MCDR preference §e<pref_name>§r set §6<value>§r: 设定偏好 §e<pref_name>§r 的值为 §6<value>§r
+        §7!!MCDR preference §e<pref_name>§r reset: 将偏好 §e<pref_name>§r 重置为默认值
+      server: |
+        §7!!MCDR server start§r: 启动服务端
+        §7!!MCDR server stop§r: 关闭服务端，且 MCDR 会继续运行
+        §7!!MCDR server stop_exit§r: 关闭服务端并退出 MCDR
+        §7!!MCDR server exit§r: 退出 MCDR。服务端应已关闭
+        §7!!MCDR server restart§r: 重启服务端
+        §7!!MCDR server kill§r: 杀死服务端，以及其所有子进程
+      debug: |
+        §7!!MCDR debug thread_dump §6[#all|<thread_name>]§r: 导出所有指定线程的堆栈追踪信息
+        §7!!MCDR debug translation get §6<translation_key>§r: 导出给定翻译键的翻译信息
+        §7!!MCDR debug translation dump §6<json_path>§r: 导出以给定路径为前缀的所有翻译键，例如 "mcdr_server.on_server_stop"
+        §7!!MCDR debug command_dump all§r: 导出所有指令树
+        §7!!MCDR debug command_dump plugin §6<plugin_id>§r: 导出给定插件注册的所有指令树
+        §7!!MCDR debug command_dump node §6<literal_name>§r: 导出树根为给定名字所有指令树
+      title: MCDR 指令帮助信息列表
+      mcdr_command: MCDR 控制指令
+      help_command: 显示指令帮助信息
+      page_number: 第 §6{0}§r 页
+      previous_page_hover: 点击显示上一页
+      next_page_hover: 点击显示下一页
+    command_not_found: 参数错误，输入 "§7{0}§r" 以查看帮助
+    command_not_found_suggest: 点击以输入 "§7{0}§r"
+    refresh_changed_plugins:
+      fail: 重载变化的插件§c失败§r
+    reload_config:
+      fail: 配置文件重载§c失败§r
+      success: 配置文件重载§a成功§r
+    reload_permission:
+      fail: 权限文件重载§c失败§r
+      success: 权限文件重载§a成功§r
+    permission_not_enough: §c权限等级不足§r
+    invalid_permission_level: §c无效的权限等级§r
+    invalid_player_name: §c无效的玩家名称§r
+    query_player_permission:
+      self: 你的权限等级为 §e{0}§r
+      player: 玩家 §b{0}§r 的权限等级为 §e{1}§r
+      player_unknown: 玩家 §b{0}§r 的权限等级未知
+    remove_player_permission:
+      player_removed: 已移除玩家 §b{0}§r
+    list_permission:
+      show_default: '默认等级: §e{0}§r'
+      suggest_setdefault: 点击以设置默认权限等级
+      suggest_list: 点击以查看权限等级 §e{0}§r 的玩家列表
+      suggest_set: 点击以设置玩家 §b{0}§r 的权限等级
+      suggest_disable: 点击以将玩家 §b{0}§r 从权限数据库中移除
+    print_mcdr_status:
+      online: §a在线§r
+      offline: §7离线§r
+      line1: '§l{0}§r 版本: §e{1}§r'
+      line2: 'MCDR 状态: {0}'
+      line3: '服务端状态: {0}'
+      line4: '服务端已启动: {0}'
+      line5: '将于服务端关闭后退出: {0}'
+      line6: 'rcon: {0}'
+      line7: '插件数量: §6{0}§r'
+      extra:
+        pid: '服务端 PID: {0}'
+        queue: '消息队列负载: §6{0}§r/§6{1}§r'
+        thread: '线程数: §6{0}§r'
+    list_plugin:
+      info_loaded_plugin: §6{0}x §e已加载插件§r
+      info_disabled_plugin: §6{0}x §e已禁用插件§r
+      info_not_loaded_plugin: §6{0}x §e未加载插件§r
+      suggest_info: 点击以显示插件 "§e{0}§r" 的信息
+      suggest_disable: 点击以禁用插件 "§e{0}§r"
+      suggest_enable: 点击以启用插件 "§e{0}§r"
+      suggest_reload: 点击以重载插件 "§e{0}§r"
+      suggest_unload: 点击以卸载插件 "§e{0}§r"
+      suggest_load: 点击以加载插件 "§e{0}§r"
+    plugin_info:
+      id: 'ID: {0}'
+      author: '作者: {0}'
+      link: '链接: {0}'
+    invalid_plugin_id: 无效的插件id "§e{0}§r"
+    invalid_plugin_file_name: 无效的插件文件名 "§e{0}§r"
+    disable_plugin:
+      fail: 插件 "§e{0}§r" 禁用§c失败§r
+      success: 插件 "§e{0}§r" 禁用§a成功§r
+    reload_plugin:
+      fail: 插件 "§e{0}§r" 重载§c失败§r
+      success: 插件 "§e{0}§r" 重载§a成功§r
+    unload_plugin:
+      fail: 插件 "§e{0}§r" 卸载§c失败§r
+      success: 插件 "§e{0}§r" 卸载§a成功§r
+    load_plugin:
+      fail: 插件 "§e{0}§r" 加载§c失败§r
+      success: 插件 "§e{0}§r" 加载§a成功§r
+    enable_plugin:
+      fail: 插件 "§e{0}§r" 启用§c失败§r
+      success: 插件 "§e{0}§r" 启用§a成功§r
+    reload_all_plugin:
+      fail: 重载所有插件§c失败§r
+    pim:
+      common:
+        duplicated_input: "发现正在进行的操作: {0}，请等待它执行完成"
+        fetch_start: 正在更新插件仓库元数据
+        fetch_done: 已更新插件仓库元数据
+        fetch_failed: '插件仓库元数据更新失败: {0}'
+        browse_cmd: 点击以展示插件 {0} 于插件仓库中的信息
+      browse:
+        name: 浏览插件
+        single:
+          id: 'ID: {0}'
+          name: '插件名: {0}'
+          description: '描述: {0}'
+          repository: '仓库: {0}'
+          latest_version: '最新版本: {0}'
+          releases: '发行版列表 ({0}x):'
+          version: '版本: {0}'
+          date: '发布日期: {0}'
+          url: '链接: {0}'
+        all:
+          keyword: '关键字: {0}'
+          title:
+            id: ID
+            name: 插件名
+            version: 版本
+            description: 描述
+          empty: 未找到满足条件的插件
+      check_update:
+        name: 检查插件更新
+        dependency_resolution_failed: '依赖解析失败: {0}'
+        no_update:
+          all: 所有已安装的 {0} 个插件均为最新版本
+          given: 给定的 {0} 个插件均为最新版本
+        found_summary: 找到了 {0}
+        updatable:
+          what: '{0} 个可更新的插件'
+          title: '可更新的插件:'
+          hint1: 使用类似 "{0}" 的指令来更新部分插件，
+          hint2: 或者使用指令 "{0}" 来更新全部插件
+        not_updatable:
+          what: '{0} 个不可更新的插件'
+          title: '不可更新的，且有较新版本的插件:'
+          reason:
+            constraints_not_satisfied: 依赖约束无法满足
+            not_packed_plugin: 非打包插件
+        up_to_date:
+          what: '{0} 个已是最新的插件'
+        latest: '最新版本 {0}'
+      install:
+        name: 安装插件
+        no_input: 未给出任何插件描述
+        no_plugin_directories: MCDR 配置的插件文件夹为空，无法安装新插件
+        invalid_target: 安装目标文件夹 {0} 无效，因为它不包含在配置的插件文件夹中
+        parse_specifier_failed: '解析插件描述 {0} 失败: {1}'
+        cannot_install_permanent: 无法安装内置插件 {0}
 
-      installation_done: 插件安装完成
-      installation_error: '插件安装失败: {0}。回滚中'
-    refreshmeta:
-      name: 刷新插件仓库元数据
+        resolving_dependencies: 正在解析插件依赖 ...
+        unknown_plugin_id: ID 为 {0} 的插件不存在
+        resolution:
+          impossible: '插件依赖解析失败。无法满足的依赖项:'
+          impossible_requirements: '{0} 依赖 {1}'
+          error: '插件依赖解析出错: {0}'
+          source_reason:
+            user_input: 用户指定了 {0}
+            existing: 已安装插件 {0}@{1}
+            existing_pinned: 已安装插件 {0}@{1} (固定)
 
-  preference:
-    unsupported_command_source: 不支持的指令源 {0}
-    list:
-      title: MCDR 偏好列表
-      detail_hint: 点击以显示偏好 {0} 的详情
-    item:
-      name: 偏好项 {0} 的详情
-      value: '当前值: {0}'
-      suggestions: '建议选项: {0}'
-      current: 当前值
-      default: 默认值
-      set_suggestion_hint: 点击以将偏好 {0} 的值设置为 {1}
-    set:
-      done: 已将偏好 "{0}" 设置为 "{1}"
-    unknown_language: 未知的语言 {0}
-  server:
-    start.success: 正在启动服务端
-    start.failed: 启动服务端失败
-    stop.success: 正在关闭服务端
-    stop.failed: 关闭服务端失败
-    stop_exit.success: 正在关闭服务端并退出MCDR
-    stop_exit.failed: 启动服务端并退出MCDR失败
-    exit.success: 正在退出MCDR
-    exit.failed: 退出MCDR失败，请确保服务端已关闭
-    restart.success: 正在重启服务端
-    restart.failed: 重启服务端失败
-    restart.spam: 服务端已在重启中，勿重复操作
-    kill.success: 已杀死服务端进程组
-    kill.failed: 杀死服务端失败
-    see_console: 见控制台以了解详情信息
-python_plugin:
-  info: '{0} 正于 {1} 环境中运行'
+        cannot_change_not_packed: '已有的插件 {0} 的类型为 {1}，无法被重新安装。只有打包插件是可以被重新安装'
+        nothing_to_install: 已安装的插件已满足所述需求，无需安装任何插件
+        install_summary:
+          plugin: '将被安装的插件 (新增 {new}, 修改 {change}, 总共 {total}):'
+          plugin_entry: '{0}: {1} -> {2}'
+          python: '将要被安装的 Python 包 ({0}x):'
+          python_entry: '{0} (被 {1} 依赖)'
 
-# ======================== plugin peripherals ========================
+        dry_run_suffix: ' (试运行)'
+        confirm_hint: '输入 {cmd_confirm} 以确认安装，或输入 {cmd_abort} 以终止安装'
+        confirm_aborted: 插件安装终止
+        confirm_timeout: 插件安装确认超时，安装终止
 
-plugin_operation_result:
-  info_loaded_succeeded: '共加载: §7{0}§r 个插件'
-  info_unloaded_succeeded: '共卸载: §7{0}§r 个插件'
-  info_reloaded_succeeded: '共重载: §7{0}§r 个插件'
-  info_loaded_failed: '加载失败: §7{0}§r 个插件'
-  info_unloaded_failed: '卸载失败: §7{0}§r 个插件'
-  info_reloaded_failed: '重载失败: §7{0}§r 个插件'
-  info_dependency_check_failed: '依赖检查失败: §7{0}§r 个插件'
-  info_none: 没有插件变更
-  info_plugin_amount: '已加载插件数: §7{0}§r'
-plugin_manager:
-  load: 加载
-  unload: 卸载
-  reload: 重载
-  load_plugin:
-    entered: 正在从 {0} 加载插件
-    fail: 插件 {0} 加载失败
-    success: 插件 {0} 已加载
-    duplicate: 插件 {0} ({1}) 拥有与已存在插件 {2} ({3}) 相同的 id，已移除
-    unload_duplication_fail: 重复插件 {0} ({1}) 卸载失败
-    resolution_error: '插件 {0} 的 Python 依赖库需求未被满足: {1}'
-  unload_plugin:
-    entered: 正在卸载插件 {0}
-    fail: 插件 {0} 卸载失败
-    success: 插件 {0} 已卸载
-  reload_plugin:
-    entered: 正在重载插件 {0}
-    fail: 插件 {0} 重载失败
-    success: 插件 {0} 已重载
-  enable_plugin:
-    entered: 正在从 {0} 启用插件
-  disable_plugin:
-    entered: 正在禁用插件 {0}
-  refresh_all_plugins:
-    entered: 刷新所有插件中
-  refresh_changed_plugins:
-    entered: 刷新所有变更的插件中
-  check_plugin_dependencies:
-    item_failed: '卸载插件 {0}，原因: {1}'
-    topo_order: '插件依赖拓扑顺序:'
-dependency_walker:
-  dependency_parent_failed: 父依赖项 {0} 依赖检查失败
-  dependency_loop: '于 {0} 检查到循环依赖: {1}'
-  dependency_not_found: 未找到依赖项 {0}
-  dependency_not_met: 依赖项 {0} 不满足版本约束 {1}
-  dependency_already_failed: 插件 {0} 的访问状态已为 {1}
-server_interface:
-  load_config_simple:
-    failed: '读取配置文件失败，使用默认值: {0}'
-    succeed: 配置文件已加载
-    key_missed: 发现缺失的键 "{0}"，使用默认值"{1}"
-plugin_catalogue_meta_registry:
-  load_cached_failed: '无法从缓存文件 {0} 加载插件仓库元数据: {1}'
-  load_cached_success: 已从缓存文件加载插件仓库元数据 (更新于 {0})
-  background_fetcher_disabled: 插件仓库元数据背景更新线程已禁用
+        installing_package: 正在安装 {0} 个 Python 包依赖
+        install_package_dry_run: 已安装 {0}
+        install_package_failed: 'Python 包依赖安装失败，见控制台以了解详情: {0}'
+        downloading_installing_plugin: 正在下载安装 {0} 个插件
+        downloading_plugin_one: '正在下载 {candidate}: {name} ({hash})'
+        installing_plugin_one: '正在安装 {candidate} 至 {path}'
+        reloading_plugins: 已安装 {0} 个插件，正在重载 MCDR
 
-# ======================== misc ========================
+        installation_done: 插件安装完成
+        installation_error: '插件安装失败: {0}。回滚中'
+      refreshmeta:
+        name: 刷新插件仓库元数据
 
-permission_manager:
-  load:
-    fail: 加载权限文件 §7{0}§r §c失败§r，使用默认的空数据
-  set_default_permission_level:
-    done: 默认权限等级已设置为 §e{0}§r
-  set_permission_level:
-    done: 玩家 §b{0}§r 的权限等级已设置为 §e{1}§r
-rcon_manager:
-  connect:
-    connection_fail: 'rcon 连接失败: {0}'
-    connected: rcon 已连接
-    wrong_password: rcon 密码错误，连接失败
-  disconnect:
-    disconnected: rcon 已断开连接
-    disconnect_fail: rcon 断开连接失败
+    preference:
+      unsupported_command_source: 不支持的指令源 {0}
+      list:
+        title: MCDR 偏好列表
+        detail_hint: 点击以显示偏好 {0} 的详情
+      item:
+        name: 偏好项 {0} 的详情
+        value: '当前值: {0}'
+        suggestions: '建议选项: {0}'
+        current: 当前值
+        default: 默认值
+        set_suggestion_hint: 点击以将偏好 {0} 的值设置为 {1}
+      set:
+        done: 已将偏好 "{0}" 设置为 "{1}"
+      unknown_language: 未知的语言 {0}
+    server:
+      start.success: 正在启动服务端
+      start.failed: 启动服务端失败
+      stop.success: 正在关闭服务端
+      stop.failed: 关闭服务端失败
+      stop_exit.success: 正在关闭服务端并退出MCDR
+      stop_exit.failed: 启动服务端并退出MCDR失败
+      exit.success: 正在退出MCDR
+      exit.failed: 退出MCDR失败，请确保服务端已关闭
+      restart.success: 正在重启服务端
+      restart.failed: 重启服务端失败
+      restart.spam: 服务端已在重启中，勿重复操作
+      kill.success: 已杀死服务端进程组
+      kill.failed: 杀死服务端失败
+      see_console: 见控制台以了解详情信息
+  python_plugin:
+    info: '{0} 正于 {1} 环境中运行'
+
+  # ======================== plugin peripherals ========================
+
+  plugin_operation_result:
+    info_loaded_succeeded: '共加载: §7{0}§r 个插件'
+    info_unloaded_succeeded: '共卸载: §7{0}§r 个插件'
+    info_reloaded_succeeded: '共重载: §7{0}§r 个插件'
+    info_loaded_failed: '加载失败: §7{0}§r 个插件'
+    info_unloaded_failed: '卸载失败: §7{0}§r 个插件'
+    info_reloaded_failed: '重载失败: §7{0}§r 个插件'
+    info_dependency_check_failed: '依赖检查失败: §7{0}§r 个插件'
+    info_none: 没有插件变更
+    info_plugin_amount: '已加载插件数: §7{0}§r'
+  plugin_manager:
+    load: 加载
+    unload: 卸载
+    reload: 重载
+    load_plugin:
+      entered: 正在从 {0} 加载插件
+      fail: 插件 {0} 加载失败
+      success: 插件 {0} 已加载
+      duplicate: 插件 {0} ({1}) 拥有与已存在插件 {2} ({3}) 相同的 id，已移除
+      unload_duplication_fail: 重复插件 {0} ({1}) 卸载失败
+      resolution_error: '插件 {0} 的 Python 依赖库需求未被满足: {1}'
+    unload_plugin:
+      entered: 正在卸载插件 {0}
+      fail: 插件 {0} 卸载失败
+      success: 插件 {0} 已卸载
+    reload_plugin:
+      entered: 正在重载插件 {0}
+      fail: 插件 {0} 重载失败
+      success: 插件 {0} 已重载
+    enable_plugin:
+      entered: 正在从 {0} 启用插件
+    disable_plugin:
+      entered: 正在禁用插件 {0}
+    refresh_all_plugins:
+      entered: 刷新所有插件中
+    refresh_changed_plugins:
+      entered: 刷新所有变更的插件中
+    check_plugin_dependencies:
+      item_failed: '卸载插件 {0}，原因: {1}'
+      topo_order: '插件依赖拓扑顺序:'
+  dependency_walker:
+    dependency_parent_failed: 父依赖项 {0} 依赖检查失败
+    dependency_loop: '于 {0} 检查到循环依赖: {1}'
+    dependency_not_found: 未找到依赖项 {0}
+    dependency_not_met: 依赖项 {0} 不满足版本约束 {1}
+    dependency_already_failed: 插件 {0} 的访问状态已为 {1}
+  server_interface:
+    load_config_simple:
+      failed: '读取配置文件失败，使用默认值: {0}'
+      succeed: 配置文件已加载
+      key_missed: 发现缺失的键 "{0}"，使用默认值"{1}"
+  plugin_catalogue_meta_registry:
+    load_cached_failed: '无法从缓存文件 {0} 加载插件仓库元数据: {1}'
+    load_cached_success: 已从缓存文件加载插件仓库元数据 (更新于 {0})
+    background_fetcher_disabled: 插件仓库元数据背景更新线程已禁用
+
+  # ======================== misc ========================
+
+  permission_manager:
+    load:
+      fail: 加载权限文件 §7{0}§r §c失败§r，使用默认的空数据
+    set_default_permission_level:
+      done: 默认权限等级已设置为 §e{0}§r
+    set_permission_level:
+      done: 玩家 §b{0}§r 的权限等级已设置为 §e{1}§r
+  rcon_manager:
+    connect:
+      connection_fail: 'rcon 连接失败: {0}'
+      connected: rcon 已连接
+      wrong_password: rcon 密码错误，连接失败
+    disconnect:
+      disconnected: rcon 已断开连接
+      disconnect_fail: rcon 断开连接失败

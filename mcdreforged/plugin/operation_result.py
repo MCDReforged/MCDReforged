@@ -81,6 +81,8 @@ class PluginOperationResult:
 			msg.append(element)
 			msg.append('; ')
 
+		tr = mcdr_server.create_internal_translator('plugin_operation_result')
+
 		def add_if_not_empty(msg: RTextList, lst: List['AbstractPlugin' or str], key: str):
 			if len(lst) > 0:
 				text_list = []
@@ -89,20 +91,20 @@ class PluginOperationResult:
 						text_list.append(ele if show_path else os.path.basename(ele))
 					else:
 						text_list.append(str(ele))
-				add_element(msg, RText(mcdr_server.tr(key, len(lst))).h('\n'.join(text_list)))
+				add_element(msg, tr(key, len(lst)).h('\n'.join(text_list)))
 
 		message = RTextList()
-		add_if_not_empty(message, list(filter(lambda plg: plg in self.dependency_check_result.success_list, self.load_result.success_list)), 'plugin_operation_result.info_loaded_succeeded')
-		add_if_not_empty(message, self.unload_result.success_list, 'plugin_operation_result.info_unloaded_succeeded')
-		add_if_not_empty(message, self.reload_result.success_list, 'plugin_operation_result.info_reloaded_succeeded')
-		add_if_not_empty(message, self.load_result.failed_list, 'plugin_operation_result.info_loaded_failed')
-		add_if_not_empty(message, self.unload_result.failed_list, 'plugin_operation_result.info_unloaded_failed')
-		add_if_not_empty(message, self.reload_result.failed_list, 'plugin_operation_result.info_reloaded_failed')
-		add_if_not_empty(message, self.dependency_check_result.failed_list, 'plugin_operation_result.info_dependency_check_failed')
+		add_if_not_empty(message, list(filter(lambda plg: plg in self.dependency_check_result.success_list, self.load_result.success_list)), 'info_loaded_succeeded')
+		add_if_not_empty(message, self.unload_result.success_list, 'info_unloaded_succeeded')
+		add_if_not_empty(message, self.reload_result.success_list, 'info_reloaded_succeeded')
+		add_if_not_empty(message, self.load_result.failed_list, 'info_loaded_failed')
+		add_if_not_empty(message, self.unload_result.failed_list, 'info_unloaded_failed')
+		add_if_not_empty(message, self.reload_result.failed_list, 'info_reloaded_failed')
+		add_if_not_empty(message, self.dependency_check_result.failed_list, 'info_dependency_check_failed')
 		if message.is_empty():
-			add_element(message, mcdr_server.tr('plugin_operation_result.info_none'))
+			add_element(message, tr('info_none'))
 		message.append(
-			RText(mcdr_server.tr('plugin_operation_result.info_plugin_amount', mcdr_server.plugin_manager.get_plugin_amount())).
+			RText(tr('info_plugin_amount', mcdr_server.plugin_manager.get_plugin_amount())).
 				h('\n'.join(map(str, mcdr_server.plugin_manager.get_all_plugins()))).
 				c(RAction.suggest_command, '!!MCDR plugin list')
 		)

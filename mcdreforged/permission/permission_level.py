@@ -39,7 +39,7 @@ class PermissionLevel:
 	LEVELS: List[int] = [inst.level for inst in INSTANCES]
 	NAMES: List[str] = [inst.name for inst in INSTANCES]
 	__NAME_DICT: Dict[str, PermissionLevelItem] = collections.OrderedDict(zip(NAMES, INSTANCES))
-	__LEVEL_DICT: Dict[str, PermissionLevelItem] = collections.OrderedDict(zip(LEVELS, INSTANCES))
+	__LEVEL_DICT: Dict[int, PermissionLevelItem] = collections.OrderedDict(zip(LEVELS, INSTANCES))
 
 	MAXIMUM_LEVEL: int = LEVELS[-1]
 	MINIMUM_LEVEL: int = LEVELS[0]

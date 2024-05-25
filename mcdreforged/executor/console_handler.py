@@ -37,7 +37,11 @@ class ConsoleHandler(BackgroundThreadExecutor):
 	def __init__(self, mcdr_server: 'MCDReforgedServer'):
 		super().__init__(mcdr_server.logger)
 		self.mcdr_server = mcdr_server
+		self.__tr = mcdr_server.create_internal_translator('console_handler').tr
 		self.console_kit = PromptToolkitWrapper(self)
+
+	def get_tr(self):
+		return self.__tr
 
 	@override
 	def loop(self):
@@ -62,7 +66,7 @@ class ConsoleHandler(BackgroundThreadExecutor):
 				try:
 					info: Info = self.mcdr_server.server_handler_manager.get_current_handler().parse_console_command(text)
 				except Exception:
-					self.mcdr_server.logger.exception(self.mcdr_server.tr('console_handler.parse_fail', text))
+					self.mcdr_server.logger.exception(self.__tr('parse_fail', text))
 				else:
 					if self.mcdr_server.logger.should_log_debug(DebugOption.HANDLER):
 						self.mcdr_server.logger.debug('Parsed text from {}: {}'.format(type(self).__name__, info), no_check=True)
@@ -72,7 +76,7 @@ class ConsoleHandler(BackgroundThreadExecutor):
 				self.mcdr_server.logger.error('User interruption caught in {}: {} {}'.format(type(self).__name__, type(error).__name__, error))
 				self.mcdr_server.interrupt()
 		except Exception:
-			self.mcdr_server.logger.exception(self.mcdr_server.tr('console_handler.error'))
+			self.mcdr_server.logger.exception(self.__tr('error'))
 
 
 class ConsoleSuggestionCommandSource(ConsoleCommandSource):
@@ -253,8 +257,8 @@ class MCDRStdoutProxy(StdoutProxy):
 class PromptToolkitWrapper:
 	def __init__(self, console_handler: ConsoleHandler):
 		self.__console_handler: ConsoleHandler = console_handler
-		self.__tr = console_handler.mcdr_server.tr
-		self.__logger = console_handler.mcdr_server.logger
+		self.__tr = console_handler.get_tr()
+		self.__logger = console_handler.logger
 		self.pt_enabled = False
 		self.stdout_proxy: Optional[StdoutProxy] = None
 		self.prompt_session: Optional[MCDRPromptSession] = None
@@ -297,7 +301,7 @@ class PromptToolkitWrapper:
 	def stop_kits(self):
 		if self.pt_enabled:
 			self.pt_enabled = False
-			self.__logger.info(self.__tr('console_handler.stopping_kits'))
+			self.__logger.info(self.__tr('stopping_kits'))
 			self.stdout_proxy.close()
 			sys.stdout = self.__real_stdout
 			sys.stderr = self.__real_stderr

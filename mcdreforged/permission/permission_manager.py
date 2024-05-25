@@ -41,6 +41,7 @@ class PermissionManager:
 	def __init__(self, mcdr_server: 'MCDReforgedServer'):
 		self.mcdr_server = mcdr_server
 		self.storage = PermissionStorage(mcdr_server.logger, PERMISSION_FILE, DEFAULT_PERMISSION_RESOURCE_PATH)
+		self.__tr = mcdr_server.create_internal_translator('permission_manager').tr
 
 	# --------------
 	# File Operating
@@ -75,7 +76,7 @@ class PermissionManager:
 		"""
 		self.storage['default_level'] = level.name
 		self.storage.save()
-		self.mcdr_server.logger.info(self.mcdr_server.tr('permission_manager.set_default_permission_level.done', level.name))
+		self.mcdr_server.logger.info(self.__tr('set_default_permission_level.done', level.name))
 
 	def get_permission_group_list(self, value: PermissionParam) -> List[str]:
 		"""
@@ -134,7 +135,7 @@ class PermissionManager:
 		"""
 		self.remove_player(player)
 		self.add_player(player, new_level.name)
-		self.mcdr_server.logger.info(self.mcdr_server.tr('permission_manager.set_permission_level.done', player, new_level.name))
+		self.mcdr_server.logger.info(self.__tr('set_permission_level.done', player, new_level.name))
 
 	def touch_player(self, player: str):
 		"""

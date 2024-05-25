@@ -22,6 +22,7 @@ class InfoReactorManager:
 		self.last_queue_full_warn_time = None
 		self.server_output_logger = ServerOutputLogger('Server')
 		self.reactors: List[AbstractInfoReactor] = []
+		self.__tr = mcdr_server.create_internal_translator('info_reactor_manager').tr
 
 	def register_reactors(self, custom_reactor_class_paths: Optional[List[str]]):
 		self.reactors.clear()
@@ -48,7 +49,7 @@ class InfoReactorManager:
 			try:
 				reactor.react(info)
 			except Exception:
-				self.mcdr_server.logger.exception(self.mcdr_server.tr('info_reactor_manager.react.error', type(reactor).__name__))
+				self.mcdr_server.logger.exception(self.__tr('react.error', type(reactor).__name__))
 
 		# send command input from the console to the server's stdin
 		if info.is_from_console and info.should_send_to_server():
@@ -69,7 +70,7 @@ class InfoReactorManager:
 				logging_method = self.mcdr_server.logger.warning
 				kwargs = {}
 				self.last_queue_full_warn_time = current_time
-			logging_method(self.mcdr_server.tr('info_reactor_manager.info_queue.full'), **kwargs)
+			logging_method(self.__tr('info_queue.full'), **kwargs)
 
 	def on_server_start(self):
 		for reactor in self.reactors:

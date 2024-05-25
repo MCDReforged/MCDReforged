@@ -39,6 +39,7 @@ class PluginManager:
 		self.plugin_directories: List[Path] = []
 		self.mcdr_server = mcdr_server
 		self.logger = mcdr_server.logger
+		self.__tr = mcdr_server.create_internal_translator('plugin_manager').tr
 
 		# plugin storage, id -> Plugin
 		self.__plugins: Dict[str, AbstractPlugin] = {}
@@ -192,24 +193,24 @@ class PluginManager:
 			plugin.load()
 		except Exception as e:
 			if isinstance(e, RequirementCheckFailure):
-				self.logger.error(self.mcdr_server.tr('plugin_manager.load_plugin.fail', plugin.get_name()))
-				self.logger.error(self.mcdr_server.tr('plugin_manager.load_plugin.resolution_error', plugin.get_name(), str(e)))
+				self.logger.error(self.__tr('load_plugin.fail', plugin.get_name()))
+				self.logger.error(self.__tr('load_plugin.resolution_error', plugin.get_name(), str(e)))
 			else:
-				self.logger.exception(self.mcdr_server.tr('plugin_manager.load_plugin.fail', plugin.get_name()))
+				self.logger.exception(self.__tr('load_plugin.fail', plugin.get_name()))
 			return None
 		else:
 			existed_plugin = self.__plugins.get(plugin.get_id())
 			if existed_plugin is None:
 				self.__add_plugin(plugin)
-				self.logger.info(self.mcdr_server.tr('plugin_manager.load_plugin.success', plugin.get_name()))
+				self.logger.info(self.__tr('load_plugin.success', plugin.get_name()))
 				return plugin
 			else:
-				self.logger.error(self.mcdr_server.tr('plugin_manager.load_plugin.duplicate', plugin.get_name(), plugin.plugin_path, existed_plugin.get_name(), self.__make_plugin_path(existed_plugin)))
+				self.logger.error(self.__tr('load_plugin.duplicate', plugin.get_name(), plugin.plugin_path, existed_plugin.get_name(), self.__make_plugin_path(existed_plugin)))
 				try:
 					plugin.unload()
 				except Exception:
 					# should never come here
-					self.logger.exception(self.mcdr_server.tr('plugin_manager.load_plugin.unload_duplication_fail', plugin.get_name(), plugin.plugin_path))
+					self.logger.exception(self.__tr('load_plugin.unload_duplication_fail', plugin.get_name(), plugin.plugin_path))
 				plugin.remove()  # quickly remove this plugin
 				return None
 
@@ -227,10 +228,10 @@ class PluginManager:
 		except Exception:
 			# should never come here
 			plugin.set_state(PluginState.UNLOADING)  # a fallback set state
-			self.logger.exception(self.mcdr_server.tr('plugin_manager.unload_plugin.fail', plugin.get_name()))
+			self.logger.exception(self.__tr('unload_plugin.fail', plugin.get_name()))
 			ret = False
 		else:
-			self.logger.info(self.mcdr_server.tr('plugin_manager.unload_plugin.success', plugin.get_name()))
+			self.logger.info(self.__tr('unload_plugin.success', plugin.get_name()))
 			ret = True
 		finally:
 			self.__remove_plugin(plugin)
@@ -246,10 +247,10 @@ class PluginManager:
 			plugin.reload()
 		except Exception as e:
 			if isinstance(e, RequirementCheckFailure):
-				self.logger.error(self.mcdr_server.tr('plugin_manager.reload_plugin.fail', plugin.get_name()))
-				self.logger.error(self.mcdr_server.tr('plugin_manager.load_plugin.resolution_error', plugin.get_name(), str(e)))
+				self.logger.error(self.__tr('reload_plugin.fail', plugin.get_name()))
+				self.logger.error(self.__tr('load_plugin.resolution_error', plugin.get_name(), str(e)))
 			else:
-				self.logger.exception(self.mcdr_server.tr('plugin_manager.reload_plugin.fail', plugin.get_name()))
+				self.logger.exception(self.__tr('reload_plugin.fail', plugin.get_name()))
 			self.__unload_plugin(plugin)
 			return False
 		else:
@@ -257,15 +258,15 @@ class PluginManager:
 			existed_plugin = self.__plugins.get(plugin.get_id())
 			if existed_plugin is None:
 				self.__add_plugin(plugin)
-				self.logger.info(self.mcdr_server.tr('plugin_manager.reload_plugin.success', plugin.get_name()))
+				self.logger.info(self.__tr('reload_plugin.success', plugin.get_name()))
 				return True
 			else:
-				self.logger.error(self.mcdr_server.tr('plugin_manager.load_plugin.duplicate', plugin.get_name(), self.__make_plugin_path(plugin), existed_plugin.get_name(), self.__make_plugin_path(existed_plugin)))
+				self.logger.error(self.__tr('load_plugin.duplicate', plugin.get_name(), self.__make_plugin_path(plugin), existed_plugin.get_name(), self.__make_plugin_path(existed_plugin)))
 				try:
 					plugin.unload()
 				except Exception:
 					# should never come here
-					self.logger.exception(self.mcdr_server.tr('plugin_manager.load_plugin.unload_duplication_fail', plugin.get_name(), self.__make_plugin_path(plugin)))
+					self.logger.exception(self.__tr('load_plugin.unload_duplication_fail', plugin.get_name(), self.__make_plugin_path(plugin)))
 				return False
 
 	# ---------------------------------------
@@ -435,10 +436,10 @@ class PluginManager:
 			plugin = self.__plugins[item.plugin_id]
 			dependency_check_result.record(plugin, item.success)
 			if not item.success:
-				self.logger.error(self.mcdr_server.tr('plugin_manager.check_plugin_dependencies.item_failed', plugin, item.reason))
+				self.logger.error(self.__tr('check_plugin_dependencies.item_failed', plugin, item.reason))
 				self.__unload_plugin(plugin)
 
-		self.logger.debug(self.mcdr_server.tr('plugin_manager.check_plugin_dependencies.topo_order'), option=DebugOption.PLUGIN)
+		self.logger.debug(self.__tr('check_plugin_dependencies.topo_order'), option=DebugOption.PLUGIN)
 		for plugin in dependency_check_result.success_list:
 			self.logger.debug('- {}'.format(plugin), option=DebugOption.PLUGIN)
 
@@ -601,43 +602,43 @@ class PluginManager:
 		class_util.check_type(file_path, Path)
 		return self.manipulate_plugins(
 			load=self.__collect_new_plugins(lambda fp: fp == file_path),
-			entered_callback=lambda: self.logger.info(self.mcdr_server.tr('plugin_manager.load_plugin.entered', file_path)),
+			entered_callback=lambda: self.logger.info(self.__tr('load_plugin.entered', file_path)),
 		)
 
 	def unload_plugin(self, plugin: RegularPlugin) -> Future[PluginOperationResult]:
 		class_util.check_type(plugin, RegularPlugin)
 		return self.manipulate_plugins(
 			unload=[plugin],
-			entered_callback=lambda: self.logger.info(self.mcdr_server.tr('plugin_manager.unload_plugin.entered', plugin)),
+			entered_callback=lambda: self.logger.info(self.__tr('unload_plugin.entered', plugin)),
 		)
 
 	def reload_plugin(self, plugin: RegularPlugin) -> Future[PluginOperationResult]:
 		class_util.check_type(plugin, RegularPlugin)
 		return self.manipulate_plugins(
 			reload=[plugin],
-			entered_callback=lambda: self.logger.info(self.mcdr_server.tr('plugin_manager.reload_plugin.entered', plugin)),
+			entered_callback=lambda: self.logger.info(self.__tr('reload_plugin.entered', plugin)),
 		)
 
 	def enable_plugin(self, file_path: Path) -> Future[PluginOperationResult]:
 		class_util.check_type(file_path, Path)
-		self.logger.info(self.mcdr_server.tr('plugin_manager.enable_plugin.entered', file_path))
+		self.logger.info(self.__tr('enable_plugin.entered', file_path))
 		return self.manipulate_plugins(enable=[file_path])
 
 	def disable_plugin(self, plugin: RegularPlugin) -> Future[PluginOperationResult]:
 		class_util.check_type(plugin, RegularPlugin)
-		self.logger.info(self.mcdr_server.tr('plugin_manager.disable_plugin.entered', plugin))
+		self.logger.info(self.__tr('disable_plugin.entered', plugin))
 		return self.manipulate_plugins(disable=[plugin])
 
 	def refresh_all_plugins(self) -> Future[PluginOperationResult]:
 		def refresh_all_plugins_action() -> PluginOperationResult:
-			self.logger.info(self.mcdr_server.tr('plugin_manager.refresh_all_plugins.entered'))
+			self.logger.info(self.__tr('refresh_all_plugins.entered'))
 			return self.__refresh_plugins(lambda plg: True)
 
 		return self.__run_manipulation(refresh_all_plugins_action)
 
 	def refresh_changed_plugins(self) -> Future[PluginOperationResult]:
 		def refresh_changed_plugins_action() -> PluginOperationResult:
-			self.logger.info(self.mcdr_server.tr('plugin_manager.refresh_changed_plugins.entered'))
+			self.logger.info(self.__tr('refresh_changed_plugins.entered'))
 			return self.__refresh_plugins(lambda plg: plg.file_changed())
 
 		return self.__run_manipulation(refresh_changed_plugins_action)

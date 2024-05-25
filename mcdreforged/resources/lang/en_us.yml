@@ -1,453 +1,453 @@
-# ======================== core logics ========================
+mcdreforged:
+  # ======================== core logics ========================
+  mcdr_server:
+    on_config_changed:
+      language_set: Language is set to {0}
+      debug_mode_on: Debug mode on
+      handler_set: Handler is set to {0}
+      encoding_decoding_set: Encoding / Decoding method has set to {0} / {1}
+      plugin_directories_set: 'Plugin directory list:'
+    start_server:
+      already_interrupted: MCDR has already been interrupted
+      start_twice: Server cannot start twice
+      about_to_exit: MCDR is about to exit
+      cwd_not_existed: Server working directory {0} does not exist
+      starting: Starting the server with command "{0}"
+      start_fail: Fail to start the server
+      pid_info: Server is running at PID {0}
+    stop:
+      stop_when_stopped: Server cannot stop when terminated
+      stop_fail: Error stopping server, force the server to stop now
+    kill_server:
+      killing: Killing server process group
+      process_killed: Process {0} (pid {1}) killed
+    interrupt:
+      soft: Interrupting MCDR, first strike. Interrupt again to kill the servers
+      hard: Interrupting MCDR and killing the servers
+    send:
+      send_when_stopped:
+        .: Server has been terminated, cannot send command to its stdin
+        text: 'Command being sent: {0}'
+    receive:
+      wait_stop: Waiting for server process to stop
+      decode_fail: 'Fail to decode text {0}: {1}'
+    on_mcdr_start:
+      starting: '{0} {1} is starting'
+      console_disabled: Console thread disabled
+    on_server_stop:
+      show_return_code: Server process stopped with code {0}
+      user_interrupted: Server has been interrupted by user
+      server_stop: Server stopped
+    tick:
+      pre_parse_fail: Fail to pre parse text from stdout of the server, use original text
+    run:
+      error: Error ticking MCDR
+    on_mcdr_stop:
+      info: Stopping MCDR
+      bye: bye
+      stop_error: Error stopping MCDR, ignored that and exiting
+  mcdr_state:
+    initializing: §8Initialized§r
+    initialized: §7Initializing§r
+    running: §aRunning§r
+    pre_stopped: §4Pre-stopped§r
+    stopped: §4Stopped§r
+  server_state:
+    running: §aRunning§r
+    stopping: §cStopping§r
+    pre_stopped: §4Pre-stopped§r
+    stopped: §4Stopped§r
+  config:
+    missing_config: |
+      Some options in the config file is missing, use default value
+      Remember to check and update the config file as soon as possible
 
-mcdr_server:
-  on_config_changed:
-    language_set: Language is set to {0}
-    debug_mode_on: Debug mode on
-    handler_set: Handler is set to {0}
-    encoding_decoding_set: Encoding / Decoding method has set to {0} / {1}
-    plugin_directories_set: 'Plugin directory list:'
-  start_server:
-    already_interrupted: MCDR has already been interrupted
-    start_twice: Server cannot start twice
-    about_to_exit: MCDR is about to exit
-    cwd_not_existed: Server working directory {0} does not exist
-    starting: Starting the server with command "{0}"
-    start_fail: Fail to start the server
-    pid_info: Server is running at PID {0}
-  stop:
-    stop_when_stopped: Server cannot stop when terminated
-    stop_fail: Error stopping server, force the server to stop now
-  kill_server:
-    killing: Killing server process group
-    process_killed: Process {0} (pid {1}) killed
-  interrupt:
-    soft: Interrupting MCDR, first strike. Interrupt again to kill the servers
-    hard: Interrupting MCDR and killing the servers
-  send:
-    send_when_stopped:
-      .: Server has been terminated, cannot send command to its stdin
-      text: 'Command being sent: {0}'
-  receive:
-    wait_stop: Waiting for server process to stop
-    decode_fail: 'Fail to decode text {0}: {1}'
-  on_mcdr_start:
-    starting: '{0} {1} is starting'
-    console_disabled: Console thread disabled
-  on_server_stop:
-    show_return_code: Server process stopped with code {0}
-    user_interrupted: Server has been interrupted by user
-    server_stop: Server stopped
-  tick:
-    pre_parse_fail: Fail to pre parse text from stdout of the server, use original text
-  run:
-    error: Error ticking MCDR
-  on_mcdr_stop:
-    info: Stopping MCDR
-    bye: bye
-    stop_error: Error stopping MCDR, ignored that and exiting
-mcdr_state:
-  initializing: §8Initialized§r
-  initialized: §7Initializing§r
-  running: §aRunning§r
-  pre_stopped: §4Pre-stopped§r
-  stopped: §4Stopped§r
-server_state:
-  running: §aRunning§r
-  stopping: §cStopping§r
-  pre_stopped: §4Pre-stopped§r
-  stopped: §4Stopped§r
-config:
-  missing_config: |
-    Some options in the config file is missing, use default value
-    Remember to check and update the config file as soon as possible
+  # ======================== thread executors ========================
 
-# ======================== thread executors ========================
-
-console_handler:
-  parse_fail: Error parsing console command "{0}"
-  error: Error ticking ConsoleHandler
-  stopping_kits: Stopping advanced console
-task_executor:
-  error: Error ticking TaskExecutor
-watchdog:
-  task_executor_no_response:
-    line1: Task executor thread has no respond for {0} seconds, something might go wrong
-    line2: "Current running plugin in task executor thread (if there's any): {0}"
-    line3: Recreating the task executor
-info_reactor_manager:
-  react:
-    error: Error processing reactor {0}
-  info_queue:
-    full: Info queue has been full, is the server spamming? Ignore incoming info!
-server_handler_manager:
-  plugin_provided:
-    set: 'Using server handler {0} provided by {1}'
-    unset: 'Using server handler {0} specified by configuration'
-  handler_detection:
-    result1: Looks like you are not using the correct handler for the server
-    result2: 'Currently using handler: {0}, success rate {1}% ({2}/{3})'
-    result3: 'Most likely capable handler: {0}, success rate {1}% ({2}/{3})'
-update_helper:
-  check_update:
-    already_checking: MCDR has already started checking update
-    check_fail: 'Fail to detect latest version from Github: {0}'
-    is_already_latest: MCDR is already the latest version
-    newer_than_latest: Current version §7{0}§r is newer than the latest version §7{1}§r in github, is it a developing version?
-    new_version_detected: "New version detected: §7{0}§r. What's new in §7{0}§r:"
-
-# ======================== commands ========================
-
-command_exception:
-  unknown_command: Unknown command
-  unknown_argument: Unknown argument
-  unknown_root_argument: Unknown root argument
-  requirement_not_met: Requirement not met
-  literal_not_match: Literal is not match
-  number_out_of_range: Number {0} out of range [{1}, {2}]
-  invalid_number: Invalid number
-  invalid_integer: Invalid integer
-  invalid_float: Invalid float
-  invalid_boolean: Invalid boolean
-  invalid_enumeration: Invalid enumeration
-  text_length_out_of_range: Text length {0} out of range [{1}, {2}]
-  illegal_escapes_usage: Illegal escapes usage
-  unclosed_quoted_string: Unclosed quoted string
-  empty_text: Empty text
-
-# ======================== builtin plugins ========================
-
-mcdr_command:
-  permission_denied: §cPermission denied§r
-  help_message:
-    .: |
-      §7!!MCDR§r: Show this message
-      §7!!MCDR checkupdate§r: Check update from Github
-      §7!!MCDR permission§r: Show permission command help message
-      §7!!MCDR plugin§r: Show plugin command help message
-      §7!!MCDR preference§r: Show preference command help message
-      §7!!MCDR reload§r: Show reload command help message
-      §7!!MCDR server§r: Show server command help message
-      §7!!MCDR status§r: Show MCDR status
-    reload: |
-      §7!!MCDR reload plugin§r: Load / Reload / Unloaded §lchanged§r plugins
-      §7!!MCDR reload config§r: Reload config file
-      §7!!MCDR reload permission§r: Reload permission file
-      §7!!MCDR reload all§r: Reload everything above
-    permission: |
-      §7!!MCDR permission list §e[<level>]§r: List all player's permission. Only list permission level §e[<level>]§r if §e[<level>]§r has set
-      §7!!MCDR permission set §b<player>§r §e<level>§r: Set the permission level of §b<player>§r to §e<level>§r
-      §7!!MCDR permission query §b[<player>]§r: Query the permission level of §b<player>§r. If §b<player>§r is not set, query the permission level of the command sender
-      §7!!MCDR permission remove §b<player>§r: Remove §b<player>§r from the permission database
-      §7!!MCDR permission setdefault §e<level>§r: Set the default permission level to §e<level>§r
-    plugin: |
-      §7!!MCDR plugin list§r: List all plugins
-      §7!!MCDR plugin info §6<plugin_id>§r: Display the information of the plugin with id §6<plugin_id>§r
-      §7!!MCDR plugin load §e<file_name>§r: Load a plugin with file name §e<file_name>§r
-      §7!!MCDR plugin enable §e<file_name>§r: Enable a plugin with file name §e<file_name>§r
-      §7!!MCDR plugin reload §6<plugin_id>§r: Reload a plugin with id §6<plugin_id>§r
-      §7!!MCDR plugin unload §6<plugin_id>§r: Unload a plugin with id §6<plugin_id>§r
-      §7!!MCDR plugin disable §6<plugin_id>§r: Disable a plugin with id §6<plugin_id>§r
-      §7!!MCDR plugin reloadall§r: Load / Reload / Unloaded §lall§r not disabled plugins
-      §7!!MCDR plugin browse §e[<keyword>]§7 [-i §6<plugin_id>§7]§r: Browse plugin catalogue. List with §e<keyword>§r or show details of plugin with id §6<plugin_id>§7
-      §7!!MCDR plugin install §a<specifier>§7 [-u] [-y] ...§r: Install plugins that satisfy the given specifier(s)
-      §7!!MCDR plugin checkupdate §6[<plugin_id> ...]§r: Check if given plugins have updates
-      §7!!MCDR plugin refreshmeta§r: Perform a re-fetch for the plugin catalogue meta cache
-    preference: |
-      §7!!MCDR preference list§r: Display the preference list
-      §7!!MCDR preference §e<pref_name>§r: Display the details of preference §e<pref_name>§r
-      §7!!MCDR preference §e<pref_name>§r set §6<value>§r: Set the value of preference §e<pref_name>§r to §6<value>§r
-      §7!!MCDR preference §e<pref_name>§r reset: Reset preference §e<pref_name>§r to the default value
-    server: |
-      §7!!MCDR server start§r: Start the server
-      §7!!MCDR server stop§r: Stop the server, but keep MCDR running
-      §7!!MCDR server stop_exit§r: Stop the server and exit MCDR
-      §7!!MCDR server exit§r: Exit MCDR. The server should already be stopped
-      §7!!MCDR server restart§r: Restart the server
-      §7!!MCDR server kill§r: Kill the server, and all of its child processes
-    debug: |
-      §7!!MCDR debug thread_dump §6[#all|<thread_name>]§r: Dump stack trace information of given threads
-      §7!!MCDR debug translation get §6<translation_key>§r: Get the translation dict for given translation key
-      §7!!MCDR debug translation dump §6<json_path>§r: Dump all translations starting with given path, e.g. "mcdr_server.on_server_stop"
-      §7!!MCDR debug command_dump all§r: Dump all command trees
-      §7!!MCDR debug command_dump plugin §6<plugin_id>§r: Dump all command trees registered by given plugin
-      §7!!MCDR debug command_dump node §6<literal_name>§r: Dump all command trees with root with given name
-    title: MCDR command help message list
-    mcdr_command: MCDR control command
-    help_command: Display command help messages
-    page_number: Page §6{0}§r
-    previous_page_hover: Click to display the previous page
-    next_page_hover: Click to display the next page
-  command_not_found: Command not found, type "§7{0}§r" to see help
-  command_not_found_suggest: Click to input "§7{0}§r"
-  refresh_changed_plugins:
-    fail: §cFail§r to reload changed plugins
-  reload_config:
-    fail: §cFail§r to reload config file
-    success: Config file reloaded §asuccessfully§r
-  reload_permission:
-    fail: §cFail§r to reload permission file
-    success: Permission file reloaded §asuccessfully§r
-  permission_not_enough: §cPermission not enough§r
-  invalid_permission_level: §cInvalid permission level§r
-  invalid_player_name: §cInvalid player name§r
-  query_player_permission:
-    self: Your permission level is §e{0}§r
-    player: The permission level of player §b{0}§r is §e{1}§r
-    player_unknown: The permission level of player §b{0}§r is unknown
-  remove_player_permission:
-    player_removed: Player §b{0}§r has been removed
-  list_permission:
-    show_default: 'Default permission level: §e{0}§r'
-    suggest_setdefault: Click to set default permission level
-    suggest_list: Click to list permission level §e{0}§r
-    suggest_set: Click to set the permission level of player §b{0}§r
-    suggest_disable: Click to remove player §b{0}§r from the permission database
-  print_mcdr_status:
-    online: §aOnline§r
-    offline: §7Offline§r
-    line1: '§l{0}§r version: §e{1}§r'
-    line2: 'MCDR state: {0}'
-    line3: 'Server state: {0}'
-    line4: 'Server startup: {0}'
-    line5: 'Exit after server stops: {0}'
-    line6: 'Rcon: {0}'
-    line7: 'Plugin count: §6{0}§r'
-    extra:
-      pid: 'Server PID: {0}'
-      queue: 'Info queue load: §6{0}§r/§6{1}§r'
-      thread: 'Thread count: §6{0}§r'
-  list_plugin:
-    info_loaded_plugin: §6{0}x §eLoaded Plugins§r
-    info_disabled_plugin: §6{0}x §eDisabled Plugins§r
-    info_not_loaded_plugin: §6{0}x §eNot-loaded Plugins§r
-    suggest_info: Click to display the information of plugin "§e{0}§r"
-    suggest_disable: Click to disable plugin "§e{0}§r"
-    suggest_enable: Click to enable plugin "§e{0}§r"
-    suggest_reload: Click to reload plugin "§e{0}§r"
-    suggest_unload: Click to unload plugin "§e{0}§r"
-    suggest_load: Click to load plugin "§e{0}§r"
-  plugin_info:
-    id: 'ID: {0}'
-    author: 'Author: {0}'
-    link: 'Link: {0}'
-  invalid_plugin_id: Invalid plugin id "§e{0}§r"
-  invalid_plugin_file_name: Invalid plugin file name "§e{0}§r"
-  disable_plugin:
-    fail: §cFail§r to disable plugin "§e{0}§r"
-    success: Disable "§e{0}§r" §asuccessfully§r
-  reload_plugin:
-    fail: §cFail§r to reload plugin "§e{0}§r"
-    success: Reload "§e{0}§r" §asuccessfully§r
-  unload_plugin:
-    fail: §cFail§r to unload plugin "§e{0}§r"
-    success: Unload "§e{0}§r" §asuccessfully§r
-  load_plugin:
-    fail: §cFail§r to load plugin "§e{0}§r"
-    success: Loaded "§e{0}§r" §asuccessfully§r
-  enable_plugin:
-    fail: §cFail§r to enable plugin "§e{0}§r"
-    success: Enabled "§e{0}§r" §asuccessfully§r
-  reload_all_plugin:
-    fail: §cFail§r to reload all plugins
-  pim:
-    common:
-      duplicated_input: "There's ongoing operations: {0}, please wait for it to completes"
-      fetch_start: Fetching plugin catalogue meta registry
-      fetch_done: Plugin catalogue meta registry fetch done
-      fetch_failed: 'Plugin catalogue meta registry fetch failed: {0}'
-      browse_cmd: Click to display catalogue information for plugin {0}
-    browse:
-      name: Browse plugins
-      single:
-        id: 'ID: {0}'
-        name: 'Name: {0}'
-        description: 'Description: {0}'
-        repository: 'Repository: {0}'
-        latest_version: 'Latest version: {0}'
-        releases: 'Release list ({0}x):'
-        version: 'Version: {0}'
-        date: 'Released date: {0}'
-        url: 'URL: {0}'
-      all:
-        keyword: 'Keyword: {0}'
-        title:
-          id: ID
-          name: Name
-          version: Version
-          description: Description
-        empty: No plugin was found
+  console_handler:
+    parse_fail: Error parsing console command "{0}"
+    error: Error ticking ConsoleHandler
+    stopping_kits: Stopping advanced console
+  task_executor:
+    error: Error ticking TaskExecutor
+  watchdog:
+    task_executor_no_response:
+      line1: Task executor thread has no respond for {0} seconds, something might go wrong
+      line2: "Current running plugin in task executor thread (if there's any): {0}"
+      line3: Recreating the task executor
+  info_reactor_manager:
+    react:
+      error: Error processing reactor {0}
+    info_queue:
+      full: Info queue has been full, is the server spamming? Ignore incoming info!
+  server_handler_manager:
+    plugin_provided:
+      set: 'Using server handler {0} provided by {1}'
+      unset: 'Using server handler {0} specified by configuration'
+    handler_detection:
+      result1: Looks like you are not using the correct handler for the server
+      result2: 'Currently using handler: {0}, success rate {1}% ({2}/{3})'
+      result3: 'Most likely capable handler: {0}, success rate {1}% ({2}/{3})'
+  update_helper:
     check_update:
-      name: Check plugin update
-      dependency_resolution_failed: 'Dependency resolution failed: {0}'
-      no_update:
-        all: All {0} installed plugins are up-to-date
-        given: No updates found for {0} plugin
-      found_summary: Found {0}
-      updatable:
-        what: '{0} updatable plugins'
-        title: 'Updatable plugins:'
-        hint1: Update some of them with command like "{0}",
-        hint2: or update all with command "{0}"
-      not_updatable:
-        what: '{0} not-updatable plugins'
-        title: 'Not-updatable plugins with newer version:'
-        reason:
-          constraints_not_satisfied: Requirement constraints not satisfied
-          not_packed_plugin: Not a packed plugin
-      up_to_date:
-        what: '{0} up-to-date plugins'
-      latest: 'latest version {0}'
-    install:
-      name: Install plugins
-      no_input: No plugin specifier is given
-      no_plugin_directories: Cannot install plugin since MCDR config "plugin_directories" is empty,
-      invalid_target: Target {0} is invalid because it's not contained in the configured plugin_directories
-      parse_specifier_failed: 'Parsing plugin specifier {0} failed: {1}'
-      cannot_install_permanent: Cannot install permanent plugin {0}
+      already_checking: MCDR has already started checking update
+      check_fail: 'Fail to detect latest version from Github: {0}'
+      is_already_latest: MCDR is already the latest version
+      newer_than_latest: Current version §7{0}§r is newer than the latest version §7{1}§r in github, is it a developing version?
+      new_version_detected: "New version detected: §7{0}§r. What's new in §7{0}§r:"
 
-      resolving_dependencies: Resolving dependencies ...
-      unknown_plugin_id: Plugin with ID {0} not found
-      resolution:
-        impossible: 'Resolution impossible. Unsatisfied requirements:'
-        impossible_requirements: '{0} requires {1}'
-        error: 'Resolution error: {0}'
-        source_reason:
-          user_input: User specified {0}
-          existing: Already installed {0}@{1}
-          existing_pinned: Already installed {0}@{1} (pinned)
+  # ======================== commands ========================
 
-      cannot_change_not_packed: 'Existing plugin {0} is {1} and cannot be reinstalled. Only packed plugin is supported'
-      nothing_to_install: Nothing needs to be installed
-      install_summary:
-        plugin: 'Plugins to install (new {new}, change {change}, total {total}):'
-        plugin_entry: '{0}: {1} -> {2}'
-        python: 'Python packages to install ({0}x):'
-        python_entry: '{0} (request by {1})'
+  command_exception:
+    unknown_command: Unknown command
+    unknown_argument: Unknown argument
+    unknown_root_argument: Unknown root argument
+    requirement_not_met: Requirement not met
+    literal_not_match: Literal is not match
+    number_out_of_range: Number {0} out of range [{1}, {2}]
+    invalid_number: Invalid number
+    invalid_integer: Invalid integer
+    invalid_float: Invalid float
+    invalid_boolean: Invalid boolean
+    invalid_enumeration: Invalid enumeration
+    text_length_out_of_range: Text length {0} out of range [{1}, {2}]
+    illegal_escapes_usage: Illegal escapes usage
+    unclosed_quoted_string: Unclosed quoted string
+    empty_text: Empty text
 
-      dry_run_suffix: ' (dry-run)'
-      confirm_hint: 'Enter {cmd_confirm} to confirm installation, or {cmd_abort} to abort'
-      confirm_aborted: Plugin installation abort
-      confirm_timeout: Plugin installation confirmation timed out, abort
+  # ======================== builtin plugins ========================
 
-      installing_package: Installing {0} required python packages
-      install_package_dry_run: Installed {0}
-      install_package_failed: 'Python package installation failed, see console for more information: {0}'
-      downloading_installing_plugin: Downloading and installing {0} plugins
-      downloading_plugin_one: 'Downloading {candidate}: {name} ({hash})'
-      installing_plugin_one: 'Installing {candidate} to {path}'
-      reloading_plugins: Installed {0} plugins, reloading MCDR
+  mcdr_command:
+    permission_denied: §cPermission denied§r
+    help_message:
+      .: |
+        §7!!MCDR§r: Show this message
+        §7!!MCDR checkupdate§r: Check update from Github
+        §7!!MCDR permission§r: Show permission command help message
+        §7!!MCDR plugin§r: Show plugin command help message
+        §7!!MCDR preference§r: Show preference command help message
+        §7!!MCDR reload§r: Show reload command help message
+        §7!!MCDR server§r: Show server command help message
+        §7!!MCDR status§r: Show MCDR status
+      reload: |
+        §7!!MCDR reload plugin§r: Load / Reload / Unloaded §lchanged§r plugins
+        §7!!MCDR reload config§r: Reload config file
+        §7!!MCDR reload permission§r: Reload permission file
+        §7!!MCDR reload all§r: Reload everything above
+      permission: |
+        §7!!MCDR permission list §e[<level>]§r: List all player's permission. Only list permission level §e[<level>]§r if §e[<level>]§r has set
+        §7!!MCDR permission set §b<player>§r §e<level>§r: Set the permission level of §b<player>§r to §e<level>§r
+        §7!!MCDR permission query §b[<player>]§r: Query the permission level of §b<player>§r. If §b<player>§r is not set, query the permission level of the command sender
+        §7!!MCDR permission remove §b<player>§r: Remove §b<player>§r from the permission database
+        §7!!MCDR permission setdefault §e<level>§r: Set the default permission level to §e<level>§r
+      plugin: |
+        §7!!MCDR plugin list§r: List all plugins
+        §7!!MCDR plugin info §6<plugin_id>§r: Display the information of the plugin with id §6<plugin_id>§r
+        §7!!MCDR plugin load §e<file_name>§r: Load a plugin with file name §e<file_name>§r
+        §7!!MCDR plugin enable §e<file_name>§r: Enable a plugin with file name §e<file_name>§r
+        §7!!MCDR plugin reload §6<plugin_id>§r: Reload a plugin with id §6<plugin_id>§r
+        §7!!MCDR plugin unload §6<plugin_id>§r: Unload a plugin with id §6<plugin_id>§r
+        §7!!MCDR plugin disable §6<plugin_id>§r: Disable a plugin with id §6<plugin_id>§r
+        §7!!MCDR plugin reloadall§r: Load / Reload / Unloaded §lall§r not disabled plugins
+        §7!!MCDR plugin browse §e[<keyword>]§7 [-i §6<plugin_id>§7]§r: Browse plugin catalogue. List with §e<keyword>§r or show details of plugin with id §6<plugin_id>§7
+        §7!!MCDR plugin install §a<specifier>§7 [-u] [-y] ...§r: Install plugins that satisfy the given specifier(s)
+        §7!!MCDR plugin checkupdate §6[<plugin_id> ...]§r: Check if given plugins have updates
+        §7!!MCDR plugin refreshmeta§r: Perform a re-fetch for the plugin catalogue meta cache
+      preference: |
+        §7!!MCDR preference list§r: Display the preference list
+        §7!!MCDR preference §e<pref_name>§r: Display the details of preference §e<pref_name>§r
+        §7!!MCDR preference §e<pref_name>§r set §6<value>§r: Set the value of preference §e<pref_name>§r to §6<value>§r
+        §7!!MCDR preference §e<pref_name>§r reset: Reset preference §e<pref_name>§r to the default value
+      server: |
+        §7!!MCDR server start§r: Start the server
+        §7!!MCDR server stop§r: Stop the server, but keep MCDR running
+        §7!!MCDR server stop_exit§r: Stop the server and exit MCDR
+        §7!!MCDR server exit§r: Exit MCDR. The server should already be stopped
+        §7!!MCDR server restart§r: Restart the server
+        §7!!MCDR server kill§r: Kill the server, and all of its child processes
+      debug: |
+        §7!!MCDR debug thread_dump §6[#all|<thread_name>]§r: Dump stack trace information of given threads
+        §7!!MCDR debug translation get §6<translation_key>§r: Get the translation dict for given translation key
+        §7!!MCDR debug translation dump §6<json_path>§r: Dump all translations starting with given path, e.g. "mcdr_server.on_server_stop"
+        §7!!MCDR debug command_dump all§r: Dump all command trees
+        §7!!MCDR debug command_dump plugin §6<plugin_id>§r: Dump all command trees registered by given plugin
+        §7!!MCDR debug command_dump node §6<literal_name>§r: Dump all command trees with root with given name
+      title: MCDR command help message list
+      mcdr_command: MCDR control command
+      help_command: Display command help messages
+      page_number: Page §6{0}§r
+      previous_page_hover: Click to display the previous page
+      next_page_hover: Click to display the next page
+    command_not_found: Command not found, type "§7{0}§r" to see help
+    command_not_found_suggest: Click to input "§7{0}§r"
+    refresh_changed_plugins:
+      fail: §cFail§r to reload changed plugins
+    reload_config:
+      fail: §cFail§r to reload config file
+      success: Config file reloaded §asuccessfully§r
+    reload_permission:
+      fail: §cFail§r to reload permission file
+      success: Permission file reloaded §asuccessfully§r
+    permission_not_enough: §cPermission not enough§r
+    invalid_permission_level: §cInvalid permission level§r
+    invalid_player_name: §cInvalid player name§r
+    query_player_permission:
+      self: Your permission level is §e{0}§r
+      player: The permission level of player §b{0}§r is §e{1}§r
+      player_unknown: The permission level of player §b{0}§r is unknown
+    remove_player_permission:
+      player_removed: Player §b{0}§r has been removed
+    list_permission:
+      show_default: 'Default permission level: §e{0}§r'
+      suggest_setdefault: Click to set default permission level
+      suggest_list: Click to list permission level §e{0}§r
+      suggest_set: Click to set the permission level of player §b{0}§r
+      suggest_disable: Click to remove player §b{0}§r from the permission database
+    print_mcdr_status:
+      online: §aOnline§r
+      offline: §7Offline§r
+      line1: '§l{0}§r version: §e{1}§r'
+      line2: 'MCDR state: {0}'
+      line3: 'Server state: {0}'
+      line4: 'Server startup: {0}'
+      line5: 'Exit after server stops: {0}'
+      line6: 'Rcon: {0}'
+      line7: 'Plugin count: §6{0}§r'
+      extra:
+        pid: 'Server PID: {0}'
+        queue: 'Info queue load: §6{0}§r/§6{1}§r'
+        thread: 'Thread count: §6{0}§r'
+    list_plugin:
+      info_loaded_plugin: §6{0}x §eLoaded Plugins§r
+      info_disabled_plugin: §6{0}x §eDisabled Plugins§r
+      info_not_loaded_plugin: §6{0}x §eNot-loaded Plugins§r
+      suggest_info: Click to display the information of plugin "§e{0}§r"
+      suggest_disable: Click to disable plugin "§e{0}§r"
+      suggest_enable: Click to enable plugin "§e{0}§r"
+      suggest_reload: Click to reload plugin "§e{0}§r"
+      suggest_unload: Click to unload plugin "§e{0}§r"
+      suggest_load: Click to load plugin "§e{0}§r"
+    plugin_info:
+      id: 'ID: {0}'
+      author: 'Author: {0}'
+      link: 'Link: {0}'
+    invalid_plugin_id: Invalid plugin id "§e{0}§r"
+    invalid_plugin_file_name: Invalid plugin file name "§e{0}§r"
+    disable_plugin:
+      fail: §cFail§r to disable plugin "§e{0}§r"
+      success: Disable "§e{0}§r" §asuccessfully§r
+    reload_plugin:
+      fail: §cFail§r to reload plugin "§e{0}§r"
+      success: Reload "§e{0}§r" §asuccessfully§r
+    unload_plugin:
+      fail: §cFail§r to unload plugin "§e{0}§r"
+      success: Unload "§e{0}§r" §asuccessfully§r
+    load_plugin:
+      fail: §cFail§r to load plugin "§e{0}§r"
+      success: Loaded "§e{0}§r" §asuccessfully§r
+    enable_plugin:
+      fail: §cFail§r to enable plugin "§e{0}§r"
+      success: Enabled "§e{0}§r" §asuccessfully§r
+    reload_all_plugin:
+      fail: §cFail§r to reload all plugins
+    pim:
+      common:
+        duplicated_input: "There's ongoing operations: {0}, please wait for it to completes"
+        fetch_start: Fetching plugin catalogue meta registry
+        fetch_done: Plugin catalogue meta registry fetch done
+        fetch_failed: 'Plugin catalogue meta registry fetch failed: {0}'
+        browse_cmd: Click to display catalogue information for plugin {0}
+      browse:
+        name: Browse plugins
+        single:
+          id: 'ID: {0}'
+          name: 'Name: {0}'
+          description: 'Description: {0}'
+          repository: 'Repository: {0}'
+          latest_version: 'Latest version: {0}'
+          releases: 'Release list ({0}x):'
+          version: 'Version: {0}'
+          date: 'Released date: {0}'
+          url: 'URL: {0}'
+        all:
+          keyword: 'Keyword: {0}'
+          title:
+            id: ID
+            name: Name
+            version: Version
+            description: Description
+          empty: No plugin was found
+      check_update:
+        name: Check plugin update
+        dependency_resolution_failed: 'Dependency resolution failed: {0}'
+        no_update:
+          all: All {0} installed plugins are up-to-date
+          given: No updates found for {0} plugin
+        found_summary: Found {0}
+        updatable:
+          what: '{0} updatable plugins'
+          title: 'Updatable plugins:'
+          hint1: Update some of them with command like "{0}",
+          hint2: or update all with command "{0}"
+        not_updatable:
+          what: '{0} not-updatable plugins'
+          title: 'Not-updatable plugins with newer version:'
+          reason:
+            constraints_not_satisfied: Requirement constraints not satisfied
+            not_packed_plugin: Not a packed plugin
+        up_to_date:
+          what: '{0} up-to-date plugins'
+        latest: 'latest version {0}'
+      install:
+        name: Install plugins
+        no_input: No plugin specifier is given
+        no_plugin_directories: Cannot install plugin since MCDR config "plugin_directories" is empty,
+        invalid_target: Target {0} is invalid because it's not contained in the configured plugin_directories
+        parse_specifier_failed: 'Parsing plugin specifier {0} failed: {1}'
+        cannot_install_permanent: Cannot install permanent plugin {0}
 
-      installation_done: Installation done
-      installation_error: 'Installation error: {0}. Performing rollback'
-    refreshmeta:
-      name: Refresh plugin meta
+        resolving_dependencies: Resolving dependencies ...
+        unknown_plugin_id: Plugin with ID {0} not found
+        resolution:
+          impossible: 'Resolution impossible. Unsatisfied requirements:'
+          impossible_requirements: '{0} requires {1}'
+          error: 'Resolution error: {0}'
+          source_reason:
+            user_input: User specified {0}
+            existing: Already installed {0}@{1}
+            existing_pinned: Already installed {0}@{1} (pinned)
 
-  preference:
-    unsupported_command_source: Unsupported Command Source {0}
-    list:
-      title: MCDR Preference List
-      detail_hint: Click to display details of preference {0}
-    item:
-      name: Preference {0} details
-      value: 'Current value: {0}'
-      suggestions: 'Suggestions: {0}'
-      current: Current value
-      default: Default value
-      set_suggestion_hint: Click to set the value of preference {0} to {1}
-    set:
-      done: Set preference {0} to {1}
-    unknown_language: Unknown language {0}
-  server:
-    start.success: Starting the server
-    start.failed: Failed to start the server
-    stop.success: Stopping the server
-    stop.failed: Failed to stop the server
-    stop_exit.success: Stopping the server and exiting MCDR
-    stop_exit.failed: Failed to start the server and exit MCDR
-    exit.success: Exiting MCDR
-    exit.failed: Failed to exit MCDR. Make sure the server has already stopped
-    restart.success: Restarting the server, do not spam
-    restart.failed: Failed to restart the server
-    restart.spam: The server is already restarting
-    kill.success: Killed the server process group
-    kill.failed: Failed to kill the server
-    see_console: Check the console for more information
-python_plugin:
-  info: '{0} is running on {1} environment'
+        cannot_change_not_packed: 'Existing plugin {0} is {1} and cannot be reinstalled. Only packed plugin is supported'
+        nothing_to_install: Nothing needs to be installed
+        install_summary:
+          plugin: 'Plugins to install (new {new}, change {change}, total {total}):'
+          plugin_entry: '{0}: {1} -> {2}'
+          python: 'Python packages to install ({0}x):'
+          python_entry: '{0} (request by {1})'
 
-# ======================== plugin peripherals ========================
+        dry_run_suffix: ' (dry-run)'
+        confirm_hint: 'Enter {cmd_confirm} to confirm installation, or {cmd_abort} to abort'
+        confirm_aborted: Plugin installation abort
+        confirm_timeout: Plugin installation confirmation timed out, abort
 
-plugin_operation_result:
-  info_loaded_succeeded: 'Loaded: §7{0}§r plugins'
-  info_unloaded_succeeded: 'Unloaded: §7{0}§r plugins'
-  info_reloaded_succeeded: 'Reloaded: §7{0}§r plugins'
-  info_loaded_failed: 'Load failed: §7{0}§r plugins'
-  info_unloaded_failed: 'Unload failed: §7{0}§r plugins'
-  info_reloaded_failed: 'Reload failed: §7{0}§r plugins'
-  info_dependency_check_failed: 'Dependency check failed: §7{0}§r plugins'
-  info_none: No plugin has changed
-  info_plugin_amount: 'Active plugin amount: §7{0}§r'
-plugin_manager:
-  load: load
-  unload: unload
-  reload: reload
-  load_plugin:
-    entered: Loading plugin from {0}
-    fail: Fail to load plugin {0}
-    success: Plugin {0} loaded
-    duplicate: Plugin {0} ({1}) has duplicate id as existed plugin {2} ({3}), removed
-    unload_duplication_fail: Fail to unload duplicated plugin {0} ({1})
-    resolution_error: 'Unsatisfied Python library requirement for plugin {0}: {1}'
-  unload_plugin:
-    entered: Unloading plugin {0}
-    fail: Fail to unload plugin {0}
-    success: Plugin {0} unloaded
-  reload_plugin:
-    entered: Reloading plugin {0}
-    fail: Fail to reload plugin {0}
-    success: Plugin {0} reloaded
-  enable_plugin:
-    entered: Enabling plugin from {0}
-  disable_plugin:
-    entered: Disabling plugin {0}
-  refresh_all_plugins:
-    entered: Refreshing all plugins
-  refresh_changed_plugins:
-    entered: Refreshing all changed plugins
-  check_plugin_dependencies:
-    item_failed: Unloading plugin {0} due to "{1}"
-    topo_order: 'Plugin dependency topology order:'
-dependency_walker:
-  dependency_parent_failed: Parent dependency {0} failed to check dependency
-  dependency_loop: 'Dependency loop found at {0}: {1}'
-  dependency_not_found: Dependency {0} not found
-  dependency_not_met: Dependency {0} does not meet version requirement {1}
-  dependency_already_failed: Visiting state of plugin {0} is already {1}
-server_interface:
-  load_config_simple:
-    failed: 'Fail to read config file, using default config: {0}'
-    succeed: Config file loaded
-    key_missed: Found missing config key "{0}", using default value "{1}"
-plugin_catalogue_meta_registry:
-  load_cached_failed: 'Loading cached plugin catalogue meta from {0} failed: {1}'
-  load_cached_success: Loaded plugin catalogue meta from cache file (fetched at {0})
-  background_fetcher_disabled: Background plugin catalogue meta fetcher disabled
+        installing_package: Installing {0} required python packages
+        install_package_dry_run: Installed {0}
+        install_package_failed: 'Python package installation failed, see console for more information: {0}'
+        downloading_installing_plugin: Downloading and installing {0} plugins
+        downloading_plugin_one: 'Downloading {candidate}: {name} ({hash})'
+        installing_plugin_one: 'Installing {candidate} to {path}'
+        reloading_plugins: Installed {0} plugins, reloading MCDR
 
-# ======================== misc ========================
+        installation_done: Installation done
+        installation_error: 'Installation error: {0}. Performing rollback'
+      refreshmeta:
+        name: Refresh plugin meta
 
-permission_manager:
-  load:
-    fail: Fail to load permission file {0}, using default empty data
-  set_default_permission_level:
-    done: The default permission level has set to §e{0}§r
-  set_permission_level:
-    done: The permission level of player §b{0}§r has set to §e{1}§r
-rcon_manager:
-  connect:
-    connection_fail: 'Rcon connection failed: {0}'
-    connected: Rcon connected
-    wrong_password: Rcon password is not correct, connection failed
-  disconnect:
-    disconnected: Rcon disconnected
-    disconnect_fail: Fail to disconnect rcon
+    preference:
+      unsupported_command_source: Unsupported Command Source {0}
+      list:
+        title: MCDR Preference List
+        detail_hint: Click to display details of preference {0}
+      item:
+        name: Preference {0} details
+        value: 'Current value: {0}'
+        suggestions: 'Suggestions: {0}'
+        current: Current value
+        default: Default value
+        set_suggestion_hint: Click to set the value of preference {0} to {1}
+      set:
+        done: Set preference {0} to {1}
+      unknown_language: Unknown language {0}
+    server:
+      start.success: Starting the server
+      start.failed: Failed to start the server
+      stop.success: Stopping the server
+      stop.failed: Failed to stop the server
+      stop_exit.success: Stopping the server and exiting MCDR
+      stop_exit.failed: Failed to start the server and exit MCDR
+      exit.success: Exiting MCDR
+      exit.failed: Failed to exit MCDR. Make sure the server has already stopped
+      restart.success: Restarting the server, do not spam
+      restart.failed: Failed to restart the server
+      restart.spam: The server is already restarting
+      kill.success: Killed the server process group
+      kill.failed: Failed to kill the server
+      see_console: Check the console for more information
+  python_plugin:
+    info: '{0} is running on {1} environment'
+
+  # ======================== plugin peripherals ========================
+
+  plugin_operation_result:
+    info_loaded_succeeded: 'Loaded: §7{0}§r plugins'
+    info_unloaded_succeeded: 'Unloaded: §7{0}§r plugins'
+    info_reloaded_succeeded: 'Reloaded: §7{0}§r plugins'
+    info_loaded_failed: 'Load failed: §7{0}§r plugins'
+    info_unloaded_failed: 'Unload failed: §7{0}§r plugins'
+    info_reloaded_failed: 'Reload failed: §7{0}§r plugins'
+    info_dependency_check_failed: 'Dependency check failed: §7{0}§r plugins'
+    info_none: No plugin has changed
+    info_plugin_amount: 'Active plugin amount: §7{0}§r'
+  plugin_manager:
+    load: load
+    unload: unload
+    reload: reload
+    load_plugin:
+      entered: Loading plugin from {0}
+      fail: Fail to load plugin {0}
+      success: Plugin {0} loaded
+      duplicate: Plugin {0} ({1}) has duplicate id as existed plugin {2} ({3}), removed
+      unload_duplication_fail: Fail to unload duplicated plugin {0} ({1})
+      resolution_error: 'Unsatisfied Python library requirement for plugin {0}: {1}'
+    unload_plugin:
+      entered: Unloading plugin {0}
+      fail: Fail to unload plugin {0}
+      success: Plugin {0} unloaded
+    reload_plugin:
+      entered: Reloading plugin {0}
+      fail: Fail to reload plugin {0}
+      success: Plugin {0} reloaded
+    enable_plugin:
+      entered: Enabling plugin from {0}
+    disable_plugin:
+      entered: Disabling plugin {0}
+    refresh_all_plugins:
+      entered: Refreshing all plugins
+    refresh_changed_plugins:
+      entered: Refreshing all changed plugins
+    check_plugin_dependencies:
+      item_failed: Unloading plugin {0} due to "{1}"
+      topo_order: 'Plugin dependency topology order:'
+  dependency_walker:
+    dependency_parent_failed: Parent dependency {0} failed to check dependency
+    dependency_loop: 'Dependency loop found at {0}: {1}'
+    dependency_not_found: Dependency {0} not found
+    dependency_not_met: Dependency {0} does not meet version requirement {1}
+    dependency_already_failed: Visiting state of plugin {0} is already {1}
+  server_interface:
+    load_config_simple:
+      failed: 'Fail to read config file, using default config: {0}'
+      succeed: Config file loaded
+      key_missed: Found missing config key "{0}", using default value "{1}"
+  plugin_catalogue_meta_registry:
+    load_cached_failed: 'Loading cached plugin catalogue meta from {0} failed: {1}'
+    load_cached_success: Loaded plugin catalogue meta from cache file (fetched at {0})
+    background_fetcher_disabled: Background plugin catalogue meta fetcher disabled
+
+  # ======================== misc ========================
+
+  permission_manager:
+    load:
+      fail: Fail to load permission file {0}, using default empty data
+    set_default_permission_level:
+      done: The default permission level has set to §e{0}§r
+    set_permission_level:
+      done: The permission level of player §b{0}§r has set to §e{1}§r
+  rcon_manager:
+    connect:
+      connection_fail: 'Rcon connection failed: {0}'
+      connected: Rcon connected
+      wrong_password: Rcon password is not correct, connection failed
+    disconnect:
+      disconnected: Rcon disconnected
+      disconnect_fail: Fail to disconnect rcon

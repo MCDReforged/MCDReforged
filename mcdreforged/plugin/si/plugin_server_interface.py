@@ -263,7 +263,7 @@ class PluginServerInterface(ServerInterface):
 		"""
 		config_handler = SimpleConfigHandler(file_name, file_format, self.get_data_folder() if in_data_folder else '.')
 
-		def log(msg: str):
+		def log(msg: MessageText):
 			if isinstance(source_to_reply, CommandSource):
 				source_to_reply.reply(msg)
 			# don't do double-echo if the source is a console command source
@@ -284,7 +284,7 @@ class PluginServerInterface(ServerInterface):
 				raise
 
 			needs_save = True
-			log(self._mcdr_server.tr('server_interface.load_config_simple.failed', e))
+			log(self._tr('load_config_simple.failed', e))
 		else:
 			if data_processor is not None:
 				needs_save |= data_processor(read_data)
@@ -304,7 +304,7 @@ class PluginServerInterface(ServerInterface):
 					raise
 				result_config = target_class.get_default()
 				needs_save = True
-				log(self._mcdr_server.tr('server_interface.load_config_simple.failed', e))
+				log(self._tr('load_config_simple.failed', e))
 			else:
 				if imperfect:
 					needs_save = True
@@ -319,7 +319,7 @@ class PluginServerInterface(ServerInterface):
 					for key, value in default_config.items():
 						if key not in read_data:
 							result_config[key] = value
-							log(self._mcdr_server.tr('server_interface.load_config_simple.key_missed', key, value))
+							log(self._tr('load_config_simple.key_missed', key, value))
 							needs_save = True
 
 				# remove unexpected keys
@@ -327,7 +327,7 @@ class PluginServerInterface(ServerInterface):
 					if key not in default_config:
 						result_config.pop(key)
 
-		log(self._mcdr_server.tr('server_interface.load_config_simple.succeed'))
+		log(self._tr('load_config_simple.succeed'))
 		if needs_save:
 			self.save_config_simple(result_config, file_name=file_name, file_format=file_format, in_data_folder=in_data_folder)
 		return result_config

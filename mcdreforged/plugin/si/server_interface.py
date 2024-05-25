@@ -49,6 +49,7 @@ class ServerInterface:
 
 	def __init__(self, mcdr_server: 'MCDReforgedServer'):
 		self._mcdr_server: 'MCDReforgedServer' = mcdr_server
+		self._tr = mcdr_server.create_internal_translator('server_interface')
 		if type(self) is ServerInterface:
 			# singleton, should only occur during MCDReforgedServer construction
 			if ServerInterface.__global_instance is not None:
@@ -190,7 +191,7 @@ class ServerInterface:
 			self.logger.warning('%s. Translation key: %s', SERVER_INTERFACE_LANGUAGE_KEYWORD, translation_key)
 			_mcdr_tr_language = language
 
-		return self._mcdr_server.tr(translation_key, *args, _mcdr_tr_language=_mcdr_tr_language, **kwargs)
+		return self._mcdr_server.translate(translation_key, *args, _mcdr_tr_language=_mcdr_tr_language, **kwargs)
 
 	def rtr(self, translation_key: str, *args, **kwargs) -> RTextMCDRTranslation:
 		"""
@@ -234,7 +235,7 @@ class ServerInterface:
 		if no_auto_fallback:
 			kwargs.update(_mcdr_tr_fallback_language=None)
 		try:
-			self._mcdr_server.tr(translation_key, **kwargs)
+			self._mcdr_server.translate(translation_key, **kwargs)
 		except KeyError:
 			return False
 		else:

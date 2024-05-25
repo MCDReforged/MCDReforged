@@ -27,7 +27,6 @@ class CommandManager:
 	def __init__(self, mcdr_server: 'MCDReforgedServer'):
 		self.mcdr_server = mcdr_server
 		self.logger = self.mcdr_server.logger
-		self.tr = self.mcdr_server.tr
 		self.root_nodes: Dict[str, List[PluginCommandHolder]] = collections.defaultdict(list)
 
 		self.__preserve_command_error_display_flag = False
@@ -47,7 +46,7 @@ class CommandManager:
 				args = ()
 			else:
 				args = error_.get_error_data()
-			return self.mcdr_server.tr(translation_key_, *args, _mcdr_tr_allow_failure=False, _mcdr_tr_language=source.get_preference().language)
+			return self.mcdr_server.translate(translation_key_, *args, _mcdr_tr_allow_failure=False, _mcdr_tr_language=source.get_preference().language)
 
 		first_literal_element = utils.get_element(command)
 		plugin_root_nodes = self.root_nodes.get(first_literal_element, [])
@@ -75,7 +74,7 @@ class CommandManager:
 
 			except CommandError as error:
 				if not error.is_handled():
-					translation_key = 'command_exception.{}'.format(string_util.hump_to_underline(type(error).__name__))
+					translation_key = 'mcdreforged.command_exception.{}'.format(string_util.hump_to_underline(type(error).__name__))
 					try:
 						error.set_message(__translate_command_error_header(translation_key, error))
 					except KeyError:

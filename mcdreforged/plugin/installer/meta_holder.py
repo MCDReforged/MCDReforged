@@ -144,7 +144,7 @@ class PersistCatalogueMetaRegistryHolder(CatalogueMetaRegistryHolder):
 	def __init__(self, mcdr_server: 'MCDReforgedServer', cache_path: Path, *, meta_json_url: str, meta_fetch_interval: float, meta_fetch_timeout: int):
 		super().__init__(meta_json_url=meta_json_url, meta_fetch_timeout=meta_fetch_timeout)
 		self.logger = mcdr_server.logger
-		self.__tr = mcdr_server.tr
+		self.__tr = mcdr_server.create_internal_translator('plugin_catalogue_meta_registry').tr
 		self.__cache_path = cache_path
 		self.__meta_lock = threading.Lock()
 		self.__meta: MetaRegistry = EmptyMetaRegistry()
@@ -172,7 +172,7 @@ class PersistCatalogueMetaRegistryHolder(CatalogueMetaRegistryHolder):
 				data: dict = json.load(f)
 			meta = self._load_meta_json(data['meta'])
 		except (KeyError, ValueError, OSError) as e:
-			self.logger.exception(self.__tr('plugin_catalogue_meta_registry.load_cached_failed', self.__cache_path, e))
+			self.logger.exception(self.__tr('load_cached_failed', self.__cache_path, e))
 			return
 
 		with self.__meta_lock:
@@ -200,7 +200,7 @@ class PersistCatalogueMetaRegistryHolder(CatalogueMetaRegistryHolder):
 		if self.__meta_fetch_interval > 0:
 			self.__background_fetcher.start()
 		else:
-			self.logger.info(self.__tr('plugin_catalogue_meta_registry.background_fetcher_disabled'))
+			self.logger.info(self.__tr('background_fetcher_disabled'))
 
 	def terminate(self):
 		self.__background_fetcher.stop()

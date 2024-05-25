@@ -13,7 +13,6 @@ from mcdreforged.executor.background_thread_executor import BackgroundThreadExec
 from mcdreforged.minecraft.rtext.style import RAction, RColor, RStyle
 from mcdreforged.minecraft.rtext.text import RText, RTextBase
 from mcdreforged.plugin.meta.version import Version
-from mcdreforged.translation.translation_text import RTextMCDRTranslation
 from mcdreforged.utils import misc_util, request_util
 from mcdreforged.utils.types.message import MessageText
 
@@ -28,6 +27,7 @@ class UpdateHelper(BackgroundThreadExecutor):
 		self.__api_fetcher = GithubApiFetcher(core_constant.GITHUB_API_LATEST_URLS)
 		self.__update_lock = Lock()
 		self.__last_query_time = 0
+		self.__tr = mcdr_server.create_internal_translator('update_helper')
 
 	@override
 	def tick(self):
@@ -39,15 +39,12 @@ class UpdateHelper(BackgroundThreadExecutor):
 		self.__last_query_time = time.monotonic()
 		misc_util.start_thread(self.__check_update, (condition_check, reply_func), 'CheckUpdate')
 
-	def tr(self, key: str, *args, **kwargs) -> RTextBase:
-		return RTextMCDRTranslation(key, *args, **kwargs).set_translator(self.mcdr_server.tr)
-
 	def __check_update(self, condition_check: Callable[[], bool], reply_func: Callable[[MessageText], Any]):
 		if not condition_check():
 			return
 		acquired = self.__update_lock.acquire(blocking=False)
 		if not acquired:
-			reply_func(self.tr('update_helper.check_update.already_checking'))
+			reply_func(self.__tr('check_update.already_checking'))
 			return
 		try:
 			response = None
@@ -56,7 +53,7 @@ class UpdateHelper(BackgroundThreadExecutor):
 				latest_version: str = response['tag_name']
 				update_log: str = response['body']
 			except Exception as e:
-				reply_func(self.tr('update_helper.check_update.check_fail', repr(e)))
+				reply_func(self.__tr('check_update.check_fail', repr(e)))
 				if isinstance(e, KeyError) and isinstance(response, dict) and 'message' in response:
 					reply_func(response['message'])
 					if 'documentation_url' in response:
@@ -73,11 +70,11 @@ class UpdateHelper(BackgroundThreadExecutor):
 					self.mcdr_server.logger.exception('Fail to compare between versions "{}" and "{}"'.format(core_constant.VERSION, latest_version))
 					return
 				if version_current == version_fetched:
-					reply_func(self.tr('update_helper.check_update.is_already_latest'))
+					reply_func(self.__tr('check_update.is_already_latest'))
 				elif version_current > version_fetched:
-					reply_func(self.tr('update_helper.check_update.newer_than_latest', core_constant.VERSION, latest_version))
+					reply_func(self.__tr('check_update.newer_than_latest', core_constant.VERSION, latest_version))
 				else:
-					reply_func(self.tr('update_helper.check_update.new_version_detected', latest_version))
+					reply_func(self.__tr('check_update.new_version_detected', latest_version))
 					for line in update_log.splitlines():
 						reply_func('    {}'.format(line))
 		finally:
