@@ -98,7 +98,7 @@ class MCDReforgedConfigManager:
 	def save(self):
 		with self.__config_lock:
 			data = self.__config.serialize()
-		self.__storage.merge_dict(data)
+		self.__storage.merge_from_dict(data)
 		self.__storage.save()
 
 	def save_default(self):

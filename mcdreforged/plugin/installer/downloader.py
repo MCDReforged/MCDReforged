@@ -39,7 +39,7 @@ class ReleaseDownloader:
 			)
 		else:
 			download_url = url
-		response = request_util.get_raw(download_url, 'download', timeout=self.download_timeout, stream=True)
+		response = request_util.get_direct(download_url, 'download', timeout=self.download_timeout, stream=True)
 
 		length = int(response.headers.get('content-length'))
 		if length != self.release.file_size:

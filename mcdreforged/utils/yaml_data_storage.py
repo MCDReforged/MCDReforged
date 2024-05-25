@@ -113,26 +113,27 @@ class YamlDataStorage:
 	def save_default(self):
 		self.__save(self.get_default_yaml())
 
-	def merge_dict(self, data: dict):
+	@classmethod
+	def merge_dict(cls, src: dict, dst: dict):
 		"""
 		Does not add new keys
 		"""
-		def merge(src: dict, dst: dict):
-			for key, value in src.items():
-				old_value = dst.get(key)
-				if isinstance(value, dict) and isinstance(old_value, dict):
-					merge(value, old_value)
-				else:
-					if key in dst and old_value != value:
-						if isinstance(old_value, CommentedSeq):
-							# the comment of the last seq item belongs to the next element. keep it
-							last_comment = old_value.ca.items.get(len(old_value) - 1)
-							# cannot use clear(), cuz that uses pop(-1) and will mess up the comment index
-							while old_value:
-								old_value.pop(len(old_value) - 1)
-							old_value.extend(value)
-							old_value.ca.items[len(old_value) - 1] = last_comment
-						else:
-							dst[key] = value
+		for key, value in src.items():
+			old_value = dst.get(key)
+			if isinstance(value, dict) and isinstance(old_value, dict):
+				cls.merge_dict(value, old_value)
+			else:
+				if key in dst and old_value != value:
+					if isinstance(old_value, CommentedSeq):
+						# the comment of the last seq item belongs to the next element. keep it
+						last_comment = old_value.ca.items.get(len(old_value) - 1)
+						# cannot use clear(), cuz that uses pop(-1) and will mess up the comment index
+						while old_value:
+							old_value.pop(len(old_value) - 1)
+						old_value.extend(value)
+						old_value.ca.items[len(old_value) - 1] = last_comment
+					else:
+						dst[key] = value
 
-		merge(data, self._data)
+	def merge_from_dict(self, data: dict):
+		self.merge_dict(data, self._data)

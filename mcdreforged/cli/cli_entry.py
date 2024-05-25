@@ -1,10 +1,11 @@
+import sys
 from argparse import ArgumentParser
 
-import sys
 from mcdreforged.cli import cmd_pim
 from mcdreforged.cli.cmd_gendefault import generate_default_stuffs
 from mcdreforged.cli.cmd_init import initialize_environment
 from mcdreforged.cli.cmd_pack import make_packed_plugin
+from mcdreforged.cli.cmd_reformat_config import reformat_config
 from mcdreforged.cli.cmd_run import run_mcdr
 from mcdreforged.cli.cmd_version import show_version
 from mcdreforged.constants import core_constant
@@ -36,6 +37,10 @@ def cli_dispatch():
 
 	parser_pim = cmd_pim.create(subparsers.add_parser)
 
+	parser_rc = subparsers.add_parser('reformat-config', help='Reformat the MCDReforged configuration file')
+	parser_rc.add_argument('-i', '--input', required=True, help='The configuration file of MCDReforged to be reformatted')
+	parser_rc.add_argument('-o', '--output', help='Path to the reformatted configuration file. If not provided, output to the input file')
+
 	parser_start = subparsers.add_parser('start', help='Start {}'.format(core_constant.NAME))
 	parser_start.add_argument('--auto-init', action='store_true', help='Automatically initialize the working environment if needed')
 
@@ -53,5 +58,7 @@ def cli_dispatch():
 		make_packed_plugin(args, quiet=args.quiet)
 	elif args.command == 'pim':
 		cmd_pim.entry(parser_pim, args)
+	elif args.command == 'reformat-config':
+		reformat_config(args.input, args.output)
 	elif args.command == 'start':
 		run_mcdr(auto_init=args.auto_init)
