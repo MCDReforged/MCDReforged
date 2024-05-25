@@ -5,7 +5,7 @@ MCDReforged
 [![PyPI Version](https://img.shields.io/pypi/v/mcdreforged.svg)](https://pypi.org/project/mcdreforged)
 [![Docker](https://img.shields.io/docker/v/mcdreforged/mcdreforged/latest?label=docker)](https://hub.docker.com/r/mcdreforged/mcdreforged)
 [![License](https://img.shields.io/github/license/MCDReforged/MCDReforged.svg)](https://github.com/MCDReforged/MCDReforged/blob/master/LICENSE)
-[![Documentation Status](https://readthedocs.org/projects/mcdreforged/badge/)](https://mcdreforged.readthedocs.io/)
+[![Documentation Status](https://readthedocs.org/projects/mcdreforged/badge/)](https://docs.mcdreforged.com/)
 
 ![MCDR-banner](https://raw.githubusercontent.com/MCDReforged/MCDReforged/master/logo_long.png)
 
@@ -45,4 +45,4 @@ Minecraft 服务器的控制台输出拥有着稳定的输出格式，并包含�
 
 ## 文档
 
-想要了解更多关于 MCDR 的详情？去看文档吧 https://mcdreforged.readthedocs.io/zh_CN/latest/
+想要了解更多关于 MCDR 的详情？去看文档吧 https://docs.mcdreforged.com/zh_CN/latest/

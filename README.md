@@ -5,7 +5,7 @@ MCDReforged
 [![PyPI Version](https://img.shields.io/pypi/v/mcdreforged.svg)](https://pypi.org/project/mcdreforged)
 [![Docker](https://img.shields.io/docker/v/mcdreforged/mcdreforged/latest?label=docker)](https://hub.docker.com/r/mcdreforged/mcdreforged)
 [![License](https://img.shields.io/github/license/MCDReforged/MCDReforged.svg)](https://github.com/MCDReforged/MCDReforged/blob/master/LICENSE)
-[![Documentation Status](https://readthedocs.org/projects/mcdreforged/badge/)](https://mcdreforged.readthedocs.io/)
+[![Documentation Status](https://readthedocs.org/projects/mcdreforged/badge/)](https://docs.mcdreforged.com/)
 
 ![MCDR-banner](logo_long.png)
 
@@ -45,4 +45,4 @@ That's it, you can even think of MCDR as a robot that stares at the server conso
 
 ## Document
 
-Check https://mcdreforged.readthedocs.io/ for more details of MCDR
+Check https://docs.mcdreforged.com/ for more details of MCDR
