@@ -32,6 +32,7 @@ mcdr_server:
     wait_stop: Waiting for server process to stop
     decode_fail: 'Fail to decode text {0}: {1}'
   on_mcdr_start:
+    starting: '{0} {1} is starting'
     console_disabled: Console thread disabled
   on_server_stop:
     show_return_code: Server process stopped with code {0}

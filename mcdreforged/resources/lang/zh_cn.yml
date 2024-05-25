@@ -32,6 +32,7 @@ mcdr_server:
     wait_stop: 等待服务端进程停止
     decode_fail: '解析文本 {0} 出错: {1}'
   on_mcdr_start:
+    starting: '{0} {1} 正在启动'
     console_disabled: 控制台线程已禁用
   on_server_stop:
     show_return_code: '服务端进程返回代码: {0}'
@@ -373,7 +374,7 @@ mcdr_command:
     kill.failed: 杀死服务端失败
     see_console: 见控制台以了解详情信息
 python_plugin:
-  info: '{0}正于{1}环境中运行'
+  info: '{0} 正于 {1} 环境中运行'
 
 # ======================== plugin peripherals ========================
 

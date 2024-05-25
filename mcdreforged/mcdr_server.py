@@ -587,6 +587,7 @@ class MCDReforgedServer:
 			self.reactor_manager.put_info(info)
 
 	def __on_mcdr_start(self):
+		self.logger.info(self.tr('mcdr_server.on_mcdr_start.starting', core_constant.NAME, core_constant.VERSION))
 		self.__register_signal_handler()
 		self.watch_dog.start()
 		self.task_executor.start()
