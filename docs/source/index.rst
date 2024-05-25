@@ -5,7 +5,7 @@
 
 Welcome to MCDReforged's documentation!
 =======================================
-This is the official documentation for `MCDReforged <https://github.com/Fallen-Breath/MCDReforged>`__.
+This is the official documentation for `MCDReforged <https://github.com/MCDReforged/MCDReforged>`__.
 
 .. toctree::
    :maxdepth: 2

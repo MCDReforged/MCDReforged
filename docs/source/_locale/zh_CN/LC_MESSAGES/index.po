@@ -73,8 +73,8 @@ msgstr "欢迎来到 MCDReforged 文档！"
 #: ../index.rst:8
 msgid ""
 "This is the official documentation for `MCDReforged <https://github.com"
-"/Fallen-Breath/MCDReforged>`__."
-msgstr "这是 `MCDReforged <https://github.com/Fallen-Breath/MCDReforged>`__ 的中文文档。"
+"/MCDReforged/MCDReforged>`__."
+msgstr "这是 `MCDReforged <https://github.com/MCDReforged/MCDReforged>`__ 的中文文档。"
 
 #: ../index.rst:28
 msgid "Indices and tables"

@@ -21,9 +21,9 @@ msgstr "快速上手"
 #: ../quick_start.rst:5
 msgid ""
 "This is a quick start tutorial of `MCDReforged <https://github.com"
-"/Fallen-Breath/MCDReforged>`__ (abbreviated as MCDR, omitted below)"
+"/MCDReforged/MCDReforged>`__ (abbreviated as MCDR, omitted below)"
 msgstr ""
-"这是一个 `MCDReforged <https://github.com/Fallen-Breath/MCDReforged>`__ （简称为 "
+"这是一个 `MCDReforged <https://github.com/MCDReforged/MCDReforged>`__ （简称为 "
 "MCDR，下同）的快速上手教程"
 
 #: ../quick_start.rst:8

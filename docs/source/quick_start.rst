@@ -2,7 +2,7 @@
 Quick Start
 ===========
 
-This is a quick start tutorial of `MCDReforged <https://github.com/Fallen-Breath/MCDReforged>`__ (abbreviated as MCDR, omitted below)
+This is a quick start tutorial of `MCDReforged <https://github.com/MCDReforged/MCDReforged>`__ (abbreviated as MCDR, omitted below)
 
 Requirements
 ------------

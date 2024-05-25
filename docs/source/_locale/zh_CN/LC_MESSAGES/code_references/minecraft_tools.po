@@ -276,7 +276,7 @@ msgstr "对于其他不以 ``\"/\"`` 开头的字符串，客户端将拒接发�
 msgid ""
 "See `Issue #203 <https://github.com/Fallen-"
 "Breath/MCDReforged/issues/203>`__"
-msgstr "见 `Issue #203 <https://github.com/Fallen-Breath/MCDReforged/issues/203>`__"
+msgstr "见 `Issue #203 <https://github.com/MCDReforged/MCDReforged/issues/203>`__"
 
 #: ../../docstring mcdreforged.minecraft.rtext.style.RAction.open_url:1 of
 msgid "Open given url"

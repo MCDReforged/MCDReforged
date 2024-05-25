@@ -173,7 +173,7 @@ msgstr "Docker Hub: https://hub.docker.com/r/mcdreforged/mcdreforged"
 msgid ""
 "Source code: https://github.com/Fallen-"
 "Breath/MCDReforged/tree/master/docker"
-msgstr "源代码：https://github.com/Fallen-Breath/MCDReforged/tree/master/docker"
+msgstr "源代码：https://github.com/MCDReforged/MCDReforged/tree/master/docker"
 
 #: ../docker.rst:107
 msgid ""
@@ -242,7 +242,7 @@ msgstr "Docker Hub: https://hub.docker.com/r/mcdreforged/mcdreforged-extra"
 
 #: ../docker.rst:150
 msgid ""
-"Source code: https://github.com/Fallen-Breath/MCDReforged-"
+"Source code: https://github.com/MCDReforged/MCDReforged-"
 "Docker/blob/master/src/Dockerfile-extra"
 msgstr ""
 "源代码：https://github.com/MCDReforged/docker/blob/master/src"
@@ -313,7 +313,7 @@ msgstr "镜像名：``mcdreforged/mcdreforged-${jdk_distribution}``。见下文�
 
 #: ../docker.rst:178
 msgid ""
-"Source code: https://github.com/Fallen-Breath/MCDReforged-"
+"Source code: https://github.com/MCDReforged/MCDReforged-"
 "Docker/blob/master/src"
 msgstr "源代码：https://github.com/MCDReforged/docker/blob/master/src"
 

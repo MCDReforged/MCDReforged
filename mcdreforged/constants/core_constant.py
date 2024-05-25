@@ -17,10 +17,10 @@ CLI_COMMAND = PACKAGE_NAME
 VERSION = '2.13.0-alpha.6'       # semver (1.2.3-alpha.4)
 VERSION_PYPI = '2.13.0a6'  # pythonic ver (1.2.3a4)
 
-GITHUB_URL = 'https://github.com/Fallen-Breath/MCDReforged'
+GITHUB_URL = 'https://github.com/MCDReforged/MCDReforged'
 GITHUB_API_LATEST_URLS = [
 	'https://api.mcdreforged.com/releases/latest',
-	'https://api.github.com/repos/Fallen-Breath/MCDReforged/releases/latest',
+	'https://api.github.com/repos/MCDReforged/MCDReforged/releases/latest',
 ]
 DOCUMENTATION_URL = 'https://docs.mcdreforged.com'
 PLUGIN_CATALOGUE_META_URL = 'https://meta.mcdreforged.com/everything_slim.json.xz'

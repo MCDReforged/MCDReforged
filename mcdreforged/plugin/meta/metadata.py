@@ -201,7 +201,7 @@ __SAMPLE_METADATA = {
 	'author': [
 		'Fallen_Breath'
 	],
-	'link': 'https://github.com/Fallen-Breath/MCDReforged',
+	'link': 'https://github.com/MCDReforged/MCDReforged',
 	'dependencies': {
 		'mcdreforged': '>=1.0.0'
 	},

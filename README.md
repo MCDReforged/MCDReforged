@@ -4,12 +4,12 @@ MCDReforged
 [![Python Versions](https://img.shields.io/pypi/pyversions/mcdreforged.svg)](https://pypi.org/project/mcdreforged)
 [![PyPI Version](https://img.shields.io/pypi/v/mcdreforged.svg)](https://pypi.org/project/mcdreforged)
 [![Docker](https://img.shields.io/docker/v/mcdreforged/mcdreforged/latest?label=docker)](https://hub.docker.com/r/mcdreforged/mcdreforged)
-[![License](https://img.shields.io/github/license/Fallen-Breath/MCDReforged.svg)](https://github.com/Fallen-Breath/MCDReforged/blob/master/LICENSE)
+[![License](https://img.shields.io/github/license/MCDReforged/MCDReforged.svg)](https://github.com/MCDReforged/MCDReforged/blob/master/LICENSE)
 [![Documentation Status](https://readthedocs.org/projects/mcdreforged/badge/)](https://mcdreforged.readthedocs.io/)
 
 ![MCDR-banner](logo_long.png)
 
-**English** | [中文](https://github.com/Fallen-Breath/MCDReforged/blob/master/README_cn.md)
+**English** | [中文](https://github.com/MCDReforged/MCDReforged/blob/master/README_cn.md)
 
 > This is a python based Minecraft server control tool
 

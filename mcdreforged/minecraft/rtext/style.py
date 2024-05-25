@@ -364,7 +364,7 @@ class RAction(__NamedObject, ABC, metaclass=__RActionMeta):
 		
 		For other strings that don't start with ``"/"``, the client will reject to send the chat message
 		
-		See `Issue #203 <https://github.com/Fallen-Breath/MCDReforged/issues/203>`__
+		See `Issue #203 <https://github.com/MCDReforged/MCDReforged/issues/203>`__
 	"""
 
 	open_url:          'RAction'

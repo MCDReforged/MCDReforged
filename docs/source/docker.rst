@@ -42,7 +42,7 @@ Example output:
 .. code-block:: text
 
     MCDReforged 2.13.0 is starting up
-    MCDReforged is open source, u can find it here: https://github.com/Fallen-Breath/MCDReforged
+    MCDReforged is open source, u can find it here: https://github.com/MCDReforged/MCDReforged
     [MCDR] [13:05:59] [MainThread/INFO]: Language is set to en_us
     [MCDR] [13:05:59] [MainThread/INFO]: Encoding / Decoding method is set to utf8 / utf8
     [MCDR] [13:05:59] [MainThread/INFO]: Plugin directory list:
@@ -102,7 +102,7 @@ Base Image
 
 - Image: ``mcdreforged/mcdreforged``
 - Docker Hub: https://hub.docker.com/r/mcdreforged/mcdreforged
-- Source code: https://github.com/Fallen-Breath/MCDReforged/tree/master/docker
+- Source code: https://github.com/MCDReforged/MCDReforged/tree/master/docker
 
 This image contains the basic runtime environment of MCDReforged, built based on the official `python <https://hub.docker.com/_/python>`__ image
 

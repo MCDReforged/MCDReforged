@@ -331,7 +331,7 @@ class CommandTreeTestCase(CommandTestCase):
 		self.assert_raises_and_check_hit(False, UnclosedQuotedString, self.run_command, executor, 'error text "abc')
 
 	def test_14_error_listener_only_1_catch(self):
-		# https://github.com/Fallen-Breath/MCDReforged/issues/109
+		# https://github.com/MCDReforged/MCDReforged/issues/109
 		counter = []
 		executor = Literal('test'). \
 			runs(lambda: None). \

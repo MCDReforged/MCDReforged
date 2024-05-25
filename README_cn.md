@@ -4,12 +4,12 @@ MCDReforged
 [![Python Versions](https://img.shields.io/pypi/pyversions/mcdreforged.svg)](https://pypi.org/project/mcdreforged)
 [![PyPI Version](https://img.shields.io/pypi/v/mcdreforged.svg)](https://pypi.org/project/mcdreforged)
 [![Docker](https://img.shields.io/docker/v/mcdreforged/mcdreforged/latest?label=docker)](https://hub.docker.com/r/mcdreforged/mcdreforged)
-[![License](https://img.shields.io/github/license/Fallen-Breath/MCDReforged.svg)](https://github.com/Fallen-Breath/MCDReforged/blob/master/LICENSE)
+[![License](https://img.shields.io/github/license/MCDReforged/MCDReforged.svg)](https://github.com/MCDReforged/MCDReforged/blob/master/LICENSE)
 [![Documentation Status](https://readthedocs.org/projects/mcdreforged/badge/)](https://mcdreforged.readthedocs.io/)
 
-![MCDR-banner](https://raw.githubusercontent.com/Fallen-Breath/MCDReforged/master/logo_long.png)
+![MCDR-banner](https://raw.githubusercontent.com/MCDReforged/MCDReforged/master/logo_long.png)
 
-[English](https://github.com/Fallen-Breath/MCDReforged/blob/master/README.md) | **中文**
+[English](https://github.com/MCDReforged/MCDReforged/blob/master/README.md) | **中文**
 
 > 这是一个基于 Python 的 Minecraft 服务端控制工具
 
