@@ -33,12 +33,12 @@ def ua_header(what: str) -> dict:
 	return {'User-Agent': ua(what)}
 
 
-def get_raw(url: str, what: str, *, timeout: Optional[Union[float, Tuple[float, float]]] = None, stream: Optional[bool] = None) -> requests.Response:
+def get_direct(url: str, what: str, *, timeout: Optional[Union[float, Tuple[float, float]]] = None, stream: Optional[bool] = None) -> requests.Response:
 	return requests.get(url, timeout=timeout, headers=ua_header(what), proxies=get_proxies(), stream=stream)
 
 
 def get_buf(url: str, what: str, *, timeout: Optional[Union[float, Tuple[float, float]]] = None, max_size: Optional[int] = None) -> bytes:
-	response = get_raw(url, what, timeout=timeout, stream=True)
+	response = get_direct(url, what, timeout=timeout, stream=True)
 
 	if max_size is None:
 		return response.content

@@ -114,7 +114,11 @@ check_update: true
 advanced_console: true
 
 
-# HTTP(s) proxy setting for all http requests inside MCDR
+# HTTP(s) proxy setting for all external HTTP requests in MCDR
+# It's suggested to set value for http_proxy and https_proxy at the same time
+# Example values:
+#   "http://127.0.0.1:1081"
+#   "http://user:pass@192.168.0.1:8888"
 http_proxy:
 https_proxy:
 
