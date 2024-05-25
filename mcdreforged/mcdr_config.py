@@ -35,10 +35,10 @@ class MCDReforgedConfig(Serializable):
 	# --------- Plugin Configuration ---------
 	plugin_directories: List[str] = ['plugins']
 	catalogue_meta_fetch_interval: int = 6 * 60 * 60  # every 6 hour
-	catalogue_meta_fetch_timeout: int = 15
+	catalogue_meta_fetch_timeout: float = 15
 	catalogue_meta_url: Optional[str] = None
 	plugin_download_url: Optional[str] = None
-	plugin_download_timeout: Optional[int] = 15
+	plugin_download_timeout: Optional[float] = 15
 
 	# --------- Misc Configuration ---------
 	check_update: bool = True
@@ -87,7 +87,7 @@ class MCDReforgedConfigManager:
 		try:
 			with self.__config_lock:
 				self.__config = MCDReforgedConfig.deserialize(data, missing_callback=dirty_callback)
-		except (KeyError, ValueError) as e:
+		except (KeyError, ValueError, TypeError) as e:
 			raise ValueError('config deserialization failed: {}'.format(e))
 
 		if has_missing:
