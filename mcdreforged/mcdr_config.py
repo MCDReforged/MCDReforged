@@ -65,12 +65,11 @@ class MCDReforgedConfig(Serializable):
 
 
 class MCDReforgedConfigManager:
-	CONFIG_FILE = 'config.yml'
 	DEFAULT_CONFIG_RESOURCE_PATH = 'resources/default_config.yml'
 
-	def __init__(self, logger: Logger):
+	def __init__(self, logger: Logger, config_file_path: str):
 		self.logger = logger
-		self.__storage = YamlDataStorage(logger, self.CONFIG_FILE, self.DEFAULT_CONFIG_RESOURCE_PATH)
+		self.__storage = YamlDataStorage(logger, config_file_path, self.DEFAULT_CONFIG_RESOURCE_PATH)
 		self.__config = MCDReforgedConfig.get_default()
 		self.__config_lock = threading.Lock()  # lock on writes
 

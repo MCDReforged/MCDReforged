@@ -24,6 +24,7 @@ from mcdreforged.info_reactor.info_filter import InfoFilterHolder
 from mcdreforged.info_reactor.info_reactor_manager import InfoReactorManager
 from mcdreforged.info_reactor.server_information import ServerInformation
 from mcdreforged.mcdr_config import MCDReforgedConfigManager, MCDReforgedConfig
+from mcdreforged.mcdr_server_args import MCDReforgedServerArgs
 from mcdreforged.mcdr_state import ServerState, MCDReforgedState, MCDReforgedFlag
 from mcdreforged.minecraft.rcon.rcon_manager import RconManager
 from mcdreforged.permission.permission_manager import PermissionManager
@@ -43,10 +44,7 @@ if TYPE_CHECKING:
 
 
 class MCDReforgedServer:
-	def __init__(self, *, generate_default_only: bool = False, initialize_environment: bool = False, auto_init: bool = False):
-		"""
-		:param generate_default_only: If set to true, MCDR will only generate the default configuration and permission files
-		"""
+	def __init__(self, args: MCDReforgedServerArgs):
 		self.mcdr_state: MCDReforgedState = MCDReforgedState.INITIALIZING
 		self.server_state: ServerState = ServerState.STOPPED
 		self.server_state_cv: threading.Condition = threading.Condition()
@@ -64,8 +62,8 @@ class MCDReforgedServer:
 
 		# --- Constructing fields --- #
 		self.logger: MCDReforgedLogger = MCDReforgedLogger()
-		self.config_manager: MCDReforgedConfigManager = MCDReforgedConfigManager(self.logger)
-		self.permission_manager: PermissionManager = PermissionManager(self)
+		self.config_manager: MCDReforgedConfigManager = MCDReforgedConfigManager(self.logger, args.config_file_path)
+		self.permission_manager: PermissionManager = PermissionManager(self, args.permission_file_path)
 		self.basic_server_interface: ServerInterface = ServerInterface(self)
 		self.task_executor: TaskExecutor = TaskExecutor(self)
 		self.console_handler: ConsoleHandler = ConsoleHandler(self)
@@ -83,14 +81,14 @@ class MCDReforgedServer:
 		self.__check_environment()
 
 		# --- Input arguments "generate_default_only" processing --- #
-		if generate_default_only:
+		if args.generate_default_only:
 			self.config_manager.save_default()
 			self.permission_manager.save_default()
 			return
 
 		# --- Initialize fields instance --- #
 		self.translation_manager.load_translations()  # translations are used for logging, so load them first
-		if initialize_environment or auto_init:
+		if args.initialize_environment or args.auto_init:
 			# Prepare config / permission files if they're missing
 			if not self.config_manager.file_presents():
 				self.config_manager.save_default()
@@ -102,15 +100,15 @@ class MCDReforgedServer:
 		# If there's any, MCDR environment might not be probably setup
 		file_missing = False
 
-		def load(kind: str, func: Callable[[], Any]) -> bool:
+		def load(kind: str, func: Callable[[], Any], file_path: str) -> bool:
 			nonlocal file_missing
 			try:
 				func()
 			except FileNotFoundError:
-				self.logger.error('{} is missing'.format(kind.title()))
+				self.logger.error('{} file {!r} is missing'.format(kind.title(), file_path))
 				file_missing = True
 			except (YAMLError, ValueError) as e:
-				self.logger.error('Failed to load {}: {}'.format(kind, type(e).__name__))
+				self.logger.error('Failed to load {} file {!r}: {}'.format(kind, file_path, type(e).__name__))
 				for line in str(e).splitlines():
 					self.logger.error(line)
 				return False
@@ -120,9 +118,10 @@ class MCDReforgedServer:
 		# load_config: config, language, handlers, plugin directories, reactors, handlers
 		# load_permission_file: permission
 		# config change will lead to creating plugin folders
-		loading_success = \
-			load('configuration', lambda: self.load_config(allowed_missing_file=False, log=not initialize_environment)) and \
-			load('permission', lambda: self.permission_manager.load_permission_file(allowed_missing_file=False))
+		loading_success = (
+			load('configuration', lambda: self.load_config(allowed_missing_file=False, log=not args.initialize_environment), args.config_file_path) and
+			load('permission', lambda: self.permission_manager.load_permission_file(allowed_missing_file=False), args.permission_file_path)
+		)
 		if file_missing:
 			self.__on_file_missing()
 			return

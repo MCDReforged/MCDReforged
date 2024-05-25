@@ -1,13 +1,13 @@
 import os
 import shlex
 import subprocess
+import sys
 import tempfile
-from argparse import ArgumentParser, Namespace
+from argparse import ArgumentParser, Namespace, ArgumentDefaultsHelpFormatter
 from typing import Callable
 from typing import Optional, List
 from zipfile import ZipFile
 
-import sys
 from mcdreforged.constants import plugin_constant
 from mcdreforged.plugin.installer.catalogue_access import PluginCatalogueAccess
 from mcdreforged.plugin.installer.meta_holder import CatalogueMetaRegistryHolder
@@ -16,7 +16,7 @@ from mcdreforged.utils.replier import NoopReplier, StdoutReplier, Replier
 
 
 def create(parser_factory: Callable[..., ArgumentParser]) -> ArgumentParser:
-	parser = parser_factory(name='pim', help='Plugin Installer for MCDReforged')
+	parser = parser_factory(name='pim', help='Plugin Installer for MCDReforged', formatter_class=ArgumentDefaultsHelpFormatter)
 	subparsers = parser.add_subparsers(title='Command', help='Available commands', dest='pim_command')
 
 	parser_list = subparsers.add_parser('browse', help='Browse plugins in the official plugin catalogue')

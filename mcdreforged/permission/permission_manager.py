@@ -16,7 +16,6 @@ if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
 
 
-PERMISSION_FILE = 'permission.yml'
 DEFAULT_PERMISSION_RESOURCE_PATH = 'resources/default_permission.yml'
 
 
@@ -38,9 +37,9 @@ class PermissionStorage(YamlDataStorage):
 
 
 class PermissionManager:
-	def __init__(self, mcdr_server: 'MCDReforgedServer'):
+	def __init__(self, mcdr_server: 'MCDReforgedServer', permission_file_path: str):
 		self.mcdr_server = mcdr_server
-		self.storage = PermissionStorage(mcdr_server.logger, PERMISSION_FILE, DEFAULT_PERMISSION_RESOURCE_PATH)
+		self.storage = PermissionStorage(mcdr_server.logger, permission_file_path, DEFAULT_PERMISSION_RESOURCE_PATH)
 		self.__tr = mcdr_server.create_internal_translator('permission_manager').tr
 
 	# --------------
