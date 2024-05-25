@@ -74,7 +74,7 @@ plugin_directories:
 - plugins
 
 
-# The interval in seconds between each plugin catalogue meta fetch
+# The interval in seconds between each scheduled plugin catalogue meta fetch
 # Set to -1 to disable scheduled meta fetch
 catalogue_meta_fetch_interval: 21600
 

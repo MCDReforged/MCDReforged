@@ -17,7 +17,7 @@ class ReleaseDownloader:
 			mkdir: bool = True,
 			download_url_override: Optional[str] = None,
 			download_url_override_kwargs: Optional[dict] = None,
-			download_timeout: Optional[float] = 15
+			download_timeout: float = 15
 	):
 		self.release = release
 		self.target_path = target_path
@@ -25,7 +25,7 @@ class ReleaseDownloader:
 		self.mkdir = mkdir
 		self.download_url_override = download_url_override
 		self.download_url_override_kwargs: dict = download_url_override_kwargs or {}
-		self.download_timeout = download_timeout
+		self.download_timeout: float = download_timeout
 
 	def __download(self, url: str, show_progress: bool):
 		if self.download_url_override is not None:

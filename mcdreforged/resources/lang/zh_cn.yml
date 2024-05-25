@@ -341,7 +341,7 @@ mcdreforged:
         installation_done: 插件安装完成
         installation_error: '插件安装失败: {0}。回滚中'
       refreshmeta:
-        name: 刷新插件仓库元数据
+        name: 更新插件仓库元数据
 
     preference:
       unsupported_command_source: 不支持的指令源 {0}

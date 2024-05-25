@@ -38,7 +38,7 @@ class MCDReforgedConfig(Serializable):
 	catalogue_meta_fetch_timeout: float = 15
 	catalogue_meta_url: Optional[str] = None
 	plugin_download_url: Optional[str] = None
-	plugin_download_timeout: Optional[float] = 15
+	plugin_download_timeout: float = 15
 
 	# --------- Misc Configuration ---------
 	check_update: bool = True

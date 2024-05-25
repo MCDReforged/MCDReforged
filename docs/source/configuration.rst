@@ -14,33 +14,37 @@ You can use command ``!!MCDR reload config`` or its short form ``!!MCDR r cfg`` 
 
     :ref:`command/mcdr:Hot reloads` command, for more detail about hot reloads
 
-List of options
----------------
+Basic Configuration
+-------------------
 
-Basic
-^^^^^
+Basic configs of MCDR
 
 language
-~~~~~~~~
+^^^^^^^^
 
 The language that MCDR will use to display information
 
 
-* Option type: string
+* Option type: :external:class:`str`
 * Default value: ``en_us``
 * Available options: ``en_us``, ``zh_cn``
 
+Server configuration
+--------------------
+
+Configs for the server that MCDR starts and controls
+
 working_directory
-~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^
 
 The working directory of the server. You should probably put all the files related to the server int this directory
 
 
-* Option type: string
+* Option type: :external:class:`str`
 * Default value: ``server``
 
 start_command
-~~~~~~~~~~~~~
+^^^^^^^^^^^^^
 
 The console command to launch the server
 
@@ -100,13 +104,13 @@ If there are some special character (e.g. ``"`` and ``\``) that yaml doesn't lik
 
     For Minecraft servers, you might want to add a ``-Dfile.encoding=UTF-8`` JVM property before the ``-jar`` argument, like the examples above
 
-    See :ref:`configuration:encoding / decoding` section for more information of UTF-8 charset for Minecraft servers
+    See :ref:`configuration:encoding, decoding` section for more information of UTF-8 charset for Minecraft servers
 
-* Option type: string
+* Option type: :external:class:`str`
 * Default value: ``echo Hello world from MCDReforged``
 
 handler
-~~~~~~~
+^^^^^^^
 
 Different Minecraft server has different kind of output, and event different kind of command. Server handlers are the modules to handle between all kind of servers and the interface for MCDR to control the server
 
@@ -142,11 +146,11 @@ Here is a table of current built-in handlers and their suitable server types
    * - basic_handler
      - The handler that parse nothing and return the raw text from the server. Don't use this unless you want to use MCDR to lanuch non Minecraft related servers.
 
-* Option type: string
+* Option type: :external:class:`str`
 * Default value: ``vanilla_handler``
 
-encoding / decoding
-~~~~~~~~~~~~~~~~~~~
+encoding, decoding
+^^^^^^^^^^^^^^^^^^
 
 The codec format to encode messages to stdin / decode messages from stdout of the server
 
@@ -207,17 +211,64 @@ and MCDR should be able communicate with the server perfectly
 Of course, if you're sure that your operating system uses UTF-8 as the default character set,
 then there's no need for any configuration. You can even leave these 2 options ``encoding``/ ``decoding`` blank to use the default system charset
 
-* Option type: string or null
+* Option type: ``Optional[str]``
 * Default value: ``utf8``, ``utf8``
 * Examples: ``utf8``, ``gbk``
 
+rcon
+^^^^
+
+The setting for `rcon <https://wiki.vg/RCON>`__. If rcon is enabled, MCDR will start a rcon client to connect to the server after server rcon has started up. Then plugins can use rcon to query command from the server
+
+rcon.enable
+"""""""""""
+
+The switch of rcon
+
+
+* Option type: :external:class:`bool`
+* Default value: ``false``
+
+rcon.address
+""""""""""""
+
+The address of the rcon server
+
+
+* Option type: :external:class:`str`
+* Default value: ``127.0.0.1``
+
+rcon.port
+"""""""""
+
+The port of the rcon server
+
+
+* Option type: :external:class:`int`
+* Default value: ``25575``
+
+rcon.password
+"""""""""""""
+
+The password to connect to the rcon server
+
+
+* Option type: :external:class:`str`
+* Default value: ``password``
+
+
+Plugin configuration
+--------------------
+
+MCDR plugin related configs
+
 plugin_directories
-~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^
 
 The list of directory path where MCDR will search for plugins to load
 
-* Option type: a list of string
-* Default value: 
+* Option type: ``List[str]``
+* Default value:
 
 .. code-block:: yaml
 
@@ -232,96 +283,127 @@ The list of directory path where MCDR will search for plugins to load
     plugin_directories:
     - plugins
     - path/to/my/plugin/directory
-    - another/plugin/directory
-
-rcon
-~~~~
-
-The setting for `rcon <https://wiki.vg/RCON>`__. If rcon is enabled, MCDR will start a rcon client to connect to the server after server rcon has started up. Then plugins can use rcon to query command from the server
-
-rcon.enable
-"""""""""""
-
-The switch of rcon
+    - /another/plugin/directory
 
 
-* Option type: boolean
-* Default value: ``false``
+catalogue_meta_fetch_interval
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-rcon.address
-""""""""""""
+The interval in seconds between each scheduled plugin catalogue meta fetch
 
-The address of the rcon server
+Set to ``-1`` to disable scheduled meta fetch
 
+* Option type: :external:class:`int`
+* Default value: ``21600`` (6 hours)
 
-* Option type: string
-* Default value: ``127.0.0.1``
+catalogue_meta_fetch_timeout
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-rcon.port
-"""""""""
+The timeout in seconds of the catalogue meta fetch
 
-The port of the rcon server
+* Option type: :external:class:`float`
+* Default value: ``15``
 
+catalogue_meta_url
+^^^^^^^^^^^^^^^^^^
 
-* Option type: integer
-* Default value: ``25575``
+URL override of the plugin catalogue "everything.json" or "everything_slim.json"
 
-rcon.password
-"""""""""""""
+If it ends with ".gz" or ".xz", corresponding decompression operation will be applied
 
-The password to connect to the rcon server
+If not provided, the url will be ``"https://meta.mcdreforged.com/everything_slim.json.xz"``
 
+* Option type: ``Optional[str]``
+* Default value: *empty*
 
-* Option type: string
-* Default value: ``password``
+plugin_download_url
+^^^^^^^^^^^^^^^^^^^
+
+Plugin file download override. Should be a valid python str.format string
+
+Available variables: ``{url}``, ``{repos_owner}``, ``{repos_name}``, ``{tag}``, ``{asset_name}``, ``{asset_id}``
+
+As an example, to use `ghproxy <https://mirror.ghproxy.com/>`__, you can set it to: ``"https://mirror.ghproxy.com/{url}"``
+
+If not provided, the origin GitHub asset download url will be directly used
+
+* Option type: ``Optional[str]``
+* Default value: *empty*
+
+plugin_download_timeout
+^^^^^^^^^^^^^^^^^^^^^^^
+
+The timeout in seconds of the plugin file download
+
+* Option type: :external:class:`float`
+* Default value: ``15``
+
+Misc configuration
+------------------
+
+Miscellaneous configs of MCDR
 
 check_update
-~~~~~~~~~~~~
+^^^^^^^^^^^^
 
 If set to true, MCDR will detect if there's a new version every 24h
 
-
-* Option type: boolean
+* Option type: :external:class:`bool`
 * Default value: ``true``
 
 advanced_console
-~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^
 
 Advance console switch powered by `prompt-toolkit <https://pypi.org/project/prompt-toolkit/>`__
 
 Set it to false if you need to redirect the stdin/stdout of MCDR or just don't like it
 
 
-* Option type: boolean
+* Option type: :external:class:`bool`
 * Default value: ``true``
 
-Advanced
-^^^^^^^^
+http_proxy, https_proxy
+^^^^^^^^^^^^^^^^^^^^^^^
+
+HTTP(s) proxy setting for all external HTTP requests in MCDR
+
+It's suggested to set value for http_proxy and https_proxy at the same time
+
+Example values::
+
+    "http://127.0.0.1:1081"
+    "http://user:pass@192.168.0.1:8888"
+
+* Option type: ``Optional[str]``
+* Default value: *empty*
+
+Advanced configuration
+----------------------
 
 Configuration options for advanced users
 
 disable_console_thread
-~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^
 
 When set to true, MCDR will not start the console thread for handling console command input
 
 Don't change it to true unless you know what you are doing
 
 
-* Option type: boolean
+* Option type: :external:class:`bool`
 * Default value: ``false``
 
 disable_console_color
-~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^
 
 When set to true, MCDR will removed all console font formatter codes in before any message gets printed onto the console
 
 
-* Option type: boolean
+* Option type: :external:class:`bool`
 * Default value: ``false``
 
 custom_handlers
-~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^
 
 A list of custom :doc:`/customize/handler` classes. The classed need to be subclasses of :class:`~mcdreforged.handler.abstract_server_handler.ServerHandler`
 
@@ -330,7 +412,7 @@ Then you can use the name of your handler in the :ref:`configuration:handler` op
 The name of a handler is defined in the :meth:`~mcdreforged.handler.abstract_server_handler.ServerHandler.get_name` method
 
 
-* Option type: a list of string, or null
+* Option type: ``Optional[List[str]]``
 * Default value: 
 
 .. code-block:: yaml
@@ -348,14 +430,14 @@ The name of a handler is defined in the :meth:`~mcdreforged.handler.abstract_ser
 In this example the custom handler package path is ``handlers.my_handler`` and the class is name ``MyHandler``
 
 custom_info_reactors
-~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^
 
-A list of custom :doc:`/customize/reactor` classes to handle the info instance. The classed need to be subclasses of :class:`~mcdreforged.info_reactor.abstract_info_reactor.AbstractInfoReactor`
+A list of custom :doc:`/customize/reactor` classes to handle the info instance. The classed need to be subclasses of :class:`~mcdreforged.handler.abstract_server_handler.ServerHandler`
 
 All custom info reactors will be registered to the reactor list to process information from the server
 
 
-* Option type: a list of string, or null
+* Option type: ``Optional[List[str]]``
 * Default value: 
 
 .. code-block:: yaml
@@ -375,11 +457,11 @@ In this example the custom reactor package path is ``my.custom.reactor`` and the
 .. _config-watchdog_threshold:
 
 watchdog_threshold
-~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^
 
 The required time interval in second for :doc:`/plugin_dev/watchdog` to consider the task executor thread is not responding. Set it to 0 to disable :doc:`/plugin_dev/watchdog`
 
-* Option type: int or float
+* Option type: :external:class:`int` or :external:class:`float`
 * Default value:
 
 .. code-block:: yaml
@@ -387,22 +469,27 @@ The required time interval in second for :doc:`/plugin_dev/watchdog` to consider
     watchdog_threshold: 10
 
 handler_detection
-~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^
 
 By default, MCDR will start a handler detection on MCDR startup for a while,
 to detect possible configuration mistake of the :ref:`configuration:handler` option
 
 Set it to false to disable the handler detection for a few less performance loss after MCDR startup, mostly for profiling MCDR
 
-* Option type: boolean
+* Option type: :external:class:`bool`
 * Default value:
 
 .. code-block:: yaml
 
     handler_detection: true
 
+Debug configuration
+-------------------
+
+Configurations for debugging MCDR
+
 debug
-~~~~~
+^^^^^
 
 Debug logging switches. Set ``all`` to true to enable all debug logging, or set the specific option to enable specific debug logging
 
