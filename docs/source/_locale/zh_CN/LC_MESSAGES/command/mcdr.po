@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-20 02:15+0800\n"
+"POT-Creation-Date: 2024-05-26 00:54+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -581,9 +581,9 @@ msgstr ""
 
 #: ../command/mcdr.rst:226
 msgid ""
-"``-u``, ``-U``, ``--upgrade``: An optional flag suggesting that if given "
-"plugin is already installed, then it will be upgrade if possible"
-msgstr "``-u``、``-U``、``--upgrade``：可选的标志位，表示若插件已安装，则尝试对其进行升级"
+"``-U``, ``--upgrade``: An optional flag suggesting that if given plugin "
+"is already installed, then it will be upgrade if possible"
+msgstr "``-U``、``--upgrade``：可选的标志位，表示若插件已安装，则尝试对其进行升级"
 
 #: ../command/mcdr.rst:227
 msgid ""
@@ -624,18 +624,18 @@ msgstr ""
 
 #: ../command/mcdr.rst:235
 msgid ""
-"``!!MCDR plugin install -u my_plugin``: Install plugin ``my_plugin`` if "
+"``!!MCDR plugin install -U my_plugin``: Install plugin ``my_plugin`` if "
 "it's not installed, or upgrade ``my_plugin`` to the latest compatible "
 "version"
 msgstr ""
-"``!!MCDR plugin install -u my_plugin``：若插件 ``my_plugin`` "
+"``!!MCDR plugin install -U my_plugin``：若插件 ``my_plugin`` "
 "已安装，则升级该插件，否则安装该插件。目标版本为最新兼容的版本"
 
 #: ../command/mcdr.rst:236
 msgid ""
-"``!!MCDR plugin install -u -y *``: Upgrade all installed plugins to their"
+"``!!MCDR plugin install -U -y *``: Upgrade all installed plugins to their"
 " latest compatible version. Confirmation check is skipped"
-msgstr "``!!MCDR plugin install -u -y *``：更新所有已安装的插件至它们的最新且兼容的版本。确认检查将被跳过"
+msgstr "``!!MCDR plugin install -U -y *``：更新所有已安装的插件至它们的最新且兼容的版本。确认检查将被跳过"
 
 #: ../command/mcdr.rst:239
 msgid ""

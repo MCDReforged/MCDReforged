@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-19 21:16+0800\n"
+"POT-Creation-Date: 2024-05-26 00:54+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -170,9 +170,7 @@ msgid "Docker Hub: https://hub.docker.com/r/mcdreforged/mcdreforged"
 msgstr "Docker Hub: https://hub.docker.com/r/mcdreforged/mcdreforged"
 
 #: ../docker.rst:105
-msgid ""
-"Source code: https://github.com/Fallen-"
-"Breath/MCDReforged/tree/master/docker"
+msgid "Source code: https://github.com/MCDReforged/MCDReforged/tree/master/docker"
 msgstr "源代码：https://github.com/MCDReforged/MCDReforged/tree/master/docker"
 
 #: ../docker.rst:107
@@ -242,11 +240,9 @@ msgstr "Docker Hub: https://hub.docker.com/r/mcdreforged/mcdreforged-extra"
 
 #: ../docker.rst:150
 msgid ""
-"Source code: https://github.com/MCDReforged/MCDReforged-"
-"Docker/blob/master/src/Dockerfile-extra"
-msgstr ""
-"源代码：https://github.com/MCDReforged/docker/blob/master/src"
+"Source code: https://github.com/MCDReforged/docker/blob/master/src"
 "/Dockerfile-extra"
+msgstr "源代码：https://github.com/MCDReforged/docker/blob/master/src/Dockerfile-extra"
 
 #: ../docker.rst:152
 msgid ""
@@ -312,9 +308,7 @@ msgid ""
 msgstr "镜像名：``mcdreforged/mcdreforged-${jdk_distribution}``。见下文以了解支持的 JDK 发行版"
 
 #: ../docker.rst:178
-msgid ""
-"Source code: https://github.com/MCDReforged/MCDReforged-"
-"Docker/blob/master/src"
+msgid "Source code: https://github.com/MCDReforged/docker/blob/master/src"
 msgstr "源代码：https://github.com/MCDReforged/docker/blob/master/src"
 
 #: ../docker.rst:180

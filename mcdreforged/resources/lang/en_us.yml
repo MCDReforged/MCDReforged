@@ -150,7 +150,7 @@ mcdreforged:
         §7!!MCDR plugin disable §6<plugin_id>§r: Disable a plugin with id §6<plugin_id>§r
         §7!!MCDR plugin reloadall§r: Load / Reload / Unloaded §lall§r not disabled plugins
         §7!!MCDR plugin browse §e[<keyword>]§7 [-i §6<plugin_id>§7]§r: Browse plugin catalogue. List with §e<keyword>§r or show details of plugin with id §6<plugin_id>§7
-        §7!!MCDR plugin install §a<specifier>§7 [-u] [-y] ...§r: Install plugins that satisfy the given specifier(s)
+        §7!!MCDR plugin install §a<specifier>§7 [-U] [-y] ...§r: Install plugins that satisfy the given specifier(s)
         §7!!MCDR plugin checkupdate §6[<plugin_id> ...]§r: Check if given plugins have updates
         §7!!MCDR plugin refreshmeta§r: Perform a re-fetch for the plugin catalogue meta cache
       preference: |

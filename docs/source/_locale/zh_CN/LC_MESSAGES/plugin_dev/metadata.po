@@ -445,14 +445,12 @@ msgid "1.2, 1.2.4"
 msgstr "1.2，1.2.4"
 
 #: ../plugin_dev/metadata.rst:210
-#, fuzzy
 msgid "=="
-msgstr "="
+msgstr "=="
 
 #: ../plugin_dev/metadata.rst:211
-#, fuzzy
 msgid "==1.2.3"
-msgstr "=1.2.3"
+msgstr "==1.2.3"
 
 #: ../plugin_dev/metadata.rst:212
 msgid "The target version should equal to 1.2.3"

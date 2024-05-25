@@ -206,7 +206,7 @@ Install plugins that satisfy the given specifier(s)
 
 .. code-block:: text
 
-    !!MCDR plugin install <specifier> [(-t|--target) <target>] [-u|-U|--upgrade] [-y|--yes] [--dry-run] [--no-dependencies] ...
+    !!MCDR plugin install <specifier> [(-t|--target) <target>] [-U|--upgrade] [-y|--yes] [--dry-run] [--no-dependencies] ...
 
 Arguments:
 
@@ -223,7 +223,7 @@ Arguments:
         my_plugin^=2.0.1
 
 - ``<target>``: The plugin directory to install the plugins into. The default value is the first path in the :ref:`configuration:plugin_directories` list in MCDR config
-- ``-u``, ``-U``, ``--upgrade``: An optional flag suggesting that if given plugin is already installed, then it will be upgrade if possible
+- ``-U``, ``--upgrade``: An optional flag suggesting that if given plugin is already installed, then it will be upgrade if possible
 - ``--dry-run``: An optional flag for test run. If provided, no actual installation will be performed
 - ``--no-dependencies``: An optional flag to ignore all dependencies relationships during plugin resolution. No indirect depended plugin and python packages will be installed
 
@@ -232,8 +232,8 @@ Example usages:
 - ``!!MCDR plugin install my_plugin``: Install a plugin with ID ``my_plugin``, using the latest compatible version
 - ``!!MCDR plugin install my_plugin<1.3``: Install a plugin with ID ``my_plugin``, using the latest compatible version, and the version should be less than ``1.3``
 - ``!!MCDR plugin install my_plugin<1.3 another_plugin==1.0.0``: On the basis of the above example, install ``another_plugin`` with exact version ``1.0.0`` as well
-- ``!!MCDR plugin install -u my_plugin``: Install plugin ``my_plugin`` if it's not installed, or upgrade ``my_plugin`` to the latest compatible version
-- ``!!MCDR plugin install -u -y *``: Upgrade all installed plugins to their latest compatible version. Confirmation check is skipped
+- ``!!MCDR plugin install -U my_plugin``: Install plugin ``my_plugin`` if it's not installed, or upgrade ``my_plugin`` to the latest compatible version
+- ``!!MCDR plugin install -U -y *``: Upgrade all installed plugins to their latest compatible version. Confirmation check is skipped
 
 
 Example output for a complete plugin installation (Note that ``my_plugin`` does not actually exist):

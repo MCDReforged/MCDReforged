@@ -150,7 +150,7 @@ mcdreforged:
         §7!!MCDR plugin disable §6<plugin_id>§r: 禁用 id 为 §6<plugin_id>§r 的插件
         §7!!MCDR plugin reloadall§r: 加载 / 重载 / 卸载§l所有§r插件
         §7!!MCDR plugin browse §e[<keyword>]§7 [-i §6<plugin_id>§7]§r: 浏览插件仓库。用关键字 §e<keyword>§r 进行筛选，或展示给定插件 §6<plugin_id>§7 的详情
-        §7!!MCDR plugin install §a<specifier>§7 [-u] [-y] ...§r: 从插件仓库安装给定描述的插件
+        §7!!MCDR plugin install §a<specifier>§7 [-U] [-y] ...§r: 从插件仓库安装给定描述的插件
         §7!!MCDR plugin checkupdate §6[<plugin_id> ...]§r: 检查给定的插件是否有更新
         §7!!MCDR plugin refreshmeta§r: 重新拉取插件仓库的元数据
       preference: |

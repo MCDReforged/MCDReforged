@@ -173,9 +173,8 @@ msgid "Check how to configure MCDR: :doc:`/configuration`"
 msgstr "查看配置 MCDR 的方式：:doc:`/configuration`"
 
 #: ../quick_start.rst:135
-#, fuzzy
 msgid "Discover the MCDR command system: :doc:`/command/index`"
-msgstr "探索 MCDR 的命令系统：:doc:`/command`"
+msgstr "探索 MCDR 的命令系统：:doc:`/command/index`"
 
 #: ../quick_start.rst:136
 msgid "Take a look at MCDR's built-in permission system: :doc:`/permission`"

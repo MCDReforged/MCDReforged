@@ -31,6 +31,9 @@ class Translator:
 		self.tr: TranslateFunc = self.__tr
 		self.rtr: TranslateFuncR = self
 
+	def create_child(self, sub_key: str) -> 'Translator':
+		return Translator(self.key_prefix + '.' + sub_key, mcdr_server=self.__mcdr_server)
+
 	def __real_tr(self, translation_key: str, *args, **kwargs) -> MessageText:
 		return self.__mcdr_server.translate(translation_key, *args, **kwargs)
 

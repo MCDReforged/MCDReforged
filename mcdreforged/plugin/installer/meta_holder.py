@@ -181,7 +181,7 @@ class PersistCatalogueMetaRegistryHolder(CatalogueMetaRegistryHolder):
 			self.__last_background_fetch_time = self.__last_meta_fetch_time
 
 		self.logger.info(self.__tr(
-			'plugin_catalogue_meta_registry.load_cached_success',
+			'load_cached_success',
 			time_util.format_time('%Y-%m-%d %H:%M:%S', self.__last_meta_fetch_time) or 'N/A',
 		))
 
@@ -208,7 +208,7 @@ class PersistCatalogueMetaRegistryHolder(CatalogueMetaRegistryHolder):
 	def __background_fetch(self):
 		with self.__fetch_lock:
 			now = time.time()
-			if now - self.__last_background_fetch_time >= self.BACKGROUND_FETCH_INTERVAL:
+			if now - self.__last_background_fetch_time >= self.BACKGROUND_FETCH_INTERVAL and now - self.__last_meta_fetch_time <= self.META_CACHE_TTL:
 				self.__do_fetch(ignore_ttl=False, show_error_stacktrace=False)
 				self.__last_background_fetch_time = time.time()
 
