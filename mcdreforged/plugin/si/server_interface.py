@@ -546,7 +546,22 @@ class ServerInterface:
 		:param plugin_id: The plugin id of the plugin to query file path
 		"""
 		def getter(plugin: RegularPlugin) -> str:
-			return str(plugin.plugin_path)
+			return str(plugin.file_modify_time)
+		return self.__existed_plugin_info_getter(plugin_id, getter, regular=True)
+
+	def get_plugin_file_mtime_ns(self, plugin_id: str) -> Optional[int]:
+		"""
+		Return the file mtime of the specified plugin, or None if the plugin doesn't exist
+
+		Notes: Directory plugins does not have mtime. For those, the return value will be -1
+
+		:param plugin_id: The plugin id of the plugin to query file path
+		.. versionadded:: v2.13.0
+		"""
+		def getter(plugin: RegularPlugin) -> int:
+			if plugin.file_modify_time is not None:
+				return plugin.file_modify_time
+			return -1
 		return self.__existed_plugin_info_getter(plugin_id, getter, regular=True)
 
 	def get_plugin_instance(self, plugin_id: str) -> Optional[Any]:
