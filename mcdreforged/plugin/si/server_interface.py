@@ -2,7 +2,7 @@ import functools
 import logging
 import threading
 from pathlib import Path
-from typing import Callable, TYPE_CHECKING, Tuple, Any, Union, Optional, List, Dict
+from typing import Callable, TYPE_CHECKING, Tuple, Any, Union, Optional, List, Dict, overload, Literal
 
 import psutil
 
@@ -515,6 +515,11 @@ class ServerInterface:
 	#      Plugin Queries
 	# ------------------------
 
+	@overload
+	def __existed_plugin_info_getter(self, plugin_id: str, handler: Callable[['RegularPlugin'], Any], *, regular: Literal[True]): ...
+	@overload
+	def __existed_plugin_info_getter(self, plugin_id: str, handler: Callable[['AbstractPlugin'], Any], *, regular: Literal[False]): ...
+
 	def __existed_plugin_info_getter(self, plugin_id: str, handler: Callable[['AbstractPlugin'], Any], *, regular: bool):
 		if regular:
 			plugin = self._plugin_manager.get_regular_plugin_from_id(plugin_id)
@@ -530,7 +535,9 @@ class ServerInterface:
 
 		:param plugin_id: The plugin id of the plugin to query metadata
 		"""
-		return self.__existed_plugin_info_getter(plugin_id, lambda plugin: plugin.get_metadata(), regular=False)
+		def getter(plugin: AbstractPlugin) -> Metadata:
+			return plugin.get_metadata()
+		return self.__existed_plugin_info_getter(plugin_id, getter, regular=False)
 
 	def get_plugin_file_path(self, plugin_id: str) -> Optional[str]:
 		"""
@@ -538,7 +545,9 @@ class ServerInterface:
 
 		:param plugin_id: The plugin id of the plugin to query file path
 		"""
-		return self.__existed_plugin_info_getter(plugin_id, lambda plugin: plugin.plugin_path, regular=False)
+		def getter(plugin: RegularPlugin) -> str:
+			return str(plugin.plugin_path)
+		return self.__existed_plugin_info_getter(plugin_id, getter, regular=True)
 
 	def get_plugin_instance(self, plugin_id: str) -> Optional[Any]:
 		"""
@@ -563,7 +572,9 @@ class ServerInterface:
 		:param plugin_id: The plugin id of the plugin you want to get entrypoint module instance
 		:return: A entrypoint module instance, or None if the plugin doesn't exist
 		"""
-		return self.__existed_plugin_info_getter(plugin_id, lambda plugin: plugin.entry_module_instance, regular=True)
+		def getter(plugin: RegularPlugin) -> Any:
+			return plugin.entry_module_instance
+		return self.__existed_plugin_info_getter(plugin_id, getter, regular=True)
 
 	def get_plugin_list(self) -> List[str]:
 		"""
