@@ -1,10 +1,10 @@
 import hashlib
+import logging
 import time
 from pathlib import Path
 from typing import Optional
 
 from mcdreforged.plugin.installer.meta_holder import ReleaseData
-from mcdreforged.plugin.si.server_interface import ServerInterface
 from mcdreforged.utils import request_util
 from mcdreforged.utils.replier import Replier
 
@@ -17,7 +17,8 @@ class ReleaseDownloader:
 			mkdir: bool = True,
 			download_url_override: Optional[str] = None,
 			download_url_override_kwargs: Optional[dict] = None,
-			download_timeout: float = 15
+			download_timeout: float = 15,
+			logger: Optional[logging.Logger] = None
 	):
 		self.release = release
 		self.target_path = target_path
@@ -26,10 +27,11 @@ class ReleaseDownloader:
 		self.download_url_override = download_url_override
 		self.download_url_override_kwargs: dict = download_url_override_kwargs or {}
 		self.download_timeout: float = download_timeout
+		self.logger = logger
 
 	def __download(self, url: str, show_progress: bool):
 		if self.download_url_override is not None:
-			download_url = self.download_url_override.format(
+			kwargs = dict(
 				url=url,
 				tag=self.release.tag_name,
 				asset_name=self.release.file_name,
@@ -37,6 +39,9 @@ class ReleaseDownloader:
 				# for repos_owner, repos_name
 				**self.download_url_override_kwargs,
 			)
+			download_url = self.download_url_override.format(**kwargs)
+			if self.logger is not None:
+				self.logger.debug('Applied download overwrite with kwargs {}: {!r} -> {!r}'.format(kwargs, url, download_url))
 		else:
 			download_url = url
 		response = request_util.get_direct(download_url, 'download', timeout=self.download_timeout, stream=True)
@@ -46,6 +51,8 @@ class ReleaseDownloader:
 			raise ValueError('content-length mismatched, expected {}, found {}'.format(length, self.release.file_size))
 		if length >= 100 * 1024 * 1024:  # 100MiB
 			raise ValueError('File too large ({}MiB), please download manually'.format(round(length / 1024 / 1024, 1)))
+		if self.logger is not None:
+			self.logger.debug('Response content length: {}'.format(length))
 
 		def report():
 			if show_progress:
@@ -82,12 +89,14 @@ class ReleaseDownloader:
 		errors = []
 		url = self.release.file_url
 		for i in range(retry_cnt):
+			if self.logger is not None:
+				self.logger.debug('Download attempt {} start'.format(i + 1))
 			try:
 				self.__download(url, show_progress)
 			except Exception as e:
 				self.replier.reply('Download attempt {} failed, url {!r}, error: {}'.format(i + 1, url, e))
-				if not self.replier.is_console() and (si := ServerInterface.get_instance()) is not None:
-					si.logger.warning('PIM download attempt {} failed, url {!r}, error: {}'.format(i + 1, url, e))
+				if not self.replier.is_console() and self.logger is not None:
+					self.logger.warning('PIM download attempt {} failed, url {!r}, error: {}'.format(i + 1, url, e))
 				errors.append(e)
 			else:
 				return

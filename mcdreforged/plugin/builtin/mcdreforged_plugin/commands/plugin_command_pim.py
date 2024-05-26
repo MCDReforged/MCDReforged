@@ -753,7 +753,6 @@ class PluginCommandPimExtension(SubCommand):
 
 		req_srcs: Dict[PluginRequirement, PluginCommandPimExtension.__PluginRequirementSource] = {}
 		step_create_plugin_requirements()
-		self.logger.info('step_create_plugin_requirements done')
 
 		# ------------------- Resolve -------------------
 
@@ -945,6 +944,7 @@ class PluginCommandPimExtension(SubCommand):
 								'repos_name': cata_meta[plugin_id].repos_name,
 							},
 							download_timeout=self.mcdr_server.config.plugin_download_timeout,
+							logger=self.logger,
 						).download()
 
 				# apply
