@@ -23,7 +23,7 @@ GITHUB_API_LATEST_URLS = [
 	'https://api.github.com/repos/MCDReforged/MCDReforged/releases/latest',
 ]
 DOCUMENTATION_URL = 'https://docs.mcdreforged.com'
-PLUGIN_CATALOGUE_META_URL = 'https://meta.mcdreforged.com/everything_slim.json.xz'
+PLUGIN_CATALOGUE_META_URL = 'https://api.mcdreforged.com/catalogue/everything_slim.json.xz'
 
 PACKAGE_PATH = Path(__file__).absolute().parent.parent  # path of the mcdreforged directory
 LOGGING_FILE = os.path.join('logs', '{}.log'.format(NAME_SHORT))
