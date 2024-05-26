@@ -61,6 +61,7 @@ Plugin Queries
 
 .. automethod:: ServerInterface.get_plugin_metadata
 .. automethod:: ServerInterface.get_plugin_file_path
+.. automethod:: ServerInterface.get_plugin_file_mtime_ns
 .. automethod:: ServerInterface.get_plugin_instance
 .. automethod:: ServerInterface.get_plugin_list
 .. automethod:: ServerInterface.get_unloaded_plugin_list
@@ -86,6 +87,7 @@ Plugin Operations
 .. automethod:: ServerInterface.disable_plugin
 .. automethod:: ServerInterface.refresh_all_plugins
 .. automethod:: ServerInterface.refresh_changed_plugins
+.. automethod:: ServerInterface.manipulate_plugins
 .. automethod:: ServerInterface.dispatch_event
 
 Configuration

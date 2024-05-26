@@ -551,11 +551,14 @@ class ServerInterface:
 
 	def get_plugin_file_mtime_ns(self, plugin_id: str) -> Optional[int]:
 		"""
-		Return the file mtime of the specified plugin, or None if the plugin doesn't exist
+		Return the file mtime (:external:attr:`os.stat_result.st_mtime_ns`) of the specified plugin,
+		or None if the plugin doesn't exist
 
-		Notes: Directory plugins does not have mtime. For those, the return value will be -1
+		Notes: :ref:`plugin_dev/plugin_format:Directory Plugin` does not have mtime.
+		In that case, the return value will always be -1
 
-		:param plugin_id: The plugin id of the plugin to query file path
+		:param plugin_id: The plugin id of the plugin to query file mtime
+
 		.. versionadded:: v2.13.0
 		"""
 		def getter(plugin: RegularPlugin) -> int:
@@ -759,20 +762,20 @@ class ServerInterface:
 		A highly-customizable plugin manipulate API that provides fine-grain control on what to be manipulated:
 		load / unload / reload / enable / disable the provided plugins, in a single action
 
-		.. note::
+		.. tip::
 
 			Here some different plugin "reload" cases and what actions you should actually provide
 
-			* ``MyPlugin.mcdr`` remains unchanged: reload "my_plugin"
-			* ``MyPlugin.mcdr`` changes its content: reload "my_plugin"
-			* ``MyPlugin.mcdr`` is replaced with an upgrade ``MyPlugin_v2.mcdr``: unload "my_plugin" and load "MyPlugin_v2.mcdr"
+			* ``MyPlugin.mcdr`` remains unchanged: reload ``my_plugin``
+			* ``MyPlugin.mcdr`` changes its content: reload ``my_plugin``
+			* ``MyPlugin.mcdr`` is replaced with an upgrade ``MyPlugin_v2.mcdr``: unload ``my_plugin`` and load ``MyPlugin_v2.mcdr``
 
-		:param load: An optional plugin file path list containing plugins to be loaded
-		:param unload: An optional plugin file path list containing plugins to be loaded
-		:param reload: An optional plugin file path list containing plugins to be loaded
-		:param enable: An optional plugin file path list containing plugins to be loaded
-		:param disable: An optional plugin file path list containing plugins to be loaded
-		:return: true if all operation succeeded, false if failed, None if it's a not-suggested chained sync plugin operation
+		:param load: An optional plugin **file path** list containing plugins to be loaded
+		:param unload: An optional plugin **ID** list containing plugins to be loaded
+		:param reload: An optional plugin **ID** list containing plugins to be reloaded
+		:param enable: An optional plugin **file path** list containing plugins to be enabled
+		:param disable: An optional plugin **ID** list containing plugins to be disabled
+		:return: True if all operation succeeded, False if failed, None if it's a not-suggested chained sync plugin operation
 
 		.. versionadded:: v2.13.0
 		"""
