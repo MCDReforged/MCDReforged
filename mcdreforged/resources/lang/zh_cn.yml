@@ -432,7 +432,6 @@ mcdreforged:
   plugin_catalogue_meta_registry:
     load_cached_failed: '无法从缓存文件 {0} 加载插件仓库元数据: {1}'
     load_cached_success: 已从缓存文件加载插件仓库元数据 (更新于 {0})
-    background_fetcher_disabled: 插件仓库元数据背景更新线程已禁用
 
   # ======================== misc ========================
 

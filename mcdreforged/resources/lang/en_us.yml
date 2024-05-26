@@ -432,7 +432,6 @@ mcdreforged:
   plugin_catalogue_meta_registry:
     load_cached_failed: 'Loading cached plugin catalogue meta from {0} failed: {1}'
     load_cached_success: Loaded plugin catalogue meta from cache file (fetched at {0})
-    background_fetcher_disabled: Background plugin catalogue meta fetcher disabled
 
   # ======================== misc ========================
 

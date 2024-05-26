@@ -71,21 +71,21 @@ rcon:
 # The list of directory path where MCDR will search for plugins to load
 # Example: "path/to/my/plugin/directory"
 plugin_directories:
-- plugins
+  - plugins
 
 
-# The interval in seconds between each scheduled plugin catalogue meta fetch
-# Set to -1 to disable scheduled meta fetch
-catalogue_meta_fetch_interval: 21600
+# The cache TTL of a fetched plugin catalogue meta
+# MCDR will keep using the cached meta within its TTL for the following catalogue plugin operations
+catalogue_meta_cache_ttl: 1200
 
 
-# The timeout in seconds of the catalogue meta fetch
+# The timeout in seconds for a plugin catalogue meta fetch
 catalogue_meta_fetch_timeout: 15
 
 
-# URL override of the plugin catalogue "everything.json" or "everything_slim.json"
-# If it ends with ".gz" or ".xz", corresponding decompression operation will be applied
-# If not provided, the url will be "https://meta.mcdreforged.com/everything_slim.json.xz"
+# Override the URL pointing to the "everything.json" or "everything_slim.json" file, which is used to fetch the plugin catalogue meta
+# If it ends with ".gz" (gzip) or ".xz" (lzma), corresponding decompression operation will be applied
+# If not provided, the url will be "https://api.mcdreforged.com/catalogue/everything_slim.json.xz"
 catalogue_meta_url:
 
 
@@ -96,7 +96,7 @@ catalogue_meta_url:
 plugin_download_url:
 
 
-# The timeout in seconds of the plugin file download
+# The timeout in seconds for a plugin file download
 plugin_download_timeout: 15
 
 

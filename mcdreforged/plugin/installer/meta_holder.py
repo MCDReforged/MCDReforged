@@ -32,7 +32,7 @@ class CatalogueMetaRegistry(MetaRegistry):
 
 
 class CatalogueMetaRegistryHolder:
-	def __init__(self, *, meta_json_url: Optional[str] = None, meta_fetch_timeout: Optional[int] = None):
+	def __init__(self, *, meta_json_url: Optional[str] = None, meta_fetch_timeout: Optional[float] = None):
 		if meta_json_url is None:
 			meta_json_url = core_constant.PLUGIN_CATALOGUE_META_URL
 		if meta_fetch_timeout is None:
@@ -119,9 +119,8 @@ class CatalogueMetaRegistryHolder:
 
 
 class BackgroundMetaFetcher(BackgroundThreadExecutor):
-	def __init__(self, logger: logging.Logger, interval: float, tick_func: Callable[[], Any]):
+	def __init__(self, logger: logging.Logger, tick_func: Callable[[], Any]):
 		super().__init__(logger)
-		self.__interval = interval
 		self.__tick_func = tick_func
 
 	@override
@@ -138,25 +137,22 @@ class PersistCatalogueMetaRegistryHolder(CatalogueMetaRegistryHolder):
 	_FetchStartCallbackOpt = Optional[Callable[[bool], None]]
 	_FetchCallbackOpt = Optional[Callable[[Optional[Exception]], None]]
 
-	BACKGROUND_FETCH_INTERVAL = 4 * 60 * 60  # 4h
-	META_CACHE_TTL = 20 * 60  # 20min
-
-	def __init__(self, mcdr_server: 'MCDReforgedServer', cache_path: Path, *, meta_json_url: str, meta_fetch_interval: float, meta_fetch_timeout: int):
+	def __init__(self, mcdr_server: 'MCDReforgedServer', cache_path: Path, *, meta_json_url: str, meta_cache_ttl: float, meta_fetch_timeout: float):
 		super().__init__(meta_json_url=meta_json_url, meta_fetch_timeout=meta_fetch_timeout)
 		self.logger = mcdr_server.logger
 		self.__tr = mcdr_server.create_internal_translator('plugin_catalogue_meta_registry').tr
 		self.__cache_path = cache_path
 		self.__meta_lock = threading.Lock()
 		self.__meta: MetaRegistry = EmptyMetaRegistry()
-		self.__meta_fetch_interval: float = meta_fetch_interval
+		self.__meta_cache_ttl = meta_cache_ttl
 		self.__last_meta_fetch_time: float = 0
-		self.__last_background_fetch_time: float = 0
+		self.__background_fetch_flag = False
 		self.__fetch_lock = threading.Lock()
-		self.__background_fetcher = BackgroundMetaFetcher(self.logger, meta_fetch_interval, self.__background_fetch)
+		self.__background_fetcher = BackgroundMetaFetcher(self.logger, self.__background_fetch)
 
 	@override
 	def get_registry(self) -> MetaRegistry:
-		self.__last_background_fetch_time = 0
+		self.__background_fetch_flag = True
 		return self.__meta
 
 	def get_registry_blocked(self, ignore_ttl: bool = False, start_callback: _FetchStartCallbackOpt = None, done_callback: _FetchCallbackOpt = None) -> MetaRegistry:
@@ -178,7 +174,6 @@ class PersistCatalogueMetaRegistryHolder(CatalogueMetaRegistryHolder):
 		with self.__meta_lock:
 			self.__meta = meta
 			self.__last_meta_fetch_time = float(data.get('timestamp', 0))
-			self.__last_background_fetch_time = self.__last_meta_fetch_time
 
 		self.logger.info(self.__tr(
 			'load_cached_success',
@@ -197,20 +192,20 @@ class PersistCatalogueMetaRegistryHolder(CatalogueMetaRegistryHolder):
 	def init(self):
 		self.__load_cached_file()
 
-		if self.__meta_fetch_interval > 0:
-			self.__background_fetcher.start()
-		else:
-			self.logger.info(self.__tr('background_fetcher_disabled'))
+		self.__background_fetcher.start()
 
 	def terminate(self):
 		self.__background_fetcher.stop()
 
 	def __background_fetch(self):
 		with self.__fetch_lock:
-			now = time.time()
-			if now - self.__last_background_fetch_time >= self.BACKGROUND_FETCH_INTERVAL and now - self.__last_meta_fetch_time <= self.META_CACHE_TTL:
+			# if the ttl is set to a very small number, don't keep fetching without stopping
+			adjusted_ttl = max(10.0, self.__meta_cache_ttl)
+
+			# flag set, and existing meta cache is expired
+			if self.__background_fetch_flag and time.time() - self.__last_meta_fetch_time > adjusted_ttl:
+				self.__background_fetch_flag = False
 				self.__do_fetch(ignore_ttl=False, show_error_stacktrace=False)
-				self.__last_background_fetch_time = time.time()
 
 	def __do_fetch(self, ignore_ttl: bool, start_callback: _FetchStartCallbackOpt = None, done_callback: _FetchCallbackOpt = None, *, show_error_stacktrace: bool = True):
 		"""
@@ -225,7 +220,7 @@ class PersistCatalogueMetaRegistryHolder(CatalogueMetaRegistryHolder):
 
 		try:
 			now = time.time()
-			if not ignore_ttl and now - self.__last_meta_fetch_time <= self.META_CACHE_TTL:
+			if not ignore_ttl and now - self.__last_meta_fetch_time <= self.__meta_cache_ttl:
 				start_callback(False)
 				done_callback(None)
 				return

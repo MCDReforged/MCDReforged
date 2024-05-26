@@ -231,7 +231,7 @@ class PluginCommandPimExtension(SubCommand):
 			self.mcdr_server,
 			Path(self.server_interface.get_data_folder()) / 'catalogue_meta_cache.json.xz',
 			meta_json_url=self.mcdr_server.config.catalogue_meta_url,
-			meta_fetch_interval=self.mcdr_server.config.catalogue_meta_fetch_interval,
+			meta_cache_ttl=self.mcdr_server.config.catalogue_meta_cache_ttl,
 			meta_fetch_timeout=self.mcdr_server.config.catalogue_meta_fetch_timeout,
 		)
 		self.__installation_confirm_helper = ConfirmHelper()

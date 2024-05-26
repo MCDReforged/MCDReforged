@@ -273,7 +273,7 @@ The list of directory path where MCDR will search for plugins to load
 .. code-block:: yaml
 
     plugin_directories:
-    - plugins
+      - plugins
 
 
 * Example:
@@ -281,25 +281,24 @@ The list of directory path where MCDR will search for plugins to load
 .. code-block:: yaml
 
     plugin_directories:
-    - plugins
-    - path/to/my/plugin/directory
-    - /another/plugin/directory
+      - plugins
+      - path/to/my/plugin/directory
+      - /another/plugin/directory
 
+catalogue_meta_cache_ttl
+^^^^^^^^^^^^^^^^^^^^^^^^
 
-catalogue_meta_fetch_interval
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The cache TTL of a fetched plugin catalogue meta
 
-The interval in seconds between each scheduled plugin catalogue meta fetch
+MCDR will use the cached meta as the data source for catalogue plugin operations within the TTL
 
-Set to ``-1`` to disable scheduled meta fetch
-
-* Option type: :external:class:`int`
-* Default value: ``21600`` (6 hours)
+* Option type: :external:class:`float`
+* Default value: ``1200`` (20 min)
 
 catalogue_meta_fetch_timeout
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The timeout in seconds of the catalogue meta fetch
+The timeout in seconds for a plugin catalogue meta fetch
 
 * Option type: :external:class:`float`
 * Default value: ``15``
@@ -307,11 +306,18 @@ The timeout in seconds of the catalogue meta fetch
 catalogue_meta_url
 ^^^^^^^^^^^^^^^^^^
 
-URL override of the plugin catalogue "everything.json" or "everything_slim.json"
+Override the URL pointing to the "everything.json" or "everything_slim.json" file,
+which is used to fetch the plugin catalogue meta
 
-If it ends with ".gz" or ".xz", corresponding decompression operation will be applied
+If it ends with ".gz" (gzip) or ".xz" (lzma), corresponding decompression operation will be applied
 
-If not provided, the url will be ``"https://meta.mcdreforged.com/everything_slim.json.xz"``
+If not provided, the url will be ``https://api.mcdreforged.com/catalogue/everything_slim.json.xz``
+
+Example value (using the original url from raw.githubusercontent.com):
+
+.. code-block:: yaml
+
+    catalogue_meta_url: 'https://raw.githubusercontent.com/MCDReforged/PluginCatalogue/meta/everything_slim.json.xz'
 
 * Option type: ``Optional[str]``
 * Default value: *empty*
@@ -319,11 +325,32 @@ If not provided, the url will be ``"https://meta.mcdreforged.com/everything_slim
 plugin_download_url
 ^^^^^^^^^^^^^^^^^^^
 
-Plugin file download override. Should be a valid python str.format string
+.. note::
 
-Available variables: ``{url}``, ``{repos_owner}``, ``{repos_name}``, ``{tag}``, ``{asset_name}``, ``{asset_id}``
+    A to-be-downloaded plugin file from the plugin catalogue is a valid GitHub release asset
 
-As an example, to use `ghproxy <https://mirror.ghproxy.com/>`__, you can set it to: ``"https://mirror.ghproxy.com/{url}"``
+Plugin file download override. Should be a valid python :external:meth:`str.format` string
+
+Available variables:
+
+* ``{url}``: The original GitHub asset download url
+* ``{repos_owner}``: The name of the owner of the GitHub repository
+* ``{repos_name}``: The name of the GitHub repository
+* ``{tag}``: Name of the git tag associated with the release
+* ``{asset_name}``: Name of the asset file, i.e. name of the plugin file
+* ``{asset_id}``: The GitHub asset ID
+
+As an example, to use `ghproxy <https://mirror.ghproxy.com/>`__, you can set it to:
+
+.. code-block:: yaml
+
+    plugin_download_url: 'https://mirror.ghproxy.com/{url}'
+
+Another example of a manual concatenation of the GitHub release asset default url. It's useless, but a good example to demonstrate how this work:
+
+.. code-block:: yaml
+
+    plugin-download_url: 'https://github.com/{repos_owner}/{repos_name}/releases/download/{tag}/{asset_name}'
 
 If not provided, the origin GitHub asset download url will be directly used
 
@@ -333,7 +360,7 @@ If not provided, the origin GitHub asset download url will be directly used
 plugin_download_timeout
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-The timeout in seconds of the plugin file download
+The timeout in seconds for a plugin file download
 
 * Option type: :external:class:`float`
 * Default value: ``15``
@@ -371,8 +398,11 @@ It's suggested to set value for http_proxy and https_proxy at the same time
 
 Example values::
 
-    "http://127.0.0.1:1081"
-    "http://user:pass@192.168.0.1:8888"
+    http_proxy: 'http://127.0.0.1:1081'
+    https_proxy: 'http://127.0.0.1:1081'
+
+    http_proxy: 'http://user:pass@192.168.0.1:8888'
+    https_proxy: 'http://user:pass@192.168.0.1:8888'
 
 * Option type: ``Optional[str]``
 * Default value: *empty*
@@ -425,7 +455,7 @@ The name of a handler is defined in the :meth:`~mcdreforged.handler.abstract_ser
 .. code-block:: yaml
 
     custom_handlers:
-    - handlers.my_handler.MyHandler
+      - handlers.my_handler.MyHandler
 
 In this example the custom handler package path is ``handlers.my_handler`` and the class is name ``MyHandler``
 
@@ -450,7 +480,7 @@ All custom info reactors will be registered to the reactor list to process infor
 .. code-block:: yaml
 
     custom_info_reactors:
-    - my.customize.reactor.MyInfoReactor
+      - my.customize.reactor.MyInfoReactor
 
 In this example the custom reactor package path is ``my.custom.reactor`` and the class name is ``MyInfoReactor``
 
