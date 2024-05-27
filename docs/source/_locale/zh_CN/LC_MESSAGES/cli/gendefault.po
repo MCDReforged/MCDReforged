@@ -1,0 +1,27 @@
+
+msgid ""
+msgstr ""
+"Project-Id-Version: MCDReforged \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-05-26 23:19+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.15.0\n"
+
+#: ../cli/gendefault.rst:3
+msgid "CLI Subcommand - gendefault"
+msgstr ""
+
+#: ../cli/gendefault.rst:9
+msgid ""
+"Generate default configuration and permission files at current working "
+"directory"
+msgstr "在当前工作目录下生成默认配置文件"
+
+#: ../cli/gendefault.rst:11
+msgid "Note that it will overwrite existing files"
+msgstr "注意，这将会覆盖现有的文件"

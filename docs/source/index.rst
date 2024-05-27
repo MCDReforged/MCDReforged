@@ -17,7 +17,7 @@ This is the official documentation for `MCDReforged <https://github.com/MCDRefor
    Permission<permission.rst>
    Preference<preference.rst>
    Customize<customize/customize.rst>
-   Command Line Interface<cli.rst>
+   Command Line Interface<cli/index.rst>
    Docker<docker.rst>
    Plugin Development<plugin_dev/index.rst>
    MCDR Development<mcdr_dev/index.rst>

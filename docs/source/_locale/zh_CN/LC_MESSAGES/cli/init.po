@@ -1,0 +1,51 @@
+
+msgid ""
+msgstr ""
+"Project-Id-Version: MCDReforged \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-05-26 23:20+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.15.0\n"
+
+#: ../cli/init.rst:3
+msgid "CLI Subcommand - init"
+msgstr "子命令 - init"
+
+#: ../cli/init.rst:9
+msgid "Prepare the working environment of MCDR"
+msgstr "准备 MCDR 的工作环境"
+
+#: ../cli/init.rst:11
+msgid ""
+"Create commonly used folders and generate default configuration and "
+"permission files, including:"
+msgstr "在当前工作目录下生成默认配置、权限文件，及常用的文件夹，包含："
+
+#: ../cli/init.rst:13
+msgid "logs/"
+msgstr "logs/"
+
+#: ../cli/init.rst:14
+msgid "configs/"
+msgstr "configs/"
+
+#: ../cli/init.rst:15
+msgid "plugins/"
+msgstr "plugins/"
+
+#: ../cli/init.rst:16
+msgid "server/"
+msgstr "server/"
+
+#: ../cli/init.rst:17
+msgid "config.yml"
+msgstr "config.yml"
+
+#: ../cli/init.rst:18
+msgid "permission.yml"
+msgstr "permission.yml"

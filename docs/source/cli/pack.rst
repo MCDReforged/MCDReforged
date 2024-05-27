@@ -1,106 +1,10 @@
 
-Command Line Interface
-======================
-
-MCDR also provides some useful tool kits via command line interface (CLI). The usage is simple: Add some arguments at the end of the command you launch MCDR
-
-Starting from v2.10, MCDR will generate a startup script under the Python executable path during installation.
-Therefore, you can directly use the ``mcdreforged`` command to start MCDR
-
-Have a try to display CLI help messages using following command
-
-.. tab:: >= v2.10
-
-    .. code-block:: bash
-
-        mcdreforged -h
-
-.. tab:: < v2.10 (Windows)
-
-    .. code-block:: bash
-
-        python -m mcdreforged -h
-
-.. tab:: < v2.10 (Linux)
-
-    .. code-block:: bash
-
-        python3 -m mcdreforged -h
-
-The following document will use ``mcdreforged`` as the command for demonstration.
-For MCDR < v2.10, you need to add the ``python -m`` prefix to the commands used below
-
-The overall CLI command format is:
+CLI Subcommand - pack
+=====================
 
 .. code-block:: bash
 
-     mcdreforged [global_args] <sub_command> [sub_command_args]
-
-
-.. note::
-
-    You can always use ``python -m mcdreforged`` to run MCDR in all environment, in case the ``mcdreforged`` command does not work
-
-    .. tab:: Windows
-
-        .. code-block:: bash
-
-            python -m mcdreforged [global_args] <sub_command> [sub_command_args]
-
-    .. tab:: Linux
-
-        .. code-block:: bash
-
-            python3 -m mcdreforged [global_args] <sub_command> [sub_command_args]
-
-Global Arguments
-----------------
-
-* ``-h``, ``--help``: Show help message and exit
-* ``-V``, ``--version``: Print MCDR version and exit
-* ``-q``, ``--quiet``: Disable CLI output
-
-.. versionadded:: v2.8.0
-    The ``-V`` and ``--version`` arguments
-
-Sub Commands
-------------
-
-gendefault
-^^^^^^^^^^
-
-.. code-block:: bash
-
-    mcdreforged gendefault [-h]
-
-Generate default configuration and permission files at current working directory
-
-Note that it will overwrite existing files
-
-init
-^^^^
-
-.. code-block:: bash
-
-    mcdreforged init [-h]
-
-Prepare the working environment of MCDR
-
-Create commonly used folders and generate default configuration and permission files, including:
-
-* logs/
-* configs/
-* plugins/
-* server/
-* config.yml
-* permission.yml
-
-pack
-^^^^
-
-.. code-block:: bash
-
-    mcdreforged pack [-h] [-i INPUT] [-o OUTPUT] [-n NAME]
+    mcdreforged pack [-h] [-i INPUT] [-o OUTPUT] [-n NAME] [--ignore-patterns IGNORE_PATTERN [IGNORE_PATTERN ...]] [--ignore-file IGNORE_FILE] [--shebang SHEBANG]
 
 Pack up your plugin source codes / resources files, from a batch of files, to a ``.mcdr`` :ref:`packed plugin file <plugin_dev/plugin_format:Packed Plugin>`
 
@@ -112,7 +16,7 @@ The packing is based on the ``mcdreforged.plugin.json`` metadata file in the inp
 * Files or folders listed in the :ref:`plugin_dev/metadata:resources` field in metadata
 
 input
-"""""
+-----
 
     ``-i INPUT``, ``--input INPUT``
 
@@ -134,7 +38,7 @@ input
     Default: current directory
 
 output
-""""""
+------
 
     ``-o OUTPUT``, ``--output OUTPUT``
 
@@ -143,7 +47,7 @@ output
     Default: current directory
 
 name
-""""
+----
 
     ``-n NAME``, ``--name NAME``
 
@@ -168,7 +72,7 @@ name
     then the included file extension will be used. Otherwise the default ``.mcdr`` file extension will be appended to the end
 
 ignore patterns
-"""""""""""""""
+---------------
 
     ``--ignore-patterns IGNORE_PATTERN [IGNORE_PATTERN ...]``
 
@@ -181,9 +85,9 @@ ignore patterns
     *   Tailing space character escaping is not supported
     *   Heading hashtag character escaping is not supported
 
-    It overwrites values from :ref:`-\\\\-ignore-file <cli:ignore file>`. It will filter nothing if the value is empty, or the file doesn't exist or not readable
+    It overwrites values from :ref:`-\\\\-ignore-file <cli/pack:ignore file>`. It will filter nothing if the value is empty, or the file doesn't exist or not readable
 
-    Notes: The root directory when calculating related path is the current working directory, not the :ref:`cli:input` directory
+    Notes: The root directory when calculating related path is the current working directory, not the :ref:`cli/pack:input` directory
 
     Default: empty list
 
@@ -196,11 +100,11 @@ ignore patterns
     .. versionadded:: v2.8.0
 
 ignore file
-"""""""""""
+-----------
 
     ``--ignore-file IGNORE_FILE``
 
-    The path to a utf8-encoded gitignore-like file. It's content will be used as the :ref:`-\\\\-ignore-patterns <cli:ignore patterns>` parameter.
+    The path to a utf8-encoded gitignore-like file. It's content will be used as the :ref:`-\\\\-ignore-patterns <cli/pack:ignore patterns>` parameter.
 
     Default: ``".gitignore"``, which means that it will automatically read the .gitignore file in the current working directory
 
@@ -229,7 +133,7 @@ ignore file
 
 
 shebang
-"""""""
+-------
 
     ``--shebang SHEBANG``
 
@@ -248,49 +152,3 @@ shebang
         --shebang "/usr/bin/env python3"
 
     .. versionadded:: v2.8.0
-
-
-pipi
-^^^^
-
-pipi == pip-install
-
-.. code-block:: bash
-
-    mcdreforged pipi [-h] [--args ARGS] [plugin_paths ...]
-
-Call ``pip install`` with the requirements.txt file in the given packed plugin to install Python packages
-
-Example usages:
-
-.. code-block:: bash
-
-    mcdreforged pipi MyPlugin.mcdr
-    mcdreforged pipi MyPlugin.mcdr /path/to/AnotherPlugin.pyz
-    mcdreforged pipi MyPlugin.mcdr --args "-i https://pypi.tuna.tsinghua.edu.cn/simple"
-
-.. versionadded:: v2.13.0
-
-plugin_paths
-""""""""""""
-
-    The packed plugin files to be processed
-
-args
-""""
-
-    Extra arguments passing to the pip process, e.g. ``--args "--proxy http://localhost:8080"``
-
-start
-^^^^^
-
-.. code-block:: bash
-
-    mcdreforged start [-h] [--auto-init]
-
-The same as ``mcdreforged``, it launches MCDR
-
-auto-init
-"""""""""
-
-    Automatically initialize the working environment if needed

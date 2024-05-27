@@ -1,0 +1,29 @@
+
+msgid ""
+msgstr ""
+"Project-Id-Version: MCDReforged \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-05-26 23:19+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.15.0\n"
+
+#: ../cli/start.rst:3
+msgid "CLI Subcommand - start"
+msgstr "子命令 - start"
+
+#: ../cli/start.rst:9
+msgid "The same as ``mcdreforged``, it launches MCDR"
+msgstr "同 ``mcdreforged`` 一样，启动 MCDR"
+
+#: ../cli/start.rst:12
+msgid "auto-init"
+msgstr "auto-init"
+
+#: ../cli/start.rst:14
+msgid "Automatically initialize the working environment if needed"
+msgstr "如果需要，自动执行 MCDR 的工作环境的准备工作"

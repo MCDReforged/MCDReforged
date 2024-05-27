@@ -1,0 +1,116 @@
+
+msgid ""
+msgstr ""
+"Project-Id-Version: MCDReforged \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-05-26 23:40+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.15.0\n"
+
+#: ../cli/index.rst:89
+msgid "gen-default"
+msgstr "gen-default"
+
+#: ../cli/index.rst:89
+msgid "init"
+msgstr "init"
+
+#: ../cli/index.rst:89
+msgid "pack"
+msgstr "pack"
+
+#: ../cli/index.rst:89
+msgid "pim"
+msgstr ""
+
+#: ../cli/index.rst:89
+msgid "reformat-config"
+msgstr ""
+
+#: ../cli/index.rst:89
+msgid "start"
+msgstr "start"
+
+#: ../cli/index.rst:3
+msgid "Command Line Interface"
+msgstr "命令行接口"
+
+#: ../cli/index.rst:5
+msgid ""
+"MCDR also provides some useful tool kits via command line interface "
+"(CLI). The usage is simple: Add some arguments at the end of the command "
+"you launch MCDR"
+msgstr ""
+"MCDR 提供了一些实用的命令行接口（CLI）工具。如果你在启动 MCDR 的时候在启动指令末尾追加一些参数。使用方法很简单：在你启动 MCDR "
+"的命令末尾追加一些参数"
+
+#: ../cli/index.rst:7
+msgid ""
+"Starting from v2.10, MCDR will generate a startup script under the Python"
+" executable path during installation. Therefore, you can directly use the"
+" ``mcdreforged`` command to start MCDR"
+msgstr ""
+"从 v2.10 开始，MCDR 在安装时会在 python 的可执行文件路径下生成一个启动脚本，因此，你可以直接使用 "
+"``mcdreforged`` 指令来启动 MCDR"
+
+#: ../cli/index.rst:10
+msgid "Have a try to display CLI help messages using following command"
+msgstr "来试试用以下命令来显示 CLI 的帮助信息吧！"
+
+#: ../cli/index.rst:30
+msgid ""
+"The following document will use ``mcdreforged`` as the command for "
+"demonstration. For MCDR < v2.10, you need to add the ``python -m`` prefix"
+" to the commands used below"
+msgstr ""
+"以下文档将使用 ``mcdreforged`` 作为演示用的指令。对于 MCDR < v2.10，你需要在下面所用的指令前加上 ``python "
+"-m`` 前缀"
+
+#: ../cli/index.rst:33
+msgid "The overall CLI command format is:"
+msgstr "CLI 命令的大体格式为："
+
+#: ../cli/index.rst:42
+msgid ""
+"You can always use ``python -m mcdreforged`` to run MCDR in all "
+"environment, in case the ``mcdreforged`` command does not work, e.g. "
+"environment variable ``PATH`` is not well configured"
+msgstr "无论在什么环境下，你总是可以用 ``python -m`` 来运行 MCDR，比如在 ``mcdreforged`` 因各种原因无法工作的时候，如环境变量 ``PATH`` 未正确配置"
+
+#: ../cli/index.rst:58
+msgid "Direct Launch"
+msgstr "直接启动"
+
+#: ../cli/index.rst:64
+msgid "If no argument is given, launch MCDR with default arguments"
+msgstr "若未提供任何参数，则直接使用默认参数启动 MCDR"
+
+#: ../cli/index.rst:68
+msgid "Global Arguments"
+msgstr "全局参数"
+
+#: ../cli/index.rst:70
+msgid "``-h``, ``--help``: Show help message and exit"
+msgstr "``-h``, ``--help``：展示帮助信息并退出"
+
+#: ../cli/index.rst:71
+msgid "``-V``, ``--version``: Print MCDR version and exit"
+msgstr "``-V``, ``--version``：打印 MCDR 的版本并退出"
+
+#: ../cli/index.rst:72
+msgid "``-q``, ``--quiet``: Disable CLI output"
+msgstr "``-q``, ``--quiet``：禁用 CLI 信息输出"
+
+#: ../cli/index.rst:74
+msgid "The ``-V`` and ``--version`` arguments"
+msgstr "参数 ``-V``、``--version``"
+
+#: ../cli/index.rst:83
+msgid "Sub Commands"
+msgstr "子命令"
+
