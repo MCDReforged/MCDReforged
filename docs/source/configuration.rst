@@ -46,11 +46,41 @@ The working directory of the server. You should probably put all the files relat
 start_command
 ^^^^^^^^^^^^^
 
-The console command to launch the server
+The console command to launch the server. It can be a string or a list of string
 
-Some examples:
+* (shell mode) If it's a string, the command will be executed as a shell command in a shell environment.
+  It's the suggested way to use due to its simpleness
 
-If you want to launch a Minecraft server, you can:
+    .. code-block:: yaml
+
+        start_command: echo Hello world from MCDReforged
+
+* (exec mode) If it's a list of strings, the command will be executed directly using exec.
+  It's useful when you want the server process directly managed by MCDR (MCDR - server),
+  instead of having a shell process in the middle of the process chain (MCDR - shell - server)
+
+    .. tab:: Flatten
+
+        .. code-block:: yaml
+
+            start_command:
+              - echo
+              - Hello world from MCDReforged
+
+    .. tab:: Inline
+
+        .. code-block:: yaml
+
+            start_command: ['echo', 'Hello world from MCDReforged']
+
+    .. versionadded:: v2.13.0
+
+.. seealso::
+
+    The *args* argument of the constructor of class :external:class:`subprocess.Popen`
+
+If you want to launch a Minecraft server, here are some useful examples. Both of them use a single string as the value,
+which mean the server will be started in shell mode:
 
 .. code-block:: yaml
 
@@ -106,7 +136,7 @@ If there are some special character (e.g. ``"`` and ``\``) that yaml doesn't lik
 
     See :ref:`configuration:encoding, decoding` section for more information of UTF-8 charset for Minecraft servers
 
-* Option type: :external:class:`str`
+* Option type: :external:class:`str` or ``List[str]``
 * Default value: ``echo Hello world from MCDReforged``
 
 handler

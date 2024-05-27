@@ -12,7 +12,7 @@ mcdreforged:
       start_twice: Server cannot start twice
       about_to_exit: MCDR is about to exit
       cwd_not_existed: Server working directory {0} does not exist
-      starting: Starting the server with command "{0}"
+      starting: Starting the server with command {0}
       start_fail: Fail to start the server
       pid_info: Server is running at PID {0}
     stop:

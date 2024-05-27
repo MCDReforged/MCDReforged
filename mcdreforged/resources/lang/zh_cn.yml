@@ -12,7 +12,7 @@ mcdreforged:
       start_twice: 服务端不能多次启动
       about_to_exit: MCDR 即将退出
       cwd_not_existed: 服务端工作路径 {0} 不存在
-      starting: 正在启动服务端，启动参数为 "{0}"
+      starting: 正在启动服务端，启动参数为 {0}
       start_fail: 服务端启动失败
       pid_info: 服务端正在以 PID {0} 运行中
     stop:

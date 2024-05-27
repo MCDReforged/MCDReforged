@@ -22,9 +22,12 @@ language: en_us
 working_directory: server
 
 
-# The console command to start the server. Will be executed in shell environment
-# Example command for Minecraft server:
-#   java -Xms1G -Xmx2G -Dfile.encoding=UTF-8 -jar minecraft_server.jar nogui
+# The command to start the server, it can be a string or a list of string
+# (shell mode) If it's a string, the command will be executed as a shell command in a shell environment
+# (exec mode) If it's a list of strings, the command will be executed directly
+# Example command for starting a Minecraft server:
+#   'java -Xms1G -Xmx2G -jar minecraft_server.jar nogui'                        (shell mode)
+#   ['java', '-Xms1G', '-Xmx2G', '-jar', 'minecraft_server.jar', 'nogui']       (exec mode)
 start_command: echo Hello world from MCDReforged
 
 

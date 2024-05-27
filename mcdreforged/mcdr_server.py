@@ -395,10 +395,17 @@ class MCDReforgedServer:
 			if not os.path.isdir(cwd):
 				self.logger.error(self.__tr('start_server.cwd_not_existed', cwd))
 				return False
+			start_command = self.config.start_command
+			self.logger.info(self.__tr('start_server.starting', repr(start_command)))
 			try:
-				start_command = self.config.start_command
-				self.logger.info(self.__tr('start_server.starting', start_command))
-				self.process = Popen(start_command, cwd=self.config.working_directory, stdin=PIPE, stdout=PIPE, stderr=STDOUT, shell=True)
+				self.process = Popen(
+					start_command,
+					cwd=self.config.working_directory,
+					stdin=PIPE,
+					stdout=PIPE,
+					stderr=STDOUT,
+					shell=isinstance(start_command, str),
+				)
 			except Exception:
 				self.logger.exception(self.__tr('start_server.start_fail'))
 				return False
