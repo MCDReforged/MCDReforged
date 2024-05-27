@@ -27,3 +27,8 @@ html.writer-html4 .rst-content dl:not(.docutils) .k, html.writer-html5 .rst-cont
 .highlight {
     tab-size: 4;
 }
+
+/* remove the bottom margin for tabs from sphinx_inline_tabs */
+.tab-set {
+    margin: 0;
+}
