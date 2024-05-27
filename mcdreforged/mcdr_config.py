@@ -29,7 +29,7 @@ class MCDReforgedConfig(Serializable):
 	start_command: Union[str, List[str]] = ['echo', 'Hello world from MCDReforged']
 	handler: str = 'vanilla_handler'
 	encoding: Optional[str] = 'utf8'
-	decoding: Optional[str] = 'utf8'
+	decoding: Optional[Union[str, List[str]]] = 'utf8'
 	rcon: RconConfig = RconConfig.get_default()
 
 	# --------- Plugin Configuration ---------

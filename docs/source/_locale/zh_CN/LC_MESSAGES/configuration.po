@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-27 16:03+0800\n"
+"POT-Creation-Date: 2024-05-27 21:36+0800\n"
 "PO-Revision-Date: 2021-01-23 13:20+0800\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -67,7 +67,7 @@ msgid "The language that MCDR will use to display information"
 msgstr "MCDR 用于输出信息的语言"
 
 #: ../configuration.rst:28 ../configuration.rst:43 ../configuration.rst:179
-#: ../configuration.rst:268 ../configuration.rst:286
+#: ../configuration.rst:345 ../configuration.rst:363
 msgid "Option type: :external:class:`str`"
 msgstr "选项类型：:external:class:`str`"
 
@@ -95,7 +95,7 @@ msgstr "working_directory"
 msgid ""
 "The working directory of the server. You should probably put all the "
 "files related to the server int this directory"
-msgstr "服务端的工作目录。你应该将所有与服务器相关的文件放入此目录"
+msgstr "服务端的工作目录。你应该将所有与服务端相关的文件放入此目录"
 
 #: ../configuration.rst:44
 msgid "Default value: ``server``"
@@ -109,7 +109,7 @@ msgstr "start_command"
 msgid ""
 "The console command to launch the server. It can be a string or a list of"
 " string"
-msgstr "启动服务器的控制台命令。它可以是一个字符串，或一个字符串列表"
+msgstr "启动服务端的控制台命令。它可以是一个字符串，或一个字符串列表"
 
 #: ../configuration.rst:51
 msgid ""
@@ -159,18 +159,19 @@ msgstr "如果指令中存在一些 YAML 不喜欢的字符（如 ``\"``、``\\`
 
 #: ../configuration.rst:135
 msgid ""
-"For Minecraft servers, you might want to add a ``-Dfile.encoding=UTF-8`` "
-"JVM property before the ``-jar`` argument, like the examples above"
+"For Minecraft servers, you might want to add some JVM properties like "
+"``-Dfile.encoding=UTF-8`` before the ``-jar`` argument to ensure a UTF-8 "
+"charset environment"
 msgstr ""
-"对于 Minecraft 服务器，你可能希望在 ``-jar`` 参数前面加一个 ``-Dfile.encoding=UTF-8`` JVM "
-"属性，如上面的例子所示"
+"对于 Minecraft 服务端，你可能希望在 ``-jar`` 参数前面加一个诸如 ``-Dfile.encoding=UTF-8`` 的 "
+"JVM 属性，以确保服务端运行在一个 UTF-8 的环境中"
 
 #: ../configuration.rst:137
 msgid ""
 "See :ref:`configuration:encoding, decoding` section for more information "
 "of UTF-8 charset for Minecraft servers"
 msgstr ""
-"见 :ref:`configuration:encoding, decoding` 小节以了解更多 Minecraft 服务器中与 UTF-8 "
+"见 :ref:`configuration:encoding, decoding` 小节以了解更多 Minecraft 服务端中与 UTF-8 "
 "编码相关的信息"
 
 #: ../configuration.rst:139
@@ -191,13 +192,13 @@ msgid ""
 "different kind of command. Server handlers are the modules to handle "
 "between all kind of servers and the interface for MCDR to control the "
 "server"
-msgstr "不同服务端有着截然不同的输出和指令。服务端处理器是用于在各种服务器之间进行处理的模块，也是 MCDR 控制服务端的接入点"
+msgstr "不同服务端有着截然不同的输出和指令。服务端处理器是用于在各种服务端之间进行处理的模块，也是 MCDR 控制服务端的接入点"
 
 #: ../configuration.rst:147
 msgid ""
 "Handler determines the specific way to parse the standard output text of "
 "the server, and uses the correct command for server control"
-msgstr "处理器确定解析服务器标准输出文本的特定方法，并使用正确的命令控制服务端"
+msgstr "处理器确定解析服务端标准输出文本的特定方法，并使用正确的命令控制服务端"
 
 #: ../configuration.rst:149
 msgid ""
@@ -218,8 +219,10 @@ msgid "vanilla_handler"
 msgstr "vanilla_handler"
 
 #: ../configuration.rst:157
-msgid "For Vanilla / Carpet / Fabric server"
-msgstr "用于 原版 / Carpet / Fabric 服务端"
+msgid ""
+"For Vanilla / Carpet / Fabric server. Use this if your server is vanilla "
+"enough"
+msgstr "用于 原版 / Carpet / Fabric 服务端。只要服务端足够原版就行"
 
 #: ../configuration.rst:158
 msgid "beta18_handler"
@@ -240,8 +243,8 @@ msgid ""
 "For Bukkit / Spigot server with Minecraft version below 1.14, and Paper /"
 " `Mohistmc <https://mohistmc.com>`__ server in all version."
 msgstr ""
-"用于 1.14 版本以下的 Bukkit / Spigot 服务器，以及所有版本的 Paper / `Mohistmc "
-"<https://mohistmc.com>`__ 服务器"
+"用于 1.14 版本以下的 Bukkit / Spigot 服务端，以及所有版本的 Paper / `Mohistmc "
+"<https://mohistmc.com>`__ 服务端"
 
 #: ../configuration.rst:162
 msgid "bukkit14_handler"
@@ -316,7 +319,7 @@ msgid ""
 "The handler that parse nothing and return the raw text from the server. "
 "Don't use this unless you want to use MCDR to lanuch non Minecraft "
 "related servers."
-msgstr "不进行任何分析并返回原始文本的处理器。除非你想使用 MCDR 启动非 Minecraft 相关的服务器，否则无需使用"
+msgstr "不进行任何分析并返回原始文本的处理器。除非你想使用 MCDR 启动非 Minecraft 相关的服务端，否则无需使用"
 
 #: ../configuration.rst:180
 msgid "Default value: ``vanilla_handler``"
@@ -341,11 +344,12 @@ msgstr "留空以让 MCDR 使用系统编码。如果它不起作用（例如控
 
 #: ../configuration.rst:190
 msgid ""
-"For Minecraft servers, if you are on an operating system that doesn't "
-"using UTF-8 as the default charset, it's highly suggested to ensure all "
-"encoding / decoding use UTF-8 charset, due to the following facts:"
+"For vanilla Minecraft servers, if you are on an operating system that "
+"doesn't using UTF-8 as the default charset, it's highly suggested to "
+"ensure all encoding / decoding use UTF-8 charset, due to the following "
+"facts:"
 msgstr ""
-"对于 Minecraft 服务端，如果你的操作系统默认的字符集并非 UTF-8，强烈建议确保所有的编码 / 解码都使用 UTF-8 "
+"对于原版 Minecraft 服务端，如果你的操作系统默认的字符集并非 UTF-8，强烈建议确保所有的编码 / 解码都使用 UTF-8 "
 "字符集，原因如下："
 
 #: ../configuration.rst:193
@@ -353,14 +357,14 @@ msgid "Python 3 uses UTF-8 to store strings"
 msgstr "Python 3 使用 UTF-8 存储字符串"
 
 #: ../configuration.rst:194
-msgid "Minecraft servers always use UTF-8 for reading stdin"
-msgstr "Minecraft 服务端始终使用 UTF-8 读取 stdin"
+msgid "Vanilla Minecraft servers always use UTF-8 for reading stdin"
+msgstr "原版 Minecraft 服务端始终使用 UTF-8 读取 stdin"
 
 #: ../configuration.rst:195
 msgid ""
-"Minecraft servers use the default charset of the operating system for "
-"writing stdout / stderr / log files"
-msgstr "Minecraft 服务器使用操作系统的默认字符集写入 stdout / stderr / 日志文件"
+"Vanilla Minecraft servers use the default charset of the operating system"
+" for writing stdout / stderr / log files"
+msgstr "原版 Minecraft 服务端使用操作系统的默认字符集写入 stdout / stderr / 日志文件"
 
 #: ../configuration.rst:196
 msgid ""
@@ -368,56 +372,85 @@ msgid ""
 "example, Windows may use GBK as the default charset for Chinese users"
 msgstr "你的操作系统使用的字符集可能不是 UTF-8，比如中文 Windows 可能使用 GBK 作为默认字符集"
 
-#: ../configuration.rst:212
+#: ../configuration.rst:198
 msgid ""
 "Non-UTF-8 charset tends to cause annoying codec problems during encoding "
 "/ decoding, resulting in MCDR being unable to communicate normally with "
 "the server"
 msgstr "非 UTF-8 字符集在编解码过程中可能会引起烦人的编解码问题，导致 MCDR 无法与服务端正常通信"
 
-#: ../configuration.rst:215
+#: ../configuration.rst:214
 msgid ""
 "To make everything related to the server use UTF-8, you can follow the "
 "steps below:"
 msgstr "为了让与服务端相关的一切编解码都用上 UTF-8，你可以参照如下方法："
 
-#: ../configuration.rst:217
+#: ../configuration.rst:216
 msgid ""
-"Ask MCDR to use UTF-8 to communicate with the Minecrate server, i.e. set "
+"Ask MCDR to use UTF-8 to communicate with the Minecraft server, i.e. set "
 "both ``encoding`` and ``decoding`` in the MCDR configuration to ``utf8``"
 msgstr ""
-"让 MCDR 使用 UTF-8 与 Minecraft 服务器通信，即在 MCDR 配置中将 ``encoding`` 和 "
+"让 MCDR 使用 UTF-8 与 Minecraft 服务端通信，即在 MCDR 配置中将 ``encoding`` 和 "
 "``decoding`` 设置为 utf8"
 
-#: ../configuration.rst:225
+#: ../configuration.rst:224
 msgid ""
 "Make sure the JVM that launches Minecraft also uses UTF-8 as the default "
-"charset. You can achieve that with any of the following actions:"
+"charset. To achieve that, you can apply the following JVM properties for "
+"the Minecraft process"
 msgstr "确保启动 Minecraft 的 JVM 也使用 UTF-8 作为默认字符集。你可以通过以下任一操作来实现："
 
-#: ../configuration.rst:228
+#: ../configuration.rst:233
 msgid ""
-"(Recommend) Modify the start command for your server. Add a "
-"``-Dfile.encoding=UTF-8`` JVM property before the ``-jar`` argument, just"
-" like the examples in the :ref:`configuration:start_command` sections"
-msgstr ""
-"（推荐）修改服务器的启动命令。在 ``-jar`` 参数之前添加一个 ``-Dfile.encoding=UTF-8`` JVM 属性，就像 "
-":ref:`configuration:start_command` 部分中的示例那样"
+"If you are using a Long-Term-Support Java version, you can always use "
+"this as a universal Java UTF-8 solution no matter what your Java version "
+"is"
+msgstr "如果你在使用 Java 的长期支持（LTS）版本，无论你的 Java 版本是什么，你都可以将本方案用作一个万能的 Java UTF-8 解决方案"
 
 #: ../configuration.rst:236
 msgid ""
-"Insert ``-Dfile.encoding=UTF-8`` into environment variable "
-"``JAVA_TOOL_OPTIONS``"
-msgstr "将 ``-Dfile.encoding=UTF-8`` 插入环境变量 ``JAVA_TOOL_OPTIONS`` 中"
+"See also: System property `stdout.encoding "
+"<https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/lang/System.html#stdout.encoding>`__"
+" and `stderr.encoding "
+"<https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/lang/System.html#stderr.encoding>`__"
+msgstr ""
+"另见：系统属性 `stdout.encoding "
+"<https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/lang/System.html#stdout.encoding>`__、`stderr.encoding"
+" "
+"<https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/lang/System.html#stderr.encoding>`__"
 
-#: ../configuration.rst:238
+#: ../configuration.rst:245
+msgid ""
+"Notes that ``-Dsun.stdout.encoding`` and ``-Dsun.stderr.encoding`` are "
+"unspecified API. See also: `JEP 400 <https://openjdk.org/jeps/400>`__"
+msgstr ""
+"注意，``-Dsun.stdout.encoding`` 和 ``-Dsun.stderr.encoding`` 是非标准的 "
+"API。另见：`JEP 400 <https://openjdk.org/jeps/400>`__"
+
+#: ../configuration.rst:254
+msgid "To apply the JVM properties, you can:"
+msgstr "要使上面的那些 JVM 系统属性生效，你可以："
+
+#: ../configuration.rst:256
+msgid ""
+"(Recommend) Modify the start command for your server. Add the following "
+"arguments before the ``-jar`` argument"
+msgstr "（推荐）修改服务端的启动命令。在 ``-jar`` 参数之前添加下述参数"
+
+#: ../configuration.rst:263
+msgid ""
+"Insert the arguments you need into environment variable "
+"``JAVA_TOOL_OPTIONS``, in case you can't modify the server start command"
+msgstr "将你需要的参数插入环境变量 ``JAVA_TOOL_OPTIONS``如果你无法修改服务端的启动命令"
+
+#: ../configuration.rst:265
 msgid ""
 "Then, the Minecraft server should run using UTF-8 as the charset for its "
 "standard IO streams, and MCDR should be able communicate with the server "
 "perfectly"
-msgstr "然后，Minecraft 服务器在运行时就会使用 UTF-8 作为其标准 IO 流的字符集，同时 MCDR 将能完美地与服务器通信"
+msgstr "然后，Minecraft 服务端在运行时就会使用 UTF-8 作为其标准 IO 流的字符集，同时 MCDR 将能完美地与服务端通信"
 
-#: ../configuration.rst:241
+#: ../configuration.rst:268
 msgid ""
 "Of course, if you're sure that your operating system uses UTF-8 as the "
 "default character set, then there's no need for any configuration. You "
@@ -427,24 +460,147 @@ msgstr ""
 "当然，如果你确定你的操作系统使用的默认字符集是 UTF-8，那你什么都不需要做。你甚至可以将这两个 ``encoding``/ "
 "``decoding`` 选项留空来使用默认的系统字符集。"
 
-#: ../configuration.rst:244 ../configuration.rst:352 ../configuration.rst:387
-#: ../configuration.rst:437
+#: ../configuration.rst:271
+msgid ""
+"If you server has mixed encoding output, you can provide multiple "
+"decoding method by supplying a list of string as the value, In this case,"
+" MCDR will try all decoding methods one by one until one succeeds"
+msgstr ""
+"如果你的服务端有混合编码输出的情况，你可以提供一个字符串列表作为 ``decoding`` 选项的值，以提供所有可能的解码方式。此时，MCDR "
+"将会逐一尝试所有提供的解码方法，直到解码成功"
+
+#: ../configuration.rst:274
+msgid ""
+"Example scenario: In Windows, the shell outputs with OS-charset (let's "
+"say GBK), and the server outputs with UTF-8"
+msgstr "示例场景：Windows 中，shell 输出使用了系统编码（如 GBK），而服务端输出使用了 UTF-8"
+
+#: ../configuration.rst:275
+msgid "Example solution: ``decoding: ['utf8', 'gbk']``"
+msgstr "示例解决方案：``decoding: ['utf8', 'gbk']``"
+
+#: ../configuration.rst:277
+msgid "**encoding**"
+msgstr "**encoding**"
+
+#: ../configuration.rst:279 ../configuration.rst:429 ../configuration.rst:464
+#: ../configuration.rst:514
 msgid "Option type: ``Optional[str]``"
 msgstr "选项类型：``Optional[str]``"
 
-#: ../configuration.rst:245
-msgid "Default value: ``utf8``, ``utf8``"
-msgstr "默认值：``空``"
+#: ../configuration.rst:280 ../configuration.rst:286
+msgid "Default value: ``utf8``"
+msgstr "默认值：``utf8``"
 
-#: ../configuration.rst:246
+#: ../configuration.rst:281
 msgid "Examples: ``utf8``, ``gbk``"
 msgstr "例如：``utf8`` ， ``gbk``"
 
-#: ../configuration.rst:249
+#: ../configuration.rst:283
+msgid "**decoding**"
+msgstr "**decoding**"
+
+#: ../configuration.rst:285
+msgid "Option type: ``Optional[str]`` or ``List[str]``"
+msgstr "选项类型：``Optional[str]`` 或 ``List[str]``"
+
+#: ../configuration.rst:287
+msgid "Examples: ``utf8``, ``gbk``, ``['utf8', 'gbk']``"
+msgstr "例如：``utf8`` ， ``gbk``, ``['utf8', 'gbk']``"
+
+#: ../configuration.rst
+msgid "Explanation of the above JVM properties"
+msgstr "上述 JVM 参数的解释"
+
+#: ../configuration.rst:291
+msgid ""
+"For Minecraft server, it has 2 common way to print stuffs to stdout / "
+"stderr:"
+msgstr "对于 Minecraft 服务端，存在两种场景的输出内容到 stdout / stderr 的方法："
+
+#: ../configuration.rst:293
+msgid "**(a) Log with log4j**"
+msgstr "**(a) 使用 log4j 打日志**"
+
+#: ../configuration.rst:295
+msgid ""
+"Vanilla Minecraft server uses the log4j library for logging. It "
+"configures log4j to use ``ConsoleAppender`` for logging messages to "
+"stdout, which eventually uses ``Charset.defaultCharset()`` to get the "
+"default charset"
+msgstr "原版 Minecraft 服务端使用 log4j 库进行日志记录。它的 log4j 配置中使用了 ``ConsoleAppender`` 来将日志信息输出到 stdout，"
+"这最终会使用 ``Charset.defaultCharset()`` 来获取默认的编码字符集"
+
+#: ../configuration.rst:299
+msgid "UTF-8 solution for this case: ``-Dfile.encoding=UTF-8``"
+msgstr "这种情况下使用UTF-8的解决方案：``-Dfile.encoding=UTF-8``"
+
+#: ../configuration.rst:301
+msgid "**(b) Print with System.out or System.err**"
+msgstr "**(b) 直接使用 System.out 或 System.err 进行输出**"
+
+#: ../configuration.rst:303
+msgid ""
+"Sometimes Minecraft server might directly print stuffs into stdout / "
+"stderr. In this case, we need to ensure both of ``System.out`` and "
+"``System.err`` use UTF-8 charset as the encoding method"
+msgstr "有时 Minecraft 服务端可能会直接将信息打印到 stdout / stderr。在这种情况下，我们需要确保 System.out 和 System.err 都使用 UTF-8 字符集来编码输出"
+
+#: ../configuration.rst:306
+msgid "UTF-8 solution for this case:"
+msgstr "这种情况下使用UTF-8的解决方案："
+
+#: ../configuration.rst:311
+msgid "Java Version"
+msgstr "Java 版本"
+
+#: ../configuration.rst:312
+msgid "JVM args to ensure UTF-8"
+msgstr "用于确保使用了 UTF-8 的 JVM 参数"
+
+#: ../configuration.rst:313
+msgid "<= 1.17"
+msgstr "<= 1.17"
+
+#: ../configuration.rst:314
+msgid "``-Dfile.encoding=UTF-8``"
+msgstr "``-Dfile.encoding=UTF-8``"
+
+#: ../configuration.rst:315
+msgid "1.18"
+msgstr "1.18"
+
+#: ../configuration.rst:316
+msgid ""
+"``-Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8`` (unspecified "
+"API)"
+msgstr "``-Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8``（非标准 API）"
+
+#: ../configuration.rst:317
+msgid ">= 1.19"
+msgstr ">= 1.19"
+
+#: ../configuration.rst:318
+msgid "``-Dstdout.encoding=UTF-8 -Dstderr.encoding=UTF-8``"
+msgstr "``-Dstdout.encoding=UTF-8 -Dstderr.encoding=UTF-8``"
+
+#: ../configuration.rst:320
+msgid "See also:"
+msgstr "另见："
+
+#: ../configuration.rst:322
+msgid "`JEP 400: UTF-8 by Default <https://openjdk.org/jeps/400>`__"
+msgstr "`JEP 400: UTF-8 by Default <https://openjdk.org/jeps/400>`__"
+
+#: ../configuration.rst:323
+msgid "https://bugs.openjdk.org/browse/JDK-8285492"
+msgstr "https://bugs.openjdk.org/browse/JDK-8285492"
+
+#: ../configuration.rst:326
 msgid "rcon"
 msgstr "rcon"
 
-#: ../configuration.rst:251
+#: ../configuration.rst:328
 msgid ""
 "The setting for `rcon <https://wiki.vg/RCON>`__. If rcon is enabled, MCDR"
 " will start a rcon client to connect to the server after server rcon has "
@@ -453,144 +609,144 @@ msgstr ""
 "`rcon <https://wiki.vg/RCON>`__ 设置。若启用 rcon，则在 Minecraft rcon "
 "服务端启动后，MCDR将自动连接到 rcon 服务端。这样插件就可以通过 rcon 向服务端发送命令"
 
-#: ../configuration.rst:254
+#: ../configuration.rst:331
 msgid "rcon.enable"
 msgstr "rcon.enable"
 
-#: ../configuration.rst:256
+#: ../configuration.rst:333
 msgid "The switch of rcon"
 msgstr "rcon 开关"
 
-#: ../configuration.rst:259 ../configuration.rst:408 ../configuration.rst:419
-#: ../configuration.rst:453 ../configuration.rst:462 ../configuration.rst:539
+#: ../configuration.rst:336 ../configuration.rst:485 ../configuration.rst:496
+#: ../configuration.rst:530 ../configuration.rst:539 ../configuration.rst:616
 msgid "Option type: :external:class:`bool`"
 msgstr "选项类型：:external:class:`bool`"
 
-#: ../configuration.rst:260 ../configuration.rst:454 ../configuration.rst:463
+#: ../configuration.rst:337 ../configuration.rst:531 ../configuration.rst:540
 msgid "Default value: ``false``"
 msgstr "默认值：``false``"
 
-#: ../configuration.rst:263
+#: ../configuration.rst:340
 msgid "rcon.address"
 msgstr "rcon.address"
 
-#: ../configuration.rst:265
+#: ../configuration.rst:342
 msgid "The address of the rcon server"
 msgstr "用于 rcon 连接的地址"
 
-#: ../configuration.rst:269
+#: ../configuration.rst:346
 msgid "Default value: ``127.0.0.1``"
 msgstr "默认值：``127.0.0.1``"
 
-#: ../configuration.rst:272
+#: ../configuration.rst:349
 msgid "rcon.port"
 msgstr "rcon.port"
 
-#: ../configuration.rst:274
+#: ../configuration.rst:351
 msgid "The port of the rcon server"
 msgstr "用于 rcon 连接的端口"
 
-#: ../configuration.rst:277
+#: ../configuration.rst:354
 msgid "Option type: :external:class:`int`"
 msgstr "选项类型：:external:class:`int`"
 
-#: ../configuration.rst:278
+#: ../configuration.rst:355
 msgid "Default value: ``25575``"
 msgstr "默认值：``25575``"
 
-#: ../configuration.rst:281
+#: ../configuration.rst:358
 msgid "rcon.password"
 msgstr "rcon.password"
 
-#: ../configuration.rst:283
+#: ../configuration.rst:360
 msgid "The password to connect to the rcon server"
 msgstr "用于 rcon 连接的密码"
 
-#: ../configuration.rst:287
+#: ../configuration.rst:364
 msgid "Default value: ``password``"
 msgstr "默认值：``password``"
 
-#: ../configuration.rst:291
+#: ../configuration.rst:368
 msgid "Plugin configuration"
 msgstr "插件配置"
 
-#: ../configuration.rst:293
+#: ../configuration.rst:370
 msgid "MCDR plugin related configs"
 msgstr "MCDR 插件相关的配置项"
 
-#: ../configuration.rst:296
+#: ../configuration.rst:373
 msgid "plugin_directories"
 msgstr "plugin_directories"
 
-#: ../configuration.rst:298
+#: ../configuration.rst:375
 msgid "The list of directory path where MCDR will search for plugins to load"
 msgstr "MCDR 搜索将要加载插件的目录列表"
 
-#: ../configuration.rst:300
+#: ../configuration.rst:377
 msgid "Option type: ``List[str]``"
 msgstr "选项类型：``List[str]``"
 
-#: ../configuration.rst:301 ../configuration.rst:476 ../configuration.rst:501
-#: ../configuration.rst:525 ../configuration.rst:540 ../configuration.rst:557
+#: ../configuration.rst:378 ../configuration.rst:553 ../configuration.rst:578
+#: ../configuration.rst:602 ../configuration.rst:617 ../configuration.rst:634
 msgid "Default value:"
 msgstr "默认值："
 
-#: ../configuration.rst:309 ../configuration.rst:483 ../configuration.rst:508
+#: ../configuration.rst:386 ../configuration.rst:560 ../configuration.rst:585
 msgid "Example:"
 msgstr "例如："
 
-#: ../configuration.rst:319
+#: ../configuration.rst:396
 msgid "catalogue_meta_cache_ttl"
 msgstr "catalogue_meta_cache_ttl"
 
-#: ../configuration.rst:321
+#: ../configuration.rst:398
 msgid "The cache TTL of a fetched plugin catalogue meta"
 msgstr "拉取的插件仓库元信息的缓存有效期"
 
-#: ../configuration.rst:323
+#: ../configuration.rst:400
 msgid ""
 "MCDR will use the cached meta as the data source for catalogue plugin "
 "operations within the TTL"
 msgstr "MCDR 会在缓存的有效期内，使用缓存的元信息作为后续与插件仓库有关操作的数据源"
 
-#: ../configuration.rst:325 ../configuration.rst:333 ../configuration.rst:395
+#: ../configuration.rst:402 ../configuration.rst:410 ../configuration.rst:472
 msgid "Option type: :external:class:`float`"
 msgstr "选项类型：:external:class:`float`"
 
-#: ../configuration.rst:326
+#: ../configuration.rst:403
 msgid "Default value: ``1200`` (20 min)"
 msgstr "默认值：``1200`` （20 分钟）"
 
-#: ../configuration.rst:329
+#: ../configuration.rst:406
 msgid "catalogue_meta_fetch_timeout"
 msgstr "catalogue_meta_fetch_timeout"
 
-#: ../configuration.rst:331
+#: ../configuration.rst:408
 msgid "The timeout in seconds for a plugin catalogue meta fetch"
 msgstr "拉取插件仓库元信息的超时时间，单位：秒"
 
-#: ../configuration.rst:334 ../configuration.rst:396
+#: ../configuration.rst:411 ../configuration.rst:473
 msgid "Default value: ``15``"
 msgstr "默认值：``15``"
 
-#: ../configuration.rst:337
+#: ../configuration.rst:414
 msgid "catalogue_meta_url"
 msgstr "catalogue_meta_url"
 
-#: ../configuration.rst:339
+#: ../configuration.rst:416
 msgid ""
 "Override the URL pointing to the \"everything.json\" or "
 "\"everything_slim.json\" file, which is used to fetch the plugin "
 "catalogue meta"
 msgstr "重写用于拉取插件仓库元信息的，指向的 \"everything.json\" 或 \"everything_slim.json\" 文件的 URL"
 
-#: ../configuration.rst:342
+#: ../configuration.rst:419
 msgid ""
 "If it ends with \".gz\" (gzip) or \".xz\" (lzma), corresponding "
 "decompression operation will be applied"
 msgstr "若它以 \".gz\" (gzip) 或 \".xz\" (lzma) 结尾，则将自动应用对应的解压操作"
 
-#: ../configuration.rst:344
+#: ../configuration.rst:421
 msgid ""
 "If not provided, the url will be "
 "``https://api.mcdreforged.com/catalogue/everything_slim.json.xz``"
@@ -598,176 +754,176 @@ msgstr ""
 "若未指定，则将使用默认的 "
 "``\"https://api.mcdreforged.com/catalogue/everything_slim.json.xz\"``"
 
-#: ../configuration.rst:346
+#: ../configuration.rst:423
 msgid "Example value (using the original url from raw.githubusercontent.com):"
 msgstr "取值举例（使用 raw.githubusercontent.com 的原始 URL）："
 
-#: ../configuration.rst:353 ../configuration.rst:388 ../configuration.rst:438
+#: ../configuration.rst:430 ../configuration.rst:465 ../configuration.rst:515
 msgid "Default value: *empty*"
 msgstr "默认值：*空*"
 
-#: ../configuration.rst:356
+#: ../configuration.rst:433
 msgid "plugin_download_url"
 msgstr "plugin_download_url"
 
-#: ../configuration.rst:360
+#: ../configuration.rst:437
 msgid ""
 "A to-be-downloaded plugin file from the plugin catalogue is a valid "
 "GitHub release asset"
 msgstr "一个将被下载的插件文件是一个 GitHub release 的 asset"
 
-#: ../configuration.rst:362
+#: ../configuration.rst:439
 msgid ""
 "Plugin file download override. Should be a valid python "
 ":external:meth:`str.format` string"
 msgstr "重写插件文件的下载 URL。应该是一个合法的 :external:meth:`str.format` 字符串"
 
-#: ../configuration.rst:364
+#: ../configuration.rst:441
 msgid "Available variables:"
 msgstr "可用的变量"
 
-#: ../configuration.rst:366
+#: ../configuration.rst:443
 msgid "``{url}``: The original GitHub asset download url"
 msgstr "``{url}``：原始的 GitHub asset 下载链接"
 
-#: ../configuration.rst:367
+#: ../configuration.rst:444
 msgid "``{repos_owner}``: The name of the owner of the GitHub repository"
 msgstr "``{repos_owner}``：插件的 GitHub 仓库的所有者名"
 
-#: ../configuration.rst:368
+#: ../configuration.rst:445
 msgid "``{repos_name}``: The name of the GitHub repository"
 msgstr "``{repos_owner}``：插件的 GitHub 仓库的仓库名"
 
-#: ../configuration.rst:369
+#: ../configuration.rst:446
 msgid "``{tag}``: Name of the git tag associated with the release"
 msgstr "``{tag}``：与该 release 关联的 git tag 的名字"
 
-#: ../configuration.rst:370
+#: ../configuration.rst:447
 msgid "``{asset_name}``: Name of the asset file, i.e. name of the plugin file"
 msgstr "``{asset_name}``：asset 的名字，即要被下载的插件文件的文件名"
 
-#: ../configuration.rst:371
+#: ../configuration.rst:448
 msgid "``{asset_id}``: The GitHub asset ID"
 msgstr "``{asset_id}``：GitHub asset ID"
 
-#: ../configuration.rst:373
+#: ../configuration.rst:450
 msgid ""
 "As an example, to use `ghproxy <https://mirror.ghproxy.com/>`__, you can "
 "set it to:"
 msgstr "作为一个例子，若要使用 `ghproxy <https://mirror.ghproxy.com/>`__ 进行下载加速，你可以将其设为："
 
-#: ../configuration.rst:379
+#: ../configuration.rst:456
 msgid ""
 "Another example of a manual concatenation of the GitHub release asset "
 "default url. It's useless, but a good example to demonstrate how this "
 "work:"
 msgstr "另一个无用的，手动拼接出 GitHub release asset 默认 url 的例子。虽然没什么用，但是一个拿来演示使用方式的好例子："
 
-#: ../configuration.rst:385
+#: ../configuration.rst:462
 msgid ""
 "If not provided, the origin GitHub asset download url will be directly "
 "used"
 msgstr "若未指定，将直接使用原始的 GitHub 附件下载 URL"
 
-#: ../configuration.rst:391
+#: ../configuration.rst:468
 msgid "plugin_download_timeout"
 msgstr "plugin_download_timeout"
 
-#: ../configuration.rst:393
+#: ../configuration.rst:470
 msgid "The timeout in seconds for a plugin file download"
 msgstr "下载插件文件的超时时间，单位：秒"
 
-#: ../configuration.rst:399
+#: ../configuration.rst:476
 msgid "Misc configuration"
 msgstr "杂项配置"
 
-#: ../configuration.rst:401
+#: ../configuration.rst:478
 msgid "Miscellaneous configs of MCDR"
 msgstr "MCDR 的杂项配置"
 
-#: ../configuration.rst:404
+#: ../configuration.rst:481
 msgid "check_update"
 msgstr "check_update"
 
-#: ../configuration.rst:406
+#: ../configuration.rst:483
 msgid "If set to true, MCDR will detect if there's a new version every 24h"
 msgstr "如果设置为 true，MCDR 将会每隔 24 小时执行一次更新检测"
 
-#: ../configuration.rst:409 ../configuration.rst:420
+#: ../configuration.rst:486 ../configuration.rst:497
 msgid "Default value: ``true``"
 msgstr "默认值：``true``"
 
-#: ../configuration.rst:412
+#: ../configuration.rst:489
 msgid "advanced_console"
 msgstr "advanced_console"
 
-#: ../configuration.rst:414
+#: ../configuration.rst:491
 msgid ""
 "Advance console switch powered by `prompt-toolkit "
 "<https://pypi.org/project/prompt-toolkit/>`__"
 msgstr "高级控制台的开关，基于 `prompt-toolkit <https://pypi.org/project/prompt-toolkit/>`__"
 
-#: ../configuration.rst:416
+#: ../configuration.rst:493
 msgid ""
 "Set it to false if you need to redirect the stdin/stdout of MCDR or just "
 "don't like it"
 msgstr "如果你需要重定向 MCDR 的标准输入/输出，或者仅仅是不喜欢这个高级控制台，把它设置为 false"
 
-#: ../configuration.rst:423
+#: ../configuration.rst:500
 msgid "http_proxy, https_proxy"
 msgstr "http_proxy, https_proxy"
 
-#: ../configuration.rst:425
+#: ../configuration.rst:502
 msgid "HTTP(s) proxy setting for all external HTTP requests in MCDR"
 msgstr "为 MCDR 所有对外的 HTTP 请求的代理设置"
 
-#: ../configuration.rst:427
+#: ../configuration.rst:504
 msgid ""
 "It's suggested to set value for http_proxy and https_proxy at the same "
 "time"
 msgstr "如果打算配置，建议同时配置 http_proxy 和 https_proxy 的值"
 
-#: ../configuration.rst:429
+#: ../configuration.rst:506
 msgid "Example values::"
 msgstr "取值举例::"
 
-#: ../configuration.rst:441
+#: ../configuration.rst:518
 msgid "Advanced configuration"
 msgstr "进阶配置"
 
-#: ../configuration.rst:443
+#: ../configuration.rst:520
 msgid "Configuration options for advanced users"
 msgstr "为进阶用户提供的选项"
 
-#: ../configuration.rst:446
+#: ../configuration.rst:523
 msgid "disable_console_thread"
 msgstr "disable_console_thread"
 
-#: ../configuration.rst:448
+#: ../configuration.rst:525
 msgid ""
 "When set to true, MCDR will not start the console thread for handling "
 "console command input"
 msgstr "设置为 true 时，MCDR 将不会启动控制台线程来处理控制台命令输入"
 
-#: ../configuration.rst:450
+#: ../configuration.rst:527
 msgid "Don't change it to true unless you know what you are doing"
 msgstr "请保持默认值，除非你清楚地知道这是什么"
 
-#: ../configuration.rst:457
+#: ../configuration.rst:534
 msgid "disable_console_color"
 msgstr "disable_console_color"
 
-#: ../configuration.rst:459
+#: ../configuration.rst:536
 msgid ""
 "When set to true, MCDR will removed all console font formatter codes in "
 "before any message gets printed onto the console"
 msgstr "设置为 true 时，MCDR 将在所有消息打印到控制台之前删除所有控制台字体格式化程序代码"
 
-#: ../configuration.rst:466
+#: ../configuration.rst:543
 msgid "custom_handlers"
 msgstr "custom_handlers"
 
-#: ../configuration.rst:468
+#: ../configuration.rst:545
 msgid ""
 "A list of custom :doc:`/customize/handler` classes. The classed need to "
 "be subclasses of "
@@ -776,13 +932,13 @@ msgstr ""
 "自定义 :doc:`/customize/handler` 类所组成的列表。这些类应当是 "
 ":class:`~mcdreforged.handler.abstract_server_handler.ServerHandler` 的子类"
 
-#: ../configuration.rst:470
+#: ../configuration.rst:547
 msgid ""
 "Then you can use the name of your handler in the "
 ":ref:`configuration:handler` option above to use your handler"
 msgstr "这样你就可以在 :ref:`configuration:handler` 选项中通过处理器的名称指派其解析标准输出文本"
 
-#: ../configuration.rst:472
+#: ../configuration.rst:549
 msgid ""
 "The name of a handler is defined in the "
 ":meth:`~mcdreforged.handler.abstract_server_handler.ServerHandler.get_name`"
@@ -792,21 +948,21 @@ msgstr ""
 ":meth:`~mcdreforged.handler.abstract_server_handler.ServerHandler.get_name`"
 " 方法定义"
 
-#: ../configuration.rst:475 ../configuration.rst:500
+#: ../configuration.rst:552 ../configuration.rst:577
 msgid "Option type: ``Optional[List[str]]``"
 msgstr "选项类型：``Optional[List[str]]``"
 
-#: ../configuration.rst:490
+#: ../configuration.rst:567
 msgid ""
 "In this example the custom handler package path is "
 "``handlers.my_handler`` and the class is name ``MyHandler``"
 msgstr "下面这个例子中，``handlers.my_handler`` 是包路径，``MyHandler`` 是类名"
 
-#: ../configuration.rst:493
+#: ../configuration.rst:570
 msgid "custom_info_reactors"
 msgstr "custom_info_reactors"
 
-#: ../configuration.rst:495
+#: ../configuration.rst:572
 msgid ""
 "A list of custom :doc:`/customize/reactor` classes to handle the info "
 "instance. The classed need to be subclasses of "
@@ -816,23 +972,23 @@ msgstr ""
 ":class:`~mcdreforged.info_reactor.abstract_info_reactor.AbstractInfoReactor`"
 " 的子类"
 
-#: ../configuration.rst:497
+#: ../configuration.rst:574
 msgid ""
 "All custom info reactors will be registered to the reactor list to "
 "process information from the server"
-msgstr "所有自定义 info 响应器都将注册到反应堆列表中，以处理来自服务器的信息"
+msgstr "所有自定义 info 响应器都将注册到反应堆列表中，以处理来自服务端的信息"
 
-#: ../configuration.rst:515
+#: ../configuration.rst:592
 msgid ""
 "In this example the custom reactor package path is ``my.custom.reactor`` "
 "and the class name is ``MyInfoReactor``"
 msgstr "下面这个例子中，``my.custom.reactor`` 是包路径，``MyInfoReactor`` 是类名"
 
-#: ../configuration.rst:520
+#: ../configuration.rst:597
 msgid "watchdog_threshold"
 msgstr "watchdog_threshold"
 
-#: ../configuration.rst:522
+#: ../configuration.rst:599
 msgid ""
 "The required time interval in second for :doc:`/plugin_dev/watchdog` to "
 "consider the task executor thread is not responding. Set it to 0 to "
@@ -841,15 +997,15 @@ msgstr ""
 "使得 :doc:`/plugin_dev/watchdog` 认为任务执行者 (task executor) "
 "线程已经未响应所需的时间间隔。将其设为 0 以禁用 :doc:`/plugin_dev/watchdog`"
 
-#: ../configuration.rst:524
+#: ../configuration.rst:601
 msgid "Option type: :external:class:`int` or :external:class:`float`"
 msgstr ""
 
-#: ../configuration.rst:532
+#: ../configuration.rst:609
 msgid "handler_detection"
 msgstr "handler_detection"
 
-#: ../configuration.rst:534
+#: ../configuration.rst:611
 msgid ""
 "By default, MCDR will start a handler detection on MCDR startup for a "
 "while, to detect possible configuration mistake of the "
@@ -858,25 +1014,25 @@ msgstr ""
 "在默认情况下，MCDR 会在启动时弃用服务端处理器正确性检测，并运行一段时间，用于检测可能出现的 :ref:`服务端处理器 "
 "<configuration:handler>` 配置错误"
 
-#: ../configuration.rst:537
+#: ../configuration.rst:614
 msgid ""
 "Set it to false to disable the handler detection for a few less "
 "performance loss after MCDR startup, mostly for profiling MCDR"
 msgstr "将其设为 false 以禁用服务端处理器检测逻辑，以减少部分 MCDR 开始运行时的性能损耗。这主要在性能分析 MCDR 时使用"
 
-#: ../configuration.rst:547
+#: ../configuration.rst:624
 msgid "Debug configuration"
 msgstr "调试配置"
 
-#: ../configuration.rst:549
+#: ../configuration.rst:626
 msgid "Configurations for debugging MCDR"
 msgstr "用于调试 MCDR 的配置"
 
-#: ../configuration.rst:552
+#: ../configuration.rst:629
 msgid "debug"
 msgstr "debug"
 
-#: ../configuration.rst:554
+#: ../configuration.rst:631
 msgid ""
 "Debug logging switches. Set ``all`` to true to enable all debug logging, "
 "or set the specific option to enable specific debug logging"

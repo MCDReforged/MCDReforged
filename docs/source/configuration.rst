@@ -84,7 +84,7 @@ which mean the server will be started in shell mode:
 
 .. code-block:: yaml
 
-    start_command: java -Xms1G -Xmx2G -Dfile.encoding=UTF-8 -jar minecraft_server.jar nogui
+    start_command: java -Xms1G -Xmx2G -jar minecraft_server.jar nogui
 
 If you have already written a startup script in the :ref:`working directory <configuration:working_directory>`, you can:
 
@@ -107,32 +107,32 @@ If there are some special character (e.g. ``"`` and ``\``) that yaml doesn't lik
     .. code-block:: yaml
 
         # use "" to wrap the command and escape " and \
-        start_command: "\"C:\\Program Files\\Java\\jdk-17.0.3.1\\bin\\java.exe\" -Xms1G -Xmx2G -Dfile.encoding=UTF-8 -jar minecraft_server.jar"
+        start_command: "\"C:\\Program Files\\Java\\jdk-17.0.3.1\\bin\\java.exe\" -Xms1G -Xmx2G -jar minecraft_server.jar"
 
         # use '' to wrap the command
-        start_command: '"C:\Program Files\Java\jdk-17.0.3.1\bin\java.exe" -Xms1G -Xmx2G -Dfile.encoding=UTF-8 -jar minecraft_server.jar'
+        start_command: '"C:\Program Files\Java\jdk-17.0.3.1\bin\java.exe" -Xms1G -Xmx2G -jar minecraft_server.jar'
 
         # use multi-line string
         start_command: |-
-          "C:\Program Files\Java\jdk-17.0.3.1\bin\java.exe" -Xms1G -Xmx2G -Dfile.encoding=UTF-8 -jar minecraft_server.jar
+          "C:\Program Files\Java\jdk-17.0.3.1\bin\java.exe" -Xms1G -Xmx2G -jar minecraft_server.jar
 
 .. tab:: Linux
 
     .. code-block:: yaml
 
         # use "" to wrap the command and escape " and \
-        start_command: "\"/path/to my/java\" -Xms1G -Xmx2G -Dfile.encoding=UTF-8 -jar minecraft_server.jar"
+        start_command: "\"/path/to my/java\" -Xms1G -Xmx2G -jar minecraft_server.jar"
 
         # use '' to wrap the command
-        start_command: '"/path/to my/java" -Xms1G -Xmx2G -Dfile.encoding=UTF-8 -jar minecraft_server.jar'
+        start_command: '"/path/to my/java" -Xms1G -Xmx2G -jar minecraft_server.jar'
 
         # use multi-line string
         start_command: |-
-          "/path/to my/java" -Xms1G -Xmx2G -Dfile.encoding=UTF-8 -jar minecraft_server.jar
+          "/path/to my/java" -Xms1G -Xmx2G -jar minecraft_server.jar
 
 .. note::
 
-    For Minecraft servers, you might want to add a ``-Dfile.encoding=UTF-8`` JVM property before the ``-jar`` argument, like the examples above
+    For Minecraft servers, you might want to add some JVM properties like ``-Dfile.encoding=UTF-8`` before the ``-jar`` argument to ensure a UTF-8 charset environment
 
     See :ref:`configuration:encoding, decoding` section for more information of UTF-8 charset for Minecraft servers
 
@@ -154,7 +154,7 @@ Here is a table of current built-in handlers and their suitable server types
    * - Handler
      - Compatible server types
    * - vanilla_handler
-     - For Vanilla / Carpet / Fabric server
+     - For Vanilla / Carpet / Fabric server. Use this if your server is vanilla enough
    * - beta18_handler
      - For Vanilla server in legacy versions, e.g. < 1.7, or even beta1.8. Tested in 1.6.4 and beta1.8.1.
    * - bukkit_handler
@@ -187,14 +187,16 @@ The codec format to encode messages to stdin / decode messages from stdout of th
 Leave it blank for MCDR to use the system encoding. If it doesn't work (e.g. random characters appear in the console),
 you need to manually set them to the correct encoding / decoding methods used by the server
 
-For Minecraft servers, if you are on an operating system that doesn't using UTF-8 as the default charset,
+For vanilla Minecraft servers, if you are on an operating system that doesn't using UTF-8 as the default charset,
 it's highly suggested to ensure all encoding / decoding use UTF-8 charset, due to the following facts:
 
-1.  Python 3 uses UTF-8 to store strings
-2.  Minecraft servers always use UTF-8 for reading stdin
-3.  Minecraft servers use the default charset of the operating system for writing stdout / stderr / log files
-4.  The default charset of your operating system might not be UTF-8.
+*   Python 3 uses UTF-8 to store strings
+*   Vanilla Minecraft servers always use UTF-8 for reading stdin
+*   Vanilla Minecraft servers use the default charset of the operating system for writing stdout / stderr / log files
+*   The default charset of your operating system might not be UTF-8.
     For example, Windows may use GBK as the default charset for Chinese users
+*   Non-UTF-8 charset tends to cause annoying codec problems during encoding / decoding,
+    resulting in MCDR being unable to communicate normally with the server
 
 .. mermaid::
     :alt: pipe
@@ -209,12 +211,9 @@ it's highly suggested to ensure all encoding / decoding use UTF-8 charset, due t
         Minecraft-->>pipe: stdout/stderr (OS charset)
         pipe-->>MCDR: receive "world" (decoding)
 
-Non-UTF-8 charset tends to cause annoying codec problems during encoding / decoding,
-resulting in MCDR being unable to communicate normally with the server
-
 To make everything related to the server use UTF-8, you can follow the steps below:
 
-*   Ask MCDR to use UTF-8 to communicate with the Minecrate server,
+#.  Ask MCDR to use UTF-8 to communicate with the Minecraft server,
     i.e. set both ``encoding`` and ``decoding`` in the MCDR configuration to ``utf8``
 
     .. code-block:: yaml
@@ -222,18 +221,46 @@ To make everything related to the server use UTF-8, you can follow the steps bel
         encoding: utf8
         decoding: utf8
 
-*   Make sure the JVM that launches Minecraft also uses UTF-8 as the default charset.
-    You can achieve that with any of the following actions:
+#.  Make sure the JVM that launches Minecraft also uses UTF-8 as the default charset.
+    To achieve that, you can apply the following JVM properties for the Minecraft process
 
-    *   (Recommend) Modify the start command for your server. Add a ``-Dfile.encoding=UTF-8`` JVM property before the ``-jar`` argument,
-        just like the examples in the :ref:`configuration:start_command` sections
+        .. tab:: Java >= 19
+
+            .. code-block:: bash
+
+                -Dfile.encoding=UTF-8 -Dstdout.encoding=UTF-8 -Dstderr.encoding=UTF-8
+
+            If you are using a Long-Term-Support Java version, you can always use this as a universal Java UTF-8 solution
+            no matter what your Java version is
+
+            See also: System property `stdout.encoding <https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/lang/System.html#stdout.encoding>`__ and
+            `stderr.encoding <https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/lang/System.html#stderr.encoding>`__
+
+        .. tab:: Java 18
+
+            .. code-block:: bash
+
+                -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8
+
+            Notes that ``-Dsun.stdout.encoding`` and ``-Dsun.stderr.encoding`` are unspecified API.
+            See also: `JEP 400 <https://openjdk.org/jeps/400>`__
+
+        .. tab:: Java <= 17
+
+            .. code-block:: bash
+
+                -Dfile.encoding=UTF-8
+
+    To apply the JVM properties, you can:
+
+    *   (Recommend) Modify the start command for your server. Add the following arguments before the ``-jar`` argument
 
         .. code-block:: yaml
 
-            start_command: java -Xms1G -Xmx2G -Dfile.encoding=UTF-8 -jar minecraft_server.jar
-                                              ^^^^^^^^^^^^^^^^^^^^^
+            start_command: java -Xms1G -Xmx2G -Dfile.encoding=UTF-8 -Dstdout.encoding=UTF-8 -Dstderr.encoding=UTF-8 -jar minecraft_server.jar
+            #                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^ insert these ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    *   Insert ``-Dfile.encoding=UTF-8`` into environment variable ``JAVA_TOOL_OPTIONS``
+    *   Insert the arguments you need into environment variable ``JAVA_TOOL_OPTIONS``, in case you can't modify the server start command
 
 Then, the Minecraft server should run using UTF-8 as the charset for its standard IO streams,
 and MCDR should be able communicate with the server perfectly
@@ -241,9 +268,59 @@ and MCDR should be able communicate with the server perfectly
 Of course, if you're sure that your operating system uses UTF-8 as the default character set,
 then there's no need for any configuration. You can even leave these 2 options ``encoding``/ ``decoding`` blank to use the default system charset
 
+If you server has mixed encoding output, you can provide multiple decoding method by supplying a list of string as the value,
+In this case, MCDR will try all decoding methods one by one until one succeeds
+
+* Example scenario: In Windows, the shell outputs with OS-charset (let's say GBK), and the server outputs with UTF-8
+* Example solution: ``decoding: ['utf8', 'gbk']``
+
+**encoding**
+
 * Option type: ``Optional[str]``
-* Default value: ``utf8``, ``utf8``
+* Default value: ``utf8``
 * Examples: ``utf8``, ``gbk``
+
+**decoding**
+
+* Option type: ``Optional[str]`` or ``List[str]``
+* Default value: ``utf8``
+* Examples: ``utf8``, ``gbk``, ``['utf8', 'gbk']``
+
+.. dropdown:: Explanation of the above JVM properties
+
+    For Minecraft server, it has 2 common way to print stuffs to stdout / stderr:
+
+    **(a) Log with log4j**
+
+        Vanilla Minecraft server uses the log4j library for logging.
+        It configures log4j to use ``ConsoleAppender`` for logging messages to stdout,
+        which eventually uses ``Charset.defaultCharset()`` to get the default charset
+
+        UTF-8 solution for this case: ``-Dfile.encoding=UTF-8``
+
+    **(b) Print with System.out or System.err**
+
+        Sometimes Minecraft server might directly print stuffs into stdout / stderr.
+        In this case, we need to ensure both of ``System.out`` and ``System.err`` use UTF-8 charset as the encoding method
+
+        UTF-8 solution for this case:
+
+        .. list-table::
+            :header-rows: 1
+
+            * - Java Version
+              - JVM args to ensure UTF-8
+            * - <= 1.17
+              - ``-Dfile.encoding=UTF-8``
+            * - 1.18
+              - ``-Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8`` (unspecified API)
+            * - >= 1.19
+              - ``-Dstdout.encoding=UTF-8 -Dstderr.encoding=UTF-8``
+
+        See also:
+
+        *   `JEP 400: UTF-8 by Default <https://openjdk.org/jeps/400>`__
+        *   https://bugs.openjdk.org/browse/JDK-8285492
 
 rcon
 ^^^^

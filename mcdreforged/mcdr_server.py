@@ -7,7 +7,7 @@ import traceback
 from importlib.metadata import PackageNotFoundError, Distribution
 from pathlib import Path
 from subprocess import Popen, PIPE, STDOUT, TimeoutExpired
-from typing import Optional, Callable, Any, TYPE_CHECKING, List
+from typing import Optional, Callable, Any, TYPE_CHECKING, List, Dict
 
 import psutil
 from ruamel.yaml import YAMLError
@@ -34,13 +34,17 @@ from mcdreforged.plugin.si.server_interface import ServerInterface
 from mcdreforged.preference.preference_manager import PreferenceManager
 from mcdreforged.translation.translation_manager import TranslationManager
 from mcdreforged.translation.translator import Translator
-from mcdreforged.utils import file_util, request_util
-from mcdreforged.utils.exception import ServerStartError, IllegalStateError, DecodeError
+from mcdreforged.utils import file_util, request_util, misc_util
+from mcdreforged.utils.exception import ServerStartError, IllegalStateError
 from mcdreforged.utils.logger import DebugOption, MCDReforgedLogger, MCColorFormatControl
 from mcdreforged.utils.types.message import MessageText
 
 if TYPE_CHECKING:
 	from mcdreforged.plugin.plugin_registry import PluginRegistryStorage
+
+
+class _ReceiveDecodeError(ValueError):
+	pass
 
 
 class MCDReforgedServer:
@@ -58,7 +62,7 @@ class MCDReforgedServer:
 
 		# will be assigned in on_config_changed()
 		self.__encoding_method: Optional[str] = None
-		self.__decoding_method: Optional[str] = None
+		self.__decoding_method: List[str] = []
 
 		# --- Constructing fields --- #
 		self.logger: MCDReforgedLogger = MCDReforgedLogger()
@@ -258,13 +262,17 @@ class MCDReforgedServer:
 				self.logger.info(self.__tr('on_config_changed.language_set', config.language))
 
 			self.__encoding_method = config.encoding or locale.getpreferredencoding()
-			self.__decoding_method = config.decoding or locale.getpreferredencoding()
+			if not isinstance(config.decoding, list):
+				self.__decoding_method = [config.decoding or locale.getpreferredencoding()]
+			else:
+				self.__decoding_method = config.decoding.copy()
+			self.__decoding_method = misc_util.unique_list(self.__decoding_method)
 			if log:
-				self.logger.info(self.__tr('on_config_changed.encoding_decoding_set', self.__encoding_method, self.__decoding_method))
+				self.logger.info(self.__tr('on_config_changed.encoding_decoding_set', self.__encoding_method, ','.join(self.__decoding_method)))
 
 			self.plugin_manager.set_plugin_directories(config.plugin_directories)
 			if log:
-				self.logger.info(self.__tr('on_config_changed.plugin_directories_set', self.__encoding_method, self.__decoding_method))
+				self.logger.info(self.__tr('on_config_changed.plugin_directories_set'))
 				for directory in self.plugin_manager.plugin_directories:
 					self.logger.info('- {}'.format(directory))
 
@@ -548,12 +556,16 @@ class MCDReforgedServer:
 			self.process.wait()
 			return None
 		else:
-			try:
-				line_text: str = line_buf.decode(self.__decoding_method)
-			except Exception as e:
-				self.logger.error(self.__tr('receive.decode_fail', line_buf, e))
-				raise DecodeError()
-			return line_text.strip('\n\r')
+			errors: Dict[str, UnicodeError] = {}
+			for enc in self.__decoding_method:
+				try:
+					line_text: str = line_buf.decode(enc)
+				except UnicodeError as e:  # https://docs.python.org/3/library/codecs.html#error-handlers
+					errors[enc] = e
+				else:
+					return line_text.strip('\n\r')
+			self.logger.error(self.__tr('receive.decode_fail', line_buf, errors))
+			raise _ReceiveDecodeError()
 
 	def __tick(self):
 		"""
@@ -562,7 +574,7 @@ class MCDReforgedServer:
 		"""
 		try:
 			text = self.__receive()
-		except DecodeError:
+		except _ReceiveDecodeError:
 			return
 
 		if text is None:  # server stops
