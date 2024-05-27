@@ -58,10 +58,7 @@ class MCDReforgedConfig(Serializable):
 	debug: dict = {o.name.lower(): False for o in DebugOption}
 
 	def is_debug_on(self) -> bool:
-		for value in self.debug:
-			if value is True:
-				return True
-		return False
+		return any(self.debug.values())
 
 
 class MCDReforgedConfigManager:
