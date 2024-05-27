@@ -32,3 +32,8 @@ html.writer-html4 .rst-content dl:not(.docutils) .k, html.writer-html5 .rst-cont
 .tab-set {
     margin: 0;
 }
+
+/* better inline codeblocks */
+.rst-content code, .rst-content tt, code {
+    background: rgba(251, 251, 251);  /* don't use pure white, that's too shiny */
+}

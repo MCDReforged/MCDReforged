@@ -11,8 +11,9 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 import os
-import sys
 from typing import TYPE_CHECKING
+
+import sys
 
 if TYPE_CHECKING:
 	from sphinx.application import Sphinx
@@ -66,6 +67,9 @@ extensions = [
 	# Mermaid graphs
 	# https://github.com/mgaitan/sphinxcontrib-mermaid
 	'sphinxcontrib.mermaid',
+
+	# https://sphinx-design.readthedocs.io/en/latest/index.html
+	'sphinx_design',
 ]
 
 source_suffix = ['.rst']

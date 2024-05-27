@@ -1,0 +1,9 @@
+
+build/
+
+source/_locale/_static/
+source/_locale/_sphinx_design_static/
+
+**/.doctrees/
+**/*.mo
+**/*.pot

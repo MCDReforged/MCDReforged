@@ -35,9 +35,3 @@ __pycache__
 /config.yml
 /permission.yml
 
-# sphinx documentation
-/docs/build/
-/docs/source/_locale/_static/
-**/.doctrees/
-**/*.mo
-**/*.pot
