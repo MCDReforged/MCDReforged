@@ -26,7 +26,7 @@ class MCDReforgedConfig(Serializable):
 
 	# --------- Server Configuration ---------
 	working_directory: str = 'server'
-	start_command: Union[str, List[str]] = ['echo', 'Hello world from MCDReforged']
+	start_command: Union[str, List[str]] = 'echo Hello world from MCDReforged'
 	handler: str = 'vanilla_handler'
 	encoding: Optional[str] = 'utf8'
 	decoding: Optional[Union[str, List[str]]] = 'utf8'
