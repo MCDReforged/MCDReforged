@@ -6,6 +6,20 @@ CLI Subcommand - reformat_config
 
     mcdreforged reformat-config [-h] -i INPUT [-o OUTPUT]
 
-Generate default configuration and permission files at current working directory
+Reformat the MCDReforged configuration file
 
-Note that it will overwrite existing files
+.. versionadded:: v2.13.0
+
+
+-i, --input
+-----------
+
+    The configuration file of MCDReforged to be reformatted
+
+    Required argument
+
+
+-o, --output
+-----------
+
+    Path to the reformatted configuration file. If not provided, output to the input file

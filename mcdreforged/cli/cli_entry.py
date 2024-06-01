@@ -52,6 +52,7 @@ def cli_dispatch():
 
 	parser_start = subparsers.add_parser('start', help='Start {}'.format(core_constant.NAME), formatter_class=ArgumentDefaultsHelpFormatter)
 	parser_start.add_argument('--auto-init', action='store_true', help='Automatically initialize the working environment if needed')
+	parser_start.add_argument('--no-server-start', action='store_true', help='Do not start the server on MCDR startup')
 	add_config_permission_path_args(parser_start)
 
 	args = parser.parse_args()
@@ -81,6 +82,7 @@ def cli_dispatch():
 	elif args.command == 'start':
 		run_mcdr(MCDReforgedServerArgs(
 			auto_init=args.auto_init,
+			no_server_start=args.no_server_start,
 			config_file_path=args.config,
 			permission_file_path=args.permission,
 		))

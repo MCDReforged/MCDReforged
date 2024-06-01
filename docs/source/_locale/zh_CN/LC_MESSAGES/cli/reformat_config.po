@@ -4,12 +4,11 @@
 # package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-26 23:40+0800\n"
+"POT-Creation-Date: 2024-06-01 18:38+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -25,12 +24,28 @@ msgid "CLI Subcommand - reformat_config"
 msgstr ""
 
 #: ../cli/reformat_config.rst:9
-msgid ""
-"Generate default configuration and permission files at current working "
-"directory"
-msgstr ""
+msgid "Reformat the MCDReforged configuration file"
+msgstr "格式化 MCDR 的配置文件"
 
-#: ../cli/reformat_config.rst:11
-msgid "Note that it will overwrite existing files"
-msgstr ""
+#: ../cli/reformat_config.rst:15
+msgid "-i, --input"
+msgstr "-i, --input"
+
+#: ../cli/reformat_config.rst:17
+msgid "The configuration file of MCDReforged to be reformatted"
+msgstr "要被格式化的 MCDR 配置文件的路径"
+
+#: ../cli/reformat_config.rst:19
+msgid "Required argument"
+msgstr "必须的参数"
+
+#: ../cli/reformat_config.rst:23
+msgid "-o, --output"
+msgstr "-o, --output"
+
+#: ../cli/reformat_config.rst:25
+msgid ""
+"Path to the reformatted configuration file. If not provided, output to "
+"the input file"
+msgstr "输出文件的路径。若未指定，直接输出到输入的配置文件"
 

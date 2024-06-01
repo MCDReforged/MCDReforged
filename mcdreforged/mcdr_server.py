@@ -57,6 +57,7 @@ class MCDReforgedServer:
 		self.__flags = MCDReforgedFlag.NONE
 		self.__info_filter_holders: List[InfoFilterHolder] = []
 		self.__starting_server_lock = threading.Lock()  # to prevent multiple start_server() call
+		self.__no_server_start = args.no_server_start
 		self.__stop_lock = threading.Lock()  # to prevent multiple stop() call
 		self.__config_change_lock = threading.Lock()
 
@@ -622,8 +623,11 @@ class MCDReforgedServer:
 			self.console_handler.start()
 		else:
 			self.logger.info(self.__tr('on_mcdr_start.console_disabled'))
-		if not self.start_server():
-			raise ServerStartError()
+		if self.__no_server_start:
+			self.logger.info('Server start skipped')
+		else:
+			if not self.start_server():
+				raise ServerStartError()
 		self.update_helper.start()
 		if self.config.handler_detection:
 			self.server_handler_manager.start_handler_detection()

@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-26 23:20+0800\n"
+"POT-Creation-Date: 2024-06-01 18:38+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -43,9 +43,34 @@ msgid "server/"
 msgstr "server/"
 
 #: ../cli/init.rst:17
-msgid "config.yml"
-msgstr "config.yml"
+msgid "config.yml (can be altered by argument)"
+msgstr "config.yml（可通过参数进行调整）"
 
 #: ../cli/init.rst:18
-msgid "permission.yml"
-msgstr "permission.yml"
+msgid "permission.yml (can be altered by argument)"
+msgstr "permission.yml（可通过参数进行调整）"
+
+#: ../cli/init.rst:21
+msgid "--config"
+msgstr "--configs"
+
+#: ../cli/init.rst:23
+msgid "Path to the MCDReforged configuration file"
+msgstr "MCDR 配置文件的路径"
+
+#: ../cli/init.rst:25
+msgid "Default: ``config.yml``"
+msgstr "默认值：``config.yml``"
+
+#: ../cli/init.rst:30
+msgid "--permission"
+msgstr "--permission"
+
+#: ../cli/init.rst:32
+msgid "Path to the MCDReforged permission file"
+msgstr "MCDR 权限文件的路径"
+
+#: ../cli/init.rst:34
+msgid "Default: ``permission.yml``"
+msgstr "默认值：``permission.yml``"
+

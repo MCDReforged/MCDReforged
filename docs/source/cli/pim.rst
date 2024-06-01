@@ -8,12 +8,24 @@ CLI Subcommand - pim
 
 .. versionadded:: v2.13.0
 
+A simple version of Plugin Installer for MCDReforged
+
 browse
 ------
 
 .. code-block:: bash
 
     mcdreforged pim browse [-h] [keyword]
+
+Browse plugins in the official plugin catalogue
+
+keyword
+~~~~~~~
+
+    Search keyword to filter the plugins
+
+    If not provided, list all plugins
+
 
 download
 --------
@@ -22,14 +34,31 @@ download
 
     mcdreforged pim download [-h] [-o OUTPUT] plugin_ids [plugin_ids ...]
 
+    Download given plugins. No dependency resolution will be made, i.e. only the given plugins will be downloaded
+
+plugin_ids
+~~~~~~~~~~
+
+    IDs of the plugins to be downloaded
+
+    It can be supplied multiple times
+
+-o, --output
+~~~~~~~~~~~~
+
+    Path of the directory to store the downloaded plugins
+
+    Default: current directory
+
+
 pipi
 ----
-
-pipi == pip-install
 
 .. code-block:: bash
 
     mcdreforged pim pipi [-h] [-a ARGS] plugin_paths [plugin_paths ...]
+
+pipi == pip-install
 
 Call ``pip install`` with the requirements.txt file in the given packed plugin to install Python packages
 
@@ -46,21 +75,10 @@ plugin_paths
 
     The packed plugin files to be processed
 
-args
-~~~~
+    It can be supplied multiple times
+
+-a, --args
+~~~~~~~~~~
 
     Extra arguments passing to the pip process, e.g. ``--args "--proxy http://localhost:8080"``
 
-start
-^^^^^
-
-.. code-block:: bash
-
-    mcdreforged start [-h] [--auto-init] [--config CONFIG_FILE] [--permission PERMISSION_FILE]
-
-The same as ``mcdreforged``, it launches MCDR
-
-auto-init
-"""""""""
-
-    Automatically initialize the working environment if needed

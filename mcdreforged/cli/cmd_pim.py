@@ -16,15 +16,15 @@ from mcdreforged.utils.replier import NoopReplier, StdoutReplier, Replier
 
 
 def create(parser_factory: Callable[..., ArgumentParser]) -> ArgumentParser:
-	parser = parser_factory(name='pim', help='Plugin Installer for MCDReforged', formatter_class=ArgumentDefaultsHelpFormatter)
+	parser = parser_factory(name='pim', help='A simple version of Plugin Installer for MCDReforged', formatter_class=ArgumentDefaultsHelpFormatter)
 	subparsers = parser.add_subparsers(title='Command', help='Available commands', dest='pim_command')
 
 	parser_list = subparsers.add_parser('browse', help='Browse plugins in the official plugin catalogue')
 	parser_list.add_argument('keyword', nargs='?', default=None, help='Search keyword to filter the plugins')
 
-	parser_download = subparsers.add_parser('download', help='Download given plugins. No dependency resolution will be made')
-	parser_download.add_argument('plugin_ids', nargs='+', help='Plugin IDs to be downloaded')
-	parser_download.add_argument('-o', '--output', default='.', help='Path to store the downloaded plugins')
+	parser_download = subparsers.add_parser('download', help='Download given plugins. No dependency resolution will be made, i.e. only the given plugins will be downloaded')
+	parser_download.add_argument('plugin_ids', nargs='+', help='IDs of the plugins to be downloaded')
+	parser_download.add_argument('-o', '--output', default='.', help='Path of the directory to store the downloaded plugins')
 
 	parser_pipi = subparsers.add_parser('pipi', help='Call "pip install" with the requirements.txt file in the given packed plugin to install Python packages')
 	parser_pipi.add_argument('plugin_paths', nargs='+', help='The packed plugin files to be processed')

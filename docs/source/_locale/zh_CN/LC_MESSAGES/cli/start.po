@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-26 23:19+0800\n"
+"POT-Creation-Date: 2024-06-01 19:52+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,9 +21,42 @@ msgid "The same as ``mcdreforged``, it launches MCDR"
 msgstr "同 ``mcdreforged`` 一样，启动 MCDR"
 
 #: ../cli/start.rst:12
-msgid "auto-init"
-msgstr "auto-init"
+msgid "--auto-init"
+msgstr "--auto-init"
 
 #: ../cli/start.rst:14
 msgid "Automatically initialize the working environment if needed"
 msgstr "如果需要，自动执行 MCDR 的工作环境的准备工作"
+
+#: ../cli/start.rst:19
+msgid "--no-server-start"
+msgstr "--no-server-start"
+
+#: ../cli/start.rst:21
+msgid "Do not start the server on MCDR startup"
+msgstr "不要在 MCDR 启动的时候，启动服务端"
+
+#: ../cli/start.rst:26
+msgid "--config"
+msgstr "--config"
+
+#: ../cli/start.rst:28
+msgid "Path to the MCDReforged configuration file"
+msgstr "MCDR 配置文件的路径"
+
+#: ../cli/start.rst:30
+msgid "Default: ``config.yml``"
+msgstr "默认值：``config.yml``"
+
+#: ../cli/start.rst:35
+msgid "--permission"
+msgstr "--permission"
+
+#: ../cli/start.rst:37
+msgid "Path to the MCDReforged permission file"
+msgstr "MCDR 权限文件的路径"
+
+#: ../cli/start.rst:39
+msgid "Default: ``permission.yml``"
+msgstr "默认值：``permission.yml``"
+
