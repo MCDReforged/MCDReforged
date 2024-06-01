@@ -545,7 +545,7 @@ class ServerInterface:
 
 		:param plugin_id: The plugin id of the plugin to query file path
 		"""
-		def getter(plugin: RegularPlugin) -> str:
+		def getter(plugin: 'RegularPlugin') -> str:
 			return str(plugin.file_modify_time)
 		return self.__existed_plugin_info_getter(plugin_id, getter, regular=True)
 
@@ -561,7 +561,7 @@ class ServerInterface:
 
 		.. versionadded:: v2.13.0
 		"""
-		def getter(plugin: RegularPlugin) -> int:
+		def getter(plugin: 'RegularPlugin') -> int:
 			if plugin.file_modify_time is not None:
 				return plugin.file_modify_time
 			return -1
@@ -590,7 +590,7 @@ class ServerInterface:
 		:param plugin_id: The plugin id of the plugin you want to get entrypoint module instance
 		:return: A entrypoint module instance, or None if the plugin doesn't exist
 		"""
-		def getter(plugin: RegularPlugin) -> Any:
+		def getter(plugin: 'RegularPlugin') -> Any:
 			return plugin.entry_module_instance
 		return self.__existed_plugin_info_getter(plugin_id, getter, regular=True)
 
