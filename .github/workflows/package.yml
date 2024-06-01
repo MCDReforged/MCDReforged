@@ -227,8 +227,8 @@ jobs:
         start_time=$(date +%s)
         while true; do
           if pip3 install "mcdreforged==${VERSION}" -i "${PYPI_SIMPLE}" --dry-run --ignore-installed --no-deps; then
-            echo "Version ${VERSION} exists on ${PYPI_SIMPLE}, wait 10s and exit"
-            sleep 10
+            echo "Version ${VERSION} exists on ${PYPI_SIMPLE}, wait 20s and exit"
+            sleep 20
             break
           else
             current_time=$(date +%s)
