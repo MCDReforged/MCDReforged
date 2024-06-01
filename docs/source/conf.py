@@ -3,17 +3,17 @@
 # This file only contains a selection of the most common options. For a full
 # list see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
-
+#
 # -- Path setup --------------------------------------------------------------
-
+#
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
+import datetime
 import os
-from typing import TYPE_CHECKING
-
 import sys
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
 	from sphinx.application import Sphinx
@@ -26,7 +26,7 @@ sys.path.insert(0, os.path.abspath(os.path.join('..', '..')))
 import os
 
 project = 'MCDReforged'
-copyright = '2024, Fallen_Breath'
+copyright = f'{datetime.datetime.now().year}, Fallen_Breath'
 author = 'Fallen_Breath'
 
 # The full version, including alpha/beta/rc tags
