@@ -225,6 +225,7 @@ class PersistCatalogueMetaRegistryHolder(CatalogueMetaRegistryHolder):
 				done_callback(None)
 				return
 			start_time = now
+			self.__last_meta_fetch_time = now
 			start_callback(True)
 
 			meta_json = self._fetch_meta_json()
@@ -237,7 +238,6 @@ class PersistCatalogueMetaRegistryHolder(CatalogueMetaRegistryHolder):
 			done_callback(e)
 		else:
 			with self.__meta_lock:
-				self.__last_meta_fetch_time = time.time()
 				self.__meta = meta
 				try:
 					self.__save(meta_json, self.__last_meta_fetch_time)
