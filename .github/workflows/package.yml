@@ -225,10 +225,12 @@ jobs:
     - name: Wait for PyPI index update
       run: |
         start_time=$(date +%s)
+        pip_cmd="pip3 install mcdreforged==${VERSION} -i ${PYPI_SIMPLE} --dry-run --ignore-installed --no-deps --no-cache-dir"
+        echo pip_cmd=$pip_cmd
         while true; do
-          if pip3 install "mcdreforged==${VERSION}" -i "${PYPI_SIMPLE}" --dry-run --ignore-installed --no-deps; then
-            echo "Version ${VERSION} exists on ${PYPI_SIMPLE}, wait 20s and exit"
-            sleep 20
+          if $pip_cmd && $pip_cmd && $pip_cmd; then
+            echo "Version ${VERSION} exists on ${PYPI_SIMPLE}, wait 15s and exit"
+            sleep 15
             break
           else
             current_time=$(date +%s)
