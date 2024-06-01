@@ -15,7 +15,7 @@ def remove_prefix(text: str, prefix: str) -> str:
 
 class __Regexps:
 	MINECRAFT_COLOR_CODE = re.compile(r'§[a-z0-9]')
-	CONSOLE_COLOR_CODE = re.compile(r'\033\[(\d+(;\d+)?)?m')
+	CONSOLE_COLOR_CODE = re.compile(r'\033\[(\d+(;\d+)*)?m')
 	HUMP_NAME = re.compile(r'([a-z]|\d)([A-Z])')
 
 
