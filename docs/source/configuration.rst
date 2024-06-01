@@ -230,11 +230,10 @@ To make everything related to the server use UTF-8, you can follow the steps bel
 
                 -Dfile.encoding=UTF-8 -Dstdout.encoding=UTF-8 -Dstderr.encoding=UTF-8
 
-            If you are using a Long-Term-Support Java version, you can always use this as a universal Java UTF-8 solution
-            no matter what your Java version is
+            If you are using a Long-Term-Support Java version (e.g. 8, 11, 17), you can always use this as a universal Java UTF-8 solution
+            no matter what your Java version is. Those unrecognized system properties ``stdout.encoding`` and ``stderr.encoding`` are harmless
 
-            See also: System property `stdout.encoding <https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/lang/System.html#stdout.encoding>`__ and
-            `stderr.encoding <https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/lang/System.html#stderr.encoding>`__
+            See also: The "Explanation of the above JVM properties" section below
 
         .. tab:: Java 18
 
@@ -261,6 +260,10 @@ To make everything related to the server use UTF-8, you can follow the steps bel
             #                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^ insert these ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     *   Insert the arguments you need into environment variable ``JAVA_TOOL_OPTIONS``, in case you can't modify the server start command
+
+        .. code-block:: bash
+
+            export JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF-8 -Dstdout.encoding=UTF-8 -Dstderr.encoding=UTF-8"
 
 Then, the Minecraft server should run using UTF-8 as the charset for its standard IO streams,
 and MCDR should be able communicate with the server perfectly
