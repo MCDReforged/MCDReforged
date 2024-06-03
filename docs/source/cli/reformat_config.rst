@@ -20,6 +20,6 @@ Reformat the MCDReforged configuration file
 
 
 -o, --output
------------
+------------
 
     Path to the reformatted configuration file. If not provided, output to the input file
