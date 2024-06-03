@@ -1,7 +1,6 @@
 import re
 from typing import Optional
 
-import parse
 from typing_extensions import override
 
 from mcdreforged.handler.abstract_server_handler import AbstractServerHandler
@@ -29,10 +28,14 @@ class BungeecordHandler(AbstractServerHandler):
 
 	@classmethod
 	@override
-	def get_content_parsing_formatter(cls):
+	def get_content_parsing_formatter(cls) -> re.Pattern:
 		# 09:00:02 [信息] Listening on /0.0.0.0:25565
 		# 09:00:01 [信息] [Steve] -> UpstreamBridge has disconnected
-		return '{hour:d}:{min:d}:{sec:d} [{logging}] {content}'
+		return re.compile(
+			r'(?P<hour>\d+):(?P<min>\d+):(?P<sec>\d+)'
+			r' \[(?P<logging>[^]]+)]'
+			r' (?P<content>.*)'
+		)
 
 	__prompt_text_regex = re.compile(r'^>*\r')
 
@@ -41,42 +44,41 @@ class BungeecordHandler(AbstractServerHandler):
 		text = super().pre_parse_server_stdout(text)
 		return self.__prompt_text_regex.sub('', text, 1)
 
-	__player_joined_parser = parse.Parser('[{name},/{ip}] <-> InitialHandler has connected')
-	__player_left_parser = parse.Parser('[{name}] -> UpstreamBridge has disconnected')
-	__server_address_parser = parse.Parser('Listening on /{}:{:d}')
-	__server_startup_done_regex = re.compile(r'Listening on /[0-9.]+:[0-9]+')
-	__server_stopping_regex = re.compile(r'Closing listener \[id: .+, L:[\d:/]+]')
+	__player_joined_regex = re.compile(r'\[(?P<name>[^,]+),/[^]]+] <-> InitialHandler has connected')
 
 	@override
 	def parse_player_joined(self, info: Info) -> Optional[str]:
 		# [Steve,/127.0.0.1:3631] <-> InitialHandler has connected
 		if not info.is_user:
-			parsed = self.__player_joined_parser.parse(info.content)
-			if parsed is not None:
-				return parsed['name']
+			if (m := self.__player_joined_regex.fullmatch(info.content)) is not None:
+				return m['name']
 		return None
+
+	__player_left_regex = re.compile(r'\[(?P<name>[^]]+)] -> UpstreamBridge has disconnected')
 
 	@override
 	def parse_player_left(self, info):
 		# [Steve] -> UpstreamBridge has disconnected
 		if not info.is_user:
-			parsed = self.__player_left_parser.parse(info.content)
-			if parsed is not None:
-				return parsed['name']
+			if (m := self.__player_left_regex.fullmatch(info.content)) is not None:
+				return m['name']
 		return None
 
 	@override
 	def parse_server_version(self, info: Info):
 		return None
 
+	__server_address_regex = re.compile(r'Listening on /(?P<ip>\S+):(?P<port>\d+)')
+
 	@override
 	def parse_server_address(self, info: Info):
 		# Listening on /0.0.0.0:25577
 		if not info.is_user:
-			parsed = self.__server_address_parser.parse(info.content)
-			if parsed is not None:
-				return parsed[0], parsed[1]
+			if (m := self.__server_address_regex.fullmatch(info.content)) is not None:
+				return m['ip'], int(m['port'])
 		return None
+
+	__server_startup_done_regex = __server_address_regex
 
 	@override
 	def test_server_startup_done(self, info: Info) -> bool:
@@ -86,6 +88,8 @@ class BungeecordHandler(AbstractServerHandler):
 	@override
 	def test_rcon_started(self, info: Info) -> bool:
 		return self.test_server_startup_done(info)
+
+	__server_stopping_regex = re.compile(r'Closing listener \[id: .+, L:[\d:/]+]')
 
 	@override
 	def test_server_stopping(self, info: Info) -> bool:

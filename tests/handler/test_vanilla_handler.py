@@ -26,6 +26,9 @@ class MyTestCase(unittest.TestCase):
 
 		self.assertRaises(Exception, self.handler.parse_server_stdout, '[00:11:34 INFO]: Preparing level "world"')  # bukkit thing
 
+		# issue #287, complex thread name
+		self.assertEqual('Thread RCON Client /127.0.0.1 shutting down', self.handler.parse_server_stdout('[16:50:20] [RCON Client /127.0.0.1 #2/INFO]: Thread RCON Client /127.0.0.1 shutting down').content)
+
 	def test_1_player(self):
 		info = self.handler.parse_server_stdout('[09:00:00] [Server thread/INFO]: <Steve> Hello')
 		self.assertEqual('Steve', info.player)

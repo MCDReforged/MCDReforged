@@ -54,10 +54,10 @@ class AbstractServerHandler(ServerHandler, ABC):
 	@classmethod
 	def get_content_parsing_formatter(cls) -> Union[str, Iterable[str]]:
 		"""
-		Return a str or a str iterable that is used in method :meth:`_content_parse` for parsing
+		Return a :external:class:`re.Pattern` or an Iterable of :external:class:`re.Pattern` iterable
+		that is used in method :meth:`_content_parse` for parsing
 
-		These strings will be passed as the 1st parameter to ``parse.parse``,
-		they are both supposed to contain at least the following fields:
+		These regex patterns are supposed to contain at least the following fields:
 
 		- ``hour``
 		- ``min``
@@ -65,7 +65,7 @@ class AbstractServerHandler(ServerHandler, ABC):
 		- ``logging``
 		- ``content``
 
-		The return value of the first succeeded ``parse.parse`` call will be used
+		The return value of the first succeeded :external:meth:`re.Pattern.fullmatch` call will be used
 		for filling fields of the :class:`~mcdreforged.info_reactor.info.Info` object
 
 		The return value should be a constant value
@@ -74,14 +74,15 @@ class AbstractServerHandler(ServerHandler, ABC):
 
 	@classmethod
 	@functools.lru_cache()
-	def _get_content_parsers(cls) -> List[parse.Parser]:
+	def __get_content_parsers(cls) -> List[re.Pattern]:
 		"""
 		The return value is cached for reuse. Do not modify
 		"""
+		# TODO: drop parse.Parser support
 		formatters = cls.get_content_parsing_formatter()
-		if isinstance(formatters, str):
-			formatters = (formatters,)
-		return list(map(parse.Parser, formatters))
+		if isinstance(formatters, str) or isinstance(formatters, re.Pattern):
+			formatters = [formatters]
+		return [parse.Parser(fmt) if isinstance(fmt, str) else fmt for fmt in formatters]
 
 	__worlds_only_regex = re.compile(r'\w+')
 
@@ -101,20 +102,20 @@ class AbstractServerHandler(ServerHandler, ABC):
 		:param info: The to-be-processed :class:`~mcdreforged.info_reactor.info.Info` object
 		:meta public:
 		"""
-		for parser in cls._get_content_parsers():
-			parsed = parser.parse(info.content)
+		for parser in cls.__get_content_parsers():
+			# TODO: drop parse.Parser support
+			if isinstance(parser, parse.Parser):
+				parsed = parser.parse(info.content)
+			else:
+				parsed = parser.fullmatch(info.content)
 			if parsed is not None:
-				logging_level = parsed['logging']
-				if cls.__worlds_only_regex.fullmatch(logging_level) is None:
-					# logging level should be text only, just in case
-					# might happen in e.g. WaterfallHandler parsing "[01:23:45 INFO] [Test]: ping"
-					continue
 				break
 		else:
 			raise ValueError('Unrecognized input: ' + info.content)
-		info.hour = parsed['hour']
-		info.min = parsed['min']
-		info.sec = parsed['sec']
+
+		info.hour = int(parsed['hour'])
+		info.min = int(parsed['min'])
+		info.sec = int(parsed['sec'])
 		info.logging_level = parsed['logging']
 		info.content = parsed['content']
 

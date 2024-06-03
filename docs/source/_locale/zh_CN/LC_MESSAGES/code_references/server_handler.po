@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-30 01:56+0800\n"
+"POT-Creation-Date: 2024-06-03 21:44+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -247,17 +247,18 @@ msgstr "将其作为解析流程的第一步，或者你也可以直接把它的
 #: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.get_content_parsing_formatter:1
 #: of
 msgid ""
-"Return a str or a str iterable that is used in method "
+"Return a :external:class:`re.Pattern` or an Iterable of "
+":external:class:`re.Pattern` iterable that is used in method "
 ":meth:`_content_parse` for parsing"
-msgstr "返回一个将在方法 :meth:`_content_parse` 中作解析用途的 str 或者 ``Iterable[str]``"
+msgstr "返回一个将在方法 :meth:`_content_parse` 中作解析用途的一个 :external:class:`re.Pattern` 或 :external:class:`re.Pattern` 的 ``Iterable``"
 
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.get_content_parsing_formatter:3
+#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.get_content_parsing_formatter:4
 #: mcdreforged.handler.impl.abstract_minecraft_handler.AbstractMinecraftHandler.get_player_message_parsing_formatter:3
 #: of
 msgid ""
-"These strings will be passed as the 1st parameter to ``parse.parse``, "
-"they are both supposed to contain at least the following fields:"
-msgstr "这些字符串会作为第一个参数传递给 ``parse.parse``，他们应该含有至少以下的属性："
+"These regex patterns are supposed to contain at least the following "
+"fields:"
+msgstr "这些正则表达式应该含有至少以下的属性："
 
 #: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.get_content_parsing_formatter:6
 #: of
@@ -285,14 +286,14 @@ msgid "``content``"
 msgstr "``content``"
 
 #: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.get_content_parsing_formatter:12
-#: mcdreforged.handler.impl.abstract_minecraft_handler.AbstractMinecraftHandler.get_player_message_parsing_formatter:9
+#: mcdreforged.handler.impl.abstract_minecraft_handler.AbstractMinecraftHandler.get_player_message_parsing_formatter:8
 #: of
 msgid ""
-"The return value of the first succeeded ``parse.parse`` call will be used"
-" for filling fields of the :class:`~mcdreforged.info_reactor.info.Info` "
-"object"
+"The return value of the first succeeded :external:meth:`re.Pattern.fullmatch` "
+"call will be used for filling fields of the "
+":class:`~mcdreforged.info_reactor.info.Info` object"
 msgstr ""
-"首个成功的 ``parse.parse`` 调用的返回值会被用于填充 "
+"首个成功的 :external:meth:`re.Pattern.fullmatch` 调用的返回值会被用于填充 "
 ":class:`~mcdreforged.info_reactor.info.Info` 对象的数据"
 
 #: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.get_content_parsing_formatter:15
@@ -360,21 +361,21 @@ msgstr "一个抽象类，为 Minecraft Java 版服务端设计的服务端处�
 #: mcdreforged.handler.impl.abstract_minecraft_handler.AbstractMinecraftHandler.get_player_message_parsing_formatter:1
 #: of
 msgid ""
-"Return a list of str that is used in method :meth:`parse_server_stdout` "
-"for parsing player message"
-msgstr "返回一个将在方法 :meth:`parse_server_stdout` 中作解析用途的 str 列表"
+"Return a list of :external:class:`re.Pattern` that is used in method "
+":meth:`parse_server_stdout` for parsing player message"
+msgstr "返回一个将在方法 :meth:`parse_server_stdout` 中作解析用途的 :external:class:`re.Pattern` 列表"
 
-#: mcdreforged.handler.impl.abstract_minecraft_handler.AbstractMinecraftHandler.get_player_message_parsing_formatter:6
+#: mcdreforged.handler.impl.abstract_minecraft_handler.AbstractMinecraftHandler.get_player_message_parsing_formatter:5
 #: of
 msgid "``name``, the name of the player"
 msgstr "``name``，玩家名"
 
-#: mcdreforged.handler.impl.abstract_minecraft_handler.AbstractMinecraftHandler.get_player_message_parsing_formatter:7
+#: mcdreforged.handler.impl.abstract_minecraft_handler.AbstractMinecraftHandler.get_player_message_parsing_formatter:6
 #: of
 msgid "``message``, what the player said"
 msgstr "``message``，玩家的聊天内容"
 
-#: mcdreforged.handler.impl.abstract_minecraft_handler.AbstractMinecraftHandler.get_player_message_parsing_formatter:12
+#: mcdreforged.handler.impl.abstract_minecraft_handler.AbstractMinecraftHandler.get_player_message_parsing_formatter:11
 #: of
 msgid ""
 "If none of these formatter strings can be parsed successfully, then this "

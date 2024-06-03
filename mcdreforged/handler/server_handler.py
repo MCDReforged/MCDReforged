@@ -17,8 +17,8 @@ class ServerHandler(ABC):
 			├── BasicHandler
 			├── AbstractMinecraftHandler
 			│   ├── VanillaHandler
-			│   │   ├── Beta18Handler
-			│   │   └── ForgeHandler
+			│   ├── Beta18Handler
+			│   ├── ForgeHandler
 			│   └── BukkitHandler
 			│       ├── Bukkit14Handler
 			│       ├── CatServerHandler

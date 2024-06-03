@@ -20,13 +20,13 @@ In this example, we have a vanilla server, but some of the players have a prefix
     <[Builder]Steve> Hello
     <[Builder]Steve> !!MCDR status
 
-For the default vanilla handler, ``[Builder]Steve`` is an illegal player name. Luckily all possible prefixes of the players in the server follows the same format ``[Prefix] PlayerName``. So it's possible to make a dedicated handler for the server
+For the default vanilla handler, ``[Builder]Steve`` is an illegal player name. Luckily all possible prefixes of the players in the server follows the same format ``[Prefix]PlayerName``. So it's possible to make a dedicated handler for the server
 
 For example, the following codes above creates a handler than is able to handle player names in this server
 
 .. code-block:: python
 
-    from parse import parse
+    import re
 
     from mcdreforged.handler.impl import VanillaHandler
 
@@ -36,12 +36,12 @@ For example, the following codes above creates a handler than is able to handle 
             return 'the_handler_for_my_server'
 
         def parse_server_stdout(self, text: str):
-            result = super().parse_server_stdout(text)
-            if result.player is None:
-                parsed = parse('<[{prefix}]{name}> {message}', result.content)
-                if parsed is not None and self._verify_player_name(parsed['name']):
-                    result.player, result.content = parsed['name'], parsed['message']
-            return result
+            info = super().parse_server_stdout(text)
+            if info.player is None:
+                m = re.fullmatch(r'<\[\w+](?P<name>[^>]+)> (?P<message>.*)', info.content)
+                if m is not None and self._verify_player_name(m['name']):
+                    info.player, info.content = m['name'], m['message']
+            return info
 
 And then you are able to use this handler to handle the server. You need to do the following things in the configuration file
 

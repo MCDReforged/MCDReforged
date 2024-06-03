@@ -1,7 +1,6 @@
 import re
-from typing import Optional, Union, Iterable
+from typing import Optional
 
-import parse
 from typing_extensions import override
 
 from mcdreforged.handler.abstract_server_handler import AbstractServerHandler
@@ -28,39 +27,41 @@ class VelocityHandler(AbstractServerHandler):
 
 	@classmethod
 	@override
-	def get_content_parsing_formatter(cls) -> Union[str, Iterable[str]]:
+	def get_content_parsing_formatter(cls) -> re.Pattern:
 		# It's the same as WaterfallHandler, but since it's a different server here comes an individual copy
-		return (
-			'[{hour:d}:{min:d}:{sec:d} {logging}]: {content}',
-			'[{hour:d}:{min:d}:{sec:d} {logging}] {dummy}: {content}'  # something there is an extra element after the heading [] and :
+		# [00:16:35 INFO] [foo]: bar
+		# [00:16:33 WARN]: foo bar
+		return re.compile(
+			r'\[(?P<hour>\d+):(?P<min>\d+):(?P<sec>\d+) (?P<logging>[^]]+)]'
+			r'( \[[^]]+])?'  # useless logger name
+			r': (?P<content>.*)'
 		)
 
-	__player_joined_parser = parse.Parser('[connected player] {name} (/{address}) has connected')
-	__player_left_parser = parse.Parser('[connected player] {name} (/{address}) has disconnected')
-	__server_address_parser = parse.Parser('Listening on /{}:{:d}')
-	__server_startup_done_regex = re.compile(r'Done \([0-9.]*s\)!')
+	__player_joined_regex = re.compile(r'\[connected player] (?P<name>[^ ]+) \(/[^ ]+:\d+\) has connected')
 
 	@override
 	def parse_player_joined(self, info: Info) -> Optional[str]:
 		# [connected player] Fallen_Breath (/127.0.0.1:12896) has connected
 		if not info.is_user:
-			parsed = self.__player_joined_parser.parse(info.content)
-			if parsed is not None:
-				return parsed['name']
+			if (m := self.__player_joined_regex.fullmatch(info.content)) is not None:
+				return m['name']
 		return None
+
+	__player_left_regex = re.compile(r'\[connected player] (?P<name>[^ ]+) \(/[^ ]+:\d+\) has disconnected')
 
 	@override
 	def parse_player_left(self, info: Info) -> Optional[str]:
 		# [connected player] Fallen_Breath (/127.0.0.1:12896) has disconnected
 		if not info.is_user:
-			parsed = self.__player_left_parser.parse(info.content)
-			if parsed is not None:
-				return parsed['name']
+			if (m := self.__player_left_regex.fullmatch(info.content)) is not None:
+				return m['name']
 		return None
 
 	@override
 	def parse_server_version(self, info: Info):
 		return None
+
+	__server_address_regex = re.compile(r'Listening on /(?P<ip>\S+):(?P<port>\d+)')
 
 	@override
 	def parse_server_address(self, info: Info):
@@ -68,10 +69,11 @@ class VelocityHandler(AbstractServerHandler):
 		# Listening on /[0:0:0:0:0:0:0:0%0]:25577
 		# Listening on /0:0:0:0:0:0:0:0%0:25577
 		if not info.is_user:
-			parsed = self.__server_address_parser.parse(info.content)
-			if parsed is not None:
-				return parsed[0], parsed[1]
+			if (m := self.__server_address_regex.fullmatch(info.content)) is not None:
+				return m['ip'], int(m['port'])
 		return None
+
+	__server_startup_done_regex = re.compile(r'Done \([0-9.]+s\)!')
 
 	@override
 	def test_server_startup_done(self, info: Info) -> bool:

@@ -1,3 +1,4 @@
+import re
 from typing import List
 
 from typing_extensions import override
@@ -12,11 +13,21 @@ class BukkitHandler(AbstractMinecraftHandler):
 	"""
 	@classmethod
 	@override
-	def get_content_parsing_formatter(cls):
-		return '[{hour:d}:{min:d}:{sec:d} {logging}]: {content}'
+	def get_content_parsing_formatter(cls) -> re.Pattern:
+		# [00:12:10 INFO]: foo bar
+		return re.compile(
+			r'\[(?P<hour>\d+):(?P<min>\d+):(?P<sec>\d+) (?P<logging>[^]]+)]'
+			r': (?P<content>.*)'
+		)
 
 	@classmethod
 	@override
-	def get_player_message_parsing_formatter(cls) -> List[str]:
-		return super().get_player_message_parsing_formatter() + ['[{dim_name}]<{name}> {message}']
+	def get_player_message_parsing_formatter(cls) -> List[re.Pattern]:
+		# [Not Secure] <Alex> hello
+		# [world_nether]<Alex> world
+		return [re.compile(
+			r'(\[Not Secure] )?'  # mc1.19+ un-verified chat message
+			r'(\[[a-z0-9_:]+])?'  # dimension name
+			r'<(?P<name>[^>]+)> (?P<message>.*)'
+		)]
 

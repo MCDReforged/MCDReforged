@@ -1,9 +1,8 @@
+import re
 from typing import Optional
 
-import parse
 from typing_extensions import override
 
-from mcdreforged.handler.impl.bukkit_handler import BukkitHandler
 from mcdreforged.handler.impl.bungeecord_handler import BungeecordHandler
 from mcdreforged.info_reactor.info import Info
 
@@ -20,9 +19,10 @@ class WaterfallHandler(BungeecordHandler):
 	@classmethod
 	@override
 	def get_content_parsing_formatter(cls):
-		return (
-			BukkitHandler.get_content_parsing_formatter(),
-			'[{hour:d}:{min:d}:{sec:d} {logging}] [{dummy}]: {content}'  # something there is an extra element after the heading [] and :
+		return re.compile(
+			r'\[(?P<hour>\d+):(?P<min>\d+):(?P<sec>\d+) (?P<logging>[^]]+)]'
+			r'( \[[^]]+])?'  # useless logger name
+			r': (?P<content>.*)'
 		)
 
 	@override
@@ -31,13 +31,12 @@ class WaterfallHandler(BungeecordHandler):
 		# sadly no player id display here
 		return None
 
-	__player_left_parser = parse.Parser('[/{ip}|{name}] -> UpstreamBridge has disconnected')
+	__player_left_regex = re.compile(r'\[/[^|]+\|(?P<name>[^]]+)] -> UpstreamBridge has disconnected')
 
 	@override
 	def parse_player_left(self, info):
 		# [/127.0.0.1:14426|Fallen_Breath] -> UpstreamBridge has disconnected
 		if not info.is_user:
-			parsed = self.__player_left_parser.parse(info.content)
-			if parsed is not None:
-				return parsed['name']
+			if (m := self.__player_left_regex.fullmatch(info.content)) is not None:
+				return m['name']
 		return None

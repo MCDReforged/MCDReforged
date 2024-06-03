@@ -1,10 +1,9 @@
 import re
 from typing import Optional
 
-import parse
 from typing_extensions import override
 
-from mcdreforged.handler.impl.vanilla_handler import VanillaHandler
+from mcdreforged.handler.impl import AbstractMinecraftHandler
 from mcdreforged.info_reactor.info import Info
 from mcdreforged.info_reactor.server_information import ServerInformation
 from mcdreforged.minecraft.rtext.text import RTextBase
@@ -12,7 +11,7 @@ from mcdreforged.utils import string_util
 from mcdreforged.utils.types.message import MessageText
 
 
-class Beta18Handler(VanillaHandler):
+class Beta18Handler(AbstractMinecraftHandler):
 	"""
 	Yes, a handler for Minecraft beta 1.8
 	"""
@@ -40,26 +39,29 @@ class Beta18Handler(VanillaHandler):
 	def get_content_parsing_formatter(cls):
 		return '{y:d}-{m:d}-{d:d} {hour:d}:{min:d}:{sec:d} [{logging}] {content}'
 
-	__player_joined_parser = parse.Parser('{name} [{}] logged in with entity id {} at ({})')
-	__player_left_parser = parse.Parser('{name} lost connection: {}')
-	__server_startup_done_regex = re.compile(r'Done \([0-9.]*ns\)! For help, type "help" or "\?"')
+	__player_joined_regex = re.compile(r'(?P<name>[^ ]+) \[[^]]+] logged in with entity id \d+ at \(.+\)')
 
 	@override
 	def parse_player_joined(self, info):
 		# Steve [/127.0.0.1:2993] logged in with entity id 3827 at (-130.5, 69.0, 253.5)
+		#      ^
+		# Comparing to vanilla: there's an extra space character after {name}
 		if not info.is_user:
-			# there's an extra space character after {name}
-			parsed = self.__player_joined_parser.parse(info.content)
-			if parsed is not None and self._verify_player_name(parsed['name']):
-				return parsed['name']
+			if (m := self.__player_joined_regex.fullmatch(info.content)) is not None:
+				if self._verify_player_name(m['name']):
+					return m['name']
 		return None
+
+	__player_left_regex = re.compile(r'(?P<name>[^ ]+) lost connection: .*')
 
 	@override
 	def parse_player_left(self, info: Info):
 		# Steve lost connection: disconnect.quitting
-		if info.is_from_server and self.__player_left_parser.parse(info.content) is not None:
-			return info.content.split(' ')[0]
+		if info.is_from_server and (m := self.__player_left_regex.fullmatch(info.content)) is not None:
+			return m['name']
 		return None
+
+	__server_startup_done_regex = re.compile(r'Done \([0-9.]+ns\)! For help, type "help" or "\?"')
 
 	@override
 	def test_server_startup_done(self, info: Info):
