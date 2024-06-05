@@ -106,7 +106,7 @@ class HandlerDetector:
 		self.running_flag = False
 		self.text_queue = queue.Queue()
 		self.text_count = 0
-		self.success_count: Counter[ServerHandler] = collections.Counter()
+		self.success_count: Counter[str] = collections.Counter()
 		self.__tr = self.mcdr_server.create_internal_translator('server_handler_manager').tr
 
 	def start_handler_detection(self):
@@ -131,6 +131,7 @@ class HandlerDetector:
 				continue
 
 			self.text_count += 1
+			handler: ServerHandler
 			for handler in misc_util.unique_list([*self.manager.handlers.values(), self.manager.get_current_handler()]):
 				if handler is not self.manager.get_basic_handler():
 					try:
@@ -138,7 +139,7 @@ class HandlerDetector:
 					except Exception:
 						pass
 					else:
-						self.success_count[handler] += 1
+						self.success_count[handler.get_name()] += 1
 
 		self.running_flag = False
 		while True:  # clean the queue
@@ -147,26 +148,27 @@ class HandlerDetector:
 			except queue.Empty:
 				break
 
-		most_common: List[Tuple[ServerHandler, int]] = self.success_count.most_common()
+		most_common: List[Tuple[str, int]] = self.success_count.most_common()
 		if len(most_common) == 0:
 			return
 		total = self.text_count
 		best_count = most_common[0][1]
 		best_handler_tuples = [t for t in most_common if t[1] == best_count]
-		best_handlers = [t[0] for t in best_handler_tuples]
+		best_handler_names = [t[0] for t in best_handler_tuples]
 
 		current_handler = self.manager.get_current_handler()
-		current_count = self.success_count[current_handler]
-		if current_handler not in best_handlers:
-			current_handler_name = current_handler.get_name()
+		current_handler_name = current_handler.get_name()
+		current_count = self.success_count[current_handler_name]
+
+		if current_handler_name not in best_handler_names:
 			psh = self.manager.get_plugin_provided_server_handler_holder()
 			if psh is not None and current_handler is psh.server_handler:
 				current_handler_name += ' ({})'.format(psh.plugin)
 
 			self.mcdr_server.logger.warning(self.__tr('handler_detection.result1'))
 			self.mcdr_server.logger.warning(self.__tr('handler_detection.result2', current_handler_name, round(100.0 * current_count / total, 2), current_count, total))
-			for best_handler, best_count in best_handler_tuples:
-				self.mcdr_server.logger.warning(self.__tr('handler_detection.result3', best_handler.get_name(), round(100.0 * best_count / total, 2), best_count, total))
+			for best_handler_name, best_count in best_handler_tuples:
+				self.mcdr_server.logger.warning(self.__tr('handler_detection.result3', best_handler_name, round(100.0 * best_count / total, 2), best_count, total))
 
 	def detect_text(self, text: str):
 		if self.is_detection_running():
