@@ -40,7 +40,8 @@ def make_polygon(points: List[Point], **kwargs) -> drawsvg.Path:
 
 def make(
 		file_path: str,
-		background: bool,
+		hexagon_background: bool = False,
+		full_background: bool = False,
 		strip_padding: bool = False,
 		color_override: Optional[str] = None,
 ):
@@ -52,7 +53,9 @@ def make(
 	cube_brown = color_override or '#865B3E'
 
 	width = 100
-	if not background and strip_padding:
+	if hexagon_background and strip_padding:
+		raise ValueError('bad config')
+	if strip_padding:
 		width -= 20
 	d = drawsvg.Drawing(width, width, origin='center')
 	h0 = hexagon_points(r=1)   # tiny gap
@@ -63,7 +66,17 @@ def make(
 	o = Point(0, 0)
 
 	# ======= background ======
-	if background:
+	if full_background:
+		d.append(drawsvg.Lines(
+			*[
+				-width, -width,
+				width, -width,
+				width, width,
+				-width, width
+			],
+			close=True, fill=background_color
+		))
+	elif hexagon_background:
 		d.append(make_polygon(
 			h4,
 			fill=background_color,
@@ -108,11 +121,13 @@ def make(
 
 
 def main():
-	make('logo.svg', background=False)
-	make('logo_compact.svg', background=False, strip_padding=True)
-	make('logo_background.svg', background=True)
-	make('logo_white.svg', background=False, color_override='white')
-	make('logo_white_compact.svg', background=False, strip_padding=True, color_override='white')
+	make('logo.svg')
+	make('logo_compact.svg', strip_padding=True)
+	make('logo_full_background.svg', full_background=True)
+	make('logo_full_background_compact.svg', full_background=True, strip_padding=True)
+	make('logo_hexagon_background.svg', hexagon_background=True)
+	make('logo_white.svg', color_override='white')
+	make('logo_white_compact.svg', strip_padding=True, color_override='white')
 
 
 if __name__ == '__main__':
