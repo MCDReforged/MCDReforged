@@ -286,7 +286,7 @@ class PromptToolkitWrapper:
 	@staticmethod
 	def __tweak_kits():
 		# monkey patch to yeet the bell sound
-		def dummy_func(self_):
+		def dummy_func(_self):
 			pass
 		Vt100_Output.bell = dummy_func
 

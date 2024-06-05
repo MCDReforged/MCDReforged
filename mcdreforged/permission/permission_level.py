@@ -29,11 +29,11 @@ class PermissionLevel:
 		ADMIN_	= PermissionLevelItem('admin', 3)
 		OWNER_	= PermissionLevelItem('owner', 4)
 
-	GUEST = __Storage.GUEST_.value.level
-	USER = __Storage.USER_.value.level
-	HELPER = __Storage.HELPER_.value.level
-	ADMIN = __Storage.ADMIN_.value.level
-	OWNER = __Storage.OWNER_.value.level
+	GUEST: int = __Storage.GUEST_.value.level
+	USER: int = __Storage.USER_.value.level
+	HELPER: int = __Storage.HELPER_.value.level
+	ADMIN: int = __Storage.ADMIN_.value.level
+	OWNER: int = __Storage.OWNER_.value.level
 
 	INSTANCES: List[PermissionLevelItem] = [item.value for item in __Storage]
 	LEVELS: List[int] = [inst.level for inst in INSTANCES]

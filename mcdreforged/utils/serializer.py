@@ -38,7 +38,7 @@ def serialize(obj: Any) -> JsonLike:
 	*   :class:`list` and :class:`tuple` will be serialized into a :class:`list` will all the items serialized
 	*   :class:`dict` will be converted into a :class:`dict` will all the keys and values serialized
 	*   :class:`re.Pattern` will be converted to a :class:`str`, with the value of :attr:`re.Pattern.pattern`.
-	    Notes: if :attr:`re.Pattern.pattern` returns :class:`bytes`, it will be decoded into a utf8 :class:`str`
+		Notes: if :attr:`re.Pattern.pattern` returns :class:`bytes`, it will be decoded into a utf8 :class:`str`
 	*   Normal object will be converted to a :class:`dict` with all of its public fields.
 		The keys are the name of the fields and the values are the serialized field values
 

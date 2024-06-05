@@ -369,7 +369,7 @@ class PluginManager:
 		def select_filter(plg: RegularPlugin) -> bool:
 			return ready_state_check(plg) and filter_(plg)
 
-		affected_plugins = self.__collect_regular_plugins(select_filter , specific, 'reload', ready_state_check)
+		affected_plugins = self.__collect_regular_plugins(select_filter, specific, 'reload', ready_state_check)
 		result = SingleOperationResult()
 
 		# child first, parent last
