@@ -1,22 +1,11 @@
 from typing import TYPE_CHECKING
 
-from typing_extensions import Protocol
-
+from mcdreforged.translation.functions import TranslateFunc, TranslateFuncR
 from mcdreforged.utils.types.message import MessageText
 
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
 	from mcdreforged.translation.translation_text import RTextMCDRTranslation
-
-
-class TranslateFunc(Protocol):
-	def __call__(self, key: str, *args, **kwargs) -> MessageText:
-		...
-
-
-class TranslateFuncR(Protocol):
-	def __call__(self, key: str, *args, **kwargs) -> 'RTextMCDRTranslation':
-		...
 
 
 class Translator:

@@ -42,25 +42,32 @@ class DebugCommand(SubCommand):
 		def translation_dump_suggest() -> Set[str]:
 			result = {'.'}
 			for k in self.translations.keys():
-				segs = k.split('.')
-				for i in range(len(segs)):
-					result.add('.'.join(segs[: i + 1]))
+				parts = k.split('.')
+				for i in range(len(parts)):
+					result.add('.'.join(parts[:i + 1]))
 			return result
+
+		def suggest_thread_name():
+			for t in threading.enumerate():
+				yield t.name
+
+		def thread_dump_callback(src: CommandSource, ctx: dict):
+			self.show_thread_dump(src, ctx.get('thread_name'))
 
 		return (
 			self.owner_command_root('debug').
 			runs(lambda src: self.reply_help_message(src, 'mcdr_command.help_message.debug')).
 			then(
 				Literal('thread_dump').
-				runs(lambda src: self.show_thread_dump(src, None)).
+				runs(thread_dump_callback).
 				then(
 					Literal('#all').
-					runs(lambda src: self.show_thread_dump(src, None))
+					runs(thread_dump_callback)
 				).
 				then(
 					QuotableText('thread_name').
-					suggests(lambda: map(lambda t: t.name, threading.enumerate())).
-					runs(lambda src, ctx: self.show_thread_dump(src, ctx['thread_name']))
+					suggests(suggest_thread_name).
+					runs(thread_dump_callback)
 				)
 			).
 			then(
@@ -92,7 +99,7 @@ class DebugCommand(SubCommand):
 					Literal('plugin').
 					then(
 						QuotableText('plugin_id').
-						suggests(lambda: map(lambda plg: plg.get_id(), self.mcdr_server.plugin_manager.get_all_plugins())).
+						suggests(lambda: [plg.get_id() for plg in self.mcdr_server.plugin_manager.get_all_plugins()]).
 						runs(lambda src, ctx: self.show_command_tree(src, plugin_id=ctx['plugin_id']))
 					)
 				).

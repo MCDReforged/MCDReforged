@@ -82,6 +82,9 @@ class PluginHolder:
 		self.topo_order: int = -1
 		self.error: Optional[DependencyError] = None
 
+	def __lt__(self, other: 'PluginHolder') -> bool:
+		return (self.topo_order, self.plugin_id) < (other.topo_order, other.plugin_id)
+
 
 class WalkResult(NamedTuple):
 	plugin_id: str
@@ -212,13 +215,11 @@ class DependencyWalker:
 				get_children.extend(search(child_node))
 			return get_children
 
-		return list(filter(
-			lambda pid: pid in self.__walk_plugin_ids,
-			map(
-				lambda h: h.plugin_id,
-				sorted(
-					map(lambda n: self.__get_holder(n.plugin_id), search(holder.graph_node)),
-					key=lambda h: h.topo_order
-				)
-			)
-		))
+		return [
+			h.plugin_id
+			for h in sorted([
+				self.__get_holder(node.plugin_id)
+				for node in search(holder.graph_node)
+			])
+			if h.plugin_id in self.__walk_plugin_ids
+		]

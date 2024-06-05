@@ -6,6 +6,7 @@ from typing_extensions import override
 
 from mcdreforged.command.builder.exception import RequirementNotMet, UnknownArgument, CommandError
 from mcdreforged.command.builder.nodes.basic import Literal
+from mcdreforged.command.builder.tools import Requirements
 from mcdreforged.command.command_source import CommandSource
 from mcdreforged.constants import core_constant
 from mcdreforged.minecraft.rtext.style import RColor, RAction
@@ -102,7 +103,7 @@ class MCDReforgedPlugin(PermanentPlugin):
 	def __register_commands(self):
 		main_root = (
 			Literal(self.control_command_prefix).
-			requires(lambda src: src.has_permission(PermissionLevel.USER)).
+			requires(Requirements.has_permission(PermissionLevel.USER)).
 			runs(self.process_mcdr_command).
 			on_error(RequirementNotMet, self.on_mcdr_command_permission_denied, handled=True).
 			on_error(UnknownArgument, self.on_mcdr_command_unknown_argument).

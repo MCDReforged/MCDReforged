@@ -43,7 +43,10 @@ class PluginCatalogueAccess:
 				any(map(functools.partial(check_keyword, ss=False), plugin.description.values())),
 			)
 
-		plugins.sort(key=lambda plg: scores[plg.id], reverse=True)
+		def sort_key_getter(plg: PluginData):
+			return scores[plg.id]
+
+		plugins.sort(key=sort_key_getter, reverse=True)
 		return [plg for plg in plugins if any(scores[plg.id])]
 
 	@classmethod

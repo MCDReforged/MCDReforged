@@ -150,8 +150,8 @@ class SyncStdoutStreamHandler(logging.StreamHandler):
 
 
 class MCColorFormatControl:
-	MC_CODE_ITEMS: List[RItemClassic] = list(filter(lambda item: isinstance(item, RItemClassic), list(RColor) + list(RStyle)))
-	assert all(map(lambda item: item.mc_code.startswith('§'), MC_CODE_ITEMS)), 'MC code items should start with §'
+	MC_CODE_ITEMS: List[RItemClassic] = [item for item in list(RColor) + list(RStyle) if isinstance(item, RItemClassic)]
+	assert all(item.mc_code.startswith('§') for item in MC_CODE_ITEMS), 'MC code items should start with §'
 
 	# global flag
 	console_color_disabled = False

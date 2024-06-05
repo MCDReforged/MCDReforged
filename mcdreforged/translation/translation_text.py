@@ -6,7 +6,8 @@ from typing_extensions import Self, override
 
 from mcdreforged.minecraft.rtext.style import RColor, RStyle, RAction
 from mcdreforged.minecraft.rtext.text import RTextBase, RText
-from mcdreforged.utils import translation_util, class_util
+from mcdreforged.translation.functions import TranslateFunc
+from mcdreforged.utils import translation_util, class_util, function_util
 from mcdreforged.utils.types.message import TranslationKeyDictRich
 
 
@@ -35,7 +36,7 @@ class RTextMCDRTranslation(RTextBase):
 		self.translation_key: str = translation_key
 		self.args = args
 		self.kwargs = kwargs
-		self.__translator = lambda *args_, **kwargs_: RText(self.translation_key)
+		self.__tr_func: TranslateFunc = function_util.always(RText(self.translation_key))
 		self.__post_process: List[Callable[[RTextBase], RTextBase]] = []
 
 		from mcdreforged.plugin.si.server_interface import ServerInterface
@@ -43,14 +44,14 @@ class RTextMCDRTranslation(RTextBase):
 		if server is not None:
 			self.set_translator(server.tr)
 
-	def set_translator(self, translate_function: Callable) -> 'RTextMCDRTranslation':
-		self.__translator = translate_function
+	def set_translator(self, translate_function: TranslateFunc) -> 'RTextMCDRTranslation':
+		self.__tr_func = translate_function
 		return self
 
 	@classmethod
 	def from_translation_dict(cls, translation_dict: TranslationKeyDictRich) -> 'RTextMCDRTranslation':
-		def fake_tr(_key: str, _mcdr_tr_language: str):
-			return translation_util.translate_from_dict(translation_dict, _mcdr_tr_language)
+		def fake_tr(*_args, **_kwargs):
+			return translation_util.translate_from_dict(translation_dict, language=_kwargs['_mcdr_tr_language'])
 
 		return RTextMCDRTranslation('').set_translator(fake_tr)
 
@@ -58,7 +59,7 @@ class RTextMCDRTranslation(RTextBase):
 		language = getattr(self.__TLS, 'language', None)
 		if language is None:
 			language = translation_util.get_mcdr_language()
-		processed_text = self.__translator(self.translation_key, *self.args, **self.kwargs, _mcdr_tr_language=language)
+		processed_text = self.__tr_func(self.translation_key, *self.args, **self.kwargs, _mcdr_tr_language=language)
 		processed_text = RTextBase.from_any(processed_text)
 		for process in self.__post_process:
 			processed_text = process(processed_text)
@@ -114,28 +115,36 @@ class RTextMCDRTranslation(RTextBase):
 	@override
 	def copy(self) -> 'RTextBase':
 		copied = RTextMCDRTranslation(self.translation_key, *self.args, **self.kwargs)
-		copied.__translator = self.__translator
+		copied.__tr_func = self.__tr_func
 		copied.__post_process = self.__post_process.copy()
 		return copied
 
 	@override
 	def set_color(self, color: RColor) -> Self:
-		self.__post_process.append(lambda rt: rt.set_color(color))
+		def add_color(rt: RTextBase):
+			return rt.set_color(color)
+		self.__post_process.append(add_color)
 		return self
 
 	@override
 	def set_styles(self, styles: Union[RStyle, Iterable[RStyle]]) -> Self:
-		self.__post_process.append(lambda rt: rt.set_styles(styles))
+		def set_styles(rt: RTextBase):
+			return rt.set_styles(styles)
+		self.__post_process.append(set_styles)
 		return self
 
 	@override
 	def set_click_event(self, action: RAction, value: str) -> Self:
-		self.__post_process.append(lambda rt: rt.set_click_event(action, value))
+		def set_click_event(rt: RTextBase):
+			return rt.set_click_event(action, value)
+		self.__post_process.append(set_click_event)
 		return self
 
 	@override
 	def set_hover_text(self, *args) -> Self:
-		self.__post_process.append(lambda rt: rt.set_hover_text(*args))
+		def set_hover_text(rt: RTextBase):
+			return rt.set_hover_text(*args)
+		self.__post_process.append(set_hover_text)
 		return self
 
 	def __repr__(self) -> str:

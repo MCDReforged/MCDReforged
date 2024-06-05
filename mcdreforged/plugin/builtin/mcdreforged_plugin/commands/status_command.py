@@ -1,4 +1,5 @@
 import threading
+from typing import List
 
 import psutil
 from typing_extensions import override
@@ -53,12 +54,20 @@ class StatusCommand(SubCommand):
 		process = self.mcdr_server.process
 		source.reply(self.tr('mcdr_command.print_mcdr_status.extra.pid', process.pid if process is not None else RText('N/A', RColor.gray)))
 		if process is not None:
+			def children_getter(proc: psutil.Process) -> List[psutil.Process]:
+				return proc.children()
+
+			def name_getter(proc: psutil.Process) -> str:
+				return '{}: {}'.format(proc.name(), proc.pid)
+
+			def line_writer(line_: str):
+				source.reply('  ' + line_)
 			try:
 				tree_printer.print_tree(
 					psutil.Process(process.pid),
-					lambda proc: proc.children(),
-					lambda proc: '{}: {}'.format(proc.name(), proc.pid),
-					lambda line: source.reply('  ' + line)
+					children_getter,
+					name_getter,
+					line_writer
 				)
 			except psutil.NoSuchProcess:
 				self.mcdr_server.logger.exception('Fail to fetch process tree from pid {}'.format(process.pid))

@@ -100,7 +100,12 @@ class Version:
 		self.component = tuple(components)
 
 	def __str__(self):
-		version_str = '.'.join(map(lambda c: str(c) if c != self.WILDCARD else self.WILDCARDS[0], self.component))
+		version_str = '.'.join(
+			str(c)
+			if c != self.WILDCARD
+			else self.WILDCARDS[0]
+			for c in self.component
+		)
 		if self.pre is not None:
 			version_str += '-' + str(self.pre)
 		if self.build is not None:

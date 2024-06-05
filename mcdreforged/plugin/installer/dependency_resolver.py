@@ -1,13 +1,13 @@
 import dataclasses
 import re
 import subprocess
+import sys
 from typing import List, Union, Mapping, Iterator, Iterable, Sequence, Optional, Dict
 
 import resolvelib
 from resolvelib.resolvers import RequirementInformation
 from typing_extensions import override
 
-import sys
 from mcdreforged.plugin.installer.meta_holder import MetaRegistry
 from mcdreforged.plugin.installer.types import PluginId, PluginResolution, PackageRequirements
 from mcdreforged.plugin.meta.version import VersionRequirement, Version
@@ -130,7 +130,11 @@ class PluginMetaProvider(resolvelib.AbstractProvider):
 				candidates.append(PluginCandidate(identifier, version))
 
 		preferred_versions = {r.preferred_version for r in reqs if r.preferred_version is not None}
-		candidates.sort(key=lambda c: (c.version in preferred_versions, c.version), reverse=True)
+
+		def sort_key_getter(c: CT):
+			return c.version in preferred_versions, c.version
+
+		candidates.sort(key=sort_key_getter, reverse=True)
 		return candidates
 
 	@override

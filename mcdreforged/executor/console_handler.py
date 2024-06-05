@@ -286,7 +286,9 @@ class PromptToolkitWrapper:
 	@staticmethod
 	def __tweak_kits():
 		# monkey patch to yeet the bell sound
-		Vt100_Output.bell = lambda self_: None
+		def dummy_func(self_):
+			pass
+		Vt100_Output.bell = dummy_func
 
 		# monkey patch to set min_rows to 2
 		# since with reserve_space_for_menu=3, 2 row of completion menu can be displayed

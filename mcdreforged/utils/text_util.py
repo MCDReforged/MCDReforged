@@ -36,7 +36,7 @@ class Table:
 			return []
 		widths = []
 		for j in range(self.width):
-			widths.append(max(map(lambda r: wcswidth(str(r[j])), self.__rows)))
+			widths.append(max(wcswidth(str(r[j])) for r in self.__rows))
 
 		from mcdreforged.minecraft.rtext.style import RStyle
 		from mcdreforged.minecraft.rtext.text import RTextBase

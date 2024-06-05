@@ -6,10 +6,10 @@ from typing_extensions import Self
 from mcdreforged.command.builder.exception import CommandError
 from mcdreforged.command.builder.nodes.basic import RUNS_CALLBACK, Literal, AbstractNode, ArgumentNode, REQUIRES_CALLBACK, FAIL_MSG_CALLBACK, SUGGESTS_CALLBACK, ERROR_HANDLER_CALLBACK
 from mcdreforged.command.command_source import CommandSource
-from mcdreforged.utils import tree_printer
 
 if TYPE_CHECKING:
 	from mcdreforged.plugin.si.plugin_server_interface import PluginServerInterface
+	from mcdreforged.utils import tree_printer
 
 
 class Requirements:
@@ -130,16 +130,24 @@ class _NodeDefinitionImpl(NodeDefinition):
 		return self
 
 	def requires(self, requirement: REQUIRES_CALLBACK, failure_message_getter: Optional[FAIL_MSG_CALLBACK] = None) -> Self:
-		return self.post_process(lambda n: n.requires(requirement, failure_message_getter))
+		def post_processor_requires(node: NodeType):
+			node.requires(requirement, failure_message_getter)
+		return self.post_process(post_processor_requires)
 
 	def suggests(self, suggestion: SUGGESTS_CALLBACK) -> Self:
-		return self.post_process(lambda n: n.suggests(suggestion))
+		def post_processor_suggests(node: NodeType):
+			node.suggests(suggestion)
+		return self.post_process(post_processor_suggests)
 
 	def on_error(self, error_type: Type[CommandError], handler: ERROR_HANDLER_CALLBACK, *, handled: bool = False) -> Self:
-		return self.post_process(lambda n: n.on_error(error_type, handler, handled=handled))
+		def post_processor_on_error(node: NodeType):
+			node.on_error(error_type, handler, handled=handled)
+		return self.post_process(post_processor_on_error)
 
 	def on_child_error(self, error_type: Type[CommandError], handler: ERROR_HANDLER_CALLBACK, *, handled: bool = False) -> Self:
-		return self.post_process(lambda n: n.on_child_error(error_type, handler, handled=handled))
+		def post_processor_on_child_error(node: NodeType):
+			node.on_child_error(error_type, handler, handled=handled)
+		return self.post_process(post_processor_on_child_error)
 
 
 class SimpleCommandBuilder:
@@ -365,7 +373,7 @@ class SimpleCommandBuilder:
 		for node in self.build():
 			parent_node.then(node)
 
-	def print_tree(self, line_writer: tree_printer.LineWriter):
+	def print_tree(self, line_writer: 'tree_printer.LineWriter'):
 		"""
 		A helper method for lazyman, to build with method :meth:`build` and print the built command trees
 

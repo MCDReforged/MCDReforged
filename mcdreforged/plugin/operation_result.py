@@ -47,9 +47,21 @@ class PluginResultType(Enum):
 		result_extractor: Callable[['PluginOperationResult'], 'SingleOperationResult']
 		check_dependency: bool
 
-	LOAD = _TypeImpl(lambda result: result.load_result, True)
-	UNLOAD = _TypeImpl(lambda result: result.unload_result, False)
-	RELOAD = _TypeImpl(lambda result: result.reload_result, True)
+	@staticmethod
+	def __load_result_getter(result: 'PluginOperationResult') -> 'SingleOperationResult':
+		return result.load_result
+
+	@staticmethod
+	def __unload_result_getter(result: 'PluginOperationResult') -> 'SingleOperationResult':
+		return result.unload_result
+
+	@staticmethod
+	def __reload_result_getter(result: 'PluginOperationResult') -> 'SingleOperationResult':
+		return result.reload_result
+
+	LOAD = _TypeImpl(__load_result_getter, True)
+	UNLOAD = _TypeImpl(__unload_result_getter, False)
+	RELOAD = _TypeImpl(__reload_result_getter, True)
 
 
 @dataclasses.dataclass(frozen=True)
@@ -94,7 +106,7 @@ class PluginOperationResult:
 				add_element(msg, tr(key, len(lst)).h('\n'.join(text_list)))
 
 		message = RTextList()
-		add_if_not_empty(message, list(filter(lambda plg: plg in self.dependency_check_result.success_list, self.load_result.success_list)), 'info_loaded_succeeded')
+		add_if_not_empty(message, [plg for plg in self.load_result.success_list if plg in self.dependency_check_result.success_list], 'info_loaded_succeeded')
 		add_if_not_empty(message, self.unload_result.success_list, 'info_unloaded_succeeded')
 		add_if_not_empty(message, self.reload_result.success_list, 'info_reloaded_succeeded')
 		add_if_not_empty(message, self.load_result.failed_list, 'info_loaded_failed')

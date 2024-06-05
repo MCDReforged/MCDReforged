@@ -281,7 +281,9 @@ class AbstractNode(ABC):
 
 		.. versionadded:: v2.6.0
 		"""
-		tree_printer.print_tree(self, lambda node: node.get_children(), str, line_writer)
+		def children_getter(node: AbstractNode) -> List[AbstractNode]:
+			return node.get_children()
+		tree_printer.print_tree(self, children_getter, str, line_writer)
 
 	# -------------------
 	#   Interfaces ends

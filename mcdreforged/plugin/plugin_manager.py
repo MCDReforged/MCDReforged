@@ -22,7 +22,7 @@ from mcdreforged.plugin.plugin_thread import PluginThreadPool
 from mcdreforged.plugin.type.permanent_plugin import PermanentPlugin
 from mcdreforged.plugin.type.plugin import AbstractPlugin, PluginState
 from mcdreforged.plugin.type.regular_plugin import RegularPlugin
-from mcdreforged.utils import file_util, string_util, misc_util, class_util, path_util
+from mcdreforged.utils import file_util, string_util, misc_util, class_util, path_util, function_util
 from mcdreforged.utils.future import Future
 from mcdreforged.utils.logger import DebugOption
 from mcdreforged.utils.thread_local_storage import ThreadLocalStorage
@@ -295,9 +295,9 @@ class PluginManager:
 				result.succeed(plugin)
 		return result
 
-	def __collect_new_plugins(self, filter_: Callable[[Path], bool], *, possible_paths: Optional[List[Path]] = None) -> List[Path]:
+	def __collect_new_plugins(self, collect_filter: Callable[[Path], bool], *, possible_paths: Optional[List[Path]] = None) -> List[Path]:
 		"""
-		:param filter_: A str predicate function for testing if the plugin file path is acceptable
+		:param collect_filter: A str predicate function for testing if the plugin file path is acceptable
 		:param possible_paths: Optional. If you have already done self.__collect_possible_plugin_file_paths() before,
 		you can pass the previous result as the argument to reuse that, so less time cost
 		"""
@@ -306,28 +306,28 @@ class PluginManager:
 
 		plugin_paths = []
 		for file_path in possible_paths:
-			if not self.contains_plugin_file(file_path) and filter_(file_path):
+			if not self.contains_plugin_file(file_path) and collect_filter(file_path):
 				plugin_paths.append(file_path)
 		return plugin_paths
 
-	def __collect_and_load_new_plugins(self, filter_: Callable[[Path], bool], *, possible_paths: Optional[List[Path]] = None) -> SingleOperationResult:
+	def __collect_and_load_new_plugins(self, collect_filter: Callable[[Path], bool], *, possible_paths: Optional[List[Path]] = None) -> SingleOperationResult:
 		"""
-		:param filter_: A str predicate function for testing if the plugin file path is acceptable
+		:param collect_filter: A str predicate function for testing if the plugin file path is acceptable
 		:param possible_paths: Optional. If you have already done self.__collect_possible_plugin_file_paths() before,
 		you can pass the previous result as the argument to reuse that, so less time cost
 		"""
-		return self.__load_given_new_plugins(self.__collect_new_plugins(filter_, possible_paths=possible_paths))
+		return self.__load_given_new_plugins(self.__collect_new_plugins(collect_filter, possible_paths=possible_paths))
 
 	def __collect_regular_plugins(
 			self, select_filter: Callable[[RegularPlugin], bool], specific: Optional[RegularPlugin],
-			operation_name: str = 'operate', collect_filter: Callable[[RegularPlugin], bool] = lambda p: True
+			operation_name: str = 'operate', collect_filter: Callable[[RegularPlugin], bool] = function_util.TRUE
 	) -> List[RegularPlugin]:
 		"""
 		collected = selected + affected
 		:return: A list of plugin in topo order
 		"""
 		plugin_list = self.get_regular_plugins() if specific is None else [specific]
-		selected_plugins = list(filter(select_filter, plugin_list))
+		selected_plugins: List[RegularPlugin] = list(filter(select_filter, plugin_list))
 		selected_plugins_set = set(selected_plugins)
 
 		walker = DependencyWalker(self)
@@ -344,7 +344,7 @@ class PluginManager:
 			if collect_filter(plugin):
 				collected_plugins.append(plugin)
 
-		affected_plugins = list(filter(lambda plg: plg not in selected_plugins_set, collected_plugins))
+		affected_plugins = [plg for plg in collected_plugins if plg not in selected_plugins_set]
 		if self.logger.should_log_debug(DebugOption.PLUGIN):
 			self.logger.debug('Collected {}x plugin'.format(len(collected_plugins)) + ':' if len(collected_plugins) > 0 else '', no_check=True)
 			if len(collected_plugins) > 0:
@@ -363,10 +363,13 @@ class PluginManager:
 		return result
 
 	def __reload_ready_plugins(self, filter_: Callable[[RegularPlugin], bool], specific: Optional[RegularPlugin] = None) -> SingleOperationResult:
-		def state_check(plg: RegularPlugin):
+		def ready_state_check(plg: RegularPlugin) -> bool:
 			return plg.in_states({PluginState.READY})
 
-		affected_plugins = self.__collect_regular_plugins(lambda plg: state_check(plg) and filter_(plg), specific, 'reload', state_check)
+		def select_filter(plg: RegularPlugin) -> bool:
+			return ready_state_check(plg) and filter_(plg)
+
+		affected_plugins = self.__collect_regular_plugins(select_filter , specific, 'reload', ready_state_check)
 		result = SingleOperationResult()
 
 		# child first, parent last
@@ -502,9 +505,14 @@ class PluginManager:
 	def __refresh_plugins(self, reload_filter: Callable[[RegularPlugin], bool]) -> PluginOperationResult:
 		possible_paths = self.__collect_possible_plugin_file_paths()
 		possible_paths_set = set(possible_paths)
-		unload_result = self.__unload_given_plugins(lambda plugin: not plugin.plugin_exists() or plugin.plugin_path not in possible_paths_set)
-		load_result = self.__collect_and_load_new_plugins(lambda fp: True, possible_paths=possible_paths)
+
+		def unload_select_filter(plg: RegularPlugin) -> bool:
+			return not plg.plugin_exists() or plg.plugin_path not in possible_paths_set
+
+		unload_result = self.__unload_given_plugins(unload_select_filter)
+		load_result = self.__collect_and_load_new_plugins(function_util.TRUE, possible_paths=possible_paths)
 		reload_result = self.__reload_ready_plugins(reload_filter)
+
 		return self.__finalize_plugin_manipulation(load_result, unload_result, reload_result)
 
 	# --------------
@@ -583,9 +591,16 @@ class PluginManager:
 		def manipulate_action():
 			if entered_callback is not None:
 				entered_callback()
-			unload_result = self.__unload_given_plugins(lambda plg: plg.get_id() in to_unload_plugin_ids)
+
+			def is_to_unload_plugin(plg: RegularPlugin) -> bool:
+				return plg.get_id() in to_unload_plugin_ids
+
+			def is_to_reload_plugin(plg: RegularPlugin) -> bool:
+				return plg.get_id() in to_reload_plugin_ids
+
+			unload_result = self.__unload_given_plugins(is_to_unload_plugin)
 			load_result = self.__load_given_new_plugins(to_load_paths)
-			reload_result = self.__reload_ready_plugins(lambda plg: plg.get_id() in to_reload_plugin_ids)
+			reload_result = self.__reload_ready_plugins(is_to_reload_plugin)
 			return self.__finalize_plugin_manipulation(load_result, unload_result, reload_result)
 
 		def done_callback(_: PluginOperationResult):
@@ -600,8 +615,12 @@ class PluginManager:
 
 	def load_plugin(self, file_path: Path) -> Future[PluginOperationResult]:
 		class_util.check_type(file_path, Path)
+
+		def equals_to_the_given_path(fp: Path) -> bool:
+			return fp == file_path
+
 		return self.manipulate_plugins(
-			load=self.__collect_new_plugins(lambda fp: fp == file_path),
+			load=self.__collect_new_plugins(equals_to_the_given_path),
 			entered_callback=lambda: self.logger.info(self.__tr('load_plugin.entered', file_path)),
 		)
 
@@ -632,14 +651,17 @@ class PluginManager:
 	def refresh_all_plugins(self) -> Future[PluginOperationResult]:
 		def refresh_all_plugins_action() -> PluginOperationResult:
 			self.logger.info(self.__tr('refresh_all_plugins.entered'))
-			return self.__refresh_plugins(lambda plg: True)
+			return self.__refresh_plugins(function_util.TRUE)
 
 		return self.__run_manipulation(refresh_all_plugins_action)
 
 	def refresh_changed_plugins(self) -> Future[PluginOperationResult]:
+		def reload_filter(plg: RegularPlugin):
+			return plg.file_changed()
+
 		def refresh_changed_plugins_action() -> PluginOperationResult:
 			self.logger.info(self.__tr('refresh_changed_plugins.entered'))
-			return self.__refresh_plugins(lambda plg: plg.file_changed())
+			return self.__refresh_plugins(reload_filter)
 
 		return self.__run_manipulation(refresh_changed_plugins_action)
 

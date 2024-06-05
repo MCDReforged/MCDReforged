@@ -370,7 +370,7 @@ class Enumeration(ArgumentNode):
 
 	@override
 	def _get_suggestions(self, context: CommandContext) -> Iterable[str]:
-		return map(lambda e: e.name, self.__enum_class)
+		return [e.name for e in self.__enum_class]
 
 	@override
 	def parse(self, text: str) -> ParseResult:

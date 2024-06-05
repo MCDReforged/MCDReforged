@@ -77,9 +77,10 @@ def print_class_inheriting_tree(cls: Type, line_writer: tree_printer.LineWriter 
 	"""
 	Remember to import all subclasses before invoking this
 	"""
-	tree_printer.print_tree(
-		cls,
-		lambda c: c.__subclasses__(),
-		lambda c: c.__name__,
-		line_writer
-	)
+	def children_getter(c: type):
+		return c.__subclasses__()
+
+	def name_getter(c: type) -> str:
+		return c.__name__
+
+	tree_printer.print_tree(cls, children_getter, name_getter, line_writer)

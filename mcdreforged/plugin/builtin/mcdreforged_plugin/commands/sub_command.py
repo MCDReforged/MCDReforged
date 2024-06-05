@@ -5,6 +5,7 @@ from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Callable, Generic, TypeVar
 
 from mcdreforged.command.builder.nodes.basic import Literal
+from mcdreforged.command.builder.tools import Requirements
 from mcdreforged.command.command_source import CommandSource
 from mcdreforged.permission.permission_level import PermissionLevel
 from mcdreforged.plugin.operation_result import PluginOperationResult
@@ -78,15 +79,15 @@ class SubCommand(ABC):
 
 	@staticmethod
 	def owner_command_root(literal) -> Literal:
-		return Literal(literal).requires(lambda src: src.has_permission(PermissionLevel.PHYSICAL_SERVER_CONTROL_LEVEL))
+		return Literal(literal).requires(Requirements.has_permission(PermissionLevel.PHYSICAL_SERVER_CONTROL_LEVEL))
 
 	@staticmethod
 	def control_command_root(literal) -> Literal:
-		return Literal(literal).requires(lambda src: src.has_permission(PermissionLevel.MCDR_CONTROL_LEVEL))
+		return Literal(literal).requires(Requirements.has_permission(PermissionLevel.MCDR_CONTROL_LEVEL))
 
 	@staticmethod
 	def public_command_root(literal) -> Literal:
-		return Literal(literal).requires(lambda src: src.has_permission(PermissionLevel.USER))
+		return Literal(literal).requires(Requirements.has_permission(PermissionLevel.USER))
 
 	@staticmethod
 	def can_see_rtext(source: CommandSource) -> bool:

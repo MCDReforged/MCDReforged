@@ -5,16 +5,17 @@ from typing import Callable, ContextManager, TextIO, Union, List
 
 from ruamel.yaml import YAML
 
+from mcdreforged.utils import function_util
 from mcdreforged.utils.types.path_like import PathLike
 
 
-def list_all(directory: PathLike, predicate: Callable[[Path], bool] = lambda file_path: True) -> List[Path]:
+def list_all(directory: PathLike, predicate: Callable[[Path], bool] = function_util.TRUE) -> List[Path]:
 	directory = Path(directory)
 	caditates = [(directory / file) for file in os.listdir(directory)]
 	return list(filter(predicate, caditates))
 
 
-def list_file(directory: PathLike, predicate: Callable[[Path], bool] = lambda file_path: True) -> List[Path]:
+def list_file(directory: PathLike, predicate: Callable[[Path], bool] = function_util.TRUE) -> List[Path]:
 	def merged_predicate(p: Path) -> bool:
 		return p.is_file() and predicate(p)
 	return list_all(directory, merged_predicate)

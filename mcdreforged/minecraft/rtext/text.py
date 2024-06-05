@@ -477,26 +477,32 @@ class RTextList(RTextBase):
 	@override
 	def to_json_object(self) -> Union[dict, list]:
 		ret = ['' if self.header_empty else self.header.to_json_object()]
-		ret.extend(map(lambda rtext: rtext.to_json_object(), self.children))
+		ret.extend([rtext.to_json_object() for rtext in self.children])
 		return ret
 
 	@override
 	def to_plain_text(self) -> str:
-		return ''.join(map(lambda rtext: rtext.to_plain_text(), self.children))
+		return ''.join(rtext.to_plain_text() for rtext in self.children)
 
 	@override
 	def to_colored_text(self) -> str:
 		# noinspection PyProtectedMember
 		head = self.header._get_console_style_codes()
 		tail = Style.RESET_ALL if len(head) > 0 else ''
-		return ''.join(map(lambda rtext: ''.join([head, rtext.to_colored_text(), tail]), self.children))
+		return ''.join(
+			''.join([head, rtext.to_colored_text(), tail])
+			for rtext in self.children
+		)
 
 	@override
 	def to_legacy_text(self) -> str:
 		# noinspection PyProtectedMember
 		head = self.header._get_legacy_style_codes()
 		tail = RColor.reset.mc_code if len(head) > 0 else ''
-		return ''.join(map(lambda rtext: ''.join([head, rtext.to_legacy_text(), tail]), self.children))
+		return ''.join(
+			''.join([head, rtext.to_legacy_text(), tail])
+			for rtext in self.children
+		)
 
 	@override
 	def copy(self) -> 'RTextList':
@@ -571,7 +577,12 @@ class RTextTranslation(RText):
 		obj.pop('text')
 		obj['translate'] = self.__translation_key
 		if len(self.__args) > 0:
-			obj['with'] = list(map(lambda arg: arg.to_json_object() if isinstance(arg, RTextBase) else arg, self.__args))
+			obj['with'] = [
+				arg.to_json_object()
+				if isinstance(arg, RTextBase)
+				else arg  # keep it as-is
+				for arg in self.__args
+			]
 		if self.__fallback is not None:
 			obj['fallback'] = self.__fallback
 		return obj

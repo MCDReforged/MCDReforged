@@ -3,7 +3,7 @@ import functools
 import re
 from abc import ABC
 from enum import EnumMeta, Enum
-from typing import Union, TypeVar, List, Dict, Type, get_type_hints, Any, Callable, Literal, Optional
+from typing import Union, TypeVar, List, Dict, Type, get_type_hints, Any, Callable, Literal, Optional, Tuple
 
 from typing_extensions import Self
 
@@ -61,7 +61,7 @@ def serialize(obj: Any) -> JsonLike:
 	elif isinstance(obj, list) or isinstance(obj, tuple):
 		return list(map(serialize, obj))
 	elif isinstance(obj, dict):
-		return dict(map(lambda t: (t[0], serialize(t[1])), obj.items()))
+		return {key: serialize(value) for key, value in obj.items()}
 	elif isinstance(obj.__class__, EnumMeta):
 		return obj.name
 	elif isinstance(obj, re.Pattern):
@@ -79,14 +79,18 @@ def serialize(obj: Any) -> JsonLike:
 			if attr_name.startswith('_'):
 				attr_dict.pop(attr_name)
 		if isinstance(obj, Serializable):
-			order_dict = {}
+			order_dict: Dict[str, int] = {}
 			for i, attr_name in enumerate(_get_type_hints(type(obj)).keys()):
 				if not attr_name.startswith('_'):
 					order_dict[attr_name] = i
-			attr_dict = dict(sorted(
-				attr_dict.items(),
-				key=lambda item: order_dict.get(item[0], len(order_dict))
-			))
+
+			def sort_key_getter(item: Tuple[str, Any]) -> int:
+				return order_dict.get(item[0], len(order_dict))
+
+			attr_dict = {
+				key: value
+				for key, value in sorted(attr_dict.items(), key=sort_key_getter)
+			}
 	except Exception:
 		raise TypeError('Unsupported input type {}'.format(type(obj))) from None
 	else:
@@ -226,7 +230,10 @@ def deserialize(
 		cls_real = cls_org if isinstance(cls_org, type) else list
 		if isinstance(data, list):
 			element_type = _get_args(cls)[0]
-			return cls_real(map(lambda e: deserialize(e, element_type, **kwargs), data))
+			return cls_real(
+				deserialize(e, element_type, **kwargs)
+				for e in data
+			)
 		else:
 			mismatch(cls_org)
 
@@ -311,6 +318,8 @@ def deserialize(
 	# Unsupported
 	else:
 		raise TypeError('Unsupported target class: {}'.format(cls))
+
+	raise RuntimeError('if-else chain escape')
 
 
 _NONE = object()
@@ -456,7 +465,9 @@ class Serializable(ABC):
 				setattr(self, attr_name, value)
 
 	def __init_from(self, data: dict):
-		self.__set_attributes(lambda attr_name: data.get(attr_name, _NONE), copy_default=True)
+		def value_provider(attr_name: str):
+			return data.get(attr_name, _NONE)
+		self.__set_attributes(value_provider, copy_default=True)
 
 	def merge_from(self, other: Self):
 		"""
@@ -473,7 +484,9 @@ class Serializable(ABC):
 
 		.. versionadded:: v2.9.0
 		"""
-		self.__set_attributes(lambda attr_name: getattr(other, attr_name, _NONE), copy_default=False)
+		def value_provider(attr_name: str):
+			return getattr(other, attr_name, _NONE)
+		self.__set_attributes(value_provider, copy_default=False)
 
 	def copy(self, *, deep: bool = True) -> Self:
 		"""
