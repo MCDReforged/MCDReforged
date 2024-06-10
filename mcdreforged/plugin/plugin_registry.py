@@ -1,5 +1,6 @@
 import collections
-from typing import Dict, List, Callable, Any, TYPE_CHECKING, Union, NamedTuple, Optional
+import dataclasses
+from typing import Dict, List, Callable, Any, TYPE_CHECKING, Union, Optional
 
 from typing_extensions import override
 
@@ -48,12 +49,14 @@ class HelpMessage:
 		return 'HelpMessage[prefix={},message={},permission={}]'.format(self.prefix, self.message, self.permission)
 
 
-class PluginCommandHolder(NamedTuple):
+@dataclasses.dataclass(frozen=True)
+class PluginCommandHolder:
 	"""
 	A tuple for tracking the plugin of the node
 	"""
 	plugin: 'AbstractPlugin'
 	node: Literal
+	allow_duplicates: bool
 
 
 class _BasePluginRegistry:
@@ -97,10 +100,10 @@ class PluginRegistry(_BasePluginRegistry):
 	def register_event_listener(self, event_id: str, listener: EventListener):
 		self._event_listeners[event_id].append(listener)
 
-	def register_command(self, node: Literal):
+	def register_command(self, node: Literal, allow_duplicates: bool):
 		if not isinstance(node, Literal):
 			raise TypeError('Only Literal node is accepted to be a root node')
-		self._command_roots.append(PluginCommandHolder(self.plugin, node))
+		self._command_roots.append(PluginCommandHolder(self.plugin, node, allow_duplicates))
 
 	def register_translation(self, language: str, mapping: TranslationKeyDictNested):
 		# Translation should be updated immediately
@@ -152,8 +155,8 @@ class PluginRegistryStorage(_BasePluginRegistry):
 			listeners.sort()
 
 	def export_commands(self, exporter: Callable[[PluginCommandHolder], Any]):
-		for node in self._command_roots:
-			exporter(node)
+		for pch in self._command_roots:
+			exporter(pch)
 
 	def export_server_handler(self, exporter: Callable[[Optional[PluginProvidedServerHandlerHolder]], Any]):
 		if self._server_handler is not None:

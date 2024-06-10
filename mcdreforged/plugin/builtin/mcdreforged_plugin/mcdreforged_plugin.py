@@ -88,9 +88,8 @@ class MCDReforgedPlugin(PermanentPlugin):
 		self.server_interface.register_event_listener(MCDRPluginEvents.MCDR_STOP, on_mcdr_stop)
 		self.mcdr_server.task_executor.add_regular_task(on_load)
 
-	def __repr__(self):
-		# avoid using self.metadata here since it might not be initialized
-		return 'MCDReforgedPlugin[version={}]'.format(METADATA['version'])
+	def _create_repr_fields(self) -> dict:
+		return {'version': METADATA['version']}
 
 	@property
 	def control_command_prefix(self):

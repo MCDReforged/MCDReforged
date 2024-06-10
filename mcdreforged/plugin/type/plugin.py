@@ -165,9 +165,9 @@ class AbstractPlugin:
 		self.plugin_registry.register_event_listener(event.id, listener)
 		self.mcdr_server.logger.mdebug('{} is registered for {}'.format(listener, event), option=DebugOption.PLUGIN)
 
-	def register_command(self, node: Literal):
+	def register_command(self, node: Literal, *, allow_duplicates: bool = False):
 		self.__assert_allow_to_register('command')
-		self.plugin_registry.register_command(node)
+		self.plugin_registry.register_command(node, allow_duplicates)
 		self.mcdr_server.logger.mdebug('{} registered command with root node {}'.format(self, node), option=DebugOption.PLUGIN)
 
 	def register_help_message(self, help_message: HelpMessage):

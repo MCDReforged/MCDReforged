@@ -78,13 +78,18 @@ class PluginServerInterface(ServerInterface):
 			event = LiteralEvent(event_id=event)
 		self.__plugin.register_event_listener(event, EventListener(self.__plugin, callback, priority))
 
-	def register_command(self, root_node: Literal) -> None:
+	def register_command(self, root_node: Literal, *, allow_duplicates: bool = False) -> None:
 		"""
 		Register a command for the current plugin
 
 		:param root_node: the root node of your command tree. It should be a :class:`~mcdreforged.command.builder.nodes.basic.Literal` node
+		:keyword allow_duplicates: If set to False (default), a warning will be printed if duplicated command root node is found.
+			If set to True, the warning will be suppressed as what it behaves before
+
+		.. versionadded:: v2.13.0
+			The *allow_duplicates* parameter
 		"""
-		self.__plugin.register_command(root_node)
+		self.__plugin.register_command(root_node, allow_duplicates=allow_duplicates)
 
 	def register_help_message(self, prefix: str, message: Union[MessageText, TranslationKeyDictRich], permission: int = PermissionLevel.MINIMUM_LEVEL) -> None:
 		"""
@@ -257,9 +262,9 @@ class PluginServerInterface(ServerInterface):
 		.. versionadded:: v2.2.0
 			The *encoding* parameter
 		.. versionadded:: v2.12.0
-			The *failure_policy* and *file_format* parameters
+			The *failure_policy* and *file_format* parameter
 		.. versionadded:: v2.13.0
-			The *data_processor* parameters
+			The *data_processor* parameter
 		"""
 		config_handler = SimpleConfigHandler(file_name, file_format, self.get_data_folder() if in_data_folder else '.')
 

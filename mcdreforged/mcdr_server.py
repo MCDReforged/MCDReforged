@@ -293,11 +293,11 @@ class MCDReforgedServer:
 		self.logger.info(future.get().to_rtext(self, show_path=True))
 
 	def on_plugin_registry_changed(self):
-		self.command_manager.clear_command()
 		self.__info_filter_holders.clear()
 
 		reg: 'PluginRegistryStorage' = self.plugin_manager.registry_storage
-		reg.export_commands(self.command_manager.register_command)
+		with self.command_manager.start_command_register() as command_register:
+			reg.export_commands(command_register)
 		reg.export_server_handler(self.server_handler_manager.set_plugin_provided_server_handler_holder)
 		reg.export_info_filters(self.__info_filter_holders.append)
 

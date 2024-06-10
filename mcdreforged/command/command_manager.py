@@ -2,6 +2,7 @@
 Handling MCDR commands
 """
 import collections
+import contextlib
 from enum import Enum, auto
 from typing import TYPE_CHECKING, Dict, List
 
@@ -31,12 +32,17 @@ class CommandManager:
 
 		self.__preserve_command_error_display_flag = False
 
-	def clear_command(self):
+	@contextlib.contextmanager
+	def start_command_register(self):
 		self.root_nodes.clear()
+		yield self.__register_one_command
+		for literal, pch_list in self.root_nodes.items():
+			if sum([not pch.allow_duplicates for pch in pch_list]) >= 2:
+				self.logger.warning('Found duplicated command root literal {!r}: {}'.format(literal, pch_list))
 
-	def register_command(self, plugin_node: PluginCommandHolder):
-		for literal in plugin_node.node.literals:
-			self.root_nodes[literal].append(plugin_node)
+	def __register_one_command(self, pch: PluginCommandHolder):
+		for literal in pch.node.literals:
+			self.root_nodes[literal].append(pch)
 
 	def _traverse(self, command: str, source: CommandSource, purpose: TraversePurpose) -> None or List[CommandSuggestion]:
 		def __translate_command_error_header(translation_key_: str, error_: CommandError) -> str:

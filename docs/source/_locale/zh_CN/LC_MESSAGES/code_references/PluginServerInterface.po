@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-05 01:11+0800\n"
+"POT-Creation-Date: 2024-06-10 23:57+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -88,9 +88,27 @@ msgstr "为当前插件注册一个指令"
 msgid ""
 "the root node of your command tree. It should be a "
 ":class:`~mcdreforged.command.builder.nodes.basic.Literal` node"
+msgstr "指令树的根节点。它应为一个 :class:`~mcdreforged.command.builder.nodes.basic.Literal` 节点"
+
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_command
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.save_config_simple
+#: of
+msgid "Keyword Arguments"
 msgstr ""
-"指令树的根节点。它应为一个 :class:`~mcdreforged.command.builder.nodes.basic.Literal` "
-"节点"
+
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_command:4
+#: of
+msgid ""
+"If set to False (default), a warning will be printed if duplicated "
+"command root node is found. If set to True, the warning will be "
+"suppressed as what it behaves before"
+msgstr "若设置为 False（默认值），则将在发现重复的命令根节点时输出警告信息。若设置为 True，将不会输出警告，和以前版本的表现一致"
+
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_command:7
+#: of
+msgid "The *allow_duplicates* parameter"
+msgstr "*allow_duplicates* 参数"
 
 #: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_help_message:1
 #: of
@@ -322,12 +340,6 @@ msgstr ""
 "一个储存着默认配置的 dict。当配置文件缺失时，这个参数是必须的，否则将抛出异常。如果 *target_class* 被给出并且 "
 "*default_config* 缺失，则当配置文件缺失时 *target_class* 的默认值将会被使用"
 
-#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple
-#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.save_config_simple
-#: of
-msgid "Keyword Arguments"
-msgstr ""
-
 #: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple:35
 #: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.save_config_simple:5
 #: of
@@ -402,12 +414,12 @@ msgstr "*encoding* 参数"
 
 #: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple:54
 #: of
-msgid "The *failure_policy* and *file_format* parameters"
+msgid "The *failure_policy* and *file_format* parameter"
 msgstr "*failure_policy* 和 *file_format* 参数"
 
 #: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple:56
 #: of
-msgid "The *data_processor* parameters"
+msgid "The *data_processor* parameter"
 msgstr "*data_processor* 参数"
 
 #: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.save_config_simple:1
@@ -434,4 +446,14 @@ msgstr "写入配置文件的编码方式。默认值 ``\"utf8\"``"
 #: of
 msgid "The *file_format* parameter"
 msgstr "*file_format* 参数"
+
+#~ msgid ""
+#~ "If set to True, the command will"
+#~ " be registered even if a command "
+#~ "with the same name already exists "
+#~ "in the command tree. If set to "
+#~ "False (default), then a warning will "
+#~ "be printed if duplicated command root"
+#~ " node is found"
+#~ msgstr ""
 
