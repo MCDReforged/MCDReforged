@@ -255,6 +255,7 @@ mcdreforged:
         duplicated_input: "发现正在进行的操作: {0}，请等待它执行完成"
         fetch_start: 正在更新插件仓库元数据
         fetch_done: 已更新插件仓库元数据
+        fetch_block_wait: 正在等待插件仓库元数据更新结束
         fetch_failed: '插件仓库元数据更新失败: {0}'
         browse_cmd: 点击以展示插件 {0} 于插件仓库中的信息
       browse:
@@ -309,7 +310,7 @@ mcdreforged:
         resolving_dependencies: 正在解析插件依赖 ...
         unknown_plugin_id: ID 为 {0} 的插件不存在
         resolution:
-          impossible: '插件依赖解析失败。无法满足的依赖项:'
+          impossible: '插件依赖解析失败。无法满足的依赖关系:'
           impossible_requirements: '{0} 依赖 {1}'
           error: '插件依赖解析出错: {0}'
           source_reason:

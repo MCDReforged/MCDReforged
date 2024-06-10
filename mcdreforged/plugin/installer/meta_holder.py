@@ -136,6 +136,7 @@ class BackgroundMetaFetcher(BackgroundThreadExecutor):
 class PersistCatalogueMetaRegistryHolder(CatalogueMetaRegistryHolder):
 	_FetchStartCallbackOpt = Optional[Callable[[bool], None]]
 	_FetchCallbackOpt = Optional[Callable[[Optional[Exception]], None]]
+	_FetchBlockedOpt = Optional[Callable[[], None]]
 
 	def __init__(self, mcdr_server: 'MCDReforgedServer', cache_path: Path, *, meta_json_url: str, meta_cache_ttl: float, meta_fetch_timeout: float):
 		super().__init__(meta_json_url=meta_json_url, meta_fetch_timeout=meta_fetch_timeout)
@@ -155,9 +156,21 @@ class PersistCatalogueMetaRegistryHolder(CatalogueMetaRegistryHolder):
 		self.__background_fetch_flag = True
 		return self.__meta
 
-	def get_registry_blocked(self, ignore_ttl: bool = False, start_callback: _FetchStartCallbackOpt = None, done_callback: _FetchCallbackOpt = None) -> MetaRegistry:
-		with self.__fetch_lock:
+	def get_registry_blocked(
+			self,
+			ignore_ttl: bool = False,
+			start_callback: _FetchStartCallbackOpt = None,
+			done_callback: _FetchCallbackOpt = None,
+			blocked_callback: _FetchBlockedOpt = None,
+	) -> MetaRegistry:
+		if not self.__fetch_lock.acquire(blocking=False):
+			if blocked_callback is not None:
+				blocked_callback()
+			self.__fetch_lock.acquire(blocking=True)
+		try:
 			self.__do_fetch(ignore_ttl=ignore_ttl, start_callback=start_callback, done_callback=done_callback)
+		finally:
+			self.__fetch_lock.release()
 		return self.__meta
 
 	def __load_cached_file(self):
@@ -207,7 +220,14 @@ class PersistCatalogueMetaRegistryHolder(CatalogueMetaRegistryHolder):
 				self.__background_fetch_flag = False
 				self.__do_fetch(ignore_ttl=False, show_error_stacktrace=False)
 
-	def __do_fetch(self, ignore_ttl: bool, start_callback: _FetchStartCallbackOpt = None, done_callback: _FetchCallbackOpt = None, *, show_error_stacktrace: bool = True):
+	def __do_fetch(
+			self,
+			ignore_ttl: bool,
+			start_callback: _FetchStartCallbackOpt = None,
+			done_callback: _FetchCallbackOpt = None,
+			*,
+			show_error_stacktrace: bool = True
+	):
 		"""
 		:return: true: processed (succeed or fail), false: skipped
 		"""

@@ -355,8 +355,16 @@ class PluginCommandPimExtension(SubCommand):
 			elif has_start_fetch:
 				source.reply(self.__tr('common.fetch_done'))
 
+		def blocked_callback():
+			source.reply(self.__tr('common.fetch_block_wait'))
+
 		has_start_fetch = False
-		return self.__meta_holder.get_registry_blocked(ignore_ttl=ignore_ttl, start_callback=start_fetch_callback, done_callback=done_callback)
+		return self.__meta_holder.get_registry_blocked(
+			ignore_ttl=ignore_ttl,
+			start_callback=start_fetch_callback,
+			done_callback=done_callback,
+			blocked_callback=blocked_callback,
+		)
 
 	def __handle_duplicated_input(self, source: CommandSource, context: CommandContext, op_func: callable, op_key: str, op_thread: Optional[threading.Thread]):
 		if op_func == type(self).cmd_install_plugins:

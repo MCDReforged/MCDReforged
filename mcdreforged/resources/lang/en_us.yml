@@ -255,6 +255,7 @@ mcdreforged:
         duplicated_input: "There's ongoing operations: {0}, please wait for it to completes"
         fetch_start: Fetching plugin catalogue meta registry
         fetch_done: Plugin catalogue meta registry fetch done
+        fetch_block_wait: Waiting for plugin catalogue meta registry fetch
         fetch_failed: 'Plugin catalogue meta registry fetch failed: {0}'
         browse_cmd: Click to display catalogue information for plugin {0}
       browse:

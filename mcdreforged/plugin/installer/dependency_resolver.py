@@ -23,7 +23,7 @@ class PluginRequirement:
 	def of(cls, req_str: str) -> 'PluginRequirement':
 		matched = re.match(r'^[a-z0-9_]{1,64}', req_str)
 		if matched is None:
-			raise ValueError('bad plugin requirement {}'.format(repr(req_str)))
+			raise ValueError('req_str {!r} does not start with a valid plugin id'.format(req_str))
 		plugin_id = matched.group(0)
 		requirement = VersionRequirement(req_str[len(plugin_id):])
 		return PluginRequirement(plugin_id, requirement)
