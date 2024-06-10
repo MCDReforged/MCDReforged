@@ -339,11 +339,11 @@ class MCDReforgedServer:
 
 	def add_flag(self, flag: MCDReforgedFlag):
 		self.__flags |= flag
-		self.logger.debug('Added MCDReforgedFlag {}'.format(flag), option=DebugOption.MCDR)
+		self.logger.mdebug('Added MCDReforgedFlag {}'.format(flag), option=DebugOption.MCDR)
 
 	def remove_flag(self, flag: MCDReforgedFlag):
 		self.__flags &= ~flag
-		self.logger.debug('Removed MCDReforgedFlag {}'.format(flag), option=DebugOption.MCDR)
+		self.logger.mdebug('Removed MCDReforgedFlag {}'.format(flag), option=DebugOption.MCDR)
 
 	# State
 
@@ -358,13 +358,13 @@ class MCDReforgedServer:
 
 	def set_server_state(self, state: ServerState):
 		self.server_state = state
-		self.logger.debug('Server state has set to "{}"'.format(state), option=DebugOption.MCDR)
+		self.logger.mdebug('Server state has set to "{}"'.format(state), option=DebugOption.MCDR)
 		with self.server_state_cv:
 			self.server_state_cv.notify_all()
 
 	def set_mcdr_state(self, state: MCDReforgedState):
 		self.mcdr_state = state
-		self.logger.debug('MCDR state has set to "{}"'.format(state), option=DebugOption.MCDR)
+		self.logger.mdebug('MCDR state has set to "{}"'.format(state), option=DebugOption.MCDR)
 
 	def should_keep_looping(self) -> bool:
 		"""
@@ -592,13 +592,13 @@ class MCDReforgedServer:
 			info = self.server_handler_manager.get_current_handler().parse_server_stdout(text)
 		except Exception:
 			if self.logger.should_log_debug(option=DebugOption.HANDLER):  # traceback.format_exc() is costly
-				self.logger.debug('Fail to parse text "{}" from stdout of the server, using raw handler'.format(text), no_check=True)
+				self.logger.mdebug('Fail to parse text "{}" from stdout of the server, using raw handler'.format(text), no_check=True)
 				for line in traceback.format_exc().splitlines():
-					self.logger.debug('    {}'.format(line), no_check=True)
+					self.logger.mdebug('    {}'.format(line), no_check=True)
 			info = self.server_handler_manager.get_basic_handler().parse_server_stdout(text)
 		else:
 			if self.logger.should_log_debug(option=DebugOption.HANDLER):
-				self.logger.debug('Parsed text from server stdout: {}'.format(info), no_check=True)
+				self.logger.mdebug('Parsed text from server stdout: {}'.format(info), no_check=True)
 		self.server_handler_manager.detect_text(text)
 		info.attach_mcdr_server(self)
 

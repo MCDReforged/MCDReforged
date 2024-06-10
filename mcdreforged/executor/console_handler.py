@@ -69,7 +69,7 @@ class ConsoleHandler(BackgroundThreadExecutor):
 					self.mcdr_server.logger.exception(self.__tr('parse_fail', text))
 				else:
 					if self.mcdr_server.logger.should_log_debug(DebugOption.HANDLER):
-						self.mcdr_server.logger.debug('Parsed text from {}: {}'.format(type(self).__name__, info), no_check=True)
+						self.mcdr_server.logger.mdebug('Parsed text from {}: {}'.format(type(self).__name__, info), no_check=True)
 					self.mcdr_server.reactor_manager.put_info(info)
 		except (KeyboardInterrupt, EOFError) as error:  # ctrl + c, ctrl + z
 			if not self.mcdr_server.is_mcdr_about_to_exit():

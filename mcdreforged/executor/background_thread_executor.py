@@ -1,13 +1,15 @@
-import logging
 import threading
 from abc import abstractmethod
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 
 from mcdreforged.utils import misc_util
 
+if TYPE_CHECKING:
+	from mcdreforged.utils.logger import MCDReforgedLogger
+
 
 class BackgroundThreadExecutor:
-	def __init__(self, logger: logging.Logger):
+	def __init__(self, logger: 'MCDReforgedLogger'):
 		self.logger = logger
 		self._executor_thread: Optional[threading.Thread] = None
 		self.__stopped_looping = False
@@ -23,7 +25,7 @@ class BackgroundThreadExecutor:
 		return not self.__stopped_looping
 
 	def start(self):
-		self.logger.debug('{} is starting'.format(self.get_name()))
+		self.logger.debug('BackgroundThreadExecutor {} is starting'.format(self.get_name()))
 		self._executor_thread = misc_util.start_thread(self.loop, (), self.get_name())
 		return self._executor_thread
 

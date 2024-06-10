@@ -3,8 +3,7 @@ Translation support
 """
 import collections
 import os
-from logging import Logger
-from typing import Optional, Set
+from typing import Optional, Set, TYPE_CHECKING
 
 from ruamel.yaml import YAML
 
@@ -13,11 +12,14 @@ from mcdreforged.minecraft.rtext.text import RTextBase
 from mcdreforged.utils import file_util, translation_util
 from mcdreforged.utils.types.message import TranslationStorage, MessageText
 
+if TYPE_CHECKING:
+	from mcdreforged.utils.logger import MCDReforgedLogger
+
 MCDR_LANGUAGE_DIRECTORY = core_constant.PACKAGE_PATH / 'resources' / 'lang'
 
 
 class TranslationManager:
-	def __init__(self, logger: Logger):
+	def __init__(self, logger: 'MCDReforgedLogger'):
 		self.logger = logger
 		self.language = core_constant.DEFAULT_LANGUAGE
 		self.translations: TranslationStorage = collections.defaultdict(dict)
@@ -34,7 +36,7 @@ class TranslationManager:
 				for key, text in translation_util.unpack_nest_translation(translations).items():
 					self.translations[key][language] = text
 				self.available_languages.add(language)
-				self.logger.debug('Loaded translation for {} with {} entries'.format(language, len(translations)))
+				self.logger.mdebug('Loaded translation for {} with {} entries'.format(language, len(translations)))
 			except Exception:
 				self.logger.exception('Failed to load language {} from "{}"'.format(language, file_path))
 

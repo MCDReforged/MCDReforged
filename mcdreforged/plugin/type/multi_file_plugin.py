@@ -105,7 +105,7 @@ class MultiFilePlugin(RegularPlugin, ABC):
 					elif file_extension in ['yml', 'yaml']:
 						translations = dict(YAML().load(file_handler))
 					else:
-						self.mcdr_server.logger.debug('Skipping unknown translation file {} in {}'.format(file_path, repr(self)), option=DebugOption.PLUGIN)
+						self.mcdr_server.logger.mdebug('Skipping unknown translation file {} in {}'.format(file_path, repr(self)), option=DebugOption.PLUGIN)
 						continue
 				self.register_translation(language, translations)
 			except Exception:

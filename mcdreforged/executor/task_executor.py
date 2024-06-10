@@ -72,7 +72,7 @@ class TaskExecutor(BackgroundThreadExecutor):
 				count += 1
 				other.task_queue.task_done()  # marked the extracted task as done
 				self.task_queue.put(task)
-		self.mcdr_server.logger.debug('Extracted {} tasks from the previous executor'.format(count), option=DebugOption.TASK_EXECUTOR)
+		self.mcdr_server.logger.mdebug('Extracted {} tasks from the previous executor'.format(count), option=DebugOption.TASK_EXECUTOR)
 
 	@override
 	def should_keep_looping(self) -> bool:

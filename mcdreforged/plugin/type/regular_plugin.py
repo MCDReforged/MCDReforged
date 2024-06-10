@@ -94,7 +94,7 @@ class RegularPlugin(AbstractPlugin, ABC):
 		for module_name in sys.modules.copy().keys():
 			if self.is_own_module(module_name):
 				rv = sys.modules.pop(module_name, None)
-				self.mcdr_server.logger.debug('Removed module {} when unloading plugin {}, success = {}'.format(module_name, repr(self), rv is not None), option=DebugOption.PLUGIN)
+				self.mcdr_server.logger.mdebug('Removed module {} when unloading plugin {}, success = {}'.format(module_name, repr(self), rv is not None), option=DebugOption.PLUGIN)
 
 	# --------------
 	#   Life Cycle
@@ -109,7 +109,7 @@ class RegularPlugin(AbstractPlugin, ABC):
 	def load(self):
 		self.assert_state({PluginState.UNINITIALIZED})
 		self.__do_load()
-		self.mcdr_server.logger.debug('{} {} loaded from {}, file modify time = {}'.format(self.__class_name, self, self.plugin_path, self.pretty_file_modify_time), option=DebugOption.PLUGIN)
+		self.mcdr_server.logger.mdebug('{} {} loaded from {}, file modify time = {}'.format(self.__class_name, self, self.plugin_path, self.pretty_file_modify_time), option=DebugOption.PLUGIN)
 
 	@override
 	def ready(self):

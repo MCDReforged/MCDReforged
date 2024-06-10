@@ -103,7 +103,7 @@ class PermissionManager:
 			level_name = self.get_default_permission_level()
 		PermissionLevel.from_value(level_name)  # validity check
 		self.get_permission_group_list(level_name).append(player)
-		self.mcdr_server.logger.debug('Added player {} with permission level {}'.format(player, level_name), option=DebugOption.PERMISSION)
+		self.mcdr_server.logger.mdebug('Added player {} with permission level {}'.format(player, level_name), option=DebugOption.PERMISSION)
 		self.storage.save()
 		return PermissionLevel.from_value(level_name).level
 
@@ -120,7 +120,7 @@ class PermissionManager:
 			if level is None:
 				break
 			self.get_permission_group_list(level).remove(player)
-		self.mcdr_server.logger.debug('Removed player {}'.format(player), option=DebugOption.PERMISSION)
+		self.mcdr_server.logger.mdebug('Removed player {}'.format(player), option=DebugOption.PERMISSION)
 		self.storage.save()
 
 	def set_permission_level(self, player: str, new_level: PermissionLevelItem):

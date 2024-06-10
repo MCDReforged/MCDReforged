@@ -40,7 +40,7 @@ class InfoReactorManager:
 				else:
 					if issubclass(reactor_class, AbstractInfoReactor):
 						self.reactors.append(reactor_class(self.mcdr_server))
-						self.mcdr_server.logger.debug('Loaded info reactor {} from {}'.format(reactor_class.__name__, class_path), option=DebugOption.REACTOR)
+						self.mcdr_server.logger.mdebug('Loaded info reactor {} from {}'.format(reactor_class.__name__, class_path), option=DebugOption.REACTOR)
 					else:
 						self.mcdr_server.logger.error('Wrong reactor class "{}", expected {} but found {}'.format(class_path, AbstractInfoReactor, reactor_class))
 

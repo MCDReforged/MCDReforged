@@ -56,7 +56,7 @@ class ServerHandlerManager:
 						handler = handler_class()
 						if handler.get_name() not in self.handlers:
 							add_handler(handler)
-							self.mcdr_server.logger.debug('Loaded info handler {} from {}'.format(handler_class.__name__, class_path), option=DebugOption.HANDLER)
+							self.mcdr_server.logger.mdebug('Loaded info handler {} from {}'.format(handler_class.__name__, class_path), option=DebugOption.HANDLER)
 						else:
 							self.mcdr_server.logger.error('Handler with name {} from path {} is already registered, ignored'.format(handler.get_name(), class_path))
 					else:

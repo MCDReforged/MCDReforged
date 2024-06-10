@@ -346,10 +346,10 @@ class PluginManager:
 
 		affected_plugins = [plg for plg in collected_plugins if plg not in selected_plugins_set]
 		if self.logger.should_log_debug(DebugOption.PLUGIN):
-			self.logger.debug('Collected {}x plugin'.format(len(collected_plugins)) + ':' if len(collected_plugins) > 0 else '', no_check=True)
+			self.logger.mdebug('Collected {}x plugin'.format(len(collected_plugins)) + (':' if len(collected_plugins) > 0 else ''), no_check=True)
 			if len(collected_plugins) > 0:
-				self.logger.debug('- selected {}x: {}'.format(len(selected_plugins), ', '.join(map(str, selected_plugins))), no_check=True)
-				self.logger.debug('- affected {}x: {}'.format(len(affected_plugins), ', '.join(map(str, affected_plugins))), no_check=True)
+				self.logger.mdebug('- selected {}x: {}'.format(len(selected_plugins), ', '.join(map(str, selected_plugins))), no_check=True)
+				self.logger.mdebug('- affected {}x: {}'.format(len(affected_plugins), ', '.join(map(str, affected_plugins))), no_check=True)
 		if len(affected_plugins) > 0:
 			self.logger.info('Collected {}x extra plugins for {} due to dependency associations: {}'.format(len(affected_plugins), operation_name, ', '.join(map(str, affected_plugins))))
 
@@ -442,9 +442,9 @@ class PluginManager:
 				self.logger.error(self.__tr('check_plugin_dependencies.item_failed', plugin, item.reason))
 				self.__unload_plugin(plugin)
 
-		self.logger.debug(self.__tr('check_plugin_dependencies.topo_order'), option=DebugOption.PLUGIN)
+		self.logger.mdebug(self.__tr('check_plugin_dependencies.topo_order'), option=DebugOption.PLUGIN)
 		for plugin in dependency_check_result.success_list:
-			self.logger.debug('- {}'.format(plugin), option=DebugOption.PLUGIN)
+			self.logger.mdebug('- {}'.format(plugin), option=DebugOption.PLUGIN)
 
 		# Expected plugin states:
 		#                   success_list        fail_list
@@ -546,7 +546,7 @@ class PluginManager:
 				finally:
 					self.__mani_thread = None
 			else:
-				self.logger.debug('Detected chained sync plugin manipulation, queueing', option=DebugOption.PLUGIN)
+				self.logger.mdebug('Detected chained sync plugin manipulation, queueing', option=DebugOption.PLUGIN)
 
 			return future
 
@@ -674,7 +674,7 @@ class PluginManager:
 		Event dispatch logic implementation
 		"""
 		if self.logger.should_log_debug(DebugOption.PLUGIN):
-			self.logger.debug('Dispatching {} with args ({})'.format(event, ', '.join([type(arg).__name__ for arg in args])), no_check=True)
+			self.logger.mdebug('Dispatching {} with args {}'.format(event, list(args)), no_check=True)
 		for listener in self.registry_storage.get_event_listeners(event.id):
 			self.trigger_listener(listener, args)
 

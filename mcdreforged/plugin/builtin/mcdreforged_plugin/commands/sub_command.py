@@ -59,7 +59,7 @@ class SubCommand(ABC):
 
 	def log_debug(self, *args, **kwargs):
 		kwargs['option'] = DebugOption.COMMAND
-		self.mcdr_server.logger.debug(*args, **kwargs)
+		self.mcdr_server.logger.mdebug(*args, **kwargs)
 
 	@property
 	def mcdr_server(self) -> 'MCDReforgedServer':

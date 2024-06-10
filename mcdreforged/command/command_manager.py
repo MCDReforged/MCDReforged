@@ -78,7 +78,7 @@ class CommandManager:
 					try:
 						error.set_message(__translate_command_error_header(translation_key, error))
 					except KeyError:
-						self.logger.debug('Fail to translated command error with key {}'.format(translation_key), option=DebugOption.COMMAND)
+						self.logger.mdebug('Fail to translated command error with key {}'.format(translation_key), option=DebugOption.COMMAND)
 					source.reply(error.to_rtext())
 			except Exception as error:
 				data = {

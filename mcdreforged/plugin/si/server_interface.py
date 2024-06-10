@@ -442,7 +442,7 @@ class ServerInterface:
 		"""
 		logger = self.logger
 		if isinstance(logger, MCDReforgedLogger):  # make type checker happy
-			logger.debug('Sending command "{}"'.format(text), option=DebugOption.PLUGIN)
+			logger.mdebug('Sending command "{}"'.format(text), option=DebugOption.PLUGIN)
 		self._mcdr_server.send(text, encoding=encoding)
 
 	@property

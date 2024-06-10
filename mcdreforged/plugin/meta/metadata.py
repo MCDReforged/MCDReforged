@@ -80,7 +80,7 @@ class Metadata:
 
 		def warn(*args, **kwargs):
 			if plugin is not None:
-				plugin.mcdr_server.logger.warning(*args, **kwargs)
+				plugin.mcdr_server.logger.warning(*args, **kwargs, stacklevel=3)
 
 		plugin_name_text = repr(plugin)
 

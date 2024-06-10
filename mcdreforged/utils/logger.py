@@ -12,7 +12,7 @@ from contextlib import contextmanager
 from enum import auto, Flag
 from pathlib import Path
 from threading import local, Lock
-from typing import Dict, Optional, List, IO, Type
+from typing import Dict, Optional, List, IO, Type, Any
 
 from colorlog import ColoredFormatter
 
@@ -266,7 +266,7 @@ class MCDReforgedLogger(logging.Logger):
 		self.console_handler.setFormatter(self.CONSOLE_FORMATTER)
 
 		self.addHandler(self.console_handler)
-		self.setLevel(logging.DEBUG)
+		self.setLevel(logging.INFO)
 
 	def set_debug_options(self, debug_options: Dict[str, bool]):
 		cls = type(self)
@@ -275,7 +275,7 @@ class MCDReforgedLogger(logging.Logger):
 			if value:
 				option = DebugOption[key.upper()]
 				cls.debug_options |= option.mask
-				self.debug('Debug option {} is set to {}'.format(option, value), option=option)
+				self.mdebug('Debug option {} is set to {}'.format(option, value), option=option)
 
 	@classmethod
 	def should_log_debug(cls, option: Optional[DebugOption] = None):
@@ -285,19 +285,27 @@ class MCDReforgedLogger(logging.Logger):
 			flags |= option.mask
 		return (cls.debug_options & flags) != 0
 
-	def _log(self, *args, **kwargs) -> None:
+	def _log(self, level: int, msg: Any, args: tuple, **kwargs) -> None:
 		if self.__plugin_id is not None:
 			extra_args = kwargs.get('extra', {})
 			extra_args[PluginIdAwareFormatter.PLUGIN_ID_KEY] = self.__plugin_id
 			kwargs['extra'] = extra_args
 
 		# noinspection PyProtectedMember
-		super()._log(*args, **kwargs)
+		super()._log(level, msg, args, **kwargs)
 
-	def debug(self, *args, option: Optional[DebugOption] = None, no_check: bool = False):
-		if no_check or self.should_log_debug(option):
+	def mdebug(self, msg: Any, *args, option: Optional[DebugOption] = None, no_check: bool = False):
+		"""
+		mcdr debug logging
+		"""
+		if no_check or self.isEnabledFor(logging.DEBUG) or self.should_log_debug(option):
 			with MCColorFormatControl.disable_minecraft_color_code_transform():
-				super().debug(*args, stacklevel=3)
+				self._log(logging.DEBUG, msg, args, stacklevel=2)
+
+	def debug(self, msg: Any, *args, **kwargs):
+		if self.isEnabledFor(logging.DEBUG) or self.should_log_debug(DebugOption.ALL):
+			with MCColorFormatControl.disable_minecraft_color_code_transform():
+				self._log(logging.DEBUG, msg, args, **kwargs, stacklevel=2)
 
 	def set_file(self, file_path: str):
 		"""
