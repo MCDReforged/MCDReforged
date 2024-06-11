@@ -30,8 +30,9 @@ SerializableType = TypeVar('SerializableType', bound=Serializable)
 
 class PluginServerInterface(ServerInterface):
 	"""
-	Derived from :class:`ServerInterface`, :class:`PluginServerInterface` adds the ability
-	for plugins to control the plugin itself on the basis of :class:`ServerInterface`
+	Derived from :class:`~mcdreforged.plugin.si.server_interface.ServerInterface`,
+	:class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface` adds the ability
+	for plugins to control the plugin itself on the basis of :class:`~mcdreforged.plugin.si.server_interface.ServerInterface`
 	"""
 
 	def __init__(self, mcdr_server: 'MCDReforgedServer', plugin: AbstractPlugin):

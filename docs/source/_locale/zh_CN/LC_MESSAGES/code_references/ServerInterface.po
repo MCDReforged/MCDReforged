@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-12 02:27+0800\n"
+"POT-Creation-Date: 2024-06-12 02:32+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,13 +28,15 @@ msgstr ":doc:`API  包 </plugin_dev/api>` 路径: ``mcdreforged.api.types``"
 #: mcdreforged.plugin.si.server_interface.ServerInterface:1 of
 msgid ""
 "ServerInterface is the interface with lots of API for plugins to interact"
-" with the server. Its subclass :class:`PluginServerInterface` contains "
-"extra APIs for plugins to control the plugin itself"
+" with the server. Its subclass "
+":class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`"
+" contains extra APIs for plugins to control the plugin itself"
 msgstr ""
-"ServerInterface 是插件与服务端交互的接口，包含许多 API。它的子类 :class:`PluginServerInterface`"
+"ServerInterface 是插件与服务端交互的接口，包含许多 API。它的子类 "
+":class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`"
 " 包含了额外的让插件控制插件自己的 API"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface:4 of
+#: mcdreforged.plugin.si.server_interface.ServerInterface:5 of
 msgid ""
 "It's recommend to use ``server`` as the variable name of the "
 "ServerInterface. This is widely used in this document"
@@ -53,39 +55,60 @@ msgstr "一个类方法，用于为插件在任何地方获取一个 ServerInter
 #: mcdreforged.plugin.si.server_interface.ServerInterface.as_basic_server_interface:1
 #: of
 msgid ""
-"Return a :class:`ServerInterface` instance. The type of the return value "
-"is exactly the :class:`ServerInterface`"
-msgstr "返回一个 :class:`ServerInterface` 实例。返回值的类型是 :class:`ServerInterface`"
+"Return a :class:`~mcdreforged.plugin.si.server_interface.ServerInterface`"
+" instance. The type of the return value is exactly the "
+":class:`~mcdreforged.plugin.si.server_interface.ServerInterface`"
+msgstr ""
+"返回一个 :class:`~mcdreforged.plugin.si.server_interface.ServerInterface` "
+"实例。返回值的类型是 "
+":class:`~mcdreforged.plugin.si.server_interface.ServerInterface`"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.as_basic_server_interface:3
+#: mcdreforged.plugin.si.server_interface.ServerInterface.as_basic_server_interface:4
 #: of
 msgid ""
 "It's used for removing the plugin information inside "
-":class:`PluginServerInterface` when you need to send a "
-":class:`ServerInterface` as parameter"
+":class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`"
+" when you need to send a "
+":class:`~mcdreforged.plugin.si.server_interface.ServerInterface` as "
+"parameter"
 msgstr ""
-"它可用于在你想要传递一个 :class:`ServerInterface` 时，移除 :class:`ServerInterface` "
+"它可用于在你想要传递一个 "
+":class:`~mcdreforged.plugin.si.server_interface.ServerInterface` 时，移除 "
+":class:`~mcdreforged.plugin.si.server_interface.ServerInterface` "
 "中包含着的插件信息"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.as_plugin_server_interface:1
 #: of
-msgid "Return a :class:`PluginServerInterface` instance."
-msgstr "返回一个 :class:`PluginServerInterface` 实例"
+msgid ""
+"Return a "
+":class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`"
+" instance."
+msgstr ""
+"返回一个 "
+":class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`"
+" 实例"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.as_plugin_server_interface:3
 #: of
 msgid ""
-"If the object is exactly a :class:`PluginServerInterface` instance, "
-"return itself"
-msgstr "如果该对象就是一个 :class:`PluginServerInterface` 实例，则直接返回它自己"
+"If the object is exactly a "
+":class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`"
+" instance, return itself"
+msgstr ""
+"如果该对象就是一个 "
+":class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`"
+" 实例，则直接返回它自己"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.as_plugin_server_interface:5
 #: of
 msgid ""
 "If the plugin context is available, return the "
-":class:`PluginServerInterface` for the related plugin. Currently, plugin "
-"context is only available inside the following scenarios:"
-msgstr "如果当前存在可用的插件上下文，返回相关插件对应的 :class:`PluginServerInterface`。目前，插件上下文仅在如下场景中可用："
+":class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`"
+" for the related plugin. Currently, plugin context is only available "
+"inside the following scenarios:"
+msgstr ""
+"如果当前存在可用的插件上下文，返回相关插件对应的 "
+":class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`。目前，插件上下文仅在如下场景中可用："
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.as_plugin_server_interface:8
 #: of
@@ -123,8 +146,10 @@ msgstr "如果 MCDR 未在运行"
 #: mcdreforged.plugin.si.server_interface.ServerInterface.si_opt:1 of
 msgid ""
 "Alias / Shortform of :meth:`get_instance`, get an optional "
-":class:`ServerInterface` instance"
-msgstr ":meth:`get_instance` 的别名 / 缩写，返回一个可能存在的 :class:`ServerInterface` 实例"
+":class:`~mcdreforged.plugin.si.server_interface.ServerInterface` instance"
+msgstr ""
+":meth:`get_instance` 的别名 / 缩写，返回一个可能存在的 "
+":class:`~mcdreforged.plugin.si.server_interface.ServerInterface` 实例"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.disable_plugin
 #: mcdreforged.plugin.si.server_interface.ServerInterface.enable_plugin
@@ -148,8 +173,12 @@ msgid "Returns"
 msgstr "返回"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.si_opt:4 of
-msgid "The :class:`ServerInterface` instance, or None if failed"
-msgstr ":class:`ServerInterface` 实例。如果失败则为 None"
+msgid ""
+"The :class:`~mcdreforged.plugin.si.server_interface.ServerInterface` "
+"instance, or None if failed"
+msgstr ""
+":class:`~mcdreforged.plugin.si.server_interface.ServerInterface` "
+"实例。如果失败则为 None"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.psi:1 of
 msgid ""
@@ -159,27 +188,37 @@ msgstr "组合 :meth:`get_instance` + :meth:`as_plugin_server_interface` 的缩�
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.psi:4 of
 msgid ""
-"Get :class:`PluginServerInterface` failed. This might occur because MCDR "
-"is not running (see :meth:`si`), or plugin context is unavailable (see "
-":meth:`as_plugin_server_interface`)"
+"Get "
+":class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`"
+" failed. This might occur because MCDR is not running (see :meth:`si`), "
+"or plugin context is unavailable (see :meth:`as_plugin_server_interface`)"
 msgstr ""
-"获取 :class:`PluginServerInterface` 失败。原因可能是 MCDR 未在运行（见 "
-":meth:`si`），或者插件上下文不可用（见 :meth:`as_plugin_server_interface`）"
+"获取 "
+":class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`"
+" 失败。原因可能是 MCDR 未在运行（见 :meth:`si`），或者插件上下文不可用（见 "
+":meth:`as_plugin_server_interface`）"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.psi_opt:1 of
 msgid ""
 "Shortform of the combination of :meth:`get_instance` + "
 ":meth:`as_plugin_server_interface`, get an optional "
-":class:`PluginServerInterface` instance"
+":class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`"
+" instance"
 msgstr ""
 "组合 :meth:`get_instance` + :meth:`as_plugin_server_interface` "
-"的缩写，返回一个可能存在的 :class:`PluginServerInterface` 实例"
+"的缩写，返回一个可能存在的 "
+":class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`"
+" 实例"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.psi_opt:4 of
 msgid ""
-"The :class:`PluginServerInterface` instance for the current plugin, or "
-"None if failed"
-msgstr "当前插件的 :class:`PluginServerInterface` 实例。如果失败则为 None"
+"The "
+":class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`"
+" instance for the current plugin, or None if failed"
+msgstr ""
+"当前插件的 "
+":class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`"
+" 实例。如果失败则为 None"
 
 #: ../code_references/ServerInterface.rst:23
 msgid "Utils"
@@ -982,9 +1021,13 @@ msgstr ""
 #: mcdreforged.plugin.si.server_interface.ServerInterface.dispatch_event:22 of
 msgid ""
 "The argument that will be used to invoke the event listeners. An "
-":class:`PluginServerInterface` instance will be automatically added to "
-"the beginning of the argument list"
-msgstr "用于调用事件监听器的参数。一个 :class:`PluginServerInterface` 实例将被自动添加到参数列表的开头"
+":class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`"
+" instance will be automatically added to the beginning of the argument "
+"list"
+msgstr ""
+"用于调用事件监听器的参数。一个 "
+":class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`"
+" 实例将被自动添加到参数列表的开头"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.dispatch_event:24 of
 msgid ""

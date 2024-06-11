@@ -38,7 +38,8 @@ if TYPE_CHECKING:
 class ServerInterface:
 	"""
 	ServerInterface is the interface with lots of API for plugins to interact with the server.
-	Its subclass :class:`PluginServerInterface` contains extra APIs for plugins to control the plugin itself
+	Its subclass :class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`
+	contains extra APIs for plugins to control the plugin itself
 
 	It's recommend to use ``server`` as the variable name of the ServerInterface. This is widely used in this document
 	"""
@@ -91,19 +92,21 @@ class ServerInterface:
 
 	def as_basic_server_interface(self) -> 'ServerInterface':
 		"""
-		Return a :class:`ServerInterface` instance. The type of the return value is exactly the :class:`ServerInterface`
+		Return a :class:`~mcdreforged.plugin.si.server_interface.ServerInterface` instance.
+		The type of the return value is exactly the :class:`~mcdreforged.plugin.si.server_interface.ServerInterface`
 
-		It's used for removing the plugin information inside :class:`PluginServerInterface` when you need to send a :class:`ServerInterface` as parameter
+		It's used for removing the plugin information inside :class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`
+		when you need to send a :class:`~mcdreforged.plugin.si.server_interface.ServerInterface` as parameter
 		"""
 		return self.get_instance()
 
 	def as_plugin_server_interface(self) -> Optional['PluginServerInterface']:
 		"""
-		Return a :class:`PluginServerInterface` instance.
+		Return a :class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface` instance.
 
-		If the object is exactly a :class:`PluginServerInterface` instance, return itself
+		If the object is exactly a :class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface` instance, return itself
 
-		If the plugin context is available, return the :class:`PluginServerInterface` for the related plugin.
+		If the plugin context is available, return the :class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface` for the related plugin.
 		Currently, plugin context is only available inside the following scenarios:
 
 		1.  :ref:`Plugin entrypoint <plugin-entrypoint>` module loading
@@ -132,9 +135,9 @@ class ServerInterface:
 	def si_opt(cls) -> Optional['ServerInterface']:
 		"""
 		Alias / Shortform of :meth:`get_instance`,
-		get an optional :class:`ServerInterface` instance
+		get an optional :class:`~mcdreforged.plugin.si.server_interface.ServerInterface` instance
 
-		:return: The :class:`ServerInterface` instance, or None if failed
+		:return: The :class:`~mcdreforged.plugin.si.server_interface.ServerInterface` instance, or None if failed
 		"""
 		return cls.get_instance()
 
@@ -144,7 +147,7 @@ class ServerInterface:
 		Shortform of the combination of :meth:`get_instance` + :meth:`as_plugin_server_interface`,
 		and never returns None
 
-		:raise RuntimeError: Get :class:`PluginServerInterface` failed. This might occur because
+		:raise RuntimeError: Get :class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface` failed. This might occur because
 			MCDR is not running (see :meth:`si`),
 			or plugin context is unavailable (see :meth:`as_plugin_server_interface`)
 		"""
@@ -157,9 +160,9 @@ class ServerInterface:
 	def psi_opt(cls) -> Optional['PluginServerInterface']:
 		"""
 		Shortform of the combination of :meth:`get_instance` + :meth:`as_plugin_server_interface`,
-		get an optional :class:`PluginServerInterface` instance
+		get an optional :class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface` instance
 
-		:return: The :class:`PluginServerInterface` instance for the current plugin, or None if failed
+		:return: The :class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface` instance for the current plugin, or None if failed
 		"""
 		si = cls.get_instance()
 		if si is not None:
@@ -837,7 +840,7 @@ class ServerInterface:
 
 		:param event: The event to dispatch. It needs to be a :class:`~mcdreforged.plugin.plugin_event.PluginEvent`
 			instance. For simple usage, you can create a :class:`~mcdreforged.plugin.plugin_event.LiteralEvent` instance for this argument
-		:param args: The argument that will be used to invoke the event listeners. An :class:`PluginServerInterface` instance
+		:param args: The argument that will be used to invoke the event listeners. An :class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface` instance
 			will be automatically added to the beginning of the argument list
 		:keyword on_executor_thread: By default the event will be dispatched in a new task in task executor thread
 			If it's set to False. The event will be dispatched immediately
