@@ -60,6 +60,8 @@ class RItemClassic(RItem, ABC):
 	"""
 	A type of :class:`RItem` that can be represented with a classic "§"-prefixed formatting code,
 	or a "\\\\033[31m" styled console ANSI escape code
+
+	.. seealso:: Minecraft Wiki `Formatting codes <https://minecraft.wiki/w/Formatting_codes>`__ page
 	"""
 	def __init__(self, name: str, mc_code: str, console_code: str):
 		self.__name: str = name
