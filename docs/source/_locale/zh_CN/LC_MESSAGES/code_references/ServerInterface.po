@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-31 01:04+0800\n"
+"POT-Creation-Date: 2024-06-12 02:09+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -230,12 +230,12 @@ msgstr "见 :ref:`此处 <plugin-translation>` 以了解为你的插件注册翻
 #: mcdreforged.plugin.si.server_interface.ServerInterface.execute
 #: mcdreforged.plugin.si.server_interface.ServerInterface.execute_command
 #: mcdreforged.plugin.si.server_interface.ServerInterface.get_permission_level
-#: mcdreforged.plugin.si.server_interface.ServerInterface.get_plugin_file_loaded_mtime_ns
 #: mcdreforged.plugin.si.server_interface.ServerInterface.get_plugin_file_path
 #: mcdreforged.plugin.si.server_interface.ServerInterface.get_plugin_instance
 #: mcdreforged.plugin.si.server_interface.ServerInterface.get_plugin_metadata
 #: mcdreforged.plugin.si.server_interface.ServerInterface.get_preference
 #: mcdreforged.plugin.si.server_interface.ServerInterface.has_translation
+#: mcdreforged.plugin.si.server_interface.ServerInterface.is_plugin_file_changed
 #: mcdreforged.plugin.si.server_interface.ServerInterface.load_plugin
 #: mcdreforged.plugin.si.server_interface.ServerInterface.manipulate_plugins
 #: mcdreforged.plugin.si.server_interface.ServerInterface.modify_mcdr_config
@@ -655,29 +655,26 @@ msgstr "返回指定插件的文件路径。若插件不存在，则返回 None"
 msgid "The plugin id of the plugin to query file path"
 msgstr "要查询文件路径的插件的 ID"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.get_plugin_file_loaded_mtime_ns:1
+#: mcdreforged.plugin.si.server_interface.ServerInterface.is_plugin_file_changed:1
 #: of
 msgid ""
-"Return the file mtime (:external:attr:`os.stat_result.st_mtime_ns`) of "
-"the specified plugin when it was loaded, or None if the plugin doesn't "
-"exist"
-msgstr ""
-"返回指定插件在被加载时，其插件文件的 mtime（:external:attr:`os.stat_result.st_mtime_ns`）。若插件不存在，则返回 "
+"Return if the given plugin has its plugin file changed, or None if the "
+"plugin doesn't exist"
+msgstr "返回指定插件的文件是否有变化。若插件不存在，则返回 "
 "None"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.get_plugin_file_loaded_mtime_ns:4
+#: mcdreforged.plugin.si.server_interface.ServerInterface.is_plugin_file_changed:4
 #: of
 msgid ""
-"Notes: :ref:`plugin_dev/plugin_format:Directory Plugin` does not have "
-"mtime. In that case, the return value will always be -1"
+"Notes: :ref:`plugin_dev/plugin_format:Directory Plugin` is always "
+"considered as changed"
 msgstr ""
-"注意：因为 :ref:`plugin_dev/plugin_format:Directory Plugin` 没有 mtime "
-"的概念，这种场景下的返回值将为 -1"
+"注意：:ref:`plugin_dev/plugin_format:Directory Plugin` 的插件文件总被认为是有变化的"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.get_plugin_file_loaded_mtime_ns:7
+#: mcdreforged.plugin.si.server_interface.ServerInterface.is_plugin_file_changed:6
 #: of
-msgid "The plugin id of the plugin to query file mtime"
-msgstr "要查询文件 mtime 的插件的 ID"
+msgid "The id of the plugin to query file change state"
+msgstr "要查询文件是否有变化的插件的 ID"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.get_plugin_instance:1
 #: of

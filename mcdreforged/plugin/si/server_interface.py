@@ -549,22 +549,19 @@ class ServerInterface:
 			return str(plugin.file_modify_time)
 		return self.__existed_plugin_info_getter(plugin_id, getter, regular=True)
 
-	def get_plugin_file_loaded_mtime_ns(self, plugin_id: str) -> Optional[int]:
+	def is_plugin_file_changed(self, plugin_id: str) -> Optional[bool]:
 		"""
-		Return the file mtime (:external:attr:`os.stat_result.st_mtime_ns`) of the specified plugin when it was loaded,
+		Return if the given plugin has its plugin file changed,
 		or None if the plugin doesn't exist
 
-		Notes: :ref:`plugin_dev/plugin_format:Directory Plugin` does not have mtime.
-		In that case, the return value will always be -1
+		Notes: :ref:`plugin_dev/plugin_format:Directory Plugin` is always considered as changed
 
-		:param plugin_id: The plugin id of the plugin to query file mtime
+		:param plugin_id: The id of the plugin to query file change state
 
 		.. versionadded:: v2.13.0
 		"""
-		def getter(plugin: 'RegularPlugin') -> int:
-			if plugin.file_modify_time is not None:
-				return plugin.file_modify_time
-			return -1
+		def getter(plugin: 'RegularPlugin') -> bool:
+			return plugin.file_changed()
 		return self.__existed_plugin_info_getter(plugin_id, getter, regular=True)
 
 	def get_plugin_instance(self, plugin_id: str) -> Optional[Any]:
