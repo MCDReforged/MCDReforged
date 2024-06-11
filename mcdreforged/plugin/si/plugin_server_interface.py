@@ -1,7 +1,7 @@
 import logging
 import os
-import typing
 from typing import Callable, TYPE_CHECKING, Union, Optional, IO, Type, TypeVar
+from typing import Literal as TLiteral
 
 from mcdreforged.command.builder.nodes.basic import Literal
 from mcdreforged.command.command_source import CommandSource, PluginCommandSource
@@ -204,7 +204,7 @@ class PluginServerInterface(ServerInterface):
 			target_class: Optional[Type[SerializableType]] = None,
 			encoding: str = 'utf8',
 			file_format: Optional[FileFormat] = None,
-			failure_policy: typing.Literal['regen', 'raise'] = 'regen',
+			failure_policy: TLiteral['regen', 'raise'] = 'regen',
 			data_processor: Optional[Callable[[dict], bool]] = None,
 	) -> Union[dict, SerializableType]:
 		"""

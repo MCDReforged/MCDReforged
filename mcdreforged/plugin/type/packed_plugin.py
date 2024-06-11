@@ -8,6 +8,7 @@ from zipfile import ZipFile
 
 from typing_extensions import override
 
+from mcdreforged.plugin.type.common import PluginFormat
 from mcdreforged.plugin.type.multi_file_plugin import MultiFilePlugin
 from mcdreforged.utils import path_util
 from mcdreforged.utils.exception import IllegalPluginStructure
@@ -20,6 +21,10 @@ class PackedPlugin(MultiFilePlugin):
 	def __init__(self, plugin_manager: 'PluginManager', file_path: Path):
 		super().__init__(plugin_manager, file_path)
 		self.__zip_file_cache: Optional[ZipFile] = None
+
+	@override
+	def get_type(self) -> PluginFormat:
+		return PluginFormat.packed
 
 	@property
 	def __zip_file(self) -> ZipFile:

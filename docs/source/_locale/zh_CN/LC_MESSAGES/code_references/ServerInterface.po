@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-12 02:09+0800\n"
+"POT-Creation-Date: 2024-06-12 02:27+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -231,6 +231,7 @@ msgstr "见 :ref:`此处 <plugin-translation>` 以了解为你的插件注册翻
 #: mcdreforged.plugin.si.server_interface.ServerInterface.execute_command
 #: mcdreforged.plugin.si.server_interface.ServerInterface.get_permission_level
 #: mcdreforged.plugin.si.server_interface.ServerInterface.get_plugin_file_path
+#: mcdreforged.plugin.si.server_interface.ServerInterface.get_plugin_format
 #: mcdreforged.plugin.si.server_interface.ServerInterface.get_plugin_instance
 #: mcdreforged.plugin.si.server_interface.ServerInterface.get_plugin_metadata
 #: mcdreforged.plugin.si.server_interface.ServerInterface.get_preference
@@ -640,8 +641,20 @@ msgstr "返回指定插件的元数据。若插件不存在，则返回 None"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.get_plugin_metadata:3
 #: of
-msgid "The plugin id of the plugin to query metadata"
-msgstr "要查询元数据的插件 ID"
+msgid "The id of the plugin to query metadata"
+msgstr "要查询元数据的插件的 ID"
+
+#: mcdreforged.plugin.si.server_interface.ServerInterface.get_plugin_format:1
+#: of
+msgid ""
+"Return the format of the specified plugin, or None if the plugin doesn't "
+"exist"
+msgstr "返回指定插件的格式。若插件不存在，则返回 None"
+
+#: mcdreforged.plugin.si.server_interface.ServerInterface.get_plugin_format:3
+#: of
+msgid "The id of the plugin to query format"
+msgstr "要查询格式的插件的 ID"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.get_plugin_file_path:1
 #: of
@@ -652,7 +665,7 @@ msgstr "返回指定插件的文件路径。若插件不存在，则返回 None"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.get_plugin_file_path:3
 #: of
-msgid "The plugin id of the plugin to query file path"
+msgid "The id of the plugin to query file path"
 msgstr "要查询文件路径的插件的 ID"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.is_plugin_file_changed:1
@@ -660,16 +673,14 @@ msgstr "要查询文件路径的插件的 ID"
 msgid ""
 "Return if the given plugin has its plugin file changed, or None if the "
 "plugin doesn't exist"
-msgstr "返回指定插件的文件是否有变化。若插件不存在，则返回 "
-"None"
+msgstr "返回指定插件的文件是否有变化。若插件不存在，则返回 None"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.is_plugin_file_changed:4
 #: of
 msgid ""
 "Notes: :ref:`plugin_dev/plugin_format:Directory Plugin` is always "
 "considered as changed"
-msgstr ""
-"注意：:ref:`plugin_dev/plugin_format:Directory Plugin` 的插件文件总被认为是有变化的"
+msgstr "注意：:ref:`plugin_dev/plugin_format:Directory Plugin` 的插件文件总被认为是有变化的"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.is_plugin_file_changed:6
 #: of
@@ -712,7 +723,7 @@ msgstr "另一个需要我的 API 插件的插件"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.get_plugin_instance:19
 #: of
-msgid "The plugin id of the plugin you want to get entrypoint module instance"
+msgid "The id of the plugin you want to get entrypoint module instance"
 msgstr "要获取入口点模块实例的插件 ID"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.get_plugin_instance:20
@@ -748,17 +759,17 @@ msgid ""
 "metadata) as key-value pair"
 msgstr "返回一个包含所有加载的插件元数据的字典，键值对为 (插件 id, 元数据)"
 
-#: ../code_references/ServerInterface.rst:72
+#: ../code_references/ServerInterface.rst:73
 msgid "Plugin Operations"
 msgstr "插件操作"
 
-#: ../code_references/ServerInterface.rst:75
+#: ../code_references/ServerInterface.rst:76
 msgid ""
 "All plugin manipulation will trigger a dependency check, which might "
 "cause unwanted plugin operations"
 msgstr "所有的插件操作都会触发依赖性检查——这可能会导致不必要的插件操作"
 
-#: ../code_references/ServerInterface.rst:77
+#: ../code_references/ServerInterface.rst:78
 msgid ""
 "It's not suggested to trigger plugin operations during :ref:`on_load "
 "<event-plugin-load>` or :ref:`on_unload <event-plugin-unload>` plugin "
@@ -768,7 +779,7 @@ msgstr ""
 "不推荐在插件事件 :ref:`插件被加载 <event-plugin-load>` 或 :ref:`插件被卸载 <event-plugin-"
 "unload>` 期间进行插件操作在这些事件发生时，MCDR 正处于一次进行中的插件操作流程之中，此时并不适合触发另一次插件操作"
 
-#: ../code_references/ServerInterface.rst:80
+#: ../code_references/ServerInterface.rst:81
 msgid ""
 "If you do trigger a plugin operation during :ref:`on_load <event-plugin-"
 "load>` or :ref:`on_unload <event-plugin-unload>` plugin events, MCDR will"
@@ -981,7 +992,7 @@ msgid ""
 "thread If it's set to False. The event will be dispatched immediately"
 msgstr "在默认值的情况下，该事件会被派发至任务执行者 (task executor) 线程中分发。如果它被设置为 False，则事件将会被立即分发"
 
-#: ../code_references/ServerInterface.rst:94
+#: ../code_references/ServerInterface.rst:95
 msgid "Configuration"
 msgstr "配置"
 
@@ -1040,7 +1051,7 @@ msgstr "其效果与指令 ``!!MCDR reload config`` 相同"
 msgid "If the config changing messages should be logged"
 msgstr "是否输出配置文件变更的相关日志"
 
-#: ../code_references/ServerInterface.rst:102
+#: ../code_references/ServerInterface.rst:103
 msgid "Permission"
 msgstr "权限"
 
@@ -1105,7 +1116,7 @@ msgstr "从权限文件重载 MCDR 的权限数据"
 msgid "It has the same effect as command ``!!MCDR reload permission``"
 msgstr "其效果与指令 ``!!MCDR reload permission`` 相同"
 
-#: ../code_references/ServerInterface.rst:109
+#: ../code_references/ServerInterface.rst:110
 msgid "Command"
 msgstr "指令"
 
@@ -1142,7 +1153,7 @@ msgid ""
 "fallback command source"
 msgstr "用于执行该条指令的指令源。如果它未被指定，MCDR 将会使用 :meth:`get_plugin_command_source` 来获得默认的指令源"
 
-#: ../code_references/ServerInterface.rst:115
+#: ../code_references/ServerInterface.rst:116
 msgid "Preference"
 msgstr "偏好"
 
@@ -1189,7 +1200,7 @@ msgstr "你要设置的偏好的对象"
 msgid "The preference to be set"
 msgstr "设置给定对象的 MCDR 偏好"
 
-#: ../code_references/ServerInterface.rst:122
+#: ../code_references/ServerInterface.rst:123
 msgid "Misc"
 msgstr "杂项"
 

@@ -7,6 +7,7 @@ from typing import IO, TYPE_CHECKING, Collection
 from typing_extensions import override
 
 from mcdreforged.constants import plugin_constant
+from mcdreforged.plugin.type.common import PluginFormat
 from mcdreforged.plugin.type.multi_file_plugin import MultiFilePlugin
 from mcdreforged.utils import class_util
 from mcdreforged.utils.exception import IllegalPluginStructure
@@ -49,6 +50,10 @@ class _DirectoryPluginBase(MultiFilePlugin, ABC):
 
 
 class DirectoryPlugin(_DirectoryPluginBase):
+	@override
+	def get_type(self) -> PluginFormat:
+		return PluginFormat.directory
+
 	@property
 	@override
 	def _file_root(self) -> Path:
@@ -62,6 +67,10 @@ class LinkedDirectoryPlugin(_DirectoryPluginBase):
 		with open(self.link_file, 'r', encoding='utf8') as f:
 			target = class_util.check_type(json.load(f)['target'], str)
 		self.target_plugin_path = Path(target)
+
+	@override
+	def get_type(self) -> PluginFormat:
+		return PluginFormat.linked_directory
 
 	@property
 	@override

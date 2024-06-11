@@ -1,7 +1,6 @@
 """
 Single plugin class
 """
-import enum
 from abc import abstractmethod
 from typing import Tuple, Any, TYPE_CHECKING, Collection, Optional
 
@@ -13,6 +12,7 @@ from mcdreforged.plugin.meta.metadata import Metadata
 from mcdreforged.plugin.meta.version import Version
 from mcdreforged.plugin.plugin_event import MCDREvent, EventListener, PluginEvent
 from mcdreforged.plugin.plugin_registry import PluginRegistry, HelpMessage
+from mcdreforged.plugin.type.common import PluginState, PluginFormat
 from mcdreforged.utils import class_util
 from mcdreforged.utils.exception import IllegalCallError, IllegalStateError
 from mcdreforged.utils.logger import DebugOption
@@ -23,15 +23,6 @@ if TYPE_CHECKING:
 	from mcdreforged.plugin.plugin_manager import PluginManager
 	from mcdreforged.plugin.type.permanent_plugin import PermanentPlugin
 	from mcdreforged.plugin.type.regular_plugin import RegularPlugin
-
-
-class PluginState(enum.Enum):
-	UNINITIALIZED = enum.auto()  # just created the instance
-	LOADING = enum.auto()        # loading the .py entrance file / metadata of a multi-file plugin
-	LOADED = enum.auto()         # loaded the .py entrance file / metadata of a multi-file plugin
-	READY = enum.auto()          # registered module & default listeners & translations, now it's ready to do anything
-	UNLOADING = enum.auto()      # just removed from the plugin list, ready to call "on unload" event
-	UNLOADED = enum.auto()       # unloaded, should never access it
 
 
 class AbstractPlugin:
@@ -51,6 +42,10 @@ class AbstractPlugin:
 	def is_regular(self) -> TypeGuard['RegularPlugin']:
 		from mcdreforged.plugin.type.regular_plugin import RegularPlugin
 		return isinstance(self, RegularPlugin)
+
+	@abstractmethod
+	def get_type(self) -> PluginFormat:
+		raise NotImplementedError()
 
 	@abstractmethod
 	def get_metadata(self) -> Metadata:

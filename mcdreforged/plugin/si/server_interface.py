@@ -16,6 +16,7 @@ from mcdreforged.plugin import plugin_factory
 from mcdreforged.plugin.meta.metadata import Metadata
 from mcdreforged.plugin.operation_result import PluginOperationResult, PluginResultType
 from mcdreforged.plugin.plugin_event import PluginEvent, MCDRPluginEvents
+from mcdreforged.plugin.type.common import PluginFormat
 from mcdreforged.plugin.type.plugin import AbstractPlugin
 from mcdreforged.preference.preference_manager import PreferenceItem
 from mcdreforged.translation.translation_text import RTextMCDRTranslation
@@ -533,17 +534,29 @@ class ServerInterface:
 		"""
 		Return the metadata of the specified plugin, or None if the plugin doesn't exist
 
-		:param plugin_id: The plugin id of the plugin to query metadata
+		:param plugin_id: The id of the plugin to query metadata
 		"""
 		def getter(plugin: AbstractPlugin) -> Metadata:
 			return plugin.get_metadata()
+		return self.__existed_plugin_info_getter(plugin_id, getter, regular=False)
+
+	def get_plugin_format(self, plugin_id: str) -> Optional[PluginFormat]:
+		"""
+		Return the format of the specified plugin, or None if the plugin doesn't exist
+
+		:param plugin_id: The id of the plugin to query format
+
+		.. versionadded:: v2.13.0
+		"""
+		def getter(plugin: 'AbstractPlugin') -> PluginFormat:
+			return plugin.get_type()
 		return self.__existed_plugin_info_getter(plugin_id, getter, regular=False)
 
 	def get_plugin_file_path(self, plugin_id: str) -> Optional[str]:
 		"""
 		Return the file path of the specified plugin, or None if the plugin doesn't exist
 
-		:param plugin_id: The plugin id of the plugin to query file path
+		:param plugin_id: The id of the plugin to query file path
 		"""
 		def getter(plugin: 'RegularPlugin') -> str:
 			return str(plugin.file_modify_time)
@@ -584,7 +597,7 @@ class ServerInterface:
 
 				server.get_plugin_instance('my_api').some_api(an_item)
 
-		:param plugin_id: The plugin id of the plugin you want to get entrypoint module instance
+		:param plugin_id: The id of the plugin you want to get entrypoint module instance
 		:return: A entrypoint module instance, or None if the plugin doesn't exist
 		"""
 		def getter(plugin: 'RegularPlugin') -> Any:

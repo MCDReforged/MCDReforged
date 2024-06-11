@@ -11,7 +11,8 @@ from typing_extensions import override
 from mcdreforged.plugin.meta.metadata import Metadata
 from mcdreforged.plugin.plugin_event import MCDRPluginEvents, EventListener, PluginEvent
 from mcdreforged.plugin.plugin_registry import DEFAULT_LISTENER_PRIORITY
-from mcdreforged.plugin.type.plugin import AbstractPlugin, PluginState
+from mcdreforged.plugin.type.common import PluginState
+from mcdreforged.plugin.type.plugin import AbstractPlugin
 from mcdreforged.utils import time_util
 from mcdreforged.utils.exception import IllegalCallError
 from mcdreforged.utils.logger import DebugOption

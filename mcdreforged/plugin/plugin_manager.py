@@ -19,8 +19,9 @@ from mcdreforged.plugin.operation_result import PluginOperationResult, SingleOpe
 from mcdreforged.plugin.plugin_event import MCDRPluginEvents, EventListener, PluginEvent
 from mcdreforged.plugin.plugin_registry import PluginRegistryStorage
 from mcdreforged.plugin.plugin_thread import PluginThreadPool
+from mcdreforged.plugin.type.common import PluginState
 from mcdreforged.plugin.type.permanent_plugin import PermanentPlugin
-from mcdreforged.plugin.type.plugin import AbstractPlugin, PluginState
+from mcdreforged.plugin.type.plugin import AbstractPlugin
 from mcdreforged.plugin.type.regular_plugin import RegularPlugin
 from mcdreforged.utils import file_util, string_util, misc_util, class_util, path_util, function_util
 from mcdreforged.utils.future import Future

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-18 22:49+0800\n"
+"POT-Creation-Date: 2024-06-12 02:24+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,6 +22,35 @@ msgid "Plugin Stuffs"
 msgstr "插件相关"
 
 #: ../code_references/plugin.rst:6
+msgid "Attributes"
+msgstr "插件属性"
+
+#: mcdreforged.plugin.type.common.PluginFormat:1 of
+msgid ":doc:`Format of the plugin </plugin_dev/plugin_format>`"
+msgstr ":doc:`插件的格式 </plugin_dev/plugin_format>`"
+
+#: ../../docstring mcdreforged.plugin.type.common.PluginFormat.permanent:1 of
+msgid "MCDR builtin plugin"
+msgstr "MCDR 内置插件"
+
+#: ../../docstring mcdreforged.plugin.type.common.PluginFormat.solo:1 of
+msgid ":ref:`plugin_dev/plugin_format:Solo Plugin`"
+msgstr ":ref:`plugin_dev/plugin_format:Solo Plugin`"
+
+#: ../../docstring mcdreforged.plugin.type.common.PluginFormat.packed:1 of
+msgid ":ref:`plugin_dev/plugin_format:Packed Plugin`"
+msgstr ":ref:`plugin_dev/plugin_format:Packed Plugin`"
+
+#: ../../docstring mcdreforged.plugin.type.common.PluginFormat.directory:1 of
+msgid ":ref:`plugin_dev/plugin_format:Directory Plugin`"
+msgstr ":ref:`plugin_dev/plugin_format:Directory Plugin`"
+
+#: ../../docstring
+#: mcdreforged.plugin.type.common.PluginFormat.linked_directory:1 of
+msgid ":ref:`plugin_dev/plugin_format:Linked Directory Plugin`"
+msgstr ":ref:`plugin_dev/plugin_format:Linked Directory Plugin`"
+
+#: ../code_references/plugin.rst:13
 msgid "Metadata"
 msgstr "元数据"
 
@@ -175,7 +204,7 @@ msgstr ""
 "版本要求字符串，含若干个通过空格字符连接的版本谓词。例子: ``\">=1.0.x\"``, ``\"^2.9\"``, ``\">=1.2.0 "
 "<1.4.3\"``, `\"\"`"
 
-#: ../code_references/plugin.rst:20
+#: ../code_references/plugin.rst:27
 msgid "Plugin Event"
 msgstr "插件事件"
 
@@ -222,4 +251,7 @@ msgstr "一般来说，只有 MCDR 才被允许构造 :class:`MCDREvent`"
 #: mcdreforged.plugin.plugin_event.MCDRPluginEvents:1 of
 msgid "A collection of all possible :class:`MCDREvent` objects used in MCDR"
 msgstr "MCDR 中使用的，所有可能的 :class:`MCDREvent` 对象的集合"
+
+#~ msgid "An enumeration."
+#~ msgstr ""
 

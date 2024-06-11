@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING
 from typing_extensions import override
 
 from mcdreforged.plugin.meta.metadata import Metadata
+from mcdreforged.plugin.type.common import PluginFormat
 from mcdreforged.plugin.type.plugin import AbstractPlugin
 
 if TYPE_CHECKING:
@@ -14,6 +15,10 @@ class PermanentPlugin(AbstractPlugin, ABC):
 	def __init__(self, plugin_manager: 'PluginManager', metadata_dict: dict):
 		super().__init__(plugin_manager)
 		self.__metadata = Metadata(metadata_dict, plugin=self)
+
+	@override
+	def get_type(self) -> PluginFormat:
+		return PluginFormat.permanent
 
 	@override
 	def get_metadata(self) -> Metadata:

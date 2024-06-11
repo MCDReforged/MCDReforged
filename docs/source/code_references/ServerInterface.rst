@@ -60,6 +60,7 @@ Plugin Queries
 --------------
 
 .. automethod:: ServerInterface.get_plugin_metadata
+.. automethod:: ServerInterface.get_plugin_format
 .. automethod:: ServerInterface.get_plugin_file_path
 .. automethod:: ServerInterface.is_plugin_file_changed
 .. automethod:: ServerInterface.get_plugin_instance
