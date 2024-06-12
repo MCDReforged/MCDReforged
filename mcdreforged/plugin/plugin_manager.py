@@ -289,6 +289,11 @@ class PluginManager:
 	def __load_given_new_plugins(self, plugin_paths: List[Path]) -> SingleOperationResult:
 		result = SingleOperationResult()
 		for file_path in plugin_paths:
+			if (ex_pid := self.__plugin_file_paths.get(file_path.absolute())) is not None:
+				self.logger.warning('Skipped loading of an existing plugin {} at {}'.format(ex_pid, file_path))
+				result.fail(file_path)
+				continue
+
 			plugin = self.__load_plugin(file_path)
 			if plugin is None:
 				result.fail(file_path)
@@ -579,7 +584,7 @@ class PluginManager:
 
 		for path in to_load_paths:
 			if not self.verify_plugin_path_to_load(path):
-				raise ValueError('Given plugin path {!r} to load is outside of MCDR''s possible plugin directories {}'.format(path, self.plugin_directories))
+				raise ValueError('Given plugin path {!r} to load is outside of MCDR\'s possible plugin directories {}'.format(path, self.plugin_directories))
 
 		to_unload_plugin_ids = {p.get_id() for p in to_unload_plugins}
 		to_reload_plugin_ids = {p.get_id() for p in to_reload_plugins}
