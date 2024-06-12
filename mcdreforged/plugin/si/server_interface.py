@@ -562,7 +562,7 @@ class ServerInterface:
 		:param plugin_id: The id of the plugin to query file path
 		"""
 		def getter(plugin: 'RegularPlugin') -> str:
-			return str(plugin.file_modify_time)
+			return str(plugin.file_path)
 		return self.__existed_plugin_info_getter(plugin_id, getter, regular=True)
 
 	def is_plugin_file_changed(self, plugin_id: str) -> Optional[bool]:
