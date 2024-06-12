@@ -100,9 +100,8 @@ class CommandManager:
 					exc_info = True
 				self.logger.error('Error when executing command {}, {}'.format(
 					repr(command),
-					', '.join([f'{key}={value!r}' for key, value in data.items()]),
-					exc_info=exc_info
-				))
+					', '.join([f'{key}={value!r}' for key, value in data.items()])
+				), exc_info=exc_info)
 
 		if purpose == TraversePurpose.SUGGEST:
 			return suggestions
