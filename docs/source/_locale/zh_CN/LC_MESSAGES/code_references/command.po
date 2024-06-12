@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-20 00:47+0800\n"
+"POT-Creation-Date: 2024-06-11 16:48+0800\n"
 "PO-Revision-Date: 2021-01-23 17:24+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -52,8 +52,8 @@ msgstr "插件可以定义一个由 :class:`CommandSource` 继承而来的类来
 msgid "If the command source is a player command source"
 msgstr "指令源是否为玩家"
 
-#: mcdreforged.command.builder.command_builder_util.get_float
-#: mcdreforged.command.builder.command_builder_util.get_int
+#: mcdreforged.command.builder.command_builder_utils.get_float
+#: mcdreforged.command.builder.command_builder_utils.get_int
 #: mcdreforged.command.builder.exception.CommandError.get_error_segment
 #: mcdreforged.command.builder.exception.CommandError.get_failed_command
 #: mcdreforged.command.builder.exception.CommandError.get_parsed_command
@@ -151,10 +151,10 @@ msgstr "示例用法::"
 msgid "A helper method for testing permission requirement"
 msgstr "一个用于测试权限需求的工具方法"
 
-#: mcdreforged.command.builder.command_builder_util.get_element
-#: mcdreforged.command.builder.command_builder_util.get_float
-#: mcdreforged.command.builder.command_builder_util.get_int
-#: mcdreforged.command.builder.command_builder_util.remove_divider_prefix
+#: mcdreforged.command.builder.command_builder_utils.get_element
+#: mcdreforged.command.builder.command_builder_utils.get_float
+#: mcdreforged.command.builder.command_builder_utils.get_int
+#: mcdreforged.command.builder.command_builder_utils.remove_divider_prefix
 #: mcdreforged.command.builder.nodes.arguments.NumberNode.at_max
 #: mcdreforged.command.builder.nodes.arguments.NumberNode.at_min
 #: mcdreforged.command.builder.nodes.arguments.NumberNode.in_range
@@ -453,10 +453,10 @@ msgstr "设置该节点的指令建议提供函数"
 msgid ":class:`Literal` node does not support this method"
 msgstr "字面量节点 :class:`Literal` 不支持这个方法"
 
-#: mcdreforged.command.builder.command_builder_util.get_element:3
-#: mcdreforged.command.builder.command_builder_util.get_float:3
-#: mcdreforged.command.builder.command_builder_util.get_int:3
-#: mcdreforged.command.builder.command_builder_util.remove_divider_prefix:3
+#: mcdreforged.command.builder.command_builder_utils.get_element:3
+#: mcdreforged.command.builder.command_builder_utils.get_float:3
+#: mcdreforged.command.builder.command_builder_utils.get_int:3
+#: mcdreforged.command.builder.command_builder_utils.remove_divider_prefix:3
 #: mcdreforged.command.builder.nodes.basic.AbstractNode.suggests:5
 #: mcdreforged.command.builder.tools.SimpleCommandBuilder.arg:7
 #: mcdreforged.command.builder.tools.SimpleCommandBuilder.command:13 of
@@ -1444,41 +1444,50 @@ msgid ""
 "node"
 msgstr "从指令树的根节点到当前节点的路径"
 
-#: ../../docstring mcdreforged.command.builder.command_builder_util.DIVIDER:1
+#: ../../docstring mcdreforged.command.builder.command_builder_utils.DIVIDER:1
 #: of
 msgid "The char to divide elements in a command string —— space"
 msgstr "在指令字符串中用于分割元素的分隔符——空格"
 
-#: mcdreforged.command.builder.command_builder_util.remove_divider_prefix:1 of
+#: mcdreforged.command.builder.command_builder_utils.remove_divider_prefix:1 of
 msgid ""
 "Remove the element divider prefix of the given text. It's usually used "
 "before taking the next element in the command str"
 msgstr "移除给定文本的分隔符前缀。它通常于获取指令字符串的下一个元素时使用"
 
-#: mcdreforged.command.builder.command_builder_util.remove_divider_prefix:10 of
+#: mcdreforged.command.builder.command_builder_utils.remove_divider_prefix:10
+#: of
 msgid "The text for divider prefix removal"
 msgstr "将被移除分隔符前缀的文本"
 
-#: mcdreforged.command.builder.command_builder_util.get_element:1 of
+#: mcdreforged.command.builder.command_builder_utils.get_element:1 of
 msgid "Get an element from the remaining input"
 msgstr "从剩余的输入字符串中获取一个元素"
 
-#: mcdreforged.command.builder.command_builder_util.get_element:14
-#: mcdreforged.command.builder.command_builder_util.get_float:12
-#: mcdreforged.command.builder.command_builder_util.get_int:12 of
+#: mcdreforged.command.builder.command_builder_utils.get_element:14
+#: mcdreforged.command.builder.command_builder_utils.get_float:12
+#: mcdreforged.command.builder.command_builder_utils.get_int:12 of
 msgid "The remaining input to be parsed. It should not start with :data:`DIVIDER`"
 msgstr "将被解析的剩余输入串。它不应以 :data:`DIVIDER` 为前缀"
 
-#: mcdreforged.command.builder.command_builder_util.get_int:1 of
+#: mcdreforged.command.builder.command_builder_utils.get_int:1 of
 msgid "Get an int from the remaining input"
 msgstr "从剩余的输入字符串中获取一个 int"
 
-#: mcdreforged.command.builder.command_builder_util.get_float:13
-#: mcdreforged.command.builder.command_builder_util.get_int:13 of
+#: mcdreforged.command.builder.command_builder_utils.get_float:13
+#: mcdreforged.command.builder.command_builder_utils.get_int:13 of
 msgid "a tuple of value, char_read. The value will be None if parsing failed"
 msgstr "一个储存着 (值, 读取字符个数) 的元组。如果解析失败，值将会为 None"
 
-#: mcdreforged.command.builder.command_builder_util.get_float:1 of
+#: mcdreforged.command.builder.command_builder_utils.get_float:1 of
 msgid "Get a float from the remaining input"
 msgstr "从剩余的输入字符串中获取一个 float"
+
+#: ../code_references/command.rst:73
+msgid ""
+"Renamed ``command_builder_util`` to ``command_builder_utils``. The old "
+"name is still accessible from ``mcdreforged.api.command``"
+msgstr ""
+"``command_builder_util`` 被重命名为 ``command_builder_utils``。旧名字仍可从 "
+"``mcdreforged.api.command`` 中访问"
 

@@ -1,6 +1,6 @@
 import unittest
 
-from mcdreforged.utils.string_util import clean_console_color_code, clean_minecraft_color_code, hump_to_underline
+from mcdreforged.utils.string_utils import clean_console_color_code, clean_minecraft_color_code, hump_to_underline
 
 
 class MyTestCase(unittest.TestCase):

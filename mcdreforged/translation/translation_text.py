@@ -7,7 +7,7 @@ from typing_extensions import Self, override
 from mcdreforged.minecraft.rtext.style import RColor, RStyle, RAction
 from mcdreforged.minecraft.rtext.text import RTextBase, RText
 from mcdreforged.translation.functions import TranslateFunc
-from mcdreforged.utils import translation_util, class_util, function_util
+from mcdreforged.utils import translation_utils, class_utils, function_utils
 from mcdreforged.utils.types.message import TranslationKeyDictRich
 
 
@@ -36,7 +36,7 @@ class RTextMCDRTranslation(RTextBase):
 		self.translation_key: str = translation_key
 		self.args = args
 		self.kwargs = kwargs
-		self.__tr_func: TranslateFunc = function_util.always(RText(self.translation_key))
+		self.__tr_func: TranslateFunc = function_utils.always(RText(self.translation_key))
 		self.__post_process: List[Callable[[RTextBase], RTextBase]] = []
 
 		from mcdreforged.plugin.si.server_interface import ServerInterface
@@ -51,14 +51,14 @@ class RTextMCDRTranslation(RTextBase):
 	@classmethod
 	def from_translation_dict(cls, translation_dict: TranslationKeyDictRich) -> 'RTextMCDRTranslation':
 		def fake_tr(*_args, **_kwargs):
-			return translation_util.translate_from_dict(translation_dict, language=_kwargs['_mcdr_tr_language'])
+			return translation_utils.translate_from_dict(translation_dict, language=_kwargs['_mcdr_tr_language'])
 
 		return RTextMCDRTranslation('').set_translator(fake_tr)
 
 	def __get_translated_text(self) -> RTextBase:
 		language = getattr(self.__TLS, 'language', None)
 		if language is None:
-			language = translation_util.get_mcdr_language()
+			language = translation_utils.get_mcdr_language()
 		processed_text = self.__tr_func(self.translation_key, *self.args, **self.kwargs, _mcdr_tr_language=language)
 		processed_text = RTextBase.from_any(processed_text)
 		for process in self.__post_process:
@@ -148,4 +148,4 @@ class RTextMCDRTranslation(RTextBase):
 		return self
 
 	def __repr__(self) -> str:
-		return class_util.represent(self)
+		return class_utils.represent(self)

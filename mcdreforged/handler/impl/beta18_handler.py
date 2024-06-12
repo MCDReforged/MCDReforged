@@ -7,7 +7,7 @@ from mcdreforged.handler.impl import AbstractMinecraftHandler
 from mcdreforged.info_reactor.info import Info
 from mcdreforged.info_reactor.server_information import ServerInformation
 from mcdreforged.minecraft.rtext.text import RTextBase
-from mcdreforged.utils import string_util
+from mcdreforged.utils import string_utils
 from mcdreforged.utils.types.message import MessageText
 
 
@@ -22,7 +22,7 @@ class Beta18Handler(AbstractMinecraftHandler):
 			content = message.to_plain_text()
 		else:
 			content = str(message)
-		return string_util.clean_minecraft_color_code(content)
+		return string_utils.clean_minecraft_color_code(content)
 
 	@override
 	def get_send_message_command(self, target: str, message: MessageText, server_information: ServerInformation) -> Optional[str]:

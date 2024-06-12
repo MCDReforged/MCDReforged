@@ -9,7 +9,7 @@ from ruamel.yaml import YAML
 
 from mcdreforged.constants import core_constant
 from mcdreforged.minecraft.rtext.text import RTextBase
-from mcdreforged.utils import file_util, translation_util
+from mcdreforged.utils import file_utils, translation_utils
 from mcdreforged.utils.types.message import TranslationStorage, MessageText
 
 if TYPE_CHECKING:
@@ -28,12 +28,12 @@ class TranslationManager:
 	def load_translations(self):
 		self.translations.clear()
 		self.available_languages.clear()
-		for file_path in file_util.list_file_with_suffix(MCDR_LANGUAGE_DIRECTORY, core_constant.LANGUAGE_FILE_SUFFIX):
+		for file_path in file_utils.list_file_with_suffix(MCDR_LANGUAGE_DIRECTORY, core_constant.LANGUAGE_FILE_SUFFIX):
 			language, _ = os.path.basename(file_path).rsplit('.', 1)
 			try:
 				with open(os.path.join(MCDR_LANGUAGE_DIRECTORY, file_path), encoding='utf8') as file_handler:
 					translations = dict(YAML().load(file_handler))
-				for key, text in translation_util.unpack_nest_translation(translations).items():
+				for key, text in translation_utils.unpack_nest_translation(translations).items():
 					self.translations[key][language] = text
 				self.available_languages.add(language)
 				self.logger.mdebug('Loaded translation for {} with {} entries'.format(language, len(translations)))
@@ -61,10 +61,10 @@ class TranslationManager:
 
 		# Translating
 		try:
-			translated_formatter = translation_util.translate_from_dict(self.translations.get(key, {}), language, fallback_language=fallback_language)
+			translated_formatter = translation_utils.translate_from_dict(self.translations.get(key, {}), language, fallback_language=fallback_language)
 		except KeyError:
 			try:
-				translated_formatter = translation_util.translate_from_dict(plugin_translations.get(key, {}), language, fallback_language=fallback_language, default=None)
+				translated_formatter = translation_utils.translate_from_dict(plugin_translations.get(key, {}), language, fallback_language=fallback_language, default=None)
 			except KeyError:
 				translated_formatter = None
 

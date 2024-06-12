@@ -6,12 +6,12 @@ import contextlib
 from enum import Enum, auto
 from typing import TYPE_CHECKING, Dict, List
 
-import mcdreforged.command.builder.command_builder_util as utils
+import mcdreforged.command.builder.command_builder_utils as utils
 from mcdreforged.command.builder.exception import CommandError, RequirementNotMet
 from mcdreforged.command.builder.nodes.basic import CommandSuggestion, CommandSuggestions, CallbackError, EntryNode
 from mcdreforged.command.command_source import InfoCommandSource, CommandSource
 from mcdreforged.plugin.plugin_registry import PluginCommandHolder
-from mcdreforged.utils import string_util
+from mcdreforged.utils import string_utils
 from mcdreforged.utils.logger import DebugOption
 
 if TYPE_CHECKING:
@@ -80,7 +80,7 @@ class CommandManager:
 
 			except CommandError as error:
 				if not error.is_handled():
-					translation_key = 'mcdreforged.command_exception.{}'.format(string_util.hump_to_underline(type(error).__name__))
+					translation_key = 'mcdreforged.command_exception.{}'.format(string_utils.hump_to_underline(type(error).__name__))
 					try:
 						error.set_message(__translate_command_error_header(translation_key, error))
 					except KeyError:

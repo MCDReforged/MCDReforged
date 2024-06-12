@@ -9,7 +9,7 @@ from mcdreforged.minecraft.rtext.text import RText
 from mcdreforged.plugin.installer.downloader import ReleaseDownloader
 from mcdreforged.plugin.installer.types import MetaRegistry, PluginData
 from mcdreforged.utils.replier import Replier
-from mcdreforged.utils.text_util import Table
+from mcdreforged.utils.text_utils import Table
 from mcdreforged.utils.types.message import MessageText
 
 

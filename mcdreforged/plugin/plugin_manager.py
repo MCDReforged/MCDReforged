@@ -23,7 +23,7 @@ from mcdreforged.plugin.type.common import PluginState
 from mcdreforged.plugin.type.permanent_plugin import PermanentPlugin
 from mcdreforged.plugin.type.plugin import AbstractPlugin
 from mcdreforged.plugin.type.regular_plugin import RegularPlugin
-from mcdreforged.utils import file_util, string_util, misc_util, class_util, path_util, function_util
+from mcdreforged.utils import file_utils, string_utils, misc_utils, class_utils, path_utils, function_utils
 from mcdreforged.utils.future import Future
 from mcdreforged.utils.logger import DebugOption
 from mcdreforged.utils.thread_local_storage import ThreadLocalStorage
@@ -62,7 +62,7 @@ class PluginManager:
 
 	@classmethod
 	def touch_directory(cls):
-		file_util.touch_directory(plugin_constant.PLUGIN_CONFIG_DIRECTORY)
+		file_utils.touch_directory(plugin_constant.PLUGIN_CONFIG_DIRECTORY)
 
 	# --------------------------
 	#   Getters / Setters etc.
@@ -97,9 +97,9 @@ class PluginManager:
 	def set_plugin_directories(self, plugin_directories: Optional[List[str]]):
 		if plugin_directories is None:
 			plugin_directories = []
-		self.plugin_directories = [Path(pd) for pd in misc_util.unique_list(plugin_directories)]
+		self.plugin_directories = [Path(pd) for pd in misc_utils.unique_list(plugin_directories)]
 		for plugin_directory in self.plugin_directories:
-			file_util.touch_directory(plugin_directory)
+			file_utils.touch_directory(plugin_directory)
 
 	@contextmanager
 	def with_plugin_context(self, plugin: AbstractPlugin):
@@ -129,7 +129,7 @@ class PluginManager:
 	def verify_plugin_path_to_load(self, plugin_path: PathLike):
 		path = Path(plugin_path).absolute()
 		for plugin_dir in self.plugin_directories:
-			if path_util.is_relative_to(path, Path(plugin_dir).absolute()):
+			if path_utils.is_relative_to(path, Path(plugin_dir).absolute()):
 				return True
 		return False
 
@@ -321,7 +321,7 @@ class PluginManager:
 
 	def __collect_regular_plugins(
 			self, select_filter: Callable[[RegularPlugin], bool], specific: Optional[RegularPlugin],
-			operation_name: str = 'operate', collect_filter: Callable[[RegularPlugin], bool] = function_util.TRUE
+			operation_name: str = 'operate', collect_filter: Callable[[RegularPlugin], bool] = function_utils.TRUE
 	) -> List[RegularPlugin]:
 		"""
 		collected = selected + affected
@@ -339,7 +339,7 @@ class PluginManager:
 			affected_plugin_ids.extend(walker.get_children(plugin.get_id()))
 
 		collected_plugins: List[RegularPlugin] = []  # plugins, in topo order
-		for plugin_id in sorted(misc_util.unique_list(affected_plugin_ids), key=walker.get_topo_order):
+		for plugin_id in sorted(misc_utils.unique_list(affected_plugin_ids), key=walker.get_topo_order):
 			plugin = self.get_regular_plugin_from_id(plugin_id)
 			assert plugin is not None
 			if collect_filter(plugin):
@@ -511,7 +511,7 @@ class PluginManager:
 			return not plg.plugin_exists() or plg.plugin_path not in possible_paths_set
 
 		unload_result = self.__unload_given_plugins(unload_select_filter)
-		load_result = self.__collect_and_load_new_plugins(function_util.TRUE, possible_paths=possible_paths)
+		load_result = self.__collect_and_load_new_plugins(function_utils.TRUE, possible_paths=possible_paths)
 		reload_result = self.__reload_ready_plugins(reload_filter)
 
 		return self.__finalize_plugin_manipulation(load_result, unload_result, reload_result)
@@ -565,15 +565,15 @@ class PluginManager:
 		to_reload_plugins: List[RegularPlugin] = (reload or []).copy()
 
 		for path in to_load_paths:
-			class_util.check_type(path, Path)
+			class_utils.check_type(path, Path)
 		for plugin in to_unload_plugins:
-			class_util.check_type(plugin, RegularPlugin)
+			class_utils.check_type(plugin, RegularPlugin)
 		for plugin in to_reload_plugins:
-			class_util.check_type(plugin, RegularPlugin)
+			class_utils.check_type(plugin, RegularPlugin)
 
 		for path in (enable or []):
 			if plugin_factory.is_disabled_plugin(path):
-				new_file_path = path.parent / string_util.remove_suffix(path.name, plugin_constant.DISABLED_PLUGIN_FILE_SUFFIX)
+				new_file_path = path.parent / string_utils.remove_suffix(path.name, plugin_constant.DISABLED_PLUGIN_FILE_SUFFIX)
 				os.rename(path, new_file_path)
 				to_load_paths.append(new_file_path)
 
@@ -615,7 +615,7 @@ class PluginManager:
 		return future
 
 	def load_plugin(self, file_path: Path) -> Future[PluginOperationResult]:
-		class_util.check_type(file_path, Path)
+		class_utils.check_type(file_path, Path)
 
 		def equals_to_the_given_path(fp: Path) -> bool:
 			return fp == file_path
@@ -626,33 +626,33 @@ class PluginManager:
 		)
 
 	def unload_plugin(self, plugin: RegularPlugin) -> Future[PluginOperationResult]:
-		class_util.check_type(plugin, RegularPlugin)
+		class_utils.check_type(plugin, RegularPlugin)
 		return self.manipulate_plugins(
 			unload=[plugin],
 			entered_callback=lambda: self.logger.info(self.__tr('unload_plugin.entered', plugin)),
 		)
 
 	def reload_plugin(self, plugin: RegularPlugin) -> Future[PluginOperationResult]:
-		class_util.check_type(plugin, RegularPlugin)
+		class_utils.check_type(plugin, RegularPlugin)
 		return self.manipulate_plugins(
 			reload=[plugin],
 			entered_callback=lambda: self.logger.info(self.__tr('reload_plugin.entered', plugin)),
 		)
 
 	def enable_plugin(self, file_path: Path) -> Future[PluginOperationResult]:
-		class_util.check_type(file_path, Path)
+		class_utils.check_type(file_path, Path)
 		self.logger.info(self.__tr('enable_plugin.entered', file_path))
 		return self.manipulate_plugins(enable=[file_path])
 
 	def disable_plugin(self, plugin: RegularPlugin) -> Future[PluginOperationResult]:
-		class_util.check_type(plugin, RegularPlugin)
+		class_utils.check_type(plugin, RegularPlugin)
 		self.logger.info(self.__tr('disable_plugin.entered', plugin))
 		return self.manipulate_plugins(disable=[plugin])
 
 	def refresh_all_plugins(self) -> Future[PluginOperationResult]:
 		def refresh_all_plugins_action() -> PluginOperationResult:
 			self.logger.info(self.__tr('refresh_all_plugins.entered'))
-			return self.__refresh_plugins(function_util.TRUE)
+			return self.__refresh_plugins(function_utils.TRUE)
 
 		return self.__run_manipulation(refresh_all_plugins_action)
 

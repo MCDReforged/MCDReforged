@@ -12,7 +12,7 @@ from mcdreforged.info_reactor.info import Info
 from mcdreforged.info_reactor.server_information import ServerInformation
 from mcdreforged.minecraft.rtext.text import RTextBase
 from mcdreforged.plugin.meta.version import VersionParsingError
-from mcdreforged.utils import string_util
+from mcdreforged.utils import string_utils
 from mcdreforged.utils.types.message import MessageText
 
 
@@ -90,7 +90,7 @@ class AbstractMinecraftHandler(AbstractServerHandler, ABC):
 		raw_result = super()._get_server_stdout_raw_result(text)
 		# Minecraft <= 1.12.x might output minecraft color codes to the console
 		# Just remove that
-		raw_result.content = string_util.clean_minecraft_color_code(raw_result.content)
+		raw_result.content = string_utils.clean_minecraft_color_code(raw_result.content)
 		return raw_result
 
 	__player_name_regex = re.compile(r'[a-zA-Z0-9_]{3,16}')

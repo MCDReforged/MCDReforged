@@ -13,7 +13,7 @@ from mcdreforged.executor.background_thread_executor import BackgroundThreadExec
 from mcdreforged.minecraft.rtext.style import RAction, RColor, RStyle
 from mcdreforged.minecraft.rtext.text import RText, RTextBase
 from mcdreforged.plugin.meta.version import Version
-from mcdreforged.utils import misc_util, request_util
+from mcdreforged.utils import misc_utils, request_utils
 from mcdreforged.utils.types.message import MessageText
 
 if TYPE_CHECKING:
@@ -37,7 +37,7 @@ class UpdateHelper(BackgroundThreadExecutor):
 
 	def check_update(self, condition_check: Callable[[], bool], reply_func: Callable[[Union[str or RTextBase]], Any]):
 		self.__last_query_time = time.monotonic()
-		misc_util.start_thread(self.__check_update, (condition_check, reply_func), 'CheckUpdate')
+		misc_utils.start_thread(self.__check_update, (condition_check, reply_func), 'CheckUpdate')
 
 	def __check_update(self, condition_check: Callable[[], bool], reply_func: Callable[[MessageText], Any]):
 		if not condition_check():
@@ -88,5 +88,5 @@ class GithubApiFetcher:
 		self.__cached_response: Optional[dict] = None
 
 	def fetch(self) -> Optional[dict]:
-		buf = request_util.get_buf_multi(self.urls, 'UpdateHelper', timeout=10, max_size=32 * 1024)
+		buf = request_utils.get_buf_multi(self.urls, 'UpdateHelper', timeout=10, max_size=32 * 1024)
 		return json.loads(buf)

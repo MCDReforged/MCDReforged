@@ -6,7 +6,7 @@ from colorama import Style
 from typing_extensions import Self, override
 
 from mcdreforged.minecraft.rtext.style import RStyle, RColor, RAction, RColorClassic, RColorRGB, RItemClassic
-from mcdreforged.utils import class_util
+from mcdreforged.utils import class_utils
 
 
 class RTextBase(ABC):
@@ -411,7 +411,7 @@ class RText(RTextBase):
 		return copied
 
 	def __repr__(self) -> str:
-		return class_util.represent(self, fields={
+		return class_utils.represent(self, fields={
 			'text': self.__text,
 			'color': self.__color,
 			'styles': self.__styles,
@@ -513,7 +513,7 @@ class RTextList(RTextBase):
 		return copied
 
 	def __repr__(self) -> str:
-		return class_util.represent(self, {
+		return class_utils.represent(self, {
 			'header': None if self.header_empty else self.header,
 			'children': self.children
 		})
@@ -600,7 +600,7 @@ class RTextTranslation(RText):
 		return copied
 
 	def __repr__(self) -> str:
-		return class_util.represent(self, fields={
+		return class_utils.represent(self, fields={
 			'key': self.__translation_key,
 			'args': self.__args,
 			'fallback': self.__fallback,

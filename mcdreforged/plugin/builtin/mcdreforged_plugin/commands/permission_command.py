@@ -10,7 +10,7 @@ from mcdreforged.minecraft.rtext.style import RColor, RAction
 from mcdreforged.minecraft.rtext.text import RTextList, RText
 from mcdreforged.permission.permission_level import PermissionLevel
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.sub_command import SubCommand
-from mcdreforged.utils import string_util
+from mcdreforged.utils import string_utils
 
 
 class Validator:
@@ -106,10 +106,10 @@ class PermissionCommand(SubCommand):
 					if self.can_see_rtext(source):
 						texts += RTextList(
 							RText(' [✎]', color=RColor.gray)
-							.c(RAction.suggest_command, '{} permission set {} '.format(self.control_command_prefix, string_util.auto_quotes(player)))
+							.c(RAction.suggest_command, '{} permission set {} '.format(self.control_command_prefix, string_utils.auto_quotes(player)))
 							.h(self.tr('mcdr_command.list_permission.suggest_set', player)),
 							RText(' [×]', color=RColor.gray)
-							.c(RAction.suggest_command, '{} permission remove {}'.format(self.control_command_prefix, string_util.auto_quotes(player)))
+							.c(RAction.suggest_command, '{} permission remove {}'.format(self.control_command_prefix, string_utils.auto_quotes(player)))
 							.h(self.tr('mcdr_command.list_permission.suggest_disable', player)),
 						)
 					source.reply(texts)

@@ -9,7 +9,7 @@ from typing_extensions import override
 from mcdreforged.constants import plugin_constant
 from mcdreforged.plugin.type.common import PluginFormat
 from mcdreforged.plugin.type.multi_file_plugin import MultiFilePlugin
-from mcdreforged.utils import class_util
+from mcdreforged.utils import class_utils
 from mcdreforged.utils.exception import IllegalPluginStructure
 
 if TYPE_CHECKING:
@@ -65,7 +65,7 @@ class LinkedDirectoryPlugin(_DirectoryPluginBase):
 		super().__init__(plugin_manager, file_path)
 		self.link_file = file_path / plugin_constant.LINK_DIRECTORY_PLUGIN_FILE_NAME
 		with open(self.link_file, 'r', encoding='utf8') as f:
-			target = class_util.check_type(json.load(f)['target'], str)
+			target = class_utils.check_type(json.load(f)['target'], str)
 		self.target_plugin_path = Path(target)
 
 	@override

@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Optional
 
 from mcdreforged.plugin.installer.meta_holder import ReleaseData
-from mcdreforged.utils import request_util
+from mcdreforged.utils import request_utils
 from mcdreforged.utils.replier import Replier
 
 
@@ -44,7 +44,7 @@ class ReleaseDownloader:
 				self.logger.debug('Applied download overwrite with kwargs {}: {!r} -> {!r}'.format(kwargs, url, download_url))
 		else:
 			download_url = url
-		response = request_util.get_direct(download_url, 'download', timeout=self.download_timeout, stream=True)
+		response = request_utils.get_direct(download_url, 'download', timeout=self.download_timeout, stream=True)
 
 		length = int(response.headers.get('content-length'))
 		if length != self.release.file_size:

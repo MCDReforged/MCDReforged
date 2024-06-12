@@ -4,7 +4,7 @@ from typing import Optional, Dict, TYPE_CHECKING, Union
 
 from mcdreforged.command.command_source import CommandSource, PlayerCommandSource, ConsoleCommandSource
 from mcdreforged.constants import core_constant, plugin_constant
-from mcdreforged.utils import file_util
+from mcdreforged.utils import file_utils
 from mcdreforged.utils.serializer import Serializable, deserialize, serialize
 
 if TYPE_CHECKING:
@@ -49,7 +49,7 @@ class PreferenceManager:
 			dir_path = os.path.dirname(PREFERENCE_FILE)
 			if not os.path.isdir(dir_path):
 				os.makedirs(dir_path)
-			with file_util.safe_write(PREFERENCE_FILE, encoding='utf8') as file:
+			with file_utils.safe_write(PREFERENCE_FILE, encoding='utf8') as file:
 				json.dump(serialize(self.preferences), file, indent=4, ensure_ascii=False)
 		except Exception:
 			self.logger.exception('Failed to save preference file')

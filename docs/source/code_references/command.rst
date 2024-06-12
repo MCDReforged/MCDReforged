@@ -63,5 +63,12 @@ Misc
     :members:
 
 
-.. automodule:: mcdreforged.command.builder.command_builder_util
+.. automodule:: mcdreforged.command.builder.command_builder_utils
     :members:
+
+.. note::
+
+    .. versionchanged:: v2.13.0
+
+        Renamed ``command_builder_util`` to ``command_builder_utils``. The old name is still accessible from ``mcdreforged.api.command``
+

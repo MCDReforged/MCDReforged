@@ -4,7 +4,7 @@ from typing_extensions import override
 
 from mcdreforged.command.builder.common import CommandContext, ParseResult
 from mcdreforged.command.builder.nodes.basic import Literal
-from mcdreforged.utils import class_util
+from mcdreforged.utils import class_utils
 
 
 class CountingLiteral(Literal):
@@ -27,7 +27,7 @@ class CountingLiteral(Literal):
 		return 'CountingLiteral {} <{}>'.format(literal, self.counter_key)
 
 	def __repr__(self):
-		return class_util.represent(self, {
+		return class_utils.represent(self, {
 			'literals': self.literals,
 			'counter_key': self.counter_key,
 		})

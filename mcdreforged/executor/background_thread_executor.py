@@ -2,7 +2,7 @@ import threading
 from abc import abstractmethod
 from typing import Optional, TYPE_CHECKING
 
-from mcdreforged.utils import misc_util
+from mcdreforged.utils import misc_utils
 
 if TYPE_CHECKING:
 	from mcdreforged.utils.logger import MCDReforgedLogger
@@ -26,7 +26,7 @@ class BackgroundThreadExecutor:
 
 	def start(self):
 		self.logger.debug('BackgroundThreadExecutor {} is starting'.format(self.get_name()))
-		self._executor_thread = misc_util.start_thread(self.loop, (), self.get_name())
+		self._executor_thread = misc_utils.start_thread(self.loop, (), self.get_name())
 		return self._executor_thread
 
 	def stop(self):

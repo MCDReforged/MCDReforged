@@ -575,5 +575,5 @@ class Serializable(ABC):
 			if hasattr(self, attr_name):
 				fields[attr_name] = getattr(self, attr_name)
 
-		from mcdreforged.utils import class_util
-		return class_util.represent(self, fields)
+		from mcdreforged.utils import class_utils
+		return class_utils.represent(self, fields)

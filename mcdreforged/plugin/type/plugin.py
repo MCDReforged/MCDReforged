@@ -13,7 +13,7 @@ from mcdreforged.plugin.meta.version import Version
 from mcdreforged.plugin.plugin_event import MCDREvent, EventListener, PluginEvent
 from mcdreforged.plugin.plugin_registry import PluginRegistry, HelpMessage
 from mcdreforged.plugin.type.common import PluginState, PluginFormat
-from mcdreforged.utils import class_util
+from mcdreforged.utils import class_utils
 from mcdreforged.utils.exception import IllegalCallError, IllegalStateError
 from mcdreforged.utils.logger import DebugOption
 from mcdreforged.utils.types.message import TranslationKeyDictNested
@@ -80,7 +80,7 @@ class AbstractPlugin:
 		}
 
 	def __repr__(self):
-		return class_util.represent(self, fields=self._create_repr_fields())
+		return class_utils.represent(self, fields=self._create_repr_fields())
 
 	def __str__(self):
 		return self.get_name()

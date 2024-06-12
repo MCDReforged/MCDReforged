@@ -2,7 +2,7 @@ from typing_extensions import override
 
 from mcdreforged.handler.impl.bukkit_handler import BukkitHandler
 from mcdreforged.handler.impl.vanilla_handler import VanillaHandler
-from mcdreforged.utils import string_util
+from mcdreforged.utils import string_utils
 
 
 class CatServerHandler(BukkitHandler):
@@ -16,7 +16,7 @@ class CatServerHandler(BukkitHandler):
 
 	@staticmethod
 	def __cleaned_info(info):
-		info.content = string_util.clean_minecraft_color_code(info.content)
+		info.content = string_utils.clean_minecraft_color_code(info.content)
 		return info
 
 	@classmethod

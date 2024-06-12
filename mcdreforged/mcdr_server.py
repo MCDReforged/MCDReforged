@@ -34,7 +34,7 @@ from mcdreforged.plugin.si.server_interface import ServerInterface
 from mcdreforged.preference.preference_manager import PreferenceManager
 from mcdreforged.translation.translation_manager import TranslationManager
 from mcdreforged.translation.translator import Translator
-from mcdreforged.utils import file_util, request_util, misc_util
+from mcdreforged.utils import file_utils, request_utils, misc_utils
 from mcdreforged.utils.exception import ServerStartError, IllegalStateError
 from mcdreforged.utils.logger import DebugOption, MCDReforgedLogger, MCColorFormatControl
 from mcdreforged.utils.types.message import MessageText
@@ -97,7 +97,7 @@ class MCDReforgedServer:
 			# Prepare config / permission files if they're missing
 			if not self.config_manager.file_presents():
 				self.config_manager.save_default()
-				file_util.touch_directory(self.config.working_directory)  # create server/ folder
+				file_utils.touch_directory(self.config.working_directory)  # create server/ folder
 			if not self.permission_manager.file_presents():
 				self.permission_manager.save_default()
 
@@ -267,7 +267,7 @@ class MCDReforgedServer:
 				self.__decoding_method = [config.decoding or locale.getpreferredencoding()]
 			else:
 				self.__decoding_method = config.decoding.copy()
-			self.__decoding_method = misc_util.unique_list(self.__decoding_method)
+			self.__decoding_method = misc_utils.unique_list(self.__decoding_method)
 			if log:
 				self.logger.info(self.__tr('on_config_changed.encoding_decoding_set', self.__encoding_method, ','.join(self.__decoding_method)))
 
@@ -284,7 +284,7 @@ class MCDReforgedServer:
 			if log:
 				self.logger.info(self.__tr('on_config_changed.handler_set', config.handler))
 
-			request_util.set_proxies(config.http_proxy, config.https_proxy)
+			request_utils.set_proxies(config.http_proxy, config.https_proxy)
 
 			self.connect_rcon()
 

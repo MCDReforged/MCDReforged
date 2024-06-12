@@ -20,7 +20,7 @@ from mcdreforged.plugin.type.common import PluginFormat
 from mcdreforged.plugin.type.plugin import AbstractPlugin
 from mcdreforged.preference.preference_manager import PreferenceItem
 from mcdreforged.translation.translation_text import RTextMCDRTranslation
-from mcdreforged.utils import misc_util, file_util, class_util
+from mcdreforged.utils import misc_utils, file_utils, class_utils
 from mcdreforged.utils.exception import IllegalCallError
 from mcdreforged.utils.future import Future
 from mcdreforged.utils.logger import MCDReforgedLogger, DebugOption
@@ -492,7 +492,7 @@ class ServerInterface:
 		if self.is_server_running():
 			self.say(text, encoding=encoding)
 		with RTextMCDRTranslation.language_context(self._mcdr_server.preference_manager.get_console_preference().language):
-			misc_util.print_text_to_console(self.logger, text)
+			misc_utils.print_text_to_console(self.logger, text)
 
 	# noinspection PyMethodMayBeStatic
 	def reply(self, info: Info, text: MessageText, *, encoding: Optional[str] = None, console_text: Optional[MessageText] = None):
@@ -616,7 +616,7 @@ class ServerInterface:
 	def __get_files_in_plugin_directories(self) -> List[str]:
 		result: List[Path] = []
 		for plugin_directory in self._plugin_manager.plugin_directories:
-			result.extend(file_util.list_all(plugin_directory))
+			result.extend(file_utils.list_all(plugin_directory))
 		return list(map(str, result))
 
 	def get_unloaded_plugin_list(self) -> List[str]:
@@ -845,7 +845,7 @@ class ServerInterface:
 		:keyword on_executor_thread: By default the event will be dispatched in a new task in task executor thread
 			If it's set to False. The event will be dispatched immediately
 		"""
-		class_util.check_type(event, PluginEvent)
+		class_utils.check_type(event, PluginEvent)
 		if MCDRPluginEvents.contains_id(event.id):
 			raise ValueError('Cannot dispatch event with already exists event id {}'.format(event.id))
 		self._plugin_manager.dispatch_event(event, args, on_executor_thread=on_executor_thread)
@@ -980,8 +980,8 @@ class ServerInterface:
 		"""
 		if source is None:
 			source = self.get_plugin_command_source()
-		class_util.check_type(command, str)
-		class_util.check_type(source, CommandSource)
+		class_utils.check_type(command, str)
+		class_utils.check_type(source, CommandSource)
 		self._mcdr_server.command_manager.execute_command(command, source)
 
 	# ------------------------

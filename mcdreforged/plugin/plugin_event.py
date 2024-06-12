@@ -1,7 +1,7 @@
 import abc
 from typing import Dict, List, Callable, TYPE_CHECKING
 
-from mcdreforged.utils import class_util
+from mcdreforged.utils import class_utils
 
 if TYPE_CHECKING:
 	from mcdreforged.plugin.type.plugin import AbstractPlugin
@@ -21,7 +21,7 @@ class PluginEvent(abc.ABC):
 		"""The id of the plugin event"""
 
 	def __repr__(self):
-		return class_util.represent(self)
+		return class_utils.represent(self)
 
 
 class LiteralEvent(PluginEvent):

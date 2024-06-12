@@ -12,7 +12,7 @@ from mcdreforged.constants import plugin_constant
 from mcdreforged.plugin.installer.catalogue_access import PluginCatalogueAccess
 from mcdreforged.plugin.installer.meta_holder import CatalogueMetaRegistryHolder
 from mcdreforged.plugin.installer.types import MetaRegistry
-from mcdreforged.utils import function_util
+from mcdreforged.utils import function_utils
 from mcdreforged.utils.replier import NoopReplier, StdoutReplier, Replier
 
 
@@ -71,7 +71,7 @@ def cmd_download(replier: Replier, plugin_reqs: List[str], output_dir: str):
 
 
 def cmd_pipi(plugin_paths: List[str], extra_args: Optional[str] = None, *, quiet: bool = False):
-	writeln = print if not quiet else function_util.NONE
+	writeln = print if not quiet else function_utils.NONE
 
 	# read requirements.txt
 	requirement_lines: List[bytes] = []

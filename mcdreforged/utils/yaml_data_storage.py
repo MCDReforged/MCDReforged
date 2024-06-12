@@ -7,7 +7,7 @@ from ruamel.yaml import YAML
 from ruamel.yaml.comments import CommentedMap, CommentedSeq
 from ruamel.yaml.scalarbool import ScalarBoolean
 
-from mcdreforged.utils import resources_util, file_util
+from mcdreforged.utils import resources_utils, file_utils
 from mcdreforged.utils.lazy_item import LazyItem
 
 
@@ -32,7 +32,7 @@ class YamlDataStorage:
 		self._logger = logger
 		self.__file_path = file_path
 		self.__default_file_path = default_file_path
-		self.__default_data = LazyItem(lambda: resources_util.get_yaml(self.__default_file_path))
+		self.__default_data = LazyItem(lambda: resources_utils.get_yaml(self.__default_file_path))
 		self._data = CommentedMap()
 		self._data_operation_lock = RLock()
 
@@ -101,7 +101,7 @@ class YamlDataStorage:
 
 	def __save(self, data: CommentedMap):
 		self._pre_save(data)
-		file_util.safe_write_yaml(self.__file_path, data)
+		file_utils.safe_write_yaml(self.__file_path, data)
 
 	def save(self):
 		with self._data_operation_lock:

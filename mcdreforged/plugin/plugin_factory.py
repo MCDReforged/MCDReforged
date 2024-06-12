@@ -6,7 +6,7 @@ from mcdreforged.plugin.type.directory_plugin import DirectoryPlugin, LinkedDire
 from mcdreforged.plugin.type.packed_plugin import PackedPlugin
 from mcdreforged.plugin.type.regular_plugin import RegularPlugin
 from mcdreforged.plugin.type.solo_plugin import SoloPlugin
-from mcdreforged.utils import string_util, file_util
+from mcdreforged.utils import string_utils, file_utils
 from mcdreforged.utils.types.path_like import PathLike
 
 if TYPE_CHECKING:
@@ -17,8 +17,8 @@ def __get_plugin_class_from_path(file_path: PathLike, allow_disabled: bool) -> O
 	file_path = Path(file_path)
 	if file_path.is_file():
 		if file_path.name.endswith(plugin_constant.DISABLED_PLUGIN_FILE_SUFFIX) and allow_disabled:
-			file_path = file_path.parent / string_util.remove_suffix(file_path.name, plugin_constant.DISABLED_PLUGIN_FILE_SUFFIX)
-		suffix = file_util.get_file_suffix(file_path)
+			file_path = file_path.parent / string_utils.remove_suffix(file_path.name, plugin_constant.DISABLED_PLUGIN_FILE_SUFFIX)
+		suffix = file_utils.get_file_suffix(file_path)
 		if suffix == plugin_constant.SOLO_PLUGIN_FILE_SUFFIX:  # .py
 			return SoloPlugin
 		if suffix in plugin_constant.PACKED_PLUGIN_FILE_SUFFIXES:  # .mcdr, .pyz

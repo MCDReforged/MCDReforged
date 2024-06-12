@@ -9,7 +9,7 @@ from zipfile import ZipFile, ZIP_DEFLATED
 
 from mcdreforged.constants import plugin_constant
 from mcdreforged.plugin.meta.metadata import Metadata
-from mcdreforged.utils import file_util, function_util
+from mcdreforged.utils import file_utils, function_utils
 
 PathPredicate = Callable[[str], bool]
 
@@ -80,7 +80,7 @@ def make_packed_plugin(args: Any, *, quiet: bool = False):
 	output_dir: str = args.output
 	file_name: Optional[str] = args.name
 
-	writeln = print if not quiet else function_util.NONE
+	writeln = print if not quiet else function_utils.NONE
 
 	if len(args.ignore_patterns) > 0:
 		writeln('Using ignore file patterns {}'.format(args.ignore_patterns))
@@ -119,7 +119,7 @@ def make_packed_plugin(args: Any, *, quiet: bool = False):
 		file_name = '{}-v{}'.format(meta.name.replace(' ', '') or meta.id, meta.version)
 
 	file_name = file_name.format(id=meta.id, version=meta.version)
-	if file_util.get_file_suffix(file_name) not in plugin_constant.PACKED_PLUGIN_FILE_SUFFIXES:
+	if file_utils.get_file_suffix(file_name) not in plugin_constant.PACKED_PLUGIN_FILE_SUFFIXES:
 		file_name += plugin_constant.PACKED_PLUGIN_FILE_SUFFIXES[0]
 	file_counter = 0
 

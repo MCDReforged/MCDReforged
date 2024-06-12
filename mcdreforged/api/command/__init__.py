@@ -1,4 +1,5 @@
-from mcdreforged.command.builder import command_builder_util
+from mcdreforged.command.builder import command_builder_utils
+from mcdreforged.command.builder import command_builder_utils as command_builder_util  # backwards compatibility
 from mcdreforged.command.builder.common import CommandContext, ParseResult
 from mcdreforged.command.builder.exception import LiteralNotMatch, NumberOutOfRange, IllegalArgument, EmptyText, \
 	UnknownCommand, UnknownArgument, CommandSyntaxError, UnknownRootArgument, RequirementNotMet, IllegalNodeOperation, \
@@ -54,7 +55,7 @@ __all__ = [
 	# ------------------
 
 	'CommandContext',
-	'command_builder_util',
+	'command_builder_util', 'command_builder_utils',
 	'ParseResult',
 
 	# ------------------

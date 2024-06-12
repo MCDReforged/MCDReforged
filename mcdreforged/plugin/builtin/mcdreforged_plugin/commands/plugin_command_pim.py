@@ -30,7 +30,7 @@ from mcdreforged.plugin.installer.downloader import ReleaseDownloader
 from mcdreforged.plugin.installer.meta_holder import PersistCatalogueMetaRegistryHolder
 from mcdreforged.plugin.installer.types import MetaRegistry, PluginData, ReleaseData, MergedMetaRegistry, PluginResolution
 from mcdreforged.plugin.meta.version import VersionRequirement, Version
-from mcdreforged.utils import misc_util
+from mcdreforged.utils import misc_utils
 from mcdreforged.utils.replier import CommandSourceReplier
 
 if TYPE_CHECKING:
@@ -179,7 +179,7 @@ def async_operation(op_holder: OperationHolder, skip_callback: callable, thread_
 				else:
 					skip_callback(*args, op_func=wrapped_func, op_key=op_key, op_thread=op_holder.operation_thread, **kwargs)
 
-			misc_util.copy_signature(wrapped_func, func)
+			misc_utils.copy_signature(wrapped_func, func)
 			return wrapped_func
 		return func_transformer
 	return decorator
@@ -732,7 +732,7 @@ class PluginCommandPimExtension(SubCommand):
 					if is_plugin_updatable(plugin):
 						input_requirements.append(as_requirement(plugin, None))
 
-			input_requirements = misc_util.unique_list(input_requirements)
+			input_requirements = misc_utils.unique_list(input_requirements)
 			input_plugin_ids = {req.id for req in input_requirements}
 			for req in input_requirements:
 				if (plugin := self.plugin_manager.get_plugin_from_id(req.id)) is None:

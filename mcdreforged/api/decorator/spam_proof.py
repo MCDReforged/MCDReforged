@@ -2,7 +2,7 @@ import functools
 from threading import RLock
 from typing import Callable, Optional
 
-from mcdreforged.utils import misc_util
+from mcdreforged.utils import misc_utils
 
 __all__ = [
 	'spam_proof'
@@ -86,7 +86,7 @@ def spam_proof(arg=None, *, lock_class=RLock, skip_callback: Optional[Callable] 
 				if skip_callback is not None:
 					skip_callback(*args, **kwargs)
 			return acquired
-		misc_util.copy_signature(wrap, func)
+		misc_utils.copy_signature(wrap, func)
 		lock = lock_class()
 		wrap.original = func
 		wrap.lock = lock

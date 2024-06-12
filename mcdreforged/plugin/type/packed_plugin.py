@@ -10,7 +10,7 @@ from typing_extensions import override
 
 from mcdreforged.plugin.type.common import PluginFormat
 from mcdreforged.plugin.type.multi_file_plugin import MultiFilePlugin
-from mcdreforged.utils import path_util
+from mcdreforged.utils import path_utils
 from mcdreforged.utils.exception import IllegalPluginStructure
 
 if TYPE_CHECKING:
@@ -84,7 +84,7 @@ class PackedPlugin(MultiFilePlugin):
 		super()._on_unload()
 		try:
 			for path in list(sys.path_importer_cache.keys()):
-				if path_util.is_relative_to(Path(path), self.plugin_path):
+				if path_utils.is_relative_to(Path(path), self.plugin_path):
 					sys.path_importer_cache.pop(path)
 			if self.plugin_path in zipimport._zip_directory_cache:
 				zipimport._zip_directory_cache.pop(self.plugin_path)

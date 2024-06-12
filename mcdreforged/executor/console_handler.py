@@ -24,7 +24,7 @@ from mcdreforged.command.command_source import ConsoleCommandSource
 from mcdreforged.executor.background_thread_executor import BackgroundThreadExecutor
 from mcdreforged.info_reactor.info import Info
 from mcdreforged.permission.permission_level import PermissionLevel
-from mcdreforged.utils import misc_util
+from mcdreforged.utils import misc_utils
 from mcdreforged.utils.logger import DebugOption, SyncStdoutStreamHandler
 from mcdreforged.utils.types.message import MessageText
 
@@ -125,7 +125,7 @@ class CommandCompleter(WordCompleter):
 	def get_completions(self, document: Document, complete_event: CompleteEvent) -> Iterable[Completion]:
 		input_ = document.current_line_before_cursor
 		suggestions = self.suggester.suggest(input_)
-		self.words = sorted(misc_util.unique_list([suggestion.command for suggestion in suggestions]))
+		self.words = sorted(misc_utils.unique_list([suggestion.command for suggestion in suggestions]))
 		self.display_dict = dict([(suggestion.command, suggestion.suggest_input) for suggestion in suggestions])
 		return super().get_completions(document, complete_event)
 

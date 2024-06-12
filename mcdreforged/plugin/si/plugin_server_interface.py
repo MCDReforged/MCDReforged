@@ -15,7 +15,7 @@ from mcdreforged.plugin.si._simple_config_handler import FileFormat, SimpleConfi
 from mcdreforged.plugin.si.server_interface import ServerInterface
 from mcdreforged.plugin.type.multi_file_plugin import MultiFilePlugin
 from mcdreforged.plugin.type.plugin import AbstractPlugin
-from mcdreforged.utils import class_util
+from mcdreforged.utils import class_utils
 from mcdreforged.utils.logger import MCDReforgedLogger
 from mcdreforged.utils.serializer import Serializable
 from mcdreforged.utils.types.message import MessageText, TranslationKeyDictRich, TranslationKeyDictNested
@@ -128,7 +128,7 @@ class PluginServerInterface(ServerInterface):
 		.. versionadded:: v2.13.0
 		"""
 		from mcdreforged.handler.server_handler import ServerHandler
-		class_util.check_type(server_handler, ServerHandler)
+		class_utils.check_type(server_handler, ServerHandler)
 		self.__plugin.register_server_handler(server_handler)
 
 	def register_info_filter(self, info_filter: InfoFilter):
@@ -147,7 +147,7 @@ class PluginServerInterface(ServerInterface):
 
 		.. versionadded:: v2.13.0
 		"""
-		class_util.check_type(info_filter, InfoFilter)
+		class_utils.check_type(info_filter, InfoFilter)
 		self.__plugin.register_info_filter(info_filter)
 
 	# ------------------------

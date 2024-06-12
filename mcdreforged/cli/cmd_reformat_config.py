@@ -4,7 +4,7 @@ from typing import Optional
 from ruamel.yaml import YAML
 
 from mcdreforged.mcdr_config import MCDReforgedConfigManager
-from mcdreforged.utils import resources_util
+from mcdreforged.utils import resources_utils
 from mcdreforged.utils.yaml_data_storage import YamlDataStorage
 
 
@@ -27,7 +27,7 @@ def reformat_config(input_path: str, output_path: Optional[str]):
 		print('Failed to load yaml from file {!r}: {}'.format(input_path, e))
 		sys.exit(1)
 
-	new_data = resources_util.get_yaml(MCDReforgedConfigManager.DEFAULT_CONFIG_RESOURCE_PATH)
+	new_data = resources_utils.get_yaml(MCDReforgedConfigManager.DEFAULT_CONFIG_RESOURCE_PATH)
 	YamlDataStorage.merge_dict(data, new_data)
 
 	try:

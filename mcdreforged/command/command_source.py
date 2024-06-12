@@ -6,7 +6,7 @@ from typing_extensions import TypeGuard, override
 
 from mcdreforged.permission.permission_level import PermissionLevel
 from mcdreforged.translation.translation_text import RTextMCDRTranslation
-from mcdreforged.utils import misc_util
+from mcdreforged.utils import misc_utils
 from mcdreforged.utils.exception import IllegalCallError
 from mcdreforged.utils.types.message import MessageText
 
@@ -226,7 +226,7 @@ class ConsoleCommandSource(InfoCommandSource):
 		if console_text is not None:
 			message = console_text
 		with self.preferred_language_context():
-			misc_util.print_text_to_console(self._mcdr_server.logger, message)
+			misc_utils.print_text_to_console(self._mcdr_server.logger, message)
 
 	def __eq__(self, other) -> bool:
 		return isinstance(other, ConsoleCommandSource)
@@ -254,7 +254,7 @@ class PluginCommandSource(CommandSource):
 
 	@override
 	def reply(self, message: MessageText, **kwargs) -> None:
-		misc_util.print_text_to_console(self.__logger, message)
+		misc_utils.print_text_to_console(self.__logger, message)
 
 	def __eq__(self, other) -> bool:
 		return isinstance(other, PluginCommandSource) and self.__plugin.get_id() == other.__plugin.get_id()

@@ -7,7 +7,7 @@ from typing import Dict, Optional, Tuple, List, TYPE_CHECKING, Counter
 from mcdreforged.handler.impl import *
 from mcdreforged.handler.plugin_provided_server_handler_holder import PluginProvidedServerHandlerHolder
 from mcdreforged.handler.server_handler import ServerHandler
-from mcdreforged.utils import misc_util, class_util
+from mcdreforged.utils import misc_utils, class_utils
 from mcdreforged.utils.logger import DebugOption
 
 if TYPE_CHECKING:
@@ -48,7 +48,7 @@ class ServerHandlerManager:
 		if custom_handler_class_paths is not None:
 			for class_path in custom_handler_class_paths:
 				try:
-					handler_class = class_util.load_class(class_path)
+					handler_class = class_utils.load_class(class_path)
 				except Exception:
 					self.mcdr_server.logger.exception('Fail to load info handler from "{}"'.format(class_path))
 				else:
@@ -114,7 +114,7 @@ class HandlerDetector:
 			self.running_flag = True
 			self.text_count = 0
 			self.success_count.clear()
-			misc_util.start_thread(self.__detection_thread, (), 'HandlerDetector')
+			misc_utils.start_thread(self.__detection_thread, (), 'HandlerDetector')
 
 	def is_detection_running(self) -> bool:
 		return self.running_flag
@@ -132,7 +132,7 @@ class HandlerDetector:
 
 			self.text_count += 1
 			handler: ServerHandler
-			for handler in misc_util.unique_list([*self.manager.handlers.values(), self.manager.get_current_handler()]):
+			for handler in misc_utils.unique_list([*self.manager.handlers.values(), self.manager.get_current_handler()]):
 				if handler is not self.manager.get_basic_handler():
 					try:
 						handler.parse_server_stdout(handler.pre_parse_server_stdout(text))

@@ -5,15 +5,15 @@ from typing import Type, Iterable, Union, Optional
 
 from typing_extensions import override, Unpack
 
-from mcdreforged.command.builder import command_builder_util as utils
-from mcdreforged.command.builder.command_builder_util import DIVIDER
+from mcdreforged.command.builder import command_builder_utils as utils
+from mcdreforged.command.builder.command_builder_utils import DIVIDER
 from mcdreforged.command.builder.common import ParseResult, CommandContext
 from mcdreforged.command.builder.exception import NumberOutOfRange, EmptyText, \
 	InvalidNumber, InvalidInteger, InvalidFloat, UnclosedQuotedString, IllegalEscapesUsage, \
 	TextLengthOutOfRange, InvalidBoolean, InvalidEnumeration, AbstractOutOfRange
 from mcdreforged.command.builder.nodes.basic import SUGGESTS_CALLBACK, \
 	ArgumentNode
-from mcdreforged.utils import misc_util, class_util
+from mcdreforged.utils import misc_utils, class_utils
 
 
 # --------------------
@@ -89,7 +89,7 @@ class NumberNode(ArgumentNode, ABC):
 		return super().__str__() + extra
 
 	def __repr__(self):
-		return class_util.represent(self, {
+		return class_utils.represent(self, {
 			'name': self.__name,
 			'min': self.__min_value,
 			'max': self.__max_value,
@@ -215,7 +215,7 @@ class TextNode(ArgumentNode, ABC):
 		return super().__str__() + extra
 
 	def __repr__(self):
-		return class_util.represent(self, {
+		return class_utils.represent(self, {
 			'name': self.__name,
 			'min_len': self.__min_length,
 			'max_len': self.__max_length,
@@ -300,7 +300,7 @@ class QuotableText(Text):
 			return suggestions
 
 		# noinspection PyTypeChecker
-		return super().suggests(misc_util.copy_signature(quote_wrapper, suggestion))
+		return super().suggests(misc_utils.copy_signature(quote_wrapper, suggestion))
 
 
 class GreedyText(TextNode):
@@ -386,7 +386,7 @@ class Enumeration(ArgumentNode):
 		return super().__str__() + ' ({})'.format(self.__enum_class.__name__)
 
 	def __repr__(self):
-		return class_util.represent(self, {
+		return class_utils.represent(self, {
 			'name': self.__name,
 			'enum_class': self.__enum_class,
 		})

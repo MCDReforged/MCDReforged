@@ -15,7 +15,7 @@ from typing_extensions import override
 from mcdreforged.constants import core_constant
 from mcdreforged.executor.background_thread_executor import BackgroundThreadExecutor
 from mcdreforged.plugin.installer.types import MetaRegistry, PluginData, ReleaseData, EmptyMetaRegistry
-from mcdreforged.utils import request_util, time_util
+from mcdreforged.utils import request_utils, time_utils
 
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
@@ -46,7 +46,7 @@ class CatalogueMetaRegistryHolder:
 
 	def _fetch_meta_json(self) -> dict:
 		max_size = 20 * 2 ** 20  # 20MiB limit. In 2024-03-14, the uncompressed size is only 545KiB
-		buf = request_util.get_buf(self.meta_json_url, 'MetaFetcher', timeout=self.meta_fetch_timeout, max_size=max_size)
+		buf = request_utils.get_buf(self.meta_json_url, 'MetaFetcher', timeout=self.meta_fetch_timeout, max_size=max_size)
 
 		if self.meta_json_url.endswith('.gz'):
 			with gzip.GzipFile(fileobj=BytesIO(buf)) as gzip_f:
@@ -190,7 +190,7 @@ class PersistCatalogueMetaRegistryHolder(CatalogueMetaRegistryHolder):
 
 		self.logger.info(self.__tr(
 			'load_cached_success',
-			time_util.format_time('%Y-%m-%d %H:%M:%S', self.__last_meta_fetch_time) or 'N/A',
+			time_utils.format_time('%Y-%m-%d %H:%M:%S', self.__last_meta_fetch_time) or 'N/A',
 		))
 
 	def __save(self, meta_json: dict, timestamp: float):

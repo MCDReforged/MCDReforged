@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, Optional
 
 from mcdreforged.command.command_source import ConsoleCommandSource, PlayerCommandSource, \
 	InfoCommandSource
-from mcdreforged.utils import class_util
+from mcdreforged.utils import class_utils
 from mcdreforged.utils.exception import IllegalStateError, IllegalCallError
 
 if TYPE_CHECKING:
@@ -205,7 +205,7 @@ class Info:
 	# --------------------------------
 
 	def __repr__(self):
-		return class_util.represent(self)
+		return class_utils.represent(self)
 
 	def __deepcopy__(self, memo: dict):
 		"""

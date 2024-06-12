@@ -6,7 +6,7 @@ from typing import Literal, Dict, Callable, Optional, Any, TextIO
 
 from ruamel.yaml import YAML
 
-from mcdreforged.utils import file_util
+from mcdreforged.utils import file_utils
 from mcdreforged.utils.types.json_like import JsonLike
 
 FileFormat = Literal['json', 'yaml']
@@ -60,5 +60,5 @@ class SimpleConfigHandler:
 
 	def save(self, data: JsonLike, *, encoding: str):
 		self.__file_path.parent.mkdir(parents=True, exist_ok=True)
-		with file_util.safe_write(self.__file_path, encoding=encoding) as file:
+		with file_utils.safe_write(self.__file_path, encoding=encoding) as file:
 			self.__dumper(data, file)

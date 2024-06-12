@@ -2,7 +2,7 @@ import functools
 import threading
 from typing import Optional, Callable, Union
 
-from mcdreforged.utils import misc_util
+from mcdreforged.utils import misc_utils
 
 __all__ = [
 	'new_thread',
@@ -107,7 +107,7 @@ def new_thread(arg: Optional[Union[str, Callable]] = None):
 			return thread
 		# bring the signature of the func to the wrap function
 		# so inspect.getfullargspec(func) works correctly
-		misc_util.copy_signature(wrap, func)
+		misc_utils.copy_signature(wrap, func)
 		wrap.original = func  # access this field to get the original function
 		return wrap
 	# Directly use @new_thread without ending brackets case, e.g. @new_thread

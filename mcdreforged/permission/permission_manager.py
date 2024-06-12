@@ -8,7 +8,7 @@ from typing_extensions import override
 from mcdreforged.command.command_source import CommandSource
 from mcdreforged.info_reactor.info import *
 from mcdreforged.permission.permission_level import PermissionLevel, PermissionLevelItem, PermissionParam
-from mcdreforged.utils import misc_util
+from mcdreforged.utils import misc_utils
 from mcdreforged.utils.logger import DebugOption
 from mcdreforged.utils.yaml_data_storage import YamlDataStorage
 
@@ -29,7 +29,7 @@ class PermissionStorage(YamlDataStorage):
 		# Deduplicate the permission data
 		for key, value in data.items():
 			if key in PermissionLevel.NAMES and isinstance(value, list):
-				data[key] = misc_util.unique_list(data[key])
+				data[key] = misc_utils.unique_list(data[key])
 		# Change empty list to None for nicer look in the .yml file
 		for key, value in data.items():
 			if key in PermissionLevel.NAMES and value is not None and len(value) == 0:

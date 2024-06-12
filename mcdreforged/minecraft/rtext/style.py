@@ -4,7 +4,7 @@ from typing import Union, Optional, Dict, Iterator, TypeVar, Generic
 from colorama import Fore, Style
 from typing_extensions import override
 
-from mcdreforged.utils import class_util, string_util
+from mcdreforged.utils import class_utils, string_utils
 
 
 class __NamedObject(ABC):
@@ -126,7 +126,7 @@ class RColor(RItem, ABC, metaclass=__RColorMeta):
 	reset:        'RColorClassic'
 
 	def __init__(self, rgb_code: int):
-		class_util.check_type(rgb_code, int)
+		class_utils.check_type(rgb_code, int)
 		self._rgb_code: int = rgb_code  # e.g. 0xRRGGBB
 
 	@classmethod
@@ -227,7 +227,7 @@ class RColorRGB(RColor):
 		:param rgb_code: An int in hex 0xRRGGBB format,
 			or a str like ``"RRGGBB"``, ``"0xRRGGBB"`` or ``"#RRGGBB"``
 		"""
-		class_util.check_type(rgb_code, (str, int))
+		class_utils.check_type(rgb_code, (str, int))
 		super().__init__(rgb_code)
 		self.__classic_cache: Optional['RColorClassic'] = None
 
@@ -239,9 +239,9 @@ class RColorRGB(RColor):
 		:param rgb_code: An int in hex 0xRRGGBB format,
 			or a str like ``"RRGGBB"``, ``"0xRRGGBB"`` or ``"#RRGGBB"``
 		"""
-		class_util.check_type(rgb_code, (str, int))
+		class_utils.check_type(rgb_code, (str, int))
 		if isinstance(rgb_code, str):
-			hex_code = string_util.remove_prefix(string_util.remove_prefix(rgb_code, '0x'), '#')
+			hex_code = string_utils.remove_prefix(string_utils.remove_prefix(rgb_code, '0x'), '#')
 			try:
 				rgb_code = int(hex_code, 16)
 			except ValueError:

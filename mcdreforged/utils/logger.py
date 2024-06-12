@@ -18,7 +18,7 @@ from colorlog import ColoredFormatter
 
 from mcdreforged.constants import core_constant
 from mcdreforged.minecraft.rtext.style import RColor, RStyle, RItemClassic
-from mcdreforged.utils import string_util, file_util
+from mcdreforged.utils import string_utils, file_utils
 
 
 class DebugOption(Flag):
@@ -188,9 +188,9 @@ class MCColorFormatControl:
 					if item.mc_code in text:
 						text = text.replace(item.mc_code, item.console_code)
 				# clean the rest of minecraft codes
-				text = string_util.clean_minecraft_color_code(text)
+				text = string_utils.clean_minecraft_color_code(text)
 		if cls.console_color_disabled:
-			text = string_util.clean_console_color_code(text)
+			text = string_utils.clean_console_color_code(text)
 		return text
 
 
@@ -202,7 +202,7 @@ class MCDReforgedFormatter(ColoredFormatter):
 
 class NoColorFormatter(logging.Formatter):
 	def formatMessage(self, record: logging.LogRecord):
-		return string_util.clean_console_color_code(super().formatMessage(record))
+		return string_utils.clean_console_color_code(super().formatMessage(record))
 
 
 class PluginIdAwareFormatter(logging.Formatter):
@@ -315,7 +315,7 @@ class MCDReforgedLogger(logging.Logger):
 		"""
 		if self.file_handler is not None:
 			self.unset_file()
-		file_util.touch_directory(os.path.dirname(file_path))
+		file_utils.touch_directory(os.path.dirname(file_path))
 		self.file_handler = ZippingDayRotatingFileHandler(file_path, self.ROTATE_DAY_COUNT)
 		self.file_handler.setFormatter(self.FILE_FORMATTER)
 		self.addHandler(self.file_handler)

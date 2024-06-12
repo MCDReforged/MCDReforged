@@ -8,7 +8,7 @@ from mcdreforged.constants import deprecations
 from mcdreforged.minecraft.rtext.text import RTextBase, RText
 from mcdreforged.plugin.meta.version import Version, VersionParsingError, VersionRequirement
 from mcdreforged.translation.translation_text import RTextMCDRTranslation
-from mcdreforged.utils import translation_util, class_util
+from mcdreforged.utils import translation_utils, class_utils
 from mcdreforged.utils.types.message import TranslationLanguageDict
 
 if TYPE_CHECKING:
@@ -104,18 +104,18 @@ class Metadata:
 				warn('{}, use fallback id {} instead'.format(use_fallback_id_reason, self.id))
 			else:
 				raise ValueError('Plugin id not found in metadata')
-		class_util.check_type(self.id, str)
+		class_utils.check_type(self.id, str)
 
 		self.name = data.get('name', self.id)
 		if isinstance(self.name, RTextBase):
 			self.name = self.name.to_plain_text()
-		class_util.check_type(self.name, str)
+		class_utils.check_type(self.name, str)
 
 		description = data.get('description')
 		if isinstance(description, RTextBase):
 			description = description.to_plain_text()
 		self.description = description
-		class_util.check_type(self.description, [None, str, dict])
+		class_utils.check_type(self.description, [None, str, dict])
 
 		self.author = data.get('author')
 		if isinstance(self.author, str):
@@ -125,10 +125,10 @@ class Metadata:
 				self.author[i] = str(self.author[i])
 			if len(self.author) == 0:
 				self.author = None
-		class_util.check_type(self.author, [None, list])
+		class_utils.check_type(self.author, [None, list])
 
 		self.link = data.get('link')
-		class_util.check_type(self.link, [None, str])
+		class_utils.check_type(self.link, [None, str])
 
 		version_str = data.get('version')
 		if version_str:
@@ -152,18 +152,18 @@ class Metadata:
 				))
 
 		self.entrypoint = data.get('entrypoint', self.id)
-		class_util.check_type(self.entrypoint, str)
+		class_utils.check_type(self.entrypoint, str)
 		# entrypoint module should be inside the plugin module
 		if self.entrypoint != self.id and not self.entrypoint.startswith(self.id + '.'):
 			raise ValueError('Invalid entry point "{}" for plugin id "{}"'.format(self.entrypoint, self.id))
 
 		self.archive_name = data.get('archive_name')
 		self.resources = data.get('resources', [])
-		class_util.check_type(self.archive_name, [None, str])
-		class_util.check_type(self.resources, list)
+		class_utils.check_type(self.archive_name, [None, str])
+		class_utils.check_type(self.resources, list)
 
 	def __repr__(self):
-		return class_util.represent(self)
+		return class_utils.represent(self)
 
 	def get_description(self, lang: Optional[str] = None) -> Optional[str]:
 		"""
@@ -175,8 +175,8 @@ class Metadata:
 		if isinstance(self.description, str):
 			return self.description
 		if lang is None:
-			lang = translation_util.get_mcdr_language()
-		return translation_util.translate_from_dict(self.description, lang, default=None)
+			lang = translation_utils.get_mcdr_language()
+		return translation_utils.translate_from_dict(self.description, lang, default=None)
 
 	def get_description_rtext(self) -> RTextBase:
 		"""

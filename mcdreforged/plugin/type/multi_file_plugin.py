@@ -15,7 +15,7 @@ from mcdreforged.constants import plugin_constant
 from mcdreforged.plugin.exception import RequirementCheckFailure
 from mcdreforged.plugin.meta.metadata import Metadata
 from mcdreforged.plugin.type.regular_plugin import RegularPlugin
-from mcdreforged.utils import path_util
+from mcdreforged.utils import path_utils
 from mcdreforged.utils.exception import BrokenMetadata, IllegalPluginStructure
 from mcdreforged.utils.logger import DebugOption
 
@@ -52,7 +52,7 @@ class MultiFilePlugin(RegularPlugin, ABC):
 		if mod.__file__ is not None:
 			mod_path = Path(mod.__file__).absolute()
 			file_root = Path(self._file_root).absolute()
-			if file_root != mod_path and not path_util.is_relative_to(mod_path, file_root):
+			if file_root != mod_path and not path_utils.is_relative_to(mod_path, file_root):
 				self.mcdr_server.logger.warning('Suspicious entrypoint module path for plugin %s, package name conflict?', self)
 				self.mcdr_server.logger.warning('- Plugin file root: %s', file_root)
 				self.mcdr_server.logger.warning('- Loaded entrypoint path: %s', mod_path)

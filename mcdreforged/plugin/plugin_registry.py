@@ -10,7 +10,7 @@ from mcdreforged.info_reactor.info_filter import InfoFilter, InfoFilterHolder
 from mcdreforged.minecraft.rtext.text import RTextBase
 from mcdreforged.plugin.plugin_event import EventListener
 from mcdreforged.translation.translation_text import RTextMCDRTranslation
-from mcdreforged.utils import translation_util
+from mcdreforged.utils import translation_utils
 from mcdreforged.utils.types.message import TranslationStorage, TranslationKeyDictRich, MessageText, \
 	TranslationKeyDictNested
 
@@ -107,8 +107,8 @@ class PluginRegistry(_BasePluginRegistry):
 
 	def register_translation(self, language: str, mapping: TranslationKeyDictNested):
 		# Translation should be updated immediately
-		translation_util.update_storage(self._translations, language, mapping)
-		translation_util.update_storage(self.target_storage._translations, language, mapping)
+		translation_utils.update_storage(self._translations, language, mapping)
+		translation_utils.update_storage(self.target_storage._translations, language, mapping)
 
 	def register_server_handler(self, server_handler: 'ServerHandler'):
 		self._server_handler = server_handler
@@ -135,7 +135,7 @@ class PluginRegistryStorage(_BasePluginRegistry):
 			self._event_listeners[event_id].extend(plg_listeners)
 		self._help_messages.extend(plugin_registry._help_messages)
 		self._command_roots.extend(plugin_registry._command_roots)
-		translation_util.extend_storage(self._translations, plugin_registry._translations)
+		translation_utils.extend_storage(self._translations, plugin_registry._translations)
 
 		if plugin_registry._server_handler is not None:
 			if self._server_handler is not None:

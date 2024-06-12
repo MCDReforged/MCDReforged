@@ -13,7 +13,7 @@ from mcdreforged.constants import plugin_constant
 from mcdreforged.plugin.meta.metadata import Metadata
 from mcdreforged.plugin.type.common import PluginFormat
 from mcdreforged.plugin.type.regular_plugin import RegularPlugin
-from mcdreforged.utils import string_util
+from mcdreforged.utils import string_utils
 
 if TYPE_CHECKING:
 	from mcdreforged.plugin.plugin_manager import PluginManager
@@ -30,7 +30,7 @@ class SoloPlugin(RegularPlugin):
 
 	@override
 	def get_fallback_metadata_id(self) -> str:
-		file_name = string_util.remove_suffix(self.file_name, plugin_constant.SOLO_PLUGIN_FILE_SUFFIX)
+		file_name = string_utils.remove_suffix(self.file_name, plugin_constant.SOLO_PLUGIN_FILE_SUFFIX)
 		return re.sub(r'[^a-z0-9]', '_', file_name.lower())
 
 	@override

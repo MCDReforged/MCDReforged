@@ -9,7 +9,7 @@ from typing_extensions import override
 
 from mcdreforged.handler.server_handler import ServerHandler
 from mcdreforged.info_reactor.info import InfoSource, Info
-from mcdreforged.utils import string_util
+from mcdreforged.utils import string_utils
 
 
 class AbstractServerHandler(ServerHandler, ABC):
@@ -18,7 +18,7 @@ class AbstractServerHandler(ServerHandler, ABC):
 	"""
 	@override
 	def get_name(self) -> str:
-		return string_util.hump_to_underline(type(self).__name__)
+		return string_utils.hump_to_underline(type(self).__name__)
 
 	@override
 	def pre_parse_server_stdout(self, text: str) -> str:
@@ -48,7 +48,7 @@ class AbstractServerHandler(ServerHandler, ABC):
 		if type(text) is not str:
 			raise TypeError('The text to parse should be a string')
 		result = Info(InfoSource.SERVER, text)
-		result.content = string_util.clean_console_color_code(text)
+		result.content = string_utils.clean_console_color_code(text)
 		return result
 
 	@classmethod
