@@ -59,9 +59,9 @@ class PluginResultType(Enum):
 	def __reload_result_getter(result: 'PluginOperationResult') -> 'SingleOperationResult':
 		return result.reload_result
 
-	LOAD = _TypeImpl(__load_result_getter, True)
-	UNLOAD = _TypeImpl(__unload_result_getter, False)
-	RELOAD = _TypeImpl(__reload_result_getter, True)
+	LOAD = _TypeImpl(getattr(__load_result_getter, '__func__'), True)
+	UNLOAD = _TypeImpl(getattr(__unload_result_getter, '__func__'), False)
+	RELOAD = _TypeImpl(getattr(__reload_result_getter, '__func__'), True)
 
 
 @dataclasses.dataclass(frozen=True)
