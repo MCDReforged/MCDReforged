@@ -4,7 +4,6 @@ Information of a plugin
 import re
 from typing import List, Dict, TYPE_CHECKING, Optional, Union
 
-from mcdreforged.constants import deprecations
 from mcdreforged.minecraft.rtext.text import RTextBase, RText
 from mcdreforged.plugin.meta.version import Version, VersionParsingError, VersionRequirement
 from mcdreforged.translation.translation_text import RTextMCDRTranslation
@@ -91,11 +90,7 @@ class Metadata:
 		else:
 			bad_id = not isinstance(self.id, str)
 			if self.PLUGIN_ID_REGEX.fullmatch(self.id) is None:
-				if self.PLUGIN_ID_REGEX_OLD.fullmatch(self.id) is not None:
-					warn(str(deprecations.PLUGIN_ID_STARTS_WITH_NON_ALPHABET))
-					warn('Plugin ID: {}'.format(self.id))
-				else:
-					bad_id = True
+				bad_id = True
 			if bad_id:
 				use_fallback_id_reason = 'Plugin ID "{}" of {} is invalid'.format(self.id, plugin_name_text)
 		if use_fallback_id_reason is not None:
