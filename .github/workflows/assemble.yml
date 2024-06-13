@@ -13,15 +13,14 @@ jobs:
         run: |
           mkdir MCDReforged
           mv * MCDReforged || true
-          cd MCDReforged
-          rm -rf .git tests
-          rm -f .gitignore logo_long.png setup.py MANIFEST.in *.md
-          mkdir server
-          mkdir config
-          rm -f plugins/*
-          rm -rf docs docs_prev
-          cd ..
-          zip -r MCDReforged-dev.zip ./MCDReforged
+          
+          pushd MCDReforged
+          rm -rf .git tests docs docker logo schemas
+          rm -f .gitignore *.png setup.py MANIFEST.in *.md
+          mkdir server config
+          popd
+
+          zip -r MCDReforged-dev.zip MCDReforged
 
       - uses: actions/upload-artifact@v4
         with:
