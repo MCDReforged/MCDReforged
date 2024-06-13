@@ -7,13 +7,13 @@ from mcdreforged.plugin.type.packed_plugin import PackedPlugin
 from mcdreforged.plugin.type.regular_plugin import RegularPlugin
 from mcdreforged.plugin.type.solo_plugin import SoloPlugin
 from mcdreforged.utils import string_utils, file_utils
-from mcdreforged.utils.types.path_like import PathLike
+from mcdreforged.utils.types.path_like import PathStr
 
 if TYPE_CHECKING:
 	from mcdreforged.plugin.plugin_manager import PluginManager
 
 
-def __get_plugin_class_from_path(file_path: PathLike, allow_disabled: bool) -> Optional[Type[RegularPlugin]]:
+def __get_plugin_class_from_path(file_path: PathStr, allow_disabled: bool) -> Optional[Type[RegularPlugin]]:
 	file_path = Path(file_path)
 	if file_path.is_file():
 		if file_path.name.endswith(plugin_constant.DISABLED_PLUGIN_FILE_SUFFIX) and allow_disabled:
@@ -33,19 +33,19 @@ def __get_plugin_class_from_path(file_path: PathLike, allow_disabled: bool) -> O
 	return None
 
 
-def __maybe_plugin(file_path: PathLike, *, allow_disabled: bool) -> bool:
+def __maybe_plugin(file_path: PathStr, *, allow_disabled: bool) -> bool:
 	return __get_plugin_class_from_path(file_path, allow_disabled) is not None
 
 
-def is_plugin(file_path: PathLike) -> bool:
+def is_plugin(file_path: PathStr) -> bool:
 	return __maybe_plugin(file_path, allow_disabled=False)
 
 
-def is_disabled_plugin(file_path: PathLike) -> bool:
+def is_disabled_plugin(file_path: PathStr) -> bool:
 	return not __maybe_plugin(file_path, allow_disabled=False) and __maybe_plugin(file_path, allow_disabled=True)
 
 
-def create_regular_plugin(plugin_manager: 'PluginManager', file_path: PathLike) -> RegularPlugin:
+def create_regular_plugin(plugin_manager: 'PluginManager', file_path: PathStr) -> RegularPlugin:
 	file_path = Path(file_path)
 	cls = __get_plugin_class_from_path(file_path, False)
 	if cls is None:

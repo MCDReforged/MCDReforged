@@ -6,28 +6,28 @@ from typing import Callable, ContextManager, TextIO, Union, List
 from ruamel.yaml import YAML
 
 from mcdreforged.utils import function_utils
-from mcdreforged.utils.types.path_like import PathLike
+from mcdreforged.utils.types.path_like import PathStr
 
 
-def list_all(directory: PathLike, predicate: Callable[[Path], bool] = function_utils.TRUE) -> List[Path]:
+def list_all(directory: PathStr, predicate: Callable[[Path], bool] = function_utils.TRUE) -> List[Path]:
 	directory = Path(directory)
 	candidates = [(directory / file) for file in os.listdir(directory)]
 	return list(filter(predicate, candidates))
 
 
-def list_file(directory: PathLike, predicate: Callable[[Path], bool] = function_utils.TRUE) -> List[Path]:
+def list_file(directory: PathStr, predicate: Callable[[Path], bool] = function_utils.TRUE) -> List[Path]:
 	def merged_predicate(p: Path) -> bool:
 		return p.is_file() and predicate(p)
 	return list_all(directory, merged_predicate)
 
 
-def list_file_with_suffix(directory: PathLike, suffix: str) -> List[Path]:
+def list_file_with_suffix(directory: PathStr, suffix: str) -> List[Path]:
 	def predicate(p: Path) -> bool:
 		return p.name.endswith(suffix)
 	return list_file(directory, predicate)
 
 
-def touch_directory(directory_path: PathLike) -> None:
+def touch_directory(directory_path: PathStr) -> None:
 	if not os.path.isdir(directory_path):
 		os.makedirs(directory_path, exist_ok=True)
 
@@ -44,7 +44,7 @@ def get_file_suffix(file_path: Union[str, Path]) -> str:
 
 
 @contextlib.contextmanager
-def safe_write(target_file_path: PathLike, *, encoding: str) -> ContextManager[TextIO]:
+def safe_write(target_file_path: PathStr, *, encoding: str) -> ContextManager[TextIO]:
 	target_file_path = Path(target_file_path)
 	temp_file_path = target_file_path.parent / (target_file_path.name + '.tmp')
 	with open(temp_file_path, 'w', encoding=encoding) as file:
@@ -52,7 +52,7 @@ def safe_write(target_file_path: PathLike, *, encoding: str) -> ContextManager[T
 	os.replace(temp_file_path, target_file_path)
 
 
-def safe_write_yaml(file_path: PathLike, data: dict):
+def safe_write_yaml(file_path: PathStr, data: dict):
 	with safe_write(file_path, encoding='utf8') as file:
 		yaml = YAML()
 		yaml.width = 1048576  # prevent yaml breaks long string into multiple lines

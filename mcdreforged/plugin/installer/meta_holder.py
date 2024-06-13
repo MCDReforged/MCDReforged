@@ -1,7 +1,6 @@
 import datetime
 import gzip
 import json
-import logging
 import lzma
 import re
 import threading
@@ -19,6 +18,7 @@ from mcdreforged.utils import request_utils, time_utils
 
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
+	from mcdreforged.utils.logger import MCDReforgedLogger
 
 
 class CatalogueMetaRegistry(MetaRegistry):
@@ -119,7 +119,7 @@ class CatalogueMetaRegistryHolder:
 
 
 class BackgroundMetaFetcher(BackgroundThreadExecutor):
-	def __init__(self, logger: logging.Logger, tick_func: Callable[[], Any]):
+	def __init__(self, logger: 'MCDReforgedLogger', tick_func: Callable[[], Any]):
 		super().__init__(logger)
 		self.__tick_func = tick_func
 
@@ -140,7 +140,7 @@ class PersistCatalogueMetaRegistryHolder(CatalogueMetaRegistryHolder):
 
 	def __init__(self, mcdr_server: 'MCDReforgedServer', cache_path: Path, *, meta_json_url: str, meta_cache_ttl: float, meta_fetch_timeout: float):
 		super().__init__(meta_json_url=meta_json_url, meta_fetch_timeout=meta_fetch_timeout)
-		self.logger = mcdr_server.logger
+		self.logger: 'MCDReforgedLogger' = mcdr_server.logger
 		self.__tr = mcdr_server.create_internal_translator('plugin_catalogue_meta_registry').tr
 		self.__cache_path = cache_path
 		self.__meta_lock = threading.Lock()

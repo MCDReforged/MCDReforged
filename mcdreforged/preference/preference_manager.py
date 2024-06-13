@@ -1,5 +1,5 @@
 import json
-import os
+from pathlib import Path
 from typing import Optional, Dict, TYPE_CHECKING, Union
 
 from mcdreforged.command.command_source import CommandSource, PlayerCommandSource, ConsoleCommandSource
@@ -19,7 +19,7 @@ class InvalidPreferenceSource(TypeError):
 	pass
 
 
-PREFERENCE_FILE = os.path.join(plugin_constant.PLUGIN_CONFIG_DIRECTORY, core_constant.PACKAGE_NAME, 'preferences.json')
+PREFERENCE_FILE_PATH = Path(plugin_constant.PLUGIN_CONFIG_DIRECTORY) / core_constant.PACKAGE_NAME / 'preferences.json'
 CONSOLE_ALIAS = '#@MCDR_Console@#'
 PreferenceStorage = Dict[str, PreferenceItem]
 PreferenceSource = Union[str, CommandSource]
@@ -33,10 +33,11 @@ class PreferenceManager:
 		self.mcdr_server: 'MCDReforgedServer' = mcdr_server
 		self.logger = mcdr_server.logger
 		self.preferences: PreferenceStorage = {}
+		self.__store_file_path = PREFERENCE_FILE_PATH
 
 	def load_preferences(self):
 		try:
-			with open(PREFERENCE_FILE, 'r', encoding='utf8') as file:
+			with open(self.__store_file_path, 'r', encoding='utf8') as file:
 				self.preferences = deserialize(json.load(file), PreferenceStorage, error_at_missing=True, error_at_redundancy=True)
 		except Exception as e:
 			if not isinstance(e, FileNotFoundError):
@@ -46,10 +47,8 @@ class PreferenceManager:
 
 	def __save_preferences(self):
 		try:
-			dir_path = os.path.dirname(PREFERENCE_FILE)
-			if not os.path.isdir(dir_path):
-				os.makedirs(dir_path)
-			with file_utils.safe_write(PREFERENCE_FILE, encoding='utf8') as file:
+			self.__store_file_path.parent.mkdir(exist_ok=True, parents=True)
+			with file_utils.safe_write(self.__store_file_path, encoding='utf8') as file:
 				json.dump(serialize(self.preferences), file, indent=4, ensure_ascii=False)
 		except Exception:
 			self.logger.exception('Failed to save preference file')

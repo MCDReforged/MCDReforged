@@ -956,7 +956,7 @@ class PluginCommandPimExtension(SubCommand):
 						).download()
 
 				# apply
-				to_load_paths: List[str] = []
+				to_load_paths: List[Path] = []
 				to_unload_ids: List[str] = []
 				from mcdreforged.plugin.type.packed_plugin import PackedPlugin
 
@@ -992,7 +992,7 @@ class PluginCommandPimExtension(SubCommand):
 						newly_added_files.append(dst)
 						shutil.move(src, dst)
 
-					to_load_paths.append(str(dst))
+					to_load_paths.append(dst)
 					if plugin is not None:
 						to_unload_ids.append(plugin_id)
 

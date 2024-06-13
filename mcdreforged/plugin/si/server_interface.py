@@ -25,7 +25,7 @@ from mcdreforged.utils.exception import IllegalCallError
 from mcdreforged.utils.future import Future
 from mcdreforged.utils.logger import MCDReforgedLogger, DebugOption
 from mcdreforged.utils.types.message import MessageText
-from mcdreforged.utils.types.path_like import PathLike
+from mcdreforged.utils.types.path_like import PathStr
 
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
@@ -656,7 +656,7 @@ class ServerInterface:
 
 	def __not_loaded_regular_plugin_manipulate(
 			self,
-			plugin_file_path: PathLike,
+			plugin_file_path: PathStr,
 			handler: Callable[['PluginManager'], Callable[[Path], Future[PluginOperationResult]]]
 	) -> bool:
 		"""
@@ -765,11 +765,11 @@ class ServerInterface:
 
 	def manipulate_plugins(
 			self, *,
-			load: Optional[List[str]] = None,     # file path
-			unload: Optional[List[str]] = None,   # plugin id
-			reload: Optional[List[str]] = None,   # plugin id
-			enable: Optional[List[str]] = None,   # file path
-			disable: Optional[List[str]] = None,  # plugin id
+			load: Optional[List[PathStr]] = None,    # file paths
+			unload: Optional[List[str]] = None,       # plugin ids
+			reload: Optional[List[str]] = None,       # plugin ids
+			enable: Optional[List[PathStr]] = None,  # file paths
+			disable: Optional[List[str]] = None,      # plugin ids
 	) -> Optional[bool]:
 		"""
 		A highly-customizable plugin manipulate API that provides fine-grain control on what to be manipulated:
@@ -781,7 +781,7 @@ class ServerInterface:
 
 			* ``MyPlugin.mcdr`` remains unchanged: reload ``my_plugin``
 			* ``MyPlugin.mcdr`` changes its content: reload ``my_plugin``
-			* ``MyPlugin.mcdr`` is replaced with an upgrade ``MyPlugin_v2.mcdr``: unload ``my_plugin`` and load ``MyPlugin_v2.mcdr``
+			* ``MyPlugin.mcdr`` is replaced with an upgraded ``MyPlugin_v2.mcdr``: unload ``my_plugin`` and load ``MyPlugin_v2.mcdr`` in one call
 
 		:param load: An optional plugin **file path** list containing plugins to be loaded
 		:param unload: An optional plugin **ID** list containing plugins to be loaded
@@ -792,7 +792,7 @@ class ServerInterface:
 
 		.. versionadded:: v2.13.0
 		"""
-		def map_to_path(paths: Optional[List[str]]) -> Optional[List[Path]]:
+		def map_to_path(paths: Optional[List[PathStr]]) -> Optional[List[Path]]:
 			if paths is not None:
 				return list(map(Path, paths))
 			else:
@@ -800,7 +800,14 @@ class ServerInterface:
 
 		def map_to_regular(plugin_ids: Optional[List[str]]) -> Optional[List['RegularPlugin']]:
 			if plugin_ids is not None:
-				return list(map(self._plugin_manager.get_regular_plugin_from_id, plugin_ids))
+				plugins = []
+				for plugin_id in plugin_ids:
+					plugin = self._plugin_manager.get_regular_plugin_from_id(plugin_id)
+					if plugin is not None:
+						plugins.append(plugin)
+					else:
+						self.logger.warning('Skipping not-exist regular plugin with ID {}'.format(plugin_id))
+				return plugins
 			else:
 				return None
 

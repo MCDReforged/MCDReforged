@@ -122,7 +122,8 @@ class DebugCommand(SubCommand):
 	def command_roots(self) -> Dict[str, List[PluginCommandHolder]]:
 		return self.mcdr_server.command_manager.root_nodes.copy()
 
-	def show_thread_dump(self, source: CommandSource, target_thread: Optional[str]):
+	@classmethod
+	def show_thread_dump(cls, source: CommandSource, target_thread: Optional[str]):
 		for line in thread_dump(target_thread=target_thread):
 			source.reply(line)
 

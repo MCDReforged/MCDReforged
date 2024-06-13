@@ -27,7 +27,7 @@ from mcdreforged.utils import file_utils, string_utils, misc_utils, class_utils,
 from mcdreforged.utils.future import Future
 from mcdreforged.utils.logger import DebugOption
 from mcdreforged.utils.thread_local_storage import ThreadLocalStorage
-from mcdreforged.utils.types.path_like import PathLike
+from mcdreforged.utils.types.path_like import PathStr
 
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
@@ -113,7 +113,7 @@ class PluginManager:
 			if len(stack) == 0:
 				self.__tls.pop(self.TLS_PLUGIN_KEY)
 
-	def contains_plugin_file(self, file_path: PathLike) -> bool:
+	def contains_plugin_file(self, file_path: PathStr) -> bool:
 		"""
 		Check if the given path corresponds to an already loaded plugin
 		"""
@@ -126,7 +126,7 @@ class PluginManager:
 		"""
 		return plugin_id in self.__plugins
 
-	def verify_plugin_path_to_load(self, plugin_path: PathLike):
+	def verify_plugin_path_to_load(self, plugin_path: PathStr):
 		path = Path(plugin_path).absolute()
 		for plugin_dir in self.plugin_directories:
 			if path_utils.is_relative_to(path, Path(plugin_dir).absolute()):

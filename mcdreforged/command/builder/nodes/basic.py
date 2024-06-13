@@ -6,7 +6,7 @@ from abc import ABC, abstractmethod
 from types import MethodType
 from typing import List, Callable, Iterable, Set, Dict, Type, Any, Union, Optional, NamedTuple, TypedDict
 
-from typing_extensions import Self, override
+from typing_extensions import Self, override, NotRequired
 
 from mcdreforged.command.builder import command_builder_utils as utils
 from mcdreforged.command.builder.common import ParseResult, CommandContext, CommandSuggestions, CommandSuggestion
@@ -605,7 +605,7 @@ class ArgumentNode(AbstractNode, ABC):
 	"""
 
 	class _InitKwargs(TypedDict):
-		accumulate: Optional[bool]
+		accumulate: NotRequired[bool]
 
 	def __init__(
 			self, name: str, *,

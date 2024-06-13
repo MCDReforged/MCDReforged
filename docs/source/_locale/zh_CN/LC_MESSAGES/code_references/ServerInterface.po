@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-12 02:32+0800\n"
+"POT-Creation-Date: 2024-06-13 14:29+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -940,10 +940,10 @@ msgstr "``MyPlugin.mcdr`` 文件内容发生了变化：重载 ``my_plugin``"
 #: mcdreforged.plugin.si.server_interface.ServerInterface.manipulate_plugins:10
 #: of
 msgid ""
-"``MyPlugin.mcdr`` is replaced with an upgrade ``MyPlugin_v2.mcdr``: "
-"unload ``my_plugin`` and load ``MyPlugin_v2.mcdr``"
+"``MyPlugin.mcdr`` is replaced with an upgraded ``MyPlugin_v2.mcdr``: "
+"unload ``my_plugin`` and load ``MyPlugin_v2.mcdr`` in one call"
 msgstr ""
-"``MyPlugin.mcdr`` 被一个新的 ``MyPlugin_v2.mcdr`` 所取代了：卸载 ``my_plugin`` 并加载 "
+"``MyPlugin.mcdr`` 被一个新的 ``MyPlugin_v2.mcdr`` 所取代了：在单次调用中，卸载 ``my_plugin`` 并加载 "
 "``MyPlugin_v2.mcdr``"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.manipulate_plugins:12
