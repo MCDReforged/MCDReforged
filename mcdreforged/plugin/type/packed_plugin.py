@@ -1,3 +1,4 @@
+import contextlib
 import os
 import sys
 import zipimport
@@ -86,8 +87,8 @@ class PackedPlugin(MultiFilePlugin):
 			for path in list(sys.path_importer_cache.keys()):
 				if path_utils.is_relative_to(Path(path), self.plugin_path):
 					sys.path_importer_cache.pop(path)
-			if self.plugin_path in zipimport._zip_directory_cache:
-				zipimport._zip_directory_cache.pop(self.plugin_path)
+			with contextlib.suppress(KeyError):
+				zipimport._zip_directory_cache.pop(self._module_search_path)
 		except KeyError:
 			self.mcdr_server.logger.exception('Fail to clean zip import cache for {}'.format(self))
 

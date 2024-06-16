@@ -26,7 +26,7 @@ class MultiFilePlugin(RegularPlugin, ABC):
 		return self.plugin_path
 
 	@property
-	def __module_search_path(self) -> str:
+	def _module_search_path(self) -> str:
 		return str(self._file_root)
 
 	@override
@@ -74,13 +74,13 @@ class MultiFilePlugin(RegularPlugin, ABC):
 	def _on_unload(self):
 		super()._on_unload()
 		try:
-			sys.path.remove(self.__module_search_path)
+			sys.path.remove(self._module_search_path)
 		except ValueError:
-			self.mcdr_server.logger.debug('Fail to remove path "{}" in sys.path for {}'.format(self.__module_search_path, self))
+			self.mcdr_server.logger.debug('Fail to remove path "{}" in sys.path for {}'.format(self._module_search_path, self))
 
 	@override
 	def _on_ready(self):
-		sys.path.append(self.__module_search_path)
+		sys.path.append(self._module_search_path)
 		# It's fail-proof for packed plugin
 		try:
 			self._load_entry_instance()
