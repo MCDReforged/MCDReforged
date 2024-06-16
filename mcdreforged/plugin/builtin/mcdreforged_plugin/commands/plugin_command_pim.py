@@ -10,7 +10,7 @@ import subprocess
 import threading
 import time
 from pathlib import Path
-from typing import Optional, List, TYPE_CHECKING, Dict, Any, Callable, Union, Iterable
+from typing import Optional, List, TYPE_CHECKING, Dict, Any, Callable, Union, Iterable, overload
 
 import resolvelib
 from typing_extensions import override, deprecated
@@ -135,12 +135,40 @@ class Texts:
 		return RText(version, color=RColor.gold)
 
 	@classmethod
-	def candidate(cls, plugin_id: str, version: Union[str, Version]) -> RTextBase:
-		return RTextList(
-			cls.plugin_id(plugin_id),
-			RText('@', RColor.gray),
-			cls.version(version),
-		)
+	@overload
+	def candidate(cls, plugin_id: str, version: Union[str, Version]) -> RTextBase: ...
+
+	@classmethod
+	@overload
+	def candidate(cls, candidate: PluginCandidate) -> RTextBase: ...
+
+	@classmethod
+	def candidate(cls, *args) -> RTextBase:
+		if len(args) == 1:
+			candidate: PluginCandidate = args[0]
+			return cls.candidate(candidate.id, candidate.version)
+		elif len(args) == 2:
+			plugin_id: str = args[0]
+			version: Union[str, Version] = args[1]
+			return RTextList(
+				cls.plugin_id(plugin_id),
+				RText('@', RColor.gray),
+				cls.version(version),
+			)
+		else:
+			raise TypeError(len(args))
+
+	@classmethod
+	def diff_version(cls, base: Version, new: Version) -> RTextBase:
+		s1, s2 = str(base), str(new)
+		i = 0
+		for i in range(min(len(s1), len(s2))):
+			if s1[i] != s2[i]:
+				break
+		if i == 0:
+			return RText(s2, RColor.gold)
+		else:
+			return RText(s2[:i]) + RText(s2[i:], RColor.dark_aqua)
 
 
 @dataclasses.dataclass
@@ -606,17 +634,6 @@ class PluginCommandPimExtension(SubCommand):
 			RTextBase.join(', ', [self.__tr(k, RText(n, RColor.gold)) for n, k in kinds if n > 0])
 		))
 
-		def diff_version(base: Version, new: Version) -> RTextBase:
-			s1, s2 = str(base), str(new)
-			i = 0
-			for i in range(min(len(s1), len(s2))):
-				if s1[i] != s2[i]:
-					break
-			if i == 0:
-				return RText(s2, RColor.gold)
-			else:
-				return RText(s2[:i]) + RText(s2[i:], RColor.dark_aqua)
-
 		if len(update_able_plugins) > 0:
 			source.reply(self.__tr('check_update.updatable.title').set_styles(RStyle.bold))
 			source.reply('')
@@ -629,12 +646,12 @@ class PluginCommandPimExtension(SubCommand):
 					' ',
 					RText(entry.current_version),
 					RText(' -> ', RColor.gray),
-					diff_version(entry.current_version, entry.update_version),
+					Texts.diff_version(entry.current_version, entry.update_version),
 				)
 				if entry.update_version != entry.latest_version:
 					texts.append(
 						' (',
-						self.__tr('check_update.latest', diff_version(entry.current_version, entry.latest_version)),
+						self.__tr('check_update.latest', Texts.diff_version(entry.current_version, entry.latest_version)),
 						')',
 					)
 				source.reply(texts)
@@ -655,7 +672,7 @@ class PluginCommandPimExtension(SubCommand):
 					' ',
 					RText(entry.current_version),
 					' (',
-					self.__tr('check_update.latest', diff_version(entry.current_version, entry.latest_version)),
+					self.__tr('check_update.latest', Texts.diff_version(entry.current_version, entry.latest_version)),
 					') -- ',
 					reason,
 				))
@@ -796,7 +813,7 @@ class PluginCommandPimExtension(SubCommand):
 		class ToInstallData:
 			id: str
 			version: Version
-			old_version: Optional[str]
+			old_version: Optional[Version]
 			release: ReleaseData
 
 		def step_collect_to_install():
@@ -841,14 +858,19 @@ class PluginCommandPimExtension(SubCommand):
 				else:
 					add_cnt += 1
 
-			source.reply(self.__tr('install.install_summary.plugin', new=add_cnt, change=change_cnt, total=len(to_install)))
+			source.reply(self.__tr(
+				'install.install_summary.plugin',
+				new=RText(add_cnt, RColor.gold),
+				change=RText(change_cnt, RColor.gold),
+				total=RText(len(to_install), RColor.gold),
+			))
 			source.reply('')
 			for plugin_id, data in to_install.items():
 				source.reply(self.INDENT + self.__tr(
 					'install.install_summary.plugin_entry',
 					self.__browse_cmd(plugin_id),
-					Texts.version(data.old_version) if data.old_version else RText('N/A', RColor.dark_gray),
-					Texts.version(data.version),
+					RText(data.old_version) if data.old_version else RText('N/A', RColor.dark_gray),
+					Texts.diff_version(data.old_version, data.version) if data.old_version else Texts.version(data.version),
 				))
 			source.reply('')
 
@@ -863,7 +885,7 @@ class PluginCommandPimExtension(SubCommand):
 					source.reply(self.INDENT + self.__tr(
 						'install.install_summary.python_entry',
 						RText(req, RColor.blue).c(RAction.open_url, f'https://pypi.org/project/{req}/'),
-						package_requirements[req],
+						Texts.candidate(package_requirements[req]),
 					))
 				source.reply('')
 
