@@ -223,6 +223,13 @@ Arguments:
         my_plugin^=2.0.1
 
 - ``<target>``: The plugin directory to install the plugins into. The default value is the first path in the :ref:`configuration:plugin_directories` list in MCDR config
+
+    .. note::
+
+        This argument only affects newly installed plugins
+
+        For already existing plugins, their target installation directory will always be where the existing plugin is
+
 - ``-U``, ``--upgrade``: An optional flag suggesting that if given plugin is already installed, then it will be upgrade if possible
 - ``--dry-run``: An optional flag for test run. If provided, no actual installation will be performed
 - ``--no-dependencies``: An optional flag to ignore all dependencies relationships during plugin resolution. No indirect depended plugin and python packages will be installed
