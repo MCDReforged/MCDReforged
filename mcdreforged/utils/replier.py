@@ -23,6 +23,10 @@ class Replier(ABC):
 	def reply(self, message: MessageText) -> None:
 		raise NotImplementedError()
 
+	@property
+	def padding_width(self) -> int:
+		return 0
+
 
 class NoopReplier(Replier):
 	@override
@@ -63,3 +67,10 @@ class CommandSourceReplier(Replier):
 	@override
 	def reply(self, message: MessageText):
 		self.command_source.reply(message)
+
+	@property
+	def padding_width(self) -> int:
+		if self.command_source.is_console:
+			return len('[MCDR] [00:00:00] [PIM/INFO]: ')
+		else:
+			return 0

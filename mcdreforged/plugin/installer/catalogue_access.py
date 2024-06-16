@@ -102,7 +102,7 @@ class PluginCatalogueAccess:
 
 			file_path = target_dir / release.file_name
 			replier.reply('Downloading {}@{} to {} ({:.1f}KiB)'.format(plugin_id, release.version, file_path, release.file_size / 1024.0))
-			ReleaseDownloader(release, file_path, replier).download(show_progress=True)
+			ReleaseDownloader(release, file_path, replier).download(show_progress=ReleaseDownloader.ShowProgressPolicy.full)
 			downloaded_paths.append(file_path)
 
 		replier.reply('Downloaded {} plugin{}: {}'.format(len(plugin_ids), 's' if len(plugin_ids) > 0 else '', ', '.join(map(str, plugin_ids))))

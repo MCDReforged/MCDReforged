@@ -975,7 +975,7 @@ class PluginCommandPimExtension(SubCommand):
 							},
 							download_timeout=self.mcdr_server.config.plugin_download_timeout,
 							logger=self.logger,
-						).download()
+						).download(show_progress=ReleaseDownloader.ShowProgressPolicy.if_costly)
 
 				# apply
 				to_load_paths: List[Path] = []

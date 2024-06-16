@@ -340,7 +340,7 @@ mcdreforged:
         reloading_plugins: 已安装 {0} 个插件，正在重载 MCDR
 
         installation_done: 插件安装完成
-        installation_error: '插件安装失败: {0}。回滚中'
+        installation_error: '插件安装失败，回滚中: {0}'
       refreshmeta:
         name: 更新插件仓库元数据
 

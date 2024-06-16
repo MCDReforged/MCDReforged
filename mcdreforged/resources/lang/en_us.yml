@@ -340,7 +340,7 @@ mcdreforged:
         reloading_plugins: Installed {0} plugins, reloading MCDR
 
         installation_done: Installation done
-        installation_error: 'Installation error: {0}. Performing rollback'
+        installation_error: 'Installation error, performing rollback: {0}'
       refreshmeta:
         name: Refresh plugin meta
 

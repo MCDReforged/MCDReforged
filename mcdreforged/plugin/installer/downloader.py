@@ -1,15 +1,35 @@
+import enum
 import hashlib
 import logging
+import os
 import time
 from pathlib import Path
 from typing import Optional
 
+from wcwidth import wcswidth
+
+from mcdreforged.minecraft.rtext.style import RColor
+from mcdreforged.minecraft.rtext.text import RText, RTextBase, RTextList
 from mcdreforged.plugin.installer.meta_holder import ReleaseData
 from mcdreforged.utils import request_utils
 from mcdreforged.utils.replier import Replier
 
 
+def width_limited(s: str, n: int) -> RTextBase:
+	result = ''
+	for ch in s:
+		if wcswidth(new_s := result + ch) > n:
+			return RText(result) + RText('...', color=RColor.gray)
+		result = new_s
+	return result
+
+
 class ReleaseDownloader:
+	class ShowProgressPolicy(enum.Enum):
+		never = enum.auto()
+		if_costly = enum.auto()
+		full = enum.auto()
+
 	def __init__(
 			self,
 			release: ReleaseData, target_path: Path, replier: Replier,
@@ -29,7 +49,9 @@ class ReleaseDownloader:
 		self.download_timeout: float = download_timeout
 		self.logger = logger
 
-	def __download(self, url: str, show_progress: bool):
+	__REPORT_INTERVAL_SEC = 5
+
+	def __download(self, url: str, show_progress: ShowProgressPolicy):
 		if self.download_url_override is not None:
 			kwargs = dict(
 				url=url,
@@ -55,14 +77,36 @@ class ReleaseDownloader:
 			self.logger.debug('Response content length: {}'.format(length))
 
 		def report():
-			if show_progress:
-				percent = 100 * downloaded / length
-				bar = '=' * (50 * downloaded // length)
-				bar += ' ' * (50 - len(bar))
-				self.replier.reply(f'Downloading [{bar}] {percent:.1f}%')
+			nonlocal has_any_report
+			has_any_report = True
+
+			file_name = width_limited(self.release.file_name, 50)
+			percent_str = f'{100.0 * downloaded / length:.1f}%'
+			percent_str_m = percent_str + ' ' * (len('100.0%') - len(percent_str))
+			simple_msg = RTextList(file_name, ' ', percent_str)
+			simple_msg_m = RTextList(file_name, ' ', percent_str_m)
+
+			if self.replier.is_console():
+				try:
+					terminal_width, _ = os.get_terminal_size()
+				except OSError:
+					terminal_width = 0
+			else:
+				terminal_width = 40
+
+			bar_max_len = terminal_width - self.replier.padding_width - len('[] ') - wcswidth(str(simple_msg_m))
+			if bar_max_len >= 10:
+				bar_len = min(100, bar_max_len - bar_max_len % 10)
+				bar = '=' * (bar_len * downloaded // length)
+				bar += ' ' * (bar_len - len(bar))
+				self.replier.reply(RTextList(file_name, f' [{bar}] {percent_str}'))
+			else:
+				self.replier.reply(simple_msg)
 
 		downloaded = 0
-		report()
+		has_any_report = False
+		if show_progress == self.ShowProgressPolicy.full:
+			report()
 
 		with open(self.target_path, 'wb') as f:
 			hasher = hashlib.sha256()
@@ -75,14 +119,18 @@ class ReleaseDownloader:
 				f.write(buf)
 
 				t = time.time()
-				if t - last_report_time > 3 or downloaded == length:
-					report()
+				if t - last_report_time > self.__REPORT_INTERVAL_SEC or downloaded == length:
+					if (
+							show_progress == self.ShowProgressPolicy.full or
+							(show_progress == self.ShowProgressPolicy.if_costly and (has_any_report or downloaded < length))
+					):
+						report()
 					last_report_time = t
 
 			if (h := hasher.hexdigest()) != self.release.file_sha256:
 				raise ValueError('SHA256 mismatched, expected {}, actual {}, length {}'.format(self.release.file_sha256, h, length))
 
-	def download(self, *, show_progress: bool = False, retry_cnt: int = 2):
+	def download(self, *, show_progress: ShowProgressPolicy = ShowProgressPolicy.never, retry_cnt: int = 2):
 		if self.mkdir:
 			self.target_path.parent.mkdir(parents=True, exist_ok=True)
 
