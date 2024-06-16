@@ -1,7 +1,9 @@
+import contextlib
 import enum
 import hashlib
 import logging
 import os
+import threading
 import time
 from pathlib import Path
 from typing import Optional
@@ -30,6 +32,9 @@ class ReleaseDownloader:
 		if_costly = enum.auto()
 		full = enum.auto()
 
+	class Aborted(Exception):
+		pass
+
 	def __init__(
 			self,
 			release: ReleaseData, target_path: Path, replier: Replier,
@@ -48,10 +53,13 @@ class ReleaseDownloader:
 		self.download_url_override_kwargs: dict = download_url_override_kwargs or {}
 		self.download_timeout: float = download_timeout
 		self.logger = logger
+		self.__download_abort_event = threading.Event()
 
 	__REPORT_INTERVAL_SEC = 5
 
 	def __download(self, url: str, show_progress: ShowProgressPolicy):
+		self.__download_abort_event.clear()
+
 		if self.download_url_override is not None:
 			kwargs = dict(
 				url=url,
@@ -75,6 +83,8 @@ class ReleaseDownloader:
 			raise ValueError('File too large ({}MiB), please download manually'.format(round(length / 1024 / 1024, 1)))
 		if self.logger is not None:
 			self.logger.debug('Response content length: {}'.format(length))
+
+		self.__check_abort()
 
 		def report():
 			nonlocal has_any_report
@@ -108,27 +118,33 @@ class ReleaseDownloader:
 		if show_progress == self.ShowProgressPolicy.full:
 			report()
 
-		with open(self.target_path, 'wb') as f:
-			hasher = hashlib.sha256()
-			last_report_time = time.time()
-			for buf in response.iter_content(chunk_size=4096):
-				downloaded += len(buf)
-				if downloaded > length:
-					raise ValueError('read too much data, read {}, length {}'.format(downloaded, length))
-				hasher.update(buf)
-				f.write(buf)
+		try:
+			with open(self.target_path, 'wb') as f:
+				hasher = hashlib.sha256()
+				last_report_time = time.time()
+				for buf in response.iter_content(chunk_size=4096):
+					self.__check_abort()
 
-				t = time.time()
-				if t - last_report_time > self.__REPORT_INTERVAL_SEC or downloaded == length:
-					if (
-							show_progress == self.ShowProgressPolicy.full or
-							(show_progress == self.ShowProgressPolicy.if_costly and (has_any_report or downloaded < length))
-					):
-						report()
-					last_report_time = t
+					downloaded += len(buf)
+					if downloaded > length:
+						raise ValueError('read too much data, read {}, length {}'.format(downloaded, length))
+					hasher.update(buf)
+					f.write(buf)
 
-			if (h := hasher.hexdigest()) != self.release.file_sha256:
-				raise ValueError('SHA256 mismatched, expected {}, actual {}, length {}'.format(self.release.file_sha256, h, length))
+					t = time.time()
+					if t - last_report_time > self.__REPORT_INTERVAL_SEC or downloaded == length:
+						if (
+								show_progress == self.ShowProgressPolicy.full or
+								(show_progress == self.ShowProgressPolicy.if_costly and (has_any_report or downloaded < length))
+						):
+							report()
+						last_report_time = t
+
+				if (h := hasher.hexdigest()) != self.release.file_sha256:
+					raise ValueError('SHA256 mismatched, expected {}, actual {}, length {}'.format(self.release.file_sha256, h, length))
+		except self.Aborted:
+			with contextlib.suppress(OSError):
+				self.target_path.unlink()
 
 	def download(self, *, show_progress: ShowProgressPolicy = ShowProgressPolicy.never, retry_cnt: int = 2):
 		if self.mkdir:
@@ -137,10 +153,13 @@ class ReleaseDownloader:
 		errors = []
 		url = self.release.file_url
 		for i in range(retry_cnt):
+			self.__check_abort()
 			if self.logger is not None:
 				self.logger.debug('Download attempt {} start'.format(i + 1))
 			try:
 				self.__download(url, show_progress)
+			except self.Aborted:
+				raise
 			except Exception as e:
 				self.replier.reply('Download attempt {} failed, url {!r}, error: {}'.format(i + 1, url, e))
 				if not self.replier.is_console() and self.logger is not None:
@@ -150,3 +169,10 @@ class ReleaseDownloader:
 				return
 
 		raise Exception('All download attempts failed: {}'.format(errors))
+
+	def abort(self):
+		self.__download_abort_event.set()
+
+	def __check_abort(self):
+		if self.__download_abort_event.is_set():
+			raise self.Aborted()

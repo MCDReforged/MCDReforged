@@ -1,3 +1,4 @@
+import contextlib
 import dataclasses
 import re
 import subprocess
@@ -191,8 +192,12 @@ class PluginDependencyResolver:
 
 
 class PackageRequirementResolver:
+	"""
+	Not thread-safe
+	"""
 	def __init__(self, package_requirements: PackageRequirements):
 		self.package_requirements = package_requirements
+		self.__proc: Optional[subprocess.Popen] = None
 
 	def check(self, *, extra_args: Iterable[str] = ()) -> Union[Optional[str], subprocess.CalledProcessError]:
 		if len(self.package_requirements) == 0:
@@ -214,6 +219,9 @@ class PackageRequirementResolver:
 	def install(self, *, extra_args: Iterable[str] = ()):
 		if len(self.package_requirements) == 0:
 			return
+		if self.__proc is not None:
+			raise RuntimeError('concurrent call')
+
 		cmd = [
 			sys.executable,
 			'-m', 'pip', 'install',
@@ -221,4 +229,13 @@ class PackageRequirementResolver:
 			*extra_args,
 			*self.package_requirements
 		]
-		subprocess.check_call(cmd)
+		try:
+			with subprocess.Popen(cmd) as self.__proc:
+				self.__proc.wait()
+		finally:
+			self.__proc = None
+
+	def abort(self):
+		proc = self.__proc
+		with contextlib.suppress(OSError):
+			proc.terminate()

@@ -1,5 +1,5 @@
+import contextlib
 import dataclasses
-import datetime
 import enum
 import functools
 import logging
@@ -10,7 +10,7 @@ import subprocess
 import threading
 import time
 from pathlib import Path
-from typing import Optional, List, TYPE_CHECKING, Dict, Any, Callable, Union, Iterable, overload
+from typing import Optional, List, TYPE_CHECKING, Dict, Callable, Iterable
 
 import resolvelib
 from typing_extensions import override, deprecated
@@ -20,15 +20,18 @@ from mcdreforged.command.builder.nodes.arguments import Text, QuotableText
 from mcdreforged.command.builder.nodes.basic import Literal
 from mcdreforged.command.builder.nodes.special import CountingLiteral
 from mcdreforged.command.command_source import CommandSource
-from mcdreforged.constants.core_constant import DEFAULT_LANGUAGE
 from mcdreforged.minecraft.rtext.style import RColor, RAction, RStyle
 from mcdreforged.minecraft.rtext.text import RTextBase, RText, RTextList
+from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.pim_internal.abort_helper import AbortHelper
+from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.pim_internal.confirm_helper import ConfirmHelper, ConfirmHelperState
+from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.pim_internal.local_meta_registry import LocalMetaRegistry, LocalReleaseData
+from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.pim_internal.texts import Texts
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.sub_command import SubCommand, SubCommandEvent
 from mcdreforged.plugin.installer.catalogue_access import PluginCatalogueAccess
 from mcdreforged.plugin.installer.dependency_resolver import PluginRequirement, PluginDependencyResolver, PackageRequirementResolver, PluginCandidate, PluginDependencyResolverArgs
 from mcdreforged.plugin.installer.downloader import ReleaseDownloader
 from mcdreforged.plugin.installer.meta_holder import PersistCatalogueMetaRegistryHolder
-from mcdreforged.plugin.installer.types import MetaRegistry, PluginData, ReleaseData, MergedMetaRegistry, PluginResolution
+from mcdreforged.plugin.installer.types import MetaRegistry, ReleaseData, MergedMetaRegistry, PluginResolution
 from mcdreforged.plugin.meta.version import VersionRequirement, Version
 from mcdreforged.utils import misc_utils
 from mcdreforged.utils.replier import CommandSourceReplier
@@ -37,59 +40,6 @@ if TYPE_CHECKING:
 	from mcdreforged.plugin.builtin.mcdreforged_plugin.mcdreforged_plugin import MCDReforgedPlugin
 	from mcdreforged.plugin.plugin_manager import PluginManager
 	from mcdreforged.plugin.type.plugin import AbstractPlugin
-
-
-class LocalReleaseData(ReleaseData):
-	pass
-
-
-class LocalMetaRegistry(MetaRegistry):
-	def __init__(self, plugin_manager: 'PluginManager', cache: bool = True):
-		self.__plugin_manager = plugin_manager
-		self.__do_cache = cache
-		self.__cached_data: Optional[dict] = None
-
-	@property
-	@override
-	def plugins(self) -> Dict[str, PluginData]:
-		if self.__do_cache and self.__cached_data is not None:
-			return self.__cached_data
-
-		result = {}
-		for plugin in self.__plugin_manager.get_all_plugins():
-			meta = plugin.get_metadata()
-			version = str(meta.version)
-			if isinstance(meta.description, str):
-				description = {DEFAULT_LANGUAGE: meta.description}
-			elif isinstance(meta.description, dict):
-				description = meta.description.copy()
-			else:
-				description = {}
-			result[meta.id] = PluginData(
-				id=meta.id,
-				name=meta.name,
-				repos_url='*local*',
-				repos_owner='*local*',
-				repos_name='*local*',
-				latest_version=version,
-				description=description,
-				releases={version: LocalReleaseData(
-					version=version,
-					tag_name='',
-					url='',
-					created_at=datetime.datetime.now(),
-					dependencies={},
-					requirements=[],
-					asset_id=0,
-					file_name='',
-					file_size=0,
-					file_url='',
-					file_sha256='',
-				)}
-			)
-		if self.__do_cache:
-			self.__cached_data = result
-		return result
 
 
 def as_requirement(plugin: 'AbstractPlugin', op: Optional[str], **kwargs) -> PluginRequirement:
@@ -114,63 +64,6 @@ def sanitize_filename(filename: str) -> str:
 	return re.sub(r'[\\/*?"<>|:]', '_', filename.strip())
 
 
-class Texts:
-	@classmethod
-	def cmd(cls, s: str, run: bool = False) -> RTextBase:
-		return RText(s, color=RColor.gray).c(RAction.run_command if run else RAction.suggest_command, s)
-	
-	@classmethod
-	def url(cls, s: Any, url: str, *, color: RColor = RColor.blue, underlined: bool = True) -> RTextBase:
-		text = RText(s, color=color).c(RAction.open_url, url)
-		if underlined:
-			text.set_styles(RStyle.underlined)
-		return text
-
-	@classmethod
-	def plugin_id(cls, plugin_id: str) -> RTextBase:
-		return RText(plugin_id, color=RColor.yellow)
-
-	@classmethod
-	def version(cls, version: Union[str, Version]) -> RTextBase:
-		return RText(version, color=RColor.gold)
-
-	@classmethod
-	@overload
-	def candidate(cls, plugin_id: str, version: Union[str, Version]) -> RTextBase: ...
-
-	@classmethod
-	@overload
-	def candidate(cls, candidate: PluginCandidate) -> RTextBase: ...
-
-	@classmethod
-	def candidate(cls, *args) -> RTextBase:
-		if len(args) == 1:
-			candidate: PluginCandidate = args[0]
-			return cls.candidate(candidate.id, candidate.version)
-		elif len(args) == 2:
-			plugin_id: str = args[0]
-			version: Union[str, Version] = args[1]
-			return RTextList(
-				cls.plugin_id(plugin_id),
-				RText('@', RColor.gray),
-				cls.version(version),
-			)
-		else:
-			raise TypeError(len(args))
-
-	@classmethod
-	def diff_version(cls, base: Version, new: Version) -> RTextBase:
-		s1, s2 = str(base), str(new)
-		i = 0
-		for i in range(min(len(s1), len(s2))):
-			if s1[i] != s2[i]:
-				break
-		if i == 0:
-			return RText(s2, RColor.gold)
-		else:
-			return RText(s2[:i]) + RText(s2[i:], RColor.dark_aqua)
-
-
 @dataclasses.dataclass
 class OperationHolder:
 	lock: threading.Lock = dataclasses.field(default_factory=threading.Lock)
@@ -181,7 +74,7 @@ class _OuterReturn(Exception):
 	pass
 
 
-def async_operation(op_holder: OperationHolder, skip_callback: callable, thread_name: str):
+def async_operation(op_holder: OperationHolder, skip_callback: callable, caller_func: callable, thread_name: str):
 	def decorator(op_key: str):
 		def func_transformer(func: callable):
 			@functools.wraps(func)
@@ -190,7 +83,7 @@ def async_operation(op_holder: OperationHolder, skip_callback: callable, thread_
 				if acquired:
 					def run():
 						try:
-							func(*args, **kwargs)
+							caller_func(*args, func, **kwargs)
 						except _OuterReturn:
 							pass
 						finally:
@@ -213,41 +106,6 @@ def async_operation(op_holder: OperationHolder, skip_callback: callable, thread_
 	return decorator
 
 
-class ConfirmHelperState(enum.Enum):
-	none = enum.auto()       # pre-waiting
-	waiting = enum.auto()    # waiting
-	confirmed = enum.auto()  # post-waiting
-	aborted = enum.auto()    # post-waiting
-	cancelled = enum.auto()  # post-waiting (abort silently)
-
-
-class ConfirmHelper:
-	def __init__(self):
-		self.__lock = threading.Lock()
-		self.__event = threading.Event()
-		self.__state = ConfirmHelperState.none
-
-	def wait(self, timeout: float) -> bool:
-		with self.__lock:
-			self.__state = ConfirmHelperState.waiting
-		return self.__event.wait(timeout=timeout)
-
-	def set(self, state: ConfirmHelperState):
-		with self.__lock:
-			if self.__state == ConfirmHelperState.waiting:
-				self.__state = state
-				self.__event.set()
-
-	def get(self) -> ConfirmHelperState:
-		with self.__lock:
-			return self.__state
-
-	def clear(self):
-		with self.__lock:
-			self.__event.clear()
-			self.__state = ConfirmHelperState.none
-
-
 class PluginCommandPimExtension(SubCommand):
 	CONFIRM_WAIT_TIMEOUT = 60  # seconds
 	INDENT = ' ' * 4
@@ -264,6 +122,7 @@ class PluginCommandPimExtension(SubCommand):
 		)
 		self.__installation_confirm_helper = ConfirmHelper()
 		self.__installation_source: Optional[CommandSource] = None
+		self.__installation_abort_helper = AbortHelper()
 		self.__tr = mcdr_plugin.get_translator().create_child('mcdr_command.pim')
 
 	@override
@@ -341,11 +200,13 @@ class PluginCommandPimExtension(SubCommand):
 	@override
 	def on_load(self):
 		self.__meta_holder.init()
+		self.__delete_remaining_download_temp()
 
 	@override
 	def on_mcdr_stop(self):
 		self.__meta_holder.terminate()
 		self.__installation_confirm_helper.set(ConfirmHelperState.aborted)
+		self.__installation_abort_helper.abort()
 		thread = self.current_operation.thread
 		if thread is not None:
 			thread.join(timeout=self.CONFIRM_WAIT_TIMEOUT + 1)
@@ -353,13 +214,16 @@ class PluginCommandPimExtension(SubCommand):
 	@override
 	def on_event(self, source: Optional[CommandSource], event: SubCommandEvent) -> bool:
 		sis = self.__installation_source
+		is_confirm_waiting = sis is not None and self.__installation_confirm_helper.is_waiting()
 		if event == SubCommandEvent.confirm:
-			if sis is not None and source == sis:
+			if is_confirm_waiting and source == sis:
 				self.__installation_confirm_helper.set(ConfirmHelperState.confirmed)
 				return True
 		elif event == SubCommandEvent.abort:
 			if sis is not None and source is not None and source.get_permission_level() >= sis.get_permission_level():
-				self.__installation_confirm_helper.set(ConfirmHelperState.aborted)
+				self.__installation_abort_helper.abort()
+				if is_confirm_waiting:
+					self.__installation_confirm_helper.set(ConfirmHelperState.aborted)
 				return True
 		return False
 
@@ -370,6 +234,19 @@ class PluginCommandPimExtension(SubCommand):
 	@property
 	def plugin_manager(self) -> 'PluginManager':
 		return self.mcdr_plugin.plugin_manager
+
+	def __delete_remaining_download_temp(self, data_dir: Optional[Path] = None):
+		if data_dir is None:
+			data_dir = Path(self.server_interface.get_data_folder())
+		for name in os.listdir(data_dir):
+			dl_path = data_dir / name
+			try:
+				if dl_path.name.startswith('pim_') and dl_path.is_dir():
+					if time.time() - dl_path.stat().st_mtime > 24 * 60 * 60:  # > 1day
+						shutil.rmtree(dl_path)
+						self.logger.info('Deleting old download temp dir {}'.format(dl_path))
+			except OSError as e:
+				self.logger.error('Error deleting renaming download temp dir {}: {}'.format(dl_path, e))
 
 	def __get_cata_meta(self, source: CommandSource, ignore_ttl: bool = False) -> MetaRegistry:
 		def start_fetch_callback(no_skip: bool):
@@ -401,16 +278,33 @@ class PluginCommandPimExtension(SubCommand):
 				# Another installation command when waiting for installation
 				# Cancel the existing one and perform another installation
 				self.__installation_confirm_helper.set(ConfirmHelperState.cancelled)
+				can_install = False
 				if op_thread is not None:
-					op_thread.join(1)
+					op_thread.join(0.5)
+
+					# if op_thread is blocked at confirm wait, then op_thread will exit soon
 					if op_thread.is_alive():
-						self.logger.error('Join thread {} failed, skipped new installation operation'.format(op_thread))
-						return
-				self.cmd_install_plugins(source, context)
-				return
+						self.log_debug('cmd_install_plugins thread is still alive after join'.format(op_thread))
+					else:
+						can_install = True
+				if can_install:
+					self.cmd_install_plugins(source, context)
+					return
+
 		source.reply(self.__tr('common.duplicated_input', self.__tr('{}.name'.format(op_key))))
 
-	plugin_installer_guard = async_operation(op_holder=current_operation, skip_callback=__handle_duplicated_input, thread_name='PIM')
+	def __guard_wrapper(self, source: CommandSource, context: CommandContext, func: Callable):
+		try:
+			func(self, source, context)
+		finally:
+			self.__installation_source = None
+
+	plugin_installer_guard = async_operation(
+		op_holder=current_operation,
+		skip_callback=__handle_duplicated_input,
+		caller_func=__guard_wrapper,
+		thread_name='PIM',
+	)
 
 	def __browse_cmd(self, plugin_id: str):
 		return (
@@ -724,6 +618,14 @@ class PluginCommandPimExtension(SubCommand):
 		ctx = __Ctx()
 		self.log_debug('pim install ctx: {}'.format(ctx))
 
+		def check_abort():
+			if self.__installation_abort_helper.is_aborted():
+				source.reply(self.__tr('install.aborted'))
+				raise _OuterReturn()
+
+		self.__installation_abort_helper.clear()
+		self.__installation_source = source
+
 		# ------------------- Verify and Collect -------------------
 
 		def step_create_plugin_requirements():
@@ -904,34 +806,23 @@ class PluginCommandPimExtension(SubCommand):
 				self.__installation_confirm_helper.clear()
 				source.reply(self.__tr('install.confirm_hint', cmd_confirm=Texts.cmd('!!MCDR confirm'), cmd_abort=Texts.cmd('!!MCDR abort')) + dry_run_suffix)
 
-				self.__installation_source = source
 				ok = self.__installation_confirm_helper.wait(self.CONFIRM_WAIT_TIMEOUT)
-				self.__installation_source = None
 
 				ich_state = self.__installation_confirm_helper.get()
 				if ich_state == ConfirmHelperState.cancelled:
 					return
 				elif ich_state == ConfirmHelperState.aborted:
-					source.reply(self.__tr('install.confirm_aborted'))
+					source.reply(self.__tr('install.aborted'))
 					return
 				if not ok:
 					source.reply(self.__tr('install.confirm_timeout'))
 					return
 
-			def delete_remaining_download_temp():
-				for name in os.listdir(base_dir):
-					dl_path = base_dir / name
-					try:
-						if dl_path.name.startswith('pim_') and dl_path.is_dir():
-							if time.time() - dl_path.stat().st_mtime > 24 * 60 * 60:  # > 1day
-								shutil.rmtree(dl_path)
-								self.logger.info('Deleting old download temp dir {}'.format(dl_path))
-					except OSError as e_:
-						self.logger.error('Error deleting renaming download temp dir {}: {}'.format(dl_path, e_))
+			check_abort()
 
 			# download
 			base_dir = Path(self.server_interface.get_data_folder())
-			delete_remaining_download_temp()
+			self.__delete_remaining_download_temp(base_dir)
 
 			download_temp_dir = base_dir / 'pim_{}'.format(os.getpid())
 			if not ctx.dry_run and download_temp_dir.is_dir():
@@ -947,12 +838,15 @@ class PluginCommandPimExtension(SubCommand):
 						source.reply(self.__tr('install.install_package_dry_run', ', '.join(package_resolver.package_requirements)) + dry_run_suffix)
 					else:
 						try:
-							package_resolver.install()
+							with self.__installation_abort_helper.add_abort_callback(package_resolver.abort):
+								package_resolver.install()
 						except subprocess.CalledProcessError as e:
 							source.reply(self.__tr('install.install_package_failed', e))
 							if source.is_console:
 								self.server_interface.logger.exception('Python package installation failed', e)
-							return
+							raise _OuterReturn()
+
+				check_abort()
 
 				source.reply(self.__tr('install.downloading_installing_plugin', len(to_install)))
 				for plugin_id, data in to_install.items():
@@ -966,7 +860,7 @@ class PluginCommandPimExtension(SubCommand):
 					) + dry_run_suffix)
 					if not ctx.dry_run:
 						download_temp_file.parent.mkdir(parents=True, exist_ok=True)
-						ReleaseDownloader(
+						downloader = ReleaseDownloader(
 							data.release, download_temp_file, CommandSourceReplier(source),
 							download_url_override=self.mcdr_server.config.plugin_download_url,
 							download_url_override_kwargs={
@@ -975,7 +869,13 @@ class PluginCommandPimExtension(SubCommand):
 							},
 							download_timeout=self.mcdr_server.config.plugin_download_timeout,
 							logger=self.logger,
-						).download(show_progress=ReleaseDownloader.ShowProgressPolicy.if_costly)
+						)
+						with contextlib.suppress(downloader.Aborted):
+							with self.__installation_abort_helper.add_abort_callback(downloader.abort):
+								downloader.download(show_progress=ReleaseDownloader.ShowProgressPolicy.if_costly)
+						check_abort()
+
+				check_abort()
 
 				# apply
 				to_load_paths: List[Path] = []
@@ -1017,6 +917,9 @@ class PluginCommandPimExtension(SubCommand):
 					to_load_paths.append(dst)
 					if plugin is not None:
 						to_unload_ids.append(plugin_id)
+
+			except _OuterReturn:
+				raise
 
 			except Exception as e:
 				self.logger.error(self.__tr('install.installation_error', e).set_color(RColor.red))

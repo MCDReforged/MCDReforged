@@ -328,7 +328,7 @@ mcdreforged:
 
         dry_run_suffix: ' (dry-run)'
         confirm_hint: 'Enter {cmd_confirm} to confirm installation, or {cmd_abort} to abort'
-        confirm_aborted: Plugin installation abort
+        aborted: Plugin installation abort
         confirm_timeout: Plugin installation confirmation timed out, abort
 
         installing_package: Installing {0} required python packages
