@@ -525,7 +525,7 @@ class PluginCommandPimExtension(SubCommand):
 		]
 		source.reply(self.__tr(
 			'check_update.found_summary',
-			RTextBase.join(', ', [self.__tr(k, RText(n, RColor.gold)) for n, k in kinds if n > 0])
+			RTextBase.join(', ', [self.__tr(k, Texts.number(n)) for n, k in kinds if n > 0])
 		))
 
 		if len(update_able_plugins) > 0:
@@ -760,11 +760,15 @@ class PluginCommandPimExtension(SubCommand):
 				else:
 					add_cnt += 1
 
-			source.reply(self.__tr(
-				'install.install_summary.plugin',
-				new=RText(add_cnt, RColor.gold),
-				change=RText(change_cnt, RColor.gold),
-				total=RText(len(to_install), RColor.gold),
+			source.reply(RTextBase.format(
+				'{} ({}):',
+				self.__tr('install.install_summary.plugin_title').set_styles(RStyle.bold),
+				self.__tr(
+					'install.install_summary.plugin_count',
+					new=Texts.number(add_cnt),
+					change=Texts.number(change_cnt),
+					total=Texts.number(len(to_install)),
+				)
 			))
 			source.reply('')
 			for plugin_id, data in to_install.items():
@@ -781,7 +785,11 @@ class PluginCommandPimExtension(SubCommand):
 				package_requirements.clear()
 
 			if len(package_requirements) > 0:
-				source.reply(self.__tr('install.install_summary.python', len(package_requirements)))
+				source.reply(RTextBase.format(
+					'{} ({}):',
+					self.__tr('install.install_summary.python_title').set_styles(RStyle.bold),
+					self.__tr('install.install_summary.python_count', Texts.number(len(package_requirements)))
+				))
 				source.reply('')
 				for req in sorted(package_requirements.keys()):
 					source.reply(self.INDENT + self.__tr(
@@ -833,7 +841,7 @@ class PluginCommandPimExtension(SubCommand):
 			newly_added_files: List[Path] = []
 			try:
 				if len(package_requirements) > 0:
-					source.reply(self.__tr('install.installing_package', len(to_install)))
+					source.reply(self.__tr('install.installing_package', Texts.number(len(package_requirements))))
 					if ctx.dry_run:
 						source.reply(self.__tr('install.install_package_dry_run', ', '.join(package_resolver.package_requirements)) + dry_run_suffix)
 					else:

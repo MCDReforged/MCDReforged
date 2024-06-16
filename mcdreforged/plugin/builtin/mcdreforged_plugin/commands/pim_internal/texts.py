@@ -61,3 +61,7 @@ class Texts:
 			return RText(s2, RColor.gold)
 		else:
 			return RText(s2[:i]) + RText(s2[i:], RColor.dark_aqua)
+
+	@classmethod
+	def number(cls, n: Union[int, float]) -> RTextBase:
+		return RText(n, color=RColor.gold)

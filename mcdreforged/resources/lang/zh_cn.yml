@@ -321,9 +321,11 @@ mcdreforged:
         cannot_change_not_packed: '已有的插件 {0} 的类型为 {1}，无法被重新安装。只有打包插件是可以被重新安装'
         nothing_to_install: 已安装的插件已满足所述需求，无需安装任何插件
         install_summary:
-          plugin: '将被安装的插件 (新增 {new}, 修改 {change}, 总共 {total}):'
+          plugin_title: '将被安装的插件'
+          plugin_count: '新增 {new}, 修改 {change}, 总共 {total}'
           plugin_entry: '{0}: {1} -> {2}'
-          python: '将要被安装的 Python 包 ({0}x):'
+          python_title: '将要被安装的 Python 包'
+          python_count: '{0}x'
           python_entry: '{0} (被 {1} 依赖)'
 
         dry_run_suffix: ' (试运行)'
