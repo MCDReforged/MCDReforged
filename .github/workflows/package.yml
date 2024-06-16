@@ -229,8 +229,8 @@ jobs:
         echo pip_cmd=$pip_cmd
         while true; do
           if $pip_cmd && $pip_cmd && $pip_cmd; then
-            echo "Version ${VERSION} exists on ${PYPI_SIMPLE}, wait 15s and exit"
-            sleep 15
+            echo "Version ${VERSION} exists on ${PYPI_SIMPLE}, wait 60s and exit"
+            sleep 60
             break
           else
             current_time=$(date +%s)
