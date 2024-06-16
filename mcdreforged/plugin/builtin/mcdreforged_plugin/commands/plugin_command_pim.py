@@ -171,7 +171,7 @@ class PluginCommandPimExtension(SubCommand):
 			)
 			node.then(CountingLiteral({'-u', '-U', '--upgrade'}, 'upgrade').redirects(node))
 			node.then(CountingLiteral('--dry-run', 'dry_run').redirects(node))
-			node.then(CountingLiteral({'-y', '--yes'}, 'skip_confirm').redirects(node))
+			node.then(CountingLiteral({'-y', '--yes', '--confirm'}, 'skip_confirm').redirects(node))
 			node.then(CountingLiteral('--no-dependencies', 'no_deps').redirects(node))
 			return node
 

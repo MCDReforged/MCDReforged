@@ -206,7 +206,7 @@ Install plugins that satisfy the given specifier(s)
 
 .. code-block:: text
 
-    !!MCDR plugin install <specifier> [(-t|--target) <target>] [-U|--upgrade] [-y|--yes] [--dry-run] [--no-dependencies] ...
+    !!MCDR plugin install <specifier> [(-t|--target) <target>] [-U|--upgrade] [-y|--yes|--confirm] [--dry-run] [--no-dependencies] ...
 
 Arguments:
 
@@ -231,6 +231,7 @@ Arguments:
         For already existing plugins, their target installation directory will always be where the existing plugin is
 
 - ``-U``, ``--upgrade``: An optional flag suggesting that if given plugin is already installed, then it will be upgrade if possible
+- ``-y``, ``--yes``, ``--confirm``: An optional flag to skip the installation confirmation step
 - ``--dry-run``: An optional flag for test run. If provided, no actual installation will be performed
 - ``--no-dependencies``: An optional flag to ignore all dependencies relationships during plugin resolution. No indirect depended plugin and python packages will be installed
 

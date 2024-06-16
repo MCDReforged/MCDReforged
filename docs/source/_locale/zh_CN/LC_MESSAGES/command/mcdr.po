@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-16 23:42+0800\n"
+"POT-Creation-Date: 2024-06-17 01:51+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -115,23 +115,23 @@ msgstr ""
 "``!!MCDR reload`` 子指令可以热重载 MCDR。它也可以缩写为 ``!!MCDR r``。执行指令 ``!!MCDR "
 "reload`` 即可获取热重载指令的帮助信息"
 
-#: ../command/mcdr.rst:36 ../command/mcdr.rst:66 ../command/mcdr.rst:306
-#: ../command/mcdr.rst:348
+#: ../command/mcdr.rst:36 ../command/mcdr.rst:66 ../command/mcdr.rst:307
+#: ../command/mcdr.rst:349
 msgid "Here's a table of the commands"
 msgstr "以下是一个展示相关指令的表格"
 
 #: ../command/mcdr.rst:41 ../command/mcdr.rst:71 ../command/mcdr.rst:121
-#: ../command/mcdr.rst:311 ../command/mcdr.rst:353
+#: ../command/mcdr.rst:312 ../command/mcdr.rst:354
 msgid "Command"
 msgstr "指令"
 
 #: ../command/mcdr.rst:42 ../command/mcdr.rst:72 ../command/mcdr.rst:122
-#: ../command/mcdr.rst:312
+#: ../command/mcdr.rst:313
 msgid "Short form"
 msgstr "缩写"
 
 #: ../command/mcdr.rst:43 ../command/mcdr.rst:73 ../command/mcdr.rst:123
-#: ../command/mcdr.rst:313 ../command/mcdr.rst:354
+#: ../command/mcdr.rst:314 ../command/mcdr.rst:355
 msgid "Function"
 msgstr "功能"
 
@@ -296,7 +296,7 @@ msgid ""
 "integer, the level of the permission"
 msgstr "<level> 参数应该是一个表示权限等级的字符串或整数。它可以是权限全名或表示权限等级的整数"
 
-#: ../command/mcdr.rst:98 ../command/mcdr.rst:332
+#: ../command/mcdr.rst:98 ../command/mcdr.rst:333
 msgid "Examples:"
 msgstr "例如："
 
@@ -516,7 +516,7 @@ msgid ""
 " given id"
 msgstr "浏览插件仓库。用关键字进行筛选，或展示给定插件的详情"
 
-#: ../command/mcdr.rst:191 ../command/mcdr.rst:211 ../command/mcdr.rst:283
+#: ../command/mcdr.rst:191 ../command/mcdr.rst:211 ../command/mcdr.rst:284
 msgid "Arguments:"
 msgstr "参数："
 
@@ -528,7 +528,7 @@ msgstr "``<keyword>``：筛选用的关键字"
 msgid "``<plugin_id>``: The plugin ID to show details of"
 msgstr "``<plugin_id>``：要展示详情的插件的 ID"
 
-#: ../command/mcdr.rst:196 ../command/mcdr.rst:237 ../command/mcdr.rst:287
+#: ../command/mcdr.rst:196 ../command/mcdr.rst:238 ../command/mcdr.rst:288
 msgid "Example usages:"
 msgstr "用法示例："
 
@@ -597,24 +597,30 @@ msgstr "``-U``、``--upgrade``：可选的标志位，表示若插件已安装�
 
 #: ../command/mcdr.rst:234
 msgid ""
+"``-y``, ``--yes``, ``--confirm``: An optional flag to skip the "
+"installation confirmation step"
+msgstr "``-y``、``--yes``、``--confirm``：可选的标志位，用于跳过安装确认的步骤"
+
+#: ../command/mcdr.rst:235
+msgid ""
 "``--dry-run``: An optional flag for test run. If provided, no actual "
 "installation will be performed"
 msgstr "``--dry-run``：可选标志位，表示试运行。若提供，则不会进行实际的安装操作"
 
-#: ../command/mcdr.rst:235
+#: ../command/mcdr.rst:236
 msgid ""
 "``--no-dependencies``: An optional flag to ignore all dependencies "
 "relationships during plugin resolution. No indirect depended plugin and "
 "python packages will be installed"
 msgstr "``--no-dependencies``：可选标志位，在安装插件时，忽略所有的依赖关系。待安装插件的插件依赖和 Python 包依赖都不会被安装"
 
-#: ../command/mcdr.rst:239
+#: ../command/mcdr.rst:240
 msgid ""
 "``!!MCDR plugin install my_plugin``: Install a plugin with ID "
 "``my_plugin``, using the latest compatible version"
 msgstr "``!!MCDR plugin install my_plugin``：安装 ID 为 ``my_plugin`` 的插件，使用最新兼容的版本"
 
-#: ../command/mcdr.rst:240
+#: ../command/mcdr.rst:241
 msgid ""
 "``!!MCDR plugin install my_plugin<1.3``: Install a plugin with ID "
 "``my_plugin``, using the latest compatible version, and the version "
@@ -623,7 +629,7 @@ msgstr ""
 "``!!MCDR plugin install my_plugin<1.3``：安装 ID 为 ``my_plugin`` "
 "的插件，使用最新兼容的，且版本小于 ``1.3`` 的版本"
 
-#: ../command/mcdr.rst:241
+#: ../command/mcdr.rst:242
 msgid ""
 "``!!MCDR plugin install my_plugin<1.3 another_plugin==1.0.0``: On the "
 "basis of the above example, install ``another_plugin`` with exact version"
@@ -632,7 +638,7 @@ msgstr ""
 "``!!MCDR plugin install my_plugin<1.3``：在上面例子的基础上，再安装 ``another_plugin`` "
 "插件，且其版本正好为 ``1.0.0``"
 
-#: ../command/mcdr.rst:242
+#: ../command/mcdr.rst:243
 msgid ""
 "``!!MCDR plugin install -U my_plugin``: Install plugin ``my_plugin`` if "
 "it's not installed, or upgrade ``my_plugin`` to the latest compatible "
@@ -641,37 +647,37 @@ msgstr ""
 "``!!MCDR plugin install -U my_plugin``：若插件 ``my_plugin`` "
 "已安装，则升级该插件，否则安装该插件。目标版本为最新兼容的版本"
 
-#: ../command/mcdr.rst:243
+#: ../command/mcdr.rst:244
 msgid ""
 "``!!MCDR plugin install -U -y *``: Upgrade all installed plugins to their"
 " latest compatible version. Confirmation check is skipped"
 msgstr "``!!MCDR plugin install -U -y *``：更新所有已安装的插件至它们的最新且兼容的版本。确认检查将被跳过"
 
-#: ../command/mcdr.rst:246
+#: ../command/mcdr.rst:247
 msgid ""
 "Example output for a complete plugin installation (Note that "
 "``my_plugin`` does not actually exist):"
 msgstr "一次完整插件安装流程的示例输出（注意 ``my_plugin`` 实际上是不存在的）："
 
-#: ../command/mcdr.rst:275
+#: ../command/mcdr.rst:276
 msgid "checkupdate"
 msgstr "检查更新 (checkupdate)"
 
-#: ../command/mcdr.rst:277
+#: ../command/mcdr.rst:278
 msgid "Check if given plugins have updates"
 msgstr "检查给定的插件是否有更新"
 
-#: ../command/mcdr.rst:285
+#: ../command/mcdr.rst:286
 msgid ""
 "``<plugin_id>``: ID of the plugin to check update for. Can be provided "
 "for multiple times. If not given, check update for all plugins"
 msgstr "``<plugin_id>``：要检查更新的插件 ID，可多次提供。若未提供，则为所有插件检查更新"
 
-#: ../command/mcdr.rst:289
+#: ../command/mcdr.rst:290
 msgid "``!!MCDR plugin checkupdate``: Check update for **all** installed plugins"
 msgstr "``!!MCDR plugin checkupdate``：为 **所有** 已安装的插件检查更新"
 
-#: ../command/mcdr.rst:290
+#: ../command/mcdr.rst:291
 msgid ""
 "``!!MCDR plugin cu my_plugin another_plugin``: Check update for plugin "
 "``my_plugin`` and ``another_plugin``"
@@ -679,186 +685,186 @@ msgstr ""
 "``!!MCDR plugin cu my_plugin another_plugin``：为 "
 "``my_plugin``、``another_plugin`` 这两个插件检查更新"
 
-#: ../command/mcdr.rst:293
+#: ../command/mcdr.rst:294
 msgid "refreshmeta"
 msgstr "刷新插件仓库元数据 (refreshmeta)"
 
-#: ../command/mcdr.rst:295
+#: ../command/mcdr.rst:296
 msgid "Perform a re-fetch for the plugin catalogue meta cache"
 msgstr "重新拉取插件仓库的元数据"
 
-#: ../command/mcdr.rst:302
+#: ../command/mcdr.rst:303
 msgid "Preference settings"
 msgstr "偏好设置"
 
-#: ../command/mcdr.rst:304
+#: ../command/mcdr.rst:305
 msgid ""
 "``!!MCDR preference`` sub-commands are used to control the preference of "
 "MCDR. It only requires permission level 1 (user) to operate"
 msgstr "``!!MCDR preference`` 子指令可用于操控 MCDR 的偏好。它仅需要权限等级 1 (user) 即可操作"
 
-#: ../command/mcdr.rst:314
+#: ../command/mcdr.rst:315
 msgid "!!MCDR preference"
 msgstr "!!MCDR preference"
 
-#: ../command/mcdr.rst:315
+#: ../command/mcdr.rst:316
 msgid "!!MCDR pref"
 msgstr "!!MCDR pref"
 
-#: ../command/mcdr.rst:316
+#: ../command/mcdr.rst:317
 msgid "Show preference command help message"
 msgstr "显示偏好指令帮助信息"
 
-#: ../command/mcdr.rst:317
+#: ../command/mcdr.rst:318
 msgid "!!MCDR preference list"
 msgstr "!!MCDR preference list"
 
-#: ../command/mcdr.rst:318
+#: ../command/mcdr.rst:319
 msgid "!!MCDR pref list"
 msgstr "!!MCDR pref list"
 
-#: ../command/mcdr.rst:319
+#: ../command/mcdr.rst:320
 msgid "Display the preference list"
 msgstr "显示偏好列表"
 
-#: ../command/mcdr.rst:320
+#: ../command/mcdr.rst:321
 msgid "!!MCDR preference <pref_name>"
 msgstr "!!MCDR preference <pref_name>"
 
-#: ../command/mcdr.rst:321
+#: ../command/mcdr.rst:322
 msgid "!!MCDR pref <pref_name>"
 msgstr "!!MCDR pref <pref_name>"
 
-#: ../command/mcdr.rst:322
+#: ../command/mcdr.rst:323
 msgid "Display the details of preference <pref_name>"
 msgstr "显示偏好 <pref_name> 的详情"
 
-#: ../command/mcdr.rst:323
+#: ../command/mcdr.rst:324
 msgid "!!MCDR preference <pref_name> set <value>"
 msgstr "!!MCDR preference <pref_name> set <value>"
 
-#: ../command/mcdr.rst:324
+#: ../command/mcdr.rst:325
 msgid "!!MCDR pref <pref_name> set <value>"
 msgstr "!!MCDR pref <pref_name> set <value>"
 
-#: ../command/mcdr.rst:325
+#: ../command/mcdr.rst:326
 msgid "Set the value of preference <pref_name> to <value>"
 msgstr "设定偏好 <pref_name> 的值为 <value>"
 
-#: ../command/mcdr.rst:326
+#: ../command/mcdr.rst:327
 msgid "!!MCDR preference <pref_name> reset"
 msgstr "!!MCDR preference <pref_name> reset"
 
-#: ../command/mcdr.rst:327
+#: ../command/mcdr.rst:328
 msgid "!!MCDR pref <pref_name> reset"
 msgstr "!!MCDR pref <pref_name> reset"
 
-#: ../command/mcdr.rst:328
+#: ../command/mcdr.rst:329
 msgid "Reset preference <pref_name> to the default value"
 msgstr "将偏好 <pref_name> 重置为默认值"
 
-#: ../command/mcdr.rst:330
+#: ../command/mcdr.rst:331
 msgid "See :doc:`here </preference>` for more information about MCDR preference"
 msgstr "查看 :doc:`/preference` 文档以获取更多关于 MCDR 偏好的信息"
 
-#: ../command/mcdr.rst:334
+#: ../command/mcdr.rst:335
 msgid ""
 "``!!MCDR pref set language zh_cn``: Set the value of preference "
 "``language`` to ``zh_cn``"
 msgstr "``!!MCDR pref set language zh_cn``: 将偏好 ``language`` 的值设置为 ``zh_cn``"
 
-#: ../command/mcdr.rst:337
+#: ../command/mcdr.rst:338
 msgid "Check update"
 msgstr "检查更新"
 
-#: ../command/mcdr.rst:339
+#: ../command/mcdr.rst:340
 msgid ""
 "``!!MCDR checkupdate``, or ``!!MCDR cu``. Use it to manually check update"
 " from github"
 msgstr "使用 ``!!MCDR checkupdate`` 或 ``!!MCDR cu`` 可手动检查来自 github 的更新"
 
-#: ../command/mcdr.rst:341
+#: ../command/mcdr.rst:342
 msgid ""
 "It will try to get the latest release version in github, and check if "
 "it's newer than the current version. If it is, it will show the update "
 "logs from the github release"
 msgstr "它将尝试在 github 中获取最新版本，并检查它是否比当前版本更新。如果是，它将显示 github 上的更新日志"
 
-#: ../command/mcdr.rst:344
+#: ../command/mcdr.rst:345
 msgid "Server Control"
 msgstr "服务端控制"
 
-#: ../command/mcdr.rst:346
+#: ../command/mcdr.rst:347
 msgid "``!!MCDR server`` sub-commands are used control the daemonized server"
 msgstr "``!!MCDR server`` 子指令可用于控制被守护的服务端"
 
-#: ../command/mcdr.rst:355
+#: ../command/mcdr.rst:356
 msgid "!!MCDR server"
 msgstr "!!MCDR server"
 
-#: ../command/mcdr.rst:356
+#: ../command/mcdr.rst:357
 msgid "Show server control command help message"
 msgstr "显示服务端控制指令的帮助信息"
 
-#: ../command/mcdr.rst:357
+#: ../command/mcdr.rst:358
 msgid "!!MCDR server start"
 msgstr "!!MCDR server start"
 
-#: ../command/mcdr.rst:358
+#: ../command/mcdr.rst:359
 msgid "Start the server"
 msgstr "启动服务端"
 
-#: ../command/mcdr.rst:359
+#: ../command/mcdr.rst:360
 msgid "!!MCDR server stop"
 msgstr "!!MCDR server stop"
 
-#: ../command/mcdr.rst:360
+#: ../command/mcdr.rst:361
 msgid "Stop the server, but keep MCDR running"
 msgstr "关闭服务端，且 MCDR 会继续运行"
 
-#: ../command/mcdr.rst:361
+#: ../command/mcdr.rst:362
 msgid "!!MCDR server stop_exit"
 msgstr "!!MCDR server stop_exit"
 
-#: ../command/mcdr.rst:362
+#: ../command/mcdr.rst:363
 msgid "Stop the server and exit MCDR"
 msgstr "关闭服务端并退出MCDR"
 
-#: ../command/mcdr.rst:363
+#: ../command/mcdr.rst:364
 msgid "!!MCDR server exit"
 msgstr "!!MCDR server exit"
 
-#: ../command/mcdr.rst:364
+#: ../command/mcdr.rst:365
 msgid "Exit MCDR. The server should already be stopped"
 msgstr "退出 MCDR。服务端应已关闭"
 
-#: ../command/mcdr.rst:365
+#: ../command/mcdr.rst:366
 msgid "!!MCDR server restart"
 msgstr "!!MCDR server restart"
 
-#: ../command/mcdr.rst:366
+#: ../command/mcdr.rst:367
 msgid "Restart the server"
 msgstr "重启服务端"
 
-#: ../command/mcdr.rst:367
+#: ../command/mcdr.rst:368
 msgid "!!MCDR server kill"
 msgstr "!!MCDR server kill"
 
-#: ../command/mcdr.rst:368
+#: ../command/mcdr.rst:369
 msgid "Kill the server, and all of its child processes"
 msgstr "杀死服务端，以及其所有子进程"
 
-#: ../command/mcdr.rst:370
+#: ../command/mcdr.rst:371
 msgid ""
 "These commands are also parts of the :doc:`ServerInterface API "
 "</code_references/ServerInterface>`"
 msgstr "这些指令同时也是 :doc:`服务端接口 API </code_references/ServerInterface>` 的一部分"
 
-#: ../command/mcdr.rst:373
+#: ../command/mcdr.rst:374
 msgid "Debug"
 msgstr "调试"
 
-#: ../command/mcdr.rst:375
+#: ../command/mcdr.rst:376
 msgid ""
 "``!!MCDR debug`` contains serval utilities for debugging MCDR or MCDR "
 "plugins. They are mostly designed for developers, so you can skip this if"
@@ -867,43 +873,43 @@ msgstr ""
 "``!!MCDR debug`` 包含了不少用于调试 MCDR 或 MCDR 插件的实用工具。它们主要是为开发者设计的，因此如果你是一位 MCDR"
 " 的用户，你可以跳过这一部分"
 
-#: ../command/mcdr.rst:379
+#: ../command/mcdr.rst:380
 msgid "Thread Dump"
 msgstr "线程转储"
 
-#: ../command/mcdr.rst:381
+#: ../command/mcdr.rst:382
 msgid ""
 "Dump stack trace information of given threads. A easy way to figure out "
 "what are your threads doing"
 msgstr "导出所有指定线程的堆栈追踪信息。一个用于快速分析你的线程正在干什么的方式"
 
-#: ../command/mcdr.rst:383
+#: ../command/mcdr.rst:384
 msgid "You can use ``#all`` as the thread name to dump all threads"
 msgstr "你可以使用 ``#all`` 作为线程名来导出所有线程的信息"
 
-#: ../command/mcdr.rst:385 ../command/mcdr.rst:395 ../command/mcdr.rst:415
+#: ../command/mcdr.rst:386 ../command/mcdr.rst:396 ../command/mcdr.rst:416
 msgid "Format::"
 msgstr "格式："
 
-#: ../command/mcdr.rst:391
+#: ../command/mcdr.rst:392
 msgid "Translation Test"
 msgstr "翻译测试"
 
-#: ../command/mcdr.rst:393
+#: ../command/mcdr.rst:394
 msgid ""
 "Query translation results by translation key, or dump all translations "
 "within given path"
 msgstr "查询给定翻译键的翻译结果，或者导出以给定路径为前缀的所有翻译键"
 
-#: ../command/mcdr.rst:400 ../command/mcdr.rst:421
+#: ../command/mcdr.rst:401 ../command/mcdr.rst:422
 msgid "Examples::"
 msgstr "例子："
 
-#: ../command/mcdr.rst:409
+#: ../command/mcdr.rst:410
 msgid "Command Tree Display"
 msgstr "指令树展示"
 
-#: ../command/mcdr.rst:411
+#: ../command/mcdr.rst:412
 msgid ""
 "Dump command trees with "
 ":meth:`~mcdreforged.command.builder.nodes.basic.AbstractNode.print_tree` "
@@ -913,7 +919,7 @@ msgstr ""
 ":meth:`~mcdreforged.command.builder.nodes.basic.AbstractNode.print_tree` "
 "导出指令树"
 
-#: ../command/mcdr.rst:413
+#: ../command/mcdr.rst:414
 msgid ""
 "You can filter out command trees to be dumped with plugin id or root node"
 " name"
