@@ -834,12 +834,15 @@ class PluginCommandPimExtension(SubCommand):
 			self.__delete_remaining_download_temp(base_dir)
 
 			download_temp_dir = base_dir / 'pim_{}'.format(os.getpid())
+			self.log_debug('download_temp_dir: {}'.format(download_temp_dir))
 			if not ctx.dry_run and download_temp_dir.is_dir():
 				shutil.rmtree(download_temp_dir)
-			downloaded_files: Dict[str, Path] = {}
+
+			downloaded_files: Dict[str, Path] = {}  # plugin id -> downloaded temp file path
 			trashbin_path = download_temp_dir / '_trashbin'
 			trashbin_files: Dict[Path, Path] = {}  # trashbin path -> origin path
 			newly_added_files: List[Path] = []
+
 			try:
 				if len(package_requirements) > 0:
 					source.reply(self.__tr('install.installing_package', Texts.number(len(package_requirements))))
@@ -869,8 +872,8 @@ class PluginCommandPimExtension(SubCommand):
 					source.reply(self.__tr(
 						'install.downloading_plugin_one',
 						candidate=Texts.candidate(plugin_id, data.version),
-						name=data.release.file_name,
-						hash=data.release.file_sha256,
+						name=Texts.file_name(data.release.file_name),
+						hash_quoted=RText(f'({data.release.file_sha256})', color=RColor.gray),
 					) + dry_run_suffix)
 					if not ctx.dry_run:
 						download_temp_file.parent.mkdir(parents=True, exist_ok=True)
@@ -891,17 +894,21 @@ class PluginCommandPimExtension(SubCommand):
 
 				check_abort()
 
-				# apply
+				# do the actual plugin files installation
 				to_load_paths: List[Path] = []
 				to_unload_ids: List[str] = []
 				from mcdreforged.plugin.type.packed_plugin import PackedPlugin
 
 				for plugin_id, data in to_install.items():
 					plugin = self.plugin_manager.get_plugin_from_id(plugin_id)
+
+					target_dir: Path  # the target dir to place the new plugin
 					if plugin is not None:
 						if not isinstance(plugin, PackedPlugin):
 							raise AssertionError('to_install contains a non-packed plugin {!r}'.format(plugin))
 						path = Path(plugin.plugin_path)
+
+						# For existing plugin, install to where the existing plugin is
 						target_dir = path.parent
 						trash_path = trashbin_path / '{}.tmp'.format(plugin_id)
 						if not ctx.dry_run:
@@ -909,6 +916,7 @@ class PluginCommandPimExtension(SubCommand):
 							trash_path.parent.mkdir(parents=True, exist_ok=True)
 							shutil.move(path, trash_path)
 					else:
+						# For new plugins, follow the user's argument
 						target_dir = default_target_path
 
 					file_name = sanitize_filename(data.release.file_name)
@@ -919,10 +927,15 @@ class PluginCommandPimExtension(SubCommand):
 							parts = file_name.rsplit('.', 1)
 							parts[0] += '_{}'.format(i + 1)
 							dst = target_dir / '.'.join(parts)
+							if not dst.is_file():
+								break
+						else:
+							raise Exception('Too many files with name like {} at {}'.format(file_name, target_dir))
+
 					source.reply(self.__tr(
 						'install.installing_plugin_one',
 						candidate=Texts.candidate(plugin_id, data.version),
-						path=str(dst),
+						path=Texts.file_path(dst),
 					) + dry_run_suffix)
 					if not ctx.dry_run:
 						newly_added_files.append(dst)

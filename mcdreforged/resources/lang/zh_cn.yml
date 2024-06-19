@@ -337,7 +337,7 @@ mcdreforged:
         install_package_dry_run: 已安装 {0}
         install_package_failed: 'Python 包依赖安装失败，见控制台以了解详情: {0}'
         downloading_installing_plugin: 正在下载安装 {0} 个插件
-        downloading_plugin_one: '正在下载 {candidate}: {name} ({hash})'
+        downloading_plugin_one: '正在下载 {candidate}: {name} {hash_quoted}'
         installing_plugin_one: '正在安装 {candidate} 至 {path}'
         reloading_plugins: 已安装 {0} 个插件，正在重载 MCDR
 

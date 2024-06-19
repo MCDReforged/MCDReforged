@@ -337,7 +337,7 @@ mcdreforged:
         install_package_dry_run: Installed {0}
         install_package_failed: 'Python package installation failed, see console for more information: {0}'
         downloading_installing_plugin: Downloading and installing {0} plugins
-        downloading_plugin_one: 'Downloading {candidate}: {name} ({hash})'
+        downloading_plugin_one: 'Downloading {candidate}: {name} {hash_quoted}'
         installing_plugin_one: 'Installing {candidate} to {path}'
         reloading_plugins: Installed {0} plugins, reloading MCDR
 
