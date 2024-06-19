@@ -39,6 +39,7 @@ class MCDReforgedConfig(Serializable):
 	catalogue_meta_url: Optional[str] = None
 	plugin_download_url: Optional[str] = None
 	plugin_download_timeout: float = 15
+	plugin_pip_install_extra_args: Optional[str] = None
 
 	# --------- Misc Configuration ---------
 	check_update: bool = True

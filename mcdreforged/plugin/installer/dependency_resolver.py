@@ -3,7 +3,7 @@ import dataclasses
 import re
 import subprocess
 import sys
-from typing import List, Union, Mapping, Iterator, Iterable, Sequence, Optional, Dict
+from typing import List, Union, Mapping, Iterator, Iterable, Sequence, Optional, Dict, Callable, Any
 
 import resolvelib
 from resolvelib.resolvers import RequirementInformation
@@ -199,7 +199,7 @@ class PackageRequirementResolver:
 		self.package_requirements = package_requirements
 		self.__proc: Optional[subprocess.Popen] = None
 
-	def check(self, *, extra_args: Iterable[str] = ()) -> Union[Optional[str], subprocess.CalledProcessError]:
+	def check(self, *, extra_args: Iterable[str] = (), pre_run_callback: Optional[Callable[[List[str]], Any]] = None) -> Union[Optional[str], subprocess.CalledProcessError]:
 		if len(self.package_requirements) == 0:
 			return None
 		cmd = [
@@ -208,15 +208,17 @@ class PackageRequirementResolver:
 			'-m', 'pip', 'install',
 			'--dry-run',
 			'--disable-pip-version-check',
-			*extra_args,
 			*self.package_requirements,
+			*extra_args,
 		]
+		if pre_run_callback is not None:
+			pre_run_callback(cmd)
 		try:
 			return subprocess.check_output(cmd, stderr=subprocess.STDOUT).decode('utf8')
 		except subprocess.CalledProcessError as e:
 			return e
 
-	def install(self, *, extra_args: Iterable[str] = ()):
+	def install(self, *, extra_args: Iterable[str] = (), pre_run_callback: Optional[Callable[[List[str]], Any]] = None):
 		if len(self.package_requirements) == 0:
 			return
 		if self.__proc is not None:
@@ -226,9 +228,11 @@ class PackageRequirementResolver:
 			sys.executable,
 			'-m', 'pip', 'install',
 			'--disable-pip-version-check',
+			*self.package_requirements,
 			*extra_args,
-			*self.package_requirements
 		]
+		if pre_run_callback is not None:
+			pre_run_callback(cmd)
 		try:
 			with subprocess.Popen(cmd) as self.__proc:
 				self.__proc.wait()

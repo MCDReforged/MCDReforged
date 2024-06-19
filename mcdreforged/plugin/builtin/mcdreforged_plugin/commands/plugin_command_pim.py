@@ -5,6 +5,7 @@ import functools
 import logging
 import os
 import re
+import shlex
 import shutil
 import subprocess
 import threading
@@ -845,9 +846,14 @@ class PluginCommandPimExtension(SubCommand):
 					if ctx.dry_run:
 						source.reply(self.__tr('install.install_package_dry_run', ', '.join(package_resolver.package_requirements)) + dry_run_suffix)
 					else:
+						def log_cmd(cmd: List[str]):
+							self.log_debug('pip install cmd: {}'.format(cmd))
 						try:
 							with self.__installation_abort_helper.add_abort_callback(package_resolver.abort):
-								package_resolver.install()
+								package_resolver.install(
+									extra_args=shlex.split(self.mcdr_server.config.plugin_pip_install_extra_args or ''),
+									pre_run_callback=log_cmd,
+								)
 						except subprocess.CalledProcessError as e:
 							source.reply(self.__tr('install.install_package_failed', e))
 							if source.is_console:

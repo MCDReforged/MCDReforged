@@ -475,6 +475,18 @@ The timeout in seconds for a plugin file download
 * Option type: :external:class:`float`
 * Default value: ``15``
 
+plugin_pip_install_extra_args
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Extra arguments passed to the pip subprocess for installing required python packages during plugin installation
+
+.. code-block:: yaml
+
+    plugin_pip_install_extra_args: -i https://test.pypi.org/simple --proxy http://localhost:8080
+
+* Option type: ``Optional[str]``
+* Default value: *empty*
+
 Misc configuration
 ------------------
 
