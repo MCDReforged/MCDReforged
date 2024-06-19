@@ -1,0 +1,2 @@
+class OuterReturn(Exception):
+	pass

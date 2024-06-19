@@ -10,8 +10,9 @@ from mcdreforged.command.command_source import CommandSource
 from mcdreforged.permission.permission_level import PermissionLevel
 from mcdreforged.plugin.operation_result import PluginOperationResult
 from mcdreforged.translation.translation_text import RTextMCDRTranslation
+from mcdreforged.utils import class_utils
 from mcdreforged.utils.future import Future
-from mcdreforged.utils.logger import DebugOption
+from mcdreforged.utils.logger import DebugOption, MCDReforgedLogger
 
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
@@ -59,7 +60,8 @@ class SubCommand(ABC):
 
 	def log_debug(self, *args, **kwargs):
 		kwargs['option'] = DebugOption.COMMAND
-		self.mcdr_server.logger.mdebug(*args, **kwargs)
+		logger = class_utils.check_type(self.server_interface.logger, MCDReforgedLogger)
+		logger.mdebug(*args, **kwargs)
 
 	@property
 	def mcdr_server(self) -> 'MCDReforgedServer':
