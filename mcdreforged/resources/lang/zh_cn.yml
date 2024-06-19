@@ -318,7 +318,14 @@ mcdreforged:
             existing: 已安装插件 {0}@{1}
             existing_pinned: 已安装插件 {0}@{1} (固定)
 
-        cannot_change_not_packed: '已有的插件 {0} 的类型为 {1}，无法被重新安装。只有打包插件是可以被重新安装'
+        cannot_change_not_packed:
+          .: '已有的插件 {0} 的类型为{1}，无法被重新安装。只有打包插件可被重新安装'
+          plugin_types:
+            permanent_plugin: 内置插件
+            solo_plugin: 单文件插件
+            packed_plugin: 打包插件
+            directory_plugin: 文件夹插件
+            lined_directory_plugin: 链接型文件夹插件
         nothing_to_install: 已安装的插件已满足所述需求，无需安装任何插件
         install_summary:
           plugin_title: '将被安装的插件'

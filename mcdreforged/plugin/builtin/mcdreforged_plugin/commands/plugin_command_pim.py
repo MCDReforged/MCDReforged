@@ -729,7 +729,21 @@ class PluginCommandPimExtension(SubCommand):
 					old_version = None
 				if old_version != version:
 					if plugin is not None and not isinstance(plugin, PackedPlugin):
-						source.reply(self.__tr('install.cannot_change_not_packed', plugin_id, type(plugin).__name__))
+						from mcdreforged.plugin.type.solo_plugin import SoloPlugin
+						from mcdreforged.plugin.type.directory_plugin import DirectoryPlugin, LinkedDirectoryPlugin
+						from mcdreforged.plugin.type.permanent_plugin import PermanentPlugin
+						plugin_type_keys: Dict[type, str] = {
+							PermanentPlugin: 'permanent_plugin',
+							SoloPlugin: 'solo_plugin',
+							PackedPlugin: 'packed_plugin',
+							DirectoryPlugin: 'directory_plugin',
+							LinkedDirectoryPlugin: 'lined_directory_plugin',
+						}
+						if (plugin_type_key := plugin_type_keys.get(type(plugin))) is not None:
+							plugin_type_text = self.__tr('install.cannot_change_not_packed.plugin_types.' + plugin_type_key)
+						else:
+							plugin_type_text = RText(type(plugin).__name__)
+						source.reply(self.__tr('install.cannot_change_not_packed', plugin_id, plugin_type_text))
 						raise _OuterReturn()
 					try:
 						release = cata_meta[plugin_id].releases[str(version)]

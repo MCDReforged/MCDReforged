@@ -318,7 +318,14 @@ mcdreforged:
             existing: Already installed {0}@{1}
             existing_pinned: Already installed {0}@{1} (pinned)
 
-        cannot_change_not_packed: 'Existing plugin {0} is {1} and cannot be reinstalled. Only packed plugin is supported'
+        cannot_change_not_packed:
+          .: 'Existing plugin {0} is {1} and cannot be reinstalled. Only packed plugin is supported'
+          plugin_types:
+            permanent_plugin: builtin plugin
+            solo_plugin: solo plugin
+            packed_plugin: packed plugin
+            directory_plugin: directory plugin
+            lined_directory_plugin: linked directory plugin
         nothing_to_install: Nothing needs to be installed
         install_summary:
           plugin_title: 'Plugins to install'
