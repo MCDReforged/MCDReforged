@@ -579,7 +579,9 @@ class PluginManager:
 		for path in (enable or []):
 			if plugin_factory.is_disabled_plugin(path):
 				new_file_path = path.parent / string_utils.remove_suffix(path.name, plugin_constant.DISABLED_PLUGIN_FILE_SUFFIX)
-				os.rename(path, new_file_path)
+				if new_file_path.is_file():
+					self.logger.warning('Overwriting existing file {}'.format(new_file_path))
+				os.replace(path, new_file_path)
 				to_load_paths.append(new_file_path)
 
 		for path in to_load_paths:
@@ -613,7 +615,9 @@ class PluginManager:
 			for plg in (disable or []):
 				if plg.plugin_exists():
 					disabled_path = plg.plugin_path.parent / (plg.plugin_path.name + plugin_constant.DISABLED_PLUGIN_FILE_SUFFIX)
-					os.rename(plg.plugin_path, disabled_path)
+					if disabled_path.is_file():
+						self.logger.warning('Overwriting existing file {}'.format(disabled_path))
+					os.replace(plg.plugin_path, disabled_path)
 
 		future = self.__run_manipulation(manipulate_action)
 		future.add_done_callback(done_callback)
