@@ -496,7 +496,7 @@ class PimInstallCommandHandler(PimCommandHandlerBase):
 				shutil.rmtree(download_temp_dir)
 
 	# ------------------------------------------------
-	#                 External APIs
+	#               Interfaces for PIM
 	# ------------------------------------------------
 
 	def delete_remaining_download_temp(self, data_dir: Optional[Path] = None):

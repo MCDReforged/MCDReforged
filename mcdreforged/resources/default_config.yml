@@ -103,6 +103,11 @@ plugin_download_url:
 plugin_download_timeout: 15
 
 
+# Extra arguments passed to the pip subprocess for installing required python packages
+# during plugin installation
+plugin_pip_install_extra_args:
+
+
 # =========================================
 # |           Misc Configuration          |
 # =========================================
