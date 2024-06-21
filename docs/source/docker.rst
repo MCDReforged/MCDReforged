@@ -180,7 +180,6 @@ Images with OpenJDK installed. If you want to run MCDR with a Minecraft server, 
 Supported OpenJDK distributions:
 
 - `corretoo <https://aws.amazon.com/corretto/>`__
-- `liberica <https://bell-sw.com/libericajdk>`__
 - `temurin <https://adoptium.net/temurin/>`__ (suggested)
 - `zulu <https://www.azul.com/downloads/?package=jdk#zulu>`__
 
