@@ -219,6 +219,17 @@ jobs:
         tags: ${{ steps.config.outputs.tags }}
         flavor: latest=false
 
+    - name: Patch docker meta
+      uses: actions/github-script@v7
+      id: meta_patched
+      with:
+        script: |-
+          core.setOutput('tags', process.env.META_TAGS.replace(/\n/g, '\\n'))
+          core.setOutput('labels', process.env.META_LABELS.replace(/\n/g, '\\n'))
+      env:
+        META_TAGS: ${{ steps.meta.outputs.tags }}
+        META_LABELS: ${{ steps.meta.outputs.labels }}
+
     - uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python }}
@@ -228,9 +239,8 @@ jobs:
         pip_cmd="pip3 install mcdreforged==${VERSION} -i ${PYPI_SIMPLE} --dry-run --ignore-installed --no-deps --no-cache-dir"
         echo pip_cmd=$pip_cmd
         while true; do
-          if $pip_cmd && $pip_cmd && $pip_cmd; then
-            echo "Version ${VERSION} exists on ${PYPI_SIMPLE}, wait 60s and exit"
-            sleep 60
+          if $pip_cmd; then
+            echo "Version ${VERSION} exists on ${PYPI_SIMPLE}, exit"
             break
           else
             current_time=$(date +%s)
@@ -249,18 +259,22 @@ jobs:
 
     - name: Build and push
       id: build
-      uses: docker/build-push-action@v5
+      uses: Wandalen/wretry.action@master
       with:
-        platforms: ${{ steps.config.outputs.platforms }}
-        push: true
-        file: docker/Dockerfile
-        context: docker
-        tags: ${{ steps.meta.outputs.tags }}
-        labels: ${{ steps.meta.outputs.labels }}
-        build-args: |
-          BASE_IMAGE_TAG=${{ steps.config.outputs.base_image_tag }}
-          MCDR_VERSION_REQUIREMENT=${{ needs.pypi_upload.outputs.pypi_version }}
-          PYPI_INDEX=${{ steps.config.outputs.pypi_simple }}
+        action: docker/build-push-action@v5
+        with: |
+          platforms: ${{ steps.config.outputs.platforms }}
+          push: true
+          file: docker/Dockerfile
+          context: docker
+          tags: "${{ steps.meta_patched.outputs.tags }}"
+          labels: "${{ steps.meta_patched.outputs.labels }}"
+          build-args: |
+            BASE_IMAGE_TAG=${{ steps.config.outputs.base_image_tag }}
+            MCDR_VERSION_REQUIREMENT=${{ needs.pypi_upload.outputs.pypi_version }}
+            PYPI_INDEX=${{ steps.config.outputs.pypi_simple }}
+        attempt_limit: 3
+        attempt_delay: 10
 
     - name: Report image build information
       run: |
@@ -284,15 +298,17 @@ jobs:
               split('\n').
               map(t => t.substring(t.lastIndexOf(':') + 1)).
               join(',')
-          core.setOutput('payload', JSON.stringify({
+          const payload = {
             'base_image_tags': tags,
             'digest': process.env.DIGEST,
             'git_ref': process.env.GITHUB_REF,
             'run_number': process.env.GITHUB_RUN_NUMBER,
-          }))
+          }
+          console.log('payload:', payload)
+          core.setOutput('payload', JSON.stringify(payload))
       env:
         TAGS: ${{ steps.meta.outputs.tags }}
-        DIGEST: ${{ steps.build.outputs.digest }}
+        DIGEST: ${{ fromJSON( steps.build.outputs.outputs ).digest }}
 
     - name: Trigger extended image builds
       if: startsWith(github.ref, 'refs/tags/v')
