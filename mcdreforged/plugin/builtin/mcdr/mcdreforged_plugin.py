@@ -12,18 +12,18 @@ from mcdreforged.constants import core_constant
 from mcdreforged.minecraft.rtext.style import RColor, RAction
 from mcdreforged.minecraft.rtext.text import RText, RTextBase
 from mcdreforged.permission.permission_level import PermissionLevel
-from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.abort_subcommand import AbortSubCommand
-from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.check_update_command import CheckUpdateCommand
-from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.confirm_subcommand import ConfirmSubCommand
-from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.debug_command import DebugCommand
-from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.help_command import HelpCommand
-from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.permission_command import PermissionCommand
-from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.plugin_command import PluginCommand
-from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.preference_command import PreferenceCommand
-from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.reload_command import ReloadCommand
-from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.server_command import ServerCommand
-from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.status_command import StatusCommand
-from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.sub_command import SubCommand, SubCommandEvent
+from mcdreforged.plugin.builtin.mcdr.commands.abort_subcommand import AbortSubCommand
+from mcdreforged.plugin.builtin.mcdr.commands.check_update_command import CheckUpdateCommand
+from mcdreforged.plugin.builtin.mcdr.commands.confirm_subcommand import ConfirmSubCommand
+from mcdreforged.plugin.builtin.mcdr.commands.debug_command import DebugCommand
+from mcdreforged.plugin.builtin.mcdr.commands.help_command import HelpCommand
+from mcdreforged.plugin.builtin.mcdr.commands.permission_command import PermissionCommand
+from mcdreforged.plugin.builtin.mcdr.commands.plugin_command import PluginCommand
+from mcdreforged.plugin.builtin.mcdr.commands.preference_command import PreferenceCommand
+from mcdreforged.plugin.builtin.mcdr.commands.reload_command import ReloadCommand
+from mcdreforged.plugin.builtin.mcdr.commands.server_command import ServerCommand
+from mcdreforged.plugin.builtin.mcdr.commands.status_command import StatusCommand
+from mcdreforged.plugin.builtin.mcdr.commands.sub_command import SubCommand, SubCommandEvent
 from mcdreforged.plugin.plugin_event import MCDRPluginEvents
 from mcdreforged.plugin.type.builtin_plugin import BuiltinPlugin
 from mcdreforged.translation.translation_text import RTextMCDRTranslation

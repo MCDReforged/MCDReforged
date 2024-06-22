@@ -5,8 +5,8 @@ from mcdreforged.command.builder.common import CommandContext
 from mcdreforged.command.command_source import CommandSource
 from mcdreforged.minecraft.rtext.style import RAction
 from mcdreforged.minecraft.rtext.text import RTextBase
-from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.pim_internal.local_meta_registry import LocalMetaRegistry
-from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.pim_internal.texts import Texts
+from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.local_meta_registry import LocalMetaRegistry
+from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.texts import Texts
 from mcdreforged.plugin.installer.types import MetaRegistry, MergedMetaRegistry
 from mcdreforged.translation.translator import Translator
 from mcdreforged.utils import class_utils
@@ -14,7 +14,7 @@ from mcdreforged.utils.logger import DebugOption, MCDReforgedLogger
 
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
-	from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.plugin_command_pim import PluginCommandPimExtension
+	from mcdreforged.plugin.builtin.mcdr.commands.plugin_command_pim import PluginCommandPimExtension
 	from mcdreforged.plugin.plugin_manager import PluginManager
 
 

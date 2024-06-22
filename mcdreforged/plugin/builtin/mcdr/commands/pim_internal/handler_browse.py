@@ -4,8 +4,8 @@ from mcdreforged.command.builder.common import CommandContext
 from mcdreforged.command.command_source import CommandSource
 from mcdreforged.minecraft.rtext.style import RColor, RAction
 from mcdreforged.minecraft.rtext.text import RTextBase, RText, RTextList
-from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.pim_internal.handler_base import PimCommandHandlerBase
-from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.pim_internal.texts import Texts
+from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.handler_base import PimCommandHandlerBase
+from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.texts import Texts
 from mcdreforged.plugin.installer.catalogue_access import PluginCatalogueAccess
 from mcdreforged.plugin.installer.types import MetaRegistry, ReleaseData
 from mcdreforged.utils.replier import CommandSourceReplier

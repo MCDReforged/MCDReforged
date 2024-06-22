@@ -3,29 +3,29 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-13 21:01+0800\n"
+"POT-Creation-Date: 2024-06-22 17:05+0800\n"
 "PO-Revision-Date: 2021-01-23 17:24+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
 "Language-Team: Chinese Simplified\n"
-"Plural-Forms: nplurals=1; plural=0\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.15.0\n"
 
-#: ../plugin_dev/command.rst:3
+#: ../plugin_dev/command.rst:5
 msgid "Command Tree"
 msgstr "指令树"
 
-#: ../plugin_dev/command.rst:5
+#: ../plugin_dev/command.rst:7
 msgid ""
 "Tired of manually splitting argument and parsing commands? Being annoyed "
 "by the complicated argument conditions? Go try the MCDR command building "
 "system!"
 msgstr "厌倦了手动拆分参数、解析指令？厌烦了复杂的判断条件？快来尝试 MCDR 的指令构建系统吧！"
 
-#: ../plugin_dev/command.rst:7
+#: ../plugin_dev/command.rst:9
 msgid ""
 "MCDR contains a command tree building system for plugins to build their "
 "commands. It behaves like a lite version of Mojang's `brigadier "
@@ -34,11 +34,11 @@ msgstr ""
 "MCDR 内置了一个指令树构建系统，供插件构建其指令。它如同一个 Mojang 的 `brigadier "
 "<https://github.com/Mojang/brigadier>`__ 的精简版"
 
-#: ../plugin_dev/command.rst:10
+#: ../plugin_dev/command.rst:12
 msgid "Workflow"
 msgstr "工作流程"
 
-#: ../plugin_dev/command.rst:12
+#: ../plugin_dev/command.rst:14
 msgid ""
 "MCDR maintains a dict to store registered commands. Any value in the "
 "storage dict is a list of literal node as a root node of a command tree, "
@@ -49,7 +49,7 @@ msgstr ""
 "MCDR 维护了一个 dict 用于储存注册的指令。该 dict 的值均为指令树根节点列表，而值对应的键则是根节点的字面值。有了它，MCDR "
 "可以快速地找到可能可以接收到来指令的指令树"
 
-#: ../plugin_dev/command.rst:14
+#: ../plugin_dev/command.rst:16
 msgid ""
 "Every time when a user info is being processed, MCDR will try to parse "
 "the user input as a command. It will takes the first segment of the user "
@@ -60,55 +60,55 @@ msgid ""
 " it will let the found command trees to handle the command."
 msgstr ""
 "每次处理用户信息时，MCDR都会尝试将用户输入解析为指令。它将用户输入的第一个分段作为键来查询指令树存储字典。**如果指令存在，则调用** "
-":meth:`~mcdreforged.info_reactor.info.Info.cancel_send_to_server()` **来阻止将信息发送到服务器的标准输入流** "
-"，然后使用对应的指令树来处理该指令"
+":meth:`~mcdreforged.info_reactor.info.Info.cancel_send_to_server()` "
+"**来阻止将信息发送到服务器的标准输入流** ，然后使用对应的指令树来处理该指令"
 
-#: ../plugin_dev/command.rst:19
+#: ../plugin_dev/command.rst:21
 msgid ""
 "If an command error occurs and the error has not been set to handled, "
 "MCDR will sent the default translated command error message to the "
 "command source"
 msgstr "如果解析指令时发生错误，且插件未将错误设置为已处理，则 MCDR 会将翻译后的指令错误消息发送到指令源"
 
-#: ../plugin_dev/command.rst:24
+#: ../plugin_dev/command.rst:26
 msgid "A Quick Peek"
 msgstr "先瞅一眼..."
 
-#: ../plugin_dev/command.rst:26
+#: ../plugin_dev/command.rst:28
 msgid ""
 "Let's peek into the actual operation of a command tree. As an example, "
 "let's say that there are 3 kinds of commands:"
 msgstr "让我们来看看指令树的实际含义。例如，假设某插件包含3种指令："
 
-#: ../plugin_dev/command.rst:29
+#: ../plugin_dev/command.rst:31
 msgid "``!!email list``"
 msgstr "``!!email list``"
 
-#: ../plugin_dev/command.rst:30
+#: ../plugin_dev/command.rst:32
 msgid "``!!email remove <email_id>``"
 msgstr "``!!email remove <email_id>``"
 
-#: ../plugin_dev/command.rst:31
+#: ../plugin_dev/command.rst:33
 msgid "``!!email send <player> <message>``"
 msgstr "``!!email send <player> <message>``"
 
-#: ../plugin_dev/command.rst:33
+#: ../plugin_dev/command.rst:35
 msgid ""
 "To implement these commands, we can build a command tree with MCDR like "
 "this:"
 msgstr "要实现这些指令，我们可以构建如下所示的指令树："
 
-#: ../plugin_dev/command.rst:45
+#: ../plugin_dev/command.rst:47
 msgid ""
 "When MCDR executes the command ``!!email remove 21``, the following "
 "things will happen"
 msgstr "当执行 ``!!email remove 21`` 指令时，以下过程将会发生："
 
-#: ../plugin_dev/command.rst:48
+#: ../plugin_dev/command.rst:50
 msgid "Parsing at node ``Literal('!!email')`` with command ``!!email remove 21``"
 msgstr "于节点 ``Literal('!!email')`` 解析指令 ``!!email remove 21`` "
 
-#: ../plugin_dev/command.rst:50
+#: ../plugin_dev/command.rst:52
 msgid ""
 "Literal Node ``Literal('!!email')`` gets the first element of ``!!email "
 "remove 21``, it's ``!!email`` and it matches the literal node"
@@ -116,25 +116,25 @@ msgstr ""
 "字面量节点 ``Literal('!!email')`` 获取了 ``!!email remove 21`` 的第一个元素，它是 "
 "``!!email`` ——与字面量节点匹配"
 
-#: ../plugin_dev/command.rst:51
+#: ../plugin_dev/command.rst:53
 msgid "Now the remaining command is ``remove 21``"
 msgstr "现在余下的指令是 ``remove 21``"
 
-#: ../plugin_dev/command.rst:52
+#: ../plugin_dev/command.rst:54
 msgid ""
 "And then, it searches through its literal children, found the child node "
 "``Literal('remove')`` matches the next literal element ``remove``"
 msgstr "于是，它搜索其字面量子节点，找到与下一个指令元素 ``remove`` 匹配的子节点 ``Literal('remove')`` "
 
-#: ../plugin_dev/command.rst:53
+#: ../plugin_dev/command.rst:55
 msgid "Then it let that child node to handle the rest of the command"
 msgstr "这样，它让该子节点处理其余指令"
 
-#: ../plugin_dev/command.rst:55
+#: ../plugin_dev/command.rst:57
 msgid "Parsing at node ``Literal('remove')`` with command ``remove 21``"
 msgstr "于节点 ``Literal('remove')`` 解析指令 ``remove 21`` "
 
-#: ../plugin_dev/command.rst:57
+#: ../plugin_dev/command.rst:59
 msgid ""
 "Literal Node ``Literal('remove')`` gets the first element of ``remove "
 "21``, it's ``remove`` and it matches the literal node"
@@ -142,66 +142,66 @@ msgstr ""
 "字面量节点 ``Literal('remove')`` 获取了 ``remove 21`` 的第一个元素，它是 ``remove`` "
 "——与字面量节点匹配"
 
-#: ../plugin_dev/command.rst:58
+#: ../plugin_dev/command.rst:60
 msgid "Now the remaining command is ``21``"
 msgstr "现在余下的指令是 ``21`` "
 
-#: ../plugin_dev/command.rst:59
+#: ../plugin_dev/command.rst:61
 msgid ""
 "And then it searches through its literal children, but doesn't found any "
 "literal child matches the next element ``21``"
 msgstr "然后它搜索其字面量子节点，但未找到与下一个指令元素 ``21`` 匹配的任何字面量子节点"
 
-#: ../plugin_dev/command.rst:60
+#: ../plugin_dev/command.rst:62
 msgid ""
 "So it let its non-literal child ``Integer('email_id')`` to handle the "
 "rest of the command"
 msgstr "因此，它让它的非字面量子节点 ``Integer('email_id')`` 处理剩余指令"
 
-#: ../plugin_dev/command.rst:62
+#: ../plugin_dev/command.rst:64
 msgid "Parsing at node ``Integer('email_id')`` with command ``21``"
 msgstr "于节点 ``Integer('email_id')`` 解析指令 ``21`` "
 
-#: ../plugin_dev/command.rst:64
+#: ../plugin_dev/command.rst:66
 msgid ""
 "Integer Node ``Integer('email_id')`` gets the first element of ``21``, "
 "it's a legal integer"
 msgstr "整数节点 ``Integer('email_id')`` 获得了 ``21`` 的第一个元素，这是一个合法的整数"
 
-#: ../plugin_dev/command.rst:65
+#: ../plugin_dev/command.rst:67
 msgid "It store the value ``21`` to the context dict with key ``email_id``"
 msgstr "它使用键 ``email_id`` 将值 ``21`` 存储到上下文 dict 中"
 
-#: ../plugin_dev/command.rst:66
+#: ../plugin_dev/command.rst:68
 msgid ""
 "And then it finds that the command parsing is already finished so it "
 "invokes the callback function with the command source and the context "
 "dict as the argument."
 msgstr "然后，它发现指令解析已经完成，因此它以指令源和上下文 dict 作为参数来调用回调函数"
 
-#: ../plugin_dev/command.rst:67
+#: ../plugin_dev/command.rst:69
 msgid "The command parsing finishes"
 msgstr "至此，指令解析完成"
 
-#: ../plugin_dev/command.rst:69
+#: ../plugin_dev/command.rst:71
 msgid ""
 "This is a quick overview of the implantation logic part of command "
 "building system. It's mainly for help you build a perceptual "
 "understanding of the command tree based command building system"
 msgstr "以上是指令构建系统逻辑部分的快速概述，主要是为了帮助你建立对指令树和指令构建系统的感性理解"
 
-#: ../plugin_dev/command.rst:71
+#: ../plugin_dev/command.rst:73
 msgid ""
 "Matching the literal nodes, parsing the remaining command, storing the "
 "parsed value inside the context dict, this is how the command system "
 "works"
 msgstr "匹配文字节点，解析剩余指令，将解析后的值存储在上下文字典中，这就是指令系统的工作方式"
 
-#: ../plugin_dev/command.rst:74
+#: ../plugin_dev/command.rst:76
 msgid "Ways to build your command tree"
 msgstr "构建指令树的方法"
 
-#: ../plugin_dev/command.rst:76
+#: ../plugin_dev/command.rst:78
 msgid ""
 "If you are familiar with Mojang's `brigadier "
 "<https://github.com/Mojang/brigadier>`__ which is used in Minecraft, or "
@@ -214,7 +214,7 @@ msgstr ""
 "<https://github.com/Mojang/brigadier>`__，或者你需要使用 MCDR 指令树的完整特性，阅读相关的 "
 ":ref:`类参考<class-ref-command>` 以了解如何创建指令节点、增添子节点，以及设置节点属性"
 
-#: ../plugin_dev/command.rst:79
+#: ../plugin_dev/command.rst:81
 msgid ""
 "If you are new to this kind of tree based command building system and "
 "don't know how to handle with command tree, you can try the :ref:`cmd-"
@@ -223,29 +223,29 @@ msgstr ""
 "如果你是刚接触基于树的指令构建系统的新手，不知道如何整指令树的这一套东西，你可以试试 :ref:`cmd-tree-builder` "
 "这个工具，来进行简单的指令树构建"
 
-#: ../plugin_dev/command.rst:81
+#: ../plugin_dev/command.rst:83
 msgid ""
 "Rather than reading this document, anther good way to learn to use the "
 "MCDR command building system is to refer and imitate existing codes You "
 "can also find the command building code of ``!!MCDR`` command in the "
 "``__register_commands`` method of class "
-"``mcdreforged.plugin.builtin.mcdreforged_plugin.MCDReforgedPlugin``"
+"``mcdreforged.plugin.builtin.mcdr.mcdreforged_plugin.MCDReforgedPlugin``"
 msgstr ""
 "除了阅读本文档外，学习使用 MCDR 指令构建系统的另一种好办法是引用和模仿现有代码。你可以在 "
-"``mcdreforged.plugin.builtin.mcdreforged_plugin.MCDReforgedPlugin`` 类的 "
+"``mcdreforged.plugin.builtin.mcdr.mcdreforged_plugin.MCDReforgedPlugin`` 类的 "
 "``__register_commands`` 方法下找到 ``!!MCDR`` 指令的构建代码"
 
-#: ../plugin_dev/command.rst:85
+#: ../plugin_dev/command.rst:87
 msgid "Context"
 msgstr "上下文"
 
-#: ../plugin_dev/command.rst:87
+#: ../plugin_dev/command.rst:89
 msgid ""
 "Context stores the information of current command parsing. It's a class "
 "inherited from dict"
 msgstr "上下文（Context）储存着当前指令解析过程中的信息，是一个继承自 dict 的类"
 
-#: ../plugin_dev/command.rst:89
+#: ../plugin_dev/command.rst:91
 msgid ""
 "Parsed values are stored inside context using the dict method, which "
 "means you can use ``context['arg_name']`` to access them"
@@ -253,65 +253,65 @@ msgstr ""
 "指令解析过程中解析得到的值将会使用 dict 的方法，储存在上下文中。这意味着你可以使用 ``context['arg_name']`` "
 "来访问这些值"
 
-#: ../plugin_dev/command.rst:94
+#: ../plugin_dev/command.rst:96
 msgid "Simple Command Builder"
 msgstr "简易指令构建器"
 
-#: ../plugin_dev/command.rst:98
+#: ../plugin_dev/command.rst:100
 msgid ""
 "Being confused about the command tree? Get tired of tree-based command "
 "building? Try this tree-free command builder and experience a nice and "
 "clean command building process"
 msgstr "对指令树一头雾水？厌烦了基于树的指令构造方式？快来试试这个不含树的指令构建器，体验清晰简单的指令构建流程吧"
 
-#: ../plugin_dev/command.rst:100
+#: ../plugin_dev/command.rst:102
 msgid "Declare & Define, that's all you need"
 msgstr "声明&定义，你要做的就这些"
 
-#: ../plugin_dev/command.rst:103
+#: ../plugin_dev/command.rst:105
 msgid "Usage"
 msgstr "用法"
 
-#: ../plugin_dev/command.rst:105
+#: ../plugin_dev/command.rst:107
 msgid ""
 "The command tree in the :ref:`cmd-tree-quick-peek` section can be built "
 "with the following codes"
 msgstr "可以使用以下代码构造 :ref:`cmd-tree-quick-peek` 部分中的指令树："
 
-#: ../plugin_dev/command.rst:127
+#: ../plugin_dev/command.rst:129
 msgid ""
 "Where ``list_email``, ``remove_email`` and ``send_email`` are callback "
 "functions of the corresponding commands"
 msgstr "其中 ``list_email``、``remove_email`` 和 ``send_email`` 为对应指令的回调函数"
 
-#: ../plugin_dev/command.rst:129
+#: ../plugin_dev/command.rst:131
 msgid "That's it!"
 msgstr "就这么简单！"
 
-#: ../plugin_dev/command.rst:133
+#: ../plugin_dev/command.rst:135
 msgid ""
 "Reference of class "
 ":class:`~mcdreforged.command.builder.tools.SimpleCommandBuilder`"
 msgstr "类 :class:`~mcdreforged.command.builder.tools.SimpleCommandBuilder` 的参考"
 
-#: ../plugin_dev/command.rst:136
+#: ../plugin_dev/command.rst:138
 msgid "Customize"
 msgstr "自定义"
 
-#: ../plugin_dev/command.rst:138
+#: ../plugin_dev/command.rst:140
 msgid ""
 "MCDR also supports customize an argument node. It might save you same "
 "repeated work on building your command"
 msgstr "MCDR 支持自定义参数节点。它也许能节省一些你为构建指令而重复工作的时间"
 
-#: ../plugin_dev/command.rst:140
+#: ../plugin_dev/command.rst:142
 msgid ""
 "To create a custom a argument node, you need to declare a class inherited"
 " from ``AbstractNode``, and then implement the ``parse`` method logic. "
 "That's it, the custom node class is ready to be used"
 msgstr "要创建自定义参数节点，你需要声明一个继承自 ``AbstractNode`` 的类，然后实现 ``parse`` 的方法逻辑"
 
-#: ../plugin_dev/command.rst:142
+#: ../plugin_dev/command.rst:144
 msgid ""
 "Custom exception provides a precise way to handle your exception with "
 "``on_error`` method. If you want to raise a custom exception when your "
@@ -321,7 +321,7 @@ msgstr ""
 "自定义异常提供了一种使用 ``on_error`` "
 "方法处理异常的精确方法。如果你想在参数节点无法解析文本时引发自定义异常，则需要使自定义异常继承自 ``CommandSyntaxError``"
 
-#: ../plugin_dev/command.rst:144
+#: ../plugin_dev/command.rst:146
 msgid ""
 "Here's a quick example of a custom Argument node, ``PointArgument``. It "
 "accepts continuous 3 float input as a coordinate and batch them in to a "
@@ -333,47 +333,47 @@ msgstr ""
 "类型的参数输入作为坐标，并将它们作为点储存到列表中。如果它获得非浮点输入，则抛出 ``IllegalPoint`` "
 "异常。如果指令在读取完三个浮点数之前结束，则抛出 ``IncompletePoint`` 异常"
 
-#: ../plugin_dev/command.rst:173
+#: ../plugin_dev/command.rst:175
 msgid "For its usage, here's a simple example as well as an input/output table:"
 msgstr "对于它的用法，这是一个简单的示例，以及一个对应的输入/输出表："
 
-#: ../plugin_dev/command.rst:188
+#: ../plugin_dev/command.rst:190
 msgid "Input"
 msgstr "输入值"
 
-#: ../plugin_dev/command.rst:189
+#: ../plugin_dev/command.rst:191
 msgid "Output"
 msgstr "输出值"
 
-#: ../plugin_dev/command.rst:190
+#: ../plugin_dev/command.rst:192
 msgid "!!mypoint 1 2 3"
 msgstr "!!mypoint 1 2 3"
 
-#: ../plugin_dev/command.rst:191
+#: ../plugin_dev/command.rst:193
 msgid "You have input a point (1.0, 2.0, 3.0)"
 msgstr "You have input a point (1.0, 2.0, 3.0)"
 
-#: ../plugin_dev/command.rst:192
+#: ../plugin_dev/command.rst:194
 msgid "!!mypoint 1 2"
 msgstr "!!mypoint 1 2"
 
-#: ../plugin_dev/command.rst:193
+#: ../plugin_dev/command.rst:195
 msgid "Incomplete Point: !!mypoint 1 2<--"
 msgstr "Incomplete Point: !!mypoint 1 2<--"
 
-#: ../plugin_dev/command.rst:194
+#: ../plugin_dev/command.rst:196
 msgid "!!mypoint xxx"
 msgstr "!!mypoint xxx"
 
-#: ../plugin_dev/command.rst:195
+#: ../plugin_dev/command.rst:197
 msgid "Invalid Point: !!mypoint xxx<--"
 msgstr "Invalid Point: !!mypoint xxx<--"
 
-#: ../plugin_dev/command.rst:196
+#: ../plugin_dev/command.rst:198
 msgid "!!mypoint 1 2 x"
 msgstr "!!mypoint 1 2 x"
 
-#: ../plugin_dev/command.rst:197
+#: ../plugin_dev/command.rst:199
 msgid "Invalid Point: !!mypoint 1 2 x<--"
 msgstr "Invalid Point: !!mypoint 1 2 x<--"
 

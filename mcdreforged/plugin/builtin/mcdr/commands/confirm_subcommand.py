@@ -4,10 +4,10 @@ from typing_extensions import override
 
 from mcdreforged.command.builder.nodes.basic import Literal
 from mcdreforged.command.command_source import CommandSource
-from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.sub_command import SubCommand
+from mcdreforged.plugin.builtin.mcdr.commands.sub_command import SubCommand
 
 if TYPE_CHECKING:
-	from mcdreforged.plugin.builtin.mcdreforged_plugin.mcdreforged_plugin import MCDReforgedPlugin
+	from mcdreforged.plugin.builtin.mcdr.mcdreforged_plugin import MCDReforgedPlugin
 
 
 class ConfirmSubCommand(SubCommand):

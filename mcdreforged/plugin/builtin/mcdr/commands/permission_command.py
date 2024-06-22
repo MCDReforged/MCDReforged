@@ -9,7 +9,7 @@ from mcdreforged.command.command_source import CommandSource
 from mcdreforged.minecraft.rtext.style import RColor, RAction
 from mcdreforged.minecraft.rtext.text import RTextList, RText
 from mcdreforged.permission.permission_level import PermissionLevel
-from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.sub_command import SubCommand
+from mcdreforged.plugin.builtin.mcdr.commands.sub_command import SubCommand
 from mcdreforged.utils import string_utils
 
 

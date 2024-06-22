@@ -16,7 +16,7 @@ from mcdreforged.utils.logger import DebugOption, MCDReforgedLogger
 
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
-	from mcdreforged.plugin.builtin.mcdreforged_plugin.mcdreforged_plugin import MCDReforgedPlugin
+	from mcdreforged.plugin.builtin.mcdr.mcdreforged_plugin import MCDReforgedPlugin
 	from mcdreforged.plugin.si.plugin_server_interface import PluginServerInterface
 
 

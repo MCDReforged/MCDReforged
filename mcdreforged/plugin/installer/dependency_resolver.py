@@ -65,7 +65,7 @@ class PluginMeta:
 
 	@classmethod
 	def builtin_plugin_metadata_list(cls) -> List['PluginMeta']:
-		from mcdreforged.plugin.builtin.mcdreforged_plugin import mcdreforged_plugin
+		from mcdreforged.plugin.builtin.mcdr import mcdreforged_plugin
 		from mcdreforged.plugin.builtin import python_plugin
 		return [
 			PluginMeta.of_metadata(mcdreforged_plugin.METADATA),

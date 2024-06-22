@@ -10,14 +10,14 @@ from mcdreforged.command.command_source import CommandSource
 from mcdreforged.minecraft.rtext.style import RColor, RStyle, RAction
 from mcdreforged.minecraft.rtext.text import RTextList, RText
 from mcdreforged.permission.permission_level import PermissionLevel
-from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.plugin_command_pim import PluginCommandPimExtension
-from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.sub_command import SubCommand, SubCommandEvent
+from mcdreforged.plugin.builtin.mcdr.commands.plugin_command_pim import PluginCommandPimExtension
+from mcdreforged.plugin.builtin.mcdr.commands.sub_command import SubCommand, SubCommandEvent
 from mcdreforged.plugin.operation_result import PluginOperationResult, PluginResultType
 from mcdreforged.plugin.type.regular_plugin import RegularPlugin
 from mcdreforged.utils.future import Future
 
 if TYPE_CHECKING:
-	from mcdreforged.plugin.builtin.mcdreforged_plugin.mcdreforged_plugin import MCDReforgedPlugin
+	from mcdreforged.plugin.builtin.mcdr.mcdreforged_plugin import MCDReforgedPlugin
 	from mcdreforged.plugin.plugin_manager import PluginManager
 
 

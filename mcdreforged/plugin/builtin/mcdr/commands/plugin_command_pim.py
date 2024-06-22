@@ -12,19 +12,19 @@ from mcdreforged.command.builder.nodes.arguments import Text, QuotableText
 from mcdreforged.command.builder.nodes.basic import Literal
 from mcdreforged.command.builder.nodes.special import CountingLiteral
 from mcdreforged.command.command_source import CommandSource
-from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.pim_internal import pim_utils
-from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.pim_internal.exceptions import OuterReturn
-from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.pim_internal.handler_browse import PimBrowseCommandHandler
-from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.pim_internal.handler_check_update import PimCheckUpdateCommandHandler
-from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.pim_internal.handler_install import PimInstallCommandHandler
-from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.sub_command import SubCommand, SubCommandEvent
+from mcdreforged.plugin.builtin.mcdr.commands.pim_internal import pim_utils
+from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.exceptions import OuterReturn
+from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.handler_browse import PimBrowseCommandHandler
+from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.handler_check_update import PimCheckUpdateCommandHandler
+from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.handler_install import PimInstallCommandHandler
+from mcdreforged.plugin.builtin.mcdr.commands.sub_command import SubCommand, SubCommandEvent
 from mcdreforged.plugin.installer.meta_holder import PersistCatalogueMetaRegistryHolder
 from mcdreforged.plugin.installer.types import MetaRegistry
 from mcdreforged.translation.translator import Translator
 from mcdreforged.utils import misc_utils
 
 if TYPE_CHECKING:
-	from mcdreforged.plugin.builtin.mcdreforged_plugin.mcdreforged_plugin import MCDReforgedPlugin
+	from mcdreforged.plugin.builtin.mcdr.mcdreforged_plugin import MCDReforgedPlugin
 	from mcdreforged.plugin.plugin_manager import PluginManager
 
 

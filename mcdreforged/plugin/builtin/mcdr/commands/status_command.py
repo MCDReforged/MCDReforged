@@ -10,7 +10,7 @@ from mcdreforged.constants import core_constant
 from mcdreforged.minecraft.rtext.style import RColor, RStyle, RAction
 from mcdreforged.minecraft.rtext.text import RText
 from mcdreforged.permission.permission_level import PermissionLevel
-from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.sub_command import SubCommand
+from mcdreforged.plugin.builtin.mcdr.commands.sub_command import SubCommand
 from mcdreforged.utils import tree_printer
 
 

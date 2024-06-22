@@ -3,7 +3,7 @@ from typing import Optional, TYPE_CHECKING, Callable
 import resolvelib
 
 from mcdreforged.command.command_source import CommandSource
-from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.pim_internal.plugin_requirement_source import PluginRequirementSource
+from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.plugin_requirement_source import PluginRequirementSource
 from mcdreforged.plugin.installer.dependency_resolver import PluginRequirement
 from mcdreforged.plugin.meta.version import VersionRequirement
 from mcdreforged.translation.translator import Translator

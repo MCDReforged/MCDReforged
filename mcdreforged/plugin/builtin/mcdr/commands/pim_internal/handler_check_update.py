@@ -7,10 +7,10 @@ from mcdreforged.command.builder.common import CommandContext
 from mcdreforged.command.command_source import CommandSource
 from mcdreforged.minecraft.rtext.style import RColor, RStyle
 from mcdreforged.minecraft.rtext.text import RTextBase, RText, RTextList
-from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.pim_internal import pim_utils
-from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.pim_internal.handler_base import PimCommandHandlerBase
-from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.pim_internal.plugin_requirement_source import PluginRequirementSource
-from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.pim_internal.texts import Texts
+from mcdreforged.plugin.builtin.mcdr.commands.pim_internal import pim_utils
+from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.handler_base import PimCommandHandlerBase
+from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.plugin_requirement_source import PluginRequirementSource
+from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.texts import Texts
 from mcdreforged.plugin.installer.dependency_resolver import PluginRequirement, PluginDependencyResolver
 from mcdreforged.plugin.meta.version import Version
 

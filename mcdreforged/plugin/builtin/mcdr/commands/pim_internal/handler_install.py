@@ -16,14 +16,14 @@ from mcdreforged.command.builder.common import CommandContext
 from mcdreforged.command.command_source import CommandSource
 from mcdreforged.minecraft.rtext.style import RColor, RAction, RStyle
 from mcdreforged.minecraft.rtext.text import RTextBase, RText
-from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.pim_internal import pim_utils
-from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.pim_internal.abort_helper import AbortHelper
-from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.pim_internal.confirm_helper import ConfirmHelper, ConfirmHelperState
-from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.pim_internal.exceptions import OuterReturn
-from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.pim_internal.handler_base import PimCommandHandlerBase
-from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.pim_internal.local_meta_registry import LocalReleaseData
-from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.pim_internal.plugin_requirement_source import PluginRequirementSource
-from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.pim_internal.texts import Texts
+from mcdreforged.plugin.builtin.mcdr.commands.pim_internal import pim_utils
+from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.abort_helper import AbortHelper
+from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.confirm_helper import ConfirmHelper, ConfirmHelperState
+from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.exceptions import OuterReturn
+from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.handler_base import PimCommandHandlerBase
+from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.local_meta_registry import LocalReleaseData
+from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.plugin_requirement_source import PluginRequirementSource
+from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.texts import Texts
 from mcdreforged.plugin.installer.dependency_resolver import PluginRequirement, PluginDependencyResolver, PackageRequirementResolver, PluginCandidate, PluginDependencyResolverArgs
 from mcdreforged.plugin.installer.downloader import ReleaseDownloader
 from mcdreforged.plugin.installer.types import ReleaseData, PluginResolution, MetaRegistry
@@ -32,8 +32,8 @@ from mcdreforged.utils import misc_utils
 from mcdreforged.utils.replier import CommandSourceReplier
 
 if TYPE_CHECKING:
-	from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.plugin_command_pim import PluginCommandPimExtension
-	from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.sub_command import SubCommandEvent
+	from mcdreforged.plugin.builtin.mcdr.commands.plugin_command_pim import PluginCommandPimExtension
+	from mcdreforged.plugin.builtin.mcdr.commands.sub_command import SubCommandEvent
 	from mcdreforged.plugin.type.plugin import AbstractPlugin
 
 
@@ -521,7 +521,7 @@ class PimInstallCommandHandler(PimCommandHandlerBase):
 		abort_helper = self.__install_abort_helper
 		is_confirm_waiting = sis is not None and confirm_helper.is_waiting()
 
-		from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.sub_command import SubCommandEvent
+		from mcdreforged.plugin.builtin.mcdr.commands.sub_command import SubCommandEvent
 		if event == SubCommandEvent.confirm:
 			if is_confirm_waiting and source == sis:
 				confirm_helper.set(ConfirmHelperState.confirmed)

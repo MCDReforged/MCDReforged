@@ -8,11 +8,11 @@ from mcdreforged.command.builder.nodes.basic import Literal, ArgumentNode
 from mcdreforged.command.command_source import CommandSource
 from mcdreforged.minecraft.rtext.style import RColor, RStyle, RAction
 from mcdreforged.minecraft.rtext.text import RTextList, RTextBase, RText
-from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.sub_command import SubCommand
+from mcdreforged.plugin.builtin.mcdr.commands.sub_command import SubCommand
 from mcdreforged.preference.preference_manager import PreferenceItem, PreferenceManager
 
 if TYPE_CHECKING:
-	from mcdreforged.plugin.builtin.mcdreforged_plugin.mcdreforged_plugin import MCDReforgedPlugin
+	from mcdreforged.plugin.builtin.mcdr.mcdreforged_plugin import MCDReforgedPlugin
 
 
 PREF_COLOR = RColor.dark_aqua
