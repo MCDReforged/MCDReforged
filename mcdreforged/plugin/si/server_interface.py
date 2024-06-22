@@ -16,7 +16,7 @@ from mcdreforged.plugin import plugin_factory
 from mcdreforged.plugin.meta.metadata import Metadata
 from mcdreforged.plugin.operation_result import PluginOperationResult, PluginResultType
 from mcdreforged.plugin.plugin_event import PluginEvent, MCDRPluginEvents
-from mcdreforged.plugin.type.common import PluginFormat
+from mcdreforged.plugin.type.common import PluginType
 from mcdreforged.plugin.type.plugin import AbstractPlugin
 from mcdreforged.preference.preference_manager import PreferenceItem
 from mcdreforged.translation.translation_text import RTextMCDRTranslation
@@ -543,15 +543,15 @@ class ServerInterface:
 			return plugin.get_metadata()
 		return self.__existed_plugin_info_getter(plugin_id, getter, regular=False)
 
-	def get_plugin_format(self, plugin_id: str) -> Optional[PluginFormat]:
+	def get_plugin_type(self, plugin_id: str) -> Optional[PluginType]:
 		"""
-		Return the format of the specified plugin, or None if the plugin doesn't exist
+		Return the type of the specified plugin, or None if the plugin doesn't exist
 
-		:param plugin_id: The id of the plugin to query format
+		:param plugin_id: The id of the plugin to query type
 
 		.. versionadded:: v2.13.0
 		"""
-		def getter(plugin: 'AbstractPlugin') -> PluginFormat:
+		def getter(plugin: 'AbstractPlugin') -> PluginType:
 			return plugin.get_type()
 		return self.__existed_plugin_info_getter(plugin_id, getter, regular=False)
 

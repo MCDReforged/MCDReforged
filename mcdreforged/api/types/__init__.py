@@ -11,7 +11,7 @@ from mcdreforged.plugin.meta.metadata import Metadata
 from mcdreforged.plugin.meta.version import Version, VersionRequirement
 from mcdreforged.plugin.si.plugin_server_interface import PluginServerInterface
 from mcdreforged.plugin.si.server_interface import ServerInterface
-from mcdreforged.plugin.type.common import PluginFormat
+from mcdreforged.plugin.type.common import PluginType
 from mcdreforged.preference.preference_manager import PreferenceItem
 from mcdreforged.utils.logger import SyncStdoutStreamHandler, MCDReforgedLogger
 
@@ -30,7 +30,7 @@ __all__ = [
 	'CommandSource', 'InfoCommandSource', 'PlayerCommandSource', 'ConsoleCommandSource', 'PluginCommandSource',
 
 	# Plugin things
-	'Metadata', 'Version', 'VersionRequirement', 'PluginFormat',
+	'Metadata', 'Version', 'VersionRequirement', 'PluginType',
 
 	# Permission
 	'PermissionLevel',

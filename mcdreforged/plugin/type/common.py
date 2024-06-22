@@ -10,7 +10,7 @@ class PluginState(enum.Enum):
 	UNLOADED = enum.auto()       # unloaded, should never access it
 
 
-class PluginFormat(enum.Enum):
+class PluginType(enum.Enum):
 	"""
 	:doc:`Format of the plugin </plugin_dev/plugin_format>`
 

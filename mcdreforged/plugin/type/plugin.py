@@ -12,7 +12,7 @@ from mcdreforged.plugin.meta.metadata import Metadata
 from mcdreforged.plugin.meta.version import Version
 from mcdreforged.plugin.plugin_event import MCDREvent, EventListener, PluginEvent
 from mcdreforged.plugin.plugin_registry import PluginRegistry, HelpMessage
-from mcdreforged.plugin.type.common import PluginState, PluginFormat
+from mcdreforged.plugin.type.common import PluginState, PluginType
 from mcdreforged.utils import class_utils
 from mcdreforged.utils.exception import IllegalCallError, IllegalStateError
 from mcdreforged.utils.logger import DebugOption
@@ -44,7 +44,7 @@ class AbstractPlugin:
 		return isinstance(self, RegularPlugin)
 
 	@abstractmethod
-	def get_type(self) -> PluginFormat:
+	def get_type(self) -> PluginType:
 		raise NotImplementedError()
 
 	@abstractmethod

@@ -5,7 +5,7 @@ Plugin Stuffs
 Attributes
 ----------
 
-.. autoclass:: mcdreforged.plugin.type.common.PluginFormat
+.. autoclass:: mcdreforged.plugin.type.common.PluginType
     :members:
 
 

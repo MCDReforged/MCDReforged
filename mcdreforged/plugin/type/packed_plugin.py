@@ -9,7 +9,7 @@ from zipfile import ZipFile
 
 from typing_extensions import override
 
-from mcdreforged.plugin.type.common import PluginFormat
+from mcdreforged.plugin.type.common import PluginType
 from mcdreforged.plugin.type.multi_file_plugin import MultiFilePlugin
 from mcdreforged.utils import path_utils
 from mcdreforged.utils.exception import IllegalPluginStructure
@@ -24,8 +24,8 @@ class PackedPlugin(MultiFilePlugin):
 		self.__zip_file_cache: Optional[ZipFile] = None
 
 	@override
-	def get_type(self) -> PluginFormat:
-		return PluginFormat.packed
+	def get_type(self) -> PluginType:
+		return PluginType.packed
 
 	@property
 	def __zip_file(self) -> ZipFile:

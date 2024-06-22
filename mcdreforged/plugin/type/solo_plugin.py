@@ -11,7 +11,7 @@ from typing_extensions import override
 
 from mcdreforged.constants import plugin_constant
 from mcdreforged.plugin.meta.metadata import Metadata
-from mcdreforged.plugin.type.common import PluginFormat
+from mcdreforged.plugin.type.common import PluginType
 from mcdreforged.plugin.type.regular_plugin import RegularPlugin
 from mcdreforged.utils import string_utils
 
@@ -25,8 +25,8 @@ class SoloPlugin(RegularPlugin):
 		self.module_name = 'MCDR_SOLO_PLUGIN@{}'.format(self.plugin_path)
 
 	@override
-	def get_type(self) -> PluginFormat:
-		return PluginFormat.solo
+	def get_type(self) -> PluginType:
+		return PluginType.solo
 
 	@override
 	def get_fallback_metadata_id(self) -> str:

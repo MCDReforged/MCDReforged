@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-13 14:29+0800\n"
+"POT-Creation-Date: 2024-06-22 16:53+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -270,9 +270,9 @@ msgstr "见 :ref:`此处 <plugin-translation>` 以了解为你的插件注册翻
 #: mcdreforged.plugin.si.server_interface.ServerInterface.execute_command
 #: mcdreforged.plugin.si.server_interface.ServerInterface.get_permission_level
 #: mcdreforged.plugin.si.server_interface.ServerInterface.get_plugin_file_path
-#: mcdreforged.plugin.si.server_interface.ServerInterface.get_plugin_format
 #: mcdreforged.plugin.si.server_interface.ServerInterface.get_plugin_instance
 #: mcdreforged.plugin.si.server_interface.ServerInterface.get_plugin_metadata
+#: mcdreforged.plugin.si.server_interface.ServerInterface.get_plugin_type
 #: mcdreforged.plugin.si.server_interface.ServerInterface.get_preference
 #: mcdreforged.plugin.si.server_interface.ServerInterface.has_translation
 #: mcdreforged.plugin.si.server_interface.ServerInterface.is_plugin_file_changed
@@ -683,17 +683,15 @@ msgstr "返回指定插件的元数据。若插件不存在，则返回 None"
 msgid "The id of the plugin to query metadata"
 msgstr "要查询元数据的插件的 ID"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.get_plugin_format:1
-#: of
+#: mcdreforged.plugin.si.server_interface.ServerInterface.get_plugin_type:1 of
 msgid ""
-"Return the format of the specified plugin, or None if the plugin doesn't "
+"Return the type of the specified plugin, or None if the plugin doesn't "
 "exist"
-msgstr "返回指定插件的格式。若插件不存在，则返回 None"
+msgstr "返回指定插件的种类。若插件不存在，则返回 None"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.get_plugin_format:3
-#: of
-msgid "The id of the plugin to query format"
-msgstr "要查询格式的插件的 ID"
+#: mcdreforged.plugin.si.server_interface.ServerInterface.get_plugin_type:3 of
+msgid "The id of the plugin to query type"
+msgstr "要查询种类的插件的 ID"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.get_plugin_file_path:1
 #: of
@@ -943,8 +941,8 @@ msgid ""
 "``MyPlugin.mcdr`` is replaced with an upgraded ``MyPlugin_v2.mcdr``: "
 "unload ``my_plugin`` and load ``MyPlugin_v2.mcdr`` in one call"
 msgstr ""
-"``MyPlugin.mcdr`` 被一个新的 ``MyPlugin_v2.mcdr`` 所取代了：在单次调用中，卸载 ``my_plugin`` 并加载 "
-"``MyPlugin_v2.mcdr``"
+"``MyPlugin.mcdr`` 被一个新的 ``MyPlugin_v2.mcdr`` 所取代了：在单次调用中，卸载 ``my_plugin``"
+" 并加载 ``MyPlugin_v2.mcdr``"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.manipulate_plugins:12
 #: of
