@@ -183,6 +183,31 @@ class Metadata:
 			return RText(self.description)
 		return RTextMCDRTranslation.from_translation_dict(self.description)
 
+	def to_dict(self) -> dict:
+		"""
+		Create a dict present of this metadata object
+
+		.. versionadded:: v2.13.0
+		"""
+		def copy(obj):
+			return obj.copy() if isinstance(obj, (list, dict)) else obj
+
+		return {
+			# Fields for all plugins
+			'id': self.id,
+			'version': str(self.version),
+			'name': self.name,
+			'description': copy(self.description),
+			'author': copy(self.author),
+			'link': self.link,
+			'dependencies': {k: str(v) for k, v in self.dependencies.items()},
+
+			# Fields for packed plugins
+			'entrypoint': self.entrypoint,
+			'archive_name': self.archive_name,
+			'resources': copy(self.resources),
+		}
+
 
 __SAMPLE_METADATA = {
 	'id': 'example_plugin',   # If missing it will be the file name without .py suffix

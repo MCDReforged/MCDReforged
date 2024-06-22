@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-12 02:24+0800\n"
+"POT-Creation-Date: 2024-06-22 20:04+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,28 +25,28 @@ msgstr "插件相关"
 msgid "Attributes"
 msgstr "插件属性"
 
-#: mcdreforged.plugin.type.common.PluginFormat:1 of
+#: mcdreforged.plugin.type.common.PluginType:1 of
 msgid ":doc:`Format of the plugin </plugin_dev/plugin_format>`"
 msgstr ":doc:`插件的格式 </plugin_dev/plugin_format>`"
 
-#: ../../docstring mcdreforged.plugin.type.common.PluginFormat.builtin:1 of
+#: ../../docstring mcdreforged.plugin.type.common.PluginType.builtin:1 of
 msgid "MCDR builtin plugin"
 msgstr "MCDR 内置插件"
 
-#: ../../docstring mcdreforged.plugin.type.common.PluginFormat.solo:1 of
+#: ../../docstring mcdreforged.plugin.type.common.PluginType.solo:1 of
 msgid ":ref:`plugin_dev/plugin_format:Solo Plugin`"
 msgstr ":ref:`plugin_dev/plugin_format:Solo Plugin`"
 
-#: ../../docstring mcdreforged.plugin.type.common.PluginFormat.packed:1 of
+#: ../../docstring mcdreforged.plugin.type.common.PluginType.packed:1 of
 msgid ":ref:`plugin_dev/plugin_format:Packed Plugin`"
 msgstr ":ref:`plugin_dev/plugin_format:Packed Plugin`"
 
-#: ../../docstring mcdreforged.plugin.type.common.PluginFormat.directory:1 of
+#: ../../docstring mcdreforged.plugin.type.common.PluginType.directory:1 of
 msgid ":ref:`plugin_dev/plugin_format:Directory Plugin`"
 msgstr ":ref:`plugin_dev/plugin_format:Directory Plugin`"
 
-#: ../../docstring
-#: mcdreforged.plugin.type.common.PluginFormat.linked_directory:1 of
+#: ../../docstring mcdreforged.plugin.type.common.PluginType.linked_directory:1
+#: of
 msgid ":ref:`plugin_dev/plugin_format:Linked Directory Plugin`"
 msgstr ":ref:`plugin_dev/plugin_format:Linked Directory Plugin`"
 
@@ -152,6 +152,10 @@ msgid ""
 msgstr ""
 "以 :class:`RText <mcdreforged.minecraft.rtext.text.RTextBase>` "
 "类型返回一个翻译后的插件描述，"
+
+#: mcdreforged.plugin.meta.metadata.Metadata.to_dict:1 of
+msgid "Create a dict present of this metadata object"
+msgstr "创建该元数据对象的 dict 表示"
 
 #: mcdreforged.plugin.meta.version.Version:1 of
 msgid "A version container that stores semver like version string"

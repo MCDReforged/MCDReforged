@@ -52,7 +52,7 @@ class DebugCommand(SubCommand):
 				yield t.name
 
 		def thread_dump_callback(src: CommandSource, ctx: dict):
-			self.show_thread_dump(src, ctx.get('thread_name'))
+			self.cmd_show_thread_dump(src, ctx.get('thread_name'))
 
 		return (
 			self.owner_command_root('debug').
@@ -77,7 +77,7 @@ class DebugCommand(SubCommand):
 					then(
 						QuotableText('translation_key').
 						suggests(lambda: self.translations.keys()).
-						runs(lambda src, ctx: self.show_translation_entry(src, ctx['translation_key']))
+						runs(lambda src, ctx: self.cmd_show_translation_entry(src, ctx['translation_key']))
 					)
 				).
 				then(
@@ -85,7 +85,7 @@ class DebugCommand(SubCommand):
 					then(
 						QuotableText('json_path').
 						suggests(translation_dump_suggest).
-						runs(lambda src, ctx: self.show_translation_dump(src, ctx['json_path']))
+						runs(lambda src, ctx: self.cmd_show_translation_dump(src, ctx['json_path']))
 					)
 				)
 			).
@@ -93,14 +93,14 @@ class DebugCommand(SubCommand):
 				Literal('command_dump').
 				then(
 					Literal('all').
-					runs(lambda src: self.show_command_tree(src, show_all=True))
+					runs(lambda src: self.cmd_show_command_tree(src, show_all=True))
 				).
 				then(
 					Literal('plugin').
 					then(
 						QuotableText('plugin_id').
 						suggests(lambda: [plg.get_id() for plg in self.mcdr_server.plugin_manager.get_all_plugins()]).
-						runs(lambda src, ctx: self.show_command_tree(src, plugin_id=ctx['plugin_id']))
+						runs(lambda src, ctx: self.cmd_show_command_tree(src, plugin_id=ctx['plugin_id']))
 					)
 				).
 				then(
@@ -108,7 +108,7 @@ class DebugCommand(SubCommand):
 					then(
 						QuotableText('literal_name').
 						suggests(lambda: self.command_roots.keys()).
-						runs(lambda src, ctx: self.show_command_tree(src, literal_name=ctx['literal_name']))
+						runs(lambda src, ctx: self.cmd_show_command_tree(src, literal_name=ctx['literal_name']))
 					)
 				)
 			)
@@ -123,15 +123,15 @@ class DebugCommand(SubCommand):
 		return self.mcdr_server.command_manager.root_nodes.copy()
 
 	@classmethod
-	def show_thread_dump(cls, source: CommandSource, target_thread: Optional[str]):
+	def cmd_show_thread_dump(cls, source: CommandSource, target_thread: Optional[str]):
 		for line in thread_dump(target_thread=target_thread):
 			source.reply(line)
 
-	def show_translation_entry(self, source: CommandSource, translation_key: str):
+	def cmd_show_translation_entry(self, source: CommandSource, translation_key: str):
 		entry = self.translations.get(translation_key.strip('.'))
 		source.reply(json_wrap(entry))
 
-	def show_translation_dump(self, source: CommandSource, json_path: str):
+	def cmd_show_translation_dump(self, source: CommandSource, json_path: str):
 		prefix_segments = list(filter(None, json_path.strip('.').split('.')))
 		ret = {}
 		for key, value in self.translations.items():
@@ -140,7 +140,7 @@ class DebugCommand(SubCommand):
 				ret[key] = value
 		source.reply(json_wrap(ret))
 
-	def show_command_tree(self, source: CommandSource, *, show_all: bool = False, plugin_id: Optional[str] = None, literal_name: Optional[str] = None):
+	def cmd_show_command_tree(self, source: CommandSource, *, show_all: bool = False, plugin_id: Optional[str] = None, literal_name: Optional[str] = None):
 		roots: Dict[str, List[PluginCommandHolder]] = self.command_roots
 		for literal, holders in roots.items():
 			if not show_all and (literal_name is not None and literal != literal_name):
