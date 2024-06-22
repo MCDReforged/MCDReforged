@@ -111,13 +111,17 @@ It can be used as the base image to build your custom runtime with MCDR
 .. code-block:: dockerfile
 
     FROM mcdreforged/mcdreforged
+
     RUN <<EOT
-    # Install system packages
+    # Install system packages you need
     apt-get update
     apt-get install -y curl
-    # Install Python packages
+
+    # Install Python packages you need
     pip3 install apscheduler
+
     # Do whatever you want for customization
+    # ./do_something.sh
     EOF
 
 Tag prefixes:
@@ -179,9 +183,17 @@ Images with OpenJDK installed. If you want to run MCDR with a Minecraft server, 
 
 Supported OpenJDK distributions:
 
-- `corretoo <https://aws.amazon.com/corretto/>`__
-- `temurin <https://adoptium.net/temurin/>`__ (suggested)
-- `zulu <https://www.azul.com/downloads/?package=jdk#zulu>`__
+.. list-table::
+   :header-rows: 1
+
+   * - OpenJDK distribution
+     - ``${jdk_distribution}``
+   * - `Eclipse Temurin <https://adoptium.net/temurin/>`__ (suggested)
+     - ``temurin``
+   * - `Amazon Corretto <https://aws.amazon.com/corretto/>`__
+     - ``corretoo``
+   * - `Azul Zulu <https://www.azul.com/downloads/?package=jdk#zulu>`__
+     - ``zulu``
 
 Supported java version: 8, 11, 17, 21 (default: 17)
 
