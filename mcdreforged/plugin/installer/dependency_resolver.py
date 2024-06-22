@@ -197,7 +197,7 @@ class PackageRequirementResolver:
 	"""
 	def __init__(self, package_requirements: PackageRequirements):
 		self.package_requirements = package_requirements
-		self.__proc: Optional[subprocess.Popen] = None
+		self.__install_proc: Optional[subprocess.Popen] = None
 
 	def check(self, *, extra_args: Iterable[str] = (), pre_run_callback: Optional[Callable[[List[str]], Any]] = None) -> Union[Optional[str], subprocess.CalledProcessError]:
 		if len(self.package_requirements) == 0:
@@ -221,7 +221,7 @@ class PackageRequirementResolver:
 	def install(self, *, extra_args: Iterable[str] = (), pre_run_callback: Optional[Callable[[List[str]], Any]] = None):
 		if len(self.package_requirements) == 0:
 			return
-		if self.__proc is not None:
+		if self.__install_proc is not None:
 			raise RuntimeError('concurrent call')
 
 		cmd = [
@@ -234,12 +234,12 @@ class PackageRequirementResolver:
 		if pre_run_callback is not None:
 			pre_run_callback(cmd)
 		try:
-			with subprocess.Popen(cmd) as self.__proc:
-				self.__proc.wait()
+			with subprocess.Popen(cmd) as self.__install_proc:
+				self.__install_proc.wait()
 		finally:
-			self.__proc = None
+			self.__install_proc = None
 
 	def abort(self):
-		proc = self.__proc
+		proc = self.__install_proc
 		with contextlib.suppress(OSError):
 			proc.terminate()

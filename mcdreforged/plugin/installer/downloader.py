@@ -8,6 +8,7 @@ import time
 from pathlib import Path
 from typing import Optional
 
+from typing_extensions import TypedDict
 from wcwidth import wcswidth
 
 from mcdreforged.minecraft.rtext.style import RColor
@@ -35,13 +36,17 @@ class ReleaseDownloader:
 	class Aborted(Exception):
 		pass
 
+	class UrlOverrideArgs(TypedDict):
+		repos_owner: Optional[str]
+		repos_name: Optional[str]
+
 	def __init__(
 			self,
 			release: ReleaseData, target_path: Path, replier: Replier,
 			*,
 			mkdir: bool = True,
 			download_url_override: Optional[str] = None,
-			download_url_override_kwargs: Optional[dict] = None,
+			download_url_override_kwargs: Optional[UrlOverrideArgs] = None,
 			download_timeout: float = 15,
 			logger: Optional[logging.Logger] = None
 	):
@@ -50,7 +55,7 @@ class ReleaseDownloader:
 		self.replier = replier
 		self.mkdir = mkdir
 		self.download_url_override = download_url_override
-		self.download_url_override_kwargs: dict = download_url_override_kwargs or {}
+		self.download_url_override_kwargs: ReleaseDownloader.UrlOverrideArgs = download_url_override_kwargs or {}
 		self.download_timeout: float = download_timeout
 		self.logger = logger
 		self.__download_abort_event = threading.Event()

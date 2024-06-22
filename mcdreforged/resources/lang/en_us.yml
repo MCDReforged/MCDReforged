@@ -397,7 +397,7 @@ mcdreforged:
     info_reloaded_failed: 'Reload failed: §7{0}§r plugins'
     info_dependency_check_failed: 'Dependency check failed: §7{0}§r plugins'
     info_none: No plugin has changed
-    info_plugin_amount: 'Active plugin amount: §7{0}§r'
+    info_plugin_count: 'Active plugin count: §7{0}§r'
   plugin_manager:
     load: load
     unload: unload

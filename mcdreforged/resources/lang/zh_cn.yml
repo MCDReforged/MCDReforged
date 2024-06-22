@@ -397,7 +397,7 @@ mcdreforged:
     info_reloaded_failed: '重载失败: §7{0}§r 个插件'
     info_dependency_check_failed: '依赖检查失败: §7{0}§r 个插件'
     info_none: 没有插件变更
-    info_plugin_amount: '已加载插件数: §7{0}§r'
+    info_plugin_count: '已加载插件数: §7{0}§r'
   plugin_manager:
     load: 加载
     unload: 卸载

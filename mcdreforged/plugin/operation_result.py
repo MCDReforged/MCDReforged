@@ -116,7 +116,7 @@ class PluginOperationResult:
 		if message.is_empty():
 			add_element(message, tr('info_none'))
 		message.append(
-			RText(tr('info_plugin_amount', mcdr_server.plugin_manager.get_plugin_amount())).
+			RText(tr('info_plugin_count', mcdr_server.plugin_manager.get_plugin_amount())).
 			h('\n'.join(map(str, mcdr_server.plugin_manager.get_all_plugins()))).
 			c(RAction.suggest_command, '!!MCDR plugin list')
 		)
