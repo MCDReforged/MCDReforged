@@ -31,7 +31,8 @@ if TYPE_CHECKING:
 @dataclasses.dataclass
 class OperationHolder:
 	lock: threading.Lock = dataclasses.field(default_factory=threading.Lock)
-	thread: threading.Thread = dataclasses.field(default=None)
+	thread: Optional[threading.Thread] = dataclasses.field(default=None)
+	op_key: Optional[str] = dataclasses.field(default=None)
 
 
 def async_operation(op_holder: OperationHolder, skip_callback: callable, thread_name: str):
@@ -47,18 +48,20 @@ def async_operation(op_holder: OperationHolder, skip_callback: callable, thread_
 						except OuterReturn:
 							pass
 						finally:
-							op_holder.operation_thread = None
+							op_holder.thread = None
+							op_holder.op_key = None
 							op_holder.lock.release()
 					try:
 						thread = threading.Thread(target=run, name=thread_name)
 						thread.start()
-						op_holder.operation_thread = thread
+						op_holder.thread = thread
+						op_holder.op_key = op_key
 						return thread
 					except BaseException:
 						op_holder.lock.release()
 						raise
 				else:
-					skip_callback(*args, op_func=wrapped_func, op_key=op_key, op_thread=op_holder.operation_thread, **kwargs)
+					skip_callback(*args, op_func=wrapped_func, op_key=op_holder.op_key, op_thread=op_holder.thread, new_op_key=op_key, **kwargs)
 
 			misc_utils.copy_signature(wrapped_func, func)
 			return wrapped_func
@@ -208,7 +211,11 @@ class PluginCommandPimExtension(SubCommand):
 			blocked_callback=blocked_callback,
 		)
 
-	def __handle_duplicated_input(self, source: CommandSource, context: CommandContext, op_func: callable, op_key: str, op_thread: Optional[threading.Thread]):
+	def __handle_duplicated_input(
+			self, source: CommandSource, context: CommandContext,
+			*,
+			op_func: callable, op_key: str, op_thread: Optional[threading.Thread], new_op_key: str,
+	):
 		if op_func == type(self).cmd_install_plugins:
 			if self.__install_handler.try_prepare_for_duplicated_input(source, op_thread):
 				self.cmd_install_plugins(source, context)
