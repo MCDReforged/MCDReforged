@@ -103,8 +103,8 @@ plugin_download_url:
 plugin_download_timeout: 15
 
 
-# Extra arguments passed to the pip subprocess for installing required python packages
-# during plugin installation
+# Extra arguments passed to the pip subprocess for installing required python packages during plugin installation
+# Example: "-i https://pypi.tuna.tsinghua.edu.cn/simple"
 plugin_pip_install_extra_args:
 
 

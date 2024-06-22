@@ -482,7 +482,7 @@ Extra arguments passed to the pip subprocess for installing required python pack
 
 .. code-block:: yaml
 
-    plugin_pip_install_extra_args: -i https://test.pypi.org/simple --proxy http://localhost:8080
+    plugin_pip_install_extra_args: -i https://pypi.tuna.tsinghua.edu.cn/simple --proxy http://localhost:8080
 
 * Option type: ``Optional[str]``
 * Default value: *empty*
