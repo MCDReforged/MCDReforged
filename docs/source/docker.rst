@@ -195,7 +195,7 @@ Supported OpenJDK distributions:
    * - `Azul Zulu <https://www.azul.com/downloads/?package=jdk#zulu>`__
      - ``zulu``
 
-Supported java version: 8, 11, 17, 21 (default: 17)
+Supported java version: 8, 11, 17, 21 (default: 21)
 
 Additional tag suffixes:
 

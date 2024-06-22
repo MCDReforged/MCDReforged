@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-22 15:54+0800\n"
+"POT-Creation-Date: 2024-06-22 15:58+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -315,57 +315,57 @@ msgstr "源代码：https://github.com/MCDReforged/docker/blob/master/src"
 msgid "Supported OpenJDK distributions:"
 msgstr "支持的 OpenJDK 发行版："
 
-#: ../docker.rst:186
+#: ../docker.rst:185
 msgid "OpenJDK distribution"
 msgstr "OpenJDK 发行版"
 
-#: ../docker.rst:187
+#: ../docker.rst:186
 msgid "``${jdk_distribution}``"
 msgstr "``${jdk_distribution}``"
 
-#: ../docker.rst:188
+#: ../docker.rst:187
 msgid "`Eclipse Temurin <https://adoptium.net/temurin/>`__ (suggested)"
 msgstr "`Eclipse Temurin <https://adoptium.net/temurin/>`__ （推荐）"
 
-#: ../docker.rst:189
+#: ../docker.rst:188
 msgid "``temurin``"
 msgstr "``temurin``"
 
-#: ../docker.rst:190
+#: ../docker.rst:189
 msgid "`Amazon Corretto <https://aws.amazon.com/corretto/>`__"
 msgstr "`Amazon Corretto <https://aws.amazon.com/corretto/>`__"
 
-#: ../docker.rst:191
+#: ../docker.rst:190
 msgid "``corretoo``"
 msgstr "``corretoo``"
 
-#: ../docker.rst:192
+#: ../docker.rst:191
 msgid "`Azul Zulu <https://www.azul.com/downloads/?package=jdk#zulu>`__"
 msgstr "`Azul Zulu <https://www.azul.com/downloads/?package=jdk#zulu>`__"
 
-#: ../docker.rst:193
+#: ../docker.rst:192
 msgid "``zulu``"
 msgstr "``zulu``"
 
-#: ../docker.rst:195
-msgid "Supported java version: 8, 11, 17, 21 (default: 17)"
-msgstr "支持的 Java 版本：8, 11, 17, 21 (默认值：17)"
+#: ../docker.rst:194
+msgid "Supported java version: 8, 11, 17, 21 (default: 21)"
+msgstr "支持的 Java 版本：8, 11, 17, 21 (默认值：21)"
 
-#: ../docker.rst:197
+#: ../docker.rst:196
 msgid "Additional tag suffixes:"
 msgstr "额外的镜像 tag 后缀"
 
-#: ../docker.rst:199
+#: ../docker.rst:198
 msgid "``-jdk17`` suffix explicitly specify the JDK version to use"
 msgstr "``-jdk17`` 后缀显式指定了 JDK 的版本"
 
-#: ../docker.rst:200
+#: ../docker.rst:199
 msgid ""
 "``-extra`` suffix means the image is built based on the :ref:`extra "
 "<docker:Extra Image>` variant"
 msgstr "``-extra`` 后缀意味着该镜像是基于 :ref:`extra <docker:Extra Image>` 变体构建的"
 
-#: ../docker.rst:202
+#: ../docker.rst:201
 msgid "Example docker tags (using temurin JDK distribution as demonstration):"
 msgstr "镜像 tag 例子（使用 temurin 为 JDK 发行版）："
 
