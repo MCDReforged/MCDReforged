@@ -148,7 +148,7 @@ class DependencyWalker:
 					holder.state = VisitingState.FAIL
 					self.__plugin_manager.logger.mdebug('Set visiting state of {} to FAIL due to "{}"'.format(plugin_id, e), option=DebugOption.PLUGIN)
 					raise
-			if not plugin.is_permanent():
+			if not plugin.is_builtin():
 				holder.topo_order = len(self.__topo_order)
 				self.__topo_order.append(plugin_id)
 			holder.state = VisitingState.PASS

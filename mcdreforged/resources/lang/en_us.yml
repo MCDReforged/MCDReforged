@@ -305,7 +305,7 @@ mcdreforged:
         no_plugin_directories: Cannot install plugin since MCDR config "plugin_directories" is empty,
         invalid_target: Target {0} is invalid because it's not contained in the configured plugin_directories
         parse_specifier_failed: 'Parsing plugin specifier {0} failed: {1}'
-        cannot_install_permanent: Cannot install permanent plugin {0}
+        cannot_install_builtin: Cannot install builtin plugin {0}
 
         resolving_dependencies: Resolving dependencies ...
         unknown_plugin_id: Plugin with ID {0} not found
@@ -321,11 +321,11 @@ mcdreforged:
         cannot_change_not_packed:
           .: 'Existing plugin {0} is {1} and cannot be reinstalled. Only packed plugin is supported'
           plugin_types:
-            permanent_plugin: builtin plugin
-            solo_plugin: solo plugin
-            packed_plugin: packed plugin
-            directory_plugin: directory plugin
-            lined_directory_plugin: linked directory plugin
+            builtin: builtin plugin
+            solo: solo plugin
+            packed: packed plugin
+            directory: directory plugin
+            lined_directory: linked directory plugin
         nothing_to_install: Nothing needs to be installed
         install_summary:
           plugin_title: 'Plugins to install'

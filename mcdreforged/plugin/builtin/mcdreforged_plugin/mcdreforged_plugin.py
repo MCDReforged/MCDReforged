@@ -25,7 +25,7 @@ from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.server_command impor
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.status_command import StatusCommand
 from mcdreforged.plugin.builtin.mcdreforged_plugin.commands.sub_command import SubCommand, SubCommandEvent
 from mcdreforged.plugin.plugin_event import MCDRPluginEvents
-from mcdreforged.plugin.type.permanent_plugin import PermanentPlugin
+from mcdreforged.plugin.type.builtin_plugin import BuiltinPlugin
 from mcdreforged.translation.translation_text import RTextMCDRTranslation
 from mcdreforged.translation.translator import Translator
 
@@ -45,7 +45,7 @@ METADATA = {
 }
 
 
-class MCDReforgedPlugin(PermanentPlugin):
+class MCDReforgedPlugin(BuiltinPlugin):
 	def __init__(self, plugin_manager: 'PluginManager'):
 		super().__init__(plugin_manager, METADATA)
 		self.__translator = self.mcdr_server.create_internal_translator('')

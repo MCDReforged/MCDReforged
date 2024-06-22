@@ -305,7 +305,7 @@ mcdreforged:
         no_plugin_directories: MCDR 配置的插件文件夹为空，无法安装新插件
         invalid_target: 安装目标文件夹 {0} 无效，因为它不包含在配置的插件文件夹中
         parse_specifier_failed: '解析插件描述 {0} 失败: {1}'
-        cannot_install_permanent: 无法安装内置插件 {0}
+        cannot_install_builtin: 无法安装内置插件 {0}
 
         resolving_dependencies: 正在解析插件依赖 ...
         unknown_plugin_id: ID 为 {0} 的插件不存在
@@ -321,11 +321,11 @@ mcdreforged:
         cannot_change_not_packed:
           .: '已有的插件 {0} 的类型为{1}，无法被重新安装。只有打包插件可被重新安装'
           plugin_types:
-            permanent_plugin: 内置插件
-            solo_plugin: 单文件插件
-            packed_plugin: 打包插件
-            directory_plugin: 文件夹插件
-            lined_directory_plugin: 链接型文件夹插件
+            builtin: 内置插件
+            solo: 单文件插件
+            packed: 打包插件
+            directory: 文件夹插件
+            lined_directory: 链接型文件夹插件
         nothing_to_install: 已安装的插件已满足所述需求，无需安装任何插件
         install_summary:
           plugin_title: '将被安装的插件'

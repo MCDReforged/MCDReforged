@@ -81,7 +81,7 @@ or if you need to access the full features of MCDR's command tree building syste
 If you are new to this kind of tree based command building system and don't know how to handle with command tree, you can try the :ref:`cmd-tree-builder` tool for easier command tree building
 
 Rather than reading this document, anther good way to learn to use the MCDR command building system is to refer and imitate existing codes
-You can also find the command building code of ``!!MCDR`` command in the ``__register_commands`` method of class ``mcdreforged.plugin.permanent.mcdreforged_plugin.MCDReforgedPlugin``
+You can also find the command building code of ``!!MCDR`` command in the ``__register_commands`` method of class ``mcdreforged.plugin.builtin.mcdreforged_plugin.mcdreforged_plugin.MCDReforgedPlugin``
 
 Context
 ^^^^^^^

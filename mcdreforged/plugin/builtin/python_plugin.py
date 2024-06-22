@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 from typing_extensions import override
 
 from mcdreforged.constants import core_constant
-from mcdreforged.plugin.type.permanent_plugin import PermanentPlugin
+from mcdreforged.plugin.type.builtin_plugin import BuiltinPlugin
 
 if TYPE_CHECKING:
 	from mcdreforged.plugin.plugin_manager import PluginManager
@@ -27,7 +27,7 @@ METADATA = {
 }
 
 
-class PythonPlugin(PermanentPlugin):
+class PythonPlugin(BuiltinPlugin):
 	def __init__(self, plugin_manager: 'PluginManager'):
 		super().__init__(plugin_manager, METADATA)
 

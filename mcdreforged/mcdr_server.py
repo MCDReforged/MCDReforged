@@ -616,7 +616,7 @@ class MCDReforgedServer:
 		self.watch_dog.start()
 		self.task_executor.start()
 		self.preference_manager.load_preferences()
-		self.plugin_manager.register_permanent_plugins()
+		self.plugin_manager.register_builtin_plugins()
 		self.task_executor.execute_on_thread(self.load_plugins, block=True)
 		self.plugin_manager.dispatch_event(MCDRPluginEvents.MCDR_START, ())
 		if not self.config.disable_console_thread:

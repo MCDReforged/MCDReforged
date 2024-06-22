@@ -19,8 +19,8 @@ from mcdreforged.plugin.operation_result import PluginOperationResult, SingleOpe
 from mcdreforged.plugin.plugin_event import MCDRPluginEvents, EventListener, PluginEvent
 from mcdreforged.plugin.plugin_registry import PluginRegistryStorage
 from mcdreforged.plugin.plugin_thread import PluginThreadPool
+from mcdreforged.plugin.type.builtin_plugin import BuiltinPlugin
 from mcdreforged.plugin.type.common import PluginState
-from mcdreforged.plugin.type.permanent_plugin import PermanentPlugin
 from mcdreforged.plugin.type.plugin import AbstractPlugin
 from mcdreforged.plugin.type.regular_plugin import RegularPlugin
 from mcdreforged.utils import file_utils, string_utils, misc_utils, class_utils, path_utils, function_utils
@@ -122,7 +122,7 @@ class PluginManager:
 	def contains_plugin_id(self, plugin_id: str) -> bool:
 		"""
 		Check if the given plugin id represents a loaded plugin
-		Includes permanent plugins
+		Includes builtin plugins
 		"""
 		return plugin_id in self.__plugins
 
@@ -134,18 +134,18 @@ class PluginManager:
 		return False
 
 	# ---------------------------------------
-	#   Permanent build-in plugin operation
+	#   Builtin plugin operation
 	# ---------------------------------------
 
-	def __add_permanent_plugin(self, plugin: PermanentPlugin):
+	def __add_builtin_plugin(self, plugin: BuiltinPlugin):
 		self.__add_plugin(plugin)
 		plugin.set_state(PluginState.LOADED)
 		plugin.load()
 		plugin.set_state(PluginState.READY)
 
-	def register_permanent_plugins(self):
-		self.__add_permanent_plugin(MCDReforgedPlugin(self))
-		self.__add_permanent_plugin(PythonPlugin(self))
+	def register_builtin_plugins(self):
+		self.__add_builtin_plugin(MCDReforgedPlugin(self))
+		self.__add_builtin_plugin(PythonPlugin(self))
 		self.__sort_plugins_by_id()
 		self.__update_registry()
 
@@ -162,7 +162,7 @@ class PluginManager:
 			self.__plugin_file_paths[plugin.plugin_path.absolute()] = plugin_id
 
 	def __remove_plugin(self, plugin: AbstractPlugin):
-		if not plugin.is_permanent():
+		if not plugin.is_builtin():
 			plugin_id = plugin.get_id()
 			self.__plugins.pop(plugin_id, None)
 			if isinstance(plugin, RegularPlugin):
@@ -176,7 +176,7 @@ class PluginManager:
 	def __make_plugin_path(cls, plg: AbstractPlugin) -> Any:
 		if isinstance(plg, RegularPlugin):
 			return str(plg.plugin_path)
-		elif isinstance(plg, PermanentPlugin):
+		elif isinstance(plg, BuiltinPlugin):
 			return '@@builtin@@'
 		else:
 			return None

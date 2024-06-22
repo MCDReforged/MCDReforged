@@ -21,7 +21,7 @@ from mcdreforged.utils.types.message import TranslationKeyDictNested
 if TYPE_CHECKING:
 	from mcdreforged.handler.server_handler import ServerHandler
 	from mcdreforged.plugin.plugin_manager import PluginManager
-	from mcdreforged.plugin.type.permanent_plugin import PermanentPlugin
+	from mcdreforged.plugin.type.builtin_plugin import BuiltinPlugin
 	from mcdreforged.plugin.type.regular_plugin import RegularPlugin
 
 
@@ -35,9 +35,9 @@ class AbstractPlugin:
 		from mcdreforged.plugin.si.plugin_server_interface import PluginServerInterface
 		self.server_interface = PluginServerInterface(self.mcdr_server, self)
 
-	def is_permanent(self) -> TypeGuard['PermanentPlugin']:
-		from mcdreforged.plugin.type.permanent_plugin import PermanentPlugin
-		return isinstance(self, PermanentPlugin)
+	def is_builtin(self) -> TypeGuard['BuiltinPlugin']:
+		from mcdreforged.plugin.type.builtin_plugin import BuiltinPlugin
+		return isinstance(self, BuiltinPlugin)
 
 	def is_regular(self) -> TypeGuard['RegularPlugin']:
 		from mcdreforged.plugin.type.regular_plugin import RegularPlugin

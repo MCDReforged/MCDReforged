@@ -17,7 +17,7 @@ class PluginType(enum.Enum):
 	.. versionadded:: v2.13.0
 	"""
 
-	permanent = enum.auto()
+	builtin = enum.auto()
 	"""MCDR builtin plugin"""
 
 	solo = enum.auto()

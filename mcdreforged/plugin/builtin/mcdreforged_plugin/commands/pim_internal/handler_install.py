@@ -183,8 +183,8 @@ class PimInstallCommandHandler(PimCommandHandlerBase):
 				add_plugin_requirement(req, PluginRequirementSource.user_input)
 				continue
 
-			if plugin.is_permanent():
-				source.reply(self._tr('install.cannot_install_permanent', plugin.get_id()))
+			if plugin.is_builtin():
+				source.reply(self._tr('install.cannot_install_builtin', plugin.get_id()))
 				raise OuterReturn()
 
 			# update installed plugin only when necessary, if do_upgrade is not provided
@@ -241,20 +241,7 @@ class PimInstallCommandHandler(PimCommandHandlerBase):
 				old_version = None
 			if old_version != version:
 				if plugin is not None and not isinstance(plugin, PackedPlugin):
-					from mcdreforged.plugin.type.solo_plugin import SoloPlugin
-					from mcdreforged.plugin.type.directory_plugin import DirectoryPlugin, LinkedDirectoryPlugin
-					from mcdreforged.plugin.type.permanent_plugin import PermanentPlugin
-					plugin_type_keys: Dict[type, str] = {
-						PermanentPlugin: 'permanent_plugin',
-						SoloPlugin: 'solo_plugin',
-						PackedPlugin: 'packed_plugin',
-						DirectoryPlugin: 'directory_plugin',
-						LinkedDirectoryPlugin: 'lined_directory_plugin',
-					}
-					if (plugin_type_key := plugin_type_keys.get(type(plugin))) is not None:
-						plugin_type_text = self._tr('install.cannot_change_not_packed.plugin_types.' + plugin_type_key)
-					else:
-						plugin_type_text = RText(type(plugin).__name__)
+					plugin_type_text = self._tr('install.cannot_change_not_packed.plugin_types.' + plugin.get_type().name)
 					source.reply(self._tr('install.cannot_change_not_packed', plugin_id, plugin_type_text))
 					raise OuterReturn()
 				try:

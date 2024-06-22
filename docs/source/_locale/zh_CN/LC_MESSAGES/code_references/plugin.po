@@ -29,7 +29,7 @@ msgstr "插件属性"
 msgid ":doc:`Format of the plugin </plugin_dev/plugin_format>`"
 msgstr ":doc:`插件的格式 </plugin_dev/plugin_format>`"
 
-#: ../../docstring mcdreforged.plugin.type.common.PluginFormat.permanent:1 of
+#: ../../docstring mcdreforged.plugin.type.common.PluginFormat.builtin:1 of
 msgid "MCDR builtin plugin"
 msgstr "MCDR 内置插件"
 

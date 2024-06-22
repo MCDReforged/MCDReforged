@@ -83,7 +83,7 @@ class PluginCommand(SubCommand):
 				c(RAction.run_command, '{} plugin info {}'.format(self.control_command_prefix, meta.id)).
 				h(self.tr('mcdr_command.list_plugin.suggest_info', plugin.get_identifier()))
 			)
-			if self.can_see_rtext(source) and not plugin.is_permanent():
+			if self.can_see_rtext(source) and not plugin.is_builtin():
 				texts.append(
 					' ',
 					RText('[↻]', color=RColor.gray)
