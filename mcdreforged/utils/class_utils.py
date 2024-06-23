@@ -40,7 +40,7 @@ def check_type(value: Any, types: Union[Type[_T], Iterable[Type[_T]]], error_mes
 		types = (types,)
 	if not isinstance(value, tuple(map(mapper, types))):
 		if error_message is None:
-			error_message = 'Except type {}, but found type {}'.format(types, type(value))
+			error_message = 'Except type {}, but found type {}'.format(types[0] if len(types) == 1 else types, type(value))
 		raise TypeError(error_message)
 	return value
 
