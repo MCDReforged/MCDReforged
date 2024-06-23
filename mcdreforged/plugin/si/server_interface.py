@@ -766,10 +766,10 @@ class ServerInterface:
 	def manipulate_plugins(
 			self, *,
 			load: Optional[List[PathStr]] = None,    # file paths
-			unload: Optional[List[str]] = None,       # plugin ids
-			reload: Optional[List[str]] = None,       # plugin ids
+			unload: Optional[List[str]] = None,      # plugin ids
+			reload: Optional[List[str]] = None,      # plugin ids
 			enable: Optional[List[PathStr]] = None,  # file paths
-			disable: Optional[List[str]] = None,      # plugin ids
+			disable: Optional[List[str]] = None,     # plugin ids
 	) -> Optional[bool]:
 		"""
 		A highly-customizable plugin manipulate API that provides fine-grain control on what to be manipulated:
@@ -802,6 +802,7 @@ class ServerInterface:
 			if plugin_ids is not None:
 				plugins = []
 				for plugin_id in plugin_ids:
+					class_utils.check_type(plugin_id, str)
 					plugin = self._plugin_manager.get_regular_plugin_from_id(plugin_id)
 					if plugin is not None:
 						plugins.append(plugin)

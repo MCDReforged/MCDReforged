@@ -35,7 +35,7 @@ class _DirectoryPluginBase(MultiFilePlugin, ABC):
 					raise IllegalPluginStructure('Packed plugin cannot contain other package: found package {}'.format(package_name))
 
 	@override
-	def plugin_exists(self):
+	def file_exists(self):
 		return self._file_root.is_dir()
 
 	@override
@@ -78,8 +78,8 @@ class LinkedDirectoryPlugin(_DirectoryPluginBase):
 		return self.target_plugin_path
 
 	@override
-	def plugin_exists(self):
-		return self.link_file.is_file() and super().plugin_exists()
+	def file_exists(self):
+		return self.link_file.is_file() and super().file_exists()
 
 	@override
 	def _create_repr_fields(self) -> dict:

@@ -165,7 +165,7 @@ class RegularPlugin(AbstractPlugin, ABC):
 	#   Plugin File
 	# ---------------
 
-	def plugin_exists(self) -> bool:
+	def file_exists(self) -> bool:
 		return self.plugin_path.is_file()
 
 	def file_changed(self) -> bool:
@@ -179,7 +179,7 @@ class RegularPlugin(AbstractPlugin, ABC):
 			return None
 
 	def calculate_file_modify_time(self) -> Optional[int]:
-		if self.plugin_exists():
+		if self.file_exists():
 			with contextlib.suppress(OSError):
 				return os.stat(self.plugin_path).st_mtime_ns
 		return None

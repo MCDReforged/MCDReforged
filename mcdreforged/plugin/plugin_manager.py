@@ -2,6 +2,7 @@
 Plugin management
 """
 import collections
+import dataclasses
 import os
 import queue
 import threading
@@ -324,10 +325,15 @@ class PluginManager:
 		"""
 		return self.__load_given_new_plugins(self.__collect_new_plugins(collect_filter, possible_paths=possible_paths))
 
-	def __collect_regular_plugins(
+	@dataclasses.dataclass(frozen=True)
+	class __CollectWithDependentsResult:
+		all: List[RegularPlugin]
+		indirect: List[RegularPlugin]
+
+	def __collect_regular_plugins_with_dependents(
 			self, select_filter: Callable[[RegularPlugin], bool], specific: Optional[RegularPlugin],
 			operation_name: str = 'operate', collect_filter: Callable[[RegularPlugin], bool] = function_utils.TRUE
-	) -> List[RegularPlugin]:
+	) -> __CollectWithDependentsResult:
 		"""
 		collected = selected + affected
 		:return: A list of plugin in topo order
@@ -350,23 +356,30 @@ class PluginManager:
 			if collect_filter(plugin):
 				collected_plugins.append(plugin)
 
-		affected_plugins = [plg for plg in collected_plugins if plg not in selected_plugins_set]
+		indirect_plugins = [plg for plg in collected_plugins if plg not in selected_plugins_set]
 		if self.logger.should_log_debug(DebugOption.PLUGIN):
 			self.logger.mdebug('Collected {}x plugin'.format(len(collected_plugins)) + (':' if len(collected_plugins) > 0 else ''), no_check=True)
 			if len(collected_plugins) > 0:
 				self.logger.mdebug('- selected {}x: {}'.format(len(selected_plugins), ', '.join(map(str, selected_plugins))), no_check=True)
-				self.logger.mdebug('- affected {}x: {}'.format(len(affected_plugins), ', '.join(map(str, affected_plugins))), no_check=True)
-		if len(affected_plugins) > 0:
-			self.logger.info('Collected {}x extra plugins for {} due to dependency associations: {}'.format(len(affected_plugins), operation_name, ', '.join(map(str, affected_plugins))))
+				self.logger.mdebug('- affected {}x: {}'.format(len(indirect_plugins), ', '.join(map(str, indirect_plugins))), no_check=True)
+		if len(indirect_plugins) > 0:
+			self.logger.info('Collected {}x extra plugins for {} due to dependency associations: {}'.format(
+				len(indirect_plugins), operation_name, ', '.join(map(str, indirect_plugins))
+			))
 
-		return collected_plugins
+		return self.__CollectWithDependentsResult(all=collected_plugins, indirect=indirect_plugins)
 
-	def __unload_given_plugins(self, filter_: Callable[[RegularPlugin], bool], specific: Optional[RegularPlugin] = None) -> SingleOperationResult:
-		affected_plugins = self.__collect_regular_plugins(filter_, specific, 'unload')
+	@dataclasses.dataclass(frozen=True)
+	class __UnloadGivenPluginResult:
+		result: SingleOperationResult
+		indirect: List[RegularPlugin]
+
+	def __unload_given_plugins(self, filter_: Callable[[RegularPlugin], bool], specific: Optional[RegularPlugin] = None) -> __UnloadGivenPluginResult:
+		affected_plugins = self.__collect_regular_plugins_with_dependents(filter_, specific, 'unload')
 		result = SingleOperationResult()
-		for plugin in affected_plugins:
+		for plugin in affected_plugins.all:
 			result.record(plugin, self.__unload_plugin(plugin))
-		return result
+		return self.__UnloadGivenPluginResult(result=result, indirect=affected_plugins.indirect)
 
 	def __reload_ready_plugins(self, filter_: Callable[[RegularPlugin], bool], specific: Optional[RegularPlugin] = None) -> SingleOperationResult:
 		def ready_state_check(plg: RegularPlugin) -> bool:
@@ -375,7 +388,7 @@ class PluginManager:
 		def select_filter(plg: RegularPlugin) -> bool:
 			return ready_state_check(plg) and filter_(plg)
 
-		affected_plugins = self.__collect_regular_plugins(select_filter, specific, 'reload', ready_state_check)
+		affected_plugins = self.__collect_regular_plugins_with_dependents(select_filter, specific, 'reload', ready_state_check).all
 		result = SingleOperationResult()
 
 		# child first, parent last
@@ -513,10 +526,10 @@ class PluginManager:
 		possible_paths_set = set(possible_paths)
 
 		def unload_select_filter(plg: RegularPlugin) -> bool:
-			return not plg.plugin_exists() or plg.plugin_path not in possible_paths_set
+			return not plg.file_exists() or plg.plugin_path not in possible_paths_set
 
-		unload_result = self.__unload_given_plugins(unload_select_filter)
-		load_result = self.__collect_and_load_new_plugins(function_utils.TRUE, possible_paths=possible_paths)
+		unload_result = self.__unload_given_plugins(unload_select_filter).result
+		load_result = self.__collect_and_load_new_plugins(function_utils.TRUE, possible_paths=possible_paths)  # indirect plugin will be collected inside __collect_new_plugins
 		reload_result = self.__reload_ready_plugins(reload_filter)
 
 		return self.__finalize_plugin_manipulation(load_result, unload_result, reload_result)
@@ -563,6 +576,7 @@ class PluginManager:
 			reload: Optional[List[RegularPlugin]] = None,
 			enable: Optional[List[Path]] = None,
 			disable: Optional[List[RegularPlugin]] = None,
+			try_load_indirect_unloaded: bool = True,
 			entered_callback: Optional[Callable[[], Any]] = None,
 	) -> Future[PluginOperationResult]:
 		to_load_paths: List[Path] = (load or []).copy()
@@ -607,13 +621,19 @@ class PluginManager:
 				return plg.get_id() in to_reload_plugin_ids
 
 			unload_result = self.__unload_given_plugins(is_to_unload_plugin)
+			if try_load_indirect_unloaded:
+				# give those indirectly-unloaded dependent plugins a chance to load again
+				for indirect_plugin in unload_result.indirect:
+					if indirect_plugin.file_exists():
+						to_load_paths.append(indirect_plugin.plugin_path)
+						self.logger.mdebug('Add indirect to_load path {!r}'.format(indirect_plugin.plugin_path), option=DebugOption.PLUGIN)
 			load_result = self.__load_given_new_plugins(to_load_paths)
 			reload_result = self.__reload_ready_plugins(is_to_reload_plugin)
-			return self.__finalize_plugin_manipulation(load_result, unload_result, reload_result)
+			return self.__finalize_plugin_manipulation(load_result, unload_result.result, reload_result)
 
 		def done_callback(_: PluginOperationResult):
 			for plg in (disable or []):
-				if plg.plugin_exists():
+				if plg.file_exists():
 					disabled_path = plg.plugin_path.parent / (plg.plugin_path.name + plugin_constant.DISABLED_PLUGIN_FILE_SUFFIX)
 					if disabled_path.is_file():
 						self.logger.warning('Overwriting existing file {}'.format(disabled_path))
