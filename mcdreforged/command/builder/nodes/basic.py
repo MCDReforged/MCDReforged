@@ -52,11 +52,17 @@ REQUIRES_CALLBACK = __SOURCE_CONTEXT_CALLBACK_BOOL
 
 
 class CallbackError(Exception):
+	Builder = Callable[[Exception], 'CallbackError']
+
 	def __init__(self, exception: Exception, context: CommandContext, action: str):
 		self.exception = exception
 		self.context = context.copy()
 		self.action = action
 		self.exc_info = sys.exc_info()
+
+	@classmethod
+	def builder(cls, context: CommandContext, action: str) -> Builder:
+		return functools.partial(cls, context=context, action=action)
 
 
 class _ErrorHandler(NamedTuple):
@@ -325,39 +331,35 @@ class AbstractNode(ABC):
 		raise NotImplementedError()
 
 	@staticmethod
-	def __smart_callback(callback: Callable, *args):
-		sig = inspect.signature(callback)
+	def __smart_callback(callback: Callable, args: tuple, callback_error_factory: CallbackError.Builder):
 		spec_args = inspect.getfullargspec(callback).args
 		spec_args_len = len(spec_args)
 
 		real_func = callback
-		for i in range(100):
+		for i in range(100):  # found the real function for the MethodType check
 			if isinstance(real_func, functools.partial):
 				real_func = real_func.func
 			else:
 				break
 		if isinstance(real_func, MethodType):  # class method, remove the 1st param
 			spec_args_len -= 1
-		try:
-			sig.bind(*args[:spec_args_len])  # test if using full arg length is ok
-		except TypeError:
-			raise
 
-		# make sure all passed CommandContext are copies
-		args = list(args)
-		for i, arg in enumerate(args):
+		call_args = []
+		for i in range(min(spec_args_len, len(args))):
+			arg = args[i]
 			if isinstance(arg, CommandContext):
-				args[i] = arg.copy()
+				arg = arg.copy()  # make sure all passed CommandContext are copies
+			call_args.append(arg)
 
-		return callback(*args[:spec_args_len])
+		try:
+			return callback(*call_args)
+		except Exception as e:
+			raise callback_error_factory(e)
 
 	def __handle_error(self, error: CommandError, context: CommandContext, error_handlers: _ERROR_HANDLER_TYPE):
 		for error_type, handler in error_handlers.items():
 			if isinstance(error, error_type):
-				try:
-					self.__smart_callback(handler.callback, context.source, error, context)
-				except Exception as e:
-					raise CallbackError(e, context, 'error handling')
+				self.__smart_callback(handler.callback, (context.source, error, context), CallbackError.builder(context, 'error handling'))
 				if handler.handled:
 					error.set_handled()
 
@@ -370,20 +372,13 @@ class AbstractNode(ABC):
 		:return: None: requirement check passed; otherwise, the unsatisfied requirement
 		"""
 		for req in self._requirements:
-			try:
-				ok = self.__smart_callback(req.requirement, context.source, context)
-			except Exception as e:
-				raise CallbackError(e, context, 'requirements check')
-			else:
-				if not ok:
-					return req
+			ok = self.__smart_callback(req.requirement, (context.source, context), CallbackError.builder(context, 'requirements check'))
+			if not ok:
+				return req
 		return None
 
 	def _get_suggestions(self, context: CommandContext) -> Iterable[str]:
-		try:
-			return self.__smart_callback(self._suggestion_getter, context.source, context)
-		except Exception as e:
-			raise CallbackError(e, context, 'suggestions fetching')
+		return self.__smart_callback(self._suggestion_getter, (context.source, context), CallbackError.builder(context, 'suggestions getting'))
 
 	def _execute_command(self, context: CommandContext) -> None:
 		command = context.command
@@ -401,10 +396,7 @@ class AbstractNode(ABC):
 				req = self.__check_requirements(context)
 				if req is not None:  # requirement check failed
 					if req.failure_message_getter is not None:
-						try:
-							failure_message = self.__smart_callback(req.failure_message_getter, context.source, context)
-						except Exception as e:
-							raise CallbackError(e, context, 'failure message fetching')
+						failure_message = self.__smart_callback(req.failure_message_getter, (context.source, context), CallbackError.builder(context, 'failure message getting'))
 					else:
 						failure_message = None
 					self.__raise_error(RequirementNotMet(context.command_read, context.command_read, failure_message), context)
@@ -415,10 +407,7 @@ class AbstractNode(ABC):
 					if callback is None and self._redirect_node is not None:
 						callback = self._redirect_node._callback
 					if callback is not None:
-						try:
-							self.__smart_callback(callback, context.source, context)
-						except Exception as e:
-							raise CallbackError(e, context, 'command callback')
+						self.__smart_callback(callback, (context.source, context), CallbackError.builder(context, 'command callback'))
 					else:
 						self.__raise_error(UnknownCommand(context.command_read, context.command_read), context)
 				# Un-parsed command string remains
