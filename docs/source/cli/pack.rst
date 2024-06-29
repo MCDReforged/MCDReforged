@@ -12,7 +12,7 @@ The packing is based on the ``mcdreforged.plugin.json`` metadata file in the inp
 
 * Folder named by the plugin id
 * File ``mcdreforged.plugin.json``
-* File ``requirements.txt``, if it exists
+* File ``requirements.txt``, if it exists. If your plugin relies on third-party Python packages, it is recommended to create this file and declare these Python packages as dependencies within it
 * Files or folders listed in the :ref:`plugin_dev/metadata:resources` field in metadata
 
 input
@@ -26,14 +26,14 @@ input
 
     .. code-block:: bash
 
-        work_place/
+        workplace/
            my_plugin/
                __init__.py
                my_lib.py
            mcdreforged.plugin.json
            requirements.txt
 
-    Then the ``work_place/`` folder would be the input directory
+    Then the ``workplace/`` folder would be the input directory
 
     Default: current directory
 

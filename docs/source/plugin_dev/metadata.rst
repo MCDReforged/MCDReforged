@@ -49,6 +49,10 @@ Here's an example
 
 If a plugin doesn't not declare the meta data field, a warning will arise in the console and the fallback values will be used
 
+.. tip::
+
+    For python package requirements, it's suggested to declare them in a file named ``requirements.txt``, then :doc:`pack </cli/pack>` it into your packed plugin
+
 Fields
 ------
 

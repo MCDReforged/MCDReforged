@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-26 23:19+0800\n"
+"POT-Creation-Date: 2024-06-29 20:42+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -41,8 +41,12 @@ msgid "File ``mcdreforged.plugin.json``"
 msgstr "文件 ``mcdreforged.plugin.json``"
 
 #: ../cli/pack.rst:15
-msgid "File ``requirements.txt``, if it exists"
-msgstr "文件 ``requirements.txt``，如果它存在"
+msgid ""
+"File ``requirements.txt``, if it exists. If your plugin relies on third-"
+"party Python packages, it is recommended to create this file and declare "
+"these Python packages as dependencies within it"
+msgstr ""
+"文件 ``requirements.txt``，如果它存在。若你的插件依赖第三方 Python 包，则建议创建此文件，并在其中声明相关的包依赖"
 
 #: ../cli/pack.rst:16
 msgid ""
@@ -67,8 +71,8 @@ msgid "For example, if you have following file structure"
 msgstr "举个例子，如果你有着如下的文件结构"
 
 #: ../cli/pack.rst:36
-msgid "Then the ``work_place/`` folder would be the input directory"
-msgstr "那么文件夹 ``work_place/`` 将会是输入文件夹"
+msgid "Then the ``workplace/`` folder would be the input directory"
+msgstr "那么文件夹 ``workplace/`` 将会是输入文件夹"
 
 #: ../cli/pack.rst:38 ../cli/pack.rst:47
 msgid "Default: current directory"
@@ -193,12 +197,12 @@ msgstr "不支持前缀 ``#`` 字符的转义"
 
 #: ../cli/pack.rst:88
 msgid ""
-"It overwrites values from :ref:`-\\\\\\\\-ignore-file <cli/pack:ignore file>`."
-" It will filter nothing if the value is empty, or the file doesn't exist "
-"or not readable"
+"It overwrites values from :ref:`-\\\\\\\\-ignore-file <cli/pack:ignore "
+"file>`. It will filter nothing if the value is empty, or the file doesn't"
+" exist or not readable"
 msgstr ""
-"它将覆盖参数 :ref:`-\\\\\\\\-ignore-file <cli/pack:ignore file>` 提供的值。如果值为空或者文件不存在 /"
-" 无法读取，什么都将不会被过滤"
+"它将覆盖参数 :ref:`-\\\\\\\\-ignore-file <cli/pack:ignore file>` "
+"提供的值。如果值为空或者文件不存在 / 无法读取，什么都将不会被过滤"
 
 #: ../cli/pack.rst:90
 msgid ""
@@ -225,7 +229,8 @@ msgstr "``--ignore-file IGNORE_FILE``"
 #: ../cli/pack.rst:107
 msgid ""
 "The path to a utf8-encoded gitignore-like file. It's content will be used"
-" as the :ref:`-\\\\\\\\-ignore-patterns <cli/pack:ignore patterns>` parameter."
+" as the :ref:`-\\\\\\\\-ignore-patterns <cli/pack:ignore patterns>` "
+"parameter."
 msgstr ""
 "指向一格 utf8 编码的类似 gitignore 的文件。文件中的内容将被用作 :ref:`-\\\\\\\\-ignore-patterns "
 "<cli/pack:ignore patterns>` 的参数"
@@ -310,3 +315,4 @@ msgid ""
 msgstr ""
 "如果你的打包插件是一个合法的 :external:doc:`zip app <library/zipapp>` 文件，即它包含一个可用的 "
 "``__main__.py``，你就可以借助此选项，让你的打包插件在 bash 环境中可执行"
+
