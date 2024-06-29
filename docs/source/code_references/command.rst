@@ -23,6 +23,7 @@ Command Nodes
     :show-inheritance:
     :members:
     :special-members:
+    :exclude-members: __weakref__
 
 .. automodule:: mcdreforged.command.builder.nodes.arguments
     :show-inheritance:

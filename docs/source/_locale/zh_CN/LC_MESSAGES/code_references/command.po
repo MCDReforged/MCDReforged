@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-11 16:48+0800\n"
+"POT-Creation-Date: 2024-06-29 19:50+0800\n"
 "PO-Revision-Date: 2021-01-23 17:24+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -528,11 +528,6 @@ msgstr "以可读的格式打印指令树。常用于调试"
 msgid "A printer function that accepts a str"
 msgstr "一个接受一个 str 的打印函数"
 
-#: ../../docstring
-#: mcdreforged.command.builder.nodes.basic.AbstractNode.__weakref__:1 of
-msgid "list of weak references to the object (if defined)"
-msgstr ""
-
 #: mcdreforged.command.builder.nodes.basic.Literal:1 of
 msgid "Bases: :py:class:`~mcdreforged.command.builder.nodes.basic.EntryNode`"
 msgstr ""
@@ -879,7 +874,7 @@ msgid ""
 " visited during the command parsing in the command context"
 msgstr "一个特殊的字面值节点。相比普通的字面值节点，它有一个额外的功能：在上下文中储存其在指令解析的过程中被访问的次数"
 
-#: ../code_references/command.rst:36
+#: ../code_references/command.rst:37
 msgid "Command Builder"
 msgstr "指令构建器"
 
@@ -1155,7 +1150,7 @@ msgstr ""
 "见 :meth:`AbstractNode.on_child_error() "
 "<mcdreforged.command.builder.nodes.basic.AbstractNode.on_child_error>`"
 
-#: ../code_references/command.rst:46
+#: ../code_references/command.rst:47
 msgid "Tools"
 msgstr "工具"
 
@@ -1199,7 +1194,7 @@ msgstr "检查给定的参数是否在当前的指令上下文中已被赋值"
 msgid "The name of the argument to be checked"
 msgstr "将要检查的参数的名称"
 
-#: ../code_references/command.rst:52
+#: ../code_references/command.rst:53
 msgid "Exceptions"
 msgstr "异常"
 
@@ -1382,7 +1377,7 @@ msgstr "解析结果不是一个合法的布尔值"
 msgid "The parsed value is not a valid Enum"
 msgstr "解析结果不是一个合法的枚举值"
 
-#: ../code_references/command.rst:59
+#: ../code_references/command.rst:60
 msgid "Misc"
 msgstr "杂项"
 
@@ -1483,7 +1478,7 @@ msgstr "一个储存着 (值, 读取字符个数) 的元组。如果解析失败
 msgid "Get a float from the remaining input"
 msgstr "从剩余的输入字符串中获取一个 float"
 
-#: ../code_references/command.rst:73
+#: ../code_references/command.rst:74
 msgid ""
 "Renamed ``command_builder_util`` to ``command_builder_utils``. The old "
 "name is still accessible from ``mcdreforged.api.command``"

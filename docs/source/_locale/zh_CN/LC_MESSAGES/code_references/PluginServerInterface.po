@@ -451,13 +451,3 @@ msgstr "写入配置文件的编码方式。默认值 ``\"utf8\"``"
 msgid "The *file_format* parameter"
 msgstr "*file_format* 参数"
 
-#~ msgid ""
-#~ "If set to True, the command will"
-#~ " be registered even if a command "
-#~ "with the same name already exists "
-#~ "in the command tree. If set to "
-#~ "False (default), then a warning will "
-#~ "be printed if duplicated command root"
-#~ " node is found"
-#~ msgstr ""
-
