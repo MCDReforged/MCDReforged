@@ -33,12 +33,20 @@ class CatalogueMetaRegistry(MetaRegistry):
 
 class CatalogueMetaRegistryHolder:
 	def __init__(self, *, meta_json_url: Optional[str] = None, meta_fetch_timeout: Optional[float] = None):
+		self.__meta_json_url: str = ''
+		self.__meta_fetch_timeout: float = 0
+		self.set_meta_json_url(meta_json_url)
+		self.set_meta_fetch_timeout(meta_fetch_timeout)
+
+	def set_meta_json_url(self, meta_json_url: Optional[str] = None):
 		if meta_json_url is None:
 			meta_json_url = core_constant.PLUGIN_CATALOGUE_META_URL
+		self.__meta_json_url = meta_json_url
+
+	def set_meta_fetch_timeout(self, meta_fetch_timeout: Optional[float] = None):
 		if meta_fetch_timeout is None:
 			meta_fetch_timeout = 10
-		self.meta_json_url = meta_json_url
-		self.meta_fetch_timeout = meta_fetch_timeout
+		self.__meta_fetch_timeout = meta_fetch_timeout
 
 	def get_registry(self) -> MetaRegistry:
 		meta_json = self._fetch_meta_json()
@@ -46,12 +54,12 @@ class CatalogueMetaRegistryHolder:
 
 	def _fetch_meta_json(self) -> dict:
 		max_size = 20 * 2 ** 20  # 20MiB limit. In 2024-03-14, the uncompressed size is only 545KiB
-		buf = request_utils.get_buf(self.meta_json_url, 'MetaFetcher', timeout=self.meta_fetch_timeout, max_size=max_size)
+		buf = request_utils.get_buf(self.__meta_json_url, 'MetaFetcher', timeout=self.__meta_fetch_timeout, max_size=max_size)
 
-		if self.meta_json_url.endswith('.gz'):
+		if self.__meta_json_url.endswith('.gz'):
 			with gzip.GzipFile(fileobj=BytesIO(buf)) as gzip_f:
 				content = gzip_f.read(max_size + 1)
-		elif self.meta_json_url.endswith('.xz'):
+		elif self.__meta_json_url.endswith('.xz'):
 			content = lzma.LZMADecompressor().decompress(buf, max_size + 1)
 		else:
 			content = buf
@@ -138,7 +146,7 @@ class PersistCatalogueMetaRegistryHolder(CatalogueMetaRegistryHolder):
 	_FetchCallbackOpt = Optional[Callable[[Optional[Exception]], None]]
 	_FetchBlockedOpt = Optional[Callable[[], None]]
 
-	def __init__(self, mcdr_server: 'MCDReforgedServer', cache_path: Path, *, meta_json_url: str, meta_cache_ttl: float, meta_fetch_timeout: float):
+	def __init__(self, mcdr_server: 'MCDReforgedServer', cache_path: Path, *, meta_json_url: str, meta_fetch_timeout: float, meta_cache_ttl: float):
 		super().__init__(meta_json_url=meta_json_url, meta_fetch_timeout=meta_fetch_timeout)
 		self.logger: 'MCDReforgedLogger' = mcdr_server.logger
 		self.__tr = mcdr_server.create_internal_translator('plugin_catalogue_meta_registry').tr
@@ -150,6 +158,9 @@ class PersistCatalogueMetaRegistryHolder(CatalogueMetaRegistryHolder):
 		self.__background_fetch_flag = False
 		self.__fetch_lock = threading.Lock()
 		self.__background_fetcher = BackgroundMetaFetcher(self.logger, self.__background_fetch)
+
+	def set_meta_cache_ttl(self, meta_cache_ttl: float):
+		self.__meta_cache_ttl = meta_cache_ttl
 
 	@override
 	def get_registry(self) -> MetaRegistry:

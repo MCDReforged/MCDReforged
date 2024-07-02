@@ -12,6 +12,7 @@ from mcdreforged.command.builder.nodes.arguments import Text, QuotableText
 from mcdreforged.command.builder.nodes.basic import Literal
 from mcdreforged.command.builder.nodes.special import CountingLiteral
 from mcdreforged.command.command_source import CommandSource
+from mcdreforged.mcdr_config import MCDReforgedConfig
 from mcdreforged.plugin.builtin.mcdr.commands.pim_internal import pim_utils
 from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.exceptions import OuterReturn
 from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.handler_browse import PimBrowseCommandHandler
@@ -78,13 +79,27 @@ class PluginCommandPimExtension(SubCommand):
 			self.mcdr_server,
 			Path(self.server_interface.get_data_folder()) / 'catalogue_meta_cache.json.xz',
 			meta_json_url=self.mcdr_server.config.catalogue_meta_url,
-			meta_cache_ttl=self.mcdr_server.config.catalogue_meta_cache_ttl,
 			meta_fetch_timeout=self.mcdr_server.config.catalogue_meta_fetch_timeout,
+			meta_cache_ttl=self.mcdr_server.config.catalogue_meta_cache_ttl,
 		)
 		self.__tr = mcdr_plugin.get_translator().create_child('mcdr_command.pim')
 		self.__browse_handler = PimBrowseCommandHandler(self)
 		self.__check_update_handler = PimCheckUpdateCommandHandler(self)
 		self.__install_handler = PimInstallCommandHandler(self)
+
+		self.mcdr_server.add_config_changed_callback(self.__on_mcdr_config_loaded)
+
+	def __on_mcdr_config_loaded(self, config: MCDReforgedConfig, log: bool):
+		# Notes: the builtin mcdreforged plugin is loaded after the initial config load,
+		# so this callback will not be called in that initial config load
+		self.__meta_holder.set_meta_json_url(config.catalogue_meta_url)
+		self.__meta_holder.set_meta_fetch_timeout(config.catalogue_meta_fetch_timeout)
+		self.__meta_holder.set_meta_cache_ttl(config.catalogue_meta_cache_ttl)
+		self.log_debug('Updated pim meta_holder config to {}'.format({
+			'meta_json_url': config.catalogue_meta_url,
+			'meta_fetch_timeout': config.catalogue_meta_fetch_timeout,
+			'meta_cache_ttl': config.catalogue_meta_cache_ttl,
+		}))
 
 	@property
 	def pim_tr(self) -> Translator:
