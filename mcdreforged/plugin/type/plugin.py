@@ -168,7 +168,7 @@ class AbstractPlugin:
 	def register_help_message(self, help_message: HelpMessage):
 		self.__assert_allow_to_register('help message')
 		self.plugin_registry.register_help_message(help_message)
-		self.mcdr_server.logger.mdebug('{} registered help message "{}"'.format(self, help_message), option=DebugOption.PLUGIN)
+		self.mcdr_server.logger.mdebug('{} registered help message {}'.format(self, help_message), option=DebugOption.PLUGIN)
 
 	def register_translation(self, language: str, mapping: TranslationKeyDictNested):
 		self.__assert_allow_to_register('translation')

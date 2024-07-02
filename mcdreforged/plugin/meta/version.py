@@ -153,7 +153,7 @@ class Version:
 		return hash((self.component, self.pre, self.build))
 
 	def __repr__(self):
-		return '<{} {}>'.format(self.__class__.__name__, repr(str(self)))
+		return '{}({!r})'.format(self.__class__.__name__, str(self))
 
 
 DEFAULT_CRITERION_OPERATOR = '=='
@@ -227,7 +227,7 @@ class VersionRequirement:
 		return ' '.join(map(str, self.criterions))
 
 	def __repr__(self):
-		return '<{} {}>'.format(self.__class__.__name__, repr(str(self)))
+		return '{}({!r})'.format(self.__class__.__name__, str(self))
 
 	def __hash__(self):
 		return hash(str(self))

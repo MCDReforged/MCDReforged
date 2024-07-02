@@ -106,4 +106,8 @@ class EventListener:
 		return self.callback(*args, **kwargs)
 
 	def __repr__(self):
-		return 'EventListener[plugin={},priority={},callback={}]'.format(self.plugin.get_name(), self.priority, self.callback)
+		return class_utils.represent(self, {
+			'plugin': self.plugin.get_name(),
+			'callback': self.callback,
+			'priority': self.priority,
+		})

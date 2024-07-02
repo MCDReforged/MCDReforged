@@ -6,7 +6,7 @@ from typing_extensions import TypeGuard, override
 
 from mcdreforged.permission.permission_level import PermissionLevel
 from mcdreforged.translation.translation_text import RTextMCDRTranslation
-from mcdreforged.utils import misc_utils
+from mcdreforged.utils import misc_utils, class_utils
 from mcdreforged.utils.exception import IllegalCallError
 from mcdreforged.utils.types.message import MessageText
 
@@ -205,7 +205,10 @@ class PlayerCommandSource(InfoCommandSource):
 		return 'Player {}'.format(self.player)
 
 	def __repr__(self):
-		return '{}[player={},info_id={}]'.format(type(self).__name__, self.player, self.get_info().id)
+		return class_utils.represent(self, {
+			'player': self.player,
+			'info_id': self.get_info().id,
+		})
 
 
 class ConsoleCommandSource(InfoCommandSource):
@@ -235,7 +238,9 @@ class ConsoleCommandSource(InfoCommandSource):
 		return 'Console'
 
 	def __repr__(self):
-		return '{}[info_id={}]'.format(type(self).__name__, self.get_info().id)
+		return class_utils.represent(self, {
+			'info_id': self.get_info().id,
+		})
 
 
 class PluginCommandSource(CommandSource):
@@ -263,4 +268,6 @@ class PluginCommandSource(CommandSource):
 		return 'Plugin' if self.__plugin is None else 'Plugin {}'.format(self.__plugin)
 
 	def __repr__(self):
-		return '{}[plugin={}]'.format(type(self).__name__, self.__plugin)
+		return class_utils.represent(self, {
+			'plugin': self.__plugin,
+		})

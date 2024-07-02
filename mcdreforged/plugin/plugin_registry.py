@@ -10,7 +10,7 @@ from mcdreforged.info_reactor.info_filter import InfoFilter, InfoFilterHolder
 from mcdreforged.minecraft.rtext.text import RTextBase
 from mcdreforged.plugin.plugin_event import EventListener
 from mcdreforged.translation.translation_text import RTextMCDRTranslation
-from mcdreforged.utils import translation_utils
+from mcdreforged.utils import translation_utils, class_utils
 from mcdreforged.utils.types.message import TranslationStorage, TranslationKeyDictRich, MessageText, \
 	TranslationKeyDictNested
 
@@ -46,7 +46,11 @@ class HelpMessage:
 		return self.prefix < other.prefix
 
 	def __repr__(self):
-		return 'HelpMessage[prefix={},message={},permission={}]'.format(self.prefix, self.message, self.permission)
+		return class_utils.represent(self, {
+			'prefix': self.prefix,
+			'message': self.message,
+			'permission': self.permission,
+		})
 
 
 @dataclasses.dataclass(frozen=True)
