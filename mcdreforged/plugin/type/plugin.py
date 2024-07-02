@@ -4,8 +4,6 @@ Single plugin class
 from abc import abstractmethod
 from typing import Tuple, Any, TYPE_CHECKING, Collection, Optional
 
-from typing_extensions import TypeGuard
-
 from mcdreforged.command.builder.nodes.basic import Literal
 from mcdreforged.info_reactor.info_filter import InfoFilter
 from mcdreforged.plugin.meta.metadata import Metadata
@@ -35,11 +33,11 @@ class AbstractPlugin:
 		from mcdreforged.plugin.si.plugin_server_interface import PluginServerInterface
 		self.server_interface = PluginServerInterface(self.mcdr_server, self)
 
-	def is_builtin(self) -> TypeGuard['BuiltinPlugin']:
+	def is_builtin(self) -> bool:
 		from mcdreforged.plugin.type.builtin_plugin import BuiltinPlugin
 		return isinstance(self, BuiltinPlugin)
 
-	def is_regular(self) -> TypeGuard['RegularPlugin']:
+	def is_regular(self) -> bool:
 		from mcdreforged.plugin.type.regular_plugin import RegularPlugin
 		return isinstance(self, RegularPlugin)
 

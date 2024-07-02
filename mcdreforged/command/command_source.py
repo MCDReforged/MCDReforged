@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from contextlib import contextmanager
 from typing import TYPE_CHECKING, Optional
 
-from typing_extensions import TypeGuard, override
+from typing_extensions import override
 
 from mcdreforged.permission.permission_level import PermissionLevel
 from mcdreforged.translation.translation_text import RTextMCDRTranslation
@@ -34,7 +34,7 @@ class CommandSource(ABC):
 	"""
 
 	@property
-	def is_player(self) -> TypeGuard['PlayerCommandSource']:
+	def is_player(self) -> bool:
 		"""
 		If the command source is a player command source
 
@@ -43,7 +43,7 @@ class CommandSource(ABC):
 		return isinstance(self, PlayerCommandSource)
 
 	@property
-	def is_console(self) -> TypeGuard['ConsoleCommandSource']:
+	def is_console(self) -> bool:
 		"""
 		If the command source is a console command source
 
