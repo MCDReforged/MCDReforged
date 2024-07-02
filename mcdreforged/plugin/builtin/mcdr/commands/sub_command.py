@@ -60,6 +60,7 @@ class SubCommand(ABC):
 
 	def log_debug(self, *args, **kwargs):
 		kwargs['option'] = DebugOption.COMMAND
+		kwargs['stacklevel'] = kwargs.get('stacklevel', 1) + 1
 		logger = class_utils.check_type(self.server_interface.logger, MCDReforgedLogger)
 		logger.mdebug(*args, **kwargs)
 

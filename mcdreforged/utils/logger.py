@@ -291,21 +291,25 @@ class MCDReforgedLogger(logging.Logger):
 			extra_args[PluginIdAwareFormatter.PLUGIN_ID_KEY] = self.__plugin_id
 			kwargs['extra'] = extra_args
 
+		# add 1 for this override
+		# the default value 1 is from logging.Logger._log
+		kwargs['stacklevel'] = kwargs.get('stacklevel', 1) + 1
+
 		# noinspection PyProtectedMember
 		super()._log(level, msg, args, **kwargs)
 
-	def mdebug(self, msg: Any, *args, option: Optional[DebugOption] = None, no_check: bool = False):
+	def mdebug(self, msg: Any, *args, option: Optional[DebugOption] = None, no_check: bool = False, stacklevel: int = 1):
 		"""
 		mcdr debug logging
 		"""
 		if no_check or self.isEnabledFor(logging.DEBUG) or self.should_log_debug(option):
 			with MCColorFormatControl.disable_minecraft_color_code_transform():
-				self._log(logging.DEBUG, msg, args, stacklevel=2)
+				self._log(logging.DEBUG, msg, args, stacklevel=stacklevel)
 
 	def debug(self, msg: Any, *args, **kwargs):
 		if self.isEnabledFor(logging.DEBUG) or self.should_log_debug(DebugOption.ALL):
 			with MCColorFormatControl.disable_minecraft_color_code_transform():
-				self._log(logging.DEBUG, msg, args, **kwargs, stacklevel=2)
+				self._log(logging.DEBUG, msg, args, **kwargs)
 
 	def set_file(self, file_path: str):
 		"""
