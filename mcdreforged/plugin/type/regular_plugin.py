@@ -92,10 +92,18 @@ class RegularPlugin(AbstractPlugin, ABC):
 		self._reset()
 
 	def _on_unload(self):
+		ok_list = []
+		failed_list = []
 		for module_name in sys.modules.copy().keys():
 			if self.is_own_module(module_name):
-				rv = sys.modules.pop(module_name, None)
-				self.mcdr_server.logger.mdebug('Removed module {} when unloading plugin {}, success = {}'.format(module_name, repr(self), rv is not None), option=DebugOption.PLUGIN)
+				if sys.modules.pop(module_name, None) is not None:
+					ok_list.append(module_name)
+				else:
+					failed_list.append(module_name)
+		self.mcdr_server.logger.mdebug(
+			'Removed plugin-own modules for {} for unload, ok: {}, failed: {}'.format(repr(self), ok_list, failed_list),
+			option=DebugOption.PLUGIN
+		)
 
 	# --------------
 	#   Life Cycle
