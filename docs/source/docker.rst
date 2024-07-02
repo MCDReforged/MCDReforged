@@ -35,7 +35,7 @@ Quick test if docker and mcdreforged image works
 
 .. code-block:: bash
 
-    docker run -it --rm mcdreforged/mcdreforged
+    docker run -it --rm mcdreforged/mcdreforged:latest-slim
 
 Example output:
 
@@ -48,7 +48,7 @@ Example output:
     [MCDR] [13:05:59] [MainThread/INFO]: Plugin directory list:
     [MCDR] [13:05:59] [MainThread/INFO]: - plugins
     [MCDR] [13:05:59] [MainThread/INFO]: Handler has set to vanilla_handler
-    [MCDR] [13:05:59] [MainThread/INFO]: MCDReforged is running on Python 3.11.7 environment
+    [MCDR] [13:05:59] [MainThread/INFO]: MCDReforged is running on Python 3.11.9 environment
     [MCDR] [13:05:59] [TaskExecutor/INFO]: Refreshing all plugins
     [MCDR] [13:05:59] [TaskExecutor/INFO]: No plugin has changed; Active plugin amount: 2
     [MCDR] [13:05:59] [MainThread/INFO]: Starting the server with command "echo Hello world from MCDReforged"
@@ -139,6 +139,10 @@ Tag suffixes:
 
     mcdreforged/mcdreforged:latest
     mcdreforged/mcdreforged:latest-slim
+    mcdreforged/mcdreforged:dev
+    mcdreforged/mcdreforged:dev-slim
+    mcdreforged/mcdreforged:dev-py3.11
+    mcdreforged/mcdreforged:dev-py3.11-slim
     mcdreforged/mcdreforged:2.13.0
     mcdreforged/mcdreforged:2.13.0-slim
     mcdreforged/mcdreforged:2.13.0-py3.11
