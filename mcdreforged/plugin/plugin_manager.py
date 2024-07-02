@@ -11,6 +11,7 @@ from pathlib import Path
 from typing import Callable, Dict, Optional, Any, Tuple, List, TYPE_CHECKING, Deque
 
 from mcdreforged.constants import core_constant, plugin_constant
+from mcdreforged.mcdr_config import MCDReforgedConfig
 from mcdreforged.plugin import plugin_factory
 from mcdreforged.plugin.builtin.mcdr.mcdreforged_plugin import MCDReforgedPlugin
 from mcdreforged.plugin.builtin.python_plugin import PythonPlugin
@@ -60,6 +61,15 @@ class PluginManager:
 		self.__mani_lock = threading.RLock()
 		self.__mani_thread: Optional[threading.Thread] = None
 		self.__mani_queue = queue.Queue()
+
+		mcdr_server.add_config_changed_callback(self.__on_mcdr_config_loaded)
+
+	def __on_mcdr_config_loaded(self, config: MCDReforgedConfig, log: bool):
+		self.set_plugin_directories(config.plugin_directories)
+		if log:
+			self.logger.info(self.__tr('on_config_changed.plugin_directories_set'))
+			for directory in self.plugin_directories:
+				self.logger.info('- {}'.format(directory))
 
 	@classmethod
 	def touch_directory(cls):

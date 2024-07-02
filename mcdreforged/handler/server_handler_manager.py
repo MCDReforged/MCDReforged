@@ -7,6 +7,7 @@ from typing import Dict, Optional, Tuple, List, TYPE_CHECKING, Counter
 from mcdreforged.handler.impl import *
 from mcdreforged.handler.plugin_provided_server_handler_holder import PluginProvidedServerHandlerHolder
 from mcdreforged.handler.server_handler import ServerHandler
+from mcdreforged.mcdr_config import MCDReforgedConfig
 from mcdreforged.utils import misc_utils, class_utils
 from mcdreforged.utils.logger import DebugOption
 
@@ -27,6 +28,14 @@ class ServerHandlerManager:
 
 		# Automation for lazy
 		self.__handler_detector = HandlerDetector(self)
+
+		mcdr_server.add_config_changed_callback(self.__on_mcdr_config_loaded)
+
+	def __on_mcdr_config_loaded(self, config: MCDReforgedConfig, log: bool):
+		self.register_handlers(config.custom_handlers)
+		self.set_configured_handler(config.handler)
+		if log:
+			self.logger.info(self.__tr('on_config_changed.handler_set', config.handler))
 
 	def register_handlers(self, custom_handler_class_paths: Optional[List[str]]):
 		def add_handler(hdr: ServerHandler):

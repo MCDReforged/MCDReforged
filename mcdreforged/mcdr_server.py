@@ -47,6 +47,9 @@ class _ReceiveDecodeError(ValueError):
 	pass
 
 
+_ConfigLoadedCallback = Callable[[MCDReforgedConfig, bool], Any]
+
+
 class MCDReforgedServer:
 	def __init__(self, args: MCDReforgedServerArgs):
 		self.mcdr_state: MCDReforgedState = MCDReforgedState.INITIALIZING
@@ -60,6 +63,7 @@ class MCDReforgedServer:
 		self.__no_server_start = args.no_server_start
 		self.__stop_lock = threading.Lock()  # to prevent multiple stop() call
 		self.__config_change_lock = threading.Lock()
+		self.__config_changed_callbacks: List[_ConfigLoadedCallback] = []
 
 		# will be assigned in on_config_changed()
 		self.__encoding_method: Optional[str] = None
@@ -253,15 +257,19 @@ class MCDReforgedServer:
 		with self.__config_change_lock:
 			config = self.config
 
+			# update log settings first
 			MCColorFormatControl.console_color_disabled = config.disable_console_color
 			self.logger.set_debug_options(config.debug)
-			if log and config.is_debug_on():
-				self.logger.info(self.__tr('on_config_changed.debug_mode_on'))
 
+			# set language second, so mcdr can log with the expected language
 			self.translation_manager.set_language(config.language)
 			if log:
 				self.logger.info(self.__tr('on_config_changed.language_set', config.language))
 
+			if log and config.is_debug_on():
+				self.logger.info(self.__tr('on_config_changed.debug_mode_on'))
+
+			# applying other mcdr-scope stuffs
 			self.__encoding_method = config.encoding or locale.getpreferredencoding()
 			if not isinstance(config.decoding, list):
 				self.__decoding_method = [config.decoding or locale.getpreferredencoding()]
@@ -271,22 +279,15 @@ class MCDReforgedServer:
 			if log:
 				self.logger.info(self.__tr('on_config_changed.encoding_decoding_set', self.__encoding_method, ','.join(self.__decoding_method)))
 
-			self.plugin_manager.set_plugin_directories(config.plugin_directories)
-			if log:
-				self.logger.info(self.__tr('on_config_changed.plugin_directories_set'))
-				for directory in self.plugin_manager.plugin_directories:
-					self.logger.info('- {}'.format(directory))
-
-			self.reactor_manager.register_reactors(config.custom_info_reactors)
-
-			self.server_handler_manager.register_handlers(config.custom_handlers)
-			self.server_handler_manager.set_configured_handler(config.handler)
-			if log:
-				self.logger.info(self.__tr('on_config_changed.handler_set', config.handler))
-
 			request_utils.set_proxies(config.http_proxy, config.https_proxy)
-
 			self.connect_rcon()
+
+			# trigger general config-changed callbacks
+			for callback in self.__config_changed_callbacks:
+				callback(config, log)
+
+	def add_config_changed_callback(self, callback: _ConfigLoadedCallback):
+		self.__config_changed_callbacks.append(callback)
 
 	def load_plugins(self):
 		future = self.plugin_manager.refresh_all_plugins()

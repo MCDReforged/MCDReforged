@@ -9,6 +9,7 @@ from mcdreforged.constants import core_constant
 from mcdreforged.info_reactor.abstract_info_reactor import AbstractInfoReactor
 from mcdreforged.info_reactor.impl import PlayerReactor, ServerReactor, GeneralReactor
 from mcdreforged.info_reactor.info import Info
+from mcdreforged.mcdr_config import MCDReforgedConfig
 from mcdreforged.utils import class_utils
 from mcdreforged.utils.logger import ServerOutputLogger, DebugOption
 
@@ -23,6 +24,11 @@ class InfoReactorManager:
 		self.server_output_logger = ServerOutputLogger('Server')
 		self.reactors: List[AbstractInfoReactor] = []
 		self.__tr = mcdr_server.create_internal_translator('info_reactor_manager').tr
+
+		mcdr_server.add_config_changed_callback(self.__on_mcdr_config_loaded)
+
+	def __on_mcdr_config_loaded(self, config: MCDReforgedConfig, log: bool):
+		self.register_reactors(config.custom_info_reactors)
 
 	def register_reactors(self, custom_reactor_class_paths: Optional[List[str]]):
 		self.reactors.clear()

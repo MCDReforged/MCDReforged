@@ -8,7 +8,6 @@ from typing import Any, Tuple, Dict, Union, Optional, List
 from mcdreforged.constants import core_constant
 from mcdreforged.utils.logger import DebugOption
 from mcdreforged.utils.serializer import Serializable
-from mcdreforged.utils.yaml_data_storage import YamlDataStorage
 
 CONFIG_SCHEMA_VERSION = 1
 
@@ -66,6 +65,7 @@ class MCDReforgedConfigManager:
 	DEFAULT_CONFIG_RESOURCE_PATH = 'resources/default_config.yml'
 
 	def __init__(self, logger: Logger, config_file_path: str):
+		from mcdreforged.utils.yaml_data_storage import YamlDataStorage
 		self.logger = logger
 		self.__storage = YamlDataStorage(logger, config_file_path, self.DEFAULT_CONFIG_RESOURCE_PATH)
 		self.__config = MCDReforgedConfig.get_default()
