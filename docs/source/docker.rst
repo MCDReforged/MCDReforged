@@ -68,7 +68,7 @@ where all MCDR related files and the server folder is in
 
 .. code-block:: bash
 
-    docker run --name my_mcdr_container -v /path/to/my/server:/mcdr mcdreforged/mcdreforged
+    docker run -it --name my_mcdr_container -v /path/to/my/server:/mcdr mcdreforged/mcdreforged
 
 Python package installation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
