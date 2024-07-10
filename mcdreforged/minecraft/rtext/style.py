@@ -91,7 +91,11 @@ class RItemClassic(RItem, ABC):
 		return self.__console_code
 
 	def __repr__(self) -> str:
-		return '{}[name={},mc_code={},console_code={}]'.format(type(self).__name__, self.name, self.mc_code, repr(self.console_code))
+		return class_utils.represent(self, {
+			'name': self.name,
+			'mc_code': self.mc_code,
+			'console_code': self.console_code,
+		})
 
 # ------------------------------------------------
 #                   Text Color
@@ -283,7 +287,7 @@ class RColorRGB(RColor):
 		return self.__classic_cache
 
 	def __repr__(self) -> str:
-		return '{}[rgb={}]'.format(type(self).__name__, '0x{:06X}'.format(self._rgb_code))
+		return class_utils.represent(self, {'rgb': '0x{:06X}'.format(self._rgb_code)})
 
 	# Interface implementation
 
@@ -411,7 +415,7 @@ class _RActionImpl(RAction):
 		return self.__name
 
 	def __repr__(self) -> str:
-		return '{}[name={}]'.format(type(self).__name__, self.name)
+		return class_utils.represent(self, {'name': self.name})
 
 
 __register_raction()
