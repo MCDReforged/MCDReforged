@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import List, TYPE_CHECKING, NamedTuple, Callable, Union
 
 from mcdreforged.minecraft.rtext.style import RAction
-from mcdreforged.minecraft.rtext.text import RTextList, RTextBase, RText
+from mcdreforged.minecraft.rtext.text import RTextList, RTextBase
 
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
@@ -116,7 +116,7 @@ class PluginOperationResult:
 		if message.is_empty():
 			add_element(message, tr('info_none'))
 		message.append(
-			RText(tr('info_plugin_count', mcdr_server.plugin_manager.get_plugin_amount())).
+			tr('info_plugin_count', mcdr_server.plugin_manager.get_plugin_amount()).
 			h('\n'.join(map(str, mcdr_server.plugin_manager.get_all_plugins()))).
 			c(RAction.suggest_command, '!!MCDR plugin list')
 		)
