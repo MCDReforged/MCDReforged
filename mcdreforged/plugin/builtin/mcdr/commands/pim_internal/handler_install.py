@@ -201,7 +201,7 @@ class PimInstallCommandHandler(PimCommandHandlerBase):
 
 		self.log_debug('Generated plugin requirements:')
 		for req, req_src in req_srcs.items():
-			self.log_debug('{} ({})'.format(req, req_src))
+			self.log_debug('  {} ({})'.format(req, req_src))
 
 		return req_srcs
 
@@ -226,7 +226,7 @@ class PimInstallCommandHandler(PimCommandHandlerBase):
 
 		self.log_debug('Output plugin resolution:')
 		for plugin_id, version in result.items():
-			self.log_debug('{} {}'.format(plugin_id, version))
+			self.log_debug('  {} {}'.format(plugin_id, version))
 		return result
 
 	def __step_collect_to_install(self, source: CommandSource, ctx: _ParsedContext, cata_meta: MetaRegistry, resolution: PluginResolution) -> _ToInstallStuffs:
