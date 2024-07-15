@@ -114,22 +114,25 @@ class AbstractMinecraftHandler(AbstractServerHandler, ABC):
 
 		return result
 
+	# Steve[/127.0.0.1:9864] logged in with entity id 131 at (187.2703, 146.79014, 404.84718)
+	# Steve[/[2001:db8:85a3::8a2e:370:7334]:9864] logged in with entity id 131 at (187.2703, 146.79014, 404.84718)
+	# Steve[local] logged in with entity id 131 at (187.2703, 146.79014, 404.84718)
+	# Steve[IP hidden] logged in with entity id 131 at (187.2703, 146.79014, 404.84718)
 	__player_joined_regex = re.compile(r'(?P<name>[^\[]+)\[(.*?)] logged in with entity id \d+ at \(.+\)')
 
 	@override
 	def parse_player_joined(self, info: Info):
-		# Steve[/127.0.0.1:9864] logged in with entity id 131 at (187.2703, 146.79014, 404.84718)
 		if not info.is_user:
 			if (m := self.__player_joined_regex.fullmatch(info.content)) is not None:
 				if self._verify_player_name(m['name']):
 					return m['name']
 		return None
 
+	# Steve left the game
 	__player_left_regex = re.compile(r'(?P<name>[^ ]+) left the game')
 
 	@override
 	def parse_player_left(self, info: Info):
-		# Steve left the game
 		if not info.is_user:
 			if (m := self.__player_left_regex.fullmatch(info.content)) is not None:
 				if self._verify_player_name(m['name']):
@@ -154,6 +157,8 @@ class AbstractMinecraftHandler(AbstractServerHandler, ABC):
 				return m['ip'], int(m['port'])
 		return None
 
+	# 1.13+ Done (3.500s)! For help, type "help"
+	# 1.13- Done (3.500s)! For help, type "help" or "?"
 	__server_startup_done_regex = re.compile(
 		r'Done \([0-9.]+s\)! For help, type "help"'
 		r'( or "\?")?'  # mc < 1.13
@@ -161,8 +166,6 @@ class AbstractMinecraftHandler(AbstractServerHandler, ABC):
 
 	@override
 	def test_server_startup_done(self, info: Info):
-		# 1.13+ Done (3.500s)! For help, type "help"
-		# 1.13- Done (3.500s)! For help, type "help" or "?"
 		return info.is_from_server and self.__server_startup_done_regex.fullmatch(info.content) is not None
 
 	__rcon_started_regex = re.compile(r'RCON running on [\w.]+:\d+')

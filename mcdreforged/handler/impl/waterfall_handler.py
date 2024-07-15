@@ -31,11 +31,11 @@ class WaterfallHandler(BungeecordHandler):
 		# sadly no player id display here
 		return None
 
+	# [/127.0.0.1:14426|Fallen_Breath] -> UpstreamBridge has disconnected
 	__player_left_regex = re.compile(r'\[/[^|]+\|(?P<name>[^]]+)] -> UpstreamBridge has disconnected')
 
 	@override
 	def parse_player_left(self, info):
-		# [/127.0.0.1:14426|Fallen_Breath] -> UpstreamBridge has disconnected
 		if not info.is_user:
 			if (m := self.__player_left_regex.fullmatch(info.content)) is not None:
 				return m['name']

@@ -44,11 +44,11 @@ class BungeecordHandler(AbstractServerHandler):
 		text = super().pre_parse_server_stdout(text)
 		return self.__prompt_text_regex.sub('', text, 1)
 
-	__player_joined_regex = re.compile(r'\[(?P<name>[^,]+),/[^]]+] <-> InitialHandler has connected')
+	# [Steve,/127.0.0.1:3631] <-> InitialHandler has connected
+	__player_joined_regex = re.compile(r'\[(?P<name>[^,]+),/(.*?)] <-> InitialHandler has connected')
 
 	@override
 	def parse_player_joined(self, info: Info) -> Optional[str]:
-		# [Steve,/127.0.0.1:3631] <-> InitialHandler has connected
 		if not info.is_user:
 			if (m := self.__player_joined_regex.fullmatch(info.content)) is not None:
 				return m['name']

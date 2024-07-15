@@ -39,33 +39,33 @@ class Beta18Handler(AbstractMinecraftHandler):
 	def get_content_parsing_formatter(cls):
 		return '{y:d}-{m:d}-{d:d} {hour:d}:{min:d}:{sec:d} [{logging}] {content}'
 
-	__player_joined_regex = re.compile(r'(?P<name>[^ ]+) \[[^]]+] logged in with entity id \d+ at \(.+\)')
+	# Steve [/127.0.0.1:2993] logged in with entity id 3827 at (-130.5, 69.0, 253.5)
+	#      ^
+	# Comparing to vanilla: there's an extra space character after {name}
+	__player_joined_regex = re.compile(r'(?P<name>[^ ]+) \[(.*?)] logged in with entity id \d+ at \(.+\)')
 
 	@override
 	def parse_player_joined(self, info):
-		# Steve [/127.0.0.1:2993] logged in with entity id 3827 at (-130.5, 69.0, 253.5)
-		#      ^
-		# Comparing to vanilla: there's an extra space character after {name}
 		if not info.is_user:
 			if (m := self.__player_joined_regex.fullmatch(info.content)) is not None:
 				if self._verify_player_name(m['name']):
 					return m['name']
 		return None
 
+	# Steve lost connection: disconnect.quitting
 	__player_left_regex = re.compile(r'(?P<name>[^ ]+) lost connection: .*')
 
 	@override
 	def parse_player_left(self, info: Info):
-		# Steve lost connection: disconnect.quitting
 		if info.is_from_server and (m := self.__player_left_regex.fullmatch(info.content)) is not None:
 			return m['name']
 		return None
 
+	# Done (6368115300ns)! For help, type "help" or "?"
 	__server_startup_done_regex = re.compile(r'Done \([0-9.]+ns\)! For help, type "help" or "\?"')
 
 	@override
 	def test_server_startup_done(self, info: Info):
-		# Done (6368115300ns)! For help, type "help" or "?"
 		if info.is_user:
 			return False
 		match = self.__server_startup_done_regex.fullmatch(info.content)

@@ -37,21 +37,21 @@ class VelocityHandler(AbstractServerHandler):
 			r': (?P<content>.*)'
 		)
 
+	# [connected player] Fallen_Breath (/127.0.0.1:12896) has connected
 	__player_joined_regex = re.compile(r'\[connected player] (?P<name>[^ ]+) \(/[^ ]+:\d+\) has connected')
 
 	@override
 	def parse_player_joined(self, info: Info) -> Optional[str]:
-		# [connected player] Fallen_Breath (/127.0.0.1:12896) has connected
 		if not info.is_user:
 			if (m := self.__player_joined_regex.fullmatch(info.content)) is not None:
 				return m['name']
 		return None
 
+	# [connected player] Fallen_Breath (/127.0.0.1:12896) has disconnected
 	__player_left_regex = re.compile(r'\[connected player] (?P<name>[^ ]+) \(/[^ ]+:\d+\) has disconnected')
 
 	@override
 	def parse_player_left(self, info: Info) -> Optional[str]:
-		# [connected player] Fallen_Breath (/127.0.0.1:12896) has disconnected
 		if not info.is_user:
 			if (m := self.__player_left_regex.fullmatch(info.content)) is not None:
 				return m['name']
@@ -73,11 +73,11 @@ class VelocityHandler(AbstractServerHandler):
 				return m['ip'], int(m['port'])
 		return None
 
+	# Done (3.05s)!
 	__server_startup_done_regex = re.compile(r'Done \([0-9.]+s\)!')
 
 	@override
 	def test_server_startup_done(self, info: Info) -> bool:
-		# Done (3.05s)!
 		return not info.is_user and self.__server_startup_done_regex.fullmatch(info.content) is not None
 
 	@override
