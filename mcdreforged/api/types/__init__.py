@@ -3,6 +3,7 @@ Type hints are always nice to have
 """
 from mcdreforged.command.command_source import CommandSource, ConsoleCommandSource, PlayerCommandSource, \
 	InfoCommandSource, PluginCommandSource
+from mcdreforged.handler.server_handler import ServerHandler
 from mcdreforged.info_reactor.info import Info
 from mcdreforged.info_reactor.info_filter import InfoFilter
 from mcdreforged.info_reactor.server_information import ServerInformation
@@ -23,6 +24,9 @@ __all__ = [
 	# Info
 	'Info', 'InfoFilter',
 
+	# Server Handler,
+	'ServerHandler',
+
 	# Server stuffs
 	'ServerInformation',
 
@@ -39,5 +43,5 @@ __all__ = [
 	'PreferenceItem',
 
 	# Logging
-	'SyncStdoutStreamHandler', 'MCDReforgedLogger'
+	'SyncStdoutStreamHandler', 'MCDReforgedLogger',
 ]
