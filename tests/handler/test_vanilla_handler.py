@@ -50,8 +50,14 @@ class MyTestCase(unittest.TestCase):
 		self.assertEqual('OwO', self.handler.parse_server_stdout('[09:00:00] [Server thread/INFO]: [Not Secure] <OwO> !!MCDR').player)
 
 	def test_2_player_events(self):
-		info = self.handler.parse_server_stdout('[00:04:13] [Server thread/INFO]: Fallen_Breath[/127.0.0.1:10545] logged in with entity id 573 at (124.37274191311167, 279.4052172954894, 141.89424426399407)')
-		self.assertEqual('Fallen_Breath', self.handler.parse_player_joined(info))
+		for join_line in [
+			'[00:04:13] [Server thread/INFO]: Steve[/127.0.0.1:9864] logged in with entity id 131 at (187.2703, 146.79014, 404.84718)',
+			'[00:04:13] [Server thread/INFO]: Steve[/[2001:aaa:bbb::ccc:ddd:eeee]:9864] logged in with entity id 131 at (1, -2, 3)',
+			'[00:04:13] [Server thread/INFO]: Steve[local] logged in with entity id 131 at (0, 0, 0)',
+			'[00:04:13] [Server thread/INFO]: Steve[IP hidden] logged in with entity id 131 at (Infinity, NaN, Infinity)',
+		]:
+			info = self.handler.parse_server_stdout(join_line)
+			self.assertEqual('Steve', self.handler.parse_player_joined(info), repr(join_line))
 
 		info = self.handler.parse_server_stdout('[23:52:53] [Server thread/INFO]: Steve left the game')
 		self.assertEqual('Steve', self.handler.parse_player_left(info))

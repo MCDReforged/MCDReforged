@@ -114,7 +114,7 @@ class AbstractMinecraftHandler(AbstractServerHandler, ABC):
 
 		return result
 
-	__player_joined_regex = re.compile(r'(?P<name>[^ ]+)\[[^]]+] logged in with entity id \d+ at \(.+\)')
+	__player_joined_regex = re.compile(r'(?P<name>[^\[]+)\[(.*?)] logged in with entity id \d+ at \(.+\)')
 
 	@override
 	def parse_player_joined(self, info: Info):
