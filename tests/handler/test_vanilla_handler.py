@@ -71,8 +71,13 @@ class MyTestCase(unittest.TestCase):
 		self.assertEqual(('*', 25565), self.handler.parse_server_address(info))
 
 	def test_4_server_events(self):
-		info = self.handler.parse_server_stdout('[00:01:46] [Server thread/INFO]: Done (3.276s)! For help, type "help"')
-		self.assertEqual(True, self.handler.test_server_startup_done(info))
+		for startup_line in [
+			'[00:01:46] [Server thread/INFO]: Done (3.276s)! For help, type "help"',
+			'[00:01:46] [Server thread/INFO]: Done (65.53s)! For help, type "help" or "?"',
+		]:
+			info = self.handler.parse_server_stdout(startup_line)
+			self.assertEqual(True, self.handler.test_server_startup_done(info), repr(startup_line))
+
 		info = self.handler.parse_server_stdout('[00:01:46] [RCON Listener #1/INFO]: RCON running on 0.0.0.0:25575')
 		self.assertEqual(True, self.handler.test_rcon_started(info))
 		info = self.handler.parse_server_stdout('[00:04:34] [Server Shutdown Thread/INFO]: Stopping server')
