@@ -257,7 +257,7 @@ msgid ""
 "Do not affect innocent info objects; that is, do not discard those info "
 "that contains important messages (e.g. server start / stop), or MCDR "
 "might not work correctly"
-msgstr "不要印象无辜的信息对象，即不要丢弃那些可能含有重要信息的信息对象（如服务端启动/关闭的输出），否则 MCDR 可能无法正确地工作"
+msgstr "不要影响无辜的信息对象，即不要丢弃那些可能含有重要信息的信息对象（如服务端启动/关闭的输出），否则 MCDR 可能无法正确地工作"
 
 #: mcdreforged.info_reactor.info_filter.InfoFilter.filter_server_info:9 of
 msgid ""
