@@ -241,6 +241,7 @@ class PersistCatalogueMetaRegistryHolder(CatalogueMetaRegistryHolder):
 			show_error_stacktrace: bool = True
 	):
 		"""
+		self.__fetch_lock should be acquired before calling this
 		:return: true: processed (succeed or fail), false: skipped
 		"""
 		if done_callback is None:
@@ -257,7 +258,6 @@ class PersistCatalogueMetaRegistryHolder(CatalogueMetaRegistryHolder):
 				done_callback(None)
 				return
 			start_time = now
-			self.__last_meta_fetch_time = now
 			start_callback(True)
 
 			meta_json = self._fetch_meta_json()
@@ -269,6 +269,7 @@ class PersistCatalogueMetaRegistryHolder(CatalogueMetaRegistryHolder):
 				self.logger.error('Catalogue meta registry fetch failed: ({}) {}'.format(type(e), e))
 			done_callback(e)
 		else:
+			self.__last_meta_fetch_time = now
 			with self.__meta_lock:
 				self.__meta = meta
 				try:
