@@ -1,4 +1,5 @@
 import abc
+import dataclasses
 from typing import Dict, List, Callable, TYPE_CHECKING
 
 from mcdreforged.utils import class_utils
@@ -91,19 +92,16 @@ class MCDRPluginEvents:
 		return event_id in _PluginEventStorage.EVENT_DICT
 
 
+@dataclasses.dataclass(frozen=True)
 class EventListener:
-	def __init__(self, plugin: 'AbstractPlugin', callback: Callable, priority: int):
-		self.plugin = plugin
-		self.callback = callback
-		self.priority = priority
+	plugin: 'AbstractPlugin'
+	callback: Callable
+	priority: int
 
 	def __lt__(self, other):
 		if not isinstance(other, type(self)):
 			return False
 		return self.priority < other.priority
-
-	def execute(self, *args, **kwargs):
-		return self.callback(*args, **kwargs)
 
 	def __repr__(self):
 		return class_utils.represent(self, {
