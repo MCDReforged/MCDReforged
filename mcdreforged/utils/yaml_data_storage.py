@@ -126,7 +126,8 @@ class YamlDataStorage:
 				if key in dst and old_value != value:
 					if isinstance(old_value, CommentedSeq):
 						# the comment of the last seq item belongs to the next element. keep it
-						last_comment = old_value.ca.items.get(len(old_value) - 1)
+						ca_items: dict = old_value.ca.items
+						last_comment = ca_items.get(len(old_value) - 1)
 						# cannot use clear(), cuz that uses pop(-1) and will mess up the comment index
 						while old_value:
 							old_value.pop(len(old_value) - 1)

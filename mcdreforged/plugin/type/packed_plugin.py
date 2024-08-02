@@ -88,7 +88,8 @@ class PackedPlugin(MultiFilePlugin):
 				if path_utils.is_relative_to(Path(path), self.plugin_path):
 					sys.path_importer_cache.pop(path)
 			with contextlib.suppress(KeyError):
-				zipimport._zip_directory_cache.pop(self._module_search_path)
+				cache: dict = zipimport._zip_directory_cache
+				cache.pop(self._module_search_path)
 		except KeyError:
 			self.mcdr_server.logger.exception('Fail to clean zip import cache for {}'.format(self))
 

@@ -84,7 +84,8 @@ class CatalogueMetaRegistryHolder:
 				meta = aop['meta']
 				latest_version = None
 
-			repos_url = aop['plugin'].get('repository', '')
+			plugin_info: dict = aop['plugin']
+			repos_url = plugin_info.get('repository', '')
 			if (repos_match := re.fullmatch(r'https://github\.com/([^/]+)/([^/]+)/?', repos_url)) is None:
 				continue
 

@@ -3,7 +3,7 @@ Thread for plugin call
 """
 import queue
 import threading
-from typing import TYPE_CHECKING, Callable, NamedTuple
+from typing import TYPE_CHECKING, Callable, NamedTuple, List
 
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
@@ -73,7 +73,7 @@ class PluginThread(threading.Thread):
 class PluginThreadPool:
 	def __init__(self, mcdr_server: 'MCDReforgedServer', max_thread: int):
 		self.mcdr_server = mcdr_server
-		self.threads = []
+		self.threads: List[PluginThread] = []
 		self.threads_write_lock = threading.Lock()
 		self.task_queue = queue.Queue()
 		self.working_count = 0

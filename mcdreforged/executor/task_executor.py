@@ -11,15 +11,14 @@ from mcdreforged.executor.background_thread_executor import BackgroundThreadExec
 from mcdreforged.utils.future import WaitableCallable
 from mcdreforged.utils.logger import DebugOption
 
+if TYPE_CHECKING:
+	from mcdreforged.mcdr_server import MCDReforgedServer
+
 
 @dataclasses.dataclass(frozen=True)
 class TaskData:
 	func: Callable
 	vip: bool
-
-
-if TYPE_CHECKING:
-	from mcdreforged.mcdr_server import MCDReforgedServer
 
 
 class DoubleQueue(queue.Queue):
