@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-22 15:58+0800\n"
+"POT-Creation-Date: 2024-08-05 19:51+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -27,7 +27,7 @@ msgstr "Docker"
 msgid ""
 "If you want to run MCDR in Docker, here's a list of official Docker "
 "images that might fit your needs"
-msgstr "如果你想要在 Docker 里运行 MCDR，那下面的官方 Docker 镜像里可能会是你想要的"
+msgstr "如果你想要在 Docker 里运行 MCDR，你可以看看下面的这些官方 Docker 镜像"
 
 #: ../docker.rst:7
 msgid ""
@@ -87,8 +87,12 @@ msgid "Working directory: ``/mcdr``"
 msgstr "工作路径：``/mcdr``"
 
 #: ../docker.rst:29
-msgid "Python package installation location:"
-msgstr "Python 包安装位置"
+msgid ""
+"Python package installation location: "
+"``/root/.local/lib/python${PYTHON_VERSION}/site-packages``"
+msgstr ""
+"Python 包安装位置: "
+"``/root/.local/lib/python${PYTHON_VERSION}/site-packages``"
 
 #: ../docker.rst:32
 msgid "Quick test"
@@ -185,29 +189,29 @@ msgstr ""
 msgid "It can be used as the base image to build your custom runtime with MCDR"
 msgstr "它可以作为构建你的自定义 MCDR 运行环境的基础镜像"
 
-#: ../docker.rst:123
+#: ../docker.rst:127
 msgid "Tag prefixes:"
 msgstr "镜像 tag 前缀说明："
 
-#: ../docker.rst:125
+#: ../docker.rst:129
 msgid "``latest`` means the latest MCDR version"
 msgstr "``latest`` 表示使用最新的 MCDR 版本"
 
-#: ../docker.rst:126
+#: ../docker.rst:130
 msgid "``2.13.0``, ``2.13`` mean the specified MCDR version"
 msgstr "``2.13.0``、``2.13`` 表示手动指定 MCDR 版本"
 
-#: ../docker.rst:127
+#: ../docker.rst:131
 msgid ""
 "``master``, ``dev`` mean the development build from the specified GitHub "
 "git branches"
 msgstr "``master``、``dev`` 表示从给定 GitHub 的 git 分支构建的开发版本"
 
-#: ../docker.rst:129
+#: ../docker.rst:133
 msgid "Tag suffixes:"
 msgstr "镜像 tag 后缀说明："
 
-#: ../docker.rst:131
+#: ../docker.rst:135
 msgid ""
 "``-slim`` means it's based on the ``-slim`` variant of the official "
 "`python <https://hub.docker.com/_/python>`__ image"
@@ -215,36 +219,36 @@ msgstr ""
 "``-slim`` 表示该镜像是基于官方 `python <https://hub.docker.com/_/python>`__ 镜像的 "
 "``-slim`` 变体构建的"
 
-#: ../docker.rst:132
+#: ../docker.rst:136
 msgid ""
 "``-py3.12`` means the python version used by the image, accurate to the "
 "minor version number. Default: ``3.11``, which is usually the second "
 "newest python version"
 msgstr "``-py3.12`` 表示镜像所使用的 python 版本，精确到次版本号。默认值：3.11，通常是次新的那个 python 版本"
 
-#: ../docker.rst:144
+#: ../docker.rst:152
 msgid "Extra Image"
 msgstr "拓展版镜像"
 
-#: ../docker.rst:146
+#: ../docker.rst:154
 msgid "Image with extra python packages installed"
 msgstr "安装有额外 python 包依赖的镜像变体"
 
-#: ../docker.rst:148
+#: ../docker.rst:156
 msgid "Image: ``mcdreforged/mcdreforged-extra``"
 msgstr "镜像名：``mcdreforged/mcdreforged-extra``"
 
-#: ../docker.rst:149
+#: ../docker.rst:157
 msgid "Docker Hub: https://hub.docker.com/r/mcdreforged/mcdreforged-extra"
 msgstr "Docker Hub: https://hub.docker.com/r/mcdreforged/mcdreforged-extra"
 
-#: ../docker.rst:150
+#: ../docker.rst:158
 msgid ""
 "Source code: https://github.com/MCDReforged/docker/blob/master/src"
 "/Dockerfile-extra"
 msgstr "源代码：https://github.com/MCDReforged/docker/blob/master/src/Dockerfile-extra"
 
-#: ../docker.rst:152
+#: ../docker.rst:160
 msgid ""
 "Theses extra packages are collected from the `Plugin Catalogue "
 "<https://github.com/MCDReforged/PluginCatalogue>`__, covering almost all "
@@ -254,7 +258,7 @@ msgstr ""
 "<https://github.com/MCDReforged/PluginCatalogue>`__ "
 "中收集得到的，涵盖了插件仓库中几乎所有插件所依赖的 Python 包"
 
-#: ../docker.rst:157
+#: ../docker.rst:165
 msgid ""
 "To ensure the feasibility of python package installation during extra "
 "image build, the actual installed version of those python package in the "
@@ -263,19 +267,19 @@ msgstr ""
 "为了确保在镜像构建过程中，Python 包的可安装性，拓展版镜像中实际安装的 Python 包的版本，可能不处于插件依赖的 Python "
 "包版本范围中"
 
-#: ../docker.rst:162
+#: ../docker.rst:170
 msgid ""
 "For production environments, it's suggested to maintain your own set of "
 "python package installation instead of simply use the Extra Image"
 msgstr "对于生产环境，建议维护你自己专用的一份 Python 包集合，而非简单地使用这个拓展版镜像"
 
-#: ../docker.rst:164
+#: ../docker.rst:172
 msgid ""
 "It's for ensuring that all of your plugins run within the python package "
 "environment they claim to be compatible with"
 msgstr "这是为了确保你的所有 MCDR 插件均可在它们声称与之兼容的 Python 包环境中运行"
 
-#: ../docker.rst:166
+#: ../docker.rst:174
 msgid ""
 "You can manually install what your plugins need on a :ref:`docker:Base "
 "Image`, and mount the ``site-packages`` directory following the guide in "
@@ -287,85 +291,85 @@ msgstr ""
 ":ref:`docker:Python package installation` 中的指引持久化 ``site-packages`` "
 "路径。在确保 python 版本一致的前提下，这个 ``site-packages`` 挂载点甚至是可以在不同容器间共享的"
 
-#: ../docker.rst:170
+#: ../docker.rst:178
 msgid "Tag format: The same as :ref:`docker:Base Image`"
 msgstr "镜像 tag 格式：与 :ref:`docker:Base Image` 一致"
 
-#: ../docker.rst:173
+#: ../docker.rst:181
 msgid "OpenJDK Images"
 msgstr "OpenJDK 镜像"
 
-#: ../docker.rst:175
+#: ../docker.rst:183
 msgid ""
 "Images with OpenJDK installed. If you want to run MCDR with a Minecraft "
 "server, then here's what you want"
 msgstr "安装有 OpenJDK 的镜像变体。如果你想用 MCDR 来运行 Minecraft 服务端，那这些镜像就是你想要的"
 
-#: ../docker.rst:177
+#: ../docker.rst:185
 msgid ""
 "Image: ``mcdreforged/mcdreforged-${jdk_distribution}``. See below for all"
 " available JDK distributions"
 msgstr "镜像名：``mcdreforged/mcdreforged-${jdk_distribution}``。见下文以了解支持的 JDK 发行版"
 
-#: ../docker.rst:178
+#: ../docker.rst:186
 msgid "Source code: https://github.com/MCDReforged/docker/blob/master/src"
 msgstr "源代码：https://github.com/MCDReforged/docker/blob/master/src"
 
-#: ../docker.rst:180
+#: ../docker.rst:188
 msgid "Supported OpenJDK distributions:"
 msgstr "支持的 OpenJDK 发行版："
 
-#: ../docker.rst:185
+#: ../docker.rst:193
 msgid "OpenJDK distribution"
 msgstr "OpenJDK 发行版"
 
-#: ../docker.rst:186
+#: ../docker.rst:194
 msgid "``${jdk_distribution}``"
 msgstr "``${jdk_distribution}``"
 
-#: ../docker.rst:187
+#: ../docker.rst:195
 msgid "`Eclipse Temurin <https://adoptium.net/temurin/>`__ (suggested)"
 msgstr "`Eclipse Temurin <https://adoptium.net/temurin/>`__ （推荐）"
 
-#: ../docker.rst:188
+#: ../docker.rst:196
 msgid "``temurin``"
 msgstr "``temurin``"
 
-#: ../docker.rst:189
+#: ../docker.rst:197
 msgid "`Amazon Corretto <https://aws.amazon.com/corretto/>`__"
 msgstr "`Amazon Corretto <https://aws.amazon.com/corretto/>`__"
 
-#: ../docker.rst:190
+#: ../docker.rst:198
 msgid "``corretoo``"
 msgstr "``corretoo``"
 
-#: ../docker.rst:191
+#: ../docker.rst:199
 msgid "`Azul Zulu <https://www.azul.com/downloads/?package=jdk#zulu>`__"
 msgstr "`Azul Zulu <https://www.azul.com/downloads/?package=jdk#zulu>`__"
 
-#: ../docker.rst:192
+#: ../docker.rst:200
 msgid "``zulu``"
 msgstr "``zulu``"
 
-#: ../docker.rst:194
+#: ../docker.rst:202
 msgid "Supported java version: 8, 11, 17, 21 (default: 21)"
 msgstr "支持的 Java 版本：8, 11, 17, 21 (默认值：21)"
 
-#: ../docker.rst:196
+#: ../docker.rst:204
 msgid "Additional tag suffixes:"
 msgstr "额外的镜像 tag 后缀"
 
-#: ../docker.rst:198
+#: ../docker.rst:206
 msgid "``-jdk17`` suffix explicitly specify the JDK version to use"
 msgstr "``-jdk17`` 后缀显式指定了 JDK 的版本"
 
-#: ../docker.rst:199
+#: ../docker.rst:207
 msgid ""
 "``-extra`` suffix means the image is built based on the :ref:`extra "
 "<docker:Extra Image>` variant"
 msgstr "``-extra`` 后缀意味着该镜像是基于 :ref:`extra <docker:Extra Image>` 变体构建的"
 
-#: ../docker.rst:201
+#: ../docker.rst:209
 msgid "Example docker tags (using temurin JDK distribution as demonstration):"
 msgstr "镜像 tag 例子（使用 temurin 为 JDK 发行版）："
 
