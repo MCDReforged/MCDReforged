@@ -96,36 +96,12 @@ msgid "Load or reload the plugin you've just created"
 msgstr "加载或重载你刚刚创建的插件"
 
 #: ../customize/handler.rst:57
-#, fuzzy
 msgid ""
 "Set the :ref:`configuration:handler` option to what method ``get_name()``"
 " of your handler returns, e.g.:"
 msgstr ""
-"在 :ref:`configuration:custom_handlers` 选项中添加自定义处理器的路径，然后把 "
-":ref:`configuration:handler` 选项设置为自定义处理器 ``get_name()`` 方法的返回值，如："
+"把 :ref:`configuration:handler` 选项设置为自定义处理器 ``get_name()`` 方法的返回值，如："
 
 #: ../customize/handler.rst:63
 msgid "That's all you need to do"
 msgstr "以上"
-
-#~ msgid ""
-#~ "And then you are able to use "
-#~ "this handler to handle the server. "
-#~ "You need to do the following "
-#~ "things in the configuration file"
-#~ msgstr "于是，你可以使用此处理器来处理服务端。你需要在配置文件中执行以下操作："
-
-#~ msgid ""
-#~ "Set the ``handler`` option in the "
-#~ "configuration file to ``the_handler_for_my_server``"
-#~ msgstr "将配置文件中的 ``handler`` 选项设置为 ``the_handler_for_my_server``"
-
-#~ msgid ""
-#~ "Place your ``my_handler.py`` into a "
-#~ "valid python package in the working "
-#~ "directory of MCDR, e.g."
-#~ msgstr "在MCDR 工作路径中将你的 ``my_handler.py`` 放进一个合法的 python 包中，如"
-
-#~ msgid "Now your handler class is accessible with the following python code:"
-#~ msgstr "现在，你的处理器类已可以用如下的 python 代码获取："
-
