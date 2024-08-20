@@ -10,7 +10,7 @@ To design a server handler, you need to inherit from an existed server handler c
 
 It's recommend to firstly have a look at the implementation of the server handlers in MCDR first and try to understand them 
 
-For easier use and distribution, it is recommended to provide server handlers by creating a MCDR Plugin.
+For easier use and distribution, it is recommended to provide server handlers by creating a :ref:`plugin_dev/basic:MCDR Plugin`.
 
 Example
 -------

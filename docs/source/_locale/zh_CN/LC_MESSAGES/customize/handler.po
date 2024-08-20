@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-20 17:01+0800\n"
+"POT-Creation-Date: 2024-08-20 17:18+0800\n"
 "PO-Revision-Date: 2021-01-23 19:44+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -53,9 +53,8 @@ msgstr "建议首先查看 MCDR 中服务端处理器的实现，并尝试理解
 #: ../customize/handler.rst:13
 msgid ""
 "For easier use and distribution, it is recommended to provide server "
-"handlers by creating a MCDR Plugin."
-msgstr ""
-"为了更方便的使用和分发，建议通过创建 MCDR 插件来提供服务端处理器"
+"handlers by creating a :ref:`plugin_dev/basic:MCDR Plugin`."
+msgstr "为了更方便的使用和分发，建议通过创建 :ref:`plugin_dev/basic:MCDR Plugin` 来提供服务端处理器"
 
 #: ../customize/handler.rst:16
 msgid "Example"
@@ -86,18 +85,15 @@ msgid ""
 "For example, we create a MCDR plugin and write the following codes as its"
 " entrypoint, which creates and registers a handler to handle player names"
 " in this server correctly"
-msgstr ""
-"例如，我们创建一个 MCDR 插件，并编写以下代码作为其入口点，以在此服务器中正确处理玩家名称："
+msgstr "例如，我们创建一个 MCDR 插件，并编写以下代码作为其入口点，以在此服务器中正确处理玩家名称："
 
 #: ../customize/handler.rst:53
 msgid "Then we can start using the handler:"
-msgstr ""
-"然后，我们可以开始使用这个处理器："
+msgstr "然后，我们可以开始使用这个处理器："
 
 #: ../customize/handler.rst:56
 msgid "Load or reload the plugin you've just created"
-msgstr ""
-"加载或重载你刚刚创建的插件"
+msgstr "加载或重载你刚刚创建的插件"
 
 #: ../customize/handler.rst:57
 #, fuzzy
