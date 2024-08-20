@@ -10,6 +10,8 @@ To design a server handler, you need to inherit from an existed server handler c
 
 It's recommend to firstly have a look at the implementation of the server handlers in MCDR first and try to understand them 
 
+For easier use and distribution, it is recommended to provide server handlers by creating a MCDR Plugin.
+
 Example
 -------
 
@@ -22,7 +24,7 @@ In this example, we have a vanilla server, but some of the players have a prefix
 
 For the default vanilla handler, ``[Builder]Steve`` is an illegal player name. Luckily all possible prefixes of the players in the server follows the same format ``[Prefix]PlayerName``. So it's possible to make a dedicated handler for the server
 
-For example, the following codes above creates a handler than is able to handle player names in this server
+For example, we create a MCDR plugin and write the following codes as its entrypoint, which creates and registers a handler to handle player names in this server correctly 
 
 .. code-block:: python
 
@@ -42,38 +44,20 @@ For example, the following codes above creates a handler than is able to handle 
                 if m is not None and self._verify_player_name(m['name']):
                     info.player, info.content = m['name'], m['message']
             return info
+    
 
-And then you are able to use this handler to handle the server. You need to do the following things in the configuration file
+    def on_load(server, prev_module):
+        server.register_server_handler(MyHandler())
 
 
-1.  Set the ``handler`` option in the configuration file to ``the_handler_for_my_server``
-2.  Place your ``my_handler.py`` into a valid python package in the working directory of MCDR, e.g.
+Then we can start using the handler:
 
-    .. code-block::
 
-        my_mcdr_server/
-         ├─ handlers/
-         │   ├─ __init__.py
-         │   └─ my_handler.py           <-----------
-         │
-         ├─ server/
-         ├─ config.yml
-         └─ permission.yml
-
-    Now your handler class is accessible with the following python code:
-
-    .. code-block:: python
-
-        from handlers.my_handler import MyHandler
-
-3.  Added the path to the custom handler in the :ref:`configuration:custom_handlers` option,
-    then set the :ref:`configuration:handler` option to the result of method ``get_name()`` of your handler class, e.g.:
+1.  Load or reload the plugin you've just created
+2.  Set the :ref:`configuration:handler` option to what method ``get_name()`` of your handler returns, e.g.:
 
     .. code-block:: yaml
 
         handler: the_handler_for_my_server
-
-        custom_handlers:
-        - handlers.my_handler.MyHandler
 
 That's all you need to do
