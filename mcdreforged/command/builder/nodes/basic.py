@@ -331,7 +331,7 @@ class AbstractNode(ABC):
 		raise NotImplementedError()
 
 	@staticmethod
-	def __smart_callback(callback: Callable, args: tuple, callback_error_factory: CallbackError.Builder):
+	def __smart_callback(callback: Callable, args: tuple, callback_error_factory: CallbackError.Builder, *, allow_async: bool = False):
 		spec_args = inspect.getfullargspec(callback).args
 		spec_args_len = len(spec_args)
 
@@ -352,7 +352,15 @@ class AbstractNode(ABC):
 			call_args.append(arg)
 
 		try:
-			return callback(*call_args)
+			if inspect.iscoroutinefunction(callback):
+				if allow_async:
+					from mcdreforged.plugin.si.server_interface import ServerInterface
+					ServerInterface.si().schedule_task(callback(*call_args))
+					return None
+				else:
+					raise ValueError(f'Async callback is not supported, callback: {real_func}')
+			else:
+				return callback(*call_args)
 		except Exception as e:
 			raise callback_error_factory(e)
 
@@ -407,7 +415,7 @@ class AbstractNode(ABC):
 					if callback is None and self._redirect_node is not None:
 						callback = self._redirect_node._callback
 					if callback is not None:
-						self.__smart_callback(callback, (context.source, context), CallbackError.builder(context, 'command callback'))
+						self.__smart_callback(callback, (context.source, context), CallbackError.builder(context, 'command callback'), allow_async=True)
 					else:
 						self.__raise_error(UnknownCommand(context.command_read, context.command_read), context)
 				# Un-parsed command string remains

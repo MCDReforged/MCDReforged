@@ -70,9 +70,9 @@ mcdreforged:
     error: 运行 TaskExecutor 时出错
   watchdog:
     task_executor_no_response:
-      line1: TaskExecutor 线程已经 {0} 秒没有响应了，可能出了些问题
-      line2: '正在于 TaskExecutor 线程中运行的插件 (如果存在的话): {0}'
-      line3: 重建 TaskExecutor 中
+      line1: '{0} 线程已经 {1} 秒没有响应了，可能出了些问题'
+      line2: '正在于 {0} 线程中运行的插件 (如果存在的话): {1}，线程堆栈:'
+      line3: 重建 {0} 中
   info_reactor_manager:
     react:
       error: 运行响应器 {0} 时出错
@@ -215,7 +215,8 @@ mcdreforged:
       line7: '插件数量: §6{0}§r'
       extra:
         pid: '服务端 PID: {0}'
-        queue: '消息队列负载: §6{0}§r/§6{1}§r'
+        queue_info: '消息队列负载: §6{0}§r/§6{1}§r'
+        queue_regular: '任务队列负载: §6{0}§r/§6{1}§r'
         thread: '线程数: §6{0}§r'
     list_plugin:
       info_loaded_plugin: §6{0}x §e已加载插件§r

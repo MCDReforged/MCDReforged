@@ -1,14 +1,15 @@
 """
 Plugin management
 """
-import collections
 import dataclasses
+import functools
 import os
 import queue
 import threading
 from contextlib import contextmanager
+from contextvars import ContextVar
 from pathlib import Path
-from typing import Callable, Dict, Optional, Any, Tuple, List, TYPE_CHECKING, Deque
+from typing import Callable, Dict, Optional, Any, Tuple, List, TYPE_CHECKING
 
 from mcdreforged.constants import core_constant, plugin_constant
 from mcdreforged.mcdr_config import MCDReforgedConfig
@@ -28,7 +29,6 @@ from mcdreforged.plugin.type.regular_plugin import RegularPlugin
 from mcdreforged.utils import file_utils, string_utils, misc_utils, class_utils, path_utils, function_utils
 from mcdreforged.utils.future import Future
 from mcdreforged.utils.logger import DebugOption
-from mcdreforged.utils.thread_local_storage import ThreadLocalStorage
 from mcdreforged.utils.types.path_like import PathStr
 
 if TYPE_CHECKING:
@@ -55,7 +55,7 @@ class PluginManager:
 		self.__thread_pool = PluginThreadPool(self.mcdr_server, max_thread=core_constant.PLUGIN_THREAD_POOL_SIZE)
 
 		# thread local storage, to store current plugin
-		self.__tls = ThreadLocalStorage()
+		self.__current_plugin: ContextVar[Optional[AbstractPlugin]] = ContextVar('tls', default=None)
 
 		# plugin manipulation logics
 		self.__mani_lock = threading.RLock()
@@ -79,13 +79,19 @@ class PluginManager:
 	#   Getters / Setters etc.
 	# --------------------------
 
-	def get_current_running_plugin(self, *, thread=None) -> Optional[AbstractPlugin]:
+	def get_plugin_in_current_context(self) -> Optional[AbstractPlugin]:
 		"""
-		Get current executing plugin in this thread
-		:param thread: If specified, it should be a Thread instance. Then it will return the executing plugin in the given thread
+		Get current executing plugin in the current thread
 		"""
-		stack: Deque[AbstractPlugin] = self.__tls.get(self.TLS_PLUGIN_KEY, None, thread=thread)
-		return stack[-1] if stack is not None else None
+		return self.__current_plugin.get()
+
+	@contextmanager
+	def with_plugin_context(self, plugin: AbstractPlugin):
+		token = self.__current_plugin.set(plugin)
+		try:
+			yield
+		finally:
+			self.__current_plugin.reset(token)
 
 	def get_plugin_amount(self) -> int:
 		return len(self.__plugins)
@@ -111,18 +117,6 @@ class PluginManager:
 		self.plugin_directories = [Path(pd) for pd in misc_utils.unique_list(plugin_directories)]
 		for plugin_directory in self.plugin_directories:
 			file_utils.touch_directory(plugin_directory)
-
-	@contextmanager
-	def with_plugin_context(self, plugin: AbstractPlugin):
-		stack: Deque[AbstractPlugin] = self.__tls.get(self.TLS_PLUGIN_KEY, default=collections.deque())
-		stack.append(plugin)
-		self.__tls.put(self.TLS_PLUGIN_KEY, stack)
-		try:
-			yield
-		finally:
-			stack.pop()
-			if len(stack) == 0:
-				self.__tls.pop(self.TLS_PLUGIN_KEY)
 
 	def contains_plugin_file(self, file_path: PathStr) -> bool:
 		"""
@@ -709,27 +703,37 @@ class PluginManager:
 	#   Plugin Event
 	# ----------------
 
-	def __dispatch_event(self, event: PluginEvent, args: Tuple[Any, ...]):
+	def dispatch_event(self, event: PluginEvent, args: Tuple[Any, ...], *, submit_for_sync: bool = True, block: bool = False):
 		"""
-		Event dispatch logic implementation
+		Event dispatching interface
 		"""
 		if self.logger.should_log_debug(DebugOption.PLUGIN):
 			self.logger.mdebug('Dispatching {} with args {}'.format(event, list(args)), no_check=True)
 		for listener in self.registry_storage.get_event_listeners(event.id):
-			self.trigger_listener(listener, args)
+			func = functools.partial(self.trigger_listener, listener, args)
+			if submit_for_sync:
+				self.mcdr_server.task_executor.submit(func, plugin=listener.plugin)
+			else:
+				event = func()
+				if block:
+					event.wait()
 
-	def dispatch_event(self, event: PluginEvent, args: Tuple[Any, ...], *, on_executor_thread: bool = True, block: bool = False, timeout: Optional[float] = None):
+	def trigger_listener(self, listener: EventListener, args: Tuple[Any, ...]) -> threading.Event:
 		"""
-		Event dispatching interface
+		Event listener triggering entrance which correctly handles sync / async listener callback
 		"""
-		if on_executor_thread:
-			self.mcdr_server.task_executor.execute_on_thread(lambda: self.__dispatch_event(event, args), block=block, timeout=timeout)
+		if listener.is_async():
+			coro = self.__trigger_listener_async(listener, args)
+			return self.mcdr_server.async_task_executor.submit(coro, plugin=listener.plugin)
 		else:
-			self.__dispatch_event(event, args)
+			self.__trigger_listener_sync(listener, args)
+			e = threading.Event()
+			e.set()
+			return e
 
-	def trigger_listener(self, listener: EventListener, args: Tuple[Any, ...]):
+	def __trigger_listener_sync(self, listener: EventListener, args: Tuple[Any, ...]):
 		"""
-		Event listener triggering implementation
+		Event listener triggering implementation (sync)
 		The server_interface parameter will be automatically added as the 1st parameter
 		"""
 		try:
@@ -737,3 +741,14 @@ class PluginManager:
 				listener.callback(listener.plugin.server_interface, *args)
 		except Exception:
 			self.logger.exception('Error invoking listener {}'.format(listener))
+
+	async def __trigger_listener_async(self, listener: EventListener, args: Tuple[Any, ...]):
+		"""
+		Event listener triggering implementation (async)
+		The server_interface parameter will be automatically added as the 1st parameter
+		"""
+		try:
+			with self.with_plugin_context(listener.plugin):
+				await listener.callback(listener.plugin.server_interface, *args)
+		except Exception:
+			self.logger.exception('Error invoking async listener {}'.format(listener))

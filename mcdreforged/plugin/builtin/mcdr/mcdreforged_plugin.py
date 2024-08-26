@@ -86,7 +86,7 @@ class MCDReforgedPlugin(BuiltinPlugin):
 				sub_command.on_mcdr_stop()
 
 		self.server_interface.register_event_listener(MCDRPluginEvents.MCDR_STOP, on_mcdr_stop)
-		self.mcdr_server.task_executor.add_regular_task(on_load)
+		self.mcdr_server.task_executor.submit(on_load, plugin=self)
 
 	def _create_repr_fields(self) -> dict:
 		return {'version': METADATA['version']}

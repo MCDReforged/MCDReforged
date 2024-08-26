@@ -70,9 +70,9 @@ mcdreforged:
     error: Error ticking TaskExecutor
   watchdog:
     task_executor_no_response:
-      line1: Task executor thread has no respond for {0} seconds, something might go wrong
-      line2: "Current running plugin in task executor thread (if there's any): {0}"
-      line3: Recreating the task executor
+      line1: '{0} thread has no respond for {1} seconds, something might go wrong'
+      line2: "Current running plugin in {0} thread (if there's any): {1}, stack trace:"
+      line3: Recreating the {0}
   info_reactor_manager:
     react:
       error: Error processing reactor {0}
@@ -215,7 +215,8 @@ mcdreforged:
       line7: 'Plugin count: §6{0}§r'
       extra:
         pid: 'Server PID: {0}'
-        queue: 'Info queue load: §6{0}§r/§6{1}§r'
+        queue_info: 'Info queue load: §6{0}§r/§6{1}§r'
+        queue_task: 'Task queue load: §6{0}§r/§6{1}§r'
         thread: 'Thread count: §6{0}§r'
     list_plugin:
       info_loaded_plugin: §6{0}x §eLoaded Plugins§r

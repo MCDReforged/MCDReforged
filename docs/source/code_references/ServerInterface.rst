@@ -123,5 +123,7 @@ Misc
 ----
 
 .. automethod:: ServerInterface.is_on_executor_thread
+.. automethod:: ServerInterface.is_on_async_executor_thread
+.. automethod:: ServerInterface.get_event_loop
 .. automethod:: ServerInterface.rcon_query
 .. automethod:: ServerInterface.schedule_task

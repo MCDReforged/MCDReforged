@@ -1,8 +1,10 @@
+import asyncio
 import functools
+import inspect
 import logging
 import threading
 from pathlib import Path
-from typing import Callable, TYPE_CHECKING, Tuple, Any, Union, Optional, List, Dict, overload, Literal
+from typing import Callable, TYPE_CHECKING, Tuple, Any, Union, Optional, List, Dict, overload, Literal, Coroutine
 
 import psutil
 
@@ -63,7 +65,7 @@ class ServerInterface:
 		return self._mcdr_server.plugin_manager
 
 	@functools.lru_cache(maxsize=512, typed=True)
-	def _get_logger(self, plugin_id: str) -> MCDReforgedLogger:
+	def _create_plugin_logger(self, plugin_id: str) -> MCDReforgedLogger:
 		logger = MCDReforgedLogger(plugin_id)
 		logger.addHandler(self._mcdr_server.logger.file_handler)
 		return logger
@@ -73,9 +75,9 @@ class ServerInterface:
 		"""
 		A nice logger for you to log message to the console
 		"""
-		plugin = self._plugin_manager.get_current_running_plugin()
+		plugin = self._plugin_manager.get_plugin_in_current_context()
 		if plugin is not None:
-			return self._get_logger(plugin.get_id())
+			return self._create_plugin_logger(plugin.get_id())
 		else:
 			return self._mcdr_server.logger
 
@@ -113,7 +115,7 @@ class ServerInterface:
 		2.  :doc:`Event listener </plugin_dev/event>` callback invocation
 		3.  :doc:`Command </plugin_dev/command>` callback invocation
 		"""
-		plugin = self._plugin_manager.get_current_running_plugin()
+		plugin = self._plugin_manager.get_plugin_in_current_context()
 		if plugin is not None:
 			return plugin.server_interface
 		return None
@@ -696,6 +698,13 @@ class ServerInterface:
 				return None
 		return None
 
+	def __plugin_operation_thread_check(self):
+		# The PLUGIN_LOADED and PLUGIN_UNLOADED event listeners during plugin manipulation
+		# are required to be triggered serially. The listener callback might be an async function,
+		# meaning that we need to be on the non-AsyncTaskExecutor thread to blockingly invoke it.
+		if self.is_on_async_executor_thread():
+			raise RuntimeError('You can not perform plugin operations directly on the {} thread'.format(threading.current_thread().getName()))
+
 	def load_plugin(self, plugin_file_path: str) -> bool:
 		"""
 		Load a plugin from the given file path
@@ -705,6 +714,8 @@ class ServerInterface:
 		"""
 		def get_handler(mgr: 'PluginManager'):
 			return mgr.load_plugin
+
+		self.__plugin_operation_thread_check()
 		return self.__not_loaded_regular_plugin_manipulate(plugin_file_path, get_handler)
 
 	def enable_plugin(self, plugin_file_path: str) -> bool:
@@ -716,6 +727,8 @@ class ServerInterface:
 		"""
 		def get_handler(mgr: 'PluginManager'):
 			return mgr.enable_plugin
+
+		self.__plugin_operation_thread_check()
 		return self.__not_loaded_regular_plugin_manipulate(plugin_file_path, get_handler)
 
 	def reload_plugin(self, plugin_id: str) -> Optional[bool]:
@@ -727,6 +740,8 @@ class ServerInterface:
 		"""
 		def get_handler(mgr: 'PluginManager'):
 			return mgr.reload_plugin
+
+		self.__plugin_operation_thread_check()
 		return self.__existed_regular_plugin_manipulate(plugin_id, get_handler, PluginResultType.RELOAD)
 
 	def unload_plugin(self, plugin_id: str) -> Optional[bool]:
@@ -738,6 +753,8 @@ class ServerInterface:
 		"""
 		def get_handler(mgr: 'PluginManager'):
 			return mgr.unload_plugin
+
+		self.__plugin_operation_thread_check()
 		return self.__existed_regular_plugin_manipulate(plugin_id, get_handler, PluginResultType.UNLOAD)
 
 	def disable_plugin(self, plugin_id: str) -> Optional[bool]:
@@ -749,18 +766,22 @@ class ServerInterface:
 		"""
 		def get_handler(mgr: 'PluginManager'):
 			return mgr.disable_plugin
+
+		self.__plugin_operation_thread_check()
 		return self.__existed_regular_plugin_manipulate(plugin_id, get_handler, PluginResultType.UNLOAD)
 
 	def refresh_all_plugins(self) -> None:
 		"""
 		Reload all plugins, load all new plugins and then unload all removed plugins
 		"""
+		self.__plugin_operation_thread_check()
 		self._plugin_manager.refresh_all_plugins()
 
 	def refresh_changed_plugins(self) -> None:
 		"""
 		Reload all **changed** plugins, load all new plugins and then unload all removed plugins
 		"""
+		self.__plugin_operation_thread_check()
 		self._plugin_manager.refresh_changed_plugins()
 
 	def manipulate_plugins(
@@ -812,6 +833,7 @@ class ServerInterface:
 			else:
 				return None
 
+		self.__plugin_operation_thread_check()
 		future = self._plugin_manager.manipulate_plugins(
 			load=map_to_path(load),
 			unload=map_to_regular(unload),
@@ -856,7 +878,7 @@ class ServerInterface:
 		class_utils.check_type(event, PluginEvent)
 		if MCDRPluginEvents.contains_id(event.id):
 			raise ValueError('Cannot dispatch event with already exists event id {}'.format(event.id))
-		self._plugin_manager.dispatch_event(event, args, on_executor_thread=on_executor_thread)
+		self._plugin_manager.dispatch_event(event, args, submit_for_sync=on_executor_thread)
 
 	# ------------------------
 	#      Configuration
@@ -1048,6 +1070,27 @@ class ServerInterface:
 		"""
 		return self._mcdr_server.task_executor.is_on_thread()
 
+	def is_on_async_executor_thread(self) -> bool:
+		"""
+		Return if the current thread is the async task executor thread
+
+		Async task executor thread is where all async event listener callbacks are invoked
+
+		.. versionadded:: v2.14.0
+		.. warning:: Beta API
+		"""
+		return self._mcdr_server.async_task_executor.is_on_thread()
+
+	def get_event_loop(self) -> asyncio.AbstractEventLoop:
+		"""
+		Return the event loop running in the async executor thread,
+		which will be used for all async event listener callbacks
+
+		.. versionadded:: v2.14.0
+		.. warning:: Beta API
+		"""
+		return self._mcdr_server.async_task_executor.get_event_loop()
+
 	def rcon_query(self, command: str) -> Optional[str]:
 		"""
 		Send command to the server through rcon connection
@@ -1057,12 +1100,28 @@ class ServerInterface:
 		"""
 		return self._mcdr_server.rcon_manager.send_command(command)
 
-	def schedule_task(self, callable_: Callable[[], Any], *, block: bool = False, timeout: Optional[float] = None) -> None:
+	def schedule_task(self, callable_: Union[Callable[[], Any], Coroutine], *, block: bool = False, timeout: Optional[float] = None) -> threading.Event:
 		"""
-		Schedule a callback task to be run in task executor thread
+		Schedule a callback task to be run in task executor / async task executor thread
 
-		:param callable_: The callable object to be run. It should accept 0 parameter
+		:param callable_: The callable or coroutine object to be run. It should accept 0 parameter
 		:keyword block: If blocks until the callable finished execution
 		:keyword timeout: The timeout of the blocking operation if ``block=True``
+
+		.. versionadded:: v2.14.0
+			The *callback* param now supports :external:func:`coroutine object <inspect.iscoroutine>`
+			or :external:func:`coroutine function <inspect.iscoroutinefunction>`
+
+		.. warning:: Beta API
 		"""
-		self._mcdr_server.task_executor.add_regular_task(callable_, block=block, timeout=timeout)
+		if inspect.iscoroutine(callable_):
+			event = self._mcdr_server.async_task_executor.submit(callable_)
+		elif inspect.iscoroutinefunction(callable_):
+			event = self._mcdr_server.async_task_executor.submit(callable_())
+		elif callable(callable_):
+			event = self._mcdr_server.task_executor.submit(callable_)
+		else:
+			raise TypeError(type(callable_))
+		if block:
+			event.wait(timeout=timeout)
+		return event

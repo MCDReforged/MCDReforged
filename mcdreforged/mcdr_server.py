@@ -14,8 +14,10 @@ from ruamel.yaml import YAMLError
 
 from mcdreforged.command.command_manager import CommandManager
 from mcdreforged.constants import core_constant
+from mcdreforged.executor.background_thread_executor import BackgroundThreadExecutor
 from mcdreforged.executor.console_handler import ConsoleHandler
-from mcdreforged.executor.task_executor import TaskExecutor
+from mcdreforged.executor.task_executor_async import AsyncTaskExecutor
+from mcdreforged.executor.task_executor_sync import SyncTaskExecutor
 from mcdreforged.executor.update_helper import UpdateHelper
 from mcdreforged.executor.watchdog import WatchDog
 from mcdreforged.handler.server_handler_manager import ServerHandlerManager
@@ -74,7 +76,8 @@ class MCDReforgedServer:
 		self.config_manager: MCDReforgedConfigManager = MCDReforgedConfigManager(self.logger, args.config_file_path)
 		self.permission_manager: PermissionManager = PermissionManager(self, args.permission_file_path)
 		self.basic_server_interface: ServerInterface = ServerInterface(self)
-		self.task_executor: TaskExecutor = TaskExecutor(self)
+		self.task_executor: SyncTaskExecutor = SyncTaskExecutor(self)
+		self.async_task_executor: AsyncTaskExecutor = AsyncTaskExecutor(self)
 		self.console_handler: ConsoleHandler = ConsoleHandler(self)
 		self.watch_dog: WatchDog = WatchDog(self)
 		self.update_helper: UpdateHelper = UpdateHelper(self)
@@ -308,7 +311,7 @@ class MCDReforgedServer:
 	# for field read-only access, simply use directly reference
 	# but for field writing operation, use setters
 
-	def set_task_executor(self, new_task_executor: TaskExecutor):
+	def set_task_executor(self, new_task_executor: SyncTaskExecutor):
 		self.task_executor = new_task_executor
 
 	# ---------------------------
@@ -616,9 +619,10 @@ class MCDReforgedServer:
 		self.__register_signal_handler()
 		self.watch_dog.start()
 		self.task_executor.start()
+		self.async_task_executor.start()
 		self.preference_manager.load_preferences()
 		self.plugin_manager.register_builtin_plugins()
-		self.task_executor.execute_on_thread(self.load_plugins, block=True)
+		self.task_executor.submit(self.load_plugins).wait()
 		self.plugin_manager.dispatch_event(MCDRPluginEvents.MCDR_START, ())
 		if not self.config.disable_console_thread:
 			self.console_handler.start()
@@ -650,13 +654,34 @@ class MCDReforgedServer:
 	def __on_mcdr_stop(self):
 		try:
 			self.set_mcdr_state(MCDReforgedState.PRE_STOPPED)
-
 			self.logger.info(self.__tr('on_mcdr_stop.info'))
 
 			self.plugin_manager.dispatch_event(MCDRPluginEvents.PLUGIN_UNLOADED, ())
-			self.task_executor.wait_till_finish_all_task()
 			with self.watch_dog.pausing():  # it's ok for plugins to take some time
 				self.plugin_manager.dispatch_event(MCDRPluginEvents.MCDR_STOP, (), block=True)
+
+				def join_executor(executor: BackgroundThreadExecutor):
+					wait_sec = 10 if self.is_interrupt() else 600
+					for i in range(wait_sec):
+						executor.join(timeout=1)
+						if executor.get_thread().is_alive():
+							if (sec := i + 1) in [10, 30, 60, 120, 300, 600]:
+								self.logger.warning('Task executor is still alive after {} seconds, stack trace:'.format(sec))
+								if (ss := executor.get_thread_stack()) is not None:
+									for line in ss.format():
+										self.logger.warning(line)
+						else:
+							break
+					else:
+						self.logger.warning('No more waiting after {} seconds, exit anyway'.format(wait_sec))
+
+				self.task_executor.soft_stop()
+				join_executor(self.task_executor)
+
+				# Stop sync executor after the sync task executor, for best effort on processing all submitted coro
+				# to prevent "coroutine xxx was never awaited" from happening
+				self.async_task_executor.stop()
+				join_executor(self.async_task_executor)
 
 			self.console_handler.stop()
 			self.logger.info(self.__tr('on_mcdr_stop.bye'))

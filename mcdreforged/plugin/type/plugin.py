@@ -193,4 +193,7 @@ class AbstractPlugin:
 		self.assert_state({PluginState.READY}, 'Only plugin in READY state is allowed to receive events')
 		self.mcdr_server.logger.mdebug('{} directly received {}'.format(self, event), option=DebugOption.PLUGIN)
 		for listener in self.plugin_registry.get_event_listeners(event.id):
-			self.plugin_manager.trigger_listener(listener, args)
+			try:
+				self.plugin_manager.trigger_listener(listener, args).wait()
+			except Exception:
+				self.mcdr_server.logger.exception('Direct listener triggering failed, plugin {}, event {}, listener {}'.format(self, event, listener))

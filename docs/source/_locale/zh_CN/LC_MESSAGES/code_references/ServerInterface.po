@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-22 16:53+0800\n"
+"POT-Creation-Date: 2024-08-26 18:05+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -129,13 +129,7 @@ msgstr ":doc:`指令 </plugin_dev/command>` 回调函数的调用"
 msgid "Alias / Shortform of :meth:`get_instance`, and never returns None"
 msgstr ":meth:`get_instance` 的别名 / 缩写，永不返回 None"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.get_permission_level
-#: mcdreforged.plugin.si.server_interface.ServerInterface.get_preference
-#: mcdreforged.plugin.si.server_interface.ServerInterface.psi
-#: mcdreforged.plugin.si.server_interface.ServerInterface.reply
-#: mcdreforged.plugin.si.server_interface.ServerInterface.set_permission_level
-#: mcdreforged.plugin.si.server_interface.ServerInterface.set_preference
-#: mcdreforged.plugin.si.server_interface.ServerInterface.si of
+#: ../code_references/ServerInterface.rst
 msgid "Raises"
 msgstr "抛出"
 
@@ -151,24 +145,7 @@ msgstr ""
 ":meth:`get_instance` 的别名 / 缩写，返回一个可能存在的 "
 ":class:`~mcdreforged.plugin.si.server_interface.ServerInterface` 实例"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.disable_plugin
-#: mcdreforged.plugin.si.server_interface.ServerInterface.enable_plugin
-#: mcdreforged.plugin.si.server_interface.ServerInterface.exit
-#: mcdreforged.plugin.si.server_interface.ServerInterface.get_plugin_instance
-#: mcdreforged.plugin.si.server_interface.ServerInterface.get_server_pid
-#: mcdreforged.plugin.si.server_interface.ServerInterface.get_server_pid_all
-#: mcdreforged.plugin.si.server_interface.ServerInterface.kill
-#: mcdreforged.plugin.si.server_interface.ServerInterface.load_plugin
-#: mcdreforged.plugin.si.server_interface.ServerInterface.manipulate_plugins
-#: mcdreforged.plugin.si.server_interface.ServerInterface.psi_opt
-#: mcdreforged.plugin.si.server_interface.ServerInterface.rcon_query
-#: mcdreforged.plugin.si.server_interface.ServerInterface.reload_plugin
-#: mcdreforged.plugin.si.server_interface.ServerInterface.restart
-#: mcdreforged.plugin.si.server_interface.ServerInterface.si_opt
-#: mcdreforged.plugin.si.server_interface.ServerInterface.start
-#: mcdreforged.plugin.si.server_interface.ServerInterface.stop
-#: mcdreforged.plugin.si.server_interface.ServerInterface.stop_exit
-#: mcdreforged.plugin.si.server_interface.ServerInterface.unload_plugin of
+#: ../code_references/ServerInterface.rst
 msgid "Returns"
 msgstr "返回"
 
@@ -262,34 +239,7 @@ msgid ""
 "translations for your plugin"
 msgstr "见 :ref:`此处 <plugin-translation>` 以了解为你的插件注册翻译的方法"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.broadcast
-#: mcdreforged.plugin.si.server_interface.ServerInterface.disable_plugin
-#: mcdreforged.plugin.si.server_interface.ServerInterface.dispatch_event
-#: mcdreforged.plugin.si.server_interface.ServerInterface.enable_plugin
-#: mcdreforged.plugin.si.server_interface.ServerInterface.execute
-#: mcdreforged.plugin.si.server_interface.ServerInterface.execute_command
-#: mcdreforged.plugin.si.server_interface.ServerInterface.get_permission_level
-#: mcdreforged.plugin.si.server_interface.ServerInterface.get_plugin_file_path
-#: mcdreforged.plugin.si.server_interface.ServerInterface.get_plugin_instance
-#: mcdreforged.plugin.si.server_interface.ServerInterface.get_plugin_metadata
-#: mcdreforged.plugin.si.server_interface.ServerInterface.get_plugin_type
-#: mcdreforged.plugin.si.server_interface.ServerInterface.get_preference
-#: mcdreforged.plugin.si.server_interface.ServerInterface.has_translation
-#: mcdreforged.plugin.si.server_interface.ServerInterface.is_plugin_file_changed
-#: mcdreforged.plugin.si.server_interface.ServerInterface.load_plugin
-#: mcdreforged.plugin.si.server_interface.ServerInterface.manipulate_plugins
-#: mcdreforged.plugin.si.server_interface.ServerInterface.modify_mcdr_config
-#: mcdreforged.plugin.si.server_interface.ServerInterface.rcon_query
-#: mcdreforged.plugin.si.server_interface.ServerInterface.reload_plugin
-#: mcdreforged.plugin.si.server_interface.ServerInterface.reply
-#: mcdreforged.plugin.si.server_interface.ServerInterface.rtr
-#: mcdreforged.plugin.si.server_interface.ServerInterface.say
-#: mcdreforged.plugin.si.server_interface.ServerInterface.schedule_task
-#: mcdreforged.plugin.si.server_interface.ServerInterface.set_permission_level
-#: mcdreforged.plugin.si.server_interface.ServerInterface.set_preference
-#: mcdreforged.plugin.si.server_interface.ServerInterface.tell
-#: mcdreforged.plugin.si.server_interface.ServerInterface.tr
-#: mcdreforged.plugin.si.server_interface.ServerInterface.unload_plugin of
+#: ../code_references/ServerInterface.rst
 msgid "Parameters"
 msgstr "参数"
 
@@ -366,15 +316,7 @@ msgid ""
 "translation into this method, because existence check doesn't need those"
 msgstr "值得注意，你不需要把传递与这个翻译相关的 ``*args`` 和 ``**kwargs`` 传给这个方法，因为存在性检查不需要它俩"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.broadcast
-#: mcdreforged.plugin.si.server_interface.ServerInterface.dispatch_event
-#: mcdreforged.plugin.si.server_interface.ServerInterface.execute
-#: mcdreforged.plugin.si.server_interface.ServerInterface.has_translation
-#: mcdreforged.plugin.si.server_interface.ServerInterface.reload_config_file
-#: mcdreforged.plugin.si.server_interface.ServerInterface.reply
-#: mcdreforged.plugin.si.server_interface.ServerInterface.say
-#: mcdreforged.plugin.si.server_interface.ServerInterface.schedule_task
-#: mcdreforged.plugin.si.server_interface.ServerInterface.tell of
+#: ../code_references/ServerInterface.rst
 msgid "Keyword Arguments"
 msgstr "关键字参数"
 
@@ -1031,7 +973,7 @@ msgstr ""
 msgid ""
 "By default the event will be dispatched in a new task in task executor "
 "thread If it's set to False. The event will be dispatched immediately"
-msgstr "在默认值的情况下，该事件会被派发至任务执行者 (task executor) 线程中分发。如果它被设置为 False，则事件将会被立即分发"
+msgstr "在默认值的情况下，该事件会被派发至任务执行者 (TaskExecutor) 线程中分发。如果它被设置为 False，则事件将会被立即分发"
 
 #: ../code_references/ServerInterface.rst:95
 msgid "Configuration"
@@ -1248,7 +1190,7 @@ msgstr "杂项"
 #: mcdreforged.plugin.si.server_interface.ServerInterface.is_on_executor_thread:1
 #: of
 msgid "Return if the current thread is the task executor thread"
-msgstr "当前线程是否为 任务执行者 (task executor) 线程"
+msgstr "当前线程是否为 任务执行者 (TaskExecutor) 线程"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.is_on_executor_thread:3
 #: of
@@ -1256,6 +1198,31 @@ msgid ""
 "Task executor thread is the main thread to parse messages and trigger "
 "listeners where some ServerInterface APIs are required to be invoked on"
 msgstr "任务执行者线程是解析消息和触发监听器的主线程，是一些调用 ServerInterface API 所需的线程"
+
+#: mcdreforged.plugin.si.server_interface.ServerInterface.is_on_async_executor_thread:1
+#: of
+msgid "Return if the current thread is the async task executor thread"
+msgstr "当前线程是否为 异步任务执行者 (AsyncTaskExecutor) 线程"
+
+#: mcdreforged.plugin.si.server_interface.ServerInterface.is_on_async_executor_thread:3
+#: of
+msgid ""
+"Async task executor thread is where all async event listener callbacks "
+"are invoked"
+msgstr "异步任务执行者线程，是触发所有异步的监听器回调的线程"
+
+#: mcdreforged.plugin.si.server_interface.ServerInterface.get_event_loop:5
+#: mcdreforged.plugin.si.server_interface.ServerInterface.is_on_async_executor_thread:6
+#: mcdreforged.plugin.si.server_interface.ServerInterface.schedule_task:11 of
+#, fuzzy
+msgid "Beta API"
+msgstr "(beta API)"
+
+#: mcdreforged.plugin.si.server_interface.ServerInterface.get_event_loop:1 of
+msgid ""
+"Return the event loop running in the async executor thread, which will be"
+" used for all async event listener callbacks"
+msgstr "返回 异步任务执行者线程 中运行的事件循环。该事件循环会被所有异步事件监听器回调使用"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.rcon_query:1 of
 msgid "Send command to the server through rcon connection"
@@ -1272,12 +1239,14 @@ msgid ""
 msgstr "服务端返回的 rcon 指令执行结果。如果 rcon 没有运行或 rcon 执行失败，则返回 None"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.schedule_task:1 of
-msgid "Schedule a callback task to be run in task executor thread"
-msgstr "在任务执行者 (task executor) 线程中添加一个任务"
+msgid ""
+"Schedule a callback task to be run in task executor / async task executor"
+" thread"
+msgstr "在任务执行者 (TaskExecutor) 或异步任务执行者 (AsyncTaskExecutor) 线程中添加一个任务"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.schedule_task:3 of
-msgid "The callable object to be run. It should accept 0 parameter"
-msgstr "将要被执行的可调用对象。它应当接受 0 个参数"
+msgid "The callable or coroutine object to be run. It should accept 0 parameter"
+msgstr "将要被执行的可调用对象或协程对象。它应当接受 0 个参数"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.schedule_task:4 of
 msgid "If blocks until the callable finished execution"
@@ -1286,4 +1255,14 @@ msgstr "是否需要阻塞至可调用对象执行结束"
 #: mcdreforged.plugin.si.server_interface.ServerInterface.schedule_task:5 of
 msgid "The timeout of the blocking operation if ``block=True``"
 msgstr "若 ``block=True``，最大的阻塞时间"
+
+#: mcdreforged.plugin.si.server_interface.ServerInterface.schedule_task:7 of
+#, fuzzy
+msgid ""
+"The *callback* param now supports :external:func:`coroutine object "
+"<inspect.iscoroutine>` or :external:func:`coroutine function "
+"<inspect.iscoroutinefunction>`"
+msgstr ""
+"(beta API) *callback* 参数支持 :external:func:`协程对象 <inspect.iscoroutine>` 或 "
+":external:func:`协程函数 <inspect.iscoroutinefunction>`"
 

@@ -1,38 +1,51 @@
-from threading import Thread, current_thread, Lock
-from typing import Dict, Optional, Generic, TypeVar
+import contextlib
+from contextvars import ContextVar
+from threading import Thread, current_thread
+from typing import Dict, Generic, TypeVar, Union
 
-_K = TypeVar('_K')
+_T = TypeVar('_T')
 _V = TypeVar('_V')
 
 
-class ThreadLocalStorage(Generic[_K, _V]):
+class _None:
+	pass
+
+
+_NONE = _None()
+
+
+class ThreadLocalStorage(Generic[_V]):
+	"""
+	Stored values should be immutable, cuz it might be shared between coroutines
+	"""
 	def __init__(self):
-		self.__storage: Dict[Thread, Dict[_K, _V]] = {}
-		self.__lock = Lock()
+		self.__storage: Dict[Thread, _V] = {}
 
-	def __get_dict(self, thread: Thread) -> Dict[_K, _V]:
-		if thread not in self.__storage:
-			self.__storage[thread] = {}
-		return self.__storage[thread]
+		# NOTES: its lifecycle is beyond this object, but it's fine cuz tls is only used in singleton
+		# see python docs for ContextVar
+		self.__context_var: ContextVar[Union[_V, _None]] = ContextVar('tls', default=_NONE)
 
-	def get(self, key: _K, default=None, *, thread: Optional[Thread] = None) -> Optional[_V]:
-		if thread is None:
-			thread = current_thread()
-		with self.__lock:
-			return self.__get_dict(thread).get(key, default)
+	def __cleanup_storage(self, thread: Thread):
+		if not thread.is_alive():
+			with contextlib.suppress(KeyError):
+				self.__storage.pop(thread)
 
-	def put(self, key: _K, value: _V, *, thread: Optional[Thread] = None):
-		if thread is None:
-			thread = current_thread()
-		with self.__lock:
-			self.__get_dict(thread)[key] = value
+	def get(self, *, default: _T) -> Union[_V, _T]:
+		value = self.__context_var.get(default)
+		if isinstance(value, _None):
+			if value != _NONE:
+				print(id(value), id(_NONE))
+			return default
+		return value
 
-	def pop(self, key: _K, *, thread: Optional[Thread] = None) -> Optional[_V]:
-		if thread is None:
-			thread = current_thread()
-		with self.__lock:
-			dt = self.__get_dict(thread)
-			if key in dt:
-				return dt.pop(key)
-			else:
-				return None
+	def get_by_thread(self, thread: Thread, default: _T) -> Union[_V, _T]:
+		return self.__storage.get(thread, default)
+
+	def put(self, value: _V):
+		self.__storage[current_thread()] = value
+		self.__context_var.set(value)
+
+	def pop(self):
+		with contextlib.suppress(KeyError):
+			self.__storage.pop(current_thread())
+		self.__context_var.set(_NONE)

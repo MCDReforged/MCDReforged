@@ -1,3 +1,4 @@
+import threading
 from threading import RLock, Event
 from typing import Generic, TypeVar, Callable, Any, Optional
 
@@ -10,6 +11,7 @@ class Future(Generic[T]):
 	def __init__(self):
 		self.__value = self._NONE
 		self.__lock = RLock()
+		self.__event = threading.Event()
 		self.__done_callbacks = []
 
 	@classmethod
@@ -32,9 +34,13 @@ class Future(Generic[T]):
 		with self.__lock:
 			self.__value = value
 		self.__invoke_callbacks(value)
+		self.__event.set()
 
 	def is_finished(self):
 		return self.__value is not self._NONE
+
+	def wait(self, timeout: Optional[float] = None) -> bool:
+		return self.__event.wait(timeout)
 
 	def get(self) -> T:
 		if self.__value is not self._NONE:
@@ -62,6 +68,10 @@ class WaitableCallable:
 		rv = self.__func(*args, **kwargs)
 		self.__event.set()
 		return rv
+
+	@property
+	def done_event(self) -> threading.Event:
+		return self.__event
 
 	def wait(self, timeout: Optional[float] = None) -> bool:
 		"""

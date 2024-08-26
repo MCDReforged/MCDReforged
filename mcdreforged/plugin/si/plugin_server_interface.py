@@ -44,7 +44,7 @@ class PluginServerInterface(ServerInterface):
 	def logger(self) -> logging.Logger:
 		if self.__logger_for_plugin is None:
 			try:
-				logger = self.__logger_for_plugin = self._get_logger(self.__plugin.get_id())
+				logger = self.__logger_for_plugin = self._create_plugin_logger(self.__plugin.get_id())
 			except Exception:
 				logger = self._mcdr_server.logger
 			self.__logger_for_plugin = logger

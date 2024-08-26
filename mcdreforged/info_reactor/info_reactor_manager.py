@@ -6,6 +6,7 @@ import time
 from typing import TYPE_CHECKING, List, Optional
 
 from mcdreforged.constants import core_constant
+from mcdreforged.executor.task_executor_queue import TaskPriority
 from mcdreforged.info_reactor.abstract_info_reactor import AbstractInfoReactor
 from mcdreforged.info_reactor.impl import PlayerReactor, ServerReactor, GeneralReactor
 from mcdreforged.info_reactor.info import Info
@@ -67,7 +68,7 @@ class InfoReactorManager:
 		if info.is_from_server:
 			self.server_output_logger.info(info.raw_content)
 		try:
-			self.mcdr_server.task_executor.enqueue_info_task(lambda: self.process_info(info), info.is_user)
+			self.mcdr_server.task_executor.submit(lambda: self.process_info(info), raise_if_full=not info.is_user, priority=TaskPriority.INFO)
 		except queue.Full:
 			current_time = time.monotonic()
 			logging_method = self.mcdr_server.logger.debug

@@ -1,5 +1,6 @@
 import abc
 import dataclasses
+import inspect
 from typing import Dict, List, Callable, TYPE_CHECKING
 
 from mcdreforged.utils import class_utils
@@ -97,6 +98,9 @@ class EventListener:
 	plugin: 'AbstractPlugin'
 	callback: Callable
 	priority: int
+
+	def is_async(self) -> bool:
+		return inspect.iscoroutinefunction(self.callback)
 
 	def __lt__(self, other):
 		if not isinstance(other, type(self)):

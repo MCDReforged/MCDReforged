@@ -7,6 +7,7 @@ from typing_extensions import override
 from mcdreforged.command.builder.nodes.basic import Literal
 from mcdreforged.command.command_source import CommandSource
 from mcdreforged.constants import core_constant
+from mcdreforged.executor.task_executor_queue import TaskPriority
 from mcdreforged.minecraft.rtext.style import RColor, RStyle, RAction
 from mcdreforged.minecraft.rtext.text import RText
 from mcdreforged.permission.permission_level import PermissionLevel
@@ -72,7 +73,9 @@ class StatusCommand(SubCommand):
 			except psutil.NoSuchProcess:
 				self.mcdr_server.logger.exception('Fail to fetch process tree from pid {}'.format(process.pid))
 
-		source.reply(self.tr('mcdr_command.print_mcdr_status.extra.queue', self.mcdr_server.task_executor.task_queue.qsize(), core_constant.MAX_TASK_QUEUE_SIZE))
+		qsizes = self.mcdr_server.task_executor.get_queue_sizes()
+		source.reply(self.tr('mcdr_command.print_mcdr_status.extra.queue_info', qsizes[TaskPriority.INFO], core_constant.MAX_TASK_QUEUE_SIZE_INFO))
+		source.reply(self.tr('mcdr_command.print_mcdr_status.extra.queue_regular', qsizes[TaskPriority.REGULAR], core_constant.MAX_TASK_QUEUE_SIZE_REGULAR))
 
 		source.reply(self.tr('mcdr_command.print_mcdr_status.extra.thread', threading.active_count()))
 		thread_pool_counts = 0
