@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-17 01:51+0800\n"
+"POT-Creation-Date: 2024-08-26 19:29+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -888,6 +888,7 @@ msgid "You can use ``#all`` as the thread name to dump all threads"
 msgstr "你可以使用 ``#all`` 作为线程名来导出所有线程的信息"
 
 #: ../command/mcdr.rst:386 ../command/mcdr.rst:396 ../command/mcdr.rst:416
+#: ../command/mcdr.rst:434
 msgid "Format::"
 msgstr "格式："
 
@@ -924,4 +925,18 @@ msgid ""
 "You can filter out command trees to be dumped with plugin id or root node"
 " name"
 msgstr "你可以通过插件 id 或根节点名来过滤指令树"
+
+#: ../command/mcdr.rst:428
+msgid "Debug Dump"
+msgstr "导出诊断信息"
+
+#: ../command/mcdr.rst:430
+msgid ""
+"Collects and outputs detailed information about the runtime environment "
+"of MCDR to a file"
+msgstr "收集并输出关于 MCDR 运行环境的详细信息至文件"
+
+#: ../command/mcdr.rst:432
+msgid "This information is useful for debugging and diagnosing MCDR issues"
+msgstr "这些信息有助于调试和诊断 MCDR"
 

@@ -424,3 +424,20 @@ Examples::
     !!MCDR debug command_dump plugin my_plugin
     !!MCDR debug command_dump node !!MyCommand
 
+Debug Dump
+^^^^^^^^^^
+
+Collects and outputs detailed information about the runtime environment of MCDR to a file
+
+This information is useful for debugging and diagnosing MCDR issues
+
+Format::
+
+    !!MCDR debug dump
+    !!MCDR debug dump [(-o|--output) <output>]
+
+::
+
+    !!MCDR debug dump
+    [MCDR] [19:21:39] [TaskExecutor/INFO]: Created mcdreforged dump at 'mcdreforged-dump-20240826-192139.json'
+
