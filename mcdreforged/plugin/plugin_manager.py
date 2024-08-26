@@ -734,6 +734,6 @@ class PluginManager:
 		"""
 		try:
 			with self.with_plugin_context(listener.plugin):
-				listener.execute(listener.plugin.server_interface, *args)
+				listener.callback(listener.plugin.server_interface, *args)
 		except Exception:
 			self.logger.exception('Error invoking listener {}'.format(listener))
