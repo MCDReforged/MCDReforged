@@ -5,6 +5,9 @@
 
 Welcome to MCDReforged's documentation!
 =======================================
+
+**English** | `中文 <https://docs.mcdreforged.com/zh-cn>`__
+
 This is the official documentation for `MCDReforged <https://github.com/MCDReforged/MCDReforged>`__.
 
 .. toctree::

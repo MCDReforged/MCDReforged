@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-19 17:53+0800\n"
+"POT-Creation-Date: 2024-09-11 00:23+0800\n"
 "PO-Revision-Date: 2021-01-23 17:27+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh\n"
@@ -14,55 +14,55 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.15.0\n"
 
-#: ../index.rst:10
+#: ../index.rst:13
 msgid "Quick Start"
 msgstr "快速上手"
 
-#: ../index.rst:10
+#: ../index.rst:13
 msgid "Configuration"
 msgstr "配置"
 
-#: ../index.rst:10
+#: ../index.rst:13
 msgid "Command"
 msgstr "指令"
 
-#: ../index.rst:10
+#: ../index.rst:13
 msgid "Permission"
 msgstr "权限"
 
-#: ../index.rst:10
+#: ../index.rst:13
 msgid "Preference"
 msgstr "偏好"
 
-#: ../index.rst:10
+#: ../index.rst:13
 msgid "Customize"
 msgstr "自定义"
 
-#: ../index.rst:10
+#: ../index.rst:13
 msgid "Command Line Interface"
 msgstr "命令行接口"
 
-#: ../index.rst:10
+#: ../index.rst:13
 msgid "Docker"
 msgstr "Docker"
 
-#: ../index.rst:10
-msgid "Migrate Guide"
-msgstr "迁移指引"
-
-#: ../index.rst:10
+#: ../index.rst:13
 msgid "Plugin Development"
 msgstr "插件开发"
 
-#: ../index.rst:10
+#: ../index.rst:13
 msgid "MCDR Development"
 msgstr "MCDR 开发"
 
-#: ../index.rst:10
+#: ../index.rst:13
 msgid "Code References"
 msgstr "代码参考"
 
-#: ../index.rst:10
+#: ../index.rst:13
+msgid "Migrate Guide"
+msgstr "迁移指引"
+
+#: ../index.rst:13
 msgid "Home"
 msgstr "首页"
 
@@ -70,25 +70,29 @@ msgstr "首页"
 msgid "Welcome to MCDReforged's documentation!"
 msgstr "欢迎来到 MCDReforged 文档！"
 
-#: ../index.rst:8
+#: ../index.rst:9
+msgid "**English** | `中文 <https://docs.mcdreforged.com/zh-cn>`__"
+msgstr "`English <https://docs.mcdreforged.com/en>`__ | **中文**"
+
+#: ../index.rst:11
 msgid ""
-"This is the official documentation for `MCDReforged <https://github.com"
-"/MCDReforged/MCDReforged>`__."
+"This is the official documentation for `MCDReforged "
+"<https://github.com/MCDReforged/MCDReforged>`__."
 msgstr "这是 `MCDReforged <https://github.com/MCDReforged/MCDReforged>`__ 的中文文档。"
 
-#: ../index.rst:28
+#: ../index.rst:31
 msgid "Indices and tables"
 msgstr "索引和搜索"
 
-#: ../index.rst:30
+#: ../index.rst:33
 msgid ":ref:`genindex`"
 msgstr ":ref:`genindex`"
 
-#: ../index.rst:31
+#: ../index.rst:34
 msgid ":ref:`modindex`"
 msgstr ":ref:`modindex`"
 
-#: ../index.rst:32
+#: ../index.rst:35
 msgid ":ref:`search`"
 msgstr ":ref:`search`"
 
