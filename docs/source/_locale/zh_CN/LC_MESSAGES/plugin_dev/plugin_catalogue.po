@@ -204,7 +204,7 @@ msgstr "使用与 :ref:`plugin_dev/plugin_catalogue:related_path` 中相同的�
 msgid ""
 "A commonly-used and recommended practice is to link the introduction "
 "document to the README files in your repository"
-msgstr "一个常见切推荐的做法是，将介绍文件指向你的仓库的 README 文件"
+msgstr "一个常见且推荐的做法是，将介绍文件指向你的仓库的 README 文件"
 
 #: ../plugin_dev/plugin_catalogue.rst:151
 msgid ""

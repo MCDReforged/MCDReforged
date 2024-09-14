@@ -26,7 +26,7 @@ Basic Information
 - OS distribution: debian (The same as what the official `python <https://hub.docker.com/_/python>`__ image use by default)
 - Image user: root
 - Working directory: ``/mcdr``
-- Python package installation location:
+- Python package installation location: ``/root/.local/lib/python${PYTHON_VERSION}/site-packages``
 
 Quick test
 ^^^^^^^^^^
@@ -86,7 +86,7 @@ If you want to installed custom python packages, here's the suggested steps:
 
         .. code-block:: bash
 
-            docker run -it --rm mcdreforged/mcdreforged ls -l /root/.local/lib
+            docker run -it --rm mcdreforged/mcdreforged:latest-slim ls -l /root/.local/lib
 
 2. Use pip3 to install whatever packages you want like usual. The ``--user`` argument is set automatically globally
 
@@ -122,7 +122,7 @@ It can be used as the base image to build your custom runtime with MCDR
 
     # Do whatever you want for customization
     # ./do_something.sh
-    EOF
+    EOT
 
 Tag prefixes:
 
