@@ -2,6 +2,7 @@ import io
 import os
 import sys
 import warnings
+from pathlib import Path
 
 
 __all__ = ['boostrap']
@@ -42,13 +43,17 @@ def __ensure_cwd_is_in_sys_path():
 
 	Reference: https://docs.python.org/3/library/sys.html#sys.path
 
-	See issue #277
+	See issue #277, #331
 	"""
 
 	cwd = os.getcwd()
-	path0 = sys.path[0]
 	try:
-		if os.path.isdir(cwd) and os.path.isdir(path0) and not os.path.samefile(cwd, path0):
+		if len(sys.path) > 0:
+			path0 = Path(sys.path[0])
+			ok = path0.is_dir() and path0.samefile(cwd)
+		else:
+			ok = False
+		if not ok:
 			sys.path.insert(0, cwd)
 	except OSError as e:
-		warnings.warn('fail to check equality between os.getcwd() {!r} and sys.path[0] {!r}: {}'.format(cwd, path0, e))
+		warnings.warn(f'Fail to check and insert cwd {cwd!r} into sys.path {sys.path}: {e}')
