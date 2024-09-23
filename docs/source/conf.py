@@ -122,6 +122,10 @@ html_css_files = [
 
 	# Tweak styles of the sphinx_inline_tabs extension
 	'css/codeblock_tab.css',
+
+	# Tweak styles of the readthedocs addons
+	# https://docs.readthedocs.io/en/stable/addons.html
+	'css/rtd_addon.css',
 ]
 
 html_js_files = [

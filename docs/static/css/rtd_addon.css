@@ -1,0 +1,4 @@
+/* Remove the ugly switch menu */
+.wy-side-nav-search > div.switch-menus {
+    display: none;
+}
