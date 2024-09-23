@@ -74,10 +74,15 @@ if (typeof READTHEDOCS_DATA !== 'undefined') {
 // Set translations
 if (language.startsWith("zh")) {
   config.translations = algolia_i18n;
-  config.indexName = 'mcdreforgeddocs-zh_CN';
+  config.searchParameters = {
+    facetFilters: [`lang:zh-CN`]
+  };
   config.placeholder = algolia_i18n.placeholder;
   switchgear_tr = switchgear_i18n.zh;
 } else {
+  config.searchParameters = {
+    facetFilters: [`lang:en`]
+  };
   switchgear_tr = switchgear_i18n.en;
 }
 
