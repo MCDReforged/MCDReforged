@@ -226,7 +226,7 @@ Plugin catalogue will automatically detect the releases in your plugin repositor
 Submit Plugin
 -------------
 
-It's encouraged to read the `Contributing Guidelines <http://https://github.com/MCDReforged/PluginCatalogue/blob/master/CONTRIBUTING.md>`_ before submitting your plugin
+It's encouraged to read the `Contributing Guidelines <https://github.com/MCDReforged/PluginCatalogue/blob/master/CONTRIBUTING.md>`_ before submitting your plugin
 
 If you want to submit your plugin:
 

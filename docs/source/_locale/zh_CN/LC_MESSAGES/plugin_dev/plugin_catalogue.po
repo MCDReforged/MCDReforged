@@ -165,7 +165,7 @@ msgid ""
 "features of the plugin to attract new users. It will be shown to user "
 "when they are browsing your plugin."
 msgstr "插件的介绍（introduction）部分是使用 markdown "
-"语法撰写的文段，在用户浏览插件时展示其功能特性，以吸引新用户。"
+"语法撰写的文段，在用户浏览插件时展示其功能特性，以吸引新用户"
 
 #: ../plugin_dev/plugin_catalogue.rst:121
 msgid ""
@@ -216,7 +216,7 @@ msgstr ""
 
 #: ../plugin_dev/plugin_catalogue.rst:160
 msgid "You should provide the introduction at least in one language."
-msgstr "每个插件至少需要提供一种语言的 introduction。"
+msgstr "每个插件至少需要提供一种语言的 introduction"
 
 #: ../plugin_dev/plugin_catalogue.rst:162
 msgid "Type: Dict[str, str]"
@@ -398,11 +398,11 @@ msgstr "提交插件"
 #: ../plugin_dev/plugin_catalogue.rst:229
 msgid ""
 "It's encouraged to read the `Contributing Guidelines "
-"<http://https://github.com/MCDReforged/PluginCatalogue/blob/master/CONTRIBUTING.md>`_"
+"<https://github.com/MCDReforged/PluginCatalogue/blob/master/CONTRIBUTING.md>`_"
 " before submitting your plugin"
 msgstr ""
 "在提交你的插件之前，建议先阅读 `贡献指南 "
-"<http://https://github.com/MCDReforged/PluginCatalogue/blob/master/CONTRIBUTING_cn.md>`_"
+"<https://github.com/MCDReforged/PluginCatalogue/blob/master/CONTRIBUTING_cn.md>`_"
 
 #: ../plugin_dev/plugin_catalogue.rst:231
 msgid "If you want to submit your plugin:"
