@@ -419,7 +419,7 @@ msgstr "在 ``plugins/`` 文件夹中创建你的插件目录，并创建所有�
 
 #: ../plugin_dev/plugin_catalogue.rst:237
 msgid "Create a pull request"
-msgstr "创建拉取请求"
+msgstr "创建 Pull Request"
 
 #: ../plugin_dev/plugin_catalogue.rst:239
 msgid ""
