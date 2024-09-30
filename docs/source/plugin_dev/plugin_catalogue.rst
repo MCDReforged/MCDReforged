@@ -116,7 +116,7 @@ Type: List[str]
 introduction
 ~~~~~~~~~~~~
 
-Introduction is a paragraph written in markdown syntax, showing the features of the plugin to attract new users. It will be shown to user when they are browsing your plugin.
+Introduction is a paragraph written in markdown syntax, showing the features of the plugin to attract new users. It will be shown to user when they are browsing your plugin
 
 For the :ref:`plugin_dev/plugin_catalogue:introduction` field, it's a mapping maps :ref:`plugin_dev/plugin_catalogue:language` into a file path
 
@@ -157,7 +157,7 @@ It's named by ``introduction.md`` for default language ``en_us`` and named by e.
          ├─ introduction.md
          └─ introduction-zh_cn.md
 
-You should provide the introduction at least in one language.
+You should provide the introduction at least in one language
 
 Type: Dict[str, str]
 
