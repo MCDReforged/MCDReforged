@@ -234,7 +234,7 @@ If you want to submit your plugin:
 
 2. Create a directory for your plugin within the ``plugins/`` folder, including all the necessary files
 
-3. Make a pull request
+3. Create a pull request
 
 It's recommended to leave your github link in the :ref:`plugin_dev/plugin_catalogue:authors` field so repository maintainers can simply tell if you are the owner of the plugin
 
