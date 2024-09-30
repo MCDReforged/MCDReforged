@@ -163,7 +163,7 @@ msgstr "introduction"
 msgid ""
 "Introduction is a paragraph written in markdown syntax, showing the "
 "features of the plugin to attract new users. It will be shown to user "
-"when they are browsing your plugin."
+"when they are browsing your plugin"
 msgstr "插件的介绍（introduction）部分是使用 markdown "
 "语法撰写的文段，在用户浏览插件时展示其功能特性，以吸引新用户"
 
@@ -215,7 +215,7 @@ msgstr ""
 "``introduction-zh_cn.md``"
 
 #: ../plugin_dev/plugin_catalogue.rst:160
-msgid "You should provide the introduction at least in one language."
+msgid "You should provide the introduction at least in one language"
 msgstr "每个插件至少需要提供一种语言的 introduction"
 
 #: ../plugin_dev/plugin_catalogue.rst:162
