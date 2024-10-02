@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-20 17:18+0800\n"
+"POT-Creation-Date: 2024-10-02 17:40+0800\n"
 "PO-Revision-Date: 2021-01-23 19:44+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -99,9 +99,39 @@ msgstr "加载或重载你刚刚创建的插件"
 msgid ""
 "Set the :ref:`configuration:handler` option to what method ``get_name()``"
 " of your handler returns, e.g.:"
-msgstr ""
-"把 :ref:`configuration:handler` 选项设置为自定义处理器 ``get_name()`` 方法的返回值，如："
+msgstr "把 :ref:`configuration:handler` 选项设置为自定义处理器 ``get_name()`` 方法的返回值，如："
 
-#: ../customize/handler.rst:63
+#: ../customize/handler.rst:64
+msgid ""
+"As a alternative but not recommended way, you may provide your handler by"
+" a single ``.py`` file, rather than a plugin"
+msgstr "除此之外，还有一种不推荐的方式，你可以通过一个 ``.py`` 文件来提供服务端处理器"
+
+#: ../customize/handler.rst:66
+msgid ""
+"Put the same code as above, without the ``on_load`` method, into a "
+"``.py`` file, ``my_handler.py`` for example, then use it as follows:"
+msgstr "将上述代码（不包括 ``on_load`` 方法）放入一个 ``.py`` 文件，例如 ``my_handler.py``，然后按以下步骤使用："
+
+#: ../customize/handler.rst:68
+msgid ""
+"Place it into a valid python package in the working directory of MCDR, "
+"e.g.:"
+msgstr "将其放入 MCDR 工作目录里的一个有效 Python 包中，例如："
+
+#: ../customize/handler.rst:81
+msgid "This make your handler class accessible with the following python code:"
+msgstr "如此一来，你就可以通过以下 Python 代码来访问该处理器类："
+
+#: ../customize/handler.rst:87
+msgid ""
+"Add the path to the :ref:`configuration:custom_handlers` option, then set"
+" the :ref:`configuration:handler` option to what method ``get_name()`` of"
+" the handler returns, e.g.:"
+msgstr ""
+"将路径添加到 :ref:`configuration:custom_handlers` 选项中，然后把 "
+":ref:`configuration:handler` 选项设置为自定义处理器 ``get_name()`` 方法的返回值，例如："
+
+#: ../customize/handler.rst:97
 msgid "That's all you need to do"
 msgstr "以上"
