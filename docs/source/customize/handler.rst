@@ -60,6 +60,9 @@ Then we can start using the handler:
 
         handler: the_handler_for_my_server
 
+That's all you need to do
+
+------
 
 As a alternative but not recommended way, you may provide your handler by a single ``.py`` file, rather than a plugin
 
@@ -93,5 +96,3 @@ Put the same code as above, without the ``on_load`` method, into a ``.py`` file,
 
         custom_handlers:
         - handlers.my_handler.MyHandler
-
-That's all you need to do
