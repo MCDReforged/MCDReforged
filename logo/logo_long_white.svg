@@ -9,10 +9,10 @@
 /*]]>*/</style>
 <defs>
 </defs>
-<path d="M0,-40 L34.64101615,-20 L34.64101615,20 L25.98076211,15 L25.98076211,-15 L0,-30 Z" fill="#FAC00F" />
-<path d="M0,40 L-34.64101615,20 L-34.64101615,-20 L-25.98076211,-15 L-25.98076211,15 L0,30 Z" fill="#3876A9" />
-<path d="M0,-1 L-16.45448267,-10.5 L0,-20 L16.45448267,-10.5 Z" fill="#399B2A" />
-<path d="M-0.8660254,0.5 L-0.8660254,19.5 L-17.32050808,10 L-17.32050808,-9 Z" fill="#397B0D" />
-<path d="M0.8660254,0.5 L17.32050808,-9 L17.32050808,10 L0.8660254,19.5 Z" fill="#865B3E" />
-<text x="170" y="-5" font-size="40" style="font-family: Minecrafter" text-anchor="middle"><tspan fill="#BC7649">MCDaemon</tspan><tspan fill="#646464" x="170" dy="40">Reforged</tspan></text>
+<path d="M0,-40 L34.64101615,-20 L34.64101615,20 L25.98076211,15 L25.98076211,-15 L0,-30 Z" fill="white" />
+<path d="M0,40 L-34.64101615,20 L-34.64101615,-20 L-25.98076211,-15 L-25.98076211,15 L0,30 Z" fill="white" />
+<path d="M0,-1 L-16.45448267,-10.5 L0,-20 L16.45448267,-10.5 Z" fill="white" />
+<path d="M-0.8660254,0.5 L-0.8660254,19.5 L-17.32050808,10 L-17.32050808,-9 Z" fill="white" />
+<path d="M0.8660254,0.5 L17.32050808,-9 L17.32050808,10 L0.8660254,19.5 Z" fill="white" />
+<text x="170" y="-5" font-size="40" style="font-family: Minecrafter" text-anchor="middle"><tspan fill="white">MCDaemon</tspan><tspan fill="white" x="170" dy="40">Reforged</tspan></text>
 </svg>

@@ -172,7 +172,7 @@ f'''
 		text.append_line('MCDaemon', fill=text_brown)
 		text.append_line('Reforged', fill=text_gray, x=text_x, dy=text_size)
 		long.append(text)
-		long.save_svg('logo_long.svg')
+		long.save_svg(file_path)
 
 	else:
 		d.save_svg(file_path)
@@ -185,7 +185,9 @@ def main():
 	make('logo_hexagon_background.svg', hexagon_background=True)
 	make('logo_white.svg', color_override='white')
 	make('logo_white_compact.svg', strip_padding=True, color_override='white')
-	make('logo_long.svg', long=True, full_background=False)
+	make('logo_long.svg', long=True)
+	make('logo_long_white.svg', long=True, color_override='white')
+	make('logo_long_full_background.svg', long=True, full_background=True)
 
 
 if __name__ == '__main__':

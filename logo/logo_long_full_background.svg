@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-     width="350" height="100" viewBox="-50 -50 350 100" style="">
+     width="350" height="100" viewBox="-50 -50 350 100" style="background: #F3F4F8">
 <style>/*<![CDATA[*/
 @font-face {
 	font-family: "MineCrafter";
