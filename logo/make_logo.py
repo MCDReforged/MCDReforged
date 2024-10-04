@@ -1,7 +1,11 @@
+import base64
 import math
+import os
 from typing import List, NamedTuple, Optional
 
 import drawsvg
+from fontTools.subset import Subsetter
+from fontTools.ttLib import TTFont
 
 
 class Point(NamedTuple):
@@ -10,6 +14,19 @@ class Point(NamedTuple):
 
 	def __add__(self, other: 'Point') -> 'Point':
 		return Point(self.x + other.x, self.y + other.y)
+
+
+def font_subset():
+	font = TTFont('font/Minecrafter.Reg.ttf')
+	subsetter = Subsetter()
+	subsetter.populate(text=''.join(set('MCDaemonReforged')))
+	subsetter.subset(font)
+	font.flavor = 'woff'
+	font.save('font/Minecrafter.min.woff')
+
+
+def font_to_url(font: str) -> str:
+	return 'data:font/ttf;base64,' + base64.b64encode(open(font, 'rb').read()).decode('utf-8')
 
 
 def hexagon_points(r: float) -> List[Point]:
@@ -43,6 +60,7 @@ def make(
 		hexagon_background: bool = False,
 		full_background: bool = False,
 		strip_padding: bool = False,
+		long: bool = False,
 		color_override: Optional[str] = None,
 ):
 	background_color = '#F3F4F8'
@@ -51,6 +69,8 @@ def make(
 	cube_green1 = color_override or '#399B2A'
 	cube_green2 = color_override or '#397B0D'
 	cube_brown = color_override or '#865B3E'
+	text_brown = color_override or '#BC7649'
+	text_gray = color_override or '#646464'
 
 	width = 100
 	if hexagon_background and strip_padding:
@@ -66,7 +86,7 @@ def make(
 	o = Point(0, 0)
 
 	# ======= background ======
-	if full_background:
+	if full_background and not long:
 		d.append(drawsvg.Lines(
 			*[
 				-width, -width,
@@ -117,8 +137,45 @@ def make(
 		fill=cube_brown,
 	))
 
-	d.save_svg(file_path)
+	if long:
+		if hexagon_background or strip_padding:
+			raise ValueError('strip_padding and hexagon_background are incompatible with long')
 
+		if not os.path.exists('MineCrafter.min.woff'):
+			font_subset()
+
+		text_size = 40
+		text_x = 170
+		font_css = \
+f'''
+@font-face {{
+	font-family: "MineCrafter";
+	src: url({font_to_url('font/MineCrafter.min.woff')}) format("woff");
+}}
+'''
+		long = drawsvg.Drawing(
+			350, 100,
+			viewBox='-50 -50 350 100',
+			style=f'background: {background_color}' if full_background else ''
+		)
+		long.append_css(font_css)
+		for ele in d.elements:
+			long.append(ele)
+		text = drawsvg.Text(
+			text='',
+			font_size=text_size,
+			x=text_x,
+			y=-5,
+			style='font-family: Minecrafter',
+			text_anchor='middle'
+		)
+		text.append_line('MCDaemon', fill=text_brown)
+		text.append_line('Reforged', fill=text_gray, x=text_x, dy=text_size)
+		long.append(text)
+		long.save_svg('logo_long.svg')
+
+	else:
+		d.save_svg(file_path)
 
 def main():
 	make('logo.svg')
@@ -128,6 +185,7 @@ def main():
 	make('logo_hexagon_background.svg', hexagon_background=True)
 	make('logo_white.svg', color_override='white')
 	make('logo_white_compact.svg', strip_padding=True, color_override='white')
+	make('logo_long.svg', long=True, full_background=False)
 
 
 if __name__ == '__main__':

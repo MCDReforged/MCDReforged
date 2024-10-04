@@ -35,3 +35,5 @@ __pycache__
 /config.yml
 /permission.yml
 
+# subset of font
+/logo/font/*.min.woff
