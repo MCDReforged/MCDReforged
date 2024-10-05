@@ -12,6 +12,7 @@ from mcdreforged.command.command_source import CommandSource, PluginCommandSourc
 from mcdreforged.constants.deprecations import SERVER_INTERFACE_LANGUAGE_KEYWORD
 from mcdreforged.info_reactor.info import Info
 from mcdreforged.info_reactor.server_information import ServerInformation
+from mcdreforged.logging.logger import MCDReforgedLogger, DebugOption
 from mcdreforged.mcdr_state import MCDReforgedFlag
 from mcdreforged.permission.permission_level import PermissionLevel, PermissionParam
 from mcdreforged.plugin import plugin_factory
@@ -25,7 +26,6 @@ from mcdreforged.translation.translation_text import RTextMCDRTranslation
 from mcdreforged.utils import misc_utils, file_utils, class_utils
 from mcdreforged.utils.exception import IllegalCallError
 from mcdreforged.utils.future import Future
-from mcdreforged.utils.logger import MCDReforgedLogger, DebugOption
 from mcdreforged.utils.types.message import MessageText
 from mcdreforged.utils.types.path_like import PathStr
 

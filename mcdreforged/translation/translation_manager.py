@@ -13,7 +13,7 @@ from mcdreforged.utils import file_utils, translation_utils
 from mcdreforged.utils.types.message import TranslationStorage, MessageText
 
 if TYPE_CHECKING:
-	from mcdreforged.utils.logger import MCDReforgedLogger
+	from mcdreforged.logging.logger import MCDReforgedLogger
 
 MCDR_LANGUAGE_DIRECTORY = core_constant.PACKAGE_PATH / 'resources' / 'lang'
 

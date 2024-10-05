@@ -6,7 +6,7 @@ from typing import Optional, TYPE_CHECKING
 from mcdreforged.utils import misc_utils
 
 if TYPE_CHECKING:
-	from mcdreforged.utils.logger import MCDReforgedLogger
+	from mcdreforged.logging.logger import MCDReforgedLogger
 
 
 def _get_thread_stack(thread: threading.Thread) -> Optional[traceback.StackSummary]:

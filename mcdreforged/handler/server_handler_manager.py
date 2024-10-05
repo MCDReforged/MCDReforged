@@ -7,9 +7,9 @@ from typing import Dict, Optional, Tuple, List, TYPE_CHECKING, Counter
 from mcdreforged.handler.impl import *
 from mcdreforged.handler.plugin_provided_server_handler_holder import PluginProvidedServerHandlerHolder
 from mcdreforged.handler.server_handler import ServerHandler
+from mcdreforged.logging.logger import DebugOption
 from mcdreforged.mcdr_config import MCDReforgedConfig
 from mcdreforged.utils import misc_utils, class_utils
-from mcdreforged.utils.logger import DebugOption
 
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer

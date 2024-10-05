@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING
 
 from mcdreforged.command.builder.common import CommandContext
 from mcdreforged.command.command_source import CommandSource
+from mcdreforged.logging.logger import DebugOption, MCDReforgedLogger
 from mcdreforged.minecraft.rtext.style import RAction
 from mcdreforged.minecraft.rtext.text import RTextBase
 from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.local_meta_registry import LocalMetaRegistry
@@ -10,7 +11,6 @@ from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.texts import Texts
 from mcdreforged.plugin.installer.types import MetaRegistry, MergedMetaRegistry
 from mcdreforged.translation.translator import Translator
 from mcdreforged.utils import class_utils
-from mcdreforged.utils.logger import DebugOption, MCDReforgedLogger
 
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer

@@ -12,12 +12,12 @@ from ruamel.yaml import YAML
 from typing_extensions import override
 
 from mcdreforged.constants import plugin_constant
+from mcdreforged.logging.logger import DebugOption
 from mcdreforged.plugin.exception import RequirementCheckFailure
 from mcdreforged.plugin.meta.metadata import Metadata
 from mcdreforged.plugin.type.regular_plugin import RegularPlugin
 from mcdreforged.utils import path_utils
 from mcdreforged.utils.exception import BrokenMetadata, IllegalPluginStructure
-from mcdreforged.utils.logger import DebugOption
 
 
 class MultiFilePlugin(RegularPlugin, ABC):

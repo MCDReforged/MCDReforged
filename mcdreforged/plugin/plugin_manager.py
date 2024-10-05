@@ -12,6 +12,7 @@ from pathlib import Path
 from typing import Callable, Dict, Optional, Any, Tuple, List, TYPE_CHECKING
 
 from mcdreforged.constants import core_constant, plugin_constant
+from mcdreforged.logging.logger import DebugOption
 from mcdreforged.mcdr_config import MCDReforgedConfig
 from mcdreforged.plugin import plugin_factory
 from mcdreforged.plugin.builtin.mcdr.mcdreforged_plugin import MCDReforgedPlugin
@@ -28,7 +29,6 @@ from mcdreforged.plugin.type.plugin import AbstractPlugin
 from mcdreforged.plugin.type.regular_plugin import RegularPlugin
 from mcdreforged.utils import file_utils, string_utils, misc_utils, class_utils, path_utils, function_utils
 from mcdreforged.utils.future import Future
-from mcdreforged.utils.logger import DebugOption
 from mcdreforged.utils.types.path_like import PathStr
 
 if TYPE_CHECKING:

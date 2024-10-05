@@ -7,9 +7,9 @@ from typing_extensions import override
 
 from mcdreforged.command.command_source import CommandSource
 from mcdreforged.info_reactor.info import *
+from mcdreforged.logging.logger import DebugOption
 from mcdreforged.permission.permission_level import PermissionLevel, PermissionLevelItem, PermissionParam
 from mcdreforged.utils import misc_utils
-from mcdreforged.utils.logger import DebugOption
 from mcdreforged.utils.yaml_data_storage import YamlDataStorage
 
 if TYPE_CHECKING:

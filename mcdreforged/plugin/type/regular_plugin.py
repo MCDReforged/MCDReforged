@@ -8,6 +8,7 @@ from typing import TYPE_CHECKING, Optional, List, Tuple, Any
 
 from typing_extensions import override
 
+from mcdreforged.logging.logger import DebugOption
 from mcdreforged.plugin.meta.metadata import Metadata
 from mcdreforged.plugin.plugin_event import MCDRPluginEvents, EventListener, PluginEvent
 from mcdreforged.plugin.plugin_registry import DEFAULT_LISTENER_PRIORITY
@@ -15,7 +16,6 @@ from mcdreforged.plugin.type.common import PluginState
 from mcdreforged.plugin.type.plugin import AbstractPlugin
 from mcdreforged.utils import time_utils
 from mcdreforged.utils.exception import IllegalCallError
-from mcdreforged.utils.logger import DebugOption
 
 if TYPE_CHECKING:
 	from mcdreforged.plugin.plugin_manager import PluginManager

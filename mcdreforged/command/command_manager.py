@@ -10,9 +10,9 @@ import mcdreforged.command.builder.command_builder_utils as utils
 from mcdreforged.command.builder.exception import CommandError, RequirementNotMet
 from mcdreforged.command.builder.nodes.basic import CommandSuggestion, CommandSuggestions, CallbackError, EntryNode
 from mcdreforged.command.command_source import InfoCommandSource, CommandSource
+from mcdreforged.logging.logger import DebugOption
 from mcdreforged.plugin.plugin_registry import PluginCommandHolder
 from mcdreforged.utils import string_utils
-from mcdreforged.utils.logger import DebugOption
 
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer

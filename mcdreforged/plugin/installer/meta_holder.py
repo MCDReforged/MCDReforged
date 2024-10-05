@@ -18,7 +18,7 @@ from mcdreforged.utils import request_utils, time_utils
 
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
-	from mcdreforged.utils.logger import MCDReforgedLogger
+	from mcdreforged.logging.logger import MCDReforgedLogger
 
 
 class CatalogueMetaRegistry(MetaRegistry):

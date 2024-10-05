@@ -7,6 +7,7 @@ from mcdreforged.command.builder.nodes.basic import Literal
 from mcdreforged.command.command_source import CommandSource, PluginCommandSource
 from mcdreforged.constants import plugin_constant
 from mcdreforged.info_reactor.info_filter import InfoFilter
+from mcdreforged.logging.logger import MCDReforgedLogger
 from mcdreforged.permission.permission_level import PermissionLevel
 from mcdreforged.plugin.meta.metadata import Metadata
 from mcdreforged.plugin.plugin_event import EventListener, LiteralEvent, PluginEvent
@@ -16,7 +17,6 @@ from mcdreforged.plugin.si.server_interface import ServerInterface
 from mcdreforged.plugin.type.multi_file_plugin import MultiFilePlugin
 from mcdreforged.plugin.type.plugin import AbstractPlugin
 from mcdreforged.utils import class_utils
-from mcdreforged.utils.logger import MCDReforgedLogger
 from mcdreforged.utils.serializer import Serializable
 from mcdreforged.utils.types.message import MessageText, TranslationKeyDictRich, TranslationKeyDictNested
 

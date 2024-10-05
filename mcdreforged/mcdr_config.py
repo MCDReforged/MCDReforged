@@ -6,7 +6,7 @@ from logging import Logger
 from typing import Any, Tuple, Dict, Union, Optional, List
 
 from mcdreforged.constants import core_constant
-from mcdreforged.utils.logger import DebugOption
+from mcdreforged.logging.logger import DebugOption
 from mcdreforged.utils.serializer import Serializable
 
 CONFIG_SCHEMA_VERSION = 1
