@@ -7,7 +7,8 @@ from typing import TYPE_CHECKING, Callable, Generic, TypeVar
 from mcdreforged.command.builder.nodes.basic import Literal
 from mcdreforged.command.builder.tools import Requirements
 from mcdreforged.command.command_source import CommandSource
-from mcdreforged.logging.logger import DebugOption, MCDReforgedLogger
+from mcdreforged.logging.debug_option import DebugOption
+from mcdreforged.logging.logger import MCDReforgedLogger
 from mcdreforged.permission.permission_level import PermissionLevel
 from mcdreforged.plugin.operation_result import PluginOperationResult
 from mcdreforged.translation.translation_text import RTextMCDRTranslation

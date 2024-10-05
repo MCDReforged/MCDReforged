@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING, Optional, List, Tuple, Any
 
 from typing_extensions import override
 
-from mcdreforged.logging.logger import DebugOption
+from mcdreforged.logging.debug_option import DebugOption
 from mcdreforged.plugin.meta.metadata import Metadata
 from mcdreforged.plugin.plugin_event import MCDRPluginEvents, EventListener, PluginEvent
 from mcdreforged.plugin.plugin_registry import DEFAULT_LISTENER_PRIORITY

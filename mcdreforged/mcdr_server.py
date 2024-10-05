@@ -25,7 +25,9 @@ from mcdreforged.info_reactor.info import Info
 from mcdreforged.info_reactor.info_filter import InfoFilterHolder
 from mcdreforged.info_reactor.info_reactor_manager import InfoReactorManager
 from mcdreforged.info_reactor.server_information import ServerInformation
-from mcdreforged.logging.logger import DebugOption, MCDReforgedLogger, MCColorFormatControl
+from mcdreforged.logging.debug_option import DebugOption
+from mcdreforged.logging.formatter import MCColorFormatControl
+from mcdreforged.logging.logger import MCDReforgedLogger
 from mcdreforged.mcdr_config import MCDReforgedConfigManager, MCDReforgedConfig
 from mcdreforged.mcdr_server_args import MCDReforgedServerArgs
 from mcdreforged.mcdr_state import ServerState, MCDReforgedState, MCDReforgedFlag

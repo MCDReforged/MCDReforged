@@ -12,7 +12,7 @@ from pathlib import Path
 from typing import Callable, Dict, Optional, Any, Tuple, List, TYPE_CHECKING
 
 from mcdreforged.constants import core_constant, plugin_constant
-from mcdreforged.logging.logger import DebugOption
+from mcdreforged.logging.debug_option import DebugOption
 from mcdreforged.mcdr_config import MCDReforgedConfig
 from mcdreforged.plugin import plugin_factory
 from mcdreforged.plugin.builtin.mcdr.mcdreforged_plugin import MCDReforgedPlugin

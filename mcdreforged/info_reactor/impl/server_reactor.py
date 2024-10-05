@@ -6,7 +6,7 @@ from typing_extensions import override
 from mcdreforged.info_reactor.abstract_info_reactor import AbstractInfoReactor
 from mcdreforged.info_reactor.info import InfoSource, Info
 from mcdreforged.info_reactor.server_information import ServerInformation
-from mcdreforged.logging.logger import DebugOption
+from mcdreforged.logging.debug_option import DebugOption
 from mcdreforged.mcdr_state import MCDReforgedFlag
 from mcdreforged.plugin.plugin_event import MCDRPluginEvents
 

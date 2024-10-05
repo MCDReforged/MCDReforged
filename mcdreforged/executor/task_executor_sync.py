@@ -6,7 +6,7 @@ from typing_extensions import override
 
 from mcdreforged.executor.task_executor_common import TaskDoneEvent, TaskExecutorBase
 from mcdreforged.executor.task_executor_queue import TaskQueue, TaskPriority, TaskQueueItem
-from mcdreforged.logging.logger import DebugOption
+from mcdreforged.logging.debug_option import DebugOption
 
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer

@@ -3,7 +3,8 @@ from typing import TYPE_CHECKING
 
 from mcdreforged.command.builder.common import CommandContext
 from mcdreforged.command.command_source import CommandSource
-from mcdreforged.logging.logger import DebugOption, MCDReforgedLogger
+from mcdreforged.logging.debug_option import DebugOption
+from mcdreforged.logging.logger import MCDReforgedLogger
 from mcdreforged.minecraft.rtext.style import RAction
 from mcdreforged.minecraft.rtext.text import RTextBase
 from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.local_meta_registry import LocalMetaRegistry

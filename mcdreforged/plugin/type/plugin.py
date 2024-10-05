@@ -6,7 +6,7 @@ from typing import Tuple, Any, TYPE_CHECKING, Collection, Optional
 
 from mcdreforged.command.builder.nodes.basic import Literal
 from mcdreforged.info_reactor.info_filter import InfoFilter
-from mcdreforged.logging.logger import DebugOption
+from mcdreforged.logging.debug_option import DebugOption
 from mcdreforged.plugin.meta.metadata import Metadata
 from mcdreforged.plugin.meta.version import Version
 from mcdreforged.plugin.plugin_event import MCDREvent, EventListener, PluginEvent

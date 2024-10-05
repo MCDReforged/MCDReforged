@@ -23,7 +23,8 @@ from mcdreforged.command.builder.nodes.basic import CommandSuggestions
 from mcdreforged.command.command_source import ConsoleCommandSource
 from mcdreforged.executor.background_thread_executor import BackgroundThreadExecutor
 from mcdreforged.info_reactor.info import Info
-from mcdreforged.logging.logger import DebugOption, SyncStdoutStreamHandler
+from mcdreforged.logging.debug_option import DebugOption
+from mcdreforged.logging.stream_handler import SyncStdoutStreamHandler
 from mcdreforged.permission.permission_level import PermissionLevel
 from mcdreforged.utils import misc_utils
 from mcdreforged.utils.types.message import MessageText

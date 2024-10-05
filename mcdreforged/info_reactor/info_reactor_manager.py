@@ -10,7 +10,8 @@ from mcdreforged.executor.task_executor_queue import TaskPriority
 from mcdreforged.info_reactor.abstract_info_reactor import AbstractInfoReactor
 from mcdreforged.info_reactor.impl import PlayerReactor, ServerReactor, GeneralReactor
 from mcdreforged.info_reactor.info import Info
-from mcdreforged.logging.logger import ServerOutputLogger, DebugOption
+from mcdreforged.logging.debug_option import DebugOption
+from mcdreforged.logging.logger import ServerOutputLogger
 from mcdreforged.mcdr_config import MCDReforgedConfig
 from mcdreforged.utils import class_utils
 

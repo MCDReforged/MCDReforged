@@ -12,7 +12,8 @@ from mcdreforged.command.command_source import CommandSource, PluginCommandSourc
 from mcdreforged.constants.deprecations import SERVER_INTERFACE_LANGUAGE_KEYWORD
 from mcdreforged.info_reactor.info import Info
 from mcdreforged.info_reactor.server_information import ServerInformation
-from mcdreforged.logging.logger import MCDReforgedLogger, DebugOption
+from mcdreforged.logging.debug_option import DebugOption
+from mcdreforged.logging.logger import MCDReforgedLogger
 from mcdreforged.mcdr_state import MCDReforgedFlag
 from mcdreforged.permission.permission_level import PermissionLevel, PermissionParam
 from mcdreforged.plugin import plugin_factory

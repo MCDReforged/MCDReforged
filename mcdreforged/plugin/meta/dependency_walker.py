@@ -2,7 +2,7 @@ from contextlib import contextmanager
 from enum import unique, Enum, auto
 from typing import Dict, List, TYPE_CHECKING, NamedTuple, Optional, Set, TypeVar, Generic
 
-from mcdreforged.logging.logger import DebugOption
+from mcdreforged.logging.debug_option import DebugOption
 from mcdreforged.plugin.meta.version import VersionRequirement
 
 if TYPE_CHECKING:
