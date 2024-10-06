@@ -10,3 +10,4 @@ This quick start guide will help you get started with MCDR.
    :maxdepth: 2
 
    Installation<install.rst>
+   First Run<first_run.rst>

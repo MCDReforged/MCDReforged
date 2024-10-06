@@ -2,6 +2,8 @@
 Installation
 ============
 
+For the first step of our journey, let's install MCDR.
+
 Requirements
 ------------
 
@@ -11,7 +13,8 @@ Requirements
 .. image:: https://img.shields.io/pypi/v/mcdreforged.svg
    :alt: PyPI version
 
-MCDR is written and runs in Python 3. The Python version need to be at least 3.8.
+MCDR is written and runs in Python 3. Make sure you have Python 3.8 or later installed
+
 The detailed Python version requirements are as shown in the table below
 
 .. list-table::
@@ -151,7 +154,9 @@ Using Docker
 
 MCDR provides Docker images for you to use. See :doc:`/docker` for more details
 
-Compared to the two methods above, Docker has a more convoluted learning path though
+Specify MCDR version by specify the tag of the image. If you're using the latest version, MCDR should always being up to date.
+
+Compared to the two methods above, Docker has a more convoluted learning path, but convenient for some advanced usages.
 
 System package manager?
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -161,7 +166,8 @@ You may found MCDR in some package repositories, AUR for example. However, it's 
 Accelerate the installation
 ---------------------------
 
-For users in China Mainland, ``pip`` and ``pipx`` may be very slow. You can use a mirror to accelerate the installation:
+For users in some areas, ``pip`` and ``pipx`` may be very slow. You can use a mirror to accelerate the installation. Here's an example for 
+Tsinghua University TUNA mirror:
 
 .. code-block:: bash
 
