@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-19 23:14+0800\n"
+"POT-Creation-Date: 2024-10-06 16:43+0800\n"
 "PO-Revision-Date: 2021-01-23 09:12+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -20,8 +20,9 @@ msgstr "快速上手"
 
 #: ../quick_start.rst:5
 msgid ""
-"This is a quick start tutorial of `MCDReforged <https://github.com"
-"/MCDReforged/MCDReforged>`__ (abbreviated as MCDR, omitted below)"
+"This is a quick start tutorial of `MCDReforged "
+"<https://github.com/MCDReforged/MCDReforged>`__ (abbreviated as MCDR, "
+"omitted below)"
 msgstr ""
 "这是一个 `MCDReforged <https://github.com/MCDReforged/MCDReforged>`__ （简称为 "
 "MCDR，下同）的快速上手教程"
@@ -32,10 +33,10 @@ msgstr "依赖"
 
 #: ../quick_start.rst:10
 msgid ""
-"MCDR requires Python3 runtime. The Python version need to be at least "
-"3.8. The detailed Python version requirements are as shown in the table "
-"below"
-msgstr "MCDR 依赖 Python3 运行环境。请确保你的 Python 版本大于 3.8。具体的 Python 版本需求如下表所示"
+"MCDR is written and runs in Python 3. The Python version need to be at "
+"least 3.8. The detailed Python version requirements are as shown in the "
+"table below"
+msgstr "MCDR 需要 Python 3 运行环境，版本至少为 3.8。具体的版本要求如下表所示"
 
 #: ../quick_start.rst:16
 msgid "MCDR version"
@@ -61,130 +62,295 @@ msgstr ">= 2.10"
 msgid ">= 3.8"
 msgstr ">= 3.8"
 
-#: ../quick_start.rst:24
-msgid "Install"
-msgstr "安装"
-
-#: ../quick_start.rst:26
+#: ../quick_start.rst:23
 msgid ""
-"MCDR is available in `pypi <https://pypi.org/project/mcdreforged>`__, "
-"which means it can be installed via the ``pip`` command:"
-msgstr ""
-"MCDR 已于 `pypi <https://pypi.org/project/mcdreforged>`__ 中发布，因此你可以通过 "
-"``pip`` 命令来安装 MCDR："
+"Common use of MCDR is to control a Minecraft server. In order to do that,"
+" you should have a configurated Minecraft server software"
+msgstr "MCDR 的常见用途是控制 Minecraft 服务器。"
+"为此，你需要一个配置好的 Minecraft 服务端"
 
-#: ../quick_start.rst:40
+#: ../quick_start.rst:25
 msgid ""
-"For Chinese users, you can added a ``-i "
-"https://pypi.tuna.tsinghua.edu.cn/simple`` prefix to the command to use "
-"`Tsinghua tuna mirror "
-"<https://mirrors.tuna.tsinghua.edu.cn/help/pypi/>`__ to speed up the "
-"installation:"
-msgstr ""
-"对于国内用户，你可以在 pip 指令的末尾添加 ``-i https://pypi.tuna.tsinghua.edu.cn/simple`` "
-"后缀来使用 `清华 pypi 镜像 <https://mirrors.tuna.tsinghua.edu.cn/help/pypi/>`__ "
-"来加速 MCDR 的下载安装："
+"For example, this is a typical directory structure of vanilla Minecraft "
+"server:"
+msgstr "例如，这是典型的 Minecraft 原版服务端目录结构："
 
-#: ../quick_start.rst:54
+#: ../quick_start.rst:43
+msgid "With a command to start it:"
+msgstr "这是它的启动命令："
+
+#: ../quick_start.rst:49
+msgid "You can also use other server software, such as Fabric, Spigot, Paper, etc"
+msgstr "你也可以使用其他服务端，如 Fabric, Spigot, Paper 等"
+
+#: ../quick_start.rst:53
+msgid ""
+"MCDR was born as a daemon for server softwares of Minecraft: Java "
+"Edition. Most plugins are predicated on this"
+msgstr "MCDR 最初是为 Minecraft: Java Edition 的服务端软件设计的守护进程。"
+"大部分插件都是以此为前提设计的"
+
+#: ../quick_start.rst:55
+msgid ""
+"If you want to build a Bedrock Edition server with MCDR, consider using "
+"`GeyserMC <https://geysermc.org/>`__ with a Java Edition server software"
+msgstr "如果你想用 MCDR 管理一个基岩版服务器，"
+"可以考虑 Java 版服务端软件并用 `GeyserMC <https://geysermc.org/>`__ 提供基岩版兼容"
+
+#: ../quick_start.rst:57
+msgid ""
+"Of course, if you don't need the MCDR plugin ecology, then you can manage"
+" almost any cli program with MCDR"
+msgstr "当然，如果你不需要 MCDR 插件生态，你可以用 MCDR 管理几乎任何命令行程序"
+
+#: ../quick_start.rst:60
+msgid "Install or Upgrade"
+msgstr "安装或升级"
+
+#: ../quick_start.rst:62
 msgid ""
 "**DO NOT** download the source files of MCDR and execute them directly, "
 "unless you're a developer of MCDR and you know what you are doing"
 msgstr "**不要** 直接下载 MCDR 的源代码并从中启动 MCDR，除非你是一个知道你自己在做什么的 MCDR 开发者"
 
-#: ../quick_start.rst:56
-msgid ""
-"After MCDR has been installed using pip, you can verify the installation "
-"with the following command:"
-msgstr "在使用 pip 安装 MCDR 后，你可以用以下指令来验证安装是否成功："
+#: ../quick_start.rst:65
+msgid "Using pipx"
+msgstr "使用 pipx"
 
-#: ../quick_start.rst:64
-msgid "Start up"
-msgstr "启动"
-
-#: ../quick_start.rst:66
+#: ../quick_start.rst:67
 msgid ""
-"Let's say your are going to start MCDR in a folder named "
-"``my_mcdr_server``. Then you can run the following commands to initialize"
-" the environment for MCDR first:"
-msgstr "假设你想在 ``my_mcdr_server`` 这一个文件夹中运行 MCDR，那么你可以运行以下指令以初始化 MCDR 的运行环境："
+"Since `PEP 668 <https://peps.python.org/pep-0668/>`__, globally "
+"installing MCDR using pip is not available on Linux and Mac OS. As a "
+"workaround, we recommend using `pipx <https://pipx.pypa.io/>`__ if you "
+"want MCDR globally installed"
+msgstr "由于 `PEP 668 <https://peps.python.org/pep-0668/>`__，现在你无法使用 pip 在 Linux 和 Mac OS 上全局安装 MCDR。"
+"作为替代方案，如果你希望 MCDR 全局可用，我们推荐使用 `pipx <https://pipx.pypa.io/>`__"
 
-#: ../quick_start.rst:73
-msgid ""
-"MCDR will generated the default configuration and permission files, as "
-"well as some default folders. The file structure will be like this"
-msgstr "MCDR 将生成默认的配置文件、权限文件，以及一些默认的文件夹。此时的路径结构将会如下所示："
+#: ../quick_start.rst:73 ../quick_start.rst:108
+msgid "When a new version available, you may upgrade MCDR by:"
+msgstr "当有新版本发布时，你可以使用以下命令升级 MCDR："
 
-#: ../quick_start.rst:86
+#: ../quick_start.rst:81
 msgid ""
-"Now put your server files into the server folder (``server`` by default),"
-" then modify the configuration file ``config.yml`` and permission file "
-"``permission.yml`` correctly"
-msgstr ""
-"现在，把你的服务端文件放入服务端文件夹里（默认为 ``server`` 文件夹），然后修改配置文件 ``config.yml`` 以及权限文件 "
-"``permission.yml`` 以满足你的需求"
+"In this way, MCDR will be installed in a virtual environment. Python "
+"packages required by MCDR plugins should be installed by:"
+msgstr "使用 pipx 会让 MCDR 被安装在虚拟环境中。"
+"MCDR 插件所需的 Python 包需要通过以下命令安装："
 
 #: ../quick_start.rst:88
 msgid ""
-"After that you can launch MCDR, and it will start handling the server "
-"correctly"
-msgstr "完成后，你就可以启动 MCDR，它将开始正确地操控服务器运行"
+"Or you may use the :ref:`\\!!MCDR command <command/mcdr:Plugin "
+"management>` to install plugins with their dependencies"
+msgstr "或者你也可以使用 :ref:`\\!!MCDR 命令 <command/mcdr:Plugin management>`"
+" 来安装插件及其依赖"
 
-#: ../quick_start.rst:95
-msgid "Upgrade"
-msgstr "更新"
+#: ../quick_start.rst:92
+msgid "Using pip"
+msgstr "使用 pip"
 
-#: ../quick_start.rst:97
+#: ../quick_start.rst:94
 msgid ""
-"With the help of `pypi <https://pypi.org/project/mcdreforged/>`__, MCDR "
-"can be easily upgraded via a single command"
+"If you're on Windows, or in a virtual environment you created, you may "
+"use pip to install MCDR:"
+msgstr "如果你正使用 Windows，或已经创建了自己的 Python 虚拟环境，那么可以使用 pip 来安装 MCDR："
+
+#: ../quick_start.rst:123
+msgid "Index Urls"
+msgstr "索引地址"
+
+#: ../quick_start.rst:125
+msgid ""
+"For Chinese users, you can added a ``-i "
+"https://pypi.tuna.tsinghua.edu.cn/simple`` prefix to the command above, "
+"to speed up the installation by using `Tsinghua tuna mirror "
+"<https://mirrors.tuna.tsinghua.edu.cn/help/pypi/>`__. For example:"
 msgstr ""
-"在 `pypi <https://pypi.org/project/mcdreforged/>`__ 的帮助下，MCDR "
-"可以轻松地通过这个命令升级："
+"对于国内用户，你可以在上述命令中添加 ``-i https://pypi.tuna.tsinghua.edu.cn/simple`` "
+"来使用 `清华 pypi 镜像 <https://mirrors.tuna.tsinghua.edu.cn/help/pypi/>`__ "
+"加速 MCDR 的安装："
 
-#: ../quick_start.rst:111
-msgid "That's it!"
-msgstr "就酱！"
+#: ../quick_start.rst:133
+msgid "Using Docker"
+msgstr "使用 Docker"
 
-#: ../quick_start.rst:113
-msgid "For Chinese users, you can use tuna mirror to speed up the upgrading too"
-msgstr "如果你是国内用户，你同样可以借助清华 pypi 镜像来加速 MCDR 的升级："
+#: ../quick_start.rst:135
+msgid "You may also use Docker to run MCDR. See :doc:`docker` for more details"
+msgstr "你也可以使用 Docker 来运行 MCDR。请参阅 :doc:`docker` 一章"
 
-#: ../quick_start.rst:127
+#: ../quick_start.rst:138
+msgid "Development Builds"
+msgstr "开发版本"
+
+#: ../quick_start.rst:140
 msgid ""
-"Development builds are available in `Test PyPi "
+"Development builds are available in `Test PyPI "
 "<https://test.pypi.org/project/mcdreforged/#history>`__, you can install "
 "them if you have special needs"
 msgstr ""
-"开发版本可在 `Test PyPi <https://test.pypi.org/project/mcdreforged/#history>`__"
-" 中找到。如果你有特殊需要，你可以安装它们"
+"开发版本可在 `Test PyPI <https://test.pypi.org/project/mcdreforged/#history>`__"
+" 中找到。如果你有特殊需要，可以安装它们"
 
-#: ../quick_start.rst:130
+#: ../quick_start.rst:143
+msgid "Initialize"
+msgstr "初始化"
+
+#: ../quick_start.rst:145
+msgid ""
+"After MCDR has been installed, you can verify the installation with the "
+"following command:"
+msgstr "安装 MCDR 后，你可以用以下指令来验证安装是否成功："
+
+#: ../quick_start.rst:152
+msgid ""
+"Let's say your are going to start MCDR in a folder named "
+"``my_mcdr_server``. Then you can run the following commands to initialize"
+" the environment for MCDR:"
+msgstr "假设你想在 ``my_mcdr_server`` 这一个文件夹中运行 MCDR，"
+"那么你可以运行以下指令以初始化 MCDR 的运行环境："
+
+#: ../quick_start.rst:159
+msgid "MCDR will generate its default structure like this:"
+msgstr "MCDR 将会生成如下的默认结构："
+
+#: ../quick_start.rst:173
+msgid "Configure"
+msgstr "配置"
+
+#: ../quick_start.rst:176
+msgid "Server Software"
+msgstr "服务端"
+
+#: ../quick_start.rst:178
+msgid ""
+"Remember the server software you have prepared? Put it into the "
+"``server`` folder. The directory structure should be something like this:"
+msgstr "还记得你准备好的服务端吗？把它放到 ``server`` 文件夹里。"
+"目录结构应该与此相似："
+
+#: ../quick_start.rst:195
+msgid "Config File"
+msgstr "配置文件"
+
+#: ../quick_start.rst:197
+msgid ""
+"Then, edit the ``config.yml`` file to configure MCDR. You can find more "
+"information about this in :doc:`configuration`"
+msgstr "编辑 ``config.yml`` 文件以配置 MCDR。"
+"参阅 :doc:`configuration` 一节以获取更多信息"
+
+#: ../quick_start.rst:199
+msgid "For most users, the configuration items that you need to be aware of are:"
+msgstr "对于大多数用户来说，你需要关注以下配置项："
+
+#: ../quick_start.rst:201
+msgid ":ref:`configuration:Basic Configuration`"
+msgstr ":ref:`configuration:Basic Configuration`"
+
+#: ../quick_start.rst:202
+msgid ":ref:`configuration:Server Configuration`"
+msgstr ":ref:`configuration:Server Configuration`"
+
+#: ../quick_start.rst:205
+msgid "Permissions"
+msgstr "权限"
+
+#: ../quick_start.rst:207
+msgid ""
+"MCDR supports permissions. You can configure permissions in the "
+"``permission.yml`` file. You can find more information about this in "
+":doc:`/permission`"
+msgstr "MCDR 支持权限系统。你可以在 ``permission.yml`` 文件中配置权限。"
+"参阅 :doc:`/permission` 一章以获取更多信息
+
+#: ../quick_start.rst:210
+msgid "Run"
+msgstr "运行"
+
+#: ../quick_start.rst:212
+msgid ""
+"Now, you should be able to launch MCDR, and it should start handling the "
+"server correctly"
+msgstr "现在，你可以启动 MCDR，它应当正确地管理服务端运行"
+
+#: ../quick_start.rst:219
 msgid "Next"
 msgstr "下一步"
 
-#: ../quick_start.rst:132
+#: ../quick_start.rst:221
 msgid ""
-"Now, you've got the basics of how to set up, run, and upgrade MCDR. "
-"What's next? Feel free to check out other parts of the documentation"
-msgstr "现在，你已经掌握了部署、运行以及升级 MCDR 的方法。接下来，你可以进一步探索文档的其他部分"
+"Now, you've got the basic knowledges of MCDR. What's next? Feel free to "
+"check out other parts of the documentation"
+msgstr "现在，你已经了解了 MCDR 的基本知识。然后呢？"
+"你可以自由地探索文档的其他部分"
 
-#: ../quick_start.rst:134
-msgid "Check how to configure MCDR: :doc:`/configuration`"
-msgstr "查看配置 MCDR 的方式：:doc:`/configuration`"
+#: ../quick_start.rst:223
+msgid "MCDR has its own command system: :doc:`/command/index`"
+msgstr "MCDR 拥有自己的指令系统：:doc:`/command/index`"
 
-#: ../quick_start.rst:135
-msgid "Discover the MCDR command system: :doc:`/command/index`"
-msgstr "探索 MCDR 的命令系统：:doc:`/command/index`"
+#: ../quick_start.rst:224
+msgid ""
+"MCDR has a fancy plugin ecosystem: `Plugin Catalogue "
+"<https://github.com/MCDReforged/PluginCatalogue>`__"
+msgstr "MCDR 拥有丰富的插件生态：`插件目录 <https://github.com/MCDReforged/PluginCatalogue>`__"
 
-#: ../quick_start.rst:136
-msgid "Take a look at MCDR's built-in permission system: :doc:`/permission`"
-msgstr "了解 MCDR 的内置权限系统：:doc:`/permission`"
+#: ../quick_start.rst:225
+msgid "MCDR's CLI provide some tools for you: :doc:`/cli/index`"
+msgstr "MCDR 的命令行接口为你提供了一些工具：:doc:`/cli/index`"
 
-#: ../quick_start.rst:137
-msgid "Learn more about MCDR command line interface: :doc:`/cli/index`"
-msgstr "学习更多关于 MCDR 命令行接口的用法：:doc:`/cli/index`"
+#: ../quick_start.rst:226
+msgid "Create your first plugin: :doc:`/plugin_dev/index`"
+msgstr "创建你的第一个插件：:doc:`/plugin_dev/index`"
 
-#: ../quick_start.rst:138
-msgid "Dive into the document to explore more about MCDR ..."
-msgstr "深入文档以探索更多关于 MCDR 的内容……"
+#: ../quick_start.rst:228
+msgid "Dive into the documentation to explore more about MCDR!"
+msgstr "深入文档，探索更多关于 MCDR 的内容！"
 
+#: ../quick_start.rst:231
+msgid "Troubleshooting"
+msgstr "故障排除"
+
+#: ../quick_start.rst:233
+msgid "Here listed some common problems and their solutions"
+msgstr "这里列出了一些常见问题及其解决方案"
+
+#: ../quick_start.rst:235
+msgid "**MCDR outputs garbled text in game.**"
+msgstr "**MCDR 在游戏中输出乱码。**"
+
+#: ../quick_start.rst:237
+msgid ""
+"Usually, this is caused by the console encoding. MCDR use your system "
+"encoding as default, but it may fail. Try to use UTF-8 in everything "
+"related to the server. See :ref:`configuration:encoding, decoding`"
+msgstr "通常，这是由于控制台编码引起的。MCDR 使用你的系统编码作为默认编码，"
+"但这不一定正确。尝试在所有与服务器相关的设置中使用 UTF-8。"
+"参见 :ref:`编解码 <configuration:encoding, decoding>` 一节"
+
+#: ../quick_start.rst:239
+msgid "**Commands not working in game.**"
+msgstr "**MCDR 指令在游戏中不起作用。**"
+
+#: ../quick_start.rst:241
+msgid "MCDR handle commands by listening to the server's console output."
+msgstr "MCDR 通过监听服务器的控制台输出来处理指令。"
+
+#: ../quick_start.rst:243
+msgid ""
+"Make sure you are using the correct :ref:`Server Handler "
+"<configuration:handler>`. If your server software is not supported by "
+"built-in handlers, you may need to :ref:`customize your own handler "
+"<customize/handler:Server Handler>`"
+msgstr "使用正确的 :ref:`服务端处理器 <configuration:handler>`。"
+"如果你的服务端不被内置处理器支持，你可能需要 :ref:`自定义处理器 "
+"<customize/handler:Server Handler>`"
+
+#: ../quick_start.rst:245
+msgid ""
+"If your server output is modified by mods or plugins, the handler may not"
+" be able to recognize the outputs. Try to disable all mods and plugins to"
+" see if the problem solved. If so, you may need to :ref:`customize your "
+"own handler <customize/handler:Server Handler>` to handle the modified "
+"outputs"
+msgstr "如果你的服务端输出被模组或插件修改，处理器可能无法识别这些输出。"
+"尝试禁用所有模组与插件，看看问题是否解决。如果问题解决，那么你可能需要 :ref:`自定义处理器 "
+"<customize/handler:Server Handler>` 来处理这些被修改的输出"
