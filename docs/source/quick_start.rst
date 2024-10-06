@@ -103,7 +103,7 @@ If you're on Windows, or in a virtual environment you created, you may use pip t
 
     .. code-block:: bash
 
-        pip3 install mcdreforged
+        (venv) $ pip3 install mcdreforged
 
 When a new version available, you may upgrade MCDR by:
 
@@ -117,7 +117,7 @@ When a new version available, you may upgrade MCDR by:
 
     .. code-block:: bash
 
-        pip3 install mcdreforged -U
+        (venv) $ pip3 install mcdreforged -U
 
 Index Urls
 ~~~~~~~~~~
