@@ -240,7 +240,7 @@ msgstr "编辑 ``config.yml`` 文件以配置 MCDR。"
 
 #: ../quick_start.rst:199
 msgid "For most users, the configuration items that you need to be aware of are:"
-msgstr "对于大多数用户来说，你需要关注以下配置项："
+msgstr "对大多数用户来说，需要关注以下配置项："
 
 #: ../quick_start.rst:201
 msgid ":ref:`configuration:Basic Configuration`"
