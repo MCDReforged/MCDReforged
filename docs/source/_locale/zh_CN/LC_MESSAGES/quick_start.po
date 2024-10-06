@@ -236,7 +236,7 @@ msgid ""
 "Then, edit the ``config.yml`` file to configure MCDR. You can find more "
 "information about this in :doc:`configuration`"
 msgstr "编辑 ``config.yml`` 文件以配置 MCDR。"
-"参阅 :doc:`configuration` 一节以获取更多信息"
+"参阅 :doc:`configuration` 一章以获取更多信息"
 
 #: ../quick_start.rst:199
 msgid "For most users, the configuration items that you need to be aware of are:"
