@@ -14,7 +14,7 @@ This is the official documentation for `MCDReforged <https://github.com/MCDRefor
    :maxdepth: 2
    :caption: Home
 
-   Quick Start<quick_start.rst>
+   Quick Start<quick_start/index.rst>
    Configuration<configuration.rst>
    Command<command/index.rst>
    Permission<permission.rst>
