@@ -260,7 +260,7 @@ msgid ""
 "``permission.yml`` file. You can find more information about this in "
 ":doc:`/permission`"
 msgstr "MCDR 支持权限系统。你可以在 ``permission.yml`` 文件中配置权限。"
-"参阅 :doc:`/permission` 一章以获取更多信息
+"参阅 :doc:`/permission` 一章以获取更多信息"
 
 #: ../quick_start.rst:210
 msgid "Run"
