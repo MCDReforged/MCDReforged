@@ -152,6 +152,8 @@ When a new version of MCDR available, you may upgrade MCDR by:
 
     (.venv) $ pip install mcdreforged -U
 
+An animated demo with bash:
+
 .. asciinema:: resources/venv.cast
     :rows: 10
 

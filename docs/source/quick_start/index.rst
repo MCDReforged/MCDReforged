@@ -2,9 +2,9 @@
 Quick Start
 ===========
 
-Welcome to the world of MCDReforged (abbreviated as MCDR, omitted below).
+Welcome to the world of MCDReforged (abbreviated as MCDR, omitted below)
 
-This quick start guide will help you get started with MCDR.
+This quick start guide will help you get started with MCDR
 
 .. toctree::
    :maxdepth: 2
