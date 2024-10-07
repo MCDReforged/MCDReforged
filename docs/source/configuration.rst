@@ -230,7 +230,7 @@ To make everything related to the server use UTF-8, you can follow the steps bel
 
                 -Dfile.encoding=UTF-8 -Dstdout.encoding=UTF-8 -Dstderr.encoding=UTF-8
 
-            If you are using a Long-Term-Support Java version (e.g. 8, 11, 17), you can always use this as a universal Java UTF-8 solution
+            If you are using a Long-Term-Support Java version (e.g. 8, 11, 17, 21), you can always use this as a universal Java UTF-8 solution
             no matter what your Java version is. Those unrecognized system properties ``stdout.encoding`` and ``stderr.encoding`` are harmless
 
             See also: The "Explanation of the above JVM properties" section below
@@ -329,6 +329,16 @@ rcon
 ^^^^
 
 The setting for `rcon <https://wiki.vg/RCON>`__. If rcon is enabled, MCDR will start a rcon client to connect to the server after server rcon has started up. Then plugins can use rcon to query command from the server
+
+To configure rcon to work with MCDR, search for these lines in your ``server.properties``:
+
+.. code-block:: properties
+
+    enable-rcon=false
+    rcon.password=
+    rcon.port=25575
+
+Make them the same value as the MCDR configurations.
 
 rcon.enable
 """""""""""

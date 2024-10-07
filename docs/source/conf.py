@@ -70,6 +70,9 @@ extensions = [
 
 	# https://sphinx-design.readthedocs.io/en/latest/index.html
 	'sphinx_design',
+
+	# https://pypi.org/project/sphinxcontrib.asciinema/
+	'sphinxcontrib.asciinema'
 ]
 
 source_suffix = ['.rst']

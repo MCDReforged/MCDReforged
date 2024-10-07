@@ -2,7 +2,13 @@
 Installation
 ============
 
-For the first step of our journey, let's install MCDR.
+For the first step of our journey, let's install MCDR
+
+.. note::
+
+    We assume you have some really basic knowledge of Python and pip.
+
+    If you have not, Google is your friend
 
 Requirements
 ------------
@@ -39,7 +45,7 @@ MCDR is available in `PyPI <https://pypi.org/project/mcdreforged>`__, which mean
 Externally managed environment
 ------------------------------
 
-If you're using Windows, the command above should work fine - you may ignore this section.
+If you're using Windows, the command above should work fine, MCDR will be installed to global environment - you may ignore this section
 
 However, on Linux and Mac OS, if you're using a newer version of Python, you'll get something like this when you run pip install:
 
@@ -69,12 +75,12 @@ However, on Linux and Mac OS, if you're using a newer version of Python, you'll 
 
 That's because of the `PEP 668 <https://peps.python.org/pep-0668/>`__, which was introduced to avoid pip conflicts with the system package manager (apt, yum, pacman, etc.)
 
-As workaround, there're multiple options for you
+As workarounds, there're multiple options for you
 
 Using pipx
 ~~~~~~~~~~
 
-This is the simplest solution for most users, but requires the use of the third-party tool `pipx <https://pipx.pypa.io/>`__, a tool for installing and running Python applications in isolated environments.
+Maybe the simplest solution for most users, but requires to use the third-party tool `pipx <https://pipx.pypa.io/>`__, which is designed to installing and running Python applications in isolated environments
 
 Install pipx refer to its `official documentation <https://pipx.pypa.io/stable/#install-pipx>`__
 
@@ -84,30 +90,33 @@ Then install MCDR using pipx:
 
     $ pipx install mcdreforged
 
-When a new version of MCDR available, you may upgrade MCDR by:
+When a new version of MCDR available, you may take the upgrade by:
 
 .. code-block:: bash
 
     $ pipx upgrade mcdreforged
 
+.. asciinema:: resources/pipx.cast
+    :rows: 8
+
+|
+
 .. note::
 
-    In this way, MCDR will be installed in a isolated environment. Python packages required by MCDR plugins should be installed by:
+    In this way, MCDR will be installed in an isolated environment. Python packages required by MCDR plugins should be installed by:
 
-    .. code-block:: bash
-
-        $ pipx inject mcdreforged <package_name>
-        $ pipx inject mcdreforged -r requirements.txt
+    * ``pipx inject mcdreforged <package_name>``
+    * or ``pipx inject mcdreforged -r requirements.txt``
     
-    Or you may use the :ref:`\!!MCDR command <command/mcdr:Plugin management>` to install plugins with their dependencies
+    More conveniently, use the :ref:`\!!MCDR plg command <command/mcdr:Plugin management>` to install plugins with their dependencies
 
 
 Using virtual environment
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-For the most native, but more complicated option, you can create a virtual environment and install MCDR in it.
+For the most native, but more complicated option, you can create a virtual environment and install MCDR in it
 
-Create a virtual environment by:
+Create a virtual environment, ``.venv`` for example, by:
 
 .. code-block:: bash
 
@@ -141,7 +150,12 @@ When a new version of MCDR available, you may upgrade MCDR by:
 
 .. code-block:: bash
 
-    $ pip install mcdreforged -U
+    (.venv) $ pip install mcdreforged -U
+
+.. asciinema:: resources/venv.cast
+    :rows: 10
+
+|
 
 .. note::
 
@@ -152,11 +166,11 @@ When a new version of MCDR available, you may upgrade MCDR by:
 Using Docker
 ~~~~~~~~~~~~
 
-MCDR provides Docker images for you to use. See :doc:`/docker` for more details
+MCDR also provides Docker images as an option. See :doc:`/docker` for more details
 
-Specify MCDR version by specify the tag of the image. If you're using the latest version, MCDR should always being up to date.
+Specify MCDR version by specify the tag of Docker image. If you use ``latest``, MCDR should always being up to date
 
-Compared to the two methods above, Docker has a more convoluted learning path, but convenient for some advanced usages.
+Compared to the two methods above, Docker has a more convoluted learning path, but convenient for some advanced usages
 
 System package manager?
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -175,3 +189,9 @@ Tsinghua University TUNA mirror:
     $ pipx upgrade -i https://pypi.tuna.tsinghua.edu.cn/simple mcdreforged
     (.venv) $ pip install -i https://pypi.tuna.tsinghua.edu.cn/simple mcdreforged
     (.venv) $ pip install -i https://pypi.tuna.tsinghua.edu.cn/simple mcdreforged -U 
+
+Or simply set a global index-url by:
+
+.. code-block:: bash
+
+    $ pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
