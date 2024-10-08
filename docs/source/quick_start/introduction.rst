@@ -28,8 +28,8 @@ We supports most popular server softwares (Vanilla, Fabric, Spigot, Paper, etc.)
 
 On multiple platforms (Windows, Linux, Mac, etc.)
 
-How it works?
--------------
+How it works
+------------
 
 **TL;DR:** MCDR works like robot that stares at the server console, respond to server output quickly, and inputting commands for users
 
