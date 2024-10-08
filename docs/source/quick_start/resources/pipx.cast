@@ -100,7 +100,7 @@
 [9.531514883041382,"o","\r⣾ installing mcdreforged\u001b[K\u001b[96C"]
 [9.550278663635254,"o","\r\u001b[K\u001b[120C"]
 [9.563260316848755,"o","\r\u001b[K\u001b[120C"]
-[9.688761472702026,"o","\r  installed package \u001b[1mmcdreforged\u001b[22m \u001b[1m2.13.2\u001b[22m, installed using Python 3.12.5\r\n  These apps are now globally available\r\n    - mcdreforged"]
+[9.688761472702026,"o","\r  installed package \u001b[1mmcdreforged\u001b[22m \u001b[1m2.x.x\u001b[22m, installed using Python 3.x.x\r\n  These apps are now globally available\r\n    - mcdreforged"]
 [9.703946590423584,"o","\r\ndone! ✨ 🌟 ✨\r\n\u001b[?25h"]
 [9.751505374908447,"o","\u001b[?2004h"]
 [9.76578974723816,"o","~ $ "]
