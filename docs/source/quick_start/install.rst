@@ -33,49 +33,38 @@ The detailed Python version requirements are as shown in the table below
    * - >= 2.10
      - >= 3.8
 
-Install using pip...?
-----------------------
+Install using pip
+-----------------
 
-MCDR is available in `PyPI <https://pypi.org/project/mcdreforged>`__, which means it can be installed via the ``pip`` command:
+MCDR is available in `PyPI <https://pypi.org/project/mcdreforged>`__, it can reasonably be installed via the ``pip`` command:
 
-.. code-block:: bash
+.. tab:: Windows
 
-    pip install mcdreforged
+    .. code-block:: bat
+
+        pip install mcdreforged
+
+.. tab:: Linux
+
+    .. code-block:: bash
+
+        pip3 install mcdreforged
 
 Externally managed environment
 ------------------------------
 
 If you're using Windows, the command above should work fine, MCDR will be installed to global environment - you may ignore this section
 
-However, on Linux and Mac OS, if you're using a newer version of Python, you'll get something like this when you run pip install:
+For Linux and Mac OS, it's not recommended to install MCDR system-wide, because it can cause conflicts with other Python packages and affect system dependencies
 
-.. code-block:: bash
-    
-    $ pip install mcdreforged
-    error: externally-managed-environment
+System-wide install also makes version management difficult 
+and requires administrator privileges, increasing security risks
 
-    × This environment is externally managed
-    ╰─> To install Python packages system-wide, try apt install
-        python3-xyz, where xyz is the package you are trying to
-        install.
-        
-        If you wish to install a non packaged Python package,
-        create a virtual environment using python3 -m venv path/to/venv.
-        Then use path/to/venv/bin/python and path/to/venv/bin/pip. Make
-        sure you have python3 full installed.
-        
-        If you wish to install a non packaged Python application,
-        it may be easiest to use pipx install xyz, which will manage a
-        virtual environment for you. Make sure you have pipx installed.
-        
-        See /usr/share/doc/python3.x/README.venv for more information.
+For the same reason, you may get a ``externally-managed-environment`` error on pip install
 
-    note: If you believe this is a mistake, please contact your Python installation or OS distribution provider. You can override this, at the risk of breaking your Python installation or OS, by passing --break-system-packages.
-    hint: See PEP 668 for the detailed specification.
+See `PEP 668 <https://peps.python.org/pep-0668/>`__ for the detailed specification
 
-That's because of the `PEP 668 <https://peps.python.org/pep-0668/>`__, which was introduced to avoid pip conflicts with the system package manager (apt, yum, pacman, etc.)
-
-As workarounds, there're multiple options for you
+It's safer to keep the installation isolated. As workarounds, there're multiple options for you
 
 Using pipx
 ~~~~~~~~~~
@@ -103,7 +92,7 @@ When a new version of MCDR available, you may take the upgrade by:
 
 .. note::
 
-    In this way, MCDR will be installed in an isolated environment. Python packages required by MCDR plugins should be installed by:
+    In this way, MCDR will be installed in an isolated environment. Instead of ``pip install <package_name>``, Python packages required by MCDR plugins should be installed by:
 
     * ``pipx inject mcdreforged <package_name>``
     * or ``pipx inject mcdreforged -r requirements.txt``
@@ -116,41 +105,47 @@ Using virtual environment
 
 For the most native, but more complicated option, you can create a virtual environment and install MCDR in it
 
-Create a virtual environment, ``.venv`` for example, by:
+Create a virtual environment by:
 
 .. code-block:: bash
 
-    $ python3 -m venv .venv
+    $ python3 -m venv <venv directory>
+
+``venv`` for example:
+
+.. code-block:: bash
+
+    $ python3 -m venv venv
 
 Activate it by: (`Reference <https://docs.python.org/3/library/venv.html#how-venvs-work>`__)
 
 +----------+------------+-----------------------------------------+
 | Platform | Shell      | Command to activate virtual environment |
 +==========+============+=========================================+
-|  POSIX   | bash/zsh   | $ source .venv/bin/activate             |
+|  POSIX   | bash/zsh   | $ source venv/bin/activate              |
 +          +------------+-----------------------------------------+
-|          | fish       | $ source .venv/bin/activate.fish        |
+|          | fish       | $ source venv/bin/activate.fish         |
 +          +------------+-----------------------------------------+
-|          | csh/tcsh   | $ source .venv/bin/activate.csh         |
+|          | csh/tcsh   | $ source venv/bin/activate.csh          |
 +          +------------+-----------------------------------------+
-|          | PowerShell | $ .venv/bin/Activate.ps1                |
+|          | PowerShell | $ venv/bin/Activate.ps1                 |
 +----------+------------+-----------------------------------------+
-| Windows  | cmd.exe    | > .venv\\Scripts\\activate.bat          |
+| Windows  | cmd.exe    | > venv\\Scripts\\activate.bat           |
 +          +------------+-----------------------------------------+
-|          | PowerShell | PS > .venv\\Scripts\\Activate.ps1       |
+|          | PowerShell | PS > venv\\Scripts\\Activate.ps1        |
 +----------+------------+-----------------------------------------+
 
 Then, install MCDR using pip:
 
 .. code-block:: bash
 
-    (.venv) $ pip install mcdreforged
+    (venv) $ pip install mcdreforged
 
 When a new version of MCDR available, you may upgrade MCDR by:
 
 .. code-block:: bash
 
-    (.venv) $ pip install mcdreforged -U
+    (venv) $ pip install mcdreforged -U
 
 An animated demo with bash:
 
@@ -189,8 +184,8 @@ Tsinghua University TUNA mirror:
 
     $ pipx install -i https://pypi.tuna.tsinghua.edu.cn/simple mcdreforged
     $ pipx upgrade -i https://pypi.tuna.tsinghua.edu.cn/simple mcdreforged
-    (.venv) $ pip install -i https://pypi.tuna.tsinghua.edu.cn/simple mcdreforged
-    (.venv) $ pip install -i https://pypi.tuna.tsinghua.edu.cn/simple mcdreforged -U 
+    (venv) $ pip install -i https://pypi.tuna.tsinghua.edu.cn/simple mcdreforged
+    (venv) $ pip install -i https://pypi.tuna.tsinghua.edu.cn/simple mcdreforged -U 
 
 Or simply set a global index-url by:
 

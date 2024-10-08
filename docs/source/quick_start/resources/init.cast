@@ -20,7 +20,7 @@
 [3.522567844390869,"o","it"]
 [3.719502925872803,"o","\r\n"]
 [4.1195611000061035,"o","\u001b[?2004l"]
-[4.239581108093262,"o","Initialized environment for MCDReforged in C:\\Users\\Alex3236\\Documents\\~\\my_mcdr_server\r\n"]
+[4.239581108093262,"o","Initialized environment for MCDReforged in ~/my_mcdr_server\r\n"]
 [4.313467741012573,"o","\u001b[?2004h"]
 [4.328097343444824,"o","my_mcdr_server $ "]
 [5.728097343444824,"o","tree -F -a --dirs-first"]

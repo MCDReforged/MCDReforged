@@ -2,7 +2,7 @@
 First Run
 =========
 
-Now you have installed MCDR, it's time to run it for the first time...?
+Now you have installed MCDR, it's time to run it for the first time
 
 .. note::
 
@@ -42,7 +42,7 @@ With this command to start it:
 
 .. code-block:: bash
 
-    java -Xmx1024M -Xms1024M -jar server.jar nogui
+    java -Xms1G -Xmx2G -jar minecraft_server.jar nogui
 
 You can also use other server software, such as Fabric, Spigot, Paper, etc.
 
@@ -133,7 +133,7 @@ As a simple example, this is all you need to aware for a vanilla Minecraft 1.21 
 
     language: en_us
 
-    start_command: java -Dfile.encoding=UTF-8 -Dstdout.encoding=UTF-8 -Dstderr.encoding=UTF-8 -Xmx1024M -Xms1024M -jar server.jar nogui
+    start_command: java -Dfile.encoding=UTF-8 -Dstdout.encoding=UTF-8 -Dstderr.encoding=UTF-8 -Xms1G -Xmx2G -jar minecraft_server.jar nogui
 
     handler: vanilla_handler
 
