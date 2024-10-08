@@ -33,12 +33,14 @@ If your server output is modified by mods or plugins, the handler may not be abl
 Run with MCSManager
 -------------------
 
-MCDR will not be actively compatible to MCSManager
+.. warning::
+
+    This part may not being up to date. If you encounter problems, do not report them to MCDR
+
+    For more infomations, get in touch with their community: `Github Repo <https://github.com/MCSManager/MCSManager>`__, `Documentation <https://docs.mcsmanager.com/>`__
+
+MCDR did not specificly designed to adapt MCSManager
 
 However, if you use UTF-8 everywhere, and enable ``Emulation Terminal`` in MCSManager, MCDR should work fine with full functionality
 
 If ``Emulation Terminal`` is disabled, you should set :ref:`configuration:advanced_console` to ``false``
-
-.. warning::
-
-    We do not guarantee the statement above to be up to date. If you encounter problems, do not report them to MCDR
