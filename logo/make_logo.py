@@ -1,4 +1,5 @@
 import base64
+import functools
 import math
 import re
 from io import BytesIO
@@ -7,8 +8,6 @@ from typing import List, NamedTuple, Optional
 import drawsvg
 from fontTools.subset import Subsetter
 from fontTools.ttLib import TTFont
-
-subset_cache: str = None
 
 
 class Point(NamedTuple):
@@ -19,22 +18,16 @@ class Point(NamedTuple):
 		return Point(self.x + other.x, self.y + other.y)
 
 
+@functools.lru_cache(maxsize=None)
 def font_subset_uri():
-	'''Get a base64-encoded subset of the Minecrafter font as a data URI.'''
-
-	global subset_cache
-
-	if subset_cache is not None:
-		return subset_cache
-
-	font = TTFont('font/Minecrafter.Reg.ttf')
+	"""Get a base64-encoded subset of the Minecrafter font as a data URI."""
+	font = TTFont('font/Minecrafter.Reg.ttf', recalcTimestamp=False)
 
 	subsetter = Subsetter()
 	subsetter.populate(text=''.join(set('MCDaemonReforged')))
 	subsetter.subset(font)
 
 	font.flavor = 'woff'
-
 	file = BytesIO()
 	font.save(file)
 

@@ -8,10 +8,6 @@ pip install -r requirements.txt
 python make_logo.py
 ```
 
-## Note
-
-As the way fonts work, the embdded font of the long logo changes slightly each time it is generated.
-
 ## Credits
 
 Font Minecrafter by PurePixel, licensed under CC-BY-ND.
