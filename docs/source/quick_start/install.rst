@@ -19,7 +19,7 @@ Requirements
 .. image:: https://img.shields.io/pypi/v/mcdreforged.svg
    :alt: PyPI version
 
-MCDR is written and runs in Python 3. Make sure you have Python 3.8 or later installed
+MCDR is written and runs in Python 3. Make sure you have Python 3.8 or later with pip3 installed
 
 The detailed Python version requirements are as shown in the table below
 
