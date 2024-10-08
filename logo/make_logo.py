@@ -157,14 +157,14 @@ def make(
 			raise ValueError('strip_padding and hexagon_background are incompatible with long')
 
 		text_size = 40
-		text_x = 170
-		font_css = \
-f'''
-@font-face {{
-	font-family: "MineCrafter";
-	src: url({font_subset_uri()}) format("woff");
-}}
-'''
+		text_x = 165
+		font_css = '\n'.join([
+			'@font-face {',
+			'   font-family: "MineCrafter";',
+			f'   src: url({font_subset_uri()}) format("woff");',
+			'}',
+		])
+
 		long = drawsvg.Drawing(
 			350, 100,
 			viewBox='-50 -50 350 100',
@@ -177,9 +177,9 @@ f'''
 			text='',
 			font_size=text_size,
 			x=text_x,
-			y=-5,
+			y=-4.25,
 			style='font-family: Minecrafter',
-			text_anchor='middle'
+			text_anchor='middle',
 		)
 		text.append_line('MCDaemon', fill=text_brown)
 		text.append_line('Reforged', fill=text_gray, x=text_x, dy=text_size)
