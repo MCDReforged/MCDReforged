@@ -9,6 +9,7 @@ The server won't start
 
 * Check out your start command
 * Check if java is installed and added in PATH
+* Try to run the server without MCDR, using the same command you configured
 * If you're directing the start command to a batch or shellscript, try the actual command instead of the script
 
 Learn more in :ref:`configuration:start_command`
