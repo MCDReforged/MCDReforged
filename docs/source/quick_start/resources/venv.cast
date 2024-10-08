@@ -61,7 +61,7 @@
 [16.195966958999634,"o","\r\n"]
 [16.19602942466736,"o","\u001b[?2004l"]
 [17.26661252975464,"o","Collecting mcdreforged\r\n"]
-[17.28200936317444,"o","  Using cached mcdreforged-2.13.2-py3-none-any.whl.metadata (3.9 kB)\r\n"]
+[17.28200936317444,"o","  Using cached mcdreforged-2.x.x-py3-none-any.whl.metadata (3.9 kB)\r\n"]
 [17.40093469619751,"o","Collecting colorlog>=6.4 (from mcdreforged)\r\n"]
 [17.422104120254517,"o","  Using cached colorlog-6.8.2-py3-none-any.whl.metadata (10 kB)\r\n"]
 [17.552369117736816,"o","Collecting colorama>=0.4.4 (from mcdreforged)\r\n"]
