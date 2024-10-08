@@ -64,7 +64,29 @@ For the same reason, you may get a ``externally-managed-environment`` error on p
 
 See `PEP 668 <https://peps.python.org/pep-0668/>`__ for the detailed specification
 
-It's safer to keep the installation isolated. As workarounds, there're multiple options for you
+It's safer to keep the installation isolated. As workarounds, there're multiple options for you. For a conclusion:
+
+.. list-table::
+    :header-rows: 1
+
+    * - Method
+      - Pros
+      - Cons
+    * - pip
+      - Native, always available
+      - Not isolated, may affect global packages, requires admin privilege
+    * - pipx
+      - Simplest
+      - 3rd party, different command set
+    * - venv
+      - Native support
+      - Requires manual environment activation
+    * - docker
+      - Reliable across environments
+      - More dependencies and disk space, convoluted learning path
+    * - system package
+      - \-
+      - Same as pip, **not recommended**
 
 Using pipx
 ~~~~~~~~~~
@@ -172,7 +194,7 @@ Compared to the two methods above, Docker has a more convoluted learning path, b
 System package manager?
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-You may found MCDR in some package repositories, AUR for example. However, it's **definately not recommended** to use system package manager to install MCDR, because it's hard to manage the dependencies of MCDR plugins in this way
+You may found MCDR in some package repositories, AUR for example. However, it's **definately not recommended** to use system package manager to install MCDR, as it's hard to manage the dependencies of MCDR plugins
 
 Accelerate the installation
 ---------------------------
