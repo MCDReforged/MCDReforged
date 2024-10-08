@@ -1,3 +1,5 @@
+![logo](logo.svg)
+
 # MCDReforged Logos
 
 ```shell
@@ -6,9 +8,13 @@ pip install -r requirements.txt
 python make_logo.py
 ```
 
+## Note
+
+As the way fonts work, the embdded font of the long logo changes slightly each time it is generated.
+
 ## Credits
 
-Used font Minecrafter by PurePixel, licensed under CC-BY-ND.
+Font Minecrafter by PurePixel, licensed under CC-BY-ND.
 
 ## Disclaimer
 

@@ -1,12 +1,13 @@
 import base64
-from io import BytesIO
 import math
-import os
+from io import BytesIO
 from typing import List, NamedTuple, Optional
 
 import drawsvg
 from fontTools.subset import Subsetter
 from fontTools.ttLib import TTFont
+
+subset_cache: str = None
 
 
 class Point(NamedTuple):
@@ -19,6 +20,12 @@ class Point(NamedTuple):
 
 def font_subset_uri():
 	'''Get a base64-encoded subset of the Minecrafter font as a data URI.'''
+
+	global subset_cache
+
+	if subset_cache is not None:
+		return subset_cache
+
 	font = TTFont('font/Minecrafter.Reg.ttf')
 
 	subsetter = Subsetter()
@@ -30,7 +37,10 @@ def font_subset_uri():
 	file = BytesIO()
 	font.save(file)
 
-	return 'data:font/ttf;base64,' + base64.b64encode(file.getvalue()).decode('utf-8')
+	b64_encoded = base64.b64encode(file.getvalue()).decode('utf-8')
+	subset_cache = 'data:font/ttf;base64,' + b64_encoded
+
+	return subset_cache
 
 
 def hexagon_points(r: float) -> List[Point]:
