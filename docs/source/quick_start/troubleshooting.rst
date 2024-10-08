@@ -21,14 +21,28 @@ Usually, this is caused by the console encoding / decoding
 
 MCDR use UTF-8 as default encoding and decoding, so try to use UTF-8 in everything related to the server. See :ref:`configuration:encoding, decoding`
 
-Commands not working in game
-----------------------------
+Commands not working
+--------------------
 
-MCDR handle commands by listening to the server's console output
+- **All commands are not responding in game, but working in console**
+- **Some commands perform incorrectly for specific players**
 
-Make sure you are using the correct :ref:`Server Handler <configuration:handler>`. If your server software is not supported by built-in handlers, you may need to :ref:`customize your own handler <customize/handler:Server Handler>`
+    MCDR handle commands by listening to the server's console output
 
-If your server output is modified by mods or plugins, the handler may not be able to recognize the outputs. Try to disable all mods and plugins to see if the problem solved. If so, you may need to :ref:`customize your own handler <customize/handler:Server Handler>` to handle the modified outputs
+    Make sure you are using the correct :ref:`Server Handler <configuration:handler>`. If your server software is not supported by built-in handlers, you may need to :ref:`customize your own handler <customize/handler:Server Handler>`
+
+    Your server output may have been modified by mods or plugins (usually something like "player title/profession", "better console"), that the handler may not be able to recognize the outputs. Try to disable all mods and plugins to see if the problem solved. If so, you may need to :ref:`customize your own handler <customize/handler:Server Handler>` to handle the modified outputs
+
+- **Some plugin commands work neither in game nor the console**
+- **Some plugin commands perform incorrectly in all conditions**
+
+    Check if the plugin is enabled and loaded correctly. Check the logs to see if there are any errors or warnings related to the plugin. Check the plugin configuration
+
+    Read the README or documentation of the plugin to see if it has any special requirements. Some plugins may require additional permissions or configurations
+
+    Some plugins may have conflicts with others. Try to disable other plugins to see if the problem solved
+
+    If the problem still exists, try to report it to the plugin's author or community
 
 Run with MCSManager
 -------------------
