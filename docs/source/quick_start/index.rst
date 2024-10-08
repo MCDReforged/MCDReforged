@@ -2,7 +2,7 @@
 Quick Start
 ===========
 
-Welcome to the world of MCDReforged (abbreviated as MCDR, omitted below)
+Welcome to the world of MCDReforged (abbr. MCDR)
 
 This quick start guide will help you get started with MCDR
 

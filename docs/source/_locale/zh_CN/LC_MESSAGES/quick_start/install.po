@@ -1,0 +1,324 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2024, Fallen_Breath
+# This file is distributed under the same license as the MCDReforged
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: MCDReforged \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-10-08 12:01+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: zh_CN\n"
+"Language-Team: zh_CN <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.15.0\n"
+
+#: ../quick_start/install.rst:3
+msgid "Installation"
+msgstr ""
+
+#: ../quick_start/install.rst:5
+msgid "For the first step of our journey, let's install MCDR"
+msgstr ""
+
+#: ../quick_start/install.rst:9
+msgid "We assume you have some really basic knowledge of Python and pip."
+msgstr ""
+
+#: ../quick_start/install.rst:11
+msgid "If you have not, Google is your friend"
+msgstr ""
+
+#: ../quick_start/install.rst:14
+msgid "Requirements"
+msgstr ""
+
+#: ../quick_start/install.rst:16
+msgid "Python version"
+msgstr ""
+
+#: ../quick_start/install.rst:19
+msgid "PyPI version"
+msgstr ""
+
+#: ../quick_start/install.rst:22
+msgid ""
+"MCDR is written and runs in Python 3. Make sure you have Python 3.8 or "
+"later installed"
+msgstr ""
+
+#: ../quick_start/install.rst:24
+msgid "The detailed Python version requirements are as shown in the table below"
+msgstr ""
+
+#: ../quick_start/install.rst:29
+msgid "MCDR version"
+msgstr ""
+
+#: ../quick_start/install.rst:30
+msgid "Python requirement"
+msgstr ""
+
+#: ../quick_start/install.rst:31
+msgid "< 2.10"
+msgstr ""
+
+#: ../quick_start/install.rst:32
+msgid ">= 3.6"
+msgstr ""
+
+#: ../quick_start/install.rst:33
+msgid ">= 2.10"
+msgstr ""
+
+#: ../quick_start/install.rst:34
+msgid ">= 3.8"
+msgstr ""
+
+#: ../quick_start/install.rst:37
+msgid "Install using pip...?"
+msgstr ""
+
+#: ../quick_start/install.rst:39
+msgid ""
+"MCDR is available in `PyPI <https://pypi.org/project/mcdreforged>`__, "
+"which means it can be installed via the ``pip`` command:"
+msgstr ""
+
+#: ../quick_start/install.rst:46
+msgid "Externally managed environment"
+msgstr ""
+
+#: ../quick_start/install.rst:48
+msgid ""
+"If you're using Windows, the command above should work fine, MCDR will be"
+" installed to global environment - you may ignore this section"
+msgstr ""
+
+#: ../quick_start/install.rst:50
+msgid ""
+"However, on Linux and Mac OS, if you're using a newer version of Python, "
+"you'll get something like this when you run pip install:"
+msgstr ""
+
+#: ../quick_start/install.rst:76
+msgid ""
+"That's because of the `PEP 668 <https://peps.python.org/pep-0668/>`__, "
+"which was introduced to avoid pip conflicts with the system package "
+"manager (apt, yum, pacman, etc.)"
+msgstr ""
+
+#: ../quick_start/install.rst:78
+msgid "As workarounds, there're multiple options for you"
+msgstr ""
+
+#: ../quick_start/install.rst:81
+msgid "Using pipx"
+msgstr ""
+
+#: ../quick_start/install.rst:83
+msgid ""
+"Maybe the simplest solution for most users, but requires to use the "
+"third-party tool `pipx <https://pipx.pypa.io/>`__, which is designed to "
+"installing and running Python applications in isolated environments"
+msgstr ""
+
+#: ../quick_start/install.rst:85
+msgid ""
+"Install pipx refer to its `official documentation "
+"<https://pipx.pypa.io/stable/#install-pipx>`__"
+msgstr ""
+
+#: ../quick_start/install.rst:87
+msgid "Then install MCDR using pipx:"
+msgstr ""
+
+#: ../quick_start/install.rst:93
+msgid "When a new version of MCDR available, you may take the upgrade by:"
+msgstr ""
+
+#: ../quick_start/install.rst:106
+msgid ""
+"In this way, MCDR will be installed in an isolated environment. Python "
+"packages required by MCDR plugins should be installed by:"
+msgstr ""
+
+#: ../quick_start/install.rst:108
+msgid "``pipx inject mcdreforged <package_name>``"
+msgstr ""
+
+#: ../quick_start/install.rst:109
+msgid "or ``pipx inject mcdreforged -r requirements.txt``"
+msgstr ""
+
+#: ../quick_start/install.rst:111
+msgid ""
+"More conveniently, use the :ref:`\\!!MCDR plg command "
+"<command/mcdr:Plugin management>` to install plugins with their "
+"dependencies"
+msgstr ""
+
+#: ../quick_start/install.rst:115
+msgid "Using virtual environment"
+msgstr ""
+
+#: ../quick_start/install.rst:117
+msgid ""
+"For the most native, but more complicated option, you can create a "
+"virtual environment and install MCDR in it"
+msgstr ""
+
+#: ../quick_start/install.rst:119
+msgid "Create a virtual environment, ``.venv`` for example, by:"
+msgstr ""
+
+#: ../quick_start/install.rst:125
+msgid ""
+"Activate it by: (`Reference <https://docs.python.org/3/library/venv.html"
+"#how-venvs-work>`__)"
+msgstr ""
+
+#: ../quick_start/install.rst:128
+msgid "Platform"
+msgstr ""
+
+#: ../quick_start/install.rst:128
+msgid "Shell"
+msgstr ""
+
+#: ../quick_start/install.rst:128
+msgid "Command to activate virtual environment"
+msgstr ""
+
+#: ../quick_start/install.rst:130
+msgid "POSIX"
+msgstr ""
+
+#: ../quick_start/install.rst:130
+msgid "bash/zsh"
+msgstr ""
+
+#: ../quick_start/install.rst:130
+msgid "$ source .venv/bin/activate"
+msgstr ""
+
+#: ../quick_start/install.rst:132
+msgid "fish"
+msgstr ""
+
+#: ../quick_start/install.rst:132
+msgid "$ source .venv/bin/activate.fish"
+msgstr ""
+
+#: ../quick_start/install.rst:134
+msgid "csh/tcsh"
+msgstr ""
+
+#: ../quick_start/install.rst:134
+msgid "$ source .venv/bin/activate.csh"
+msgstr ""
+
+#: ../quick_start/install.rst:136 ../quick_start/install.rst:140
+msgid "PowerShell"
+msgstr ""
+
+#: ../quick_start/install.rst:136
+msgid "$ .venv/bin/Activate.ps1"
+msgstr ""
+
+#: ../quick_start/install.rst:138
+msgid "Windows"
+msgstr ""
+
+#: ../quick_start/install.rst:138
+msgid "cmd.exe"
+msgstr ""
+
+#: ../quick_start/install.rst:138
+msgid "> .venv\\\\Scripts\\\\activate.bat"
+msgstr ""
+
+#: ../quick_start/install.rst:140
+msgid "PS > .venv\\\\Scripts\\\\Activate.ps1"
+msgstr ""
+
+#: ../quick_start/install.rst:143
+msgid "Then, install MCDR using pip:"
+msgstr ""
+
+#: ../quick_start/install.rst:149
+msgid "When a new version of MCDR available, you may upgrade MCDR by:"
+msgstr ""
+
+#: ../quick_start/install.rst:155
+msgid "An animated demo with bash:"
+msgstr ""
+
+#: ../quick_start/install.rst:164
+msgid ""
+"In this way, you must activate the virtual environment every time you "
+"want to use MCDR, or install packages for MCDR plugins"
+msgstr ""
+
+#: ../quick_start/install.rst:166
+msgid ""
+"For more information about virtual environments, See `Python Docs "
+"<https://docs.python.org/3/library/venv.html>`__"
+msgstr ""
+
+#: ../quick_start/install.rst:169
+msgid "Using Docker"
+msgstr ""
+
+#: ../quick_start/install.rst:171
+msgid ""
+"MCDR also provides Docker images as an option. See :doc:`/docker` for "
+"more details"
+msgstr ""
+
+#: ../quick_start/install.rst:173
+msgid ""
+"Specify MCDR version by specify the tag of Docker image. If you use "
+"``latest``, MCDR should always being up to date"
+msgstr ""
+
+#: ../quick_start/install.rst:175
+msgid ""
+"Compared to the two methods above, Docker has a more convoluted learning "
+"path, but convenient for some advanced usages"
+msgstr ""
+
+#: ../quick_start/install.rst:178
+msgid "System package manager?"
+msgstr ""
+
+#: ../quick_start/install.rst:180
+msgid ""
+"You may found MCDR in some package repositories, AUR for example. "
+"However, it's **definately not recommended** to use system package "
+"manager to install MCDR, because it's hard to manage the dependencies of "
+"MCDR plugins in this way"
+msgstr ""
+
+#: ../quick_start/install.rst:183
+msgid "Accelerate the installation"
+msgstr ""
+
+#: ../quick_start/install.rst:185
+msgid ""
+"For users in some areas, ``pip`` and ``pipx`` may be very slow. You can "
+"use a mirror to accelerate the installation. Here's an example for "
+"Tsinghua University TUNA mirror:"
+msgstr ""
+
+#: ../quick_start/install.rst:195
+msgid "Or simply set a global index-url by:"
+msgstr ""
+

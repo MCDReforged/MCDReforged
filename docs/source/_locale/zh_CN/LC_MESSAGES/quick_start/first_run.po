@@ -1,0 +1,220 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2024, Fallen_Breath
+# This file is distributed under the same license as the MCDReforged
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: MCDReforged \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-10-08 12:01+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: zh_CN\n"
+"Language-Team: zh_CN <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.15.0\n"
+
+#: ../quick_start/first_run.rst:3
+msgid "First Run"
+msgstr ""
+
+#: ../quick_start/first_run.rst:5
+msgid "Now you have installed MCDR, it's time to run it for the first time...?"
+msgstr ""
+
+#: ../quick_start/first_run.rst:9
+msgid ""
+"We assume you have basic knowledge of managing a Minecraft server with "
+"one of the common server softwares. Which means, you should know:"
+msgstr ""
+
+#: ../quick_start/first_run.rst:11
+msgid "The Minecraft server software: what is it, how to configure it"
+msgstr ""
+
+#: ../quick_start/first_run.rst:12
+msgid "Start command of Minecraft server: what is it, what its arguments mean"
+msgstr ""
+
+#: ../quick_start/first_run.rst:13
+msgid "Console of the server: what it prints, commands you can send to it"
+msgstr ""
+
+#: ../quick_start/first_run.rst:14
+msgid "YAML and JSON files: what they are, how to edit them"
+msgstr ""
+
+#: ../quick_start/first_run.rst:16
+msgid "If you have not, Google is your friend"
+msgstr ""
+
+#: ../quick_start/first_run.rst:19
+msgid "Minecraft Server Software"
+msgstr ""
+
+#: ../quick_start/first_run.rst:21
+msgid ""
+"Most common use of MCDR is to control a Minecraft server. In order to do "
+"that, you should have a **well-configured** Minecraft server software"
+msgstr ""
+
+#: ../quick_start/first_run.rst:23
+msgid ""
+"For example, this is a typical directory structure of vanilla Minecraft "
+"server:"
+msgstr ""
+
+#: ../quick_start/first_run.rst:41
+msgid "With this command to start it:"
+msgstr ""
+
+#: ../quick_start/first_run.rst:47
+msgid ""
+"You can also use other server software, such as Fabric, Spigot, Paper, "
+"etc."
+msgstr ""
+
+#: ../quick_start/first_run.rst:51
+msgid ""
+"Configure and troubleshoot your server software **BEFORE** you introduce "
+"MCDR. Otherwise, you can't distinguish whether a problem is caused by "
+"MCDR or your server software"
+msgstr ""
+
+#: ../quick_start/first_run.rst:53
+msgid ""
+"MCDR was born as a daemon for server softwares of Minecraft: Java "
+"Edition. Most plugins are predicated on that. If you want to run MCDR "
+"with a Bedrock Edition server, consider using Java Edition server "
+"software with `GeyserMC <https://geysermc.org/>`__ to provide Bedrock "
+"Edition compatibility"
+msgstr ""
+
+#: ../quick_start/first_run.rst:55
+msgid ""
+"Of course, if you don't need the MCDR plugin community, you can run "
+"anything you want with MCDR"
+msgstr ""
+
+#: ../quick_start/first_run.rst:58
+msgid "Initialize"
+msgstr ""
+
+#: ../quick_start/first_run.rst:60
+msgid ""
+"After MCDR has been installed, you can verify the installation with the "
+"following command:"
+msgstr ""
+
+#: ../quick_start/first_run.rst:67
+msgid ""
+"Let's say your are going to start MCDR in a folder named "
+"``my_mcdr_server``. Then you can run the following commands to initialize"
+" the environment for MCDR:"
+msgstr ""
+
+#: ../quick_start/first_run.rst:74
+msgid "MCDR will generate its default structure like this:"
+msgstr ""
+
+#: ../quick_start/first_run.rst:87
+msgid "Animated demo:"
+msgstr ""
+
+#: ../quick_start/first_run.rst:95
+msgid "Configure"
+msgstr ""
+
+#: ../quick_start/first_run.rst:98
+msgid "Server Software"
+msgstr ""
+
+#: ../quick_start/first_run.rst:100
+msgid ""
+"Remember the server software you have prepared? Put it into the "
+"``server`` folder. The directory structure should be something like this:"
+msgstr ""
+
+#: ../quick_start/first_run.rst:117
+msgid "Config File"
+msgstr ""
+
+#: ../quick_start/first_run.rst:119
+msgid ""
+"Then, edit the ``config.yml`` file to configure MCDR. You can find more "
+"information about this in :doc:`/configuration`"
+msgstr ""
+
+#: ../quick_start/first_run.rst:121
+msgid ""
+"For most users, there are 4 parts of the configuration that you need to "
+"be aware of"
+msgstr ""
+
+#: ../quick_start/first_run.rst:123
+msgid ":ref:`configuration:language`: the language using in MCDR"
+msgstr ""
+
+#: ../quick_start/first_run.rst:124
+msgid ":ref:`configuration:start_command`: how MCDR starts your server"
+msgstr ""
+
+#: ../quick_start/first_run.rst:125
+msgid ":ref:`configuration:handler`: how MCDR read your server outputs"
+msgstr ""
+
+#: ../quick_start/first_run.rst:126
+msgid ""
+":ref:`configuration:encoding, decoding`: how MCDR handles the server IO "
+"stream"
+msgstr ""
+
+#: ../quick_start/first_run.rst:128
+msgid ""
+"Read each section carefully and make sure you filled in the correct "
+"values."
+msgstr ""
+
+#: ../quick_start/first_run.rst:130
+msgid ""
+"As a simple example, this is all you need to aware for a vanilla "
+"Minecraft 1.21 server with Java 21:"
+msgstr ""
+
+#: ../quick_start/first_run.rst:143
+msgid ""
+"If you're confusing why this command is much logner than we mentioned "
+"earlier, make sure you have read those 4 sections carefully."
+msgstr ""
+
+#: ../quick_start/first_run.rst:146
+msgid "RCON"
+msgstr ""
+
+#: ../quick_start/first_run.rst:148
+msgid ""
+"Optionally, you may enable RCON protocol to make some specific plugins "
+"work properly or more efficiently. Check the details in "
+":ref:`configuration:rcon`"
+msgstr ""
+
+#: ../quick_start/first_run.rst:151
+msgid "Run"
+msgstr ""
+
+#: ../quick_start/first_run.rst:153
+msgid ""
+"Now, you should be able to launch MCDR, and it should start handling the "
+"server correctly"
+msgstr ""
+
+#: ../quick_start/first_run.rst:159
+msgid "An animated demo configured as above:"
+msgstr ""
+

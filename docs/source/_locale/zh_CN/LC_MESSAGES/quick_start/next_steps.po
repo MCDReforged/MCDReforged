@@ -1,0 +1,158 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2024, Fallen_Breath
+# This file is distributed under the same license as the MCDReforged
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: MCDReforged \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-10-08 12:01+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: zh_CN\n"
+"Language-Team: zh_CN <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.15.0\n"
+
+#: ../quick_start/next_steps.rst:3
+msgid "Next Steps"
+msgstr ""
+
+#: ../quick_start/next_steps.rst:5
+msgid "Now, you've got the basic knowledges of MCDR. What's next?"
+msgstr ""
+
+#: ../quick_start/next_steps.rst:8
+msgid "Plugins"
+msgstr ""
+
+#: ../quick_start/next_steps.rst:10
+msgid "MCDR is kind of a plugin-based framework. You may want to:"
+msgstr ""
+
+#: ../quick_start/next_steps.rst:12
+msgid ""
+"Have a look at the `Plugin Catalogue "
+"<https://github.com/MCDReforged/PluginCatalogue/>`__ to find some "
+"interesting plugins"
+msgstr ""
+
+#: ../quick_start/next_steps.rst:13
+msgid ""
+"Use :ref:`\\!!MCDR plg <command/mcdr:Plugin management>` to search and "
+"install plugins with their dependencies"
+msgstr ""
+
+#: ../quick_start/next_steps.rst:15
+msgid "If you have interest to develop one yourself:"
+msgstr ""
+
+#: ../quick_start/next_steps.rst:17
+msgid ""
+":doc:`Create your own plugin </plugin_dev/basic>`, and :doc:`publish it "
+"into the catalogue </plugin_dev/plugin_catalogue>`"
+msgstr ""
+
+#: ../quick_start/next_steps.rst:18
+msgid ""
+"We have official `Example Plugin "
+"<https://github.com/MCDReforged/ExamplePlugin>`__ and `Plugin Template "
+"<https://github.com/MCDReforged/PluginTemplate>`__ for you to start with"
+msgstr ""
+
+#: ../quick_start/next_steps.rst:19
+msgid ""
+":doc:`/code_references/index` may help you to understand the interfaces "
+"of MCDR"
+msgstr ""
+
+#: ../quick_start/next_steps.rst:20
+msgid ""
+"Check out the source code of popular plugins, even MCDR itself, to learn "
+"more"
+msgstr ""
+
+#: ../quick_start/next_steps.rst:23
+msgid "Commands"
+msgstr ""
+
+#: ../quick_start/next_steps.rst:25
+msgid ""
+"MCDR has its own command system. By tradition, whether built-ins or ones "
+"registered by plugins, most of them start with a ``!!``. Mentioned above,"
+" ``!!MCDR plg`` is one of the built-in commands."
+msgstr ""
+
+#: ../quick_start/next_steps.rst:27
+msgid "You may want to learn more of them: :doc:`/command/index`"
+msgstr ""
+
+#: ../quick_start/next_steps.rst:30
+msgid "Permission"
+msgstr ""
+
+#: ../quick_start/next_steps.rst:32
+msgid ""
+"MCDR has a permission system to control the access of commands. For "
+"example, most ``!!MCDR`` commands are only accessible for level 3 (Admin)"
+" users."
+msgstr ""
+
+#: ../quick_start/next_steps.rst:34
+msgid ""
+"Currently the permission system is quite simple, but it's enough for most"
+" cases."
+msgstr ""
+
+#: ../quick_start/next_steps.rst:36
+msgid "More details in: :doc:`/permission`"
+msgstr ""
+
+#: ../quick_start/next_steps.rst:39
+msgid "CLI"
+msgstr ""
+
+#: ../quick_start/next_steps.rst:41
+msgid ""
+"MCDR has a Command Line Interface to provide some useful tools for you. "
+"For example, you may manage plugins without launching the server!"
+msgstr ""
+
+#: ../quick_start/next_steps.rst:43
+msgid "More details in: :doc:`/cli/index`"
+msgstr ""
+
+#: ../quick_start/next_steps.rst:46
+msgid "Community"
+msgstr ""
+
+#: ../quick_start/next_steps.rst:48
+msgid ""
+"We have an organization on Github that hosts the source code for most "
+"parts of the MCDR project"
+msgstr ""
+
+#: ../quick_start/next_steps.rst:50
+msgid "Check it out: `MCDReforged@Github <https://github.com/MCDReforged>`__"
+msgstr ""
+
+#: ../quick_start/next_steps.rst:53
+msgid "Migrate"
+msgstr ""
+
+#: ../quick_start/next_steps.rst:55
+msgid ""
+"If you was a user of legacy versions of MCDR, you may want to check out "
+"the :doc:`/migrate/index`"
+msgstr ""
+
+#: ../quick_start/next_steps.rst:59
+msgid "Have fun with MCDR!"
+msgstr ""
+

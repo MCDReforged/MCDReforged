@@ -2,7 +2,7 @@
 What is MCDR?
 =============
 
-MCDReforged (abbr. MCDR) is a tool which provides the management ability of the Minecraft server using custom plugin system. It doesn't need to modify or mod the original Minecraft server at all
+MCDReforged (MCDR, hereinafter) is a tool which provides the management ability of the Minecraft server using custom plugin system. It doesn't need to modify or mod the original Minecraft server at all
 
 From in-game calculator, player high-light, scoreboard manipulate, structure file management to backup / rollback, you can control the whole world by MCDR and its plugins
 

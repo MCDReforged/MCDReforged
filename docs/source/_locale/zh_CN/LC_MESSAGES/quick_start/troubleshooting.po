@@ -1,0 +1,120 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2024, Fallen_Breath
+# This file is distributed under the same license as the MCDReforged
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: MCDReforged \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-10-08 12:01+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: zh_CN\n"
+"Language-Team: zh_CN <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.15.0\n"
+
+#: ../quick_start/troubleshooting.rst:3
+msgid "Troubleshooting"
+msgstr ""
+
+#: ../quick_start/troubleshooting.rst:5
+msgid ""
+"Have problems to make things work? Here are some common issues and their "
+"solutions"
+msgstr ""
+
+#: ../quick_start/troubleshooting.rst:8
+msgid "The server won't start"
+msgstr ""
+
+#: ../quick_start/troubleshooting.rst:10
+msgid "Check out your start command"
+msgstr ""
+
+#: ../quick_start/troubleshooting.rst:11
+msgid "Check if java is installed and added in PATH"
+msgstr ""
+
+#: ../quick_start/troubleshooting.rst:12
+msgid ""
+"If you're directing the start command to a batch or shellscript, try the "
+"actual command instead of the script"
+msgstr ""
+
+#: ../quick_start/troubleshooting.rst:14
+msgid "Learn more in :ref:`configuration:start_command`"
+msgstr ""
+
+#: ../quick_start/troubleshooting.rst:18
+msgid "Garbled text / UnicodeDecodeError"
+msgstr ""
+
+#: ../quick_start/troubleshooting.rst:20
+msgid "Usually, this is caused by the console encoding / decoding"
+msgstr ""
+
+#: ../quick_start/troubleshooting.rst:22
+msgid ""
+"MCDR use UTF-8 as default encoding and decoding, so try to use UTF-8 in "
+"everything related to the server. See :ref:`configuration:encoding, "
+"decoding`"
+msgstr ""
+
+#: ../quick_start/troubleshooting.rst:25
+msgid "Commands not working in game"
+msgstr ""
+
+#: ../quick_start/troubleshooting.rst:27
+msgid "MCDR handle commands by listening to the server's console output"
+msgstr ""
+
+#: ../quick_start/troubleshooting.rst:29
+msgid ""
+"Make sure you are using the correct :ref:`Server Handler "
+"<configuration:handler>`. If your server software is not supported by "
+"built-in handlers, you may need to :ref:`customize your own handler "
+"<customize/handler:Server Handler>`"
+msgstr ""
+
+#: ../quick_start/troubleshooting.rst:31
+msgid ""
+"If your server output is modified by mods or plugins, the handler may not"
+" be able to recognize the outputs. Try to disable all mods and plugins to"
+" see if the problem solved. If so, you may need to :ref:`customize your "
+"own handler <customize/handler:Server Handler>` to handle the modified "
+"outputs"
+msgstr ""
+
+#: ../quick_start/troubleshooting.rst:34
+msgid "Run with MCSManager"
+msgstr ""
+
+#: ../quick_start/troubleshooting.rst:36
+msgid "MCDR will not be actively compatible to MCSManager"
+msgstr ""
+
+#: ../quick_start/troubleshooting.rst:38
+msgid ""
+"However, if you use UTF-8 everywhere, and enable ``Emulation Terminal`` "
+"in MCSManager, MCDR should work fine with full functionality"
+msgstr ""
+
+#: ../quick_start/troubleshooting.rst:40
+msgid ""
+"If ``Emulation Terminal`` is disabled, you should set "
+":ref:`configuration:advanced_console` to ``false``"
+msgstr ""
+
+#: ../quick_start/troubleshooting.rst:44
+msgid ""
+"We do not guarantee the statement above to be up to date. If you "
+"encounter problems, do not report them to MCDR"
+msgstr ""
+

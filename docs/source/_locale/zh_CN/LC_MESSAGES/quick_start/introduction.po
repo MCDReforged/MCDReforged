@@ -1,0 +1,127 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2024, Fallen_Breath
+# This file is distributed under the same license as the MCDReforged
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: MCDReforged \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-10-08 12:07+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: zh_CN\n"
+"Language-Team: zh_CN <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.15.0\n"
+
+#: ../quick_start/introduction.rst:3
+msgid "What is MCDR?"
+msgstr ""
+
+#: ../quick_start/introduction.rst:5
+msgid ""
+"MCDReforged (MCDR, hereinafter) is a tool which provides the management "
+"ability of the Minecraft server using custom plugin system. It doesn't "
+"need to modify or mod the original Minecraft server at all"
+msgstr ""
+
+#: ../quick_start/introduction.rst:7
+msgid ""
+"From in-game calculator, player high-light, scoreboard manipulate, "
+"structure file management to backup / rollback, you can control the whole"
+" world by MCDR and its plugins"
+msgstr ""
+
+#: ../quick_start/introduction.rst:9
+msgid ""
+"Greatly thanks to chino_desu and his MCDaemon 1.0 for the idea of such a "
+"cool tool"
+msgstr ""
+
+#: ../quick_start/introduction.rst:12
+msgid "Advantage"
+msgstr ""
+
+#: ../quick_start/introduction.rst:15
+msgid "Vanilla!"
+msgstr ""
+
+#: ../quick_start/introduction.rst:17
+msgid ""
+"MCDR runs above the server. It doesn't need to modify the server at all, "
+"which keep everything **vanilla**"
+msgstr ""
+
+#: ../quick_start/introduction.rst:20
+msgid "Plugin System"
+msgstr ""
+
+#: ../quick_start/introduction.rst:22
+msgid ""
+"MCDR has a hot-reloadable plugin system. You don't need to shut down the "
+"server to update the plugins"
+msgstr ""
+
+#: ../quick_start/introduction.rst:25
+msgid "Compatibility"
+msgstr ""
+
+#: ../quick_start/introduction.rst:27
+msgid ""
+"We supports most popular server softwares (Vanilla, Fabric, Spigot, "
+"Paper, etc.)"
+msgstr ""
+
+#: ../quick_start/introduction.rst:29
+msgid "On multiple platforms (Windows, Linux, Mac, etc.)"
+msgstr ""
+
+#: ../quick_start/introduction.rst:32
+msgid "How it works?"
+msgstr ""
+
+#: ../quick_start/introduction.rst:34
+msgid ""
+"**TL;DR:** MCDR works like robot that stares at the server console, "
+"respond to server output quickly, and inputting commands for users"
+msgstr ""
+
+#: ../quick_start/introduction.rst:36
+msgid ""
+"MCDR uses `Popen "
+"<https://docs.python.org/3/library/subprocess.html#subprocess.Popen>`__ "
+"to start the server software as a sub-process, so it has the ability to "
+"control the standard input / out stream of the server"
+msgstr ""
+
+#: ../quick_start/introduction.rst:38
+msgid ""
+"Since the console output of a Minecraft server has a stable format and "
+"contains a large amount of useful information about the server, e.g. "
+"player chat messages, MCDR is able to parse and analyze the server "
+"output, abstract them into different events and dispatch them towards "
+"plugins for responding"
+msgstr ""
+
+#: ../quick_start/introduction.rst:40
+msgid ""
+"With the help of Minecraft command system, MCDR can send Minecraft "
+"commands via the standard input stream to affect the actual Minecraft "
+"server"
+msgstr ""
+
+#~ msgid ""
+#~ "MCDReforged (abbr. MCDR) is a tool "
+#~ "which provides the management ability of"
+#~ " the Minecraft server using custom "
+#~ "plugin system. It doesn't need to "
+#~ "modify or mod the original Minecraft "
+#~ "server at all"
+#~ msgstr ""
+
