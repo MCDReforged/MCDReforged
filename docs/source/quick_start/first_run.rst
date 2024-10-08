@@ -159,3 +159,11 @@ An animated demo configured as above:
 .. asciinema:: resources/run.cast
 
 |
+
+Also, test MCDR in game:
+
+.. asciinema:: resources/ingame.cast
+    :rows: 2
+    :theme: nord
+
+|

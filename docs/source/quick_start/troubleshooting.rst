@@ -5,7 +5,7 @@ Troubleshooting
 Have problems to make things work? Here are some common issues and their solutions
 
 The server won't start
-------------------------
+----------------------
 
 * Check out your start command
 * Check if java is installed and added in PATH
