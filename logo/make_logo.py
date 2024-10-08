@@ -1,5 +1,6 @@
 import base64
 import math
+import re
 from io import BytesIO
 from typing import List, NamedTuple, Optional
 
@@ -67,6 +68,13 @@ def make_polygon(points: List[Point], **kwargs) -> drawsvg.Path:
 
 	flatten = [x for point in points for x in point]
 	return drawsvg.Lines(*map(polish, flatten), close=True, **kwargs)
+
+
+def save_svg(img: drawsvg.Drawing, file_path: str):
+	svg = img.as_svg()
+	svg = re.sub(r' xmlns:xlink="http://www\.w3\.org/1999/xlink"([\n\r])', '\\1', svg, 1)  # pycharm says this is useless
+	with open(file_path, 'w', encoding='utf8', newline='\n') as f:
+		f.write(svg)
 
 
 def make(
@@ -183,10 +191,11 @@ f'''
 		text.append_line('MCDaemon', fill=text_brown)
 		text.append_line('Reforged', fill=text_gray, x=text_x, dy=text_size)
 		long.append(text)
-		long.save_svg(file_path)
+		save_svg(long, file_path)
 
 	else:
-		d.save_svg(file_path)
+		save_svg(d, file_path)
+
 
 def main():
 	make('logo.svg')
