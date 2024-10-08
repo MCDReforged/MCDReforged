@@ -84,7 +84,7 @@ def make(
 	cube_green1 = color_override or '#399B2A'
 	cube_green2 = color_override or '#397B0D'
 	cube_brown = color_override or '#865B3E'
-	text_brown = color_override or '#BC7649'
+	text_brown = color_override or '#C8723F'
 	text_gray = color_override or '#646464'
 
 	width = 100
