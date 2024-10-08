@@ -1,4 +1,5 @@
 import base64
+from io import BytesIO
 import math
 import os
 from typing import List, NamedTuple, Optional
@@ -16,17 +17,20 @@ class Point(NamedTuple):
 		return Point(self.x + other.x, self.y + other.y)
 
 
-def font_subset():
+def font_subset_uri():
+	'''Get a base64-encoded subset of the Minecrafter font as a data URI.'''
 	font = TTFont('font/Minecrafter.Reg.ttf')
+
 	subsetter = Subsetter()
 	subsetter.populate(text=''.join(set('MCDaemonReforged')))
 	subsetter.subset(font)
+
 	font.flavor = 'woff'
-	font.save('font/Minecrafter.min.woff')
 
+	file = BytesIO()
+	font.save(file)
 
-def font_to_url(font: str) -> str:
-	return 'data:font/ttf;base64,' + base64.b64encode(open(font, 'rb').read()).decode('utf-8')
+	return 'data:font/ttf;base64,' + base64.b64encode(file.getvalue()).decode('utf-8')
 
 
 def hexagon_points(r: float) -> List[Point]:
@@ -141,16 +145,13 @@ def make(
 		if hexagon_background or strip_padding:
 			raise ValueError('strip_padding and hexagon_background are incompatible with long')
 
-		if not os.path.exists('MineCrafter.min.woff'):
-			font_subset()
-
 		text_size = 40
 		text_x = 170
 		font_css = \
 f'''
 @font-face {{
 	font-family: "MineCrafter";
-	src: url({font_to_url('font/MineCrafter.min.woff')}) format("woff");
+	src: url({font_subset_uri()}) format("woff");
 }}
 '''
 		long = drawsvg.Drawing(
@@ -192,3 +193,4 @@ def main():
 
 if __name__ == '__main__':
 	main()
+	# font_subset()

@@ -34,6 +34,3 @@ __pycache__
 # these will be automatically generated at the first run
 /config.yml
 /permission.yml
-
-# subset of font
-/logo/font/*.min.woff
