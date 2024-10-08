@@ -35,7 +35,7 @@ Run with MCSManager
 
 .. warning::
 
-    This part may not being up to date. If you encounter problems, do not report them to MCDR
+    This part may not being up to date. If you encounter any problems, do not report them to MCDR
 
     For more infomations, get in touch with their community: `Github Repo <https://github.com/MCSManager/MCSManager>`__, `Documentation <https://docs.mcsmanager.com/>`__
 
