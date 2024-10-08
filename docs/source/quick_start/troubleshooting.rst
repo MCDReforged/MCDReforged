@@ -28,18 +28,24 @@ Commands not working
 - **All commands are not responding in game, but working in console**
 - **Some commands perform incorrectly for specific players**
 
-    MCDR handle commands by listening to the server's console output
+    MCDR handle commands by listening to the server's console output. Make sure you are using the correct :ref:`Server Handler <configuration:handler>`
 
-    Make sure you are using the correct :ref:`Server Handler <configuration:handler>`. If your server software is not supported by built-in handlers, you may need to :ref:`customize your own handler <customize/handler:Server Handler>`
+    Your server may unexpectedly not compatible with handlers:
+ 
+    Maybe our server software is unique that not supported by built-in handlers
 
-    Your server output may have been modified by mods or plugins (usually something like "player title/profession", "better console"), that the handler may not be able to recognize the outputs. Try to disable all mods and plugins to see if the problem solved. If so, you may need to :ref:`customize your own handler <customize/handler:Server Handler>` to handle the modified outputs
+    Maybe your server output is different. For example, if you allow players that not following the Mojang naming rule (``[A-Za-z0-9_]{3,16}``), the handler will not recognize them
+
+    Maybe your server output have been modified by mods or plugins (usually something like "player title/profession", "better console"), that the handler can't recognize them. To be confirmed, disable all mods and plugins and see if the problem solved
+
+    If your server has one of these problems, you may need to :ref:`customize your own handler <customize/handler:Server Handler>`
 
 - **Some plugin commands work neither in game nor the console**
 - **Some plugin commands perform incorrectly in all conditions**
 
     Check if the plugin is enabled and loaded correctly. Check the logs to see if there are any errors or warnings related to the plugin. Check the plugin configuration
 
-    Read the README or documentation of the plugin to see if it has any special requirements. Some plugins may require additional permissions or configurations
+    Check the README or documentation of the plugin to see if it has any special requirements. Some plugins may require additional permissions or configurations
 
     Some plugins may have conflicts with others. Try to disable other plugins to see if the problem solved
 
