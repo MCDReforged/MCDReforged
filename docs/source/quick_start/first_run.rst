@@ -127,11 +127,9 @@ For most users, there are 4 parts of the configuration that you need to be aware
 
 Read each section carefully and make sure you filled in the correct values.
 
-As a simple example, this is all you need to aware for a vanilla Minecraft 1.21 server with Java 21:
+As a simple example, this is the ones you need to aware for a vanilla Minecraft 1.21 server with Java 21:
 
 .. code-block:: yaml
-
-    language: en_us
 
     start_command: java -Dfile.encoding=UTF-8 -Dstdout.encoding=UTF-8 -Dstderr.encoding=UTF-8 -Xms1G -Xmx2G -jar minecraft_server.jar nogui
 
@@ -140,7 +138,7 @@ As a simple example, this is all you need to aware for a vanilla Minecraft 1.21 
     encoding: utf8
     decoding: utf8
 
-If you're confusing why this command is much logner than we mentioned earlier, make sure you have read those 4 sections carefully.
+If you're confusing why this command is much logner than we mentioned earlier, read the **encoding, decoding** section again
 
 RCON
 ~~~~
