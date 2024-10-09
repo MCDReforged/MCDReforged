@@ -14,10 +14,10 @@ Now you have installed MCDR, it's time to run it for the first time
     
     Which means, you should know:
 
-    * The Minecraft server softwares: what are they, how to configure (one of) them
-    * Start command of Minecraft server: what is it, what its arguments mean
+    * The Minecraft server softwares: what they are, how to configure (one of) them
+    * Start command of Minecraft server: what it is, what its arguments mean
     * Console of the server: what it prints, what command can you send to it
-    * YAML and JSON files: what are they, how to edit them
+    * YAML and JSON files: what they are, how to edit them
     
     If you have not, Google is your friend
 
