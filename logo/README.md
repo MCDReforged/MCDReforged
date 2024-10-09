@@ -1,4 +1,4 @@
-![logo](logo.svg)
+![logo](images/logo.svg)
 
 # MCDReforged Logos
 
@@ -10,7 +10,7 @@ pip install -r requirements.txt
 python make_logo.py
 ```
 
-Then converted the [logo_long.svg](logo_long.svg) to [logo_long.png](../logo_long.png) at repository root. Example tools:
+Then converted the [logo_long.svg](images/logo_long.svg) to [logo_long.png](../logo_long.png) at repository root. Example tools:
 
 - svg to png: https://vincerubinetti.github.io/svg-to-png/
 - png lossless compressing: https://compressor.io/

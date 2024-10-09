@@ -3,6 +3,7 @@ import functools
 import math
 import re
 from io import BytesIO
+from pathlib import Path
 from typing import List, NamedTuple, Optional
 
 import drawsvg
@@ -63,7 +64,7 @@ def make_polygon(points: List[Point], **kwargs) -> drawsvg.Path:
 	return drawsvg.Lines(*map(polish, flatten), close=True, **kwargs)
 
 
-def save_svg(img: drawsvg.Drawing, file_path: str):
+def save_svg(img: drawsvg.Drawing, file_path: Path):
 	svg = img.as_svg()
 	svg = re.sub(r' xmlns:xlink="http://www\.w3\.org/1999/xlink"([\n\r])', '\\1', svg, 1)  # pycharm says this is useless
 	with open(file_path, 'w', encoding='utf8', newline='\n') as f:
@@ -71,7 +72,7 @@ def save_svg(img: drawsvg.Drawing, file_path: str):
 
 
 def make(
-		file_path: str,
+		file_path: Path,
 		hexagon_background: bool = False,
 		full_background: bool = False,
 		strip_padding: bool = False,
@@ -191,16 +192,19 @@ def make(
 
 
 def main():
-	make('logo.svg')
-	make('logo_compact.svg', strip_padding=True)
-	make('logo_full_background.svg', full_background=True)
-	make('logo_full_background_compact.svg', full_background=True, strip_padding=True)
-	make('logo_hexagon_background.svg', hexagon_background=True)
-	make('logo_white.svg', color_override='white')
-	make('logo_white_compact.svg', strip_padding=True, color_override='white')
-	make('logo_long.svg', long=True)
-	make('logo_long_white.svg', long=True, color_override='white')
-	make('logo_long_full_background.svg', long=True, full_background=True)
+	output_dir = Path('images')
+	output_dir.mkdir(exist_ok=True)
+
+	make(output_dir / 'logo.svg')
+	make(output_dir / 'logo_compact.svg', strip_padding=True)
+	make(output_dir / 'logo_full_background.svg', full_background=True)
+	make(output_dir / 'logo_full_background_compact.svg', full_background=True, strip_padding=True)
+	make(output_dir / 'logo_hexagon_background.svg', hexagon_background=True)
+	make(output_dir / 'logo_white.svg', color_override='white')
+	make(output_dir / 'logo_white_compact.svg', strip_padding=True, color_override='white')
+	make(output_dir / 'logo_long.svg', long=True)
+	make(output_dir / 'logo_long_white.svg', long=True, color_override='white')
+	make(output_dir / 'logo_long_full_background.svg', long=True, full_background=True)
 
 
 if __name__ == '__main__':
