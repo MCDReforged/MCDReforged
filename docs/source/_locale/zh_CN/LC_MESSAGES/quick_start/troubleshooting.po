@@ -1,15 +1,9 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2024, Fallen_Breath
-# This file is distributed under the same license as the MCDReforged
-# package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
-#
-#, fuzzy
+
 msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-08 12:01+0800\n"
+"POT-Creation-Date: 2024-10-09 11:50+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -43,78 +37,186 @@ msgid "Check if java is installed and added in PATH"
 msgstr ""
 
 #: ../quick_start/troubleshooting.rst:12
+msgid "Try to run the server without MCDR, using the same command you configured"
+msgstr ""
+
+#: ../quick_start/troubleshooting.rst:13
 msgid ""
 "If you're directing the start command to a batch or shellscript, try the "
 "actual command instead of the script"
 msgstr ""
 
-#: ../quick_start/troubleshooting.rst:14
+#: ../quick_start/troubleshooting.rst:15
 msgid "Learn more in :ref:`configuration:start_command`"
 msgstr ""
 
-#: ../quick_start/troubleshooting.rst:18
+#: ../quick_start/troubleshooting.rst:19
 msgid "Garbled text / UnicodeDecodeError"
 msgstr ""
 
-#: ../quick_start/troubleshooting.rst:20
+#: ../quick_start/troubleshooting.rst:21
 msgid "Usually, this is caused by the console encoding / decoding"
 msgstr ""
 
-#: ../quick_start/troubleshooting.rst:22
+#: ../quick_start/troubleshooting.rst:23
 msgid ""
 "MCDR use UTF-8 as default encoding and decoding, so try to use UTF-8 in "
 "everything related to the server. See :ref:`configuration:encoding, "
 "decoding`"
 msgstr ""
 
-#: ../quick_start/troubleshooting.rst:25
-msgid "Commands not working in game"
+#: ../quick_start/troubleshooting.rst:26
+msgid "Commands not working"
 msgstr ""
 
-#: ../quick_start/troubleshooting.rst:27
-msgid "MCDR handle commands by listening to the server's console output"
+#: ../quick_start/troubleshooting.rst:28
+msgid "**All commands are not responding in game, but working in console**"
 msgstr ""
 
 #: ../quick_start/troubleshooting.rst:29
-msgid ""
-"Make sure you are using the correct :ref:`Server Handler "
-"<configuration:handler>`. If your server software is not supported by "
-"built-in handlers, you may need to :ref:`customize your own handler "
-"<customize/handler:Server Handler>`"
+msgid "**Some commands perform incorrectly for specific players**"
 msgstr ""
 
 #: ../quick_start/troubleshooting.rst:31
 msgid ""
-"If your server output is modified by mods or plugins, the handler may not"
-" be able to recognize the outputs. Try to disable all mods and plugins to"
-" see if the problem solved. If so, you may need to :ref:`customize your "
-"own handler <customize/handler:Server Handler>` to handle the modified "
-"outputs"
+"MCDR handle commands by listening to the server's console output. Make "
+"sure you are using the correct :ref:`Server Handler "
+"<configuration:handler>`"
 msgstr ""
 
-#: ../quick_start/troubleshooting.rst:34
+#: ../quick_start/troubleshooting.rst:33
+msgid "Your server may unexpectedly not compatible with handlers:"
+msgstr ""
+
+#: ../quick_start/troubleshooting.rst:35
+msgid ""
+"Maybe our server software is unique that not supported by built-in "
+"handlers"
+msgstr ""
+
+#: ../quick_start/troubleshooting.rst:37
+msgid ""
+"Maybe your server output is different. For example, if you allow players "
+"that not following the Mojang naming rule (``[A-Za-z0-9_]{3,16}``), the "
+"handler will not recognize them"
+msgstr ""
+
+#: ../quick_start/troubleshooting.rst:39
+msgid ""
+"Maybe your server output have been modified by mods or plugins (usually "
+"something like \"player title/profession\", \"better console\"), that the"
+" handler can't recognize them. To be confirmed, disable all mods and "
+"plugins and see if the problem solved"
+msgstr ""
+
+#: ../quick_start/troubleshooting.rst:41
+msgid ""
+"If your server has one of these problems, you may need to :ref:`customize"
+" your own handler <customize/handler:Server Handler>`"
+msgstr ""
+
+#: ../quick_start/troubleshooting.rst:43
+msgid "**Some plugin commands work neither in game nor the console**"
+msgstr ""
+
+#: ../quick_start/troubleshooting.rst:44
+msgid "**Some plugin commands perform incorrectly in all conditions**"
+msgstr ""
+
+#: ../quick_start/troubleshooting.rst:46
+msgid ""
+"Check if the plugin is enabled and loaded correctly. Check the logs to "
+"see if there are any errors or warnings related to the plugin. Check the "
+"plugin configuration"
+msgstr ""
+
+#: ../quick_start/troubleshooting.rst:48
+msgid ""
+"Check the README or documentation of the plugin to see if it has any "
+"special requirements. Some plugins may require additional permissions or "
+"configurations"
+msgstr ""
+
+#: ../quick_start/troubleshooting.rst:50
+msgid ""
+"Some plugins may have conflicts with others. Try to disable other plugins"
+" to see if the problem solved"
+msgstr ""
+
+#: ../quick_start/troubleshooting.rst:52
+msgid ""
+"If the problem still exists, try to report it to the plugin's author or "
+"community"
+msgstr ""
+
+#: ../quick_start/troubleshooting.rst:55
 msgid "Run with MCSManager"
 msgstr ""
 
-#: ../quick_start/troubleshooting.rst:36
-msgid "MCDR will not be actively compatible to MCSManager"
+#: ../quick_start/troubleshooting.rst:59
+msgid ""
+"This part may not being up to date. If you encounter any problems, do not"
+" report them to MCDR"
 msgstr ""
 
-#: ../quick_start/troubleshooting.rst:38
+#: ../quick_start/troubleshooting.rst:61
+msgid ""
+"For more infomations, get in touch with their community: `Github Repo "
+"<https://github.com/MCSManager/MCSManager>`__, `Documentation "
+"<https://docs.mcsmanager.com/>`__"
+msgstr ""
+
+#: ../quick_start/troubleshooting.rst:63
+msgid "MCDR did not specificly designed to adapt MCSManager"
+msgstr ""
+
+#: ../quick_start/troubleshooting.rst:65
 msgid ""
 "However, if you use UTF-8 everywhere, and enable ``Emulation Terminal`` "
 "in MCSManager, MCDR should work fine with full functionality"
 msgstr ""
 
-#: ../quick_start/troubleshooting.rst:40
+#: ../quick_start/troubleshooting.rst:67
 msgid ""
 "If ``Emulation Terminal`` is disabled, you should set "
 ":ref:`configuration:advanced_console` to ``false``"
 msgstr ""
 
-#: ../quick_start/troubleshooting.rst:44
-msgid ""
-"We do not guarantee the statement above to be up to date. If you "
-"encounter problems, do not report them to MCDR"
-msgstr ""
+#~ msgid "Commands not working in game"
+#~ msgstr ""
+
+#~ msgid "MCDR handle commands by listening to the server's console output"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Make sure you are using the "
+#~ "correct :ref:`Server Handler "
+#~ "<configuration:handler>`. If your server "
+#~ "software is not supported by built-"
+#~ "in handlers, you may need to "
+#~ ":ref:`customize your own handler "
+#~ "<customize/handler:Server Handler>`"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "If your server output is modified "
+#~ "by mods or plugins, the handler "
+#~ "may not be able to recognize the"
+#~ " outputs. Try to disable all mods "
+#~ "and plugins to see if the problem"
+#~ " solved. If so, you may need to"
+#~ " :ref:`customize your own handler "
+#~ "<customize/handler:Server Handler>` to handle "
+#~ "the modified outputs"
+#~ msgstr ""
+
+#~ msgid "MCDR will not be actively compatible to MCSManager"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "We do not guarantee the statement "
+#~ "above to be up to date. If "
+#~ "you encounter problems, do not report"
+#~ " them to MCDR"
+#~ msgstr ""
 

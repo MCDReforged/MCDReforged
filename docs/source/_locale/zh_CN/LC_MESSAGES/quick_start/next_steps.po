@@ -1,10 +1,4 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2024, Fallen_Breath
-# This file is distributed under the same license as the MCDReforged
-# package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
-#
-#, fuzzy
+
 msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"

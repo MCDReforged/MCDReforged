@@ -1,15 +1,9 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2024, Fallen_Breath
-# This file is distributed under the same license as the MCDReforged
-# package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
-#
-#, fuzzy
+
 msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-08 12:07+0800\n"
+"POT-Creation-Date: 2024-10-09 11:50+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -21,21 +15,21 @@ msgstr ""
 "Generated-By: Babel 2.15.0\n"
 
 #: ../quick_start/introduction.rst:3
-msgid "What is MCDR?"
+msgid "What is MCDR"
 msgstr ""
 
 #: ../quick_start/introduction.rst:5
 msgid ""
-"MCDReforged (MCDR, hereinafter) is a tool which provides the management "
-"ability of the Minecraft server using custom plugin system. It doesn't "
-"need to modify or mod the original Minecraft server at all"
+"MCDReforged (MCDR, hereinafter) is a tool to manage your Minecraft server"
+" with the custom plugin system. No need to modify the original Minecraft "
+"server at all"
 msgstr ""
 
 #: ../quick_start/introduction.rst:7
 msgid ""
-"From in-game calculator, player high-light, scoreboard manipulate, "
-"structure file management to backup / rollback, you can control the whole"
-" world by MCDR and its plugins"
+"In-game calculator, player high-light, scoreboard manipulate, structure "
+"file management, backup / rollback... you can control the whole world "
+"with MCDR and its plugins"
 msgstr ""
 
 #: ../quick_start/introduction.rst:9
@@ -49,7 +43,7 @@ msgid "Advantage"
 msgstr ""
 
 #: ../quick_start/introduction.rst:15
-msgid "Vanilla!"
+msgid "Vanilla"
 msgstr ""
 
 #: ../quick_start/introduction.rst:17
@@ -83,7 +77,7 @@ msgid "On multiple platforms (Windows, Linux, Mac, etc.)"
 msgstr ""
 
 #: ../quick_start/introduction.rst:32
-msgid "How it works?"
+msgid "How it works"
 msgstr ""
 
 #: ../quick_start/introduction.rst:34
@@ -123,5 +117,31 @@ msgstr ""
 #~ "plugin system. It doesn't need to "
 #~ "modify or mod the original Minecraft "
 #~ "server at all"
+#~ msgstr ""
+
+#~ msgid "What is MCDR?"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "MCDReforged (MCDR, hereinafter) is a "
+#~ "tool which provides the management "
+#~ "ability of the Minecraft server using"
+#~ " custom plugin system. It doesn't "
+#~ "need to modify or mod the original"
+#~ " Minecraft server at all"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "From in-game calculator, player high-"
+#~ "light, scoreboard manipulate, structure file"
+#~ " management to backup / rollback, you"
+#~ " can control the whole world by "
+#~ "MCDR and its plugins"
+#~ msgstr ""
+
+#~ msgid "Vanilla!"
+#~ msgstr ""
+
+#~ msgid "How it works?"
 #~ msgstr ""
 

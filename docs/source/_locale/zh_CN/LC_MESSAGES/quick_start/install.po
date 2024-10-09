@@ -1,15 +1,9 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2024, Fallen_Breath
-# This file is distributed under the same license as the MCDReforged
-# package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
-#
-#, fuzzy
+
 msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-08 12:01+0800\n"
+"POT-Creation-Date: 2024-10-09 11:50+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -51,7 +45,7 @@ msgstr ""
 #: ../quick_start/install.rst:22
 msgid ""
 "MCDR is written and runs in Python 3. Make sure you have Python 3.8 or "
-"later installed"
+"later with pip3 installed"
 msgstr ""
 
 #: ../quick_start/install.rst:24
@@ -83,242 +77,427 @@ msgid ">= 3.8"
 msgstr ""
 
 #: ../quick_start/install.rst:37
-msgid "Install using pip...?"
+msgid "Install using pip"
 msgstr ""
 
 #: ../quick_start/install.rst:39
 msgid ""
-"MCDR is available in `PyPI <https://pypi.org/project/mcdreforged>`__, "
-"which means it can be installed via the ``pip`` command:"
+"MCDR is available in `PyPI <https://pypi.org/project/mcdreforged>`__, it "
+"can reasonably be installed via the ``pip`` command:"
 msgstr ""
 
-#: ../quick_start/install.rst:46
+#: ../quick_start/install.rst:54
 msgid "Externally managed environment"
 msgstr ""
 
-#: ../quick_start/install.rst:48
+#: ../quick_start/install.rst:56
 msgid ""
 "If you're using Windows, the command above should work fine, MCDR will be"
 " installed to global environment - you may ignore this section"
 msgstr ""
 
-#: ../quick_start/install.rst:50
+#: ../quick_start/install.rst:58
 msgid ""
-"However, on Linux and Mac OS, if you're using a newer version of Python, "
-"you'll get something like this when you run pip install:"
+"For Linux and Mac OS, it's not recommended to install MCDR system-wide, "
+"because it can cause conflicts with other Python packages and affect "
+"system dependencies"
+msgstr ""
+
+#: ../quick_start/install.rst:60
+msgid ""
+"System-wide install also makes version management difficult and requires "
+"administrator privileges, increasing security risks"
+msgstr ""
+
+#: ../quick_start/install.rst:63
+msgid ""
+"For the same reason, you may get a ``externally-managed-environment`` "
+"error on pip install"
+msgstr ""
+
+#: ../quick_start/install.rst:65
+msgid ""
+"See `PEP 668 <https://peps.python.org/pep-0668/>`__ for the detailed "
+"specification"
+msgstr ""
+
+#: ../quick_start/install.rst:67
+msgid ""
+"It's safer to keep the installation isolated. As workarounds, there're "
+"multiple options for you. For a conclusion:"
+msgstr ""
+
+#: ../quick_start/install.rst:72
+msgid "Method"
+msgstr ""
+
+#: ../quick_start/install.rst:73
+msgid "Pros"
+msgstr ""
+
+#: ../quick_start/install.rst:74
+msgid "Cons"
+msgstr ""
+
+#: ../quick_start/install.rst:75
+msgid "pip"
 msgstr ""
 
 #: ../quick_start/install.rst:76
-msgid ""
-"That's because of the `PEP 668 <https://peps.python.org/pep-0668/>`__, "
-"which was introduced to avoid pip conflicts with the system package "
-"manager (apt, yum, pacman, etc.)"
+msgid "Native, always available"
+msgstr ""
+
+#: ../quick_start/install.rst:77
+msgid "Not isolated, may affect global packages, requires admin privilege"
 msgstr ""
 
 #: ../quick_start/install.rst:78
-msgid "As workarounds, there're multiple options for you"
+msgid "pipx"
+msgstr ""
+
+#: ../quick_start/install.rst:79
+msgid "Simplest"
+msgstr ""
+
+#: ../quick_start/install.rst:80
+msgid "3rd party, different command set"
 msgstr ""
 
 #: ../quick_start/install.rst:81
-msgid "Using pipx"
+msgid "venv"
+msgstr ""
+
+#: ../quick_start/install.rst:82
+msgid "Native support"
 msgstr ""
 
 #: ../quick_start/install.rst:83
+msgid "Requires manual environment activation"
+msgstr ""
+
+#: ../quick_start/install.rst:84
+msgid "docker"
+msgstr ""
+
+#: ../quick_start/install.rst:85
+msgid "Reliable across environments"
+msgstr ""
+
+#: ../quick_start/install.rst:86
+msgid "More dependencies and disk space, convoluted learning path"
+msgstr ""
+
+#: ../quick_start/install.rst:87
+msgid "system package"
+msgstr ""
+
+#: ../quick_start/install.rst:88
+msgid "\\-"
+msgstr ""
+
+#: ../quick_start/install.rst:89
+msgid "Same as pip, **not recommended**"
+msgstr ""
+
+#: ../quick_start/install.rst:92
+msgid "Using pipx"
+msgstr ""
+
+#: ../quick_start/install.rst:94
 msgid ""
 "Maybe the simplest solution for most users, but requires to use the "
 "third-party tool `pipx <https://pipx.pypa.io/>`__, which is designed to "
 "installing and running Python applications in isolated environments"
 msgstr ""
 
-#: ../quick_start/install.rst:85
+#: ../quick_start/install.rst:96
 msgid ""
 "Install pipx refer to its `official documentation "
 "<https://pipx.pypa.io/stable/#install-pipx>`__"
 msgstr ""
 
-#: ../quick_start/install.rst:87
+#: ../quick_start/install.rst:98
 msgid "Then install MCDR using pipx:"
 msgstr ""
 
-#: ../quick_start/install.rst:93
+#: ../quick_start/install.rst:104
 msgid "When a new version of MCDR available, you may take the upgrade by:"
 msgstr ""
 
-#: ../quick_start/install.rst:106
+#: ../quick_start/install.rst:117
 msgid ""
-"In this way, MCDR will be installed in an isolated environment. Python "
-"packages required by MCDR plugins should be installed by:"
+"In this way, MCDR will be installed in an isolated environment. Instead "
+"of ``pip install <package_name>``, Python packages required by MCDR "
+"plugins should be installed by:"
 msgstr ""
 
-#: ../quick_start/install.rst:108
+#: ../quick_start/install.rst:119
 msgid "``pipx inject mcdreforged <package_name>``"
 msgstr ""
 
-#: ../quick_start/install.rst:109
+#: ../quick_start/install.rst:120
 msgid "or ``pipx inject mcdreforged -r requirements.txt``"
 msgstr ""
 
-#: ../quick_start/install.rst:111
+#: ../quick_start/install.rst:122
 msgid ""
 "More conveniently, use the :ref:`\\!!MCDR plg command "
 "<command/mcdr:Plugin management>` to install plugins with their "
 "dependencies"
 msgstr ""
 
-#: ../quick_start/install.rst:115
+#: ../quick_start/install.rst:126
 msgid "Using virtual environment"
 msgstr ""
 
-#: ../quick_start/install.rst:117
+#: ../quick_start/install.rst:128
 msgid ""
 "For the most native, but more complicated option, you can create a "
 "virtual environment and install MCDR in it"
 msgstr ""
 
-#: ../quick_start/install.rst:119
-msgid "Create a virtual environment, ``.venv`` for example, by:"
-msgstr ""
-
-#: ../quick_start/install.rst:125
-msgid ""
-"Activate it by: (`Reference <https://docs.python.org/3/library/venv.html"
-"#how-venvs-work>`__)"
-msgstr ""
-
-#: ../quick_start/install.rst:128
-msgid "Platform"
-msgstr ""
-
-#: ../quick_start/install.rst:128
-msgid "Shell"
-msgstr ""
-
-#: ../quick_start/install.rst:128
-msgid "Command to activate virtual environment"
-msgstr ""
-
 #: ../quick_start/install.rst:130
-msgid "POSIX"
-msgstr ""
-
-#: ../quick_start/install.rst:130
-msgid "bash/zsh"
-msgstr ""
-
-#: ../quick_start/install.rst:130
-msgid "$ source .venv/bin/activate"
-msgstr ""
-
-#: ../quick_start/install.rst:132
-msgid "fish"
-msgstr ""
-
-#: ../quick_start/install.rst:132
-msgid "$ source .venv/bin/activate.fish"
-msgstr ""
-
-#: ../quick_start/install.rst:134
-msgid "csh/tcsh"
-msgstr ""
-
-#: ../quick_start/install.rst:134
-msgid "$ source .venv/bin/activate.csh"
-msgstr ""
-
-#: ../quick_start/install.rst:136 ../quick_start/install.rst:140
-msgid "PowerShell"
+msgid "Create a virtual environment by:"
 msgstr ""
 
 #: ../quick_start/install.rst:136
-msgid "$ .venv/bin/Activate.ps1"
+msgid "``venv`` for example:"
 msgstr ""
 
-#: ../quick_start/install.rst:138
-msgid "Windows"
+#: ../quick_start/install.rst:142
+msgid "Activate it by:"
 msgstr ""
 
-#: ../quick_start/install.rst:138
-msgid "cmd.exe"
+#: ../quick_start/install.rst:145
+msgid "Platform"
 msgstr ""
 
-#: ../quick_start/install.rst:138
-msgid "> .venv\\\\Scripts\\\\activate.bat"
+#: ../quick_start/install.rst:145
+msgid "Shell"
 msgstr ""
 
-#: ../quick_start/install.rst:140
-msgid "PS > .venv\\\\Scripts\\\\Activate.ps1"
+#: ../quick_start/install.rst:145
+msgid "Command to activate virtual environment"
 msgstr ""
 
-#: ../quick_start/install.rst:143
-msgid "Then, install MCDR using pip:"
+#: ../quick_start/install.rst:147
+msgid "POSIX"
+msgstr ""
+
+#: ../quick_start/install.rst:147
+msgid "bash/zsh"
+msgstr ""
+
+#: ../quick_start/install.rst:147
+msgid "$ source venv/bin/activate"
 msgstr ""
 
 #: ../quick_start/install.rst:149
-msgid "When a new version of MCDR available, you may upgrade MCDR by:"
+msgid "fish"
+msgstr ""
+
+#: ../quick_start/install.rst:149
+msgid "$ source venv/bin/activate.fish"
+msgstr ""
+
+#: ../quick_start/install.rst:151
+msgid "csh/tcsh"
+msgstr ""
+
+#: ../quick_start/install.rst:151
+msgid "$ source venv/bin/activate.csh"
+msgstr ""
+
+#: ../quick_start/install.rst:153 ../quick_start/install.rst:157
+msgid "PowerShell"
+msgstr ""
+
+#: ../quick_start/install.rst:153
+msgid "$ venv/bin/Activate.ps1"
 msgstr ""
 
 #: ../quick_start/install.rst:155
+msgid "Windows"
+msgstr ""
+
+#: ../quick_start/install.rst:155
+msgid "cmd.exe"
+msgstr ""
+
+#: ../quick_start/install.rst:155
+msgid "> venv\\\\Scripts\\\\activate.bat"
+msgstr ""
+
+#: ../quick_start/install.rst:157
+msgid "PS > venv\\\\Scripts\\\\Activate.ps1"
+msgstr ""
+
+#: ../quick_start/install.rst:160
+msgid "Then, install MCDR using pip:"
+msgstr ""
+
+#: ../quick_start/install.rst:166
+msgid "When a new version of MCDR available, you may upgrade MCDR by:"
+msgstr ""
+
+#: ../quick_start/install.rst:172
 msgid "An animated demo with bash:"
 msgstr ""
 
-#: ../quick_start/install.rst:164
+#: ../quick_start/install.rst:181
 msgid ""
 "In this way, you must activate the virtual environment every time you "
 "want to use MCDR, or install packages for MCDR plugins"
 msgstr ""
 
-#: ../quick_start/install.rst:166
+#: ../quick_start/install.rst:185
 msgid ""
-"For more information about virtual environments, See `Python Docs "
-"<https://docs.python.org/3/library/venv.html>`__"
+"Python Doc: `How venvs work <https://docs.python.org/3/library/venv.html"
+"#how-venvs-work>`__"
 msgstr ""
 
-#: ../quick_start/install.rst:169
+#: ../quick_start/install.rst:188
 msgid "Using Docker"
 msgstr ""
 
-#: ../quick_start/install.rst:171
+#: ../quick_start/install.rst:190
 msgid ""
 "MCDR also provides Docker images as an option. See :doc:`/docker` for "
 "more details"
 msgstr ""
 
-#: ../quick_start/install.rst:173
+#: ../quick_start/install.rst:192
 msgid ""
 "Specify MCDR version by specify the tag of Docker image. If you use "
 "``latest``, MCDR should always being up to date"
 msgstr ""
 
-#: ../quick_start/install.rst:175
+#: ../quick_start/install.rst:194
 msgid ""
 "Compared to the two methods above, Docker has a more convoluted learning "
 "path, but convenient for some advanced usages"
 msgstr ""
 
-#: ../quick_start/install.rst:178
-msgid "System package manager?"
+#: ../quick_start/install.rst:197
+msgid "System package manager"
 msgstr ""
 
-#: ../quick_start/install.rst:180
+#: ../quick_start/install.rst:199
 msgid ""
 "You may found MCDR in some package repositories, AUR for example. "
-"However, it's **definately not recommended** to use system package "
-"manager to install MCDR, because it's hard to manage the dependencies of "
-"MCDR plugins in this way"
+"However, it's **definately not recommended** to use a system package "
+"manager to install MCDR. Not only it has all the same problem as the "
+"system-wide pip install, it's also hard to manage the dependencies of "
+"MCDR plugins"
 msgstr ""
 
-#: ../quick_start/install.rst:183
+#: ../quick_start/install.rst:202
 msgid "Accelerate the installation"
 msgstr ""
 
-#: ../quick_start/install.rst:185
+#: ../quick_start/install.rst:204
 msgid ""
 "For users in some areas, ``pip`` and ``pipx`` may be very slow. You can "
-"use a mirror to accelerate the installation. Here's an example for "
+"use a mirror to accelerate the installation. Here's an example with "
 "Tsinghua University TUNA mirror:"
 msgstr ""
 
-#: ../quick_start/install.rst:195
+#: ../quick_start/install.rst:214
 msgid "Or simply set a global index-url by:"
 msgstr ""
+
+#~ msgid ""
+#~ "MCDR is written and runs in Python"
+#~ " 3. Make sure you have Python "
+#~ "3.8 or later installed"
+#~ msgstr ""
+
+#~ msgid "Install using pip...?"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "MCDR is available in `PyPI "
+#~ "<https://pypi.org/project/mcdreforged>`__, which means "
+#~ "it can be installed via the "
+#~ "``pip`` command:"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "However, on Linux and Mac OS, if"
+#~ " you're using a newer version of "
+#~ "Python, you'll get something like this"
+#~ " when you run pip install:"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "That's because of the `PEP 668 "
+#~ "<https://peps.python.org/pep-0668/>`__, which was "
+#~ "introduced to avoid pip conflicts with"
+#~ " the system package manager (apt, "
+#~ "yum, pacman, etc.)"
+#~ msgstr ""
+
+#~ msgid "As workarounds, there're multiple options for you"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "In this way, MCDR will be "
+#~ "installed in an isolated environment. "
+#~ "Python packages required by MCDR plugins"
+#~ " should be installed by:"
+#~ msgstr ""
+
+#~ msgid "Create a virtual environment, ``.venv`` for example, by:"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Activate it by: (`Reference "
+#~ "<https://docs.python.org/3/library/venv.html#how-venvs-"
+#~ "work>`__)"
+#~ msgstr ""
+
+#~ msgid "$ source .venv/bin/activate"
+#~ msgstr ""
+
+#~ msgid "$ source .venv/bin/activate.fish"
+#~ msgstr ""
+
+#~ msgid "$ source .venv/bin/activate.csh"
+#~ msgstr ""
+
+#~ msgid "$ .venv/bin/Activate.ps1"
+#~ msgstr ""
+
+#~ msgid "> .venv\\\\Scripts\\\\activate.bat"
+#~ msgstr ""
+
+#~ msgid "PS > .venv\\\\Scripts\\\\Activate.ps1"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "For more information about virtual "
+#~ "environments, See `Python Docs "
+#~ "<https://docs.python.org/3/library/venv.html>`__"
+#~ msgstr ""
+
+#~ msgid "System package manager?"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "You may found MCDR in some package"
+#~ " repositories, AUR for example. However,"
+#~ " it's **definately not recommended** to "
+#~ "use system package manager to install"
+#~ " MCDR, because it's hard to manage"
+#~ " the dependencies of MCDR plugins in"
+#~ " this way"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "For users in some areas, ``pip`` "
+#~ "and ``pipx`` may be very slow. You"
+#~ " can use a mirror to accelerate "
+#~ "the installation. Here's an example for"
+#~ " Tsinghua University TUNA mirror:"
+#~ msgstr ""
 
