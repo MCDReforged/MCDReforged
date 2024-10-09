@@ -7,7 +7,7 @@ MCDReforged
 [![License](https://img.shields.io/github/license/MCDReforged/MCDReforged.svg)](https://github.com/MCDReforged/MCDReforged/blob/master/LICENSE)
 [![Documentation Status](https://readthedocs.org/projects/mcdreforged/badge/)](https://docs.mcdreforged.com/)
 
-![MCDR-banner](https://raw.githubusercontent.com/MCDReforged/MCDReforged/master/logo_long.png)
+![MCDR-banner](https://raw.githubusercontent.com/MCDReforged/MCDReforged/master/logo/logo_long.png)
 
 [English](https://github.com/MCDReforged/MCDReforged/blob/master/README.md) | **中文**
 
