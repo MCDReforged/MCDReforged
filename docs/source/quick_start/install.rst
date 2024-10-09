@@ -36,7 +36,7 @@ The detailed Python version requirements are as shown in the table below
 Install using pip
 -----------------
 
-MCDR is available in `PyPI <https://pypi.org/project/mcdreforged>`__, it can reasonably be installed via the ``pip`` command:
+MCDR is available in `PyPI <https://pypi.org/project/mcdreforged>`__, it's reasonably to be installed by:
 
 .. tab:: Windows
 
@@ -49,6 +49,20 @@ MCDR is available in `PyPI <https://pypi.org/project/mcdreforged>`__, it can rea
     .. code-block:: bash
 
         pip3 install mcdreforged
+
+And upgraded by:
+
+.. tab:: Windows
+
+    .. code-block:: bat
+
+        pip install mcdreforged -U
+
+.. tab:: Linux
+
+    .. code-block:: bash
+
+        pip3 install mcdreforged -U
 
 Externally managed environment
 ------------------------------
@@ -74,7 +88,7 @@ It's safer to keep the installation isolated. As workarounds, there're multiple 
       - Cons
     * - pip
       - Native, always available
-      - Not isolated, may affect global packages, requires admin privilege
+      - Not isolated, may affect global packages with root privileges
     * - pipx
       - Simplest
       - 3rd party, different command set
@@ -189,7 +203,7 @@ Using Docker
 
 MCDR also provides Docker images as an option. See :doc:`/docker` for more details
 
-Specify MCDR version by specify the tag of Docker image. If you use ``latest``, MCDR should always being up to date
+Specify MCDR version by the tag of Docker image
 
 Compared to the two methods above, Docker has a more convoluted learning path, but convenient for some advanced usages
 
@@ -201,8 +215,8 @@ You may found MCDR in some package repositories, AUR for example. However, it's 
 Accelerate the installation
 ---------------------------
 
-For users in some areas, ``pip`` and ``pipx`` may be very slow. You can use a mirror to accelerate the installation. Here's an example with 
-Tsinghua University TUNA mirror:
+For users in China, you may use a mirror to accelerate ``pip`` and ``pipx``. Here's an example with 
+`Tsinghua University TUNA mirror <https://mirrors.tuna.tsinghua.edu.cn/help/pypi/>`__:
 
 .. code-block:: bash
 

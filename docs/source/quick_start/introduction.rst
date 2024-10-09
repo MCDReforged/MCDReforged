@@ -6,10 +6,10 @@ MCDReforged (MCDR, hereinafter) is a tool to manage your Minecraft server with t
 
 In-game calculator, player high-light, scoreboard manipulate, structure file management, backup / rollback... you can control the whole world with MCDR and its plugins
 
-Greatly thanks to chino_desu and his MCDaemon 1.0 for the idea of such a cool tool
+Greatly thanks to `chino_desu <https://github.com/kafuuchino-desu>`__ and his `MCDaemon 1.0 <https://github.com/kafuuchino-desu/MCDaemon>`__ for the idea of such a cool tool
 
-Advantage
----------
+Advantages
+----------
 
 Vanilla
 ~~~~~~~
