@@ -36,7 +36,7 @@ jobs:
     - name: Setup python
       uses: actions/setup-python@v5
       with:
-        python-version: 3.11
+        python-version: 3.12
 
     - uses: actions/cache@v4
       with:
@@ -145,7 +145,7 @@ jobs:
     strategy:
       matrix:
         slim: ['false', 'true']
-        python: ['3.10', '3.11', '3.12']  # last 3 minor versions
+        python: ['3.11', '3.12', '3.13']  # last 3 minor versions
 
     steps:
     - uses: actions/checkout@v4
@@ -174,7 +174,7 @@ jobs:
           let metaTagsLatest = []
           let suffixes = [`-py${python}`]  // will be appended at the end of all metaTagsBase
 
-          if (python === '3.11') {  // 3.11 is the default python version
+          if (python === '3.12') {  // 3.12 is the default python version
             suffixes.push('')  // add a no-python suffixes
             if (isRelease && /^[0-9.]+$/.test(version)) {  // stable release only
               metaTagsLatest.push('latest')
