@@ -139,7 +139,7 @@ Create a virtual environment by:
 
     $ python3 -m venv venv
 
-Activate it by: (`Reference <https://docs.python.org/3/library/venv.html#how-venvs-work>`__)
+Activate it by:
 
 +----------+------------+-----------------------------------------+
 | Platform | Shell      | Command to activate virtual environment |
@@ -180,7 +180,9 @@ An animated demo with bash:
 
     In this way, you must activate the virtual environment every time you want to use MCDR, or install packages for MCDR plugins
 
-    For more information about virtual environments, See `Python Docs <https://docs.python.org/3/library/venv.html>`__
+.. seealso ::
+
+    Python Doc: `How venvs work <https://docs.python.org/3/library/venv.html#how-venvs-work>`__
 
 Using Docker
 ~~~~~~~~~~~~
@@ -191,15 +193,15 @@ Specify MCDR version by specify the tag of Docker image. If you use ``latest``, 
 
 Compared to the two methods above, Docker has a more convoluted learning path, but convenient for some advanced usages
 
-System package manager?
-~~~~~~~~~~~~~~~~~~~~~~~
+System package manager
+~~~~~~~~~~~~~~~~~~~~~~
 
-You may found MCDR in some package repositories, AUR for example. However, it's **definately not recommended** to use system package manager to install MCDR, as it's hard to manage the dependencies of MCDR plugins
+You may found MCDR in some package repositories, AUR for example. However, it's **definately not recommended** to use a system package manager to install MCDR. Not only it has all the same problem as the system-wide pip install, it's also hard to manage the dependencies of MCDR plugins
 
 Accelerate the installation
 ---------------------------
 
-For users in some areas, ``pip`` and ``pipx`` may be very slow. You can use a mirror to accelerate the installation. Here's an example for 
+For users in some areas, ``pip`` and ``pipx`` may be very slow. You can use a mirror to accelerate the installation. Here's an example with 
 Tsinghua University TUNA mirror:
 
 .. code-block:: bash
