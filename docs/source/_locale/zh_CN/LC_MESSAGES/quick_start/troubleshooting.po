@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-09 11:50+0800\n"
+"POT-Creation-Date: 2024-10-10 22:55+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -24,222 +24,236 @@ msgid ""
 "solutions"
 msgstr "遇到问题？这里有一些常见的问题和解决方案"
 
-
 #: ../quick_start/troubleshooting.rst:8
-msgid "The server won't start"
-msgstr "服务器无法启动"
+msgid "MCDR won't start"
+msgstr "MCDR 无法启动"
 
 #: ../quick_start/troubleshooting.rst:10
-msgid "Check out your start command"
-msgstr "检查你的启动命令"
+msgid "**mcdreforged: command not found**"
+msgstr "**mcdreforged 不是内部或外部命令**"
 
 #: ../quick_start/troubleshooting.rst:11
-msgid "Check if java is installed and added in PATH"
-msgstr "检查 Java 是否已安装并添加到 PATH 中"
+msgid "Try ``python -m mcdreforged``"
+msgstr "试试 ``python -m mcdreforged``"
 
 #: ../quick_start/troubleshooting.rst:12
-msgid "Try to run the server without MCDR, using the same command you configured"
-msgstr "尝试使用你配置的命令直接启动服务端"
+msgid ""
+"If you installed MCDR via pipx, ensure the pipx apps directory is in your"
+" PATH"
+msgstr "若你通过 pipx 安装了 MCDR，确保 pipx 应用程序目录在你的 PATH 中"
 
 #: ../quick_start/troubleshooting.rst:13
 msgid ""
-"If you're directing the start command to a batch or shellscript, try the "
-"actual command instead of the script"
-msgstr ""
-"如果你将启动命令指向批处理或 shell 脚本，"
-"尝试直接使用实际命令而不是脚本"
+"If you installed MCDR via pip globally, ensure the pip scripts directory "
+"is in your PATH"
+msgstr "若你通过 pip 全局安装了 MCDR，确保 pip 脚本目录在你的 PATH 中"
+
+#: ../quick_start/troubleshooting.rst:14
+msgid ""
+"If you installed MCDR via pip within venv, make sure you have activated "
+"the venv"
+msgstr "若你通过 pip 在 venv 中安装了 MCDR，确保你激活了 venv"
 
 #: ../quick_start/troubleshooting.rst:15
+msgid ""
+"If you installed MCDR via system package manager... don't install MCDR "
+"via system package manager"
+msgstr "如果你通过系统包管理器安装了 MCDR... 不要通过系统包管理器安装 MCDR"
+
+#: ../quick_start/troubleshooting.rst:17
+msgid "**There're some error raised by Python**"
+msgstr "**Python 抛出错误**"
+
+#: ../quick_start/troubleshooting.rst:18
+msgid "Install MCDR correctly. Don't start MCDR from source code"
+msgstr "正确安装 MCDR。不要从源码启动 MCDR"
+
+#: ../quick_start/troubleshooting.rst:19
+msgid "Try to re-install MCDR, see if the problem persists"
+msgstr "尝试重新安装 MCDR，看看问题是否依然存在"
+
+#: ../quick_start/troubleshooting.rst:20
+msgid "If you installed MCDR via venv, make sure you have activated the venv"
+msgstr "若你通过 pip 在 venv 中安装了 MCDR，确保你激活了 venv"
+
+#: ../quick_start/troubleshooting.rst:21
+msgid ""
+"Use ``which mcdreforged`` (``where mcdreforged`` in Windows), see which "
+"executable is being called"
+msgstr ""
+"使用 ``which mcdreforged`` (Windows 下使用 ``where mcdreforged``)，看看调用了哪个可执行文件"
+
+#: ../quick_start/troubleshooting.rst:23
+msgid ""
+"Get in touch with :ref:`our kind community "
+"<quick_start/next_steps:Community>`"
+msgstr "联系 :ref:`我们可爱的社区 <quick_start/next_steps:Community>`"
+
+#: ../quick_start/troubleshooting.rst:26
+msgid "The server won't start"
+msgstr "服务器无法启动"
+
+#: ../quick_start/troubleshooting.rst:28
+msgid "Check out your start command"
+msgstr "检查你的启动命令"
+
+#: ../quick_start/troubleshooting.rst:29
+msgid "Check if java is installed and added in PATH"
+msgstr "检查 Java 是否已安装并添加到 PATH 中"
+
+#: ../quick_start/troubleshooting.rst:30
+msgid "Try to run the server without MCDR, using the same command you configured"
+msgstr "尝试使用你配置的命令直接启动服务端"
+
+#: ../quick_start/troubleshooting.rst:31
+msgid ""
+"If you're directing the start command to a batch or shellscript, try the "
+"actual command instead of the script"
+msgstr "如果你将启动命令指向批处理或 shell 脚本，尝试直接使用实际命令而不是脚本"
+
+#: ../quick_start/troubleshooting.rst:33
 msgid "Learn more in :ref:`configuration:start_command`"
 msgstr "详见 :ref:`configuration:start_command` 一节"
 
-#: ../quick_start/troubleshooting.rst:19
+#: ../quick_start/troubleshooting.rst:37
 msgid "Garbled text / UnicodeDecodeError"
 msgstr "乱码 / UnicodeDecodeError"
 
-#: ../quick_start/troubleshooting.rst:21
+#: ../quick_start/troubleshooting.rst:39
 msgid "Usually, this is caused by the console encoding / decoding"
 msgstr "这通常是控制台编解码异常引起的"
 
-#: ../quick_start/troubleshooting.rst:23
+#: ../quick_start/troubleshooting.rst:41
 msgid ""
 "MCDR use UTF-8 as default encoding and decoding, so try to use UTF-8 in "
 "everything related to the server. See :ref:`configuration:encoding, "
 "decoding`"
 msgstr ""
-"MCDR 默认使用 UTF-8 编码和解码，不妨尝试在服务端相关的所有地方都使用 UTF-8。"
-"参见 :ref:`configuration:encoding, decoding` 一节"
+"MCDR 默认使用 UTF-8 编码和解码，不妨尝试在服务端相关的所有地方都使用 UTF-8。参见 "
+":ref:`configuration:encoding, decoding` 一节"
 
-#: ../quick_start/troubleshooting.rst:26
+#: ../quick_start/troubleshooting.rst:44
 msgid "Commands not working"
 msgstr "指令不工作"
 
-#: ../quick_start/troubleshooting.rst:28
+#: ../quick_start/troubleshooting.rst:46
 msgid "**All commands are not responding in game, but working in console**"
 msgstr "**所有指令在游戏内都不响应，但控制台里正常**"
 
-#: ../quick_start/troubleshooting.rst:29
+#: ../quick_start/troubleshooting.rst:47
 msgid "**Some commands perform incorrectly for specific players**"
 msgstr "**某些指令对特定玩家执行不正确**"
 
-#: ../quick_start/troubleshooting.rst:31
+#: ../quick_start/troubleshooting.rst:49
 msgid ""
 "MCDR handle commands by listening to the server's console output. Make "
 "sure you are using the correct :ref:`Server Handler "
 "<configuration:handler>`"
-msgstr ""
-"MCDR 通过监听服务端控制台输出来处理指令，请确保你使用了正确的 "
-":ref:`服务端处理器 <configuration:handler>`"
+msgstr "MCDR 通过监听服务端控制台输出来处理指令，请确保你使用了正确的 :ref:`服务端处理器 <configuration:handler>`"
 
-#: ../quick_start/troubleshooting.rst:33
+#: ../quick_start/troubleshooting.rst:51
 msgid "Your server may unexpectedly not compatible with handlers:"
 msgstr "你的服务端可能意外地与处理器不兼容："
 
-#: ../quick_start/troubleshooting.rst:35
+#: ../quick_start/troubleshooting.rst:53
 msgid ""
 "Maybe your server software is unique that not supported by built-in "
 "handlers"
-msgstr ""
-"也许，你的服务端比较特别，内置处理器均不兼容"
+msgstr "也许，你的服务端比较特别，内置处理器均不兼容"
 
-#: ../quick_start/troubleshooting.rst:37
+#: ../quick_start/troubleshooting.rst:55
 msgid ""
 "Maybe your server output is different. For example, if you allow players "
 "that not following the Mojang naming rule (``[A-Za-z0-9_]{3,16}``), the "
 "handler will not recognize them"
 msgstr ""
-"也许，你的服务端输出与默认状态不同。例如，如果你允许"
-"非 Mojang 命名规则（``[A-Za-z0-9_]{3,16}``）的玩家名，处理器将无法识别"
+"也许，你的服务端输出与默认状态不同。例如，如果你允许非 Mojang "
+"命名规则（``[A-Za-z0-9_]{3,16}``）的玩家名，处理器将无法识别"
 
-#: ../quick_start/troubleshooting.rst:39
+#: ../quick_start/troubleshooting.rst:57
 msgid ""
 "Maybe your server output have been modified by mods or plugins (usually "
 "something like \"player title/profession\", \"better console\"), that the"
 " handler can't recognize them. To be confirmed, disable all mods and "
 "plugins and see if the problem solved"
-msgstr ""
-"也许，你的服务端输出被插件或模组（例如：玩家称号/职业，更好的控制台）"
-"修改了，导致处理器无法识别。禁用所有插件和模组，看看问题是否解决"
+msgstr "也许，你的服务端输出被插件或模组（例如：玩家称号/职业，更好的控制台）修改了，导致处理器无法识别。禁用所有插件和模组，看看问题是否解决"
 
-#: ../quick_start/troubleshooting.rst:41
+#: ../quick_start/troubleshooting.rst:59
 msgid ""
 "If your server has one of these problems, you may need to :ref:`customize"
 " your own handler <customize/handler:Server Handler>`"
-msgstr ""
-"如果你的服务端存在上述问题之一，你可能需要 :ref:`自定义服务端处理器 <customize/handler:Server Handler>`"
+msgstr "如果你的服务端存在上述问题之一，你可能需要 :ref:`自定义服务端处理器 <customize/handler:Server Handler>`"
 
-#: ../quick_start/troubleshooting.rst:43
+#: ../quick_start/troubleshooting.rst:61
 msgid "**Some plugin commands work neither in game nor the console**"
 msgstr "**某些插件命令在游戏和控制台中都无法使用**"
 
-#: ../quick_start/troubleshooting.rst:44
+#: ../quick_start/troubleshooting.rst:62
 msgid "**Some plugin commands perform incorrectly in all conditions**"
 msgstr "**某些插件命令在所有条件下都执行不正确**"
 
-#: ../quick_start/troubleshooting.rst:46
+#: ../quick_start/troubleshooting.rst:64
 msgid ""
 "Check if the plugin is enabled and loaded correctly. Check the logs to "
 "see if there are any errors or warnings related to the plugin. Check the "
 "plugin configuration"
-msgstr ""
-"检查插件是否正确启用和加载。检查日志，看看是否有与插件相关的错误或警告。检查插件配置文件"
+msgstr "检查插件是否正确启用和加载。检查日志，看看是否有与插件相关的错误或警告。检查插件配置文件"
 
-#: ../quick_start/troubleshooting.rst:48
+#: ../quick_start/troubleshooting.rst:66
 msgid ""
 "Check the README or documentation of the plugin to see if it has any "
 "special requirements. Some plugins may require additional permissions or "
 "configurations"
-msgstr ""
-"查看插件的 README 或文档，看看它是否有任何特殊要求。有些插件可能需要额外权限或配置"
+msgstr "查看插件的 README 或文档，看看它是否有任何特殊要求。有些插件可能需要额外权限或配置"
 
-#: ../quick_start/troubleshooting.rst:50
+#: ../quick_start/troubleshooting.rst:68
 msgid ""
 "Some plugins may have conflicts with others. Try to disable other plugins"
 " to see if the problem solved"
-msgstr ""
-"有些插件可能与其它插件冲突。尝试禁用其它插件，看看问题是否解决"
+msgstr "有些插件可能与其它插件冲突。尝试禁用其它插件，看看问题是否解决"
 
-#: ../quick_start/troubleshooting.rst:52
+#: ../quick_start/troubleshooting.rst:70
 msgid ""
 "If the problem still exists, try to report it to the plugin's author or "
 "community"
 msgstr "如果问题仍然存在，尝试向插件的作者或社区报告"
 
-#: ../quick_start/troubleshooting.rst:55
+#: ../quick_start/troubleshooting.rst:73
 msgid "Run with MCSManager"
 msgstr "使用 MCSManager 运行"
 
-#: ../quick_start/troubleshooting.rst:59
+#: ../quick_start/troubleshooting.rst:77
 msgid ""
 "This part may not being up to date. If you encounter any problems, do not"
 " report them to MCDR"
-msgstr ""
-"这部分内容可能过时。若你遇到任何问题，不要向 MCDR 报告"
+msgstr "这部分内容可能过时。若你遇到任何问题，不要向 MCDR 报告"
 
-#: ../quick_start/troubleshooting.rst:61
+#: ../quick_start/troubleshooting.rst:79
 msgid ""
 "For more infomations, get in touch with their community: `Github Repo "
 "<https://github.com/MCSManager/MCSManager>`__, `Documentation "
 "<https://docs.mcsmanager.com/>`__"
 msgstr ""
-"更多信息，请与 MCSManager 社区联系："
-"`Github 存储库 <https://github.com/MCSManager/MCSManager>`__，"
-"`MCSManager 文档 <https://docs.mcsmanager.com/>`__"
+"更多信息，请与 MCSManager 社区联系：`Github 存储库 "
+"<https://github.com/MCSManager/MCSManager>`__，`MCSManager 文档 "
+"<https://docs.mcsmanager.com/>`__"
 
-#: ../quick_start/troubleshooting.rst:63
+#: ../quick_start/troubleshooting.rst:81
 msgid "MCDR did not specificly designed to adapt MCSManager"
 msgstr "MCDR 并未专门适配 MCSManager"
 
-#: ../quick_start/troubleshooting.rst:65
+#: ../quick_start/troubleshooting.rst:83
 msgid ""
 "However, if you use UTF-8 everywhere, and enable ``Emulation Terminal`` "
 "in MCSManager, MCDR should work fine with full functionality"
-msgstr "不过，如果你始终使用 UTF-8，并在 MCSManager 中启用 "
-"``仿真终端``，MCDR 应该能正常工作，并具有完整功能"
+msgstr "不过，如果你始终使用 UTF-8，并在 MCSManager 中启用 ``仿真终端``，MCDR 应该能正常工作，并具有完整功能"
 
-#: ../quick_start/troubleshooting.rst:67
+#: ../quick_start/troubleshooting.rst:85
 msgid ""
 "If ``Emulation Terminal`` is disabled, you should set "
 ":ref:`configuration:advanced_console` to ``false``"
-msgstr "若你关闭了 ``仿真终端``，请将 "
-":ref:`configuration:advanced_console` 设置为 ``false``"
+msgstr "若你关闭了 ``仿真终端``，请将 :ref:`configuration:advanced_console` 设置为 ``false``"
 
-
-#~ msgid "Commands not working in game"
-#~ msgstr ""
-
-#~ msgid "MCDR handle commands by listening to the server's console output"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Make sure you are using the "
-#~ "correct :ref:`Server Handler "
-#~ "<configuration:handler>`. If your server "
-#~ "software is not supported by built-"
-#~ "in handlers, you may need to "
-#~ ":ref:`customize your own handler "
-#~ "<customize/handler:Server Handler>`"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "If your server output is modified "
-#~ "by mods or plugins, the handler "
-#~ "may not be able to recognize the"
-#~ " outputs. Try to disable all mods "
-#~ "and plugins to see if the problem"
-#~ " solved. If so, you may need to"
-#~ " :ref:`customize your own handler "
-#~ "<customize/handler:Server Handler>` to handle "
-#~ "the modified outputs"
-#~ msgstr ""
-
-#~ msgid "MCDR will not be actively compatible to MCSManager"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "We do not guarantee the statement "
-#~ "above to be up to date. If "
-#~ "you encounter problems, do not report"
-#~ " them to MCDR"
+#~ msgid "Get in touch with our kind community"
 #~ msgstr ""
 

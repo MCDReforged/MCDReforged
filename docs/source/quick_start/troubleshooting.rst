@@ -4,6 +4,24 @@ Troubleshooting
 
 Have problems to make things work? Here are some common issues and their solutions
 
+MCDR won't start
+----------------
+
+* **mcdreforged: command not found**
+    * Try ``python -m mcdreforged``
+    * If you installed MCDR via pipx, ensure the pipx apps directory is in your PATH
+    * If you installed MCDR via pip globally, ensure the pip scripts directory is in your PATH
+    * If you installed MCDR via pip within venv, make sure you have activated the venv
+    * If you installed MCDR via system package manager... don't install MCDR via system package manager
+
+* **There're some error raised by Python**
+    * Install MCDR correctly. Don't start MCDR from source code
+    * Try to re-install MCDR, see if the problem persists
+    * If you installed MCDR via venv, make sure you have activated the venv
+    * Use ``which mcdreforged`` (``where mcdreforged`` in Windows), see which executable is being called
+
+Get in touch with :ref:`our kind community <quick_start/next_steps:Community>`
+
 The server won't start
 ----------------------
 

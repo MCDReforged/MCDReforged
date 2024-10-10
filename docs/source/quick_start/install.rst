@@ -33,6 +33,17 @@ The detailed Python version requirements are as shown in the table below
    * - >= 2.10
      - >= 3.8
 
+Wait a second
+-------------
+
+In some "tutorials", you may learned to use MCDR by downloading a zip from Github and extract it
+
+However, that's not the actual way to install MCDR - Those tutorials are outdated
+
+.. caution::
+
+    **DO NOT** download the source files of MCDR and execute them directly, unless you're a developer of MCDR and you know what you are doing
+
 Install using pip
 -----------------
 

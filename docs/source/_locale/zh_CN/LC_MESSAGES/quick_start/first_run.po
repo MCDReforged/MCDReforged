@@ -60,7 +60,7 @@ msgstr "YAML 和 JSON 文件：是什么，如何编辑"
 
 #: ../quick_start/first_run.rst:22
 msgid "If you have not, Google is your friend"
-msgstr "不了解也没关系，Google 是你的朋友"
+msgstr "不了解也没关系，搜索引擎是你的朋友"
 
 #: ../quick_start/first_run.rst:25
 msgid "Prepare"
