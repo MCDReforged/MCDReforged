@@ -16,47 +16,33 @@ msgstr ""
 
 #: ../quick_start/index.rst:9
 msgid "What is MCDR"
-msgstr ""
+msgstr "MCDR 是什么"
 
 #: ../quick_start/index.rst:9
 msgid "Installation"
-msgstr ""
+msgstr "安装"
 
 #: ../quick_start/index.rst:9
 msgid "First Run"
-msgstr ""
+msgstr "启动！"
 
 #: ../quick_start/index.rst:9
 msgid "Next Steps"
-msgstr ""
+msgstr "更进一步"
 
 #: ../quick_start/index.rst:9
 msgid "Troubleshooting"
-msgstr ""
+msgstr "故障排除"
 
 #: ../quick_start/index.rst:3
 msgid "Quick Start"
-msgstr ""
+msgstr "快速上手"
 
 #: ../quick_start/index.rst:5
 msgid "Welcome to the world of MCDReforged (MCDR, hereinafter)"
-msgstr ""
+msgstr "欢迎使用 MCDReforged (MCDR, 下同) "
 
 #: ../quick_start/index.rst:7
 msgid "This quick start guide will help you get started"
-msgstr ""
-
-#~ msgid ""
-#~ "Welcome to the world of MCDReforged "
-#~ "(abbreviated as MCDR, omitted below)"
-#~ msgstr ""
-
-#~ msgid "What is MCDR?"
-#~ msgstr ""
-
-#~ msgid "Welcome to the world of MCDReforged (abbr. MCDR)"
-#~ msgstr ""
-
-#~ msgid "This quick start guide will help you get started with MCDR"
-#~ msgstr ""
+msgstr "本指南将助你踏入 MCDR 的大门"
 

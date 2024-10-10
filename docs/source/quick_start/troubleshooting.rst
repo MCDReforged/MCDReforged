@@ -32,7 +32,7 @@ Commands not working
 
     Your server may unexpectedly not compatible with handlers:
  
-    Maybe our server software is unique that not supported by built-in handlers
+    Maybe your server software is unique that not supported by built-in handlers
 
     Maybe your server output is different. For example, if you allow players that not following the Mojang naming rule (``[A-Za-z0-9_]{3,16}``), the handler will not recognize them
 
