@@ -141,7 +141,7 @@ html_theme_options = {
 	'logo_only': True,
 }
 
-html_logo = 'banner.png'
+html_logo = '../../logo/images/logo_long_white.svg'
 
 
 # -- Options for sphinx-intl -------------------------------------------------
