@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-19 15:44+0800\n"
+"POT-Creation-Date: 2024-10-08 12:01+0800\n"
 "PO-Revision-Date: 2021-01-23 13:20+0800\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -67,7 +67,7 @@ msgid "The language that MCDR will use to display information"
 msgstr "MCDR 用于输出信息的语言"
 
 #: ../configuration.rst:28 ../configuration.rst:43 ../configuration.rst:179
-#: ../configuration.rst:348 ../configuration.rst:366
+#: ../configuration.rst:358 ../configuration.rst:376
 msgid "Option type: :external:class:`str`"
 msgstr "选项类型：:external:class:`str`"
 
@@ -401,10 +401,11 @@ msgid ""
 msgstr "确保启动 Minecraft 的 JVM 也使用 UTF-8 作为默认字符集。你可以通过以下任一操作来实现："
 
 #: ../configuration.rst:233
+#, fuzzy
 msgid ""
-"If you are using a Long-Term-Support Java version (e.g. 8, 11, 17), you "
-"can always use this as a universal Java UTF-8 solution no matter what "
-"your Java version is. Those unrecognized system properties "
+"If you are using a Long-Term-Support Java version (e.g. 8, 11, 17, 21), "
+"you can always use this as a universal Java UTF-8 solution no matter what"
+" your Java version is. Those unrecognized system properties "
 "``stdout.encoding`` and ``stderr.encoding`` are harmless"
 msgstr ""
 "如果你在使用 Java 的长期支持（LTS）版本，如 8、11、17，则无论你的 Java 版本是什么，你都可以将本方案用作一个万能的 Java "
@@ -478,8 +479,8 @@ msgstr "示例解决方案：``decoding: ['utf8', 'gbk']``"
 msgid "**encoding**"
 msgstr "**encoding**"
 
-#: ../configuration.rst:282 ../configuration.rst:432 ../configuration.rst:467
-#: ../configuration.rst:487 ../configuration.rst:529
+#: ../configuration.rst:282 ../configuration.rst:442 ../configuration.rst:477
+#: ../configuration.rst:497 ../configuration.rst:539
 msgid "Option type: ``Optional[str]``"
 msgstr "选项类型：``Optional[str]``"
 
@@ -607,144 +608,154 @@ msgstr ""
 "`rcon <https://wiki.vg/RCON>`__ 设置。若启用 rcon，则在 Minecraft rcon "
 "服务端启动后，MCDR将自动连接到 rcon 服务端。这样插件就可以通过 rcon 向服务端发送命令"
 
-#: ../configuration.rst:334
+#: ../configuration.rst:333
+msgid ""
+"To configure rcon to work with MCDR, search for these lines in your "
+"``server.properties``:"
+msgstr ""
+
+#: ../configuration.rst:341
+msgid "Make them the same value as the MCDR configurations."
+msgstr ""
+
+#: ../configuration.rst:344
 msgid "rcon.enable"
 msgstr "rcon.enable"
 
-#: ../configuration.rst:336
+#: ../configuration.rst:346
 msgid "The switch of rcon"
 msgstr "rcon 开关"
 
-#: ../configuration.rst:339 ../configuration.rst:500 ../configuration.rst:511
-#: ../configuration.rst:545 ../configuration.rst:554 ../configuration.rst:631
+#: ../configuration.rst:349 ../configuration.rst:510 ../configuration.rst:521
+#: ../configuration.rst:555 ../configuration.rst:564 ../configuration.rst:641
 msgid "Option type: :external:class:`bool`"
 msgstr "选项类型：:external:class:`bool`"
 
-#: ../configuration.rst:340 ../configuration.rst:546 ../configuration.rst:555
+#: ../configuration.rst:350 ../configuration.rst:556 ../configuration.rst:565
 msgid "Default value: ``false``"
 msgstr "默认值：``false``"
 
-#: ../configuration.rst:343
+#: ../configuration.rst:353
 msgid "rcon.address"
 msgstr "rcon.address"
 
-#: ../configuration.rst:345
+#: ../configuration.rst:355
 msgid "The address of the rcon server"
 msgstr "用于 rcon 连接的地址"
 
-#: ../configuration.rst:349
+#: ../configuration.rst:359
 msgid "Default value: ``127.0.0.1``"
 msgstr "默认值：``127.0.0.1``"
 
-#: ../configuration.rst:352
+#: ../configuration.rst:362
 msgid "rcon.port"
 msgstr "rcon.port"
 
-#: ../configuration.rst:354
+#: ../configuration.rst:364
 msgid "The port of the rcon server"
 msgstr "用于 rcon 连接的端口"
 
-#: ../configuration.rst:357
+#: ../configuration.rst:367
 msgid "Option type: :external:class:`int`"
 msgstr "选项类型：:external:class:`int`"
 
-#: ../configuration.rst:358
+#: ../configuration.rst:368
 msgid "Default value: ``25575``"
 msgstr "默认值：``25575``"
 
-#: ../configuration.rst:361
+#: ../configuration.rst:371
 msgid "rcon.password"
 msgstr "rcon.password"
 
-#: ../configuration.rst:363
+#: ../configuration.rst:373
 msgid "The password to connect to the rcon server"
 msgstr "用于 rcon 连接的密码"
 
-#: ../configuration.rst:367
+#: ../configuration.rst:377
 msgid "Default value: ``password``"
 msgstr "默认值：``password``"
 
-#: ../configuration.rst:371
+#: ../configuration.rst:381
 msgid "Plugin configuration"
 msgstr "插件配置"
 
-#: ../configuration.rst:373
+#: ../configuration.rst:383
 msgid "MCDR plugin related configs"
 msgstr "MCDR 插件相关的配置项"
 
-#: ../configuration.rst:376
+#: ../configuration.rst:386
 msgid "plugin_directories"
 msgstr "plugin_directories"
 
-#: ../configuration.rst:378
+#: ../configuration.rst:388
 msgid "The list of directory path where MCDR will search for plugins to load"
 msgstr "MCDR 搜索将要加载插件的目录列表"
 
-#: ../configuration.rst:380
+#: ../configuration.rst:390
 msgid "Option type: ``List[str]``"
 msgstr "选项类型：``List[str]``"
 
-#: ../configuration.rst:381 ../configuration.rst:568 ../configuration.rst:593
-#: ../configuration.rst:617 ../configuration.rst:632 ../configuration.rst:649
+#: ../configuration.rst:391 ../configuration.rst:578 ../configuration.rst:603
+#: ../configuration.rst:627 ../configuration.rst:642 ../configuration.rst:659
 msgid "Default value:"
 msgstr "默认值："
 
-#: ../configuration.rst:389 ../configuration.rst:575 ../configuration.rst:600
+#: ../configuration.rst:399 ../configuration.rst:585 ../configuration.rst:610
 msgid "Example:"
 msgstr "例如："
 
-#: ../configuration.rst:399
+#: ../configuration.rst:409
 msgid "catalogue_meta_cache_ttl"
 msgstr "catalogue_meta_cache_ttl"
 
-#: ../configuration.rst:401
+#: ../configuration.rst:411
 msgid "The cache TTL of a fetched plugin catalogue meta"
 msgstr "拉取的插件仓库元信息的缓存有效期"
 
-#: ../configuration.rst:403
+#: ../configuration.rst:413
 msgid ""
 "MCDR will use the cached meta as the data source for catalogue plugin "
 "operations within the TTL"
 msgstr "MCDR 会在缓存的有效期内，使用缓存的元信息作为后续与插件仓库有关操作的数据源"
 
-#: ../configuration.rst:405 ../configuration.rst:413 ../configuration.rst:475
+#: ../configuration.rst:415 ../configuration.rst:423 ../configuration.rst:485
 msgid "Option type: :external:class:`float`"
 msgstr "选项类型：:external:class:`float`"
 
-#: ../configuration.rst:406
+#: ../configuration.rst:416
 msgid "Default value: ``1200`` (20 min)"
 msgstr "默认值：``1200`` （20 分钟）"
 
-#: ../configuration.rst:409
+#: ../configuration.rst:419
 msgid "catalogue_meta_fetch_timeout"
 msgstr "catalogue_meta_fetch_timeout"
 
-#: ../configuration.rst:411
+#: ../configuration.rst:421
 msgid "The timeout in seconds for a plugin catalogue meta fetch"
 msgstr "拉取插件仓库元信息的超时时间，单位：秒"
 
-#: ../configuration.rst:414 ../configuration.rst:476
+#: ../configuration.rst:424 ../configuration.rst:486
 msgid "Default value: ``15``"
 msgstr "默认值：``15``"
 
-#: ../configuration.rst:417
+#: ../configuration.rst:427
 msgid "catalogue_meta_url"
 msgstr "catalogue_meta_url"
 
-#: ../configuration.rst:419
+#: ../configuration.rst:429
 msgid ""
 "Override the URL pointing to the \"everything.json\" or "
 "\"everything_slim.json\" file, which is used to fetch the plugin "
 "catalogue meta"
 msgstr "重写用于拉取插件仓库元信息的，指向的 \"everything.json\" 或 \"everything_slim.json\" 文件的 URL"
 
-#: ../configuration.rst:422
+#: ../configuration.rst:432
 msgid ""
 "If it ends with \".gz\" (gzip) or \".xz\" (lzma), corresponding "
 "decompression operation will be applied"
 msgstr "若它以 \".gz\" (gzip) 或 \".xz\" (lzma) 结尾，则将自动应用对应的解压操作"
 
-#: ../configuration.rst:424
+#: ../configuration.rst:434
 msgid ""
 "If not provided, the url will be "
 "``https://api.mcdreforged.com/catalogue/everything_slim.json.xz``"
@@ -752,187 +763,187 @@ msgstr ""
 "若未指定，则将使用默认的 "
 "``\"https://api.mcdreforged.com/catalogue/everything_slim.json.xz\"``"
 
-#: ../configuration.rst:426
+#: ../configuration.rst:436
 msgid "Example value (using the original url from raw.githubusercontent.com):"
 msgstr "取值举例（使用 raw.githubusercontent.com 的原始 URL）："
 
-#: ../configuration.rst:433 ../configuration.rst:468 ../configuration.rst:488
-#: ../configuration.rst:530
+#: ../configuration.rst:443 ../configuration.rst:478 ../configuration.rst:498
+#: ../configuration.rst:540
 msgid "Default value: *empty*"
 msgstr "默认值：*空*"
 
-#: ../configuration.rst:436
+#: ../configuration.rst:446
 msgid "plugin_download_url"
 msgstr "plugin_download_url"
 
-#: ../configuration.rst:440
+#: ../configuration.rst:450
 msgid ""
 "A to-be-downloaded plugin file from the plugin catalogue is a valid "
 "GitHub release asset"
 msgstr "一个将被下载的插件文件是一个 GitHub release 的 asset"
 
-#: ../configuration.rst:442
+#: ../configuration.rst:452
 msgid ""
 "Plugin file download override. Should be a valid python "
 ":external:meth:`str.format` string"
 msgstr "重写插件文件的下载 URL。应该是一个合法的 :external:meth:`str.format` 字符串"
 
-#: ../configuration.rst:444
+#: ../configuration.rst:454
 msgid "Available variables:"
 msgstr "可用的变量"
 
-#: ../configuration.rst:446
+#: ../configuration.rst:456
 msgid "``{url}``: The original GitHub asset download url"
 msgstr "``{url}``：原始的 GitHub asset 下载链接"
 
-#: ../configuration.rst:447
+#: ../configuration.rst:457
 msgid "``{repos_owner}``: The name of the owner of the GitHub repository"
 msgstr "``{repos_owner}``：插件的 GitHub 仓库的所有者名"
 
-#: ../configuration.rst:448
+#: ../configuration.rst:458
 msgid "``{repos_name}``: The name of the GitHub repository"
 msgstr "``{repos_owner}``：插件的 GitHub 仓库的仓库名"
 
-#: ../configuration.rst:449
+#: ../configuration.rst:459
 msgid "``{tag}``: Name of the git tag associated with the release"
 msgstr "``{tag}``：与该 release 关联的 git tag 的名字"
 
-#: ../configuration.rst:450
+#: ../configuration.rst:460
 msgid "``{asset_name}``: Name of the asset file, i.e. name of the plugin file"
 msgstr "``{asset_name}``：asset 的名字，即要被下载的插件文件的文件名"
 
-#: ../configuration.rst:451
+#: ../configuration.rst:461
 msgid "``{asset_id}``: The GitHub asset ID"
 msgstr "``{asset_id}``：GitHub asset ID"
 
-#: ../configuration.rst:453
+#: ../configuration.rst:463
 msgid ""
 "As an example, to use `ghproxy <https://mirror.ghproxy.com/>`__, you can "
 "set it to:"
 msgstr "作为一个例子，若要使用 `ghproxy <https://mirror.ghproxy.com/>`__ 进行下载加速，你可以将其设为："
 
-#: ../configuration.rst:459
+#: ../configuration.rst:469
 msgid ""
 "Another example of a manual concatenation of the GitHub release asset "
 "default url. It's useless, but a good example to demonstrate how this "
 "work:"
 msgstr "另一个无用的，手动拼接出 GitHub release asset 默认 url 的例子。虽然没什么用，但是一个拿来演示使用方式的好例子："
 
-#: ../configuration.rst:465
+#: ../configuration.rst:475
 msgid ""
 "If not provided, the origin GitHub asset download url will be directly "
 "used"
 msgstr "若未指定，将直接使用原始的 GitHub 附件下载 URL"
 
-#: ../configuration.rst:471
+#: ../configuration.rst:481
 msgid "plugin_download_timeout"
 msgstr "plugin_download_timeout"
 
-#: ../configuration.rst:473
+#: ../configuration.rst:483
 msgid "The timeout in seconds for a plugin file download"
 msgstr "下载插件文件的超时时间，单位：秒"
 
-#: ../configuration.rst:479
+#: ../configuration.rst:489
 msgid "plugin_pip_install_extra_args"
 msgstr "plugin_pip_install_extra_args"
 
-#: ../configuration.rst:481
+#: ../configuration.rst:491
 msgid ""
 "Extra arguments passed to the pip subprocess for installing required "
 "python packages during plugin installation"
 msgstr "在插件安装过程中，安装插件依赖的 python 包时，传递给 pip 子进程的额外参数"
 
-#: ../configuration.rst:491
+#: ../configuration.rst:501
 msgid "Misc configuration"
 msgstr "杂项配置"
 
-#: ../configuration.rst:493
+#: ../configuration.rst:503
 msgid "Miscellaneous configs of MCDR"
 msgstr "MCDR 的杂项配置"
 
-#: ../configuration.rst:496
+#: ../configuration.rst:506
 msgid "check_update"
 msgstr "check_update"
 
-#: ../configuration.rst:498
+#: ../configuration.rst:508
 msgid "If set to true, MCDR will detect if there's a new version every 24h"
 msgstr "如果设置为 true，MCDR 将会每隔 24 小时执行一次更新检测"
 
-#: ../configuration.rst:501 ../configuration.rst:512
+#: ../configuration.rst:511 ../configuration.rst:522
 msgid "Default value: ``true``"
 msgstr "默认值：``true``"
 
-#: ../configuration.rst:504
+#: ../configuration.rst:514
 msgid "advanced_console"
 msgstr "advanced_console"
 
-#: ../configuration.rst:506
+#: ../configuration.rst:516
 msgid ""
 "Advance console switch powered by `prompt-toolkit "
 "<https://pypi.org/project/prompt-toolkit/>`__"
 msgstr "高级控制台的开关，基于 `prompt-toolkit <https://pypi.org/project/prompt-toolkit/>`__"
 
-#: ../configuration.rst:508
+#: ../configuration.rst:518
 msgid ""
 "Set it to false if you need to redirect the stdin/stdout of MCDR or just "
 "don't like it"
 msgstr "如果你需要重定向 MCDR 的标准输入/输出，或者仅仅是不喜欢这个高级控制台，把它设置为 false"
 
-#: ../configuration.rst:515
+#: ../configuration.rst:525
 msgid "http_proxy, https_proxy"
 msgstr "http_proxy, https_proxy"
 
-#: ../configuration.rst:517
+#: ../configuration.rst:527
 msgid "HTTP(s) proxy setting for all external HTTP requests in MCDR"
 msgstr "为 MCDR 所有对外的 HTTP 请求的代理设置"
 
-#: ../configuration.rst:519
+#: ../configuration.rst:529
 msgid ""
 "It's suggested to set value for http_proxy and https_proxy at the same "
 "time"
 msgstr "如果打算配置，建议同时配置 http_proxy 和 https_proxy 的值"
 
-#: ../configuration.rst:521
+#: ../configuration.rst:531
 msgid "Example values::"
 msgstr "取值举例::"
 
-#: ../configuration.rst:533
+#: ../configuration.rst:543
 msgid "Advanced configuration"
 msgstr "进阶配置"
 
-#: ../configuration.rst:535
+#: ../configuration.rst:545
 msgid "Configuration options for advanced users"
 msgstr "为进阶用户提供的选项"
 
-#: ../configuration.rst:538
+#: ../configuration.rst:548
 msgid "disable_console_thread"
 msgstr "disable_console_thread"
 
-#: ../configuration.rst:540
+#: ../configuration.rst:550
 msgid ""
 "When set to true, MCDR will not start the console thread for handling "
 "console command input"
 msgstr "设置为 true 时，MCDR 将不会启动控制台线程来处理控制台命令输入"
 
-#: ../configuration.rst:542
+#: ../configuration.rst:552
 msgid "Don't change it to true unless you know what you are doing"
 msgstr "请保持默认值，除非你清楚地知道这是什么"
 
-#: ../configuration.rst:549
+#: ../configuration.rst:559
 msgid "disable_console_color"
 msgstr "disable_console_color"
 
-#: ../configuration.rst:551
+#: ../configuration.rst:561
 msgid ""
 "When set to true, MCDR will removed all console font formatter codes in "
 "before any message gets printed onto the console"
 msgstr "设置为 true 时，MCDR 将在所有消息打印到控制台之前删除所有控制台字体格式化程序代码"
 
-#: ../configuration.rst:558
+#: ../configuration.rst:568
 msgid "custom_handlers"
 msgstr "custom_handlers"
 
-#: ../configuration.rst:560
+#: ../configuration.rst:570
 msgid ""
 "A list of custom :doc:`/customize/handler` classes. The classed need to "
 "be subclasses of "
@@ -941,13 +952,13 @@ msgstr ""
 "自定义 :doc:`/customize/handler` 类所组成的列表。这些类应当是 "
 ":class:`~mcdreforged.handler.abstract_server_handler.ServerHandler` 的子类"
 
-#: ../configuration.rst:562
+#: ../configuration.rst:572
 msgid ""
 "Then you can use the name of your handler in the "
 ":ref:`configuration:handler` option above to use your handler"
 msgstr "这样你就可以在 :ref:`configuration:handler` 选项中通过处理器的名称指派其解析标准输出文本"
 
-#: ../configuration.rst:564
+#: ../configuration.rst:574
 msgid ""
 "The name of a handler is defined in the "
 ":meth:`~mcdreforged.handler.abstract_server_handler.ServerHandler.get_name`"
@@ -957,21 +968,21 @@ msgstr ""
 ":meth:`~mcdreforged.handler.abstract_server_handler.ServerHandler.get_name`"
 " 方法定义"
 
-#: ../configuration.rst:567 ../configuration.rst:592
+#: ../configuration.rst:577 ../configuration.rst:602
 msgid "Option type: ``Optional[List[str]]``"
 msgstr "选项类型：``Optional[List[str]]``"
 
-#: ../configuration.rst:582
+#: ../configuration.rst:592
 msgid ""
 "In this example the custom handler package path is "
 "``handlers.my_handler`` and the class is name ``MyHandler``"
 msgstr "下面这个例子中，``handlers.my_handler`` 是包路径，``MyHandler`` 是类名"
 
-#: ../configuration.rst:585
+#: ../configuration.rst:595
 msgid "custom_info_reactors"
 msgstr "custom_info_reactors"
 
-#: ../configuration.rst:587
+#: ../configuration.rst:597
 msgid ""
 "A list of custom :doc:`/customize/reactor` classes to handle the info "
 "instance. The classed need to be subclasses of "
@@ -981,23 +992,23 @@ msgstr ""
 ":class:`~mcdreforged.info_reactor.abstract_info_reactor.AbstractInfoReactor`"
 " 的子类"
 
-#: ../configuration.rst:589
+#: ../configuration.rst:599
 msgid ""
 "All custom info reactors will be registered to the reactor list to "
 "process information from the server"
 msgstr "所有自定义 info 响应器都将注册到反应堆列表中，以处理来自服务端的信息"
 
-#: ../configuration.rst:607
+#: ../configuration.rst:617
 msgid ""
 "In this example the custom reactor package path is ``my.custom.reactor`` "
 "and the class name is ``MyInfoReactor``"
 msgstr "下面这个例子中，``my.custom.reactor`` 是包路径，``MyInfoReactor`` 是类名"
 
-#: ../configuration.rst:612
+#: ../configuration.rst:622
 msgid "watchdog_threshold"
 msgstr "watchdog_threshold"
 
-#: ../configuration.rst:614
+#: ../configuration.rst:624
 msgid ""
 "The required time interval in second for :doc:`/plugin_dev/watchdog` to "
 "consider the task executor thread is not responding. Set it to 0 to "
@@ -1006,15 +1017,15 @@ msgstr ""
 "使得 :doc:`/plugin_dev/watchdog` 认为任务执行者 (task executor) "
 "线程已经未响应所需的时间间隔。将其设为 0 以禁用 :doc:`/plugin_dev/watchdog`"
 
-#: ../configuration.rst:616
+#: ../configuration.rst:626
 msgid "Option type: :external:class:`int` or :external:class:`float`"
 msgstr ""
 
-#: ../configuration.rst:624
+#: ../configuration.rst:634
 msgid "handler_detection"
 msgstr "handler_detection"
 
-#: ../configuration.rst:626
+#: ../configuration.rst:636
 msgid ""
 "By default, MCDR will start a handler detection on MCDR startup for a "
 "while, to detect possible configuration mistake of the "
@@ -1023,25 +1034,25 @@ msgstr ""
 "在默认情况下，MCDR 会在启动时弃用服务端处理器正确性检测，并运行一段时间，用于检测可能出现的 :ref:`服务端处理器 "
 "<configuration:handler>` 配置错误"
 
-#: ../configuration.rst:629
+#: ../configuration.rst:639
 msgid ""
 "Set it to false to disable the handler detection for a few less "
 "performance loss after MCDR startup, mostly for profiling MCDR"
 msgstr "将其设为 false 以禁用服务端处理器检测逻辑，以减少部分 MCDR 开始运行时的性能损耗。这主要在性能分析 MCDR 时使用"
 
-#: ../configuration.rst:639
+#: ../configuration.rst:649
 msgid "Debug configuration"
 msgstr "调试配置"
 
-#: ../configuration.rst:641
+#: ../configuration.rst:651
 msgid "Configurations for debugging MCDR"
 msgstr "用于调试 MCDR 的配置"
 
-#: ../configuration.rst:644
+#: ../configuration.rst:654
 msgid "debug"
 msgstr "debug"
 
-#: ../configuration.rst:646
+#: ../configuration.rst:656
 msgid ""
 "Debug logging switches. Set ``all`` to true to enable all debug logging, "
 "or set the specific option to enable specific debug logging"

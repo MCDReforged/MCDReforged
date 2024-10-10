@@ -37,3 +37,16 @@ html.writer-html4 .rst-content dl:not(.docutils) .k, html.writer-html5 .rst-cont
 .rst-content code, .rst-content tt, code {
     background: rgba(251, 251, 251);  /* don't use pure white, that's too shiny */
 }
+
+/*
+  render multi-line cell of tables correctly
+  https://github.com/readthedocs/sphinx_rtd_theme/issues/1241
+*/
+.rst-content table.docutils td:first-child, 
+.rst-content table.docutils th:first-child, 
+.rst-content table.field-list td:first-child, 
+.rst-content table.field-list th:first-child, 
+.wy-table td:first-child,
+.wy-table th:first-child {
+    border-left-width: 1px;
+}

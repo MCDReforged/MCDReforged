@@ -1,0 +1,48 @@
+
+msgid ""
+msgstr ""
+"Project-Id-Version: MCDReforged \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-10-09 11:50+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: zh_CN\n"
+"Language-Team: zh_CN <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.15.0\n"
+
+#: ../quick_start/index.rst:9
+msgid "What is MCDR"
+msgstr "MCDR 是什么"
+
+#: ../quick_start/index.rst:9
+msgid "Installation"
+msgstr "安装"
+
+#: ../quick_start/index.rst:9
+msgid "First Run"
+msgstr "启动！"
+
+#: ../quick_start/index.rst:9
+msgid "Next Steps"
+msgstr "更进一步"
+
+#: ../quick_start/index.rst:9
+msgid "Troubleshooting"
+msgstr "故障排除"
+
+#: ../quick_start/index.rst:3
+msgid "Quick Start"
+msgstr "快速上手"
+
+#: ../quick_start/index.rst:5
+msgid "Welcome to the world of MCDReforged (MCDR, hereinafter)"
+msgstr "欢迎使用 MCDReforged (MCDR, 下同) "
+
+#: ../quick_start/index.rst:7
+msgid "This quick start guide will help you get started"
+msgstr "本指南将助你踏入 MCDR 的大门"
+
