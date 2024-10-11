@@ -11,6 +11,7 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 import datetime
+import importlib
 import os
 import sys
 from typing import TYPE_CHECKING
@@ -71,6 +72,10 @@ extensions = [
 	# https://sphinx-design.readthedocs.io/en/latest/index.html
 	'sphinx_design',
 ]
+
+# Hack fix for the incompatibility between `sphinx==8.1.0` and `sphinxcontrib-mermaid`
+# See https://github.com/MCDReforged/MCDReforged/issues/340
+importlib.import_module('sphinx.util').ExtensionError = importlib.import_module('sphinx.errors').ExtensionError
 
 source_suffix = ['.rst']
 
