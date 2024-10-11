@@ -11,6 +11,7 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 import datetime
+import importlib
 import os
 import sys
 from typing import TYPE_CHECKING
@@ -74,6 +75,10 @@ extensions = [
 	# https://pypi.org/project/sphinxcontrib.asciinema/
 	'sphinxcontrib.asciinema'
 ]
+
+# Hack fix for the incompatibility between `sphinx==8.1.0` and `sphinxcontrib-mermaid`
+# See https://github.com/MCDReforged/MCDReforged/issues/340
+importlib.import_module('sphinx.util').ExtensionError = importlib.import_module('sphinx.errors').ExtensionError
 
 source_suffix = ['.rst']
 
@@ -144,7 +149,7 @@ html_theme_options = {
 	'logo_only': True,
 }
 
-html_logo = 'banner.png'
+html_logo = '../../logo/images/logo_long_white.svg'
 
 
 # -- Options for sphinx-intl -------------------------------------------------
