@@ -77,7 +77,7 @@ And upgraded by:
 
 Verify the installation with:
 
-.. code-block-mcdr-version:: bash
+.. prompt-mcdr-version:: bash $ auto
 
     $ mcdreforged
     MCDReforged v@@MCDR_VERSION@@
@@ -129,15 +129,15 @@ Install pipx refer to its `official documentation <https://pipx.pypa.io/stable/#
 
 Then install MCDR using pipx:
 
-.. code-block:: bash
+.. prompt:: bash
 
-    $ pipx install mcdreforged
+    pipx install mcdreforged
 
 When a new version of MCDR available, you may take the upgrade by:
 
-.. code-block:: bash
+.. prompt:: bash
 
-    $ pipx upgrade mcdreforged
+    pipx upgrade mcdreforged
 
 .. asciinema:: resources/pipx.cast
     :rows: 8
@@ -161,15 +161,15 @@ For the most native, but more complicated option, you can create a virtual envir
 
 Create a virtual environment by:
 
-.. code-block:: bash
+.. prompt:: bash
 
-    $ python3 -m venv <venv directory>
+    python3 -m venv <venv directory>
 
 ``venv`` for example:
 
-.. code-block:: bash
+.. prompt:: bash
 
-    $ python3 -m venv venv
+    python3 -m venv venv
 
 Activate it by:
 
@@ -191,15 +191,17 @@ Activate it by:
 
 Then, install MCDR using pip:
 
-.. code-block:: bash
+.. prompt:: bash
+    :prompts: (venv) $
 
-    (venv) $ pip install mcdreforged
+    pip install mcdreforged
 
 When a new version of MCDR available, you may upgrade MCDR by:
 
-.. code-block:: bash
+.. prompt:: bash
+    :prompts: (venv) $
 
-    (venv) $ pip install mcdreforged -U
+    pip install mcdreforged -U
 
 An animated demo with bash:
 
@@ -236,7 +238,9 @@ Accelerate the installation
 For users in China, you may use a mirror to accelerate ``pip`` and ``pipx``. Here's an example with 
 `Tsinghua University TUNA mirror <https://mirrors.tuna.tsinghua.edu.cn/help/pypi/>`__:
 
-.. code-block:: bash
+.. prompt:: bash
+    :prompts: $,(venv) $
+    :modifiers: auto
 
     $ pipx install -i https://pypi.tuna.tsinghua.edu.cn/simple mcdreforged
     $ pipx upgrade -i https://pypi.tuna.tsinghua.edu.cn/simple mcdreforged
@@ -245,6 +249,6 @@ For users in China, you may use a mirror to accelerate ``pip`` and ``pipx``. Her
 
 Or simply set a global index-url by:
 
-.. code-block:: bash
+.. prompt:: bash
 
-    $ pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+    pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple

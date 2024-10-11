@@ -149,9 +149,9 @@ Run
 
 Now, you should be able to launch MCDR, and it should start handling the server correctly
 
-.. code-block-mcdr-version:: bash
+.. prompt:: bash
 
-    $ mcdreforged
+    mcdreforged
 
 An animated demo configured as above:
 

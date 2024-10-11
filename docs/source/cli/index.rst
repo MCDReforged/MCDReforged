@@ -74,10 +74,10 @@ Global Arguments
 .. versionadded:: v2.8.0
     The ``-V`` and ``--version`` arguments
 
-.. code-block:: bash
+.. prompt-mcdr-version:: bash $ auto
 
     $ mcdreforged -V
-    MCDReforged 2.8.0
+    MCDReforged @@MCDR_VERSION@@
 
 Sub Commands
 ------------

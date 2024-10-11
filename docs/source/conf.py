@@ -93,9 +93,9 @@ exclude_patterns = ['build', 'Thumbs.db', '.DS_Store']
 
 def setup(app: 'Sphinx'):
 	from typing import List
-	from sphinx.directives.code import CodeBlock
+	from sphinx_prompt import PromptDirective
 
-	class CodeBlockWithMCDRVersion(CodeBlock):
+	class PromptWithMCDRVersion(PromptDirective):
 		content: List[str]
 
 		def run(self):
@@ -104,7 +104,7 @@ def setup(app: 'Sphinx'):
 				self.content[i] = self.content[i].replace('@@MCDR_VERSION@@', core_constant.VERSION)
 			return super().run()
 
-	app.add_directive('code-block-mcdr-version', CodeBlockWithMCDRVersion)
+	app.add_directive('prompt-mcdr-version', PromptWithMCDRVersion)
 	autodoc_setup(app)
 
 
