@@ -63,13 +63,6 @@ You can also use other server software, such as Fabric, Spigot, Paper, etc.
 Initialize
 ----------
 
-After MCDR has been installed, you can verify the installation with the following command:
-
-.. code-block-mcdr-version:: bash
-
-    $ mcdreforged
-    MCDReforged v@@MCDR_VERSION@@
-
 Let's say your are going to start MCDR in a folder named ``my_mcdr_server``. Then you can run the following commands to initialize the environment for MCDR:
 
 .. code-block:: bash

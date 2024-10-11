@@ -75,6 +75,13 @@ And upgraded by:
 
         pip3 install mcdreforged -U
 
+Verify the installation with:
+
+.. code-block-mcdr-version:: bash
+
+    $ mcdreforged
+    MCDReforged v@@MCDR_VERSION@@
+
 Externally managed environment
 ------------------------------
 

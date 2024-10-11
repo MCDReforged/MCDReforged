@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-10 21:03+0800\n"
+"POT-Creation-Date: 2024-10-11 13:39+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -26,15 +26,13 @@ msgstr "现在你已经安装好了 MCDR，是时候启动它了"
 msgid ""
 "Most common use of MCDR is to control a Minecraft server, so we also take"
 " this as the demonstrated use case here"
-msgstr ""
-"MCDR 最常见的用途是控制 Minecraft 服务器，我们也就以此为例"
+msgstr "MCDR 最常见的用途是控制 Minecraft 服务器，我们也就以此为例"
 
 #: ../quick_start/first_run.rst:13
 msgid ""
 "To manage Minecraft server with MCDR, It is recommended to have basic "
 "knowledge of common Minecraft server softwares"
-msgstr ""
-"用 MCDR 管理 Minecraft 服务器前，建议对常见的 Minecraft 服务端有些基础了解"
+msgstr "用 MCDR 管理 Minecraft 服务器前，建议对常见的 Minecraft 服务端有些基础了解"
 
 #: ../quick_start/first_run.rst:15
 msgid "Which means, you should know:"
@@ -70,36 +68,30 @@ msgstr "准备"
 msgid ""
 "To manage a Minecraft server with MCDR, you should have a **well-"
 "configured** Minecraft server software"
-msgstr ""
-"要用 MCDR 管理 Minecraft 服务器，你首先需要 **配置好** 一个 Minecraft 服务端"
+msgstr "要用 MCDR 管理 Minecraft 服务器，你首先需要 **配置好** 一个 Minecraft 服务端"
 
 #: ../quick_start/first_run.rst:29
 msgid ""
 "For example, this is a typical directory structure of vanilla Minecraft "
 "server:"
-msgstr ""
-"例如，这是典型的原版 Minecraft 服务端目录结构："
+msgstr "例如，这是典型的原版 Minecraft 服务端目录结构："
 
 #: ../quick_start/first_run.rst:47
 msgid "With this command to start it:"
-msgstr ""
-"可以使用以下命令启动它："
+msgstr "可以使用以下命令启动它："
 
 #: ../quick_start/first_run.rst:53
 msgid ""
 "You can also use other server software, such as Fabric, Spigot, Paper, "
 "etc."
-msgstr ""
-"你也选择其他服务端，如 Fabric、Spigot、Paper 等"
+msgstr "你也选择其他服务端，如 Fabric、Spigot、Paper 等"
 
 #: ../quick_start/first_run.rst:57
 msgid ""
 "Configure and troubleshoot your server software **BEFORE** you introduce "
 "MCDR. Otherwise, you can't distinguish whether a problem is caused by "
 "MCDR or your server software"
-msgstr ""
-"在引入 MCDR **之前**，请先配置并调试好服务端。"
-"否则，你将很难区分由 MCDR 和服务端引起的问题"
+msgstr "在引入 MCDR **之前**，请先配置并调试好服务端。否则，你将很难区分由 MCDR 和服务端引起的问题"
 
 #: ../quick_start/first_run.rst:59
 msgid ""
@@ -109,15 +101,14 @@ msgid ""
 "software with `GeyserMC <https://geysermc.org/>`__ to provide Bedrock "
 "Edition compatibility"
 msgstr ""
-"MCDR 是为 Minecraft Java 版常见服务端而诞生的。大多数插件以此为前提。"
-"如果你想在基岩版服务器上运行 MCDR，可以考虑使用 Java 版服务端，并用 `GeyserMC <https://geysermc.org/>`__ 兼容基岩版"
+"MCDR 是为 Minecraft Java 版常见服务端而诞生的。大多数插件以此为前提。如果你想在基岩版服务器上运行 MCDR，可以考虑使用 "
+"Java 版服务端，并用 `GeyserMC <https://geysermc.org/>`__ 兼容基岩版"
 
 #: ../quick_start/first_run.rst:61
 msgid ""
 "Of course, if you don't need to make use of the plugin ecosystem designed"
 " for Java Edition server, you can run any programs you want with MCDR"
-msgstr ""
-"当然，如果你不需要使用为 Java 版服务器设计的插件生态系统，那用 MCDR 跑啥都行"
+msgstr "当然，如果你不需要使用为 Java 版服务器设计的插件生态系统，那用 MCDR 跑啥都行"
 
 #: ../quick_start/first_run.rst:64
 msgid "Initialize"
@@ -125,127 +116,111 @@ msgstr "初始化"
 
 #: ../quick_start/first_run.rst:66
 msgid ""
-"After MCDR has been installed, you can verify the installation with the "
-"following command:"
-msgstr ""
-"可用以下命令验证 MCDR 是否成功安装："
-
-#: ../quick_start/first_run.rst:73
-msgid ""
 "Let's say your are going to start MCDR in a folder named "
 "``my_mcdr_server``. Then you can run the following commands to initialize"
 " the environment for MCDR:"
-msgstr ""
-"假设你要在名为 ``my_mcdr_server`` 的文件夹中启动 MCDR，"
-"那么你可以运行以下命令来初始化 MCDR 环境："
+msgstr "假设你要在名为 ``my_mcdr_server`` 的文件夹中启动 MCDR，那么你可以运行以下命令来初始化 MCDR 环境："
 
-#: ../quick_start/first_run.rst:80
+#: ../quick_start/first_run.rst:73
 msgid "MCDR will generate its default structure like this:"
-msgstr ""
-"MCDR 将生成默认结构，如下所示："
+msgstr "MCDR 将生成默认结构，如下所示："
 
-#: ../quick_start/first_run.rst:93
+#: ../quick_start/first_run.rst:86
 msgid "Animated demo:"
 msgstr "动画演示："
 
-#: ../quick_start/first_run.rst:101
+#: ../quick_start/first_run.rst:94
 msgid "Configure"
 msgstr "配置"
 
-#: ../quick_start/first_run.rst:104
+#: ../quick_start/first_run.rst:97
 msgid "Server Software"
 msgstr "服务端"
 
-#: ../quick_start/first_run.rst:106
+#: ../quick_start/first_run.rst:99
 msgid ""
 "Remember the server software you have prepared? Put it into the "
 "``server`` folder. The directory structure should be something like this:"
-msgstr ""
-"还记得你准备的服务端软件吗？把它放到 ``server`` 文件夹中"
+msgstr "还记得你准备的服务端软件吗？把它放到 ``server`` 文件夹中"
 
-#: ../quick_start/first_run.rst:123
+#: ../quick_start/first_run.rst:116
 msgid "Config File"
 msgstr "配置文件"
 
-#: ../quick_start/first_run.rst:125
+#: ../quick_start/first_run.rst:118
 msgid ""
 "Then, edit the ``config.yml`` file to configure MCDR. You can find more "
 "information about this in :doc:`/configuration`"
-msgstr ""
-"然后，编辑 ``config.yml`` 文件来配置 MCDR。详见 :doc:`/configuration` 一章"
+msgstr "然后，编辑 ``config.yml`` 文件来配置 MCDR。详见 :doc:`/configuration` 一章"
 
-#: ../quick_start/first_run.rst:127
+#: ../quick_start/first_run.rst:120
 msgid ""
 "For most users, there are 4 parts of the configuration that you need to "
 "be aware of"
-msgstr ""
-"对于大多数用户来说，有 4 个需要注意的部分"
+msgstr "对于大多数用户来说，有 4 个需要注意的部分"
 
-#: ../quick_start/first_run.rst:129
+#: ../quick_start/first_run.rst:122
 msgid ":ref:`configuration:language`: the language using in MCDR"
 msgstr ":ref:`configuration:language`：MCDR 使用的语言"
 
-#: ../quick_start/first_run.rst:130
+#: ../quick_start/first_run.rst:123
 msgid ":ref:`configuration:start_command`: how MCDR starts your server"
 msgstr ":ref:`configuration:start_command`：MCDR 启动服务端的命令"
 
-#: ../quick_start/first_run.rst:131
+#: ../quick_start/first_run.rst:124
 msgid ":ref:`configuration:handler`: how MCDR read your server outputs"
 msgstr ":ref:`configuration:handler`：MCDR 处理服务端输出的方式"
 
-#: ../quick_start/first_run.rst:132
+#: ../quick_start/first_run.rst:125
 msgid ""
 ":ref:`configuration:encoding, decoding`: how MCDR handles the server IO "
 "stream"
 msgstr ":ref:`configuration:encoding, decoding`：MCDR 编/解码 服务端 输入/输出流 的方式"
 
-#: ../quick_start/first_run.rst:134
+#: ../quick_start/first_run.rst:127
 msgid ""
 "Read each section carefully and make sure you filled in the correct "
 "values."
 msgstr "仔细阅读这几节，确保它们填写正确"
 
-#: ../quick_start/first_run.rst:136
+#: ../quick_start/first_run.rst:129
 msgid ""
 "As a simple example, this is the ones you need to aware for a vanilla "
 "Minecraft 1.21 server with Java 21:"
 msgstr "例如，对于 Java 21 的 Minecraft 1.21 原版服务端，需要关注的部分如下："
 
-#: ../quick_start/first_run.rst:147
+#: ../quick_start/first_run.rst:140
 msgid ""
 "If you're confusing why this command is much logner than we mentioned "
 "earlier, read the **encoding, decoding** section again"
-msgstr ""
-"如果你产生了 “为什么这命令相比之前提及时，变长了这么多” 的疑问，请再读读 **encoding, decoding** 一节"
+msgstr "如果你产生了 “为什么这命令相比之前提及时，变长了这么多” 的疑问，请再读读 **encoding, decoding** 一节"
 
-#: ../quick_start/first_run.rst:150
+#: ../quick_start/first_run.rst:143
 msgid "RCON"
 msgstr "RCON"
 
-#: ../quick_start/first_run.rst:152
+#: ../quick_start/first_run.rst:145
 msgid ""
 "Optionally, you may enable RCON protocol to make some specific plugins "
 "work properly or more efficiently. Check the details in "
 ":ref:`configuration:rcon`"
-msgstr ""
-"你可以选择是否启用 RCON 协议，来让一些特定插件工作正常或高效。详见 :ref:`configuration:rcon` 一节"
+msgstr "你可以选择是否启用 RCON 协议，来让一些特定插件工作正常或高效。详见 :ref:`configuration:rcon` 一节"
 
-#: ../quick_start/first_run.rst:155
+#: ../quick_start/first_run.rst:148
 msgid "Run"
 msgstr "启动！"
 
-#: ../quick_start/first_run.rst:157
+#: ../quick_start/first_run.rst:150
 msgid ""
 "Now, you should be able to launch MCDR, and it should start handling the "
 "server correctly"
-msgstr ""
-"现在，你应该能够启动 MCDR，并且它应该能够正确地处理服务端"
+msgstr "现在，你应该能够启动 MCDR，并且它应该能够正确地处理服务端"
 
-#: ../quick_start/first_run.rst:163
+#: ../quick_start/first_run.rst:156
 msgid "An animated demo configured as above:"
 msgstr "如上配置的动画演示："
 
-#: ../quick_start/first_run.rst:169
+#: ../quick_start/first_run.rst:162
 msgid "Also, test MCDR in game:"
 msgstr "也请在游戏中测试 MCDR："
 
