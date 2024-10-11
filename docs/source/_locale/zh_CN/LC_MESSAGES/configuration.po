@@ -612,11 +612,11 @@ msgstr ""
 msgid ""
 "To configure rcon to work with MCDR, search for these lines in your "
 "``server.properties``:"
-msgstr ""
+msgstr "要配置 rcon 以便 MCDR 使用，请在 ``server.properties`` 中找到以下几行："
 
 #: ../configuration.rst:341
 msgid "Make them the same value as the MCDR configurations."
-msgstr ""
+msgstr "确保它们与 MCDR 配置相同"
 
 #: ../configuration.rst:344
 msgid "rcon.enable"
