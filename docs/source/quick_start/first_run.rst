@@ -39,7 +39,7 @@ For example, this is a typical directory structure of vanilla Minecraft server:
     ├── banned-players.json
     ├── eula.txt
     ├── ops.json
-    ├── server.jar
+    ├── minecraft_server.jar
     ├── server.properties
     ├── usercache.json
     └── whitelist.json
@@ -114,7 +114,7 @@ Remember the server software you have prepared? Put it into the ``server`` folde
         ├─ plugins/
         ├─ server/
     ++  │   ├─ ...
-    ++  │   ├─ server.jar
+    ++  │   ├─ minecraft_server.jar
     ++  │   └─ server.properties
         ├─ config.yml
         └─ permission.yml
