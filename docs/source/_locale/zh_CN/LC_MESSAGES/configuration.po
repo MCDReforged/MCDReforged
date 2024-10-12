@@ -401,14 +401,13 @@ msgid ""
 msgstr "确保启动 Minecraft 的 JVM 也使用 UTF-8 作为默认字符集。你可以通过以下任一操作来实现："
 
 #: ../configuration.rst:233
-#, fuzzy
 msgid ""
 "If you are using a Long-Term-Support Java version (e.g. 8, 11, 17, 21), "
 "you can always use this as a universal Java UTF-8 solution no matter what"
 " your Java version is. Those unrecognized system properties "
 "``stdout.encoding`` and ``stderr.encoding`` are harmless"
 msgstr ""
-"如果你在使用 Java 的长期支持（LTS）版本，如 8、11、17，则无论你的 Java 版本是什么，你都可以将本方案用作一个万能的 Java "
+"如果你在使用 Java 的长期支持（LTS）版本，如 8/11/17/21，那么你总是可以将此作为一个万能的 Java "
 "UTF-8 解决方案。未被识别的系统属性 ``stdout.encoding`` 和 ``stderr.encoding`` 是无害的"
 
 #: ../configuration.rst:236
