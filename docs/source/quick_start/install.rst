@@ -237,7 +237,9 @@ You may found MCDR in some package repositories, AUR for example. However, it's 
 Accelerate the installation
 ---------------------------
 
-For users in China, you may use a mirror, `Tsinghua University TUNA mirror <https://mirrors.tuna.tsinghua.edu.cn/help/pypi/>`__ for example, to accelerate ``pip`` and ``pipx``:
+For users in China, you may use a mirror, `Tsinghua University TUNA mirror <https://mirrors.tuna.tsinghua.edu.cn/help/pypi/>`__ for example, to accelerate ``pip`` and ``pipx``
+
+To use the mirror, ``-i <index-url>`` to the commands:
 
 .. prompt:: bash
     :prompts: $,(venv) $

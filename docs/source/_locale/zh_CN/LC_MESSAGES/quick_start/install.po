@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-13 12:59+0800\n"
+"POT-Creation-Date: 2024-10-13 18:02+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -449,13 +449,17 @@ msgstr "加速安装"
 msgid ""
 "For users in China, you may use a mirror, `Tsinghua University TUNA "
 "mirror <https://mirrors.tuna.tsinghua.edu.cn/help/pypi/>`__ for example, "
-"to accelerate ``pip`` and ``pipx``:"
+"to accelerate ``pip`` and ``pipx``"
 msgstr ""
 "中国用户可以使用镜像，例如 `清华大学 TUNA 镜像 "
 "<https://mirrors.tuna.tsinghua.edu.cn/help/pypi/>`__ 来加速 ``pip`` 和 "
-"``pipx``："
+"``pipx``"
 
-#: ../quick_start/install.rst:251
+#: ../quick_start/install.rst:242
+msgid "To use the mirror, ``-i <index-url>`` to the commands:"
+msgstr "使用镜像，只需在命令中添加 ``-i <index-url>`` 参数："
+
+#: ../quick_start/install.rst:253
 msgid "Or simply set a global index-url by:"
 msgstr "也可以一劳永逸地通过以下命令设置全局索引："
 
