@@ -19,7 +19,9 @@ MCDR runs above the server. It doesn't need to modify the server at all, which k
 Plugin System
 ~~~~~~~~~~~~~
 
-MCDR has a hot-reloadable plugin system. You don't need to shut down the server to update the plugins
+MCDR has a rich ecosystem of plugins from the community
+
+Meanwhile it's hot-reloadable that you don't need to shut down the server to update the plugins
 
 Compatibility
 ~~~~~~~~~~~~~

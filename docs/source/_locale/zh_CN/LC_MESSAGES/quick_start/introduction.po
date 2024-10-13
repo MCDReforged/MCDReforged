@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-10 21:03+0800\n"
+"POT-Creation-Date: 2024-10-13 12:16+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -24,17 +24,15 @@ msgid ""
 " with the custom plugin system. No need to modify the original Minecraft "
 "server at all"
 msgstr ""
-"MCDReforged (MCDR, 下同) 是一个管理 Minecraft 服务器的工具，拥有自定义插件系统。"
-"完全无需修改 Minecraft 服务器本身"
+"MCDReforged (MCDR, 下同) 是一个管理 Minecraft 服务器的工具，拥有自定义插件系统。完全无需修改 Minecraft "
+"服务器本身"
 
 #: ../quick_start/introduction.rst:7
 msgid ""
 "In-game calculator, player high-light, scoreboard manipulate, structure "
 "file management, backup / rollback... you can control the whole world "
 "with MCDR and its plugins"
-msgstr ""
-"游戏内计算器，玩家高亮，计分板操作，结构文件管理，备份/回滚... 你可以用 MCDR 和其插件"
-"控制整个世界"
+msgstr "游戏内计算器，玩家高亮，计分板操作，结构文件管理，备份/回滚... 你可以用 MCDR 和其插件控制整个世界"
 
 #: ../quick_start/introduction.rst:9
 msgid ""
@@ -42,8 +40,8 @@ msgid ""
 " his `MCDaemon 1.0 <https://github.com/kafuuchino-desu/MCDaemon>`__ for "
 "the idea of such a cool tool"
 msgstr ""
-"特别感谢 `chino_desu <https://github.com/kafuuchino-desu>`__ 和他的 `MCDaemon 1.0 "
-"<https://github.com/kafuuchino-desu/MCDaemon>`__ 提供如此炫酷的点子"
+"特别感谢 `chino_desu <https://github.com/kafuuchino-desu>`__ 和他的 `MCDaemon "
+"1.0 <https://github.com/kafuuchino-desu/MCDaemon>`__ 提供如此炫酷的点子"
 
 #: ../quick_start/introduction.rst:12
 msgid "Advantages"
@@ -57,46 +55,47 @@ msgstr "纯净"
 msgid ""
 "MCDR runs above the server. It doesn't need to modify the server at all, "
 "which keep everything **vanilla**"
-msgstr ""
-"MCDR 运行于服务端之上，不需要修改服务器，保持一切 **纯净** (*Vanilla*)"
+msgstr "MCDR 运行于服务端之上，不需要修改服务器，服务端可保持原版状态"
 
 #: ../quick_start/introduction.rst:20
 msgid "Plugin System"
 msgstr "插件系统"
 
 #: ../quick_start/introduction.rst:22
-msgid ""
-"MCDR has a hot-reloadable plugin system. You don't need to shut down the "
-"server to update the plugins"
-msgstr ""
-"MCDR 拥有一个支持热重载的插件系统，你不需要关闭服务器来更新插件"
+msgid "MCDR has a rich ecosystem of plugins from the community"
+msgstr "MCDR 拥有丰富的社区插件生态"
 
-#: ../quick_start/introduction.rst:25
+#: ../quick_start/introduction.rst:24
+msgid ""
+"Meanwhile it's hot-reloadable that you don't need to shut down the server"
+" to update the plugins"
+msgstr "支持热重载，无需关闭服务器即可更新插件"
+
+#: ../quick_start/introduction.rst:27
 msgid "Compatibility"
 msgstr "兼容性"
 
-#: ../quick_start/introduction.rst:27
+#: ../quick_start/introduction.rst:29
 msgid ""
 "We supports most popular server softwares (Vanilla, Fabric, Spigot, "
 "Paper, etc.)"
 msgstr "支持大多数流行服务端 (Vanilla, Fabric, Spigot, Paper 等)"
 
-#: ../quick_start/introduction.rst:29
+#: ../quick_start/introduction.rst:31
 msgid "On multiple platforms (Windows, Linux, Mac, etc.)"
 msgstr "支持多平台 (Windows, Linux, Mac 等)"
 
-#: ../quick_start/introduction.rst:32
+#: ../quick_start/introduction.rst:34
 msgid "How it works"
 msgstr "它是如何工作的"
 
-#: ../quick_start/introduction.rst:34
+#: ../quick_start/introduction.rst:36
 msgid ""
 "**TL;DR:** MCDR works like robot that stares at the server console, "
 "respond to server output quickly, and inputting commands for users"
-msgstr ""
-"**简单来说:** MCDR 就像一个盯着服务端控制台看的小机器人，快速响应服务端输出，并为用户输入指令"
+msgstr "**简单来说:** MCDR 就像一个盯着服务端控制台看的小机器人，快速响应服务端输出，并为用户输入指令"
 
-#: ../quick_start/introduction.rst:36
+#: ../quick_start/introduction.rst:38
 msgid ""
 "MCDR uses `Popen "
 "<https://docs.python.org/3/library/subprocess.html#subprocess.Popen>`__ "
@@ -107,7 +106,7 @@ msgstr ""
 "<https://docs.python.org/3/library/subprocess.html#subprocess.Popen>`__ "
 "来启动服务端软件作为子进程，因此它能够控制服务端的输入输出流"
 
-#: ../quick_start/introduction.rst:38
+#: ../quick_start/introduction.rst:40
 msgid ""
 "Since the console output of a Minecraft server has a stable format and "
 "contains a large amount of useful information about the server, e.g. "
@@ -115,16 +114,13 @@ msgid ""
 "output, abstract them into different events and dispatch them towards "
 "plugins for responding"
 msgstr ""
-"由于 Minecraft 服务端的控制台输出格式稳定，并且包含大量有用的信息，"
-"例如玩家聊天消息，MCDR 能够解析和分析服务端输出，将它们抽象为不同的事件，"
-"并将它们分派给插件以进行响应"
+"由于 Minecraft 服务端的控制台输出格式稳定，并且包含大量有用的信息，例如玩家聊天消息，MCDR "
+"能够解析和分析服务端输出，将它们抽象为不同的事件，并将它们分派给插件以进行响应"
 
-#: ../quick_start/introduction.rst:40
+#: ../quick_start/introduction.rst:42
 msgid ""
 "With the help of Minecraft command system, MCDR can send Minecraft "
 "commands via the standard input stream to affect the actual Minecraft "
 "server"
-msgstr ""
-"借助 Minecraft 指令系统，MCDR 可以通过标准输入流发送 Minecraft "
-"指令以操作 Minecraft 服务端"
+msgstr "借助 Minecraft 指令系统，MCDR 可以通过标准输入流发送 Minecraft 指令以操作 Minecraft 服务端"
 

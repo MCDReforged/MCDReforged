@@ -610,8 +610,8 @@ msgstr ""
 #: ../configuration.rst:333
 msgid ""
 "To configure rcon to work with MCDR, search for these lines in your "
-"``server.properties``:"
-msgstr "要配置 rcon 以便 MCDR 使用，请在 ``server.properties`` 中找到以下几行："
+"``server.properties`` of your Minecraft server:"
+msgstr "要配置 rcon 以便 MCDR 使用，请在 Minecraft 服务端的 ``server.properties`` 中找到以下几行："
 
 #: ../configuration.rst:341
 msgid "Make them the same value as the MCDR configurations."

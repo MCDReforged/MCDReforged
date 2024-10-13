@@ -22,7 +22,7 @@ If you have interest to develop one yourself:
 Commands
 --------
 
-MCDR has its own command system. By tradition, whether built-ins or ones registered by plugins, most of them start with a ``!!``. Mentioned above, ``!!MCDR plg`` is one of the built-in commands.
+MCDR has its own command system.  Most of them start with a ``!!`` in common practice. Mentioned above, ``!!MCDR plg`` is one of the built-in commands.
 
 You may want to learn more of them: :doc:`/command/index`
 
@@ -38,7 +38,7 @@ More details in: :doc:`/permission`
 CLI
 ---
 
-MCDR has a Command Line Interface to provide some useful tools for you. For example, you may manage plugins without launching the server!
+MCDR has a Command Line Interface to provide some useful tools for you. For example, you may manage plugins without launching the server
 
 More details in: :doc:`/cli/index`
 

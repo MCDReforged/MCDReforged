@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-10 22:55+0800\n"
+"POT-Creation-Date: 2024-10-13 12:16+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -80,8 +80,7 @@ msgstr "若你通过 pip 在 venv 中安装了 MCDR，确保你激活了 venv"
 msgid ""
 "Use ``which mcdreforged`` (``where mcdreforged`` in Windows), see which "
 "executable is being called"
-msgstr ""
-"使用 ``which mcdreforged`` (Windows 下使用 ``where mcdreforged``)，看看调用了哪个可执行文件"
+msgstr "使用 ``which mcdreforged`` (Windows 下使用 ``where mcdreforged``)，看看调用了哪个可执行文件"
 
 #: ../quick_start/troubleshooting.rst:23
 msgid ""
@@ -165,70 +164,70 @@ msgstr "也许，你的服务端比较特别，内置处理器均不兼容"
 msgid ""
 "Maybe your server output is different. For example, if you allow players "
 "that not following the Mojang naming rule (``[A-Za-z0-9_]{3,16}``), the "
-"handler will not recognize them"
+"handler will not recognize them. Examples:"
 msgstr ""
 "也许，你的服务端输出与默认状态不同。例如，如果你允许非 Mojang "
-"命名规则（``[A-Za-z0-9_]{3,16}``）的玩家名，处理器将无法识别"
+"命名规则（``[A-Za-z0-9_]{3,16}``）的玩家名，处理器将无法识别。例如："
 
-#: ../quick_start/troubleshooting.rst:57
+#: ../quick_start/troubleshooting.rst:70
 msgid ""
 "Maybe your server output have been modified by mods or plugins (usually "
 "something like \"player title/profession\", \"better console\"), that the"
 " handler can't recognize them. To be confirmed, disable all mods and "
-"plugins and see if the problem solved"
-msgstr "也许，你的服务端输出被插件或模组（例如：玩家称号/职业，更好的控制台）修改了，导致处理器无法识别。禁用所有插件和模组，看看问题是否解决"
+"plugins and see if the problem solved. Examples:"
+msgstr "也许，你的服务端输出被插件或模组（例如：玩家称号/职业，更好的控制台）修改了，导致处理器无法识别。禁用所有插件和模组，看看问题是否解决。例如："
 
-#: ../quick_start/troubleshooting.rst:59
+#: ../quick_start/troubleshooting.rst:85
 msgid ""
 "If your server has one of these problems, you may need to :ref:`customize"
 " your own handler <customize/handler:Server Handler>`"
 msgstr "如果你的服务端存在上述问题之一，你可能需要 :ref:`自定义服务端处理器 <customize/handler:Server Handler>`"
 
-#: ../quick_start/troubleshooting.rst:61
+#: ../quick_start/troubleshooting.rst:87
 msgid "**Some plugin commands work neither in game nor the console**"
 msgstr "**某些插件命令在游戏和控制台中都无法使用**"
 
-#: ../quick_start/troubleshooting.rst:62
+#: ../quick_start/troubleshooting.rst:88
 msgid "**Some plugin commands perform incorrectly in all conditions**"
 msgstr "**某些插件命令在所有条件下都执行不正确**"
 
-#: ../quick_start/troubleshooting.rst:64
+#: ../quick_start/troubleshooting.rst:90
 msgid ""
 "Check if the plugin is enabled and loaded correctly. Check the logs to "
 "see if there are any errors or warnings related to the plugin. Check the "
 "plugin configuration"
 msgstr "检查插件是否正确启用和加载。检查日志，看看是否有与插件相关的错误或警告。检查插件配置文件"
 
-#: ../quick_start/troubleshooting.rst:66
+#: ../quick_start/troubleshooting.rst:92
 msgid ""
 "Check the README or documentation of the plugin to see if it has any "
 "special requirements. Some plugins may require additional permissions or "
 "configurations"
 msgstr "查看插件的 README 或文档，看看它是否有任何特殊要求。有些插件可能需要额外权限或配置"
 
-#: ../quick_start/troubleshooting.rst:68
+#: ../quick_start/troubleshooting.rst:94
 msgid ""
 "Some plugins may have conflicts with others. Try to disable other plugins"
 " to see if the problem solved"
 msgstr "有些插件可能与其它插件冲突。尝试禁用其它插件，看看问题是否解决"
 
-#: ../quick_start/troubleshooting.rst:70
+#: ../quick_start/troubleshooting.rst:96
 msgid ""
 "If the problem still exists, try to report it to the plugin's author or "
 "community"
 msgstr "如果问题仍然存在，尝试向插件的作者或社区报告"
 
-#: ../quick_start/troubleshooting.rst:73
+#: ../quick_start/troubleshooting.rst:99
 msgid "Run with MCSManager"
 msgstr "使用 MCSManager 运行"
 
-#: ../quick_start/troubleshooting.rst:77
+#: ../quick_start/troubleshooting.rst:103
 msgid ""
 "This part may not being up to date. If you encounter any problems, do not"
 " report them to MCDR"
 msgstr "这部分内容可能过时。若你遇到任何问题，不要向 MCDR 报告"
 
-#: ../quick_start/troubleshooting.rst:79
+#: ../quick_start/troubleshooting.rst:105
 msgid ""
 "For more infomations, get in touch with their community: `Github Repo "
 "<https://github.com/MCSManager/MCSManager>`__, `Documentation "
@@ -238,22 +237,19 @@ msgstr ""
 "<https://github.com/MCSManager/MCSManager>`__，`MCSManager 文档 "
 "<https://docs.mcsmanager.com/>`__"
 
-#: ../quick_start/troubleshooting.rst:81
+#: ../quick_start/troubleshooting.rst:107
 msgid "MCDR did not specificly designed to adapt MCSManager"
 msgstr "MCDR 并未专门适配 MCSManager"
 
-#: ../quick_start/troubleshooting.rst:83
+#: ../quick_start/troubleshooting.rst:109
 msgid ""
 "However, if you use UTF-8 everywhere, and enable ``Emulation Terminal`` "
 "in MCSManager, MCDR should work fine with full functionality"
 msgstr "不过，如果你始终使用 UTF-8，并在 MCSManager 中启用 ``仿真终端``，MCDR 应该能正常工作，并具有完整功能"
 
-#: ../quick_start/troubleshooting.rst:85
+#: ../quick_start/troubleshooting.rst:111
 msgid ""
 "If ``Emulation Terminal`` is disabled, you should set "
 ":ref:`configuration:advanced_console` to ``false``"
 msgstr "若你关闭了 ``仿真终端``，请将 :ref:`configuration:advanced_console` 设置为 ``false``"
-
-#~ msgid "Get in touch with our kind community"
-#~ msgstr ""
 

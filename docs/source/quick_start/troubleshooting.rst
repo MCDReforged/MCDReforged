@@ -52,9 +52,35 @@ Commands not working
  
     Maybe your server software is unique that not supported by built-in handlers
 
-    Maybe your server output is different. For example, if you allow players that not following the Mojang naming rule (``[A-Za-z0-9_]{3,16}``), the handler will not recognize them
+    Maybe your server output is different. For example, if you allow players that not following the Mojang naming rule (``[A-Za-z0-9_]{3,16}``), the handler will not recognize them. Examples:
 
-    Maybe your server output have been modified by mods or plugins (usually something like "player title/profession", "better console"), that the handler can't recognize them. To be confirmed, disable all mods and plugins and see if the problem solved
+    .. tab:: ❌
+
+        .. code-block:: text
+
+            [09:00:00] [Server thread/INFO]: <Steve.the.Warrior> Hello
+            [09:00:00] [Server thread/INFO]: <史蒂夫> hello
+
+    .. tab:: ✅
+
+        .. code-block:: text
+
+            [09:00:00] [Server thread/INFO]: <Steve> Hello
+
+    Maybe your server output have been modified by mods or plugins (usually something like "player title/profession", "better console"), that the handler can't recognize them. To be confirmed, disable all mods and plugins and see if the problem solved. Examples:
+    
+    .. tab:: ❌
+
+        .. code-block:: text
+
+            [09:00:00] [Server thread/INFO]: <[Warrior]Steve> Hello
+            (09:00:00) INFO | Steve: hello
+        
+    .. tab:: ✅
+
+        .. code-block:: text
+
+            [09:00:00] [Server thread/INFO]: <Steve> Hello
 
     If your server has one of these problems, you may need to :ref:`customize your own handler <customize/handler:Server Handler>`
 

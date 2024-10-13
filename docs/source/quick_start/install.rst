@@ -36,7 +36,7 @@ The detailed Python version requirements are as shown in the table below
 Wait a second
 -------------
 
-In some "tutorials", you may learned to use MCDR by downloading a zip from Github and extract it
+In some tutorials, you may learned to use MCDR by downloading a zip from Github and extract it
 
 However, that's not the actual way to install MCDR - Those tutorials are outdated
 
@@ -87,12 +87,12 @@ Externally managed environment
 
 If you're using Windows, the command above should work fine, MCDR will be installed to global environment - you may ignore this section
 
-For Linux and Mac OS, it's not recommended to install MCDR system-wide, because it can cause conflicts with other Python packages and affect system dependencies
+For Linux and Mac OS, it's not recommended to install MCDR system-wide (with root), because it can cause conflicts with other Python packages and affect system dependencies
 
 System-wide install also makes version management difficult 
 and requires administrator privileges, increasing security risks
 
-For the same reason, you may get a ``externally-managed-environment`` error on pip install
+System-wide install may even result in an ``externally-managed-environment`` error
 
 See `PEP 668 <https://peps.python.org/pep-0668/>`__ for the detailed specification
 
@@ -148,7 +148,7 @@ When a new version of MCDR available, you may take the upgrade by:
 
     In this way, MCDR will be installed in an isolated environment. Instead of ``pip install <package_name>``, Python packages required by MCDR plugins should be installed by:
 
-    * ``pipx inject mcdreforged <package_name>``
+    * ``pipx inject mcdreforged <package_name>``, e.g. ``pipx inject mcdreforged requests``
     * or ``pipx inject mcdreforged -r requirements.txt``
     
     More conveniently, use the :ref:`\!!MCDR plg command <command/mcdr:Plugin management>` to install plugins with their dependencies
@@ -176,17 +176,17 @@ Activate it by:
 +----------+------------+-----------------------------------------+
 | Platform | Shell      | Command to activate virtual environment |
 +==========+============+=========================================+
-|  POSIX   | bash/zsh   | $ source venv/bin/activate              |
+|  POSIX   | bash/zsh   | source venv/bin/activate                |
 +          +------------+-----------------------------------------+
-|          | fish       | $ source venv/bin/activate.fish         |
+|          | fish       | source venv/bin/activate.fish           |
 +          +------------+-----------------------------------------+
-|          | csh/tcsh   | $ source venv/bin/activate.csh          |
+|          | csh/tcsh   | source venv/bin/activate.csh            |
 +          +------------+-----------------------------------------+
-|          | PowerShell | $ venv/bin/Activate.ps1                 |
+|          | PowerShell | venv/bin/Activate.ps1                   |
 +----------+------------+-----------------------------------------+
-| Windows  | cmd.exe    | > venv\\Scripts\\activate.bat           |
+| Windows  | cmd.exe    | venv\\Scripts\\activate.bat             |
 +          +------------+-----------------------------------------+
-|          | PowerShell | PS > venv\\Scripts\\Activate.ps1        |
+|          | PowerShell | venv\\Scripts\\Activate.ps1             |
 +----------+------------+-----------------------------------------+
 
 Then, install MCDR using pip:

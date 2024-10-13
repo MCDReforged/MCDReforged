@@ -53,12 +53,12 @@ msgid "Console of the server: what it prints, what command can you send to it"
 msgstr "服务端控制台：它输出什么，可以发送什么命令"
 
 #: ../quick_start/first_run.rst:20
-msgid "YAML and JSON files: what they are, how to edit them"
-msgstr "YAML 和 JSON 文件：是什么，如何编辑"
+msgid "How to manage the server: configure, mods / plugins etc."
+msgstr "如何管理服务器：配置文件，mod / 插件 等"
 
 #: ../quick_start/first_run.rst:22
 msgid "If you have not, Google is your friend"
-msgstr "不了解也没关系，搜索引擎是你的朋友"
+msgstr "不了解也没关系，善用搜索引擎"
 
 #: ../quick_start/first_run.rst:25
 msgid "Prepare"

@@ -330,7 +330,7 @@ rcon
 
 The setting for `rcon <https://wiki.vg/RCON>`__. If rcon is enabled, MCDR will start a rcon client to connect to the server after server rcon has started up. Then plugins can use rcon to query command from the server
 
-To configure rcon to work with MCDR, search for these lines in your ``server.properties``:
+To configure rcon to work with MCDR, search for these lines in your ``server.properties`` of your Minecraft server:
 
 .. code-block:: properties
 
