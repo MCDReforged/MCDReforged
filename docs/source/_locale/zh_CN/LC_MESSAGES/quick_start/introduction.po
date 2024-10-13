@@ -55,7 +55,7 @@ msgstr "纯净"
 msgid ""
 "MCDR runs above the server. It doesn't need to modify the server at all, "
 "which keep everything **vanilla**"
-msgstr "MCDR 运行于服务端之上，不需要修改服务器，服务端可保持原版状态"
+msgstr "MCDR 运行于服务端之上，不需要对服务端进行修改，从而保证一切都是 **原版** 的"
 
 #: ../quick_start/introduction.rst:20
 msgid "Plugin System"

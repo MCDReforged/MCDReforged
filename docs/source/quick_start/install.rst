@@ -189,6 +189,10 @@ Activate it by:
 |          | PowerShell | venv\\Scripts\\Activate.ps1             |
 +----------+------------+-----------------------------------------+
 
+.. seealso ::
+
+    Python Doc: `How venvs work <https://docs.python.org/3/library/venv.html#how-venvs-work>`__
+
 Then, install MCDR using pip:
 
 .. prompt:: bash
@@ -214,9 +218,7 @@ An animated demo with bash:
 
     In this way, you must activate the virtual environment every time you want to use MCDR, or install packages for MCDR plugins
 
-.. seealso ::
-
-    Python Doc: `How venvs work <https://docs.python.org/3/library/venv.html#how-venvs-work>`__
+    For more information, see `venv <https://docs.python.org/en/3/library/venv.html>`__ in Python Doc
 
 Using Docker
 ~~~~~~~~~~~~
@@ -235,8 +237,7 @@ You may found MCDR in some package repositories, AUR for example. However, it's 
 Accelerate the installation
 ---------------------------
 
-For users in China, you may use a mirror to accelerate ``pip`` and ``pipx``. Here's an example with 
-`Tsinghua University TUNA mirror <https://mirrors.tuna.tsinghua.edu.cn/help/pypi/>`__:
+For users in China, you may use a mirror, `Tsinghua University TUNA mirror <https://mirrors.tuna.tsinghua.edu.cn/help/pypi/>`__ for example, to accelerate ``pip`` and ``pipx``:
 
 .. prompt:: bash
     :prompts: $,(venv) $

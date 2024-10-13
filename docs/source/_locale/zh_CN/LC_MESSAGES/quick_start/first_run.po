@@ -204,7 +204,8 @@ msgid ""
 "Optionally, you may enable RCON protocol to make some specific plugins "
 "work properly or more efficiently. Check the details in "
 ":ref:`configuration:rcon`"
-msgstr "你可以选择是否启用 RCON 协议，来让一些特定插件工作正常或高效。详见 :ref:`configuration:rcon` 一节"
+msgstr "你可以选择是否启用 RCON 协议，来让一些插件正常工作，或更高效地工作。"
+"详见 :ref:`configuration:rcon` 一节"
 
 #: ../quick_start/first_run.rst:148
 msgid "Run"

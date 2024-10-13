@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-13 12:01+0800\n"
+"POT-Creation-Date: 2024-10-13 12:59+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -372,25 +372,7 @@ msgstr ""
 msgid "venv\\\\Scripts\\\\Activate.ps1"
 msgstr ""
 
-#: ../quick_start/install.rst:192
-msgid "Then, install MCDR using pip:"
-msgstr "然后，使用 pip 安装 MCDR："
-
-#: ../quick_start/install.rst:199
-msgid "When a new version of MCDR available, you may upgrade MCDR by:"
-msgstr "当有新版本的 MCDR 可用时，你可以通过以下命令升级："
-
-#: ../quick_start/install.rst:206
-msgid "An animated demo with bash:"
-msgstr "使用 bash 的动画演示："
-
-#: ../quick_start/install.rst:215
-msgid ""
-"In this way, you must activate the virtual environment every time you "
-"want to use MCDR, or install packages for MCDR plugins"
-msgstr "这样一来，每次使用 MCDR，或为 MCDR 插件安装依赖时，都要激活虚拟环境"
-
-#: ../quick_start/install.rst:219
+#: ../quick_start/install.rst:194
 msgid ""
 "Python Doc: `How venvs work <https://docs.python.org/3/library/venv.html"
 "#how-venvs-work>`__"
@@ -398,31 +380,57 @@ msgstr ""
 "Python 文档: `虚拟环境是如何实现的 <https://docs.python.org/zh-cn/3/library/venv.html"
 "#how-venvs-work>`__"
 
-#: ../quick_start/install.rst:222
+#: ../quick_start/install.rst:196
+msgid "Then, install MCDR using pip:"
+msgstr "然后，使用 pip 安装 MCDR："
+
+#: ../quick_start/install.rst:203
+msgid "When a new version of MCDR available, you may upgrade MCDR by:"
+msgstr "当有新版本的 MCDR 可用时，你可以通过以下命令升级："
+
+#: ../quick_start/install.rst:210
+msgid "An animated demo with bash:"
+msgstr "使用 bash 的动画演示："
+
+#: ../quick_start/install.rst:219
+msgid ""
+"In this way, you must activate the virtual environment every time you "
+"want to use MCDR, or install packages for MCDR plugins"
+msgstr "这样一来，每次使用 MCDR，或为 MCDR 插件安装依赖时，都要激活虚拟环境"
+
+#: ../quick_start/install.rst:221
+msgid ""
+"For more information, see `venv "
+"<https://docs.python.org/en/3/library/venv.html>`__ in Python Doc"
+msgstr ""
+"更多信息，参见 Python 文档：`虚拟环境的创建 <https://docs.python.org/zh-"
+"cn/3/library/venv.html>`__"
+
+#: ../quick_start/install.rst:224
 msgid "Using Docker"
 msgstr "使用 Docker"
 
-#: ../quick_start/install.rst:224
+#: ../quick_start/install.rst:226
 msgid ""
 "MCDR also provides Docker images as an option. See :doc:`/docker` for "
 "more details"
 msgstr "MCDR 还提供了 Docker 镜像。参见 :doc:`/docker` 一章"
 
-#: ../quick_start/install.rst:226
+#: ../quick_start/install.rst:228
 msgid "Specify MCDR version by the tag of Docker image"
 msgstr "通过 Docker 镜像标签来指定 MCDR 版本"
 
-#: ../quick_start/install.rst:228
+#: ../quick_start/install.rst:230
 msgid ""
 "Compared to the two methods above, Docker has a more convoluted learning "
 "path, but convenient for some advanced usages"
 msgstr "与上述两种方法相比，Docker 的学习曲线更曲折，但更适合一些高级用法"
 
-#: ../quick_start/install.rst:231
+#: ../quick_start/install.rst:233
 msgid "System package manager"
 msgstr "系统包管理器"
 
-#: ../quick_start/install.rst:233
+#: ../quick_start/install.rst:235
 msgid ""
 "You may found MCDR in some package repositories, AUR for example. "
 "However, it's **definately not recommended** to use a system package "
@@ -433,20 +441,21 @@ msgstr ""
 "您可以在一些包仓库（例如 AUR）中找到 MCDR。但，**非常不建议** 使用系统包管理器来安装 MCDR。系统包安装不仅与全局 pip "
 "安装有同样的问题，而且很难管理 MCDR 插件的依赖"
 
-#: ../quick_start/install.rst:236
+#: ../quick_start/install.rst:238
 msgid "Accelerate the installation"
 msgstr "加速安装"
 
-#: ../quick_start/install.rst:238
+#: ../quick_start/install.rst:240
 msgid ""
-"For users in China, you may use a mirror to accelerate ``pip`` and "
-"``pipx``. Here's an example with `Tsinghua University TUNA mirror "
-"<https://mirrors.tuna.tsinghua.edu.cn/help/pypi/>`__:"
+"For users in China, you may use a mirror, `Tsinghua University TUNA "
+"mirror <https://mirrors.tuna.tsinghua.edu.cn/help/pypi/>`__ for example, "
+"to accelerate ``pip`` and ``pipx``:"
 msgstr ""
-"中国用户可以使用镜像来加速 ``pip`` 和 ``pipx``。以下是一个使用 `清华大学 TUNA 镜像 "
-"<https://mirrors.tuna.tsinghua.edu.cn/help/pypi/>`__ 的例子："
+"中国用户可以使用镜像，例如 `清华大学 TUNA 镜像 "
+"<https://mirrors.tuna.tsinghua.edu.cn/help/pypi/>`__ 来加速 ``pip`` 和 "
+"``pipx``："
 
-#: ../quick_start/install.rst:250
+#: ../quick_start/install.rst:251
 msgid "Or simply set a global index-url by:"
 msgstr "也可以一劳永逸地通过以下命令设置全局索引："
 
