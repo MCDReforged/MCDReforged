@@ -3,7 +3,7 @@ import functools
 import logging
 import threading
 from pathlib import Path
-from typing import Optional, List, TYPE_CHECKING, Iterable
+from typing import Optional, List, TYPE_CHECKING, Iterable, Callable
 
 from typing_extensions import override, deprecated
 
@@ -36,9 +36,9 @@ class OperationHolder:
 	op_key: Optional[str] = dataclasses.field(default=None)
 
 
-def async_operation(op_holder: OperationHolder, skip_callback: callable, thread_name: str):
+def async_operation(op_holder: OperationHolder, skip_callback: Callable, thread_name: str):
 	def decorator(op_key: str):
-		def func_transformer(func: callable):
+		def func_transformer(func: Callable):
 			@functools.wraps(func)
 			def wrapped_func(*args, **kwargs):
 				acquired = op_holder.lock.acquire(blocking=False)
@@ -229,7 +229,7 @@ class PluginCommandPimExtension(SubCommand):
 	def __handle_duplicated_input(
 			self, source: CommandSource, context: CommandContext,
 			*,
-			op_func: callable, op_key: str, op_thread: Optional[threading.Thread], new_op_key: str,
+			op_func: Callable, op_key: str, op_thread: Optional[threading.Thread], new_op_key: str,
 	):
 		if op_func == type(self).cmd_install_plugins:
 			if self.__install_handler.try_prepare_for_duplicated_input(source, op_thread):
