@@ -57,15 +57,18 @@ class _ParsedContext:
 	no_deps: bool
 
 
-_RequirementSources = Dict[PluginRequirement, PluginRequirementSource]
-
-
 @dataclasses.dataclass(frozen=True)
 class _PluginToInstallData:
 	id: str
 	version: Version
 	old_version: Optional[Version]
 	release: ReleaseData
+
+
+@dataclasses.dataclass(frozen=True)
+class _ParsedPluginRequirements:
+	requirement_sources: Dict[PluginRequirement, PluginRequirementSource] = dataclasses.field(default_factory=dict)
+	hash_validators: Dict[str, str] = dataclasses.field(default_factory=dict)
 
 
 @dataclasses.dataclass(frozen=True)
@@ -108,12 +111,12 @@ class PimInstallCommandHandler(PimCommandHandlerBase):
 		self.log_debug('pim install ctx: {}'.format(ctx))
 
 		# 2. Verify and collect requirements
-		req_srcs = self.__step_create_plugin_requirements(source, ctx)
+		ppr = self.__step_parse_plugin_requirements(source, ctx)
 
 		# 3. Resolve what will be installed
 		cata_meta = self.get_merged_cata_meta(source)
-		resolution = self.__step_resolve(source, ctx, req_srcs, cata_meta)
-		to_install = self.__step_collect_to_install(source, ctx, cata_meta, resolution)
+		resolution = self.__step_resolve(source, ctx, ppr, cata_meta)
+		to_install = self.__step_collect_to_install(source, ctx, ppr, cata_meta, resolution)
 
 		# 4. Install packages and plugins
 		self.__step_install(source, ctx, cata_meta, to_install)
@@ -151,8 +154,9 @@ class PimInstallCommandHandler(PimCommandHandlerBase):
 			no_deps=context.get('no_deps', 0) > 0,
 		)
 
-	def __step_create_plugin_requirements(self, source: CommandSource, ctx: _ParsedContext) -> _RequirementSources:
-		req_srcs: _RequirementSources = {}
+	def __step_parse_plugin_requirements(self, source: CommandSource, ctx: _ParsedContext) -> _ParsedPluginRequirements:
+		ppr = _ParsedPluginRequirements()
+		req_srcs = ppr.requirement_sources
 
 		def add_plugin_requirement(req_: PluginRequirement, req_src_: PluginRequirementSource):
 			req_srcs[req_] = req_src_
@@ -166,11 +170,28 @@ class PimInstallCommandHandler(PimCommandHandlerBase):
 		input_requirements: List[PluginRequirement] = []
 		for s in ctx.input_specifiers:
 			if s != '*':
+				parts = s.split('@', 1)
+				if len(parts) == 2:
+					req_str, h = parts[0], parts[1].lower()
+				else:
+					req_str, h = s, None
 				try:
-					input_requirements.append(PluginRequirement.of(s))
+					req = PluginRequirement.of(req_str)
 				except ValueError as e:
 					source.reply(self._tr('install.parse_specifier_failed', repr(s), e))
 					raise OuterReturn()
+				if h is not None:
+					if re.fullmatch(r'[0-9abcdef]{10,64}', h) is None:  # len(sha256_hash_hex) == 64
+						source.reply(self._tr('install.hash_validator_invalid', repr(s)))
+						raise OuterReturn()
+					cris = req.requirement.criterions
+					if len(cris) == 1 and cris[0].opt == '==':
+						ppr.hash_validators[req.id] = h
+					else:
+						source.reply(self._tr('install.hash_validator_unexpected', repr(s)))
+						raise OuterReturn()
+				input_requirements.append(req)
+
 		if '*' in ctx.input_specifiers:
 			for plugin in self.plugin_manager.get_regular_plugins():
 				if is_plugin_updatable(plugin):
@@ -203,9 +224,10 @@ class PimInstallCommandHandler(PimCommandHandlerBase):
 		for req, req_src in req_srcs.items():
 			self.log_debug('  {} ({})'.format(req, req_src))
 
-		return req_srcs
+		return ppr
 
-	def __step_resolve(self, source: CommandSource, ctx: _ParsedContext, req_srcs: _RequirementSources, cata_meta: MetaRegistry) -> PluginResolution:
+	def __step_resolve(self, source: CommandSource, ctx: _ParsedContext, ppr: _ParsedPluginRequirements, cata_meta: MetaRegistry) -> PluginResolution:
+		req_srcs = ppr.requirement_sources
 		source.reply(self._tr('install.resolving_dependencies'))
 
 		for req in req_srcs.keys():
@@ -229,12 +251,13 @@ class PimInstallCommandHandler(PimCommandHandlerBase):
 			self.log_debug('  {} {}'.format(plugin_id, version))
 		return result
 
-	def __step_collect_to_install(self, source: CommandSource, ctx: _ParsedContext, cata_meta: MetaRegistry, resolution: PluginResolution) -> _ToInstallStuffs:
+	def __step_collect_to_install(self, source: CommandSource, ctx: _ParsedContext, ppr: _ParsedPluginRequirements, cata_meta: MetaRegistry, resolution: PluginResolution) -> _ToInstallStuffs:
 		to_install = _ToInstallStuffs()
 
 		from mcdreforged.plugin.type.packed_plugin import PackedPlugin
 		for plugin_id, version in resolution.items():
 			plugin = self.plugin_manager.get_plugin_from_id(plugin_id)
+			expected_hash = ppr.hash_validators.get(plugin_id)
 			if plugin is not None:
 				old_version = plugin.get_version()
 			else:
@@ -251,6 +274,12 @@ class PimInstallCommandHandler(PimCommandHandlerBase):
 				if isinstance(release, LocalReleaseData):
 					self.logger.warning('Skipping unexpected chosen LocalReleaseData {}'.format(release))
 					continue
+				if expected_hash is not None and not release.file_sha256.startswith(expected_hash):
+					source.reply(self._tr(
+						'install.mismatched_hash.catalogue',
+						Texts.candidate(plugin_id, version), expected_hash, release.file_sha256
+					).set_color(RColor.red))
+					raise OuterReturn()
 				to_install.plugins[plugin_id] = _PluginToInstallData(
 					id=plugin_id,
 					version=version,
@@ -262,6 +291,15 @@ class PimInstallCommandHandler(PimCommandHandlerBase):
 						self.log_debug('Skipping mcdreforged requirement in requirements of plugin {}'.format(plugin_id))
 					else:
 						to_install.packages[req] = PluginCandidate(plugin_id, version)
+			else:
+				if expected_hash is not None and isinstance(plugin, PackedPlugin):
+					current_hash = plugin.get_file_hash()
+					if current_hash is not None and not current_hash.startswith(expected_hash):
+						source.reply(self._tr(
+							'install.mismatched_hash.local',
+							Texts.candidate(plugin_id, plugin.get_version()), expected_hash, current_hash
+						).set_color(RColor.red))
+						raise OuterReturn()
 
 		if len(to_install.plugins) == 0:
 			source.reply(self._tr('install.nothing_to_install'))

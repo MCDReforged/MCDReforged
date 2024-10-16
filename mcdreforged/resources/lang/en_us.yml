@@ -314,6 +314,8 @@ mcdreforged:
         no_plugin_directories: Cannot install plugin since MCDR config "plugin_directories" is empty,
         invalid_target: Target {0} is invalid because it's not contained in the configured plugin_directories
         parse_specifier_failed: 'Parsing plugin specifier {0} failed: {1}'
+        hash_validator_invalid: 'Invalid hash validator, it should be a hex string with its length within [10, 64]. Current specifier: {0}'
+        hash_validator_unexpected: 'Only specifier using "==" can include a hash validator. Current specifier: {0}'
         cannot_install_builtin: Cannot install builtin plugin {0}
 
         resolving_dependencies: Resolving dependencies ...
@@ -335,6 +337,9 @@ mcdreforged:
             packed: packed plugin
             directory: directory plugin
             lined_directory: linked directory plugin
+        mismatched_hash:
+          catalogue: Plugin {0} in the catalogue has mismatched sha256 hash, expected {1}, actual {2}
+          local: Installed plugin {0} has mismatched sha256 hash, expected {1}, actual {2}
         nothing_to_install: Nothing needs to be installed
         install_summary:
           plugin_title: 'Plugins to install'
