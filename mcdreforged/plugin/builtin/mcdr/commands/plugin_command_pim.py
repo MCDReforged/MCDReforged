@@ -17,6 +17,7 @@ from mcdreforged.plugin.builtin.mcdr.commands.pim_internal import pim_utils
 from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.exceptions import OuterReturn
 from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.handler_browse import PimBrowseCommandHandler
 from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.handler_check_update import PimCheckUpdateCommandHandler
+from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.handler_freeze import PimFreezeCommandHandler
 from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.handler_install import PimInstallCommandHandler
 from mcdreforged.plugin.builtin.mcdr.commands.sub_command import SubCommand, SubCommandEvent
 from mcdreforged.plugin.installer.meta_holder import PersistCatalogueMetaRegistryHolder
@@ -86,6 +87,7 @@ class PluginCommandPimExtension(SubCommand):
 		self.__browse_handler = PimBrowseCommandHandler(self)
 		self.__check_update_handler = PimCheckUpdateCommandHandler(self)
 		self.__install_handler = PimInstallCommandHandler(self)
+		self.__freeze_handler = PimFreezeCommandHandler(self)
 
 		self.mcdr_server.add_config_changed_callback(self.__on_mcdr_config_loaded)
 
@@ -170,11 +172,23 @@ class PluginCommandPimExtension(SubCommand):
 			node.runs(self.cmd_refresh_meta)
 			return node
 
+		def freeze_node() -> Literal:
+			node = Literal('freeze')
+			node.runs(self.cmd_freeze_installed_plugins)
+			node.then(CountingLiteral({'-a', '--all'}, 'all').redirects(node))
+			node.then(CountingLiteral('--no-hash', 'no_hash').redirects(node))
+			node.then(
+				Literal({'-o', '--output'}).
+				then(QuotableText('output').suggests(lambda: ['plugin_requirements.txt']).redirects(node))
+			)
+			return node
+
 		return [
 			browse_node(),
 			check_update_node(),
 			install_node(),
 			refresh_meta_node(),
+			freeze_node(),
 		]
 
 	@override
@@ -259,3 +273,6 @@ class PluginCommandPimExtension(SubCommand):
 	@plugin_installer_guard('install')
 	def cmd_install_plugins(self, source: CommandSource, context: CommandContext):
 		self.__install_handler.process(source, context)
+
+	def cmd_freeze_installed_plugins(self, source: CommandSource, context: CommandContext):
+		self.__freeze_handler.process(source, context)

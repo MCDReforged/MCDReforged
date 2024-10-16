@@ -11,7 +11,7 @@ from typing_extensions import override
 
 from mcdreforged.plugin.type.common import PluginType
 from mcdreforged.plugin.type.multi_file_plugin import MultiFilePlugin
-from mcdreforged.utils import path_utils
+from mcdreforged.utils import path_utils, file_utils
 from mcdreforged.utils.exception import IllegalPluginStructure
 
 if TYPE_CHECKING:
@@ -22,6 +22,7 @@ class PackedPlugin(MultiFilePlugin):
 	def __init__(self, plugin_manager: 'PluginManager', file_path: Path):
 		super().__init__(plugin_manager, file_path)
 		self.__zip_file_cache: Optional[ZipFile] = None
+		self.__file_sha256: Optional[str] = None
 
 	@override
 	def get_type(self) -> PluginType:
@@ -103,3 +104,11 @@ class PackedPlugin(MultiFilePlugin):
 			else:
 				import gc
 				gc.collect()
+
+	@override
+	def _load_entry_instance(self):
+		self.__file_sha256 = file_utils.calc_file_sha256(self.plugin_path)
+		super()._load_entry_instance()
+
+	def get_file_hash(self) -> str:
+		return self.__file_sha256

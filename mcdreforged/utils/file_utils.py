@@ -1,4 +1,5 @@
 import contextlib
+import hashlib
 import os
 from pathlib import Path
 from typing import Callable, ContextManager, TextIO, Union, List
@@ -57,3 +58,11 @@ def safe_write_yaml(file_path: PathStr, data: dict):
 		yaml = YAML()
 		yaml.width = 1048576  # prevent yaml breaks long string into multiple lines
 		yaml.dump(data, file)
+
+
+def calc_file_sha256(file_path: PathStr):
+	hasher = hashlib.sha256()
+	with open(file_path, 'rb') as f:
+		while buf := f.read(16 * 1024):
+			hasher.update(buf)
+	return hasher.hexdigest()

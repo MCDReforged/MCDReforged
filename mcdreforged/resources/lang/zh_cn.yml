@@ -153,6 +153,7 @@ mcdreforged:
         §7!!MCDR plugin install §a<specifier>§7 [-U] [-y] ...§r: 从插件仓库安装给定描述的插件
         §7!!MCDR plugin checkupdate §6[<plugin_id> ...]§r: 检查给定的插件是否有更新
         §7!!MCDR plugin refreshmeta§r: 重新拉取插件仓库的元数据
+        §7!!MCDR plugin freeze [-a] [-o <file>] [--no-hash]§r: 输出插件依赖冻结列表，类似 §7pip freeze§r
       preference: |
         §7!!MCDR preference list§r: 显示偏好列表
         §7!!MCDR preference §e<pref_name>§r: 显示偏好 §e<pref_name>§r 的详情
@@ -300,6 +301,13 @@ mcdreforged:
         up_to_date:
           what: '{0} 个已是最新的插件'
         latest: '最新版本 {0}'
+      freeze:
+        file_output:
+          done: 已输出插件依赖冻结列表至 {0}
+          error: '输出插件依赖冻结列表至 {0} 时发生错误: {1}'
+        direct_output:
+          title: 正在输出所有打包插件的依赖冻结列表，插件数 {0}
+          title_all: 正在输出所有插件的依赖冻结列表，插件数 {0}
       install:
         name: 安装插件
         no_input: 未给出任何插件描述
