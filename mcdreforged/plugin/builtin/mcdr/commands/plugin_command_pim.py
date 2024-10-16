@@ -1,9 +1,10 @@
 import dataclasses
 import functools
 import logging
+import re
 import threading
 from pathlib import Path
-from typing import Optional, List, TYPE_CHECKING, Iterable, Callable
+from typing import Optional, List, TYPE_CHECKING, Iterable, Callable, Set
 
 from typing_extensions import override, deprecated
 
@@ -128,10 +129,40 @@ class PluginCommandPimExtension(SubCommand):
 			return node
 
 		def install_node() -> Literal:
-			def suggest_plugin_id() -> Iterable[str]:
-				keys = set(self.__meta_holder.get_registry().plugins.keys())
-				keys.add('*')  # so user can update all installed plugins
-				return keys
+			plugin_id_prefix_regex = re.compile(r'^([a-z][a-z0-9_]+)')
+
+			def suggest_plugin_id(_: CommandSource, ctx: CommandContext) -> Iterable[str]:
+				input_str: Optional[str] = None
+				input_plugin_id: Optional[str] = None
+				if len(plugin_specifiers := ctx.get('plugin_specifier', [])) > 0:
+					input_str = plugin_specifiers[-1]
+					m = plugin_id_prefix_regex.search(input_str)
+					if m is not None:
+						input_plugin_id = m.group(1)
+
+				suggestions: Set[str] = set()
+				for plugin_id, plugin in self.__meta_holder.get_registry().plugins.items():
+					if input_str is None:
+						suggestions.add(plugin_id)
+					else:
+						add_version_suggestions = False
+						if input_str == plugin_id:
+							suggestions.add(plugin_id)
+							add_version_suggestions = True
+						elif input_plugin_id == plugin_id:
+							if input_str.startswith(f'{plugin_id}==') or f'{plugin_id}=='.startswith(input_str):
+								add_version_suggestions = True
+							else:  # user is input plugin_id + non '==' specifier
+								pass
+						elif plugin_id.startswith(input_str):
+							suggestions.add(plugin_id)
+
+						if add_version_suggestions:
+							for version in plugin.releases.keys():
+								suggestions.add(f'{plugin_id}=={version}')
+
+				suggestions.add('*')  # so user can update all installed plugins
+				return suggestions
 
 			def suggest_target() -> Iterable[str]:
 				return [str(path) for path in self.mcdr_server.plugin_manager.plugin_directories]
