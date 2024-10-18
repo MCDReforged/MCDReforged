@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-29 19:50+0800\n"
+"POT-Creation-Date: 2024-10-18 17:53+0800\n"
 "PO-Revision-Date: 2021-01-23 17:24+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -52,18 +52,7 @@ msgstr "插件可以定义一个由 :class:`CommandSource` 继承而来的类来
 msgid "If the command source is a player command source"
 msgstr "指令源是否为玩家"
 
-#: mcdreforged.command.builder.command_builder_utils.get_float
-#: mcdreforged.command.builder.command_builder_utils.get_int
-#: mcdreforged.command.builder.exception.CommandError.get_error_segment
-#: mcdreforged.command.builder.exception.CommandError.get_failed_command
-#: mcdreforged.command.builder.exception.CommandError.get_parsed_command
-#: mcdreforged.command.builder.tools.SimpleCommandBuilder.arg
-#: mcdreforged.command.builder.tools.SimpleCommandBuilder.build
-#: mcdreforged.command.builder.tools.SimpleCommandBuilder.literal
-#: mcdreforged.command.command_source.CommandSource.has_permission
-#: mcdreforged.command.command_source.CommandSource.has_permission_higher_than
-#: mcdreforged.command.command_source.CommandSource.is_console
-#: mcdreforged.command.command_source.CommandSource.is_player of
+#: ../code_references/command.rst
 msgid "Returns"
 msgstr "返回"
 
@@ -151,35 +140,9 @@ msgstr "示例用法::"
 msgid "A helper method for testing permission requirement"
 msgstr "一个用于测试权限需求的工具方法"
 
-#: mcdreforged.command.builder.command_builder_utils.get_element
-#: mcdreforged.command.builder.command_builder_utils.get_float
-#: mcdreforged.command.builder.command_builder_utils.get_int
-#: mcdreforged.command.builder.command_builder_utils.remove_divider_prefix
-#: mcdreforged.command.builder.nodes.arguments.NumberNode.at_max
-#: mcdreforged.command.builder.nodes.arguments.NumberNode.at_min
-#: mcdreforged.command.builder.nodes.arguments.NumberNode.in_range
-#: mcdreforged.command.builder.nodes.arguments.TextNode.at_max_length
-#: mcdreforged.command.builder.nodes.arguments.TextNode.at_min_length
-#: mcdreforged.command.builder.nodes.arguments.TextNode.in_length_range
-#: mcdreforged.command.builder.nodes.basic.AbstractNode.on_error
-#: mcdreforged.command.builder.nodes.basic.AbstractNode.print_tree
-#: mcdreforged.command.builder.nodes.basic.AbstractNode.redirects
+#: ../code_references/command.rst
 #: mcdreforged.command.builder.nodes.basic.AbstractNode.requires
-#: mcdreforged.command.builder.nodes.basic.AbstractNode.runs
-#: mcdreforged.command.builder.nodes.basic.AbstractNode.suggests
-#: mcdreforged.command.builder.nodes.basic.AbstractNode.then
-#: mcdreforged.command.builder.nodes.basic.ArgumentNode.__init__
-#: mcdreforged.command.builder.tools.Requirements.argument_exists
-#: mcdreforged.command.builder.tools.Requirements.has_permission
-#: mcdreforged.command.builder.tools.SimpleCommandBuilder.add_children_for
-#: mcdreforged.command.builder.tools.SimpleCommandBuilder.arg
-#: mcdreforged.command.builder.tools.SimpleCommandBuilder.command
-#: mcdreforged.command.builder.tools.SimpleCommandBuilder.literal
-#: mcdreforged.command.builder.tools.SimpleCommandBuilder.print_tree
-#: mcdreforged.command.builder.tools.SimpleCommandBuilder.register
-#: mcdreforged.command.command_source.CommandSource.has_permission
-#: mcdreforged.command.command_source.CommandSource.has_permission_higher_than
-#: mcdreforged.command.command_source.CommandSource.reply of
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.then of
 msgid "Parameters"
 msgstr "参数"
 
@@ -219,10 +182,7 @@ msgstr "发送消息到指令源。消息可以是包括 RText 对象在内的�
 msgid "The message you want to send"
 msgstr "你想要发送的消息"
 
-#: mcdreforged.command.builder.nodes.basic.AbstractNode.on_error
-#: mcdreforged.command.builder.nodes.basic.ArgumentNode.__init__
-#: mcdreforged.command.builder.tools.SimpleCommandBuilder.build
-#: mcdreforged.command.command_source.CommandSource.reply of
+#: ../code_references/command.rst
 msgid "Keyword Arguments"
 msgstr "关键字参数"
 
@@ -580,9 +540,23 @@ msgid ""
 " the list"
 msgstr "若被设为 True，则解析的值将间接地储存在一个列表中。重新访问该节点会把新解析的值追加到该列表中"
 
-#: mcdreforged.command.builder.nodes.basic.ArgumentNode.__init__:5 of
+#: mcdreforged.command.builder.nodes.basic.ArgumentNode.__init__:4 of
+msgid ""
+"Optional str. It behaves like the *metavar* kwarg of "
+":external:meth:`argparse.ArgumentParser.add_argument`, which overrides "
+"the name displayed of the command suggestion usage placeholder. If not "
+"provided, the *name* argument will be used as the default placeholder"
+msgstr ""
+"可选的字符串参数。其表现类似 :external:meth:`argparse.ArgumentParser.add_argument` 的 "
+"*metavar* 参数，即对指令提示的用法占位符进行覆盖。若未给出，则将使用 *name* 参数的值作为默认的占位符"
+
+#: mcdreforged.command.builder.nodes.basic.ArgumentNode.__init__:8 of
 msgid "The *accumulate* parameter"
 msgstr "*accumulate* 参数"
+
+#: mcdreforged.command.builder.nodes.basic.ArgumentNode.__init__:10 of
+msgid "The *metavar* parameter"
+msgstr "*metavar* 参数"
 
 #: mcdreforged.command.builder.nodes.arguments.NumberNode:1
 #: mcdreforged.command.builder.nodes.arguments.TextNode:1 of
@@ -1034,10 +1008,7 @@ msgstr ""
 "一个列表，储存着构建完成的指令树的根节点。构建结果将被缓存，直到你再次操作这个指令构建器。借助 "
 ":meth:`clean_cache`，你可以主动地清空构建结果缓存"
 
-#: mcdreforged.command.builder.tools.SimpleCommandBuilder.add_children_for
-#: mcdreforged.command.builder.tools.SimpleCommandBuilder.build
-#: mcdreforged.command.builder.tools.SimpleCommandBuilder.print_tree
-#: mcdreforged.command.builder.tools.SimpleCommandBuilder.register of
+#: ../code_references/command.rst
 msgid "Raises"
 msgstr "抛出"
 

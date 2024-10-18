@@ -603,22 +603,30 @@ class ArgumentNode(AbstractNode, ABC):
 
 	class _InitKwargs(TypedDict):
 		accumulate: NotRequired[bool]
+		metavar: NotRequired[str]
 
 	def __init__(
 			self, name: str, *,
 			accumulate: Optional[bool] = None,
+			metavar: Optional[str] = None,
 	):
 		"""
 		:param name: The name of the argument node. Should be unique within the command tree path
 		:keyword accumulate: If set to True, then the parsed value will be stored in a list in the command context.
 			Re-visiting of this node appends new value to the end of the list
+		:keyword metavar: Optional str. It behaves like the *metavar* kwarg of :external:meth:`argparse.ArgumentParser.add_argument`,
+			which overrides the name displayed of the command suggestion usage placeholder.
+			If not provided, the *name* argument will be used as the default placeholder
 
 		.. versionadded:: v2.13.0
 			The *accumulate* parameter
+		.. versionadded:: v2.14.0
+			The *metavar* parameter
 		"""
 		super().__init__()
 		self.__name = name
 		self.__accumulate: bool = bool(accumulate)
+		self.__metavar = metavar
 
 	@override
 	def _on_visited(self, context: CommandContext, parsed_result: ParseResult):
@@ -634,10 +642,15 @@ class ArgumentNode(AbstractNode, ABC):
 
 	@override
 	def _get_usage(self) -> str:
-		return '<{}>'.format(self.__name)
+		return '<{}>'.format(self.__metavar or self.__name)
 
 	def __str__(self):
 		return '{} <{}>'.format(self.__class__.__name__, self.get_name())
 
 	def __repr__(self):
-		return class_utils.represent(self, {'name': self.__name})
+		fields = {'name': self.__name}
+		if self.__accumulate:
+			fields['accumulate'] = True
+		if self.__metavar:
+			fields['metavar'] = True
+		return class_utils.represent(self, fields)
