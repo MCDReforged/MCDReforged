@@ -1,11 +1,5 @@
 /* --- Algolia Docsearch Styles --- */
 
-/* Some sphinx ajustment */
-/* https://github.com/readthedocs/sphinx_rtd_theme/issues/761 */
-.wy-nav-side {
-    overflow: visible;
-}
-
 /* Override sphinx theme styles for search box */
 .DocSearch-Input {
     border: none !important;

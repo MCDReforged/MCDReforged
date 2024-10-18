@@ -1,1 +1,2 @@
 drawsvg>=2
+fontTools[woff]

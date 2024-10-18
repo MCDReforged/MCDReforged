@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-03 21:44+0800\n"
+"POT-Creation-Date: 2024-10-02 22:57+0800\n"
 "PO-Revision-Date: 2021-01-23 19:44+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -50,11 +50,17 @@ msgid ""
 " handlers in MCDR first and try to understand them"
 msgstr "建议首先查看 MCDR 中服务端处理器的实现，并尝试理解它们"
 
-#: ../customize/handler.rst:14
+#: ../customize/handler.rst:13
+msgid ""
+"For easier use and distribution, it is recommended to provide server "
+"handlers by creating a :ref:`plugin_dev/basic:MCDR Plugin`."
+msgstr "为了更方便的使用和分发，建议通过创建 :ref:`plugin_dev/basic:MCDR Plugin` 来提供服务端处理器"
+
+#: ../customize/handler.rst:16
 msgid "Example"
 msgstr "示例"
 
-#: ../customize/handler.rst:16
+#: ../customize/handler.rst:18
 msgid ""
 "In this example, we have a vanilla server, but some of the players have a"
 " prefix on their username, which result in some changes to the message "
@@ -64,7 +70,7 @@ msgstr ""
 "假设我们有一个原版服务器，但某些玩家的用户名加有前缀，这将导致玩家聊天消息的消息格式发生一些更改。例如，具有 ID ``Steve`` 和前缀 "
 "``[Builder]`` 的玩家可能有以下聊天消息："
 
-#: ../customize/handler.rst:23
+#: ../customize/handler.rst:25
 msgid ""
 "For the default vanilla handler, ``[Builder]Steve`` is an illegal player "
 "name. Luckily all possible prefixes of the players in the server follows "
@@ -74,45 +80,60 @@ msgstr ""
 "对于默认的原版服务端处理器，``[Builder]Steve`` 是一个非法的玩家名称。幸运的是，服务器中所有可能的玩家前缀都遵循相同的格式，即 "
 "``[前缀]玩家名称``。因此，可以为之创建专用的处理器"
 
-#: ../customize/handler.rst:25
+#: ../customize/handler.rst:27
 msgid ""
-"For example, the following codes above creates a handler than is able to "
-"handle player names in this server"
-msgstr "例如，上面的以下代码创建一个处理器，以在此服务器中处理玩家名："
+"For example, we create a MCDR plugin and write the following codes as its"
+" entrypoint, which creates and registers a handler to handle player names"
+" in this server correctly"
+msgstr "例如，我们创建一个 MCDR 插件，并编写以下代码作为其入口点，以在此服务器中正确处理玩家名称："
 
-#: ../customize/handler.rst:46
-msgid ""
-"And then you are able to use this handler to handle the server. You need "
-"to do the following things in the configuration file"
-msgstr "于是，你可以使用此处理器来处理服务端。你需要在配置文件中执行以下操作："
+#: ../customize/handler.rst:53
+msgid "Then we can start using the handler:"
+msgstr "然后，我们可以开始使用这个处理器："
 
-#: ../customize/handler.rst:49
-msgid ""
-"Set the ``handler`` option in the configuration file to "
-"``the_handler_for_my_server``"
-msgstr "将配置文件中的 ``handler`` 选项设置为 ``the_handler_for_my_server``"
+#: ../customize/handler.rst:56
+msgid "Load or reload the plugin you've just created"
+msgstr "加载或重载你刚刚创建的插件"
 
-#: ../customize/handler.rst:50
+#: ../customize/handler.rst:57
 msgid ""
-"Place your ``my_handler.py`` into a valid python package in the working "
-"directory of MCDR, e.g."
-msgstr "在MCDR 工作路径中将你的 ``my_handler.py`` 放进一个合法的 python 包中，如"
+"Set the :ref:`configuration:handler` option to what method ``get_name()``"
+" of your handler returns, e.g.:"
+msgstr "把 :ref:`configuration:handler` 选项设置为自定义处理器 ``get_name()`` 方法的返回值，如："
 
 #: ../customize/handler.rst:63
-msgid "Now your handler class is accessible with the following python code:"
-msgstr "现在，你的处理器类已可以用如下的 python 代码获取："
+msgid "That's all you need to do"
+msgstr "以上"
+
+#: ../customize/handler.rst:67
+msgid ""
+"As a alternative but not recommended way, you may provide your handler by"
+" a single ``.py`` file, rather than a plugin"
+msgstr "除此之外，还有一种不推荐的方式，你可以通过一个 ``.py`` 文件来提供服务端处理器"
 
 #: ../customize/handler.rst:69
 msgid ""
-"Added the path to the custom handler in the "
-":ref:`configuration:custom_handlers` option, then set the "
-":ref:`configuration:handler` option to the result of method "
-"``get_name()`` of your handler class, e.g.:"
+"Put the same code as above, without the ``on_load`` method, into a "
+"``.py`` file, ``my_handler.py`` for example, then use it as follows:"
+msgstr "将上述代码（不包括 ``on_load`` 方法）放入一个 ``.py`` 文件，例如 ``my_handler.py``，然后按以下步骤使用："
+
+#: ../customize/handler.rst:71
+msgid ""
+"Place it into a valid python package in the working directory of MCDR, "
+"e.g.:"
+msgstr "将其放入 MCDR 工作目录里的一个有效 Python 包中，例如："
+
+#: ../customize/handler.rst:84
+msgid ""
+"This make your handler class accessible with ``from handlers.my_handler "
+"import MyHandler``"
+msgstr "如此一来，你就可以通过 ``from handlers.my_handler import MyHandler`` 来访问该处理器类"
+
+#: ../customize/handler.rst:86
+msgid ""
+"Add the path to the :ref:`configuration:custom_handlers` option, then set"
+" the :ref:`configuration:handler` option to what method ``get_name()`` of"
+" the handler returns, e.g.:"
 msgstr ""
-"在 :ref:`configuration:custom_handlers` 选项中添加自定义处理器的路径，然后把 "
-":ref:`configuration:handler` 选项设置为自定义处理器 ``get_name()`` 方法的返回值，如："
-
-#: ../customize/handler.rst:79
-msgid "That's all you need to do"
-msgstr "这样就行了"
-
+"将路径添加到 :ref:`configuration:custom_handlers` 选项中，然后把 "
+":ref:`configuration:handler` 选项设置为自定义处理器 ``get_name()`` 方法的返回值，例如："

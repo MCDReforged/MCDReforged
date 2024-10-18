@@ -3,7 +3,7 @@ Plugin Catalogue
 
 The official MCDR plugin catalogue is the ``master`` branch of repository https://github.com/MCDReforged/PluginCatalogue. Users can browse plugins here and developers can submit their plugins to the catalogue
 
-The catalogue is updated once files change, and every 1 hour via github action
+The catalogue is updated once files change, and twice per hour via github action
 
 File structures
 ---------------
@@ -116,10 +116,7 @@ Type: List[str]
 introduction
 ~~~~~~~~~~~~
 
-Optional field, default: ``{}``
-
-Introduction is a paragraph written in markdown syntax. It will be shown to user when they are browsing your plugin.
-Comparing to readme or document, introduction focuses more on showing the features of the plugin to attract new users
+Introduction is a paragraph written in markdown syntax, showing the features of the plugin to attract new users. It will be shown to user when they are browsing your plugin
 
 For the :ref:`plugin_dev/plugin_catalogue:introduction` field, it's a mapping maps :ref:`plugin_dev/plugin_catalogue:language` into a file path
 
@@ -159,6 +156,8 @@ It's named by ``introduction.md`` for default language ``en_us`` and named by e.
          ├─ plugin_info.json
          ├─ introduction.md
          └─ introduction-zh_cn.md
+
+You should provide the introduction at least in one language
 
 Type: Dict[str, str]
 
@@ -227,7 +226,15 @@ Plugin catalogue will automatically detect the releases in your plugin repositor
 Submit Plugin
 -------------
 
-If you want to submit your plugin, create the directory of your plugin inside the ``plugins/`` directory with necessary files, and make a pull request
+It's encouraged to read the `Contributing Guidelines <https://github.com/MCDReforged/PluginCatalogue/blob/master/CONTRIBUTING.md>`_ before submitting your plugin
+
+If you want to submit your plugin:
+
+1. Fork the catalogue repo
+
+2. Create a directory for your plugin within the ``plugins/`` folder, including all the necessary files
+
+3. Create a pull request
 
 It's recommended to leave your github link in the :ref:`plugin_dev/plugin_catalogue:authors` field so repository maintainers can simply tell if you are the owner of the plugin
 
