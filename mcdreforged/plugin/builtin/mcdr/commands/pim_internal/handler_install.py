@@ -37,6 +37,16 @@ if TYPE_CHECKING:
 	from mcdreforged.plugin.type.plugin import AbstractPlugin
 
 
+def read_mcdr_plugin_requirement_file(file_path: Path) -> List[str]:
+	reqs: List[str] = []
+	with open(file_path, 'r', encoding='utf8') as f:
+		for line in f:
+			line = line.split('#', 1)[0].strip()
+			if len(line) > 0:
+				reqs.append(line)
+	return reqs
+
+
 def is_plugin_updatable(plg: 'AbstractPlugin') -> bool:
 	"""i.e. plugin is a packed plugin"""
 	from mcdreforged.plugin.type.packed_plugin import PackedPlugin
@@ -122,7 +132,18 @@ class PimInstallCommandHandler(PimCommandHandlerBase):
 		self.__step_install(source, ctx, cata_meta, to_install)
 
 	def __step_parse_input(self, source: CommandSource, context: CommandContext) -> _ParsedContext:
-		input_specifiers: Optional[List[str]] = context.get('plugin_specifier')
+		input_specifiers: List[str] = []
+		if len(arg_specifiers := context.get('plugin_specifier', [])) > 0:
+			input_specifiers.extend(arg_specifiers)
+		if len(req_files := context.get('requirement', [])) > 0:
+			for req_file in req_files:
+				try:
+					file_specifiers = read_mcdr_plugin_requirement_file(Path(req_file))
+				except OSError as e:
+					source.reply(self._tr('install.read_file_error', repr(req_file), e).set_color(RColor.red))
+					raise OuterReturn()
+				else:
+					input_specifiers.extend(file_specifiers)
 		if not input_specifiers:
 			source.reply(self._tr('install.no_input').set_color(RColor.red))
 			raise OuterReturn()
@@ -228,7 +249,7 @@ class PimInstallCommandHandler(PimCommandHandlerBase):
 
 	def __step_resolve(self, source: CommandSource, ctx: _ParsedContext, ppr: _ParsedPluginRequirements, cata_meta: MetaRegistry) -> PluginResolution:
 		req_srcs = ppr.requirement_sources
-		source.reply(self._tr('install.resolving_dependencies'))
+		source.reply(self._tr('install.resolving_dependencies', len(req_srcs)))
 
 		for req in req_srcs.keys():
 			plugin_id = req.id

@@ -1,6 +1,7 @@
 import dataclasses
 import functools
 import logging
+import os.path
 import re
 import threading
 from pathlib import Path
@@ -74,6 +75,7 @@ def async_operation(op_holder: OperationHolder, skip_callback: Callable, thread_
 
 class PluginCommandPimExtension(SubCommand):
 	current_operation = OperationHolder()
+	DEFAULT_FREEZE_FILE_NAME = 'mcdr_plugin_requirements.txt'
 
 	def __init__(self, mcdr_plugin: 'MCDReforgedPlugin'):
 		super().__init__(mcdr_plugin)
@@ -175,6 +177,14 @@ class PluginCommandPimExtension(SubCommand):
 				redirects(node)
 			)
 			node.then(
+				Literal({'-r', '--requirement'}).
+				then(
+					QuotableText('requirement', accumulate=True, metavar='file').
+					suggests(lambda: [self.DEFAULT_FREEZE_FILE_NAME] if os.path.isfile(self.DEFAULT_FREEZE_FILE_NAME) else []).
+					redirects(node)
+				)
+			)
+			node.then(
 				Literal({'-t', '--target'}).
 				then(
 					QuotableText('target').
@@ -210,7 +220,7 @@ class PluginCommandPimExtension(SubCommand):
 			node.then(CountingLiteral('--no-hash', 'no_hash').redirects(node))
 			node.then(
 				Literal({'-o', '--output'}).
-				then(QuotableText('output').suggests(lambda: ['plugin_requirements.txt']).redirects(node))
+				then(QuotableText('output').suggests(lambda: [self.DEFAULT_FREEZE_FILE_NAME]).redirects(node))
 			)
 			return node
 

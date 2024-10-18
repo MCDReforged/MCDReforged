@@ -310,6 +310,7 @@ mcdreforged:
           title_all: 正在输出所有插件的依赖冻结列表，插件数 {0}
       install:
         name: 安装插件
+        read_file_error: '读取文件 {0} 失败: {1}'
         no_input: 未给出任何插件描述
         no_plugin_directories: MCDR 配置的插件文件夹为空，无法安装新插件
         invalid_target: 安装目标文件夹 {0} 无效，因为它不包含在配置的插件文件夹中

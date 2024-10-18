@@ -310,6 +310,7 @@ mcdreforged:
           title_all: Freezing {0} plugins
       install:
         name: Install plugins
+        read_file_error: 'Failed to read file {0}: {1}'
         no_input: No plugin specifier is given
         no_plugin_directories: Cannot install plugin since MCDR config "plugin_directories" is empty,
         invalid_target: Target {0} is invalid because it's not contained in the configured plugin_directories
