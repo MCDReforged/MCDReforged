@@ -20,8 +20,6 @@ MCDR won't start
     * If you installed MCDR via venv, make sure you have activated the venv
     * Use ``which mcdreforged`` (``where mcdreforged`` in Windows), see which executable is being called
 
-Get in touch with :ref:`our kind community <quick_start/next_steps:Community>`
-
 The server won't start
 ----------------------
 
@@ -109,3 +107,24 @@ MCDR did not specificly designed to adapt MCSManager
 However, if you use UTF-8 everywhere, and enable ``Emulation Terminal`` in MCSManager, MCDR should work fine with full functionality
 
 If ``Emulation Terminal`` is disabled, you should set :ref:`configuration:advanced_console` to ``false``
+
+Get in touch
+------------
+
+If these solutions did not solve your problem, please get in touch with :ref:`our kind community <quick_start/next_steps:Community>`
+
+Still, before you ask questions or report bugs, please:
+
+* Search, and research
+* Write a title that summarizes the specific problem
+* Help others reproduce the problem:
+
+    * `Create a minimal reproducible example <https://stackoverflow.com/help/minimal-reproducible-example>`__
+    * Provide your full logs and context, no unnecessary images
+
+* Proofread before posting
+* Respond to feedback after posting
+
+.. seealso::
+
+    Stack Overflow: `How do I ask a good question? <https://stackoverflow.com/help/how-to-ask>`__
