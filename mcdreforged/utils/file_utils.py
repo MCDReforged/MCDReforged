@@ -60,7 +60,7 @@ def safe_write_yaml(file_path: PathStr, data: dict):
 		yaml.dump(data, file)
 
 
-def calc_file_sha256(file_path: PathStr):
+def calc_file_sha256(file_path: PathStr) -> str:
 	hasher = hashlib.sha256()
 	with open(file_path, 'rb') as f:
 		while buf := f.read(16 * 1024):

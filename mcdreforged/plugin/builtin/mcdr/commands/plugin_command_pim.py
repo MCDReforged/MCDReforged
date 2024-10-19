@@ -1,7 +1,7 @@
 import dataclasses
 import functools
 import logging
-import os.path
+import os
 import re
 import threading
 from pathlib import Path
