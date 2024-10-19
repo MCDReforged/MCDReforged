@@ -21,12 +21,12 @@ Plugin System
 
 MCDR has a rich ecosystem of plugins from the community. From an in-game calculator, player highlighter, and Twitch chat bot, to a scoreboard manipulator, file manager, and backup system, all of them can be implemented with MCDReforged plugins
 
-Meanwhile it's hot-reloadable that you don't need to shut down the server to update the plugins
+Meanwhile, the plugin system is hot-reloadable, so you don't need to shut down the server to update the plugins
 
 Compatibility
 ~~~~~~~~~~~~~
 
-We supports most popular server softwares (Vanilla, Fabric, Spigot, Paper, etc.)
+We support most popular servers (Vanilla, Fabric, Spigot, Paper, etc.)
 
 Supports multiple platforms (Windows, Linux, Mac, etc.)
 

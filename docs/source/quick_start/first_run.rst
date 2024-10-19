@@ -6,15 +6,15 @@ Now you have installed MCDR, it's time to run it for the first time
 
 .. note::
 
-    Most common use of MCDR is to control a Minecraft server, so we also take this as the demonstrated use case here
+    The most common use of MCDR is to control a Minecraft server, so we also take this as the demonstrated use case here
 
 .. tip::
 
-    To manage Minecraft server with MCDR, It is recommended to have basic knowledge of common Minecraft server softwares
+    To manage Minecraft server with MCDR, It is recommended to have basic knowledge of common Minecraft servers
     
     Which means, you should know:
 
-    * The Minecraft server softwares: what they are, how to configure (one of) them
+    * The Minecraft servers: what they are, how to configure (one of) them
     * Start command of Minecraft server: what it is, what its arguments mean
     * Console of the server: what it prints, what command can you send to it
     * How to manage the server: configure, mods / plugins etc.
@@ -24,7 +24,7 @@ Now you have installed MCDR, it's time to run it for the first time
 Prepare
 -------
 
-To manage a Minecraft server with MCDR, you should have a **well-configured** Minecraft server software
+To manage a Minecraft server with MCDR, you should have a **well-configured** Minecraft server
 
 For example, this is a typical directory structure of vanilla Minecraft server:
 
@@ -50,13 +50,13 @@ With this command to start it:
 
     java -Xms1G -Xmx2G -jar minecraft_server.jar nogui
 
-You can also use other server software, such as Fabric, Spigot, Paper, etc.
+You can also use other server, such as Fabric, Spigot, Paper, etc.
 
 .. tip::
 
-    Configure and troubleshoot your server software **BEFORE** you introduce MCDR. Otherwise, you can't distinguish whether a problem is caused by MCDR or your server software
+    Configure and troubleshoot your server **BEFORE** you introduce MCDR. Otherwise, you can't distinguish whether a problem is caused by MCDR or your server
 
-    MCDR was born as a daemon for common server softwares of Minecraft: Java Edition. Most plugins are predicated on that. If you want to run MCDR with a Bedrock Edition server, consider using Java Edition server software with `GeyserMC <https://geysermc.org/>`__ to provide Bedrock Edition compatibility
+    MCDR was born as a daemon for common server of Minecraft: Java Edition. Most plugins are predicated on that. If you want to run MCDR with a Bedrock Edition server, consider using Java Edition server with `GeyserMC <https://geysermc.org/>`__ to provide Bedrock Edition compatibility
 
     Of course, if you don't need to make use of the plugin ecosystem designed for Java Edition server, you can run any programs you want with MCDR
 
@@ -93,10 +93,10 @@ Animated demo:
 Configure
 ---------
 
-Server Software
-~~~~~~~~~~~~~~~
+Server
+~~~~~~
 
-Remember the server software you have prepared? Put it into the ``server`` folder. The directory structure should be something like this:
+Remember the server you have prepared? Put it into the ``server`` folder. The directory structure should be something like this:
 
 .. code-block:: diff
 
@@ -126,7 +126,7 @@ For most users, there are 4 parts of the configuration that you need to be aware
 
 Read each section carefully and make sure you filled in the correct values.
 
-As a simple example, this is the ones you need to aware for a vanilla Minecraft 1.21 server with Java 21:
+As a simple example, this is the ones you need to be aware for a vanilla Minecraft 1.21 server with Java 21:
 
 .. code-block:: yaml
 
@@ -137,7 +137,7 @@ As a simple example, this is the ones you need to aware for a vanilla Minecraft 
     encoding: utf8
     decoding: utf8
 
-If you're confusing why this command is much logner than we mentioned earlier, read the **encoding, decoding** section again
+If you're confusing why this command is much longer than we mentioned earlier, read the **encoding, decoding** section again
 
 RCON
 ~~~~

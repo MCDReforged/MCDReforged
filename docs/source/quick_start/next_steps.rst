@@ -2,7 +2,7 @@
 Next Steps
 ==========
 
-Now, you've got the basic knowledges of MCDR. What's next?
+Now, you've got the basic knowledge of MCDR. What's next?
 
 Plugins
 -------
@@ -52,7 +52,7 @@ Check it out: `MCDReforged@Github <https://github.com/MCDReforged>`__
 Migrate
 -------
 
-If you was a user of legacy versions of MCDR, you may want to check out the :doc:`/migrate/index`
+If you were a user of legacy versions of MCDR, you may want to check out the :doc:`/migrate/index`
 
 -----
 

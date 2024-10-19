@@ -14,7 +14,7 @@ MCDR won't start
     * If you installed MCDR via pip within venv, make sure you have activated the venv
     * If you installed MCDR via system package manager... don't install MCDR via system package manager
 
-* **There're some error raised by Python**
+* **Error raised by Python**
     * Install MCDR correctly. Don't start MCDR from source code
     * Try to re-install MCDR, see if the problem persists
     * If you installed MCDR via venv, make sure you have activated the venv
@@ -48,7 +48,7 @@ Commands not working
 
     Your server may unexpectedly not compatible with handlers:
  
-    Maybe your server software is unique that not supported by built-in handlers
+    Maybe your server is unique that not supported by built-in handlers
 
     Maybe your server output is different. For example, if you allow players that not following the Mojang naming rule (``[A-Za-z0-9_]{3,16}``), the handler will not recognize them. Examples:
 

@@ -36,7 +36,7 @@ The detailed Python version requirements are as shown in the table below
 Wait a second
 -------------
 
-In some tutorials, you may learned to use MCDR by downloading a zip from Github and extract it
+In some tutorials, you may learn to use MCDR by downloading a zip from Github and extract it
 
 However, that's not the correct way to install MCDR - Those tutorials are outdated
 
@@ -237,9 +237,9 @@ You may find MCDR in some system package repositories, AUR for example. However,
 Accelerate the installation
 ---------------------------
 
-For users in China, you may use a mirror, `Tsinghua University TUNA mirror <https://mirrors.tuna.tsinghua.edu.cn/help/pypi/>`__ for example, to accelerate ``pip`` and ``pipx``
+For users in China, you may use a PyPI mirror, `Tsinghua University TUNA mirror <https://mirrors.tuna.tsinghua.edu.cn/help/pypi/>`__ for example, to accelerate ``pip`` and ``pipx``
 
-To use the mirror, ``-i <index-url>`` to the commands:
+To use the PyPI mirror, add ``-i <index-url>`` to the commands:
 
 .. prompt:: bash
     :prompts: $,(venv) $
