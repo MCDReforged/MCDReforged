@@ -123,7 +123,7 @@ It's safer to keep the installation isolated. As workarounds, there're multiple 
 Using pipx
 ~~~~~~~~~~
 
-Maybe the simplest solution for most users, but requires to use the third-party tool `pipx <https://pipx.pypa.io/>`__, which is designed to installing and running Python applications in isolated environments
+It may be the simplest solution for most users, but it requires using the third-party tool `pipx <https://pipx.pypa.io/>`__, which is designed for installing and running Python applications in isolated environments
 
 Install pipx refer to its `official documentation <https://pipx.pypa.io/stable/#install-pipx>`__
 
