@@ -146,7 +146,7 @@ When a new version of MCDR is available, you can upgrade by:
 
 .. note::
 
-    In this way, MCDR will be installed in an isolated environment. Instead of ``pip install <package_name>``, Python packages required by MCDR plugins should be installed by:
+    In this way, MCDR will be installed in an isolated environment. Instead of using ``pip install <package_name>``, Python packages required by MCDR plugins should be installed by:
 
     * ``pipx inject mcdreforged <package_name>``, e.g. ``pipx inject mcdreforged requests``
     * or ``pipx inject mcdreforged -r requirements.txt``
