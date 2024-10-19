@@ -127,7 +127,7 @@ It may be the simplest solution for most users, but it requires using the third-
 
 Install pipx refer to its `official documentation <https://pipx.pypa.io/stable/#install-pipx>`__
 
-Then install MCDR using pipx:
+Then you can install MCDR using pipx:
 
 .. prompt:: bash
 
