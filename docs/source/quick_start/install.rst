@@ -38,7 +38,7 @@ Wait a second
 
 In some tutorials, you may learned to use MCDR by downloading a zip from Github and extract it
 
-However, that's not the actual way to install MCDR - Those tutorials are outdated
+However, that's not the correct way to install MCDR - Those tutorials are outdated
 
 .. caution::
 
