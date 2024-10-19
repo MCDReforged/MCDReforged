@@ -96,7 +96,7 @@ System-wide installation may even result in an ``externally-managed-environment`
 
 See `PEP 668 <https://peps.python.org/pep-0668/>`__ for the detailed specification
 
-It's safer to keep the installation isolated. As workarounds, there're multiple options for you. For a conclusion:
+It's safer to keep the installation isolated. As workarounds, there're multiple options for you. In conclusion:
 
 .. list-table::
     :header-rows: 1
