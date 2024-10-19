@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-13 12:16+0800\n"
+"POT-Creation-Date: 2024-10-19 13:22+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -19,7 +19,7 @@ msgid "Next Steps"
 msgstr "更进一步"
 
 #: ../quick_start/next_steps.rst:5
-msgid "Now, you've got the basic knowledges of MCDR. What's next?"
+msgid "Now, you've got the basic knowledge of MCDR. What's next?"
 msgstr "现在，你已经了解了 MCDR 的基本知识。接下来呢？"
 
 #: ../quick_start/next_steps.rst:8
@@ -32,7 +32,7 @@ msgstr "插件让 MCDR 更强大。你可能想："
 
 #: ../quick_start/next_steps.rst:12
 msgid ""
-"Have a look at the `Plugin Catalogue "
+"Take a look at the `Plugin Catalogue "
 "<https://mcdreforged.com/en/plugins>`__ to find some interesting plugins"
 msgstr "看看 `插件仓库 <https://mcdreforged.com/zh-CN/plugins>`__ 找些有趣的插件"
 
@@ -84,8 +84,7 @@ msgid ""
 "MCDR has its own command system.  Most of them start with a ``!!`` in "
 "common practice. Mentioned above, ``!!MCDR plg`` is one of the built-in "
 "commands."
-msgstr ""
-"MCDR 有自己的指令系统。指令常以 ``!!`` 开头。上面提到的 ``!!MCDR plg`` 就是一个内置指令"
+msgstr "MCDR 有自己的指令系统。指令常以 ``!!`` 开头。上面提到的 ``!!MCDR plg`` 就是一个内置指令"
 
 #: ../quick_start/next_steps.rst:27
 msgid "You may want to learn more of them: :doc:`/command/index`"
@@ -148,7 +147,7 @@ msgstr "迁移"
 
 #: ../quick_start/next_steps.rst:55
 msgid ""
-"If you was a user of legacy versions of MCDR, you may want to check out "
+"If you were a user of legacy versions of MCDR, you may want to check out "
 "the :doc:`/migrate/index`"
 msgstr "如果你曾是 MCDR 旧版本的用户，你可能想看看 :doc:`/migrate/index`"
 

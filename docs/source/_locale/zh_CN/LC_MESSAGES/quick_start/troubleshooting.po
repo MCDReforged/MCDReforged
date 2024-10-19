@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-18 14:00+0800\n"
+"POT-Creation-Date: 2024-10-19 13:22+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -61,7 +61,8 @@ msgid ""
 msgstr "如果你通过系统包管理器安装了 MCDR... 不要通过系统包管理器安装 MCDR"
 
 #: ../quick_start/troubleshooting.rst:17
-msgid "**There're some error raised by Python**"
+#, fuzzy
+msgid "**Error raised by Python**"
 msgstr "**Python 抛出错误**"
 
 #: ../quick_start/troubleshooting.rst:18
@@ -149,9 +150,8 @@ msgid "Your server may unexpectedly not compatible with handlers:"
 msgstr "你的服务端可能意外地与处理器不兼容："
 
 #: ../quick_start/troubleshooting.rst:51
-msgid ""
-"Maybe your server software is unique that not supported by built-in "
-"handlers"
+#, fuzzy
+msgid "Maybe your server is unique that not supported by built-in handlers"
 msgstr "也许，你的服务端比较特别，内置处理器均不兼容"
 
 #: ../quick_start/troubleshooting.rst:53
@@ -265,35 +265,33 @@ msgstr "还请注意，在提问或报告问题之前，请："
 msgid "Search, and research"
 msgstr "先尝试自己搜索并研究"
 
-#: ../quick_start/troubleshooting.rst:120
+#: ../quick_start/troubleshooting.rst:119
 msgid "Write a title that summarizes the specific problem"
 msgstr "用一个简短的句子概括你的问题"
 
-#: ../quick_start/troubleshooting.rst:122
+#: ../quick_start/troubleshooting.rst:120
 msgid "Help others reproduce the problem:"
 msgstr "帮助他人重现问题："
 
-#: ../quick_start/troubleshooting.rst:123
+#: ../quick_start/troubleshooting.rst:122
 msgid ""
 "`Create a minimal reproducible example <https://stackoverflow.com/help"
 "/minimal-reproducible-example>`__"
-msgstr ""
-"`构建最小复现示例 <https://stackoverflow.com/help/minimal-reproducible-"
-"example>`__"
+msgstr "`构建最小复现示例 <https://stackoverflow.com/help/minimal-reproducible-example>`__"
 
-#: ../quick_start/troubleshooting.rst:124
+#: ../quick_start/troubleshooting.rst:123
 msgid "Provide your full logs and context, no unnecessary images"
 msgstr "提供完整的日志和环境，不要提供非必要的图片"
 
-#: ../quick_start/troubleshooting.rst:126
+#: ../quick_start/troubleshooting.rst:125
 msgid "Proofread before posting"
 msgstr "提问之前校对你写的信息"
 
-#: ../quick_start/troubleshooting.rst:128
+#: ../quick_start/troubleshooting.rst:126
 msgid "Respond to feedback after posting"
 msgstr "提问之后，积极回应他人反馈"
 
-#: ../quick_start/troubleshooting.rst:132
+#: ../quick_start/troubleshooting.rst:130
 msgid ""
 "Stack Overflow: `How do I ask a good question? "
 "<https://stackoverflow.com/help/how-to-ask>`__"

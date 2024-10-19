@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-13 12:16+0800\n"
+"POT-Creation-Date: 2024-10-19 13:22+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -62,13 +62,20 @@ msgid "Plugin System"
 msgstr "插件系统"
 
 #: ../quick_start/introduction.rst:22
-msgid "MCDR has a rich ecosystem of plugins from the community"
-msgstr "MCDR 拥有丰富的社区插件生态"
+msgid ""
+"MCDR has a rich ecosystem of plugins from the community. From an in-game "
+"calculator, player highlighter, and Twitch chat bot, to a scoreboard "
+"manipulator, file manager, and backup system, all of them can be "
+"implemented with MCDReforged plugins"
+msgstr ""
+"MCDR 拥有丰富的社区插件生态"
+"小至计算器、高亮玩家、b 站弹幕姬，大至操控计分板、管理结构文件、"
+"自助备份回档，都可以通过 MCDR 及相配套的插件实现"
 
 #: ../quick_start/introduction.rst:24
 msgid ""
-"Meanwhile it's hot-reloadable that you don't need to shut down the server"
-" to update the plugins"
+"Meanwhile, the plugin system is hot-reloadable, so you don't need to shut"
+" down the server to update the plugins"
 msgstr "支持热重载，无需关闭服务器即可更新插件"
 
 #: ../quick_start/introduction.rst:27
@@ -76,13 +83,11 @@ msgid "Compatibility"
 msgstr "兼容性"
 
 #: ../quick_start/introduction.rst:29
-msgid ""
-"We supports most popular server softwares (Vanilla, Fabric, Spigot, "
-"Paper, etc.)"
+msgid "We support most popular servers (Vanilla, Fabric, Spigot, Paper, etc.)"
 msgstr "支持大多数流行服务端 (Vanilla, Fabric, Spigot, Paper 等)"
 
 #: ../quick_start/introduction.rst:31
-msgid "On multiple platforms (Windows, Linux, Mac, etc.)"
+msgid "Supports multiple platforms (Windows, Linux, Mac, etc.)"
 msgstr "支持多平台 (Windows, Linux, Mac 等)"
 
 #: ../quick_start/introduction.rst:34
@@ -91,16 +96,16 @@ msgstr "它是如何工作的"
 
 #: ../quick_start/introduction.rst:36
 msgid ""
-"**TL;DR:** MCDR works like robot that stares at the server console, "
-"respond to server output quickly, and inputting commands for users"
+"**TL;DR:** MCDR works like a robot that stares at the server console, "
+"responds to server output quickly, and inputs commands for users"
 msgstr "**简单来说:** MCDR 就像一个盯着服务端控制台看的小机器人，快速响应服务端输出，并为用户输入指令"
 
 #: ../quick_start/introduction.rst:38
 msgid ""
 "MCDR uses `Popen "
 "<https://docs.python.org/3/library/subprocess.html#subprocess.Popen>`__ "
-"to start the server software as a sub-process, so it has the ability to "
-"control the standard input / out stream of the server"
+"to start the server as a sub-process, so it has the ability to control "
+"the standard input / out stream of the server"
 msgstr ""
 "MCDR 使用 `Popen "
 "<https://docs.python.org/3/library/subprocess.html#subprocess.Popen>`__ "

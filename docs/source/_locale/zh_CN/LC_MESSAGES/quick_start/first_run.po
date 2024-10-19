@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-11 13:39+0800\n"
+"POT-Creation-Date: 2024-10-19 13:22+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -24,14 +24,14 @@ msgstr "现在你已经安装好了 MCDR，是时候启动它了"
 
 #: ../quick_start/first_run.rst:9
 msgid ""
-"Most common use of MCDR is to control a Minecraft server, so we also take"
-" this as the demonstrated use case here"
+"The most common use of MCDR is to control a Minecraft server, so we also "
+"take this as the demonstrated use case here"
 msgstr "MCDR 最常见的用途是控制 Minecraft 服务器，我们也就以此为例"
 
 #: ../quick_start/first_run.rst:13
 msgid ""
 "To manage Minecraft server with MCDR, It is recommended to have basic "
-"knowledge of common Minecraft server softwares"
+"knowledge of common Minecraft servers"
 msgstr "用 MCDR 管理 Minecraft 服务器前，建议对常见的 Minecraft 服务端有些基础了解"
 
 #: ../quick_start/first_run.rst:15
@@ -39,9 +39,7 @@ msgid "Which means, you should know:"
 msgstr "换句话说，请先了解："
 
 #: ../quick_start/first_run.rst:17
-msgid ""
-"The Minecraft server softwares: what they are, how to configure (one of) "
-"them"
+msgid "The Minecraft servers: what they are, how to configure (one of) them"
 msgstr "常见的 Minecraft 服务端：有哪些，如何配置（其中一种）"
 
 #: ../quick_start/first_run.rst:18
@@ -67,7 +65,7 @@ msgstr "准备"
 #: ../quick_start/first_run.rst:27
 msgid ""
 "To manage a Minecraft server with MCDR, you should have a **well-"
-"configured** Minecraft server software"
+"configured** Minecraft server"
 msgstr "要用 MCDR 管理 Minecraft 服务器，你首先需要 **配置好** 一个 Minecraft 服务端"
 
 #: ../quick_start/first_run.rst:29
@@ -81,25 +79,22 @@ msgid "With this command to start it:"
 msgstr "可以使用以下命令启动它："
 
 #: ../quick_start/first_run.rst:53
-msgid ""
-"You can also use other server software, such as Fabric, Spigot, Paper, "
-"etc."
+msgid "You can also use other server, such as Fabric, Spigot, Paper, etc."
 msgstr "你也选择其他服务端，如 Fabric、Spigot、Paper 等"
 
 #: ../quick_start/first_run.rst:57
 msgid ""
-"Configure and troubleshoot your server software **BEFORE** you introduce "
-"MCDR. Otherwise, you can't distinguish whether a problem is caused by "
-"MCDR or your server software"
+"Configure and troubleshoot your server **BEFORE** you introduce MCDR. "
+"Otherwise, you can't distinguish whether a problem is caused by MCDR or "
+"your server"
 msgstr "在引入 MCDR **之前**，请先配置并调试好服务端。否则，你将很难区分由 MCDR 和服务端引起的问题"
 
 #: ../quick_start/first_run.rst:59
 msgid ""
-"MCDR was born as a daemon for common server softwares of Minecraft: Java "
-"Edition. Most plugins are predicated on that. If you want to run MCDR "
-"with a Bedrock Edition server, consider using Java Edition server "
-"software with `GeyserMC <https://geysermc.org/>`__ to provide Bedrock "
-"Edition compatibility"
+"MCDR was born as a daemon for common server of Minecraft: Java Edition. "
+"Most plugins are predicated on that. If you want to run MCDR with a "
+"Bedrock Edition server, consider using Java Edition server with `GeyserMC"
+" <https://geysermc.org/>`__ to provide Bedrock Edition compatibility"
 msgstr ""
 "MCDR 是为 Minecraft Java 版常见服务端而诞生的。大多数插件以此为前提。如果你想在基岩版服务器上运行 MCDR，可以考虑使用 "
 "Java 版服务端，并用 `GeyserMC <https://geysermc.org/>`__ 兼容基岩版"
@@ -134,14 +129,14 @@ msgid "Configure"
 msgstr "配置"
 
 #: ../quick_start/first_run.rst:97
-msgid "Server Software"
+msgid "Server"
 msgstr "服务端"
 
 #: ../quick_start/first_run.rst:99
 msgid ""
-"Remember the server software you have prepared? Put it into the "
-"``server`` folder. The directory structure should be something like this:"
-msgstr "还记得你准备的服务端软件吗？把它放到 ``server`` 文件夹中"
+"Remember the server you have prepared? Put it into the ``server`` folder."
+" The directory structure should be something like this:"
+msgstr "还记得你准备的服务端吗？把它放到 ``server`` 文件夹中"
 
 #: ../quick_start/first_run.rst:116
 msgid "Config File"
@@ -185,13 +180,13 @@ msgstr "仔细阅读这几节，确保它们填写正确"
 
 #: ../quick_start/first_run.rst:129
 msgid ""
-"As a simple example, this is the ones you need to aware for a vanilla "
+"As a simple example, this is the ones you need to be aware for a vanilla "
 "Minecraft 1.21 server with Java 21:"
 msgstr "例如，对于 Java 21 的 Minecraft 1.21 原版服务端，需要关注的部分如下："
 
 #: ../quick_start/first_run.rst:140
 msgid ""
-"If you're confusing why this command is much logner than we mentioned "
+"If you're confusing why this command is much longer than we mentioned "
 "earlier, read the **encoding, decoding** section again"
 msgstr "如果你产生了 “为什么这命令相比之前提及时，变长了这么多” 的疑问，请再读读 **encoding, decoding** 一节"
 
@@ -204,8 +199,7 @@ msgid ""
 "Optionally, you may enable RCON protocol to make some specific plugins "
 "work properly or more efficiently. Check the details in "
 ":ref:`configuration:rcon`"
-msgstr "你可以选择是否启用 RCON 协议，来让一些插件正常工作，或更高效地工作。"
-"详见 :ref:`configuration:rcon` 一节"
+msgstr "你可以选择是否启用 RCON 协议，来让一些插件正常工作，或更高效地工作。详见 :ref:`configuration:rcon` 一节"
 
 #: ../quick_start/first_run.rst:148
 msgid "Run"
