@@ -9,6 +9,9 @@ DEFAULT_CONFIG_RESOURCE_PATH = MCDReforgedConfigManager.DEFAULT_CONFIG_RESOURCE_
 
 
 class MyTestCase(unittest.TestCase):
+	def setUp(self):
+		self.maxDiff = None
+
 	def test_default_config_consistency(self):
 		self.assertIsNotNone(resources_utils.get_data(DEFAULT_CONFIG_RESOURCE_PATH))
 		data = resources_utils.get_data('/' + DEFAULT_CONFIG_RESOURCE_PATH)
