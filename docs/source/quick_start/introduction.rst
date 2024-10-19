@@ -35,7 +35,7 @@ How it works
 
 **TL;DR:** MCDR works like a robot that stares at the server console, responds to server output quickly, and inputs commands for users
 
-MCDR uses `Popen <https://docs.python.org/3/library/subprocess.html#subprocess.Popen>`__ to start the server software as a sub-process, so it has the ability to control the standard input / out stream of the server
+MCDR uses `Popen <https://docs.python.org/3/library/subprocess.html#subprocess.Popen>`__ to start the server as a sub-process, so it has the ability to control the standard input / out stream of the server
 
 Since the console output of a Minecraft server has a stable format and contains a large amount of useful information about the server, e.g. player chat messages, MCDR is able to parse and analyze the server output, abstract them into different events and dispatch them towards plugins for responding
 
