@@ -9,7 +9,7 @@ Plugins
 
 MCDR is kind of a plugin-based framework. You may want to:
 
-* Have a look at the `Plugin Catalogue <https://mcdreforged.com/en/plugins>`__ to find some interesting plugins
+* Take a look at the `Plugin Catalogue <https://mcdreforged.com/en/plugins>`__ to find some interesting plugins
 * Use :ref:`\!!MCDR plg <command/mcdr:Plugin management>` to search and install plugins with their dependencies
 
 If you have interest to develop one yourself:
