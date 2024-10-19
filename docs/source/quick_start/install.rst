@@ -151,7 +151,7 @@ When a new version of MCDR is available, you can upgrade by:
     * ``pipx inject mcdreforged <package_name>``, e.g. ``pipx inject mcdreforged requests``
     * or ``pipx inject mcdreforged -r requirements.txt``
     
-    More conveniently, use the :ref:`\!!MCDR plg command <command/mcdr:Plugin management>` to install plugins with their dependencies
+    More conveniently, you can use the :ref:`\!!MCDR plg command <command/mcdr:Plugin management>` to install plugins with their dependencies
 
 
 Using virtual environment
