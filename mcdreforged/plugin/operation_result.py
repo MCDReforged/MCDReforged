@@ -2,7 +2,7 @@ import dataclasses
 import os
 from enum import Enum
 from pathlib import Path
-from typing import List, TYPE_CHECKING, NamedTuple, Callable, Union
+from typing import List, TYPE_CHECKING, Callable, Union
 
 from mcdreforged.minecraft.rtext.style import RAction
 from mcdreforged.minecraft.rtext.text import RTextList, RTextBase
@@ -42,26 +42,28 @@ class SingleOperationResult:
 		return len(self.failed_list) > 0
 
 
-class PluginResultType(Enum):
-	class _TypeImpl(NamedTuple):
-		result_extractor: Callable[['PluginOperationResult'], 'SingleOperationResult']
-		check_dependency: bool
+@dataclasses.dataclass(frozen=True)
+class _PluginResultTypeImpl:
+	result_extractor: Callable[['PluginOperationResult'], 'SingleOperationResult']
+	check_dependency: bool
 
 	@staticmethod
-	def __load_result_getter(result: 'PluginOperationResult') -> 'SingleOperationResult':
+	def load_result_getter(result: 'PluginOperationResult') -> 'SingleOperationResult':
 		return result.load_result
 
 	@staticmethod
-	def __unload_result_getter(result: 'PluginOperationResult') -> 'SingleOperationResult':
+	def unload_result_getter(result: 'PluginOperationResult') -> 'SingleOperationResult':
 		return result.unload_result
 
 	@staticmethod
-	def __reload_result_getter(result: 'PluginOperationResult') -> 'SingleOperationResult':
+	def reload_result_getter(result: 'PluginOperationResult') -> 'SingleOperationResult':
 		return result.reload_result
 
-	LOAD = _TypeImpl(getattr(__load_result_getter, '__func__'), True)
-	UNLOAD = _TypeImpl(getattr(__unload_result_getter, '__func__'), False)
-	RELOAD = _TypeImpl(getattr(__reload_result_getter, '__func__'), True)
+
+class PluginResultType(Enum):
+	LOAD = _PluginResultTypeImpl(_PluginResultTypeImpl.load_result_getter, True)
+	UNLOAD = _PluginResultTypeImpl(_PluginResultTypeImpl.unload_result_getter, False)
+	RELOAD = _PluginResultTypeImpl(_PluginResultTypeImpl.reload_result_getter, True)
 
 
 @dataclasses.dataclass(frozen=True)
