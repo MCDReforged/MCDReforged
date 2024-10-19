@@ -14,7 +14,7 @@ Advantages
 Vanilla
 ~~~~~~~
 
-MCDR runs above the server. It doesn't need to modify the server at all, which keep everything **vanilla**
+MCDR runs above the server. It doesn't need to modify the server at all, which keeps everything **vanilla**
 
 Plugin System
 ~~~~~~~~~~~~~
@@ -35,8 +35,8 @@ How it works
 
 **TL;DR:** MCDR works like a robot that stares at the server console, responds to server output quickly, and inputs commands for users
 
-MCDR uses `Popen <https://docs.python.org/3/library/subprocess.html#subprocess.Popen>`__ to start the server as a sub-process, so it has the ability to control the standard input / out stream of the server
+MCDR uses `Popen <https://docs.python.org/3/library/subprocess.html#subprocess.Popen>`__ to start the server as a sub-process, so it has the ability to control the standard input / output stream of the server
 
 Since the console output of a Minecraft server has a stable format and contains a large amount of useful information about the server, e.g. player chat messages, MCDR is able to parse and analyze the server output, abstract them into different events and dispatch them towards plugins for responding
 
-With the help of Minecraft command system, MCDR can send Minecraft commands via the standard input stream to affect the actual Minecraft server
+With the help of the Minecraft command system, MCDR can send Minecraft commands via the standard input stream to affect the actual Minecraft server

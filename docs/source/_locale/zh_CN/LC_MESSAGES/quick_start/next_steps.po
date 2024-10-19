@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-19 13:22+0000\n"
+"POT-Creation-Date: 2024-10-19 13:49+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -38,12 +38,12 @@ msgstr "看看 `插件仓库 <https://mcdreforged.com/zh-CN/plugins>`__ 找些�
 
 #: ../quick_start/next_steps.rst:13
 msgid ""
-"Use :ref:`\\!!MCDR plg <command/mcdr:Plugin management>` to search and "
-"install plugins with their dependencies"
+"Use :ref:`\\!!MCDR plg <command/mcdr:Plugin management>` to search for "
+"and install plugins with their dependencies"
 msgstr "使用 :ref:`\\!!MCDR plg <command/mcdr:Plugin management>` 搜索并安装插件及其依赖"
 
 #: ../quick_start/next_steps.rst:15
-msgid "If you have interest to develop one yourself:"
+msgid "If you have an interest in developing one yourself:"
 msgstr "如果你有兴趣自己开发一个插件："
 
 #: ../quick_start/next_steps.rst:17
@@ -56,8 +56,8 @@ msgstr ""
 
 #: ../quick_start/next_steps.rst:18
 msgid ""
-"We have official `Example Plugin "
-"<https://github.com/MCDReforged/ExamplePlugin>`__ and `Plugin Template "
+"We have an official `Example Plugin "
+"<https://github.com/MCDReforged/ExamplePlugin>`__ and a `Plugin Template "
 "<https://github.com/MCDReforged/PluginTemplate>`__ for you to start with"
 msgstr ""
 "官方的 `示例插件 <https://github.com/MCDReforged/ExamplePlugin>`__ 和 `插件模板 "
@@ -65,8 +65,8 @@ msgstr ""
 
 #: ../quick_start/next_steps.rst:19
 msgid ""
-":doc:`/code_references/index` may help you to understand the interfaces "
-"of MCDR"
+":doc:`/code_references/index` may help you understand the interfaces of "
+"MCDR"
 msgstr ":doc:`/code_references/index` 也许能助你理解 MCDR 的接口"
 
 #: ../quick_start/next_steps.rst:20
@@ -97,8 +97,8 @@ msgstr "权限"
 #: ../quick_start/next_steps.rst:32
 msgid ""
 "MCDR has a permission system to control the access of commands. For "
-"example, most ``!!MCDR`` commands are only accessible for level 3 (Admin)"
-" users."
+"example, most ``!!MCDR`` commands are only accessible to level 3 (Admin) "
+"users."
 msgstr "MCDR 有自己的权限系统，来控制指令执行。例如，大部分 ``!!MCDR`` 指令只有 level 3 (管理员) 用户才能执行。"
 
 #: ../quick_start/next_steps.rst:34

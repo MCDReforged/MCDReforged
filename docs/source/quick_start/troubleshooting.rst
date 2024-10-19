@@ -2,7 +2,7 @@
 Troubleshooting
 ===============
 
-Have problems to make things work? Here are some common issues and their solutions
+Have problems making things work? Here are some common issues and their solutions
 
 MCDR won't start
 ----------------
@@ -15,7 +15,7 @@ MCDR won't start
     * If you installed MCDR via system package manager... don't install MCDR via system package manager
 
 * **Error raised by Python**
-    * Install MCDR correctly. Don't start MCDR from source code
+    * Install MCDR correctly. Don't start MCDR the source code
     * Try to re-install MCDR, see if the problem persists
     * If you installed MCDR via venv, make sure you have activated the venv
     * Use ``which mcdreforged`` (``where mcdreforged`` in Windows), see which executable is being called
@@ -24,7 +24,7 @@ The server won't start
 ----------------------
 
 * Check out your start command
-* Check if java is installed and added in PATH
+* Check if Java is installed and added to the PATH
 * Try to run the server without MCDR, using the same command you configured
 * If you're directing the start command to a batch or shellscript, try the actual command instead of the script
 
@@ -36,7 +36,7 @@ Garbled text / UnicodeDecodeError
 
 Usually, this is caused by the console encoding / decoding
 
-MCDR use UTF-8 as default encoding and decoding, so try to use UTF-8 in everything related to the server. See :ref:`configuration:encoding, decoding`
+MCDR uses UTF-8 as the default encoding and decoding, so try to use UTF-8 in everything related to the server. See :ref:`configuration:encoding, decoding`
 
 Commands not working
 --------------------
@@ -44,7 +44,7 @@ Commands not working
 - **All commands are not responding in game, but working in console**
 - **Some commands perform incorrectly for specific players**
 
-    MCDR handle commands by listening to the server's console output. Make sure you are using the correct :ref:`Server Handler <configuration:handler>`
+    MCDR handles commands by listening to the server's console output. Make sure you are using the correct :ref:`Server Handler <configuration:handler>`
 
     Your server may unexpectedly not compatible with handlers:
  
@@ -65,7 +65,7 @@ Commands not working
 
             [09:00:00] [Server thread/INFO]: <Steve> Hello
 
-    Maybe your server output have been modified by mods or plugins (usually something like "player title/profession", "better console"), that the handler can't recognize them. To be confirmed, disable all mods and plugins and see if the problem solved. Examples:
+    Maybe your server output has been modified by mods or plugins (usually something like "player title/profession", "better console"), that the handler can't recognize them. To be confirmed, disable all mods and plugins and see if the problem is solved. Examples:
     
     .. tab:: ❌
 
@@ -82,7 +82,7 @@ Commands not working
 
     If your server has one of these problems, you may need to :ref:`customize your own handler <customize/handler:Server Handler>`
 
-- **Some plugin commands work neither in game nor the console**
+- **Some plugin commands work neither in game nor on the console**
 - **Some plugin commands perform incorrectly in all conditions**
 
     Check if the plugin is enabled and loaded correctly. Check the logs to see if there are any errors or warnings related to the plugin. Check the plugin configuration
@@ -111,7 +111,7 @@ If ``Emulation Terminal`` is disabled, you should set :ref:`configuration:advanc
 Get in touch
 ------------
 
-If these solutions did not solve your problem, please get in touch with :ref:`our kind community <quick_start/next_steps:Community>`
+If these solutions do not solve your problem, please get in touch with :ref:`our kind community <quick_start/next_steps:Community>`
 
 Still, before you ask questions or report bugs, please:
 

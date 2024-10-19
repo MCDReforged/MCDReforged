@@ -36,7 +36,7 @@ The detailed Python version requirements are as shown in the table below
 Wait a second
 -------------
 
-In some tutorials, you may learn to use MCDR by downloading a zip from Github and extract it
+In some tutorials, you may learn to use MCDR by downloading a zip from Github and extracting it
 
 However, that's not the correct way to install MCDR - Those tutorials are outdated
 
@@ -218,7 +218,7 @@ An animated demo with bash:
 
     In this way, you must activate the virtual environment every time you want to use MCDR, or install packages for MCDR plugins
 
-    For more information, see `venv <https://docs.python.org/en/3/library/venv.html>`__ in Python Doc
+    For more information, see `venv <https://docs.python.org/en/3/library/venv.html>`__ in the Python Doc
 
 Using Docker
 ~~~~~~~~~~~~

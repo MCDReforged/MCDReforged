@@ -10,13 +10,13 @@ Plugins
 MCDR is kind of a plugin-based framework. You may want to:
 
 * Take a look at the `Plugin Catalogue <https://mcdreforged.com/en/plugins>`__ to find some interesting plugins
-* Use :ref:`\!!MCDR plg <command/mcdr:Plugin management>` to search and install plugins with their dependencies
+* Use :ref:`\!!MCDR plg <command/mcdr:Plugin management>` to search for and install plugins with their dependencies
 
-If you have interest to develop one yourself:
+If you have an interest in developing one yourself:
 
 * :doc:`Create your own plugin </plugin_dev/basic>`, and :doc:`publish it into the catalogue </plugin_dev/plugin_catalogue>`
-* We have official `Example Plugin <https://github.com/MCDReforged/ExamplePlugin>`__ and `Plugin Template <https://github.com/MCDReforged/PluginTemplate>`__ for you to start with
-* :doc:`/code_references/index` may help you to understand the interfaces of MCDR
+* We have an official `Example Plugin <https://github.com/MCDReforged/ExamplePlugin>`__ and a `Plugin Template <https://github.com/MCDReforged/PluginTemplate>`__ for you to start with
+* :doc:`/code_references/index` may help you understand the interfaces of MCDR
 * Check out the source code of popular plugins, even MCDR itself, to learn more
 
 Commands
@@ -29,7 +29,7 @@ You may want to learn more of them: :doc:`/command/index`
 Permission
 ----------
 
-MCDR has a permission system to control the access of commands. For example, most ``!!MCDR`` commands are only accessible for level 3 (Admin) users.
+MCDR has a permission system to control the access of commands. For example, most ``!!MCDR`` commands are only accessible to level 3 (Admin) users.
 
 Currently the permission system is quite simple, but it's enough for most cases.
 

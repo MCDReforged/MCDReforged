@@ -2,7 +2,7 @@
 First Run
 =========
 
-Now you have installed MCDR, it's time to run it for the first time
+Now, you have installed MCDR, it's time to run it for the first time
 
 .. note::
 
@@ -10,7 +10,7 @@ Now you have installed MCDR, it's time to run it for the first time
 
 .. tip::
 
-    To manage Minecraft server with MCDR, It is recommended to have basic knowledge of common Minecraft servers
+    To manage a Minecraft server with MCDR, it is recommended to have basic knowledge of common Minecraft servers
     
     Which means, you should know:
 
@@ -26,7 +26,7 @@ Prepare
 
 To manage a Minecraft server with MCDR, you should have a **well-configured** Minecraft server
 
-For example, this is a typical directory structure of vanilla Minecraft server:
+For example, this is the typical directory structure of a vanilla Minecraft server:
 
 .. code-block:: text
 
@@ -50,20 +50,20 @@ With this command to start it:
 
     java -Xms1G -Xmx2G -jar minecraft_server.jar nogui
 
-You can also use other server, such as Fabric, Spigot, Paper, etc.
+You can also use other servers, such as Fabric, Spigot, Paper, etc.
 
 .. tip::
 
     Configure and troubleshoot your server **BEFORE** you introduce MCDR. Otherwise, you can't distinguish whether a problem is caused by MCDR or your server
 
-    MCDR was born as a daemon for common server of Minecraft: Java Edition. Most plugins are predicated on that. If you want to run MCDR with a Bedrock Edition server, consider using Java Edition server with `GeyserMC <https://geysermc.org/>`__ to provide Bedrock Edition compatibility
+    MCDR was born as a daemon for common servers of Minecraft: Java Edition. Most plugins are predicated on that. If you want to run MCDR with a Bedrock Edition server, consider using a Java Edition server with `GeyserMC <https://geysermc.org/>`__ to provide Bedrock Edition compatibility
 
-    Of course, if you don't need to make use of the plugin ecosystem designed for Java Edition server, you can run any programs you want with MCDR
+    Of course, if you don't need to make use of the plugin ecosystem designed for Java Edition servers, you can run any programs you want with MCDR
 
 Initialize
 ----------
 
-Let's say your are going to start MCDR in a folder named ``my_mcdr_server``. Then you can run the following commands to initialize the environment for MCDR:
+Let's say you are going to start MCDR in a folder named ``my_mcdr_server``. Then you can run the following commands to initialize the environment for MCDR:
 
 .. code-block:: bash
 
@@ -96,7 +96,7 @@ Configure
 Server
 ~~~~~~
 
-Remember the server you have prepared? Put it into the ``server`` folder. The directory structure should be something like this:
+Remember the server you prepared? Put it into the ``server`` folder. The directory structure should be something like this:
 
 .. code-block:: diff
 
@@ -121,12 +121,12 @@ For most users, there are 4 parts of the configuration that you need to be aware
 
 - :ref:`configuration:language`: the language using in MCDR
 - :ref:`configuration:start_command`: how MCDR starts your server
-- :ref:`configuration:handler`: how MCDR read your server outputs
+- :ref:`configuration:handler`: how MCDR reads your server outputs
 - :ref:`configuration:encoding, decoding`: how MCDR handles the server IO stream
 
-Read each section carefully and make sure you filled in the correct values.
+Read each section carefully and make sure you fill in the correct values.
 
-As a simple example, this is the ones you need to be aware for a vanilla Minecraft 1.21 server with Java 21:
+As a simple example, these are the ones you need to be aware of for a vanilla Minecraft 1.21 server with Java 21:
 
 .. code-block:: yaml
 
@@ -137,12 +137,12 @@ As a simple example, this is the ones you need to be aware for a vanilla Minecra
     encoding: utf8
     decoding: utf8
 
-If you're confusing why this command is much longer than we mentioned earlier, read the **encoding, decoding** section again
+If you're confusing about why this command is much longer than we mentioned earlier, read the **encoding, decoding** section again
 
 RCON
 ~~~~
 
-Optionally, you may enable RCON protocol to make some specific plugins work properly or more efficiently. Check the details in :ref:`configuration:rcon`
+Optionally, you may enable the RCON protocol to make some specific plugins work properly or more efficiently. Check the details in :ref:`configuration:rcon`
 
 Run
 ---
@@ -153,13 +153,13 @@ Now, you should be able to launch MCDR, and it should start handling the server 
 
     mcdreforged
 
-An animated demo configured as above:
+An animated demo, configured as above:
 
 .. asciinema:: resources/run.cast
 
 |
 
-Also, test MCDR in game:
+Also, test MCDR in the game:
 
 .. asciinema:: resources/ingame.cast
     :rows: 2

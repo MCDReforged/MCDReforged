@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-19 13:22+0000\n"
+"POT-Creation-Date: 2024-10-19 13:49+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -81,14 +81,12 @@ msgid "Wait a second"
 msgstr "先等等"
 
 #: ../quick_start/install.rst:39
-#, fuzzy
 msgid ""
 "In some tutorials, you may learn to use MCDR by downloading a zip from "
-"Github and extract it"
+"Github and extracting it"
 msgstr "在一些“教程”中，你可能会听说要从 Github 下载 zip 文件并解压来使用 MCDR"
 
 #: ../quick_start/install.rst:41
-#, fuzzy
 msgid ""
 "However, that's not the correct way to install MCDR - Those tutorials are"
 " outdated"
@@ -123,7 +121,6 @@ msgid "Externally managed environment"
 msgstr "外部管理的环境"
 
 #: ../quick_start/install.rst:88
-#, fuzzy
 msgid ""
 "If you're using Windows, the command above should work fine, and MCDR "
 "will be installed to the global environment - you may ignore this section"
@@ -404,7 +401,7 @@ msgstr "这样一来，每次使用 MCDR，或为 MCDR 插件安装依赖时，�
 #: ../quick_start/install.rst:221
 msgid ""
 "For more information, see `venv "
-"<https://docs.python.org/en/3/library/venv.html>`__ in Python Doc"
+"<https://docs.python.org/en/3/library/venv.html>`__ in the Python Doc"
 msgstr ""
 "更多信息，参见 Python 文档：`虚拟环境的创建 <https://docs.python.org/zh-"
 "cn/3/library/venv.html>`__"
@@ -459,7 +456,6 @@ msgstr ""
 "``pipx``"
 
 #: ../quick_start/install.rst:242
-#, fuzzy
 msgid "To use the PyPI mirror, add ``-i <index-url>`` to the commands:"
 msgstr "只需在命令中添加 ``-i <index-url>`` 参数："
 

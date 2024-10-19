@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-19 13:22+0000\n"
+"POT-Creation-Date: 2024-10-19 13:49+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -20,7 +20,7 @@ msgstr "故障排除"
 
 #: ../quick_start/troubleshooting.rst:5
 msgid ""
-"Have problems to make things work? Here are some common issues and their "
+"Have problems making things work? Here are some common issues and their "
 "solutions"
 msgstr "遇到问题？这里有一些常见的问题和解决方案"
 
@@ -61,12 +61,11 @@ msgid ""
 msgstr "如果你通过系统包管理器安装了 MCDR... 不要通过系统包管理器安装 MCDR"
 
 #: ../quick_start/troubleshooting.rst:17
-#, fuzzy
 msgid "**Error raised by Python**"
 msgstr "**Python 抛出错误**"
 
 #: ../quick_start/troubleshooting.rst:18
-msgid "Install MCDR correctly. Don't start MCDR from source code"
+msgid "Install MCDR correctly. Don't start MCDR the source code"
 msgstr "正确安装 MCDR。不要从源码启动 MCDR"
 
 #: ../quick_start/troubleshooting.rst:19
@@ -92,7 +91,7 @@ msgid "Check out your start command"
 msgstr "检查你的启动命令"
 
 #: ../quick_start/troubleshooting.rst:27
-msgid "Check if java is installed and added in PATH"
+msgid "Check if Java is installed and added to the PATH"
 msgstr "检查 Java 是否已安装并添加到 PATH 中"
 
 #: ../quick_start/troubleshooting.rst:28
@@ -119,8 +118,8 @@ msgstr "这通常是控制台编解码异常引起的"
 
 #: ../quick_start/troubleshooting.rst:39
 msgid ""
-"MCDR use UTF-8 as default encoding and decoding, so try to use UTF-8 in "
-"everything related to the server. See :ref:`configuration:encoding, "
+"MCDR uses UTF-8 as the default encoding and decoding, so try to use UTF-8"
+" in everything related to the server. See :ref:`configuration:encoding, "
 "decoding`"
 msgstr ""
 "MCDR 默认使用 UTF-8 编码和解码，不妨尝试在服务端相关的所有地方都使用 UTF-8。参见 "
@@ -140,7 +139,7 @@ msgstr "**某些指令对特定玩家执行不正确**"
 
 #: ../quick_start/troubleshooting.rst:47
 msgid ""
-"MCDR handle commands by listening to the server's console output. Make "
+"MCDR handles commands by listening to the server's console output. Make "
 "sure you are using the correct :ref:`Server Handler "
 "<configuration:handler>`"
 msgstr "MCDR 通过监听服务端控制台输出来处理指令，请确保你使用了正确的 :ref:`服务端处理器 <configuration:handler>`"
@@ -150,7 +149,6 @@ msgid "Your server may unexpectedly not compatible with handlers:"
 msgstr "你的服务端可能意外地与处理器不兼容："
 
 #: ../quick_start/troubleshooting.rst:51
-#, fuzzy
 msgid "Maybe your server is unique that not supported by built-in handlers"
 msgstr "也许，你的服务端比较特别，内置处理器均不兼容"
 
@@ -165,10 +163,10 @@ msgstr ""
 
 #: ../quick_start/troubleshooting.rst:68
 msgid ""
-"Maybe your server output have been modified by mods or plugins (usually "
+"Maybe your server output has been modified by mods or plugins (usually "
 "something like \"player title/profession\", \"better console\"), that the"
 " handler can't recognize them. To be confirmed, disable all mods and "
-"plugins and see if the problem solved. Examples:"
+"plugins and see if the problem is solved. Examples:"
 msgstr "也许，你的服务端输出被插件或模组（例如：玩家称号/职业，更好的控制台）修改了，导致处理器无法识别。禁用所有插件和模组，看看问题是否解决。例如："
 
 #: ../quick_start/troubleshooting.rst:83
@@ -178,7 +176,7 @@ msgid ""
 msgstr "如果你的服务端存在上述问题之一，你可能需要 :ref:`自定义服务端处理器 <customize/handler:Server Handler>`"
 
 #: ../quick_start/troubleshooting.rst:85
-msgid "**Some plugin commands work neither in game nor the console**"
+msgid "**Some plugin commands work neither in game nor on the console**"
 msgstr "**某些插件命令在游戏和控制台中都无法使用**"
 
 #: ../quick_start/troubleshooting.rst:86
@@ -253,7 +251,7 @@ msgstr "联系我们"
 
 #: ../quick_start/troubleshooting.rst:114
 msgid ""
-"If these solutions did not solve your problem, please get in touch with "
+"If these solutions do not solve your problem, please get in touch with "
 ":ref:`our kind community <quick_start/next_steps:Community>`"
 msgstr "如果以上方案无法解决你的问题，请联系 :ref:`我们可爱的社区 <quick_start/next_steps:Community>`"
 
