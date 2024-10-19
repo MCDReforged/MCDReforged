@@ -200,7 +200,7 @@ Then, install MCDR using pip:
 
     pip install mcdreforged
 
-When a new version of MCDR available, you may upgrade MCDR by:
+When a new version of MCDR is available, you can upgrade MCDR by:
 
 .. prompt:: bash
     :prompts: (venv) $
