@@ -28,7 +28,7 @@ Compatibility
 
 We supports most popular server softwares (Vanilla, Fabric, Spigot, Paper, etc.)
 
-On multiple platforms (Windows, Linux, Mac, etc.)
+Supports multiple platforms (Windows, Linux, Mac, etc.)
 
 How it works
 ------------
