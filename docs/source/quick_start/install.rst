@@ -89,7 +89,7 @@ If you're using Windows, the command above should work fine, and MCDR will be in
 
 For Linux and Mac OS, it's not recommended to install MCDR system-wide (with root), because it can cause conflicts with other Python packages and affect system dependencies
 
-System-wide install also makes version management difficult 
+System-wide installation also makes version management difficult 
 and requires administrator privileges, increasing security risks
 
 System-wide install may even result in an ``externally-managed-environment`` error
