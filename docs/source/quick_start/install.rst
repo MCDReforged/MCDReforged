@@ -133,7 +133,7 @@ Then you can install MCDR using pipx:
 
     pipx install mcdreforged
 
-When a new version of MCDR available, you may take the upgrade by:
+When a new version of MCDR is available, you can upgrade by:
 
 .. prompt:: bash
 
