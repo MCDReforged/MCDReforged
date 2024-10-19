@@ -92,7 +92,7 @@ For Linux and Mac OS, it's not recommended to install MCDR system-wide (with roo
 System-wide installation also makes version management difficult 
 and requires administrator privileges, increasing security risks
 
-System-wide install may even result in an ``externally-managed-environment`` error
+System-wide installation may even result in an ``externally-managed-environment`` error
 
 See `PEP 668 <https://peps.python.org/pep-0668/>`__ for the detailed specification
 
