@@ -85,7 +85,7 @@ Verify the installation with:
 Externally managed environment
 ------------------------------
 
-If you're using Windows, the command above should work fine, MCDR will be installed to global environment - you may ignore this section
+If you're using Windows, the command above should work fine, and MCDR will be installed to the global environment - you may ignore this section
 
 For Linux and Mac OS, it's not recommended to install MCDR system-wide (with root), because it can cause conflicts with other Python packages and affect system dependencies
 
