@@ -227,7 +227,7 @@ MCDR also provides Docker images as an option. See :doc:`/docker` for more detai
 
 You can specify the version of MCDR by the tag of the Docker image
 
-Compared to the two methods above, Docker has a more convoluted learning path, but convenient for some advanced usages
+Compared to the two methods above, Docker has a more convoluted learning path, but is more convenient for some advanced usages
 
 System package manager
 ~~~~~~~~~~~~~~~~~~~~~~
