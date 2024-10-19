@@ -33,7 +33,7 @@ Supports multiple platforms (Windows, Linux, Mac, etc.)
 How it works
 ------------
 
-**TL;DR:** MCDR works like robot that stares at the server console, respond to server output quickly, and inputting commands for users
+**TL;DR:** MCDR works like a robot that stares at the server console, responds to server output quickly, and inputs commands for users
 
 MCDR uses `Popen <https://docs.python.org/3/library/subprocess.html#subprocess.Popen>`__ to start the server software as a sub-process, so it has the ability to control the standard input / out stream of the server
 
