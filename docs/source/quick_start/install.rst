@@ -232,7 +232,7 @@ Compared to the two methods above, Docker has a more convoluted learning path, b
 System package manager
 ~~~~~~~~~~~~~~~~~~~~~~
 
-You may found MCDR in some package repositories, AUR for example. However, it's **definately not recommended** to use a system package manager to install MCDR. Not only it has all the same problem as the system-wide pip install, it's also hard to manage the dependencies of MCDR plugins
+You may find MCDR in some system package repositories, AUR for example. However, it's **definitely not recommended** to use a system package manager to install MCDR. Not only does it have all the same problems as system-wide pip installation, but it's also hard to manage the dependencies of MCDR plugins
 
 Accelerate the installation
 ---------------------------
