@@ -241,8 +241,8 @@ msgid ""
 " third-party tool `pipx <https://pipx.pypa.io/>`__, which is designed for"
 " installing and running Python applications in isolated environments"
 msgstr ""
-"也许是对大多数用户而言最简单的解决方案，但需使用第三方工具 `pipx "
-"<https://pipx.pypa.io/>`__，为在隔离环境中安装和运行 Python 应用程序而生"
+"也许是对大多数用户而言最简单的解决方案，但需要使用第三方工具 `pipx "
+"<https://pipx.pypa.io/>`__，其专为在隔离环境中安装和运行 Python 应用程序而设计""
 
 #: ../quick_start/install.rst:128
 msgid ""
