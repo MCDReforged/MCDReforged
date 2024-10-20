@@ -10,7 +10,7 @@ Now, you have installed MCDR, it's time to run it for the first time
 
 .. tip::
 
-    To manage a Minecraft server with MCDR, it is recommended to have basic knowledge of common Minecraft servers
+    To manage a Minecraft server with MCDR, it is recommended to have some basic understanding of common Minecraft servers
     
     Which means, you should know:
 
