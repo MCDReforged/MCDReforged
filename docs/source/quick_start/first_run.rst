@@ -30,7 +30,7 @@ For example, this is the typical directory structure of a vanilla Minecraft serv
 
 .. code-block:: text
 
-    server/
+    ./
     ├── libraries/
     ├── logs/
     ├── versions/
@@ -119,7 +119,7 @@ Then, edit the ``config.yml`` file to configure MCDR. You can find more informat
 
 For most users, there are 4 parts of the configuration that you need to be aware of
 
-- :ref:`configuration:language`: the language using in MCDR
+- :ref:`configuration:language`: the language used in MCDR
 - :ref:`configuration:start_command`: how MCDR starts your server
 - :ref:`configuration:handler`: how MCDR reads your server outputs
 - :ref:`configuration:encoding, decoding`: how MCDR handles the server IO stream
@@ -137,12 +137,7 @@ As a simple example, these are the ones you need to be aware of for a vanilla Mi
     encoding: utf8
     decoding: utf8
 
-If you're confusing about why this command is much longer than we mentioned earlier, read the **encoding, decoding** section again
-
-RCON
-~~~~
-
-Optionally, you may enable the RCON protocol to make some specific plugins work properly or more efficiently. Check the details in :ref:`configuration:rcon`
+If you're confusing about why this command is much longer than we mentioned earlier, read the :ref:`configuration:encoding, decoding` section again
 
 Run
 ---

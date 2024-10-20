@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-19 13:49+0000\n"
+"POT-Creation-Date: 2024-10-20 08:51+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -30,8 +30,8 @@ msgstr "MCDR 最常见的用途是控制 Minecraft 服务器，我们也就以�
 
 #: ../quick_start/first_run.rst:13
 msgid ""
-"To manage a Minecraft server with MCDR, it is recommended to have basic "
-"knowledge of common Minecraft servers"
+"To manage a Minecraft server with MCDR, it is recommended to have some "
+"basic understanding of common Minecraft servers"
 msgstr "用 MCDR 管理 Minecraft 服务器前，建议对常见的 Minecraft 服务端有些基础了解"
 
 #: ../quick_start/first_run.rst:15
@@ -156,7 +156,7 @@ msgid ""
 msgstr "对于大多数用户来说，有 4 个需要注意的部分"
 
 #: ../quick_start/first_run.rst:122
-msgid ":ref:`configuration:language`: the language using in MCDR"
+msgid ":ref:`configuration:language`: the language used in MCDR"
 msgstr ":ref:`configuration:language`：MCDR 使用的语言"
 
 #: ../quick_start/first_run.rst:123
@@ -186,35 +186,25 @@ msgstr "例如，对于 Java 21 的 Minecraft 1.21 原版服务端，需要关�
 #: ../quick_start/first_run.rst:140
 msgid ""
 "If you're confusing about why this command is much longer than we "
-"mentioned earlier, read the **encoding, decoding** section again"
-msgstr "如果你产生了 “为什么这命令相比之前提及时，变长了这么多” 的疑问，请再读读 **encoding, decoding** 一节"
+"mentioned earlier, read the :ref:`configuration:encoding, decoding` "
+"section again"
+msgstr "如果你产生了 “为什么这命令相比之前提及时，变长了这么多” 的疑问，请再读读 :ref:`configuration:encoding, decoding` 一节"
 
 #: ../quick_start/first_run.rst:143
-msgid "RCON"
-msgstr "RCON"
-
-#: ../quick_start/first_run.rst:145
-msgid ""
-"Optionally, you may enable the RCON protocol to make some specific "
-"plugins work properly or more efficiently. Check the details in "
-":ref:`configuration:rcon`"
-msgstr "你可以选择是否启用 RCON 协议，来让一些插件正常工作，或更高效地工作。详见 :ref:`configuration:rcon` 一节"
-
-#: ../quick_start/first_run.rst:148
 msgid "Run"
 msgstr "启动！"
 
-#: ../quick_start/first_run.rst:150
+#: ../quick_start/first_run.rst:145
 msgid ""
 "Now, you should be able to launch MCDR, and it should start handling the "
 "server correctly"
 msgstr "现在，你应该能够启动 MCDR，并且它应该能够正确地处理服务端"
 
-#: ../quick_start/first_run.rst:156
+#: ../quick_start/first_run.rst:151
 msgid "An animated demo, configured as above:"
 msgstr "如上配置的动画演示："
 
-#: ../quick_start/first_run.rst:162
+#: ../quick_start/first_run.rst:157
 msgid "Also, test MCDR in the game:"
 msgstr "也请在游戏中测试 MCDR："
 
