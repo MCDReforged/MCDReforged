@@ -56,7 +56,7 @@ You can also use other servers, such as Fabric, Spigot, Paper, etc.
 
     Configure and troubleshoot your server **BEFORE** you introduce MCDR. Otherwise, you can't distinguish whether a problem is caused by MCDR or your server
 
-    MCDR was born as a daemon for common servers of Minecraft: Java Edition. Most plugins are predicated on that. If you want to run MCDR with a Bedrock Edition server, consider using a Java Edition server with `GeyserMC <https://geysermc.org/>`__ to provide Bedrock Edition compatibility
+    MCDR was born as a daemon for common servers of Minecraft: Java Edition. Most plugins are predicated on that
 
     Of course, if you don't need to make use of the plugin ecosystem designed for Java Edition servers, you can run any programs you want with MCDR
 

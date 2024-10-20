@@ -8,9 +8,9 @@ MCDR won't start
 ----------------
 
 * **mcdreforged: command not found**
-    * Try ``python -m mcdreforged``
+    * Try ``python -m mcdreforged``, which explicitly specifies the Python interpreter to start MCDR
     * If you installed MCDR via pipx, ensure the pipx apps directory is in your PATH
-    * If you installed MCDR via pip globally, ensure the pip scripts directory is in your PATH
+    * If you installed MCDR via pip globally, ensure that the directory where pip places the installed scripts is in your PATH
     * If you installed MCDR via pip within venv, make sure you have activated the venv
     * If you installed MCDR via system package manager... don't install MCDR via system package manager
 
@@ -120,7 +120,7 @@ Still, before you ask questions or report bugs, please:
 * Help others reproduce the problem:
 
     * `Create a minimal reproducible example <https://stackoverflow.com/help/minimal-reproducible-example>`__
-    * Provide your full logs and context, no unnecessary images
+    * Provide your full logs and context, no unnecessary images. If the log file is long, send it as an attachment file or use services like `mclo.gs <https://mclo.gs/>`__ or `Pastebin <https://pastebin.com/>`__ to share it
 
 * Proofread before posting
 * Respond to feedback after posting

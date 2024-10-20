@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-19 13:49+0000\n"
+"POT-Creation-Date: 2024-10-20 09:13+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -33,8 +33,10 @@ msgid "**mcdreforged: command not found**"
 msgstr "**mcdreforged 不是内部或外部命令**"
 
 #: ../quick_start/troubleshooting.rst:11
-msgid "Try ``python -m mcdreforged``"
-msgstr "试试 ``python -m mcdreforged``"
+msgid ""
+"Try ``python -m mcdreforged``, which explicitly specifies the Python "
+"interpreter to start MCDR"
+msgstr "尝试明确指定 Python 解释器来启动 MCDR：``python -m mcdreforged``"
 
 #: ../quick_start/troubleshooting.rst:12
 msgid ""
@@ -44,9 +46,9 @@ msgstr "若你通过 pipx 安装了 MCDR，确保 pipx 应用程序目录在你�
 
 #: ../quick_start/troubleshooting.rst:13
 msgid ""
-"If you installed MCDR via pip globally, ensure the pip scripts directory "
-"is in your PATH"
-msgstr "若你通过 pip 全局安装了 MCDR，确保 pip 脚本目录在你的 PATH 中"
+"If you installed MCDR via pip globally, ensure that the directory where "
+"pip places the installed scripts is in your PATH"
+msgstr "若你通过 pip 全局安装了 MCDR，确保 pip 已安装脚本的目录在你的 PATH 中"
 
 #: ../quick_start/troubleshooting.rst:14
 msgid ""
@@ -225,7 +227,7 @@ msgid ""
 "<https://github.com/MCSManager/MCSManager>`__, `Documentation "
 "<https://docs.mcsmanager.com/>`__"
 msgstr ""
-"更多信息，请与 MCSManager 社区联系：`Github 存储库 "
+"更多信息，请与 MCSManager 社区联系：`Github 仓库 "
 "<https://github.com/MCSManager/MCSManager>`__，`MCSManager 文档 "
 "<https://docs.mcsmanager.com/>`__"
 
@@ -278,8 +280,14 @@ msgid ""
 msgstr "`构建最小复现示例 <https://stackoverflow.com/help/minimal-reproducible-example>`__"
 
 #: ../quick_start/troubleshooting.rst:123
-msgid "Provide your full logs and context, no unnecessary images"
-msgstr "提供完整的日志和环境，不要提供非必要的图片"
+msgid ""
+"Provide your full logs and context, no unnecessary images. If the log "
+"file is long, send it as an attachment file or use services like `mclo.gs"
+" <https://mclo.gs/>`__ or `Pastebin <https://pastebin.com/>`__ to share "
+"it"
+msgstr ""
+"提供完整的日志和环境，不要提供非必要的图片。若日志太长，请作为附件发送，或使用 `mclo.gs <https://mclo.gs/>`__ / "
+"`Pastebin <https://pastebin.com/>`__ 等服务提供"
 
 #: ../quick_start/troubleshooting.rst:125
 msgid "Proofread before posting"
