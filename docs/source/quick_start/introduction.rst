@@ -26,7 +26,7 @@ Meanwhile, the plugin system is hot-reloadable, so you don't need to shut down t
 Compatibility
 ~~~~~~~~~~~~~
 
-We support most popular servers (Vanilla, Fabric, Spigot, Paper, etc.)
+MCDR supports most popular servers (Vanilla, Fabric, Spigot, Paper, etc.)
 
 Supports multiple platforms (Windows, Linux, Mac, etc.)
 

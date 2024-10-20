@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-19 13:49+0000\n"
+"POT-Creation-Date: 2024-10-20 05:25+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -82,7 +82,7 @@ msgid "Compatibility"
 msgstr "兼容性"
 
 #: ../quick_start/introduction.rst:29
-msgid "We support most popular servers (Vanilla, Fabric, Spigot, Paper, etc.)"
+msgid "MCDR supports most popular servers (Vanilla, Fabric, Spigot, Paper, etc.)"
 msgstr "支持大多数流行服务端 (Vanilla, Fabric, Spigot, Paper 等)"
 
 #: ../quick_start/introduction.rst:31
