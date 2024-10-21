@@ -1,0 +1,157 @@
+
+msgid ""
+msgstr ""
+"Project-Id-Version: MCDReforged \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-10-19 13:49+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: zh_CN\n"
+"Language-Team: zh_CN <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.15.0\n"
+
+#: ../quick_start/next_steps.rst:3
+msgid "Next Steps"
+msgstr "更进一步"
+
+#: ../quick_start/next_steps.rst:5
+msgid "Now, you've got the basic knowledge of MCDR. What's next?"
+msgstr "现在，你已经了解了 MCDR 的基本知识。接下来呢？"
+
+#: ../quick_start/next_steps.rst:8
+msgid "Plugins"
+msgstr "插件"
+
+#: ../quick_start/next_steps.rst:10
+msgid "MCDR is kind of a plugin-based framework. You may want to:"
+msgstr "插件让 MCDR 更强大。你可能想："
+
+#: ../quick_start/next_steps.rst:12
+msgid ""
+"Take a look at the `Plugin Catalogue "
+"<https://mcdreforged.com/en/plugins>`__ to find some interesting plugins"
+msgstr "看看 `插件仓库 <https://mcdreforged.com/zh-CN/plugins>`__ 找些有趣的插件"
+
+#: ../quick_start/next_steps.rst:13
+msgid ""
+"Use :ref:`\\!!MCDR plg <command/mcdr:Plugin management>` to search for "
+"and install plugins with their dependencies"
+msgstr "使用 :ref:`\\!!MCDR plg <command/mcdr:Plugin management>` 搜索并安装插件及其依赖"
+
+#: ../quick_start/next_steps.rst:15
+msgid "If you have an interest in developing one yourself:"
+msgstr "如果你有兴趣自己开发一个插件："
+
+#: ../quick_start/next_steps.rst:17
+msgid ""
+":doc:`Create your own plugin </plugin_dev/basic>`, and :doc:`publish it "
+"into the catalogue </plugin_dev/plugin_catalogue>`"
+msgstr ""
+":doc:`创建你自己的插件 </plugin_dev/basic>`，并 :doc:`将其发布到插件仓库中 "
+"</plugin_dev/plugin_catalogue>`"
+
+#: ../quick_start/next_steps.rst:18
+msgid ""
+"We have an official `Example Plugin "
+"<https://github.com/MCDReforged/ExamplePlugin>`__ and a `Plugin Template "
+"<https://github.com/MCDReforged/PluginTemplate>`__ for you to start with"
+msgstr ""
+"官方的 `示例插件 <https://github.com/MCDReforged/ExamplePlugin>`__ 和 `插件模板 "
+"<https://github.com/MCDReforged/PluginTemplate>`__ 或能助你一臂之力"
+
+#: ../quick_start/next_steps.rst:19
+msgid ""
+":doc:`/code_references/index` may help you understand the interfaces of "
+"MCDR"
+msgstr ":doc:`/code_references/index` 也许能助你理解 MCDR 的接口"
+
+#: ../quick_start/next_steps.rst:20
+msgid ""
+"Check out the source code of popular plugins, even MCDR itself, to learn "
+"more"
+msgstr "查看热门插件，甚至 MCDR 本身的源代码，以了解更多"
+
+#: ../quick_start/next_steps.rst:23
+msgid "Commands"
+msgstr "指令"
+
+#: ../quick_start/next_steps.rst:25
+msgid ""
+"MCDR has its own command system.  Most of them start with a ``!!`` in "
+"common practice. Mentioned above, ``!!MCDR plg`` is one of the built-in "
+"commands."
+msgstr "MCDR 有自己的指令系统。指令常以 ``!!`` 开头。上面提到的 ``!!MCDR plg`` 就是一个内置指令"
+
+#: ../quick_start/next_steps.rst:27
+msgid "You may want to learn more of them: :doc:`/command/index`"
+msgstr "详见 :doc:`/command/index` 一章"
+
+#: ../quick_start/next_steps.rst:30
+msgid "Permission"
+msgstr "权限"
+
+#: ../quick_start/next_steps.rst:32
+msgid ""
+"MCDR has a permission system to control the access of commands. For "
+"example, most ``!!MCDR`` commands are only accessible to level 3 (Admin) "
+"users."
+msgstr "MCDR 有自己的权限系统，来控制指令执行。例如，大部分 ``!!MCDR`` 指令只有 level 3 (管理员) 用户才能执行。"
+
+#: ../quick_start/next_steps.rst:34
+msgid ""
+"Currently the permission system is quite simple, but it's enough for most"
+" cases."
+msgstr "目前，权限系统比较简单，但足以应对大部分情况"
+
+#: ../quick_start/next_steps.rst:36
+msgid "More details in: :doc:`/permission`"
+msgstr "详见 :doc:`/permission` 一章"
+
+#: ../quick_start/next_steps.rst:39
+msgid "CLI"
+msgstr "命令行接口"
+
+#: ../quick_start/next_steps.rst:41
+msgid ""
+"MCDR has a Command Line Interface to provide some useful tools for you. "
+"For example, you may manage plugins without launching the server"
+msgstr "MCDR 提供了一个命令行接口，为你带来一些实用工具。例如，你可以在不启动服务器的情况下管理插件"
+
+#: ../quick_start/next_steps.rst:43
+msgid "More details in: :doc:`/cli/index`"
+msgstr "详见 :doc:`/cli/index` 一章"
+
+#: ../quick_start/next_steps.rst:46
+msgid "Community"
+msgstr "社区"
+
+#: ../quick_start/next_steps.rst:48
+msgid ""
+"We have an organization on Github that hosts the source code for most "
+"parts of the MCDR project"
+msgstr ""
+"我们在 Github 上有一个组织，托管了 MCDR 项目的绝大部分源码：`MCDReforged@Github "
+"<https://github.com/MCDReforged>`__"
+
+#: ../quick_start/next_steps.rst:50
+msgid "Check it out: `MCDReforged@Github <https://github.com/MCDReforged>`__"
+msgstr "另外，还有一个 QQ 讨论群：1101314858"
+
+#: ../quick_start/next_steps.rst:53
+msgid "Migrate"
+msgstr "迁移"
+
+#: ../quick_start/next_steps.rst:55
+msgid ""
+"If you were a user of legacy versions of MCDR, you may want to check out "
+"the :doc:`/migrate/index`"
+msgstr "如果你曾是 MCDR 旧版本的用户，你可能想看看 :doc:`/migrate/index`"
+
+#: ../quick_start/next_steps.rst:59
+msgid "Have fun with MCDR!"
+msgstr "祝你玩的开心！"
+
