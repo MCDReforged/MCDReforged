@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-20 09:13+0000\n"
+"POT-Creation-Date: 2024-10-21 06:43+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -34,15 +34,15 @@ msgstr "**mcdreforged 不是内部或外部命令**"
 
 #: ../quick_start/troubleshooting.rst:11
 msgid ""
-"Try ``python -m mcdreforged``, which explicitly specifies the Python "
-"interpreter to start MCDR"
-msgstr "尝试明确指定 Python 解释器来启动 MCDR：``python -m mcdreforged``"
-
-#: ../quick_start/troubleshooting.rst:12
-msgid ""
 "If you installed MCDR via pipx, ensure the pipx apps directory is in your"
 " PATH"
 msgstr "若你通过 pipx 安装了 MCDR，确保 pipx 应用程序目录在你的 PATH 中"
+
+#: ../quick_start/troubleshooting.rst:12
+msgid ""
+"If you installed MCDR via pip, try ``python -m mcdreforged``, which "
+"explicitly specifies the Python interpreter to start MCDR"
+msgstr "若你通过 pip 安装了 MCDR，尝试明确指定 Python 解释器来启动 MCDR：``python -m mcdreforged``"
 
 #: ../quick_start/troubleshooting.rst:13
 msgid ""
@@ -67,7 +67,7 @@ msgid "**Error raised by Python**"
 msgstr "**Python 抛出错误**"
 
 #: ../quick_start/troubleshooting.rst:18
-msgid "Install MCDR correctly. Don't start MCDR the source code"
+msgid "Install MCDR correctly. Don't start MCDR from the source code"
 msgstr "正确安装 MCDR。不要从源码启动 MCDR"
 
 #: ../quick_start/troubleshooting.rst:19
@@ -89,7 +89,7 @@ msgid "The server won't start"
 msgstr "服务器无法启动"
 
 #: ../quick_start/troubleshooting.rst:26
-msgid "Check out your start command"
+msgid "Check your start command"
 msgstr "检查你的启动命令"
 
 #: ../quick_start/troubleshooting.rst:27

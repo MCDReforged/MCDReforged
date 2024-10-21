@@ -8,14 +8,14 @@ MCDR won't start
 ----------------
 
 * **mcdreforged: command not found**
-    * Try ``python -m mcdreforged``, which explicitly specifies the Python interpreter to start MCDR
     * If you installed MCDR via pipx, ensure the pipx apps directory is in your PATH
+    * If you installed MCDR via pip, try ``python -m mcdreforged``, which explicitly specifies the Python interpreter to start MCDR
     * If you installed MCDR via pip globally, ensure that the directory where pip places the installed scripts is in your PATH
     * If you installed MCDR via pip within venv, make sure you have activated the venv
     * If you installed MCDR via system package manager... don't install MCDR via system package manager
 
 * **Error raised by Python**
-    * Install MCDR correctly. Don't start MCDR the source code
+    * Install MCDR correctly. Don't start MCDR from the source code
     * Try to re-install MCDR, see if the problem persists
     * If you installed MCDR via venv, make sure you have activated the venv
     * Use ``which mcdreforged`` (``where mcdreforged`` in Windows), see which executable is being called
@@ -23,7 +23,7 @@ MCDR won't start
 The server won't start
 ----------------------
 
-* Check out your start command
+* Check your start command
 * Check if Java is installed and added to the PATH
 * Try to run the server without MCDR, using the same command you configured
 * If you're directing the start command to a batch or shellscript, try the actual command instead of the script
