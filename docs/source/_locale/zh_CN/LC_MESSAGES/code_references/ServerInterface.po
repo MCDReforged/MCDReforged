@@ -123,7 +123,7 @@ msgstr ":doc:`事件监听器 </plugin_dev/event>` 回调函数的调用"
 #: mcdreforged.plugin.si.server_interface.ServerInterface.as_plugin_server_interface:10
 #: of
 msgid ":doc:`Command </plugin_dev/command>` callback invocation"
-msgstr ":doc:`指令 </plugin_dev/command>` 回调函数的调用"
+msgstr ":doc:`命令 </plugin_dev/command>` 回调函数的调用"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.si:1 of
 msgid "Alias / Shortform of :meth:`get_instance`, and never returns None"
@@ -348,13 +348,13 @@ msgstr "如果服务端正在运行或正在由其他插件启动，它将返回
 msgid ""
 "If the operation succeed. The operation fails if the server is already "
 "started, or cannot start due to invalid command or current MCDR state"
-msgstr "操作是否成功。若服务端已启动，或者服务端因指令错误或 MCDR 状态无法启动，操作将会失败"
+msgstr "操作是否成功。若服务端已启动，或者服务端因命令错误或 MCDR 状态无法启动，操作将会失败"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.stop:1 of
 msgid ""
 "Soft shutting down the server by sending the correct stop command to the "
 "server"
-msgstr "通过向服务端发送其对应的关闭指令指令来软停止服务端"
+msgstr "通过向服务端发送其对应的关闭命令来软停止服务端"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.stop:3 of
 msgid ""
@@ -525,17 +525,17 @@ msgstr "文本交互"
 msgid ""
 "Execute a server command by sending the command content to server's "
 "standard input stream"
-msgstr "通过将指令内容发送到服务端的标准输入流来执行服务端指令"
+msgstr "通过将命令内容发送到服务端的标准输入流来执行服务端命令"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.execute:5 of
 msgid ""
 ":meth:`execute_command` if you want to execute command in MCDR's command "
 "system"
-msgstr "方法 :meth:`execute_command`，如果你想要在 MCDR 的指令系统中执行指令"
+msgstr "方法 :meth:`execute_command`，如果你想要在 MCDR 的命令系统中执行命令"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.execute:7 of
 msgid "The content of the command you want to send"
-msgstr "你要发送的指令内容"
+msgstr "你要发送的命令内容"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.broadcast:6
 #: mcdreforged.plugin.si.server_interface.ServerInterface.execute:8
@@ -548,7 +548,7 @@ msgstr "文本的编码方法。留空以使用 MCDR 配置文件中的编码方
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.tell:1 of
 msgid "Use command like ``/tellraw`` to send the message to the specific player"
-msgstr "使用 ``/tellraw`` 等指令向特定玩家发送消息"
+msgstr "使用 ``/tellraw`` 等命令向特定玩家发送消息"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.tell:3 of
 msgid "The name of the player you want to tell"
@@ -560,7 +560,7 @@ msgstr "你想发送的信息"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.say:1 of
 msgid "Use command like ``/tellraw @a`` to broadcast the message in game"
-msgstr "使用 ``/tellraw @a`` 等指令在游戏中广播消息"
+msgstr "使用 ``/tellraw @a`` 等命令在游戏中广播消息"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.broadcast:5
 #: mcdreforged.plugin.si.server_interface.ServerInterface.reply:9
@@ -1027,7 +1027,7 @@ msgstr "从配置文件重载 MCDR 的配置"
 #: mcdreforged.plugin.si.server_interface.ServerInterface.reload_config_file:3
 #: of
 msgid "It has the same effect as command ``!!MCDR reload config``"
-msgstr "其效果与指令 ``!!MCDR reload config`` 相同"
+msgstr "其效果与命令 ``!!MCDR reload config`` 相同"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.reload_config_file:5
 #: of
@@ -1052,7 +1052,7 @@ msgid ""
 "<mcdreforged.command.command_source.CommandSource>`"
 msgstr ""
 "``obj`` 对象可以是一个表示玩家名的 str，一个 :class:`~mcdreforged.info_reactor.info.Info`"
-" 实例或者一个 :class:`指令源 <mcdreforged.command.command_source.CommandSource>`"
+" 实例或者一个 :class:`命令源 <mcdreforged.command.command_source.CommandSource>`"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.get_permission_level:7
 #: of
@@ -1097,27 +1097,27 @@ msgstr "从权限文件重载 MCDR 的权限数据"
 #: mcdreforged.plugin.si.server_interface.ServerInterface.reload_permission_file:3
 #: of
 msgid "It has the same effect as command ``!!MCDR reload permission``"
-msgstr "其效果与指令 ``!!MCDR reload permission`` 相同"
+msgstr "其效果与命令 ``!!MCDR reload permission`` 相同"
 
 #: ../code_references/ServerInterface.rst:110
 msgid "Command"
-msgstr "指令"
+msgstr "命令"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.get_plugin_command_source:1
 #: of
 msgid "Return a simple plugin command source for e.g. command execution"
-msgstr "返回一个简单的插件指令源，用于例如执行指令时使用"
+msgstr "返回一个简单的插件命令源，用于例如执行命令时使用"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.get_plugin_command_source:3
 #: of
 msgid ""
 "It's not player or console, it has maximum permission level, it uses "
 ":attr:`logger` for replying"
-msgstr "该指令源不是玩家或控制台，它拥有最高的权限等级，它使用 :attr:`logger` 来处理回复"
+msgstr "该命令源不是玩家或控制台，它拥有最高的权限等级，它使用 :attr:`logger` 来处理回复"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.execute_command:1 of
 msgid "Execute a single command in MCDR's command system"
-msgstr "在 MCDR 的指令系统中执行一条指令"
+msgstr "在 MCDR 的命令系统中执行一条命令"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.execute_command:5 of
 msgid ""
@@ -1127,14 +1127,14 @@ msgstr "方法 :meth:`execute`，如果你想要往服务端的标准输入流�
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.execute_command:7 of
 msgid "The command you want to execute"
-msgstr "你想要执行的指令"
+msgstr "你想要执行的命令"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.execute_command:8 of
 msgid ""
 "The command source that is used to execute the command. If it's not "
 "specified MCDR will use :meth:`get_plugin_command_source` to get a "
 "fallback command source"
-msgstr "用于执行该条指令的指令源。如果它未被指定，MCDR 将会使用 :meth:`get_plugin_command_source` 来获得默认的指令源"
+msgstr "用于执行该条命令的命令源。如果它未被指定，MCDR 将会使用 :meth:`get_plugin_command_source` 来获得默认的命令源"
 
 #: ../code_references/ServerInterface.rst:116
 msgid "Preference"
@@ -1153,7 +1153,7 @@ msgid ""
 ":class:`~mcdreforged.command.command_source.ConsoleCommandSource` are "
 "supported"
 msgstr ""
-"该对象可以是一个表示玩家名称的 str，或者是一个指令源。指令源仅支持 "
+"该对象可以是一个表示玩家名称的 str，或者是一个命令源。命令源仅支持 "
 ":class:`~mcdreforged.command.command_source.PlayerCommandSource` 以及 "
 ":class:`~mcdreforged.command.command_source.ConsoleCommandSource`"
 
@@ -1226,17 +1226,17 @@ msgstr "返回 异步任务执行者线程 中运行的事件循环。该事件�
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.rcon_query:1 of
 msgid "Send command to the server through rcon connection"
-msgstr "通过 rcon 连接向服务端发送指令"
+msgstr "通过 rcon 连接向服务端发送命令"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.rcon_query:3 of
 msgid "The command you want to send to the rcon server"
-msgstr "你要发送给 rcon 服务端的指令"
+msgstr "你要发送给 rcon 服务端的命令"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.rcon_query:4 of
 msgid ""
 "The result that server returned from rcon. Return None if rcon is not "
 "running or rcon query failed"
-msgstr "服务端返回的 rcon 指令执行结果。如果 rcon 没有运行或 rcon 执行失败，则返回 None"
+msgstr "服务端返回的 rcon 命令执行结果。如果 rcon 没有运行或 rcon 执行失败，则返回 None"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.schedule_task:1 of
 msgid ""

@@ -31,7 +31,7 @@ msgstr "Info 相关"
 
 #: ../code_references/index.rst:8
 msgid "Command Stuffs"
-msgstr "指令相关"
+msgstr "命令相关"
 
 #: ../code_references/index.rst:8
 msgid "Plugin Stuffs"

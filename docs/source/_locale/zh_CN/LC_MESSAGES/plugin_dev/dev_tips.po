@@ -137,7 +137,7 @@ msgid ""
 "command>` to MCDR. It's much more efficient to develop than handling "
 "yourself inside :ref:`event-user-info` event"
 msgstr ""
-"如果你只关心用户输入的指令，与其监听 :ref:`event-user-info` 事件，你还可以 :ref:`注册一棵指令树 <page-"
+"如果你只关心用户输入的命令，与其监听 :ref:`event-user-info` 事件，你还可以 :ref:`注册一棵命令树 <page-"
 "command>`。这比手动在 :ref:`event-user-info` 事件里处理的开发效率要高不少"
 
 #: ../plugin_dev/dev_tips.rst:57

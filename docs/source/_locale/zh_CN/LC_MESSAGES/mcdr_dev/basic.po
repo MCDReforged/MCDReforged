@@ -66,14 +66,14 @@ msgstr "进入 ``my_mcdr_server_in_source/`` 目录，运行以下命令，创�
 
 #: ../mcdr_dev/basic.rst:33
 msgid "That's it. After that command, MCDR can be launched normally"
-msgstr "这样就行了。在你执行完上述这一条指令后，MCDR 将可以不带任何警告地正常启动"
+msgstr "这样就行了。在你执行完上述这一条命令后，MCDR 将可以不带任何警告地正常启动"
 
 #: ../mcdr_dev/basic.rst:35
 msgid ""
 "Don't forget to regenerate the egg_info by using the same command after "
 "you changed the information of the mcdreforged package, e.g. the version "
 "of MCDR"
-msgstr "别忘了在你改变了 mcdreforged 包的信息，如 MCDR 的版本时，再次使用这一指令来重新生成 egg_info"
+msgstr "别忘了在你改变了 mcdreforged 包的信息，如 MCDR 的版本时，再次使用这一命令来重新生成 egg_info"
 
 #: ../mcdr_dev/basic.rst:38
 msgid "Launch via python script"
@@ -83,17 +83,17 @@ msgstr "从 python 脚本启动"
 msgid ""
 "In development environment, you cannot use command ``mcdreforged`` to "
 "launch MCDR -- that's only available in production environment"
-msgstr "在开发环境中，你无法使用 ``mcdreforged`` 指令来启动 MCDR——那只在生产环境中可用"
+msgstr "在开发环境中，你无法使用 ``mcdreforged`` 命令来启动 MCDR——那只在生产环境中可用"
 
 #: ../mcdr_dev/basic.rst:42
 msgid ""
 "To launch MCDR in development, you can run the following command in the "
 "root of the MCDR repository:"
-msgstr "为了在开发环境中启动 MCDR，你可以在 MCDR 仓库根路径中执行下述指令："
+msgstr "为了在开发环境中启动 MCDR，你可以在 MCDR 仓库根路径中执行下述命令："
 
 #: ../mcdr_dev/basic.rst:56
 msgid "The above command also works in production environment"
-msgstr "上述指令在生产环境中也可以使用"
+msgstr "上述命令在生产环境中也可以使用"
 
 #: ../mcdr_dev/basic.rst:58
 msgid ""
