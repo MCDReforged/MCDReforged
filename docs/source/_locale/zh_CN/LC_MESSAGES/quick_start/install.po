@@ -84,7 +84,7 @@ msgstr "先等等"
 msgid ""
 "In some tutorials, you may learn to use MCDR by downloading a zip from "
 "Github and extracting it"
-msgstr "在一些“教程”中，你可能会听说要从 Github 下载 zip 文件并解压来使用 MCDR"
+msgstr "在一些教程中，你可能会听说要从 Github 下载 zip 文件并解压来使用 MCDR"
 
 #: ../quick_start/install.rst:41
 msgid ""
@@ -217,7 +217,7 @@ msgstr "跨环境可靠"
 
 #: ../quick_start/install.rst:118
 msgid "More dependencies and disk space, convoluted learning path"
-msgstr "更多依赖和磁盘空间，学习曲线曲折"
+msgstr "更多依赖和磁盘空间，学路线曲折"
 
 #: ../quick_start/install.rst:119
 msgid "system package"
@@ -424,7 +424,7 @@ msgstr "通过 Docker 镜像标签来指定 MCDR 版本"
 msgid ""
 "Compared to the two methods above, Docker has a more convoluted learning "
 "path, but is more convenient for some advanced usages"
-msgstr "与上述两种方法相比，Docker 的学习曲线更曲折，但更适合一些高级用法"
+msgstr "与上述两种方法相比，Docker 的学习路线更曲折，但更适合一些高级用法"
 
 #: ../quick_start/install.rst:233
 msgid "System package manager"
