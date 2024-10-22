@@ -74,7 +74,7 @@ msgid ""
 "``command`` package contains the necessities for building a command tree "
 "or create your own command, including command tree node classes, command "
 "exceptions and some command utils"
-msgstr "``command`` 包包含了建立指令树或创建自己的指令的必要条件，包括指令树节点类、指令异常和一些指令实用工具"
+msgstr "``command`` 包包含了建立命令树或创建自己的命令的必要条件，包括命令树节点类、命令异常和一些命令实用工具"
 
 #: ../plugin_dev/api.rst:37
 msgid ""
@@ -82,7 +82,7 @@ msgid ""
 "for building your command tree ``on_error`` exception handling, you can "
 "do it like this"
 msgstr ""
-"例如，若你希望使用 ``Literal`` 和 ``IllegalArgument`` 来构建你指令树并处理 ``on_error`` "
+"例如，若你希望使用 ``Literal`` 和 ``IllegalArgument`` 来构建你命令树并处理 ``on_error`` "
 "异常，则可以这样做："
 
 #: ../plugin_dev/api.rst:43

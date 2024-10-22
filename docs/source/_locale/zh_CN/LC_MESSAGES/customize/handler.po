@@ -22,7 +22,7 @@ msgstr "服务端处理器"
 msgid ""
 "Server handler is the object which parses server output and provides "
 "command interfaces to control the server"
-msgstr "服务端处理器是分析服务器输出并提供指令接口来控制服务器的对象"
+msgstr "服务端处理器是分析服务器输出并提供命令接口来控制服务器的对象"
 
 #: ../customize/handler.rst:7
 msgid ""

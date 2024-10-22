@@ -264,7 +264,7 @@ msgid ""
 "click the decorated text"
 msgstr ""
 "(Minecraft <1.19.1) 如果给定的文本不以 ``\"/\"`` "
-"开头，给定的文本将会被当做聊天信息发送至服务端。借此，玩家在点击被修饰的文本后可以自动执行 MCDR 指令"
+"开头，给定的文本将会被当做聊天信息发送至服务端。借此，玩家在点击被修饰的文本后可以自动执行 MCDR 命令"
 
 #: ../../docstring mcdreforged.minecraft.rtext.style.RAction.run_command:8 of
 msgid ""

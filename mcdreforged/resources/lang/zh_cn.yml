@@ -24,8 +24,8 @@ mcdreforged:
       hard: 正在终止 MCDR 并杀死服务端
     send:
       send_when_stopped:
-        .: 服务端已关闭，不能向其标准输入流输入指令
-        text: '被输入的指令: {0}'
+        .: 服务端已关闭，不能向其标准输入流输入命令
+        text: '被输入的命令: {0}'
     receive:
       wait_stop: 等待服务端进程停止
       decode_fail: '解析文本 {0} 出错: {1}'
@@ -63,7 +63,7 @@ mcdreforged:
   # ======================== thread executors ========================
 
   console_handler:
-    parse_fail: 解析控制台指令 "{0}" 出错
+    parse_fail: 解析控制台命令 "{0}" 出错
     error: 运行 ConsoleHandler 时出错
     stopping_kits: 正在关闭高级控制台
   task_executor:
@@ -99,7 +99,7 @@ mcdreforged:
   # ======================== commands ========================
 
   command_exception:
-    unknown_command: 未知指令
+    unknown_command: 未知命令
     unknown_argument: 未知参数
     unknown_root_argument: 未知根节点参数
     requirement_not_met: 约束未满足
@@ -137,7 +137,7 @@ mcdreforged:
       permission: |
         §7!!MCDR permission list §e[<level>]§r: 列出所有玩家的权限等级。如果 §e[<level>]§r 被指定则仅列出权限等级 §e[<level>]§r
         §7!!MCDR permission set §b<player>§r §e<level>§r: 将 §b<player>§r 的权限等级设置为 §e<level>§r
-        §7!!MCDR permission query §b[<player>]§r: 查询 §b<player>§r 的权限等级。当 §b<player>§r 参数被省略时，查询指令发送者的权限等级
+        §7!!MCDR permission query §b[<player>]§r: 查询 §b<player>§r 的权限等级。当 §b<player>§r 参数被省略时，查询命令发送者的权限等级
         §7!!MCDR permission remove §b<player>§r: 将 §b<player>§r 从权限数据库中移除
         §7!!MCDR permission setdefault §e<level>§r: 将默认权限等级设置为 §e<level>§r
       plugin: |
@@ -169,12 +169,12 @@ mcdreforged:
         §7!!MCDR debug thread_dump §6[#all|<thread_name>]§r: 导出所有指定线程的堆栈追踪信息
         §7!!MCDR debug translation get §6<translation_key>§r: 导出给定翻译键的翻译信息
         §7!!MCDR debug translation dump §6<json_path>§r: 导出以给定路径为前缀的所有翻译键，例如 "mcdr_server.on_server_stop"
-        §7!!MCDR debug command_dump all§r: 导出所有指令树
-        §7!!MCDR debug command_dump plugin §6<plugin_id>§r: 导出给定插件注册的所有指令树
-        §7!!MCDR debug command_dump node §6<literal_name>§r: 导出树根为给定名字所有指令树
-      title: MCDR 指令帮助信息列表
-      mcdr_command: MCDR 控制指令
-      help_command: 显示指令帮助信息
+        §7!!MCDR debug command_dump all§r: 导出所有命令树
+        §7!!MCDR debug command_dump plugin §6<plugin_id>§r: 导出给定插件注册的所有命令树
+        §7!!MCDR debug command_dump node §6<literal_name>§r: 导出树根为给定名字所有命令树
+      title: MCDR 命令帮助信息列表
+      mcdr_command: MCDR 控制命令
+      help_command: 显示命令帮助信息
       page_number: 第 §6{0}§r 页
       previous_page_hover: 点击显示上一页
       next_page_hover: 点击显示下一页
@@ -288,8 +288,8 @@ mcdreforged:
         updatable:
           what: '{0} 个可更新的插件'
           title: '可更新的插件:'
-          hint1: 使用类似 "{0}" 的指令来更新部分插件，
-          hint2: 或者使用指令 "{0}" 来更新全部插件
+          hint1: 使用类似 "{0}" 的命令来更新部分插件，
+          hint2: 或者使用命令 "{0}" 来更新全部插件
         not_updatable:
           what: '{0} 个不可更新的插件'
           title: '不可更新的，且有较新版本的插件:'
@@ -354,7 +354,7 @@ mcdreforged:
         name: 更新插件仓库元数据
 
     preference:
-      unsupported_command_source: 不支持的指令源 {0}
+      unsupported_command_source: 不支持的命令源 {0}
       list:
         title: MCDR 偏好列表
         detail_hint: 点击以显示偏好 {0} 的详情

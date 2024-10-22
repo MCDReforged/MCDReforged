@@ -123,7 +123,7 @@ msgstr ":doc:`事件监听器 </plugin_dev/event>` 回调函数的调用"
 #: mcdreforged.plugin.si.server_interface.ServerInterface.as_plugin_server_interface:10
 #: of
 msgid ":doc:`Command </plugin_dev/command>` callback invocation"
-msgstr ":doc:`指令 </plugin_dev/command>` 回调函数的调用"
+msgstr ":doc:`命令 </plugin_dev/command>` 回调函数的调用"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.si:1 of
 msgid "Alias / Shortform of :meth:`get_instance`, and never returns None"
@@ -514,7 +514,7 @@ msgstr "当服务端启动时，该标志将被设置为 ``True``"
 #: mcdreforged.plugin.si.server_interface.ServerInterface.set_exit_after_stop_flag:7
 #: of
 msgid "The flag value is displayed in line 5 in command ``!!MCDR status``"
-msgstr "该标志值的值也会在指令 ``!!MCDR status`` 的第 5 行中显示"
+msgstr "该标志值的值也会在命令 ``!!MCDR status`` 的第 5 行中显示"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.is_server_running:1
 #: of
@@ -589,11 +589,11 @@ msgstr "通过将命令内容发送到服务端的标准输入流来执行服务
 msgid ""
 ":meth:`execute_command` if you want to execute command in MCDR's command "
 "system"
-msgstr "方法 :meth:`execute_command`，如果你想要在 MCDR 的指令系统中执行指令"
+msgstr "方法 :meth:`execute_command`，如果你想要在 MCDR 的命令系统中执行命令"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.execute:7 of
 msgid "The content of the command you want to send"
-msgstr "你要发送的指令内容"
+msgstr "你要发送的命令内容"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.broadcast:6
 #: mcdreforged.plugin.si.server_interface.ServerInterface.execute:8
@@ -1085,7 +1085,7 @@ msgstr "从配置文件重载 MCDR 的配置"
 #: mcdreforged.plugin.si.server_interface.ServerInterface.reload_config_file:3
 #: of
 msgid "It has the same effect as command ``!!MCDR reload config``"
-msgstr "其效果与指令 ``!!MCDR reload config`` 相同"
+msgstr "其效果与命令 ``!!MCDR reload config`` 相同"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.reload_config_file:5
 #: of
@@ -1110,7 +1110,7 @@ msgid ""
 "<mcdreforged.command.command_source.CommandSource>`"
 msgstr ""
 "``obj`` 对象可以是一个表示玩家名的 str，一个 :class:`~mcdreforged.info_reactor.info.Info`"
-" 实例或者一个 :class:`指令源 <mcdreforged.command.command_source.CommandSource>`"
+" 实例或者一个 :class:`命令源 <mcdreforged.command.command_source.CommandSource>`"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.get_permission_level:7
 #: of
@@ -1155,27 +1155,27 @@ msgstr "从权限文件重载 MCDR 的权限数据"
 #: mcdreforged.plugin.si.server_interface.ServerInterface.reload_permission_file:3
 #: of
 msgid "It has the same effect as command ``!!MCDR reload permission``"
-msgstr "其效果与指令 ``!!MCDR reload permission`` 相同"
+msgstr "其效果与命令 ``!!MCDR reload permission`` 相同"
 
 #: ../code_references/ServerInterface.rst:110
 msgid "Command"
-msgstr "指令"
+msgstr "命令"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.get_plugin_command_source:1
 #: of
 msgid "Return a simple plugin command source for e.g. command execution"
-msgstr "返回一个简单的插件指令源，用于例如执行指令时使用"
+msgstr "返回一个简单的插件命令源，用于例如执行命令时使用"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.get_plugin_command_source:3
 #: of
 msgid ""
 "It's not player or console, it has maximum permission level, it uses "
 ":attr:`logger` for replying"
-msgstr "该指令源不是玩家或控制台，它拥有最高的权限等级，它使用 :attr:`logger` 来处理回复"
+msgstr "该命令源不是玩家或控制台，它拥有最高的权限等级，它使用 :attr:`logger` 来处理回复"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.execute_command:1 of
 msgid "Execute a single command in MCDR's command system"
-msgstr "在 MCDR 的指令系统中执行一条指令"
+msgstr "在 MCDR 的命令系统中执行一条命令"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.execute_command:5 of
 msgid ""
@@ -1185,14 +1185,14 @@ msgstr "方法 :meth:`execute`，如果你想要往服务端的标准输入流�
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.execute_command:7 of
 msgid "The command you want to execute"
-msgstr "你想要执行的指令"
+msgstr "你想要执行的命令"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.execute_command:8 of
 msgid ""
 "The command source that is used to execute the command. If it's not "
 "specified MCDR will use :meth:`get_plugin_command_source` to get a "
 "fallback command source"
-msgstr "用于执行该条指令的指令源。如果它未被指定，MCDR 将会使用 :meth:`get_plugin_command_source` 来获得默认的指令源"
+msgstr "用于执行该条命令的命令源。如果它未被指定，MCDR 将会使用 :meth:`get_plugin_command_source` 来获得默认的命令源"
 
 #: ../code_references/ServerInterface.rst:116
 msgid "Preference"
@@ -1211,7 +1211,7 @@ msgid ""
 ":class:`~mcdreforged.command.command_source.ConsoleCommandSource` are "
 "supported"
 msgstr ""
-"该对象可以是一个表示玩家名称的 str，或者是一个指令源。指令源仅支持 "
+"该对象可以是一个表示玩家名称的 str，或者是一个命令源。命令源仅支持 "
 ":class:`~mcdreforged.command.command_source.PlayerCommandSource` 以及 "
 ":class:`~mcdreforged.command.command_source.ConsoleCommandSource`"
 

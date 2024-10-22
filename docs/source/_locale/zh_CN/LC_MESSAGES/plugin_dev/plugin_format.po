@@ -227,7 +227,7 @@ msgid ""
 "reload plugin`` :ref:`command/mcdr:Hot reloads` command"
 msgstr ""
 "在 ``!!MCDR reload plugin`` 这个 :ref:`command/mcdr:Hot reloads` "
-"指令中，文件夹插件总会被视为是“有变化”的插件"
+"命令中，文件夹插件总会被视为是“有变化”的插件"
 
 #: ../plugin_dev/plugin_format.rst:125
 msgid "Linked Directory Plugin"

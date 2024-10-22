@@ -25,7 +25,7 @@ msgid ""
 " to trigger command parsing or dispatch plugin events"
 msgstr ""
 "Info 响应器是响应 :class:`~mcdreforged.info_reactor.info.Info` 实例的组件。MCDR "
-"使用响应器触发指令解析或插件分发事件"
+"使用响应器触发命令解析或插件分发事件"
 
 #: ../customize/reactor.rst:8
 msgid ""

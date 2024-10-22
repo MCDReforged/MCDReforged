@@ -215,7 +215,7 @@ msgstr "使用 :func:`~mcdreforged.api.decorator.event_listener.event_listener` 
 
 #: ../plugin_dev/basic.rst:151
 msgid "Command"
-msgstr "指令"
+msgstr "命令"
 
 #: ../plugin_dev/basic.rst:153
 msgid ""
@@ -226,13 +226,13 @@ msgid ""
 msgstr ""
 "除了在如 ``on_user_info`` 的用户信息事件回调中手动解析用户输入 "
 ":attr:`info.content<mcdreforged.info_reactor.info.Info.content>`，MCDR "
-"还为插件提供了一个指令构建系统来帮助插件注册它们的指令"
+"还为插件提供了一个命令构建系统来帮助插件注册它们的命令"
 
 #: ../plugin_dev/basic.rst:156
 msgid ""
 "Check the :doc:`/plugin_dev/command` document for more detail about "
 "building a command tree"
-msgstr "查看 :doc:`/plugin_dev/command` 文档以获取有关构建指令树的更多详细信息"
+msgstr "查看 :doc:`/plugin_dev/command` 文档以获取有关构建命令树的更多详细信息"
 
 #: ../plugin_dev/basic.rst:158
 msgid ""
@@ -241,9 +241,9 @@ msgid ""
 ":meth:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_command`"
 " method to register your command tree in MCDR"
 msgstr ""
-"假设你已经使用根文字节点 *root* 构建了指令树，则你可以使用 "
+"假设你已经使用根文字节点 *root* 构建了命令树，则你可以使用 "
 ":meth:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_command`"
-" 方法在 MCDR 中注册这一棵指令树："
+" 方法在 MCDR 中注册这一棵命令树："
 
 #: ../plugin_dev/basic.rst:166
 msgid "Help message"

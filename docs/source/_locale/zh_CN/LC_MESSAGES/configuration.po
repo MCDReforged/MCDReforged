@@ -44,11 +44,11 @@ msgstr "配置文件使用 `YAML <https://zh.wikipedia.org/wiki/YAML>`__ 格式"
 msgid ""
 "You can use command ``!!MCDR reload config`` or its short form ``!!MCDR r"
 " cfg`` to reload the config file when MCDR is running"
-msgstr "当 MCDR 运行时，你可以使用 ``!!MCDR reload config`` 指令（或其缩写 ``!!MCDR r cfg``）来重载配置文件"
+msgstr "当 MCDR 运行时，你可以使用 ``!!MCDR reload config`` 命令（或其缩写 ``!!MCDR r cfg``）来重载配置文件"
 
 #: ../configuration.rst:15
 msgid ":ref:`command/mcdr:Hot reloads` command, for more detail about hot reloads"
-msgstr ":ref:`command/mcdr:Hot reloads` 指令章节中更多与热重载相关的指令"
+msgstr ":ref:`command/mcdr:Hot reloads` 命令章节中更多与热重载相关的命令"
 
 #: ../configuration.rst:18
 msgid "Basic Configuration"

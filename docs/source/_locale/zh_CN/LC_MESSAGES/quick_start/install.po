@@ -283,7 +283,7 @@ msgid ""
 "<command/mcdr:Plugin management>` to install plugins with their "
 "dependencies"
 msgstr ""
-"当然，也可以用 :ref:`\\!!MCDR plg 指令 <command/mcdr:Plugin management>` "
+"当然，也可以用 :ref:`\\!!MCDR plg 命令 <command/mcdr:Plugin management>` "
 "更轻松地安装插件及其依赖"
 
 #: ../quick_start/install.rst:158
