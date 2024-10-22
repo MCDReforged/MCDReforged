@@ -217,7 +217,7 @@ msgstr "跨环境可靠"
 
 #: ../quick_start/install.rst:118
 msgid "More dependencies and disk space, convoluted learning path"
-msgstr "更多依赖和磁盘空间，学路线曲折"
+msgstr "更多依赖和磁盘空间，学习路线曲折"
 
 #: ../quick_start/install.rst:119
 msgid "system package"
