@@ -112,7 +112,7 @@ msgstr "最低权限，如访客或者熊孩子"
 msgid ""
 "The permission level of console input is always the highest level "
 "``owner``"
-msgstr "控制台输入的指令将被视为最高权限等级 ``owner`` "
+msgstr "控制台输入的命令将被视为最高权限等级 ``owner`` "
 
 #: ../permission.rst:38
 msgid "Permission File"
@@ -159,8 +159,8 @@ msgid ""
 "Permission file supports hot-reload. You can use ``!!MCDR reload "
 "permission`` to reload the permission file in-game"
 msgstr ""
-"权限文件支持热重载。你可以使用 ``!!MCDR reload permission`` 指令来重载权限文件"
+"权限文件支持热重载。你可以使用 ``!!MCDR reload permission`` 命令来重载权限文件"
 
 #: ../permission.rst:69
 msgid ":ref:`command/mcdr:Hot reloads` command, for more detail about hot reloads"
-msgstr ":ref:`command/mcdr:Hot reloads` 指令章节中更多与热重载相关的指令"
+msgstr ":ref:`command/mcdr:Hot reloads` 命令章节中更多与热重载相关的命令"

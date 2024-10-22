@@ -46,7 +46,7 @@ msgid ""
 "(CLI). The usage is simple: Add some arguments at the end of the command "
 "you launch MCDR"
 msgstr ""
-"MCDR 提供了一些实用的命令行接口（CLI）工具。如果你在启动 MCDR 的时候在启动指令末尾追加一些参数。使用方法很简单：在你启动 MCDR "
+"MCDR 提供了一些实用的命令行接口（CLI）工具。如果你在启动 MCDR 的时候在启动命令末尾追加一些参数。使用方法很简单：在你启动 MCDR "
 "的命令末尾追加一些参数"
 
 #: ../cli/index.rst:7
@@ -56,7 +56,7 @@ msgid ""
 " ``mcdreforged`` command to start MCDR"
 msgstr ""
 "从 v2.10 开始，MCDR 在安装时会在 python 的可执行文件路径下生成一个启动脚本，因此，你可以直接使用 "
-"``mcdreforged`` 指令来启动 MCDR"
+"``mcdreforged`` 命令来启动 MCDR"
 
 #: ../cli/index.rst:10
 msgid "Have a try to display CLI help messages using following command"
@@ -68,7 +68,7 @@ msgid ""
 "demonstration. For MCDR < v2.10, you need to add the ``python -m`` prefix"
 " to the commands used below"
 msgstr ""
-"以下文档将使用 ``mcdreforged`` 作为演示用的指令。对于 MCDR < v2.10，你需要在下面所用的指令前加上 ``python "
+"以下文档将使用 ``mcdreforged`` 作为演示用的命令。对于 MCDR < v2.10，你需要在下面所用的命令前加上 ``python "
 "-m`` 前缀"
 
 #: ../cli/index.rst:33

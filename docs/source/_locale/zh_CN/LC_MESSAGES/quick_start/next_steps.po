@@ -77,14 +77,14 @@ msgstr "查看热门插件，甚至 MCDR 本身的源代码，以了解更多"
 
 #: ../quick_start/next_steps.rst:23
 msgid "Commands"
-msgstr "指令"
+msgstr "命令"
 
 #: ../quick_start/next_steps.rst:25
 msgid ""
 "MCDR has its own command system.  Most of them start with a ``!!`` in "
 "common practice. Mentioned above, ``!!MCDR plg`` is one of the built-in "
 "commands."
-msgstr "MCDR 有自己的指令系统。指令常以 ``!!`` 开头。上面提到的 ``!!MCDR plg`` 就是一个内置指令"
+msgstr "MCDR 有自己的命令系统。命令常以 ``!!`` 开头。上面提到的 ``!!MCDR plg`` 就是一个内置命令"
 
 #: ../quick_start/next_steps.rst:27
 msgid "You may want to learn more of them: :doc:`/command/index`"
@@ -99,7 +99,7 @@ msgid ""
 "MCDR has a permission system to control the access of commands. For "
 "example, most ``!!MCDR`` commands are only accessible to level 3 (Admin) "
 "users."
-msgstr "MCDR 有自己的权限系统，来控制指令执行。例如，大部分 ``!!MCDR`` 指令只有 level 3 (管理员) 用户才能执行。"
+msgstr "MCDR 有自己的权限系统，来控制命令执行。例如，大部分 ``!!MCDR`` 命令只有 level 3 (管理员) 用户才能执行。"
 
 #: ../quick_start/next_steps.rst:34
 msgid ""

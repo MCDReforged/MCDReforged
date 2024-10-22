@@ -21,28 +21,28 @@ msgstr ""
 
 #: ../command/help.rst:3
 msgid "!!help command"
-msgstr "!!help 指令"
+msgstr "!!help 命令"
 
 #: ../command/help.rst:5
 msgid ""
 "``!!help`` command is place to display the help messages of all commands."
 " It works as an index of all commands"
-msgstr "``!!help`` 指令将显示所有指令的帮助消息。它作为着一个包含所有指令的索引"
+msgstr "``!!help`` 命令将显示所有命令的帮助消息。它作为着一个包含所有命令的索引"
 
 #: ../command/help.rst:7
 msgid ""
 "The content of this command can be registered by plugins, so a new user "
 "can easily browse all available commands that it can access"
-msgstr "此指令的内容可以由插件注册，所以一个新的用户可以借此轻松浏览所有可用的指令"
+msgstr "此命令的内容可以由插件注册，所以一个新的用户可以借此轻松浏览所有可用的命令"
 
 #: ../command/help.rst:9
 msgid ""
 "Any user is allowed to use this command, and MCDR will list all command "
 "help messages that the user has enough permission level to see"
-msgstr "任何用户都可以使用此指令，MCDR 将列出该用户有权查看的所有指令帮助消息"
+msgstr "任何用户都可以使用此命令，MCDR 将列出该用户有权查看的所有命令帮助消息"
 
 #: ../command/help.rst:11
 msgid ""
 "Without any plugin, you may see the result below after you entered the "
 "``!!help`` command"
-msgstr "在无任何插件的情况下，输入 ``!!help`` 指令后将返回如下结果："
+msgstr "在无任何插件的情况下，输入 ``!!help`` 命令后将返回如下结果："

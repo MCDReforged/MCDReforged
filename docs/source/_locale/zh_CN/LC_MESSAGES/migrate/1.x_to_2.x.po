@@ -204,7 +204,7 @@ msgstr "该改变基本上不会影响你的插件的可运作性，不过它很
 
 #: ../migrate/1.x_to_2.x.rst:86
 msgid "Command"
-msgstr "指令"
+msgstr "命令"
 
 #: ../migrate/1.x_to_2.x.rst:88
 msgid ""
@@ -229,5 +229,5 @@ msgstr ""
 msgid ""
 "For your custom command node classes, you might only need to change some "
 "related type hints"
-msgstr "对于你的自定义指令节点的类，你可能只需要修改一些相关的类型提示"
+msgstr "对于你的自定义命令节点的类，你可能只需要修改一些相关的类型提示"
 

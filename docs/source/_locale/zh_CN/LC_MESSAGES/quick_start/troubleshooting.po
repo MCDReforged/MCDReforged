@@ -129,22 +129,22 @@ msgstr ""
 
 #: ../quick_start/troubleshooting.rst:42
 msgid "Commands not working"
-msgstr "指令不工作"
+msgstr "命令不工作"
 
 #: ../quick_start/troubleshooting.rst:44
 msgid "**All commands are not responding in game, but working in console**"
-msgstr "**所有指令在游戏内都不响应，但控制台里正常**"
+msgstr "**所有命令在游戏内都不响应，但控制台里正常**"
 
 #: ../quick_start/troubleshooting.rst:45
 msgid "**Some commands perform incorrectly for specific players**"
-msgstr "**某些指令对特定玩家执行不正确**"
+msgstr "**某些命令对特定玩家执行不正确**"
 
 #: ../quick_start/troubleshooting.rst:47
 msgid ""
 "MCDR handles commands by listening to the server's console output. Make "
 "sure you are using the correct :ref:`Server Handler "
 "<configuration:handler>`"
-msgstr "MCDR 通过监听服务端控制台输出来处理指令，请确保你使用了正确的 :ref:`服务端处理器 <configuration:handler>`"
+msgstr "MCDR 通过监听服务端控制台输出来处理命令，请确保你使用了正确的 :ref:`服务端处理器 <configuration:handler>`"
 
 #: ../quick_start/troubleshooting.rst:49
 msgid "Your server may unexpectedly not compatible with handlers:"

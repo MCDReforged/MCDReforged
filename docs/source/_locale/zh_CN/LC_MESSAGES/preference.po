@@ -33,7 +33,7 @@ msgstr "偏好文件储存于 ``config/mcdreforged/preferences.json``"
 msgid ""
 ":ref:`command/mcdr:Preference settings`, for the way to control preferences "
 "via command"
-msgstr ":ref:`command/mcdr:Preference settings`，以获得使用指令来操控偏好的方法"
+msgstr ":ref:`command/mcdr:Preference settings`，以获得使用命令来操控偏好的方法"
 
 #: ../preference.rst:16
 msgid "language"

@@ -32,7 +32,7 @@ msgstr "插件事件"
 
 #: ../plugin_dev/index.rst:7
 msgid "Command Tree"
-msgstr "指令树"
+msgstr "命令树"
 
 #: ../plugin_dev/index.rst:7
 msgid "API"

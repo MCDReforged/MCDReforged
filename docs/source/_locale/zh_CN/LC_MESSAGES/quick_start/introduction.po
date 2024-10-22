@@ -97,7 +97,7 @@ msgstr "它是如何工作的"
 msgid ""
 "**TL;DR:** MCDR works like a robot that stares at the server console, "
 "responds to server output quickly, and inputs commands for users"
-msgstr "**简单来说:** MCDR 就像一个盯着服务端控制台看的小机器人，快速响应服务端输出，并为用户输入指令"
+msgstr "**简单来说:** MCDR 就像一个盯着服务端控制台看的小机器人，快速响应服务端输出，并为用户输入命令"
 
 #: ../quick_start/introduction.rst:38
 msgid ""
@@ -126,5 +126,5 @@ msgid ""
 "With the help of the Minecraft command system, MCDR can send Minecraft "
 "commands via the standard input stream to affect the actual Minecraft "
 "server"
-msgstr "借助 Minecraft 指令系统，MCDR 可以通过标准输入流发送 Minecraft 指令以操作 Minecraft 服务端"
+msgstr "借助 Minecraft 命令系统，MCDR 可以通过标准输入流发送 Minecraft 命令以操作 Minecraft 服务端"
 

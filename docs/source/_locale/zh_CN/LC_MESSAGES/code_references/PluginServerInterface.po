@@ -85,14 +85,14 @@ msgstr "监听器的优先级。如果没有指定，将被设置为默认值 ``
 #: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_command:1
 #: of
 msgid "Register a command for the current plugin"
-msgstr "为当前插件注册一个指令"
+msgstr "为当前插件注册一个命令"
 
 #: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_command:3
 #: of
 msgid ""
 "the root node of your command tree. It should be a "
 ":class:`~mcdreforged.command.builder.nodes.basic.Literal` node"
-msgstr "指令树的根节点。它应为一个 :class:`~mcdreforged.command.builder.nodes.basic.Literal` 节点"
+msgstr "命令树的根节点。它应为一个 :class:`~mcdreforged.command.builder.nodes.basic.Literal` 节点"
 
 #: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple
 #: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_command
@@ -119,7 +119,7 @@ msgstr "*allow_duplicates* 参数"
 msgid ""
 "Register a help message for the current plugin, which is used in "
 "``!!help`` command"
-msgstr "为当前插件注册一个帮助信息，以在 ``!!help`` 指令中显示"
+msgstr "为当前插件注册一个帮助信息，以在 ``!!help`` 命令中显示"
 
 #: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_help_message:3
 #: of
@@ -127,7 +127,7 @@ msgid ""
 "The help command of your plugin. When player click on the displayed "
 "message it will suggest this prefix parameter to the player. It's "
 "recommend to set it to the entry command of your plugin"
-msgstr "你的插件的帮助指令。当玩家点击显示的信息时，会向玩家提示这个前缀参数。建议将其设置为你的插件的入口指令"
+msgstr "你的插件的帮助命令。当玩家点击显示的信息时，会向玩家提示这个前缀参数。建议将其设置为你的插件的入口命令"
 
 #: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_help_message:5
 #: of
@@ -136,7 +136,7 @@ msgid ""
 "<mcdreforged.minecraft.rtext.text.RTextBase>` Also, it can be a dict maps"
 " from language to description message"
 msgstr ""
-"一个整洁的指令描述。它可以为一个 str 或者 :class:`RText "
+"一个整洁的命令描述。它可以为一个 str 或者 :class:`RText "
 "<mcdreforged.minecraft.rtext.text.RTextBase>`。除此之外它还可为一个将语言映射至描述信息的 dict"
 
 #: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_help_message:7
@@ -360,7 +360,7 @@ msgstr "是否在控制台中打印配置文件加载相关日志"
 #: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple:37
 #: of
 msgid "The command source for replying logging messages"
-msgstr "用于回复加载配置相关日志的指令源"
+msgstr "用于回复加载配置相关日志的命令源"
 
 #: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple:38
 #: of

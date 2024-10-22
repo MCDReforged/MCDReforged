@@ -602,7 +602,7 @@ msgstr "在 CLI 中生成的 ``.mcdr`` 打包插件的文件名"
 msgid ""
 ":ref:`cli/pack:name` option in :doc:`/cli/pack` command in "
 ":doc:`/cli/index`"
-msgstr ":doc:`/cli/index` 中 :doc:`/cli/pack` 指令的 :ref:`cli/pack:name` 选项"
+msgstr ":doc:`/cli/index` 中 :doc:`/cli/pack` 命令的 :ref:`cli/pack:name` 选项"
 
 #: ../plugin_dev/metadata.rst:291
 msgid "Field key: ``archive_name``"
