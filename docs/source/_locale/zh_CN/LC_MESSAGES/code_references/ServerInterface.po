@@ -406,13 +406,13 @@ msgstr "如果服务端正在运行或正在由其他插件启动，它将返回
 msgid ""
 "If the operation succeed. The operation fails if the server is already "
 "started, or cannot start due to invalid command or current MCDR state"
-msgstr "操作是否成功。若服务端已启动，或者服务端因指令错误或 MCDR 状态无法启动，操作将会失败"
+msgstr "操作是否成功。若服务端已启动，或者服务端因命令错误或 MCDR 状态无法启动，操作将会失败"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.stop:1 of
 msgid ""
 "Soft shutting down the server by sending the correct stop command to the "
 "server"
-msgstr "通过向服务端发送其对应的关闭指令指令来软停止服务端"
+msgstr "通过向服务端发送其对应的关闭命令来软停止服务端"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.stop:3 of
 msgid ""
@@ -514,7 +514,7 @@ msgstr "当服务端启动时，该标志将被设置为 ``True``"
 #: mcdreforged.plugin.si.server_interface.ServerInterface.set_exit_after_stop_flag:7
 #: of
 msgid "The flag value is displayed in line 5 in command ``!!MCDR status``"
-msgstr "该标志值的值也会在命令 ``!!MCDR status`` 的第 5 行中显示"
+msgstr "该标志值的值也会在指令 ``!!MCDR status`` 的第 5 行中显示"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.is_server_running:1
 #: of
@@ -583,7 +583,7 @@ msgstr "文本交互"
 msgid ""
 "Execute a server command by sending the command content to server's "
 "standard input stream"
-msgstr "通过将指令内容发送到服务端的标准输入流来执行服务端指令"
+msgstr "通过将命令内容发送到服务端的标准输入流来执行服务端命令"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.execute:5 of
 msgid ""
@@ -606,7 +606,7 @@ msgstr "文本的编码方法。留空以使用 MCDR 配置文件中的编码方
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.tell:1 of
 msgid "Use command like ``/tellraw`` to send the message to the specific player"
-msgstr "使用 ``/tellraw`` 等指令向特定玩家发送消息"
+msgstr "使用 ``/tellraw`` 等命令向特定玩家发送消息"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.tell:3 of
 msgid "The name of the player you want to tell"
@@ -618,7 +618,7 @@ msgstr "你想发送的信息"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.say:1 of
 msgid "Use command like ``/tellraw @a`` to broadcast the message in game"
-msgstr "使用 ``/tellraw @a`` 等指令在游戏中广播消息"
+msgstr "使用 ``/tellraw @a`` 等命令在游戏中广播消息"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.broadcast:5
 #: mcdreforged.plugin.si.server_interface.ServerInterface.reply:9
@@ -1259,17 +1259,17 @@ msgstr "任务执行者线程是解析消息和触发监听器的主线程，是
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.rcon_query:1 of
 msgid "Send command to the server through rcon connection"
-msgstr "通过 rcon 连接向服务端发送指令"
+msgstr "通过 rcon 连接向服务端发送命令"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.rcon_query:3 of
 msgid "The command you want to send to the rcon server"
-msgstr "你要发送给 rcon 服务端的指令"
+msgstr "你要发送给 rcon 服务端的命令"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.rcon_query:4 of
 msgid ""
 "The result that server returned from rcon. Return None if rcon is not "
 "running or rcon query failed"
-msgstr "服务端返回的 rcon 指令执行结果。如果 rcon 没有运行或 rcon 执行失败，则返回 None"
+msgstr "服务端返回的 rcon 命令执行结果。如果 rcon 没有运行或 rcon 执行失败，则返回 None"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.schedule_task:1 of
 msgid "Schedule a callback task to be run in task executor thread"

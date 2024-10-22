@@ -107,7 +107,7 @@ msgid ""
 "If set to False (default), a warning will be printed if duplicated "
 "command root node is found. If set to True, the warning will be "
 "suppressed as what it behaves before"
-msgstr "若设置为 False（默认值），则将在发现重复的命令根节点时输出警告信息。若设置为 True，将不会输出警告，和以前版本的表现一致"
+msgstr "若设置为 False（默认值），则将在发现重复的指令根节点时输出警告信息。若设置为 True，将不会输出警告，和以前版本的表现一致"
 
 #: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_command:7
 #: of

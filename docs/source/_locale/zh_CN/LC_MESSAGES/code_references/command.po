@@ -430,7 +430,7 @@ msgstr "你需要一个简短的指令和一个全路径指令来执行相同的
 msgid ""
 "You want to repeatedly re-enter a command node's children when parsing "
 "commands"
-msgstr "当解析命令时，你希望重复进入一个命令节点的子节点"
+msgstr "当解析指令时，你希望重复进入一个指令节点的子节点"
 
 #: mcdreforged.command.builder.nodes.basic.AbstractNode.redirects:19 of
 msgid ""

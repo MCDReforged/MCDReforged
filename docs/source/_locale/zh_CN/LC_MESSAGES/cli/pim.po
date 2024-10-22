@@ -81,7 +81,7 @@ msgid ""
 "Call ``pip install`` with the requirements.txt file in the given packed "
 "plugin to install Python packages"
 msgstr ""
-"读取给定的打包插件中的 requirements.txt 文件，然后使用当前 Python 解释器调用 ``pip install`` 指令来安装"
+"读取给定的打包插件中的 requirements.txt 文件，然后使用当前 Python 解释器调用 ``pip install`` 命令来安装"
 " Python 包依赖"
 
 #: ../cli/pim.rst:65

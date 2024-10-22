@@ -179,11 +179,11 @@ msgstr "如果你的服务端存在上述问题之一，你可能需要 :ref:`�
 
 #: ../quick_start/troubleshooting.rst:85
 msgid "**Some plugin commands work neither in game nor on the console**"
-msgstr "**某些插件命令在游戏和控制台中都无法使用**"
+msgstr "**某些插件指令在游戏和控制台中都无法使用**"
 
 #: ../quick_start/troubleshooting.rst:86
 msgid "**Some plugin commands perform incorrectly in all conditions**"
-msgstr "**某些插件命令在所有条件下都执行不正确**"
+msgstr "**某些插件指令在所有条件下都执行不正确**"
 
 #: ../quick_start/troubleshooting.rst:88
 msgid ""

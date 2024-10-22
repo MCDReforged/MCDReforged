@@ -117,7 +117,7 @@ msgid ""
 "Plugin load event gets triggered once when a plugin is loaded. Plugins "
 "are supposed to register some event listeners, commands and help messages"
 " as well as initialize their fields here"
-msgstr "插件被加载事件将在插件加载后被触发一次，若你需要注册一些事件监听器/命令/帮助消息，以及初始化参数，那么你应该将它们置于这个函数里"
+msgstr "插件被加载事件将在插件加载后被触发一次，若你需要注册一些事件监听器/指令/帮助消息，以及初始化参数，那么你应该将它们置于这个函数里"
 
 #: ../plugin_dev/event.rst:56
 msgid ""
@@ -261,7 +261,7 @@ msgid ""
 "tree for you plugin. See the :ref:`command registering "
 "<plugin_dev/basic:command>` doc"
 msgstr ""
-"如果你想要更复杂的命令系统，而不是在用户信息事件中手动解析它们，则建议你为插件注册一个命令树。参见插件的 :ref:`指令注册 "
+"如果你想要更复杂的指令系统，而不是在用户信息事件中手动解析它们，则建议你为插件注册一个指令树。参见插件的 :ref:`指令注册 "
 "<plugin_dev/basic:command>` 文档"
 
 #: ../plugin_dev/event.rst:137

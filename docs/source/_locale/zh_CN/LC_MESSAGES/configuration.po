@@ -44,7 +44,7 @@ msgstr "配置文件使用 `YAML <https://zh.wikipedia.org/wiki/YAML>`__ 格式"
 msgid ""
 "You can use command ``!!MCDR reload config`` or its short form ``!!MCDR r"
 " cfg`` to reload the config file when MCDR is running"
-msgstr "当 MCDR 运行时，你可以使用 ``!!MCDR reload config`` 命令（或其缩写 ``!!MCDR r cfg``）来重载配置文件"
+msgstr "当 MCDR 运行时，你可以使用 ``!!MCDR reload config`` 指令（或其缩写 ``!!MCDR r cfg``）来重载配置文件"
 
 #: ../configuration.rst:15
 msgid ":ref:`command/mcdr:Hot reloads` command, for more detail about hot reloads"
@@ -116,7 +116,7 @@ msgid ""
 "(shell mode) If it's a string, the command will be executed as a shell "
 "command in a shell environment. It's the suggested way to use due to its "
 "simpleness"
-msgstr "（shell 模式）如果值为一个字符串，则指令将被视为一个 shell 指令，在 shell 环境中执行。推荐使用，因为它易于使用"
+msgstr "（shell 模式）如果值为一个字符串，则命令将被视为一个 shell 命令，在 shell 环境中执行。推荐使用，因为它易于使用"
 
 #: ../configuration.rst:58
 msgid ""
@@ -125,7 +125,7 @@ msgid ""
 "directly managed by MCDR (MCDR - server), instead of having a shell "
 "process in the middle of the process chain (MCDR - shell - server)"
 msgstr ""
-"（exec 模式）如果值是一个字符串列表，则给定指令将被直接 exec 执行。该模式可让服务端进程直接被 MCDR 接管（MCDR - "
+"（exec 模式）如果值是一个字符串列表，则给定命令将被直接 exec 执行。该模式可让服务端进程直接被 MCDR 接管（MCDR - "
 "server），而非通过一个 shell 进程间接地接管（MCDR - shell - server）"
 
 #: ../configuration.rst:80
@@ -155,7 +155,7 @@ msgstr ""
 msgid ""
 "If there are some special character (e.g. ``\"`` and ``\\``) that yaml "
 "doesn't like in the command, you can either:"
-msgstr "如果指令中存在一些 YAML 不喜欢的字符（如 ``\"``、``\\``），你可以从以下解决方案中任选一个："
+msgstr "如果命令中存在一些 YAML 不喜欢的字符（如 ``\"``、``\\``），你可以从以下解决方案中任选一个："
 
 #: ../configuration.rst:135
 msgid ""
@@ -192,7 +192,7 @@ msgid ""
 "different kind of command. Server handlers are the modules to handle "
 "between all kind of servers and the interface for MCDR to control the "
 "server"
-msgstr "不同服务端有着截然不同的输出和指令。服务端处理器是用于在各种服务端之间进行处理的模块，也是 MCDR 控制服务端的接入点"
+msgstr "不同服务端有着截然不同的输出和命令。服务端处理器是用于在各种服务端之间进行处理的模块，也是 MCDR 控制服务端的接入点"
 
 #: ../configuration.rst:147
 msgid ""

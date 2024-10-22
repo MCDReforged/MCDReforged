@@ -35,7 +35,7 @@ msgid ""
 msgstr ""
 "使用 "
 ":meth:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_help_message`"
-" 来为你的插件添加一些必要的提示，这样玩家就可以使用 ``!!help`` 命令来了解如何使用你的插件"
+" 来为你的插件添加一些必要的提示，这样玩家就可以使用 ``!!help`` 指令来了解如何使用你的插件"
 
 #: ../plugin_dev/dev_tips.rst:13
 msgid ""
