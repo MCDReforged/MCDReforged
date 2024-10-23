@@ -93,7 +93,7 @@ Then you can start using the handler by loading or reloading the plugin that you
 
             :doc:`/plugin_dev/metadata` document
 
-    2.  Load your newly created plugin with command ``!!MCDR plugin load plugins/handler_for_my_server.py``
+    2.  Load your newly created plugin with command ``!!MCDR plugin load handler_for_my_server.py``
     3.  Now your custom server handler should be loaded. Test if it works as expected
     4.  (Optional) If it doesn't, edit the ``.py`` plugin file to suit your needs
     5.  (Optional) Reload the plugin with command ``!!MCDR plugin reload handler_for_my_server``

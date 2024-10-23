@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-23 15:39+0800\n"
+"POT-Creation-Date: 2024-10-24 02:05+0800\n"
 "PO-Revision-Date: 2021-01-23 19:44+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -120,7 +120,7 @@ msgid ""
 "Notes that the only difference between the following code and code above,"
 " is that it contains a ``PLUGIN_METADATA`` field in the global scope as "
 "its plugin metadata"
-msgstr "注意，以下代码与上面代码的唯一区别，是它在全局作用域内声明了一个 ``PLUGIN_METADATA`` 字段，作为单文件插件的元信息字段"
+msgstr "注意，以下代码与上面代码的唯一区别，是它在全局作用域内声明了一个 ``PLUGIN_METADATA`` 字段，作为单文件插件的元数据字段"
 
 #: ../customize/handler.rst:94
 msgid ":doc:`/plugin_dev/metadata` document"
@@ -129,8 +129,8 @@ msgstr ":doc:`/plugin_dev/metadata` 文档"
 #: ../customize/handler.rst:96
 msgid ""
 "Load your newly created plugin with command ``!!MCDR plugin load "
-"plugins/handler_for_my_server.py``"
-msgstr "使用命令 ``!!MCDR plugin load plugins/handler_for_my_server.py`` 加载你新创建的插件"
+"handler_for_my_server.py``"
+msgstr "使用命令 ``!!MCDR plugin load handler_for_my_server.py`` 加载你新创建的插件"
 
 #: ../customize/handler.rst:97
 msgid ""
