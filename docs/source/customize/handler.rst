@@ -52,6 +52,52 @@ For example, we create a MCDR plugin and write the following codes as its entryp
 
 Then you can start using the handler by loading or reloading the plugin that you've just created
 
+.. dropdown:: Quick guide: Create a working solo plugin providing your custom handler
+
+    The easiest way to create a plugin is to create a :ref:`plugin_dev/plugin_format:Solo Plugin`, which consists of a single ``.py`` file
+
+    1.  Assuming the :ref:`configuration:plugin_directories` config contains the ``plugins/`` directory,
+        you can create a new solo plugin by creating and editing the file ``plugins/handler_for_my_server.py``
+
+        .. code-block:: python
+
+            import re
+
+            from mcdreforged.handler.impl import VanillaHandler
+
+            PLUGIN_METADATA = {
+                'id': 'handler_for_my_server',
+                'version': '0.0.0',
+            }
+
+            class MyHandler(VanillaHandler):
+                def get_name(self) -> str:
+                    return 'the_handler_for_my_server'
+
+                def parse_server_stdout(self, text: str):
+                    info = super().parse_server_stdout(text)
+                    if info.player is None:
+                        m = re.fullmatch(r'<\[\w+](?P<name>[^>]+)> (?P<message>.*)', info.content)
+                        if m is not None and self._verify_player_name(m['name']):
+                            info.player, info.content = m['name'], m['message']
+                    return info
+
+
+            def on_load(server, prev_module):
+                server.register_server_handler(MyHandler())
+
+        Notes that the only difference between the following code and code above,
+        is that it contains a ``PLUGIN_METADATA`` field in the global scope as its plugin metadata
+
+        .. seealso::
+
+            :doc:`/plugin_dev/metadata` document
+
+    2.  Load your newly created plugin with command ``!!MCDR plugin load plugins/handler_for_my_server.py``
+    3.  Now your custom server handler should be loaded. Test if it works as expected
+    4.  (Optional) If it doesn't, edit the ``.py`` plugin file to suit your needs
+    5.  (Optional) Reload the plugin with command ``!!MCDR plugin reload handler_for_my_server``
+
 ------
 
 As a alternative but not recommended way, you may provide your handler by a single ``.py`` file, rather than a plugin
