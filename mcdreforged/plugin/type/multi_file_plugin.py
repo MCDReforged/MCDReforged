@@ -1,7 +1,6 @@
 import importlib
 import json
 import os
-import re
 import sys
 from abc import ABC, abstractmethod
 from pathlib import Path
@@ -118,8 +117,6 @@ class MultiFilePlugin(RegularPlugin, ABC):
 		"""
 		raise NotImplementedError()
 
-	COMMENT_REGEX = re.compile(r'(^|\s+)#.*$')
-
 	def __check_requirements(self):
 		try:
 			req_file = self.open_file(plugin_constant.PLUGIN_REQUIREMENTS_FILE)
@@ -133,7 +130,7 @@ class MultiFilePlugin(RegularPlugin, ABC):
 			req_file_str = req_file.read().decode('utf8')
 			for i, line in enumerate(req_file_str.splitlines()):
 				# ref: pip._internal.req.req_file.ignore_comments
-				line = self.COMMENT_REGEX.sub('', line).strip()
+				line = line.split('#', 1)[0].strip()
 				if len(line) == 0:
 					continue
 

@@ -82,7 +82,18 @@ def cmd_pipi(plugin_paths: List[str], extra_args: Optional[str] = None, *, quiet
 				if req_file_name not in zip_file.namelist():
 					writeln('Plugin {!r} does not contain a {}'.format(plugin_path, req_file_name))
 					return 1
-				requirement_lines.extend(zip_file.read(req_file_name).splitlines())
+				for line in zip_file.read(req_file_name).splitlines():
+					line = line.split(b'#', 1)[0].lstrip()
+					if len(line) == 0:
+						continue
+					import packaging.requirements as pr
+					try:
+						req = pr.Requirement(line.decode('utf8'))
+					except (UnicodeError, pr.InvalidRequirement):
+						pass
+					else:
+						if req.name != 'mcdreforged':
+							requirement_lines.append(line)
 		except Exception as e:
 			writeln('Failed to read plugin from {!r}: {}'.format(plugin_path, e))
 			return 2
