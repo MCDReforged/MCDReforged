@@ -50,17 +50,7 @@ For example, we create a MCDR plugin and write the following codes as its entryp
         server.register_server_handler(MyHandler())
 
 
-Then we can start using the handler:
-
-
-1.  Load or reload the plugin you've just created
-2.  Set the :ref:`configuration:handler` option to what method ``get_name()`` of your handler returns, e.g.:
-
-    .. code-block:: yaml
-
-        handler: the_handler_for_my_server
-
-That's all you need to do
+Then you can start using the handler by loading or reloading the plugin that you've just created
 
 ------
 
