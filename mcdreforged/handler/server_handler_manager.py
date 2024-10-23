@@ -85,6 +85,8 @@ class ServerHandlerManager:
 			return self.__basic_handler
 
 	def set_configured_handler(self, handler_name: str):
+		if handler_name != self.__current_configured_handler_name:
+			self.__shutdown_handler_detection()
 		self.__current_configured_handler_name = handler_name
 		self.__current_configured_handler_invalid_warned = False
 
@@ -93,6 +95,8 @@ class ServerHandlerManager:
 			self.logger.info(self.__tr('plugin_provided.set', repr(psh.server_handler.get_name()), psh.plugin))
 		elif self.__plugin_provided_server_handler_holder is not None:
 			self.logger.info(self.__tr('plugin_provided.unset', repr(self.__current_configured_handler.get_name())))
+		if psh != self.__plugin_provided_server_handler_holder:
+			self.__shutdown_handler_detection()
 		self.__plugin_provided_server_handler_holder = psh
 
 	def get_basic_handler(self) -> ServerHandler:
@@ -110,6 +114,9 @@ class ServerHandlerManager:
 	def start_handler_detection(self):
 		self.__handler_detector.start_handler_detection()
 
+	def __shutdown_handler_detection(self):
+		self.__handler_detector.shutdown_handler_detection()
+
 	def detect_text(self, text: str):
 		self.__handler_detector.detect_text(text)
 
@@ -122,7 +129,7 @@ class HandlerDetector:
 		self.manager = manager
 		self.mcdr_server: 'MCDReforgedServer' = manager.mcdr_server
 		self.running_flag = False
-		self.text_queue = queue.Queue()
+		self.text_queue: 'queue.Queue[Optional[str]]' = queue.Queue()
 		self.text_count = 0
 		self.success_count: Counter[str] = collections.Counter()
 		self.__tr = self.mcdr_server.create_internal_translator('server_handler_manager').tr
@@ -134,37 +141,46 @@ class HandlerDetector:
 			self.success_count.clear()
 			misc_utils.start_thread(self.__detection_thread, (), 'HandlerDetector')
 
+	def shutdown_handler_detection(self):
+		# do nothing if it's called before the detection starts
+		if self.is_detection_running():
+			self.text_queue.put(None)
+
 	def is_detection_running(self) -> bool:
 		return self.running_flag
 
 	def __detection_thread(self):
 		start_time = time.time()
-		while True:
-			time_elapsed = time.time() - start_time
-			if time_elapsed >= self.HANDLER_DETECTION_MINIMUM_SAMPLING_TIME and self.text_count >= self.HANDLER_DETECTION_MINIMUM_SAMPLE_COUNT:
-				break
-			try:
-				text: str = self.text_queue.get(block=True, timeout=1)
-			except queue.Empty:
-				continue
+		try:
+			while True:
+				time_elapsed = time.time() - start_time
+				if time_elapsed >= self.HANDLER_DETECTION_MINIMUM_SAMPLING_TIME and self.text_count >= self.HANDLER_DETECTION_MINIMUM_SAMPLE_COUNT:
+					break
+				try:
+					text = self.text_queue.get(block=True, timeout=1)
+				except queue.Empty:
+					continue
+				if text is None:  # shutdown
+					self.mcdr_server.logger.debug('Handler detection has shutdown')
+					return
 
-			self.text_count += 1
-			handler: ServerHandler
-			for handler in misc_utils.unique_list([*self.manager.handlers.values(), self.manager.get_current_handler()]):
-				if handler is not self.manager.get_basic_handler():
-					try:
-						handler.parse_server_stdout(handler.pre_parse_server_stdout(text))
-					except Exception:
-						pass
-					else:
-						self.success_count[handler.get_name()] += 1
-
-		self.running_flag = False
-		while True:  # clean the queue
-			try:
-				self.text_queue.get(block=False)
-			except queue.Empty:
-				break
+				self.text_count += 1
+				handler: ServerHandler
+				for handler in misc_utils.unique_list([*self.manager.handlers.values(), self.manager.get_current_handler()]):
+					if handler is not self.manager.get_basic_handler():
+						try:
+							handler.parse_server_stdout(handler.pre_parse_server_stdout(text))
+						except Exception:
+							pass
+						else:
+							self.success_count[handler.get_name()] += 1
+		finally:
+			self.running_flag = False
+			while True:  # drain the queue
+				try:
+					self.text_queue.get(block=False)
+				except queue.Empty:
+					break
 
 		most_common: List[Tuple[str, int]] = self.success_count.most_common()
 		if len(most_common) == 0:
