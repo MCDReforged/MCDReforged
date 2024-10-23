@@ -174,7 +174,7 @@ class PluginCommand(SubCommand):
 			operation_name: str, possible_plugin_path: List[str]
 	):
 		possible_plugin_path = [Path(fp) for fp in possible_plugin_path]
-		plugin_paths = [fp for fp in possible_plugin_path if str(fp) == file_name]  # try full-match
+		plugin_paths = [fp for fp in possible_plugin_path if str(fp) == str(Path(file_name))]  # try full-match
 		if len(plugin_paths) == 0:
 			plugin_paths = [fp for fp in possible_plugin_path if fp.name == file_name]  # try name-match
 		if len(plugin_paths) == 0:
