@@ -24,7 +24,8 @@ class ServerHandlerManager:
 
 		self.__basic_handler: Optional[ServerHandler] = None  # the handler that should always work
 		self.__plugin_provided_server_handler_holder: Optional[PluginProvidedServerHandlerHolder] = None
-		self.__current_configured_handler: Optional[ServerHandler] = None
+		self.__current_configured_handler_name: Optional[str] = None
+		self.__current_configured_handler_invalid_warned: bool = False
 
 		# Automation for lazy
 		self.__handler_detector = HandlerDetector(self)
@@ -71,19 +72,27 @@ class ServerHandlerManager:
 					else:
 						self.mcdr_server.logger.error('Wrong handler class "{}", expected {} but found {}'.format(class_path, ServerHandler, handler_class))
 
-	def set_configured_handler(self, handler_name: str):
+	@property
+	def __current_configured_handler(self) -> Optional[ServerHandler]:
+		handler_name = self.__current_configured_handler_name
 		try:
-			self.__current_configured_handler = self.handlers[handler_name]
+			return self.handlers[handler_name]
 		except KeyError:
-			self.logger.error('Fail to load handler with name "{}"'.format(handler_name))
-			self.logger.error('Fallback basic handler is used, MCDR might not works correctly'.format(handler_name))
-			self.__current_configured_handler = self.__basic_handler
+			if not self.__current_configured_handler_invalid_warned:
+				self.logger.error('Fail to load configured handler with name {}'.format(repr(handler_name)))
+				self.logger.error('Fallback basic handler is used, MCDR might not works correctly')
+				self.__current_configured_handler_invalid_warned = True
+			return self.__basic_handler
+
+	def set_configured_handler(self, handler_name: str):
+		self.__current_configured_handler_name = handler_name
+		self.__current_configured_handler_invalid_warned = False
 
 	def set_plugin_provided_server_handler_holder(self, psh: Optional[PluginProvidedServerHandlerHolder]):
 		if psh is not None:
-			self.logger.info(self.__tr('plugin_provided.set', psh.server_handler.get_name(), psh.plugin))
+			self.logger.info(self.__tr('plugin_provided.set', repr(psh.server_handler.get_name()), psh.plugin))
 		elif self.__plugin_provided_server_handler_holder is not None:
-			self.logger.info(self.__tr('plugin_provided.unset', self.__current_configured_handler.get_name()))
+			self.logger.info(self.__tr('plugin_provided.unset', repr(self.__current_configured_handler.get_name())))
 		self.__plugin_provided_server_handler_holder = psh
 
 	def get_basic_handler(self) -> ServerHandler:
