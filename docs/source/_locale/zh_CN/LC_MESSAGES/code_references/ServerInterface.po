@@ -1214,9 +1214,8 @@ msgstr "异步任务执行者线程，是触发所有异步的监听器回调的
 #: mcdreforged.plugin.si.server_interface.ServerInterface.get_event_loop:5
 #: mcdreforged.plugin.si.server_interface.ServerInterface.is_on_async_executor_thread:6
 #: mcdreforged.plugin.si.server_interface.ServerInterface.schedule_task:11 of
-#, fuzzy
 msgid "Beta API"
-msgstr "(beta API)"
+msgstr "(Beta API)"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.get_event_loop:1 of
 msgid ""
@@ -1257,12 +1256,11 @@ msgid "The timeout of the blocking operation if ``block=True``"
 msgstr "若 ``block=True``，最大的阻塞时间"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.schedule_task:7 of
-#, fuzzy
 msgid ""
 "The *callback* param now supports :external:func:`coroutine object "
 "<inspect.iscoroutine>` or :external:func:`coroutine function "
 "<inspect.iscoroutinefunction>`"
 msgstr ""
-"(beta API) *callback* 参数支持 :external:func:`协程对象 <inspect.iscoroutine>` 或 "
+"*callback* 参数支持 :external:func:`协程对象 <inspect.iscoroutine>` 或 "
 ":external:func:`协程函数 <inspect.iscoroutinefunction>`"
 
