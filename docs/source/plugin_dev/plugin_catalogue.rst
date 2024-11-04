@@ -186,6 +186,9 @@ All current available labels are shown in the following table
     * - api
       - API
       - Works as a API or a library which provides common functionalities to other plugins
+    * - handler
+      - Handler
+      - Provides a :doc:`custom server handler </customize/handler>`
 
 Language
 --------
