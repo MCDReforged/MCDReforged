@@ -176,16 +176,16 @@ All current available labels are shown in the following table
       - Description
     * - information
       - Information
-      - Show or get information for users
+      - Collects and displays information for users
     * - tool
       - Tool
-      - A tool, or a game helper
+      - A useful tool, or a game helper
     * - management
       - Management
-      - Manages files or other stuffs of the server
+      - Manages files or other stuffs on the server
     * - api
       - API
-      - Works as a API or a library which provides common functionalities to other plugins
+      - Functions as an API or library that provides common functionalities to other plugins
     * - handler
       - Handler
       - Provides a :doc:`custom server handler </customize/handler>`

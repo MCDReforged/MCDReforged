@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-05 01:00+0800\n"
+"POT-Creation-Date: 2024-11-05 01:13+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -254,8 +254,8 @@ msgid "Information"
 msgstr "信息"
 
 #: ../plugin_dev/plugin_catalogue.rst:179
-msgid "Show or get information for users"
-msgstr "显示或获取各类信息的插件"
+msgid "Collects and displays information for users"
+msgstr "获取并显示各类信息的插件"
 
 #: ../plugin_dev/plugin_catalogue.rst:180
 msgid "tool"
@@ -266,8 +266,8 @@ msgid "Tool"
 msgstr "工具"
 
 #: ../plugin_dev/plugin_catalogue.rst:182
-msgid "A tool, or a game helper"
-msgstr "工具类，或游戏助手型插件"
+msgid "A useful tool, or a game helper"
+msgstr "实用工具 / 游戏助手型插件"
 
 #: ../plugin_dev/plugin_catalogue.rst:183
 msgid "management"
@@ -278,7 +278,7 @@ msgid "Management"
 msgstr "管理"
 
 #: ../plugin_dev/plugin_catalogue.rst:185
-msgid "Manages files or other stuffs of the server"
+msgid "Manages files or other stuffs on the server"
 msgstr "管理服务端的文件等各种事务"
 
 #: ../plugin_dev/plugin_catalogue.rst:186
@@ -291,9 +291,9 @@ msgstr "API"
 
 #: ../plugin_dev/plugin_catalogue.rst:188
 msgid ""
-"Works as a API or a library which provides common functionalities to "
+"Functions as an API or library that provides common functionalities to "
 "other plugins"
-msgstr "作为一个 API 或者一个依赖库，为其他插件提供各种通用功能"
+msgstr "作为一个 API 或一个依赖库，为其他插件提供功能支持"
 
 #: ../plugin_dev/plugin_catalogue.rst:189
 msgid "handler"
