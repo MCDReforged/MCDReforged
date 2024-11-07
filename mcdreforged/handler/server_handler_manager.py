@@ -91,11 +91,11 @@ class ServerHandlerManager:
 		self.__current_configured_handler_invalid_warned = False
 
 	def set_plugin_provided_server_handler_holder(self, psh: Optional[PluginProvidedServerHandlerHolder]):
-		if psh is not None:
-			self.logger.info(self.__tr('plugin_provided.set', repr(psh.server_handler.get_name()), psh.plugin))
-		elif self.__plugin_provided_server_handler_holder is not None:
-			self.logger.info(self.__tr('plugin_provided.unset', repr(self.__current_configured_handler.get_name())))
 		if psh != self.__plugin_provided_server_handler_holder:
+			if psh is not None:
+				self.logger.info(self.__tr('plugin_provided.set', repr(psh.server_handler.get_name()), psh.plugin))
+			else:
+				self.logger.info(self.__tr('plugin_provided.unset', repr(self.__current_configured_handler.get_name())))
 			self.__shutdown_handler_detection()
 		self.__plugin_provided_server_handler_holder = psh
 
