@@ -542,16 +542,25 @@ class PluginManager:
 	#   Interfaces
 	# --------------
 
-	def __run_manipulation(self, action: Callable[[], PluginOperationResult]) -> Future[PluginOperationResult]:
+	def __run_manipulation(self, action: Callable[[], PluginOperationResult], *, wait_if_async: bool = True) -> Future[PluginOperationResult]:
 		"""
-		Async manipulations: Blocked and wait via self.__mani_lock
+		Async manipulations: Submit to the task executor, then wait until the execution finished
 
-		Sync manipulations: Run directly for the 1st action, store in queue for other actions.
-		The delayed actions in queue will be executed after the 1st action is done
+		Sync manipulations (should be on the task executor thread): Run directly for the 1st action,
+		store in queue for other actions. The delayed actions in queue will be executed after the 1st action is done
 
 		:return: A future to the plugin operation result. The future is finished
 		iif. it's the 1st manipulation call in the current thread's call chain
 		"""
+		if not self.mcdr_server.task_executor.is_on_thread():
+			def func():
+				self.__run_manipulation(action).add_done_callback(result_future.set_result)
+			result_future = Future()
+			e = self.mcdr_server.task_executor.submit(func)
+			if wait_if_async:
+				e.wait()
+			return result_future
+
 		with self.__mani_lock:
 			future: Future[PluginOperationResult] = Future()
 			self.__mani_queue.put((action, future))
