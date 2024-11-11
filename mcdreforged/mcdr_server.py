@@ -658,9 +658,9 @@ class MCDReforgedServer:
 			self.set_mcdr_state(MCDReforgedState.PRE_STOPPED)
 			self.logger.info(self.__tr('on_mcdr_stop.info'))
 
-			self.plugin_manager.dispatch_event(MCDRPluginEvents.PLUGIN_UNLOADED, ())
 			with self.watch_dog.pausing():  # it's ok for plugins to take some time
-				self.plugin_manager.dispatch_event(MCDRPluginEvents.MCDR_STOP, (), block=True)
+				self.plugin_manager.dispatch_event(MCDRPluginEvents.MCDR_STOP, ())
+				self.plugin_manager.dispatch_event(MCDRPluginEvents.PLUGIN_UNLOADED, ())
 
 				def join_executor(executor: BackgroundThreadExecutor):
 					wait_sec = 10 if self.is_interrupt() else 600
