@@ -6,6 +6,7 @@ import functools
 import os
 import queue
 import threading
+from concurrent.futures import Future
 from contextlib import contextmanager
 from contextvars import ContextVar
 from pathlib import Path
@@ -27,8 +28,7 @@ from mcdreforged.plugin.type.builtin_plugin import BuiltinPlugin
 from mcdreforged.plugin.type.common import PluginState
 from mcdreforged.plugin.type.plugin import AbstractPlugin
 from mcdreforged.plugin.type.regular_plugin import RegularPlugin
-from mcdreforged.utils import file_utils, string_utils, misc_utils, class_utils, path_utils, function_utils
-from mcdreforged.utils.future import Future
+from mcdreforged.utils import file_utils, string_utils, misc_utils, class_utils, path_utils, function_utils, future_utils
 from mcdreforged.utils.types.path_like import PathStr
 
 if TYPE_CHECKING:
@@ -621,7 +621,7 @@ class PluginManager:
 		if len(to_unload_plugin_ids) + len(to_load_paths) + len(to_reload_plugin_ids) == 0:
 			if entered_callback is not None:
 				entered_callback()
-			return Future.completed(PluginOperationResult.of_empty())
+			return future_utils.completed(PluginOperationResult.of_empty())
 
 		def manipulate_action():
 			if entered_callback is not None:
@@ -644,7 +644,7 @@ class PluginManager:
 			reload_result = self.__reload_ready_plugins(is_to_reload_plugin)
 			return self.__finalize_plugin_manipulation(load_result, unload_result.result, reload_result)
 
-		def done_callback(_: PluginOperationResult):
+		def done_callback(_: Future[PluginOperationResult]):
 			for plg in (disable or []):
 				if plg.file_exists():
 					disabled_path = plg.plugin_path.parent / (plg.plugin_path.name + plugin_constant.DISABLED_PLUGIN_FILE_SUFFIX)

@@ -2,6 +2,7 @@ import dataclasses
 import enum
 import traceback
 from abc import ABC, abstractmethod
+from concurrent.futures import Future
 from typing import TYPE_CHECKING, Callable, Generic, TypeVar
 
 from mcdreforged.command.builder.nodes.basic import Literal
@@ -13,7 +14,6 @@ from mcdreforged.permission.permission_level import PermissionLevel
 from mcdreforged.plugin.operation_result import PluginOperationResult
 from mcdreforged.translation.translation_text import RTextMCDRTranslation
 from mcdreforged.utils import class_utils
-from mcdreforged.utils.future import Future
 
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
@@ -107,8 +107,8 @@ class SubCommand(ABC):
 
 	def _print_plugin_operation_result_if_no_error(self, source: CommandSource, ret: FunctionCallResult[Future[PluginOperationResult]]):
 		if ret.no_error:
-			def reply(result: PluginOperationResult):
-				source.reply(result.to_rtext(self.mcdr_server, show_path=source.has_permission(PermissionLevel.PHYSICAL_SERVER_CONTROL_LEVEL)))
+			def reply(fut: Future[PluginOperationResult]):
+				source.reply(fut.result().to_rtext(self.mcdr_server, show_path=source.has_permission(PermissionLevel.PHYSICAL_SERVER_CONTROL_LEVEL)))
 			ret.return_value.add_done_callback(reply)
 
 	def function_call(

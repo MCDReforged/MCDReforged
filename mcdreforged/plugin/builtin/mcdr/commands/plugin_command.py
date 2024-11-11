@@ -1,4 +1,5 @@
 import os
+from concurrent.futures import Future
 from pathlib import Path
 from typing import TYPE_CHECKING, Callable, List, Tuple, Optional
 
@@ -14,7 +15,6 @@ from mcdreforged.plugin.builtin.mcdr.commands.plugin_command_pim import PluginCo
 from mcdreforged.plugin.builtin.mcdr.commands.sub_command import SubCommand, SubCommandEvent
 from mcdreforged.plugin.operation_result import PluginOperationResult, PluginResultType
 from mcdreforged.plugin.type.regular_plugin import RegularPlugin
-from mcdreforged.utils.future import Future
 
 if TYPE_CHECKING:
 	from mcdreforged.plugin.builtin.mcdr.mcdreforged_plugin import MCDReforgedPlugin
@@ -158,8 +158,8 @@ class PluginCommand(SubCommand):
 	):
 		ret = self.function_call(source, func, operation_name, reply_success=False, msg_args=(plugin_alias,))
 		if ret.no_error:
-			def report(result: PluginOperationResult):
-				if result.get_if_success(result_type_to_check_success):
+			def report(fut: Future[PluginOperationResult]):
+				if fut.result().get_if_success(result_type_to_check_success):
 					source.reply(self.tr('mcdr_command.{}.success'.format(operation_name), plugin_alias))
 				else:
 					source.reply(self.tr('mcdr_command.{}.fail'.format(operation_name), plugin_alias))

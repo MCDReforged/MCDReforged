@@ -3,6 +3,7 @@ import functools
 import inspect
 import logging
 import threading
+from concurrent.futures import Future
 from pathlib import Path
 from typing import Callable, TYPE_CHECKING, Tuple, Any, Union, Optional, List, Dict, overload, Literal, Coroutine
 
@@ -26,7 +27,6 @@ from mcdreforged.preference.preference_manager import PreferenceItem
 from mcdreforged.translation.translation_text import RTextMCDRTranslation
 from mcdreforged.utils import misc_utils, file_utils, class_utils
 from mcdreforged.utils.exception import IllegalCallError
-from mcdreforged.utils.future import Future
 from mcdreforged.utils.types.message import MessageText
 from mcdreforged.utils.types.path_like import PathStr
 
@@ -670,8 +670,8 @@ class ServerInterface:
 		"""
 		plugin_file_path = Path(plugin_file_path)
 		future: Future[PluginOperationResult] = handler(self._plugin_manager)(plugin_file_path)
-		if future.is_finished():
-			return future.get().get_if_success(PluginResultType.LOAD)  # the operations are always loading a plugin
+		if future.done():
+			return future.result().get_if_success(PluginResultType.LOAD)  # the operations are always loading a plugin
 		else:
 			return False  # TODO handle unknown result caused by chained sync plugin operation
 
@@ -693,8 +693,8 @@ class ServerInterface:
 		plugin = self._plugin_manager.get_regular_plugin_from_id(plugin_id)
 		if plugin is not None:
 			future = handler(self._plugin_manager)(plugin)
-			if future.is_finished():
-				return future.get().get_if_success(result_type)
+			if future.done():
+				return future.result().get_if_success(result_type)
 			else:
 				return None
 		return None
@@ -842,8 +842,8 @@ class ServerInterface:
 			enable=map_to_path(enable),
 			disable=map_to_regular(disable),
 		)
-		if future.is_finished():
-			por = future.get()
+		if future.done():
+			por = future.result()
 			return por.load_result.is_success_or_empty() and por.reload_result.is_success_or_empty() and por.unload_result.is_success_or_empty()
 		else:
 			return False  # chained sync plugin operation
