@@ -24,3 +24,8 @@ class IllegalPluginStructure(Exception):
 # When the metadata of a plugin is invalid
 class BrokenMetadata(Exception):
 	pass
+
+
+# infinity join
+class SelfJoinError(RuntimeError):
+	pass

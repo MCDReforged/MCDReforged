@@ -882,7 +882,12 @@ class ServerInterface:
 		class_utils.check_type(event, PluginEvent)
 		if MCDRPluginEvents.contains_id(event.id):
 			raise ValueError('Cannot dispatch event with already exists event id {}'.format(event.id))
-		self._plugin_manager.dispatch_event(event, args, submit_for_sync=on_executor_thread)
+
+		if on_executor_thread:
+			dispatch_policy = self._plugin_manager.DispatchEventPolicy.always_new_task
+		else:
+			dispatch_policy = self._plugin_manager.DispatchEventPolicy.directly_invoke
+		self._plugin_manager.dispatch_event(event, args, dispatch_policy=dispatch_policy)
 
 	# ------------------------
 	#      Configuration

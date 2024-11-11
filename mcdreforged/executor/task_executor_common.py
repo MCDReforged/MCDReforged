@@ -6,16 +6,13 @@ from typing import Optional, TYPE_CHECKING, TypeVar
 from typing_extensions import override
 
 from mcdreforged.executor.background_thread_executor import BackgroundThreadExecutor
+from mcdreforged.utils.exception import SelfJoinError
 
 if TYPE_CHECKING:
 	from mcdreforged.plugin.type.plugin import AbstractPlugin
 
 
 _T = TypeVar('_T')
-
-
-class SelfJoinError(RuntimeError):
-	pass
 
 
 class TaskDoneFuture(Future[_T]):

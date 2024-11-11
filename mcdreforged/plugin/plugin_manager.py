@@ -2,6 +2,7 @@
 Plugin management
 """
 import dataclasses
+import enum
 import functools
 import os
 import queue
@@ -28,6 +29,7 @@ from mcdreforged.plugin.type.common import PluginState
 from mcdreforged.plugin.type.plugin import AbstractPlugin
 from mcdreforged.plugin.type.regular_plugin import RegularPlugin
 from mcdreforged.utils import file_utils, string_utils, misc_utils, class_utils, path_utils, function_utils, future_utils
+from mcdreforged.utils.exception import SelfJoinError
 from mcdreforged.utils.types.path_like import PathStr
 
 if TYPE_CHECKING:
@@ -708,18 +710,34 @@ class PluginManager:
 	#   Plugin Event
 	# ----------------
 
-	def dispatch_event(self, event: PluginEvent, args: Tuple[Any, ...], *, submit_for_sync: bool = True, block: bool = False):
+	class DispatchEventPolicy(enum.Enum):
+		directly_invoke = enum.auto()
+		ensure_on_thread = enum.auto()
+		always_new_task = enum.auto()
+
+	def dispatch_event(
+			self, event: PluginEvent, args: Tuple[Any, ...], *,
+			dispatch_policy: DispatchEventPolicy = DispatchEventPolicy.always_new_task, block: bool = False
+	):
 		"""
 		Event dispatching interface
 		"""
 		if self.logger.should_log_debug(DebugOption.PLUGIN):
 			self.logger.mdebug('Dispatching {} with args {}'.format(event, list(args)), no_check=True)
 
+		is_on_executor_thread = self.mcdr_server.task_executor.is_on_thread()
+		should_submit_task = (
+				dispatch_policy == self.DispatchEventPolicy.always_new_task or
+				dispatch_policy == self.DispatchEventPolicy.ensure_on_thread and not is_on_executor_thread
+		)
+		if block and should_submit_task and is_on_executor_thread:
+			raise SelfJoinError()
+
 		future1_list: List[Future[None]] = []
 		future2_list: List[Future[Future[None]]] = []
 		for listener in self.registry_storage.get_event_listeners(event.id):
 			func: Callable[[], Future[None]] = functools.partial(self.trigger_listener, listener, args)
-			if submit_for_sync:
+			if should_submit_task:
 				f2 = self.mcdr_server.task_executor.submit(func, plugin=listener.plugin)
 				future2_list.append(f2)
 			else:
