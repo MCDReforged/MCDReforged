@@ -1,14 +1,19 @@
 import asyncio
 import threading
-from typing import TYPE_CHECKING, Optional, Coroutine, Any, Callable
+from concurrent.futures import Future
+from typing import TYPE_CHECKING, Optional, Coroutine, Any, Callable, TypeVar
 
 from typing_extensions import override
 
-from mcdreforged.executor.task_executor_common import TaskDoneEvent, TaskExecutorBase
+from mcdreforged.executor.task_executor_common import TaskExecutorBase, TaskDoneFuture
+from mcdreforged.utils import future_utils
 
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
 	from mcdreforged.plugin.type.plugin import AbstractPlugin
+
+
+_T = TypeVar('_T')
 
 
 class AsyncTaskExecutor(TaskExecutorBase):
@@ -29,19 +34,22 @@ class AsyncTaskExecutor(TaskExecutorBase):
 		task = asyncio.current_task(self.__event_loop)
 		return getattr(task, '_mcdr_running_plugin', None)
 
-	def submit(self, coro: Coroutine, *, plugin: Optional['AbstractPlugin'] = None) -> threading.Event:
-		done_event = TaskDoneEvent(self.get_thread())
+	def submit(self, coro: Coroutine[Any, Any, _T], *, plugin: Optional['AbstractPlugin'] = None) -> Future[_T]:
+		future = TaskDoneFuture(self.get_thread())
 		if self.__stop_flag:
 			self.logger.warning('Submitting async coroutine to a stopped AsyncTaskExecutor, dropped')
-			done_event.set()
+			future.cancel()
 		else:
+			def task_done_callback(task: asyncio.Task[_T]):
+				future_utils.copy_done_state(task, future)
+
 			def create_task():
 				task = self.__event_loop.create_task(coro)
-				task.add_done_callback(lambda t: done_event.set())
+				task.add_done_callback(task_done_callback)
 				setattr(task, '_mcdr_running_plugin', plugin)
 				self.__submitted_tasks.put_nowait(task)
 			self.call_soon_threadsafe(create_task)
-		return done_event
+		return future
 
 	def call_soon_threadsafe(self, func: Callable[[], Any]):
 		self.__event_loop.call_soon_threadsafe(func)

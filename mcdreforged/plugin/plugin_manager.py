@@ -556,9 +556,9 @@ class PluginManager:
 			def func():
 				self.__run_manipulation(action).add_done_callback(result_future.set_result)
 			result_future = Future()
-			e = self.mcdr_server.task_executor.submit(func)
+			executor_future = self.mcdr_server.task_executor.submit(func)
 			if wait_if_async:
-				e.wait()
+				executor_future.result()
 			return result_future
 
 		with self.__mani_lock:
@@ -718,16 +718,25 @@ class PluginManager:
 		"""
 		if self.logger.should_log_debug(DebugOption.PLUGIN):
 			self.logger.mdebug('Dispatching {} with args {}'.format(event, list(args)), no_check=True)
-		for listener in self.registry_storage.get_event_listeners(event.id):
-			func = functools.partial(self.trigger_listener, listener, args)
-			if submit_for_sync:
-				self.mcdr_server.task_executor.submit(func, plugin=listener.plugin)
-			else:
-				event = func()
-				if block:
-					event.wait()
 
-	def trigger_listener(self, listener: EventListener, args: Tuple[Any, ...]) -> threading.Event:
+		future1_list: List[Future[None]] = []
+		future2_list: List[Future[Future[None]]] = []
+		for listener in self.registry_storage.get_event_listeners(event.id):
+			func: Callable[[], Future[None]] = functools.partial(self.trigger_listener, listener, args)
+			if submit_for_sync:
+				f2 = self.mcdr_server.task_executor.submit(func, plugin=listener.plugin)
+				future2_list.append(f2)
+			else:
+				f1 = func()
+				future1_list.append(f1)
+
+		if block:
+			for f2 in future2_list:
+				future1_list.append(f2.result())
+			for f1 in future1_list:
+				f1.result()
+
+	def trigger_listener(self, listener: EventListener, args: Tuple[Any, ...]) -> Future[None]:
 		"""
 		Event listener triggering entrance which correctly handles sync / async listener callback
 		"""
@@ -736,9 +745,7 @@ class PluginManager:
 			return self.mcdr_server.async_task_executor.submit(coro, plugin=listener.plugin)
 		else:
 			self.__trigger_listener_sync(listener, args)
-			e = threading.Event()
-			e.set()
-			return e
+			return future_utils.completed(None)
 
 	def __trigger_listener_sync(self, listener: EventListener, args: Tuple[Any, ...]):
 		"""

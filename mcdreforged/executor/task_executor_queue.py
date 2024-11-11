@@ -3,12 +3,15 @@ import enum
 import queue
 import threading
 import time
-from typing import Dict, Callable, Optional, TYPE_CHECKING, Any
+from concurrent.futures import Future
+from typing import Dict, Callable, Optional, TYPE_CHECKING, TypeVar, Generic
 
 from mcdreforged.constants import core_constant
 
 if TYPE_CHECKING:
 	from mcdreforged.plugin.type.plugin import AbstractPlugin
+
+_T = TypeVar('_T')
 
 
 class TaskPriority(enum.Enum):
@@ -19,11 +22,11 @@ class TaskPriority(enum.Enum):
 
 
 @dataclasses.dataclass(frozen=True)
-class TaskQueueItem:
-	func: Callable[[], Any]
+class TaskQueueItem(Generic[_T]):
+	func: Callable[[], _T]
 	priority: TaskPriority
-	plugin: Optional['AbstractPlugin'] = None
-	done_event: Optional[threading.Event] = None
+	plugin: Optional['AbstractPlugin']
+	future: Future[_T]
 
 
 class TaskQueue:

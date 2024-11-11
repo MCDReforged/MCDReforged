@@ -296,7 +296,7 @@ class MCDReforgedServer:
 
 	def load_plugins(self):
 		future = self.plugin_manager.refresh_all_plugins()
-		self.logger.info(future.get().to_rtext(self, show_path=True))
+		self.logger.info(future.result().to_rtext(self, show_path=True))
 
 	def on_plugin_registry_changed(self):
 		self.__info_filter_holders.clear()
@@ -624,7 +624,7 @@ class MCDReforgedServer:
 		self.async_task_executor.start()
 		self.preference_manager.load_preferences()
 		self.plugin_manager.register_builtin_plugins()
-		self.task_executor.submit(self.load_plugins).wait()
+		self.task_executor.submit(self.load_plugins).result()
 		self.plugin_manager.dispatch_event(MCDRPluginEvents.MCDR_START, ())
 		if not self.config.disable_console_thread:
 			self.console_handler.start()

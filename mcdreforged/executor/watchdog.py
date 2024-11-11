@@ -1,5 +1,5 @@
-import threading
 import time
+from concurrent.futures import Future
 from contextlib import contextmanager
 from typing import TYPE_CHECKING
 
@@ -9,6 +9,7 @@ from mcdreforged.executor.background_thread_executor import BackgroundThreadExec
 from mcdreforged.executor.task_executor_common import TaskExecutorBase
 from mcdreforged.executor.task_executor_queue import TaskPriority
 from mcdreforged.executor.task_executor_sync import SyncTaskExecutor
+from mcdreforged.utils import future_utils
 
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
@@ -40,15 +41,15 @@ class WatchDog(BackgroundThreadExecutor):
 		finally:
 			self.resume()
 
-	def __wait_event(self, event: threading.Event, timeout: float) -> bool:
+	def __wait_future(self, future: Future, timeout: float) -> bool:
 		n = 5
 		for _ in range(n):
-			if not self.__monitoring or event.wait(timeout / n) or not self.__monitoring:
+			if not self.__monitoring or future_utils.wait(future, timeout / n) or not self.__monitoring:
 				return True
 
 	def __show_executor(self, executor: TaskExecutorBase, no_respond_threshold: float, can_rebuild: bool):
 		plugin = executor.get_running_plugin()
-		thread_name = executor.get_thread().getName()
+		thread_name = executor.get_thread().name
 		self.mcdr_server.logger.warning(self.__tr('task_executor_no_response.line1', thread_name, no_respond_threshold))
 		self.mcdr_server.logger.warning(self.__tr('task_executor_no_response.line2', thread_name, plugin))
 
@@ -62,8 +63,8 @@ class WatchDog(BackgroundThreadExecutor):
 
 	def __check_sync_task_executor(self, no_respond_threshold: float):
 		executor = self.mcdr_server.task_executor
-		event = executor.submit(lambda: None, priority=TaskPriority.HIGH)
-		if self.__wait_event(event, no_respond_threshold):
+		future = executor.submit(lambda: None, priority=TaskPriority.HIGH)
+		if self.__wait_future(future, no_respond_threshold):
 			return
 
 		self.__show_executor(executor, no_respond_threshold, True)
@@ -78,10 +79,10 @@ class WatchDog(BackgroundThreadExecutor):
 
 	def __check_async_task_executor(self, no_respond_threshold: float):
 		executor = self.mcdr_server.async_task_executor
-		event = threading.Event()
-		executor.call_soon_threadsafe(event.set)
+		future = Future()
+		executor.call_soon_threadsafe(future.cancel)
 
-		if self.__wait_event(event, no_respond_threshold):
+		if self.__wait_future(future, no_respond_threshold):
 			return
 
 		self.__show_executor(executor, no_respond_threshold, False)

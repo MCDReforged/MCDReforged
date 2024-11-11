@@ -52,7 +52,7 @@ class BackgroundThreadExecutor:
 	def set_name(self, name: str):
 		self.__name = name
 		if (thread := self._executor_thread) is not None:
-			thread.setName(name)
+			thread.name = name
 
 	def loop(self):
 		while self.should_keep_looping():

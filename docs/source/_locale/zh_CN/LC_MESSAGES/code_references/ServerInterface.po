@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-26 18:05+0800\n"
+"POT-Creation-Date: 2024-11-12 16:25+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1213,7 +1213,7 @@ msgstr "异步任务执行者线程，是触发所有异步的监听器回调的
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.get_event_loop:5
 #: mcdreforged.plugin.si.server_interface.ServerInterface.is_on_async_executor_thread:6
-#: mcdreforged.plugin.si.server_interface.ServerInterface.schedule_task:11 of
+#: mcdreforged.plugin.si.server_interface.ServerInterface.schedule_task:13 of
 msgid "Beta API"
 msgstr "(Beta API)"
 
@@ -1263,4 +1263,8 @@ msgid ""
 msgstr ""
 "*callback* 参数支持 :external:func:`协程对象 <inspect.iscoroutine>` 或 "
 ":external:func:`协程函数 <inspect.iscoroutinefunction>`"
+
+#: mcdreforged.plugin.si.server_interface.ServerInterface.schedule_task:11 of
+msgid "The return value is now a :external:class:`~concurrent.futures.Future`"
+msgstr "返回值现为一个 :external:class:`~concurrent.futures.Future`"
 

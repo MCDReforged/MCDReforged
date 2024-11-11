@@ -5,7 +5,7 @@ import logging
 import threading
 from concurrent.futures import Future
 from pathlib import Path
-from typing import Callable, TYPE_CHECKING, Tuple, Any, Union, Optional, List, Dict, overload, Literal, Coroutine
+from typing import Callable, TYPE_CHECKING, Tuple, Any, Union, Optional, List, Dict, overload, Literal, Coroutine, TypeVar
 
 import psutil
 
@@ -25,7 +25,7 @@ from mcdreforged.plugin.type.common import PluginType
 from mcdreforged.plugin.type.plugin import AbstractPlugin
 from mcdreforged.preference.preference_manager import PreferenceItem
 from mcdreforged.translation.translation_text import RTextMCDRTranslation
-from mcdreforged.utils import misc_utils, file_utils, class_utils
+from mcdreforged.utils import misc_utils, file_utils, class_utils, future_utils
 from mcdreforged.utils.exception import IllegalCallError
 from mcdreforged.utils.types.message import MessageText
 from mcdreforged.utils.types.path_like import PathStr
@@ -36,6 +36,9 @@ if TYPE_CHECKING:
 	from mcdreforged.plugin.plugin_manager import PluginManager
 	from mcdreforged.plugin.si.plugin_server_interface import PluginServerInterface
 	from mcdreforged.plugin.type.regular_plugin import RegularPlugin
+
+
+_T = TypeVar('_T')
 
 
 class ServerInterface:
@@ -704,7 +707,7 @@ class ServerInterface:
 		# are required to be triggered serially. The listener callback might be an async function,
 		# meaning that we need to be on the non-AsyncTaskExecutor thread to blockingly invoke it.
 		if self.is_on_async_executor_thread():
-			raise RuntimeError('You can not perform plugin operations directly on the {} thread'.format(threading.current_thread().getName()))
+			raise RuntimeError('You can not perform plugin operations directly on the {} thread'.format(threading.current_thread().name))
 
 	def load_plugin(self, plugin_file_path: str) -> bool:
 		"""
@@ -1101,7 +1104,10 @@ class ServerInterface:
 		"""
 		return self._mcdr_server.rcon_manager.send_command(command)
 
-	def schedule_task(self, callable_: Union[Callable[[], Any], Coroutine], *, block: bool = False, timeout: Optional[float] = None) -> threading.Event:
+	def schedule_task(
+			self, callable_: Union[Callable[[], _T], Coroutine[Any, Any, _T]], *,
+			block: bool = False, timeout: Optional[float] = None
+	) -> Future[_T]:
 		"""
 		Schedule a callback task to be run in task executor / async task executor thread
 
@@ -1113,16 +1119,18 @@ class ServerInterface:
 			The *callback* param now supports :external:func:`coroutine object <inspect.iscoroutine>`
 			or :external:func:`coroutine function <inspect.iscoroutinefunction>`
 
+			The return value is now a :external:class:`~concurrent.futures.Future`
+
 		.. warning:: Beta API
 		"""
 		if inspect.iscoroutine(callable_):
-			event = self._mcdr_server.async_task_executor.submit(callable_)
+			future = self._mcdr_server.async_task_executor.submit(callable_)
 		elif inspect.iscoroutinefunction(callable_):
-			event = self._mcdr_server.async_task_executor.submit(callable_())
+			future = self._mcdr_server.async_task_executor.submit(callable_())
 		elif callable(callable_):
-			event = self._mcdr_server.task_executor.submit(callable_)
+			future = self._mcdr_server.task_executor.submit(callable_)
 		else:
 			raise TypeError(type(callable_))
 		if block:
-			event.wait(timeout=timeout)
-		return event
+			future_utils.wait(future, timeout)
+		return future
