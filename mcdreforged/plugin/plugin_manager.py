@@ -12,7 +12,7 @@ from contextvars import ContextVar
 from pathlib import Path
 from typing import Callable, Dict, Optional, Any, Tuple, List, TYPE_CHECKING
 
-from mcdreforged.constants import core_constant, plugin_constant
+from mcdreforged.constants import plugin_constant
 from mcdreforged.logging.debug_option import DebugOption
 from mcdreforged.mcdr_config import MCDReforgedConfig
 from mcdreforged.plugin import plugin_factory
@@ -23,7 +23,6 @@ from mcdreforged.plugin.meta.dependency_walker import DependencyWalker
 from mcdreforged.plugin.operation_result import PluginOperationResult, SingleOperationResult
 from mcdreforged.plugin.plugin_event import MCDRPluginEvents, EventListener, PluginEvent
 from mcdreforged.plugin.plugin_registry import PluginRegistryStorage
-from mcdreforged.plugin.plugin_thread import PluginThreadPool
 from mcdreforged.plugin.type.builtin_plugin import BuiltinPlugin
 from mcdreforged.plugin.type.common import PluginState
 from mcdreforged.plugin.type.plugin import AbstractPlugin
@@ -50,9 +49,6 @@ class PluginManager:
 		self.__plugin_file_paths: Dict[Path, str] = {}
 		# storage for event listeners, help messages and commands
 		self.registry_storage = PluginRegistryStorage(self)
-
-		# not used currently
-		self.__thread_pool = PluginThreadPool(self.mcdr_server, max_thread=core_constant.PLUGIN_THREAD_POOL_SIZE)
 
 		# thread local storage, to store current plugin
 		self.__current_plugin: ContextVar[Optional[AbstractPlugin]] = ContextVar('tls', default=None)
