@@ -410,6 +410,8 @@ class MCDReforgedServer:
 			if not os.path.isdir(cwd):
 				self.logger.error(self.__tr('start_server.cwd_not_existed', cwd))
 				return False
+
+			self.__on_server_start_pre()
 			start_command = self.config.start_command
 			self.logger.info(self.__tr('start_server.starting', repr(start_command)))
 			try:
@@ -425,7 +427,7 @@ class MCDReforgedServer:
 				self.logger.exception(self.__tr('start_server.start_fail'))
 				return False
 			else:
-				self.__on_server_start()
+				self.__on_server_start_post()
 				return True
 
 	def __kill_server(self):
@@ -490,7 +492,11 @@ class MCDReforgedServer:
 	#      Server Logics
 	# --------------------------
 
-	def __on_server_start(self):
+	def __on_server_start_pre(self):
+		# we might be on the task executor thread, so we cannot use policy=always_new_task with block=True, or self-join will happen
+		self.plugin_manager.dispatch_event(MCDRPluginEvents.SERVER_START_PRE, (), dispatch_policy=self.plugin_manager.DispatchEventPolicy.ensure_on_thread, block=True)
+
+	def __on_server_start_post(self):
 		self.set_server_state(ServerState.RUNNING)
 		self.add_flag(MCDReforgedFlag.EXIT_AFTER_STOP)  # Set after server state is set to RUNNING, or MCDR might have a chance to exit if the server is started by other thread
 		self.logger.info(self.__tr('start_server.pid_info', self.process.pid))

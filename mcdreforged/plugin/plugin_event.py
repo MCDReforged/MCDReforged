@@ -70,6 +70,7 @@ class MCDRPluginEvents:
 	GENERAL_INFO = MCDREvent('mcdr.general_info', 'on_info')
 	USER_INFO = MCDREvent('mcdr.user_info', 'on_user_info')
 
+	SERVER_START_PRE = MCDREvent('mcdr.server_start_pre', 'on_server_start_pre')
 	SERVER_START = MCDREvent('mcdr.server_start', 'on_server_start')
 	SERVER_STARTUP = MCDREvent('mcdr.server_startup', 'on_server_startup')
 	SERVER_STOP = MCDREvent('mcdr.server_stop', 'on_server_stop')

@@ -34,7 +34,7 @@ MCDR Event List
 
 To help understand, some MCDR events can be sorted into 3 lifecycle flows:
 
-* Plugin lifecycle: :ref:`plugin_dev/event:Plugin Loaded` -> :ref:`plugin_dev/event:Plugin Unloaded`
+* Plugin lifecycle: :ref:`plugin_dev/event:Plugin Loaded` -> :ref:`plugin_dev/event:Plugin Unloaded`. They are the first and lasts event a plugin will receive
 * Server lifecycle: :ref:`plugin_dev/event:Server Start` -> :ref:`plugin_dev/event:Server Startup` -> :ref:`plugin_dev/event:Server Stop`
 * MCDR lifecycle: :ref:`plugin_dev/event:MCDR Start` -> :ref:`plugin_dev/event:MCDR Stop`
 
@@ -138,19 +138,29 @@ I will suggest you to register a command tree for you plugin. See the :ref:`comm
 :Callback arguments: :class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`, :class:`~mcdreforged.info_reactor.info.Info`
 :Default function name: ``on_user_info``
 
-.. _event-server-start:
+Server Start Pre
+~~~~~~~~~~~~~~~~
+
+The server process is about to be started by MCDR
+
+.. note::
+
+    Blocking event. MCDR will wait until all events finished their callbacks to continue executing
+
+
+:Event id: ``mcdr.server_start_pre``
+:Callback arguments: :class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`
+:Default function name: ``on_server_start_pre``
 
 Server Start
 ~~~~~~~~~~~~
 
-The server process is just started by MCDR
+The server process has just been started by MCDR
 
 
 :Event id: ``mcdr.server_start``
 :Callback arguments: :class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`
 :Default function name: ``on_server_start``
-
-.. _event-server-startup:
 
 Server Startup
 ~~~~~~~~~~~~~~
@@ -162,14 +172,14 @@ The server has fully started up. For example, a vanilla Minecraft server outputs
 :Callback arguments: :class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`
 :Default function name: ``on_server_startup``
 
-.. _event-server-stop:
-
 Server Stop
 ~~~~~~~~~~~
 
 The server process stops. You can do something depends on the process return code
 
-MCDR will wait until all events finished their callbacks to continue executing
+.. note::
+
+    Blocking event. MCDR will wait until all events finished their callbacks to continue executing
 
 Example:
 
@@ -184,8 +194,6 @@ Example:
 :Callback arguments: :class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`, :class:`int`
 :Default function name: ``on_server_stop``
 
-.. _event-mcdr-start:
-
 MCDR Start
 ~~~~~~~~~~
 
@@ -196,14 +204,14 @@ The MCDR is starting. Only plugins which is loaded with MCDR is able to receive 
 :Callback arguments: :class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`
 :Default function name: ``on_mcdr_start``
 
-.. _event-mcdr-stop:
-
 MCDR Stop
 ~~~~~~~~~
 
 The MCDR is stopping. Time to do some clean up
 
-MCDR will wait until all events finished their callbacks to continue executing
+.. note::
+
+    Blocking event. MCDR will wait until all events finished their callbacks to continue executing
 
 Watchdog is disabled during this event dispatching, so you can safely block MCDR here to wait until your cleanup codes finishes
 
@@ -211,8 +219,6 @@ Watchdog is disabled during this event dispatching, so you can safely block MCDR
 :Event id: ``mcdr.mcdr_stop``
 :Callback arguments: :class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`
 :Default function name: ``on_mcdr_stop``
-
-.. _event-player-joined:
 
 Player Joined
 ~~~~~~~~~~~~~
@@ -230,8 +236,6 @@ Example:
 :Event id: ``mcdr.player_joined``
 :Callback arguments: :class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`, :class:`str`, :class:`~mcdreforged.info_reactor.info.Info`
 :Default function name: ``on_player_joined``
-
-.. _event-player-left:
 
 Player Left
 ~~~~~~~~~~~

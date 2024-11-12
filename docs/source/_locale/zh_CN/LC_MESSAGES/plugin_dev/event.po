@@ -3,12 +3,12 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-14 21:26+0800\n"
+"POT-Creation-Date: 2024-11-12 16:25+0800\n"
 "PO-Revision-Date: 2021-01-23 12:20+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
 "Language-Team: Chinese Simplified\n"
-"Plural-Forms: nplurals=1; plural=0\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -85,10 +85,11 @@ msgstr "为了助于理解，一些 MCDR 的事件可被划分为三个生命周
 #: ../plugin_dev/event.rst:37
 msgid ""
 "Plugin lifecycle: :ref:`plugin_dev/event:Plugin Loaded` -> "
-":ref:`plugin_dev/event:Plugin Unloaded`"
+":ref:`plugin_dev/event:Plugin Unloaded`. They are the first and lasts "
+"event a plugin will receive"
 msgstr ""
 "插件生命周期：:ref:`plugin_dev/event:Plugin Loaded` -> "
-":ref:`plugin_dev/event:Plugin Unloaded`"
+":ref:`plugin_dev/event:Plugin Unloaded`。它们是插件接收到的第一个和最后一个事件"
 
 #: ../plugin_dev/event.rst:38
 msgid ""
@@ -157,11 +158,11 @@ msgstr "回调参数"
 
 #: ../plugin_dev/event.rst:77
 msgid ""
-":class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`, "
-":class:`Any` (previous module)"
+":class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`,"
+" :class:`Any` (previous module)"
 msgstr ""
-":class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`, "
-":class:`Any` (之前的模块)"
+":class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`,"
+" :class:`Any` (之前的模块)"
 
 #: ../plugin_dev/event.rst
 msgid "Default function name"
@@ -191,9 +192,9 @@ msgstr "除此之外，在 MCDR 关闭过程中，该事件也将被派发，因
 msgid "``mcdr.plugin_unloaded``"
 msgstr "``mcdr.plugin_unloaded``"
 
-#: ../plugin_dev/event.rst:90 ../plugin_dev/event.rst:150
-#: ../plugin_dev/event.rst:162 ../plugin_dev/event.rst:196
-#: ../plugin_dev/event.rst:212
+#: ../plugin_dev/event.rst:90 ../plugin_dev/event.rst:152
+#: ../plugin_dev/event.rst:162 ../plugin_dev/event.rst:172
+#: ../plugin_dev/event.rst:204 ../plugin_dev/event.rst:220
 msgid ":class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`"
 msgstr ""
 
@@ -225,11 +226,11 @@ msgstr "``mcdr.general_info``"
 
 #: ../plugin_dev/event.rst:111 ../plugin_dev/event.rst:138
 msgid ""
-":class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`, "
-":class:`~mcdreforged.info_reactor.info.Info`"
+":class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`,"
+" :class:`~mcdreforged.info_reactor.info.Info`"
 msgstr ""
-":class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`, "
-":class:`~mcdreforged.info_reactor.info.Info`"
+":class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`,"
+" :class:`~mcdreforged.info_reactor.info.Info`"
 
 #: ../plugin_dev/event.rst:112
 msgid "``on_info``"
@@ -272,27 +273,50 @@ msgstr "``mcdr.user_info``"
 msgid "``on_user_info``"
 msgstr "``on_user_info``"
 
+#: ../plugin_dev/event.rst:142
+msgid "Server Start Pre"
+msgstr "服务端启动前"
+
 #: ../plugin_dev/event.rst:144
+msgid "The server process is about to be started by MCDR"
+msgstr "服务端进程准备被 MCDR 启动"
+
+#: ../plugin_dev/event.rst:148 ../plugin_dev/event.rst:182
+#: ../plugin_dev/event.rst:214
+msgid ""
+"Blocking event. MCDR will wait until all events finished their callbacks "
+"to continue executing"
+msgstr "阻塞型事件。MCDR 将等待所有派发的事件触发的回调函数运行完成，再继续运行下去"
+
+#: ../plugin_dev/event.rst:151
+msgid "``mcdr.server_start_pre``"
+msgstr "``mcdr.server_start_pre``"
+
+#: ../plugin_dev/event.rst:153
+msgid "``on_server_start_pre``"
+msgstr "``on_server_start_pre``"
+
+#: ../plugin_dev/event.rst:156
 msgid "Server Start"
 msgstr "服务端启动"
 
-#: ../plugin_dev/event.rst:146
-msgid "The server process is just started by MCDR"
-msgstr "服务端进程刚被 MCDR 启动时触发"
+#: ../plugin_dev/event.rst:158
+msgid "The server process has just been started by MCDR"
+msgstr "服务端进程刚被 MCDR 启动"
 
-#: ../plugin_dev/event.rst:149
+#: ../plugin_dev/event.rst:161
 msgid "``mcdr.server_start``"
 msgstr "``mcdr.server_start``"
 
-#: ../plugin_dev/event.rst:151
+#: ../plugin_dev/event.rst:163
 msgid "``on_server_start``"
 msgstr "``on_server_start``"
 
-#: ../plugin_dev/event.rst:156
+#: ../plugin_dev/event.rst:166
 msgid "Server Startup"
 msgstr "服务端启动完成"
 
-#: ../plugin_dev/event.rst:158
+#: ../plugin_dev/event.rst:168
 msgid ""
 "The server has fully started up. For example, a vanilla Minecraft server "
 "outputs ``Done (1.0s)! For help, type \"help\"``"
@@ -300,148 +324,142 @@ msgstr ""
 "服务器已完全启动时——例如，原版 Minecraft 服务器输出 ``Done (1.0s)! For help, type \"help\"``"
 " 时——被触发"
 
-#: ../plugin_dev/event.rst:161
+#: ../plugin_dev/event.rst:171
 msgid "``mcdr.server_startup``"
 msgstr "``mcdr.server_startup``"
 
-#: ../plugin_dev/event.rst:163
+#: ../plugin_dev/event.rst:173
 msgid "``on_server_startup``"
 msgstr "``on_server_startup``"
 
-#: ../plugin_dev/event.rst:168
+#: ../plugin_dev/event.rst:176
 msgid "Server Stop"
 msgstr "服务端终止"
 
-#: ../plugin_dev/event.rst:170
+#: ../plugin_dev/event.rst:178
 msgid ""
 "The server process stops. You can do something depends on the process "
 "return code"
 msgstr "服务端进程终止。你可以通过判断进程的返回码执行不同操作"
 
-#: ../plugin_dev/event.rst:172 ../plugin_dev/event.rst:206
-msgid ""
-"MCDR will wait until all events finished their callbacks to continue "
-"executing"
-msgstr "MCDR 将等待所有派发的事件触发的回调函数运行完成，再继续运行下去"
-
-#: ../plugin_dev/event.rst:174 ../plugin_dev/event.rst:222
+#: ../plugin_dev/event.rst:184 ../plugin_dev/event.rst:228
 msgid "Example:"
 msgstr "例如："
 
-#: ../plugin_dev/event.rst:183
+#: ../plugin_dev/event.rst:193
 msgid "``mcdr.server_stop``"
 msgstr "``mcdr.server_stop``"
 
-#: ../plugin_dev/event.rst:184
+#: ../plugin_dev/event.rst:194
 msgid ""
-":class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`, "
-":class:`int`"
+":class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`,"
+" :class:`int`"
 msgstr ""
-":class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`, "
-":class:`int`"
+":class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`,"
+" :class:`int`"
 
-#: ../plugin_dev/event.rst:185
+#: ../plugin_dev/event.rst:195
 msgid "``on_server_stop``"
 msgstr "``on_server_stop``"
 
-#: ../plugin_dev/event.rst:190
+#: ../plugin_dev/event.rst:198
 msgid "MCDR Start"
 msgstr "MCDR 启动"
 
-#: ../plugin_dev/event.rst:192
+#: ../plugin_dev/event.rst:200
 msgid ""
 "The MCDR is starting. Only plugins which is loaded with MCDR is able to "
 "receive this event"
 msgstr "MCDR 正在启动。只有成功加载的插件才能接收此事件"
 
-#: ../plugin_dev/event.rst:195
+#: ../plugin_dev/event.rst:203
 msgid "``mcdr.mcdr_start``"
 msgstr "``mcdr.mcdr_start``"
 
-#: ../plugin_dev/event.rst:197
+#: ../plugin_dev/event.rst:205
 msgid "``on_mcdr_start``"
 msgstr "``on_mcdr_start``"
 
-#: ../plugin_dev/event.rst:202
+#: ../plugin_dev/event.rst:208
 msgid "MCDR Stop"
 msgstr "MCDR 终止"
 
-#: ../plugin_dev/event.rst:204
+#: ../plugin_dev/event.rst:210
 msgid "The MCDR is stopping. Time to do some clean up"
 msgstr "MCDR 正在关闭，该做一些清理工作了"
 
-#: ../plugin_dev/event.rst:208
+#: ../plugin_dev/event.rst:216
 msgid ""
 "Watchdog is disabled during this event dispatching, so you can safely "
 "block MCDR here to wait until your cleanup codes finishes"
 msgstr "Watchdog 在这个过程中将会被临时禁用，因此你可以放心地在这里阻塞 MCDR 至你的清理操作结束"
 
-#: ../plugin_dev/event.rst:211
+#: ../plugin_dev/event.rst:219
 msgid "``mcdr.mcdr_stop``"
 msgstr "``mcdr.mcdr_stop``"
 
-#: ../plugin_dev/event.rst:213
+#: ../plugin_dev/event.rst:221
 msgid "``on_mcdr_stop``"
 msgstr "``on_mcdr_stop``"
 
-#: ../plugin_dev/event.rst:218
+#: ../plugin_dev/event.rst:224
 msgid "Player Joined"
 msgstr "玩家加入"
 
-#: ../plugin_dev/event.rst:220
+#: ../plugin_dev/event.rst:226
 msgid ""
 "A player just joined the game. MCDR only parses the name of the player to"
 " a string, plugin can use the info instance for more custom information "
 "parsing"
 msgstr "一名玩家加入了游戏。MCDR 仅将玩家的名称解析为字符串，插件可以使用返回的 ``Info`` 实例进行更多自定义信息解析"
 
-#: ../plugin_dev/event.rst:230
+#: ../plugin_dev/event.rst:236
 msgid "``mcdr.player_joined``"
 msgstr "``mcdr.player_joined``"
 
-#: ../plugin_dev/event.rst:231
+#: ../plugin_dev/event.rst:237
 msgid ""
-":class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`, "
-":class:`str`, :class:`~mcdreforged.info_reactor.info.Info`"
+":class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`,"
+" :class:`str`, :class:`~mcdreforged.info_reactor.info.Info`"
 msgstr ""
-":class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`, "
-":class:`str`, :class:`~mcdreforged.info_reactor.info.Info`"
+":class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`,"
+" :class:`str`, :class:`~mcdreforged.info_reactor.info.Info`"
 
-#: ../plugin_dev/event.rst:232
+#: ../plugin_dev/event.rst:238
 msgid "``on_player_joined``"
 msgstr "``on_player_joined``"
 
-#: ../plugin_dev/event.rst:237
+#: ../plugin_dev/event.rst:241
 msgid "Player Left"
 msgstr "玩家离开"
 
-#: ../plugin_dev/event.rst:239
+#: ../plugin_dev/event.rst:243
 msgid ""
 "A player just left the game. Plugin can do cleanups for player related "
 "objects"
 msgstr "一名玩家离开了游戏。插件可以清理与玩家相关的对象"
 
-#: ../plugin_dev/event.rst:242
+#: ../plugin_dev/event.rst:246
 msgid "``mcdr.player_left``"
 msgstr "``mcdr.player_left``"
 
-#: ../plugin_dev/event.rst:243
+#: ../plugin_dev/event.rst:247
 msgid ""
-":class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`, "
-":class:`str`"
+":class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`,"
+" :class:`str`"
 msgstr ""
-":class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`, "
-":class:`str`"
+":class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`,"
+" :class:`str`"
 
-#: ../plugin_dev/event.rst:244
+#: ../plugin_dev/event.rst:248
 msgid "``on_player_left``"
 msgstr "``on_player_left``"
 
-#: ../plugin_dev/event.rst:247
+#: ../plugin_dev/event.rst:251
 msgid "Custom Event"
 msgstr "自定义事件"
 
-#: ../plugin_dev/event.rst:249
+#: ../plugin_dev/event.rst:253
 msgid ""
 "Besides MCDR itself, plugins can also dispatch its own event. All you "
 "need to do is invoking "
@@ -452,9 +470,10 @@ msgstr ""
 ":meth:`ServerInterface.dispatch_event<mcdreforged.plugin.si.server_interface.ServerInterface.dispatch_event>`"
 " API"
 
-#: ../plugin_dev/event.rst:252
+#: ../plugin_dev/event.rst:256
 msgid ""
 "Customizing event is a good way to broadcast a message between plugins. "
 "It's also a good indirectly way for your plugin to react to requests from"
 " other plugins"
 msgstr "自定义事件是在插件之间传递消息的好办法。这也是一种不错的间接让插件响应其他插件请求的方式"
+
