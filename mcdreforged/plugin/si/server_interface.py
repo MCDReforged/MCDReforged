@@ -663,7 +663,7 @@ class ServerInterface:
 	def __not_loaded_regular_plugin_manipulate(
 			self,
 			plugin_file_path: PathStr,
-			handler: Callable[['PluginManager'], Callable[[Path], Future[PluginOperationResult]]]
+			handler: Callable[['PluginManager'], Callable[[Path], 'Future[PluginOperationResult]']]
 	) -> bool:
 		"""
 		Manipulate a not loaded regular plugin from a given file path
@@ -672,7 +672,7 @@ class ServerInterface:
 		:return: If success
 		"""
 		plugin_file_path = Path(plugin_file_path)
-		future: Future[PluginOperationResult] = handler(self._plugin_manager)(plugin_file_path)
+		future: 'Future[PluginOperationResult]' = handler(self._plugin_manager)(plugin_file_path)
 		if future.done():
 			return future.result().get_if_success(PluginResultType.LOAD)  # the operations are always loading a plugin
 		else:
@@ -681,7 +681,7 @@ class ServerInterface:
 	def __existed_regular_plugin_manipulate(
 			self,
 			plugin_id: str,
-			handler: Callable[['PluginManager'], Callable[['RegularPlugin'], Future[PluginOperationResult]]],
+			handler: Callable[['PluginManager'], Callable[['RegularPlugin'], 'Future[PluginOperationResult]']],
 			result_type: PluginResultType
 	) -> Optional[bool]:
 		"""
@@ -1112,7 +1112,7 @@ class ServerInterface:
 	def schedule_task(
 			self, callable_: Union[Callable[[], _T], Coroutine[Any, Any, _T]], *,
 			block: bool = False, timeout: Optional[float] = None
-	) -> Future[_T]:
+	) -> 'Future[_T]':
 		"""
 		Schedule a callback task to be run in task executor / async task executor thread
 

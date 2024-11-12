@@ -540,7 +540,7 @@ class PluginManager:
 	#   Interfaces
 	# --------------
 
-	def __run_manipulation(self, action: Callable[[], PluginOperationResult], *, wait_if_async: bool = True) -> Future[PluginOperationResult]:
+	def __run_manipulation(self, action: Callable[[], PluginOperationResult], *, wait_if_async: bool = True) -> 'Future[PluginOperationResult]':
 		"""
 		Async manipulations: Submit to the task executor, then wait until the execution finished
 
@@ -560,7 +560,7 @@ class PluginManager:
 			return result_future
 
 		with self.__mani_lock:
-			future: Future[PluginOperationResult] = Future()
+			future: 'Future[PluginOperationResult]' = Future()
 			self.__mani_queue.put((action, future))
 			if self.__mani_thread != threading.current_thread():
 				self.__mani_thread = threading.current_thread()
@@ -589,7 +589,7 @@ class PluginManager:
 			disable: Optional[List[RegularPlugin]] = None,
 			try_load_indirect_unloaded: bool = True,
 			entered_callback: Optional[Callable[[], Any]] = None,
-	) -> Future[PluginOperationResult]:
+	) -> 'Future[PluginOperationResult]':
 		to_load_paths: List[Path] = (load or []).copy()
 		to_unload_plugins: List[RegularPlugin] = (unload or []) + (disable or [])
 		to_reload_plugins: List[RegularPlugin] = (reload or []).copy()
@@ -642,7 +642,7 @@ class PluginManager:
 			reload_result = self.__reload_ready_plugins(is_to_reload_plugin)
 			return self.__finalize_plugin_manipulation(load_result, unload_result.result, reload_result)
 
-		def done_callback(_: Future[PluginOperationResult]):
+		def done_callback(_: 'Future[PluginOperationResult]'):
 			for plg in (disable or []):
 				if plg.file_exists():
 					disabled_path = plg.plugin_path.parent / (plg.plugin_path.name + plugin_constant.DISABLED_PLUGIN_FILE_SUFFIX)
@@ -654,7 +654,7 @@ class PluginManager:
 		future.add_done_callback(done_callback)
 		return future
 
-	def load_plugin(self, file_path: Path) -> Future[PluginOperationResult]:
+	def load_plugin(self, file_path: Path) -> 'Future[PluginOperationResult]':
 		class_utils.check_type(file_path, Path)
 
 		def equals_to_the_given_path(fp: Path) -> bool:
@@ -665,38 +665,38 @@ class PluginManager:
 			entered_callback=lambda: self.logger.info(self.__tr('load_plugin.entered', file_path)),
 		)
 
-	def unload_plugin(self, plugin: RegularPlugin) -> Future[PluginOperationResult]:
+	def unload_plugin(self, plugin: RegularPlugin) -> 'Future[PluginOperationResult]':
 		class_utils.check_type(plugin, RegularPlugin)
 		return self.manipulate_plugins(
 			unload=[plugin],
 			entered_callback=lambda: self.logger.info(self.__tr('unload_plugin.entered', plugin)),
 		)
 
-	def reload_plugin(self, plugin: RegularPlugin) -> Future[PluginOperationResult]:
+	def reload_plugin(self, plugin: RegularPlugin) -> 'Future[PluginOperationResult]':
 		class_utils.check_type(plugin, RegularPlugin)
 		return self.manipulate_plugins(
 			reload=[plugin],
 			entered_callback=lambda: self.logger.info(self.__tr('reload_plugin.entered', plugin)),
 		)
 
-	def enable_plugin(self, file_path: Path) -> Future[PluginOperationResult]:
+	def enable_plugin(self, file_path: Path) -> 'Future[PluginOperationResult]':
 		class_utils.check_type(file_path, Path)
 		self.logger.info(self.__tr('enable_plugin.entered', file_path))
 		return self.manipulate_plugins(enable=[file_path])
 
-	def disable_plugin(self, plugin: RegularPlugin) -> Future[PluginOperationResult]:
+	def disable_plugin(self, plugin: RegularPlugin) -> 'Future[PluginOperationResult]':
 		class_utils.check_type(plugin, RegularPlugin)
 		self.logger.info(self.__tr('disable_plugin.entered', plugin))
 		return self.manipulate_plugins(disable=[plugin])
 
-	def refresh_all_plugins(self) -> Future[PluginOperationResult]:
+	def refresh_all_plugins(self) -> 'Future[PluginOperationResult]':
 		def refresh_all_plugins_action() -> PluginOperationResult:
 			self.logger.info(self.__tr('refresh_all_plugins.entered'))
 			return self.__refresh_plugins(function_utils.TRUE)
 
 		return self.__run_manipulation(refresh_all_plugins_action)
 
-	def refresh_changed_plugins(self) -> Future[PluginOperationResult]:
+	def refresh_changed_plugins(self) -> 'Future[PluginOperationResult]':
 		def reload_filter(plg: RegularPlugin):
 			return plg.file_changed()
 
@@ -733,10 +733,10 @@ class PluginManager:
 		if block and should_submit_task and is_on_executor_thread:
 			raise SelfJoinError()
 
-		future1_list: List[Future[None]] = []
-		future2_list: List[Future[Future[None]]] = []
+		future1_list: List['Future[None]'] = []
+		future2_list: List['Future[Future[None]]'] = []
 		for listener in self.registry_storage.get_event_listeners(event.id):
-			func: Callable[[], Future[None]] = functools.partial(self.trigger_listener, listener, args)
+			func: Callable[[], 'Future[None]'] = functools.partial(self.trigger_listener, listener, args)
 			if should_submit_task:
 				f2 = self.mcdr_server.task_executor.submit(func, plugin=listener.plugin)
 				future2_list.append(f2)
@@ -750,7 +750,7 @@ class PluginManager:
 			for f1 in future1_list:
 				f1.result()
 
-	def trigger_listener(self, listener: EventListener, args: Tuple[Any, ...]) -> Future[None]:
+	def trigger_listener(self, listener: EventListener, args: Tuple[Any, ...]) -> 'Future[None]':
 		"""
 		Event listener triggering entrance which correctly handles sync / async listener callback
 		"""

@@ -105,9 +105,9 @@ class SubCommand(ABC):
 		for line in self.mcdr_plugin.get_help_message(source, translation_key):
 			source.reply(line)
 
-	def _print_plugin_operation_result_if_no_error(self, source: CommandSource, ret: FunctionCallResult[Future[PluginOperationResult]]):
+	def _print_plugin_operation_result_if_no_error(self, source: CommandSource, ret: FunctionCallResult['Future[PluginOperationResult]']):
 		if ret.no_error:
-			def reply(fut: Future[PluginOperationResult]):
+			def reply(fut: 'Future[PluginOperationResult]'):
 				source.reply(fut.result().to_rtext(self.mcdr_server, show_path=source.has_permission(PermissionLevel.PHYSICAL_SERVER_CONTROL_LEVEL)))
 			ret.return_value.add_done_callback(reply)
 

@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 _T = TypeVar('_T')
 
 
-class TaskDoneFuture(Future[_T]):
+class TaskDoneFuture(Future):
 	def __init__(self, runner_thread: threading.Thread):
 		super().__init__()
 		if not isinstance(runner_thread, threading.Thread):

@@ -34,13 +34,13 @@ class AsyncTaskExecutor(TaskExecutorBase):
 		task = asyncio.current_task(self.__event_loop)
 		return getattr(task, '_mcdr_running_plugin', None)
 
-	def submit(self, coro: Coroutine[Any, Any, _T], *, plugin: Optional['AbstractPlugin'] = None) -> Future[_T]:
+	def submit(self, coro: Coroutine[Any, Any, _T], *, plugin: Optional['AbstractPlugin'] = None) -> 'Future[_T]':
 		future = TaskDoneFuture(self.get_thread())
 		if self.__stop_flag:
 			self.logger.warning('Submitting async coroutine to a stopped AsyncTaskExecutor, dropped')
 			future.cancel()
 		else:
-			def task_done_callback(task: asyncio.Task[_T]):
+			def task_done_callback(task: 'asyncio.Task[_T]'):
 				future_utils.copy_done_state(task, future)
 
 			def create_task():

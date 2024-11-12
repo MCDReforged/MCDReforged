@@ -26,7 +26,7 @@ class TaskQueueItem(Generic[_T]):
 	func: Callable[[], _T]
 	priority: TaskPriority
 	plugin: Optional['AbstractPlugin']
-	future: Future[_T]
+	future: 'Future[_T]'
 
 
 class TaskQueue:

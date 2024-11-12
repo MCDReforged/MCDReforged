@@ -44,7 +44,7 @@ class SyncTaskExecutor(TaskExecutorBase):
 	def submit(
 			self, func: Callable[[], _T], *,
 			priority: TaskPriority = TaskPriority.REGULAR, raise_if_full: bool = False, plugin: Optional['AbstractPlugin'] = None
-	) -> Future[_T]:
+	) -> 'Future[_T]':
 		future = TaskDoneFuture(self.get_thread())
 		item = TaskQueueItem(func, priority, plugin=plugin, future=future)
 		self.__task_queue.put(item, block=not raise_if_full)

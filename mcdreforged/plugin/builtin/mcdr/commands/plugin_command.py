@@ -153,12 +153,12 @@ class PluginCommand(SubCommand):
 				source.reply(meta.get_description_rtext())
 
 	def __execute_and_report_plugin_manipulate(
-			self, source: CommandSource, operation_name: str, func: Callable[[], Future[PluginOperationResult]],
+			self, source: CommandSource, operation_name: str, func: Callable[[], 'Future[PluginOperationResult]'],
 			plugin_alias: str, result_type_to_check_success: PluginResultType
 	):
 		ret = self.function_call(source, func, operation_name, reply_success=False, msg_args=(plugin_alias,))
 		if ret.no_error:
-			def report(fut: Future[PluginOperationResult]):
+			def report(fut: 'Future[PluginOperationResult]'):
 				if fut.result().get_if_success(result_type_to_check_success):
 					source.reply(self.tr('mcdr_command.{}.success'.format(operation_name), plugin_alias))
 				else:
@@ -170,7 +170,7 @@ class PluginCommand(SubCommand):
 		self._print_plugin_operation_result_if_no_error(source, ret)
 
 	def __not_loaded_plugin_file_manipulate(
-			self, source: CommandSource, file_name: str, func: Callable[[Path], Future[PluginOperationResult]],
+			self, source: CommandSource, file_name: str, func: Callable[[Path], 'Future[PluginOperationResult]'],
 			operation_name: str, possible_plugin_path: List[str]
 	):
 		possible_plugin_path = [Path(fp) for fp in possible_plugin_path]
@@ -183,7 +183,7 @@ class PluginCommand(SubCommand):
 			self.__execute_and_report_plugin_manipulate(source, operation_name, lambda: func(plugin_paths[0]), file_name, PluginResultType.LOAD)
 
 	def __existed_regular_plugin_manipulate(
-			self, source: CommandSource, plugin_id: str, func: Callable[[RegularPlugin], Future[PluginOperationResult]],
+			self, source: CommandSource, plugin_id: str, func: Callable[[RegularPlugin], 'Future[PluginOperationResult]'],
 			operation_name: str, result_type_to_check_success: PluginResultType
 	):
 		plugin = self.mcdr_server.plugin_manager.get_regular_plugin_from_id(plugin_id)
