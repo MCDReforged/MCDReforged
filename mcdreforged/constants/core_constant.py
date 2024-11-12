@@ -3,7 +3,6 @@ Core constants
 """
 
 import os
-from pathlib import Path
 
 # will be modified in CI
 __CI_BUILD_NUM = None
@@ -25,7 +24,7 @@ GITHUB_API_LATEST_URLS = [
 DOCUMENTATION_URL = 'https://docs.mcdreforged.com'
 PLUGIN_CATALOGUE_META_URL = 'https://api.mcdreforged.com/catalogue/everything_slim.json.xz'
 
-PACKAGE_PATH = Path(__file__).absolute().parent.parent  # path of the mcdreforged directory
+PACKAGE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))  # path of the mcdreforged directory
 LOGGING_FILE = os.path.join('logs', '{}.log'.format(NAME_SHORT))
 LANGUAGE_FILE_SUFFIX = '.yml'
 DEFAULT_LANGUAGE = 'en_us'

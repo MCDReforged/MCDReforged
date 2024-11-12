@@ -3,6 +3,7 @@ Translation support
 """
 import collections
 import os
+from pathlib import Path
 from typing import Optional, Set, TYPE_CHECKING
 
 from ruamel.yaml import YAML
@@ -15,7 +16,7 @@ from mcdreforged.utils.types.message import TranslationStorage, MessageText
 if TYPE_CHECKING:
 	from mcdreforged.logging.logger import MCDReforgedLogger
 
-MCDR_LANGUAGE_DIRECTORY = core_constant.PACKAGE_PATH / 'resources' / 'lang'
+MCDR_LANGUAGE_DIRECTORY = Path(core_constant.PACKAGE_PATH) / 'resources' / 'lang'
 
 
 class TranslationManager:
