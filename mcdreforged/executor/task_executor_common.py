@@ -22,13 +22,21 @@ class TaskDoneFuture(Future[_T]):
 			raise TypeError(type(runner_thread))
 		self.__runner_thread = runner_thread
 
-	@override
-	def result(self, timeout: Optional[float] = None) -> _T:
+	def __self_join_check(self):
 		if not self.done() and threading.current_thread() == self.__runner_thread:
 			raise SelfJoinError('Cannot perform wait() on {} whose runner thread is current thread {}'.format(
 				self.__class__.__name__, self.__runner_thread,
 			))
+
+	@override
+	def result(self, timeout: Optional[float] = None) -> _T:
+		self.__self_join_check()
 		return super().result(timeout=timeout)
+
+	@override
+	def exception(self, timeout: Optional[float] = None) -> Optional[BaseException]:
+		self.__self_join_check()
+		return super().exception(timeout=timeout)
 
 
 class TaskExecutorBase(BackgroundThreadExecutor, ABC):
