@@ -105,6 +105,12 @@ jobs:
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
         repository-url: https://test.pypi.org/legacy/
+        # Fix running the gh-action-pypi-publish action twice in one job causing an error on the 2nd run:
+        # "InvalidDistribution: Unknown distribution format: 'mcdreforged-2.14.0a2-py3-none-any.whl.publish.attestation'"
+        # See also:
+        # https://github.com/pypa/gh-action-pypi-publish/issues/283
+        # https://github.com/pypa/twine/commit/dd613569856f1dd128040f197948b5c48eb8dd43
+        attestations: false
 
     - name: Publish distribution to PyPI
       if: env.IS_RELEASE == 'true'
