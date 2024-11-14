@@ -150,8 +150,8 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev'
     strategy:
       matrix:
-        slim: ['false', 'true']
         python: ['3.11', '3.12', '3.13']  # last 3 minor versions
+        slim: ['false', 'true']
 
     steps:
     - uses: actions/checkout@v4
