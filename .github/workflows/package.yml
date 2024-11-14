@@ -165,11 +165,13 @@ jobs:
           const slim = process.env.SLIM
           const python = process.env.PYTHON
           const isRelease = process.env.IS_RELEASE === 'true'
+          const isStableRelease = isRelease && /^[0-9.]+$/.test(version)
+          const defaultPythonVersion = '3.12'
 
           if (isRelease) {
-            core.setOutput('pypi_simple', 'https://pypi.org/simple')
+            core.setOutput('pypi_simple_url', 'https://pypi.org/simple')
           } else {
-            core.setOutput('pypi_simple', 'https://test.pypi.org/simple')
+            core.setOutput('pypi_simple_url', 'https://test.pypi.org/simple')
           }
           
           let metaTagsBase = [
@@ -180,10 +182,10 @@ jobs:
           let metaTagsLatest = []
           let suffixes = [`-py${python}`]  // will be appended at the end of all metaTagsBase
 
-          if (python === '3.12') {  // 3.12 is the default python version
+          if (python === defaultPythonVersion) {
             suffixes.push('')  // add a no-python suffixes
-            if (isRelease && /^[0-9.]+$/.test(version)) {  // stable release only
-              metaTagsLatest.push('latest')
+            if (isStableRelease) {
+              metaTagsLatest.push('latest')  // stable release only
             }
           }
           let metaTagsAll = suffixes.flatMap(suffix => metaTagsBase.map(t => t + suffix)).concat(metaTagsLatest)
@@ -214,7 +216,7 @@ jobs:
     - name: Login to Docker Hub
       uses: docker/login-action@v3
       with:
-        username: fallenbreath
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
     - name: Docker meta
@@ -225,6 +227,7 @@ jobs:
         tags: ${{ steps.config.outputs.tags }}
         flavor: latest=false
 
+    # this required to make Wandalen/wretry.action@master work correctly
     - name: Patch docker meta
       uses: actions/github-script@v7
       id: meta_patched
@@ -242,26 +245,26 @@ jobs:
     - name: Wait for PyPI index update
       run: |
         start_time=$(date +%s)
-        pip_cmd="pip3 install mcdreforged==${VERSION} -i ${PYPI_SIMPLE} --dry-run --ignore-installed --no-deps --no-cache-dir"
+        pip_cmd="pip3 install mcdreforged==${VERSION} -i ${PYPI_SIMPLE_URL} --dry-run --ignore-installed --no-deps --no-cache-dir"
         echo pip_cmd=$pip_cmd
         while true; do
           if $pip_cmd; then
-            echo "Version ${VERSION} exists on ${PYPI_SIMPLE}, exit"
+            echo "Version ${VERSION} exists on ${PYPI_SIMPLE_URL}, exit"
             break
           else
             current_time=$(date +%s)
             elapsed_time=$((current_time - start_time))
             if [ "$elapsed_time" -ge 600 ]; then
-              echo "Failed to find package version ${VERSION} on ${PYPI_SIMPLE} after 10 minutes"
+              echo "Failed to find package version ${VERSION} on ${PYPI_SIMPLE_URL} after 10 minutes"
               exit 1
             fi
-            echo "Version ${VERSION} not exist on ${PYPI_SIMPLE}. Checking again in 5 seconds"
+            echo "Version ${VERSION} not exist on ${PYPI_SIMPLE_URL}. Checking again in 5 seconds"
             sleep 5
           fi
         done
       env:
         VERSION: ${{ needs.pypi_upload.outputs.pypi_version }}
-        PYPI_SIMPLE: ${{ steps.config.outputs.pypi_simple }}
+        PYPI_SIMPLE_URL: ${{ steps.config.outputs.pypi_simple_url }}
 
     - name: Build and push
       id: build
@@ -278,22 +281,27 @@ jobs:
           build-args: |
             BASE_IMAGE_TAG=${{ steps.config.outputs.base_image_tag }}
             MCDR_VERSION_REQUIREMENT=${{ needs.pypi_upload.outputs.pypi_version }}
-            PYPI_INDEX=${{ steps.config.outputs.pypi_simple }}
+            PYPI_INDEX=${{ steps.config.outputs.pypi_simple_url }}
         attempt_limit: 3
         attempt_delay: 10
 
     - name: Report image build information
       run: |
-        echo -e "### Build args\n" >> $GITHUB_STEP_SUMMARY
-        echo -e "- BASE_IMAGE_TAG: \`${{ steps.config.outputs.base_image_tag }}\`" >> $GITHUB_STEP_SUMMARY
-        echo -e "- MCDR_VERSION_REQUIREMENT: \`${{ needs.pypi_upload.outputs.pypi_version }}\`" >> $GITHUB_STEP_SUMMARY
-        echo -e "- PYPI_INDEX: \`${{ steps.config.outputs.pypi_simple }}\`" >> $GITHUB_STEP_SUMMARY
-        echo -e "" >> $GITHUB_STEP_SUMMARY
+        cat << SUMMARY_EOF >> $GITHUB_STEP_SUMMARY
+        ### Build args
         
-        echo -e "### Image tags\n" >> $GITHUB_STEP_SUMMARY
-        echo -e "\`\`\`" >> $GITHUB_STEP_SUMMARY
-        echo -e "${{ steps.meta.outputs.tags }}" >> $GITHUB_STEP_SUMMARY
-        echo -e "\`\`\`" >> $GITHUB_STEP_SUMMARY
+        ```
+        BASE_IMAGE_TAG=${{ steps.config.outputs.base_image_tag }}
+        MCDR_VERSION_REQUIREMENT=${{ needs.pypi_upload.outputs.pypi_version }}
+        PYPI_INDEX=${{ steps.config.outputs.pypi_simple_url }}
+        ```
+        
+        ### Image tags
+        
+        ```
+        ${{ steps.meta.outputs.tags }}
+        ```
+        SUMMARY_EOF
 
     - name: Prepare extended image build workflow arguments
       uses: actions/github-script@v7
