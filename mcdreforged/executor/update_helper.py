@@ -2,6 +2,8 @@
 MCDR update things
 """
 import json
+import platform
+import sys
 import time
 from threading import Lock
 from typing import Callable, Any, Union, Optional, TYPE_CHECKING, List
@@ -75,8 +77,16 @@ class UpdateHelper(BackgroundThreadExecutor):
 					reply_func(self.__tr('check_update.newer_than_latest', core_constant.VERSION, latest_version))
 				else:
 					reply_func(self.__tr('check_update.new_version_detected', latest_version))
-					for line in update_log.splitlines():
+					lines = update_log.splitlines()
+					line_limit = 8
+					for line in lines[:line_limit]:
 						reply_func('    {}'.format(line))
+					if len(lines) > line_limit:
+						reply_func(self.__tr('check_update.n_more_lines', len(lines) - line_limit))
+
+					if (3, 8) <= sys.version_info < (3, 9):
+						reply_func(self.__tr('check_update.python_version_notes', core_constant.NAME, platform.python_version()))
+
 		finally:
 			self.__update_lock.release()
 
