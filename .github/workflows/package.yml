@@ -290,17 +290,17 @@ jobs:
         cat << SUMMARY_EOF >> $GITHUB_STEP_SUMMARY
         ### Build args
         
-        ```
+        ~~~
         BASE_IMAGE_TAG=${{ steps.config.outputs.base_image_tag }}
         MCDR_VERSION_REQUIREMENT=${{ needs.pypi_upload.outputs.pypi_version }}
         PYPI_INDEX=${{ steps.config.outputs.pypi_simple_url }}
-        ```
+        ~~~
         
         ### Image tags
         
-        ```
+        ~~~
         ${{ steps.meta.outputs.tags }}
-        ```
+        ~~~
         SUMMARY_EOF
 
     - name: Prepare extended image build workflow arguments
