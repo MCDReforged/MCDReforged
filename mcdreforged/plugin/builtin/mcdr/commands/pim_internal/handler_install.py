@@ -191,6 +191,9 @@ class PimInstallCommandHandler(PimCommandHandlerBase):
 		input_requirements: List[PluginRequirement] = []
 		for s in ctx.input_specifiers:
 			if s != '*':
+				if ' ' in s:
+					source.reply(self._tr('install.space_char_not_allowed', repr(s)))
+					raise OuterReturn()
 				# <plugin_id><opt><criterion>[@<hash_method>:<hash_hex>]
 				# my_plugin==1.2.3@sha256:abc123
 				parts = s.split('@', 1)

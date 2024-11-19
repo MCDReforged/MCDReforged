@@ -172,7 +172,7 @@ class PluginCommandPimExtension(SubCommand):
 			node = Literal('install')
 			node.runs(self.cmd_install_plugins)
 			node.then(
-				Text('plugin_specifier', accumulate=True).
+				QuotableText('plugin_specifier', accumulate=True).
 				suggests(suggest_plugin_id).
 				redirects(node)
 			)
