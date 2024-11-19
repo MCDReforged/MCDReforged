@@ -31,7 +31,7 @@ class AbortHelper:
 		return self.__aborted
 
 	@contextlib.contextmanager
-	def add_abort_callback(self, callback: _CALLBACK):
+	def with_abort_callback(self, callback: _CALLBACK):
 		with self.__lock:
 			key = self.__id_counter
 			self.__id_counter += 1
@@ -39,4 +39,5 @@ class AbortHelper:
 		try:
 			yield
 		finally:
+			# atomic operation, no need for lock
 			self.__callbacks.pop(key)

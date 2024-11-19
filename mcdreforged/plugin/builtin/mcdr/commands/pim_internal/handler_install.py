@@ -421,7 +421,7 @@ class PimInstallCommandHandler(PimCommandHandlerBase):
 						self.log_debug('pip install cmd: {}'.format(cmd))
 
 					try:
-						with self.__install_abort_helper.add_abort_callback(package_resolver.abort):
+						with self.__install_abort_helper.with_abort_callback(package_resolver.abort):
 							package_resolver.install(
 								extra_args=shlex.split(self.mcdr_server.config.plugin_pip_install_extra_args or ''),
 								pre_run_callback=log_cmd,
@@ -457,7 +457,7 @@ class PimInstallCommandHandler(PimCommandHandlerBase):
 						logger=self.logger,
 					)
 					with contextlib.suppress(downloader.Aborted):
-						with self.__install_abort_helper.add_abort_callback(downloader.abort):
+						with self.__install_abort_helper.with_abort_callback(downloader.abort):
 							downloader.download(show_progress=ReleaseDownloader.ShowProgressPolicy.if_costly)
 					self.__check_abort(source)
 
