@@ -44,7 +44,7 @@ class PimFreezeCommandHandler(PimCommandHandlerBase):
 			if freeze_all or isinstance(plugin, PackedPlugin):
 				item = _FreezeItem(id=plugin.get_id(), version=str(plugin.get_version()))
 				if with_hash and isinstance(plugin, PackedPlugin):
-					item.hash = plugin.get_file_hash()
+					item.hash = 'sha256:' + plugin.get_file_sha256()
 				freeze_items.append(item)
 
 		if output_path is not None:

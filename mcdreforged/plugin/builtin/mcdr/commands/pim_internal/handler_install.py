@@ -191,23 +191,33 @@ class PimInstallCommandHandler(PimCommandHandlerBase):
 		input_requirements: List[PluginRequirement] = []
 		for s in ctx.input_specifiers:
 			if s != '*':
+				# <plugin_id><opt><criterion>[@<hash_method>:<hash_hex>]
+				# my_plugin==1.2.3@sha256:abc123
 				parts = s.split('@', 1)
 				if len(parts) == 2:
-					req_str, h = parts[0], parts[1].lower()
+					req_str, hash_str = parts[0], parts[1].lower()
 				else:
-					req_str, h = s, None
+					req_str, hash_str = s, None
 				try:
 					req = PluginRequirement.of(req_str)
 				except ValueError as e:
 					source.reply(self._tr('install.parse_specifier_failed', repr(s), e))
 					raise OuterReturn()
-				if h is not None:
-					if re.fullmatch(r'[0-9abcdef]{10,64}', h) is None:  # len(sha256_hash_hex) == 64
+				if hash_str is not None:
+					if re.fullmatch(r'[a-z0-9]+:[0-9abcdef]+', hash_str) is not None:
+						hash_method, hash_hex = hash_str.split(':', 1)
+					else:
+						hash_method, hash_hex = 'sha256', hash_str
+
+					if hash_method not in ['sha256']:
+						source.reply(self._tr('install.hash_method_unsupported', repr(hash_method)))
+						raise OuterReturn()
+					if re.fullmatch(r'[0-9abcdef]{10,64}', hash_hex) is None:  # len(sha256_hash_hex) == 64
 						source.reply(self._tr('install.hash_validator_invalid', repr(s)))
 						raise OuterReturn()
 					cris = req.requirement.criterions
 					if len(cris) == 1 and cris[0].opt == '==':
-						ppr.hash_validators[req.id] = h
+						ppr.hash_validators[req.id] = hash_hex
 					else:
 						source.reply(self._tr('install.hash_validator_unexpected', repr(s)))
 						raise OuterReturn()
@@ -314,7 +324,7 @@ class PimInstallCommandHandler(PimCommandHandlerBase):
 						to_install.packages[req] = PluginCandidate(plugin_id, version)
 			else:
 				if expected_hash is not None and isinstance(plugin, PackedPlugin):
-					current_hash = plugin.get_file_hash()
+					current_hash = plugin.get_file_sha256()
 					if current_hash is not None and not current_hash.startswith(expected_hash):
 						source.reply(self._tr(
 							'install.mismatched_hash.local',

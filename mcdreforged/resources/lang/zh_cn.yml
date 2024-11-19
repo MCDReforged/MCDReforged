@@ -315,6 +315,7 @@ mcdreforged:
         no_plugin_directories: MCDR 配置的插件文件夹为空，无法安装新插件
         invalid_target: 安装目标文件夹 {0} 无效，因为它不包含在配置的插件文件夹中
         parse_specifier_failed: '解析插件描述 {0} 失败: {1}'
+        hash_method_unsupported: '不支持的哈希算法 {0}。目前仅支持 sha256'
         hash_validator_invalid: '无效的哈希校验值，应当为一个长度在 [10, 64] 之间的十六进制字符串。当前插件描述: {0}'
         hash_validator_unexpected: '只有使用 "==" 的插件描述可附加哈希校验值。当前插件描述: {0}'
         cannot_install_builtin: 无法安装内置插件 {0}

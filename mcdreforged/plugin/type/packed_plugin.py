@@ -110,5 +110,5 @@ class PackedPlugin(MultiFilePlugin):
 		self.__file_sha256 = file_utils.calc_file_sha256(self.plugin_path)
 		super()._load_entry_instance()
 
-	def get_file_hash(self) -> str:
+	def get_file_sha256(self) -> str:
 		return self.__file_sha256

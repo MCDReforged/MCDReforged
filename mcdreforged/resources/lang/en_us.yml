@@ -315,6 +315,7 @@ mcdreforged:
         no_plugin_directories: Cannot install plugin since MCDR config "plugin_directories" is empty,
         invalid_target: Target {0} is invalid because it's not contained in the configured plugin_directories
         parse_specifier_failed: 'Parsing plugin specifier {0} failed: {1}'
+        hash_method_unsupported: 'Unsupported hash method {0}. Currently only sha256 is supported'
         hash_validator_invalid: 'Invalid hash validator, it should be a hex string with its length within [10, 64]. Current specifier: {0}'
         hash_validator_unexpected: 'Only specifier using "==" can include a hash validator. Current specifier: {0}'
         cannot_install_builtin: Cannot install builtin plugin {0}
