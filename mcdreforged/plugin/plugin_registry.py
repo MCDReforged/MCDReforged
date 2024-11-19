@@ -143,10 +143,9 @@ class PluginRegistryStorage(_BasePluginRegistry):
 
 		if plugin_registry._server_handler is not None:
 			if self._server_handler is not None:
-				self.logger.warning(
-					'Found multiple plugin-defined server handler, previously registered by plugin {}, current plugin {}, ignore the current one',
-					self.__server_handler_plugin, plugin,
-				)
+				self.logger.warning('Found multiple plugin-defined server handlers: previous {} by plugin {}, current {} by plugin {}. Ignoring the current one'.format(
+					repr(self._server_handler.get_name()), self.__server_handler_plugin, repr(plugin_registry._server_handler.get_name()), plugin
+				))
 			else:
 				self.__server_handler_plugin = plugin
 				self._server_handler = plugin_registry._server_handler
