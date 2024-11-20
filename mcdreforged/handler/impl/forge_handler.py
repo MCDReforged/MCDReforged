@@ -17,7 +17,7 @@ class ForgeHandler(AbstractMinecraftHandler):
 
 	@classmethod
 	@override
-	def get_content_parsing_formatter(cls):
+	def get_content_parsing_formatter(cls) -> re.Pattern:
 		return re.compile(
 			r'\[(?P<hour>\d+):(?P<min>\d+):(?P<sec>\d+)]'
 			r' \[(?P<thread>[^]]+)/(?P<logging>[^]/]+)]'

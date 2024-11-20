@@ -18,7 +18,7 @@ class WaterfallHandler(BungeecordHandler):
 	# [02:18:29 INFO] [ViaVersion]: Loading 1.12.2 -> 1.13 mappings..."
 	@classmethod
 	@override
-	def get_content_parsing_formatter(cls):
+	def get_content_parsing_formatter(cls) -> re.Pattern:
 		return re.compile(
 			r'\[(?P<hour>\d+):(?P<min>\d+):(?P<sec>\d+) (?P<logging>[^]]+)]'
 			r'( \[[^]]+])?'  # useless logger name

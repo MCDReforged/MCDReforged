@@ -1,3 +1,5 @@
+import re
+
 from typing_extensions import override
 
 from mcdreforged.handler.impl.bukkit_handler import BukkitHandler
@@ -21,7 +23,7 @@ class CatServerHandler(BukkitHandler):
 
 	@classmethod
 	@override
-	def get_content_parsing_formatter(cls):
+	def get_content_parsing_formatter(cls) -> re.Pattern:
 		return VanillaHandler.get_content_parsing_formatter()
 
 	@override

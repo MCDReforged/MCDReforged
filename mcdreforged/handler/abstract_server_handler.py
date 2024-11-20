@@ -52,7 +52,7 @@ class AbstractServerHandler(ServerHandler, ABC):
 		return result
 
 	@classmethod
-	def get_content_parsing_formatter(cls) -> Union[str, Iterable[str]]:
+	def get_content_parsing_formatter(cls) -> Union[str, Iterable[str], re.Pattern, Iterable[re.Pattern]]:
 		"""
 		Return a :external:class:`re.Pattern` or an Iterable of :external:class:`re.Pattern` iterable
 		that is used in method :meth:`_content_parse` for parsing

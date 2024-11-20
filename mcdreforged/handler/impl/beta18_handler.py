@@ -36,8 +36,14 @@ class Beta18Handler(AbstractMinecraftHandler):
 	# 2020-12-27 02:57:42 [INFO] <Steve> ping
 	@classmethod
 	@override
-	def get_content_parsing_formatter(cls):
-		return '{y:d}-{m:d}-{d:d} {hour:d}:{min:d}:{sec:d} [{logging}] {content}'
+	def get_content_parsing_formatter(cls) -> re.Pattern:
+		# YYYY-mm-dd HH:MM:SS [LEVEL] MESSAGE
+		return re.compile(
+			r'(\d+)-(\d+)-(\d+)'
+			r' (?P<hour>\d+):(?P<min>\d+):(?P<sec>\d+)'
+			r' \[(?P<logging>[^]]+)]'
+			r' (?P<content>.*)'
+		)
 
 	# Steve [/127.0.0.1:2993] logged in with entity id 3827 at (-130.5, 69.0, 253.5)
 	#      ^
