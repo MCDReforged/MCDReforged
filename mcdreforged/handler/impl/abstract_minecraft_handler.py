@@ -11,9 +11,32 @@ from mcdreforged.handler.abstract_server_handler import AbstractServerHandler
 from mcdreforged.info_reactor.info import Info
 from mcdreforged.info_reactor.server_information import ServerInformation
 from mcdreforged.minecraft.rtext.text import RTextBase
-from mcdreforged.plugin.meta.version import VersionParsingError
 from mcdreforged.utils import string_utils
 from mcdreforged.utils.types.message import MessageText
+
+
+@functools.lru_cache(maxsize=128)
+def _does_mc_version_has_execute_command(version_name: Optional[str]) -> bool:
+	if version_name is None:
+		return False
+
+	def check_release_version(major: str, minor: str) -> bool:
+		return (int(major), int(minor)) >= (1, 13)
+
+	version_with_release_regex = [
+		re.compile(r'(?P<major>\d+)\.(?P<minor>\d+)(\.(\d+))?', re.IGNORECASE),  # "1.21", "1.17.1"
+		re.compile(r'(?P<major>\d+)\.(?P<minor>\d+)(\.(\d+))? Pre-Release \d+', re.IGNORECASE),  # "1.20.5 Pre-Release 4"
+		re.compile(r'(?P<major>\d+)\.(?P<minor>\d+)(\.(\d+))? Release Candidate \d+', re.IGNORECASE),  # "1.21 Release Candidate 1"
+	]
+	for regex in version_with_release_regex:
+		if (m := regex.fullmatch(version_name)) is not None:
+			return check_release_version(m.group(1), m.group(2))
+
+	# modern snapshots, e.g. "22w45a"
+	if (m := re.fullmatch(r'(\d{2})w(\d{2})[a-z]', version_name)) is not None:
+		return (int(m.group(1)), int(m.group(2))) >= (18, 30)  # >= 18w30a, first 1.13.1 snapshot
+
+	return False
 
 
 class AbstractMinecraftHandler(AbstractServerHandler, ABC):
@@ -67,15 +90,12 @@ class AbstractMinecraftHandler(AbstractServerHandler, ABC):
 
 	@override
 	def get_send_message_command(self, target: str, message: MessageText, server_information: ServerInformation) -> Optional[str]:
-		can_do_execute = False
-		if server_information.version is not None:
-			try:
-				from mcdreforged.plugin.meta.version import Version
-				version = Version(server_information.version.split(' ')[0])
-				if version >= Version('1.13.0'):
-					can_do_execute = True
-			except VersionParsingError:
-				pass
+		try:
+			can_do_execute = _does_mc_version_has_execute_command(server_information.version)
+		except (ValueError, IndexError):
+			# TODO: logging?
+			can_do_execute = False
+
 		command = 'tellraw {} {}'.format(target, self.format_message(message))
 		if can_do_execute:
 			# Mute the "No player was found" output when no player is online by using the "execute at" command
