@@ -13,8 +13,8 @@ class ServerHandler(ABC):
 	Class inheriting tree::
 
 		ServerHandler (interface)
+		├── BasicHandler
 		└── AbstractServerHandler
-			├── BasicHandler
 			├── AbstractMinecraftHandler
 			│   ├── VanillaHandler
 			│   ├── Beta18Handler
