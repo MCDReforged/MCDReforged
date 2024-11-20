@@ -62,7 +62,8 @@ class AbstractMinecraftHandler(AbstractServerHandler, ABC):
 		if isinstance(message, RTextBase):
 			return message.to_json_str()
 		else:
-			return json.dumps(str(message))
+			# quote it
+			return json.dumps(str(message), ensure_ascii=False, separators=(',', ':'))
 
 	@override
 	def get_send_message_command(self, target: str, message: MessageText, server_information: ServerInformation) -> Optional[str]:
@@ -77,6 +78,7 @@ class AbstractMinecraftHandler(AbstractServerHandler, ABC):
 				pass
 		command = 'tellraw {} {}'.format(target, self.format_message(message))
 		if can_do_execute:
+			# Mute the "No player was found" output when no player is online by using the "execute at" command
 			command = 'execute at @p run ' + command
 		return command
 
