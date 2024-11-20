@@ -45,10 +45,9 @@ class Beta18Handler(AbstractMinecraftHandler):
 			r' (?P<content>.*)'
 		)
 
-	# Steve [/127.0.0.1:2993] logged in with entity id 3827 at (-130.5, 69.0, 253.5)
-	#      ^
-	# Comparing to vanilla: there's an extra space character after {name}
-	__player_joined_regex = re.compile(r'(?P<name>[^ ]+) \[(.*?)] logged in with entity id \d+ at \(.+\)')
+	# (beta1.8) Steve [/127.0.0.1:2993] logged in with entity id 3827 at (-130.5, 69.0, 253.5)
+	# (mc>=1.0) Alex[/127.0.0.1:5527] logged in with entity id 747 at (176.21, 65.0, 258.03)
+	__player_joined_regex = re.compile(r'(?P<name>[^\[ ]+)( )?\[(.*?)] logged in with entity id \d+ at \(.+\)')
 
 	@override
 	def parse_player_joined(self, info):
@@ -67,8 +66,9 @@ class Beta18Handler(AbstractMinecraftHandler):
 			return m['name']
 		return None
 
-	# Done (6368115300ns)! For help, type "help" or "?"
-	__server_startup_done_regex = re.compile(r'Done \([0-9.]+ns\)! For help, type "help" or "\?"')
+	# (beta1.8) Done (6368115300ns)! For help, type "help" or "?"
+	# (mc>=1.0) Done (0.295s)! For help, type "help" or "?"
+	__server_startup_done_regex = re.compile(r'Done \([0-9.]+n?s\)! For help, type "help" or "\?"')
 
 	@override
 	def test_server_startup_done(self, info: Info):
