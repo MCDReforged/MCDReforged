@@ -80,7 +80,7 @@ msgstr "可以使用以下命令启动它："
 
 #: ../quick_start/first_run.rst:53
 msgid "You can also use other servers, such as Fabric, Spigot, Paper, etc."
-msgstr "你也选择其他服务端，如 Fabric、Spigot、Paper 等"
+msgstr "你也可以选择其他服务端，如 Fabric、Spigot、Paper 等"
 
 #: ../quick_start/first_run.rst:57
 msgid ""

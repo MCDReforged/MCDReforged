@@ -19,7 +19,7 @@ MCDR runs above the server. It doesn't need to modify the server at all, which k
 Plugin System
 ~~~~~~~~~~~~~
 
-MCDR has a rich ecosystem of plugins from the community. From an in-game calculator, player highlighter, and Twitch chat bot, to a scoreboard manipulator, file manager, and backup system, all of them can be implemented with MCDReforged plugins
+MCDR has a `rich ecosystem <https://mcdreforged.com/en/plugins>`__ of plugins from the community. From an in-game calculator, player highlighter, and Twitch chat bot, to a scoreboard manipulator, file manager, and backup system, all of them can be implemented with MCDReforged plugins
 
 Meanwhile, the plugin system is hot-reloadable, so you don't need to shut down the server to update the plugins
 
