@@ -282,6 +282,8 @@ jobs:
             BASE_IMAGE_TAG=${{ steps.config.outputs.base_image_tag }}
             MCDR_VERSION_REQUIREMENT=${{ needs.pypi_upload.outputs.pypi_version }}
             PYPI_INDEX=${{ steps.config.outputs.pypi_simple_url }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
         attempt_limit: 3
         attempt_delay: 10
 
