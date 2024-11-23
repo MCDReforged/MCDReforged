@@ -37,5 +37,4 @@ def get_yaml(path: str) -> CommentedMap:
 
 
 if __name__ == '__main__':
-	# Don't run it directly
-	pass
+	raise RuntimeError("Don't run it directly")
