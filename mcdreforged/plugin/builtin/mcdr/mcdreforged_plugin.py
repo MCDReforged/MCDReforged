@@ -141,8 +141,6 @@ class MCDReforgedPlugin(BuiltinPlugin):
 				h(self.tr('mcdr_command.command_not_found_suggest', command)).
 				c(RAction.run_command, command)
 			)
-		else:
-			self.on_mcdr_command_permission_denied(source, error)
 
 	def process_mcdr_command(self, source: CommandSource):
 		if source.has_permission(PermissionLevel.MCDR_CONTROL_LEVEL):
