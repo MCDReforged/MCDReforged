@@ -2,6 +2,8 @@ import typing
 from contextlib import contextmanager
 from typing import List, Iterable, Dict, Any, Optional, NamedTuple
 
+from typing_extensions import override
+
 if typing.TYPE_CHECKING:
 	from mcdreforged.command.command_source import CommandSource
 	from mcdreforged.command.builder.nodes.basic import AbstractNode
@@ -49,6 +51,7 @@ class CommandSuggestions(List[CommandSuggestion]):
 		# "<file_name>" is the complete_hint
 		self.complete_hint: Optional[str] = None
 
+	@override
 	def extend(self, __iterable: Iterable) -> None:
 		super().extend(__iterable)
 		if isinstance(__iterable, CommandSuggestions):
@@ -73,6 +76,7 @@ class CommandContext(Dict[str, Any]):
 		self.__cursor = 0
 		self.__node_path: List[AbstractNode] = []
 
+	@override
 	def copy(self) -> 'CommandContext':
 		copied = CommandContext(self.source, self.command)
 		copied.update(self)

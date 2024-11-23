@@ -35,5 +35,6 @@ class PythonPlugin(BuiltinPlugin):
 	def load(self):
 		self.mcdr_server.logger.info(self.mcdr_server.translate('mcdreforged.python_plugin.info', core_constant.NAME, self.get_meta_name()))
 
+	@override
 	def _create_repr_fields(self) -> dict:
 		return {'version': METADATA['version']}

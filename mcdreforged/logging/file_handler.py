@@ -6,6 +6,8 @@ import zipfile
 from pathlib import Path
 from typing import Optional
 
+from typing_extensions import override
+
 
 class ZippingDayRotatingFileHandler(logging.FileHandler):
 	def __init__(self, file_path: str, rotate_day_count: int):
@@ -19,6 +21,7 @@ class ZippingDayRotatingFileHandler(logging.FileHandler):
 
 		super().__init__(file_path, encoding='utf8')
 
+	@override
 	def emit(self, record: logging.LogRecord) -> None:
 		try:
 			self.try_rotate()

@@ -1,7 +1,7 @@
 from abc import ABC
 from typing import Dict, Callable, TYPE_CHECKING, Optional, List, TypeVar, Generic, Any, Type, overload
 
-from typing_extensions import Self
+from typing_extensions import Self, override
 
 from mcdreforged.command.builder.exception import CommandError
 from mcdreforged.command.builder.nodes.basic import RUNS_CALLBACK, Literal, AbstractNode, ArgumentNode, REQUIRES_CALLBACK, FAIL_MSG_CALLBACK, SUGGESTS_CALLBACK, ERROR_HANDLER_CALLBACK, PRECONDITION_CALLBACK
@@ -133,30 +133,36 @@ class _NodeDefinitionImpl(NodeDefinition):
 			processor(node)
 		return node
 
+	@override
 	def post_process(self, post_processor: Callable[[NodeType], Any]) -> Self:
 		self.__node_processors.append(post_processor)
 		return self
 
+	@override
 	def requires(self, requirement: REQUIRES_CALLBACK, failure_message_getter: Optional[FAIL_MSG_CALLBACK] = None) -> Self:
 		def post_processor_requires(node: NodeType):
 			node.requires(requirement, failure_message_getter)
 		return self.post_process(post_processor_requires)
 
+	@override
 	def precondition(self, precondition: PRECONDITION_CALLBACK) -> Self:
 		def post_processor_requires(node: NodeType):
 			node.requires(precondition)
 		return self.post_process(post_processor_requires)
 
+	@override
 	def suggests(self, suggestion: SUGGESTS_CALLBACK) -> Self:
 		def post_processor_suggests(node: NodeType):
 			node.suggests(suggestion)
 		return self.post_process(post_processor_suggests)
 
+	@override
 	def on_error(self, error_type: Type[CommandError], handler: ERROR_HANDLER_CALLBACK, *, handled: bool = False) -> Self:
 		def post_processor_on_error(node: NodeType):
 			node.on_error(error_type, handler, handled=handled)
 		return self.post_process(post_processor_on_error)
 
+	@override
 	def on_child_error(self, error_type: Type[CommandError], handler: ERROR_HANDLER_CALLBACK, *, handled: bool = False) -> Self:
 		def post_processor_on_child_error(node: NodeType):
 			node.on_child_error(error_type, handler, handled=handled)

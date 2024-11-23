@@ -3,6 +3,8 @@ import os
 from typing import Callable, TYPE_CHECKING, Union, Optional, IO, Type, TypeVar
 from typing import Literal as TLiteral
 
+from typing_extensions import override
+
 from mcdreforged.command.builder.nodes.basic import Literal
 from mcdreforged.command.command_source import CommandSource, PluginCommandSource
 from mcdreforged.constants import plugin_constant
@@ -40,7 +42,12 @@ class PluginServerInterface(ServerInterface):
 		self.__plugin = plugin
 		self.__logger_for_plugin: Optional[MCDReforgedLogger] = None
 
+	# -----------------------
+	#   Overwritten methods
+	# -----------------------
+
 	@property
+	@override
 	def logger(self) -> logging.Logger:
 		if self.__logger_for_plugin is None:
 			try:
@@ -50,13 +57,11 @@ class PluginServerInterface(ServerInterface):
 			self.__logger_for_plugin = logger
 		return self.__logger_for_plugin
 
+	@override
 	def as_plugin_server_interface(self) -> Optional['PluginServerInterface']:
 		return self
 
-	# -----------------------
-	#   Overwritten methods
-	# -----------------------
-
+	@override
 	def get_plugin_command_source(self) -> PluginCommandSource:
 		return PluginCommandSource(self, self.__plugin)
 

@@ -4,6 +4,7 @@ from threading import local
 from typing import List, Type
 
 from colorlog import ColoredFormatter
+from typing_extensions import override
 
 from mcdreforged.minecraft.rtext.style import RItemClassic, RColor, RStyle
 from mcdreforged.utils import string_utils
@@ -55,12 +56,14 @@ class MCColorFormatControl:
 
 
 class MCDReforgedFormatter(ColoredFormatter):
+	@override
 	def formatMessage(self, record: logging.LogRecord):
 		text = super().formatMessage(record)
 		return MCColorFormatControl.modify_message_text(text)
 
 
 class NoColorFormatter(logging.Formatter):
+	@override
 	def formatMessage(self, record: logging.LogRecord):
 		return string_utils.clean_console_color_code(super().formatMessage(record))
 

@@ -3,6 +3,8 @@ from abc import ABC
 from enum import Enum
 from typing import Type
 
+from typing_extensions import override
+
 from mcdreforged.api.command import *
 from mcdreforged.api.types import CommandSource
 from mcdreforged.command.builder.nodes.basic import CallbackError
@@ -11,12 +13,15 @@ from mcdreforged.utils.types.message import MessageText
 
 
 class _TestCommandSource(CommandSource):
+	@override
 	def get_server(self):
 		raise RuntimeError()
 
+	@override
 	def get_permission_level(self) -> int:
 		raise RuntimeError()
 
+	@override
 	def reply(self, message: MessageText, **kwargs) -> None:
 		raise RuntimeError()
 

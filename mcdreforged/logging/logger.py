@@ -5,6 +5,8 @@ import logging
 import os
 from typing import Dict, Optional, Any
 
+from typing_extensions import override
+
 from mcdreforged.constants import core_constant
 from mcdreforged.logging.debug_option import DebugOption
 from mcdreforged.logging.file_handler import ZippingDayRotatingFileHandler
@@ -74,6 +76,7 @@ class MCDReforgedLogger(logging.Logger):
 			flags |= option.mask
 		return (cls.debug_options & flags) != 0
 
+	@override
 	def _log(self, level: int, msg: Any, args: tuple, **kwargs) -> None:
 		if self.__plugin_id is not None:
 			extra_args = kwargs.get('extra', {})
@@ -95,6 +98,7 @@ class MCDReforgedLogger(logging.Logger):
 			with MCColorFormatControl.disable_minecraft_color_code_transform():
 				self._log(logging.DEBUG, msg, args, stacklevel=stacklevel)
 
+	@override
 	def debug(self, msg: Any, *args, **kwargs):
 		if self.isEnabledFor(logging.DEBUG) or self.should_log_debug(DebugOption.ALL):
 			with MCColorFormatControl.disable_minecraft_color_code_transform():

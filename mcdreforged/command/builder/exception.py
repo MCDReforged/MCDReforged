@@ -1,6 +1,8 @@
 from abc import ABC
 from typing import Optional, Union
 
+from typing_extensions import override
+
 from mcdreforged.minecraft.rtext.text import RTextBase, RText, RColor
 from mcdreforged.utils.types.message import MessageText
 
@@ -152,6 +154,7 @@ class RequirementNotMet(CommandError):
 	def get_reason(self) -> MessageText:
 		return self.__reason
 
+	@override
 	def get_error_data(self) -> tuple:
 		return (self.get_reason(),)
 
@@ -213,6 +216,7 @@ class AbstractOutOfRange(IllegalArgument, ABC):
 	def get_boundary_text(cls, value) -> str:
 		return str(value) if value is not None else '/'
 
+	@override
 	def get_error_data(self) -> tuple:
 		return self.__value, self.get_boundary_text(self.__range_l), self.get_boundary_text(self.__range_r)
 
