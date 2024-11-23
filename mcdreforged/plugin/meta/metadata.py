@@ -234,3 +234,4 @@ __SAMPLE_METADATA = {
 		'another_resource_file',
 	]
 }
+Metadata(__SAMPLE_METADATA)  # there's should be no exception
