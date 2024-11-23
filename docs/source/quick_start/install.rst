@@ -40,7 +40,8 @@ Wait a second
 
 In some tutorials, you may learn to use MCDR by downloading a zip from Github and extracting it
 
-However, that's not the correct way to install MCDR - Those tutorials are outdated
+However, that's not the correct way to install MCDR - Those tutorials are outdated.
+Since the release of version 1.0 in early 2021, MCDR has no longer used source code installation
 
 .. caution::
 
@@ -83,6 +84,9 @@ Verify the installation with:
 
     $ mcdreforged
     MCDReforged v@@MCDR_VERSION@@
+
+For users in China, if you encounter slow downloads or network issues while using ``pip`` to install packages,
+you can refer to the :ref:`quick_start/install:Accelerate the installation` section below to resolve these issues
 
 Externally managed environment
 ------------------------------
@@ -140,7 +144,7 @@ Then you can install MCDR using pipx:
 
     pipx install mcdreforged
 
-When a new version of MCDR is available, you can upgrade by:
+When a new version of MCDR is available, you can upgrade MCDR by:
 
 .. prompt:: bash
 
@@ -153,7 +157,8 @@ When a new version of MCDR is available, you can upgrade by:
 
 .. note::
 
-    In this way, MCDR will be installed in an isolated environment. Instead of using ``pip install <package_name>``, Python packages required by MCDR plugins should be installed by:
+    In this way, MCDR will be installed in an isolated environment managed by pipx.
+    To install Python packages into this environment, instead of using ``pip install <package_name>``, you should use:
 
     * ``pipx inject mcdreforged <package_name>``, e.g. ``pipx inject mcdreforged requests``
     * or ``pipx inject mcdreforged -r requirements.txt``
@@ -200,6 +205,8 @@ Activate it by:
 
     Python Doc: `How venvs work <https://docs.python.org/3/library/venv.html#how-venvs-work>`__
 
+After activating the virtual environment, a ``(venv)`` prefix should appear in your terminal environment
+
 Then, install MCDR using pip:
 
 .. prompt:: bash
@@ -232,7 +239,7 @@ Using Docker
 
 MCDR also provides Docker images as an option. See :doc:`/docker` for more details
 
-You can specify the version of MCDR by the tag of the Docker image
+In addition to the basic MCDR image, MCDR also provides image variants pre-installed with additional Python packages and OpenJDK.
 
 Compared to the two methods above, Docker has a more convoluted learning path, but is more convenient for some advanced usages
 
