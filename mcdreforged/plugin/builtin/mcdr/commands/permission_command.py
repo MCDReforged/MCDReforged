@@ -87,10 +87,10 @@ class PermissionCommand(SubCommand):
 		if specified_level is None:
 			# show default level information if target permission not specified
 			source.reply(
-				RText(self.tr(
+				self.tr(
 					'mcdr_command.list_permission.show_default',
 					self.mcdr_server.permission_manager.get_default_permission_level()
-				))
+				)
 				.c(RAction.suggest_command, '{} permission setdefault '.format(self.control_command_prefix))
 				.h(self.tr('mcdr_command.list_permission.suggest_setdefault'))
 			)

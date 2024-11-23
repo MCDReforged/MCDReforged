@@ -131,13 +131,13 @@ class MCDReforgedPlugin(BuiltinPlugin):
 
 	def on_mcdr_command_permission_denied(self, source: CommandSource, error: CommandError):
 		if not error.is_handled():
-			source.reply(RText(self.mcdr_server.translate('mcdreforged.mcdr_command.permission_denied'), color=RColor.red))
+			source.reply(self.tr('mcdr_command.permission_denied'), color=RColor.red)
 
 	def on_mcdr_command_unknown_argument(self, source: CommandSource, error: CommandError):
 		if source.has_permission(PermissionLevel.MCDR_CONTROL_LEVEL):
 			command = error.get_parsed_command().rstrip(' ')
 			source.reply(
-				RText(self.tr('mcdr_command.command_not_found', command)).
+				self.tr('mcdr_command.command_not_found', command).
 				h(self.tr('mcdr_command.command_not_found_suggest', command)).
 				c(RAction.run_command, command)
 			)
