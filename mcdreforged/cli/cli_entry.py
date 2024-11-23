@@ -1,10 +1,11 @@
 import sys
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
+from typing import cast
 
 from mcdreforged.cli import cmd_pim
 from mcdreforged.cli.cmd_gendefault import generate_default_stuffs
 from mcdreforged.cli.cmd_init import initialize_environment
-from mcdreforged.cli.cmd_pack import make_packed_plugin
+from mcdreforged.cli.cmd_pack import make_packed_plugin, PackArgs
 from mcdreforged.cli.cmd_reformat_config import reformat_config
 from mcdreforged.cli.cmd_run import run_mcdr
 from mcdreforged.cli.cmd_version import show_version
@@ -74,7 +75,7 @@ def cli_dispatch():
 			quiet=args.quiet,
 		)
 	elif args.command == 'pack':
-		make_packed_plugin(args, quiet=args.quiet)
+		make_packed_plugin(cast(PackArgs, args), quiet=args.quiet)
 	elif args.command == 'pim':
 		cmd_pim.entry(parser_pim, args)
 	elif args.command == 'reformat-config':

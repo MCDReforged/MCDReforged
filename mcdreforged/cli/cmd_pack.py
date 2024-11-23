@@ -1,11 +1,13 @@
-import fnmatch
 import json
 import os
-import re
 import stat
 import zipapp
-from typing import Optional, Any, List, Callable, NamedTuple, Pattern
+from pathlib import Path
+from typing import Optional, Any, Callable
 from zipfile import ZipFile, ZIP_DEFLATED
+
+import pathspec
+from typing_extensions import Protocol
 
 from mcdreforged.constants import plugin_constant
 from mcdreforged.plugin.meta.metadata import Metadata
@@ -13,58 +15,33 @@ from mcdreforged.utils import file_utils, function_utils
 
 PathPredicate = Callable[[str], bool]
 
+class PackArgs(Protocol):
+	@property
+	def input(self) -> str:
+		pass
 
-class IgnoreFilter:
-	class Pattern(NamedTuple):
-		regex: Pattern
-		negation: bool
-		dir_only: bool
+	@property
+	def output(self) -> str:
+		pass
 
-	def __init__(self, patterns: List[str]):
-		self.patterns: List[IgnoreFilter.Pattern] = []
+	@property
+	def name(self) -> str:
+		pass
 
-		for pattern in patterns:
-			pattern = pattern.strip()
-			if pattern.startswith("#") or len(pattern) == 0:
-				continue
+	@property
+	def ignore_patterns(self) -> str:
+		pass
 
-			def add(p: str, dir_only: bool):
-				regex_pattern = fnmatch.translate(p)
-				regex_pattern = regex_pattern.replace(r'\*\*/', '(?:.+/)?')
-				regex_pattern = regex_pattern.replace(r'/\*\*', '(?:/.+)?')
-				self.patterns.append(self.Pattern(re.compile(regex_pattern), is_negation, dir_only))
+	@property
+	def ignore_file(self) -> str:
+		pass
 
-			is_negation = pattern.startswith('!')
-			if is_negation:
-				pattern = pattern[1:]
-
-			if '/' in pattern[:-1]:  # match from root-dir
-				pattern = pattern[1:]
-			elif not pattern.startswith('**/'):  # match from any sub-dir
-				pattern = '**/' + pattern
-
-			if pattern.endswith('/'):  # yes, it's a dir
-				add(pattern[:-1], True)  # ignore the dir itself
-				add(pattern + '**', False)  # files inside the dir
-			else:
-				add(pattern, False)  # ignore the file inside
-				add(pattern + '/**', False)  # just in case it's a dir, add everything inside
-
-	def is_ignored(self, path: str):
-		path = path.replace(os.sep, '/')
-		is_dir = os.path.isdir(path)
-		is_ignored = False
-		for pattern in self.patterns:
-			if pattern.dir_only and not is_dir:
-				continue
-			if pattern.regex.match(path):
-				is_ignored = not pattern.negation
-		return is_ignored
+	@property
+	def shebang(self) -> str:
+		pass
 
 
-def read_ignore_file(file: str, writeln: Callable[[str], Any]) -> Optional[IgnoreFilter]:
-	if len(file) == 0:
-		return None
+def read_ignore_file(file: Path, writeln: Callable[[str], Any]) -> Optional[pathspec.PathSpec]:
 	try:
 		with open(file, 'r', encoding='utf8') as f:
 			lines = f.readlines()
@@ -72,35 +49,34 @@ def read_ignore_file(file: str, writeln: Callable[[str], Any]) -> Optional[Ignor
 		writeln('Failed to read ignore file {}: {}'.format(file, e))
 		return None
 	else:
-		return IgnoreFilter(lines)
+		return pathspec.GitIgnoreSpec.from_lines(lines)
 
 
-def make_packed_plugin(args: Any, *, quiet: bool = False):
-	input_dir: str = args.input
-	output_dir: str = args.output
+def make_packed_plugin(args: PackArgs, *, quiet: bool = False):
+	input_dir = Path(args.input)
+	output_dir = Path(args.output)
 	file_name: Optional[str] = args.name
 
 	writeln = print if not quiet else function_utils.NONE
 
 	if len(args.ignore_patterns) > 0:
 		writeln('Using ignore file patterns {}'.format(args.ignore_patterns))
-		ignore_filter = IgnoreFilter(args.ignore_patterns)
+		ignore_filter = pathspec.GitIgnoreSpec.from_lines(args.ignore_patterns)
 	else:
-		ignore_filter = read_ignore_file(os.path.join(input_dir, args.ignore_file), writeln)
-		if ignore_filter is not None:
-			writeln('Loaded ignore file patterns from {}'.format(args.ignore_file))
-		else:
-			ignore_filter = IgnoreFilter([])
+		ignore_filter = pathspec.GitIgnoreSpec.from_lines([])
+		if args.ignore_file:
+			ignore_filter = read_ignore_file(input_dir / args.ignore_file, writeln)
+			if ignore_filter is not None:
+				writeln('Loaded ignore file patterns from {}'.format(args.ignore_file))
 
-	if not os.path.isdir(input_dir):
+	if not input_dir.is_dir():
 		writeln('Invalid input directory {}'.format(input_dir))
 		return
-	if not os.path.isdir(output_dir):
-		os.makedirs(output_dir)
+	output_dir.mkdir(exist_ok=True)
 
-	meta_file_path = os.path.join(input_dir, plugin_constant.PLUGIN_META_FILE)
-	req_file_path = os.path.join(input_dir, plugin_constant.PLUGIN_REQUIREMENTS_FILE)
-	if not os.path.isfile(meta_file_path):
+	meta_file_path: Path = input_dir / plugin_constant.PLUGIN_META_FILE
+	req_file_path: Path = input_dir / plugin_constant.PLUGIN_REQUIREMENTS_FILE
+	if not meta_file_path.is_file():
 		writeln('Plugin metadata file {} not found'.format(meta_file_path))
 		return
 	try:
@@ -123,26 +99,26 @@ def make_packed_plugin(args: Any, *, quiet: bool = False):
 		file_name += plugin_constant.PACKED_PLUGIN_FILE_SUFFIXES[0]
 	file_counter = 0
 
-	def write(base_path: str, *, directory_only: bool):
-		if ignore_filter.is_ignored(base_path):
+	def write(base_path: Path, *, directory_only: bool):
+		if ignore_filter.match_file(base_path):
 			return
 		nonlocal file_counter
-		if os.path.isdir(base_path):
-			dir_arc = os.path.basename(base_path)
+		if base_path.is_dir():
+			dir_arc = base_path.name
 			zip_file.write(base_path, arcname=dir_arc)
 			file_counter += 1
 			writeln('Creating directory: {} -> {}'.format(base_path, dir_arc))
 			for dir_path, dir_names, file_names in os.walk(base_path):
 				for file_name_ in file_names + dir_names:
-					full_path = os.path.join(dir_path, file_name_)
-					if ignore_filter.is_ignored(full_path):
+					full_path = Path(dir_path) / file_name_
+					if ignore_filter.match_file(full_path):
 						continue
-					arc_name = os.path.join(dir_arc, full_path.replace(base_path, '', 1).lstrip(os.sep))
+					arc_name = os.path.join(dir_arc, full_path.relative_to(base_path))
 					zip_file.write(full_path, arcname=arc_name)
 					file_counter += 1
 					writeln('  Written: {} -> {}'.format(full_path, arc_name))
-		elif os.path.isfile(base_path) and not directory_only:
-			arc_name = os.path.basename(base_path)
+		elif base_path.is_file() and not directory_only:
+			arc_name = base_path.name
 			zip_file.write(base_path, arcname=arc_name)
 			file_counter += 1
 			writeln('Writing single file: {} -> {}'.format(base_path, arc_name))
@@ -150,7 +126,7 @@ def make_packed_plugin(args: Any, *, quiet: bool = False):
 			writeln('[WARN] {} not found! ignored'.format(base_path))
 
 	writeln('Packing plugin "{}" into "{}" ...'.format(meta.id, file_name))
-	packed_plugin_path = os.path.join(output_dir, file_name)
+	packed_plugin_path = output_dir / file_name
 	with open(packed_plugin_path, 'wb') as fd:
 		if args.shebang:
 			shebang = b'#!' + args.shebang.encode(getattr(zipapp, 'shebang_encoding', 'utf8')) + b'\n'
@@ -160,10 +136,11 @@ def make_packed_plugin(args: Any, *, quiet: bool = False):
 		with ZipFile(fd, 'w', ZIP_DEFLATED) as zip_file:
 			write(meta_file_path, directory_only=False)  # metadata
 			write(req_file_path, directory_only=False)  # requirement
-			write(os.path.join(input_dir, meta.id), directory_only=True)  # source module
-			for resource_path in meta.resources:  # resources
-				write(os.path.join(input_dir, resource_path), directory_only=False)
+			write(input_dir / meta.id, directory_only=True)  # source module
+			for resource_path in (meta.resources or []):  # resources
+				write(input_dir / resource_path, directory_only=False)
 	if args.shebang:
+		# chmod +x
 		os.chmod(packed_plugin_path, os.stat(packed_plugin_path).st_mode | stat.S_IEXEC)
 
 	writeln('Packed {} files/folders into "{}"'.format(file_counter, file_name))
