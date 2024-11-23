@@ -83,11 +83,11 @@ class SubCommand(ABC):
 
 	@staticmethod
 	def owner_command_root(literal) -> Literal:
-		return Literal(literal).requires(Requirements.has_permission(PermissionLevel.PHYSICAL_SERVER_CONTROL_LEVEL))
+		return Literal(literal).precondition(Requirements.has_permission(PermissionLevel.PHYSICAL_SERVER_CONTROL_LEVEL))
 
 	@staticmethod
 	def control_command_root(literal) -> Literal:
-		return Literal(literal).requires(Requirements.has_permission(PermissionLevel.MCDR_CONTROL_LEVEL))
+		return Literal(literal).precondition(Requirements.has_permission(PermissionLevel.MCDR_CONTROL_LEVEL))
 
 	@staticmethod
 	def public_command_root(literal) -> Literal:

@@ -4,7 +4,7 @@ from typing import Dict, Callable, TYPE_CHECKING, Optional, List, TypeVar, Gener
 from typing_extensions import Self
 
 from mcdreforged.command.builder.exception import CommandError
-from mcdreforged.command.builder.nodes.basic import RUNS_CALLBACK, Literal, AbstractNode, ArgumentNode, REQUIRES_CALLBACK, FAIL_MSG_CALLBACK, SUGGESTS_CALLBACK, ERROR_HANDLER_CALLBACK
+from mcdreforged.command.builder.nodes.basic import RUNS_CALLBACK, Literal, AbstractNode, ArgumentNode, REQUIRES_CALLBACK, FAIL_MSG_CALLBACK, SUGGESTS_CALLBACK, ERROR_HANDLER_CALLBACK, PRECONDITION_CALLBACK
 from mcdreforged.command.command_source import CommandSource
 
 if TYPE_CHECKING:
@@ -95,6 +95,14 @@ class NodeDefinition(Generic[NodeType], ABC):
 		"""
 		raise NotImplementedError()
 
+	def precondition(self, precondition: PRECONDITION_CALLBACK) -> Self:
+		"""
+		See :meth:`AbstractNode.precondition() <mcdreforged.command.builder.nodes.basic.AbstractNode.precondition>`
+
+		.. versionadded:: v2.14.0
+		"""
+		raise NotImplementedError()
+
 	def suggests(self, suggestion: SUGGESTS_CALLBACK) -> Self:
 		"""
 		See :meth:`AbstractNode.suggests() <mcdreforged.command.builder.nodes.basic.AbstractNode.suggests>`
@@ -132,6 +140,11 @@ class _NodeDefinitionImpl(NodeDefinition):
 	def requires(self, requirement: REQUIRES_CALLBACK, failure_message_getter: Optional[FAIL_MSG_CALLBACK] = None) -> Self:
 		def post_processor_requires(node: NodeType):
 			node.requires(requirement, failure_message_getter)
+		return self.post_process(post_processor_requires)
+
+	def precondition(self, precondition: PRECONDITION_CALLBACK) -> Self:
+		def post_processor_requires(node: NodeType):
+			node.requires(precondition)
 		return self.post_process(post_processor_requires)
 
 	def suggests(self, suggestion: SUGGESTS_CALLBACK) -> Self:

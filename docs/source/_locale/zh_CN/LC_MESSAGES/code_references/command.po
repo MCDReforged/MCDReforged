@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-18 17:53+0800\n"
+"POT-Creation-Date: 2024-11-23 23:33+0800\n"
 "PO-Revision-Date: 2021-01-23 17:24+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -141,6 +141,7 @@ msgid "A helper method for testing permission requirement"
 msgstr "一个用于测试权限需求的工具方法"
 
 #: ../code_references/command.rst
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.precondition
 #: mcdreforged.command.builder.nodes.basic.AbstractNode.requires
 #: mcdreforged.command.builder.nodes.basic.AbstractNode.then of
 msgid "Parameters"
@@ -287,14 +288,14 @@ msgstr ""
 msgid ""
 "Set the requirement tester callback of the node. When entering this node,"
 " MCDR will invoke the requirement tester to see if the current command "
-"source and context match your specific condition."
-msgstr "设置节点的需要的测试器回调。进入此节点时，MCDR将调用需求测试器以查看当前命令源和上下文是否符合你设定的条件"
+"source and context meet the specified condition"
+msgstr "设置节点的校验测试器回调。进入此节点时，MCDR 将调用校验测试器以查看当前命令源和上下文是否符合你设定的条件"
 
 #: mcdreforged.command.builder.nodes.basic.AbstractNode.requires:4 of
 msgid ""
 "If the tester callback return True, nothing will happen, MCDR will "
 "continue parsing the rest of the command"
-msgstr "如果测试器返回 True，则MCDR将继续解析命令的其余部分"
+msgstr "如果测试器返回 True，则 MCDR 将继续解析命令的其余部分"
 
 #: mcdreforged.command.builder.nodes.basic.AbstractNode.requires:6 of
 msgid ""
@@ -315,6 +316,7 @@ msgid ""
 "all given requirements are satisfied"
 msgstr "若多次调用 :meth:`requires`，则将使用“与”逻辑合并所有需求，即仅当所有需求都被满足时测试才算通过"
 
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.precondition:10
 #: mcdreforged.command.builder.nodes.basic.AbstractNode.requires:14 of
 msgid ""
 "A callable that accepts up to 2 arguments and returns a bool. Argument "
@@ -338,9 +340,29 @@ msgstr ""
 "的可调用对象。参数列表：:class:`~mcdreforged.command.command_source.CommandSource`、:class:`dict`"
 " (:class:`~mcdreforged.command.builder.common.CommandContext`)"
 
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.precondition:13
 #: mcdreforged.command.builder.nodes.basic.AbstractNode.requires:19 of
 msgid "Example usages::"
 msgstr "示例用法::"
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.precondition:1 of
+msgid ""
+"Set the precondition callback for this node. Before attempting to enter "
+"this node, MCDR will invoke the precondition callback to see if the "
+"current command source and context meet the specified condition"
+msgstr "设置节点的需要的前置条件回调。进入此节点时，MCDR 将调用前置条件测试器以查看当前命令源和上下文是否符合你设定的条件"
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.precondition:4 of
+msgid ""
+"If the precondition callback returns True, the node will remain "
+"accessible, and MCDR will continue entering the node"
+msgstr "如果测试器返回 True，则 MCDR 将继续进入该节点，并执行后续的解析操作"
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.precondition:6 of
+msgid ""
+"If the precondition callback returns False, the node will be filtered out"
+" and treated as if it does not exist"
+msgstr "如果测试器返回 False，则该节点将被跳过，就像不存在一样"
 
 #: mcdreforged.command.builder.nodes.basic.AbstractNode.redirects:1 of
 msgid "Redirect all further child nodes command parsing to another given node"
@@ -370,29 +392,33 @@ msgstr "命令解析，即从命令中解析节点的字面量 / 参数值"
 
 #: mcdreforged.command.builder.nodes.basic.AbstractNode.redirects:11 of
 msgid "Requirement testing"
-msgstr "节点需求测试"
+msgstr "节点校验条件测试"
 
 #: mcdreforged.command.builder.nodes.basic.AbstractNode.redirects:12 of
+msgid "Precondition testing"
+msgstr "节点前置条件测试"
+
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.redirects:13 of
 msgid "Suggestion fetching"
 msgstr "命令建议获取"
 
-#: mcdreforged.command.builder.nodes.basic.AbstractNode.redirects:14 of
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.redirects:15 of
 msgid "Example use cases:"
 msgstr "用途示例："
 
-#: mcdreforged.command.builder.nodes.basic.AbstractNode.redirects:16 of
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.redirects:17 of
 msgid ""
 "You want a short command and full-path command that will all execute the "
 "same commands"
 msgstr "你需要一个简短的命令和一个全路径命令来执行相同的命令"
 
-#: mcdreforged.command.builder.nodes.basic.AbstractNode.redirects:17 of
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.redirects:18 of
 msgid ""
 "You want to repeatedly re-enter a command node's children when parsing "
 "commands"
 msgstr "当解析命令时，你希望重复进入一个命令节点的子节点"
 
-#: mcdreforged.command.builder.nodes.basic.AbstractNode.redirects:19 of
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.redirects:20 of
 msgid ""
 "Pay attention to the difference between :meth:`redirects` and "
 ":meth:`then`. :meth:`redirects` is to redirect the child nodes, and "
@@ -401,7 +427,7 @@ msgstr ""
 "注意 :meth:`redirects` 和 :meth:`then` 之间的区别。:meth:`redirects` 是重定向子节点，而 "
 ":meth:`then` 是添加子节点"
 
-#: mcdreforged.command.builder.nodes.basic.AbstractNode.redirects:22 of
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.redirects:23 of
 msgid "A node instance which current node is redirecting to"
 msgstr "当前节点的重定向目标"
 
@@ -1093,6 +1119,15 @@ msgstr "在 :meth:`SimpleCommandBuilder.build` 中，当一个节点被构造后
 msgid ""
 "See :meth:`AbstractNode.requires() "
 "<mcdreforged.command.builder.nodes.basic.AbstractNode.requires>`"
+msgstr ""
+"见 :meth:`AbstractNode.requires() "
+"<mcdreforged.command.builder.nodes.basic.AbstractNode.requires>`"
+
+#: mcdreforged.command.builder.tools.NodeDefinition.precondition:1 of
+#, fuzzy
+msgid ""
+"See :meth:`AbstractNode.precondition() "
+"<mcdreforged.command.builder.nodes.basic.AbstractNode.precondition>`"
 msgstr ""
 "见 :meth:`AbstractNode.requires() "
 "<mcdreforged.command.builder.nodes.basic.AbstractNode.requires>`"

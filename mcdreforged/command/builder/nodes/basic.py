@@ -49,6 +49,7 @@ ERROR_HANDLER_CALLBACK = __SOURCE_ERROR_CONTEXT_CALLBACK
 FAIL_MSG_CALLBACK = __SOURCE_CONTEXT_CALLBACK_MSG
 SUGGESTS_CALLBACK = __SOURCE_CONTEXT_CALLBACK_STR_ITERABLE
 REQUIRES_CALLBACK = __SOURCE_CONTEXT_CALLBACK_BOOL
+PRECONDITION_CALLBACK = __SOURCE_CONTEXT_CALLBACK_BOOL
 
 
 class CallbackError(Exception):
@@ -90,6 +91,7 @@ class AbstractNode(ABC):
 		self._callback: Optional[RUNS_CALLBACK] = None
 		self._error_handlers: _ERROR_HANDLER_TYPE = {}
 		self._child_error_handlers: _ERROR_HANDLER_TYPE = {}
+		self._preconditions: List[PRECONDITION_CALLBACK] = []
 		self._requirements: List[_Requirement] = []
 		self._redirect_node: Optional[AbstractNode] = None
 		self._suggestion_getter: SUGGESTS_CALLBACK = lambda: []
@@ -167,7 +169,7 @@ class AbstractNode(ABC):
 	def requires(self, requirement: REQUIRES_CALLBACK, failure_message_getter: Optional[FAIL_MSG_CALLBACK] = None) -> Self:
 		"""
 		Set the requirement tester callback of the node. When entering this node, MCDR will invoke the requirement tester
-		to see if the current command source and context match your specific condition.
+		to see if the current command source and context meet the specified condition
 
 		If the tester callback return True, nothing will happen, MCDR will continue parsing the rest of the command
 
@@ -186,13 +188,36 @@ class AbstractNode(ABC):
 
 		Example usages::
 
-			node1.requires(lambda src: src.has_permission(3))  # Permission check
+			node1.requires(lambda src: src.has_permission(3))  # Permission check, error if the permission is not enough
 			node2.requires(lambda src, ctx: ctx['page_count'] <= get_max_page())  # Dynamic range check
 			node3.requires(lambda src, ctx: is_legal(ctx['target']), lambda src, ctx: 'target {} is illegal'.format(ctx['target']))  # Customized failure message
 		"""
 		class_utils.check_type(requirement, Callable)
 		class_utils.check_type(failure_message_getter, [Callable, None])
 		self._requirements.append(_Requirement(requirement, failure_message_getter))
+		return self
+
+	def precondition(self, precondition: PRECONDITION_CALLBACK) -> Self:
+		"""
+		Set the precondition callback for this node. Before attempting to enter this node, MCDR will invoke the precondition callback
+		to see if the current command source and context meet the specified condition
+
+		If the precondition callback returns True, the node will remain accessible, and MCDR will continue entering the node
+
+		If the precondition callback returns False, the node will be filtered out and treated as if it does not exist
+
+		.. versionadded:: v2.14.0
+
+		:param precondition: A callable that accepts up to 2 arguments and returns a bool.
+			Argument list: :class:`~mcdreforged.command.command_source.CommandSource`, :class:`dict` (:class:`~mcdreforged.command.builder.common.CommandContext`)
+
+		Example usages::
+
+			node1.precondition(lambda src: src.has_permission(3))  # Permission check, but hide if the permission is not enough
+			node2.precondition(lambda src, ctx: 'foo' in ctx)  # Avoid re-assigning the "foo" argument
+		"""
+		class_utils.check_type(precondition, Callable)
+		self._preconditions.append(precondition)
 		return self
 
 	def redirects(self, redirect_node: 'AbstractNode') -> Self:
@@ -208,6 +233,7 @@ class AbstractNode(ABC):
 
 		* Command parsing, i.e. parsing the literal / argument value of the node from command
 		* Requirement testing
+		* Precondition testing
 		* Suggestion fetching
 
 		Example use cases:
@@ -385,6 +411,13 @@ class AbstractNode(ABC):
 				return req
 		return None
 
+	def __check_preconditions(self, context: CommandContext) -> bool:
+		for precondition in self._preconditions:
+			ok = self.__smart_callback(precondition, (context.source, context), CallbackError.builder(context, 'preconditions check'))
+			if not ok:
+				return False
+		return True
+
 	def _get_suggestions(self, context: CommandContext) -> Iterable[str]:
 		return self.__smart_callback(self._suggestion_getter, (context.source, context), CallbackError.builder(context, 'suggestions getting'))
 
@@ -433,7 +466,10 @@ class AbstractNode(ABC):
 						try:
 							# Check literal children first
 							literal_error = None
+							child_literal: AbstractNode  # satisfy pycharm's static checker on the __check_preconditions() call
 							for child_literal in node._children_literal.get(next_literal, []):
+								if not child_literal.__check_preconditions(context):
+									continue
 								try:
 									with context.enter_child(child_literal):
 										child_literal._execute_command(context)
@@ -446,6 +482,8 @@ class AbstractNode(ABC):
 								if literal_error is not None:
 									raise literal_error
 								for child in node._children:
+									if not child.__check_preconditions(context):
+										continue
 									with context.enter_child(child):
 										child._execute_command(context)
 									break
@@ -495,16 +533,23 @@ class AbstractNode(ABC):
 				node = self if self._redirect_node is None else self._redirect_node
 				# Check literal children first
 				children_literal = node._children_literal.get(utils.get_element(next_remaining), [])
+				child_literal: AbstractNode  # satisfy pycharm's static checker on the __check_preconditions() call
 				for child_literal in children_literal:
+					if not child_literal.__check_preconditions(context):
+						continue
 					with context.enter_child(child_literal):
 						suggestions.extend(child_literal._generate_suggestions(context))
 				if len(children_literal) == 0:
 					for literal_list in node._children_literal.values():
 						for child_literal in literal_list:
+							if not child_literal.__check_preconditions(context):
+								continue
 							with context.enter_child(child_literal):
 								suggestions.extend(child_literal._generate_suggestions(context))
 					usages = []
 					for child in node._children:
+						if not child.__check_preconditions(context):
+							continue
 						with context.enter_child(child):
 							suggestions.extend(child._generate_suggestions(context))
 							if len(next_remaining) == 0:
