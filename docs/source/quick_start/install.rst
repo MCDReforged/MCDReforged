@@ -96,6 +96,11 @@ and requires administrator privileges, increasing security risks
 
 System-wide installation may even result in an ``externally-managed-environment`` error
 
+.. dropdown:: An animated demo on the ``externally-managed-environment`` error
+
+    .. asciinema:: resources/externally_managed_environment.cast
+        :rows: 24
+
 See `PEP 668 <https://peps.python.org/pep-0668/>`__ for the detailed specification
 
 It's safer to keep the installation isolated. As workarounds, there're multiple options for you. In conclusion:
