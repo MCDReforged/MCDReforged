@@ -289,7 +289,7 @@ msgid ""
 " pipx. To install Python packages into this environment, instead of using"
 " ``pip install <package_name>``, you should use:"
 msgstr ""
-"如此一来，MCDR 将被安装在一个 pipx 管理的隔离环境中。要将 Python 包安装到此环境中，不建议使用 ``pip install "
+"如此一来，MCDR 将被安装在一个 pipx 管理的隔离环境中。要将 Python 包安装到此环境中，不应该使用 ``pip install "
 "<包名称>``，而应该使用："
 
 #: ../quick_start/install.rst:163
