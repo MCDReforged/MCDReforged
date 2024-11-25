@@ -9,7 +9,7 @@ MCDR won't start
 
 * **mcdreforged: command not found**
     * If you installed MCDR via pipx, ensure the pipx apps directory is in your PATH
-    * If you installed MCDR via pip, try ``python -m mcdreforged``, which explicitly specifies the Python interpreter to start MCDR
+    * If you installed MCDR via pip, try ``python -m mcdreforged``, which explicitly specifies the Python interpreter to start MCDR, to avoid using a wrong Python interpreter
     * If you installed MCDR via pip globally, ensure that the directory where pip places the installed scripts is in your PATH
     * If you installed MCDR via pip within venv, make sure you have activated the venv
     * If you installed MCDR via system package manager... don't install MCDR via system package manager
@@ -25,8 +25,8 @@ The server won't start
 
 * Check your start command
 * Check if Java is installed and added to the PATH
-* Try to run the server without MCDR, using the same command you configured
-* If you're directing the start command to a batch or shellscript, try the actual command instead of the script
+* **Try to run the server without MCDR, using the same command you configured**
+* If you're directing the start command to a batch or shell script, try the actual command instead of the script
 
 Learn more in :ref:`configuration:start_command`
 
@@ -85,9 +85,10 @@ Commands not working
 - **Some plugin commands work neither in game nor on the console**
 - **Some plugin commands perform incorrectly in all conditions**
 
-    Check if the plugin is enabled and loaded correctly. Check the logs to see if there are any errors or warnings related to the plugin. Check the plugin configuration
+    Check if the plugin is enabled and loaded correctly. Check the logs to see if there are any errors or warnings related to the plugin, and read if there are
 
-    Check the README or documentation of the plugin to see if it has any special requirements. Some plugins may require additional permissions or configurations
+    Check the README or documentation of the plugin to see if it has any special requirements. Some plugins may require additional permissions or configurations.
+    Check the plugin configuration file to ensure it's filled correctly
 
     Some plugins may have conflicts with others. Try to disable other plugins to see if the problem solved
 
@@ -120,7 +121,9 @@ Still, before you ask questions or report bugs, please:
 * Help others reproduce the problem:
 
     * `Create a minimal reproducible example <https://stackoverflow.com/help/minimal-reproducible-example>`__
-    * Provide your full logs and context, no unnecessary images. If the log file is long, send it as an attachment file or use services like `mclo.gs <https://mclo.gs/>`__ or `Pastebin <https://pastebin.com/>`__ to share it
+    * Provide your full logs and context, no unnecessary images. If the log file is long,
+      send it as an attachment file or use services like `mclo.gs <https://mclo.gs/>`__ or `Pastebin <https://pastebin.com/>`__ to share it.
+      Remember to clean up sensitive information in the logs.
 
 * Proofread before posting
 * Respond to feedback after posting

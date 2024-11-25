@@ -22,7 +22,7 @@ If you have an interest in developing one yourself:
 Commands
 --------
 
-MCDR has its own command system.  Most of them start with a ``!!`` in common practice. Mentioned above, ``!!MCDR plg`` is one of the built-in commands.
+MCDR has its own command system. Most of them start with a ``!!`` in common practice. Mentioned above, ``!!MCDR plg`` is one of the built-in commands.
 
 You may want to learn more of them: :doc:`/command/index`
 

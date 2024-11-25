@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-19 13:49+0000\n"
+"POT-Creation-Date: 2024-11-23 14:32+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -46,7 +46,9 @@ msgstr "PyPI 版本"
 msgid ""
 "MCDR is written and runs in Python 3. Make sure you have Python 3.8 or "
 "later, with `pip <https://github.com/pypa/pip>`__ installed"
-msgstr "MCDR 用 Python 3 编写和运行。确保你的 Python 版本至少为 3.8，并且安装了 `pip <https://github.com/pypa/pip>`__"
+msgstr ""
+"MCDR 用 Python 3 编写和运行。确保你的 Python 版本至少为 3.8，并且安装了 `pip "
+"<https://github.com/pypa/pip>`__"
 
 #: ../quick_start/install.rst:24
 msgid "The detailed Python version requirements are as shown in the table below"
@@ -76,57 +78,76 @@ msgstr ">= 2.10"
 msgid ">= 3.8"
 msgstr ">= 3.8"
 
-#: ../quick_start/install.rst:37
+#: ../quick_start/install.rst:35
+msgid ">= 2.15 (future version)"
+msgstr ">= 2.15（未来版本）"
+
+#: ../quick_start/install.rst:36
+msgid ">= 3.9"
+msgstr ">= 3.9"
+
+#: ../quick_start/install.rst:39
 msgid "Wait a second"
 msgstr "先等等"
 
-#: ../quick_start/install.rst:39
+#: ../quick_start/install.rst:41
 msgid ""
 "In some tutorials, you may learn to use MCDR by downloading a zip from "
 "Github and extracting it"
 msgstr "在一些教程中，你可能会听说要从 Github 下载 zip 文件并解压来使用 MCDR"
 
-#: ../quick_start/install.rst:41
+#: ../quick_start/install.rst:43
 msgid ""
 "However, that's not the correct way to install MCDR - Those tutorials are"
-" outdated"
-msgstr "然而，那并不是安装 MCDR 的正确方式——那些教程已经过时了"
+" outdated. Since the release of version 1.0 in early 2021, MCDR has no "
+"longer used source code installation"
+msgstr "然而，那并不是安装 MCDR 的正确方式——那些教程已经过时了。MCDR 自 2021 年初的 v1.0 版本开始，就不再使用源码安装了"
 
-#: ../quick_start/install.rst:45
+#: ../quick_start/install.rst:48
 msgid ""
 "**DO NOT** download the source files of MCDR and execute them directly, "
 "unless you're a developer of MCDR and you know what you are doing"
 msgstr "**不要** 下载 MCDR 的源码并直接运行，除非你是 MCDR 的开发者，并且你知道你在干什么"
 
-#: ../quick_start/install.rst:48
+#: ../quick_start/install.rst:51
 msgid "Install using pip"
 msgstr "使用 pip 安装"
 
-#: ../quick_start/install.rst:50
+#: ../quick_start/install.rst:53
 msgid ""
 "MCDR is available in `PyPI <https://pypi.org/project/mcdreforged>`__, "
 "it's reasonably to be installed by:"
 msgstr "MCDR 已上传至 `PyPI <https://pypi.org/project/mcdreforged>`__。它理应能由如下命令安装："
 
-#: ../quick_start/install.rst:64
+#: ../quick_start/install.rst:67
 msgid "And upgraded by:"
 msgstr "并用如下命令升级："
 
-#: ../quick_start/install.rst:78
+#: ../quick_start/install.rst:81
 msgid "Verify the installation with:"
 msgstr "验证安装是否成功："
 
-#: ../quick_start/install.rst:86
+#: ../quick_start/install.rst:88
+msgid ""
+"For users in China, if you encounter slow downloads or network issues "
+"while using ``pip`` to install packages, you can refer to the "
+":ref:`quick_start/install:Accelerate the installation` section below to "
+"resolve these issues"
+msgstr ""
+"对于国内用户，若在 pip 安装时出现了下载缓慢、网络不畅等网络问题，可以参考下文的 "
+":ref:`quick_start/install:Accelerate the installation` 小节来解决"
+
+#: ../quick_start/install.rst:92
 msgid "Externally managed environment"
 msgstr "外部管理的环境"
 
-#: ../quick_start/install.rst:88
+#: ../quick_start/install.rst:94
 msgid ""
 "If you're using Windows, the command above should work fine, and MCDR "
 "will be installed to the global environment - you may ignore this section"
 msgstr "如果你使用的是 Windows，上述命令应当能正常工作，MCDR 将被安装到全局环境中，你可以忽略本节内容"
 
-#: ../quick_start/install.rst:90
+#: ../quick_start/install.rst:96
 msgid ""
 "For Linux and Mac OS, it's not recommended to install MCDR system-wide "
 "(with root), because it can cause conflicts with other Python packages "
@@ -135,149 +156,153 @@ msgstr ""
 "但是，在 Linux 和 Mac OS 中，我们不建议全局（使用 root）安装 MCDR，因为它可能会与其他 Python "
 "包产生冲突，并可能影响系统依赖"
 
-#: ../quick_start/install.rst:92
+#: ../quick_start/install.rst:98
 msgid ""
 "System-wide installation also makes version management difficult and "
 "requires administrator privileges, increasing security risks"
 msgstr "全局安装也使得版本管理变得困难，并且需要管理员权限，增加了安全风险"
 
-#: ../quick_start/install.rst:95
+#: ../quick_start/install.rst:101
 msgid ""
 "System-wide installation may even result in an ``externally-managed-"
 "environment`` error"
 msgstr "全局安装甚至可能导致 ``externally-managed-environment`` 错误"
 
-#: ../quick_start/install.rst:97
+#: ../quick_start/install.rst
+msgid "An animated demo on the ``externally-managed-environment`` error"
+msgstr "关于 ``externally-managed-environment`` 错误的动画演示"
+
+#: ../quick_start/install.rst:108
 msgid ""
 "See `PEP 668 <https://peps.python.org/pep-0668/>`__ for the detailed "
 "specification"
 msgstr "详见 `PEP 668 <https://peps.python.org/pep-0668/>`__"
 
-#: ../quick_start/install.rst:99
+#: ../quick_start/install.rst:110
 msgid ""
 "It's safer to keep the installation isolated. As workarounds, there're "
 "multiple options for you. In conclusion:"
-msgstr "为了安全起见，最好将 MCDR 安装在隔离环境中。你可以选择以下几种方式："
+msgstr "为了安全起见，最好将 MCDR 安装在一个与全局环境相隔离的环境中。有如下几种方案可供参考："
 
-#: ../quick_start/install.rst:104
+#: ../quick_start/install.rst:115
 msgid "Method"
 msgstr "方式"
 
-#: ../quick_start/install.rst:105
+#: ../quick_start/install.rst:116
 msgid "Pros"
 msgstr "优点"
 
-#: ../quick_start/install.rst:106
+#: ../quick_start/install.rst:117
 msgid "Cons"
 msgstr "缺点"
 
-#: ../quick_start/install.rst:107
+#: ../quick_start/install.rst:118
 msgid "pip"
 msgstr "pip"
 
-#: ../quick_start/install.rst:108
+#: ../quick_start/install.rst:119
 msgid "Native, always available"
 msgstr "原生支持，总是可用"
 
-#: ../quick_start/install.rst:109
+#: ../quick_start/install.rst:120
 msgid "Not isolated, may affect global packages with root privileges"
 msgstr "非隔离环境，root 使用时可能影响全局包"
 
-#: ../quick_start/install.rst:110
+#: ../quick_start/install.rst:121
 msgid "pipx"
 msgstr "pipx"
 
-#: ../quick_start/install.rst:111
+#: ../quick_start/install.rst:122
 msgid "Simplest"
 msgstr "易于使用"
 
-#: ../quick_start/install.rst:112
+#: ../quick_start/install.rst:123
 msgid "3rd party, different command set"
 msgstr "第三方工具，命令不同"
 
-#: ../quick_start/install.rst:113
+#: ../quick_start/install.rst:124
 msgid "venv"
 msgstr "venv"
 
-#: ../quick_start/install.rst:114
+#: ../quick_start/install.rst:125
 msgid "Native support"
 msgstr "原生支持"
 
-#: ../quick_start/install.rst:115
+#: ../quick_start/install.rst:126
 msgid "Requires manual environment activation"
 msgstr "需要手动激活环境"
 
-#: ../quick_start/install.rst:116
+#: ../quick_start/install.rst:127
 msgid "docker"
 msgstr "docker"
 
-#: ../quick_start/install.rst:117
+#: ../quick_start/install.rst:128
 msgid "Reliable across environments"
-msgstr "跨环境可靠"
+msgstr "多环境下一致可靠"
 
-#: ../quick_start/install.rst:118
+#: ../quick_start/install.rst:129
 msgid "More dependencies and disk space, convoluted learning path"
 msgstr "更多依赖和磁盘空间，学习路线曲折"
 
-#: ../quick_start/install.rst:119
+#: ../quick_start/install.rst:130
 msgid "system package"
 msgstr "系统包"
 
-#: ../quick_start/install.rst:120
+#: ../quick_start/install.rst:131
 msgid "\\-"
 msgstr "\\-"
 
-#: ../quick_start/install.rst:121
+#: ../quick_start/install.rst:132
 msgid "Same as pip, **not recommended**"
 msgstr "与 pip 相同，**不推荐使用**"
 
-#: ../quick_start/install.rst:124
+#: ../quick_start/install.rst:135
 msgid "Using pipx"
 msgstr "使用 pipx"
 
-#: ../quick_start/install.rst:126
+#: ../quick_start/install.rst:137
 msgid ""
 "It may be the simplest solution for most users, but it requires using the"
 " third-party tool `pipx <https://pipx.pypa.io/>`__, which is designed for"
 " installing and running Python applications in isolated environments"
 msgstr ""
-"也许是对大多数用户而言最简单的解决方案，但需要使用第三方工具 `pipx "
-"<https://pipx.pypa.io/>`__，其专为在隔离环境中安装和运行 Python 应用程序而设计""
+"这也许是对大多数用户而言最简单的解决方案，但需要使用第三方工具 `pipx <https://pipx.pypa.io/>`__。pipx "
+"专为在隔离环境中安装和运行 Python 应用程序而设计"
 
-#: ../quick_start/install.rst:128
+#: ../quick_start/install.rst:139
 msgid ""
 "To install pipx, please refer to its `official documentation "
 "<https://pipx.pypa.io/stable/#install-pipx>`__"
-msgstr "参考其 `官方文档 <https://pipx.pypa.io/stable/#install-pipx>`__ 安装 pipx"
+msgstr "请先参考其 `官方文档 <https://pipx.pypa.io/stable/#install-pipx>`__ 安装 pipx"
 
-#: ../quick_start/install.rst:130
+#: ../quick_start/install.rst:141
 msgid "Then you can install MCDR using pipx:"
-msgstr "然后使用 pipx 安装 MCDR："
+msgstr "然后再使用 pipx 安装 MCDR："
 
-#: ../quick_start/install.rst:136
-msgid "When a new version of MCDR is available, you can upgrade by:"
-msgstr "当有新版本的 MCDR 可用时，你可以通过以下命令升级："
+#: ../quick_start/install.rst:147 ../quick_start/install.rst:217
+msgid "When a new version of MCDR is available, you can upgrade MCDR by:"
+msgstr "在 MCDR 发布新版本后，你可以通过以下命令升级："
 
-#: ../quick_start/install.rst:149
+#: ../quick_start/install.rst:160
 msgid ""
-"In this way, MCDR will be installed in an isolated environment. Instead "
-"of using ``pip install <package_name>``, Python packages required by MCDR"
-" plugins should be installed by:"
+"In this way, MCDR will be installed in an isolated environment managed by"
+" pipx. To install Python packages into this environment, instead of using"
+" ``pip install <package_name>``, you should use:"
 msgstr ""
-"如此一来，MCDR 将被安装在隔离环境中。MCDR 插件所需的 Python 包应通过以下命令安装，而非 ``pip install "
-"<包名称>``："
+"如此一来，MCDR 将被安装在一个 pipx 管理的隔离环境中。要将 Python 包安装到此环境中，不应该使用 ``pip install "
+"<包名称>``，而应该使用："
 
-#: ../quick_start/install.rst:151
+#: ../quick_start/install.rst:163
 msgid ""
 "``pipx inject mcdreforged <package_name>``, e.g. ``pipx inject "
 "mcdreforged requests``"
 msgstr "``pipx inject mcdreforged <包名称>``，例如 ``pipx inject mcdreforged requests``"
 
-#: ../quick_start/install.rst:152
+#: ../quick_start/install.rst:164
 msgid "or ``pipx inject mcdreforged -r requirements.txt``"
 msgstr "或 ``pipx inject mcdreforged -r requirements.txt``"
 
-#: ../quick_start/install.rst:154
+#: ../quick_start/install.rst:166
 msgid ""
 "More conveniently, you can use the :ref:`\\!!MCDR plg command "
 "<command/mcdr:Plugin management>` to install plugins with their "
@@ -286,93 +311,93 @@ msgstr ""
 "当然，也可以用 :ref:`\\!!MCDR plg 命令 <command/mcdr:Plugin management>` "
 "更轻松地安装插件及其依赖"
 
-#: ../quick_start/install.rst:158
+#: ../quick_start/install.rst:170
 msgid "Using virtual environment"
 msgstr "使用虚拟环境"
 
-#: ../quick_start/install.rst:160
+#: ../quick_start/install.rst:172
 msgid ""
 "For the most native, but more complicated option, you can create a "
 "virtual environment and install MCDR in it"
-msgstr "这是最原生但最复杂的方法，你可以创建一个虚拟环境，并在其中安装 MCDR"
+msgstr "这是最原生但更复杂的方法，你可以创建一个虚拟环境，并在其中安装 MCDR"
 
-#: ../quick_start/install.rst:162
+#: ../quick_start/install.rst:174
 msgid "Create a virtual environment by:"
 msgstr "通过以下命令创建虚拟环境："
 
-#: ../quick_start/install.rst:168
+#: ../quick_start/install.rst:180
 msgid "``venv`` for example:"
-msgstr "例如，创建在 ``venv`` 文件夹中："
+msgstr "例如使用 ``venv`` 作为虚拟环境的部署路径"
 
-#: ../quick_start/install.rst:174
+#: ../quick_start/install.rst:186
 msgid "Activate it by:"
-msgstr "通过以下命令激活："
+msgstr "然后通过以下命令激活虚拟环境："
 
-#: ../quick_start/install.rst:177
+#: ../quick_start/install.rst:189
 msgid "Platform"
 msgstr "平台"
 
-#: ../quick_start/install.rst:177
+#: ../quick_start/install.rst:189
 msgid "Shell"
 msgstr "Shell"
 
-#: ../quick_start/install.rst:177
+#: ../quick_start/install.rst:189
 msgid "Command to activate virtual environment"
 msgstr "激活虚拟环境的命令"
 
-#: ../quick_start/install.rst:179
+#: ../quick_start/install.rst:191
 msgid "POSIX"
 msgstr "POSIX"
 
-#: ../quick_start/install.rst:179
+#: ../quick_start/install.rst:191
 msgid "bash/zsh"
 msgstr "bash/zsh"
 
-#: ../quick_start/install.rst:179
+#: ../quick_start/install.rst:191
 msgid "source venv/bin/activate"
 msgstr ""
 
-#: ../quick_start/install.rst:181
+#: ../quick_start/install.rst:193
 msgid "fish"
 msgstr "fish"
 
-#: ../quick_start/install.rst:181
+#: ../quick_start/install.rst:193
 msgid "source venv/bin/activate.fish"
 msgstr ""
 
-#: ../quick_start/install.rst:183
+#: ../quick_start/install.rst:195
 msgid "csh/tcsh"
 msgstr "csh/tcsh"
 
-#: ../quick_start/install.rst:183
+#: ../quick_start/install.rst:195
 msgid "source venv/bin/activate.csh"
 msgstr ""
 
-#: ../quick_start/install.rst:185 ../quick_start/install.rst:189
+#: ../quick_start/install.rst:197 ../quick_start/install.rst:201
 msgid "PowerShell"
 msgstr "PowerShell"
 
-#: ../quick_start/install.rst:185
+#: ../quick_start/install.rst:197
 msgid "venv/bin/Activate.ps1"
 msgstr ""
 
-#: ../quick_start/install.rst:187
+#: ../quick_start/install.rst:199
 msgid "Windows"
 msgstr "Windows"
 
-#: ../quick_start/install.rst:187
+#: ../quick_start/install.rst:199
 msgid "cmd.exe"
 msgstr "cmd.exe"
 
-#: ../quick_start/install.rst:187
+#: ../quick_start/install.rst:199
 msgid "venv\\\\Scripts\\\\activate.bat"
 msgstr ""
 
-#: ../quick_start/install.rst:189
+#: ../quick_start/install.rst:201
 msgid "venv\\\\Scripts\\\\Activate.ps1"
 msgstr ""
 
-#: ../quick_start/install.rst:194
+#: ../quick_start/install.rst:206
 msgid ""
 "Python Doc: `How venvs work <https://docs.python.org/3/library/venv.html"
 "#how-venvs-work>`__"
@@ -380,25 +405,27 @@ msgstr ""
 "Python 文档: `虚拟环境是如何实现的 <https://docs.python.org/zh-cn/3/library/venv.html"
 "#how-venvs-work>`__"
 
-#: ../quick_start/install.rst:196
-msgid "Then, install MCDR using pip:"
-msgstr "然后，使用 pip 安装 MCDR："
-
-#: ../quick_start/install.rst:203
-msgid "When a new version of MCDR is available, you can upgrade MCDR by:"
-msgstr "当有新版本的 MCDR 可用时，你可以通过以下命令升级："
+#: ../quick_start/install.rst:208
+msgid ""
+"After activating the virtual environment, a ``(venv)`` prefix should "
+"appear in your terminal environment"
+msgstr "在虚拟环境激活后，你的终端环境中应当出现一个 ``(venv)`` 前缀"
 
 #: ../quick_start/install.rst:210
+msgid "Then, install MCDR using pip:"
+msgstr "然后，你可以直接使用 pip 安装 MCDR："
+
+#: ../quick_start/install.rst:224
 msgid "An animated demo with bash:"
 msgstr "使用 bash 的动画演示："
 
-#: ../quick_start/install.rst:219
+#: ../quick_start/install.rst:233
 msgid ""
 "In this way, you must activate the virtual environment every time you "
 "want to use MCDR, or install packages for MCDR plugins"
-msgstr "这样一来，每次使用 MCDR，或为 MCDR 插件安装依赖时，都要激活虚拟环境"
+msgstr "这样一来，每当你需要使用 MCDR，或要为 MCDR 插件安装 Python 包依赖时，你都需要激活虚拟环境"
 
-#: ../quick_start/install.rst:221
+#: ../quick_start/install.rst:235
 msgid ""
 "For more information, see `venv "
 "<https://docs.python.org/en/3/library/venv.html>`__ in the Python Doc"
@@ -406,31 +433,33 @@ msgstr ""
 "更多信息，参见 Python 文档：`虚拟环境的创建 <https://docs.python.org/zh-"
 "cn/3/library/venv.html>`__"
 
-#: ../quick_start/install.rst:224
+#: ../quick_start/install.rst:238
 msgid "Using Docker"
 msgstr "使用 Docker"
 
-#: ../quick_start/install.rst:226
+#: ../quick_start/install.rst:240
 msgid ""
 "MCDR also provides Docker images as an option. See :doc:`/docker` for "
 "more details"
 msgstr "MCDR 还提供了 Docker 镜像。参见 :doc:`/docker` 一章"
 
-#: ../quick_start/install.rst:228
-msgid "You can specify the version of MCDR by the tag of the Docker image"
-msgstr "通过 Docker 镜像标签来指定 MCDR 版本"
+#: ../quick_start/install.rst:242
+msgid ""
+"In addition to the basic MCDR image, MCDR also provides image variants "
+"pre-installed with additional Python packages and OpenJDK."
+msgstr "除了最基础的 MCDR 镜像外，MCDR 还提供了预安装有额外 Python 包 / OpenJDK 的镜像变体"
 
-#: ../quick_start/install.rst:230
+#: ../quick_start/install.rst:244
 msgid ""
 "Compared to the two methods above, Docker has a more convoluted learning "
 "path, but is more convenient for some advanced usages"
 msgstr "与上述两种方法相比，Docker 的学习路线更曲折，但更适合一些高级用法"
 
-#: ../quick_start/install.rst:233
+#: ../quick_start/install.rst:247
 msgid "System package manager"
 msgstr "系统包管理器"
 
-#: ../quick_start/install.rst:235
+#: ../quick_start/install.rst:249
 msgid ""
 "You may find MCDR in some system package repositories, AUR for example. "
 "However, it's **definitely not recommended** to use a system package "
@@ -441,25 +470,24 @@ msgstr ""
 "您可以在一些系统包仓库（例如 AUR）中找到 MCDR。但，**非常不建议** 使用系统包管理器来安装 MCDR。系统包安装不仅与全局 pip "
 "安装有同样的问题，而且很难管理 MCDR 插件的依赖"
 
-#: ../quick_start/install.rst:238
+#: ../quick_start/install.rst:252
 msgid "Accelerate the installation"
 msgstr "加速安装"
 
-#: ../quick_start/install.rst:240
+#: ../quick_start/install.rst:254
 msgid ""
 "For users in China, you may use a PyPI mirror, `Tsinghua University TUNA "
 "mirror <https://mirrors.tuna.tsinghua.edu.cn/help/pypi/>`__ for example, "
 "to accelerate ``pip`` and ``pipx``"
 msgstr ""
-"中国用户可以使用 PyPI 镜像，例如 `清华大学 TUNA 镜像 "
-"<https://mirrors.tuna.tsinghua.edu.cn/help/pypi/>`__ 来加速 ``pip`` 和 "
-"``pipx``"
+"中国用户可以使用 PyPI 镜像来加速 ``pip`` 和 ``pipx``。例如使用 `清华大学 TUNA 镜像 "
+"<https://mirrors.tuna.tsinghua.edu.cn/help/pypi/>`__"
 
-#: ../quick_start/install.rst:242
+#: ../quick_start/install.rst:256
 msgid "To use the PyPI mirror, add ``-i <index-url>`` to the commands:"
-msgstr "只需在命令中添加 ``-i <index-url>`` 参数："
+msgstr "长话短说，只需在命令中添加 ``-i <index-url>`` 参数，即可使用 TUNA 镜像："
 
-#: ../quick_start/install.rst:253
+#: ../quick_start/install.rst:267
 msgid "Or simply set a global index-url by:"
-msgstr "也可以一劳永逸地通过以下命令设置全局索引："
+msgstr "你也可以通过以下命令设置全局索引，一劳永逸："
 
