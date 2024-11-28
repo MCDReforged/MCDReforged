@@ -30,7 +30,7 @@ def cli_dispatch():
 		p.add_argument('--config', metavar='CONFIG_FILE', help='Path to the MCDReforged configuration file', default=core_constant.CONFIG_FILE_PATH)
 		p.add_argument('--permission', metavar='PERMISSION_FILE', help='Path to the MCDReforged permission file', default=core_constant.PERMISSION_FILE_PATH)
 
-	parser_gendefault = subparsers.add_parser('gen-default', aliases=['gendefault'], help='Generate default configuration and permission files at current working directory. Existed files will be overwritten', formatter_class=ArgumentDefaultsHelpFormatter)
+	parser_gendefault = subparsers.add_parser('gen-default', aliases=['gendefault'], help='Generate default configuration and permission files at current working directory. Existing files will be overwritten', formatter_class=ArgumentDefaultsHelpFormatter)
 	add_config_permission_path_args(parser_gendefault)
 
 	parser_init = subparsers.add_parser('init', help='Prepare the working environment of {}. Create commonly used folders and generate default configuration and permission files'.format(core_constant.NAME), formatter_class=ArgumentDefaultsHelpFormatter)
