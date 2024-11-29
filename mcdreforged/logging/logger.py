@@ -35,7 +35,7 @@ class MCDReforgedLogger(logging.Logger):
 
 	FILE_FORMATTER = PluginIdAwareFormatter(
 		NoColorFormatter,
-		f'[%(name)s] [%(asctime)s.%(msecs)d] [%(threadName)s/%(levelname)s] [%(filename)s:%(lineno)d(%(funcName)s)] [%(plugin_id)s]: %(message)s',
+		f'[%(name)s] [%(asctime)s.%(msecs)03d] [%(threadName)s/%(levelname)s] [%(filename)s:%(lineno)d(%(funcName)s)] [%(plugin_id)s]: %(message)s',
 		datefmt='%Y-%m-%d %H:%M:%S',
 	)
 	CONSOLE_FORMATTER = PluginIdAwareFormatter(
