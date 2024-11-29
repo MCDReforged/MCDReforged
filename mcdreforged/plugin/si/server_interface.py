@@ -1,5 +1,4 @@
 import asyncio
-import functools
 import inspect
 import logging
 import threading
@@ -68,7 +67,6 @@ class ServerInterface:
 	def _plugin_manager(self) -> 'PluginManager':
 		return self._mcdr_server.plugin_manager
 
-	@functools.lru_cache(maxsize=512, typed=True)
 	def _create_plugin_logger(self, plugin_id: str) -> MCDReforgedLogger:
 		logger = MCDReforgedLogger(plugin_id)
 		logger.addHandler(self._mcdr_server.logger.file_handler)

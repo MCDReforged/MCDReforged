@@ -45,6 +45,8 @@ class RegularPlugin(AbstractPlugin, ABC):
 	def _reset(self):
 		self.file_modify_time = self.calculate_file_modify_time()
 		self.plugin_registry.clear()
+		# noinspection PyProtectedMember
+		self.server_interface._reset_on_load()
 
 	@override
 	def get_metadata(self) -> Metadata:

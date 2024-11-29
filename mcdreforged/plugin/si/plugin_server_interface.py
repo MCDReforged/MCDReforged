@@ -43,6 +43,13 @@ class PluginServerInterface(ServerInterface):
 		self.__logger_for_plugin: Optional[MCDReforgedLogger] = None
 
 	# -----------------------
+	#     Not public APIs
+	# -----------------------
+
+	def _reset_on_load(self):
+		self.__logger_for_plugin = None
+
+	# -----------------------
 	#   Overwritten methods
 	# -----------------------
 
