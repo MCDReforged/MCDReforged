@@ -76,14 +76,4 @@ class StatusCommand(SubCommand):
 		qsizes = self.mcdr_server.task_executor.get_queue_sizes()
 		source.reply(self.tr('mcdr_command.print_mcdr_status.extra.queue_info', qsizes[TaskPriority.INFO], core_constant.MAX_TASK_QUEUE_SIZE_INFO))
 		source.reply(self.tr('mcdr_command.print_mcdr_status.extra.queue_regular', qsizes[TaskPriority.REGULAR], core_constant.MAX_TASK_QUEUE_SIZE_REGULAR))
-
 		source.reply(self.tr('mcdr_command.print_mcdr_status.extra.thread', threading.active_count()))
-		thread_pool_counts = 0
-		for thread in threading.enumerate():
-			name = thread.name
-			if not name.startswith('ThreadPoolExecutor-'):
-				source.reply(RText('  - ', RColor.gray) + name)
-			else:
-				thread_pool_counts += 1
-		if thread_pool_counts > 0:
-			source.reply(RText('  - ', RColor.gray) + 'ThreadPoolExecutor thread x{}'.format(thread_pool_counts))
