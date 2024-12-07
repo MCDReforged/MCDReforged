@@ -1,6 +1,7 @@
 import copy
 import functools
 import re
+import uuid
 from abc import ABC
 from enum import EnumMeta, Enum
 from typing import Union, TypeVar, List, Dict, Type, get_type_hints, Any, Callable, Literal, Optional, Tuple
@@ -39,14 +40,16 @@ def serialize(obj: Any) -> JsonLike:
 	*   :class:`dict` will be converted into a :class:`dict` will all the keys and values serialized
 	*   :class:`re.Pattern` will be converted to a :class:`str`, with the value of :attr:`re.Pattern.pattern`.
 		Notes: if :attr:`re.Pattern.pattern` returns :class:`bytes`, it will be decoded into a utf8 :class:`str`
+	*   :class:`uuid.UUID` will be converted to a :class:`str`, with the value of ``str(uuid_object)``
 	*   Normal object will be converted to a :class:`dict` with all of its public fields.
 		The keys are the name of the fields and the values are the serialized field values
 
 	.. versionadded:: v2.8.0
 		If the object is a :class:`Serializable`, the value field order will follow the order in the annotation
-
 	.. versionadded:: v2.12.0
 		Added custom subclass of base classes and :class:`re.Pattern` support
+	.. versionadded:: v2.14.0
+		Added :class:`uuid.UUID` support
 
 	:param obj: The object to be serialized
 	:return: The serialized result
@@ -71,6 +74,8 @@ def serialize(obj: Any) -> JsonLike:
 			return obj.pattern.decode('utf8')
 		else:
 			raise TypeError('bad pattern property type for the given Pattern object: {}'.format(type(obj.pattern)))
+	elif isinstance(obj, uuid.UUID):
+		return str(obj)
 
 	try:
 		attr_dict: Dict[str, Any] = vars(obj).copy()
@@ -136,6 +141,7 @@ def deserialize(
 		*   :data:`typing.Literal`: The input data needs to be in parameter the of :data:`~typing.Literal`, then the input data will be returned as the result
 
 	*   Regular expression pattern (:class:`re.Pattern`). The input data should be a :class:`str`
+	*   UUID object (:class:`uuid.UUID`). The input data should be a :class:`str`
 
 	*   Normal class: The class should have its fields type annotated. It's constructor should accept 0 input parameter.
 		Example class::
@@ -173,6 +179,8 @@ def deserialize(
 		Added :data:`typing.Literal` support
 	.. versionadded:: v2.12.0
 		Added custom subclass of base classes and :class:`re.Pattern` support
+	.. versionadded:: v2.14.0
+		Added :class:`uuid.UUID` support
 	"""
 	def mismatch(*expected_class: Type):
 		if expected_class != (cls,):
@@ -274,6 +282,16 @@ def deserialize(
 				return re.compile(data)
 			except re.error as e:
 				raise ValueError('Invalid regular expression {!r}: {}'.format(data, e))
+		else:
+			mismatch(str)
+
+	# UUID
+	elif cls == uuid.UUID:
+		if isinstance(data, str):
+			try:
+				return uuid.UUID(hex=data)
+			except ValueError as e:
+				raise ValueError('Invalid uuid expression {!r}: {}'.format(data, e))
 		else:
 			mismatch(str)
 

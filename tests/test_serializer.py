@@ -1,6 +1,7 @@
 import re
 import sys
 import unittest
+import uuid
 from enum import Enum, auto, IntFlag, IntEnum, Flag
 from typing import List, Dict, Union, Optional, Any, Literal, TypeVar, Generic
 
@@ -509,10 +510,36 @@ class MyTestCase(unittest.TestCase):
 			self.assertEqual(type(z.regex), re.Pattern)
 			self.assertEqual(z.regex.pattern, regex_str)
 
-			with self.assertRaises(ValueError) as cm:
-				Data.deserialize({'regex': r'[a-z'})
-			self.assertIsInstance(cm.exception, ValueError)
-			self.assertTrue('Invalid regular expression'.lower() in str(cm.exception).lower())
+		with self.assertRaises(ValueError) as cm:
+			Data.deserialize({'regex': r'[a-z'})
+		self.assertIsInstance(cm.exception, ValueError)
+		self.assertIn('Invalid regular expression'.lower(), str(cm.exception).lower())
+
+	def test_20_uuid(self):
+		for uuid_str in [
+			'f4a23ecc-3994-4409-affe-e2dc33cbfec2',
+			'74272dbd-658e-453c-bcdc-7270b5e08442'.replace('-', ''),
+		]:
+			class Data(Serializable):
+				u: uuid.UUID = uuid.UUID(hex=uuid_str)
+
+			uuid_str_std = str(uuid.UUID(uuid_str))
+			x = Data.get_default()
+			self.assertEqual(type(x.u), uuid.UUID)
+			self.assertEqual(str(x.u), uuid_str_std)
+
+			y = x.serialize()
+			self.assertIsInstance(y['u'], str)
+			self.assertEqual({'u': uuid_str_std}, y)
+
+			z = Data.deserialize(y)
+			self.assertEqual(type(z.u), uuid.UUID)
+			self.assertEqual(z.u, x.u)
+
+		with self.assertRaises(ValueError) as cm:
+			Data.deserialize({'u': '244b28ca-899b-4d'})
+		self.assertIsInstance(cm.exception, ValueError)
+		self.assertIn('Invalid uuid'.lower(), str(cm.exception).lower())
 
 
 if __name__ == '__main__':
