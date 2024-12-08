@@ -24,6 +24,7 @@ This is the official documentation for `MCDReforged <https://github.com/MCDRefor
    Docker<docker.rst>
    Plugin Development<plugin_dev/index.rst>
    MCDR Development<mcdr_dev/index.rst>
+   Telemetry<telemetry.rst>
    Code References<code_references/index.rst>
    Migrate Guide<migrate/index.rst>
 

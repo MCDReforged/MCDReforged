@@ -18,6 +18,7 @@ from mcdreforged.executor.background_thread_executor import BackgroundThreadExec
 from mcdreforged.executor.console_handler import ConsoleHandler
 from mcdreforged.executor.task_executor_async import AsyncTaskExecutor
 from mcdreforged.executor.task_executor_sync import SyncTaskExecutor
+from mcdreforged.executor.telemetry_reporter import TelemetryReporterScheduler
 from mcdreforged.executor.update_helper import UpdateHelper
 from mcdreforged.executor.watchdog import WatchDog
 from mcdreforged.handler.server_handler_manager import ServerHandlerManager
@@ -83,6 +84,7 @@ class MCDReforgedServer:
 		self.console_handler: ConsoleHandler = ConsoleHandler(self)
 		self.watch_dog: WatchDog = WatchDog(self)
 		self.update_helper: UpdateHelper = UpdateHelper(self)
+		self.telemetry_reporter_scheduler: TelemetryReporterScheduler = TelemetryReporterScheduler(self)
 		self.translation_manager: TranslationManager = TranslationManager(self.logger)
 		self.rcon_manager: RconManager = RconManager(self)
 		self.server_handler_manager: ServerHandlerManager = ServerHandlerManager(self)
@@ -198,6 +200,7 @@ class MCDReforgedServer:
 			self.logger.warning('In a production environment, you should install {} from PyPI, NOT from source codes'.format(mcdr_pkg))
 			self.logger.warning('See document ({}) for more information'.format(core_constant.DOCUMENTATION_URL))
 			self.logger.warning('MCDR will launch after 20 seconds...')
+			self.telemetry_reporter_scheduler.set_launched_from_source(True)
 			time.sleep(20)
 
 	def __on_file_missing(self):
@@ -626,6 +629,7 @@ class MCDReforgedServer:
 		self.logger.info(self.__tr('on_mcdr_start.starting', core_constant.NAME, core_constant.VERSION))
 		self.__register_signal_handler()
 		self.watch_dog.start()
+		self.telemetry_reporter_scheduler.start()
 		self.task_executor.start()
 		self.async_task_executor.start()
 		self.preference_manager.load_preferences()
@@ -692,6 +696,8 @@ class MCDReforgedServer:
 				join_executor(self.async_task_executor)
 
 			self.console_handler.stop()
+			self.update_helper.stop()
+			self.telemetry_reporter_scheduler.stop()
 			self.logger.info(self.__tr('on_mcdr_stop.bye'))
 		except KeyboardInterrupt:  # I don't know why there sometimes will be a KeyboardInterrupt if MCDR is stopped by ctrl-c
 			pass

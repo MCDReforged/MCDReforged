@@ -37,18 +37,22 @@ def get_direct(url: str, what: str, *, timeout: Optional[Union[float, Tuple[floa
 	return requests.get(url, timeout=timeout, headers=ua_header(what), proxies=get_proxies(), stream=stream)
 
 
-def get_buf(url: str, what: str, *, timeout: Optional[Union[float, Tuple[float, float]]] = None, max_size: Optional[int] = None) -> bytes:
-	response = get_direct(url, what, timeout=timeout, stream=True)
-
+def __get_response_buf_with_size_limited(response: requests.Response, max_size: Optional[int] = None) -> bytes:
 	if max_size is None:
 		return response.content
-	else:
-		buf = bytearray()
-		for chunk in response.iter_content(chunk_size=4096):
-			buf += chunk
-			if len(buf) > max_size:
-				raise ValueError('body too large, read {}, max size {}'.format(len(buf), max_size))
-		return bytes(buf)
+
+	buf_list: List[bytes] = []
+	len_sum = 0
+	for chunk in response.iter_content(chunk_size=4096):
+		buf_list.append(chunk)
+		len_sum += len(chunk)
+		if len_sum > max_size:
+			raise ValueError('body too large, read {}, max size {}'.format(len_sum, max_size))
+	return b''.join(buf_list)
+
+def get_buf(url: str, what: str, *, timeout: Optional[Union[float, Tuple[float, float]]] = None, max_size: Optional[int] = None) -> bytes:
+	response = get_direct(url, what, timeout=timeout, stream=True)
+	return __get_response_buf_with_size_limited(response, max_size=max_size)
 
 
 def get_buf_multi(urls: Iterable[str], what: str, *, timeout: Optional[Union[float, Tuple[float, float]]] = None, max_size: Optional[int] = None):
@@ -59,3 +63,8 @@ def get_buf_multi(urls: Iterable[str], what: str, *, timeout: Optional[Union[flo
 		except Exception as e:
 			errors.append(e)
 	raise Exception('All attempts failed: {}'.format('; '.join(map(str, errors))))
+
+
+def post_json(url: str, what: str, payload: dict, *, timeout: Optional[Union[float, Tuple[float, float]]] = None, max_size: Optional[int] = None) -> Tuple[requests.Response, bytes]:
+	response = requests.post(url, timeout=timeout, headers=ua_header(what), proxies=get_proxies(), json=payload, stream=True)
+	return response, __get_response_buf_with_size_limited(response, max_size=max_size)

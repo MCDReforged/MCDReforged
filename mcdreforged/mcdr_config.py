@@ -6,6 +6,7 @@ from logging import Logger
 from typing import Any, Tuple, Dict, Union, Optional, List
 
 from mcdreforged.constants import core_constant
+from mcdreforged.constants.environment_variables import ENV_DISABLE_TELEMETRY
 from mcdreforged.logging.debug_option import DebugOption
 from mcdreforged.utils.serializer import Serializable
 
@@ -45,6 +46,7 @@ class MCDReforgedConfig(Serializable):
 	advanced_console: bool = True
 	http_proxy: Optional[str] = None
 	https_proxy: Optional[str] = None
+	telemetry: bool = ENV_DISABLE_TELEMETRY.is_not_true()
 
 	# --------- Advanced Configuration ---------
 	disable_console_thread: bool = False

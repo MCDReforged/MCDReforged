@@ -1124,13 +1124,12 @@ msgstr ""
 "<mcdreforged.command.builder.nodes.basic.AbstractNode.requires>`"
 
 #: mcdreforged.command.builder.tools.NodeDefinition.precondition:1 of
-#, fuzzy
 msgid ""
 "See :meth:`AbstractNode.precondition() "
 "<mcdreforged.command.builder.nodes.basic.AbstractNode.precondition>`"
 msgstr ""
 "见 :meth:`AbstractNode.requires() "
-"<mcdreforged.command.builder.nodes.basic.AbstractNode.requires>`"
+"<mcdreforged.command.builder.nodes.basic.AbstractNode.precondition>`"
 
 #: mcdreforged.command.builder.tools.NodeDefinition.suggests:1 of
 msgid ""

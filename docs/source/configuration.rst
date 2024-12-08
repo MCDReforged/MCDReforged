@@ -539,6 +539,22 @@ Example values::
 * Option type: ``Optional[str]``
 * Default value: *empty*
 
+telemetry
+^^^^^^^^^
+
+MCDR collects anonymous telemetry data on some basic information about MCDR and the runtime environment, for the purpose of improving MCDR.
+The collected telemetry data do not contain any personal information, and are not sold or used for advertising purposes
+If you simply don't want MCDR to report any telemetry data, you can disable it by setting the option value to false
+
+.. seealso::
+
+    :doc:`/telemetry` document
+
+
+* Option type: :external:class:`bool`
+* Default value: ``true``. ``false`` if environment variable ``MCDREFORGED_TELEMETRY_DISABLED`` is set to ``true`
+
+
 Advanced configuration
 ----------------------
 
@@ -668,3 +684,4 @@ Debug logging switches. Set ``all`` to true to enable all debug logging, or set 
       plugin: false
       permission: false
       command: false
+      telemetry: true

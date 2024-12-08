@@ -21,7 +21,7 @@ class BackgroundThreadExecutor:
 	def __init__(self, logger: 'MCDReforgedLogger'):
 		self.logger = logger
 		self._executor_thread: Optional[threading.Thread] = None
-		self.__stopped_looping = False
+		self.__stopped_looping = threading.Event()
 		self.__name = self.__class__.__name__
 
 	def get_thread(self) -> Optional[threading.Thread]:
@@ -36,7 +36,7 @@ class BackgroundThreadExecutor:
 		return threading.current_thread() is self._executor_thread
 
 	def should_keep_looping(self) -> bool:
-		return not self.__stopped_looping
+		return not self.__stopped_looping.is_set()
 
 	def start(self):
 		self.logger.debug('BackgroundThreadExecutor {} is starting'.format(self.get_name()))
@@ -44,7 +44,10 @@ class BackgroundThreadExecutor:
 		return self._executor_thread
 
 	def stop(self):
-		self.__stopped_looping = True
+		self.__stopped_looping.set()
+
+	def _wait_for_stop(self, timeout: float):
+		self.__stopped_looping.wait(timeout=timeout)
 
 	def get_name(self) -> str:
 		return self.__name

@@ -60,7 +60,7 @@ mcdreforged:
       Some options in the config file is missing, use default value
       Remember to check and update the config file as soon as possible
 
-  # ======================== thread executors ========================
+  # ======================== background thread executors ========================
 
   console_handler:
     parse_fail: Error parsing console command "{0}"
@@ -97,6 +97,8 @@ mcdreforged:
       new_version_detected: "New version detected: §7{0}§r. What's new in §7{0}§r:"
       n_more_lines: '... {0} more lines'
       python_version_notes: '[NOTES] Python 3.8 has reached its end-of-life as of 07 Oct 2024, future {0} versions will no longer support Python 3.8'
+  telemetry_reporter:
+    disabled: Telemetry disabled
 
   # ======================== commands ========================
 

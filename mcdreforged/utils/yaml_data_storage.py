@@ -75,9 +75,17 @@ class YamlDataStorage:
 		if not isinstance(users_data, dict):
 			return current_data, True
 		else:
-			result = users_data.copy()
+			result: CommentedMap = users_data.copy()
 			has_missing = False
-			divider = ' -> ' if len(key_path) > 0 else ''
+			divider = '.' if len(key_path) > 0 else ''
+
+			current_users_keys = list(users_data.keys())
+			last_user_key = current_users_keys[-1] if len(current_users_keys) > 0 else None
+			try:
+				comment_dict: dict = result.ca.items
+			except AttributeError:
+				self._logger.warning('Failed to access comment dict for {}'.format(type(result)))
+				comment_dict = {}
 			for key in current_data.keys():
 				current_key_path = key_path + divider + key
 				if key in users_data:
@@ -93,6 +101,11 @@ class YamlDataStorage:
 					# missing config key
 					result[key] = current_data[key]
 					has_missing = True
+					if last_user_key is not None and last_user_key in comment_dict:
+						# previously, the last dict has the comment. but now, "key" is the last item
+						# notes: in ruamel.yaml, the comment of an element is at the below of the element, not above
+						# example hack fix usage: adding new elements in the mcdr config "debug" dict
+						comment_dict[key] = comment_dict.pop(last_user_key)
 					self._logger.warning('Option "{}" missing, use default value "{}"'.format(current_key_path, current_data[key]))
 			return result, has_missing
 

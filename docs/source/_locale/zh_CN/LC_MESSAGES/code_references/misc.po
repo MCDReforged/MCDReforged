@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-13 21:25+0800\n"
+"POT-Creation-Date: 2024-12-08 20:40+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,25 +25,29 @@ msgstr "杂项"
 msgid "Information of the current server, interred from the output of the server"
 msgstr "当前服务端的信息，由服务端的输出推断得出"
 
-#: ../docstring
+#: ../../docstring
 #: mcdreforged.info_reactor.server_information.ServerInformation.version:1 of
 msgid "Server version name, e.g. ``\"1.15.2\"``, ``\"1.17 Release Candidate 1\"``"
 msgstr "服务端版本名，如 ``\"1.15.2\"``、``\"1.17 Release Candidate 1\"``"
 
-#: ../docstring
+#: ../../docstring
 #: mcdreforged.info_reactor.server_information.ServerInformation.ip:1 of
 msgid "Server IP address, e.g. ``\"127.0.0.1\"``"
 msgstr "服务端 IP 地址，如 ``\"127.0.0.1\"``"
 
-#: ../docstring
+#: ../../docstring
 #: mcdreforged.info_reactor.server_information.ServerInformation.ip:3 of
 msgid ""
 "Notes that this is the address that the server is listening on, not the "
 "physical server's ip address"
 msgstr "注意这是服务端所监听的地址，并非物理服务器的 IP 地址"
 
-#: ../docstring
+#: ../../docstring
 #: mcdreforged.info_reactor.server_information.ServerInformation.port:1 of
 msgid "Server port, e.g. ``25565``"
 msgstr "服务端端口，如 ``25565``"
+
+#: mcdreforged.executor.telemetry_reporter.TelemetryReporter:1 of
+msgid "The class to collect and report telemetry data"
+msgstr "收集并上报遥测数据的实现类"
 

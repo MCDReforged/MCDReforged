@@ -60,7 +60,7 @@ mcdreforged:
       配置文件缺失部分选项，使用默认值
       请尽快去检测并更新配置文件
 
-  # ======================== thread executors ========================
+  # ======================== background thread executors ========================
 
   console_handler:
     parse_fail: 解析控制台命令 "{0}" 出错
@@ -97,6 +97,8 @@ mcdreforged:
       new_version_detected: '已检测到新版本: §7{0}§r。§7{0}§r 的新内容:'
       n_more_lines: '... 等 {0} 行'
       python_version_notes: '[注意] Python 3.8 已于 2024-10-07 达到了生命周期的终点，未来的 {} 版本将不再支持 Python 3.8'
+  telemetry_reporter:
+    disabled: 遥测上报已关闭
 
   # ======================== commands ========================
 

@@ -15,6 +15,7 @@ class DebugOption(Flag):
 	PERMISSION = auto()
 	COMMAND = auto()
 	TASK_EXECUTOR = auto()
+	TELEMETRY = auto()
 
 
 def __pre_fetch_debug_option_value():

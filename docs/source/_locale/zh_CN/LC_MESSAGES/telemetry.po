@@ -1,0 +1,164 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2024, Fallen_Breath
+# This file is distributed under the same license as the MCDReforged
+# package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: MCDReforged \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-12-08 23:27+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: zh_CN\n"
+"Language-Team: zh_CN <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.15.0\n"
+
+#: ../telemetry.rst:3
+msgid "Telemetry"
+msgstr "遥测上报"
+
+#: ../telemetry.rst:5
+msgid ""
+"Since v2.14, MCDR collects and reports anonymous telemetry data about "
+"some basic information regarding MCDR and the runtime environment"
+msgstr "自 v2.14 起，MCDR 开始收集并上报有关 MCDR 和运行环境的一些匿名遥测数据"
+
+#: ../telemetry.rst:7
+msgid ""
+"This data helps MCDR developers analyze usage scenarios and provides data"
+" support for the development of future improvements to MCDR's "
+"functionality"
+msgstr "这些数据有助于 MCDR 开发者分析使用场景，并为未来对 MCDR 功能改进的开发提供数据支撑"
+
+#: ../telemetry.rst:9
+msgid "Telemetry is enabled by default"
+msgstr "遥测上报默认开启"
+
+#: ../telemetry.rst:12
+msgid "What will it report"
+msgstr "它会上报什么"
+
+#: ../telemetry.rst:14
+msgid "The telemetry data contains the following information:"
+msgstr "遥测数据包含以下信息："
+
+#: ../telemetry.rst:16
+msgid ""
+"A unique UUID v4 identifier, representing the running MCDR instance. The "
+"UUID is generated on each MCDR launch, and will not be persisted"
+msgstr "一个唯一的 UUID v4 标识符，代表当前运行的 MCDR 实例。MCDR 每次启动都会生成一个新的 UUID。MCDR 不会持久化该 UUID"
+
+#: ../telemetry.rst:17
+msgid "MCDR and Python version"
+msgstr "MCDR 和 Python 的版本"
+
+#: ../telemetry.rst:18
+msgid "System information, including:"
+msgstr "系统相关信息，包括："
+
+#: ../telemetry.rst:20
+msgid "Type, e.g. Windows, Linux"
+msgstr "系统类型，如 Windows、Linux"
+
+#: ../telemetry.rst:21
+msgid "Version, e.g. 10 for Windows, 5.14.0 for Linux"
+msgstr "系统版本，如 Windows 10、Linux 5.14.0"
+
+#: ../telemetry.rst:22
+msgid "Architecture, e.g. AMD64"
+msgstr "系统架构，如 AMD64"
+
+#: ../telemetry.rst:24
+msgid "MCDR information, including:"
+msgstr "MCDR 相关信息，包括："
+
+#: ../telemetry.rst:26
+msgid "MCDR uptime"
+msgstr "MCDR 运行时长"
+
+#: ../telemetry.rst:27
+msgid ""
+"MCDR runtime environment information, e.g. if it's running inside a "
+"container or virtualenv"
+msgstr "MCDR 运行环境相关消息，比如是否在容器 / virtualenv 里运行"
+
+#: ../telemetry.rst:28
+msgid "Plugin counts"
+msgstr "插件数量"
+
+#: ../telemetry.rst:30
+msgid ""
+"The collected telemetry data do not contain any personal information, and"
+" are not sold or used for advertising purposes"
+msgstr "收集的遥测数据不会包含任何个人信息，也不会用于销售或广告的目的"
+
+#: ../telemetry.rst:32
+msgid "Example telemetry data:"
+msgstr "遥测数据样例："
+
+#: ../telemetry.rst:63
+msgid ""
+"You can also inspect the source code of "
+":class:`~mcdreforged.executor.telemetry_reporter.TelemetryReporter` to "
+"see what will be reported"
+msgstr ""
+"你随时可以检查遥测数据上报的实现代码，以验证 MCDR "
+"都上报了什么东西：:class:`~mcdreforged.executor.telemetry_reporter.TelemetryReporter`"
+
+#: ../telemetry.rst:66
+msgid "When will it report"
+msgstr "会在什么时候上报"
+
+#: ../telemetry.rst:68
+msgid "MCDR will collect and report the telemetry data once per hour"
+msgstr "MCDR 将每小时收集并上报一次遥测数据"
+
+#: ../telemetry.rst:71
+msgid "How to disable it"
+msgstr "怎样关掉它"
+
+#: ../telemetry.rst:73
+msgid ""
+"If you feel uncomfortable with the telemetry report, or you simply don't "
+"want MCDR to report any telemetry data, you can disable it at any time "
+"with any of the following methods"
+msgstr "如果你看遥测上报不爽，或者你就是不想 MCDR 上报任何东西，你可以随时通过以下任一方法禁用它"
+
+#: ../telemetry.rst:77
+msgid "by config"
+msgstr "通过配置项"
+
+#: ../telemetry.rst:79
+msgid ""
+"You can set the value of :ref:`configuration:telemetry` in the config to "
+"``false`` to disable the telemetry"
+msgstr "你可以把配置中 :ref:`configuration:telemetry` 的值设置为 ``false`` 来禁用遥测上报"
+
+#: ../telemetry.rst:82
+msgid "by environment variable"
+msgstr "通过环境变量"
+
+#: ../telemetry.rst:84
+msgid ""
+"If you want to run / initialize MCDR with telemetry off, you can set the "
+"environment variable ``MCDREFORGED_TELEMETRY_DISABLED`` to ``true`` "
+"before launching MCDR"
+msgstr ""
+"如果你希望运行前 / 初始化 MCDR 时就禁用遥测，你可以在启动 MCDR 前将环境变量 ``MCDREFORGED_TELEMETRY_DISABLED`` "
+"设置为 ``true``"
+
+#: ../telemetry.rst:91
+msgid ""
+"With this environment variable being set to ``true``, the default value "
+"of config option :ref:`configuration:telemetry` will also be set to "
+"``false``"
+msgstr ""
+"当此环境变量被设置为 ``true`` 时，配置选项 :ref:`configuration:telemetry` 的默认值也会变为 "
+"``false``"
+
