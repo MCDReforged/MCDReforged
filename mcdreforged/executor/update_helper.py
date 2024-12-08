@@ -98,5 +98,6 @@ class GithubApiFetcher:
 		self.__cached_response: Optional[dict] = None
 
 	def fetch(self) -> Optional[dict]:
-		buf = request_utils.get_buf_multi(self.urls, 'UpdateHelper', timeout=10, max_size=32 * 1024)
+		rsp, buf = request_utils.get_buf_multi(self.urls, 'UpdateHelper', timeout=10, max_size=32 * 1024)
+		rsp.raise_for_status()
 		return json.loads(buf)

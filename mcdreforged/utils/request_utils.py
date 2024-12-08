@@ -50,12 +50,13 @@ def __get_response_buf_with_size_limited(response: requests.Response, max_size: 
 			raise ValueError('body too large, read {}, max size {}'.format(len_sum, max_size))
 	return b''.join(buf_list)
 
-def get_buf(url: str, what: str, *, timeout: Optional[Union[float, Tuple[float, float]]] = None, max_size: Optional[int] = None) -> bytes:
+
+def get_buf(url: str, what: str, *, timeout: Optional[Union[float, Tuple[float, float]]] = None, max_size: Optional[int] = None) -> Tuple[requests.Response, bytes]:
 	response = get_direct(url, what, timeout=timeout, stream=True)
-	return __get_response_buf_with_size_limited(response, max_size=max_size)
+	return response, __get_response_buf_with_size_limited(response, max_size=max_size)
 
 
-def get_buf_multi(urls: Iterable[str], what: str, *, timeout: Optional[Union[float, Tuple[float, float]]] = None, max_size: Optional[int] = None):
+def get_buf_multi(urls: Iterable[str], what: str, *, timeout: Optional[Union[float, Tuple[float, float]]] = None, max_size: Optional[int] = None) -> Tuple[requests.Response, bytes]:
 	errors: List[Exception] = []
 	for url in urls:
 		try:

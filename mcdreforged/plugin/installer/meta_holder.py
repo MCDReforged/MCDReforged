@@ -54,7 +54,8 @@ class CatalogueMetaRegistryHolder:
 
 	def _fetch_meta_json(self) -> dict:
 		max_size = 20 * 2 ** 20  # 20MiB limit. In 2024-03-14, the uncompressed size is only 545KiB
-		buf = request_utils.get_buf(self.__meta_json_url, 'MetaFetcher', timeout=self.__meta_fetch_timeout, max_size=max_size)
+		resp, buf = request_utils.get_buf(self.__meta_json_url, 'MetaFetcher', timeout=self.__meta_fetch_timeout, max_size=max_size)
+		resp.raise_for_status()
 
 		if self.__meta_json_url.endswith('.gz'):
 			with gzip.GzipFile(fileobj=BytesIO(buf)) as gzip_f:
