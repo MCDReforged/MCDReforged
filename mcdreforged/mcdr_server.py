@@ -123,6 +123,7 @@ class MCDReforgedServer:
 			except FileNotFoundError:
 				self.logger.error('{} file {!r} is missing'.format(kind.title(), file_path))
 				file_missing = True
+				return False
 			except (YAMLError, ValueError) as e:
 				self.logger.error('Failed to load {} file {!r}: {}'.format(kind, file_path, type(e).__name__))
 				for line in str(e).splitlines():
