@@ -7,7 +7,7 @@ MCDReforged
 [![License](https://img.shields.io/github/license/MCDReforged/MCDReforged.svg)](https://github.com/MCDReforged/MCDReforged/blob/master/LICENSE)
 [![Documentation Status](https://readthedocs.org/projects/mcdreforged/badge/)](https://docs.mcdreforged.com/)
 
-![MCDR-banner](https://raw.githubusercontent.com/MCDReforged/MCDReforged/master/logo_long.png)
+![MCDR-banner](https://raw.githubusercontent.com/MCDReforged/MCDReforged/master/logo/images/logo_long.png)
 
 [English](https://github.com/MCDReforged/MCDReforged/blob/master/README.md) | **中文**
 
@@ -35,9 +35,9 @@ MCDR 使用了 [Popen](https://docs.python.org/zh-cn/3/library/subprocess.html#s
 Minecraft 服务器的控制台输出拥有着稳定的输出格式，并包含着大量与服务器有关的有用信息（如玩家聊天信息）。
 借此，MCDR 可以解析并分析服务端输出，将他们抽象成不同的事件并派发给插件进行响应
 
-在 Minecraft 内置指令系统的帮助下，MCDR 可以通过向服务端标准输入流发送 Minecraft 指令来与 Minecraft 服务器做出交互
+在 Minecraft 内置命令系统的帮助下，MCDR 可以通过向服务端标准输入流发送 Minecraft 命令来与 Minecraft 服务器做出交互
 
-就这样！如果你愿意的话，你可以将 MCDR 视为一个盯着服务端控制台看的，可以根据服务端的输出快速地做出响应并向服务端输入相关指令的，一个机器人
+就这样！如果你愿意的话，你可以将 MCDR 视为一个盯着服务端控制台看的，可以根据服务端的输出快速地做出响应并向服务端输入相关命令的，一个机器人
 
 ## 插件
 

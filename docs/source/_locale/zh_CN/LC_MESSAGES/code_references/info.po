@@ -123,7 +123,7 @@ msgstr "返回 ServerInterface 实例"
 
 #: mcdreforged.info_reactor.info.Info.get_command_source:1 of
 msgid "Extract a command source object from this object:"
-msgstr "从此对象中提取出一个指令源对象"
+msgstr "从此对象中提取出一个命令源对象"
 
 #: mcdreforged.info_reactor.info.Info.get_command_source:3 of
 msgid ""
@@ -144,7 +144,7 @@ msgstr "返回"
 
 #: mcdreforged.info_reactor.info.Info.get_command_source:6 of
 msgid "The command source instance, or None if it can't extract a command source"
-msgstr "返回指令源实例。如果无法提取指令源，则返回 None"
+msgstr "返回命令源实例。如果无法提取命令源，则返回 None"
 
 #: mcdreforged.info_reactor.info.Info.to_command_source:1 of
 msgid ""
@@ -152,7 +152,7 @@ msgid ""
 ":class:`~mcdreforged.utils.exception.IllegalCallError` if it can't "
 "extract a command source"
 msgstr ""
-"与方法 :meth:`get_command_source` 一样，只不过它会在无法提取指令源时抛出一个 "
+"与方法 :meth:`get_command_source` 一样，只不过它会在无法提取命令源时抛出一个 "
 ":class:`~mcdreforged.utils.exception.IllegalCallError`"
 
 #: mcdreforged.info_reactor.info.Info.to_command_source of
@@ -161,7 +161,7 @@ msgstr "抛出"
 
 #: mcdreforged.info_reactor.info.Info.to_command_source:4 of
 msgid "if a command source cannot be extracted from this object"
-msgstr "如果此无法从这个对象中提取指令源"
+msgstr "如果此无法从这个对象中提取命令源"
 
 #: mcdreforged.info_reactor.info.Info.should_send_to_server:1 of
 msgid ""

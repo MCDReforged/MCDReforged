@@ -254,7 +254,7 @@ msgstr "使用给定的文本填充聊天栏"
 
 #: ../../docstring mcdreforged.minecraft.rtext.style.RAction.run_command:1 of
 msgid "Run the given text as command"
-msgstr "将给定的文本作为指令运行"
+msgstr "将给定的文本作为命令运行"
 
 #: ../../docstring mcdreforged.minecraft.rtext.style.RAction.run_command:3 of
 msgid ""
@@ -264,7 +264,7 @@ msgid ""
 "click the decorated text"
 msgstr ""
 "(Minecraft <1.19.1) 如果给定的文本不以 ``\"/\"`` "
-"开头，给定的文本将会被当做聊天信息发送至服务端。借此，玩家在点击被修饰的文本后可以自动执行 MCDR 指令"
+"开头，给定的文本将会被当做聊天信息发送至服务端。借此，玩家在点击被修饰的文本后可以自动执行 MCDR 命令"
 
 #: ../../docstring mcdreforged.minecraft.rtext.style.RAction.run_command:8 of
 msgid ""
@@ -272,7 +272,7 @@ msgid ""
 " command strings, can be used as the text value of :attr:`run_command` "
 "action"
 msgstr ""
-"在原版 Minecraft >=1.19.1 中，只有以 ``\"/\"`` 开头的字符串，即代表指令的字符串，可以被用作 "
+"在原版 Minecraft >=1.19.1 中，只有以 ``\"/\"`` 开头的字符串，即代表命令的字符串，可以被用作 "
 ":attr:`run_command` 动作的值"
 
 #: ../../docstring mcdreforged.minecraft.rtext.style.RAction.run_command:10 of
@@ -299,7 +299,7 @@ msgid ""
 ":attr:`open_file` actions, so don't be surprised if this "
 ":attr:`open_file` doesn't work"
 msgstr ""
-"事实上原版 Minecraft 并不允许指令中的文本包含 :attr:`open_file` 动作，因此当你发现这个 "
+"事实上原版 Minecraft 并不允许命令中的文本包含 :attr:`open_file` 动作，因此当你发现这个 "
 ":attr:`open_file` 不起作用时别太惊讶"
 
 #: ../../docstring

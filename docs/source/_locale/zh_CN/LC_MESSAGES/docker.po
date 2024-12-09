@@ -100,7 +100,7 @@ msgstr "快速测试"
 
 #: ../docker.rst:34
 msgid "Quick test if docker and mcdreforged image works"
-msgstr "用于测试验证 mcdreforged 的镜像是否可以正常运行的一条快速测试指令"
+msgstr "用于测试验证 mcdreforged 的镜像是否可以正常运行的一条快速测试命令"
 
 #: ../docker.rst:40
 msgid "Example output:"
@@ -149,13 +149,13 @@ msgstr "``PYTHON_VERSION`` 是 python 解释器的主 + 次版本号，如 ``3.1
 
 #: ../docker.rst:85
 msgid "You can confirm the path by executing the following command"
-msgstr "你可以用下述指令来确认这一挂载路径"
+msgstr "你可以用下述命令来确认这一挂载路径"
 
 #: ../docker.rst:91
 msgid ""
 "Use pip3 to install whatever packages you want like usual. The ``--user``"
 " argument is set automatically globally"
-msgstr "使用 pip3 指令安装你想装的任何 Python 包。``--user`` 参数将会自动设置，以确保 Python 包将被安装到上面提到的路径中"
+msgstr "使用 pip3 命令安装你想装的任何 Python 包。``--user`` 参数将会自动设置，以确保 Python 包将被安装到上面提到的路径中"
 
 #: ../docker.rst:98
 msgid "Image Variants"

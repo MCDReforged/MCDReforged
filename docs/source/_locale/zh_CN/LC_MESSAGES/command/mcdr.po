@@ -21,27 +21,27 @@ msgstr ""
 
 #: ../command/mcdr.rst:3
 msgid "!!MCDR command"
-msgstr "!!MCDR 指令"
+msgstr "!!MCDR 命令"
 
 #: ../command/mcdr.rst:5
 msgid ""
 "``!!MCDR`` commands is the way for users to control MCDR on console, or "
 "in game. All of these following commands require permission level 3 "
 "(admin) to be executed unless extra nodes exist"
-msgstr "``!!MCDR`` 指令是用户在控制台或游戏中控制 MCDR 的方式。这些指令至少需要权限级别 3 (admin) 才能执行"
+msgstr "``!!MCDR`` 命令是用户在控制台或游戏中控制 MCDR 的方式。这些命令至少需要权限级别 3 (admin) 才能执行"
 
 #: ../command/mcdr.rst:7
 msgid ""
 "Assuming you already have the permission to control MCDR, then you can "
 "enter ``!!MCDR`` to the console or in game chat and you will see the help"
 " message of MCDR"
-msgstr "若你已经有控制 MCDR 的权限，那么你可以在控制台或游戏聊天框中输入 ``!!MCDR``，你将会看到 MCDR 指令的帮助消息"
+msgstr "若你已经有控制 MCDR 的权限，那么你可以在控制台或游戏聊天框中输入 ``!!MCDR``，你将会看到 MCDR 命令的帮助消息"
 
 #: ../command/mcdr.rst:9
 msgid ""
 "If you only have permission level 1 (user) or above, then the version of "
 "MCDR will be displayed via ``!!MCDR`` command"
-msgstr "如果你仅拥有权限级别 1 (user)，则 ``!!MCDR`` 指令将展示 MCDR 的版本"
+msgstr "如果你仅拥有权限级别 1 (user)，则 ``!!MCDR`` 命令将展示 MCDR 的版本"
 
 #: ../command/mcdr.rst:12
 msgid "Status display"
@@ -51,7 +51,7 @@ msgstr "状态显示"
 msgid ""
 "``!!MCDR status`` displays the status of MCDR. It will display the "
 "following contents:"
-msgstr "``!!MCDR status`` 指令将返回 MCDR 的当前状态。它包括如下内容："
+msgstr "``!!MCDR status`` 命令将返回 MCDR 的当前状态。它包括如下内容："
 
 #: ../command/mcdr.rst:17
 msgid "The version of MCDR"
@@ -112,18 +112,18 @@ msgid ""
 "short form is ``!!MCDR r``. Directly enter command ``!!MCDR reload`` will"
 " show the help message of the hot reload commands"
 msgstr ""
-"``!!MCDR reload`` 子指令可以热重载 MCDR。它也可以缩写为 ``!!MCDR r``。执行指令 ``!!MCDR "
-"reload`` 即可获取热重载指令的帮助信息"
+"``!!MCDR reload`` 子命令可以热重载 MCDR。它也可以缩写为 ``!!MCDR r``。执行命令 ``!!MCDR "
+"reload`` 即可获取热重载命令的帮助信息"
 
 #: ../command/mcdr.rst:36 ../command/mcdr.rst:66 ../command/mcdr.rst:307
 #: ../command/mcdr.rst:349
 msgid "Here's a table of the commands"
-msgstr "以下是一个展示相关指令的表格"
+msgstr "以下是一个展示相关命令的表格"
 
 #: ../command/mcdr.rst:41 ../command/mcdr.rst:71 ../command/mcdr.rst:121
 #: ../command/mcdr.rst:312 ../command/mcdr.rst:354
 msgid "Command"
-msgstr "指令"
+msgstr "命令"
 
 #: ../command/mcdr.rst:42 ../command/mcdr.rst:72 ../command/mcdr.rst:122
 #: ../command/mcdr.rst:313
@@ -145,7 +145,7 @@ msgstr "!!MCDR r"
 
 #: ../command/mcdr.rst:46
 msgid "Show reload command help message"
-msgstr "显示重载指令的帮助信息"
+msgstr "显示重载命令的帮助信息"
 
 #: ../command/mcdr.rst:47
 msgid "!!MCDR reload plugin"
@@ -206,8 +206,8 @@ msgid ""
 "``!!MCDR perm`` will show the help message of the permission manipulation"
 " commands"
 msgstr ""
-"``!!MCDR permission`` 子指令用于操作玩家权限。它的缩写是 ``!!MCDR perm``。执行指令 `!!MCDR "
-"perm` 将显示权限操作指令的帮助信息"
+"``!!MCDR permission`` 子命令用于操作玩家权限。它的缩写是 ``!!MCDR perm``。执行命令 `!!MCDR "
+"perm` 将显示权限操作命令的帮助信息"
 
 #: ../command/mcdr.rst:74
 msgid "!!MCDR permission"
@@ -219,7 +219,7 @@ msgstr "!!MCDR perm"
 
 #: ../command/mcdr.rst:76
 msgid "Show permission command help message"
-msgstr "显示权限指令帮助信息"
+msgstr "显示权限命令帮助信息"
 
 #: ../command/mcdr.rst:77
 msgid "!!MCDR permission list [<level>]"
@@ -259,7 +259,7 @@ msgstr "!!MCDR perm q [<player>]"
 msgid ""
 "Query the permission level of <player>. If <player> is not set, query the"
 " permission level of the command sender"
-msgstr "查询 <player> 的权限级别。如果没有设置 <player>，查询指令发送者的权限级别"
+msgstr "查询 <player> 的权限级别。如果没有设置 <player>，查询命令发送者的权限级别"
 
 #: ../command/mcdr.rst:86
 msgid "!!MCDR permission remove <player>"
@@ -332,8 +332,8 @@ msgid ""
 "form is ``!!MCDR plg``. Directly enter command ``!!MCDR plg`` will show "
 "the help message of the commands"
 msgstr ""
-"``!!MCDR plugin`` 用于操纵插件的指令。它的缩写是 ``!!MCDR plg``。直接执行指令 ``!!MCDR plg`` "
-"将显示该指令的帮助信息"
+"``!!MCDR plugin`` 用于操纵插件的命令。它的缩写是 ``!!MCDR plg``。直接执行命令 ``!!MCDR plg`` "
+"将显示该命令的帮助信息"
 
 #: ../command/mcdr.rst:114
 msgid "Local plugin management"
@@ -341,7 +341,7 @@ msgstr "本地插件管理"
 
 #: ../command/mcdr.rst:116
 msgid "Here's the commands that can be used to manipulate local installed plugins"
-msgstr "下面是用于操纵本地已安装插件的指令"
+msgstr "下面是用于操纵本地已安装插件的命令"
 
 #: ../command/mcdr.rst:124
 msgid "!!MCDR plugin list"
@@ -466,11 +466,11 @@ msgstr ""
 
 #: ../command/mcdr.rst:157
 msgid "Then you can do the following commands"
-msgstr "于是你可以执行以下指令："
+msgstr "于是你可以执行以下命令："
 
 #: ../command/mcdr.rst:167
 msgid "These commands do the following things:"
-msgstr "这些指令将执行以下操作："
+msgstr "这些命令将执行以下操作："
 
 #: ../command/mcdr.rst:170
 msgid "Query the information about the plugin with id ``my_plugin``"
@@ -504,7 +504,7 @@ msgstr "插件仓库访问"
 msgid ""
 "The following commands provide operations based on the "
 "`https://mcdreforged.com/en/plugins <plugin catalogue>`__"
-msgstr "下述指令提供了一系列基于 `插件仓库 <https://mcdreforged.com/zh-CN/plugins>`__ 的操作"
+msgstr "下述命令提供了一系列基于 `插件仓库 <https://mcdreforged.com/zh-CN/plugins>`__ 的操作"
 
 #: ../command/mcdr.rst:183
 msgid "browse"
@@ -701,7 +701,7 @@ msgstr "偏好设置"
 msgid ""
 "``!!MCDR preference`` sub-commands are used to control the preference of "
 "MCDR. It only requires permission level 1 (user) to operate"
-msgstr "``!!MCDR preference`` 子指令可用于操控 MCDR 的偏好。它仅需要权限等级 1 (user) 即可操作"
+msgstr "``!!MCDR preference`` 子命令可用于操控 MCDR 的偏好。它仅需要权限等级 1 (user) 即可操作"
 
 #: ../command/mcdr.rst:315
 msgid "!!MCDR preference"
@@ -713,7 +713,7 @@ msgstr "!!MCDR pref"
 
 #: ../command/mcdr.rst:317
 msgid "Show preference command help message"
-msgstr "显示偏好指令帮助信息"
+msgstr "显示偏好命令帮助信息"
 
 #: ../command/mcdr.rst:318
 msgid "!!MCDR preference list"
@@ -796,7 +796,7 @@ msgstr "服务端控制"
 
 #: ../command/mcdr.rst:347
 msgid "``!!MCDR server`` sub-commands are used control the daemonized server"
-msgstr "``!!MCDR server`` 子指令可用于控制被守护的服务端"
+msgstr "``!!MCDR server`` 子命令可用于控制被守护的服务端"
 
 #: ../command/mcdr.rst:356
 msgid "!!MCDR server"
@@ -804,7 +804,7 @@ msgstr "!!MCDR server"
 
 #: ../command/mcdr.rst:357
 msgid "Show server control command help message"
-msgstr "显示服务端控制指令的帮助信息"
+msgstr "显示服务端控制命令的帮助信息"
 
 #: ../command/mcdr.rst:358
 msgid "!!MCDR server start"
@@ -858,7 +858,7 @@ msgstr "杀死服务端，以及其所有子进程"
 msgid ""
 "These commands are also parts of the :doc:`ServerInterface API "
 "</code_references/ServerInterface>`"
-msgstr "这些指令同时也是 :doc:`服务端接口 API </code_references/ServerInterface>` 的一部分"
+msgstr "这些命令同时也是 :doc:`服务端接口 API </code_references/ServerInterface>` 的一部分"
 
 #: ../command/mcdr.rst:374
 msgid "Debug"
@@ -907,7 +907,7 @@ msgstr "例子："
 
 #: ../command/mcdr.rst:410
 msgid "Command Tree Display"
-msgstr "指令树展示"
+msgstr "命令树展示"
 
 #: ../command/mcdr.rst:412
 msgid ""
@@ -917,11 +917,11 @@ msgid ""
 msgstr ""
 "使用方法 "
 ":meth:`~mcdreforged.command.builder.nodes.basic.AbstractNode.print_tree` "
-"导出指令树"
+"导出命令树"
 
 #: ../command/mcdr.rst:414
 msgid ""
 "You can filter out command trees to be dumped with plugin id or root node"
 " name"
-msgstr "你可以通过插件 id 或根节点名来过滤指令树"
+msgstr "你可以通过插件 id 或根节点名来过滤命令树"
 

@@ -261,7 +261,7 @@ msgid ""
 "tree for you plugin. See the :ref:`command registering "
 "<plugin_dev/basic:command>` doc"
 msgstr ""
-"如果你想要更复杂的命令系统，而不是在用户信息事件中手动解析它们，则建议你为插件注册一个命令树。参见插件的 :ref:`指令注册 "
+"如果你想要更复杂的命令系统，而不是在用户信息事件中手动解析它们，则建议你为插件注册一个命令树。参见插件的 :ref:`命令注册 "
 "<plugin_dev/basic:command>` 文档"
 
 #: ../plugin_dev/event.rst:137

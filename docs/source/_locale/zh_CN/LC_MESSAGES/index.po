@@ -24,7 +24,7 @@ msgstr "配置"
 
 #: ../index.rst:13
 msgid "Command"
-msgstr "指令"
+msgstr "命令"
 
 #: ../index.rst:13
 msgid "Permission"
