@@ -552,7 +552,7 @@ If you simply don't want MCDR to report any telemetry data, you can disable it b
 
 
 * Option type: :external:class:`bool`
-* Default value: ``true``. ``false`` if environment variable ``MCDREFORGED_TELEMETRY_DISABLED`` is set to ``true`
+* Default value: ``true``. ``false`` if environment variable ``MCDREFORGED_TELEMETRY_DISABLED`` is set to ``true``
 
 
 Advanced configuration

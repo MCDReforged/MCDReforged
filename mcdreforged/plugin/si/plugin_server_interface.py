@@ -1,6 +1,6 @@
 import logging
 import os
-from typing import Callable, TYPE_CHECKING, Union, Optional, IO, Type, TypeVar
+from typing import Callable, TYPE_CHECKING, Union, Optional, IO, Type, TypeVar, Any
 from typing import Literal as TLiteral
 
 from typing_extensions import override
@@ -21,6 +21,15 @@ from mcdreforged.plugin.type.plugin import AbstractPlugin
 from mcdreforged.utils import class_utils
 from mcdreforged.utils.serializer import Serializable
 from mcdreforged.utils.types.message import MessageText, TranslationKeyDictRich, TranslationKeyDictNested
+
+try:
+	# noinspection PyPackageRequirements
+	from pydantic import BaseModel as PydanticBaseModel
+	PydanticBaseModelType = TypeVar('PydanticBaseModelType', bound=PydanticBaseModel)
+except ImportError:
+	PydanticBaseModel: Any = None
+	PydanticBaseModelType: Any = None
+
 
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
@@ -210,26 +219,27 @@ class PluginServerInterface(ServerInterface):
 		return self.__plugin.open_file(relative_file_path)
 
 	def load_config_simple(
-			self, file_name: Optional[str] = None, default_config: Optional = None, *,
+			self, file_name: Optional[str] = None, default_config: Optional[dict] = None, *,
 			in_data_folder: bool = True,
 			echo_in_console: bool = True,
 			source_to_reply: Optional[CommandSource] = None,
-			target_class: Optional[Type[SerializableType]] = None,
+			target_class: Optional[Union[Type[SerializableType], Type[PydanticBaseModelType]]] = None,
 			encoding: str = 'utf8',
 			file_format: Optional[FileFormat] = None,
 			failure_policy: TLiteral['regen', 'raise'] = 'regen',
 			data_processor: Optional[Callable[[dict], bool]] = None,
-	) -> Union[dict, SerializableType]:
+			pydantic_model_validate_kwargs: Optional[dict] = None,
+	) -> Union[dict, SerializableType, PydanticBaseModelType]:
 		"""
-		A simple method to load a dict or :class:`~mcdreforged.utils.serializer.Serializable` type config from a json file
+		A simple method to load a dict or :class:`~mcdreforged.utils.serializer.Serializable` or :class:`pydantic.BaseModel` type config from a json file
 
 		Default config is supported. Missing key-values in the loaded config object will be filled using the default config
 		
 		Example 1::
 
 			config = {
-				'settingA': 1
-				'settingB': 'xyz'
+				'setting_a': 1
+				'setting_b': 'xyz'
 			}
 			default_config = config.copy()
 
@@ -240,13 +250,21 @@ class PluginServerInterface(ServerInterface):
 		Example 2::
 
 			class Config(Serializable):
-				settingA: int = 1
-				settingB: str = 'xyz'
-
-			config: Config
+				setting_a: int = 1
+				setting_b: str = 'xyz'
 
 			def on_load(server: PluginServerInterface, prev_module):
-				global config
+				config = server.load_config_simple(target_class=Config)
+
+		Example 3::
+
+			from pydantic import BaseModel
+
+			class Config(BaseModel):
+				setting_a: int = 1
+				setting_b: str = 'xyz'
+
+			def on_load(server: PluginServerInterface, prev_module):
 				config = server.load_config_simple(target_class=Config)
 			
 		Assuming that the plugin id is ``my_plugin``, then the config file will be in ``"config/my_plugin/my_config.json"``
@@ -258,7 +276,7 @@ class PluginServerInterface(ServerInterface):
 		:keyword in_data_folder: If True, the parent directory of file operating is the :meth:`data folder <get_data_folder>` of the plugin
 		:keyword echo_in_console: If logging messages in console about config loading
 		:keyword source_to_reply: The command source for replying logging messages
-		:keyword target_class: A class derived from :class:`~mcdreforged.utils.serializer.Serializable`.
+		:keyword target_class: A class derived from :class:`~mcdreforged.utils.serializer.Serializable` or :class:`pydantic.BaseModel`.
 			When specified the loaded config data will be deserialized
 			to an instance of *target_class* which will be returned as return value
 		:keyword encoding: The encoding method to read the config file. Default ``"utf8"``
@@ -270,6 +288,9 @@ class PluginServerInterface(ServerInterface):
 			It should accept one argument and return a bool. The argument is the parsed config file, normally a dict-like object.
 			The return value indicates if the file saving operation should be performed after the config loading
 			Example usage: config data migration
+		:keyword pydantic_model_validate_kwargs: Only used if *target_class* is a subclass of :class:`pydantic.BaseModel`.
+			Extra kwargs passed to the :meth:`pydantic.BaseModel.model_validate` method.
+			If not provided, ``{'strict': True}`` will be used
 		:return: A dict contains the loaded and processed config
 
 		.. versionadded:: v2.2.0
@@ -278,6 +299,8 @@ class PluginServerInterface(ServerInterface):
 			The *failure_policy* and *file_format* parameter
 		.. versionadded:: v2.13.0
 			The *data_processor* parameter
+		.. versionadded:: v2.14.0
+			:class:`pydantic.BaseModel` support and the *pydantic_model_validate_kwargs* parameter
 		"""
 		config_handler = SimpleConfigHandler(file_name, file_format, self.get_data_folder() if in_data_folder else '.')
 
@@ -307,7 +330,22 @@ class PluginServerInterface(ServerInterface):
 			if data_processor is not None:
 				needs_save |= data_processor(read_data)
 
-		if target_class is not None:
+		if PydanticBaseModel is not None and issubclass(target_class, PydanticBaseModel):
+			if read_data is None:  # read failed, use default
+				result_config = target_class()
+			else:
+				if pydantic_model_validate_kwargs is None:
+					pydantic_model_validate_kwargs = {'strict': True}
+				try:
+					result_config = target_class.model_validate(read_data, **pydantic_model_validate_kwargs)
+				except Exception as e:
+					if failure_policy == 'raise':
+						raise
+					result_config = target_class()
+					needs_save = True
+					log(self._tr('load_config_simple.failed', e))
+
+		elif issubclass(target_class, Serializable):
 			def set_imperfect(*_):
 				nonlocal imperfect
 				imperfect = True
@@ -326,6 +364,7 @@ class PluginServerInterface(ServerInterface):
 			else:
 				if imperfect:
 					needs_save = True
+
 		else:
 			if read_data is None:  # read failed, use default
 				result_config = default_config.copy()
@@ -351,10 +390,11 @@ class PluginServerInterface(ServerInterface):
 		return result_config
 
 	def save_config_simple(
-			self, config: Union[dict, Serializable], file_name: str = 'config.json', *,
+			self, config: Union[dict, Serializable, PydanticBaseModel], file_name: str = 'config.json', *,
 			in_data_folder: bool = True,
 			encoding: str = 'utf8',
 			file_format: Optional[FileFormat] = None,
+			pydantic_model_dump_kwargs: Optional[dict] = None,
 	) -> None:
 		"""
 		A simple method to save your dict or :class:`~mcdreforged.utils.serializer.Serializable` type config as a json file
@@ -365,14 +405,27 @@ class PluginServerInterface(ServerInterface):
 		:keyword encoding: The encoding method to write the config file. Default ``"utf8"``
 		:keyword file_format: The syntax format of the config file. Default: ``None``, which means that
 			MCDR will try to detect the format from the name of the config file
+		:keyword pydantic_model_dump_kwargs: Only used if *config* is a :class:`pydantic.BaseModel`.
+			Extra kwargs passed to the :meth:`pydantic.BaseModel.model_dump` method.
+			Notes that the *mode* will always be set to ``"json"``
 
 		.. versionadded:: v2.2.0
 			The *encoding* parameter
 		.. versionadded:: v2.12.0
 			The *file_format* parameter
+		.. versionadded:: v2.14.0
+			:class:`pydantic.BaseModel` support and the *pydantic_model_dump_kwargs* parameter
 		"""
 		if isinstance(config, Serializable):
 			data = config.serialize()
+		elif PydanticBaseModel is not None and isinstance(config, PydanticBaseModel):
+			if pydantic_model_dump_kwargs is None:
+				pydantic_model_dump_kwargs = {}
+			else:
+				pydantic_model_dump_kwargs = pydantic_model_dump_kwargs.copy()
+			pydantic_model_dump_kwargs['mode'] = 'json'
+			config: Any
+			data = config.model_dump(**pydantic_model_dump_kwargs)
 		else:
 			data = config
 

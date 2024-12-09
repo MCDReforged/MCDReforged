@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-12 02:32+0800\n"
+"POT-Creation-Date: 2024-12-10 01:03+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -47,16 +47,7 @@ msgstr "插件注册"
 msgid "Register an event listener for the current plugin"
 msgstr "为当前插件注册一个事件监听器"
 
-#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple
-#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.open_bundled_file
-#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_command
-#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_event_listener
-#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_help_message
-#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_info_filter
-#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_server_handler
-#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_translation
-#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.save_config_simple
-#: of
+#: ../code_references/PluginServerInterface.rst
 msgid "Parameters"
 msgstr "参数"
 
@@ -94,10 +85,7 @@ msgid ""
 ":class:`~mcdreforged.command.builder.nodes.basic.Literal` node"
 msgstr "命令树的根节点。它应为一个 :class:`~mcdreforged.command.builder.nodes.basic.Literal` 节点"
 
-#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple
-#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_command
-#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.save_config_simple
-#: of
+#: ../code_references/PluginServerInterface.rst
 msgid "Keyword Arguments"
 msgstr ""
 
@@ -254,10 +242,7 @@ msgstr "文件夹的路径将会为 ``\"config/plugin_id\"``，其中 ``plugin_i
 msgid "Example::"
 msgstr "例子::"
 
-#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.get_data_folder
-#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple
-#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.open_bundled_file
-#: of
+#: ../code_references/PluginServerInterface.rst
 msgid "Returns"
 msgstr "返回"
 
@@ -281,8 +266,7 @@ msgstr "你想要打开的文件位于你的插件中的相对位置"
 msgid "A un-decoded bytes file-like object"
 msgstr "一个未解码的，bytes 形式的文件型的对象"
 
-#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.open_bundled_file
-#: of
+#: ../code_references/PluginServerInterface.rst
 msgid "Raises"
 msgstr "抛出"
 
@@ -295,11 +279,12 @@ msgstr "如果插件并非是一个多文件插件（换句话来讲，是一个
 #: of
 msgid ""
 "A simple method to load a dict or "
-":class:`~mcdreforged.utils.serializer.Serializable` type config from a "
-"json file"
+":class:`~mcdreforged.utils.serializer.Serializable` or "
+":class:`pydantic.BaseModel` type config from a json file"
 msgstr ""
 "一个简单的，从一个 json 文件中载入一个 dict 或 "
-":class:`~mcdreforged.utils.serializer.Serializable` 类型的配置文件的方法"
+":class:`~mcdreforged.utils.serializer.Serializable` 或 "
+":class:`pydantic.BaseModel` 类型的配置文件的方法"
 
 #: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple:3
 #: of
@@ -318,7 +303,12 @@ msgstr "例 1::"
 msgid "Example 2::"
 msgstr "例 2::"
 
-#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple:29
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple:26
+#: of
+msgid "Example 3::"
+msgstr "例 3::"
+
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple:37
 #: of
 msgid ""
 "Assuming that the plugin id is ``my_plugin``, then the config file will "
@@ -327,13 +317,13 @@ msgstr ""
 "假设插件 id 为 ``my_plugin``，此时配置文件将被储存于 "
 "``\"config/my_plugin/my_config.json\"`` 中"
 
-#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple:31
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple:39
 #: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.save_config_simple:4
 #: of
 msgid "The name of the config file. It can also be a path to the config file"
 msgstr "配置文件的文件名。它也可为配置文件的路径"
 
-#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple:32
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple:40
 #: of
 msgid ""
 "A dict contains the default config. It's required when the config file is"
@@ -344,7 +334,7 @@ msgstr ""
 "一个储存着默认配置的 dict。当配置文件缺失时，这个参数是必须的，否则将抛出异常。如果 *target_class* 被给出并且 "
 "*default_config* 缺失，则当配置文件缺失时 *target_class* 的默认值将会被使用"
 
-#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple:35
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple:43
 #: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.save_config_simple:5
 #: of
 msgid ""
@@ -352,32 +342,34 @@ msgid ""
 " <get_data_folder>` of the plugin"
 msgstr "如果被设置为 True，则操作配置文件时的路径将为该插件的 :meth:`数据文件夹 <get_data_folder>` 中"
 
-#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple:36
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple:44
 #: of
 msgid "If logging messages in console about config loading"
 msgstr "是否在控制台中打印配置文件加载相关日志"
 
-#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple:37
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple:45
 #: of
 msgid "The command source for replying logging messages"
 msgstr "用于回复加载配置相关日志的命令源"
 
-#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple:38
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple:46
 #: of
 msgid ""
-"A class derived from :class:`~mcdreforged.utils.serializer.Serializable`."
-" When specified the loaded config data will be deserialized to an "
-"instance of *target_class* which will be returned as return value"
+"A class derived from :class:`~mcdreforged.utils.serializer.Serializable` "
+"or :class:`pydantic.BaseModel`. When specified the loaded config data "
+"will be deserialized to an instance of *target_class* which will be "
+"returned as return value"
 msgstr ""
-"一个派生自 :class:`~mcdreforged.utils.serializer.Serializable` "
-"的类。当被指定时，加载的配置文件数据将会被反序列化为一个 *target_class* 的实例并令其作为方法的返回值"
+"一个派生自 :class:`~mcdreforged.utils.serializer.Serializable` 或 "
+":class:`pydantic.BaseModel` 的类。当被指定时，加载的配置文件数据将会被反序列化为一个 *target_class* "
+"的实例并令其作为方法的返回值"
 
-#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple:41
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple:49
 #: of
 msgid "The encoding method to read the config file. Default ``\"utf8\"``"
 msgstr "读取配置文件的编码方式。默认值 ``\"utf8\"``"
 
-#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple:42
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple:50
 #: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.save_config_simple:7
 #: of
 msgid ""
@@ -385,7 +377,7 @@ msgid ""
 " MCDR will try to detect the format from the name of the config file"
 msgstr "配置文件的语法格式。默认值：``None``，意味着 MCDR 将尝试基于配置文件的名字来推断格式"
 
-#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple:44
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple:52
 #: of
 msgid ""
 "The policy of handling a config loading error. ``\"regen\"`` (default): "
@@ -393,7 +385,7 @@ msgid ""
 "exception"
 msgstr "用于处理配置文件加载失败错误的策略。``\"regen\"`` （默认值）：尝试重新生成配置文件；``\"raise\"``: 直接抛出相关异常"
 
-#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple:46
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple:54
 #: of
 msgid ""
 "A callback function that processes the data read from the config file. It"
@@ -405,26 +397,44 @@ msgstr ""
 "一个回调函数，用于自定义处理从配置文件中读取的数据。它应仅接受一个参数，并返回一个 "
 "bool。参数是解析后的配置文件对象，返回值表示在是否应该在配置文件加载结束时写入新的配置文件数据。用例：插件升级后迁移配置文件的数据"
 
-#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple:50
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple:58
+#: of
+msgid ""
+"Only used if *target_class* is a subclass of :class:`pydantic.BaseModel`."
+" Extra kwargs passed to the :meth:`pydantic.BaseModel.model_validate` "
+"method. If not provided, ``{'strict': True}`` will be used"
+msgstr ""
+"仅在 *target_class* 是一个 :class:`pydantic.BaseModel` 的子类时会用到。传递给 "
+":meth:`pydantic.BaseModel.model_validate` 方法的额外 kwargs。若未提供，则使用 "
+"``{'strict': True}``"
+
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple:61
 #: of
 msgid "A dict contains the loaded and processed config"
 msgstr "一个储存着加载并处理后的配置文件的 dict"
 
-#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple:52
-#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.save_config_simple:10
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple:63
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.save_config_simple:13
 #: of
 msgid "The *encoding* parameter"
 msgstr "*encoding* 参数"
 
-#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple:54
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple:65
 #: of
 msgid "The *failure_policy* and *file_format* parameter"
 msgstr "*failure_policy* 和 *file_format* 参数"
 
-#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple:56
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple:67
 #: of
 msgid "The *data_processor* parameter"
 msgstr "*data_processor* 参数"
+
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.load_config_simple:69
+#: of
+msgid ""
+":class:`pydantic.BaseModel` support and the "
+"*pydantic_model_validate_kwargs* parameter"
+msgstr ":class:`pydantic.BaseModel` 支持以及 *pydantic_model_validate_kwargs* 参数"
 
 #: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.save_config_simple:1
 #: of
@@ -446,8 +456,26 @@ msgstr "将要被保存的配置文件实例"
 msgid "The encoding method to write the config file. Default ``\"utf8\"``"
 msgstr "写入配置文件的编码方式。默认值 ``\"utf8\"``"
 
-#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.save_config_simple:12
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.save_config_simple:9
+#: of
+msgid ""
+"Only used if *config* is a :class:`pydantic.BaseModel`. Extra kwargs "
+"passed to the :meth:`pydantic.BaseModel.model_dump` method. Notes that "
+"the *mode* will always be set to ``\"json\"``"
+msgstr ""
+"仅在 *config* 是一个 :class:`pydantic.BaseModel` 时会用到。传递给 "
+":meth:`pydantic.BaseModel.model_dump` 方法的额外 kwargs。请注意，其 *mode* "
+"总会被设置为 ``\"json\"``"
+
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.save_config_simple:15
 #: of
 msgid "The *file_format* parameter"
 msgstr "*file_format* 参数"
+
+#: mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.save_config_simple:17
+#: of
+msgid ""
+":class:`pydantic.BaseModel` support and the *pydantic_model_dump_kwargs* "
+"parameter"
+msgstr ":class:`pydantic.BaseModel` 支持以及 *pydantic_model_dump_kwargs* 参数"
 
