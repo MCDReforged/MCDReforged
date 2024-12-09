@@ -196,7 +196,7 @@ class TelemetryReporter:
 	@functools.lru_cache(maxsize=None)
 	def __guess_python_package_isolation_method(cls) -> str:
 		if sys.prefix != sys.base_prefix:
-			if sys.prefix.replace('\\', '/').endswith('/pipx/venvs/mcdreforged'):
+			if os.path.isfile(os.path.join(sys.prefix, 'pipx_metadata.json')):
 				return 'pipx'
 			return 'venv'
 		return 'host'
