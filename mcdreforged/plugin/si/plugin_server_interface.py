@@ -345,10 +345,11 @@ class PluginServerInterface(ServerInterface):
 					needs_save = True
 					log(self._tr('load_config_simple.failed', e))
 
-		elif issubclass(target_class, Serializable):
+		elif target_class is not None:
 			def set_imperfect(*_):
 				nonlocal imperfect
 				imperfect = True
+			target_class: Serializable
 			imperfect = False
 			try:
 				if read_data is None:  # read failed, use default
