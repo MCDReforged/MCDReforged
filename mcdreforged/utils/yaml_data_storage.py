@@ -1,7 +1,7 @@
 import os
 from logging import Logger
 from threading import RLock
-from typing import Tuple
+from typing import Tuple, Callable, Optional
 
 from ruamel.yaml import YAML
 from ruamel.yaml.comments import CommentedMap, CommentedSeq
@@ -123,8 +123,11 @@ class YamlDataStorage:
 	def get_default_yaml(self) -> CommentedMap:
 		return self.__default_data.get()
 
-	def save_default(self):
-		self.__save(self.get_default_yaml())
+	def save_default(self, config_processor: Optional[Callable[[CommentedMap], CommentedMap]] = None):
+		config = self.get_default_yaml()
+		if config_processor is not None:
+			config = config_processor(config)
+		self.__save(config)
 
 	@classmethod
 	def merge_dict(cls, src: dict, dst: dict):

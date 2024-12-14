@@ -3,7 +3,7 @@ MCDR config file stuffs
 """
 import threading
 from logging import Logger
-from typing import Any, Tuple, Dict, Union, Optional, List
+from typing import Any, Tuple, Dict, Union, Optional, List, TypeVar
 
 from mcdreforged.constants import core_constant
 from mcdreforged.constants.environment_variables import ENV_DISABLE_TELEMETRY
@@ -101,7 +101,14 @@ class MCDReforgedConfigManager:
 		self.__storage.save()
 
 	def save_default(self):
-		self.__storage.save_default()
+		typ = TypeVar('typ', bound=dict)
+
+		def config_processor(config: typ) -> typ:
+			if ENV_DISABLE_TELEMETRY.is_true():
+				config['telemetry'] = False
+			return config
+
+		self.__storage.save_default(config_processor)
 
 	def file_presents(self) -> bool:
 		return self.__storage.file_presents()
