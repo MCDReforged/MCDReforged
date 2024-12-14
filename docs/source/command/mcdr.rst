@@ -299,6 +299,15 @@ Perform a re-fetch for the plugin catalogue meta cache
 
     !!MCDR plugin refreshmeta
 
+freeze
+~~~~~~
+
+Print plugin freeze result, similar to ``pip freeze``
+
+.. code-block:: text
+
+    !!MCDR plg freeze [-a|--all] [--no-hash] [(-o|--output) <output_file>]
+
 Preference settings
 -------------------
 
