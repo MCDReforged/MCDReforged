@@ -135,7 +135,7 @@ class PimInstallCommandHandler(PimCommandHandlerBase):
 		input_specifiers: List[str] = []
 		if len(arg_specifiers := context.get('plugin_specifier', [])) > 0:
 			input_specifiers.extend(arg_specifiers)
-		if len(req_files := context.get('requirement', [])) > 0:
+		if len(req_files := context.get('requirement_file', [])) > 0:
 			for req_file in req_files:
 				try:
 					file_specifiers = read_mcdr_plugin_requirement_file(Path(req_file))

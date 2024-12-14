@@ -179,7 +179,7 @@ class PluginCommandPimExtension(SubCommand):
 			node.then(
 				Literal({'-r', '--requirement'}).
 				then(
-					QuotableText('requirement', accumulate=True, metavar='file').
+					QuotableText('requirement_file', accumulate=True, metavar='requirement_file').
 					suggests(lambda: [self.DEFAULT_FREEZE_FILE_NAME] if os.path.isfile(self.DEFAULT_FREEZE_FILE_NAME) else []).
 					redirects(node)
 				)

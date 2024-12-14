@@ -574,7 +574,7 @@ msgid ""
 "provided, the *name* argument will be used as the default placeholder"
 msgstr ""
 "可选的字符串参数。其表现类似 :external:meth:`argparse.ArgumentParser.add_argument` 的 "
-"*metavar* 参数，即对指令提示的用法占位符进行覆盖。若未给出，则将使用 *name* 参数的值作为默认的占位符"
+"*metavar* 参数，即对命令提示的用法占位符进行覆盖。若未给出，则将使用 *name* 参数的值作为默认的占位符"
 
 #: mcdreforged.command.builder.nodes.basic.ArgumentNode.__init__:8 of
 msgid "The *accumulate* parameter"

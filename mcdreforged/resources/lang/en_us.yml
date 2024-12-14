@@ -157,7 +157,7 @@ mcdreforged:
         §7!!MCDR plugin install §a<specifier>§7 [-U] [-y] ...§r: Install plugins that satisfy the given specifier(s)
         §7!!MCDR plugin checkupdate §6[<plugin_id> ...]§r: Check if given plugins have updates
         §7!!MCDR plugin refreshmeta§r: Perform a re-fetch for the plugin catalogue meta cache
-        §7!!MCDR plugin freeze [-a] [-o <file>] [--no-hash]§r: Print plugin freeze result, similar to §7pip freeze§r
+        §7!!MCDR plugin freeze [-a] [-o <file>] [--no-hash]§r: Print a plugin freeze result, similar to §7pip freeze§r
       preference: |
         §7!!MCDR preference list§r: Display the preference list
         §7!!MCDR preference §e<pref_name>§r: Display the details of preference §e<pref_name>§r

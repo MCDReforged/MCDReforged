@@ -206,11 +206,11 @@ Install plugins that satisfy the given specifier(s)
 
 .. code-block:: text
 
-    !!MCDR plugin install <specifier> [(-t|--target) <target>] [-U|--upgrade] [-y|--yes|--confirm] [--dry-run] [--no-dependencies] ...
+    !!MCDR plugin install <specifier> [(-t|--target) <target>] [-U|--upgrade] [-y|--yes|--confirm] [--dry-run] [--no-dependencies] [(-r|--requirement) <requirement_file>] ...
 
 Arguments:
 
-- ``<specifier>``: Describes the plugins to be installed, can be provided for multiple times
+- ``<specifier>``: A plugin specifier that describes the plugins to be installed, can be provided for multiple times
 
     Format: ``${id}${requirement}``. The requirement syntax can be found :ref:`here <plugin_dev/metadata:dependencies>`.
     Examples:
@@ -250,6 +250,7 @@ Arguments:
 - ``-y``, ``--yes``, ``--confirm``: An optional flag to skip the installation confirmation step
 - ``--dry-run``: An optional flag for test run. If provided, no actual installation will be performed
 - ``--no-dependencies``: An optional flag to ignore all dependencies relationships during plugin resolution. No indirect depended plugin and python packages will be installed
+- ``-r``, ``--requirement``: Path to a requirement text file, where each line is a plugin specifier. Empty or #-prefixing lines will be ignored. Just like what ``pip install -r`` does
 
 Example usages:
 
@@ -319,11 +320,21 @@ Perform a re-fetch for the plugin catalogue meta cache
 freeze
 ~~~~~~
 
-Print plugin freeze result, similar to ``pip freeze``
+Print a plugin freeze result, similar to ``pip freeze``
+
+By default, only :ref:`packed plugins <plugin_dev/plugin_format:Packed Plugin>` will be shown,
+since only packed plugins can be installed from the ``!!MCDR plugin install`` command
 
 .. code-block:: text
 
     !!MCDR plg freeze [-a|--all] [--no-hash] [(-o|--output) <output_file>]
+
+Arguments:
+
+- ``-a``, ``-all``: Include all user installed plugins, including those non packed plugins
+- ``--no-hash``: Exclude the hash prefix
+- ``-o``, ``--output``: Write the freeze output to the given file.
+  The output file can be used as the requirement file in the ``!!MCDR plugin install -r <requirement_file>`` command
 
 Preference settings
 -------------------
