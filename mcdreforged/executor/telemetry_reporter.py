@@ -29,11 +29,12 @@ class TelemetryReporterScheduler(BackgroundThreadExecutor):
 		self.__reporter = TelemetryReporter(mcdr_server)
 		self.__report_hour_offset = self.__calc_report_hour_offset()
 		self.__tr = mcdr_server.create_internal_translator('telemetry_reporter')
+		self.__was_enabled_on_start = False
 
 		mcdr_server.add_config_changed_callback(self.__on_mcdr_config_loaded)
 
 	def __on_mcdr_config_loaded(self, _1: 'MCDReforgedConfig', _2: bool):
-		if super().should_keep_looping() and not self.__telemetry_enabled:
+		if self.__was_enabled_on_start and super().should_keep_looping() and not self.__telemetry_enabled:
 			# This should be a hot-reload on the config. Let's inform the user
 			self.logger.info(self.__tr('disabled'))
 			self.stop()
@@ -66,6 +67,7 @@ class TelemetryReporterScheduler(BackgroundThreadExecutor):
 	def start(self):
 		if self.__telemetry_enabled:
 			self.logger.mdebug('Telemetry enabled, report scheduled at *:{}'.format(time.strftime('%M:%S', time.localtime(self.__report_hour_offset))), option=DebugOption.TELEMETRY)
+			self.__was_enabled_on_start = True
 			super().start()
 		else:
 			self.logger.debug('Telemetry is disabled at startup')
