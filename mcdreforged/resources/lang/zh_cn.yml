@@ -343,7 +343,7 @@ mcdreforged:
             solo: 单文件插件
             packed: 打包插件
             directory: 文件夹插件
-            lined_directory: 链接型文件夹插件
+            linked_directory: 链接型文件夹插件
         mismatched_hash:
           catalogue: '插件仓库中的插件 {0} 的 sha256 哈希值与校验值不匹配。预期: {1}，实际: {2}'
           local: '已安装插件 {0} 的 sha256 哈希值与校验值不匹配。预期: {1}，实际: {2}'

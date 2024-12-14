@@ -343,7 +343,7 @@ mcdreforged:
             solo: solo plugin
             packed: packed plugin
             directory: directory plugin
-            lined_directory: linked directory plugin
+            linked_directory: linked directory plugin
         mismatched_hash:
           catalogue: Plugin {0} in the catalogue has mismatched sha256 hash, expected {1}, actual {2}
           local: Installed plugin {0} has mismatched sha256 hash, expected {1}, actual {2}
