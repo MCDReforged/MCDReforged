@@ -170,16 +170,10 @@ class TelemetryReporter:
 				'python_package_isolation': self.__guess_python_package_isolation_method(),
 				'launched_from_source': self.__launched_from_source,
 				'plugin_type_counts': self.__get_plugin_type_counts(),
+				'server_handler_name': self.__get_server_handler_name(),
 			},
 		}
 		return telemetry_data
-
-	def __get_plugin_type_counts(self) -> dict:
-		if self.__mcdr_server is None:
-			return {}
-		from mcdreforged.plugin.type.common import PluginType
-		counter = collections.Counter(plg.get_type() for plg in self.__mcdr_server.plugin_manager.get_all_plugins())
-		return {pt.name: counter.get(pt, 0) for pt in PluginType}
 
 	@classmethod
 	@functools.lru_cache(maxsize=None)
@@ -200,3 +194,15 @@ class TelemetryReporter:
 				return 'pipx'
 			return 'venv'
 		return 'host'
+
+	def __get_plugin_type_counts(self) -> dict:
+		if self.__mcdr_server is None:
+			return {}
+		from mcdreforged.plugin.type.common import PluginType
+		counter = collections.Counter(plg.get_type() for plg in self.__mcdr_server.plugin_manager.get_all_plugins())
+		return {pt.name: counter.get(pt, 0) for pt in PluginType}
+
+	def __get_server_handler_name(self) -> str:
+		if self.__mcdr_server is None:
+			return ''
+		return self.__mcdr_server.server_handler_manager.get_current_handler_name() or ''

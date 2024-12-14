@@ -25,7 +25,8 @@ The telemetry data contains the following information:
 
     *   MCDR uptime
     *   MCDR runtime environment information, e.g. if it's running inside a container or virtualenv
-    *   Plugin counts
+    *   Plugin counts by plugin type
+    *   :meth:`Name <mcdreforged.handler.server_handler.ServerHandler.get_name>` of the currently in-used server handler
 
 The collected telemetry data do not contain any personal information, and are not sold or used for advertising purposes
 
@@ -56,7 +57,8 @@ Example telemetry data:
           "packed": 11,
           "directory": 0,
           "linked_directory": 2
-        }
+        },
+        "server_handler_name": "vanilla_handler"
       }
     }
 

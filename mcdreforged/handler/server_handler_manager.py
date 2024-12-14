@@ -110,6 +110,11 @@ class ServerHandlerManager:
 			return psh.server_handler
 		return self.__current_configured_handler
 
+	def get_current_handler_name(self) -> Optional[str]:
+		if (psh := self.__plugin_provided_server_handler_holder) is not None:
+			return psh.server_handler.get_name()
+		return self.__current_configured_handler_name
+
 	# Automation for lazy
 	def start_handler_detection(self):
 		self.__handler_detector.start_handler_detection()
