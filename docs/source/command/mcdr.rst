@@ -222,6 +222,22 @@ Arguments:
         my_plugin>=1.0
         my_plugin^=2.0.1
 
+    Additionally, if the requirement uses ``==`` to pin the plugin version, you can append a hash validator the end of the specifier string,
+    to ensure the hash of the to-be-installed plugin file is expected
+
+    .. code-block:: test
+
+        my_plugin==3.0.0@0ec1e048c6
+        my_plugin==3.0.0@0ec1e048c6a1737cce639ddc912d13870705fa109e2009321c64193fbc2e4e35
+        my_plugin==3.0.0@sha256:0ec1e048c6a1737cce63
+        my_plugin==3.0.0@sha256:0ec1e048c6a1737cce639ddc912d13870705fa109e2009321c64193fbc2e4e35
+
+    With a hash validator, the specifier format now becomes ``${id}${requirement}@${hash_validator}``
+
+    -   The ``hash_validator`` part can be ``${hash_method}:${hash_value}``, or just ``${hash_value}`` and use sha256
+    -   The ``hash_method`` support ``sha256`` only
+    -   The ``hash_value`` should be a hex string in length [10, 64]. It should be a prefix of the expected sha256 value
+
 - ``<target>``: The plugin directory to install the plugins into. The default value is the first path in the :ref:`configuration:plugin_directories` list in MCDR config
 
     .. note::
@@ -240,6 +256,7 @@ Example usages:
 - ``!!MCDR plugin install my_plugin``: Install a plugin with ID ``my_plugin``, using the latest compatible version
 - ``!!MCDR plugin install my_plugin<1.3``: Install a plugin with ID ``my_plugin``, using the latest compatible version, and the version should be less than ``1.3``
 - ``!!MCDR plugin install my_plugin<1.3 another_plugin==1.0.0``: On the basis of the above example, install ``another_plugin`` with exact version ``1.0.0`` as well
+- ``!!MCDR plugin install my_plugin==1.3@sha256:134b44beec``: Install ``my_plugin`` with version ``1.3``, and ensure the sha256 of the plugin file starts with ``134b44beec``
 - ``!!MCDR plugin install -U my_plugin``: Install plugin ``my_plugin`` if it's not installed, or upgrade ``my_plugin`` to the latest compatible version
 - ``!!MCDR plugin install -U -y *``: Upgrade all installed plugins to their latest compatible version. Confirmation check is skipped
 
