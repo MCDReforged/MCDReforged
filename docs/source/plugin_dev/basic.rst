@@ -147,6 +147,13 @@ There are 3 methods to register an event listener for you plugin
     Use :func:`~mcdreforged.api.decorator.event_listener.event_listener` decorator
 
 
+(Beta feature) Since v2.14, you can use an async function as the event listener callback function
+
+.. code-block:: python
+
+    async def on_load(server, prev):
+        await do_something_with_async()
+
 Command
 ^^^^^^^
 
