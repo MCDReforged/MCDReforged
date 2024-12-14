@@ -30,7 +30,7 @@ def _does_mc_version_has_execute_command(version_name: Optional[str]) -> bool:
 	]
 	for regex in version_with_release_regex:
 		if (m := regex.fullmatch(version_name)) is not None:
-			return check_release_version(m.group(1), m.group(2))
+			return check_release_version(m.group('major'), m.group('minor'))
 
 	# modern snapshots, e.g. "22w45a"
 	if (m := re.fullmatch(r'(\d{2})w(\d{2})[a-z]', version_name)) is not None:
