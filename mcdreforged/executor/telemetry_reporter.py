@@ -92,6 +92,7 @@ class TelemetryReporter:
 	"""
 	REPORT_URL = 'https://telemetry.mcdreforged.com/report'
 	REPORT_TIMEOUT_SEC = 10
+	SCHEMA_VERSION = 1
 
 	def __init__(self, mcdr_server: Optional['MCDReforgedServer']):
 		self.__mcdr_server = mcdr_server
@@ -155,8 +156,9 @@ class TelemetryReporter:
 
 	def __collect_telemetry_data(self) -> dict:
 		telemetry_data = {
-			'uuid': str(self.__uuid),
+			'schema_version': self.SCHEMA_VERSION,
 			'reporter': core_constant.NAME,
+			'uuid': str(self.__uuid),
 			'platform': {
 				'mcdr_version': core_constant.VERSION,
 				'mcdr_version_pypi': core_constant.VERSION_PYPI,

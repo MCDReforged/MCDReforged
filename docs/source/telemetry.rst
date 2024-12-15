@@ -35,8 +35,9 @@ Example telemetry data:
 .. code-block:: json
 
     {
-      "uuid": "14bb1768-aa97-4f11-874e-deafd0c09cb0",
+      "schema_version": 1,
       "reporter": "MCDReforged",
+      "uuid": "14bb1768-aa97-4f11-874e-deafd0c09cb0",
       "platform": {
         "mcdr_version": "2.14.0",
         "mcdr_version_pypi": "2.14.0",
