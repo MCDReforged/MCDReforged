@@ -422,8 +422,13 @@ You can use ``#all`` as the thread name to dump all threads
 
 Format::
 
-    !!MCDR debug thread_dump #all
-    !!MCDR debug thread_dump <thread_name>
+    !!MCDR debug thread_dump [<thread_name>] [(-o|--output) <output_file>] [--name-only]
+
+Arguments:
+
+- ``thread_name``: Optional argument, the name of the thread to dump. If it's not provided, or its value is ``#all``, then all threads will be dumped
+- ``--name-only``: Show thread names only. Do not output thread stacks
+- ``-o``, ``--output``: Write the thread dump output to the given file for further inspection
 
 Translation Test
 ^^^^^^^^^^^^^^^^
@@ -433,14 +438,18 @@ Query translation results by translation key, or dump all translations within gi
 Format::
 
     !!MCDR debug translation get <translation_key>
-    !!MCDR debug translation dump <json_path>
+    !!MCDR debug translation dump <json_path> [(-o|--output) <output_file>]
+
+Arguments:
+
+- ``-o``, ``--output``: Write the translation dump output to the given file for further inspection
 
 Examples::
 
     !!MCDR debug translation get one.of.my.translation.key
     !!MCDR debug translation get server_interface.load_config_simple.succeed
     !!MCDR debug translation dump .
-    !!MCDR debug translation dump mcdr_server
+    !!MCDR debug translation dump mcdr_server -o mcdr_translation_dump.json
     !!MCDR debug translation dump mcdr_server.on_server_stop
 
 Command Tree Display
@@ -452,12 +461,17 @@ You can filter out command trees to be dumped with plugin id or root node name
 
 Format::
 
-    !!MCDR debug command_dump all
-    !!MCDR debug command_dump plugin <plugin_id>
-    !!MCDR debug command_dump node <literal_name>
+    !!MCDR debug command_dump all [(-o|--output) <output_file>]
+    !!MCDR debug command_dump plugin <plugin_id> [(-o|--output) <output_file>]
+    !!MCDR debug command_dump node <literal_name> [(-o|--output) <output_file>]
+
+Arguments:
+
+- ``-o``, ``--output``: Write the command dump output to the given file for further inspection
 
 Examples::
 
+    !!MCDR debug command_dump all -o mcdr_command_dump.txt
     !!MCDR debug command_dump plugin my_plugin
     !!MCDR debug command_dump node !!MyCommand
 

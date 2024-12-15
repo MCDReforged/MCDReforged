@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-14 21:14+0800\n"
+"POT-Creation-Date: 2024-12-15 20:23+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -517,7 +517,8 @@ msgid ""
 msgstr "浏览插件仓库。用关键字进行筛选，或展示给定插件的详情"
 
 #: ../command/mcdr.rst:191 ../command/mcdr.rst:211 ../command/mcdr.rst:302
-#: ../command/mcdr.rst:332
+#: ../command/mcdr.rst:332 ../command/mcdr.rst:427 ../command/mcdr.rst:443
+#: ../command/mcdr.rst:468
 msgid "Arguments:"
 msgstr "参数："
 
@@ -972,29 +973,52 @@ msgstr "导出所有指定线程的堆栈追踪信息。一个用于快速分析
 msgid "You can use ``#all`` as the thread name to dump all threads"
 msgstr "你可以使用 ``#all`` 作为线程名来导出所有线程的信息"
 
-#: ../command/mcdr.rst:423 ../command/mcdr.rst:433 ../command/mcdr.rst:453
+#: ../command/mcdr.rst:423 ../command/mcdr.rst:438 ../command/mcdr.rst:462
 msgid "Format::"
 msgstr "格式："
 
 #: ../command/mcdr.rst:429
+msgid ""
+"``thread_name``: Optional argument, the name of the thread to dump. If "
+"it's not provided, or its value is ``#all``, then all threads will be "
+"dumped"
+msgstr "``thread_name``：可选参数，要导出堆栈的线程名字。若未提供，或其值为 ``#all``，则导出所有线程"
+
+#: ../command/mcdr.rst:430
+msgid "``--name-only``: Show thread names only. Do not output thread stacks"
+msgstr "``--name-only``：仅展示线程名，不要输出线程堆栈"
+
+#: ../command/mcdr.rst:431
+msgid ""
+"``-o``, ``--output``: Write the thread dump output to the given file for "
+"further inspection"
+msgstr "``-o``, ``--output``：将线程信息导出结果输出至给定文件，以供进一步分析"
+
+#: ../command/mcdr.rst:434
 msgid "Translation Test"
 msgstr "翻译测试"
 
-#: ../command/mcdr.rst:431
+#: ../command/mcdr.rst:436
 msgid ""
 "Query translation results by translation key, or dump all translations "
 "within given path"
 msgstr "查询给定翻译键的翻译结果，或者导出以给定路径为前缀的所有翻译键"
 
-#: ../command/mcdr.rst:438 ../command/mcdr.rst:459
+#: ../command/mcdr.rst:445
+msgid ""
+"``-o``, ``--output``: Write the translation dump output to the given file"
+" for further inspection"
+msgstr "``-o``, ``--output``：将翻译数据导出结果输出至给定文件，以供进一步分析"
+
+#: ../command/mcdr.rst:447 ../command/mcdr.rst:472
 msgid "Examples::"
 msgstr "例子："
 
-#: ../command/mcdr.rst:447
+#: ../command/mcdr.rst:456
 msgid "Command Tree Display"
 msgstr "命令树展示"
 
-#: ../command/mcdr.rst:449
+#: ../command/mcdr.rst:458
 msgid ""
 "Dump command trees with "
 ":meth:`~mcdreforged.command.builder.nodes.basic.AbstractNode.print_tree` "
@@ -1004,17 +1028,15 @@ msgstr ""
 ":meth:`~mcdreforged.command.builder.nodes.basic.AbstractNode.print_tree` "
 "导出命令树"
 
-#: ../command/mcdr.rst:451
+#: ../command/mcdr.rst:460
 msgid ""
 "You can filter out command trees to be dumped with plugin id or root node"
 " name"
 msgstr "你可以通过插件 id 或根节点名来过滤命令树"
 
-#~ msgid ""
-#~ "``-o``, ``--output``: Write the freeze "
-#~ "output to the given file. The file"
-#~ " can be used as the requirement "
-#~ "file in the ``!!MCDR plugin install "
-#~ "-r <requirement_file>`` command"
-#~ msgstr ""
+#: ../command/mcdr.rst:470
+msgid ""
+"``-o``, ``--output``: Write the command dump output to the given file for"
+" further inspection"
+msgstr "``-o``, ``--output``：将指令树输出至给定文件，以供进一步分析"
 
