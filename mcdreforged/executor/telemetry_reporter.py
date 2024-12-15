@@ -91,7 +91,7 @@ class TelemetryReporter:
 	The class to collect and report telemetry data
 	"""
 	REPORT_URL = 'https://telemetry.mcdreforged.com/report'
-	REPORT_TIMEOUT_SEC = 10
+	REPORT_TIMEOUT_SEC = 15
 	SCHEMA_VERSION = 1
 
 	def __init__(self, mcdr_server: Optional['MCDReforgedServer']):
