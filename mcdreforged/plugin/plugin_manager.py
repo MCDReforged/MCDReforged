@@ -552,7 +552,9 @@ class PluginManager:
 		"""
 		if not self.mcdr_server.task_executor.is_on_thread():
 			def func():
-				self.__run_manipulation(action).add_done_callback(result_future.set_result)
+				def sync_done_callback(f: 'Future[PluginOperationResult]'):
+					result_future.set_result(f.result())
+				self.__run_manipulation(action).add_done_callback(sync_done_callback)
 			result_future = Future()
 			executor_future = self.mcdr_server.task_executor.submit(func)
 			if wait_if_async:
