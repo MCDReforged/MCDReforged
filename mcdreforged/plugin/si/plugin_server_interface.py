@@ -238,7 +238,7 @@ class PluginServerInterface(ServerInterface):
 		Example 1::
 
 			config = {
-				'setting_a': 1
+				'setting_a': 1,
 				'setting_b': 'xyz'
 			}
 			default_config = config.copy()
