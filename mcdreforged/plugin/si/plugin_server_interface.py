@@ -330,7 +330,7 @@ class PluginServerInterface(ServerInterface):
 			if data_processor is not None:
 				needs_save |= data_processor(read_data)
 
-		if PydanticBaseModel is not None and issubclass(target_class, PydanticBaseModel):
+		if target_class is not None and PydanticBaseModel is not None and issubclass(target_class, PydanticBaseModel):
 			if read_data is None:  # read failed, use default
 				result_config = target_class()
 			else:
