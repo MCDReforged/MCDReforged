@@ -13,8 +13,8 @@ PACKAGE_NAME = 'mcdreforged'
 CLI_COMMAND = PACKAGE_NAME
 
 # MCDR Version Storage
-VERSION = '2.14.1'        # semver (1.2.3-alpha.4)
-VERSION_PYPI = '2.14.1'   # pythonic ver (1.2.3a4)
+VERSION = '2.14.2'        # semver (1.2.3-alpha.4)
+VERSION_PYPI = '2.14.2'   # pythonic ver (1.2.3a4)
 
 GITHUB_URL = 'https://github.com/MCDReforged/MCDReforged'
 GITHUB_API_LATEST_URLS = [
