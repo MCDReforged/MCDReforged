@@ -26,9 +26,9 @@ def thread_dump(*, target_thread: Optional[str] = None, name_only: bool = False)
 		if target_thread is not None and thread_name != target_thread:
 			continue
 		if thread_id in stack_map:
+			lines.append("Thread {} (id {})".format(thread_name, thread_id))
 			if name_only:
 				continue
-			lines.append("Thread {} (id {})".format(thread_name, thread_id))
 			for filename, lineno, func_name, line in traceback.extract_stack(stack_map[thread_id]):
 				lines.append('  File "{}", line {}, in {}'.format(filename, lineno, func_name))
 				if line:
@@ -70,23 +70,28 @@ class DebugCommand(SubCommand):
 				yield t.name
 
 		def thread_dump_callback(src: CommandSource, ctx: dict):
+			thread_name = ctx.get('thread_name')
+			if thread_name == '#all':
+				thread_name = None
 			self.cmd_show_thread_dump(
 				src,
-				target_thread=ctx.get('thread_name'),
+				target_thread=thread_name,
 				name_only=ctx.get('name_only', 0) > 0,
 				output_file=ctx.get('output_file'),
 			)
 
 		def make_thread_dump_node() -> Literal:
-			wofa = functools.partial(with_output_file_argument, suggests=['mcdr_thread_dump.txt'])
-			node = wofa(Literal('thread_dump'))
+			def decorate(n: _AbstractNodeType) -> _AbstractNodeType:
+				n = with_output_file_argument(n, suggests=['mcdr_thread_dump.txt'])
+				n.then(CountingLiteral('--name-only', 'name_only').redirects(n))
+				return n
+			node = decorate(Literal('thread_dump'))
 			node.runs(thread_dump_callback)
 			node.then(
-				wofa(QuotableText('thread_name')).
+				decorate(QuotableText('thread_name')).
 				suggests(suggest_thread_name).
 				runs(thread_dump_callback)
 			)
-			node.then(CountingLiteral('--name-only', 'name_only').redirects(node))
 			return node
 
 		def make_translation_dump_node() -> Literal:
