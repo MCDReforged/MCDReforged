@@ -24,8 +24,8 @@ mcdreforged:
       hard: 正在終止 MCDR 並殺死伺服端進程
     send:
       send_when_stopped:
-        .: 伺服端已關閉，不能向其標準輸入流輸入指令
-        text: '被出入的指令: {0}'
+        .: 伺服端已關閉，不能向其標準輸入流輸入命令
+        text: '被輸入的命令: {0}''
     receive:
       wait_stop: 等待伺服端進程停止
       decode_fail: '解析文本 {0} 出錯: {1}'
@@ -60,19 +60,19 @@ mcdreforged:
       配置文件缺失部分選項，使用預設值
       請盡快去檢測並更新配置文件
 
-  # ======================== thread executors ========================
+  # ======================== background thread executors ========================
 
   console_handler:
-    parse_fail: 解析控制台指令 "{0}" 出錯
+    parse_fail: 解析控制台命令 "{0}" 出錯
     error: 運行 ConsoleHandler 時出錯
     stopping_kits: 正在關閉高級控制台
   task_executor:
     error: 運行 TaskExecutor 時出錯
   watchdog:
     task_executor_no_response:
-      line1: TaskExecutor 線程已經 {0} 秒沒有回應了，可能出了些問題
-      line2: '正在於 TaskExecutor 線程中運行的插件 (如果存在的話): {0}'
-      line3: 重建 TaskExecutor 中
+      line1: '{0} 線程已經 {1} 秒沒有回應了，可能出了些問題'
+      line2: '正在於 {0} 線程中運行的插件 (如果存在的話): {1}，線程堆疊:'
+      line3: 重建 {0} 中
   info_reactor_manager:
     react:
       error: 運行響應器 {0} 時出錯
@@ -95,11 +95,15 @@ mcdreforged:
       is_already_latest: MCDR 已為最新版
       newer_than_latest: 目前版本 §7{0}§r 比 Github 中的最新版 §7{1}§r 更新，這是一個開發版嗎?
       new_version_detected: '已檢測到新版本: §7{0}§r。§7{0}§r 的新內容:'
+      n_more_lines: '... 等 {0} 行'
+      python_version_notes: '[注意] Python 3.8 已於 2024-10-07 達到了生命周期的終點，未來的 {} 版本將不再支持 Python 3.8'
+  telemetry_reporter:
+    disabled: 遙測上報已關閉
 
   # ======================== commands ========================
 
   command_exception:
-    unknown_command: 未知指令
+    unknown_command: 未知命令
     unknown_argument: 未知參數
     unknown_root_argument: 未知根節點參數
     requirement_not_met: 約束未滿足
@@ -137,7 +141,7 @@ mcdreforged:
       permission: |
         §7!!MCDR permission list §e[<level>]§r: 列出所有玩家的權限等級。如果 §e[<level>]§r 被指定則僅列出權限等級 §e[<level>]§r
         §7!!MCDR permission set §b<player>§r §e<level>§r: 將 §b<player>§r 的權限設置為 §e<level>§r
-        §7!!MCDR permission query §b[<player>]§r: 查詢 §b<player>§r 的權限等級。當 §b<player>§r 參數被忽略時，查詢指令發送者的權限等級
+        §7!!MCDR permission query §b[<player>]§r: 查詢 §b<player>§r 的權限等級。當 §b<player>§r 參數被忽略時，查詢命令發送者的權限等級
         §7!!MCDR permission remove §b<player>§r: 將 §b<player>§r 從權限資料庫中刪除
         §7!!MCDR permission setdefault §e<level>§r: 將默認等級設置為 §e<level>§r
       plugin: |
@@ -153,6 +157,7 @@ mcdreforged:
         §7!!MCDR plugin install §a<specifier>§7 [-U] [-y] ...§r: 從插件倉庫安裝給定描述的插件
         §7!!MCDR plugin checkupdate §6[<plugin_id> ...]§r: 檢查给定的插件是否有更新
         §7!!MCDR plugin refreshmeta§r: 重新拉取插件倉庫的元數據
+        §7!!MCDR plugin freeze [-a] [-o <file>] [--no-hash]§r: 輸出插件依賴凍結列表，類似 §7pip freeze§r
       preference: |
         §7!!MCDR preference list§r: 顯示偏好列表
         §7!!MCDR preference §e<pref_name>§r: 顯示偏好 §e<pref_name>§r 的詳情
@@ -169,12 +174,12 @@ mcdreforged:
         §7!!MCDR debug thread_dump §6[#all|<thread_name>]§r: 匯出所有指定線程的堆線追蹤信息
         §7!!MCDR debug translation get §6<translation_key>§r: 匯出給定翻譯鍵的翻譯信息
         §7!!MCDR debug translation dump §6<json_path>§r: 匯出已给定路徑為前綴的所有翻譯鍵，例如 "mcdr_server.on_server_stop"
-        §7!!MCDR debug command_dump all§r: 匯出所有指令樹
-        §7!!MCDR debug command_dump plugin §6<plugin_id>§r: 匯出给定插件註冊的所有指令樹
-        §7!!MCDR debug command_dump node §6<literal_name>§r: 匯出樹根為给定名字所有指令樹
-      title: MCDR 指令幫助信息列表
-      mcdr_command: MCDR 控制指令
-      help_command: 顯示指令幫助信息
+        §7!!MCDR debug command_dump all§r: 匯出所有命令樹
+        §7!!MCDR debug command_dump plugin §6<plugin_id>§r: 匯出给定插件註冊的所有命令樹
+        §7!!MCDR debug command_dump node §6<literal_name>§r: 匯出樹根為给定名字所有命令樹
+      title: MCDR 命令幫助信息列表
+      mcdr_command: MCDR 控制命令
+      help_command: 顯示命令幫助信息
       page_number: 第 §6{0}§r 頁
       previous_page_hover: 點擊顯示上一頁
       next_page_hover: 點擊顯示下一頁
@@ -215,7 +220,8 @@ mcdreforged:
       line7: '插件數量: §6{0}§r'
       extra:
         pid: '伺服端 PID: {0}'
-        queue: '消息隊列負載: §6{0}§r/§6{1}§r'
+        queue_info: '消息隊列負載: §6{0}§r/§6{1}§r'
+        queue_regular: '任務隊列負載: §6{0}§r/§6{1}§r'
         thread: '線程數: §6{0}§r'
     list_plugin:
       info_loaded_plugin: §6{0}x §e已加載插件§r
@@ -288,8 +294,8 @@ mcdreforged:
         updatable:
           what: '{0} 個可更新的插件'
           title: '可更新的插件:'
-          hint1: 使用類似 "{0}" 的指令來更新部分插件，
-          hint2: 或者使用指令 "{0}" 來更新全部插件
+          hint1: 使用類似 "{0}" 的命令來更新部分插件，
+          hint2: 或者使用命令 "{0}" 來更新全部插件
         not_updatable:
           what: '{0} 個不可更新的插件'
           title: '不可更新的，且有較新版本的插件:'
@@ -299,12 +305,24 @@ mcdreforged:
         up_to_date:
           what: '{0} 個已是最新的插件'
         latest: '最新版本 {0}'
+      freeze:
+        file_output:
+          done: 已輸出插件依賴凍結列表至 {0}
+          error: '輸出插件依賴凍結列表至 {0} 時發生錯誤: {1}'
+        direct_output:
+          title: 正在輸出所有打包插件的依賴凍結列表，插件數 {0}
+          title_all: 正在輸出所有插件的依賴凍結列表，插件數 {0}
       install:
         name: 安装插件
+        read_file_error: '讀取文件 {0} 失敗: {1}'
         no_input: 未给出任何插件描述
         no_plugin_directories: MCDR 配置的插件文件夾為空，無法安装新插件
         invalid_target: 安装目標文件夾 {0} 無效，因為它不包含在配置的插件文件夾中
+        space_char_not_allowed: '插件描述中不允許使用空格字符。當前插件描述: {0}'
         parse_specifier_failed: '解析插件描述 {0} 失敗: {1}'
+        hash_method_unsupported: '不支持的哈希算法 {0}。目前僅支持 sha256'
+        hash_validator_invalid: '無效的哈希校驗值，應該為一個長度在 [10, 64] 之間的十六進制字符串。目前插件描述: {0}'
+        hash_validator_unexpected: '只有使用 "==" 的插件描述可附加哈希校驗值。當前插件描述: {0}'
         cannot_install_builtin: 無法安装内置插件 {0}
 
         resolving_dependencies: 正在解析插件依賴 ...
@@ -325,7 +343,10 @@ mcdreforged:
             solo: 單文件插件
             packed: 打包插件
             directory: 文件夾插件
-            lined_directory: 鏈接型文件夾插件
+            linked_directory: 鏈接型文件夾插件
+        mismatched_hash:
+          catalogue: '插件倉庫中的插件 {0} 的 sha256 哈希值与校驗值不匹配。預期: {1}，實際: {2}'
+          local: '已安装插件 {0} 的 sha256 哈希值与校驗不匹配。預期: {1}，實際: {2}'
         nothing_to_install: 已安装的插件已滿足所述需求，无需安装任何插件
         install_summary:
           plugin_title: '將被安装的插件'
@@ -354,7 +375,7 @@ mcdreforged:
         name: 更新插件倉庫元數據
 
     preference:
-      unsupported_command_source: 不支持的指令源 {0}
+      unsupported_command_source: 不支持的命令源 {0}
       list:
         title: MCDR 偏好列表
         detail_hint: 點擊以顯示偏好 {0} 的詳情
