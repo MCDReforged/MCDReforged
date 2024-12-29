@@ -25,7 +25,7 @@ mcdreforged:
     send:
       send_when_stopped:
         .: 伺服端已關閉，不能向其標準輸入流輸入命令
-        text: '被輸入的命令: {0}''
+        text: '被輸入的命令: {0}'
     receive:
       wait_stop: 等待伺服端進程停止
       decode_fail: '解析文本 {0} 出錯: {1}'
