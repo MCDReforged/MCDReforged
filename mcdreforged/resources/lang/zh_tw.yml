@@ -313,17 +313,17 @@ mcdreforged:
           title: 正在輸出所有打包插件的依賴凍結列表，插件數 {0}
           title_all: 正在輸出所有插件的依賴凍結列表，插件數 {0}
       install:
-        name: 安装插件
+        name: 安裝插件
         read_file_error: '讀取文件 {0} 失敗: {1}'
         no_input: 未给出任何插件描述
-        no_plugin_directories: MCDR 配置的插件文件夾為空，無法安装新插件
-        invalid_target: 安装目標文件夾 {0} 無效，因為它不包含在配置的插件文件夾中
+        no_plugin_directories: MCDR 配置的插件文件夾為空，無法安裝新插件
+        invalid_target: 安裝目標文件夾 {0} 無效，因為它不包含在配置的插件文件夾中
         space_char_not_allowed: '插件描述中不允許使用空格字符。當前插件描述: {0}'
         parse_specifier_failed: '解析插件描述 {0} 失敗: {1}'
         hash_method_unsupported: '不支持的哈希算法 {0}。目前僅支持 sha256'
         hash_validator_invalid: '無效的哈希校驗值，應該為一個長度在 [10, 64] 之間的十六進制字符串。目前插件描述: {0}'
         hash_validator_unexpected: '只有使用 "==" 的插件描述可附加哈希校驗值。當前插件描述: {0}'
-        cannot_install_builtin: 無法安装内置插件 {0}
+        cannot_install_builtin: 無法安裝内置插件 {0}
 
         resolving_dependencies: 正在解析插件依賴 ...
         unknown_plugin_id: ID 為 {0} 的插件不存在
@@ -333,11 +333,11 @@ mcdreforged:
           error: '插件依賴解析出錯: {0}'
           source_reason:
             user_input: 用戶指定了 {0}
-            existing: 已安装插件 {0}@{1}
-            existing_pinned: 已安装插件 {0}@{1} (固定)
+            existing: 已安裝插件 {0}@{1}
+            existing_pinned: 已安裝插件 {0}@{1} (固定)
 
         cannot_change_not_packed:
-          .: '已有的插件 {0} 的類型為{1}，無法被重新安装。只有打包插件可被重新安装'
+          .: '已有的插件 {0} 的類型為{1}，無法被重新安裝。只有打包插件可被重新安裝'
           plugin_types:
             builtin: 内置插件
             solo: 單文件插件
@@ -346,31 +346,31 @@ mcdreforged:
             linked_directory: 鏈接型文件夾插件
         mismatched_hash:
           catalogue: '插件倉庫中的插件 {0} 的 sha256 哈希值与校驗值不匹配。預期: {1}，實際: {2}'
-          local: '已安装插件 {0} 的 sha256 哈希值与校驗不匹配。預期: {1}，實際: {2}'
-        nothing_to_install: 已安装的插件已滿足所述需求，无需安装任何插件
+          local: '已安裝插件 {0} 的 sha256 哈希值与校驗不匹配。預期: {1}，實際: {2}'
+        nothing_to_install: 已安裝的插件已滿足所述需求，无需安裝任何插件
         install_summary:
-          plugin_title: '將被安装的插件'
+          plugin_title: '將被安裝的插件'
           plugin_count: '新增 {new}, 修改 {change}, 總共 {total}'
           plugin_entry: '{0}: {1} -> {2}'
-          python_title: '將要被安装的 Python 包'
+          python_title: '將要被安裝的 Python 包'
           python_count: '{0}x'
           python_entry: '{0} (被 {1} 依賴)'
 
         dry_run_suffix: ' (試運行)'
-        confirm_hint: '输入 {cmd_confirm} 以確認安装，或输入 {cmd_abort} 以終止安装'
-        aborted: 插件安装終止
-        confirm_timeout: 插件安装確認超时，安装終止
+        confirm_hint: '輸入 {cmd_confirm} 以確認安裝，或輸入 {cmd_abort} 以終止安裝'
+        aborted: 插件安裝終止
+        confirm_timeout: 插件安裝確認超时，安裝終止
 
-        installing_package: 正在安装 {0} 個 Python 包依賴
-        install_package_dry_run: 已安装 {0}
-        install_package_failed: 'Python 包依賴安装失敗，見控制台以了解詳情: {0}'
-        downloading_installing_plugin: 正在下載安装 {0} 個插件
+        installing_package: 正在安裝 {0} 個 Python 包依賴
+        install_package_dry_run: 已安裝 {0}
+        install_package_failed: 'Python 包依賴安裝失敗，見控制台以了解詳情: {0}'
+        downloading_installing_plugin: 正在下載安裝 {0} 個插件
         downloading_plugin_one: '正在下載 {candidate}: {name} {hash_quoted}'
-        installing_plugin_one: '正在安装 {candidate} 至 {path}'
-        reloading_plugins: 已安装 {0} 個插件，正在重載 MCDR
+        installing_plugin_one: '正在安裝 {candidate} 至 {path}'
+        reloading_plugins: 已安裝 {0} 個插件，正在重載 MCDR
 
-        installation_done: 插件安装完成
-        installation_error: '插件安装失敗，回滾中: {0}'
+        installation_done: 插件安裝完成
+        installation_error: '插件安裝失敗，回滾中: {0}'
       refreshmeta:
         name: 更新插件倉庫元數據
 
@@ -453,7 +453,7 @@ mcdreforged:
       topo_order: '插件依賴拓撲順序:'
   dependency_walker:
     dependency_parent_failed: 父依賴項 {0} 依賴檢查失敗
-    dependency_loop: '於 {0} 檢查到循环依賴: {1}'
+    dependency_loop: '於 {0} 檢查到循環依賴: {1}'
     dependency_not_found: 未找到依賴項 {0}
     dependency_not_met: 依賴項 {0} 不滿足版本約束 {1}
     dependency_already_failed: 插件 {0} 的訪問狀態已為 {1}
@@ -479,7 +479,7 @@ mcdreforged:
     connect:
       connection_fail: 'rcon 連接失敗: {0}'
       connected: rcon 已連接
-      wrong_password: rcon 密码錯誤，連接失敗
+      wrong_password: rcon 密碼錯誤，連接失敗
     disconnect:
-      disconnected: rcon 已斷开連接
-      disconnect_fail: rcon 斷开連接失敗
+      disconnected: rcon 已斷開連接
+      disconnect_fail: rcon 斷開連接失敗
