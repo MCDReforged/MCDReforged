@@ -8,7 +8,7 @@ mcdreforged:
     start_server:
       already_interrupted: MCDR 已被終止
       start_twice: 伺服端不能多次啟動
-      about_to_exit: MCDR 即將退出!
+      about_to_exit: MCDR 即將退出
       cwd_not_existed: 伺服端工作路徑 {0} 不存在
       starting: 正在啟動伺服端，啟動參數為 {0}
       start_fail: 伺服端啟動失敗
