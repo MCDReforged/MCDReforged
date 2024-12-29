@@ -42,7 +42,7 @@ mcdreforged:
       error: 運行 MCDR 時出錯
     on_mcdr_stop:
       info: 正在關閉 MCDR
-      bye: bye~
+      bye: bye
       stop_error: 關閉 MCDR 時出錯，忽略並繼續退出
   mcdr_state:
     initializing: §8初始化中§r
@@ -77,7 +77,7 @@ mcdreforged:
     react:
       error: 運行響應器 {0} 時出錯
     info_queue:
-      full: 消息隊列已滿, 伺服端是否再刷屏? 忽然新到來消息
+      full: 消息隊列已滿, 伺服端是否在刷屏? 忽略新到來消息
   server_handler_manager:
     on_config_changed:
       handler_set: 解析處理器已設置為 {0}
