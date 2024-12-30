@@ -96,7 +96,7 @@ mcdreforged:
       newer_than_latest: 目前版本 §7{0}§r 比 Github 中的最新版 §7{1}§r 更新，这是一个开发版吗？
       new_version_detected: '已检测到新版本: §7{0}§r。§7{0}§r 的新内容:'
       n_more_lines: '... 等 {0} 行'
-      python_version_notes: '[注意] Python 3.8 已于 2024-10-07 达到了生命周期的终点，未来的 {} 版本将不再支持 Python 3.8'
+      python_version_notes: '[注意] Python 3.8 已于 2024-10-07 达到了生命周期的终点，未来的 {0} 版本将不再支持 Python 3.8'
   telemetry_reporter:
     disabled: 遥测上报已关闭
 

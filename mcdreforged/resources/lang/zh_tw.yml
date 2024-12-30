@@ -21,7 +21,7 @@ mcdreforged:
       process_killed: 進程 {0} (pid {1}) 已殺死
     interrupt:
       soft: 正在終止 MCDR。再次執行以強制殺死伺服端進程
-      hard: 正在終止 MCDR 並殺死伺服端進程
+      hard: 正在終止 MCDR 並殺死伺服端
     send:
       send_when_stopped:
         .: 伺服端已關閉，不能向其標準輸入流輸入命令
@@ -31,13 +31,13 @@ mcdreforged:
       decode_fail: '解析文本 {0} 出錯: {1}'
     on_mcdr_start:
       starting: '{0} {1} 正在啟動'
-      console_disabled: 控制台進程已禁用
+      console_disabled: 控制台線程已禁用
     on_server_stop:
       show_return_code: '伺服端進程返回代碼: {0}'
       user_interrupted: 伺服端已被用戶終止
       server_stop: 伺服端已關閉
     tick:
-      pre_parse_fail: 預解析伺服端標準輸出流失敗，使用原文本
+      pre_parse_fail: 預解析伺服端標準輸出流失敗，使用源文本
     run:
       error: 運行 MCDR 時出錯
     on_mcdr_stop:
@@ -58,7 +58,7 @@ mcdreforged:
   config:
     missing_config: |
       配置文件缺失部分選項，使用預設值
-      請盡快去檢測並更新配置文件
+      請盡快去檢查並更新配置文件
 
   # ======================== background thread executors ========================
 
@@ -77,7 +77,7 @@ mcdreforged:
     react:
       error: 運行響應器 {0} 時出錯
     info_queue:
-      full: 消息隊列已滿, 伺服端是否在刷屏? 忽略新到來消息
+      full: 消息隊列已滿, 伺服端是否在刷屏? 忽略新到來的消息
   server_handler_manager:
     on_config_changed:
       handler_set: 解析處理器已設置為 {0}
@@ -87,7 +87,7 @@ mcdreforged:
     handler_detection:
       result1: 似乎你並沒有使用正確的伺服端解析處理器
       result2: '目前正在使用的解析處理器: {0}, 成功率 {1}% ({2}/{3})'
-      result3: '可能更為準確解解析處理器: {0}, 成功率 {1}% ({2}/{3})'
+      result3: '可能更為準確的解析處理器: {0}, 成功率 {1}% ({2}/{3})'
   update_helper:
     check_update:
       already_checking: MCDR 已在檢查更新中
@@ -96,7 +96,7 @@ mcdreforged:
       newer_than_latest: 目前版本 §7{0}§r 比 Github 中的最新版 §7{1}§r 更新，這是一個開發版嗎?
       new_version_detected: '已檢測到新版本: §7{0}§r。§7{0}§r 的新內容:'
       n_more_lines: '... 等 {0} 行'
-      python_version_notes: '[注意] Python 3.8 已於 2024-10-07 達到了生命周期的終點，未來的 {} 版本將不再支持 Python 3.8'
+      python_version_notes: '[注意] Python 3.8 已於 2024-10-07 達到了生命周期的終點，未來的 {0} 版本將不再支持 Python 3.8'
   telemetry_reporter:
     disabled: 遙測上報已關閉
 
@@ -130,7 +130,7 @@ mcdreforged:
         §7!!MCDR permission§r: 顯示權限相關的幫助訊息
         §7!!MCDR plugin§r: 顯示插件相關的幫助訊息
         §7!!MCDR preference§r: 顯示偏好相關的幫助訊息
-        §7!!MCDR reload§r: 先是重載相關的幫助訊息
+        §7!!MCDR reload§r: 顯示重載相關的幫助訊息
         §7!!MCDR server§r: 顯示控制伺服端相關的幫助訊息
         §7!!MCDR status§r: 顯示 MCDR 狀態
       reload: |
@@ -141,17 +141,17 @@ mcdreforged:
       permission: |
         §7!!MCDR permission list §e[<level>]§r: 列出所有玩家的權限等級。如果 §e[<level>]§r 被指定則僅列出權限等級 §e[<level>]§r
         §7!!MCDR permission set §b<player>§r §e<level>§r: 將 §b<player>§r 的權限設置為 §e<level>§r
-        §7!!MCDR permission query §b[<player>]§r: 查詢 §b<player>§r 的權限等級。當 §b<player>§r 參數被忽略時，查詢命令發送者的權限等級
+        §7!!MCDR permission query §b[<player>]§r: 查詢 §b<player>§r 的權限等級。當 §b<player>§r 參數被省略時，查詢命令發送者的權限等級
         §7!!MCDR permission remove §b<player>§r: 將 §b<player>§r 從權限資料庫中刪除
-        §7!!MCDR permission setdefault §e<level>§r: 將默認等級設置為 §e<level>§r
+        §7!!MCDR permission setdefault §e<level>§r: 將預設等級設置為 §e<level>§r
       plugin: |
         §7!!MCDR plugin list§r: 列出所有的插件
-        §7!!MCDR plugin info §6<plugin_id>§r: 顯示 id 為 §6<plugin_id>§r 插件信息
+        §7!!MCDR plugin info §6<plugin_id>§r: 顯示 ID 為 §6<plugin_id>§r 插件信息
         §7!!MCDR plugin load §e<file_name>§r: 加載文件名為 §e<file_name>§r 的插件
         §7!!MCDR plugin enable §e<file_name>§r: 啟用文件名為 §e<file_name>§r 的插件
-        §7!!MCDR plugin reload §6<plugin_id>§r: 重載 id 為 §6<plugin_id>§r 的插件
-        §7!!MCDR plugin unload §6<plugin_id>§r: 卸載 id 為 §6<plugin_id>§r 的插件
-        §7!!MCDR plugin disable §6<plugin_id>§r: 禁用 id 為 §6<plugin_id>§r 的插件
+        §7!!MCDR plugin reload §6<plugin_id>§r: 重載 ID 為 §6<plugin_id>§r 的插件
+        §7!!MCDR plugin unload §6<plugin_id>§r: 卸載 ID 為 §6<plugin_id>§r 的插件
+        §7!!MCDR plugin disable §6<plugin_id>§r: 禁用 ID 為 §6<plugin_id>§r 的插件
         §7!!MCDR plugin reloadall§r: 加載 / 重載 / 卸載§l所有§r插件
         §7!!MCDR plugin browse §e[<keyword>]§7 [-i §6<plugin_id>§7]§r: 瀏覽插件倉庫。用關鍵字 §e<keyword>§r 進行篩選，或展示給定插件 §6<plugin_id>§7 的詳情
         §7!!MCDR plugin install §a<specifier>§7 [-U] [-y] ...§r: 從插件倉庫安裝給定描述的插件
@@ -162,18 +162,18 @@ mcdreforged:
         §7!!MCDR preference list§r: 顯示偏好列表
         §7!!MCDR preference §e<pref_name>§r: 顯示偏好 §e<pref_name>§r 的詳情
         §7!!MCDR preference §e<pref_name>§r set §6<value>§r: 設置偏好 §e<pref_name>§r 的值為 §6<value>§r
-        §7!!MCDR preference §e<pref_name>§r reset: 將偏好 §e<pref_name>§r 恢復為預設值
+        §7!!MCDR preference §e<pref_name>§r reset: 將偏好 §e<pref_name>§r 重置為預設值
       server: |
         §7!!MCDR server start§r: 啟動伺服端
         §7!!MCDR server stop§r: 關閉伺服端，且 MCDR 會繼續運行
         §7!!MCDR server stop_exit§r: 關閉伺服端並退出 MCDR
         §7!!MCDR server exit§r: 退出 MCDR。伺服端應已關閉
         §7!!MCDR server restart§r: 重啟伺服端
-        §7!!MCDR server kill§r: 殺死伺服端進程，以及其所有子進程
+        §7!!MCDR server kill§r: 殺死伺服端，以及其所有子進程
       debug: |
-        §7!!MCDR debug thread_dump §6[#all|<thread_name>]§r: 匯出所有指定線程的堆線追蹤信息
+        §7!!MCDR debug thread_dump §6[#all|<thread_name>]§r: 匯出所有指定線程的堆疊追蹤信息
         §7!!MCDR debug translation get §6<translation_key>§r: 匯出給定翻譯鍵的翻譯信息
-        §7!!MCDR debug translation dump §6<json_path>§r: 匯出已给定路徑為前綴的所有翻譯鍵，例如 "mcdr_server.on_server_stop"
+        §7!!MCDR debug translation dump §6<json_path>§r: 匯出以给定路徑為前綴的所有翻譯鍵，例如 "mcdr_server.on_server_stop"
         §7!!MCDR debug command_dump all§r: 匯出所有命令樹
         §7!!MCDR debug command_dump plugin §6<plugin_id>§r: 匯出给定插件註冊的所有命令樹
         §7!!MCDR debug command_dump node §6<literal_name>§r: 匯出樹根為给定名字所有命令樹
@@ -236,8 +236,8 @@ mcdreforged:
     plugin_info:
       id: 'ID: {0}'
       author: '作者: {0}'
-      link: '鏈結: {0}'
-    invalid_plugin_id: 無效的插件id "§e{0}§r"
+      link: '鏈接: {0}'
+    invalid_plugin_id: 無效的插件ID "§e{0}§r"
     invalid_plugin_file_name: 無效的插件文件名 "§e{0}§r"
     disable_plugin:
       fail: 插件 "§e{0}§r" 禁用§c失敗§r
@@ -307,21 +307,21 @@ mcdreforged:
         latest: '最新版本 {0}'
       freeze:
         file_output:
-          done: 已輸出插件依賴凍結列表至 {0}
-          error: '輸出插件依賴凍結列表至 {0} 時發生錯誤: {1}'
+          done: 已匯出插件依賴凍結列表至 {0}
+          error: '匯出插件依賴凍結列表至 {0} 時發生錯誤: {1}'
         direct_output:
-          title: 正在輸出所有打包插件的依賴凍結列表，插件數 {0}
-          title_all: 正在輸出所有插件的依賴凍結列表，插件數 {0}
+          title: 正在匯出所有打包插件的依賴凍結列表，插件數 {0}
+          title_all: 正在匯出所有插件的依賴凍結列表，插件數 {0}
       install:
         name: 安裝插件
         read_file_error: '讀取文件 {0} 失敗: {1}'
         no_input: 未给出任何插件描述
-        no_plugin_directories: MCDR 配置的插件文件夾為空，無法安裝新插件
-        invalid_target: 安裝目標文件夾 {0} 無效，因為它不包含在配置的插件文件夾中
+        no_plugin_directories: MCDR 配置的插件資料夾為空，無法安裝新插件
+        invalid_target: 安裝目標資料夾 {0} 無效，因為它不包含在配置的插件資料夾中
         space_char_not_allowed: '插件描述中不允許使用空格字符。當前插件描述: {0}'
         parse_specifier_failed: '解析插件描述 {0} 失敗: {1}'
         hash_method_unsupported: '不支持的哈希算法 {0}。目前僅支持 sha256'
-        hash_validator_invalid: '無效的哈希校驗值，應該為一個長度在 [10, 64] 之間的十六進制字符串。目前插件描述: {0}'
+        hash_validator_invalid: '無效的哈希校驗值，應當為一個長度在 [10, 64] 之間的十六進制字符串。目前插件描述: {0}'
         hash_validator_unexpected: '只有使用 "==" 的插件描述可附加哈希校驗值。當前插件描述: {0}'
         cannot_install_builtin: 無法安裝内置插件 {0}
 
@@ -342,11 +342,11 @@ mcdreforged:
             builtin: 内置插件
             solo: 單文件插件
             packed: 打包插件
-            directory: 文件夾插件
-            linked_directory: 鏈接型文件夾插件
+            directory: 資料夾插件
+            linked_directory: 鏈接型資料夾插件
         mismatched_hash:
           catalogue: '插件倉庫中的插件 {0} 的 sha256 哈希值与校驗值不匹配。預期: {1}，實際: {2}'
-          local: '已安裝插件 {0} 的 sha256 哈希值与校驗不匹配。預期: {1}，實際: {2}'
+          local: '已安裝插件 {0} 的 sha256 哈希值與校驗值不匹配。預期: {1}，實際: {2}'
         nothing_to_install: 已安裝的插件已滿足所述需求，无需安裝任何插件
         install_summary:
           plugin_title: '將被安裝的插件'
@@ -421,7 +421,7 @@ mcdreforged:
     info_plugin_count: '已加載插件數: §7{0}§r'
   plugin_manager:
     on_config_changed:
-      plugin_directories_set: '插件文件夾列表:'
+      plugin_directories_set: '插件資料夾列表:'
     load: 加載
     unload: 卸載
     reload: 重載
@@ -447,7 +447,7 @@ mcdreforged:
     refresh_all_plugins:
       entered: 刷新所有插件中
     refresh_changed_plugins:
-      entered: 刷新所有更變的插件中
+      entered: 刷新所有變更的插件中
     check_plugin_dependencies:
       item_failed: '卸載插件 {0}，原因: {1}'
       topo_order: '插件依賴拓撲順序:'
