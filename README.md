@@ -9,11 +9,7 @@ MCDReforged
 
 ![MCDR-banner](https://raw.githubusercontent.com/MCDReforged/MCDReforged/master/logo/images/logo_long.png)
 
-**English** | [简中](https://github.com
-
-/MCDReforged/MCDReforged/blob/master/README_zh_cn.md) | [繁中](https://github.com
-
-/MCDReforged/MCDReforged/blob/master/README_zh_tw.md)
+**English** | [简中](https://github.com/MCDReforged/MCDReforged/blob/master/README_zh_cn.md) | [繁中](https://github.com/MCDReforged/MCDReforged/blob/master/README_zh_tw.md)
 
 > This is a python based Minecraft server control tool
 
