@@ -9,7 +9,7 @@ MCDReforged
 
 ![MCDR-banner](https://raw.githubusercontent.com/MCDReforged/MCDReforged/master/logo/images/logo_long.png)
 
-[English](https://github.com/MCDReforged/MCDReforged/blob/master/README.md) | [简中](https://github.com/MCDReforged/MCDReforged/blob/master/README_cn.md) | **繁中**
+[English](README.md) | [简中](README_zh_cn.md) | **繁中**
 
 > 這是一個基於 Python 的 Minecraft 伺服端控制工具
 
