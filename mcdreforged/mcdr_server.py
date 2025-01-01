@@ -40,7 +40,7 @@ from mcdreforged.plugin.si.server_interface import ServerInterface
 from mcdreforged.preference.preference_manager import PreferenceManager
 from mcdreforged.translation.translation_manager import TranslationManager
 from mcdreforged.translation.translator import Translator
-from mcdreforged.utils import file_utils, request_utils, misc_utils
+from mcdreforged.utils import file_utils, request_utils, collection_utils
 from mcdreforged.utils.exception import ServerStartError, IllegalStateError
 from mcdreforged.utils.types.message import MessageText
 
@@ -284,7 +284,7 @@ class MCDReforgedServer:
 				self.__decoding_method = [config.decoding or locale.getpreferredencoding()]
 			else:
 				self.__decoding_method = config.decoding.copy()
-			self.__decoding_method = misc_utils.unique_list(self.__decoding_method)
+			self.__decoding_method = collection_utils.unique_list(self.__decoding_method)
 			if log:
 				self.logger.info(self.__tr('on_config_changed.encoding_decoding_set', self.__encoding_method, ','.join(self.__decoding_method)))
 

@@ -28,7 +28,7 @@ from mcdreforged.plugin.type.builtin_plugin import BuiltinPlugin
 from mcdreforged.plugin.type.common import PluginState
 from mcdreforged.plugin.type.plugin import AbstractPlugin
 from mcdreforged.plugin.type.regular_plugin import RegularPlugin
-from mcdreforged.utils import file_utils, string_utils, misc_utils, class_utils, path_utils, function_utils, future_utils
+from mcdreforged.utils import file_utils, string_utils, class_utils, path_utils, function_utils, future_utils, collection_utils
 from mcdreforged.utils.exception import SelfJoinError
 from mcdreforged.utils.types.path_like import PathStr
 
@@ -112,7 +112,7 @@ class PluginManager:
 	def set_plugin_directories(self, plugin_directories: Optional[List[str]]):
 		if plugin_directories is None:
 			plugin_directories = []
-		self.plugin_directories = [Path(pd) for pd in misc_utils.unique_list(plugin_directories)]
+		self.plugin_directories = [Path(pd) for pd in collection_utils.unique_list(plugin_directories)]
 		for plugin_directory in self.plugin_directories:
 			file_utils.touch_directory(plugin_directory)
 
@@ -352,7 +352,7 @@ class PluginManager:
 			affected_plugin_ids.extend(walker.get_children(plugin.get_id()))
 
 		collected_plugins: List[RegularPlugin] = []  # plugins, in topo order
-		for plugin_id in sorted(misc_utils.unique_list(affected_plugin_ids), key=walker.get_topo_order):
+		for plugin_id in sorted(collection_utils.unique_list(affected_plugin_ids), key=walker.get_topo_order):
 			plugin = self.get_regular_plugin_from_id(plugin_id)
 			assert plugin is not None
 			if collect_filter(plugin):

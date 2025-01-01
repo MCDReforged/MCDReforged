@@ -26,7 +26,7 @@ from mcdreforged.info_reactor.info import Info
 from mcdreforged.logging.debug_option import DebugOption
 from mcdreforged.logging.stream_handler import SyncStdoutStreamHandler
 from mcdreforged.permission.permission_level import PermissionLevel
-from mcdreforged.utils import misc_utils
+from mcdreforged.utils import collection_utils
 from mcdreforged.utils.types.message import MessageText
 
 if TYPE_CHECKING:
@@ -126,7 +126,7 @@ class CommandCompleter(WordCompleter):
 	def get_completions(self, document: Document, complete_event: CompleteEvent) -> Iterable[Completion]:
 		input_ = document.current_line_before_cursor
 		suggestions = self.suggester.suggest(input_)
-		self.words = sorted(misc_utils.unique_list([suggestion.command for suggestion in suggestions]))
+		self.words = sorted(collection_utils.unique_list([suggestion.command for suggestion in suggestions]))
 		self.display_dict = dict([(suggestion.command, suggestion.suggest_input) for suggestion in suggestions])
 		return super().get_completions(document, complete_event)
 

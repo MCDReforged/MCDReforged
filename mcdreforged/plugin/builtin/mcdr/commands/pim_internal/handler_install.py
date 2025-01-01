@@ -28,7 +28,7 @@ from mcdreforged.plugin.installer.dependency_resolver import PluginRequirement, 
 from mcdreforged.plugin.installer.downloader import ReleaseDownloader
 from mcdreforged.plugin.installer.types import ReleaseData, PluginResolution, MetaRegistry
 from mcdreforged.plugin.meta.version import Version
-from mcdreforged.utils import misc_utils
+from mcdreforged.utils import collection_utils
 from mcdreforged.utils.replier import CommandSourceReplier
 
 if TYPE_CHECKING:
@@ -231,7 +231,7 @@ class PimInstallCommandHandler(PimCommandHandlerBase):
 				if is_plugin_updatable(plugin):
 					input_requirements.append(pim_utils.as_requirement(plugin, None))
 
-		input_requirements = misc_utils.unique_list(input_requirements)
+		input_requirements = collection_utils.unique_list(input_requirements)
 		input_plugin_ids = {req.id for req in input_requirements}
 		for req in input_requirements:
 			if (plugin := self.plugin_manager.get_plugin_from_id(req.id)) is None:

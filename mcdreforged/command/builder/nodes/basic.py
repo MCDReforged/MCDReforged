@@ -14,7 +14,7 @@ from mcdreforged.command.builder.exception import LiteralNotMatch, UnknownComman
 	UnknownRootArgument, RequirementNotMet, IllegalNodeOperation, \
 	CommandError
 from mcdreforged.command.command_source import CommandSource
-from mcdreforged.utils import misc_utils, tree_printer, class_utils
+from mcdreforged.utils import tree_printer, class_utils, collection_utils
 from mcdreforged.utils.types.message import MessageText
 
 __SOURCE_CONTEXT_CALLBACK = Union[
@@ -333,7 +333,7 @@ class AbstractNode(ABC):
 		for literal_list in self._children_literal.values():
 			children.extend(literal_list)
 		children.extend(self._children)
-		return misc_utils.unique_list(children)
+		return collection_utils.unique_list(children)
 
 	def _on_visited(self, context: CommandContext, parsed_result: ParseResult):
 		"""

@@ -4,20 +4,13 @@ Misc tool collection
 import inspect
 import logging
 import threading
-from typing import List, Callable, Tuple, TypeVar, Any, Optional, Iterable
+from typing import Callable, Tuple, Any, Optional
 
 
 def start_thread(func: Callable, args: Tuple, name: Optional[str] = None):
 	thread = threading.Thread(target=func, args=args, name=name, daemon=True)
 	thread.start()
 	return thread
-
-
-T = TypeVar('T')
-
-
-def unique_list(lst: Iterable[T]) -> List[T]:
-	return list(dict.fromkeys(lst).keys())
 
 
 def print_text_to_console(logger: logging.Logger, text: Any):

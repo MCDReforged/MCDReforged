@@ -1,7 +1,7 @@
 import importlib
 from typing import Any, Type, Union, Iterable, Optional, Collection, TypeVar, List
 
-from mcdreforged.utils import misc_utils, tree_printer
+from mcdreforged.utils import tree_printer, collection_utils
 
 _T = TypeVar('_T')
 
@@ -51,7 +51,7 @@ def get_all_base_class(cls: Type) -> List[Type]:
 	ret = [cls]
 	for base in cls.__bases__:
 		ret.extend(get_all_base_class(base))
-	return misc_utils.unique_list(ret)
+	return collection_utils.unique_list(ret)
 
 
 def represent(obj: Any, fields: Optional[dict] = None, *, blacklist: Collection[str] = (), parentheses: str = '()') -> str:
