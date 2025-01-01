@@ -30,6 +30,8 @@ class BackgroundThreadExecutor:
 	def get_thread_stack(self) -> Optional[traceback.StackSummary]:
 		if (thread := self._executor_thread) is None:
 			return None
+		if not thread.is_alive():
+			return None
 		return _get_thread_stack(thread)
 
 	def is_on_thread(self):
