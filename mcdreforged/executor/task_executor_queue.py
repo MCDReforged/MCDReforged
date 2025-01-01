@@ -4,9 +4,10 @@ import queue
 import threading
 import time
 from concurrent.futures import Future
-from typing import Dict, Callable, Optional, TYPE_CHECKING, TypeVar, Generic
+from typing import Dict, Callable, Optional, TYPE_CHECKING, TypeVar, Generic, List, Iterable
 
 from mcdreforged.constants import core_constant
+from mcdreforged.utils import collection_utils
 
 if TYPE_CHECKING:
 	from mcdreforged.plugin.type.plugin import AbstractPlugin
@@ -37,8 +38,8 @@ class TaskQueue:
 			TaskPriority.INFO: queue.Queue(maxsize=core_constant.MAX_TASK_QUEUE_SIZE_INFO),
 			TaskPriority.SENTINEL: queue.Queue(),
 		}
-		for p in TaskPriority:  # ensure the priority range is expected
-			_ = self.__queues[p]
+		if tuple(self.__queues.keys()) != tuple(TaskPriority):
+			raise AssertionError()
 		self.__not_empty = threading.Condition(threading.Lock())
 
 	def __len__(self):
@@ -71,3 +72,12 @@ class TaskQueue:
 					pass
 
 			raise AssertionError('should never come here')
+
+	def drain_all_tasks(self) -> List[TaskQueueItem]:
+		def do_drain() -> Iterable[TaskQueueItem]:
+			for priority, q in self.__queues.items():
+				if priority == TaskPriority.SENTINEL:
+					continue
+				yield from collection_utils.drain_queue(q)
+
+		return list(do_drain())

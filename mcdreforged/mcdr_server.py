@@ -679,7 +679,7 @@ class MCDReforgedServer:
 						executor.join(timeout=1)
 						if executor.get_thread().is_alive():
 							if (sec := i + 1) in [10, 30, 60, 120, 300, 600]:
-								self.logger.warning('Task executor is still alive after {} seconds, stack trace:'.format(sec))
+								self.logger.warning('{} is still alive after {} seconds, stack trace:'.format(executor, sec))
 								if (ss := executor.get_thread_stack()) is not None:
 									for line in ss.format():
 										self.logger.warning(line)
@@ -695,6 +695,9 @@ class MCDReforgedServer:
 				# to prevent "coroutine xxx was never awaited" from happening
 				self.async_task_executor.stop()
 				join_executor(self.async_task_executor)
+
+				self.watch_dog.stop()
+				join_executor(self.watch_dog)
 
 			self.console_handler.stop()
 			self.update_helper.stop()

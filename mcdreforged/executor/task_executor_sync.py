@@ -1,4 +1,3 @@
-import queue
 from concurrent.futures import Future
 from typing import Callable, Optional, TYPE_CHECKING, Dict, TypeVar
 
@@ -26,17 +25,11 @@ class SyncTaskExecutor(TaskExecutorBase):
 		self.__running_plugin: Optional['AbstractPlugin'] = None
 		self.set_name('TaskExecutor')
 
-	def drain_tasks_from(self, other: 'SyncTaskExecutor'):
-		count = 0
-		while True:
-			try:
-				task = other.__task_queue.get(block=False)
-			except queue.Empty:
-				break
-			else:
-				count += 1
-				self.__task_queue.put(task)
-		self.mcdr_server.logger.mdebug('Extracted {} tasks from the previous executor'.format(count), option=DebugOption.TASK_EXECUTOR)
+	def extract_tasks_from(self, other: 'SyncTaskExecutor'):
+		tasks = other.__task_queue.drain_all_tasks()
+		for task in tasks:
+			self.__task_queue.put(task)
+		self.mcdr_server.logger.mdebug('Extracted {} tasks from the previous executor'.format(len(tasks)), option=DebugOption.TASK_EXECUTOR)
 
 	def get_queue_sizes(self) -> Dict[TaskPriority, int]:
 		return self.__task_queue.qsizes()
@@ -45,6 +38,8 @@ class SyncTaskExecutor(TaskExecutorBase):
 			self, func: Callable[[], _T], *,
 			priority: TaskPriority = TaskPriority.REGULAR, raise_if_full: bool = False, plugin: Optional['AbstractPlugin'] = None
 	) -> 'Future[_T]':
+		if not self._executor_thread.is_alive():
+			self.logger.error('Submitting task to a dead task executor {}, thread {}'.format(self, self._executor_thread.ident))
 		future = TaskDoneFuture(self.get_thread())
 		item = TaskQueueItem(func, priority, plugin=plugin, future=future)
 		self.__task_queue.put(item, block=not raise_if_full)

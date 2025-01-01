@@ -73,7 +73,7 @@ class WatchDog(BackgroundThreadExecutor):
 		executor.set_name(executor.get_name() + ' (no response)')
 
 		new_executor = SyncTaskExecutor(self.mcdr_server)
-		new_executor.drain_tasks_from(executor)
+		new_executor.extract_tasks_from(executor)
 		new_executor.start()
 		self.mcdr_server.set_task_executor(new_executor)
 
