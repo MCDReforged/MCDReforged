@@ -34,7 +34,7 @@ class TranslationManager:
 			language, _ = os.path.basename(file_path).rsplit('.', 1)
 			try:
 				with open(os.path.join(MCDR_LANGUAGE_DIRECTORY, file_path), encoding='utf8') as file_handler:
-					translations = dict(YAML().load(file_handler))
+					translations: dict = YAML(typ='safe').load(file_handler)
 				for key, text in translation_utils.unpack_nest_translation(translations).items():
 					self.translations[key][language] = text
 				self.available_languages.add(language)

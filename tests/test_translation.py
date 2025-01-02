@@ -24,7 +24,7 @@ class MyTestCase(unittest.TestCase):
 		for file_path in file_utils.list_file_with_suffix(MCDR_LANGUAGE_DIRECTORY, core_constant.LANGUAGE_FILE_SUFFIX):
 			language, _ = os.path.basename(file_path).rsplit('.', 1)
 			with open(os.path.join(MCDR_LANGUAGE_DIRECTORY, file_path), encoding='utf8') as file_handler:
-				translations = dict(YAML().load(file_handler))
+				translations = YAML(typ='safe').load(file_handler)
 			language_key_dict[language] = translations
 
 		language_list = list(language_key_dict.keys())

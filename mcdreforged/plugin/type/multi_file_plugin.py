@@ -102,7 +102,7 @@ class MultiFilePlugin(RegularPlugin, ABC):
 					if file_extension == 'json':
 						translations = json.load(file_handler)
 					elif file_extension in ['yml', 'yaml']:
-						translations = dict(YAML().load(file_handler))
+						translations = YAML(typ='safe').load(file_handler)
 					else:
 						self.mcdr_server.logger.mdebug('Skipping unknown translation file {} in {}'.format(file_path, repr(self)), option=DebugOption.PLUGIN)
 						continue
