@@ -27,7 +27,7 @@ The language that MCDR will use to display information
 
 * Option type: :external:class:`str`
 * Default value: ``en_us``
-* Available options: ``en_us``, ``zh_cn``
+* Available options: ``en_us``, ``zh_cn``, ``zh_tw``
 
 Server configuration
 --------------------

@@ -8,7 +8,7 @@
 
 
 # The language that MCDR will use to display information
-# Examples: "en_us", "zh_cn"
+# Examples: "en_us", "zh_cn", "zh_tw"
 language: en_us
 
 

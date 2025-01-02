@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-10 00:52+0800\n"
+"POT-Creation-Date: 2025-01-03 00:48+0800\n"
 "PO-Revision-Date: 2021-01-23 13:20+0800\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -76,8 +76,8 @@ msgid "Default value: ``en_us``"
 msgstr "默认值：``en_us``"
 
 #: ../configuration.rst:30
-msgid "Available options: ``en_us``, ``zh_cn``"
-msgstr "可用选项：``en_us``，``zh_cn``"
+msgid "Available options: ``en_us``, ``zh_cn``, ``zh_tw``"
+msgstr "可用选项：``en_us``，``zh_cn``，``zh_tw``"
 
 #: ../configuration.rst:33
 msgid "Server configuration"
