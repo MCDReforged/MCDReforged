@@ -1,0 +1,485 @@
+mcdreforged:
+  # ======================== core logics ========================
+  mcdr_server:
+    on_config_changed:
+      language_set: 語言已設置為 {0}
+      debug_mode_on: 調試模式開啟
+      encoding_decoding_set: 編碼 / 編碼方式已設置為 {0} / {1}
+    start_server:
+      already_interrupted: MCDR 已被終止
+      start_twice: 伺服端不能多次啟動
+      about_to_exit: MCDR 即將退出
+      cwd_not_existed: 伺服端工作路徑 {0} 不存在
+      starting: 正在啟動伺服端，啟動參數為 {0}
+      start_fail: 伺服端啟動失敗
+      pid_info: 伺服端正在以 PID {0} 運行中
+    stop:
+      stop_when_stopped: 伺服端不能在關閉時再次關閉
+      stop_fail: 伺服端關閉出錯，強制關閉
+    kill_server:
+      killing: 正在殺死伺服端進程組
+      process_killed: 進程 {0} (pid {1}) 已殺死
+    interrupt:
+      soft: 正在終止 MCDR。再次執行以強制殺死伺服端進程
+      hard: 正在終止 MCDR 並殺死伺服端
+    send:
+      send_when_stopped:
+        .: 伺服端已關閉，不能向其標準輸入流輸入命令
+        text: '被輸入的命令: {0}'
+    receive:
+      wait_stop: 等待伺服端進程停止
+      decode_fail: '解析文本 {0} 出錯: {1}'
+    on_mcdr_start:
+      starting: '{0} {1} 正在啟動'
+      console_disabled: 控制台線程已禁用
+    on_server_stop:
+      show_return_code: '伺服端進程返回代碼: {0}'
+      user_interrupted: 伺服端已被用戶終止
+      server_stop: 伺服端已關閉
+    tick:
+      pre_parse_fail: 預解析伺服端標準輸出流失敗，使用源文本
+    run:
+      error: 運行 MCDR 時出錯
+    on_mcdr_stop:
+      info: 正在關閉 MCDR
+      bye: bye
+      stop_error: 關閉 MCDR 時出錯，忽略並繼續退出
+  mcdr_state:
+    initializing: §8初始化中§r
+    initialized: §7已初始化§r
+    running: §a運行中§r
+    pre_stopped: §4正在關閉§r
+    stopped: §4已關閉§r
+  server_state:
+    running: §a運行中§r
+    stopping: §c正在關閉§r
+    pre_stopped: §4即將關閉§r
+    stopped: §4已關閉§r
+  config:
+    missing_config: |
+      配置文件缺失部分選項，使用預設值
+      請盡快去檢查並更新配置文件
+
+  # ======================== background thread executors ========================
+
+  console_handler:
+    parse_fail: 解析控制台命令 "{0}" 出錯
+    error: 運行 ConsoleHandler 時出錯
+    stopping_kits: 正在關閉高級控制台
+  task_executor:
+    error: 運行 TaskExecutor 時出錯
+  watchdog:
+    task_executor_no_response:
+      line1: '{0} 線程已經 {1} 秒沒有回應了，可能出了些問題'
+      line2: '正在於 {0} 線程中運行的插件 (如果存在的話): {1}，線程堆疊:'
+      line3: 重建 {0} 中
+  info_reactor_manager:
+    react:
+      error: 運行響應器 {0} 時出錯
+    info_queue:
+      full: 消息隊列已滿, 伺服端是否在刷屏? 忽略新到來的消息
+  server_handler_manager:
+    on_config_changed:
+      handler_set: 解析處理器已設置為 {0}
+    plugin_provided:
+      set: '使用插件 {1} 提供的解析處理器 {0}'
+      unset: '使用配置文件指定的解析處理器 {0}'
+    handler_detection:
+      result1: 似乎你並沒有使用正確的伺服端解析處理器
+      result2: '目前正在使用的解析處理器: {0}, 成功率 {1}% ({2}/{3})'
+      result3: '可能更為準確的解析處理器: {0}, 成功率 {1}% ({2}/{3})'
+  update_helper:
+    check_update:
+      already_checking: MCDR 已在檢查更新中
+      check_fail: '從 Github 檢查最新版本失敗: {0}'
+      is_already_latest: MCDR 已為最新版
+      newer_than_latest: 目前版本 §7{0}§r 比 Github 中的最新版 §7{1}§r 更新，這是一個開發版嗎?
+      new_version_detected: '已檢測到新版本: §7{0}§r。§7{0}§r 的新內容:'
+      n_more_lines: '... 等 {0} 行'
+      python_version_notes: '[注意] Python 3.8 已於 2024-10-07 達到了生命周期的終點，未來的 {0} 版本將不再支持 Python 3.8'
+  telemetry_reporter:
+    disabled: 遙測上報已關閉
+
+  # ======================== commands ========================
+
+  command_exception:
+    unknown_command: 未知命令
+    unknown_argument: 未知參數
+    unknown_root_argument: 未知根節點參數
+    requirement_not_met: 約束未滿足
+    literal_not_match: 字面不匹配
+    number_out_of_range: 數字 {0} 超出範圍 [{1}, {2}]
+    invalid_number: 無效的數字
+    invalid_integer: 無效的整數
+    invalid_float: 無效的浮點數
+    invalid_boolean: 無效的布爾值
+    invalid_enumeration: 無效的枚舉值
+    text_length_out_of_range: 文本長度 {0} 超出範圍 [{1}, {2}]
+    illegal_escapes_usage: 轉義符的非法使用
+    unclosed_quoted_string: 未封閉的引號
+    empty_text: 空文本
+
+  # ======================== builtin plugins ========================
+
+  mcdr_command:
+    permission_denied: §c權限不足§r
+    help_message:
+      .: |
+        §7!!MCDR§r: 顯示這條訊息
+        §7!!MCDR checkupdate§r: 從 Github 檢查更新
+        §7!!MCDR permission§r: 顯示權限相關的幫助訊息
+        §7!!MCDR plugin§r: 顯示插件相關的幫助訊息
+        §7!!MCDR preference§r: 顯示偏好相關的幫助訊息
+        §7!!MCDR reload§r: 顯示重載相關的幫助訊息
+        §7!!MCDR server§r: 顯示控制伺服端相關的幫助訊息
+        §7!!MCDR status§r: 顯示 MCDR 狀態
+      reload: |
+        §7!!MCDR reload plugin§r: 加載 / 重載 / 卸載§l有修改的§r插件
+        §7!!MCDR reload config§r: 重載配置文件
+        §7!!MCDR reload permission§r: 重載權限文件
+        §7!!MCDR reload all§r: 重載上述所有
+      permission: |
+        §7!!MCDR permission list §e[<level>]§r: 列出所有玩家的權限等級。如果 §e[<level>]§r 被指定則僅列出權限等級 §e[<level>]§r
+        §7!!MCDR permission set §b<player>§r §e<level>§r: 將 §b<player>§r 的權限設置為 §e<level>§r
+        §7!!MCDR permission query §b[<player>]§r: 查詢 §b<player>§r 的權限等級。當 §b<player>§r 參數被省略時，查詢命令發送者的權限等級
+        §7!!MCDR permission remove §b<player>§r: 將 §b<player>§r 從權限資料庫中刪除
+        §7!!MCDR permission setdefault §e<level>§r: 將預設等級設置為 §e<level>§r
+      plugin: |
+        §7!!MCDR plugin list§r: 列出所有的插件
+        §7!!MCDR plugin info §6<plugin_id>§r: 顯示 ID 為 §6<plugin_id>§r 插件信息
+        §7!!MCDR plugin load §e<file_name>§r: 加載文件名為 §e<file_name>§r 的插件
+        §7!!MCDR plugin enable §e<file_name>§r: 啟用文件名為 §e<file_name>§r 的插件
+        §7!!MCDR plugin reload §6<plugin_id>§r: 重載 ID 為 §6<plugin_id>§r 的插件
+        §7!!MCDR plugin unload §6<plugin_id>§r: 卸載 ID 為 §6<plugin_id>§r 的插件
+        §7!!MCDR plugin disable §6<plugin_id>§r: 禁用 ID 為 §6<plugin_id>§r 的插件
+        §7!!MCDR plugin reloadall§r: 加載 / 重載 / 卸載§l所有§r插件
+        §7!!MCDR plugin browse §e[<keyword>]§7 [-i §6<plugin_id>§7]§r: 瀏覽插件倉庫。用關鍵字 §e<keyword>§r 進行篩選，或展示給定插件 §6<plugin_id>§7 的詳情
+        §7!!MCDR plugin install §a<specifier>§7 [-U] [-y] ...§r: 從插件倉庫安裝給定描述的插件
+        §7!!MCDR plugin checkupdate §6[<plugin_id> ...]§r: 檢查给定的插件是否有更新
+        §7!!MCDR plugin refreshmeta§r: 重新拉取插件倉庫的元數據
+        §7!!MCDR plugin freeze [-a] [-o <file>] [--no-hash]§r: 輸出插件依賴凍結列表，類似 §7pip freeze§r
+      preference: |
+        §7!!MCDR preference list§r: 顯示偏好列表
+        §7!!MCDR preference §e<pref_name>§r: 顯示偏好 §e<pref_name>§r 的詳情
+        §7!!MCDR preference §e<pref_name>§r set §6<value>§r: 設置偏好 §e<pref_name>§r 的值為 §6<value>§r
+        §7!!MCDR preference §e<pref_name>§r reset: 將偏好 §e<pref_name>§r 重置為預設值
+      server: |
+        §7!!MCDR server start§r: 啟動伺服端
+        §7!!MCDR server stop§r: 關閉伺服端，且 MCDR 會繼續運行
+        §7!!MCDR server stop_exit§r: 關閉伺服端並退出 MCDR
+        §7!!MCDR server exit§r: 退出 MCDR。伺服端應已關閉
+        §7!!MCDR server restart§r: 重啟伺服端
+        §7!!MCDR server kill§r: 殺死伺服端，以及其所有子進程
+      debug: |
+        §7!!MCDR debug thread_dump §6[#all|<thread_name>]§r: 匯出所有指定線程的堆疊追蹤信息
+        §7!!MCDR debug translation get §6<translation_key>§r: 匯出給定翻譯鍵的翻譯信息
+        §7!!MCDR debug translation dump §6<json_path>§r: 匯出以给定路徑為前綴的所有翻譯鍵，例如 "mcdr_server.on_server_stop"
+        §7!!MCDR debug command_dump all§r: 匯出所有命令樹
+        §7!!MCDR debug command_dump plugin §6<plugin_id>§r: 匯出给定插件註冊的所有命令樹
+        §7!!MCDR debug command_dump node §6<literal_name>§r: 匯出樹根為给定名字所有命令樹
+      title: MCDR 命令幫助信息列表
+      mcdr_command: MCDR 控制命令
+      help_command: 顯示命令幫助信息
+      page_number: 第 §6{0}§r 頁
+      previous_page_hover: 點擊顯示上一頁
+      next_page_hover: 點擊顯示下一頁
+    command_not_found: 參數錯誤，輸入 "§7{0}§r" 以查看幫助
+    command_not_found_suggest: 點擊以輸入 "§7{0}§r"
+    refresh_changed_plugins:
+      fail: 重載變化的插件§c失敗§r
+    reload_config:
+      fail: 配置文件重載§c失敗§r
+      success: 配置文件重載§a成功§r
+    reload_permission:
+      fail: 權限文件重載§c失敗§r
+      success: 權限文件重載§a成功§r
+    permission_not_enough: §c權限等級不足§r
+    invalid_permission_level: §c無效的權限等級§r
+    invalid_player_name: §c無效的玩家名稱§r
+    query_player_permission:
+      self: 你的權限等級為 §e{0}§r
+      player: 玩家 §b{0}§r 的權限等級為 §e{1}§r
+      player_unknown: 玩家 §b{0}§r 的權限等級未知
+    remove_player_permission:
+      player_removed: 已移除玩家 §b{0}§r
+    list_permission:
+      show_default: '預設等級: §e{0}§r'
+      suggest_setdefault: 點擊以設置預設權限等級
+      suggest_list: 點擊以查看權限等級 §e{0}§r 的玩家列表
+      suggest_set: 點擊以設置玩家 §b{0}§r 的權限等級
+      suggest_disable: 點擊以將玩家 §b{0}§r 從權限資料庫中移除
+    print_mcdr_status:
+      online: §a在線§r
+      offline: §7離線§r
+      line1: '§l{0}§r 版本: §e{1}§r'
+      line2: 'MCDR 狀態: {0}'
+      line3: '伺服端狀態: {0}'
+      line4: '伺服端已啟動: {0}'
+      line5: '將於伺服端關閉後退出: {0}'
+      line6: 'rcon: {0}'
+      line7: '插件數量: §6{0}§r'
+      extra:
+        pid: '伺服端 PID: {0}'
+        queue_info: '消息隊列負載: §6{0}§r/§6{1}§r'
+        queue_regular: '任務隊列負載: §6{0}§r/§6{1}§r'
+        thread: '線程數: §6{0}§r'
+    list_plugin:
+      info_loaded_plugin: §6{0}x §e已加載插件§r
+      info_disabled_plugin: §6{0}x §e已禁用插件§r
+      info_not_loaded_plugin: §6{0}x §e未加載插件§r
+      suggest_info: 點擊以顯示插件 "§e{0}§r" 的信息
+      suggest_disable: 點擊以禁用插件 "§e{0}§r"
+      suggest_enable: 點擊以啟用插件 "§e{0}§r"
+      suggest_reload: 點擊以重載插件 "§e{0}§r"
+      suggest_unload: 點擊以卸載插件 "§e{0}§r"
+      suggest_load: 點擊以加載插件 "§e{0}§r"
+    plugin_info:
+      id: 'ID: {0}'
+      author: '作者: {0}'
+      link: '鏈接: {0}'
+    invalid_plugin_id: 無效的插件ID "§e{0}§r"
+    invalid_plugin_file_name: 無效的插件文件名 "§e{0}§r"
+    disable_plugin:
+      fail: 插件 "§e{0}§r" 禁用§c失敗§r
+      success: 插件 "§e{0}§r" 禁用§a成功§r
+    reload_plugin:
+      fail: 插件 "§e{0}§r" 重載§c失敗§r
+      success: 插件 "§e{0}§r" 重載§a成功§r
+    unload_plugin:
+      fail: 插件 "§e{0}§r" 卸載§c失敗§r
+      success: 插件 "§e{0}§r" 卸載§a成功§r
+    load_plugin:
+      fail: 插件 "§e{0}§r" 加載§c失敗§r
+      success: 插件 "§e{0}§r" 加載§a成功§r
+    enable_plugin:
+      fail: 插件 "§e{0}§r" 啟用§c失敗§r
+      success: 插件 "§e{0}§r" 啟用§a成功§r
+    reload_all_plugin:
+      fail: 重載所有插件§c失敗§r
+    pim:
+      common:
+        duplicated_input: "發現正在進行的操作: {0}，請等待它執行完成"
+        fetch_start: 正在更新插件倉庫元數據
+        fetch_done: 已更新插件倉庫元數據
+        fetch_block_wait: 正在等待插件倉庫元數據更新结束
+        fetch_failed: '插件倉庫元數據更新失敗: {0}'
+        browse_cmd: 點擊以展示插件 {0} 於插件倉庫中的信息
+      browse:
+        name: 瀏覽插件
+        single:
+          id: 'ID: {0}'
+          name: '插件名: {0}'
+          description: '描述: {0}'
+          repository: '倉庫: {0}'
+          latest_version: '最新版本: {0}'
+          releases: '發行版列表 ({0}x):'
+          version: '版本: {0}'
+          date: '發布日期: {0}'
+          url: '鏈接: {0}'
+        all:
+          keyword: '關鍵字: {0}'
+          title:
+            id: ID
+            name: 插件名
+            version: 版本
+            description: 描述
+          empty: 未找到滿足條件的插件
+      check_update:
+        name: 檢查插件更新
+        dependency_resolution_failed: '依賴解析失敗: {0}'
+        no_update:
+          all: 所有已安裝的 {0} 個插件均為最新版本
+          given: 給定的 {0} 個插件均為最新版本
+        found_summary: 找到了 {0}
+        updatable:
+          what: '{0} 個可更新的插件'
+          title: '可更新的插件:'
+          hint1: 使用類似 "{0}" 的命令來更新部分插件，
+          hint2: 或者使用命令 "{0}" 來更新全部插件
+        not_updatable:
+          what: '{0} 個不可更新的插件'
+          title: '不可更新的，且有較新版本的插件:'
+          reason:
+            constraints_not_satisfied: 依賴約束無法滿足
+            not_packed_plugin: 非打包插件
+        up_to_date:
+          what: '{0} 個已是最新的插件'
+        latest: '最新版本 {0}'
+      freeze:
+        file_output:
+          done: 已匯出插件依賴凍結列表至 {0}
+          error: '匯出插件依賴凍結列表至 {0} 時發生錯誤: {1}'
+        direct_output:
+          title: 正在匯出所有打包插件的依賴凍結列表，插件數 {0}
+          title_all: 正在匯出所有插件的依賴凍結列表，插件數 {0}
+      install:
+        name: 安裝插件
+        read_file_error: '讀取文件 {0} 失敗: {1}'
+        no_input: 未给出任何插件描述
+        no_plugin_directories: MCDR 配置的插件資料夾為空，無法安裝新插件
+        invalid_target: 安裝目標資料夾 {0} 無效，因為它不包含在配置的插件資料夾中
+        space_char_not_allowed: '插件描述中不允許使用空格字符。當前插件描述: {0}'
+        parse_specifier_failed: '解析插件描述 {0} 失敗: {1}'
+        hash_method_unsupported: '不支持的哈希算法 {0}。目前僅支持 sha256'
+        hash_validator_invalid: '無效的哈希校驗值，應當為一個長度在 [10, 64] 之間的十六進制字符串。目前插件描述: {0}'
+        hash_validator_unexpected: '只有使用 "==" 的插件描述可附加哈希校驗值。當前插件描述: {0}'
+        cannot_install_builtin: 無法安裝内置插件 {0}
+
+        resolving_dependencies: 正在解析插件依賴 ...
+        unknown_plugin_id: ID 為 {0} 的插件不存在
+        resolution:
+          impossible: '插件依賴解析失敗。無法滿足的依賴關係:'
+          impossible_requirements: '{0} 依賴 {1}'
+          error: '插件依賴解析出錯: {0}'
+          source_reason:
+            user_input: 用戶指定了 {0}
+            existing: 已安裝插件 {0}@{1}
+            existing_pinned: 已安裝插件 {0}@{1} (固定)
+
+        cannot_change_not_packed:
+          .: '已有的插件 {0} 的類型為{1}，無法被重新安裝。只有打包插件可被重新安裝'
+          plugin_types:
+            builtin: 内置插件
+            solo: 單文件插件
+            packed: 打包插件
+            directory: 資料夾插件
+            linked_directory: 鏈接型資料夾插件
+        mismatched_hash:
+          catalogue: '插件倉庫中的插件 {0} 的 sha256 哈希值与校驗值不匹配。預期: {1}，實際: {2}'
+          local: '已安裝插件 {0} 的 sha256 哈希值與校驗值不匹配。預期: {1}，實際: {2}'
+        nothing_to_install: 已安裝的插件已滿足所述需求，无需安裝任何插件
+        install_summary:
+          plugin_title: '將被安裝的插件'
+          plugin_count: '新增 {new}, 修改 {change}, 總共 {total}'
+          plugin_entry: '{0}: {1} -> {2}'
+          python_title: '將要被安裝的 Python 包'
+          python_count: '{0}x'
+          python_entry: '{0} (被 {1} 依賴)'
+
+        dry_run_suffix: ' (試運行)'
+        confirm_hint: '輸入 {cmd_confirm} 以確認安裝，或輸入 {cmd_abort} 以終止安裝'
+        aborted: 插件安裝終止
+        confirm_timeout: 插件安裝確認超时，安裝終止
+
+        installing_package: 正在安裝 {0} 個 Python 包依賴
+        install_package_dry_run: 已安裝 {0}
+        install_package_failed: 'Python 包依賴安裝失敗，見控制台以了解詳情: {0}'
+        downloading_installing_plugin: 正在下載安裝 {0} 個插件
+        downloading_plugin_one: '正在下載 {candidate}: {name} {hash_quoted}'
+        installing_plugin_one: '正在安裝 {candidate} 至 {path}'
+        reloading_plugins: 已安裝 {0} 個插件，正在重載 MCDR
+
+        installation_done: 插件安裝完成
+        installation_error: '插件安裝失敗，回滾中: {0}'
+      refreshmeta:
+        name: 更新插件倉庫元數據
+
+    preference:
+      unsupported_command_source: 不支持的命令源 {0}
+      list:
+        title: MCDR 偏好列表
+        detail_hint: 點擊以顯示偏好 {0} 的詳情
+      item:
+        name: 偏好項 {0} 的詳情
+        value: '當前值: {0}'
+        suggestions: '建議選項: {0}'
+        current: 當前值
+        default: 預設值
+        set_suggestion_hint: 點擊以將偏好 {0} 的值設置為 {1}
+      set:
+        done: 已將偏好 "{0}" 設置為 "{1}"
+      unknown_language: 未知的語言 {0}
+    server:
+      start.success: 正在啟動伺服端
+      start.failed: 啟動伺服端失敗
+      stop.success: 正在關閉伺服端
+      stop.failed: 關閉伺服端失敗
+      stop_exit.success: 正在關閉伺服端並退出MCDR
+      stop_exit.failed: 啟動伺服端並退出MCDR失敗
+      exit.success: 正在退出MCDR
+      exit.failed: 退出MCDR失敗，請確保伺服端已關閉
+      restart.success: 正在重啟伺服端
+      restart.failed: 重啟伺服端失敗
+      restart.spam: 伺服端已在重啟中，勿重複操作
+      kill.success: 已殺死伺服端進程組
+      kill.failed: 殺死伺服端失敗
+      see_console: 見控制台以了解詳情信息
+  python_plugin:
+    info: '{0} 正於 {1} 環境中運行'
+
+  # ======================== plugin peripherals ========================
+
+  plugin_operation_result:
+    info_loaded_succeeded: '共加載: §7{0}§r 個插件'
+    info_unloaded_succeeded: '共卸載: §7{0}§r 個插件'
+    info_reloaded_succeeded: '共重載: §7{0}§r 個插件'
+    info_loaded_failed: '加載失敗: §7{0}§r 個插件'
+    info_unloaded_failed: '卸載失敗: §7{0}§r 個插件'
+    info_reloaded_failed: '重載失敗: §7{0}§r 個插件'
+    info_dependency_check_failed: '依賴檢查失敗: §7{0}§r 個插件'
+    info_none: 没有插件更變
+    info_plugin_count: '已加載插件數: §7{0}§r'
+  plugin_manager:
+    on_config_changed:
+      plugin_directories_set: '插件資料夾列表:'
+    load: 加載
+    unload: 卸載
+    reload: 重載
+    load_plugin:
+      entered: 正在從 {0} 加載插件
+      fail: 插件 {0} 加載失敗
+      success: 插件 {0} 已加載
+      duplicate: 插件 {0} ({1}) 擁有與已存在插件 {2} ({3}) 相同的 id，已移除
+      unload_duplication_fail: 重複插件 {0} ({1}) 卸載失敗
+      resolution_error: '插件 {0} 的 Python 依賴庫需求未被滿足: {1}'
+    unload_plugin:
+      entered: 正在卸載插件 {0}
+      fail: 插件 {0} 卸載失敗
+      success: 插件 {0} 已卸載
+    reload_plugin:
+      entered: 正在重載插件 {0}
+      fail: 插件 {0} 重載失敗
+      success: 插件 {0} 已重載
+    enable_plugin:
+      entered: 正在從 {0} 啟用插件
+    disable_plugin:
+      entered: 正在禁用插件 {0}
+    refresh_all_plugins:
+      entered: 刷新所有插件中
+    refresh_changed_plugins:
+      entered: 刷新所有變更的插件中
+    check_plugin_dependencies:
+      item_failed: '卸載插件 {0}，原因: {1}'
+      topo_order: '插件依賴拓撲順序:'
+  dependency_walker:
+    dependency_parent_failed: 父依賴項 {0} 依賴檢查失敗
+    dependency_loop: '於 {0} 檢查到循環依賴: {1}'
+    dependency_not_found: 未找到依賴項 {0}
+    dependency_not_met: 依賴項 {0} 不滿足版本約束 {1}
+    dependency_already_failed: 插件 {0} 的訪問狀態已為 {1}
+  server_interface:
+    load_config_simple:
+      failed: '讀取配置文件失敗，使用預設值: {0}'
+      succeed: 配置文件已加載
+      key_missed: 發現缺失的鍵 "{0}"，使用預設值"{1}"
+  plugin_catalogue_meta_registry:
+    load_cached_failed: '無法從緩存文件 {0} 加載插件倉庫元數據: {1}'
+    load_cached_success: 已從緩存文件加載插件倉庫元數據 (更新於 {0})
+
+  # ======================== misc ========================
+
+  permission_manager:
+    load:
+      fail: 加載權限文件 §7{0}§r §c失敗§r，使用預設的空數據
+    set_default_permission_level:
+      done: 預設權限等級已設置為 §e{0}§r
+    set_permission_level:
+      done: 玩家 §b{0}§r 的權限等級已設置為 §e{1}§r
+  rcon_manager:
+    connect:
+      connection_fail: 'rcon 連接失敗: {0}'
+      connected: rcon 已連接
+      wrong_password: rcon 密碼錯誤，連接失敗
+    disconnect:
+      disconnected: rcon 已斷開連接
+      disconnect_fail: rcon 斷開連接失敗
