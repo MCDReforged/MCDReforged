@@ -225,7 +225,7 @@ Arguments:
     Additionally, if the requirement uses ``==`` to pin the plugin version, you can append a hash validator the end of the specifier string,
     to ensure the hash of the to-be-installed plugin file is expected
 
-    .. code-block:: test
+    .. code-block:: text
 
         my_plugin==3.0.0@0ec1e048c6
         my_plugin==3.0.0@0ec1e048c6a1737cce639ddc912d13870705fa109e2009321c64193fbc2e4e35

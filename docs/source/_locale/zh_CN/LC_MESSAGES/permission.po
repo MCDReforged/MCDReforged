@@ -3,12 +3,12 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-14 20:01+0800\n"
+"POT-Creation-Date: 2024-12-26 22:21+0800\n"
 "PO-Revision-Date: 2021-01-23 08:51+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
 "Language-Team: Chinese Simplified\n"
-"Plural-Forms: nplurals=1; plural=0\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -114,53 +114,59 @@ msgid ""
 "``owner``"
 msgstr "控制台输入的命令将被视为最高权限等级 ``owner`` "
 
-#: ../permission.rst:38
+#: ../permission.rst:39
+msgid ""
+":ref:`command/mcdr:Permission management`, to learn how to manage "
+"permissions using MCDR commands"
+msgstr ":ref:`command/mcdr:Permission management`，了解如何用 MCDR 命令管理权限"
+
+#: ../permission.rst:42
 msgid "Permission File"
 msgstr "权限文件"
 
-#: ../permission.rst:40
+#: ../permission.rst:44
 msgid ""
 "Permission file ``permission.yml`` is the config and storage file for the"
 " system"
 msgstr "权限文件 ``permission.yml`` 用以储存权限系统的相关信息"
 
-#: ../permission.rst:43
+#: ../permission.rst:47
 msgid ""
 "`default_level`: The default permission level a new player will get. "
 "Default: ``user``"
 msgstr "``default_level``：新玩家默认的权限等级。默认值：``user``"
 
-#: ../permission.rst:44
+#: ../permission.rst:48
 msgid "``owner``: Names of players with permission ``owner``"
 msgstr "``owner``：拥有权限等级 ``owner`` 的玩家列表"
 
-#: ../permission.rst:45
+#: ../permission.rst:49
 msgid "``admin``: Names of players with permission ``admin``"
 msgstr "``admin``：拥有权限等级 ``admin`` 的玩家列表"
 
-#: ../permission.rst:46
+#: ../permission.rst:50
 msgid "``helper``: Names of players with permission ``helper``"
 msgstr "``helper``：拥有权限等级 ``helper`` 的玩家列表"
 
-#: ../permission.rst:47
+#: ../permission.rst:51
 msgid "``user``: Names of players with permission ``user``"
 msgstr "``user``：拥有权限等级 ``user`` 的玩家列表"
 
-#: ../permission.rst:48
+#: ../permission.rst:52
 msgid "``guest``: Names of players with permission ``guest``"
 msgstr "``guest``：拥有权限等级 ``guest`` 的玩家列表"
 
-#: ../permission.rst:50
+#: ../permission.rst:54
 msgid "Player name list of permission levels can be filled like this:"
 msgstr "玩家名列表可以参照如下方式填写："
 
-#: ../permission.rst:65
+#: ../permission.rst:69
 msgid ""
 "Permission file supports hot-reload. You can use ``!!MCDR reload "
 "permission`` to reload the permission file in-game"
-msgstr ""
-"权限文件支持热重载。你可以使用 ``!!MCDR reload permission`` 命令来重载权限文件"
+msgstr "权限文件支持热重载。你可以使用 ``!!MCDR reload permission`` 命令来重载权限文件"
 
-#: ../permission.rst:69
+#: ../permission.rst:73
 msgid ":ref:`command/mcdr:Hot reloads` command, for more detail about hot reloads"
 msgstr ":ref:`command/mcdr:Hot reloads` 命令章节中更多与热重载相关的命令"
+

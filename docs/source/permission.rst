@@ -34,6 +34,10 @@ There are 5 different levels of permission in total:
 
 The permission level of console input is always the highest level ``owner``
 
+.. seealso::
+  
+    :ref:`command/mcdr:Permission management`, to learn how to manage permissions using MCDR commands
+
 Permission File
 ---------------
 
