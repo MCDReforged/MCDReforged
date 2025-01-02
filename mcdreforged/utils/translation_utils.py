@@ -1,6 +1,7 @@
-from typing import Optional
+from typing import Optional, Union, Literal
 
 from mcdreforged.constants import core_constant
+from mcdreforged.translation.language_fallback_handler import LanguageFallbackHandler
 from mcdreforged.utils.types.message import TranslationKeyDictRich, MessageText, TranslationStorage, TranslationKeyDictNested, TranslationKeyDict
 
 __all__ = [
@@ -24,22 +25,34 @@ def get_mcdr_language() -> str:
 def translate_from_dict(
 		translations: TranslationKeyDictRich, language: str,
 		*,
-		fallback_language: Optional[str] = core_constant.DEFAULT_LANGUAGE, default: Optional[MessageText] = _NONE
+		fallback: Union[LanguageFallbackHandler, Literal['none', 'auto']] = 'auto',
+		default: Optional[MessageText] = _NONE
 ) -> MessageText:
 	"""
 	Select a translation for given language based on a translation dict
 	:param language: The language
-	:param fallback_language: If translation file, it will try using the fallback_language as language for a second try
+	:param fallback: If translation fails, try to get a fallback language using the given fallback handler for another attempt
 	:param translations: A language -> text mapping
 	:param default: The fallback value. If not specified and translation not found, KeyError will be risen
 	"""
-	result = translations.get(language)
-	if result is None and fallback_language is not None:
-		result = translations.get(fallback_language)
+	if fallback == 'none':
+		fallback_handler = LanguageFallbackHandler.none()
+	elif fallback == 'auto':
+		fallback_handler = LanguageFallbackHandler.auto()
+	elif isinstance(fallback, LanguageFallbackHandler):
+		fallback_handler = fallback
+	else:
+		raise TypeError(type(fallback))
+
+	if (result := translations.get(language)) is None:
+		for fallback_language in fallback_handler.get_fallbacks(language):
+			if (result := translations.get(fallback_language)) is not None:
+				break
+
 	if result is None:
 		result = default
 	if result is _NONE:
-		raise KeyError('Failed to translate from dict with translations {}, language {}, fallback_language {}'.format(translations, language, fallback_language))
+		raise KeyError('Failed to translate from dict with translations {}, language {}, fallback_handler {}'.format(translations, language, fallback_handler))
 	return result
 
 

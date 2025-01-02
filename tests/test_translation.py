@@ -7,6 +7,7 @@ from ruamel.yaml import YAML
 
 from mcdreforged.constants import core_constant
 from mcdreforged.minecraft.rtext.text import RText, RTextBase
+from mcdreforged.translation.language_fallback_handler import LanguageFallbackHandler
 from mcdreforged.translation.translation_manager import TranslationManager, MCDR_LANGUAGE_DIRECTORY
 from mcdreforged.utils import file_utils
 
@@ -15,6 +16,7 @@ class MyTestCase(unittest.TestCase):
 	translation_manager: TranslationManager
 
 	def setUp(self) -> None:
+		# noinspection PyTypeChecker
 		self.translation_manager = TranslationManager(logging.getLogger())
 
 	def test_0_same_key_order(self):
@@ -37,7 +39,7 @@ class MyTestCase(unittest.TestCase):
 	def test_1_translation_formatting(self):
 		self.translation_manager.language = 'test_lang'
 		self.translation_manager.translations['key1'] = {'test_lang': 'A {0} bb {c} {1}zzz'}
-		tr = functools.partial(self.translation_manager.translate, allow_failure=False)
+		tr = functools.partial(self.translation_manager.translate, allow_failure=False, fallback_handler=LanguageFallbackHandler.none())
 
 		self.assertEqual('A X bb Z Yzzz', tr('key1', ('X', 'Y'), {'c': 'Z'}))
 		self.assertEqual('A X bb Z Yzzz', tr('key1', ('X', 'Y', 'dummy'), {'c': 'Z'}))

@@ -38,6 +38,7 @@ from mcdreforged.plugin.plugin_event import MCDRPluginEvents
 from mcdreforged.plugin.plugin_manager import PluginManager
 from mcdreforged.plugin.si.server_interface import ServerInterface
 from mcdreforged.preference.preference_manager import PreferenceManager
+from mcdreforged.translation.language_fallback_handler import LanguageFallbackHandler
 from mcdreforged.translation.translation_manager import TranslationManager
 from mcdreforged.translation.translator import Translator
 from mcdreforged.utils import file_utils, request_utils, collection_utils
@@ -53,6 +54,7 @@ class _ReceiveDecodeError(ValueError):
 
 
 _ConfigLoadedCallback = Callable[[MCDReforgedConfig, bool], Any]
+_UNSET: Any = object()
 
 
 class MCDReforgedServer:
@@ -224,7 +226,7 @@ class MCDReforgedServer:
 			self, translation_key: str,
 			*args,
 			_mcdr_tr_language: Optional[str] = None,
-			_mcdr_tr_fallback_language: Optional[str] = core_constant.DEFAULT_LANGUAGE,
+			_mcdr_tr_fallback_language: Optional[str] = _UNSET,
 			_mcdr_tr_allow_failure: bool = True,
 			**kwargs
 	) -> MessageText:
@@ -239,11 +241,18 @@ class MCDReforgedServer:
 		:param _mcdr_tr_allow_failure: If set to false, a KeyError will be risen if the translation key is not recognized
 		:param kwargs: The kwargs to be formatted
 		"""
+		if _mcdr_tr_fallback_language is _UNSET:
+			fallback_handler = LanguageFallbackHandler.auto()
+		elif _mcdr_tr_fallback_language is None:
+			fallback_handler = LanguageFallbackHandler.none()
+		else:
+			fallback_handler = LanguageFallbackHandler.specified(_mcdr_tr_fallback_language)
+
 		return self.translation_manager.translate(
 			translation_key, args, kwargs,
 			allow_failure=_mcdr_tr_allow_failure,
 			language=_mcdr_tr_language,
-			fallback_language=_mcdr_tr_fallback_language,
+			fallback_handler=fallback_handler,
 			plugin_translations=self.plugin_manager.registry_storage.translations
 		)
 
