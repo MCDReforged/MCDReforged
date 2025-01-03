@@ -138,7 +138,8 @@ html_css_files = [
 
 html_js_files = [
 	('https://cdn.jsdelivr.net/npm/@docsearch/js@3', {'defer': 'defer'}),
-	('js/algolia.js', {'defer': 'defer'})
+	('js/algolia.js', {'defer': 'defer'}),
+	('js/docsearch-flyout.js', {'defer': 'defer'})
 ]
 
 
