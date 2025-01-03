@@ -11,8 +11,8 @@ function waitForElement(selector, callback) {
 window.addEventListener('load', () => {
     waitForElement('readthedocs-flyout', () => {
         let flyout = document.querySelector('readthedocs-flyout').shadowRoot;
-        let main = flyout.querySelector("main");
-        main.addEventListener('click', (e) => {
+        let target = flyout.querySelector("header");
+        target.addEventListener('click', (e) => {
             e.stopPropagation();
         });
     })
