@@ -148,7 +148,6 @@ html_js_files = [
 html_theme_options = {
 	'navigation_depth': 6,
 	'logo_only': True,
-	'flyout_display': 'attached',
 }
 
 html_logo = '../../logo/images/logo_long_white.svg'
