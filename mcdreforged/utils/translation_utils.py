@@ -1,4 +1,4 @@
-from typing import Optional, Union, Literal
+from typing import Optional
 
 from mcdreforged.constants import core_constant
 from mcdreforged.translation.language_fallback_handler import LanguageFallbackHandler
@@ -25,25 +25,16 @@ def get_mcdr_language() -> str:
 def translate_from_dict(
 		translations: TranslationKeyDictRich, language: str,
 		*,
-		fallback: Union[LanguageFallbackHandler, Literal['none', 'auto']] = 'auto',
+		fallback_handler: LanguageFallbackHandler = LanguageFallbackHandler.auto(),
 		default: Optional[MessageText] = _NONE
 ) -> MessageText:
 	"""
 	Select a translation for given language based on a translation dict
 	:param language: The language
-	:param fallback: If translation fails, try to get a fallback language using the given fallback handler for another attempt
+	:param fallback_handler: If translation fails, try to get a fallback language using the given fallback handler for another attempt
 	:param translations: A language -> text mapping
 	:param default: The fallback value. If not specified and translation not found, KeyError will be risen
 	"""
-	if fallback == 'none':
-		fallback_handler = LanguageFallbackHandler.none()
-	elif fallback == 'auto':
-		fallback_handler = LanguageFallbackHandler.auto()
-	elif isinstance(fallback, LanguageFallbackHandler):
-		fallback_handler = fallback
-	else:
-		raise TypeError(type(fallback))
-
 	if (result := translations.get(language)) is None:
 		for fallback_language in fallback_handler.get_fallbacks(language):
 			if (result := translations.get(fallback_language)) is not None:

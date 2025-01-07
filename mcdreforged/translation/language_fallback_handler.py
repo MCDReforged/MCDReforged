@@ -13,10 +13,11 @@ class LanguageFallbackHandler:
 	preferred_fallbacks: Dict[str, List[str]]
 
 	def get_fallbacks(self, language: str) -> List[str]:
-		return [
-			*self.preferred_fallbacks.get(language, []),
-			self.default_fallback,
-		]
+		fallbacks: List[str] = []
+		fallbacks.extend(self.preferred_fallbacks.get(language, []))
+		if self.default_fallback is not None:
+			fallbacks.append(self.default_fallback)
+		return fallbacks
 
 	@classmethod
 	@functools.lru_cache(maxsize=None)

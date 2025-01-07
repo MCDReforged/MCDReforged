@@ -63,10 +63,10 @@ class TranslationManager:
 
 		# Translating
 		try:
-			translated_formatter = translation_utils.translate_from_dict(self.translations.get(key, {}), language, fallback=fallback_handler)
+			translated_formatter = translation_utils.translate_from_dict(self.translations.get(key, {}), language, fallback_handler=fallback_handler)
 		except KeyError:
 			try:
-				translated_formatter = translation_utils.translate_from_dict(plugin_translations.get(key, {}), language, fallback=fallback_handler, default=None)
+				translated_formatter = translation_utils.translate_from_dict(plugin_translations.get(key, {}), language, fallback_handler=fallback_handler, default=None)
 			except KeyError:
 				translated_formatter = None
 
