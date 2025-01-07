@@ -542,10 +542,10 @@ class PluginManager:
 
 	def __run_manipulation(self, action: Callable[[], PluginOperationResult], *, wait_if_async: bool = True) -> 'Future[PluginOperationResult]':
 		"""
-		Async manipulations: Submit to the task executor, then wait until the execution finished
+		On non task executor thread: Submit to the task executor, then wait until the execution finished
 
-		Sync manipulations (should be on the task executor thread): Run directly for the 1st action,
-		store in queue for other actions. The delayed actions in queue will be executed after the 1st action is done
+		On task executor thread: Run directly for the 1st action, store in queue for other actions.
+		The delayed actions in queue will be executed after the 1st action is done
 
 		:return: A future to the plugin operation result. The future is finished
 		iif. it's the 1st manipulation call in the current thread's call chain
