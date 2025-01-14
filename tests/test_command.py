@@ -1,7 +1,7 @@
 import unittest
 from abc import ABC
 from enum import Enum
-from typing import Type, Any, TypeVar
+from typing import Type, Any, TypeVar, Set
 
 from typing_extensions import override
 
@@ -435,6 +435,23 @@ class CommandTreeTestCase(CommandTestCase):
 		self.run_command_and_check_result(root, 'test ping', (1, None))
 		self.run_command_and_check_result(root, 'test ping pong ping', (2, 1))
 		self.run_command_and_check_result(root, 'test pong pong pong', (None, 3))
+
+	def test_18_precondition(self):
+		whitelist: Set[str] = set()
+
+		root = (
+			Literal('a').
+			precondition(lambda: 'a' in whitelist).
+			then(Text('b').precondition(lambda: 'b' in whitelist).runs(self.callback_hit))
+		)
+
+		# Notes: precondition has no effect on root node for now
+		self.assertRaises(UnknownCommand, self.run_command, root, 'a')
+		self.assertRaises(UnknownArgument, self.run_command, root, 'a b')
+
+		whitelist.add('b')
+		self.assertRaises(UnknownCommand, self.run_command, root, 'a')
+		self.run_command_and_check_hit(root, 'a b', True)
 
 
 class SimpleCommandBuilderTestCase(CommandTestCase):
