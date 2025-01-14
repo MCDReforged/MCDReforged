@@ -690,8 +690,10 @@ class MCDReforgedServer:
 							if (sec := i + 1) in [10, 30, 60, 120, 300, 600, 1800]:
 								self.logger.warning('{} is still alive after {} seconds, stack trace:'.format(executor, sec))
 								if (ss := executor.get_thread_stack()) is not None:
-									for line in ss.format():
-										self.logger.warning(line)
+									for lines in ss.format():
+										for line in lines.splitlines():
+											if line:
+												self.logger.warning(line)
 						else:
 							break
 					else:
