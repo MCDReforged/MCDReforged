@@ -7,7 +7,7 @@ from typing_extensions import override
 
 from mcdreforged.api.command import *
 from mcdreforged.api.types import CommandSource
-from mcdreforged.command.builder.nodes.basic import CallbackError
+from mcdreforged.command.builder.callback import CallbackError, DirectCallbackInvoker
 from mcdreforged.command.builder.nodes.special import CountingLiteral
 from mcdreforged.utils.types.message import MessageText
 
@@ -51,7 +51,9 @@ class CommandTestCase(ABC, unittest.TestCase):
 		self.has_hit = False
 		self.result = None
 		# noinspection PyTypeChecker
-		executor._entry_execute(None, command)
+		executions = executor._entry_execute(None, command)
+		for execution in executions:
+			execution.scheduled_callback.invoke(DirectCallbackInvoker())
 
 	def check_hit(self, value: bool):
 		self.assertEqual(self.has_hit, value)

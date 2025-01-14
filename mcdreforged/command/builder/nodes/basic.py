@@ -1,15 +1,12 @@
 import collections
-import functools
-import inspect
-import sys
 from abc import ABC, abstractmethod
-from types import MethodType
-from typing import List, Callable, Iterable, Set, Dict, Type, Any, Union, Optional, NamedTuple, TypedDict
+from typing import List, Callable, Iterable, Set, Dict, Type, Any, Union, Optional, NamedTuple, TypedDict, TypeVar
 
 from typing_extensions import Self, override, NotRequired
 
 from mcdreforged.command.builder import command_builder_utils as utils
-from mcdreforged.command.builder.common import ParseResult, CommandContext, CommandSuggestions, CommandSuggestion
+from mcdreforged.command.builder.callback import CallbackError, ScheduledCallback, DirectCallbackInvoker
+from mcdreforged.command.builder.common import ParseResult, CommandContext, CommandSuggestions, CommandSuggestion, CommandExecutions, CommandExecution
 from mcdreforged.command.builder.exception import LiteralNotMatch, UnknownCommand, UnknownArgument, CommandSyntaxError, \
 	UnknownRootArgument, RequirementNotMet, IllegalNodeOperation, \
 	CommandError
@@ -17,6 +14,7 @@ from mcdreforged.command.command_source import CommandSource
 from mcdreforged.utils import tree_printer, class_utils, collection_utils
 from mcdreforged.utils.types.message import MessageText
 
+_T = TypeVar('_T')
 __SOURCE_CONTEXT_CALLBACK = Union[
 	Callable[[], Any],
 	Callable[[CommandSource], Any],
@@ -50,20 +48,6 @@ FAIL_MSG_CALLBACK = __SOURCE_CONTEXT_CALLBACK_MSG
 SUGGESTS_CALLBACK = __SOURCE_CONTEXT_CALLBACK_STR_ITERABLE
 REQUIRES_CALLBACK = __SOURCE_CONTEXT_CALLBACK_BOOL
 PRECONDITION_CALLBACK = __SOURCE_CONTEXT_CALLBACK_BOOL
-
-
-class CallbackError(Exception):
-	Builder = Callable[[Exception], 'CallbackError']
-
-	def __init__(self, exception: Exception, context: CommandContext, action: str):
-		self.exception = exception
-		self.context = context.copy()
-		self.action = action
-		self.exc_info = sys.exc_info()
-
-	@classmethod
-	def builder(cls, context: CommandContext, action: str) -> Builder:
-		return functools.partial(cls, context=context, action=action)
 
 
 class _ErrorHandler(NamedTuple):
@@ -357,38 +341,13 @@ class AbstractNode(ABC):
 		raise NotImplementedError()
 
 	@staticmethod
-	def __smart_callback(callback: Callable, args: tuple, callback_error_factory: CallbackError.Builder, *, allow_async: bool = False):
-		spec_args = inspect.getfullargspec(callback).args
-		spec_args_len = len(spec_args)
-
-		real_func = callback
-		for i in range(100):  # found the real function for the MethodType check
-			if isinstance(real_func, functools.partial):
-				real_func = real_func.func
-			else:
-				break
-		if isinstance(real_func, MethodType):  # class method, remove the 1st param
-			spec_args_len -= 1
-
-		call_args = []
-		for i in range(min(spec_args_len, len(args))):
-			arg = args[i]
-			if isinstance(arg, CommandContext):
-				arg = arg.copy()  # make sure all passed CommandContext are copies
-			call_args.append(arg)
-
-		try:
-			if inspect.iscoroutinefunction(callback):
-				if allow_async:
-					from mcdreforged.plugin.si.server_interface import ServerInterface
-					ServerInterface.si().schedule_task(callback(*call_args))
-					return None
-				else:
-					raise ValueError(f'Async callback is not supported, callback: {real_func}')
-			else:
-				return callback(*call_args)
-		except Exception as e:
-			raise callback_error_factory(e)
+	def __smart_callback(callback: Callable, args: tuple, callback_error_factory: CallbackError.Builder):
+		# make sure all passed CommandContext are copies
+		adjusted_args = tuple(
+			arg.copy() if isinstance(arg, CommandContext) else arg
+			for arg in args
+		)
+		return ScheduledCallback(callback, adjusted_args, callback_error_factory).invoke(DirectCallbackInvoker())
 
 	def __handle_error(self, error: CommandError, context: CommandContext, error_handlers: _ERROR_HANDLER_TYPE):
 		for error_type, handler in error_handlers.items():
@@ -421,8 +380,9 @@ class AbstractNode(ABC):
 	def _get_suggestions(self, context: CommandContext) -> Iterable[str]:
 		return self.__smart_callback(self._suggestion_getter, (context.source, context), CallbackError.builder(context, 'suggestions getting'))
 
-	def _execute_command(self, context: CommandContext) -> None:
+	def _execute_command(self, context: CommandContext) -> CommandExecutions:
 		command = context.command
+		executions = CommandExecutions()
 		try:
 			parse_result = self.parse(context.command_remaining)
 		except CommandSyntaxError as error:
@@ -448,7 +408,11 @@ class AbstractNode(ABC):
 					if callback is None and self._redirect_node is not None:
 						callback = self._redirect_node._callback
 					if callback is not None:
-						self.__smart_callback(callback, (context.source, context), CallbackError.builder(context, 'command callback'), allow_async=True)
+						context2 = context.copy()
+						executions.append(CommandExecution(
+							context=context2,
+							scheduled_callback=ScheduledCallback(callback, (context2.source, context2), CallbackError.builder(context2, 'command callback')),
+						))
 					else:
 						self.__raise_error(UnknownCommand(context.command_read, context.command_read), context)
 				# Un-parsed command string remains
@@ -472,7 +436,7 @@ class AbstractNode(ABC):
 									continue
 								try:
 									with context.enter_child(child_literal):
-										child_literal._execute_command(context)
+										executions.extend(child_literal._execute_command(context))
 									break
 								except CommandError as e:
 									# it's ok for a direct literal node to fail
@@ -485,7 +449,7 @@ class AbstractNode(ABC):
 									if not child.__check_preconditions(context):
 										continue
 									with context.enter_child(child):
-										child._execute_command(context)
+										executions.extend(child._execute_command(context))
 									break
 								else:  # No argument child
 									argument_unknown = True
@@ -496,6 +460,8 @@ class AbstractNode(ABC):
 
 					if argument_unknown:
 						self.__raise_error(UnknownArgument(context.command_read, command), context)
+
+		return executions
 
 	def _generate_suggestions(self, context: CommandContext) -> CommandSuggestions:
 		"""
@@ -560,7 +526,7 @@ class AbstractNode(ABC):
 
 
 class EntryNode(AbstractNode, ABC):
-	def _entry_execute(self, source: CommandSource, command: str):
+	def _entry_execute(self, source: CommandSource, command: str) -> CommandExecutions:
 		"""
 		Parse and execute this command
 
@@ -572,7 +538,7 @@ class EntryNode(AbstractNode, ABC):
 		try:
 			context = CommandContext(source, command)
 			with context.enter_child(self):
-				self._execute_command(context)
+				return self._execute_command(context)
 		except LiteralNotMatch as error:
 			# the root literal node fails to parse the first element
 			raise UnknownRootArgument(error.get_parsed_command(), error.get_failed_command()) from error

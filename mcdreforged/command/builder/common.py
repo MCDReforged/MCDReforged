@@ -1,8 +1,11 @@
+import dataclasses
 import typing
 from contextlib import contextmanager
 from typing import List, Iterable, Dict, Any, Optional, NamedTuple
 
 from typing_extensions import override
+
+from mcdreforged.command.builder.callback import ScheduledCallback
 
 if typing.TYPE_CHECKING:
 	from mcdreforged.command.command_source import CommandSource
@@ -12,6 +15,16 @@ if typing.TYPE_CHECKING:
 class ParseResult(NamedTuple):
 	value: Optional[Any]
 	char_read: int
+
+
+@dataclasses.dataclass(frozen=True)
+class CommandExecution:
+	context: 'CommandContext'
+	scheduled_callback: ScheduledCallback
+
+
+class CommandExecutions(List[CommandExecution]):
+	pass
 
 
 class CommandSuggestion:
