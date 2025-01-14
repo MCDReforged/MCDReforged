@@ -683,11 +683,11 @@ class MCDReforgedServer:
 				self.plugin_manager.dispatch_event(MCDRPluginEvents.PLUGIN_UNLOADED, ())
 
 				def join_executor(executor: BackgroundThreadExecutor):
-					wait_sec = 10 if self.is_interrupt() else 600
+					wait_sec = 10 if self.is_interrupt() else 1800
 					for i in range(wait_sec):
 						executor.join(timeout=1)
 						if executor.get_thread().is_alive():
-							if (sec := i + 1) in [10, 30, 60, 120, 300, 600]:
+							if (sec := i + 1) in [10, 30, 60, 120, 300, 600, 1800]:
 								self.logger.warning('{} is still alive after {} seconds, stack trace:'.format(executor, sec))
 								if (ss := executor.get_thread_stack()) is not None:
 									for line in ss.format():
