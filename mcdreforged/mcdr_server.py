@@ -65,7 +65,6 @@ class MCDReforgedServer:
 		self.server_information: ServerInformation = ServerInformation()
 		self.process: Optional[Popen] = None
 		self.__flags = MCDReforgedFlag.NONE
-		self.__info_filter_holders: List[InfoFilterHolder] = []
 		self.__starting_server_lock = threading.Lock()  # to prevent multiple start_server() call
 		self.__no_server_start = args.no_server_start
 		self.__stop_lock = threading.Lock()  # to prevent multiple stop() call
@@ -312,13 +311,14 @@ class MCDReforgedServer:
 		self.logger.info(future.result().to_rtext(self, show_path=True))
 
 	def on_plugin_registry_changed(self):
-		self.__info_filter_holders.clear()
-
 		reg: 'PluginRegistryStorage' = self.plugin_manager.registry_storage
 		with self.command_manager.start_command_register() as command_register:
 			reg.export_commands(command_register)
 		reg.export_server_handler(self.server_handler_manager.set_plugin_provided_server_handler_holder)
-		reg.export_info_filters(self.__info_filter_holders.append)
+
+		info_filter_holders: List[InfoFilterHolder] = []
+		reg.export_info_filters(info_filter_holders.append)
+		self.reactor_manager.set_info_filters(info_filter_holders)
 
 	# ---------------------------
 	#      General Setters
@@ -625,15 +625,8 @@ class MCDReforgedServer:
 			if self.logger.should_log_debug(option=DebugOption.HANDLER):
 				self.logger.mdebug('Parsed text from server stdout: {}'.format(info), no_check=True)
 		self.server_handler_manager.detect_text(text)
-		info.attach_mcdr_server(self)
 
-		for ifh in self.__info_filter_holders:
-			if ifh.filter.filter_server_info(info) is False:
-				if self.logger.should_log_debug(option=DebugOption.HANDLER):
-					self.logger.debug('Server info is discarded by filter {} from {}'.format(ifh.filter, ifh.plugin))
-				break
-		else:  # all filter check ok
-			self.reactor_manager.put_info(info)
+		self.reactor_manager.put_info(info)
 
 	def __on_mcdr_start(self):
 		self.logger.info(self.__tr('on_mcdr_start.starting', core_constant.NAME, core_constant.VERSION))

@@ -10,6 +10,7 @@ from mcdreforged.executor.task_executor_queue import TaskPriority
 from mcdreforged.info_reactor.abstract_info_reactor import AbstractInfoReactor
 from mcdreforged.info_reactor.impl import PlayerReactor, ServerReactor, GeneralReactor
 from mcdreforged.info_reactor.info import Info
+from mcdreforged.info_reactor.info_filter import InfoFilterHolder
 from mcdreforged.logging.debug_option import DebugOption
 from mcdreforged.logging.logger import ServerOutputLogger
 from mcdreforged.mcdr_config import MCDReforgedConfig
@@ -26,11 +27,15 @@ class InfoReactorManager:
 		self.server_output_logger = ServerOutputLogger('Server')
 		self.reactors: List[AbstractInfoReactor] = []
 		self.__tr = mcdr_server.create_internal_translator('info_reactor_manager').tr
+		self.__info_filter_holders: List[InfoFilterHolder] = []
 
 		mcdr_server.add_config_changed_callback(self.__on_mcdr_config_loaded)
 
 	def __on_mcdr_config_loaded(self, config: MCDReforgedConfig, log: bool):
 		self.register_reactors(config.custom_info_reactors)
+
+	def set_info_filters(self, info_filter_holders: List[InfoFilterHolder]):
+		self.__info_filter_holders = info_filter_holders
 
 	def register_reactors(self, custom_reactor_class_paths: Optional[List[str]]):
 		self.reactors.clear()
@@ -65,6 +70,13 @@ class InfoReactorManager:
 
 	def put_info(self, info: Info):
 		info.attach_mcdr_server(self.mcdr_server)
+
+		for ifh in self.__info_filter_holders:
+			if ifh.filter.filter_server_info(info) is False:
+				if self.mcdr_server.logger.should_log_debug(option=DebugOption.HANDLER):
+					self.mcdr_server.logger.debug('Server info is discarded by filter {} from {}'.format(ifh.filter, ifh.plugin))
+				return
+
 		# echo info from the server to the console
 		if info.is_from_server:
 			self.server_output_logger.info(info.raw_content)
