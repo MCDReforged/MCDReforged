@@ -25,7 +25,7 @@ class Metadata:
 	
 	.. versionchanged:: v2.11.0
 		
-		Plugin id starts with non-alphabet character is no longer disallowed
+		Plugin id starts with non-alphabet character is no longer allowed
 	"""
 
 	version: Version

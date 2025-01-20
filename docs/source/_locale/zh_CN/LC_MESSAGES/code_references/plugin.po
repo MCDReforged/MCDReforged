@@ -63,7 +63,7 @@ msgid "The id of the plugin. Should match regexp ``[a-z][a-z0-9_]{0,63}``"
 msgstr "插件的 ID。应该与正则表达式 ``[a-z][a-z0-9_]{0,63}`` 匹配"
 
 #: ../../docstring mcdreforged.plugin.meta.metadata.Metadata.id:5 of
-msgid "Plugin id starts with non-alphabet character is no longer disallowed"
+msgid "Plugin id starts with non-alphabet character is no longer allowed"
 msgstr "不再允许以非字母字符开头的插件 ID"
 
 #: ../../docstring mcdreforged.plugin.meta.metadata.Metadata.name:1 of
