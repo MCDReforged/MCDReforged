@@ -124,7 +124,7 @@ class PluginCommandPimExtension(SubCommand):
 				Literal({'-i', '--id'}).
 				then(
 					QuotableText('plugin_id').
-					suggests(lambda: self.__meta_holder.get_registry().plugins.keys()).
+					suggests(lambda: self.__meta_holder.get_registry_fast().plugins.keys()).
 					redirects(node)
 				)
 			)
@@ -143,7 +143,7 @@ class PluginCommandPimExtension(SubCommand):
 						input_plugin_id = m.group(1)
 
 				suggestions: Set[str] = set()
-				for plugin_id, plugin in self.__meta_holder.get_registry().plugins.items():
+				for plugin_id, plugin in self.__meta_holder.get_registry_fast().plugins.items():
 					if input_str is None:
 						suggestions.add(plugin_id)
 					else:

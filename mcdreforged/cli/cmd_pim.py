@@ -57,7 +57,7 @@ def entry(parser: ArgumentParser, args: Namespace):
 def __fetch_meta(replier: Replier) -> MetaRegistry:
 	meta_holder = CatalogueMetaRegistryHolder()
 	replier.reply('Fetching catalogue meta')
-	return meta_holder.get_registry()
+	return meta_holder.fetch_and_get_registry()
 
 
 def cmd_browse(replier: Replier, keyword: str):

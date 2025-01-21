@@ -48,7 +48,7 @@ class CatalogueMetaRegistryHolder:
 			meta_fetch_timeout = 10
 		self.__meta_fetch_timeout = meta_fetch_timeout
 
-	def get_registry(self) -> MetaRegistry:
+	def fetch_and_get_registry(self) -> MetaRegistry:
 		meta_json = self._fetch_meta_json()
 		return self._load_meta_json(meta_json)
 
@@ -124,9 +124,6 @@ class CatalogueMetaRegistryHolder:
 
 		return CatalogueMetaRegistry(plugins)
 
-	def get_release(self, plugin_id: str, version: str) -> ReleaseData:
-		return self.get_registry().plugins[plugin_id].releases[version]
-
 
 class BackgroundMetaFetcher(BackgroundThreadExecutor):
 	def __init__(self, logger: 'MCDReforgedLogger', tick_func: Callable[[], Any]):
@@ -164,8 +161,7 @@ class PersistCatalogueMetaRegistryHolder(CatalogueMetaRegistryHolder):
 	def set_meta_cache_ttl(self, meta_cache_ttl: float):
 		self.__meta_cache_ttl = meta_cache_ttl
 
-	@override
-	def get_registry(self) -> MetaRegistry:
+	def get_registry_fast(self) -> MetaRegistry:
 		self.__background_fetch_flag = True
 		return self.__meta
 
