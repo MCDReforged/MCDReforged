@@ -58,16 +58,17 @@ def make_packed_plugin(args: PackArgs, *, quiet: bool = False):
 	file_name: Optional[str] = args.name
 
 	writeln = print if not quiet else function_utils.NONE
+	ignore_filter: Optional[pathspec.PathSpec] = None
 
 	if len(args.ignore_patterns) > 0:
 		writeln('Using ignore file patterns {}'.format(args.ignore_patterns))
 		ignore_filter = pathspec.GitIgnoreSpec.from_lines(args.ignore_patterns)
-	else:
+	elif args.ignore_file:
+		ignore_filter = read_ignore_file(input_dir / args.ignore_file, writeln)
+		if ignore_filter is not None:
+			writeln('Loaded ignore file patterns from {}'.format(args.ignore_file))
+	if ignore_filter is None:
 		ignore_filter = pathspec.GitIgnoreSpec.from_lines([])
-		if args.ignore_file:
-			ignore_filter = read_ignore_file(input_dir / args.ignore_file, writeln)
-			if ignore_filter is not None:
-				writeln('Loaded ignore file patterns from {}'.format(args.ignore_file))
 
 	if not input_dir.is_dir():
 		writeln('Invalid input directory {}'.format(input_dir))
