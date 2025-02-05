@@ -413,7 +413,7 @@ msgid ""
 " before submitting your plugin"
 msgstr ""
 "在提交你的插件之前，建议先阅读 `贡献指南 "
-"<https://github.com/MCDReforged/PluginCatalogue/blob/master/CONTRIBUTING_cn.md>`_"
+"<https://github.com/MCDReforged/PluginCatalogue/blob/master/CONTRIBUTING_zh_cn.md>`_"
 
 #: ../plugin_dev/plugin_catalogue.rst:234
 msgid "If you want to submit your plugin:"
