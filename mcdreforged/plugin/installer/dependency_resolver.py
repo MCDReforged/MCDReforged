@@ -184,8 +184,9 @@ class PluginDependencyResolver:
 		except resolvelib.ResolutionError as e:
 			return e
 
+		result_mapping: Mapping[KT, CT] = result.mapping
 		resolution: PluginResolution = {}
-		for pid, pc in result.mapping.items():
+		for pid, pc in result_mapping.items():
 			resolution[pid] = pc.version
 
 		return resolution
