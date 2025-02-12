@@ -59,6 +59,18 @@ class MCDReforgedLogger(logging.Logger):
 		self.addHandler(self.console_handler)
 		self.setLevel(logging.INFO)
 
+	@override
+	def setLevel(self, level):
+		super().setLevel(level)
+
+		# We're not following the best-practice of using the ``logging.Logger``,
+		# i.e. we are directly instantiating the ``MCDReforgedLogger``, not from ``logging.getLogger``.
+		# As the result, we need to handle the consequence manually
+		#
+		# This patch is for https://github.com/python/cpython/issues/81439
+		if isinstance(cache := getattr(self, '_cache', None), dict):
+			cache.clear()
+
 	def set_debug_options(self, debug_options: Dict[str, bool]):
 		cls = type(self)
 		cls.debug_options = 0
