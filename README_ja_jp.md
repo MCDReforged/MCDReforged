@@ -23,16 +23,17 @@ Discordで私を連絡してください：`Fallen_Breath#1215`
 
 ## 強み
 
-- 運行於伺服端之上，完全不需要修改伺服端，保留原汁原味的原版特性
+- サーバープログラムが全然変更の必要がありません。オリジナルが保存された。
 - サーバーの修正必要性が全然ありません。
-- 可熱重載的插件系統，無須重啟伺服端即可更新插件
-- 多平台/伺服端的兼容性，支援在 Linux / Windows 下運行 vanilla、paper 以及 bungeecord 等伺服端
+- サーマルリローディングできます。レスダートしなくてプラグインを更新できます。
+- LinuxとWindowsでvanillaやpaperやbungeecordなどサーバープログラムを運行できます。
 
 ## 実行原理は何ですか？
 
 /*
 MCDR 使用了 [Popen](https://docs.python.org/zh-cn/3/library/subprocess.html#subprocess.Popen) 来將伺服端作為一個子進程啟動，
 因此它便擁有了控制伺服端標準輸入/輸出流的能力
+MCDRは [Popen](https://docs.python.org/zh-cn/3/library/subprocess.html#subprocess.Popen) によってサーバーをサブプロセスで///できません
 
 Minecraft 伺服器的控制台輸出擁有著穩定的輸出格式，並包含著大量與伺服器有關的有用信息（如玩家聊天信息）。
 藉此，MCDR 可以解析並分析伺服端輸出，將他们抽象成不同的事件並派發给插件進行響應
