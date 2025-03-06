@@ -9,7 +9,7 @@ MCDReforged
 
 ![MCDR-banner](https://raw.githubusercontent.com/MCDReforged/MCDReforged/master/logo/images/logo_long.png)
 
-[English](README.md) | **简中** | [繁中](README_zh_tw.md)
+[English](README.md) | **简中** | [繁中](README_zh_tw.md) | [日本語](/README_ja_jp.md)
 
 > 这是一个基于 Python 的 Minecraft 服务端控制工具
 
