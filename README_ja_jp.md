@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/c78dddc8-1343-4fda-ab35-c1b99823742e)MCDReforged
+!MCDReforged
 --------
 
 [![Python Versions](https://img.shields.io/pypi/pyversions/mcdreforged.svg)](https://pypi.org/project/mcdreforged)
