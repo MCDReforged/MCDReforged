@@ -1,3 +1,9 @@
-from mcdreforged.constants import core_constant as __core_constant
+"""
+.. versionadded:: v2.15.0
+	Module ``mcdreforged`` now contains everything in ``mcdreforged.api.all``. All MCDR API components can be imported from here
+"""
 
-__version__ = __core_constant.VERSION_PYPI
+# noinspection PyPep8Naming
+from mcdreforged.constants.core_constant import VERSION_PYPI as __version__
+
+from mcdreforged.api.all import *

@@ -3,12 +3,12 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-19 00:42+0800\n"
+"POT-Creation-Date: 2025-03-12 22:05+0800\n"
 "PO-Revision-Date: 2021-01-24 09:02+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
 "Language-Team: Chinese Simplified\n"
-"Plural-Forms: nplurals=1; plural=0\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -18,14 +18,23 @@ msgstr ""
 msgid "API Packages for Plugins"
 msgstr "插件的 API 包"
 
-#: ../plugin_dev/api.rst:5
+#: ../plugin_dev/api.rst:7
+msgid ""
+"Since MCDR v2.15, the module ``mcdreforged`` includes all API components "
+"from ``mcdreforged.api.all``. You can import any API components you want "
+"from MCDR from the ``mcdreforged`` module directly"
+msgstr ""
+"从 MCDR v2.15 开始，模块 ``mcdreforged`` 将包含 ``mcdreforged.api.all`` 中的所有 API "
+"组件。你可以直接从 ``mcdreforged`` 里导入任何你需要的 API 组件"
+
+#: ../plugin_dev/api.rst:10
 msgid ""
 "When your plugin needs to import something from MCDR, rather than "
-"directly import the package you want, you can import the packages in "
-"``mcdreforged.api``"
+"directly import the package you want, you can import the packages in the "
+"``mcdreforged.api`` module"
 msgstr "当你需要从 MCDR 中导入些东西时，除了直接从 MCDR 的内部实现中导入外，你还可以从 ``mcdreforged.api`` 中进行导入"
 
-#: ../plugin_dev/api.rst:7
+#: ../plugin_dev/api.rst:12
 msgid ""
 "``mcdreforged.api`` is the package for plugin developers to import. By "
 "only importing from the api package, the import of the target class in "
@@ -37,46 +46,55 @@ msgstr ""
 "包进行导入目标类，就可以保证插件导入目标类的导入路径与目标类的实际路径解耦。如果以后 MCDR 重构了目标类，亦或是移动了目标类的位置，那么仅从 "
 "api 包中导入目标类的插件就能丝毫不受影响"
 
-#: ../plugin_dev/api.rst:10
+#: ../plugin_dev/api.rst:17
 msgid "all"
 msgstr "all"
 
-#: ../plugin_dev/api.rst:12
-msgid "Module path: ``mcdreforged.api.all``"
-msgstr "模块路径: ``mcdreforged.api.all``"
+#: ../plugin_dev/api.rst:19
+msgid "Module path: ``mcdreforged.api.all`` / ``mcdreforged``"
+msgstr "模块路径: ``mcdreforged.api.all`` / ``mcdreforged``"
 
-#: ../plugin_dev/api.rst:18
+#: ../plugin_dev/api.rst:37
 msgid ""
 "This is the simplest way to import everything you want for plugin "
 "development. It's a life saver for lazy man"
 msgstr "这是导入插件开发所需的所有内容的最简单的方法，是懒人的救命稻草"
 
-#: ../plugin_dev/api.rst:20
+#: ../plugin_dev/api.rst:39
 msgid ""
 "You can also use the following way as an approach with more security "
 "since it doesn't use ``*``"
 msgstr "你也可以使用如下所示，不使用 ``*`` 的更安全的操作"
 
-#: ../plugin_dev/api.rst:28
+#: ../plugin_dev/api.rst:59
 msgid "Continue reading to see what it will actually import"
 msgstr "继续阅读以了解实际导入的内容"
 
-#: ../plugin_dev/api.rst:31
+#: ../plugin_dev/api.rst:61
+msgid ""
+"Module ``mcdreforged`` now contains everything in "
+"``mcdreforged.api.all``. All MCDR API components can be imported from "
+"``mcdreforged``"
+msgstr ""
+"模块 ``mcdreforged`` 现包含 ``mcdreforged.api.all`` 中的所有内容。MCDR 的所有 API 组件均可从 "
+"``mcdreforged`` 中导入"
+
+#: ../plugin_dev/api.rst:65
 msgid "command"
 msgstr "command"
 
-#: ../plugin_dev/api.rst:33
+#: ../plugin_dev/api.rst:67
 msgid "Module path: ``mcdreforged.api.command``"
 msgstr "模块路径: ``mcdreforged.api.command``"
 
-#: ../plugin_dev/api.rst:35
+#: ../plugin_dev/api.rst:69
 msgid ""
 "``command`` package contains the necessities for building a command tree "
 "or create your own command, including command tree node classes, command "
 "exceptions and some command utils"
 msgstr "``command`` 包包含了建立命令树或创建自己的命令的必要条件，包括命令树节点类、命令异常和一些命令实用工具"
 
-#: ../plugin_dev/api.rst:37
+#: ../plugin_dev/api.rst:71
 msgid ""
 "For example, if you want the class ``Literal`` and ``IllegalArgument`` "
 "for building your command tree ``on_error`` exception handling, you can "
@@ -85,47 +103,47 @@ msgstr ""
 "例如，若你希望使用 ``Literal`` 和 ``IllegalArgument`` 来构建你命令树并处理 ``on_error`` "
 "异常，则可以这样做："
 
-#: ../plugin_dev/api.rst:43
+#: ../plugin_dev/api.rst:77
 msgid "Of course if you are lazy enough you can just"
 msgstr "当然，如果你嫌麻烦，那么也可以："
 
-#: ../plugin_dev/api.rst:49
+#: ../plugin_dev/api.rst:83
 msgid "Class references: :ref:`class-ref-command`"
 msgstr "类参考：:ref:`class-ref-command`"
 
-#: ../plugin_dev/api.rst:52
+#: ../plugin_dev/api.rst:86
 msgid "decorator"
 msgstr "decorator"
 
-#: ../plugin_dev/api.rst:54
+#: ../plugin_dev/api.rst:88
 msgid "Module path: ``mcdreforged.api.decorator``"
 msgstr "模块路径: ``mcdreforged.api.decorator``"
 
-#: ../plugin_dev/api.rst:56
+#: ../plugin_dev/api.rst:90
 msgid ""
 "``decorator`` package contains some useful function decorators for plugin"
 " development"
 msgstr "``decorator`` 包包含了一些对插件开发有用的函数装饰器"
 
-#: ../plugin_dev/api.rst:58
+#: ../plugin_dev/api.rst:92
 msgid "Class references: :ref:`class-ref-decorators`"
 msgstr "类参考：:ref:`class-ref-decorators`"
 
-#: ../plugin_dev/api.rst:61
+#: ../plugin_dev/api.rst:95
 msgid "event"
 msgstr "event"
 
-#: ../plugin_dev/api.rst:63
+#: ../plugin_dev/api.rst:97
 msgid "Module path: ``mcdreforged.api.event``"
 msgstr "模块路径: ``mcdreforged.api.event``"
 
-#: ../plugin_dev/api.rst:65
+#: ../plugin_dev/api.rst:99
 msgid ""
 "``event`` package contains the classes for creating custom events, and "
 "classes of MCDR built-in events"
 msgstr "``event`` 包包含用于创建自定义事件的类和 MCDR 内置事件的类"
 
-#: ../plugin_dev/api.rst:67
+#: ../plugin_dev/api.rst:101
 msgid ""
 "You might already read the "
 ":meth:`~mcdreforged.plugin.si.server_interface.ServerInterface.dispatch_event`"
@@ -139,33 +157,33 @@ msgstr ""
 " 方法。它只接受一个 ``PluginEvent`` 实例作为第一个参数。所以，如果你想分发你的自定义事件，为了简单起见，请创建一个 "
 "``LiteralEvent`` 或一个继承自 ``PluginEvent`` 的自定义事件类"
 
-#: ../plugin_dev/api.rst:72
+#: ../plugin_dev/api.rst:106
 msgid "exception"
 msgstr "exception"
 
-#: ../plugin_dev/api.rst:74
+#: ../plugin_dev/api.rst:108
 msgid "Module path: ``mcdreforged.api.exception``"
 msgstr "模块路径: ``mcdreforged.api.exception``"
 
-#: ../plugin_dev/api.rst:76
+#: ../plugin_dev/api.rst:110
 msgid ""
 "There some custom exceptions that is used in MCDR runtime e.g. "
-":class:`~mcdreforged.plugin.si.server_interface.ServerInterface` methods. "
-"Here comes the way to import them"
+":class:`~mcdreforged.plugin.si.server_interface.ServerInterface` methods."
+" Here comes the way to import them"
 msgstr ""
 "MCDR 运行时会使用一些自定义的异常，例如在调用 "
 ":class:`~mcdreforged.plugin.si.server_interface.ServerInterface` "
 "的方法时。这是导入它们的方法"
 
-#: ../plugin_dev/api.rst:79
+#: ../plugin_dev/api.rst:113
 msgid "rcon"
 msgstr "rcon"
 
-#: ../plugin_dev/api.rst:81
+#: ../plugin_dev/api.rst:115
 msgid "Module path: ``mcdreforged.api.rcon``"
 msgstr "模块路径: ``mcdreforged.api.rcon``"
 
-#: ../plugin_dev/api.rst:83
+#: ../plugin_dev/api.rst:117
 msgid ""
 "Package ``rcon`` contains a single class ``RconConnection``. It's is a "
 "simply rcon client for connect to any Minecraft servers that supports "
@@ -174,19 +192,19 @@ msgstr ""
 "``rcon`` 包仅包含一个类—— ``RconConnection``。这是一个简单的 rcon 客户端，用于连接到任何支持 rcon 协议的"
 " Minecraft 服务端"
 
-#: ../plugin_dev/api.rst:85
+#: ../plugin_dev/api.rst:119
 msgid "Class references: :ref:`code_references/minecraft_tools:Rcon`"
 msgstr "类参考：:ref:`code_references/minecraft_tools:Rcon`"
 
-#: ../plugin_dev/api.rst:88
+#: ../plugin_dev/api.rst:122
 msgid "rtext"
 msgstr "rtext"
 
-#: ../plugin_dev/api.rst:90
+#: ../plugin_dev/api.rst:124
 msgid "Module path: ``mcdreforged.api.rtext``"
 msgstr "模块路径: ``mcdreforged.api.rtext``"
 
-#: ../plugin_dev/api.rst:92
+#: ../plugin_dev/api.rst:126
 msgid ""
 "Recommend to read the page `Raw JSON text format "
 "<https://minecraft.gamepedia.com/Raw_JSON_text_format>`__ in Minecraft "
@@ -196,11 +214,11 @@ msgstr ""
 "<https://wiki.biligame.com/mc/%E5%8E%9F%E5%A7%8BJSON%E6%96%87%E6%9C%AC%E6%A0%BC%E5%BC%8F>`__"
 " 页面"
 
-#: ../plugin_dev/api.rst:94
+#: ../plugin_dev/api.rst:128
 msgid "This is an advanced text component library for Minecraft"
 msgstr "这是一个用于Minecraft的高级文本组件库"
 
-#: ../plugin_dev/api.rst:96
+#: ../plugin_dev/api.rst:130
 msgid ""
 "Inspired by the `MCD stext API <https://github.com/TISUnion/rtext>`__ "
 "made by `Pandaria98 <https://github.com/Pandaria98>`__"
@@ -208,19 +226,19 @@ msgstr ""
 "这部分受 `Pandaria98 <https://github.com/Pandaria98>`__ 制作的 `MCD stext API "
 "<https://github.com/TISUnion/rtext>`__ 的启发，在此表达感谢"
 
-#: ../plugin_dev/api.rst:98
+#: ../plugin_dev/api.rst:132
 msgid "Class references: :ref:`code_references/minecraft_tools:RText`"
 msgstr "类参考：:ref:`code_references/minecraft_tools:RText`"
 
-#: ../plugin_dev/api.rst:101
+#: ../plugin_dev/api.rst:135
 msgid "types"
 msgstr "types"
 
-#: ../plugin_dev/api.rst:103
+#: ../plugin_dev/api.rst:137
 msgid "Module path: ``mcdreforged.api.types``"
 msgstr "模块路径: ``mcdreforged.api.types``"
 
-#: ../plugin_dev/api.rst:105
+#: ../plugin_dev/api.rst:139
 msgid ""
 "Who doesn't want a complete type checking to help you reduce silly "
 "mistakes etc. when coding your plugin? If you want to add type hints to "
@@ -228,25 +246,19 @@ msgid ""
 "you to import those Usually-used classes"
 msgstr "谁不希望在编写插件时，有一个检查器来帮助你减少愚蠢的错误呢？如果你想指定类型以让 IDE 知道你在写什么，这里有一个包可以让你导入一些常用的类"
 
-#: ../plugin_dev/api.rst:117
+#: ../plugin_dev/api.rst:151
 msgid "utils"
 msgstr "utils"
 
-#: ../plugin_dev/api.rst:119
+#: ../plugin_dev/api.rst:153
 msgid "Some useful kits"
 msgstr "一些实用工具集"
 
-#: ../plugin_dev/api.rst:121
+#: ../plugin_dev/api.rst:155
 msgid "Module path: ``mcdreforged.api.utils``"
 msgstr "模块路径: ``mcdreforged.api.utils``"
 
-#: ../plugin_dev/api.rst:123
+#: ../plugin_dev/api.rst:157
 msgid "Class references: :ref:`class-ref-utilities`"
 msgstr "类参考：:ref:`class-ref-utilities`"
-
-#~ msgid "Class references: :ref:`class-ref-rcon`"
-#~ msgstr "类参考：:ref:`class-ref-rcon`"
-
-#~ msgid "Class references: :ref:`class-ref-rtext`"
-#~ msgstr "类参考：:ref:`class-ref-rtext`"
 

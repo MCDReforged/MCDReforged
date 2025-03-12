@@ -2,30 +2,64 @@
 API Packages for Plugins
 ========================
 
-When your plugin needs to import something from MCDR, rather than directly import the package you want, you can import the packages in ``mcdreforged.api``
+.. tip::
 
-``mcdreforged.api`` is the package for plugin developers to import. By only importing from the api package, the import of the target class in the plugin can be decoupled from the actual location of the target class. If MCDR refactors the target class and moves its location in the future, only importing from the api package can keep your plugin unaffected
+    Since MCDR v2.15, the module ``mcdreforged`` includes all API components from ``mcdreforged.api.all``.
+    You can import any API components you want from MCDR from the ``mcdreforged`` module directly
+
+When your plugin needs to import something from MCDR, rather than directly import the package you want, you can import the packages in the ``mcdreforged.api`` module
+
+``mcdreforged.api`` is the package for plugin developers to import.
+By only importing from the api package, the import of the target class in the plugin can be decoupled from the actual location of the target class.
+If MCDR refactors the target class and moves its location in the future, only importing from the api package can keep your plugin unaffected
 
 all
 ---
 
-Module path: ``mcdreforged.api.all``
+Module path: ``mcdreforged.api.all`` / ``mcdreforged``
 
-.. code-block:: python
+.. tab:: MCDR >= 2.15
 
-    from mcdreforged.api.all import *
+    .. code-block:: python
+
+        from mcdreforged import *
+
+        si = ServerInterface.si()
+
+.. tab:: MCDR < 2.15
+
+    .. code-block:: python
+
+        from mcdreforged.api.all import *
+
+        si = ServerInterface.si()
 
 This is the simplest way to import everything you want for plugin development. It's a life saver for lazy man
 
 You can also use the following way as an approach with more security since it doesn't use ``*``
 
-.. code-block:: python
+.. tab:: MCDR >= 2.15
 
-    import mcdreforged.api.all as mcdr
+    .. code-block:: python
 
-    # access stuffs with mcdr.Something
+        import mcdreforged as mcdr
+
+        # access stuffs with mcdr.Something
+        si = mcdr.ServerInterface.si()
+
+.. tab:: MCDR < 2.15
+
+    .. code-block:: python
+
+        import mcdreforged.api.all as mcdr
+
+        # access stuffs with mcdr.Something
+        si = mcdr.ServerInterface.si()
 
 Continue reading to see what it will actually import
+
+.. versionadded:: v2.15.0
+    Module ``mcdreforged`` now contains everything in ``mcdreforged.api.all``. All MCDR API components can be imported from ``mcdreforged``
 
 command
 -------
