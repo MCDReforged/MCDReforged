@@ -185,6 +185,10 @@ debug:
   telemetry: false
 
 
+# Write server outputs to the MCDR log file in addition to the console
+write_server_output_to_log_file: false
+
+
 # =========================================
 # |         Missing Configuration         |
 # =========================================

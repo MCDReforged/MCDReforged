@@ -58,6 +58,7 @@ class MCDReforgedConfig(Serializable):
 
 	# --------- Debug Configuration ---------
 	debug: dict = {o.name.lower(): False for o in DebugOption}
+	write_server_output_to_log_file: bool = False
 
 	def is_debug_on(self) -> bool:
 		return any(self.debug.values())

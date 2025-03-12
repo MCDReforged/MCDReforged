@@ -142,10 +142,19 @@ class MCDReforgedLogger(logging.Logger):
 
 
 class ServerOutputLogger:
-	def __init__(self, name: str):
+	def __init__(self, name: str, mcdr_logger: MCDReforgedLogger):
 		self.name = name
 		self.handler = SyncStdoutStreamHandler()
+		self.mcdr_logger = mcdr_logger
 
-	def info(self, msg: str):
+	def info(self, msg: str, *, write_to_mcdr_log_file: bool = False):
 		msg = MCColorFormatControl.modify_message_text(msg)
-		self.handler.write_direct('[{}] {}\n'.format(self.name, msg))
+		msg_line = '[{}] {}\n'.format(self.name, msg)
+		self.handler.write_direct(msg_line)
+
+		if write_to_mcdr_log_file:
+			try:
+				if (fh := self.mcdr_logger.file_handler) is not None and fh.stream is not None:
+					fh.stream.write(msg_line)
+			except Exception as e:
+				self.mcdr_logger.warning('write server output to mcdr log file failed: {}'.format(e))

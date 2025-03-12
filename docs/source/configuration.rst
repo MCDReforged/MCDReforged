@@ -685,3 +685,16 @@ Debug logging switches. Set ``all`` to true to enable all debug logging, or set 
       permission: false
       command: false
       telemetry: true
+
+write_server_output_to_log_file
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When enabled, server outputs will be logged to both the console and the MCDR log file (``MCDR.log``),
+which might be useful for debugging MCDR
+
+* Option type: :external:class:`bool`
+* Default value:
+
+.. code-block:: yaml
+
+    write_server_output_to_log_file: false

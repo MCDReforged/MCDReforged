@@ -23,7 +23,7 @@ class PimCommandHandlerBase(ABC):
 	def __init__(self, pim_ext: 'PluginCommandPimExtension'):
 		self.__pim_ext = pim_ext
 		self.server_interface = pim_ext.mcdr_plugin.server_interface
-		self.logger = class_utils.check_type(self.server_interface.logger, MCDReforgedLogger)
+		self.logger: MCDReforgedLogger = class_utils.check_type(self.server_interface.logger, MCDReforgedLogger)
 		self.mcdr_server: 'MCDReforgedServer' = pim_ext.mcdr_plugin.mcdr_server
 		self.plugin_manager: 'PluginManager' = self.mcdr_server.plugin_manager
 		self._tr: Translator = pim_ext.pim_tr

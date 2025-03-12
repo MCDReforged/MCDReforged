@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-03 00:48+0800\n"
+"POT-Creation-Date: 2025-03-12 21:40+0800\n"
 "PO-Revision-Date: 2021-01-23 13:20+0800\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -627,7 +627,7 @@ msgstr "rcon 开关"
 
 #: ../configuration.rst:349 ../configuration.rst:510 ../configuration.rst:521
 #: ../configuration.rst:554 ../configuration.rst:571 ../configuration.rst:580
-#: ../configuration.rst:657
+#: ../configuration.rst:657 ../configuration.rst:695
 msgid "Option type: :external:class:`bool`"
 msgstr "选项类型：:external:class:`bool`"
 
@@ -697,6 +697,7 @@ msgstr "选项类型：``List[str]``"
 
 #: ../configuration.rst:391 ../configuration.rst:594 ../configuration.rst:619
 #: ../configuration.rst:643 ../configuration.rst:658 ../configuration.rst:675
+#: ../configuration.rst:696
 msgid "Default value:"
 msgstr "默认值："
 
@@ -1086,4 +1087,16 @@ msgid ""
 "Debug logging switches. Set ``all`` to true to enable all debug logging, "
 "or set the specific option to enable specific debug logging"
 msgstr "调试日志模式开关。将 ``all`` 设置为 ``true`` 以启用所有的调试输出。也可以打开部分选项，以启用某些调试输出"
+
+#: ../configuration.rst:690
+msgid "write_server_output_to_log_file"
+msgstr "write_server_output_to_log_file"
+
+#: ../configuration.rst:692
+msgid ""
+"When enabled, server outputs will be logged to both the console and the "
+"MCDR log file (``MCDR.log``), which might be useful for debugging MCDR"
+msgstr ""
+"启用此功能后，服务器的输出将不仅输出至控制台，也会被写入 MCDR 日志文件（``MCDR.log``）里。这有助于结合 MCDR "
+"自身的日志来调试 MCDR"
 

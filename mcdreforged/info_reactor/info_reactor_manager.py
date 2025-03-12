@@ -24,7 +24,7 @@ class InfoReactorManager:
 	def __init__(self, mcdr_server: 'MCDReforgedServer'):
 		self.mcdr_server = mcdr_server
 		self.last_queue_full_warn_time = None
-		self.server_output_logger = ServerOutputLogger('Server')
+		self.server_output_logger = ServerOutputLogger('Server', mcdr_server.logger)
 		self.reactors: List[AbstractInfoReactor] = []
 		self.__tr = mcdr_server.create_internal_translator('info_reactor_manager').tr
 		self.__info_filter_holders: List[InfoFilterHolder] = []
@@ -79,7 +79,7 @@ class InfoReactorManager:
 
 		# echo info from the server to the console
 		if info.is_from_server:
-			self.server_output_logger.info(info.raw_content)
+			self.server_output_logger.info(info.raw_content, write_to_mcdr_log_file=self.mcdr_server.config.write_server_output_to_log_file)
 		try:
 			self.mcdr_server.task_executor.submit(lambda: self.process_info(info), raise_if_full=not info.is_user, priority=TaskPriority.INFO)
 		except queue.Full:
