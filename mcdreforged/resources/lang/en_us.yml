@@ -18,7 +18,6 @@ mcdreforged:
       stop_fail: Error stopping server, force the server to stop now
     kill_server:
       killing: Killing server process group
-      process_killed: Process {0} (pid {1}) killed
     interrupt:
       soft: Interrupting MCDR, first strike. Interrupt again to kill the servers
       hard: Interrupting MCDR and killing the servers
@@ -59,6 +58,8 @@ mcdreforged:
     missing_config: |
       Some options in the config file is missing, use default value
       Remember to check and update the config file as soon as possible
+  process:
+    process_killed: Process {0} (pid {1}) killed
 
   # ======================== background thread executors ========================
 

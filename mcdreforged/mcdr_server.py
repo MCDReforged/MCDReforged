@@ -1,4 +1,5 @@
-import contextlib
+import concurrent.futures as cf
+import dataclasses
 import locale
 import os
 import threading
@@ -6,10 +7,8 @@ import time
 import traceback
 from importlib.metadata import PackageNotFoundError, Distribution
 from pathlib import Path
-from subprocess import Popen, PIPE, STDOUT, TimeoutExpired
 from typing import Optional, Callable, Any, TYPE_CHECKING, List, Dict
 
-import psutil
 from ruamel.yaml import YAMLError
 
 from mcdreforged.command.command_manager import CommandManager
@@ -38,6 +37,7 @@ from mcdreforged.plugin.plugin_event import MCDRPluginEvents
 from mcdreforged.plugin.plugin_manager import PluginManager
 from mcdreforged.plugin.si.server_interface import ServerInterface
 from mcdreforged.preference.preference_manager import PreferenceManager
+from mcdreforged.process.server_process_manager import ServerProcessManager
 from mcdreforged.translation.language_fallback_handler import LanguageFallbackHandler
 from mcdreforged.translation.translation_manager import TranslationManager
 from mcdreforged.translation.translator import Translator
@@ -53,6 +53,16 @@ class _ReceiveDecodeError(ValueError):
 	pass
 
 
+class _ServerProcessStopped(Exception):
+	pass
+
+
+@dataclasses.dataclass(frozen=True)
+class _ParsedServerOutput:
+	line: str
+	is_stdout: bool
+
+
 _ConfigLoadedCallback = Callable[[MCDReforgedConfig, bool], Any]
 _UNSET: Any = object()
 
@@ -63,7 +73,6 @@ class MCDReforgedServer:
 		self.server_state: ServerState = ServerState.STOPPED
 		self.server_state_cv: threading.Condition = threading.Condition()
 		self.server_information: ServerInformation = ServerInformation()
-		self.process: Optional[Popen] = None
 		self.__flags = MCDReforgedFlag.NONE
 		self.__starting_server_lock = threading.Lock()  # to prevent multiple start_server() call
 		self.__no_server_start = args.no_server_start
@@ -77,6 +86,7 @@ class MCDReforgedServer:
 
 		# --- Constructing fields --- #
 		self.logger: MCDReforgedLogger = MCDReforgedLogger()
+		self.process_manager: ServerProcessManager = ServerProcessManager(self)
 		self.config_manager: MCDReforgedConfigManager = MCDReforgedConfigManager(self.logger, args.config_file_path)
 		self.permission_manager: PermissionManager = PermissionManager(self, args.permission_file_path)
 		self.basic_server_interface: ServerInterface = ServerInterface(self)
@@ -152,11 +162,6 @@ class MCDReforgedServer:
 
 		# --- Done --- #
 		self.set_mcdr_state(MCDReforgedState.INITIALIZED)
-
-	def __del__(self):
-		with contextlib.suppress(Exception):
-			if self.process and self.process.poll() is None:
-				self.__kill_server()
 
 	def __check_environment(self):
 		"""
@@ -419,8 +424,8 @@ class MCDReforgedServer:
 				self.logger.warning(self.__tr('start_server.about_to_exit'))
 				return False
 
-			cwd = self.config.working_directory
-			if not os.path.isdir(cwd):
+			cwd = Path(self.config.working_directory)
+			if not cwd.is_dir():
 				self.logger.error(self.__tr('start_server.cwd_not_existed', cwd))
 				return False
 
@@ -428,14 +433,7 @@ class MCDReforgedServer:
 			start_command = self.config.start_command
 			self.logger.info(self.__tr('start_server.starting', repr(start_command)))
 			try:
-				self.process = Popen(
-					start_command,
-					cwd=self.config.working_directory,
-					stdin=PIPE,
-					stdout=PIPE,
-					stderr=STDOUT,
-					shell=isinstance(start_command, str),
-				)
+				self.process_manager.start(start_command, cwd=cwd)
 			except Exception:
 				self.logger.exception(self.__tr('start_server.start_fail'))
 				return False
@@ -447,22 +445,9 @@ class MCDReforgedServer:
 		"""
 		Kill the server process group
 		"""
-		if self.process and self.process.poll() is None:
+		if self.process_manager.is_alive():
 			self.logger.info(self.__tr('kill_server.killing'))
-			try:
-				root = psutil.Process(self.process.pid)
-				processes = [root]
-				processes.extend(root.children(recursive=True))
-				for proc in reversed(processes):  # child first, parent last
-					try:
-						proc_pid, proc_name = proc.pid, proc.name()  # in case we cannot get them after the process dies
-						proc.kill()
-						self.logger.info(self.__tr('kill_server.process_killed', proc_name, proc_pid))
-					except psutil.NoSuchProcess:
-						pass
-			except psutil.NoSuchProcess:
-				pass
-			self.process.poll()
+			self.process_manager.kill_process_tree()
 		else:
 			self.logger.warning('Try to kill the server when the server process has already been terminated')
 
@@ -512,22 +497,14 @@ class MCDReforgedServer:
 	def __on_server_start_post(self):
 		self.set_server_state(ServerState.RUNNING)
 		self.add_flag(MCDReforgedFlag.EXIT_AFTER_STOP)  # Set after server state is set to RUNNING, or MCDR might have a chance to exit if the server is started by other thread
-		self.logger.info(self.__tr('start_server.pid_info', self.process.pid))
+		self.logger.info(self.__tr('start_server.pid_info', self.process_manager.get_pid()))
 		self.reactor_manager.on_server_start()
 		self.plugin_manager.dispatch_event(MCDRPluginEvents.SERVER_START, ())
 
 	def __on_server_stop(self):
-		return_code = self.process.poll()
+		return_code = self.process_manager.get_return_code()
 		self.logger.info(self.__tr('on_server_stop.show_return_code', return_code))
-		try:
-			self.process.stdin.close()
-		except Exception as e:
-			self.logger.warning('Error when closing stdin: {}'.format(e))
-		try:
-			self.process.stdout.close()
-		except Exception as e:
-			self.logger.warning('Error when closing stdout: {}'.format(e))
-		self.process = None
+		self.process_manager.reset()
 		self.set_server_state(ServerState.STOPPED)
 		self.remove_flag(MCDReforgedFlag.SERVER_STARTUP | MCDReforgedFlag.SERVER_RCON_READY)  # removes this two
 		self.reactor_manager.on_server_stop()
@@ -554,44 +531,47 @@ class MCDReforgedServer:
 		else:
 			raise TypeError('should be a str, found {}'.format(type(text)))
 		if self.is_server_running():
-			self.process.stdin.write(encoded_text)
-			self.process.stdin.flush()
+			self.process_manager.write(encoded_text)
 		else:
 			self.logger.warning(self.__tr('send.send_when_stopped'))
 			self.logger.warning(self.__tr('send.send_when_stopped.text', repr(text) if len(text) <= 32 else repr(text[:32]) + '...'))
 
-	def __receive(self) -> Optional[str]:
+	def __receive(self) -> _ParsedServerOutput:
 		"""
 		Try to receive a str from server's stdout. This will block the current thread
 
-		If server has stopped it will wait up to 60s for the server process to exit, then return None
+		If server has stopped it will wait up to 60s for the server process to exit
+
+		:raise _ServerProcessStopped: The server has stopped
+		:raise _ReceiveDecodeError: Decode error
 		"""
-		try:
-			line_buf: bytes = next(iter(self.process.stdout))
-		except StopIteration:  # server process has stopped
+		so = self.process_manager.read()
+		if so is None:
+			process_exit_future = self.process_manager.get_wait_future()
 			for i in range(core_constant.WAIT_TIME_AFTER_SERVER_STDOUT_END_SEC):
 				try:
-					self.process.wait(1)
-				except TimeoutExpired:
+					process_exit_future.result(timeout=1)
+				except cf.TimeoutError:
 					self.logger.info(self.__tr('receive.wait_stop'))
 				else:
 					break
 			else:
 				self.logger.warning('The server is still not stopped after {}s after its stdout was closed, killing'.format(core_constant.WAIT_TIME_AFTER_SERVER_STDOUT_END_SEC))
 				self.__kill_server()
-			self.process.wait()
-			return None
-		else:
-			errors: Dict[str, UnicodeError] = {}
-			for enc in self.__decoding_method:
-				try:
-					line_text: str = line_buf.decode(enc)
-				except UnicodeError as e:  # https://docs.python.org/3/library/codecs.html#error-handlers
-					errors[enc] = e
-				else:
-					return line_text.strip('\n\r')
-			self.logger.error(self.__tr('receive.decode_fail', line_buf, errors))
-			raise _ReceiveDecodeError()
+			process_exit_future.result()
+			raise _ServerProcessStopped()
+
+		line_buf: bytes = so.line
+		errors: Dict[str, UnicodeError] = {}
+		for enc in self.__decoding_method:
+			try:
+				line_text: str = line_buf.decode(enc)
+			except UnicodeError as e:  # https://docs.python.org/3/library/codecs.html#error-handlers
+				errors[enc] = e
+			else:
+				return _ParsedServerOutput(line_text.strip('\n\r'), so.is_stdout)
+		self.logger.error(self.__tr('receive.decode_fail', line_buf, errors))
+		raise _ReceiveDecodeError()
 
 	def __tick(self):
 		"""
@@ -599,14 +579,15 @@ class MCDReforgedServer:
 		try to receive a new line from server's stdout and parse / display / process the text
 		"""
 		try:
-			text = self.__receive()
+			recv_result = self.__receive()
 		except _ReceiveDecodeError:
 			return
-
-		if text is None:  # server stops
+		except _ServerProcessStopped:
 			self.__on_server_stop()
 			return
 
+		# TODO: make use of recv_result.is_stdout
+		text: str = recv_result.line
 		try:
 			text = self.server_handler_manager.get_current_handler().pre_parse_server_stdout(text)
 		except Exception:
@@ -659,6 +640,8 @@ class MCDReforgedServer:
 				signal_name = signal.Signals(sig).name
 			except ValueError:
 				signal_name = 'unknown'
+
+			# FIXME: logging error with "reentrant call inside xxx" if the signal is caught during logging
 			self.logger.warning('Received signal {} ({}), interrupting MCDR'.format(signal_name, sig))
 			self.interrupt()
 
@@ -726,7 +709,6 @@ class MCDReforgedServer:
 			else:
 				raise IllegalStateError('MCDR can only start once')
 		self.__main_loop()
-		return self.process
 
 	def __main_loop(self):
 		"""

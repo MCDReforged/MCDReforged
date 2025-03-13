@@ -18,7 +18,6 @@ mcdreforged:
       stop_fail: 伺服端關閉出錯，強制關閉
     kill_server:
       killing: 正在殺死伺服端進程組
-      process_killed: 進程 {0} (pid {1}) 已殺死
     interrupt:
       soft: 正在終止 MCDR。再次執行以強制殺死伺服端進程
       hard: 正在終止 MCDR 並殺死伺服端
@@ -59,6 +58,8 @@ mcdreforged:
     missing_config: |
       配置文件缺失部分選項，使用預設值
       請盡快去檢查並更新配置文件
+  process:
+    process_killed: 進程 {0} (pid {1}) 已殺死
 
   # ======================== background thread executors ========================
 

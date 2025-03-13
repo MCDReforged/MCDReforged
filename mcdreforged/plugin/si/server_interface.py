@@ -399,9 +399,7 @@ class ServerInterface:
 
 		:return: The pid of the server. None if the server is stopped
 		"""
-		if self._mcdr_server.process is not None:
-			return self._mcdr_server.process.pid
-		return None
+		return self._mcdr_server.process_manager.get_pid()
 
 	def get_server_pid_all(self) -> List[int]:
 		"""
@@ -411,11 +409,12 @@ class ServerInterface:
 
 		.. versionadded:: v2.6.0
 		"""
-		pids = []
-		if self._mcdr_server.process is not None:
+		pids: List[int] = []
+		root_pid = self.get_server_pid()
+		if root_pid is not None:
 			try:
-				pids.append(self._mcdr_server.process.pid)
-				for process in psutil.Process(self._mcdr_server.process.pid).children(recursive=True):
+				pids.append(root_pid)
+				for process in psutil.Process(root_pid).children(recursive=True):
 					pids.append(process.pid)
 			except psutil.NoSuchProcess:
 				pids.clear()
