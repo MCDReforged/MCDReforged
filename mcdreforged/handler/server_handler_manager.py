@@ -9,7 +9,7 @@ from mcdreforged.handler.plugin_provided_server_handler_holder import PluginProv
 from mcdreforged.handler.server_handler import ServerHandler
 from mcdreforged.logging.debug_option import DebugOption
 from mcdreforged.mcdr_config import MCDReforgedConfig
-from mcdreforged.utils import misc_utils, class_utils, collection_utils
+from mcdreforged.utils import class_utils, collection_utils, thread_utils
 
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
@@ -144,7 +144,7 @@ class HandlerDetector:
 			self.running_flag = True
 			self.text_count = 0
 			self.success_count.clear()
-			misc_utils.start_thread(self.__detection_thread, (), 'HandlerDetector')
+			thread_utils.start_thread(self.__detection_thread, (), 'HandlerDetector')
 
 	def shutdown_handler_detection(self):
 		# do nothing if it's called before the detection starts

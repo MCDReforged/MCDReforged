@@ -1,7 +1,6 @@
 import functools
 import json
 import threading
-import traceback
 from typing import List, Optional, Set, Dict, Generator, TypeVar
 
 from typing_extensions import override
@@ -12,27 +11,22 @@ from mcdreforged.command.builder.nodes.special import CountingLiteral
 from mcdreforged.command.command_source import CommandSource
 from mcdreforged.plugin.builtin.mcdr.commands.sub_command import SubCommand
 from mcdreforged.plugin.plugin_registry import PluginCommandHolder
+from mcdreforged.utils import thread_utils
 from mcdreforged.utils.types.json_like import JsonLike
 from mcdreforged.utils.types.message import TranslationStorage
 
 
 def thread_dump(*, target_thread: Optional[str] = None, name_only: bool = False) -> List[str]:
-	# noinspection PyProtectedMember
-	from sys import _current_frames
-	lines = []
-	stack_map = _current_frames().copy()
+	stack_map = thread_utils.get_stack_map().copy()
+	lines: List[str] = []
 	for thread in threading.enumerate():
-		thread_id, thread_name = thread.ident, thread.name
-		if target_thread is not None and thread_name != target_thread:
+		if target_thread is not None and thread.name != target_thread:
 			continue
-		if thread_id in stack_map:
-			lines.append("Thread {} (id {})".format(thread_name, thread_id))
-			if name_only:
-				continue
-			for filename, lineno, func_name, line in traceback.extract_stack(stack_map[thread_id]):
-				lines.append('  File "{}", line {}, in {}'.format(filename, lineno, func_name))
-				if line:
-					lines.append('    {}'.format(line.strip()))
+		tsi = thread_utils.get_stack_info(thread, stack_map=stack_map)
+		if name_only:
+			lines.append(tsi.head_line)
+		else:
+			lines.extend(tsi.get_lines())
 	return lines
 
 

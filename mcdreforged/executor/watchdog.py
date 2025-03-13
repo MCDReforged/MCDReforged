@@ -55,9 +55,8 @@ class WatchDog(BackgroundThreadExecutor):
 		self.mcdr_server.logger.warning(self.__tr('task_executor_no_response.line2', thread_name, plugin))
 
 		if (ss := executor.get_thread_stack()) is not None:
-			for lines in ss.format():
-				for line in lines.splitlines():
-					self.mcdr_server.logger.warning(line)
+			for line in ss.get_lines():
+				self.mcdr_server.logger.warning(line)
 
 		if can_rebuild:
 			self.mcdr_server.logger.warning(self.__tr('task_executor_no_response.line3', thread_name))

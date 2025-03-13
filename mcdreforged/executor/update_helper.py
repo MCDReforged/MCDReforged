@@ -15,7 +15,7 @@ from mcdreforged.executor.background_thread_executor import BackgroundThreadExec
 from mcdreforged.minecraft.rtext.style import RAction, RColor, RStyle
 from mcdreforged.minecraft.rtext.text import RText, RTextBase
 from mcdreforged.plugin.meta.version import Version
-from mcdreforged.utils import misc_utils, request_utils
+from mcdreforged.utils import request_utils, thread_utils
 from mcdreforged.utils.types.message import MessageText
 
 if TYPE_CHECKING:
@@ -39,7 +39,7 @@ class UpdateHelper(BackgroundThreadExecutor):
 
 	def check_update(self, condition_check: Callable[[], bool], reply_func: Callable[[Union[str or RTextBase]], Any]):
 		self.__last_query_time = time.monotonic()
-		misc_utils.start_thread(self.__check_update, (condition_check, reply_func), 'CheckUpdate')
+		thread_utils.start_thread(self.__check_update, (condition_check, reply_func), 'CheckUpdate')
 
 	def __check_update(self, condition_check: Callable[[], bool], reply_func: Callable[[MessageText], Any]):
 		if not condition_check():

@@ -1,20 +1,11 @@
 import threading
-import traceback
 from abc import abstractmethod
 from typing import Optional, TYPE_CHECKING
 
-from mcdreforged.utils import misc_utils
+from mcdreforged.utils import thread_utils
 
 if TYPE_CHECKING:
 	from mcdreforged.logging.logger import MCDReforgedLogger
-
-
-def _get_thread_stack(thread: threading.Thread) -> Optional[traceback.StackSummary]:
-	# noinspection PyProtectedMember
-	from sys import _current_frames
-	if (frame := _current_frames().get(thread.ident)) is None:
-		return None
-	return traceback.extract_stack(frame)
 
 
 class BackgroundThreadExecutor:
@@ -27,12 +18,12 @@ class BackgroundThreadExecutor:
 	def get_thread(self) -> Optional[threading.Thread]:
 		return self._executor_thread
 
-	def get_thread_stack(self) -> Optional[traceback.StackSummary]:
+	def get_thread_stack(self) -> Optional[thread_utils.ThreadStackInfo]:
 		if (thread := self._executor_thread) is None:
 			return None
 		if not thread.is_alive():
 			return None
-		return _get_thread_stack(thread)
+		return thread_utils.get_stack_info(thread)
 
 	def is_on_thread(self):
 		return threading.current_thread() is self._executor_thread
@@ -42,7 +33,7 @@ class BackgroundThreadExecutor:
 
 	def start(self):
 		self.logger.debug('BackgroundThreadExecutor {} is starting'.format(self.get_name()))
-		self._executor_thread = misc_utils.start_thread(self.loop, (), self.get_name())
+		self._executor_thread = thread_utils.start_thread(self.loop, (), self.get_name())
 		return self._executor_thread
 
 	def stop(self):
