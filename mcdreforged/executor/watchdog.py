@@ -46,6 +46,7 @@ class WatchDog(BackgroundThreadExecutor):
 		for _ in range(n):
 			if not self.__monitoring or future_utils.wait(future, timeout / n) or not self.__monitoring:
 				return True
+		return False
 
 	def __show_executor(self, executor: TaskExecutorBase, no_respond_threshold: float, can_rebuild: bool):
 		plugin = executor.get_running_plugin()
