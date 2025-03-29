@@ -1,32 +1,55 @@
+import contextlib
+import enum
 import json
 from abc import ABC, abstractmethod
-from typing import Iterable, List, Union, Optional, Any, Tuple, Set, NamedTuple
+from typing import Iterable, List, Union, Optional, Any, Tuple, Set, NamedTuple, Dict
 
 from colorama import Style
-from typing_extensions import Self, override
+from typing_extensions import Self, override, TypedDict, NotRequired, Unpack
 
 from mcdreforged.minecraft.rtext.style import RStyle, RColor, RAction, RColorClassic, RColorRGB, RItemClassic
 from mcdreforged.utils import class_utils
+
+
+class RTextJsonFormat(enum.Enum):
+	V_1_7 = enum.auto()  # Minecraft [1.7, 1.21.5)
+	V_1_21_5 = enum.auto()  # Minecraft [1.21.5, ~)
+
+	@classmethod
+	def default(cls) -> Self:
+		return cls.V_1_7
+
+
+_V_1_21_5_RACTION_TO_CLICK_EVENT_KEY: Dict[RAction, str] = {
+	RAction.suggest_command: 'command',
+	RAction.run_command: 'command',
+	RAction.open_url: 'url',
+	RAction.open_file: 'path',
+	RAction.copy_to_clipboard: 'value',
+}
 
 
 class RTextBase(ABC):
 	"""
 	An abstract base class of Minecraft text component
 	"""
+	class ToJsonKwargs(TypedDict):
+		json_format: NotRequired[RTextJsonFormat]
+
 	@abstractmethod
-	def to_json_object(self) -> Union[dict, list]:
+	def to_json_object(self, **kwargs: Unpack[ToJsonKwargs]) -> Union[dict, list]:
 		"""
 		Return an object representing its data that can be serialized into a json string
 		"""
 		raise NotImplementedError()
 
-	def to_json_str(self) -> str:
+	def to_json_str(self, **kwargs: Unpack[ToJsonKwargs]) -> str:
 		"""
 		Return a json formatted str representing its data
 
 		It can be used as the second parameter in Minecraft command ``/tellraw <target> <message>`` and more
 		"""
-		return json.dumps(self.to_json_object(), ensure_ascii=False, separators=(',', ':'))
+		return json.dumps(self.to_json_object(**kwargs), ensure_ascii=False, separators=(',', ':'))
 
 	@abstractmethod
 	def to_plain_text(self) -> str:
@@ -258,22 +281,18 @@ class RTextBase(ABC):
 					styles.append(style)
 			text.set_styles(styles)
 			if 'color' in data:
-				try:
+				with contextlib.suppress(ValueError):
 					text.set_color(RColor.from_mc_value(data['color']))
-				except ValueError:
-					pass
-			try:
-				click_event = data['clickEvent']
-				if isinstance(click_event, dict):
-					text.set_click_event(RAction[click_event['action']], click_event['value'])
-			except KeyError:
-				pass
-			try:
-				hover_event = data['hoverEvent']
+			with contextlib.suppress(KeyError):
+				for click_event_key in ['clickEvent', 'click_event']:
+					if isinstance(click_event := data.get(click_event_key), dict):
+						action: RAction = RAction[click_event['action']]
+						value_key = 'value' if click_event_key == 'clickEvent' else _V_1_21_5_RACTION_TO_CLICK_EVENT_KEY[action]
+						text.set_click_event(action, click_event[value_key])
+			with contextlib.suppress(KeyError):
+				hover_event = data.get('hoverEvent', data.get('hover_event'))
 				if isinstance(hover_event, dict) and hover_event['action'] == 'show_text':
 					text.set_hover_text(cls.from_json_object(hover_event['value']))
-			except KeyError:
-				pass
 			return text
 
 
@@ -332,17 +351,29 @@ class RText(RTextBase):
 		return self
 
 	@override
-	def to_json_object(self) -> Union[dict, list]:
+	def to_json_object(self, **kwargs: Unpack[RTextBase.ToJsonKwargs]) -> Union[dict, list]:
+		json_format = kwargs.get('json_format', RTextJsonFormat.default())
 		obj = {'text': self.__text}
 		if self.__color is not None:
 			obj['color'] = self.__color.name
 		for style in self.__styles:
 			obj[style.name] = True
 		if self.__click_event is not None:
-			obj['clickEvent'] = {
-				'action': self.__click_event.action.name,
-				'value': self.__click_event.value
-			}
+			if json_format == RTextJsonFormat.V_1_7:
+				obj['clickEvent'] = {
+					'action': self.__click_event.action.name,
+					'value': self.__click_event.value
+				}
+			elif json_format == RTextJsonFormat.V_1_21_5:
+				click_event_value_key = _V_1_21_5_RACTION_TO_CLICK_EVENT_KEY.get(self.__click_event.action)
+				if click_event_value_key is None:
+					raise ValueError('Unknown click event action {!r}'.format(self.__click_event.action))
+				obj['click_event'] = {
+					'action': self.__click_event.action.name,
+					click_event_value_key: self.__click_event.value
+				}
+			else:
+				raise ValueError('Unknown json_format {!r}'.format(json_format))
 		if len(self.__hover_text_list) > 0:
 			if len(self.__hover_text_list) == 1:
 				hover_value = RTextBase.from_any(self.__hover_text_list[0]).to_json_object()
@@ -351,7 +382,13 @@ class RText(RTextBase):
 					'text': '',
 					'extra': RTextList(*self.__hover_text_list).to_json_object(),
 				}
-			obj['hoverEvent'] = {
+			if json_format == RTextJsonFormat.V_1_7:
+				hover_event_key = 'hoverEvent'
+			elif json_format == RTextJsonFormat.V_1_21_5:
+				hover_event_key = 'hover_event'
+			else:
+				raise ValueError('Unknown json_format {!r}'.format(json_format))
+			obj[hover_event_key] = {
 				'action': 'show_text',
 				'value': hover_value,
 			}
@@ -475,9 +512,9 @@ class RTextList(RTextBase):
 		return len(self.children) == 0
 
 	@override
-	def to_json_object(self) -> Union[dict, list]:
-		ret = ['' if self.header_empty else self.header.to_json_object()]
-		ret.extend([rtext.to_json_object() for rtext in self.children])
+	def to_json_object(self, **kwargs: Unpack[RTextBase.ToJsonKwargs]) -> Union[dict, list]:
+		ret = ['' if self.header_empty else self.header.to_json_object(**kwargs)]
+		ret.extend([rtext.to_json_object(**kwargs) for rtext in self.children])
 		return ret
 
 	@override
@@ -572,8 +609,8 @@ class RTextTranslation(RText):
 		return self.__translation_key
 
 	@override
-	def to_json_object(self) -> Union[dict, list]:
-		obj = super().to_json_object()
+	def to_json_object(self, **kwargs: Unpack[RTextBase.ToJsonKwargs]) -> Union[dict, list]:
+		obj = super().to_json_object(**kwargs)
 		obj.pop('text')
 		obj['translate'] = self.__translation_key
 		if len(self.__args) > 0:

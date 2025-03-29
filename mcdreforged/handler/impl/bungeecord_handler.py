@@ -24,7 +24,7 @@ class BungeecordHandler(AbstractServerHandler):
 	@override
 	def get_broadcast_message_command(self, message: MessageText, server_information: ServerInformation) -> Optional[str]:
 		from mcdreforged.handler.impl import VanillaHandler
-		return 'alertraw {}'.format(VanillaHandler.format_message(message))
+		return 'alertraw {}'.format(VanillaHandler.format_message(message, server_information=server_information))
 
 	@classmethod
 	@override

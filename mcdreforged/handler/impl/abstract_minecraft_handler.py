@@ -2,7 +2,7 @@ import functools
 import json
 import re
 from abc import ABC
-from typing import Optional, List
+from typing import Optional, List, Tuple
 
 import parse
 from typing_extensions import override
@@ -10,33 +10,50 @@ from typing_extensions import override
 from mcdreforged.handler.abstract_server_handler import AbstractServerHandler
 from mcdreforged.info_reactor.info import Info
 from mcdreforged.info_reactor.server_information import ServerInformation
-from mcdreforged.minecraft.rtext.text import RTextBase
+from mcdreforged.minecraft.rtext.text import RTextBase, RTextJsonFormat
 from mcdreforged.utils import string_utils
 from mcdreforged.utils.types.message import MessageText
 
 
-@functools.lru_cache(maxsize=128)
-def _does_mc_version_has_execute_command(version_name: Optional[str]) -> bool:
+def __check_mc_version_ge(version_name: Optional[str], min_release: Tuple[int, ...], min_snapshot: Tuple[int, int]) -> bool:
 	if version_name is None:
 		return False
 
-	def check_release_version(major: str, minor: str) -> bool:
-		return (int(major), int(minor)) >= (1, 13)
+	def check_release_version(major: str, minor: str, patch: Optional[str]) -> bool:
+		if patch is None:
+			patch = '0'
+		return (int(major), int(minor), int(patch)) >= min_release
 
 	version_with_release_regex = [
-		re.compile(r'(?P<major>\d+)\.(?P<minor>\d+)(\.(\d+))?', re.IGNORECASE),  # "1.21", "1.17.1"
-		re.compile(r'(?P<major>\d+)\.(?P<minor>\d+)(\.(\d+))? Pre-Release \d+', re.IGNORECASE),  # "1.20.5 Pre-Release 4"
-		re.compile(r'(?P<major>\d+)\.(?P<minor>\d+)(\.(\d+))? Release Candidate \d+', re.IGNORECASE),  # "1.21 Release Candidate 1"
+		re.compile(r'(?P<major>\d+)\.(?P<minor>\d+)(\.(?P<patch>\d+))?', re.IGNORECASE),  # "1.21", "1.17.1"
+		re.compile(r'(?P<major>\d+)\.(?P<minor>\d+)(\.(?P<patch>\d+))? Pre-Release \d+', re.IGNORECASE),  # "1.20.5 Pre-Release 4"
+		re.compile(r'(?P<major>\d+)\.(?P<minor>\d+)(\.(?P<patch>\d+))? Release Candidate \d+', re.IGNORECASE),  # "1.21 Release Candidate 1"
 	]
 	for regex in version_with_release_regex:
 		if (m := regex.fullmatch(version_name)) is not None:
-			return check_release_version(m.group('major'), m.group('minor'))
+			return check_release_version(m.group('major'), m.group('minor'), m.group('patch'))
 
 	# modern snapshots, e.g. "22w45a"
 	if (m := re.fullmatch(r'(\d{2})w(\d{2})[a-z]', version_name)) is not None:
-		return (int(m.group(1)), int(m.group(2))) >= (18, 30)  # >= 18w30a, first 1.13.1 snapshot
+		return (int(m.group(1)), int(m.group(2))) >= min_snapshot
 
+	# unknown version
 	return False
+
+
+@functools.lru_cache(maxsize=128)
+def _does_mc_version_has_execute_command(version_name: Optional[str]) -> bool:
+	# >= 18w30a, first 1.13.1 snapshot
+	return __check_mc_version_ge(version_name, (1, 13, 0), (18, 30))
+
+
+@functools.lru_cache(maxsize=128)
+def _get_rtext_json_format(version_name: Optional[str]) -> RTextJsonFormat:
+	# >= 25w03a, an 1.21.5 snapshot
+	if __check_mc_version_ge(version_name, (1, 21, 5), (25, 3)):
+		return RTextJsonFormat.V_1_21_5
+	else:
+		return RTextJsonFormat.default()
 
 
 class AbstractMinecraftHandler(AbstractServerHandler, ABC):
@@ -78,12 +95,13 @@ class AbstractMinecraftHandler(AbstractServerHandler, ABC):
 		return [parse.Parser(fmt) if isinstance(fmt, str) else fmt for fmt in formatters]
 
 	@classmethod
-	def format_message(cls, message: MessageText) -> str:
+	def format_message(cls, message: MessageText, *, server_information: Optional[ServerInformation] = None) -> str:
 		"""
 		A utility method to convert a message into a valid argument used in message sending command
 		"""
 		if isinstance(message, RTextBase):
-			return message.to_json_str()
+			json_format = _get_rtext_json_format(server_information.version) if server_information else RTextJsonFormat.default()
+			return message.to_json_str(json_format=json_format)
 		else:
 			# quote it
 			return json.dumps(str(message), ensure_ascii=False, separators=(',', ':'))
@@ -96,7 +114,7 @@ class AbstractMinecraftHandler(AbstractServerHandler, ABC):
 			# TODO: logging?
 			can_do_execute = False
 
-		command = 'tellraw {} {}'.format(target, self.format_message(message))
+		command = 'tellraw {} {}'.format(target, self.format_message(message, server_information=server_information))
 		if can_do_execute:
 			# Mute the "No player was found" output when no player is online by using the "execute at" command
 			command = 'execute at @p run ' + command
