@@ -4,7 +4,7 @@ for MCDR
 
 ## Requirement
 
-Requires python >= 3.8
+Requires python >= 3.9
 
 ```
 cd docs/

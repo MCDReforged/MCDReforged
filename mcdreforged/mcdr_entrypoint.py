@@ -11,8 +11,8 @@ def __environment_check():
 	# only mcdreforged.constants is allowed to load before the boostrap() call
 	from mcdreforged.constants import core_constant
 
-	if sys.version_info < (3, 8):
-		print('Python 3.8+ is needed to run {}'.format(core_constant.NAME))
+	if sys.version_info < (3, 9):
+		print('Python 3.9+ is needed to run {}'.format(core_constant.NAME))
 		print('Current Python version {} is too old'.format(platform.python_version()))
 		sys.exit(1)
 

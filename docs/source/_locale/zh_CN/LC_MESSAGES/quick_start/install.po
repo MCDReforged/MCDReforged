@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-23 14:32+0800\n"
+"POT-Creation-Date: 2025-03-29 17:23+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -44,10 +44,10 @@ msgstr "PyPI 版本"
 
 #: ../quick_start/install.rst:22
 msgid ""
-"MCDR is written and runs in Python 3. Make sure you have Python 3.8 or "
+"MCDR is written and runs in Python 3. Make sure you have Python 3.9 or "
 "later, with `pip <https://github.com/pypa/pip>`__ installed"
 msgstr ""
-"MCDR 用 Python 3 编写和运行。确保你的 Python 版本至少为 3.8，并且安装了 `pip "
+"MCDR 用 Python 3 编写和运行。确保你的 Python 版本至少为 3.9，并且安装了 `pip "
 "<https://github.com/pypa/pip>`__"
 
 #: ../quick_start/install.rst:24
@@ -79,8 +79,8 @@ msgid ">= 3.8"
 msgstr ">= 3.8"
 
 #: ../quick_start/install.rst:35
-msgid ">= 2.15 (future version)"
-msgstr ">= 2.15（未来版本）"
+msgid ">= 2.15"
+msgstr ">= 2.15"
 
 #: ../quick_start/install.rst:36
 msgid ">= 3.9"
