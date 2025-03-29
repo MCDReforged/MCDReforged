@@ -275,6 +275,8 @@ class RTextBase(ABC):
 			except KeyError:
 				pass
 			return text
+		else:
+			raise TypeError('Unsupported data {!r}'.format(data))
 
 
 class _ClickEvent(NamedTuple):
