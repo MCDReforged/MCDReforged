@@ -81,23 +81,23 @@ class PluginCatalogueAccess:
 		return len(plugins)
 
 	@classmethod
-	def download_plugin(cls, meta: MetaRegistry, replier: Replier, plugin_ids: List[str], target_dir: str) -> int:
+	def download_plugin(cls, meta: MetaRegistry, replier: Replier, plugin_ids: List[str], target_dir: str) -> bool:
 		target_dir = Path(target_dir)
 		if not target_dir.is_dir():
 			replier.reply('{} is not a valid directory'.format(target_dir))
-			return 1
+			return False
 
 		for plugin_id in plugin_ids:
 			if plugin_id not in meta.plugins:
 				replier.reply('Plugin {!r} does not exist'.format(plugin_id))
-				return 1
+				return False
 
 		downloaded_paths = []
 		for plugin_id in plugin_ids:
 			plugin = meta.plugins[plugin_id]
 			if plugin.latest_version is None:
 				replier.reply('Plugin {!r} does not have any release'.format(plugin_id))
-				return 1
+				return False
 			release = plugin.releases[plugin.latest_version]
 
 			file_path = target_dir / release.file_name
@@ -106,3 +106,4 @@ class PluginCatalogueAccess:
 			downloaded_paths.append(file_path)
 
 		replier.reply('Downloaded {} plugin{}: {}'.format(len(plugin_ids), 's' if len(plugin_ids) > 0 else '', ', '.join(map(str, plugin_ids))))
+		return True
