@@ -2,7 +2,7 @@ import threading
 from contextlib import contextmanager
 from typing import Union, Iterable, Optional, List, Callable
 
-from typing_extensions import Self, override
+from typing_extensions import Self, override, Unpack
 
 from mcdreforged.minecraft.rtext.style import RColor, RStyle, RAction
 from mcdreforged.minecraft.rtext.text import RTextBase, RText
@@ -97,8 +97,8 @@ class RTextMCDRTranslation(RTextBase):
 			cls.__TLS.language = prev
 
 	@override
-	def to_json_object(self) -> Union[dict, list]:
-		return self.__get_translated_text().to_json_object()
+	def to_json_object(self, **kwargs: Unpack[RTextBase.ToJsonKwargs]) -> Union[dict, list]:
+		return self.__get_translated_text().to_json_object(**kwargs)
 
 	@override
 	def to_plain_text(self) -> str:
