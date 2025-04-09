@@ -9,8 +9,8 @@ from typing_extensions import override
 from mcdreforged.constants import plugin_constant
 from mcdreforged.plugin.type.common import PluginType
 from mcdreforged.plugin.type.multi_file_plugin import MultiFilePlugin
-from mcdreforged.utils import class_utils
 from mcdreforged.utils.exception import IllegalPluginStructure
+from mcdreforged.utils.serializer import Serializable
 
 if TYPE_CHECKING:
 	from mcdreforged.plugin.plugin_manager import PluginManager
@@ -60,13 +60,18 @@ class DirectoryPlugin(_DirectoryPluginBase):
 		return self.plugin_path
 
 
+class LinkedDirectoryPluginMeta(Serializable):
+	target: str
+	skip_package_legality_check: bool = False
+
+
 class LinkedDirectoryPlugin(_DirectoryPluginBase):
 	def __init__(self, plugin_manager: 'PluginManager', file_path: Path):
 		super().__init__(plugin_manager, file_path)
 		self.link_file = file_path / plugin_constant.LINK_DIRECTORY_PLUGIN_FILE_NAME
 		with open(self.link_file, 'r', encoding='utf8') as f:
-			target = class_utils.check_type(json.load(f)['target'], str)
-		self.target_plugin_path = Path(target)
+			self.__ldp_meta = LinkedDirectoryPluginMeta.deserialize(json.load(f))
+		self.target_plugin_path = Path(self.__ldp_meta.target)
 
 	@override
 	def get_type(self) -> PluginType:
@@ -87,3 +92,8 @@ class LinkedDirectoryPlugin(_DirectoryPluginBase):
 			**super()._create_repr_fields(),
 			'target': self.target_plugin_path,
 		}
+
+	@override
+	def _check_subdir_legality(self):
+		if not self.__ldp_meta.skip_package_legality_check:
+			super()._check_subdir_legality()
