@@ -52,9 +52,9 @@ class StatusCommand(SubCommand):
 		if not source.has_permission(PermissionLevel.PHYSICAL_SERVER_CONTROL_LEVEL):
 			return
 
-		process = self.mcdr_server.process
-		source.reply(self.tr('mcdr_command.print_mcdr_status.extra.pid', process.pid if process is not None else RText('N/A', RColor.gray)))
-		if process is not None:
+		process_pid = self.mcdr_server.process_manager.get_pid()
+		source.reply(self.tr('mcdr_command.print_mcdr_status.extra.pid', process_pid if process_pid is not None else RText('N/A', RColor.gray)))
+		if process_pid is not None:
 			def children_getter(proc: psutil.Process) -> List[psutil.Process]:
 				return proc.children()
 
@@ -65,13 +65,13 @@ class StatusCommand(SubCommand):
 				source.reply('  ' + line_)
 			try:
 				tree_printer.print_tree(
-					psutil.Process(process.pid),
+					psutil.Process(process_pid),
 					children_getter,
 					name_getter,
 					line_writer
 				)
 			except psutil.NoSuchProcess:
-				self.mcdr_server.logger.exception('Fail to fetch process tree from pid {}'.format(process.pid))
+				self.mcdr_server.logger.exception('Fail to fetch process tree from pid {}'.format(process_pid))
 
 		qsizes = self.mcdr_server.task_executor.get_queue_sizes()
 		source.reply(self.tr('mcdr_command.print_mcdr_status.extra.queue_info', qsizes[TaskPriority.INFO], core_constant.MAX_TASK_QUEUE_SIZE_INFO))
