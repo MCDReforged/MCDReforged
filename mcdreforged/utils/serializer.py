@@ -6,7 +6,7 @@ from abc import ABC
 from enum import EnumMeta, Enum
 from typing import Union, TypeVar, List, Dict, Type, get_type_hints, Any, Callable, Literal, Optional, Tuple
 
-from typing_extensions import Self
+from typing_extensions import Self, TypedDict, NotRequired, Unpack
 
 from mcdreforged.utils.types.json_like import JsonLike
 
@@ -106,6 +106,13 @@ _BASIC_CLASSES_NO_NONE = (bool, int, float, str, list, dict)
 _BASIC_CLASSES = (type(None), *_BASIC_CLASSES_NO_NONE)
 
 
+class _DeserializeKwargs(TypedDict):
+	error_at_missing: NotRequired[bool]
+	error_at_redundancy: NotRequired[bool]
+	missing_callback: NotRequired[Optional[Callable[[Any, Type, str], Any]]]
+	redundancy_callback: NotRequired[Optional[Callable[[Any, Type, str, Any], Any]]]
+
+
 def deserialize(
 		data: Any, cls: Type[T], *,
 		error_at_missing: bool = False,
@@ -192,7 +199,7 @@ def deserialize(
 	# in case None instead of NoneType is passed
 	if cls is None:
 		cls = type(None)
-	kwargs = dict(
+	kwargs = _DeserializeKwargs(
 		error_at_missing=error_at_missing,
 		error_at_redundancy=error_at_redundancy,
 		missing_callback=missing_callback,
@@ -456,7 +463,7 @@ class Serializable(ABC):
 		return serialize(self)
 
 	@classmethod
-	def deserialize(cls: Type[Self], data: dict, **kwargs) -> Self:
+	def deserialize(cls: Type[Self], data: dict, **kwargs: Unpack[_DeserializeKwargs]) -> Self:
 		"""
 		Deserialize a dict into an object of this class via function :func:`deserialize`
 
