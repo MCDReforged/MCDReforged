@@ -69,9 +69,15 @@ class LinkedDirectoryPlugin(_DirectoryPluginBase):
 	def __init__(self, plugin_manager: 'PluginManager', file_path: Path):
 		super().__init__(plugin_manager, file_path)
 		self.link_file = file_path / plugin_constant.LINK_DIRECTORY_PLUGIN_FILE_NAME
+		self.__ldp_meta = self.__read_ldp_meta()
+
+	def __read_ldp_meta(self) -> LinkedDirectoryPluginMeta:
 		with open(self.link_file, 'r', encoding='utf8') as f:
-			self.__ldp_meta = LinkedDirectoryPluginMeta.deserialize(json.load(f))
-		self.target_plugin_path = Path(self.__ldp_meta.target)
+			return LinkedDirectoryPluginMeta.deserialize(json.load(f))
+
+	@property
+	def target_plugin_path(self) -> Path:
+		return Path(self.__ldp_meta.target)
 
 	@override
 	def get_type(self) -> PluginType:
@@ -97,3 +103,8 @@ class LinkedDirectoryPlugin(_DirectoryPluginBase):
 	def _check_subdir_legality(self):
 		if not self.__ldp_meta.skip_package_legality_check:
 			super()._check_subdir_legality()
+
+	@override
+	def _on_load(self):
+		self.__ldp_meta = self.__read_ldp_meta()
+		super()._on_load()
