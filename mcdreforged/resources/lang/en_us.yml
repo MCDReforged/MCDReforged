@@ -222,7 +222,7 @@ mcdreforged:
       extra:
         pid: 'Server PID: {0}'
         queue_info: 'Info queue load: §6{0}§r/§6{1}§r'
-        queue_task: 'Task queue load: §6{0}§r/§6{1}§r'
+        queue_regular: 'Task queue load: §6{0}§r/§6{1}§r'
         thread: 'Thread count: §6{0}§r'
     list_plugin:
       info_loaded_plugin: §6{0}x §eLoaded Plugins§r
