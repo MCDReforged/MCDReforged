@@ -33,6 +33,7 @@ class SimpleConfigHandler:
 			dumper = functools.partial(json.dump, indent=4, ensure_ascii=False)
 		elif file_format == 'yaml':
 			yaml = YAML(typ='safe')
+			yaml.default_flow_style = False  # use block style for yaml
 			yaml.width = 1048576
 			dumper = yaml.dump
 			loader = yaml.load
