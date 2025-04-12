@@ -20,7 +20,7 @@ class RTextJsonFormat(enum.Enum):
 		return cls.V_1_7
 
 
-_V_1_21_5_RACTION_TO_CLICK_EVENT_KEY: Dict[RAction, str] = {
+_V_1_21_5_RACTION_TO_CLICK_EVENT_VALUE_KEY: Dict[RAction, str] = {
 	RAction.suggest_command: 'command',
 	RAction.run_command: 'command',
 	RAction.open_url: 'url',
@@ -287,7 +287,7 @@ class RTextBase(ABC):
 				for click_event_key in ['clickEvent', 'click_event']:
 					if isinstance(click_event := data.get(click_event_key), dict):
 						action: RAction = RAction[click_event['action']]
-						value_key = 'value' if click_event_key == 'clickEvent' else _V_1_21_5_RACTION_TO_CLICK_EVENT_KEY[action]
+						value_key = 'value' if click_event_key == 'clickEvent' else _V_1_21_5_RACTION_TO_CLICK_EVENT_VALUE_KEY[action]
 						text.set_click_event(action, click_event[value_key])
 			with contextlib.suppress(KeyError):
 				hover_event = data.get('hoverEvent', data.get('hover_event'))
@@ -367,7 +367,7 @@ class RText(RTextBase):
 					'value': self.__click_event.value
 				}
 			elif json_format == RTextJsonFormat.V_1_21_5:
-				click_event_value_key = _V_1_21_5_RACTION_TO_CLICK_EVENT_KEY.get(self.__click_event.action)
+				click_event_value_key = _V_1_21_5_RACTION_TO_CLICK_EVENT_VALUE_KEY.get(self.__click_event.action)
 				if click_event_value_key is None:
 					raise ValueError('Unknown click event action {!r}'.format(self.__click_event.action))
 				obj['click_event'] = {
