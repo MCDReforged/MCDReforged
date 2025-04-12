@@ -1,7 +1,9 @@
+import collections
+import contextlib
 from concurrent.futures import Future
 from typing import Callable, Optional, TYPE_CHECKING, Dict, TypeVar
 
-from typing_extensions import override
+from typing_extensions import override, Deque
 
 from mcdreforged.executor.task_executor_common import TaskExecutorBase, TaskDoneFuture
 from mcdreforged.executor.task_executor_queue import TaskQueue, TaskPriority, TaskQueueItem
@@ -22,7 +24,7 @@ class SyncTaskExecutor(TaskExecutorBase):
 		super().__init__(mcdr_server.logger)
 		self.mcdr_server = mcdr_server
 		self.__task_queue = TaskQueue()
-		self.__running_plugin: Optional['AbstractPlugin'] = None
+		self.__running_plugins: Deque['AbstractPlugin'] = collections.deque()
 		self.set_name('TaskExecutor')
 
 	def extract_tasks_from(self, other: 'SyncTaskExecutor'):
@@ -51,10 +53,23 @@ class SyncTaskExecutor(TaskExecutorBase):
 
 	@override
 	def get_running_plugin(self) -> Optional['AbstractPlugin']:
-		return self.__running_plugin
+		try:
+			return self.__running_plugins[-1]
+		except IndexError:
+			return None
 
 	def soft_stop(self):
 		self.__task_queue.put(self.__soft_stop_sentinel)
+
+	@contextlib.contextmanager
+	def __with_plugin(self, plugin: 'AbstractPlugin'):
+		if not self.is_on_thread():
+			raise AssertionError()
+		self.__running_plugins.append(plugin)
+		try:
+			yield
+		finally:
+			self.__running_plugins.pop()
 
 	@override
 	def tick(self):
@@ -63,13 +78,19 @@ class SyncTaskExecutor(TaskExecutorBase):
 			self.stop()
 			return
 
-		self.__running_plugin = task.plugin
-		try:
-			task_result = task.func()
-		except Exception as e:
-			self.mcdr_server.logger.exception(self.mcdr_server.translate('mcdreforged.task_executor.error'))
-			task.future.set_exception(e)
+		with self.__with_plugin(task.plugin):
+			try:
+				task_result = task.func()
+			except Exception as e:
+				self.mcdr_server.logger.exception(self.mcdr_server.translate('mcdreforged.task_executor.error'))
+				task.future.set_exception(e)
+			else:
+				task.future.set_result(task_result)
+
+	@contextlib.contextmanager
+	def with_plugin_if_on_thread(self, plugin: 'AbstractPlugin'):
+		if self.is_on_thread():
+			with self.__with_plugin(plugin):
+				yield
 		else:
-			task.future.set_result(task_result)
-		finally:
-			self.__running_plugin = None
+			yield

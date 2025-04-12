@@ -769,7 +769,7 @@ class PluginManager:
 		The server_interface parameter will be automatically added as the 1st parameter
 		"""
 		try:
-			with self.with_plugin_context(listener.plugin):
+			with self.with_plugin_context(listener.plugin), self.mcdr_server.task_executor.with_plugin_if_on_thread(listener.plugin):
 				listener.callback(listener.plugin.server_interface, *args)
 		except Exception:
 			self.logger.exception('Error invoking listener {}'.format(listener))

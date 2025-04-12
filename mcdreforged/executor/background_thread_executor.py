@@ -11,9 +11,19 @@ if TYPE_CHECKING:
 class BackgroundThreadExecutor:
 	def __init__(self, logger: 'MCDReforgedLogger'):
 		self.logger = logger
-		self._executor_thread: Optional[threading.Thread] = None
+		self.__executor_thread: Optional[threading.Thread] = None
 		self.__stopped_looping = threading.Event()
 		self.__name = self.__class__.__name__
+
+	@property
+	def _executor_thread(self) -> Optional[threading.Thread]:
+		return self.__executor_thread
+
+	@_executor_thread.setter
+	def _executor_thread(self, thread: threading.Thread):
+		if self.__executor_thread and thread != self.__executor_thread:
+			raise RuntimeError('Assigning executor_thread to another thread, old {}, new {}'.format(self.__executor_thread, thread))
+		self.__executor_thread = thread
 
 	def get_thread(self) -> Optional[threading.Thread]:
 		return self._executor_thread
@@ -32,8 +42,10 @@ class BackgroundThreadExecutor:
 		return not self.__stopped_looping.is_set()
 
 	def start(self):
+		if self._executor_thread is not None:
+			raise RuntimeError('Already started')
 		self.logger.debug('BackgroundThreadExecutor {} is starting'.format(self.get_name()))
-		self._executor_thread = thread_utils.start_thread(self.loop, (), self.get_name())
+		self._executor_thread = thread_utils.start_thread(self.__loop_entry, (), self.get_name())
 		return self._executor_thread
 
 	def stop(self):
@@ -49,6 +61,10 @@ class BackgroundThreadExecutor:
 		self.__name = name
 		if (thread := self._executor_thread) is not None:
 			thread.name = name
+
+	def __loop_entry(self):
+		self._executor_thread = threading.current_thread()
+		self.loop()
 
 	def loop(self):
 		while self.should_keep_looping():
