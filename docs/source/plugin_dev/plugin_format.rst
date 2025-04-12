@@ -137,14 +137,14 @@ To create a linked directory plugin, imply create a directory that includes a fi
      └─ MyLinkedDirectoryPlugin/
          └─ mcdreforged.linked_directory_plugin.json
 
-The ``mcdreforged.linked_directory_plugin.json`` file contains an object with a sole key ``target``,
+The ``mcdreforged.linked_directory_plugin.json`` file contains an object with at least a key ``target``,
 which specifies the path to the actual directory plugin to be loaded:
-
 
 .. code-block:: json
 
     {
-        "target": "/path/to/the/target/directory/plugin/"
+        "target": "/path/to/the/target/directory/plugin/",  // required, path to the actual directory plugin
+        "skip_package_legality_check": false  // optional. If set to true, the package legality check will be skipped
     }
 
 The file structure of the target directory plugin appears as follows:
@@ -159,3 +159,5 @@ The file structure of the target directory plugin appears as follows:
      └─ requirements.txt
 
 .. versionadded:: v2.12.0
+.. versionadded:: v2.15.0
+    The ``skip_package_legality_check`` option
