@@ -81,7 +81,13 @@ class ReleaseDownloader:
 			download_url = url
 		response = request_utils.get_direct(download_url, 'ReleaseDownloader', timeout=self.download_timeout, stream=True)
 
-		length = int(response.headers.get('content-length'))
+		content_length = response.headers.get('content-length')
+		if content_length is None:
+			raise ValueError('content-length header is missing')
+		try:
+			length = int(content_length)
+		except ValueError:
+			raise ValueError(f'content-length header {content_length!r} is invalid')
 		if length != self.release.file_size:
 			raise ValueError('content-length mismatched, expected {}, found {}'.format(length, self.release.file_size))
 		if length >= 100 * 1024 * 1024:  # 100MiB
