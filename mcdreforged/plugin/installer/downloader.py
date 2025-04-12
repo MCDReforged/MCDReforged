@@ -80,6 +80,7 @@ class ReleaseDownloader:
 		else:
 			download_url = url
 		response = request_utils.get_direct(download_url, 'ReleaseDownloader', timeout=self.download_timeout, stream=True)
+		response.raise_for_status()
 
 		content_length = response.headers.get('content-length')
 		if content_length is None:
