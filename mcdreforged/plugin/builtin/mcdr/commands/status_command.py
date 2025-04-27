@@ -54,7 +54,7 @@ class StatusCommand(SubCommand):
 
 		process_pid = self.mcdr_server.process_manager.get_pid()
 		source.reply(self.tr('mcdr_command.print_mcdr_status.extra.pid', process_pid if process_pid is not None else RText('N/A', RColor.gray)))
-		if process_pid is not None:
+		if process_pid is not None and self.mcdr_server.process_manager.is_alive():
 			def children_getter(proc: psutil.Process) -> List[psutil.Process]:
 				return proc.children()
 
@@ -70,8 +70,8 @@ class StatusCommand(SubCommand):
 					name_getter,
 					line_writer
 				)
-			except psutil.NoSuchProcess:
-				self.mcdr_server.logger.exception('Fail to fetch process tree from pid {}'.format(process_pid))
+			except psutil.NoSuchProcess as e:
+				self.mcdr_server.logger.error('Fail to fetch process tree from pid {}: {}'.format(process_pid, e))
 
 		qsizes = self.mcdr_server.task_executor.get_queue_sizes()
 		source.reply(self.tr('mcdr_command.print_mcdr_status.extra.queue_info', qsizes[TaskPriority.INFO], core_constant.MAX_TASK_QUEUE_SIZE_INFO))

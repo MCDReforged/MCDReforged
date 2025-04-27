@@ -42,6 +42,9 @@ class _RunningProcess:
 	loop: asyncio.AbstractEventLoop
 	thread: threading.Thread
 
+	def is_proc_alive_and_loop_available(self) -> bool:
+		return self.proc.returncode is None and not self.loop.is_closed() and self.thread.is_alive()
+
 
 class ServerProcessManager:
 	MAX_OUTPUT_QUEUE_SIZE = 10000
@@ -138,7 +141,8 @@ class ServerProcessManager:
 
 		if (cp := self.__current_process) is None:
 			raise ProcessNotRunning('process not running')
-		asyncio.run_coroutine_threadsafe(do_write(), cp.loop).result()
+		if cp.is_proc_alive_and_loop_available():
+			asyncio.run_coroutine_threadsafe(do_write(), cp.loop).result()
 
 	def get_wait_future(self) -> 'cf.Future[int]':
 		async def do_wait() -> int:
@@ -146,14 +150,12 @@ class ServerProcessManager:
 
 		if (cp := self.__current_process) is None:
 			raise ProcessNotRunning('process not running')
-		return asyncio.run_coroutine_threadsafe(do_wait(), cp.loop)
-	
-	def join(self, timeout: float):
-		try:
-			future = self.get_wait_future()
-		except ProcessNotRunning:
-			return
-		future.result(timeout)
+		if cp.is_proc_alive_and_loop_available():
+			return asyncio.run_coroutine_threadsafe(do_wait(), cp.loop)
+		else:
+			future = cf.Future()
+			future.set_result(cp.proc.returncode)
+			return future
 
 	def send_signal(self, sig: int):
 		if (cp := self.__current_process) is None:

@@ -508,12 +508,12 @@ class MCDReforgedServer:
 		self.set_server_state(ServerState.STOPPED)
 		self.remove_flag(MCDReforgedFlag.SERVER_STARTUP | MCDReforgedFlag.SERVER_RCON_READY)  # removes this two
 		self.reactor_manager.on_server_stop()
-		self.plugin_manager.dispatch_event(MCDRPluginEvents.SERVER_STOP, (return_code,), block=True)
-
 		if self.is_interrupt():
 			self.logger.info(self.__tr('on_server_stop.user_interrupted'))
 		else:
 			self.logger.info(self.__tr('on_server_stop.server_stop'))
+
+		self.plugin_manager.dispatch_event(MCDRPluginEvents.SERVER_STOP, (return_code,), block=True)
 
 	def send(self, text: str, ending: str = '\n', encoding: Optional[str] = None):
 		"""
@@ -549,6 +549,8 @@ class MCDReforgedServer:
 		if so is None:
 			process_exit_future = self.process_manager.get_wait_future()
 			for i in range(core_constant.WAIT_TIME_AFTER_SERVER_STDOUT_END_SEC):
+				if not self.process_manager.is_alive():
+					break
 				try:
 					process_exit_future.result(timeout=1)
 				except cf.TimeoutError:
@@ -558,7 +560,10 @@ class MCDReforgedServer:
 			else:
 				self.logger.warning('The server is still not stopped after {}s after its stdout was closed, killing'.format(core_constant.WAIT_TIME_AFTER_SERVER_STDOUT_END_SEC))
 				self.__kill_server()
-			process_exit_future.result()
+			try:
+				self.process_manager.get_wait_future().result(timeout=10)
+			except cf.TimeoutError:
+				self.logger.warning('process_exit_future is still not done, skip anyway')
 			raise _ServerProcessStopped()
 
 		line_buf: bytes = so.line

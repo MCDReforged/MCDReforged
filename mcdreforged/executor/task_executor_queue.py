@@ -78,6 +78,6 @@ class TaskQueue:
 			for priority, q in self.__queues.items():
 				if priority == TaskPriority.SENTINEL:
 					continue
-				yield from collection_utils.drain_queue(q)
+				yield from collection_utils.drain_iterate_queue(q)
 
 		return list(do_drain())
