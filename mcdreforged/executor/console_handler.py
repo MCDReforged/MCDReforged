@@ -1,3 +1,4 @@
+import asyncio
 import queue
 import sys
 import threading
@@ -219,7 +220,7 @@ class MCDRStdoutProxy(StdoutProxy):
 			if not item:
 				continue
 
-			text = [item]
+			text: List[str] = [item]
 			for i in range(100 - 1):  # MCDR modification: take 100 items at max each round
 				try:
 					item = self._flush_queue.get_nowait()
@@ -236,23 +237,43 @@ class MCDRStdoutProxy(StdoutProxy):
 			if app_loop is not None:
 				time.sleep(self.sleep_between_writes)
 
+	@classmethod
+	def __is_closed_event_loop(cls, e: RuntimeError) -> bool:
+		# Reference: asyncio.base_events.BaseEventLoop._check_closed
+		# `raise RuntimeError('Event loop is closed')`
+		return type(e) == RuntimeError and str(e) == 'Event loop is closed'
+
 	@override
-	def _write_and_flush(self, loop, text):
-		# make sure the event loop queue does not accumulate too much, in case stdout spams
-		assert threading.current_thread() == self._flush_thread, '_write_and_flush called on unexpected thread {}'.format(threading.current_thread().name)
+	def _write_and_flush(self, loop: Optional[asyncio.AbstractEventLoop], text: str):
+		"""
+		make sure the event loop queue does not accumulate too much, in case stdout spams
+		"""
+		if threading.current_thread() != self._flush_thread:
+			raise AssertionError('_write_and_flush called on unexpected thread {}'.format(threading.current_thread().name))
+
 		self.sleep_between_writes = self.__sleep_duration
 		ready_queue = getattr(loop, '_ready', None)  # asyncio.base_events.BaseEventLoop._ready
 		if loop is not None and isinstance(ready_queue, Sized) and len(ready_queue) >= 2:
 			event = threading.Event()
-			loop.call_soon_threadsafe(event.set)
+			try:
+				loop.call_soon_threadsafe(event.set)
+			except RuntimeError as e:
+				if not self.__is_closed_event_loop(e):
+					raise
+			else:
+				t = time.time()
+				event.wait(timeout=3)
+				elapsed = time.time() - t
 
-			t = time.time()
-			event.wait(timeout=3)
-			elapsed = time.time() - t
+				self.sleep_between_writes = max(0, self.__sleep_duration - elapsed)
 
-			self.sleep_between_writes = max(0, self.__sleep_duration - elapsed)
-
-		super()._write_and_flush(loop, text)
+		if loop is not None and loop.is_closed():
+			loop = None
+		try:
+			super()._write_and_flush(loop, text)
+		except RuntimeError as e:
+			if not self.__is_closed_event_loop(e):
+				raise
 
 
 class PromptToolkitWrapper:
