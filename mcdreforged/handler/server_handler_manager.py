@@ -37,7 +37,7 @@ class ServerHandlerManager:
 		self.set_configured_handler(config.handler)
 		if log:
 			if (psh := self.__plugin_provided_server_handler_holder) is not None:
-				self.logger.info(self.__tr('on_config_changed.handler_set_overridden', config.handler, repr(psh.server_handler.get_name()), psh.plugin))
+				self.logger.info(self.__tr('on_config_changed.handler_set_overridden', config.handler, psh.server_handler.get_name(), psh.plugin))
 			else:
 				self.logger.info(self.__tr('on_config_changed.handler_set', config.handler))
 
@@ -96,9 +96,9 @@ class ServerHandlerManager:
 	def set_plugin_provided_server_handler_holder(self, psh: Optional[PluginProvidedServerHandlerHolder]):
 		if psh != self.__plugin_provided_server_handler_holder:
 			if psh is not None:
-				self.logger.info(self.__tr('plugin_provided.set', repr(psh.server_handler.get_name()), psh.plugin))
+				self.logger.info(self.__tr('plugin_provided.set', psh.server_handler.get_name(), psh.plugin))
 			else:
-				self.logger.info(self.__tr('plugin_provided.unset', repr(self.__current_configured_handler.get_name())))
+				self.logger.info(self.__tr('plugin_provided.unset', self.__current_configured_handler.get_name()))
 			self.__shutdown_handler_detection()
 		self.__plugin_provided_server_handler_holder = psh
 
