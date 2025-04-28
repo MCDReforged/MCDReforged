@@ -1,4 +1,6 @@
 import asyncio
+import contextlib
+import logging
 import queue
 import sys
 import threading
@@ -199,13 +201,22 @@ class MCDRPromptSession(PromptSession):
 
 
 class MCDRStdoutProxy(StdoutProxy):
-	def __init__(self):
+	def __init__(self, logger: logging.Logger):
 		super().__init__(sleep_between_writes=0.01, raw=True)
+		self.__logger = logger
 		self.__sleep_duration = self.sleep_between_writes
 		self._flush_queue.maxsize = 1000
 
 	@override
 	def _write_thread(self) -> None:
+		try:
+			self.__write_thread()
+		except Exception:
+			with contextlib.suppress(OSError):
+				self.__logger.critical(f'MCDRStdoutProxy.__write_thread() error', exc_info=True)
+			raise
+
+	def __write_thread(self) -> None:
 		"""
 		Almost the same as :meth:`StdoutProxy._write_thread`. See line comments for modifications
 		"""
@@ -292,7 +303,7 @@ class PromptToolkitWrapper:
 		try:
 			self.__tweak_kits()
 			self.prompt_session = MCDRPromptSession(self.__console_handler)
-			self.stdout_proxy = MCDRStdoutProxy()
+			self.stdout_proxy = MCDRStdoutProxy(self.__logger)
 		except Exception:
 			self.__logger.exception('Failed to enable advanced console, switch back to basic input')
 		else:
