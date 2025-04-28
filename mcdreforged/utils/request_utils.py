@@ -33,8 +33,13 @@ def ua_header(what: str) -> dict:
 	return {'User-Agent': ua(what)}
 
 
-def get_direct(url: str, what: str, *, timeout: Optional[Union[float, Tuple[float, float]]] = None, stream: Optional[bool] = None) -> requests.Response:
-	return requests.get(url, timeout=timeout, headers=ua_header(what), proxies=get_proxies(), stream=stream)
+def get_direct(
+		url: str, what: str, *,
+		timeout: Optional[Union[float, Tuple[float, float]]] = None,
+		stream: Optional[bool] = None,
+		allow_redirects: bool = True,  # GET requests are usually ok to allow redirects
+) -> requests.Response:
+	return requests.get(url, timeout=timeout, headers=ua_header(what), proxies=get_proxies(), stream=stream, allow_redirects=allow_redirects)
 
 
 def __get_response_buf_with_size_limited(response: requests.Response, max_size: Optional[int] = None) -> bytes:
