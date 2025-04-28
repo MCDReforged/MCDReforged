@@ -252,7 +252,7 @@ class MCDRStdoutProxy(StdoutProxy):
 	def __is_closed_event_loop(cls, e: RuntimeError) -> bool:
 		# Reference: asyncio.base_events.BaseEventLoop._check_closed
 		# `raise RuntimeError('Event loop is closed')`
-		return type(e) == RuntimeError and str(e) == 'Event loop is closed'
+		return type(e) is RuntimeError and str(e) == 'Event loop is closed'
 
 	@override
 	def _write_and_flush(self, loop: Optional[asyncio.AbstractEventLoop], text: str):
