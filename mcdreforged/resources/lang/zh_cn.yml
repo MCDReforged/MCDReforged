@@ -82,6 +82,7 @@ mcdreforged:
   server_handler_manager:
     on_config_changed:
       handler_set: 解析处理器已设置为 {0}
+      handler_set_overridden: 解析处理器最初被配置为 {0}，但已被 {2} 提供的 {1} 覆盖
     plugin_provided:
       set: '使用插件 {1} 提供的解析处理器 {0}'
       unset: '使用配置文件指定的解析处理器 {0}'

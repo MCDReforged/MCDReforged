@@ -81,7 +81,8 @@ mcdreforged:
       full: Info queue has been full, is the server spamming? Ignore incoming info!
   server_handler_manager:
     on_config_changed:
-      handler_set: Handler is set to {0}
+      handler_set: Server handler is set to {0}
+      handler_set_overridden: 'Server handler was initially configured as {0}, but has been overridden by {1} provided by {2}'
     plugin_provided:
       set: 'Using server handler {0} provided by {1}'
       unset: 'Using server handler {0} specified by configuration'

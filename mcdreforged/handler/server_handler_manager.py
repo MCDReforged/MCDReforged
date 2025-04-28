@@ -36,7 +36,10 @@ class ServerHandlerManager:
 		self.register_handlers(config.custom_handlers)
 		self.set_configured_handler(config.handler)
 		if log:
-			self.logger.info(self.__tr('on_config_changed.handler_set', config.handler))
+			if (psh := self.__plugin_provided_server_handler_holder) is not None:
+				self.logger.info(self.__tr('on_config_changed.handler_set_overridden', config.handler, repr(psh.server_handler.get_name()), psh.plugin))
+			else:
+				self.logger.info(self.__tr('on_config_changed.handler_set', config.handler))
 
 	def register_handlers(self, custom_handler_class_paths: Optional[List[str]]):
 		def add_handler(hdr: ServerHandler):
