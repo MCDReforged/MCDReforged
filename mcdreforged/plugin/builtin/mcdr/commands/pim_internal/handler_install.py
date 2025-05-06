@@ -496,6 +496,7 @@ class PimInstallCommandHandler(PimCommandHandlerBase):
 					if not ctx.dry_run:
 						trashbin_files[trash_path] = path
 						trash_path.parent.mkdir(parents=True, exist_ok=True)
+						plugin.release_file_occupation()
 						shutil.move(path, trash_path)
 				else:
 					# For new plugins, follow the user's argument

@@ -1,4 +1,5 @@
 import contextlib
+import functools
 import os
 import sys
 import zipimport
@@ -16,6 +17,8 @@ from mcdreforged.utils.exception import IllegalPluginStructure
 
 if TYPE_CHECKING:
 	from mcdreforged.plugin.plugin_manager import PluginManager
+
+_LRU_FUNC_TYPE = type(functools.lru_cache(maxsize=None)(lambda: None))
 
 
 class PackedPlugin(MultiFilePlugin):
@@ -80,7 +83,6 @@ class PackedPlugin(MultiFilePlugin):
 				if is_module and package_name != self.get_id():
 					raise IllegalPluginStructure('Packed plugin cannot contain other package: found package {}'.format(package_name))
 
-	# noinspection PyProtectedMember,PyUnresolvedReferences
 	@override
 	def _on_unload(self):
 		super()._on_unload()
@@ -89,21 +91,13 @@ class PackedPlugin(MultiFilePlugin):
 				if path_utils.is_relative_to(Path(path), self.plugin_path):
 					sys.path_importer_cache.pop(path)
 			with contextlib.suppress(KeyError):
+				# noinspection PyProtectedMember,PyUnresolvedReferences
 				cache: dict = zipimport._zip_directory_cache
 				cache.pop(self._module_search_path)
 		except KeyError:
 			self.mcdr_server.logger.exception('Fail to clean zip import cache for {}'.format(self))
 
-		if sys.version_info >= (3, 10):
-			# https://github.com/MCDReforged/MCDReforged/issues/283
-			try:
-				from importlib.metadata import FastPath
-				FastPath.__new__.cache_clear()
-			except Exception:
-				self.mcdr_server.logger.exception('Fail to clean the importlib internal path cache')
-			else:
-				import gc
-				gc.collect()
+		self.release_file_occupation()
 
 	@override
 	def _load_entry_instance(self):
@@ -112,3 +106,32 @@ class PackedPlugin(MultiFilePlugin):
 
 	def get_file_sha256(self) -> str:
 		return self.__file_sha256
+
+	def release_file_occupation(self):
+		"""
+		Make the best effort to close all open file handles related to the packed plugin file,
+		to prevent the Windows error "The process cannot access the file because it is being used by another process"
+		during operations on the packed plugin file
+		"""
+
+		def release_importlib_zip_path_cache():
+			if sys.version_info < (3, 10):
+				return
+
+			# https://github.com/MCDReforged/MCDReforged/issues/283
+			try:
+				# noinspection PyProtectedMember,PyUnresolvedReferences
+				from importlib.metadata import FastPath
+				lru_func: _LRU_FUNC_TYPE = FastPath.__new__
+
+				if lru_func.cache_info().currsize == 0:
+					return
+
+				lru_func.cache_clear()
+			except Exception:
+				self.mcdr_server.logger.exception('Fail to clean the importlib internal path cache')
+			else:
+				import gc
+				gc.collect()
+
+		release_importlib_zip_path_cache()
