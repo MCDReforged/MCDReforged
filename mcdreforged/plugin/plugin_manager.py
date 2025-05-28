@@ -11,7 +11,7 @@ from concurrent.futures import Future
 from contextlib import contextmanager
 from contextvars import ContextVar
 from pathlib import Path
-from typing import Callable, Dict, Optional, Any, Tuple, List, TYPE_CHECKING
+from typing import Callable, Dict, Optional, Any, Tuple, List, TYPE_CHECKING, Set
 
 from mcdreforged.constants import plugin_constant
 from mcdreforged.logging.debug_option import DebugOption
@@ -346,17 +346,29 @@ class PluginManager:
 
 		walker = DependencyWalker(self)
 		walker.walk()
-		affected_plugin_ids: List[str] = []
 
+		# affected = selected + selected's children
+		# NOTES: might collect plugins in any states (e.g. LOADED and not READY)
+		affected_plugin_ids: Set[str] = set()
 		for plugin in selected_plugins:
-			affected_plugin_ids.extend(walker.get_children(plugin.get_id()))
+			affected_plugin_ids.update(walker.get_children(plugin.get_id()))
 
-		collected_plugins: List[RegularPlugin] = []  # plugins, in topo order
-		for plugin_id in sorted(collection_utils.unique_list(affected_plugin_ids), key=walker.get_topo_order):
+		# affected_plugin_ids --(collect_filter)-> collected_plugins
+		collected_plugins: List[RegularPlugin] = []  # in topo order (after sort), parent first
+		for plugin_id in affected_plugin_ids:
 			plugin = self.get_regular_plugin_from_id(plugin_id)
-			assert plugin is not None
+			if plugin is None:
+				raise AssertionError('Could not find plugin with id {}'.format(plugin_id))
 			if collect_filter(plugin):
 				collected_plugins.append(plugin)
+
+		def sort_key_getter(plg: RegularPlugin) -> int:
+			try:
+				return walker.get_topo_order(plg.get_id())
+			except Exception:
+				self.logger.error('Failed to get topo order for plugin {}'.format(plugin))
+				raise
+		collected_plugins.sort(key=sort_key_getter)
 
 		indirect_plugins = [plg for plg in collected_plugins if plg not in selected_plugins_set]
 		if self.logger.should_log_debug(DebugOption.PLUGIN):
