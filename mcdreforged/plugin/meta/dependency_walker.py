@@ -1,6 +1,7 @@
+import dataclasses
 from contextlib import contextmanager
 from enum import unique, Enum, auto
-from typing import Dict, List, TYPE_CHECKING, NamedTuple, Optional, Set, TypeVar, Generic
+from typing import Dict, List, TYPE_CHECKING, Optional, Set, TypeVar, Generic
 
 from mcdreforged.logging.debug_option import DebugOption
 from mcdreforged.plugin.meta.version import VersionRequirement
@@ -67,26 +68,30 @@ class VisitingState(Enum):
 	FAIL = auto()
 
 
+@dataclasses.dataclass(frozen=True)
 class DependencyGraphNode:
-	def __init__(self, plugin_id: str):
-		self.plugin_id = plugin_id
-		self.parents: List['DependencyGraphNode'] = []
-		self.children: List['DependencyGraphNode'] = []
+	plugin_id: str
+	parents: List['DependencyGraphNode'] = dataclasses.field(default_factory=list)
+	children: List['DependencyGraphNode'] = dataclasses.field(default_factory=list)
 
 
+@dataclasses.dataclass
 class PluginHolder:
-	def __init__(self, plugin_id: str):
-		self.plugin_id = plugin_id
-		self.state = VisitingState.UNVISITED
-		self.graph_node: DependencyGraphNode = DependencyGraphNode(plugin_id)
-		self.topo_order: int = -1
-		self.error: Optional[DependencyError] = None
+	plugin_id: str
+	state: VisitingState = VisitingState.UNVISITED
+	graph_node: DependencyGraphNode = dataclasses.field(init=False)
+	topo_order: int = -1
+	error: Optional[DependencyError] = None
+
+	def __post_init__(self):
+		self.graph_node = DependencyGraphNode(self.plugin_id)
 
 	def __lt__(self, other: 'PluginHolder') -> bool:
 		return (self.topo_order, self.plugin_id) < (other.topo_order, other.plugin_id)
 
 
-class WalkResult(NamedTuple):
+@dataclasses.dataclass(frozen=True)
+class WalkResult:
 	plugin_id: str
 	success: bool
 	reason: Optional[DependencyError]
