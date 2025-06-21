@@ -355,7 +355,7 @@ class RText(RTextBase):
 	@override
 	def to_json_object(self, **kwargs: Unpack[RTextBase.ToJsonKwargs]) -> Union[dict, list]:
 		json_format = kwargs.get('json_format', RTextJsonFormat.default())
-		obj = {'text': self.__text}
+		obj: Dict[str, Any] = {'text': self.__text}
 		if self.__color is not None:
 			obj['color'] = self.__color.name
 		for style in self.__styles:
