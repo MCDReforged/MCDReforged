@@ -56,7 +56,7 @@ class MultiFilePlugin(RegularPlugin, ABC):
 				self.mcdr_server.logger.warning('- Plugin file root: %s', file_root)
 				self.mcdr_server.logger.warning('- Loaded entrypoint path: %s', mod_path)
 		else:
-			self.mcdr_server.logger.warning('Suspicious entrypoint module %s for plugin %s, it may be an implicit package?', mod_path, self)
+			self.mcdr_server.logger.warning('Suspicious entrypoint module %s for plugin %s, it may be an implicit package?', mod.__name__, self)
 		return mod
 
 	@override
