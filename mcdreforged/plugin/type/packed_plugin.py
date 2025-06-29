@@ -65,20 +65,24 @@ class PackedPlugin(MultiFilePlugin):
 		return result
 
 	@override
-	def _check_subdir_legality(self):
-		for file_info in self.__zip_file.infolist():
-			if file_info.is_dir():
-				package_name: str = file_info.filename[:-1]  # removing the ending '/'
-				if '/' in package_name:  # not at root
-					continue
-				try:
-					init_info = self.__zip_file.getinfo(os.path.join(package_name, '__init__.py'))
-				except KeyError:
-					is_module = False
-				else:
-					is_module = not init_info.is_dir()
-				if is_module and package_name != self.get_id():
-					raise IllegalPluginStructure('Packed plugin cannot contain other package: found package {}'.format(package_name))
+	def _check_dir_legality(self):
+		plugin_id = self.get_id()
+
+		for zip_info in self.__zip_file.infolist():
+			path = zip_info.filename
+			if zip_info.is_dir():
+				continue
+
+			file_path = Path(path)
+			parts = file_path.parts
+			if len(parts) == 1:
+				if file_path.suffix == '.py' and file_path.stem != plugin_id:
+					raise IllegalPluginStructure(f'Packed plugin cannot contain other module: found module {file_path.stem}')
+			elif parts[0].startswith(('.', '__')):
+				continue
+			elif parts[0] != plugin_id:
+				if file_path.suffix == '.py':
+					raise IllegalPluginStructure(f'Packed plugin cannot contain other package: found package {".".join(parts[:-1])}')
 
 	# noinspection PyProtectedMember,PyUnresolvedReferences
 	@override
