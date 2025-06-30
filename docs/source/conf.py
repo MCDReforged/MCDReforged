@@ -55,7 +55,7 @@ extensions = [
 	'sphinx.ext.napoleon',
 	'sphinx.ext.viewcode',
 	'sphinx_copybutton',
-	'sphinx-prompt',
+	'sphinx_prompt',
 
 	# workaround for broken search utility and broken doc version popup
 	# https://github.com/readthedocs/sphinx_rtd_theme/issues/1451
