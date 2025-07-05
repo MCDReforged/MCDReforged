@@ -4,6 +4,7 @@ from typing import Union, Optional, Dict, Iterator, TypeVar, Generic
 from colorama import Fore, Style
 from typing_extensions import override
 
+from mcdreforged.utils.serializer import Serializable
 from mcdreforged.utils import class_utils, string_utils
 
 
@@ -345,6 +346,58 @@ __register_rstyle()
 # ------------------------------------------------
 
 
+class __RHoverMeta(__RRegistry['RHover']):
+	pass
+
+
+class RHover(RItem, ABC, metaclass=__RStyleMeta):
+	"""
+	Minecraft hover event actions
+	"""
+	show_entity:     'RHover'
+	show_item:       'RHover'
+	show_text:       'RHover'
+
+
+def __register_rhover():
+	def register(name: str):
+		RHover.register_item(name, _RHoverImpl(name))
+
+	register('show_entity')
+	register('show_item')
+	register('show_text')
+
+
+class _RHoverImpl(RHover):
+	def __init__(self, name: str):
+		self.__name = name
+
+	@property
+	@override
+	def name(self) -> str:
+		return self.__name
+
+	def __repr__(self) -> str:
+		return class_utils.represent(self, {'action': self.name})
+
+
+class RHoverComponents(Serializable):
+	id: str
+
+
+class RHoverEntity(RHoverComponents, Serializable):
+	name: str  # display name of the target entity.
+	uuid: str  # uuid of the target entity, format requirements see MinecraftWiki plz.
+
+
+class RHoverItem(RHoverComponents, Serializable):
+	count: int  # seems useless because it can't be displayed in hover event, but available.
+	components: Optional[dict]  # Extra item info, can be empty.
+
+
+__register_rhover()
+
+
 class __RActionMeta(__RRegistry['RAction']):
 	pass
 
@@ -419,4 +472,3 @@ class _RActionImpl(RAction):
 
 
 __register_raction()
-

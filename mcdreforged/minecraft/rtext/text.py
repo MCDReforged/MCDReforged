@@ -7,7 +7,8 @@ from typing import Iterable, List, Union, Optional, Any, Tuple, Set, NamedTuple,
 from colorama import Style
 from typing_extensions import Self, override, TypedDict, NotRequired, Unpack
 
-from mcdreforged.minecraft.rtext.style import RStyle, RColor, RAction, RColorClassic, RColorRGB, RItemClassic
+from mcdreforged.minecraft.rtext.style import RStyle, RColor, RAction, RColorClassic, RColorRGB, RItemClassic, RHover, \
+	RHoverComponents, RHoverItem, RHoverEntity
 from mcdreforged.utils import class_utils
 
 
@@ -113,11 +114,24 @@ class RTextBase(ABC):
 		raise NotImplementedError()
 
 	@abstractmethod
+	def set_hover_event(self, type: RHover, *args, component: Optional[RHoverComponents] = None) -> Self:
+		"""
+		Set the hover event
+
+		Method :meth:`h` is the short form of :meth:`set_hover_event`
+
+		:param type: The type of hover_event(hoverEvent)
+		:param component: The component of `RHover.show_entity` or `RHover.show_item`
+		:param args: The elements be used to create a :class:`RHover` instance.
+			Especially, if :param type: is `RHover.show_text`, then the elements will be used to create a :class:`RTextList` instance, and be used as the actual hover text
+		:return: The text component itself
+		"""
+		raise NotImplementedError()
+
+	@abstractmethod
 	def set_hover_text(self, *args) -> Self:
 		"""
-		Set the hover text
-
-		Method :meth:`h` is the short form of :meth:`set_hover_text`
+		Set the hover text, actually call `set_hover_event` with :param type: is set to `RHover.show_text`
 
 		:param args: The elements be used to create a :class:`RTextList` instance.
 			The :class:`RTextList` instance is used as the actual hover text
@@ -131,11 +145,18 @@ class RTextBase(ABC):
 		"""
 		return self.set_click_event(action, value)
 
-	def h(self, *args) -> Self:
+	def h(self, type: Optional[RHover], *args, component: Optional[RHoverComponents] = None) -> Self:
 		"""
-		The short form of :meth:`set_hover_text`
+		The short form of :meth:`set_hover_event`
 		"""
-		return self.set_hover_text(*args)
+		match type, component:
+			case None, _:
+				raise TypeError('')
+			case _, None:
+				raise TypeError('')
+			case _, _:
+				return self.set_hover_event(type, component, *args)
+		return self.set_hover_event(RHover.show_text, *args)
 
 	def __str__(self):
 		return self.to_plain_text()
@@ -303,6 +324,11 @@ class _ClickEvent(NamedTuple):
 	value: str
 
 
+class _HoverEvent(NamedTuple):
+	type: RHover
+	component: RHoverComponents | list
+
+
 class RText(RTextBase):
 	"""
 	The regular text component class
@@ -320,6 +346,7 @@ class RText(RTextBase):
 		self.__color: Optional[RColor] = None
 		self.__styles: Set[RStyle] = set()
 		self.__click_event: Optional[_ClickEvent] = None
+		self.__hover_event: Optional[_HoverEvent] = None
 		self.__hover_text_list: list = []
 		if color is not None:
 			self.set_color(color)
@@ -348,18 +375,30 @@ class RText(RTextBase):
 		return self
 
 	@override
+	def set_hover_event(self, type: RHover, *args, component: Optional[RHoverComponents] = None) -> Self:
+		if component is not None:
+			self.__hover_event = _HoverEvent(type, component)
+		else:
+			self.__hover_event = _HoverEvent(type, list(args))
+		return self
+
+	@override
 	def set_hover_text(self, *args) -> Self:
-		self.__hover_text_list = list(args)
+		self.__hover_event = _HoverEvent(RHover.show_text, list(args))
 		return self
 
 	@override
 	def to_json_object(self, **kwargs: Unpack[RTextBase.ToJsonKwargs]) -> Union[dict, list]:
+		# init format
 		json_format = kwargs.get('json_format', RTextJsonFormat.default())
 		obj = {'text': self.__text}
+		# set color
 		if self.__color is not None:
 			obj['color'] = self.__color.name
+		# set style
 		for style in self.__styles:
 			obj[style.name] = True
+		# set click event
 		if self.__click_event is not None:
 			if json_format == RTextJsonFormat.V_1_7:
 				obj['clickEvent'] = {
@@ -376,24 +415,59 @@ class RText(RTextBase):
 				}
 			else:
 				raise ValueError('Unknown json_format {!r}'.format(json_format))
-		if len(self.__hover_text_list) > 0:
-			if len(self.__hover_text_list) == 1:
-				hover_value = RTextBase.from_any(self.__hover_text_list[0]).to_json_object()
-			else:
-				hover_value = {
-					'text': '',
-					'extra': RTextList(*self.__hover_text_list).to_json_object(),
-				}
+		# set hover event
+		# if len(self.__hover_text_list) > 0:
+		# 	if len(self.__hover_text_list) == 1:
+		# 		hover_value = RTextBase.from_any(self.__hover_text_list[0]).to_json_object()
+		# 	else:
+		# 		hover_value = {
+		# 			'text': '',
+		# 			'extra': RTextList(*self.__hover_text_list).to_json_object(),
+		# 		}
+		if self.__hover_event is not None:
 			if json_format == RTextJsonFormat.V_1_7:
 				hover_event_key = 'hoverEvent'
 			elif json_format == RTextJsonFormat.V_1_21_5:
 				hover_event_key = 'hover_event'
 			else:
 				raise ValueError('Unknown json_format {!r}'.format(json_format))
-			obj[hover_event_key] = {
-				'action': 'show_text',
-				'value': hover_value,
-			}
+			if self.__hover_event.type != RHover.show_text:
+				hover_event_value_key = "contents"
+			else:
+				hover_event_value_key = "value"
+			if self.__hover_event.type == RHover.show_text:
+				hover_value = {
+					'text': '',
+					'extra': RTextList(*self.__hover_event.component).to_json_object(),
+				}
+			elif self.__hover_event.type == RHover.show_item:
+				if isinstance(self.__hover_event.component, RHoverItem):
+					hover_value = {
+						'id': self.__hover_event.component.id,
+						'count': self.__hover_event.component.count,
+					}
+			elif self.__hover_event.type == RHover.show_entity:
+				if isinstance(self.__hover_event.component, RHoverEntity):
+					hover_value = {
+						'id': self.__hover_event.component.id,
+						'name': self.__hover_event.component.name,
+						'uuid': self.__hover_event.component.uuid,
+					}
+			else:
+				hover_value = {}
+			if json_format == RTextJsonFormat.V_1_21_5:
+				obj[hover_event_key] = {
+					'action': self.__hover_event.type.name,
+				}
+				if self.__hover_event.type.name == RHover.show_text.name:
+					obj.update({hover_event_value_key: hover_value})
+				else:
+					obj.update(hover_value)
+			elif json_format == RTextJsonFormat.V_1_7:
+				obj[hover_event_key] = {
+					'action': self.__hover_event.type.name,
+					hover_event_value_key: hover_value
+				}
 		return obj
 
 	@override
@@ -491,6 +565,12 @@ class RTextList(RTextBase):
 	@override
 	def set_click_event(self, action: RAction, value) -> Self:
 		self.header.set_click_event(action, value)
+		self.header_empty = False
+		return self
+
+	@override
+	def set_hover_event(self, type: RHover, *args) -> Self:
+		self.header.set_hover_event(type, *args)
 		self.header_empty = False
 		return self
 
