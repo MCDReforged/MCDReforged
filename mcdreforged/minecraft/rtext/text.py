@@ -145,17 +145,15 @@ class RTextBase(ABC):
 		"""
 		return self.set_click_event(action, value)
 
-	def h(self, type: Optional[RHover], *args, component: Optional[RHoverComponents] = None) -> Self:
+	def h(self, *args, type: Optional[RHover] = None, component: Optional[RHoverComponents] = None) -> Self:
 		"""
 		The short form of :meth:`set_hover_event`
 		"""
 		match type, component:
-			case None, _:
+			case type, component if (type is None) != (component is None):
 				raise TypeError('')
-			case _, None:
-				raise TypeError('')
-			case _, _:
-				return self.set_hover_event(type, component, *args)
+			case type, component if type is not None and component is not None:
+				return self.set_hover_event(type, *args, component=component)
 		return self.set_hover_event(RHover.show_text, *args)
 
 	def __str__(self):
@@ -347,7 +345,6 @@ class RText(RTextBase):
 		self.__styles: Set[RStyle] = set()
 		self.__click_event: Optional[_ClickEvent] = None
 		self.__hover_event: Optional[_HoverEvent] = None
-		self.__hover_text_list: list = []
 		if color is not None:
 			self.set_color(color)
 		if styles is not None:
@@ -569,8 +566,8 @@ class RTextList(RTextBase):
 		return self
 
 	@override
-	def set_hover_event(self, type: RHover, *args) -> Self:
-		self.header.set_hover_event(type, *args)
+	def set_hover_event(self, type: RHover, *args, component: Optional[RHoverComponents] = None) -> Self:
+		self.header.set_hover_event(type, *args, component)
 		self.header_empty = False
 		return self
 
