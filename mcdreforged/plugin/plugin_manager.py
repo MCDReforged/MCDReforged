@@ -159,7 +159,7 @@ class PluginManager:
 	def __add_plugin(self, plugin: AbstractPlugin):
 		plugin_id = plugin.get_id()
 		if plugin_id in self.__plugins:
-			self.logger.critical('Something is not correct, a plugin with existed plugin id "{}" is added'.format(plugin_id))
+			self.logger.critical('Something is not correct, a plugin with existed plugin id {!r} is added'.format(plugin_id))
 		self.__plugins[plugin_id] = plugin
 		if isinstance(plugin, RegularPlugin):
 			self.__plugin_file_paths[plugin.plugin_path.absolute()] = plugin_id
@@ -286,7 +286,7 @@ class PluginManager:
 					if plugin_factory.is_plugin(file_path):
 						paths.append(file_path)
 			else:
-				self.logger.warning('Plugin directory "{}" not found'.format(plugin_directory))
+				self.logger.warning('Plugin directory {!r} not found'.format(plugin_directory))
 		return paths
 
 	def __load_given_new_plugins(self, plugin_paths: List[Path]) -> SingleOperationResult:

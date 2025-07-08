@@ -382,13 +382,13 @@ class MCDReforgedServer:
 
 	def set_server_state(self, state: ServerState):
 		self.server_state = state
-		self.logger.mdebug('Server state has set to "{}"'.format(state), option=DebugOption.MCDR)
+		self.logger.mdebug('Server state has set to {}'.format(state), option=DebugOption.MCDR)
 		with self.server_state_cv:
 			self.server_state_cv.notify_all()
 
 	def set_mcdr_state(self, state: MCDReforgedState):
 		self.mcdr_state = state
-		self.logger.mdebug('MCDR state has set to "{}"'.format(state), option=DebugOption.MCDR)
+		self.logger.mdebug('MCDR state has set to {}'.format(state), option=DebugOption.MCDR)
 
 	def should_keep_looping(self) -> bool:
 		"""
@@ -603,7 +603,7 @@ class MCDReforgedServer:
 			info = self.server_handler_manager.get_current_handler().parse_server_stdout(text)
 		except Exception:
 			if self.logger.should_log_debug(option=DebugOption.HANDLER):  # traceback.format_exc() is costly
-				self.logger.mdebug('Fail to parse text "{}" from stdout of the server, using raw handler'.format(text), no_check=True)
+				self.logger.mdebug('Fail to parse text {!r} from stdout of the server, using raw handler'.format(text), no_check=True)
 				for line in traceback.format_exc().splitlines():
 					self.logger.mdebug('    {}'.format(line), no_check=True)
 			info = self.server_handler_manager.get_basic_handler().parse_server_stdout(text)

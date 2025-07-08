@@ -69,7 +69,7 @@ class UpdateHelper(BackgroundThreadExecutor):
 					version_current = Version(core_constant.VERSION, allow_wildcard=False)
 					version_fetched = Version(latest_version.lstrip('vV'), allow_wildcard=False)
 				except Exception:
-					self.mcdr_server.logger.exception('Fail to compare between versions "{}" and "{}"'.format(core_constant.VERSION, latest_version))
+					self.mcdr_server.logger.exception('Fail to compare between versions {!r} and {!r}'.format(core_constant.VERSION, latest_version))
 					return
 				if version_current == version_fetched:
 					reply_func(self.__tr('check_update.is_already_latest'))

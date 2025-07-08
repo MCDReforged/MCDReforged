@@ -126,7 +126,7 @@ def make_packed_plugin(args: PackArgs, *, quiet: bool = False):
 		else:
 			writeln('[WARN] {} not found! ignored'.format(base_path))
 
-	writeln('Packing plugin "{}" into "{}" ...'.format(meta.id, file_name))
+	writeln('Packing plugin {!r} into {!r} ...'.format(meta.id, file_name))
 	packed_plugin_path = output_dir / file_name
 	with open(packed_plugin_path, 'wb') as fd:
 		if args.shebang:
@@ -144,5 +144,5 @@ def make_packed_plugin(args: PackArgs, *, quiet: bool = False):
 		# chmod +x
 		os.chmod(packed_plugin_path, os.stat(packed_plugin_path).st_mode | stat.S_IEXEC)
 
-	writeln('Packed {} files/folders into "{}"'.format(file_counter, file_name))
+	writeln('Packed {} files/folders into {!r}'.format(file_counter, file_name))
 	writeln('Done')

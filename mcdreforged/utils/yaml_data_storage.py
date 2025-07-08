@@ -106,7 +106,7 @@ class YamlDataStorage:
 						# notes: in ruamel.yaml, the comment of an element is at the below of the element, not above
 						# example hack fix usage: adding new elements in the mcdr config "debug" dict
 						comment_dict[key] = comment_dict.pop(last_user_key)
-					self._logger.warning('Option "{}" missing, use default value "{}"'.format(current_key_path, current_data[key]))
+					self._logger.warning('Option {!r} missing, use default value {!r}'.format(current_key_path, current_data[key]))
 			return result, has_missing
 
 	def _pre_save(self, data: CommentedMap):
