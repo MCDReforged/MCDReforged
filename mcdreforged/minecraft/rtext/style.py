@@ -355,8 +355,14 @@ class RHover(RItem, ABC, metaclass=__RStyleMeta):
 	Minecraft hover event actions
 	"""
 	show_entity:     'RHover'
+	"""Show an entity's information"""
+
 	show_item:       'RHover'
+	"""Show an item's information"""
+
 	show_text:       'RHover'
+	"""Display texts in hover event"""
+
 
 
 def __register_rhover():
@@ -382,15 +388,33 @@ class _RHoverImpl(RHover):
 
 
 class RHoverComponents(Serializable):
+	"""
+	Internal components in hover event actions (except `show_text`)
+
+	:param id: Generic id attribute for components
+	"""
 	id: str
 
 
 class RHoverEntity(RHoverComponents, Serializable):
-	name: str  # display name of the target entity.
+	"""
+	Component for `show_entity` hover event action.
+
+	:param name: Set display name of the target entity
+	:param uuid: UUID of the target entity, format requirements see MinecraftWiki plz.
+	"""
+	name: str
 	uuid: str  # uuid of the target entity, format requirements see MinecraftWiki plz.
 
 
 class RHoverItem(RHoverComponents, Serializable):
+	"""
+	Component for `show_item` hover event action.
+
+	:param count: Optional, the number of the target item.
+		Due to it's not displayed actually, so set default to 1.
+	:param components: Optional, receive extra item components by a custom dict object.
+	"""
 	count: Optional[int] = 1  # seems useless because it can't be displayed in hover event, but available.
 	components: Optional[dict]  # Extra item info, can be empty.
 
