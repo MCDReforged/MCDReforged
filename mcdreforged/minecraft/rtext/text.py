@@ -149,12 +149,12 @@ class RTextBase(ABC):
 		"""
 		The short form of :meth:`set_hover_event`
 		"""
-		match type, component:
-			case type, component if (type is None) != (component is None):
-				raise TypeError('')
-			case type, component if type is not None and component is not None:
-				return self.set_hover_event(type, *args, component=component)
-		return self.set_hover_event(RHover.show_text, *args)
+		if (type is None) != (component is None):
+			raise TypeError("Arguments 'type' and 'component' must both be None or both non-None")
+		elif type is not None and component is not None:
+			return self.set_hover_event(type, *args, component=component)
+		else:
+			return self.set_hover_event(RHover.show_text, *args)
 
 	def __str__(self):
 		return self.to_plain_text()
