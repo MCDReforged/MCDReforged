@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-11-23 14:45+0800\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2025-05-28 20:51+0800\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
 "Language-Team: zh_CN <LL@li.org>\n"
@@ -153,5 +153,5 @@ msgstr "如果你曾是 MCDR 旧版本的用户，你可能想看看 :doc:`/migr
 
 #: ../quick_start/next_steps.rst:59
 msgid "Have fun with MCDR!"
-msgstr "祝你玩的开心！"
+msgstr "祝你玩得开心！"
 
