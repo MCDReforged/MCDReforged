@@ -63,7 +63,7 @@ class ServerHandlerManager:
 				try:
 					handler_class = class_utils.load_class(class_path)
 				except Exception:
-					self.mcdr_server.logger.exception('Fail to load info handler from "{}"'.format(class_path))
+					self.mcdr_server.logger.exception('Fail to load info handler from {!r}'.format(class_path))
 				else:
 					if issubclass(handler_class, ServerHandler):
 						handler = handler_class()
@@ -73,7 +73,7 @@ class ServerHandlerManager:
 						else:
 							self.mcdr_server.logger.error('Handler with name {} from path {} is already registered, ignored'.format(handler.get_name(), class_path))
 					else:
-						self.mcdr_server.logger.error('Wrong handler class "{}", expected {} but found {}'.format(class_path, ServerHandler, handler_class))
+						self.mcdr_server.logger.error('Wrong handler class {!r}, expected {} but found {}'.format(class_path, ServerHandler, handler_class))
 
 	@property
 	def __current_configured_handler(self) -> Optional[ServerHandler]:

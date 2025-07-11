@@ -578,7 +578,7 @@ class Literal(EntryNode):
 			if not isinstance(literal, str):
 				raise TypeError('Literal node only accepts str but {} found'.format(type(literal)))
 			if utils.DIVIDER in literal:
-				raise TypeError('DIVIDER character "{}" cannot be inside a literal'.format(utils.DIVIDER))
+				raise TypeError('DIVIDER character {!r} cannot be inside a literal'.format(utils.DIVIDER))
 		self.literals: Set[str] = literals
 		self._suggestion_getter = lambda: self.literals
 

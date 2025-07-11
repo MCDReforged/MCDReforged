@@ -49,13 +49,13 @@ class InfoReactorManager:
 				try:
 					reactor_class = class_utils.load_class(class_path)
 				except Exception:
-					self.mcdr_server.logger.exception('Fail to load info reactor from "{}"'.format(class_path))
+					self.mcdr_server.logger.exception('Fail to load info reactor from {!r}'.format(class_path))
 				else:
 					if issubclass(reactor_class, AbstractInfoReactor):
 						self.reactors.append(reactor_class(self.mcdr_server))
 						self.mcdr_server.logger.mdebug('Loaded info reactor {} from {}'.format(reactor_class.__name__, class_path), option=DebugOption.REACTOR)
 					else:
-						self.mcdr_server.logger.error('Wrong reactor class "{}", expected {} but found {}'.format(class_path, AbstractInfoReactor, reactor_class))
+						self.mcdr_server.logger.error('Wrong reactor class {!r}, expected {} but found {}'.format(class_path, AbstractInfoReactor, reactor_class))
 
 	def process_info(self, info: Info):
 		for reactor in self.reactors:

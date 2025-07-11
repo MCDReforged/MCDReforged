@@ -151,7 +151,7 @@ class DependencyWalker:
 					self.__ensure_loaded(dep_id, req)
 				except DependencyError as e:
 					holder.state = VisitingState.FAIL
-					self.__plugin_manager.logger.mdebug('Set visiting state of {} to FAIL due to "{}"'.format(plugin_id, e), option=DebugOption.PLUGIN)
+					self.__plugin_manager.logger.mdebug('Set visiting state of {!r} to FAIL: {}'.format(plugin_id, e), option=DebugOption.PLUGIN)
 					raise
 			if not plugin.is_builtin():
 				holder.topo_order = len(self.__topo_order)

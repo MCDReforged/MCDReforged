@@ -92,7 +92,7 @@ class Metadata:
 			if self.PLUGIN_ID_REGEX.fullmatch(self.id) is None:
 				bad_id = True
 			if bad_id:
-				use_fallback_id_reason = 'Plugin ID "{}" of {} is invalid'.format(self.id, plugin_name_text)
+				use_fallback_id_reason = 'Plugin ID {!r} of {} is invalid'.format(self.id, plugin_name_text)
 		if use_fallback_id_reason is not None:
 			if plugin is not None:
 				self.id = plugin.get_fallback_metadata_id()
@@ -130,7 +130,7 @@ class Metadata:
 			try:
 				self.version = Version(version_str, allow_wildcard=False)
 			except VersionParsingError as e:
-				warn('Version "{}" of {} is invalid ({}), ignore and use fallback version instead {}'.format(version_str, plugin_name_text, e, self.FALLBACK_VERSION))
+				warn('Version {!r} of {} is invalid ({}), ignore and use fallback version instead {}'.format(version_str, plugin_name_text, e, self.FALLBACK_VERSION))
 				version_str = None
 		else:
 			warn("{} doesn't specific a version, use fallback version {}".format(plugin_name_text, self.FALLBACK_VERSION))
@@ -150,7 +150,7 @@ class Metadata:
 		class_utils.check_type(self.entrypoint, str)
 		# entrypoint module should be inside the plugin module
 		if self.entrypoint != self.id and not self.entrypoint.startswith(self.id + '.'):
-			raise ValueError('Invalid entry point "{}" for plugin id "{}"'.format(self.entrypoint, self.id))
+			raise ValueError('Invalid entry point {!r} for plugin id {!r}'.format(self.entrypoint, self.id))
 
 		self.archive_name = data.get('archive_name')
 		self.resources = data.get('resources', [])

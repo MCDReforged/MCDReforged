@@ -58,7 +58,7 @@ class MyTestCase(unittest.TestCase):
 			try:
 				info = self.handler.parse_server_stdout(line)
 			except Exception:
-				print('error when parsing line "{}"'.format(line))
+				print('error when parsing line {!r}'.format(line))
 				raise
 			# no exception
 			if not info.is_player:

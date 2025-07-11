@@ -33,7 +33,7 @@ class MyTestCase(unittest.TestCase):
 		for test_lang, test_lang_mapping in language_key_dict.items():
 			test_lang_keys = list(test_lang_mapping)
 			for i, key in enumerate(base_keys):
-				self.assertEqual(key, test_lang_keys[i], 'key[{}] "{}" in base language {} is not the same as test language {}'.format(i, key, base_lang, test_lang))
+				self.assertEqual(key, test_lang_keys[i], 'key[{}]={!r} in base language {} is not the same as test language {}'.format(i, key, base_lang, test_lang))
 			self.assertEqual(len(base_keys), len(test_lang_keys))
 
 	def test_1_translation_formatting(self):

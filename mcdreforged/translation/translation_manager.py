@@ -40,7 +40,7 @@ class TranslationManager:
 				self.available_languages.add(language)
 				self.logger.mdebug('Loaded translation for {} with {} entries'.format(language, len(translations)))
 			except Exception:
-				self.logger.exception('Failed to load language {} from "{}"'.format(language, file_path))
+				self.logger.exception('Failed to load language {} from {!r}'.format(language, file_path))
 
 	def set_language(self, language: str):
 		self.language = language
@@ -86,6 +86,6 @@ class TranslationManager:
 			return translated_formatter
 		else:
 			if not allow_failure:
-				raise KeyError('Translation key "{}" not found with language {}, fallback_language {}'.format(key, language, fallback_handler))
-			self.logger.error('Error translate text "{}" to language {}'.format(key, language))
+				raise KeyError('Translation key {!r} not found with language {}, fallback_language {}'.format(key, language, fallback_handler))
+			self.logger.error('Error translate text {!r} to language {}'.format(key, language))
 			return key if not use_rtext else RTextBase.from_any(key)
