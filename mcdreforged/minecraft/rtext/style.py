@@ -416,7 +416,7 @@ class RHoverItem(RHoverComponents, Serializable):
 	:param components: Optional, receive extra item components by a custom dict object.
 	"""
 	count: Optional[int] = 1  # seems useless because it can't be displayed in hover event, but available.
-	components: Optional[dict]  # Extra item info, can be empty.
+	components: Optional[dict] = None  # Extra item info, can be empty.
 
 
 __register_rhover()

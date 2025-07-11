@@ -305,7 +305,23 @@ class RTextBase(ABC):
 			with contextlib.suppress(KeyError):
 				hover_event = data.get('hoverEvent', data.get('hover_event'))
 				if isinstance(hover_event, dict) and hover_event['action'] == 'show_text':
-					text.set_hover_text(cls.from_json_object(hover_event['value']))
+					text.set_hover_text(hover_event['value'])
+				elif isinstance(hover_event, dict) and hover_event['action'] == 'show_entity':
+					text.set_hover_event(
+						component=RHoverEntity(
+							id=hover_event.get('id', hover_event['contents']['id']),
+							name=hover_event.get('name', hover_event['contents']['name']),
+							uuid=hover_event.get('uuid', hover_event['contents']['uuid']),
+						)
+					)
+				elif isinstance(hover_event, dict) and hover_event['action'] == 'show_item':
+					text.set_hover_event(
+						component=RHoverItem(
+							id=hover_event.get('id', hover_event['contents']['id']),
+							count=hover_event.get('count', hover_event['contents']['count']),
+							components=hover_event.get('components', hover_event.get('contents', {}).get('components', {})),
+						)
+					)
 			return text
 		else:
 			raise TypeError('Unsupported data {!r}'.format(data))
@@ -427,10 +443,8 @@ class RText(RTextBase):
 		if self.__hover_event is not None:
 			if json_format == RTextJsonFormat.V_1_7:
 				hover_event_key = 'hoverEvent'
-				hover_action_components_key = 'contents'
 			elif json_format == RTextJsonFormat.V_1_21_5:
 				hover_event_key = 'hover_event'
-				hover_action_components_key = 'components'
 			else:
 				raise ValueError('Unknown json_format {!r}'.format(json_format))
 			if self.__hover_event.type != RHover.show_text:
@@ -451,7 +465,7 @@ class RText(RTextBase):
 					if self.__hover_event.component.components is not None:
 						if isinstance(self.__hover_event.component.components, dict):
 							hover_value.update({
-								hover_action_components_key: self.__hover_event.component.components
+								'components': self.__hover_event.component.components
 							})
 						else:
 							raise TypeError('Extra components for hover actions should be a dict object.')
