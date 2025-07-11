@@ -388,7 +388,7 @@ class RText(RTextBase):
 
 	@override
 	def to_json_object(self, **kwargs: Unpack[RTextBase.ToJsonKwargs]) -> Union[dict, list]:
-		# init format
+		# get format
 		json_format = kwargs.get('json_format', RTextJsonFormat.default())
 		obj = {'text': self.__text}
 		# set color
@@ -415,6 +415,7 @@ class RText(RTextBase):
 			else:
 				raise ValueError('Unknown json_format {!r}'.format(json_format))
 		# set hover event
+		# the following comment is old codes, idk if still need, keep them though.
 		# if len(self.__hover_text_list) > 0:
 		# 	if len(self.__hover_text_list) == 1:
 		# 		hover_value = RTextBase.from_any(self.__hover_text_list[0]).to_json_object()
@@ -426,8 +427,10 @@ class RText(RTextBase):
 		if self.__hover_event is not None:
 			if json_format == RTextJsonFormat.V_1_7:
 				hover_event_key = 'hoverEvent'
+				hover_action_components_key = 'contents'
 			elif json_format == RTextJsonFormat.V_1_21_5:
 				hover_event_key = 'hover_event'
+				hover_action_components_key = 'components'
 			else:
 				raise ValueError('Unknown json_format {!r}'.format(json_format))
 			if self.__hover_event.type != RHover.show_text:
@@ -445,6 +448,13 @@ class RText(RTextBase):
 						'id': self.__hover_event.component.id,
 						'count': self.__hover_event.component.count,
 					}
+					if self.__hover_event.component.components is not None:
+						if isinstance(self.__hover_event.component.components, dict):
+							hover_value.update({
+								hover_action_components_key: self.__hover_event.component.components
+							})
+						else:
+							raise TypeError('Extra components for hover actions should be a dict object.')
 			elif self.__hover_event.type == RHover.show_entity:
 				if isinstance(self.__hover_event.component, RHoverEntity):
 					hover_value = {
