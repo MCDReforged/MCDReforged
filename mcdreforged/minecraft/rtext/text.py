@@ -723,5 +723,5 @@ class RTextTranslation(RText):
 			'color': self.__color,
 			'styles': self.__styles,
 			'click_event': self.__click_event,
-			'hover_texts': self.__hover_text_list
+			'hover_event': self.__hover_event
 		})
