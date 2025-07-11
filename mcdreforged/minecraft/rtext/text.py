@@ -459,9 +459,9 @@ class RText(RTextBase):
 					'action': self.__hover_event.type.name,
 				}
 				if self.__hover_event.type.name == RHover.show_text.name:
-					obj.update({hover_event_value_key: hover_value})
+					obj[hover_event_key].update({hover_event_value_key: hover_value})
 				else:
-					obj.update(hover_value)
+					obj[hover_event_key].update(hover_value)
 			elif json_format == RTextJsonFormat.V_1_7:
 				obj[hover_event_key] = {
 					'action': self.__hover_event.type.name,
