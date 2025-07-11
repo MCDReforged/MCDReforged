@@ -335,7 +335,7 @@ class _ClickEvent(NamedTuple):
 
 class _HoverEvent(NamedTuple):
 	type: RHover
-	component: RHoverComponents | list
+	component: Union[RHoverComponents, list]
 
 
 class RText(RTextBase):
