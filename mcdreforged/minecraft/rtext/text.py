@@ -114,13 +114,12 @@ class RTextBase(ABC):
 		raise NotImplementedError()
 
 	@abstractmethod
-	def set_hover_event(self, type: RHover, *args, component: Optional[RHoverComponents] = None) -> Self:
+	def set_hover_event(self, *args, component: Optional[RHoverComponents] = None) -> Self:
 		"""
 		Set the hover event
 
 		Method :meth:`h` is the short form of :meth:`set_hover_event`
 
-		:param type: The type of hover_event(hoverEvent)
 		:param component: The component of `RHover.show_entity` or `RHover.show_item`
 		:param args: The elements be used to create a :class:`RHover` instance.
 			Especially, if :param type: is `RHover.show_text`, then the elements will be used to create a :class:`RTextList` instance, and be used as the actual hover text
@@ -145,16 +144,11 @@ class RTextBase(ABC):
 		"""
 		return self.set_click_event(action, value)
 
-	def h(self, *args, type: Optional[RHover] = None, component: Optional[RHoverComponents] = None) -> Self:
+	def h(self, *args, component: Optional[RHoverComponents] = None) -> Self:
 		"""
 		The short form of :meth:`set_hover_event`
 		"""
-		if (type is None) != (component is None):
-			raise TypeError("Arguments 'type' and 'component' must both be None or both non-None")
-		elif type is not None and component is not None:
-			return self.set_hover_event(type, *args, component=component)
-		else:
-			return self.set_hover_event(RHover.show_text, *args)
+		return self.set_hover_event(*args, component=component)
 
 	def __str__(self):
 		return self.to_plain_text()
@@ -372,15 +366,23 @@ class RText(RTextBase):
 		return self
 
 	@override
-	def set_hover_event(self, type: RHover, *args, component: Optional[RHoverComponents] = None) -> Self:
+	def set_hover_event(self, *args, component: Optional[RHoverComponents] = None) -> Self:
 		if component is not None:
-			self.__hover_event = _HoverEvent(type, component)
+			_hover_type = RHover.show_text
+			if isinstance(component, RHoverEntity):
+				_hover_type = RHover.show_entity
+			if isinstance(component, RHoverItem):
+				_hover_type = RHover.show_item
+			self.__hover_event = _HoverEvent(_hover_type, component)
 		else:
-			self.__hover_event = _HoverEvent(type, list(args))
+			self.__hover_event = _HoverEvent(RHover.show_text, list(args))
 		return self
 
 	@override
 	def set_hover_text(self, *args) -> Self:
+		for i in args:
+			if isinstance(i, RHoverComponents):
+				raise TypeError('HoverComponents type {!r} not supported here, use `set_hover_event` instead.'.format(i))
 		self.__hover_event = _HoverEvent(RHover.show_text, list(args))
 		return self
 
@@ -512,7 +514,7 @@ class RText(RTextBase):
 		self.__color = text.__color
 		self.__styles = text.__styles.copy()
 		self.__click_event = text.__click_event
-		self.__hover_text_list = text.__hover_text_list.copy()
+		self.__hover_event = text.__hover_event
 
 	@override
 	def copy(self) -> 'RText':
@@ -526,7 +528,7 @@ class RText(RTextBase):
 			'color': self.__color,
 			'styles': self.__styles,
 			'click_event': self.__click_event,
-			'hover_texts': self.__hover_text_list
+			'hover_event': self.__hover_event
 		})
 
 
@@ -566,8 +568,8 @@ class RTextList(RTextBase):
 		return self
 
 	@override
-	def set_hover_event(self, type: RHover, *args, component: Optional[RHoverComponents] = None) -> Self:
-		self.header.set_hover_event(type, *args, component)
+	def set_hover_event(self, *args, component: Optional[RHoverComponents] = None) -> Self:
+		self.header.set_hover_event(*args, component)
 		self.header_empty = False
 		return self
 
