@@ -6,7 +6,10 @@
 __pycache__
 *.pyc
 /venv/
+.venv/
 .mypy_cache
+pyproject.toml
+uv.lock
 
 # pytest
 .pytest_cache/
