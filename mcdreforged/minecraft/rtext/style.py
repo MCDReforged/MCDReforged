@@ -4,6 +4,7 @@ from typing import Union, Optional, Dict, Iterator, TypeVar, Generic
 from colorama import Fore, Style
 from typing_extensions import override
 
+from mcdreforged.utils.serializer import Serializable
 from mcdreforged.utils import class_utils, string_utils
 
 
@@ -345,6 +346,83 @@ __register_rstyle()
 # ------------------------------------------------
 
 
+class __RHoverMeta(__RRegistry['RHover']):
+	pass
+
+
+class RHover(RItem, ABC, metaclass=__RStyleMeta):
+	"""
+	Minecraft hover event actions
+	"""
+
+	show_entity:     'RHover'
+	"""Show an entity's information"""
+
+	show_item:       'RHover'
+	"""Show an item's information"""
+
+	show_text:       'RHover'
+	"""Display texts in hover event"""
+
+
+
+def __register_rhover():
+	def register(name: str):
+		RHover.register_item(name, _RHoverImpl(name))
+
+	register('show_entity')
+	register('show_item')
+	register('show_text')
+
+
+class _RHoverImpl(RHover):
+	def __init__(self, name: str):
+		self.__name = name
+
+	@property
+	@override
+	def name(self) -> str:
+		return self.__name
+
+	def __repr__(self) -> str:
+		return class_utils.represent(self, {'action': self.name})
+
+
+class RHoverComponents(Serializable):
+	"""
+	Internal components in hover event actions (except `show_text`)
+
+	:param id: Generic id attribute for components
+	"""
+	id: str
+
+
+class RHoverEntity(RHoverComponents, Serializable):
+	"""
+	Component for `show_entity` hover event action.
+
+	:param name: Set display name of the target entity
+	:param uuid: UUID of the target entity, format requirements see MinecraftWiki plz.
+	"""
+	name: str
+	uuid: str  # uuid of the target entity, format requirements see MinecraftWiki plz.
+
+
+class RHoverItem(RHoverComponents, Serializable):
+	"""
+	Component for `show_item` hover event action.
+
+	:param count: Optional, the number of the target item.
+		Due to it's not displayed actually, so set default to 1.
+	:param components: Optional, receive extra item components by a custom dict object.
+	"""
+	count: Optional[int] = 1  # seems useless because it can't be displayed in hover event, but available.
+	components: Optional[dict] = None  # Extra item info, can be empty.
+
+
+__register_rhover()
+
+
 class __RActionMeta(__RRegistry['RAction']):
 	pass
 
@@ -419,4 +497,3 @@ class _RActionImpl(RAction):
 
 
 __register_raction()
-

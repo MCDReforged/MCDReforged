@@ -4,7 +4,7 @@ from typing import Union, Iterable, Optional, List, Callable
 
 from typing_extensions import Self, override, Unpack
 
-from mcdreforged.minecraft.rtext.style import RColor, RStyle, RAction
+from mcdreforged.minecraft.rtext.style import RColor, RStyle, RAction, RHoverComponents
 from mcdreforged.minecraft.rtext.text import RTextBase, RText
 from mcdreforged.translation.functions import TranslateFunc
 from mcdreforged.utils import translation_utils, class_utils, function_utils
@@ -145,6 +145,12 @@ class RTextMCDRTranslation(RTextBase):
 		def set_hover_text(rt: RTextBase):
 			return rt.set_hover_text(*args)
 		self.__post_process.append(set_hover_text)
+		return self
+	@override
+	def set_hover_event(self, *args, component: Optional[RHoverComponents] = None) -> Self:
+		def set_hover_event(rt: RTextBase):
+			return rt.set_hover_event(*args, component=component)
+		self.__post_process.append(set_hover_event)
 		return self
 
 	def __repr__(self) -> str:
