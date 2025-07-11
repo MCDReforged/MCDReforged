@@ -120,9 +120,10 @@ class RTextBase(ABC):
 
 		Method :meth:`h` is the short form of :meth:`set_hover_event`
 
-		:param component: The component of `RHover.show_entity` or `RHover.show_item`
-		:param args: The elements be used to create a :class:`RHover` instance.
-			Especially, if :param type: is `RHover.show_text`, then the elements will be used to create a :class:`RTextList` instance, and be used as the actual hover text
+		:param args: The elements be used to create a :class:`RTextList` instance.
+			Will be ignored if component is a valid :class:`RHoverComponents`.
+			The :class:`RTextList` instance is used as the actual hover text.
+		:param component: Require a :class:`RHoverComponents`, the component of `RHover.show_entity` or `RHover.show_item`
 		:return: The text component itself
 		"""
 		raise NotImplementedError()
@@ -130,7 +131,7 @@ class RTextBase(ABC):
 	@abstractmethod
 	def set_hover_text(self, *args) -> Self:
 		"""
-		Set the hover text, actually call `set_hover_event` with :param type: is set to `RHover.show_text`
+		Set the hover text, actually call `set_hover_event` with no hover components
 
 		:param args: The elements be used to create a :class:`RTextList` instance.
 			The :class:`RTextList` instance is used as the actual hover text
