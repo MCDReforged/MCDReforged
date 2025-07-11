@@ -354,6 +354,7 @@ class RHover(RItem, ABC, metaclass=__RStyleMeta):
 	"""
 	Minecraft hover event actions
 	"""
+
 	show_entity:     'RHover'
 	"""Show an entity's information"""
 
