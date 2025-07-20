@@ -545,7 +545,7 @@ class MCDReforgedServer:
 		:raise _ServerProcessStopped: The server has stopped
 		:raise _ReceiveDecodeError: Decode error
 		"""
-		so = self.process_manager.read()
+		so = self.process_manager.read_line()
 		if so is None:
 			process_exit_future = self.process_manager.get_wait_future()
 			for i in range(core_constant.WAIT_TIME_AFTER_SERVER_STDOUT_END_SEC):

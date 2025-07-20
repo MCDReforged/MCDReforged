@@ -127,7 +127,7 @@ class ServerProcessManager:
 		proc_future: 'cf.Future[asyncio.subprocess.Process]' = cf.Future()
 		self.__current_process = do_start()
 
-	def read(self) -> Optional[ServerOutput]:
+	def read_line(self) -> Optional[ServerOutput]:
 		so = self.__output_queue.get()
 		if so is _SERVER_OUTPUT_EOF_SENTINEL:
 			self.__output_queue.put(so)
