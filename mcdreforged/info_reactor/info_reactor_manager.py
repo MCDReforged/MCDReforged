@@ -69,7 +69,8 @@ class InfoReactorManager:
 			self.mcdr_server.send(info.content)
 
 	def put_info(self, info: Info):
-		info.attach_mcdr_server(self.mcdr_server)
+		# noinspection PyProtectedMember
+		info._attach_and_finalize(self.mcdr_server)
 
 		for ifh in self.__info_filter_holders:
 			if ifh.filter.filter_server_info(info) is False:

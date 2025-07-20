@@ -1,12 +1,12 @@
 """
 Info and InfoSource
 """
+import dataclasses
+import threading
 from enum import Enum
 from typing import TYPE_CHECKING, Optional
 
-from mcdreforged.command.command_source import ConsoleCommandSource, PlayerCommandSource, \
-	InfoCommandSource
-from mcdreforged.utils import class_utils
+from mcdreforged.command.command_source import ConsoleCommandSource, PlayerCommandSource, InfoCommandSource
 from mcdreforged.utils.exception import IllegalStateError, IllegalCallError
 
 if TYPE_CHECKING:
@@ -26,85 +26,76 @@ class InfoSource(int, Enum):
 	"""From input from console"""
 
 
+class _InfoIdCounter:
+	lock = threading.Lock()
+	counter = 0
+
+	@classmethod
+	def acquire(cls) -> int:
+		with cls.lock:
+			ret = cls.counter
+			cls.counter += 1
+		return ret
+
+
+@dataclasses.dataclass
+class _InfoControlData:
+	mcdr_server: 'MCDReforgedServer'
+	command_source: InfoCommandSource
+	should_send_to_server: bool
+
+
+@dataclasses.dataclass
 class Info:
 	"""
 	An :class:`Info` instance contains the parsed result from the server or from the console
 	"""
-	__id_counter = 0
 
-	def __init__(self, source: InfoSource, raw_content: str):
-		self.id: int = Info.__id_counter
-		"""A monotonously increasing unique id"""
+	source: InfoSource
+	"""
+	A int (actually :class:`InfoSource`, a subclass of int) representing the the type of the info
 
-		Info.__id_counter += 1
-		self.__mcdr_server: Optional['MCDReforgedServer'] = None
-		self.__send_to_server = True
-		self.__command_source = None
+	For info from the server, its value is ``0``
 
-		# -----------------
-		#   Public fields
-		# -----------------
+	For info from the console, its value is ``1``
 
-		self.hour: Optional[int] = None
-		"""Time information from the parsed text - hour"""
-		self.min: Optional[int] = None
-		"""Time information from the parsed text - minute"""
-		self.sec: Optional[int] = None
-		"""Time information from the parsed text - second"""
+	See :class:`InfoSource` for all possible values
+	"""
 
-		self.raw_content: str = raw_content
-		"""
-		Very raw unparsed content from the server stdout.
+	raw_content: str
+	"""
+	Very raw unparsed content from the server stdout.
 
-		It's also the content to be echoed to the stdout
-		"""
+	It's also the content to be echoed to the stdout
+	"""
 
-		self.content: Optional[str] = None
-		"""
-		The parsed message text
-		
-		If the text is sent by a player it will be what the player said.
-		Otherwise it will be the content that removes stuffs like timestamp or thread name
-		"""
+	id: int = dataclasses.field(default_factory=_InfoIdCounter.acquire)
+	"""A monotonously increasing unique id"""
 
-		self.__player: Optional[str] = None  # See the player property
+	hour: Optional[int] = None
+	"""Time information from the parsed text - hour"""
+	min: Optional[int] = None
+	"""Time information from the parsed text - minute"""
+	sec: Optional[int] = None
+	"""Time information from the parsed text - second"""
 
-		self.source: InfoSource = source
-		"""
-		A int (actually :class:`InfoSource`, a subclass of int) representing the the type of the info
+	content: Optional[str] = None
+	"""
+	The parsed message text
 
-		For info from the server, its value is ``0``
-		
-		For info from the console, its value is ``1``
-		
-		See :class:`InfoSource` for all possible values
-		"""
+	If the text is sent by a player it will be what the player said.
+	Otherwise it will be the content that removes stuffs like timestamp or thread name
+	"""
 
-		self.logging_level: Optional[str] = None
-		"""The logging level of the server's stdout, such as ``"INFO"`` or ``"WARN"``"""
+	player: Optional[str] = None
+	"""
+	The name of the player
 
-		# -----------------
-		#      Caches
-		# -----------------
-		self.__is_user: bool = False
-		self.__update_cache()
+	If it's not sent by a player the value will be None
+	"""
 
-	def __update_cache(self):
-		self.__is_user = self.is_from_console or self.is_player
-
-	@property
-	def player(self) -> Optional[str]:
-		"""
-		The name of the player
-
-		If it's not sent by a player the value will be None
-		"""
-		return self.__player
-
-	@player.setter
-	def player(self, player: str):
-		self.__player = player
-		self.__update_cache()
+	logging_level: Optional[str] = None
+	"""The logging level of the server's stdout, such as ``"INFO"`` or ``"WARN"``"""
 
 	@property
 	def is_from_console(self) -> bool:
@@ -132,31 +123,13 @@ class Info:
 		"""
 		If the source is from a user, i.e. if the source is from the console or from a player in the server
 		"""
-		return self.__is_user
-
-	# --------------
-	#      API
-	# --------------
-
-	def __assert_attached(self):
-		if self.__mcdr_server is None:
-			raise IllegalStateError('MCDR server is not attached to this Info instance yet')
-
-	def attach_mcdr_server(self, mcdr_server: 'MCDReforgedServer'):
-		"""
-		**Not public API**
-
-		:meta private:
-		"""
-		if self.__mcdr_server is not None and self.__mcdr_server is not mcdr_server:
-			raise IllegalStateError('An Info instance can only attach one MCDR server')
-		self.__mcdr_server = mcdr_server
+		return self.is_from_console or self.is_player
 
 	def get_server(self) -> 'ServerInterface':
 		"""
 		Return the server interface instance
 		"""
-		return self.__mcdr_server.basic_server_interface
+		return self.__icd.mcdr_server.basic_server_interface
 
 	def get_command_source(self) -> Optional[InfoCommandSource]:
 		"""
@@ -167,13 +140,7 @@ class Info:
 
 		:return: The command source instance, or None if it can't extract a command source
 		"""
-		self.__assert_attached()
-		if self.__command_source is None:
-			if self.is_from_console:
-				self.__command_source = ConsoleCommandSource(self.__mcdr_server, self)
-			elif self.is_player:
-				self.__command_source = PlayerCommandSource(self.__mcdr_server, self, self.player)
-		return self.__command_source
+		return self.__icd.command_source
 
 	def to_command_source(self) -> InfoCommandSource:
 		"""
@@ -192,31 +159,39 @@ class Info:
 		Representing if MCDR should send the content to the standard input stream of the server
 		if this info is input from the console
 		"""
-		return self.__send_to_server
+		return self.__icd.should_send_to_server if self.__control_data else True
 
 	def cancel_send_to_server(self) -> None:
 		"""
 		Prevent this info from being sent to the standard input stream of the server
 		"""
-		self.__send_to_server = False
+		self.__icd.should_send_to_server = False
 
-	# --------------------------------
-	#   Formatting and Magic methods
-	# --------------------------------
+	# -----------------------
+	#      Non-API Below
+	# -----------------------
 
-	def __repr__(self):
-		return class_utils.represent(self)
+	__control_data: Optional[_InfoControlData] = dataclasses.field(default=None, repr=False, compare=False)
 
-	def __deepcopy__(self, memo: dict):
+	@property
+	def __icd(self) -> _InfoControlData:
+		if self.__control_data is None:
+			raise IllegalStateError('This info instance has not been finalized, the API you called is not available yet')
+		return self.__control_data
+
+	def _attach_and_finalize(self, mcdr_server: 'MCDReforgedServer'):
 		"""
-		Just don't copy the mcdr_server instance
+		**Not public API**
 		"""
-		existed = memo.get(self)
-		if existed is not None:
-			return existed
-		memo[self] = dupe = Info(self.source, self.raw_content)
-		dupe.hour, dupe.min, dupe.sec = self.hour, self.min, self.sec
-		dupe.content = self.content
-		dupe.player = self.player
-		dupe.logging_level = self.logging_level
-		return dupe
+		def create_command_source() -> Optional[InfoCommandSource]:
+			if self.is_from_console:
+				return ConsoleCommandSource(mcdr_server, self)
+			elif self.is_player:
+				return PlayerCommandSource(mcdr_server, self, self.player)
+			return None
+
+		self.__control_data = _InfoControlData(
+			mcdr_server=mcdr_server,
+			command_source=create_command_source(),
+			should_send_to_server=True,
+		)
