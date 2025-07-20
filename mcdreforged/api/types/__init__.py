@@ -4,7 +4,7 @@ Type hints are always nice to have
 from mcdreforged.command.command_source import CommandSource, ConsoleCommandSource, PlayerCommandSource, \
 	InfoCommandSource, PluginCommandSource
 from mcdreforged.handler.server_handler import ServerHandler
-from mcdreforged.info_reactor.info import Info
+from mcdreforged.info_reactor.info import Info, InfoSource
 from mcdreforged.info_reactor.info_filter import InfoFilter
 from mcdreforged.info_reactor.server_information import ServerInformation
 from mcdreforged.logging.logger import MCDReforgedLogger
@@ -22,7 +22,8 @@ __all__ = [
 	'ServerInterface', 'PluginServerInterface',
 
 	# Info
-	'Info', 'InfoFilter',
+	'Info', 'InfoSource',
+	'InfoFilter',
 
 	# Server Handler,
 	'ServerHandler',
