@@ -9,6 +9,10 @@ Info
 .. autoclass:: mcdreforged.info_reactor.info.Info
     :members:
 
+.. autoclass:: mcdreforged.info_reactor.info.InfoActionFlag
+    :show-inheritance:
+    :members:
+
 .. autoclass:: mcdreforged.info_reactor.info.InfoSource
     :show-inheritance:
     :members:

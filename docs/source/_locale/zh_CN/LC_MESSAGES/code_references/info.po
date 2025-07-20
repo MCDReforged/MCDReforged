@@ -3,12 +3,12 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-30 20:17+0800\n"
+"POT-Creation-Date: 2025-07-21 02:47+0800\n"
 "PO-Revision-Date: 2021-01-22 14:26+0000\n"
 "Last-Translator: \n"
 "Language: zh_CN\n"
 "Language-Team: Chinese Simplified\n"
-"Plural-Forms: nplurals=1; plural=0\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -28,41 +28,6 @@ msgid ""
 "from the console"
 msgstr "一个 :class:`Info` 信息对象包含了从服务器或控制台解析的结果"
 
-#: ../../docstring mcdreforged.info_reactor.info.Info.id:1 of
-msgid "A monotonously increasing unique id"
-msgstr "一个单调递增的唯一 ID"
-
-#: ../../docstring mcdreforged.info_reactor.info.Info.hour:1 of
-msgid "Time information from the parsed text - hour"
-msgstr "来自被解析文本的时间信息 - 小时"
-
-#: ../../docstring mcdreforged.info_reactor.info.Info.min:1 of
-msgid "Time information from the parsed text - minute"
-msgstr "来自被解析文本的时间信息 - 分钟"
-
-#: ../../docstring mcdreforged.info_reactor.info.Info.sec:1 of
-msgid "Time information from the parsed text - second"
-msgstr "来自被解析文本的时间信息 - 秒"
-
-#: ../../docstring mcdreforged.info_reactor.info.Info.raw_content:1 of
-msgid "Very raw unparsed content from the server stdout."
-msgstr "服务器标准输出中未解析的原始内容"
-
-#: ../../docstring mcdreforged.info_reactor.info.Info.raw_content:3 of
-msgid "It's also the content to be echoed to the stdout"
-msgstr "它也是将要回显到标准输出的内容"
-
-#: ../../docstring mcdreforged.info_reactor.info.Info.content:1 of
-msgid "The parsed message text"
-msgstr "解析完毕的信息文本"
-
-#: ../../docstring mcdreforged.info_reactor.info.Info.content:3 of
-msgid ""
-"If the text is sent by a player it will be what the player said. "
-"Otherwise it will be the content that removes stuffs like timestamp or "
-"thread name"
-msgstr "如果该信息是玩家的聊天信息，则其值为玩家的聊天内容。否则其值为除去时间/线程名等信息后的内容"
-
 #: ../../docstring mcdreforged.info_reactor.info.Info.source:1 of
 msgid ""
 "A int (actually :class:`InfoSource`, a subclass of int) representing the "
@@ -81,19 +46,65 @@ msgstr "若来自控制台输入，则为 ``1``"
 msgid "See :class:`InfoSource` for all possible values"
 msgstr "见 :class:`InfoSource` 以了解所有可能的取值"
 
+#: ../../docstring mcdreforged.info_reactor.info.Info.raw_content:1 of
+msgid "Very raw unparsed content from the server stdout."
+msgstr "服务器标准输出中未解析的原始内容"
+
+#: ../../docstring mcdreforged.info_reactor.info.Info.raw_content:3 of
+msgid "It's also the content to be echoed to the stdout"
+msgstr "它也是将要回显到标准输出的内容"
+
+#: ../../docstring mcdreforged.info_reactor.info.Info.id:1 of
+msgid "A monotonously increasing unique id"
+msgstr "一个单调递增的唯一 ID"
+
+#: ../../docstring mcdreforged.info_reactor.info.Info.hour:1 of
+msgid "Time information from the parsed text - hour"
+msgstr "来自被解析文本的时间信息 - 小时"
+
+#: ../../docstring mcdreforged.info_reactor.info.Info.min:1 of
+msgid "Time information from the parsed text - minute"
+msgstr "来自被解析文本的时间信息 - 分钟"
+
+#: ../../docstring mcdreforged.info_reactor.info.Info.sec:1 of
+msgid "Time information from the parsed text - second"
+msgstr "来自被解析文本的时间信息 - 秒"
+
+#: ../../docstring mcdreforged.info_reactor.info.Info.content:1 of
+msgid "The parsed message text"
+msgstr "解析完毕的信息文本"
+
+#: ../../docstring mcdreforged.info_reactor.info.Info.content:3 of
+msgid ""
+"If the text is sent by a player it will be what the player said. "
+"Otherwise it will be the content that removes stuffs like timestamp or "
+"thread name"
+msgstr "如果该信息是玩家的聊天信息，则其值为玩家的聊天内容。否则其值为除去时间/线程名等信息后的内容"
+
+#: ../../docstring mcdreforged.info_reactor.info.Info.player:1 of
+msgid "The name of the player"
+msgstr "玩家名称"
+
+#: ../../docstring mcdreforged.info_reactor.info.Info.player:3 of
+msgid "If it's not sent by a player the value will be None"
+msgstr "若信息不是来自玩家的聊天信息，则为 None"
+
 #: ../../docstring mcdreforged.info_reactor.info.Info.logging_level:1 of
 msgid ""
 "The logging level of the server's stdout, such as ``\"INFO\"`` or "
 "``\"WARN\"``"
 msgstr "该信息的 logging 级别，例如 ``\"INFO\"`` 或者 ``\"WARN\"``"
 
-#: mcdreforged.info_reactor.info.Info.player:1 of
-msgid "The name of the player"
-msgstr "玩家名称"
+#: ../../docstring mcdreforged.info_reactor.info.Info.action_flag:1
+#: mcdreforged.info_reactor.info.InfoActionFlag:1 of
+msgid ""
+"A flag variable controlling what actions MCDR will do next with this Info"
+" object"
+msgstr "一个用于控制 MCDR 接下来将对这个 Info 对象执行的操作的 flag 变量"
 
-#: mcdreforged.info_reactor.info.Info.player:3 of
-msgid "If it's not sent by a player the value will be None"
-msgstr "若信息不是来自玩家的聊天信息，则为 None"
+#: ../../docstring mcdreforged.info_reactor.info.Info.action_flag:3 of
+msgid "class :class:`InfoActionFlag`"
+msgstr "类 :class:`InfoActionFlag`"
 
 #: mcdreforged.info_reactor.info.Info.is_from_console:1 of
 msgid ""
@@ -137,8 +148,7 @@ msgid ""
 "info is from a player in the server"
 msgstr ":class:`~mcdreforged.command.command_source.PlayerCommandSource`，如果该信息来自服务端中的玩家"
 
-#: mcdreforged.info_reactor.info.Info.get_command_source
-#: mcdreforged.info_reactor.info_filter.InfoFilter.filter_server_info of
+#: ../code_references/info.rst
 msgid "Returns"
 msgstr "返回"
 
@@ -155,7 +165,7 @@ msgstr ""
 "与方法 :meth:`get_command_source` 一样，只不过它会在无法提取命令源时抛出一个 "
 ":class:`~mcdreforged.utils.exception.IllegalCallError`"
 
-#: mcdreforged.info_reactor.info.Info.to_command_source of
+#: ../code_references/info.rst
 msgid "Raises"
 msgstr "抛出"
 
@@ -175,6 +185,38 @@ msgid ""
 "server"
 msgstr "将该信息取消发送至服务端标准输入流"
 
+#: mcdreforged.info_reactor.info.InfoActionFlag:1 of
+msgid "Bases: :py:class:`~enum.Flag`"
+msgstr ""
+
+#: ../../docstring
+#: mcdreforged.info_reactor.info.InfoActionFlag.send_to_server:1 of
+msgid "Send the content from console stdin to server stdin"
+msgstr "将控制台标准输入内容发送到服务器的标准输入"
+
+#: ../../docstring
+#: mcdreforged.info_reactor.info.InfoActionFlag.print_to_console:1 of
+msgid "Print the server output to the console stdout"
+msgstr "将服务器输出内容回显到控制台标准输出"
+
+#: ../../docstring mcdreforged.info_reactor.info.InfoActionFlag.process:1 of
+msgid "Allow subsequent info reactor processing, such as plugin event dispatching"
+msgstr "允许后续的 Info 响应器处理操作，如插件事件的分发"
+
+#: mcdreforged.info_reactor.info.InfoActionFlag.default:1 of
+msgid "The default flag set that allows all actions to be performed"
+msgstr "默认的 flag set，允许后续所有操作"
+
+#: mcdreforged.info_reactor.info.InfoActionFlag.hidden:1 of
+msgid ""
+"Do not echo the server output to the console, perform the subsequent "
+"actions silently"
+msgstr "不要将服务器输出回显到控制台，静默执行后续操作"
+
+#: mcdreforged.info_reactor.info.InfoActionFlag.discarded:1 of
+msgid "Discard the info object right now, no more future processing"
+msgstr "立即丢弃该信息对象，不再进行后续处理"
+
 #: mcdreforged.info_reactor.info.InfoSource:1 of
 msgid "Bases: :py:class:`int`, :py:class:`~enum.Enum`"
 msgstr ""
@@ -191,7 +233,7 @@ msgstr "来自服务端的标准输出流"
 msgid "From input from console"
 msgstr "来自控制台的输入"
 
-#: ../code_references/info.rst:18
+#: ../code_references/info.rst:22
 msgid "Info Reactor"
 msgstr "信息响应器"
 
@@ -215,8 +257,7 @@ msgstr "对一个 :class:`~mcdreforged.info_reactor.info.Info` 对象做出响�
 msgid "It will be invoked on the task executor thread"
 msgstr "它将在任务执行者 (task executor) 线程被调用"
 
-#: mcdreforged.info_reactor.abstract_info_reactor.AbstractInfoReactor.react
-#: mcdreforged.info_reactor.info_filter.InfoFilter.filter_server_info of
+#: ../code_references/info.rst
 msgid "Parameters"
 msgstr "参数"
 
@@ -235,7 +276,7 @@ msgstr "在服务端启动时将被调用"
 msgid "Gets invoked when the server stops"
 msgstr "在服务端停止的时候将被调用"
 
-#: ../code_references/info.rst:25
+#: ../code_references/info.rst:29
 msgid "Info Filter"
 msgstr "信息过滤器"
 
@@ -267,10 +308,33 @@ msgid ""
 msgstr "该函数将在 MCDR 从服务器输出解析出 :class:`~mcdreforged.info_reactor.info.Info` 对象后立即调用"
 
 #: mcdreforged.info_reactor.info_filter.InfoFilter.filter_server_info:12 of
+msgid ""
+"To precisely control what actions MCDR should take next for the info "
+"object, you can edit its "
+":attr:`~<mcdreforged.info_reactor.info.Info.action_flag>` in this "
+"function. Returning ``False`` is actually equivalent to::"
+msgstr "要精确控制 MCDR 接下来应对该 info 对象执行哪些操作，"
+"可以在此函数中修改其 :attr:`~<mcdreforged.info_reactor.info.Info.action_flag>` 属性。"
+"返回 ``False`` 实际上等同于::"
+
+#: mcdreforged.info_reactor.info_filter.InfoFilter.filter_server_info:18 of
+msgid "class :class:`~mcdreforged.info_reactor.info.InfoActionFlag`"
+msgstr ":class:`~mcdreforged.info_reactor.info.InfoActionFlag` 类"
+
+#: mcdreforged.info_reactor.info_filter.InfoFilter.filter_server_info:20 of
 msgid "The info object, which is parsed from server output, to check"
 msgstr "用于检查的信息对象"
 
-#: mcdreforged.info_reactor.info_filter.InfoFilter.filter_server_info:13 of
-msgid "True: do nothing; False: discard the info object"
+#: mcdreforged.info_reactor.info_filter.InfoFilter.filter_server_info:21 of
+msgid "False: discard the info object; other: do nothing"
 msgstr "True：什么都不做；False：丢弃这个对象"
+
+#~ msgid ""
+#~ "To precisely control what actions MCDR"
+#~ " should do next for the info "
+#~ "object, you can edit its "
+#~ ":attr:`~<mcdreforged.info_reactor.info.Info.action_flag>` in "
+#~ "this function. Returning ``False`` actually"
+#~ " equals to::"
+#~ msgstr ""
 

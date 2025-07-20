@@ -2,9 +2,11 @@
 Info and InfoSource
 """
 import dataclasses
+import enum
 import threading
-from enum import Enum
 from typing import TYPE_CHECKING, Optional
+
+from typing_extensions import Self
 
 from mcdreforged.command.command_source import ConsoleCommandSource, PlayerCommandSource, InfoCommandSource
 from mcdreforged.utils.exception import IllegalStateError, IllegalCallError
@@ -14,7 +16,7 @@ if TYPE_CHECKING:
 	from mcdreforged.plugin.si.server_interface import ServerInterface
 
 
-class InfoSource(int, Enum):
+class InfoSource(int, enum.Enum):
 	"""
 	Sources where an :class:`Info` object comes from
 	"""
@@ -38,11 +40,52 @@ class _InfoIdCounter:
 		return ret
 
 
+class InfoActionFlag(enum.Flag):
+	"""
+	A flag variable controlling what actions MCDR will do next with this Info object
+	"""
+
+	send_to_server = enum.auto()
+	"""
+	Send the content from console stdin to server stdin
+	"""
+
+	echo_to_console = enum.auto()
+	"""
+	Print the server output to the console stdout
+	"""
+
+	process = enum.auto()
+	"""
+	Allow subsequent info reactor processing, such as plugin event dispatching
+	"""
+
+	@classmethod
+	def default(cls) -> Self:
+		"""
+		The default flag set that allows all actions to be performed
+		"""
+		return cls.send_to_server | cls.echo_to_console | cls.process
+
+	@classmethod
+	def hidden(cls) -> Self:
+		"""
+		Do not echo the server output to the console, perform the subsequent actions silently
+		"""
+		return cls.send_to_server | cls.process
+
+	@classmethod
+	def discarded(cls) -> Self:
+		"""
+		Discard the info object right now, no more future processing
+		"""
+		return cls(0)
+
+
 @dataclasses.dataclass
 class _InfoControlData:
 	mcdr_server: 'MCDReforgedServer'
 	command_source: InfoCommandSource
-	should_send_to_server: bool
 
 
 @dataclasses.dataclass
@@ -96,6 +139,13 @@ class Info:
 
 	logging_level: Optional[str] = None
 	"""The logging level of the server's stdout, such as ``"INFO"`` or ``"WARN"``"""
+
+	action_flag: InfoActionFlag = dataclasses.field(default_factory=InfoActionFlag.default)
+	"""
+	A flag variable controlling what actions MCDR will do next with this Info object
+
+	.. seealso:: class :class:`InfoActionFlag`
+	"""
 
 	@property
 	def is_from_console(self) -> bool:
@@ -159,17 +209,17 @@ class Info:
 		Representing if MCDR should send the content to the standard input stream of the server
 		if this info is input from the console
 		"""
-		return self.__icd.should_send_to_server if self.__control_data else True
+		return InfoActionFlag.send_to_server in self.action_flag
 
 	def cancel_send_to_server(self) -> None:
 		"""
 		Prevent this info from being sent to the standard input stream of the server
 		"""
-		self.__icd.should_send_to_server = False
+		self.action_flag &= ~InfoActionFlag.send_to_server
 
-	# -----------------------
-	#      Non-API Below
-	# -----------------------
+	# -------------------------------
+	#      Non-API Section Below
+	# -------------------------------
 
 	__control_data: Optional[_InfoControlData] = dataclasses.field(default=None, repr=False, compare=False)
 
@@ -193,5 +243,4 @@ class Info:
 		self.__control_data = _InfoControlData(
 			mcdr_server=mcdr_server,
 			command_source=create_command_source(),
-			should_send_to_server=True,
 		)
