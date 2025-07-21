@@ -193,31 +193,31 @@ class RTextBase(ABC):
 		"""
 		args = list(args)
 		kwargs = kwargs.copy()
-		counter = 0
+		placeholder_counter = 0
 		rtext_elements: List[Tuple[str, RTextBase]] = []
 
-		def get():
-			nonlocal counter
-			rv = '@@MCDR#RText.format#Placeholder#{}@@'.format(counter)
-			counter += 1
-			return rv
+		def acquire_placeholder():
+			nonlocal placeholder_counter
+			ph = '@@MCDR#RText.FMT#PH#{}@@'.format(placeholder_counter)
+			placeholder_counter += 1
+			return ph
 
 		for i, arg in enumerate(args):
 			if isinstance(arg, RTextBase):
-				placeholder = get()
+				placeholder = acquire_placeholder()
 				rtext_elements.append((placeholder, arg))
 				args[i] = placeholder
 		for key, value in kwargs.items():
 			if isinstance(value, RTextBase):
-				placeholder = get()
+				placeholder = acquire_placeholder()
 				rtext_elements.append((placeholder, value))
 				kwargs[key] = placeholder
 
-		texts = [fmt.format(*args, **kwargs)]
+		texts: List[Union[str, RTextBase]] = [fmt.format(*args, **kwargs)]
 		for placeholder, rtext in rtext_elements:
-			new_texts = []
+			new_texts: List[Union[str, RTextBase]] = []
 			for text in texts:
-				processed_text = []
+				processed_text: List[Union[str, RTextBase]] = []
 				if isinstance(text, str):
 					for j, ele in enumerate(text.split(placeholder)):
 						if j > 0:
