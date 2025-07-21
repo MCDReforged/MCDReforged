@@ -222,7 +222,8 @@ class RTextBase(ABC):
 					for j, ele in enumerate(text.split(placeholder)):
 						if j > 0:
 							processed_text.append(rtext)
-						processed_text.append(ele)
+						if len(ele) > 0:
+							processed_text.append(ele)
 				else:
 					processed_text.append(text)
 				new_texts.extend(processed_text)
