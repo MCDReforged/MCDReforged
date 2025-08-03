@@ -4,7 +4,7 @@ from enum import Enum
 from pathlib import Path
 from typing import List, TYPE_CHECKING, Callable, Union
 
-from mcdreforged.minecraft.rtext.style import RAction
+from mcdreforged.minecraft.rtext.click_event import RAction
 from mcdreforged.minecraft.rtext.text import RTextList, RTextBase
 
 if TYPE_CHECKING:

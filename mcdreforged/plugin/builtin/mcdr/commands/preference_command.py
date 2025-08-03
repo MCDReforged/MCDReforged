@@ -6,7 +6,8 @@ from mcdreforged.command.builder.exception import RequirementNotMet
 from mcdreforged.command.builder.nodes.arguments import QuotableText
 from mcdreforged.command.builder.nodes.basic import Literal, ArgumentNode
 from mcdreforged.command.command_source import CommandSource
-from mcdreforged.minecraft.rtext.style import RColor, RStyle, RAction
+from mcdreforged.minecraft.rtext.click_event import RAction
+from mcdreforged.minecraft.rtext.style import RColor, RStyle
 from mcdreforged.minecraft.rtext.text import RTextList, RTextBase, RText
 from mcdreforged.plugin.builtin.mcdr.commands.sub_command import SubCommand
 from mcdreforged.preference.preference_manager import PreferenceItem, PreferenceManager

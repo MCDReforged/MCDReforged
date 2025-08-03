@@ -1,7 +1,8 @@
 from pathlib import Path
 from typing import Any, Union, overload
 
-from mcdreforged.minecraft.rtext.style import RColor, RAction, RStyle
+from mcdreforged.minecraft.rtext.click_event import RAction
+from mcdreforged.minecraft.rtext.style import RColor, RStyle
 from mcdreforged.minecraft.rtext.text import RTextBase, RText, RTextList
 from mcdreforged.plugin.installer.dependency_resolver import PluginCandidate
 from mcdreforged.plugin.meta.version import Version

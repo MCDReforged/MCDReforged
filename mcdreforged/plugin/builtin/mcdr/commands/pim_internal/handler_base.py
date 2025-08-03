@@ -5,7 +5,7 @@ from mcdreforged.command.builder.common import CommandContext
 from mcdreforged.command.command_source import CommandSource
 from mcdreforged.logging.debug_option import DebugOption
 from mcdreforged.logging.logger import MCDReforgedLogger
-from mcdreforged.minecraft.rtext.style import RAction
+from mcdreforged.minecraft.rtext.click_event import RAction
 from mcdreforged.minecraft.rtext.text import RTextBase
 from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.local_meta_registry import LocalMetaRegistry
 from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.texts import Texts

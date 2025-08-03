@@ -8,7 +8,8 @@ from typing_extensions import override
 from mcdreforged.command.builder.nodes.arguments import QuotableText, Text
 from mcdreforged.command.builder.nodes.basic import Literal
 from mcdreforged.command.command_source import CommandSource
-from mcdreforged.minecraft.rtext.style import RColor, RStyle, RAction
+from mcdreforged.minecraft.rtext.click_event import RAction
+from mcdreforged.minecraft.rtext.style import RColor, RStyle
 from mcdreforged.minecraft.rtext.text import RTextList, RText
 from mcdreforged.permission.permission_level import PermissionLevel
 from mcdreforged.plugin.builtin.mcdr.commands.plugin_command_pim import PluginCommandPimExtension

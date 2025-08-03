@@ -12,7 +12,8 @@ from typing_extensions import override
 
 from mcdreforged.constants import core_constant
 from mcdreforged.executor.background_thread_executor import BackgroundThreadExecutor
-from mcdreforged.minecraft.rtext.style import RAction, RColor, RStyle
+from mcdreforged.minecraft.rtext.click_event import RAction
+from mcdreforged.minecraft.rtext.style import RColor, RStyle
 from mcdreforged.minecraft.rtext.text import RText, RTextBase
 from mcdreforged.plugin.meta.version import Version
 from mcdreforged.utils import request_utils, thread_utils

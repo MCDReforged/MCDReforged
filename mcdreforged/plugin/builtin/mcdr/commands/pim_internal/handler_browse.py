@@ -2,7 +2,8 @@ from typing_extensions import override
 
 from mcdreforged.command.builder.common import CommandContext
 from mcdreforged.command.command_source import CommandSource
-from mcdreforged.minecraft.rtext.style import RColor, RAction
+from mcdreforged.minecraft.rtext.click_event import RAction
+from mcdreforged.minecraft.rtext.style import RColor
 from mcdreforged.minecraft.rtext.text import RTextBase, RText, RTextList
 from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.handler_base import PimCommandHandlerBase
 from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.texts import Texts

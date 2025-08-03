@@ -1,10 +1,12 @@
 import threading
 from contextlib import contextmanager
-from typing import Union, Iterable, Optional, List, Callable
+from typing import Union, Iterable, Optional, List, Callable, Any
 
 from typing_extensions import Self, override, Unpack
 
-from mcdreforged.minecraft.rtext.style import RColor, RStyle, RAction
+from mcdreforged.minecraft.rtext.click_event import RClickEvent
+from mcdreforged.minecraft.rtext.hover_event import RHoverEvent
+from mcdreforged.minecraft.rtext.style import RColor, RStyle
 from mcdreforged.minecraft.rtext.text import RTextBase, RText
 from mcdreforged.translation.functions import TranslateFunc
 from mcdreforged.utils import translation_utils, class_utils, function_utils
@@ -37,7 +39,7 @@ class RTextMCDRTranslation(RTextBase):
 		self.args = args
 		self.kwargs = kwargs
 		self.__tr_func: TranslateFunc = function_utils.always(RText(self.translation_key))
-		self.__post_process: List[Callable[[RTextBase], RTextBase]] = []
+		self.__post_process: List[Callable[[RTextBase], Any]] = []
 
 		from mcdreforged.plugin.si.server_interface import ServerInterface
 		server: Optional[ServerInterface] = ServerInterface.get_instance()
@@ -62,7 +64,7 @@ class RTextMCDRTranslation(RTextBase):
 		processed_text = self.__tr_func(self.translation_key, *self.args, **self.kwargs, _mcdr_tr_language=language)
 		processed_text = RTextBase.from_any(processed_text)
 		for process in self.__post_process:
-			processed_text = process(processed_text)
+			process(processed_text)
 		return processed_text
 
 	@classmethod
@@ -134,10 +136,17 @@ class RTextMCDRTranslation(RTextBase):
 		return self
 
 	@override
-	def set_click_event(self, action: RAction, value: str) -> Self:
+	def _set_click_event_direct(self, click_event: RClickEvent) -> Self:
 		def set_click_event(rt: RTextBase):
-			return rt.set_click_event(action, value)
+			return rt._set_click_event_direct(click_event)
 		self.__post_process.append(set_click_event)
+		return self
+
+	@override
+	def set_hover_event(self, hover_event: RHoverEvent) -> Self:
+		def set_hover_event(rt: RTextBase):
+			return rt.set_hover_event(hover_event)
+		self.__post_process.append(set_hover_event)
 		return self
 
 	@override

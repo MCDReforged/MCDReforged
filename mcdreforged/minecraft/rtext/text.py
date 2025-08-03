@@ -1,32 +1,18 @@
 import contextlib
-import enum
 import json
 from abc import ABC, abstractmethod
-from typing import Iterable, List, Union, Optional, Any, Tuple, Set, NamedTuple, Dict
+from typing import Iterable, List, Union, Optional, Any, Tuple, Set, Dict, TypeVar
 
 from colorama import Style
-from typing_extensions import Self, override, TypedDict, NotRequired, Unpack
+from typing_extensions import Self, override, TypedDict, NotRequired, Unpack, final
 
-from mcdreforged.minecraft.rtext.style import RStyle, RColor, RAction, RColorClassic, RColorRGB, RItemClassic
+from mcdreforged.minecraft.rtext.click_event import RClickAction, RClickEvent, _RClickEventSingleValue
+from mcdreforged.minecraft.rtext.hover_event import RHoverEvent, RHoverText
+from mcdreforged.minecraft.rtext.schema import RTextJsonFormat
+from mcdreforged.minecraft.rtext.style import RStyle, RColor, RColorClassic, RColorRGB, RItemClassic
 from mcdreforged.utils import class_utils
 
-
-class RTextJsonFormat(enum.Enum):
-	V_1_7 = enum.auto()  # Minecraft [1.7, 1.21.5)
-	V_1_21_5 = enum.auto()  # Minecraft [1.21.5, ~)
-
-	@classmethod
-	def default(cls) -> Self:
-		return cls.V_1_7
-
-
-_V_1_21_5_RACTION_TO_CLICK_EVENT_VALUE_KEY: Dict[RAction, str] = {
-	RAction.suggest_command: 'command',
-	RAction.run_command: 'command',
-	RAction.open_url: 'url',
-	RAction.open_file: 'path',
-	RAction.copy_to_clipboard: 'value',
-}
+_T = TypeVar('_T')
 
 
 class RTextBase(ABC):
@@ -35,6 +21,9 @@ class RTextBase(ABC):
 	"""
 	class ToJsonKwargs(TypedDict):
 		json_format: NotRequired[RTextJsonFormat]
+
+	class FromJsonKwargs(TypedDict):
+		json_format: NotRequired[Optional[RTextJsonFormat]]  # None means auto-detect
 
 	@abstractmethod
 	def to_json_object(self, **kwargs: Unpack[ToJsonKwargs]) -> Union[dict, list]:
@@ -99,20 +88,34 @@ class RTextBase(ABC):
 		"""
 		raise NotImplementedError()
 
-	@abstractmethod
-	def set_click_event(self, action: RAction, value: str) -> Self:
+	@final
+	def set_click_event(self, action: RClickAction[_RClickEventSingleValue[_T]], value: _T) -> Self:
 		"""
 		Set the click event
-		
+
 		Method :meth:`c` is the short form of :meth:`set_click_event`
 
 		:param action: The type of the action
 		:param value: The string value of the action
 		:return: The text component itself
 		"""
+		event_class = action.event_class
+		if issubclass(event_class, _RClickEventSingleValue):
+			return self._set_click_event_direct(event_class.from_json_value(value))
+		else:
+			raise TypeError('Unsupported action type {}'.format(type(action)))
+
+	@abstractmethod
+	def _set_click_event_direct(self, click_event: RClickEvent) -> Self:
 		raise NotImplementedError()
 
 	@abstractmethod
+	def set_hover_event(self, hover_event: RHoverEvent) -> Self:
+		"""
+		Set the hover event
+		"""
+		raise NotImplementedError()
+
 	def set_hover_text(self, *args) -> Self:
 		"""
 		Set the hover text
@@ -123,9 +126,14 @@ class RTextBase(ABC):
 			The :class:`RTextList` instance is used as the actual hover text
 		:return: The text component itself
 		"""
-		raise NotImplementedError()
+		if len(args) == 1:
+			text = RTextBase.from_any(args[0])
+		else:
+			text = RTextList(*args)
+		self.set_hover_event(RHoverText(text=text))
+		return self
 
-	def c(self, action: RAction, value: str) -> Self:
+	def c(self, action: RClickAction, value: str) -> Self:
 		"""
 		The short form of :meth:`set_click_event`
 		"""
@@ -231,7 +239,55 @@ class RTextBase(ABC):
 		return RTextList(*texts)
 
 	@classmethod
-	def from_json_object(cls, data: Union[str, list, dict]) -> 'RTextBase':
+	def __from_json_list(cls, data: list, json_format: Optional[RTextJsonFormat]) -> 'RTextBase':
+		text = RTextList()
+		if len(data) == 0:
+			return text
+		lst = [cls.from_json_object(item, json_format=json_format) for item in data]
+		if data[0] != '':
+			text.set_header_text(lst[0])
+		text.append(*lst[1:])
+		return text
+
+	@classmethod
+	def __from_json_dict(cls, data: dict, json_format: Optional[RTextJsonFormat]) -> 'RTextBase':
+		text: RTextBase
+		if 'text' in data:
+			text = RText(data['text'])
+		elif 'translate' in data:
+			tr_args = data.get('with', [])
+			text = RTextTranslation(data['translate']).arg(*map(cls.from_json_object, tr_args))
+		else:
+			raise ValueError('No method to create RText from {}'.format(data))
+		if isinstance(siblings := data.get('extra'), list):
+			text_list = RTextList()
+			text_list.set_header_text(text)
+			text_list.append(*map(cls.from_json_object, siblings))
+			text = text_list
+
+		styles: List[RStyle] = []
+		for style in RStyle:
+			if data.get(style.name, False):
+				styles.append(style)
+		text.set_styles(styles)
+
+		if isinstance(color := data.get('color'), str):
+			with contextlib.suppress(ValueError):
+				text.set_color(RColor.from_mc_value(color))
+
+		if json_format is None:
+			json_format = RTextJsonFormat.guess(data)
+		with contextlib.suppress(KeyError):
+			if isinstance(click_event := data[json_format.value.click_event_key], dict):
+				text._set_click_event_direct(RClickEvent.from_json_object(click_event, json_format))
+		with contextlib.suppress(KeyError):
+			if isinstance(hover_event := data[json_format.value.hover_event_key], dict):
+				text.set_hover_event(RHoverEvent.from_json_object(hover_event, json_format))
+
+		return text
+
+	@classmethod
+	def from_json_object(cls, data: Union[str, list, dict], **kwargs: Unpack[FromJsonKwargs]) -> 'RTextBase':
 		"""
 		Convert a json object into a :class:`RText <RTextBase>` component
 
@@ -247,67 +303,22 @@ class RTextBase(ABC):
 
 		.. versionadded:: v2.4.0
 		"""
+		json_format = kwargs.get('json_format')
 		if isinstance(data, str):
 			return cls.from_any(data)
 		if isinstance(data, list):
-			if len(data) == 0:
-				raise ValueError('Empty list')
-			lst = list(map(cls.from_json_object, data))
-			text = RTextList()
-			if data[0] != '':
-				text.set_header_text(lst[0])
-			text.append(*lst[1:])
-			return text
+			return cls.__from_json_list(data, json_format)
 		elif isinstance(data, dict):
-			if 'text' in data:
-				text = RText(data['text'])
-			elif 'translate' in data:
-				if 'with' in data:
-					args = data['with']
-				else:
-					args = []
-				text = RTextTranslation(data['translate']).arg(*map(cls.from_json_object, args))
-			else:
-				raise ValueError('No method to create RText from {}'.format(data))
-			if 'extra' in data:
-				siblings = data['extra']
-				if isinstance(siblings, list):
-					text_list = RTextList()
-					text_list.set_header_text(text)
-					text_list.append(*map(cls.from_json_object, siblings))
-					text = text_list
-			styles = []
-			for style in RStyle:
-				if data.get(style.name, False):
-					styles.append(style)
-			text.set_styles(styles)
-			if 'color' in data:
-				with contextlib.suppress(ValueError):
-					text.set_color(RColor.from_mc_value(data['color']))
-			with contextlib.suppress(KeyError):
-				for click_event_key in ['clickEvent', 'click_event']:
-					if isinstance(click_event := data.get(click_event_key), dict):
-						action: RAction = RAction[click_event['action']]
-						value_key = 'value' if click_event_key == 'clickEvent' else _V_1_21_5_RACTION_TO_CLICK_EVENT_VALUE_KEY[action]
-						text.set_click_event(action, click_event[value_key])
-			with contextlib.suppress(KeyError):
-				hover_event = data.get('hoverEvent', data.get('hover_event'))
-				if isinstance(hover_event, dict) and hover_event['action'] == 'show_text':
-					text.set_hover_text(cls.from_json_object(hover_event['value']))
-			return text
+			return cls.__from_json_dict(data, json_format)
 		else:
 			raise TypeError('Unsupported data {!r}'.format(data))
-
-
-class _ClickEvent(NamedTuple):
-	action: RAction
-	value: str
 
 
 class RText(RTextBase):
 	"""
 	The regular text component class
 	"""
+
 	def __init__(self, text: Any, color: Optional[RColor] = None, styles: Optional[Union[RStyle, Iterable[RStyle]]] = None):
 		"""
 		Create a :class:`RText` object with specific text, optional color and optional style
@@ -317,11 +328,11 @@ class RText(RTextBase):
 		:param styles: Optional, the style of the text. It can be a single :class:`~mcdreforged.minecraft.rtext.style.RStyle`
 			or an iterable of :class:`~mcdreforged.minecraft.rtext.style.RStyle`
 		"""
-		self.__text: str = str(text)
+		self.__text: str = str(text) if type(text) is not str else text
 		self.__color: Optional[RColor] = None
 		self.__styles: Set[RStyle] = set()
-		self.__click_event: Optional[_ClickEvent] = None
-		self.__hover_text_list: list = []
+		self.__click_event: Optional[RClickEvent] = None
+		self.__hover_event: Optional[RHoverEvent] = None
 		if color is not None:
 			self.set_color(color)
 		if styles is not None:
@@ -344,13 +355,13 @@ class RText(RTextBase):
 		return self
 
 	@override
-	def set_click_event(self, action: RAction, value: str) -> Self:
-		self.__click_event = _ClickEvent(action, value)
+	def _set_click_event_direct(self, click_event: RClickEvent) -> Self:
+		self.__click_event = click_event
 		return self
 
 	@override
-	def set_hover_text(self, *args) -> Self:
-		self.__hover_text_list = list(args)
+	def set_hover_event(self, hover_event: RHoverEvent) -> Self:
+		self.__hover_event = hover_event
 		return self
 
 	@override
@@ -363,38 +374,20 @@ class RText(RTextBase):
 			obj[style.name] = True
 		if self.__click_event is not None:
 			if json_format == RTextJsonFormat.V_1_7:
-				obj['clickEvent'] = {
-					'action': self.__click_event.action.name,
-					'value': self.__click_event.value
-				}
+				click_event_key = 'clickEvent'
 			elif json_format == RTextJsonFormat.V_1_21_5:
-				click_event_value_key = _V_1_21_5_RACTION_TO_CLICK_EVENT_VALUE_KEY.get(self.__click_event.action)
-				if click_event_value_key is None:
-					raise ValueError('Unknown click event action {!r}'.format(self.__click_event.action))
-				obj['click_event'] = {
-					'action': self.__click_event.action.name,
-					click_event_value_key: self.__click_event.value
-				}
+				click_event_key = 'click_event'
 			else:
 				raise ValueError('Unknown json_format {!r}'.format(json_format))
-		if len(self.__hover_text_list) > 0:
-			if len(self.__hover_text_list) == 1:
-				hover_value = RTextBase.from_any(self.__hover_text_list[0]).to_json_object()
-			else:
-				hover_value = {
-					'text': '',
-					'extra': RTextList(*self.__hover_text_list).to_json_object(),
-				}
+			obj[click_event_key] = self.__click_event.to_json_object(json_format)
+		if self.__hover_event is not None:
 			if json_format == RTextJsonFormat.V_1_7:
 				hover_event_key = 'hoverEvent'
 			elif json_format == RTextJsonFormat.V_1_21_5:
 				hover_event_key = 'hover_event'
 			else:
 				raise ValueError('Unknown json_format {!r}'.format(json_format))
-			obj[hover_event_key] = {
-				'action': 'show_text',
-				'value': hover_value,
-			}
+			obj[hover_event_key] = self.__hover_event.to_json_object(json_format)
 		return obj
 
 	@override
@@ -442,7 +435,7 @@ class RText(RTextBase):
 		self.__color = text.__color
 		self.__styles = text.__styles.copy()
 		self.__click_event = text.__click_event
-		self.__hover_text_list = text.__hover_text_list.copy()
+		self.__hover_event = text.__hover_event
 
 	@override
 	def copy(self) -> 'RText':
@@ -456,7 +449,7 @@ class RText(RTextBase):
 			'color': self.__color,
 			'styles': self.__styles,
 			'click_event': self.__click_event,
-			'hover_texts': self.__hover_text_list
+			'hover_event': self.__hover_event,
 		})
 
 
@@ -490,14 +483,15 @@ class RTextList(RTextBase):
 		return self
 
 	@override
-	def set_click_event(self, action: RAction, value) -> Self:
-		self.header.set_click_event(action, value)
+	def _set_click_event_direct(self, click_event: RClickEvent) -> Self:
+		# noinspection PyProtectedMember
+		self.header._set_click_event_direct(click_event)
 		self.header_empty = False
 		return self
 
 	@override
-	def set_hover_text(self, *args) -> Self:
-		self.header.set_hover_text(*args)
+	def set_hover_event(self, hover_event: RHoverEvent) -> Self:
+		self.header.set_hover_event(hover_event)
 		self.header_empty = False
 		return self
 
@@ -647,5 +641,5 @@ class RTextTranslation(RText):
 			'color': self.__color,
 			'styles': self.__styles,
 			'click_event': self.__click_event,
-			'hover_texts': self.__hover_text_list
+			'hover_event': self.__hover_event,
 		})

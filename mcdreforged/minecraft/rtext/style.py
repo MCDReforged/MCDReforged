@@ -1,48 +1,14 @@
-from abc import ABC, ABCMeta, abstractmethod
-from typing import Union, Optional, Dict, Iterator, TypeVar, Generic
+from abc import ABC, abstractmethod
+from typing import Union, Optional
 
 from colorama import Fore, Style
 from typing_extensions import override
 
+from mcdreforged.minecraft.rtext._registry import RRegistry, NamedObject
 from mcdreforged.utils import class_utils, string_utils
 
 
-class __NamedObject(ABC):
-	@property
-	@abstractmethod
-	def name(self) -> str:
-		"""
-		The unique identifier used in :class:`__RRegistry`
-		"""
-		raise NotImplementedError()
-
-
-T = TypeVar('T', bound=__NamedObject)
-
-
-class __RRegistry(ABCMeta, Generic[T]):
-	def __init__(cls, *args, **kwargs):
-		super().__init__(*args, **kwargs)
-		cls._registry: Dict[str, T] = {}
-
-	def __iter__(self) -> Iterator[T]:
-		return iter(self._registry.values())
-
-	def __contains__(self, item_name: str) -> bool:
-		return item_name in self._registry
-
-	def __getitem__(self, item_name: str) -> T:
-		return self._registry[item_name]
-
-	def register_item(self, name: str, item: T):
-		from typing import get_type_hints
-		assert name in get_type_hints(self), 'registering unknown item {} for class {} ({})'.format(name, self, type(self))
-
-		self._registry[item.name] = item
-		setattr(self, item.name, item)
-
-
-class RItem(__NamedObject):
+class RItem(NamedObject):
 	"""
 	A general Minecraft text style item
 	"""
@@ -102,7 +68,7 @@ class RItemClassic(RItem, ABC):
 # ------------------------------------------------
 
 
-class __RColorMeta(__RRegistry['RColor']):
+class __RColorMeta(RRegistry['RColor']):
 	pass
 
 
@@ -305,11 +271,11 @@ __register_classic_rcolor()
 # ------------------------------------------------
 
 
-class __RStyleMeta(__RRegistry['RStyle']):
+class __RStyleMeta(RRegistry['RStyle']):
 	pass
 
 
-class RStyle(RItem, ABC, metaclass=__RStyleMeta):
+class RStyle(RItem, ABC, metaclass=RRegistry):
 	"""
 	Minecraft text styles
 	"""
@@ -318,6 +284,12 @@ class RStyle(RItem, ABC, metaclass=__RStyleMeta):
 	underlined:    'RStyleClassic'
 	strikethrough: 'RStyleClassic'
 	obfuscated:    'RStyleClassic'
+
+
+class RStyleClassic(RItemClassic, RStyle):
+	"""
+	Classic Minecraft text style with corresponding "§"-prefixed formatting code
+	"""
 
 
 def __register_rstyle():
@@ -331,92 +303,4 @@ def __register_rstyle():
 	register('obfuscated',    '§k', '')
 
 
-class RStyleClassic(RItemClassic, RStyle):
-	"""
-	Classic Minecraft text style with corresponding "§"-prefixed formatting code
-	"""
-
-
 __register_rstyle()
-
-
-# ------------------------------------------------
-#                  Text Special
-# ------------------------------------------------
-
-
-class __RActionMeta(__RRegistry['RAction']):
-	pass
-
-
-class RAction(__NamedObject, ABC, metaclass=__RActionMeta):
-	"""
-	Minecraft click event actions
-	"""
-
-	suggest_command:   'RAction'
-	"""Fill the chat bar with given text"""
-
-	run_command:       'RAction'
-	"""
-	Run the given text as command
-	
-	(Minecraft <1.19.1) If the given text doesn't start with ``"/"``, the given text will be considered as a chat message and sent to the server,
-	so it can be used to automatically execute MCDR command after the player click the decorated text
-	
-	.. attention:: 
-	
-		In vanilla Minecraft >=1.19.1, only strings starting with ``"/"``, i.e. command strings, can be used as the text value of :attr:`run_command` action
-		
-		For other strings that don't start with ``"/"``, the client will reject to send the chat message
-		
-		See `Issue #203 <https://github.com/MCDReforged/MCDReforged/issues/203>`__
-	"""
-
-	open_url:          'RAction'
-	"""Open given url"""
-
-	open_file:         'RAction'
-	"""
-	Open file from given path
-	
-	.. note:: 
-	
-		Actually vanilla Minecraft doesn't allow texts sent by command contain :attr:`open_file` actions,
-		so don't be surprised if this :attr:`open_file` doesn't work
-	"""
-
-	copy_to_clipboard: 'RAction'
-	"""
-	Copy given text to clipboard
-	
-	.. note:: Available in Minecraft 1.15+
-	"""
-
-
-def __register_raction():
-	def register(name: str):
-		RAction.register_item(name, _RActionImpl(name))
-
-	register('suggest_command')
-	register('run_command')
-	register('open_url')
-	register('open_file')
-	register('copy_to_clipboard')
-
-
-class _RActionImpl(RAction):
-	def __init__(self, name: str):
-		self.__name = name
-
-	@property
-	@override
-	def name(self) -> str:
-		return self.__name
-
-	def __repr__(self) -> str:
-		return class_utils.represent(self, {'name': self.name})
-
-
-__register_raction()
-
