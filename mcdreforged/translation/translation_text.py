@@ -158,3 +158,11 @@ class RTextMCDRTranslation(RTextBase):
 
 	def __repr__(self) -> str:
 		return class_utils.represent(self)
+
+	def __eq__(self, other: 'RTextMCDRTranslation') -> bool:
+		"""
+		.. versionadded:: v2.15.0
+		"""
+		if type(other) != type(self):
+			return False
+		return self.__get_translated_text() == other.__get_translated_text()

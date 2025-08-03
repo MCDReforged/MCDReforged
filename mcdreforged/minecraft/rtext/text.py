@@ -452,6 +452,20 @@ class RText(RTextBase):
 			'hover_event': self.__hover_event,
 		})
 
+	def __eq__(self, other: 'RText') -> bool:
+		"""
+		.. versionadded:: v2.15.0
+		"""
+		if type(other) != type(self):
+			return False
+		return all((
+			self.__text == other.__text,
+			self.__color == other.__color,
+			self.__styles == other.__styles,
+			self.__click_event == other.__click_event,
+			self.__hover_event == other.__hover_event,
+		))
+
 
 class RTextList(RTextBase):
 	"""
@@ -552,6 +566,18 @@ class RTextList(RTextBase):
 			'children': self.children
 		})
 
+	def __eq__(self, other: 'RTextList') -> bool:
+		"""
+		.. versionadded:: v2.15.0
+		"""
+		if type(other) != type(self):
+			return False
+		return all((
+			self.header == other.header,
+			self.header_empty == other.header_empty,
+			self.children == other.children,
+		))
+
 
 class RTextTranslation(RText):
 	"""
@@ -643,3 +669,16 @@ class RTextTranslation(RText):
 			'click_event': self.__click_event,
 			'hover_event': self.__hover_event,
 		})
+
+	def __eq__(self, other: 'RTextTranslation') -> bool:
+		"""
+		.. versionadded:: v2.15.0
+		"""
+		if type(other) != type(self):
+			return False
+		return all((
+			super().__eq__(other),
+			self.__translation_key == other.__translation_key,
+			self.__args == other.__args,
+			self.__fallback == other.__fallback,
+		))
