@@ -1,7 +1,7 @@
 import dataclasses
 import json
 from abc import ABC, abstractmethod
-from typing import Optional, TYPE_CHECKING, Type, Dict, Any, Union, TypeVar, Generic
+from typing import Optional, TYPE_CHECKING, Type, Dict, Any, Union, TypeVar, Generic, ClassVar
 from uuid import UUID
 
 from typing_extensions import override, Self, final
@@ -23,16 +23,16 @@ _RHE = TypeVar('_RHE', bound='RHoverEvent')
 
 class RHoverAction(NamedObject, ABC, Generic[_RHE], metaclass=__RHoverMeta):
 	"""
-	Minecraft hover event actions
+	Minecraft text hover event actions
 	"""
 
-	show_text: 'RHoverAction[RHoverText]'
-	"""Display texts in hover event"""
+	show_text: ClassVar['RHoverAction[RHoverText]']
+	"""Show hover text"""
 
-	show_entity: 'RHoverAction[RHoverEntity]'
+	show_entity: ClassVar['RHoverAction[RHoverEntity]']
 	"""Show entity information"""
 
-	show_item: 'RHoverAction[RHoverItem]'
+	show_item: ClassVar['RHoverAction[RHoverItem]']
 	"""Show item information"""
 
 	@property
@@ -63,25 +63,41 @@ class _RHoverActionImpl(RHoverAction):
 @dataclasses.dataclass(frozen=True)
 class RHoverEvent(ABC):
 	"""
-	Internal components in hover event actions (except `show_text`)
+	An abstract base class of Minecraft hover event component
 	"""
+
 	@property
 	@abstractmethod
 	def action(self) -> RHoverAction:
+		"""
+		Return the hover action type of this component
+		"""
 		raise NotImplementedError()
 
 	@final
 	def to_json_object(self, json_format: RTextJsonFormat) -> dict:
+		"""
+		Serialize itself into a json dict
+
+		:param json_format: The target json format
+		"""
 		data = self._to_json_object(json_format)
-		data['action'] = self.action.name
-		return data
+		data.pop('action', None)
+		return {'action': self.action.name, **data}
 
 	@abstractmethod
 	def _to_json_object(self, json_format: RTextJsonFormat) -> dict:
 		raise NotImplementedError()
 
 	@classmethod
+	@final
 	def from_json_object(cls, hover_event: dict, json_format: RTextJsonFormat) -> Optional['RHoverEvent']:
+		"""
+		Deserialize a json dict to a hover event component
+
+		:param hover_event: The json dict to deserialize from
+		:param json_format: The json format of the provided data
+		"""
 		action: str = class_utils.check_type(hover_event['action'], str)
 		for rha in RHoverAction:
 			if rha.name == action:
@@ -108,7 +124,12 @@ def _get_by_any_key(dt: Dict[_K, _V], *keys: _K) -> _V:
 
 @dataclasses.dataclass(frozen=True)
 class RHoverText(RHoverEvent):
+	"""
+	The hover event component for :attr:`RHoverAction.show_text` action
+	"""
+
 	text: 'RTextBase'
+	"""The text to be displayed"""
 
 	@property
 	@override
@@ -121,7 +142,7 @@ class RHoverText(RHoverEvent):
 		if json_format == RTextJsonFormat.V_1_7:
 			return {'value': text_obj}
 		elif json_format == RTextJsonFormat.V_1_21_5:
-			return {'text': text_obj}
+			return {'value': text_obj}
 		else:
 			raise ValueError(json_format)
 
@@ -131,7 +152,7 @@ class RHoverText(RHoverEvent):
 		if json_format == RTextJsonFormat.V_1_7:
 			text_obj = _get_by_any_key(click_event, 'value', 'contents')
 		elif json_format == RTextJsonFormat.V_1_21_5:
-			text_obj = click_event['text']
+			text_obj = click_event['value']
 		else:
 			raise ValueError(json_format)
 		from mcdreforged.minecraft.rtext.text import RTextBase
@@ -141,11 +162,23 @@ class RHoverText(RHoverEvent):
 @dataclasses.dataclass(frozen=True)
 class RHoverEntity(RHoverEvent):
 	"""
-	Component for `show_entity` hover event action.
+	The hover event component for :attr:`RHoverAction.show_entity` action
 	"""
-	id: str  # entity type identifier, e.g. "minecraft:creeper"
-	uuid: UUID  # entity UUID
-	name: Optional[Union[str, 'RTextBase']] = None  # optional entity name
+
+	id: str
+	"""
+	The entity type identifier, e.g. ``minecraft:creeper``
+	"""
+
+	uuid: UUID
+	"""
+	The UUID of the entity
+	"""
+
+	name: Optional[Union[str, 'RTextBase']] = None
+	"""
+	(Optional) The custom name of the entity
+	"""
 
 	@property
 	@override
@@ -167,7 +200,7 @@ class RHoverEntity(RHoverEvent):
 				'value': json.dumps({
 					'type': self.id,
 					'id': str(self.uuid),
-					**({'name': name_value} if name_value is not None else {}),
+					**({'name': json.dumps(name_value, ensure_ascii=False)} if name_value is not None else {}),
 				}, ensure_ascii=False)
 			}
 		elif json_format == RTextJsonFormat.V_1_21_5:
@@ -202,9 +235,11 @@ class RHoverEntity(RHoverEvent):
 
 		if json_format == RTextJsonFormat.V_1_7:
 			if 'contents' in click_event:
-				data = json.loads(click_event['contents'])
+				data = click_event['contents']
 			else:
-				data = click_event
+				data = json.loads(click_event['value'])
+				if 'name' in data:
+					data['name'] = json.loads(data['name'])
 			return cls(
 				id=class_utils.check_type(data['type'], str),
 				uuid=deserialize_uuid(data['id']),
@@ -223,12 +258,23 @@ class RHoverEntity(RHoverEvent):
 @dataclasses.dataclass(frozen=True)
 class RHoverItem(RHoverEvent):
 	"""
-	Component for `show_item` hover event action
+	The hover event component for :attr:`RHoverAction.show_item` action
 	"""
 
-	id: str  # item id, e.g. "minecraft:stone"
-	count: Optional[int] = None  # optional count, defaults to 1 in Minecraft
-	components: Optional[dict] = None  # optional extra nbt info, XXX: proper support
+	id: str
+	"""
+	The item type identifier, e.g. ``minecraft:stone``
+	"""
+
+	count: Optional[int] = None
+	"""
+	(Optional) Item count. Although it's optional, it's still suggested provide a value (e.g. 1)
+	"""
+
+	components: Optional[dict] = None
+	"""
+	(Optional) Extra NBT tag / item components information of the item stack
+	"""
 
 	@property
 	@override
@@ -259,9 +305,9 @@ class RHoverItem(RHoverEvent):
 	def _from_json_object(cls, click_event: dict, json_format: RTextJsonFormat) -> Self:
 		if json_format == RTextJsonFormat.V_1_7:
 			if 'contents' in click_event:
-				data = json.loads(click_event['contents'])
+				data = click_event['contents']
 			else:
-				data = click_event
+				data = json.loads(click_event['value'])
 			return cls(
 				id=class_utils.check_type(data['id'], str),
 				count=class_utils.check_type(data.get('Count'), (int, None)),
@@ -279,11 +325,15 @@ class RHoverItem(RHoverEvent):
 
 def __register_hover_events():
 	def register(name: str, event_class: Type[RHoverEvent]):
-		RHoverAction.register_item(name, _RHoverActionImpl(name, event_class))
+		# noinspection PyProtectedMember
+		RHoverAction._register_item(name, _RHoverActionImpl(name, event_class))
 
 	register('show_text', RHoverText)
 	register('show_entity', RHoverEntity)
 	register('show_item', RHoverItem)
+
+	# noinspection PyProtectedMember
+	RHoverAction._ensure_registration_done()
 
 
 __register_hover_events()

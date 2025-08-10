@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-12 02:45+0800\n"
+"POT-Creation-Date: 2025-08-11 02:51+0800\n"
 "PO-Revision-Date: 2021-01-24 09:02+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -96,25 +96,7 @@ msgid ""
 "Minecraft color value"
 msgstr "一个工厂函数，从给定的 Minecraft 颜色值构造一个 :class:`RColor` 对象"
 
-#: mcdreforged.minecraft.rcon.rcon_connection.RconConnection.__init__
-#: mcdreforged.minecraft.rcon.rcon_connection.RconConnection.send_command
-#: mcdreforged.minecraft.rtext.style.RColor.from_mc_value
-#: mcdreforged.minecraft.rtext.style.RColorRGB.__init__
-#: mcdreforged.minecraft.rtext.style.RColorRGB.from_code
-#: mcdreforged.minecraft.rtext.style.RColorRGB.from_rgb
-#: mcdreforged.minecraft.rtext.text.RText.__init__
-#: mcdreforged.minecraft.rtext.text.RTextBase.format
-#: mcdreforged.minecraft.rtext.text.RTextBase.from_json_object
-#: mcdreforged.minecraft.rtext.text.RTextBase.join
-#: mcdreforged.minecraft.rtext.text.RTextBase.set_click_event
-#: mcdreforged.minecraft.rtext.text.RTextBase.set_hover_text
-#: mcdreforged.minecraft.rtext.text.RTextList.__init__
-#: mcdreforged.minecraft.rtext.text.RTextTranslation.__init__
-#: mcdreforged.minecraft.rtext.text.RTextTranslation.arg
-#: mcdreforged.minecraft.rtext.text.RTextTranslation.fallback
-#: mcdreforged.translation.translation_text.RTextMCDRTranslation.__init__
-#: mcdreforged.translation.translation_text.RTextMCDRTranslation.language_context
-#: of
+#: ../code_references/minecraft_tools.rst
 msgid "Parameters"
 msgstr "参数"
 
@@ -124,11 +106,7 @@ msgid ""
 "``\"red\"``, ``\"blue\"``, ``\"#00AAFF\"``"
 msgstr "Minecraft 文本容器 中 ``color`` 属性的值，如 ``\"red\"``、``\"blue\"``、``\"#00AAFF\"``"
 
-#: mcdreforged.minecraft.rcon.rcon_connection.RconConnection.connect
-#: mcdreforged.minecraft.rcon.rcon_connection.RconConnection.send_command
-#: mcdreforged.minecraft.rtext.style.RColor.from_mc_value
-#: mcdreforged.minecraft.rtext.text.RTextBase.set_click_event
-#: mcdreforged.minecraft.rtext.text.RTextBase.set_hover_text of
+#: ../code_references/minecraft_tools.rst
 msgid "Returns"
 msgstr "返回"
 
@@ -136,7 +114,7 @@ msgstr "返回"
 msgid "A corresponding :class:`RColor` object"
 msgstr "与之对应的 :class:`RColor` 对象"
 
-#: mcdreforged.minecraft.rtext.style.RColor.from_mc_value of
+#: ../code_references/minecraft_tools.rst
 msgid "Raises"
 msgstr "抛出"
 
@@ -243,20 +221,26 @@ msgid ""
 " code"
 msgstr "传统 Minecraft 文本样式，拥有着对应的以 \"§\" 为前缀的样式代码"
 
-#: mcdreforged.minecraft.rtext.style.RAction:1 of
-msgid "Minecraft click event actions"
-msgstr "Minecraft 文本点击事件的动作"
+#: ../code_references/minecraft_tools.rst:45
+msgid "Text Click Events"
+msgstr "文本点击事件"
 
-#: ../../docstring mcdreforged.minecraft.rtext.style.RAction.suggest_command:1
-#: of
+#: mcdreforged.minecraft.rtext.click_event.RClickAction:1 of
+msgid "Minecraft text click event actions"
+msgstr "Minecraft 文本点击事件行为"
+
+#: ../../docstring
+#: mcdreforged.minecraft.rtext.click_event.RClickAction.suggest_command:1 of
 msgid "Fill the chat bar with given text"
 msgstr "使用给定的文本填充聊天栏"
 
-#: ../../docstring mcdreforged.minecraft.rtext.style.RAction.run_command:1 of
+#: ../../docstring
+#: mcdreforged.minecraft.rtext.click_event.RClickAction.run_command:1 of
 msgid "Run the given text as command"
 msgstr "将给定的文本作为命令运行"
 
-#: ../../docstring mcdreforged.minecraft.rtext.style.RAction.run_command:3 of
+#: ../../docstring
+#: mcdreforged.minecraft.rtext.click_event.RClickAction.run_command:3 of
 msgid ""
 "(Minecraft <1.19.1) If the given text doesn't start with ``\"/\"``, the "
 "given text will be considered as a chat message and sent to the server, "
@@ -266,7 +250,8 @@ msgstr ""
 "(Minecraft <1.19.1) 如果给定的文本不以 ``\"/\"`` "
 "开头，给定的文本将会被当做聊天信息发送至服务端。借此，玩家在点击被修饰的文本后可以自动执行 MCDR 命令"
 
-#: ../../docstring mcdreforged.minecraft.rtext.style.RAction.run_command:8 of
+#: ../../docstring
+#: mcdreforged.minecraft.rtext.click_event.RClickAction.run_command:8 of
 msgid ""
 "In vanilla Minecraft >=1.19.1, only strings starting with ``\"/\"``, i.e."
 " command strings, can be used as the text value of :attr:`run_command` "
@@ -275,25 +260,30 @@ msgstr ""
 "在原版 Minecraft >=1.19.1 中，只有以 ``\"/\"`` 开头的字符串，即代表命令的字符串，可以被用作 "
 ":attr:`run_command` 动作的值"
 
-#: ../../docstring mcdreforged.minecraft.rtext.style.RAction.run_command:10 of
+#: ../../docstring
+#: mcdreforged.minecraft.rtext.click_event.RClickAction.run_command:10 of
 msgid ""
 "For other strings that don't start with ``\"/\"``, the client will reject"
 " to send the chat message"
 msgstr "对于其他不以 ``\"/\"`` 开头的字符串，客户端将拒接发送对应的聊天消息"
 
-#: ../../docstring mcdreforged.minecraft.rtext.style.RAction.run_command:12 of
+#: ../../docstring
+#: mcdreforged.minecraft.rtext.click_event.RClickAction.run_command:12 of
 msgid "See `Issue #203 <https://github.com/MCDReforged/MCDReforged/issues/203>`__"
 msgstr "见 `Issue #203 <https://github.com/MCDReforged/MCDReforged/issues/203>`__"
 
-#: ../../docstring mcdreforged.minecraft.rtext.style.RAction.open_url:1 of
+#: ../../docstring
+#: mcdreforged.minecraft.rtext.click_event.RClickAction.open_url:1 of
 msgid "Open given url"
 msgstr "打开给定链接"
 
-#: ../../docstring mcdreforged.minecraft.rtext.style.RAction.open_file:1 of
+#: ../../docstring
+#: mcdreforged.minecraft.rtext.click_event.RClickAction.open_file:1 of
 msgid "Open file from given path"
 msgstr "从给定路径打开文件"
 
-#: ../../docstring mcdreforged.minecraft.rtext.style.RAction.open_file:5 of
+#: ../../docstring
+#: mcdreforged.minecraft.rtext.click_event.RClickAction.open_file:5 of
 msgid ""
 "Actually vanilla Minecraft doesn't allow texts sent by command contain "
 ":attr:`open_file` actions, so don't be surprised if this "
@@ -303,16 +293,255 @@ msgstr ""
 ":attr:`open_file` 不起作用时别太惊讶"
 
 #: ../../docstring
-#: mcdreforged.minecraft.rtext.style.RAction.copy_to_clipboard:1 of
+#: mcdreforged.minecraft.rtext.click_event.RClickAction.copy_to_clipboard:1 of
 msgid "Copy given text to clipboard"
 msgstr "将给定文本复制到剪切板"
 
 #: ../../docstring
-#: mcdreforged.minecraft.rtext.style.RAction.copy_to_clipboard:3 of
+#: mcdreforged.minecraft.rtext.click_event.RClickAction.copy_to_clipboard:3 of
 msgid "Available in Minecraft 1.15+"
 msgstr "在 Minecraft 1.15+ 中可用"
 
-#: ../code_references/minecraft_tools.rst:49
+#: ../../docstring
+#: mcdreforged.minecraft.rtext.click_event.RClickAction.change_page:1 of
+msgid "Change to the specified page of the current book"
+msgstr "要跳转到当前打开的书本页数"
+
+#: ../../docstring
+#: mcdreforged.minecraft.rtext.click_event.RClickAction.change_page:5 of
+msgid "Only work in written books"
+msgstr "仅在成书中的有效"
+
+#: ../../docstring
+#: mcdreforged.minecraft.rtext.click_event.RClickAction.show_dialog:1 of
+msgid "Open specified dialog"
+msgstr "打开一个对话框"
+
+#: ../../docstring
+#: mcdreforged.minecraft.rtext.click_event.RClickAction.custom:3
+#: mcdreforged.minecraft.rtext.click_event.RClickAction.show_dialog:3
+#: mcdreforged.minecraft.rtext.click_event.RClickCustom:3
+#: mcdreforged.minecraft.rtext.click_event.RClickShowDialog:3 of
+msgid "Available in Minecraft 1.21.6+"
+msgstr "在 Minecraft 1.21.6+ 中可用"
+
+#: ../../docstring
+#: mcdreforged.minecraft.rtext.click_event.RClickAction.custom:1 of
+msgid "Send a custom event to the server, which has no effect in vanilla servers"
+msgstr "在服务端触发一个自定义文本事件，后续表现取决于服务端的 mod / 插件，原版服务端对此不会有任何响应"
+
+#: mcdreforged.minecraft.rtext.click_event.RClickAction:1 of
+msgid "Alias of :class:`RClickAction`"
+msgstr ":class:`RClickAction` 的别名"
+
+#: mcdreforged.minecraft.rtext.click_event.RClickEvent:1 of
+msgid "An abstract base class of Minecraft click event component"
+msgstr "Minecraft 文本点击事件组件的抽象基类"
+
+#: mcdreforged.minecraft.rtext.click_event.RClickEvent.action:1 of
+msgid "Return the click action type of this component"
+msgstr "返回该组件的点击事件行为"
+
+#: mcdreforged.minecraft.rtext.click_event.RClickEvent.to_json_object:1
+#: mcdreforged.minecraft.rtext.hover_event.RHoverEvent.to_json_object:1 of
+msgid "Serialize itself into a json dict"
+msgstr "将自身序列化成一个 json dict"
+
+#: mcdreforged.minecraft.rtext.click_event.RClickEvent.to_json_object:3
+#: mcdreforged.minecraft.rtext.hover_event.RHoverEvent.to_json_object:3 of
+msgid "The target json format"
+msgstr "目标 json 格式"
+
+#: mcdreforged.minecraft.rtext.click_event.RClickEvent.from_json_object:1 of
+msgid "Deserialize a json dict to a click event component"
+msgstr "将一个 json dict 反序列化回一个点击事件组件"
+
+#: mcdreforged.minecraft.rtext.click_event.RClickEvent.from_json_object:3
+#: mcdreforged.minecraft.rtext.hover_event.RHoverEvent.from_json_object:3 of
+msgid "The json dict to deserialize from"
+msgstr "要反序列化的 json dict"
+
+#: mcdreforged.minecraft.rtext.click_event.RClickEvent.from_json_object:4
+#: mcdreforged.minecraft.rtext.hover_event.RHoverEvent.from_json_object:4 of
+msgid "The json format of the provided data"
+msgstr "源 json 格式"
+
+#: mcdreforged.minecraft.rtext.click_event.RClickEventSingleValue:1 of
+msgid ""
+"An abstract base class for those click event components that contain only"
+" 1 value"
+msgstr "那些只包含 1 个值的点击事件组件的抽象基类"
+
+#: mcdreforged.minecraft.rtext.click_event.RClickSuggestCommand:1 of
+msgid "The click event component for :attr:`RClickAction.suggest_command` action"
+msgstr "表示 :attr:`RClickAction.suggest_command` 的点击事件组件"
+
+#: ../../docstring
+#: mcdreforged.minecraft.rtext.click_event.RClickSuggestCommand.command:1 of
+msgid "The command to suggest"
+msgstr "用于填充聊天栏的文本"
+
+#: mcdreforged.minecraft.rtext.click_event.RClickRunCommand:1 of
+msgid "The click event component for :attr:`RClickAction.run_command` action"
+msgstr "表示 :attr:`RClickAction.run_command` 的点击事件组件"
+
+#: ../../docstring
+#: mcdreforged.minecraft.rtext.click_event.RClickRunCommand.command:1 of
+msgid "The command to run"
+msgstr "用于作为命令运行的文本"
+
+#: mcdreforged.minecraft.rtext.click_event.RClickOpenUrl:1 of
+msgid "The click event component for :attr:`RClickAction.open_url` action"
+msgstr "表示 :attr:`RClickAction.open_url` 的点击事件组件"
+
+#: ../../docstring mcdreforged.minecraft.rtext.click_event.RClickOpenUrl.url:1
+#: of
+msgid "The url to open"
+msgstr "要打开的 url"
+
+#: mcdreforged.minecraft.rtext.click_event.RClickOpenFile:1 of
+msgid "The click event component for :attr:`RClickAction.open_file` action"
+msgstr "表示 :attr:`RClickAction.open_file` 的点击事件组件"
+
+#: ../../docstring
+#: mcdreforged.minecraft.rtext.click_event.RClickOpenFile.path:1 of
+msgid "The file path to open"
+msgstr "要打开的文件路径"
+
+#: mcdreforged.minecraft.rtext.click_event.RClickCopyToClipboard:1 of
+msgid ""
+"The click event component for :attr:`RClickAction.copy_to_clipboard` "
+"action"
+msgstr "表示 :attr:`RClickAction.copy_to_clipboard` 的点击事件组件"
+
+#: ../../docstring
+#: mcdreforged.minecraft.rtext.click_event.RClickCopyToClipboard.value:1 of
+msgid "The content to copy to clipboard"
+msgstr "要复制到剪切板的内容"
+
+#: mcdreforged.minecraft.rtext.click_event.RClickShowDialog:1 of
+msgid "The click event component for :attr:`RClickAction.show_dialog` action"
+msgstr "表示 :attr:`RClickAction.show_dialog` 的点击事件组件"
+
+#: ../../docstring
+#: mcdreforged.minecraft.rtext.click_event.RClickShowDialog.dialog:1 of
+msgid "The data of the dialog. It can be either:"
+msgstr "对话框的数据。它可以是（任选其一）："
+
+#: ../../docstring
+#: mcdreforged.minecraft.rtext.click_event.RClickShowDialog.dialog:3 of
+msgid "A dialog identifier, e.g., ``minecraft:server_links``"
+msgstr "对话框唯一标识符，如 ``minecraft:server_links``"
+
+#: ../../docstring
+#: mcdreforged.minecraft.rtext.click_event.RClickShowDialog.dialog:4 of
+msgid "A full dialog description NBT tag"
+msgstr "对话框的 NBT 数据"
+
+#: mcdreforged.minecraft.rtext.click_event.RClickChangePage:1 of
+msgid "The click event component for :attr:`RClickAction.change_page` action"
+msgstr "表示 :attr:`RClickAction.change_page` 的点击事件组件"
+
+#: ../../docstring
+#: mcdreforged.minecraft.rtext.click_event.RClickChangePage.page:1 of
+msgid "The page number to change to"
+msgstr "要跳转到的页数"
+
+#: mcdreforged.minecraft.rtext.click_event.RClickCustom:1 of
+msgid "The click event component for :attr:`RClickAction.custom` action"
+msgstr "表示 :attr:`RClickAction.custom` 的点击事件组件"
+
+#: ../../docstring mcdreforged.minecraft.rtext.click_event.RClickCustom.id:1 of
+msgid "The identifier"
+msgstr "唯一标识符"
+
+#: ../../docstring
+#: mcdreforged.minecraft.rtext.click_event.RClickCustom.payload:1 of
+msgid "(Optional) The payload"
+msgstr "数据"
+
+#: ../code_references/minecraft_tools.rst:51
+msgid "Text Hover Events"
+msgstr "文本悬浮事件"
+
+#: mcdreforged.minecraft.rtext.hover_event.RHoverAction:1 of
+msgid "Minecraft text hover event actions"
+msgstr "Minecraft 文本悬浮事件行为"
+
+#: ../../docstring
+#: mcdreforged.minecraft.rtext.hover_event.RHoverAction.show_text:1 of
+msgid "Show hover text"
+msgstr "展示悬浮文本"
+
+#: ../../docstring
+#: mcdreforged.minecraft.rtext.hover_event.RHoverAction.show_entity:1 of
+msgid "Show entity information"
+msgstr "展示实体信息"
+
+#: ../../docstring
+#: mcdreforged.minecraft.rtext.hover_event.RHoverAction.show_item:1 of
+msgid "Show item information"
+msgstr "展示物品信息"
+
+#: mcdreforged.minecraft.rtext.hover_event.RHoverEvent:1 of
+msgid "An abstract base class of Minecraft hover event component"
+msgstr "Minecraft 文本悬浮事件组件的抽象基类"
+
+#: mcdreforged.minecraft.rtext.hover_event.RHoverEvent.action:1 of
+msgid "Return the hover action type of this component"
+msgstr "返回该组件的悬浮事件行为"
+
+#: mcdreforged.minecraft.rtext.hover_event.RHoverEvent.from_json_object:1 of
+msgid "Deserialize a json dict to a hover event component"
+msgstr "将一个 json dict 反序列化回一个悬浮事件组件"
+
+#: mcdreforged.minecraft.rtext.hover_event.RHoverText:1 of
+msgid "The hover event component for :attr:`RHoverAction.show_text` action"
+msgstr "表示 :attr:`RHoverAction.show_text` 的悬浮事件组件"
+
+#: ../../docstring mcdreforged.minecraft.rtext.hover_event.RHoverText.text:1 of
+msgid "The text to be displayed"
+msgstr "用于展示的文本"
+
+#: mcdreforged.minecraft.rtext.hover_event.RHoverEntity:1 of
+msgid "The hover event component for :attr:`RHoverAction.show_entity` action"
+msgstr "表示 :attr:`RHoverAction.show_entity` 的悬浮事件组件"
+
+#: ../../docstring mcdreforged.minecraft.rtext.hover_event.RHoverEntity.id:1 of
+msgid "The entity type identifier, e.g. ``minecraft:creeper``"
+msgstr "对话框唯一标识符，如 ``minecraft:creeper``"
+
+#: ../../docstring mcdreforged.minecraft.rtext.hover_event.RHoverEntity.uuid:1
+#: of
+msgid "The UUID of the entity"
+msgstr "实体的 UUID"
+
+#: ../../docstring mcdreforged.minecraft.rtext.hover_event.RHoverEntity.name:1
+#: of
+msgid "(Optional) The custom name of the entity"
+msgstr "（可选）实体的自定义名字"
+
+#: mcdreforged.minecraft.rtext.hover_event.RHoverItem:1 of
+msgid "The hover event component for :attr:`RHoverAction.show_item` action"
+msgstr "表示 :attr:`RHoverAction.show_item` 的悬浮事件组件"
+
+#: ../../docstring mcdreforged.minecraft.rtext.hover_event.RHoverItem.id:1 of
+msgid "The item type identifier, e.g. ``minecraft:stone``"
+msgstr "物品类型的唯一标识符，如 ``minecraft:stone``"
+
+#: ../../docstring mcdreforged.minecraft.rtext.hover_event.RHoverItem.count:1
+#: of
+msgid ""
+"(Optional) Item count. Although it's optional, it's still suggested "
+"provide a value (e.g. 1)"
+msgstr "（可选）物品的数量。尽管这是可选的，仍建议提供一个合法取值（如 1）"
+
+#: ../../docstring
+#: mcdreforged.minecraft.rtext.hover_event.RHoverItem.components:1 of
+msgid "(Optional) Extra NBT tag / item components information of the item stack"
+msgstr "（可选）物品的额外 NBT 标签 / 组件"
+
+#: ../code_references/minecraft_tools.rst:57
 msgid "Text Components"
 msgstr "文本组件"
 
@@ -373,21 +602,18 @@ msgid "Set the click event"
 msgstr "设置点击事件"
 
 #: mcdreforged.minecraft.rtext.text.RTextBase.set_click_event:3 of
+msgid ""
+"You can either directly provide the click event, or provide the action "
+"type and the action value separately"
+msgstr "你既可以直接提供一个点击事件组件，也可以提供点击事件组件类型和组件的值"
+
+#: mcdreforged.minecraft.rtext.text.RTextBase.set_click_event:12 of
 msgid "Method :meth:`c` is the short form of :meth:`set_click_event`"
 msgstr "方法 :meth:`c` 是方法 :meth:`set_click_event` 的简写"
 
-#: mcdreforged.minecraft.rtext.text.RTextBase.set_click_event:5 of
-msgid "The type of the action"
-msgstr "动作类型"
-
-#: mcdreforged.minecraft.rtext.text.RTextBase.set_click_event:6 of
-msgid "The string value of the action"
-msgstr "动作的字符串值"
-
-#: mcdreforged.minecraft.rtext.text.RTextBase.set_click_event:7
-#: mcdreforged.minecraft.rtext.text.RTextBase.set_hover_text:7 of
-msgid "The text component itself"
-msgstr "自身"
+#: mcdreforged.minecraft.rtext.text.RTextBase.set_hover_event:1 of
+msgid "Set the hover event"
+msgstr "设置悬浮事件"
 
 #: mcdreforged.minecraft.rtext.text.RTextBase.set_hover_text:1 of
 msgid "Set the hover text"
@@ -403,13 +629,17 @@ msgid ""
 ":class:`RTextList` instance is used as the actual hover text"
 msgstr "用于创建 :class:`RTextList` 实例的元素。:class:`RTextList` 实例将作为实际的悬浮文本"
 
-#: mcdreforged.minecraft.rtext.text.RTextBase.c:1 of
-msgid "The short form of :meth:`set_click_event`"
-msgstr "方法 :meth:`set_click_event` 的简写"
+#: mcdreforged.minecraft.rtext.text.RTextBase.set_hover_text:7 of
+msgid "The text component itself"
+msgstr "自身"
 
-#: mcdreforged.minecraft.rtext.text.RTextBase.h:1 of
-msgid "The short form of :meth:`set_hover_text`"
-msgstr "方法 :meth:`set_hover_text` 的简写"
+#: mcdreforged.minecraft.rtext.text.RTextBase.set_click_event:1 of
+msgid "Alias of :meth:`set_click_event`"
+msgstr "方法 :meth:`set_click_event` 的别名"
+
+#: mcdreforged.minecraft.rtext.text.RTextBase.set_hover_text:1 of
+msgid "Alias of :meth:`set_hover_text`"
+msgstr "方法 :meth:`set_hover_text` 的别名"
 
 #: mcdreforged.minecraft.rtext.text.RTextBase.from_any:1 of
 msgid "Convert anything into a RText component"
@@ -631,11 +861,31 @@ msgstr "MCDR 将自动地于发送信息至玩家或控制台前，使用 :ref:`
 msgid "The language to be used during translation inside the context"
 msgstr "在上下文中进行翻译时所用的语言"
 
-#: ../code_references/minecraft_tools.rst:77
+#: ../code_references/minecraft_tools.rst:85
+msgid "Misc"
+msgstr "杂项"
+
+#: mcdreforged.minecraft.rtext.schema.RTextJsonFormat:1 of
+msgid ""
+"Define the serialization format of :class:`RText <RTextBase>` components "
+"for different Minecraft versions"
+msgstr "为不同的 Minecraft 版本定义的 :class:`RText <RTextBase>` 组件的序列化格式"
+
+#: ../../docstring mcdreforged.minecraft.rtext.schema.RTextJsonFormat.V_1_7:1
+#: of
+msgid "For Minecraft ``[1.7, 1.21.5)``"
+msgstr "适用于 Minecraft ``[1.7, 1.21.5)``"
+
+#: ../../docstring
+#: mcdreforged.minecraft.rtext.schema.RTextJsonFormat.V_1_21_5:1 of
+msgid "For Minecraft ``[1.21.5, ~)``"
+msgstr "适用于 Minecraft ``[1.21.5, ~)``"
+
+#: ../code_references/minecraft_tools.rst:91
 msgid "Rcon"
 msgstr "Rcon"
 
-#: ../code_references/minecraft_tools.rst:79
+#: ../code_references/minecraft_tools.rst:93
 msgid ":doc:`API package </plugin_dev/api>` path: ``mcdreforged.api.rcon``"
 msgstr ":doc:`API  包 </plugin_dev/api>` 路径: ``mcdreforged.api.rcon``"
 
@@ -661,7 +911,7 @@ msgstr "rcon 服务器的端口"
 msgid "The password of the rcon connection"
 msgstr "rcon 服务器的密码"
 
-#: mcdreforged.minecraft.rcon.rcon_connection.RconConnection.__init__ of
+#: ../code_references/minecraft_tools.rst
 msgid "Keyword Arguments"
 msgstr "关键字参数"
 

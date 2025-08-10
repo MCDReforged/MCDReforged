@@ -1,6 +1,7 @@
 import dataclasses
+import json
 from abc import ABC, abstractmethod
-from typing import Optional, Type, TypeVar, Generic, Union
+from typing import Optional, Type, TypeVar, Generic, Union, ClassVar
 
 from typing_extensions import override, Self, final
 
@@ -18,13 +19,13 @@ _RCE = TypeVar('_RCE', bound='RClickEvent')
 
 class RClickAction(NamedObject, ABC, Generic[_RCE], metaclass=__RClickActionMeta):
 	"""
-	Minecraft click event actions
+	Minecraft text click event actions
 	"""
 
-	suggest_command: 'RClickAction[RClickSuggestCommand]'
+	suggest_command: ClassVar['RClickAction[RClickSuggestCommand]']
 	"""Fill the chat bar with given text"""
 
-	run_command: 'RClickAction[RClickRunCommand]'
+	run_command: ClassVar['RClickAction[RClickRunCommand]']
 	"""
 	Run the given text as command
 
@@ -40,10 +41,10 @@ class RClickAction(NamedObject, ABC, Generic[_RCE], metaclass=__RClickActionMeta
 		See `Issue #203 <https://github.com/MCDReforged/MCDReforged/issues/203>`__
 	"""
 
-	open_url: 'RClickAction[RClickOpenUrl]'
+	open_url: ClassVar['RClickAction[RClickOpenUrl]']
 	"""Open given url"""
 
-	open_file: 'RClickAction[RClickOpenFile]'
+	open_file: ClassVar['RClickAction[RClickOpenFile]']
 	"""
 	Open file from given path
 
@@ -53,14 +54,14 @@ class RClickAction(NamedObject, ABC, Generic[_RCE], metaclass=__RClickActionMeta
 		so don't be surprised if this :attr:`open_file` doesn't work
 	"""
 
-	copy_to_clipboard: 'RClickAction[RClickCopyToClipboard]'
+	copy_to_clipboard: ClassVar['RClickAction[RClickCopyToClipboard]']
 	"""
 	Copy given text to clipboard
 
 	.. note:: Available in Minecraft 1.15+
 	"""
 
-	change_page: 'RClickAction[RClickChangePage]'
+	change_page: ClassVar['RClickAction[RClickChangePage]']
 	"""
 	Change to the specified page of the current book 
 
@@ -69,14 +70,14 @@ class RClickAction(NamedObject, ABC, Generic[_RCE], metaclass=__RClickActionMeta
 		Only work in written books
 	"""
 
-	show_dialog: 'RClickAction[RClickShowDialog]'
+	show_dialog: ClassVar['RClickAction[RClickShowDialog]']
 	"""
 	Open specified dialog
 
 	.. note:: Available in Minecraft 1.21.6+
 	"""
 
-	custom: 'RClickAction[RClickCustom]'
+	custom: ClassVar['RClickAction[RClickCustom]']
 	"""
 	Send a custom event to the server, which has no effect in vanilla servers
 
@@ -89,7 +90,11 @@ class RClickAction(NamedObject, ABC, Generic[_RCE], metaclass=__RClickActionMeta
 		raise NotImplementedError()
 
 
-RAction = RClickAction  # The historical alias
+# The historical alias
+RAction = RClickAction
+"""
+Alias of :class:`RClickAction`
+"""
 
 
 class _RClickActionImpl(RClickAction):
@@ -113,16 +118,28 @@ class _RClickActionImpl(RClickAction):
 
 @dataclasses.dataclass(frozen=True)
 class RClickEvent(ABC):
+	"""
+	An abstract base class of Minecraft click event component
+	"""
+
 	@property
 	@abstractmethod
 	def action(self) -> RClickAction:
+		"""
+		Return the click action type of this component
+		"""
 		raise NotImplementedError()
 
 	@final
 	def to_json_object(self, json_format: RTextJsonFormat) -> dict:
+		"""
+		Serialize itself into a json dict
+
+		:param json_format: The target json format
+		"""
 		data = self._to_json_object(json_format)
-		data['action'] = self.action.name
-		return data
+		data.pop('action', None)
+		return {'action': self.action.name, **data}
 
 	@abstractmethod
 	def _to_json_object(self, json_format: RTextJsonFormat) -> dict:
@@ -131,6 +148,12 @@ class RClickEvent(ABC):
 	@classmethod
 	@final
 	def from_json_object(cls, click_event: dict, json_format: RTextJsonFormat) -> Optional['RClickEvent']:
+		"""
+		Deserialize a json dict to a click event component
+
+		:param click_event: The json dict to deserialize from
+		:param json_format: The json format of the provided data
+		"""
 		action: str = class_utils.check_type(click_event['action'], str)
 		for rca in RClickAction:
 			if rca.name == action:
@@ -144,10 +167,16 @@ class RClickEvent(ABC):
 		raise NotImplementedError()
 
 
-_T = TypeVar('_T')
+_JsonValueType = TypeVar('_JsonValueType')
 
 
-class _RClickEventSingleValue(RClickEvent, ABC, Generic[_T]):
+class RClickEventSingleValue(RClickEvent, ABC, Generic[_JsonValueType]):
+	"""
+	An abstract base class for those click event components that contain only 1 value
+
+	.. seealso: :meth:`RTextBase.set_click_event(action, value) <mcdreforged.minecraft.rtext.text.RTextBase.set_click_event>`
+	"""
+
 	@override
 	@final
 	def _to_json_object(self, json_format: RTextJsonFormat) -> dict:
@@ -165,18 +194,23 @@ class _RClickEventSingleValue(RClickEvent, ABC, Generic[_T]):
 		raise NotImplementedError()
 
 	@abstractmethod
-	def get_json_value(self, json_format: RTextJsonFormat) -> _T:
+	def get_json_value(self, json_format: RTextJsonFormat) -> _JsonValueType:
 		raise NotImplementedError()
 
 	@classmethod
 	@abstractmethod
-	def from_json_value(cls, v: _T) -> Self:
+	def from_json_value(cls, v: _JsonValueType) -> Self:
 		raise NotImplementedError()
 
 
 @dataclasses.dataclass(frozen=True)
-class RClickSuggestCommand(_RClickEventSingleValue[str]):
+class RClickSuggestCommand(RClickEventSingleValue[str]):
+	"""
+	The click event component for :attr:`RClickAction.suggest_command` action
+	"""
+
 	command: str
+	"""The command to suggest"""
 
 	@property
 	@override
@@ -199,8 +233,13 @@ class RClickSuggestCommand(_RClickEventSingleValue[str]):
 
 
 @dataclasses.dataclass(frozen=True)
-class RClickRunCommand(_RClickEventSingleValue[str]):
+class RClickRunCommand(RClickEventSingleValue[str]):
+	"""
+	The click event component for :attr:`RClickAction.run_command` action
+	"""
+
 	command: str
+	"""The command to run"""
 
 	@property
 	@override
@@ -223,8 +262,13 @@ class RClickRunCommand(_RClickEventSingleValue[str]):
 
 
 @dataclasses.dataclass(frozen=True)
-class RClickOpenUrl(_RClickEventSingleValue[str]):
+class RClickOpenUrl(RClickEventSingleValue[str]):
+	"""
+	The click event component for :attr:`RClickAction.open_url` action
+	"""
+
 	url: str
+	"""The url to open"""
 
 	@property
 	@override
@@ -247,8 +291,13 @@ class RClickOpenUrl(_RClickEventSingleValue[str]):
 
 
 @dataclasses.dataclass(frozen=True)
-class RClickOpenFile(_RClickEventSingleValue[str]):
+class RClickOpenFile(RClickEventSingleValue[str]):
+	"""
+	The click event component for :attr:`RClickAction.open_file` action
+	"""
+
 	path: str
+	"""The file path to open"""
 
 	@property
 	@override
@@ -271,8 +320,13 @@ class RClickOpenFile(_RClickEventSingleValue[str]):
 
 
 @dataclasses.dataclass(frozen=True)
-class RClickCopyToClipboard(_RClickEventSingleValue[str]):
+class RClickCopyToClipboard(RClickEventSingleValue[str]):
+	"""
+	The click event component for :attr:`RClickAction.copy_to_clipboard` action
+	"""
+
 	value: str
+	"""The content to copy to clipboard"""
 
 	@property
 	@override
@@ -295,11 +349,19 @@ class RClickCopyToClipboard(_RClickEventSingleValue[str]):
 
 
 @dataclasses.dataclass(frozen=True)
-class RClickShowDialog(_RClickEventSingleValue[Union[str, dict]]):
+class RClickShowDialog(RClickEventSingleValue[Union[str, dict]]):
+	"""
+	The click event component for :attr:`RClickAction.show_dialog` action
+
+	.. note:: Available in Minecraft 1.21.6+
+	"""
+
 	dialog: Union[str, dict]
 	"""
-	A dialog identifier, e.g. "minecraft:server_links",
-	or a full dialog description NBT tag
+	The data of the dialog. It can be either:
+	
+	1. A dialog identifier, e.g., ``minecraft:server_links``
+	2. A full dialog description NBT tag
 	"""
 
 	@property
@@ -314,7 +376,12 @@ class RClickShowDialog(_RClickEventSingleValue[Union[str, dict]]):
 
 	@override
 	def get_json_value(self, json_format: RTextJsonFormat) -> Union[str, dict]:
-		return self.dialog
+		if json_format == RTextJsonFormat.V_1_7:
+			# This was introduced in mc1.21.5 and RTextJsonFormat.V_1_7 does not support this
+			# just return something safe for the server (in case it only expects str for the `value` field)
+			return self.dialog if isinstance(self.dialog, str) else json.dumps(self.dialog, ensure_ascii=False)
+		else:
+			return self.dialog if isinstance(self.dialog, str) else self.dialog.copy()  # XXX: deepcopy?
 
 	@classmethod
 	@override
@@ -322,9 +389,18 @@ class RClickShowDialog(_RClickEventSingleValue[Union[str, dict]]):
 		return cls(dialog=class_utils.check_type(v, (str, dict)))
 
 
+# The json value type is
+#    str, in RTextJsonFormat.V_1_7
+#    int, in RTextJsonFormat.V_1_21_5
+# Just use `Union[int, str]` here to make it simple
 @dataclasses.dataclass(frozen=True)
-class RClickChangePage(_RClickEventSingleValue[Union[int, str]]):
+class RClickChangePage(RClickEventSingleValue[Union[int, str]]):
+	"""
+	The click event component for :attr:`RClickAction.change_page` action
+	"""
+
 	page: int
+	"""The page number to change to"""
 
 	@property
 	@override
@@ -348,8 +424,17 @@ class RClickChangePage(_RClickEventSingleValue[Union[int, str]]):
 
 @dataclasses.dataclass(frozen=True)
 class RClickCustom(RClickEvent):
+	"""
+	The click event component for :attr:`RClickAction.custom` action
+
+	.. note:: Available in Minecraft 1.21.6+
+	"""
+
 	id: str
+	"""The identifier"""
+
 	payload: Optional[Union[str, dict]] = None
+	"""(Optional) The payload"""
 
 	@property
 	@override
@@ -376,13 +461,20 @@ class RClickCustom(RClickEvent):
 
 def __register_click_events():
 	def register(name: str, event_class: Type['RClickEvent']):
-		RClickAction.register_item(name, _RClickActionImpl(name, event_class))
+		# noinspection PyProtectedMember
+		RClickAction._register_item(name, _RClickActionImpl(name, event_class))
 
 	register('suggest_command', RClickSuggestCommand)
 	register('run_command', RClickRunCommand)
 	register('open_url', RClickOpenUrl)
 	register('open_file', RClickOpenFile)
 	register('copy_to_clipboard', RClickCopyToClipboard)
+	register('change_page', RClickChangePage)
+	register('show_dialog', RClickShowDialog)
+	register('custom', RClickCustom)
+
+	# noinspection PyProtectedMember
+	RClickAction._ensure_registration_done()
 
 
 __register_click_events()

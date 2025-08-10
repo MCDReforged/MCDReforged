@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Union, Optional
+from typing import Union, Optional, ClassVar
 
 from colorama import Fore, Style
 from typing_extensions import override
@@ -76,24 +76,24 @@ class RColor(RItem, ABC, metaclass=__RColorMeta):
 	"""
 	Minecraft text colors
 	"""
-	black:        'RColorClassic'
-	dark_blue:    'RColorClassic'
-	dark_green:   'RColorClassic'
-	dark_aqua:    'RColorClassic'
-	dark_red:     'RColorClassic'
-	dark_purple:  'RColorClassic'
-	gold:         'RColorClassic'
-	gray:         'RColorClassic'
-	dark_gray:    'RColorClassic'
-	blue:         'RColorClassic'
-	green:        'RColorClassic'
-	aqua:         'RColorClassic'
-	red:          'RColorClassic'
-	light_purple: 'RColorClassic'
-	yellow:       'RColorClassic'
-	white:        'RColorClassic'
+	black:        ClassVar['RColorClassic']
+	dark_blue:    ClassVar['RColorClassic']
+	dark_green:   ClassVar['RColorClassic']
+	dark_aqua:    ClassVar['RColorClassic']
+	dark_red:     ClassVar['RColorClassic']
+	dark_purple:  ClassVar['RColorClassic']
+	gold:         ClassVar['RColorClassic']
+	gray:         ClassVar['RColorClassic']
+	dark_gray:    ClassVar['RColorClassic']
+	blue:         ClassVar['RColorClassic']
+	green:        ClassVar['RColorClassic']
+	aqua:         ClassVar['RColorClassic']
+	red:          ClassVar['RColorClassic']
+	light_purple: ClassVar['RColorClassic']
+	yellow:       ClassVar['RColorClassic']
+	white:        ClassVar['RColorClassic']
 
-	reset:        'RColorClassic'
+	reset:        ClassVar['RColorClassic']
 
 	def __init__(self, rgb_code: int):
 		class_utils.check_type(rgb_code, int)
@@ -140,7 +140,8 @@ class RColor(RItem, ABC, metaclass=__RColorMeta):
 
 def __register_classic_rcolor():
 	def register(name: str, rgb_hex: int, mc_code: str, console_code: str):
-		RColor.register_item(name, RColorClassic(name, rgb_hex, mc_code, console_code))
+		# noinspection PyProtectedMember
+		RColor._register_item(name, RColorClassic(name, rgb_hex, mc_code, console_code))
 
 	register('black',        0x000000, '§0', Fore.BLACK)
 	register('dark_blue',    0x0000AA, '§1', Fore.BLUE)
@@ -161,6 +162,9 @@ def __register_classic_rcolor():
 
 	# default text color is white, so use 0xFFFFFF
 	register('reset',        0xFFFFFF, '§r', Style.RESET_ALL)
+
+	# noinspection PyProtectedMember
+	RColor._ensure_registration_done()
 
 
 class RColorClassic(RItemClassic, RColor):
@@ -241,7 +245,8 @@ class RColorRGB(RColor):
 				if result is None or distance < min_distance:
 					result = color
 					min_distance = distance
-		assert result is not None
+		if result is None:
+			raise AssertionError()
 		return result
 
 	def to_classic(self) -> 'RColorClassic':
@@ -279,11 +284,11 @@ class RStyle(RItem, ABC, metaclass=RRegistry):
 	"""
 	Minecraft text styles
 	"""
-	bold:          'RStyleClassic'
-	italic:        'RStyleClassic'
-	underlined:    'RStyleClassic'
-	strikethrough: 'RStyleClassic'
-	obfuscated:    'RStyleClassic'
+	bold:          ClassVar['RStyleClassic']
+	italic:        ClassVar['RStyleClassic']
+	underlined:    ClassVar['RStyleClassic']
+	strikethrough: ClassVar['RStyleClassic']
+	obfuscated:    ClassVar['RStyleClassic']
 
 
 class RStyleClassic(RItemClassic, RStyle):
@@ -294,13 +299,17 @@ class RStyleClassic(RItemClassic, RStyle):
 
 def __register_rstyle():
 	def register(name: str, mc_code: str, console_code: str):
-		RStyle.register_item(name, RStyleClassic(name, mc_code, console_code))
+		# noinspection PyProtectedMember
+		RStyle._register_item(name, RStyleClassic(name, mc_code, console_code))
 
 	register('bold',          '§l', Style.BRIGHT)
 	register('italic',        '§o', '')
 	register('underlined',    '§n', '')
 	register('strikethrough', '§m', '')
 	register('obfuscated',    '§k', '')
+
+	# noinspection PyProtectedMember
+	RStyle._ensure_registration_done()
 
 
 __register_rstyle()

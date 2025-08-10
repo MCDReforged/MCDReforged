@@ -1,18 +1,19 @@
 import contextlib
 import json
 from abc import ABC, abstractmethod
-from typing import Iterable, List, Union, Optional, Any, Tuple, Set, Dict, TypeVar
+from typing import Iterable, List, Union, Optional, Any, Tuple, Set, Dict, TypeVar, overload
 
 from colorama import Style
 from typing_extensions import Self, override, TypedDict, NotRequired, Unpack, final
 
-from mcdreforged.minecraft.rtext.click_event import RClickAction, RClickEvent, _RClickEventSingleValue
+from mcdreforged.minecraft.rtext.click_event import RClickAction, RClickEvent, RClickEventSingleValue
 from mcdreforged.minecraft.rtext.hover_event import RHoverEvent, RHoverText
 from mcdreforged.minecraft.rtext.schema import RTextJsonFormat
 from mcdreforged.minecraft.rtext.style import RStyle, RColor, RColorClassic, RColorRGB, RItemClassic
 from mcdreforged.utils import class_utils
 
 _T = TypeVar('_T')
+_UNSET = object()
 
 
 class RTextBase(ABC):
@@ -88,22 +89,53 @@ class RTextBase(ABC):
 		"""
 		raise NotImplementedError()
 
+	@overload
+	def set_click_event(self, click_event: RClickEvent) -> Self:
+		"""
+		Set the click event of the text directly
+		"""
+		...
+
+	@overload
+	def set_click_event(self, action: RClickAction[RClickEventSingleValue[_T]], value: _T) -> Self:
+		"""
+		Set the click event of the text by providing the action type and the action value
+
+		This overload works for click actions that accept exactly 1 argument
+		"""
+		...
+
 	@final
-	def set_click_event(self, action: RClickAction[_RClickEventSingleValue[_T]], value: _T) -> Self:
+	def set_click_event(self, action: Union[RClickEvent, RClickAction[RClickEventSingleValue[_T]]], value: _T = _UNSET) -> Self:
 		"""
 		Set the click event
 
-		Method :meth:`c` is the short form of :meth:`set_click_event`
+		You can either directly provide the click event, or provide the action type and the action value separately
 
-		:param action: The type of the action
-		:param value: The string value of the action
-		:return: The text component itself
+		.. code-block:: python
+
+			text = RText('example')
+
+			text.set_click_event(RClickSuggestCommand('/say something'))  # directly
+			text.set_click_event(RClickAction.suggest_command, '/say something')  # action + value
+
+		Method :meth:`c` is the short form of :meth:`set_click_event`
 		"""
-		event_class = action.event_class
-		if issubclass(event_class, _RClickEventSingleValue):
-			return self._set_click_event_direct(event_class.from_json_value(value))
+		if value is not _UNSET:
+			if not isinstance(action, RClickAction):
+				raise TypeError('The action parameter should be a valid RClickAction if value is provided, but got {}'.format(type(action)))
+
+			event_class = action.event_class
+			if issubclass(event_class, RClickEventSingleValue):
+				if value is _UNSET:
+					raise ValueError('value arg not provided')
+				return self._set_click_event_direct(event_class.from_json_value(value))
+			else:
+				raise TypeError('Unsupported action type {} with event class {}'.format(type(action), event_class))
+		elif isinstance(action, RClickEvent):
+			return self._set_click_event_direct(action)
 		else:
-			raise TypeError('Unsupported action type {}'.format(type(action)))
+			raise TypeError('Unexpected argument type {}'.format(type(action)))
 
 	@abstractmethod
 	def _set_click_event_direct(self, click_event: RClickEvent) -> Self:
@@ -126,6 +158,11 @@ class RTextBase(ABC):
 			The :class:`RTextList` instance is used as the actual hover text
 		:return: The text component itself
 		"""
+		for arg in args:
+			# typo checker
+			if isinstance(arg, RHoverEvent):
+				raise TypeError(f'Argument can not be a RHoverEvent, got {arg!r}. If you want to directly set the hover event, use `set_hover_event` instead')
+
 		if len(args) == 1:
 			text = RTextBase.from_any(args[0])
 		else:
@@ -133,17 +170,15 @@ class RTextBase(ABC):
 		self.set_hover_event(RHoverText(text=text))
 		return self
 
-	def c(self, action: RClickAction, value: str) -> Self:
-		"""
-		The short form of :meth:`set_click_event`
-		"""
-		return self.set_click_event(action, value)
+	c = set_click_event
+	"""
+	Alias of :meth:`set_click_event`
+	"""
 
-	def h(self, *args) -> Self:
-		"""
-		The short form of :meth:`set_hover_text`
-		"""
-		return self.set_hover_text(*args)
+	h = set_hover_text
+	"""
+	Alias of :meth:`set_hover_text`
+	"""
 
 	def __str__(self):
 		return self.to_plain_text()

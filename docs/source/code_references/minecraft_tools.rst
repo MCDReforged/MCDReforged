@@ -41,9 +41,17 @@ Text Styles
     :show-inheritance:
     :members:
 
-.. autoclass:: RAction
+Text Click Events
+^^^^^^^^^^^^^^^^^
+
+.. automodule:: mcdreforged.minecraft.rtext.click_event
     :members:
-    :undoc-members:
+
+Text Hover Events
+^^^^^^^^^^^^^^^^^
+
+.. automodule:: mcdreforged.minecraft.rtext.hover_event
+    :members:
 
 Text Components
 ^^^^^^^^^^^^^^^
@@ -72,6 +80,12 @@ Text Components
     :show-inheritance:
     :members:
     :special-members: __init__
+
+Misc
+^^^^
+
+.. autoclass:: mcdreforged.minecraft.rtext.schema.RTextJsonFormat
+    :members:
 
 Rcon
 ----

@@ -11,8 +11,15 @@ class RTextJsonFormatItem:
 
 
 class RTextJsonFormat(enum.Enum):
-	V_1_7 = RTextJsonFormatItem('clickEvent', 'hoverEvent')  # Minecraft [1.7, 1.21.5)
-	V_1_21_5 = RTextJsonFormatItem('click_event', 'hover_event')  # Minecraft [1.21.5, ~)
+	"""
+	Define the serialization format of :class:`RText <RTextBase>` components for different Minecraft versions
+	"""
+
+	V_1_7 = RTextJsonFormatItem('clickEvent', 'hoverEvent')
+	"""For Minecraft ``[1.7, 1.21.5)``"""
+
+	V_1_21_5 = RTextJsonFormatItem('click_event', 'hover_event')
+	"""For Minecraft ``[1.21.5, ~)``"""
 
 	@classmethod
 	def default(cls) -> Self:
