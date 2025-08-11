@@ -234,7 +234,7 @@ class PluginServerInterface(ServerInterface):
 		A simple method to load a dict or :class:`~mcdreforged.utils.serializer.Serializable` or :class:`pydantic.BaseModel` type config from a json file
 
 		Default config is supported. Missing key-values in the loaded config object will be filled using the default config
-		
+
 		Example 1::
 
 			config = {
@@ -266,7 +266,7 @@ class PluginServerInterface(ServerInterface):
 
 			def on_load(server: PluginServerInterface, prev_module):
 				config = server.load_config_simple(target_class=Config)
-			
+
 		Assuming that the plugin id is ``my_plugin``, then the config file will be in ``"config/my_plugin/my_config.json"``
 
 		:param file_name: The name of the config file. It can also be a path to the config file
@@ -330,7 +330,14 @@ class PluginServerInterface(ServerInterface):
 			if data_processor is not None:
 				needs_save |= data_processor(read_data)
 
-		if target_class is not None and PydanticBaseModel is not None and issubclass(target_class, PydanticBaseModel):
+		# Always try to import pydantic in case the user installs it after MCDR has started
+		try:
+			from pydantic import BaseModel as PydanticBaseModelClass
+		except ImportError:
+			# noinspection PyPep8Naming
+			PydanticBaseModelClass = None
+
+		if target_class is not None and PydanticBaseModelClass is not None and issubclass(target_class, PydanticBaseModelClass):
 			if read_data is None:  # read failed, use default
 				result_config = target_class()
 			else:
