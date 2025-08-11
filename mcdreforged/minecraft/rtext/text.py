@@ -408,21 +408,9 @@ class RText(RTextBase):
 		for style in self.__styles:
 			obj[style.name] = True
 		if self.__click_event is not None:
-			if json_format == RTextJsonFormat.V_1_7:
-				click_event_key = 'clickEvent'
-			elif json_format == RTextJsonFormat.V_1_21_5:
-				click_event_key = 'click_event'
-			else:
-				raise ValueError('Unknown json_format {!r}'.format(json_format))
-			obj[click_event_key] = self.__click_event.to_json_object(json_format)
+			obj[json_format.value.click_event_key] = self.__click_event.to_json_object(json_format)
 		if self.__hover_event is not None:
-			if json_format == RTextJsonFormat.V_1_7:
-				hover_event_key = 'hoverEvent'
-			elif json_format == RTextJsonFormat.V_1_21_5:
-				hover_event_key = 'hover_event'
-			else:
-				raise ValueError('Unknown json_format {!r}'.format(json_format))
-			obj[hover_event_key] = self.__hover_event.to_json_object(json_format)
+			obj[json_format.value.hover_event_key] = self.__hover_event.to_json_object(json_format)
 		return obj
 
 	@override
