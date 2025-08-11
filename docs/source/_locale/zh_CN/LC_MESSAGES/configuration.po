@@ -819,9 +819,9 @@ msgstr "``{asset_id}``：GitHub asset ID"
 
 #: ../configuration.rst:463
 msgid ""
-"As an example, to use `ghproxy <https://mirror.ghproxy.com/>`__, you can "
+"As an example, to use `ghproxy <https://ghfast.top/>`__, you can "
 "set it to:"
-msgstr "作为一个例子，若要使用 `ghproxy <https://mirror.ghproxy.com/>`__ 进行下载加速，你可以将其设为："
+msgstr "作为一个例子，若要使用 `ghproxy <https://ghfast.top/>`__ 进行下载加速，你可以将其设为："
 
 #: ../configuration.rst:469
 msgid ""

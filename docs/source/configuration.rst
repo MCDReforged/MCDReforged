@@ -460,11 +460,11 @@ Available variables:
 * ``{asset_name}``: Name of the asset file, i.e. name of the plugin file
 * ``{asset_id}``: The GitHub asset ID
 
-As an example, to use `ghproxy <https://mirror.ghproxy.com/>`__, you can set it to:
+As an example, to use `ghproxy <https://ghfast.top/>`__, you can set it to:
 
 .. code-block:: yaml
 
-    plugin_download_url: 'https://mirror.ghproxy.com/{url}'
+    plugin_download_url: 'https://ghfast.top/{url}'
 
 Another example of a manual concatenation of the GitHub release asset default url. It's useless, but a good example to demonstrate how this work:
 

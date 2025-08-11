@@ -94,7 +94,7 @@ catalogue_meta_url:
 
 # Plugin file download override. Should be a valid python str.format string
 # Available variables: {url}, {repos_owner}, {repos_name}, {tag}, {asset_name}, {asset_id}
-# As an example, to use ghproxy, you can set it to: "https://mirror.ghproxy.com/{url}"
+# As an example, to use ghproxy, you can set it to: "https://ghfast.top/{url}"
 # If not provided, the origin GitHub asset download url will be directly used
 plugin_download_url:
 
