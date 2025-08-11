@@ -53,6 +53,8 @@ def serialize(obj: Any) -> JsonLike:
 
 	:param obj: The object to be serialized
 	:return: The serialized result
+
+	.. tip:: For more complex serialization/deserialization requirements, take a look at the `pydantic <https://github.com/pydantic/pydantic>`__ library
 	"""
 	if type(obj) in (type(None), bool, int, float, str):
 		return obj
@@ -188,6 +190,8 @@ def deserialize(
 		Added custom subclass of base classes and :class:`re.Pattern` support
 	.. versionadded:: v2.14.0
 		Added :class:`uuid.UUID` support
+
+	.. tip:: For more complex serialization/deserialization requirements, take a look at the `pydantic <https://github.com/pydantic/pydantic>`__ library
 	"""
 	def mismatch(*expected_class: Type):
 		if expected_class != (cls,):
@@ -418,6 +422,8 @@ class Serializable(ABC):
 		{'name': 'zhang_san', 'gender': 'female'}
 		>>> Person.deserialize({'name': 'li_si', 'gender': 'female'}).gender == Gender.female
 		True
+
+	.. tip:: For more complex serialization/deserialization requirements, take a look at the `pydantic <https://github.com/pydantic/pydantic>`__ library
 	"""
 
 	def __init__(self, **kwargs):

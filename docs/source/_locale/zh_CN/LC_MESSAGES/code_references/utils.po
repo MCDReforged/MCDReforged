@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-07 17:15+0800\n"
+"POT-Creation-Date: 2025-08-12 02:00+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -112,6 +112,16 @@ msgstr "返回值"
 #: mcdreforged.utils.serializer.serialize:23 of
 msgid "The serialized result"
 msgstr "序列化结果"
+
+#: mcdreforged.utils.serializer.Serializable:68
+#: mcdreforged.utils.serializer.deserialize:69
+#: mcdreforged.utils.serializer.serialize:25 of
+msgid ""
+"For more complex serialization/deserialization requirements, take a look "
+"at the `pydantic <https://github.com/pydantic/pydantic>`__ library"
+msgstr ""
+"对于更复杂的序列化/反序列化需求，可以看看 `pydantic <https://github.com/pydantic/pydantic>`__"
+" 库"
 
 #: mcdreforged.utils.serializer.deserialize:1 of
 msgid ""
