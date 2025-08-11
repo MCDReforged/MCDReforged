@@ -24,6 +24,8 @@ _RHE = TypeVar('_RHE', bound='RHoverEvent')
 class RHoverAction(NamedObject, ABC, Generic[_RHE], metaclass=__RHoverMeta):
 	"""
 	Minecraft text hover event actions
+
+	.. versionadded:: v2.15.0
 	"""
 
 	show_text: ClassVar['RHoverAction[RHoverText]']
@@ -64,6 +66,8 @@ class _RHoverActionImpl(RHoverAction):
 class RHoverEvent(ABC):
 	"""
 	An abstract base class of Minecraft hover event component
+
+	.. versionadded:: v2.15.0
 	"""
 
 	@property
@@ -126,6 +130,8 @@ def _get_by_any_key(dt: Dict[_K, _V], *keys: _K) -> _V:
 class RHoverText(RHoverEvent):
 	"""
 	The hover event component for :attr:`RHoverAction.show_text` action
+
+	.. versionadded:: v2.15.0
 	"""
 
 	text: 'RTextBase'
@@ -163,6 +169,8 @@ class RHoverText(RHoverEvent):
 class RHoverEntity(RHoverEvent):
 	"""
 	The hover event component for :attr:`RHoverAction.show_entity` action
+
+	.. versionadded:: v2.15.0
 	"""
 
 	id: str
@@ -259,6 +267,8 @@ class RHoverEntity(RHoverEvent):
 class RHoverItem(RHoverEvent):
 	"""
 	The hover event component for :attr:`RHoverAction.show_item` action
+
+	.. versionadded:: v2.15.0
 	"""
 
 	id: str

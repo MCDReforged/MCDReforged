@@ -20,6 +20,9 @@ _RCE = TypeVar('_RCE', bound='RClickEvent')
 class RClickAction(NamedObject, ABC, Generic[_RCE], metaclass=__RClickActionMeta):
 	"""
 	Minecraft text click event actions
+
+	.. versionadded:: v2.15.0
+	.. note:: For versions before v2.15.0, use :attr:`RAction` instead. You can stick to :attr:`RAction` for maximum compatibility
 	"""
 
 	suggest_command: ClassVar['RClickAction[RClickSuggestCommand]']
@@ -65,9 +68,7 @@ class RClickAction(NamedObject, ABC, Generic[_RCE], metaclass=__RClickActionMeta
 	"""
 	Change to the specified page of the current book 
 
-	.. note:: 
-
-		Only work in written books
+	.. note:: Only work in written books
 	"""
 
 	show_dialog: ClassVar['RClickAction[RClickShowDialog]']
@@ -75,6 +76,7 @@ class RClickAction(NamedObject, ABC, Generic[_RCE], metaclass=__RClickActionMeta
 	Open specified dialog
 
 	.. note:: Available in Minecraft 1.21.6+
+	.. versionadded:: v2.15.0
 	"""
 
 	custom: ClassVar['RClickAction[RClickCustom]']
@@ -82,6 +84,7 @@ class RClickAction(NamedObject, ABC, Generic[_RCE], metaclass=__RClickActionMeta
 	Send a custom event to the server, which has no effect in vanilla servers
 
 	.. note:: Available in Minecraft 1.21.6+
+	.. versionadded:: v2.15.0
 	"""
 
 	@property
@@ -94,6 +97,8 @@ class RClickAction(NamedObject, ABC, Generic[_RCE], metaclass=__RClickActionMeta
 RAction = RClickAction
 """
 Alias of :class:`RClickAction`
+
+.. versionadded:: v1.0.0
 """
 
 
@@ -120,6 +125,8 @@ class _RClickActionImpl(RClickAction):
 class RClickEvent(ABC):
 	"""
 	An abstract base class of Minecraft click event component
+
+	.. versionadded:: v2.15.0
 	"""
 
 	@property
@@ -175,6 +182,7 @@ class RClickEventSingleValue(RClickEvent, ABC, Generic[_JsonValueType]):
 	An abstract base class for those click event components that contain only 1 value
 
 	.. seealso: :meth:`RTextBase.set_click_event(action, value) <mcdreforged.minecraft.rtext.text.RTextBase.set_click_event>`
+	.. versionadded:: v2.15.0
 	"""
 
 	@override
@@ -207,6 +215,8 @@ class RClickEventSingleValue(RClickEvent, ABC, Generic[_JsonValueType]):
 class RClickSuggestCommand(RClickEventSingleValue[str]):
 	"""
 	The click event component for :attr:`RClickAction.suggest_command` action
+
+	.. versionadded:: v2.15.0
 	"""
 
 	command: str
@@ -236,6 +246,8 @@ class RClickSuggestCommand(RClickEventSingleValue[str]):
 class RClickRunCommand(RClickEventSingleValue[str]):
 	"""
 	The click event component for :attr:`RClickAction.run_command` action
+
+	.. versionadded:: v2.15.0
 	"""
 
 	command: str
@@ -265,6 +277,8 @@ class RClickRunCommand(RClickEventSingleValue[str]):
 class RClickOpenUrl(RClickEventSingleValue[str]):
 	"""
 	The click event component for :attr:`RClickAction.open_url` action
+
+	.. versionadded:: v2.15.0
 	"""
 
 	url: str
@@ -294,6 +308,8 @@ class RClickOpenUrl(RClickEventSingleValue[str]):
 class RClickOpenFile(RClickEventSingleValue[str]):
 	"""
 	The click event component for :attr:`RClickAction.open_file` action
+
+	.. versionadded:: v2.15.0
 	"""
 
 	path: str
@@ -323,6 +339,8 @@ class RClickOpenFile(RClickEventSingleValue[str]):
 class RClickCopyToClipboard(RClickEventSingleValue[str]):
 	"""
 	The click event component for :attr:`RClickAction.copy_to_clipboard` action
+
+	.. versionadded:: v2.15.0
 	"""
 
 	value: str
@@ -354,6 +372,7 @@ class RClickShowDialog(RClickEventSingleValue[Union[str, dict]]):
 	The click event component for :attr:`RClickAction.show_dialog` action
 
 	.. note:: Available in Minecraft 1.21.6+
+	.. versionadded:: v2.15.0
 	"""
 
 	dialog: Union[str, dict]
@@ -397,6 +416,8 @@ class RClickShowDialog(RClickEventSingleValue[Union[str, dict]]):
 class RClickChangePage(RClickEventSingleValue[Union[int, str]]):
 	"""
 	The click event component for :attr:`RClickAction.change_page` action
+
+	.. versionadded:: v2.15.0
 	"""
 
 	page: int
@@ -428,6 +449,7 @@ class RClickCustom(RClickEvent):
 	The click event component for :attr:`RClickAction.custom` action
 
 	.. note:: Available in Minecraft 1.21.6+
+	.. versionadded:: v2.15.0
 	"""
 
 	id: str

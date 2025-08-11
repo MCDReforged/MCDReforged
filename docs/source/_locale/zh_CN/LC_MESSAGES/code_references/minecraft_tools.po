@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-11 02:51+0800\n"
+"POT-Creation-Date: 2025-08-12 01:31+0800\n"
 "PO-Revision-Date: 2021-01-24 09:02+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -36,7 +36,7 @@ msgid ""
 "<https://github.com/TISUnion/stext>`__ library"
 msgstr ""
 "感谢 `Pandaria98 <https://github.com/Pandaria98>`__ 的 `stext API "
-"<https://github.com/TISUnion/stext>`__ 库"
+"<https://github.com/TISUnion/stext>`__ 库，这同时此库的灵感来源"
 
 #: ../code_references/minecraft_tools.rst:13
 msgid "Text Styles"
@@ -229,6 +229,12 @@ msgstr "文本点击事件"
 msgid "Minecraft text click event actions"
 msgstr "Minecraft 文本点击事件行为"
 
+#: mcdreforged.minecraft.rtext.click_event.RClickAction:4 of
+msgid ""
+"For versions before v2.15.0, use :attr:`RAction` instead. You can stick "
+"to :attr:`RAction` for maximum compatibility"
+msgstr "对于 v2.15.0 以前的版本，请使用 :attr:`RAction` 作为替代。如需最大的兼容性，继续用 :attr:`RAction` 即可"
+
 #: ../../docstring
 #: mcdreforged.minecraft.rtext.click_event.RClickAction.suggest_command:1 of
 msgid "Fill the chat bar with given text"
@@ -308,7 +314,7 @@ msgid "Change to the specified page of the current book"
 msgstr "要跳转到当前打开的书本页数"
 
 #: ../../docstring
-#: mcdreforged.minecraft.rtext.click_event.RClickAction.change_page:5 of
+#: mcdreforged.minecraft.rtext.click_event.RClickAction.change_page:3 of
 msgid "Only work in written books"
 msgstr "仅在成书中的有效"
 
