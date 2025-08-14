@@ -79,15 +79,11 @@ class PackedPlugin(MultiFilePlugin):
 				else:
 					is_module = not init_info.is_dir()
 				if is_module and package_name != self.get_id():
-					raise IllegalPluginStructure(
-						'Packed plugin cannot contain other package: found package {}'.format(package_name)
-					)
+					raise IllegalPluginStructure('Packed plugin cannot contain other package: found package {}'.format(package_name))
 			elif file_info.filename.endswith('.py'):
-				module_name = file_info.filename[:-3]  # 去掉 .py
+				module_name = file_info.filename[:-3]  # remove .py
 				if module_name != self.get_id():
-					raise IllegalPluginStructure(
-						'Packed plugin cannot contain other module: found module {}'.format(module_name)
-					)
+					raise IllegalPluginStructure('Packed plugin cannot contain other module: found module {}'.format(module_name))
 
 	# noinspection PyProtectedMember,PyUnresolvedReferences
 	@override
