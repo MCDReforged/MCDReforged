@@ -28,15 +28,15 @@ class _DirectoryPluginBase(MultiFilePlugin, ABC):
 	@override
 	def _check_dir_legality(self):
 		plugin_id = self.get_id()
-        for name in os.listdir(self._file_root):
-            path = self._file_root / name
-            if path.is_dir():
-                is_module = (path / '__init__.py').is_file()
-                if is_module and name != plugin_id:
-                    raise IllegalPluginStructure('Packed plugin cannot contain other package: found package {}'.format(name))
-            else:
-                if Path(name).suffix == '.py' and Path(name).stem != plugin_id:
-                    raise IllegalPluginStructure('Directory plugin cannot contain other module: found module {}'.format(Path(name).stem))
+		for name in os.listdir(self._file_root):
+			path = self._file_root / name
+			if path.is_dir():
+				is_module = (path / '__init__.py').is_file()
+				if is_module and name != plugin_id:
+					raise IllegalPluginStructure('Packed plugin cannot contain other package: found package {}'.format(name))
+			else:
+				if Path(name).suffix == '.py' and Path(name).stem != plugin_id:
+					raise IllegalPluginStructure('Directory plugin cannot contain other module: found module {}'.format(Path(name).stem))
 
 	@override
 	def file_exists(self):
