@@ -67,7 +67,7 @@ class PackedPlugin(MultiFilePlugin):
 	@override
 	def _check_dir_legality(self):
 		plugin_id = self.get_id()
-        for file_info in self.__zip_file.infolist():
+		for file_info in self.__zip_file.infolist():
 			name = file_info.filename.rstrip('/')
 			if '/' in name: # not at root
 				continue
