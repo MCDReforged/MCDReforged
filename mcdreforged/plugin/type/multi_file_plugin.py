@@ -55,6 +55,8 @@ class MultiFilePlugin(RegularPlugin, ABC):
 				self.mcdr_server.logger.warning('Suspicious entrypoint module path for plugin %s, package name conflict?', self)
 				self.mcdr_server.logger.warning('- Plugin file root: %s', file_root)
 				self.mcdr_server.logger.warning('- Loaded entrypoint path: %s', mod_path)
+		else:
+			self.mcdr_server.logger.warning('Suspicious entrypoint module %s for plugin %s, it may be an implicit package?', mod.__name__, self)
 		return mod
 
 	@override
@@ -67,7 +69,7 @@ class MultiFilePlugin(RegularPlugin, ABC):
 		with meta_file:
 			self._set_metadata(Metadata(json.load(meta_file), plugin=self))
 		self.__check_requirements()
-		self._check_subdir_legality()
+		self._check_dir_legality()
 
 	@override
 	def _on_unload(self):
@@ -110,7 +112,7 @@ class MultiFilePlugin(RegularPlugin, ABC):
 			except Exception:
 				self.mcdr_server.logger.exception('Fail to load default translation from file {} in {}'.format(file_path, repr(self)))
 
-	def _check_subdir_legality(self):
+	def _check_dir_legality(self):
 		"""
 		Make sure the only python submodule inside the plugin is named with the plugin id
 		:raise IllegalPluginStructure if check failed

@@ -448,8 +448,11 @@ class AbstractNode(ABC):
 								for child in node._children:
 									if not child.__check_preconditions(context):
 										continue
-									with context.enter_child(child):
-										executions.extend(child._execute_command(context))
+									try:
+										with context.enter_child(child):
+											executions.extend(child._execute_command(context))
+									except UnknownArgument:
+										continue
 									break
 								else:  # No argument child
 									argument_unknown = True
