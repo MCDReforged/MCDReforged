@@ -542,8 +542,11 @@ Example values::
 telemetry
 ^^^^^^^^^
 
+The telemetry switch
+
 MCDR collects anonymous telemetry data on some basic information about MCDR and the runtime environment, for the purpose of improving MCDR.
 The collected telemetry data do not contain any personal information, and are not sold or used for advertising purposes
+
 If you simply don't want MCDR to report any telemetry data, you can disable it by setting the option value to false
 
 .. seealso::
