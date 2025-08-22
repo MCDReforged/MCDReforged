@@ -33,11 +33,13 @@ author = 'Fallen_Breath'
 # The full version, including alpha/beta/rc tags
 try:
 	import mcdreforged.constants.core_constant as core_constant
-	release = core_constant.VERSION
-	print('Loaded MCDR version {}'.format(release))
+	mcdr_version = core_constant.VERSION
+	print('Loaded MCDR version {}'.format(mcdr_version))
 except (ImportError, AttributeError) as e:
-	release = '2.0'
-	print('Load MCDR version failed ({}), use fallback version {}'.format(e, release))
+	mcdr_version = '2.0'
+	print('Load MCDR version failed ({}), use fallback version {}'.format(e, mcdr_version))
+
+release = mcdr_version
 
 
 # -- General configuration ---------------------------------------------------
@@ -101,7 +103,7 @@ def setup(app: 'Sphinx'):
 		def run(self):
 			self.assert_has_content()
 			for i in range(len(self.content)):
-				self.content[i] = self.content[i].replace('@@MCDR_VERSION@@', core_constant.VERSION)
+				self.content[i] = self.content[i].replace('@@MCDR_VERSION@@', mcdr_version)
 			return super().run()
 
 	app.add_directive('prompt-mcdr-version', PromptWithMCDRVersion)
