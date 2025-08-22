@@ -34,7 +34,7 @@ start_command: echo Hello world from MCDReforged
 # The handler to the specific way to parse the standard output text of the server and the correct command for server control
 #   vanilla_handler    , for Vanilla / Carpet / Fabric server
 #   beta18_handler     , for Vanilla server in legacy versions, e.g. < 1.7, or even beta1.8
-#   bukkit_handler     , for Bukkit / Spigot server with Minecraft version below 1.14, and Paper / Mohist server in all version
+#   bukkit_handler     , for Bukkit / Spigot server with Minecraft version below 1.14, and Paper / Mohist / Folia server in all version
 #   bukkit14_handler   , for Bukkit / Spigot server with Minecraft version 1.14 and above
 #   forge_handler      , for Forge server
 #   cat_server_handler , for CatServer server
