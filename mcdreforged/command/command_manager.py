@@ -49,26 +49,26 @@ class CommandExecutionInvoker(CallbackInvoker):
 		self.__mcdr_server.async_task_executor.submit(async_command_execution_wrapper(), plugin=self.__pch.plugin)
 
 
-# deal with !!MCDR and !!help command
 class CommandManager:
 	def __init__(self, mcdr_server: 'MCDReforgedServer'):
 		self.mcdr_server = mcdr_server
 		self.logger = self.mcdr_server.logger
-		self.root_nodes: Dict[str, List[PluginCommandHolder]] = collections.defaultdict(list)
+		self.root_nodes: Dict[str, List[PluginCommandHolder]] = {}
 
 		self.__preserve_command_error_display_flag = False
 
 	@contextlib.contextmanager
 	def start_command_register(self):
-		self.root_nodes.clear()
-		yield self.__register_one_command
-		for literal, pch_list in self.root_nodes.items():
+		def register_one_command(pch: PluginCommandHolder):
+			for literal_ in pch.node.literals:
+				new_root_nodes[literal_].append(pch)
+
+		new_root_nodes: Dict[str, List[PluginCommandHolder]] = collections.defaultdict(list)
+		yield register_one_command
+		for literal, pch_list in new_root_nodes.items():
 			if sum([not pch.allow_duplicates for pch in pch_list]) >= 2:
 				self.logger.warning('Found duplicated command root literal {!r}: {}'.format(literal, pch_list))
-
-	def __register_one_command(self, pch: PluginCommandHolder):
-		for literal in pch.node.literals:
-			self.root_nodes[literal].append(pch)
+		self.root_nodes = dict(new_root_nodes)  # no more defaultdict
 
 	def __translate_command_error_header(self, source: CommandSource, translation_key_: str, error_: CommandError) -> str:
 		if isinstance(error_, RequirementNotMet):
