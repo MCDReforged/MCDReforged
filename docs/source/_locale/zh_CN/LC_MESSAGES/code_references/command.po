@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-23 23:33+0800\n"
+"POT-Creation-Date: 2025-08-23 01:02+0800\n"
 "PO-Revision-Date: 2021-01-23 17:24+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -214,6 +214,40 @@ msgstr "源自一个由 MCDR 创建的 info 的命令源"
 #: mcdreforged.command.command_source.InfoCommandSource.get_info:1 of
 msgid "Return the Info instance that this command source is created from"
 msgstr "返回此命令源创建的 info 对象"
+
+#: mcdreforged.command.command_source.ConsoleCommandSource:1
+#: mcdreforged.command.command_source.PlayerCommandSource:1 of
+msgid "Bases: :py:class:`~mcdreforged.command.command_source.InfoCommandSource`"
+msgstr ""
+
+#: mcdreforged.command.command_source.PlayerCommandSource:1 of
+msgid "Player command source: the command source that represents a player"
+msgstr "玩家命令源：代表一个玩家的命令源"
+
+#: ../../docstring
+#: mcdreforged.command.command_source.PlayerCommandSource.player:1 of
+msgid "The name of the player"
+msgstr "玩家的名字"
+
+#: mcdreforged.command.command_source.PlayerCommandSource.reply:1 of
+msgid "encoding method to be used in :meth:`ServerInterface.tell`"
+msgstr "在调用 :meth:`ServerInterface.tell` 时所使用的文本编码方法"
+
+#: mcdreforged.command.command_source.ConsoleCommandSource:1 of
+msgid "Console command source: the command source that represents the console"
+msgstr "控制台命令源：代表控制台的命令源"
+
+#: mcdreforged.command.command_source.ConsoleCommandSource.reply:1 of
+msgid "If it's specified, overwrite the value of parameter ``message`` with it"
+msgstr "若提供，则使用其值来覆盖 ``message`` 参数"
+
+#: mcdreforged.command.command_source.PluginCommandSource:1 of
+msgid "Bases: :py:class:`~mcdreforged.command.command_source.CommandSource`"
+msgstr ""
+
+#: mcdreforged.command.command_source.PluginCommandSource:1 of
+msgid "Plugin command source: the command source that represents a MCDR plugin"
+msgstr "插件命令源：代表 MCDR 插件的命令源"
 
 #: ../code_references/command.rst:20
 msgid "Command Nodes"

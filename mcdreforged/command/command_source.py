@@ -179,6 +179,9 @@ class InfoCommandSource(CommandSource, ABC):
 
 
 class PlayerCommandSource(InfoCommandSource):
+	"""
+	Player command source: the command source that represents a player
+	"""
 	def __init__(self, mcdr_server: 'MCDReforgedServer', info: 'Info', player: str):
 		if not info.is_from_server:
 			raise TypeError('{} should be built from server info'.format(self.__class__.__name__))
@@ -212,6 +215,9 @@ class PlayerCommandSource(InfoCommandSource):
 
 
 class ConsoleCommandSource(InfoCommandSource):
+	"""
+	Console command source: the command source that represents the console
+	"""
 	def __init__(self, mcdr_server: 'MCDReforgedServer', info: 'Info'):
 		if not info.is_from_console:
 			raise TypeError('{} should be built from console info'.format(self.__class__.__name__))
@@ -244,6 +250,9 @@ class ConsoleCommandSource(InfoCommandSource):
 
 
 class PluginCommandSource(CommandSource):
+	"""
+	Plugin command source: the command source that represents a MCDR plugin
+	"""
 	def __init__(self, server: 'ServerInterface', plugin: Optional['AbstractPlugin'] = None):
 		self.__server = server.as_basic_server_interface()
 		self.__logger = self.__server.logger
