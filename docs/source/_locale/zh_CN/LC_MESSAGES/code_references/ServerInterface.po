@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-12 16:25+0800\n"
+"POT-Creation-Date: 2025-08-23 01:38+0800\n"
 "PO-Revision-Date: 2025-05-28 20:50+0800\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1106,7 +1106,7 @@ msgstr "命令"
 #: mcdreforged.plugin.si.server_interface.ServerInterface.get_plugin_command_source:1
 #: of
 msgid "Return a simple plugin command source for e.g. command execution"
-msgstr "返回一个简单的插件命令源，用于例如执行命令时使用"
+msgstr "返回一个简单的插件命令源，可用于执行 MCDR 命令"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.get_plugin_command_source:3
 #: of
@@ -1114,6 +1114,35 @@ msgid ""
 "It's not player or console, it has maximum permission level, it uses "
 ":attr:`logger` for replying"
 msgstr "该命令源不是玩家或控制台，它拥有最高的权限等级，它使用 :attr:`logger` 来处理回复"
+
+#: ../../docstring
+#: mcdreforged.plugin.si.server_interface.ServerInterface.get_plugin_command_source:1
+#: of
+msgid "Alias of :meth:`get_plugin_command_source`"
+msgstr ":meth:`get_plugin_command_source` 的别名"
+
+#: mcdreforged.plugin.si.server_interface.ServerInterface.create_player_command_source:1
+#: of
+msgid "Create a player command source for e.g. command execution"
+msgstr "返回一个简单的玩家命令源，可用于执行 MCDR 命令"
+
+#: mcdreforged.plugin.si.server_interface.ServerInterface.create_console_command_source:3
+#: mcdreforged.plugin.si.server_interface.ServerInterface.create_player_command_source:3
+#: of
+msgid ""
+"Note: the :class:`~mcdreforged.info_reactor.info.Info` instance bound to "
+"the returned command source is a dummy one that contains nothing"
+msgstr "注意：绑定到返回的命令源的 :class:`~mcdreforged.info_reactor.info.Info` 对象是一个不包含任何内容空对象"
+
+#: mcdreforged.plugin.si.server_interface.ServerInterface.create_player_command_source:6
+#: of
+msgid "The name of the player"
+msgstr "目标玩家的名字"
+
+#: mcdreforged.plugin.si.server_interface.ServerInterface.create_console_command_source:1
+#: of
+msgid "Create a console command source for e.g. command execution"
+msgstr "返回一个简单的控制台命令源，可用于执行 MCDR 命令"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.execute_command:1 of
 msgid "Execute a single command in MCDR's command system"
@@ -1136,7 +1165,7 @@ msgid ""
 "fallback command source"
 msgstr "用于执行该条命令的命令源。如果它未被指定，MCDR 将会使用 :meth:`get_plugin_command_source` 来获得默认的命令源"
 
-#: ../code_references/ServerInterface.rst:116
+#: ../code_references/ServerInterface.rst:120
 msgid "Preference"
 msgstr "偏好"
 
@@ -1183,7 +1212,7 @@ msgstr "你要设置的偏好的对象"
 msgid "The preference to be set"
 msgstr "设置给定对象的 MCDR 偏好"
 
-#: ../code_references/ServerInterface.rst:123
+#: ../code_references/ServerInterface.rst:127
 msgid "Misc"
 msgstr "杂项"
 

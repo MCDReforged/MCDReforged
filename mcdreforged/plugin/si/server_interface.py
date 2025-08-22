@@ -10,7 +10,7 @@ import psutil
 
 from mcdreforged.command.command_source import CommandSource, PluginCommandSource, PlayerCommandSource, ConsoleCommandSource
 from mcdreforged.constants.deprecations import SERVER_INTERFACE_LANGUAGE_KEYWORD
-from mcdreforged.info_reactor.info import Info
+from mcdreforged.info_reactor.info import Info, InfoSource
 from mcdreforged.info_reactor.server_information import ServerInformation
 from mcdreforged.logging.debug_option import DebugOption
 from mcdreforged.logging.logger import MCDReforgedLogger
@@ -1001,6 +1001,39 @@ class ServerInterface:
 		It's not player or console, it has maximum permission level, it uses :attr:`logger` for replying
 		"""
 		return PluginCommandSource(self, None)
+
+	create_plugin_command_source = get_plugin_command_source
+	"""
+	Alias of :meth:`get_plugin_command_source`
+	"""
+
+	def create_player_command_source(self, player: str) -> PlayerCommandSource:
+		"""
+		Create a player command source for e.g. command execution
+
+		Note: the :class:`~mcdreforged.info_reactor.info.Info` instance bound to the returned command source
+		is a dummy one that contains nothing
+
+		:param player: The name of the player
+		"""
+		info = Info(InfoSource.SERVER, '')
+		command_source = PlayerCommandSource(self._mcdr_server, info, player)
+		# noinspection PyProtectedMember
+		info._attach_and_finalize(self._mcdr_server, command_source=command_source)
+		return command_source
+
+	def create_console_command_source(self) -> ConsoleCommandSource:
+		"""
+		Create a console command source for e.g. command execution
+
+		Note: the :class:`~mcdreforged.info_reactor.info.Info` instance bound to the returned command source
+		is a dummy one that contains nothing
+		"""
+		info = Info(InfoSource.CONSOLE, '')
+		command_source = ConsoleCommandSource(self._mcdr_server, info)
+		# noinspection PyProtectedMember
+		info._attach_and_finalize(self._mcdr_server, command_source=command_source)
+		return command_source
 
 	def execute_command(self, command: str, source: CommandSource = None) -> None:
 		"""
