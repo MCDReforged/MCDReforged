@@ -179,7 +179,7 @@ class InfoCommandSource(CommandSource, ABC):
 
 
 class PlayerCommandSource(InfoCommandSource):
-	def __init__(self, mcdr_server, info, player: str):
+	def __init__(self, mcdr_server: 'MCDReforgedServer', info: 'Info', player: str):
 		if not info.is_from_server:
 			raise TypeError('{} should be built from server info'.format(self.__class__.__name__))
 		super().__init__(mcdr_server, info)
@@ -212,7 +212,7 @@ class PlayerCommandSource(InfoCommandSource):
 
 
 class ConsoleCommandSource(InfoCommandSource):
-	def __init__(self, mcdr_server, info):
+	def __init__(self, mcdr_server: 'MCDReforgedServer', info: 'Info'):
 		if not info.is_from_console:
 			raise TypeError('{} should be built from console info'.format(self.__class__.__name__))
 		super().__init__(mcdr_server, info)
