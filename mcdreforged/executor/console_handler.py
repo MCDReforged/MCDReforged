@@ -101,6 +101,10 @@ class CachedSuggestionProvider:
 		self.__cache_input: Optional[str] = None
 		self.__cache_suggestion: Optional[CommandSuggestions] = None
 
+	@property
+	def mcdr_server(self) -> 'MCDReforgedServer':
+		return self.__command_manager.mcdr_server
+
 	def suggest(self, input_: str) -> CommandSuggestions:
 		with self.__lock:
 			if input_ == self.__cache_input:
@@ -108,9 +112,12 @@ class CachedSuggestionProvider:
 		acq = self.__calc_lock.acquire(blocking=False)
 		if not acq:
 			return CommandSuggestions()  # empty suggestion
-		info = self.__command_manager.mcdr_server.server_handler_manager.get_current_handler().parse_console_command(input_)
-		command_source = ConsoleSuggestionCommandSource(self.__command_manager.mcdr_server, info)
 		try:
+			info = self.mcdr_server.server_handler_manager.get_current_handler().parse_console_command(input_)
+			command_source = ConsoleSuggestionCommandSource(self.__command_manager.mcdr_server, info)
+			# noinspection PyProtectedMember
+			info._attach_and_finalize(self.mcdr_server, command_source=command_source)
+
 			suggestion = self.__command_manager.suggest_command(input_, command_source)
 			with self.__lock:
 				self.__cache_input = input_

@@ -230,11 +230,13 @@ class Info:
 			raise IllegalStateError('This info instance has not been finalized, the API you called is not available yet')
 		return self.__control_data
 
-	def _attach_and_finalize(self, mcdr_server: 'MCDReforgedServer'):
+	def _attach_and_finalize(self, mcdr_server: 'MCDReforgedServer', *, command_source: Optional[InfoCommandSource] = None):
 		"""
 		**Not public API**
 		"""
 		def create_command_source() -> Optional[InfoCommandSource]:
+			if command_source is not None:
+				return command_source
 			if self.is_from_console:
 				return ConsoleCommandSource(mcdr_server, self)
 			elif self.is_player:
