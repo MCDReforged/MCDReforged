@@ -262,7 +262,11 @@ class PluginCommandSource(CommandSource):
 		misc_utils.print_text_to_console(self.__logger, message)
 
 	def __eq__(self, other) -> bool:
-		return isinstance(other, PluginCommandSource) and self.__plugin.get_id() == other.__plugin.get_id()
+		return (
+				isinstance(other, PluginCommandSource) and
+				(self.__plugin is None) == (other.__plugin is None) and
+				(self.__plugin is None or self.__plugin.get_id() == other.__plugin.get_id())
+		)
 
 	def __str__(self):
 		return 'Plugin' if self.__plugin is None else 'Plugin {}'.format(self.__plugin)
