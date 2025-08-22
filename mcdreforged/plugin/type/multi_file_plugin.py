@@ -1,6 +1,7 @@
 import importlib
 import json
 import os
+import re
 import sys
 from abc import ABC, abstractmethod
 from pathlib import Path
@@ -111,6 +112,8 @@ class MultiFilePlugin(RegularPlugin, ABC):
 				self.register_translation(language, translations)
 			except Exception:
 				self.mcdr_server.logger.exception('Fail to load default translation from file {} in {}'.format(file_path, repr(self)))
+
+	_ILLEGAL_ROOT_PY_FILE_STEM = re.compile(r'^[A-Za-z_](?!_)[A-Za-z0-9_]*$')
 
 	def _check_dir_legality(self):
 		"""

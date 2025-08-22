@@ -35,7 +35,7 @@ class _DirectoryPluginBase(MultiFilePlugin, ABC):
 				if is_module and name != plugin_id:
 					raise IllegalPluginStructure('Directory plugin cannot contain other package: found package {}'.format(name))
 			else:
-				if path.suffix == '.py' and path.stem != plugin_id:
+				if path.suffix == '.py' and self._ILLEGAL_ROOT_PY_FILE_STEM.fullmatch(path.stem):
 					raise IllegalPluginStructure('Directory plugin cannot contain other module: found module {}'.format(path.stem))
 
 	@override
@@ -104,9 +104,9 @@ class LinkedDirectoryPlugin(_DirectoryPluginBase):
 		}
 
 	@override
-	def _check_subdir_legality(self):
+	def _check_dir_legality(self):
 		if not self.__ldp_meta.skip_package_legality_check:
-			super()._check_subdir_legality()
+			super()._check_dir_legality()
 
 	@override
 	def _on_load(self):
