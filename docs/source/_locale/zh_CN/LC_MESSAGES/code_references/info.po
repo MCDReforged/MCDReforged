@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-21 02:47+0800\n"
+"POT-Creation-Date: 2025-08-23 00:12+0800\n"
 "PO-Revision-Date: 2021-01-22 14:26+0000\n"
 "Last-Translator: \n"
 "Language: zh_CN\n"
@@ -148,11 +148,15 @@ msgid ""
 "info is from a player in the server"
 msgstr ":class:`~mcdreforged.command.command_source.PlayerCommandSource`，如果该信息来自服务端中的玩家"
 
+#: mcdreforged.info_reactor.info.Info.get_command_source:5 of
+msgid "Otherwise: return None"
+msgstr "其他情况将返回 None"
+
 #: ../code_references/info.rst
 msgid "Returns"
 msgstr "返回"
 
-#: mcdreforged.info_reactor.info.Info.get_command_source:6 of
+#: mcdreforged.info_reactor.info.Info.get_command_source:7 of
 msgid "The command source instance, or None if it can't extract a command source"
 msgstr "返回命令源实例。如果无法提取命令源，则返回 None"
 
@@ -195,7 +199,7 @@ msgid "Send the content from console stdin to server stdin"
 msgstr "将控制台标准输入内容发送到服务器的标准输入"
 
 #: ../../docstring
-#: mcdreforged.info_reactor.info.InfoActionFlag.print_to_console:1 of
+#: mcdreforged.info_reactor.info.InfoActionFlag.echo_to_console:1 of
 msgid "Print the server output to the console stdout"
 msgstr "将服务器输出内容回显到控制台标准输出"
 
@@ -313,9 +317,10 @@ msgid ""
 "object, you can edit its "
 ":attr:`~<mcdreforged.info_reactor.info.Info.action_flag>` in this "
 "function. Returning ``False`` is actually equivalent to::"
-msgstr "要精确控制 MCDR 接下来应对该 info 对象执行哪些操作，"
-"可以在此函数中修改其 :attr:`~<mcdreforged.info_reactor.info.Info.action_flag>` 属性。"
-"返回 ``False`` 实际上等同于::"
+msgstr ""
+"要精确控制 MCDR 接下来应对该 info 对象执行哪些操作，可以在此函数中修改其 "
+":attr:`~<mcdreforged.info_reactor.info.Info.action_flag>` 属性。返回 ``False``"
+" 实际上等同于::"
 
 #: mcdreforged.info_reactor.info_filter.InfoFilter.filter_server_info:18 of
 msgid "class :class:`~mcdreforged.info_reactor.info.InfoActionFlag`"

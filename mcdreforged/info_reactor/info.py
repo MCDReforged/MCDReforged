@@ -187,6 +187,7 @@ class Info:
 
 		* :class:`~mcdreforged.command.command_source.ConsoleCommandSource` if this info is from console
 		* :class:`~mcdreforged.command.command_source.PlayerCommandSource` if this info is from a player in the server
+		* Otherwise: return None
 
 		:return: The command source instance, or None if it can't extract a command source
 		"""
