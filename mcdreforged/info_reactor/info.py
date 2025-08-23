@@ -22,7 +22,7 @@ class InfoSource(int, enum.Enum):
 	"""
 
 	SERVER = 0
-	"""From the standard output stream of the server"""
+	"""From the standard output / standard error stream of the server"""
 
 	CONSOLE = 1
 	"""From input from console"""
@@ -107,9 +107,9 @@ class Info:
 
 	raw_content: str
 	"""
-	Very raw unparsed content from the server stdout.
+	Very raw unparsed content from the server stdout / stderr
 
-	It's also the content to be echoed to the stdout
+	It's also the content to be echoed to the console stdout
 	"""
 
 	id: int = dataclasses.field(default_factory=_InfoIdCounter.acquire)
@@ -138,7 +138,7 @@ class Info:
 	"""
 
 	logging_level: Optional[str] = None
-	"""The logging level of the server's stdout, such as ``"INFO"`` or ``"WARN"``"""
+	"""The logging level of the server's output, such as ``"INFO"`` or ``"WARN"``"""
 
 	action_flag: InfoActionFlag = dataclasses.field(default_factory=InfoActionFlag.default)
 	"""
