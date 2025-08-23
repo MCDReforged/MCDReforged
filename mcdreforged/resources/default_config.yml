@@ -176,6 +176,7 @@ handler_detection: true
 debug:
   all: false
   mcdr: false
+  process: false
   handler: false
   reactor: false
   plugin: false

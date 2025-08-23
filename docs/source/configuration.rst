@@ -682,6 +682,7 @@ Debug logging switches. Set ``all`` to true to enable all debug logging, or set 
     debug:
       all: false
       mcdr: false
+      process: false
       handler: false
       reactor: false
       plugin: false

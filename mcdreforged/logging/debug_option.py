@@ -9,6 +9,7 @@ class DebugOption(Flag):
 
 	ALL = auto()
 	MCDR = auto()
+	PROCESS = auto()
 	HANDLER = auto()
 	REACTOR = auto()
 	PLUGIN = auto()
