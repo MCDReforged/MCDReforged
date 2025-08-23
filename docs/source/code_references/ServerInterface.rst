@@ -110,9 +110,8 @@ Command
 -------
 
 .. automethod:: ServerInterface.get_plugin_command_source
-.. autoattribute:: ServerInterface.create_plugin_command_source
-.. automethod:: ServerInterface.create_player_command_source
-.. automethod:: ServerInterface.create_console_command_source
+.. automethod:: ServerInterface.get_player_command_source
+.. automethod:: ServerInterface.get_console_command_source
 .. automethod:: ServerInterface.execute_command
 
 Preference

@@ -996,20 +996,15 @@ class ServerInterface:
 
 	def get_plugin_command_source(self) -> PluginCommandSource:
 		"""
-		Return a simple plugin command source for e.g. command execution
+		Return a plugin command source, which can be used to execute MCDR commands
 
 		It's not player or console, it has maximum permission level, it uses :attr:`logger` for replying
 		"""
 		return PluginCommandSource(self, None)
 
-	create_plugin_command_source = get_plugin_command_source
-	"""
-	Alias of :meth:`get_plugin_command_source`
-	"""
-
-	def create_player_command_source(self, player: str) -> PlayerCommandSource:
+	def get_player_command_source(self, player: str) -> PlayerCommandSource:
 		"""
-		Create a player command source for e.g. command execution
+		Return a player command source, which can be used to simulate a player executing MCDR commands
 
 		Note: the :class:`~mcdreforged.info_reactor.info.Info` instance bound to the returned command source
 		is a dummy one that contains nothing
@@ -1022,9 +1017,9 @@ class ServerInterface:
 		info._attach_and_finalize(self._mcdr_server, command_source=command_source)
 		return command_source
 
-	def create_console_command_source(self) -> ConsoleCommandSource:
+	def get_console_command_source(self) -> ConsoleCommandSource:
 		"""
-		Create a console command source for e.g. command execution
+		Return a console command source, which can be used to simulate the console executing MCDR commands
 
 		Note: the :class:`~mcdreforged.info_reactor.info.Info` instance bound to the returned command source
 		is a dummy one that contains nothing
