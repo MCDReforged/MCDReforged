@@ -1,6 +1,6 @@
 import logging
 import sys
-from threading import Lock
+import threading
 from typing import IO
 
 
@@ -11,7 +11,7 @@ class _SyncWriteStream:
 	"""
 	def __init__(self, stream: IO[str]):
 		self.sws_stream = stream
-		self.sws_lock = Lock()
+		self.sws_lock = threading.RLock()  # in case of reentrancy during signal handling or whatever
 
 	def write(self, s: str):
 		with self.sws_lock:
