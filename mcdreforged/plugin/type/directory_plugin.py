@@ -33,10 +33,10 @@ class _DirectoryPluginBase(MultiFilePlugin, ABC):
 			if path.is_dir():
 				is_module = (path / '__init__.py').is_file()
 				if is_module and name != plugin_id:
-					raise IllegalPluginStructure('Directory plugin cannot contain other package: found package {}'.format(name))
+					raise IllegalPluginStructure('Directory plugin cannot contain other package: found package {} at {}'.format(name, path))
 			else:
 				if path.suffix == '.py' and path.stem != plugin_id and self._ILLEGAL_ROOT_PY_FILE_STEM.fullmatch(path.stem):
-					raise IllegalPluginStructure('Directory plugin cannot contain other module: found module {}'.format(path.stem))
+					raise IllegalPluginStructure('Directory plugin cannot contain other module: found module {} at {}'.format(path.stem, path))
 
 	@override
 	def file_exists(self):

@@ -29,7 +29,7 @@ from mcdreforged.plugin.type.common import PluginState
 from mcdreforged.plugin.type.plugin import AbstractPlugin
 from mcdreforged.plugin.type.regular_plugin import RegularPlugin
 from mcdreforged.utils import file_utils, string_utils, class_utils, path_utils, function_utils, future_utils, collection_utils
-from mcdreforged.utils.exception import SelfJoinError
+from mcdreforged.utils.exception import SelfJoinError, IllegalPluginStructure
 from mcdreforged.utils.types.path_like import PathStr
 
 if TYPE_CHECKING:
@@ -184,6 +184,17 @@ class PluginManager:
 		else:
 			return None
 
+	def __log_plugin_loading_error(self, plugin: AbstractPlugin, e: Exception, err_msg_tr_key: str):
+		err_msg = self.__tr(err_msg_tr_key, plugin.get_name())
+		if isinstance(e, RequirementCheckFailure):
+			self.logger.error(err_msg)
+			self.logger.error(self.__tr('load_plugin.resolution_error', plugin.get_name(), str(e)))
+		elif isinstance(e, IllegalPluginStructure):
+			self.logger.error(err_msg)
+			self.logger.error(self.__tr('load_plugin.plugin_structure_error', plugin.get_name(), str(e)))
+		else:
+			self.logger.exception(err_msg)
+
 	def __load_plugin(self, file_path: Path) -> Optional[RegularPlugin]:
 		"""
 		Try to load a plugin from the given file
@@ -196,11 +207,7 @@ class PluginManager:
 		try:
 			plugin.load()
 		except Exception as e:
-			if isinstance(e, RequirementCheckFailure):
-				self.logger.error(self.__tr('load_plugin.fail', plugin.get_name()))
-				self.logger.error(self.__tr('load_plugin.resolution_error', plugin.get_name(), str(e)))
-			else:
-				self.logger.exception(self.__tr('load_plugin.fail', plugin.get_name()))
+			self.__log_plugin_loading_error(plugin, e, 'load_plugin.fail')
 			return None
 		else:
 			existed_plugin = self.__plugins.get(plugin.get_id())
@@ -250,11 +257,7 @@ class PluginManager:
 		try:
 			plugin.reload()
 		except Exception as e:
-			if isinstance(e, RequirementCheckFailure):
-				self.logger.error(self.__tr('reload_plugin.fail', plugin.get_name()))
-				self.logger.error(self.__tr('load_plugin.resolution_error', plugin.get_name(), str(e)))
-			else:
-				self.logger.exception(self.__tr('reload_plugin.fail', plugin.get_name()))
+			self.__log_plugin_loading_error(plugin, e, 'reload_plugin.fail')
 			self.__unload_plugin(plugin)
 			return False
 		else:

@@ -434,6 +434,7 @@ mcdreforged:
       duplicate: 插件 {0} ({1}) 拥有与已存在插件 {2} ({3}) 相同的 id，已移除
       unload_duplication_fail: 重复插件 {0} ({1}) 卸载失败
       resolution_error: '插件 {0} 的 Python 依赖库需求未被满足: {1}'
+      plugin_structure_error: '插件 {0} 包含非法的文件结构: {1}'
     unload_plugin:
       entered: 正在卸载插件 {0}
       fail: 插件 {0} 卸载失败

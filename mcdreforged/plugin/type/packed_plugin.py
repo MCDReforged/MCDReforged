@@ -86,7 +86,7 @@ class PackedPlugin(MultiFilePlugin):
 			elif name.endswith('.py'):
 				module_name = name[:-3]  # remove .py
 				if module_name != plugin_id and self._ILLEGAL_ROOT_PY_FILE_STEM.fullmatch(module_name):
-					raise IllegalPluginStructure('Packed plugin cannot contain other module: found module {}'.format(module_name))
+					raise IllegalPluginStructure('Packed plugin cannot contain other module: found module {} at {}'.format(module_name, name))
 
 	@override
 	def _on_unload(self):
