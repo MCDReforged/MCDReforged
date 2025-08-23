@@ -640,14 +640,21 @@ class MCDReforgedServer:
 		self.set_mcdr_state(MCDReforgedState.RUNNING)
 
 	def __register_signal_handler(self):
+		is_signal_logging = False
+
 		def callback(sig: int, _frame):
 			try:
 				signal_name = signal.Signals(sig).name
 			except ValueError:
 				signal_name = 'unknown'
 
-			# FIXME: logging error with "reentrant call inside xxx" if the signal is caught during logging
-			self.logger.warning('Received signal {} ({}), interrupting MCDR'.format(signal_name, sig))
+			nonlocal is_signal_logging
+			if not is_signal_logging:
+				is_signal_logging = True
+				try:
+					self.logger.warning('Received signal {} ({}), interrupting MCDR'.format(signal_name, sig))
+				finally:
+					is_signal_logging = False
 			self.interrupt()
 
 		import signal
