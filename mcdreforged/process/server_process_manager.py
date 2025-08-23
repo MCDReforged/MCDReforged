@@ -4,6 +4,7 @@ import contextlib
 import dataclasses
 import queue
 import threading
+import time
 from pathlib import Path
 from typing import Optional, Union, List, TYPE_CHECKING
 
@@ -47,7 +48,7 @@ class _RunningProcess:
 
 
 class ServerProcessManager:
-	MAX_OUTPUT_QUEUE_SIZE = 10000
+	MAX_OUTPUT_QUEUE_SIZE = 1024
 
 	def __init__(self, mcdr_server: 'MCDReforgedServer'):
 		self.logger = mcdr_server.logger
@@ -65,16 +66,14 @@ class ServerProcessManager:
 			raise ProcessAlreadyRunning('server process already started')
 
 		async def drain_reader(reader: asyncio.StreamReader, is_stdout: bool):
-			queue_full_cooldown = 0
+			queue_full_warn_ts = 0
 			while line := await reader.readline():
-				try:
-					self.__output_queue.put_nowait(ServerOutput(line, is_stdout))
-				except queue.Full:
-					if queue_full_cooldown == 0:
-						queue_full_cooldown = 1000
+				self.__output_queue.put(ServerOutput(line, is_stdout))
+				if self.__output_queue.full():
+					now = time.time()
+					if now - queue_full_warn_ts >= 10:
+						queue_full_warn_ts = now
 						self.logger.warning('output queue is full')
-					else:
-						queue_full_cooldown -= 1
 
 		async def run_process():
 			try:
