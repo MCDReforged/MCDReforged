@@ -27,7 +27,7 @@ class TaskQueueItem(Generic[_T]):
 	func: Callable[[], _T]
 	priority: TaskPriority
 	plugin: Optional['AbstractPlugin']
-	future: 'Future[_T]'
+	future: Optional[Future[_T]]
 
 
 class TaskQueue:
@@ -40,12 +40,16 @@ class TaskQueue:
 		}
 		if tuple(self.__queues.keys()) != tuple(TaskPriority):
 			raise AssertionError()
+		self.__queues_list = list(self.__queues.values())
 		self.__not_empty = threading.Condition(threading.Lock())
 
 	def __len__(self):
-		return sum(self.qsizes().values())
+		return sum(q.qsize() for q in self.__queues_list)
 
-	def qsizes(self) -> Dict[TaskPriority, int]:
+	def empty(self) -> bool:
+		return all(q.empty() for q in self.__queues_list)
+
+	def queue_sizes(self) -> Dict[TaskPriority, int]:
 		return {p: q.qsize() for p, q in self.__queues.items()}
 
 	def put(self, item: TaskQueueItem, block: bool = True, timeout: Optional[float] = None):
@@ -59,7 +63,7 @@ class TaskQueue:
 				raise queue.Empty()
 
 			end_time = time.time() + timeout if timeout is not None else None
-			while not len(self):
+			while self.empty():
 				remaining = None
 				if end_time is not None and (remaining := end_time - time.time()) <= 0:
 					raise queue.Empty()

@@ -34,15 +34,21 @@ class SyncTaskExecutor(TaskExecutorBase):
 		self.mcdr_server.logger.mdebug('Extracted {} tasks from the previous executor'.format(len(tasks)), option=DebugOption.TASK_EXECUTOR)
 
 	def get_queue_sizes(self) -> Dict[TaskPriority, int]:
-		return self.__task_queue.qsizes()
+		return self.__task_queue.queue_sizes()
 
 	def submit(
 			self, func: Callable[[], _T], *,
-			priority: TaskPriority = TaskPriority.REGULAR, raise_if_full: bool = False, plugin: Optional['AbstractPlugin'] = None
-	) -> 'Future[_T]':
+			priority: TaskPriority = TaskPriority.REGULAR,
+			raise_if_full: bool = False,
+			need_future: bool = True,
+			plugin: Optional['AbstractPlugin'] = None,
+	) -> Optional[Future[_T]]:
 		if not self._executor_thread.is_alive():
 			self.logger.error('Submitting task to a dead task executor {}, thread {}'.format(self, self._executor_thread.ident))
-		future = TaskDoneFuture(self.get_thread())
+		if need_future:
+			future = TaskDoneFuture(self.get_thread())
+		else:
+			future = None
 		item = TaskQueueItem(func, priority, plugin=plugin, future=future)
 		self.__task_queue.put(item, block=not raise_if_full)
 		return future
@@ -83,9 +89,11 @@ class SyncTaskExecutor(TaskExecutorBase):
 				task_result = task.func()
 			except Exception as e:
 				self.mcdr_server.logger.exception(self.mcdr_server.translate('mcdreforged.task_executor.error'))
-				task.future.set_exception(e)
+				if task.future is not None:
+					task.future.set_exception(e)
 			else:
-				task.future.set_result(task_result)
+				if task.future is not None:
+					task.future.set_result(task_result)
 
 	@contextlib.contextmanager
 	def with_plugin_if_on_thread(self, plugin: 'AbstractPlugin'):

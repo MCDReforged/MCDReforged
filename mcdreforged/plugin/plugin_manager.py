@@ -771,7 +771,7 @@ class PluginManager:
 		"""
 		Event listener triggering entrance which correctly handles sync / async listener callback
 		"""
-		if listener.is_async():
+		if listener.is_async:
 			coro = self.__trigger_listener_async(listener, args)
 			return self.mcdr_server.async_task_executor.submit(coro, plugin=listener.plugin)
 		else:
@@ -784,6 +784,7 @@ class PluginManager:
 		The server_interface parameter will be automatically added as the 1st parameter
 		"""
 		try:
+			# XXX: these `with` calls are much costly then the listener callback
 			with self.with_plugin_context(listener.plugin), self.mcdr_server.task_executor.with_plugin_if_on_thread(listener.plugin):
 				listener.callback(listener.plugin.server_interface, *args)
 		except Exception:

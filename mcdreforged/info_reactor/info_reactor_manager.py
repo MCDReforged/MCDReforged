@@ -88,12 +88,18 @@ class InfoReactorManager:
 			if info.is_from_console and InfoActionFlag.send_to_server in info.action_flag:
 				self.mcdr_server.send(info.content)
 
-		def do_info_process() -> Future:
+		def do_info_process_then_send_to_server():
+			def process_info_wrapper():
+				try:
+					self.process_info(info)
+				finally:
+					send_to_server()
 			try:
-				return self.mcdr_server.task_executor.submit(
-					lambda: self.process_info(info),
+				self.mcdr_server.task_executor.submit(
+					process_info_wrapper,
 					raise_if_full=not info.is_user,
 					priority=TaskPriority.INFO,
+					need_future=False
 				)
 			except queue.Full:
 				current_time = time.monotonic()
@@ -104,12 +110,11 @@ class InfoReactorManager:
 					kwargs = {}
 					self.last_queue_full_warn_time = current_time
 				logging_method(self.__tr('info_queue.full'), **kwargs)
-				return future_utils.completed(None)
+				send_to_server()
 
 		echo_to_console()
 		if InfoActionFlag.process in info.action_flag:
-			# do send_to_server() after processing done
-			do_info_process().add_done_callback(send_to_server)
+			do_info_process_then_send_to_server()
 		else:
 			# send to server now
 			send_to_server()

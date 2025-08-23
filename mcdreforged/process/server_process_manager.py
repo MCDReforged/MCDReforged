@@ -59,6 +59,7 @@ class ServerProcessManager:
 		self.logger = mcdr_server.logger
 		self.__tr = mcdr_server.create_internal_translator('process').tr
 		self.__remaining_outputs: 'queue.Queue[ServerOutput]' = queue.Queue(maxsize=self.MAX_OUTPUT_QUEUE_SIZE * 5)
+		self.__has_remaining_outputs = False
 		self.__current_process: Optional[_RunningProcess] = None
 
 	def __del__(self):
@@ -137,6 +138,7 @@ class ServerProcessManager:
 					continue
 				try:
 					self.__remaining_outputs.put_nowait(so)
+					self.__has_remaining_outputs = True
 				except queue.Full:
 					self.logger.warning('self.__remaining_outputs is full, discarding {} remaining output_queue items'.format(output_queue.qsize()))
 
@@ -159,10 +161,11 @@ class ServerProcessManager:
 		self.__current_process = do_start()
 
 	def read_line(self) -> Optional[ServerOutput]:
-		try:
-			return self.__remaining_outputs.get_nowait()
-		except queue.Empty:
-			pass
+		if self.__has_remaining_outputs:
+			try:
+				return self.__remaining_outputs.get_nowait()
+			except queue.Empty:
+				self.__has_remaining_outputs = False
 
 		def do_read_line() -> Optional[ServerOutput]:
 			so = cp.output_queue.get()

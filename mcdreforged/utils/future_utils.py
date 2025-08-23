@@ -5,8 +5,13 @@ from typing import TypeVar, Optional
 
 _T = TypeVar('_T')
 
+__completed_none_future = Future()
+__completed_none_future.set_result(None)
+
 
 def completed(value: _T) -> 'Future[_T]':
+	if value is None:
+		return __completed_none_future
 	future = Future()
 	future.set_result(value)
 	return future

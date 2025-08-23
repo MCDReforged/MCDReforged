@@ -82,6 +82,9 @@ class InfoActionFlag(enum.Flag):
 		return cls(0)
 
 
+_default_info_action_flag = InfoActionFlag.default()
+
+
 @dataclasses.dataclass
 class _InfoControlData:
 	mcdr_server: 'MCDReforgedServer'
@@ -140,7 +143,7 @@ class Info:
 	logging_level: Optional[str] = None
 	"""The logging level of the server's output, such as ``"INFO"`` or ``"WARN"``"""
 
-	action_flag: InfoActionFlag = dataclasses.field(default_factory=InfoActionFlag.default)
+	action_flag: InfoActionFlag = dataclasses.field(default=_default_info_action_flag)
 	"""
 	A flag variable controlling what actions MCDR will do next with this Info object
 

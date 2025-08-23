@@ -1,5 +1,6 @@
 import abc
 import dataclasses
+import functools
 import inspect
 from typing import Dict, List, Callable, TYPE_CHECKING
 
@@ -110,6 +111,7 @@ class EventListener:
 	callback: Callable
 	priority: int
 
+	@functools.cached_property
 	def is_async(self) -> bool:
 		return inspect.iscoroutinefunction(self.callback)
 
