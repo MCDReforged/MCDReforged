@@ -10,6 +10,7 @@ from typing import Optional, Union, List, TYPE_CHECKING
 
 import psutil
 
+from mcdreforged.logging.debug_option import DebugOption
 from mcdreforged.utils import collection_utils, thread_utils
 
 if TYPE_CHECKING:
@@ -39,12 +40,16 @@ _SERVER_OUTPUT_EOF_SENTINEL = ServerOutput(b'', False)
 
 @dataclasses.dataclass(frozen=True)
 class _RunningProcess:
-	proc: asyncio.subprocess.Process
-	loop: asyncio.AbstractEventLoop
 	thread: threading.Thread
+	loop: asyncio.AbstractEventLoop
+	proc: asyncio.subprocess.Process
+	output_queue: queue.Queue[ServerOutput]
+
+	def is_loop_available(self) -> bool:
+		return not self.loop.is_closed() and self.thread.is_alive()
 
 	def is_proc_alive_and_loop_available(self) -> bool:
-		return self.proc.returncode is None and not self.loop.is_closed() and self.thread.is_alive()
+		return self.proc.returncode is None and self.is_loop_available()
 
 
 class ServerProcessManager:
@@ -53,7 +58,7 @@ class ServerProcessManager:
 	def __init__(self, mcdr_server: 'MCDReforgedServer'):
 		self.logger = mcdr_server.logger
 		self.__tr = mcdr_server.create_internal_translator('process').tr
-		self.__output_queue: 'queue.Queue[ServerOutput]' = queue.Queue(maxsize=self.MAX_OUTPUT_QUEUE_SIZE)
+		self.__remaining_outputs: 'queue.Queue[ServerOutput]' = queue.Queue(maxsize=self.MAX_OUTPUT_QUEUE_SIZE * 5)
 		self.__current_process: Optional[_RunningProcess] = None
 
 	def __del__(self):
@@ -65,15 +70,28 @@ class ServerProcessManager:
 		if self.__current_process is not None:
 			raise ProcessAlreadyRunning('server process already started')
 
+		async def put_queue(so: ServerOutput):
+			sleep_time = 0
+			while True:
+				try:
+					output_queue.put_nowait(so)
+					break
+				except queue.Full:
+					pass
+				sleep_time = max(sleep_time + 0.001, 0.01)
+				await asyncio.sleep(sleep_time)
+
 		async def drain_reader(reader: asyncio.StreamReader, is_stdout: bool):
+			self.logger.mdebug(f'drain_reader() start {is_stdout=}', option=DebugOption.PROCESS)
 			queue_full_warn_ts = 0
 			while line := await reader.readline():
-				self.__output_queue.put(ServerOutput(line, is_stdout))
-				if self.__output_queue.full():
+				await put_queue(ServerOutput(line, is_stdout))
+				if output_queue.full():
 					now = time.time()
 					if now - queue_full_warn_ts >= 10:
 						queue_full_warn_ts = now
 						self.logger.warning('output queue is full')
+			self.logger.mdebug(f'drain_reader() end {is_stdout=}', option=DebugOption.PROCESS)
 
 		async def run_process():
 			try:
@@ -91,23 +109,36 @@ class ServerProcessManager:
 			except Exception as e:
 				proc_future.set_exception(e)
 				raise
-			else:
-				proc_future.set_result(proc)
+
+			self.logger.mdebug(f'proc created, {proc.pid=}', option=DebugOption.PROCESS)
+			proc_future.set_result(proc)
 
 			async def set_output_eof():
-				await asyncio.gather(t1, t2)
-				self.__output_queue.put(_SERVER_OUTPUT_EOF_SENTINEL)
+				await asyncio.gather(proc.wait(), t1, t2)
+				await put_queue(_SERVER_OUTPUT_EOF_SENTINEL)
 
 			t1 = asyncio.create_task(drain_reader(proc.stdout, True))
 			t2 = asyncio.create_task(drain_reader(proc.stderr, False))
 			t3 = asyncio.create_task(set_output_eof())
 
 			await proc.wait()
+			self.logger.mdebug(f'proc.wait() finished, {proc.pid=} {proc.returncode=}', option=DebugOption.PROCESS)
+
 			try:
 				# the process is dead, so the reader drainer tasks should finish too
-				await asyncio.wait_for(t3, timeout=1)
+				await asyncio.wait_for(t3, timeout=5)
 			except asyncio.TimeoutError:
-				self.logger.warning('run_process() drain_reader wait timeout')
+				self.logger.warning('run_process() drain_reader wait cost too long')
+				await t3
+			self.logger.mdebug(f'set_output_eof() finished, {output_queue.qsize()=}', option=DebugOption.PROCESS)
+
+			for so in collection_utils.drain_iterate_queue(output_queue):
+				if so is _SERVER_OUTPUT_EOF_SENTINEL:
+					continue
+				try:
+					self.__remaining_outputs.put_nowait(so)
+				except queue.Full:
+					self.logger.warning('self.__remaining_outputs is full, discarding {} remaining output_queue items'.format(output_queue.qsize()))
 
 		def do_start() -> _RunningProcess:
 			thread = thread_utils.start_thread(asyncio.run, args=(run_process(),), name='ServerProcessManager')
@@ -120,18 +151,30 @@ class ServerProcessManager:
 					event_loop.stop()
 				raise
 			else:
-				return _RunningProcess(proc, event_loop, thread)
+				return _RunningProcess(thread, event_loop, proc, output_queue)
 
-		event_loop_future: 'cf.Future[asyncio.AbstractEventLoop]' = cf.Future()
-		proc_future: 'cf.Future[asyncio.subprocess.Process]' = cf.Future()
+		event_loop_future: cf.Future[asyncio.AbstractEventLoop] = cf.Future()
+		proc_future: cf.Future[asyncio.subprocess.Process] = cf.Future()
+		output_queue = queue.Queue(maxsize=self.MAX_OUTPUT_QUEUE_SIZE)
 		self.__current_process = do_start()
 
 	def read_line(self) -> Optional[ServerOutput]:
-		so = self.__output_queue.get()
-		if so is _SERVER_OUTPUT_EOF_SENTINEL:
-			self.__output_queue.put(so)
+		try:
+			return self.__remaining_outputs.get_nowait()
+		except queue.Empty:
+			pass
+
+		def do_read_line() -> Optional[ServerOutput]:
+			so = cp.output_queue.get()
+			if so is _SERVER_OUTPUT_EOF_SENTINEL:
+				cp.output_queue.put(so)
+				return None
+			return so
+
+		if (cp := self.__current_process) is not None and cp.is_loop_available():
+			return do_read_line()
+		else:
 			return None
-		return so
 
 	def write(self, buf: bytes):
 		async def do_write():
@@ -202,10 +245,8 @@ class ServerProcessManager:
 		if cp.proc.returncode is None:
 			raise ProcessStillAlive('process is still alive')
 
-		self.__current_process = None
 		cp.thread.join(timeout=10)
 		if cp.thread.is_alive():
 			self.logger.warning('The {} thread is still alive after 10s'.format(cp.thread.name))
 			cp.thread.join()
-
-		collection_utils.drain_queue(self.__output_queue)
+		self.__current_process = None
