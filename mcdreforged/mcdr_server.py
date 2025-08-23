@@ -41,7 +41,7 @@ from mcdreforged.process.server_process_manager import ServerProcessManager
 from mcdreforged.translation.language_fallback_handler import LanguageFallbackHandler
 from mcdreforged.translation.translation_manager import TranslationManager
 from mcdreforged.translation.translator import Translator
-from mcdreforged.utils import file_utils, request_utils, collection_utils
+from mcdreforged.utils import file_utils, request_utils, collection_utils, thread_utils
 from mcdreforged.utils.exception import ServerStartError, IllegalStateError
 from mcdreforged.utils.types.message import MessageText
 
@@ -640,22 +640,26 @@ class MCDReforgedServer:
 		self.set_mcdr_state(MCDReforgedState.RUNNING)
 
 	def __register_signal_handler(self):
-		is_signal_logging = False
+		do_callback_lock = threading.Lock()
 
-		def callback(sig: int, _frame):
+		def do_callback(sig: int):
 			try:
 				signal_name = signal.Signals(sig).name
 			except ValueError:
 				signal_name = 'unknown'
 
-			nonlocal is_signal_logging
-			if not is_signal_logging:
-				is_signal_logging = True
-				try:
-					self.logger.warning('Received signal {} ({}), interrupting MCDR'.format(signal_name, sig))
-				finally:
-					is_signal_logging = False
-			self.interrupt()
+			if not do_callback_lock.acquire(blocking=False):
+				self.logger.mdebug('Received signal {} ({}), do_callback_lock not acquired, skip'.format(signal_name, sig), option=DebugOption.MCDR)
+				return
+			try:
+				self.logger.warning('Received signal {} ({}), interrupting MCDR'.format(signal_name, sig))
+				self.interrupt()
+			finally:
+				do_callback_lock.release()
+
+		def callback(sig: int, _frame):
+			# never do logging inside the signal handler. Nobody wants reentrant logging calls
+			thread_utils.start_thread(do_callback, (sig,), f'SignalHandler')
 
 		import signal
 		signal.signal(signal.SIGINT, callback)   # ctrl + c
