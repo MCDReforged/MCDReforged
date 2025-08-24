@@ -79,7 +79,7 @@ class ServerProcessManager:
 					break
 				except queue.Full:
 					pass
-				sleep_time = max(sleep_time + 0.001, 0.01)
+				sleep_time = min(sleep_time + 0.001, 0.01)
 				await asyncio.sleep(sleep_time)
 
 		async def drain_reader(reader: asyncio.StreamReader, is_stdout: bool):
