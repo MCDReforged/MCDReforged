@@ -11,7 +11,7 @@ from typing import Optional, Union, List, TYPE_CHECKING
 import psutil
 
 from mcdreforged.logging.debug_option import DebugOption
-from mcdreforged.utils import collection_utils, thread_utils
+from mcdreforged.utils import thread_utils
 
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
@@ -35,15 +35,23 @@ class ServerOutput:
 	is_stdout: bool  # true: stdout, false: stderr
 
 
+# server stdout and stderr are EOF, and the server process has terminated
 _SERVER_OUTPUT_EOF_SENTINEL = ServerOutput(b'', False)
+
+
+@dataclasses.dataclass(frozen=True)
+class _ProcessData:
+	process: asyncio.subprocess.Process
+	eof_consumed_event: asyncio.Event
 
 
 @dataclasses.dataclass(frozen=True)
 class _RunningProcess:
 	thread: threading.Thread
 	loop: asyncio.AbstractEventLoop
-	proc: asyncio.subprocess.Process
 	output_queue: queue.Queue[ServerOutput]
+	proc: asyncio.subprocess.Process
+	eof_consumed_event: asyncio.Event
 
 	def is_loop_available(self) -> bool:
 		return not self.loop.is_closed() and self.thread.is_alive()
@@ -58,8 +66,6 @@ class ServerProcessManager:
 	def __init__(self, mcdr_server: 'MCDReforgedServer'):
 		self.logger = mcdr_server.logger
 		self.__tr = mcdr_server.create_internal_translator('process').tr
-		self.__remaining_outputs: 'queue.Queue[ServerOutput]' = queue.Queue(maxsize=self.MAX_OUTPUT_QUEUE_SIZE * 5)
-		self.__has_remaining_outputs = False
 		self.__current_process: Optional[_RunningProcess] = None
 
 	def __del__(self):
@@ -112,15 +118,22 @@ class ServerProcessManager:
 				raise
 
 			self.logger.mdebug(f'proc created, {proc.pid=}', option=DebugOption.PROCESS)
-			proc_future.set_result(proc)
+			eof_consumed_event = asyncio.Event()
+			proc_future.set_result(_ProcessData(proc, eof_consumed_event))
 
-			async def set_output_eof():
+			async def handle_output_eof():
 				await asyncio.gather(proc.wait(), t1, t2)
+				self.logger.mdebug(f'handle_output_eof() proc.wait() and drain_readers finished', option=DebugOption.PROCESS)
+
 				await put_queue(_SERVER_OUTPUT_EOF_SENTINEL)
+				self.logger.mdebug(f'handle_output_eof() put EOF ok', option=DebugOption.PROCESS)
+
+				await eof_consumed_event.wait()
+				self.logger.mdebug(f'handle_output_eof() EOF consumed', option=DebugOption.PROCESS)
 
 			t1 = asyncio.create_task(drain_reader(proc.stdout, True))
 			t2 = asyncio.create_task(drain_reader(proc.stderr, False))
-			t3 = asyncio.create_task(set_output_eof())
+			t3 = asyncio.create_task(handle_output_eof())
 
 			await proc.wait()
 			self.logger.mdebug(f'proc.wait() finished, {proc.pid=} {proc.returncode=}', option=DebugOption.PROCESS)
@@ -129,53 +142,35 @@ class ServerProcessManager:
 				# the process is dead, so the reader drainer tasks should finish too
 				await asyncio.wait_for(t3, timeout=5)
 			except asyncio.TimeoutError:
-				self.logger.warning('run_process() drain_reader wait cost too long')
+				self.logger.warning('run_process() handle_output_eof() wait cost too long')
 				await t3
-			self.logger.mdebug(f'set_output_eof() finished, {output_queue.qsize()=}', option=DebugOption.PROCESS)
-
-			for so in collection_utils.drain_iterate_queue(output_queue):
-				if so is _SERVER_OUTPUT_EOF_SENTINEL:
-					continue
-				try:
-					self.__remaining_outputs.put_nowait(so)
-					self.__has_remaining_outputs = True
-				except queue.Full:
-					self.logger.warning('self.__remaining_outputs is full, discarding {} remaining output_queue items'.format(output_queue.qsize()))
 
 		def do_start() -> _RunningProcess:
 			thread = thread_utils.start_thread(asyncio.run, args=(run_process(),), name='ServerProcessManager')
 			event_loop: Optional[asyncio.AbstractEventLoop] = None
 			try:
 				event_loop = event_loop_future.result()
-				proc = proc_future.result()
+				pd = proc_future.result()
 			except Exception:
 				if event_loop is not None:
 					event_loop.stop()
 				raise
 			else:
-				return _RunningProcess(thread, event_loop, proc, output_queue)
+				return _RunningProcess(thread, event_loop, output_queue, pd.process, pd.eof_consumed_event)
 
 		event_loop_future: cf.Future[asyncio.AbstractEventLoop] = cf.Future()
-		proc_future: cf.Future[asyncio.subprocess.Process] = cf.Future()
-		output_queue = queue.Queue(maxsize=self.MAX_OUTPUT_QUEUE_SIZE)
+		proc_future: cf.Future[_ProcessData] = cf.Future()
+		output_queue: queue.Queue[ServerOutput] = queue.Queue(maxsize=self.MAX_OUTPUT_QUEUE_SIZE)
 		self.__current_process = do_start()
 
 	def read_line(self) -> Optional[ServerOutput]:
-		if self.__has_remaining_outputs:
-			try:
-				return self.__remaining_outputs.get_nowait()
-			except queue.Empty:
-				self.__has_remaining_outputs = False
-
-		def do_read_line() -> Optional[ServerOutput]:
+		if (cp := self.__current_process) is not None and cp.is_loop_available():
 			so = cp.output_queue.get()
 			if so is _SERVER_OUTPUT_EOF_SENTINEL:
 				cp.output_queue.put(so)
+				cp.loop.call_soon_threadsafe(cp.eof_consumed_event.set)
 				return None
 			return so
-
-		if (cp := self.__current_process) is not None and cp.is_loop_available():
-			return do_read_line()
 		else:
 			return None
 

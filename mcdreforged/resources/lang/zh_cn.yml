@@ -26,7 +26,6 @@ mcdreforged:
         .: 服务端已关闭，不能向其标准输入流输入命令
         text: '被输入的命令: {0}'
     receive:
-      wait_stop: 等待服务端进程停止
       decode_fail: '解析文本 {0} 出错: {1}'
     on_mcdr_start:
       starting: '{0} {1} 正在启动'

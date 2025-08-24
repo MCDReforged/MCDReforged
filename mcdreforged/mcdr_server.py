@@ -550,23 +550,6 @@ class MCDReforgedServer:
 		"""
 		so = self.process_manager.read_line()
 		if so is None:
-			process_exit_future = self.process_manager.get_wait_future()
-			for i in range(core_constant.WAIT_TIME_AFTER_SERVER_STDOUT_END_SEC):
-				if not self.process_manager.is_alive():
-					break
-				try:
-					process_exit_future.result(timeout=1)
-				except cf.TimeoutError:
-					self.logger.info(self.__tr('receive.wait_stop'))
-				else:
-					break
-			else:
-				self.logger.warning('The server is still not stopped after {}s after its stdout was closed, killing'.format(core_constant.WAIT_TIME_AFTER_SERVER_STDOUT_END_SEC))
-				self.__kill_server()
-			try:
-				self.process_manager.get_wait_future().result(timeout=10)
-			except cf.TimeoutError:
-				self.logger.warning('process_exit_future is still not done, skip anyway')
 			raise _ServerProcessStopped()
 
 		line_buf: bytes = so.line

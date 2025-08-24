@@ -26,7 +26,6 @@ mcdreforged:
         .: Server has been terminated, cannot send command to its stdin
         text: 'Command being sent: {0}'
     receive:
-      wait_stop: Waiting for server process to stop
       decode_fail: 'Fail to decode text {0}: {1}'
     on_mcdr_start:
       starting: '{0} {1} is starting'
