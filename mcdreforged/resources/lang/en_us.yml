@@ -19,7 +19,7 @@ mcdreforged:
     kill_server:
       killing: Killing server process group
     interrupt:
-      soft: Interrupting MCDR, first strike. Interrupt again to kill the servers
+      soft: Interrupting MCDR, first strike. Interrupt again to kill the server
       hard: Interrupting MCDR and killing the servers
     send:
       send_when_stopped:
