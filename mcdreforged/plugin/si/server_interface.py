@@ -1010,6 +1010,8 @@ class ServerInterface:
 		is a dummy one that contains nothing
 
 		:param player: The name of the player
+
+		.. versionadded:: v2.15.0
 		"""
 		info = Info(InfoSource.SERVER, '')
 		command_source = PlayerCommandSource(self._mcdr_server, info, player)
@@ -1023,6 +1025,8 @@ class ServerInterface:
 
 		Note: the :class:`~mcdreforged.info_reactor.info.Info` instance bound to the returned command source
 		is a dummy one that contains nothing
+
+		.. versionadded:: v2.15.0
 		"""
 		info = Info(InfoSource.CONSOLE, '')
 		command_source = ConsoleCommandSource(self._mcdr_server, info)
