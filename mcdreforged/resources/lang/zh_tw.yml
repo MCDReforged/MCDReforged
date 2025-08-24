@@ -32,7 +32,8 @@ mcdreforged:
       starting: '{0} {1} 正在啟動'
       console_disabled: 控制台線程已禁用
     on_server_stop:
-      show_return_code: '伺服端進程返回代碼: {0}'
+      show_return_code: '伺服端進程已停止，返回代碼爲 {0}'
+      show_return_code_signal: '伺服端進程已停止，返回代碼爲 {0} (被信號 {1} 終止)'
       user_interrupted: 伺服端已被用戶終止
       server_stop: 伺服端已關閉
     tick:

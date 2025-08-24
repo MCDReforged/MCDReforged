@@ -32,7 +32,8 @@ mcdreforged:
       starting: '{0} {1} 正在启动'
       console_disabled: 控制台线程已禁用
     on_server_stop:
-      show_return_code: '服务端进程返回代码: {0}'
+      show_return_code: '服务器进程已停止，返回代码为 {0}'
+      show_return_code_signal: '服务器进程已停止，返回代码为 {0} (被信号 {1} 终止)'
       user_interrupted: 服务端已被用户终止
       server_stop: 服务端已关闭
     tick:

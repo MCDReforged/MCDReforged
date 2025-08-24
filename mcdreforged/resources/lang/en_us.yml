@@ -33,6 +33,7 @@ mcdreforged:
       console_disabled: Console thread disabled
     on_server_stop:
       show_return_code: Server process stopped with code {0}
+      show_return_code_signal: Server process stopped with code {0} (terminated by signal {1})
       user_interrupted: Server has been interrupted by user
       server_stop: Server stopped
     tick:

@@ -41,7 +41,7 @@ from mcdreforged.process.server_process_manager import ServerProcessManager
 from mcdreforged.translation.language_fallback_handler import LanguageFallbackHandler
 from mcdreforged.translation.translation_manager import TranslationManager
 from mcdreforged.translation.translator import Translator
-from mcdreforged.utils import file_utils, request_utils, collection_utils, thread_utils
+from mcdreforged.utils import file_utils, request_utils, collection_utils, thread_utils, os_utils
 from mcdreforged.utils.exception import ServerStartError, IllegalStateError
 from mcdreforged.utils.types.message import MessageText
 
@@ -503,7 +503,10 @@ class MCDReforgedServer:
 
 	def __on_server_stop(self):
 		return_code = self.process_manager.get_return_code()
-		self.logger.info(self.__tr('on_server_stop.show_return_code', return_code))
+		if return_code >= 0:
+			self.logger.info(self.__tr('on_server_stop.show_return_code', return_code))
+		else:
+			self.logger.info(self.__tr('on_server_stop.show_return_code_signal', return_code, os_utils.get_signal_name(-return_code)))
 		self.process_manager.reset()
 		self.set_server_state(ServerState.STOPPED)
 		self.remove_flag(MCDReforgedFlag.SERVER_STARTUP | MCDReforgedFlag.SERVER_RCON_READY)  # removes this two
@@ -643,10 +646,7 @@ class MCDReforgedServer:
 		do_callback_lock = threading.Lock()
 
 		def do_callback(sig: int):
-			try:
-				signal_name = signal.Signals(sig).name
-			except ValueError:
-				signal_name = 'unknown'
+			signal_name = os_utils.get_signal_name(sig)
 
 			if not do_callback_lock.acquire(blocking=False):
 				self.logger.mdebug('Received signal {} ({}), do_callback_lock not acquired, skip'.format(signal_name, sig), option=DebugOption.MCDR)
