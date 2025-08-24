@@ -115,7 +115,7 @@ class ServerProcessManager:
 					proc = await asyncio.create_subprocess_exec(*args, **common_kwargs)
 			except Exception as e:
 				proc_future.set_exception(e)
-				raise
+				return
 
 			self.logger.mdebug(f'proc created, {proc.pid=}', option=DebugOption.PROCESS)
 			eof_consumed_event = asyncio.Event()
