@@ -83,8 +83,12 @@ def make_packed_plugin(args: PackArgs, *, quiet: bool = False):
 		file_name += plugin_constant.PACKED_PLUGIN_FILE_SUFFIXES[0]
 	file_counter = 0
 
+	def format_path_for_filter(path: str, is_dir: bool) -> str:
+		# https://github.com/cpburnz/python-pathspec/issues/89
+		return Path(path).as_posix() + ('/' if is_dir else '')
+
 	def write(base_path: Path, *, directory_only: bool):
-		if ignore_filter.match_file(base_path):
+		if ignore_filter.match_file(format_path_for_filter(base_path.name, base_path.is_dir())):
 			return
 		nonlocal file_counter
 		if base_path.is_dir():
@@ -95,9 +99,9 @@ def make_packed_plugin(args: PackArgs, *, quiet: bool = False):
 			for dir_path, dir_names, file_names in os.walk(base_path):
 				for file_name_ in file_names + dir_names:
 					full_path = Path(dir_path) / file_name_
-					if ignore_filter.match_file(full_path):
-						continue
 					arc_name = os.path.join(dir_arc, full_path.relative_to(base_path))
+					if ignore_filter.match_file(format_path_for_filter(arc_name, full_path.is_dir())):
+						continue
 					zip_file.write(full_path, arcname=arc_name)
 					file_counter += 1
 					writeln('  Written: {} -> {}'.format(full_path, arc_name))

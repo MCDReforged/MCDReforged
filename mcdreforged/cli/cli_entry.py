@@ -41,8 +41,8 @@ def cli_dispatch():
 	parser_pack.add_argument('-i', '--input', help='The input directory which the plugin is in', default='.')
 	parser_pack.add_argument('-o', '--output', help='The output directory to store the zipped plugin', default='.')
 	parser_pack.add_argument('-n', '--name', help='A specific name to the output zipped plugin file. If not given the metadata specific name or a default one will be used', default=None)
-	parser_pack.add_argument('--ignore-patterns', nargs='+', metavar='IGNORE_PATTERN', help='A list of gitignore-like pattern, indicating a set of files and directories to be ignored during plugin packing. Overwrites values from --ignore-file', default=[])
-	parser_pack.add_argument('--ignore-file', help='The path to a utf8-encoded gitignore-like file. It\'s content will be used as the --ignore-patterns parameter', default='.gitignore')
+	parser_pack.add_argument('--ignore-patterns', nargs='+', metavar='IGNORE_PATTERN', help='A list of gitignore-like pattern, indicating a set of files and directories to be ignored during plugin packing. The ignore patterns should be relate to the --input path. Overwrites values from --ignore-file', default=[])
+	parser_pack.add_argument('--ignore-file', help='The path to a utf8-encoded gitignore-like file. It\'s content will be used as the --ignore-patterns parameter. The provided file path and the ignore patterns inside the file should be relate to the --input path', default='.gitignore')
 	parser_pack.add_argument('--shebang', help='Add a "#!"-prefixed shebang line at the beginning of the packed plugin. It will also make the packed plugin executable on POSIX. By default no shebang line will be added. Example: --shebang "/usr/bin/env python3"')
 
 	parser_pim = cmd_pim.create(subparsers.add_parser)
