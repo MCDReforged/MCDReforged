@@ -1014,6 +1014,7 @@ class ServerInterface:
 		.. versionadded:: v2.15.0
 		"""
 		info = Info(InfoSource.SERVER, '')
+		info.player = player  # some plugins may expect this
 		command_source = PlayerCommandSource(self._mcdr_server, info, player)
 		# noinspection PyProtectedMember
 		info._attach_and_finalize(self._mcdr_server, command_source=command_source)
