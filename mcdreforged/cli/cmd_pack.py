@@ -3,7 +3,7 @@ import os
 import stat
 import zipapp
 from pathlib import Path
-from typing import Optional, Any, Callable
+from typing import Optional, Any, Callable, List
 from zipfile import ZipFile, ZIP_DEFLATED
 
 import pathspec
@@ -16,29 +16,12 @@ from mcdreforged.utils import file_utils, function_utils
 PathPredicate = Callable[[str], bool]
 
 class PackArgs(Protocol):
-	@property
-	def input(self) -> str:
-		pass
-
-	@property
-	def output(self) -> str:
-		pass
-
-	@property
-	def name(self) -> str:
-		pass
-
-	@property
-	def ignore_patterns(self) -> str:
-		pass
-
-	@property
-	def ignore_file(self) -> str:
-		pass
-
-	@property
-	def shebang(self) -> str:
-		pass
+	input: str
+	output: str
+	name: str
+	ignore_patterns: List[str]
+	ignore_file: str
+	shebang: str
 
 
 def read_ignore_file(file: Path, writeln: Callable[[str], Any]) -> Optional[pathspec.PathSpec]:
