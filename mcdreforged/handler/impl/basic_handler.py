@@ -16,7 +16,7 @@ class BasicHandler(ServerHandler):
 	"""
 	The basic plain handler, providing the minimum parsed information
 
-	It's used as the fallback handler when every other dedicated handler failed
+	During server output parsing, it's used as the fallback handler when every other dedicated handler failed
 	"""
 
 	@override

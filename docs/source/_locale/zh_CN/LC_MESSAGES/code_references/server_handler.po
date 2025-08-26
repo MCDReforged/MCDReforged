@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-03 21:44+0800\n"
+"POT-Creation-Date: 2025-08-26 20:01+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -349,9 +349,9 @@ msgstr "基础的朴素的处理器，提供最小的解析信息"
 
 #: mcdreforged.handler.impl.basic_handler.BasicHandler:3 of
 msgid ""
-"It's used as the fallback handler when every other dedicated handler "
-"failed"
-msgstr "当所有其他的专用服务端处理器失败后，它将被作为后备处理器使用"
+"During server output parsing, it's used as the fallback handler when "
+"every other dedicated handler failed"
+msgstr "在解析服务端输出的过程中，当所有其他的专用服务端处理器失败时，它将被作为后备处理器使用"
 
 #: mcdreforged.handler.impl.abstract_minecraft_handler.AbstractMinecraftHandler:1
 #: of
