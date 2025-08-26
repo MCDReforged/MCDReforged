@@ -58,11 +58,17 @@ class PermissionLevel:
 	@classmethod
 	def from_value(cls, value: PermissionParam) -> PermissionLevelItem:
 		"""
-		Convert any type of permission level into int value. Examples:
-			'guest'	-> 0
-			'admin'	-> 3
-			'1'		-> 1
-			2		-> 2
+		Convert any type of permission level into a :class:`PermissionLevelItem`. Examples:
+
+		>>> PermissionLevel.from_value('guest').level
+		0
+		>>> PermissionLevel.from_value('admin').level
+		3
+		>>> PermissionLevel.from_value('1').level
+		1
+		>>> PermissionLevel.from_value(2).level
+		2
+
 		If the argument is invalid return None
 
 		:param value: a permission related object
