@@ -1,4 +1,4 @@
-from typing import NamedTuple, Any, List
+from typing import List
 
 from typing_extensions import override
 
@@ -12,11 +12,6 @@ from mcdreforged.plugin.builtin.mcdr.commands.sub_command import SubCommand
 from mcdreforged.plugin.plugin_registry import HelpMessage
 
 HELP_MESSAGE_PER_PAGE = 10
-
-
-class FunctionCallResult(NamedTuple):
-	return_value: Any
-	no_error: bool
 
 
 class HelpCommand(SubCommand):

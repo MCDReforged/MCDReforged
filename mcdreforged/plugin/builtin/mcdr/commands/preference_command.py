@@ -1,4 +1,5 @@
-from typing import TYPE_CHECKING, NamedTuple, Callable, Collection, Any, Type, Dict, List, Optional
+import dataclasses
+from typing import TYPE_CHECKING, Callable, Collection, Any, Type, Dict, List, Optional
 
 from typing_extensions import override
 
@@ -20,7 +21,8 @@ PREF_COLOR = RColor.dark_aqua
 VALUE_COLOR = RColor.gold
 
 
-class PrefCommandEntry(NamedTuple):
+@dataclasses.dataclass(frozen=True)
+class PrefCommandEntry:
 	pref_name: str
 	node_type: Type[ArgumentNode]
 	suggester: Callable[[], Collection[str]]

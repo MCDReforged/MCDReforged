@@ -1,5 +1,6 @@
+import dataclasses
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, NamedTuple, Optional
+from typing import TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
 	from mcdreforged.info_reactor.info import Info
@@ -35,6 +36,7 @@ class InfoFilter(ABC):
 		...
 
 
-class InfoFilterHolder(NamedTuple):
+@dataclasses.dataclass(frozen=True)
+class InfoFilterHolder:
 	filter: InfoFilter
 	plugin: 'AbstractPlugin'

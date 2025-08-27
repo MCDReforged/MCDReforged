@@ -1,7 +1,8 @@
-from typing import NamedTuple
+import dataclasses
 
 
-class Deprecation(NamedTuple):
+@dataclasses.dataclass(frozen=True)
+class Deprecation:
 	feature: str
 	version_deprecated: str
 	version_removal: str

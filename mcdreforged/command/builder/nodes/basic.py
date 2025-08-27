@@ -1,6 +1,7 @@
 import collections
+import dataclasses
 from abc import ABC, abstractmethod
-from typing import List, Callable, Iterable, Set, Dict, Type, Any, Union, Optional, NamedTuple, TypedDict, TypeVar
+from typing import List, Callable, Iterable, Set, Dict, Type, Any, Union, Optional, TypedDict, TypeVar
 
 from typing_extensions import Self, override, NotRequired
 
@@ -50,12 +51,14 @@ REQUIRES_CALLBACK = __SOURCE_CONTEXT_CALLBACK_BOOL
 PRECONDITION_CALLBACK = __SOURCE_CONTEXT_CALLBACK_BOOL
 
 
-class _ErrorHandler(NamedTuple):
+@dataclasses.dataclass(frozen=True)
+class _ErrorHandler:
 	callback: ERROR_HANDLER_CALLBACK
 	handled: bool
 
 
-class _Requirement(NamedTuple):
+@dataclasses.dataclass(frozen=True)
+class _Requirement:
 	requirement: REQUIRES_CALLBACK
 	failure_message_getter: Optional[FAIL_MSG_CALLBACK]
 
