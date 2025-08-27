@@ -242,6 +242,7 @@ class RHoverEntity(RHoverEvent):
 				raise TypeError(type(value))
 
 		if json_format == RTextJsonFormat.V_1_7:
+			data: dict
 			if 'contents' in click_event:
 				data = click_event['contents']
 			else:
@@ -314,6 +315,7 @@ class RHoverItem(RHoverEvent):
 	@override
 	def _from_json_object(cls, click_event: dict, json_format: RTextJsonFormat) -> Self:
 		if json_format == RTextJsonFormat.V_1_7:
+			data: dict
 			if 'contents' in click_event:
 				data = click_event['contents']
 			else:

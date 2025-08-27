@@ -1,7 +1,7 @@
 """
 Single plugin class
 """
-from abc import abstractmethod
+from abc import abstractmethod, ABC
 from typing import Tuple, Any, TYPE_CHECKING, Collection, Optional
 
 from mcdreforged.command.builder.nodes.basic import Literal
@@ -23,7 +23,7 @@ if TYPE_CHECKING:
 	from mcdreforged.plugin.type.regular_plugin import RegularPlugin
 
 
-class AbstractPlugin:
+class AbstractPlugin(ABC):
 	def __init__(self, plugin_manager: 'PluginManager'):
 		self.plugin_manager = plugin_manager
 		self.mcdr_server = plugin_manager.mcdr_server

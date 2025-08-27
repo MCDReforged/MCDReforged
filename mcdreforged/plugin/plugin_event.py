@@ -55,7 +55,7 @@ class MCDREvent(PluginEvent):
 
 class _MCDRPluginEventStorage:
 	""":meta private:"""
-	EVENT_DICT: Dict[str, PluginEvent] = {}
+	EVENT_DICT: Dict[str, MCDREvent] = {}
 
 	@classmethod
 	def register(cls, event: MCDREvent):
@@ -86,7 +86,7 @@ class MCDRPluginEvents:
 	PLUGIN_UNLOADED = MCDREvent('mcdr.plugin_unloaded', 'on_unload')
 
 	@classmethod
-	def get_event_list(cls) -> List[PluginEvent]:
+	def get_event_list(cls) -> List[MCDREvent]:
 		""":meta private:"""
 		return list(_MCDRPluginEventStorage.EVENT_DICT.values())
 
