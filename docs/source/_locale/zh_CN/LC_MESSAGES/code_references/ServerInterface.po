@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-24 01:09+0800\n"
+"POT-Creation-Date: 2025-08-28 03:14+0800\n"
 "PO-Revision-Date: 2025-05-28 20:50+0800\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -260,12 +260,8 @@ msgid ""
 "MCDR is using will be used"
 msgstr "指定在该次翻译中使用的语言。若未指定，则使用 MCDR 所使用的语言"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.tr:14 of
-msgid "Deprecated, to be removed in v2.15. Use kwarg *_mcdr_tr_language* instead"
-msgstr "已弃用，将于 v2.15 移除。请使用关键字参数 *_mcdr_tr_language* 替代"
-
 #: mcdreforged.plugin.si.server_interface.ServerInterface.rtr:10
-#: mcdreforged.plugin.si.server_interface.ServerInterface.tr:15 of
+#: mcdreforged.plugin.si.server_interface.ServerInterface.tr:14 of
 msgid "The kwargs to be formatted"
 msgstr "用于格式化的关键字参数（kwargs）"
 
@@ -1294,4 +1290,9 @@ msgstr ""
 #: mcdreforged.plugin.si.server_interface.ServerInterface.schedule_task:11 of
 msgid "The return value is now a :external:class:`~concurrent.futures.Future`"
 msgstr "返回值现为一个 :external:class:`~concurrent.futures.Future`"
+
+#~ msgid ""
+#~ "Deprecated, to be removed in v2.15. "
+#~ "Use kwarg *_mcdr_tr_language* instead"
+#~ msgstr "已弃用，将于 v2.15 移除。请使用关键字参数 *_mcdr_tr_language* 替代"
 

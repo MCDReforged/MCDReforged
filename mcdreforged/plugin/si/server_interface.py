@@ -9,7 +9,6 @@ from typing import Callable, TYPE_CHECKING, Tuple, Any, Union, Optional, List, D
 import psutil
 
 from mcdreforged.command.command_source import CommandSource, PluginCommandSource, PlayerCommandSource, ConsoleCommandSource
-from mcdreforged.constants.deprecations import SERVER_INTERFACE_LANGUAGE_KEYWORD
 from mcdreforged.info_reactor.info import Info, InfoSource
 from mcdreforged.info_reactor.server_information import ServerInformation
 from mcdreforged.logging.debug_option import DebugOption
@@ -177,7 +176,7 @@ class ServerInterface:
 	#          Utils
 	# ------------------------
 
-	def tr(self, translation_key: str, *args, _mcdr_tr_language: Optional[str] = None, language: Optional[str] = None, **kwargs) -> MessageText:
+	def tr(self, translation_key: str, *args, _mcdr_tr_language: Optional[str] = None, **kwargs) -> MessageText:
 		"""
 		Return a translated text corresponded to the translation key and format the text with given args and kwargs
 
@@ -192,13 +191,8 @@ class ServerInterface:
 		:param translation_key: The key of the translation
 		:param args: The args to be formatted
 		:param _mcdr_tr_language: Specific language to be used in this translation, or the language that MCDR is using will be used
-		:param language: Deprecated, to be removed in v2.15. Use kwarg *_mcdr_tr_language* instead
 		:param kwargs: The kwargs to be formatted
 		"""
-		if language is not None and _mcdr_tr_language is None:
-			self.logger.warning('%s. Translation key: %s', SERVER_INTERFACE_LANGUAGE_KEYWORD, translation_key)
-			_mcdr_tr_language = language
-
 		return self._mcdr_server.translate(translation_key, *args, _mcdr_tr_language=_mcdr_tr_language, **kwargs)
 
 	def rtr(self, translation_key: str, *args, **kwargs) -> RTextMCDRTranslation:
