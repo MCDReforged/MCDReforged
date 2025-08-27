@@ -21,7 +21,7 @@ make html
 
 The document will be generated in `docs/build/html/` in zh_CN
 
-If you want to switch the language, modify line 72 in `docs/source/conf.py` or set the value of environment variable `READTHEDOCS_LANGUAGE`
+If you want to switch the language, set the value of environment variable `READTHEDOCS_LANGUAGE`
 
 ## Update zh_CN translation
 
@@ -36,7 +36,7 @@ Then check che changed `.po` files in `docs/source/_locale/zh_CN/`. For the chan
 - Empty translations will be generated for new texts
 - `#, fuzzy` comments will be added to the translation for changed texts. Fixed the translation and remove the `#, fuzzy` comment
 - Translations for removed texts will be moved to the bottom of the `.po` file and be commented out
-- Those msgid starts with `Bases: ` for base class displaying in auto-gen classes don't need to be translated
+- Those msgid starting with `Bases: ` are for base class displaying in auto-gen classes, they don't need to be translated
 
 ## Auto build server
 
