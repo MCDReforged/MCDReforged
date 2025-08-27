@@ -84,8 +84,6 @@ class AbstractServerHandler(ServerHandler, ABC):
 			formatters = [formatters]
 		return [parse.Parser(fmt) if isinstance(fmt, str) else fmt for fmt in formatters]
 
-	__worlds_only_regex = re.compile(r'\w+')
-
 	@classmethod
 	def _content_parse(cls, info: Info):
 		"""
