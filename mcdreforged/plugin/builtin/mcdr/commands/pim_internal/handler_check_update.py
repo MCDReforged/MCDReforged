@@ -68,7 +68,10 @@ class PimCheckUpdateCommandHandler(PimCommandHandlerBase):
 		from mcdreforged.plugin.type.packed_plugin import PackedPlugin
 		for plugin_id, version in resolution.items():
 			plugin = self.plugin_manager.get_plugin_from_id(plugin_id)
-			if plugin.is_builtin():
+			# skip if:
+			# a) plugin not-installed (newly introduced dependency)
+			# b) plugin is a builtin plugin
+			if plugin is None or plugin.is_builtin():
 				continue
 
 			is_packed_plugin = isinstance(plugin, PackedPlugin)
