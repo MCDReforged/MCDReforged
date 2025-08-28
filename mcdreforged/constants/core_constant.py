@@ -1,18 +1,16 @@
 """
 Core constants
+Should not import non-stdlib modules
 """
 
 import os
-
-# will be modified in CI
-__CI_BUILD_NUM = None
 
 NAME_SHORT = 'MCDR'
 NAME = 'MCDReforged'
 PACKAGE_NAME = 'mcdreforged'
 CLI_COMMAND = PACKAGE_NAME
 
-# MCDR Version Storage
+# MCDR Version Storage (will be modified in CI)
 VERSION = '2.15.1-beta.1'  # semver (1.2.3-alpha.4)
 VERSION_PYPI = '2.15.1b1'  # pythonic ver (1.2.3a4)
 
@@ -37,8 +35,3 @@ MAX_TASK_QUEUE_SIZE_REGULAR = 1048576
 MAX_TASK_QUEUE_SIZE_INFO = 2048
 WAIT_TIME_AFTER_SERVER_STDOUT_END_SEC = 60
 REACTOR_QUEUE_FULL_WARN_INTERVAL_SEC = 5
-
-
-if isinstance(__CI_BUILD_NUM, str) and __CI_BUILD_NUM.isdigit():
-	VERSION += '+dev.{}'.format(__CI_BUILD_NUM)
-	VERSION_PYPI += '.dev{}'.format(__CI_BUILD_NUM)

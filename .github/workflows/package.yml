@@ -48,19 +48,22 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install -U pip
-        pip install setuptools wheel -r requirements.txt
+        pip install build -r requirements.txt
 
     - name: Modify and get version information
       id: version
       run: |
         version_file=mcdreforged/constants/core_constant.py
         if [ "$IS_RELEASE" != "true" ]; then
-          sed -i "/^__CI_BUILD_NUM/c\__CI_BUILD_NUM = '$GITHUB_RUN_NUMBER'" "$version_file"
+          ci_build_num=$GITHUB_RUN_NUMBER
+          sed -i "s/^VERSION\s*=\s*'\([^']*\)'/VERSION = '\1+dev.${ci_build_num}'/" "$version_file"
+          sed -i "s/^VERSION_PYPI\s*=\s*'\([^']*\)'/VERSION_PYPI = '\1.dev${ci_build_num}'/" "$version_file"
         fi
         
         python - <<EOF
         import os
         from mcdreforged.constants import core_constant as cc
+        print(f'{cc.VERSION=!r} {cc.VERSION_PYPI=!r}')
         with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
           f.write('mcdr_version={}\n'.format(cc.VERSION))
           f.write('pypi_version={}\n'.format(cc.VERSION_PYPI))
@@ -68,7 +71,7 @@ jobs:
 
     - name: Create distribution
       run: |
-        python setup.py sdist bdist_wheel
+        python -m build
 
     - name: Check version consistency
       if: env.IS_RELEASE == 'true'
