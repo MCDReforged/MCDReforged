@@ -194,8 +194,13 @@ class TelemetryReporter:
 	@functools.lru_cache(maxsize=None)
 	def __guess_python_package_isolation_method(cls) -> str:
 		if sys.prefix != sys.base_prefix:
+			# pipx install mcdreforged
 			if os.path.isfile(os.path.join(sys.prefix, 'pipx_metadata.json')):
 				return 'pipx'
+			# uv tool install mcdreforged
+			if os.path.isfile(os.path.join(sys.prefix, 'uv-receipt.toml')):
+				return 'uv'
+			# regular venv / "uv tool run"
 			return 'venv'
 		return 'host'
 
