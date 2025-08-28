@@ -288,6 +288,7 @@ mcdreforged:
           empty: 未找到满足条件的插件
       check_update:
         name: 检查插件更新
+        cannot_check_update_builtin: '不可为内置插件 {0} 检测更新'
         dependency_resolution_failed: '依赖解析失败: {0}'
         no_update:
           all: 所有已安装的 {0} 个插件均为最新版本

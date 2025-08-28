@@ -24,9 +24,12 @@ class PimCheckUpdateCommandHandler(PimCommandHandlerBase):
 				if plugin is None:
 					source.reply(self._raw_tr('mcdr_command.invalid_plugin_id', plugin_id))
 					return
+				if plugin.is_builtin():
+					source.reply(self._tr('check_update.cannot_check_update_builtin', plugin_id))
+					return
 			input_plugin_ids = set(plugin_ids)
 		else:
-			input_plugin_ids = {plugin.get_id() for plugin in self.plugin_manager.get_all_plugins()}
+			input_plugin_ids = {plugin.get_id() for plugin in self.plugin_manager.get_regular_plugins()}
 
 		plugin_requirements = []
 		for plugin in self.plugin_manager.get_all_plugins():
@@ -69,8 +72,8 @@ class PimCheckUpdateCommandHandler(PimCommandHandlerBase):
 		for plugin_id, version in resolution.items():
 			plugin = self.plugin_manager.get_plugin_from_id(plugin_id)
 			# skip if:
-			# a) plugin not-installed (newly introduced dependency)
-			# b) plugin is a builtin plugin
+			# a) plugin not-installed (it's a newly introduced dependency from whatever plugin)
+			# b) plugin is a builtin plugin (it cannot be updated)
 			if plugin is None or plugin.is_builtin():
 				continue
 
