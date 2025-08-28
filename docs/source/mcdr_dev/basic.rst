@@ -28,7 +28,8 @@ Enter the directory ``my_mcdr_server_in_source/``, and run the following command
 
 .. code-block:: bash
 
-    python setup.py egg_info
+    pip install setuptools
+    python -c "from setuptools import setup; setup()" egg_info
 
 That's it. After that command, MCDR can be launched normally
 
