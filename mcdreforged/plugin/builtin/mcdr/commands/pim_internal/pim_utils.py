@@ -55,7 +55,10 @@ def show_resolve_error(
 					args = (cause_req,)
 				elif req_src in [PluginRequirementSource.existing, PluginRequirementSource.existing_pinned]:
 					plugin = plugin_manager.get_plugin_from_id(cause_req.id)
-					args = (plugin.get_id(), plugin.get_version())
+					if plugin is None:  # this plugin was unloaded in another thread?
+						args = (cause_req.id, '?')
+					else:
+						args = (plugin.get_id(), plugin.get_version())
 				source.reply(INDENT + pim_tr('install.resolution.source_reason.' + req_src.name, *args))
 		source.reply('')
 	else:
