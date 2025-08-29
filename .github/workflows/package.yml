@@ -70,8 +70,19 @@ jobs:
         EOF
 
     - name: Create distribution
+      run: python -m build
+
+    - name: Validate distribution version
       run: |
-        python -m build
+        pypi_version=${{ steps.version.outputs.pypi_version }}
+        whl_path=dist/mcdreforged-${pypi_version}-py3-none-any.whl
+        echo whl_path=${whl_path}
+  
+        if [ ! -f "$whl_path" ]; then
+          echo "Error: whl $whl_path does not exist"
+          ls -l dist
+          exit 1
+        fi
 
     - name: Check version consistency
       if: env.IS_RELEASE == 'true'
