@@ -369,7 +369,7 @@ class PluginManager:
 			try:
 				return walker.get_topo_order(plg.get_id())
 			except Exception:
-				self.logger.error('Failed to get topo order for plugin {}'.format(plugin))
+				self.logger.error('Failed to get topo order for plugin {}'.format(plg))
 				raise
 		collected_plugins.sort(key=sort_key_getter)
 
