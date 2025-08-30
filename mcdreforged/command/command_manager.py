@@ -93,7 +93,7 @@ class CommandManager:
 					self.logger.mdebug('Fail to translated command error with key {}'.format(translation_key), option=DebugOption.COMMAND)
 				source.reply(error.to_rtext())
 		except Exception as error:
-			data = {
+			data: dict = {
 				'source': source,
 				'node': node,
 				'plugin': plugin,

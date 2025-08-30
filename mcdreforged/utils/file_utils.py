@@ -2,7 +2,7 @@ import contextlib
 import hashlib
 import os
 from pathlib import Path
-from typing import Callable, ContextManager, TextIO, Union, List
+from typing import Callable, TextIO, Union, List, Generator
 
 from ruamel.yaml import YAML
 
@@ -45,7 +45,7 @@ def get_file_suffix(file_path: Union[str, Path]) -> str:
 
 
 @contextlib.contextmanager
-def safe_write(target_file_path: PathStr, *, encoding: str) -> ContextManager[TextIO]:
+def safe_write(target_file_path: PathStr, *, encoding: str) -> Generator[TextIO, None, None]:
 	target_file_path = Path(target_file_path)
 	temp_file_path = target_file_path.parent / (target_file_path.name + '.tmp')
 	with open(temp_file_path, 'w', encoding=encoding) as file:

@@ -3,7 +3,6 @@ The place to reacting information from the server
 """
 import queue
 import time
-from concurrent.futures import Future
 from typing import TYPE_CHECKING, List, Optional
 
 from mcdreforged.constants import core_constant
@@ -15,7 +14,7 @@ from mcdreforged.info_reactor.info_filter import InfoFilterHolder
 from mcdreforged.logging.debug_option import DebugOption
 from mcdreforged.logging.logger import ServerOutputLogger
 from mcdreforged.mcdr_config import MCDReforgedConfig
-from mcdreforged.utils import class_utils, future_utils
+from mcdreforged.utils import class_utils
 
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
@@ -32,7 +31,7 @@ class InfoReactorManager:
 
 		mcdr_server.add_config_changed_callback(self.__on_mcdr_config_loaded)
 
-	def __on_mcdr_config_loaded(self, config: MCDReforgedConfig, log: bool):
+	def __on_mcdr_config_loaded(self, config: MCDReforgedConfig, _log: bool):
 		self.register_reactors(config.custom_info_reactors)
 
 	def set_info_filters(self, info_filter_holders: List[InfoFilterHolder]):

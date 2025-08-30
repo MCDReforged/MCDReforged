@@ -39,7 +39,7 @@ def entry(parser: ArgumentParser, args: Namespace):
 
 	if pcmd is None:
 		parser.print_help()
-		return 1
+		sys.exit(1)
 
 	replier = NoopReplier() if args.quiet else StdoutReplier()
 

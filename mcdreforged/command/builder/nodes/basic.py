@@ -665,7 +665,7 @@ class ArgumentNode(AbstractNode, ABC):
 		return '{} <{}>'.format(self.__class__.__name__, self.get_name())
 
 	def __repr__(self):
-		fields = {'name': self.__name}
+		fields: dict = {'name': self.__name}
 		if self.__accumulate:
 			fields['accumulate'] = True
 		if self.__metavar:

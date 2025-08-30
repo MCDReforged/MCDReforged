@@ -50,7 +50,7 @@ class UpdateHelper(BackgroundThreadExecutor):
 			reply_func(self.__tr('check_update.already_checking'))
 			return
 		try:
-			response = None
+			response: Optional[dict] = None
 			try:
 				response = self.__api_fetcher.fetch()
 				latest_version: str = response['tag_name']

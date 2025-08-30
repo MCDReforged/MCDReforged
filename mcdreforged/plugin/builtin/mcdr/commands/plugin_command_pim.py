@@ -5,7 +5,7 @@ import os
 import re
 import threading
 from pathlib import Path
-from typing import Optional, List, TYPE_CHECKING, Iterable, Callable, Set
+from typing import Optional, List, TYPE_CHECKING, Iterable, Callable, Set, Any
 
 from typing_extensions import override, deprecated
 
@@ -33,17 +33,17 @@ if TYPE_CHECKING:
 
 
 @dataclasses.dataclass
-class OperationHolder:
+class _OperationHolder:
 	lock: threading.Lock = dataclasses.field(default_factory=threading.Lock)
 	thread: Optional[threading.Thread] = dataclasses.field(default=None)
 	op_key: Optional[str] = dataclasses.field(default=None)
 
 
-def async_operation(op_holder: OperationHolder, skip_callback: Callable, thread_name: str):
+def create_async_operation_guard_decorator(op_holder: _OperationHolder, skip_callback: Callable, thread_name: str):
 	def decorator(op_key: str):
 		def func_transformer(func: Callable):
 			@functools.wraps(func)
-			def wrapped_func(*args, **kwargs):
+			def wrapped_func(*args, **kwargs) -> Any:
 				acquired = op_holder.lock.acquire(blocking=False)
 				if acquired:
 					def run():
@@ -66,6 +66,7 @@ def async_operation(op_holder: OperationHolder, skip_callback: Callable, thread_
 						raise
 				else:
 					skip_callback(*args, op_func=wrapped_func, op_key=op_holder.op_key, op_thread=op_holder.thread, new_op_key=op_key, **kwargs)
+					return None
 
 			misc_utils.copy_signature(wrapped_func, func)
 			return wrapped_func
@@ -74,7 +75,7 @@ def async_operation(op_holder: OperationHolder, skip_callback: Callable, thread_
 
 
 class PluginCommandPimExtension(SubCommand):
-	current_operation = OperationHolder()
+	current_operation = _OperationHolder()
 	DEFAULT_FREEZE_FILE_NAME = 'mcdr_plugin_requirements.txt'
 
 	def __init__(self, mcdr_plugin: 'MCDReforgedPlugin'):
@@ -94,7 +95,7 @@ class PluginCommandPimExtension(SubCommand):
 
 		self.mcdr_server.add_config_changed_callback(self.__on_mcdr_config_loaded)
 
-	def __on_mcdr_config_loaded(self, config: MCDReforgedConfig, log: bool):
+	def __on_mcdr_config_loaded(self, config: MCDReforgedConfig, _log: bool):
 		# Notes: the builtin mcdreforged plugin is loaded after the initial config load,
 		# so this callback will not be called in that initial config load
 		self.__meta_holder.set_meta_json_url(config.catalogue_meta_url)
@@ -293,7 +294,7 @@ class PluginCommandPimExtension(SubCommand):
 
 		source.reply(self.__tr('common.duplicated_input', self.__tr('{}.name'.format(op_key))))
 
-	plugin_installer_guard = async_operation(
+	plugin_installer_guard = create_async_operation_guard_decorator(
 		op_holder=current_operation,
 		skip_callback=__handle_duplicated_input,
 		thread_name='PIM',

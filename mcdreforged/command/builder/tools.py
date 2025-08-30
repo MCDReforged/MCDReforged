@@ -1,5 +1,5 @@
 from abc import ABC
-from typing import Dict, Callable, TYPE_CHECKING, Optional, List, TypeVar, Generic, Any, Type, overload
+from typing import Dict, Callable, TYPE_CHECKING, Optional, List, TypeVar, Generic, Any, Type, overload, Union
 
 from typing_extensions import Self, override
 
@@ -122,7 +122,7 @@ class NodeDefinition(Generic[NodeType], ABC):
 		raise NotImplementedError()
 
 
-class _NodeDefinitionImpl(NodeDefinition):
+class _NodeDefinitionImpl(NodeDefinition[NodeType]):
 	def __init__(self, node_factory: Callable[[str], NodeType]):
 		self.__node_factory = node_factory
 		self.__node_processors: List[Callable[[NodeType], Any]] = []
@@ -237,7 +237,7 @@ class SimpleCommandBuilder:
 	@overload
 	def command(self, command: str, callback: RUNS_CALLBACK) -> None: ...
 
-	def command(self, command: str, callback: Optional[RUNS_CALLBACK] = None):
+	def command(self, command: str, callback: Optional[RUNS_CALLBACK] = None) -> Union[CommandCallbackDecorator, None]:
 		"""
 		Define a command and its callback
 
@@ -284,6 +284,7 @@ class SimpleCommandBuilder:
 
 		self.__commands[command] = callback
 		self.clean_cache()
+		return None
 
 	def arg(self, arg_name: str, node_factory: Callable[[str], ArgNodeType]) -> NodeDefinition[ArgNodeType]:
 		"""

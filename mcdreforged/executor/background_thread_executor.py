@@ -1,5 +1,5 @@
 import threading
-from abc import abstractmethod
+from abc import abstractmethod, ABC
 from typing import Optional, TYPE_CHECKING
 
 from mcdreforged.utils import thread_utils
@@ -8,7 +8,7 @@ if TYPE_CHECKING:
 	from mcdreforged.logging.logger import MCDReforgedLogger
 
 
-class BackgroundThreadExecutor:
+class BackgroundThreadExecutor(ABC):
 	def __init__(self, logger: 'MCDReforgedLogger'):
 		self.logger = logger
 		self.__executor_thread: Optional[threading.Thread] = None

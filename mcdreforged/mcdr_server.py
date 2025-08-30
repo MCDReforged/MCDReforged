@@ -1,4 +1,3 @@
-import concurrent.futures as cf
 import dataclasses
 import locale
 import os

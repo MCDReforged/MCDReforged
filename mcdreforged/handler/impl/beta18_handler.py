@@ -17,7 +17,7 @@ class Beta18Handler(AbstractMinecraftHandler):
 	"""
 	@classmethod
 	@override
-	def format_message(cls, message: MessageText) -> str:
+	def format_message(cls, message: MessageText, *, server_information: Optional[ServerInformation] = None) -> str:
 		if isinstance(message, RTextBase):
 			content = message.to_plain_text()
 		else:

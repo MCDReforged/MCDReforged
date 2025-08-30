@@ -8,7 +8,7 @@ import time
 from pathlib import Path
 from typing import Optional
 
-from typing_extensions import TypedDict
+from typing_extensions import TypedDict, NotRequired
 from wcwidth import wcswidth
 
 from mcdreforged.minecraft.rtext.style import RColor
@@ -37,8 +37,8 @@ class ReleaseDownloader:
 		pass
 
 	class UrlOverrideArgs(TypedDict):
-		repos_owner: Optional[str]
-		repos_name: Optional[str]
+		repos_owner: NotRequired[str]
+		repos_name: NotRequired[str]
 
 	def __init__(
 			self,
