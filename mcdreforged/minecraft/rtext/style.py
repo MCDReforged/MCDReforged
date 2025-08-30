@@ -280,7 +280,7 @@ class __RStyleMeta(RRegistry['RStyle']):
 	pass
 
 
-class RStyle(RItem, ABC, metaclass=RRegistry):
+class RStyle(RItem, ABC, metaclass=__RStyleMeta):
 	"""
 	Minecraft text styles
 	"""
