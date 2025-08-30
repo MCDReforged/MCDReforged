@@ -1,7 +1,7 @@
 import contextlib
 import json
 from abc import ABC, abstractmethod
-from typing import Iterable, List, Union, Optional, Any, Tuple, Set, Dict, TypeVar, overload
+from typing import Iterable, List, Union, Optional, Any, Tuple, Set, Dict, TypeVar, overload, Callable
 
 from colorama import Style
 from typing_extensions import Self, override, TypedDict, NotRequired, Unpack, final
@@ -417,17 +417,21 @@ class RText(RTextBase):
 	def to_plain_text(self) -> str:
 		return self.__text
 
-	def _get_console_style_codes(self) -> str:
+	def __collect_classic_style_codes(self, mapper: Callable[[RItemClassic], str]) -> str:
+		colors: List[str] = []
 		if isinstance(self.__color, RColorClassic):
-			color = self.__color.console_code
+			colors.append(mapper(self.__color))
 		elif isinstance(self.__color, RColorRGB):
-			color = self.__color.to_classic().console_code
-		else:
-			color = ''
+			colors.append(mapper(self.__color.to_classic()))
 		for style in self.__styles:
 			if isinstance(style, RItemClassic):
-				color += style.console_code
-		return color
+				colors.append(mapper(style))
+		return ''.join(colors)
+
+	def _get_console_style_codes(self) -> str:
+		def code_getter(item: RItemClassic) -> str:
+			return item.console_code
+		return self.__collect_classic_style_codes(code_getter)
 
 	@override
 	def to_colored_text(self) -> str:
@@ -436,16 +440,9 @@ class RText(RTextBase):
 		return head + self.to_plain_text() + tail
 
 	def _get_legacy_style_codes(self) -> str:
-		if isinstance(self.__color, RColorClassic):
-			color = self.__color.mc_code
-		elif isinstance(self.__color, RColorRGB):
-			color = self.__color.to_classic().mc_code
-		else:
-			color = ''
-		for style in self.__styles:
-			if isinstance(style, RItemClassic):
-				color += style.mc_code
-		return color
+		def code_getter(item: RItemClassic) -> str:
+			return item.mc_code
+		return self.__collect_classic_style_codes(code_getter)
 
 	@override
 	def to_legacy_text(self) -> str:
