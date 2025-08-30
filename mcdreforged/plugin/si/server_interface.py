@@ -896,7 +896,7 @@ class ServerInterface:
 		"""
 		return self._mcdr_server.config.serialize()
 
-	def modify_mcdr_config(self, changes: Dict[Union[Tuple[str], str], Any]):
+	def modify_mcdr_config(self, changes: Dict[Union[Tuple[str, ...], str], Any]):
 		"""
 		Modify the configuration of MCDR
 
