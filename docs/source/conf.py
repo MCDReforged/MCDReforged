@@ -44,8 +44,8 @@ release = mcdr_version
 
 # -- General configuration ---------------------------------------------------
 
-# https://docs.readthedocs.io/en/stable/environment-variables.html
-RTD: bool = os.environ.get('READTHEDOCS', False)
+# https://docs.readthedocs.com/platform/stable/reference/environment-variables.html#envvar-READTHEDOCS
+RTD: bool = os.environ.get('READTHEDOCS', '').lower() == 'true'
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your customize
