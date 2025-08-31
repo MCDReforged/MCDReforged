@@ -45,3 +45,38 @@ jobs:
         run: |
           # it should load at least most of the MCDR modules
           python -m mcdreforged -V
+
+  lint:
+    runs-on: ubuntu-latest
+    name: Lint with mypy
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
+
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install dependencies
+        run: |
+          python -m pip install -U pip
+          pip install -r requirements.txt -r requirements.dev.txt
+
+      - name: Run mypy
+        run: |
+          echo -e "## Mypy lint result\n" >> $GITHUB_STEP_SUMMARY
+          echo "~~~" >> $GITHUB_STEP_SUMMARY
+          mypy --pretty --show-error-codes --no-color --html-report mypy_html_report | grep -vE "^Generated HTML report " >> $GITHUB_STEP_SUMMARY || true
+          echo "~~~" >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload HTML report as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mypy-html-report
+          path: mypy_html_report/

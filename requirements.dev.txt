@@ -6,7 +6,7 @@ setuptools>=77.0.3
 pydantic
 
 # static checking
-mypy>=1.17
+mypy[reports]>=1.17
 types-colorama
 types-psutil
 types-requests
