@@ -1,0 +1,12 @@
+# build
+build
+setuptools>=77.0.3
+
+# extra features
+pydantic
+
+# static checking
+mypy>=1.17
+types-colorama
+types-psutil
+types-requests
