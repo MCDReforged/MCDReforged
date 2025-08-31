@@ -4,7 +4,7 @@ import logging
 import threading
 from concurrent.futures import Future
 from pathlib import Path
-from typing import Callable, TYPE_CHECKING, Tuple, Any, Union, Optional, List, Dict, overload, Literal, Coroutine, TypeVar
+from typing import Callable, TYPE_CHECKING, Tuple, Any, Union, Optional, List, Dict, overload, Literal, Coroutine, TypeVar, cast, Sequence
 
 import psutil
 
@@ -22,6 +22,7 @@ from mcdreforged.plugin.plugin_event import PluginEvent, MCDRPluginEvents
 from mcdreforged.plugin.type.common import PluginType
 from mcdreforged.plugin.type.plugin import AbstractPlugin
 from mcdreforged.preference.preference_manager import PreferenceItem
+from mcdreforged.translation.functions import TranslateFunc
 from mcdreforged.translation.translation_text import RTextMCDRTranslation
 from mcdreforged.utils import misc_utils, file_utils, class_utils, future_utils
 from mcdreforged.utils.exception import IllegalCallError
@@ -68,7 +69,8 @@ class ServerInterface:
 
 	def _create_plugin_logger(self, plugin_id: str) -> MCDReforgedLogger:
 		logger = MCDReforgedLogger(plugin_id)
-		logger.addHandler(self._mcdr_server.logger.file_handler)
+		if self._mcdr_server.logger.file_handler is not None:
+			logger.addHandler(self._mcdr_server.logger.file_handler)
 		return logger
 
 	@property
@@ -101,7 +103,7 @@ class ServerInterface:
 		It's used for removing the plugin information inside :class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`
 		when you need to send a :class:`~mcdreforged.plugin.si.server_interface.ServerInterface` as parameter
 		"""
-		return self.get_instance()
+		return self.si()
 
 	def as_plugin_server_interface(self) -> Optional['PluginServerInterface']:
 		"""
@@ -211,7 +213,7 @@ class ServerInterface:
 		.. versionadded:: v2.1.0
 		"""
 		text = RTextMCDRTranslation(translation_key, *args, **kwargs)
-		text.set_translator(self.tr)  # not that necessary tbh, just in case self.tr != ServerInterface.get_instance().tr somehow
+		text.set_translator(cast(TranslateFunc, self.tr))  # not that necessary tbh, just in case self.tr != ServerInterface.get_instance().tr somehow
 		return text
 
 	def has_translation(self, translation_key: str, *, language: Optional[str] = None, no_auto_fallback: bool = False):
@@ -230,14 +232,13 @@ class ServerInterface:
 
 		.. versionadded:: v2.12.0
 		"""
-		kwargs = dict(
-			_mcdr_tr_language=language,
-			_mcdr_tr_allow_failure=False
-		)
-		if no_auto_fallback:
-			kwargs.update(_mcdr_tr_fallback_language=None)
 		try:
-			self._mcdr_server.translate(translation_key, **kwargs)
+			self._mcdr_server.translate(
+				translation_key,
+				_mcdr_tr_language=language,
+				_mcdr_tr_allow_failure=False,
+				**({'_mcdr_tr_fallback_language': None} if no_auto_fallback else {}),
+			)
 		except KeyError:
 			return False
 		else:
@@ -521,7 +522,8 @@ class ServerInterface:
 	@overload
 	def __existed_plugin_info_getter(self, plugin_id: str, handler: Callable[['AbstractPlugin'], Any], *, regular: Literal[False]): ...
 
-	def __existed_plugin_info_getter(self, plugin_id: str, handler: Callable[['AbstractPlugin'], Any], *, regular: bool):
+	def __existed_plugin_info_getter(self, plugin_id: str, handler: Callable[[Any], Any], *, regular: bool):
+		plugin: Optional[AbstractPlugin]
 		if regular:
 			plugin = self._plugin_manager.get_regular_plugin_from_id(plugin_id)
 		else:
@@ -781,11 +783,11 @@ class ServerInterface:
 
 	def manipulate_plugins(
 			self, *,
-			load: Optional[List[PathStr]] = None,    # file paths
-			unload: Optional[List[str]] = None,      # plugin ids
-			reload: Optional[List[str]] = None,      # plugin ids
-			enable: Optional[List[PathStr]] = None,  # file paths
-			disable: Optional[List[str]] = None,     # plugin ids
+			load: Optional[Sequence[PathStr]] = None,    # file paths
+			unload: Optional[Sequence[str]] = None,      # plugin ids
+			reload: Optional[Sequence[str]] = None,      # plugin ids
+			enable: Optional[Sequence[PathStr]] = None,  # file paths
+			disable: Optional[Sequence[str]] = None,     # plugin ids
 	) -> Optional[bool]:
 		"""
 		A highly-customizable plugin manipulate API that provides fine-grain control on what to be manipulated:
@@ -808,15 +810,15 @@ class ServerInterface:
 
 		.. versionadded:: v2.13.0
 		"""
-		def map_to_path(paths: Optional[List[PathStr]]) -> Optional[List[Path]]:
+		def map_to_path(paths: Optional[Sequence[PathStr]]) -> Optional[List[Path]]:
 			if paths is not None:
 				return list(map(Path, paths))
 			else:
 				return None
 
-		def map_to_regular(plugin_ids: Optional[List[str]]) -> Optional[List['RegularPlugin']]:
+		def map_to_regular(plugin_ids: Optional[Sequence[str]]) -> Optional[List['RegularPlugin']]:
 			if plugin_ids is not None:
-				plugins = []
+				plugins: List['RegularPlugin'] = []
 				for plugin_id in plugin_ids:
 					class_utils.check_type(plugin_id, str)
 					plugin = self._plugin_manager.get_regular_plugin_from_id(plugin_id)
@@ -950,9 +952,9 @@ class ServerInterface:
 		:raise TypeError: If the type of the given object is not supported for permission querying
 		"""
 		if isinstance(obj, Info):  # Info instance
-			obj = obj.get_command_source()
-			if obj is None:
+			if (info_command_source := obj.get_command_source()) is None:
 				raise TypeError('The Info instance is not from a user')
+			obj = info_command_source
 		if isinstance(obj, CommandSource):  # Command Source
 			return obj.get_permission_level()
 		elif isinstance(obj, str):  # Player name
@@ -1029,7 +1031,7 @@ class ServerInterface:
 		info._attach_and_finalize(self._mcdr_server, command_source=command_source)
 		return command_source
 
-	def execute_command(self, command: str, source: CommandSource = None) -> None:
+	def execute_command(self, command: str, source: Optional[CommandSource] = None) -> None:
 		"""
 		Execute a single command in MCDR's command system
 

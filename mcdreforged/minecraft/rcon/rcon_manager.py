@@ -37,6 +37,7 @@ class RconManager:
 
 	def disconnect(self):
 		if self.is_running():
+			assert self.rcon is not None
 			try:
 				self.rcon.disconnect()
 				self.logger.info(self.__tr('disconnect.disconnected'))
@@ -46,6 +47,7 @@ class RconManager:
 
 	def send_command(self, command: str) -> Optional[str]:
 		if self.is_running():
+			assert self.rcon is not None
 			return self.rcon.send_command(command)
 		else:
 			return None

@@ -62,10 +62,12 @@ class RconConnection:
 		self.disconnect()
 
 	def __send(self, data: Packet):
+		assert self.socket is not None
 		self.socket.send(data.flush())
 		time.sleep(0.03)  # MC-72390
 
 	def __receive(self, length: int) -> bytes:
+		assert self.socket is not None
 		data = bytes()
 		while len(data) < length:
 			data += self.socket.recv(min(self.BUFFER_SIZE, length - len(data)))

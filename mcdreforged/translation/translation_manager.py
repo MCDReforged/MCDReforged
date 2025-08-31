@@ -75,6 +75,9 @@ class TranslationManager:
 
 		# Processing
 		if translated_formatter is not None:
+			if not isinstance(translated_formatter, str):
+				raise AssertionError('translated_formatter must be a string, got {}'.format(type(translated_formatter)))
+
 			translated_formatter = translated_formatter.strip('\n\r')
 			try:
 				if use_rtext:

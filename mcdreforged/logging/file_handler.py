@@ -33,7 +33,7 @@ class ZippingDayRotatingFileHandler(logging.FileHandler):
 		current = datetime.datetime.now().date()
 
 		if self.last_rover_date is None or (current - self.last_rover_date).days >= self.rotate_day_count:
-			self.do_rotate(self.last_record_date and self.last_record_date.strftime('%Y-%m-%d'))
+			self.do_rotate(self.last_record_date.strftime('%Y-%m-%d') if self.last_record_date else None)
 			self.last_rover_date = current
 
 		self.last_record_date = current

@@ -27,6 +27,8 @@ class AsyncTaskExecutor(TaskExecutorBase):
 		self.__submitted_tasks: Optional[asyncio.Queue[asyncio.Task]] = None
 
 	def get_event_loop(self) -> asyncio.AbstractEventLoop:
+		if self.__event_loop is None:
+			raise RuntimeError('event_loop is None')
 		return self.__event_loop
 
 	@override
@@ -35,7 +37,7 @@ class AsyncTaskExecutor(TaskExecutorBase):
 		return getattr(task, '_mcdr_running_plugin', None)
 
 	def submit(self, coro: Coroutine[Any, Any, _T], *, plugin: Optional['AbstractPlugin'] = None) -> 'Future[_T]':
-		future = TaskDoneFuture(self.get_thread())
+		future: TaskDoneFuture[_T] = TaskDoneFuture(self.get_thread())
 		if self.__stop_flag:
 			self.logger.warning('Submitting async coroutine to a stopped AsyncTaskExecutor, dropped')
 			future.cancel()
@@ -44,6 +46,8 @@ class AsyncTaskExecutor(TaskExecutorBase):
 				future_utils.copy_done_state(task, future)
 
 			def create_task():
+				assert self.__event_loop is not None
+				assert self.__submitted_tasks is not None
 				task = self.__event_loop.create_task(coro)
 				task.add_done_callback(task_done_callback)
 				setattr(task, '_mcdr_running_plugin', plugin)
@@ -52,7 +56,7 @@ class AsyncTaskExecutor(TaskExecutorBase):
 		return future
 
 	def call_soon_threadsafe(self, func: Callable[[], Any]):
-		self.__event_loop.call_soon_threadsafe(func)
+		self.get_event_loop().call_soon_threadsafe(func)
 
 	@override
 	def start(self):
@@ -64,8 +68,9 @@ class AsyncTaskExecutor(TaskExecutorBase):
 		if self.__stop_flag:
 			raise RuntimeError('double stop')
 
+		assert self.__stop_event is not None
 		self.__stop_flag = True
-		self.__event_loop.call_soon_threadsafe(self.__stop_event.set)
+		self.get_event_loop().call_soon_threadsafe(self.__stop_event.set)
 
 	@override
 	def loop(self):
@@ -81,10 +86,11 @@ class AsyncTaskExecutor(TaskExecutorBase):
 		self.__submitted_tasks = asyncio.Queue()
 		self.__start_ok_event.set()
 		
-		stop_sentinel = object()
+		stop_sentinel: Any = object()
 
 		# ensure all running tasks are done
 		async def task_awaiter():
+			assert self.__submitted_tasks is not None
 			while True:
 				task_coro = await self.__submitted_tasks.get()
 				if task_coro is stop_sentinel:

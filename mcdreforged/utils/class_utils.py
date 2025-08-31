@@ -1,9 +1,12 @@
 import importlib
-from typing import Any, Type, Union, Iterable, Optional, Collection, TypeVar, List
+from typing import Any, Type, Union, Optional, Collection, TypeVar, List, overload, Tuple
 
 from mcdreforged.utils import tree_printer, collection_utils
 
 _T = TypeVar('_T')
+_T1 = TypeVar('_T1')
+_T2 = TypeVar('_T2')
+_T3 = TypeVar('_T3')
 
 
 def load_class(path: str) -> Any:
@@ -23,22 +26,74 @@ def load_class(path: str) -> Any:
 		raise ImportError('Class {!r} not found in package {!r}'.format(class_name, module_path)) from None
 
 
-def check_class(class_: Type, base_class: Type, error_message: str = None):
+def check_class(class_: Type, base_class: Type, error_message: Optional[str] = None):
 	if not issubclass(class_, base_class):
 		if error_message is None:
 			error_message = 'Except class derived from {}, but found class {}'.format(base_class, class_)
 		raise TypeError(error_message)
 
 
-def check_type(value: Any, types: Union[Type[_T], Iterable[Type[_T]]], error_message: str = None) -> _T:
-	def mapper(x):
+@overload
+def check_type(value: Any, types: Type[_T], error_message: Optional[str] = None) -> _T:
+	...
+
+
+@overload
+def check_type(value: Any, types: None, error_message: Optional[str] = None) -> None:
+	...
+
+
+@overload
+def check_type(value: Any, types: Tuple[Type[_T1], Type[_T2]], error_message: Optional[str] = None) -> Union[_T1, _T2]:
+	...
+
+
+@overload
+def check_type(value: Any, types: Tuple[None, Type[_T2]], error_message: Optional[str] = None) -> Union[None, _T2]:
+	...
+
+
+@overload
+def check_type(value: Any, types: Tuple[Type[_T1], None], error_message: Optional[str] = None) -> Union[_T1, None]:
+	...
+
+
+@overload
+def check_type(value: Any, types: Tuple[Type[_T1], Type[_T2], Type[_T3]], error_message: Optional[str] = None) -> Union[_T1, _T2, _T3]:
+	...
+
+
+@overload
+def check_type(value: Any, types: Tuple[None, Type[_T2], Type[_T3]], error_message: Optional[str] = None) -> Union[None, _T2, _T3]:
+	...
+
+
+@overload
+def check_type(value: Any, types: Tuple[Type[_T1], None, Type[_T3]], error_message: Optional[str] = None) -> Union[_T1, None, _T3]:
+	...
+
+
+@overload
+def check_type(value: Any, types: Tuple[Type[_T1], Type[_T2], None], error_message: Optional[str] = None) -> Union[_T1, _T2, None]:
+	...
+
+
+@overload
+def check_type(value: Any, types: Tuple[Type], error_message: Optional[str] = None) -> Any:  # whatever
+	...
+
+
+def check_type(value: Any, types: Any, error_message: Optional[str] = None) -> Any:
+	def type_mapper(x: Union[Type, None]) -> Type:
 		if x is None:
 			return type(x)
 		return x
 
-	if not isinstance(types, Iterable):
+	if isinstance(types, Collection):
+		types = tuple(types)
+	else:
 		types = (types,)
-	if not isinstance(value, tuple(map(mapper, types))):
+	if not isinstance(value, tuple(map(type_mapper, types))):
 		if error_message is None:
 			error_message = 'Except type {}, but found type {}'.format(types[0] if len(types) == 1 else types, type(value))
 		raise TypeError(error_message)
@@ -77,10 +132,10 @@ def print_class_inheriting_tree(cls: Type, line_writer: tree_printer.LineWriter 
 	"""
 	Remember to import all subclasses before invoking this
 	"""
-	def children_getter(c: type):
+	def children_getter(c: Type):
 		return c.__subclasses__()
 
-	def name_getter(c: type) -> str:
+	def name_getter(c: Type) -> str:
 		return c.__name__
 
 	tree_printer.print_tree(cls, children_getter, name_getter, line_writer)

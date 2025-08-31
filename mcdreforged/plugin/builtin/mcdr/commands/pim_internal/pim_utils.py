@@ -33,10 +33,11 @@ def show_resolve_error(
 		source: 'CommandSource', err: Exception,
 		pim_tr: Translator, plugin_manager: 'PluginManager',
 		*,
-		req_src_getter: Optional[Callable[[PluginRequirement], 'PluginRequirementSource']] = None
+		req_src_getter: Optional[Callable[[PluginRequirement], Optional['PluginRequirementSource']]] = None
 ):
 	if req_src_getter is None:
-		req_src_getter = {}.get
+		def req_src_getter(_: PluginRequirement) -> Optional['PluginRequirementSource']:
+			return None
 	if isinstance(err, resolvelib.ResolutionImpossible):
 		source.reply(pim_tr('install.resolution.impossible'))
 		source.reply('')
@@ -50,7 +51,7 @@ def show_resolve_error(
 			if cause.parent is not None or req_src is None:
 				source.reply(INDENT + pim_tr('install.resolution.impossible_requirements', cause.parent, cause_req))
 			else:
-				args = ()
+				args: tuple = ()
 				if req_src == PluginRequirementSource.user_input:
 					args = (cause_req,)
 				elif req_src in [PluginRequirementSource.existing, PluginRequirementSource.existing_pinned]:

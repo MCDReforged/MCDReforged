@@ -11,7 +11,7 @@ from mcdreforged.command.command_source import CommandSource
 from mcdreforged.constants import core_constant
 from mcdreforged.minecraft.rtext.click_event import RAction
 from mcdreforged.minecraft.rtext.style import RColor
-from mcdreforged.minecraft.rtext.text import RText, RTextBase
+from mcdreforged.minecraft.rtext.text import RText
 from mcdreforged.permission.permission_level import PermissionLevel
 from mcdreforged.plugin.builtin.mcdr.commands.abort_subcommand import AbortSubCommand
 from mcdreforged.plugin.builtin.mcdr.commands.check_update_command import CheckUpdateCommand
@@ -29,6 +29,7 @@ from mcdreforged.plugin.plugin_event import MCDRPluginEvents
 from mcdreforged.plugin.type.builtin_plugin import BuiltinPlugin
 from mcdreforged.translation.translation_text import RTextMCDRTranslation
 from mcdreforged.translation.translator import Translator
+from mcdreforged.utils.types.message import MessageText
 
 if TYPE_CHECKING:
 	from mcdreforged.plugin.plugin_manager import PluginManager
@@ -120,8 +121,8 @@ class MCDReforgedPlugin(BuiltinPlugin):
 	#    Command Stuffs
 	# --------------------
 
-	def get_help_message(self, source: CommandSource, translation_key: str) -> List[RTextBase]:
-		lst = []
+	def get_help_message(self, source: CommandSource, translation_key: str) -> List[MessageText]:
+		lst: List[MessageText] = []
 		with source.preferred_language_context():
 			for line in self.tr(translation_key).to_plain_text().splitlines(keepends=False):
 				prefix = re.search(r'(?<=§7)' + self.control_command_prefix + r'[\w ]*(?=§)', line)

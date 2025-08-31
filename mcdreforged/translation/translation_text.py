@@ -1,6 +1,6 @@
 import threading
 from contextlib import contextmanager
-from typing import Union, Iterable, Optional, List, Callable, Any
+from typing import Union, Iterable, Optional, List, Callable, Any, cast
 
 from typing_extensions import Self, override, Unpack
 
@@ -10,7 +10,7 @@ from mcdreforged.minecraft.rtext.style import RColor, RStyle
 from mcdreforged.minecraft.rtext.text import RTextBase, RText
 from mcdreforged.translation.functions import TranslateFunc
 from mcdreforged.utils import translation_utils, class_utils, function_utils
-from mcdreforged.utils.types.message import TranslationKeyDictRich
+from mcdreforged.utils.types.message import TranslationKeyMappingRich
 
 
 class RTextMCDRTranslation(RTextBase):
@@ -44,14 +44,14 @@ class RTextMCDRTranslation(RTextBase):
 		from mcdreforged.plugin.si.server_interface import ServerInterface
 		server: Optional[ServerInterface] = ServerInterface.get_instance()
 		if server is not None:
-			self.set_translator(server.tr)
+			self.set_translator(cast(TranslateFunc, server.tr))
 
 	def set_translator(self, translate_function: TranslateFunc) -> 'RTextMCDRTranslation':
 		self.__tr_func = translate_function
 		return self
 
 	@classmethod
-	def from_translation_dict(cls, translation_dict: TranslationKeyDictRich) -> 'RTextMCDRTranslation':
+	def from_translation_dict(cls, translation_dict: TranslationKeyMappingRich) -> 'RTextMCDRTranslation':
 		def fake_tr(*_args, **_kwargs):
 			return translation_utils.translate_from_dict(translation_dict, language=_kwargs['_mcdr_tr_language'])
 
@@ -115,7 +115,7 @@ class RTextMCDRTranslation(RTextBase):
 		return self.__get_translated_text().to_legacy_text()
 
 	@override
-	def copy(self) -> 'RTextBase':
+	def copy(self) -> 'RTextMCDRTranslation':
 		copied = RTextMCDRTranslation(self.translation_key, *self.args, **self.kwargs)
 		copied.__tr_func = self.__tr_func
 		copied.__post_process = self.__post_process.copy()
@@ -159,10 +159,11 @@ class RTextMCDRTranslation(RTextBase):
 	def __repr__(self) -> str:
 		return class_utils.represent(self)
 
-	def __eq__(self, other: 'RTextMCDRTranslation') -> bool:
+	def __eq__(self, other) -> bool:
 		"""
 		.. versionadded:: v2.15.0
 		"""
 		if type(other) != type(self):
 			return False
+		other: Self
 		return self.__get_translated_text() == other.__get_translated_text()

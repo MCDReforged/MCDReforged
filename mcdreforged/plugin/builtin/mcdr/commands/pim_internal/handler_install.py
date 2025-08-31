@@ -227,6 +227,7 @@ class PimInstallCommandHandler(PimCommandHandlerBase):
 						raise OuterReturn()
 				input_requirements.append(req)
 
+		plugin: Optional[AbstractPlugin]
 		if '*' in ctx.input_specifiers:
 			for plugin in self.plugin_manager.get_regular_plugins():
 				if is_plugin_updatable(plugin):
@@ -573,7 +574,7 @@ class PimInstallCommandHandler(PimCommandHandlerBase):
 			except OSError as e:
 				self.logger.error('Error deleting renaming download temp dir {}: {}'.format(dl_path, e))
 
-	def try_prepare_for_duplicated_input(self, source: CommandSource, op_thread: threading.Thread) -> bool:
+	def try_prepare_for_duplicated_input(self, source: CommandSource, op_thread: Optional[threading.Thread]) -> bool:
 		sis = self.__install_source
 		if sis is not None and sis == source:
 			# Another installation command when waiting for installation
@@ -584,7 +585,7 @@ class PimInstallCommandHandler(PimCommandHandlerBase):
 
 				# if op_thread is blocked at confirm wait, then op_thread will exit soon
 				if op_thread.is_alive():
-					self.log_debug('cmd_install_plugins thread is still alive after join'.format(op_thread))
+					self.log_debug('cmd_install_plugins thread {} is still alive after join'.format(op_thread))
 				else:
 					return True
 		return False

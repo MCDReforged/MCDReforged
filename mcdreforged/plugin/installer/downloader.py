@@ -12,13 +12,14 @@ from typing_extensions import TypedDict, NotRequired
 from wcwidth import wcswidth
 
 from mcdreforged.minecraft.rtext.style import RColor
-from mcdreforged.minecraft.rtext.text import RText, RTextBase, RTextList
+from mcdreforged.minecraft.rtext.text import RText, RTextList
 from mcdreforged.plugin.installer.meta_holder import ReleaseData
 from mcdreforged.utils import request_utils
 from mcdreforged.utils.replier import Replier
+from mcdreforged.utils.types.message import MessageText
 
 
-def width_limited(s: str, n: int) -> RTextBase:
+def width_limited(s: str, n: int) -> MessageText:
 	result = ''
 	for ch in s:
 		if wcswidth(new_s := result + ch) > n:
@@ -97,6 +98,8 @@ class ReleaseDownloader:
 			self.logger.debug('Response content length: {}'.format(length))
 
 		self.__check_abort()
+		has_any_report = False
+		downloaded = 0
 
 		def report():
 			nonlocal has_any_report
@@ -125,8 +128,6 @@ class ReleaseDownloader:
 			else:
 				self.replier.reply(simple_msg)
 
-		downloaded = 0
-		has_any_report = False
 		if show_progress == self.ShowProgressPolicy.full:
 			report()
 

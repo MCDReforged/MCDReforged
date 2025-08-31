@@ -3,7 +3,7 @@ Handling MCDR commands
 """
 import collections
 import contextlib
-from typing import TYPE_CHECKING, Dict, List, Tuple, Callable, Coroutine, Iterable, ContextManager, TypeVar
+from typing import TYPE_CHECKING, Dict, List, Tuple, Callable, Coroutine, Iterable, ContextManager, TypeVar, Any
 
 from typing_extensions import override
 
@@ -16,6 +16,7 @@ from mcdreforged.command.command_source import InfoCommandSource, CommandSource
 from mcdreforged.logging.debug_option import DebugOption
 from mcdreforged.plugin.plugin_registry import PluginCommandHolder
 from mcdreforged.utils import string_utils
+from mcdreforged.utils.types.message import MessageText
 
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
@@ -70,7 +71,7 @@ class CommandManager:
 				self.logger.warning('Found duplicated command root literal {!r}: {}'.format(literal, pch_list))
 		self.root_nodes = dict(new_root_nodes)  # no more defaultdict
 
-	def __translate_command_error_header(self, source: CommandSource, translation_key_: str, error_: CommandError) -> str:
+	def __translate_command_error_header(self, source: CommandSource, translation_key_: str, error_: CommandError) -> MessageText:
 		if isinstance(error_, RequirementNotMet):
 			if error_.has_custom_reason():
 				return error_.get_reason()
@@ -98,6 +99,7 @@ class CommandManager:
 				'node': node,
 				'plugin': plugin,
 			}
+			exc_info: Any
 			if isinstance(error, CallbackError):
 				data['for'] = error.action
 				data['path'] = error.context.node_path

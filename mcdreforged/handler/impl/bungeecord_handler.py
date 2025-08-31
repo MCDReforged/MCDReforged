@@ -1,5 +1,5 @@
 import re
-from typing import Optional
+from typing import Optional, Tuple
 
 from typing_extensions import override
 
@@ -40,7 +40,7 @@ class BungeecordHandler(AbstractServerHandler):
 	__prompt_text_regex = re.compile(r'^>*\r')
 
 	@override
-	def pre_parse_server_stdout(self, text):
+	def pre_parse_server_stdout(self, text) -> str:
 		text = super().pre_parse_server_stdout(text)
 		return self.__prompt_text_regex.sub('', text, 1)
 
@@ -49,7 +49,7 @@ class BungeecordHandler(AbstractServerHandler):
 
 	@override
 	def parse_player_joined(self, info: Info) -> Optional[str]:
-		if not info.is_user:
+		if info.content is not None and not info.is_user:
 			if (m := self.__player_joined_regex.fullmatch(info.content)) is not None:
 				return m['name']
 		return None
@@ -57,7 +57,7 @@ class BungeecordHandler(AbstractServerHandler):
 	__player_left_regex = re.compile(r'\[(?P<name>[^]]+)] -> UpstreamBridge has disconnected')
 
 	@override
-	def parse_player_left(self, info):
+	def parse_player_left(self, info) -> Optional[str]:
 		# [Steve] -> UpstreamBridge has disconnected
 		if not info.is_user:
 			if (m := self.__player_left_regex.fullmatch(info.content)) is not None:
@@ -65,15 +65,15 @@ class BungeecordHandler(AbstractServerHandler):
 		return None
 
 	@override
-	def parse_server_version(self, info: Info):
+	def parse_server_version(self, info: Info) -> Optional[str]:
 		return None
 
 	__server_address_regex = re.compile(r'Listening on /(?P<ip>\S+):(?P<port>\d+)')
 
 	@override
-	def parse_server_address(self, info: Info):
+	def parse_server_address(self, info: Info) -> Optional[Tuple[str, int]]:  # type: ignore
 		# Listening on /0.0.0.0:25577
-		if not info.is_user:
+		if info.content is not None and not info.is_user:
 			if (m := self.__server_address_regex.fullmatch(info.content)) is not None:
 				return m['ip'], int(m['port'])
 		return None
@@ -83,7 +83,7 @@ class BungeecordHandler(AbstractServerHandler):
 	@override
 	def test_server_startup_done(self, info: Info) -> bool:
 		# Listening on /0.0.0.0:25577
-		return not info.is_user and self.__server_startup_done_regex.fullmatch(info.content) is not None
+		return info.content is not None and not info.is_user and self.__server_startup_done_regex.fullmatch(info.content) is not None
 
 	@override
 	def test_rcon_started(self, info: Info) -> bool:
@@ -94,4 +94,4 @@ class BungeecordHandler(AbstractServerHandler):
 	@override
 	def test_server_stopping(self, info: Info) -> bool:
 		# Closing listener [id: 0x3acae0b0, L:/0:0:0:0:0:0:0:0:25565]
-		return not info.is_user and self.__server_stopping_regex.fullmatch(info.content) is not None
+		return info.content is not None and not info.is_user and self.__server_stopping_regex.fullmatch(info.content) is not None

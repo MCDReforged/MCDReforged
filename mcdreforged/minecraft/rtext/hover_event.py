@@ -18,10 +18,10 @@ class __RHoverMeta(RRegistry['RHoverAction']):
 	pass
 
 
-_RHE = TypeVar('_RHE', bound='RHoverEvent')
+_RHE_co = TypeVar('_RHE_co', bound='RHoverEvent', covariant=True)
 
 
-class RHoverAction(NamedObject, ABC, Generic[_RHE], metaclass=__RHoverMeta):
+class RHoverAction(NamedObject, ABC, Generic[_RHE_co], metaclass=__RHoverMeta):
 	"""
 	Minecraft text hover event actions
 
@@ -39,7 +39,7 @@ class RHoverAction(NamedObject, ABC, Generic[_RHE], metaclass=__RHoverMeta):
 
 	@property
 	@abstractmethod
-	def event_class(self) -> Type[_RHE]:
+	def event_class(self) -> Type[_RHE_co]:
 		raise NotImplementedError()
 
 
@@ -95,7 +95,7 @@ class RHoverEvent(ABC):
 
 	@classmethod
 	@final
-	def from_json_object(cls, hover_event: dict, json_format: RTextJsonFormat) -> Optional['RHoverEvent']:
+	def from_json_object(cls, hover_event: dict, json_format: RTextJsonFormat) -> 'RHoverEvent':
 		"""
 		Deserialize a json dict to a hover event component
 
@@ -105,9 +105,9 @@ class RHoverEvent(ABC):
 		action: str = class_utils.check_type(hover_event['action'], str)
 		for rha in RHoverAction:
 			if rha.name == action:
-				event_class: RHoverEvent = rha.event_class
+				event_class: Type[RHoverEvent] = rha.event_class
 				return event_class._from_json_object(hover_event, json_format)
-		return None
+		raise ValueError(f'Unknown hover event action {action!r}')
 
 	@classmethod
 	@abstractmethod
@@ -196,6 +196,7 @@ class RHoverEntity(RHoverEvent):
 	@override
 	def _to_json_object(self, json_format: RTextJsonFormat) -> dict:
 		from mcdreforged.minecraft.rtext.text import RTextBase
+		name_value: Union[str, dict, list, None]
 		if isinstance(self.name, str):
 			name_value = self.name
 		elif isinstance(self.name, RTextBase):

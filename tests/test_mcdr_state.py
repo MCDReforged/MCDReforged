@@ -1,4 +1,5 @@
 import unittest
+from typing import cast
 
 from mcdreforged.mcdr_state import ServerState, MCDReforgedState
 
@@ -8,7 +9,7 @@ class MyTestCase(unittest.TestCase):
 		self.assertEqual(True, ServerState.STOPPED.in_state(ServerState.STOPPED))
 		self.assertEqual(True, MCDReforgedState.INITIALIZING.in_state(MCDReforgedState.INITIALIZING, MCDReforgedState.RUNNING))
 		self.assertEqual(False, MCDReforgedState.STOPPED.in_state(MCDReforgedState.INITIALIZING, MCDReforgedState.RUNNING))
-		self.assertEqual(False, ServerState.STOPPED.in_state(MCDReforgedState.STOPPED))
+		self.assertEqual(False, ServerState.STOPPED.in_state(cast(ServerState, MCDReforgedState.STOPPED)))
 
 
 if __name__ == '__main__':

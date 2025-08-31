@@ -33,7 +33,7 @@ class YamlDataStorage:
 		self.__file_path = file_path
 		self.__default_file_path = default_file_path
 		self.__default_data = LazyItem(lambda: resources_utils.get_yaml(self.__default_file_path))
-		self._data = CommentedMap()
+		self._data: dict = CommentedMap()
 		self._data_operation_lock = RLock()
 
 	def __getitem__(self, option: str):
@@ -109,10 +109,10 @@ class YamlDataStorage:
 					self._logger.warning('Option {!r} missing, use default value {!r}'.format(current_key_path, current_data[key]))
 			return result, has_missing
 
-	def _pre_save(self, data: CommentedMap):
+	def _pre_save(self, data: dict):
 		pass
 
-	def __save(self, data: CommentedMap):
+	def __save(self, data: dict):
 		self._pre_save(data)
 		file_utils.safe_write_yaml(self.__file_path, data)
 

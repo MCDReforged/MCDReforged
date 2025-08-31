@@ -14,10 +14,10 @@ class __RClickActionMeta(RRegistry['RAction']):
 	pass
 
 
-_RCE = TypeVar('_RCE', bound='RClickEvent')
+_RCE_co = TypeVar('_RCE_co', bound='RClickEvent', covariant=True)
 
 
-class RClickAction(NamedObject, ABC, Generic[_RCE], metaclass=__RClickActionMeta):
+class RClickAction(NamedObject, ABC, Generic[_RCE_co], metaclass=__RClickActionMeta):
 	"""
 	Minecraft text click event actions
 
@@ -89,7 +89,7 @@ class RClickAction(NamedObject, ABC, Generic[_RCE], metaclass=__RClickActionMeta
 
 	@property
 	@abstractmethod
-	def event_class(self) -> Type[_RCE]:
+	def event_class(self) -> Type[_RCE_co]:
 		raise NotImplementedError()
 
 
@@ -154,7 +154,7 @@ class RClickEvent(ABC):
 
 	@classmethod
 	@final
-	def from_json_object(cls, click_event: dict, json_format: RTextJsonFormat) -> Optional['RClickEvent']:
+	def from_json_object(cls, click_event: dict, json_format: RTextJsonFormat) -> 'RClickEvent':
 		"""
 		Deserialize a json dict to a click event component
 
@@ -164,9 +164,9 @@ class RClickEvent(ABC):
 		action: str = class_utils.check_type(click_event['action'], str)
 		for rca in RClickAction:
 			if rca.name == action:
-				event_class: RClickEvent = rca.event_class
+				event_class: Type[RClickEvent] = rca.event_class
 				return event_class._from_json_object(click_event, json_format)
-		return None
+		raise ValueError(f'Unknown click event action {action!r}')
 
 	@classmethod
 	@abstractmethod

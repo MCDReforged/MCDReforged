@@ -88,11 +88,11 @@ def spam_proof(arg=None, *, lock_class=RLock, skip_callback: Optional[Callable] 
 			return acquired
 		misc_utils.copy_signature(wrap, func)
 		lock = lock_class()
-		wrap.original = func
-		wrap.lock = lock
+		wrap.original = func  # type: ignore
+		wrap.lock = lock  # type: ignore
 		return wrap
 	# Directly use @spam_proof without ending brackets case
-	if isinstance(arg, Callable):
+	if isinstance(arg, Callable):  # type: ignore  # see also: python/mypy#14928
 		return wrapper(arg)
 	# Use @spam_proof with ending brackets case
 	else:

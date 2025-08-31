@@ -273,8 +273,10 @@ class PluginCommandSource(CommandSource):
 	def __eq__(self, other) -> bool:
 		return (
 				isinstance(other, PluginCommandSource) and
-				(self.__plugin is None) == (other.__plugin is None) and
-				(self.__plugin is None or self.__plugin.get_id() == other.__plugin.get_id())
+				(
+						(self.__plugin is None and other.__plugin is None) or
+						(self.__plugin is not None and other.__plugin is not None and self.__plugin.get_id() == other.__plugin.get_id())
+				)
 		)
 
 	def __str__(self):

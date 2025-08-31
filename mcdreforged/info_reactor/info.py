@@ -6,8 +6,6 @@ import enum
 import threading
 from typing import TYPE_CHECKING, Optional
 
-from typing_extensions import Self
-
 from mcdreforged.command.command_source import ConsoleCommandSource, PlayerCommandSource, InfoCommandSource
 from mcdreforged.utils.exception import IllegalStateError, IllegalCallError
 
@@ -61,21 +59,21 @@ class InfoActionFlag(enum.Flag):
 	"""
 
 	@classmethod
-	def default(cls) -> Self:
+	def default(cls) -> 'InfoActionFlag':
 		"""
 		The default flag set that allows all actions to be performed
 		"""
 		return cls.send_to_server | cls.echo_to_console | cls.process
 
 	@classmethod
-	def hidden(cls) -> Self:
+	def hidden(cls) -> 'InfoActionFlag':
 		"""
 		Do not echo the server output to the console, perform the subsequent actions silently
 		"""
 		return cls.send_to_server | cls.process
 
 	@classmethod
-	def discarded(cls) -> Self:
+	def discarded(cls) -> 'InfoActionFlag':
 		"""
 		Discard the info object right now, no more future processing
 		"""
@@ -88,7 +86,7 @@ _default_info_action_flag = InfoActionFlag.default()
 @dataclasses.dataclass
 class _InfoControlData:
 	mcdr_server: 'MCDReforgedServer'
-	command_source: InfoCommandSource
+	command_source: Optional[InfoCommandSource]
 
 
 @dataclasses.dataclass
@@ -243,6 +241,7 @@ class Info:
 			if self.is_from_console:
 				return ConsoleCommandSource(mcdr_server, self)
 			elif self.is_player:
+				assert self.player is not None
 				return PlayerCommandSource(mcdr_server, self, self.player)
 			return None
 

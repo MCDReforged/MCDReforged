@@ -6,7 +6,7 @@ import sys
 import threading
 import time
 from threading import RLock, Lock
-from typing import TYPE_CHECKING, Optional, Iterable, List, Sized
+from typing import TYPE_CHECKING, Optional, Iterable, List, Sized, TextIO, cast, IO
 
 from prompt_toolkit import PromptSession
 from prompt_toolkit.application import get_app
@@ -108,6 +108,7 @@ class CachedSuggestionProvider:
 	def suggest(self, input_: str) -> CommandSuggestions:
 		with self.__lock:
 			if input_ == self.__cache_input:
+				assert self.__cache_suggestion is not None
 				return self.__cache_suggestion
 		acq = self.__calc_lock.acquire(blocking=False)
 		if not acq:
@@ -182,7 +183,7 @@ class MCDRPromptSession(PromptSession):
 		# Completion calculation might be happening right now in another thread, so make a reference copy first.
 		complete_state: Optional[CompletionState] = buffer.complete_state
 		# Similarly, in addition to checking if it's None, we should check its completions field as well
-		return complete_state is not None and complete_state.completions
+		return complete_state is not None and bool(complete_state.completions)
 
 	@override
 	def _get_default_buffer_control_height(self) -> Dimension:
@@ -302,8 +303,8 @@ class PromptToolkitWrapper:
 		self.pt_enabled = False
 		self.stdout_proxy: Optional[StdoutProxy] = None
 		self.prompt_session: Optional[MCDRPromptSession] = None
-		self.__real_stdout = None
-		self.__real_stderr = None
+		self.__real_stdout: Optional[TextIO] = None
+		self.__real_stderr: Optional[TextIO] = None
 		self.__promoting = RLock()  # more for a status check
 
 	def start_kits(self):
@@ -319,7 +320,7 @@ class PromptToolkitWrapper:
 			sys.stdout = self.stdout_proxy
 			sys.stderr = self.stdout_proxy
 			# noinspection PyTypeChecker
-			SyncStdoutStreamHandler.update_stdout(sys.stdout)
+			SyncStdoutStreamHandler.update_stdout(cast(IO[str], sys.stdout))
 			self.pt_enabled = True
 			self.__logger.debug('Prompt Toolkits enabled')
 
@@ -328,7 +329,7 @@ class PromptToolkitWrapper:
 		# monkey patch to yeet the bell sound
 		def dummy_func(_self):
 			pass
-		Vt100_Output.bell = dummy_func
+		Vt100_Output.bell = dummy_func  # type: ignore
 
 		# monkey patch to set min_rows to 2
 		# since with reserve_space_for_menu=3, 2 row of completion menu can be displayed
@@ -338,12 +339,17 @@ class PromptToolkitWrapper:
 
 		# noinspection PyTypeChecker
 		real_ctor = MultiColumnCompletionMenuControl.__init__
-		MultiColumnCompletionMenuControl.__init__ = min_rows_is_2
+		MultiColumnCompletionMenuControl.__init__ = min_rows_is_2  # type: ignore
 
 	def stop_kits(self):
 		if self.pt_enabled:
 			self.pt_enabled = False
 			self.__logger.info(self.__tr('stopping_kits'))
+
+			assert self.stdout_proxy is not None
+			assert self.__real_stdout is not None
+			assert self.__real_stderr is not None
+
 			self.stdout_proxy.close()
 			sys.stdout = self.__real_stdout
 			sys.stderr = self.__real_stderr
@@ -361,6 +367,7 @@ class PromptToolkitWrapper:
 	def get_input(self) -> List[str]:
 		if self.pt_enabled:
 			assert self.__console_handler.is_on_thread()
+			assert self.prompt_session is not None
 			with self.__promoting:
 				# It's possible for prompt-toolkit to return a string wth multiple lines when pasting (#146)
 				input_ = self.prompt_session.prompt('> ')

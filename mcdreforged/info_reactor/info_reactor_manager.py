@@ -23,7 +23,7 @@ if TYPE_CHECKING:
 class InfoReactorManager:
 	def __init__(self, mcdr_server: 'MCDReforgedServer'):
 		self.mcdr_server = mcdr_server
-		self.last_queue_full_warn_time = None
+		self.last_queue_full_warn_time: Optional[float] = None
 		self.server_output_logger = ServerOutputLogger('Server', mcdr_server.logger)
 		self.reactors: List[AbstractInfoReactor] = []
 		self.__tr = mcdr_server.create_internal_translator('info_reactor_manager').tr
@@ -84,7 +84,7 @@ class InfoReactorManager:
 				self.server_output_logger.info(info.raw_content, write_to_mcdr_log_file=self.mcdr_server.config.write_server_output_to_log_file)
 
 		def send_to_server(_fut=None):
-			if info.is_from_console and InfoActionFlag.send_to_server in info.action_flag:
+			if info.content is not None and info.is_from_console and InfoActionFlag.send_to_server in info.action_flag:
 				self.mcdr_server.send(info.content)
 
 		def do_info_process_then_send_to_server():

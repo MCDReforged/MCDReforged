@@ -77,7 +77,7 @@ class CommandError(CommandErrorBase, ABC):
 		"""
 		return ()
 
-	def set_message(self, message: str):
+	def set_message(self, message: MessageText):
 		self.__message = message
 
 	def get_parsed_command(self) -> str:

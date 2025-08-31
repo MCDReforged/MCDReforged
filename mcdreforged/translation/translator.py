@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, cast
 
 from mcdreforged.translation.functions import TranslateFunc, TranslateFuncR
 from mcdreforged.utils.types.message import MessageText
@@ -33,5 +33,5 @@ class Translator:
 	def __call__(self, key: str, *args, **kwargs) -> 'RTextMCDRTranslation':
 		translation_key = self.key_prefix + '.' + key
 		text = self.__rtr_cls(translation_key, *args, **kwargs)
-		text.set_translator(self.__real_tr)
+		text.set_translator(cast(TranslateFunc, self.__real_tr))
 		return text

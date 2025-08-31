@@ -10,7 +10,7 @@ class Table:
 	Row = Tuple[MessageText, ...]
 
 	def __init__(self, header: Optional[Iterable[MessageText]]):
-		self.__rows: Optional[List[Table.Row]] = [tuple(header)] if header is not None else None
+		self.__rows: List[Table.Row] = [tuple(header)] if header is not None else []
 		self.__has_header = header is not None
 		self.__width: Optional[int] = None
 
@@ -40,7 +40,7 @@ class Table:
 
 		from mcdreforged.minecraft.rtext.style import RStyle
 		from mcdreforged.minecraft.rtext.text import RTextBase
-		lines = []
+		lines: List[MessageText] = []
 		for i, row in enumerate(self.__rows):
 			items = []
 			for j, cell in enumerate(row):

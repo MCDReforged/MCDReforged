@@ -3,7 +3,7 @@ Misc tool collection
 """
 import inspect
 import logging
-from typing import Callable, Any
+from typing import Callable, Any, TypeVar
 
 
 def print_text_to_console(logger: logging.Logger, text: Any):
@@ -16,13 +16,16 @@ def print_text_to_console(logger: logging.Logger, text: Any):
 			logger.info(line)
 
 
-def copy_signature(target: Callable, origin: Callable) -> Callable:
+_F = TypeVar('_F', bound=Callable)
+
+
+def copy_signature(target: _F, origin: Callable) -> _F:
 	"""
 	Copy the function signature of origin into target
 	"""
 	assert callable(target) and callable(origin)
 
 	# https://stackoverflow.com/questions/39926567/python-create-decorator-preserving-function-arguments
-	target.__signature__ = inspect.signature(origin)
+	target.__signature__ = inspect.signature(origin)  # type: ignore
 	return target
 

@@ -50,7 +50,7 @@ class Beta18Handler(AbstractMinecraftHandler):
 	__player_joined_regex = re.compile(r'(?P<name>[^\[ ]+)( )?\[(.*?)] logged in with entity id \d+ at \(.+\)')
 
 	@override
-	def parse_player_joined(self, info):
+	def parse_player_joined(self, info) -> Optional[str]:
 		if not info.is_user:
 			if (m := self.__player_joined_regex.fullmatch(info.content)) is not None:
 				if self._verify_player_name(m['name']):
@@ -61,8 +61,8 @@ class Beta18Handler(AbstractMinecraftHandler):
 	__player_left_regex = re.compile(r'(?P<name>[^ ]+) lost connection: .*')
 
 	@override
-	def parse_player_left(self, info: Info):
-		if info.is_from_server and (m := self.__player_left_regex.fullmatch(info.content)) is not None:
+	def parse_player_left(self, info: Info) -> Optional[str]:
+		if info.content is not None and info.is_from_server and (m := self.__player_left_regex.fullmatch(info.content)) is not None:
 			return m['name']
 		return None
 
@@ -71,17 +71,14 @@ class Beta18Handler(AbstractMinecraftHandler):
 	__server_startup_done_regex = re.compile(r'Done \([0-9.]+n?s\)! For help, type "help" or "\?"')
 
 	@override
-	def test_server_startup_done(self, info: Info):
-		if info.is_user:
-			return False
-		match = self.__server_startup_done_regex.fullmatch(info.content)
-		return match is not None
+	def test_server_startup_done(self, info: Info) -> bool:
+		return info.content is not None and not info.is_user and self.__server_startup_done_regex.fullmatch(info.content) is not None
 
 	@override
-	def test_rcon_started(self, info: Info):
+	def test_rcon_started(self, info: Info) -> bool:
 		return False
 
 	@override
-	def test_server_stopping(self, info: Info):
+	def test_server_stopping(self, info: Info) -> bool:
 		# Stopping server
 		return not info.is_user and info.content == 'Stopping server'

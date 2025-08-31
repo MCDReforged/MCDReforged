@@ -30,6 +30,9 @@ def get_data(path: str) -> Optional[bytes]:
 
 def get_yaml(path: str) -> CommentedMap:
 	bytes_data = get_data(path)
+	if bytes_data is None:
+		raise FileNotFoundError(f'resource file {path!r} not found')
+
 	# Replace CRLF or yaml loader will load extra lines
 	string_data = bytes_data.decode('utf8').replace('\r\n', '\n')
 	ret = YAML().load(string_data)

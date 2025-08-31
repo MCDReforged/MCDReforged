@@ -1,15 +1,15 @@
-from typing import Optional
+from typing import Optional, Any
 
 from mcdreforged.constants import core_constant
 from mcdreforged.translation.language_fallback_handler import LanguageFallbackHandler
-from mcdreforged.utils.types.message import TranslationKeyDictRich, MessageText, TranslationStorage, TranslationKeyDictNested, TranslationKeyDict
+from mcdreforged.utils.types.message import MessageText, TranslationStorage, TranslationKeyDict, TranslationKeyMappingRich, TranslationKeyMappingNested
 
 __all__ = [
 	'translate_from_dict',
 	'update_storage',
 ]
 
-_NONE = object()
+_NONE: Any = object()
 
 
 def get_mcdr_language() -> str:
@@ -23,11 +23,11 @@ def get_mcdr_language() -> str:
 
 
 def translate_from_dict(
-		translations: TranslationKeyDictRich, language: str,
+		translations: TranslationKeyMappingRich, language: str,
 		*,
 		fallback_handler: LanguageFallbackHandler = LanguageFallbackHandler.auto(),
 		default: Optional[MessageText] = _NONE
-) -> MessageText:
+) -> Optional[MessageText]:
 	"""
 	Select a translation for given language based on a translation dict
 	:param language: The language
@@ -47,8 +47,8 @@ def translate_from_dict(
 	return result
 
 
-def unpack_nest_translation(translation: TranslationKeyDictNested) -> TranslationKeyDict:
-	def traverse(mapping: TranslationKeyDictNested, path: str = ''):
+def unpack_nest_translation(translation: TranslationKeyMappingNested) -> TranslationKeyDict:
+	def traverse(mapping: TranslationKeyMappingNested, path: str = ''):
 		for key, value in mapping.items():
 			if not isinstance(key, str):
 				raise ValueError('bad key type at {!r}, should be str: ({}) {}'.format(path, type(key), key))
@@ -63,12 +63,12 @@ def unpack_nest_translation(translation: TranslationKeyDictNested) -> Translatio
 			else:
 				raise ValueError('bad value type at {!r}, should be str or dict: ({}) {}'.format(current_path, type(value), value))
 
-	result = {}
+	result: TranslationKeyDict = {}
 	traverse(translation, '')
 	return result
 
 
-def update_storage(storage: TranslationStorage, language: str, mapping: TranslationKeyDictNested):
+def update_storage(storage: TranslationStorage, language: str, mapping: TranslationKeyMappingNested):
 	for key, value in unpack_nest_translation(mapping).items():
 		storage[key][language] = value
 

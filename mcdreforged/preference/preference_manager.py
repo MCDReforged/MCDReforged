@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
-from typing import Optional, Dict, TYPE_CHECKING, Union
+from typing import Literal as TLiteral
+from typing import Optional, Dict, TYPE_CHECKING, Union, overload
 
 from mcdreforged.command.command_source import CommandSource, PlayerCommandSource, ConsoleCommandSource
 from mcdreforged.constants import core_constant, plugin_constant
@@ -12,7 +13,7 @@ if TYPE_CHECKING:
 
 
 class PreferenceItem(Serializable):
-	language: Optional[str]
+	language: str
 
 
 class InvalidPreferenceSource(TypeError):
@@ -59,6 +60,16 @@ class PreferenceManager:
 		)
 
 	@classmethod
+	@overload
+	def __get_name(cls, obj: PreferenceSource, *, strict_type_check: TLiteral[True]) -> str:
+		...
+
+	@classmethod
+	@overload
+	def __get_name(cls, obj: PreferenceSource, *, strict_type_check: bool = False) -> Optional[str]:
+		...
+
+	@classmethod
 	def __get_name(cls, obj: PreferenceSource, *, strict_type_check: bool = False) -> Optional[str]:
 		if isinstance(obj, str):
 			player_name = obj
@@ -88,7 +99,7 @@ class PreferenceManager:
 		return self.get_preference(CONSOLE_ALIAS, strict_type_check=True)
 
 	def set_preference(self, obj: PreferenceSource, pref: PreferenceItem):
-		name: str = self.__get_name(obj)
+		name: str = self.__get_name(obj, strict_type_check=True)
 		self.preferences[name] = pref.copy()
 		self.__save_preferences()
 

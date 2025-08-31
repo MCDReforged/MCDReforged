@@ -23,10 +23,11 @@ def thread_dump(*, target_thread: Optional[str] = None, name_only: bool = False)
 		if target_thread is not None and thread.name != target_thread:
 			continue
 		tsi = thread_utils.get_stack_info(thread, stack_map=stack_map)
-		if name_only:
-			lines.append(tsi.head_line)
-		else:
-			lines.extend(tsi.get_lines())
+		if tsi is not None:
+			if name_only:
+				lines.append(tsi.head_line)
+			else:
+				lines.extend(tsi.get_lines())
 	return lines
 
 

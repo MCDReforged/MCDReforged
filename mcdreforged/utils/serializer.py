@@ -4,7 +4,8 @@ import re
 import uuid
 from abc import ABC
 from enum import EnumMeta, Enum
-from typing import Union, TypeVar, List, Dict, Type, get_type_hints, Any, Callable, Literal, Optional, Tuple
+from typing import Literal as TLiteral
+from typing import Union, TypeVar, List, Dict, Type, get_type_hints, Any, Callable, Optional, Tuple, cast
 
 from typing_extensions import Self, TypedDict, NotRequired, Unpack
 
@@ -233,7 +234,7 @@ def deserialize(
 			return data
 		# int is ok for float
 		elif cls is float and isinstance(data, int):
-			return float(data)
+			return cast(T, float(data))
 		else:
 			if cls is float:
 				mismatch(float, int)
@@ -242,7 +243,8 @@ def deserialize(
 
 	# Custom class that inherits one of the base class (no generic)
 	elif isinstance(cls, type) and issubclass(cls, _BASIC_CLASSES_NO_NONE):
-		return cls(data)
+		ctor: Callable[[Any], T] = cls
+		return ctor(data)
 
 	# List (generic with type hint)
 	elif cls_org == getattr(List[int], '__origin__') or (isinstance(cls_org, type) and issubclass(cls_org, list)):
@@ -279,7 +281,7 @@ def deserialize(
 			mismatch(str)
 
 	# Literal
-	elif cls_org == Literal:
+	elif cls_org == TLiteral:
 		literals = _get_args(cls)
 		if data in literals:
 			return data
@@ -290,7 +292,7 @@ def deserialize(
 	elif cls == re.Pattern:
 		if isinstance(data, str):
 			try:
-				return re.compile(data)
+				return cast(T, re.compile(data))
 			except re.error as e:
 				raise ValueError('Invalid regular expression {!r}: {}'.format(data, e))
 		else:
@@ -300,7 +302,7 @@ def deserialize(
 	elif cls == uuid.UUID:
 		if isinstance(data, str):
 			try:
-				return uuid.UUID(hex=data)
+				return cast(T, uuid.UUID(hex=data))
 			except ValueError as e:
 				raise ValueError('Invalid uuid expression {!r}: {}'.format(data, e))
 		else:
@@ -466,7 +468,7 @@ class Serializable(ABC):
 		"""
 		Serialize itself into a dict via function :func:`serialize`
 		"""
-		return serialize(self)
+		return cast(dict, serialize(self))
 
 	@classmethod
 	def deserialize(cls: Type[Self], data: dict, **kwargs: Unpack[_DeserializeKwargs]) -> Self:

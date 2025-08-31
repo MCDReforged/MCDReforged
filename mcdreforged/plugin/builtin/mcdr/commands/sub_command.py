@@ -3,7 +3,7 @@ import enum
 import traceback
 from abc import ABC, abstractmethod
 from concurrent.futures import Future
-from typing import TYPE_CHECKING, Callable, Generic, TypeVar
+from typing import TYPE_CHECKING, Callable, Generic, TypeVar, Optional
 
 from mcdreforged.command.builder.nodes.basic import Literal
 from mcdreforged.command.builder.tools import Requirements
@@ -26,7 +26,7 @@ T = TypeVar('T')
 
 @dataclasses.dataclass(frozen=True)
 class FunctionCallResult(Generic[T]):
-	return_value: T
+	return_value: Optional[T]
 	no_error: bool
 
 
@@ -109,6 +109,7 @@ class SubCommand(ABC):
 		if ret.no_error:
 			def reply(fut: 'Future[PluginOperationResult]'):
 				source.reply(fut.result().to_rtext(self.mcdr_server, show_path=source.has_permission(PermissionLevel.PHYSICAL_SERVER_CONTROL_LEVEL)))
+			assert ret.return_value is not None
 			ret.return_value.add_done_callback(reply)
 
 	def function_call(

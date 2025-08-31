@@ -242,5 +242,6 @@ class PackageRequirementResolver:
 
 	def abort(self):
 		proc = self.__install_proc
-		with contextlib.suppress(OSError):
-			proc.terminate()
+		if proc is not None:
+			with contextlib.suppress(OSError):
+				proc.terminate()

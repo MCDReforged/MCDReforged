@@ -166,7 +166,7 @@ class Criterion:
 	criterion: Callable[[Version, Version], bool]
 	is_default: bool
 
-	def test(self, target: Union[Version, str]):
+	def test(self, target: Version):
 		return self.criterion(self.base_version, target)
 
 	def __str__(self):

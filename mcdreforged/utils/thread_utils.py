@@ -30,6 +30,8 @@ class ThreadStackInfo:
 
 
 def get_stack_info(thread: threading.Thread, *, stack_map: Optional[_StackMap] = None) -> Optional[ThreadStackInfo]:
+	if thread.ident is None:
+		return None
 	if stack_map is None:
 		stack_map = get_stack_map()
 	stack_data = stack_map.get(thread.ident)

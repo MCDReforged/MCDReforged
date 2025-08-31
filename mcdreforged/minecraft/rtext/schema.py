@@ -1,8 +1,6 @@
 import dataclasses
 import enum
 
-from typing_extensions import Self
-
 
 @dataclasses.dataclass(frozen=True)
 class RTextJsonFormatItem:
@@ -22,11 +20,11 @@ class RTextJsonFormat(enum.Enum):
 	"""For Minecraft ``[1.21.5, ~)``"""
 
 	@classmethod
-	def default(cls) -> Self:
+	def default(cls) -> 'RTextJsonFormat':
 		return cls.V_1_7
 
 	@classmethod
-	def guess(cls, text_obj: dict) -> Self:
+	def guess(cls, text_obj: dict) -> 'RTextJsonFormat':
 		for key in [cls.V_1_21_5.value.click_event_key, cls.V_1_21_5.value.hover_event_key]:
 			if key in text_obj:
 				return cls.V_1_21_5

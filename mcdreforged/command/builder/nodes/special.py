@@ -1,4 +1,4 @@
-from typing import Iterable
+from typing import Iterable, Union
 
 from typing_extensions import override
 
@@ -14,7 +14,7 @@ class CountingLiteral(Literal):
 
 	.. versionadded:: v2.12.0
 	"""
-	def __init__(self, literal: str or Iterable[str], counter_key: str):
+	def __init__(self, literal: Union[str, Iterable[str]], counter_key: str):
 		super().__init__(literal)
 		self.counter_key = counter_key
 

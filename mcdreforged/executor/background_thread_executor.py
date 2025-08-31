@@ -25,7 +25,9 @@ class BackgroundThreadExecutor(ABC):
 			raise RuntimeError('Assigning executor_thread to another thread, old {}, new {}'.format(self.__executor_thread, thread))
 		self.__executor_thread = thread
 
-	def get_thread(self) -> Optional[threading.Thread]:
+	def get_thread(self) -> threading.Thread:
+		if self._executor_thread is None:
+			raise RuntimeError('No executor thread')
 		return self._executor_thread
 
 	def get_thread_stack(self) -> Optional[thread_utils.ThreadStackInfo]:
@@ -34,6 +36,9 @@ class BackgroundThreadExecutor(ABC):
 		if not thread.is_alive():
 			return None
 		return thread_utils.get_stack_info(thread)
+
+	def is_thread_alive(self) -> bool:
+		return self.__executor_thread is not None and self.__executor_thread.is_alive()
 
 	def is_on_thread(self):
 		return threading.current_thread() is self._executor_thread

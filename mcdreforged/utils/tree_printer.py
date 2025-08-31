@@ -1,4 +1,4 @@
-from typing import Callable, Any, TypeVar, Iterable, Sized, Generic
+from typing import Callable, Any, TypeVar, Iterable, Sized, Generic, Optional
 
 from typing_extensions import Self
 
@@ -9,17 +9,17 @@ __all__ = [
 ]
 
 
-T = TypeVar('T')
+_T = TypeVar('_T')
 LineWriter = Callable[[str], Any]
-_ChildrenGetter = Callable[[T], Iterable[T]]
-_NameGetter = Callable[[T], str]
+_ChildrenGetter = Callable[[_T], Iterable[_T]]
+_NameGetter = Callable[[_T], str]
 
 
-class TreePrinter(Generic[T]):
+class TreePrinter(Generic[_T]):
 	def __init__(self):
 		self.__line_writer: LineWriter = print
-		self.__children_getter = None
-		self.__name_getter = None
+		self.__children_getter: Optional[_ChildrenGetter] = None
+		self.__name_getter: Optional[_NameGetter] = None
 		self.__use_tab = False
 		self.__use_ascii = False
 
@@ -40,11 +40,11 @@ class TreePrinter(Generic[T]):
 		self.__use_ascii = True
 		return self
 
-	def print(self, root: T) -> Self:
-		def is_root(node: T) -> bool:
+	def print(self, root: _T) -> Self:
+		def is_root(node: _T) -> bool:
 			return node == root
 
-		def get_item_line(node: T, is_last: bool) -> str:
+		def get_item_line(node: _T, is_last: bool) -> str:
 			if is_root(node):
 				return ''
 			if self.__use_ascii:
@@ -52,7 +52,7 @@ class TreePrinter(Generic[T]):
 			else:
 				return '└── ' if is_last else '├── '
 
-		def get_parent_line(node: T, is_last: bool) -> str:
+		def get_parent_line(node: _T, is_last: bool) -> str:
 			if is_root(node):
 				return ''
 			if is_last:
@@ -62,7 +62,12 @@ class TreePrinter(Generic[T]):
 			padding = '\t' if self.__use_tab else '   '
 			return base + padding
 
-		def do_print(node: T, prefix: str, is_last: bool):
+		def do_print(node: _T, prefix: str, is_last: bool):
+			if self.__children_getter is None:
+				raise AssertionError('children_getter not assigned')
+			if self.__name_getter is None:
+				raise AssertionError('name_getter not assigned')
+
 			line = self.__name_getter(node)
 			line = get_item_line(node, is_last) + line
 			self.__line_writer(prefix + line)
@@ -73,11 +78,12 @@ class TreePrinter(Generic[T]):
 			for i, child in enumerate(children):
 				do_print(child, prefix + get_parent_line(node, is_last), i == len(children) - 1)
 
-		assert self.__children_getter is not None, 'children_getter not assigned'
-		assert self.__name_getter is not None, 'name_getter not assigned'
 		do_print(root, '', False)
 		return self
 
 
-def print_tree(root: T, children_getter: _ChildrenGetter, name_getter: _NameGetter, line_writer: LineWriter):
-	TreePrinter().writer(line_writer).getters(children_getter, name_getter).print(root)
+def print_tree(root: _T, children_getter: _ChildrenGetter, name_getter: _NameGetter, line_writer: LineWriter):
+	tp: TreePrinter[_T] = TreePrinter()
+	tp.writer(line_writer)
+	tp.getters(children_getter, name_getter)
+	tp.print(root)

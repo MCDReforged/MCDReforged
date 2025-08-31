@@ -96,7 +96,7 @@ class TelemetryReporter:
 
 	def __init__(self, mcdr_server: Optional['MCDReforgedServer']):
 		self.__mcdr_server = mcdr_server
-		self.__logger = mcdr_server.logger if mcdr_server is not None else None
+		self.__logger: Optional[logging.Logger] = mcdr_server.logger if mcdr_server is not None else None
 		self.__verbose_log = False
 
 		self.__uuid = uuid.uuid4()
@@ -111,15 +111,21 @@ class TelemetryReporter:
 		self.__launched_from_source = flag
 
 	def __log_info(self, msg: str):
-		if self.__verbose_log and self.__logger:
+		if self.__logger is None:
+			return
+		from mcdreforged import MCDReforgedLogger
+		if self.__verbose_log:
 			self.__logger.info(msg)
-		else:
+		elif isinstance(self.__logger, MCDReforgedLogger):
 			self.__logger.mdebug(msg, option=DebugOption.TELEMETRY)
 
 	def __log_error(self, msg: str):
+		if self.__logger is None:
+			return
+		from mcdreforged import MCDReforgedLogger
 		if self.__verbose_log and self.__logger:
 			self.__logger.error(msg)
-		else:
+		elif isinstance(self.__logger, MCDReforgedLogger):
 			self.__logger.mdebug(msg, option=DebugOption.TELEMETRY)
 
 	def report(self):

@@ -117,6 +117,7 @@ class PimCheckUpdateCommandHandler(PimCommandHandlerBase):
 			source.reply(self._tr('check_update.updatable.title').set_styles(RStyle.bold))
 			source.reply('')
 			for entry in update_able_plugins:
+				assert entry.latest_version is not None
 				# xxx 0.1.0 -> 0.2.0
 				# xxx 0.1.0 -> 0.2.0 (latest: 0.3.0)
 				texts = RTextList(
@@ -140,6 +141,7 @@ class PimCheckUpdateCommandHandler(PimCommandHandlerBase):
 			source.reply(self._tr('check_update.not_updatable.title').set_styles(RStyle.bold))
 			source.reply('')
 			for entry in not_update_able_plugins:
+				assert entry.latest_version is not None
 				if entry.is_packed_plugin:
 					reason = self._tr('check_update.not_updatable.reason.constraints_not_satisfied')
 				else:

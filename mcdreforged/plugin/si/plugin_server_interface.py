@@ -20,15 +20,16 @@ from mcdreforged.plugin.type.multi_file_plugin import MultiFilePlugin
 from mcdreforged.plugin.type.plugin import AbstractPlugin
 from mcdreforged.utils import class_utils
 from mcdreforged.utils.serializer import Serializable
-from mcdreforged.utils.types.message import MessageText, TranslationKeyDictRich, TranslationKeyDictNested
+from mcdreforged.utils.types.json_like import JsonLike
+from mcdreforged.utils.types.message import MessageText, TranslationKeyMappingNested, TranslationKeyMappingRich
 
 try:
 	# noinspection PyPackageRequirements
 	from pydantic import BaseModel as PydanticBaseModel
 	PydanticBaseModelType = TypeVar('PydanticBaseModelType', bound=PydanticBaseModel)
 except ImportError:
-	PydanticBaseModel: Any = None
-	PydanticBaseModelType: Any = None
+	PydanticBaseModel: Any = None  # type: ignore
+	PydanticBaseModelType: Any = None  # type: ignore
 
 
 if TYPE_CHECKING:
@@ -113,7 +114,7 @@ class PluginServerInterface(ServerInterface):
 		"""
 		self.__plugin.register_command(root_node, allow_duplicates=allow_duplicates)
 
-	def register_help_message(self, prefix: str, message: Union[MessageText, TranslationKeyDictRich], permission: int = PermissionLevel.MINIMUM_LEVEL) -> None:
+	def register_help_message(self, prefix: str, message: Union[MessageText, TranslationKeyMappingRich], permission: int = PermissionLevel.MINIMUM_LEVEL) -> None:
 		"""
 		Register a help message for the current plugin, which is used in ``!!help`` command
 
@@ -126,7 +127,7 @@ class PluginServerInterface(ServerInterface):
 		"""
 		self.__plugin.register_help_message(HelpMessage(self.__plugin, prefix, message, permission))
 
-	def register_translation(self, language: str, mapping: TranslationKeyDictNested) -> None:
+	def register_translation(self, language: str, mapping: TranslationKeyMappingNested) -> None:
 		"""
 		Register a translation mapping for a specific language for the current plugin
 
@@ -227,9 +228,9 @@ class PluginServerInterface(ServerInterface):
 			encoding: str = 'utf8',
 			file_format: Optional[FileFormat] = None,
 			failure_policy: TLiteral['regen', 'raise'] = 'regen',
-			data_processor: Optional[Callable[[dict], bool]] = None,
+			data_processor: Optional[Callable[[JsonLike], bool]] = None,
 			pydantic_model_validate_kwargs: Optional[dict] = None,
-	) -> Union[dict, SerializableType, PydanticBaseModelType]:
+	) -> Union[JsonLike, SerializableType, PydanticBaseModelType]:
 		"""
 		A simple method to load a dict or :class:`~mcdreforged.utils.serializer.Serializable` or :class:`pydantic.BaseModel` type config from a json file
 
@@ -335,8 +336,9 @@ class PluginServerInterface(ServerInterface):
 			from pydantic import BaseModel as PydanticBaseModelClass
 		except ImportError:
 			# noinspection PyPep8Naming
-			PydanticBaseModelClass = None
+			PydanticBaseModelClass: Any = None  # type: ignore
 
+		result_config: Union[JsonLike, SerializableType, PydanticBaseModelType]
 		if target_class is not None and PydanticBaseModelClass is not None and issubclass(target_class, PydanticBaseModelClass):
 			if read_data is None:  # read failed, use default
 				result_config = target_class()
@@ -353,15 +355,18 @@ class PluginServerInterface(ServerInterface):
 					log(self._tr('load_config_simple.failed', e))
 
 		elif target_class is not None:
+			assert issubclass(target_class, Serializable)
+			imperfect = False
+
 			def set_imperfect(*_):
 				nonlocal imperfect
 				imperfect = True
-			target_class: Serializable
-			imperfect = False
 			try:
 				if read_data is None:  # read failed, use default
 					result_config = target_class.get_default()
 				else:
+					if not isinstance(read_data, dict):
+						raise TypeError('read_data must be a dict')
 					result_config = target_class.deserialize(read_data, missing_callback=set_imperfect, redundancy_callback=set_imperfect)
 			except Exception as e:
 				if failure_policy == 'raise':
@@ -375,8 +380,10 @@ class PluginServerInterface(ServerInterface):
 
 		else:
 			if read_data is None:  # read failed, use default
+				if default_config is None:  # should already been handled (raising exception) above
+					raise AssertionError('default_config cannot be None')
 				result_config = default_config.copy()
-			else:
+			elif isinstance(read_data, dict):
 				result_config = read_data
 				if default_config is not None:
 					# Notes: support level-1 nesting only
@@ -391,6 +398,8 @@ class PluginServerInterface(ServerInterface):
 					for key in list(result_config.keys()):
 						if key not in default_config:
 							result_config.pop(key)
+			else:
+				result_config = read_data
 
 		log(self._tr('load_config_simple.succeed'))
 		if needs_save:
@@ -398,7 +407,7 @@ class PluginServerInterface(ServerInterface):
 		return result_config
 
 	def save_config_simple(
-			self, config: Union[dict, Serializable, PydanticBaseModel], file_name: str = 'config.json', *,
+			self, config: Union[JsonLike, Serializable, PydanticBaseModel], file_name: Optional[str] = None, *,
 			in_data_folder: bool = True,
 			encoding: str = 'utf8',
 			file_format: Optional[FileFormat] = None,
@@ -424,6 +433,7 @@ class PluginServerInterface(ServerInterface):
 		.. versionadded:: v2.14.0
 			:class:`pydantic.BaseModel` support and the *pydantic_model_dump_kwargs* parameter
 		"""
+		data: JsonLike
 		if isinstance(config, Serializable):
 			data = config.serialize()
 		elif PydanticBaseModel is not None and isinstance(config, PydanticBaseModel):
@@ -432,7 +442,6 @@ class PluginServerInterface(ServerInterface):
 			else:
 				pydantic_model_dump_kwargs = pydantic_model_dump_kwargs.copy()
 			pydantic_model_dump_kwargs['mode'] = 'json'
-			config: Any
 			data = config.model_dump(**pydantic_model_dump_kwargs)
 		else:
 			data = config

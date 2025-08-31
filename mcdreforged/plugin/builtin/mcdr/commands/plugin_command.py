@@ -165,6 +165,7 @@ class PluginCommand(SubCommand):
 				else:
 					source.reply(self.tr('mcdr_command.{}.fail'.format(operation_name), plugin_alias))
 
+			assert ret.return_value is not None
 			ret.return_value.add_done_callback(report)
 		else:
 			source.reply(self.tr('mcdr_command.{}.fail'.format(operation_name), plugin_alias))

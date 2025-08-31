@@ -6,6 +6,7 @@ from typing import List, TYPE_CHECKING, Callable, Union
 
 from mcdreforged.minecraft.rtext.click_event import RAction
 from mcdreforged.minecraft.rtext.text import RTextList, RTextBase
+from mcdreforged.utils import class_utils
 
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
@@ -25,7 +26,8 @@ class SingleOperationResult:
 
 	def record(self, plugin: Union['AbstractPlugin', Path], result: bool):
 		if result:
-			self.succeed(plugin)
+			from mcdreforged.plugin.type.plugin import AbstractPlugin
+			self.succeed(class_utils.check_type(plugin, AbstractPlugin))
 		else:
 			self.fail(plugin)
 
@@ -97,7 +99,7 @@ class PluginOperationResult:
 
 		tr = mcdr_server.create_internal_translator('plugin_operation_result')
 
-		def add_if_not_empty(msg: RTextList, lst: List['AbstractPlugin' or str], key: str):
+		def add_if_not_empty(msg: RTextList, lst: list, key: str):
 			if len(lst) > 0:
 				text_list = []
 				for ele in lst:

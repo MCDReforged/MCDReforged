@@ -57,7 +57,7 @@ class MCDReforgedConfig(Serializable):
 	handler_detection: bool = True
 
 	# --------- Debug Configuration ---------
-	debug: dict = {o.name.lower(): False for o in DebugOption}
+	debug: Dict[str, bool] = {str(o.name).lower(): False for o in DebugOption}
 	write_server_output_to_log_file: bool = False
 
 	def is_debug_on(self) -> bool:
@@ -114,7 +114,7 @@ class MCDReforgedConfigManager:
 	def file_presents(self) -> bool:
 		return self.__storage.file_presents()
 
-	def set_values(self, changes: Dict[Union[Tuple[str], str], Any]):
+	def set_values(self, changes: Dict[Union[Tuple[str, ...], str], Any]):
 		"""
 		Example keys: 'path.to.value', ('path', 'to', 'value')
 		:param changes: change map

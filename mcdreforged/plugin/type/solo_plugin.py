@@ -45,7 +45,15 @@ class SoloPlugin(RegularPlugin):
 		# https://docs.python.org/3/library/importlib.html#importing-a-source-file-directly
 		# https://docs.python.org/zh-cn/3.6/library/importlib.html#importing-a-source-file-directly
 		spec = importlib.util.spec_from_file_location(self.module_name, self.plugin_path)
+		if spec is None:
+			raise Exception('Failed to create module spec, module_name {!r} path {!r}'.format(self.module_name, self.plugin_path))
+		if spec.loader is None:
+			raise Exception('spec has no loader, module_name {!r} path {!r}'.format(self.module_name, self.plugin_path))
+
 		module = importlib.util.module_from_spec(spec)
+		if module is None:
+			raise Exception('Failed to create module from spec {}, module_name {!r} path {!r}'.format(spec, self.module_name, self.plugin_path))
+
 		# noinspection PyUnresolvedReferences
 		spec.loader.exec_module(module)
 		# store the module, in case something want to access sys.modules[some_field.__module__]

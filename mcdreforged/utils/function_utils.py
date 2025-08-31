@@ -3,10 +3,11 @@ from typing import TypeVar, Callable, Container
 from typing_extensions import Protocol
 
 _T = TypeVar('_T')
+_R = TypeVar('_R', covariant=True)
 
 
-class _Always(Protocol[_T]):
-	def __call__(self, *args, **kwargs) -> _T:
+class _Always(Protocol[_R]):
+	def __call__(self, *args, **kwargs) -> _R:
 		...
 
 

@@ -1,7 +1,7 @@
 import collections
 import dataclasses
 from abc import ABC, abstractmethod
-from typing import List, Callable, Iterable, Set, Dict, Type, Any, Union, Optional, TypedDict, TypeVar
+from typing import List, Callable, Iterable, Set, Dict, Type, Any, Union, Optional, TypedDict, TypeVar, NoReturn
 
 from typing_extensions import Self, override, NotRequired
 
@@ -149,7 +149,7 @@ class AbstractNode(ABC):
 		:param func: A callable that accepts up to 2 arguments.
 			Argument list: :class:`~mcdreforged.command.command_source.CommandSource`, :class:`dict` (:class:`~mcdreforged.command.builder.common.CommandContext`)
 		"""
-		class_utils.check_type(func, Callable)
+		class_utils.check_type(func, Callable)  # type: ignore  # see also: python/mypy#14928
 		self._callback = func
 		return self
 
@@ -179,8 +179,8 @@ class AbstractNode(ABC):
 			node2.requires(lambda src, ctx: ctx['page_count'] <= get_max_page())  # Dynamic range check
 			node3.requires(lambda src, ctx: is_legal(ctx['target']), lambda src, ctx: 'target {} is illegal'.format(ctx['target']))  # Customized failure message
 		"""
-		class_utils.check_type(requirement, Callable)
-		class_utils.check_type(failure_message_getter, [Callable, None])
+		class_utils.check_type(requirement, Callable)  # type: ignore  # see also: python/mypy#14928
+		class_utils.check_type(failure_message_getter, (Callable, None))  # type: ignore  # see also: python/mypy#14928
 		self._requirements.append(_Requirement(requirement, failure_message_getter))
 		return self
 
@@ -203,7 +203,7 @@ class AbstractNode(ABC):
 			node1.precondition(lambda src: src.has_permission(3))  # Permission check, but hide if the permission is not enough
 			node2.precondition(lambda src, ctx: 'foo' in ctx)  # Avoid re-assigning the "foo" argument
 		"""
-		class_utils.check_type(precondition, Callable)
+		class_utils.check_type(precondition, Callable)  # type: ignore  # see also: python/mypy#14928
 		self._preconditions.append(precondition)
 		return self
 
@@ -259,7 +259,7 @@ class AbstractNode(ABC):
 		:param suggestion: A callable function which accepts up to 2 parameters and return an iterable of str indicating the current command suggestions.
 			Argument list: :class:`~mcdreforged.command.command_source.CommandSource`, :class:`dict` (:class:`~mcdreforged.command.builder.common.CommandContext`)
 		"""
-		class_utils.check_type(suggestion, Callable)
+		class_utils.check_type(suggestion, Callable)  # type: ignore  # see also: python/mypy#14928
 		self._suggestion_getter = suggestion
 		return self
 
@@ -277,7 +277,7 @@ class AbstractNode(ABC):
 		if not issubclass(error_type, CommandError):
 			raise TypeError('error_type parameter should be a class inherited from CommandError, but class {} found'.format(error_type))
 		class_utils.check_type(error_type, type)
-		class_utils.check_type(handler, Callable)
+		class_utils.check_type(handler, Callable)  # type: ignore  # see also: python/mypy#14928
 		self._error_handlers[error_type] = _ErrorHandler(handler, handled)
 		return self
 
@@ -288,7 +288,7 @@ class AbstractNode(ABC):
 		if not issubclass(error_type, CommandError):
 			raise TypeError('error_type parameter should be a class inherited from CommandError, but class {} found'.format(error_type))
 		class_utils.check_type(error_type, type)
-		class_utils.check_type(handler, Callable)
+		class_utils.check_type(handler, Callable)  # type: ignore  # see also: python/mypy#14928
 		self._child_error_handlers[error_type] = _ErrorHandler(handler, handled)
 		return self
 
@@ -316,7 +316,7 @@ class AbstractNode(ABC):
 		return len(self._children) + len(self._children_literal) > 0
 
 	def get_children(self) -> List['AbstractNode']:
-		children = []
+		children: List[AbstractNode] = []
 		for literal_list in self._children_literal.values():
 			children.extend(literal_list)
 		children.extend(self._children)
@@ -572,7 +572,7 @@ class Literal(EntryNode):
 
 	Literal node is the only node that can start a command execution
 	"""
-	def __init__(self, literal: str or Iterable[str]):
+	def __init__(self, literal: Union[str, Iterable[str]]):
 		super().__init__()
 		if isinstance(literal, str):
 			literals = {literal}
@@ -593,7 +593,7 @@ class Literal(EntryNode):
 		return '|'.join(sorted(self.literals))
 
 	@override
-	def suggests(self, suggestion: SUGGESTS_CALLBACK) -> 'AbstractNode':
+	def suggests(self, suggestion: SUGGESTS_CALLBACK) -> NoReturn:
 		raise IllegalNodeOperation('Literal node does not support suggests')
 
 	@override

@@ -3,7 +3,7 @@ from typing import Optional, Union, Tuple, List, Iterable
 
 import requests
 
-_proxy_dict = {}
+_proxy_dict: dict = {}
 _proxy_dict_lock = threading.Lock()
 
 

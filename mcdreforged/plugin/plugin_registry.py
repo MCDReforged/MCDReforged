@@ -11,8 +11,7 @@ from mcdreforged.minecraft.rtext.text import RTextBase
 from mcdreforged.plugin.plugin_event import EventListener
 from mcdreforged.translation.translation_text import RTextMCDRTranslation
 from mcdreforged.utils import translation_utils, class_utils
-from mcdreforged.utils.types.message import TranslationStorage, TranslationKeyDictRich, MessageText, \
-	TranslationKeyDictNested
+from mcdreforged.utils.types.message import TranslationStorage, MessageText, TranslationKeyMappingNested, TranslationKeyMappingRich
 
 if TYPE_CHECKING:
 	from mcdreforged.handler.server_handler import ServerHandler
@@ -23,7 +22,7 @@ DEFAULT_LISTENER_PRIORITY = 1000
 
 
 class HelpMessage:
-	def __init__(self, plugin: 'AbstractPlugin', prefix: str, message: Union[MessageText, TranslationKeyDictRich], permission: int):
+	def __init__(self, plugin: 'AbstractPlugin', prefix: str, message: Union[MessageText, TranslationKeyMappingRich], permission: int):
 		self.plugin = plugin
 		self.prefix = prefix
 
@@ -109,7 +108,7 @@ class PluginRegistry(_BasePluginRegistry):
 			raise TypeError('Only Literal node is accepted to be a root node')
 		self._command_roots.append(PluginCommandHolder(self.plugin, node, allow_duplicates))
 
-	def register_translation(self, language: str, mapping: TranslationKeyDictNested):
+	def register_translation(self, language: str, mapping: TranslationKeyMappingNested):
 		# Translation should be updated immediately
 		translation_utils.update_storage(self._translations, language, mapping)
 		translation_utils.update_storage(self.target_storage._translations, language, mapping)
@@ -127,12 +126,12 @@ class PluginRegistryStorage(_BasePluginRegistry):
 		self.plugin_manager = plugin_manager
 		self.logger = plugin_manager.logger
 
-		self.__server_handler_plugin: Optional['AbstractPlugin'] = None
+		self.__pch: Optional[PluginProvidedServerHandlerHolder] = None
 
 	@override
 	def clear(self):
 		super().clear()
-		self.__server_handler_plugin = None
+		self.__pch = None
 
 	def collect(self, plugin: 'AbstractPlugin', plugin_registry: _BasePluginRegistry):
 		for event_id, plg_listeners in plugin_registry._event_listeners.items():
@@ -142,13 +141,12 @@ class PluginRegistryStorage(_BasePluginRegistry):
 		translation_utils.extend_storage(self._translations, plugin_registry._translations)
 
 		if plugin_registry._server_handler is not None:
-			if self._server_handler is not None:
+			if self.__pch is not None:
 				self.logger.warning('Found multiple plugin-defined server handlers: previous {} by plugin {}, current {} by plugin {}. Ignoring the current one'.format(
-					repr(self._server_handler.get_name()), self.__server_handler_plugin, repr(plugin_registry._server_handler.get_name()), plugin
+					repr(self.__pch.server_handler.get_name()), self.__pch.plugin, repr(plugin_registry._server_handler.get_name()), plugin
 				))
 			else:
-				self.__server_handler_plugin = plugin
-				self._server_handler = plugin_registry._server_handler
+				self.__pch = PluginProvidedServerHandlerHolder(plugin_registry._server_handler, plugin)
 
 		self._info_filters.extend(plugin_registry._info_filters)
 
@@ -162,10 +160,7 @@ class PluginRegistryStorage(_BasePluginRegistry):
 			exporter(pch)
 
 	def export_server_handler(self, exporter: Callable[[Optional[PluginProvidedServerHandlerHolder]], Any]):
-		if self._server_handler is not None:
-			exporter(PluginProvidedServerHandlerHolder(self._server_handler, self.__server_handler_plugin))
-		else:
-			exporter(None)
+		exporter(self.__pch)
 
 	def export_info_filters(self, exporter: Callable[[InfoFilterHolder], Any]):
 		for info_filter in self._info_filters:

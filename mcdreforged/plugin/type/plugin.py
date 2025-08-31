@@ -14,7 +14,7 @@ from mcdreforged.plugin.plugin_registry import PluginRegistry, HelpMessage
 from mcdreforged.plugin.type.common import PluginState, PluginType
 from mcdreforged.utils import class_utils
 from mcdreforged.utils.exception import IllegalCallError, IllegalStateError
-from mcdreforged.utils.types.message import TranslationKeyDictNested
+from mcdreforged.utils.types.message import TranslationKeyMappingNested
 
 if TYPE_CHECKING:
 	from mcdreforged.handler.server_handler import ServerHandler
@@ -168,7 +168,7 @@ class AbstractPlugin(ABC):
 		self.plugin_registry.register_help_message(help_message)
 		self.mcdr_server.logger.mdebug('{} registered help message {}'.format(self, help_message), option=DebugOption.PLUGIN)
 
-	def register_translation(self, language: str, mapping: TranslationKeyDictNested):
+	def register_translation(self, language: str, mapping: TranslationKeyMappingNested):
 		self.__assert_allow_to_register('translation')
 		self.plugin_registry.register_translation(language, mapping)
 		self.mcdr_server.logger.mdebug('{} registered translation for {} with at least {} entries'.format(self, language, len(mapping)), option=DebugOption.PLUGIN)

@@ -42,7 +42,7 @@ class VelocityHandler(AbstractServerHandler):
 
 	@override
 	def parse_player_joined(self, info: Info) -> Optional[str]:
-		if not info.is_user:
+		if info.content is not None and not info.is_user:
 			if (m := self.__player_joined_regex.fullmatch(info.content)) is not None:
 				return m['name']
 		return None
@@ -52,7 +52,7 @@ class VelocityHandler(AbstractServerHandler):
 
 	@override
 	def parse_player_left(self, info: Info) -> Optional[str]:
-		if not info.is_user:
+		if info.content is not None and not info.is_user:
 			if (m := self.__player_left_regex.fullmatch(info.content)) is not None:
 				return m['name']
 		return None
@@ -68,7 +68,7 @@ class VelocityHandler(AbstractServerHandler):
 		# Listening on /192.168.0.1:25577
 		# Listening on /[0:0:0:0:0:0:0:0%0]:25577
 		# Listening on /0:0:0:0:0:0:0:0%0:25577
-		if not info.is_user:
+		if info.content is not None and not info.is_user:
 			if (m := self.__server_address_regex.fullmatch(info.content)) is not None:
 				return m['ip'], int(m['port'])
 		return None
@@ -78,7 +78,7 @@ class VelocityHandler(AbstractServerHandler):
 
 	@override
 	def test_server_startup_done(self, info: Info) -> bool:
-		return not info.is_user and self.__server_startup_done_regex.fullmatch(info.content) is not None
+		return info.content is not None and not info.is_user and self.__server_startup_done_regex.fullmatch(info.content) is not None
 
 	@override
 	def test_rcon_started(self, info: Info) -> bool:

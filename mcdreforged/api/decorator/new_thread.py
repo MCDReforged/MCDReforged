@@ -1,6 +1,6 @@
 import functools
 import threading
-from typing import Optional, Callable, Union
+from typing import Optional, Callable, Union, TypeVar, Iterable
 
 from mcdreforged.utils import misc_utils
 
@@ -9,6 +9,8 @@ __all__ = [
 	'FunctionThread'
 ]
 
+_R = TypeVar('_R')
+
 
 class FunctionThread(threading.Thread):
 	"""
@@ -16,10 +18,10 @@ class FunctionThread(threading.Thread):
 	"""
 	__NONE = object()
 
-	def __init__(self, target, name, args, kwargs):
+	def __init__(self, target: Callable[..., _R], name: Optional[str], args: Iterable = (), kwargs: Optional[dict] = None):
 		super().__init__(target=target, args=args, kwargs=kwargs, name=name, daemon=True)
 		self.__return_value = self.__NONE
-		self.__error = None
+		self.__error: Optional[Exception] = None
 
 		def wrapped_target(*args_, **kwargs_):
 			try:
@@ -58,6 +60,8 @@ class FunctionThread(threading.Thread):
 		if self.__return_value is self.__NONE:
 			if self.is_alive():
 				raise RuntimeError('The thread is still running')
+			if self.__error is None:
+				raise AssertionError()
 			raise self.__error
 		return self.__return_value
 
@@ -108,10 +112,13 @@ def new_thread(arg: Optional[Union[str, Callable]] = None):
 		# bring the signature of the func to the wrap function
 		# so inspect.getfullargspec(func) works correctly
 		misc_utils.copy_signature(wrap, func)
-		wrap.original = func  # access this field to get the original function
+		# access this field to get the original function
+		wrap.original = func  # type: ignore
 		return wrap
+
+	thread_name: Optional[str]
 	# Directly use @new_thread without ending brackets case, e.g. @new_thread
-	if isinstance(arg, Callable):
+	if callable(arg):
 		thread_name = None
 		return wrapper(arg)
 	# Use @new_thread with ending brackets case, e.g. @new_thread('A'), @new_thread()

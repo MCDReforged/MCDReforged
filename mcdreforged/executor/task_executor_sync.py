@@ -1,7 +1,8 @@
 import collections
 import contextlib
 from concurrent.futures import Future
-from typing import Callable, Optional, TYPE_CHECKING, Dict, TypeVar
+from typing import Callable, Optional, TYPE_CHECKING, Dict, TypeVar, overload
+from typing import Literal as TLiteral
 
 from typing_extensions import override, Deque
 
@@ -36,6 +37,26 @@ class SyncTaskExecutor(TaskExecutorBase):
 	def get_queue_sizes(self) -> Dict[TaskPriority, int]:
 		return self.__task_queue.queue_sizes()
 
+	@overload
+	def submit(
+			self, func: Callable[[], _T], *,
+			priority: TaskPriority = TaskPriority.REGULAR,
+			raise_if_full: bool = False,
+			need_future: TLiteral[True] = True,
+			plugin: Optional['AbstractPlugin'] = None,
+	) -> Future[_T]:
+		...
+
+	@overload
+	def submit(
+			self, func: Callable[[], _T], *,
+			priority: TaskPriority = TaskPriority.REGULAR,
+			raise_if_full: bool = False,
+			need_future: TLiteral[False],
+			plugin: Optional['AbstractPlugin'] = None,
+	) -> None:
+		...
+
 	def submit(
 			self, func: Callable[[], _T], *,
 			priority: TaskPriority = TaskPriority.REGULAR,
@@ -43,10 +64,13 @@ class SyncTaskExecutor(TaskExecutorBase):
 			need_future: bool = True,
 			plugin: Optional['AbstractPlugin'] = None,
 	) -> Optional[Future[_T]]:
-		if not self._executor_thread.is_alive():
-			self.logger.error('Submitting task to a dead task executor {}, thread {}'.format(self, self._executor_thread.ident))
+		thread = self.get_thread()
+		if not thread.is_alive():
+			self.logger.error('Submitting task to a dead task executor {}, thread {}'.format(self, thread.ident if thread is not None else 'N/A'))
+
+		future: Optional[TaskDoneFuture[_T]]
 		if need_future:
-			future = TaskDoneFuture(self.get_thread())
+			future = TaskDoneFuture(thread)
 		else:
 			future = None
 		item = TaskQueueItem(func, priority, plugin=plugin, future=future)
@@ -68,9 +92,12 @@ class SyncTaskExecutor(TaskExecutorBase):
 		self.__task_queue.put(self.__soft_stop_sentinel)
 
 	@contextlib.contextmanager
-	def __with_plugin(self, plugin: 'AbstractPlugin'):
+	def __with_plugin(self, plugin: Optional['AbstractPlugin']):
 		if not self.is_on_thread():
 			raise AssertionError()
+		if plugin is None:
+			yield
+			return
 		self.__running_plugins.append(plugin)
 		try:
 			yield

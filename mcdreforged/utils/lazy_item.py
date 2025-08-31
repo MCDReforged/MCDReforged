@@ -1,16 +1,16 @@
-from typing import TypeVar, Callable, Generic
+from typing import TypeVar, Callable, Generic, Any
 
-T = TypeVar('T')
+_T = TypeVar('_T')
 
 
-class LazyItem(Generic[T]):
-	__NONE = object()
+class LazyItem(Generic[_T]):
+	__NONE: Any = object()
 
-	def __init__(self, provider: Callable[[], T]):
+	def __init__(self, provider: Callable[[], _T]):
 		self.__provider = provider
-		self.__item = self.__NONE
+		self.__item: _T = self.__NONE
 
-	def get(self) -> T:
+	def get(self) -> _T:
 		if self.__item is self.__NONE:
 			self.__item = self.__provider()
 		return self.__item

@@ -95,7 +95,7 @@ class PreferenceCommand(SubCommand):
 			))
 
 	def show_preference_item(self, source: CommandSource, pref_name: str):
-		entry: PrefCommandEntry = self.preferences.get(pref_name)
+		entry: PrefCommandEntry = self.preferences[pref_name]
 		pref: PreferenceItem = self.pref_mgr.get_preference(source, auto_add=True)
 		current_value = getattr(pref, pref_name, None)
 		default_value = getattr(self.pref_mgr.get_default_preference(), pref_name, None)

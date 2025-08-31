@@ -75,7 +75,8 @@ class CatalogueMetaRegistryHolder:
 
 		aop: dict
 		for plugin_id, aop in meta_json.get('plugins', {}).items():
-			release_summary: dict
+			release_summary: Optional[dict]
+			meta: dict
 			if (release_summary := aop.get('release')) is None or aop.get('meta') is None:
 				continue
 			if (idx := release_summary.get('latest_version_index')) is not None:
@@ -100,7 +101,7 @@ class CatalogueMetaRegistryHolder:
 				description=meta.get('description', {}),
 			)
 			for release in release_summary['releases']:
-				meta: dict = release['meta']
+				meta = release['meta']
 				asset: dict = release['asset']
 				release_data = ReleaseData(
 					version=meta['version'],
@@ -145,7 +146,7 @@ class PersistCatalogueMetaRegistryHolder(CatalogueMetaRegistryHolder):
 	_FetchCallbackOpt = Optional[Callable[[Optional[Exception]], None]]
 	_FetchBlockedOpt = Optional[Callable[[], None]]
 
-	def __init__(self, mcdr_server: 'MCDReforgedServer', cache_path: Path, *, meta_json_url: str, meta_fetch_timeout: float, meta_cache_ttl: float):
+	def __init__(self, mcdr_server: 'MCDReforgedServer', cache_path: Path, *, meta_json_url: Optional[str], meta_fetch_timeout: float, meta_cache_ttl: float):
 		super().__init__(meta_json_url=meta_json_url, meta_fetch_timeout=meta_fetch_timeout)
 		self.logger: 'MCDReforgedLogger' = mcdr_server.logger
 		self.__tr = mcdr_server.create_internal_translator('plugin_catalogue_meta_registry').tr

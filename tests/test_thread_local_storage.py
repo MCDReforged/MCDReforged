@@ -1,9 +1,6 @@
 import asyncio
 import threading
 import unittest
-from typing import Union
-
-from typing_extensions import Self
 
 from mcdreforged.utils.thread_local_storage import ThreadLocalStorage
 
@@ -12,15 +9,17 @@ class Value:
 	def __init__(self, v: int):
 		self.v = v
 
-	def __eq__(self, other: Union[Self, int]):
+	def __eq__(self, other):
 		if isinstance(other, int):
 			other = Value(other)
+		if not isinstance(other, Value):
+			return False
 		return self.v == other.v
 
 
 class MyTestCase(unittest.TestCase):
 	def test_threading(self):
-		tls = ThreadLocalStorage()
+		tls: ThreadLocalStorage[int] = ThreadLocalStorage()
 		tls.put(1)
 
 		def another():

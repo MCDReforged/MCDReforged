@@ -6,7 +6,7 @@ import time
 import traceback
 from importlib.metadata import PackageNotFoundError, Distribution
 from pathlib import Path
-from typing import Optional, Callable, Any, TYPE_CHECKING, List, Dict
+from typing import Optional, Callable, Any, TYPE_CHECKING, List, Dict, Union
 
 from ruamel.yaml import YAMLError
 
@@ -179,7 +179,7 @@ class MCDReforgedServer:
 			from_source_reason = '{} distribution is not found in python packages'.format(mcdr_pkg)
 		else:
 			current_file = Path(__file__).absolute()
-			dist_module_path = 'unknown'
+			dist_module_path: Union[str, Path] = 'unknown'
 			for file in distribution.files or []:
 				dist_file = Path(file.locate())
 
@@ -244,6 +244,7 @@ class MCDReforgedServer:
 		:param _mcdr_tr_allow_failure: If set to false, a KeyError will be risen if the translation key is not recognized
 		:param kwargs: The kwargs to be formatted
 		"""
+		fallback_handler: LanguageFallbackHandler
 		if _mcdr_tr_fallback_language is _UNSET:
 			fallback_handler = LanguageFallbackHandler.auto()
 		elif _mcdr_tr_fallback_language is None:
@@ -271,7 +272,7 @@ class MCDReforgedServer:
 		# load the language before warning missing config to make sure translation is available
 		self.on_config_changed(log=log)
 		if log and has_missing:
-			for line in self.translate('mcdreforged.config.missing_config').splitlines():
+			for line in str(self.translate('mcdreforged.config.missing_config')).splitlines():
 				self.logger.warning(line)
 
 	def on_config_changed(self, *, log: bool):
@@ -502,7 +503,7 @@ class MCDReforgedServer:
 
 	def __on_server_stop(self):
 		return_code = self.process_manager.get_return_code()
-		if return_code >= 0:
+		if return_code is None or return_code >= 0:
 			self.logger.info(self.__tr('on_server_stop.show_return_code', return_code))
 		else:
 			self.logger.info(self.__tr('on_server_stop.show_return_code_signal', return_code, os_utils.get_signal_name(-return_code)))
@@ -528,6 +529,8 @@ class MCDReforgedServer:
 		"""
 		if encoding is None:
 			encoding = self.__encoding_method
+		if encoding is None:
+			encoding = 'utf8'
 		if isinstance(text, str):
 			encoded_text = (text + ending).encode(encoding)
 		else:
@@ -660,7 +663,7 @@ class MCDReforgedServer:
 					wait_sec = 10 if self.is_interrupt() else 1800
 					for i in range(wait_sec):
 						executor.join(timeout=1)
-						if executor.get_thread().is_alive():
+						if executor.is_thread_alive():
 							if (sec := i + 1) in [10, 30, 60, 120, 300, 600, 1800]:
 								self.logger.warning('{} is still alive after {} seconds, stack trace:'.format(executor, sec))
 								if (ss := executor.get_thread_stack()) is not None:
@@ -733,6 +736,9 @@ class MCDReforgedServer:
 		self.rcon_manager.disconnect()
 		rcon_config = self.config.rcon
 		if rcon_config.enable and self.is_server_rcon_ready():
+			if rcon_config.address is None or rcon_config.port is None or rcon_config.password is None:
+				self.logger.warning('rcon config is incomplete, rcon connection skipped')
+				return
 			self.rcon_manager.connect(
 				address=rcon_config.address,
 				port=rcon_config.port,

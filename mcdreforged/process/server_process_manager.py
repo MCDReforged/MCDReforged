@@ -78,7 +78,7 @@ class ServerProcessManager:
 			raise ProcessAlreadyRunning('server process already started')
 
 		async def put_queue(so: ServerOutput):
-			sleep_time = 0
+			sleep_time = 0.0
 			while True:
 				try:
 					output_queue.put_nowait(so)
@@ -90,7 +90,7 @@ class ServerProcessManager:
 
 		async def drain_reader(reader: asyncio.StreamReader, is_stdout: bool):
 			self.logger.mdebug(f'drain_reader() start {is_stdout=}', option=DebugOption.PROCESS)
-			queue_full_warn_ts = 0
+			queue_full_warn_ts = 0.0
 			while line := await reader.readline():
 				await put_queue(ServerOutput(line, is_stdout))
 				if output_queue.full():
@@ -103,16 +103,32 @@ class ServerProcessManager:
 		async def run_process():
 			try:
 				event_loop_future.set_result(asyncio.get_event_loop())
-				common_kwargs = dict(
-					cwd=cwd,
-					stdin=asyncio.subprocess.PIPE,
-					stdout=asyncio.subprocess.PIPE,
-					stderr=asyncio.subprocess.PIPE,
-				)
 				if isinstance(args, str):
-					proc = await asyncio.create_subprocess_shell(args, **common_kwargs)
+					proc = await asyncio.create_subprocess_shell(
+						args,
+						cwd=cwd,
+						stdin=asyncio.subprocess.PIPE,
+						stdout=asyncio.subprocess.PIPE,
+						stderr=asyncio.subprocess.PIPE,
+					)
 				else:
-					proc = await asyncio.create_subprocess_exec(*args, **common_kwargs)
+					proc = await asyncio.create_subprocess_exec(
+						*args,
+						cwd=cwd,
+						stdin=asyncio.subprocess.PIPE,
+						stdout=asyncio.subprocess.PIPE,
+						stderr=asyncio.subprocess.PIPE,
+					)
+				try:
+					if proc.stdin is None:
+						raise AssertionError('proc stdin is not available')
+					if proc.stdout is None:
+						raise AssertionError('proc stdout is not available')
+					if proc.stderr is None:
+						raise AssertionError('proc stderr is not available')
+				except Exception:
+					proc.kill()
+					raise
 			except Exception as e:
 				proc_future.set_exception(e)
 				return
@@ -176,6 +192,7 @@ class ServerProcessManager:
 
 	def write(self, buf: bytes):
 		async def do_write():
+			assert cp is not None and cp.proc.stdin is not None
 			cp.proc.stdin.write(buf)
 			await cp.proc.stdin.drain()
 
@@ -184,8 +201,9 @@ class ServerProcessManager:
 		if cp.is_proc_alive_and_loop_available():
 			asyncio.run_coroutine_threadsafe(do_write(), cp.loop).result()
 
-	def get_wait_future(self) -> 'cf.Future[int]':
+	def get_wait_future(self) -> cf.Future[int]:
 		async def do_wait() -> int:
+			assert cp is not None
 			return await cp.proc.wait()
 
 		if (cp := self.__current_process) is None:
@@ -193,7 +211,8 @@ class ServerProcessManager:
 		if cp.is_proc_alive_and_loop_available():
 			return asyncio.run_coroutine_threadsafe(do_wait(), cp.loop)
 		else:
-			future = cf.Future()
+			future: cf.Future[int] = cf.Future()
+			assert cp.proc.returncode is not None
 			future.set_result(cp.proc.returncode)
 			return future
 

@@ -22,7 +22,7 @@ class ServerHandlerManager:
 		self.handlers: Dict[str, ServerHandler] = {}
 		self.__tr = mcdr_server.create_internal_translator('server_handler_manager').tr
 
-		self.__basic_handler: Optional[ServerHandler] = None  # the handler that should always work
+		self.__basic_handler = BasicHandler()
 		self.__plugin_provided_server_handler_holder: Optional[PluginProvidedServerHandlerHolder] = None
 		self.__current_configured_handler_name: Optional[str] = None
 		self.__current_configured_handler_invalid_warned: bool = False
@@ -46,7 +46,6 @@ class ServerHandlerManager:
 			self.handlers[hdr.get_name()] = hdr
 
 		self.handlers.clear()
-		self.__basic_handler = BasicHandler()
 		add_handler(self.__basic_handler)
 		add_handler(VanillaHandler())
 		add_handler(BukkitHandler())
@@ -76,9 +75,11 @@ class ServerHandlerManager:
 						self.mcdr_server.logger.error('Wrong handler class {!r}, expected {} but found {}'.format(class_path, ServerHandler, handler_class))
 
 	@property
-	def __current_configured_handler(self) -> Optional[ServerHandler]:
+	def __current_configured_handler(self) -> ServerHandler:
 		handler_name = self.__current_configured_handler_name
 		try:
+			if handler_name is None:
+				raise KeyError('current handler name is not set')
 			return self.handlers[handler_name]
 		except KeyError:
 			if not self.__current_configured_handler_invalid_warned:
@@ -105,7 +106,7 @@ class ServerHandlerManager:
 	def get_basic_handler(self) -> ServerHandler:
 		return self.__basic_handler
 
-	def get_plugin_provided_server_handler_holder(self) -> PluginProvidedServerHandlerHolder:
+	def get_plugin_provided_server_handler_holder(self) -> Optional[PluginProvidedServerHandlerHolder]:
 		return self.__plugin_provided_server_handler_holder
 
 	def get_current_handler(self) -> ServerHandler:

@@ -1,7 +1,8 @@
 """
 Permission control things
 """
-from typing import Set, Any, List
+from typing import Literal as TLiteral
+from typing import Set, Any, List, overload
 
 from typing_extensions import override
 
@@ -143,6 +144,14 @@ class PermissionManager:
 		:param player: the name of the player
 		"""
 		self.get_player_permission_level(player)
+
+	@overload
+	def get_player_permission_level(self, player: str, *, auto_add: TLiteral[True] = True) -> int:
+		...
+
+	@overload
+	def get_player_permission_level(self, player: str, *, auto_add: TLiteral[False]) -> Optional[int]:
+		...
 
 	def get_player_permission_level(self, player: str, *, auto_add: bool = True) -> Optional[int]:
 		"""

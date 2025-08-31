@@ -6,7 +6,7 @@ import platform
 import sys
 import time
 from threading import Lock
-from typing import Callable, Any, Union, Optional, TYPE_CHECKING, List
+from typing import Callable, Any, Optional, TYPE_CHECKING, List
 
 from typing_extensions import override
 
@@ -14,7 +14,7 @@ from mcdreforged.constants import core_constant
 from mcdreforged.executor.background_thread_executor import BackgroundThreadExecutor
 from mcdreforged.minecraft.rtext.click_event import RAction
 from mcdreforged.minecraft.rtext.style import RColor, RStyle
-from mcdreforged.minecraft.rtext.text import RText, RTextBase
+from mcdreforged.minecraft.rtext.text import RText
 from mcdreforged.plugin.meta.version import Version
 from mcdreforged.utils import request_utils, thread_utils
 from mcdreforged.utils.types.message import MessageText
@@ -29,7 +29,7 @@ class UpdateHelper(BackgroundThreadExecutor):
 		self.mcdr_server = mcdr_server
 		self.__api_fetcher = GithubApiFetcher(core_constant.GITHUB_API_LATEST_URLS)
 		self.__update_lock = Lock()
-		self.__last_query_time = 0
+		self.__last_query_time = 0.0
 		self.__tr = mcdr_server.create_internal_translator('update_helper')
 
 	@override
@@ -38,7 +38,7 @@ class UpdateHelper(BackgroundThreadExecutor):
 			self.check_update(lambda: self.mcdr_server.config.check_update, self.mcdr_server.logger.info)
 		time.sleep(1)
 
-	def check_update(self, condition_check: Callable[[], bool], reply_func: Callable[[Union[str or RTextBase]], Any]):
+	def check_update(self, condition_check: Callable[[], bool], reply_func: Callable[[MessageText], Any]):
 		self.__last_query_time = time.monotonic()
 		thread_utils.start_thread(self.__check_update, (condition_check, reply_func), 'CheckUpdate')
 
@@ -57,13 +57,13 @@ class UpdateHelper(BackgroundThreadExecutor):
 				update_log: str = response['body']
 			except Exception as e:
 				reply_func(self.__tr('check_update.check_fail', repr(e)))
-				if isinstance(e, KeyError) and isinstance(response, dict) and 'message' in response:
-					reply_func(response['message'])
-					if 'documentation_url' in response:
+				if isinstance(e, KeyError) and isinstance(response, dict) and isinstance(err_message := response.get('message'), str):
+					reply_func(err_message)
+					if isinstance(err_doc_url := response.get('documentation_url'), str):
 						reply_func(
-							RText(response['documentation_url'], color=RColor.blue, styles=RStyle.underlined).
-							h(response['documentation_url']).
-							c(RAction.open_url, response['documentation_url'])
+							RText(err_doc_url, color=RColor.blue, styles=RStyle.underlined).
+							h(err_doc_url).
+							c(RAction.open_url, err_doc_url)
 						)
 			else:
 				try:
@@ -98,7 +98,7 @@ class GithubApiFetcher:
 		self.__etag = 'dummy'
 		self.__cached_response: Optional[dict] = None
 
-	def fetch(self) -> Optional[dict]:
+	def fetch(self) -> dict:
 		rsp, buf = request_utils.get_buf_multi(self.urls, 'UpdateHelper', timeout=10, max_size=32 * 1024)
 		rsp.raise_for_status()
 		return json.loads(buf)

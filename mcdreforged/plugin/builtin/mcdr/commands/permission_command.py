@@ -84,7 +84,7 @@ class PermissionCommand(SubCommand):
 				source.reply(self.tr('mcdr_command.remove_player_permission.player_removed', player))
 
 	def list_permission(self, source: CommandSource, target_value: Optional[str]):
-		specified_level = PermissionLevel.get_level(target_value)
+		specified_level = PermissionLevel.get_level(target_value) if target_value is not None else None
 		if specified_level is None:
 			# show default level information if target permission not specified
 			source.reply(

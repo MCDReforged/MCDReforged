@@ -18,8 +18,6 @@ from mcdreforged.utils.exception import IllegalPluginStructure
 if TYPE_CHECKING:
 	from mcdreforged.plugin.plugin_manager import PluginManager
 
-_LRU_FUNC_TYPE = type(functools.lru_cache(maxsize=None)(lambda: None))
-
 
 class PackedPlugin(MultiFilePlugin):
 	def __init__(self, plugin_manager: 'PluginManager', file_path: Path):
@@ -96,8 +94,7 @@ class PackedPlugin(MultiFilePlugin):
 				if path_utils.is_relative_to(Path(path), self.plugin_path):
 					sys.path_importer_cache.pop(path)
 			with contextlib.suppress(KeyError):
-				# noinspection PyProtectedMember,PyUnresolvedReferences
-				cache: dict = zipimport._zip_directory_cache
+				cache: dict = getattr(zipimport, '_zip_directory_cache', {})
 				cache.pop(self._module_search_path)
 		except KeyError:
 			self.mcdr_server.logger.exception('Fail to clean zip import cache for {}'.format(self))
@@ -110,6 +107,8 @@ class PackedPlugin(MultiFilePlugin):
 		super()._load_entry_instance()
 
 	def get_file_sha256(self) -> str:
+		if self.__file_sha256 is None:
+			raise ValueError(f'file_sha256 for plugin {self} has not been generated yet')
 		return self.__file_sha256
 
 	def release_file_occupation(self):
@@ -126,8 +125,8 @@ class PackedPlugin(MultiFilePlugin):
 			# https://github.com/MCDReforged/MCDReforged/issues/283
 			try:
 				# noinspection PyProtectedMember,PyUnresolvedReferences
-				from importlib.metadata import FastPath
-				lru_func: _LRU_FUNC_TYPE = FastPath.__new__
+				from importlib.metadata import FastPath  # type: ignore
+				lru_func: functools._lru_cache_wrapper = FastPath.__new__
 
 				if lru_func.cache_info().currsize == 0:
 					return

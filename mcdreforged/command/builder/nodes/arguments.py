@@ -105,6 +105,7 @@ class Number(NumberNode):
 	"""
 	@override
 	def parse(self, text: str) -> ParseResult:
+		value: Optional[NumberNode.NumberType]
 		value, read = utils.get_int(text)
 		if value is None:
 			value, read = utils.get_float(text)
@@ -163,8 +164,8 @@ class TextNode(ArgumentNode, ABC):
 	"""
 	def __init__(self, name: str, **kwargs: Unpack[ArgumentNode._InitKwargs]):
 		super().__init__(name, **kwargs)
-		self.__min_length = None
-		self.__max_length = None
+		self.__min_length: Optional[int] = None
+		self.__max_length: Optional[int] = None
 
 	def at_min_length(self, min_length: int) -> 'TextNode':
 		"""

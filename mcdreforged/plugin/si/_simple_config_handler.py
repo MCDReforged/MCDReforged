@@ -2,14 +2,15 @@ import functools
 import json
 import os
 from pathlib import Path
-from typing import Literal, Dict, Callable, Optional, Any, TextIO
+from typing import Dict, Callable, Optional, Any, TextIO
+from typing import Literal as TLiteral
 
 from ruamel.yaml import YAML
 
 from mcdreforged.utils import file_utils
 from mcdreforged.utils.types.json_like import JsonLike
 
-FileFormat = Literal['json', 'yaml']
+FileFormat = TLiteral['json', 'yaml']
 
 
 class SimpleConfigHandler:
@@ -27,6 +28,8 @@ class SimpleConfigHandler:
 		if file_format is None:
 			file_format = self.__guess_file_format(file_name)
 
+		loader: Callable[[TextIO], JsonLike]
+		dumper: Callable[[JsonLike, TextIO], Any]
 		if file_format == 'json':
 			loader = json.load
 			# config file should be nicely readable, so here come the indent and non-ascii chars

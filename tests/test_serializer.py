@@ -3,7 +3,8 @@ import sys
 import unittest
 import uuid
 from enum import Enum, auto, IntFlag, IntEnum, Flag
-from typing import List, Dict, Union, Optional, Any, Literal, TypeVar, Generic
+from typing import List, Dict, Union, Optional, Any, TypeVar, Generic, Type
+from typing import Literal as TLiteral
 
 from mcdreforged.api.utils import serialize, deserialize, Serializable
 
@@ -176,7 +177,7 @@ class MyTestCase(unittest.TestCase):
 
 	def test_6_construct(self):
 		class Points(Serializable):
-			main: Point = None
+			main: Optional[Point] = None
 			any: Optional[Serializable] = None
 			collection: List[Point] = []
 
@@ -295,8 +296,8 @@ class MyTestCase(unittest.TestCase):
 
 	def test_12_literal(self):
 		class A(Serializable):
-			a: Literal[1, 2, '3'] = 2
-			b: Dict[str, Literal['x', 'y', 'z']]
+			a: TLiteral[1, 2, '3'] = 2
+			b: Dict[str, TLiteral['x', 'y', 'z']]
 
 		a = A.get_default()
 		self.assertEqual(a.a, 2)
@@ -317,7 +318,7 @@ class MyTestCase(unittest.TestCase):
 	def test_13_serialize_order(self):
 		class Data(Serializable):
 			a: int
-			b: Dict[str, str] = {'b': True}
+			b: Dict[str, bool] = {'b': True}
 
 		x = Data()
 		self.assertEqual(['b'], list(filter(lambda k: not k.startswith('_'), vars(x).keys())))
@@ -445,7 +446,7 @@ class MyTestCase(unittest.TestCase):
 			b: MyStr = MyStr('1m')
 			c: MyList = MyList([1, 2, 3])
 			d: MyDict = MyDict({'a': 0.4})
-			e: MyDictG[MyStr, MyInt] = MyDict({'1b': 7})
+			e: MyDictG[MyStr, MyInt] = MyDictG({'1b': 7})
 
 		x = Data.get_default().serialize()
 		self.assertEqual(type(x['a']), int)

@@ -84,10 +84,10 @@ class Metadata:
 		plugin_name_text = repr(plugin)
 
 		use_fallback_id_reason = None
-		self.id = data.get('id')
-		if self.id is None:
+		if (plugin_id := data.get('id')) is None:
 			use_fallback_id_reason = 'Plugin ID of {} not found'.format(plugin_name_text)
 		else:
+			self.id = plugin_id
 			bad_id = not isinstance(self.id, str)
 			if self.PLUGIN_ID_REGEX.fullmatch(self.id) is None:
 				bad_id = True
@@ -110,7 +110,7 @@ class Metadata:
 		if isinstance(description, RTextBase):
 			description = description.to_plain_text()
 		self.description = description
-		class_utils.check_type(self.description, [None, str, dict])
+		class_utils.check_type(self.description, (None, str, dict))
 
 		self.author = data.get('author')
 		if isinstance(self.author, str):
@@ -120,10 +120,10 @@ class Metadata:
 				self.author[i] = str(self.author[i])
 			if len(self.author) == 0:
 				self.author = None
-		class_utils.check_type(self.author, [None, list])
+		class_utils.check_type(self.author, (None, list))
 
 		self.link = data.get('link')
-		class_utils.check_type(self.link, [None, str])
+		class_utils.check_type(self.link, (None, str))
 
 		version_str = data.get('version')
 		if version_str:
@@ -154,7 +154,7 @@ class Metadata:
 
 		self.archive_name = data.get('archive_name')
 		self.resources = data.get('resources', [])
-		class_utils.check_type(self.archive_name, [None, str])
+		class_utils.check_type(self.archive_name, (None, str))
 		class_utils.check_type(self.resources, list)
 
 	def __repr__(self):
@@ -167,11 +167,14 @@ class Metadata:
 		:param lang: Optional, the language to translate to. When not specified it will use the language of MCDR
 		:return: Translated plugin description
 		"""
+		if self.description is None:
+			return None
 		if isinstance(self.description, str):
 			return self.description
 		if lang is None:
 			lang = translation_utils.get_mcdr_language()
-		return translation_utils.translate_from_dict(self.description, lang, default=None)
+		result = translation_utils.translate_from_dict(self.description, lang, default=None)
+		return class_utils.check_type(result, (str, None))
 
 	def get_description_rtext(self) -> RTextBase:
 		"""
@@ -179,6 +182,8 @@ class Metadata:
 
 		.. versionadded:: v2.1.2
 		"""
+		if self.description is None:
+			raise ValueError('description is None')
 		if isinstance(self.description, str):
 			return RText(self.description)
 		return RTextMCDRTranslation.from_translation_dict(self.description)

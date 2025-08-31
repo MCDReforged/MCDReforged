@@ -11,7 +11,7 @@ from concurrent.futures import Future
 from contextlib import contextmanager
 from contextvars import ContextVar
 from pathlib import Path
-from typing import Callable, Dict, Optional, Any, Tuple, List, TYPE_CHECKING, Set
+from typing import Callable, Dict, Optional, Any, Tuple, List, TYPE_CHECKING, Set, cast
 
 from mcdreforged.constants import plugin_constant
 from mcdreforged.logging.debug_option import DebugOption
@@ -58,7 +58,7 @@ class PluginManager:
 		# plugin manipulation logics
 		self.__mani_lock = threading.RLock()
 		self.__mani_thread: Optional[threading.Thread] = None
-		self.__mani_queue = queue.Queue()
+		self.__mani_queue: queue.Queue[Tuple[Callable[[], PluginOperationResult], Future[PluginOperationResult]]] = queue.Queue()
 
 		mcdr_server.add_config_changed_callback(self.__on_mcdr_config_loaded)
 
@@ -353,17 +353,17 @@ class PluginManager:
 		# affected = selected + selected's children
 		# NOTES: might collect plugins in any states (e.g. LOADED and not READY)
 		affected_plugin_ids: Set[str] = set()
-		for plugin in selected_plugins:
-			affected_plugin_ids.update(walker.get_children(plugin.get_id()))
+		for selected_plugin in selected_plugins:
+			affected_plugin_ids.update(walker.get_children(selected_plugin.get_id()))
 
 		# affected_plugin_ids --(collect_filter)-> collected_plugins
 		collected_plugins: List[RegularPlugin] = []  # in topo order (after sort), parent first
 		for plugin_id in affected_plugin_ids:
-			plugin = self.get_regular_plugin_from_id(plugin_id)
-			if plugin is None:
+			affected_plugin = self.get_regular_plugin_from_id(plugin_id)
+			if affected_plugin is None:
 				raise AssertionError('Could not find plugin with id {}'.format(plugin_id))
-			if collect_filter(plugin):
-				collected_plugins.append(plugin)
+			if collect_filter(affected_plugin):
+				collected_plugins.append(affected_plugin)
 
 		def sort_key_getter(plg: RegularPlugin) -> int:
 			try:
@@ -468,6 +468,7 @@ class PluginManager:
 		if reload_result is None:
 			reload_result = SingleOperationResult()
 
+		plugin: Optional[AbstractPlugin]
 		walker = DependencyWalker(self)
 		walk_result = walker.walk()
 		dependency_check_result = SingleOperationResult()  # topo order in success_list
@@ -492,7 +493,14 @@ class PluginManager:
 		self.registry_storage.clear()  # in case plugin invokes dispatch_event during on_load. don't let them trigger listeners
 
 		newly_loaded_plugins = {*load_result.success_list, *reload_result.success_list}
-		to_be_removed_plugins = unload_result.success_list + unload_result.failed_list + reload_result.failed_list + dependency_check_result.failed_list
+		to_be_removed_plugins: List[AbstractPlugin] = cast(List[AbstractPlugin], [
+			*unload_result.success_list,
+			*unload_result.failed_list,
+			*reload_result.failed_list,
+			*dependency_check_result.failed_list,
+		])
+		for plugin in to_be_removed_plugins:
+			assert isinstance(plugin, AbstractPlugin)
 
 		# collect removed plugin module instance in case e.g. reloading when a plugin file was renamed
 		# so its on_load event can still have the old entry module
@@ -570,7 +578,7 @@ class PluginManager:
 				def sync_done_callback(f: 'Future[PluginOperationResult]'):
 					result_future.set_result(f.result())
 				self.__run_manipulation(action).add_done_callback(sync_done_callback)
-			result_future = Future()
+			result_future: Future[PluginOperationResult] = Future()
 			executor_future = self.mcdr_server.task_executor.submit(func)
 			if wait_if_async:
 				executor_future.result()

@@ -12,8 +12,7 @@ from mcdreforged.plugin.plugin_event import MCDRPluginEvents
 class GeneralReactor(AbstractInfoReactor):
 	@override
 	def react(self, info: Info):
-		command_source = info.get_command_source()
-		if command_source is not None:
+		if info.content is not None and (command_source := info.get_command_source()) is not None:
 			self.mcdr_server.command_manager.execute_command(info.content, command_source)
 
 		# The subsequent code flow needs to check the `cancel_send_to_server` status of the `info`,

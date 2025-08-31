@@ -11,11 +11,11 @@ from mcdreforged.plugin.meta.version import Version
 class Texts:
 	@classmethod
 	@overload
-	def candidate(cls, plugin_id: str, version: Union[str, Version]) -> RTextBase: ...
+	def candidate(cls, plugin_id: str, version: Union[str, Version], /) -> RTextBase: ...
 
 	@classmethod
 	@overload
-	def candidate(cls, candidate: PluginCandidate) -> RTextBase: ...
+	def candidate(cls, candidate: PluginCandidate, /) -> RTextBase: ...
 
 	@classmethod
 	def candidate(cls, *args) -> RTextBase:

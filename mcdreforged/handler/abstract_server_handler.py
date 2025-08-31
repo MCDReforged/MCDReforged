@@ -80,9 +80,12 @@ class AbstractServerHandler(ServerHandler, ABC):
 		"""
 		# TODO: drop parse.Parser support
 		formatters = cls.get_content_parsing_formatter()
+		fmt_list: Iterable[Union[str, re.Pattern]]
 		if isinstance(formatters, str) or isinstance(formatters, re.Pattern):
-			formatters = [formatters]
-		return [parse.Parser(fmt) if isinstance(fmt, str) else fmt for fmt in formatters]
+			fmt_list = [formatters]
+		else:
+			fmt_list = formatters
+		return [parse.Parser(fmt) if isinstance(fmt, str) else fmt for fmt in fmt_list]
 
 	@classmethod
 	def _content_parse(cls, info: Info):
@@ -100,6 +103,9 @@ class AbstractServerHandler(ServerHandler, ABC):
 		:param info: The to-be-processed :class:`~mcdreforged.info_reactor.info.Info` object
 		:meta public:
 		"""
+		if info.content is None:
+			raise ValueError('info.content cannot be None')
+
 		for parser in cls.__get_content_parsers():
 			# TODO: drop parse.Parser support
 			if isinstance(parser, parse.Parser):

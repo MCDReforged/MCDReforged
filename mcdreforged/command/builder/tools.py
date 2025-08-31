@@ -1,5 +1,5 @@
 from abc import ABC
-from typing import Dict, Callable, TYPE_CHECKING, Optional, List, TypeVar, Generic, Any, Type, overload, Union
+from typing import Dict, Callable, TYPE_CHECKING, Optional, List, TypeVar, Generic, Any, Type, overload, Union, cast
 
 from typing_extensions import Self, override
 
@@ -215,11 +215,12 @@ class SimpleCommandBuilder:
 
 		child = child_map.get(node_name)
 		if child is None:
-			child_factory: _NodeDefinitionImpl[AbstractNode]
+			child_factory: _NodeDefinitionImpl
 			if self.__is_arg(node_name):
-				child_factory = self.__arguments.get(node_name)
-				if child_factory is None:
-					raise self.Error('Undefined arg {}'.format(node_name))
+				try:
+					child_factory = self.__arguments[node_name]
+				except KeyError:
+					raise self.Error('Undefined arg {}'.format(node_name)) from None
 			else:
 				child_factory = self.__literals.get(node_name, self.__DEFAULT_LITERAL_DEFINITION)
 
@@ -307,7 +308,7 @@ class SimpleCommandBuilder:
 		if not self.__is_arg(arg_name):
 			arg_name = self.__make_arg(arg_name)
 		definition = _NodeDefinitionImpl(node_factory)
-		self.__arguments[arg_name] = definition
+		self.__arguments[arg_name] = cast(_NodeDefinitionImpl[ArgumentNode], definition)
 		self.clean_cache()
 		return definition
 
@@ -351,7 +352,7 @@ class SimpleCommandBuilder:
 		if not use_cache or self.__build_cache is None:
 			root = Literal('#TEMP')
 			for command, callback in self.__commands.items():
-				node = root
+				node: AbstractNode = root
 				for segment in command.split(' '):
 					if len(segment) > 0:
 						node = self.__locate_or_create_child(node, segment)
@@ -378,7 +379,7 @@ class SimpleCommandBuilder:
 			if isinstance(node, Literal):
 				server.register_command(node)
 			else:
-				raise self.Error('Not-literal root node is not supported'.format(node))
+				raise self.Error('Not-literal root node {} is not supported'.format(type(node)))
 
 	def add_children_for(self, parent_node: AbstractNode):
 		"""

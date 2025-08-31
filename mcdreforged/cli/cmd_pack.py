@@ -119,7 +119,7 @@ def make_packed_plugin(args: PackArgs, *, quiet: bool = False):
 		if args.shebang:
 			shebang = b'#!' + args.shebang.encode(getattr(zipapp, 'shebang_encoding', 'utf8')) + b'\n'
 			fd.write(shebang)
-			writeln('Added shebang {}'.format(shebang))
+			writeln('Added shebang {!r}'.format(shebang))
 
 		with ZipFile(fd, 'w', ZIP_DEFLATED) as zip_file:
 			write(meta_file_path, directory_only=False)  # metadata

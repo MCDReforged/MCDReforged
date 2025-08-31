@@ -260,6 +260,8 @@ class PluginCommandPimExtension(SubCommand):
 		return self.mcdr_plugin.plugin_manager
 
 	def get_cata_meta(self, source: CommandSource, ignore_ttl: bool) -> MetaRegistry:
+		has_start_fetch = False
+
 		def start_fetch_callback(no_skip: bool):
 			nonlocal has_start_fetch
 			if has_start_fetch := no_skip:
@@ -274,7 +276,6 @@ class PluginCommandPimExtension(SubCommand):
 		def blocked_callback():
 			source.reply(self.__tr('common.fetch_block_wait'))
 
-		has_start_fetch = False
 		return self.__meta_holder.get_registry_blocked(
 			ignore_ttl=ignore_ttl,
 			start_callback=start_fetch_callback,

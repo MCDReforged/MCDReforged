@@ -79,7 +79,7 @@ class WatchDog(BackgroundThreadExecutor):
 
 	def __check_async_task_executor(self, no_respond_threshold: float):
 		executor = self.mcdr_server.async_task_executor
-		future = Future()
+		future: Future[None] = Future()
 		executor.call_soon_threadsafe(future.cancel)
 
 		if self.__wait_future(future, no_respond_threshold):
