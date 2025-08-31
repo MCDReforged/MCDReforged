@@ -134,12 +134,6 @@ class AbstractMinecraftHandler(AbstractServerHandler, ABC):
 			raw_result.content = string_utils.clean_minecraft_color_code(raw_result.content)
 		return raw_result
 
-	__player_name_regex = re.compile(r'[a-zA-Z0-9_]{3,16}')
-
-	@classmethod
-	def _verify_player_name(cls, name: str) -> bool:
-		return cls.__player_name_regex.fullmatch(name) is not None
-
 	@override
 	def parse_server_stdout(self, text: str) -> Info:
 		result = super().parse_server_stdout(text)
@@ -149,7 +143,7 @@ class AbstractMinecraftHandler(AbstractServerHandler, ABC):
 				parsed = parser.parse(result.content)  # TODO: drop parse.Parser support
 			else:
 				parsed = parser.fullmatch(result.content)
-			if parsed is not None and self._verify_player_name(parsed['name']):
+			if parsed is not None and self.validate_player_name(parsed['name']):
 				result.player, result.content = parsed['name'], parsed['message']
 				break
 
@@ -165,7 +159,7 @@ class AbstractMinecraftHandler(AbstractServerHandler, ABC):
 	def parse_player_joined(self, info: Info) -> Optional[str]:
 		if info.content is not None and not info.is_user:
 			if (m := self.__player_joined_regex.fullmatch(info.content)) is not None:
-				if self._verify_player_name(m['name']):
+				if self.validate_player_name(m['name']):
 					return m['name']
 		return None
 
@@ -176,7 +170,7 @@ class AbstractMinecraftHandler(AbstractServerHandler, ABC):
 	def parse_player_left(self, info: Info) -> Optional[str]:
 		if info.content is not None and not info.is_user:
 			if (m := self.__player_left_regex.fullmatch(info.content)) is not None:
-				if self._verify_player_name(m['name']):
+				if self.validate_player_name(m['name']):
 					return m['name']
 		return None
 

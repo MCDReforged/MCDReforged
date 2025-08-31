@@ -187,3 +187,15 @@ class ServerHandler(ABC):
 		:return: If the server is stopping
 		"""
 		...
+
+	@abstractmethod
+	def validate_player_name(self, name: str) -> bool:
+		"""
+	    Check if the given player name is valid
+
+	    :param name: The name to be validated
+	    :return: True if the name is a valid player name, otherwise False
+
+		.. versionadded:: v2.16.0
+		"""
+		...

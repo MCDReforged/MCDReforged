@@ -82,3 +82,7 @@ class BasicHandler(ServerHandler):
 	@override
 	def test_server_stopping(self, info: Info) -> bool:
 		return False
+
+	@override
+	def validate_player_name(self, name: str) -> bool:
+		return name.isprintable()

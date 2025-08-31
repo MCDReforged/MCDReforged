@@ -65,17 +65,7 @@ msgid ""
 "before parsing"
 msgstr "用于在解析前删除文本中那些无用/影响解析的字符"
 
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler._content_parse
-#: mcdreforged.handler.server_handler.ServerHandler.parse_console_command
-#: mcdreforged.handler.server_handler.ServerHandler.parse_player_joined
-#: mcdreforged.handler.server_handler.ServerHandler.parse_player_left
-#: mcdreforged.handler.server_handler.ServerHandler.parse_server_address
-#: mcdreforged.handler.server_handler.ServerHandler.parse_server_stdout
-#: mcdreforged.handler.server_handler.ServerHandler.parse_server_version
-#: mcdreforged.handler.server_handler.ServerHandler.pre_parse_server_stdout
-#: mcdreforged.handler.server_handler.ServerHandler.test_rcon_started
-#: mcdreforged.handler.server_handler.ServerHandler.test_server_startup_done
-#: mcdreforged.handler.server_handler.ServerHandler.test_server_stopping of
+#: ../code_references/server_handler.rst
 msgid "Parameters"
 msgstr "参数"
 
@@ -93,15 +83,7 @@ msgstr "解析控制台输入"
 msgid "A line of console input to be parsed"
 msgstr "一行要被解析的控制台输入字符串"
 
-#: mcdreforged.handler.server_handler.ServerHandler.parse_console_command
-#: mcdreforged.handler.server_handler.ServerHandler.parse_player_joined
-#: mcdreforged.handler.server_handler.ServerHandler.parse_player_left
-#: mcdreforged.handler.server_handler.ServerHandler.parse_server_address
-#: mcdreforged.handler.server_handler.ServerHandler.parse_server_stdout
-#: mcdreforged.handler.server_handler.ServerHandler.parse_server_version
-#: mcdreforged.handler.server_handler.ServerHandler.test_rcon_started
-#: mcdreforged.handler.server_handler.ServerHandler.test_server_startup_done
-#: mcdreforged.handler.server_handler.ServerHandler.test_server_stopping of
+#: ../code_references/server_handler.rst
 msgid "Returns"
 msgstr "返回值"
 
@@ -222,6 +204,18 @@ msgstr "检查这条信息是否表示服务端正在关闭"
 msgid "If the server is stopping"
 msgstr "这条信息是否表示服务端正在关闭"
 
+#: mcdreforged.handler.server_handler.ServerHandler.validate_player_name:1 of
+msgid "Check if the given player name is valid"
+msgstr "校验该玩家名是否合法"
+
+#: mcdreforged.handler.server_handler.ServerHandler.validate_player_name:3 of
+msgid "The name to be validated"
+msgstr "需要校验的玩家名"
+
+#: mcdreforged.handler.server_handler.ServerHandler.validate_player_name:4 of
+msgid "True if the name is a valid player name, otherwise False"
+msgstr "若玩家名合法，则返回 True，否则返回 False"
+
 #: mcdreforged.handler.abstract_server_handler.AbstractServerHandler:1 of
 msgid ""
 "The abstract base class for server handler, with some common "
@@ -250,7 +244,9 @@ msgid ""
 "Return a :external:class:`re.Pattern` or an Iterable of "
 ":external:class:`re.Pattern` iterable that is used in method "
 ":meth:`_content_parse` for parsing"
-msgstr "返回一个将在方法 :meth:`_content_parse` 中作解析用途的一个 :external:class:`re.Pattern` 或 :external:class:`re.Pattern` 的 ``Iterable``"
+msgstr ""
+"返回一个将在方法 :meth:`_content_parse` 中作解析用途的一个 :external:class:`re.Pattern` 或 "
+":external:class:`re.Pattern` 的 ``Iterable``"
 
 #: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.get_content_parsing_formatter:4
 #: mcdreforged.handler.impl.abstract_minecraft_handler.AbstractMinecraftHandler.get_player_message_parsing_formatter:3
@@ -289,9 +285,9 @@ msgstr "``content``"
 #: mcdreforged.handler.impl.abstract_minecraft_handler.AbstractMinecraftHandler.get_player_message_parsing_formatter:8
 #: of
 msgid ""
-"The return value of the first succeeded :external:meth:`re.Pattern.fullmatch` "
-"call will be used for filling fields of the "
-":class:`~mcdreforged.info_reactor.info.Info` object"
+"The return value of the first succeeded "
+":external:meth:`re.Pattern.fullmatch` call will be used for filling "
+"fields of the :class:`~mcdreforged.info_reactor.info.Info` object"
 msgstr ""
 "首个成功的 :external:meth:`re.Pattern.fullmatch` 调用的返回值会被用于填充 "
 ":class:`~mcdreforged.info_reactor.info.Info` 对象的数据"
@@ -363,7 +359,9 @@ msgstr "一个抽象类，为 Minecraft Java 版服务端设计的服务端处�
 msgid ""
 "Return a list of :external:class:`re.Pattern` that is used in method "
 ":meth:`parse_server_stdout` for parsing player message"
-msgstr "返回一个将在方法 :meth:`parse_server_stdout` 中作解析用途的 :external:class:`re.Pattern` 列表"
+msgstr ""
+"返回一个将在方法 :meth:`parse_server_stdout` 中作解析用途的 :external:class:`re.Pattern`"
+" 列表"
 
 #: mcdreforged.handler.impl.abstract_minecraft_handler.AbstractMinecraftHandler.get_player_message_parsing_formatter:5
 #: of

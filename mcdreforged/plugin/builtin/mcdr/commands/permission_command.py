@@ -1,4 +1,3 @@
-import re
 from typing import Optional
 
 from typing_extensions import override
@@ -14,15 +13,10 @@ from mcdreforged.plugin.builtin.mcdr.commands.sub_command import SubCommand
 from mcdreforged.utils import string_utils
 
 
-class Validator:
-	__player_name_regex = re.compile(r'[a-zA-Z0-9_]{3,16}')
-
-	@classmethod
-	def player_name(cls, player):
-		return cls.__player_name_regex.fullmatch(player)
-
-
 class PermissionCommand(SubCommand):
+	def __validate_player_name(self, name: str) -> bool:
+		return name.isprintable() and self.mcdr_server.server_handler_manager.get_current_handler().validate_player_name(name)
+
 	@override
 	def get_command_node(self) -> Literal:
 		def permission_player_node():
@@ -48,7 +42,7 @@ class PermissionCommand(SubCommand):
 		permission_level = PermissionLevel.get_level(value)
 		if permission_level is None:
 			source.reply(self.tr('mcdr_command.invalid_permission_level'))
-		elif not Validator.player_name(player):
+		elif not self.__validate_player_name(player):
 			source.reply(self.tr('mcdr_command.invalid_player_name'))
 		else:
 			# Source with permission level x is allowed manipulate players/level in permission level range [0, x]
@@ -63,7 +57,7 @@ class PermissionCommand(SubCommand):
 		source.reply(self.tr('mcdr_command.query_player_permission.self', PermissionLevel.from_value(source.get_permission_level())))
 
 	def query_player_permission(self, source: CommandSource, player: str):
-		if not Validator.player_name(player):
+		if not self.__validate_player_name(player):
 			source.reply(self.tr('mcdr_command.invalid_player_name'))
 			return
 		else:
@@ -74,7 +68,7 @@ class PermissionCommand(SubCommand):
 				source.reply(self.tr('mcdr_command.query_player_permission.player_unknown', player))
 
 	def remove_player_permission(self, source: CommandSource, player: str):
-		if not Validator.player_name(player):
+		if not self.__validate_player_name(player):
 			source.reply(self.tr('mcdr_command.invalid_player_name'))
 		else:
 			if not source.has_permission(self.mcdr_server.permission_manager.get_player_permission_level(player)):

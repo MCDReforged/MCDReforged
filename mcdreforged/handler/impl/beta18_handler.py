@@ -53,7 +53,7 @@ class Beta18Handler(AbstractMinecraftHandler):
 	def parse_player_joined(self, info) -> Optional[str]:
 		if not info.is_user:
 			if (m := self.__player_joined_regex.fullmatch(info.content)) is not None:
-				if self._verify_player_name(m['name']):
+				if self.validate_player_name(m['name']):
 					return m['name']
 		return None
 

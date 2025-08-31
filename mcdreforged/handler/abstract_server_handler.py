@@ -128,3 +128,9 @@ class AbstractServerHandler(ServerHandler, ABC):
 		info = self._get_server_stdout_raw_result(text)
 		self._content_parse(info)
 		return info
+
+	_vanilla_minecraft_player_name_regex = re.compile(r'[a-zA-Z0-9_]{3,16}')
+
+	@override
+	def validate_player_name(self, name: str) -> bool:
+		return self._vanilla_minecraft_player_name_regex.fullmatch(name) is not None
