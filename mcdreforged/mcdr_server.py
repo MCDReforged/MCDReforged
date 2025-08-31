@@ -483,7 +483,9 @@ class MCDReforgedServer:
 			self.set_server_state(ServerState.STOPPING)
 			if not forced:
 				try:
-					self.send(self.server_handler_manager.get_current_handler().get_stop_command())
+					stop_command = self.server_handler_manager.get_current_handler().get_stop_command()
+					self.logger.mdebug('Sending command {} to the server'.format(repr(stop_command)), option=DebugOption.PROCESS)
+					self.send(stop_command)
 				except Exception:
 					self.logger.error(self.__tr('stop.stop_fail'))
 					forced = True
