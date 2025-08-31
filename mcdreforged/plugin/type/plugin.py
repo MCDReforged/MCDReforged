@@ -13,12 +13,13 @@ from mcdreforged.plugin.plugin_event import MCDREvent, EventListener, PluginEven
 from mcdreforged.plugin.plugin_registry import PluginRegistry, HelpMessage
 from mcdreforged.plugin.type.common import PluginState, PluginType
 from mcdreforged.utils import class_utils
-from mcdreforged.utils.exception import IllegalCallError, IllegalStateError
+from mcdreforged.utils.exception import MetadataNotSet, IllegalStateError
 from mcdreforged.utils.types.message import TranslationKeyMappingNested
 
 if TYPE_CHECKING:
 	from mcdreforged.handler.server_handler import ServerHandler
 	from mcdreforged.plugin.plugin_manager import PluginManager
+	from mcdreforged.plugin.si.plugin_server_interface import PluginServerInterface
 	from mcdreforged.plugin.type.builtin_plugin import BuiltinPlugin
 	from mcdreforged.plugin.type.regular_plugin import RegularPlugin
 
@@ -29,6 +30,7 @@ class AbstractPlugin(ABC):
 		self.mcdr_server = plugin_manager.mcdr_server
 		self.state = PluginState.UNINITIALIZED
 		self.plugin_registry = PluginRegistry(self, plugin_manager.registry_storage)
+		self.__metadata: Optional[Metadata] = None
 
 		from mcdreforged.plugin.si.plugin_server_interface import PluginServerInterface
 		self.server_interface = PluginServerInterface(self.mcdr_server, self)
@@ -45,9 +47,15 @@ class AbstractPlugin(ABC):
 	def get_type(self) -> PluginType:
 		raise NotImplementedError()
 
-	@abstractmethod
 	def get_metadata(self) -> Metadata:
-		raise NotImplementedError()
+		if self.__metadata is None:
+			raise MetadataNotSet('Meta data of plugin {} is not loaded. Plugin state = {}'.format(repr(self), self.state))
+		return self.__metadata
+
+	def _set_metadata(self, metadata: Metadata):
+		self.__metadata = metadata
+		# noinspection PyProtectedMember
+		self.server_interface._on_plugin_metadata_set()
 
 	def get_id(self) -> str:
 		return self.get_metadata().id
@@ -65,7 +73,7 @@ class AbstractPlugin(ABC):
 	def get_name(self) -> str:
 		try:
 			return self.get_identifier()
-		except IllegalCallError:
+		except MetadataNotSet:
 			return repr(self)
 
 	def get_identifier(self) -> str:

@@ -26,6 +26,11 @@ class BrokenMetadata(Exception):
 	pass
 
 
+# If the metadata of a AbstractPlugin has not been set yet
+class MetadataNotSet(Exception):
+	pass
+
+
 # infinity join
 class SelfJoinError(RuntimeError):
 	pass

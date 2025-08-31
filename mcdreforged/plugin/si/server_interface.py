@@ -25,7 +25,7 @@ from mcdreforged.preference.preference_manager import PreferenceItem
 from mcdreforged.translation.functions import TranslateFunc
 from mcdreforged.translation.translation_text import RTextMCDRTranslation
 from mcdreforged.utils import misc_utils, file_utils, class_utils, future_utils
-from mcdreforged.utils.exception import IllegalCallError
+from mcdreforged.utils.exception import IllegalCallError, MetadataNotSet
 from mcdreforged.utils.types.message import MessageText
 from mcdreforged.utils.types.path_like import PathStr
 
@@ -67,12 +67,6 @@ class ServerInterface:
 	def _plugin_manager(self) -> 'PluginManager':
 		return self._mcdr_server.plugin_manager
 
-	def _create_plugin_logger(self, plugin_id: str) -> MCDReforgedLogger:
-		logger = MCDReforgedLogger(plugin_id)
-		if self._mcdr_server.logger.file_handler is not None:
-			logger.addHandler(self._mcdr_server.logger.file_handler)
-		return logger
-
 	@property
 	def logger(self) -> logging.Logger:
 		"""
@@ -80,9 +74,13 @@ class ServerInterface:
 		"""
 		plugin = self._plugin_manager.get_plugin_in_current_context()
 		if plugin is not None:
-			return self._create_plugin_logger(plugin.get_id())
-		else:
-			return self._mcdr_server.logger
+			try:
+				plugin_id = plugin.get_id()
+			except MetadataNotSet:
+				pass
+			else:
+				return MCDReforgedLogger.get(plugin_id)
+		return self._mcdr_server.logger
 
 	# ------------------------
 	#    Instance Getters

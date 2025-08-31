@@ -9,13 +9,11 @@ from typing import TYPE_CHECKING, Optional, List, Tuple, Any
 from typing_extensions import override
 
 from mcdreforged.logging.debug_option import DebugOption
-from mcdreforged.plugin.meta.metadata import Metadata
 from mcdreforged.plugin.plugin_event import MCDRPluginEvents, EventListener, PluginEvent
 from mcdreforged.plugin.plugin_registry import DEFAULT_LISTENER_PRIORITY
 from mcdreforged.plugin.type.common import PluginState
 from mcdreforged.plugin.type.plugin import AbstractPlugin
 from mcdreforged.utils import time_utils
-from mcdreforged.utils.exception import IllegalCallError
 
 if TYPE_CHECKING:
 	from mcdreforged.plugin.plugin_manager import PluginManager
@@ -32,7 +30,6 @@ class RegularPlugin(AbstractPlugin, ABC):
 		self.file_path: Path = file_path
 		self.file_name: str = file_path.name
 		self.file_modify_time: Optional[int] = None
-		self.__metadata: Optional[Metadata] = None
 		self.entry_module_instance: MODULE_TYPE = None
 		self.old_entry_module_instance: MODULE_TYPE = None
 		self.decorated_event_listeners: List[Tuple[PluginEvent, EventListener]] = []
@@ -47,15 +44,6 @@ class RegularPlugin(AbstractPlugin, ABC):
 		self.plugin_registry.clear()
 		# noinspection PyProtectedMember
 		self.server_interface._reset_on_load()
-
-	@override
-	def get_metadata(self) -> Metadata:
-		if self.__metadata is None:
-			raise IllegalCallError('Meta data of plugin {} is not loaded. Plugin state = {}'.format(repr(self), self.state))
-		return self.__metadata
-
-	def _set_metadata(self, metadata: Metadata):
-		self.__metadata = metadata
 
 	@property
 	def __class_name(self):

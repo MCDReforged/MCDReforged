@@ -9,7 +9,7 @@ from mcdreforged.command.builder.nodes.basic import Literal
 from mcdreforged.command.command_source import CommandSource, PluginCommandSource
 from mcdreforged.constants import plugin_constant
 from mcdreforged.info_reactor.info_filter import InfoFilter
-from mcdreforged.logging.logger import MCDReforgedLogger
+from mcdreforged.logging.logger import MCDReforgedLogger, MCDReforgedPluginLogger
 from mcdreforged.permission.permission_level import PermissionLevel
 from mcdreforged.plugin.meta.metadata import Metadata
 from mcdreforged.plugin.plugin_event import EventListener, LiteralEvent, PluginEvent
@@ -50,14 +50,18 @@ class PluginServerInterface(ServerInterface):
 	def __init__(self, mcdr_server: 'MCDReforgedServer', plugin: AbstractPlugin):
 		super().__init__(mcdr_server)
 		self.__plugin = plugin
-		self.__logger_for_plugin: Optional[MCDReforgedLogger] = None
+		self.__logger_for_plugin: logging.Logger = MCDReforgedLogger.get()
 
 	# -----------------------
 	#     Not public APIs
 	# -----------------------
 
+	def _on_plugin_metadata_set(self):
+		self.__logger_for_plugin = MCDReforgedLogger.get(self.__plugin.get_id())
+
 	def _reset_on_load(self):
-		self.__logger_for_plugin = None
+		if isinstance(logger := self.__logger_for_plugin, MCDReforgedPluginLogger):
+			logger.reset()
 
 	# -----------------------
 	#   Overwritten methods
@@ -66,12 +70,6 @@ class PluginServerInterface(ServerInterface):
 	@property
 	@override
 	def logger(self) -> logging.Logger:
-		if self.__logger_for_plugin is None:
-			try:
-				logger = self.__logger_for_plugin = self._create_plugin_logger(self.__plugin.get_id())
-			except Exception:
-				logger = self._mcdr_server.logger
-			self.__logger_for_plugin = logger
 		return self.__logger_for_plugin
 
 	@override

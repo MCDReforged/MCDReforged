@@ -14,15 +14,11 @@ if TYPE_CHECKING:
 class BuiltinPlugin(AbstractPlugin, ABC):
 	def __init__(self, plugin_manager: 'PluginManager', metadata_dict: dict):
 		super().__init__(plugin_manager)
-		self.__metadata = Metadata(metadata_dict, plugin=self)
+		self._set_metadata(Metadata(metadata_dict, plugin=self))
 
 	@override
 	def get_type(self) -> PluginType:
 		return PluginType.builtin
-
-	@override
-	def get_metadata(self) -> Metadata:
-		return self.__metadata
 
 	@override
 	def get_fallback_metadata_id(self) -> str:

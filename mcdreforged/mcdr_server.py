@@ -84,7 +84,7 @@ class MCDReforgedServer:
 		self.__decoding_method: List[str] = []
 
 		# --- Constructing fields --- #
-		self.logger: MCDReforgedLogger = MCDReforgedLogger()
+		self.logger: MCDReforgedLogger = MCDReforgedLogger.get()
 		self.process_manager: ServerProcessManager = ServerProcessManager(self)
 		self.config_manager: MCDReforgedConfigManager = MCDReforgedConfigManager(self.logger, args.config_file_path)
 		self.permission_manager: PermissionManager = PermissionManager(self, args.permission_file_path)
@@ -156,7 +156,8 @@ class MCDReforgedServer:
 			return
 
 		# MCDR environment has been set up, so continue creating default folders and loading stuffs
-		self.logger.set_file(core_constant.LOGGING_FILE)  # will create logs/ folder
+		# noinspection PyProtectedMember
+		self.logger._set_file(core_constant.LOGGING_FILE)  # will create logs/ folder
 		self.plugin_manager.touch_directory()  # will create config/ folder
 
 		# --- Done --- #
