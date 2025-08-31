@@ -3,7 +3,8 @@ Misc tool collection
 """
 import inspect
 import logging
-from typing import Callable, Any, TypeVar
+import os
+from typing import Callable, Any, Optional, Dict, List, Union, TypeVar
 
 
 def print_text_to_console(logger: logging.Logger, text: Any):
@@ -29,3 +30,25 @@ def copy_signature(target: _F, origin: Callable) -> _F:
 	target.__signature__ = inspect.signature(origin)  # type: ignore
 	return target
 
+
+def prepare_subprocess_environment(envs: Optional[Union[List[str], Dict[str, str]]], inherit: bool) -> Optional[Dict[str, str]]:
+	if envs is None and inherit:
+		return None
+
+	result: Dict[str, str] = {}
+	if inherit:
+		result.update(os.environ)
+
+	if envs is None:
+		pass
+	elif isinstance(envs, dict):
+		result.update(envs)
+	elif isinstance(envs, list):
+		for kv_pair in envs:
+			parts = kv_pair.split('=', 1)
+			if len(parts) == 2:
+				result[parts[0]] = parts[1]
+	else:
+		raise TypeError('envs must be a dict or a list, got {}'.format(type(envs)))
+
+	return result

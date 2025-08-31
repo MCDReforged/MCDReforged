@@ -30,6 +30,8 @@ class MCDReforgedConfig(Serializable):
 	handler: str = 'vanilla_handler'
 	encoding: Optional[str] = 'utf8'
 	decoding: Optional[Union[str, List[str]]] = 'utf8'
+	environment: Optional[Union[List[str], Dict[str, str]]] = None
+	environment_inherit: bool = True
 	rcon: RconConfig = RconConfig.get_default()
 
 	# --------- Plugin Configuration ---------

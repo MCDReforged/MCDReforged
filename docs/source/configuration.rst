@@ -325,6 +325,26 @@ In this case, MCDR will try all decoding methods one by one until one succeeds
         *   `JEP 400: UTF-8 by Default <https://openjdk.org/jeps/400>`__
         *   https://bugs.openjdk.org/browse/JDK-8285492
 
+environment
+^^^^^^^^^^^
+
+Server process environment variable overrides
+
+This can be a dict with string keys and string values, or a list of strings in the ``"KEY=VALUE"`` format
+
+Leaving it empty means no overrides
+
+* Option type: *empty* or ``List[str]`` or ``Dict[str, str]``
+* Default value: *empty*
+
+environment_inherit
+^^^^^^^^^^^^^^^^^^^
+
+If set to true (default), the server process will inherit environment variables from the MCDR process
+
+* Option type: :external:class:`bool`
+* Default value: ``true``
+
 rcon
 ^^^^
 

@@ -40,7 +40,7 @@ from mcdreforged.process.server_process_manager import ServerProcessManager
 from mcdreforged.translation.language_fallback_handler import LanguageFallbackHandler
 from mcdreforged.translation.translation_manager import TranslationManager
 from mcdreforged.translation.translator import Translator
-from mcdreforged.utils import file_utils, request_utils, collection_utils, thread_utils, os_utils
+from mcdreforged.utils import file_utils, request_utils, collection_utils, thread_utils, os_utils, misc_utils
 from mcdreforged.utils.exception import ServerStartError, IllegalStateError
 from mcdreforged.utils.types.message import MessageText
 
@@ -430,10 +430,14 @@ class MCDReforgedServer:
 				return False
 
 			self.__on_server_start_pre()
-			start_command = self.config.start_command
-			self.logger.info(self.__tr('start_server.starting', repr(start_command)))
+			start_args = self.process_manager.StartArguments(
+				args=self.config.start_command,
+				cwd=cwd,
+				env=misc_utils.prepare_subprocess_environment(self.config.environment, self.config.environment_inherit),
+			)
+			self.logger.info(self.__tr('start_server.starting', repr(start_args.args)))
 			try:
-				self.process_manager.start(start_command, cwd=cwd)
+				self.process_manager.start(start_args)
 			except Exception:
 				self.logger.exception(self.__tr('start_server.start_fail'))
 				return False

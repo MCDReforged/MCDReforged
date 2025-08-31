@@ -6,7 +6,7 @@ import queue
 import threading
 import time
 from pathlib import Path
-from typing import Optional, Union, List, TYPE_CHECKING
+from typing import Optional, Union, List, TYPE_CHECKING, Dict
 
 import psutil
 
@@ -61,6 +61,12 @@ class _RunningProcess:
 
 
 class ServerProcessManager:
+	@dataclasses.dataclass(frozen=True)
+	class StartArguments:
+		args: Union[str, List[str]]
+		cwd: Path
+		env: Optional[Dict[str, str]]
+
 	MAX_OUTPUT_QUEUE_SIZE = 1024
 
 	def __init__(self, mcdr_server: 'MCDReforgedServer'):
@@ -73,7 +79,7 @@ class ServerProcessManager:
 			with contextlib.suppress(Exception):
 				self.kill_process_tree(quiet=True)
 
-	def start(self, args: Union[str, List[str]], cwd: Path):
+	def start(self, start_args: StartArguments):
 		if self.__current_process is not None:
 			raise ProcessAlreadyRunning('server process already started')
 
@@ -103,18 +109,20 @@ class ServerProcessManager:
 		async def run_process():
 			try:
 				event_loop_future.set_result(asyncio.get_event_loop())
-				if isinstance(args, str):
+				if isinstance(start_args.args, str):
 					proc = await asyncio.create_subprocess_shell(
-						args,
-						cwd=cwd,
+						start_args.args,
+						cwd=start_args.cwd,
+						env=start_args.env,
 						stdin=asyncio.subprocess.PIPE,
 						stdout=asyncio.subprocess.PIPE,
 						stderr=asyncio.subprocess.PIPE,
 					)
 				else:
 					proc = await asyncio.create_subprocess_exec(
-						*args,
-						cwd=cwd,
+						*start_args.args,
+						cwd=start_args.cwd,
+						env=start_args.env,
 						stdin=asyncio.subprocess.PIPE,
 						stdout=asyncio.subprocess.PIPE,
 						stderr=asyncio.subprocess.PIPE,

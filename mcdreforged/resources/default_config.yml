@@ -57,6 +57,15 @@ encoding: utf8
 decoding: utf8
 
 
+# Server process environment variable overrides
+# This can be a dict with string keys and string values, or a list of strings in the "KEY=VALUE" format
+# Leaving it empty means no overrides
+environment:
+
+# If set to true (default), the server process will inherit environment variables from the MCDR process
+environment_inherit: true
+
+
 # Minecraft RCON setting
 # If enabled, plugins can use rcon to query commands from the server
 rcon:
