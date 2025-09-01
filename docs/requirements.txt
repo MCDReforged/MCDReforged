@@ -1,7 +1,8 @@
 # core
 sphinx>=6.2.1               # core
 sphinx-intl>=2.1.0          # locale
-sphinx-rtd-theme>=3.0.0rc1  # the theme of the webside
+furo>=2024.5.6              # the theme of the webside
+sphinxcontrib-jquery        # theme might need this, in case it doesn't exist
 Babel==2.15.0               # Unified the version to prevent different versions from appearing in .po comments
 
 # extensions
@@ -12,3 +13,4 @@ sphinxcontrib-mermaid>=1.0.0   # add mermaid graph support
 sphinx_inline_tabs             # codeblock tabs are nice
 sphinx-prompt                  # make ">>>" prefix in prompt section unselectable
 sphinxcontrib.asciinema        # add asciinema animation support
+sphinx-docsearch               # Algolia Docsearch

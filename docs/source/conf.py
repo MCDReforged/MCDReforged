@@ -75,7 +75,11 @@ extensions = [
 	'sphinx_design',
 
 	# https://pypi.org/project/sphinxcontrib.asciinema/
-	'sphinxcontrib.asciinema'
+	'sphinxcontrib.asciinema',
+
+	# Algolia DocSearch
+	# https://pypi.org/project/sphinx-docsearch
+	'sphinx_docsearch',
 ]
 
 source_suffix = ['.rst']
@@ -111,7 +115,7 @@ def setup(app: 'Sphinx'):
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'sphinx_rtd_theme'
+html_theme = 'furo'
 
 html_static_path = ['../static']
 
@@ -119,12 +123,7 @@ html_css_files = [
 	# Save the table width
 	# override wide tables in RTD theme
 	# https://rackerlabs.github.io/docs-rackspace/tools/rtd-tables.html
-	'css/theme_overrides.css',  
-
-	# Algolia Docsearch
-	# https://docsearch.algolia.com/docs/DocSearch-v3
-	'css/algolia.css',
-	'https://cdn.jsdelivr.net/npm/@docsearch/css@3',
+	'css/theme_overrides.css',
 
 	# Tweak styles of the sphinx_inline_tabs extension
 	'css/codeblock_tab.css',
@@ -135,20 +134,19 @@ html_css_files = [
 ]
 
 html_js_files = [
-	('https://cdn.jsdelivr.net/npm/@docsearch/js@3', {'defer': 'defer'}),
-	('js/algolia.js', {'defer': 'defer'}),
 	('js/readthedoc-flyout.js', {'defer': 'defer'}),
 ]
 
 
-# Show a deeper toctree in the sidebar
-# https://stackoverflow.com/questions/27669376/show-entire-toctree-in-read-the-docs-sidebar
+# https://pradyunsg.me/furo/customisation/
 html_theme_options = {
-	'navigation_depth': 6,
-	'logo_only': True,
+	'sidebar_hide_name': True,
+	"source_repository": "https://github.com/MCDReforged/MCDReforged",
+	"source_branch": "master",
+	"source_directory": "docs/source",
 }
 
-html_logo = '../../logo/images/logo_long_white.svg'
+html_logo = '../../logo/images/logo_long.svg'
 
 
 # -- Options for sphinx-intl -------------------------------------------------
@@ -193,3 +191,9 @@ def autodoc_setup(app: 'Sphinx'):
 	app.connect('autodoc-skip-member', autodoc_skip_member_handler)
 
 
+# -- Options for sphinx_docsearch -------------------------------------------------
+# https://pypi.org/project/sphinx-docsearch
+
+docsearch_app_id = "A1XIV9INYQ"
+docsearch_api_key = "43120950d3053488e5146d70643f567f"
+docsearch_index_name = "mcdreforgeddocs"
