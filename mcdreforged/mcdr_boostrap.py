@@ -10,7 +10,7 @@ __all__ = ['boostrap']
 
 def boostrap():
 	"""
-	Do some boostrap things before non-std modules get loaded
+	Do some boostrap things
 	"""
 	__disable_stdout_stderr_block_buffering()
 	__ensure_cwd_is_in_sys_path()
