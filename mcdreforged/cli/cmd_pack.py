@@ -67,7 +67,7 @@ def make_packed_plugin(args: PackArgs, *, quiet: bool = False):
 		with open(meta_file_path, encoding='utf8') as meta_file:
 			meta_dict: dict = json.load(meta_file)
 		assert isinstance(meta_dict, dict)
-		meta = Metadata(meta_dict)
+		meta = Metadata.create(meta_dict)
 	except Exception as e:
 		writeln('Fail to load plugin metadata from {}: {}'.format(meta_file_path, e))
 		return

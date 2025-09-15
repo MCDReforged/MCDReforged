@@ -1,8 +1,9 @@
 """
 Information of a plugin
 """
+import dataclasses
 import re
-from typing import List, Dict, TYPE_CHECKING, Optional, Union
+from typing import List, Dict, TYPE_CHECKING, Optional, Union, ClassVar
 
 from mcdreforged.minecraft.rtext.text import RTextBase, RText
 from mcdreforged.plugin.meta.version import Version, VersionParsingError, VersionRequirement
@@ -14,6 +15,7 @@ if TYPE_CHECKING:
 	from mcdreforged.plugin.type.plugin import AbstractPlugin
 
 
+@dataclasses.dataclass(frozen=True)
 class Metadata:
 	"""
 	The metadata of a MCDR plugin
@@ -65,11 +67,12 @@ class Metadata:
 	archive_name: Optional[str]  # used in MCDR CLI only
 	resources: Optional[List[str]]  # used in MCDR CLI only
 
-	PLUGIN_ID_REGEX_OLD = re.compile(r'[a-z0-9_]{1,64}')
-	PLUGIN_ID_REGEX = re.compile(r'[a-z][a-z0-9_]{0,63}')
-	FALLBACK_VERSION = '0.0.0'
+	PLUGIN_ID_REGEX_OLD: ClassVar[re.Pattern] = re.compile(r'[a-z0-9_]{1,64}')
+	PLUGIN_ID_REGEX: ClassVar[re.Pattern] = re.compile(r'[a-z][a-z0-9_]{0,63}')
+	FALLBACK_VERSION: ClassVar[str] = '0.0.0'
 
-	def __init__(self, data: Optional[dict], *, plugin: Optional['AbstractPlugin'] = None):
+	@classmethod
+	def create(cls, data: Optional[dict], *, plugin: Optional['AbstractPlugin'] = None) -> 'Metadata':
 		"""
 		:param AbstractPlugin plugin: the plugin which this metadata is belonged to
 		:param dict or None data: a dict with information of the plugin
@@ -83,82 +86,102 @@ class Metadata:
 
 		plugin_name_text = repr(plugin)
 
-		use_fallback_id_reason = None
-		if (plugin_id := data.get('id')) is None:
-			use_fallback_id_reason = 'Plugin ID of {} not found'.format(plugin_name_text)
-		else:
-			self.id = plugin_id
-			bad_id = not isinstance(self.id, str)
-			if self.PLUGIN_ID_REGEX.fullmatch(self.id) is None:
-				bad_id = True
-			if bad_id:
-				use_fallback_id_reason = 'Plugin ID {!r} of {} is invalid'.format(self.id, plugin_name_text)
-		if use_fallback_id_reason is not None:
+		def create_id() -> str:
+			if (plugin_id := data.get('id')) is not None:
+				if isinstance(plugin_id, str) and cls.PLUGIN_ID_REGEX.fullmatch(plugin_id):
+					return plugin_id
+				use_fallback_id_reason = 'Plugin ID {!r} of {} is invalid'.format(plugin_id, plugin_name_text)
+			else:
+				use_fallback_id_reason = 'Plugin ID of {} not found'.format(plugin_name_text)
+
 			if plugin is not None:
-				self.id = plugin.get_fallback_metadata_id()
-				warn('{}, use fallback id {} instead'.format(use_fallback_id_reason, self.id))
+				fallback_id = plugin.get_fallback_metadata_id()
+				warn('{}, use fallback id {} instead'.format(use_fallback_id_reason, fallback_id))
+				return fallback_id
 			else:
 				raise ValueError('Plugin id not found in metadata')
-		class_utils.check_type(self.id, str)
 
-		self.name = data.get('name', self.id)
-		if isinstance(self.name, RTextBase):
-			self.name = self.name.to_plain_text()
-		class_utils.check_type(self.name, str)
+		meta_id = create_id()
 
-		description = data.get('description')
-		if isinstance(description, RTextBase):
-			description = description.to_plain_text()
-		self.description = description
-		class_utils.check_type(self.description, (None, str, dict))
+		def create_name() -> str:
+			meta_name = data.get('name', meta_id)
+			if isinstance(meta_name, RTextBase):
+				meta_name = meta_name.to_plain_text()
+			class_utils.check_type(meta_name, str)
+			return meta_name
 
-		self.author = data.get('author')
-		if isinstance(self.author, str):
-			self.author = [self.author]
-		if isinstance(self.author, list):
-			for i in range(len(self.author)):
-				self.author[i] = str(self.author[i])
-			if len(self.author) == 0:
-				self.author = None
-		class_utils.check_type(self.author, (None, list))
+		def create_description() -> Optional[Union[str, TranslationLanguageDict]]:
+			description = data.get('description')
+			if isinstance(description, RTextBase):
+				description = description.to_plain_text()
+			meta_description = description
+			class_utils.check_type(meta_description, (None, str, dict))
+			return meta_description
 
-		self.link = data.get('link')
-		class_utils.check_type(self.link, (None, str))
+		def create_author() -> Optional[List[str]]:
+			meta_author = data.get('author')
+			if isinstance(meta_author, str):
+				meta_author = [meta_author]
+			if isinstance(meta_author, list):
+				for i in range(len(meta_author)):
+					meta_author[i] = str(meta_author[i])
+				if len(meta_author) == 0:
+					meta_author = None
+			class_utils.check_type(meta_author, (None, list))
+			return meta_author
 
-		version_str = data.get('version')
-		if version_str:
-			try:
-				self.version = Version(version_str, allow_wildcard=False)
-			except VersionParsingError as e:
-				warn('Version {!r} of {} is invalid ({}), ignore and use fallback version instead {}'.format(version_str, plugin_name_text, e, self.FALLBACK_VERSION))
-				version_str = None
-		else:
-			warn("{} doesn't specific a version, use fallback version {}".format(plugin_name_text, self.FALLBACK_VERSION))
-		if version_str is None:
-			self.version = Version(self.FALLBACK_VERSION)
+		def create_link() -> Optional[str]:
+			meta_link = data.get('link')
+			class_utils.check_type(meta_link, (None, str))
+			return meta_link
 
-		self.dependencies = {}
-		for plugin_id, requirement in data.get('dependencies', {}).items():
-			try:
-				self.dependencies[plugin_id] = VersionRequirement(requirement)
-			except VersionParsingError as e:
-				warn('Dependency "{}: {}" of {} is invalid ({}), ignore'.format(
-					plugin_id, requirement, plugin_name_text, e
-				))
+		def create_version() -> Version:
+			if version_str := data.get('version'):
+				try:
+					return Version(version_str, allow_wildcard=False)
+				except VersionParsingError as e:
+					warn('Version {!r} of {} is invalid ({}), ignore and use fallback version instead {}'.format(version_str, plugin_name_text, e, cls.FALLBACK_VERSION))
+			else:
+				warn("{} doesn't specific a version, use fallback version {}".format(plugin_name_text, cls.FALLBACK_VERSION))
+			return Version(cls.FALLBACK_VERSION)
 
-		self.entrypoint = data.get('entrypoint', self.id)
-		class_utils.check_type(self.entrypoint, str)
-		# entrypoint module should be inside the plugin module
-		if self.entrypoint != self.id and not self.entrypoint.startswith(self.id + '.'):
-			raise ValueError('Invalid entry point {!r} for plugin id {!r}'.format(self.entrypoint, self.id))
+		def create_dependencies() -> Dict[str, VersionRequirement]:
+			meta_dependencies = {}
+			for plugin_id, requirement in data.get('dependencies', {}).items():
+				try:
+					meta_dependencies[plugin_id] = VersionRequirement(requirement)
+				except VersionParsingError as e:
+					warn('Dependency "{}: {}" of {} is invalid ({}), ignore'.format(
+						plugin_id, requirement, plugin_name_text, e
+					))
+			return meta_dependencies
 
-		self.archive_name = data.get('archive_name')
-		self.resources = data.get('resources', [])
-		class_utils.check_type(self.archive_name, (None, str))
-		class_utils.check_type(self.resources, list)
+		def create_entrypoint() -> str:
+			meta_entrypoint = data.get('entrypoint', meta_id)
+			class_utils.check_type(meta_entrypoint, str)
+			# entrypoint module should be inside the plugin module
+			if meta_entrypoint != meta_id and not meta_entrypoint.startswith(meta_id + '.'):
+				raise ValueError('Invalid entry point {!r} for plugin id {!r}'.format(meta_entrypoint, meta_id))
+			return meta_entrypoint
 
-	def __repr__(self):
-		return class_utils.represent(self)
+		def create_archive_name() -> Optional[str]:
+			return class_utils.check_type(data.get('archive_name'), (None, str))
+
+		def create_resources() -> List[str]:
+			return class_utils.check_type(data.get('resources', []), list)
+
+		return cls(
+			id=meta_id,
+			version=create_version(),
+			name=create_name(),
+			description=create_description(),
+			author=create_author(),
+			link=create_link(),
+			dependencies=create_dependencies(),
+			entrypoint=create_entrypoint(),
+			archive_name=create_archive_name(),
+			resources=create_resources(),
+		)
 
 	def get_description(self, lang: Optional[str] = None) -> Optional[str]:
 		"""
@@ -239,4 +262,4 @@ __SAMPLE_METADATA = {
 		'another_resource_file',
 	]
 }
-Metadata(__SAMPLE_METADATA)  # there's should be no exception
+Metadata.create(__SAMPLE_METADATA)  # there's should be no exception

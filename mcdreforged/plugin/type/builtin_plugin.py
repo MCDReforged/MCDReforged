@@ -14,7 +14,7 @@ if TYPE_CHECKING:
 class BuiltinPlugin(AbstractPlugin, ABC):
 	def __init__(self, plugin_manager: 'PluginManager', metadata_dict: dict):
 		super().__init__(plugin_manager)
-		self._set_metadata(Metadata(metadata_dict, plugin=self))
+		self._set_metadata(Metadata.create(metadata_dict, plugin=self))
 
 	@override
 	def get_type(self) -> PluginType:
