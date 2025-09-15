@@ -11,4 +11,4 @@ def entrypoint():
 	boostrap()
 
 	from mcdreforged.cli import cli_entry
-	cli_entry.cli_dispatch()
+	cli_entry.cli_main()
