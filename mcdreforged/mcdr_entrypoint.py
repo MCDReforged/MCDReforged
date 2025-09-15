@@ -1,20 +1,4 @@
-import platform
-import sys
-
 __all__ = ['entrypoint']
-
-
-def __environment_check():
-	"""
-	This should even work in python 2.7+
-	"""
-	# only mcdreforged.constants is allowed to load before the boostrap() call
-	from mcdreforged.constants import core_constant
-
-	if sys.version_info < (3, 9):
-		print('Python 3.9+ is needed to run {}'.format(core_constant.NAME))
-		print('Current Python version {} is too old'.format(platform.python_version()))
-		sys.exit(1)
 
 
 def entrypoint():
@@ -23,8 +7,6 @@ def entrypoint():
 
 	All MCDR launches start from here
 	"""
-	__environment_check()
-
 	from mcdreforged.mcdr_boostrap import boostrap
 	boostrap()
 
