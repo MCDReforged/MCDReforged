@@ -1,7 +1,7 @@
 import contextlib
 import json
 from abc import ABC, abstractmethod
-from typing import Iterable, List, Union, Optional, Any, Tuple, Set, Dict, TypeVar, overload, Callable
+from typing import Iterable, List, Union, Optional, Any, Tuple, Set, Dict, TypeVar, overload, Callable, NoReturn
 
 from colorama import Style
 from typing_extensions import Self, override, TypedDict, NotRequired, Unpack, final
@@ -12,14 +12,21 @@ from mcdreforged.minecraft.rtext.schema import RTextJsonFormat
 from mcdreforged.minecraft.rtext.style import RStyle, RColor, RColorClassic, RColorRGB, RItemClassic
 from mcdreforged.utils import class_utils
 
+
+class __Unset:
+	def __repr__(self):
+		return '<unset>'
+
+
+_UNSET: Any = __Unset()
 _T = TypeVar('_T')
-_UNSET: Any = object()
 
 
 class RTextBase(ABC):
 	"""
 	An abstract base class of Minecraft text component
 	"""
+
 	class ToJsonKwargs(TypedDict):
 		json_format: NotRequired[RTextJsonFormat]
 
@@ -92,21 +99,44 @@ class RTextBase(ABC):
 	@overload
 	def set_click_event(self, event: RClickEvent, /) -> Self:
 		"""
-		Set the click event of the text directly
+		Set the click event of the text directly (position-argument only version)
 		"""
 		...
 
 	@overload
-	def set_click_event(self, action: RClickAction[RClickEventSingleValue[_T]], /, value: _T) -> Self:
+	def set_click_event(self, /, *, event: RClickEvent) -> Self:
 		"""
-		Set the click event of the text by providing the action type and the action value
+		Set the click event of the text directly (kwargs-only version)
+		"""
+		...
+
+	@overload
+	def set_click_event(self, action: RClickAction[RClickEventSingleValue[_T]], value: _T, /) -> Self:
+		"""
+		Set the click event of the text by providing the action type and the action value (position-argument only version)
+
+		This overload works for click actions that accept exactly 1 argument
+		"""
+		...
+
+	@overload
+	def set_click_event(self, /, *, action: RClickAction[RClickEventSingleValue[_T]], value: _T) -> Self:
+		"""
+		Set the click event of the text by providing the action type and the action value (kwargs-only version)
 
 		This overload works for click actions that accept exactly 1 argument
 		"""
 		...
 
 	@final
-	def set_click_event(self, action: Union[RClickEvent, RClickAction[RClickEventSingleValue[_T]]], /, value: _T = _UNSET) -> Self:
+	def set_click_event(
+			self,
+			arg1: Union[RClickEvent, RClickAction[RClickEventSingleValue[_T]]] = _UNSET,
+			arg2: _T = _UNSET, /, *,
+			event: RClickEvent = _UNSET,
+			action: RClickAction[RClickEventSingleValue[_T]] = _UNSET,
+			value: _T = _UNSET,
+	) -> Self:
 		"""
 		Set the click event
 
@@ -117,25 +147,30 @@ class RTextBase(ABC):
 			text = RText('example')
 
 			text.set_click_event(RClickSuggestCommand('/say something'))  # directly
+			text.set_click_event(event=RClickSuggestCommand('/say something'))  # directly (kwarg)
 			text.set_click_event(RClickAction.suggest_command, '/say something')  # action + value
+			text.set_click_event(action=RClickAction.suggest_command, value='/say something')  # action + value (kwarg)
 
 		Method :meth:`c` is the short form of :meth:`set_click_event`
 		"""
-		if value is not _UNSET:
-			if not isinstance(action, RClickAction):
-				raise TypeError('The action parameter should be a valid RClickAction if value is provided, but got {}'.format(type(action)))
+		def set_by_action_and_value(a: RClickAction[RClickEventSingleValue[_T]], v: _T):
+			if not issubclass(event_class := a.event_class, RClickEventSingleValue):
+				raise TypeError('Unsupported action type {} with event class {}'.format(type(a), event_class))
+			return self._set_click_event_direct(event_class.from_json_value(v))
 
-			event_class = action.event_class
-			if issubclass(event_class, RClickEventSingleValue):
-				if value is _UNSET:
-					raise ValueError('value arg not provided')
-				return self._set_click_event_direct(event_class.from_json_value(value))
-			else:
-				raise TypeError('Unsupported action type {} with event class {}'.format(type(action), event_class))
-		elif isinstance(action, RClickEvent):
-			return self._set_click_event_direct(action)
-		else:
-			raise TypeError('Unexpected argument type {}'.format(type(action)))
+		# set by RClickEvent instance
+		if isinstance(arg1, RClickEvent) and arg2 is _UNSET and event is _UNSET and action is _UNSET and value is _UNSET:
+			return self._set_click_event_direct(arg1)
+		if arg1 is _UNSET and arg2 is _UNSET and isinstance(event, RClickEvent) and action is _UNSET and value is _UNSET:
+			return self._set_click_event_direct(event)
+
+		# set by RClickAction[RClickEventSingleValue[_T]] + value
+		if isinstance(arg1, RClickAction) and arg2 is not _UNSET and event is _UNSET and action is _UNSET and value is _UNSET:
+			return set_by_action_and_value(arg1, arg2)
+		if arg1 is _UNSET and arg2 is _UNSET and event is _UNSET and isinstance(action, RClickAction) and value is not _UNSET:
+			return set_by_action_and_value(action, value)
+
+		raise TypeError(f'Unexpected argument combination: {arg1=!r}, {arg2=!r}, {event=!r}, {action=!r}, {value=!r}')
 
 	@abstractmethod
 	def _set_click_event_direct(self, click_event: RClickEvent) -> Self:
@@ -431,6 +466,7 @@ class RText(RTextBase):
 	def _get_console_style_codes(self) -> str:
 		def code_getter(item: RItemClassic) -> str:
 			return item.console_code
+
 		return self.__collect_classic_style_codes(code_getter)
 
 	@override
@@ -442,6 +478,7 @@ class RText(RTextBase):
 	def _get_legacy_style_codes(self) -> str:
 		def code_getter(item: RItemClassic) -> str:
 			return item.mc_code
+
 		return self.__collect_classic_style_codes(code_getter)
 
 	@override
@@ -492,6 +529,7 @@ class RTextList(RTextBase):
 	"""
 	A list of :class:`RTextBase` objects, a compound text component
 	"""
+
 	def __init__(self, *args: Any):
 		"""
 		Use the given *\\*args* to create a :class:`RTextList`
@@ -548,6 +586,7 @@ class RTextList(RTextBase):
 				return get(text.header)
 			else:
 				raise ValueError(f'Unexpected RTextList header text type {type(text)}')
+
 		return get(self.header)
 
 	def append(self, *args) -> Self:
@@ -620,6 +659,7 @@ class RTextTranslation(RText):
 	"""
 	The translation text component class. It's almost the same as :class:`RText`
 	"""
+
 	def __init__(self, translation_key: str, color: RColor = RColor.reset, styles: Optional[Union[RStyle, Iterable[RStyle]]] = None):
 		"""
 		Create a :class:`RTextTranslation` object with specific translation key.
