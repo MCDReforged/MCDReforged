@@ -135,7 +135,9 @@ class RTextColorTestCase(unittest.TestCase):
 		self.assertEqual(text.to_json_object(json_format=RTextJsonFormat.V_1_21_5), js_1_21_5)
 
 		self.assertEqual(text, RText('foo').set_click_event(RClickSuggestCommand('/say something')))
+		self.assertEqual(text, RText('foo').set_click_event(event=RClickSuggestCommand('/say something')))
 		self.assertEqual(text, RText('foo').set_click_event(RClickAction.suggest_command, '/say something'))
+		self.assertEqual(text, RText('foo').set_click_event(action=RClickAction.suggest_command, value='/say something'))
 		self.assertEqual(text, RText('foo').c(RClickSuggestCommand('/say something')))
 		self.assertEqual(text, RText('foo').c(RClickAction.suggest_command, '/say something'))
 

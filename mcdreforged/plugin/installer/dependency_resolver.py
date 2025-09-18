@@ -225,7 +225,7 @@ class PackageRequirementResolver:
 		if self.__install_proc is not None:
 			raise RuntimeError('concurrent call')
 
-		cmd = [
+		cmd: List[str] = [
 			sys.executable,
 			'-m', 'pip', 'install',
 			'--disable-pip-version-check',
@@ -235,8 +235,11 @@ class PackageRequirementResolver:
 		if pre_run_callback is not None:
 			pre_run_callback(cmd)
 		try:
-			with subprocess.Popen(cmd) as self.__install_proc:
-				self.__install_proc.wait()
+			with subprocess.Popen(cmd) as proc:
+				self.__install_proc = proc
+				proc.wait()
+			if code := proc.poll():
+				raise subprocess.CalledProcessError(code, proc.args)
 		finally:
 			self.__install_proc = None
 
