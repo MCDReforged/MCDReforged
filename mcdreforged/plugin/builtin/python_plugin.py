@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING
 from typing_extensions import override
 
 from mcdreforged.constants import core_constant
+from mcdreforged.plugin.meta.schema import PluginMetadataJsonModel
 from mcdreforged.plugin.type.builtin_plugin import BuiltinPlugin
 
 if TYPE_CHECKING:
@@ -18,13 +19,13 @@ def __get_python_version():
 
 
 VERSION = __get_python_version()
-METADATA = {
-	'id': 'python',
-	'version': VERSION,
-	'name': 'Python {}'.format(VERSION),
-	'author': 'Python Software Foundation',
-	'link': 'https://www.python.org/'
-}
+METADATA = PluginMetadataJsonModel(
+	id='python',
+	version=VERSION,
+	name='Python {}'.format(VERSION),
+	author='Python Software Foundation',
+	link='https://www.python.org/'
+)
 
 
 class PythonPlugin(BuiltinPlugin):
@@ -37,4 +38,4 @@ class PythonPlugin(BuiltinPlugin):
 
 	@override
 	def _create_repr_fields(self) -> dict:
-		return {'version': METADATA['version']}
+		return {'version': METADATA.version}

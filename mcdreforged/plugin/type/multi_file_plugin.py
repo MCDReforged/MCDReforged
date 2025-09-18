@@ -1,3 +1,4 @@
+import contextlib
 import importlib
 import json
 import os
@@ -15,6 +16,7 @@ from mcdreforged.constants import plugin_constant
 from mcdreforged.logging.debug_option import DebugOption
 from mcdreforged.plugin.exception import RequirementCheckFailure
 from mcdreforged.plugin.meta.metadata import Metadata
+from mcdreforged.plugin.meta.schema import PluginMetadataJsonModel
 from mcdreforged.plugin.type.regular_plugin import RegularPlugin
 from mcdreforged.utils import path_utils
 from mcdreforged.utils.exception import BrokenMetadata, IllegalPluginStructure
@@ -63,12 +65,14 @@ class MultiFilePlugin(RegularPlugin, ABC):
 	@override
 	def _on_load(self):
 		super()._on_load()
-		try:
-			meta_file = self.open_file(plugin_constant.PLUGIN_META_FILE)
-		except Exception:
-			raise IllegalPluginStructure('Metadata file {} not found'.format(plugin_constant.PLUGIN_META_FILE)) from None
-		with meta_file:
-			self._set_metadata(Metadata.create(json.load(meta_file), plugin=self))
+		with contextlib.ExitStack() as es:
+			try:
+				meta_file = es.enter_context(self.open_file(plugin_constant.PLUGIN_META_FILE))
+			except Exception:
+				raise IllegalPluginStructure('Metadata file {} not found'.format(plugin_constant.PLUGIN_META_FILE)) from None
+			meta_json_buf = meta_file.read()
+		metadata_model = PluginMetadataJsonModel.model_validate_json(meta_json_buf, strict=True)
+		self._set_metadata(Metadata.create(metadata_model, plugin=self))
 		self.__check_requirements()
 		self._check_dir_legality()
 

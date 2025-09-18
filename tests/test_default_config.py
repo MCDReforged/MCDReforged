@@ -18,7 +18,7 @@ class MyTestCase(unittest.TestCase):
 		self.assertIsNotNone(data)
 
 		yaml_config = YAML(typ='safe').load(data)
-		default_config = MCDReforgedConfig.get_default().serialize()
+		default_config = MCDReforgedConfig().model_dump()
 
 		# value equality
 		self.assertIsInstance(default_config, dict)

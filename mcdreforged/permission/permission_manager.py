@@ -4,6 +4,7 @@ Permission control things
 from typing import Literal as TLiteral
 from typing import Set, Any, List, overload
 
+from pydantic import BaseModel, ConfigDict
 from typing_extensions import override
 
 from mcdreforged.command.command_source import CommandSource
@@ -18,6 +19,23 @@ if TYPE_CHECKING:
 
 
 DEFAULT_PERMISSION_RESOURCE_PATH = 'resources/default_permission.yml'
+
+
+class PermissionConfigModel(BaseModel):
+	model_config = ConfigDict(
+		json_schema_extra={
+			'$id': f'https://json.schemastore.org/mcdreforged-permission.json',
+			'$schema': 'http://json-schema.org/draft-07/schema#'
+		},
+	)
+
+	default_level: str = 'user'
+
+	owner: Optional[List[str]] = None
+	admin: Optional[List[str]] = None
+	helper: Optional[List[str]] = None
+	user: Optional[List[str]] = None
+	guest: Optional[List[str]] = None
 
 
 class PermissionStorage(YamlDataStorage):
@@ -52,6 +70,10 @@ class PermissionManager:
 		Load the permission file from disk
 		"""
 		self.storage.read_config(allowed_missing_file)
+		try:
+			PermissionConfigModel.model_validate(self.storage.to_dict())
+		except ValueError as e:
+			raise ValueError('permission validation failed: {}'.format(e))
 
 	def file_presents(self) -> bool:
 		return self.storage.file_presents()

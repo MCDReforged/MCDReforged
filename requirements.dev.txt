@@ -2,9 +2,6 @@
 build
 setuptools>=77.0.3
 
-# extra features
-pydantic
-
 # static checking
 mypy[reports]>=1.17
 types-colorama

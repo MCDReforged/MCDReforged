@@ -6,6 +6,8 @@ import logging
 import os
 from typing import Callable, Any, Optional, Dict, List, Union, TypeVar
 
+from pydantic import BaseModel
+
 
 def print_text_to_console(logger: logging.Logger, text: Any):
 	from mcdreforged.minecraft.rtext.text import RTextBase
@@ -52,3 +54,24 @@ def prepare_subprocess_environment(envs: Optional[Union[List[str], Dict[str, str
 		raise TypeError('envs must be a dict or a list, got {}'.format(type(envs)))
 
 	return result
+
+
+def contains_unset_default_fields(obj: BaseModel) -> bool:
+	for field_name in type(obj).model_fields:
+		if field_name not in obj.model_fields_set:
+			return True
+
+		field_value = getattr(obj, field_name, None)
+		if isinstance(field_value, BaseModel):
+			if contains_unset_default_fields(field_value):
+				return True
+		elif isinstance(field_value, (list, tuple, set)):
+			for item in field_value:
+				if isinstance(item, BaseModel) and contains_unset_default_fields(item):
+					return True
+		elif isinstance(field_value, dict):
+			for item in field_value.values():
+				if isinstance(item, BaseModel) and contains_unset_default_fields(item):
+					return True
+
+	return False

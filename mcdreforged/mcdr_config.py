@@ -5,22 +5,30 @@ import threading
 from logging import Logger
 from typing import Any, Tuple, Dict, Union, Optional, List, TypeVar
 
+from pydantic import BaseModel, Field, ConfigDict
+
 from mcdreforged.constants import core_constant
 from mcdreforged.constants.environment_variables import ENV_DISABLE_TELEMETRY
 from mcdreforged.logging.debug_option import DebugOption
-from mcdreforged.utils.serializer import Serializable
 
 CONFIG_SCHEMA_VERSION = 1
 
 
-class RconConfig(Serializable):
+class RconConfig(BaseModel):
 	enable: bool = False
 	address: Optional[str] = '127.0.0.1'
 	port: Optional[int] = 25575
 	password: Optional[str] = 'password'
 
 
-class MCDReforgedConfig(Serializable):
+class MCDReforgedConfig(BaseModel):
+	model_config = ConfigDict(
+		json_schema_extra={
+			'$id': f'https://json.schemastore.org/mcdreforged-config.json',
+			'$schema': 'http://json-schema.org/draft-07/schema#'
+		},
+	)
+
 	# --------- Basic Configuration ---------
 	language: str = core_constant.DEFAULT_LANGUAGE
 
@@ -32,10 +40,10 @@ class MCDReforgedConfig(Serializable):
 	decoding: Optional[Union[str, List[str]]] = 'utf8'
 	environment: Optional[Union[List[str], Dict[str, str]]] = None
 	environment_inherit: bool = True
-	rcon: RconConfig = RconConfig.get_default()
+	rcon: RconConfig = Field(default_factory=RconConfig)
 
 	# --------- Plugin Configuration ---------
-	plugin_directories: List[str] = ['plugins']
+	plugin_directories: List[str] = Field(default_factory=lambda: ['plugins'])
 	catalogue_meta_cache_ttl: int = 20 * 60  # 20min
 	catalogue_meta_fetch_timeout: float = 15
 	catalogue_meta_url: Optional[str] = None
@@ -59,7 +67,7 @@ class MCDReforgedConfig(Serializable):
 	handler_detection: bool = True
 
 	# --------- Debug Configuration ---------
-	debug: Dict[str, bool] = {str(o.name).lower(): False for o in DebugOption}
+	debug: Dict[str, bool] = Field(default_factory=lambda: {str(o.name).lower(): False for o in DebugOption})
 	write_server_output_to_log_file: bool = False
 
 	def is_debug_on(self) -> bool:
@@ -73,7 +81,7 @@ class MCDReforgedConfigManager:
 		from mcdreforged.utils.yaml_data_storage import YamlDataStorage
 		self.logger = logger
 		self.__storage = YamlDataStorage(logger, config_file_path, self.DEFAULT_CONFIG_RESOURCE_PATH)
-		self.__config = MCDReforgedConfig.get_default()
+		self.__config = MCDReforgedConfig()
 		self.__config_lock = threading.Lock()  # lock on writes
 
 	def get_config(self) -> MCDReforgedConfig:
@@ -83,13 +91,9 @@ class MCDReforgedConfigManager:
 		has_missing = self.__storage.read_config(allowed_missing_file, save_on_missing=False)
 		data = self.__storage.to_dict()
 
-		def dirty_callback(*_):
-			nonlocal has_missing
-			has_missing = True
-
 		try:
 			with self.__config_lock:
-				self.__config = MCDReforgedConfig.deserialize(data, missing_callback=dirty_callback)
+				self.__config = MCDReforgedConfig.model_validate(data, strict=True)
 		except (KeyError, ValueError, TypeError) as e:
 			raise ValueError('config deserialization failed: {}'.format(e))
 
@@ -99,7 +103,7 @@ class MCDReforgedConfigManager:
 
 	def save(self):
 		with self.__config_lock:
-			data = self.__config.serialize()
+			data = self.__config.model_dump()
 		self.__storage.merge_from_dict(data)
 		self.__storage.save()
 

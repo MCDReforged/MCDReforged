@@ -3,9 +3,10 @@ Information of a plugin
 """
 import dataclasses
 import re
-from typing import List, Dict, TYPE_CHECKING, Optional, Union, ClassVar
+from typing import List, Dict, TYPE_CHECKING, Optional, Union, ClassVar, TypeVar
 
 from mcdreforged.minecraft.rtext.text import RTextBase, RText
+from mcdreforged.plugin.meta.schema import PluginMetadataJsonModel
 from mcdreforged.plugin.meta.version import Version, VersionParsingError, VersionRequirement
 from mcdreforged.translation.translation_text import RTextMCDRTranslation
 from mcdreforged.utils import translation_utils, class_utils
@@ -13,6 +14,12 @@ from mcdreforged.utils.types.message import TranslationLanguageDict
 
 if TYPE_CHECKING:
 	from mcdreforged.plugin.type.plugin import AbstractPlugin
+
+_T = TypeVar('_T')
+
+
+def _none_or(value: Optional[_T], default: _T) -> _T:
+	return value if value is not None else default
 
 
 @dataclasses.dataclass(frozen=True)
@@ -72,21 +79,21 @@ class Metadata:
 	FALLBACK_VERSION: ClassVar[str] = '0.0.0'
 
 	@classmethod
-	def create(cls, data: Optional[dict], *, plugin: Optional['AbstractPlugin'] = None) -> 'Metadata':
+	def create(cls, data: Union[dict, PluginMetadataJsonModel], *, plugin: Optional['AbstractPlugin'] = None) -> 'Metadata':
 		"""
 		:param AbstractPlugin plugin: the plugin which this metadata is belonged to
 		:param dict or None data: a dict with information of the plugin
 		"""
-		if not isinstance(data, dict):
-			data = {}
+		class_utils.check_type(data, (dict, PluginMetadataJsonModel))
+		plugin_name_text = repr(plugin)
 
 		def warn(*args, **kwargs):
 			if plugin is not None:
 				plugin.mcdr_server.logger.warning(*args, **kwargs, stacklevel=3)
 
-		plugin_name_text = repr(plugin)
-
 		def create_id() -> str:
+			if isinstance(data, PluginMetadataJsonModel):
+				return data.id
 			if (plugin_id := data.get('id')) is not None:
 				if isinstance(plugin_id, str) and cls.PLUGIN_ID_REGEX.fullmatch(plugin_id):
 					return plugin_id
@@ -104,6 +111,8 @@ class Metadata:
 		meta_id = create_id()
 
 		def create_name() -> str:
+			if isinstance(data, PluginMetadataJsonModel):
+				return _none_or(data.name, meta_id)
 			meta_name = data.get('name', meta_id)
 			if isinstance(meta_name, RTextBase):
 				meta_name = meta_name.to_plain_text()
@@ -111,6 +120,8 @@ class Metadata:
 			return meta_name
 
 		def create_description() -> Optional[Union[str, TranslationLanguageDict]]:
+			if isinstance(data, PluginMetadataJsonModel):
+				return data.description
 			description = data.get('description')
 			if isinstance(description, RTextBase):
 				description = description.to_plain_text()
@@ -119,6 +130,8 @@ class Metadata:
 			return meta_description
 
 		def create_author() -> Optional[List[str]]:
+			if isinstance(data, PluginMetadataJsonModel):
+				return [data.author] if isinstance(data.author, str) else data.author
 			meta_author = data.get('author')
 			if isinstance(meta_author, str):
 				meta_author = [meta_author]
@@ -131,12 +144,14 @@ class Metadata:
 			return meta_author
 
 		def create_link() -> Optional[str]:
+			if isinstance(data, PluginMetadataJsonModel):
+				return data.link
 			meta_link = data.get('link')
 			class_utils.check_type(meta_link, (None, str))
 			return meta_link
 
 		def create_version() -> Version:
-			if version_str := data.get('version'):
+			if (version_str := data.version if isinstance(data, PluginMetadataJsonModel) else data.get('version')) is not None:
 				try:
 					return Version(version_str, allow_wildcard=False)
 				except VersionParsingError as e:
@@ -147,7 +162,8 @@ class Metadata:
 
 		def create_dependencies() -> Dict[str, VersionRequirement]:
 			meta_dependencies = {}
-			for plugin_id, requirement in data.get('dependencies', {}).items():
+			raw_dependencies: Dict[str, str] = data.dependencies if isinstance(data, PluginMetadataJsonModel) else data.get('dependencies', {})
+			for plugin_id, requirement in raw_dependencies.items():
 				try:
 					meta_dependencies[plugin_id] = VersionRequirement(requirement)
 				except VersionParsingError as e:
@@ -157,7 +173,10 @@ class Metadata:
 			return meta_dependencies
 
 		def create_entrypoint() -> str:
-			meta_entrypoint = data.get('entrypoint', meta_id)
+			if isinstance(data, PluginMetadataJsonModel):
+				meta_entrypoint = _none_or(data.entrypoint, meta_id)
+			else:
+				meta_entrypoint = data.get('entrypoint', meta_id)
 			class_utils.check_type(meta_entrypoint, str)
 			# entrypoint module should be inside the plugin module
 			if meta_entrypoint != meta_id and not meta_entrypoint.startswith(meta_id + '.'):
@@ -165,10 +184,16 @@ class Metadata:
 			return meta_entrypoint
 
 		def create_archive_name() -> Optional[str]:
-			return class_utils.check_type(data.get('archive_name'), (None, str))
+			if isinstance(data, PluginMetadataJsonModel):
+				return data.archive_name
+			else:
+				return class_utils.check_type(data.get('archive_name'), (None, str))
 
 		def create_resources() -> List[str]:
-			return class_utils.check_type(data.get('resources', []), list)
+			if isinstance(data, PluginMetadataJsonModel):
+				return _none_or(data.resources, [])
+			else:
+				return class_utils.check_type(data.get('resources', []), list)
 
 		return cls(
 			id=meta_id,
@@ -217,6 +242,7 @@ class Metadata:
 
 		.. versionadded:: v2.13.0
 		"""
+
 		def copy(obj):
 			return obj.copy() if isinstance(obj, (list, dict)) else obj
 

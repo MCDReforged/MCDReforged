@@ -1,16 +1,15 @@
-import json
 import os
 from abc import ABC
 from pathlib import Path
 from typing import IO, TYPE_CHECKING, Collection
 
+from pydantic import BaseModel, ConfigDict, Field
 from typing_extensions import override
 
 from mcdreforged.constants import plugin_constant
 from mcdreforged.plugin.type.common import PluginType
 from mcdreforged.plugin.type.multi_file_plugin import MultiFilePlugin
 from mcdreforged.utils.exception import IllegalPluginStructure
-from mcdreforged.utils.serializer import Serializable
 
 if TYPE_CHECKING:
 	from mcdreforged.plugin.plugin_manager import PluginManager
@@ -64,9 +63,16 @@ class DirectoryPlugin(_DirectoryPluginBase):
 		return self.plugin_path
 
 
-class LinkedDirectoryPluginMeta(Serializable):
-	target: str
-	skip_package_legality_check: bool = False
+class LinkedDirectoryPluginJsonModel(BaseModel):
+	model_config = ConfigDict(
+		json_schema_extra={
+			'$id': f'https://json.schemastore.org/mcdreforged-link-directory-plugin.json',
+			'$schema': 'http://json-schema.org/draft-07/schema#'
+		},
+	)
+
+	target: str = Field(description='The path to a directory where the actual directory plugin is to be loaded')
+	skip_package_legality_check: bool = Field(description='Skip package legality checks', default=False)
 
 
 class LinkedDirectoryPlugin(_DirectoryPluginBase):
@@ -75,9 +81,9 @@ class LinkedDirectoryPlugin(_DirectoryPluginBase):
 		self.link_file = file_path / plugin_constant.LINK_DIRECTORY_PLUGIN_FILE_NAME
 		self.__ldp_meta = self.__read_ldp_meta()
 
-	def __read_ldp_meta(self) -> LinkedDirectoryPluginMeta:
-		with open(self.link_file, 'r', encoding='utf8') as f:
-			return LinkedDirectoryPluginMeta.deserialize(json.load(f))
+	def __read_ldp_meta(self) -> LinkedDirectoryPluginJsonModel:
+		with open(self.link_file, 'rb') as f:
+			return LinkedDirectoryPluginJsonModel.model_validate_json(f.read())
 
 	@property
 	def target_plugin_path(self) -> Path:

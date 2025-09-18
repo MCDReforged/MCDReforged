@@ -894,7 +894,7 @@ class ServerInterface:
 		"""
 		Return the current config of MCDR as a dict
 		"""
-		return self._mcdr_server.config.serialize()
+		return self._mcdr_server.config.model_dump(mode='json')
 
 	def modify_mcdr_config(self, changes: Dict[Union[Tuple[str, ...], str], Any]):
 		"""

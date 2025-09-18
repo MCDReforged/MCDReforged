@@ -11,6 +11,7 @@ from typing_extensions import override
 
 from mcdreforged.plugin.installer.meta_holder import MetaRegistry
 from mcdreforged.plugin.installer.types import PluginId, PluginResolution, PackageRequirements
+from mcdreforged.plugin.meta.schema import PluginMetadataJsonModel
 from mcdreforged.plugin.meta.version import VersionRequirement, Version
 
 
@@ -60,8 +61,8 @@ class PluginMeta:
 		return PluginMeta(plugin_id, {version: PluginVersionInfo(version, {}, [])})
 
 	@classmethod
-	def of_metadata(cls, plugin_metadata: dict) -> 'PluginMeta':
-		return cls.of(plugin_metadata['id'], plugin_metadata['version'])
+	def of_metadata(cls, plugin_metadata: PluginMetadataJsonModel) -> 'PluginMeta':
+		return cls.of(plugin_metadata.id, plugin_metadata.version)
 
 	@classmethod
 	def builtin_plugin_metadata_list(cls) -> List['PluginMeta']:

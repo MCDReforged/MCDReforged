@@ -1,4 +1,3 @@
-import json
 import os
 import stat
 import zipapp
@@ -11,6 +10,7 @@ from typing_extensions import Protocol
 
 from mcdreforged.constants import plugin_constant
 from mcdreforged.plugin.meta.metadata import Metadata
+from mcdreforged.plugin.meta.schema import PluginMetadataJsonModel
 from mcdreforged.utils import file_utils, function_utils
 
 PathPredicate = Callable[[str], bool]
@@ -65,9 +65,8 @@ def make_packed_plugin(args: PackArgs, *, quiet: bool = False):
 		return
 	try:
 		with open(meta_file_path, encoding='utf8') as meta_file:
-			meta_dict: dict = json.load(meta_file)
-		assert isinstance(meta_dict, dict)
-		meta = Metadata.create(meta_dict)
+			meta_model = PluginMetadataJsonModel.model_validate_json(meta_file.read(), strict=True)
+		meta = Metadata.create(meta_model)
 	except Exception as e:
 		writeln('Fail to load plugin metadata from {}: {}'.format(meta_file_path, e))
 		return

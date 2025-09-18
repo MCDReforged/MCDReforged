@@ -1,8 +1,9 @@
 import logging
 import os
-from typing import Callable, TYPE_CHECKING, Union, Optional, IO, Type, TypeVar, Any
+from typing import Callable, TYPE_CHECKING, Union, Optional, IO, Type, TypeVar
 from typing import Literal as TLiteral
 
+from pydantic import BaseModel as PydanticBaseModel
 from typing_extensions import override
 
 from mcdreforged.command.builder.nodes.basic import Literal
@@ -18,19 +19,10 @@ from mcdreforged.plugin.si._simple_config_handler import FileFormat, SimpleConfi
 from mcdreforged.plugin.si.server_interface import ServerInterface
 from mcdreforged.plugin.type.multi_file_plugin import MultiFilePlugin
 from mcdreforged.plugin.type.plugin import AbstractPlugin
-from mcdreforged.utils import class_utils
+from mcdreforged.utils import class_utils, misc_utils
 from mcdreforged.utils.serializer import Serializable
 from mcdreforged.utils.types.json_like import JsonLike
 from mcdreforged.utils.types.message import MessageText, TranslationKeyMappingNested, TranslationKeyMappingRich
-
-try:
-	# noinspection PyPackageRequirements
-	from pydantic import BaseModel as PydanticBaseModel
-	PydanticBaseModelType = TypeVar('PydanticBaseModelType', bound=PydanticBaseModel)
-except ImportError:
-	PydanticBaseModel: Any = None  # type: ignore
-	PydanticBaseModelType: Any = None  # type: ignore
-
 
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
@@ -38,6 +30,7 @@ if TYPE_CHECKING:
 
 
 SerializableType = TypeVar('SerializableType', bound=Serializable)
+PydanticBaseModelType = TypeVar('PydanticBaseModelType', bound=PydanticBaseModel)
 
 
 class PluginServerInterface(ServerInterface):
@@ -329,15 +322,8 @@ class PluginServerInterface(ServerInterface):
 			if data_processor is not None:
 				needs_save |= data_processor(read_data)
 
-		# Always try to import pydantic in case the user installs it after MCDR has started
-		try:
-			from pydantic import BaseModel as PydanticBaseModelClass
-		except ImportError:
-			# noinspection PyPep8Naming
-			PydanticBaseModelClass: Any = None  # type: ignore
-
 		result_config: Union[JsonLike, SerializableType, PydanticBaseModelType]
-		if target_class is not None and PydanticBaseModelClass is not None and issubclass(target_class, PydanticBaseModelClass):
+		if target_class is not None and issubclass(target_class, PydanticBaseModel):
 			if read_data is None:  # read failed, use default
 				result_config = target_class()
 			else:
@@ -351,6 +337,8 @@ class PluginServerInterface(ServerInterface):
 					result_config = target_class()
 					needs_save = True
 					log(self._tr('load_config_simple.failed', e))
+				else:
+					needs_save |= misc_utils.contains_unset_default_fields(result_config)
 
 		elif target_class is not None:
 			assert issubclass(target_class, Serializable)
@@ -434,7 +422,7 @@ class PluginServerInterface(ServerInterface):
 		data: JsonLike
 		if isinstance(config, Serializable):
 			data = config.serialize()
-		elif PydanticBaseModel is not None and isinstance(config, PydanticBaseModel):
+		elif isinstance(config, PydanticBaseModel):
 			if pydantic_model_dump_kwargs is None:
 				pydantic_model_dump_kwargs = {}
 			else:

@@ -25,6 +25,7 @@ from mcdreforged.plugin.builtin.mcdr.commands.reload_command import ReloadComman
 from mcdreforged.plugin.builtin.mcdr.commands.server_command import ServerCommand
 from mcdreforged.plugin.builtin.mcdr.commands.status_command import StatusCommand
 from mcdreforged.plugin.builtin.mcdr.commands.sub_command import SubCommand, SubCommandEvent
+from mcdreforged.plugin.meta.schema import PluginMetadataJsonModel
 from mcdreforged.plugin.plugin_event import MCDRPluginEvents
 from mcdreforged.plugin.type.builtin_plugin import BuiltinPlugin
 from mcdreforged.translation.translation_text import RTextMCDRTranslation
@@ -35,16 +36,16 @@ if TYPE_CHECKING:
 	from mcdreforged.plugin.plugin_manager import PluginManager
 
 
-METADATA = {
-	'id': core_constant.PACKAGE_NAME,
-	'version': core_constant.VERSION,
-	'name': core_constant.NAME,
-	'description': 'The core of {}'.format(core_constant.NAME),
-	'author': [
+METADATA = PluginMetadataJsonModel(
+	id=core_constant.PACKAGE_NAME,
+	version=core_constant.VERSION,
+	name=core_constant.NAME,
+	description='The {} itself'.format(core_constant.NAME),
+	author=[
 		'Fallen_Breath'
 	],
-	'link': core_constant.GITHUB_URL
-}
+	link=core_constant.GITHUB_URL
+)
 
 
 class MCDReforgedPlugin(BuiltinPlugin):
@@ -92,7 +93,7 @@ class MCDReforgedPlugin(BuiltinPlugin):
 
 	@override
 	def _create_repr_fields(self) -> dict:
-		return {'version': METADATA['version']}
+		return {'version': METADATA.version}
 
 	@property
 	def control_command_prefix(self):
