@@ -1,10 +1,10 @@
 import logging
 import os
-from typing import Callable, TYPE_CHECKING, Union, Optional, IO, Type, TypeVar
+from typing import Callable, TYPE_CHECKING, Union, Optional, IO, Type, TypeVar, overload
 from typing import Literal as TLiteral
 
 from pydantic import BaseModel as PydanticBaseModel
-from typing_extensions import override
+from typing_extensions import override, TypedDict, NotRequired, Unpack
 
 from mcdreforged.command.builder.nodes.basic import Literal
 from mcdreforged.command.command_source import CommandSource, PluginCommandSource
@@ -209,6 +209,44 @@ class PluginServerInterface(ServerInterface):
 		if not isinstance(self.__plugin, MultiFilePlugin):
 			raise FileNotFoundError('Only packed plugin supported this API, found plugin type: {}'.format(self.__plugin.__class__))
 		return self.__plugin.open_file(relative_file_path)
+
+	class _LoadConfigSimpleCommonKwargs(TypedDict):
+		in_data_folder: NotRequired[bool]
+		echo_in_console: NotRequired[bool]
+		source_to_reply: NotRequired[Optional[CommandSource]]
+		encoding: NotRequired[str]
+		file_format: NotRequired[Optional[FileFormat]]
+		failure_policy: NotRequired[TLiteral['regen', 'raise']]
+		data_processor: NotRequired[Optional[Callable[[JsonLike], bool]]]
+
+	# PyCharm is not smart enough on these `Unpack[TypedDict]`s. Suppressed with "noinspection" as long as mypy doesn't warn
+
+	# noinspection PyOverloads
+	@overload
+	def load_config_simple(
+			self, file_name: Optional[str] = None, default_config: Optional[dict] = None,
+			**kwargs: Unpack[_LoadConfigSimpleCommonKwargs],
+	) -> JsonLike:
+		...
+
+	# noinspection PyOverloads
+	@overload
+	def load_config_simple(
+			self, file_name: Optional[str] = None, *,
+			target_class: Type[SerializableType],
+			**kwargs: Unpack[_LoadConfigSimpleCommonKwargs],
+	) -> SerializableType:
+		...
+
+	# noinspection PyOverloads
+	@overload
+	def load_config_simple(
+			self, file_name: Optional[str] = None, *,
+			target_class: Type[PydanticBaseModelType],
+			pydantic_model_validate_kwargs: Optional[dict] = None,
+			**kwargs: Unpack[_LoadConfigSimpleCommonKwargs],
+	) -> PydanticBaseModelType:
+		...
 
 	def load_config_simple(
 			self, file_name: Optional[str] = None, default_config: Optional[dict] = None, *,
