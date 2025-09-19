@@ -246,7 +246,7 @@ class PluginServerInterface(ServerInterface):
 				setting_b: str = 'xyz'
 
 			def on_load(server: PluginServerInterface, prev_module):
-				config = server.load_config_simple(target_class=Config)
+				config = server.load_config_simple('my_config.json', target_class=Config)
 
 		Example 3::
 
@@ -257,7 +257,7 @@ class PluginServerInterface(ServerInterface):
 				setting_b: str = 'xyz'
 
 			def on_load(server: PluginServerInterface, prev_module):
-				config = server.load_config_simple(target_class=Config)
+				config = server.load_config_simple('my_config.json', target_class=Config)
 
 		Assuming that the plugin id is ``my_plugin``, then the config file will be in ``"config/my_plugin/my_config.json"``
 
