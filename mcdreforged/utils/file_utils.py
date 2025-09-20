@@ -2,9 +2,7 @@ import contextlib
 import hashlib
 import os
 from pathlib import Path
-from typing import Callable, TextIO, Union, List, Generator
-
-from ruamel.yaml import YAML
+from typing import Callable, TextIO, Union, List, Generator, BinaryIO, Optional, Any
 
 from mcdreforged.utils import function_utils
 from mcdreforged.utils.types.path_like import PathStr
@@ -45,19 +43,24 @@ def get_file_suffix(file_path: Union[str, Path]) -> str:
 
 
 @contextlib.contextmanager
-def safe_write(target_file_path: PathStr, *, encoding: str) -> Generator[TextIO, None, None]:
+def __safe_write(target_file_path: PathStr, mode: str, encoding: Optional[str]) -> Generator[Any, None, None]:
 	target_file_path = Path(target_file_path)
 	temp_file_path = target_file_path.parent / (target_file_path.name + '.tmp')
-	with open(temp_file_path, 'w', encoding=encoding) as file:
+	with open(temp_file_path, mode, encoding=encoding) as file:
 		yield file
 	os.replace(temp_file_path, target_file_path)
 
 
-def safe_write_yaml(file_path: PathStr, data: dict):
-	with safe_write(file_path, encoding='utf8') as file:
-		yaml = YAML()
-		yaml.width = 1048576  # prevent yaml breaks long string into multiple lines
-		yaml.dump(data, file)
+@contextlib.contextmanager
+def safe_write(target_file_path: PathStr, *, encoding: str) -> Generator[TextIO, None, None]:
+	with __safe_write(target_file_path, mode='w', encoding=encoding) as file:
+		yield file
+
+
+@contextlib.contextmanager
+def safe_write_b(target_file_path: PathStr) -> Generator[BinaryIO, None, None]:
+	with __safe_write(target_file_path, mode='wb', encoding=None) as file:
+		yield file
 
 
 def calc_file_sha256(file_path: PathStr) -> str:

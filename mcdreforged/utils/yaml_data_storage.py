@@ -1,5 +1,7 @@
-import os
+import hashlib
+from io import StringIO
 from logging import Logger
+from pathlib import Path
 from threading import RLock
 from typing import Tuple, Callable, Optional
 
@@ -30,7 +32,7 @@ def transform_yaml_to_dict(source: dict) -> dict:
 class YamlDataStorage:
 	def __init__(self, logger: Logger, file_path: str, default_file_path: str):
 		self._logger = logger
-		self.__file_path = file_path
+		self.__file_path = Path(file_path)
 		self.__default_file_path = default_file_path
 		self.__default_data = LazyItem(lambda: resources_utils.get_yaml(self.__default_file_path))
 		self._data: dict = CommentedMap()
@@ -44,7 +46,7 @@ class YamlDataStorage:
 			return transform_yaml_to_dict(self._data)
 
 	def file_presents(self) -> bool:
-		return os.path.isfile(self.__file_path)
+		return self.__file_path.is_file()
 
 	def read_config(self, allowed_missing_file: bool, save_on_missing: bool = True):
 		"""
@@ -114,7 +116,28 @@ class YamlDataStorage:
 
 	def __save(self, data: dict):
 		self._pre_save(data)
-		file_utils.safe_write_yaml(self.__file_path, data)
+
+		yaml = YAML()
+		yaml.width = 1048576  # prevent yaml breaks long string into multiple lines
+		yaml_content = StringIO()
+		yaml.dump(data, yaml_content)
+		buf = yaml_content.getvalue().encode('utf8')
+		del yaml_content
+
+		if self.file_presents():
+			existing_hash: Optional[str] = None
+			try:
+				if self.__file_path.stat().st_size == len(buf):
+					existing_hash = file_utils.calc_file_sha256(self.__file_path)
+			except OSError as e:
+				self._logger.warning('Calculate existing file hash for {} failed: {}'.format(self.__file_path, e))
+			else:
+				new_hash = hashlib.sha256(buf).hexdigest()
+				if existing_hash == new_hash:  # no changes, no need to write
+					return
+
+		with file_utils.safe_write_b(self.__file_path) as file:
+			file.write(buf)
 
 	def save(self):
 		with self._data_operation_lock:
