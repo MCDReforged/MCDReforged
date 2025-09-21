@@ -172,7 +172,7 @@ class ServerProcessManager:
 				await put_queue(_SERVER_OUTPUT_EOF_SENTINEL)
 				self.logger.mdebug(f'handle_output_eof() put EOF ok', option=DebugOption.PROCESS)
 
-				await eof_consumed_event.wait()
+				await eof_consumed_event.wait()  # wait until the output_queue of this process is cleared
 				self.logger.mdebug(f'handle_output_eof() EOF consumed', option=DebugOption.PROCESS)
 
 			t1 = asyncio.create_task(drain_reader(proc.stdout, True))
