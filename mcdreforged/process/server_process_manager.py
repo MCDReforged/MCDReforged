@@ -68,6 +68,7 @@ class ServerProcessManager:
 		env: Optional[Dict[str, str]]
 
 	MAX_OUTPUT_QUEUE_SIZE = 1024
+	SERVER_OUTPUT_LINE_LIMIT = 10 * 1024 * 1024  # 10MiB
 
 	def __init__(self, mcdr_server: 'MCDReforgedServer'):
 		self.logger = mcdr_server.logger
@@ -78,6 +79,9 @@ class ServerProcessManager:
 		if self.is_alive():
 			with contextlib.suppress(Exception):
 				self.kill_process_tree(quiet=True)
+
+	__ERR_READ_LIMIT_EXCEEDED1 = 'Separator is found, but chunk is longer than limit'
+	__ERR_READ_LIMIT_EXCEEDED2 = 'Separator is not found, and chunk exceed the limit'
 
 	def start(self, start_args: StartArguments):
 		if self.__current_process is not None:
@@ -97,7 +101,29 @@ class ServerProcessManager:
 		async def drain_reader(reader: asyncio.StreamReader, is_stdout: bool):
 			self.logger.mdebug(f'drain_reader() start {is_stdout=}', option=DebugOption.PROCESS)
 			queue_full_warn_ts = 0.0
-			while line := await reader.readline():
+			line_limit_exceeded = False
+			while True:
+				try:
+					line = await reader.readline()
+				except Exception as e:
+					if isinstance(e, ValueError) and (err_msg := str(e)) in [self.__ERR_READ_LIMIT_EXCEEDED1, self.__ERR_READ_LIMIT_EXCEEDED2]:
+						self.logger.error(f'readline() from server exceeded the line length limit of {self.SERVER_OUTPUT_LINE_LIMIT}, {is_stdout=}: {e}')
+						line_limit_exceeded = err_msg == self.__ERR_READ_LIMIT_EXCEEDED2
+					else:
+						self.logger.critical(f'readline() from server error, {is_stdout=}: {e}')
+					continue
+
+				if len(line) == 0:
+					self.logger.mdebug(f'drain_reader() got empty line (EOF reached), break loop {is_stdout=}', option=DebugOption.PROCESS)
+					break
+
+				if line_limit_exceeded:
+					def pline() -> str:
+						return repr(line) if len(line) < 20 else f'{line[:10]!r} ... {line[-10:]!r}'
+					self.logger.warning(f'previous readline() exceeded the line length limit, discarding the incomplete read line, read len={len(line)} {pline()}, {is_stdout=}')
+					line_limit_exceeded = False
+					continue
+
 				await put_queue(ServerOutput(line, is_stdout))
 				if output_queue.full():
 					now = time.time()
@@ -117,6 +143,7 @@ class ServerProcessManager:
 						stdin=asyncio.subprocess.PIPE,
 						stdout=asyncio.subprocess.PIPE,
 						stderr=asyncio.subprocess.PIPE,
+						limit=self.SERVER_OUTPUT_LINE_LIMIT,
 					)
 				else:
 					proc = await asyncio.create_subprocess_exec(
@@ -126,6 +153,7 @@ class ServerProcessManager:
 						stdin=asyncio.subprocess.PIPE,
 						stdout=asyncio.subprocess.PIPE,
 						stderr=asyncio.subprocess.PIPE,
+						limit=self.SERVER_OUTPUT_LINE_LIMIT,
 					)
 				try:
 					if proc.stdin is None:
@@ -152,7 +180,7 @@ class ServerProcessManager:
 				await put_queue(_SERVER_OUTPUT_EOF_SENTINEL)
 				self.logger.mdebug(f'handle_output_eof() put EOF ok', option=DebugOption.PROCESS)
 
-				await eof_consumed_event.wait()
+				await eof_consumed_event.wait()  # wait until the output_queue of this process is cleared
 				self.logger.mdebug(f'handle_output_eof() EOF consumed', option=DebugOption.PROCESS)
 
 			t1 = asyncio.create_task(drain_reader(proc.stdout, True))
@@ -167,6 +195,7 @@ class ServerProcessManager:
 				await asyncio.wait_for(t3, timeout=5)
 			except asyncio.TimeoutError:
 				self.logger.warning('run_process() handle_output_eof() wait cost too long')
+			with contextlib.suppress(asyncio.CancelledError):
 				await t3
 
 		def do_start() -> _RunningProcess:
