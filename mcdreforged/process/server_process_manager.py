@@ -6,7 +6,7 @@ import queue
 import threading
 import time
 from pathlib import Path
-from typing import Optional, Union, List, TYPE_CHECKING, Dict
+from typing import Optional, Union, List, TYPE_CHECKING, Dict, ClassVar
 
 import psutil
 
@@ -67,8 +67,8 @@ class ServerProcessManager:
 		cwd: Path
 		env: Optional[Dict[str, str]]
 
-	MAX_OUTPUT_QUEUE_SIZE = 1024
-	SERVER_OUTPUT_LINE_LIMIT = 10 * 1024 * 1024  # 10MiB
+	MAX_OUTPUT_QUEUE_SIZE: ClassVar[int] = 1024
+	SERVER_OUTPUT_LINE_LIMIT: ClassVar[int] = 10 * 1024 * 1024  # 10MiB
 
 	def __init__(self, mcdr_server: 'MCDReforgedServer'):
 		self.logger = mcdr_server.logger
@@ -80,8 +80,8 @@ class ServerProcessManager:
 			with contextlib.suppress(Exception):
 				self.kill_process_tree(quiet=True)
 
-	__ERR_READ_LIMIT_EXCEEDED1 = 'Separator is found, but chunk is longer than limit'
-	__ERR_READ_LIMIT_EXCEEDED2 = 'Separator is not found, and chunk exceed the limit'
+	__ERR_READ_LIMIT_EXCEEDED1: ClassVar[str] = 'Separator is found, but chunk is longer than limit'
+	__ERR_READ_LIMIT_EXCEEDED2: ClassVar[str] = 'Separator is not found, and chunk exceed the limit'
 
 	def start(self, start_args: StartArguments):
 		if self.__current_process is not None:
