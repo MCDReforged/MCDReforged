@@ -1,4 +1,6 @@
-from typing import Callable, Union, Optional
+from typing import Callable, Union, Optional, TypeVar
+
+from typing_extensions import ParamSpec
 
 from mcdreforged.plugin.plugin_event import PluginEvent
 from mcdreforged.plugin.si.server_interface import ServerInterface
@@ -8,7 +10,11 @@ __all__ = [
 ]
 
 
-def event_listener(event: Union[PluginEvent, str], *, priority: Optional[int] = None):
+_T = TypeVar('_T')
+_P = ParamSpec('_P')
+
+
+def event_listener(event: Union[PluginEvent, str], *, priority: Optional[int] = None) -> Callable[[Callable[_P, _T]], Callable[_P, _T]]:
 	"""
 	This decorator is used to register a custom event listener without involving
 	:meth:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.register_event_listener`
@@ -37,7 +43,7 @@ def event_listener(event: Union[PluginEvent, str], *, priority: Optional[int] = 
 	:raise RuntimeError: If it fails to acquire a :class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`
 		(see :meth:`~mcdreforged.plugin.si.server_interface.ServerInterface.as_plugin_server_interface` for more details)
 	"""
-	def wrapper(callback: Callable) -> Callable:
+	def wrapper(callback: Callable[_P, _T]) -> Callable[_P, _T]:
 		ServerInterface.psi().register_event_listener(event, callback, priority)
 		return callback
 

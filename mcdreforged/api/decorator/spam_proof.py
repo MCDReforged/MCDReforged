@@ -1,6 +1,8 @@
 import functools
 from threading import RLock
-from typing import Callable, Optional
+from typing import Callable, Optional, Protocol, TypeVar, overload
+
+from typing_extensions import ParamSpec
 
 from mcdreforged.utils import misc_utils
 
@@ -9,7 +11,29 @@ __all__ = [
 ]
 
 
-def spam_proof(arg=None, *, lock_class=RLock, skip_callback: Optional[Callable] = None):
+class LockLike(Protocol):
+	def acquire(self, blocking: bool) -> bool:
+		...
+
+	def release(self) -> None:
+		...
+
+
+_T = TypeVar('_T')
+_P = ParamSpec('_P')
+
+
+@overload
+def spam_proof(func: Callable[_P, _T], /, *, lock_class: Callable[[], LockLike] = RLock, skip_callback: Optional[Callable] = None) -> Callable[_P, bool]:
+	...
+
+
+@overload
+def spam_proof(*, lock_class: Callable[[], LockLike] = RLock, skip_callback: Optional[Callable] = None) -> Callable[[Callable[_P, _T]], Callable[_P, bool]]:
+	...
+
+
+def spam_proof(arg: Optional[Callable[_P, _T]] = None, /, *, lock_class: Callable[[], LockLike] = RLock, skip_callback: Optional[Callable] = None):
 	"""
 	Use a lock to protect the decorated function from being invoked on multiple threads at the same time
 
@@ -73,9 +97,9 @@ def spam_proof(arg=None, *, lock_class=RLock, skip_callback: Optional[Callable] 
 	.. versionadded:: v2.7.0
 		Added ``skip_callback`` keyword argument
 	"""
-	def wrapper(func):
+	def wrapper(func: Callable[_P, _T]) -> Callable[_P, bool]:
 		@functools.wraps(func)  # to preserve the origin function information
-		def wrap(*args, **kwargs):
+		def wrap(*args: _P.args, **kwargs: _P.kwargs) -> bool:
 			acquired = lock.acquire(blocking=False)
 			if acquired:
 				try:
@@ -91,8 +115,9 @@ def spam_proof(arg=None, *, lock_class=RLock, skip_callback: Optional[Callable] 
 		wrap.original = func  # type: ignore
 		wrap.lock = lock  # type: ignore
 		return wrap
+
 	# Directly use @spam_proof without ending brackets case
-	if isinstance(arg, Callable):  # type: ignore  # see also: python/mypy#14928
+	if arg is not None:
 		return wrapper(arg)
 	# Use @spam_proof with ending brackets case
 	else:

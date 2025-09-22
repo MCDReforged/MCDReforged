@@ -1,6 +1,8 @@
 import functools
 import threading
-from typing import Optional, Callable, Union, TypeVar, Iterable
+from typing import Optional, Callable, Union, TypeVar, Iterable, overload, Generic, Any
+
+from typing_extensions import ParamSpec
 
 from mcdreforged.utils import misc_utils
 
@@ -9,18 +11,20 @@ __all__ = [
 	'FunctionThread'
 ]
 
-_R = TypeVar('_R')
+
+_T = TypeVar('_T')
+_P = ParamSpec('_P')
 
 
-class FunctionThread(threading.Thread):
+class FunctionThread(threading.Thread, Generic[_T]):
 	"""
 	A Thread subclass which is used in decorator :func:`new_thread` to wrap a synchronized function call
 	"""
-	__NONE = object()
+	__NONE: Any = object()
 
-	def __init__(self, target: Callable[..., _R], name: Optional[str], args: Iterable = (), kwargs: Optional[dict] = None):
+	def __init__(self, target: Callable[..., _T], name: Optional[str], args: Iterable = (), kwargs: Optional[dict] = None):
 		super().__init__(target=target, args=args, kwargs=kwargs, name=name, daemon=True)
-		self.__return_value = self.__NONE
+		self.__return_value: _T = self.__NONE
 		self.__error: Optional[Exception] = None
 
 		def wrapped_target(*args_, **kwargs_):
@@ -32,7 +36,7 @@ class FunctionThread(threading.Thread):
 
 		self._target = wrapped_target
 
-	def get_return_value(self, block: bool = False, timeout: Optional[float] = None):
+	def get_return_value(self, block: bool = False, timeout: Optional[float] = None) -> _T:
 		"""
 		Get the return value of the original function
 
@@ -66,7 +70,22 @@ class FunctionThread(threading.Thread):
 		return self.__return_value
 
 
-def new_thread(arg: Optional[Union[str, Callable]] = None):
+@overload
+def new_thread() -> Callable[[Callable[_P, _T]], Callable[_P, FunctionThread]]:
+	...
+
+
+@overload
+def new_thread(thread_name: str, /) -> Callable[[Callable[_P, _T]], Callable[_P, FunctionThread]]:
+	...
+
+
+@overload
+def new_thread(func: Callable[_P, _T], /) -> Callable[_P, FunctionThread]:
+	...
+
+
+def new_thread(arg: Optional[Union[str, Callable[_P, _T]]] = None, /):
 	"""
 	This is a one line solution to make your function executes in parallels.
 	When decorated with this decorator, functions will be executed in a new daemon thread
@@ -103,9 +122,9 @@ def new_thread(arg: Optional[Union[str, Callable]] = None):
 		log something by ``server.logger``, a meaningful thread name will be displayed
 		instead of a plain and meaningless ``Thread-3``
 	"""
-	def wrapper(func):
+	def wrapper(func: Callable[_P, _T]) -> Callable[_P, FunctionThread]:
 		@functools.wraps(func)  # to preserve the origin function information
-		def wrap(*args, **kwargs):
+		def wrap(*args: _P.args, **kwargs: _P.kwargs) -> FunctionThread:
 			thread = FunctionThread(target=func, args=args, kwargs=kwargs, name=thread_name)
 			thread.start()
 			return thread
@@ -118,11 +137,10 @@ def new_thread(arg: Optional[Union[str, Callable]] = None):
 
 	thread_name: Optional[str]
 	# Directly use @new_thread without ending brackets case, e.g. @new_thread
-	if callable(arg):
+	if arg is not None and callable(arg):
 		thread_name = None
 		return wrapper(arg)
 	# Use @new_thread with ending brackets case, e.g. @new_thread('A'), @new_thread()
 	else:
 		thread_name = arg
 		return wrapper
-
