@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-22 20:04+0800\n"
+"POT-Creation-Date: 2025-10-09 17:18+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -66,6 +66,10 @@ msgstr "插件的 ID。应该与正则表达式 ``[a-z][a-z0-9_]{0,63}`` 匹配"
 msgid "Plugin id starts with non-alphabet character is no longer allowed"
 msgstr "不再允许以非字母字符开头的插件 ID"
 
+#: ../../docstring mcdreforged.plugin.meta.metadata.Metadata.version:1 of
+msgid "The version of the plugin, in a less restrictive semver format"
+msgstr "插件的版本，格式为一种约束弱化版的语义化版本格式"
+
 #: ../../docstring mcdreforged.plugin.meta.metadata.Metadata.name:1 of
 msgid "The name of the plugin"
 msgstr "插件的名字"
@@ -87,10 +91,6 @@ msgstr "插件的作者"
 #: ../../docstring mcdreforged.plugin.meta.metadata.Metadata.link:1 of
 msgid "The url to the plugin, e.g. link to a github repository"
 msgstr "插件的网址，如指向 github 仓库的链接"
-
-#: ../../docstring mcdreforged.plugin.meta.metadata.Metadata.version:1 of
-msgid "The version of the plugin, in a less restrictive semver format"
-msgstr "插件的版本，格式为一种约束弱化版的语义化版本格式"
 
 #: ../../docstring mcdreforged.plugin.meta.metadata.Metadata.dependencies:1 of
 msgid "A dict of dependencies the plugin relies on"
@@ -120,16 +120,21 @@ msgstr "插件的入口点"
 msgid "The entrypoint should be import-able"
 msgstr "入口点应当是是可以 import 的"
 
+#: ../code_references/plugin.rst
+msgid "Parameters"
+msgstr "参数"
+
+#: mcdreforged.plugin.meta.metadata.Metadata.create:1 of
+msgid "the plugin which this metadata is belonged to"
+msgstr "该元数据所归属的插件对象"
+
+#: mcdreforged.plugin.meta.metadata.Metadata.create:2 of
+msgid "a dict with information of the plugin"
+msgstr "包含插件相关信息的一个 dict"
+
 #: mcdreforged.plugin.meta.metadata.Metadata.get_description:1 of
 msgid "Return a translated plugin description in str"
 msgstr "以 str 类型返回一个翻译后的插件描述"
-
-#: mcdreforged.plugin.meta.metadata.Metadata.get_description
-#: mcdreforged.plugin.meta.version.Version.__init__
-#: mcdreforged.plugin.meta.version.VersionRequirement.__init__
-#: mcdreforged.plugin.plugin_event.LiteralEvent.__init__ of
-msgid "Parameters"
-msgstr "参数"
 
 #: mcdreforged.plugin.meta.metadata.Metadata.get_description:3 of
 msgid ""
@@ -137,7 +142,7 @@ msgid ""
 "the language of MCDR"
 msgstr "可选参数，翻译的目标语言。若未指定，使用 MCDR 的语言"
 
-#: mcdreforged.plugin.meta.metadata.Metadata.get_description of
+#: ../code_references/plugin.rst
 msgid "Returns"
 msgstr "返回值"
 
@@ -181,7 +186,7 @@ msgstr "``\"1.2.3-pre4+build.5\"``"
 msgid "The version string to be parsed"
 msgstr "被解析的版本字符串"
 
-#: mcdreforged.plugin.meta.version.Version.__init__ of
+#: ../code_references/plugin.rst
 msgid "Keyword Arguments"
 msgstr "关键字参数"
 
