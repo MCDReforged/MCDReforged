@@ -36,7 +36,7 @@ jobs:
     - name: Setup python
       uses: actions/setup-python@v5
       with:
-        python-version: 3.12
+        python-version: 3.13
         cache: pip
 
     - name: Install dependencies
@@ -158,7 +158,7 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev'
     strategy:
       matrix:
-        python: ['3.11', '3.12', '3.13']  # last 3 minor versions
+        python: ['3.12', '3.13', '3.14']  # last 3 minor versions
         slim: ['false', 'true']
 
     steps:
@@ -174,7 +174,7 @@ jobs:
           const python = process.env.PYTHON
           const isRelease = process.env.IS_RELEASE === 'true'
           const isStableRelease = isRelease && /^[0-9.]+$/.test(version)
-          const defaultPythonVersion = '3.12'
+          const defaultPythonVersion = '3.13'
 
           if (isRelease) {
             core.setOutput('pypi_simple_url', 'https://pypi.org/simple')

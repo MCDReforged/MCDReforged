@@ -133,7 +133,7 @@ Tag prefixes:
 Tag suffixes:
 
 - ``-slim`` means it's based on the ``-slim`` variant of the official `python <https://hub.docker.com/_/python>`__ image
-- ``-py3.12`` means the python version used by the image, accurate to the minor version number. Default: ``3.12``, which is usually the second newest python version
+- ``-py3.13`` means the python version used by the image, accurate to the minor version number. Default: ``3.13``, which is usually the second newest python version
 
 .. code-block:: text
 
