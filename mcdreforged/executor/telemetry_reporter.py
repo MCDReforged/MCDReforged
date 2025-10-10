@@ -7,8 +7,9 @@ import platform
 import sys
 import time
 import uuid
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, Optional, Dict
 
+from pydantic import BaseModel
 from typing_extensions import override
 
 from mcdreforged.constants import core_constant
@@ -86,6 +87,31 @@ class TelemetryReporterScheduler(BackgroundThreadExecutor):
 			self.__reporter.report()
 
 
+class TelemetryReportRequest(BaseModel):
+	class Platform(BaseModel):
+		mcdr_version: str
+		mcdr_version_pypi: str
+		python_version: str
+		python_implementation: str
+		system_type: str
+		system_release: str
+		system_architecture: str
+
+	class Data(BaseModel):
+		uptime: float
+		container_environment: str
+		python_package_isolation: str
+		launched_from_source: bool
+		plugin_type_counts: Dict[str, int]
+		server_handler_name: str
+
+	schema_version: int
+	reporter: str
+	uuid: str
+	platform: Platform
+	data: Data
+
+
 class TelemetryReporter:
 	"""
 	The class to collect and report telemetry data
@@ -161,29 +187,29 @@ class TelemetryReporter:
 	# -----------------------------------------------
 
 	def __collect_telemetry_data(self) -> dict:
-		telemetry_data = {
-			'schema_version': self.SCHEMA_VERSION,
-			'reporter': core_constant.NAME,
-			'uuid': str(self.__uuid),
-			'platform': {
-				'mcdr_version': core_constant.VERSION,
-				'mcdr_version_pypi': core_constant.VERSION_PYPI,
-				'python_version': platform.python_version(),
-				'python_implementation': platform.python_implementation(),
-				'system_type': platform.system(),
-				'system_release': platform.release(),
-				'system_architecture': platform.machine(),
-			},
-			'data': {
-				'uptime': time.time() - self.__start_time,
-				'container_environment': self.__guess_container_environment(),
-				'python_package_isolation': self.__guess_python_package_isolation_method(),
-				'launched_from_source': self.__launched_from_source,
-				'plugin_type_counts': self.__get_plugin_type_counts(),
-				'server_handler_name': self.__get_server_handler_name(),
-			},
-		}
-		return telemetry_data
+		telemetry_data = TelemetryReportRequest(
+			schema_version=self.SCHEMA_VERSION,
+			reporter=core_constant.NAME,
+			uuid=str(self.__uuid),
+			platform=TelemetryReportRequest.Platform(
+				mcdr_version=core_constant.VERSION,
+				mcdr_version_pypi=core_constant.VERSION_PYPI,
+				python_version=platform.python_version(),
+				python_implementation=platform.python_implementation(),
+				system_type=platform.system(),
+				system_release=platform.release(),
+				system_architecture=platform.machine(),
+			),
+			data=TelemetryReportRequest.Data(
+				uptime=time.time() - self.__start_time,
+				container_environment=self.__guess_container_environment(),
+				python_package_isolation=self.__guess_python_package_isolation_method(),
+				launched_from_source=self.__launched_from_source,
+				plugin_type_counts=self.__get_plugin_type_counts(),
+				server_handler_name=self.__get_server_handler_name(),
+			),
+		)
+		return telemetry_data.model_dump(mode='json')
 
 	@classmethod
 	@functools.lru_cache(maxsize=None)
