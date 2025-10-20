@@ -3,7 +3,9 @@ Information of a plugin
 """
 import dataclasses
 import re
-from typing import List, Dict, TYPE_CHECKING, Optional, Union, ClassVar, TypeVar
+from typing import List, Dict, TYPE_CHECKING, Optional, Union, ClassVar, TypeVar, Any, cast, Type
+
+from typing_extensions import override
 
 from mcdreforged.minecraft.rtext.text import RTextBase, RText
 from mcdreforged.plugin.meta.schema import PluginMetadataJsonModel
@@ -22,12 +24,22 @@ def _none_or(value: Optional[_T], default: _T) -> _T:
 	return value if value is not None else default
 
 
+class __MetadataMeta(type):
+	@override
+	def __call__(cls: type[_T], *args: Any, **kwargs: Any) -> _T:
+		if cls is Metadata and len(args) == 1 and len(kwargs) == 0 and isinstance(args[0], dict):
+			# compat old usage (before v2.16.0) that pass a single dict into the constructor
+			# XXX: drop this compactibility hack in v3?
+			return cast(_T, cast(Type[Metadata], cls).create(args[0]))
+		else:
+			return type.__call__(cls, *args, **kwargs)
+
+
 @dataclasses.dataclass(frozen=True)
-class Metadata:
+class Metadata(metaclass=__MetadataMeta):
 	"""
 	The metadata of a MCDR plugin
 	"""
-
 	id: str
 	"""
 	The id of the plugin. Should match regexp ``[a-z][a-z0-9_]{0,63}``
@@ -83,6 +95,8 @@ class Metadata:
 		"""
 		:param AbstractPlugin plugin: the plugin which this metadata is belonged to
 		:param dict or None data: a dict with information of the plugin
+
+		.. versionadded:: v2.16.0
 		"""
 		class_utils.check_type(data, (dict, PluginMetadataJsonModel))
 		plugin_name_text = repr(plugin)
@@ -263,29 +277,38 @@ class Metadata:
 		}
 
 
-__SAMPLE_METADATA = {
-	'id': 'example_plugin',   # If missing it will be the file name without .py suffix
-	'version': '1.0.0',       # If missing it will be '0.0.0'
-	'name': 'Sample Plugin',
-	# single string description is also supported
-	# 'description': 'Sample plugin for MCDR',
-	'description': {
-		'en_us': 'Sample plugin for MCDR'
-	},
-	'author': [
-		'Fallen_Breath'
-	],
-	'link': 'https://github.com/MCDReforged/MCDReforged',
-	'dependencies': {
-		'mcdreforged': '>=1.0.0'
-	},
+def __sample_test():
+	sample_metadata = {
+		'id': 'example_plugin',   # If missing it will be the file name without .py suffix
+		'version': '1.0.0',       # If missing it will be '0.0.0'
+		'name': 'Sample Plugin',
+		# single string description is also supported
+		# 'description': 'Sample plugin for MCDR',
+		'description': {
+			'en_us': 'Sample plugin for MCDR'
+		},
+		'author': [
+			'Fallen_Breath'
+		],
+		'link': 'https://github.com/MCDReforged/MCDReforged',
+		'dependencies': {
+			'mcdreforged': '>=1.0.0'
+		},
 
-	# Fields for packed plugins
-	'entrypoint': 'example_plugin.entry',
-	'archive_name': 'MyExamplePlugin-v{version}',
-	'resources': [
-		'my_resource_folder',
-		'another_resource_file',
-	]
-}
-Metadata.create(__SAMPLE_METADATA)  # there's should be no exception
+		# Fields for packed plugins
+		'entrypoint': 'example_plugin.entry',
+		'archive_name': 'MyExamplePlugin-v{version}',
+		'resources': [
+			'my_resource_folder',
+			'another_resource_file',
+		]
+	}
+
+	# there's should be no exception on both new method and old method
+	meta1 = Metadata.create(sample_metadata)
+	meta2 = Metadata(sample_metadata)  # type: ignore
+	if meta1 != meta2:
+		raise AssertionError(f'{meta1} != {meta2}')
+
+__sample_test()
+
