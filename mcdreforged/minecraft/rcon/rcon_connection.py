@@ -5,7 +5,6 @@ Reference: https://wiki.vg/RCON
 import dataclasses
 import socket
 import struct
-import time
 from logging import Logger
 from threading import RLock
 from typing import Optional, List, ClassVar
@@ -64,7 +63,6 @@ class RconConnection:
 	def __send(self, data: Packet):
 		assert self.socket is not None
 		self.socket.sendall(data.flush())
-		time.sleep(0.03)  # MC-72390
 
 	def __receive(self, length: int) -> bytes:
 		assert self.socket is not None
