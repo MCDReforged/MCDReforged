@@ -8,7 +8,7 @@ import struct
 import time
 from logging import Logger
 from threading import RLock
-from typing import Optional
+from typing import Optional, List, ClassVar
 
 
 class _RequestId:
@@ -39,7 +39,7 @@ class RconConnection:
 	A simply rcon client for connect to any Minecraft servers that supports rcon protocol
 	"""
 
-	BUFFER_SIZE = 2 ** 10
+	BUFFER_SIZE: ClassVar[int] = 4096
 
 	def __init__(self, address: str, port: int, password: str, *, logger: Optional[Logger] = None):
 		"""
@@ -63,7 +63,7 @@ class RconConnection:
 
 	def __send(self, data: Packet):
 		assert self.socket is not None
-		self.socket.send(data.flush())
+		self.socket.sendall(data.flush())
 		time.sleep(0.03)  # MC-72390
 
 	def __receive(self, length: int) -> bytes:
