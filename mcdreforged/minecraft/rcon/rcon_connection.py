@@ -4,8 +4,10 @@ Reference: https://wiki.vg/RCON
 """
 import contextlib
 import dataclasses
+import os
 import socket
 import struct
+import sys
 from logging import Logger
 from threading import RLock
 from typing import Optional, List, ClassVar
@@ -152,10 +154,25 @@ class RconConnection:
 		return None
 
 
-if __name__ == '__main__':
-	rcon = RconConnection('localhost', 25575, 'rcon_34ft786cbsqd')
+def __main():
+	rcon = RconConnection(
+		address=os.getenv('MCDR_RCON_TEST_ADDRESS', 'localhost'),
+		port=int(os.getenv('MCDR_RCON_TEST_PORT', '25575')),
+		password=os.getenv('MCDR_RCON_TEST_PASSWORD', 'eXamp1eRC0Npazzwalled'),
+	)
+
 	ok = rcon.connect()
 	print('Login success: {}'.format(ok))
-	if ok:
+	if not ok:
+		sys.exit(1)
+
+	try:
 		while True:
 			print('Server ->', rcon.send_command(input('Server <- ')))
+	except KeyboardInterrupt:
+		pass
+	rcon.disconnect()
+
+
+if __name__ == '__main__':
+	__main()
