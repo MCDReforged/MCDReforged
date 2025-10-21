@@ -68,10 +68,15 @@ class RconConnection:
 
 	def __receive(self, length: int) -> bytes:
 		assert self.socket is not None
-		data = bytes()
-		while len(data) < length:
-			data += self.socket.recv(min(self.BUFFER_SIZE, length - len(data)))
-		return data
+		fragments: List[bytes] = []
+		read_len = 0
+		while read_len < length:
+			buf = self.socket.recv(min(self.BUFFER_SIZE, length - read_len))
+			if not buf:
+				raise ConnectionError(f'Connection closed by peer while reading data, expect {length}, read {read_len}')
+			read_len += len(buf)
+			fragments.append(buf)
+		return b''.join(fragments)
 
 	def __receive_packet(self) -> Packet:
 		length = struct.unpack('<i', self.__receive(4))[0]
