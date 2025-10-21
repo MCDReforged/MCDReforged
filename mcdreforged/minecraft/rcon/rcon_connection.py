@@ -2,6 +2,7 @@
 Simple rcon client implement
 Reference: https://wiki.vg/RCON
 """
+import contextlib
 import dataclasses
 import socket
 import struct
@@ -12,6 +13,8 @@ from typing import Optional, List, ClassVar
 
 class _RequestId:
 	DEFAULT = 0
+	COMMAND = 1
+	ENDING_PROBE = 2
 	LOGIN_FAIL = -1
 
 
@@ -125,24 +128,19 @@ class RconConnection:
 		with self.command_lock:
 			for i in range(max_retry_time):
 				try:
-					self.__send(Packet(_RequestId.DEFAULT, _PacketType.COMMAND_REQUEST, command))
-					self.__send(Packet(_RequestId.DEFAULT, _PacketType.ENDING_PACKET, 'lol'))
-					result = ''
-					while True:
-						packet = self.__receive_packet()
-						if packet.payload == 'Unknown request {}'.format(hex(_PacketType.ENDING_PACKET)[2:]):
-							break
-						result += packet.payload
-					return result
-				except Exception:
+					self.__send(Packet(_RequestId.COMMAND, _PacketType.COMMAND_REQUEST, command))
+					self.__send(Packet(_RequestId.ENDING_PROBE, _PacketType.ENDING_PACKET, 'lol'))
+					result_parts: List[str] = []
+					while (packet := self.__receive_packet()).request_id == _RequestId.COMMAND:
+						result_parts.append(packet.payload)
+					return ''.join(result_parts)
+				except Exception as e:
 					if self.logger is not None:
-						self.logger.warning('Rcon Fail to received packet')
-					try:
+						self.logger.warning(f'Rcon fail to receive packet: {e}')
+					with contextlib.suppress(Exception):
 						self.disconnect()
 						if self.connect():  # next try
 							continue
-					except Exception:
-						pass
 					break
 		return None
 
