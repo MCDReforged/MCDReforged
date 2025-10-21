@@ -12,7 +12,7 @@ from typing import Optional, List, ClassVar
 
 
 class _RequestId:
-	DEFAULT = 0
+	LOGIN = 0
 	COMMAND = 1
 	ENDING_PROBE = 2
 	LOGIN_FAIL = -1
@@ -22,7 +22,7 @@ class _PacketType:
 	COMMAND_RESPONSE = 0
 	COMMAND_REQUEST = 2
 	LOGIN_REQUEST = 3
-	ENDING_PACKET = 100
+	ENDING_PACKET = 100  # an invalid id
 
 
 @dataclasses.dataclass(frozen=True)
@@ -31,9 +31,21 @@ class Packet:
 	packet_type: int
 	payload: str
 
-	def flush(self) -> bytes:
-		data = struct.pack('<ii', self.request_id, self.packet_type) + bytes(self.payload + '\x00\x00', encoding='utf8')
+	def dump(self) -> bytes:
+		return struct.pack('<ii', self.request_id, self.packet_type) + bytes(self.payload + '\x00\x00', encoding='utf8')
+
+	def dump_with_length_header(self) -> bytes:
+		data = self.dump()
 		return struct.pack('<i', len(data)) + data
+
+	@classmethod
+	def load(cls, data: bytes) -> 'Packet':
+		"""data is without the length header"""
+		return Packet(
+			request_id=struct.unpack('<i', data[0:4])[0],
+			packet_type=struct.unpack('<i', data[4:8])[0],
+			payload=data[8:-2].decode('utf8'),
+		)
 
 
 class RconConnection:
@@ -65,7 +77,7 @@ class RconConnection:
 
 	def __send(self, data: Packet):
 		assert self.socket is not None
-		self.socket.sendall(data.flush())
+		self.socket.sendall(data.dump_with_length_header())
 
 	def __receive(self, length: int) -> bytes:
 		assert self.socket is not None
@@ -82,12 +94,7 @@ class RconConnection:
 	def __receive_packet(self) -> Packet:
 		length = struct.unpack('<i', self.__receive(4))[0]
 		data = self.__receive(length)
-		packet = Packet(
-			request_id=struct.unpack('<i', data[0:4])[0],
-			packet_type=struct.unpack('<i', data[4:8])[0],
-			payload=data[8:-2].decode('utf8'),
-		)
-		return packet
+		return Packet.load(data)
 
 	def connect(self) -> bool:
 		"""
@@ -102,7 +109,7 @@ class RconConnection:
 				pass
 		self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		self.socket.connect((self.address, self.port))
-		self.__send(Packet(_RequestId.DEFAULT, _PacketType.LOGIN_REQUEST, self.password))
+		self.__send(Packet(_RequestId.LOGIN, _PacketType.LOGIN_REQUEST, self.password))
 		success = self.__receive_packet().request_id != _RequestId.LOGIN_FAIL
 		if not success:
 			self.disconnect()
