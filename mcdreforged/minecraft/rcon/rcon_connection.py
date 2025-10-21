@@ -1,18 +1,22 @@
 """
 Simple rcon client implement
-Reference: https://wiki.vg/RCON
+Reference: https://minecraft.wiki/w/RCON
 """
+import contextlib
 import dataclasses
+import os
 import socket
 import struct
-import time
+import sys
 from logging import Logger
 from threading import RLock
-from typing import Optional
+from typing import Optional, List, ClassVar
 
 
 class _RequestId:
-	DEFAULT = 0
+	LOGIN = 0
+	COMMAND = 1
+	ENDING_PROBE = 2
 	LOGIN_FAIL = -1
 
 
@@ -20,7 +24,7 @@ class _PacketType:
 	COMMAND_RESPONSE = 0
 	COMMAND_REQUEST = 2
 	LOGIN_REQUEST = 3
-	ENDING_PACKET = 100
+	ENDING_PACKET = 100  # an invalid id
 
 
 @dataclasses.dataclass(frozen=True)
@@ -29,9 +33,21 @@ class Packet:
 	packet_type: int
 	payload: str
 
-	def flush(self) -> bytes:
-		data = struct.pack('<ii', self.request_id, self.packet_type) + bytes(self.payload + '\x00\x00', encoding='utf8')
+	def dump(self) -> bytes:
+		return struct.pack('<ii', self.request_id, self.packet_type) + bytes(self.payload + '\x00\x00', encoding='utf8')
+
+	def dump_with_length_header(self) -> bytes:
+		data = self.dump()
 		return struct.pack('<i', len(data)) + data
+
+	@classmethod
+	def load(cls, data: bytes) -> 'Packet':
+		"""data is without the length header"""
+		return Packet(
+			request_id=struct.unpack('<i', data[0:4])[0],
+			packet_type=struct.unpack('<i', data[4:8])[0],
+			payload=data[8:-2].decode('utf8'),
+		)
 
 
 class RconConnection:
@@ -39,7 +55,7 @@ class RconConnection:
 	A simply rcon client for connect to any Minecraft servers that supports rcon protocol
 	"""
 
-	BUFFER_SIZE = 2 ** 10
+	BUFFER_SIZE: ClassVar[int] = 4096
 
 	def __init__(self, address: str, port: int, password: str, *, logger: Optional[Logger] = None):
 		"""
@@ -63,25 +79,24 @@ class RconConnection:
 
 	def __send(self, data: Packet):
 		assert self.socket is not None
-		self.socket.send(data.flush())
-		time.sleep(0.03)  # MC-72390
+		self.socket.sendall(data.dump_with_length_header())
 
 	def __receive(self, length: int) -> bytes:
 		assert self.socket is not None
-		data = bytes()
-		while len(data) < length:
-			data += self.socket.recv(min(self.BUFFER_SIZE, length - len(data)))
-		return data
+		fragments: List[bytes] = []
+		read_len = 0
+		while read_len < length:
+			buf = self.socket.recv(min(self.BUFFER_SIZE, length - read_len))
+			if not buf:
+				raise ConnectionError(f'Connection closed by peer while reading data, expect {length}, read {read_len}')
+			read_len += len(buf)
+			fragments.append(buf)
+		return b''.join(fragments)
 
 	def __receive_packet(self) -> Packet:
 		length = struct.unpack('<i', self.__receive(4))[0]
 		data = self.__receive(length)
-		packet = Packet(
-			request_id=struct.unpack('<i', data[0:4])[0],
-			packet_type=struct.unpack('<i', data[4:8])[0],
-			payload=data[8:-2].decode('utf8'),
-		)
-		return packet
+		return Packet.load(data)
 
 	def connect(self) -> bool:
 		"""
@@ -96,7 +111,7 @@ class RconConnection:
 				pass
 		self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		self.socket.connect((self.address, self.port))
-		self.__send(Packet(_RequestId.DEFAULT, _PacketType.LOGIN_REQUEST, self.password))
+		self.__send(Packet(_RequestId.LOGIN, _PacketType.LOGIN_REQUEST, self.password))
 		success = self.__receive_packet().request_id != _RequestId.LOGIN_FAIL
 		if not success:
 			self.disconnect()
@@ -122,32 +137,42 @@ class RconConnection:
 		with self.command_lock:
 			for i in range(max_retry_time):
 				try:
-					self.__send(Packet(_RequestId.DEFAULT, _PacketType.COMMAND_REQUEST, command))
-					self.__send(Packet(_RequestId.DEFAULT, _PacketType.ENDING_PACKET, 'lol'))
-					result = ''
-					while True:
-						packet = self.__receive_packet()
-						if packet.payload == 'Unknown request {}'.format(hex(_PacketType.ENDING_PACKET)[2:]):
-							break
-						result += packet.payload
-					return result
-				except Exception:
+					self.__send(Packet(_RequestId.COMMAND, _PacketType.COMMAND_REQUEST, command))
+					self.__send(Packet(_RequestId.ENDING_PROBE, _PacketType.ENDING_PACKET, 'lol'))
+					result_parts: List[str] = []
+					while (packet := self.__receive_packet()).request_id == _RequestId.COMMAND:
+						result_parts.append(packet.payload)
+					return ''.join(result_parts)
+				except Exception as e:
 					if self.logger is not None:
-						self.logger.warning('Rcon Fail to received packet')
-					try:
+						self.logger.warning(f'Rcon fail to receive packet: {e}')
+					with contextlib.suppress(Exception):
 						self.disconnect()
 						if self.connect():  # next try
 							continue
-					except Exception:
-						pass
 					break
 		return None
 
 
-if __name__ == '__main__':
-	rcon = RconConnection('localhost', 25575, 'rcon_34ft786cbsqd')
+def __main():
+	rcon = RconConnection(
+		address=os.getenv('MCDR_RCON_TEST_ADDRESS', 'localhost'),
+		port=int(os.getenv('MCDR_RCON_TEST_PORT', '25575')),
+		password=os.getenv('MCDR_RCON_TEST_PASSWORD', 'eXamp1eRC0Npazzwalled'),
+	)
+
 	ok = rcon.connect()
 	print('Login success: {}'.format(ok))
-	if ok:
+	if not ok:
+		sys.exit(1)
+
+	try:
 		while True:
 			print('Server ->', rcon.send_command(input('Server <- ')))
+	except KeyboardInterrupt:
+		pass
+	rcon.disconnect()
+
+
+if __name__ == '__main__':
+	__main()
