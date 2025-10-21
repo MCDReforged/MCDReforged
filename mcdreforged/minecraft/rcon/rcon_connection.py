@@ -1,6 +1,6 @@
 """
 Simple rcon client implement
-Reference: https://wiki.vg/RCON
+Reference: https://minecraft.wiki/w/RCON
 """
 import contextlib
 import dataclasses
