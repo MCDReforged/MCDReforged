@@ -95,3 +95,7 @@ Rcon
 .. autoclass:: mcdreforged.minecraft.rcon.rcon_connection.RconConnection
     :members:
     :special-members: __init__
+
+.. autoclass:: mcdreforged.minecraft.rcon.rcon_connection.AsyncRconConnection
+    :members:
+    :special-members: __init__
