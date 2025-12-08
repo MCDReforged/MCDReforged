@@ -303,6 +303,21 @@ class QuotableText(Text):
 		# noinspection PyTypeChecker
 		return super().suggests(misc_utils.copy_signature(quote_wrapper, suggestion))
 
+	@override
+	def _get_suggestions(self, context: CommandContext) -> Iterable[str]:
+		# XXX: Too tricky. Need design a better implementation
+		if (arg_value := context.get(self.get_name())) is not None:
+			self_value = arg_value[-1] if isinstance(arg_value, list) else arg_value
+		else:
+			self_value = context.command_remaining
+		suggestions = super()._get_suggestions(context)
+		if self_value.startswith(self.QUOTE_CHAR):
+			suggestions = [
+				suggestion if suggestion.startswith(self.QUOTE_CHAR) else json.dumps(suggestion, ensure_ascii=False)
+				for suggestion in suggestions
+			]
+		return suggestions
+
 
 class GreedyText(TextNode):
 	"""
