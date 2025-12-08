@@ -296,7 +296,7 @@ class QuotableText(Text):
 			suggestions = []
 			for s in suggestion(*args, **kwargs):
 				if DIVIDER in s:
-					s = json.dumps(s)
+					s = json.dumps(s, ensure_ascii=False)
 				suggestions.append(s)
 			return suggestions
 
