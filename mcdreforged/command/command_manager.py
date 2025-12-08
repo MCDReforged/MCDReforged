@@ -106,10 +106,11 @@ class CommandManager:
 				exc_info = error.exc_info
 			else:
 				exc_info = True
-			self.logger.error('Error when executing command {}, {}'.format(
-				repr(command),
-				', '.join(f'{key}={value!r}' for key, value in data.items())
-			), exc_info=exc_info)
+			try:
+				kv_str = ', '.join(f'{key}={value!r}' for key, value in data.items())
+			except Exception as e:
+				kv_str = f'<error formatting {e}>'
+			self.logger.error('Error when executing command {}, {}'.format(repr(command), kv_str), exc_info=exc_info)
 
 	def __create_command_context_func(self, source: CommandSource, command: str, execution: CommandExecution, pch: PluginCommandHolder) -> Callable[[], ContextManager]:
 		@contextlib.contextmanager

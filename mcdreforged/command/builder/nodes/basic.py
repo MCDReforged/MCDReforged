@@ -659,13 +659,13 @@ class ArgumentNode(AbstractNode, ABC):
 
 	@override
 	def _get_usage(self) -> str:
-		return '<{}>'.format(self.__metavar or self.__name)
+		return '<{}>'.format(self.__metavar or self.get_name())
 
 	def __str__(self):
 		return '{} <{}>'.format(self.__class__.__name__, self.get_name())
 
 	def __repr__(self):
-		fields: dict = {'name': self.__name}
+		fields: dict = {'name': self.get_name()}
 		if self.__accumulate:
 			fields['accumulate'] = True
 		if self.__metavar:

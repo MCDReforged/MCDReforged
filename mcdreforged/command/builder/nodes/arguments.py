@@ -90,7 +90,7 @@ class NumberNode(ArgumentNode, ABC):
 
 	def __repr__(self):
 		return class_utils.represent(self, {
-			'name': self.__name,
+			'name': self.get_name(),
 			'min': self.__min_value,
 			'max': self.__max_value,
 		})
@@ -217,7 +217,7 @@ class TextNode(ArgumentNode, ABC):
 
 	def __repr__(self):
 		return class_utils.represent(self, {
-			'name': self.__name,
+			'name': self.get_name(),
 			'min_len': self.__min_length,
 			'max_len': self.__max_length,
 		})
@@ -388,7 +388,7 @@ class Enumeration(ArgumentNode):
 
 	def __repr__(self):
 		return class_utils.represent(self, {
-			'name': self.__name,
+			'name': self.get_name(),
 			'enum_class': self.__enum_class,
 		})
 
