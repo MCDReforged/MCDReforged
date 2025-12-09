@@ -300,6 +300,7 @@ class QuotableText(Text):
 				suggestions.append(s)
 			return suggestions
 
+		# TODO: support not-prefix suggesting, for those QUOTE_CHAR required suggestion
 		# noinspection PyTypeChecker
 		return super().suggests(misc_utils.copy_signature(quote_wrapper, suggestion))
 
