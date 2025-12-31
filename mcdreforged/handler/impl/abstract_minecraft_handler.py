@@ -15,7 +15,7 @@ from mcdreforged.utils import string_utils
 from mcdreforged.utils.types.message import MessageText
 
 
-def __check_mc_version_ge(version_name: Optional[str], min_release: Tuple[int, ...], min_snapshot: Tuple[int, int]) -> bool:
+def _check_mc_version_ge(version_name: Optional[str], min_release: Tuple[int, ...], min_snapshot: Tuple[int, int]) -> bool:
 	if version_name is None:
 		return False
 
@@ -24,18 +24,28 @@ def __check_mc_version_ge(version_name: Optional[str], min_release: Tuple[int, .
 			patch = '0'
 		return (int(major), int(minor), int(patch)) >= min_release
 
-	version_with_release_regex = [
-		re.compile(r'(?P<major>\d+)\.(?P<minor>\d+)(\.(?P<patch>\d+))?', re.IGNORECASE),  # "1.21", "1.17.1"
+	def check_snapshot_version(year: str, week: str) -> bool:
+		return (int(year), int(week)) >= min_snapshot
+
+	release_regexps = [
+		re.compile(r'(?P<major>\d+)\.(?P<minor>\d+)(\.(?P<patch>\d+))?', re.IGNORECASE),  # "1.21", "1.17.1", "26.1"
 		re.compile(r'(?P<major>\d+)\.(?P<minor>\d+)(\.(?P<patch>\d+))? Pre-Release \d+', re.IGNORECASE),  # "1.20.5 Pre-Release 4"
 		re.compile(r'(?P<major>\d+)\.(?P<minor>\d+)(\.(?P<patch>\d+))? Release Candidate \d+', re.IGNORECASE),  # "1.21 Release Candidate 1"
 	]
-	for regex in version_with_release_regex:
+	for regex in release_regexps:
 		if (m := regex.fullmatch(version_name)) is not None:
 			return check_release_version(m.group('major'), m.group('minor'), m.group('patch'))
 
-	# modern snapshots, e.g. "22w45a"
-	if (m := re.fullmatch(r'(\d{2})w(\d{2})[a-z]', version_name)) is not None:
-		return (int(m.group(1)), int(m.group(2))) >= min_snapshot
+	snapshot_regexps = [
+		re.compile(r'(?P<year>\d+)w(?P<week>\d+)[a-z]', re.IGNORECASE),  # "22w45a"
+		re.compile(r'(?P<year>\d+)(\.(?P<minor>\d+)(\.(?P<patch>\d+))?)? Snapshot (?P<num>\d+)', re.IGNORECASE),  # "26.1 Snapshot 1"
+	]
+	for regex in snapshot_regexps:
+		if (m := regex.fullmatch(version_name)) is not None:
+			groups = m.groupdict()
+			snapshot_id = groups.get('week') or groups.get('num')
+			assert snapshot_id is not None
+			return check_snapshot_version(m.group('year'), snapshot_id)
 
 	# unknown version
 	return False
@@ -44,13 +54,13 @@ def __check_mc_version_ge(version_name: Optional[str], min_release: Tuple[int, .
 @functools.lru_cache(maxsize=128)
 def _does_mc_version_has_execute_command(version_name: Optional[str]) -> bool:
 	# >= 18w30a, first 1.13.1 snapshot
-	return __check_mc_version_ge(version_name, (1, 13, 0), (18, 30))
+	return _check_mc_version_ge(version_name, (1, 13, 0), (18, 30))
 
 
 @functools.lru_cache(maxsize=128)
 def _get_rtext_json_format(version_name: Optional[str]) -> RTextJsonFormat:
 	# >= 25w03a, an 1.21.5 snapshot
-	if __check_mc_version_ge(version_name, (1, 21, 5), (25, 3)):
+	if _check_mc_version_ge(version_name, (1, 21, 5), (25, 3)):
 		return RTextJsonFormat.V_1_21_5
 	else:
 		return RTextJsonFormat.default()
