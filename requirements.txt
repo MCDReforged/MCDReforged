@@ -7,6 +7,6 @@ prompt-toolkit~=3.0
 psutil>=5.8.0
 requests>=2.26
 resolvelib
-ruamel.yaml~=0.17
+ruamel.yaml~=0.17,<0.19
 typing-extensions>=4.6.0
 wcwidth
