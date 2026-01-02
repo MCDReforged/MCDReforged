@@ -27,6 +27,8 @@ def _check_mc_version_ge(version_name: Optional[str], min_release: Tuple[int, ..
 	def check_snapshot_version(year: str, week: str) -> bool:
 		return (int(year), int(week)) >= min_snapshot
 
+	version_name = string_utils.remove_suffix(version_name, ' Unobfuscated')  # "1.21.11 Unobfuscated"
+
 	release_regexps = [
 		re.compile(r'(?P<major>\d+)\.(?P<minor>\d+)(\.(?P<patch>\d+))?', re.IGNORECASE),  # "1.21", "1.17.1", "26.1"
 		re.compile(r'(?P<major>\d+)\.(?P<minor>\d+)(\.(?P<patch>\d+))? Pre-Release \d+', re.IGNORECASE),  # "1.20.5 Pre-Release 4"
