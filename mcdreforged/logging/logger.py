@@ -5,6 +5,7 @@ import logging
 import os
 from typing import Dict, Optional, Any
 
+import filelock
 from typing_extensions import override
 
 from mcdreforged.constants import core_constant
@@ -51,6 +52,7 @@ class MCDReforgedLogger(logging.Logger):
 	def __init__(self, plugin_id: Optional[str] = None):
 		super().__init__(self.DEFAULT_NAME)
 		self.file_handler: Optional[logging.FileHandler] = None
+		self.file_handler_lock: Optional[filelock.FileLock] = None
 		self.__plugin_id = plugin_id
 
 		self.console_handler = SyncStdoutStreamHandler()
@@ -121,12 +123,19 @@ class MCDReforgedLogger(logging.Logger):
 
 		:meta private:
 		"""
+    
+		self.file_handler_lock = filelock.FileLock(file_path + ".lock", blocking = False)
+		self.file_handler_lock.acquire()
+		
 		if self.file_handler is not None:
 			self.unset_file()
+		
 		file_utils.touch_directory(os.path.dirname(file_path))
 		self.file_handler = ZippingDayRotatingFileHandler(file_path, self.ROTATE_DAY_COUNT)
 		self.file_handler.setFormatter(self.FILE_FORMATTER)
 		self.addHandler(self.file_handler)
+			
+			
 
 	def unset_file(self):
 		"""
@@ -137,6 +146,7 @@ class MCDReforgedLogger(logging.Logger):
 		if self.file_handler is not None:
 			self.removeHandler(self.file_handler)
 			self.file_handler.close()
+			self.file_handler_lock.release()
 			self.file_handler = None
 
 

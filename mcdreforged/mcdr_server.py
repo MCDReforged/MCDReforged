@@ -8,6 +8,7 @@ from importlib.metadata import PackageNotFoundError, Distribution
 from pathlib import Path
 from typing import Optional, Callable, Any, TYPE_CHECKING, List, Dict, Union
 
+import filelock
 from ruamel.yaml import YAMLError
 
 from mcdreforged.command.command_manager import CommandManager
@@ -156,7 +157,15 @@ class MCDReforgedServer:
 			return
 
 		# MCDR environment has been set up, so continue creating default folders and loading stuffs
-		self.logger.set_file(core_constant.LOGGING_FILE)  # will create logs/ folder
+
+		try:
+			self.logger.set_file(core_constant.LOGGING_FILE)  # will create logs/ folder
+		except filelock.Timeout:
+			self.logger.error("Could not acquire lock for logfile: \"{}\".".format(core_constant.LOGGING_FILE+".lock"))
+			self.logger.error("This usually means another MCDR instance is logging to the same folder.")
+			self.logger.error("Please stop those instances to remove the lock.")
+			return
+
 		self.plugin_manager.touch_directory()  # will create config/ folder
 
 		# --- Done --- #

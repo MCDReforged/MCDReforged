@@ -10,3 +10,4 @@ resolvelib
 ruamel.yaml~=0.17,<0.19
 typing-extensions>=4.6.0
 wcwidth
+filelock
