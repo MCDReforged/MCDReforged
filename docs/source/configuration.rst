@@ -664,6 +664,40 @@ Set it to false to disable the handler detection for a few less performance loss
 
     handler_detection: true
 
+bedrock_player_name_prefix
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The prefix that Geyser/Floodgate adds to Bedrock player usernames to avoid conflicts with Java Edition players.
+
+When using Geyser or Floodgate proxy to allow Bedrock Edition players to join a Java Edition server, these players' usernames are prefixed with a special string (default is ``"."``) to distinguish them from Java Edition players.
+
+This option should match the ``username-prefix`` setting in your Floodgate ``config.yml`` file. If you're using Geyser without Floodgate, this option should be set to match Geyser's username prefix configuration.
+
+* Option type: :external:class:`str`
+* Default value: ``""`` (empty string, prefix support disabled by default)
+
+.. code-block:: yaml
+
+    bedrock_player_name_prefix: ""
+
+* Example with Floodgate's default prefix:
+
+.. code-block:: yaml
+
+    bedrock_player_name_prefix: "."
+
+* Example with a custom prefix:
+
+.. code-block:: yaml
+
+    bedrock_player_name_prefix: "Bedrock_"
+
+.. note::
+
+    When this option is set to a non-empty value, MCDR will recognize player names starting with the prefix as valid Bedrock Edition players. The prefix is stripped before validating the player name against Minecraft's naming rules (3-16 alphanumeric characters and underscores). The total length (prefix + player name) must not exceed 16 characters.
+
+    If this option is left empty (default), MCDR will only recognize standard Java Edition player names, and Bedrock players with prefixes will not be properly identified.
+
 Debug configuration
 -------------------
 

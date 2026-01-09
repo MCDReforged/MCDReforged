@@ -5,6 +5,34 @@ class MyTestCase(unittest.TestCase):
 	def __init__(self, *args):
 		super().__init__(*args)
 
+	def test_verify_player_name_bedrock_prefix(self):
+		from mcdreforged.handler.impl.abstract_minecraft_handler import AbstractMinecraftHandler
+
+		AbstractMinecraftHandler._set_bedrock_prefix("")
+		self.assertTrue(AbstractMinecraftHandler._verify_player_name("Steve"))
+		self.assertTrue(AbstractMinecraftHandler._verify_player_name("Player123"))
+		self.assertFalse(AbstractMinecraftHandler._verify_player_name("AB"))
+		self.assertFalse(AbstractMinecraftHandler._verify_player_name("A" * 17))
+		self.assertFalse(AbstractMinecraftHandler._verify_player_name(".Steve"))
+		
+		AbstractMinecraftHandler._set_bedrock_prefix(".")
+		self.assertTrue(AbstractMinecraftHandler._verify_player_name(".Steve"))
+		self.assertTrue(AbstractMinecraftHandler._verify_player_name(".Player123"))
+		self.assertTrue(AbstractMinecraftHandler._verify_player_name("Steve"))
+		self.assertTrue(AbstractMinecraftHandler._verify_player_name("Player123"))
+		self.assertFalse(AbstractMinecraftHandler._verify_player_name("."))
+		self.assertFalse(AbstractMinecraftHandler._verify_player_name(".AB"))
+		self.assertFalse(AbstractMinecraftHandler._verify_player_name("." + "A" * 16))
+		
+		AbstractMinecraftHandler._set_bedrock_prefix(".*.")
+		self.assertTrue(AbstractMinecraftHandler._verify_player_name(".*.Steve"))
+		self.assertTrue(AbstractMinecraftHandler._verify_player_name(".*.Test"))
+		self.assertTrue(AbstractMinecraftHandler._verify_player_name("Steve"))
+		self.assertFalse(AbstractMinecraftHandler._verify_player_name(".*."))
+		self.assertFalse(AbstractMinecraftHandler._verify_player_name(".*.AB"))
+		self.assertFalse(AbstractMinecraftHandler._verify_player_name(".*." + "A" * 14))
+		
+		
 	def test_does_mc_version_has_execute_command(self):
 		from mcdreforged.handler.impl.abstract_minecraft_handler import _does_mc_version_has_execute_command
 
