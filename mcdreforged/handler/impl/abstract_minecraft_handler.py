@@ -4,6 +4,7 @@ import re
 from abc import ABC
 from typing import Optional, List, Tuple
 
+from mcdreforged.logging import logger
 import parse
 from typing_extensions import override
 
@@ -66,6 +67,9 @@ def _get_rtext_json_format(version_name: Optional[str]) -> RTextJsonFormat:
 		return RTextJsonFormat.V_1_21_5
 	else:
 		return RTextJsonFormat.default()
+
+
+_bedrock_player_name_prefix: str = ""
 
 
 class AbstractMinecraftHandler(AbstractServerHandler, ABC):
@@ -149,7 +153,25 @@ class AbstractMinecraftHandler(AbstractServerHandler, ABC):
 	__player_name_regex = re.compile(r'[a-zA-Z0-9_]{3,16}')
 
 	@classmethod
+	def _get_bedrock_prefix(cls) -> str:
+		return _bedrock_player_name_prefix
+
+	@classmethod
+	def _set_bedrock_prefix(cls, prefix: str) -> None:
+		
+		global _bedrock_player_name_prefix
+		if len(prefix) >= 16:
+			logger.warning(f"Bedrock player name prefix is too long: \"{prefix}\"")
+		_bedrock_player_name_prefix = prefix
+
+	@classmethod
 	def _verify_player_name(cls, name: str) -> bool:
+		prefix = cls._get_bedrock_prefix()
+		if prefix and name.startswith(prefix):
+			if len(name) > 16 or len(name) < 3:
+				return False
+			name = name[len(prefix):]
+
 		return cls.__player_name_regex.fullmatch(name) is not None
 
 	@override

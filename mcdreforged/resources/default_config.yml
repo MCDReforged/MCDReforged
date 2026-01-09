@@ -168,6 +168,13 @@ watchdog_threshold: 10
 handler_detection: true
 
 
+# The prefix that Geyser/Floodgate adds to Bedrock player usernames to avoid conflicts with Java Edition players
+# This should match the "username-prefix" setting in your Floodgate config.yml file
+# Default value "" to disable the prefix
+# Examples: "." or any custom string
+bedrock_player_name_prefix: ""
+
+
 # =========================================
 # |          Debug Configuration          |
 # =========================================

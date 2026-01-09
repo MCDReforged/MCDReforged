@@ -55,6 +55,7 @@ class MCDReforgedConfig(Serializable):
 	custom_info_reactors: Optional[List[str]] = None
 	watchdog_threshold: int = 10
 	handler_detection: bool = True
+	bedrock_player_name_prefix: str = ""
 
 	# --------- Debug Configuration ---------
 	debug: Dict[str, bool] = {str(o.name).lower(): False for o in DebugOption}

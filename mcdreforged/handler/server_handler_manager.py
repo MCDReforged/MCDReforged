@@ -33,6 +33,8 @@ class ServerHandlerManager:
 		mcdr_server.add_config_changed_callback(self.__on_mcdr_config_loaded)
 
 	def __on_mcdr_config_loaded(self, config: MCDReforgedConfig, log: bool):
+		# Update bedrock player name prefix
+		AbstractMinecraftHandler._set_bedrock_prefix(config.bedrock_player_name_prefix)
 		self.register_handlers(config.custom_handlers)
 		self.set_configured_handler(config.handler)
 		if log:
