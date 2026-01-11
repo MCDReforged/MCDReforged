@@ -8,6 +8,7 @@ import os
 import socket
 import struct
 import sys
+import time
 from logging import Logger
 from threading import RLock
 from typing import Optional, List, ClassVar
@@ -80,6 +81,9 @@ class RconConnection:
 	def __send(self, data: Packet):
 		assert self.socket is not None
 		self.socket.sendall(data.dump_with_length_header())
+		# MC-72390: some server implementations can break if packets are sent too fast
+		# (especially when sending command request + ending packet back-to-back).
+		time.sleep(0.03)
 
 	def __receive(self, length: int) -> bytes:
 		assert self.socket is not None
