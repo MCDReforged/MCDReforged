@@ -4,6 +4,7 @@ Reference: https://minecraft.wiki/w/RCON
 """
 import contextlib
 import dataclasses
+import logging
 import os
 import socket
 import struct
@@ -110,7 +111,9 @@ class RconConnection:
 			except Exception:
 				pass
 		self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		self.socket.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
 		self.socket.connect((self.address, self.port))
+		self.socket.settimeout(60)
 		self.__send(Packet(_RequestId.LOGIN, _PacketType.LOGIN_REQUEST, self.password))
 		success = self.__receive_packet().request_id != _RequestId.LOGIN_FAIL
 		if not success:
@@ -132,25 +135,61 @@ class RconConnection:
 
 		:param command: The command you want to send to the server
 		:param max_retry_time: The maximum retry time of the operation
-		:return: The command execution result form the server, or None if *max_retry_time* retries exceeded
+		:return: The command execution result from the server, or None if *max_retry_time* retries exceeded
 		"""
+		def send_once() -> str:
+			"""
+			Workaround for Minecraft's buggy implementation of RCON
+
+			1. Purpose of ENDING_PROBE:
+			   Minecraft splits long RCON responses into multiple packets,
+			   but does not provide a clear termination signal (e.g., an empty packet) when the response ends.
+			   We send an extra `ENDING_PROBE` packet to serve as a delimiter to detect the end of the response stream
+
+			2. Why send ENDING_PROBE later:
+			   The MC server requires each TCP read to obtain EXACTLY one complete RCON packet,
+			   reading partial or multiple packets causes a disconnect or data loss.
+			   Therefore, we cannot send the COMMAND and ENDING_PROBE in one go.
+			   We must ensure the server has finished reading the COMMAND packet before sending the ENDING_PROBE.
+			   We achieve this by waiting for the first response packet before sending the probe
+
+		    See also: https://github.com/MCDReforged/MCDReforged/pull/411#issuecomment-3735273034
+			"""
+
+			self.__send(Packet(_RequestId.COMMAND, _PacketType.COMMAND_REQUEST, command))
+			result_parts: List[str] = []
+
+			# Even for empty response, Minecraft itself will send a response with empty payload
+			# So it's guaranteed that at least one response packet will be received for our COMMAND packet
+			ending_probe_sent = False
+			while (packet := self.__receive_packet()).request_id == _RequestId.COMMAND:
+				result_parts.append(packet.payload)
+				if self.logger:
+					self.logger.debug(f'Rcon received command response with utf8 len {len(packet.payload)}')
+				if not ending_probe_sent:
+					# Minecraft has finished processing the COMMAND packet, we're safe to send our ending probe packet
+					# XXX: break if len < 4096 as a fast path?
+					self.__send(Packet(_RequestId.ENDING_PROBE, _PacketType.ENDING_PACKET, 'lol'))
+					ending_probe_sent = True
+			return ''.join(result_parts)
+
 		with self.command_lock:
 			for i in range(max_retry_time):
 				try:
-					self.__send(Packet(_RequestId.COMMAND, _PacketType.COMMAND_REQUEST, command))
-					self.__send(Packet(_RequestId.ENDING_PROBE, _PacketType.ENDING_PACKET, 'lol'))
-					result_parts: List[str] = []
-					while (packet := self.__receive_packet()).request_id == _RequestId.COMMAND:
-						result_parts.append(packet.payload)
-					return ''.join(result_parts)
+					return send_once()
 				except Exception as e:
 					if self.logger is not None:
-						self.logger.warning(f'Rcon fail to receive packet: {e}')
-					with contextlib.suppress(Exception):
-						self.disconnect()
+						self.logger.warning(f'Rcon fail to receive packet ({i + 1} / {max_retry_time}): {e}')
+
+				with contextlib.suppress(Exception):
+					self.disconnect()
+					try:
 						if self.connect():  # next try
 							continue
-					break
+					except Exception as e:
+						if self.logger is not None:
+							self.logger.error(f'Rcon reconnect failed, no more retry: {e}')
+				break
 		return None
 
 
@@ -159,6 +198,7 @@ def __main():
 		address=os.getenv('MCDR_RCON_TEST_ADDRESS', 'localhost'),
 		port=int(os.getenv('MCDR_RCON_TEST_PORT', '25575')),
 		password=os.getenv('MCDR_RCON_TEST_PASSWORD', 'eXamp1eRC0Npazzwalled'),
+		logger=logging.getLogger(__name__),
 	)
 
 	ok = rcon.connect()
