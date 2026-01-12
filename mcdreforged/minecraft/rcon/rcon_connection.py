@@ -56,6 +56,8 @@ class RconConnection:
 	A simply rcon client for connect to any Minecraft servers that supports rcon protocol
 	"""
 
+	CONNECT_TIMEOUT_SEC: ClassVar[int] = 10
+	READ_WRITE_TIMEOUT_SEC: ClassVar[int] = 60
 	BUFFER_SIZE: ClassVar[int] = 4096
 
 	def __init__(self, address: str, port: int, password: str, *, logger: Optional[Logger] = None):
@@ -108,10 +110,13 @@ class RconConnection:
 		if self.socket is not None:
 			with contextlib.suppress(Exception):
 				self.disconnect()
+
 		self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		self.socket.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
+		self.socket.settimeout(self.CONNECT_TIMEOUT_SEC)
 		self.socket.connect((self.address, self.port))
-		self.socket.settimeout(60)
+		self.socket.settimeout(self.READ_WRITE_TIMEOUT_SEC)
+
 		self.__send(Packet(_RequestId.LOGIN, _PacketType.LOGIN_REQUEST, self.password))
 		success = self.__receive_packet().request_id != _RequestId.LOGIN_FAIL
 		if not success:
