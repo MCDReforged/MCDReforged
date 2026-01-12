@@ -188,7 +188,9 @@ class RconConnection:
 			   We must ensure the server has finished reading the COMMAND packet before sending the ENDING_PROBE.
 			   We achieve this by waiting for the first response packet before sending the probe
 
-		    See also: https://github.com/MCDReforged/MCDReforged/pull/411#issuecomment-3735273034
+		    See also:
+		    - https://github.com/MCDReforged/MCDReforged/pull/411#issuecomment-3735273034
+		    - https://bugs.mojang.com/browse/MC/issues/MC-87863
 			"""
 
 			self.__send(Packet(_RequestId.COMMAND, _PacketType.COMMAND_REQUEST, command))
@@ -203,7 +205,6 @@ class RconConnection:
 					self.logger.debug(f'Rcon received command response with utf8 len {len(packet.payload)}')
 				if not ending_probe_sent:
 					# Minecraft has finished processing the COMMAND packet, we're safe to send our ending probe packet
-					# XXX: break if len < 4096 as a fast path?
 					self.__send(Packet(_RequestId.ENDING_PROBE, _PacketType.ENDING_PACKET, 'lol'))
 					ending_probe_sent = True
 			return ''.join(result_parts)
@@ -288,7 +289,7 @@ class AsyncRconConnection:
 			await self.disconnect()
 
 		reader, writer = await asyncio.open_connection(self.config.address, self.config.port)
-		sock: socket.socket = writer.transport.get_extra_info('socket')
+		sock: socket.socket = writer.get_extra_info('socket')
 		if sock is not None:
 			sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
 		self.connection = self.__Connection(reader, writer)
@@ -315,7 +316,7 @@ class AsyncRconConnection:
 		:return: The command execution result form the server, or None if *max_retry_time* retries exceeded
 		"""
 		async def send_once() -> str:
-			# see RconConnection.send_command for implementation explaination
+			# see RconConnection.send_command for implementation explanation
 			await self.__send(Packet(_RequestId.COMMAND, _PacketType.COMMAND_REQUEST, command))
 			result_parts: List[str] = []
 
