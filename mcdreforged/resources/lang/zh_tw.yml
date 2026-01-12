@@ -481,9 +481,9 @@ mcdreforged:
       done: 玩家 §b{0}§r 的權限等級已設置為 §e{1}§r
   rcon_manager:
     connect:
-      connection_fail: 'rcon 連接失敗: {0}'
+      connection_fail: 'rcon 連接失敗: {0} - {1}'
       connected: rcon 已連接
-      wrong_password: rcon 密碼錯誤，連接失敗
+      wrong_password: 'rcon 密碼錯誤，連接失敗: {0}'
     disconnect:
       disconnected: rcon 已斷開連接
-      disconnect_fail: rcon 斷開連接失敗
+      disconnect_fail: 'rcon 斷開連接失敗: {0}'

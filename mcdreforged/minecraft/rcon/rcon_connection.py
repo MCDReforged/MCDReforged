@@ -106,10 +106,8 @@ class RconConnection:
 		:return: If connect and login success
 		"""
 		if self.socket is not None:
-			try:
+			with contextlib.suppress(Exception):
 				self.disconnect()
-			except Exception:
-				pass
 		self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		self.socket.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
 		self.socket.connect((self.address, self.port))
