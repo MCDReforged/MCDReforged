@@ -98,12 +98,18 @@ class RconConnection:
 		self.disconnect()
 
 	def __enter__(self) -> 'RconConnection':
+		"""
+		.. versionadded:: v2.16.0
+		"""
 		success = self.connect()
 		if not success:
 			raise RconAuthenticationFail('RCON authentication failed')
 		return self
 
 	def __exit__(self, exc_type, exc_val, exc_tb):
+		"""
+		.. versionadded:: v2.16.0
+		"""
 		self.disconnect()
 
 	def __send(self, data: Packet):
@@ -223,6 +229,12 @@ class RconConnection:
 
 
 class AsyncRconConnection:
+	"""
+	The async version of :class:`RconConnection`
+
+	.. versionadded:: v2.16.0
+	"""
+
 	@dataclasses.dataclass(frozen=True)
 	class __Connection:
 		reader: asyncio.StreamReader
