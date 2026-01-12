@@ -481,9 +481,9 @@ mcdreforged:
       done: The permission level of player §b{0}§r has set to §e{1}§r
   rcon_manager:
     connect:
-      connection_fail: 'Rcon connection failed: {0}'
+      connection_fail: 'Rcon connection failed: {0} - {1}'
       connected: Rcon connected
-      wrong_password: Rcon password is not correct, connection failed
+      wrong_password: 'Rcon password incorrect, connection failed: {0}'
     disconnect:
       disconnected: Rcon disconnected
-      disconnect_fail: Fail to disconnect rcon
+      disconnect_fail: 'Rcon disconnection failed: {0}'
