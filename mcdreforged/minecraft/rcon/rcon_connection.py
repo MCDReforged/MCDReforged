@@ -274,8 +274,13 @@ class AsyncRconConnection:
 	async def connect(self) -> bool:
 		with contextlib.suppress(Exception):
 			await self.disconnect()
+
 		reader, writer = await asyncio.open_connection(self.config.address, self.config.port)
+		sock: socket.socket = writer.transport.get_extra_info('socket')
+		if sock is not None:
+			sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
 		self.connection = self.__Connection(reader, writer)
+
 		await self.__send(Packet(_RequestId.LOGIN, _PacketType.LOGIN_REQUEST, self.config.password))
 		success = (await self.__receive_packet()).request_id != _RequestId.LOGIN_FAIL
 		if not success:
@@ -297,23 +302,38 @@ class AsyncRconConnection:
 		:param max_retry_time: The maximum retry time of the operation
 		:return: The command execution result form the server, or None if *max_retry_time* retries exceeded
 		"""
+		async def send_once() -> str:
+			# see RconConnection.send_command for implementation explaination
+			await self.__send(Packet(_RequestId.COMMAND, _PacketType.COMMAND_REQUEST, command))
+			result_parts: List[str] = []
+
+			ending_probe_sent = False
+			while (packet := await self.__receive_packet()).request_id == _RequestId.COMMAND:
+				result_parts.append(packet.payload)
+				if self.logger:
+					self.logger.debug(f'Rcon received command response with utf8 len {len(packet.payload)}')
+				if not ending_probe_sent:
+					await self.__send(Packet(_RequestId.ENDING_PROBE, _PacketType.ENDING_PACKET, 'lol'))
+					ending_probe_sent = True
+			return ''.join(result_parts)
+
 		async with self.command_lock:
 			for i in range(max_retry_time):
 				try:
-					await self.__send(Packet(_RequestId.COMMAND, _PacketType.COMMAND_REQUEST, command))
-					await self.__send(Packet(_RequestId.ENDING_PROBE, _PacketType.ENDING_PACKET, 'lol'))
-					result_parts: List[str] = []
-					while (packet := await self.__receive_packet()).request_id == _RequestId.COMMAND:
-						result_parts.append(packet.payload)
-					return ''.join(result_parts)
+					return await send_once()
 				except Exception as e:
 					if self.logger is not None:
-						self.logger.warning(f'Rcon fail to receive packet: {e}')
-					with contextlib.suppress(Exception):
-						await self.disconnect()
+						self.logger.warning(f'Rcon fail to receive packet ({i + 1} / {max_retry_time}): {e}')
+
+				with contextlib.suppress(Exception):
+					await self.disconnect()
+					try:
 						if await self.connect():  # next try
 							continue
-					break
+					except Exception as e:
+						if self.logger is not None:
+							self.logger.error(f'Rcon reconnect failed, no more retry: {e}')
+				break
 		return None
 
 
@@ -333,6 +353,7 @@ async def __async_main():
 		address=os.getenv('MCDR_RCON_TEST_ADDRESS', 'localhost'),
 		port=int(os.getenv('MCDR_RCON_TEST_PORT', '25575')),
 		password=os.getenv('MCDR_RCON_TEST_PASSWORD', 'eXamp1eRC0Npazzwalled'),
+		logger=logging.getLogger(__name__),
 	) as rcon:
 		while True:
 			print('Server ->', await rcon.send_command(input('Server <- ')))
