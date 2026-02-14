@@ -36,7 +36,7 @@ msgid ""
 "<https://github.com/TISUnion/stext>`__ library"
 msgstr ""
 "感谢 `Pandaria98 <https://github.com/Pandaria98>`__ 的 `stext API "
-"<https://github.com/TISUnion/stext>`__ 库，这同时此库的灵感来源"
+"<https://github.com/TISUnion/stext>`__ 库，这同时是此库的灵感来源"
 
 #: ../code_references/minecraft_tools.rst:13
 msgid "Text Styles"
