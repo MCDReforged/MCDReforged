@@ -1,4 +1,4 @@
-import threading
+import contextvars
 from contextlib import contextmanager
 from typing import Union, Iterable, Optional, List, Callable, Any, cast
 
@@ -24,8 +24,7 @@ class RTextMCDRTranslation(RTextBase):
 	.. versionadded:: v2.1.0
 	"""
 
-	__TLS = threading.local()
-	__TLS.language = None
+	__language_context: contextvars.ContextVar[str] = contextvars.ContextVar('language_context')
 
 	def __init__(self, translation_key: str, *args, **kwargs):
 		"""
@@ -58,7 +57,7 @@ class RTextMCDRTranslation(RTextBase):
 		return RTextMCDRTranslation('').set_translator(fake_tr)
 
 	def __get_translated_text(self) -> RTextBase:
-		language = getattr(self.__TLS, 'language', None)
+		language = self.__language_context.get(None)
 		if language is None:
 			language = translation_utils.get_mcdr_language()
 		processed_text = self.__tr_func(self.translation_key, *self.args, **self.kwargs, _mcdr_tr_language=language)
@@ -91,12 +90,11 @@ class RTextMCDRTranslation(RTextBase):
 
 		:param language: The language to be used during translation inside the context
 		"""
-		prev = getattr(cls.__TLS, 'language', None)
-		cls.__TLS.language = language
+		token = cls.__language_context.set(language)
 		try:
 			yield
 		finally:
-			cls.__TLS.language = prev
+			cls.__language_context.reset(token)
 
 	@override
 	def to_json_object(self, **kwargs: Unpack[RTextBase.ToJsonKwargs]) -> Union[dict, list]:
