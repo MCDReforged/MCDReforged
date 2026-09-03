@@ -82,7 +82,7 @@ Verify the installation with:
 
 .. prompt-mcdr-version:: bash $ auto
 
-    $ mcdreforged
+    $ mcdreforged -V
     MCDReforged v@@MCDR_VERSION@@
 
 For users in China, if you encounter slow downloads or network issues while using ``pip`` to install packages,

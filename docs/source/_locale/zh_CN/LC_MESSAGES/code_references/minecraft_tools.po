@@ -36,7 +36,7 @@ msgid ""
 "<https://github.com/TISUnion/stext>`__ library"
 msgstr ""
 "感谢 `Pandaria98 <https://github.com/Pandaria98>`__ 的 `stext API "
-"<https://github.com/TISUnion/stext>`__ 库，这同时此库的灵感来源"
+"<https://github.com/TISUnion/stext>`__ 库，这同时是此库的灵感来源"
 
 #: ../code_references/minecraft_tools.rst:13
 msgid "Text Styles"
@@ -953,7 +953,7 @@ msgstr "操作的最大重试次数"
 
 #: mcdreforged.minecraft.rcon.rcon_connection.RconConnection.send_command:5 of
 msgid ""
-"The command execution result form the server, or None if *max_retry_time*"
+"The command execution result from the server, or None if *max_retry_time*"
 " retries exceeded"
 msgstr "服务器的命令执行结果。如果重试次数超过 *max_retry_time*，则将返回 None"
 
