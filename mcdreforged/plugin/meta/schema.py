@@ -4,6 +4,8 @@ from typing import List, Dict, Optional, Union
 from pydantic import BaseModel, Field, ConfigDict, StringConstraints
 from typing_extensions import Annotated
 
+from mcdreforged.constants import plugin_constant
+
 
 class Person(BaseModel):
 	name: str = Field(description='Name of the person')
@@ -15,7 +17,7 @@ class PluginLinks(BaseModel):
 	homepage: Optional[str] = Field(default=None, description='Homepage of the plugin')
 	source: Optional[str] = Field(default=None, description='Source repository of the plugin')
 	documentation: Optional[str] = Field(default=None, description='Documentation page of the plugin')
-	issue: Optional[str] = Field(default=None, description='Issue page of the plugin')
+	issues: Optional[str] = Field(default=None, description='Issue page of the plugin')
 
 
 def __join_regex(segment: str, sep: str) -> re.Pattern:
@@ -70,34 +72,25 @@ class PluginMetadataJsonModel(BaseModel):
 		},
 	)
 
+	schema_version: int = Field(default=0, description='The schema version of mcdreforged.plugin.json; omitted in version 0')
 	id: PluginId = Field(description='The identifier of the plugin')
 	version: PluginVersion = Field(description='The version of the plugin, in a less restrictive semver format')
 	name: Optional[str] = Field(default=None, description='The name of the plugin')
 	description: PluginDescription = Field(default=None, description='The description of the plugin')
 
-	author: Optional[Union[str, List[str]]] = Field(default=None, description='The author(s) of the plugin')
-	# maintainer: PersonList = Field(default=None, description='The maintainer(s) of the plugin')
-	link: Optional[str] = Field(default=None, description='The url to the plugin, e.g. link to a github repository')
+	author: Optional[Union[str, List[str]]] = Field(default=None, description='The author(s) of the plugin', deprecated='Use authors instead')
+	authors: PersonList = Field(default=None, description='The author(s) of the plugin')
+	maintainers: PersonList = Field(default=None, description='The current maintainer(s) of the plugin')
+	link: Optional[str] = Field(default=None, description='The url to the plugin, e.g. link to a github repository', deprecated='Use links instead')
+	links: Optional[PluginLinks] = Field(default=None, description='The links related to the plugin')
 	license: Optional[str] = Field(default=None, description='The license of the plugin. Recommended to use the SPDX License Identifiers')
 
 	dependencies: Dict[PluginId, PluginVersionRequirement] = Field(default_factory=dict, description='A dict of dependencies the plugin relies on')
-	# requirements_file: Optional[str] = Field(default='requirements.txt', description='Path to the Python package requirements file inside the multi-file plugin')
+	requirements_file: Optional[str] = Field(
+		default=plugin_constant.PLUGIN_REQUIREMENTS_FILE,
+		description='Python requirements file path inside the multi-file plugin; omit to try requirements.txt automatically, or use null to disable',
+	)
 	entrypoint: Optional[EntryPoint] = Field(default=None, description='The entrypoint module of the multi-file plugin. The entrypoint should be import-able')
 
-	# TODO: deprecate
 	archive_name: Optional[str] = Field(default=None, description='The file name of generated .mcdr packed plugin in CLI')
 	resources: Optional[List[str]] = Field(default=None, description='A list of file or folder names that will be packed into the generated .mcdr packed plugin file in CLI')
-
-
-class PluginBuildConfigJsonModel(BaseModel):
-	model_config = ConfigDict(
-		extra='forbid',
-		json_schema_extra={
-			'$id': f'https://json.schemastore.org/mcdreforged-plugin-build-config.json',
-			'$schema': 'http://json-schema.org/draft-07/schema#'
-		},
-	)
-
-	archive_name: Optional[str] = Field(default=None, description='The file name of generated .mcdr packed plugin in CLI')
-	resources: Optional[List[str]] = Field(default=None, description='A list of file or folder names that will be packed into the generated .mcdr packed plugin file in CLI')
-	pack_ignorefile: str = Field(default='.gitignore', description='Path to the ignore file that will used during the CLI pack command')

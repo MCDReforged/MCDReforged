@@ -12,6 +12,8 @@ from mcdreforged.constants import plugin_constant
 from mcdreforged.plugin.installer.catalogue_access import PluginCatalogueAccess
 from mcdreforged.plugin.installer.meta_holder import CatalogueMetaRegistryHolder
 from mcdreforged.plugin.installer.types import MetaRegistry
+from mcdreforged.plugin.meta.metadata import RequirementsFileSpec
+from mcdreforged.plugin.meta.schema import PluginMetadataJsonModel
 from mcdreforged.utils import function_utils
 from mcdreforged.utils.replier import NoopReplier, StdoutReplier, Replier
 
@@ -27,7 +29,7 @@ def create(parser_factory: Callable[..., ArgumentParser]) -> ArgumentParser:
 	parser_download.add_argument('plugin_ids', nargs='+', help='IDs of the plugins to be downloaded')
 	parser_download.add_argument('-o', '--output', default='.', help='Path of the directory to store the downloaded plugins')
 
-	parser_pipi = subparsers.add_parser('pipi', help='Call "pip install" with the requirements.txt file in the given packed plugin to install Python packages')
+	parser_pipi = subparsers.add_parser('pipi', help='Call "pip install" with the Python requirements file declared by the given packed plugin')
 	parser_pipi.add_argument('plugin_paths', nargs='+', help='The packed plugin files to be processed')
 	parser_pipi.add_argument('-a', '--args', help='Extra arguments passing to the pip process, e.g. --args "--proxy http://localhost:8080", --args "-i https://pypi.org/simple/"')
 
@@ -73,16 +75,31 @@ def cmd_download(replier: Replier, plugin_reqs: List[str], output_dir: str):
 def cmd_pipi(plugin_paths: List[str], extra_args: Optional[str] = None, *, quiet: bool = False):
 	writeln = print if not quiet else function_utils.NONE
 
-	# read requirements.txt
 	requirement_lines: List[bytes] = []
-	req_file_name = plugin_constant.PLUGIN_REQUIREMENTS_FILE
 	for plugin_path in plugin_paths:
 		try:
 			with ZipFile(plugin_path) as zip_file:
-				if req_file_name not in zip_file.namelist():
-					writeln('Plugin {!r} does not contain a {}'.format(plugin_path, req_file_name))
+				metadata_model = PluginMetadataJsonModel.model_validate_json(
+					zip_file.read(plugin_constant.PLUGIN_META_FILE),
+					strict=True,
+				)
+				if metadata_model.schema_version > plugin_constant.PLUGIN_METADATA_SCHEMA_VERSION:
+					writeln('[WARN] Plugin metadata schema version {} in {!r} is newer than the latest supported version {}, parsing known fields only'.format(
+						metadata_model.schema_version, plugin_path, plugin_constant.PLUGIN_METADATA_SCHEMA_VERSION,
+					))
+				requirements_file = RequirementsFileSpec.from_model(metadata_model)
+				if requirements_file.mode is RequirementsFileSpec.Mode.DISABLED:
+					continue
+				assert requirements_file.path is not None
+				req_file_name = requirements_file.path
+				try:
+					requirements_content = zip_file.read(req_file_name)
+				except KeyError:
+					if requirements_file.mode is RequirementsFileSpec.Mode.AUTO:
+						continue
+					writeln('Plugin {!r} does not contain required requirements file {!r}'.format(plugin_path, req_file_name))
 					return 1
-				for line in zip_file.read(req_file_name).splitlines():
+				for line in requirements_content.splitlines():
 					line = line.split(b'#', 1)[0].lstrip()
 					if len(line) == 0:
 						continue

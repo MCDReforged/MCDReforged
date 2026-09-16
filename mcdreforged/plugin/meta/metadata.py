@@ -2,13 +2,16 @@
 Information of a plugin
 """
 import dataclasses
+import enum
 import re
+from pathlib import PurePosixPath, PureWindowsPath
 from typing import List, Dict, TYPE_CHECKING, Optional, Union, ClassVar, TypeVar, Any, cast, Type
 
-from typing_extensions import override
+from typing_extensions import deprecated, override
 
+from mcdreforged.constants import plugin_constant
 from mcdreforged.minecraft.rtext.text import RTextBase, RText
-from mcdreforged.plugin.meta.schema import PluginMetadataJsonModel
+from mcdreforged.plugin.meta.schema import PluginMetadataJsonModel, Person, PluginLinks
 from mcdreforged.plugin.meta.version import Version, VersionParsingError, VersionRequirement
 from mcdreforged.translation.translation_text import RTextMCDRTranslation
 from mcdreforged.utils import translation_utils, class_utils
@@ -22,6 +25,105 @@ _T = TypeVar('_T')
 
 def _none_or(value: Optional[_T], default: _T) -> _T:
 	return value if value is not None else default
+
+
+def _normalize_requirements_file_path(path: str) -> str:
+	windows_path = PureWindowsPath(path)
+	posix_path = PurePosixPath(path.replace('\\', '/'))
+	if (
+		'\0' in path or
+		windows_path.drive or
+		windows_path.root or
+		posix_path.is_absolute() or
+		'..' in posix_path.parts
+	):
+		raise ValueError('requirements_file must be a relative path inside the plugin, found {!r}'.format(path))
+	normalized = posix_path.as_posix()
+	if normalized in ('', '.'):
+		raise ValueError('requirements_file must be a non-empty file path, found {!r}'.format(path))
+	return normalized
+
+
+@dataclasses.dataclass(frozen=True)
+class RequirementsFileSpec:
+	"""The declared handling strategy for a multi-file plugin's Python requirements file."""
+
+	class Mode(enum.Enum):
+		AUTO = 'auto'
+		DISABLED = 'disabled'
+		REQUIRED = 'required'
+
+	mode: Mode
+	path: Optional[str]
+
+	def __post_init__(self):
+		if not isinstance(self.mode, self.Mode):
+			raise TypeError('mode should be RequirementsFileSpec.Mode, found {}'.format(type(self.mode).__name__))
+		if self.mode is self.Mode.AUTO and self.path != plugin_constant.PLUGIN_REQUIREMENTS_FILE:
+			raise ValueError('path should be {!r} in auto mode, found {!r}'.format(plugin_constant.PLUGIN_REQUIREMENTS_FILE, self.path))
+		if self.mode is self.Mode.DISABLED and self.path is not None:
+			raise ValueError('path should be None in disabled mode, found {!r}'.format(self.path))
+		if self.mode is self.Mode.REQUIRED:
+			if not isinstance(self.path, str):
+				raise TypeError('path should be str in required mode, found {}'.format(type(self.path).__name__))
+			object.__setattr__(self, 'path', _normalize_requirements_file_path(self.path))
+
+	@classmethod
+	def auto(cls) -> 'RequirementsFileSpec':
+		return cls(cls.Mode.AUTO, plugin_constant.PLUGIN_REQUIREMENTS_FILE)
+
+	@classmethod
+	def disabled(cls) -> 'RequirementsFileSpec':
+		return cls(cls.Mode.DISABLED, None)
+
+	@classmethod
+	def required(cls, path: str) -> 'RequirementsFileSpec':
+		return cls(cls.Mode.REQUIRED, path)
+
+	@classmethod
+	def from_declaration(cls, value: Optional[str], *, declared: bool) -> 'RequirementsFileSpec':
+		if not declared:
+			return cls.auto()
+		if value is None:
+			return cls.disabled()
+		return cls.required(value)
+
+	@classmethod
+	def from_model(cls, model: PluginMetadataJsonModel) -> 'RequirementsFileSpec':
+		return cls.from_declaration(
+			model.requirements_file,
+			declared='requirements_file' in model.model_fields_set,
+		)
+
+
+def _normalize_person_list(value: Any) -> List[Person]:
+	if value is None:
+		return []
+	if not isinstance(value, list):
+		value = [value]
+
+	result: List[Person] = []
+	for item in value:
+		if isinstance(item, str):
+			person = Person(name=item)
+		elif isinstance(item, Person):
+			person = item
+		elif isinstance(item, dict):
+			person = Person.model_validate(item)
+		else:
+			raise TypeError('Invalid person item type {}, expected str, dict, or Person'.format(type(item).__name__))
+		result.append(person)
+	return result
+
+
+def _normalize_legacy_authors(value: Any) -> List[Person]:
+	if value is None:
+		return []
+	if isinstance(value, str):
+		names = [value]
+	else:
+		names = class_utils.check_type(value, list)
+	return [Person(name=str(name)) for name in names]
 
 
 class __MetadataMeta(type):
@@ -62,11 +164,17 @@ class Metadata(metaclass=__MetadataMeta):
 	It can be a regular str or a ``Dict[str, str]`` indicating a mapping from language to description
 	"""
 
-	author: Optional[List[str]]
-	"""The authors of the plugin"""
+	authors: Optional[List[Person]]
+	"""The structured authors of the plugin"""
 
-	link: Optional[str]
-	"""The url to the plugin, e.g. link to a github repository"""
+	maintainers: Optional[List[Person]]
+	"""The current maintainers of the plugin"""
+
+	links: Optional[PluginLinks]
+	"""The links related to the plugin"""
+
+	license: Optional[str]
+	"""The license of the plugin"""
 
 	dependencies: Dict[str, VersionRequirement]
 	"""
@@ -75,6 +183,9 @@ class Metadata(metaclass=__MetadataMeta):
 	:Key: The id of the dependent plugin
 	:Value: The version requirement of the dependent plugin
 	"""
+
+	requirements_file: RequirementsFileSpec
+	"""The declared handling strategy for the Python requirements file inside the multi-file plugin"""
 
 	entrypoint: str
 	"""
@@ -143,26 +254,51 @@ class Metadata(metaclass=__MetadataMeta):
 			class_utils.check_type(meta_description, (None, str, dict))
 			return meta_description
 
-		def create_author() -> Optional[List[str]]:
-			if isinstance(data, PluginMetadataJsonModel):
-				return [data.author] if isinstance(data.author, str) else data.author
-			meta_author = data.get('author')
-			if isinstance(meta_author, str):
-				meta_author = [meta_author]
-			if isinstance(meta_author, list):
-				for i in range(len(meta_author)):
-					meta_author[i] = str(meta_author[i])
-				if len(meta_author) == 0:
-					meta_author = None
-			class_utils.check_type(meta_author, (None, list))
-			return meta_author
+		if isinstance(data, PluginMetadataJsonModel):
+			legacy_fields = data.model_dump(include={'author', 'link'})
+			legacy_authors = legacy_fields['author']
+			legacy_link = legacy_fields['link']
+		else:
+			legacy_authors = data.get('author')
+			legacy_link = data.get('link')
 
-		def create_link() -> Optional[str]:
+		def create_maintainers() -> Optional[List[Person]]:
 			if isinstance(data, PluginMetadataJsonModel):
-				return data.link
-			meta_link = data.get('link')
-			class_utils.check_type(meta_link, (None, str))
-			return meta_link
+				value = data.maintainers
+			else:
+				value = data.get('maintainers')
+			result = _normalize_person_list(value)
+			return result or None
+
+		def create_authors() -> Optional[List[Person]]:
+			if isinstance(data, PluginMetadataJsonModel):
+				new_authors = data.authors
+			else:
+				new_authors = data.get('authors')
+			result = _normalize_person_list(new_authors)
+			result.extend(_normalize_legacy_authors(legacy_authors))
+			return result or None
+
+		def create_links() -> Optional[PluginLinks]:
+			if isinstance(data, PluginMetadataJsonModel):
+				meta_links = data.links
+			else:
+				meta_links = data.get('links')
+			if isinstance(meta_links, dict):
+				meta_links = PluginLinks.model_validate(meta_links)
+			meta_links = class_utils.check_type(meta_links, (None, PluginLinks))
+			checked_legacy_link = class_utils.check_type(legacy_link, (None, str))
+			if checked_legacy_link is not None and (meta_links is None or meta_links.homepage is None):
+				if meta_links is None:
+					meta_links = PluginLinks(homepage=checked_legacy_link)
+				else:
+					meta_links = meta_links.model_copy(update={'homepage': checked_legacy_link})
+			return meta_links
+
+		def create_license() -> Optional[str]:
+			if isinstance(data, PluginMetadataJsonModel):
+				return data.license
+			return class_utils.check_type(data.get('license'), (None, str))
 
 		def create_version() -> Version:
 			if (version_str := data.version if isinstance(data, PluginMetadataJsonModel) else data.get('version')) is not None:
@@ -209,18 +345,55 @@ class Metadata(metaclass=__MetadataMeta):
 			else:
 				return class_utils.check_type(data.get('resources', []), list)
 
+		if isinstance(data, PluginMetadataJsonModel):
+			requirements_file = RequirementsFileSpec.from_model(data)
+		else:
+			requirements_file = RequirementsFileSpec.from_declaration(
+				class_utils.check_type(data.get('requirements_file'), (None, str)),
+				declared='requirements_file' in data,
+			)
+
 		return cls(
 			id=meta_id,
 			version=create_version(),
 			name=create_name(),
 			description=create_description(),
-			author=create_author(),
-			link=create_link(),
+			authors=create_authors(),
+			maintainers=create_maintainers(),
+			links=create_links(),
+			license=create_license(),
 			dependencies=create_dependencies(),
+			requirements_file=requirements_file,
 			entrypoint=create_entrypoint(),
 			archive_name=create_archive_name(),
 			resources=create_resources(),
 		)
+
+	@property
+	@deprecated('Use authors instead', category=None)
+	def author(self) -> Optional[List[str]]:
+		"""
+		The author names of the plugin
+
+		.. deprecated:: v2.16.0
+			Use :attr:`authors` instead.
+		"""
+		if self.authors is None:
+			return None
+		return [person.name for person in self.authors]
+
+	@property
+	@deprecated('Use links instead', category=None)
+	def link(self) -> Optional[str]:
+		"""
+		The homepage of the plugin
+
+		.. deprecated:: v2.16.0
+			Use :attr:`links` instead.
+		"""
+		if self.links is None:
+			return None
+		return self.links.homepage
 
 	def get_description(self, lang: Optional[str] = None) -> Optional[str]:
 		"""
@@ -260,14 +433,21 @@ class Metadata(metaclass=__MetadataMeta):
 		def copy(obj):
 			return obj.copy() if isinstance(obj, (list, dict)) else obj
 
-		return {
+		def person_list_to_json(items: Optional[List[Person]]):
+			if items is None:
+				return None
+			return [item.model_dump(mode='json') for item in items]
+
+		result = {
 			# Fields for all plugins
 			'id': self.id,
 			'version': str(self.version),
 			'name': self.name,
 			'description': copy(self.description),
-			'author': copy(self.author),
-			'link': self.link,
+			'authors': person_list_to_json(self.authors),
+			'maintainers': person_list_to_json(self.maintainers),
+			'links': self.links.model_dump(mode='json') if self.links is not None else None,
+			'license': self.license,
 			'dependencies': {k: str(v) for k, v in self.dependencies.items()},
 
 			# Fields for packed plugins
@@ -275,6 +455,11 @@ class Metadata(metaclass=__MetadataMeta):
 			'archive_name': self.archive_name,
 			'resources': copy(self.resources),
 		}
+		if self.requirements_file.mode is RequirementsFileSpec.Mode.DISABLED:
+			result['requirements_file'] = None
+		elif self.requirements_file.mode is RequirementsFileSpec.Mode.REQUIRED:
+			result['requirements_file'] = self.requirements_file.path
+		return result
 
 
 def __sample_test():
@@ -311,4 +496,3 @@ def __sample_test():
 		raise AssertionError(f'{meta1} != {meta2}')
 
 __sample_test()
-

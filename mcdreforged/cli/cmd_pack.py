@@ -2,14 +2,14 @@ import os
 import stat
 import zipapp
 from pathlib import Path
-from typing import Optional, Any, Callable, List
+from typing import Optional, Any, Callable, List, Tuple
 from zipfile import ZipFile, ZIP_DEFLATED
 
 import pathspec
 from typing_extensions import Protocol
 
 from mcdreforged.constants import plugin_constant
-from mcdreforged.plugin.meta.metadata import Metadata
+from mcdreforged.plugin.meta.metadata import Metadata, RequirementsFileSpec
 from mcdreforged.plugin.meta.schema import PluginMetadataJsonModel
 from mcdreforged.utils import file_utils, function_utils
 
@@ -59,7 +59,6 @@ def make_packed_plugin(args: PackArgs, *, quiet: bool = False):
 	output_dir.mkdir(exist_ok=True)
 
 	meta_file_path: Path = input_dir / plugin_constant.PLUGIN_META_FILE
-	req_file_path: Path = input_dir / plugin_constant.PLUGIN_REQUIREMENTS_FILE
 	if not meta_file_path.is_file():
 		writeln('Plugin metadata file {} not found'.format(meta_file_path))
 		return
@@ -72,6 +71,24 @@ def make_packed_plugin(args: PackArgs, *, quiet: bool = False):
 		return
 	writeln('Plugin ID: {}'.format(meta.id))
 	writeln('Plugin version: {}'.format(meta.version))
+	if meta_model.schema_version > plugin_constant.PLUGIN_METADATA_SCHEMA_VERSION:
+		writeln('[WARN] Plugin metadata schema version {} is newer than the latest supported version {}, parsing known fields only'.format(
+			meta_model.schema_version, plugin_constant.PLUGIN_METADATA_SCHEMA_VERSION,
+		))
+	requirements_file = meta.requirements_file
+	requirements_to_pack: Optional[Tuple[Path, str]] = None
+	if requirements_file.mode is not RequirementsFileSpec.Mode.DISABLED:
+		assert requirements_file.path is not None
+		requirements_path = requirements_file.path
+		req_file_path = input_dir / requirements_path
+		if req_file_path.is_file():
+			if requirements_file.mode is RequirementsFileSpec.Mode.REQUIRED and ignore_filter.match_file(requirements_path):
+				writeln('Required requirements file {!r} is excluded by pack ignore rules'.format(requirements_path))
+				return
+			requirements_to_pack = req_file_path, requirements_path
+		elif requirements_file.mode is RequirementsFileSpec.Mode.REQUIRED:
+			writeln('Requirements file {} not found'.format(req_file_path))
+			return
 	if file_name is None:
 		file_name = meta.archive_name
 	if file_name is None:
@@ -86,12 +103,12 @@ def make_packed_plugin(args: PackArgs, *, quiet: bool = False):
 		# https://github.com/cpburnz/python-pathspec/issues/89
 		return Path(path).as_posix() + ('/' if is_dir else '')
 
-	def write(base_path: Path, *, directory_only: bool):
-		if ignore_filter.match_file(format_path_for_filter(base_path.name, base_path.is_dir())):
+	def write(base_path: Path, *, directory_only: bool, arcname: Optional[str] = None):
+		if ignore_filter.match_file(format_path_for_filter(arcname or base_path.name, base_path.is_dir())):
 			return
 		nonlocal file_counter
 		if base_path.is_dir():
-			dir_arc = base_path.name
+			dir_arc = arcname or base_path.name
 			zip_file.write(base_path, arcname=dir_arc)
 			file_counter += 1
 			writeln('Creating directory: {} -> {}'.format(base_path, dir_arc))
@@ -105,7 +122,7 @@ def make_packed_plugin(args: PackArgs, *, quiet: bool = False):
 					file_counter += 1
 					writeln('  Written: {} -> {}'.format(full_path, arc_name))
 		elif base_path.is_file() and not directory_only:
-			arc_name = base_path.name
+			arc_name = arcname or base_path.name
 			zip_file.write(base_path, arcname=arc_name)
 			file_counter += 1
 			writeln('Writing single file: {} -> {}'.format(base_path, arc_name))
@@ -122,10 +139,15 @@ def make_packed_plugin(args: PackArgs, *, quiet: bool = False):
 
 		with ZipFile(fd, 'w', ZIP_DEFLATED) as zip_file:
 			write(meta_file_path, directory_only=False)  # metadata
-			write(req_file_path, directory_only=False)  # requirement
 			write(input_dir / meta.id, directory_only=True)  # source module
 			for resource_path in (meta.resources or []):  # resources
 				write(input_dir / resource_path, directory_only=False)
+			if requirements_to_pack is not None:
+				req_file_path, req_file_arcname = requirements_to_pack
+				try:
+					zip_file.getinfo(req_file_arcname)
+				except KeyError:
+					write(req_file_path, directory_only=False, arcname=req_file_arcname)
 	if args.shebang:
 		# chmod +x
 		os.chmod(packed_plugin_path, os.stat(packed_plugin_path).st_mode | stat.S_IEXEC)

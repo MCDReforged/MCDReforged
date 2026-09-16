@@ -51,7 +51,10 @@ class PackedPlugin(MultiFilePlugin):
 
 	@override
 	def open_file(self, file_path: str) -> IO[bytes]:
-		return self.__zip_file.open(self.__format_path(file_path), 'r')
+		try:
+			return self.__zip_file.open(self.__format_path(file_path), 'r')
+		except KeyError:
+			raise FileNotFoundError(file_path) from None
 
 	@override
 	def list_directory(self, directory_name: str) -> Collection[str]:

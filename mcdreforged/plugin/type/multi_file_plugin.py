@@ -15,7 +15,7 @@ from typing_extensions import override
 from mcdreforged.constants import plugin_constant
 from mcdreforged.logging.debug_option import DebugOption
 from mcdreforged.plugin.exception import RequirementCheckFailure
-from mcdreforged.plugin.meta.metadata import Metadata
+from mcdreforged.plugin.meta.metadata import Metadata, RequirementsFileSpec
 from mcdreforged.plugin.meta.schema import PluginMetadataJsonModel
 from mcdreforged.plugin.type.regular_plugin import RegularPlugin
 from mcdreforged.utils import path_utils
@@ -68,10 +68,15 @@ class MultiFilePlugin(RegularPlugin, ABC):
 		with contextlib.ExitStack() as es:
 			try:
 				meta_file = es.enter_context(self.open_file(plugin_constant.PLUGIN_META_FILE))
-			except Exception:
+			except FileNotFoundError:
 				raise IllegalPluginStructure('Metadata file {} not found'.format(plugin_constant.PLUGIN_META_FILE)) from None
 			meta_json_buf = meta_file.read()
 		metadata_model = PluginMetadataJsonModel.model_validate_json(meta_json_buf, strict=True)
+		if metadata_model.schema_version > plugin_constant.PLUGIN_METADATA_SCHEMA_VERSION:
+			self.mcdr_server.logger.warning(
+				'Plugin metadata schema version %s is newer than the latest supported version %s, parsing known fields only',
+				metadata_model.schema_version, plugin_constant.PLUGIN_METADATA_SCHEMA_VERSION,
+			)
 		self._set_metadata(Metadata.create(metadata_model, plugin=self))
 		self.__check_requirements()
 		self._check_dir_legality()
@@ -127,10 +132,17 @@ class MultiFilePlugin(RegularPlugin, ABC):
 		raise NotImplementedError()
 
 	def __check_requirements(self):
-		try:
-			req_file = self.open_file(plugin_constant.PLUGIN_REQUIREMENTS_FILE)
-		except Exception:
+		requirements_file = self.get_metadata().requirements_file
+		if requirements_file.mode is RequirementsFileSpec.Mode.DISABLED:
 			return
+		assert requirements_file.path is not None
+		requirements_path = requirements_file.path
+		try:
+			req_file = self.open_file(requirements_path)
+		except FileNotFoundError:
+			if requirements_file.mode is RequirementsFileSpec.Mode.AUTO:
+				return
+			raise IllegalPluginStructure('Requirements file {} not found'.format(requirements_path)) from None
 		with req_file:
 			import packaging.requirements as pr
 			import packaging.version as pv
