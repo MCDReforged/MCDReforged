@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-12 21:42+0800\n"
+"POT-Creation-Date: 2026-09-17 15:12+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.15.0\n"
+"Generated-By: Babel 2.17.0\n"
 
 #: ../plugin_dev/plugin_format.rst:3
 msgid "Plugin Format"
@@ -50,7 +50,7 @@ msgstr "多文件插件（抽象）"
 msgid "Packed Plugin"
 msgstr "打包插件"
 
-#: ../plugin_dev/plugin_format.rst:15 ../plugin_dev/plugin_format.rst:102
+#: ../plugin_dev/plugin_format.rst:15 ../plugin_dev/plugin_format.rst:105
 msgid "Directory Plugin"
 msgstr "文件夹插件"
 
@@ -130,8 +130,12 @@ msgid "A minimum packed plugin consists of the following files at its zip root"
 msgstr "一个最小的打包插件在其压缩文件根目录中包含了以下的文件："
 
 #: ../plugin_dev/plugin_format.rst:55
-msgid "``mcdreforged.plugin.json``, contains the metadata of the plugin"
-msgstr "``mcdreforged.plugin.json``，储存着该插件的元数据"
+msgid ""
+"``mcdreforged.plugin.json``, contains the :doc:`metadata <metadata>` of "
+"the plugin, including the required ``id`` and ``version`` fields"
+msgstr ""
+"``mcdreforged.plugin.json``，储存着该插件的 :doc:`元数据 <metadata>`，其中包含了必需的 ``id``"
+" 和 ``version`` 字段"
 
 #: ../plugin_dev/plugin_format.rst:56
 msgid "a valid python package with your plugin id"
@@ -152,8 +156,9 @@ msgstr "可选的，打包插件可以包含其他可被 MCDR 识别的有用的
 #: ../plugin_dev/plugin_format.rst:70
 msgid ""
 "``requirements.txt``, indicating the python package requirement of your "
-"plugin. It'll be checked before plugin loading"
-msgstr "``requirements.txt``，储存着你的插件所依赖的 python 依赖。在插件加载前这些依赖需求将会被检查"
+"plugin. It'll be checked before plugin loading when selected by the "
+"metadata"
+msgstr "``requirements.txt``，储存着你的插件所需的 python 包依赖。当它被元数据选中时，这些依赖需求将在插件加载前被检查"
 
 #: ../plugin_dev/plugin_format.rst:71
 msgid ""
@@ -166,6 +171,17 @@ msgstr ""
 
 #: ../plugin_dev/plugin_format.rst:73
 msgid ""
+"Since v2.16.0, the :ref:`plugin_dev/metadata:requirements_file` metadata "
+"field can select a different requirements file relative to the plugin "
+"root, or disable requirements file handling. Omitting it preserves the "
+"default behavior of using ``requirements.txt`` if present"
+msgstr ""
+"自 v2.16.0 起，:ref:`plugin_dev/metadata:requirements_file` "
+"元数据字段可以指定一个相对于插件根目录的其他依赖文件，也可以禁用依赖文件处理。省略该字段则保持默认行为：若 "
+"``requirements.txt`` 存在，则使用它"
+
+#: ../plugin_dev/plugin_format.rst:76
+msgid ""
 "You can include any other files or folders inside your packed plugin. You"
 " can access them via "
 ":meth:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.open_bundled_file`"
@@ -177,13 +193,13 @@ msgstr ""
 ":meth:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.open_bundled_file`"
 " 方法来访问这些文件"
 
-#: ../plugin_dev/plugin_format.rst:77
+#: ../plugin_dev/plugin_format.rst:80
 msgid ""
 "Here's an example file tree of a valid packed plugin with more possible "
 "files:"
 msgstr "下面是包含着更多文件的打包插件的文件树的一个例子："
 
-#: ../plugin_dev/plugin_format.rst:95
+#: ../plugin_dev/plugin_format.rst:98
 msgid ""
 "In addition to ``.mcdr`` file extension, the python :external:doc:`zip "
 "app <library/zipapp>` file extension ``.pyz`` is also valid for a packed "
@@ -192,7 +208,7 @@ msgstr ""
 "除了 ``.mcdr`` 文件扩展名外，python 的 :external:doc:`zip app <library/zipapp>` 扩展名"
 " ``.pyz`` 也是打包插件的一个可用扩展名"
 
-#: ../plugin_dev/plugin_format.rst:97
+#: ../plugin_dev/plugin_format.rst:100
 msgid ""
 "Although it's not as obvious to be a MCDR plugin as ``.mcdr``, but for "
 "those plugins who provide the functionality to run in command line "
@@ -202,7 +218,7 @@ msgstr ""
 "尽管 ``.pyz`` 并不像 ``.mcdr`` 那样，能让人轻易地从文件名看出这是一个 MCDR 插件，但是对于那些支持脱离 MCDR "
 "直接于控制台中运行的插件而言，使用 ``.pyz`` 扩展名能明确地表示“可于控制台中运行”这一性质"
 
-#: ../plugin_dev/plugin_format.rst:104
+#: ../plugin_dev/plugin_format.rst:107
 msgid ""
 "Directory plugin has exactly the same file structure as "
 ":ref:`plugin_dev/plugin_format:Packed Plugin`. The only difference is "
@@ -212,17 +228,17 @@ msgstr ""
 "文件夹插件拥有着与 :ref:`plugin_dev/plugin_format:Packed Plugin` "
 "完全一致的文件结构。唯一的区别为，文件夹插件的文件位于一个文件夹中，而非一个 ``.mcdr`` 压缩文件中"
 
-#: ../plugin_dev/plugin_format.rst:107
+#: ../plugin_dev/plugin_format.rst:110
 msgid ""
 "Directory plugin is mostly used for debug purpose inside the plugin "
 "directory of MCDR"
 msgstr "文件夹插件主要用于在 MCDR 的插件文件夹中的插件调试"
 
-#: ../plugin_dev/plugin_format.rst:109
+#: ../plugin_dev/plugin_format.rst:112
 msgid "Here's an example file tree of a directory plugin:"
 msgstr "下面是文件夹插件的文件树的一个例子："
 
-#: ../plugin_dev/plugin_format.rst:121
+#: ../plugin_dev/plugin_format.rst:124
 msgid ""
 "Directory plugin will always be treated as \"modified\" during ``!!MCDR "
 "reload plugin`` :ref:`command/mcdr:Hot reloads` command"
@@ -230,17 +246,17 @@ msgstr ""
 "在 ``!!MCDR reload plugin`` 这个 :ref:`command/mcdr:Hot reloads` "
 "命令中，文件夹插件总会被视为是“有变化”的插件"
 
-#: ../plugin_dev/plugin_format.rst:125
+#: ../plugin_dev/plugin_format.rst:128
 msgid "Linked Directory Plugin"
 msgstr "链接型文件夹插件"
 
-#: ../plugin_dev/plugin_format.rst:127
+#: ../plugin_dev/plugin_format.rst:130
 msgid ""
 "Linked directory plugin is a specialized form of directory plugin, "
 "primarily designed for MCDR plugin developers"
 msgstr "链接型文件夹插件是一种特殊形式的文件夹插件，主要为 MCDR 插件开发者设计"
 
-#: ../plugin_dev/plugin_format.rst:129
+#: ../plugin_dev/plugin_format.rst:132
 msgid ""
 "It functions similarly to a symbolic link (symlink) that links to a "
 "regular :ref:`plugin_dev/plugin_format:Directory Plugin`. Compared to a "
@@ -249,7 +265,7 @@ msgstr ""
 "它的工作方式类似于符号链接（symlink），链接到一个标准的 :ref:`plugin_dev/plugin_format:Directory "
 "Plugin`。与真实的符号链接相比，它更易于创建且提供更好的隔离性"
 
-#: ../plugin_dev/plugin_format.rst:132
+#: ../plugin_dev/plugin_format.rst:135
 msgid ""
 "To create a linked directory plugin, imply create a directory that "
 "includes a file named ``mcdreforged.linked_directory_plugin.json``:"
@@ -257,7 +273,7 @@ msgstr ""
 "要创建一个链接型文件夹插件，只需新建一个包含名为 ``mcdreforged.linked_directory_plugin.json`` "
 "的文件的目录："
 
-#: ../plugin_dev/plugin_format.rst:140
+#: ../plugin_dev/plugin_format.rst:143
 msgid ""
 "The ``mcdreforged.linked_directory_plugin.json`` file contains an object "
 "with at least a key ``target``, which specifies the path to the actual "
@@ -266,11 +282,11 @@ msgstr ""
 "该 ``mcdreforged.linked_directory_plugin.json`` 文件包含一个 json 对象，这个对象需至少包含键 "
 "``target``，该键指定了实际要加载的文件夹插件所在的路径："
 
-#: ../plugin_dev/plugin_format.rst:150
+#: ../plugin_dev/plugin_format.rst:153
 msgid "The file structure of the target directory plugin appears as follows:"
 msgstr "目标文件夹插件的文件结构如下所示："
 
-#: ../plugin_dev/plugin_format.rst:162
+#: ../plugin_dev/plugin_format.rst:165
 msgid "The ``skip_package_legality_check`` option"
 msgstr "``skip_package_legality_check`` 选项"
 

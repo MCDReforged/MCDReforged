@@ -46,7 +46,7 @@ def _normalize_requirements_file_path(path: str) -> str:
 
 @dataclasses.dataclass(frozen=True)
 class RequirementsFileSpec:
-	"""The declared handling strategy for a multi-file plugin's Python requirements file."""
+	"""The declared handling strategy for a multi-file plugin's Python requirements file"""
 
 	class Mode(enum.Enum):
 		AUTO = 'auto'

@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-29 20:42+0800\n"
+"POT-Creation-Date: 2026-09-17 15:16+0800\n"
 "PO-Revision-Date: 2021-01-23 10:38+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -12,7 +12,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.15.0\n"
+"Generated-By: Babel 2.17.0\n"
 
 #: ../plugin_dev/metadata.rst:3
 msgid "Metadata"
@@ -33,32 +33,38 @@ msgstr ""
 "的元数据声明于其源文件的全局作用域中。它是一个包含着多个键值对的，名为 ``PLUGIN_METADATA`` 的 dict 对象"
 
 #: ../plugin_dev/metadata.rst:10
-msgid "Here's a metadata field with all possible key-values"
-msgstr "以下是一个元数据字段，其中包含所有可能的键值"
+msgid "Here's a metadata example"
+msgstr "下面是一个元数据例子："
 
-#: ../plugin_dev/metadata.rst:27
+#: ../plugin_dev/metadata.rst:29
 msgid ""
 "The following section `Fields <#fields>`__ will use metadata declared in "
 "python syntax as examples"
 msgstr "下面的 `属性 <#fields>`__ 小节将会使用 python 语法进行元数据声明举例"
 
-#: ../plugin_dev/metadata.rst:31
+#: ../plugin_dev/metadata.rst:33
 msgid ""
 "For multi file plugin, the metadata is declared in file "
 "``mcdreforged.plugin.json`` in json syntax"
 msgstr "对于多文件插件或者文件夹插件而言，元数据以 json 语法在文件 ``mcdreforged.plugin.json`` 中声明"
 
-#: ../plugin_dev/metadata.rst:33
+#: ../plugin_dev/metadata.rst:35
 msgid "Here's an example"
 msgstr "下面是一个例子："
 
-#: ../plugin_dev/metadata.rst:50
+#: ../plugin_dev/metadata.rst:57
 msgid ""
-"If a plugin doesn't not declare the meta data field, a warning will arise"
+"If a solo plugin doesn't declare the metadata field, a warning will arise"
 " in the console and the fallback values will be used"
-msgstr "如果插件未声明元数据字段，则控制台中将出现警告，并使用备用值"
+msgstr "如果单文件插件未声明元数据字段，则控制台中将出现警告，并使用备用值"
 
-#: ../plugin_dev/metadata.rst:54
+#: ../plugin_dev/metadata.rst:59
+msgid ""
+"For multi file plugins, the metadata file and its ``id`` and ``version`` "
+"fields are required"
+msgstr "对于多文件插件，元数据文件必须存在，其 ``id``、``version`` 字段也都是必须的"
+
+#: ../plugin_dev/metadata.rst:63
 msgid ""
 "For python package requirements, it's suggested to declare them in a file"
 " named ``requirements.txt``, then :doc:`pack </cli/pack>` it into your "
@@ -67,54 +73,90 @@ msgstr ""
 "对于 Python 包依赖，建议将它们声明在名为 ``requirements.txt`` 的文件中，然后把它 :doc:`打包进 "
 "</cli/pack>` 你的打包插件中"
 
-#: ../plugin_dev/metadata.rst:57
+#: ../plugin_dev/metadata.rst:66
 msgid "Fields"
 msgstr "属性"
 
-#: ../plugin_dev/metadata.rst:60
+#: ../plugin_dev/metadata.rst:69
+msgid "schema_version"
+msgstr "schema_version"
+
+#: ../plugin_dev/metadata.rst:71
+msgid ""
+"The format version of ``mcdreforged.plugin.json``. Use ``1`` for the "
+"format introduced in v2.16.0. Omitting this field means version ``0`` and"
+" remains supported. If the version is newer than MCDR supports, MCDR will"
+" warn and attempt to read the known fields"
+msgstr ""
+"``mcdreforged.plugin.json`` 的格式版本。对于 v2.16.0 中引入的格式，请使用 ``1``。省略此字段表示版本为 "
+"``0``，该版本仍受支持。如果版本比 MCDR 所支持的更新，MCDR 将会发出警告，并尝试读取其中已知的字段"
+
+#: ../plugin_dev/metadata.rst:75
+msgid ""
+"This does not replace the plugin's ``version`` or its ``mcdreforged`` "
+"dependency requirement"
+msgstr "此字段不能替代插件的 ``version``，也不能替代其对 ``mcdreforged`` 的依赖要求"
+
+#: ../plugin_dev/metadata.rst:79
+msgid "Only used in ``mcdreforged.plugin.json``, not in solo plugin metadata"
+msgstr "仅用于 ``mcdreforged.plugin.json``，不适用于单文件插件的元数据"
+
+#: ../plugin_dev/metadata.rst:83
+msgid "Field key: ``schema_version``"
+msgstr "字段键名：``schema_version``"
+
+#: ../plugin_dev/metadata.rst:84
+msgid "Value type: int"
+msgstr "字段类型：int"
+
+#: ../plugin_dev/metadata.rst:85
+msgid "Fallback value: ``0``"
+msgstr "备用值：``0``"
+
+#: ../plugin_dev/metadata.rst:88
 msgid "id"
 msgstr "id"
 
-#: ../plugin_dev/metadata.rst:62
+#: ../plugin_dev/metadata.rst:90
 msgid ""
-"ID, or plugin id, is the identity string of your plugin. It should "
-"consist of lowercase letters, numbers and underscores with a length of 1 "
-"to 64"
-msgstr "ID（即插件 ID）是你插件的“身份证号”。它应由小写字母，数字和下划线组成，长度为 1 到 64"
+"ID, or plugin id, is the identity string of your plugin. It should start "
+"with a lowercase letter and consist of lowercase letters, numbers and "
+"underscores with a length of 1 to 64"
+msgstr "ID（即插件 ID）是你插件的“身份证号”。它应以小写字母为前缀，由小写字母，数字和下划线组成，长度为 1 到 64"
 
-#: ../plugin_dev/metadata.rst:64
+#: ../plugin_dev/metadata.rst:92
 msgid "Here's some available plugin ids:"
 msgstr "以下是一些可用的插件 ID："
 
-#: ../plugin_dev/metadata.rst:67
+#: ../plugin_dev/metadata.rst:95
 msgid "``my_plugin``"
 msgstr "``my_plugin``"
 
-#: ../plugin_dev/metadata.rst:68
+#: ../plugin_dev/metadata.rst:96
 msgid "``anotherhelper123``"
 msgstr "``anotherhelper123``"
 
-#: ../plugin_dev/metadata.rst:69
-msgid "``__a_cool_plugin__``"
-msgstr "``__a_cool_plugin__``"
+#: ../plugin_dev/metadata.rst:97
+msgid "``a_cool_plugin``"
+msgstr "``a_cool_plugin``"
 
-#: ../plugin_dev/metadata.rst:71
+#: ../plugin_dev/metadata.rst:99
 msgid "But the following ids are not allowed:"
 msgstr "但不允许使用以下ID："
 
-#: ../plugin_dev/metadata.rst:74
+#: ../plugin_dev/metadata.rst:102
 msgid "``MyPlugin``"
 msgstr "``MyPlugin``"
 
-#: ../plugin_dev/metadata.rst:75
+#: ../plugin_dev/metadata.rst:103
 msgid "``another-helper-123``"
 msgstr "``another-helper-123``"
 
-#: ../plugin_dev/metadata.rst:76
+#: ../plugin_dev/metadata.rst:104
 msgid "``a cool plugin``"
 msgstr "``a cool plugin``"
 
-#: ../plugin_dev/metadata.rst:78
+#: ../plugin_dev/metadata.rst:106
 msgid ""
 "MCDR uses plugin id to distinguish between different plugins and check "
 "the dependencies. All loaded plugin in MCDR contain different plugin ids."
@@ -124,13 +166,13 @@ msgstr ""
 "MCDR 使用插件 ID 来区分不同的插件并检查插件间的依赖。MCDR 中加载的所有插件都应使用不同的插件 "
 "ID。如果新加载的插件具有与现有插件完全相同的插件 ID，则新插件将无法加载"
 
-#: ../plugin_dev/metadata.rst:80
+#: ../plugin_dev/metadata.rst:108
 msgid ""
 "Choose your plugin id wisely. It's highly suggested to keep your plugin "
 "id not changed after release your plugin"
 msgstr "请明智地选择你的插件 ID。强烈建议你在发布插件后不要再更改插件 ID"
 
-#: ../plugin_dev/metadata.rst:84
+#: ../plugin_dev/metadata.rst:112
 msgid ""
 "Be careful about potential package name conflict. It is not recommended "
 "to take an id that is the same as the standard library / third-party "
@@ -140,27 +182,28 @@ msgstr ""
 "小心可能的包名冲突。非常不推荐为你的插件取一个与标准库 / 第三方库名相同的 id，如 ``test``，否则 MCDR "
 "很可能无法正确地加载你的插件"
 
-#: ../plugin_dev/metadata.rst:88
+#: ../plugin_dev/metadata.rst:116
 msgid "Field key: ``id``"
 msgstr "字段键名：``id``"
 
-#: ../plugin_dev/metadata.rst:89 ../plugin_dev/metadata.rst:110
-#: ../plugin_dev/metadata.rst:122 ../plugin_dev/metadata.rst:167
-#: ../plugin_dev/metadata.rst:275 ../plugin_dev/metadata.rst:292
+#: ../plugin_dev/metadata.rst:117 ../plugin_dev/metadata.rst:138
+#: ../plugin_dev/metadata.rst:150 ../plugin_dev/metadata.rst:238
+#: ../plugin_dev/metadata.rst:273 ../plugin_dev/metadata.rst:404
+#: ../plugin_dev/metadata.rst:421
 msgid "Value type: str"
 msgstr "字段类型：str"
 
-#: ../plugin_dev/metadata.rst:90
+#: ../plugin_dev/metadata.rst:118
 msgid ""
 "Fallback value: the file name without the ``.py`` extension if it's a "
 "solo plugin"
 msgstr "备用值：不含 ``.py`` 后缀的插件文件名，如果你的插件是一个单文件插件"
 
-#: ../plugin_dev/metadata.rst:93
+#: ../plugin_dev/metadata.rst:121
 msgid "version"
 msgstr "version"
 
-#: ../plugin_dev/metadata.rst:95
+#: ../plugin_dev/metadata.rst:123
 msgid ""
 "The version value indicates the version of your plugin. It's mostly in "
 "`semver <https://semver.org/>`__ format but it has less restriction such "
@@ -169,31 +212,31 @@ msgstr ""
 "version 字段代表你的插件版本。它基本上采用了 `语义化版本 <https://semver.org/lang/zh-CN/>`__ "
 "的格式，不过限制较少，如你可以定义任意长度的版本号"
 
-#: ../plugin_dev/metadata.rst:97
+#: ../plugin_dev/metadata.rst:125
 msgid "Here's some available version:"
 msgstr "以下一些可用的版本："
 
-#: ../plugin_dev/metadata.rst:100
+#: ../plugin_dev/metadata.rst:128
 msgid "``1.0.0``"
 msgstr "``1.0.0``"
 
-#: ../plugin_dev/metadata.rst:101
+#: ../plugin_dev/metadata.rst:129
 msgid "``2.0``"
 msgstr "``2.0``"
 
-#: ../plugin_dev/metadata.rst:102
+#: ../plugin_dev/metadata.rst:130
 msgid "``1.2.3-pre4``"
 msgstr "``1.2.3-pre4``"
 
-#: ../plugin_dev/metadata.rst:103
+#: ../plugin_dev/metadata.rst:131
 msgid "``1.8.9-rc.8``"
 msgstr "``1.8.9-rc.8``"
 
-#: ../plugin_dev/metadata.rst:104
+#: ../plugin_dev/metadata.rst:132
 msgid "``1.14.1-beta.4+build.54``"
 msgstr "``1.14.1-beta.4+build.54``"
 
-#: ../plugin_dev/metadata.rst:106
+#: ../plugin_dev/metadata.rst:134
 msgid ""
 "Following `semver <https://semver.org/>`__ format for you version string "
 "is a good idea. It's easier to maintain and for people to understand"
@@ -201,111 +244,218 @@ msgstr ""
 "遵循 `语义化版本 <https://semver.org/lang/zh-CN/>`__ "
 "格式为你的插件定义版本字符串是一个好主意——易于维护、易于理解"
 
-#: ../plugin_dev/metadata.rst:109
+#: ../plugin_dev/metadata.rst:137
 msgid "Field key: ``version``"
 msgstr "字段键名：``version``"
 
-#: ../plugin_dev/metadata.rst:111
-msgid "Fallback value: ``0.0.0``"
-msgstr "备用值：``0.0.0``"
+#: ../plugin_dev/metadata.rst:139
+msgid ""
+"Fallback value: ``0.0.0`` for solo plugins; required for multi file "
+"plugins"
+msgstr "备用值：单文件插件为 ``0.0.0``；多文件插件则必须声明"
 
-#: ../plugin_dev/metadata.rst:114
+#: ../plugin_dev/metadata.rst:142
 msgid "name"
 msgstr "name"
 
-#: ../plugin_dev/metadata.rst:116
+#: ../plugin_dev/metadata.rst:144
 msgid ""
 "The name of your plugin. Give your plugin with a nice name with any kinds"
 " of characters"
 msgstr "你的插件名称——给你的插件起一个好听的名字吧"
 
-#: ../plugin_dev/metadata.rst:118
+#: ../plugin_dev/metadata.rst:146
 msgid ""
 "Try not to make the name too long. For more details of your plugin, you "
 "can put them into the ``description``"
 msgstr "尽量不要使插件名称太长。你可以把插件的详细信息放在 ``description`` 之中"
 
-#: ../plugin_dev/metadata.rst:121
+#: ../plugin_dev/metadata.rst:149
 msgid "Field key: ``name``"
 msgstr "字段键名：``name``"
 
-#: ../plugin_dev/metadata.rst:123 ../plugin_dev/metadata.rst:276
+#: ../plugin_dev/metadata.rst:151 ../plugin_dev/metadata.rst:405
 msgid "Fallback value: The plugin id"
 msgstr "备用值：插件 ID"
 
-#: ../plugin_dev/metadata.rst:126
+#: ../plugin_dev/metadata.rst:154
 msgid "description"
 msgstr "description"
 
-#: ../plugin_dev/metadata.rst:128
+#: ../plugin_dev/metadata.rst:156
 msgid ""
 "The description of you plugin. Go write down the functionality summarize "
 "of your plugin here"
 msgstr "你的插件描述。在这里写下你的插件的功能总结吧"
 
-#: ../plugin_dev/metadata.rst:130 ../plugin_dev/metadata.rst:151
-#: ../plugin_dev/metadata.rst:163
+#: ../plugin_dev/metadata.rst:158 ../plugin_dev/metadata.rst:183
+#: ../plugin_dev/metadata.rst:234
 msgid "This field is optional, you can just ignore it if you are lazy"
 msgstr "此字段是可选的。如果你想偷懒的话可以不填写"
 
-#: ../plugin_dev/metadata.rst:132
+#: ../plugin_dev/metadata.rst:160
 msgid ""
 "For translation purpose, instead of using a ``str`` as the value, you can"
 " use a Dict[str, str] indicating a mapping from language to description "
 "as value, e.g.:"
 msgstr "处于翻译的目的，除了使用一个 ``str`` 作为值外，你还可以使用一个代表着从语言映射到描述文本的 Dict[str, str] 映射作为值，如："
 
-#: ../plugin_dev/metadata.rst:142
+#: ../plugin_dev/metadata.rst:170
 msgid "Field key: ``description``"
 msgstr "字段键名：``description``"
 
-#: ../plugin_dev/metadata.rst:143
+#: ../plugin_dev/metadata.rst:171
 msgid "Value type: Union[str, Dict[str, str]]"
 msgstr "字段类型：Union[str, Dict[str, str]]"
 
-#: ../plugin_dev/metadata.rst:144 ../plugin_dev/metadata.rst:156
-#: ../plugin_dev/metadata.rst:168 ../plugin_dev/metadata.rst:259
-#: ../plugin_dev/metadata.rst:293 ../plugin_dev/metadata.rst:310
+#: ../plugin_dev/metadata.rst:172 ../plugin_dev/metadata.rst:188
+#: ../plugin_dev/metadata.rst:212 ../plugin_dev/metadata.rst:223
+#: ../plugin_dev/metadata.rst:239 ../plugin_dev/metadata.rst:263
+#: ../plugin_dev/metadata.rst:274 ../plugin_dev/metadata.rst:365
+#: ../plugin_dev/metadata.rst:422 ../plugin_dev/metadata.rst:439
 msgid "Fallback value: None"
 msgstr "备用值：None"
 
-#: ../plugin_dev/metadata.rst:147
+#: ../plugin_dev/metadata.rst:175
 msgid "author"
 msgstr "author"
 
-#: ../plugin_dev/metadata.rst:149
+#: ../plugin_dev/metadata.rst:177
+msgid ""
+"Use :ref:`plugin_dev/metadata:authors` instead. This field remains "
+"supported. When both fields are provided, names from ``author`` are "
+"appended to ``authors`` without deduplication"
+msgstr ""
+"请使用 :ref:`plugin_dev/metadata:authors` "
+"作为替代。此字段仍然受支持。当同时提供这两个字段时，``author`` 中的名字会被追加到 ``authors`` 中，且不会去重"
+
+#: ../plugin_dev/metadata.rst:181
 msgid ""
 "The authors of the plugins. If there's only a single author, you can also"
 " use a string instead of a list of string"
 msgstr "插件作者。如果只有一个作者，可使用 string 而非 list"
 
-#: ../plugin_dev/metadata.rst:154
+#: ../plugin_dev/metadata.rst:186
 msgid "Field key: ``author``"
 msgstr "字段键名：``author``"
 
-#: ../plugin_dev/metadata.rst:155
+#: ../plugin_dev/metadata.rst:187
 msgid "Value type: str or List[str]"
 msgstr "字段类型：str 或 list[str]"
 
-#: ../plugin_dev/metadata.rst:159
+#: ../plugin_dev/metadata.rst:191
+msgid "authors"
+msgstr "authors"
+
+#: ../plugin_dev/metadata.rst:193
+msgid ""
+"The original authors and main creators of the plugin. Each person can be "
+"a string containing their name, or a dict with a required ``name`` and "
+"optional ``email`` and ``homepage`` string fields. You can provide a "
+"single person or a list of people, mixing strings and dicts"
+msgstr ""
+"插件的原作者和主要创作者。每个人可以是一个包含其名字的字符串，也可以是一个 dict——其中 ``name`` 为必需字段，``email`` 和"
+" ``homepage`` 为可选的字符串字段。你可以只提供一个人，也可以提供一个由人组成的列表，并在其中混合使用字符串和 dict"
+
+#: ../plugin_dev/metadata.rst:210
+msgid "Field key: ``authors``"
+msgstr "字段键名：``authors``"
+
+#: ../plugin_dev/metadata.rst:211 ../plugin_dev/metadata.rst:222
+msgid "Value type: str or Dict[str, str] or List[Union[str, Dict[str, str]]]"
+msgstr "字段类型：str 或 Dict[str, str] 或 List[Union[str, Dict[str, str]]]"
+
+#: ../plugin_dev/metadata.rst:215
+msgid "maintainers"
+msgstr "maintainers"
+
+#: ../plugin_dev/metadata.rst:217
+msgid ""
+"The people currently maintaining the plugin. This field uses the same "
+"format as :ref:`plugin_dev/metadata:authors`"
+msgstr "当前维护该插件的人。此字段的格式与 :ref:`plugin_dev/metadata:authors` 相同"
+
+#: ../plugin_dev/metadata.rst:221
+msgid "Field key: ``maintainers``"
+msgstr "字段键名：``maintainers``"
+
+#: ../plugin_dev/metadata.rst:226
 msgid "link"
 msgstr "link"
 
-#: ../plugin_dev/metadata.rst:161
+#: ../plugin_dev/metadata.rst:228
+msgid ""
+"Use :ref:`plugin_dev/metadata:links` instead. This field remains "
+"supported. Its value is used as ``links.homepage`` when that value is "
+"missing or None"
+msgstr ""
+"请使用 :ref:`plugin_dev/metadata:links` 作为替代。此字段仍然受支持。当 ``links.homepage`` "
+"缺失或为 None 时，本字段的值将作为 ``links.homepage`` 使用"
+
+#: ../plugin_dev/metadata.rst:232
 msgid ""
 "The url to your plugin. You can put a link to the github repository of "
 "your plugin here. It should be an available url"
 msgstr "你的插件的网址。你可以将其指向插件的 github 链接。它的值应为一个可访问的网址"
 
-#: ../plugin_dev/metadata.rst:166
+#: ../plugin_dev/metadata.rst:237
 msgid "Field key: ``link``"
 msgstr "字段键名：``link``"
 
-#: ../plugin_dev/metadata.rst:171
+#: ../plugin_dev/metadata.rst:242
+msgid "links"
+msgstr "links"
+
+#: ../plugin_dev/metadata.rst:244
+msgid "Links related to the plugin. All of the following keys are optional:"
+msgstr "与插件相关的链接。以下所有键都是可选的："
+
+#: ../plugin_dev/metadata.rst:246
+msgid "``homepage``: The plugin homepage"
+msgstr "``homepage``：插件主页"
+
+#: ../plugin_dev/metadata.rst:247
+msgid "``source``: The source code repository"
+msgstr "``source``：源代码仓库"
+
+#: ../plugin_dev/metadata.rst:248
+msgid "``documentation``: The documentation page"
+msgstr "``documentation``：文档页面"
+
+#: ../plugin_dev/metadata.rst:249
+msgid "``issues``: The issue tracker"
+msgstr "``issues``：问题追踪页面"
+
+#: ../plugin_dev/metadata.rst:261
+msgid "Field key: ``links``"
+msgstr "字段键名：``links``"
+
+#: ../plugin_dev/metadata.rst:262
+msgid "Value type: Dict[str, Optional[str]]"
+msgstr "字段类型：Dict[str, Optional[str]]"
+
+#: ../plugin_dev/metadata.rst:266
+msgid "license"
+msgstr "license"
+
+#: ../plugin_dev/metadata.rst:268
+msgid ""
+"The license of the plugin. An `SPDX license identifier "
+"<https://spdx.org/licenses/>`__, such as ``LGPL-3.0``, is "
+"recommended"
+msgstr ""
+"插件的许可证。推荐使用 `SPDX 许可证标识符 <https://spdx.org/licenses/>`__，例如 "
+"``LGPL-3.0``"
+
+#: ../plugin_dev/metadata.rst:272
+msgid "Field key: ``license``"
+msgstr "字段键名：``license``"
+
+#: ../plugin_dev/metadata.rst:277
 msgid "dependencies"
 msgstr "dependencies"
 
-#: ../plugin_dev/metadata.rst:173
+#: ../plugin_dev/metadata.rst:279
 msgid ""
 "A dict of dependencies you plugin relies on. It's a dict contains several"
 " key-value pairs. The key is the id of the plugin that your plugin is "
@@ -313,13 +463,13 @@ msgid ""
 "your plugin is relies on"
 msgstr "插件的依赖关系。应为一个字典，其中包含多个键值对。键为插件所依赖的插件 ID，值是插件所依赖插件的版本要求"
 
-#: ../plugin_dev/metadata.rst:175
+#: ../plugin_dev/metadata.rst:281
 msgid ""
 "If your plugin has requirement to the version of MCDR, use "
 "``mcdreforged`` as the plugin id"
 msgstr "如果你的插件对 MCDR 版本有需求，请使用 mcdreforged 作为插件 ID"
 
-#: ../plugin_dev/metadata.rst:177
+#: ../plugin_dev/metadata.rst:283
 msgid ""
 "A version requirement is a string than contains several criterions of the"
 " version. Criterions are divided by space character, each criterion is "
@@ -327,196 +477,196 @@ msgid ""
 "when describing the base version"
 msgstr "版本要求是一个包含若干个版本约束的字符串。约束按空格划分，每个每个由一个运算符和一个基础版本字符串组成。描述基版本时允许使用通配符"
 
-#: ../plugin_dev/metadata.rst:179
+#: ../plugin_dev/metadata.rst:285
 msgid "List of the operators:"
 msgstr "运算符列表："
 
-#: ../plugin_dev/metadata.rst:184
+#: ../plugin_dev/metadata.rst:290
 msgid "Operator"
 msgstr "运算符"
 
-#: ../plugin_dev/metadata.rst:185
+#: ../plugin_dev/metadata.rst:291
 msgid "Example"
 msgstr "示例说明"
 
-#: ../plugin_dev/metadata.rst:186
+#: ../plugin_dev/metadata.rst:292
 msgid "Explanation for the example"
 msgstr "示例说明"
 
-#: ../plugin_dev/metadata.rst:187
+#: ../plugin_dev/metadata.rst:293
 msgid "Accepted"
 msgstr "允许的值"
 
-#: ../plugin_dev/metadata.rst:188
+#: ../plugin_dev/metadata.rst:294
 msgid "Unaccepted"
 msgstr "不允许的值"
 
-#: ../plugin_dev/metadata.rst:189
+#: ../plugin_dev/metadata.rst:295
 msgid ">="
 msgstr ">="
 
-#: ../plugin_dev/metadata.rst:190
+#: ../plugin_dev/metadata.rst:296
 msgid ">=1.2.3"
 msgstr ">=1.2.3"
 
-#: ../plugin_dev/metadata.rst:191
+#: ../plugin_dev/metadata.rst:297
 msgid "The target version should be equal to or newer than 1.2.3"
 msgstr "目标版本应大于等于 1.2.3"
 
-#: ../plugin_dev/metadata.rst:192
+#: ../plugin_dev/metadata.rst:298
 msgid "1.2.3, 1.3.0"
 msgstr "1.2.3，1.3.0"
 
-#: ../plugin_dev/metadata.rst:193
+#: ../plugin_dev/metadata.rst:299
 msgid "1.2.0"
 msgstr "1.2.0"
 
-#: ../plugin_dev/metadata.rst:194
+#: ../plugin_dev/metadata.rst:300
 msgid ">"
 msgstr ">"
 
-#: ../plugin_dev/metadata.rst:195
+#: ../plugin_dev/metadata.rst:301
 msgid ">1.2.3"
 msgstr ">1.2.3"
 
-#: ../plugin_dev/metadata.rst:196
+#: ../plugin_dev/metadata.rst:302
 msgid "The target version should be newer than 1.2.3"
 msgstr "目标版本应大于 1.2.3"
 
-#: ../plugin_dev/metadata.rst:197
+#: ../plugin_dev/metadata.rst:303
 msgid "1.2.4, 1.3.0"
 msgstr "1.2.4，1.3.0"
 
-#: ../plugin_dev/metadata.rst:198
+#: ../plugin_dev/metadata.rst:304
 msgid "1.2.0, 1.2.3"
 msgstr "1.2.0，1.2.3"
 
-#: ../plugin_dev/metadata.rst:199
+#: ../plugin_dev/metadata.rst:305
 msgid "<="
 msgstr "<="
 
-#: ../plugin_dev/metadata.rst:200
+#: ../plugin_dev/metadata.rst:306
 msgid "<=1.2.3"
 msgstr "<=1.2.3"
 
-#: ../plugin_dev/metadata.rst:201
+#: ../plugin_dev/metadata.rst:307
 msgid "The target version should be equal to or older than 1.2.3"
 msgstr "目标版本应小于等于 1.2.3"
 
-#: ../plugin_dev/metadata.rst:202
+#: ../plugin_dev/metadata.rst:308
 msgid "1.2.3, 1.1.0"
 msgstr "1.2.3，1.1.0"
 
-#: ../plugin_dev/metadata.rst:203
+#: ../plugin_dev/metadata.rst:309
 msgid "1.2.4, 2.0.0"
 msgstr "1.2.4，2.0.0"
 
-#: ../plugin_dev/metadata.rst:204
+#: ../plugin_dev/metadata.rst:310
 msgid "<"
 msgstr "<"
 
-#: ../plugin_dev/metadata.rst:205
+#: ../plugin_dev/metadata.rst:311
 msgid "<1.2.3"
 msgstr "<1.2.3"
 
-#: ../plugin_dev/metadata.rst:206
+#: ../plugin_dev/metadata.rst:312
 msgid "The target version should be older than 1.2.3"
 msgstr "目标版本应小于 1.2.3"
 
-#: ../plugin_dev/metadata.rst:207
+#: ../plugin_dev/metadata.rst:313
 msgid "1.1.0"
 msgstr "1.1.0"
 
-#: ../plugin_dev/metadata.rst:208
+#: ../plugin_dev/metadata.rst:314
 msgid "1.2.3, 1.5"
 msgstr "1.2.3，1.5"
 
-#: ../plugin_dev/metadata.rst:209
+#: ../plugin_dev/metadata.rst:315
 msgid "="
 msgstr "="
 
-#: ../plugin_dev/metadata.rst:210
+#: ../plugin_dev/metadata.rst:316
 msgid "=1.2.3"
 msgstr "=1.2.3"
 
-#: ../plugin_dev/metadata.rst:211
+#: ../plugin_dev/metadata.rst:317
 msgid "The same as ``==``"
-msgstr ""
+msgstr "与 ``==`` 相同"
 
-#: ../plugin_dev/metadata.rst:212 ../plugin_dev/metadata.rst:217
-#: ../plugin_dev/metadata.rst:220 ../plugin_dev/metadata.rst:222
+#: ../plugin_dev/metadata.rst:318 ../plugin_dev/metadata.rst:323
+#: ../plugin_dev/metadata.rst:326 ../plugin_dev/metadata.rst:328
 msgid "1.2.3"
 msgstr "1.2.3"
 
-#: ../plugin_dev/metadata.rst:213 ../plugin_dev/metadata.rst:218
-#: ../plugin_dev/metadata.rst:223
+#: ../plugin_dev/metadata.rst:319 ../plugin_dev/metadata.rst:324
+#: ../plugin_dev/metadata.rst:329
 msgid "1.2, 1.2.4"
 msgstr "1.2，1.2.4"
 
-#: ../plugin_dev/metadata.rst:214
+#: ../plugin_dev/metadata.rst:320
 msgid "=="
 msgstr "=="
 
-#: ../plugin_dev/metadata.rst:215
+#: ../plugin_dev/metadata.rst:321
 msgid "==1.2.3"
 msgstr "==1.2.3"
 
-#: ../plugin_dev/metadata.rst:216
+#: ../plugin_dev/metadata.rst:322
 msgid "The target version should equal to 1.2.3"
 msgstr "目标版本应等于 1.2.3"
 
-#: ../plugin_dev/metadata.rst:221
+#: ../plugin_dev/metadata.rst:327
 msgid ""
 "If the operator is not specified, ``==`` is used as default. In this case"
 " the target version should equal to 1.2.3"
 msgstr "如果未指定运算符，则默认使用 ``==`` 。在这种情况下，目标版本应等于1.2.3"
 
-#: ../plugin_dev/metadata.rst:224
+#: ../plugin_dev/metadata.rst:330
 msgid "^"
 msgstr "^"
 
-#: ../plugin_dev/metadata.rst:225
+#: ../plugin_dev/metadata.rst:331
 msgid "^1.2.3"
 msgstr "^1.2.3"
 
-#: ../plugin_dev/metadata.rst:226
+#: ../plugin_dev/metadata.rst:332
 msgid ""
 "The target version should be equal to or newer than 1.2.3, and the first "
 "version segment of the target version should be equal to the base version"
 msgstr "目标版本应大于等于 1.2.3，且目标版本的第一个版本分段应等于基版本"
 
-#: ../plugin_dev/metadata.rst:227
+#: ../plugin_dev/metadata.rst:333
 msgid "1.2.3, 1.2.4, 1.4.4"
 msgstr "1.2.3，1.2.4，1.4.4"
 
-#: ../plugin_dev/metadata.rst:228
+#: ../plugin_dev/metadata.rst:334
 msgid "1.0.0, 2.0.0"
 msgstr "1.0.0，2.0.0"
 
-#: ../plugin_dev/metadata.rst:229
+#: ../plugin_dev/metadata.rst:335
 msgid "~"
 msgstr "~"
 
-#: ../plugin_dev/metadata.rst:230
+#: ../plugin_dev/metadata.rst:336
 msgid "~1.2.3"
 msgstr "~1.2.3"
 
-#: ../plugin_dev/metadata.rst:231
+#: ../plugin_dev/metadata.rst:337
 msgid ""
 "The target version should be equal to or newer than 1.2.3, and the first "
 "and the second version segment of the target version should be equal to "
 "the base version"
 msgstr "目标版本应大于等于 1.2.3，并且目标版本的第一和第二版本分段应等于基版本"
 
-#: ../plugin_dev/metadata.rst:232
+#: ../plugin_dev/metadata.rst:338
 msgid "1.2.3, 1.2.4"
 msgstr "1.2.3，1.2.4"
 
-#: ../plugin_dev/metadata.rst:233
+#: ../plugin_dev/metadata.rst:339
 msgid "1.0.0, 1.4.4, 2.0.0"
 msgstr "1.0.0，1.4.4，2.0.0"
 
-#: ../plugin_dev/metadata.rst:236
+#: ../plugin_dev/metadata.rst:342
 msgid ""
 "Check `here <https://docs.npmjs.com/about-semantic-versioning>`__ for "
 "more detail to the version requirement"
@@ -525,17 +675,17 @@ msgstr ""
 "`此处(中文) <https://www.kancloud.cn/shellway/npm-doc/199995>`__ "
 "以获取版本要求的更多详细信息"
 
-#: ../plugin_dev/metadata.rst:238
+#: ../plugin_dev/metadata.rst:344
 msgid ""
 "If there are multiple declared criterions, the target version is accepted"
 " only when it's accepted by all criterions"
 msgstr "如果存在多个声明的条件，则仅当所有条件都接受目标版本时，才接受目标版本"
 
-#: ../plugin_dev/metadata.rst:240
+#: ../plugin_dev/metadata.rst:346
 msgid "Here a dependencies example:"
 msgstr "这里是一个依赖关系示例："
 
-#: ../plugin_dev/metadata.rst:252
+#: ../plugin_dev/metadata.rst:358
 msgid ""
 "MCDR will make sure only when all dependency requirements are satisfied "
 "your plugin will get loaded successfully. Missing dependency, dependency "
@@ -543,29 +693,84 @@ msgid ""
 "failure"
 msgstr "MCDR 将确保仅在满足所有依赖项要求时，你的插件才能成功加载。依赖项缺失，依赖项版本不匹配或出现依赖环路，都会导致依赖关系检查失败"
 
-#: ../plugin_dev/metadata.rst:254
+#: ../plugin_dev/metadata.rst:360
 msgid ""
 "This field is optional, you can just ignore it if your plugin doesn't "
 "have any dependency"
 msgstr "该字段是可选的，如果你的插件没有任何依赖关系，则可以忽略它"
 
-#: ../plugin_dev/metadata.rst:257
+#: ../plugin_dev/metadata.rst:363
 msgid "Field key: ``dependencies``"
 msgstr "字段键名：``dependencies``"
 
-#: ../plugin_dev/metadata.rst:258
+#: ../plugin_dev/metadata.rst:364
 msgid "Value type: Dict[str, str]"
 msgstr "字段类型：Dict[str, str]"
 
-#: ../plugin_dev/metadata.rst:262
+#: ../plugin_dev/metadata.rst:368
+msgid "requirements_file"
+msgstr "requirements_file"
+
+#: ../plugin_dev/metadata.rst:370
+msgid ""
+"The Python requirements file inside a multi file plugin. This field "
+"controls which file is used for dependency checks, packing and Python "
+"dependency installation:"
+msgstr "多文件插件内部的 Python 依赖文件。此字段决定了哪个文件会被用于依赖检查、打包和 Python 依赖安装："
+
+#: ../plugin_dev/metadata.rst:373
+msgid "If omitted, MCDR uses ``requirements.txt`` when it exists"
+msgstr "如果省略，则当 ``requirements.txt`` 存在时，MCDR 会使用它"
+
+#: ../plugin_dev/metadata.rst:374
+msgid ""
+"If set to ``null`` in JSON (``None`` in Python), no requirements file is "
+"used"
+msgstr "如果在 JSON 中设为 ``null``（在 Python 中为 ``None``），则不使用任何依赖文件"
+
+#: ../plugin_dev/metadata.rst:375
+msgid ""
+"If set to a string, that file must exist, even when the value is "
+"``\"requirements.txt\"``"
+msgstr "如果设为一个字符串，则该文件必须存在，即使其值为 ``\"requirements.txt\"``"
+
+#: ../plugin_dev/metadata.rst:377
+msgid ""
+"The path is relative to the plugin root and must stay inside it. Absolute"
+" paths and ``..`` path components are not allowed. For example, "
+"``\"requirements_file\": \"deps/runtime.txt\"`` selects a file in the "
+"plugin's ``deps`` directory"
+msgstr ""
+"该路径相对于插件根目录，且必须位于插件根目录之内。不允许使用绝对路径，也不允许包含 ``..`` "
+"路径片段。例如，``\"requirements_file\": \"deps/runtime.txt\"`` 会选中插件 ``deps`` "
+"目录中的一个文件"
+
+#: ../plugin_dev/metadata.rst:382 ../plugin_dev/metadata.rst:401
+#: ../plugin_dev/metadata.rst:414 ../plugin_dev/metadata.rst:431
+msgid "Not available in solo plugin"
+msgstr "在单文件插件中不可用"
+
+#: ../plugin_dev/metadata.rst:386
+msgid "Field key: ``requirements_file``"
+msgstr "字段键名：``requirements_file``"
+
+#: ../plugin_dev/metadata.rst:387
+msgid "Value type: str or None"
+msgstr "字段类型：str 或 None"
+
+#: ../plugin_dev/metadata.rst:388
+msgid "Fallback value: Automatically use ``requirements.txt`` if present"
+msgstr "备用值：如果 ``requirements.txt`` 存在，则自动使用它"
+
+#: ../plugin_dev/metadata.rst:391
 msgid "entrypoint"
 msgstr "entrypoint"
 
-#: ../plugin_dev/metadata.rst:264
+#: ../plugin_dev/metadata.rst:393
 msgid "The :ref:`plugin_dev/basic:entrypoint` module of your plugin"
 msgstr "你的插件的 :ref:`plugin_dev/basic:entrypoint` 模块"
 
-#: ../plugin_dev/metadata.rst:266
+#: ../plugin_dev/metadata.rst:395
 msgid ""
 "By default the value is the id of your plugin, which means "
 "``my_plugin/__init__.py`` will be the entry point. If the value is "
@@ -575,58 +780,53 @@ msgstr ""
 "在默认情况下，其值为你的插件的 id。这意味着 ``my_plugin/__init__.py`` 将会成为入口点。如果其值为 "
 "``my_plugin.my_entry``，那么 ``my_plugin/my_entry.py`` 将成为入口点"
 
-#: ../plugin_dev/metadata.rst:268
+#: ../plugin_dev/metadata.rst:397
 msgid ""
 "MCDR will perform the same execution as a solo plugin to the entrypoint, "
 "like default event listener registering"
 msgstr "MCDR 会对入口点模块进行与单文件插件相同的操作，如默认事件监听器注册"
 
-#: ../plugin_dev/metadata.rst:272 ../plugin_dev/metadata.rst:285
-#: ../plugin_dev/metadata.rst:302
-msgid "Not available in solo plugin"
-msgstr "在单文件插件中不可用"
-
-#: ../plugin_dev/metadata.rst:274
+#: ../plugin_dev/metadata.rst:403
 msgid "Field key: ``entrypoint``"
 msgstr "字段键名：``entrypoint``"
 
-#: ../plugin_dev/metadata.rst:279
+#: ../plugin_dev/metadata.rst:408
 msgid "archive_name"
 msgstr "archive_name"
 
-#: ../plugin_dev/metadata.rst:281
+#: ../plugin_dev/metadata.rst:410
 msgid "The file name of generated ``.mcdr`` packed plugin in CLI"
 msgstr "在 CLI 中生成的 ``.mcdr`` 打包插件的文件名"
 
-#: ../plugin_dev/metadata.rst:289
+#: ../plugin_dev/metadata.rst:418
 msgid ""
 ":ref:`cli/pack:name` option in :doc:`/cli/pack` command in "
 ":doc:`/cli/index`"
 msgstr ":doc:`/cli/index` 中 :doc:`/cli/pack` 命令的 :ref:`cli/pack:name` 选项"
 
-#: ../plugin_dev/metadata.rst:291
+#: ../plugin_dev/metadata.rst:420
 msgid "Field key: ``archive_name``"
 msgstr "字段键名：``archive_name``"
 
-#: ../plugin_dev/metadata.rst:296
+#: ../plugin_dev/metadata.rst:425
 msgid "resources"
 msgstr "resources"
 
-#: ../plugin_dev/metadata.rst:298
+#: ../plugin_dev/metadata.rst:427
 msgid ""
 "A list of file or folder names that will be packed into the generated "
 "``.mcdr`` packed plugin file in CLI"
 msgstr "一个文件或文件夹名称的列表，将用于在 CLI 中打包入 ``.mcdr`` 打包插件"
 
-#: ../plugin_dev/metadata.rst:306
+#: ../plugin_dev/metadata.rst:435
 msgid ":doc:`/cli/pack` command in :doc:`/cli/index`"
 msgstr ":doc:`/cli/index` 中的 :doc:`/cli/pack`"
 
-#: ../plugin_dev/metadata.rst:308
+#: ../plugin_dev/metadata.rst:437
 msgid "Field key: ``resources``"
 msgstr "字段键名：``resources``"
 
-#: ../plugin_dev/metadata.rst:309
+#: ../plugin_dev/metadata.rst:438
 msgid "Value type: List[str]"
 msgstr "字段类型：List[str]"
 

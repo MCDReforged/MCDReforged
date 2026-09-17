@@ -12,8 +12,24 @@ Attributes
 Metadata
 --------
 
+For metadata declarations and field formats, see :doc:`/plugin_dev/metadata`
+
 .. autoclass:: mcdreforged.plugin.meta.metadata.Metadata
     :members:
+
+.. autoclass:: mcdreforged.plugin.meta.schema.Person
+    :members:
+    :undoc-members:
+    :exclude-members: model_config
+
+.. autoclass:: mcdreforged.plugin.meta.schema.PluginLinks
+    :members:
+    :undoc-members:
+    :exclude-members: model_config
+
+.. autoclass:: mcdreforged.plugin.meta.metadata.RequirementsFileSpec
+    :members:
+    :undoc-members:
 
 .. autoclass:: mcdreforged.plugin.meta.version.Version
     :members:

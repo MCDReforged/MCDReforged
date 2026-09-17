@@ -7,7 +7,7 @@ Declaration
 
 As a single ``.py`` file only plugin, the metadata of :ref:`plugin_dev/plugin_format:Solo Plugin` is declared in the global scope of the source file. It's a dict contains several key-value with the name ``PLUGIN_METADATA``
 
-Here's a metadata field with all possible key-values
+Here's a metadata example
 
 .. code-block:: python
 
@@ -16,10 +16,12 @@ Here's a metadata field with all possible key-values
         'version': '1.0.0',
         'name': 'My Plugin',
         'description': 'A plugin to do something cool',
-        'author': 'myself',
-        'link': 'https://github.com',
+        'authors': ['myself'],
+        'links': {
+            'homepage': 'https://github.com',
+        },
         'dependencies': {
-            'mcdreforged': '>=1.0.0',
+            'mcdreforged': '>=2.16.0',
             'an_important_api': '*'
         }
     }
@@ -35,19 +37,26 @@ Here's an example
 .. code-block:: json
 
     {
+        "schema_version": 1,
         "id": "example_plugin",
         "version": "1.0.0",
         "name": "Example Plugin",
         "description": "Example plugin for MCDR",
-        "author": "Fallen_Breath",
-        "link": "https://github.com/MCDReforged/MCDReforged-ExamplePlugin",
+        "authors": [
+            {"name": "Fallen_Breath"}
+        ],
+        "links": {
+            "source": "https://github.com/MCDReforged/MCDReforged-ExamplePlugin"
+        },
         "dependencies": {
-            "mcdreforged": ">=2.0.0-alpha.1"
+            "mcdreforged": ">=2.16.0"
         }
     }
 
 
-If a plugin doesn't not declare the meta data field, a warning will arise in the console and the fallback values will be used
+If a solo plugin doesn't declare the metadata field, a warning will arise in the console and the fallback values will be used
+
+For multi file plugins, the metadata file and its ``id`` and ``version`` fields are required
 
 .. tip::
 
@@ -56,17 +65,36 @@ If a plugin doesn't not declare the meta data field, a warning will arise in the
 Fields
 ------
 
+schema_version
+^^^^^^^^^^^^^^
+
+The format version of ``mcdreforged.plugin.json``. Use ``1`` for the format introduced in v2.16.0.
+Omitting this field means version ``0`` and remains supported.
+If the version is newer than MCDR supports, MCDR will warn and attempt to read the known fields
+
+This does not replace the plugin's ``version`` or its ``mcdreforged`` dependency requirement
+
+.. attention::
+
+    Only used in ``mcdreforged.plugin.json``, not in solo plugin metadata
+
+.. versionadded:: v2.16.0
+
+* Field key: ``schema_version``
+* Value type: int
+* Fallback value: ``0``
+
 id
 ^^
 
-ID, or plugin id, is the identity string of your plugin. It should consist of lowercase letters, numbers and underscores with a length of 1 to 64
+ID, or plugin id, is the identity string of your plugin. It should start with a lowercase letter and consist of lowercase letters, numbers and underscores with a length of 1 to 64
 
 Here's some available plugin ids:
 
 
 * ``my_plugin``
 * ``anotherhelper123``
-* ``__a_cool_plugin__``
+* ``a_cool_plugin``
 
 But the following ids are not allowed:
 
@@ -108,7 +136,7 @@ Following `semver <https://semver.org/>`__ format for you version string is a go
 
 * Field key: ``version``
 * Value type: str
-* Fallback value: ``0.0.0``
+* Fallback value: ``0.0.0`` for solo plugins; required for multi file plugins
 
 name
 ^^^^
@@ -146,6 +174,10 @@ For translation purpose, instead of using a ``str`` as the value, you can use a 
 author
 ^^^^^^
 
+.. deprecated:: v2.16.0
+    Use :ref:`plugin_dev/metadata:authors` instead. This field remains supported.
+    When both fields are provided, names from ``author`` are appended to ``authors`` without deduplication
+
 The authors of the plugins. If there's only a single author, you can also use a string instead of a list of string
 
 This field is optional, you can just ignore it if you are lazy
@@ -155,8 +187,47 @@ This field is optional, you can just ignore it if you are lazy
 * Value type: str or List[str]
 * Fallback value: None
 
+authors
+^^^^^^^
+
+The original authors and main creators of the plugin. Each person can be a string containing their name,
+or a dict with a required ``name`` and optional ``email`` and ``homepage`` string fields.
+You can provide a single person or a list of people, mixing strings and dicts
+
+.. code-block:: python
+
+    'authors': [
+        'Alice',
+        {
+            'name': 'Bob',
+            'email': 'bob@example.com',
+            'homepage': 'https://example.com/bob',
+        }
+    ]
+
+.. versionadded:: v2.16.0
+
+* Field key: ``authors``
+* Value type: str or Dict[str, str] or List[Union[str, Dict[str, str]]]
+* Fallback value: None
+
+maintainers
+^^^^^^^^^^^
+
+The people currently maintaining the plugin. This field uses the same format as :ref:`plugin_dev/metadata:authors`
+
+.. versionadded:: v2.16.0
+
+* Field key: ``maintainers``
+* Value type: str or Dict[str, str] or List[Union[str, Dict[str, str]]]
+* Fallback value: None
+
 link
 ^^^^
+
+.. deprecated:: v2.16.0
+    Use :ref:`plugin_dev/metadata:links` instead. This field remains supported.
+    Its value is used as ``links.homepage`` when that value is missing or None
 
 The url to your plugin. You can put a link to the github repository of your plugin here. It should be an available url
 
@@ -164,6 +235,41 @@ This field is optional, you can just ignore it if you are lazy
 
 
 * Field key: ``link``
+* Value type: str
+* Fallback value: None
+
+links
+^^^^^
+
+Links related to the plugin. All of the following keys are optional:
+
+* ``homepage``: The plugin homepage
+* ``source``: The source code repository
+* ``documentation``: The documentation page
+* ``issues``: The issue tracker
+
+.. code-block:: python
+
+    'links': {
+        'homepage': 'https://example.com',
+        'source': 'https://github.com/example/my_plugin',
+        'issues': 'https://github.com/example/my_plugin/issues'
+    }
+
+.. versionadded:: v2.16.0
+
+* Field key: ``links``
+* Value type: Dict[str, Optional[str]]
+* Fallback value: None
+
+license
+^^^^^^^
+
+The license of the plugin. An `SPDX license identifier <https://spdx.org/licenses/>`__, such as ``LGPL-3.0``, is recommended
+
+.. versionadded:: v2.16.0
+
+* Field key: ``license``
 * Value type: str
 * Fallback value: None
 
@@ -257,6 +363,29 @@ This field is optional, you can just ignore it if your plugin doesn't have any d
 * Field key: ``dependencies``
 * Value type: Dict[str, str]
 * Fallback value: None
+
+requirements_file
+^^^^^^^^^^^^^^^^^
+
+The Python requirements file inside a multi file plugin. This field controls which file is used for dependency checks,
+packing and Python dependency installation:
+
+* If omitted, MCDR uses ``requirements.txt`` when it exists
+* If set to ``null`` in JSON (``None`` in Python), no requirements file is used
+* If set to a string, that file must exist, even when the value is ``"requirements.txt"``
+
+The path is relative to the plugin root and must stay inside it. Absolute paths and ``..`` path components are not allowed.
+For example, ``"requirements_file": "deps/runtime.txt"`` selects a file in the plugin's ``deps`` directory
+
+.. attention::
+
+    Not available in solo plugin
+
+.. versionadded:: v2.16.0
+
+* Field key: ``requirements_file``
+* Value type: str or None
+* Fallback value: Automatically use ``requirements.txt`` if present
 
 entrypoint
 ^^^^^^^^^^

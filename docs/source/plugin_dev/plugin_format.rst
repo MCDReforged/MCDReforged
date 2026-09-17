@@ -52,7 +52,7 @@ Packed plugin is a zip type compressed file with file extension name ``.mcdr`` o
 
 A minimum packed plugin consists of the following files at its zip root
 
-* ``mcdreforged.plugin.json``, contains the metadata of the plugin
+* ``mcdreforged.plugin.json``, contains the :doc:`metadata <metadata>` of the plugin, including the required ``id`` and ``version`` fields
 * a valid python package with your plugin id
 
 Here's an example file tree of a minimum packed plugin with plugin id ``my_plugin``:
@@ -67,8 +67,11 @@ Here's an example file tree of a minimum packed plugin with plugin id ``my_plugi
 
 Optionally, a packed plugin can have some other useful files that will be recognized by MCDR:
 
-* ``requirements.txt``, indicating the python package requirement of your plugin. It'll be checked before plugin loading
+* ``requirements.txt``, indicating the python package requirement of your plugin. It'll be checked before plugin loading when selected by the metadata
 * ``lang/``, a folder storing translation files in json (``.json``) or yaml (``.yml``) format. MCDR will automatically load and register translation files in this folder
+
+Since v2.16.0, the :ref:`plugin_dev/metadata:requirements_file` metadata field can select a different requirements file
+relative to the plugin root, or disable requirements file handling. Omitting it preserves the default behavior of using ``requirements.txt`` if present
 
 You can include any other files or folders inside your packed plugin.
 You can access them via :meth:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface.open_bundled_file` method

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-17 15:11+0800\n"
+"POT-Creation-Date: 2026-09-17 16:50+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -52,6 +52,12 @@ msgstr ":ref:`plugin_dev/plugin_format:Linked Directory Plugin`"
 #: ../code_references/plugin.rst:13
 msgid "Metadata"
 msgstr "元数据"
+
+#: ../code_references/plugin.rst:15
+msgid ""
+"For metadata declarations and field formats, see "
+":doc:`/plugin_dev/metadata`"
+msgstr "有关元数据声明和字段格式，请参阅 :doc:`/plugin_dev/metadata`"
 
 #: mcdreforged.plugin.meta.metadata.Metadata:1 of
 msgid "The metadata of a MCDR plugin"
@@ -98,7 +104,7 @@ msgstr "插件的相关链接"
 
 #: mcdreforged.plugin.meta.metadata.Metadata.license:1 of
 msgid "The license of the plugin"
-msgstr "插件的协议"
+msgstr "插件的许可证"
 
 #: mcdreforged.plugin.meta.metadata.Metadata.dependencies:1 of
 msgid "A dict of dependencies the plugin relies on"
@@ -192,6 +198,12 @@ msgstr ""
 msgid "Create a dict present of this metadata object"
 msgstr "创建该元数据对象的 dict 表示"
 
+#: mcdreforged.plugin.meta.metadata.RequirementsFileSpec:1 of
+msgid ""
+"The declared handling strategy for a multi-file plugin's Python "
+"requirements file"
+msgstr "多文件插件 Python 依赖文件的处理策略"
+
 #: mcdreforged.plugin.meta.version.Version:1 of
 msgid "A version container that stores semver like version string"
 msgstr "一个储存类似语义化版本的版本字符串"
@@ -243,7 +255,7 @@ msgstr ""
 "版本要求字符串，含若干个通过空格字符连接的版本谓词。例子: ``\">=1.0.x\"``, ``\"^2.9\"``, ``\">=1.2.0 "
 "<1.4.3\"``, `\"\"`"
 
-#: ../code_references/plugin.rst:27
+#: ../code_references/plugin.rst:43
 msgid "Plugin Event"
 msgstr "插件事件"
 
