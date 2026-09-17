@@ -146,10 +146,24 @@ class PluginCommand(SubCommand):
 				RText('v{}'.format(meta.version), color=RColor.gray)
 			))
 			source.reply(self.tr('mcdr_command.plugin_info.id', meta.id))
-			if meta.author is not None:
-				source.reply(self.tr('mcdr_command.plugin_info.author', ', '.join(meta.author)))
-			if meta.link is not None:
-				source.reply(self.tr('mcdr_command.plugin_info.link', RText(meta.link, color=RColor.blue, styles=RStyle.underlined).c(RAction.open_url, meta.link)))
+			if meta.authors is not None:
+				source.reply(self.tr('mcdr_command.plugin_info.author', ', '.join(person.name for person in meta.authors)))
+			if meta.maintainers is not None:
+				source.reply(self.tr('mcdr_command.plugin_info.maintainer', ', '.join(person.name for person in meta.maintainers)))
+			if meta.links is not None:
+				for link_name, link in (
+						('homepage', meta.links.homepage),
+						('source', meta.links.source),
+						('documentation', meta.links.documentation),
+						('issues', meta.links.issues),
+				):
+					if link is not None:
+						source.reply(self.tr(
+							'mcdr_command.plugin_info.link.{}'.format(link_name),
+							RText(link, color=RColor.blue, styles=RStyle.underlined).c(RAction.open_url, link)
+						))
+			if meta.license is not None:
+				source.reply(self.tr('mcdr_command.plugin_info.license', meta.license))
 			if meta.description is not None:
 				source.reply(meta.get_description_rtext())
 

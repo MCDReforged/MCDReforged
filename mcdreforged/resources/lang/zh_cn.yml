@@ -238,7 +238,13 @@ mcdreforged:
     plugin_info:
       id: 'ID: {0}'
       author: '作者: {0}'
-      link: '链接: {0}'
+      maintainer: '维护者: {0}'
+      license: '许可证: {0}'
+      link:
+        homepage: '主页: {0}'
+        source: '源码: {0}'
+        documentation: '文档: {0}'
+        issues: '问题反馈: {0}'
     invalid_plugin_id: 无效的插件id "§e{0}§r"
     invalid_plugin_file_name: 无效的插件文件名 "§e{0}§r"
     disable_plugin:

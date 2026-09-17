@@ -238,7 +238,13 @@ mcdreforged:
     plugin_info:
       id: 'ID: {0}'
       author: 'Author: {0}'
-      link: 'Link: {0}'
+      maintainer: 'Maintainer: {0}'
+      license: 'License: {0}'
+      link:
+        homepage: 'Homepage: {0}'
+        source: 'Source: {0}'
+        documentation: 'Documentation: {0}'
+        issues: 'Issues: {0}'
     invalid_plugin_id: Invalid plugin id "§e{0}§r"
     invalid_plugin_file_name: Invalid plugin file name "§e{0}§r"
     disable_plugin:
