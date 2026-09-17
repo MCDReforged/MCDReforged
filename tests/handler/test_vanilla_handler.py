@@ -59,9 +59,25 @@ class MyTestCase(unittest.TestCase):
 			info = self.handler.parse_server_stdout(join_line)
 			self.assertEqual('Steve', self.handler.parse_player_joined(info), repr(join_line))
 
-		info = self.handler.parse_server_stdout('[23:52:53] [Server thread/INFO]: Steve left the game')
-		self.assertEqual('Steve', self.handler.parse_player_left(info))
+		for left_line, expected_player in [
+			('[23:52:53] [Server thread/INFO]: Steve left the game', 'Steve'),
+			# the left game notification is a system chat message in mc >= 26.3 snapshot 3
+			('[23:52:53] [Server thread/INFO]: System chat: Steve left the game', 'Steve'),
+			('[23:52:53] [Server thread/INFO]: System chat: System left the game', 'System'),
+		]:
+			info = self.handler.parse_server_stdout(left_line)
+			self.assertEqual(expected_player, self.handler.parse_player_left(info), repr(left_line))
+
+		# player message shouldn't be treated as a player left event
 		info = self.handler.parse_server_stdout('[23:52:53] [Server thread/INFO]: <Steve> Steve left the game')
+		self.assertEqual(None, self.handler.parse_player_left(info))
+		info = self.handler.parse_server_stdout('[23:52:53] [Server thread/INFO]: <Steve> System chat: Alex left the game')
+		self.assertEqual(None, self.handler.parse_player_left(info))
+
+		# invalid player name
+		info = self.handler.parse_server_stdout('[23:52:53] [Server thread/INFO]: System chat: ab left the game')
+		self.assertEqual(None, self.handler.parse_player_left(info))
+		info = self.handler.parse_server_stdout('[23:52:53] [Server thread/INFO]: System chat: <Alex> left the game')
 		self.assertEqual(None, self.handler.parse_player_left(info))
 
 	def test_3_server_info(self):

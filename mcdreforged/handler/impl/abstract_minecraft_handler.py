@@ -176,7 +176,8 @@ class AbstractMinecraftHandler(AbstractServerHandler, ABC):
 		return None
 
 	# Steve left the game
-	__player_left_regex = re.compile(r'(?P<name>[^ ]+) left the game')
+	# System chat: Steve left the game  # mc >= 26.3 snapshot 3
+	__player_left_regex = re.compile(r'(System chat: )?(?P<name>[^ ]+) left the game')
 
 	@override
 	def parse_player_left(self, info: Info) -> Optional[str]:
