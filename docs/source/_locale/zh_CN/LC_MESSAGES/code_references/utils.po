@@ -61,12 +61,18 @@ msgstr ":class:`dict` 会被转换成一个所有键和值都被序列化的 :cl
 #: mcdreforged.utils.serializer.serialize:9 of
 msgid ""
 ":class:`re.Pattern` will be converted to a :class:`str`, with the value "
-"of :attr:`re.Pattern.pattern`. Notes: if :attr:`re.Pattern.pattern` "
-"returns :class:`bytes`, it will be decoded into a utf8 :class:`str`"
+"of :attr:`re.Pattern.pattern`."
 msgstr ""
 ":class:`re.Pattern` 会被转换为一个 :class:`str`，其值为 "
-":attr:`re.Pattern.pattern`。注意：如果 :attr:`re.Pattern.pattern` 返回了一个 "
-":class:`bytes`，它将会被转换成一个 utf8 编码的 :class:`str`"
+":attr:`re.Pattern.pattern`。"
+
+#: mcdreforged.utils.serializer.serialize:10 of
+msgid ""
+"Notes: if :attr:`re.Pattern.pattern` returns :class:`bytes`, it will be "
+"decoded into a utf8 :class:`str`"
+msgstr ""
+"注意：如果 :attr:`re.Pattern.pattern` 返回了一个 :class:`bytes`，它将会被转换成一个 "
+"utf8 编码的 :class:`str`"
 
 #: mcdreforged.utils.serializer.serialize:11 of
 msgid ""
@@ -77,9 +83,14 @@ msgstr ":class:`uuid.UUID` 会被转换成一个值为 ``str(uuid_object)`` 的 
 #: mcdreforged.utils.serializer.serialize:12 of
 msgid ""
 "Normal object will be converted to a :class:`dict` with all of its public"
-" fields. The keys are the name of the fields and the values are the "
-"serialized field values"
-msgstr "普通的对象会被转换成一个包含了其所有公开属性的 :class:`dict`。键为属性的名字，值为序列化后的属性值"
+" fields."
+msgstr "普通对象会被转换成一个包含其所有公开属性的 :class:`dict`。"
+
+#: mcdreforged.utils.serializer.serialize:13 of
+msgid ""
+"The keys are the name of the fields and the values are the serialized "
+"field values"
+msgstr "其中，键为属性名，值为序列化后的属性值"
 
 #: mcdreforged.utils.serializer.serialize:15 of
 msgid ""
@@ -232,8 +243,12 @@ msgstr "UUID 对象（:class:`uuid.UUID`）。这时输入数据应该是一个 
 #: mcdreforged.utils.serializer.deserialize:30 of
 msgid ""
 "Normal class: The class should have its fields type annotated. It's "
-"constructor should accept 0 input parameter. Example class::"
-msgstr "普通类：这个类应当类型注解完善其所有属性，并且其构造函数应当可接受 0 个入参。类例子："
+"constructor should accept 0 input parameter."
+msgstr "普通类：这个类应为其所有属性添加类型注解，并且其构造函数应能接受 0 个参数。"
+
+#: mcdreforged.utils.serializer.deserialize:31 of
+msgid "Example class::"
+msgstr "示例类："
 
 #: mcdreforged.utils.serializer.deserialize:37 of
 msgid ""
@@ -475,4 +490,3 @@ msgstr "一个将在反序列化完成后被调用的方法"
 #: mcdreforged.utils.serializer.Serializable.on_deserialization:3 of
 msgid "You can do some custom initialization here"
 msgstr "你可以在这里做一些自定义的初始化操作"
-
