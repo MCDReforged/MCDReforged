@@ -165,10 +165,10 @@ class Metadata(metaclass=__MetadataMeta):
 	"""
 
 	authors: Optional[List[Person]]
-	"""The structured authors of the plugin"""
+	"""The authors of the plugin"""
 
 	maintainers: Optional[List[Person]]
-	"""The current maintainers of the plugin"""
+	"""The maintainers of the plugin"""
 
 	links: Optional[PluginLinks]
 	"""The links related to the plugin"""
@@ -185,7 +185,7 @@ class Metadata(metaclass=__MetadataMeta):
 	"""
 
 	requirements_file: RequirementsFileSpec
-	"""The declared handling strategy for the Python requirements file inside the multi-file plugin"""
+	"""The defination of the Python requirements file inside the multi-file plugin"""
 
 	entrypoint: str
 	"""
