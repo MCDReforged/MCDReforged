@@ -25,7 +25,7 @@ from mcdreforged.plugin.builtin.mcdr.commands.reload_command import ReloadComman
 from mcdreforged.plugin.builtin.mcdr.commands.server_command import ServerCommand
 from mcdreforged.plugin.builtin.mcdr.commands.status_command import StatusCommand
 from mcdreforged.plugin.builtin.mcdr.commands.sub_command import SubCommand, SubCommandEvent
-from mcdreforged.plugin.meta.schema import PluginMetadataJsonModel
+from mcdreforged.plugin.meta.schema import PluginMetadataJsonModel, Person, PluginLinks
 from mcdreforged.plugin.plugin_event import MCDRPluginEvents
 from mcdreforged.plugin.type.builtin_plugin import BuiltinPlugin
 from mcdreforged.translation.translation_text import RTextMCDRTranslation
@@ -40,11 +40,20 @@ METADATA = PluginMetadataJsonModel(
 	id=core_constant.PACKAGE_NAME,
 	version=core_constant.VERSION,
 	name=core_constant.NAME,
-	description='The {} itself'.format(core_constant.NAME),
-	author=[
-		'Fallen_Breath'
+	description='The core of {}'.format(core_constant.NAME),
+	authors=[
+		Person(name='Fallen_Breath'),
 	],
-	link=core_constant.GITHUB_URL
+	maintainers=[
+		Person(name='Fallen_Breath'),
+	],
+	links=PluginLinks(
+		homepage=core_constant.GITHUB_URL,
+		source=core_constant.GITHUB_URL,
+		documentation=core_constant.DOCUMENTATION_URL,
+		issues=core_constant.GITHUB_URL + '/issues',
+	),
+	license='LGPL-3.0-only',
 )
 
 

@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 from typing_extensions import override
 
 from mcdreforged.constants import core_constant
-from mcdreforged.plugin.meta.schema import PluginMetadataJsonModel
+from mcdreforged.plugin.meta.schema import PluginMetadataJsonModel, Person, PluginLinks
 from mcdreforged.plugin.type.builtin_plugin import BuiltinPlugin
 
 if TYPE_CHECKING:
@@ -23,8 +23,17 @@ METADATA = PluginMetadataJsonModel(
 	id='python',
 	version=VERSION,
 	name='Python {}'.format(VERSION),
-	author='Python Software Foundation',
-	link='https://www.python.org/'
+	description='The Python interpreter that {} is running on'.format(core_constant.NAME),
+	authors=[
+		Person(name='Python Software Foundation'),
+	],
+	links=PluginLinks(
+		homepage='https://www.python.org/',
+		source='https://github.com/python/cpython',
+		documentation='https://docs.python.org/',
+		issues='https://github.com/python/cpython/issues',
+	),
+	license='PSF-2.0',
 )
 
 
