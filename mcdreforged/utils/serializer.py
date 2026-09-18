@@ -40,10 +40,10 @@ def serialize(obj: Any) -> JsonLike:
 	*   :class:`list` and :class:`tuple` will be serialized into a :class:`list` will all the items serialized
 	*   :class:`dict` will be converted into a :class:`dict` will all the keys and values serialized
 	*   :class:`re.Pattern` will be converted to a :class:`str`, with the value of :attr:`re.Pattern.pattern`.
-		Notes: if :attr:`re.Pattern.pattern` returns :class:`bytes`, it will be decoded into a utf8 :class:`str`
+	    Notes: if :attr:`re.Pattern.pattern` returns :class:`bytes`, it will be decoded into a utf8 :class:`str`
 	*   :class:`uuid.UUID` will be converted to a :class:`str`, with the value of ``str(uuid_object)``
 	*   Normal object will be converted to a :class:`dict` with all of its public fields.
-		The keys are the name of the fields and the values are the serialized field values
+	    The keys are the name of the fields and the values are the serialized field values
 
 	.. versionadded:: v2.8.0
 		If the object is a :class:`Serializable`, the value field order will follow the order in the annotation
@@ -154,17 +154,17 @@ def deserialize(
 	*   UUID object (:class:`uuid.UUID`). The input data should be a :class:`str`
 
 	*   Normal class: The class should have its fields type annotated. It's constructor should accept 0 input parameter.
-		Example class::
+	    Example class::
 
 			class MyClass:
 				some_str: str
 				a_list: List[int]
 
-		The input data needs to be a dict. Keys and values in the dict correspond to the field names and serialized field values. Example dict::
+	    The input data needs to be a dict. Keys and values in the dict correspond to the field names and serialized field values. Example dict::
 
 			{'some_str': 'foo', 'a_list': [1, 2, 3]}
 
-		Fields are set via ``__setattr__``, non-public fields will be ignored.
+	    Fields are set via ``__setattr__``, non-public fields will be ignored.
 
 	:param data: The json-like object to be deserialized
 	:param cls: The target class of the generated object
