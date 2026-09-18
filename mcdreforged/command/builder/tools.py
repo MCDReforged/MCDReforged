@@ -321,7 +321,7 @@ class SimpleCommandBuilder:
 		:param literal_name: The name of the literal node
 		:param node_factory: A literal node constructor, that accepts the literal name as the only parameter
 			and return a :class:`~mcdreforged.command.builder.nodes.basic.Literal` object. Optional
-		:return: A :class:`NodeDefinitionImpl` object. With that you can further customize this node definition
+		:return: A :class:`NodeDefinition` object. With that you can further customize this node definition
 		"""
 		if node_factory is None:
 			node_factory = Literal

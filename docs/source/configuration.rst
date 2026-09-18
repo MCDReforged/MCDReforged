@@ -633,7 +633,7 @@ In this example the custom handler package path is ``handlers.my_handler`` and t
 custom_info_reactors
 ^^^^^^^^^^^^^^^^^^^^
 
-A list of custom :doc:`/customize/reactor` classes to handle the info instance. The classed need to be subclasses of :class:`~mcdreforged.handler.abstract_server_handler.ServerHandler`
+A list of custom :doc:`/customize/reactor` classes to handle the info instance. The classes need to be subclasses of :class:`~mcdreforged.info_reactor.abstract_info_reactor.AbstractInfoReactor`
 
 All custom info reactors will be registered to the reactor list to process information from the server
 

@@ -72,10 +72,11 @@ msgid ""
 ":class:`~mcdreforged.plugin.si.server_interface.ServerInterface` as "
 "parameter"
 msgstr ""
-"它可用于在你想要传递一个 "
-":class:`~mcdreforged.plugin.si.server_interface.ServerInterface` 时，移除 "
+"它可用于移除 "
+":class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface` "
+"中包含的插件信息。比如在需要传递一个 "
 ":class:`~mcdreforged.plugin.si.server_interface.ServerInterface` "
-"中包含着的插件信息"
+"参数，但又不想暴露插件信息时"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.as_plugin_server_interface:1
 #: of

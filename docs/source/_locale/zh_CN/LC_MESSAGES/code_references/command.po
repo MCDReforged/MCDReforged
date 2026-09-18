@@ -975,7 +975,7 @@ msgstr ""
 
 #: mcdreforged.command.builder.tools.SimpleCommandBuilder.literal:8 of
 msgid ""
-"A :class:`NodeDefinitionImpl` object. With that you can further customize"
+"A :class:`NodeDefinition` object. With that you can further customize"
 " this node definition"
 msgstr "一个 :class:`NodeDefinition` 对象。借助它，你可以进一步的自定义这个节点定义"
 
