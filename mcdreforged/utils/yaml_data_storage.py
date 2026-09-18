@@ -62,7 +62,7 @@ class YamlDataStorage:
 		else:
 			if not allowed_missing_file:
 				raise FileNotFoundError()
-			users_data = {}
+			users_data = CommentedMap()
 		fixed_result, has_missing = self.__fix(dict(self.__default_data.get()), users_data)
 		with self._data_operation_lock:
 			self._data = fixed_result

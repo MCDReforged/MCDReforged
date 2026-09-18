@@ -231,7 +231,7 @@ def deserialize(
 	# For list and dict, since it doesn't have any type hint, we choose to simply return the data
 	elif cls in _BASIC_CLASSES:
 		if type(data) is cls:
-			return data
+			return cast(T, data)
 		# int is ok for float
 		elif cls is float and isinstance(data, int):
 			return cast(T, float(data))
@@ -312,7 +312,7 @@ def deserialize(
 	elif isinstance(cls, type):
 		if isinstance(data, dict):
 			try:
-				result = cls()
+				result = cast(Type[T], cls)()
 			except Exception:
 				raise TypeError('Failed to construct instance of class {}'.format(type(cls)))
 

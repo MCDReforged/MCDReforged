@@ -161,7 +161,6 @@ class RTextMCDRTranslation(RTextBase):
 		"""
 		.. versionadded:: v2.15.0
 		"""
-		if type(other) != type(self):
+		if not (type(other) == type(self) and isinstance(other, RTextMCDRTranslation)):
 			return False
-		other: Self
 		return self.__get_translated_text() == other.__get_translated_text()

@@ -102,13 +102,11 @@ class InfoReactorManager:
 				)
 			except queue.Full:
 				current_time = time.monotonic()
-				logging_method = self.mcdr_server.logger.debug
-				kwargs = {'option': DebugOption.REACTOR}
 				if self.last_queue_full_warn_time is None or current_time - self.last_queue_full_warn_time >= core_constant.REACTOR_QUEUE_FULL_WARN_INTERVAL_SEC:
-					logging_method = self.mcdr_server.logger.warning
-					kwargs = {}
 					self.last_queue_full_warn_time = current_time
-				logging_method(self.__tr('info_queue.full'), **kwargs)
+					self.mcdr_server.logger.warning(self.__tr('info_queue.full'))
+				else:
+					self.mcdr_server.logger.mdebug(self.__tr('info_queue.full'), option=DebugOption.REACTOR)
 				send_to_server()
 
 		echo_to_console()

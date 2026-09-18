@@ -23,8 +23,8 @@ def is_subsequence(keyword: str, s: str):
 
 class PluginCatalogueAccess:
 	@classmethod
-	def filter_sort(cls, plugins: Iterable[PluginData], keyword: Optional[str]) -> List[PluginData]:
-		plugins: List[PluginData] = list(plugins)
+	def filter_sort(cls, plugins_input: Iterable[PluginData], keyword: Optional[str]) -> List[PluginData]:
+		plugins: List[PluginData] = list(plugins_input)
 
 		if keyword is None:
 			return plugins

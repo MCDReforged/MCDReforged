@@ -513,9 +513,8 @@ class RText(RTextBase):
 		"""
 		.. versionadded:: v2.15.0
 		"""
-		if type(other) != type(self):
+		if not (type(other) == type(self) and isinstance(other, RText)):
 			return False
-		other: Self
 		return all((
 			self.__text == other.__text,
 			self.__color == other.__color,
@@ -645,9 +644,8 @@ class RTextList(RTextBase):
 		"""
 		.. versionadded:: v2.15.0
 		"""
-		if type(other) != type(self):
+		if not (type(other) == type(self) and isinstance(other, RTextList)):
 			return False
-		other: Self
 		return all((
 			self.header == other.header,
 			self.header_empty == other.header_empty,
@@ -751,9 +749,8 @@ class RTextTranslation(RText):
 		"""
 		.. versionadded:: v2.15.0
 		"""
-		if type(other) != type(self):
+		if not (type(other) == type(self) and isinstance(other, RTextTranslation)):
 			return False
-		other: Self
 		return all((
 			super().__eq__(other),
 			self.__translation_key == other.__translation_key,

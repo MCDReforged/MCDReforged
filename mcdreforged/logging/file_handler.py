@@ -43,7 +43,7 @@ class ZippingDayRotatingFileHandler(logging.FileHandler):
 			return
 
 		inited = hasattr(self, 'stream')
-		if inited:
+		if inited and self.stream is not None:
 			self.stream.close()
 		try:
 			if base_name is None:
