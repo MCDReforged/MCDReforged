@@ -22,7 +22,15 @@ Plugin information is stored in the ``plugins/`` directory in the repository. Ea
 Plugin Info
 ^^^^^^^^^^^
 
-``plugin_info.json`` contains the basic information of your plugin
+.. list-table::
+    :header-rows: 1
+
+    * - File
+      - Role
+    * - ``plugin_info.json``
+      - The catalogue registration record for the plugin, defining how it is registered and presented
+    * - ``mcdreforged.plugin.json``
+      - The plugin's self-declared metadata, defining its identity and runtime contract with MCDR
 
 id
 ~~
@@ -36,7 +44,10 @@ authors
 
 Optional field, default: ``[]``
 
-A list contains the authors of the plugin. Elements in the list can be a single str representing the name of the author, or a dict contains the author name and the url link of the author
+A list contains the authors of the plugin.
+Elements in the list can be a single str representing the name of the author, or a dict contains the author name and the url link of the author
+
+The url field can be written as ``link`` (the catalogue form) or ``homepage`` (the plugin metadata form); both represent the author's homepage
 
 Example:
 
