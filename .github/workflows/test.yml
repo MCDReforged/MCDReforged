@@ -17,9 +17,9 @@ jobs:
     name: Test with python ${{ matrix.python-version }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Setup python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python-version }}
           cache: pip
@@ -45,9 +45,9 @@ jobs:
     runs-on: ubuntu-latest
     name: Lint with mypy
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Setup python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: 3.13
           cache: pip
@@ -65,7 +65,7 @@ jobs:
           echo "~~~" >> $GITHUB_STEP_SUMMARY
 
       - name: Upload HTML report as artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: mypy-html-report
           path: mypy_html_report/

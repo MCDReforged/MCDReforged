@@ -8,7 +8,7 @@ jobs:
     name: Assemble a dev source compressed file
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Create Dev Build
         run: |
           mkdir MCDReforged
@@ -22,7 +22,7 @@ jobs:
 
           zip -r MCDReforged-dev.zip MCDReforged
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: MCDReforged dev source for ${{ github.sha }}
           path: MCDReforged-dev.zip
