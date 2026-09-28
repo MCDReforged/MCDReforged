@@ -46,7 +46,7 @@ For example, we create a MCDR plugin and write the following codes as its entryp
             info = super().parse_server_stdout(text)
             if info.player is None:
                 m = re.fullmatch(r'<\[\w+](?P<name>[^>]+)> (?P<message>.*)', info.content)
-                if m is not None and self._verify_player_name(m['name']):
+                if m is not None and self.validate_player_name(m['name']):
                     info.player, info.content = m['name'], m['message']
             return info
     
@@ -83,7 +83,7 @@ Then you can start using the handler by loading or reloading the plugin that you
                     info = super().parse_server_stdout(text)
                     if info.player is None:
                         m = re.fullmatch(r'<\[\w+](?P<name>[^>]+)> (?P<message>.*)', info.content)
-                        if m is not None and self._verify_player_name(m['name']):
+                        if m is not None and self.validate_player_name(m['name']):
                             info.player, info.content = m['name'], m['message']
                     return info
 
