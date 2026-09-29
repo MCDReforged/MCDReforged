@@ -1,5 +1,7 @@
 import contextlib
 import dataclasses
+import hashlib
+import json
 import os
 import re
 import shlex
@@ -7,13 +9,16 @@ import shutil
 import subprocess
 import threading
 import time
+import urllib.parse
 from pathlib import Path
-from typing import Optional, List, TYPE_CHECKING, Dict
+from typing import Optional, List, TYPE_CHECKING, Dict, Tuple
+from zipfile import ZipFile
 
 from typing_extensions import override
 
 from mcdreforged.command.builder.common import CommandContext
 from mcdreforged.command.command_source import CommandSource
+from mcdreforged.constants import plugin_constant
 from mcdreforged.minecraft.rtext.click_event import RAction
 from mcdreforged.minecraft.rtext.style import RColor, RStyle
 from mcdreforged.minecraft.rtext.text import RTextBase, RText
@@ -25,11 +30,13 @@ from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.handler_base import P
 from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.local_meta_registry import LocalReleaseData
 from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.plugin_requirement_source import PluginRequirementSource
 from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.texts import Texts
+from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.uri_meta_registry import UriMetaRegistry
 from mcdreforged.plugin.installer.dependency_resolver import PluginRequirement, PluginDependencyResolver, PackageRequirementResolver, PluginCandidate, PluginDependencyResolverArgs
-from mcdreforged.plugin.installer.downloader import ReleaseDownloader
-from mcdreforged.plugin.installer.types import ReleaseData, PluginResolution, MetaRegistry
-from mcdreforged.plugin.meta.version import Version
-from mcdreforged.utils import collection_utils
+from mcdreforged.plugin.installer.downloader import ReleaseDownloader, DirectDownloader
+from mcdreforged.plugin.installer.types import ReleaseData, PluginResolution, MetaRegistry, UriReleaseData, MergedMetaRegistry
+from mcdreforged.plugin.meta.schema import PluginMetadataJsonModel
+from mcdreforged.plugin.meta.version import Version, VersionRequirement
+from mcdreforged.utils import collection_utils, request_utils
 from mcdreforged.utils.replier import CommandSourceReplier
 
 if TYPE_CHECKING:
@@ -76,10 +83,36 @@ class _PluginToInstallData:
 	release: ReleaseData
 
 
+MAX_URI_PLUGIN_SIZE = 100 * 1024 * 1024  # 100MiB
+MAX_URI_METADATA_SIZE = 100 * 1024       # 100KiB
+
+
+@dataclasses.dataclass(frozen=True)
+class _UriMetadata:
+	uri: str
+	local_path: Path
+	metadata: 'PluginMetadataJsonModel'
+	requirements: List[str]
+
+
+@dataclasses.dataclass(frozen=True)
+class _ParsedHash:
+	method: str
+	hex: str
+
+
+@dataclasses.dataclass(frozen=True)
+class _ParsedSpecifierResult:
+	requirement: PluginRequirement
+	uri_metadata: Optional['_UriMetadata'] = None
+	hash_hex: Optional[str] = None
+
+
 @dataclasses.dataclass(frozen=True)
 class _ParsedPluginRequirements:
 	requirement_sources: Dict[PluginRequirement, PluginRequirementSource] = dataclasses.field(default_factory=dict)
 	hash_validators: Dict[str, str] = dataclasses.field(default_factory=dict)
+	uri_metadata_map: Dict[str, _UriMetadata] = dataclasses.field(default_factory=dict)
 
 
 @dataclasses.dataclass(frozen=True)
@@ -107,9 +140,91 @@ class PimInstallCommandHandler(PimCommandHandlerBase):
 		finally:
 			self.__install_source = None
 
+	@staticmethod
+	def __is_uri_specifier(s: str) -> bool:
+		return s.startswith('file://') or s.startswith('https://')
+
 	# ------------------------------------------------
 	#             Command Implementation
 	# ------------------------------------------------
+
+	def __extract_metadata_from_uri_file(self, source: CommandSource, uri: str) -> Path:
+		file_path_str = urllib.parse.unquote(uri[7:])
+		file_path = Path(file_path_str).resolve()
+
+		if not file_path.is_file():
+			source.reply(self._tr('install.uri_file_not_found', uri).set_color(RColor.red))
+			raise OuterReturn()
+
+		if file_path.stat().st_size > MAX_URI_PLUGIN_SIZE:
+			source.reply(self._tr('install.uri_file_too_large', uri, MAX_URI_PLUGIN_SIZE // (1024 * 1024)).set_color(RColor.red))
+			raise OuterReturn()
+
+		return file_path
+
+	def __extract_metadata_from_uri_https(self, source: CommandSource, uri: str, temp_dir: Path) -> Path:
+		uri_hex = hashlib.sha256(uri.encode('utf8')).hexdigest()[:16]
+		temp_file = temp_dir / f'uri_download_{uri_hex}.tmp'
+
+		source.reply(self._tr('install.uri_downloading', uri))
+		downloader = DirectDownloader(
+			url=uri,
+			target_path=temp_file,
+			timeout=self.mcdr_server.config.plugin_download_timeout
+		)
+		try:
+			downloader.download()
+		except Exception as e:
+			source.reply(self._tr('install.uri_download_failed', uri, e).set_color(RColor.red))
+			raise OuterReturn()
+
+		return temp_file
+
+	def __extract_metadata_from_uri_zip(self, source: CommandSource, uri: str, local_path: Path) -> Tuple['PluginMetadataJsonModel', List[str]]:
+		try:
+			with ZipFile(local_path, 'r') as zip_file:
+				try:
+					meta_info = zip_file.getinfo(plugin_constant.PLUGIN_META_FILE)
+					if meta_info.file_size > MAX_URI_METADATA_SIZE:
+						raise Exception('Metadata file too large')
+					with zip_file.open(plugin_constant.PLUGIN_META_FILE) as meta_file:
+						metadata_dict = json.load(meta_file)
+						metadata = PluginMetadataJsonModel.model_validate(metadata_dict)
+				except KeyError:
+					raise Exception(f'Missing {plugin_constant.PLUGIN_META_FILE} in plugin archive')
+
+				requirements: List[str] = []
+				requirements_file_path = metadata.requirements_file or plugin_constant.PLUGIN_REQUIREMENTS_FILE
+				if requirements_file_path:
+					try:
+						req_info = zip_file.getinfo(requirements_file_path)
+						if req_info.file_size > MAX_URI_METADATA_SIZE:
+							raise Exception('Requirements file too large')
+						with zip_file.open(requirements_file_path) as req_file:
+							req_content = req_file.read().decode('utf8')
+							for line in req_content.splitlines():
+								line = line.split('#', 1)[0].strip()
+								if line:
+									requirements.append(line)
+					except KeyError:
+						pass
+
+		except Exception as e:
+			source.reply(self._tr('install.uri_metadata_extraction_failed', uri, e).set_color(RColor.red))
+			raise OuterReturn()
+
+		return metadata, requirements
+
+	def __extract_metadata_from_uri(self, source: CommandSource, uri: str, temp_dir: Path) -> _UriMetadata:
+		if uri.startswith('file://'):
+			local_path = self.__extract_metadata_from_uri_file(source, uri)
+		elif uri.startswith('https://'):
+			local_path = self.__extract_metadata_from_uri_https(source, uri, temp_dir)
+		else:
+			raise ValueError(f'Unsupported URI scheme: {uri}')
+
+		metadata, requirements = self.__extract_metadata_from_uri_zip(source, uri, local_path)
+		return _UriMetadata(uri=uri, local_path=local_path, metadata=metadata, requirements=requirements)
 
 	def __check_abort(self, source: CommandSource):
 		if self.__install_abort_helper.is_aborted():
@@ -126,11 +241,11 @@ class PimInstallCommandHandler(PimCommandHandlerBase):
 
 		# 3. Resolve what will be installed
 		cata_meta = self.get_merged_cata_meta(source)
-		resolution = self.__step_resolve(source, ctx, ppr, cata_meta)
-		to_install = self.__step_collect_to_install(source, ctx, ppr, cata_meta, resolution)
+		resolution, merged_meta = self.__step_resolve(source, ctx, ppr, cata_meta)
+		to_install = self.__step_collect_to_install(source, ctx, ppr, merged_meta, resolution)
 
 		# 4. Install packages and plugins
-		self.__step_install(source, ctx, cata_meta, to_install)
+		self.__step_install(source, ctx, ppr, merged_meta, to_install)
 
 	def __step_parse_input(self, source: CommandSource, context: CommandContext) -> _ParsedContext:
 		input_specifiers: List[str] = []
@@ -176,6 +291,70 @@ class PimInstallCommandHandler(PimCommandHandlerBase):
 			no_deps=context.get('no_deps', 0) > 0,
 		)
 
+	def __parse_hash_validator(self, source: CommandSource, s: str, hash_str: str) -> _ParsedHash:
+		if re.fullmatch(r'[a-z0-9]+:[0-9abcdef]+', hash_str) is not None:
+			hash_method, hash_hex = hash_str.split(':', 1)
+		else:
+			hash_method, hash_hex = 'sha256', hash_str
+
+		if hash_method not in ['sha256']:
+			source.reply(self._tr('install.hash_method_unsupported', repr(hash_method)))
+			raise OuterReturn()
+		if re.fullmatch(r'[0-9abcdef]{10,64}', hash_hex) is None:
+			source.reply(self._tr('install.hash_validator_invalid', repr(s)))
+			raise OuterReturn()
+
+		return _ParsedHash(method=hash_method, hex=hash_hex)
+
+	def __parse_uri_specifier(self, source: CommandSource, s: str, uri_temp_dir: Path) -> _ParsedSpecifierResult:
+		parts = s.split('@', 1)
+		if len(parts) == 2:
+			uri, hash_str = parts[0], parts[1].lower()
+		else:
+			uri, hash_str = s, None
+
+		uri_metadata = self.__extract_metadata_from_uri(source, uri, uri_temp_dir)
+
+		plugin_id = uri_metadata.metadata.id
+		version = str(uri_metadata.metadata.version)
+
+		req = PluginRequirement(
+			id=plugin_id,
+			requirement=VersionRequirement(f'=={version}'),
+			source_uri=uri,
+		)
+
+		hash_hex = None
+		if hash_str is not None:
+			parsed_hash = self.__parse_hash_validator(source, s, hash_str)
+			hash_hex = parsed_hash.hex
+
+		return _ParsedSpecifierResult(requirement=req, uri_metadata=uri_metadata, hash_hex=hash_hex)
+
+	def __parse_plugin_specifier(self, source: CommandSource, s: str) -> _ParsedSpecifierResult:
+		parts = s.split('@', 1)
+		if len(parts) == 2:
+			req_str, hash_str = parts[0], parts[1].lower()
+		else:
+			req_str, hash_str = s, None
+		try:
+			req = PluginRequirement.of(req_str)
+		except ValueError as e:
+			source.reply(self._tr('install.parse_specifier_failed', repr(s), e))
+			raise OuterReturn()
+
+		hash_hex = None
+		if hash_str is not None:
+			parsed_hash = self.__parse_hash_validator(source, s, hash_str)
+			cris = req.requirement.criterions
+			if len(cris) == 1 and cris[0].opt == '==':
+				hash_hex = parsed_hash.hex
+			else:
+				source.reply(self._tr('install.hash_validator_unexpected', repr(s)))
+				raise OuterReturn()
+
+		return _ParsedSpecifierResult(requirement=req, hash_hex=hash_hex)
+
 	def __step_parse_plugin_requirements(self, source: CommandSource, ctx: _ParsedContext) -> _ParsedPluginRequirements:
 		ppr = _ParsedPluginRequirements()
 		req_srcs = ppr.requirement_sources
@@ -189,43 +368,30 @@ class PimInstallCommandHandler(PimCommandHandlerBase):
 			else:
 				add_plugin_requirement(pim_utils.as_requirement(plg, '==', preferred_version=preferred_version), PluginRequirementSource.existing_pinned)
 
-		input_requirements: List[PluginRequirement] = []
+		base_dir = Path(self.server_interface.get_data_folder())
+		uri_temp_dir = base_dir / 'pim_uri_{}'.format(os.getpid())
+
+		parsed_results: List[_ParsedSpecifierResult] = []
 		for s in ctx.input_specifiers:
 			if s != '*':
 				if ' ' in s:
 					source.reply(self._tr('install.space_char_not_allowed', repr(s)))
 					raise OuterReturn()
-				# <plugin_id><opt><criterion>[@<hash_method>:<hash_hex>]
-				# my_plugin==1.2.3@sha256:abc123
-				parts = s.split('@', 1)
-				if len(parts) == 2:
-					req_str, hash_str = parts[0], parts[1].lower()
-				else:
-					req_str, hash_str = s, None
-				try:
-					req = PluginRequirement.of(req_str)
-				except ValueError as e:
-					source.reply(self._tr('install.parse_specifier_failed', repr(s), e))
-					raise OuterReturn()
-				if hash_str is not None:
-					if re.fullmatch(r'[a-z0-9]+:[0-9abcdef]+', hash_str) is not None:
-						hash_method, hash_hex = hash_str.split(':', 1)
-					else:
-						hash_method, hash_hex = 'sha256', hash_str
 
-					if hash_method not in ['sha256']:
-						source.reply(self._tr('install.hash_method_unsupported', repr(hash_method)))
-						raise OuterReturn()
-					if re.fullmatch(r'[0-9abcdef]{10,64}', hash_hex) is None:  # len(sha256_hash_hex) == 64
-						source.reply(self._tr('install.hash_validator_invalid', repr(s)))
-						raise OuterReturn()
-					cris = req.requirement.criterions
-					if len(cris) == 1 and cris[0].opt == '==':
-						ppr.hash_validators[req.id] = hash_hex
-					else:
-						source.reply(self._tr('install.hash_validator_unexpected', repr(s)))
-						raise OuterReturn()
-				input_requirements.append(req)
+				if self.__is_uri_specifier(s):
+					result = self.__parse_uri_specifier(source, s, uri_temp_dir)
+					parsed_results.append(result)
+				else:
+					result = self.__parse_plugin_specifier(source, s)
+					parsed_results.append(result)
+
+		for result in parsed_results:
+			if result.uri_metadata is not None:
+				ppr.uri_metadata_map[result.requirement.id] = result.uri_metadata
+			if result.hash_hex is not None:
+				ppr.hash_validators[result.requirement.id] = result.hash_hex
+
+		input_requirements: List[PluginRequirement] = [result.requirement for result in parsed_results]
 
 		plugin: Optional[AbstractPlugin]
 		if '*' in ctx.input_specifiers:
@@ -262,17 +428,22 @@ class PimInstallCommandHandler(PimCommandHandlerBase):
 
 		return ppr
 
-	def __step_resolve(self, source: CommandSource, ctx: _ParsedContext, ppr: _ParsedPluginRequirements, cata_meta: MetaRegistry) -> PluginResolution:
+	def __step_resolve(self, source: CommandSource, ctx: _ParsedContext, ppr: _ParsedPluginRequirements, cata_meta: MetaRegistry) -> Tuple[PluginResolution, MetaRegistry]:
 		req_srcs = ppr.requirement_sources
 		source.reply(self._tr('install.resolving_dependencies', len(req_srcs)))
 
+		merged_meta = cata_meta
+		if ppr.uri_metadata_map:
+			uri_sourced_meta = UriMetaRegistry(ppr.uri_metadata_map)
+			merged_meta = MergedMetaRegistry(cata_meta, uri_sourced_meta)
+
 		for req in req_srcs.keys():
 			plugin_id = req.id
-			if plugin_id not in cata_meta.plugins:
+			if plugin_id not in merged_meta.plugins:
 				source.reply(self._tr('install.unknown_plugin_id', Texts.plugin_id(plugin_id)))
 				raise OuterReturn()
 
-		resolver = PluginDependencyResolver(cata_meta)
+		resolver = PluginDependencyResolver(merged_meta)
 		result = resolver.resolve(
 			req_srcs.keys(),
 			args=PluginDependencyResolverArgs(ignore_dependencies=ctx.no_deps),
@@ -285,7 +456,7 @@ class PimInstallCommandHandler(PimCommandHandlerBase):
 		self.log_debug('Output plugin resolution:')
 		for plugin_id, version in result.items():
 			self.log_debug('  {} {}'.format(plugin_id, version))
-		return result
+		return result, merged_meta
 
 	def __step_collect_to_install(self, source: CommandSource, ctx: _ParsedContext, ppr: _ParsedPluginRequirements, cata_meta: MetaRegistry, resolution: PluginResolution) -> _ToInstallStuffs:
 		to_install = _ToInstallStuffs()
@@ -310,12 +481,14 @@ class PimInstallCommandHandler(PimCommandHandlerBase):
 				if isinstance(release, LocalReleaseData):
 					self.logger.warning('Skipping unexpected chosen LocalReleaseData {}'.format(release))
 					continue
-				if expected_hash is not None and not release.file_sha256.startswith(expected_hash):
+
+				if expected_hash is not None and release.file_sha256 and not release.file_sha256.startswith(expected_hash):
 					source.reply(self._tr(
 						'install.mismatched_hash.catalogue',
 						Texts.candidate(plugin_id, version), expected_hash, release.file_sha256
 					).set_color(RColor.red))
 					raise OuterReturn()
+
 				to_install.plugins[plugin_id] = _PluginToInstallData(
 					id=plugin_id,
 					version=version,
@@ -389,7 +562,7 @@ class PimInstallCommandHandler(PimCommandHandlerBase):
 
 		return to_install
 
-	def __step_install(self, source: CommandSource, ctx: _ParsedContext, cata_meta: MetaRegistry, to_install: _ToInstallStuffs):
+	def __step_install(self, source: CommandSource, ctx: _ParsedContext, ppr: _ParsedPluginRequirements, cata_meta: MetaRegistry, to_install: _ToInstallStuffs):
 		dry_run_suffix = self._tr('install.dry_run_suffix') if ctx.dry_run else RText('')
 		if not ctx.skip_confirm:
 			self.__install_confirm_helper.clear()
@@ -453,28 +626,56 @@ class PimInstallCommandHandler(PimCommandHandlerBase):
 			for plugin_id, data in to_install.plugins.items():
 				download_temp_file = download_temp_dir / '{}.tmp'.format(plugin_id)
 				downloaded_files[plugin_id] = download_temp_file
-				source.reply(self._tr(
-					'install.downloading_plugin_one',
-					candidate=Texts.candidate(plugin_id, data.version),
-					name=Texts.file_name(data.release.file_name),
-					hash_quoted=RText(f'({data.release.file_sha256})', color=RColor.gray),
-				) + dry_run_suffix)
-				if not ctx.dry_run:
-					download_temp_file.parent.mkdir(parents=True, exist_ok=True)
-					downloader = ReleaseDownloader(
-						data.release, download_temp_file, CommandSourceReplier(source),
-						download_url_override=self.mcdr_server.config.plugin_download_url,
-						download_url_override_kwargs={
-							'repos_owner': cata_meta[plugin_id].repos_owner,
-							'repos_name': cata_meta[plugin_id].repos_name,
-						},
-						download_timeout=self.mcdr_server.config.plugin_download_timeout,
-						logger=self.logger,
-					)
-					with contextlib.suppress(downloader.Aborted):
-						with self.__install_abort_helper.with_abort_callback(downloader.abort):
-							downloader.download(show_progress=ReleaseDownloader.ShowProgressPolicy.if_costly)
-					self.__check_abort(source)
+
+				if isinstance(data.release, UriReleaseData):
+					source.reply(self._tr(
+						'install.downloading_plugin_one',
+						candidate=Texts.candidate(plugin_id, data.version),
+						name=Texts.file_name(data.release.file_name),
+						hash_quoted=RText('(from URI)', color=RColor.gray),
+					) + dry_run_suffix)
+					if not ctx.dry_run:
+						download_temp_file.parent.mkdir(parents=True, exist_ok=True)
+						if data.release.local_file_path is None:
+							raise AssertionError(f'UriReleaseData for {plugin_id} has no local_file_path')
+						shutil.copy2(data.release.local_file_path, download_temp_file)
+
+						hasher = hashlib.sha256()
+						with open(download_temp_file, 'rb') as f:
+							for chunk in iter(lambda: f.read(8192), b''):
+								hasher.update(chunk)
+						calculated_hash = hasher.hexdigest()
+
+						expected_hash = ppr.hash_validators.get(plugin_id)
+						if expected_hash is not None and not calculated_hash.startswith(expected_hash):
+							source.reply(self._tr(
+								'install.mismatched_hash.catalogue',
+								Texts.candidate(plugin_id, data.version), expected_hash, calculated_hash
+							).set_color(RColor.red))
+							raise OuterReturn()
+				else:
+					source.reply(self._tr(
+						'install.downloading_plugin_one',
+						candidate=Texts.candidate(plugin_id, data.version),
+						name=Texts.file_name(data.release.file_name),
+						hash_quoted=RText(f'({data.release.file_sha256})', color=RColor.gray),
+					) + dry_run_suffix)
+					if not ctx.dry_run:
+						download_temp_file.parent.mkdir(parents=True, exist_ok=True)
+						downloader = ReleaseDownloader(
+							data.release, download_temp_file, CommandSourceReplier(source),
+							download_url_override=self.mcdr_server.config.plugin_download_url,
+							download_url_override_kwargs={
+								'repos_owner': cata_meta[plugin_id].repos_owner,
+								'repos_name': cata_meta[plugin_id].repos_name,
+							},
+							download_timeout=self.mcdr_server.config.plugin_download_timeout,
+							logger=self.logger,
+						)
+						with contextlib.suppress(downloader.Aborted):
+							with self.__install_abort_helper.with_abort_callback(downloader.abort):
+								downloader.download(show_progress=ReleaseDownloader.ShowProgressPolicy.if_costly)
+				self.__check_abort(source)
 
 			self.__check_abort(source)
 

@@ -332,6 +332,11 @@ mcdreforged:
         hash_method_unsupported: '不支持的哈希算法 {0}。目前仅支持 sha256'
         hash_validator_invalid: '无效的哈希校验值，应当为一个长度在 [10, 64] 之间的十六进制字符串。当前插件描述: {0}'
         hash_validator_unexpected: '只有使用 "==" 的插件描述可附加哈希校验值。当前插件描述: {0}'
+        uri_file_not_found: '文件未找到: {0}'
+        uri_file_too_large: '文件大小超过 {1} MiB 限制: {0}'
+        uri_downloading: '正在从 {0} 下载插件 ...'
+        uri_download_failed: '从 {0} 下载插件失败: {1}'
+        uri_metadata_extraction_failed: '从 {0} 提取插件元数据失败: {1}'
         cannot_install_builtin: 无法安装内置插件 {0}
 
         resolving_dependencies: 正在解析插件依赖 ...

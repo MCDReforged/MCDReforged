@@ -1,6 +1,7 @@
 import dataclasses
 import datetime
 from abc import ABC, abstractmethod
+from pathlib import Path
 from typing import List, Dict, Optional, Mapping
 
 from typing_extensions import override
@@ -26,6 +27,12 @@ class ReleaseData:
 	file_size: int
 	file_url: str
 	file_sha256: str
+
+
+@dataclasses.dataclass(frozen=True)
+class UriReleaseData(ReleaseData):
+	source_uri: str = ''
+	local_file_path: Optional[Path] = None
 
 
 @dataclasses.dataclass

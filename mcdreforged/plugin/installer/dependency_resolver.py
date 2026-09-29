@@ -20,6 +20,7 @@ class PluginRequirement:
 	id: PluginId
 	requirement: VersionRequirement
 	preferred_version: Optional[Version] = None
+	source_uri: Optional[str] = None
 
 	@classmethod
 	def of(cls, req_str: str) -> 'PluginRequirement':
