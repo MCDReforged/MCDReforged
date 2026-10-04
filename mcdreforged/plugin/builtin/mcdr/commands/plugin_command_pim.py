@@ -34,6 +34,7 @@ if TYPE_CHECKING:
 
 @dataclasses.dataclass
 class _OperationHolder:
+	state_lock: threading.Lock = dataclasses.field(default_factory=threading.Lock)
 	lock: threading.Lock = dataclasses.field(default_factory=threading.Lock)
 	thread: Optional[threading.Thread] = dataclasses.field(default=None)
 	op_key: Optional[str] = dataclasses.field(default=None)
@@ -44,29 +45,32 @@ def create_async_operation_guard_decorator(op_holder: _OperationHolder, skip_cal
 		def func_transformer(func: Callable):
 			@functools.wraps(func)
 			def wrapped_func(*args, **kwargs) -> Any:
-				acquired = op_holder.lock.acquire(blocking=False)
-				if acquired:
-					def run():
+				with op_holder.state_lock:
+					if op_holder.lock.acquire(blocking=False):
+						def run():
+							try:
+								func(*args, **kwargs)
+							except OuterReturn:
+								pass
+							finally:
+								with op_holder.state_lock:
+									op_holder.thread = None
+									op_holder.op_key = None
+									op_holder.lock.release()
 						try:
-							func(*args, **kwargs)
-						except OuterReturn:
-							pass
-						finally:
+							thread = threading.Thread(target=run, name=thread_name)
+							op_holder.thread = thread
+							op_holder.op_key = op_key
+							thread.start()
+							return thread
+						except BaseException:
 							op_holder.thread = None
 							op_holder.op_key = None
 							op_holder.lock.release()
-					try:
-						thread = threading.Thread(target=run, name=thread_name)
-						thread.start()
-						op_holder.thread = thread
-						op_holder.op_key = op_key
-						return thread
-					except BaseException:
-						op_holder.lock.release()
-						raise
-				else:
-					skip_callback(*args, op_func=wrapped_func, op_key=op_holder.op_key, op_thread=op_holder.thread, new_op_key=op_key, **kwargs)
-					return None
+							raise
+					current_key, current_thread = op_holder.op_key, op_holder.thread
+				skip_callback(*args, op_func=wrapped_func, op_key=current_key, op_thread=current_thread, new_op_key=op_key, **kwargs)
+				return None
 
 			misc_utils.copy_signature(wrapped_func, func)
 			return wrapped_func
@@ -242,7 +246,8 @@ class PluginCommandPimExtension(SubCommand):
 	def on_mcdr_stop(self):
 		self.__meta_holder.terminate()
 		self.__install_handler.on_mcdr_stop()
-		thread = self.current_operation.thread
+		with self.current_operation.state_lock:
+			thread = self.current_operation.thread
 		if thread is not None:
 			thread.join(timeout=pim_utils.CONFIRM_WAIT_TIMEOUT + 1)
 
