@@ -1,10 +1,9 @@
 import dataclasses
 import hashlib
 import re
-import tempfile
 import urllib.parse
 from pathlib import Path
-from typing import Iterable, List, Optional, Tuple
+from typing import Iterable, List, Tuple
 from zipfile import ZipFile
 
 from mcdreforged.constants import plugin_constant
@@ -35,29 +34,16 @@ class UriPluginPrepareHelper:
 	__MAX_PLUGIN_SIZE = 100 * 1024 * 1024
 	__MAX_METADATA_SIZE = 100 * 1024
 
-	def __init__(self, data_dir: Path, download_timeout: float, abort_helper: AbortHelper):
-		self.__data_dir = data_dir
+	def __init__(self, work_path: Path, download_timeout: float, abort_helper: AbortHelper):
+		self.__work_path = work_path
 		self.__download_timeout = download_timeout
 		self.__abort_helper = abort_helper
-		self.__temp_directory: Optional[tempfile.TemporaryDirectory] = None
 		self.__next_file_id = 0
-
-	def __enter__(self) -> 'UriPluginPrepareHelper':
-		self.__check_abort()
-		self.__data_dir.mkdir(parents=True, exist_ok=True)
-		self.__temp_directory = tempfile.TemporaryDirectory(prefix='pim_uri_', dir=self.__data_dir)
-		return self
-
-	def __exit__(self, exc_type, exc_value, traceback):
-		if self.__temp_directory is not None:
-			self.__temp_directory.cleanup()
-			self.__temp_directory = None
 
 	def prepare(self, specifier: UriPluginSpecifier) -> PreparedUriPlugin:
 		self.__check_abort()
-		if self.__temp_directory is None:
-			raise RuntimeError('URI preparation requires an active context manager')
-		target = Path(self.__temp_directory.name) / '{}.tmp'.format(self.__next_file_id)
+		self.__work_path.mkdir(parents=True, exist_ok=True)
+		target = self.__work_path / '{}.tmp'.format(self.__next_file_id)
 		self.__next_file_id += 1
 		if specifier.scheme is UriScheme.file:
 			assert isinstance(specifier.location, Path)

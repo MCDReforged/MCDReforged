@@ -5,6 +5,7 @@ import re
 import shlex
 import shutil
 import subprocess
+import tempfile
 import threading
 import time
 from pathlib import Path
@@ -143,18 +144,18 @@ class PimInstallCommandHandler(PimCommandHandlerBase):
 		ctx = self.__step_parse_input(source, context)
 		self.log_debug('pim install ctx: {}'.format(ctx))
 
-		with contextlib.ExitStack() as stack:
+		data_dir = Path(self.server_interface.get_data_folder())
+		data_dir.mkdir(parents=True, exist_ok=True)
+		with tempfile.TemporaryDirectory(prefix='pim_', dir=data_dir) as temp_dir:
+			workspace = Path(temp_dir)
 			uri_helper = None
 			if ctx.has_uri_specifier:
-				try:
-					uri_helper = stack.enter_context(UriPluginPrepareHelper(
-						Path(self.server_interface.get_data_folder()),
-						self.mcdr_server.config.plugin_download_timeout,
-						self.__install_abort_helper,
-					))
-				except UriPluginPrepareHelper.Aborted:
-					self.__check_abort(source)
-					raise OuterReturn()
+				self.__check_abort(source)
+				uri_helper = UriPluginPrepareHelper(
+					workspace / 'prepared',
+					self.mcdr_server.config.plugin_download_timeout,
+					self.__install_abort_helper,
+				)
 			# 2. Prepare URI plugins and collect requirements
 			ppr = self.__step_parse_plugin_requirements(source, ctx, uri_helper)
 
@@ -164,7 +165,7 @@ class PimInstallCommandHandler(PimCommandHandlerBase):
 			to_install = self.__step_collect_to_install(source, ctx, ppr, merged_meta, resolution)
 
 			# 4. Install packages and plugins
-			self.__step_install(source, ctx, merged_meta, to_install)
+			self.__step_install(source, ctx, merged_meta, to_install, workspace)
 
 	def __step_parse_input(self, source: CommandSource, context: CommandContext) -> _ParsedContext:
 		raw_specifiers: List[_RawSpecifier] = []
@@ -477,7 +478,7 @@ class PimInstallCommandHandler(PimCommandHandlerBase):
 
 		return to_install
 
-	def __step_install(self, source: CommandSource, ctx: _ParsedContext, cata_meta: MetaRegistry, to_install: _ToInstallStuffs):
+	def __step_install(self, source: CommandSource, ctx: _ParsedContext, cata_meta: MetaRegistry, to_install: _ToInstallStuffs, workspace: Path):
 		dry_run_suffix = self._tr('install.dry_run_suffix') if ctx.dry_run else RText('')
 		if not ctx.skip_confirm:
 			self.__install_confirm_helper.clear()
@@ -501,12 +502,10 @@ class PimInstallCommandHandler(PimCommandHandlerBase):
 
 		# download
 		base_dir = Path(self.server_interface.get_data_folder())
-		self.delete_remaining_download_temp(base_dir)
+		self.delete_remaining_download_temp(base_dir, active_workspace=workspace)
 
-		download_temp_dir = base_dir / 'pim_{}'.format(os.getpid())
+		download_temp_dir = workspace / 'downloads'
 		self.log_debug('download_temp_dir: {}'.format(download_temp_dir))
-		if not ctx.dry_run and download_temp_dir.is_dir():
-			shutil.rmtree(download_temp_dir)
 
 		file_install_state = _PluginFileInstallState()
 
@@ -518,7 +517,7 @@ class PimInstallCommandHandler(PimCommandHandlerBase):
 			self.__check_abort(source)
 
 			to_load_paths, to_unload_ids = self.__commit_install(
-				source, ctx, to_install, downloaded_files, download_temp_dir / '_trashbin', dry_run_suffix, file_install_state,
+				source, ctx, to_install, downloaded_files, workspace / '_trashbin', dry_run_suffix, file_install_state,
 			)
 
 		except OuterReturn:
@@ -535,10 +534,6 @@ class PimInstallCommandHandler(PimCommandHandlerBase):
 			if not ctx.dry_run:
 				self.server_interface.manipulate_plugins(unload=to_unload_ids, load=to_load_paths)
 			source.reply(self._tr('install.installation_done').set_color(RColor.green))
-
-		finally:
-			if download_temp_dir.is_dir():
-				shutil.rmtree(download_temp_dir)
 
 	def __install_packages(self, source: CommandSource, ctx: _ParsedContext, to_install: _ToInstallStuffs, dry_run_suffix: RTextBase):
 		# XXX: verify python package feasibility with PackageRequirementResolver.check
@@ -667,11 +662,13 @@ class PimInstallCommandHandler(PimCommandHandlerBase):
 	#               Interfaces for PIM
 	# ------------------------------------------------
 
-	def delete_remaining_download_temp(self, data_dir: Optional[Path] = None):
+	def delete_remaining_download_temp(self, data_dir: Optional[Path] = None, *, active_workspace: Optional[Path] = None):
 		if data_dir is None:
 			data_dir = Path(self.server_interface.get_data_folder())
 		for name in os.listdir(data_dir):
 			dl_path = data_dir / name
+			if active_workspace is not None and dl_path.absolute() == active_workspace.absolute():
+				continue
 			try:
 				if dl_path.name.startswith('pim_') and dl_path.is_dir():
 					if time.time() - dl_path.stat().st_mtime > 24 * 60 * 60:  # > 1day
