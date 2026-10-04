@@ -106,6 +106,12 @@ class _ToInstallStuffs:
 	plugins: Dict[str, _PluginToInstallData] = dataclasses.field(default_factory=dict)
 
 
+@dataclasses.dataclass
+class _PluginFileInstallState:
+	trashbin_files: Dict[Path, Path] = dataclasses.field(default_factory=dict)  # trashbin path -> origin path
+	newly_added_files: List[Path] = dataclasses.field(default_factory=list)
+
+
 class PimInstallCommandHandler(PimCommandHandlerBase):
 	def __init__(self, pim_ext: 'PluginCommandPimExtension'):
 		super().__init__(pim_ext)
@@ -502,136 +508,25 @@ class PimInstallCommandHandler(PimCommandHandlerBase):
 		if not ctx.dry_run and download_temp_dir.is_dir():
 			shutil.rmtree(download_temp_dir)
 
-		downloaded_files: Dict[str, Path] = {}  # plugin id -> downloaded temp file path
-		trashbin_path = download_temp_dir / '_trashbin'
-		trashbin_files: Dict[Path, Path] = {}  # trashbin path -> origin path
-		newly_added_files: List[Path] = []
+		file_install_state = _PluginFileInstallState()
 
 		try:
-			# XXX: verify python package feasibility with PackageRequirementResolver.check
-			package_resolver = PackageRequirementResolver(list(to_install.packages.keys()))
-
-			if len(to_install.packages) > 0:
-				source.reply(self._tr('install.installing_package', Texts.number(len(to_install.packages))))
-				if ctx.dry_run:
-					source.reply(self._tr('install.install_package_dry_run', ', '.join(to_install.packages.keys())) + dry_run_suffix)
-				else:
-					def log_cmd(cmd: List[str]):
-						self.log_debug('pip install cmd: {}'.format(cmd))
-
-					try:
-						with self.__install_abort_helper.with_abort_callback(package_resolver.abort):
-							package_resolver.install(
-								extra_args=shlex.split(self.mcdr_server.config.plugin_pip_install_extra_args or ''),
-								pre_run_callback=log_cmd,
-							)
-					except subprocess.CalledProcessError as e:
-						self.__check_abort(source)
-						source.reply(self._tr('install.install_package_failed', e))
-						if source.is_console:
-							self.server_interface.logger.exception('Python package installation failed', e)
-						raise OuterReturn()
-
+			self.__install_packages(source, ctx, to_install, dry_run_suffix)
 			self.__check_abort(source)
 
-			source.reply(self._tr('install.downloading_installing_plugin', len(to_install.plugins)))
-			for plugin_id, data in to_install.plugins.items():
-				download_temp_file = download_temp_dir / '{}.tmp'.format(plugin_id)
-				downloaded_files[plugin_id] = download_temp_file
-				source.reply(self._tr(
-					'install.downloading_plugin_one',
-					candidate=Texts.candidate(plugin_id, data.version),
-					name=Texts.file_name(data.release.file_name),
-					hash_quoted=RText(f'({data.release.file_sha256})', color=RColor.gray),
-				) + dry_run_suffix)
-				if isinstance(data.release, UriReleaseData):
-					# Install the snapshot verified before dependency resolution.
-					downloaded_files[plugin_id] = data.release.local_file_path
-				elif not ctx.dry_run:
-					download_temp_file.parent.mkdir(parents=True, exist_ok=True)
-					downloader = ReleaseDownloader(
-						data.release, download_temp_file, CommandSourceReplier(source),
-						download_url_override=self.mcdr_server.config.plugin_download_url,
-						download_url_override_kwargs={
-							'repos_owner': cata_meta[plugin_id].repos_owner,
-							'repos_name': cata_meta[plugin_id].repos_name,
-						},
-						download_timeout=self.mcdr_server.config.plugin_download_timeout,
-						logger=self.logger,
-					)
-					with contextlib.suppress(downloader.Aborted):
-						with self.__install_abort_helper.with_abort_callback(downloader.abort):
-							downloader.download(show_progress=ReleaseDownloader.ShowProgressPolicy.if_costly)
-					self.__check_abort(source)
-
+			downloaded_files = self.__prepare_install_files(source, ctx, cata_meta, to_install, download_temp_dir, dry_run_suffix)
 			self.__check_abort(source)
 
-			# do the actual plugin files installation
-			to_load_paths: List[Path] = []
-			to_unload_ids: List[str] = []
-			from mcdreforged.plugin.type.packed_plugin import PackedPlugin
-
-			for plugin_id, data in to_install.plugins.items():
-				plugin = self.plugin_manager.get_plugin_from_id(plugin_id)
-
-				install_target_dir: Path  # the target dir to place the new plugin
-				if plugin is not None:
-					if not isinstance(plugin, PackedPlugin):
-						raise AssertionError('to_install_stuffs.plugins contains a non-packed plugin {!r}'.format(plugin))
-					path = Path(plugin.plugin_path)
-
-					# For existing plugin, install to where the existing plugin is
-					install_target_dir = path.parent
-					trash_path = trashbin_path / '{}.tmp'.format(plugin_id)
-					if not ctx.dry_run:
-						trashbin_files[trash_path] = path
-						trash_path.parent.mkdir(parents=True, exist_ok=True)
-						plugin.release_file_occupation()
-						shutil.move(path, trash_path)
-				else:
-					# For new plugins, follow the user's argument
-					install_target_dir = ctx.default_install_dir
-
-				file_name = sanitize_filename(data.release.file_name)
-				src = downloaded_files[plugin_id]
-				dst = install_target_dir / file_name
-				if dst.is_file():
-					for i in range(1000):
-						parts = file_name.rsplit('.', 1)
-						parts[0] += '_{}'.format(i + 1)
-						dst = install_target_dir / '.'.join(parts)
-						if not dst.is_file():
-							break
-					else:
-						raise Exception('Too many files with name like {} at {}'.format(file_name, install_target_dir))
-
-				source.reply(self._tr(
-					'install.installing_plugin_one',
-					candidate=Texts.candidate(plugin_id, data.version),
-					path=Texts.file_path(dst),
-				) + dry_run_suffix)
-				if not ctx.dry_run:
-					newly_added_files.append(dst)
-					shutil.move(src, dst)
-
-				to_load_paths.append(dst)
-				if plugin is not None:
-					to_unload_ids.append(plugin_id)
+			to_load_paths, to_unload_ids = self.__commit_install(
+				source, ctx, to_install, downloaded_files, download_temp_dir / '_trashbin', dry_run_suffix, file_install_state,
+			)
 
 		except OuterReturn:
 			raise
 
 		except Exception as e:
 			self.logger.error(self._tr('install.installation_error', e).set_color(RColor.red))
-			try:
-				for new_file in newly_added_files:
-					self.logger.warning('(rollback) Deleting new file {}'.format(new_file))
-					new_file.unlink(missing_ok=True)
-				for trash_path, origin_path in trashbin_files.items():
-					self.logger.warning('(rollback) Restoring old plugin {}'.format(origin_path))
-					shutil.move(trash_path, origin_path)
-			except Exception:
-				self.logger.exception('Rollback failed')
+			self.__rollback_plugin_files(file_install_state)
 			raise
 
 		else:
@@ -644,6 +539,129 @@ class PimInstallCommandHandler(PimCommandHandlerBase):
 		finally:
 			if download_temp_dir.is_dir():
 				shutil.rmtree(download_temp_dir)
+
+	def __install_packages(self, source: CommandSource, ctx: _ParsedContext, to_install: _ToInstallStuffs, dry_run_suffix: RTextBase):
+		# XXX: verify python package feasibility with PackageRequirementResolver.check
+		package_resolver = PackageRequirementResolver(list(to_install.packages.keys()))
+
+		if len(to_install.packages) > 0:
+			source.reply(self._tr('install.installing_package', Texts.number(len(to_install.packages))))
+			if ctx.dry_run:
+				source.reply(self._tr('install.install_package_dry_run', ', '.join(to_install.packages.keys())) + dry_run_suffix)
+			else:
+				def log_cmd(cmd: List[str]):
+					self.log_debug('pip install cmd: {}'.format(cmd))
+
+				try:
+					with self.__install_abort_helper.with_abort_callback(package_resolver.abort):
+						package_resolver.install(
+							extra_args=shlex.split(self.mcdr_server.config.plugin_pip_install_extra_args or ''),
+							pre_run_callback=log_cmd,
+						)
+				except subprocess.CalledProcessError as e:
+					self.__check_abort(source)
+					source.reply(self._tr('install.install_package_failed', e))
+					if source.is_console:
+						self.server_interface.logger.exception('Python package installation failed', e)
+					raise OuterReturn()
+
+	def __prepare_install_files(self, source: CommandSource, ctx: _ParsedContext, cata_meta: MetaRegistry, to_install: _ToInstallStuffs, download_temp_dir: Path, dry_run_suffix: RTextBase) -> Dict[str, Path]:
+		downloaded_files: Dict[str, Path] = {}  # plugin id -> downloaded temp file path
+		source.reply(self._tr('install.downloading_installing_plugin', len(to_install.plugins)))
+		for plugin_id, data in to_install.plugins.items():
+			download_temp_file = download_temp_dir / '{}.tmp'.format(plugin_id)
+			downloaded_files[plugin_id] = download_temp_file
+			source.reply(self._tr(
+				'install.downloading_plugin_one',
+				candidate=Texts.candidate(plugin_id, data.version),
+				name=Texts.file_name(data.release.file_name),
+				hash_quoted=RText(f'({data.release.file_sha256})', color=RColor.gray),
+			) + dry_run_suffix)
+			if isinstance(data.release, UriReleaseData):
+				# Install the snapshot verified before dependency resolution.
+				downloaded_files[plugin_id] = data.release.local_file_path
+			elif not ctx.dry_run:
+				download_temp_file.parent.mkdir(parents=True, exist_ok=True)
+				downloader = ReleaseDownloader(
+					data.release, download_temp_file, CommandSourceReplier(source),
+					download_url_override=self.mcdr_server.config.plugin_download_url,
+					download_url_override_kwargs={
+						'repos_owner': cata_meta[plugin_id].repos_owner,
+						'repos_name': cata_meta[plugin_id].repos_name,
+					},
+					download_timeout=self.mcdr_server.config.plugin_download_timeout,
+					logger=self.logger,
+				)
+				with contextlib.suppress(downloader.Aborted):
+					with self.__install_abort_helper.with_abort_callback(downloader.abort):
+						downloader.download(show_progress=ReleaseDownloader.ShowProgressPolicy.if_costly)
+				self.__check_abort(source)
+		return downloaded_files
+
+	def __commit_install(self, source: CommandSource, ctx: _ParsedContext, to_install: _ToInstallStuffs, downloaded_files: Dict[str, Path], trashbin_path: Path, dry_run_suffix: RTextBase, file_install_state: _PluginFileInstallState) -> Tuple[List[Path], List[str]]:
+		# do the actual plugin files installation
+		to_load_paths: List[Path] = []
+		to_unload_ids: List[str] = []
+		from mcdreforged.plugin.type.packed_plugin import PackedPlugin
+
+		for plugin_id, data in to_install.plugins.items():
+			plugin = self.plugin_manager.get_plugin_from_id(plugin_id)
+
+			install_target_dir: Path  # the target dir to place the new plugin
+			if plugin is not None:
+				if not isinstance(plugin, PackedPlugin):
+					raise AssertionError('to_install_stuffs.plugins contains a non-packed plugin {!r}'.format(plugin))
+				path = Path(plugin.plugin_path)
+
+				# For existing plugin, install to where the existing plugin is
+				install_target_dir = path.parent
+				trash_path = trashbin_path / '{}.tmp'.format(plugin_id)
+				if not ctx.dry_run:
+					file_install_state.trashbin_files[trash_path] = path
+					trash_path.parent.mkdir(parents=True, exist_ok=True)
+					plugin.release_file_occupation()
+					shutil.move(path, trash_path)
+			else:
+				# For new plugins, follow the user's argument
+				install_target_dir = ctx.default_install_dir
+
+			file_name = sanitize_filename(data.release.file_name)
+			src = downloaded_files[plugin_id]
+			dst = install_target_dir / file_name
+			if dst.is_file():
+				for i in range(1000):
+					parts = file_name.rsplit('.', 1)
+					parts[0] += '_{}'.format(i + 1)
+					dst = install_target_dir / '.'.join(parts)
+					if not dst.is_file():
+						break
+				else:
+					raise Exception('Too many files with name like {} at {}'.format(file_name, install_target_dir))
+
+			source.reply(self._tr(
+				'install.installing_plugin_one',
+				candidate=Texts.candidate(plugin_id, data.version),
+				path=Texts.file_path(dst),
+			) + dry_run_suffix)
+			if not ctx.dry_run:
+				file_install_state.newly_added_files.append(dst)
+				shutil.move(src, dst)
+
+			to_load_paths.append(dst)
+			if plugin is not None:
+				to_unload_ids.append(plugin_id)
+		return to_load_paths, to_unload_ids
+
+	def __rollback_plugin_files(self, file_install_state: _PluginFileInstallState):
+		try:
+			for new_file in file_install_state.newly_added_files:
+				self.logger.warning('(rollback) Deleting new file {}'.format(new_file))
+				new_file.unlink(missing_ok=True)
+			for trash_path, origin_path in file_install_state.trashbin_files.items():
+				self.logger.warning('(rollback) Restoring old plugin {}'.format(origin_path))
+				shutil.move(trash_path, origin_path)
+		except Exception:
+			self.logger.exception('Rollback failed')
 
 	# ------------------------------------------------
 	#               Interfaces for PIM
