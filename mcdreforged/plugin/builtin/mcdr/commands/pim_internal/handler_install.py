@@ -8,7 +8,7 @@ import subprocess
 import threading
 import time
 from pathlib import Path
-from typing import Optional, List, TYPE_CHECKING, Dict
+from typing import Optional, List, TYPE_CHECKING, Dict, Tuple, Union, Literal
 
 from typing_extensions import override
 
@@ -25,10 +25,13 @@ from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.handler_base import P
 from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.local_meta_registry import LocalReleaseData
 from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.plugin_requirement_source import PluginRequirementSource
 from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.texts import Texts
+from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.uri_meta_registry import UriMetaRegistry, UriReleaseData
+from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.uri_plugin_prepare_helper import PreparedUriPlugin, UriPluginPrepareHelper
+from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.uri_plugin_specifier import UriPluginSpecifier, UriScheme
 from mcdreforged.plugin.installer.dependency_resolver import PluginRequirement, PluginDependencyResolver, PackageRequirementResolver, PluginCandidate, PluginDependencyResolverArgs
 from mcdreforged.plugin.installer.downloader import ReleaseDownloader
-from mcdreforged.plugin.installer.types import ReleaseData, PluginResolution, MetaRegistry
-from mcdreforged.plugin.meta.version import Version
+from mcdreforged.plugin.installer.types import ReleaseData, PluginResolution, MetaRegistry, MergedMetaRegistry
+from mcdreforged.plugin.meta.version import Version, VersionRequirement
 from mcdreforged.utils import collection_utils
 from mcdreforged.utils.replier import CommandSourceReplier
 
@@ -39,13 +42,8 @@ if TYPE_CHECKING:
 
 
 def read_mcdr_plugin_requirement_file(file_path: Path) -> List[str]:
-	reqs: List[str] = []
 	with open(file_path, 'r', encoding='utf8') as f:
-		for line in f:
-			line = line.split('#', 1)[0].strip()
-			if len(line) > 0:
-				reqs.append(line)
-	return reqs
+		return list(f)
 
 
 def is_plugin_updatable(plg: 'AbstractPlugin') -> bool:
@@ -59,8 +57,25 @@ def sanitize_filename(filename: str) -> str:
 
 
 @dataclasses.dataclass(frozen=True)
+class _RawSpecifier:
+	raw: str
+	from_requirement_file: bool
+
+
+@dataclasses.dataclass(frozen=True)
+class _RequirementSpecifier:
+	raw: str
+	requirement: PluginRequirement
+	expected_sha256: Optional[str]
+
+
+_ParsedSpecifier = Union[_RequirementSpecifier, UriPluginSpecifier, Literal['*']]
+
+
+@dataclasses.dataclass(frozen=True)
 class _ParsedContext:
-	input_specifiers: List[str]
+	input_specifiers: List[_ParsedSpecifier]
+	has_uri_specifier: bool
 	default_install_dir: Path
 	do_upgrade: bool
 	dry_run: bool
@@ -80,6 +95,7 @@ class _PluginToInstallData:
 class _ParsedPluginRequirements:
 	requirement_sources: Dict[PluginRequirement, PluginRequirementSource] = dataclasses.field(default_factory=dict)
 	hash_validators: Dict[str, str] = dataclasses.field(default_factory=dict)
+	uri_plugins: Dict[str, PreparedUriPlugin] = dataclasses.field(default_factory=dict)
 
 
 @dataclasses.dataclass(frozen=True)
@@ -121,32 +137,51 @@ class PimInstallCommandHandler(PimCommandHandlerBase):
 		ctx = self.__step_parse_input(source, context)
 		self.log_debug('pim install ctx: {}'.format(ctx))
 
-		# 2. Verify and collect requirements
-		ppr = self.__step_parse_plugin_requirements(source, ctx)
+		with contextlib.ExitStack() as stack:
+			uri_helper = None
+			if ctx.has_uri_specifier:
+				try:
+					uri_helper = stack.enter_context(UriPluginPrepareHelper(
+						Path(self.server_interface.get_data_folder()),
+						self.mcdr_server.config.plugin_download_timeout,
+						self.__install_abort_helper,
+					))
+				except UriPluginPrepareHelper.Aborted:
+					self.__check_abort(source)
+					raise OuterReturn()
+			# 2. Prepare URI plugins and collect requirements
+			ppr = self.__step_parse_plugin_requirements(source, ctx, uri_helper)
 
-		# 3. Resolve what will be installed
-		cata_meta = self.get_merged_cata_meta(source)
-		resolution = self.__step_resolve(source, ctx, ppr, cata_meta)
-		to_install = self.__step_collect_to_install(source, ctx, ppr, cata_meta, resolution)
+			# 3. Resolve what will be installed
+			cata_meta = self.get_merged_cata_meta(source)
+			resolution, merged_meta = self.__step_resolve(source, ctx, ppr, cata_meta)
+			to_install = self.__step_collect_to_install(source, ctx, ppr, merged_meta, resolution)
 
-		# 4. Install packages and plugins
-		self.__step_install(source, ctx, cata_meta, to_install)
+			# 4. Install packages and plugins
+			self.__step_install(source, ctx, merged_meta, to_install)
 
 	def __step_parse_input(self, source: CommandSource, context: CommandContext) -> _ParsedContext:
-		input_specifiers: List[str] = []
-		if len(arg_specifiers := context.get('plugin_specifier', [])) > 0:
-			input_specifiers.extend(arg_specifiers)
-		if len(req_files := context.get('requirement_file', [])) > 0:
-			for req_file in req_files:
-				try:
-					file_specifiers = read_mcdr_plugin_requirement_file(Path(req_file))
-				except OSError as e:
-					source.reply(self._tr('install.read_file_error', repr(req_file), e).set_color(RColor.red))
-					raise OuterReturn()
-				else:
-					input_specifiers.extend(file_specifiers)
+		raw_specifiers: List[_RawSpecifier] = []
+		raw_specifiers.extend(_RawSpecifier(raw=s, from_requirement_file=False) for s in context.get('plugin_specifier', []))
+		for req_file in context.get('requirement_file', []):
+			try:
+				lines = read_mcdr_plugin_requirement_file(Path(req_file))
+			except OSError as e:
+				source.reply(self._tr('install.read_file_error', repr(req_file), e).set_color(RColor.red))
+				raise OuterReturn()
+			raw_specifiers.extend(_RawSpecifier(raw=line, from_requirement_file=True) for line in lines)
+
+		input_specifiers: List[_ParsedSpecifier] = []
+		for raw_specifier in raw_specifiers:
+			specifier = self.__parse_specifier(source, raw_specifier.raw, from_file=raw_specifier.from_requirement_file)
+			if specifier is not None:
+				input_specifiers.append(specifier)
 		if not input_specifiers:
 			source.reply(self._tr('install.no_input').set_color(RColor.red))
+			raise OuterReturn()
+		has_uri_specifier = any(isinstance(s, UriPluginSpecifier) for s in input_specifiers)
+		if source.is_player and has_uri_specifier:
+			source.reply(self._tr('install.uri_player_not_allowed').set_color(RColor.red))
 			raise OuterReturn()
 
 		plugin_directories = self.plugin_manager.plugin_directories.copy()
@@ -169,6 +204,7 @@ class PimInstallCommandHandler(PimCommandHandlerBase):
 
 		return _ParsedContext(
 			input_specifiers=input_specifiers,
+			has_uri_specifier=has_uri_specifier,
 			default_install_dir=default_install_dir,
 			do_upgrade=context.get('upgrade', 0) > 0,
 			dry_run=context.get('dry_run', 0) > 0,
@@ -176,7 +212,61 @@ class PimInstallCommandHandler(PimCommandHandlerBase):
 			no_deps=context.get('no_deps', 0) > 0,
 		)
 
-	def __step_parse_plugin_requirements(self, source: CommandSource, ctx: _ParsedContext) -> _ParsedPluginRequirements:
+	def __parse_specifier(self, source: CommandSource, raw: str, *, from_file: bool) -> Optional[_ParsedSpecifier]:
+		if from_file:
+			raw = raw.strip()
+		scheme = UriScheme.from_specifier(raw)
+		if from_file:
+			if scheme is not None:
+				raw = re.split(r'\s+#', raw, maxsplit=1)[0].strip()
+			else:
+				raw = raw.split('#', 1)[0].strip()
+			if not raw:
+				return None
+		if ' ' in raw:
+			source.reply(self._tr('install.space_char_not_allowed', repr(raw)))
+			raise OuterReturn()
+		if raw == '*':
+			return '*'
+		if scheme is not None:
+			try:
+				return UriPluginSpecifier.parse(raw, scheme)
+			except ValueError as e:
+				source.reply(self._tr('install.parse_specifier_failed', repr(raw), e))
+				raise OuterReturn()
+		return self.__parse_requirement_specifier(source, raw)
+
+	def __parse_requirement_specifier(self, source: CommandSource, raw: str) -> _RequirementSpecifier:
+		# <plugin_id><opt><criterion>[@<hash_method>:<hash_hex>]
+		# my_plugin==1.2.3@sha256:abc123
+		parts = raw.split('@', 1)
+		req_str = parts[0]
+		hash_str = parts[1].lower() if len(parts) == 2 else None
+		try:
+			req = PluginRequirement.of(req_str)
+		except ValueError as e:
+			source.reply(self._tr('install.parse_specifier_failed', repr(raw), e))
+			raise OuterReturn()
+
+		hash_hex = None
+		if hash_str is not None:
+			if re.fullmatch(r'[a-z0-9]+:[0-9abcdef]+', hash_str) is not None:
+				hash_method, hash_hex = hash_str.split(':', 1)
+			else:
+				hash_method, hash_hex = 'sha256', hash_str
+			if hash_method != 'sha256':
+				source.reply(self._tr('install.hash_method_unsupported', repr(hash_method)))
+				raise OuterReturn()
+			if re.fullmatch(r'[0-9abcdef]{10,64}', hash_hex) is None:  # len(sha256_hash_hex) == 64
+				source.reply(self._tr('install.hash_validator_invalid', repr(raw)))
+				raise OuterReturn()
+			cris = req.requirement.criterions
+			if not (len(cris) == 1 and cris[0].opt == '=='):
+				source.reply(self._tr('install.hash_validator_unexpected', repr(raw)))
+				raise OuterReturn()
+		return _RequirementSpecifier(raw, req, hash_hex)
+
+	def __step_parse_plugin_requirements(self, source: CommandSource, ctx: _ParsedContext, uri_helper: Optional[UriPluginPrepareHelper]) -> _ParsedPluginRequirements:
 		ppr = _ParsedPluginRequirements()
 		req_srcs = ppr.requirement_sources
 
@@ -190,42 +280,29 @@ class PimInstallCommandHandler(PimCommandHandlerBase):
 				add_plugin_requirement(pim_utils.as_requirement(plg, '==', preferred_version=preferred_version), PluginRequirementSource.existing_pinned)
 
 		input_requirements: List[PluginRequirement] = []
-		for s in ctx.input_specifiers:
-			if s != '*':
-				if ' ' in s:
-					source.reply(self._tr('install.space_char_not_allowed', repr(s)))
-					raise OuterReturn()
-				# <plugin_id><opt><criterion>[@<hash_method>:<hash_hex>]
-				# my_plugin==1.2.3@sha256:abc123
-				parts = s.split('@', 1)
-				if len(parts) == 2:
-					req_str, hash_str = parts[0], parts[1].lower()
-				else:
-					req_str, hash_str = s, None
+		for specifier in ctx.input_specifiers:
+			if isinstance(specifier, UriPluginSpecifier):
+				assert uri_helper is not None
+				if specifier.scheme.is_remote:
+					source.reply(self._tr('install.uri_downloading', specifier.uri))
 				try:
-					req = PluginRequirement.of(req_str)
-				except ValueError as e:
-					source.reply(self._tr('install.parse_specifier_failed', repr(s), e))
+					data = uri_helper.prepare(specifier)
+				except UriPluginPrepareHelper.Aborted:
+					self.__check_abort(source)
 					raise OuterReturn()
-				if hash_str is not None:
-					if re.fullmatch(r'[a-z0-9]+:[0-9abcdef]+', hash_str) is not None:
-						hash_method, hash_hex = hash_str.split(':', 1)
-					else:
-						hash_method, hash_hex = 'sha256', hash_str
-
-					if hash_method not in ['sha256']:
-						source.reply(self._tr('install.hash_method_unsupported', repr(hash_method)))
-						raise OuterReturn()
-					if re.fullmatch(r'[0-9abcdef]{10,64}', hash_hex) is None:  # len(sha256_hash_hex) == 64
-						source.reply(self._tr('install.hash_validator_invalid', repr(s)))
-						raise OuterReturn()
-					cris = req.requirement.criterions
-					if len(cris) == 1 and cris[0].opt == '==':
-						ppr.hash_validators[req.id] = hash_hex
-					else:
-						source.reply(self._tr('install.hash_validator_unexpected', repr(s)))
-						raise OuterReturn()
-				input_requirements.append(req)
+				except Exception as e:
+					source.reply(self._tr('install.uri_prepare_failed', specifier.raw, e).set_color(RColor.red))
+					raise OuterReturn()
+				plugin_id = data.metadata.id
+				if plugin_id in ppr.uri_plugins:
+					source.reply(self._tr('install.uri_duplicate_id', plugin_id).set_color(RColor.red))
+					raise OuterReturn()
+				ppr.uri_plugins[plugin_id] = data
+				input_requirements.append(PluginRequirement(plugin_id, VersionRequirement('=={}'.format(data.metadata.version))))
+			elif isinstance(specifier, _RequirementSpecifier):
+				input_requirements.append(specifier.requirement)
+				if specifier.expected_sha256 is not None:
+					ppr.hash_validators[specifier.requirement.id] = specifier.expected_sha256
 
 		plugin: Optional[AbstractPlugin]
 		if '*' in ctx.input_specifiers:
@@ -262,17 +339,22 @@ class PimInstallCommandHandler(PimCommandHandlerBase):
 
 		return ppr
 
-	def __step_resolve(self, source: CommandSource, ctx: _ParsedContext, ppr: _ParsedPluginRequirements, cata_meta: MetaRegistry) -> PluginResolution:
+	def __step_resolve(self, source: CommandSource, ctx: _ParsedContext, ppr: _ParsedPluginRequirements, cata_meta: MetaRegistry) -> Tuple[PluginResolution, MetaRegistry]:
 		req_srcs = ppr.requirement_sources
 		source.reply(self._tr('install.resolving_dependencies', len(req_srcs)))
 
+		merged_meta = cata_meta
+		if ppr.uri_plugins:
+			uri_sourced_meta = UriMetaRegistry(ppr.uri_plugins, cata_meta)
+			merged_meta = MergedMetaRegistry(cata_meta, uri_sourced_meta)
+
 		for req in req_srcs.keys():
 			plugin_id = req.id
-			if plugin_id not in cata_meta.plugins:
+			if plugin_id not in merged_meta.plugins:
 				source.reply(self._tr('install.unknown_plugin_id', Texts.plugin_id(plugin_id)))
 				raise OuterReturn()
 
-		resolver = PluginDependencyResolver(cata_meta)
+		resolver = PluginDependencyResolver(merged_meta)
 		result = resolver.resolve(
 			req_srcs.keys(),
 			args=PluginDependencyResolverArgs(ignore_dependencies=ctx.no_deps),
@@ -285,7 +367,7 @@ class PimInstallCommandHandler(PimCommandHandlerBase):
 		self.log_debug('Output plugin resolution:')
 		for plugin_id, version in result.items():
 			self.log_debug('  {} {}'.format(plugin_id, version))
-		return result
+		return result, merged_meta
 
 	def __step_collect_to_install(self, source: CommandSource, ctx: _ParsedContext, ppr: _ParsedPluginRequirements, cata_meta: MetaRegistry, resolution: PluginResolution) -> _ToInstallStuffs:
 		to_install = _ToInstallStuffs()
@@ -298,7 +380,7 @@ class PimInstallCommandHandler(PimCommandHandlerBase):
 				old_version = plugin.get_version()
 			else:
 				old_version = None
-			if old_version != version:
+			if old_version != version or plugin_id in ppr.uri_plugins:
 				if plugin is not None and not isinstance(plugin, PackedPlugin):
 					plugin_type_text = self._tr('install.cannot_change_not_packed.plugin_types.' + plugin.get_type().name)
 					source.reply(self._tr('install.cannot_change_not_packed', plugin_id, plugin_type_text))
@@ -459,7 +541,10 @@ class PimInstallCommandHandler(PimCommandHandlerBase):
 					name=Texts.file_name(data.release.file_name),
 					hash_quoted=RText(f'({data.release.file_sha256})', color=RColor.gray),
 				) + dry_run_suffix)
-				if not ctx.dry_run:
+				if isinstance(data.release, UriReleaseData):
+					# Install the snapshot verified before dependency resolution.
+					downloaded_files[plugin_id] = data.release.local_file_path
+				elif not ctx.dry_run:
 					download_temp_file.parent.mkdir(parents=True, exist_ok=True)
 					downloader = ReleaseDownloader(
 						data.release, download_temp_file, CommandSourceReplier(source),

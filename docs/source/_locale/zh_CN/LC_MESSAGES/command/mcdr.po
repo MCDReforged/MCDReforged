@@ -568,6 +568,15 @@ msgstr ""
 "格式：``${ID}${版本需求}``。版本需求的具体形式可参考 :ref:`此处 "
 "<plugin_dev/metadata:dependencies>`。例子："
 
+msgid "Besides installing plugins from the plugin catalogue, you can also install from local files or remote URLs directly:"
+msgstr "除了从插件仓库安装，你也可以直接从本地文件或远程 URL 安装插件："
+
+msgid "URI specifiers are available to non-player command sources only, including when read from ``-r`` files. Files are copied or downloaded into a temporary directory and verified before dependency resolution. An explicit URI installs that file even when the same plugin version is already installed. Multiple URI specifiers providing the same plugin ID are rejected. Relative ``file://`` paths are resolved against the MCDR working directory. Use percent encoding for spaces in URI paths."
+msgstr "URI 插件描述仅允许非玩家命令源使用，从 ``-r`` 文件读取时也一样。文件会先拷贝或下载到临时目录，在依赖解析前完成校验。显式指定 URI 时，即使已安装相同版本，也会安装该文件。多个 URI 提供相同插件 ID 时会被拒绝。相对 ``file://`` 路径以 MCDR 工作目录为基准。URI 路径中的空格请使用百分号编码。"
+
+msgid "For URI specifiers, use an explicit trailing ``@sha256:<hash_value>`` validator, for example ``https://example.com/plugin.mcdr@sha256:0ec1e048c6``. Other ``@`` characters in a URI are preserved."
+msgstr "URI 插件描述需要在末尾显式使用 ``@sha256:<hash_value>`` 校验器，例如 ``https://example.com/plugin.mcdr@sha256:0ec1e048c6``。URI 中其他 ``@`` 字符会保留。"
+
 #: ../command/mcdr.rst:224
 msgid ""
 "Additionally, if the requirement uses ``==`` to pin the plugin version, "

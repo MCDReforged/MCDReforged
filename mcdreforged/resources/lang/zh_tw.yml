@@ -332,6 +332,10 @@ mcdreforged:
         hash_method_unsupported: '不支持的哈希算法 {0}。目前僅支持 sha256'
         hash_validator_invalid: '無效的哈希校驗值，應當為一個長度在 [10, 64] 之間的十六進制字符串。目前插件描述: {0}'
         hash_validator_unexpected: '只有使用 "==" 的插件描述可附加哈希校驗值。當前插件描述: {0}'
+        uri_downloading: '正在從 {0} 下載插件 ...'
+        uri_prepare_failed: '從 {0} 準備插件文件失敗: {1}'
+        uri_player_not_allowed: '玩家不能使用 URI 描述安裝插件'
+        uri_duplicate_id: '多個 URI 描述提供了相同的插件 ID: {0}'
         cannot_install_builtin: 無法安裝内置插件 {0}
 
         resolving_dependencies: 正在解析插件依賴 ...

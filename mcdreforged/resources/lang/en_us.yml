@@ -332,6 +332,10 @@ mcdreforged:
         hash_method_unsupported: 'Unsupported hash method {0}. Currently only sha256 is supported'
         hash_validator_invalid: 'Invalid hash validator, it should be a hex string with its length within [10, 64]. Current specifier: {0}'
         hash_validator_unexpected: 'Only specifier using "==" can include a hash validator. Current specifier: {0}'
+        uri_downloading: 'Downloading plugin from {0} ...'
+        uri_prepare_failed: 'Failed to prepare plugin from {0}: {1}'
+        uri_player_not_allowed: 'Players cannot install plugins from URI specifiers'
+        uri_duplicate_id: 'Multiple URI specifiers provide the same plugin ID: {0}'
         cannot_install_builtin: Cannot install builtin plugin {0}
 
         resolving_dependencies: Resolving dependencies ...

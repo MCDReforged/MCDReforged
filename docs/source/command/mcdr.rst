@@ -221,6 +221,23 @@ Arguments:
         my_plugin>=1.0
         my_plugin^=2.0.1
 
+    Besides installing plugins from the plugin catalogue, you can also install from local files or remote URLs directly:
+
+    .. code-block:: text
+
+        file:///path/to/plugin.mcdr
+        file://plugins/my_plugin.mcdr
+        file:///D:/plugins/my_plugin.mcdr
+        file://D:\plugins\my_plugin.mcdr
+        https://example.com/plugins/my_plugin-v1.0.0.mcdr
+        http://example.com/plugins/my_plugin-v1.0.0.mcdr
+
+    URI specifiers are available to non-player command sources only, including when read from ``-r`` files.
+    Files are copied or downloaded into a temporary directory and verified before dependency resolution.
+    An explicit URI installs that file even when the same plugin version is already installed.
+    Multiple URI specifiers providing the same plugin ID are rejected.
+    Relative ``file://`` paths are resolved against the MCDR working directory. Use percent encoding for spaces in URI paths.
+
     Additionally, if the requirement uses ``==`` to pin the plugin version, you can append a hash validator the end of the specifier string,
     to ensure the hash of the to-be-installed plugin file is expected
 
@@ -236,6 +253,10 @@ Arguments:
     -   The ``hash_validator`` part can be ``${hash_method}:${hash_value}``, or just ``${hash_value}`` and use sha256
     -   The ``hash_method`` support ``sha256`` only
     -   The ``hash_value`` should be a hex string in length [10, 64]. It should be a prefix of the expected sha256 value
+
+    For URI specifiers, use an explicit trailing ``@sha256:<hash_value>`` validator,
+    for example ``https://example.com/plugin.mcdr@sha256:0ec1e048c6``.
+    Other ``@`` characters in a URI are preserved.
 
 - ``<target>``: The plugin directory to install the plugins into. The default value is the first path in the :ref:`configuration:plugin_directories` list in MCDR config
 

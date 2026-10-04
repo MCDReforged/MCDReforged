@@ -1,12 +1,16 @@
+import codecs
 import contextlib
+import dataclasses
 import enum
 import hashlib
 import logging
 import os
 import threading
 import time
+from email.message import Message as EmailMessage
+from email.utils import collapse_rfc2231_value
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Iterator, Tuple, TYPE_CHECKING
 
 from typing_extensions import TypedDict, NotRequired
 from wcwidth import wcswidth
@@ -17,6 +21,147 @@ from mcdreforged.plugin.installer.meta_holder import ReleaseData
 from mcdreforged.utils import request_utils
 from mcdreforged.utils.replier import Replier
 from mcdreforged.utils.types.message import MessageText
+
+if TYPE_CHECKING:
+	import requests
+
+
+_MAX_DOWNLOAD_SIZE = 100 * 1024 * 1024
+
+
+@dataclasses.dataclass(frozen=True)
+class _DownloadChunk:
+	chunk: bytes
+	total_downloaded: int
+
+
+@dataclasses.dataclass(frozen=True)
+class DirectDownloadResult:
+	final_url: str
+	suggested_file_names: Tuple[str, ...]
+
+
+class _StreamDownloadHelper:
+	def __init__(self, url: str, timeout: float, max_size: int):
+		self.url = url
+		self.timeout = timeout
+		self.max_size = max_size
+		self._response: Optional['requests.Response'] = None
+		self._content_length: Optional[int] = None
+
+	def establish(self) -> Optional[int]:
+		response = request_utils.get_direct(self.url, 'StreamDownloadHelper', timeout=self.timeout, stream=True)
+		self._response = response
+		try:
+			response.raise_for_status()
+			content_length = response.headers.get('content-length')
+			if content_length is None:
+				self._content_length = None
+				return None
+			try:
+				self._content_length = int(content_length)
+			except ValueError:
+				raise ValueError('content-length header {!r} is invalid'.format(content_length))
+			if not 0 <= self._content_length <= self.max_size:
+				raise ValueError('content-length {} is outside [0, {}]'.format(self._content_length, self.max_size))
+			return self._content_length
+		except Exception:
+			self.close()
+			raise
+
+	def download(self) -> Iterator[_DownloadChunk]:
+		if self._response is None:
+			raise RuntimeError('establish() must be called before download()')
+
+		total_downloaded = 0
+		check_length = self._response.headers.get('content-encoding', 'identity').lower() == 'identity'
+		for chunk in self._response.iter_content(chunk_size=8192):
+			total_downloaded += len(chunk)
+			if total_downloaded > self.max_size:
+				raise ValueError('downloaded size {} exceeds max size {}'.format(total_downloaded, self.max_size))
+			if check_length and self._content_length is not None:
+				if total_downloaded > self._content_length:
+					raise ValueError('read too much data, read {}, length {}'.format(total_downloaded, self._content_length))
+			yield _DownloadChunk(chunk=chunk, total_downloaded=total_downloaded)
+
+		if check_length and self._content_length is not None and total_downloaded != self._content_length:
+			raise ValueError('downloaded size {} does not match content-length {}'.format(total_downloaded, self._content_length))
+
+	def get_result(self) -> DirectDownloadResult:
+		if self._response is None:
+			raise RuntimeError('establish() must be called before get_result()')
+		return DirectDownloadResult(
+			self._response.url,
+			self.__get_suggested_file_names(self._response.headers.get('content-disposition', '')),
+		)
+
+	def close(self):
+		if self._response is not None:
+			self._response.close()
+			self._response = None
+
+	@staticmethod
+	def __get_suggested_file_names(header: str) -> Tuple[str, ...]:
+		message = EmailMessage()
+		message['Content-Disposition'] = header
+		values = [value for key, value in message.get_params(header='Content-Disposition', failobj=[]) if key.lower() == 'filename']
+		# RFC 2231 extended values are tuples; prefer them regardless of header order.
+		values.sort(key=lambda value: not isinstance(value, tuple))
+		names = []
+		for value in values:
+			if isinstance(value, tuple):
+				try:
+					# collapse() recovers from unknown charsets; retain strict rejection here.
+					if value[0] is not None:
+						codecs.lookup(value[0])
+					value = collapse_rfc2231_value(value, errors='strict')
+				except (LookupError, UnicodeError):
+					continue
+			names.append(value)
+		return tuple(names)
+
+
+class DirectDownloader:
+	class Aborted(Exception):
+		pass
+
+	def __init__(self, url: str, target_path: Path, timeout: float, *, max_size: int = _MAX_DOWNLOAD_SIZE):
+		self.__url = url
+		self.__target_path = target_path
+		self.__timeout = timeout
+		self.__max_size = max_size
+		self.__abort_event = threading.Event()
+
+	def download(self) -> DirectDownloadResult:
+		self.__check_abort()
+		helper = _StreamDownloadHelper(self.__url, self.__timeout, self.__max_size)
+		file_created = False
+		try:
+			helper.establish()
+			self.__check_abort()
+			self.__target_path.parent.mkdir(parents=True, exist_ok=True)
+			with self.__target_path.open('wb') as f:
+				file_created = True
+				for dc in helper.download():
+					self.__check_abort()
+					f.write(dc.chunk)
+			self.__check_abort()
+			return helper.get_result()
+		except Exception:
+			if file_created:
+				with contextlib.suppress(OSError):
+					self.__target_path.unlink()
+			self.__check_abort()
+			raise
+		finally:
+			helper.close()
+
+	def abort(self):
+		self.__abort_event.set()
+
+	def __check_abort(self):
+		if self.__abort_event.is_set():
+			raise self.Aborted()
 
 
 def width_limited(s: str, n: int) -> MessageText:
@@ -80,33 +225,28 @@ class ReleaseDownloader:
 				self.logger.debug('Applied download overwrite with kwargs {}: {!r} -> {!r}'.format(kwargs, url, download_url))
 		else:
 			download_url = url
-		response = request_utils.get_direct(download_url, 'ReleaseDownloader', timeout=self.download_timeout, stream=True)
-		response.raise_for_status()
 
-		content_length = response.headers.get('content-length')
+		helper = _StreamDownloadHelper(url=download_url, timeout=self.download_timeout, max_size=_MAX_DOWNLOAD_SIZE)
+		content_length = helper.establish()
+
 		if content_length is None:
 			raise ValueError('content-length header is missing')
-		try:
-			length = int(content_length)
-		except ValueError:
-			raise ValueError(f'content-length header {content_length!r} is invalid')
-		if length != self.release.file_size:
-			raise ValueError('content-length mismatched, expected {}, found {}'.format(length, self.release.file_size))
-		if length >= 100 * 1024 * 1024:  # 100MiB
-			raise ValueError('File too large ({}MiB), please download manually'.format(round(length / 1024 / 1024, 1)))
+		if content_length != self.release.file_size:
+			raise ValueError('content-length mismatched, expected {}, found {}'.format(self.release.file_size, content_length))
 		if self.logger is not None:
-			self.logger.debug('Response content length: {}'.format(length))
+			self.logger.debug('Response content length: {}'.format(content_length))
 
 		self.__check_abort()
 		has_any_report = False
 		downloaded = 0
 
 		def report():
+			assert content_length is not None
 			nonlocal has_any_report
 			has_any_report = True
 
 			file_name = width_limited(self.release.file_name, 50)
-			percent_str = f'{100.0 * downloaded / length:.1f}%'
+			percent_str = f'{100.0 * downloaded / content_length:.1f}%'
 			percent_str_m = percent_str + ' ' * (len('100.0%') - len(percent_str))
 			simple_msg = RTextList(file_name, ' ', percent_str)
 			simple_msg_m = RTextList(file_name, ' ', percent_str_m)
@@ -122,7 +262,7 @@ class ReleaseDownloader:
 			bar_max_len = terminal_width - self.replier.padding_width - len('[] ') - wcswidth(str(simple_msg_m))
 			if bar_max_len >= 10:
 				bar_len = min(100, bar_max_len - bar_max_len % 10)
-				bar = '=' * (bar_len * downloaded // length)
+				bar = '=' * (bar_len * downloaded // content_length)
 				bar += ' ' * (bar_len - len(bar))
 				self.replier.reply(RTextList(file_name, f' [{bar}] {percent_str}'))
 			else:
@@ -135,26 +275,24 @@ class ReleaseDownloader:
 			with open(self.target_path, 'wb') as f:
 				hasher = hashlib.sha256()
 				last_report_time = time.time()
-				for buf in response.iter_content(chunk_size=4096):
+				for dc in helper.download():
 					self.__check_abort()
 
-					downloaded += len(buf)
-					if downloaded > length:
-						raise ValueError('read too much data, read {}, length {}'.format(downloaded, length))
-					hasher.update(buf)
-					f.write(buf)
+					downloaded = dc.total_downloaded
+					hasher.update(dc.chunk)
+					f.write(dc.chunk)
 
 					t = time.time()
-					if t - last_report_time > self.__REPORT_INTERVAL_SEC or downloaded == length:
+					if t - last_report_time > self.__REPORT_INTERVAL_SEC or downloaded == content_length:
 						if (
 								show_progress == self.ShowProgressPolicy.full or
-								(show_progress == self.ShowProgressPolicy.if_costly and (has_any_report or downloaded < length))
+								(show_progress == self.ShowProgressPolicy.if_costly and (has_any_report or downloaded < content_length))
 						):
 							report()
 						last_report_time = t
 
 				if (h := hasher.hexdigest()) != self.release.file_sha256:
-					raise ValueError('SHA256 mismatched, expected {}, actual {}, length {}'.format(self.release.file_sha256, h, length))
+					raise ValueError('SHA256 mismatched, expected {}, actual {}, length {}'.format(self.release.file_sha256, h, content_length))
 		except self.Aborted:
 			with contextlib.suppress(OSError):
 				self.target_path.unlink()
