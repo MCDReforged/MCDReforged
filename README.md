@@ -1,4 +1,4 @@
-MCDReforged
+!MCDReforged
 --------
 
 [![Python Versions](https://img.shields.io/pypi/pyversions/mcdreforged.svg)](https://pypi.org/project/mcdreforged)
@@ -9,40 +9,37 @@ MCDReforged
 
 ![MCDR-banner](https://raw.githubusercontent.com/MCDReforged/MCDReforged/master/logo/images/logo_long.png)
 
-**English** | [简中](https://github.com/MCDReforged/MCDReforged/blob/master/README_zh_cn.md) | [繁中](https://github.com/MCDReforged/MCDReforged/blob/master/README_zh_tw.md)
+[English](README.md) | [简中](README_zh_cn.md) | [繁中](README_zh_tw.md) | **日本語**
 
-> This is a python based Minecraft server control tool
+> これはPythonで作られたMinecraftサーバー制御ツールです
 
-MCDReforged (abbreviated as MCDR) is a tool which provides the management ability of the Minecraft server using custom plugin system. It doesn't need to modify or mod the original Minecraft server at all
+MCDReforged（以下はMCDRと略します）はMinecraftサーバーを全く修正せずに、MCDRのプラグインシステムでサーバーを管理するツールです。
 
-From in-game calculator, player high-light, to manipulate scoreboard, manage structure file and backup / load backup, you can implement these by using MCDR and related plugins
+簡単な電卓、プレーヤー・ハイライト、Bilibili弾幕から、複雑のスコアボード、設定ファイル、自動バックアップまで、MCDRとそれに対応するプラグインで実現できます！
 
-Greatly thanks to chino_desu and his [MCDaemon 1.0](https://github.com/kafuuchino-desu/MCDaemon) for the idea of such a cool Minecraft control tool
+[MCDaemon 1.0](https://github.com/kafuuchino-desu/MCDaemon)のようなアイデアを提供してくれたChino_Desuさんに申し上げます！
 
-Contact me on discord: `Fallen_Breath#1215`
+Discordでご連絡してください：`Fallen_Breath#1215`
 
-## Advantage
+## 強み
 
-- It's running above the server. It doesn't need to modify the server at all which keep everything vanilla
-- Hot-reloadable plugin system. You don't need to shut down the server to update the plugins
-- Multi-platform / server compatibility. Supports vanilla, paper, bungeecord etc. on Linux / Windows
+- サーバープログラムが一切変更の必要がありません。サーバーの修正が一切不要。
+- サーバーの修正必要性が全然ありません。
+- ホットロードできます。リスダートしなくてプラグインを更新できます。
+- LinuxとWindowsでvanillaやpaperやbungeecordなどサーバープログラムを実行できます。
 
-## How it works?
+## 実行原理は何ですか？
+MCDRは[Popen](https://docs.python.org/zh-cn/3/library/subprocess.html#subprocess.Popen)を使用し、サーバーをサブプロセスとして起動します。
+そのため、サーバーの標準入出力ストリームを制御することが可能です。
 
-MCDR uses [Popen](https://docs.python.org/3/library/subprocess.html#subprocess.Popen) to start the server as a sub-process, 
-then it has the ability to control the standard input / out stream of the server
+Minecraftサーバーコンソールの出力は安定的な出力形式があって、いろいろでサーバーに関連性がある情報もあります（例えばプレーヤーたちのチャットメッセージ）。
+これによって、MCDRはサーバーの出力を分析できてから、これらのデータを様々な事件に抽象化してから、プラグインに送信してからインパクトします。
+そうです！できれば、MCDRにサーボコンソールを見つめ、サーボ出力に素早く反応し、サーボに命令を入力するロボットと考えられます。
 
-Since the console output of a Minecraft server has a stable format and contains a large amount of useful information about the server, 
-e.g. player chat messages, MCDR is able to parse and analyze the server output, abstract them into different events and dispatch them towards plugins for responding
+## プラグイン
 
-With the help of Minecraft command system, MCDR can send Minecraft commands via the standard input stream to affect the actual Minecraft server
+[ここ](https://github.com/MCDReforged/PluginCatalogue) はMCDRプラグイン倉庫です。
 
-That's it, you can even think of MCDR as a robot that stares at the server console and can quickly respond to server output and input related commands if you like 
+## ドキュメント
 
-## Plugin
-
-[Here](https://github.com/MCDReforged/PluginCatalogue) is a MCDR plugin collection repository
-
-## Document
-
-Check https://docs.mcdreforged.com/ for more details of MCDR
+もっと多い情報を了解したいですか？[ドキュメント](https://docs.mcdreforged.com/zh_CN/latest/)を見よう
