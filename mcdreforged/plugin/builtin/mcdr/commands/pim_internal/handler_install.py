@@ -475,9 +475,11 @@ class PimInstallCommandHandler(PimCommandHandlerBase):
 		dry_run_suffix = self._tr('install.dry_run_suffix') if ctx.dry_run else RText('')
 		if not ctx.skip_confirm:
 			self.__install_confirm_helper.clear()
-			source.reply(self._tr('install.confirm_hint', cmd_confirm=Texts.cmd('!!MCDR confirm'), cmd_abort=Texts.cmd('!!MCDR abort')) + dry_run_suffix)
 
-			ok = self.__install_confirm_helper.wait(pim_utils.CONFIRM_WAIT_TIMEOUT)
+			def prompt_confirm_hint():
+				source.reply(self._tr('install.confirm_hint', cmd_confirm=Texts.cmd('!!MCDR confirm'), cmd_abort=Texts.cmd('!!MCDR abort')) + dry_run_suffix)
+
+			ok = self.__install_confirm_helper.wait(pim_utils.CONFIRM_WAIT_TIMEOUT, on_wait_started=prompt_confirm_hint)
 
 			ich_state = self.__install_confirm_helper.get()
 			if ich_state == ConfirmHelperState.cancelled:

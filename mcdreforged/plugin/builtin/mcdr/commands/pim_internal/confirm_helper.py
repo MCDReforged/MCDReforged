@@ -1,5 +1,6 @@
 import enum
 import threading
+from typing import Callable, Optional
 
 
 class ConfirmHelperState(enum.Enum):
@@ -17,11 +18,13 @@ class ConfirmHelper:
 		self.__state = ConfirmHelperState.none
 		self.__is_waiting = False
 
-	def wait(self, timeout: float) -> bool:
+	def wait(self, timeout: float, *, on_wait_started: Optional[Callable[[], None]] = None) -> bool:
 		with self.__lock:
 			self.__state = ConfirmHelperState.waiting
 			self.__is_waiting = True
 		try:
+			if on_wait_started is not None:
+				on_wait_started()
 			return self.__event.wait(timeout=timeout)
 		finally:
 			self.__is_waiting = False
