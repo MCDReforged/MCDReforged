@@ -227,8 +227,6 @@ class ReleaseDownloader:
 	__REPORT_INTERVAL_SEC = 5
 
 	def __download(self, url: str, show_progress: ShowProgressPolicy):
-		self.__download_abort_event.clear()
-
 		if self.download_url_override is not None:
 			kwargs = dict(
 				url=url,

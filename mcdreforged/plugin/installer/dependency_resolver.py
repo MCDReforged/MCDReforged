@@ -3,6 +3,7 @@ import dataclasses
 import re
 import subprocess
 import sys
+import threading
 from typing import List, Union, Mapping, Iterator, Iterable, Sequence, Optional, Dict, Callable, Any
 
 import resolvelib
@@ -200,6 +201,7 @@ class PackageRequirementResolver:
 	def __init__(self, package_requirements: PackageRequirements):
 		self.package_requirements = package_requirements
 		self.__install_proc: Optional[subprocess.Popen] = None
+		self.__abort_event = threading.Event()
 
 	def check(self, *, extra_args: Iterable[str] = (), pre_run_callback: Optional[Callable[[List[str]], Any]] = None) -> Union[Optional[str], subprocess.CalledProcessError]:
 		if len(self.package_requirements) == 0:
@@ -235,9 +237,14 @@ class PackageRequirementResolver:
 		]
 		if pre_run_callback is not None:
 			pre_run_callback(cmd)
+		if self.__abort_event.is_set():
+			return
 		try:
 			with subprocess.Popen(cmd) as proc:
 				self.__install_proc = proc
+				# An abort during Popen must also reach the newly created process.
+				if self.__abort_event.is_set():
+					self.abort()
 				proc.wait()
 			if code := proc.poll():
 				raise subprocess.CalledProcessError(code, proc.args)
@@ -245,6 +252,7 @@ class PackageRequirementResolver:
 			self.__install_proc = None
 
 	def abort(self):
+		self.__abort_event.set()
 		proc = self.__install_proc
 		if proc is not None:
 			with contextlib.suppress(OSError):

@@ -526,6 +526,7 @@ class PimInstallCommandHandler(PimCommandHandlerBase):
 								pre_run_callback=log_cmd,
 							)
 					except subprocess.CalledProcessError as e:
+						self.__check_abort(source)
 						source.reply(self._tr('install.install_package_failed', e))
 						if source.is_console:
 							self.server_interface.logger.exception('Python package installation failed', e)

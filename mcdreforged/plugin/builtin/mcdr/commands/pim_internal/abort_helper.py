@@ -36,7 +36,10 @@ class AbortHelper:
 			key = self.__id_counter
 			self.__id_counter += 1
 			self.__callbacks[key] = callback
+			already_aborted = self.__aborted
 		try:
+			if already_aborted:
+				callback()
 			yield
 		finally:
 			# atomic operation, no need for lock
