@@ -1,4 +1,5 @@
 import dataclasses
+import hashlib
 import re
 import tempfile
 import urllib.parse
@@ -62,10 +63,15 @@ class UriPluginPrepareHelper:
 			assert isinstance(specifier.location, Path)
 			self.__copy_file(specifier.location, target)
 			names = [specifier.location.name]
+			self.__check_abort()
+			file_hash = file_utils.calc_file_sha256(target)
+			file_size = target.stat().st_size
 		else:
 			assert isinstance(specifier.location, urllib.parse.SplitResult)
+			hasher = hashlib.sha256()
 			downloader = DirectDownloader(
 				specifier.uri, target, self.__download_timeout, max_size=self.__MAX_PLUGIN_SIZE,
+				on_chunk=hasher.update,
 			)
 			try:
 				with self.__abort_helper.with_abort_callback(downloader.abort):
@@ -73,14 +79,15 @@ class UriPluginPrepareHelper:
 					result = downloader.download()
 			except DirectDownloader.Aborted:
 				raise self.Aborted() from None
-			names = list(result.suggested_file_names)
+			file_hash = hasher.hexdigest()
+			file_size = result.size
+			names = result.suggested_file_names
 			names.extend(
 				urllib.parse.unquote(urllib.parse.urlsplit(url).path.rsplit('/', 1)[-1])
 				for url in (result.final_url, specifier.uri)
 			)
 
 		self.__check_abort()
-		file_hash = file_utils.calc_file_sha256(target)
 		if specifier.expected_sha256 is not None and not file_hash.startswith(specifier.expected_sha256):
 			raise ValueError('SHA256 mismatched, expected {}, actual {}'.format(specifier.expected_sha256, file_hash))
 		self.__check_abort()
@@ -92,7 +99,7 @@ class UriPluginPrepareHelper:
 			metadata=metadata,
 			requirements=requirements,
 			file_name=self.__choose_file_name(names, metadata),
-			file_size=target.stat().st_size,
+			file_size=file_size,
 			file_sha256=file_hash,
 		)
 
