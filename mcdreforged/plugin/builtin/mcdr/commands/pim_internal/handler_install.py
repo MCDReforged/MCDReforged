@@ -21,10 +21,11 @@ from mcdreforged.minecraft.rtext.text import RTextBase, RText
 from mcdreforged.plugin.builtin.mcdr.commands.pim_internal import pim_utils
 from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.abort_helper import AbortHelper
 from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.confirm_helper import ConfirmHelper, ConfirmHelperState
-from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.exceptions import OuterReturn
+from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.exceptions import OuterReturn, SpecifierParseError
 from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.handler_base import PimCommandHandlerBase
 from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.local_meta_registry import LocalReleaseData
 from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.plugin_requirement_source import PluginRequirementSource
+from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.specifier_hash_parser import SpecifierHashParser
 from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.texts import Texts
 from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.uri_meta_registry import UriMetaRegistry, UriReleaseData
 from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.uri_plugin_prepare_helper import PreparedUriPlugin, UriPluginPrepareHelper
@@ -235,42 +236,28 @@ class PimInstallCommandHandler(PimCommandHandlerBase):
 			raise OuterReturn()
 		if raw == '*':
 			return '*'
-		if scheme is not None:
-			try:
+		try:
+			if scheme is not None:
 				return UriPluginSpecifier.parse(raw, scheme)
-			except ValueError as e:
-				source.reply(self._tr('install.parse_specifier_failed', repr(raw), e))
-				raise OuterReturn()
-		return self.__parse_requirement_specifier(source, raw)
+			return self.__parse_requirement_specifier(raw)
+		except SpecifierParseError as e:
+			source.reply(self._tr(e.translation_key, *e.translation_args))
+			raise OuterReturn()
 
-	def __parse_requirement_specifier(self, source: CommandSource, raw: str) -> _RequirementSpecifier:
+	@classmethod
+	def __parse_requirement_specifier(cls, raw: str) -> _RequirementSpecifier:
 		# <plugin_id><opt><criterion>[@<hash_method>:<hash_hex>]
 		# my_plugin==1.2.3@sha256:abc123
-		parts = raw.split('@', 1)
-		req_str = parts[0]
-		hash_str = parts[1].lower() if len(parts) == 2 else None
+		req_str, hash_hex = SpecifierHashParser.parse_specifier(raw)
 		try:
 			req = PluginRequirement.of(req_str)
 		except ValueError as e:
-			source.reply(self._tr('install.parse_specifier_failed', repr(raw), e))
-			raise OuterReturn()
+			raise SpecifierParseError('install.parse_specifier_failed', repr(raw), e) from e
 
-		hash_hex = None
-		if hash_str is not None:
-			if re.fullmatch(r'[a-z0-9]+:[0-9abcdef]+', hash_str) is not None:
-				hash_method, hash_hex = hash_str.split(':', 1)
-			else:
-				hash_method, hash_hex = 'sha256', hash_str
-			if hash_method != 'sha256':
-				source.reply(self._tr('install.hash_method_unsupported', repr(hash_method)))
-				raise OuterReturn()
-			if re.fullmatch(r'[0-9abcdef]{10,64}', hash_hex) is None:  # len(sha256_hash_hex) == 64
-				source.reply(self._tr('install.hash_validator_invalid', repr(raw)))
-				raise OuterReturn()
+		if hash_hex is not None:
 			cris = req.requirement.criterions
 			if not (len(cris) == 1 and cris[0].opt == '=='):
-				source.reply(self._tr('install.hash_validator_unexpected', repr(raw)))
-				raise OuterReturn()
+				raise SpecifierParseError('install.hash_validator_unexpected', repr(raw))
 		return _RequirementSpecifier(raw, req, hash_hex)
 
 	def __step_parse_plugin_requirements(self, source: CommandSource, ctx: _ParsedContext, uri_helper: Optional[UriPluginPrepareHelper]) -> _ParsedPluginRequirements:

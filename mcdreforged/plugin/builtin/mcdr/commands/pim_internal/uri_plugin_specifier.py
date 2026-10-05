@@ -1,11 +1,13 @@
 import dataclasses
 import enum
 import os
-import re
 import urllib.parse
 import urllib.request
 from pathlib import Path, PureWindowsPath
-from typing import Optional, Tuple, Union
+from typing import Optional, Union
+
+from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.exceptions import SpecifierParseError
+from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.specifier_hash_parser import SpecifierHashParser
 
 
 class UriScheme(enum.Enum):
@@ -37,16 +39,19 @@ class UriPluginSpecifier:
 
 	@classmethod
 	def parse(cls, raw: str, scheme: UriScheme) -> 'UriPluginSpecifier':
-		uri, expected_hash = cls.__split_hash(raw, scheme)
+		uri, expected_hash = SpecifierHashParser.parse_uri(raw, is_remote=scheme.is_remote)
 		location: Union[Path, urllib.parse.SplitResult]
-		if scheme is UriScheme.file:
-			location = cls.__parse_file_path(uri, scheme).absolute()
-		else:
-			location = urllib.parse.urlsplit(uri)
-			if not location.hostname:
-				raise ValueError('HTTP URI has no host')
-			# Accessing port validates its syntax and range before downloading.
-			_ = location.port
+		try:
+			if scheme is UriScheme.file:
+				location = cls.__parse_file_path(uri, scheme).absolute()
+			else:
+				location = urllib.parse.urlsplit(uri)
+				if not location.hostname:
+					raise ValueError('HTTP URI has no host')
+				# Accessing port validates its syntax and range before downloading.
+				_ = location.port
+		except ValueError as e:
+			raise SpecifierParseError('install.parse_specifier_failed', repr(raw), e) from e
 		return cls(raw, scheme, location, expected_hash)
 
 	@property
@@ -54,31 +59,6 @@ class UriPluginSpecifier:
 		if isinstance(self.location, Path):
 			return self.location.as_uri()
 		return self.location.geturl()
-
-	@staticmethod
-	def __split_hash(raw: str, scheme: UriScheme) -> Tuple[str, Optional[str]]:
-		# <uri>[@sha256:<hash_hex>]
-		# https://example.com/plugin.mcdr@sha256:abcdef0123
-		# Split from the end so that user-info and other @ characters remain in the URI.
-		uri, separator, suffix = raw.rpartition('@')
-		if separator and re.fullmatch(r'[a-zA-Z0-9]+:[^/@?#]*', suffix):
-			authority_end = raw.find('/', raw.find('://') + 3)
-			# A numeric port in a pathless URL is part of the authority,
-			# including when the host happens to be named after a hash method.
-			if scheme.is_remote and authority_end < 0:
-				try:
-					if urllib.parse.urlsplit(raw).port is not None:
-						return raw, None
-				except ValueError:
-					pass
-			if scheme is UriScheme.file or suffix.lower().startswith('sha256:') or (authority_end >= 0 and len(uri) > authority_end):
-				method, value = suffix.lower().split(':', 1)
-				if method != 'sha256':
-					raise ValueError('Unsupported hash method {!r}'.format(method))
-				if re.fullmatch(r'[0-9abcdef]{10,64}', value) is None:
-					raise ValueError('SHA256 validator must contain 10 to 64 hexadecimal characters')
-				return uri, value
-		return raw, None
 
 	@staticmethod
 	def __parse_file_path(uri: str, scheme: UriScheme) -> Path:
