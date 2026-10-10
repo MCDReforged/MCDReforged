@@ -14,6 +14,7 @@ jobs:
           - '3.12'
           - '3.13'
           - '3.14'
+          - '3.15'
     name: Test with python ${{ matrix.python-version }}
 
     steps:
@@ -49,7 +50,7 @@ jobs:
       - name: Setup python
         uses: actions/setup-python@v7
         with:
-          python-version: 3.13
+          python-version: '3.14'
           cache: pip
 
       - name: Install dependencies

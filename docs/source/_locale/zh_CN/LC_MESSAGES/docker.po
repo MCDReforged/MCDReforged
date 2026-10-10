@@ -221,10 +221,10 @@ msgstr ""
 
 #: ../docker.rst:136
 msgid ""
-"``-py3.13`` means the python version used by the image, accurate to the "
-"minor version number. Default: ``3.13``, which is usually the second "
+"``-py3.14`` means the python version used by the image, accurate to the "
+"minor version number. Default: ``3.14``, which is usually the second "
 "newest python version"
-msgstr "``-py3.13`` 表示镜像所使用的 python 版本，精确到次版本号。默认值：3.13，通常是次新的那个 python 版本"
+msgstr "``-py3.14`` 表示镜像所使用的 python 版本，精确到次版本号。默认值：3.14，通常是次新的那个 python 版本"
 
 #: ../docker.rst:152
 msgid "Extra Image"
