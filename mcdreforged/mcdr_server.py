@@ -292,10 +292,15 @@ class MCDReforgedServer:
 			if log and config.is_debug_on():
 				self.logger.info(self.__tr('on_config_changed.debug_mode_on'))
 
+			def get_system_encoding() -> str:
+				if hasattr(locale, 'getencoding'):
+					return locale.getencoding()  # introduced in python 3.11, always returns system encoding (ignores Python UTF-8 mode)
+				return locale.getpreferredencoding()
+
 			# applying other mcdr-scope stuffs
-			self.__encoding_method = config.encoding or locale.getpreferredencoding()
+			self.__encoding_method = config.encoding or get_system_encoding()
 			if not isinstance(config.decoding, list):
-				self.__decoding_method = [config.decoding or locale.getpreferredencoding()]
+				self.__decoding_method = [config.decoding or get_system_encoding()]
 			else:
 				self.__decoding_method = config.decoding.copy()
 			self.__decoding_method = collection_utils.unique_list(self.__decoding_method)
