@@ -125,24 +125,6 @@ jobs:
         name: MCDReforged package distribution for ${{ github.sha }}
         path: dist/
 
-    - name: Report
-      run: |
-        version=${{ steps.version.outputs.pypi_version }}
-        echo -e "## Version info\n" >> $GITHUB_STEP_SUMMARY
-        echo -e "- MCDR version: \`${{ steps.version.outputs.mcdr_version }}\`" >> $GITHUB_STEP_SUMMARY
-        echo -e "- PyPI version: \`${{ steps.version.outputs.pypi_version }}\`" >> $GITHUB_STEP_SUMMARY
-        echo -e "" >> $GITHUB_STEP_SUMMARY
-  
-        echo -e "## PyPI package urls\n" >> $GITHUB_STEP_SUMMARY
-        if [ "$IS_RELEASE" = "true" ]; then
-          echo -e "### PyPI\n" >> $GITHUB_STEP_SUMMARY
-          echo -e "https://pypi.org/project/mcdreforged/${version}/\n" >> $GITHUB_STEP_SUMMARY
-          echo -e "\`\`\`\npip install mcdreforged==$version\n\`\`\`\n" >> $GITHUB_STEP_SUMMARY
-        fi
-        echo -e "### Test PyPI\n" >> $GITHUB_STEP_SUMMARY
-        echo -e "https://test.pypi.org/project/mcdreforged/$version/\n" >> $GITHUB_STEP_SUMMARY
-        echo -e "\`\`\`\npip install mcdreforged==$version -i https://test.pypi.org/simple\n\`\`\`\n" >> $GITHUB_STEP_SUMMARY
-
     outputs:
       mcdr_version: ${{ steps.version.outputs.mcdr_version }}
       pypi_version: ${{ steps.version.outputs.pypi_version }}
@@ -202,6 +184,7 @@ jobs:
         path: dist/
 
     - name: Publish distribution to MCDReforged PyPI
+      id: publish
       uses: pypa/gh-action-pypi-publish@release/v1
       continue-on-error: true
       with:
@@ -209,6 +192,60 @@ jobs:
         user: ${{ secrets.MCDR_PYPI_USERNAME }}
         password: ${{ secrets.MCDR_PYPI_PASSWORD }}
         attestations: false
+
+    outputs:
+      upload_outcome: ${{ steps.publish.outcome }}
+
+  report:
+    runs-on: ubuntu-latest
+    name: Report package publishing results
+    needs: [build_dist, pypi_upload, pypi_upload_test, pypi_upload_mcdr]
+    # Report upload results even when upload jobs fail or are skipped.
+    # https://docs.github.com/en/actions/reference/workflows-and-actions/expressions#status-check-functions
+    if: ${{ !cancelled() && needs.build_dist.result == 'success' }}
+
+    steps:
+    - name: Report
+      env:
+        MCDR_VERSION: ${{ needs.build_dist.outputs.mcdr_version }}
+        PYPI_VERSION: ${{ needs.build_dist.outputs.pypi_version }}
+        PYPI_RESULT: ${{ needs.pypi_upload.result }}
+        TESTPYPI_RESULT: ${{ needs.pypi_upload_test.result }}
+        MCDR_PYPI_JOB_RESULT: ${{ needs.pypi_upload_mcdr.result }}
+        MCDR_PYPI_RESULT: ${{ needs.pypi_upload_mcdr.outputs.upload_outcome }}
+      run: |
+        version="$PYPI_VERSION"
+        # The upload step may fail while its job succeeds due to continue-on-error.
+        if [ "$MCDR_PYPI_JOB_RESULT" != "success" ]; then
+          MCDR_PYPI_RESULT="$MCDR_PYPI_JOB_RESULT"
+        fi
+
+        echo -e "## Version info\n" >> "$GITHUB_STEP_SUMMARY"
+        echo -e "- MCDR version: \`$MCDR_VERSION\`" >> "$GITHUB_STEP_SUMMARY"
+        echo -e "- PyPI version: \`$version\`\n" >> "$GITHUB_STEP_SUMMARY"
+
+        echo -e "## PyPI upload results\n" >> "$GITHUB_STEP_SUMMARY"
+        echo "| Repository | Result |" >> "$GITHUB_STEP_SUMMARY"
+        echo "| --- | --- |" >> "$GITHUB_STEP_SUMMARY"
+        echo "| PyPI | $PYPI_RESULT |" >> "$GITHUB_STEP_SUMMARY"
+        echo "| Test PyPI | $TESTPYPI_RESULT |" >> "$GITHUB_STEP_SUMMARY"
+        echo -e "| MCDReforged PyPI | ${MCDR_PYPI_RESULT:-unknown} |\n" >> "$GITHUB_STEP_SUMMARY"
+
+        if [ "$PYPI_RESULT" = "success" ]; then
+          echo -e "### PyPI\n" >> "$GITHUB_STEP_SUMMARY"
+          echo -e "https://pypi.org/project/mcdreforged/${version}/\n" >> "$GITHUB_STEP_SUMMARY"
+          echo -e "\`\`\`\npip install mcdreforged==$version\n\`\`\`\n" >> "$GITHUB_STEP_SUMMARY"
+        fi
+        if [ "$TESTPYPI_RESULT" = "success" ]; then
+          echo -e "### Test PyPI\n" >> "$GITHUB_STEP_SUMMARY"
+          echo -e "https://test.pypi.org/project/mcdreforged/$version/\n" >> "$GITHUB_STEP_SUMMARY"
+          echo -e "\`\`\`\npip install mcdreforged==$version -i https://test.pypi.org/simple\n\`\`\`\n" >> "$GITHUB_STEP_SUMMARY"
+        fi
+        if [ "$MCDR_PYPI_RESULT" = "success" ]; then
+          echo -e "### MCDReforged PyPI\n" >> "$GITHUB_STEP_SUMMARY"
+          echo -e "https://pypi.mcdreforged.com/simple/mcdreforged/\n" >> "$GITHUB_STEP_SUMMARY"
+          echo -e "\`\`\`\npip install mcdreforged==$version -i https://pypi.mcdreforged.com/simple/\n\`\`\`\n" >> "$GITHUB_STEP_SUMMARY"
+        fi
 
   image:
     name: Docker image (py${{ matrix.python }}${{ matrix.slim == 'true' && ', slim' || '' }})
