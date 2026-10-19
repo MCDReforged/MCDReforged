@@ -1,13 +1,14 @@
 """
 Custom logger for MCDR
 """
+import dataclasses
 import functools
 import logging
 import os
 import threading
 from typing import Dict, Optional, Any, ClassVar, List, Type
 
-from typing_extensions import override
+from typing_extensions import override, Final
 
 from mcdreforged.constants import core_constant
 from mcdreforged.logging.debug_option import DebugOption
@@ -15,6 +16,13 @@ from mcdreforged.logging.file_handler import ZippingDayRotatingFileHandler
 from mcdreforged.logging.formatter import MCColorFormatControl, MCDReforgedFormatter, NoColorFormatter, PluginIdAwareFormatter
 from mcdreforged.logging.stream_handler import SyncStdoutStreamHandler
 from mcdreforged.utils import file_utils
+
+
+@dataclasses.dataclass
+class _SharedFileHandler:
+	lock: threading.Lock = dataclasses.field(default_factory=threading.Lock)
+	waiting_instances: List['MCDReforgedLogger'] = dataclasses.field(default_factory=list)
+	handler: Optional[ZippingDayRotatingFileHandler] = None
 
 
 class MCDReforgedLogger(logging.Logger):
@@ -50,9 +58,7 @@ class MCDReforgedLogger(logging.Logger):
 
 	debug_options: ClassVar[int] = 0
 
-	__file_handler_lock: ClassVar[threading.Lock] = threading.Lock()
-	__file_handler_wanting_instances: ClassVar[List['MCDReforgedLogger']] = []
-	__file_handler: ClassVar[Optional[ZippingDayRotatingFileHandler]] = None
+	__shared_file_handler: Final[_SharedFileHandler] = _SharedFileHandler()
 
 	def __init__(self, name: str):
 		super().__init__(name)
@@ -62,11 +68,11 @@ class MCDReforgedLogger(logging.Logger):
 		self.console_handler.setFormatter(self.CONSOLE_FORMATTER)
 		self.addHandler(self.console_handler)
 
-		with self.__file_handler_lock:
-			if self.__file_handler is not None:
-				self.addHandler(self.__file_handler)
+		with self.__shared_file_handler.lock:
+			if self.__shared_file_handler.handler is not None:
+				self.addHandler(self.__shared_file_handler.handler)
 			else:
-				self.__file_handler_wanting_instances.append(self)
+				self.__shared_file_handler.waiting_instances.append(self)
 
 	__create_lock = threading.RLock()
 
@@ -104,16 +110,17 @@ class MCDReforgedLogger(logging.Logger):
 
 		:meta private:
 		"""
-		with cls.__file_handler_lock:
-			if cls.__file_handler is not None:
+		with cls.__shared_file_handler.lock:
+			if cls.__shared_file_handler.handler is not None:
 				raise AssertionError('already set')
 
 			file_utils.touch_directory(os.path.dirname(file_path))
-			cls.__file_handler = ZippingDayRotatingFileHandler(file_path, cls.ROTATE_DAY_COUNT)
-			cls.__file_handler.setFormatter(cls.FILE_FORMATTER)
-			for inst in cls.__file_handler_wanting_instances:
-				inst.addHandler(cls.__file_handler)
-			cls.__file_handler_wanting_instances.clear()
+			handler = ZippingDayRotatingFileHandler(file_path, cls.ROTATE_DAY_COUNT)
+			handler.setFormatter(cls.FILE_FORMATTER)
+			cls.__shared_file_handler.handler = handler
+			for inst in cls.__shared_file_handler.waiting_instances:
+				inst.addHandler(handler)
+			cls.__shared_file_handler.waiting_instances.clear()
 
 	@classmethod
 	def _get_file_handler(cls) -> Optional[ZippingDayRotatingFileHandler]:
@@ -122,7 +129,7 @@ class MCDReforgedLogger(logging.Logger):
 
 		:meta private:
 		"""
-		return cls.__file_handler
+		return cls.__shared_file_handler.handler
 
 	def set_debug_options(self, debug_options: Dict[str, bool]):
 		cls = type(self)
