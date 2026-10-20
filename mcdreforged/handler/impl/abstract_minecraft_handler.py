@@ -93,7 +93,7 @@ class AbstractMinecraftHandler(AbstractServerHandler, ABC):
 		is considered as a non-player message, i.e. has :attr:`info.player <mcdreforged.info_reactor.info.Info.hour>` equaling None
 		"""
 		return [
-			re.compile(r'(\[Not Secure] )?<(?P<name>[^>]+)> (?P<message>.*)')
+			re.compile(r'(System chat: )?(\[Not Secure] )?<(?P<name>[^>]+)> (?P<message>.*)')
 		]
 
 	@classmethod

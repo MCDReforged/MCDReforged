@@ -49,6 +49,15 @@ class MyTestCase(unittest.TestCase):
 		# test mc1.19 unverified message
 		self.assertEqual('OwO', self.handler.parse_server_stdout('[09:00:00] [Server thread/INFO]: [Not Secure] <OwO> !!MCDR').player)
 
+		# test mc26.3 from LMCAS-for-server mimicked chat messages
+		info = self.handler.parse_server_stdout('[09:00:00] [Server thread/INFO]: System chat: <OwO> !!MCDR')
+		self.assertEqual('OwO', info.player)
+		self.assertEqual('!!MCDR', info.content)
+		self.assertEqual('OwO', self.handler.parse_server_stdout('[09:00:00] [Server thread/INFO]: System chat: [Not Secure] <OwO> !!MCDR').player)
+		info = self.handler.parse_server_stdout('[09:00:00] [Server thread/INFO]: <Steve> System chat: <Alex> hi')
+		self.assertEqual('Steve', info.player)
+		self.assertEqual('System chat: <Alex> hi', info.content)
+
 	def test_2_player_events(self):
 		for join_line in [
 			'[00:04:13] [Server thread/INFO]: Steve[/127.0.0.1:9864] logged in with entity id 131 at (187.2703, 146.79014, 404.84718)',
