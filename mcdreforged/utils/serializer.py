@@ -4,8 +4,9 @@ import re
 import uuid
 from abc import ABC
 from enum import EnumMeta, Enum
+from types import UnionType
 from typing import Literal as TLiteral
-from typing import Union, TypeVar, List, Dict, Type, get_type_hints, Any, Callable, Optional, Tuple, cast
+from typing import Union, TypeVar, List, Dict, Type, get_type_hints, get_origin, get_args, Any, Callable, Optional, Tuple, cast
 
 from typing_extensions import Self, TypedDict, NotRequired, Unpack
 
@@ -19,14 +20,6 @@ def _get_type_hints(cls: Type):
 		return get_type_hints(cls)
 	except Exception:
 		return get_type_hints(cls, globalns={})
-
-
-def _get_origin(cls: Type):
-	return getattr(cls, '__origin__', None)
-
-
-def _get_args(cls: Type) -> tuple:
-	return getattr(cls, '__args__', ())
 
 
 def serialize(obj: Any) -> JsonLike:
@@ -145,7 +138,7 @@ def deserialize(
 
 	*   Types in the :external:doc:`typing <library/typing>` module:
 
-		*   :data:`typing.Union`: Iterate through its available candidate classes, and return the first successful deserialization result
+		*   :data:`typing.Union` and ``X | Y``: Iterate through their available candidate classes, and return the first successful deserialization result
 		*   :data:`typing.Optional`: Actually it will be converted to a :data:`typing.Union` automatically
 		*   :data:`typing.Any`: The input data will be directed returned as the result
 		*   :data:`typing.Literal`: The input data needs to be in parameter the of :data:`~typing.Literal`, then the input data will be returned as the result
@@ -191,6 +184,8 @@ def deserialize(
 		Added custom subclass of base classes and :class:`re.Pattern` support
 	.. versionadded:: v2.14.0
 		Added :class:`uuid.UUID` support
+	.. versionadded:: v2.17.0
+		Added support for union types written as ``X | Y``
 
 	.. tip:: For more complex serialization/deserialization requirements, take a look at the `pydantic <https://github.com/pydantic/pydantic>`__ library
 	"""
@@ -211,7 +206,7 @@ def deserialize(
 		redundancy_callback=redundancy_callback,
 	)
 
-	cls_org = _get_origin(cls)
+	cls_org = get_origin(cls)
 
 	# if the target class is Any, then simply return the data
 	if cls is Any:
@@ -219,8 +214,8 @@ def deserialize(
 
 	# Union
 	# Unpack Union first since the target class is not confirmed yet
-	elif cls_org == Union:
-		for possible_cls in _get_args(cls):
+	elif cls_org is Union or cls_org is UnionType:
+		for possible_cls in get_args(cls):
 			try:
 				return deserialize(data, possible_cls, **kwargs)
 			except (TypeError, ValueError):
@@ -247,29 +242,29 @@ def deserialize(
 		return ctor(data)
 
 	# List (generic with type hint)
-	elif cls_org == getattr(List[int], '__origin__') or (isinstance(cls_org, type) and issubclass(cls_org, list)):
+	elif cls_org is list or (isinstance(cls_org, type) and issubclass(cls_org, list)):
 		cls_real = cls_org if isinstance(cls_org, type) else list
 		if isinstance(data, list):
-			element_type = _get_args(cls)[0]
-			return cls_real(
+			element_type = get_args(cls)[0]
+			return cast(T, cls_real(
 				deserialize(e, element_type, **kwargs)
 				for e in data
-			)
+			))
 		else:
 			mismatch(cls_org)
 
 	# Dict (generic with type hint)
-	elif cls_org == getattr(Dict[int, int], '__origin__') or (isinstance(cls_org, type) and issubclass(cls_org, dict)):
+	elif cls_org is dict or (isinstance(cls_org, type) and issubclass(cls_org, dict)):
 		cls_real = cls_org if isinstance(cls_org, type) else dict
 		if isinstance(data, dict):
-			key_type = _get_args(cls)[0]
-			val_type = _get_args(cls)[1]
+			key_type = get_args(cls)[0]
+			val_type = get_args(cls)[1]
 			result = cls_real()
 			for key, value in data.items():
 				deserialized_key = deserialize(key, key_type, **kwargs)
 				deserialized_value = deserialize(value, val_type, **kwargs)
 				result[deserialized_key] = deserialized_value
-			return result
+			return cast(T, result)
 		else:
 			mismatch(cls_real)
 
@@ -282,7 +277,7 @@ def deserialize(
 
 	# Literal
 	elif cls_org == TLiteral:
-		literals = _get_args(cls)
+		literals = get_args(cls)
 		if data in literals:
 			return data
 		else:

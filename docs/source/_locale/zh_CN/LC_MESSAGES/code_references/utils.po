@@ -196,9 +196,13 @@ msgstr ":external:doc:`typing <library/typing>` 模块中的类型"
 
 #: mcdreforged.utils.serializer.deserialize:22 of
 msgid ""
-":data:`typing.Union`: Iterate through its available candidate classes, "
+":data:`typing.Union` and ``X | Y``: Iterate through their available candidate classes, "
 "and return the first successful deserialization result"
-msgstr ":data:`typing.Union`：遍历所有可能的候选类，返回第一个成功的反序列化结果"
+msgstr ":data:`typing.Union` 和 ``X | Y``：遍历所有可能的候选类，返回第一个成功的反序列化结果"
+
+#: mcdreforged.utils.serializer.deserialize of
+msgid "Added support for union types written as ``X | Y``"
+msgstr "添加了对 ``X | Y`` 写法的联合类型的支持"
 
 #: mcdreforged.utils.serializer.deserialize:23 of
 msgid ""

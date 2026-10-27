@@ -172,6 +172,47 @@ class MyTestCase(unittest.TestCase):
 		self.assertRaises(TypeError, Cls.deserialize, {'a': None, 'b': 1.2})
 		self.assertRaises(TypeError, Cls.deserialize, {'a': 1, 'b': 'y'})
 
+	def test_5_union_operator(self):
+		for data, target in (
+			(1, int | str),
+			('text', int | str),
+			(None, int | None),
+			(1, int | None),
+			([1, None], list[int | None]),
+			({'a': 1, 'b': 'text'}, dict[str, int | str]),
+			([1], list[int] | dict[str, int]),
+			({'a': 1}, list[int] | dict[str, int]),
+			(None, Union[int, str] | None),
+			('text', int | TLiteral['text']),
+		):
+			with self.subTest(data=data, target=target):
+				self.assertEqual(deserialize(data, target), data)
+
+		for data, target in (
+			(None, int | str),
+			(False, int | str),
+			([], int | str),
+			([None], list[int | str]),
+			({'a': None}, dict[str, int | str]),
+			('other', int | TLiteral['text']),
+		):
+			with self.subTest(data=data, target=target):
+				self.assertRaises(TypeError, deserialize, data, target)
+
+	def test_5_union_operator_fields(self):
+		class Data(Serializable):
+			point: Point | None = None
+			value: 'int | None' = None
+
+		self.assertEqual(Data.deserialize({}), Data())
+		self.assertEqual(Data.deserialize({'point': None, 'value': None}), Data())
+		data = Data.deserialize({'point': {'x': 2, 'y': 3}, 'value': 4})
+		self.assertIsInstance(data.point, Point)
+		self.assertEqual(data.point.x, 2)
+		self.assertEqual(data.point.y, 3)
+		self.assertEqual(data.value, 4)
+		self.assertEqual(data.serialize(), {'point': {'x': 2.0, 'y': 3.0}, 'value': 4})
+
 	def test_6_construct(self):
 		class Points(Serializable):
 			main: Optional[Point] = None
