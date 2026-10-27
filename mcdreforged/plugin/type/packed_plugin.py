@@ -122,9 +122,6 @@ class PackedPlugin(MultiFilePlugin):
 		"""
 
 		def release_importlib_zip_path_cache():
-			if sys.version_info < (3, 10):
-				return
-
 			# https://github.com/MCDReforged/MCDReforged/issues/283
 			try:
 				# noinspection PyProtectedMember,PyUnresolvedReferences

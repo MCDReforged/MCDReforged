@@ -23,7 +23,7 @@ def __disable_stdout_stderr_block_buffering():
 	Prevent stdout / stderr goes into block-buffered mode, if the stdio of MCDR is wrapped by other programs
 	See issue #257
 
-	stderr might be fully buffered before python 3.9, so reconfigure it as well
+	stdout may be block-buffered when non-interactive. Reconfigure both streams in case they have been replaced
 	"""
 	for name, stream in {'sys.stdout': sys.stdout, 'sys.stderr': sys.stderr}.items():
 		if isinstance(stream, io.TextIOWrapper):
