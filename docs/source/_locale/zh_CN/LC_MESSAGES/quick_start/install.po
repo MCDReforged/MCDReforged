@@ -44,10 +44,10 @@ msgstr "PyPI 版本"
 
 #: ../quick_start/install.rst:22
 msgid ""
-"MCDR is written and runs in Python 3. Make sure you have Python 3.9 or "
+"MCDR is written and runs in Python 3. Make sure you have Python 3.10 or "
 "later, with `pip <https://github.com/pypa/pip>`__ installed"
 msgstr ""
-"MCDR 用 Python 3 编写和运行。确保你的 Python 版本至少为 3.9，并且安装了 `pip "
+"MCDR 用 Python 3 编写和运行。确保你的 Python 版本至少为 3.10，并且安装了 `pip "
 "<https://github.com/pypa/pip>`__"
 
 #: ../quick_start/install.rst:24
@@ -85,6 +85,14 @@ msgstr ">= 2.15"
 #: ../quick_start/install.rst:36
 msgid ">= 3.9"
 msgstr ">= 3.9"
+
+#: ../quick_start/install.rst:37
+msgid ">= 2.17"
+msgstr ">= 2.17"
+
+#: ../quick_start/install.rst:38
+msgid ">= 3.10"
+msgstr ">= 3.10"
 
 #: ../quick_start/install.rst:39
 msgid "Wait a second"

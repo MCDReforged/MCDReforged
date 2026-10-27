@@ -8,8 +8,8 @@ def __python_version_check():
 	# This should even work in python 2.7+
 	import platform
 	import sys
-	if sys.version_info < (3, 9):
-		raise RuntimeError('MCDReforged requires Python 3.9 or higher to run. Current Python version is {}'.format(platform.python_version()))
+	if sys.version_info < (3, 10):
+		raise RuntimeError('MCDReforged requires Python 3.10 or higher to run. Current Python version is {}'.format(platform.python_version()))
 
 
 __python_version_check()
