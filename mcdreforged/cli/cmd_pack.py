@@ -2,11 +2,10 @@ import os
 import stat
 import zipapp
 from pathlib import Path
-from typing import Optional, Any, Callable, List, Tuple
+from typing import Optional, Any, Callable, List, Tuple, Protocol
 from zipfile import ZipFile, ZIP_DEFLATED
 
 import pathspec
-from typing_extensions import Protocol
 
 from mcdreforged.constants import plugin_constant
 from mcdreforged.plugin.meta.metadata import Metadata, RequirementsFileSpec

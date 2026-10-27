@@ -1,8 +1,6 @@
 import functools
 from threading import RLock
-from typing import Callable, Optional, Protocol, TypeVar, overload
-
-from typing_extensions import ParamSpec
+from typing import Callable, Optional, Protocol, TypeVar, overload, ParamSpec
 
 from mcdreforged.utils import misc_utils
 

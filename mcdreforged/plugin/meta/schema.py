@@ -1,8 +1,7 @@
 import re
-from typing import List, Dict, Optional, Union
+from typing import List, Dict, Optional, Union, Annotated
 
 from pydantic import BaseModel, Field, ConfigDict, StringConstraints
-from typing_extensions import Annotated
 
 from mcdreforged.constants import plugin_constant
 

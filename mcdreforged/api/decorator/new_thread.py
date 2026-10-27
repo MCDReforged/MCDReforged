@@ -1,8 +1,6 @@
 import functools
 import threading
-from typing import Optional, Callable, Union, TypeVar, Iterable, overload, Generic, Any
-
-from typing_extensions import ParamSpec
+from typing import Optional, Callable, Union, TypeVar, Iterable, overload, Generic, Any, ParamSpec
 
 from mcdreforged.utils import misc_utils
 

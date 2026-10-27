@@ -6,9 +6,9 @@ import functools
 import logging
 import os
 import threading
-from typing import Dict, Optional, Any, ClassVar, List, Type
+from typing import Dict, Optional, Any, ClassVar, List, Type, Final
 
-from typing_extensions import override, Final
+from typing_extensions import override
 
 from mcdreforged.constants import core_constant
 from mcdreforged.logging.debug_option import DebugOption

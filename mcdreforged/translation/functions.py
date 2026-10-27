@@ -1,6 +1,4 @@
-from typing import TYPE_CHECKING
-
-from typing_extensions import Protocol
+from typing import TYPE_CHECKING, Protocol
 
 if TYPE_CHECKING:
 	from mcdreforged.translation.translation_text import RTextMCDRTranslation

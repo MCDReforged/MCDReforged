@@ -1,5 +1,4 @@
 import re
-import sys
 import unittest
 import uuid
 from enum import Enum, auto, IntFlag, IntEnum, Flag
@@ -7,8 +6,6 @@ from typing import List, Dict, Union, Optional, Any, TypeVar, Generic, Type
 from typing import Literal as TLiteral
 
 from mcdreforged.api.utils import serialize, deserialize, Serializable
-
-_py39 = sys.version_info >= (3, 9)
 
 T = TypeVar('T')
 K = TypeVar('K')
@@ -275,24 +272,19 @@ class MyTestCase(unittest.TestCase):
 
 	def test_11_py39_type_hint(self):
 		# see pep-0585
-		if _py39:
-			# suppressing these inspections so no complain with python <3.9
-			# noinspection PyTypeHints,PyUnresolvedReferences
-			class A(Serializable):
-				a: list[int] = [1]
-				b: dict[str, bool] = {'yes': True}
+		class A(Serializable):
+			a: list[int] = [1]
+			b: dict[str, bool] = {'yes': True}
 
-			a = A.get_default()
-			self.assertIsInstance(a.a, list)
-			self.assertEqual(a.a, [1])
-			self.assertIsInstance(a.b, dict)
-			self.assertEqual(a.b.get('yes'), True)
+		a = A.get_default()
+		self.assertIsInstance(a.a, list)
+		self.assertEqual(a.a, [1])
+		self.assertIsInstance(a.b, dict)
+		self.assertEqual(a.b.get('yes'), True)
 
-			a = deserialize({'a': [3, 4], 'b': {'no': False}}, A)
-			self.assertEqual(a.a, [3, 4])
-			self.assertEqual(a.b.get('no'), False)
-		else:
-			print('Ignored type hint test which uses python 3.9 feature')
+		a = deserialize({'a': [3, 4], 'b': {'no': False}}, A)
+		self.assertEqual(a.a, [3, 4])
+		self.assertEqual(a.b.get('no'), False)
 
 	def test_12_literal(self):
 		class A(Serializable):

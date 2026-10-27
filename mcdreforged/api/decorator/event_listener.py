@@ -1,6 +1,4 @@
-from typing import Callable, Union, Optional, TypeVar
-
-from typing_extensions import ParamSpec
+from typing import Callable, Union, Optional, TypeVar, ParamSpec
 
 from mcdreforged.plugin.plugin_event import PluginEvent
 from mcdreforged.plugin.si.server_interface import ServerInterface

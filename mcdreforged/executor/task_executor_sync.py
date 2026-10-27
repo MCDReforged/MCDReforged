@@ -4,7 +4,7 @@ from concurrent.futures import Future
 from typing import Callable, Optional, TYPE_CHECKING, Dict, TypeVar, overload
 from typing import Literal as TLiteral
 
-from typing_extensions import override, Deque
+from typing_extensions import override
 
 from mcdreforged.executor.task_executor_common import TaskExecutorBase, TaskDoneFuture
 from mcdreforged.executor.task_executor_queue import TaskQueue, TaskPriority, TaskQueueItem
@@ -25,7 +25,7 @@ class SyncTaskExecutor(TaskExecutorBase):
 		super().__init__(mcdr_server.logger)
 		self.mcdr_server = mcdr_server
 		self.__task_queue = TaskQueue()
-		self.__running_plugins: Deque['AbstractPlugin'] = collections.deque()
+		self.__running_plugins: collections.deque['AbstractPlugin'] = collections.deque()
 		self.set_name('TaskExecutor')
 
 	def extract_tasks_from(self, other: 'SyncTaskExecutor'):

@@ -1,6 +1,4 @@
-from typing import TypeVar, Callable, Container
-
-from typing_extensions import Protocol
+from typing import TypeVar, Callable, Container, Protocol
 
 _T = TypeVar('_T')
 _R = TypeVar('_R', covariant=True)
