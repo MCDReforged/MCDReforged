@@ -14,6 +14,17 @@ from mcdreforged.utils import class_utils, collection_utils, thread_utils
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
 
+# Attributes of the removed handler base classes that SpecServerHandler no longer calls, mapped to their replacements
+_OUTDATED_HANDLER_OVERRIDES: Dict[str, str] = {
+	'get_content_parsing_formatter': 'use parsing.line in the handler spec, or override parse_server_stdout',
+	'get_player_message_parsing_formatter': 'use parsing.player_message in the handler spec',
+	'_get_server_stdout_raw_result': 'override parse_server_stdout',
+	'_content_parse': 'override parse_server_stdout',
+	'format_message': 'override get_send_message_command / get_broadcast_message_command',
+	'_vanilla_minecraft_player_name_regex': 'use parsing.player_name in the handler spec, or override validate_player_name',
+	'_verify_player_name': 'override validate_player_name',
+}
+
 
 class ServerHandlerManager:
 	def __init__(self, mcdr_server: 'MCDReforgedServer'):
@@ -66,6 +77,7 @@ class ServerHandlerManager:
 				else:
 					if issubclass(handler_class, ServerHandler):
 						handler = handler_class()
+						self.__check_outdated_overrides(handler, 'custom handler class path {!r}'.format(class_path))
 						if handler.get_name() not in self.handlers:
 							add_handler(handler)
 							self.mcdr_server.logger.mdebug('Loaded info handler {} from {}'.format(handler_class.__name__, class_path), option=DebugOption.HANDLER)
@@ -73,6 +85,16 @@ class ServerHandlerManager:
 							self.mcdr_server.logger.error('Handler with name {} from path {} is already registered, ignored'.format(handler.get_name(), class_path))
 					else:
 						self.mcdr_server.logger.error('Wrong handler class {!r}, expected {} but found {}'.format(class_path, ServerHandler, handler_class))
+
+	def __check_outdated_overrides(self, handler: ServerHandler, source: str):
+		if not isinstance(handler, SpecServerHandler):
+			return
+		handler_class = type(handler)
+		for name, replacement in _OUTDATED_HANDLER_OVERRIDES.items():
+			if hasattr(handler_class, name):
+				self.logger.warning('Server handler {!r} ({}.{}) from {} defines {}, which MCDR no longer calls. Alternative: {}'.format(
+					handler.get_name(), handler_class.__module__, handler_class.__qualname__, source, name, replacement,
+				))
 
 	@property
 	def __current_configured_handler(self) -> ServerHandler:
@@ -98,6 +120,7 @@ class ServerHandlerManager:
 		if psh != self.__plugin_provided_server_handler_holder:
 			if psh is not None:
 				self.logger.info(self.__tr('plugin_provided.set', psh.server_handler.get_name(), psh.plugin))
+				self.__check_outdated_overrides(psh.server_handler, 'plugin {}'.format(psh.plugin))
 			else:
 				self.logger.info(self.__tr('plugin_provided.unset', self.__current_configured_handler.get_name()))
 			self.__shutdown_handler_detection()

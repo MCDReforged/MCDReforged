@@ -7,7 +7,7 @@ from typing_extensions import override, assert_never
 
 from mcdreforged.handler.handler_spec import HandlerSpec, TextTransform, TextTransforms, StopMethod, StopMethods, SendMessageMethod, SendMessageMethods, \
 	BroadcastMessageMethod, BroadcastMessageMethods
-from mcdreforged.handler.impl.abstract_minecraft_handler import _does_mc_version_has_execute_command, _get_rtext_json_format
+from mcdreforged.handler.impl import mc_version_utils
 from mcdreforged.handler.server_handler import ServerHandler
 from mcdreforged.info_reactor.info import Info, InfoSource
 from mcdreforged.info_reactor.server_information import ServerInformation
@@ -45,7 +45,7 @@ class SpecServerHandler(ServerHandler):
 	@classmethod
 	def __format_json_message(cls, message: MessageText, server_information: ServerInformation) -> str:
 		if isinstance(message, RTextBase):
-			json_format = _get_rtext_json_format(server_information.version) if server_information else RTextJsonFormat.default()
+			json_format = mc_version_utils.get_rtext_json_format(server_information.version) if server_information else RTextJsonFormat.default()
 			return message.to_json_str(json_format=json_format)
 		else:
 			return json.dumps(str(message), ensure_ascii=False, separators=(',', ':'))
@@ -58,7 +58,7 @@ class SpecServerHandler(ServerHandler):
 	@classmethod
 	def __tellraw_command(cls, target: str, message: MessageText, server_information: ServerInformation) -> str:
 		try:
-			can_do_execute = _does_mc_version_has_execute_command(server_information.version)
+			can_do_execute = mc_version_utils.does_mc_version_has_execute_command(server_information.version)
 		except (ValueError, IndexError):
 			can_do_execute = False
 

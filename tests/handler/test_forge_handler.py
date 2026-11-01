@@ -1,6 +1,7 @@
 import unittest
 
-from mcdreforged.handler.impl.forge_handler import ForgeHandler
+from mcdreforged.handler.impl import ForgeHandler
+from tests.handler import handler_test_utils
 
 
 class MyTestCase(unittest.TestCase):
@@ -63,6 +64,11 @@ class MyTestCase(unittest.TestCase):
 			# no exception
 			if not info.is_player:
 				self.assertEqual(line.split(']: ', 1)[1], info.content)
+
+	def test_6_control(self):
+		self.assertEqual('stop', self.handler.get_stop_command())
+		handler_test_utils.assert_minecraft_tellraw_commands(self, self.handler)
+		handler_test_utils.assert_pre_parse_unchanged(self, self.handler)
 
 
 TEXT = r'''

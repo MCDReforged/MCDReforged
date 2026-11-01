@@ -1,6 +1,7 @@
 import unittest
 
-from mcdreforged.handler.impl.vanilla_handler import VanillaHandler
+from mcdreforged.handler.impl import VanillaHandler
+from tests.handler import handler_test_utils
 
 
 class MyTestCase(unittest.TestCase):
@@ -105,6 +106,31 @@ class MyTestCase(unittest.TestCase):
 			# no exception
 			self.assertEqual(line.split(']: ', 1)[1], info.content)
 			self.assertIn(info.logging_level, {'INFO', 'WARN'})
+
+	def test_6_control(self):
+		self.assertEqual('stop', self.handler.get_stop_command())
+		handler_test_utils.assert_minecraft_tellraw_commands(self, self.handler)
+		handler_test_utils.assert_pre_parse_unchanged(self, self.handler)
+
+	def test_7_player_chat_is_not_server_event(self):
+		for content in [
+			'Stopping server',
+			'Done (3.355s)! For help, type "help"',
+			'RCON running on 0.0.0.0:25575',
+			'Starting minecraft server version 1.13.2',
+			'Starting Minecraft server on *:25565',
+			'Alex[/127.0.0.1:9477] logged in with entity id 574 at (1.0, 2.0, 3.0)',
+			'Alex left the game',
+		]:
+			info = self.handler.parse_server_stdout('[23:54:36] [Server thread/INFO]: <Steve> ' + content)
+			self.assertEqual('Steve', info.player)
+			self.assertEqual(False, self.handler.test_server_stopping(info), content)
+			self.assertEqual(False, self.handler.test_server_startup_done(info), content)
+			self.assertEqual(False, self.handler.test_rcon_started(info), content)
+			self.assertEqual(None, self.handler.parse_server_version(info), content)
+			self.assertEqual(None, self.handler.parse_server_address(info), content)
+			self.assertEqual(None, self.handler.parse_player_joined(info), content)
+			self.assertEqual(None, self.handler.parse_player_left(info), content)
 
 
 TEXT = '''

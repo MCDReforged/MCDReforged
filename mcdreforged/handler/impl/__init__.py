@@ -1,24 +1,28 @@
-from mcdreforged.handler.impl.abstract_minecraft_handler import AbstractMinecraftHandler
-from mcdreforged.handler.impl.arclight_handler import ArclightHandler
 from mcdreforged.handler.impl.basic_handler import BasicHandler
-from mcdreforged.handler.impl.beta18_handler import Beta18Handler
-from mcdreforged.handler.impl.bukkit14_handler import Bukkit14Handler
-from mcdreforged.handler.impl.bukkit_handler import BukkitHandler
-from mcdreforged.handler.impl.bungeecord_handler import BungeecordHandler
-from mcdreforged.handler.impl.cat_server_handler import CatServerHandler
-from mcdreforged.handler.impl.forge_handler import ForgeHandler
-from mcdreforged.handler.impl.vanilla_handler import VanillaHandler
-from mcdreforged.handler.impl.velocity_handler import VelocityHandler
-from mcdreforged.handler.impl.waterfall_handler import WaterfallHandler
+from mcdreforged.handler.impl.builtin_handlers import (
+	BuiltinSpecServerHandler,
+	VanillaHandler,
+	Beta18Handler,
+	ForgeHandler,
+	BukkitHandler,
+	Bukkit14Handler,
+	CatServerHandler,
+	ArclightHandler,
+	BungeecordHandler,
+	WaterfallHandler,
+	VelocityHandler,
+)
+from mcdreforged.handler.impl.spec_server_handler import SpecServerHandler
 
 __all__ = [
 	'BasicHandler',
 
-	'AbstractMinecraftHandler',
+	'SpecServerHandler',
+	'BuiltinSpecServerHandler',
 
 	'VanillaHandler', 'Beta18Handler', 'ForgeHandler',
 	'BukkitHandler', 'Bukkit14Handler', 'CatServerHandler', 'ArclightHandler',
 
 	'BungeecordHandler', 'WaterfallHandler',
-	'VelocityHandler'
+	'VelocityHandler',
 ]

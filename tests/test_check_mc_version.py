@@ -1,7 +1,7 @@
 import unittest
 
 # noinspection PyProtectedMember
-from mcdreforged.handler.impl.abstract_minecraft_handler import _check_mc_version_ge
+from mcdreforged.handler.impl.mc_version_utils import check_mc_version_ge
 
 
 class TestCheckMCVersionGE(unittest.TestCase):
@@ -42,7 +42,7 @@ class TestCheckMCVersionGE(unittest.TestCase):
 
 		for version_name, expected in test_cases:
 			with self.subTest(version_name=version_name):
-				result = _check_mc_version_ge(version_name, min_release, min_snapshot)
+				result = check_mc_version_ge(version_name, min_release, min_snapshot)
 				self.assertEqual(
 					result,
 					expected,

@@ -1,6 +1,7 @@
 import unittest
 
-from mcdreforged.handler.impl.bungeecord_handler import BungeecordHandler
+from mcdreforged.handler.impl import BungeecordHandler
+from tests.handler import handler_test_utils
 
 
 class MyTestCase(unittest.TestCase):
@@ -52,6 +53,17 @@ class MyTestCase(unittest.TestCase):
 			# no exception
 			if not info.is_player:
 				self.assertEqual(line.split('] ', 1)[1], info.content)
+
+	def test_6_control(self):
+		self.assertEqual('end', self.handler.get_stop_command())
+		handler_test_utils.assert_alertraw_broadcast_only(self, self.handler)
+		handler_test_utils.assert_jline_prompt_stripped(self, self.handler)
+
+	def test_7_player_name_validation(self):
+		info = self.handler.parse_server_stdout('02:07:04 [信息] [S,/127.0.0.1:13565] <-> InitialHandler has connected')
+		self.assertEqual(None, self.handler.parse_player_joined(info))
+		info = self.handler.parse_server_stdout('02:07:42 [信息] [S] -> UpstreamBridge has disconnected')
+		self.assertEqual(None, self.handler.parse_player_left(info))
 
 
 TEXT = r'''

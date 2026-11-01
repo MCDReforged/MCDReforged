@@ -14,18 +14,18 @@ class ServerHandler(ABC):
 
 		ServerHandler (interface)
 		├── BasicHandler
-		└── AbstractServerHandler
-			├── AbstractMinecraftHandler
-			│   ├── VanillaHandler
-			│   ├── Beta18Handler
-			│   ├── ForgeHandler
-			│   └── BukkitHandler
-			│       ├── Bukkit14Handler
-			│       ├── CatServerHandler
-			│       └── ArclightHandler
-			├── BungeecordHandler
-			│   └── WaterfallHandler
-			└── VelocityHandler
+		└── SpecServerHandler
+			└── BuiltinSpecServerHandler
+				├── VanillaHandler
+				├── Beta18Handler
+				├── ForgeHandler
+				├── BukkitHandler
+				├── Bukkit14Handler
+				├── CatServerHandler
+				├── ArclightHandler
+				├── BungeecordHandler
+				├── WaterfallHandler
+				└── VelocityHandler
 	"""
 
 	# ---------------------

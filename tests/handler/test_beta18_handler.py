@@ -1,6 +1,9 @@
 import unittest
 
-from mcdreforged.handler.impl.beta18_handler import Beta18Handler
+from mcdreforged.handler.impl import Beta18Handler
+from mcdreforged.minecraft.rtext.style import RColor
+from mcdreforged.minecraft.rtext.text import RText
+from tests.handler import handler_test_utils
 
 
 class MyTestCase(unittest.TestCase):
@@ -64,6 +67,24 @@ class MyTestCase(unittest.TestCase):
 			# no exception
 			if not info.is_player:
 				self.assertEqual(line.split('] ', 1)[1], info.content)
+
+	def test_6_control(self):
+		self.assertEqual('stop', self.handler.get_stop_command())
+		si = handler_test_utils.server_info('Beta 1.8.1')
+		self.assertEqual('tell Steve hi "there" x', self.handler.get_send_message_command('Steve', handler_test_utils.STR_MESSAGE, si))
+		self.assertEqual('say hi "there" x', self.handler.get_broadcast_message_command(handler_test_utils.STR_MESSAGE, si))
+		self.assertEqual('tell Steve hi', self.handler.get_send_message_command('Steve', RText('§ahi', color=RColor.red), si))
+		self.assertEqual('say hi', self.handler.get_broadcast_message_command(RText('§ahi', color=RColor.red), si))
+		handler_test_utils.assert_pre_parse_unchanged(self, self.handler)
+
+	def test_7_event_validation(self):
+		info = self.handler.parse_server_stdout('2021-01-09 01:41:56 [INFO] <Steve> Stopping server')
+		self.assertEqual(False, self.handler.test_server_stopping(info))
+
+		info = self.handler.parse_server_stdout('2021-01-09 01:41:52 [INFO] Steve lost connection: disconnect.quitting')
+		self.assertEqual('Steve', self.handler.parse_player_left(info))
+		info = self.handler.parse_server_stdout('2021-01-09 01:41:52 [INFO] S lost connection: disconnect.quitting')
+		self.assertEqual(None, self.handler.parse_player_left(info))
 
 
 TEXT = r'''

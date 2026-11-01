@@ -1,7 +1,7 @@
 from abc import ABC
 
 from mcdreforged.handler.handler_spec import HandlerSpec
-from mcdreforged.handler.impl_v2.spec_server_handler import SpecServerHandler
+from mcdreforged.handler.impl.spec_server_handler import SpecServerHandler
 from mcdreforged.utils import resources_utils
 
 

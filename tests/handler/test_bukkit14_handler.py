@@ -1,6 +1,7 @@
 import unittest
 
-from mcdreforged.handler.impl.bukkit14_handler import Bukkit14Handler
+from mcdreforged.handler.impl import Bukkit14Handler
+from tests.handler import handler_test_utils
 
 
 class MyTestCase(unittest.TestCase):
@@ -56,6 +57,11 @@ class MyTestCase(unittest.TestCase):
 			if not info.is_player:
 				self.assertEqual(line.split(']: ', 1)[1], info.content)
 			self.assertIn(info.logging_level, {'INFO', 'WARN', 'ERROR'})
+
+	def test_6_control(self):
+		self.assertEqual('stop', self.handler.get_stop_command())
+		handler_test_utils.assert_minecraft_tellraw_commands(self, self.handler)
+		handler_test_utils.assert_pre_parse_unchanged(self, self.handler)
 
 
 TEXT = r'''

@@ -1,6 +1,7 @@
 import unittest
 
 from mcdreforged.handler.impl import VelocityHandler
+from tests.handler import handler_test_utils
 
 
 class MyTestCase(unittest.TestCase):
@@ -45,6 +46,19 @@ class MyTestCase(unittest.TestCase):
 			except Exception:
 				print('error when parsing line {!r}'.format(line))
 				raise
+
+	def test_6_control(self):
+		self.assertEqual('shutdown', self.handler.get_stop_command())
+		si = handler_test_utils.server_info(None)
+		self.assertEqual(None, self.handler.get_send_message_command('Steve', handler_test_utils.STR_MESSAGE, si))
+		self.assertEqual(None, self.handler.get_broadcast_message_command(handler_test_utils.STR_MESSAGE, si))
+		handler_test_utils.assert_pre_parse_unchanged(self, self.handler)
+
+	def test_7_player_name_validation(self):
+		info = self.handler.parse_server_stdout('[00:19:07 INFO]: [connected player] S (/127.0.0.1:13394) has connected')
+		self.assertEqual(None, self.handler.parse_player_joined(info))
+		info = self.handler.parse_server_stdout('[00:20:32 INFO]: [connected player] S (/127.0.0.1:13456) has disconnected')
+		self.assertEqual(None, self.handler.parse_player_left(info))
 
 
 TEXT = r'''
