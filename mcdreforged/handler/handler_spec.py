@@ -6,7 +6,9 @@ import re
 import string
 from typing import List, Dict, Annotated, Any, ClassVar, FrozenSet, Mapping, Type
 
-from pydantic import BaseModel, ConfigDict, Field, AfterValidator, Discriminator, Tag, StringConstraints, field_validator
+from pydantic import BaseModel, ConfigDict, Field, AfterValidator, Tag, StringConstraints, field_validator
+
+from mcdreforged.utils.pydantic_utils import key_discriminator
 
 
 # ------------------------------
@@ -15,15 +17,6 @@ from pydantic import BaseModel, ConfigDict, Field, AfterValidator, Discriminator
 
 class _SpecModel(BaseModel):
 	model_config = ConfigDict(frozen=True)
-
-
-def _key_discriminator(key_to_tag: Dict[str, str], default: str) -> Discriminator:
-	def func(value: Any) -> str:
-		for key, tag in key_to_tag.items():
-			if (isinstance(value, dict) and key in value) or (not isinstance(value, dict) and hasattr(value, key)):
-				return tag
-		return default
-	return Discriminator(func)
 
 
 def _require_groups(*groups: str) -> AfterValidator:
@@ -57,7 +50,7 @@ class TextTransforms:
 
 TextTransform = Annotated[
 	Annotated[TextTransforms.Builtin, Tag('builtin')] | Annotated[TextTransforms.Sub, Tag('sub')],
-	_key_discriminator({'builtin': 'builtin'}, 'sub'),
+	key_discriminator({'builtin': 'builtin', 'sub': 'sub'}),
 ]
 
 
@@ -82,7 +75,7 @@ class StopMethods:
 
 StopMethod = Annotated[
 	Annotated[StopMethods.Command, Tag('command')] | Annotated[StopMethods.Signal, Tag('signal')],
-	_key_discriminator({'command': 'command'}, 'signal'),
+	key_discriminator({'command': 'command', 'signal': 'signal'}),
 ]
 
 
@@ -135,7 +128,7 @@ class SendMessageMethods:
 
 SendMessageMethod = Annotated[
 	Annotated[SendMessageMethods.Builtin, Tag('builtin')] | Annotated[SendMessageMethods.Template, Tag('template')],
-	_key_discriminator({'template': 'template'}, 'builtin'),
+	key_discriminator({'template': 'template', 'builtin': 'builtin'}),
 ]
 
 
@@ -149,7 +142,7 @@ class BroadcastMessageMethods:
 
 BroadcastMessageMethod = Annotated[
 	Annotated[BroadcastMessageMethods.Builtin, Tag('builtin')] | Annotated[BroadcastMessageMethods.Template, Tag('template')],
-	_key_discriminator({'template': 'template'}, 'builtin'),
+	key_discriminator({'template': 'template', 'builtin': 'builtin'}),
 ]
 
 
@@ -187,9 +180,8 @@ class HandlerSpec(_SpecModel):
 	def extend(self, override: Mapping[str, Any]) -> 'HandlerSpec':
 		"""
 		Merge override onto this spec and validate the result as a complete HandlerSpec.
-		The "extends" key is ignored; "name" is not inherited from this spec
+		"name" is not inherited from this spec
 		"""
-		override = {k: v for k, v in override.items() if k != 'extends'}
 		merged_dict = self._merge(type(self), self.model_dump(exclude={'name'}), override)
 		return HandlerSpec.model_validate(merged_dict)
 

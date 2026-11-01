@@ -2,13 +2,18 @@ import collections
 import queue
 import time
 from logging import Logger
-from typing import Dict, Optional, Tuple, List, TYPE_CHECKING, Counter
+from typing import Dict, Optional, Tuple, List, TYPE_CHECKING, Counter, Union
 
+from pydantic import TypeAdapter, ValidationError
+from ruamel.yaml import YAML, YAMLError
+from typing_extensions import assert_never
+
+from mcdreforged.handler.handler_spec import HandlerSpec
 from mcdreforged.handler.impl import *
 from mcdreforged.handler.plugin_provided_server_handler_holder import PluginProvidedServerHandlerHolder
 from mcdreforged.handler.server_handler import ServerHandler
 from mcdreforged.logging.debug_option import DebugOption
-from mcdreforged.mcdr_config import MCDReforgedConfig
+from mcdreforged.mcdr_config import MCDReforgedConfig, CustomHandlerEntry, CustomHandlerExtendEntry, CustomHandlerDefineEntry, CustomHandlerFileEntry
 from mcdreforged.utils import class_utils, collection_utils, thread_utils
 
 if TYPE_CHECKING:
@@ -52,11 +57,15 @@ class ServerHandlerManager:
 			else:
 				self.logger.info(self.__tr('on_config_changed.handler_set', config.handler))
 
-	def register_handlers(self, custom_handler_class_paths: Optional[List[str]]):
-		def add_handler(hdr: ServerHandler):
-			self.handlers[hdr.get_name()] = hdr
+	def register_handlers(self, custom_handlers: Optional[List[Union[str, CustomHandlerEntry]]]):
+		"""
+		:raise ValueError: if a spec entry in custom_handlers is invalid. The registered handlers are not changed in this case
+		"""
+		handlers: Dict[str, ServerHandler] = {}
 
-		self.handlers.clear()
+		def add_handler(hdr: ServerHandler):
+			handlers[hdr.get_name()] = hdr
+
 		add_handler(self.__basic_handler)
 		add_handler(VanillaHandler())
 		add_handler(BukkitHandler())
@@ -68,8 +77,15 @@ class ServerHandlerManager:
 		add_handler(BungeecordHandler())
 		add_handler(WaterfallHandler())
 		add_handler(VelocityHandler())
-		if custom_handler_class_paths is not None:
-			for class_path in custom_handler_class_paths:
+		builtin_specs: Dict[str, HandlerSpec] = {
+			name: hdr.spec
+			for name, hdr in handlers.items()
+			if isinstance(hdr, BuiltinSpecServerHandler)
+		}
+
+		for i, entry in enumerate(custom_handlers or []):
+			if isinstance(entry, str):
+				class_path = entry
 				try:
 					handler_class = class_utils.load_class(class_path)
 				except Exception:
@@ -78,13 +94,71 @@ class ServerHandlerManager:
 					if issubclass(handler_class, ServerHandler):
 						handler = handler_class()
 						self.__check_outdated_overrides(handler, 'custom handler class path {!r}'.format(class_path))
-						if handler.get_name() not in self.handlers:
+						if handler.get_name() not in handlers:
 							add_handler(handler)
 							self.mcdr_server.logger.mdebug('Loaded info handler {} from {}'.format(handler_class.__name__, class_path), option=DebugOption.HANDLER)
 						else:
 							self.mcdr_server.logger.error('Handler with name {} from path {} is already registered, ignored'.format(handler.get_name(), class_path))
 					else:
 						self.mcdr_server.logger.error('Wrong handler class {!r}, expected {} but found {}'.format(class_path, ServerHandler, handler_class))
+			else:
+				location = 'custom_handlers[{}]'.format(i)
+				spec = self.__load_custom_handler_spec(entry, location, builtin_specs)
+				if spec.name in handlers:
+					raise ValueError('{}: handler with name {!r} is already registered'.format(location, spec.name))
+				add_handler(SpecServerHandler(spec))
+				self.mcdr_server.logger.mdebug('Loaded spec handler {} from {}'.format(spec.name, location), option=DebugOption.HANDLER)
+
+		self.handlers = handlers
+
+	@classmethod
+	def __load_custom_handler_spec(cls, entry: CustomHandlerEntry, location: str, builtin_specs: Dict[str, HandlerSpec]) -> HandlerSpec:
+		"""
+		:raise ValueError: if the entry is invalid
+		"""
+		if isinstance(entry, CustomHandlerFileEntry):
+			location = '{} (file {!r})'.format(location, entry.file)
+			try:
+				with open(entry.file, encoding='utf8') as f:
+					data = YAML(typ='safe').load(f)
+			except (OSError, YAMLError) as e:
+				raise ValueError('{}: failed to read the handler spec file: {}'.format(location, e))
+			try:
+				entry = TypeAdapter(CustomHandlerEntry).validate_python(data, strict=True)
+			except ValidationError as e:
+				raise ValueError(cls.__format_validation_error(location, None, e))
+			if isinstance(entry, CustomHandlerFileEntry):
+				raise ValueError('{}: a handler spec file cannot reference another file'.format(location))
+
+		base: Optional[HandlerSpec]
+		if isinstance(entry, CustomHandlerExtendEntry):
+			if (base := builtin_specs.get(entry.extends)) is None:
+				raise ValueError('{}.extends: unknown builtin handler {!r}, available: {}'.format(location, entry.extends, ', '.join(builtin_specs.keys())))
+			body_key, body = 'overrides', entry.overrides
+		elif isinstance(entry, CustomHandlerDefineEntry):
+			base = None
+			body_key, body = 'spec', entry.spec
+		else:
+			assert_never(entry)
+
+		if 'name' in body:
+			raise ValueError('{}.{}.name: name should be set at the entry root'.format(location, body_key))
+		data = {**body, 'name': entry.name}
+		try:
+			return base.extend(data) if base is not None else HandlerSpec.model_validate(data)
+		except ValidationError as e:
+			raise ValueError(cls.__format_validation_error(location, body_key, e))
+
+	@classmethod
+	def __format_validation_error(cls, location: str, body_key: Optional[str], error: ValidationError) -> str:
+		lines = ['{}: invalid handler spec, {} error(s)'.format(location, error.error_count())]
+		for err in error.errors():
+			loc = list(err['loc'])
+			if body_key is not None and loc[:1] != ['name']:
+				loc.insert(0, body_key)
+			path = location + ''.join('[{}]'.format(item) if isinstance(item, int) else '.{}'.format(item) for item in loc)
+			lines.append('  {}: {}'.format(path, err['msg']))
+		return '\n'.join(lines)
 
 	def __check_outdated_overrides(self, handler: ServerHandler, source: str):
 		if not isinstance(handler, SpecServerHandler):

@@ -43,6 +43,7 @@ from mcdreforged.translation.translator import Translator
 from mcdreforged.utils import file_utils, request_utils, collection_utils, thread_utils, os_utils, misc_utils
 from mcdreforged.utils.exception import ServerStartError, IllegalStateError
 from mcdreforged.utils.types.message import MessageText
+from mcdreforged.utils.yaml_data_storage import DataFileMissingError
 
 if TYPE_CHECKING:
 	from mcdreforged.plugin.plugin_registry import PluginRegistryStorage
@@ -130,7 +131,7 @@ class MCDReforgedServer:
 			nonlocal file_missing
 			try:
 				func()
-			except FileNotFoundError:
+			except DataFileMissingError:
 				self.logger.error('{} file {!r} is missing'.format(kind.title(), file_path))
 				file_missing = True
 				return False

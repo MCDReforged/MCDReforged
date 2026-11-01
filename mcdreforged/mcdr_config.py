@@ -3,13 +3,14 @@ MCDR config file stuffs
 """
 import threading
 from logging import Logger
-from typing import Any, Tuple, Dict, Union, Optional, List, TypeVar
+from typing import Any, Tuple, Dict, Union, Optional, List, TypeVar, Annotated
 
-from pydantic import BaseModel, Field, ConfigDict
+from pydantic import BaseModel, Field, ConfigDict, Tag
 
 from mcdreforged.constants import core_constant
 from mcdreforged.constants.environment_variables import ENV_DISABLE_TELEMETRY
 from mcdreforged.logging.debug_option import DebugOption
+from mcdreforged.utils.pydantic_utils import key_discriminator
 
 CONFIG_SCHEMA_VERSION = 1
 
@@ -19,6 +20,30 @@ class RconConfig(BaseModel):
 	address: Optional[str] = '127.0.0.1'
 	port: Optional[int] = 25575
 	password: Optional[str] = 'password'
+
+
+class CustomHandlerExtendEntry(BaseModel):
+	model_config = ConfigDict(extra='forbid')
+	name: str
+	extends: str
+	overrides: Dict[str, Any]
+
+
+class CustomHandlerDefineEntry(BaseModel):
+	model_config = ConfigDict(extra='forbid')
+	name: str
+	spec: Dict[str, Any]
+
+
+class CustomHandlerFileEntry(BaseModel):
+	model_config = ConfigDict(extra='forbid')
+	file: str
+
+
+CustomHandlerEntry = Annotated[
+	Annotated[CustomHandlerExtendEntry, Tag('extend')] | Annotated[CustomHandlerDefineEntry, Tag('define')] | Annotated[CustomHandlerFileEntry, Tag('file')],
+	key_discriminator({'extends': 'extend', 'spec': 'define', 'file': 'file'}),
+]
 
 
 class MCDReforgedConfig(BaseModel):
@@ -61,7 +86,7 @@ class MCDReforgedConfig(BaseModel):
 	# --------- Advanced Configuration ---------
 	disable_console_thread: bool = False
 	disable_console_color: bool = False
-	custom_handlers: Optional[List[str]] = None
+	custom_handlers: Optional[List[Union[str, CustomHandlerEntry]]] = None
 	custom_info_reactors: Optional[List[str]] = None
 	watchdog_threshold: int = 10
 	handler_detection: bool = True

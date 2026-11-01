@@ -29,6 +29,10 @@ def transform_yaml_to_dict(source: dict) -> dict:
 	return ret
 
 
+class DataFileMissingError(FileNotFoundError):
+	pass
+
+
 class YamlDataStorage:
 	def __init__(self, logger: Logger, file_path: str, default_file_path: str):
 		self._logger = logger
@@ -50,18 +54,18 @@ class YamlDataStorage:
 
 	def read_config(self, allowed_missing_file: bool, save_on_missing: bool = True):
 		"""
-		:param bool allowed_missing_file: If set to True, missing data file will result in a FileNotFoundError(),
+		:param bool allowed_missing_file: If set to False, missing data file will result in a DataFileMissingError,
 		otherwise it will treat it as an empty config file
 		:param bool save_on_missing: Perform save() on missing
 		:return: if there is any missing data entry
-		:raise: FileNotFoundError
+		:raise: DataFileMissingError
 		"""
 		if self.file_presents():
 			with open(self.__file_path, encoding='utf8') as file:
 				users_data = YAML().load(file)
 		else:
 			if not allowed_missing_file:
-				raise FileNotFoundError()
+				raise DataFileMissingError(str(self.__file_path))
 			users_data = CommentedMap()
 		fixed_result, has_missing = self.__fix(dict(self.__default_data.get()), users_data)
 		with self._data_operation_lock:
