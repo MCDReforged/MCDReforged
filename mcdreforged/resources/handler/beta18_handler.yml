@@ -1,0 +1,48 @@
+name: beta18_handler
+
+control:
+  stop:
+    command: stop
+  send_message:
+    template: 'tell {target} {message}'
+    message_format: plain
+  broadcast_message:
+    template: 'say {message}'
+    message_format: plain
+
+parsing:
+  pre_parse: []
+  line_transforms:
+    - builtin: strip_ansi_color
+    - builtin: strip_minecraft_color
+  line:
+    # 2020-12-27 02:56:35 [INFO] Loading properties
+    # 2020-12-27 02:57:42 [INFO] <Steve> ping
+    - '(\d+)-(\d+)-(\d+) (?P<hour>\d+):(?P<min>\d+):(?P<sec>\d+) \[(?P<logging>[^]]+)] (?P<content>.*)'
+  player_message:
+    # <Steve> ping
+    - '(\[Not Secure] )?<(?P<name>[^>]+)> (?P<message>.*)'
+  player_name: '[a-zA-Z0-9_]{3,16}'
+
+events:
+  player_joined:
+    # Steve [/127.0.0.1:2993] logged in with entity id 3827 at (-130.5, 69.0, 253.5)   (beta1.8)
+    # Alex[/127.0.0.1:5527] logged in with entity id 747 at (176.21, 65.0, 258.03)     (mc >= 1.0)
+    - '(?P<name>[^\[ ]+)( )?\[(.*?)] logged in with entity id \d+ at \(.+\)'
+  player_left:
+    # Steve lost connection: disconnect.quitting
+    - '(?P<name>[^ ]+) lost connection: .*'
+  server_version:
+    # Starting minecraft server version Beta 1.8.1
+    - 'Starting minecraft server version (?P<version>.+)'
+  server_address:
+    # Starting Minecraft server on *:25565
+    - 'Starting Minecraft server on (?P<ip>\S+):(?P<port>\d+)'
+  server_startup_done:
+    # Done (6368115300ns)! For help, type "help" or "?"   (beta1.8)
+    # Done (0.295s)! For help, type "help" or "?"         (mc >= 1.0)
+    - 'Done \([0-9.]+n?s\)! For help, type "help" or "\?"'
+  rcon_started: []
+  server_stopping:
+    # Stopping server
+    - 'Stopping server'

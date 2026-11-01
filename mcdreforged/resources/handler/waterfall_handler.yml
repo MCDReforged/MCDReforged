@@ -1,0 +1,44 @@
+name: waterfall_handler
+
+control:
+  stop:
+    command: end
+  send_message: null
+  broadcast_message:
+    template: 'alertraw {message}'
+    message_format: json
+
+parsing:
+  pre_parse:
+    # jline prompt at the beginning of the line
+    - sub: '^>*\r'
+      repl: ''
+      count: 1
+  line_transforms:
+    - builtin: strip_ansi_color
+  line:
+    # [02:18:30 INFO]: Enabled plugin cmd_list version git:cmd_list:1.15-SNAPSHOT:f1c32f8:1489 by SpigotMC
+    # [02:18:29 INFO] [ViaVersion]: Loading 1.12.2 -> 1.13 mappings...
+    - '\[(?P<hour>\d+):(?P<min>\d+):(?P<sec>\d+) (?P<logging>[^]]+)]( \[[^]]+])?: (?P<content>.*)'
+  player_message: []
+  player_name: '[a-zA-Z0-9_]{3,16}'
+
+events:
+  # [/127.0.0.1:14426] <-> InitialHandler has connected   (no player name)
+  player_joined: []
+  player_left:
+    # [/127.0.0.1:14426|Steve] -> UpstreamBridge has disconnected
+    - '\[/[^|]+\|(?P<name>[^]]+)] -> UpstreamBridge has disconnected'
+  server_version: []
+  server_address:
+    # Listening on /0.0.0.0:25577
+    - 'Listening on /(?P<ip>\S+):(?P<port>\d+)'
+  server_startup_done:
+    # Listening on /0.0.0.0:25577
+    - 'Listening on /(?P<ip>\S+):(?P<port>\d+)'
+  rcon_started:
+    # Listening on /0.0.0.0:25577
+    - 'Listening on /(?P<ip>\S+):(?P<port>\d+)'
+  server_stopping:
+    # Closing listener [id: 0x3acae0b0, L:/0:0:0:0:0:0:0:0:25565]
+    - 'Closing listener \[id: .+, L:[\d:/]+]'

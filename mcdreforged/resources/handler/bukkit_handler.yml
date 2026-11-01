@@ -1,0 +1,52 @@
+name: bukkit_handler
+
+control:
+  stop:
+    command: stop
+  send_message:
+    builtin: minecraft_tellraw
+  broadcast_message:
+    builtin: minecraft_tellraw
+    target: '@a'
+
+parsing:
+  pre_parse: []
+  line_transforms:
+    - builtin: strip_ansi_color
+    - builtin: strip_minecraft_color
+  line:
+    # [00:12:10 INFO]: foo bar
+    - '\[(?P<hour>\d+):(?P<min>\d+):(?P<sec>\d+) (?P<logging>[^]]+)]: (?P<content>.*)'
+  player_message:
+    # [Not Secure] <Alex> hello
+    # [world_nether]<Alex> world
+    - '(\[Not Secure] )?(\[[a-z0-9_:]+])?<(?P<name>[^>]+)> (?P<message>.*)'
+  player_name: '[a-zA-Z0-9_]{3,16}'
+
+events:
+  player_joined:
+    # Steve[/127.0.0.1:9864] logged in with entity id 131 at (187.2703, 146.79014, 404.84718)
+    # Steve[/[2001:db8:85a3::8a2e:370:7334]:9864] logged in with entity id 131 at (187.2703, 146.79014, 404.84718)
+    # Steve[local] logged in with entity id 131 at (187.2703, 146.79014, 404.84718)
+    # Steve[IP hidden] logged in with entity id 131 at (187.2703, 146.79014, 404.84718)
+    - '(?P<name>[^\[]+)\[(.*?)] logged in with entity id \d+ at \(.+\)'
+  player_left:
+    # Steve left the game
+    # System chat: Steve left the game   (mc >= 26.3 snapshot 3)
+    - '(System chat: )?(?P<name>[^ ]+) left the game'
+  server_version:
+    # Starting minecraft server version 1.21.4
+    - 'Starting minecraft server version (?P<version>.+)'
+  server_address:
+    # Starting Minecraft server on *:25565
+    - 'Starting Minecraft server on (?P<ip>\S+):(?P<port>\d+)'
+  server_startup_done:
+    # Done (3.500s)! For help, type "help"            (mc >= 1.13)
+    # Done (3.500s)! For help, type "help" or "?"     (mc < 1.13)
+    - 'Done \([0-9.]+s\)! For help, type "help"( or "\?")?'
+  rcon_started:
+    # RCON running on 0.0.0.0:25575
+    - 'RCON running on [\w.]+:\d+'
+  server_stopping:
+    # Stopping server
+    - 'Stopping server'

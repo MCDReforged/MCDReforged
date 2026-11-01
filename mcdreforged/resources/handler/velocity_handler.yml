@@ -1,0 +1,39 @@
+name: velocity_handler
+
+control:
+  stop:
+    command: shutdown
+  send_message: null
+  broadcast_message: null
+
+parsing:
+  pre_parse: []
+  line_transforms:
+    - builtin: strip_ansi_color
+  line:
+    # [00:16:35 INFO] [foo]: bar
+    # [00:16:33 WARN]: foo bar
+    - '\[(?P<hour>\d+):(?P<min>\d+):(?P<sec>\d+) (?P<logging>[^]]+)]( \[[^]]+])?: (?P<content>.*)'
+  player_message: []
+  player_name: '[a-zA-Z0-9_]{3,16}'
+
+events:
+  player_joined:
+    # [connected player] Steve (/127.0.0.1:12896) has connected
+    - '\[connected player] (?P<name>[^ ]+) \(/[^ ]+:\d+\) has connected'
+  player_left:
+    # [connected player] Steve (/127.0.0.1:12896) has disconnected
+    - '\[connected player] (?P<name>[^ ]+) \(/[^ ]+:\d+\) has disconnected'
+  server_version: []
+  server_address:
+    # Listening on /192.168.0.1:25577
+    # Listening on /[0:0:0:0:0:0:0:0%0]:25577
+    # Listening on /0:0:0:0:0:0:0:0%0:25577
+    - 'Listening on /(?P<ip>\S+):(?P<port>\d+)'
+  server_startup_done:
+    # Done (3.05s)!
+    - 'Done \([0-9.]+s\)!'
+  rcon_started: []
+  server_stopping:
+    # Shutting down the proxy...
+    - 'Shutting down the proxy\.\.\.'

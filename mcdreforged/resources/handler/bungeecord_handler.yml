@@ -1,0 +1,44 @@
+name: bungeecord_handler
+
+control:
+  stop:
+    command: end
+  send_message: null
+  broadcast_message:
+    template: 'alertraw {message}'
+    message_format: json
+
+parsing:
+  pre_parse:
+    # jline prompt at the beginning of the line
+    - sub: '^>*\r'
+      repl: ''
+      count: 1
+  line_transforms:
+    - builtin: strip_ansi_color
+  line:
+    # 09:00:02 [INFO] Listening on /0.0.0.0:25565
+    - '(?P<hour>\d+):(?P<min>\d+):(?P<sec>\d+) \[(?P<logging>[^]]+)] (?P<content>.*)'
+  player_message: []
+  player_name: '[a-zA-Z0-9_]{3,16}'
+
+events:
+  player_joined:
+    # [Steve,/127.0.0.1:3631] <-> InitialHandler has connected
+    - '\[(?P<name>[^,]+),/(.*?)] <-> InitialHandler has connected'
+  player_left:
+    # [Steve] -> UpstreamBridge has disconnected
+    - '\[(?P<name>[^]]+)] -> UpstreamBridge has disconnected'
+  server_version: []
+  server_address:
+    # Listening on /0.0.0.0:25577
+    - 'Listening on /(?P<ip>\S+):(?P<port>\d+)'
+  server_startup_done:
+    # Listening on /0.0.0.0:25577
+    - 'Listening on /(?P<ip>\S+):(?P<port>\d+)'
+  rcon_started:
+    # Listening on /0.0.0.0:25577
+    - 'Listening on /(?P<ip>\S+):(?P<port>\d+)'
+  server_stopping:
+    # Closing listener [id: 0x3acae0b0, L:/0:0:0:0:0:0:0:0:25565]
+    - 'Closing listener \[id: .+, L:[\d:/]+]'
