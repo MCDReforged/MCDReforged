@@ -8,13 +8,13 @@ from pydantic import TypeAdapter, ValidationError
 from ruamel.yaml import YAML, YAMLError
 from typing_extensions import assert_never
 
-from mcdreforged.handler.handler_spec import HandlerSpec
+from mcdreforged.handler.handler_spec import HandlerSpec, StopMethods
 from mcdreforged.handler.impl import *
 from mcdreforged.handler.plugin_provided_server_handler_holder import PluginProvidedServerHandlerHolder
 from mcdreforged.handler.server_handler import ServerHandler
 from mcdreforged.logging.debug_option import DebugOption
 from mcdreforged.mcdr_config import MCDReforgedConfig, CustomHandlerEntry, CustomHandlerExtendEntry, CustomHandlerDefineEntry, CustomHandlerFileEntry
-from mcdreforged.utils import class_utils, collection_utils, thread_utils
+from mcdreforged.utils import class_utils, collection_utils, thread_utils, os_utils
 
 if TYPE_CHECKING:
 	from mcdreforged.mcdr_server import MCDReforgedServer
@@ -108,6 +108,11 @@ class ServerHandlerManager:
 					raise ValueError('{}: handler with name {!r} is already registered'.format(location, spec.name))
 				add_handler(SpecServerHandler(spec))
 				self.mcdr_server.logger.mdebug('Loaded spec handler {} from {}'.format(spec.name, location), option=DebugOption.HANDLER)
+				if isinstance(stop := spec.control.stop, StopMethods.Signal):
+					try:
+						os_utils.resolve_signal(stop.signal)
+					except ValueError as e:
+						self.logger.warning('{}.control.stop.signal: {}, the server will be killed when stopping'.format(location, e))
 
 		self.handlers = handlers
 

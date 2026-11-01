@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Optional, Callable, Any, TYPE_CHECKING, List, Dict, Union
 
 from ruamel.yaml import YAMLError
+from typing_extensions import assert_never
 
 from mcdreforged.command.command_manager import CommandManager
 from mcdreforged.constants import core_constant
@@ -19,6 +20,7 @@ from mcdreforged.executor.task_executor_sync import SyncTaskExecutor
 from mcdreforged.executor.telemetry_reporter import TelemetryReporterScheduler
 from mcdreforged.executor.update_helper import UpdateHelper
 from mcdreforged.executor.watchdog import WatchDog
+from mcdreforged.handler.handler_spec import StopMethods
 from mcdreforged.handler.server_handler_manager import ServerHandlerManager
 from mcdreforged.info_reactor.info import Info
 from mcdreforged.info_reactor.info_filter import InfoFilterHolder
@@ -479,7 +481,7 @@ class MCDReforgedServer:
 		"""
 		Stop the server
 
-		:param forced: an optional bool. If it's False (default) MCDR will stop the server by sending the STOP_COMMAND from the
+		:param forced: an optional bool. If it's False (default) MCDR will stop the server with the stop method from the
 		current handler. If it's True MCDR will just kill the server process group
 		"""
 		with self.__stop_lock:
@@ -489,11 +491,19 @@ class MCDReforgedServer:
 			self.set_server_state(ServerState.STOPPING)
 			if not forced:
 				try:
-					stop_command = self.server_handler_manager.get_current_handler().get_stop_command()
-					self.logger.mdebug('Sending command {} to the server'.format(repr(stop_command)), option=DebugOption.PROCESS)
-					self.send(stop_command)
+					stop_method = self.server_handler_manager.get_current_handler().get_stop_method()
+					if isinstance(stop_method, StopMethods.Command):
+						self.logger.mdebug('Sending command {!r} to the server'.format(stop_method.command), option=DebugOption.PROCESS)
+						self.send(stop_method.command)
+					elif isinstance(stop_method, StopMethods.Signal):
+						sig = os_utils.resolve_signal(stop_method.signal)
+						process_tree = stop_method.scope == StopMethods.Signal.Scope.process_tree
+						self.logger.mdebug('Sending signal {} ({}) to the server, process_tree={}'.format(os_utils.get_signal_name(sig), sig, process_tree), option=DebugOption.PROCESS)
+						self.process_manager.send_signal(sig, process_tree=process_tree)
+					else:
+						assert_never(stop_method)
 				except Exception:
-					self.logger.error(self.__tr('stop.stop_fail'))
+					self.logger.exception(self.__tr('stop.stop_fail'))
 					forced = True
 			if forced:
 				self.__kill_server()

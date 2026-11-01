@@ -69,7 +69,7 @@ class StopMethods:
 			process_tree = 'process_tree'
 
 		model_config = ConfigDict(frozen=True, extra='forbid')
-		signal: Annotated[str, StringConstraints(pattern=r'^(SIG[A-Z0-9]+|CTRL_[A-Z]+_EVENT)$')] | Annotated[int, Field(ge=0)]
+		signal: Annotated[str, StringConstraints(pattern=r'^SIG[A-Z0-9]+$')] | Annotated[int, Field(ge=1)]
 		scope: Scope = Scope.process
 
 

@@ -253,10 +253,20 @@ class ServerProcessManager:
 			future.set_result(cp.proc.returncode)
 			return future
 
-	def send_signal(self, sig: int):
+	def send_signal(self, sig: int, *, process_tree: bool = False):
+		"""
+		:param sig: the signal number to send
+		:param process_tree: if True, send the signal to the process and all its descendants, children first;
+			otherwise only send the signal to the process
+		"""
 		if (cp := self.__current_process) is None:
 			raise ProcessNotRunning('process not running')
-		cp.proc.send_signal(sig)
+		if not process_tree:
+			psutil.Process(cp.proc.pid).send_signal(sig)
+			return
+		for proc in reversed(self.__collect_process_tree(cp.proc.pid)):
+			with contextlib.suppress(psutil.NoSuchProcess):
+				proc.send_signal(sig)
 
 	def is_alive(self) -> bool:
 		if cp := self.__current_process:
@@ -273,19 +283,25 @@ class ServerProcessManager:
 			return cp.proc.returncode
 		return None
 
+	@classmethod
+	def __collect_process_tree(cls, pid: int) -> List[psutil.Process]:
+		"""
+		:return: the process with the given pid, followed by all its descendants
+		"""
+		processes: List[psutil.Process] = []
+		with contextlib.suppress(psutil.NoSuchProcess):
+			root = psutil.Process(pid)
+			processes.append(root)
+			processes.extend(root.children(recursive=True))
+		return processes
+
 	def kill_process_tree(self, *, quiet: bool = False):
 		proc_pid = self.get_pid()
 		if proc_pid is None:
 			return
 
-		processes: List[psutil.Process] = []
-		with contextlib.suppress(psutil.NoSuchProcess):
-			root = psutil.Process(proc_pid)
-			processes.append(root)
-			processes.extend(root.children(recursive=True))
-
 		# child first, parent last
-		for proc in reversed(processes):
+		for proc in reversed(self.__collect_process_tree(proc_pid)):
 			with contextlib.suppress(psutil.NoSuchProcess):
 				proc_pid, proc_name = proc.pid, proc.name()
 				proc.kill()

@@ -5,7 +5,7 @@ from typing import Optional, Tuple, List, Iterable
 
 from typing_extensions import override, assert_never
 
-from mcdreforged.handler.handler_spec import HandlerSpec, TextTransform, TextTransforms, StopMethod, StopMethods, SendMessageMethod, SendMessageMethods, \
+from mcdreforged.handler.handler_spec import HandlerSpec, TextTransform, TextTransforms, StopMethod, SendMessageMethod, SendMessageMethods, \
 	BroadcastMessageMethod, BroadcastMessageMethods
 from mcdreforged.handler.impl import mc_version_utils
 from mcdreforged.handler.server_handler import ServerHandler
@@ -32,15 +32,9 @@ class SpecServerHandler(ServerHandler):
 	#   Server control
 	# ------------------
 
+	@override
 	def get_stop_method(self) -> StopMethod:
 		return self.spec.control.stop
-
-	@override
-	def get_stop_command(self) -> str:
-		stop = self.spec.control.stop
-		if not isinstance(stop, StopMethods.Command):
-			raise ValueError('handler {!r} does not stop the server with a command'.format(self.get_name()))
-		return stop.command
 
 	@classmethod
 	def __format_json_message(cls, message: MessageText, server_information: ServerInformation) -> str:

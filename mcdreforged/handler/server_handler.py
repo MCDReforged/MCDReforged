@@ -1,6 +1,9 @@
 from abc import ABC, abstractmethod
 from typing import Optional, Tuple
 
+from typing_extensions import deprecated
+
+from mcdreforged.handler.handler_spec import StopMethod, StopMethods
 from mcdreforged.info_reactor.info import Info
 from mcdreforged.info_reactor.server_information import ServerInformation
 from mcdreforged.utils.types.message import MessageText
@@ -28,6 +31,11 @@ class ServerHandler(ABC):
 				└── VelocityHandler
 	"""
 
+	def __new__(cls, *args, **kwargs):
+		if cls.get_stop_method is ServerHandler.get_stop_method and cls.get_stop_command is ServerHandler.get_stop_command:
+			raise TypeError("Can't instantiate handler class {} without an implementation for get_stop_method or get_stop_command".format(cls.__name__))
+		return super().__new__(cls)
+
 	# ---------------------
 	#   Basic Information
 	# ---------------------
@@ -45,12 +53,33 @@ class ServerHandler(ABC):
 	#   Server control
 	# ------------------
 
-	@abstractmethod
+	@deprecated('Use get_stop_method instead', category=None)
 	def get_stop_command(self) -> str:
 		"""
 		The command to stop the server
+
+		The default implementation derives the command from :meth:`get_stop_method`
+
+		.. deprecated:: v2.17.0
+			Use :meth:`get_stop_method` instead
 		"""
-		...
+		if type(self).get_stop_method is ServerHandler.get_stop_method:
+			raise NotImplementedError('handler {!r} implements neither get_stop_method nor get_stop_command'.format(self.get_name()))
+		stop = self.get_stop_method()
+		if not isinstance(stop, StopMethods.Command):
+			raise ValueError('handler {!r} does not stop the server with a command'.format(self.get_name()))
+		return stop.command
+
+	def get_stop_method(self) -> StopMethod:
+		"""
+		The method to stop the server
+
+		At least one of this method and :meth:`get_stop_command` must be implemented, or the handler class cannot be instantiated.
+		The default implementation wraps the result of :meth:`get_stop_command`
+		"""
+		if type(self).get_stop_command is ServerHandler.get_stop_command:
+			raise NotImplementedError('handler {!r} implements neither get_stop_method nor get_stop_command'.format(self.get_name()))
+		return StopMethods.Command(command=self.get_stop_command())
 
 	@abstractmethod
 	def get_send_message_command(self, target: str, message: MessageText, server_information: ServerInformation) -> Optional[str]:

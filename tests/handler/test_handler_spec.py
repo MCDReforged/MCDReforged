@@ -159,7 +159,6 @@ class StopMethodValidationTestCase(SpecTestCase):
 		for stop in [
 			{'command': 'stop'},
 			{'signal': 'SIGTERM'},
-			{'signal': 'CTRL_BREAK_EVENT'},
 			{'signal': 15},
 			{'signal': 'SIGINT', 'scope': 'process'},
 			{'signal': 'SIGINT', 'scope': 'process_tree'},
@@ -171,6 +170,8 @@ class StopMethodValidationTestCase(SpecTestCase):
 		for stop in [
 			{'command': 'stop', 'signal': 'SIGTERM'},
 			{'signal': 'TERM'},
+			{'signal': 'CTRL_BREAK_EVENT'},
+			{'signal': 0},
 			{'signal': -1},
 			{'signal': 'SIGTERM', 'scope': 'everything'},
 			{'command': 'stop', 'scope': 'process'},
