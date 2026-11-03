@@ -1154,7 +1154,7 @@ msgstr ""
 msgid ""
 "All custom info reactors will be registered to the reactor list to "
 "process information from the server"
-msgstr "所有自定义 info 响应器都将注册到反应堆列表中，以处理来自服务端的信息"
+msgstr "所有自定义 info 响应器都将注册到响应器列表中，以处理来自服务端的信息"
 
 #: ../configuration.rst:690
 msgid "Option type: ``Optional[List[str]]``"
