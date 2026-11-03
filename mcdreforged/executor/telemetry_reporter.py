@@ -32,7 +32,7 @@ class TelemetryReporterScheduler(BackgroundThreadExecutor):
 		self.__tr = mcdr_server.create_internal_translator('telemetry_reporter')
 		self.__was_enabled_on_start = False
 
-		mcdr_server.add_config_changed_callback(self.__on_mcdr_config_loaded)
+		mcdr_server.config_manager.add_config_changed_callback(self.__on_mcdr_config_loaded)
 
 	def __on_mcdr_config_loaded(self, _1: 'MCDReforgedConfig', _2: bool):
 		if self.__was_enabled_on_start and super().should_keep_looping() and not self.__telemetry_enabled:

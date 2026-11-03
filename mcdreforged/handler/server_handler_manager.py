@@ -46,7 +46,7 @@ class ServerHandlerManager:
 		# Automation for lazy
 		self.__handler_detector = HandlerDetector(self)
 
-		mcdr_server.add_config_changed_callback(self.__on_mcdr_config_loaded)
+		mcdr_server.config_manager.add_config_changed_callback(self.__on_mcdr_config_loaded)
 
 	def __on_mcdr_config_loaded(self, config: MCDReforgedConfig, log: bool):
 		self.register_handlers(config.custom_handlers)
@@ -150,7 +150,10 @@ class ServerHandlerManager:
 			raise ValueError('{}.{}.name: name should be set at the entry root'.format(location, body_key))
 		data = {**body, 'name': entry.name}
 		try:
-			return base.extend(data) if base is not None else HandlerSpec.model_validate(data)
+			if base is not None:
+				return base.extend(data)
+			else:
+				return HandlerSpec.model_validate(data)
 		except ValidationError as e:
 			raise ValueError(cls.__format_validation_error(location, body_key, e))
 

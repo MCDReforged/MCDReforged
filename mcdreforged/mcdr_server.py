@@ -65,7 +65,6 @@ class _ParsedServerOutput:
 	is_stdout: bool
 
 
-_ConfigLoadedCallback = Callable[[MCDReforgedConfig, bool], Any]
 _UNSET: Any = object()
 
 
@@ -79,10 +78,8 @@ class MCDReforgedServer:
 		self.__starting_server_lock = threading.Lock()  # to prevent multiple start_server() call
 		self.__no_server_start = args.no_server_start
 		self.__stop_lock = threading.Lock()  # to prevent multiple stop() call
-		self.__config_change_lock = threading.Lock()
-		self.__config_changed_callbacks: List[_ConfigLoadedCallback] = []
 
-		# will be assigned in on_config_changed()
+		# will be assigned in __on_mcdr_config_loaded()
 		self.__encoding_method: Optional[str] = None
 		self.__decoding_method: List[str] = []
 
@@ -90,6 +87,7 @@ class MCDReforgedServer:
 		self.logger: MCDReforgedLogger = MCDReforgedLogger.get()
 		self.process_manager: ServerProcessManager = ServerProcessManager(self)
 		self.config_manager: MCDReforgedConfigManager = MCDReforgedConfigManager(self.logger, args.config_file_path)
+		self.config_manager.add_config_changed_callback(self.__on_mcdr_config_loaded)
 		self.permission_manager: PermissionManager = PermissionManager(self, args.permission_file_path)
 		self.basic_server_interface: ServerInterface = ServerInterface(self)
 		self.task_executor: SyncTaskExecutor = SyncTaskExecutor(self)
@@ -272,53 +270,41 @@ class MCDReforgedServer:
 	# --------------------------
 
 	def load_config(self, *, allowed_missing_file: bool = True, log: bool = True):
-		has_missing = self.config_manager.load(allowed_missing_file)
-		# load the language before warning missing config to make sure translation is available
-		self.on_config_changed(log=log)
+		has_missing = self.config_manager.load(allowed_missing_file, log=log)
 		if log and has_missing:
 			for line in str(self.translate('mcdreforged.config.missing_config')).splitlines():
 				self.logger.warning(line)
 
-	def on_config_changed(self, *, log: bool):
-		with self.__config_change_lock:
-			config = self.config
+	def __on_mcdr_config_loaded(self, config: MCDReforgedConfig, log: bool):
+		# update log settings first
+		MCColorFormatControl.console_color_disabled = config.disable_console_color
+		self.logger.set_debug_options(config.debug)
 
-			# update log settings first
-			MCColorFormatControl.console_color_disabled = config.disable_console_color
-			self.logger.set_debug_options(config.debug)
+		# set language second, so mcdr can log with the expected language
+		self.translation_manager.set_language(config.language)
+		if log:
+			self.logger.info(self.__tr('on_config_changed.language_set', config.language))
 
-			# set language second, so mcdr can log with the expected language
-			self.translation_manager.set_language(config.language)
-			if log:
-				self.logger.info(self.__tr('on_config_changed.language_set', config.language))
+		if log and config.is_debug_on():
+			self.logger.info(self.__tr('on_config_changed.debug_mode_on'))
 
-			if log and config.is_debug_on():
-				self.logger.info(self.__tr('on_config_changed.debug_mode_on'))
+		def get_system_encoding() -> str:
+			if hasattr(locale, 'getencoding'):
+				return locale.getencoding()  # introduced in python 3.11, always returns system encoding (ignores Python UTF-8 mode)
+			return locale.getpreferredencoding()
 
-			def get_system_encoding() -> str:
-				if hasattr(locale, 'getencoding'):
-					return locale.getencoding()  # introduced in python 3.11, always returns system encoding (ignores Python UTF-8 mode)
-				return locale.getpreferredencoding()
+		# applying other mcdr-scope stuffs
+		self.__encoding_method = config.encoding or get_system_encoding()
+		if not isinstance(config.decoding, list):
+			self.__decoding_method = [config.decoding or get_system_encoding()]
+		else:
+			self.__decoding_method = config.decoding.copy()
+		self.__decoding_method = collection_utils.unique_list(self.__decoding_method)
+		if log:
+			self.logger.info(self.__tr('on_config_changed.encoding_decoding_set', self.__encoding_method, ','.join(self.__decoding_method)))
 
-			# applying other mcdr-scope stuffs
-			self.__encoding_method = config.encoding or get_system_encoding()
-			if not isinstance(config.decoding, list):
-				self.__decoding_method = [config.decoding or get_system_encoding()]
-			else:
-				self.__decoding_method = config.decoding.copy()
-			self.__decoding_method = collection_utils.unique_list(self.__decoding_method)
-			if log:
-				self.logger.info(self.__tr('on_config_changed.encoding_decoding_set', self.__encoding_method, ','.join(self.__decoding_method)))
-
-			request_utils.set_proxies(config.http_proxy, config.https_proxy)
-			self.connect_rcon()
-
-			# trigger general config-changed callbacks
-			for callback in self.__config_changed_callbacks:
-				callback(config, log)
-
-	def add_config_changed_callback(self, callback: _ConfigLoadedCallback):
-		self.__config_changed_callbacks.append(callback)
+		request_utils.set_proxies(config.http_proxy, config.https_proxy)
+		self.connect_rcon()
 
 	def load_plugins(self):
 		future = self.plugin_manager.refresh_all_plugins()

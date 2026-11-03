@@ -920,7 +920,6 @@ class ServerInterface:
 		"""
 		self._mcdr_server.config_manager.set_values(changes)
 		self._mcdr_server.config_manager.save()
-		self._mcdr_server.on_config_changed(log=False)
 
 	def reload_config_file(self, *, log: bool = False):
 		"""

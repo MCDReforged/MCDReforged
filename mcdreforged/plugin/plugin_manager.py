@@ -60,7 +60,7 @@ class PluginManager:
 		self.__mani_thread: Optional[threading.Thread] = None
 		self.__mani_queue: queue.Queue[Tuple[Callable[[], PluginOperationResult], Future[PluginOperationResult]]] = queue.Queue()
 
-		mcdr_server.add_config_changed_callback(self.__on_mcdr_config_loaded)
+		mcdr_server.config_manager.add_config_changed_callback(self.__on_mcdr_config_loaded)
 
 	def __on_mcdr_config_loaded(self, config: MCDReforgedConfig, log: bool):
 		self.set_plugin_directories(config.plugin_directories)

@@ -97,7 +97,7 @@ class PluginCommandPimExtension(SubCommand):
 		self.__install_handler = PimInstallCommandHandler(self)
 		self.__freeze_handler = PimFreezeCommandHandler(self)
 
-		self.mcdr_server.add_config_changed_callback(self.__on_mcdr_config_loaded)
+		self.mcdr_server.config_manager.add_config_changed_callback(self.__on_mcdr_config_loaded)
 
 	def __on_mcdr_config_loaded(self, config: MCDReforgedConfig, _log: bool):
 		# Notes: the builtin mcdreforged plugin is loaded after the initial config load,

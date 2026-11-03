@@ -29,7 +29,7 @@ class InfoReactorManager:
 		self.__tr = mcdr_server.create_internal_translator('info_reactor_manager').tr
 		self.__info_filter_holders: List[InfoFilterHolder] = []
 
-		mcdr_server.add_config_changed_callback(self.__on_mcdr_config_loaded)
+		mcdr_server.config_manager.add_config_changed_callback(self.__on_mcdr_config_loaded)
 
 	def __on_mcdr_config_loaded(self, config: MCDReforgedConfig, _log: bool):
 		self.register_reactors(config.custom_info_reactors)
