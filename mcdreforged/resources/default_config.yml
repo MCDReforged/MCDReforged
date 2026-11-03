@@ -160,7 +160,11 @@ disable_console_thread: false
 disable_console_color: false
 
 
-# A list of customizing info reactor classes to handle the info instance. The classes need to be subclasses of AbstractServerHandler
+# A list of custom server handlers. Each entry can be:
+# - A Python class path of a ServerHandler subclass
+# - {name, extends, overrides}: extend a builtin handler
+# - {name, spec}: define a handler with a complete spec
+# - {file}: load an extends or spec entry from a YAML file
 custom_handlers:
 
 

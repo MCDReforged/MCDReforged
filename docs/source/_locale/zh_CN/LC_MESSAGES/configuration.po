@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-28 21:22+0800\n"
+"POT-Creation-Date: 2026-11-03 17:42+0800\n"
 "PO-Revision-Date: 2021-01-23 13:20+0800\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -12,7 +12,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.15.0\n"
+"Generated-By: Babel 2.17.0\n"
 
 #: ../configuration.rst:3
 msgid "Configuration"
@@ -830,26 +830,32 @@ msgid "Available variables:"
 msgstr "可用的变量"
 
 #: ../configuration.rst:476
+#, python-brace-format
 msgid "``{url}``: The original GitHub asset download url"
 msgstr "``{url}``：原始的 GitHub asset 下载链接"
 
 #: ../configuration.rst:477
+#, python-brace-format
 msgid "``{repos_owner}``: The name of the owner of the GitHub repository"
 msgstr "``{repos_owner}``：插件的 GitHub 仓库的所有者名"
 
 #: ../configuration.rst:478
+#, python-brace-format
 msgid "``{repos_name}``: The name of the GitHub repository"
 msgstr "``{repos_owner}``：插件的 GitHub 仓库的仓库名"
 
 #: ../configuration.rst:479
+#, python-brace-format
 msgid "``{tag}``: Name of the git tag associated with the release"
 msgstr "``{tag}``：与该 release 关联的 git tag 的名字"
 
 #: ../configuration.rst:480
+#, python-brace-format
 msgid "``{asset_name}``: Name of the asset file, i.e. name of the plugin file"
 msgstr "``{asset_name}``：asset 的名字，即要被下载的插件文件的文件名"
 
 #: ../configuration.rst:481
+#, python-brace-format
 msgid "``{asset_id}``: The GitHub asset ID"
 msgstr "``{asset_id}``：GitHub asset ID"
 
@@ -1016,10 +1022,10 @@ msgstr "custom_handlers"
 msgid ""
 "A list of custom :doc:`/customize/handler` classes. The classed need to "
 "be subclasses of "
-":class:`~mcdreforged.handler.abstract_server_handler.ServerHandler`"
+":class:`~mcdreforged.handler.server_handler.ServerHandler`"
 msgstr ""
 "自定义 :doc:`/customize/handler` 类所组成的列表。这些类应当是 "
-":class:`~mcdreforged.handler.abstract_server_handler.ServerHandler` 的子类"
+":class:`~mcdreforged.handler.server_handler.ServerHandler` 的子类"
 
 #: ../configuration.rst:611
 msgid ""
@@ -1030,11 +1036,10 @@ msgstr "这样你就可以在 :ref:`configuration:handler` 选项中通过处理
 #: ../configuration.rst:613
 msgid ""
 "The name of a handler is defined in the "
-":meth:`~mcdreforged.handler.abstract_server_handler.ServerHandler.get_name`"
-" method"
+":meth:`~mcdreforged.handler.server_handler.ServerHandler.get_name` method"
 msgstr ""
 "处理器名称通过 "
-":meth:`~mcdreforged.handler.abstract_server_handler.ServerHandler.get_name`"
+":meth:`~mcdreforged.handler.server_handler.ServerHandler.get_name`"
 " 方法定义"
 
 #: ../configuration.rst:616 ../configuration.rst:641

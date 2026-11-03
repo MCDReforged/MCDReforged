@@ -606,11 +606,11 @@ When set to true, MCDR will removed all console font formatter codes in before a
 custom_handlers
 ^^^^^^^^^^^^^^^
 
-A list of custom :doc:`/customize/handler` classes. The classed need to be subclasses of :class:`~mcdreforged.handler.abstract_server_handler.ServerHandler`
+A list of custom :doc:`/customize/handler` classes. The classed need to be subclasses of :class:`~mcdreforged.handler.server_handler.ServerHandler`
 
 Then you can use the name of your handler in the :ref:`configuration:handler` option above to use your handler
 
-The name of a handler is defined in the :meth:`~mcdreforged.handler.abstract_server_handler.ServerHandler.get_name` method
+The name of a handler is defined in the :meth:`~mcdreforged.handler.server_handler.ServerHandler.get_name` method
 
 
 * Option type: ``Optional[List[str]]``

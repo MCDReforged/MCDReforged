@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-26 20:01+0800\n"
+"POT-Creation-Date: 2026-11-03 17:35+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.15.0\n"
+"Generated-By: Babel 2.17.0\n"
 
 #: ../code_references/server_handler.rst:3
 msgid "Server Handler"
@@ -42,6 +42,29 @@ msgstr "这个名字作为此服务端处理器的标识符，将在 MCDR 的配
 #: mcdreforged.handler.server_handler.ServerHandler.get_stop_command:1 of
 msgid "The command to stop the server"
 msgstr "用于关闭服务端的命令"
+
+#: mcdreforged.handler.server_handler.ServerHandler.get_stop_command:3 of
+msgid ""
+"The default implementation derives the command from "
+":meth:`get_stop_method`"
+msgstr "默认实现根据 :meth:`get_stop_method` 的返回值获取停服命令"
+
+#: mcdreforged.handler.server_handler.ServerHandler.get_stop_command:5 of
+msgid "Use :meth:`get_stop_method` instead"
+msgstr "请改用 :meth:`get_stop_method`"
+
+#: mcdreforged.handler.server_handler.ServerHandler.get_stop_method:1 of
+msgid "The method to stop the server"
+msgstr "用于关闭服务端的方式"
+
+#: mcdreforged.handler.server_handler.ServerHandler.get_stop_method:3 of
+msgid ""
+"At least one of this method and :meth:`get_stop_command` must be "
+"implemented, or the handler class cannot be instantiated. The default "
+"implementation wraps the result of :meth:`get_stop_command`"
+msgstr ""
+"必须至少实现本方法或 :meth:`get_stop_command` 之一，否则无法实例化处理器类。"
+"默认实现将 :meth:`get_stop_command` 的返回值封装为停服方式"
 
 #: mcdreforged.handler.server_handler.ServerHandler.get_send_message_command:1
 #: of
@@ -216,129 +239,6 @@ msgstr "需要校验的玩家名"
 msgid "True if the name is a valid player name, otherwise False"
 msgstr "若玩家名合法，则返回 True，否则返回 False"
 
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler:1 of
-msgid ""
-"The abstract base class for server handler, with some common "
-"implementations"
-msgstr "服务端处理器的抽象基类，带有一些常见的功能实现"
-
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler._get_server_stdout_raw_result:1
-#: of
-msgid ""
-"This method does a raw parsing and returns an almost un-parsed "
-":class:`~mcdreforged.info_reactor.info.Info` object"
-msgstr ""
-"此方法会进行一次未处理的“解析”，并返回一个几乎未解析的 :class:`~mcdreforged.info_reactor.info.Info`"
-" 对象"
-
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler._get_server_stdout_raw_result:3
-#: of
-msgid ""
-"Use as the first step of the parsing process, or as the parsing result if"
-" you give up parsing this text"
-msgstr "将其作为解析流程的第一步，或者你也可以直接把它的返回值作为最终解析结果，如果你放弃解析这个文本"
-
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.get_content_parsing_formatter:1
-#: of
-msgid ""
-"Return a :external:class:`re.Pattern` or an Iterable of "
-":external:class:`re.Pattern` iterable that is used in method "
-":meth:`_content_parse` for parsing"
-msgstr ""
-"返回一个将在方法 :meth:`_content_parse` 中作解析用途的一个 :external:class:`re.Pattern` 或 "
-":external:class:`re.Pattern` 的 ``Iterable``"
-
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.get_content_parsing_formatter:4
-#: mcdreforged.handler.impl.abstract_minecraft_handler.AbstractMinecraftHandler.get_player_message_parsing_formatter:3
-#: of
-msgid ""
-"These regex patterns are supposed to contain at least the following "
-"fields:"
-msgstr "这些正则表达式应该含有至少以下的属性："
-
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.get_content_parsing_formatter:6
-#: of
-msgid "``hour``"
-msgstr "``hour``"
-
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.get_content_parsing_formatter:7
-#: of
-msgid "``min``"
-msgstr "``min``"
-
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.get_content_parsing_formatter:8
-#: of
-msgid "``sec``"
-msgstr "``sec``"
-
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.get_content_parsing_formatter:9
-#: of
-msgid "``logging``"
-msgstr "``logging``"
-
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.get_content_parsing_formatter:10
-#: of
-msgid "``content``"
-msgstr "``content``"
-
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.get_content_parsing_formatter:12
-#: mcdreforged.handler.impl.abstract_minecraft_handler.AbstractMinecraftHandler.get_player_message_parsing_formatter:8
-#: of
-msgid ""
-"The return value of the first succeeded "
-":external:meth:`re.Pattern.fullmatch` call will be used for filling "
-"fields of the :class:`~mcdreforged.info_reactor.info.Info` object"
-msgstr ""
-"首个成功的 :external:meth:`re.Pattern.fullmatch` 调用的返回值会被用于填充 "
-":class:`~mcdreforged.info_reactor.info.Info` 对象的数据"
-
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler.get_content_parsing_formatter:15
-#: of
-msgid "The return value should be a constant value"
-msgstr "返回值应当为一个固定值"
-
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler._content_parse:1
-#: of
-msgid ""
-"A commonly used method to parse several generic elements from an un-"
-"parsed :class:`~mcdreforged.info_reactor.info.Info` object"
-msgstr "一个常用的方法，用于从一个未解析的 :class:`~mcdreforged.info_reactor.info.Info` 对象中解析一些基础元素"
-
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler._content_parse:3
-#: of
-msgid "Elements expected to be parsed includes:"
-msgstr "期望解析出的元素包括："
-
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler._content_parse:5
-#: of
-msgid ":attr:`info.hour <mcdreforged.info_reactor.info.Info.hour>`"
-msgstr ":attr:`info.hour <mcdreforged.info_reactor.info.Info.hour>`"
-
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler._content_parse:6
-#: of
-msgid ":attr:`info.min <mcdreforged.info_reactor.info.Info.min>`"
-msgstr ":attr:`info.min <mcdreforged.info_reactor.info.Info.min>`"
-
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler._content_parse:7
-#: of
-msgid ":attr:`info.sec <mcdreforged.info_reactor.info.Info.sec>`"
-msgstr ":attr:`info.sec <mcdreforged.info_reactor.info.Info.sec>`"
-
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler._content_parse:8
-#: of
-msgid ":attr:`info.logging <mcdreforged.info_reactor.info.Info.logging>`"
-msgstr ":attr:`info.logging <mcdreforged.info_reactor.info.Info.logging>`"
-
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler._content_parse:9
-#: of
-msgid ":attr:`info.content <mcdreforged.info_reactor.info.Info.content>`"
-msgstr ":attr:`info.content <mcdreforged.info_reactor.info.Info.content>`"
-
-#: mcdreforged.handler.abstract_server_handler.AbstractServerHandler._content_parse:11
-#: of
-msgid "The to-be-processed :class:`~mcdreforged.info_reactor.info.Info` object"
-msgstr "一个将被处理的 :class:`~mcdreforged.info_reactor.info.Info` 对象"
-
 #: mcdreforged.handler.impl.basic_handler.BasicHandler:1 of
 msgid "The basic plain handler, providing the minimum parsed information"
 msgstr "基础的朴素的处理器，提供最小的解析信息"
@@ -349,62 +249,32 @@ msgid ""
 "every other dedicated handler failed"
 msgstr "在解析服务端输出的过程中，当所有其他的专用服务端处理器失败时，它将被作为后备处理器使用"
 
-#: mcdreforged.handler.impl.abstract_minecraft_handler.AbstractMinecraftHandler:1
-#: of
-msgid "An abstract handler for Minecraft Java Edition servers"
-msgstr "一个抽象类，为 Minecraft Java 版服务端设计的服务端处理器"
-
-#: mcdreforged.handler.impl.abstract_minecraft_handler.AbstractMinecraftHandler.get_player_message_parsing_formatter:1
-#: of
+#: mcdreforged.handler.impl.spec_server_handler.SpecServerHandler:1 of
 msgid ""
-"Return a list of :external:class:`re.Pattern` that is used in method "
-":meth:`parse_server_stdout` for parsing player message"
+"A server handler driven by a "
+":class:`~mcdreforged.handler.handler_spec.HandlerSpec`"
 msgstr ""
-"返回一个将在方法 :meth:`parse_server_stdout` 中作解析用途的 :external:class:`re.Pattern`"
-" 列表"
+"由 :class:`~mcdreforged.handler.handler_spec.HandlerSpec` 驱动的服务端处理器"
 
-#: mcdreforged.handler.impl.abstract_minecraft_handler.AbstractMinecraftHandler.get_player_message_parsing_formatter:5
-#: of
-msgid "``name``, the name of the player"
-msgstr "``name``，玩家名"
+#: mcdreforged.handler.impl.builtin_handlers.BuiltinSpecServerHandler:1 of
+msgid "A spec server handler whose spec is loaded from a resource file of MCDR"
+msgstr "从 MCDR 资源文件加载 spec 的服务端处理器"
 
-#: mcdreforged.handler.impl.abstract_minecraft_handler.AbstractMinecraftHandler.get_player_message_parsing_formatter:6
-#: of
-msgid "``message``, what the player said"
-msgstr "``message``，玩家的聊天内容"
-
-#: mcdreforged.handler.impl.abstract_minecraft_handler.AbstractMinecraftHandler.get_player_message_parsing_formatter:11
-#: of
-msgid ""
-"If none of these formatter strings can be parsed successfully, then this "
-"info is considered as a non-player message, i.e. has :attr:`info.player "
-"<mcdreforged.info_reactor.info.Info.hour>` equaling None"
-msgstr ""
-"如果这些格式字符串都无法被成功地解析，那么这条信息将被视作一个非玩家信息，即 :attr:`info.player "
-"<mcdreforged.info_reactor.info.Info.hour>` 将为 None"
-
-#: mcdreforged.handler.impl.abstract_minecraft_handler.AbstractMinecraftHandler.format_message:1
-#: of
-msgid ""
-"A utility method to convert a message into a valid argument used in "
-"message sending command"
-msgstr "一个工具方法，将一条消息转换为一个合法的消息参数，这个消息参数将被用在服务端的消息发送命令中"
-
-#: mcdreforged.handler.impl.vanilla_handler.VanillaHandler:1 of
+#: mcdreforged.handler.impl.builtin_handlers.VanillaHandler:1 of
 msgid "A handler for vanilla Minecraft servers"
 msgstr "为原版 Minecraft 服务端设计的服务端处理器"
 
-#: mcdreforged.handler.impl.beta18_handler.Beta18Handler:1 of
+#: mcdreforged.handler.impl.builtin_handlers.Beta18Handler:1 of
 msgid "Yes, a handler for Minecraft beta 1.8"
 msgstr "你没看错，一个为 beta 1.8 版本的 Minecraft 服务端设计的服务端处理器"
 
-#: mcdreforged.handler.impl.forge_handler.ForgeHandler:1 of
+#: mcdreforged.handler.impl.builtin_handlers.ForgeHandler:1 of
 msgid ""
 "A handler for `Forge <https://files.minecraftforge.net>`__ Minecraft "
 "servers"
 msgstr "为 `Forge <https://files.minecraftforge.net>`__ Minecraft 服务端设计的服务端处理器"
 
-#: mcdreforged.handler.impl.bukkit_handler.BukkitHandler:1 of
+#: mcdreforged.handler.impl.builtin_handlers.BukkitHandler:1 of
 msgid ""
 "A handler for `bukkit <https://www.spigotmc.org/wiki/buildtools>`__ and "
 "bukkit-like (e.g. `Paper <https://github.com/PaperMC/Paper>`__) Minecraft"
@@ -413,7 +283,7 @@ msgstr ""
 "为 `bukkit <https://www.spigotmc.org/wiki/buildtools>`__ 和类 bukkit (如 "
 "`Paper <https://github.com/PaperMC/Paper>`__) Minecraft 服务端设计的服务端处理器"
 
-#: mcdreforged.handler.impl.bukkit14_handler.Bukkit14Handler:1 of
+#: mcdreforged.handler.impl.builtin_handlers.Bukkit14Handler:1 of
 msgid ""
 "A handler for `bukkit and spigot "
 "<https://www.spigotmc.org/wiki/buildtools>`__ Minecraft servers in 1.14+"
@@ -421,7 +291,7 @@ msgstr ""
 "为 `bukkit 和 spigot <https://www.spigotmc.org/wiki/buildtools>`__ 的 1.14+ "
 "Minecraft 服务端设计的服务端处理器"
 
-#: mcdreforged.handler.impl.cat_server_handler.CatServerHandler:1 of
+#: mcdreforged.handler.impl.builtin_handlers.CatServerHandler:1 of
 msgid ""
 "A handler for `CatServer <https://github.com/Luohuayu/CatServer>`__ "
 "Minecraft servers"
@@ -429,39 +299,20 @@ msgstr ""
 "为 `CatServer <https://github.com/Luohuayu/CatServer>`__ Minecraft "
 "服务端设计的服务端处理器"
 
-#: mcdreforged.handler.impl.cat_server_handler.CatServerHandler:3 of
-msgid ""
-"CatServer uses vanilla logging format but spigot like player joined "
-"message"
-msgstr "CatServer 使用原版的日志格式，但是玩家加入信息的格式类似于 spigot"
-
-#: mcdreforged.handler.impl.cat_server_handler.CatServerHandler:5 of
-msgid "And has color code around the player left message"
-msgstr "并且玩家离开消息拥有一些颜色代码"
-
-#: mcdreforged.handler.impl.arclight_handler.ArclightHandler:1 of
+#: mcdreforged.handler.impl.builtin_handlers.ArclightHandler:1 of
 msgid "A handler for `Arclight <https://github.com/IzzelAliz/Arclight>`__ servers"
 msgstr "为 `Arclight <https://github.com/IzzelAliz/Arclight>`__ 服务端设计的服务端处理器"
 
-#: mcdreforged.handler.impl.bungeecord_handler.BungeecordHandler:1 of
+#: mcdreforged.handler.impl.builtin_handlers.BungeecordHandler:1 of
 msgid ""
 "A handler for `Bungeecord <https://github.com/SpigotMC/BungeeCord>`__ "
 "servers"
 msgstr "为 `Bungeecord <https://github.com/SpigotMC/BungeeCord>`__ 服务端设计的服务端处理器"
 
-#: mcdreforged.handler.impl.waterfall_handler.WaterfallHandler:1 of
+#: mcdreforged.handler.impl.builtin_handlers.WaterfallHandler:1 of
 msgid "A handler for `Waterfall <https://github.com/PaperMC/Waterfall>`__ servers"
 msgstr "为 `Waterfall <https://github.com/PaperMC/Waterfall>`__ 服务端设计的服务端处理器"
 
-#: mcdreforged.handler.impl.waterfall_handler.WaterfallHandler:3 of
-msgid ""
-"The logging format of waterfall server is paper like (waterfall is "
-"PaperMC's bungeecord fork shmm)"
-msgstr ""
-"waterfall 服务端的日志格式为 paper 的格式（嘘~ waterfall 是 PaperMC 维护的 bungeecord 的 "
-"fork）"
-
-#: mcdreforged.handler.impl.velocity_handler.VelocityHandler:1 of
+#: mcdreforged.handler.impl.builtin_handlers.VelocityHandler:1 of
 msgid "A handler for `Velocity <https://velocitypowered.com>`__ servers"
 msgstr "为 `Velocity <https://velocitypowered.com>`__ 服务端设计的服务端处理器"
-
