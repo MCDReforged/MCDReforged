@@ -13,7 +13,7 @@ from mcdreforged.handler.impl import *
 from mcdreforged.handler.plugin_provided_server_handler_holder import PluginProvidedServerHandlerHolder
 from mcdreforged.handler.server_handler import ServerHandler
 from mcdreforged.logging.debug_option import DebugOption
-from mcdreforged.mcdr_config import MCDReforgedConfig, CustomHandlerEntry, CustomHandlerExtendEntry, CustomHandlerDefineEntry, CustomHandlerFileEntry
+from mcdreforged.config.mcdr_config import MCDReforgedConfig, CustomHandlerEntry, CustomHandlerExtendEntry, CustomHandlerDefineEntry, CustomHandlerFileEntry
 from mcdreforged.utils import class_utils, collection_utils, thread_utils, os_utils
 
 if TYPE_CHECKING:

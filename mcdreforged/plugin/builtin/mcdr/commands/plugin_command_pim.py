@@ -14,7 +14,7 @@ from mcdreforged.command.builder.nodes.arguments import Text, QuotableText
 from mcdreforged.command.builder.nodes.basic import Literal
 from mcdreforged.command.builder.nodes.special import CountingLiteral
 from mcdreforged.command.command_source import CommandSource
-from mcdreforged.mcdr_config import MCDReforgedConfig
+from mcdreforged.config.mcdr_config import MCDReforgedConfig
 from mcdreforged.plugin.builtin.mcdr.commands.pim_internal import pim_utils
 from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.exceptions import OuterReturn
 from mcdreforged.plugin.builtin.mcdr.commands.pim_internal.handler_browse import PimBrowseCommandHandler

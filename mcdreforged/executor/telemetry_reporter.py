@@ -19,7 +19,7 @@ from mcdreforged.logging.debug_option import DebugOption
 from mcdreforged.utils import request_utils, math_utils
 
 if TYPE_CHECKING:
-	from mcdreforged.mcdr_config import MCDReforgedConfig
+	from mcdreforged.config.mcdr_config import MCDReforgedConfig
 	from mcdreforged.mcdr_server import MCDReforgedServer
 
 

@@ -13,7 +13,7 @@ from mcdreforged.info_reactor.info import Info, InfoActionFlag
 from mcdreforged.info_reactor.info_filter import InfoFilterHolder
 from mcdreforged.logging.debug_option import DebugOption
 from mcdreforged.logging.logger import ServerOutputLogger
-from mcdreforged.mcdr_config import MCDReforgedConfig
+from mcdreforged.config.mcdr_config import MCDReforgedConfig
 from mcdreforged.utils import class_utils
 
 if TYPE_CHECKING:

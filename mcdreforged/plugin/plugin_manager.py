@@ -15,7 +15,7 @@ from typing import Callable, Dict, Optional, Any, Tuple, List, TYPE_CHECKING, Se
 
 from mcdreforged.constants import plugin_constant
 from mcdreforged.logging.debug_option import DebugOption
-from mcdreforged.mcdr_config import MCDReforgedConfig
+from mcdreforged.config.mcdr_config import MCDReforgedConfig
 from mcdreforged.plugin import plugin_factory
 from mcdreforged.plugin.builtin.mcdr.mcdreforged_plugin import MCDReforgedPlugin
 from mcdreforged.plugin.builtin.python_plugin import PythonPlugin
