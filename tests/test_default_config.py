@@ -2,7 +2,8 @@ import unittest
 
 from ruamel.yaml import YAML
 
-from mcdreforged.config.mcdr_config import MCDReforgedConfigManager, MCDReforgedConfig
+from mcdreforged.config.mcdr_config import MCDReforgedConfig
+from mcdreforged.config.mcdr_config_manager import MCDReforgedConfigManager
 from mcdreforged.utils import resources_utils
 
 DEFAULT_CONFIG_RESOURCE_PATH = MCDReforgedConfigManager.DEFAULT_CONFIG_RESOURCE_PATH

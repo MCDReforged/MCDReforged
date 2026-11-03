@@ -29,7 +29,8 @@ from mcdreforged.info_reactor.server_information import ServerInformation
 from mcdreforged.logging.debug_option import DebugOption
 from mcdreforged.logging.formatter import MCColorFormatControl
 from mcdreforged.logging.logger import MCDReforgedLogger
-from mcdreforged.config.mcdr_config import MCDReforgedConfigManager, MCDReforgedConfig
+from mcdreforged.config.mcdr_config import MCDReforgedConfig
+from mcdreforged.config.mcdr_config_manager import MCDReforgedConfigManager
 from mcdreforged.mcdr_server_args import MCDReforgedServerArgs
 from mcdreforged.mcdr_state import ServerState, MCDReforgedState, MCDReforgedFlag
 from mcdreforged.minecraft.rcon.rcon_manager import RconManager

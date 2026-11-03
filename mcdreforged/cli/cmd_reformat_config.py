@@ -3,7 +3,7 @@ from typing import Optional
 
 from ruamel.yaml import YAML
 
-from mcdreforged.config.mcdr_config import MCDReforgedConfigManager
+from mcdreforged.config.mcdr_config_manager import MCDReforgedConfigManager
 from mcdreforged.utils import resources_utils
 from mcdreforged.utils.yaml_data_storage import YamlDataStorage
 
