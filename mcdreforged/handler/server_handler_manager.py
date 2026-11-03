@@ -14,6 +14,7 @@ from mcdreforged.handler.plugin_provided_server_handler_holder import PluginProv
 from mcdreforged.handler.server_handler import ServerHandler
 from mcdreforged.logging.debug_option import DebugOption
 from mcdreforged.config.mcdr_config import MCDReforgedConfig, CustomHandlerEntry, CustomHandlerExtendEntry, CustomHandlerDefineEntry, CustomHandlerFileEntry
+from mcdreforged.config.mcdr_config_consumer import MCDReforgedConfigConsumer
 from mcdreforged.utils import class_utils, collection_utils, thread_utils, os_utils
 
 if TYPE_CHECKING:
@@ -46,22 +47,25 @@ class ServerHandlerManager:
 		# Automation for lazy
 		self.__handler_detector = HandlerDetector(self)
 
-		mcdr_server.config_manager.add_config_changed_callback(self.__on_mcdr_config_loaded)
+		load_handlers = self.__load_handlers
+		consume_config = self.__consume_config
 
-	def __on_mcdr_config_loaded(self, config: MCDReforgedConfig, log: bool):
-		self.register_handlers(config.custom_handlers)
-		self.set_configured_handler(config.handler)
-		if log:
-			if (psh := self.__plugin_provided_server_handler_holder) is not None:
-				self.logger.info(self.__tr('on_config_changed.handler_set_overridden', config.handler, psh.server_handler.get_name(), psh.plugin))
-			else:
-				self.logger.info(self.__tr('on_config_changed.handler_set', config.handler))
+		class Consumer(MCDReforgedConfigConsumer[Tuple[Dict[str, ServerHandler], List[str]]]):
+			def validate(self, config: MCDReforgedConfig) -> Tuple[Dict[str, ServerHandler], List[str]]:
+				return load_handlers(config.custom_handlers)
 
-	def register_handlers(self, custom_handlers: Optional[List[Union[str, CustomHandlerEntry]]]):
+			def consume(self, config: MCDReforgedConfig, validated_data: Tuple[Dict[str, ServerHandler], List[str]], log: bool):
+				handlers, debug_messages = validated_data
+				consume_config(config, handlers, debug_messages, log)
+
+		mcdr_server.config_manager.add_config_consumer(Consumer())
+
+	def __load_handlers(self, custom_handlers: Optional[List[Union[str, CustomHandlerEntry]]]) -> Tuple[Dict[str, ServerHandler], List[str]]:
 		"""
-		:raise ValueError: if a spec entry in custom_handlers is invalid. The registered handlers are not changed in this case
+		:raise ValueError: if a spec entry in custom_handlers is invalid
 		"""
 		handlers: Dict[str, ServerHandler] = {}
+		debug_messages: List[str] = []
 
 		def add_handler(hdr: ServerHandler):
 			handlers[hdr.get_name()] = hdr
@@ -96,7 +100,7 @@ class ServerHandlerManager:
 						self.__check_outdated_overrides(handler, 'custom handler class path {!r}'.format(class_path))
 						if handler.get_name() not in handlers:
 							add_handler(handler)
-							self.mcdr_server.logger.mdebug('Loaded info handler {} from {}'.format(handler_class.__name__, class_path), option=DebugOption.HANDLER)
+							debug_messages.append('Loaded info handler {} from {}'.format(handler_class.__name__, class_path))
 						else:
 							self.mcdr_server.logger.error('Handler with name {} from path {} is already registered, ignored'.format(handler.get_name(), class_path))
 					else:
@@ -107,14 +111,25 @@ class ServerHandlerManager:
 				if spec.name in handlers:
 					raise ValueError('{}: handler with name {!r} is already registered'.format(location, spec.name))
 				add_handler(SpecServerHandler(spec))
-				self.mcdr_server.logger.mdebug('Loaded spec handler {} from {}'.format(spec.name, location), option=DebugOption.HANDLER)
+				debug_messages.append('Loaded spec handler {} from {}'.format(spec.name, location))
 				if isinstance(stop := spec.control.stop, StopMethods.Signal):
 					try:
 						os_utils.resolve_signal(stop.signal)
 					except ValueError as e:
 						self.logger.warning('{}.control.stop.signal: {}, the server will be killed when stopping'.format(location, e))
 
+		return handlers, debug_messages
+
+	def __consume_config(self, config: MCDReforgedConfig, handlers: Dict[str, ServerHandler], debug_messages: List[str], log: bool):
 		self.handlers = handlers
+		self.set_configured_handler(config.handler)
+		for message in debug_messages:
+			self.mcdr_server.logger.mdebug(message, option=DebugOption.HANDLER)
+		if log:
+			if (psh := self.__plugin_provided_server_handler_holder) is not None:
+				self.logger.info(self.__tr('on_config_changed.handler_set_overridden', config.handler, psh.server_handler.get_name(), psh.plugin))
+			else:
+				self.logger.info(self.__tr('on_config_changed.handler_set', config.handler))
 
 	@classmethod
 	def __load_custom_handler_spec(cls, entry: CustomHandlerEntry, location: str, builtin_specs: Dict[str, HandlerSpec]) -> HandlerSpec:
