@@ -109,7 +109,7 @@ msgid ""
 "The url field can be written as ``link`` (the catalogue form) or "
 "``homepage`` (the plugin metadata form); both represent the author's "
 "homepage"
-msgstr "url 字段既可以写成 ``link``（插件仓库风格），也可以写成 ``homepage``（插件元数据风格）；两者均表示作者的主页"
+msgstr "url 字段既可以写成 ``link`` （插件仓库风格），也可以写成 ``homepage`` （插件元数据风格）；两者均表示作者的主页"
 
 #: ../plugin_dev/plugin_catalogue.rst:52
 msgid "Example:"
