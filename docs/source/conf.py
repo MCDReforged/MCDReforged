@@ -55,6 +55,7 @@ extensions = [
 	'sphinx.ext.autosectionlabel',
 	'sphinx.ext.intersphinx',
 	'sphinx.ext.napoleon',
+	'sphinx_autodoc_typehints',
 	'sphinx.ext.viewcode',
 	'sphinx_copybutton',
 	'sphinx_prompt',
@@ -168,6 +169,16 @@ autodoc_member_order = 'bysource'
 autodoc_inherit_docstrings = False  # so overridden methods won't pop up
 
 
+# -- Options for sphinx-autodoc-typehints -------------------------------------------------
+# https://github.com/tox-dev/sphinx-autodoc-typehints
+typehints_use_signature = True  # keep parameter types in signatures
+typehints_use_signature_return = True  # keep return types in signatures
+typehints_document_rtype = False  # avoid a separate return-type field
+suppress_warnings = [
+    'sphinx_autodoc_typehints.forward_reference',  # Imported aliases may contain forward references that cannot be evaluated at runtime
+]
+
+
 # -- Options for sphinx.ext.autosectionlabel -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/extensions/autosectionlabel.html
 autosectionlabel_prefix_document = True
@@ -187,6 +198,13 @@ intersphinx_timeout = 30
 
 
 def autodoc_setup(app: 'Sphinx'):
+	# sphinx-autodoc-typehints 3.17.4 omits autodecorator from overload handling.
+	from sphinx_autodoc_typehints._docstring import object_fields
+	from sphinx_autodoc_typehints._signature.header import overloads
+
+	for module in (object_fields, overloads):
+		module.OVERLOADED_KINDS |= {'decorator'}
+
 	# https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html#event-autodoc-skip-member
 	def autodoc_skip_member_handler(app_, what, name, obj, skip, options):
 		return skip
