@@ -4,6 +4,7 @@ MCDR config file stuffs
 from typing import Any, Dict, Union, Optional, List, Annotated
 
 from pydantic import BaseModel, Field, ConfigDict, Tag
+from typing_extensions import TypeAliasType
 
 from mcdreforged.constants import core_constant
 from mcdreforged.constants.environment_variables import ENV_DISABLE_TELEMETRY
@@ -38,10 +39,10 @@ class CustomHandlerFileEntry(BaseModel):
 	file: str
 
 
-CustomHandlerEntry = Annotated[
+CustomHandlerEntry = TypeAliasType('CustomHandlerEntry', Annotated[
 	Annotated[CustomHandlerExtendEntry, Tag('extend')] | Annotated[CustomHandlerDefineEntry, Tag('define')] | Annotated[CustomHandlerFileEntry, Tag('file')],
 	key_discriminator({'extends': 'extend', 'spec': 'define', 'file': 'file'}),
-]
+])
 
 
 class MCDReforgedConfig(BaseModel):

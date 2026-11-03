@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  mcdreforged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-17 14:48+0800\n"
+"POT-Creation-Date: 2026-11-04 02:48+0800\n"
 "PO-Revision-Date: 2021-01-23 17:24+0800\n"
 "Last-Translator: Alex3236 <alex3236@qq.com>\n"
 "Language: zh_CN\n"
@@ -142,13 +142,13 @@ msgstr "一个用于测试权限需求的工具方法"
 msgid "Parameters"
 msgstr "参数"
 
-#: mcdreforged.command.command_source.CommandSource.has_permission:3
-#: mcdreforged.command.command_source.CommandSource.has_permission_higher_than:3
+#: mcdreforged.command.command_source.CommandSource.has_permission:4
+#: mcdreforged.command.command_source.CommandSource.has_permission_higher_than:4
 #: of
 msgid "The permission level to be tested"
 msgstr "用于比较的权限等级"
 
-#: mcdreforged.command.command_source.CommandSource.has_permission:4 of
+#: mcdreforged.command.command_source.CommandSource.has_permission:5 of
 msgid ""
 "If the command source has not less permission level than the given "
 "permission level"
@@ -161,7 +161,7 @@ msgid ""
 " greater than judgment"
 msgstr "与 :meth:`CommandSource.has_permission` 相似，但命令源权限需 *高于* 给定的权限才返回 ``True``"
 
-#: mcdreforged.command.command_source.CommandSource.has_permission_higher_than:4
+#: mcdreforged.command.command_source.CommandSource.has_permission_higher_than:5
 #: of
 msgid ""
 "If the command source has greater permission level than the given "
@@ -174,7 +174,7 @@ msgid ""
 "including RTexts"
 msgstr "发送消息到命令源。消息可以是包括 RText 对象在内的任何内容"
 
-#: mcdreforged.command.command_source.CommandSource.reply:3 of
+#: mcdreforged.command.command_source.CommandSource.reply:4 of
 msgid "The message you want to send"
 msgstr "你想要发送的消息"
 
@@ -182,13 +182,13 @@ msgstr "你想要发送的消息"
 msgid "Keyword Arguments"
 msgstr "关键字参数"
 
-#: mcdreforged.command.command_source.CommandSource.reply:4 of
+#: mcdreforged.command.command_source.CommandSource.reply:5 of
 msgid ""
 "The encoding method for the message. It's only used in "
 ":class:`PlayerCommandSource`"
 msgstr "消息的编码方式。该参数仅在 :class:`PlayerCommandSource` 中使用"
 
-#: mcdreforged.command.command_source.CommandSource.reply:5 of
+#: mcdreforged.command.command_source.CommandSource.reply:6 of
 msgid "Message override when it's a :class:`ConsoleCommandSource`"
 msgstr "当为 :class:`ConsoleCommandSource` 时的消息覆写"
 
@@ -212,15 +212,27 @@ msgstr "玩家命令源：代表一个玩家的命令源"
 msgid "The name of the player"
 msgstr "玩家的名字"
 
-#: mcdreforged.command.command_source.PlayerCommandSource.reply:1 of
+#: mcdreforged.command.command_source.PlayerCommandSource.reply:2 of
 msgid "encoding method to be used in :meth:`ServerInterface.tell`"
 msgstr "在调用 :meth:`ServerInterface.tell` 时所使用的文本编码方法"
+
+#: mcdreforged.command.command_source.ConsoleCommandSource.reply
+#: mcdreforged.command.command_source.PlayerCommandSource.reply of
+msgid "Overrides"
+msgstr ""
+
+#: mcdreforged.command.command_source.ConsoleCommandSource.reply:5
+#: mcdreforged.command.command_source.PlayerCommandSource.reply:5 of
+msgid ""
+":py:meth:`CommandSource.reply "
+"<mcdreforged.command.command_source.CommandSource.reply>`"
+msgstr ""
 
 #: mcdreforged.command.command_source.ConsoleCommandSource:1 of
 msgid "Console command source: the command source that represents the console"
 msgstr "控制台命令源：代表控制台的命令源"
 
-#: mcdreforged.command.command_source.ConsoleCommandSource.reply:1 of
+#: mcdreforged.command.command_source.ConsoleCommandSource.reply:2 of
 msgid "If it's specified, overwrite the value of parameter ``message`` with it"
 msgstr "若提供，则使用其值来覆盖 ``message`` 参数"
 
@@ -247,11 +259,11 @@ msgstr "将子节点附加到其子列表中，然后返回自身"
 msgid "It's used for building the command tree structure"
 msgstr "用于构建命令树结构"
 
-#: mcdreforged.command.builder.nodes.basic.AbstractNode.then:5 of
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.then:6 of
 msgid "A node instance to be added to current node's children list"
 msgstr "要添加到当前节点的子列表中的节点实例"
 
-#: mcdreforged.command.builder.nodes.basic.AbstractNode.then:7
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.then:8
 #: mcdreforged.command.builder.tools.SimpleCommandBuilder.print_tree:3 of
 msgid "Example::"
 msgstr "例子::"
@@ -287,7 +299,7 @@ msgid ""
 "invoking of the command nodes"
 msgstr "这种动态回调参数适配在所有命令节点的回调调用中使用"
 
-#: mcdreforged.command.builder.nodes.basic.AbstractNode.runs:27 of
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.runs:28 of
 msgid ""
 "A callable that accepts up to 2 arguments. Argument list: "
 ":class:`~mcdreforged.command.command_source.CommandSource`, :class:`dict`"
@@ -329,8 +341,8 @@ msgid ""
 "all given requirements are satisfied"
 msgstr "若多次调用 :meth:`requires`，则将使用“与”逻辑合并所有需求，即仅当所有需求都被满足时测试才算通过"
 
-#: mcdreforged.command.builder.nodes.basic.AbstractNode.precondition:10
-#: mcdreforged.command.builder.nodes.basic.AbstractNode.requires:14 of
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.precondition:11
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.requires:15 of
 msgid ""
 "A callable that accepts up to 2 arguments and returns a bool. Argument "
 "list: :class:`~mcdreforged.command.command_source.CommandSource`, "
@@ -341,7 +353,7 @@ msgstr ""
 "的可调用对象。参数列表：:class:`~mcdreforged.command.command_source.CommandSource`、:class:`dict`"
 " (:class:`~mcdreforged.command.builder.common.CommandContext`)"
 
-#: mcdreforged.command.builder.nodes.basic.AbstractNode.requires:16 of
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.requires:18 of
 msgid ""
 "An optional callable that accepts up to 2 arguments and returns a str or "
 "a :class:`~mcdreforged.minecraft.rtext.text.RTextBase`. Argument list: "
@@ -353,8 +365,8 @@ msgstr ""
 "的可调用对象。参数列表：:class:`~mcdreforged.command.command_source.CommandSource`、:class:`dict`"
 " (:class:`~mcdreforged.command.builder.common.CommandContext`)"
 
-#: mcdreforged.command.builder.nodes.basic.AbstractNode.precondition:13
-#: mcdreforged.command.builder.nodes.basic.AbstractNode.requires:19 of
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.precondition:14
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.requires:21 of
 msgid "Example usages::"
 msgstr "示例用法::"
 
@@ -440,7 +452,7 @@ msgstr ""
 "注意 :meth:`redirects` 和 :meth:`then` 之间的区别。:meth:`redirects` 是重定向子节点，而 "
 ":meth:`then` 是添加子节点"
 
-#: mcdreforged.command.builder.nodes.basic.AbstractNode.redirects:23 of
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.redirects:24 of
 msgid "A node instance which current node is redirecting to"
 msgstr "当前节点的重定向目标"
 
@@ -470,7 +482,7 @@ msgstr ""
 "当用户在控制台中输入 ``!!whereis`` 及一个空格字符时，MCDR 将会展示包含 ``\"Steve\"`` 及 "
 "``\"Alex\"`` 的输入建议"
 
-#: mcdreforged.command.builder.nodes.basic.AbstractNode.suggests:16 of
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.suggests:17 of
 msgid ""
 "A callable function which accepts up to 2 parameters and return an "
 "iterable of str indicating the current command suggestions. Argument "
@@ -488,11 +500,11 @@ msgid ""
 "handle with the error"
 msgstr "当发生命令错误时，给定的将调用给定的处理程序以处理错误"
 
-#: mcdreforged.command.builder.nodes.basic.AbstractNode.on_error:3 of
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.on_error:4 of
 msgid "A class that is subclass of :class:`CommandError`"
 msgstr ":class:`CommandError` 的子类"
 
-#: mcdreforged.command.builder.nodes.basic.AbstractNode.on_error:4 of
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.on_error:6 of
 msgid ""
 "A callable that accepts up to 3 arguments. Argument list: "
 ":class:`~mcdreforged.command.builder.exception.CommandError`, "
@@ -503,7 +515,7 @@ msgstr ""
 "个参数的可调用对象。参数列表：:class:`~mcdreforged.command.builder.exception.CommandError`、:class:`~mcdreforged.command.command_source.CommandSource`、:class:`dict`"
 " (:class:`~mcdreforged.command.builder.common.CommandContext`)"
 
-#: mcdreforged.command.builder.nodes.basic.AbstractNode.on_error:7 of
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.on_error:10 of
 msgid ""
 "If handled is set to True, "
 ":meth:`CommandError.set_handled<mcdreforged.command.builder.exception.CommandError.set_handled>`"
@@ -522,8 +534,8 @@ msgstr "与 :meth:`on_error` 类似，不过它仅在该节点收到了一个来
 msgid "Print the command tree in a read-able format. Mostly used in debugging"
 msgstr "以可读的格式打印命令树。常用于调试"
 
-#: mcdreforged.command.builder.nodes.basic.AbstractNode.print_tree:3
-#: mcdreforged.command.builder.tools.SimpleCommandBuilder.print_tree:7 of
+#: mcdreforged.command.builder.nodes.basic.AbstractNode.print_tree:4
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.print_tree:8 of
 msgid "A printer function that accepts a str"
 msgstr "一个接受一个 str 的打印函数"
 
@@ -556,20 +568,20 @@ msgid ""
 "parsed value in context"
 msgstr "它拥有着一个 str 属性 ``name``，用于作为键在上下文中储存解析的值"
 
-#: mcdreforged.command.builder.nodes.basic.ArgumentNode.__init__:1 of
+#: mcdreforged.command.builder.nodes.basic.ArgumentNode.__init__:2 of
 msgid ""
 "The name of the argument node. Should be unique within the command tree "
 "path"
 msgstr "参数节点的名字。应当在命令树路径上是唯一的"
 
-#: mcdreforged.command.builder.nodes.basic.ArgumentNode.__init__:2 of
+#: mcdreforged.command.builder.nodes.basic.ArgumentNode.__init__:4 of
 msgid ""
 "If set to True, then the parsed value will be stored in a list in the "
 "command context. Re-visiting of this node appends new value to the end of"
 " the list"
 msgstr "若被设为 True，则解析的值将间接地储存在一个列表中。重新访问该节点会把新解析的值追加到该列表中"
 
-#: mcdreforged.command.builder.nodes.basic.ArgumentNode.__init__:4 of
+#: mcdreforged.command.builder.nodes.basic.ArgumentNode.__init__:7 of
 msgid ""
 "Optional str. It behaves like the *metavar* kwarg of "
 ":external:meth:`argparse.ArgumentParser.add_argument`, which overrides "
@@ -579,11 +591,11 @@ msgstr ""
 "可选的字符串参数。其表现类似 :external:meth:`argparse.ArgumentParser.add_argument` 的 "
 "*metavar* 参数，即对命令提示的用法占位符进行覆盖。若未给出，则将使用 *name* 参数的值作为默认的占位符"
 
-#: mcdreforged.command.builder.nodes.basic.ArgumentNode.__init__:8 of
+#: mcdreforged.command.builder.nodes.basic.ArgumentNode.__init__:11 of
 msgid "The *accumulate* parameter"
 msgstr "*accumulate* 参数"
 
-#: mcdreforged.command.builder.nodes.basic.ArgumentNode.__init__:10 of
+#: mcdreforged.command.builder.nodes.basic.ArgumentNode.__init__:13 of
 msgid "The *metavar* parameter"
 msgstr "*metavar* 参数"
 
@@ -617,8 +629,8 @@ msgid ""
 "inclusive"
 msgstr "设置数字范围的下限。边界值将包含于范围内"
 
-#: mcdreforged.command.builder.nodes.arguments.NumberNode.at_min:3
-#: mcdreforged.command.builder.nodes.arguments.NumberNode.in_range:9 of
+#: mcdreforged.command.builder.nodes.arguments.NumberNode.at_min:4
+#: mcdreforged.command.builder.nodes.arguments.NumberNode.in_range:10 of
 msgid "the lower boundary of the range restriction"
 msgstr "数字范围的下限"
 
@@ -628,8 +640,8 @@ msgid ""
 "inclusive"
 msgstr "设置数字范围的上限。边界值将包含于范围内"
 
-#: mcdreforged.command.builder.nodes.arguments.NumberNode.at_max:3
-#: mcdreforged.command.builder.nodes.arguments.NumberNode.in_range:10 of
+#: mcdreforged.command.builder.nodes.arguments.NumberNode.at_max:4
+#: mcdreforged.command.builder.nodes.arguments.NumberNode.in_range:12 of
 msgid "the higher boundary of the range restriction"
 msgstr "数字范围的上限"
 
@@ -715,8 +727,8 @@ msgid ""
 "inclusive"
 msgstr "设置长度范围的下限。边界值将包含于范围内"
 
-#: mcdreforged.command.builder.nodes.arguments.TextNode.at_min_length:3
-#: mcdreforged.command.builder.nodes.arguments.TextNode.in_length_range:9 of
+#: mcdreforged.command.builder.nodes.arguments.TextNode.at_min_length:4
+#: mcdreforged.command.builder.nodes.arguments.TextNode.in_length_range:10 of
 msgid "the lower boundary of the length range restriction"
 msgstr "长度范围的下限"
 
@@ -726,8 +738,8 @@ msgid ""
 "inclusive"
 msgstr "设置长度范围的上限。边界值将包含于范围内"
 
-#: mcdreforged.command.builder.nodes.arguments.TextNode.at_max_length:3
-#: mcdreforged.command.builder.nodes.arguments.TextNode.in_length_range:10 of
+#: mcdreforged.command.builder.nodes.arguments.TextNode.at_max_length:4
+#: mcdreforged.command.builder.nodes.arguments.TextNode.in_length_range:12 of
 msgid "the higher boundary of the length range restriction"
 msgstr "长度范围的上限"
 
@@ -893,11 +905,11 @@ msgid ""
 "callback function by passing the first argument::"
 msgstr "除此之外，你还可以把此方法用作一个装饰器，来装饰命令回调函数。只需仅传入第一个参数即可："
 
-#: mcdreforged.command.builder.tools.SimpleCommandBuilder.command:32 of
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.command:33 of
 msgid "A command path string, e.g. ``\"!!calc add <value_a> <value_b>\"``"
 msgstr "一个命令路径字符串，如 ``\"!!calc add <value_a> <value_b>\"``"
 
-#: mcdreforged.command.builder.tools.SimpleCommandBuilder.command:33 of
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.command:35 of
 msgid ""
 "The callback function of this command, which will be passed to "
 ":meth:`AbstractNode.then<mcdreforged.command.builder.nodes.basic.AbstractNode.then>`"
@@ -906,7 +918,7 @@ msgstr ""
 ":meth:`AbstractNode.then<mcdreforged.command.builder.nodes.basic.AbstractNode.then>`"
 " 方法"
 
-#: mcdreforged.command.builder.tools.SimpleCommandBuilder.command:35 of
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.command:37 of
 msgid "It can now be used as a decorator for callback functions"
 msgstr "现在它可以用作一个装饰回调函数的装饰器了"
 
@@ -927,13 +939,13 @@ msgstr ""
 "注意到几乎所有的 MCDR 内置参数节点均可使用 1 个参数名参数来构造（如 "
 ":class:`~mcdreforged.command.builder.nodes.arguments.Text`、:class:`~mcdreforged.command.builder.nodes.arguments.Number`），因此你可以直接在这里填入参数节点的类名"
 
-#: mcdreforged.command.builder.tools.SimpleCommandBuilder.arg:12 of
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.arg:13 of
 msgid ""
 "The name of the argument node. It can be quoted with ``\"<>\"`` if you "
 "want. Examples: ``\"my_arg\"``, ``\"<my_arg>\"``"
 msgstr "参数节点的名称。可选地，它可以被 ``\"<>\"`` 括住。例子：``\"my_arg\"``、``\"<my_arg>\"``"
 
-#: mcdreforged.command.builder.tools.SimpleCommandBuilder.arg:13 of
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.arg:15 of
 msgid ""
 "An argument node constructor, that accepts the argument name as the only "
 "parameter and return an "
@@ -942,7 +954,8 @@ msgstr ""
 "一个参数节点的构造函数，接受参数节点名字作为其唯一一个参数，返回一个 "
 ":class:`~mcdreforged.command.builder.nodes.basic.ArgumentNode` 实例"
 
-#: mcdreforged.command.builder.tools.SimpleCommandBuilder.arg:15 of
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.arg:17
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.literal:10 of
 msgid ""
 "A :class:`NodeDefinition` object. With that you can further customize "
 "this node definition"
@@ -959,11 +972,11 @@ msgstr ""
 "为一个字面量名字定义一个字面量节点。如果你想要一些拥有自定义功能的字面量节点它将会很有用。如果你仅仅一个普通的字面量节点，你无需调用这个方法来给出定义，因为本构建器会使用默认的"
 " :class:`~mcdreforged.command.builder.nodes.basic.Literal` 构造函数来构造字面量节点"
 
-#: mcdreforged.command.builder.tools.SimpleCommandBuilder.literal:5 of
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.literal:6 of
 msgid "The name of the literal node"
 msgstr "字面量节点的名字"
 
-#: mcdreforged.command.builder.tools.SimpleCommandBuilder.literal:6 of
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.literal:8 of
 msgid ""
 "A literal node constructor, that accepts the literal name as the only "
 "parameter and return a "
@@ -972,12 +985,6 @@ msgid ""
 msgstr ""
 "一个字面量节点的构造函数，接受字面量节点名字作为其唯一一个参数，返回一个 "
 ":class:`~mcdreforged.command.builder.nodes.basic.Literal` 实例。参数为可选参数"
-
-#: mcdreforged.command.builder.tools.SimpleCommandBuilder.literal:8 of
-msgid ""
-"A :class:`NodeDefinition` object. With that you can further customize"
-" this node definition"
-msgstr "一个 :class:`NodeDefinition` 对象。借助它，你可以进一步的自定义这个节点定义"
 
 #: mcdreforged.command.builder.tools.SimpleCommandBuilder.build:1 of
 msgid "Build the command trees"
@@ -993,11 +1000,11 @@ msgstr ""
 "拥有相同名字的节点将被复用。比如，如果你定义了 3 个命令了，命令路径分别为 ``\"!!foo\"``、``\"!!foo bar\"`` 和 "
 "\"``!!foo baz\"``，那么根节点 ``\"!!foo\"`` 将被复用，最后将会只有一个 ``\"!!foo\"`` 节点"
 
-#: mcdreforged.command.builder.tools.SimpleCommandBuilder.build:6 of
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.build:7 of
 msgid "If set to false, do not use cache and always build new command trees"
 msgstr "若设为 false，不使用结果缓存，总是构建新的命令树"
 
-#: mcdreforged.command.builder.tools.SimpleCommandBuilder.build:7 of
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.build:8 of
 msgid ""
 "A list of the built command tree root nodes. The result is cached until "
 "you instruct the builder again. You can use :meth:`clean_cache` to "
@@ -1010,11 +1017,11 @@ msgstr ""
 msgid "Raises"
 msgstr "抛出"
 
-#: mcdreforged.command.builder.tools.SimpleCommandBuilder.build:9 of
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.build:10 of
 msgid "if there are undefined argument nodes"
 msgstr "如果存在未定义的参数节点"
 
-#: mcdreforged.command.builder.tools.SimpleCommandBuilder.build:11 of
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.build:12 of
 msgid "Added ``use_cache`` keyword argument"
 msgstr "添加 ``use_cache`` 关键字参数"
 
@@ -1032,7 +1039,7 @@ msgid ""
 "register built commands to the MCDR server"
 msgstr "一个为懒人提供的工具方法，使用方法 :meth:`build` 构建命令树，并将构建结果向 MCDR 注册"
 
-#: mcdreforged.command.builder.tools.SimpleCommandBuilder.register:3 of
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.register:4 of
 msgid ""
 "The "
 ":class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`"
@@ -1042,7 +1049,7 @@ msgstr ""
 ":class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`"
 " 实例"
 
-#: mcdreforged.command.builder.tools.SimpleCommandBuilder.register:4 of
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.register:5 of
 msgid "if build fails, or there are rooted non-literal nodes in the build result"
 msgstr "如果构建失败，或者构建结果中存在非字面量的根节点"
 
@@ -1057,12 +1064,12 @@ msgstr ""
 ":meth:`~mcdreforged.command.builder.nodes.basic.AbstractNode.then` "
 "方法，将构建结果添加为给定命令节点的子节点"
 
-#: mcdreforged.command.builder.tools.SimpleCommandBuilder.add_children_for:4 of
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.add_children_for:5 of
 msgid "The command node that will become the parent of the built children nodes"
 msgstr "将作为构建结果节点的父亲的命令节点"
 
-#: mcdreforged.command.builder.tools.SimpleCommandBuilder.add_children_for:5
-#: mcdreforged.command.builder.tools.SimpleCommandBuilder.print_tree:8 of
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.add_children_for:6
+#: mcdreforged.command.builder.tools.SimpleCommandBuilder.print_tree:9 of
 msgid "if build fails"
 msgstr "若构建失败"
 
@@ -1151,7 +1158,7 @@ msgstr ""
 msgid "Check if the command source has the given permission level"
 msgstr "检查命令源是否拥有给定的权限等级"
 
-#: mcdreforged.command.builder.tools.Requirements.has_permission:3 of
+#: mcdreforged.command.builder.tools.Requirements.has_permission:4 of
 msgid "The minimum accepted permission level"
 msgstr "最小的可被接受的权限等级"
 
@@ -1167,7 +1174,7 @@ msgstr "检查命令源是否为控制台"
 msgid "Check if the given argument has been assigned in current command context"
 msgstr "检查给定的参数是否在当前的命令上下文中已被赋值"
 
-#: mcdreforged.command.builder.tools.Requirements.argument_exists:3 of
+#: mcdreforged.command.builder.tools.Requirements.argument_exists:4 of
 msgid "The name of the argument to be checked"
 msgstr "将要检查的参数的名称"
 
@@ -1363,7 +1370,7 @@ msgid ""
 "before taking the next element in the command str"
 msgstr "移除给定文本的分隔符前缀。它通常于获取命令字符串的下一个元素时使用"
 
-#: mcdreforged.command.builder.command_builder_utils.remove_divider_prefix:10
+#: mcdreforged.command.builder.command_builder_utils.remove_divider_prefix:11
 #: of
 msgid "The text for divider prefix removal"
 msgstr "将被移除分隔符前缀的文本"
@@ -1372,9 +1379,9 @@ msgstr "将被移除分隔符前缀的文本"
 msgid "Get an element from the remaining input"
 msgstr "从剩余的输入字符串中获取一个元素"
 
-#: mcdreforged.command.builder.command_builder_utils.get_element:14
-#: mcdreforged.command.builder.command_builder_utils.get_float:12
-#: mcdreforged.command.builder.command_builder_utils.get_int:12 of
+#: mcdreforged.command.builder.command_builder_utils.get_element:15
+#: mcdreforged.command.builder.command_builder_utils.get_float:13
+#: mcdreforged.command.builder.command_builder_utils.get_int:13 of
 msgid "The remaining input to be parsed. It should not start with :data:`DIVIDER`"
 msgstr "将被解析的剩余输入串。它不应以 :data:`DIVIDER` 为前缀"
 
@@ -1382,8 +1389,8 @@ msgstr "将被解析的剩余输入串。它不应以 :data:`DIVIDER` 为前缀"
 msgid "Get an int from the remaining input"
 msgstr "从剩余的输入字符串中获取一个 int"
 
-#: mcdreforged.command.builder.command_builder_utils.get_float:13
-#: mcdreforged.command.builder.command_builder_utils.get_int:13 of
+#: mcdreforged.command.builder.command_builder_utils.get_float:14
+#: mcdreforged.command.builder.command_builder_utils.get_int:14 of
 msgid "a tuple of value, char_read. The value will be None if parsing failed"
 msgstr "一个储存着 (值, 读取字符个数) 的元组。如果解析失败，值将会为 None"
 
