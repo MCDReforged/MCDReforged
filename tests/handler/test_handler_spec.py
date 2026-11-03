@@ -214,13 +214,24 @@ class MessageMethodValidationTestCase(SpecTestCase):
 
 
 class UnknownFieldTestCase(SpecTestCase):
-	def test_unknown_fields_ignored(self):
-		data = copy.deepcopy(MINIMAL)
-		data['future_field'] = 1
-		data['control']['future_field'] = 1
-		data['parsing']['future_field'] = 1
-		data['events'] = {'future_event': ['foo']}
-		HandlerSpec.model_validate(data)
+	def test_unknown_fields_rejected(self):
+		for path, value in [
+			(('future_field',), 1),
+			(('control', 'future_field'), 1),
+			(('control', 'send_message'), {'builtin': 'minecraft_tellraw', 'future_field': 1}),
+			(('parsing', 'future_field'), 1),
+			(('parsing', 'pre_parse'), [{'builtin': 'strip_ansi_color', 'future_field': 1}]),
+			(('events', 'future_event'), ['foo']),
+		]:
+			with self.subTest(path=path):
+				self.assert_invalid(with_value(MINIMAL, path, value), path)
+
+	def test_typo_in_extend_rejected(self):
+		base = HandlerSpec.model_validate(BASE)
+		with self.assertRaises(ValidationError):
+			base.extend({'name': 'child_handler', 'parsing': {'player_mesage': []}})
+		with self.assertRaises(ValidationError):
+			base.extend({'name': 'child_handler', 'event': {}})
 
 
 class ExtendTestCase(SpecTestCase):
@@ -244,9 +255,9 @@ class ExtendTestCase(SpecTestCase):
 		with self.assertRaises(ValidationError):
 			self.base.extend({})
 
-	def test_extends_key_ignored(self):
-		handler = SpecServerHandler(self.base.extend({'name': 'child_handler', 'extends': 'base_handler'}))
-		self.assertEqual('child_handler', handler.get_name())
+	def test_extends_key_rejected(self):
+		with self.assertRaises(ValidationError):
+			self.base.extend({'name': 'child_handler', 'extends': 'base_handler'})
 
 	def test_object_merged_by_key(self):
 		handler = self.extend({'parsing': {'player_name': r'\.?[a-zA-Z0-9_]{3,16}'}})

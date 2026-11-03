@@ -176,6 +176,9 @@ Here is a table of current built-in handlers and their suitable server types
    * - basic_handler
      - The handler that parse nothing and return the raw text from the server. Don't use this unless you want to use MCDR to lanuch non Minecraft related servers.
 
+Besides the built-in handlers, you can also use the handlers defined in the :ref:`configuration:custom_handlers` option, or :doc:`customize your own handler </customize/handler>`.
+For a non Minecraft related server, a custom handler can also parse its output and stop it properly
+
 * Option type: :external:class:`str`
 * Default value: ``vanilla_handler``
 
@@ -606,15 +609,36 @@ When set to true, MCDR will removed all console font formatter codes in before a
 custom_handlers
 ^^^^^^^^^^^^^^^
 
-A list of custom :doc:`/customize/handler` classes. The classed need to be subclasses of :class:`~mcdreforged.handler.server_handler.ServerHandler`
-
+A list of custom :doc:`server handlers </customize/handler>`.
 Then you can use the name of your handler in the :ref:`configuration:handler` option above to use your handler
 
-The name of a handler is defined in the :meth:`~mcdreforged.handler.server_handler.ServerHandler.get_name` method
+Each entry of the list is one of the following forms:
 
+.. list-table::
+   :header-rows: 1
 
-* Option type: ``Optional[List[str]]``
-* Default value: 
+   * - Form
+     - Description
+   * - A string
+     - The class path of a Python server handler class, which needs to be a subclass of :class:`~mcdreforged.handler.server_handler.ServerHandler`.
+       The name of the handler is defined in its :meth:`~mcdreforged.handler.server_handler.ServerHandler.get_name` method
+   * - A dict with keys ``name``, ``extends``, ``overrides``
+     - Extend a built-in handler. ``extends`` is the name of a built-in handler except ``basic_handler``,
+       and ``overrides`` contains the parts of the :class:`handler spec <mcdreforged.handler.handler_spec.HandlerSpec>` to change
+   * - A dict with keys ``name``, ``spec``
+     - Define a handler with a complete :class:`handler spec <mcdreforged.handler.handler_spec.HandlerSpec>`. ``spec`` is the handler spec without ``name``
+   * - A dict with key ``file``
+     - Load an ``extends`` or ``spec`` entry above from a YAML file. The file path is relative to the working directory of MCDR
+
+``name`` is the name of the handler. It cannot be the same as any existing handler
+
+If a class path entry fails to load, MCDR logs the error and skips the entry.
+If a handler spec entry is invalid, the whole configuration is considered invalid
+
+See :ref:`customize/handler:Customize with Handler Spec` for more details about handler spec entries
+
+* Option type: ``Optional[List[str | dict]]``
+* Default value:
 
 .. code-block:: yaml
 
@@ -626,9 +650,34 @@ The name of a handler is defined in the :meth:`~mcdreforged.handler.server_handl
 .. code-block:: yaml
 
     custom_handlers:
+      # A Python server handler class
       - handlers.my_handler.MyHandler
 
-In this example the custom handler package path is ``handlers.my_handler`` and the class is name ``MyHandler``
+      # Extend a built-in handler
+      - name: my_vanilla_handler
+        extends: vanilla_handler
+        overrides:
+          parsing:
+            player_name: '\.?[a-zA-Z0-9_]{3,16}'
+
+      # Define a handler with a complete handler spec
+      - name: my_app_handler
+        spec:
+          control:
+            stop:
+              signal: SIGINT
+          parsing:
+            line:
+              - '(?P<content>.*)'
+            player_name: '[a-zA-Z0-9_]{3,16}'
+
+      # Load an entry from a YAML file
+      - file: handlers/my_paper_handler.yml
+
+In the first entry, the custom handler package path is ``handlers.my_handler`` and the class name is ``MyHandler``
+
+.. versionchanged:: v2.17.0
+    Added handler spec entries
 
 custom_info_reactors
 ^^^^^^^^^^^^^^^^^^^^

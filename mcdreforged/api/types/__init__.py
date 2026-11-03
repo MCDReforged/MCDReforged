@@ -3,6 +3,9 @@ Type hints are always nice to have
 """
 from mcdreforged.command.command_source import CommandSource, ConsoleCommandSource, PlayerCommandSource, \
 	InfoCommandSource, PluginCommandSource
+from mcdreforged.handler.handler_spec import HandlerSpec, StopMethods, StopMethod, SendMessageMethods, SendMessageMethod, \
+	BroadcastMessageMethods, BroadcastMessageMethod, TextTransforms, TextTransform
+from mcdreforged.handler.impl.spec_server_handler import SpecServerHandler
 from mcdreforged.handler.server_handler import ServerHandler
 from mcdreforged.info_reactor.info import Info, InfoSource, InfoActionFlag
 from mcdreforged.info_reactor.info_filter import InfoFilter
@@ -25,8 +28,10 @@ __all__ = [
 	'Info', 'InfoSource', 'InfoActionFlag',
 	'InfoFilter',
 
-	# Server Handler,
-	'ServerHandler',
+	# Server Handler
+	'ServerHandler', 'SpecServerHandler',
+	'HandlerSpec', 'StopMethods', 'StopMethod', 'SendMessageMethods', 'SendMessageMethod',
+	'BroadcastMessageMethods', 'BroadcastMessageMethod', 'TextTransforms', 'TextTransform',
 
 	# Server stuffs
 	'ServerInformation',

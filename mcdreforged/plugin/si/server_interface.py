@@ -259,7 +259,7 @@ class ServerInterface:
 
 	def stop(self) -> bool:
 		"""
-		Soft shutting down the server by sending the correct stop command to the server
+		Soft shutting down the server with the stop method of the current server handler
 
 		This option will not stop MCDR. MCDR will keep running unless :meth:`exit` is invoked
 

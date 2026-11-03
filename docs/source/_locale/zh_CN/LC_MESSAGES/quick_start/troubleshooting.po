@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-23 14:57+0800\n"
+"POT-Creation-Date: 2026-11-03 21:04+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -12,7 +12,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.15.0\n"
+"Generated-By: Babel 2.17.0\n"
 
 #: ../quick_start/troubleshooting.rst:3
 msgid "Troubleshooting"
@@ -160,6 +160,7 @@ msgid "Maybe your server is unique that not supported by built-in handlers"
 msgstr "也许，你的服务端比较特别，内置处理器均不兼容"
 
 #: ../quick_start/troubleshooting.rst:53
+#, python-brace-format
 msgid ""
 "Maybe your server output is different. For example, if you allow players "
 "that not following the Mojang naming rule (``[A-Za-z0-9_]{3,16}``), the "
@@ -179,25 +180,31 @@ msgstr "也许，你的服务端输出被插件或模组（例如：玩家称号
 #: ../quick_start/troubleshooting.rst:83
 msgid ""
 "If your server has one of these problems, you may need to :ref:`customize"
-" your own handler <customize/handler:Server Handler>`"
-msgstr "如果你的服务端存在上述问题之一，你可能需要 :ref:`自定义服务端处理器 <customize/handler:Server Handler>`"
+" your own handler <customize/handler:Server Handler>`. For problems like "
+"the player name rule or the prefix in player messages, usually a few "
+"lines of :ref:`handler spec <customize/handler:Customize with Handler "
+"Spec>` in the MCDR configuration are enough"
+msgstr ""
+"如果你的服务端存在上述问题之一，你可能需要 :ref:`自定义服务端处理器 "
+"<customize/handler:Server Handler>`。玩家名规则、玩家消息前缀这类问题，通常在 MCDR 配置里写几行 "
+":ref:`处理器定义 <customize/handler:Customize with Handler Spec>` 就能解决"
 
-#: ../quick_start/troubleshooting.rst:85
+#: ../quick_start/troubleshooting.rst:87
 msgid "**Some plugin commands work neither in game nor on the console**"
 msgstr "**某些插件命令在游戏和控制台中都无法使用**"
 
-#: ../quick_start/troubleshooting.rst:86
+#: ../quick_start/troubleshooting.rst:88
 msgid "**Some plugin commands perform incorrectly in all conditions**"
 msgstr "**某些插件命令在所有条件下都执行不正确**"
 
-#: ../quick_start/troubleshooting.rst:88
+#: ../quick_start/troubleshooting.rst:90
 msgid ""
 "Check if the plugin is enabled and loaded correctly. Check the logs to "
 "see if there are any errors or warnings related to the plugin, and read "
 "if there are"
 msgstr "检查插件是否正确启用和加载。检查日志，看看是否有与插件相关的错误或警告，若有则请仔细阅读相关输出"
 
-#: ../quick_start/troubleshooting.rst:90
+#: ../quick_start/troubleshooting.rst:92
 msgid ""
 "Check the README or documentation of the plugin to see if it has any "
 "special requirements. Some plugins may require additional permissions or "
@@ -205,29 +212,29 @@ msgid ""
 " correctly"
 msgstr "查看插件的 README 或文档，看看它是否有任何特殊要求。有些插件可能需要额外权限或配置。检查并确保插件配置文件已被正确填写"
 
-#: ../quick_start/troubleshooting.rst:93
+#: ../quick_start/troubleshooting.rst:95
 msgid ""
 "Some plugins may have conflicts with others. Try to disable other plugins"
 " to see if the problem solved"
 msgstr "有些插件可能与其它插件冲突。尝试禁用其它插件，看看问题是否解决"
 
-#: ../quick_start/troubleshooting.rst:95
+#: ../quick_start/troubleshooting.rst:97
 msgid ""
 "If the problem still exists, try to report it to the plugin's author or "
 "community"
 msgstr "如果问题仍然存在，尝试向插件的作者或社区报告"
 
-#: ../quick_start/troubleshooting.rst:98
+#: ../quick_start/troubleshooting.rst:100
 msgid "Run with MCSManager"
 msgstr "使用 MCSManager 运行"
 
-#: ../quick_start/troubleshooting.rst:102
+#: ../quick_start/troubleshooting.rst:104
 msgid ""
 "This part may not being up to date. If you encounter any problems, do not"
 " report them to MCDR"
 msgstr "这部分内容可能过时。若你遇到任何问题，不要向 MCDR 报告"
 
-#: ../quick_start/troubleshooting.rst:104
+#: ../quick_start/troubleshooting.rst:106
 msgid ""
 "For more infomations, get in touch with their community: `Github Repo "
 "<https://github.com/MCSManager/MCSManager>`__, `Documentation "
@@ -237,55 +244,55 @@ msgstr ""
 "<https://github.com/MCSManager/MCSManager>`__，`MCSManager 文档 "
 "<https://docs.mcsmanager.com/>`__"
 
-#: ../quick_start/troubleshooting.rst:106
+#: ../quick_start/troubleshooting.rst:108
 msgid "MCDR did not specificly designed to adapt MCSManager"
 msgstr "MCDR 并未专门适配 MCSManager"
 
-#: ../quick_start/troubleshooting.rst:108
+#: ../quick_start/troubleshooting.rst:110
 msgid ""
 "However, if you use UTF-8 everywhere, and enable ``Emulation Terminal`` "
 "in MCSManager, MCDR should work fine with full functionality"
 msgstr "不过，如果你始终使用 UTF-8，并在 MCSManager 中启用 ``仿真终端``，MCDR 应该能正常工作，并具有完整功能"
 
-#: ../quick_start/troubleshooting.rst:110
+#: ../quick_start/troubleshooting.rst:112
 msgid ""
 "If ``Emulation Terminal`` is disabled, you should set "
 ":ref:`configuration:advanced_console` to ``false``"
 msgstr "若你关闭了 ``仿真终端``，请将 :ref:`configuration:advanced_console` 设置为 ``false``"
 
-#: ../quick_start/troubleshooting.rst:113
+#: ../quick_start/troubleshooting.rst:115
 msgid "Get in touch"
 msgstr "联系我们"
 
-#: ../quick_start/troubleshooting.rst:115
+#: ../quick_start/troubleshooting.rst:117
 msgid ""
 "If these solutions do not solve your problem, please get in touch with "
 ":ref:`our kind community <quick_start/next_steps:Community>`"
 msgstr "如果以上方案无法解决你的问题，请联系 :ref:`我们可爱的社区 <quick_start/next_steps:Community>`"
 
-#: ../quick_start/troubleshooting.rst:117
+#: ../quick_start/troubleshooting.rst:119
 msgid "Still, before you ask questions or report bugs, please:"
 msgstr "还请注意，在提问或报告问题之前，请："
 
-#: ../quick_start/troubleshooting.rst:119
+#: ../quick_start/troubleshooting.rst:121
 msgid "Search, and research"
 msgstr "先尝试自己搜索并研究"
 
-#: ../quick_start/troubleshooting.rst:120
+#: ../quick_start/troubleshooting.rst:122
 msgid "Write a title that summarizes the specific problem"
 msgstr "用一个简短的句子概括你的问题"
 
-#: ../quick_start/troubleshooting.rst:121
+#: ../quick_start/troubleshooting.rst:123
 msgid "Help others reproduce the problem:"
 msgstr "帮助他人重现问题："
 
-#: ../quick_start/troubleshooting.rst:123
+#: ../quick_start/troubleshooting.rst:125
 msgid ""
 "`Create a minimal reproducible example <https://stackoverflow.com/help"
 "/minimal-reproducible-example>`__"
 msgstr "`构建最小复现示例 <https://stackoverflow.com/help/minimal-reproducible-example>`__"
 
-#: ../quick_start/troubleshooting.rst:124
+#: ../quick_start/troubleshooting.rst:126
 msgid ""
 "Provide your full logs and context, no unnecessary images. If the log "
 "file is long, send it as an attachment file or use services like `mclo.gs"
@@ -295,15 +302,15 @@ msgstr ""
 "提供完整的日志和环境，不要提供非必要的图片。若日志太长，请将其作为附件发送，或使用 `mclo.gs <https://mclo.gs/>`__ "
 "/ `Pastebin <https://pastebin.com/>`__ 等服务来提供。记得清理日志中的敏感信息"
 
-#: ../quick_start/troubleshooting.rst:128
+#: ../quick_start/troubleshooting.rst:130
 msgid "Proofread before posting"
 msgstr "提问之前校对你写的问题描述，确保语意清晰无歧义"
 
-#: ../quick_start/troubleshooting.rst:129
+#: ../quick_start/troubleshooting.rst:131
 msgid "Respond to feedback after posting"
 msgstr "提问之后，积极回应他人反馈"
 
-#: ../quick_start/troubleshooting.rst:133
+#: ../quick_start/troubleshooting.rst:135
 msgid ""
 "Stack Overflow: `How do I ask a good question? "
 "<https://stackoverflow.com/help/how-to-ask>`__"

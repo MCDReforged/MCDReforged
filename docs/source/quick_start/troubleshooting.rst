@@ -80,7 +80,9 @@ Commands not working
 
             [09:00:00] [Server thread/INFO]: <Steve> Hello
 
-    If your server has one of these problems, you may need to :ref:`customize your own handler <customize/handler:Server Handler>`
+    If your server has one of these problems, you may need to :ref:`customize your own handler <customize/handler:Server Handler>`.
+    For problems like the player name rule or the prefix in player messages,
+    usually a few lines of :ref:`handler spec <customize/handler:Customize with Handler Spec>` in the MCDR configuration are enough
 
 - **Some plugin commands work neither in game nor on the console**
 - **Some plugin commands perform incorrectly in all conditions**

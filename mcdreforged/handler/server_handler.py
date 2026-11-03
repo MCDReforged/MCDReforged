@@ -76,6 +76,8 @@ class ServerHandler(ABC):
 
 		At least one of this method and :meth:`get_stop_command` must be implemented, or the handler class cannot be instantiated.
 		The default implementation wraps the result of :meth:`get_stop_command`
+
+		.. versionadded:: v2.17.0
 		"""
 		if type(self).get_stop_command is ServerHandler.get_stop_command:
 			raise NotImplementedError('handler {!r} implements neither get_stop_method nor get_stop_command'.format(self.get_name()))
@@ -127,14 +129,7 @@ class ServerHandler(ABC):
 
 		It may raise any exceptions if the format of the input string is not correct
 
-		In this default implementation, it firstly uses :meth:`_get_server_stdout_raw_result`
-		to get a raw :class:`~mcdreforged.info_reactor.info.Info` object,
-		then use :meth:`_content_parse` to fill generic information into the :class:`~mcdreforged.info_reactor.info.Info` object,
-		finally returns that as a simply-parsed info
-
-		If the server handler is able to parse more information, you can do more post-parsing operations after invoking this method via ``super()``
-
-		:param text: A line of the server stdout to be parsed
+		:param text: A line of the server stdout to be parsed, processed by :meth:`pre_parse_server_stdout`
 		:return: An :class:`~mcdreforged.info_reactor.info.Info` object as the result
 		"""
 		...

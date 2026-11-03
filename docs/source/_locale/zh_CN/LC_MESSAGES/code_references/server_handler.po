@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-03 17:35+0800\n"
+"POT-Creation-Date: 2026-11-04 01:37+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,6 +20,10 @@ msgstr ""
 #: ../code_references/server_handler.rst:3
 msgid "Server Handler"
 msgstr "服务端处理器"
+
+#: ../code_references/server_handler.rst:6
+msgid "Base Class"
+msgstr "基类"
 
 #: mcdreforged.handler.server_handler.ServerHandler:1 of
 msgid "The interface class for server handler"
@@ -63,8 +67,8 @@ msgid ""
 "implemented, or the handler class cannot be instantiated. The default "
 "implementation wraps the result of :meth:`get_stop_command`"
 msgstr ""
-"必须至少实现本方法或 :meth:`get_stop_command` 之一，否则无法实例化处理器类。"
-"默认实现将 :meth:`get_stop_command` 的返回值封装为停服方式"
+"必须至少实现本方法或 :meth:`get_stop_command` 之一，否则无法实例化处理器类。默认实现将 "
+":meth:`get_stop_command` 的返回值封装为停服方式"
 
 #: mcdreforged.handler.server_handler.ServerHandler.get_send_message_command:1
 #: of
@@ -92,7 +96,6 @@ msgstr "用于在解析前删除文本中那些无用/影响解析的字符"
 msgid "Parameters"
 msgstr "参数"
 
-#: mcdreforged.handler.server_handler.ServerHandler.parse_server_stdout:12
 #: mcdreforged.handler.server_handler.ServerHandler.pre_parse_server_stdout:5
 #: of
 msgid "A line of the server stdout to be parsed"
@@ -111,7 +114,7 @@ msgid "Returns"
 msgstr "返回值"
 
 #: mcdreforged.handler.server_handler.ServerHandler.parse_console_command:4
-#: mcdreforged.handler.server_handler.ServerHandler.parse_server_stdout:13 of
+#: mcdreforged.handler.server_handler.ServerHandler.parse_server_stdout:6 of
 msgid "An :class:`~mcdreforged.info_reactor.info.Info` object as the result"
 msgstr "一个作为返回值的 :class:`~mcdreforged.info_reactor.info.Info` 对象"
 
@@ -129,23 +132,9 @@ msgstr "它可以在输入字符串格式不正确时，抛出你想要的异常
 
 #: mcdreforged.handler.server_handler.ServerHandler.parse_server_stdout:5 of
 msgid ""
-"In this default implementation, it firstly uses "
-":meth:`_get_server_stdout_raw_result` to get a raw "
-":class:`~mcdreforged.info_reactor.info.Info` object, then use "
-":meth:`_content_parse` to fill generic information into the "
-":class:`~mcdreforged.info_reactor.info.Info` object, finally returns that"
-" as a simply-parsed info"
-msgstr ""
-"在这个默认实现中，它首先使用 :meth:`_get_server_stdout_raw_result` 来获取一个未处理的 "
-":class:`~mcdreforged.info_reactor.info.Info` 对象，然后使用 "
-":meth:`_content_parse` 来向 :class:`~mcdreforged.info_reactor.info.Info` "
-"对象填充一些基础信息，最后将其作为一个简单解析的信息返回"
-
-#: mcdreforged.handler.server_handler.ServerHandler.parse_server_stdout:10 of
-msgid ""
-"If the server handler is able to parse more information, you can do more "
-"post-parsing operations after invoking this method via ``super()``"
-msgstr "如果服务端处理器有解析出更多信息的能力，你可以在借助 ``super()`` 调用本方法后进行更多的后续解析操作"
+"A line of the server stdout to be parsed, processed by "
+":meth:`pre_parse_server_stdout`"
+msgstr "一行要被解析的服务器标准输出流字符串，已经过 :meth:`pre_parse_server_stdout` 处理"
 
 #: mcdreforged.handler.server_handler.ServerHandler.parse_player_joined:1 of
 msgid "Check if the info indicating a player joined message"
@@ -239,6 +228,582 @@ msgstr "需要校验的玩家名"
 msgid "True if the name is a valid player name, otherwise False"
 msgstr "若玩家名合法，则返回 True，否则返回 False"
 
+#: ../code_references/server_handler.rst:12
+msgid "SpecServerHandler"
+msgstr "SpecServerHandler"
+
+#: mcdreforged.handler.impl.spec_server_handler.SpecServerHandler:1 of
+msgid ""
+"A server handler that works according to a "
+":class:`~mcdreforged.handler.handler_spec.HandlerSpec`"
+msgstr "按照 :class:`~mcdreforged.handler.handler_spec.HandlerSpec` 工作的服务端处理器"
+
+#: mcdreforged.handler.impl.SpecServerHandler.spec:1
+#: mcdreforged.handler.impl.spec_server_handler.SpecServerHandler:3 of
+msgid "The handler spec of this handler"
+msgstr "此处理器使用的处理器定义"
+
+#: ../code_references/server_handler.rst:18
+msgid "HandlerSpec"
+msgstr "HandlerSpec"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec:1 of
+msgid ""
+"The declarative definition of a server handler, as an immutable `pydantic"
+" <https://docs.pydantic.dev/>`__ model"
+msgstr "服务端处理器的声明式定义，是一个不可变的 `pydantic <https://docs.pydantic.dev/>`__ 模型"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec:6
+#: mcdreforged.handler.handler_spec.HandlerSpec.Control:6
+#: mcdreforged.handler.handler_spec.HandlerSpec.Events:12
+#: mcdreforged.handler.handler_spec.HandlerSpec.Parsing:15 of
+msgid "Field"
+msgstr "字段"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec:7
+#: mcdreforged.handler.handler_spec.HandlerSpec.Control:7
+#: mcdreforged.handler.handler_spec.HandlerSpec.Parsing:16 of
+msgid "Type"
+msgstr "类型"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec:8
+#: mcdreforged.handler.handler_spec.HandlerSpec.Control:8
+#: mcdreforged.handler.handler_spec.HandlerSpec.Parsing:17 of
+msgid "Description"
+msgstr "说明"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec:9
+#: mcdreforged.handler.handler_spec.HandlerSpec.Events:15
+#: mcdreforged.handler.handler_spec.HandlerSpec.Events:17 of
+msgid "``name``"
+msgstr "``name``"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec:10 of
+msgid ":class:`str`"
+msgstr ":class:`str`"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec:11 of
+msgid "Required. The name of the handler"
+msgstr "必填。处理器的名称"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec:12 of
+msgid "``control``"
+msgstr "``control``"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec:13 of
+msgid ""
+":class:`HandlerSpec.Control "
+"<mcdreforged.handler.handler_spec.HandlerSpec.Control>`"
+msgstr ""
+":class:`HandlerSpec.Control "
+"<mcdreforged.handler.handler_spec.HandlerSpec.Control>`"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec:14
+#: mcdreforged.handler.handler_spec.HandlerSpec:17 of
+msgid "Required"
+msgstr "必填"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec:15 of
+msgid "``parsing``"
+msgstr "``parsing``"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec:16 of
+msgid ""
+":class:`HandlerSpec.Parsing "
+"<mcdreforged.handler.handler_spec.HandlerSpec.Parsing>`"
+msgstr ""
+":class:`HandlerSpec.Parsing "
+"<mcdreforged.handler.handler_spec.HandlerSpec.Parsing>`"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec:18 of
+msgid "``events``"
+msgstr "``events``"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec:19 of
+msgid ""
+":class:`HandlerSpec.Events "
+"<mcdreforged.handler.handler_spec.HandlerSpec.Events>`"
+msgstr ""
+":class:`HandlerSpec.Events "
+"<mcdreforged.handler.handler_spec.HandlerSpec.Events>`"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec:20 of
+msgid "Optional. Default: no event is recognized"
+msgstr "可选。默认值：不识别任何事件"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec:22 of
+msgid ""
+"All regular expressions use the Python :external:mod:`re` syntax. Except "
+"the ``sub`` of :class:`TextTransforms.Sub "
+"<mcdreforged.handler.handler_spec.TextTransforms.Sub>`:"
+msgstr ""
+"所有正则表达式均使用 Python :external:mod:`re` 语法。除 :class:`TextTransforms.Sub "
+"<mcdreforged.handler.handler_spec.TextTransforms.Sub>` 的 ``sub`` 外："
+
+#: mcdreforged.handler.handler_spec.HandlerSpec:24 of
+msgid "A regular expression needs to match the whole text"
+msgstr "正则表达式需要匹配整段文本（整串匹配）"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec:25 of
+msgid ""
+"For a list of regular expressions, they are tried in order, and the first"
+" matched one is used"
+msgstr "若提供了多个正则表达式，则会按顺序逐个尝试，第一个匹配成功的结果将会被使用"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec:26 of
+msgid "Named groups listed as required must be present. Other groups are ignored"
+msgstr "标为必需的命名分组必须存在，其余分组会被忽略"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec.Control:1 of
+msgid "Rules for controlling the server"
+msgstr "控制服务端的规则"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec.Control:9 of
+msgid "``stop``"
+msgstr "``stop``"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec.Control:10 of
+msgid ":data:`StopMethod <mcdreforged.handler.handler_spec.StopMethod>`"
+msgstr ":data:`StopMethod <mcdreforged.handler.handler_spec.StopMethod>`"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec.Control:11 of
+msgid "Required. How to stop the server"
+msgstr "必填。关闭服务端的方式"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec.Control:12 of
+msgid "``send_message``"
+msgstr "``send_message``"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec.Control:13 of
+msgid ""
+":data:`SendMessageMethod "
+"<mcdreforged.handler.handler_spec.SendMessageMethod>` or ``null``"
+msgstr ""
+":data:`SendMessageMethod "
+"<mcdreforged.handler.handler_spec.SendMessageMethod>` 或 ``null``"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec.Control:14 of
+msgid ""
+"Optional. How to send a message to a player. Default: ``null``, not "
+"supported"
+msgstr "可选。向玩家发送消息的方式。默认值：``null``，即不支持"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec.Control:15 of
+msgid "``broadcast_message``"
+msgstr "``broadcast_message``"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec.Control:16 of
+msgid ""
+":data:`BroadcastMessageMethod "
+"<mcdreforged.handler.handler_spec.BroadcastMessageMethod>` or ``null``"
+msgstr ""
+":data:`BroadcastMessageMethod "
+"<mcdreforged.handler.handler_spec.BroadcastMessageMethod>` 或 ``null``"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec.Control:17 of
+msgid ""
+"Optional. How to broadcast a message to all players. Default: ``null``, "
+"not supported"
+msgstr "可选。向所有玩家广播消息的方式。默认值：``null``，即不支持"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec.Parsing:1 of
+msgid "Rules for parsing the server output"
+msgstr "解析服务端输出的规则"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec.Parsing:3 of
+msgid "Each line of the server output is processed in the following steps:"
+msgstr "服务端输出的每一行都将按以下步骤处理："
+
+#: mcdreforged.handler.handler_spec.HandlerSpec.Parsing:5 of
+msgid ""
+"Apply the ``pre_parse`` text transforms. The result is the "
+":attr:`~mcdreforged.info_reactor.info.Info.raw_content` of the info"
+msgstr ""
+"应用 ``pre_parse`` 文本变换。其结果即为信息的 "
+":attr:`~mcdreforged.info_reactor.info.Info.raw_content`"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec.Parsing:6 of
+msgid "Apply the ``line_transforms`` text transforms to the raw content"
+msgstr "对原始内容应用 ``line_transforms`` 文本变换"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec.Parsing:7 of
+msgid ""
+"Match the result against the ``line`` rules. If none of the rules "
+"matches, the line is unrecognized, its "
+":attr:`~mcdreforged.info_reactor.info.Info.content` is the raw content"
+msgstr ""
+"用 ``line`` 规则匹配上一步的结果。若所有规则均不匹配，则该行无法识别，其 "
+":attr:`~mcdreforged.info_reactor.info.Info.content` 为原始内容"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec.Parsing:9 of
+msgid ""
+"Match the content against the ``player_message`` rules. If matched, the "
+"line is a message from a player"
+msgstr "用 ``player_message`` 规则匹配内容。若匹配成功，则这一行是玩家发送的消息"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec.Parsing:18 of
+msgid "``pre_parse``"
+msgstr "``pre_parse``"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec.Parsing:19
+#: mcdreforged.handler.handler_spec.HandlerSpec.Parsing:22 of
+msgid ""
+"List of :data:`TextTransform "
+"<mcdreforged.handler.handler_spec.TextTransform>`"
+msgstr ":data:`TextTransform <mcdreforged.handler.handler_spec.TextTransform>` 的列表"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec.Parsing:20
+#: mcdreforged.handler.handler_spec.HandlerSpec.Parsing:23 of
+msgid "Optional. Default: ``[]``"
+msgstr "可选。默认值：``[]``"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec.Parsing:21 of
+msgid "``line_transforms``"
+msgstr "``line_transforms``"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec.Parsing:24 of
+msgid "``line``"
+msgstr "``line``"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec.Parsing:25
+#: mcdreforged.handler.handler_spec.HandlerSpec.Parsing:32 of
+msgid "List of regular expressions"
+msgstr "正则表达式列表"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec.Parsing:26 of
+msgid ""
+"Required, at least one. The formats of a line. Named group ``content`` is"
+" required, as the :attr:`~mcdreforged.info_reactor.info.Info.content` of "
+"the info. Named groups ``hour``, ``min``, ``sec`` and ``logging`` are "
+"optional, as the :attr:`~mcdreforged.info_reactor.info.Info.hour`, "
+":attr:`~mcdreforged.info_reactor.info.Info.min`, "
+":attr:`~mcdreforged.info_reactor.info.Info.sec` and "
+":attr:`~mcdreforged.info_reactor.info.Info.logging_level` of the info"
+msgstr ""
+"必填，至少一条。一行输出的格式。命名分组 ``content`` 为必需，作为信息的 "
+":attr:`~mcdreforged.info_reactor.info.Info.content`。命名分组 "
+"``hour``、``min``、``sec`` 和 ``logging`` 为可选，分别作为信息的 "
+":attr:`~mcdreforged.info_reactor.info.Info.hour`、:attr:`~mcdreforged.info_reactor.info.Info.min`、:attr:`~mcdreforged.info_reactor.info.Info.sec`"
+" 和 :attr:`~mcdreforged.info_reactor.info.Info.logging_level`"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec.Parsing:31 of
+msgid "``player_message``"
+msgstr "``player_message``"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec.Parsing:33 of
+msgid ""
+"Optional. The formats of a player message. Named groups ``name`` and "
+"``message`` are required, as the "
+":attr:`~mcdreforged.info_reactor.info.Info.player` and the "
+":attr:`~mcdreforged.info_reactor.info.Info.content` of the info. A rule "
+"is skipped if the player name is invalid. Default: ``[]``, player "
+"messages are not recognized"
+msgstr ""
+"可选。玩家消息的格式。命名分组 ``name`` 和 ``message`` 为必需，分别作为信息的 "
+":attr:`~mcdreforged.info_reactor.info.Info.player` 和 "
+":attr:`~mcdreforged.info_reactor.info.Info.content`。若玩家名不合法，则跳过该规则。默认值：``[]``，即不识别玩家消息"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec.Parsing:38 of
+msgid "``player_name``"
+msgstr "``player_name``"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec.Parsing:39 of
+msgid "Regular expression"
+msgstr "正则表达式"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec.Parsing:40 of
+msgid "Required. The format of a valid player name"
+msgstr "必填。合法玩家名的格式"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec.Events:1 of
+msgid "Rules for recognizing server events"
+msgstr "识别服务端事件的规则"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec.Events:3 of
+msgid ""
+"Each field is an optional list of regular expressions, matched against "
+"the :attr:`~mcdreforged.info_reactor.info.Info.content` of the info. "
+"Default: ``[]``, the event is not recognized"
+msgstr ""
+"每个字段都是一个可选的正则表达式列表，用于匹配信息的 "
+":attr:`~mcdreforged.info_reactor.info.Info.content`。默认值：``[]``，即不识别该事件"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec.Events:6 of
+msgid ""
+"Events are only recognized from server output that is not a player "
+"message. For rules with the ``name`` named group, a rule is skipped if "
+"the player name is invalid"
+msgstr "事件只会从非玩家消息的服务端输出中识别。对于含有 ``name`` 命名分组的规则，若玩家名不合法，则跳过该规则"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec.Events:13 of
+msgid "Required named groups"
+msgstr "必需的命名分组"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec.Events:14 of
+msgid "``player_joined``"
+msgstr "``player_joined``"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec.Events:16 of
+msgid "``player_left``"
+msgstr "``player_left``"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec.Events:18 of
+msgid "``server_version``"
+msgstr "``server_version``"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec.Events:19 of
+msgid "``version``"
+msgstr "``version``"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec.Events:20 of
+msgid "``server_address``"
+msgstr "``server_address``"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec.Events:21 of
+msgid "``ip``, ``port``"
+msgstr "``ip``、``port``"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec.Events:22 of
+msgid "``server_startup_done``"
+msgstr "``server_startup_done``"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec.Events:24 of
+msgid "``rcon_started``"
+msgstr "``rcon_started``"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec.Events:26 of
+msgid "``server_stopping``"
+msgstr "``server_stopping``"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec.extend:1 of
+msgid "Create a new spec by merging the given override onto this spec"
+msgstr "将 override 合并到当前定义之上，得到一个新的处理器定义"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec.extend:3 of
+msgid "Merging rules:"
+msgstr "合并规则："
+
+#: mcdreforged.handler.handler_spec.HandlerSpec.extend:5 of
+msgid ""
+"``control``, ``parsing`` and ``events`` are merged key by key. Keys not "
+"present in the override are inherited from this spec"
+msgstr "``control``、``parsing`` 和 ``events`` 逐键合并，override 中没写的键沿用当前定义"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec.extend:6 of
+msgid ""
+"Other values are replaced as a whole, including lists, stop methods, "
+"message methods and text transforms"
+msgstr "其余的值整体替换，包括列表、停服方式、消息发送方式和文本变换"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec.extend:7 of
+msgid "``name`` is not inherited"
+msgstr "``name`` 不沿用"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec.extend:9 of
+msgid "The override, in the same structure as a handler spec"
+msgstr "要合并的内容，结构与处理器定义一致"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec.extend:10 of
+msgid "The merged handler spec"
+msgstr "合并后的处理器定义"
+
+#: ../code_references/server_handler.rst
+msgid "Raises"
+msgstr "抛出"
+
+#: mcdreforged.handler.handler_spec.HandlerSpec.extend:11 of
+msgid "If the merged handler spec is invalid"
+msgstr "若合并后的处理器定义不合法"
+
+#: mcdreforged.handler.handler_spec:1 of
+msgid "Server handler spec models for declarative handler configuration"
+msgstr "服务端处理器定义的数据模型，用于声明式配置"
+
+#: mcdreforged.handler.handler_spec.TextTransforms:1 of
+msgid ""
+"The available forms of :data:`TextTransform "
+"<mcdreforged.handler.handler_spec.TextTransform>`, which modify a line of"
+" text"
+msgstr ""
+"修改一行文本的文本变换，即 :data:`TextTransform "
+"<mcdreforged.handler.handler_spec.TextTransform>` 可用的各种写法"
+
+#: mcdreforged.handler.handler_spec.SendMessageMethods.Builtin:5
+#: mcdreforged.handler.handler_spec.TextTransforms.Builtin:5 of
+msgid "Available values of ``builtin``:"
+msgstr "``builtin`` 的可用值："
+
+#: mcdreforged.handler.handler_spec.TextTransforms.Builtin:7 of
+msgid "``strip_ansi_color``: Remove ANSI console color codes, e.g. ``\\033[31m``"
+msgstr "``strip_ansi_color``：移除 ANSI 控制台颜色代码，例如 ``\\033[31m``"
+
+#: mcdreforged.handler.handler_spec.TextTransforms.Builtin:8 of
+msgid "``strip_minecraft_color``: Remove Minecraft color codes, e.g. ``§a``"
+msgstr "``strip_minecraft_color``：移除 Minecraft 颜色代码，例如 ``§a``"
+
+#: mcdreforged.handler.handler_spec.TextTransforms.Sub:1 of
+msgid "Replace occurrences of a regular expression, like :external:func:`re.sub`"
+msgstr "替换正则表达式的匹配项，类似 :external:func:`re.sub`"
+
+#: of typing.Annotated:1
+msgid ""
+"A text transform, in one of the forms in :class:`TextTransforms "
+"<mcdreforged.handler.handler_spec.TextTransforms>`, determined by the key"
+" present"
+msgstr ""
+"文本变换，为 :class:`TextTransforms "
+"<mcdreforged.handler.handler_spec.TextTransforms>` 中的一种，具体是哪种取决于写了哪个键"
+
+#: mcdreforged.handler.handler_spec.StopMethods:1 of
+msgid ""
+"The available forms of :data:`StopMethod "
+"<mcdreforged.handler.handler_spec.StopMethod>`, which stop the server"
+msgstr ""
+"关闭服务端的方式，即 :data:`StopMethod "
+"<mcdreforged.handler.handler_spec.StopMethod>` 可用的各种写法"
+
+#: mcdreforged.handler.handler_spec.StopMethods.Command:1 of
+msgid "Send a command to the standard input of the server"
+msgstr "向服务端的标准输入发送一条命令"
+
+#: mcdreforged.handler.handler_spec.StopMethods.Signal:1 of
+msgid "Send a signal to the server process"
+msgstr "向服务端进程发送一个信号"
+
+#: mcdreforged.handler.handler_spec.StopMethods.Signal:8 of
+msgid "Available values of ``scope``:"
+msgstr "``scope`` 的可用值："
+
+#: mcdreforged.handler.handler_spec.StopMethods.Signal:10 of
+msgid "``process``: Only the server process, i.e. the process started by MCDR"
+msgstr "``process``：仅服务端进程，即由 MCDR 启动的进程"
+
+#: mcdreforged.handler.handler_spec.StopMethods.Signal:11 of
+msgid "``process_tree``: The server process and all of its child processes"
+msgstr "``process_tree``：服务端进程及其所有子进程"
+
+#: mcdreforged.handler.handler_spec.StopMethods.Signal:13 of
+msgid ""
+"On Windows, only ``SIGTERM`` is supported, which terminates the process "
+"immediately"
+msgstr "在 Windows 上，仅支持 ``SIGTERM``，它会立即终止进程"
+
+#: of typing.Annotated:1
+msgid ""
+"A stop method, in one of the forms in :class:`StopMethods "
+"<mcdreforged.handler.handler_spec.StopMethods>`, determined by the key "
+"present"
+msgstr ""
+"停服方式，为 :class:`StopMethods "
+"<mcdreforged.handler.handler_spec.StopMethods>` 中的一种，具体是哪种取决于写了哪个键"
+
+#: mcdreforged.handler.handler_spec.SendMessageMethods:1 of
+msgid ""
+"The available forms of :data:`SendMessageMethod "
+"<mcdreforged.handler.handler_spec.SendMessageMethod>`, which send a "
+"message to a target"
+msgstr ""
+"向一个目标发送消息的方式，即 :data:`SendMessageMethod "
+"<mcdreforged.handler.handler_spec.SendMessageMethod>` 可用的各种写法"
+
+#: mcdreforged.handler.handler_spec.SendMessageMethods.Builtin:7 of
+msgid "``minecraft_tellraw``: The ``tellraw`` command of Minecraft"
+msgstr "``minecraft_tellraw``：Minecraft 的 ``tellraw`` 命令"
+
+#: mcdreforged.handler.handler_spec.BroadcastMessageMethods.Template:1
+#: mcdreforged.handler.handler_spec.SendMessageMethods.Template:1 of
+msgid "A command built from a template"
+msgstr "由模板构建的命令"
+
+#: mcdreforged.handler.handler_spec.SendMessageMethods.Template:8 of
+msgid ""
+"``template`` uses the :external:meth:`str.format` syntax. Available "
+"placeholders:"
+msgstr "``template`` 使用 :external:meth:`str.format` 语法。可用的占位符："
+
+#: mcdreforged.handler.handler_spec.SendMessageMethods.Template:10 of
+#, python-brace-format
+msgid "``{target}``: The target of the message"
+msgstr "``{target}``：消息的目标"
+
+#: mcdreforged.handler.handler_spec.SendMessageMethods.Template:11 of
+#, python-brace-format
+msgid "``{message}``: The message, formatted according to ``message_format``"
+msgstr "``{message}``：消息内容，按 ``message_format`` 格式化"
+
+#: mcdreforged.handler.handler_spec.SendMessageMethods.Template:13 of
+#, python-brace-format
+msgid ""
+"Use ``{{`` and ``}}`` for literal braces. Placeholders with conversions "
+"or format specs, e.g. ``{message!r}``, are not allowed"
+msgstr "字面量花括号写作 ``{{`` 和 ``}}``。不支持 ``{message!r}`` 这类带转换符或格式说明符的占位符"
+
+#: mcdreforged.handler.handler_spec.SendMessageMethods.Template:15 of
+msgid "Available values of ``message_format``:"
+msgstr "``message_format`` 的可用值："
+
+#: mcdreforged.handler.handler_spec.SendMessageMethods.Template:17 of
+msgid "``json``: A JSON text component"
+msgstr "``json``：JSON 文本组件"
+
+#: mcdreforged.handler.handler_spec.SendMessageMethods.Template:18 of
+msgid "``plain``: Plain text, with Minecraft color codes like ``§a`` removed"
+msgstr "``plain``：纯文本，并移除 ``§a`` 等 Minecraft 颜色代码"
+
+#: of typing.Annotated:1
+msgid ""
+"A send message method, in one of the forms in :class:`SendMessageMethods "
+"<mcdreforged.handler.handler_spec.SendMessageMethods>`, determined by the"
+" key present"
+msgstr ""
+"消息发送方式，为 :class:`SendMessageMethods "
+"<mcdreforged.handler.handler_spec.SendMessageMethods>` 中的一种，具体是哪种取决于写了哪个键"
+
+#: mcdreforged.handler.handler_spec.BroadcastMessageMethods:1 of
+msgid ""
+"The available forms of :data:`BroadcastMessageMethod "
+"<mcdreforged.handler.handler_spec.BroadcastMessageMethod>`, which "
+"broadcast a message"
+msgstr ""
+"广播消息的方式，即 :data:`BroadcastMessageMethod "
+"<mcdreforged.handler.handler_spec.BroadcastMessageMethod>` 可用的各种写法"
+
+#: mcdreforged.handler.handler_spec.BroadcastMessageMethods.Builtin:6 of
+msgid ""
+"Same as :class:`SendMessageMethods.Builtin "
+"<mcdreforged.handler.handler_spec.SendMessageMethods.Builtin>`, with a "
+"fixed ``target``"
+msgstr ""
+"与 :class:`SendMessageMethods.Builtin "
+"<mcdreforged.handler.handler_spec.SendMessageMethods.Builtin>` 相同，但使用固定的 "
+"``target``"
+
+#: mcdreforged.handler.handler_spec.BroadcastMessageMethods.Template:8 of
+#, python-brace-format
+msgid ""
+"Same as :class:`SendMessageMethods.Template "
+"<mcdreforged.handler.handler_spec.SendMessageMethods.Template>`, except "
+"that only the ``{message}`` placeholder is available"
+msgstr ""
+"与 :class:`SendMessageMethods.Template "
+"<mcdreforged.handler.handler_spec.SendMessageMethods.Template>` 相同，但仅可使用 "
+"``{message}`` 占位符"
+
+#: of typing.Annotated:1
+msgid ""
+"A broadcast message method, in one of the forms in "
+":class:`BroadcastMessageMethods "
+"<mcdreforged.handler.handler_spec.BroadcastMessageMethods>`, determined "
+"by the key present"
+msgstr ""
+"消息广播方式，为 :class:`BroadcastMessageMethods "
+"<mcdreforged.handler.handler_spec.BroadcastMessageMethods>` "
+"中的一种，具体是哪种取决于写了哪个键"
+
+#: ../code_references/server_handler.rst:28
+msgid "Built-in Handlers"
+msgstr "内置处理器"
+
 #: mcdreforged.handler.impl.basic_handler.BasicHandler:1 of
 msgid "The basic plain handler, providing the minimum parsed information"
 msgstr "基础的朴素的处理器，提供最小的解析信息"
@@ -248,17 +813,6 @@ msgid ""
 "During server output parsing, it's used as the fallback handler when "
 "every other dedicated handler failed"
 msgstr "在解析服务端输出的过程中，当所有其他的专用服务端处理器失败时，它将被作为后备处理器使用"
-
-#: mcdreforged.handler.impl.spec_server_handler.SpecServerHandler:1 of
-msgid ""
-"A server handler driven by a "
-":class:`~mcdreforged.handler.handler_spec.HandlerSpec`"
-msgstr ""
-"由 :class:`~mcdreforged.handler.handler_spec.HandlerSpec` 驱动的服务端处理器"
-
-#: mcdreforged.handler.impl.builtin_handlers.BuiltinSpecServerHandler:1 of
-msgid "A spec server handler whose spec is loaded from a resource file of MCDR"
-msgstr "从 MCDR 资源文件加载 spec 的服务端处理器"
 
 #: mcdreforged.handler.impl.builtin_handlers.VanillaHandler:1 of
 msgid "A handler for vanilla Minecraft servers"
@@ -316,3 +870,4 @@ msgstr "为 `Waterfall <https://github.com/PaperMC/Waterfall>`__ 服务端设计
 #: mcdreforged.handler.impl.builtin_handlers.VelocityHandler:1 of
 msgid "A handler for `Velocity <https://velocitypowered.com>`__ servers"
 msgstr "为 `Velocity <https://velocitypowered.com>`__ 服务端设计的服务端处理器"
+

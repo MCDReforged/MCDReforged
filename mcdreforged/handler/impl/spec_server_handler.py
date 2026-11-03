@@ -18,15 +18,26 @@ from mcdreforged.utils.types.message import MessageText
 
 class SpecServerHandler(ServerHandler):
 	"""
-	A server handler driven by a :class:`~mcdreforged.handler.handler_spec.HandlerSpec`
+	A server handler that works according to a :class:`~mcdreforged.handler.handler_spec.HandlerSpec`
+
+	:param spec: The handler spec of this handler
+
+	.. versionadded:: v2.17.0
 	"""
 
 	def __init__(self, spec: HandlerSpec):
-		self.spec = spec
+		self.__spec = spec
+
+	@property
+	def spec(self) -> HandlerSpec:
+		"""
+		The handler spec of this handler
+		"""
+		return self.__spec
 
 	@override
 	def get_name(self) -> str:
-		return self.spec.name
+		return self.__spec.name
 
 	# ------------------
 	#   Server control
@@ -34,7 +45,7 @@ class SpecServerHandler(ServerHandler):
 
 	@override
 	def get_stop_method(self) -> StopMethod:
-		return self.spec.control.stop
+		return self.__spec.control.stop
 
 	@classmethod
 	def __format_json_message(cls, message: MessageText, server_information: ServerInformation) -> str:
@@ -88,11 +99,11 @@ class SpecServerHandler(ServerHandler):
 
 	@override
 	def get_send_message_command(self, target: str, message: MessageText, server_information: ServerInformation) -> Optional[str]:
-		return self.__render_message_command(self.spec.control.send_message, target, message, server_information)
+		return self.__render_message_command(self.__spec.control.send_message, target, message, server_information)
 
 	@override
 	def get_broadcast_message_command(self, message: MessageText, server_information: ServerInformation) -> Optional[str]:
-		return self.__render_message_command(self.spec.control.broadcast_message, None, message, server_information)
+		return self.__render_message_command(self.__spec.control.broadcast_message, None, message, server_information)
 
 	# -------------------------
 	#   Server output parsing
@@ -117,7 +128,7 @@ class SpecServerHandler(ServerHandler):
 
 	@override
 	def pre_parse_server_stdout(self, text: str) -> str:
-		return self.__apply_text_transforms(text, self.spec.parsing.pre_parse)
+		return self.__apply_text_transforms(text, self.__spec.parsing.pre_parse)
 
 	@override
 	def parse_console_command(self, text: str) -> Info:
@@ -136,9 +147,9 @@ class SpecServerHandler(ServerHandler):
 		if type(text) is not str:
 			raise TypeError('The text to parse should be a string')
 		info = Info(InfoSource.SERVER, text)
-		content = self.__apply_text_transforms(text, self.spec.parsing.line_transforms)
+		content = self.__apply_text_transforms(text, self.__spec.parsing.line_transforms)
 
-		for pattern in self.spec.parsing.line:
+		for pattern in self.__spec.parsing.line:
 			if (m := pattern.fullmatch(content)) is not None:
 				break
 		else:
@@ -151,7 +162,7 @@ class SpecServerHandler(ServerHandler):
 		info.logging_level = groups.get('logging')
 		info.content = m['content']
 
-		if (m := self.__match_with_player_name(self.spec.parsing.player_message, info.content)) is not None:
+		if (m := self.__match_with_player_name(self.__spec.parsing.player_message, info.content)) is not None:
 			info.player, info.content = m['name'], m['message']
 		return info
 
@@ -173,40 +184,40 @@ class SpecServerHandler(ServerHandler):
 
 	@override
 	def parse_player_joined(self, info: Info) -> Optional[str]:
-		if (m := self.__match_event(self.spec.events.player_joined, info, with_player_name=True)) is not None:
+		if (m := self.__match_event(self.__spec.events.player_joined, info, with_player_name=True)) is not None:
 			return m['name']
 		return None
 
 	@override
 	def parse_player_left(self, info: Info) -> Optional[str]:
-		if (m := self.__match_event(self.spec.events.player_left, info, with_player_name=True)) is not None:
+		if (m := self.__match_event(self.__spec.events.player_left, info, with_player_name=True)) is not None:
 			return m['name']
 		return None
 
 	@override
 	def parse_server_version(self, info: Info) -> Optional[str]:
-		if (m := self.__match_event(self.spec.events.server_version, info, with_player_name=False)) is not None:
+		if (m := self.__match_event(self.__spec.events.server_version, info, with_player_name=False)) is not None:
 			return m['version']
 		return None
 
 	@override
 	def parse_server_address(self, info: Info) -> Optional[Tuple[str, int]]:
-		if (m := self.__match_event(self.spec.events.server_address, info, with_player_name=False)) is not None:
+		if (m := self.__match_event(self.__spec.events.server_address, info, with_player_name=False)) is not None:
 			return m['ip'], int(m['port'])
 		return None
 
 	@override
 	def test_server_startup_done(self, info: Info) -> bool:
-		return self.__match_event(self.spec.events.server_startup_done, info, with_player_name=False) is not None
+		return self.__match_event(self.__spec.events.server_startup_done, info, with_player_name=False) is not None
 
 	@override
 	def test_rcon_started(self, info: Info) -> bool:
-		return self.__match_event(self.spec.events.rcon_started, info, with_player_name=False) is not None
+		return self.__match_event(self.__spec.events.rcon_started, info, with_player_name=False) is not None
 
 	@override
 	def test_server_stopping(self, info: Info) -> bool:
-		return self.__match_event(self.spec.events.server_stopping, info, with_player_name=False) is not None
+		return self.__match_event(self.__spec.events.server_stopping, info, with_player_name=False) is not None
 
 	@override
 	def validate_player_name(self, name: str) -> bool:
-		return self.spec.parsing.player_name.fullmatch(name) is not None
+		return self.__spec.parsing.player_name.fullmatch(name) is not None

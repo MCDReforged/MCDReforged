@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-28 03:14+0800\n"
+"POT-Creation-Date: 2026-11-03 21:04+0800\n"
 "PO-Revision-Date: 2025-05-28 20:50+0800\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.15.0\n"
+"Generated-By: Babel 2.17.0\n"
 
 #: ../code_references/ServerInterface.rst:3
 msgid "ServerInterface"
@@ -73,8 +73,8 @@ msgid ""
 "parameter"
 msgstr ""
 "它可用于移除 "
-":class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface` "
-"中包含的插件信息。比如在需要传递一个 "
+":class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`"
+" 中包含的插件信息。比如在需要传递一个 "
 ":class:`~mcdreforged.plugin.si.server_interface.ServerInterface` "
 "参数，但又不想暴露插件信息时"
 
@@ -202,7 +202,6 @@ msgstr ""
 msgid "Utils"
 msgstr "实用工具"
 
-#: ../../docstring
 #: mcdreforged.plugin.si.server_interface.ServerInterface.MCDR:1 of
 msgid "An identifier field for MCDR"
 msgstr "MCDR 的标识符属性"
@@ -349,9 +348,9 @@ msgstr "操作是否成功。若服务端已启动，或者服务端因命令错
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.stop:1 of
 msgid ""
-"Soft shutting down the server by sending the correct stop command to the "
-"server"
-msgstr "通过向服务端发送其对应的关闭命令来软停止服务端"
+"Soft shutting down the server with the stop method of the current server "
+"handler"
+msgstr "使用当前服务端处理器的停服方式来软停止服务端"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.stop:3 of
 msgid ""
