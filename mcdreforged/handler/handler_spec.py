@@ -6,7 +6,7 @@ import re
 import string
 from typing import List, Dict, Annotated, Any, ClassVar, FrozenSet, Mapping, Type
 
-from pydantic import BaseModel, ConfigDict, Field, AfterValidator, Tag, StringConstraints, field_validator
+from pydantic import BaseModel, ConfigDict, Field, AfterValidator, Tag, StringConstraints, ValidationInfo, field_validator
 from typing_extensions import TypeAliasType
 
 from mcdreforged.utils.pydantic_utils import key_discriminator
@@ -74,6 +74,16 @@ class TextTransforms:
 		sub: re.Pattern[str]
 		repl: str
 		count: int = Field(default=0, ge=0)
+
+		@field_validator('repl')
+		@classmethod
+		def _validate_repl(cls, repl: str, info: ValidationInfo) -> str:
+			if (pattern := info.data.get('sub')) is not None:
+				try:
+					pattern.sub(repl, '')
+				except (re.error, IndexError) as e:
+					raise ValueError(f'invalid replacement: {e}') from e
+			return repl
 
 
 TextTransform = TypeAliasType('TextTransform', Annotated[
