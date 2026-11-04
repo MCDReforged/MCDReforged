@@ -9,7 +9,6 @@ from threading import RLock, Lock
 from typing import TYPE_CHECKING, Optional, Iterable, List, Sized, TextIO, cast, IO
 
 from prompt_toolkit import PromptSession
-from prompt_toolkit.application import get_app
 from prompt_toolkit.buffer import CompletionState, Buffer
 from prompt_toolkit.completion import Completion, CompleteEvent, WordCompleter
 from prompt_toolkit.document import Document
@@ -341,12 +340,24 @@ class PromptToolkitWrapper:
 		real_ctor = MultiColumnCompletionMenuControl.__init__
 		MultiColumnCompletionMenuControl.__init__ = min_rows_is_2  # type: ignore
 
+	def __exit_prompt(self):
+		assert self.prompt_session is not None
+		app = self.prompt_session.app
+		if app.is_running and not app.is_done:
+			app.exit()
+
+	def __on_prompt_start(self):
+		# A stop request may arrive before the prompt's event loop is available.
+		if not self.pt_enabled:
+			self.__exit_prompt()
+
 	def stop_kits(self):
 		if self.pt_enabled:
 			self.pt_enabled = False
 			self.__logger.info(self.__tr('stopping_kits'))
 
 			assert self.stdout_proxy is not None
+			assert self.prompt_session is not None
 			assert self.__real_stdout is not None
 			assert self.__real_stderr is not None
 
@@ -354,12 +365,13 @@ class PromptToolkitWrapper:
 			sys.stdout = self.__real_stdout
 			sys.stderr = self.__real_stderr
 			SyncStdoutStreamHandler.update_stdout(sys.stdout)
-			pt_app = get_app()
-			if pt_app.is_running:
+			loop = self.prompt_session.app.loop
+			if loop is not None:
 				try:
-					pt_app.exit()
-				except Exception:
-					self.__logger.exception('Fail to stop prompt toolkit app')
+					loop.call_soon_threadsafe(self.__exit_prompt)
+				except RuntimeError:
+					if not loop.is_closed():
+						raise
 			with self.__promoting:
 				# make sure in the console thread, prompt_session.prompt() ends
 				pass
@@ -370,7 +382,7 @@ class PromptToolkitWrapper:
 			assert self.prompt_session is not None
 			with self.__promoting:
 				# It's possible for prompt-toolkit to return a string wth multiple lines when pasting (#146)
-				input_ = self.prompt_session.prompt('> ')
+				input_ = self.prompt_session.prompt('> ', pre_run=self.__on_prompt_start)
 				if input_ is None:
 					input_ = ''
 				return input_.splitlines()
