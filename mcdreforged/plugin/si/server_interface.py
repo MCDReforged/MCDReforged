@@ -902,7 +902,7 @@ class ServerInterface:
 
 		The modification will be written to the disk and take effect immediately
 
-		Currently, MCDR will not validate the type of the value
+		The new config is validated before being applied
 
 		Example usages::
 

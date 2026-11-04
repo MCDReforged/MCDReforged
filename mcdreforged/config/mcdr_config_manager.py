@@ -83,19 +83,20 @@ class MCDReforgedConfigManager:
 		:param changes: change map
 		"""
 		with self.__config_change_lock:
-			config = self.__config.model_copy(deep=True)
+			data = self.__config.model_dump()
 			for keys, value in changes.items():
 				if isinstance(keys, str):
 					keys = tuple(keys.split('.'))
 				assert len(keys) > 0
-				obj = config
+				obj = data
 				for i, key in enumerate(keys):
 					if key.startswith('_'):
 						raise ValueError('Bad key to modify: {!r} at index {}'.format(key, i))
-					if not hasattr(obj, key):
+					if not isinstance(obj, dict) or key not in obj:
 						raise KeyError('Unknown config key: {!r} at index {}'.format(key, i))
 					if i < len(keys) - 1:
-						obj = getattr(obj, key)
+						obj = obj[key]
 					else:
-						setattr(obj, key, value)
+						obj[key] = value
+			config = MCDReforgedConfig.model_validate(data, strict=True)
 			self.__on_config_changed(config, log)

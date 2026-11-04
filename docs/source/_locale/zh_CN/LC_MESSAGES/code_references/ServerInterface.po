@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MCDReforged \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-03 21:04+0800\n"
+"POT-Creation-Date: 2026-11-04 21:21+0800\n"
 "PO-Revision-Date: 2025-05-28 20:50+0800\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -243,25 +243,25 @@ msgstr "见 :ref:`此处 <plugin-translation>` 以了解为你的插件注册翻
 msgid "Parameters"
 msgstr "参数"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.has_translation:9
-#: mcdreforged.plugin.si.server_interface.ServerInterface.rtr:8
-#: mcdreforged.plugin.si.server_interface.ServerInterface.tr:11 of
+#: mcdreforged.plugin.si.server_interface.ServerInterface.has_translation:10
+#: mcdreforged.plugin.si.server_interface.ServerInterface.rtr:9
+#: mcdreforged.plugin.si.server_interface.ServerInterface.tr:12 of
 msgid "The key of the translation"
 msgstr "翻译键"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.rtr:9
-#: mcdreforged.plugin.si.server_interface.ServerInterface.tr:12 of
+#: mcdreforged.plugin.si.server_interface.ServerInterface.rtr:11
+#: mcdreforged.plugin.si.server_interface.ServerInterface.tr:14 of
 msgid "The args to be formatted"
 msgstr "用于格式化的参数（args）"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.tr:13 of
+#: mcdreforged.plugin.si.server_interface.ServerInterface.tr:16 of
 msgid ""
 "Specific language to be used in this translation, or the language that "
 "MCDR is using will be used"
 msgstr "指定在该次翻译中使用的语言。若未指定，则使用 MCDR 所使用的语言"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.rtr:10
-#: mcdreforged.plugin.si.server_interface.ServerInterface.tr:14 of
+#: mcdreforged.plugin.si.server_interface.ServerInterface.rtr:13
+#: mcdreforged.plugin.si.server_interface.ServerInterface.tr:18 of
 msgid "The kwargs to be formatted"
 msgstr "用于格式化的关键字参数（kwargs）"
 
@@ -316,11 +316,11 @@ msgstr "值得注意，你不需要把传递与这个翻译相关的 ``*args`` �
 msgid "Keyword Arguments"
 msgstr "关键字参数"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.has_translation:10 of
+#: mcdreforged.plugin.si.server_interface.ServerInterface.has_translation:12 of
 msgid "Optional, the language to check for translation key existence"
 msgstr "可选参数，用于检查翻译是否存在时使用的语言"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.has_translation:11 of
+#: mcdreforged.plugin.si.server_interface.ServerInterface.has_translation:14 of
 msgid ""
 "When set to True, MCDR will not fall back to \"en_us\" and have another "
 "translation try, if translation failed"
@@ -529,14 +529,14 @@ msgid ""
 "system"
 msgstr "方法 :meth:`execute_command`，如果你想要在 MCDR 的命令系统中执行命令"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.execute:7 of
+#: mcdreforged.plugin.si.server_interface.ServerInterface.execute:8 of
 msgid "The content of the command you want to send"
 msgstr "你要发送的命令内容"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.broadcast:6
-#: mcdreforged.plugin.si.server_interface.ServerInterface.execute:8
-#: mcdreforged.plugin.si.server_interface.ServerInterface.say:4
-#: mcdreforged.plugin.si.server_interface.ServerInterface.tell:5 of
+#: mcdreforged.plugin.si.server_interface.ServerInterface.broadcast:8
+#: mcdreforged.plugin.si.server_interface.ServerInterface.execute:10
+#: mcdreforged.plugin.si.server_interface.ServerInterface.say:6
+#: mcdreforged.plugin.si.server_interface.ServerInterface.tell:8 of
 msgid ""
 "The encoding method for the text. Leave it empty to use the encoding "
 "method from the configuration of MCDR"
@@ -546,11 +546,11 @@ msgstr "文本的编码方法。留空以使用 MCDR 配置文件中的编码方
 msgid "Use command like ``/tellraw`` to send the message to the specific player"
 msgstr "使用 ``/tellraw`` 等命令向特定玩家发送消息"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.tell:3 of
+#: mcdreforged.plugin.si.server_interface.ServerInterface.tell:4 of
 msgid "The name of the player you want to tell"
 msgstr "目标玩家的名字"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.tell:4 of
+#: mcdreforged.plugin.si.server_interface.ServerInterface.tell:6 of
 msgid "The message you want to send to the player"
 msgstr "你想发送的信息"
 
@@ -558,9 +558,9 @@ msgstr "你想发送的信息"
 msgid "Use command like ``/tellraw @a`` to broadcast the message in game"
 msgstr "使用 ``/tellraw @a`` 等命令在游戏中广播消息"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.broadcast:5
-#: mcdreforged.plugin.si.server_interface.ServerInterface.reply:9
-#: mcdreforged.plugin.si.server_interface.ServerInterface.say:3 of
+#: mcdreforged.plugin.si.server_interface.ServerInterface.broadcast:6
+#: mcdreforged.plugin.si.server_interface.ServerInterface.reply:11
+#: mcdreforged.plugin.si.server_interface.ServerInterface.say:4 of
 msgid "The message you want to send"
 msgstr "你要发送的消息"
 
@@ -587,21 +587,21 @@ msgstr ""
 "``server.logger.info`` 来输出到控制台；在其他情况下，Info 不是来自用户，抛出 "
 ":class:`~mcdreforged.utils.exception.IllegalCallError`"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.reply:8 of
+#: mcdreforged.plugin.si.server_interface.ServerInterface.reply:9 of
 msgid "the Info you want to reply to"
 msgstr "你要回复的 Info 目标"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.reply:10 of
+#: mcdreforged.plugin.si.server_interface.ServerInterface.reply:13 of
 msgid "The encoding method for the text"
 msgstr "文本的编码方法"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.reply:11 of
+#: mcdreforged.plugin.si.server_interface.ServerInterface.reply:15 of
 msgid ""
 "If it's specified, *console_text* will be used instead of text when "
 "replying to console"
 msgstr "如果指定了该参数，那么在回复控制台时，将使用 *console_text* 来代替 "
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.reply:12 of
+#: mcdreforged.plugin.si.server_interface.ServerInterface.reply:16 of
 msgid "If the Info is not from a user"
 msgstr "如果这个 Info 并非来自一位用户"
 
@@ -616,7 +616,7 @@ msgid ""
 "doesn't exist"
 msgstr "返回指定插件的元数据。若插件不存在，则返回 None"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.get_plugin_metadata:3
+#: mcdreforged.plugin.si.server_interface.ServerInterface.get_plugin_metadata:4
 #: of
 msgid "The id of the plugin to query metadata"
 msgstr "要查询元数据的插件的 ID"
@@ -627,7 +627,7 @@ msgid ""
 "exist"
 msgstr "返回指定插件的种类。若插件不存在，则返回 None"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.get_plugin_type:3 of
+#: mcdreforged.plugin.si.server_interface.ServerInterface.get_plugin_type:4 of
 msgid "The id of the plugin to query type"
 msgstr "要查询种类的插件的 ID"
 
@@ -638,7 +638,7 @@ msgid ""
 "doesn't exist"
 msgstr "返回指定插件的文件路径。若插件不存在，则返回 None"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.get_plugin_file_path:3
+#: mcdreforged.plugin.si.server_interface.ServerInterface.get_plugin_file_path:4
 #: of
 msgid "The id of the plugin to query file path"
 msgstr "要查询文件路径的插件的 ID"
@@ -657,7 +657,7 @@ msgid ""
 "considered as changed"
 msgstr "注意：:ref:`plugin_dev/plugin_format:Directory Plugin` 的插件文件总被认为是有变化的"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.is_plugin_file_changed:6
+#: mcdreforged.plugin.si.server_interface.ServerInterface.is_plugin_file_changed:7
 #: of
 msgid "The id of the plugin to query file change state"
 msgstr "要查询文件是否有变化的插件的 ID"
@@ -696,12 +696,12 @@ msgstr "我的一个插件 id 为 ``my_api`` 的 API 插件的入口点模块"
 msgid "Another plugin that needs my API plugin::"
 msgstr "另一个需要我的 API 插件的插件"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.get_plugin_instance:19
+#: mcdreforged.plugin.si.server_interface.ServerInterface.get_plugin_instance:20
 #: of
 msgid "The id of the plugin you want to get entrypoint module instance"
 msgstr "要获取入口点模块实例的插件 ID"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.get_plugin_instance:20
+#: mcdreforged.plugin.si.server_interface.ServerInterface.get_plugin_instance:21
 #: of
 msgid "A entrypoint module instance, or None if the plugin doesn't exist"
 msgstr "返回指定插件的 `入口点 <../basic.html#entrypoint>`__。若插件不存在，则返回 None"
@@ -770,11 +770,11 @@ msgstr ""
 msgid "Load a plugin from the given file path"
 msgstr "从给定的文件路径加载一个插件"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.load_plugin:3 of
+#: mcdreforged.plugin.si.server_interface.ServerInterface.load_plugin:4 of
 msgid "The file path of the plugin to load. Example: \"plugins/my_plugin.py\""
 msgstr "要加载插件的文件路径。例如：``\"plugins/my_plugin.py\"``"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.load_plugin:4 of
+#: mcdreforged.plugin.si.server_interface.ServerInterface.load_plugin:5 of
 msgid "If the plugin gets loaded successfully"
 msgstr "从给定的文件路径加载一个插件"
 
@@ -782,13 +782,13 @@ msgstr "从给定的文件路径加载一个插件"
 msgid "Enable a disabled plugin from the given path"
 msgstr "从给定的文件路径启用一个被禁用的插件"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.enable_plugin:3 of
+#: mcdreforged.plugin.si.server_interface.ServerInterface.enable_plugin:4 of
 msgid ""
 "The file path of the plugin to enable. Example: "
 "\"plugins/my_plugin.py.disabled\""
 msgstr "要启用插件的文件路径。例如：``\"plugin/my_plugin.py.disabled\"``"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.enable_plugin:4 of
+#: mcdreforged.plugin.si.server_interface.ServerInterface.enable_plugin:5 of
 msgid "If the plugin gets enabled successfully"
 msgstr "插件是否被成功启用"
 
@@ -796,11 +796,11 @@ msgstr "插件是否被成功启用"
 msgid "Reload a plugin specified by plugin id"
 msgstr "重载一个由插件 ID 给定的插件"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.reload_plugin:3 of
+#: mcdreforged.plugin.si.server_interface.ServerInterface.reload_plugin:4 of
 msgid "The id of the plugin to reload. Example: ``\"my_plugin\"``"
 msgstr "要重新加载的插件的 ID。例如：``\"my_plugin\"``"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.reload_plugin:4 of
+#: mcdreforged.plugin.si.server_interface.ServerInterface.reload_plugin:5 of
 msgid ""
 "A bool indicating if the plugin gets reloaded successfully, or None if "
 "plugin not found"
@@ -810,11 +810,11 @@ msgstr "返回一个 bool 表示插件是否被成功重载，若插件不存在
 msgid "Unload a plugin specified by plugin id"
 msgstr "卸载一个由插件 ID 给定的插件"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.unload_plugin:3 of
+#: mcdreforged.plugin.si.server_interface.ServerInterface.unload_plugin:4 of
 msgid "The id of the plugin to unload. Example: ``\"my_plugin\"``"
 msgstr "要卸载的插件的 ID。例如：``\"my_plugin\"``"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.unload_plugin:4 of
+#: mcdreforged.plugin.si.server_interface.ServerInterface.unload_plugin:5 of
 msgid ""
 "A bool indicating if the plugin gets unloaded successfully, or None if "
 "plugin not found"
@@ -824,11 +824,11 @@ msgstr "返回一个 bool 表示插件是否被成功卸载，若插件不存在
 msgid "Disable an unloaded plugin specified by plugin id"
 msgstr "禁用一个由插件 ID 给定的插件"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.disable_plugin:3 of
+#: mcdreforged.plugin.si.server_interface.ServerInterface.disable_plugin:4 of
 msgid "The id of the plugin to disable. Example: ``\"my_plugin\"``"
 msgstr "要禁用的插件的 ID。例如：``\"my_plugin\"``"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.disable_plugin:4 of
+#: mcdreforged.plugin.si.server_interface.ServerInterface.disable_plugin:5 of
 msgid ""
 "A bool indicating if the plugin gets disabled successfully, or None if "
 "plugin not found"
@@ -882,32 +882,32 @@ msgstr ""
 "``MyPlugin.mcdr`` 被一个新的 ``MyPlugin_v2.mcdr`` 所取代了：在单次调用中，卸载 ``my_plugin``"
 " 并加载 ``MyPlugin_v2.mcdr``"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.manipulate_plugins:12
+#: mcdreforged.plugin.si.server_interface.ServerInterface.manipulate_plugins:13
 #: of
 msgid "An optional plugin **file path** list containing plugins to be loaded"
 msgstr "一个可选的插件 **文件路径** 列表，包含将要被加载的插件"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.manipulate_plugins:13
+#: mcdreforged.plugin.si.server_interface.ServerInterface.manipulate_plugins:15
 #: of
 msgid "An optional plugin **ID** list containing plugins to be loaded"
 msgstr "一个可选的插件 **ID** 列表，包含将要被加载的插件"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.manipulate_plugins:14
+#: mcdreforged.plugin.si.server_interface.ServerInterface.manipulate_plugins:17
 #: of
 msgid "An optional plugin **ID** list containing plugins to be reloaded"
 msgstr "一个可选的插件 **ID** 列表，包含将要被重载的插件"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.manipulate_plugins:15
+#: mcdreforged.plugin.si.server_interface.ServerInterface.manipulate_plugins:19
 #: of
 msgid "An optional plugin **file path** list containing plugins to be enabled"
 msgstr "一个可选的插件 **文件路径** 列表，包含将要被启用的插件"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.manipulate_plugins:16
+#: mcdreforged.plugin.si.server_interface.ServerInterface.manipulate_plugins:21
 #: of
 msgid "An optional plugin **ID** list containing plugins to be disabled"
 msgstr "一个可选的插件 **ID** 列表，包含将要被禁用的插件"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.manipulate_plugins:17
+#: mcdreforged.plugin.si.server_interface.ServerInterface.manipulate_plugins:22
 #: of
 msgid ""
 "True if all operation succeeded, False if failed, None if it's a not-"
@@ -942,7 +942,7 @@ msgstr "对于分发事件的插件::"
 msgid "For the event listener plugin::"
 msgstr "对于监听事件的插件::"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.dispatch_event:20 of
+#: mcdreforged.plugin.si.server_interface.ServerInterface.dispatch_event:21 of
 msgid ""
 "The event to dispatch. It needs to be a "
 ":class:`~mcdreforged.plugin.plugin_event.PluginEvent` instance. For "
@@ -954,7 +954,7 @@ msgstr ""
 "实例。为了更简单地使用，你可以为这个参数创建一个 "
 ":class:`~mcdreforged.plugin.plugin_event.LiteralEvent` 实例"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.dispatch_event:22 of
+#: mcdreforged.plugin.si.server_interface.ServerInterface.dispatch_event:24 of
 msgid ""
 "The argument that will be used to invoke the event listeners. An "
 ":class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`"
@@ -965,7 +965,7 @@ msgstr ""
 ":class:`~mcdreforged.plugin.si.plugin_server_interface.PluginServerInterface`"
 " 实例将被自动添加到参数列表的开头"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.dispatch_event:24 of
+#: mcdreforged.plugin.si.server_interface.ServerInterface.dispatch_event:27 of
 msgid ""
 "By default the event will be dispatched in a new task in task executor "
 "thread If it's set to False. The event will be dispatched immediately"
@@ -996,15 +996,15 @@ msgstr "修改操作会立即被写入磁盘并在 MCDR 中生效"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.modify_mcdr_config:5
 #: of
-msgid "Currently, MCDR will not validate the type of the value"
-msgstr "目前 MCDR 不会验证值的类型是否正确"
+msgid "The new config is validated before being applied"
+msgstr "新配置在应用前会进行校验"
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.modify_mcdr_config:7
 #: of
 msgid "Example usages::"
 msgstr "示例用法:"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.modify_mcdr_config:13
+#: mcdreforged.plugin.si.server_interface.ServerInterface.modify_mcdr_config:14
 #: of
 msgid ""
 "A dict storing the changes to the config. For the entries of the dict: "
@@ -1025,7 +1025,7 @@ msgstr "从配置文件重载 MCDR 的配置"
 msgid "It has the same effect as command ``!!MCDR reload config``"
 msgstr "其效果与命令 ``!!MCDR reload config`` 相同"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.reload_config_file:5
+#: mcdreforged.plugin.si.server_interface.ServerInterface.reload_config_file:6
 #: of
 msgid "If the config changing messages should be logged"
 msgstr "是否输出配置文件变更的相关日志"
@@ -1050,12 +1050,12 @@ msgstr ""
 "``obj`` 对象可以是一个表示玩家名的 str，一个 :class:`~mcdreforged.info_reactor.info.Info`"
 " 实例或者一个 :class:`命令源 <mcdreforged.command.command_source.CommandSource>`"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.get_permission_level:7
+#: mcdreforged.plugin.si.server_interface.ServerInterface.get_permission_level:8
 #: of
 msgid "The object you are querying"
 msgstr "你要查询的对象"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.get_permission_level:8
+#: mcdreforged.plugin.si.server_interface.ServerInterface.get_permission_level:9
 #: of
 msgid "If the type of the given object is not supported for permission querying"
 msgstr "当给定对象的类型不支持权限查询时"
@@ -1065,12 +1065,12 @@ msgstr "当给定对象的类型不支持权限查询时"
 msgid "Set the permission level of the given player"
 msgstr "设置给定玩家的权限等级"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.set_permission_level:3
+#: mcdreforged.plugin.si.server_interface.ServerInterface.set_permission_level:4
 #: of
 msgid "The name of the player that you want to set his/her permission level"
 msgstr "你想设置权限级别的玩家名字"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.set_permission_level:4
+#: mcdreforged.plugin.si.server_interface.ServerInterface.set_permission_level:6
 #: of
 msgid ""
 "The target permission level you want to set the player to. It can be an "
@@ -1080,7 +1080,7 @@ msgstr ""
 "你想将玩家设置为的目标权限级别，它可以是一个代表权限级别的 int 或 str。例如：``1``， ``\"1\"``，或  "
 "``\"user\"``"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.set_permission_level:6
+#: mcdreforged.plugin.si.server_interface.ServerInterface.set_permission_level:8
 #: of
 msgid "If the value parameter doesn't properly represent a permission level"
 msgstr "如果数值参数不是一个正确的权限级别"
@@ -1126,7 +1126,7 @@ msgid ""
 "the returned command source is a dummy one that contains nothing"
 msgstr "注意：绑定到返回的命令源的 :class:`~mcdreforged.info_reactor.info.Info` 对象是一个不包含任何内容空对象"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.get_player_command_source:6
+#: mcdreforged.plugin.si.server_interface.ServerInterface.get_player_command_source:7
 #: of
 msgid "The name of the player"
 msgstr "目标玩家的名字"
@@ -1148,11 +1148,11 @@ msgid ""
 "stream"
 msgstr "方法 :meth:`execute`，如果你想要往服务端的标准输入流中发送文本"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.execute_command:7 of
+#: mcdreforged.plugin.si.server_interface.ServerInterface.execute_command:8 of
 msgid "The command you want to execute"
 msgstr "你想要执行的命令"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.execute_command:8 of
+#: mcdreforged.plugin.si.server_interface.ServerInterface.execute_command:10 of
 msgid ""
 "The command source that is used to execute the command. If it's not "
 "specified MCDR will use :meth:`get_plugin_command_source` to get a "
@@ -1180,12 +1180,12 @@ msgstr ""
 ":class:`~mcdreforged.command.command_source.PlayerCommandSource` 以及 "
 ":class:`~mcdreforged.command.command_source.ConsoleCommandSource`"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.get_preference:7 of
+#: mcdreforged.plugin.si.server_interface.ServerInterface.get_preference:8 of
 msgid "The object to query preference"
 msgstr "你要查询的偏好的对象"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.get_preference:8
-#: mcdreforged.plugin.si.server_interface.ServerInterface.set_preference:9 of
+#: mcdreforged.plugin.si.server_interface.ServerInterface.get_preference:9
+#: mcdreforged.plugin.si.server_interface.ServerInterface.set_preference:11 of
 msgid "If the type of the given object is not supported for preference querying"
 msgstr "若给定对象的类型不支持偏好查询"
 
@@ -1198,11 +1198,11 @@ msgstr "返回默认的 MCDR 偏好"
 msgid "Set the MCDR preference of the given object"
 msgstr "设置给定对象的 MCDR 偏好"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.set_preference:7 of
+#: mcdreforged.plugin.si.server_interface.ServerInterface.set_preference:8 of
 msgid "The object to set preference"
 msgstr "你要设置的偏好的对象"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.set_preference:8 of
+#: mcdreforged.plugin.si.server_interface.ServerInterface.set_preference:10 of
 msgid "The preference to be set"
 msgstr "设置给定对象的 MCDR 偏好"
 
@@ -1236,7 +1236,7 @@ msgstr "异步任务执行者线程，是触发所有异步的监听器回调的
 
 #: mcdreforged.plugin.si.server_interface.ServerInterface.get_event_loop:5
 #: mcdreforged.plugin.si.server_interface.ServerInterface.is_on_async_executor_thread:6
-#: mcdreforged.plugin.si.server_interface.ServerInterface.schedule_task:13 of
+#: mcdreforged.plugin.si.server_interface.ServerInterface.schedule_task:16 of
 msgid "Beta API"
 msgstr "(Beta API)"
 
@@ -1250,11 +1250,11 @@ msgstr "返回 异步任务执行者线程 中运行的事件循环。该事件�
 msgid "Send command to the server through rcon connection"
 msgstr "通过 rcon 连接向服务端发送命令"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.rcon_query:3 of
+#: mcdreforged.plugin.si.server_interface.ServerInterface.rcon_query:4 of
 msgid "The command you want to send to the rcon server"
 msgstr "你要发送给 rcon 服务端的命令"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.rcon_query:4 of
+#: mcdreforged.plugin.si.server_interface.ServerInterface.rcon_query:5 of
 msgid ""
 "The result that server returned from rcon. Return None if rcon is not "
 "running or rcon query failed"
@@ -1266,19 +1266,19 @@ msgid ""
 " thread"
 msgstr "在任务执行者 (TaskExecutor) 或异步任务执行者 (AsyncTaskExecutor) 线程中添加一个任务"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.schedule_task:3 of
+#: mcdreforged.plugin.si.server_interface.ServerInterface.schedule_task:4 of
 msgid "The callable or coroutine object to be run. It should accept 0 parameter"
 msgstr "将要被执行的可调用对象或协程对象。它应当接受 0 个参数"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.schedule_task:4 of
+#: mcdreforged.plugin.si.server_interface.ServerInterface.schedule_task:6 of
 msgid "If blocks until the callable finished execution"
 msgstr "是否需要阻塞至可调用对象执行结束"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.schedule_task:5 of
+#: mcdreforged.plugin.si.server_interface.ServerInterface.schedule_task:8 of
 msgid "The timeout of the blocking operation if ``block=True``"
 msgstr "若 ``block=True``，最大的阻塞时间"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.schedule_task:7 of
+#: mcdreforged.plugin.si.server_interface.ServerInterface.schedule_task:10 of
 msgid ""
 "The *callback* param now supports :external:func:`coroutine object "
 "<inspect.iscoroutine>` or :external:func:`coroutine function "
@@ -1287,12 +1287,7 @@ msgstr ""
 "*callback* 参数支持 :external:func:`协程对象 <inspect.iscoroutine>` 或 "
 ":external:func:`协程函数 <inspect.iscoroutinefunction>`"
 
-#: mcdreforged.plugin.si.server_interface.ServerInterface.schedule_task:11 of
+#: mcdreforged.plugin.si.server_interface.ServerInterface.schedule_task:14 of
 msgid "The return value is now a :external:class:`~concurrent.futures.Future`"
 msgstr "返回值现为一个 :external:class:`~concurrent.futures.Future`"
-
-#~ msgid ""
-#~ "Deprecated, to be removed in v2.15. "
-#~ "Use kwarg *_mcdr_tr_language* instead"
-#~ msgstr "已弃用，将于 v2.15 移除。请使用关键字参数 *_mcdr_tr_language* 替代"
 
