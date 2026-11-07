@@ -546,10 +546,15 @@ class MCDReforgedServer:
 		else:
 			raise TypeError('should be a str, found {}'.format(type(text)))
 		if self.is_server_running():
-			self.process_manager.write(encoded_text)
+			try:
+				self.process_manager.write(encoded_text)
+			except (BrokenPipeError, ConnectionResetError):
+				self.logger.warning(self.__tr('send.stdin_closed'))
+			else:
+				return
 		else:
-			self.logger.warning(self.__tr('send.send_when_stopped'))
-			self.logger.warning(self.__tr('send.send_when_stopped.text', repr(text) if len(text) <= 32 else repr(text[:32]) + '...'))
+			self.logger.warning(self.__tr('send.server_stopped'))
+		self.logger.warning(self.__tr('send.command', repr(text) if len(text) <= 32 else repr(text[:32]) + '...'))
 
 	def __receive(self) -> _ParsedServerOutput:
 		"""

@@ -22,9 +22,9 @@ mcdreforged:
       soft: Interrupting MCDR, first strike. Interrupt again to kill the server
       hard: Interrupting MCDR and killing the servers
     send:
-      send_when_stopped:
-        .: Server has been terminated, cannot send command to its stdin
-        text: 'Command being sent: {0}'
+      server_stopped: Server has been terminated, cannot send command to its stdin
+      stdin_closed: Server stdin has been closed, cannot send command to it
+      command: 'Command being sent: {0}'
     receive:
       decode_fail: 'Fail to decode text {0}: {1}'
     on_mcdr_start:

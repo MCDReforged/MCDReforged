@@ -22,9 +22,9 @@ mcdreforged:
       soft: 正在終止 MCDR。再次執行以強制殺死伺服端進程
       hard: 正在終止 MCDR 並殺死伺服端
     send:
-      send_when_stopped:
-        .: 伺服端已關閉，不能向其標準輸入流輸入命令
-        text: '被輸入的命令: {0}'
+      server_stopped: 伺服端已關閉，不能向其標準輸入流輸入命令
+      stdin_closed: 伺服端標準輸入流已關閉，無法向其輸入命令
+      command: '被輸入的命令: {0}'
     receive:
       decode_fail: '解析文本 {0} 出錯: {1}'
     on_mcdr_start:
