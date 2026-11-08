@@ -36,7 +36,7 @@ from mcdreforged.plugin.plugin_event import MCDRPluginEvents
 from mcdreforged.plugin.plugin_manager import PluginManager
 from mcdreforged.plugin.si.server_interface import ServerInterface
 from mcdreforged.preference.preference_manager import PreferenceManager
-from mcdreforged.process.server_process_manager import ServerProcessManager
+from mcdreforged.process.server_process_manager import ProcessNotRunning, ServerProcessManager
 from mcdreforged.translation.language_fallback_handler import LanguageFallbackHandler
 from mcdreforged.translation.translation_manager import TranslationManager
 from mcdreforged.translation.translator import Translator
@@ -543,10 +543,20 @@ class MCDReforgedServer:
 		else:
 			raise TypeError('should be a str, found {}'.format(type(text)))
 		if self.is_server_running():
-			self.process_manager.write(encoded_text)
+			try:
+				self.process_manager.write(encoded_text)
+			except (ProcessNotRunning, ConnectionError):
+				# The server can close its stdin between the state check and the
+				# write, which is what a ConnectionResetError from the write
+				# means. Report it the same way as a write to a stopped server
+				# instead of letting it escape to the caller.
+				self.__warn_send_when_stopped(text)
 		else:
-			self.logger.warning(self.__tr('send.send_when_stopped'))
-			self.logger.warning(self.__tr('send.send_when_stopped.text', repr(text) if len(text) <= 32 else repr(text[:32]) + '...'))
+			self.__warn_send_when_stopped(text)
+
+	def __warn_send_when_stopped(self, text: str) -> None:
+		self.logger.warning(self.__tr('send.send_when_stopped'))
+		self.logger.warning(self.__tr('send.send_when_stopped.text', repr(text) if len(text) <= 32 else repr(text[:32]) + '...'))
 
 	def __receive(self) -> _ParsedServerOutput:
 		"""
