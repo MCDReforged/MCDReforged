@@ -10,6 +10,7 @@ import time
 from pathlib import Path
 from typing import Optional, List, TYPE_CHECKING, Dict
 
+from packaging.requirements import InvalidRequirement, Requirement
 from typing_extensions import override
 
 from mcdreforged.command.builder.common import CommandContext
@@ -380,9 +381,14 @@ class PimInstallCommandHandler(PimCommandHandlerBase):
 			))
 			source.reply('')
 			for req in sorted(to_install.packages.keys()):
+				req_text = RText(req, RColor.blue)
+				with contextlib.suppress(InvalidRequirement):
+					package_req = Requirement(req)
+					if package_req.url is None:
+						req_text.c(RAction.open_url, f'https://pypi.org/project/{package_req.name}/')
 				source.reply(pim_utils.INDENT + self._tr(
 					'install.install_summary.python_entry',
-					RText(req, RColor.blue).c(RAction.open_url, f'https://pypi.org/project/{req}/'),
+					req_text,
 					Texts.candidate(to_install.packages[req]),
 				))
 			source.reply('')
