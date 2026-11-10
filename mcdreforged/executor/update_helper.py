@@ -85,8 +85,11 @@ class UpdateHelper(BackgroundThreadExecutor):
 					if len(lines) > line_limit:
 						reply_func(self.__tr('check_update.n_more_lines', len(lines) - line_limit))
 
-					if (3, 8) <= sys.version_info < (3, 9):
-						reply_func(self.__tr('check_update.python_version_notes', core_constant.NAME, platform.python_version()))
+					if (3, 9) <= sys.version_info < (3, 10):
+						reply_func(self.__tr(
+							'check_update.python_version_notes',
+							core_constant.NAME, '3.9', '2025-10-31', platform.python_version(),
+						))
 
 		finally:
 			self.__update_lock.release()
